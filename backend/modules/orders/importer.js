@@ -7,8 +7,8 @@ var step = require('h5.step');
 
 module.exports = function setUpOrdersImporter(app, ordersModule)
 {
-  var ORDER_INFO_SUBJECT = 'Job PL02_ORDER_INFO, Step 1';
-  var OPER_INFO_SUBJECT = 'Job PL02_OPER_INFO, Step 1';
+  var ORDER_INFO_SUBJECT = 'Job PL02_ORDER_INFO, Step ';
+  var OPER_INFO_SUBJECT = 'Job PL02_OPER_INFO, Step ';
   var LATE_DATA_PARSE_DELAY = 10 * 60;
 
   var Order = app[ordersModule.config.mongooseId].model('Order');
@@ -19,7 +19,7 @@ module.exports = function setUpOrdersImporter(app, ordersModule)
   var operInfoQueue = [];
 
   app.broker
-    .subscribe('mailListener.received', handleMail)
+    .subscribe('mail.received', handleMail)
     .setFilter(function(mail)
     {
       return mail.subject.indexOf(ORDER_INFO_SUBJECT) !== -1
@@ -449,18 +449,6 @@ module.exports = function setUpOrdersImporter(app, ordersModule)
       return this.skip(err);
     }
 
-    var next = this.next();
-
-    orderModel.save(function(err)
-    {
-      if (!err)
-      {
-        /*app.broker.publish('orders.edited', {
-          model: orderModel.toJSON()
-        });*/
-      }
-
-      next(err);
-    });
+    orderModel.save(this.next());
   }
 };

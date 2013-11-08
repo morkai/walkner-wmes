@@ -45,7 +45,7 @@ exports.start = function startMailListenerModule(app, module)
 
     mailListener.on('mail', function(mail)
     {
-      app.broker.publish('mailListener.received', mail);
+      app.broker.publish('mail.received', mail);
     });
 
     mailListener.start();

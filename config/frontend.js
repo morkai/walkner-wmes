@@ -9,7 +9,7 @@ exports.modules = [
   'httpsServer',
   'sio',
   'pubsub',
-  //'mailListener',
+  //'mail/listener',
   'user',
   'express',
   'users',
@@ -87,7 +87,7 @@ exports.express = {
   }
 };
 
-exports.mailListener = {
+exports['mail/listener'] = {
   username: 'import@wmes.walkner.pl',
   password: 'wmesXSQ1@3xsq',
   host: 'poczta-611475.vipserv.org',
