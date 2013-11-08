@@ -9,7 +9,8 @@ exports.modules = [
   'httpsServer',
   'sio',
   'pubsub',
-  //'mail/listener',
+  'mail/listener',
+  'mail/downloader',
   'user',
   'express',
   'users',
@@ -93,6 +94,11 @@ exports['mail/listener'] = {
   host: 'poczta-611475.vipserv.org',
   port: 993,
   tls: true
+};
+
+exports['mail/downloader'] = {
+  savePath: __dirname + '/../data/attachments',
+  timestamp: true
 };
 
 exports.user = {
