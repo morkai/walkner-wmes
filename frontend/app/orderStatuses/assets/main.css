@@ -1,0 +1,10 @@
+.orderStatus {
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 1em;
+}
+.orderStatuses-form-color-picker {
+  width: 8em;
+}
+.orderStatuses-form-color-input {
+  text-align: center;
+}

@@ -1,0 +1,60 @@
+{
+  "TITLE": "Wannabe MES",
+
+  "MSG_LOADING": "Ładowanie...",
+  "MSG_LOADING_FAILURE": "Ładowanie nie powiodło się :(",
+  "MSG:LOG_OUT:FAILURE": "Wylogowanie nie powiodło się :(",
+  "MSG:LOG_OUT:SUCCESS": "Zostałeś wylogowany!",
+
+  "PAGE_ACTION:filter": "Filtruj",
+
+  "LIST:COLUMN:actions": "Akcje",
+  "LIST:NO_DATA": "Brak danych.",
+  "LIST:NO_DATA:cell": "brak danych",
+  "LIST:ACTION:viewDetails": "Pokaż szczegóły",
+  "LIST:ACTION:edit": "Edytuj",
+  "LIST:ACTION:delete": "Usuń",
+
+  "BREADCRUMBS:EDIT": "Edycja",
+  "BREADCRUMBS:DELETE": "Usuwanie",
+  "BREADCRUMBS:ERROR": "Błąd {code}: {codeStr, select, e401{nieautoryzowany dostęp} e404{nie znaleziono} other{nieprawidłowe zapytanie}}",
+
+  "ERROR_400": "Żądanie nie może być obsłużone z powodu błędnej składni zapytania :(",
+  "ERROR_401": "Niestety, ale nie masz wystarczających uprawnień do wykonania żądanej akcji :(",
+  "ERROR_404": "Wybrana strona nie istnieje :(",
+
+  "PAGINATION_FIRST_PAGE": "Pierwsza strona",
+  "PAGINATION_PREV_PAGE": "Poprzednia strona",
+  "PAGINATION_NEXT_PAGE": "Następna strona",
+  "PAGINATION_LAST_PAGE": "Ostatnia strona",
+
+  "LOG_IN_FORM:DIALOG_TITLE": "Logowanie do systemu",
+  "LOG_IN_FORM:LABEL:LOGIN": "Login",
+  "LOG_IN_FORM:LABEL:PASSWORD": "Hasło",
+  "LOG_IN_FORM:LABEL:SUBMIT": "Zaloguj się",
+
+  "GUEST_USER_NAME": "Gość",
+
+  "NAVBAR:TOGGLE": "Pokaż menu",
+  "NAVBAR:DASHBOARD": "Dashboard",
+  "NAVBAR:EVENTS": "Zdarzenia",
+  "NAVBAR:ORDERS": "Zlecenia",
+  "NAVBAR:LINES": "Linie produkcyjne",
+  "NAVBAR:USERS": "Użytkownicy",
+  "NAVBAR:MY_ACCOUNT": "Moje konto",
+  "NAVBAR:UI_LOCALE": "Lokalizacja UI",
+  "NAVBAR:LOCALE_PL": "Po polsku",
+  "NAVBAR:LOCALE_US": "Po angielsku",
+  "NAVBAR:LOG_IN": "Zaloguj się",
+  "NAVBAR:LOG_OUT": "Wyloguj się",
+  "NAVBAR:DICTIONARIES": "Słowniki",
+  "NAVBAR:ORDER_STATUSES": "Statusy zleceń",
+  "NAVBAR:DOWNTIME_REASONS": "Powody przestojów",
+  "NAVBAR:AORS": "Obszary odpowiedzialności",
+
+  "ACTION_FORM_BUTTON": "Wykonaj akcję",
+  "ACTION_FORM_BUTTON:delete": "Usuń",
+  "ACTION_FORM_BUTTON:cancel": "Anuluj",
+  "ACTION_FORM_MESSAGE": "Czy na pewno chcesz wykonać żądaną akcję?",
+  "ACTION_FORM_MESSAGE_FAILURE": "Wykonywanie akcji nie powiodło się :("
+}

@@ -1,0 +1,26 @@
+<form class="orderStatuses-form" method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-id" class="control-label"><%- t('orderStatuses', 'PROPERTY:_id') %></label>
+        <input id="<%- idPrefix %>-id" class="form-control" type="text" name="_id" value="<%- model._id %>" autofocus required maxlength="50">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-label" class="control-label"><%- t('orderStatuses', 'PROPERTY:label') %></label>
+        <input id="<%- idPrefix %>-label" class="form-control" type="text" name="label" value="<%- model.label %>" required maxlength="100">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-color" class="control-label"><%- t('orderStatuses', 'PROPERTY:color') %></label>
+        <div class="input-group colorpicker-component orderStatuses-form-color-picker" data-color="<%- model.color %>" data-color-format="hex">
+          <input id="<%- idPrefix %>-color" class="form-control orderStatuses-form-color-input" name="color" type="text" value="<%- model.color %>">
+          <span class="input-group-addon"><i style="background-color: <%- model.color %>"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

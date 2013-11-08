@@ -1,0 +1,17 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <%- t('aors', 'PANEL_TITLE:details') %>
+  </div>
+  <div class="panel-details">
+    <div class="props first">
+      <div class="prop">
+        <div class="prop-name"><%- t('aors', 'PROPERTY:name') %></div>
+        <div class="prop-value"><%= model.name %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('aors', 'PROPERTY:description') %></div>
+        <div class="prop-value"><%= model.description || '-' %></div>
+      </div>
+    </div>
+  </div>
+</div>

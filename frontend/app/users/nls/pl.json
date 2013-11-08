@@ -1,0 +1,53 @@
+{
+  "BREADCRUMBS:BROWSE": "Użytkownicy",
+  "BREADCRUMBS:ADD_FORM": "Dodawanie",
+  "BREADCRUMBS:EDIT_FORM": "Edycja",
+  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+
+  "MSG_LOADING_FAILURE": "Ładowanie użytkowników nie powiodło się :(",
+  "MSG_LOADING_SINGLE_FAILURE": "Ładowanie użytkownika nie powiodło się :(",
+  "MSG:USER_DELETED": "Użytkownik <em>{login}</em> został usunięty.",
+
+  "PAGE_ACTION:add": "Dodaj użytkownika",
+  "PAGE_ACTION:edit": "Edytuj użytkownika",
+  "PAGE_ACTION:delete": "Usuń użytkownika",
+
+  "PANEL_TITLE:details": "Szczegóły użytkownika",
+  "PANEL_TITLE:addForm": "Formularz dodawania użytkownika",
+  "PANEL_TITLE:editForm": "Formularz edycji użytkownika",
+
+  "PROPERTY:login": "Login",
+  "PROPERTY:password": "Hasło",
+  "PROPERTY:password2": "Potwierdzenie hasła",
+  "PROPERTY:email": "Adres e-mail",
+  "PROPERTY:mobile": "Telefon komórkowy",
+  "PROPERTY:privileges": "Uprawnienia",
+
+  "ACTION_DIALOG_TITLE:delete": "Potwierdzenie usunięcia użytkownika",
+
+  "FORM_ACTION_ADD": "Dodaj użytkownika",
+  "FORM_ACTION_EDIT": "Edytuj użytkownika",
+  "FORM_ERROR_PASSWORD_MISMATCH": "Podane hasła nie pasują do siebie.",
+  "FORM_ERROR_ADD_FAILURE": "Nie udało się dodać użytkownika :-(",
+  "FORM_ERROR_EDIT_FAILURE": "Nie udało się zmodyfikować użytkownika :-(",
+
+  "ACTION_FORM_BUTTON:delete": "Usuń użytkownika",
+  "ACTION_FORM_MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybranego użytkownika?",
+  "ACTION_FORM_MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć użytkownika <em>{label}</em>?",
+  "ACTION_FORM_MESSAGE_FAILURE:delete": "Nie udało się usunąć użytkownika :-(",
+
+  "PRIVILEGE:ORDERS:VIEW": "Przeglądanie zleceń",
+  "PRIVILEGE:ORDERS:MANAGE": "Zarządzanie zleceniami",
+  "PRIVILEGE:LINES:VIEW": "Przeglądanie linii produkcyjnych",
+  "PRIVILEGE:LINES:MANAGE": "Zarządzanie liniami produkcyjnymi",
+  "PRIVILEGE:EVENTS:VIEW": "Przeglądanie zdarzeń",
+  "PRIVILEGE:EVENTS:MANAGE": "Zarządzanie zdarzeniami",
+  "PRIVILEGE:USERS:VIEW": "Przeglądanie użytkowników",
+  "PRIVILEGE:USERS:MANAGE": "Zarządzanie użytkownikami",
+  "PRIVILEGE:ORDER_STATUSES:VIEW": "Przeglądanie statusów zleceń",
+  "PRIVILEGE:ORDER_STATUSES:MANAGE": "Zarządzanie statusami zleceń",
+  "PRIVILEGE:DOWNTIME_REASONS:VIEW": "Przeglądanie powodów przestojów",
+  "PRIVILEGE:DOWNTIME_REASONS:MANAGE": "Zarządzanie powodami przestojów",
+  "PRIVILEGE:AORS:VIEW": "Przeglądanie obszarów odpowiedzialności",
+  "PRIVILEGE:AORS:MANAGE": "Zarządzanie obszarami odpowiedzialności"
+}
