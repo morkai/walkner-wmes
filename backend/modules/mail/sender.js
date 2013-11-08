@@ -11,7 +11,7 @@ exports.DEFAULT_CONFIG = {
   replyTo: {tagName: 'mailer.replyTo', default: 'someone@the.net'}
 };
 
-exports.start = function startMailerModule(app, module)
+exports.start = function startMailSenderModule(app, module)
 {
   var config = module.config;
   var transport = nodemailer.createTransport(
