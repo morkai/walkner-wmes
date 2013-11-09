@@ -51,14 +51,6 @@ exports.start = function startMailDownloaderModule(app, module)
         {
           module.debug("Saved attachment: %s", attachment.fileName);
         }
-
-        fs.utimes(savePath, timestamp, timestamp, function(err)
-        {
-          if (err)
-          {
-            module.error("Failed to change times of the '%s' file: %s", savePath, err.message);
-          }
-        });
       });
     });
   });
