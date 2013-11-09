@@ -15,10 +15,12 @@ exports.start = function startMailDownloaderModule(app, module)
   {
     if (typeof module.config.matcher === 'function' && !module.config.matcher(mail))
     {
+      console.log('mail.received does not match', mail.subject);
+
       return;
     }
 
-    if (mail.attachments.length === 0)
+    if (!Array.isArray(mail.attachments) || mail.attachments.length === 0)
     {
       return module.debug("Ignoring an e-mail without any attachments: subject=%s", mail.subject);
     }
