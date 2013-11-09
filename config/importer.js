@@ -19,7 +19,9 @@ exports.events = {
       'app.started'
     ],
     info: [
-      'events.**'
+      'events.**',
+      'orders.synced',
+      'emptyOrders.synced'
     ]
   }
 };

@@ -33,9 +33,7 @@ exports.events = {
       'aors.added', 'aors.edited'
     ],
     info: [
-      'events.**',
-      'orders.synced',
-      'emptyOrders.synced'
+      'events.**'
     ],
     warning: [
       'users.deleted',
