@@ -9,14 +9,14 @@ exports.modules = [
   'httpsServer',
   'sio',
   'pubsub',
-  'mail/listener',
-  'mail/downloader',
   'user',
   'express',
   'users',
   'orders',
   'downtimeReasons',
-  'aors'
+  'aors',
+  {id: 'messenger/client', name: 'messenger/client:attachments'},
+  {id: 'messenger/client', name: 'messenger/client:importer'}
 ];
 
 exports.events = {
@@ -67,10 +67,6 @@ exports.pubsub = {
   ]
 };
 
-exports.sio = {
-
-};
-
 exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
@@ -88,19 +84,6 @@ exports.express = {
   }
 };
 
-exports['mail/listener'] = {
-  username: 'import@wmes.walkner.pl',
-  password: 'wmesXSQ1@3xsq',
-  host: 'poczta-611475.vipserv.org',
-  port: 993,
-  tls: true
-};
-
-exports['mail/downloader'] = {
-  savePath: __dirname + '/../data/attachments',
-  timestamp: true
-};
-
 exports.user = {
   privileges: [
     'USERS:VIEW', 'USERS:MANAGE',
@@ -111,4 +94,19 @@ exports.user = {
     'DOWNTIME_REASONS:VIEW', 'DOWNTIME_REASONS:MANAGE',
     'AORS:VIEW', 'AORS:MANAGE'
   ]
+};
+exports['messenger/client:attachments'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60010,
+  repHost: '127.0.0.1',
+  repPort: 60011,
+  responseTimeout: 5000
+};
+
+exports['messenger/client:importer'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60020,
+  repHost: '127.0.0.1',
+  repPort: 60021,
+  responseTimeout: 5000
 };

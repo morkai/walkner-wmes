@@ -1,0 +1,59 @@
+'use strict';
+
+var cheerio = require('cheerio');
+
+module.exports = function parseOrderInfo(html, orders)
+{
+  var $ = cheerio.load(html);
+  var $tables = $('table');
+
+  for (var t = 2; t < $tables.length; ++t)
+  {
+    $tables.eq(t).find('tr').each(parseOrderInfoRow);
+  }
+
+  function parseOrderInfoRow(i)
+  {
+    /*jshint validthis:true*/
+
+    if (i === 0)
+    {
+      return;
+    }
+
+    var cells = $(this).find('td').map(function()
+    {
+      return $(this).text().replace(/&nbsp;/g, ' ').trim().replace(/ {2,}/g, ' ');
+    });
+
+    if (cells.length !== 15)
+    {
+      return;
+    }
+
+    var nc12 = /^[0-9]{15}$/.test(cells[1]) ? cells[1].substr(3) : cells[1];
+    var startDateParts = cells[10].split('.').map(Number);
+    var finishDateParts = cells[11].split('.').map(Number);
+    var statuses = cells[13]
+      .replace(/\s+/g, ' ')
+      .split(' ')
+      .map(function(status) { return status.replace(/\*/g, ''); });
+
+    var order = {
+      _id: cells[0],
+      createdAt: new Date(),
+      updatedAt: null,
+      nc12: nc12,
+      name: cells[2],
+      mrp: cells[5],
+      qty: parseInt(cells[8], 10),
+      unit: cells[9],
+      startDate: new Date(startDateParts[2], startDateParts[1] - 1, startDateParts[0]),
+      finishDate: new Date(finishDateParts[2], finishDateParts[1] - 1, finishDateParts[0]),
+      statuses: statuses,
+      operations: null
+    };
+
+    orders[order._id] = order;
+  }
+};
