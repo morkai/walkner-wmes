@@ -129,7 +129,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
       var filePaths = collectFileInfoPaths([orderFileInfoStepsMap, operFileInfoStepsMap]);
 
-//      deleteFileInfoStepFiles(filePaths);
+      deleteFileInfoStepFiles(filePaths);
 
       setTimeout(removeFilePathsFromCache, 15000, filePaths);
 
