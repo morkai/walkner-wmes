@@ -27,6 +27,18 @@ exports.start = function startEventsModule(app, module)
    */
   var pendingEvents = null;
 
+  /**
+   * @private
+   * @type {number}
+   */
+  var lastFetchAllTypesTime = 0;
+
+  /**
+   * @private
+   * @type {object|null}
+   */
+  var nextFetchAllTypesTimer = null;
+
   module.types = {};
 
   app.onModuleReady(
@@ -43,6 +55,19 @@ exports.start = function startEventsModule(app, module)
 
   function fetchAllTypes()
   {
+    var now = Date.now();
+    var diff = now - lastFetchAllTypesTime;
+
+    if (diff < 60000)
+    {
+      if (nextFetchAllTypesTimer === null)
+      {
+        nextFetchAllTypesTimer = setTimeout(fetchAllTypes, diff);
+      }
+
+      return;
+    }
+
     eventsCollection.distinct('type', null, null, function(err, types)
     {
       if (err)
@@ -56,6 +81,9 @@ exports.start = function startEventsModule(app, module)
           module.types[type] = 1;
         });
       }
+
+      lastFetchAllTypesTime = Date.now();
+      nextFetchAllTypesTimer = null;
     });
   }
 
@@ -98,7 +126,7 @@ exports.start = function startEventsModule(app, module)
   {
     if (topic === 'events.saved')
     {
-      return;
+      return fetchAllTypes();
     }
 
     if (!lodash.isObject(data))
