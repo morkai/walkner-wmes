@@ -15,8 +15,6 @@ exports.start = function startMailDownloaderModule(app, module)
   {
     if (typeof module.config.matcher === 'function' && !module.config.matcher(mail))
     {
-      console.log('mail.received does not match', mail.subject);
-
       return;
     }
 
