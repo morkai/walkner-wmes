@@ -6,6 +6,7 @@ module.exports = [
   'downtimeReason',
   'event',
   'order',
+  'emptyOrder',
   'orderStatus',
   'user'
 

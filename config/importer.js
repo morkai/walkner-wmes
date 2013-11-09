@@ -7,7 +7,8 @@ exports.modules = [
   'events',
   'messenger/server',
   'directoryWatcher',
-  'orders/importer/orders'
+  {id: 'orders/importer/orders', name: 'orderImporter'},
+  {id: 'orders/importer/emptyOrders', name: 'emptyOrderImporter'}
 ];
 
 exports.events = {
@@ -39,14 +40,19 @@ exports['messenger/server'] = {
   repPort: 60021,
   broadcastTopics: [
     'events.saved',
-    'orders.synced'
+    'orders.synced',
+    'emptyOrders.synced'
   ]
-};
-
-exports['orders/importer/orders'] = {
-  stepCount: 8
 };
 
 exports.directoryWatcher = {
   path: __dirname + '/../data/attachments'
+};
+
+exports.orderImporter = {
+  stepCount: 8
+};
+
+exports.emptyOrderImporter = {
+  stepCount: 8
 };

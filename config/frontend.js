@@ -34,7 +34,8 @@ exports.events = {
     ],
     info: [
       'events.**',
-      'orders.synced'
+      'orders.synced',
+      'emptyOrders.synced'
     ],
     warning: [
       'users.deleted',
