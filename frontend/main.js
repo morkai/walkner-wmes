@@ -65,8 +65,10 @@
     broker,
     i18n,
     socket,
+    router,
     viewport,
     PageLayout,
+    PrintLayout,
     NavbarView,
     LogInFormView)
   {
@@ -105,37 +107,51 @@
       keep: true
     });
 
-    var navbarView = new NavbarView();
-
-    navbarView.on('logIn', function()
+    viewport.registerLayout('page', function createPageLayout()
     {
-      viewport.showDialog(
-        new LogInFormView(), i18n('core', 'LOG_IN_FORM:DIALOG_TITLE')
-      );
-    });
-
-    navbarView.on('logOut', function()
-    {
-      $.ajax({
-        type: 'GET',
-        url: '/logout'
-      }).fail(function()
-      {
-        viewport.msg.show({
-          type: 'error',
-          text: i18n('core', 'MSG:LOG_OUT:FAILURE'),
-          time: 5000
-        });
+      return new PageLayout({
+        views: {
+          '.navbar': createNavbarView()
+        }
       });
     });
 
-    var pageLayout = new PageLayout({
-      views: {
-        '.navbar': navbarView
-      }
+    viewport.registerLayout('print', function createPrintLayout()
+    {
+      return new PrintLayout();
     });
 
-    viewport.registerLayout('page', pageLayout);
+    function createNavbarView()
+    {
+      var req = router.getCurrentRequest();
+      var navbarView = new NavbarView({
+        currentPath: req === null ? '/' : req.path
+      });
+
+      navbarView.on('logIn', function()
+      {
+        viewport.showDialog(
+          new LogInFormView(), i18n('core', 'LOG_IN_FORM:DIALOG_TITLE')
+        );
+      });
+
+      navbarView.on('logOut', function()
+      {
+        $.ajax({
+          type: 'GET',
+          url: '/logout'
+        }).fail(function()
+          {
+            viewport.msg.show({
+              type: 'error',
+              text: i18n('core', 'MSG:LOG_OUT:FAILURE'),
+              time: 5000
+            });
+          });
+      });
+
+      return navbarView;
+    }
 
     function doStartApp()
     {
@@ -190,12 +206,15 @@
       'app/broker',
       'app/i18n',
       'app/socket',
+      'app/router',
       'app/viewport',
       'app/core/layouts/PageLayout',
+      'app/core/layouts/PrintLayout',
       'app/core/views/NavbarView',
       'app/core/views/LogInFormView',
       'app/time',
       'app/orders/routes',
+      'app/emptyOrders/routes',
       'app/events/routes',
       'app/users/routes',
       'app/orderStatuses/routes',

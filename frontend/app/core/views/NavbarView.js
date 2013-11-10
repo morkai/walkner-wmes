@@ -79,6 +79,10 @@ define([
     /**
      * @type {string}
      */
+    currentPath: '/',
+    /**
+     * @type {string}
+     */
     activeItemClassName: 'active',
     /**
      * @type {string}
@@ -115,6 +119,8 @@ define([
      * @type {jQuery|null}
      */
     this.$activeNavItem = null;
+
+    this.activateNavItem(this.getModuleNameFromPath(this.options.currentPath));
   };
 
   NavbarView.prototype.beforeRender = function()

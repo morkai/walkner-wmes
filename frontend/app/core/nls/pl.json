@@ -39,6 +39,7 @@
   "NAVBAR:DASHBOARD": "Dashboard",
   "NAVBAR:EVENTS": "Zdarzenia",
   "NAVBAR:ORDERS": "Zlecenia",
+  "NAVBAR:EMPTY_ORDERS": "Puste zlecenia",
   "NAVBAR:LINES": "Linie produkcyjne",
   "NAVBAR:USERS": "Użytkownicy",
   "NAVBAR:MY_ACCOUNT": "Moje konto",

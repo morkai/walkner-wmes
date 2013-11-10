@@ -1,0 +1,29 @@
+<table class="table table-bordered table-condensed">
+  <thead>
+    <tr>
+      <% columns.forEach(function(column) { %>
+      <th><%- column.label %></th>
+      <% }) %>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (!rows.length) { %>
+    <tr>
+      <td colspan="<%- columns.length + 1 %>"><%- t('core', 'LIST:NO_DATA') %></td>
+    </tr>
+    <% } %>
+    <% rows.forEach(function(row) { %>
+    <tr class="list-item <%- row.className ? row.className : '' %>">
+      <% columns.forEach(function(column) { %>
+      <td>
+        <% if (row[column.id] == null) { %>
+        <em><%- t('core', 'LIST:NO_DATA:cell') %></em>
+        <% } else { %>
+        <%- row[column.id] %>
+        <% } %>
+      </td>
+      <% }) %>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

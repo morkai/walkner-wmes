@@ -15,9 +15,6 @@ define([
 ) {
   'use strict';
 
-  var removeLayoutView = View.prototype.removeView;
-  var setLayoutView = View.prototype.setView;
-
   function Viewport(options)
   {
     View.call(this, options);
@@ -29,6 +26,8 @@ define([
     this.layouts = {};
 
     this.currentLayout = null;
+
+    this.currentLayoutName = null;
 
     this.currentPage = null;
 
@@ -67,7 +66,6 @@ define([
     }
 
     _.invoke(this.dialogQueue.filter(_.isObject), 'remove');
-    _.invoke(this.layouts, 'remove');
 
     this.$el.off('click', '.viewport-dialog .cancel', this.closeDialog);
 
@@ -95,9 +93,9 @@ define([
     this.$dialog.on('hidden.bs.modal', this.onDialogHidden.bind(this));
   };
 
-  Viewport.prototype.registerLayout = function(name, layout)
+  Viewport.prototype.registerLayout = function(name, layoutFactory)
   {
-    this.layouts[name] = layout;
+    this.layouts[name] = layoutFactory;
 
     return this;
   };
@@ -227,9 +225,7 @@ define([
 
   Viewport.prototype.setLayout = function(layoutName)
   {
-    var newLayout = this.layouts[layoutName];
-
-    if (newLayout === this.currentLayout)
+    if (layoutName === this.currentLayoutName)
     {
       if (_.isFunction(this.currentLayout.reset))
       {
@@ -239,16 +235,18 @@ define([
       return this.currentLayout;
     }
 
+    var createNewLayout = this.layouts[layoutName];
     var selector = this.options.selector || '';
 
     if (_.isObject(this.currentLayout))
     {
-      removeLayoutView.call(this, selector);
+      this.removeView(selector);
     }
 
-    this.currentLayout = newLayout;
+    this.currentLayoutName = layoutName;
+    this.currentLayout = createNewLayout();
 
-    setLayoutView.call(this, selector, newLayout);
+    this.setView(selector, this.currentLayout);
 
     return this.currentLayout;
   };

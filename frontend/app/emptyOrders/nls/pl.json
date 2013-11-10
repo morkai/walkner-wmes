@@ -1,0 +1,20 @@
+{
+  "BREADCRUMBS:BROWSE": "Puste zlecenia",
+
+  "MSG_LOADING_FAILURE": "Ładowanie pustych zleceń nie powiodło się :(",
+  "MSG_LOADING_SINGLE_FAILURE": "Ładowanie pustych zlecenia nie powiodło się :(",
+
+  "PAGE_ACTION:print": "Pokaż wersję do druku",
+
+  "PRINT_PAGE:HD:LEFT": "Zlecenia bez żadnych operacji",
+  "PRINT_PAGE:FT:PAGE_NO": "Strona <span class=print-page-no>?</span> z <span class=print-page-count>?</span>",
+  "PRINT_PAGE:FT:INFO": "Wydruk wygenerowany <span class=print-page-date>?</span> przez użytkownika <span class=print-page-user>?</span>.",
+
+  "PROPERTY:_id": "Nr zlecenia",
+  "PROPERTY:createdAt": "Czas stworzenia",
+  "PROPERTY:nc12": "12NC",
+  "PROPERTY:mrp": "MRP",
+  "PROPERTY:startDate": "Data startu",
+  "PROPERTY:finishDate": "Data ukończenia",
+  "PROPERTY:statuses": "Status"
+}

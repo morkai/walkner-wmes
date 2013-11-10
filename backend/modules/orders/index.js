@@ -2,6 +2,7 @@
 
 var setUpOrderStatusesRoutes = require('./orderStatusesRoutes');
 var setUpOrdersRoutes = require('./ordersRoutes');
+var setUpEmptyOrdersRoutes = require('./emptyOrdersRoutes');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -21,6 +22,7 @@ exports.start = function startOrdersModule(app, module)
     {
       setUpOrderStatusesRoutes(app, module);
       setUpOrdersRoutes(app, module);
+      setUpEmptyOrdersRoutes(app, module);
     }
   );
 };
