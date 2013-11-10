@@ -1,5 +1,3 @@
-/*jshint maxparams:5*/
-
 'use strict';
 
 var step = require('h5.step');
@@ -11,7 +9,7 @@ exports.browseRoute = function(app, Model, req, res, next)
 
   if (queryOptions.limit === 0)
   {
-    queryOptions.limit = 100;
+    queryOptions.limit = typeof Model.BROWSE_LIMIT === 'number' ? Model.BROWSE_LIMIT : 100;
   }
 
   step(
@@ -45,8 +43,7 @@ exports.browseRoute = function(app, Model, req, res, next)
 
       var totalCount = this.totalCount;
 
-      if (typeof Model.customizeLeanObject === 'function'
-        && totalCount > 0)
+      if (typeof Model.customizeLeanObject === 'function' && totalCount > 0)
       {
         models = models.map(function(leanModel)
         {
