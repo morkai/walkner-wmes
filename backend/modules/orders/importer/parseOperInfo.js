@@ -23,7 +23,7 @@ module.exports = function parseOperInfo(html, orders, missingOrders)
 
     var cells = $(this).find('td').map(function()
     {
-      return $(this).text().replace(/&nbsp;/g, ' ').trim().replace(/ {2,}/g, ' ');
+      return $(this).text().replace(/\s+/g, ' ').trim();
     });
 
     if (cells.length !== 10)
