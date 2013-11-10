@@ -71,7 +71,7 @@ define([
         order.updatedAtText = moment(order.updatedAt).format('LLLL');
       }
 
-      order.operations = order.operations.toJSON();
+      order.operations = order.operations === null ? [] : order.operations.toJSON();
 
       return order;
     }
