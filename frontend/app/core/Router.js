@@ -41,10 +41,24 @@ define([
 
     /**
      * @private
+     * @type {Request|null}
+     */
+    this.currentRequest = null;
+
+    /**
+     * @private
      * @type {string|null}
      */
     this.previousUrl = null;
   }
+
+  /**
+   * @returns {Request|null}
+   */
+  Router.prototype.getCurrentRequest = function()
+  {
+    return this.currentRequest;
+  };
 
   /**
    * @param {string|RegExp} pattern
@@ -179,6 +193,8 @@ define([
    */
   Router.prototype.execute = function(handlers, req)
   {
+    this.currentRequest = req;
+
     this.broker.publish('router.executing', {
       handlers: handlers,
       req: req
