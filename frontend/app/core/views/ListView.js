@@ -98,7 +98,7 @@ define([
     viewDetails: function(model, nlsDomain)
     {
       return {
-        pageId: 'viewDetails',
+        id: 'viewDetails',
         icon: 'file-text-o',
         label: t(nlsDomain || 'core', 'LIST:ACTION:viewDetails'),
         href: model.genClientUrl()
@@ -107,7 +107,7 @@ define([
     edit: function(model, nlsDomain)
     {
       return {
-        pageId: 'edit',
+        id: 'edit',
         icon: 'edit',
         label: t(nlsDomain || 'core', 'LIST:ACTION:edit'),
         href: model.genClientUrl('edit')
@@ -116,7 +116,7 @@ define([
     delete: function(model, nlsDomain)
     {
       return {
-        pageId: 'delete',
+        id: 'delete',
         icon: 'times',
         label: t(nlsDomain || 'core', 'LIST:ACTION:delete'),
         href: model.genClientUrl('delete')
