@@ -9,7 +9,7 @@ exports.browseRoute = function(app, Model, req, res, next)
 {
   var queryOptions = mongoSerializer.fromQuery(req.rql);
 
-  if (queryOptions.limit === 0 || queryOptions.limit > 100)
+  if (queryOptions.limit === 0)
   {
     queryOptions.limit = 100;
   }
