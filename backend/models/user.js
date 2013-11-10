@@ -42,5 +42,12 @@ module.exports = function setupUserModel(app, mongoose)
 
   userSchema.statics.TOPIC_PREFIX = 'users';
 
+  userSchema.statics.customizeLeanObject = function(leanModel)
+  {
+    delete leanModel.password;
+
+    return leanModel;
+  };
+
   mongoose.model('User', userSchema);
 };
