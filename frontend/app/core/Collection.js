@@ -64,6 +64,10 @@ define([
     {
       rqlQuery = rql.parse(rqlQuery);
     }
+    else if (_.isFunction(rqlQuery))
+    {
+      rqlQuery = rqlQuery.call(this, rql);
+    }
     else if (_.isObject(rqlQuery))
     {
       rqlQuery = rql.Query.fromObject(rqlQuery);
@@ -79,7 +83,12 @@ define([
       return rql.parse(this.rqlQuery);
     }
 
-    if (_.isObject(rqlQuery))
+    if (_.isFunction(this.rqlQuery))
+    {
+      return this.rqlQuery.call(this, rql);
+    }
+
+    if (_.isObject(this.rqlQuery))
     {
       return rql.Query.fromObject(this.rqlQuery);
     }
@@ -96,11 +105,6 @@ define([
     rqlQuery.skip = '${skip}';
     rqlQuery.limit = '${limit}';
 
-/*
-    var clientUrl = _.isFunction(this.clientUrl)
-      ? this.clientUrl()
-      : _.isString(this.clientUrl) ? this.clientUrl : '#';
-*/
     var urlTemplate = this.genClientUrl() + '?' + rqlQuery.toString();
 
     rqlQuery.skip = skip;
