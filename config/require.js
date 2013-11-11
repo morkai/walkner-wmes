@@ -16,7 +16,8 @@ exports.paths = {
   'h5.pubsub': 'vendor/h5.pubsub',
   'h5.rql': 'vendor/h5.rql',
   'form2js': 'vendor/form2js',
-  'js2form': 'vendor/js2form'
+  'js2form': 'vendor/js2form',
+  'reltime': 'vendor/reltime'
 };
 
 exports.shim = {
@@ -28,7 +29,10 @@ exports.shim = {
     exports: 'Backbone'
   },
   'bootstrap': ['jquery'],
-  'bootstrap-colorpicker': ['bootstrap']
+  'bootstrap-colorpicker': ['bootstrap'],
+  'reltime': {
+    exports: 'reltime'
+  }
 };
 
 exports.buildPaths = exports.paths;
