@@ -2,6 +2,7 @@ define([
   'underscore',
   'moment',
   'js2form',
+  'reltime',
   'app/i18n',
   'app/core/View',
   'app/events/templates/filter',
@@ -10,6 +11,7 @@ define([
   _,
   moment,
   js2form,
+  reltime,
   t,
   View,
   filterTemplate
@@ -49,8 +51,7 @@ define([
       var formData = {
         type: '$ANY',
         user: '$ANY',
-        limit:
-          rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit),
+        limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit),
         severity: []
       };
 
@@ -145,31 +146,53 @@ define([
 
       var $from = this.$('#' + this.idPrefix + '-from');
       var $to = this.$('#' + this.idPrefix + '-to');
+      var fromValue = $from.val().trim();
+      var toValue = $to.val().trim();
+      var now = new Date();
+      var fromMoment = moment(fromValue);
+      var toMoment = moment(toValue);
 
-      var from = moment($from.val());
-      var to = moment($to.val());
-
-      if (from.isValid())
+      if (!fromMoment.isValid() && fromValue.length > 0)
       {
-        $from.val(from.format('YYYY-MM-DD HH:mm:ss'));
+        var fromReltime = reltime.parse(now, fromValue);
 
-        timeRange.from = from.valueOf();
+        if (fromReltime !== false)
+        {
+          fromMoment = moment(fromReltime);
+        }
+      }
+
+      if (!toMoment.isValid() && toValue.length > 0)
+      {
+        var toReltime = reltime.parse(now, toValue);
+
+        if (toReltime !== false)
+        {
+          toMoment = moment(toReltime);
+        }
+      }
+
+      if (fromMoment.isValid())
+      {
+        $from.val(fromMoment.format('YYYY-MM-DD HH:mm:ss'));
+
+        timeRange.from = fromMoment.valueOf();
       }
       else
       {
         $from.val('');
       }
 
-      if (to.isValid())
+      if (toMoment.isValid())
       {
-        if (from.valueOf() === to.valueOf())
+        if (fromMoment.valueOf() === toMoment.valueOf())
         {
-          to.add('days', 1);
+          toMoment.add('days', 1);
         }
 
-        $to.val(to.format('YYYY-MM-DD HH:mm:ss'));
+        $to.val(toMoment.format('YYYY-MM-DD HH:mm:ss'));
 
-        timeRange.to = to.valueOf();
+        timeRange.to = toMoment.valueOf();
       }
       else
       {
@@ -189,16 +212,9 @@ define([
         $allSeverity.addClass('active');
       }
 
-      var selectedSeverity = $activeSeverity
-        .map(function()
-        {
-          return this.value;
-        })
-        .get();
+      var selectedSeverity = $activeSeverity.map(function() { return this.value; }).get();
 
-      return selectedSeverity.length === $allSeverity.length
-        ? []
-        : selectedSeverity;
+      return selectedSeverity.length === $allSeverity.length ? [] : selectedSeverity;
     },
 
     toggleSeverity: function(severities)
@@ -213,9 +229,7 @@ define([
       {
         severities.forEach(function(severity)
         {
-          $allSeverity
-            .filter('[title="' + severity.toUpperCase() + '"]')
-            .addClass('active');
+          $allSeverity.filter('[title="' + severity.toUpperCase() + '"]').addClass('active');
         });
       }
     }
