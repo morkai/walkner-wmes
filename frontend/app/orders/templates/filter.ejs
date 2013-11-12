@@ -1,0 +1,36 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-_id"><%- t('orders', 'PROPERTY:_id') %></label>
+      <input id="<%- idPrefix %>-_id" class="form-control orders-filter-_id" name="_id" type="text" minlength="4" maxlength="10" placeholder="<%- t('orders', 'FILTER:PLACEHOLDER:_id') %>">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-nc12"><%- t('orders', 'PROPERTY:nc12') %></label>
+      <input id="<%- idPrefix %>-nc12" class="form-control orders-filter-nc12" name="nc12" type="text" minlength="3" maxlength="12" placeholder="<%- t('orders', 'FILTER:PLACEHOLDER:nc12') %>">
+    </div><div
+      class="form-group orders-filter-date-group">
+      <div>
+        <label>
+          <input id="<%- idPrefix %>-date-start" name="date" type="radio" value="start">
+          <%- t('orders', 'PROPERTY:startDate') %>
+        </label><label
+          class="orders-filter-date-finish-label">
+          <input id="<%- idPrefix %>-date-finish" name="date" type="radio" value="finish">
+          <%- t('orders', 'PROPERTY:finishDate') %>
+        </label>
+      </div><div class="orders-filter-date-range">
+        <label for="<%- idPrefix %>-from"><%- t('orders', 'FILTER:DATE:FROM') %></label>
+        <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+        <label for="<%- idPrefix %>-to" class="control-label"><%- t('orders', 'FILTER:DATE:TO') %></label>
+        <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
+      </div>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-limit"><%- t('orders', 'FILTER:LIMIT') %></label>
+      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('orders', 'FILTER:BUTTON') %>">
+    </div>
+  </form>
+</div>

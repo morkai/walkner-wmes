@@ -1,32 +1,32 @@
 <div class="well">
-  <form id="<%- idPrefix %>-form" class="events-filter-form">
+  <form id="<%- idPrefix %>-form" class="filter-form">
     <div class="form-group">
-      <label for="<%- idPrefix %>-from"><%- t('events', 'FILTER_FROM') %></label>
+      <label for="<%- idPrefix %>-from"><%- t('events', 'FILTER:DATE:FROM') %></label>
       <input id="<%- idPrefix %>-from" class="form-control" name="from" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-to"><%- t('events', 'FILTER_TO') %></label>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-to"><%- t('events', 'FILTER:DATE:TO') %></label>
       <input id="<%- idPrefix %>-to" class="form-control" name="to" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-type"><%- t('events', 'FILTER_TYPE') %></label>
-      <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%= t('events', 'FILTER_TYPE_ANY') %>">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-type"><%- t('events', 'PROPERTY:type') %></label>
+      <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%= t('events', 'FILTER:PLACEHOLDER:type') %>">
         <option></option>
         <% types.forEach(function(type) { %>
         <option value="<%- type.value %>"><%= type.label %>
         <% }) %>
       </select>
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-user"><%- t('events', 'FILTER_USER') %></label>
-      <input id="<%- idPrefix %>-user" name="user" type="hidden" data-placeholder="<%= t('events', 'FILTER_USER_ANY') %>">
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-limit"><%- t('events', 'FILTER_LIMIT') %></label>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-user"><%- t('events', 'PROPERTY:user') %></label>
+      <input id="<%- idPrefix %>-user" name="user" type="hidden" data-placeholder="<%= t('events', 'FILTER:PLACEHOLDER:user') %>">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-limit"><%- t('events', 'FILTER:LIMIT') %></label>
       <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
-    </div>
-    <div class="form-group events-filter-severity-group">
-      <label><%- t('events', 'FILTER_SEVERITY') %></label>
+    </div><div
+      class="form-group events-filter-severity-group">
+      <label><%- t('events', 'PROPERTY:severity') %></label>
       <div class="btn-group events-filter-group" data-toggle="buttons-checkbox">
         <button class="btn btn-default events-filter-form-severity" type="button" value="debug">&nbsp;</button>
         <button class="btn btn-info events-filter-form-severity" type="button" value="info">&nbsp;</button>
@@ -34,8 +34,9 @@
         <button class="btn btn-warning events-filter-form-severity" type="button" value="warning">&nbsp;</button>
         <button class="btn btn-danger events-filter-form-severity" type="button" value="error">&nbsp;</button>
       </div>
-    </div><div class="form-group events-filter-actions">
-      <input type="submit" class="btn btn-primary" value="<%= t('events', 'FILTER_BUTTON') %>">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('events', 'FILTER:BUTTON') %>">
     </div>
   </form>
 </div>

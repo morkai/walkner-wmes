@@ -18,6 +18,9 @@
 .form-control[disabled]:focus {
   background-color: #eee;
 }
+.form-control[type="date"] {
+  width: 11em;
+}
 .form-actions {
   padding: 1em;
   margin-top: 1em;

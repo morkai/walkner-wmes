@@ -5,6 +5,7 @@ define([
   'reltime',
   'app/i18n',
   'app/core/View',
+  'app/core/util/fixTimeRange',
   'app/events/templates/filter',
   'i18n!app/nls/events',
   'select2'
@@ -15,6 +16,7 @@ define([
   reltime,
   t,
   View,
+  fixTimeRange,
   filterTemplate
 ) {
   'use strict';
@@ -24,7 +26,7 @@ define([
     template: filterTemplate,
 
     events: {
-      'submit .events-filter-form': function(e)
+      'submit .filter-form': function(e)
       {
         e.preventDefault();
 
@@ -49,7 +51,7 @@ define([
     {
       var formData = this.serializeRqlQuery();
 
-      js2form(this.el.querySelector('.events-filter-form'), formData);
+      js2form(this.el.querySelector('.filter-form'), formData);
 
       this.toggleSeverity(formData.severity);
 
@@ -136,7 +138,11 @@ define([
     changeFilter: function()
     {
       var rqlQuery = this.model.rqlQuery;
-      var timeRange = this.fixTimeRange();
+      var timeRange = fixTimeRange(
+        this.$('#' + this.idPrefix + '-from'),
+        this.$('#' + this.idPrefix + '-to'),
+        'YYYY-MM-DD HH:mm:ss'
+      );
       var selector = [];
       var type = this.$('#' + this.idPrefix + '-type').val().trim();
       var user = this.$('#' + this.idPrefix + '-user').val().trim();
@@ -180,71 +186,6 @@ define([
       rqlQuery.skip = 0;
 
       this.trigger('filterChanged', rqlQuery);
-    },
-
-    fixTimeRange: function()
-    {
-      var timeRange = {
-        from: -1,
-        to: -1
-      };
-
-      var $from = this.$('#' + this.idPrefix + '-from');
-      var $to = this.$('#' + this.idPrefix + '-to');
-      var fromValue = $from.val().trim();
-      var toValue = $to.val().trim();
-      var now = new Date();
-      var fromMoment = moment(fromValue);
-      var toMoment = moment(toValue);
-
-      if (!fromMoment.isValid() && fromValue.length > 0)
-      {
-        var fromReltime = reltime.parse(now, fromValue);
-
-        if (fromReltime !== false)
-        {
-          fromMoment = moment(fromReltime);
-        }
-      }
-
-      if (!toMoment.isValid() && toValue.length > 0)
-      {
-        var toReltime = reltime.parse(now, toValue);
-
-        if (toReltime !== false)
-        {
-          toMoment = moment(toReltime);
-        }
-      }
-
-      if (fromMoment.isValid())
-      {
-        $from.val(fromMoment.format('YYYY-MM-DD HH:mm:ss'));
-
-        timeRange.from = fromMoment.valueOf();
-      }
-      else
-      {
-        $from.val('');
-      }
-
-      if (toMoment.isValid())
-      {
-        if (fromMoment.valueOf() === toMoment.valueOf())
-        {
-          toMoment.add('days', 1);
-        }
-
-        $to.val(toMoment.format('YYYY-MM-DD HH:mm:ss'));
-
-        timeRange.to = toMoment.valueOf();
-      }
-      else
-      {
-        $to.val('');
-      }
-
-      return timeRange;
     },
 
     fixSeverity: function()

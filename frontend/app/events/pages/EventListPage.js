@@ -41,8 +41,8 @@ define([
       this.defineModels();
       this.defineViews();
 
-      this.setView('.events-list-container', this.eventListView);
-      this.setView('.events-filter-container', this.eventFilterView);
+      this.setView('.filter-container', this.filterView);
+      this.setView('.events-list-container', this.listView);
     },
 
     defineModels: function()
@@ -58,16 +58,16 @@ define([
 
     defineViews: function()
     {
-      this.eventListView = new EventListView({model: this.eventList});
+      this.listView = new EventListView({model: this.eventList});
 
-      this.eventFilterView = new EventFilterView({
+      this.filterView = new EventFilterView({
         model: {
           rqlQuery: this.eventList.rqlQuery,
           eventTypes: this.eventTypes
         }
       });
 
-      this.listenTo(this.eventFilterView, 'filterChanged', this.refreshEventList);
+      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },
 
     load: function(when)
@@ -78,11 +78,11 @@ define([
       );
     },
 
-    refreshEventList: function(newRqlQuery)
+    refreshList: function(newRqlQuery)
     {
       this.eventList.rqlQuery = newRqlQuery;
 
-      this.eventListView.refreshCollection(null, true);
+      this.listView.refreshCollection(null, true);
 
       this.broker.publish('router.navigate', {
         url: this.eventList.genClientUrl() + '?' + newRqlQuery,

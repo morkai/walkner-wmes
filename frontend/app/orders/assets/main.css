@@ -1,0 +1,23 @@
+.orders-filter-_id,
+.orders-filter-nc12 {
+  width: 11em;
+}
+.filter-form .orders-filter-date-group {
+  margin-bottom: 0;
+}
+.orders-filter-date-group input[type=date] {
+  display: inline-block;
+  margin-bottom: 1em;
+}
+.orders-filter-date-group input[type=radio] {
+  margin-top: 0;
+}
+.orders-filter-date-finish-label {
+  margin-left: 1em;
+}
+.orders-filter-date-range label {
+  margin-top: .5em;
+  margin-bottom: 0;
+  vertical-align: top;
+  font-weight: normal;
+}

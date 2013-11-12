@@ -3,6 +3,7 @@
 @import url(./form.css);
 @import url(./properties.css);
 @import url(./logInForm.css);
+@import url(./filter.css);
 
 body {
   cursor: default;

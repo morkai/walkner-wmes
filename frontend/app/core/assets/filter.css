@@ -1,0 +1,29 @@
+.filter-container {
+  margin-bottom: 1em;
+}
+.filter-container .well {
+  padding: 1em 1em 0 0;
+}
+.filter-form .form-group {
+  display: inline-block;
+  margin-left: 1em;
+  margin-bottom: 1em;
+  vertical-align: top;
+}
+.filter-form input {
+  margin-bottom: 0;
+}
+.filter-form input[name="limit"] {
+  width: 5em;
+  text-align: right;
+}
+.filter-form .filter-actions {
+  padding-left: 1em;
+  margin-left: 1em;
+  border-left: 1px solid #e3e3e3;
+  vertical-align: bottom;
+}
+.filter-label.radio {
+  margin-top: 0;
+  margin-bottom: 5px;
+}

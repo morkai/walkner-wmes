@@ -5,16 +5,13 @@
 
   "BREADCRUMBS:BROWSE": "Zdarzenia",
 
-  "FILTER_FROM": "Od:",
-  "FILTER_TO": "Do:",
-  "FILTER_TYPE": "Typ:",
-  "FILTER_TYPE_ANY": "Dowolny typ",
-  "FILTER_USER": "Użytkownik:",
-  "FILTER_USER_ANY": "Dowolny użytkownik",
-  "FILTER_USER_SYSTEM": "System",
-  "FILTER_SEVERITY": "Poziom ważności",
-  "FILTER_LIMIT": "Limit",
-  "FILTER_BUTTON": "Filtruj",
+  "FILTER:DATE:FROM": "Od",
+  "FILTER:DATE:TO": "Do",
+  "FILTER:PLACEHOLDER:type": "Dowolny typ",
+  "FILTER:PLACEHOLDER:user": "Dowolny użytkownik",
+  "FILTER:SYSTEM_USER": "System",
+  "FILTER:LIMIT": "Limit",
+  "FILTER:BUTTON": "Filtruj zdarzenia",
 
   "TABLE_ACTION_VIEW": "Pokaż szczegóły zdarzenia",
 
@@ -22,6 +19,7 @@
   "PROPERTY:user": "Użytkownik",
   "PROPERTY:type": "Typ",
   "PROPERTY:text": "Opis",
+  "PROPERTY:severity": "Poziom ważności",
 
   "TYPE:app.started": "Start systemu",
   "TEXT:app.started": "<em>{id, select, frontend{Serwer aplikacji} controller{Serwer sterownika} alarms{Serwer alarmów} other{Serwer {id}}}</em> wystartował w środowisku <em>{env, select, development{rozwojowym} production{produkcyjnym} other{nieokreślonym}}</em> w ciągu <em>{time}</em> ms.",
