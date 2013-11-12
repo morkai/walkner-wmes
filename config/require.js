@@ -17,7 +17,9 @@ exports.paths = {
   'h5.rql': 'vendor/h5.rql',
   'form2js': 'vendor/form2js',
   'js2form': 'vendor/js2form',
-  'reltime': 'vendor/reltime'
+  'reltime': 'vendor/reltime',
+  'select2': 'vendor/select2/select2',
+  'select2-lang': 'vendor/select2-lang'
 };
 
 exports.shim = {
@@ -32,6 +34,10 @@ exports.shim = {
   'bootstrap-colorpicker': ['bootstrap'],
   'reltime': {
     exports: 'reltime'
+  },
+  'select2': {
+    deps: ['jquery'],
+    exports: 'Select2'
   }
 };
 

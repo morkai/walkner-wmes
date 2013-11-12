@@ -4,6 +4,7 @@
 
   var domains = [];
   var i18n = null;
+  var select2 = null;
 
   require.onError = function(err)
   {
@@ -53,6 +54,20 @@
       });
 
       domains = null;
+    }
+    else if (map.id === 'select2')
+    {
+      select2 = context.defined[map.id];
+      select2.lang = function(lang)
+      {
+        window.jQuery.extend(window.jQuery.fn.select2.defaults, select2.lang[lang]);
+      };
+    }
+    else if (/^select2-lang/.test(map.id))
+    {
+      var lang = map.id.substr(map.id.lastIndexOf('/') + 1);
+
+      select2.lang[lang] = context.defined[map.id];
     }
   };
 
@@ -223,6 +238,7 @@
       'app/dashboard/routes',
       'bootstrap',
       'moment-lang/' + (window.LOCALE || 'pl'),
+      'select2-lang/' + (window.LOCALE || 'pl'),
       'i18n!app/nls/core'
     ], startApp);
   }

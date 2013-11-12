@@ -1,10 +1,12 @@
 define([
   'underscore',
   'moment',
+  'select2',
   'app/broker'
 ], function(
   _,
   moment,
+  select2,
   broker
 ) {
   'use strict';
@@ -84,9 +86,12 @@ define([
       modules.unshift('moment-lang/' + newLocale);
     }
 
+    modules.unshift('select2-lang/' + newLocale);
+
     require(modules, function()
     {
       moment.lang(newLocale);
+      select2.lang(newLocale);
 
       broker.publish('i18n.reloaded', {
         oldLocale: oldLocale,
