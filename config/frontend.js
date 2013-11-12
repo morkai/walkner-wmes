@@ -15,6 +15,7 @@ exports.modules = [
   'orders',
   'downtimeReasons',
   'aors',
+  'workCenters',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'}
 ];
@@ -30,7 +31,8 @@ exports.events = {
       'orders.added', 'orders.edited',
       'orderStatuses.added', 'orderStatuses.edited',
       'downtimeReasons.added', 'downtimeReasons.edited',
-      'aors.added', 'aors.edited'
+      'aors.added', 'aors.edited',
+      'workCenters.added', 'workCenters.edited'
     ],
     info: [
       'events.**'
@@ -41,7 +43,8 @@ exports.events = {
       'orders.deleted',
       'orderStatuses.deleted',
       'downtimeReasons.deleted',
-      'aors.deleted'
+      'aors.deleted',
+      'workCenters.deleted'
     ]
   }
 };
@@ -91,7 +94,8 @@ exports.user = {
     'EVENTS:VIEW', 'EVENTS:MANAGE',
     'ORDER_STATUSES:VIEW', 'ORDER_STATUSES:MANAGE',
     'DOWNTIME_REASONS:VIEW', 'DOWNTIME_REASONS:MANAGE',
-    'AORS:VIEW', 'AORS:MANAGE'
+    'AORS:VIEW', 'AORS:MANAGE',
+    'WORK_CENTERS:VIEW', 'WORK_CENTERS:MANAGE'
   ]
 };
 exports['messenger/client:attachments'] = {

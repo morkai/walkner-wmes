@@ -52,6 +52,7 @@
   "NAVBAR:ORDER_STATUSES": "Statusy zleceń",
   "NAVBAR:DOWNTIME_REASONS": "Powody przestojów",
   "NAVBAR:AORS": "Obszary odpowiedzialności",
+  "NAVBAR:WORK_CENTERS": "Centra produkcyjne",
 
   "ACTION_FORM_BUTTON": "Wykonaj akcję",
   "ACTION_FORM_BUTTON:delete": "Usuń",

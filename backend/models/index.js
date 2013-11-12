@@ -8,6 +8,7 @@ module.exports = [
   'order',
   'emptyOrder',
   'orderStatus',
-  'user'
+  'user',
+  'workCenter'
 
 ];

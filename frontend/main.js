@@ -235,6 +235,7 @@
       'app/orderStatuses/routes',
       'app/downtimeReasons/routes',
       'app/aors/routes',
+      'app/workCenters/routes',
       'app/dashboard/routes',
       'bootstrap',
       'moment-lang/' + (window.LOCALE || 'pl'),
