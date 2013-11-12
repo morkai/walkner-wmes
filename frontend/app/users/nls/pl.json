@@ -49,5 +49,7 @@
   "PRIVILEGE:DOWNTIME_REASONS:VIEW": "Przeglądanie powodów przestojów",
   "PRIVILEGE:DOWNTIME_REASONS:MANAGE": "Zarządzanie powodami przestojów",
   "PRIVILEGE:AORS:VIEW": "Przeglądanie obszarów odpowiedzialności",
-  "PRIVILEGE:AORS:MANAGE": "Zarządzanie obszarami odpowiedzialności"
+  "PRIVILEGE:AORS:MANAGE": "Zarządzanie obszarami odpowiedzialności",
+  "PRIVILEGE:WORK_CENTERS:VIEW": "Przeglądanie centrów produkcyjnych",
+  "PRIVILEGE:WORK_CENTERS:MANAGE": "Zarządzanie centrami produkcyjnych"
 }
