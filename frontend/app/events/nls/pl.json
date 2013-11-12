@@ -35,6 +35,8 @@
   "TEXT:users.edited": "Zmodyfikowano użytkownika: <a href='\\#users/{model->_id}'>{model->login}</a>",
   "TYPE:users.deleted": "Usunięcie użytkownika",
   "TEXT:users.deleted": "Usunięto użytkownika: <em>{model->login}</em>",
+  "TYPE:emptyOrders.synced": "Synchronizacja pustych zleceń",
+  "TEXT:emptyOrders.synced": "Dodano {count, plural, one{1 nowe puste zlecenie} few {# nowe puste zlecenia} other{# nowych pustych zleceń}}.",
   "TYPE:orders.synced": "Synchronizacja zleceń",
   "TEXT:orders.synced": "Dodano {created, plural, one{1 nowe zlecenie} few{# nowe zlecenia} other{# nowych zleceń}} i zmodyfikowano {updated, plural, one{1 istniejące zlecenie} few{# istniejące zlecenia} other{# istniejących zleceń}}.",
   "TYPE:orders.added": "Dodanie zlecenia",
@@ -60,5 +62,11 @@
   "TYPE:aors.edited": "Edycja obszaru odpowiedzialności",
   "TEXT:aors.edited": "Zmodyfikowano obszar odpowiedzialności: <a href='\\#aors/{model->_id}'>{model->name}</a>",
   "TYPE:aors.deleted": "Usunięcie obszaru odpowiedzialności",
-  "TEXT:aors.deleted": "Usunięto obszar odpowiedzialności: <em>{model->name}</em>"
+  "TEXT:aors.deleted": "Usunięto obszar odpowiedzialności: <em>{model->name}</em>",
+  "TYPE:workCenters.added": "Dodanie centrum produkcyjnego",
+  "TEXT:workCenters.added": "Dodano centrum produkcyjne: <a href='\\#aors/{model->_id}'>{model->_id}</a>",
+  "TYPE:workCenters.edited": "Edycja centrum produkcyjnego",
+  "TEXT:workCenters.edited": "Zmodyfikowano centrum produkcyjne: <a href='\\#aors/{model->_id}'>{model->_id}</a>",
+  "TYPE:workCenters.deleted": "Usunięcie centrum produkcyjnego",
+  "TEXT:workCenters.deleted": "Usunięto centrum produkcyjne: <em>{model->_id}</em>"
 }
