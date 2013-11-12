@@ -179,16 +179,21 @@ define([
     {
       var dialogTitle = null;
 
-      if (!options.nlsDomain && options.model.nlsDomain)
+      if (!options.nlsDomain)
       {
         options.nlsDomain = options.model.nlsDomain;
+      }
+
+      if (!options.labelProperty)
+      {
+        options.labelProperty = options.model.labelProperty;
       }
 
       if (options.nlsDomain)
       {
         dialogTitle = t.bound(options.nlsDomain, 'ACTION_DIALOG_TITLE:' + options.actionKey);
 
-        if (options.model.labelProperty)
+        if (options.labelProperty)
         {
           options.messageText = t.bound(
             options.nlsDomain,
