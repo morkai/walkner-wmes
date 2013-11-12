@@ -4,7 +4,6 @@ define([
   'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
-  'app/users/UserCollection',
   '../EventCollection',
   '../EventTypeCollection',
   '../views/EventListView',
@@ -17,7 +16,6 @@ define([
   t,
   bindLoadingMessage,
   View,
-  UserCollection,
   EventCollection,
   EventTypeCollection,
   EventListView,
@@ -56,10 +54,6 @@ define([
       this.eventTypes = bindLoadingMessage(
         new EventTypeCollection(), this, 'MSG_LOADING_TYPES_FAILURE'
       );
-
-      this.users = bindLoadingMessage(
-        new UserCollection(null, {rqlQuery: 'select(login)&sort(+login)'}), this
-      );
     },
 
     defineViews: function()
@@ -69,8 +63,7 @@ define([
       this.eventFilterView = new EventFilterView({
         model: {
           rqlQuery: this.eventList.rqlQuery,
-          eventTypes: this.eventTypes,
-          users: this.users
+          eventTypes: this.eventTypes
         }
       });
 
@@ -81,8 +74,7 @@ define([
     {
       return when(
         this.eventList.fetch({reset: true}),
-        this.eventTypes.fetch({reset: true}),
-        this.users.fetch({reset: true})
+        this.eventTypes.fetch({reset: true})
       );
     },
 

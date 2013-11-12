@@ -41,8 +41,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        types: this.model.eventTypes.toJSON(),
-        users: this.model.users.toJSON()
+        types: this.model.eventTypes.toJSON()
       };
     },
 
@@ -58,9 +57,38 @@ define([
         width: 'resolve',
         allowClear: true
       });
+
       this.$('#' + this.idPrefix + '-user').select2({
         width: '200px',
-        allowClear: true
+        allowClear: true,
+        minimumInputLength: 3,
+        ajax: {
+          cache: true,
+          quietMillis: 500,
+          url: function(term)
+          {
+            term = encodeURIComponent(term);
+
+            return '/users?select(login)&sort(login)&limit(20)&regex(login,' + term + ')';
+          },
+          results: function(data, query)
+          {
+            var results = [
+              {id: '$SYSTEM', text: t('events', 'FILTER_USER_SYSTEM')},
+              {id: 'root', text: 'root'}
+            ].filter(function(user)
+            {
+              return user.text.indexOf(query.term) !== -1;
+            });
+
+            return {
+              results: results.concat((data.collection || []).map(function(user)
+              {
+                return {id: user.login, text: user.login};
+              }))
+            };
+          }
+        }
       });
     },
 

@@ -19,14 +19,7 @@
     </div>
     <div class="form-group">
       <label for="<%- idPrefix %>-user"><%- t('events', 'FILTER_USER') %></label>
-      <select id="<%- idPrefix %>-user" name="user" data-placeholder="<%= t('events', 'FILTER_USER_ANY') %>">
-        <option></option>
-        <option value="$SYSTEM"><%= t('events', 'FILTER_USER_SYSTEM') %>
-        <option>root
-        <% users.forEach(function(user) { %>
-        <option><%= user.login %>
-        <% }) %>
-      </select>
+      <input id="<%- idPrefix %>-user" name="user" type="hidden" data-placeholder="<%= t('events', 'FILTER_USER_ANY') %>">
     </div>
     <div class="form-group">
       <label for="<%- idPrefix %>-limit"><%- t('events', 'FILTER_LIMIT') %></label>
