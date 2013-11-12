@@ -10,17 +10,17 @@
     </div>
     <div class="form-group">
       <label for="<%- idPrefix %>-type"><%- t('events', 'FILTER_TYPE') %></label>
-      <select id="<%- idPrefix %>-type" class="form-control" name="type">
-        <option value="$ANY"><%= t('events', 'FILTER_TYPE_ANY') %>
-          <% types.forEach(function(type) { %>
+      <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%= t('events', 'FILTER_TYPE_ANY') %>">
+        <option></option>
+        <% types.forEach(function(type) { %>
         <option value="<%- type.value %>"><%= type.label %>
-          <% }) %>
+        <% }) %>
       </select>
     </div>
     <div class="form-group">
       <label for="<%- idPrefix %>-user"><%- t('events', 'FILTER_USER') %></label>
-      <select id="<%- idPrefix %>-user" class="form-control" name="user">
-        <option value="$ANY"><%= t('events', 'FILTER_USER_ANY') %>
+      <select id="<%- idPrefix %>-user" name="user" data-placeholder="<%= t('events', 'FILTER_USER_ANY') %>">
+        <option></option>
         <option value="$SYSTEM"><%= t('events', 'FILTER_USER_SYSTEM') %>
         <option>root
         <% users.forEach(function(user) { %>

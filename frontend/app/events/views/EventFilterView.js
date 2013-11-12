@@ -6,7 +6,8 @@ define([
   'app/i18n',
   'app/core/View',
   'app/events/templates/filter',
-  'i18n!app/nls/events'
+  'i18n!app/nls/events',
+  'select2'
 ], function(
   _,
   moment,
@@ -47,10 +48,28 @@ define([
 
     afterRender: function()
     {
+      var formData = this.serializeRqlQuery();
+
+      js2form(this.el.querySelector('.events-filter-form'), formData);
+
+      this.toggleSeverity(formData.severity);
+
+      this.$('#' + this.idPrefix + '-type').select2({
+        width: 'resolve',
+        allowClear: true
+      });
+      this.$('#' + this.idPrefix + '-user').select2({
+        width: '200px',
+        allowClear: true
+      });
+    },
+
+    serializeRqlQuery: function()
+    {
       var rqlQuery = this.model.rqlQuery;
       var formData = {
-        type: '$ANY',
-        user: '$ANY',
+        type: '',
+        user: '',
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit),
         severity: []
       };
@@ -83,9 +102,7 @@ define([
         }
       });
 
-      js2form(this.el.querySelector('.events-filter-form'), formData);
-
-      this.toggleSeverity(formData.severity);
+      return formData;
     },
 
     changeFilter: function()
@@ -93,11 +110,11 @@ define([
       var rqlQuery = this.model.rqlQuery;
       var timeRange = this.fixTimeRange();
       var selector = [];
-      var type = this.$('#' + this.idPrefix + '-type').val();
-      var user = this.$('#' + this.idPrefix + '-user').val();
+      var type = this.$('#' + this.idPrefix + '-type').val().trim();
+      var user = this.$('#' + this.idPrefix + '-user').val().trim();
       var severity = this.fixSeverity();
 
-      if (type !== '$ANY')
+      if (type !== '')
       {
         selector.push({name: 'eq', args: ['type', type]});
       }
@@ -106,7 +123,7 @@ define([
       {
         selector.push({name: 'eq', args: ['user', null]});
       }
-      else if (user !== '$ANY')
+      else if (user !== '')
       {
         selector.push({name: 'eq', args: ['user.login', user]});
       }
