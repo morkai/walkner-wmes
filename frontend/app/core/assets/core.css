@@ -29,11 +29,6 @@ dd {
   -ms-user-select: none;
   user-select: none;
 }
-.row,
-.form-horizontal .form-group {
-  margin-left: -7px;
-  margin-right: -7px;
-}
 .well {
   padding: 1em;
 }

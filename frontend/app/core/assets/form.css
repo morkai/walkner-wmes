@@ -1,6 +1,9 @@
 .form-group:last-child {
   margin-bottom: 0;
 }
+.row > .form-group:last-child {
+  margin-bottom: 15px;
+}
 .control-label {
   font-weight: bold;
 }
