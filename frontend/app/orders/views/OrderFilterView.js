@@ -101,7 +101,9 @@ define([
 
           case '_id':
           case 'nc12':
-            formData[property] = term.args[1].replace(/[^0-9]/g, '');
+            var value = term.args[1];
+
+            formData[property] = _.isString(value) ? value.replace(/[^0-9]/g, '') : '-';
             break;
         }
       });
@@ -143,11 +145,21 @@ define([
     serializeRegexTerm: function(selector, property, maxLength)
     {
       var $el = this.$('#' + this.idPrefix + '-' + property);
-      var value = $el.val().trim().replace(/[^0-9]/g, '');
+      var value = $el.val().trim();
+
+      if (value !== '-')
+      {
+        value = value.replace(/[^0-9]/g, '');
+      }
 
       $el.val(value);
 
-      if (value.length === maxLength)
+      if (value === '-')
+      {
+        value = null;
+      }
+
+      if (value === null || value.length === maxLength)
       {
         selector.push({name: 'eq', args: [property, value]});
       }
