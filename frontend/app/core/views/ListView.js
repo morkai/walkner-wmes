@@ -58,7 +58,7 @@ define([
           y -= $navbar.outerHeight();
         }
 
-        $('body').animate({scrollTop: y}, 'fast');
+        $('html, body').animate({scrollTop: y});
       });
     },
 
