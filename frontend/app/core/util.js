@@ -112,11 +112,16 @@ define([
   /**
    * @param {object} obj
    * @param {string} brokerProperty
-   * @param {object.<string, function>} topics
+   * @param {object.<string, function|string>|function(): object.<string, function|string>} topics
    * @param {boolean} bind
    */
   util.subscribeTopics = function(obj, brokerProperty, topics, bind)
   {
+    if (_.isFunction(topics))
+    {
+      topics = topics.call(obj);
+    }
+
     if (!_.isObject(topics) || !_.size(topics))
     {
       return;
