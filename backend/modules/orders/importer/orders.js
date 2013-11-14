@@ -146,7 +146,16 @@ exports.start = function startOrdersImporterModule(app, module)
 
   function compareMissingOrderWithDoc(updateList, orderModel, missingOrder)
   {
-    var oldOperations = orderModel.get('operations').toObject();
+    var oldOperations = orderModel.get('operations');
+
+    if (oldOperations === null)
+    {
+      oldOperations = [];
+    }
+    else
+    {
+      oldOperations = oldOperations.toObject();
+    }
 
     if (!deepEqual(oldOperations, missingOrder.operations, {strict: true}))
     {
