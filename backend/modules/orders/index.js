@@ -1,6 +1,5 @@
 'use strict';
 
-var setUpOrderStatusesRoutes = require('./orderStatusesRoutes');
 var setUpOrdersRoutes = require('./ordersRoutes');
 var setUpEmptyOrdersRoutes = require('./emptyOrdersRoutes');
 
@@ -20,7 +19,6 @@ exports.start = function startOrdersModule(app, module)
     ],
     function()
     {
-      setUpOrderStatusesRoutes(app, module);
       setUpOrdersRoutes(app, module);
       setUpEmptyOrdersRoutes(app, module);
     }

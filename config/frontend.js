@@ -13,6 +13,7 @@ exports.modules = [
   'express',
   'users',
   'orders',
+  'orderStatuses',
   'downtimeReasons',
   'aors',
   'workCenters',
