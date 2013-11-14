@@ -11,11 +11,4 @@ module.exports = function setUpEmptyOrdersRoutes(app, ordersModule)
   var canView = auth('ORDERS:VIEW');
 
   express.get('/emptyOrders', canView, crud.browseRoute.bind(null, app, EmptyOrder));
-
-  express.get('/emptyOrders;print', canView, printEmptyOrdersRoute);
-
-  function printEmptyOrdersRoute(req, res)
-  {
-    res.send(500);
-  }
 };
