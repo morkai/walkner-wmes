@@ -9,11 +9,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   var Order = app[ordersModule.config.mongooseId].model('Order');
 
   var canView = auth('ORDERS:VIEW');
-  var canManage = auth('ORDERS:MANAGE');
 
   express.get('/orders', canView, crud.browseRoute.bind(null, app, Order));
 
-  express.get(
-    '/orders/:id', canView, crud.readRoute.bind(null, app, Order)
-  );
+  express.get('/orders/:id', canView, crud.readRoute.bind(null, app, Order));
 };
