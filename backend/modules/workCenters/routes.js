@@ -8,8 +8,8 @@ module.exports = function setUpWorkCentersRoutes(app, workCentersModule)
   var auth = app[workCentersModule.config.userId].auth;
   var WorkCenter = app[workCentersModule.config.mongooseId].model('WorkCenter');
 
-  var canView = auth('WORK_CENTERS:VIEW');
-  var canManage = auth('WORK_CENTERS:MANAGE');
+  var canView = auth('DICTIONARIES:VIEW');
+  var canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/workCenters', canView, crud.browseRoute.bind(null, app, WorkCenter));
 

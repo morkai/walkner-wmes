@@ -36,8 +36,8 @@ define([
     actions: function()
     {
       return [
-        pageActions.edit(this.model, 'ORDER_STATUSES:MANAGE'),
-        pageActions.delete(this.model, 'ORDER_STATUSES:MANAGE')
+        pageActions.edit(this.model, 'DICTIONARIES:MANAGE'),
+        pageActions.delete(this.model, 'DICTIONARIES:MANAGE')
       ];
     },
 

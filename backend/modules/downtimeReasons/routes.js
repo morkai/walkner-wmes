@@ -8,8 +8,8 @@ module.exports = function setUpDowntimeReasonsRoutes(app, downtimeReasonsModule)
   var auth = app[downtimeReasonsModule.config.userId].auth;
   var DowntimeReason = app[downtimeReasonsModule.config.mongooseId].model('DowntimeReason');
 
-  var canView = auth('DOWNTIME_REASONS:VIEW');
-  var canManage = auth('DOWNTIME_REASONS:MANAGE');
+  var canView = auth('DICTIONARIES:VIEW');
+  var canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/downtimeReasons', canView, crud.browseRoute.bind(null, app, DowntimeReason));
 

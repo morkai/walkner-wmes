@@ -22,8 +22,8 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('ORDER_STATUSES:VIEW');
-  var canManage = user.auth('ORDER_STATUSES:MANAGE');
+  var canView = user.auth('DICTIONARIES:VIEW');
+  var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/orderStatuses', canView, function showOrderStatusListPage(req)
   {

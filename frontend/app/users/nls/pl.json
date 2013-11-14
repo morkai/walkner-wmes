@@ -44,12 +44,6 @@
   "PRIVILEGE:EVENTS:MANAGE": "Zarządzanie zdarzeniami",
   "PRIVILEGE:USERS:VIEW": "Przeglądanie użytkowników",
   "PRIVILEGE:USERS:MANAGE": "Zarządzanie użytkownikami",
-  "PRIVILEGE:ORDER_STATUSES:VIEW": "Przeglądanie statusów zleceń",
-  "PRIVILEGE:ORDER_STATUSES:MANAGE": "Zarządzanie statusami zleceń",
-  "PRIVILEGE:DOWNTIME_REASONS:VIEW": "Przeglądanie powodów przestojów",
-  "PRIVILEGE:DOWNTIME_REASONS:MANAGE": "Zarządzanie powodami przestojów",
-  "PRIVILEGE:AORS:VIEW": "Przeglądanie obszarów odpowiedzialności",
-  "PRIVILEGE:AORS:MANAGE": "Zarządzanie obszarami odpowiedzialności",
-  "PRIVILEGE:WORK_CENTERS:VIEW": "Przeglądanie centrów produkcyjnych",
-  "PRIVILEGE:WORK_CENTERS:MANAGE": "Zarządzanie centrami produkcyjnych"
+  "PRIVILEGE:DICTIONARIES:VIEW": "Przeglądanie słowników",
+  "PRIVILEGE:DICTIONARIES:MANAGE": "Zarządzanie słownikami"
 }

@@ -26,7 +26,7 @@ define([
 
     actions: function()
     {
-      return [pageActions.add(this.model, 'DOWNTIME_REASONS:MANAGE')];
+      return [pageActions.add(this.model, 'DICTIONARIES:MANAGE')];
     },
 
     initialize: function()

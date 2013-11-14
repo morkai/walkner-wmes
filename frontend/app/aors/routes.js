@@ -22,8 +22,8 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('AORS:VIEW');
-  var canManage = user.auth('AORS:MANAGE');
+  var canView = user.auth('DICTIONARIES:VIEW');
+  var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/aors', canView, function showAorListPage(req)
   {

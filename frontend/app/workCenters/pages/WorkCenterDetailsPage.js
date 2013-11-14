@@ -36,8 +36,8 @@ define([
     actions: function()
     {
       return [
-        pageActions.edit(this.model, 'WORK_CENTERS:MANAGE'),
-        pageActions.delete(this.model, 'WORK_CENTERS:MANAGE')
+        pageActions.edit(this.model, 'DICTIONARIES:MANAGE'),
+        pageActions.delete(this.model, 'DICTIONARIES:MANAGE')
       ];
     },
 

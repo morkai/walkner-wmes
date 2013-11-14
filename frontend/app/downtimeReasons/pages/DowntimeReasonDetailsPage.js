@@ -36,8 +36,8 @@ define([
     actions: function()
     {
       return [
-        pageActions.edit(this.model, 'DOWNTIME_REASONS:MANAGE'),
-        pageActions.delete(this.model, 'DOWNTIME_REASONS:MANAGE')
+        pageActions.edit(this.model, 'DICTIONARIES:MANAGE'),
+        pageActions.delete(this.model, 'DICTIONARIES:MANAGE')
       ];
     },
 

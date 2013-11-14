@@ -8,8 +8,8 @@ module.exports = function setUpAorsRoutes(app, aorsModule)
   var auth = app[aorsModule.config.userId].auth;
   var Aor = app[aorsModule.config.mongooseId].model('Aor');
 
-  var canView = auth('AORS:VIEW');
-  var canManage = auth('AORS:MANAGE');
+  var canView = auth('DICTIONARIES:VIEW');
+  var canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/aors', canView, crud.browseRoute.bind(null, app, Aor));
 

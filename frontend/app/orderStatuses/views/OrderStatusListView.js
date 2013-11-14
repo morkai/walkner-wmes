@@ -29,7 +29,7 @@ define([
           {id: 'coloredId', label: t('orderStatuses', 'PROPERTY:_id')},
           {id: 'label', label: t('orderStatuses', 'PROPERTY:label')}
         ],
-        actions: ListView.actions.viewEditDelete(this.model, 'ORDER_STATUSES:MANAGE'),
+        actions: ListView.actions.viewEditDelete(this.model, 'DICTIONARIES:MANAGE'),
         rows: this.model.toJSON().map(function(orderStatus)
         {
           orderStatus.coloredId = renderOrderStatus(orderStatus);

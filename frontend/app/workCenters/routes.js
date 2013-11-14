@@ -22,8 +22,8 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('WORK_CENTERS:VIEW');
-  var canManage = user.auth('WORK_CENTERS:MANAGE');
+  var canView = user.auth('DICTIONARIES:VIEW');
+  var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/workCenters', canView, function showWorkCenterListPage(req)
   {

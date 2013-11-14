@@ -27,7 +27,7 @@ define([
           {id: '_id', label: t('downtimeReasons', 'PROPERTY:_id')},
           {id: 'label', label: t('downtimeReasons', 'PROPERTY:label')}
         ],
-        actions: ListView.actions.viewEditDelete(this.model, 'DOWNTIME_REASONS:MANAGE'),
+        actions: ListView.actions.viewEditDelete(this.model, 'DICTIONARIES:MANAGE'),
         rows: this.model.toJSON()
       };
     }

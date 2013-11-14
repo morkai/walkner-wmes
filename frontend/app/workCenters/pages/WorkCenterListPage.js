@@ -27,7 +27,7 @@ define([
     actions: function()
     {
       return [
-        pageActions.add(this.model, 'WORK_CENTERS:MANAGE')
+        pageActions.add(this.model, 'DICTIONARIES:MANAGE')
       ];
     },
 

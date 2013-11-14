@@ -29,7 +29,7 @@ define([
           {id: '_id', label: t('workCenters', 'PROPERTY:_id')},
           {id: 'description', label: t('workCenters', 'PROPERTY:description')}
         ],
-        actions: ListView.actions.viewEditDelete(this.model, 'WORK_CENTERS:MANAGE'),
+        actions: ListView.actions.viewEditDelete(this.model, 'DICTIONARIES:MANAGE'),
         rows: collection.toJSON()
       };
     }

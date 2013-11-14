@@ -31,7 +31,7 @@ define([
           {id: 'name', label: t('aors', 'PROPERTY:name')},
           {id: 'description', label: t('aors', 'PROPERTY:description')}
         ],
-        actions: ListView.actions.viewEditDelete(this.model, 'AORS:MANAGE'),
+        actions: ListView.actions.viewEditDelete(this.model, 'DICTIONARIES:MANAGE'),
         rows: collection.toJSON()
       };
     }

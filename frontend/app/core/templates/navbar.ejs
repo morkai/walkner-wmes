@@ -16,17 +16,16 @@
       <li data-online data-privilege="ORDERS:VIEW"><a href="#emptyOrders"><%- t('core', 'NAVBAR:EMPTY_ORDERS') %></a>
       <li data-online data-privilege="LINES:VIEW"><a href="#lines"><%- t('core', 'NAVBAR:LINES') %></a>
       <li data-online data-privilege="USERS:VIEW"><a href="#users"><%- t('core', 'NAVBAR:USERS') %></a>
-      <li data-online data-privilege="ORDER_STATUSES:MANAGE">
-      <li data-online data-loggedin class="dropdown">
+      <li data-online data-privilege="DICTIONARIES:VIEW" class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown">
           <%- t('core', 'NAVBAR:DICTIONARIES') %>
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
-          <li data-online data-privilege="ORDER_STATUSES:VIEW"><a href="#orderStatuses"><%- t('core', 'NAVBAR:ORDER_STATUSES') %></a>
-          <li data-online data-privilege="DOWNTIME_REASONS:VIEW"><a href="#downtimeReasons"><%- t('core', 'NAVBAR:DOWNTIME_REASONS') %></a>
-          <li data-online data-privilege="AORS:VIEW"><a href="#aors"><%- t('core', 'NAVBAR:AORS') %></a>
-          <li data-online data-privilege="WORK_CENTERS:VIEW"><a href="#workCenters"><%- t('core', 'NAVBAR:WORK_CENTERS') %></a>
+          <li data-online><a href="#orderStatuses"><%- t('core', 'NAVBAR:ORDER_STATUSES') %></a>
+          <li data-online><a href="#downtimeReasons"><%- t('core', 'NAVBAR:DOWNTIME_REASONS') %></a>
+          <li data-online><a href="#aors"><%- t('core', 'NAVBAR:AORS') %></a>
+          <li data-online><a href="#workCenters"><%- t('core', 'NAVBAR:WORK_CENTERS') %></a>
         </ul>
     </ul>
     <ul class="nav navbar-nav navbar-right">

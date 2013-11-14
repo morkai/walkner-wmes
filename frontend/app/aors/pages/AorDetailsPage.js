@@ -33,8 +33,8 @@ define([
     actions: function()
     {
       return [
-        pageActions.edit(this.model, 'AORS:MANAGE'),
-        pageActions.delete(this.model, 'AORS:MANAGE')
+        pageActions.edit(this.model, 'DICTIONARIES:MANAGE'),
+        pageActions.delete(this.model, 'DICTIONARIES:MANAGE')
       ];
     },
 

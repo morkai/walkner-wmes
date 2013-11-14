@@ -28,7 +28,7 @@ define([
 
     actions: function()
     {
-      return [pageActions.add(this.model, 'ORDER_STATUSES:MANAGE')];
+      return [pageActions.add(this.model, 'DICTIONARIES:MANAGE')];
     },
 
     initialize: function()

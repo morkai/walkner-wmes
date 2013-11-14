@@ -27,7 +27,7 @@ define([
     actions: function()
     {
       return [
-        pageActions.add(this.model, 'AORS:MANAGE')
+        pageActions.add(this.model, 'DICTIONARIES:MANAGE')
       ];
     },
 
