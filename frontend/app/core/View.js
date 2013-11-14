@@ -20,18 +20,18 @@ function(
 
   function View(options)
   {
-    util.defineSandboxedProperty(this, 'broker', broker);
-    util.defineSandboxedProperty(this, 'pubsub', pubsub);
-    util.defineSandboxedProperty(this, 'socket', socket);
-
-    util.subscribeTopics(this, 'broker', this.localTopics, true);
-    util.subscribeTopics(this, 'pubsub', this.remoteTopics, true);
-
     this.timers = {};
 
     this.promises = [];
 
+    util.defineSandboxedProperty(this, 'broker', broker);
+    util.defineSandboxedProperty(this, 'pubsub', pubsub);
+    util.defineSandboxedProperty(this, 'socket', socket);
+
     Layout.call(this, options);
+
+    util.subscribeTopics(this, 'broker', this.localTopics, true);
+    util.subscribeTopics(this, 'pubsub', this.remoteTopics, true);
   }
 
   util.inherits(View, Layout);
