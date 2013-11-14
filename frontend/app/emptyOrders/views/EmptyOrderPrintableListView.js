@@ -10,18 +10,21 @@ define([
 
   return PrintableListView.extend({
 
-    serialize: function()
+    serializeColumns: function()
     {
-      return {
-        columns: [
-          {id: '_id', label: t('emptyOrders', 'PROPERTY:_id')},
-          {id: 'nc12', label: t('emptyOrders', 'PROPERTY:nc12')},
-          {id: 'mrp', label: t('emptyOrders', 'PROPERTY:mrp')},
-          {id: 'startDateText', label: t('emptyOrders', 'PROPERTY:startDate')},
-          {id: 'finishDateText', label: t('emptyOrders', 'PROPERTY:finishDate')}
-        ],
-        rows: this.model.toJSON({startFinishDateFormat: 'YYYY-MM-DD'})
-      };
+      return [
+        {id: '_id', label: t('emptyOrders', 'PROPERTY:_id')},
+        {id: 'nc12', label: t('emptyOrders', 'PROPERTY:nc12')},
+        {id: 'mrp', label: t('emptyOrders', 'PROPERTY:mrp')},
+        {id: 'startDateText', label: t('emptyOrders', 'PROPERTY:startDate')},
+        {id: 'finishDateText', label: t('emptyOrders', 'PROPERTY:finishDate')}
+      ];
+    },
+
+    serializeRows: function()
+    {
+      return this.collection.toJSON({startFinishDateFormat: 'YYYY-MM-DD'});
     }
+
   });
 });

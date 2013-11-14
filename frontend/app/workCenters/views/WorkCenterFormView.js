@@ -12,18 +12,16 @@ define([
 
     template: formTemplate,
 
-    idPrefix: 'workCenter',
-
-    successUrlPrefix: '/workCenters/',
-
     afterRender: function()
     {
+      FormView.prototype.afterRender.call(this);
+
       if (this.options.editMode)
       {
         this.$('.form-control[name=_id]').attr('readonly', true);
         this.$('.form-control[name=description]').focus();
       }
-    },
+    }
 
   });
 });

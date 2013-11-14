@@ -1,6 +1,6 @@
 define([
-  'app/i18n',
-  'app/core/Collection',
+  '../i18n',
+  '../core/Collection',
   './EventType'
 ], function(
   t,

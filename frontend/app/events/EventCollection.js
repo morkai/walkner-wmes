@@ -1,6 +1,6 @@
 define([
   'moment',
-  'app/core/Collection',
+  '../core/Collection',
   './Event'
 ], function(
   moment,

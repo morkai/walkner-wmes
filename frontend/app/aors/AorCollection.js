@@ -1,5 +1,5 @@
 define([
-  'app/core/Collection',
+  '../core/Collection',
   './Aor'
 ], function(
   Collection,

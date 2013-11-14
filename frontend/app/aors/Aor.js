@@ -1,5 +1,5 @@
 define([
-  'app/core/Model'
+  '../core/Model'
 ], function(
   Model
 ) {
@@ -11,9 +11,13 @@ define([
 
     clientUrlRoot: '#aors',
 
-    labelProperty: 'name',
+    topicPrefix: 'aors',
+
+    privilegePrefix: 'DICTIONARIES',
 
     nlsDomain: 'aors',
+
+    labelAttribute: 'name',
     
     defaults: {
       name: null,

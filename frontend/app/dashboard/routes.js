@@ -10,7 +10,7 @@ define([
 ) {
   'use strict';
 
-  router.map('/', function showDashboardPage()
+  router.map('/', function()
   {
     viewport.showPage(new DashboardPage());
   });

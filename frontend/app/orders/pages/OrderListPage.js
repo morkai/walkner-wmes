@@ -29,13 +29,8 @@ define([
     pageId: 'orderList',
 
     breadcrumbs: [
-      t.bound('orders', 'BREADCRUMBS:BROWSE')
+      t.bound('orders', 'BREADCRUMBS:browse')
     ],
-
-    actions: function()
-    {
-      return [pageActions.add(this.model, 'ORDERS:MANAGE')];
-    },
 
     initialize: function()
     {
@@ -48,7 +43,7 @@ define([
 
     defineModels: function()
     {
-      this.model = bindLoadingMessage(
+      this.collection = bindLoadingMessage(
         new OrderCollection(null, {rqlQuery: this.options.rql}), this
       );
     },
@@ -57,28 +52,28 @@ define([
     {
       this.filterView = new OrderFilterView({
         model: {
-          rqlQuery: this.model.rqlQuery
+          rqlQuery: this.collection.rqlQuery
         }
       });
 
-      this.listView = new OrderListView({model: this.model});
+      this.listView = new OrderListView({collection: this.collection});
 
       this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },
 
     load: function(when)
     {
-      return when(this.model.fetch({reset: true}));
+      return when(this.collection.fetch({reset: true}));
     },
 
     refreshList: function(newRqlQuery)
     {
-      this.model.rqlQuery = newRqlQuery;
+      this.collection.rqlQuery = newRqlQuery;
 
       this.listView.refreshCollection(null, true);
 
       this.broker.publish('router.navigate', {
-        url: this.model.genClientUrl() + '?' + newRqlQuery,
+        url: this.collection.genClientUrl() + '?' + newRqlQuery,
         trigger: false,
         replace: true
       });

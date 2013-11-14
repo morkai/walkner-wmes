@@ -15,8 +15,6 @@ define([
 
     idPrefix: 'model',
 
-    successUrlPrefix: '/orderStatuses/',
-
     events: {
       'submit': 'submitForm',
       'change .orderStatuses-form-color-input': 'updatePickerColor'

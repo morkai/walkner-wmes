@@ -20,8 +20,6 @@ define([
 
     idPrefix: 'userForm',
 
-    successUrlPrefix: '/users/',
-
     events: {
       'submit': 'submitForm',
       'input input[type="password"]': function(e)
@@ -39,7 +37,7 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      if (this.options.requirePassword)
+      if (!this.options.editMode)
       {
         this.$('input[type="password"]').attr('required', true);
       }
@@ -56,7 +54,7 @@ define([
       }
       else
       {
-        password2.setCustomValidity(t('users', 'FORM_ERROR_PASSWORD_MISMATCH'));
+        password2.setCustomValidity(t('users', 'FORM:ERROR:passwordMismatch'));
       }
 
       this.timers.validatePassword = null;

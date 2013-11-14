@@ -1,7 +1,7 @@
 define([
-  'app/router',
-  'app/viewport',
-  'app/user',
+  '../router',
+  '../viewport',
+  '../user',
   './pages/OrderListPage',
   './pages/OrderDetailsPage',
   'i18n!app/nls/orders'
@@ -15,15 +15,14 @@ define([
   'use strict';
 
   var canView = user.auth('ORDERS:VIEW');
-  var canManage = user.auth('ORDERS:MANAGE');
 
-  router.map('/orders', canView, function showOrderListPage(req)
+  router.map('/orders', canView, function(req)
   {
     viewport.showPage(new OrderListPage({rql: req.rql}));
   });
 
-  router.map('/orders/:id', function showOrderDetailsPage(req)
+  router.map('/orders/:id', function(req)
   {
-    viewport.showPage(new OrderDetailsPage({orderId: req.params.id}));
+    viewport.showPage(new OrderDetailsPage({modelId: req.params.id}));
   });
 });

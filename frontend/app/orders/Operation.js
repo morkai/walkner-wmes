@@ -1,5 +1,5 @@
 define([
-  'app/core/Model'
+  '../core/Model'
 ], function(
   Model
 ) {

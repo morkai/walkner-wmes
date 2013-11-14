@@ -23,8 +23,6 @@ define([
 
     idPrefix: 'formView',
 
-    successUrlPrefix: '/',
-
     $errorMessage: null,
 
     initialize: function()
@@ -76,19 +74,16 @@ define([
 
       var $submitEl = this.$('[type="submit"]').attr('disabled', true);
 
-      var req = $.ajax({
-        type: this.options.formMethod,
-        url: this.el.action,
-        data: JSON.stringify(this.serializeForm(form2js(this.el))),
-        contentType: 'application/json'
-      });
+      var req = this.promised(this.model.save(this.serializeForm(form2js(this.el)), {
+        wait: true
+      }));
 
       var view = this;
 
-      req.done(function(res)
+      req.done(function()
       {
         view.broker.publish('router.navigate', {
-          url: view.successUrlPrefix + res._id,
+          url: view.model.genClientUrl(),
           trigger: true
         });
       });

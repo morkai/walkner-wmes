@@ -1,5 +1,5 @@
 define([
-  'app/core/Collection',
+  '../core/Collection',
   './EmptyOrder'
 ], function(
   Collection,
@@ -8,10 +8,6 @@ define([
   'use strict';
 
   return Collection.extend({
-
-    url: '/emptyOrders',
-
-    clientUrl: '#emptyOrders',
 
     model: EmptyOrder,
 

@@ -1,8 +1,7 @@
 {
-  "BREADCRUMBS:BROWSE": "Puste zlecenia",
+  "BREADCRUMBS:browse": "Puste zlecenia",
 
-  "MSG_LOADING_FAILURE": "Ładowanie pustych zleceń nie powiodło się :(",
-  "MSG_LOADING_SINGLE_FAILURE": "Ładowanie pustych zlecenia nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie pustych zleceń nie powiodło się :(",
 
   "PAGE_ACTION:print": "Pokaż wersję do druku",
 

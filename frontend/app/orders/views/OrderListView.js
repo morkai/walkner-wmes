@@ -27,32 +27,42 @@ define([
       'orders.deleted': 'refreshCollection'
     },
 
-    nlsDomain: 'orders',
-
-    serialize: function()
+    serializeColumns: function()
     {
-      return {
-        columns: [
-          {id: '_id', label: t('orders', 'PROPERTY:_id')},
-          {id: 'nc12', label: t('orders', 'PROPERTY:nc12')},
-          {id: 'name', label: t('orders', 'PROPERTY:name')},
-          {id: 'mrp', label: t('orders', 'PROPERTY:mrp')},
-          {id: 'qtyUnit', label: t('orders', 'PROPERTY:qty')},
-          {id: 'startDateText', label: t('orders', 'PROPERTY:startDate')},
-          {id: 'finishDateText', label: t('orders', 'PROPERTY:finishDate')},
-          {id: 'statusLabels', label: t('orders', 'PROPERTY:statuses')}
-        ],
-        actions: ListView.actions.viewEditDelete(this.model, 'ORDERS:MANAGE'),
-        rows: this.model.toJSON().map(function(row)
-        {
-          row.statusLabels = orderStatuses
-            .findAndFill(row.statuses)
-            .map(function(orderStatus) { return renderOrderStatus(orderStatus); })
-            .join('');
+      return [
+        {id: '_id', label: t('orders', 'PROPERTY:_id')},
+        {id: 'nc12', label: t('orders', 'PROPERTY:nc12')},
+        {id: 'name', label: t('orders', 'PROPERTY:name')},
+        {id: 'mrp', label: t('orders', 'PROPERTY:mrp')},
+        {id: 'qtyUnit', label: t('orders', 'PROPERTY:qty')},
+        {id: 'startDateText', label: t('orders', 'PROPERTY:startDate')},
+        {id: 'finishDateText', label: t('orders', 'PROPERTY:finishDate')},
+        {id: 'statusLabels', label: t('orders', 'PROPERTY:statuses')}
+      ];
+    },
 
-          return row;
-        })
+    serializeActions: function()
+    {
+      var collection = this.collection;
+
+      return function(row)
+      {
+        return [ListView.actions.viewDetails(collection.get(row._id))];
       };
+    },
+
+    serializeRows: function()
+    {
+      return this.collection.toJSON().map(function(row)
+      {
+        row.statusLabels = orderStatuses
+          .findAndFill(row.statuses)
+          .map(function(orderStatus) { return renderOrderStatus(orderStatus); })
+          .join('');
+
+        return row;
+      });
     }
+
   });
 });

@@ -1,6 +1,6 @@
 define([
   'moment',
-  'app/core/Model',
+  '../core/Model',
   './OperationCollection'
 ], function(
   moment,
@@ -15,9 +15,13 @@ define([
 
     clientUrlRoot: '#orders',
 
-    labelProperty: '_id',
+    topicPrefix: 'orders',
+
+    privilegePrefix: 'ORDERS',
 
     nlsDomain: 'orders',
+
+    labelAttribute: '_id',
 
     defaults: {
       nc12: null,

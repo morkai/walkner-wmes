@@ -23,7 +23,7 @@ define([
     pageId: 'emptyOrderList',
 
     breadcrumbs: [
-      t.bound('emptyOrders', 'BREADCRUMBS:BROWSE')
+      t.bound('emptyOrders', 'BREADCRUMBS:browse')
     ],
 
     actions: [
@@ -37,16 +37,16 @@ define([
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(
+      this.collection = bindLoadingMessage(
         new EmptyOrderCollection(null, {rqlQuery: this.options.rql}), this
       );
 
-      this.view = new EmptyOrderListView({model: this.model});
+      this.view = new EmptyOrderListView({collection: this.collection});
     },
 
     load: function(when)
     {
-      return when(this.model.fetch({reset: true}));
+      return when(this.collection.fetch({reset: true}));
     }
 
   });

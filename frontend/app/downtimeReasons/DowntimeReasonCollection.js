@@ -1,5 +1,5 @@
 define([
-  'app/core/Collection',
+  '../core/Collection',
   './DowntimeReason'
 ], function(
   Collection,

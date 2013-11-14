@@ -1,5 +1,5 @@
 define([
-  'app/core/Model'
+  '../core/Model'
 ], function(
   Model
 ) {
@@ -11,9 +11,13 @@ define([
 
     clientUrlRoot: '#workCenters',
 
-    labelProperty: '_id',
+    topicPrefix: 'workCenters',
+
+    privilegePrefix: 'DICTIONARIES',
 
     nlsDomain: 'workCenters',
+
+    labelAttribute: '_id',
     
     defaults: {
       description: null

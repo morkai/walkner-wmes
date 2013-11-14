@@ -21,14 +21,46 @@ define([
 
     template: printableListTemplate,
 
-    initialize: function()
+    serialize: function()
     {
+      return {
+        columns: this.serializeColumns(),
+        rows: this.serializeRows()
+      };
+    },
 
+    serializeColumns: function()
+    {
+      var nlsDomain = this.collection.getNlsDomain();
+      var columns;
+
+      if (Array.isArray(this.options.columns))
+      {
+        columns = this.options.columns;
+      }
+      else if (Array.isArray(this.columns))
+      {
+        columns = this.columns;
+      }
+      else
+      {
+        columns = [];
+      }
+
+      return columns.map(function(propertyName)
+      {
+        return {id: propertyName, label: t(nlsDomain, 'PROPERTY:' + propertyName)};
+      });
+    },
+
+    serializeRows: function()
+    {
+      return this.collection.toJSON();
     },
 
     afterRender: function()
     {
-      this.listenToOnce(this.model, 'reset', this.render);
+      this.listenToOnce(this.collection, 'reset', this.render);
     },
 
     fitToPrintablePage: function(maxPageHeight)

@@ -1,8 +1,8 @@
 {
   "TITLE": "Wannabe MES",
 
-  "MSG_LOADING": "Ładowanie...",
-  "MSG_LOADING_FAILURE": "Ładowanie nie powiodło się :(",
+  "MSG:LOADING": "Ładowanie...",
+  "MSG:LOADING_FAILURE": "Ładowanie nie powiodło się :(",
   "MSG:LOG_OUT:FAILURE": "Wylogowanie nie powiodło się :(",
   "MSG:LOG_OUT:SUCCESS": "Zostałeś wylogowany!",
 
@@ -15,18 +15,18 @@
   "LIST:ACTION:edit": "Edytuj",
   "LIST:ACTION:delete": "Usuń",
 
-  "BREADCRUMBS:EDIT": "Edycja",
-  "BREADCRUMBS:DELETE": "Usuwanie",
-  "BREADCRUMBS:ERROR": "Błąd {code}: {codeStr, select, e401{nieautoryzowany dostęp} e404{nie znaleziono} other{nieprawidłowe zapytanie}}",
+  "BREADCRUMBS:edit": "Edycja",
+  "BREADCRUMBS:delete": "Usuwanie",
+  "BREADCRUMBS:error": "Błąd {code}: {codeStr, select, e401{nieautoryzowany dostęp} e404{nie znaleziono} other{nieprawidłowe zapytanie}}",
 
-  "ERROR_400": "Żądanie nie może być obsłużone z powodu błędnej składni zapytania :(",
-  "ERROR_401": "Niestety, ale nie masz wystarczających uprawnień do wykonania żądanej akcji :(",
-  "ERROR_404": "Wybrana strona nie istnieje :(",
+  "ERROR:400": "Żądanie nie może być obsłużone z powodu błędnej składni zapytania :(",
+  "ERROR:401": "Niestety, ale nie masz wystarczających uprawnień do wykonania żądanej akcji :(",
+  "ERROR:404": "Wybrana strona nie istnieje :(",
 
-  "PAGINATION_FIRST_PAGE": "Pierwsza strona",
-  "PAGINATION_PREV_PAGE": "Poprzednia strona",
-  "PAGINATION_NEXT_PAGE": "Następna strona",
-  "PAGINATION_LAST_PAGE": "Ostatnia strona",
+  "PAGINATION:FIRST_PAGE": "Pierwsza strona",
+  "PAGINATION:PREV_PAGE": "Poprzednia strona",
+  "PAGINATION:NEXT_PAGE": "Następna strona",
+  "PAGINATION:LAST_PAGE": "Ostatnia strona",
 
   "LOG_IN_FORM:DIALOG_TITLE": "Logowanie do systemu",
   "LOG_IN_FORM:LABEL:LOGIN": "Login",
@@ -54,9 +54,9 @@
   "NAVBAR:AORS": "Obszary odpowiedzialności",
   "NAVBAR:WORK_CENTERS": "Centra produkcyjne",
 
-  "ACTION_FORM_BUTTON": "Wykonaj akcję",
-  "ACTION_FORM_BUTTON:delete": "Usuń",
-  "ACTION_FORM_BUTTON:cancel": "Anuluj",
-  "ACTION_FORM_MESSAGE": "Czy na pewno chcesz wykonać żądaną akcję?",
-  "ACTION_FORM_MESSAGE_FAILURE": "Wykonywanie akcji nie powiodło się :("
+  "ACTION_FORM:BUTTON": "Wykonaj akcję",
+  "ACTION_FORM:BUTTON:delete": "Usuń",
+  "ACTION_FORM:BUTTON:cancel": "Anuluj",
+  "ACTION_FORM:MESSAGE": "Czy na pewno chcesz wykonać żądaną akcję?",
+  "ACTION_FORM:MESSAGE:failure": "Wykonywanie akcji nie powiodło się :("
 }

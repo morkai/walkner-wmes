@@ -14,29 +14,23 @@ define([
 
   return ListView.extend({
 
-    remoteTopics: {
-      'orderStatuses.added': 'refreshCollection',
-      'orderStatuses.edited': 'refreshCollection',
-      'orderStatuses.deleted': 'refreshCollection'
+    serializeColumns: function()
+    {
+      return [
+        {id: 'coloredId', label: t('orderStatuses', 'PROPERTY:_id')},
+        {id: 'label', label: t('orderStatuses', 'PROPERTY:label')}
+      ];
     },
 
-    nlsDomain: 'orderStatuses',
-
-    serialize: function()
+    serializeRows: function()
     {
-      return {
-        columns: [
-          {id: 'coloredId', label: t('orderStatuses', 'PROPERTY:_id')},
-          {id: 'label', label: t('orderStatuses', 'PROPERTY:label')}
-        ],
-        actions: ListView.actions.viewEditDelete(this.model, 'DICTIONARIES:MANAGE'),
-        rows: this.model.toJSON().map(function(orderStatus)
-        {
-          orderStatus.coloredId = renderOrderStatus(orderStatus);
+      return this.collection.toJSON().map(function(orderStatus)
+      {
+        orderStatus.coloredId = renderOrderStatus(orderStatus);
 
-          return orderStatus;
-        })
-      };
+        return orderStatus;
+      });
     }
+
   });
 });

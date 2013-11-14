@@ -25,22 +25,22 @@ define([
     hdLeft: function() { return t('emptyOrders', 'PRINT_PAGE:HD:LEFT'); },
 
     breadcrumbs: [
-      t.bound('emptyOrders', 'BREADCRUMBS:BROWSE')
+      t.bound('emptyOrders', 'BREADCRUMBS:browse')
     ],
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(
+      this.collection = bindLoadingMessage(
         new EmptyOrderCollection(null, {rqlQuery: this.options.rql}), this
       );
-      this.model.rqlQuery.limit = -1;
+      this.collection.rqlQuery.limit = -1;
 
-      this.view = new EmptyOrderPrintableListView({model: this.model});
+      this.view = new EmptyOrderPrintableListView({collection: this.collection});
     },
 
     load: function(when)
     {
-      return when(this.model.fetch({reset: true}));
+      return when(this.collection.fetch({reset: true}));
     }
 
   });

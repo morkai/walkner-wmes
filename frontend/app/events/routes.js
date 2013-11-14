@@ -1,7 +1,7 @@
 define([
-  'app/router',
-  'app/viewport',
-  'app/user',
+  '../router',
+  '../viewport',
+  '../user',
   './pages/EventListPage'
 ], function(
   router,
@@ -11,7 +11,7 @@ define([
 ) {
   'use strict';
 
-  router.map('/events', user.auth('EVENTS:VIEW'), function showEventListPage(req)
+  router.map('/events', user.auth('EVENTS:VIEW'), function(req)
   {
     viewport.showPage(new EventListPage({rql: req.rql}));
   });

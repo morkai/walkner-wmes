@@ -23,7 +23,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('core', 'BREADCRUMBS:ERROR', {
+        t.bound('core', 'BREADCRUMBS:error', {
           code: this.options.code,
           codeStr: 'e' + this.options.code
         })

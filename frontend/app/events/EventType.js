@@ -1,5 +1,5 @@
 define([
-  'app/core/Model'
+  '../core/Model'
 ], function(
   Model
 ) {
@@ -11,13 +11,13 @@ define([
 
     clientUrlRoot: '#events/types',
 
-    labelProperty: 'label',
-
     nlsDomain: 'events',
 
+    labelAttribute: 'label',
+
     defaults: {
-      label: '',
-      value: ''
+      label: null,
+      value: null
     }
 
   });

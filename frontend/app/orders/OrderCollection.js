@@ -1,5 +1,5 @@
 define([
-  'app/core/Collection',
+  '../core/Collection',
   './Order'
 ], function(
   Collection,
@@ -8,10 +8,6 @@ define([
   'use strict';
 
   return Collection.extend({
-
-    url: '/orders',
-
-    clientUrl: '#orders',
 
     model: Order,
 

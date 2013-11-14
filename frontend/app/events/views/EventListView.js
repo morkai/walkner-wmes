@@ -27,7 +27,7 @@ define([
       var view = this;
 
       return {
-        events: this.model.map(function(event)
+        events: this.collection.map(function(event)
         {
           var type = event.get('type');
           var data = view.prepareData(type, event.get('data'));

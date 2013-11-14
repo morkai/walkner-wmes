@@ -30,7 +30,7 @@ define([
     /**
      * @type {string|function}
      */
-    formActionText: t.bound('core', 'ACTION_FORM_BUTTON'),
+    formActionText: t.bound('core', 'ACTION_FORM:BUTTON'),
     /**
      * @type {string}
      */
@@ -38,7 +38,7 @@ define([
     /**
      * @type {string|function}
      */
-    messageText: t.bound('core', 'ACTION_FORM_MESSAGE'),
+    messageText: t.bound('core', 'ACTION_FORM:MESSAGE'),
     /**
      * @type {string|null}
      */
@@ -50,7 +50,7 @@ define([
     /**
      * @type {string|function}
      */
-    failureText: t.bound('core', 'ACTION_FORM_MESSAGE_FAILURE'),
+    failureText: t.bound('core', 'ACTION_FORM:MESSAGE_FAILURE'),
     /**
      * @type {*}
      */
@@ -72,11 +72,6 @@ define([
       _.defaults(this.options, DEFAULT_OPTIONS);
 
       this.$errorMessage = null;
-
-      if (this.model)
-      {
-        this.listenTo(this.model, 'change', this.render);
-      }
     },
 
     destroy: function()
@@ -95,6 +90,14 @@ define([
         cancelUrl: this.options.cancelUrl,
         model: this.model
       };
+    },
+
+    afterRender: function()
+    {
+      if (this.model)
+      {
+        this.listenToOnce(this.model, 'change', this.render);
+      }
     },
 
     submitForm: function()
@@ -181,38 +184,37 @@ define([
 
       if (!options.nlsDomain)
       {
-        options.nlsDomain = options.model.nlsDomain;
+        options.nlsDomain = options.model.getNlsDomain();
       }
 
-      if (!options.labelProperty)
+      if (!options.labelAttribute)
       {
-        options.labelProperty = options.model.labelProperty;
+        options.labelAttribute = options.model.getLabelAttribute();
       }
 
       if (options.nlsDomain)
       {
-        dialogTitle = t.bound(options.nlsDomain, 'ACTION_DIALOG_TITLE:' + options.actionKey);
+        dialogTitle = t.bound(options.nlsDomain, 'ACTION_FORM:DIALOG_TITLE:' + options.actionKey);
 
-        if (options.labelProperty)
+        if (options.labelAttribute)
         {
           options.messageText = t.bound(
             options.nlsDomain,
-            'ACTION_FORM_MESSAGE_SPECIFIC:' + options.actionKey,
-            {label: options.model.get(options.labelProperty)}
+            'ACTION_FORM:MESSAGE_SPECIFIC:' + options.actionKey,
+            {label: options.model.get(options.labelAttribute)}
           );
         }
         else
         {
-          options.messageText = t.bound(
-            options.nlsDomain, 'ACTION_FORM_MESSAGE:' + options.actionKey
-          );
+          options.messageText =
+            t.bound(options.nlsDomain, 'ACTION_FORM:MESSAGE:' + options.actionKey);
         }
 
         options.formActionText =
-          t.bound(options.nlsDomain, 'ACTION_FORM_BUTTON:' + options.actionKey);
+          t.bound(options.nlsDomain, 'ACTION_FORM:BUTTON:' + options.actionKey);
 
         options.failureText =
-          t.bound('alarms', 'ACTION_FORM_MESSAGE_FAILURE:' + options.actionKey);
+          t.bound(options.nlsDomain, 'ACTION_FORM:MESSAGE_FAILURE:' + options.actionKey);
       }
 
       if (!options.formAction && _.isFunction(options.model.url))

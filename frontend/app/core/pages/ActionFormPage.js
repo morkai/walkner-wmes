@@ -1,18 +1,16 @@
 define([
   'underscore',
   'app/i18n',
-  'app/core/util/bindLoadingMessage',
-  'app/core/View',
-  'app/core/views/ActionFormView',
-  '../WorkCenter',
-  'i18n!app/nls/workCenters'
+  '../util/bindLoadingMessage',
+  '../View',
+  '../views/ActionFormView'
 ], function(
   _,
   t,
   bindLoadingMessage,
   View,
   ActionFormView,
-  WorkCenter
+  Aor
 ) {
   'use strict';
 
@@ -24,27 +22,27 @@ define([
     {
       return [
         {
-          label: t.bound('workCenters', 'BREADCRUMBS:BROWSE'),
+          label: t.bound(this.model.getNlsDomain(), 'BREADCRUMBS:browse'),
           href: this.model.genClientUrl('base')
         },
         {
           label: this.model.getLabel(),
           href: this.model.genClientUrl()
         },
-        t.bound('workCenters', 'BREADCRUMBS:ACTION_FORM:' + this.options.actionKey)
+        t.bound(this.model.getNlsDomain(), 'BREADCRUMBS:ACTION_FORM:' + this.options.actionKey)
       ];
     },
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(new WorkCenter({_id: this.options.workCenterId}), this);
+      this.model = bindLoadingMessage(this.options.model, this);
 
       var actionKey = this.options.actionKey;
 
       this.view = new ActionFormView(_.defaults({model: this.model}, this.options, {
-        formActionText: t.bound('workCenters', 'ACTION_FORM_BUTTON:' + actionKey),
-        messageText: t.bound('workCenters', 'ACTION_FORM_MESSAGE:' + actionKey),
-        failureText: t.bound('workCenters', 'ACTION_FORM_MESSAGE_FAILURE:' + actionKey),
+        formActionText: t.bound(this.model.getNlsDomain(), 'ACTION_FORM:BUTTON:' + actionKey),
+        messageText: t.bound(this.model.getNlsDomain(), 'ACTION_FORM:MESSAGE:' + actionKey),
+        failureText: t.bound(this.model.getNlsDomain(), 'ACTION_FORM:MESSAGE_FAILURE:' + actionKey),
         requestData: {action: actionKey}
       }));
     },

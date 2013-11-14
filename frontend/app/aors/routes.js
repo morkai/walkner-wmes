@@ -1,63 +1,83 @@
 define([
-  'app/router',
-  'app/viewport',
-  'app/user',
-  'app/data/aors',
-  './pages/AorListPage',
-  './pages/AorDetailsPage',
-  './pages/AddAorFormPage',
-  './pages/EditAorFormPage',
-  './pages/AorActionFormPage',
+  '../router',
+  '../viewport',
+  '../user',
+  '../data/aors',
+  './Aor',
+  '../core/pages/ListPage',
+  '../core/pages/DetailsPage',
+  '../core/pages/AddFormPage',
+  '../core/pages/EditFormPage',
+  '../core/views/FormView',
+  '../core/pages/ActionFormPage',
+  'app/aors/templates/details',
+  'app/aors/templates/form',
   'i18n!app/nls/aors'
 ], function(
   router,
   viewport,
   user,
   aors,
-  AorListPage,
-  AorDetailsPage,
-  AddAorFormPage,
-  EditAorFormPage,
-  AorActionFormPage
+  Aor,
+  ListPage,
+  DetailsPage,
+  AddFormPage,
+  EditFormPage,
+  FormView,
+  ActionFormPage,
+  detailsTemplate,
+  formTemplate
 ) {
   'use strict';
 
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
-  router.map('/aors', canView, function showAorListPage(req)
+  router.map('/aors', canView, function()
   {
-    viewport.showPage(new AorListPage({rql: req.rql, aors: aors}));
+    viewport.showPage(new ListPage({
+      collection: aors,
+      columns: ['name', 'description']
+    }));
   });
 
-  router.map('/aors/:id', function showAorDetailsPage(req)
+  router.map('/aors/:id', function(req)
   {
-    viewport.showPage(new AorDetailsPage({aorId: req.params.id}));
+    viewport.showPage(new DetailsPage({
+      model: new Aor({_id: req.params.id}),
+      detailsTemplate: detailsTemplate
+    }));
   });
 
-  router.map('/aors;add', canManage, function showAddAorFormPage()
+  router.map('/aors;add', canManage, function()
   {
-    viewport.showPage(new AddAorFormPage());
+    viewport.showPage(new AddFormPage({
+      model: new Aor(),
+      formTemplate: formTemplate
+    }));
   });
 
-  router.map('/aors/:id;edit', canManage, function showEditAorFormPage(req)
+  router.map('/aors/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditAorFormPage({aorId: req.params.id}));
+    viewport.showPage(new EditFormPage({
+      model: new Aor({_id: req.params.id}),
+      formTemplate: formTemplate
+    }));
   });
 
-  router.map(
-    '/aors/:id;delete', canManage, function showDeleteAorFormPage(req, referer)
-    {
-      viewport.showPage(new AorActionFormPage({
-        aorId: req.params.id,
-        actionKey: 'delete',
-        successUrl: '#aors',
-        cancelUrl: '#' + (referer || '/aors').substr(1),
-        formMethod: 'DELETE',
-        formAction: '/aors/' + req.params.id,
-        formActionSeverity: 'danger'
-      }));
-    }
-  );
+  router.map('/aors/:id;delete', canManage, function(req, referer)
+  {
+    var model = new Aor({_id: req.params.id});
+
+    viewport.showPage(new ActionFormPage({
+      model: model,
+      actionKey: 'delete',
+      successUrl: model.genClientUrl('base'),
+      cancelUrl: referer || model.genClientUrl('base'),
+      formMethod: 'DELETE',
+      formAction: model.url(),
+      formActionSeverity: 'danger'
+    }));
+  });
 
 });

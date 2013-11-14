@@ -1,5 +1,5 @@
 define([
-  'app/core/Model'
+  '../core/Model'
 ], function(
   Model
 ) {
@@ -11,9 +11,13 @@ define([
 
     clientUrlRoot: '#users',
 
-    labelProperty: 'login',
+    topicPrefix: 'users',
+
+    privilegePrefix: 'USERS',
 
     nlsDomain: 'users',
+
+    labelAttribute: 'login',
 
     defaults: {
       login: '',

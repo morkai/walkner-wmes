@@ -14,12 +14,14 @@ define([
 ) {
   'use strict';
 
-  router.map('/emptyOrders', user.auth('ORDERS:VIEW'), function showEmptyOrderListPage(req)
+  var canView = user.auth('ORDERS:VIEW');
+
+  router.map('/emptyOrders', canView, function(req)
   {
     viewport.showPage(new EmptyOrderListPage({rql: req.rql}));
   });
 
-  router.map('/emptyOrders;print', user.auth('ORDERS:VIEW'), function printEmptyOrderListPage(req)
+  router.map('/emptyOrders;print', canView, function(req)
   {
     viewport.showPage(new EmptyOrderPrintableListPage({rql: req.rql}));
   });

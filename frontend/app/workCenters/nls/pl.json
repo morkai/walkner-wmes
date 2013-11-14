@@ -1,33 +1,33 @@
 {
-  "BREADCRUMBS:BROWSE": "Centra produkcyjne",
-  "BREADCRUMBS:ADD_FORM": "Dodawanie",
-  "BREADCRUMBS:EDIT_FORM": "Edycja",
+  "BREADCRUMBS:browse": "Centra produkcyjne",
+  "BREADCRUMBS:addForm": "Dodawanie",
+  "BREADCRUMBS:edit_FORM": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG_LOADING_FAILURE": "Ładowanie centrów produkcyjnych nie powiodło się :(",
-  "MSG_LOADING_SINGLE_FAILURE": "Ładowanie centrum produkcyjnego nie powiodło się :(",
-  "MSG_ORDER_STATUS_DELETED": "Obszar odpowiedzialności <em>{name}</em> został usunięty.",
+  "MSG:LOADING_FAILURE": "Ładowanie centrów produkcyjnych nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie centrum produkcyjnego nie powiodło się :(",
+  "MSG:DELETED": "Centrum produkcyjne <em>{label}</em> zostało usunięte.",
 
   "PAGE_ACTION:add": "Dodaj centrum produkcyjne",
   "PAGE_ACTION:edit": "Edytuj centrum produkcyjne",
   "PAGE_ACTION:delete": "Usuń centrum produkcyjne",
 
-  "PANEL_TITLE:details": "Szczegóły centrum produkcyjnego",
-  "PANEL_TITLE:addForm": "Formularz dodawania centrum produkcyjnego",
-  "PANEL_TITLE:editForm": "Formularz edycji centrum produkcyjnego",
+  "PANEL:TITLE:details": "Szczegóły centrum produkcyjnego",
+  "PANEL:TITLE:addForm": "Formularz dodawania centrum produkcyjnego",
+  "PANEL:TITLE:editForm": "Formularz edycji centrum produkcyjnego",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:description": "Opis",
 
-  "ACTION_DIALOG_TITLE:delete": "Potwierdzenie usunięcia centrum produkcyjnego",
 
-  "FORM_ACTION_ADD": "Dodaj centrum produkcyjne",
-  "FORM_ACTION_EDIT": "Edytuj centrum produkcyjne",
-  "FORM_ERROR_ADD_FAILURE": "Nie udało się dodać centrum produkcyjnego :-(",
-  "FORM_ERROR_EDIT_FAILURE": "Nie udało się zmodyfikować centrum produkcyjnego :-(",
+  "FORM:ACTION:add": "Dodaj centrum produkcyjne",
+  "FORM:ACTION:edit": "Edytuj centrum produkcyjne",
+  "FORM:ERROR:addFailure": "Nie udało się dodać centrum produkcyjnego :-(",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować centrum produkcyjnego :-(",
 
-  "ACTION_FORM_BUTTON:delete": "Usuń centrum produkcyjne",
-  "ACTION_FORM_MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany centrum produkcyjne?",
-  "ACTION_FORM_MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć centrum produkcyjne <em>{label}</em>?",
-  "ACTION_FORM_MESSAGE_FAILURE:delete": "Nie udało się usunąć centrum produkcyjnego :-("
+  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia centrum produkcyjnego",
+  "ACTION_FORM:BUTTON:delete": "Usuń centrum produkcyjne",
+  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany centrum produkcyjne?",
+  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć centrum produkcyjne <em>{label}</em>?",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć centrum produkcyjnego :-("
 }

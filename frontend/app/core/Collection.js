@@ -58,6 +58,38 @@ define([
     return Backbone.sync(type, model, options);
   };
 
+  Collection.prototype.genClientUrl = function(action)
+  {
+    if (this.model.prototype.clientUrlRoot === null)
+    {
+      throw new Error("Model's `clientUrlRoot` was not specified");
+    }
+
+    var url = this.model.prototype.clientUrlRoot;
+
+    if (typeof action === 'string')
+    {
+      url += ';' + action;
+    }
+
+    return url;
+  };
+
+  Collection.prototype.getTopicPrefix = function()
+  {
+    return this.topicPrefix || this.model.prototype.topicPrefix;
+  };
+
+  Collection.prototype.getPrivilegePrefix = function()
+  {
+    return this.privilegePrefix || this.model.prototype.privilegePrefix;
+  };
+
+  Collection.prototype.getNlsDomain = function()
+  {
+    return this.nlsDomain || this.model.prototype.nlsDomain;
+  };
+
   Collection.prototype.createRqlQuery = function(rqlQuery)
   {
     if (_.isString(rqlQuery))
@@ -118,23 +150,6 @@ define([
     this.rqlQuery.skip = (newPage - 1) * this.rqlQuery.limit;
 
     this.fetch({reset: true});
-  };
-
-  Collection.prototype.genClientUrl = function(action)
-  {
-    if (this.model.prototype.clientUrlRoot === null)
-    {
-      throw new Error("Model's `clientUrlRoot` was not specified");
-    }
-
-    var url = this.model.prototype.clientUrlRoot;
-
-    if (typeof action === 'string')
-    {
-      url += ';' + action;
-    }
-
-    return url;
   };
 
   return Collection;

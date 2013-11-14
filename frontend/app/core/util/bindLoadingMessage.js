@@ -29,11 +29,11 @@ define([
     {
       if (modelOrCollection.model)
       {
-        key = 'MSG_LOADING_FAILURE';
+        key = 'MSG:LOADING_FAILURE';
       }
       else
       {
-        key = 'MSG_LOADING_SINGLE_FAILURE';
+        key = 'MSG:LOADING_SINGLE_FAILURE';
       }
     }
 

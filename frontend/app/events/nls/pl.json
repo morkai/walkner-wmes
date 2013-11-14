@@ -1,9 +1,9 @@
 {
-  "MSG_LOADING_FAILURE": "Ładowanie zdarzeń nie powiodło się :(",
-  "MSG_LOADING_SINGLE_FAILURE": "Ładowanie zdarzenia nie powiodło się :(",
-  "MSG_LOADING_TYPES_FAILURE": "Ładowanie typów zdarzeń nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie zdarzeń nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zdarzenia nie powiodło się :(",
+  "MSG:LOADING_TYPES_FAILURE": "Ładowanie typów zdarzeń nie powiodło się :(",
 
-  "BREADCRUMBS:BROWSE": "Zdarzenia",
+  "BREADCRUMBS:browse": "Zdarzenia",
 
   "FILTER:DATE:FROM": "Od",
   "FILTER:DATE:TO": "Do",
@@ -12,8 +12,6 @@
   "FILTER:SYSTEM_USER": "System",
   "FILTER:LIMIT": "Limit",
   "FILTER:BUTTON": "Filtruj zdarzenia",
-
-  "TABLE_ACTION_VIEW": "Pokaż szczegóły zdarzenia",
 
   "PROPERTY:time": "Czas wystąpienia",
   "PROPERTY:user": "Użytkownik",

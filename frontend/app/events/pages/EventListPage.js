@@ -33,7 +33,7 @@ define([
     pageId: 'eventList',
 
     breadcrumbs: [
-      t.bound('events', 'BREADCRUMBS:BROWSE')
+      t.bound('events', 'BREADCRUMBS:browse')
     ],
 
     initialize: function()
@@ -52,13 +52,13 @@ define([
       );
 
       this.eventTypes = bindLoadingMessage(
-        new EventTypeCollection(), this, 'MSG_LOADING_TYPES_FAILURE'
+        new EventTypeCollection(), this, 'MSG:LOADING_TYPES_FAILURE'
       );
     },
 
     defineViews: function()
     {
-      this.listView = new EventListView({model: this.eventList});
+      this.listView = new EventListView({collection: this.eventList});
 
       this.filterView = new EventFilterView({
         model: {

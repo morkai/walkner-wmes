@@ -15,9 +15,13 @@ define([
 
     clientUrlRoot: null,
 
-    nlsDomain: 'core',
+    topicPrefix: null,
 
-    labelProperty: null,
+    privilegePrefix: null,
+
+    nlsDomain: null,
+
+    labelAttribute: null,
 
     genClientUrl: function(action)
     {
@@ -52,9 +56,29 @@ define([
       return url;
     },
 
+    getTopicPrefix: function()
+    {
+      return this.topicPrefix;
+    },
+
+    getPrivilegePrefix: function()
+    {
+      return this.privilegePrefix;
+    },
+
+    getNlsDomain: function()
+    {
+      return this.nlsDomain || 'core';
+    },
+
+    getLabelAttribute: function()
+    {
+      return this.labelAttribute || this.idAttribute;
+    },
+
     getLabel: function()
     {
-      return String(this.get(this.labelProperty || '_id'));
+      return String(this.get(this.getLabelAttribute()));
     }
 
   });

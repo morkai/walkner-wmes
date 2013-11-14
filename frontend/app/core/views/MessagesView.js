@@ -194,7 +194,7 @@ define([
 
     this.show({
       type: 'error',
-      text: _.isString(text) ? text : t('core', 'MSG_LOADING_FAILURE')
+      text: _.isString(text) ? text : t('core', 'MSG:LOADING_FAILURE')
     });
   };
 
@@ -213,7 +213,7 @@ define([
     this.$loadingMessage = this.show({
       type: 'warning',
       text: '<i class="fa fa-spinner fa-spin"></i><span>'
-        + t('core', 'MSG_LOADING') + '</span>',
+        + t('core', 'MSG:LOADING') + '</span>',
       immediate: true
     });
   };

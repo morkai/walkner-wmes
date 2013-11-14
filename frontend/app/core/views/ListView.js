@@ -21,50 +21,84 @@ define([
 
     template: listTemplate,
 
+    remoteTopics: function()
+    {
+      var topics = {};
+      var topicPrefix = this.collection.getTopicPrefix();
+
+      topics[topicPrefix + '.added'] = 'refreshCollection';
+      topics[topicPrefix + '.edited'] = 'refreshCollection';
+      topics[topicPrefix + '.deleted'] = 'refreshCollection';
+
+      return topics;
+    },
+
     events: {
       'click .action-delete': function(e)
       {
-        ActionFormView.showDeleteDialog({
-          model: this.getModelFromEvent(e),
-          labelProperty: this.labelProperty || '_id',
-          nlsDomain: this.nlsDomain || 'core'
-        });
-
         e.preventDefault();
+
+        ActionFormView.showDeleteDialog({model: this.getModelFromEvent(e)});
       }
     },
 
     initialize: function()
     {
-      /**
-       * @private
-       * @type {number}
-       */
       this.lastRefreshAt = 0;
 
       this.setView('.pagination-container', new PaginationView({
-        model: this.model.paginationData
+        model: this.collection.paginationData
       }));
 
-      var view = this;
+      this.listenTo(this.collection.paginationData, 'change:page', this.scrollTop);
+    },
 
-      this.listenTo(this.model.paginationData, 'change:page', function()
+    serialize: function()
+    {
+      return {
+        columns: this.serializeColumns(),
+        actions: this.serializeActions(),
+        rows: this.serializeRows()
+      };
+    },
+
+    serializeColumns: function()
+    {
+      var nlsDomain = this.collection.getNlsDomain();
+      var columns;
+
+      if (Array.isArray(this.options.columns))
       {
-        var y = view.$el.offset().top - 14;
-        var $navbar = $('.navbar-fixed-top');
+        columns = this.options.columns;
+      }
+      else if (Array.isArray(this.columns))
+      {
+        columns = this.columns;
+      }
+      else
+      {
+        columns = [];
+      }
 
-        if ($navbar.length)
-        {
-          y -= $navbar.outerHeight();
-        }
-
-        $('html, body').animate({scrollTop: y});
+      return columns.map(function(propertyName)
+      {
+        return {id: propertyName, label: t(nlsDomain, 'PROPERTY:' + propertyName)};
       });
+    },
+
+    serializeActions: function()
+    {
+      return ListView.actions.viewEditDelete(this.collection);
+    },
+
+    serializeRows: function()
+    {
+      return this.collection.toJSON();
     },
 
     afterRender: function()
     {
-      this.listenToOnce(this.model, 'reset', this.render);
+      this.listenToOnce(this.collection, 'reset', this.render);
     },
 
     refreshCollection: function()
@@ -72,27 +106,52 @@ define([
       var now = Date.now();
       var diff = now - this.lastRefreshAt;
 
-      if (now - this.lastRefreshAt < 500)
+      if (now - this.lastRefreshAt < 1000)
       {
-        this.timers.refreshCollection =
-          setTimeout(this.refreshCollection.bind(this), 500 - diff);
+        this.timers.refreshCollection = setTimeout(this.refreshCollection.bind(this), 1000 - diff);
       }
       else
       {
         this.lastRefreshAt = Date.now();
 
-        this.model.fetch({reset: true});
+        this.promised(this.collection.fetch({reset: true}));
       }
+    },
+
+    scrollTop: function()
+    {
+      var y = this.$el.offset().top - 14;
+      var $navbar = $('.navbar-fixed-top');
+
+      if ($navbar.length)
+      {
+        y -= $navbar.outerHeight();
+      }
+
+      $('html, body').animate({scrollTop: y});
     },
 
     getModelFromEvent: function(e)
     {
-      return this.model.get(
-        this.$(e.target).closest('.list-item').attr('data-id')
-      );
+      return this.collection.get(this.$(e.target).closest('.list-item').attr('data-id'));
     }
 
   });
+
+  function getLabel(model, nlsDomain, key)
+  {
+    if (!nlsDomain)
+    {
+      nlsDomain = model.getNlsDomain();
+    }
+
+    if (t.has(nlsDomain, key))
+    {
+      return t(nlsDomain, key);
+    }
+
+    return t('core', key);
+  }
 
   ListView.actions = {
     viewDetails: function(model, nlsDomain)
@@ -100,7 +159,7 @@ define([
       return {
         id: 'viewDetails',
         icon: 'file-text-o',
-        label: t(nlsDomain || 'core', 'LIST:ACTION:viewDetails'),
+        label: getLabel(model, nlsDomain, 'LIST:ACTION:viewDetails'),
         href: model.genClientUrl()
       };
     },
@@ -109,7 +168,7 @@ define([
       return {
         id: 'edit',
         icon: 'edit',
-        label: t(nlsDomain || 'core', 'LIST:ACTION:edit'),
+        label: getLabel(model, nlsDomain, 'LIST:ACTION:edit'),
         href: model.genClientUrl('edit')
       };
     },
@@ -118,18 +177,18 @@ define([
       return {
         id: 'delete',
         icon: 'times',
-        label: t(nlsDomain || 'core', 'LIST:ACTION:delete'),
+        label: getLabel(model, nlsDomain, 'LIST:ACTION:delete'),
         href: model.genClientUrl('delete')
       };
     },
-    viewEditDelete: function(collection, managePrivilege, nlsDomain)
+    viewEditDelete: function(collection, privilegePrefix, nlsDomain)
     {
       return function(row)
       {
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model, nlsDomain)];
 
-        if (user.isAllowedTo(managePrivilege))
+        if (user.isAllowedTo((privilegePrefix || model.getPrivilegePrefix()) + ':MANAGE'))
         {
           actions.push(
             ListView.actions.edit(model, nlsDomain),
