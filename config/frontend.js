@@ -26,25 +26,15 @@ exports.events = {
   topics: {
     debug: [
       'app.started',
-      'users.added', 'users.edited',
       'users.login', 'users.logout',
-      'orders.added', 'orders.edited',
-      'orderStatuses.added', 'orderStatuses.edited',
-      'downtimeReasons.added', 'downtimeReasons.edited',
-      'aors.added', 'aors.edited',
-      'workCenters.added', 'workCenters.edited'
+      '*.added', '*.edited'
     ],
     info: [
       'events.**'
     ],
     warning: [
-      'users.deleted',
       'users.loginFailure',
-      'orders.deleted',
-      'orderStatuses.deleted',
-      'downtimeReasons.deleted',
-      'aors.deleted',
-      'workCenters.deleted'
+      '*.deleted'
     ]
   }
 };
