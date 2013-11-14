@@ -36,8 +36,11 @@ module.exports = function startCoreRoutes(app, express)
 
         app.mongoose.model('Aor')
           .find({}, {name: 1, description: 1}).lean().exec(this.parallel());
+
+        app.mongoose.model('Company')
+          .find({}, {name: 1}).lean().exec(this.parallel());
       },
-      function sendResponseStep(err, orderStatuses, downtimeReasons, aors)
+      function sendResponseStep(err, orderStatuses, downtimeReasons, aors, companies)
       {
         if (err)
         {
@@ -53,7 +56,8 @@ module.exports = function startCoreRoutes(app, express)
             PRIVILEGES: JSON.stringify(app.user.config.privileges),
             ORDER_STATUSES: JSON.stringify(orderStatuses),
             DOWNTIME_REASONS: JSON.stringify(downtimeReasons),
-            AORS: JSON.stringify(aors)
+            AORS: JSON.stringify(aors),
+            COMPANIES: JSON.stringify(companies)
           }
         });
       }

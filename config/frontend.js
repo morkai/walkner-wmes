@@ -17,6 +17,7 @@ exports.modules = [
   'downtimeReasons',
   'aors',
   'workCenters',
+  'companies',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'}
 ];
