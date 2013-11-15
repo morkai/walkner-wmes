@@ -1,7 +1,7 @@
 {
   "BREADCRUMBS:browse": "Statusy zleceń",
   "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:edit_FORM": "Edycja",
+  "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
   "MSG:LOADING_FAILURE": "Ładowanie statusów zleceń nie powiodło się :(",
