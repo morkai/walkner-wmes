@@ -21,8 +21,14 @@ module.exports = function setupUserModel(app, mongoose)
       default: 'unspecified'
     },
     privileges: [String],
-    aor: String,
-    company: String,
+    aor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Aor'
+    },
+    company: {
+      type: String,
+      ref: 'Company'
+    },
     division: String,
     personellId: String,
     card: String,
