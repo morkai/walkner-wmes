@@ -6,7 +6,7 @@
 
   "MSG:LOADING_FAILURE": "Ładowanie firm nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie firmy nie powiodło się :(",
-  "MSG:DELETED": "Powód przestojów <em>{label}</em> został usunięty.",
+  "MSG:DELETED": "Firma <em>{label}</em> została usunięta.",
 
   "PAGE_ACTION:add": "Dodaj firmę",
   "PAGE_ACTION:edit": "Edytuj firmę",
