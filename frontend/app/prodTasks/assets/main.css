@@ -1,0 +1,16 @@
+.prodTaskList-item > td:nth-child(2) {
+  padding-top: 3px;
+  padding-bottom: 0;
+}
+.prodTaskList-label {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+  border: 1px solid #ddd;
+  background: none;
+  color: inherit;
+  text-shadow: none;
+}
+.prodTaskDetails-aors {
+  padding-left: 0;
+  list-style-position: inside;
+}

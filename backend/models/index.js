@@ -10,6 +10,7 @@ module.exports = [
   'orderStatus',
   'user',
   'workCenter',
-  'company'
+  'company',
+  'prodTask'
 
 ];

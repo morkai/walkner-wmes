@@ -18,6 +18,7 @@ exports.modules = [
   'aors',
   'workCenters',
   'companies',
+  'prodTasks',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'}
 ];
