@@ -42,10 +42,17 @@ define([
     {
       this.model = bindLoadingMessage(this.options.model, this);
 
-      this.view = new DetailsView({
-        template: this.options.detailsTemplate,
+      var DetailsViewClass = this.options.DetailsView || DetailsView;
+      var options = {
         model: this.model
-      });
+      };
+
+      if (typeof this.options.detailsTemplate === 'function')
+      {
+        options.template = this.options.detailsTemplate;
+      }
+
+      this.view = new DetailsViewClass(options);
     },
 
     load: function(when)

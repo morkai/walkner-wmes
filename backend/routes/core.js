@@ -47,6 +47,8 @@ module.exports = function startCoreRoutes(app, express)
           return next(err);
         }
 
+        var prodFunctions = app.mongoose.model('User').schema.path('prodFunction').enumValues;
+
         res.render('index', {
           appCache: appCache,
           appData: {
@@ -54,6 +56,7 @@ module.exports = function startCoreRoutes(app, express)
             LOCALE: JSON.stringify(locale),
             GUEST_USER: JSON.stringify(app.user.guest),
             PRIVILEGES: JSON.stringify(app.user.config.privileges),
+            PROD_FUNCTIONS: JSON.stringify(prodFunctions),
             ORDER_STATUSES: JSON.stringify(orderStatuses),
             DOWNTIME_REASONS: JSON.stringify(downtimeReasons),
             AORS: JSON.stringify(aors),

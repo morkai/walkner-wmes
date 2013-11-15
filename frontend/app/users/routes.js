@@ -9,8 +9,9 @@ define([
   '../core/pages/AddFormPage',
   '../core/pages/EditFormPage',
   '../core/pages/ActionFormPage',
+  './views/UserListView',
+  './views/UserDetailsView',
   './views/UserFormView',
-  'app/users/templates/details',
   'i18n!app/nls/users'
 ], function(
   router,
@@ -23,8 +24,9 @@ define([
   AddFormPage,
   EditFormPage,
   ActionFormPage,
-  UserFormView,
-  detailsTemplate
+  UserListView,
+  UserDetailsView,
+  UserFormView
 ) {
   'use strict';
 
@@ -34,8 +36,8 @@ define([
   router.map('/users', canView, function(req)
   {
     viewport.showPage(new ListPage({
-      collection: new UserCollection(null, {rqlQuery: req.rql}),
-      columns: ['login', 'email', 'mobile']
+      ListView: UserListView,
+      collection: new UserCollection(null, {rqlQuery: req.rql})
     }));
   });
 
@@ -55,8 +57,8 @@ define([
     function(req)
     {
       viewport.showPage(new DetailsPage({
-        model: new User({_id: req.params.id}),
-        detailsTemplate: detailsTemplate
+        DetailsView: UserDetailsView,
+        model: new User({_id: req.params.id})
       }));
     }
   );

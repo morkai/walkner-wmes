@@ -1,7 +1,7 @@
 define([
   'app/viewport',
   'app/i18n',
-  'app/core/View'
+  '../View'
 ], function(
   viewport,
   t,

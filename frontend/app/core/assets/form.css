@@ -34,12 +34,15 @@
 .form-actions .cancel {
   margin-left: 1em;
 }
-.checkbox {
+.checkbox,
+.radio {
   margin-bottom: 0;
 }
-.checkbox + .checkbox {
+.checkbox + .checkbox,
+.radio + .radio {
   margin-top: .25em;
 }
-.control-label + .checkbox {
+.control-label + .checkbox,
+.control-label + .radio {
   margin-top: 0;
 }

@@ -12,22 +12,25 @@ module.exports = function setupUserModel(app, mongoose)
     password: {
       type: String,
       trim: true,
-      required: true,
-      unique: true
+      required: true
     },
-    email: {
+    email: String,
+    prodFunction: {
       type: String,
-      trim: true,
-      required: true,
-      unique: true
+      enum: ['master', 'leader', 'mizusumashi', 'adjuster', 'operator', 'unspecified'],
+      default: 'unspecified'
     },
-    mobile: {
-      type: String,
-      trim: true
-    },
-    privileges: {
-      type: [String]
-    }
+    privileges: [String],
+    aor: String,
+    company: String,
+    division: String,
+    personellId: String,
+    card: String,
+    firstName: String,
+    lastName: String,
+    registerDate: String,
+    sapPosition: String,
+    active: Boolean
   }, {
     id: false,
     toJSON: {

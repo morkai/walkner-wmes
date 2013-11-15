@@ -2,6 +2,9 @@ define([
   'underscore',
   'app/i18n',
   'app/core/views/FormView',
+  'app/data/aors',
+  'app/data/companies',
+  'app/data/prodFunctions',
   'app/data/privileges',
   'app/users/templates/form',
   'i18n!app/nls/users'
@@ -9,6 +12,9 @@ define([
   _,
   t,
   FormView,
+  aors,
+  companies,
+  prodFunctions,
   privileges,
   formTemplate
 ) {
@@ -41,6 +47,11 @@ define([
       {
         this.$('input[type="password"]').attr('required', true);
       }
+
+      this.$('#' + this.idPrefix + '-aor').select2({
+        width: '100%',
+        allowClear: true
+      });
     },
 
     validatePasswords: function()
@@ -63,13 +74,16 @@ define([
     serialize: function()
     {
       return _.extend(FormView.prototype.serialize.call(this), {
+        aors: aors.toJSON(),
+        companies: companies.toJSON(),
+        prodFunctions: prodFunctions,
         privileges: privileges
       });
     },
 
     serializeForm: function(formData)
     {
-      return _.defaults(formData, {privileges: []});
+      return _.defaults(formData, {privileges: [], aor: null});
     }
 
   });

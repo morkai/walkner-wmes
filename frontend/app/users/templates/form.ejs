@@ -3,38 +3,100 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
-      <div class="form-group">
-        <label for="<%- idPrefix %>-login" class="control-label"><%- t('users', 'PROPERTY:login') %></label>
-        <input id="<%- idPrefix %>-login" class="form-control" type="text" name="login" value="" autofocus required maxlength="50">
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('users', 'PROPERTY:firstName') %></label>
+          <input id="<%- idPrefix %>-firstName" class="form-control" type="text" name="firstName" autofocus maxlength="50">
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-lastName" class="control-label"><%- t('users', 'PROPERTY:lastName') %></label>
+          <input id="<%- idPrefix %>-lastName" class="form-control" type="text" name="lastName" maxlength="50">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-login" class="control-label"><%- t('users', 'PROPERTY:login') %></label>
+          <input id="<%- idPrefix %>-login" class="form-control" type="text" name="login" required maxlength="50">
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-email" class="control-label"><%- t('users', 'PROPERTY:email') %></label>
+          <input id="<%- idPrefix %>-email" class="form-control" type="email" name="email" maxlength="100">
+        </div>
       </div>
       <div class="row">
         <div class="col-md-6 form-group">
           <label for="<%- idPrefix %>-password" class="control-label"><%- t('users', 'PROPERTY:password') %></label>
-          <input id="<%- idPrefix %>-password" class="form-control" type="password" name="password" value="">
+          <input id="<%- idPrefix %>-password" class="form-control" type="password" name="password">
         </div>
         <div class="col-md-6 form-group">
           <label for="<%- idPrefix %>-password2" class="control-label"><%- t('users', 'PROPERTY:password2') %></label>
-          <input id="<%- idPrefix %>-password2" class="form-control" type="password" value="">
+          <input id="<%- idPrefix %>-password2" class="form-control" type="password">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row users-form-choicesRow">
+            <div class="col-md-4 form-group">
+              <label class="control-label"><%- t('users', 'PROPERTY:privileges') %></label>
+              <% privileges.forEach(function(privilege) { %>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="privileges[]" value="<%- privilege %>">
+                  <%- t('users', 'PRIVILEGE:' + privilege) %>
+                </label>
+              </div>
+              <% }) %>
+            </div>
+            <div class="col-md-4 form-group">
+              <label for="<%- idPrefix %>-company" class="control-label"><%- t('users', 'PROPERTY:company') %></label>
+              <% companies.forEach(function(company) { %>
+              <div class="radio">
+                <label><input type="radio" name="company" value="<%- company._id %>"> <%= company.name %></label>
+              </div>
+              <% }) %>
+            </div>
+            <div class="col-md-4 form-group">
+              <label for="<%- idPrefix %>-prodFunction" class="control-label"><%- t('users', 'PROPERTY:prodFunction') %></label>
+              <% prodFunctions.forEach(function(prodFunction) { %>
+              <div class="radio">
+                <label><input type="radio" name="prodFunction" value="<%- prodFunction %>"> <%- t('users', 'PROD_FUNCTION:' + prodFunction) %></label>
+              </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-aor" class="control-label"><%- t('users', 'PROPERTY:aor') %></label>
+          <select id="<%- idPrefix %>-aor" name="aor" data-placeholder="<%- t('users', 'FORM:PLACEHOLDER:aor') %>">
+            <option></option>
+            <% aors.forEach(function(aor) { %>
+            <option value="<%- aor._id %>"><%= aor.name %>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-division" class="control-label"><%- t('users', 'PROPERTY:division') %></label>
+          <input id="<%- idPrefix %>-division" class="form-control" type="text" name="division" maxlength="100">
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-sapPosition" class="control-label"><%- t('users', 'PROPERTY:sapPosition') %></label>
+          <input id="<%- idPrefix %>-sapPosition" class="form-control" type="text" name="sapPosition" maxlength="100">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-personellId" class="control-label"><%- t('users', 'PROPERTY:personellId') %></label>
+          <input id="<%- idPrefix %>-personellId" class="form-control" type="text" name="personellId" maxlength="15">
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-card" class="control-label"><%- t('users', 'PROPERTY:card') %></label>
+          <input id="<%- idPrefix %>-card" class="form-control" type="text" name="card" maxlength="15">
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-email" class="control-label"><%- t('users', 'PROPERTY:email') %></label>
-        <input id="<%- idPrefix %>-email" class="form-control" type="email" name="email" value="" required maxlength="100">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-mobile" class="control-label"><%- t('users', 'PROPERTY:mobile') %></label>
-        <input id="<%- idPrefix %>-mobile" class="form-control" type="tel" name="mobile" value="" maxlength="20">
-      </div>
-      <div class="form-group">
-        <label class="control-label"><%- t('users', 'PROPERTY:privileges') %></label>
-        <% privileges.forEach(function(privilege) { %>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="privileges[]" value="<%- privilege %>">
-            <%- t('users', 'PRIVILEGE:' + privilege) %>
-          </label>
-        </div>
-        <% }) %>
+        <label class="control-label checkbox"><input type="checkbox" name="active" value="true"> <%- t('users', 'PROPERTY:active') %></label>
       </div>
     </div>
     <div class="panel-footer">

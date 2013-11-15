@@ -20,10 +20,20 @@ define([
     labelAttribute: 'login',
 
     defaults: {
-      login: '',
-      email: '',
-      mobile: '',
-      privileges: null
+      login: null,
+      email: null,
+      prodFunction: 'unspecified',
+      privileges: null,
+      aor: null,
+      company: null,
+      division: null,
+      personellId: null,
+      card: null,
+      firstName: null,
+      lastName: null,
+      registerDate: null,
+      sapPosition: null,
+      active: true
     },
 
     initialize: function()
@@ -32,6 +42,14 @@ define([
       {
         this.set('privileges', []);
       }
+    },
+
+    getLabel: function()
+    {
+      var lastName = this.get('lastName') || '';
+      var firstName = this.get('firstName') || '';
+
+      return lastName.length && firstName.length ? (lastName + ' ' + firstName) : this.get('login');
     }
 
   });
