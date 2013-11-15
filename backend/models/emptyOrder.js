@@ -27,8 +27,6 @@ module.exports = function setupEmptyOrderModel(app, mongoose)
   emptyOrderSchema.statics.TOPIC_PREFIX = 'emptyOrders';
   emptyOrderSchema.statics.BROWSE_LIMIT = 2000;
 
-  emptyOrderSchema.index({startDate: -1, finishDate: -1});
-
   emptyOrderSchema.pre('save', function(next)
   {
     /*jshint validthis:true*/
