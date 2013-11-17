@@ -84,7 +84,7 @@ define([
 
           for (var ii = 0, ll = flatKeys.length; ii < ll; ++ii)
           {
-            result[key + '->' + flatKeys[ii]] = _.escape(String(flatObj[flatKeys[ii]]));
+            result[key + '->' + flatKeys[ii]] = String(flatObj[flatKeys[ii]]);
           }
         }
         else
