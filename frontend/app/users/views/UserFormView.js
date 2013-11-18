@@ -73,17 +73,34 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      var templateData = _.extend(FormView.prototype.serialize.call(this), {
         aors: aors.toJSON(),
         companies: companies.toJSON(),
         prodFunctions: prodFunctions,
         privileges: privileges
       });
+
+      if (templateData.model.company === null)
+      {
+        templateData.model.company = null;
+      }
+
+      return templateData;
     },
 
     serializeForm: function(formData)
     {
-      return _.defaults(formData, {privileges: [], aor: null});
+      formData = _.defaults(formData, {
+        privileges: [],
+        aor: null
+      });
+
+      if (formData.company === 'null')
+      {
+        formData.company = null;
+      }
+
+      return formData;
     }
 
   });

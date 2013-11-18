@@ -49,9 +49,8 @@
   "FORM:ERROR:passwordMismatch": "Podane hasła nie pasują do siebie.",
   "FORM:ERROR:addFailure": "Nie udało się dodać użytkownika :-(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować użytkownika :-(",
-  "FORM:PLACEHOLDER:aor": "Nie określony...",
-
-  "LIST:NO_DATA:aor": "Nie określony",
+  "NO_DATA:aor": "Nieokreślony",
+  "NO_DATA:company": "Nieokreślona",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia użytkownika",
   "ACTION_FORM:BUTTON:delete": "Usuń użytkownika",

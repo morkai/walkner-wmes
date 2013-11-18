@@ -14,10 +14,7 @@ define([
   {
     var company = companies.get(user.company);
 
-    if (company)
-    {
-      user.company = company.getLabel();
-    }
+    user.company = company ? company.getLabel() : t('users', 'NO_DATA:company');
 
     if (user.aor)
     {
@@ -28,9 +25,10 @@ define([
         user.aor = aor.getLabel();
       }
     }
-    else
+
+    if (!user.aor)
     {
-      user.aor = t('users', 'LIST:NO_DATA:aor');
+      user.aor = t('users', 'NO_DATA:aor');
     }
 
     if (user.prodFunction)

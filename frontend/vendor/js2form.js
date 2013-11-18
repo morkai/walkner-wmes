@@ -91,7 +91,7 @@
     {
       for(i = 0; i < field.length; i++)
       {
-        if (field[i].value == value || value === true) field[i].checked = true;
+        if (String(field[i].value) == String(value) || value === true) field[i].checked = true;
       }
     }
     else if (_inputOrTextareaRegexp.test(field.nodeName))
