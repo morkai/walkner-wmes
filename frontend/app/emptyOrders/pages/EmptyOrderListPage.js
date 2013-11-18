@@ -1,4 +1,5 @@
 define([
+  'jquery',
   'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
@@ -9,6 +10,7 @@ define([
   'app/emptyOrders/templates/listPage',
   'i18n!app/nls/emptyOrders'
 ], function(
+  $,
   t,
   bindLoadingMessage,
   pageActions,
@@ -34,6 +36,7 @@ define([
 
     actions: [
       {
+        className: 'emptyOrders-pageAction-print',
         label: t.bound('emptyOrders', 'PAGE_ACTION:print'),
         icon: 'print',
         href: '#emptyOrders;print',
@@ -48,6 +51,16 @@ define([
 
       this.setView('.emptyOrders-list-container', this.listView);
       this.setView('.filter-container', this.filterView);
+    },
+
+    destroy: function()
+    {
+      this.layout = null;
+    },
+
+    setUpLayout: function(layout)
+    {
+      this.layout = layout;
     },
 
     defineModels: function()
@@ -81,11 +94,20 @@ define([
 
       this.listView.refreshCollection(null, true);
 
+      var newRqlQueryStr = newRqlQuery.toString();
+
       this.broker.publish('router.navigate', {
-        url: this.collection.genClientUrl() + '?' + newRqlQuery,
+        url: this.collection.genClientUrl() + '?' + newRqlQueryStr,
         trigger: false,
         replace: true
       });
+
+      if (this.layout)
+      {
+        this.actions[0].href = '#emptyOrders;print?' + newRqlQueryStr;
+
+        this.layout.setActions(this.actions, this);
+      }
     }
 
   });

@@ -1,4 +1,6 @@
 define([
+  'underscore',
+  'moment',
   'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
@@ -7,6 +9,8 @@ define([
   '../views/EmptyOrderPrintableListView',
   'i18n!app/nls/emptyOrders'
 ], function(
+  _,
+  moment,
   t,
   bindLoadingMessage,
   pageActions,
@@ -22,7 +26,23 @@ define([
 
     pageId: 'emptyOrderPrintableList',
 
-    hdLeft: function() { return t('emptyOrders', 'PRINT_PAGE:HD:LEFT'); },
+    hdLeft: function()
+    {
+      var selector = _.find(this.collection.rqlQuery.selector.args, function(selector)
+      {
+        return selector.name === 'eq'
+          && (selector.args[0] === 'startDate' || selector.args[0] === 'finishDate');
+      });
+
+      if (!selector)
+      {
+        return t('emptyOrders', 'PRINT_PAGE:HD:LEFT:all');
+      }
+
+      return t('emptyOrders', 'PRINT_PAGE:HD:LEFT:' + selector.args[0], {
+        date: moment(selector.args[1]).format('LL')
+      });
+    },
 
     breadcrumbs: [
       t.bound('emptyOrders', 'BREADCRUMBS:browse')

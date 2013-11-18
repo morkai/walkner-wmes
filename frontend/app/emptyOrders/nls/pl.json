@@ -5,7 +5,9 @@
 
   "PAGE_ACTION:print": "Pokaż wersję do druku",
 
-  "PRINT_PAGE:HD:LEFT": "Zlecenia bez żadnych operacji",
+  "PRINT_PAGE:HD:LEFT:all": "Wszystkie zlecenia bez żadnych operacji",
+  "PRINT_PAGE:HD:LEFT:startDate": "Zlecenia bez żadnych operacji rozpoczynające się {date}",
+  "PRINT_PAGE:HD:LEFT:finishDate": "Zlecenia bez żadnych operacji kończące się {date}",
   "PRINT_PAGE:FT:PAGE_NO": "Strona <span class=print-page-no>?</span> z <span class=print-page-count>?</span>",
   "PRINT_PAGE:FT:INFO": "Wydruk wygenerowany <span class=print-page-date>?</span> przez użytkownika <span class=print-page-user>?</span>.",
 
