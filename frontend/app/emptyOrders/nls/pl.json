@@ -15,5 +15,8 @@
   "PROPERTY:mrp": "MRP",
   "PROPERTY:startDate": "Data startu",
   "PROPERTY:finishDate": "Data ukończenia",
-  "PROPERTY:statuses": "Status"
+  "PROPERTY:statuses": "Status",
+
+  "FILTER:LIMIT": "Limit",
+  "FILTER:BUTTON": "Filtruj puste zlecenia"
 }

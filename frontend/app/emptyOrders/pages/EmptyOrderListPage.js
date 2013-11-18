@@ -5,6 +5,8 @@ define([
   'app/core/View',
   '../EmptyOrderCollection',
   '../views/EmptyOrderListView',
+  '../views/EmptyOrderFilterView',
+  'app/emptyOrders/templates/listPage',
   'i18n!app/nls/emptyOrders'
 ], function(
   t,
@@ -12,11 +14,15 @@ define([
   pageActions,
   View,
   EmptyOrderCollection,
-  EmptyOrderListView
+  EmptyOrderListView,
+  EmptyOrderFilterView,
+  listPageTemplate
 ) {
   'use strict';
 
   return View.extend({
+
+    template: listPageTemplate,
 
     layoutName: 'page',
 
@@ -37,16 +43,49 @@ define([
 
     initialize: function()
     {
+      this.defineModels();
+      this.defineViews();
+
+      this.setView('.emptyOrders-list-container', this.listView);
+      this.setView('.filter-container', this.filterView);
+    },
+
+    defineModels: function()
+    {
       this.collection = bindLoadingMessage(
         new EmptyOrderCollection(null, {rqlQuery: this.options.rql}), this
       );
+    },
 
-      this.view = new EmptyOrderListView({collection: this.collection});
+    defineViews: function()
+    {
+      this.filterView = new EmptyOrderFilterView({
+        model: {
+          rqlQuery: this.collection.rqlQuery
+        }
+      });
+
+      this.listView = new EmptyOrderListView({collection: this.collection});
+
+      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },
 
     load: function(when)
     {
       return when(this.collection.fetch({reset: true}));
+    },
+
+    refreshList: function(newRqlQuery)
+    {
+      this.collection.rqlQuery = newRqlQuery;
+
+      this.listView.refreshCollection(null, true);
+
+      this.broker.publish('router.navigate', {
+        url: this.collection.genClientUrl() + '?' + newRqlQuery,
+        trigger: false,
+        replace: true
+      });
     }
 
   });

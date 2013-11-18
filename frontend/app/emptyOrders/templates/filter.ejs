@@ -1,0 +1,25 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group emptyOrders-filter-date-group">
+      <div>
+        <label>
+          <input name="dateType" type="radio" value="start">
+          <%- t('emptyOrders', 'PROPERTY:startDate') %>
+        </label><label
+          class="emptyOrders-filter-date-finish-label">
+          <input name="dateType" type="radio" value="finish">
+          <%- t('emptyOrders', 'PROPERTY:finishDate') %>
+        </label>
+      </div><div class="emptyOrders-filter-date-range">
+        <input id="<%- idPrefix %>-date" class="form-control" name="date" type="date" placeholder="YYYY-MM-DD">
+      </div>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-limit"><%- t('emptyOrders', 'FILTER:LIMIT') %></label>
+      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('emptyOrders', 'FILTER:BUTTON') %>">
+    </div>
+  </form>
+</div>
