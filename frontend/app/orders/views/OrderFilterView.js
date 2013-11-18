@@ -7,8 +7,7 @@ define([
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/orders/templates/filter',
-  'i18n!app/nls/events',
-  'select2'
+  'i18n!app/nls/events'
 ], function(
   _,
   moment,
@@ -64,11 +63,6 @@ define([
       var formData = this.serializeRqlQuery();
 
       js2form(this.el.querySelector('.filter-form'), formData);
-
-      this.$('#' + this.idPrefix + '-type').select2({
-        width: 'resolve',
-        allowClear: true
-      });
     },
 
     serializeRqlQuery: function()
