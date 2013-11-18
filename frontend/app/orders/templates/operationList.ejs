@@ -1,0 +1,37 @@
+<div class="panel panel-default orders-operations">
+  <div class="panel-heading"><%- t('orders', 'PANEL:TITLE:operations') %></div>
+  <% if (operations.length) { %>
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th><%- t('orders', 'PROPERTY:operations.no') %>
+        <th><%- t('orders', 'PROPERTY:operations.workCenter') %>
+        <th><%- t('orders', 'PROPERTY:operations.name') %>
+        <th><%- t('orders', 'PROPERTY:operations.qty') %>
+        <th><%- t('orders', 'PROPERTY:operations.machineSetupTime') %>
+        <th><%- t('orders', 'PROPERTY:operations.laborSetupTime') %>
+        <th><%- t('orders', 'PROPERTY:operations.machineTime') %>
+        <th><%- t('orders', 'PROPERTY:operations.laborTime') %>
+      </tr>
+    </thead>
+    <tbody>
+      <% operations.forEach(function(operation) { %>
+      <tr>
+        <td><%= operation.no || '-' %>
+        <td><%= operation.workCenter || '-' %>
+        <td><%= operation.name || '-' %>
+        <td><%= operation.qtyUnit || '-' %>
+        <td><%= operation.machineSetupTime || '-' %>
+        <td><%= operation.laborSetupTime || '-' %>
+        <td><%= operation.machineTime || '-' %>
+        <td><%= operation.laborTime || '-' %>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <div class="panel-body">
+    <%- t('orders', 'OPERATIONS:NO_DATA') %>
+  </div>
+  <% } %>
+</div>

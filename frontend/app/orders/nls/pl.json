@@ -5,6 +5,7 @@
 
   "PANEL:TITLE:details": "Szczegóły zlecenia",
   "PANEL:TITLE:operations": "Lista operacji zlecenia",
+  "PANEL:TITLE:changes": "Historia zmian zlecenia",
 
   "PROPERTY:_id": "Nr zlecenia",
   "PROPERTY:createdAt": "Czas stworzenia",
@@ -28,7 +29,15 @@
   "PROPERTY:operations.machineTime": "Czas <em>Machine</em>",
   "PROPERTY:operations.laborTime": "Czas <em>Labor</em>",
 
-  "OPERATIONS_LIST_NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
+  "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
+
+  "CHANGES:NO_DATA": "Zlecenie nie było modyfikowane.",
+  "CHANGES:operations": "{count, plural, one{1 operacja} few{# operacje} other{# operacji}}",
+  "CHANGES:time": "Czas",
+  "CHANGES:user": "Użytkownik",
+  "CHANGES:property": "Atrybut",
+  "CHANGES:oldValue": "Stara wartość",
+  "CHANGES:newValue": "Nowa wartość",
 
   "FILTER:PLACEHOLDER:_id": "Dowolny nr",
   "FILTER:PLACEHOLDER:nc12": "Dowolny 12NC",
