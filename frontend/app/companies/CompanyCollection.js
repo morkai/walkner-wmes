@@ -11,7 +11,7 @@ define([
 
     model: Company,
 
-    rqlQuery: 'select(label)&sort(_id)'
+    rqlQuery: 'select(name)&sort(_id)'
 
   });
 });
