@@ -39,6 +39,8 @@
   "NAVBAR:DASHBOARD": "Dashboard",
   "NAVBAR:EVENTS": "Zdarzenia",
   "NAVBAR:ORDERS": "Zlecenia",
+  "NAVBAR:MECH_ORDERS": "Zlecenia działu mechanicznego",
+  "NAVBAR:OTHER_ORDERS": "Zlecenia reszty działów",
   "NAVBAR:EMPTY_ORDERS": "Puste zlecenia",
   "NAVBAR:LINES": "Linie produkcyjne",
   "NAVBAR:USERS": "Użytkownicy",
