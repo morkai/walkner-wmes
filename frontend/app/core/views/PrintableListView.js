@@ -24,6 +24,7 @@ define([
     serialize: function()
     {
       return {
+        className: this.className || '',
         columns: this.serializeColumns(),
         rows: this.serializeRows()
       };
