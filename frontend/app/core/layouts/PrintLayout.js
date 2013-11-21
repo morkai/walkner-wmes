@@ -193,7 +193,7 @@ define([
     }
     else
     {
-      pages = $pageView.$el;
+      pages = [$pageView.$el.detach()];
     }
 
     $bdContainer.height(bdContainerHeight);
