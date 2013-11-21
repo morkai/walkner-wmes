@@ -26,7 +26,8 @@
 .select2-container .select2-choice > .select2-chosen {
   padding: 6px 0;
 }
-.select2-container .select2-choice .select2-arrow {
+.select2-container .select2-choice .select2-arrow,
+.select2-container.select2-container-disabled .select2-choice .select2-arrow {
   border-left: 0;
   border-radius: 0;
   background: none;
