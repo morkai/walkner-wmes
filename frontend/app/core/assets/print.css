@@ -39,6 +39,9 @@ body.print {
   margin: 0;
   padding: 0;
 }
+.print-page-hd-right {
+  line-height: 16px;
+}
 .print-page-ft-right,
 .print-page-hd-right {
   float: right;
