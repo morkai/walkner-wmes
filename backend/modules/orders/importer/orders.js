@@ -164,7 +164,7 @@ exports.start = function startOrdersImporterModule(app, module)
         time: new Date(),
         user: null,
         oldValues: {operations: oldOperations},
-        newValues: missingOrder.operations
+        newValues: {operations: missingOrder.operations}
       });
 
       updateList.push(orderModel);
