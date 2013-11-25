@@ -18,11 +18,10 @@
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
-          <li data-online><a href="#mechOrders"><%- t('core', 'NAVBAR:MECH_ORDERS') %></a>
+          <li data-disabled data-online><a href="#mechOrders"><%- t('core', 'NAVBAR:MECH_ORDERS') %></a>
           <li data-online><a href="#orders"><%- t('core', 'NAVBAR:OTHER_ORDERS') %></a>
           <li data-online><a href="#emptyOrders"><%- t('core', 'NAVBAR:EMPTY_ORDERS') %></a>
         </ul>
-      <li data-online data-privilege="LINES:VIEW"><a href="#lines"><%- t('core', 'NAVBAR:LINES') %></a>
       <li data-online data-privilege="USERS:VIEW"><a href="#users"><%- t('core', 'NAVBAR:USERS') %></a>
       <li data-online data-privilege="DICTIONARIES:VIEW" class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown">
@@ -42,7 +41,7 @@
       <li class="dropdown navbar-account-dropdown">
         <a href="#account" class="dropdown-toggle" data-toggle="dropdown">
           <i class="fa fa-user fa-lg navbar-account-status"></i>
-          <%- user.data.name || user.data.login %>
+          <%- user.getLabel() %>
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">

@@ -65,6 +65,24 @@ function(
   };
 
   /**
+   * @returns {string}
+   */
+  user.getLabel = function()
+  {
+    if (user.data.name)
+    {
+      return user.data.name;
+    }
+
+    if (user.data.lastName && user.data.firstName)
+    {
+      return user.data.lastName + ' ' + user.data.firstName;
+    }
+
+    return user.data.login;
+  };
+
+  /**
    * @param {string|Array.<string>} [privilege]
    * @returns {boolean}
    */
