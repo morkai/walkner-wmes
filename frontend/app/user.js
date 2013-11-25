@@ -55,7 +55,7 @@ function(
   };
 
   /**
-   * @return {boolean}
+   * @returns {boolean}
    */
   user.isLoggedIn = function()
   {
@@ -64,7 +64,7 @@ function(
 
   /**
    * @param {string|Array.<string>} [privilege]
-   * @return {boolean}
+   * @returns {boolean}
    */
   user.isAllowedTo = function(privilege)
   {
@@ -73,7 +73,9 @@ function(
       return true;
     }
 
-    if (!user.data.privileges)
+    var userPrivileges = user.data.privileges;
+
+    if (!userPrivileges)
     {
       return false;
     }
@@ -84,21 +86,31 @@ function(
     }
 
     var privileges = [].concat(privilege);
+    var matches = 0;
 
     for (var i = 0, l = privileges.length; i < l; ++i)
     {
       privilege = privileges[i];
 
-      if (typeof privilege !== 'string'
-        || user.data.privileges.indexOf(privilege) !== -1)
+      if (typeof privilege !== 'string')
       {
         continue;
       }
 
-      return false;
+      var privilegeRe = new RegExp('^' + privilege.replace('*', '.*?') + '$');
+
+      for (var ii = 0, ll = userPrivileges.length; ii < ll; ++ii)
+      {
+        if (privilegeRe.test(userPrivileges[ii]))
+        {
+          ++matches;
+
+          break;
+        }
+      }
     }
 
-    return true;
+    return matches === privileges.length;
   };
 
   /**
