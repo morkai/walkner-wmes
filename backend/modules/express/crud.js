@@ -91,7 +91,24 @@ exports.addRoute = function(app, Model, req, res, next)
 
 exports.readRoute = function(app, Model, req, res, next)
 {
-  Model.findById(req.params.id, null, function(err, model)
+  var query = Model.findById(req.params.id);
+
+  try
+  {
+    req.rql.selector.args.forEach(function(term)
+    {
+      if (term.name === 'populate')
+      {
+        query.populate(term.args[0], term.args[1].join(' '));
+      }
+    });
+  }
+  catch (err)
+  {
+    return next(err);
+  }
+
+  query.exec(function(err, model)
   {
     if (err)
     {
