@@ -20,7 +20,7 @@
   "PROPERTY:statuses": "Status",
   "PROPERTY:operations": "Operacje",
   "PROPERTY:operations.no": "Nr operacji",
-  "PROPERTY:operations.workCenter": "Centrum produkcyjne",
+  "PROPERTY:operations.workCenter": "WorkCenter",
   "PROPERTY:operations.name": "Nazwa operacji",
   "PROPERTY:operations.qty": "Ilość",
   "PROPERTY:operations.unit": "Jednostka",

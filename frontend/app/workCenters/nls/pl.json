@@ -1,33 +1,32 @@
 {
-  "BREADCRUMBS:browse": "Centra produkcyjne",
+  "BREADCRUMBS:browse": "WorkCentra",
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie centrów produkcyjnych nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie centrum produkcyjnego nie powiodło się :(",
-  "MSG:DELETED": "Centrum produkcyjne <em>{label}</em> zostało usunięte.",
+  "MSG:LOADING_FAILURE": "Ładowanie WorkCentrów nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie WorkCenter nie powiodło się :(",
+  "MSG:DELETED": "WorkCenter <em>{label}</em> zostało usunięte.",
 
-  "PAGE_ACTION:add": "Dodaj centrum produkcyjne",
-  "PAGE_ACTION:edit": "Edytuj centrum produkcyjne",
-  "PAGE_ACTION:delete": "Usuń centrum produkcyjne",
+  "PAGE_ACTION:add": "Dodaj WorkCenter",
+  "PAGE_ACTION:edit": "Edytuj WorkCenter",
+  "PAGE_ACTION:delete": "Usuń WorkCenter",
 
-  "PANEL:TITLE:details": "Szczegóły centrum produkcyjnego",
-  "PANEL:TITLE:addForm": "Formularz dodawania centrum produkcyjnego",
-  "PANEL:TITLE:editForm": "Formularz edycji centrum produkcyjnego",
+  "PANEL:TITLE:details": "Szczegóły WorkCenter",
+  "PANEL:TITLE:addForm": "Formularz dodawania WorkCenter",
+  "PANEL:TITLE:editForm": "Formularz edycji WorkCenter",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:description": "Opis",
 
+  "FORM:ACTION:add": "Dodaj WorkCenter",
+  "FORM:ACTION:edit": "Edytuj WorkCenter",
+  "FORM:ERROR:addFailure": "Nie udało się dodać WorkCenter :-(",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować WorkCenter :-(",
 
-  "FORM:ACTION:add": "Dodaj centrum produkcyjne",
-  "FORM:ACTION:edit": "Edytuj centrum produkcyjne",
-  "FORM:ERROR:addFailure": "Nie udało się dodać centrum produkcyjnego :-(",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować centrum produkcyjnego :-(",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia centrum produkcyjnego",
-  "ACTION_FORM:BUTTON:delete": "Usuń centrum produkcyjne",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany centrum produkcyjne?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć centrum produkcyjne <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć centrum produkcyjnego :-("
+  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia WorkCenter",
+  "ACTION_FORM:BUTTON:delete": "Usuń WorkCenter",
+  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane WorkCenter?",
+  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć WorkCenter <em>{label}</em>?",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć WorkCenter :-("
 }
