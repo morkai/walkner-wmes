@@ -4,6 +4,7 @@ define([
   'app/i18n',
   'app/broker',
   'app/socket',
+  'app/viewport',
   'app/core/pages/ErrorPage'
 ],
 function(
@@ -12,6 +13,7 @@ function(
   t,
   broker,
   socket,
+  viewport,
   ErrorPage
 ) {
   'use strict';
@@ -127,7 +129,7 @@ function(
       }
       else
       {
-        new ErrorPage({code: 401, req: req, referer: referer}).render();
+        viewport.showPage(new ErrorPage({code: 401, req: req, referer: referer}));
       }
     };
   };
