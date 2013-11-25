@@ -189,6 +189,9 @@ exports.start = function startUserModule(app, module)
 
       sockets.forEach(function(socket)
       {
+        socket.handshake.sessionId = message.newSessionId;
+        socket.handshake.user = message.user;
+
         if (socket.id !== message.socketId)
         {
           socket.emit('user.reload', message.user);
@@ -202,6 +205,9 @@ exports.start = function startUserModule(app, module)
 
       sockets.forEach(function(socket)
       {
+        socket.handshake.sessionId = message.newSessionId;
+        socket.handshake.user = module.guest;
+
         if (socket.id !== message.socketId)
         {
           socket.emit('user.reload', module.guest);
