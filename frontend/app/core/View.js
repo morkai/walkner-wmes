@@ -100,5 +100,17 @@ function(
     return promise;
   };
 
+  View.prototype.$id = function(idSuffix)
+  {
+    var id = '#';
+
+    if (typeof this.idPrefix === 'string')
+    {
+      id += this.idPrefix + '-';
+    }
+
+    return this.$(id + idSuffix);
+  };
+
   return View;
 });
