@@ -332,6 +332,11 @@ define([
 
       var $li = navbarView.$(this);
 
+      if (typeof $li.attr('data-disabled') !== 'undefined')
+      {
+        return $li.addClass('disabled');
+      }
+
       switch ($li.attr('data-online'))
       {
         case 'show':
