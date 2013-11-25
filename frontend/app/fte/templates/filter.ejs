@@ -1,0 +1,45 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-aor"><%- t('fte', 'FILTER:AOR') %></label>
+      <select id="<%- idPrefix %>-aor" name="aor" data-placeholder="<%= t('fte', 'FILTER:AOR:PLACEHOLDER') %>">
+        <option></option>
+        <% aors.forEach(function(aor) { %>
+        <option value="<%- aor._id %>"><%= aor.name %>
+        <% }) %>
+      </select>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-date"><%- t('fte', 'FILTER:DATE') %></label>
+      <input id="<%- idPrefix %>-date" class="form-control" name="date" type="date">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-shift-any"><%- t('fte', 'FILTER:SHIFT') %></label>
+      <div class="fte-filter-shift-group">
+        <label class="radio-inline">
+          <input id="<%- idPrefix %>-shift-any" name="shift" type="radio" value="0">
+          <%- t('fte', 'FILTER:SHIFT:ANY') %>
+        </label>
+        <label class="radio-inline">
+          <input name="shift" type="radio" value="1">
+          <%- t('fte', 'shift:1') %>
+        </label>
+        <label class="radio-inline">
+          <input name="shift" type="radio" value="2">
+          <%- t('fte', 'shift:2') %>
+        </label>
+        <label class="radio-inline">
+          <input name="shift" type="radio" value="3">
+          <%- t('fte', 'shift:3') %>
+        </label>
+      </div>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-limit"><%- t('fte', 'FILTER:LIMIT') %></label>
+      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('fte', 'FILTER:BUTTON') %>">
+    </div>
+  </form>
+</div>

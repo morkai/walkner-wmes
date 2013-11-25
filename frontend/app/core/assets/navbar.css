@@ -32,3 +32,6 @@
 .navbar-toggle:hover .icon-bar {
   background-color: #5e5e5e;
 }
+.navbar-default .dropdown-header {
+  font-weight: bold;
+}

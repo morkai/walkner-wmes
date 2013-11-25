@@ -19,6 +19,7 @@ exports.modules = [
   'workCenters',
   'companies',
   'prodTasks',
+  'fte',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'}
 ];
@@ -30,7 +31,8 @@ exports.events = {
     debug: [
       'app.started',
       'users.login', 'users.logout',
-      '*.added', '*.edited'
+      '*.added', '*.edited',
+      'fte.leader.created', 'fte.master.created'
     ],
     info: [
       'events.**'
@@ -58,7 +60,9 @@ exports.pubsub = {
   statsPublishInterval: 10000,
   republishTopics: [
     'events.saved',
-    '*.added', '*.edited', '*.deleted', '*.synced'
+    '*.added', '*.edited', '*.deleted', '*.synced',
+    'shiftChanged',
+    'fte.leader.*'
   ]
 };
 
@@ -85,9 +89,12 @@ exports.user = {
     'ORDERS:VIEW', 'ORDERS:MANAGE',
     'LINES:VIEW', 'LINES:MANAGE',
     'EVENTS:VIEW', 'EVENTS:MANAGE',
+    'FTE:LEADER:VIEW', 'FTE:LEADER:MANAGE',
+    'FTE:MASTER:VIEW', 'FTE:MASTER:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE'
   ]
 };
+
 exports['messenger/client:attachments'] = {
   pubHost: '127.0.0.1',
   pubPort: 60010,

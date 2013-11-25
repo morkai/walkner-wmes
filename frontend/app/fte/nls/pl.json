@@ -1,0 +1,37 @@
+{
+  "BREADCRUMBS:leader:entryList": "FTE (lider)",
+  "BREADCRUMBS:leader:entryForm": "Przydzielanie zasobów",
+  "BREADCRUMBS:leader:entryDetails": "Przydzielone zasoby",
+
+  "MSG:LOADING_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
+
+  "PAGE_ACTION:print": "Pokaż wersję do druku",
+  "LIST:ACTION:print": "Pokaż wersję do druku",
+
+  "FILTER:DATE": "Data:",
+  "FILTER:LIMIT": "Limit:",
+  "FILTER:AOR": "Obszar odpowiedzialności:",
+  "FILTER:AOR:PLACEHOLDER": "Dowolny",
+  "FILTER:SHIFT": "Zmiana:",
+  "FILTER:SHIFT:ANY": "Dowolna",
+  "FILTER:BUTTON": "Filtruj FTE",
+
+  "leaderEntry:column:task": "Zadanie produkcyjne",
+  "leaderEntry:column:taskTotal": "Suma",
+  "leaderEntry:column:companyTotal": "Suma",
+  "leaderEntry:property:aor": "Obszar odpowiedzialności:",
+  "leaderEntry:property:shift": "Zmiana:",
+  "leaderEntry:property:date": "Data:",
+
+  "leaderEntryList:aor": "Obszar odpowiedzialności",
+  "leaderEntryList:date": "Data",
+  "leaderEntryList:shift": "Zmiana",
+
+  "leaderEntry:print:hdLeft": "Zasoby przydzielone do {aor}",
+  "leaderEntry:print:hdRight": "{date}, {shift} zmiana",
+
+  "shift:1": "I",
+  "shift:2": "II",
+  "shift:3": "III"
+}

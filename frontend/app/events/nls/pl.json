@@ -78,5 +78,9 @@
   "TYPE:prodTasks.edited": "Edycja zadania produkcyjnego",
   "TEXT:prodTasks.edited": "Zmodyfikowano zadanie produkcyjne: <a href='\\#prodTasks/{model->_id}'>{model->name}</a>",
   "TYPE:prodTasks.deleted": "Usunięcie zadania produkcyjnego",
-  "TEXT:prodTasks.deleted": "Usunięto zadanie produkcyjne: <em>{model->name}</em>"
+  "TEXT:prodTasks.deleted": "Usunięto zadanie produkcyjne: <em>{model->name}</em>",
+  "TYPE:fte.leader.created": "Utworzenie FTE (lider)",
+  "TEXT:fte.leader.created": "Utworzono nowy wpis FTE (lider) dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> z obszaru odpowiedzialności <em>{model->aor}</em>.",
+  "TYPE:fte.master.created": "Utworzenie FTE (mistrz)",
+  "TEXT:fte.master.created": "Utworzono nowy wpis FTE (mistrz) dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> z obszaru odpowiedzialności <em>{model->aor}</em>."
 }

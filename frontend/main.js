@@ -228,6 +228,7 @@
       'app/core/views/NavbarView',
       'app/core/views/LogInFormView',
       'app/time',
+      'app/fte/routes',
       'app/orders/routes',
       'app/emptyOrders/routes',
       'app/events/routes',

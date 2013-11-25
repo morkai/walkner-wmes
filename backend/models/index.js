@@ -11,6 +11,7 @@ module.exports = [
   'user',
   'workCenter',
   'company',
-  'prodTask'
+  'prodTask',
+  'fteLeaderEntry'
 
 ];

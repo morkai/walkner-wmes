@@ -1,0 +1,61 @@
+<div>
+  <div class="well">
+    <div class="fte-property">
+      <span class="fte-property-name"><%- t('fte', 'leaderEntry:property:aor') %></span>
+      <span class="fte-property-value"><%- aor.name %></span>
+    </div>
+    <div class="fte-property">
+      <span class="fte-property-name"><%- t('fte', 'leaderEntry:property:date') %></span>
+      <span class="fte-property-value"><%- date %></span>
+    </div>
+    <div class="fte-property">
+      <span class="fte-property-name"><%- t('fte', 'leaderEntry:property:shift') %></span>
+      <span class="fte-property-value"><%- t('fte', 'shift:' + shift) %></span>
+    </div>
+  </div>
+  <table class="table table-bordered table-condensed table-hover fte-leaderEntry">
+    <thead>
+      <tr>
+        <th><%- t('fte', 'leaderEntry:column:task') %></th>
+        <th class="fte-leaderEntry-total-overall"><%- t('fte', 'leaderEntry:column:taskTotal') %></th>
+        <% companies.forEach(function(company) { %>
+        <th class="fte-leaderEntry-total-company"><%= company.name %></th>
+        <% }) %>
+      </tr>
+    </thead>
+    <thead>
+      <tr>
+        <th><%- t('fte', 'leaderEntry:column:companyTotal') %></th>
+        <td class="fte-leaderEntry-total-overall"><%- total %></td>
+        <% companies.forEach(function(company, companyIndex) { %>
+        <td class="fte-leaderEntry-total-company" data-company="<%= companyIndex %>"><%- company.total %></td>
+        <% }) %>
+      </tr>
+    </thead>
+    <tbody>
+      <% tasks.forEach(function(task, taskIndex) { %>
+      <tr>
+        <td><%= task.name %></td>
+        <td class="fte-leaderEntry-total-task"><%- task.total %></td>
+        <% task.companies.forEach(function(company, companyIndex) { %>
+        <td <%- editable ? '' : 'class="fte-leaderEntry-count"' %>>
+          <% if (editable) { %>
+          <input
+            class="form-control fte-leaderEntry-count"
+            type="number"
+            min="0"
+            max="9999"
+            value="<%- company.count %>"
+            data-value="<%- company.count %>"
+            data-task="<%- taskIndex %>"
+            data-company="<%- companyIndex %>">
+          <% } else { %>
+          <%- company.count %>
+          <% } %>
+        </td>
+        <% }) %>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

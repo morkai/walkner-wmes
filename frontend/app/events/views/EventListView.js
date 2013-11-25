@@ -2,6 +2,7 @@ define([
   'underscore',
   'moment',
   'app/i18n',
+  'app/data/aors',
   'app/core/views/ListView',
   'app/events/templates/list',
   'i18n!app/nls/events'
@@ -9,6 +10,7 @@ define([
   _,
   moment,
   t,
+  aors,
   ListView,
   listTemplate
 ) {
@@ -58,6 +60,24 @@ define([
     prepareData: function(type, data)
     {
       /*jshint -W015*/
+
+      if (data.$prepared)
+      {
+        return;
+      }
+
+      data.$prepared = true;
+
+      switch (type)
+      {
+        case 'fte.leader.created':
+        case 'fte.master.created':
+          var aor = aors.get(data.model.aor);
+
+          data.model.aor = aor ? aor.getLabel() : '?';
+          data.model.date = moment(data.model.date).format('YYYY-MM-DD');
+          break;
+      }
 
       return data;
     },
