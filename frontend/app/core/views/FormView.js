@@ -32,7 +32,7 @@ define([
 
       this.listenTo(this.model, 'change', function(model)
       {
-        js2form(this.el, model.toJSON());
+        js2form(this.el, this.serializeToForm());
       });
     },
 
@@ -55,7 +55,12 @@ define([
 
     afterRender: function()
     {
-      js2form(this.el, this.model.toJSON());
+      js2form(this.el, this.serializeToForm());
+    },
+
+    serializeToForm: function()
+    {
+      return this.model.toJSON();
     },
 
     serializeForm: function(formData)
