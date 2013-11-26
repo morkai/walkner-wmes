@@ -1,6 +1,5 @@
 'use strict';
 
-var step = require('h5.step');
 var requirejsConfig = require('../../config/require');
 
 module.exports = function startCoreRoutes(app, express)
@@ -24,52 +23,24 @@ module.exports = function startCoreRoutes(app, express)
   {
     var sessionUser = req.session.user;
     var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
+    var prodFunctions = app.mongoose.model('User').schema.path('prodFunction').enumValues;
 
-    step(
-      function fetchAppDataStep()
-      {
-        app.mongoose.model('OrderStatus')
-          .find({}, {color: 1, label: 1}).lean().exec(this.parallel());
-
-        app.mongoose.model('DowntimeReason')
-          .find({}, {label: 1}).lean().exec(this.parallel());
-
-        app.mongoose.model('Aor')
-          .find({}, {name: 1, description: 1}).lean().exec(this.parallel());
-
-        app.mongoose.model('Company')
-          .find({}, {name: 1}).lean().exec(this.parallel());
-
-        app.mongoose.model('ProdTask')
-          .find({}, {name: 1, aors: 1}).lean().exec(this.parallel());
-      },
-      function sendResponseStep(err, orderStatuses, downtimeReasons, aors, companies, prodTasks)
-      {
-        if (err)
-        {
-          return next(err);
-        }
-
-        var prodFunctions = app.mongoose.model('User').schema.path('prodFunction').enumValues;
-
-        res.render('index', {
-          appCache: appCache,
-          appData: {
-            TIME: JSON.stringify(Date.now()),
-            LOCALE: JSON.stringify(locale),
-            GUEST_USER: JSON.stringify(app.user.guest),
-            PRIVILEGES: JSON.stringify(app.user.config.privileges),
-            PROD_FUNCTIONS: JSON.stringify(prodFunctions),
-            ORDER_STATUSES: JSON.stringify(orderStatuses),
-            DOWNTIME_REASONS: JSON.stringify(downtimeReasons),
-            AORS: JSON.stringify(aors),
-            COMPANIES: JSON.stringify(companies),
-            PROD_TASKS: JSON.stringify(prodTasks),
-            PROD_CENTERS: JSON.stringify(app.prodCenters.data)
-          }
-        });
+    res.render('index', {
+      appCache: appCache,
+      appData: {
+        TIME: JSON.stringify(Date.now()),
+        LOCALE: JSON.stringify(locale),
+        GUEST_USER: JSON.stringify(app.user.guest),
+        PRIVILEGES: JSON.stringify(app.user.config.privileges),
+        PROD_FUNCTIONS: JSON.stringify(prodFunctions),
+        ORDER_STATUSES: JSON.stringify(app.orderStatuses.models),
+        DOWNTIME_REASONS: JSON.stringify(app.downtimeReasons.models),
+        AORS: JSON.stringify(app.aors.models),
+        COMPANIES: JSON.stringify(app.companies.models),
+        PROD_TASKS: JSON.stringify(app.prodTasks.models),
+        PROD_CENTERS: JSON.stringify(app.prodCenters.models)
       }
-    );
+    });
   }
 
   function sendRequireJsConfig(req, res)
