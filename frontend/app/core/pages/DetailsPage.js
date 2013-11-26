@@ -57,7 +57,7 @@ define([
 
     load: function(when)
     {
-      return when(this.model.fetch());
+      return when(this.model.fetch(this.options.fetchOptions));
     }
 
   });
