@@ -239,6 +239,7 @@
       'app/workCenters/routes',
       'app/companies/routes',
       'app/prodTasks/routes',
+      'app/prodCenters/routes',
       'app/dashboard/routes',
       'bootstrap',
       'moment-lang/' + (window.LOCALE || 'pl'),
