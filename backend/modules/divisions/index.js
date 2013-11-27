@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = require('../createDictionaryModule')(
-  'ProdCenter',
+  'Division',
   require('./routes')
 );

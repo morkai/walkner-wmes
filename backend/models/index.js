@@ -9,7 +9,7 @@ module.exports = [
   'emptyOrder',
   'orderStatus',
   'user',
-  'prodCenter',
+  'division',
   'workCenter',
   'company',
   'prodTask',

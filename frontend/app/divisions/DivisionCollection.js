@@ -1,15 +1,15 @@
 define([
   '../core/Collection',
-  './ProdCenter'
+  './Division'
 ], function(
   Collection,
-  ProdCenter
+  Division
 ) {
   'use strict';
 
   return Collection.extend({
 
-    model: ProdCenter,
+    model: Division,
 
     rqlQuery: 'select(description)&sort(_id)'
 

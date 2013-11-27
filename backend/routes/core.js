@@ -38,7 +38,7 @@ module.exports = function startCoreRoutes(app, express)
         AORS: JSON.stringify(app.aors.models),
         COMPANIES: JSON.stringify(app.companies.models),
         PROD_TASKS: JSON.stringify(app.prodTasks.models),
-        PROD_CENTERS: JSON.stringify(app.prodCenters.models)
+        DIVISIONS: JSON.stringify(app.divisions.models)
       }
     });
   }

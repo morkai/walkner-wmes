@@ -2,28 +2,28 @@ define([
   '../router',
   '../viewport',
   '../user',
-  './ProdCenterCollection',
-  './ProdCenter',
+  '../data/divisions',
+  './Division',
   '../core/pages/ListPage',
   '../core/pages/DetailsPage',
   '../core/pages/AddFormPage',
   '../core/pages/EditFormPage',
   '../core/pages/ActionFormPage',
-  './views/ProdCenterFormView',
-  'app/prodCenters/templates/details',
-  'i18n!app/nls/prodCenters'
+  './views/DivisionFormView',
+  'app/divisions/templates/details',
+  'i18n!app/nls/divisions'
 ], function(
   router,
   viewport,
   user,
-  ProdCenterCollection,
-  ProdCenter,
+  divisions,
+  Division,
   ListPage,
   DetailsPage,
   AddFormPage,
   EditFormPage,
   ActionFormPage,
-  ProdCenterFormView,
+  DivisionFormView,
   detailsTemplate
 ) {
   'use strict';
@@ -31,41 +31,41 @@ define([
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
-  router.map('/prodCenters', canView, function(req)
+  router.map('/divisions', canView, function(req)
   {
     viewport.showPage(new ListPage({
-      collection: new ProdCenterCollection({rqlQuery: req.rql}),
+      collection: divisions,
       columns: ['_id', 'description']
     }));
   });
 
-  router.map('/prodCenters/:id', function(req)
+  router.map('/divisions/:id', function(req)
   {
     viewport.showPage(new DetailsPage({
-      model: new ProdCenter({_id: req.params.id}),
+      model: new Division({_id: req.params.id}),
       detailsTemplate: detailsTemplate
     }));
   });
 
-  router.map('/prodCenters;add', canManage, function()
+  router.map('/divisions;add', canManage, function()
   {
     viewport.showPage(new AddFormPage({
-      FormView: ProdCenterFormView,
-      model: new ProdCenter()
+      FormView: DivisionFormView,
+      model: new Division()
     }));
   });
 
-  router.map('/prodCenters/:id;edit', canManage, function(req)
+  router.map('/divisions/:id;edit', canManage, function(req)
   {
     viewport.showPage(new EditFormPage({
-      FormView: ProdCenterFormView,
-      model: new ProdCenter({_id: req.params.id})
+      FormView: DivisionFormView,
+      model: new Division({_id: req.params.id})
     }));
   });
 
-  router.map('/prodCenters/:id;delete', canManage, function(req, referer)
+  router.map('/divisions/:id;delete', canManage, function(req, referer)
   {
-    var model = new ProdCenter({_id: req.params.id});
+    var model = new Division({_id: req.params.id});
 
     viewport.showPage(new ActionFormPage({
       model: model,

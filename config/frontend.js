@@ -20,7 +20,7 @@ exports.modules = [
   'companies',
   'prodTasks',
   'fte',
-  'prodCenters',
+  'divisions',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'}
 ];

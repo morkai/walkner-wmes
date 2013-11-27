@@ -1,8 +1,8 @@
 define([
   'underscore',
   'app/core/views/FormView',
-  'app/prodCenters/templates/form',
-  'i18n!app/nls/prodCenters'
+  'app/divisions/templates/form',
+  'i18n!app/nls/divisions'
 ], function(
   _,
   FormView,
@@ -14,7 +14,7 @@ define([
 
     template: formTemplate,
 
-    idPrefix: 'prodCenterForm',
+    idPrefix: 'divisionForm',
 
     afterRender: function()
     {

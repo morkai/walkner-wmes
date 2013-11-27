@@ -7,15 +7,15 @@ define([
 
   return Model.extend({
 
-    urlRoot: '/prodCenters',
+    urlRoot: '/divisions',
 
-    clientUrlRoot: '#prodCenters',
+    clientUrlRoot: '#divisions',
 
-    topicPrefix: 'prodCenters',
+    topicPrefix: 'divisions',
 
     privilegePrefix: 'DICTIONARIES',
 
-    nlsDomain: 'prodCenters',
+    nlsDomain: 'divisions',
 
     labelAttribute: '_id',
 
