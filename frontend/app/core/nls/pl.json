@@ -57,6 +57,7 @@
   "NAVBAR:WORK_CENTERS": "WorkCentra",
   "NAVBAR:COMPANIES": "Firmy",
   "NAVBAR:DIVISIONS": "Wydziały",
+  "NAVBAR:SUBDIVISIONS": "Działy",
   "NAVBAR:PROD_TASKS": "Zadania produkcyjne",
   "NAVBAR:FTE": "FTE",
   "NAVBAR:FTE:MASTER": "Mistrz",

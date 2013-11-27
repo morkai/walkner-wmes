@@ -10,6 +10,7 @@ module.exports = [
   'orderStatus',
   'user',
   'division',
+  'subdivision',
   'workCenter',
   'company',
   'prodTask',

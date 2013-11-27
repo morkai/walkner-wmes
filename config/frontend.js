@@ -21,6 +21,7 @@ exports.modules = [
   'prodTasks',
   'fte',
   'divisions',
+  'subdivisions',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'}
 ];

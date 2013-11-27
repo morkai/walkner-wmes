@@ -19,7 +19,7 @@ module.exports = function startCoreRoutes(app, express)
 
   express.get('/wmes.appcache', sendAppCacheManifest);
 
-  function showIndex(req, res, next)
+  function showIndex(req, res)
   {
     var sessionUser = req.session.user;
     var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
@@ -38,7 +38,8 @@ module.exports = function startCoreRoutes(app, express)
         AORS: JSON.stringify(app.aors.models),
         COMPANIES: JSON.stringify(app.companies.models),
         PROD_TASKS: JSON.stringify(app.prodTasks.models),
-        DIVISIONS: JSON.stringify(app.divisions.models)
+        DIVISIONS: JSON.stringify(app.divisions.models),
+        SUBDIVISIONS: JSON.stringify(app.subdivisions.models)
       }
     });
   }
