@@ -28,6 +28,7 @@ module.exports = function setupWorkCenterModel(app, mongoose)
   });
 
   workCenterSchema.statics.TOPIC_PREFIX = 'workCenters';
+  workCenterSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('WorkCenter', workCenterSchema);
 };

@@ -18,6 +18,7 @@ module.exports = function setupCompanyModel(app, mongoose)
   });
 
   companySchema.statics.TOPIC_PREFIX = 'companies';
+  companySchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('Company', companySchema);
 };

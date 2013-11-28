@@ -18,6 +18,7 @@ module.exports = function setupProdFlowModel(app, mongoose)
   });
 
   prodFlowSchema.statics.TOPIC_PREFIX = 'prodFlows';
+  prodFlowSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('ProdFlow', prodFlowSchema);
 };

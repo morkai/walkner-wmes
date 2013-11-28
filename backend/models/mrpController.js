@@ -23,6 +23,7 @@ module.exports = function setupMrpControllerModel(app, mongoose)
   });
 
   mrpControllerSchema.statics.TOPIC_PREFIX = 'mrpControllers';
+  mrpControllerSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('MrpController', mrpControllerSchema);
 };

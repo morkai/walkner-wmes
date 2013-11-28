@@ -18,6 +18,7 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
   });
 
   downtimeReasonSchema.statics.TOPIC_PREFIX = 'downtimeReasons';
+  downtimeReasonSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('DowntimeReason', downtimeReasonSchema);
 };

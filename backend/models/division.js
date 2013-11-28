@@ -18,6 +18,7 @@ module.exports = function setupDivisionModel(app, mongoose)
   });
 
   divisionSchema.statics.TOPIC_PREFIX = 'divisions';
+  divisionSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('Division', divisionSchema);
 };

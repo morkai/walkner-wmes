@@ -23,6 +23,7 @@ module.exports = function setupOrderStatusModel(app, mongoose)
   });
 
   orderStatusSchema.statics.TOPIC_PREFIX = 'orderStatuses';
+  orderStatusSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('OrderStatus', orderStatusSchema);
 };

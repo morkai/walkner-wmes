@@ -23,6 +23,7 @@ module.exports = function setupProdLineModel(app, mongoose)
   });
 
   prodLineSchema.statics.TOPIC_PREFIX = 'prodLines';
+  prodLineSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('ProdLine', prodLineSchema);
 };

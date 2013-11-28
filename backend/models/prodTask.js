@@ -17,6 +17,7 @@ module.exports = function setupProdTaskModel(app, mongoose)
   });
 
   prodTaskSchema.statics.TOPIC_PREFIX = 'prodTasks';
+  prodTaskSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('ProdTask', prodTaskSchema);
 };

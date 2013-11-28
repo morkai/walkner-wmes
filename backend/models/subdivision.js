@@ -18,6 +18,7 @@ module.exports = function setupSubdivisionModel(app, mongoose)
   });
 
   subdivisionSchema.statics.TOPIC_PREFIX = 'subdivisions';
+  subdivisionSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('Subdivision', subdivisionSchema);
 };
