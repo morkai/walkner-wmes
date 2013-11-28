@@ -7,11 +7,9 @@
       <div class="prop">
         <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:subdivision') %></div>
         <div class="prop-value">
-          <% if (model.division) { %>
+          <% if (model.division && model.subdivision) { %>
           <a href="#divisions/<%= model.division._id %>"><%= model.division._id %></a>
-          <% } %>
           \
-          <% if (model.subdivision) { %>
           <a href="#subdivisions/<%= model.subdivision._id %>"><%= model.subdivision.name %></a>
           <% } else { %>
           -
