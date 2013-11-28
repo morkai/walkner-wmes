@@ -31,6 +31,7 @@ define([
     collection.on('remove', storeLocally);
     collection.on('destroy', storeLocally);
     collection.on('change', storeLocally);
+    collection.on('sync', storeLocally);
 
     pubsub.subscribe(topicPrefix + '.added', function(message)
     {
