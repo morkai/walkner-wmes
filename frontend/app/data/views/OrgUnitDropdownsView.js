@@ -86,6 +86,13 @@ define([
       }
     },
 
+    focus: function()
+    {
+      this.$id('division').select2('focus');
+
+      return this;
+    },
+
     selectValue: function(model)
     {
       /*jshint -W015*/
@@ -116,6 +123,8 @@ define([
           this.selectProdLine(model);
           break;
       }
+
+      return this;
     },
 
     selectDivision: function(model)

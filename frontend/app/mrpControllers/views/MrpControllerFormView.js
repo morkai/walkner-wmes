@@ -34,12 +34,12 @@ define([
       if (this.options.editMode)
       {
         this.$id('_id').attr('disabled', true);
-
-        this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
-        {
-          this.orgUnitDropdownsView.selectValue(this.model);
-        });
       }
+
+      this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
+      {
+        this.orgUnitDropdownsView.selectValue(this.model).focus();
+      });
     }
 
   });

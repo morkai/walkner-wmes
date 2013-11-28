@@ -33,13 +33,10 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      if (this.options.editMode)
+      this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
       {
-        this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
-        {
-          this.orgUnitDropdownsView.selectValue(this.model);
-        });
-      }
+        this.orgUnitDropdownsView.selectValue(this.model).focus();
+      });
     }
 
   });
