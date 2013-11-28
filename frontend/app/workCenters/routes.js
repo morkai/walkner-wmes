@@ -9,8 +9,9 @@ define([
   '../core/pages/AddFormPage',
   '../core/pages/EditFormPage',
   '../core/pages/ActionFormPage',
+  './views/WorkCenterListView',
+  './views/WorkCenterDetailsView',
   './views/WorkCenterFormView',
-  'app/workCenters/templates/details',
   'i18n!app/nls/workCenters'
 ], function(
   router,
@@ -23,8 +24,9 @@ define([
   AddFormPage,
   EditFormPage,
   ActionFormPage,
-  WorkCenterFormView,
-  detailsTemplate
+  WorkCenterListView,
+  WorkCenterDetailsView,
+  WorkCenterFormView
 ) {
   'use strict';
 
@@ -34,16 +36,16 @@ define([
   router.map('/workCenters', canView, function()
   {
     viewport.showPage(new ListPage({
-      collection: workCenters,
-      columns: ['_id', 'description']
+      ListView: WorkCenterListView,
+      collection: workCenters
     }));
   });
 
   router.map('/workCenters/:id', function(req)
   {
     viewport.showPage(new DetailsPage({
-      model: new WorkCenter({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
+      DetailsView: WorkCenterDetailsView,
+      model: new WorkCenter({_id: req.params.id})
     }));
   });
 

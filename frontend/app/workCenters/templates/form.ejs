@@ -3,13 +3,14 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
+      <div class="orgUnitDropdowns-container"></div>
       <div class="form-group">
         <label for="<%- idPrefix %>-_id" class="control-label"><%- t('workCenters', 'PROPERTY:_id') %></label>
-        <input id="<%- idPrefix %>-_id" class="form-control" type="text" name="_id" autofocus required maxlength="50">
+        <input id="<%- idPrefix %>-_id" class="form-control" type="text" name="_id" required maxlength="50">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-description" class="control-label"><%- t('workCenters', 'PROPERTY:description') %></label>
-        <input id="<%- idPrefix %>-description" class="form-control" type="text" name="description" required maxlength="100">
+        <input id="<%- idPrefix %>-description" class="form-control" type="text" name="description" required maxlength="150">
       </div>
     </div>
     <div class="panel-footer">

@@ -18,8 +18,10 @@ define([
     nlsDomain: 'workCenters',
 
     labelAttribute: '_id',
-    
+
     defaults: {
+      mrpController: null,
+      prodFlow: null,
       description: null
     }
 

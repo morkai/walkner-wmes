@@ -19,6 +19,20 @@ define([
   {
     var orgUnits = [];
 
+    if (model.constructor === workCenters.model)
+    {
+      orgUnits.unshift(model);
+
+      model = model.get('prodFlow')
+        ? prodFlows.get(model.get('prodFlow'))
+        : mrpControllers.get(model.get('mrpController'));
+
+      if (!model)
+      {
+        return null;
+      }
+    }
+
     if (model.constructor === prodFlows.model)
     {
       orgUnits.unshift(model);

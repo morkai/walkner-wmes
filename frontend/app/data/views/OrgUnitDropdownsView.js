@@ -144,7 +144,21 @@ define([
 
     selectProdFlow: function(model)
     {
-      throw new Error('TODO');
+      if (model.get('prodFlow'))
+      {
+        return this.selectModel(model, 'selectMrpController', prodFlows, 'prodFlow');
+      }
+      else if (model.get('mrpController'))
+      {
+        model = this.selectMrpController(model);
+
+        if (model)
+        {
+          this.$id('prodFlow').select2('val', null);
+        }
+
+        return model;
+      }
     },
 
     selectWorkCenter: function(model)

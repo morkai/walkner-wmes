@@ -11,7 +11,7 @@ define([
 
     model: WorkCenter,
 
-    rqlQuery: 'select(description)&sort(_id)'
+    rqlQuery: 'select(mrpController,prodFlow,description)&sort(_id)'
 
   });
 });

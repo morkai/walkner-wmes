@@ -1,8 +1,10 @@
 define([
+  'app/data/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
   'app/workCenters/templates/form',
   'i18n!app/nls/workCenters'
 ], function(
+  OrgUnitDropdownsView,
   FormView,
   formTemplate
 ) {
@@ -12,6 +14,17 @@ define([
 
     template: formTemplate,
 
+    initialize: function()
+    {
+      FormView.prototype.initialize.call(this);
+
+      this.orgUnitDropdownsView = new OrgUnitDropdownsView({
+        orgUnit: OrgUnitDropdownsView.ORG_UNIT.PROD_FLOW
+      });
+
+      this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);
+    },
+
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);
@@ -19,8 +32,26 @@ define([
       if (this.options.editMode)
       {
         this.$('.form-control[name=_id]').attr('readonly', true);
-        this.$('.form-control[name=description]').focus();
       }
+
+      this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
+      {
+        this.orgUnitDropdownsView.selectValue(this.model).focus();
+      });
+    },
+
+    serializeForm: function(data)
+    {
+      if (data.prodFlow)
+      {
+        data.mrpController = null;
+      }
+      else
+      {
+        data.prodFlow = null;
+      }
+
+      return data;
     }
 
   });
