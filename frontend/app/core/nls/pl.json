@@ -59,6 +59,7 @@
   "NAVBAR:DIVISIONS": "Wydziały",
   "NAVBAR:SUBDIVISIONS": "Działy",
   "NAVBAR:MRP_CONTROLLERS": "Kontrolery MRP",
+  "NAVBAR:PROD_FLOWS": "Przepływy",
   "NAVBAR:PROD_TASKS": "Zadania produkcyjne",
   "NAVBAR:FTE": "FTE",
   "NAVBAR:FTE:MASTER": "Mistrz",
@@ -72,5 +73,12 @@
   "ACTION_FORM:BUTTON:delete": "Usuń",
   "ACTION_FORM:BUTTON:cancel": "Anuluj",
   "ACTION_FORM:MESSAGE": "Czy na pewno chcesz wykonać żądaną akcję?",
-  "ACTION_FORM:MESSAGE:failure": "Wykonywanie akcji nie powiodło się :("
+  "ACTION_FORM:MESSAGE:failure": "Wykonywanie akcji nie powiodło się :(",
+
+  "ORG_UNIT:division": "Wydział",
+  "ORG_UNIT:subdivision": "Dział",
+  "ORG_UNIT:mrpController": "Kontroler MRP",
+  "ORG_UNIT:prodFlow": "Przepływ",
+  "ORG_UNIT:workCenter": "WorkCenter",
+  "ORG_UNIT:prodLine": "Linia montażowa"
 }
