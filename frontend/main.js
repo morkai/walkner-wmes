@@ -242,6 +242,7 @@
       'app/divisions/routes',
       'app/subdivisions/routes',
       'app/mrpControllers/routes',
+      'app/prodFlows/routes',
       'app/dashboard/routes',
       'bootstrap',
       'moment-lang/' + (window.LOCALE || 'pl'),

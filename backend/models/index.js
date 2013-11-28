@@ -10,6 +10,7 @@ module.exports = [
   'subdivision',
   'mrpController',
   'workCenter',
+  'prodFlow',
 
   'aor',
   'orderStatus',
