@@ -221,7 +221,7 @@ define([
       var query = {};
       query[parentProperty] = e.val;
 
-      var data = query.prodFlow === null ? [] : collection.where(query).map(idAndLabel);
+      var data = e.val === null ? [] : collection.where(query).map(idAndLabel);
       var options = {
         data: data
       };
