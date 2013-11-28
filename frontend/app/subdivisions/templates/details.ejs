@@ -6,17 +6,11 @@
     <div class="props first">
       <div class="prop">
         <div class="prop-name"><%- t('subdivisions', 'PROPERTY:division') %></div>
-        <div class="prop-value">
-          <% if (model.division) { %>
-          <a href="#divisions/<%= model.division._id %>"><%= model.division.description %> (<%= model.division._id %>)</a>
-          <% } else { %>
-          -
-          <% } %>
-        </div>
+        <div class="prop-value"><%- orgUnitPath || '-' %></div>
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('subdivisions', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name %></div>
+        <div class="prop-value"><%= model.name || '-' %></div>
       </div>
     </div>
   </div>

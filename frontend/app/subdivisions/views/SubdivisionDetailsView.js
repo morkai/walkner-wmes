@@ -1,12 +1,12 @@
 define([
   'app/i18n',
-  'app/data/divisions',
+  'app/data/views/renderOrgUnitPath',
   'app/core/views/DetailsView',
   'app/subdivisions/templates/details',
   'i18n!app/nls/subdivisions'
 ], function(
   t,
-  divisions,
+  renderOrgUnitPath,
   DetailsView,
   detailsTemplate
 ) {
@@ -23,9 +23,8 @@ define([
     serialize: function()
     {
       var data = DetailsView.prototype.serialize.call(this);
-      var division = divisions.get(data.model.division);
 
-      data.model.division = division ? division.toJSON() : null;
+      data.orgUnitPath = renderOrgUnitPath(this.model, true);
 
       return data;
     }
