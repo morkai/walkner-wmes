@@ -1,12 +1,12 @@
 define([
   'underscore',
-  'app/data/divisions',
+  'app/data/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
   'app/subdivisions/templates/form',
   'i18n!app/nls/divisions'
 ], function(
   _,
-  divisions,
+  OrgUnitDropdownsView,
   FormView,
   formTemplate
 ) {
@@ -18,18 +18,28 @@ define([
 
     idPrefix: 'subdivisionForm',
 
-    serialize: function()
+    initialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
-        divisions: divisions.toJSON()
+      FormView.prototype.initialize.call(this);
+
+      this.orgUnitDropdownsView = new OrgUnitDropdownsView({
+        orgUnit: OrgUnitDropdownsView.ORG_UNIT.DIVISION
       });
+
+      this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);
     },
 
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);
 
-      this.$id('division').select2();
+      if (this.options.editMode)
+      {
+        this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
+        {
+          this.orgUnitDropdownsView.selectValue(this.model);
+        });
+      }
     }
 
   });
