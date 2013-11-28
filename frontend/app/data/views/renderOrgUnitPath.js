@@ -3,21 +3,35 @@ define([
   '../divisions',
   '../subdivisions',
   '../mrpControllers',
+  '../workCenters',
   '../prodFlows',
-  '../workCenters'
+  '../prodLines'
 ], function(
   _,
   divisions,
   subdivisions,
   mrpControllers,
+  workCenters,
   prodFlows,
-  workCenters
+  prodLines
 ) {
   'use strict';
 
   return function renderOrgUnitPath(model, link, pop)
   {
     var orgUnits = [];
+
+    if (model.constructor === prodLines.model)
+    {
+      orgUnits.unshift(model);
+
+      model = workCenters.get(model.get('workCenter'));
+
+      if (!model)
+      {
+        return null;
+      }
+    }
 
     if (model.constructor === workCenters.model)
     {

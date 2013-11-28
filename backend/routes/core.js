@@ -39,6 +39,7 @@ module.exports = function startCoreRoutes(app, express)
         MRP_CONTROLLERS: JSON.stringify(app.mrpControllers.models),
         PROD_FLOWS: JSON.stringify(app.prodFlows.models),
         WORK_CENTERS: JSON.stringify(app.workCenters.models),
+        PROD_LINES: JSON.stringify(app.prodLines.models),
         AORS: JSON.stringify(app.aors.models),
         ORDER_STATUSES: JSON.stringify(app.orderStatuses.models),
         DOWNTIME_REASONS: JSON.stringify(app.downtimeReasons.models),

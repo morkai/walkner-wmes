@@ -11,6 +11,7 @@ module.exports = [
   'mrpController',
   'workCenter',
   'prodFlow',
+  'prodLine',
 
   'aor',
   'orderStatus',

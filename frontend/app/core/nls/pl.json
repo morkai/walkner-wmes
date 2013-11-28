@@ -61,6 +61,7 @@
   "NAVBAR:MRP_CONTROLLERS": "Kontrolery MRP",
   "NAVBAR:PROD_FLOWS": "Przepływy",
   "NAVBAR:PROD_TASKS": "Zadania produkcyjne",
+  "NAVBAR:PROD_LINES": "Linie produkcyjne",
   "NAVBAR:FTE": "FTE",
   "NAVBAR:FTE:MASTER": "Mistrz",
   "NAVBAR:FTE:MASTER:LIST": "Historia",

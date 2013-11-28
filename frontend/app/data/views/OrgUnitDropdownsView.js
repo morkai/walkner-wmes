@@ -144,6 +144,11 @@ define([
 
     selectProdFlow: function(model)
     {
+      if (!model)
+      {
+        return null;
+      }
+
       if (model.get('prodFlow'))
       {
         return this.selectModel(model, 'selectMrpController', prodFlows, 'prodFlow');
@@ -159,11 +164,13 @@ define([
 
         return model;
       }
+
+      return null;
     },
 
     selectWorkCenter: function(model)
     {
-      throw new Error('TODO');
+      return this.selectModel(model, 'selectProdFlow', workCenters, 'workCenter');
     },
 
     selectProdLine: function(model)
@@ -214,12 +221,12 @@ define([
       var query = {};
       query[parentProperty] = e.val;
 
-      var data = collection.where(query).map(idAndLabel);
+      var data = query.prodFlow === null ? [] : collection.where(query).map(idAndLabel);
       var options = {
         data: data
       };
 
-      if (parentProperty === 'mrpController')
+      if (parentProperty === 'mrpController' && this.options.orgUnit === ORG_UNIT.PROD_FLOW)
       {
         options.placeholder = ' ';
         options.allowClear = true;
@@ -280,7 +287,7 @@ define([
 
       $dropdown.select2({
         data: [],
-        allowClear: this.options.orgUnit > ORG_UNIT.PROD_FLOW
+        allowClear: this.options.orgUnit === ORG_UNIT.PROD_FLOW
       });
 
       this.$id('mrpController').on(
@@ -299,14 +306,11 @@ define([
       this.$id('prodFlow').on(
         'change', this.onChange.bind(this, $dropdown, workCenters, 'prodFlow')
       );
-      this.$id('mrpController').on(
-        'change', this.onChange.bind(this, $dropdown, workCenters, 'mrpController')
-      );
     },
 
     renderProdLineDropdown: function()
     {
-      var $dropdown = this.createDropdownElement('prodLine');
+      throw new Error('TODO');
     }
 
   }, {

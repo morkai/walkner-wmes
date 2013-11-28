@@ -18,6 +18,7 @@ exports.modules = [
   'mrpControllers',
   'workCenters',
   'prodFlows',
+  'prodLines',
   'aors',
   'orderStatuses',
   'downtimeReasons',
