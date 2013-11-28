@@ -58,6 +58,7 @@
   "NAVBAR:COMPANIES": "Firmy",
   "NAVBAR:DIVISIONS": "Wydziały",
   "NAVBAR:SUBDIVISIONS": "Działy",
+  "NAVBAR:MRP_CONTROLLERS": "Kontrolery MRP",
   "NAVBAR:PROD_TASKS": "Zadania produkcyjne",
   "NAVBAR:FTE": "FTE",
   "NAVBAR:FTE:MASTER": "Mistrz",

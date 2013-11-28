@@ -33,13 +33,14 @@ module.exports = function startCoreRoutes(app, express)
         GUEST_USER: JSON.stringify(app.user.guest),
         PRIVILEGES: JSON.stringify(app.user.config.privileges),
         PROD_FUNCTIONS: JSON.stringify(prodFunctions),
+        COMPANIES: JSON.stringify(app.companies.models),
+        DIVISIONS: JSON.stringify(app.divisions.models),
+        SUBDIVISIONS: JSON.stringify(app.subdivisions.models),
+        MRP_CONTROLLERS: JSON.stringify(app.mrpControllers.models),
+        AORS: JSON.stringify(app.aors.models),
         ORDER_STATUSES: JSON.stringify(app.orderStatuses.models),
         DOWNTIME_REASONS: JSON.stringify(app.downtimeReasons.models),
-        AORS: JSON.stringify(app.aors.models),
-        COMPANIES: JSON.stringify(app.companies.models),
-        PROD_TASKS: JSON.stringify(app.prodTasks.models),
-        DIVISIONS: JSON.stringify(app.divisions.models),
-        SUBDIVISIONS: JSON.stringify(app.subdivisions.models)
+        PROD_TASKS: JSON.stringify(app.prodTasks.models)
       }
     });
   }

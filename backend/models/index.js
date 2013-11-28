@@ -2,18 +2,23 @@
 
 module.exports = [
 
-  'aor',
-  'downtimeReason',
   'event',
-  'order',
-  'emptyOrder',
-  'orderStatus',
   'user',
+
+  'company',
   'division',
   'subdivision',
+  'mrpController',
   'workCenter',
-  'company',
+
+  'aor',
+  'orderStatus',
+  'downtimeReason',
   'prodTask',
+
+  'order',
+  'emptyOrder',
+
   'fteLeaderEntry'
 
 ];
