@@ -37,10 +37,29 @@ define([
       }
     }
 
-    context.listenTo(modelOrCollection, 'request', viewport.msg.loading);
-    context.listenTo(modelOrCollection, 'sync', viewport.msg.loaded);
-    context.listenTo(modelOrCollection, 'error', function(modelOrCollection, jqXhr)
+    context.listenTo(modelOrCollection, 'request', function(modelOrCollection, jqXhr, options)
     {
+      if (options.syncMethod === 'read')
+      {
+        viewport.msg.loading();
+      }
+    });
+
+    context.listenTo(modelOrCollection, 'sync', function(modelOrCollection, jqXhr, options)
+    {
+      if (options.syncMethod === 'read')
+      {
+        viewport.msg.loaded();
+      }
+    });
+
+    context.listenTo(modelOrCollection, 'error', function(modelOrCollection, jqXhr, options)
+    {
+      if (options.syncMethod !== 'read')
+      {
+        return;
+      }
+
       var code = jqXhr.statusText;
 
       if (code === 'abort')

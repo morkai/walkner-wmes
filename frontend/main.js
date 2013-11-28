@@ -87,6 +87,8 @@
     NavbarView,
     LogInFormView)
   {
+    monkeyPatch(Backbone);
+
     socket.connect();
 
     moment.lang(window.LOCALE || 'pl');
@@ -274,4 +276,16 @@
   appCache.onerror = doStartApp;
   appCache.onobsolete = location.reload.bind(location);
   appCache.onupdateready = location.reload.bind(location);
+
+  function monkeyPatch(Backbone)
+  {
+    var originalSync = Backbone.sync;
+
+    Backbone.sync = function(method, model, options)
+    {
+      options.syncMethod = method;
+
+      return originalSync.call(this, method, model, options);
+    };
+  }
 })();
