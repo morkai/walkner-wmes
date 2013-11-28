@@ -108,3 +108,9 @@
   font-size: 1em;
   line-height: 1.23;
 }
+.select2-results .select2-result-label {
+  cursor: default;
+}
+.select2-results .select2-result-selectable .select2-result-label {
+  cursor: pointer;
+}
