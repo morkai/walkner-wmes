@@ -207,6 +207,11 @@ define([
       actions = actions.call(context);
     }
 
+    if (!actions)
+    {
+      return this;
+    }
+
     if (!Array.isArray(actions))
     {
       actions = [actions];
