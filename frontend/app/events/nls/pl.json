@@ -1,6 +1,5 @@
 {
   "MSG:LOADING_FAILURE": "Ładowanie zdarzeń nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zdarzenia nie powiodło się :(",
   "MSG:LOADING_TYPES_FAILURE": "Ładowanie typów zdarzeń nie powiodło się :(",
 
   "BREADCRUMBS:browse": "Zdarzenia",
@@ -33,6 +32,10 @@
   "TEXT:users.edited": "Zmodyfikowano użytkownika: <a href='\\#users/{model->_id}'>{model->login}</a>",
   "TYPE:users.deleted": "Usunięcie użytkownika",
   "TEXT:users.deleted": "Usunięto użytkownika: <em>{model->login}</em>",
+  "TYPE:users.synced": "Synchronizacja użytkowników",
+  "TEXT:users.synced": "Dodano {created, plural, one{1 nowego użytkownika} other{# nowych użytkowników}} i zmodyfikowano {updated, plural, one{1 istniejącego użytkownika} other{# istniejących użytkowników}} podczas synchronizacji z bazą KD.",
+  "TYPE:users.syncFailed": "Błąd synchronizacji użytkowników",
+  "TEXT:users.syncFailed": "Nie udało się zsynchronizować użytkowników z bazą KD: <em>{error}</em>",
   "TYPE:emptyOrders.synced": "Synchronizacja pustych zleceń",
   "TEXT:emptyOrders.synced": "Dodano {count, plural, one{1 nowe puste zlecenie} few {# nowe puste zlecenia} other{# nowych pustych zleceń}}.",
   "TYPE:orders.synced": "Synchronizacja zleceń",

@@ -11,6 +11,7 @@
   "PAGE_ACTION:add": "Dodaj użytkownika",
   "PAGE_ACTION:edit": "Edytuj użytkownika",
   "PAGE_ACTION:delete": "Usuń użytkownika",
+  "PAGE_ACTION:sync": "Synchronizuj z bazą KD",
 
   "PANEL:TITLE:details": "Szczegóły użytkownika",
   "PANEL:TITLE:addForm": "Formularz dodawania użytkownika",

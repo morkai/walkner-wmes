@@ -36,7 +36,11 @@ module.exports = function setupUserModel(app, mongoose)
     lastName: String,
     registerDate: String,
     sapPosition: String,
-    active: Boolean
+    active: Boolean,
+    kdId: {
+      type: Number,
+      default: -1
+    }
   }, {
     id: false,
     toJSON: {

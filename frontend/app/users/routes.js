@@ -4,12 +4,11 @@ define([
   '../user',
   './User',
   './UserCollection',
-  '../core/pages/ListPage',
   '../core/pages/DetailsPage',
   '../core/pages/AddFormPage',
   '../core/pages/EditFormPage',
   '../core/pages/ActionFormPage',
-  './views/UserListView',
+  './pages/UserListPage',
   './views/UserDetailsView',
   './views/UserFormView',
   'i18n!app/nls/users'
@@ -19,12 +18,11 @@ define([
   user,
   User,
   UserCollection,
-  ListPage,
   DetailsPage,
   AddFormPage,
   EditFormPage,
   ActionFormPage,
-  UserListView,
+  UserListPage,
   UserDetailsView,
   UserFormView
 ) {
@@ -35,10 +33,7 @@ define([
 
   router.map('/users', canView, function(req)
   {
-    viewport.showPage(new ListPage({
-      ListView: UserListView,
-      collection: new UserCollection(null, {rqlQuery: req.rql})
-    }));
+    viewport.showPage(new UserListPage({rql: req.rql}));
   });
 
   router.map(

@@ -40,11 +40,15 @@ exports.events = {
       'fte.leader.created', 'fte.master.created'
     ],
     info: [
-      'events.**'
+      'events.**',
+      'users.synced'
     ],
     warning: [
       'users.loginFailure',
       '*.deleted'
+    ],
+    error: [
+      'users.syncFailed'
     ]
   }
 };
@@ -67,7 +71,8 @@ exports.pubsub = {
     'events.saved',
     '*.added', '*.edited', '*.deleted', '*.synced',
     'shiftChanged',
-    'fte.leader.*'
+    'fte.leader.*',
+    'users.syncFailed'
   ]
 };
 
