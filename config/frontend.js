@@ -5,9 +5,6 @@ exports.id = 'frontend';
 exports.modules = [
   'mongoose',
   'events',
-  'httpServer',
-  'httpsServer',
-  'sio',
   'pubsub',
   'user',
   'express',
@@ -26,7 +23,10 @@ exports.modules = [
   'orders',
   'fte',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
-  {id: 'messenger/client', name: 'messenger/client:importer'}
+  {id: 'messenger/client', name: 'messenger/client:importer'},
+  'httpServer',
+  'httpsServer',
+  'sio'
 ];
 
 exports.events = {

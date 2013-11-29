@@ -6,6 +6,7 @@ var domain = require('domain');
 var fs = require('fs');
 
 exports.DEFAULT_CONFIG = {
+  expressId: 'express',
   host: '0.0.0.0',
   port: 443,
   key: 'privatekey.pem',
@@ -54,7 +55,16 @@ exports.start = function startHttpServerModule(app, module, done)
         reqDomain.dispose();
       });
 
-      app.express(req, res);
+      var express = app[module.config.expressId];
+
+      if (express)
+      {
+        express(req, res);
+      }
+      else
+      {
+        res.send(503);
+      }
     });
 
     app.httpsServer.once('error', onFirstServerError);

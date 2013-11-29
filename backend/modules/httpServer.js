@@ -5,6 +5,7 @@ var http = require('http');
 var domain = require('domain');
 
 exports.DEFAULT_CONFIG = {
+  expressId: 'express',
   host: '0.0.0.0',
   port: 80
 };
@@ -46,7 +47,16 @@ exports.start = function startHttpServerModule(app, module, done)
         reqDomain.dispose();
       });
 
-      app.express(req, res);
+      var express = app[module.config.expressId];
+
+      if (express)
+      {
+        express(req, res);
+      }
+      else
+      {
+        res.send(503);
+      }
     });
 
     app.httpServer.once('error', onFirstServerError);

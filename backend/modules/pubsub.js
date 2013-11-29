@@ -11,13 +11,6 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startPubsubModule(app, module)
 {
-  var sio = app[module.config.sioId];
-
-  if (!sio)
-  {
-    throw new Error("pubsub module requires the sio module!");
-  }
-
   var stats = {
     publishedMessages: 0,
     receivedMessages: 0,
@@ -91,16 +84,18 @@ exports.start = function startPubsubModule(app, module)
     ++stats.unsubscriptions;
   });
 
-  sio.sockets.on('connection', function onSocketConnect(socket)
+  app.onModuleReady(module.config.sioId, function()
   {
-    socket.pubsub = module.sandbox();
-    socket.pubsub.onSubscriptionMessage =
-      onSubscriptionMessage.bind(null, socket);
+    app[module.config.sioId].sockets.on('connection', function onSocketConnect(socket)
+    {
+      socket.pubsub = module.sandbox();
+      socket.pubsub.onSubscriptionMessage = onSubscriptionMessage.bind(null, socket);
 
-    socket.on('disconnect', onSocketDisconnect);
-    socket.on('pubsub.subscribe', onSocketSubscribe);
-    socket.on('pubsub.unsubscribe', onSocketUnsubscribe);
-    socket.on('pubsub.publish', onSocketPublish);
+      socket.on('disconnect', onSocketDisconnect);
+      socket.on('pubsub.subscribe', onSocketSubscribe);
+      socket.on('pubsub.unsubscribe', onSocketUnsubscribe);
+      socket.on('pubsub.publish', onSocketPublish);
+    });
   });
 
   publishPubsubStats();
@@ -271,7 +266,7 @@ exports.start = function startPubsubModule(app, module)
   {
     /*jshint forin:false*/
 
-    var sockets = sio.sockets.sockets;
+    var sockets =  app[module.config.sioId].sockets.sockets;
     var socketIds = Object.keys(socketIdToMessagesMap);
 
     for (var i = 0, l = socketIds.length; i < l; ++i)
