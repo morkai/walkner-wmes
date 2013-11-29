@@ -247,6 +247,7 @@
       'app/prodFlows/routes',
       'app/prodLines/routes',
       'app/dashboard/routes',
+      'app/vis/routes',
       'bootstrap',
       'moment-lang/' + (window.LOCALE || 'pl'),
       'select2-lang/' + (window.LOCALE || 'pl'),

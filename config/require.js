@@ -19,7 +19,8 @@ exports.paths = {
   'js2form': 'vendor/js2form',
   'reltime': 'vendor/reltime',
   'select2': 'vendor/select2/select2',
-  'select2-lang': 'vendor/select2-lang'
+  'select2-lang': 'vendor/select2-lang',
+  'd3': 'vendor/d3.v3'
 };
 
 exports.shim = {
@@ -38,6 +39,9 @@ exports.shim = {
   'select2': {
     deps: ['jquery'],
     exports: 'Select2'
+  },
+  'd3': {
+    exports: 'd3'
   }
 };
 

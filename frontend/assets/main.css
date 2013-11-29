@@ -12,6 +12,7 @@
 @import url("../app/fte/assets/main.css");
 @import url("../app/divisions/assets/main.css");
 @import url("../app/orders/assets/main.css");
+@import url("../app/vis/assets/main.css");
 
 #app-loading {
   position: absolute;

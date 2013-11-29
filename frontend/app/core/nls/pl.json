@@ -69,6 +69,8 @@
   "NAVBAR:FTE:LEADER": "Lider",
   "NAVBAR:FTE:LEADER:LIST": "Historia",
   "NAVBAR:FTE:LEADER:CURRENT": "Przydzielanie zasobów",
+  "NAVBAR:VIS": "Wizualizacja",
+  "NAVBAR:VIS:STRUCTURE": "Struktura organizacyjna",
 
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
   "ACTION_FORM:BUTTON:delete": "Usuń",
