@@ -39,7 +39,7 @@ define([
             time: moment(event.get('time')).format('lll'),
             user: event.get('user'),
             type: t('events', 'TYPE:' + type),
-            text: t('events', 'TEXT:' + type, view.flatten(data) || {})
+            text: t('events', 'TEXT:' + type, view.flatten(data))
           };
         })
       };
@@ -63,7 +63,7 @@ define([
 
       if (data.$prepared)
       {
-        return;
+        return data;
       }
 
       data.$prepared = true;
@@ -84,12 +84,13 @@ define([
 
     flatten: function(obj)
     {
-      if (obj === null)
+      var result = {};
+
+      if (obj == null)
       {
-        return null;
+        return result;
       }
 
-      var result = {};
       var keys = Object.keys(obj);
 
       for (var i = 0, l = keys.length; i < l; ++i)
