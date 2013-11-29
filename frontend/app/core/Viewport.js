@@ -1,4 +1,5 @@
 define([
+  'require',
   'underscore',
   'jquery',
   './View',
@@ -6,6 +7,7 @@ define([
   './views/MessagesView',
   'app/core/templates/dialog'
 ], function(
+  require,
   _,
   $,
   View,
@@ -14,6 +16,11 @@ define([
   dialogTemplate
 ) {
   'use strict';
+
+  var DEFAULT_PAGE_FACTORY = function(Page)
+  {
+    return new Page();
+  };
 
   function Viewport(options)
   {
@@ -98,6 +105,24 @@ define([
     this.layouts[name] = layoutFactory;
 
     return this;
+  };
+
+  Viewport.prototype.loadPage = function(pageModulePath, createPage)
+  {
+    this.msg.loading();
+
+    if (!_.isFunction(createPage))
+    {
+      createPage = DEFAULT_PAGE_FACTORY;
+    }
+
+    var viewport = this;
+
+    require([pageModulePath], function(Page)
+    {
+      viewport.showPage(createPage(Page));
+      viewport.msg.loaded();
+    });
   };
 
   Viewport.prototype.showPage = function(page)
