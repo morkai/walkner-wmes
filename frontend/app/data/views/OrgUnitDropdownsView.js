@@ -50,6 +50,11 @@ define([
 
     afterRender: function()
     {
+      if (this.$el.children().length !== 0)
+      {
+        this.$el.empty();
+      }
+
       if (this.options.noGrid !== true)
       {
         this.$el.addClass('row');
