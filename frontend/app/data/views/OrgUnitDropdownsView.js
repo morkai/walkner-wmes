@@ -41,20 +41,20 @@ define([
 
     tagName: 'div',
 
-    className: 'row orgUnitDropdowns',
+    className: 'orgUnitDropdowns',
 
     initialize: function()
     {
       this.idPrefix = _.uniqueId('orgUnitDropdown');
     },
 
-    serialize: function()
-    {
-      return {};
-    },
-
     afterRender: function()
     {
+      if (this.options.noGrid !== true)
+      {
+        this.$el.addClass('row');
+      }
+
       var orgUnit = this.options.orgUnit || ORG_UNIT.DIVISION;
 
       if (orgUnit >= ORG_UNIT.DIVISION)
@@ -212,14 +212,18 @@ define([
 
     createDropdownElement: function(orgUnit, data)
     {
-      var span = Math.floor(12 / this.options.orgUnit);
       var id = this.idPrefix + '-' + orgUnit;
-      var html = '<div class="form-group col-lg-' + span + '">'
+      var $formGroup = $('<div class="form-group">'
         + '<label for="' + id + '">' + t('core', 'ORG_UNIT:' + orgUnit) + '</label>'
         + '<input id="' + id + '" name="' + orgUnit + '">'
-        + '</div>';
+        + '</div>');
 
-      return $(html).appendTo(this.el).find('input').select2({
+      if (this.options.noGrid !== true)
+      {
+        $formGroup.addClass('col-lg-' + Math.floor(12 / this.options.orgUnit));
+      }
+
+      return $formGroup.appendTo(this.el).find('input').select2({
         data: data || [],
         placeholder: ' ',
         allowClear: this.options.allowClear || this.options.orgUnit === ORG_UNIT.PROD_FLOW
