@@ -13,11 +13,10 @@ define([
   return ListView.extend({
 
     localTopics: {
-      'companies.synced': 'render',
-      'aors.synced': 'render'
+      'companies.synced': 'render'
     },
 
-    columns: ['personellId', 'lastName', 'firstName', 'company', 'aor', 'prodFunction'],
+    columns: ['personellId', 'lastName', 'firstName', 'company', 'orgUnit', 'prodFunction'],
 
     serializeRows: function()
     {

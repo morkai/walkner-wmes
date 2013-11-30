@@ -12,7 +12,7 @@ define([
     model: User,
 
     rqlQuery:
-      'select(personellId,lastName,firstName,company,aor,prodFunction)'
+      'select(personellId,lastName,firstName,company,orgUnitType,orgUnitId,prodFunction)'
         + '&sort(+lastName,+firstName)&limit(15)'
 
   });

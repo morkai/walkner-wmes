@@ -68,24 +68,27 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-aor" class="control-label"><%- t('users', 'PROPERTY:aor') %></label>
-          <select id="<%- idPrefix %>-aor" name="aor" data-placeholder="<%- t('users', 'NO_DATA:aor') %>">
-            <option></option>
-            <% aors.forEach(function(aor) { %>
-            <option value="<%- aor._id %>"><%= aor.name %>
-            <% }) %>
-          </select>
+        <div class="col-md-6">
+          <div class="orgUnitDropdowns-container"></div>
+          <div class=" form-group">
+            <label for="<%- idPrefix %>-aor" class="control-label"><%- t('users', 'PROPERTY:aor') %></label>
+            <select id="<%- idPrefix %>-aor" name="aor" data-placeholder="<%- t('users', 'NO_DATA:aor') %>">
+              <option></option>
+              <% aors.forEach(function(aor) { %>
+              <option value="<%- aor._id %>"><%= aor.name %>
+                <% }) %>
+            </select>
+          </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-division" class="control-label"><%- t('users', 'PROPERTY:division') %></label>
-          <input id="<%- idPrefix %>-division" class="form-control" type="text" name="division" maxlength="100">
+          <label for="<%- idPrefix %>-kdDivision" class="control-label"><%- t('users', 'PROPERTY:kdDivision') %></label>
+          <input id="<%- idPrefix %>-kdDivision" class="form-control" type="text" name="kdDivision" maxlength="100">
         </div>
         <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-sapPosition" class="control-label"><%- t('users', 'PROPERTY:sapPosition') %></label>
-          <input id="<%- idPrefix %>-sapPosition" class="form-control" type="text" name="sapPosition" maxlength="100">
+          <label for="<%- idPrefix %>-kdPosition" class="control-label"><%- t('users', 'PROPERTY:kdPosition') %></label>
+          <input id="<%- idPrefix %>-kdPosition" class="form-control" type="text" name="kdPosition" maxlength="100">
         </div>
       </div>
       <div class="row">

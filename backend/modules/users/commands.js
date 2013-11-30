@@ -212,8 +212,8 @@ module.exports = function setUpUsersCommands(app, usersModule)
         personellId: row[4],
         active: row[6] === 1,
         company: row[5]['10001'],
-        division: row[5]['10003'],
-        sapPosition: row[5]['10004']
+        kdDivision: row[5]['10003'],
+        kdPosition: row[5]['10004']
       };
 
       if (userModel === null)

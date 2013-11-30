@@ -7,7 +7,8 @@ define([
   '../subdivisions',
   '../mrpControllers',
   '../prodFlows',
-  '../workCenters'
+  '../workCenters',
+  '../prodLines'
 ], function(
   _,
   $,
@@ -17,7 +18,8 @@ define([
   subdivisions,
   mrpControllers,
   prodFlows,
-  workCenters
+  workCenters,
+  prodLines
 ) {
   'use strict';
 
@@ -93,56 +95,60 @@ define([
       return this;
     },
 
-    selectValue: function(model)
+    selectValue: function(model, orgUnit)
     {
       /*jshint -W015*/
 
-      switch (this.options.orgUnit)
+      var selectFirst = !orgUnit;
+
+      switch (orgUnit || this.options.orgUnit)
       {
         case ORG_UNIT.DIVISION:
-          this.selectDivision(model);
+          this.selectDivision(model, selectFirst);
           break;
 
         case ORG_UNIT.SUBDIVISION:
-          this.selectSubdivision(model);
+          this.selectSubdivision(model, selectFirst);
           break;
 
         case ORG_UNIT.MRP_CONTROLLER:
-          this.selectMrpController(model);
+          this.selectMrpController(model, selectFirst);
           break;
 
         case ORG_UNIT.PROD_FLOW:
-          this.selectProdFlow(model);
+          this.selectProdFlow(model, selectFirst);
           break;
 
         case ORG_UNIT.WORK_CENTER:
-          this.selectWorkCenter(model);
+          this.selectWorkCenter(model, selectFirst);
           break;
 
         case ORG_UNIT.PROD_LINE:
-          this.selectProdLine(model);
+          this.selectProdLine(model, selectFirst);
           break;
       }
 
       return this;
     },
 
-    selectDivision: function(model)
+    selectDivision: function(model, selectFirst)
     {
-      return this.selectModel(model, null, divisions, 'division');
+      return this.selectModel(model, null, divisions, 'division', selectFirst);
     },
 
-    selectSubdivision: function(model)
+    selectSubdivision: function(model, selectFirst)
     {
-      return this.selectModel(model, 'selectDivision', subdivisions, 'subdivision');
+      return this.selectModel(model, 'selectDivision', subdivisions, 'subdivision', selectFirst);
     },
 
-    selectMrpController: function(model)
+    selectMrpController: function(model, selectFirst)
     {
-      return this.selectModel(model, 'selectSubdivision', mrpControllers, 'mrpController');
+      return this.selectModel(
+        model, 'selectSubdivision', mrpControllers, 'mrpController', selectFirst
+      );
     },
 
-    selectProdFlow: function(model)
+    selectProdFlow: function(model, selectFirst)
     {
       if (!model)
       {
@@ -151,11 +157,11 @@ define([
 
       if (model.get('prodFlow'))
       {
-        return this.selectModel(model, 'selectMrpController', prodFlows, 'prodFlow');
+        return this.selectModel(model, 'selectMrpController', prodFlows, 'prodFlow', selectFirst);
       }
       else if (model.get('mrpController'))
       {
-        model = this.selectMrpController(model);
+        model = this.selectMrpController(model, selectFirst);
 
         if (model)
         {
@@ -168,17 +174,17 @@ define([
       return null;
     },
 
-    selectWorkCenter: function(model)
+    selectWorkCenter: function(model, selectFirst)
     {
-      return this.selectModel(model, 'selectProdFlow', workCenters, 'workCenter');
+      return this.selectModel(model, 'selectProdFlow', workCenters, 'workCenter', selectFirst);
     },
 
-    selectProdLine: function(model)
+    selectProdLine: function()
     {
       throw new Error('TODO');
     },
 
-    selectModel: function(model, parentSelect, parentCollection, parentProperty)
+    selectModel: function(model, parentSelect, parentCollection, parentProperty, selectFirst)
     {
       if (!model)
       {
@@ -189,7 +195,7 @@ define([
 
       if (parentSelect !== null)
       {
-        parentModel = this[parentSelect](parentModel);
+        parentModel = this[parentSelect](parentModel, selectFirst);
       }
 
       if (!parentModel)
@@ -199,12 +205,12 @@ define([
 
       this.$id(parentProperty)
         .select2('val', parentModel.id)
-        .trigger({type: 'change', val: parentModel.id});
+        .trigger({type: 'change', val: parentModel.id, selectFirst: selectFirst});
 
       return model;
     },
 
-    createDropdownElement: function(orgUnit)
+    createDropdownElement: function(orgUnit, data)
     {
       var span = Math.floor(12 / this.options.orgUnit);
       var id = this.idPrefix + '-' + orgUnit;
@@ -213,7 +219,11 @@ define([
         + '<input id="' + id + '" name="' + orgUnit + '">'
         + '</div>';
 
-      return $(html).appendTo(this.el).find('input');
+      return $(html).appendTo(this.el).find('input').select2({
+        data: data || [],
+        placeholder: ' ',
+        allowClear: this.options.allowClear || this.options.orgUnit === ORG_UNIT.PROD_FLOW
+      });
     },
 
     onChange: function($dropdown, collection, parentProperty, e)
@@ -223,19 +233,16 @@ define([
 
       var data = e.val === null ? [] : collection.where(query).map(idAndLabel);
       var options = {
-        data: data
+        data: data,
+        placeholder: ' ',
+        allowClear: !!this.options.allowClear
+          || (parentProperty === 'mrpController' && this.options.orgUnit === ORG_UNIT.PROD_FLOW)
       };
-
-      if (parentProperty === 'mrpController' && this.options.orgUnit === ORG_UNIT.PROD_FLOW)
-      {
-        options.placeholder = ' ';
-        options.allowClear = true;
-      }
 
       $dropdown.select2('val', null);
       $dropdown.select2(options);
 
-      if (data.length)
+      if (data.length && e.selectFirst !== false)
       {
         $dropdown.select2('val', data[0].id);
       }
@@ -248,20 +255,12 @@ define([
 
     renderDivisionDropdown: function()
     {
-      var $dropdown = this.createDropdownElement('division');
-
-      $dropdown.select2({
-        data: divisions.map(idAndLabel)
-      });
+      this.createDropdownElement('division', divisions.map(idAndLabel));
     },
 
     renderSubdivisionDropdown: function()
     {
       var $dropdown = this.createDropdownElement('subdivision');
-
-      $dropdown.select2({
-        data: []
-      });
 
       this.$id('division').on(
         'change', this.onChange.bind(this, $dropdown, subdivisions, 'division')
@@ -272,10 +271,6 @@ define([
     {
       var $dropdown = this.createDropdownElement('mrpController');
 
-      $dropdown.select2({
-        data: []
-      });
-
       this.$id('subdivision').on(
         'change', this.onChange.bind(this, $dropdown, mrpControllers, 'subdivision')
       );
@@ -284,11 +279,6 @@ define([
     renderProdFlowDropdown: function()
     {
       var $dropdown = this.createDropdownElement('prodFlow');
-
-      $dropdown.select2({
-        data: [],
-        allowClear: this.options.orgUnit === ORG_UNIT.PROD_FLOW
-      });
 
       this.$id('mrpController').on(
         'change', this.onChange.bind(this, $dropdown, prodFlows, 'mrpController')
@@ -299,10 +289,6 @@ define([
     {
       var $dropdown = this.createDropdownElement('workCenter');
 
-      $dropdown.select2({
-        data: []
-      });
-
       this.$id('prodFlow').on(
         'change', this.onChange.bind(this, $dropdown, workCenters, 'prodFlow')
       );
@@ -310,7 +296,11 @@ define([
 
     renderProdLineDropdown: function()
     {
-      throw new Error('TODO');
+      var $dropdown = this.createDropdownElement('prodLine');
+
+      this.$id('workCenter').on(
+        'change', this.onChange.bind(this, $dropdown, prodLines, 'prodLine')
+      );
     }
 
   }, {

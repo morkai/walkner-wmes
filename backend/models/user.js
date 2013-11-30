@@ -29,14 +29,23 @@ module.exports = function setupUserModel(app, mongoose)
       type: String,
       ref: 'Company'
     },
-    division: String,
+    orgUnitType: {
+      type: String,
+      enum: ['division', 'subdivision', 'unspecified'],
+      default: 'unspecified'
+    },
+    orgUnitId: {
+      type: String,
+      default: null
+    },
     personellId: String,
     card: String,
     firstName: String,
     lastName: String,
     registerDate: String,
-    sapPosition: String,
     active: Boolean,
+    kdPosition: String,
+    kdDivision: String,
     kdId: {
       type: Number,
       default: -1

@@ -26,13 +26,13 @@ define([
       privileges: null,
       aor: null,
       company: null,
-      division: null,
+      kdDivision: null,
       personellId: null,
       card: null,
       firstName: null,
       lastName: null,
       registerDate: null,
-      sapPosition: null,
+      kdPosition: null,
       active: true
     },
 
