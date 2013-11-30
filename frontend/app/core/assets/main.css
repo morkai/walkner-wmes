@@ -22,6 +22,9 @@ dt:first-child {
 dd {
   margin-left: 1em;
 }
+p:last-child {
+  margin-bottom: 0;
+}
 .unselectable {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -54,6 +57,20 @@ dd {
   border: 1px solid transparent;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
   opacity: 0;
+}
+.message-inline {
+  position: static;
+  display: block;
+  z-index: 0;
+  opacity: 1;
+  text-align: left;
+  font-weight: normal;
+}
+.panel > .message-inline {
+  box-shadow: none;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
 }
 .message-info {
   background-color: #E8F6FF;
