@@ -23,7 +23,7 @@ define([
     template: messagesTemplate,
 
     events: {
-      'click .message': function(e)
+      'click .messages .message': function(e)
       {
         this.hide($(e.currentTarget));
       }
