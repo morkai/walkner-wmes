@@ -23,9 +23,12 @@ define([
     template: messagesTemplate,
 
     events: {
-      'click .messages .message': function(e)
+      'click .message': function(e)
       {
-        this.hide($(e.currentTarget));
+        if (e.currentTarget.parentNode === this.el)
+        {
+          this.hide($(e.currentTarget));
+        }
       }
     },
 
