@@ -1,3 +1,6 @@
 .users-form-choicesRow > .form-group {
   width: auto;
 }
+.users-form-aor {
+  margin-bottom: 15px!important;
+}
