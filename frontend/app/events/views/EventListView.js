@@ -75,6 +75,7 @@ define([
       switch (type)
       {
         case 'fte.leader.created':
+        case 'fte.leader.locked':
           var subdivision = subdivisions.get(data.model.subdivision);
 
           data.model.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
@@ -82,6 +83,7 @@ define([
           break;
 
         case 'fte.master.created':
+        case 'fte.master.locked':
           var division = divisions.get(data.model.division);
 
           data.model.division = division ? renderOrgUnitPath(division, false, false) : '?';
