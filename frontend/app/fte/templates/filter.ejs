@@ -1,14 +1,6 @@
 <div class="well">
   <form id="<%- idPrefix %>-form" class="filter-form">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-aor"><%- t('fte', 'FILTER:AOR') %></label>
-      <select id="<%- idPrefix %>-aor" name="aor" data-placeholder="<%= t('fte', 'FILTER:AOR:PLACEHOLDER') %>">
-        <option></option>
-        <% aors.forEach(function(aor) { %>
-        <option value="<%- aor._id %>"><%= aor.name %>
-        <% }) %>
-      </select>
-    </div><div
+    <div class="orgUnitDropdowns-container"></div><div
       class="form-group">
       <label for="<%- idPrefix %>-date"><%- t('fte', 'FILTER:DATE') %></label>
       <input id="<%- idPrefix %>-date" class="form-control" name="date" type="date">

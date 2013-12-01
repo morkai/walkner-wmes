@@ -2,7 +2,9 @@ define([
   'underscore',
   'moment',
   'app/i18n',
-  'app/data/aors',
+  'app/data/divisions',
+  'app/data/subdivisions',
+  'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView',
   'app/events/templates/list',
   'i18n!app/nls/events'
@@ -10,7 +12,9 @@ define([
   _,
   moment,
   t,
-  aors,
+  divisions,
+  subdivisions,
+  renderOrgUnitPath,
   ListView,
   listTemplate
 ) {
@@ -71,10 +75,16 @@ define([
       switch (type)
       {
         case 'fte.leader.created':
-        case 'fte.master.created':
-          var aor = aors.get(data.model.aor);
+          var subdivision = subdivisions.get(data.model.subdivision);
 
-          data.model.aor = aor ? aor.getLabel() : '?';
+          data.model.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
+          data.model.date = moment(data.model.date).format('YYYY-MM-DD');
+          break;
+
+        case 'fte.master.created':
+          var division = divisions.get(data.model.division);
+
+          data.model.division = division ? renderOrgUnitPath(division, false, false) : '?';
           data.model.date = moment(data.model.date).format('YYYY-MM-DD');
           break;
       }

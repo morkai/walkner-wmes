@@ -8,10 +8,14 @@ module.exports = function setupProdTaskModel(app, mongoose)
       required: true,
       trim: true
     },
-    aors: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Aor'
-    }]
+    fteMaster: {
+      type: Boolean,
+      default: true
+    },
+    fteLeader: {
+      type: Boolean,
+      default: true
+    }
   }, {
     id: false
   });

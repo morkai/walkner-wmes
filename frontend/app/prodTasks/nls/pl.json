@@ -18,13 +18,13 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:aors": "Obszary odpowiedzialności",
+  "PROPERTY:fteMaster": "FTE (mistrz)",
+  "PROPERTY:fteLeader": "FTE (lider)",
 
   "FORM:ACTION:add": "Dodaj zadanie produkcyjne",
   "FORM:ACTION:edit": "Edytuj zadanie produkcyjne",
   "FORM:ERROR:addFailure": "Nie udało się dodać zadania produkcyjnego :-(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zadania produkcyjnego :-(",
-  "FORM:PLACEHOLDER:aors": "Przypisz obszary odpowiedzialności...",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zadania produkcyjnego",
   "ACTION_FORM:BUTTON:delete": "Usuń zadanie produkcyjne",

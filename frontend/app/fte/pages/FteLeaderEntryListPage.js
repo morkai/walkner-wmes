@@ -34,7 +34,12 @@ define([
       t.bound('fte', 'BREADCRUMBS:leader:entryList')
     ],
 
-    actions: [],
+    actions: [{
+      label: t('fte', 'PAGE_ACTIONS:leader:currentEntry'),
+      href: '#fte/leader/current',
+      icon: 'edit',
+      privileges: 'FTE:LEADER:MANAGE'
+    }],
 
     initialize: function()
     {

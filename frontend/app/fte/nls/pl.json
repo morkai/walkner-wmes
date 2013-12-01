@@ -2,17 +2,20 @@
   "BREADCRUMBS:leader:entryList": "FTE (lider)",
   "BREADCRUMBS:leader:entryForm": "Przydzielanie zasobów",
   "BREADCRUMBS:leader:entryDetails": "Przydzielone zasoby",
+  "BREADCRUMBS:leader:currentEntry": "Wybór działu",
 
   "MSG:LOADING_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
 
+  "PAGE_ACTIONS:leader:currentEntry": "Przydzielaj zasoby",
   "PAGE_ACTION:print": "Pokaż wersję do druku",
+  "PAGE_ACTION:lock": "Zamknij wpis",
+  "PAGE_ACTION:edit": "Edytuj wpis",
   "LIST:ACTION:print": "Pokaż wersję do druku",
+  "LIST:ACTION:edit": "Edytuj wpis",
 
   "FILTER:DATE": "Data:",
   "FILTER:LIMIT": "Limit:",
-  "FILTER:AOR": "Obszar odpowiedzialności:",
-  "FILTER:AOR:PLACEHOLDER": "Dowolny",
   "FILTER:SHIFT": "Zmiana:",
   "FILTER:SHIFT:ANY": "Dowolna",
   "FILTER:BUTTON": "Filtruj FTE",
@@ -20,16 +23,21 @@
   "leaderEntry:column:task": "Zadanie produkcyjne",
   "leaderEntry:column:taskTotal": "Suma",
   "leaderEntry:column:companyTotal": "Suma",
-  "leaderEntry:property:aor": "Obszar odpowiedzialności:",
   "leaderEntry:property:shift": "Zmiana:",
   "leaderEntry:property:date": "Data:",
 
-  "leaderEntryList:aor": "Obszar odpowiedzialności",
   "leaderEntryList:date": "Data",
   "leaderEntryList:shift": "Zmiana",
 
-  "leaderEntry:print:hdLeft": "Zasoby przydzielone do {aor}",
+  "leaderEntry:print:hdLeft": "Zasoby przydzielone do {subdivision}",
   "leaderEntry:print:hdRight": "{date}, {shift} zmiana",
+
+  "currentLeaderEntry:panel:title": "Formularz wyboru działu do przydzielania zasobów",
+  "currentLeaderEntry:panel:warning": "<p>Jeżeli wybrany dział nie będzie miał wpisu dla aktualnej zmiany, zostanie utworzony nowy wpis.</p>",
+  "currentLeaderEntry:submit": "Przydzielaj zasoby",
+  "currentLeaderEntry:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem :(",
+  "currentLeaderEntry:msg:failure": "Nie udało się utworzyć wpisu :(",
+  "currentLeaderEntry:msg:lockFailure": "Nie udało się zamknąć wpisu :(",
 
   "shift:1": "I",
   "shift:2": "II",

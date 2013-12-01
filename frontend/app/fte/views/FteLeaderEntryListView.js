@@ -1,13 +1,17 @@
 define([
   'moment',
   'app/i18n',
-  'app/data/aors',
+  'app/user',
+  'app/data/subdivisions',
+  'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView',
   'i18n!app/nls/fte'
 ], function(
   moment,
   t,
-  aors,
+  user,
+  subdivisions,
+  renderOrgUnitPath,
   ListView
 ) {
   'use strict';
@@ -15,13 +19,14 @@ define([
   return ListView.extend({
 
     remoteTopics: {
-      'fte.leader.created': 'refreshCollection'
+      'fte.leader.created': 'refreshCollection',
+      'fte.leader.locked': 'refreshCollection'
     },
 
     serializeColumns: function()
     {
       return [
-        {id: 'aor', label: t('fte', 'leaderEntryList:aor')},
+        {id: 'subdivision', label: t('core', 'ORG_UNIT:subdivision')},
         {id: 'date', label: t('fte', 'leaderEntryList:date')},
         {id: 'shift', label: t('fte', 'leaderEntryList:shift')}
       ];
@@ -34,15 +39,37 @@ define([
       return function(row)
       {
         var model = collection.get(row._id);
+        var actions = [ListView.actions.viewDetails(model)];
 
-        return [
-          ListView.actions.viewDetails(model),
-          {
+        if (row.locked)
+        {
+          actions.push({
             icon: 'print',
             label: t('fte', 'LIST:ACTION:print'),
             href: model.genClientUrl('print')
+          });
+        }
+        else if (user.isAllowedTo('FTE:LEADER:MANAGE'))
+        {
+          if (!user.isAllowedTo('FTE:LEADER:ALL'))
+          {
+            var userDivision = user.getDivision();
+            var subdivision = subdivisions.get(model.get('subdivision'));
+
+            if (userDivision && userDivision.get('_id') !== subdivision.get('division'))
+            {
+              return actions;
+            }
           }
-        ];
+
+          actions.push({
+            icon: 'edit',
+            label: t('fte', 'LIST:ACTION:edit'),
+            href: model.genClientUrl('edit')
+          });
+        }
+
+        return actions;
       };
     },
 
@@ -50,10 +77,10 @@ define([
     {
       return this.collection.map(function(model)
       {
-        var aor = aors.get(model.get('aor'));
+        var subdivision = subdivisions.get(model.get('subdivision'));
         var row = model.toJSON();
 
-        row.aor = aor ? aor.getLabel() : '?';
+        row.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
         row.date = moment(row.date).format('LL');
         row.shift = t('fte', 'shift:' + row.shift);
 

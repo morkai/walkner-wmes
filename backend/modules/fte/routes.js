@@ -1,5 +1,6 @@
 'use strict';
 
+var lodash = require('lodash');
 var crud = require('../express/crud');
 
 module.exports = function setUpFteRoutes(app, fteModule)
@@ -12,67 +13,44 @@ module.exports = function setUpFteRoutes(app, fteModule)
   var canViewLeader = auth('FTE:LEADER:VIEW');
   var canManageLeader = auth('FTE:LEADER:MANAGE');
 
-  express.get('/fte/leader', canViewLeader, crud.browseRoute.bind(null, app, FteLeaderEntry));
-
-  express.get('/fte/leader/current', canManageLeader, getCurrentFteLeaderEntryRoute);
+  express.get(
+    '/fte/leader', canViewLeader, limitToDivision, crud.browseRoute.bind(null, app, FteLeaderEntry)
+  );
 
   express.get('/fte/leader/:id', canViewLeader, crud.readRoute.bind(null, app, FteLeaderEntry));
 
-  function getCurrentFteLeaderEntryRoute(req, res, next)
+  function limitToDivision(req, res, next)
   {
-    var currentUser = req.session.user;
+    var selector = req.rql.selector;
 
-    if (!currentUser.aor)
+    if (!Array.isArray(selector.args) || !selector.args.length)
     {
-      res.statusCode = 400;
-
-      return next(new Error('NO_AOR'));
+      return next();
     }
 
-    var currentShiftId = getCurrentShiftId(currentUser.aor);
-
-    FteLeaderEntry.findOne(currentShiftId, function(err, fteLeaderEntry)
+    var divisionTerm = lodash.find(selector.args, function(term)
     {
-      if (err)
-      {
-        return next(err);
-      }
-
-      if (fteLeaderEntry !== null)
-      {
-        return res.send(fteLeaderEntry.toJSON());
-      }
-
-      FteLeaderEntry.createForShift(currentShiftId, function(err, fteLeaderEntry)
-      {
-        if (err)
-        {
-          return next(err);
-        }
-
-        res.send(fteLeaderEntry);
-
-        app.broker.publish('fte.leader.created', {
-          user: currentUser,
-          model: {
-            _id: fteLeaderEntry.get('_id'),
-            aor: currentShiftId.aor,
-            date: currentShiftId.date,
-            shift: currentShiftId.shift
-          }
-        });
-      });
+      return term.name === 'eq' && term.args[0] === 'division';
     });
-  }
 
-  function getCurrentShiftId(aor)
-  {
-    var currentShift = fteModule.getCurrentShift();
+    if (!divisionTerm)
+    {
+      return next();
+    }
 
-    return {
-      aor: aor,
-      date: currentShift.date,
-      shift: currentShift.shift
-    };
+    var subdivisions = [];
+
+    app[fteModule.config.subdivisionsId].models.forEach(function(subdivisionModel)
+    {
+      if (subdivisionModel.get('division') === divisionTerm.args[1])
+      {
+        subdivisions.push(subdivisionModel.get('_id').toString());
+      }
+    });
+
+    divisionTerm.name = 'in';
+    divisionTerm.args = ['subdivision', subdivisions];
+
+    next();
   }
 };

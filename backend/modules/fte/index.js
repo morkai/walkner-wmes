@@ -7,18 +7,22 @@ exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
   userId: 'user',
-  sioId: 'sio'
+  sioId: 'sio',
+  subdivisionsId: 'subdivisions'
 };
 
 exports.start = function startFteModule(app, module)
 {
+  // TODO: Lock entries on shift change
+
   module.getCurrentShift = getCurrentShift;
 
   app.onModuleReady(
     [
       module.config.mongooseId,
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.subdivisionsId
     ],
     setUpRoutes.bind(null, app, module)
   );
@@ -27,7 +31,8 @@ exports.start = function startFteModule(app, module)
     [
       module.config.mongooseId,
       module.config.userId,
-      module.config.sioId
+      module.config.sioId,
+      module.config.subdivisionsId
     ],
     setUpCommands.bind(null, app, module)
   );
@@ -39,7 +44,7 @@ exports.start = function startFteModule(app, module)
     var h6 = 6 * 3600 * 1000;
     var h8 = 8 * 3600 * 1000;
     var currentShift = getCurrentShift();
-    var currentShiftTime = currentShift.date.getTime() + h6 + (currentShift.shift - 1) * h8;
+    var currentShiftTime = currentShift.date.getTime() + h6 + (currentShift.no - 1) * h8;
     var nextShiftTime = currentShiftTime + h8;
 
     setTimeout(broadcastShiftChange, nextShiftTime - Date.now());
@@ -49,7 +54,7 @@ exports.start = function startFteModule(app, module)
   {
     var newShift = getCurrentShift();
 
-    module.debug("Broadcasting a shift change (%d)...", newShift.shift);
+    module.debug("Broadcasting a shift change (%d)...", newShift.no);
 
     app.broker.publish('shiftChanged', newShift);
 
@@ -60,15 +65,15 @@ exports.start = function startFteModule(app, module)
   {
     var date = new Date();
     var hours = date.getHours();
-    var shift = 3;
+    var no = 3;
 
     if (hours >= 6 && hours < 14)
     {
-      shift = 1;
+      no = 1;
     }
     else if (hours >= 14 && hours < 22)
     {
-      shift = 2;
+      no = 2;
     }
     else if (hours < 6)
     {
@@ -82,25 +87,7 @@ exports.start = function startFteModule(app, module)
 
     return {
       date: date,
-      shift: shift
-    };
-  }
-
-  function getNextShift()
-  {
-    var currentShift = getCurrentShift();
-
-    if (currentShift.shift === 3)
-    {
-      return {
-        date: new Date(currentShift.date.getTime() + 24 * 3600 * 1000),
-        shift: 1
-      };
-    }
-
-    return {
-      date: currentShift.date,
-      shift: currentShift.shift + 1
+      no: no
     };
   }
 };

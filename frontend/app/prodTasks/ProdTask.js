@@ -21,19 +21,8 @@ define([
 
     defaults: {
       name: null,
-      aors: null
-    },
-
-    toJSON: function()
-    {
-      var prodTask = Model.prototype.toJSON.call(this);
-
-      if (!Array.isArray(prodTask.aors))
-      {
-        prodTask.aors = [];
-      }
-
-      return prodTask;
+      fteMaster: true,
+      fteLeader: true
     }
 
   });

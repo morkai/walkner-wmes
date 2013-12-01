@@ -27,3 +27,9 @@
   margin-top: 0;
   margin-bottom: 5px;
 }
+.filter-form .orgUnitDropdowns-container {
+  display: inline-block;
+}
+.filter-form .orgUnitDropdowns .form-group {
+  min-width: 150px;
+}

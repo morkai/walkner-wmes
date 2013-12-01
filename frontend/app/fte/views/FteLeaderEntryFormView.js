@@ -4,9 +4,6 @@ define([
   'app/i18n',
   'app/user',
   'app/core/View',
-  'app/data/aors',
-  'app/data/companies',
-  'app/data/prodTasks',
   'app/fte/templates/leaderEntry',
   'i18n!app/nls/fte'
 ], function(
@@ -15,9 +12,6 @@ define([
   t,
   user,
   View,
-  aors,
-  companies,
-  prodTasks,
   leaderEntryTemplate
 ) {
   'use strict';
@@ -27,10 +21,6 @@ define([
     template: leaderEntryTemplate,
 
     idPrefix: 'leaderEntryForm',
-
-    remoteTopics: {
-      'shiftChanged': 'onShiftChange'
-    },
 
     events: {
       'change .fte-leaderEntry-count': 'updateCount',
@@ -43,7 +33,11 @@ define([
 
       this.listenToOnce(this.model, 'sync', function()
       {
-        view.pubsub.subscribe('fte.leader.' + view.model.get('aor'), view.onRemoteEdit.bind(view));
+        var redirectToDetails = view.redirectToDetails.bind(view);
+
+        view.pubsub.subscribe('fte.leader.updated.' + view.model.id, view.onRemoteEdit.bind(view));
+        view.pubsub.subscribe('fte.leader.locked.' + view.model.id, redirectToDetails);
+        view.pubsub.subscribe('shiftChanged', redirectToDetails);
       });
     },
 
@@ -176,9 +170,12 @@ define([
       this.recount($count[0], message.taskIndex, message.companyIndex);
     },
 
-    onShiftChange: function()
+    redirectToDetails: function()
     {
-      this.promised(this.model.set('_id', 'current').fetch());
+      this.broker.publish('router.navigate', {
+        url: this.model.genClientUrl(),
+        trigger: true
+      });
     }
 
   });

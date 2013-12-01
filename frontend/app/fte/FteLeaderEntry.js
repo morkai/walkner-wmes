@@ -1,14 +1,12 @@
 define([
   'moment',
-  '../data/companies',
-  '../data/aors',
-  '../data/prodTasks',
+  '../data/subdivisions',
+  '../data/views/renderOrgUnitPath',
   '../core/Model'
 ], function(
   moment,
-  companies,
-  aors,
-  prodTasks,
+  subdivisions,
+  renderOrgUnitPath,
   Model
 ) {
   'use strict';
@@ -19,30 +17,39 @@ define([
 
     clientUrlRoot: '#fte/leader',
 
-    topicPrefix: 'fte.leader',
+    topicPrefix: 'fteLeaderEntries',
 
     privilegePrefix: 'FTE:LEADER',
 
     nlsDomain: 'fte',
 
     defaults: {
-      aor: null,
+      subdivision: null,
       date: null,
       shift: null,
-      tasks: null
+      tasks: null,
+      locked: false,
+      createdAt: null,
+      creatorId: null,
+      creatorLabel: null,
+      updatedAt: null,
+      updaterId: null,
+      updaterLabel: null
     },
 
     serializeWithTotals: function()
     {
       var companies = this.serializeCompanies();
+      var subdivision = subdivisions.get(this.get('subdivision'));
 
       return {
-        aor: aors.get(this.get('aor')).toJSON(),
-        shift: this.get('shift'),
+        subdivision: subdivision ? renderOrgUnitPath(subdivision, false, false) : '?',
         date: moment(this.get('date')).format('LL'),
+        shift: this.get('shift'),
         total: companies.reduce(function(total, company) { return total + company.total; }, 0),
         companies: companies,
-        tasks: this.serializeTasks()
+        tasks: this.serializeTasks(),
+        locked: !!this.get('locked')
       };
     },
 
@@ -50,11 +57,8 @@ define([
     {
       var tasks = this.get('tasks');
 
-      return tasks[0].companies.map(function(companyEntry, companyIndex)
+      return tasks[0].companies.map(function(company, companyIndex)
       {
-        var companyModel = companies.get(companyEntry.company);
-        var company = companyModel ? companyModel.toJSON() : {_id: companyEntry, name: '???'};
-
         company.total = tasks.reduce(function(total, task)
         {
           return total + task.companies[companyIndex].count;
@@ -66,20 +70,8 @@ define([
 
     serializeTasks: function()
     {
-      return this.get('tasks').map(function(taskEntry)
+      return this.get('tasks').map(function(task)
       {
-        var task = prodTasks.get(taskEntry.task);
-
-        if (task)
-        {
-          task = task.toJSON();
-        }
-        else
-        {
-          task = {_id: taskEntry.task, name: '???'};
-        }
-
-        task.companies = taskEntry.companies;
         task.total = task.companies.reduce(function(total, company)
         {
           return total + company.count;

@@ -30,11 +30,11 @@ define([
       this.model.serializeCompanies().forEach(function(company)
       {
         columns.push({
-          id: company._id,
+          id: company.id,
           label: company.name
         });
 
-        totalsByCompany[company._id] = company.total;
+        totalsByCompany[company.id] = company.total;
       });
 
       return columns;
@@ -67,7 +67,7 @@ define([
 
         task.companies.forEach(function(company)
         {
-          taskRow[company.company] = company.count;
+          taskRow[company.id] = company.count;
         });
 
         rows.push(taskRow);

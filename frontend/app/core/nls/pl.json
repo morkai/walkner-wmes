@@ -33,6 +33,9 @@
   "LOG_IN_FORM:LABEL:PASSWORD": "Hasło",
   "LOG_IN_FORM:LABEL:SUBMIT": "Zaloguj się",
 
+  "BOOL:true": "Tak",
+  "BOOL:false": "Nie",
+
   "GUEST_USER_NAME": "Gość",
 
   "NAVBAR:TOGGLE": "Pokaż menu",

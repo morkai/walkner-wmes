@@ -42,8 +42,7 @@ module.exports = function startCoreRoutes(app, express)
         PROD_LINES: JSON.stringify(app.prodLines.models),
         AORS: JSON.stringify(app.aors.models),
         ORDER_STATUSES: JSON.stringify(app.orderStatuses.models),
-        DOWNTIME_REASONS: JSON.stringify(app.downtimeReasons.models),
-        PROD_TASKS: JSON.stringify(app.prodTasks.models)
+        DOWNTIME_REASONS: JSON.stringify(app.downtimeReasons.models)
       }
     });
   }

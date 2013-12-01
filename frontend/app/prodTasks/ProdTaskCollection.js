@@ -11,7 +11,7 @@ define([
 
     model: ProdTask,
 
-    rqlQuery: 'select(name,aors)&sort(name)&limit(15)'
+    rqlQuery: 'select(name,fteMaster,fteLeader)&sort(name)&limit(15)'
 
   });
 });

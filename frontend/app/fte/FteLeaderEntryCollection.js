@@ -17,18 +17,16 @@ define([
     {
       var selector;
 
-      if (user.data.aor)
+      if (user.data.orgUnitType !== 'unspecified')
       {
         selector = {
           name: 'and',
-          args: [
-            {name: 'eq', args: ['aor', user.data.aor]}
-          ]
+          args: [{name: 'eq', args: [user.data.orgUnitType, user.data.orgUnitId]}]
         };
       }
 
       return rql.Query.fromObject({
-        fields: {aor: 1, date: 1, shift: 1},
+        fields: {subdivision: 1, date: 1, shift: 1, locked: 1},
         sort: {date: -1, shift: -1},
         limit: 15,
         selector: selector

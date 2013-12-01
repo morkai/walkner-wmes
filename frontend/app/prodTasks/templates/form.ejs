@@ -7,13 +7,17 @@
         <label for="<%- idPrefix %>-name" class="control-label"><%- t('prodTasks', 'PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" value="" autofocus required maxlength="150">
       </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-aors" class="control-label"><%- t('prodTasks', 'PROPERTY:aors') %></label>
-        <select id="<%- idPrefix %>-aors" name="aors[]" multiple data-placeholder="<%- t('prodTasks', 'FORM:PLACEHOLDER:aors') %>">
-          <% aors.forEach(function(aor) { %>
-          <option value="<%= aor._id %>"><%= aor.name %>
-          <% }) %>
-        </select>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="fteMaster" value="true">
+          <%- t('prodTasks', 'PROPERTY:fteMaster') %>
+        </label>
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="fteLeader" value="true">
+          <%- t('prodTasks', 'PROPERTY:fteLeader') %>
+        </label>
       </div>
     </div>
     <div class="panel-footer">

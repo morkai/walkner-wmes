@@ -10,8 +10,8 @@ define([
   '../core/pages/EditFormPage',
   '../core/pages/ActionFormPage',
   './views/ProdTaskListView',
-  './views/ProdTaskDetailsView',
-  './views/ProdTaskFormView',
+  'app/prodTasks/templates/details',
+  'app/prodTasks/templates/form',
   'i18n!app/nls/prodTasks'
 ], function(
   router,
@@ -25,8 +25,8 @@ define([
   EditFormPage,
   ActionFormPage,
   ProdTaskListView,
-  ProdTaskDetailsView,
-  ProdTaskFormView
+  detailsTemplate,
+  formTemplate
 ) {
   'use strict';
 
@@ -44,24 +44,24 @@ define([
   router.map('/prodTasks/:id', function(req)
   {
     viewport.showPage(new DetailsPage({
-      DetailsView: ProdTaskDetailsView,
       model: new ProdTask({_id: req.params.id}),
+      detailsTemplate: detailsTemplate
     }));
   });
 
   router.map('/prodTasks;add', canManage, function()
   {
     viewport.showPage(new AddFormPage({
-      FormView: ProdTaskFormView,
-      model: new ProdTask()
+      model: new ProdTask(),
+      detailsTemplate: detailsTemplate
     }));
   });
 
   router.map('/prodTasks/:id;edit', canManage, function(req)
   {
     viewport.showPage(new EditFormPage({
-      FormView: ProdTaskFormView,
-      model: new ProdTask({_id: req.params.id})
+      model: new ProdTask({_id: req.params.id}),
+      formTemplate: formTemplate
     }));
   });
 

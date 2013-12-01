@@ -37,7 +37,8 @@ exports.events = {
       'app.started',
       'users.login', 'users.logout',
       '*.added', '*.edited',
-      'fte.leader.created', 'fte.master.created'
+      'fte.leader.created', 'fte.leader.locked',
+      'fte.master.created', 'fte.master.locked'
     ],
     info: [
       'events.**',
@@ -99,8 +100,8 @@ exports.user = {
     'ORDERS:VIEW', 'ORDERS:MANAGE',
     'LINES:VIEW', 'LINES:MANAGE',
     'EVENTS:VIEW', 'EVENTS:MANAGE',
-    'FTE:LEADER:VIEW', 'FTE:LEADER:MANAGE',
-    'FTE:MASTER:VIEW', 'FTE:MASTER:MANAGE',
+    'FTE:LEADER:VIEW', 'FTE:LEADER:MANAGE', 'FTE:LEADER:ALL',
+    'FTE:MASTER:VIEW', 'FTE:MASTER:MANAGE', 'FTE:MASTER:ALL',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE'
   ]
 };

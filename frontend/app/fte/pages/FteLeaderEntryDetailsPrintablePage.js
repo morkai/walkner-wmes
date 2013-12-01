@@ -1,7 +1,8 @@
 define([
   'moment',
   'app/i18n',
-  'app/data/aors',
+  'app/data/subdivisions',
+  'app/data/views/renderOrgUnitPath',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../FteLeaderEntry',
@@ -10,7 +11,8 @@ define([
 ], function(
   moment,
   t,
-  aors,
+  subdivisions,
+  renderOrgUnitPath,
   bindLoadingMessage,
   View,
   FteLeaderEntry,
@@ -26,10 +28,10 @@ define([
 
     hdLeft: function()
     {
-      var aor = aors.get(this.model.get('aor'));
+      var subdivision = subdivisions.get(this.model.get('subdivision'));
 
       return t('fte', 'leaderEntry:print:hdLeft', {
-        aor: aor ? aor.getLabel() : '?'
+        subdivision: subdivision ? renderOrgUnitPath(subdivision, false, false) : '?'
       });
     },
 
