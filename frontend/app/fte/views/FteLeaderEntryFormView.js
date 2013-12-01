@@ -46,6 +46,15 @@ define([
       this.listenToOnce(this.model, 'change', this.render);
 
       this.$('.fte-leaderEntry-count').first().focus();
+
+      if (this.model.get('locked'))
+      {
+        this.broker.publish('router.navigate', {
+          url: this.model.genClientUrl(),
+          replace: true,
+          trigger: true
+        });
+      }
     },
 
     serialize: function()
