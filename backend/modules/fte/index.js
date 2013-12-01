@@ -8,6 +8,7 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   sioId: 'sio',
+  divisionsId: 'divisions',
   subdivisionsId: 'subdivisions'
 };
 
@@ -30,6 +31,7 @@ exports.start = function startFteModule(app, module)
       module.config.mongooseId,
       module.config.userId,
       module.config.sioId,
+      module.config.divisionsId,
       module.config.subdivisionsId
     ],
     setUpCommands.bind(null, app, module)
@@ -41,8 +43,13 @@ exports.start = function startFteModule(app, module)
     ],
     function()
     {
+      var lockMasterEntries = lockEntries.bind(null, 'master');
+      var lockLeaderEntries = lockEntries.bind(null, 'leader');
+
+      app.broker.subscribe('shiftChanged', lockMasterEntries);
       app.broker.subscribe('shiftChanged', lockLeaderEntries);
 
+      lockMasterEntries();
       lockLeaderEntries();
     }
   );
@@ -101,33 +108,38 @@ exports.start = function startFteModule(app, module)
     };
   }
 
-  function lockLeaderEntries()
+  function lockEntries(type)
   {
-    var FteLeaderEntry = app[module.config.mongooseId].model('FteLeaderEntry');
+    var FteEntryModel =
+      app[module.config.mongooseId].model(type === 'master' ? 'FteMasterEntry': 'FteLeaderEntry');
     var currentShift = getCurrentShift();
     var condition = {
       locked: false,
-      date: {$ne: currentShift.date},
-      shift: {$ne: currentShift.no}
+      $or: [{date: {$ne: currentShift.date}}, {shift: {$ne: currentShift.no}}]
     };
 
-    FteLeaderEntry.find(condition, {tasks: 0}, function(err, fteLeaderEntries)
+    FteEntryModel.find(condition, {tasks: 0}, function(err, fteEntries)
     {
       if (err)
       {
-        return module.error("Failed to lock leader entries: %s", err.message);
+        return module.error("Failed to lock %s entries: %s", type, err.message);
       }
 
-      module.info("Locking %d leader entries...", fteLeaderEntries.length);
-
-      fteLeaderEntries.forEach(function(fteLeaderEntry)
+      if (!fteEntries.length)
       {
-        fteLeaderEntry.lock(null, function(err)
+        return;
+      }
+
+      module.info("Locking %d %s entries...", fteEntries.length, type);
+
+      fteEntries.forEach(function(fteEntry)
+      {
+        fteEntry.lock(null, function(err)
         {
           if (err)
           {
             module.error(
-              "Failed to lock leader entry (%s): %s", fteLeaderEntry.get('_id'), err.message
+              "Failed to lock %s entry (%s): %s", type, fteEntry.get('_id'), err.message
             );
           }
         });
