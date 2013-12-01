@@ -17,7 +17,7 @@ define([
 
     clientUrlRoot: '#fte/leader',
 
-    topicPrefix: 'fteLeaderEntries',
+    topicPrefix: 'fte.leader',
 
     privilegePrefix: 'FTE:LEADER',
 
