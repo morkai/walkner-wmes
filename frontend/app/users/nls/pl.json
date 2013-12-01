@@ -69,5 +69,11 @@
   "PRIVILEGE:USERS:VIEW": "Przeglądanie użytkowników",
   "PRIVILEGE:USERS:MANAGE": "Zarządzanie użytkownikami",
   "PRIVILEGE:DICTIONARIES:VIEW": "Przeglądanie słowników",
-  "PRIVILEGE:DICTIONARIES:MANAGE": "Zarządzanie słownikami"
+  "PRIVILEGE:DICTIONARIES:MANAGE": "Zarządzanie słownikami",
+  "PRIVILEGE:FTE:MASTER:VIEW": "FTE (mistrz): przeglądanie",
+  "PRIVILEGE:FTE:MASTER:MANAGE": "FTE (mistrz): zarządzanie",
+  "PRIVILEGE:FTE:MASTER:ALL": "FTE (mistrz): dostęp do wszystkich wydziałów",
+  "PRIVILEGE:FTE:LEADER:VIEW": "FTE (lider): przeglądanie",
+  "PRIVILEGE:FTE:LEADER:MANAGE": "FTE (lider): zarządzanie",
+  "PRIVILEGE:FTE:LEADER:ALL": "FTE (lider): dostęp do wszystkich wydziałów"
 }
