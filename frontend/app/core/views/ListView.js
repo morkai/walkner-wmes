@@ -106,13 +106,19 @@ define([
       var now = Date.now();
       var diff = now - this.lastRefreshAt;
 
-      if (now - this.lastRefreshAt < 1000)
+      if (diff < 1000)
       {
-        this.timers.refreshCollection = setTimeout(this.refreshCollection.bind(this), 1000 - diff);
+        if (!this.timers.refreshCollection)
+        {
+          this.timers.refreshCollection =
+            setTimeout(this.refreshCollection.bind(this), 1000 - diff);
+        }
       }
       else
       {
         this.lastRefreshAt = Date.now();
+
+        delete this.timers.refreshCollection;
 
         this.promised(this.collection.fetch({reset: true}));
       }
