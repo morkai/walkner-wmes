@@ -5,6 +5,8 @@ define([
   'app/broker',
   'app/socket',
   'app/viewport',
+  'app/data/divisions',
+  'app/data/subdivisions',
   'app/core/pages/ErrorPage'
 ],
 function(
@@ -14,6 +16,8 @@ function(
   broker,
   socket,
   viewport,
+  divisions,
+  subdivisions,
   ErrorPage
 ) {
   'use strict';
@@ -150,6 +154,26 @@ function(
         viewport.showPage(new ErrorPage({code: 401, req: req, referer: referer}));
       }
     };
+  };
+
+  user.getDivision = function()
+  {
+    if (user.data.orgUnitType !== 'division')
+    {
+      return null;
+    }
+
+    return divisions.get(user.data.orgUnitId) || null;
+  };
+
+  user.getSubdivision = function()
+  {
+    if (user.data.orgUnitType !== 'subdivision')
+    {
+      return null;
+    }
+
+    return subdivisions.get(user.data.orgUnitId) || null;
   };
 
   window.user = user;
