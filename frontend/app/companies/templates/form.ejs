@@ -11,6 +11,24 @@
         <label for="<%- idPrefix %>-name" class="control-label"><%- t('companies', 'PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required maxlength="100">
       </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="fteMasterMaster" value="true">
+          <%- t('companies', 'PROPERTY:fteMasterMaster') %>
+        </label>
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="fteMaster" value="true">
+          <%- t('companies', 'PROPERTY:fteMaster') %>
+        </label>
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="fteLeader" value="true">
+          <%- t('companies', 'PROPERTY:fteLeader') %>
+        </label>
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

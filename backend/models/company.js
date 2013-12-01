@@ -12,6 +12,18 @@ module.exports = function setupCompanyModel(app, mongoose)
     name: {
       type: String,
       trim: true
+    },
+    fteMaster: {
+      type: Boolean,
+      default: true
+    },
+    fteMasterMaster: {
+      type: Boolean,
+      default: true
+    },
+    fteLeader: {
+      type: Boolean,
+      default: true
     }
   }, {
     id: false
