@@ -301,7 +301,7 @@ define([
     this.$('li[data-privilege]').each(function()
     {
       var $li = navbarView.$(this);
-      var privilege = $li.attr('data-privilege');
+      var privilege = $li.attr('data-privilege').split(' ');
 
       $li[user.isAllowedTo(privilege) ? 'show' : 'hide']();
     });
