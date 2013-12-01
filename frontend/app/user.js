@@ -158,12 +158,27 @@ function(
 
   user.getDivision = function()
   {
-    if (user.data.orgUnitType !== 'division')
+    /*jshint -W015*/
+
+    var divisionId = null;
+
+    switch (user.data.orgUnitType)
     {
-      return null;
+      case 'division':
+        divisionId = user.data.orgUnitId;
+        break;
+
+      case 'subdivision':
+        var subdivision = subdivisions.get(user.data.orgUnitId);
+
+        if (subdivision)
+        {
+          divisionId = subdivision.get('division');
+        }
+        break;
     }
 
-    return divisions.get(user.data.orgUnitId) || null;
+    return divisions.get(divisionId) || null;
   };
 
   user.getSubdivision = function()
