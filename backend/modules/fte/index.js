@@ -13,8 +13,6 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startFteModule(app, module)
 {
-  // TODO: Lock entries on shift change
-
   module.getCurrentShift = getCurrentShift;
 
   app.onModuleReady(
@@ -35,6 +33,18 @@ exports.start = function startFteModule(app, module)
       module.config.subdivisionsId
     ],
     setUpCommands.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId
+    ],
+    function()
+    {
+      app.broker.subscribe('shiftChanged', lockLeaderEntries);
+
+      lockLeaderEntries();
+    }
   );
 
   setUpShiftChangeBroadcast();
@@ -89,5 +99,39 @@ exports.start = function startFteModule(app, module)
       date: date,
       no: no
     };
+  }
+
+  function lockLeaderEntries()
+  {
+    var FteLeaderEntry = app[module.config.mongooseId].model('FteLeaderEntry');
+    var currentShift = getCurrentShift();
+    var condition = {
+      locked: false,
+      date: {$ne: currentShift.date},
+      shift: {$ne: currentShift.no}
+    };
+
+    FteLeaderEntry.find(condition, {tasks: 0}, function(err, fteLeaderEntries)
+    {
+      if (err)
+      {
+        return module.error("Failed to lock leader entries: %s", err.message);
+      }
+
+      module.info("Locking %d leader entries...", fteLeaderEntries.length);
+
+      fteLeaderEntries.forEach(function(fteLeaderEntry)
+      {
+        fteLeaderEntry.lock(null, function(err)
+        {
+          if (err)
+          {
+            module.error(
+              "Failed to lock leader entry (%s): %s", fteLeaderEntry.get('_id'), err.message
+            );
+          }
+        });
+      });
+    });
   }
 };
