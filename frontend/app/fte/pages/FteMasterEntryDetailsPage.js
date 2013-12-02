@@ -1,7 +1,6 @@
 define([
   'app/i18n',
   'app/user',
-  'app/data/subdivisions',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../FteMasterEntry',
@@ -10,7 +9,6 @@ define([
 ], function(
   t,
   user,
-  subdivisions,
   bindLoadingMessage,
   View,
   FteMasterEntry,
@@ -44,14 +42,13 @@ define([
           href: this.model.genClientUrl('print')
         });
       }
-      else if (user.isAllowedTo('FTE:LEADER:MANAGE'))
+      else if (user.isAllowedTo('FTE:MASTER:MANAGE'))
       {
-        if (!user.isAllowedTo('FTE:LEADER:ALL'))
+        if (!user.isAllowedTo('FTE:MASTER:ALL'))
         {
           var userDivision = user.getDivision();
-          var subdivision = subdivisions.get(this.model.get('subdivision'));
 
-          if (userDivision && userDivision.get('_id') !== subdivision.get('division'))
+          if (userDivision && userDivision.get('_id') !== this.model.get('division'))
           {
             return actions;
           }
@@ -61,7 +58,7 @@ define([
           label: t.bound('fte', 'PAGE_ACTION:edit'),
           icon: 'edit',
           href: this.model.genClientUrl('edit'),
-          privileges: 'FTE:LEADER:MANAGE'
+          privileges: 'FTE:MASTER:MANAGE'
         });
       }
 
