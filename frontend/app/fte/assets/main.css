@@ -46,3 +46,22 @@
   font-weight: bold;
   border-bottom: 2px solid #000!important;
 }
+.fte-masterEntry,
+.fte-masterEntry th {
+  text-align: center;
+}
+.fte-masterEntry th:first-child,
+.fte-masterEntry td:first-child {
+  text-align: left;
+}
+.fte-masterEntry th {
+  border-bottom-width: 0!important;
+}
+.fte-masterEntry th:nth-child(1),
+.fte-masterEntry th:nth-child(2) {
+  border-top-width: 0;
+  border-bottom-width: 0;
+}
+.fte-masterEntry thead:nth-child(4) th {
+  border-bottom-width: 2px!important;
+}

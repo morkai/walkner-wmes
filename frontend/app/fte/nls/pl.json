@@ -3,11 +3,15 @@
   "BREADCRUMBS:leader:entryForm": "Przydzielanie zasobów",
   "BREADCRUMBS:leader:entryDetails": "Przydzielone zasoby",
   "BREADCRUMBS:leader:currentEntry": "Wybór działu",
+  "BREADCRUMBS:master:entryList": "FTE (mistrz)",
+  "BREADCRUMBS:master:entryForm": "Przydzielanie zasobów",
+  "BREADCRUMBS:master:entryDetails": "Przydzielone zasoby",
+  "BREADCRUMBS:master:currentEntry": "Wybór wydziału",
 
   "MSG:LOADING_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
 
-  "PAGE_ACTIONS:leader:currentEntry": "Przydzielaj zasoby",
+  "PAGE_ACTION:currentEntry": "Przydzielaj zasoby",
   "PAGE_ACTION:print": "Pokaż wersję do druku",
   "PAGE_ACTION:lock": "Zamknij wpis",
   "PAGE_ACTION:edit": "Edytuj wpis",
@@ -25,6 +29,7 @@
   "leaderEntry:column:companyTotal": "Suma",
   "leaderEntry:property:shift": "Zmiana:",
   "leaderEntry:property:date": "Data:",
+  "leaderEntry:msg:lockFailure": "Nie udało się zamknąć wpisu :(",
 
   "leaderEntryList:date": "Data",
   "leaderEntryList:shift": "Zmiana",
@@ -37,7 +42,25 @@
   "currentLeaderEntry:submit": "Przydzielaj zasoby",
   "currentLeaderEntry:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem :(",
   "currentLeaderEntry:msg:failure": "Nie udało się utworzyć wpisu :(",
-  "currentLeaderEntry:msg:lockFailure": "Nie udało się zamknąć wpisu :(",
+
+  "masterEntry:column:task": "Przepływ/<em>Zadanie produkcyjne</em>",
+  "masterEntry:column:noPlan": "Brak planu?",
+  "masterEntry:column:total": "Suma",
+  "masterEntry:property:shift": "Zmiana:",
+  "masterEntry:property:date": "Data:",
+  "masterEntry:msg:lockFailure": "Nie udało się zamknąć wpisu :(",
+
+  "masterEntryList:date": "Data",
+  "masterEntryList:shift": "Zmiana",
+
+  "currentMasterEntry:panel:title": "Formularz wyboru wydziału do przydzielania zasobów",
+  "currentMasterEntry:panel:warning": "<p>Jeżeli wybrany wydział nie będzie miał wpisu dla aktualnej zmiany, zostanie utworzony nowy wpis.</p>",
+  "currentMasterEntry:submit": "Przydzielaj zasoby",
+  "currentMasterEntry:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem :(",
+  "currentMasterEntry:msg:failure": "Nie udało się utworzyć wpisu :(",
+
+  "masterEntry:print:hdLeft": "Zasoby przydzielone do {division}",
+  "masterEntry:print:hdRight": "{date}, {shift} zmiana",
 
   "shift:1": "I",
   "shift:2": "II",

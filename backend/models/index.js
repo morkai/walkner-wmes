@@ -21,6 +21,7 @@ module.exports = [
   'order',
   'emptyOrder',
 
+  'fteMasterEntry',
   'fteLeaderEntry'
 
 ];

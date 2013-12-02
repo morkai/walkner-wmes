@@ -75,7 +75,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     id: false
   });
 
-  fteLeaderEntrySchema.statics.TOPIC_PREFIX = 'fteLeaderEntries';
+  fteLeaderEntrySchema.statics.TOPIC_PREFIX = 'fte.leader';
 
   fteLeaderEntrySchema.statics.createForShift = function(shiftId, user, done)
   {
@@ -83,7 +83,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       function queryCompaniesStep()
       {
         mongoose.model('Company')
-          .find({}, {name: 1})
+          .find({fteLeader: true}, {name: 1})
           .sort({name: 1})
           .lean()
           .exec(this.next());
@@ -163,11 +163,6 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
       fteLeaderEntry.lock(user, done);
     });
-  };
-
-  fteLeaderEntrySchema.methods.isLocked = function()
-  {
-    return Date.now() > this.date.getTime() + 6 * 3600 * 1000 + (this.shift * 8 * 3600 * 1000) - 1;
   };
 
   fteLeaderEntrySchema.methods.lock = function(user, done)

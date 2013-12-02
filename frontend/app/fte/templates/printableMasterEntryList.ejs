@@ -1,0 +1,59 @@
+<table class="table table-bordered table-condensed fte-masterEntry fte-masterEntry-print">
+  <thead>
+  <tr>
+    <th><%- t('fte', 'masterEntry:column:task') %>
+    <th><%- t('fte', 'masterEntry:column:noPlan') %>
+    <th colspan="2"><%- t('fte', 'masterEntry:column:total') %></th>
+    <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+    <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- t('users', 'PROD_FUNCTION:' + prodFunctionId) %></th>
+    <% }) %>
+  <tr>
+    <th>
+    <th>
+    <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+    <th><%- totalByCompany[companyId].name %>
+    <% }) %>
+    <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+    <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+    <th><%= totalByCompany[companyId].name %>
+    <% }) %>
+    <% }) %>
+  </thead>
+  <tbody>
+  <tr>
+    <th>
+    <th>
+    <th colspan="<%- companyCount %>"><%- total %>
+    <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+    <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- totalByProdFunction[prodFunctionId].total %>
+    <% }) %>
+  <tr>
+    <th>
+    <th>
+    <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+    <th><%- totalByCompany[companyId].total %>
+    <% }) %>
+    <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+    <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+    <th><%- totalByProdFunction[prodFunctionId].companies[companyId] %>
+    <% }) %>
+    <% }) %>
+  <% tasks.forEach(function(task, taskIndex) { %>
+  <tr>
+    <td>
+      <% if (task.type === 'prodFlow') { %>
+      <%= task.name %>
+      <% } else { %>
+      <em><%= task.name %></em>
+      <% } %>
+    <td><i class="fa fa-<%- task.noPlan ? 'check' : 'times' %>"></i>
+    <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
+    <td><%- task.totalByCompany[companyId] %></td>
+    <% }) %>
+    <% task.functions.forEach(function(prodFunction, functionIndex) { %>
+    <% prodFunction.companies.forEach(function(company, companyIndex) { %>
+    <td><%- company.count %>
+    <% }) %>
+    <% }) %>
+  <% }) %>
+</table>

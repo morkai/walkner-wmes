@@ -8,10 +8,16 @@ module.exports = function setUpFteRoutes(app, fteModule)
   var express = app[fteModule.config.expressId];
   var auth = app[fteModule.config.userId].auth;
   var mongoose = app[fteModule.config.mongooseId];
+  var subdivisionsModule = app[fteModule.config.subdivisionsId];
+  var FteMasterEntry = mongoose.model('FteMasterEntry');
   var FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
   var canViewLeader = auth('FTE:LEADER:VIEW');
-  var canManageLeader = auth('FTE:LEADER:MANAGE');
+  var canViewMaster = auth('FTE:MASTER:VIEW');
+
+  express.get('/fte/master', canViewMaster, crud.browseRoute.bind(null, app, FteMasterEntry));
+
+  express.get('/fte/master/:id', canViewMaster, crud.readRoute.bind(null, app, FteMasterEntry));
 
   express.get(
     '/fte/leader', canViewLeader, limitToDivision, crud.browseRoute.bind(null, app, FteLeaderEntry)
@@ -40,7 +46,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
     var subdivisions = [];
 
-    app[fteModule.config.subdivisionsId].models.forEach(function(subdivisionModel)
+    subdivisionsModule.models.forEach(function(subdivisionModel)
     {
       if (subdivisionModel.get('division') === divisionTerm.args[1])
       {

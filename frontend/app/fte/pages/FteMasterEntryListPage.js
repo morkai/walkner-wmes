@@ -4,8 +4,8 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/View',
-  '../FteLeaderEntryCollection',
-  '../views/FteLeaderEntryListView',
+  '../FteMasterEntryCollection',
+  '../views/FteMasterEntryListView',
   '../views/FteEntryFilterView',
   'app/fte/templates/listPage',
   'i18n!app/nls/emptyOrders'
@@ -15,8 +15,8 @@ define([
   bindLoadingMessage,
   pageActions,
   View,
-  FteLeaderEntryCollection,
-  FteLeaderEntryListView,
+  FteMasterEntryCollection,
+  FteMasterEntryListView,
   FteEntryFilterView,
   listPageTemplate
 ) {
@@ -28,17 +28,17 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'fteLeaderEntryList',
+    pageId: 'fteMasterEntryList',
 
     breadcrumbs: [
-      t.bound('fte', 'BREADCRUMBS:leader:entryList')
+      t.bound('fte', 'BREADCRUMBS:master:entryList')
     ],
 
     actions: [{
       label: t('fte', 'PAGE_ACTION:currentEntry'),
-      href: '#fte/leader/current',
+      href: '#fte/master/current',
       icon: 'edit',
-      privileges: 'FTE:LEADER:MANAGE'
+      privileges: 'FTE:MASTER:MANAGE'
     }],
 
     initialize: function()
@@ -53,19 +53,20 @@ define([
     defineModels: function()
     {
       this.collection = bindLoadingMessage(
-        new FteLeaderEntryCollection(null, {rqlQuery: this.options.rql}), this
+        new FteMasterEntryCollection(null, {rqlQuery: this.options.rql}), this
       );
     },
 
     defineViews: function()
     {
       this.filterView = new FteEntryFilterView({
+        divisionOnly: true,
         model: {
           rqlQuery: this.collection.rqlQuery
         }
       });
 
-      this.listView = new FteLeaderEntryListView({collection: this.collection});
+      this.listView = new FteMasterEntryListView({collection: this.collection});
 
       this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },

@@ -46,7 +46,7 @@ define([
       this.idPrefix = _.uniqueId('fteFilter');
 
       this.orgUnitDropdownsView = new OrgUnitDropdownsView({
-        orgUnit: ORG_UNIT.SUBDIVISION,
+        orgUnit: this.options.divisionOnly ? ORG_UNIT.DIVISION : ORG_UNIT.SUBDIVISION,
         allowClear: true,
         noGrid: true
       });
@@ -145,11 +145,11 @@ define([
       var dateMoment = moment(this.$id('date').val());
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
 
-      if (subdivision !== '')
+      if (!_.isEmpty(subdivision))
       {
         selector.push({name: 'eq', args: ['subdivision', subdivision]});
       }
-      else if (division !== '')
+      else if (!_.isEmpty(division))
       {
         selector.push({name: 'eq', args: ['division', division]});
       }

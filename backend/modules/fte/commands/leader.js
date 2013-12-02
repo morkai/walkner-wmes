@@ -2,16 +2,21 @@
 
 var lodash = require('lodash');
 
-module.exports = function setUpFteCommands(app, fteModule)
+module.exports = function setUpFteLeaderCommands(app, fteModule)
 {
-  var sio = app[fteModule.config.sioId];
   var mongoose = app[fteModule.config.mongooseId];
   var subdivisions = app[fteModule.config.subdivisionsId];
   var FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
-  sio.sockets.on('connection', function(socket)
+  function canManageLeaderEntry(user)
   {
-    socket.on('fte.leader.getCurrentEntryId', function(subdivisionId, reply)
+    return user.super
+      || (Array.isArray(user.privileges)
+        && user.privileges.indexOf('FTE:LEADER:MANAGE') !== -1);
+  }
+
+  return {
+    getCurrentEntryId: function(socket, subdivisionId, reply)
     {
       if (!lodash.isFunction(reply))
       {
@@ -36,55 +41,50 @@ module.exports = function setUpFteCommands(app, fteModule)
       }
 
       var currentShift = fteModule.getCurrentShift();
+      var condition = {
+        subdivision: subdivisionId,
+        date: currentShift.date,
+        shift: currentShift.no
+      };
+      var fields = {_id: 1, locked: 1};
 
-      FteLeaderEntry
-        .findOne({
-          subdivision: subdivisionId,
-          date: currentShift.date,
-          shift: currentShift.no
-        }, {
-          _id: 1,
-          locked: 1
-        })
-        .lean()
-        .exec(function(err, fteLeaderEntry)
+      FteLeaderEntry.findOne(condition, fields).lean().exec(function(err, fteLeaderEntry)
+      {
+        if (err)
         {
-          if (err)
+          return reply(err);
+        }
+
+        if (fteLeaderEntry !== null)
+        {
+          return reply(
+            fteLeaderEntry.locked ? new Error('LOCKED') : null,
+            fteLeaderEntry._id.toString()
+          );
+        }
+
+        currentShift.subdivision = subdivisionId;
+
+        FteLeaderEntry.createForShift(currentShift, user, function(err, fteLeaderEntry)
+        {
+          if (fteLeaderEntry)
           {
-            return reply(err);
+            app.broker.publish('fte.leader.created', {
+              user: user,
+              model: {
+                _id: fteLeaderEntry.get('_id'),
+                subdivision: currentShift.subdivision,
+                date: currentShift.date,
+                shift: currentShift.no
+              }
+            });
           }
 
-          if (fteLeaderEntry !== null)
-          {
-            return reply(
-              fteLeaderEntry.locked ? new Error('LOCKED') : null,
-              fteLeaderEntry._id.toString()
-            );
-          }
-
-          currentShift.subdivision = subdivisionId;
-
-          FteLeaderEntry.createForShift(currentShift, user, function(err, fteLeaderEntry)
-          {
-            if (fteLeaderEntry)
-            {
-              app.broker.publish('fte.leader.created', {
-                user: user,
-                model: {
-                  _id: fteLeaderEntry.get('_id'),
-                  subdivision: currentShift.subdivision,
-                  date: currentShift.date,
-                  shift: currentShift.no
-                }
-              });
-            }
-
-            return reply(err, fteLeaderEntry ? fteLeaderEntry._id.toString() : null);
-          });
+          return reply(err, fteLeaderEntry ? fteLeaderEntry._id.toString() : null);
         });
-    });
-
-    socket.on('fte.leader.updateCount', function(data, reply)
+      });
+    },
+    updateCount: function(socket, data, reply)
     {
       if (!lodash.isFunction(reply))
       {
@@ -151,9 +151,8 @@ module.exports = function setUpFteCommands(app, fteModule)
           app.pubsub.publish('fte.leader.updated.' + data._id, data);
         });
       });
-    });
-
-    socket.on('fte.leader.lockEntry', function(fteLeaderEntryId, reply)
+    },
+    lockEntry: function(socket, fteLeaderEntryId, reply)
     {
       if (!lodash.isFunction(reply))
       {
@@ -178,12 +177,6 @@ module.exports = function setUpFteCommands(app, fteModule)
 
         app.pubsub.publish('fte.leader.locked.' + fteLeaderEntryId);
       });
-    });
-  });
-
-  function canManageLeaderEntry(user)
-  {
-    return user.super
-      || (Array.isArray(user.privileges) && user.privileges.indexOf('FTE:LEADER:MANAGE') !== -1);
-  }
+    }
+  };
 };

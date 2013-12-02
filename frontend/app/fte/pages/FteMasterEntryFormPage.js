@@ -4,8 +4,8 @@ define([
   'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
-  '../FteLeaderEntry',
-  '../views/FteLeaderEntryFormView',
+  '../FteMasterEntry',
+  '../views/FteMasterEntryFormView',
   'i18n!app/nls/fte'
 ], function(
   $,
@@ -13,8 +13,8 @@ define([
   viewport,
   bindLoadingMessage,
   View,
-  FteLeaderEntry,
-  FteLeaderEntryFormView
+  FteMasterEntry,
+  FteMasterEntryFormView
 ) {
   'use strict';
 
@@ -22,14 +22,14 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'fteLeaderEntryForm',
+    pageId: 'fteMasterEntryForm',
 
     breadcrumbs: [
       {
-        label: t.bound('fte', 'BREADCRUMBS:leader:entryList'),
-        href: '#fte/leader'
+        label: t.bound('fte', 'BREADCRUMBS:master:entryList'),
+        href: '#fte/master'
       },
-      t.bound('fte', 'BREADCRUMBS:leader:entryForm')
+      t.bound('fte', 'BREADCRUMBS:master:entryForm')
     ],
 
     actions: function()
@@ -51,9 +51,9 @@ define([
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(new FteLeaderEntry({_id: this.options.modelId}), this);
+      this.model = bindLoadingMessage(new FteMasterEntry({_id: this.options.modelId}), this);
 
-      this.view = new FteLeaderEntryFormView({model: this.model});
+      this.view = new FteMasterEntryFormView({model: this.model});
     },
 
     load: function(when)
@@ -70,7 +70,7 @@ define([
 
       $action.addClass('disabled');
 
-      this.socket.emit('fte.leader.lockEntry', this.model.id, function(err)
+      this.socket.emit('fte.master.lockEntry', this.model.id, function(err)
       {
         if (err)
         {
@@ -81,7 +81,7 @@ define([
           return viewport.msg.show({
             type: 'error',
             time: 5000,
-            text: t('fte', 'leaderEntry:msg:lockFailure')
+            text: t('fte', 'masterEntry:msg:lockFailure')
           });
         }
       });
