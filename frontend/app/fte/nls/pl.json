@@ -49,6 +49,7 @@
   "masterEntry:tasksPanel:title:editable": "Formularz przydzielania zasobów",
   "masterEntry:absencePanel:title": "Absencja personalna",
   "masterEntry:absencePanel:title:editable": "Formularz absencji personalnej",
+  "masterEntry:absence:searchPlaceholder": "Szukaj użytkowników po nazwisku lub nr kadrowym...",
   "masterEntry:column:task": "Przepływ/<em>Zadanie produkcyjne</em>",
   "masterEntry:column:noPlan": "Brak planu?",
   "masterEntry:column:total": "Suma",

@@ -1,0 +1,9 @@
+<tr>
+  <td><%= absentUser.personellId %>
+  <td><%= absentUser.name %>
+  <% if (editable) { %>
+  <td>
+    <button class="btn btn-danger fte-masterEntry-absence-remove" data-userId="<%- absentUser.id %>">
+      <i class="fa fa-times"></i>
+    </button>
+  <% } %>

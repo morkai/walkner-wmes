@@ -36,6 +36,14 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     _id: false
   });
 
+  var fteMasterAbsentUserSchema = mongoose.Schema({
+    id: mongoose.Schema.Types.ObjectId,
+    name: String,
+    personellId: String
+  }, {
+    _id: false
+  });
+
   var fteMasterEntrySchema = mongoose.Schema({
     division: {
       type: String,
@@ -82,7 +90,8 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       type: String,
       default: null
     },
-    tasks: [fteMasterTaskSchema]
+    tasks: [fteMasterTaskSchema],
+    absentUsers: [fteMasterAbsentUserSchema]
   }, {
     id: false
   });
@@ -217,6 +226,46 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
       fteMasterEntry.lock(user, done);
     });
+  };
+
+  fteMasterEntrySchema.statics.addAbsentUser = function(_id, absentUser, user, done)
+  {
+    var update = {
+      $set: {
+        updatedAt: new Date()
+      },
+      $push: {
+        absentUsers: absentUser
+      }
+    };
+
+    if (user)
+    {
+      update.$set.updater = user._id;
+      update.$set.updaterLabel = user.login;
+    }
+
+    this.update({_id: _id}, update, done);
+  };
+
+  fteMasterEntrySchema.statics.removeAbsentUser = function(_id, absentUserId, user, done)
+  {
+    var update = {
+      $set: {
+        updatedAt: new Date()
+      },
+      $pull: {
+        absentUsers: {id: absentUserId}
+      }
+    };
+
+    if (user)
+    {
+      update.$set.updater = user._id;
+      update.$set.updaterLabel = user.login;
+    }
+
+    this.update({_id: _id}, update, done);
   };
 
   fteMasterEntrySchema.methods.lock = function(user, done)

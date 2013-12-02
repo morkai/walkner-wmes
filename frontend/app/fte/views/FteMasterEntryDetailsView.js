@@ -2,11 +2,13 @@ define([
   'underscore',
   'app/core/View',
   'app/fte/templates/masterEntry',
+  'app/fte/templates/absentUserRow',
   'i18n!app/nls/fte'
 ], function(
   _,
   View,
-  masterEntryTemplate
+  masterEntryTemplate,
+  absentUserRowTemplate
 ) {
   'use strict';
 
@@ -35,12 +37,27 @@ define([
 
     serialize: function()
     {
-      return _.extend(this.model.serializeWithTotals(), {editable: false});
+      return _.extend(this.model.serializeWithTotals(), {
+        editable: false,
+        renderAbsentUserRow: absentUserRowTemplate
+      });
     },
 
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change', this.render);
+
+      var $entries = this.$('.fte-masterEntry-absence-entries');
+      var $noEntries = this.$('.fte-masterEntry-absence-noEntries');
+
+      if ($entries.children().length)
+      {
+        $noEntries.hide();
+      }
+      else
+      {
+        $entries.hide();
+      }
     },
 
     refreshModel: function()

@@ -35,7 +35,8 @@ define([
       creatorLabel: null,
       updatedAt: null,
       updaterId: null,
-      updaterLabel: null
+      updaterLabel: null,
+      absentUsers: null
     },
 
     serializeWithTotals: function()
@@ -80,7 +81,11 @@ define([
         totalByProdFunction: totalByProdFunction,
         total: total,
         tasks: tasks,
-        locked: !!this.get('locked')
+        locked: !!this.get('locked'),
+        absentUsers: (this.get('absentUsers') || []).filter(function(absentUser)
+        {
+          return !!absentUser;
+        })
       };
     },
 

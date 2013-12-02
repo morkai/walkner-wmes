@@ -75,3 +75,22 @@
 .fte-masterEntry tr:hover td.even {
   background-color: #efefef;
 }
+.fte-masterEntry-absence-userFinder-container {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #dddddd;
+}
+.fte-masterEntry-print {
+  border-left-width: 0;
+}
+.fte-masterEntry-print-absence-separator td,
+.fte-masterEntry-print-absence-header th {
+  border: 0!important;
+}
+.fte-masterEntry-print-absence-columns th {
+  border-top: 1px solid #000!important;
+  text-align: left;
+}
+.fte-masterEntry-print-absence-row td {
+  text-align: left;
+}

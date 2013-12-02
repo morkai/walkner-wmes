@@ -32,7 +32,7 @@
         <th class="even">
         <th colspan="<%- companyCount %>" class="fte-masterEntry-total"><%- total %>
         <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-        <th class="<%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" class="fte-masterEntry-total-prodFunction" data-functionId="<%- prodFunctionId %>"><%- totalByProdFunction[prodFunctionId].total %>
+        <th class="fte-masterEntry-total-prodFunction <%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" class="fte-masterEntry-total-prodFunction" data-functionId="<%- prodFunctionId %>"><%- totalByProdFunction[prodFunctionId].total %>
         <% }) %>
       </tr>
       </thead>
@@ -108,6 +108,32 @@
       </tr>
       <% }) %>
       </tbody>
+    </table>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- t('fte', 'masterEntry:absencePanel:title' + (editable ? ':editable': '')) %></div>
+    <% if (editable) { %>
+    <div class="fte-masterEntry-absence-userFinder-container">
+      <input class="fte-masterEntry-absence-userFinder" type="text" data-placeholder="<%- t('fte', 'masterEntry:absence:searchPlaceholder') %>">
+    </div>
+    <% } %>
+    <table class="table table-bordered table-condensed table-hover fte-masterEntry-absence">
+      <thead>
+      <tr>
+        <th><%- t('users', 'PROPERTY:personellId') %>
+        <th><%- t('users', 'PROPERTY:name') %>
+        <% if (editable) { %>
+        <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+        <% } %>
+      </tr>
+      </thead>
+      <tbody class="fte-masterEntry-absence-noEntries">
+      <tr>
+        <td colspan="3"><%- t('core', 'LIST:NO_DATA') %>
+      <tbody class="fte-masterEntry-absence-entries">
+      <% absentUsers.forEach(function(absentUser) { %>
+      <%- renderAbsentUserRow({absentUser: absentUser, editable: editable}) %>
+      <% }) %>
     </table>
   </div>
 </div>

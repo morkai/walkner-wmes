@@ -1,18 +1,22 @@
 define([
   'underscore',
+  'jquery',
   'moment',
   'app/i18n',
   'app/user',
   'app/core/View',
   'app/fte/templates/masterEntry',
+  'app/fte/templates/absentUserRow',
   'i18n!app/nls/fte'
 ], function(
   _,
+  $,
   moment,
   t,
   user,
   View,
-  masterEntryTemplate
+  masterEntryTemplate,
+  absentUserRowTemplate
 ) {
   'use strict';
 
@@ -32,7 +36,8 @@ define([
         {
           this.$(e.target).find('.fte-masterEntry-noPlan').click();
         }
-      }
+      },
+      'click .fte-masterEntry-absence-remove': 'removeAbsentUser'
     },
 
     initialize: function()
@@ -63,11 +68,106 @@ define([
           trigger: true
         });
       }
+
+      this.setUpUserFinder();
     },
 
     serialize: function()
     {
-      return _.extend(this.model.serializeWithTotals(), {editable: true});
+      return _.extend(this.model.serializeWithTotals(), {
+        editable: true,
+        renderAbsentUserRow: absentUserRowTemplate
+      });
+    },
+
+    setUpUserFinder: function()
+    {
+      var $userFinder = this.$('.fte-masterEntry-absence-userFinder');
+      var $entries = this.$('.fte-masterEntry-absence-entries');
+      var $noEntries = this.$('.fte-masterEntry-absence-noEntries');
+
+      if ($entries.children().length)
+      {
+        $noEntries.hide();
+      }
+      else
+      {
+        $entries.hide();
+      }
+
+      $userFinder.select2({
+        allowClear: true,
+        minimumInputLength: 3,
+        ajax: {
+          cache: true,
+          quietMillis: 500,
+          url: function(term)
+          {
+            term = term.trim();
+
+            var property = /^[0-9]+$/.test(term) ? 'personellId' : 'lastName';
+
+            term = encodeURIComponent('^' + term);
+
+            return '/users'
+              + '?select(personellId,lastName,firstName)'
+              + '&sort(lastName)'
+              + '&limit(20)&regex(' + property + ',' + term + ',i)';
+          },
+          results: function(data)
+          {
+            return {
+              results: (data.collection || [])
+                .filter(function(user)
+                {
+                  var selector = '.fte-masterEntry-absence-remove[data-userId="' + user._id + '"]';
+
+                  return $entries.find(selector).length === 0;
+                })
+                .map(function(user)
+                {
+                  var name = user.lastName && user.firstName
+                    ? (user.firstName + ' ' + user.lastName)
+                    : '-';
+                  var personellId = user.personellId ? user.personellId : '-';
+
+                  return {
+                    id: user._id,
+                    text: name + ' (' + personellId + ')',
+                    name: name,
+                    personellId: personellId
+                  };
+                })
+            };
+          }
+        }
+      });
+
+      var view = this;
+
+      $userFinder.on('change', function(e)
+      {
+        $userFinder.select2('val', '');
+
+        var data = {
+          type: 'addAbsentUser',
+          socketId: view.socket.getId(),
+          _id: view.model.id,
+          user: e.added
+        };
+
+        view.socket.emit('fte.master.addAbsentUser', data, function(err)
+        {
+          if (err)
+          {
+            console.error(err);
+          }
+          else
+          {
+            view.handleAddAbsentUserChange(data);
+          }
+        });
+      });
     },
 
     updatePlan: function(e)
@@ -151,7 +251,7 @@ define([
       this.recount(countEl, data.taskIndex, data.functionIndex, data.companyIndex);
     },
 
-    recount: function(countEl, taskIndex, functionIndex, companyIndex)
+    recount: function(countEl)
     {
       var countSelector;
       var totalSelector;
@@ -197,20 +297,96 @@ define([
       this.$(totalSelector).text(total);
     },
 
+    removeAbsentUser: function(e)
+    {
+      var $button = this.$(e.target).closest('button').attr('disabled', true);
+
+      var data = {
+        type: 'removeAbsentUser',
+        socketId: this.socket.getId(),
+        _id: this.model.id,
+        userId: $button.attr('data-userId')
+      };
+
+      var view = this;
+
+      this.socket.emit('fte.master.removeAbsentUser', data, function(err)
+      {
+        if (err)
+        {
+          console.error(err);
+
+          $button.attr('disabled', false);
+        }
+        else
+        {
+          view.handleRemoveAbsentUserChange(data);
+        }
+      });
+    },
+
     onRemoteEdit: function(message)
     {
+      /*jshint -W015*/
+
       if (message.socketId === this.socket.getId())
       {
         return;
       }
 
-      if (message.type === 'plan')
+      switch (message.type)
       {
-        this.handlePlanChange(message);
+        case 'plan':
+          return this.handlePlanChange(message);
+
+        case 'count':
+          return this.handleCountChange(message);
+
+        case 'addAbsentUser':
+          return this.handleAddAbsentUserChange(message);
+
+        case 'removeAbsentUser':
+          return this.handleRemoveAbsentUserChange(message);
       }
-      else
+    },
+
+    handleAddAbsentUserChange: function(message)
+    {
+      var absentUser = message.user;
+
+      if (this.$('.fte-masterEntry-absence-remove[data-userId="' + absentUser.id + '"]').length)
       {
-        this.handleCountChange(message);
+        return;
+      }
+
+      $(absentUserRowTemplate({absentUser: absentUser, editable: true}))
+        .hide()
+        .appendTo(this.$('.fte-masterEntry-absence-entries').show())
+        .fadeIn('fast');
+
+      this.$('.fte-masterEntry-absence-noEntries').hide();
+    },
+
+    handleRemoveAbsentUserChange: function(message)
+    {
+      var $button = this.$('.fte-masterEntry-absence-remove[data-userId="' + message.userId + '"]');
+
+      if ($button.length)
+      {
+        var view = this;
+
+        $button.closest('tr').fadeOut(function()
+        {
+          $(this).remove();
+
+          var $entries = view.$('.fte-masterEntry-absence-entries');
+
+          if (!$entries.length)
+          {
+            $entries.hide();
+            view.$('.fte-masterEntry-absence-noEntries').show();
+          }
+        });
       }
     },
 

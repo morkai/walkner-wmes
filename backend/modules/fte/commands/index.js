@@ -11,6 +11,9 @@ module.exports = function setUpFteCommands(app, fteModule)
     socket.on('fte.master.updateCount', masterCommands.updateCount.bind(null, socket));
     socket.on('fte.master.updatePlan', masterCommands.updatePlan.bind(null, socket));
     socket.on('fte.master.lockEntry', masterCommands.lockEntry.bind(null, socket));
+    socket.on('fte.master.addAbsentUser', masterCommands.addAbsentUser.bind(null, socket));
+    socket.on('fte.master.removeAbsentUser', masterCommands.removeAbsentUser.bind(null, socket));
+
     socket.on('fte.leader.getCurrentEntryId', leaderCommands.getCurrentEntryId.bind(null, socket));
     socket.on('fte.leader.updateCount', leaderCommands.updateCount.bind(null, socket));
     socket.on('fte.leader.lockEntry', leaderCommands.lockEntry.bind(null, socket));

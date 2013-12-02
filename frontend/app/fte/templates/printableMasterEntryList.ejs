@@ -56,4 +56,16 @@
     <% }) %>
     <% }) %>
   <% }) %>
+  <tr class="fte-masterEntry-print-absence-separator">
+    <td colspan="999">&nbsp;
+  <tr class="fte-masterEntry-print-absence-header">
+    <th colspan="999">Absencja personalna
+  <tr class="fte-masterEntry-print-absence-columns">
+    <th><%- t('users', 'PROPERTY:personellId') %>
+    <th colspan="999"><%- t('users', 'PROPERTY:name') %>
+  <% absentUsers.forEach(function(absentUser) { %>
+  <tr class="fte-masterEntry-print-absence-row">
+    <td><%- absentUser.personellId %>
+    <td colspan="999"><%- absentUser.name %>
+  <% }) %>
 </table>

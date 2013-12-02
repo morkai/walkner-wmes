@@ -249,6 +249,73 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
         app.pubsub.publish('fte.master.locked.' + fteMasterEntryId);
       });
+    },
+    addAbsentUser: function(socket, data, reply)
+    {
+      if (!lodash.isFunction(reply))
+      {
+        reply = function() {};
+      }
+
+      if (!lodash.isString(data._id)
+        || !lodash.isObject(data.user)
+        || !lodash.isString(data.user.id)
+        || !lodash.isString(data.user.name)
+        || !lodash.isString(data.user.personellId))
+      {
+        return reply(new Error('INVALID_INPUT'));
+      }
+
+      var user = socket.handshake.user;
+
+      if (!canManageMasterEntry(user))
+      {
+        return reply(new Error('AUTH'));
+      }
+
+      FteMasterEntry.addAbsentUser(data._id, data.user, user, function(err)
+      {
+        if (err)
+        {
+          return reply(err);
+        }
+
+        reply();
+
+        app.pubsub.publish('fte.master.updated.' + data._id, data);
+      });
+    },
+    removeAbsentUser: function(socket, data, reply)
+    {
+      if (!lodash.isFunction(reply))
+      {
+        reply = function() {};
+      }
+
+      if (!lodash.isString(data._id)
+        || !lodash.isString(data.userId))
+      {
+        return reply(new Error('INVALID_INPUT'));
+      }
+
+      var user = socket.handshake.user;
+
+      if (!canManageMasterEntry(user))
+      {
+        return reply(new Error('AUTH'));
+      }
+
+      FteMasterEntry.removeAbsentUser(data._id, data.userId, user, function(err)
+      {
+        if (err)
+        {
+          return reply(err);
+        }
+
+        reply();
+
+        app.pubsub.publish('fte.master.updated.' + data._id, data);
+      });
     }
   };
 };
