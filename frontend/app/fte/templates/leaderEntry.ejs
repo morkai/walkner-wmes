@@ -13,30 +13,28 @@
       <span class="fte-property-value"><%- t('fte', 'shift:' + shift) %></span>
     </div>
   </div>
-  <table class="table table-bordered table-condensed table-hover fte-leaderEntry">
-    <thead>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- t('fte', 'leaderEntry:panel:title') %></div>
+    <table class="table table-bordered table-condensed table-hover fte-leaderEntry">
+      <thead>
       <tr>
-        <th><%- t('fte', 'leaderEntry:column:task') %></th>
-        <th class="fte-leaderEntry-total-overall"><%- t('fte', 'leaderEntry:column:taskTotal') %></th>
+        <th><%- t('fte', 'leaderEntry:column:task') %>
+        <th class="fte-leaderEntry-total-overall"><%- t('fte', 'leaderEntry:column:taskTotal') %>
         <% companies.forEach(function(company) { %>
-        <th class="fte-leaderEntry-total-company"><%= company.name %></th>
+        <th class="fte-leaderEntry-total-company"><%= company.name %>
         <% }) %>
-      </tr>
-    </thead>
-    <thead>
+      <thead>
       <tr>
-        <th><%- t('fte', 'leaderEntry:column:companyTotal') %></th>
-        <td class="fte-leaderEntry-total-overall"><%- total %></td>
+        <th><%- t('fte', 'leaderEntry:column:companyTotal') %>
+        <td class="fte-leaderEntry-total-overall"><%- total %>
         <% companies.forEach(function(company, companyIndex) { %>
-        <td class="fte-leaderEntry-total-company" data-company="<%= companyIndex %>"><%- company.total %></td>
+        <td class="fte-leaderEntry-total-company" data-company="<%= companyIndex %>"><%- company.total %>
         <% }) %>
-      </tr>
-    </thead>
-    <tbody>
+      <tbody>
       <% tasks.forEach(function(task, taskIndex) { %>
       <tr>
-        <td><%= task.name %></td>
-        <td class="fte-leaderEntry-total-task"><%- task.total %></td>
+        <td><%= task.name %>
+        <td class="fte-leaderEntry-total-task"><%- task.total %>
         <% task.companies.forEach(function(company, companyIndex) { %>
         <td <%- editable ? '' : 'class="fte-leaderEntry-count"' %>>
           <% if (editable) { %>
@@ -52,10 +50,8 @@
           <% } else { %>
           <%- company.count %>
           <% } %>
-        </td>
         <% }) %>
-      </tr>
       <% }) %>
-    </tbody>
-  </table>
+    </table>
+  </div>
 </div>

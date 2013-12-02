@@ -13,99 +13,102 @@
       <span class="fte-property-value"><%- t('fte', 'shift:' + shift) %></span>
     </div>
   </div>
-  <table class="table table-bordered table-condensed table-hover fte-masterEntry">
-    <thead>
-    <tr>
-      <th><%- t('fte', 'masterEntry:column:task') %>
-      <th><%- t('fte', 'masterEntry:column:noPlan') %>
-      <th colspan="2"><%- t('fte', 'masterEntry:column:total') %></th>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-      <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- t('users', 'PROD_FUNCTION:' + prodFunctionId) %></th>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- t('fte', 'masterEntry:tasksPanel:title') %></div>
+    <table class="table table-bordered table-condensed table-hover fte-masterEntry">
+      <thead>
+      <tr>
+        <th><%- t('fte', 'masterEntry:column:task') %>
+        <th><%- t('fte', 'masterEntry:column:noPlan') %>
+        <th colspan="2"><%- t('fte', 'masterEntry:column:total') %></th>
+        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+        <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- t('users', 'PROD_FUNCTION:' + prodFunctionId) %></th>
+        <% }) %>
+      </tr>
+      </thead>
+      <thead>
+      <tr>
+        <th>
+        <th>
+        <th colspan="<%- companyCount %>" class="fte-masterEntry-total"><%- total %>
+        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+        <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" class="fte-masterEntry-total-prodFunction" data-functionId="<%- prodFunctionId %>"><%- totalByProdFunction[prodFunctionId].total %>
+        <% }) %>
+      </tr>
+      </thead>
+      <thead>
+      <tr>
+        <th>
+        <th>
+        <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+        <th><%- totalByCompany[companyId].name %>
+        <% }) %>
+        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+        <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+        <th><%= totalByCompany[companyId].name %>
+        <% }) %>
+        <% }) %>
+      </tr>
+      </thead>
+      <thead>
+      <tr>
+        <th>
+        <th>
+        <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+        <th class="fte-masterEntry-total-company" data-companyId="<%- companyId %>"><%- totalByCompany[companyId].total %>
+        <% }) %>
+        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+        <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+        <th class="fte-masterEntry-total-prodFunction-company" data-functionId="<%- prodFunctionId %>" data-companyId="<%- companyId %>"><%- totalByProdFunction[prodFunctionId].companies[companyId] %>
+        <% }) %>
+        <% }) %>
+      </tr>
+      </thead>
+      <tbody>
+      <% tasks.forEach(function(task, taskIndex) { %>
+      <tr>
+        <td>
+          <% if (task.type === 'prodFlow') { %>
+          <%= task.name %>
+          <% } else { %>
+          <em><%= task.name %></em>
+          <% } %>
+        </td>
+        <td>
+          <% if (editable) { %>
+          <input class="fte-masterEntry-noPlan" type="checkbox" data-task="<%- taskIndex %>" <%- task.noPlan ? 'checked' : '' %>>
+          <% } else { %>
+          <i class="fa fa-<%- task.noPlan ? 'check' : 'times' %>"></i>
+          <% } %>
+        </td>
+        <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
+        <td class="fte-masterEntry-total-company-task" data-companyId="<%- companyId %>"><%- task.totalByCompany[companyId] %></td>
+        <% }) %>
+        <% task.functions.forEach(function(prodFunction, functionIndex) { %>
+        <% prodFunction.companies.forEach(function(company, companyIndex) { %>
+        <td>
+          <% if (editable) { %>
+          <input
+            class="form-control fte-masterEntry-count"
+            type="number"
+            min="0"
+            max="9999"
+            value="<%- company.count %>"
+            data-value="<%- company.count %>"
+            data-task="<%- taskIndex %>"
+            data-function="<%- functionIndex %>"
+            data-company="<%- companyIndex %>"
+            data-functionId="<%- prodFunction.id %>"
+            data-companyId="<%- company.id %>">
+          <% } else { %>
+          <%- company.count %>
+          <% } %>
+        </td>
+        <% }) %>
+        <% }) %>
+      </tr>
       <% }) %>
-    </tr>
-    </thead>
-    <thead>
-    <tr>
-      <th>
-      <th>
-      <th colspan="<%- companyCount %>" class="fte-masterEntry-total"><%- total %>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-      <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" class="fte-masterEntry-total-prodFunction" data-functionId="<%- prodFunctionId %>"><%- totalByProdFunction[prodFunctionId].total %>
-      <% }) %>
-    </tr>
-    </thead>
-    <thead>
-    <tr>
-      <th>
-      <th>
-      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-      <th><%- totalByCompany[companyId].name %>
-      <% }) %>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-      <th><%= totalByCompany[companyId].name %>
-      <% }) %>
-      <% }) %>
-    </tr>
-    </thead>
-    <thead>
-    <tr>
-      <th>
-      <th>
-      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-      <th class="fte-masterEntry-total-company" data-companyId="<%- companyId %>"><%- totalByCompany[companyId].total %>
-      <% }) %>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-      <th class="fte-masterEntry-total-prodFunction-company" data-functionId="<%- prodFunctionId %>" data-companyId="<%- companyId %>"><%- totalByProdFunction[prodFunctionId].companies[companyId] %>
-      <% }) %>
-      <% }) %>
-    </tr>
-    </thead>
-    <tbody>
-    <% tasks.forEach(function(task, taskIndex) { %>
-    <tr>
-      <td>
-        <% if (task.type === 'prodFlow') { %>
-        <%= task.name %>
-        <% } else { %>
-        <em><%= task.name %></em>
-        <% } %>
-      </td>
-      <td>
-        <% if (editable) { %>
-        <input class="fte-masterEntry-noPlan" type="checkbox" data-task="<%- taskIndex %>" <%- task.noPlan ? 'checked' : '' %>>
-        <% } else { %>
-        <i class="fa fa-<%- task.noPlan ? 'check' : 'times' %>"></i>
-        <% } %>
-      </td>
-      <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
-      <td class="fte-masterEntry-total-company-task" data-companyId="<%- companyId %>"><%- task.totalByCompany[companyId] %></td>
-      <% }) %>
-      <% task.functions.forEach(function(prodFunction, functionIndex) { %>
-      <% prodFunction.companies.forEach(function(company, companyIndex) { %>
-      <td>
-        <% if (editable) { %>
-        <input
-          class="form-control fte-masterEntry-count"
-          type="number"
-          min="0"
-          max="9999"
-          value="<%- company.count %>"
-          data-value="<%- company.count %>"
-          data-task="<%- taskIndex %>"
-          data-function="<%- functionIndex %>"
-          data-company="<%- companyIndex %>"
-          data-functionId="<%- prodFunction.id %>"
-          data-companyId="<%- company.id %>">
-        <% } else { %>
-        <%- company.count %>
-        <% } %>
-      </td>
-      <% }) %>
-      <% }) %>
-    </tr>
-    <% }) %>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>
