@@ -53,7 +53,7 @@ define([
   {
     viewport.showPage(new AddFormPage({
       model: new ProdTask(),
-      detailsTemplate: detailsTemplate
+      formTemplate: formTemplate
     }));
   });
 
