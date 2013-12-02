@@ -72,17 +72,23 @@ exports.start = function startUserModule(app, module)
   }
 
   /**
-   * @param {string|Array.<string>} requiredPrivileges
    * @returns {function(object, object, function)}
    */
-  function createAuthMiddleware(requiredPrivileges)
+  function createAuthMiddleware()
   {
-    if (!Array.isArray(requiredPrivileges))
-    {
-      requiredPrivileges = requiredPrivileges ? [requiredPrivileges] : [];
-    }
+    var anyPrivileges = [];
 
-    var l = requiredPrivileges.length;
+    for (var i = 0, l = arguments.length; i < l; ++i)
+    {
+      var allPrivileges = arguments[i];
+
+      if (!Array.isArray(allPrivileges))
+      {
+        allPrivileges = [allPrivileges];
+      }
+
+      anyPrivileges.push(allPrivileges);
+    }
 
     return function(req, res, next)
     {
@@ -103,15 +109,26 @@ exports.start = function startUserModule(app, module)
         return next();
       }
 
-      for (var i = 0; i < l; ++i)
+      for (var i = 0, l = anyPrivileges.length; i < l; ++i)
       {
-        if (user.privileges.indexOf(requiredPrivileges[i]) === -1)
+        var allPrivileges = anyPrivileges[i];
+        var matches = 0;
+
+        for (var ii = 0, ll = allPrivileges.length; ii < ll; ++ii)
         {
-          return res.send(401);
+          matches += user.privileges.indexOf(allPrivileges[ii]) === -1 ? 0 : 1;
+        }
+
+        if (matches === ll)
+        {
+          return next();
         }
       }
 
-      return next();
+      var err = new Error('AUTH');
+      err.status = 401;
+
+      return next(err);
     };
   }
 
