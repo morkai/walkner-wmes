@@ -80,4 +80,14 @@ body.print {
   .table-bordered > thead > tr > td {
     border-bottom-width: 2px!important;
   }
+  body {
+    margin-top: 0!important;
+  }
+  .page-actions,
+  .ft {
+    display: none!important;
+  }
+  .page-breadcrumbs li {
+    font-size: 24px!important;
+  }
 }
