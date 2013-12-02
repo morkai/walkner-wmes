@@ -41,8 +41,6 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change', this.render);
-
-      console.log('afterRender')
     },
 
     refreshModel: function()
