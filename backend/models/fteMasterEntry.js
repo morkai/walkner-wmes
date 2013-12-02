@@ -156,9 +156,16 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       },
       function queryProdFlowsStep()
       {
-        this.tasks = getProdFlowsByDivisionId(shiftId.division, this.functions);
+        getProdFlowTasks(shiftId.division, this.functions, this.next());
+      },
+      function handleProdFlowsQueryResultStep(err, prodFlows)
+      {
+        if (err)
+        {
+          return this.done(done, err);
+        }
 
-        setImmediate(this.next());
+        this.tasks = prodFlows;
       },
       function queryProdTasksStep()
       {
@@ -309,44 +316,25 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     });
   };
 
-  function getProdFlowsByDivisionId(divisionId, functions)
+  function getProdFlowTasks(divisionId, functions, done)
   {
-    var prodFlows = [];
-
-    app.subdivisions.models.forEach(function(subdivision)
+    mongoose.model('ProdFlow').getAllByDivisionId(divisionId, function(err, prodFlows)
     {
-      if (subdivision.get('division') !== divisionId)
+      if (err)
       {
-        return;
+        return done(err);
       }
 
-      var subdivisionId = subdivision.get('_id').toString();
-
-      app.mrpControllers.models.forEach(function(mrpController)
+      done(null, prodFlows.map(function(prodFlow)
       {
-        if (String(mrpController.get('subdivision')) !== subdivisionId)
-        {
-          return;
-        }
-
-        var mrpControllerId = mrpController.get('_id');
-
-        app.prodFlows.models.forEach(function(prodFlow)
-        {
-          if (prodFlow.get('mrpController') === mrpControllerId)
-          {
-            prodFlows.push({
-              type: 'prodFlow',
-              id: prodFlow.get('_id'),
-              name: prodFlow.get('name'),
-              functions: functions
-            });
-          }
-        });
-      });
+        return {
+          type: 'prodFlow',
+          id: prodFlow.get('_id'),
+          name: prodFlow.get('name'),
+          functions: functions
+        };
+      }));
     });
-
-    return prodFlows;
   }
 
   mongoose.model('FteMasterEntry', fteMasterEntrySchema);
