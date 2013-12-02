@@ -24,7 +24,8 @@
   "FILTER:SHIFT:ANY": "Dowolna",
   "FILTER:BUTTON": "Filtruj FTE",
 
-  "leaderEntry:panel:title": "Formularz przydzielania zasobów",
+  "leaderEntry:panel:title": "Podział zasobów",
+  "leaderEntry:panel:title:editable": "Formularz przydzielania zasobów",
   "leaderEntry:column:task": "Zadanie produkcyjne",
   "leaderEntry:column:taskTotal": "Suma",
   "leaderEntry:column:companyTotal": "Suma",
@@ -44,7 +45,8 @@
   "currentLeaderEntry:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem :(",
   "currentLeaderEntry:msg:failure": "Nie udało się utworzyć wpisu :(",
 
-  "masterEntry:tasksPanel:title": "Formularz przydzielania zasobów",
+  "masterEntry:tasksPanel:title": "Podział zasobów",
+  "masterEntry:tasksPanel:title:editable": "Formularz przydzielania zasobów",
   "masterEntry:column:task": "Przepływ/<em>Zadanie produkcyjne</em>",
   "masterEntry:column:noPlan": "Brak planu?",
   "masterEntry:column:total": "Suma",
