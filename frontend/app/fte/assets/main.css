@@ -69,3 +69,9 @@
 .fte-masterEntry-noPlan {
   cursor: pointer;
 }
+.fte-masterEntry .even {
+  background-color: #f5f5f5;
+}
+.fte-masterEntry tr:hover td.even {
+  background-color: #efefef;
+}

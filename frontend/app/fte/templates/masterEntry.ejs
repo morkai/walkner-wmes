@@ -19,33 +19,33 @@
       <thead>
       <tr>
         <th><%- t('fte', 'masterEntry:column:task') %>
-        <th><%- t('fte', 'masterEntry:column:noPlan') %>
+        <th class="even"><%- t('fte', 'masterEntry:column:noPlan') %>
         <th colspan="2"><%- t('fte', 'masterEntry:column:total') %></th>
-        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-        <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- t('users', 'PROD_FUNCTION:' + prodFunctionId) %></th>
+        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+        <th class="<%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- t('users', 'PROD_FUNCTION:' + prodFunctionId) %></th>
         <% }) %>
       </tr>
       </thead>
       <thead>
       <tr>
         <th>
-        <th>
+        <th class="even">
         <th colspan="<%- companyCount %>" class="fte-masterEntry-total"><%- total %>
-        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-        <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" class="fte-masterEntry-total-prodFunction" data-functionId="<%- prodFunctionId %>"><%- totalByProdFunction[prodFunctionId].total %>
+        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+        <th class="<%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" class="fte-masterEntry-total-prodFunction" data-functionId="<%- prodFunctionId %>"><%- totalByProdFunction[prodFunctionId].total %>
         <% }) %>
       </tr>
       </thead>
       <thead>
       <tr>
         <th>
-        <th>
+        <th class="even">
         <% Object.keys(totalByCompany).forEach(function(companyId) { %>
         <th><%- totalByCompany[companyId].name %>
         <% }) %>
-        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
         <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-        <th><%= totalByCompany[companyId].name %>
+        <th class="<%- functionIndex % 2 ? '' : 'even' %>"><%= totalByCompany[companyId].name %>
         <% }) %>
         <% }) %>
       </tr>
@@ -53,13 +53,13 @@
       <thead>
       <tr>
         <th>
-        <th>
+        <th class="even">
         <% Object.keys(totalByCompany).forEach(function(companyId) { %>
         <th class="fte-masterEntry-total-company" data-companyId="<%- companyId %>"><%- totalByCompany[companyId].total %>
         <% }) %>
-        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+        <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
         <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-        <th class="fte-masterEntry-total-prodFunction-company" data-functionId="<%- prodFunctionId %>" data-companyId="<%- companyId %>"><%- totalByProdFunction[prodFunctionId].companies[companyId] %>
+        <th class="fte-masterEntry-total-prodFunction-company <%- functionIndex % 2 ? '' : 'even' %>" data-functionId="<%- prodFunctionId %>" data-companyId="<%- companyId %>"><%- totalByProdFunction[prodFunctionId].companies[companyId] %>
         <% }) %>
         <% }) %>
       </tr>
@@ -73,8 +73,7 @@
           <% } else { %>
           <em><%= task.name %></em>
           <% } %>
-        </td>
-        <td <% if (editable) { %>class="fte-masterEntry-noPlan-container"<% } %>>
+        <td class="even <% if (editable) { %>fte-masterEntry-noPlan-container<% } %>">
           <% if (editable) { %>
           <input class="fte-masterEntry-noPlan" type="checkbox" data-task="<%- taskIndex %>" <%- task.noPlan ? 'checked' : '' %>>
           <% } else { %>
@@ -86,7 +85,7 @@
         <% }) %>
         <% task.functions.forEach(function(prodFunction, functionIndex) { %>
         <% prodFunction.companies.forEach(function(company, companyIndex) { %>
-        <td>
+        <td class="<%- functionIndex % 2 ? '' : 'even' %>">
           <% if (editable) { %>
           <input
             class="form-control fte-masterEntry-count"
