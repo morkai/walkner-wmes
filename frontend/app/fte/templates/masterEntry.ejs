@@ -74,7 +74,7 @@
           <em><%= task.name %></em>
           <% } %>
         </td>
-        <td>
+        <td <% if (editable) { %>class="fte-masterEntry-noPlan-container"<% } %>>
           <% if (editable) { %>
           <input class="fte-masterEntry-noPlan" type="checkbox" data-task="<%- taskIndex %>" <%- task.noPlan ? 'checked' : '' %>>
           <% } else { %>

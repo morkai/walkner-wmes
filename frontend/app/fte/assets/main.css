@@ -65,3 +65,7 @@
 .fte-masterEntry thead:nth-child(4) th {
   border-bottom-width: 2px!important;
 }
+.fte-masterEntry-noPlan-container,
+.fte-masterEntry-noPlan {
+  cursor: pointer;
+}

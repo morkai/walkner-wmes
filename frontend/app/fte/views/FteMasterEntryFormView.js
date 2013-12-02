@@ -25,7 +25,14 @@ define([
     events: {
       'change .fte-masterEntry-count': 'updateCount',
       'keyup .fte-masterEntry-count': 'updateCount',
-      'change .fte-masterEntry-noPlan': 'updatePlan'
+      'change .fte-masterEntry-noPlan': 'updatePlan',
+      'click .fte-masterEntry-noPlan-container': function(e)
+      {
+        if (e.target.classList.contains('fte-masterEntry-noPlan-container'))
+        {
+          this.$(e.target).find('.fte-masterEntry-noPlan').click();
+        }
+      }
     },
 
     initialize: function()
