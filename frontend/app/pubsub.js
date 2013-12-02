@@ -20,23 +20,40 @@ function(
 
   var pubsub = new MessageBroker();
 
+  var pendingUnsubscriptions = {};
+  var pendingSubscriptions = [];
+  var subscribeTimer = null;
+  var unsubscribeTimer = null;
+
   pubsub.on('new topic', function(topic)
   {
-    var topics = [topic];
+    if (typeof pendingUnsubscriptions[topic] !== 'undefined')
+    {
+      delete pendingUnsubscriptions[topic];
+    }
 
     if (socket.isConnected())
     {
-      socket.emit(
-        'pubsub.subscribe', topics, onSocketSubscribe.bind(null, topics)
-      );
+      pendingSubscriptions.push(topic);
+
+      if (subscribeTimer === null)
+      {
+        subscribeTimer = setTimeout(sendPendingSubscriptions, 0);
+      }
     }
   });
 
   pubsub.on('empty topic', function(topic)
   {
-    socket.emit('pubsub.unsubscribe', [topic]);
+    if (socket.isConnected())
+    {
+      pendingUnsubscriptions[topic] = true;
 
-    broker.publish('pubsub.unsubscribed', {topic: topic});
+      if (unsubscribeTimer === null)
+      {
+        unsubscribeTimer = setTimeout(sendPendingUnsubscriptions, 0);
+      }
+    }
   });
 
   pubsub.on('message', function(topic, message, meta)
@@ -72,14 +89,10 @@ function(
   {
     var topics = Object.keys(pubsub.count());
 
-    if (topics.length === 0)
+    if (topics.length)
     {
-      return;
+      socket.emit('pubsub.subscribe', topics, onSocketSubscribe.bind(null, topics));
     }
-
-    socket.emit(
-      'pubsub.subscribe', topics, onSocketSubscribe.bind(null, topics)
-    );
   });
 
   socket.on('pubsub.message', function(topic, message)
@@ -114,6 +127,36 @@ function(
         topics: subscribedTopics
       });
     }
+  }
+
+  function sendPendingSubscriptions()
+  {
+    if (socket.isConnected())
+    {
+      socket.emit(
+        'pubsub.subscribe',
+        pendingSubscriptions,
+        onSocketSubscribe.bind(null, pendingSubscriptions)
+      );
+    }
+
+    pendingSubscriptions = [];
+    subscribeTimer = null;
+  }
+
+  function sendPendingUnsubscriptions()
+  {
+    var topics = Object.keys(pendingUnsubscriptions);
+
+    if (socket.isConnected())
+    {
+      socket.emit('pubsub.unsubscribe', topics);
+    }
+
+    pendingUnsubscriptions = {};
+    unsubscribeTimer = null;
+
+    broker.publish('pubsub.unsubscribed', {topics: topics});
   }
 
   window.pubsub = pubsub;
