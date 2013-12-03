@@ -128,8 +128,6 @@ define([
         data.hourIndex = parseInt(countEl.getAttribute('data-hour'), 10);
       }
 
-      countEl.value = data.newValue;
-
       if (data.newCount === oldCount)
       {
         return;
