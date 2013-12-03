@@ -117,7 +117,7 @@ exports.start = function startOrdersImporterModule(app, module)
 
     Object.keys(order).forEach(function(key)
     {
-      if (key === 'createdAt' || key === 'updatedAt')
+      if (key === 'createdAt' || key === 'updatedAt' || key === 'importTs')
       {
         return;
       }
