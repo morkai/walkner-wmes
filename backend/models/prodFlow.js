@@ -1,5 +1,7 @@
 'use strict';
 
+var step = require('h5.step');
+
 module.exports = function setupProdFlowModel(app, mongoose)
 {
   var prodFlowSchema = mongoose.Schema({
@@ -68,6 +70,8 @@ module.exports = function setupProdFlowModel(app, mongoose)
     {
       done(err, divisionProdFlows);
     });
+
+    step(steps);
   };
 
   prodFlowSchema.statics.getAllBySubdivisionId = function(subdivisionId, done)
