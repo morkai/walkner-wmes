@@ -45,7 +45,7 @@ define([
     {
       var page = this;
 
-      return [].concat({
+      return [pageActions.add(this.userList)].concat({
         label: t.bound('users', 'PAGE_ACTION:sync'),
         icon: 'refresh',
         privileges: 'USERS:MANAGE',
