@@ -62,8 +62,40 @@ define([
       return _.extend(this.model.serializeWithTotals(), {editable: true});
     },
 
+    focusNextInput: function($current)
+    {
+      var $nextCell = $current.closest('td').next('td');
+
+      if ($nextCell.length)
+      {
+        return $nextCell.find('input').focus();
+      }
+
+      var $nextRow = $current.closest('tr').next();
+
+      if ($nextRow.length)
+      {
+        return $nextRow.find('.fte-leaderEntry-count').first().focus();
+      }
+
+      this.el.querySelector('.fte-leaderEntry-count').select();
+    },
+
     updateCount: function(e)
     {
+      if (e.which === 13)
+      {
+        return this.focusNextInput(this.$(e.target));
+      }
+
+      var oldCount = parseInt(e.target.getAttribute('data-value'), 10) || 0;
+      var newCount = parseInt(e.target.value, 10) || 0;
+
+      if (oldCount === newCount)
+      {
+        return;
+      }
+
       var timerKey =
         e.target.getAttribute('data-task') + ':' + e.target.getAttribute('data-company');
 
@@ -72,27 +104,23 @@ define([
         clearTimeout(this.timers[timerKey]);
       }
 
-      this.timers[timerKey] = setTimeout(this.doUpdateCount.bind(this), 250, e.target, timerKey);
+      this.timers[timerKey] = setTimeout(
+        this.doUpdateCount.bind(this), 250, e.target, timerKey, oldCount, newCount
+      );
     },
 
-    doUpdateCount: function(countEl, timerKey)
+    doUpdateCount: function(countEl, timerKey, oldCount, newCount)
     {
       delete this.timers[timerKey];
 
       var oldRemote = countEl.getAttribute('data-remote');
-      var oldCount = parseInt(countEl.getAttribute('data-value'), 10);
       var data = {
         socketId: this.socket.getId(),
         _id: this.model.id,
-        newCount: parseInt(countEl.value, 10) || 0,
+        newCount: newCount,
         taskIndex: parseInt(countEl.getAttribute('data-task'), 10),
         companyIndex: parseInt(countEl.getAttribute('data-company'), 10)
       };
-
-      if (data.newCount === oldCount)
-      {
-        return;
-      }
 
       countEl.setAttribute('data-value', data.newCount);
       countEl.setAttribute('data-remote', 'false');

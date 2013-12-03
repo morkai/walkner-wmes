@@ -74,6 +74,25 @@ define([
       });
     },
 
+    focusNextInput: function($current)
+    {
+      var $nextCell = $current.closest('td').next('td');
+
+      if ($nextCell.length)
+      {
+        return $nextCell.find('input').focus();
+      }
+
+      var $nextRow = $current.closest('tr').next();
+
+      if ($nextRow.length)
+      {
+        return $nextRow.find('.hourlyPlan-count').first().focus();
+      }
+
+      this.el.querySelector('.hourlyPlan-count').select();
+    },
+
     updatePlan: function(e)
     {
       var data = {
@@ -97,6 +116,19 @@ define([
 
     updateCount: function(e)
     {
+      if (e.which === 13)
+      {
+        return this.focusNextInput(this.$(e.target));
+      }
+
+      var oldCount = parseInt(e.target.getAttribute('data-value'), 10) || 0;
+      var newCount = parseInt(e.target.value, 10) || 0;
+
+      if (oldCount === newCount)
+      {
+        return;
+      }
+
       var timerKey = e.target.getAttribute('data-flow')
         + ':' + e.target.getAttribute('data-hour')
         + ':' + e.target.getAttribute('name');
@@ -106,20 +138,21 @@ define([
         clearTimeout(this.timers[timerKey]);
       }
 
-      this.timers[timerKey] = setTimeout(this.doUpdateCount.bind(this), 250, e.target, timerKey);
+      this.timers[timerKey] = setTimeout(
+        this.doUpdateCount.bind(this), 250, e.target, timerKey, oldCount, newCount
+      );
     },
 
-    doUpdateCount: function(countEl, timerKey)
+    doUpdateCount: function(countEl, timerKey, oldCount, newCount)
     {
       delete this.timers[timerKey];
 
       var oldRemote = countEl.getAttribute('data-remote');
-      var oldCount = parseInt(countEl.getAttribute('data-value'), 10);
       var data = {
         type: 'count',
         socketId: this.socket.getId(),
         _id: this.model.id,
-        newValue: parseInt(countEl.value, 10) || 0,
+        newValue: newCount,
         flowIndex: parseInt(countEl.getAttribute('data-flow'), 10)
       };
 
@@ -128,12 +161,7 @@ define([
         data.hourIndex = parseInt(countEl.getAttribute('data-hour'), 10);
       }
 
-      if (data.newCount === oldCount)
-      {
-        return;
-      }
-
-      countEl.setAttribute('data-value', data.newCount);
+      countEl.setAttribute('data-value', data.newValue);
       countEl.setAttribute('data-remote', 'false');
 
       this.socket.emit('hourlyPlans.updateCount', data, function(err)
