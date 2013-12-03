@@ -58,7 +58,7 @@ define([
         changes: (this.model.get('changes') || []).reverse().map(function(change)
         {
           change.timeText = moment(change.time).format('YYYY-MM-DD HH:mm:ss');
-          change.values = Object.keys(change.oldValues).map(function(property)
+          change.values = Object.keys(change.oldValues || {}).map(function(property)
           {
             return {
               property: property,
@@ -68,6 +68,10 @@ define([
           });
 
           return change;
+        })
+        .filter(function(change)
+        {
+          return change.values.length;
         }),
         renderValueChange: this.renderValueChange
       };
