@@ -90,6 +90,11 @@ exports.express = {
   staticPath: __dirname + '/../frontend',
   staticBuildPath: __dirname + '/../frontend-build',
   sessionCookieKey: 'wmes.sid',
+  sessionCookie: {
+    httpOnly: true,
+    path: '/',
+    maxAge: null
+  },
   cookieSecret: '1ee7\\/\\/mes',
   ejsAmdHelpers: {
     t: 'app/i18n'

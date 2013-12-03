@@ -28,7 +28,7 @@ module.exports = function(Store)
      * @private
      * @type {string}
      */
-    this.collectionName = options.collectionName || 'sessions';
+    this.collectionName = options.collectionName || MongoStore.Options.collectionName;
 
     /**
      * @private
@@ -40,7 +40,14 @@ module.exports = function(Store)
      * @private
      * @type {number}
      */
-    this.gcInterval = (options.gcInterval || 600) * 1000;
+    this.gcInterval = (options.gcInterval || MongoStore.Options.gcInterval) * 1000;
+
+    /**
+     * @private
+     * @type {number}
+     */
+    this.defaultExpirationTime =
+      (options.defaultExpirationTime || MongoStore.Options.defaultExpirationTime) * 1000;
 
     /**
      * @private
@@ -92,7 +99,12 @@ module.exports = function(Store)
     /**
      * @type {number}
      */
-    gcInterval: 600
+    gcInterval: 600,
+
+    /**
+     * @type {number}
+     */
+    defaultExpirationTime: 3600 * 24 * 14
   };
 
   util.inherits(MongoStore, Store);
@@ -160,6 +172,11 @@ module.exports = function(Store)
         expires: Date.parse(session.cookie.expires),
         data: JSON.stringify(session)
       };
+
+      if (isNaN(doc.expires))
+      {
+        doc.expires = Date.now() + store.defaultExpirationTime;
+      }
 
       var opts = {
         upsert: true,
