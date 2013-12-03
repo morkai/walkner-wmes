@@ -18,8 +18,8 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:fteMaster": "FTE (mistrz)",
-  "PROPERTY:fteLeader": "FTE (lider)",
+  "PROPERTY:fteMaster": "FTE (produkcja)",
+  "PROPERTY:fteLeader": "FTE (magazyn)",
 
   "FORM:ACTION:add": "Dodaj zadanie produkcyjne",
   "FORM:ACTION:edit": "Edytuj zadanie produkcyjne",

@@ -1,9 +1,9 @@
 {
-  "BREADCRUMBS:leader:entryList": "FTE (lider)",
+  "BREADCRUMBS:leader:entryList": "FTE (magazyn)",
   "BREADCRUMBS:leader:entryForm": "Przydzielanie zasobów",
   "BREADCRUMBS:leader:entryDetails": "Przydzielone zasoby",
   "BREADCRUMBS:leader:currentEntry": "Wybór działu",
-  "BREADCRUMBS:master:entryList": "FTE (mistrz)",
+  "BREADCRUMBS:master:entryList": "FTE (produkcja)",
   "BREADCRUMBS:master:entryForm": "Przydzielanie zasobów",
   "BREADCRUMBS:master:entryDetails": "Przydzielone zasoby",
   "BREADCRUMBS:master:currentEntry": "Wybór wydziału",
