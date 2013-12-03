@@ -102,6 +102,11 @@ exports.start = function startOrdersImporterModule(app, module)
 
   function compareOrderWithDoc(updateList, orderModel, order)
   {
+    if (orderModel.get('importTs') > order.importTs)
+    {
+      return;
+    }
+
     var different = false;
     var changes = {
       time: new Date(),
@@ -146,6 +151,11 @@ exports.start = function startOrdersImporterModule(app, module)
 
   function compareMissingOrderWithDoc(updateList, orderModel, missingOrder)
   {
+    if (orderModel.get('importTs') > missingOrder.importTs)
+    {
+      return;
+    }
+
     var oldOperations = orderModel.get('operations');
 
     if (oldOperations === null)

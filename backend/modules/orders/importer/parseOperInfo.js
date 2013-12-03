@@ -2,7 +2,7 @@
 
 var cheerio = require('cheerio');
 
-module.exports = function parseOperInfo(html, orders, missingOrders)
+module.exports = function parseOperInfo(html, orders, missingOrders, importTs)
 {
   var $ = cheerio.load(html);
   var $tables = $('table');
@@ -48,6 +48,8 @@ module.exports = function parseOperInfo(html, orders, missingOrders)
 
     if (order)
     {
+      order.importTs = importTs;
+
       if (order.operations === null)
       {
         order.operations = [];
@@ -61,7 +63,8 @@ module.exports = function parseOperInfo(html, orders, missingOrders)
       {
         missingOrders[orderNo] = {
           _id: orderNo,
-          operations: []
+          operations: [],
+          importTs: importTs
         };
       }
 

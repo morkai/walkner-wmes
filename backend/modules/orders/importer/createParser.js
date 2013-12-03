@@ -196,7 +196,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
         }
         else
         {
-          parseOrderInfo(orderInfoHtml, orders);
+          parseOrderInfo(orderInfoHtml, orders, new Date(orderFileInfo.timestamp));
         }
 
         next();
@@ -220,7 +220,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
         }
         else
         {
-          parseOperInfo(operInfoHtml, orders, missingOrders);
+          parseOperInfo(operInfoHtml, orders, missingOrders, new Date(operFileInfo.timestamp));
         }
 
         next();

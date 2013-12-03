@@ -2,7 +2,7 @@
 
 var cheerio = require('cheerio');
 
-module.exports = function parseOrderInfo(html, orders)
+module.exports = function parseOrderInfo(html, orders, importTs)
 {
   var $ = cheerio.load(html);
   var $tables = $('table');
@@ -51,7 +51,8 @@ module.exports = function parseOrderInfo(html, orders)
       startDate: new Date(startDateParts[2], startDateParts[1] - 1, startDateParts[0]),
       finishDate: new Date(finishDateParts[2], finishDateParts[1] - 1, finishDateParts[0]),
       statuses: statuses,
-      operations: null
+      operations: null,
+      importTs: importTs
     };
 
     orders[order._id] = order;

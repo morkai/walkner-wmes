@@ -77,7 +77,8 @@ module.exports = function setupOrderModel(app, mongoose)
     finishDate: Date,
     statuses: [String],
     operations: [operationSchema],
-    changes: [changeSchema]
+    changes: [changeSchema],
+    importTs: Date
   }, {
     id: false
   });
