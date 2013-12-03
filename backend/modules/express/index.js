@@ -14,6 +14,11 @@ exports.DEFAULT_CONFIG = {
   staticPath: 'public',
   staticBuildPath: 'public-build',
   sessionCookieKey: 'walkner.sid',
+  sessionCookie: {
+    maxAge: null,
+    path: '/',
+    httpOnly: true
+  },
   cookieSecret: 'sec~1ee7~ret',
   ejsAmdHelpers: {}
 };
@@ -47,11 +52,7 @@ exports.start = function startExpressModule(app, module, done)
   module.use(express.session({
     store: module.sessionStore,
     key: module.config.sessionCookieKey,
-    cookie: {
-      maxAge: 3600 * 24 * 30 * 1000,
-      path: '/',
-      httpOnly: true
-    }
+    cookie: module.config.sessionCookie
   }));
   module.use(express.bodyParser());
   module.use(express.methodOverride());
