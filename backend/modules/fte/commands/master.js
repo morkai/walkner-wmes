@@ -165,6 +165,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
       }
 
       if (!lodash.isString(data._id)
+        || !lodash.isString(data.taskId)
         || !lodash.isBoolean(data.newValue)
         || !lodash.isNumber(data.taskIndex))
       {
@@ -178,8 +179,8 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         return reply(new Error('AUTH'));
       }
 
-      var condition = {_id: data._id};
-      var fields = {locked: 1};
+      var condition = {_id: data._id, 'tasks.id': data.taskId};
+      var fields = {locked: 1, 'tasks.$': 1};
 
       FteMasterEntry.findOne(condition, fields).exec(function(err, fteMasterEntry)
       {
@@ -193,6 +194,13 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
           return reply(new Error('UNKNOWN_ENTRY'));
         }
 
+        var tasks = fteMasterEntry.get('tasks');
+
+        if (tasks.length !== 1)
+        {
+          return reply(new Error('UNKNOWN_TASK'));
+        }
+
         if (fteMasterEntry.get('locked'))
         {
           return reply(new Error('ENTRY_LOCKED'));
@@ -204,7 +212,25 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
           updaterLabel: user.login
         }};
 
-        update.$set['tasks.' + data.taskIndex + '.noPlan'] = data.newValue;
+        if (data.newValue)
+        {
+          var task = tasks[0];
+          task.noPlan = true;
+
+          task.functions.forEach(function(functionEntry)
+          {
+            functionEntry.companies.forEach(function(companyEntry)
+            {
+              companyEntry.count = 0;
+            });
+          });
+
+          update.$set['tasks.' + data.taskIndex] = task;
+        }
+        else
+        {
+          update.$set['tasks.' + data.taskIndex + '.noPlan'] = data.newValue;
+        }
 
         FteMasterEntry.update(condition, update, function(err, updatedCount)
         {

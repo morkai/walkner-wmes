@@ -53,18 +53,18 @@ define([
 
     afterRender: function()
     {
-      this.listenToOnce(this.model, 'change', this.render);
-
-      this.$('.hourlyPlan-count').first().focus();
-
       if (this.model.get('locked'))
       {
-        this.broker.publish('router.navigate', {
+        return this.broker.publish('router.navigate', {
           url: this.model.genClientUrl(),
           replace: true,
           trigger: true
         });
       }
+
+      this.listenToOnce(this.model, 'change', this.render);
+
+      this.focusFirstEnabledInput();
     },
 
     serialize: function()
@@ -80,17 +80,77 @@ define([
 
       if ($nextCell.length)
       {
-        return $nextCell.find('input').focus();
+        return $nextCell.find('input').select();
       }
 
       var $nextRow = $current.closest('tr').next();
 
-      if ($nextRow.length)
+      if (!$nextRow.length)
       {
-        return $nextRow.find('.hourlyPlan-count').first().focus();
+        return this.focusFirstEnabledInput();
       }
 
-      this.el.querySelector('.hourlyPlan-count').select();
+      this.focusNextEnabledInput($nextRow);
+    },
+
+    focusFirstEnabledInput: function()
+    {
+      var noPlanEl = this.el.querySelector('.hourlyPlan-noPlan:not(:checked)');
+
+      if (noPlanEl)
+      {
+        this.$(noPlanEl).closest('tr').find('.hourlyPlan-count').first().select();
+      }
+    },
+
+    focusNextEnabledInput: function($nextRow)
+    {
+      if (!$nextRow.length)
+      {
+        return this.focusFirstEnabledInput();
+      }
+
+      if ($nextRow.find('.hourlyPlan-noPlan:checked').length)
+      {
+        return this.focusNextEnabledInput($nextRow.next());
+      }
+
+      $nextRow.find('.hourlyPlan-count').first().select();
+    },
+
+    toggleCountsInRow: function($noPlan, remote)
+    {
+      var $focusedRow = this.$(this.el.ownerDocument.activeElement).closest('tr');
+      var $lastRow = this.$('.hourlyPlan > tbody > :last-child');
+      var $noPlanRow = $noPlan.closest('tr');
+
+      var $counts = $noPlanRow.find('.hourlyPlan-count').attr('disabled', $noPlan[0].checked);
+
+      if (!$noPlan[0].checked)
+      {
+        if (!remote)
+        {
+          $noPlanRow.find('.hourlyPlan-count').first().select();
+        }
+
+        return;
+      }
+
+      $counts.val('0').attr('data-value', '0');
+
+      if (!remote)
+      {
+        return $noPlanRow[0] === $lastRow[0]
+          ? this.focusFirstEnabledInput()
+          : this.focusNextEnabledInput($noPlanRow);
+      }
+
+      if ($noPlanRow[0] === $focusedRow[0])
+      {
+        return $noPlanRow[0] === $lastRow[0]
+          ? this.focusFirstEnabledInput()
+          : this.focusNextEnabledInput($noPlanRow);
+      }
     },
 
     updatePlan: function(e)
@@ -102,6 +162,10 @@ define([
         flowIndex: parseInt(e.target.getAttribute('data-flow'), 10),
         newValue: e.target.checked
       };
+      var $noPlan = this.$(e.target);
+      var view = this;
+
+      this.toggleCountsInRow($noPlan);
 
       this.socket.emit('hourlyPlans.updatePlan', data, function(err)
       {
@@ -110,6 +174,8 @@ define([
           console.error(err);
 
           e.target.checked = !e.target.checked;
+
+          view.toggleCountsInRow($noPlan);
         }
       });
     },
@@ -211,6 +277,8 @@ define([
       }
 
       $noPlan.prop('checked', message.newValue);
+
+      this.toggleCountsInRow($noPlan, true);
     },
 
     handleCountChange: function(message)

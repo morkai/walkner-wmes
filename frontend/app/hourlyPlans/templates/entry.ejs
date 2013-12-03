@@ -45,7 +45,8 @@
             max="9999"
             value="<%- flow.level %>"
             data-value="<%- flow.level %>"
-            data-flow="<%- flowIndex %>">
+            data-flow="<%- flowIndex %>"
+            <%- flow.noPlan ? 'disabled' : '' %>>
           <% } else { %>
           <%- flow.level %>
           <% } %>
@@ -61,7 +62,8 @@
             value="<%- count %>"
             data-value="<%- count %>"
             data-flow="<%- flowIndex %>"
-            data-hour="<%- hourIndex %>">
+            data-hour="<%- hourIndex %>"
+            <%- flow.noPlan ? 'disabled' : '' %>>
           <% } else { %>
           <%- count %>
           <% } %>

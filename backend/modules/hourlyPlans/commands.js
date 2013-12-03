@@ -220,6 +220,16 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       update.$set['flows.' + data.flowIndex + '.noPlan'] = data.newValue;
 
+      if (data.newValue)
+      {
+        update.$set['flows.' + data.flowIndex + '.level'] = 0;
+        update.$set['flows.' + data.flowIndex + '.hours'] = [
+          0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0
+        ];
+      }
+
       HourlyPlan.update(condition, update, function(err, updatedCount)
       {
         if (err)

@@ -56,20 +56,20 @@ define([
 
     afterRender: function()
     {
-      this.listenToOnce(this.model, 'change', this.render);
-
-      this.$('.fte-masterEntry-count').first().focus();
-
       if (this.model.get('locked'))
       {
-        this.broker.publish('router.navigate', {
+        return this.broker.publish('router.navigate', {
           url: this.model.genClientUrl(),
           replace: true,
           trigger: true
         });
       }
 
+      this.listenToOnce(this.model, 'change', this.render);
+
       this.setUpUserFinder();
+
+      this.focusFirstEnabledInput();
     },
 
     serialize: function()
@@ -176,17 +176,75 @@ define([
 
       if ($nextCell.length)
       {
-        return $nextCell.find('input').focus();
+        return $nextCell.find('input').select();
       }
 
       var $nextRow = $current.closest('tr').next();
 
-      if ($nextRow.length)
+      if (!$nextRow.length)
       {
-        return $nextRow.find('.fte-masterEntry-count').first().focus();
+        return this.focusFirstEnabledInput();
       }
 
-      this.el.querySelector('.fte-masterEntry-count').focus();
+      this.focusNextEnabledInput($nextRow);
+    },
+
+    focusFirstEnabledInput: function()
+    {
+      var noPlanEl = this.el.querySelector('.fte-masterEntry-noPlan:not(:checked)');
+
+      if (noPlanEl)
+      {
+        this.$(noPlanEl).closest('tr').find('.fte-masterEntry-count').first().select();
+      }
+    },
+
+    focusNextEnabledInput: function($nextRow)
+    {
+      if (!$nextRow.length)
+      {
+        return this.focusFirstEnabledInput();
+      }
+
+      if ($nextRow.find('.fte-masterEntry-noPlan:checked').length)
+      {
+        return this.focusNextEnabledInput($nextRow.next());
+      }
+
+      $nextRow.find('.fte-masterEntry-count').first().select();
+    },
+
+    toggleCountsInRow: function($noPlan, remote)
+    {
+      var $focusedRow = this.$(this.el.ownerDocument.activeElement).closest('tr');
+      var $lastRow = this.$('.fte-masterEntry > tbody > :last-child');
+      var $noPlanRow = $noPlan.closest('tr');
+
+      $noPlanRow.find('.fte-masterEntry-count').attr('disabled', $noPlan[0].checked);
+
+      if (!$noPlan[0].checked)
+      {
+        if (!remote)
+        {
+          $noPlanRow.find('.fte-masterEntry-count').first().select();
+        }
+      }
+
+      this.recountAll($noPlanRow);
+
+      if (!remote)
+      {
+        return $noPlanRow[0] === $lastRow[0]
+          ? this.focusFirstEnabledInput()
+          : this.focusNextEnabledInput($noPlanRow);
+      }
+
+      if ($noPlanRow[0] === $focusedRow[0])
+      {
+        return $noPlanRow[0] === $lastRow[0]
+          ? this.focusFirstEnabledInput()
+          : this.focusNextEnabledInput($noPlanRow);
+      }
     },
 
     updatePlan: function(e)
@@ -195,9 +253,14 @@ define([
         type: 'plan',
         socketId: this.socket.getId(),
         _id: this.model.id,
+        taskId: e.target.getAttribute('data-taskId'),
         taskIndex: parseInt(e.target.getAttribute('data-task'), 10),
         newValue: e.target.checked
       };
+      var $noPlan = this.$(e.target);
+      var view = this;
+
+      this.toggleCountsInRow($noPlan);
 
       this.socket.emit('fte.master.updatePlan', data, function(err)
       {
@@ -206,6 +269,8 @@ define([
           console.error(err);
 
           e.target.checked = !e.target.checked;
+
+          view.toggleCountsInRow($noPlan);
         }
       });
     },
@@ -271,12 +336,12 @@ define([
             countEl.setAttribute('data-value', oldCount);
             countEl.setAttribute('data-remote', oldRemote);
 
-            view.recount(countEl, data.taskIndex, data.companyIndex);
+            view.recount(countEl);
           }
         }
       });
 
-      this.recount(countEl, data.taskIndex, data.functionIndex, data.companyIndex);
+      this.recount(countEl);
     },
 
     recount: function(countEl)
@@ -301,7 +366,13 @@ define([
       totalSelector = '.fte-masterEntry-total-prodFunction-company'
         + '[data-functionId=' + functionId + ']'
         + '[data-companyId=' + companyId + ']';
-      this.$(countSelector).each(function() { total += parseInt(this.value, 10) || 0; });
+      this.$(countSelector).each(function()
+      {
+        if (!this.disabled)
+        {
+          total += parseInt(this.value, 10) || 0;
+        }
+      });
       this.$(totalSelector).text(total);
 
       total = 0;
@@ -323,6 +394,19 @@ define([
       totalSelector = '.fte-masterEntry-total';
       this.$(countSelector).each(function() { total += parseInt(this.innerHTML, 10) || 0; });
       this.$(totalSelector).text(total);
+    },
+
+    recountAll: function($row)
+    {
+      var view = this;
+
+      $row.find('.fte-masterEntry-count').each(function()
+      {
+        this.value = '0';
+        this.setAttribute('data-value', '0');
+
+        view.recount(this);
+      });
     },
 
     removeAbsentUser: function(e)
@@ -430,6 +514,8 @@ define([
       }
 
       $noPlan.prop('checked', message.newValue);
+
+      this.toggleCountsInRow($noPlan, true);
     },
 
     handleCountChange: function(message)

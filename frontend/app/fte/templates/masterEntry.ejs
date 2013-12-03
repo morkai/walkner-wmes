@@ -75,7 +75,7 @@
           <% } %>
         <td class="even <% if (editable) { %>fte-masterEntry-noPlan-container<% } %>">
           <% if (editable) { %>
-          <input class="fte-masterEntry-noPlan" type="checkbox" data-task="<%- taskIndex %>" <%- task.noPlan ? 'checked' : '' %>>
+          <input class="fte-masterEntry-noPlan" type="checkbox" data-taskId="<%- task.id %>" data-task="<%- taskIndex %>" <%- task.noPlan ? 'checked' : '' %>>
           <% } else { %>
           <i class="fa fa-<%- task.noPlan ? 'check' : 'times' %>"></i>
           <% } %>
@@ -98,7 +98,8 @@
             data-function="<%- functionIndex %>"
             data-company="<%- companyIndex %>"
             data-functionId="<%- prodFunction.id %>"
-            data-companyId="<%- company.id %>">
+            data-companyId="<%- company.id %>"
+            <%- task.noPlan ? 'disabled' : '' %>>
           <% } else { %>
           <%- company.count %>
           <% } %>
