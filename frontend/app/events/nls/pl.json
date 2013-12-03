@@ -119,5 +119,9 @@
   "TYPE:fte.master.created": "Utworzenie wpisu FTE (mistrz)",
   "TEXT:fte.master.created": "Utworzono nowy wpis FTE (mistrz) dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
   "TYPE:fte.master.locked": "Zamknięcie wpisu FTE (mistrz)",
-  "TEXT:fte.master.locked": "Zamknięto wpis FTE (mistrz) dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>."
+  "TEXT:fte.master.locked": "Zamknięto wpis FTE (mistrz) dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
+  "TYPE:hourlyPlans.created": "Utworzenie planu godzinowego",
+  "TEXT:hourlyPlans.created": "Utworzono nowy plan godzinowy dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
+  "TYPE:hourlyPlans.locked": "Zamknięcie planu godzinowego",
+  "TEXT:hourlyPlans.locked": "Zamknięto nowy plan godzinowy dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>."
 }

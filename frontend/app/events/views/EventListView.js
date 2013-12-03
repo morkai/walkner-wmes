@@ -84,6 +84,8 @@ define([
 
         case 'fte.master.created':
         case 'fte.master.locked':
+        case 'hourlyPlans.created':
+        case 'hourlyPlans.locked':
           var division = divisions.get(data.model.division);
 
           data.model.division = division ? renderOrgUnitPath(division, false, false) : '?';
