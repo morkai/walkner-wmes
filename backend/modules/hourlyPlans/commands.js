@@ -77,7 +77,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       {
         if (hourlyPlan)
         {
-          app.broker.publish('hourlyPlan.created', {
+          app.broker.publish('hourlyPlans.created', {
             user: user,
             model: {
               _id: hourlyPlan.get('_id'),
@@ -140,7 +140,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         updaterLabel: user.login
       }};
       var field = 'flows.' + data.flowIndex;
-console.log(data);
+
       if (lodash.isNumber(data.hourIndex))
       {
         field += '.hours.' + data.hourIndex;

@@ -163,7 +163,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
         return done(err);
       }
 
-      app.broker.publish('hourlyPlan.locked', {
+      app.broker.publish('hourlyPlans.locked', {
         user: user,
         model: {
           _id: hourlyPlan.get('_id'),
