@@ -1,12 +1,14 @@
 define([
   'app/i18n',
   'app/core/View',
-  '../views/FteLeaderCurrentEntryView',
+  '../FteLeaderEntry',
+  '../views/FteCurrentEntryView',
   'i18n!app/nls/fte'
 ], function(
   t,
   View,
-  FteLeaderCurrentEntryView
+  FteLeaderEntry,
+  FteCurrentEntryView
 ) {
   'use strict';
 
@@ -26,7 +28,9 @@ define([
 
     initialize: function()
     {
-      this.view = new FteLeaderCurrentEntryView();
+      this.view = new FteCurrentEntryView({
+        model: new FteLeaderEntry({_id: 'current'})
+      });
     }
 
   });

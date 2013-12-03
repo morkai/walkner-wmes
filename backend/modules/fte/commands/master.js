@@ -5,7 +5,7 @@ var lodash = require('lodash');
 module.exports = function setUpFteMasterCommands(app, fteModule)
 {
   var mongoose = app[fteModule.config.mongooseId];
-  var divisions = app[fteModule.config.divisionsId];
+  var subdivisions = app[fteModule.config.subdivisionsId];
   var FteMasterEntry = mongoose.model('FteMasterEntry');
 
   function canManageMasterEntry(user)
@@ -16,7 +16,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
   }
 
   return {
-    getCurrentEntryId: function(socket, divisionId, reply)
+    getCurrentEntryId: function(socket, subdivisionId, reply)
     {
       if (!lodash.isFunction(reply))
       {
@@ -30,9 +30,9 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         return reply(new Error('AUTH'));
       }
 
-      var validDivision = divisions.models.some(function(division)
+      var validDivision = subdivisions.models.some(function(subdivision)
       {
-        return division.get('_id').toString() === divisionId;
+        return subdivision.get('_id').toString() === subdivisionId;
       });
 
       if (!validDivision)
@@ -42,7 +42,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
       var currentShift = fteModule.getCurrentShift();
       var condition = {
-        division: divisionId,
+        subdivision: subdivisionId,
         date: currentShift.date,
         shift: currentShift.no
       };
@@ -63,7 +63,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
           );
         }
 
-        currentShift.division = divisionId;
+        currentShift.subdivision = subdivisionId;
 
         FteMasterEntry.createForShift(currentShift, user, function(err, fteMasterEntry)
         {
@@ -73,7 +73,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
               user: user,
               model: {
                 _id: fteMasterEntry.get('_id'),
-                division: currentShift.division,
+                subdivision: currentShift.subdivision,
                 date: currentShift.date,
                 shift: currentShift.no
               }

@@ -15,12 +15,20 @@ module.exports = function setUpFteRoutes(app, fteModule)
   var canViewLeader = auth('FTE:LEADER:VIEW');
   var canViewMaster = auth('FTE:MASTER:VIEW');
 
-  express.get('/fte/master', canViewMaster, crud.browseRoute.bind(null, app, FteMasterEntry));
+  express.get(
+    '/fte/master',
+    canViewMaster,
+    limitToDivision,
+    crud.browseRoute.bind(null, app, FteMasterEntry)
+  );
 
   express.get('/fte/master/:id', canViewMaster, crud.readRoute.bind(null, app, FteMasterEntry));
 
   express.get(
-    '/fte/leader', canViewLeader, limitToDivision, crud.browseRoute.bind(null, app, FteLeaderEntry)
+    '/fte/leader',
+    canViewLeader,
+    limitToDivision,
+    crud.browseRoute.bind(null, app, FteLeaderEntry)
   );
 
   express.get('/fte/leader/:id', canViewLeader, crud.readRoute.bind(null, app, FteLeaderEntry));

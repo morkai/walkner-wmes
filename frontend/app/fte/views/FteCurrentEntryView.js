@@ -3,20 +3,22 @@ define([
   'app/viewport',
   'app/user',
   'app/data/divisions',
+  'app/data/subdivisions',
   'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/View',
-  'app/fte/templates/currentMasterEntry',
+  'app/fte/templates/currentEntry',
   'i18n!app/nls/fte'
 ], function(
   t,
   viewport,
   user,
   divisions,
+  subdivisions,
   OrgUnitDropdownsView,
   Model,
   View,
-  currentMasterEntryTemplate
+  currentEntryTemplate
 ) {
   'use strict';
 
@@ -24,9 +26,9 @@ define([
 
   return View.extend({
 
-    template: currentMasterEntryTemplate,
+    template: currentEntryTemplate,
 
-    idPrefix: 'currentMasterEntry',
+    idPrefix: 'currentEntry',
 
     events: {
       'click .btn-primary': 'onSubmit'
@@ -60,12 +62,13 @@ define([
     {
       var view = this;
       var userDivision = user.getDivision();
+      var userSubdivision = user.getSubdivision();
 
       this.$submit = this.$('.btn-primary').attr('disabled', true);
 
       this.listenToOnce(this.oudView, 'afterRender', function()
       {
-        view.oudView.$id('division').on('change', function(e)
+        view.oudView.$id('subdivision').on('change', function(e)
         {
           view.$submit.attr('disabled', e.val === '' || e.val === null);
         });
@@ -73,7 +76,12 @@ define([
         var model = null;
         var orgUnit = null;
 
-        if (userDivision !== null)
+        if (userSubdivision !== null)
+        {
+          orgUnit = ORG_UNIT.SUBDIVISION;
+          model = new Model({subdivision: userSubdivision.id});
+        }
+        else if (userDivision !== null)
         {
           orgUnit = ORG_UNIT.DIVISION;
           model = new Model({division: userDivision.id});
@@ -81,18 +89,11 @@ define([
 
         view.oudView.selectValue(model, orgUnit);
 
-        view.readonlyDivision = !(user.isAllowedTo('FTE:MASTER:ALL') && !userDivision);
+        view.readonlyDivision =
+          !(user.isAllowedTo(view.model.getPrivilegePrefix() + ':ALL') && !userDivision);
 
         view.oudView.$id('division').select2('readonly', view.readonlyDivision);
-
-        if (view.readonlyDivision)
-        {
-          view.$submit.focus();
-        }
-        else
-        {
-          view.oudView.$id('division').select2('focus');
-        }
+        view.oudView.$id(view.readonlyDivision ? 'subdivision' : 'division').select2('focus');
       });
     },
 
@@ -103,34 +104,42 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 5000,
-          text: t('fte', 'currentMasterEntry:msg:offline')
+          text: t(this.model.getNlsDomain(), 'currentEntry:msg:offline')
         });
       }
 
       var view = this;
       var $division = this.oudView.$id('division');
+      var $subdivision = this.oudView.$id('subdivision');
       var $icon = this.$submit.find('i').removeClass('fa-edit').addClass('fa-spinner fa-spin');
 
       $division.select2('readonly', true);
+      $subdivision.select2('readonly', true);
       this.$submit.attr('disabled', true);
 
       this.socket.emit(
-        'fte.master.getCurrentEntryId',
-        $division.select2('val'),
+        this.model.getTopicPrefix() + '.getCurrentEntryId',
+        $subdivision.select2('val'),
         function(err, currentEntryId)
         {
+          if (currentEntryId)
+          {
+            view.model.set('_id', currentEntryId);
+          }
+
           if (err)
           {
             if (err.message === 'LOCKED')
             {
               return view.broker.publish('router.navigate', {
-                url: '#fte/master/' + currentEntryId,
+                url: view.model.genClientUrl(),
                 trigger: true
               });
             }
 
             $icon.removeClass('fa-spinner fa-spin').addClass('fa-edit');
             $division.select2('readonly', view.readonlyDivision);
+            $subdivision.select2('readonly', false);
             view.$submit.attr('disabled', false).focus();
 
             console.error(err);
@@ -138,12 +147,12 @@ define([
             return viewport.msg.show({
               type: 'error',
               time: 5000,
-              text: t('fte', 'currentMasterEntry:msg:failure')
+              text: t(view.model.getNlsDomain(), 'currentEntry:msg:failure')
             });
           }
 
           view.broker.publish('router.navigate', {
-            url: '#fte/master/' + currentEntryId + ';edit',
+            url: view.model.genClientUrl('edit'),
             trigger: true
           });
         }

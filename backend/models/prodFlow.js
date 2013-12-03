@@ -23,12 +23,14 @@ module.exports = function setupProdFlowModel(app, mongoose)
 
   prodFlowSchema.statics.getAllByDivisionId = function(divisionId, done)
   {
-    if (!app.subdivisions || !app.mrpControllers || !app.prodFlows)
+    if (!app.subdivisions)
     {
       return done(new Error('MISSING_MODULE'));
     }
 
-    var prodFlows = [];
+    var ProdFlow = this;
+    var divisionProdFlows = [];
+    var steps = [];
 
     app.subdivisions.models.forEach(function(subdivision)
     {
@@ -39,22 +41,59 @@ module.exports = function setupProdFlowModel(app, mongoose)
 
       var subdivisionId = subdivision.get('_id').toString();
 
-      app.mrpControllers.models.forEach(function(mrpController)
+      steps.push(function getAllBySubdivisionIdStep(err)
       {
-        if (String(mrpController.get('subdivision')) !== subdivisionId)
+        if (err)
         {
-          return;
+          return this.done(done, err);
         }
 
-        var mrpControllerId = mrpController.get('_id');
+        var next = this.next();
 
-        app.prodFlows.models.forEach(function(prodFlow)
+        ProdFlow.getAllBySubdivisionId(subdivisionId, function(err, subdivisionProdFlows)
         {
-          if (prodFlow.get('mrpController') === mrpControllerId)
+          if (err)
           {
-            prodFlows.push(prodFlow);
+            return next(err);
           }
+
+          divisionProdFlows = divisionProdFlows.concat(subdivisionProdFlows);
+
+          next();
         });
+      });
+    });
+
+    steps.push(function(err)
+    {
+      done(err, divisionProdFlows);
+    });
+  };
+
+  prodFlowSchema.statics.getAllBySubdivisionId = function(subdivisionId, done)
+  {
+    if (!app.mrpControllers || !app.prodFlows)
+    {
+      return done(new Error('MISSING_MODULE'));
+    }
+
+    var prodFlows = [];
+
+    app.mrpControllers.models.forEach(function(mrpController)
+    {
+      if (String(mrpController.get('subdivision')) !== subdivisionId)
+      {
+        return;
+      }
+
+      var mrpControllerId = mrpController.get('_id');
+
+      app.prodFlows.models.forEach(function(prodFlow)
+      {
+        if (prodFlow.get('mrpController') === mrpControllerId)
+        {
+          prodFlows.push(prodFlow);
+        }
       });
     });
 

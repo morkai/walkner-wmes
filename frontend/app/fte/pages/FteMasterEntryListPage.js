@@ -60,7 +60,6 @@ define([
     defineViews: function()
     {
       this.filterView = new FteEntryFilterView({
-        divisionOnly: true,
         model: {
           rqlQuery: this.collection.rqlQuery
         }

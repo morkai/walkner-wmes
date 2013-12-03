@@ -24,26 +24,21 @@
   "FILTER:SHIFT:ANY": "Dowolna",
   "FILTER:BUTTON": "Filtruj FTE",
 
+  "currentEntry:panel:title": "Formularz wyboru działu do przydzielania zasobów",
+  "currentEntry:panel:warning": "<p>Jeżeli wybrany dział nie będzie miał wpisu dla aktualnej zmiany, zostanie utworzony nowy wpis.</p>",
+  "currentEntry:submit": "Przydzielaj zasoby",
+  "currentEntry:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem :(",
+  "currentEntry:msg:failure": "Nie udało się utworzyć wpisu :(",
+
   "leaderEntry:panel:title": "Podział zasobów",
   "leaderEntry:panel:title:editable": "Formularz przydzielania zasobów",
   "leaderEntry:column:task": "Zadanie produkcyjne",
   "leaderEntry:column:taskTotal": "Suma",
   "leaderEntry:column:companyTotal": "Suma",
-  "leaderEntry:property:shift": "Zmiana:",
-  "leaderEntry:property:date": "Data:",
   "leaderEntry:msg:lockFailure": "Nie udało się zamknąć wpisu :(",
 
-  "leaderEntryList:date": "Data",
-  "leaderEntryList:shift": "Zmiana",
-
-  "leaderEntry:print:hdLeft": "Zasoby przydzielone do {subdivision}",
-  "leaderEntry:print:hdRight": "{date}, {shift} zmiana",
-
-  "currentLeaderEntry:panel:title": "Formularz wyboru działu do przydzielania zasobów",
-  "currentLeaderEntry:panel:warning": "<p>Jeżeli wybrany dział nie będzie miał wpisu dla aktualnej zmiany, zostanie utworzony nowy wpis.</p>",
-  "currentLeaderEntry:submit": "Przydzielaj zasoby",
-  "currentLeaderEntry:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem :(",
-  "currentLeaderEntry:msg:failure": "Nie udało się utworzyć wpisu :(",
+  "property:date": "Data",
+  "property:shift": "Zmiana",
 
   "masterEntry:tasksPanel:title": "Podział zasobów",
   "masterEntry:tasksPanel:title:editable": "Formularz przydzielania zasobów",
@@ -53,19 +48,8 @@
   "masterEntry:column:task": "Przepływ/<em>Zadanie produkcyjne</em>",
   "masterEntry:column:noPlan": "Brak planu?",
   "masterEntry:column:total": "Suma",
-  "masterEntry:property:shift": "Zmiana:",
-  "masterEntry:property:date": "Data:",
   "masterEntry:msg:lockFailure": "Nie udało się zamknąć wpisu :(",
 
-  "masterEntryList:date": "Data",
-  "masterEntryList:shift": "Zmiana",
-
-  "currentMasterEntry:panel:title": "Formularz wyboru wydziału do przydzielania zasobów",
-  "currentMasterEntry:panel:warning": "<p>Jeżeli wybrany wydział nie będzie miał wpisu dla aktualnej zmiany, zostanie utworzony nowy wpis.</p>",
-  "currentMasterEntry:submit": "Przydzielaj zasoby",
-  "currentMasterEntry:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem :(",
-  "currentMasterEntry:msg:failure": "Nie udało się utworzyć wpisu :(",
-
-  "masterEntry:print:hdLeft": "Zasoby przydzielone do {division}",
-  "masterEntry:print:hdRight": "{date}, {shift} zmiana"
+  "print:hdLeft": "Zasoby przydzielone do {subdivision}",
+  "print:hdRight": "{date}, {shift} zmiana"
 }

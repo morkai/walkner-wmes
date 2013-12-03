@@ -27,8 +27,8 @@ define([
     {
       return [
         {id: 'subdivision', label: t('core', 'ORG_UNIT:subdivision')},
-        {id: 'date', label: t('fte', 'leaderEntryList:date')},
-        {id: 'shift', label: t('fte', 'leaderEntryList:shift')}
+        {id: 'date', label: t(this.collection.getNlsDomain(), 'property:date')},
+        {id: 'shift', label: t(this.collection.getNlsDomain(), 'property:shift')}
       ];
     },
 
@@ -40,18 +40,19 @@ define([
       {
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];
+        var privilegePrefix = model.getPrivilegePrefix();
 
         if (row.locked)
         {
           actions.push({
             icon: 'print',
-            label: t('fte', 'LIST:ACTION:print'),
+            label: t(model.getNlsDomain(), 'LIST:ACTION:print'),
             href: model.genClientUrl('print')
           });
         }
-        else if (user.isAllowedTo('FTE:LEADER:MANAGE'))
+        else if (user.isAllowedTo(privilegePrefix + ':MANAGE'))
         {
-          if (!user.isAllowedTo('FTE:LEADER:ALL'))
+          if (!user.isAllowedTo(privilegePrefix + ':ALL'))
           {
             var userDivision = user.getDivision();
             var subdivision = subdivisions.get(model.get('subdivision'));
@@ -64,7 +65,7 @@ define([
 
           actions.push({
             icon: 'edit',
-            label: t('fte', 'LIST:ACTION:edit'),
+            label: t(model.getNlsDomain(), 'LIST:ACTION:edit'),
             href: model.genClientUrl('edit')
           });
         }

@@ -1,11 +1,11 @@
 define([
   'moment',
-  '../data/divisions',
+  '../data/subdivisions',
   '../data/views/renderOrgUnitPath',
   '../core/Model'
 ], function(
   moment,
-  divisions,
+  subdivisions,
   renderOrgUnitPath,
   Model
 ) {
@@ -24,7 +24,7 @@ define([
     nlsDomain: 'fte',
 
     defaults: {
-      division: null,
+      subdivision: null,
       date: null,
       shift: null,
       flows: null,
@@ -41,7 +41,7 @@ define([
 
     serializeWithTotals: function()
     {
-      var division = divisions.get(this.get('division'));
+      var subdivision = subdivisions.get(this.get('subdivision'));
 
       var totalByCompany = {};
       var totalByProdFunction = {};
@@ -73,7 +73,7 @@ define([
       });
 
       return {
-        division: division ? renderOrgUnitPath(division, false, false) : '?',
+        subdivision: subdivision ? renderOrgUnitPath(subdivision, false, false) : '?',
         date: moment(this.get('date')).format('LL'),
         shift: this.get('shift'),
         companyCount: Object.keys(totalByCompany).length,

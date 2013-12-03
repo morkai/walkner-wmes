@@ -16,18 +16,17 @@ define([
     rqlQuery: function(rql)
     {
       var selector;
-      var userDivision = user.getDivision();
 
-      if (userDivision)
+      if (user.data.orgUnitType !== 'unspecified')
       {
         selector = {
           name: 'and',
-          args: [{name: 'eq', args: ['division', userDivision.id]}]
+          args: [{name: 'eq', args: [user.data.orgUnitType, user.data.orgUnitId]}]
         };
       }
 
       return rql.Query.fromObject({
-        fields: {division: 1, date: 1, shift: 1, locked: 1},
+        fields: {subdivision: 1, date: 1, shift: 1, locked: 1},
         sort: {date: -1, shift: -1},
         limit: 15,
         selector: selector

@@ -30,14 +30,14 @@ define([
     {
       var subdivision = subdivisions.get(this.model.get('subdivision'));
 
-      return t('fte', 'leaderEntry:print:hdLeft', {
+      return t('fte', 'print:hdLeft', {
         subdivision: subdivision ? renderOrgUnitPath(subdivision, false, false) : '?'
       });
     },
 
     hdRight: function()
     {
-      return t('fte', 'leaderEntry:print:hdRight', {
+      return t('fte', 'print:hdRight', {
         date: moment(this.model.get('date')).format('YYYY-MM-DD'),
         shift: t('core', 'SHIFT:' + this.model.get('shift'))
       });

@@ -45,9 +45,9 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
   });
 
   var fteMasterEntrySchema = mongoose.Schema({
-    division: {
-      type: String,
-      ref: 'Division',
+    subdivision: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Subdivision',
       required: true
     },
     date: {
@@ -156,7 +156,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       },
       function queryProdFlowsStep()
       {
-        getProdFlowTasks(shiftId.division, this.functions, this.next());
+        getProdFlowTasks(shiftId.subdivision, this.functions, this.next());
       },
       function handleProdFlowsQueryResultStep(err, prodFlows)
       {
@@ -199,7 +199,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       function createFteMasterEntryStep()
       {
         var fteMasterEntryData = {
-          division: shiftId.division,
+          subdivision: shiftId.subdivision,
           date: shiftId.date,
           shift: shiftId.no,
           tasks: this.tasks,
@@ -306,7 +306,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
         user: user,
         model: {
           _id: fteMasterEntry.get('_id'),
-          division: fteMasterEntry.get('division'),
+          subdivision: fteMasterEntry.get('subdivision'),
           date: fteMasterEntry.get('date'),
           shift: fteMasterEntry.get('shift')
         }
@@ -316,9 +316,9 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     });
   };
 
-  function getProdFlowTasks(divisionId, functions, done)
+  function getProdFlowTasks(subdivisionId, functions, done)
   {
-    mongoose.model('ProdFlow').getAllByDivisionId(divisionId, function(err, prodFlows)
+    mongoose.model('ProdFlow').getAllBySubdivisionId(subdivisionId, function(err, prodFlows)
     {
       if (err)
       {
