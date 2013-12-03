@@ -4,9 +4,11 @@ define([
   'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
-  'app/core/pages/ListPage',
+  'app/core/View',
   '../UserCollection',
   '../views/UserListView',
+  '../views/UserFilterView',
+  'app/users/templates/listPage',
   'i18n!app/nls/users'
 ], function(
   $,
@@ -14,13 +16,19 @@ define([
   viewport,
   bindLoadingMessage,
   pageActions,
-  ListPage,
+  View,
   UserCollection,
-  UserListView
+  UserListView,
+  UserFilterView,
+  listPageTemplate
 ) {
   'use strict';
 
-  return ListPage.extend({
+  return View.extend({
+
+    template: listPageTemplate,
+
+    layoutName: 'page',
 
     pageId: 'userList',
 
@@ -29,17 +37,21 @@ define([
       'users.syncFailed': 'onSyncFailed'
     },
 
+    breadcrumbs: [
+      t.bound('users', 'BREADCRUMBS:browse')
+    ],
+
     actions: function()
     {
       var page = this;
 
-      return ListPage.prototype.actions.call(this).concat({
+      return [].concat({
         label: t.bound('users', 'PAGE_ACTION:sync'),
         icon: 'refresh',
         privileges: 'USERS:MANAGE',
         callback: function()
         {
-          page.$action = $('a', this);
+          page.$syncAction = $('a', this);
 
           page.syncUsers();
 
@@ -50,23 +62,56 @@ define([
 
     initialize: function()
     {
-      this.collection = bindLoadingMessage(
+      this.$syncAction = null;
+
+      this.defineModels();
+      this.defineViews();
+
+      this.setView('.filter-container', this.filterView);
+      this.setView('.users-list-container', this.listView);
+    },
+
+    defineModels: function()
+    {
+      this.userList = bindLoadingMessage(
         new UserCollection(null, {rqlQuery: this.options.rql}), this
       );
+    },
 
-      this.view = new UserListView({collection: this.collection});
+    defineViews: function()
+    {
+      this.listView = new UserListView({collection: this.userList});
 
-      this.$action = null;
+      this.filterView = new UserFilterView({
+        model: {
+          rqlQuery: this.userList.rqlQuery
+        }
+      });
+
+      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },
 
     load: function(when)
     {
-      return when(this.collection.fetch({reset: true}));
+      return when(this.userList.fetch({reset: true}));
+    },
+
+    refreshList: function(newRqlQuery)
+    {
+      this.userList.rqlQuery = newRqlQuery;
+
+      this.listView.refreshCollection(null, true);
+
+      this.broker.publish('router.navigate', {
+        url: this.userList.genClientUrl() + '?' + newRqlQuery,
+        trigger: false,
+        replace: true
+      });
     },
 
     syncUsers: function()
     {
-      var $action = this.$action;
+      var $action = this.$syncAction;
 
       if ($action.hasClass('disabled'))
       {
@@ -96,14 +141,14 @@ define([
 
     unlockSync: function()
     {
-      this.$action.removeClass('disabled');
-      this.$action.find('i').removeClass('fa-spinner fa-spin').addClass('fa-refresh');
-      this.$action = null;
+      this.$syncAction.removeClass('disabled');
+      this.$syncAction.find('i').removeClass('fa-spinner fa-spin').addClass('fa-refresh');
+      this.$syncAction = null;
     },
 
     onSynced: function()
     {
-      if (this.$action === null)
+      if (this.$syncAction === null)
       {
         return;
       }
@@ -119,7 +164,7 @@ define([
 
     onSyncFailed: function()
     {
-      if (this.$action === null)
+      if (this.$syncAction === null)
       {
         return;
       }

@@ -1,0 +1,15 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-personellId"><%- t('users', 'PROPERTY:personellId') %></label>
+      <input id="<%- idPrefix %>-personellId" class="form-control" name="personellId" type="text" placeholder="<%- t('users', 'FILTER:PLACEHOLDER:personellId') %>">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-lastName"><%- t('users', 'PROPERTY:lastName') %></label>
+      <input id="<%- idPrefix %>-lastName" class="form-control" name="lastName" type="text" placeholder="<%- t('users', 'FILTER:PLACEHOLDER:lastName') %>">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('users', 'FILTER:BUTTON') %>">
+    </div>
+  </form>
+</div>
