@@ -67,9 +67,5 @@
   "currentMasterEntry:msg:failure": "Nie udało się utworzyć wpisu :(",
 
   "masterEntry:print:hdLeft": "Zasoby przydzielone do {division}",
-  "masterEntry:print:hdRight": "{date}, {shift} zmiana",
-
-  "shift:1": "I",
-  "shift:2": "II",
-  "shift:3": "III"
+  "masterEntry:print:hdRight": "{date}, {shift} zmiana"
 }

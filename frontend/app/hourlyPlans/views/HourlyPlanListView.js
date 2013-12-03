@@ -5,7 +5,7 @@ define([
   'app/data/divisions',
   'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView',
-  'i18n!app/nls/fte'
+  'i18n!app/nls/hourlyPlans'
 ], function(
   moment,
   t,
@@ -19,16 +19,16 @@ define([
   return ListView.extend({
 
     remoteTopics: {
-      'fte.master.created': 'refreshCollection',
-      'fte.master.locked': 'refreshCollection'
+      'hourlyPlans.created': 'refreshCollection',
+      'hourlyPlans.locked': 'refreshCollection'
     },
 
     serializeColumns: function()
     {
       return [
         {id: 'division', label: t('core', 'ORG_UNIT:division')},
-        {id: 'date', label: t('fte', 'masterEntryList:date')},
-        {id: 'shift', label: t('fte', 'masterEntryList:shift')}
+        {id: 'date', label: t('hourlyPlans', 'property:date')},
+        {id: 'shift', label: t('hourlyPlans', 'property:shift')}
       ];
     },
 
@@ -45,13 +45,13 @@ define([
         {
           actions.push({
             icon: 'print',
-            label: t('fte', 'LIST:ACTION:print'),
+            label: t('hourlyPlans', 'LIST:ACTION:print'),
             href: model.genClientUrl('print')
           });
         }
-        else if (user.isAllowedTo('FTE:MASTER:MANAGE'))
+        else if (user.isAllowedTo('HOURLY_PLANS:MANAGE'))
         {
-          if (!user.isAllowedTo('FTE:MASTER:ALL'))
+          if (!user.isAllowedTo('HOURLY_PLANS:ALL'))
           {
             var userDivision = user.getDivision();
 
@@ -63,7 +63,7 @@ define([
 
           actions.push({
             icon: 'edit',
-            label: t('fte', 'LIST:ACTION:edit'),
+            label: t('hourlyPlans', 'LIST:ACTION:edit'),
             href: model.genClientUrl('edit')
           });
         }

@@ -39,7 +39,7 @@ define([
     {
       return t('fte', 'leaderEntry:print:hdRight', {
         date: moment(this.model.get('date')).format('YYYY-MM-DD'),
-        shift: t('fte', 'shift:' + this.model.get('shift'))
+        shift: t('core', 'SHIFT:' + this.model.get('shift'))
       });
     },
 

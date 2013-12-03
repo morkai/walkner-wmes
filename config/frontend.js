@@ -22,6 +22,7 @@ exports.modules = [
   'prodTasks',
   'orders',
   'fte',
+  'hourlyPlans',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'},
   'httpServer',
@@ -38,7 +39,8 @@ exports.events = {
       'users.login', 'users.logout',
       '*.added', '*.edited',
       'fte.leader.created', 'fte.leader.locked',
-      'fte.master.created', 'fte.master.locked'
+      'fte.master.created', 'fte.master.locked',
+      'hourlyPlans.created', 'hourlyPlans.locked'
     ],
     info: [
       'events.**',
@@ -72,7 +74,7 @@ exports.pubsub = {
     'events.saved',
     '*.added', '*.edited', '*.deleted', '*.synced',
     'shiftChanged',
-    'fte.leader.*',
+    'fte.master.*', 'fte.leader.*', 'hourlyPlans.*',
     'users.syncFailed'
   ]
 };
@@ -102,6 +104,7 @@ exports.user = {
     'EVENTS:VIEW', 'EVENTS:MANAGE',
     'FTE:LEADER:VIEW', 'FTE:LEADER:MANAGE', 'FTE:LEADER:ALL',
     'FTE:MASTER:VIEW', 'FTE:MASTER:MANAGE', 'FTE:MASTER:ALL',
+    'HOURLY_PLANS:VIEW', 'HOURLY_PLANS:MANAGE', 'HOURLY_PLANS:ALL',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE'
   ]
 };

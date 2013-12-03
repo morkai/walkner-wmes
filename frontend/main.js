@@ -231,6 +231,7 @@
       'app/core/views/LogInFormView',
       'app/time',
       'app/fte/routes',
+      'app/hourlyPlans/routes',
       'app/orders/routes',
       'app/emptyOrders/routes',
       'app/events/routes',

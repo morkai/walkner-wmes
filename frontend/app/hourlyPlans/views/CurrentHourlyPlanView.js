@@ -6,8 +6,8 @@ define([
   'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/View',
-  'app/fte/templates/currentMasterEntry',
-  'i18n!app/nls/fte'
+  'app/hourlyPlans/templates/current',
+  'i18n!app/nls/hourlyPlans'
 ], function(
   t,
   viewport,
@@ -16,7 +16,7 @@ define([
   OrgUnitDropdownsView,
   Model,
   View,
-  currentMasterEntryTemplate
+  currentTemplate
 ) {
   'use strict';
 
@@ -24,9 +24,9 @@ define([
 
   return View.extend({
 
-    template: currentMasterEntryTemplate,
+    template: currentTemplate,
 
-    idPrefix: 'currentMasterEntry',
+    idPrefix: 'currentHourlyPlan',
 
     events: {
       'click .btn-primary': 'onSubmit'
@@ -81,7 +81,7 @@ define([
 
         view.oudView.selectValue(model, orgUnit);
 
-        view.readonlyDivision = !(user.isAllowedTo('FTE:MASTER:ALL') && !userDivision);
+        view.readonlyDivision = !(user.isAllowedTo('HOURLY_PLANS:ALL') && !userDivision);
 
         view.oudView.$id('division').select2('readonly', view.readonlyDivision);
 
@@ -103,7 +103,7 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 5000,
-          text: t('fte', 'currentMasterEntry:msg:offline')
+          text: t('hourlyPlans', 'msg:offline')
         });
       }
 
@@ -115,7 +115,7 @@ define([
       this.$submit.attr('disabled', true);
 
       this.socket.emit(
-        'fte.master.getCurrentEntryId',
+        'hourlyPlans.getCurrentEntryId',
         $division.select2('val'),
         function(err, currentEntryId)
         {
@@ -124,7 +124,7 @@ define([
             if (err.message === 'LOCKED')
             {
               return view.broker.publish('router.navigate', {
-                url: '#fte/master/' + currentEntryId,
+                url: '#hourlyPlans/' + currentEntryId,
                 trigger: true
               });
             }
@@ -138,12 +138,12 @@ define([
             return viewport.msg.show({
               type: 'error',
               time: 5000,
-              text: t('fte', 'currentMasterEntry:msg:failure')
+              text: t('hourlyPlans', 'msg:failure')
             });
           }
 
           view.broker.publish('router.navigate', {
-            url: '#fte/master/' + currentEntryId + ';edit',
+            url: '#hourlyPlans/' + currentEntryId + ';edit',
             trigger: true
           });
         }

@@ -22,6 +22,7 @@ module.exports = [
   'emptyOrder',
 
   'fteMasterEntry',
-  'fteLeaderEntry'
+  'fteLeaderEntry',
+  'hourlyPlan'
 
 ];

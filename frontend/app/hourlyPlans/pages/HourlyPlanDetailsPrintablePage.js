@@ -5,9 +5,9 @@ define([
   'app/data/views/renderOrgUnitPath',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
-  '../FteMasterEntry',
-  '../views/FteMasterEntryDetailsPrintableView',
-  'i18n!app/nls/fte'
+  '../HourlyPlan',
+  '../views/HourlyPlanDetailsPrintableView',
+  'i18n!app/nls/hourlyPlans'
 ], function(
   moment,
   t,
@@ -15,8 +15,8 @@ define([
   renderOrgUnitPath,
   bindLoadingMessage,
   View,
-  FteMasterEntry,
-  FteMasterEntryDetailsPrintableView
+  HourlyPlan,
+  HourlyPlanDetailsPrintableView
 ) {
   'use strict';
 
@@ -24,20 +24,20 @@ define([
 
     layoutName: 'print',
 
-    pageId: 'fteMasterEntryDetailsPrintable',
+    pageId: 'hourlyPlanDetailsPrintable',
 
     hdLeft: function()
     {
       var division = divisions.get(this.model.get('division'));
 
-      return t('fte', 'masterEntry:print:hdLeft', {
+      return t('hourlyPlans', 'print:hdLeft', {
         division: division ? renderOrgUnitPath(division, false, false) : '?'
       });
     },
 
     hdRight: function()
     {
-      return t('fte', 'masterEntry:print:hdRight', {
+      return t('hourlyPlans', 'print:hdRight', {
         date: moment(this.model.get('date')).format('YYYY-MM-DD'),
         shift: t('core', 'SHIFT:' + this.model.get('shift'))
       });
@@ -45,9 +45,9 @@ define([
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(new FteMasterEntry({_id: this.options.modelId}), this);
+      this.model = bindLoadingMessage(new HourlyPlan({_id: this.options.modelId}), this);
 
-      this.view = new FteMasterEntryDetailsPrintableView({model: this.model});
+      this.view = new HourlyPlanDetailsPrintableView({model: this.model});
     },
 
     load: function(when)

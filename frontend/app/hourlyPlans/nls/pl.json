@@ -1,0 +1,40 @@
+{
+  "BREADCRUMBS:entryList": "Plany godzinowe",
+  "BREADCRUMBS:entryForm": "Planowanie",
+  "BREADCRUMBS:entryDetails": "Plan godzinowy",
+  "BREADCRUMBS:currentEntry": "Wybór wydziału",
+
+  "MSG:LOADING_FAILURE": "Ładowanie planów godzinowych nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie planu godzinowego nie powiodło się :(",
+
+  "PAGE_ACTION:currentEntry": "Planuj",
+  "PAGE_ACTION:print": "Pokaż wersję do druku",
+  "PAGE_ACTION:lock": "Zamknij wpis",
+  "PAGE_ACTION:edit": "Edytuj wpis",
+  "LIST:ACTION:print": "Pokaż wersję do druku",
+  "LIST:ACTION:edit": "Edytuj wpis",
+
+  "FILTER:DATE": "Data:",
+  "FILTER:LIMIT": "Limit:",
+  "FILTER:SHIFT": "Zmiana:",
+  "FILTER:SHIFT:ANY": "Dowolna",
+  "FILTER:BUTTON": "Filtruj plany",
+
+  "panel:title": "Plan godzinowy",
+  "panel:title:editable": "Formularz planu godzinowego",
+  "column:flow": "Przepływ",
+  "column:noPlan": "Brak<br>planu?",
+  "column:level": "Poziom",
+  "property:shift": "Zmiana:",
+  "property:date": "Data:",
+  "msg:lockFailure": "Nie udało się zamknąć wpisu :(",
+
+  "print:hdLeft": "Plan godzinowy dla {division}",
+  "print:hdRight": "{date}, {shift} zmiana",
+
+  "current:panel:title": "Formularz wyboru wydziału do planów godzinowych",
+  "current:panel:warning": "<p>Jeżeli wybrany wydział nie będzie miał wpisu dla aktualnej zmiany, zostanie utworzony nowy wpis.</p>",
+  "current:submit": "Planuj",
+  "current:msg:offline": "Nie można planować: brak połączenia z serwerem :(",
+  "current:msg:failure": "Nie udało się utworzyć wpisu :("
+}

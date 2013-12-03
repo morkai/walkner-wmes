@@ -77,5 +77,8 @@
   "PRIVILEGE:FTE:MASTER:ALL": "FTE (mistrz): dostęp do wszystkich wydziałów",
   "PRIVILEGE:FTE:LEADER:VIEW": "FTE (lider): przeglądanie",
   "PRIVILEGE:FTE:LEADER:MANAGE": "FTE (lider): zarządzanie",
-  "PRIVILEGE:FTE:LEADER:ALL": "FTE (lider): dostęp do wszystkich wydziałów"
+  "PRIVILEGE:FTE:LEADER:ALL": "FTE (lider): dostęp do wszystkich wydziałów",
+  "PRIVILEGE:HOURLY_PLANS:VIEW": "Plany godzinowe: przeglądanie",
+  "PRIVILEGE:HOURLY_PLANS:MANAGE": "Plany godzinowe: zarządzanie",
+  "PRIVILEGE:HOURLY_PLANS:ALL": "Plany godzinowe: dostęp do wszystkich wydziałów"
 }

@@ -82,7 +82,7 @@ define([
 
         row.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
         row.date = moment(row.date).format('LL');
-        row.shift = t('fte', 'shift:' + row.shift);
+        row.shift = t('core', 'SHIFT:' + row.shift);
 
         return row;
       });

@@ -4,19 +4,19 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/View',
-  '../FteLeaderEntryCollection',
-  '../views/FteLeaderEntryListView',
-  '../views/FteEntryFilterView',
-  'app/fte/templates/listPage',
-  'i18n!app/nls/fte'
+  '../HourlyPlanCollection',
+  '../views/HourlyPlanListView',
+  'app/fte/views/FteEntryFilterView',
+  'app/hourlyPlans/templates/listPage',
+  'i18n!app/nls/hourlyPlans'
 ], function(
   $,
   t,
   bindLoadingMessage,
   pageActions,
   View,
-  FteLeaderEntryCollection,
-  FteLeaderEntryListView,
+  HourlyPlanCollection,
+  HourlyPlanListView,
   FteEntryFilterView,
   listPageTemplate
 ) {
@@ -28,17 +28,17 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'fteLeaderEntryList',
+    pageId: 'hourlyPlanList',
 
     breadcrumbs: [
-      t.bound('fte', 'BREADCRUMBS:leader:entryList')
+      t.bound('hourlyPlans', 'BREADCRUMBS:entryList')
     ],
 
     actions: [{
-      label: t('fte', 'PAGE_ACTION:currentEntry'),
-      href: '#fte/leader/current',
+      label: t('hourlyPlans', 'PAGE_ACTION:currentEntry'),
+      href: '#hourlyPlans/current',
       icon: 'edit',
-      privileges: 'FTE:LEADER:MANAGE'
+      privileges: 'HOURLY_PLANS:MANAGE'
     }],
 
     initialize: function()
@@ -47,25 +47,26 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.fte-list-container', this.listView);
+      this.setView('.hourlyPlans-list-container', this.listView);
     },
 
     defineModels: function()
     {
       this.collection = bindLoadingMessage(
-        new FteLeaderEntryCollection(null, {rqlQuery: this.options.rql}), this
+        new HourlyPlanCollection(null, {rqlQuery: this.options.rql}), this
       );
     },
 
     defineViews: function()
     {
       this.filterView = new FteEntryFilterView({
+        divisionOnly: true,
         model: {
           rqlQuery: this.collection.rqlQuery
         }
       });
 
-      this.listView = new FteLeaderEntryListView({collection: this.collection});
+      this.listView = new HourlyPlanListView({collection: this.collection});
 
       this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },

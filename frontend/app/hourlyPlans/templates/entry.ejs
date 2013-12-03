@@ -1,0 +1,72 @@
+<div>
+  <div class="well">
+    <div class="fte-property">
+      <span class="fte-property-name"><%- t('core', 'ORG_UNIT:division') %></span>
+      <span class="fte-property-value"><%- division %></span>
+    </div>
+    <div class="fte-property">
+      <span class="fte-property-name"><%- t('hourlyPlans', 'property:date') %></span>
+      <span class="fte-property-value"><%- date %></span>
+    </div>
+    <div class="fte-property">
+      <span class="fte-property-name"><%- t('hourlyPlans', 'property:shift') %></span>
+      <span class="fte-property-value"><%- t('core', 'SHIFT:' + shift) %></span>
+    </div>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- t('hourlyPlans', 'panel:title' + (editable ? ':editable': '')) %></div>
+    <table class="table table-bordered table-condensed table-hover hourlyPlan">
+      <thead>
+      <tr>
+        <th><%- t('hourlyPlans', 'column:flow') %>
+        <th class="hourlyPlan-column-noPlan even"><%- t('hourlyPlans', 'column:noPlan') %>
+        <th class="hourlyPlan-column-level"><%- t('hourlyPlans', 'column:level') %>
+        <% [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4, 5].forEach(function(hour, hourIndex) { %>
+        <th class="<%- hourIndex % 2 ? '' : 'even' %>">
+          <span><%- hour < 10 ? '0' : '' %><%- hour %><!--:00-<%- hour === 23 ? '00' : ((hour + 1 < 10 ? '0' : '') + (hour + 1)) %>:00//--></span>
+        <% }) %>
+      <tbody>
+      <% flows.forEach(function(flow, flowIndex) { %>
+      <tr>
+        <td><%= flow.name %>
+        <td class="even <% if (editable) { %>hourlyPlan-noPlan-container<% } %>">
+          <% if (editable) { %>
+          <input class="hourlyPlan-noPlan" type="checkbox" data-flow="<%- flowIndex %>" <%- flow.noPlan ? 'checked' : '' %>>
+          <% } else { %>
+          <i class="fa fa-<%- flow.noPlan ? 'check' : 'times' %>"></i>
+          <% } %>
+        <td>
+          <% if (editable) { %>
+          <input
+            class="form-control hourlyPlan-count"
+            name="level"
+            type="text"
+            min="0"
+            max="9999"
+            value="<%- flow.level %>"
+            data-value="<%- flow.level %>"
+            data-flow="<%- flowIndex %>">
+          <% } else { %>
+          <%- flow.level %>
+          <% } %>
+        <% flow.hours.forEach(function(count, hourIndex) { %>
+        <td class="hourlyPlan-cell-count <%- hourIndex % 2 ? '' : 'even' %>">
+          <% if (editable) { %>
+          <input
+            class="form-control hourlyPlan-count"
+            name="hour"
+            type="text"
+            min="0"
+            max="9999"
+            value="<%- count %>"
+            data-value="<%- count %>"
+            data-flow="<%- flowIndex %>"
+            data-hour="<%- hourIndex %>">
+          <% } else { %>
+          <%- count %>
+          <% } %>
+        <% }) %>
+      <% }) %>
+    </table>
+  </div>
+</div>
