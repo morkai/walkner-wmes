@@ -76,14 +76,14 @@ define([
       {
         case 'fte.leader.created':
         case 'fte.leader.locked':
+        case 'fte.master.created':
+        case 'fte.master.locked':
           var subdivision = subdivisions.get(data.model.subdivision);
 
           data.model.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
           data.model.date = moment(data.model.date).format('YYYY-MM-DD');
           break;
 
-        case 'fte.master.created':
-        case 'fte.master.locked':
         case 'hourlyPlans.created':
         case 'hourlyPlans.locked':
           var division = divisions.get(data.model.division);
