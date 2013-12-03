@@ -145,6 +145,15 @@ exports.start = function startUserModule(app, module)
       var express = app[module.config.expressId];
       var cookies = cookie.parse(String(handshakeData.headers.cookie));
       var sessionCookie = cookies[express.config.sessionCookieKey];
+
+      if (typeof sessionCookie !== 'string')
+      {
+        handshakeData.sessionId = String(Date.now() + Math.random());
+        handshakeData.user = module.guest;
+
+        return done(null, true);
+      }
+
       var sessionId = connect.utils.parseSignedCookie(
         sessionCookie, express.config.cookieSecret
       );
