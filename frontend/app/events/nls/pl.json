@@ -123,5 +123,5 @@
   "TYPE:hourlyPlans.created": "Utworzenie planu godzinowego",
   "TEXT:hourlyPlans.created": "Utworzono nowy plan godzinowy dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
   "TYPE:hourlyPlans.locked": "Zamknięcie planu godzinowego",
-  "TEXT:hourlyPlans.locked": "Zamknięto nowy plan godzinowy dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>."
+  "TEXT:hourlyPlans.locked": "Zamknięto plan godzinowy dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>."
 }
