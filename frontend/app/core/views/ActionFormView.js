@@ -187,21 +187,20 @@ define([
         options.nlsDomain = options.model.getNlsDomain();
       }
 
-      if (!options.labelAttribute)
-      {
-        options.labelAttribute = options.model.getLabelAttribute();
-      }
-
       if (options.nlsDomain)
       {
         dialogTitle = t.bound(options.nlsDomain, 'ACTION_FORM:DIALOG_TITLE:' + options.actionKey);
 
-        if (options.labelAttribute)
+        var modelLabel = options.labelAttribute
+          ? options.model.get(options.labelAttribute)
+          : options.model.getLabel();
+
+        if (modelLabel)
         {
           options.messageText = t.bound(
             options.nlsDomain,
             'ACTION_FORM:MESSAGE_SPECIFIC:' + options.actionKey,
-            {label: options.model.get(options.labelAttribute)}
+            {label: modelLabel}
           );
         }
         else
