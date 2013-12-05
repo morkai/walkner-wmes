@@ -84,6 +84,7 @@
     viewport,
     PageLayout,
     PrintLayout,
+    BlankLayout,
     NavbarView,
     LogInFormView)
   {
@@ -136,6 +137,11 @@
     viewport.registerLayout('print', function createPrintLayout()
     {
       return new PrintLayout();
+    });
+
+    viewport.registerLayout('blank', function createBlankLayout()
+    {
+      return new BlankLayout();
     });
 
     function createNavbarView()
@@ -227,6 +233,7 @@
       'app/viewport',
       'app/core/layouts/PageLayout',
       'app/core/layouts/PrintLayout',
+      'app/core/layouts/BlankLayout',
       'app/core/views/NavbarView',
       'app/core/views/LogInFormView',
       'app/time',
