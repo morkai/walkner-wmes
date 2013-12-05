@@ -20,7 +20,8 @@ exports.paths = {
   'reltime': 'vendor/reltime',
   'select2': 'vendor/select2/select2',
   'select2-lang': 'vendor/select2-lang',
-  'd3': 'vendor/d3.v3'
+  'd3': 'vendor/d3.v3',
+  'visibly': 'vendor/visibly'
 };
 
 exports.shim = {
@@ -42,6 +43,9 @@ exports.shim = {
   },
   'd3': {
     exports: 'd3'
+  },
+  'visibly': {
+    exports: 'visibly'
   }
 };
 
