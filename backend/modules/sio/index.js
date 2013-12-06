@@ -58,7 +58,7 @@ exports.start = function startIoModule(app, module)
     {
       if (typeof reply === 'function')
       {
-        reply(Date.now());
+        reply(Date.now(), 'Europe/Warsaw');
       }
     });
   });

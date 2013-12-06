@@ -1,14 +1,20 @@
 define([
-  'jquery',
-  'app/socket'
+  'moment-timezone',
+  'app/socket',
+  'moment-timezone-data'
 ], function(
-  $,
+  moment,
   socket
 ) {
   'use strict';
 
+  var OFFSET_STORAGE_KEY = 'TIME:OFFSET';
+  var TZ_STORAGE_KEY = 'TIME:ZONE';
+
   var time = {
-    offset: 0,
+    synced: false,
+    offset: parseFloat(localStorage.getItem(OFFSET_STORAGE_KEY)) || 0,
+    zone: localStorage.getItem(TZ_STORAGE_KEY) || 'Europe/Warsaw',
     appData: window.TIME || 0
   };
 
@@ -18,10 +24,20 @@ define([
   {
     var startTime = Date.now();
 
-    socket.emit('time', function(serverTime)
+    socket.emit('time', function(serverTime, serverTz)
     {
       time.offset = ((serverTime - startTime) + (serverTime - Date.now())) / 2;
+      time.zone = serverTz;
+      time.synced = true;
+
+      localStorage.setItem(OFFSET_STORAGE_KEY, time.offset.toString());
+      localStorage.setItem(TZ_STORAGE_KEY, time.zone);
     });
+  };
+
+  time.getServerMoment = function()
+  {
+    return moment(Date.now() + time.offset).tz(time.zone);
   };
 
   /**
