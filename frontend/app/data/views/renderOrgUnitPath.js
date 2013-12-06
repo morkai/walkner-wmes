@@ -19,6 +19,11 @@ define([
 
   return function renderOrgUnitPath(model, link, pop)
   {
+    if (!model)
+    {
+      return null;
+    }
+
     var orgUnits = [];
 
     if (model.constructor === prodLines.model)
