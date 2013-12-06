@@ -80,7 +80,7 @@ function(
 
     if (user.data.lastName && user.data.firstName)
     {
-      return user.data.lastName + ' ' + user.data.firstName;
+      return user.data.firstName + ' ' + user.data.lastName;
     }
 
     return user.data.login;
