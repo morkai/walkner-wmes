@@ -22,7 +22,7 @@ exports.start = function startUserModule(app, module)
   module.root = lodash.merge(module.config.root, {
     loggedIn: true,
     super: true,
-    _id: 'admin1234567890123456789',
+    _id: '52a33b8bfb955dac8a92261b',
     login: 'root',
     privileges: []
   });
@@ -30,7 +30,7 @@ exports.start = function startUserModule(app, module)
   module.guest = lodash.merge({privileges: []}, module.config.guest, {
     loggedIn: false,
     super: false,
-    _id: 'guest1234567890123456789',
+    _id: '52a33b9cfb955dac8a92261c',
     login: 'guest',
     password: undefined
   });
