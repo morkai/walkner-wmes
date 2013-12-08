@@ -40,6 +40,11 @@ function(
    */
   user.reload = function(userData)
   {
+    if (_.isEqual(userData, user.data))
+    {
+      return;
+    }
+
     var wasLoggedIn = user.isLoggedIn();
 
     if (_.isObject(userData) && Object.keys(userData).length > 0)
