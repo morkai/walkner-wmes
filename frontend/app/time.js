@@ -40,6 +40,11 @@ define([
     return moment(Date.now() + time.offset).tz(time.zone);
   };
 
+  time.format = function(date, format)
+  {
+    return moment(date).tz(time.zone).format(format);
+  };
+
   /**
    * @param {string} str
    * @returns {number}
