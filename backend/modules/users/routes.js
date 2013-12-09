@@ -15,11 +15,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
   var canView = userModule.auth('USERS:VIEW');
   var canManage = userModule.auth('USERS:MANAGE');
 
-  express.get(
-    '/users',
-    userModule.auth('USERS:VIEW', 'EVENTS:VIEW', 'FTE:MASTER:MANAGE'),
-    crud.browseRoute.bind(null, app, User)
-  );
+  express.get('/users', crud.browseRoute.bind(null, app, User));
 
   express.post(
     '/users', canManage, hashPassword, crud.addRoute.bind(null, app, User)
