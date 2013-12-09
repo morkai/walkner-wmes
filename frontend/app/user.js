@@ -92,6 +92,18 @@ function(
   };
 
   /**
+   * @returns {{id: string, label: string, ip: string}}
+   */
+  user.getInfo = function()
+  {
+    return {
+      id: user.data._id,
+      ip: user.data.ip || user.data.ipAddress || '0.0.0.0',
+      label: user.getLabel()
+    };
+  };
+
+  /**
    * @param {string|Array.<string>} [privilege]
    * @returns {boolean}
    */
