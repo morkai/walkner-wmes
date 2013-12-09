@@ -45,6 +45,7 @@ define([
         this.toggleActions();
       });
       this.listenTo(this.model.prodShiftOrder, 'change:orderId', this.updateOrderData);
+      this.listenTo(this.model.prodShiftOrder, 'change:_id', this.toggleOrderDataProperties);
       this.listenTo(this.model.prodShiftOrder, 'change:quantityDone', this.updateQuantityDone);
       this.listenTo(this.model.prodShiftOrder, 'change:workerCount', function()
       {
@@ -66,13 +67,18 @@ define([
 
     updateOrderData: function()
     {
-      this.$('.production-properties-orderData').toggle(!!this.model.prodShiftOrder.id);
+      this.toggleOrderDataProperties();
 
       this.$property('orderNo').text(this.model.prodShiftOrder.getOrderNo());
       this.$property('nc12').text(this.model.prodShiftOrder.getNc12());
       this.$property('productName').text(this.model.prodShiftOrder.getProductName());
       this.$property('operationName').text(this.model.prodShiftOrder.getOperationName());
       this.$property('startedAt').text(this.model.prodShiftOrder.getStartedAt());
+    },
+
+    toggleOrderDataProperties: function()
+    {
+      this.$('.production-properties-orderData').toggle(!!this.model.prodShiftOrder.id);
     },
 
     updateWorkerCount: function()
