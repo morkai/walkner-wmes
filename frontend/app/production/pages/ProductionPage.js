@@ -114,11 +114,15 @@ window.model = this.model;
       this.listenTo(this.model, 'change:shift', function()
       {
         viewport.closeDialog();
-        viewport.msg.show({
-          type: 'info',
-          time: 2000,
-          text: t('production', 'msg:shiftChange')
-        });
+
+        if (this.model.get('shift'))
+        {
+          viewport.msg.show({
+            type: 'info',
+            time: 2000,
+            text: t('production', 'msg:shiftChange')
+          });
+        }
       });
 
       this.listenTo(this.model.prodShiftOrder, 'change:mechOrder', function()
