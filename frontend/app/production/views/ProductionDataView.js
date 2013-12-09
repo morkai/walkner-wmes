@@ -66,7 +66,7 @@ define([
 
     updateOrderData: function()
     {
-      this.$('.production-properties-orderData').toggle(this.model.prodShiftOrder.hasOrderData());
+      this.$('.production-properties-orderData').toggle(!!this.model.prodShiftOrder.id);
 
       this.$property('orderNo').text(this.model.prodShiftOrder.getOrderNo());
       this.$property('nc12').text(this.model.prodShiftOrder.getNc12());
