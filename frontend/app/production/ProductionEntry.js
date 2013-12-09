@@ -112,7 +112,7 @@ define([
       }
       catch (err) {}
 
-      if (data == null)
+      if (_.isEmpty(data))
       {
         this.resetShift();
       }
