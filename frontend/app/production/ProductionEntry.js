@@ -279,11 +279,6 @@ define([
 
     endDowntime: function()
     {
-      if (!this.prodDowntimes.findFirstUnfinished())
-      {
-        throw new Error("Cannot end a downtime as there is none!");
-      }
-
       this.finishDowntime();
 
       if (this.prodShiftOrder.id)
