@@ -84,6 +84,7 @@ define([
     {
       var lastShiftHour = this.model.getCurrentShiftMoment().add('hours', 7).hours();
       var currentMoment = time.getServerMoment();
+      var currentTime = currentMoment.valueOf();
       var currentHour = currentMoment.hours();
 
       var nextHourTime = currentMoment
@@ -97,7 +98,7 @@ define([
         ? (nextHourTime - 10 * 60 * 1000)
         : nextHourTime;
 
-      var delay = nextRenderTime + 1000 - Date.now();
+      var delay = nextRenderTime + 1000 - currentTime;
 
       if (delay > 0)
       {
