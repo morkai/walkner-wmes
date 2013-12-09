@@ -279,6 +279,11 @@ define([
   Viewport.prototype.onDialogShown = function()
   {
     this.currentDialog.$('[autofocus]').focus();
+
+    if (_.isFunction(this.currentDialog.onDialogShown))
+    {
+      this.currentDialog.onDialogShown();
+    }
   };
 
   Viewport.prototype.onDialogHidden = function()

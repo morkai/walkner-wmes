@@ -23,6 +23,10 @@ module.exports = [
 
   'fteMasterEntry',
   'fteLeaderEntry',
-  'hourlyPlan'
+  'hourlyPlan',
+  'prodLogEntry',
+  'prodShift',
+  'prodShiftOrder',
+  'prodDowntime'
 
 ];

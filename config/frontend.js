@@ -23,6 +23,7 @@ exports.modules = [
   'orders',
   'fte',
   'hourlyPlans',
+  'production',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'},
   'httpServer',

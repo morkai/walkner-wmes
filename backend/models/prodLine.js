@@ -17,13 +17,33 @@ module.exports = function setupProdLineModel(app, mongoose)
     description: {
       type: String,
       trim: true
+    },
+    secretKey: {
+      type: String,
+      trim: true,
+      required: true
     }
   }, {
-    id: false
+    id: false,
+    toJSON: {
+      transform: function(prodLine, ret)
+      {
+        delete ret.secretKey;
+
+        return ret;
+      }
+    }
   });
 
   prodLineSchema.statics.TOPIC_PREFIX = 'prodLines';
   prodLineSchema.statics.BROWSE_LIMIT = 1000;
+
+  prodLineSchema.statics.customizeLeanObject = function(leanModel)
+  {
+    delete leanModel.secretKey;
+
+    return leanModel;
+  };
 
   mongoose.model('ProdLine', prodLineSchema);
 };

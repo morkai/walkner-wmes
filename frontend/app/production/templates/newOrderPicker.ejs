@@ -1,0 +1,19 @@
+<form class="production-newOrderPicker">
+  <% if (offline) { %>
+  <p class="message message-inline message-warning"><%- t('production', 'newOrderPicker:offline:warning') %></p>
+  <% } else { %>
+  <p class="message message-inline message-info"><%- t('production', 'newOrderPicker:online:info') %></p>
+  <% } %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-order"><%- t('production', 'newOrderPicker:order:label') %></label>
+    <input id="<%- idPrefix %>-order" class="form-control" type="text" placeholder="<%- t('production', 'newOrderPicker:order:placeholder') %>">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-operation"><%- t('production', 'newOrderPicker:operation:label') %></label>
+    <input id="<%- idPrefix %>-operation" class="form-control" type="text" placeholder="<%- t('production', 'newOrderPicker:offline:operation:placeholder') %>">
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-success"><%- t('production', 'newOrderPicker:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('production', 'newOrderPicker:cancel') %></button>
+  </div>
+</form>

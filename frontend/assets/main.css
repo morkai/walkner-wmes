@@ -14,6 +14,7 @@
 @import url("../app/divisions/assets/main.css");
 @import url("../app/orders/assets/main.css");
 @import url("../app/vis/assets/main.css");
+@import url("../app/production/assets/main.css");
 
 #app-loading {
   position: absolute;

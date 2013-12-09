@@ -1,0 +1,15 @@
+<div class="production <%- locked ? 'is-locked' : 'is-unlocked' %> is-<%- state %>">
+  <div class="production-controls-container"></div>
+  <div class="production-header-container"></div>
+  <div class="production-data-container"></div>
+  <div class="production-ft">
+    <h2 class="production-sectionHeader"><%- t('production', 'section:history') %></h2>
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="production-subsectionHeader"><%- t('production', 'section:downtimes') %></h3>
+        <div class="table-responsive production-downtimes-container"></div>
+      </div>
+      <div class="col-md-4 production-quantities-container"></div>
+    </div>
+  </div>
+</div>

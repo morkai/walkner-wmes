@@ -1,0 +1,50 @@
+<div class="production-data">
+  <h2 class="production-sectionHeader"><%- t('production', 'section:data') %></h2>
+  <div class="production-properties production-properties-orderInfo">
+    <div class="production-property production-property-orderNo">
+      <div class="production-property-name"><%- t('production', 'property:orderNo') %></div>
+      <div class="production-property-value"></div>
+    </div>
+    <div class="production-property production-property-nc12">
+      <div class="production-property-name"><%- t('production', 'property:nc12') %></div>
+      <div class="production-property-value"></div>
+    </div>
+    <div class="production-property production-property-productName">
+      <div class="production-property-name"><%- t('production', 'property:productName') %></div>
+      <div class="production-property-value"></div>
+    </div>
+    <div class="production-property production-property-operationName">
+      <div class="production-property-name"><%- t('production', 'property:operationName') %></div>
+      <div class="production-property-value"></div>
+    </div>
+    <div class="production-property production-property-taktTime">
+      <div class="production-property-name"><%- t('production', 'property:taktTime') %></div>
+      <div class="production-property-value"></div>
+    </div>
+    <div class="production-property production-property-workerCountSap">
+      <div class="production-property-name"><%- t('production', 'property:workerCountSap') %></div>
+      <div class="production-property-value"></div>
+    </div>
+  </div>
+  <div class="production-properties production-properties-orderData">
+    <div class="production-property production-property-startedAt">
+      <div class="production-property-name"><%- t('production', 'property:createdAt') %></div>
+      <div class="production-property-value"></div>
+    </div>
+    <div class="production-property production-property-quantityDone">
+      <div class="production-property-name"><%- t('production', 'property:quantityDone') %></div>
+      <div class="production-property-value"></div>
+    </div>
+    <div class="production-property production-property-workerCount">
+      <div class="production-property-name"><%- t('production', 'property:workerCount') %></div>
+      <div class="production-property-value"></div>
+    </div>
+  </div>
+  <div class="production-actions">
+    <button class="btn btn-danger production-action production-beginDowntime">Przestój</button>
+    <button class="btn btn-success production-action production-endDowntime">Koniec przestoju</button>
+    <button class="btn btn-success production-action production-continueOrder">Kontynuuj zlecenie</button>
+    <button class="btn btn-success production-action production-pickNextOrder">Następne zlecenie</button>
+    <button class="btn btn-warning production-action production-endWork">Koniec pracy</button>
+  </div>
+</div>

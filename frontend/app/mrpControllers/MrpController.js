@@ -1,7 +1,9 @@
 define([
-  '../core/Model'
+  '../core/Model',
+  'app/data/subdivisions'
 ], function(
-  Model
+  Model,
+  subdivisions
 ) {
   'use strict';
 
@@ -22,6 +24,11 @@ define([
     defaults: {
       subdivision: null,
       description: null
+    },
+
+    getSubdivision: function()
+    {
+      return subdivisions.get(this.get('subdivision')) || null;
     }
 
   });

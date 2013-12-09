@@ -12,6 +12,8 @@
   "PAGE_ACTION:edit": "Edytuj linii produkcyjną",
   "PAGE_ACTION:delete": "Usuń linii produkcyjną",
 
+  "LIST:ACTION:production": "Pokaż formatkę produkcji",
+
   "PANEL:TITLE:details": "Szczegóły linii produkcyjnej",
   "PANEL:TITLE:addForm": "Formularz dodawania linii produkcyjnej",
   "PANEL:TITLE:editForm": "Formularz edycji linii produkcyjnej",

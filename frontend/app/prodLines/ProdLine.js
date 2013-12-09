@@ -1,7 +1,9 @@
 define([
-  '../core/Model'
+  '../core/Model',
+  '../data/workCenters'
 ], function(
-  Model
+  Model,
+  workCenters
 ) {
   'use strict';
 
@@ -22,6 +24,13 @@ define([
     defaults: {
       workCenter: null,
       description: null
+    },
+
+    getSubdivision: function()
+    {
+      var workCenter = workCenters.get(this.get('workCenter'));
+
+      return workCenter ? workCenter.getSubdivision() : null;
     }
 
   });

@@ -1,7 +1,11 @@
 define([
-  '../core/Model'
+  '../core/Model',
+  'app/data/mrpControllers',
+  'app/data/prodFlows'
 ], function(
-  Model
+  Model,
+  mrpControllers,
+  prodFlows
 ) {
   'use strict';
 
@@ -23,6 +27,27 @@ define([
       mrpController: null,
       prodFlow: null,
       description: null
+    },
+
+    getSubdivision: function()
+    {
+      var mrpController;
+
+      if (this.get('mrpController'))
+      {
+        mrpController = mrpControllers.get(this.get('mrpController'));
+      }
+      else
+      {
+        var prodFlow = prodFlows.get(this.get('prodFlow'));
+
+        if (prodFlow)
+        {
+          mrpController = mrpControllers.get(prodFlow.get('mrpController'));
+        }
+      }
+
+      return mrpController ? mrpController.getSubdivision() : null;
     }
 
   });

@@ -1,0 +1,11 @@
+<div class="production-controls">
+  <a href="#" class="fa fa-home" title="<%- t('production', 'controls:dashboard') %>"></a>
+  <% if (user.isAllowedTo('DICTIONARIES:MANAGE')) { %>
+  <a class="fa fa-unlock production-controls-lock" title="<%- t('production', 'controls:lock') %>"></a>
+  <a class="fa fa-lock production-controls-unlock" title="<%- t('production', 'controls:unlock') %>"></a>
+  <% } else { %>
+  <i class="fa fa-unlock production-controls-lock" title="<%- t('production', 'controls:locked') %>"></i>
+  <i class="fa fa-lock production-controls-unlock" title="<%- t('production', 'controls:unlocked') %>"></i>
+  <% } %>
+  <i class="fa fa-refresh production-controls-sync" title="<%- t('production', 'controls:sync') %>"></i>
+</div>

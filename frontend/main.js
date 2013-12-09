@@ -237,6 +237,7 @@
       'app/core/views/NavbarView',
       'app/core/views/LogInFormView',
       'app/time',
+      'app/production/routes',
       'app/fte/routes',
       'app/hourlyPlans/routes',
       'app/orders/routes',

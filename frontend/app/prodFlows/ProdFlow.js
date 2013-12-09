@@ -1,7 +1,9 @@
 define([
-  '../core/Model'
+  '../core/Model',
+  'app/data/mrpControllers'
 ], function(
-  Model
+  Model,
+  mrpControllers
 ) {
   'use strict';
 
@@ -22,6 +24,13 @@ define([
     defaults: {
       mrpController: null,
       name: null
+    },
+
+    getSubdivision: function()
+    {
+      var mrpController = mrpControllers.get(this.get('mrpController'));
+
+      return mrpController ? mrpController.getSubdivision() : null;
     }
 
   });

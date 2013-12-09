@@ -1,0 +1,11 @@
+<form class="production-personelPicker">
+  <% if (offline) { %>
+  <p class="message message-inline message-warning"><%- t('production', 'personelPicker:offline:warning') %></p>
+  <% } %>
+  <label for="<%- idPrefix %>-user"><%= label %></label>
+  <input id="<%- idPrefix %>-user" class="form-control" type="text" placeholder="<%= placeholder %>">
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('production', 'personelPicker:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('production', 'personelPicker:cancel') %></button>
+  </div>
+</form>
