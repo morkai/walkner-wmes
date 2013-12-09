@@ -40,9 +40,14 @@ define([
     return moment(Date.now() + time.offset).tz(time.zone);
   };
 
+  time.getMoment = function(date)
+  {
+    return moment(date).tz(time.zone);
+  };
+
   time.format = function(date, format)
   {
-    return moment(date).tz(time.zone).format(format);
+    return time.getMoment(date).format(format);
   };
 
   /**
