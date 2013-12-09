@@ -88,7 +88,7 @@
     NavbarView,
     LogInFormView)
   {
-    monkeyPatch(Backbone);
+    monkeyPatch(Backbone, $);
 
     socket.connect();
 
@@ -288,7 +288,7 @@
   appCache.onobsolete = location.reload.bind(location);
   appCache.onupdateready = location.reload.bind(location);
 
-  function monkeyPatch(Backbone)
+  function monkeyPatch(Backbone, $)
   {
     var originalSync = Backbone.sync;
 
@@ -298,5 +298,7 @@
 
       return originalSync.call(this, method, model, options);
     };
+
+    $.fn.modal.Constructor.prototype.enforceFocus = function() {};
   }
 })();
