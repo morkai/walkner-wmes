@@ -25,6 +25,8 @@ define([
 ) {
   'use strict';
 
+  // TODO: Sync with the latest entry on unlock
+
   return Model.extend({
 
     urlRoot: '/prodShift',
@@ -87,6 +89,11 @@ define([
 
     readLocalData: function()
     {
+      if (this.isLocked())
+      {
+        return;
+      }
+
       var data = null;
 
       try
@@ -137,7 +144,7 @@ define([
 
     changeShift: function()
     {
-      var finishedProdShiftId = this.id;
+      var finishedProdShiftId = this.id || null;
 
       this.finishOrder();
       this.finishDowntime();
@@ -461,7 +468,7 @@ define([
      */
     isLocked: function()
     {
-      return typeof localStorage.getItem(this.getSecretKeyStorageKey()) !== 'string';
+      return this.getSecretKey() === null;
     },
 
     /**
@@ -482,7 +489,11 @@ define([
       if (secretKey === null)
       {
         localStorage.removeItem(this.getSecretKeyStorageKey());
+        localStorage.removeItem(this.getDataStorageKey());
 
+        this.prodShiftOrder.clear();
+        this.prodDowntimes.reset();
+        this.clear();
         this.trigger('locked');
       }
       else
@@ -490,6 +501,7 @@ define([
         localStorage.setItem(this.getSecretKeyStorageKey(), secretKey);
 
         this.trigger('unlocked');
+        this.readLocalData();
       }
     },
 
