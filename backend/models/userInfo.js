@@ -1,5 +1,7 @@
 'use strict';
 
+var ObjectId = require('mongoose').Types.ObjectId;
+
 exports.createObject = function(userData, addressData)
 {
   var userInfo = {
@@ -10,7 +12,7 @@ exports.createObject = function(userData, addressData)
 
   try
   {
-    userInfo.id = new ObjectId(String(userData._id || userData.id));
+    userInfo.id = ObjectId.createFromHexString(String(userData._id || userData.id));
   }
   catch (err) {}
 
