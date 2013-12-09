@@ -2,12 +2,19 @@
 
 var crypto = require('crypto');
 var lodash = require('lodash');
+var userInfo = require('../../models/userInfo');
 
 module.exports = function setUpProductionsCommands(app, productionModule)
 {
   var sio = app[productionModule.config.sioId];
   var mongoose = app[productionModule.config.mongooseId];
+  var ProdLogEntry = mongoose.model('ProdLogEntry');
   var prodLines = app[productionModule.config.prodLinesId];
+  var secretKeys = {};
+
+  cacheSecretKeys();
+
+  app.broker.subscribe('prodLines.*', cacheSecretKeys);
 
   sio.sockets.on('connection', function(socket)
   {
@@ -19,7 +26,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
       }
 
       var user = socket.handshake.user;
-console.log(user);
+
       if (!user || (!user.super && (user.privileges || []).indexOf('DICTIONARIES:MANAGE') === -1))
       {
         return reply(new Error('AUTH'));
@@ -53,7 +60,9 @@ console.log(user);
           return reply(err);
         }
 
-        secretKey = crypto.createHash('sha1').update(bytes).digest('md5');
+        secretKey = crypto.createHash('md5').update(bytes).digest('hex');
+
+        secretKeys[prodLineId] = secretKey;
 
         prodLine.set('secretKey', secretKey);
         prodLine.save(function(err)
@@ -85,21 +94,32 @@ console.log(user);
       }
 
       var logEntryList = [];
+      var creator = userInfo.createObject(socket.handshake.user, socket);
 
       logEntryStream.split('\n').forEach(function(logEntryJson)
       {
         try
         {
-          var historyEntry = JSON.parse(logEntryJson);
+          var logEntry = JSON.parse(logEntryJson);
 
-          if (lodash.isObject(historyEntry))
+          if (!lodash.isObject(logEntry))
           {
-            logEntryList.push(historyEntry);
+            return logInvalidEntry(new Error("TYPE"), logEntryJson);
           }
+
+          if (!validateSecretKey(logEntry))
+          {
+            return logInvalidEntry(new Error("SECRET_KEY"), logEntryJson);
+          }
+
+          logEntry.creator = creator;
+          logEntry.todo = true;
+
+          logEntryList.push(new ProdLogEntry(logEntry).toObject());
         }
         catch (err)
         {
-          productionModule.debug("Invalid log entry: %s\n%s", err.message, logEntryJson);
+          logInvalidEntry(err, logEntryJson);
         }
       });
 
@@ -108,16 +128,52 @@ console.log(user);
         return reply();
       }
 
-      productionModule.debug("Syncing...");
-
-      logEntryList.forEach(function(logEntry)
+      setImmediate(function()
       {
-        console.log(logEntry);
+        productionModule.debug("Saving log entries...");
+
+        ProdLogEntry.collection.insert(logEntryList, {continueOnError: true}, function(err, docs)
+        {
+          if (err)
+          {
+            productionModule.error("Error during saving of log entries: %s", err.message);
+          }
+
+          productionModule.debug("Saved %d of %d!", docs ? docs.length : 0, logEntryList.length);
+
+          reply();
+        });
       });
-
-      productionModule.debug("Synced!");
-
-      reply();
     });
   });
+
+  function logInvalidEntry(err, logEntryJson)
+  {
+    productionModule.debug("Invalid log entry: %s\n%s", err.message, logEntryJson);
+  }
+
+  function cacheSecretKeys()
+  {
+    secretKeys = {};
+
+    prodLines.models.forEach(function(prodLine)
+    {
+      var secretKey = prodLine.get('secretKey');
+
+      if (secretKey)
+      {
+        secretKeys[prodLine.get('_id')] = secretKey;
+      }
+    });
+  }
+
+  function validateSecretKey(logEntry)
+  {
+    if (typeof logEntry.secretKey !== 'string')
+    {
+      return false;
+    }
+
+    return logEntry.secretKey === secretKeys[logEntry.prodLine];
+  }
 };

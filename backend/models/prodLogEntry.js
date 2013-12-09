@@ -27,6 +27,10 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     createdAt: {
       type: Date,
       required: true
+    },
+    todo: {
+      type: Boolean,
+      default: true
     }
   }, {
     id: false
