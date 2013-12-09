@@ -88,7 +88,18 @@ define([
 
     updateShift: function()
     {
-      this.$property('shift').text(this.model.get('shift'));
+      var shift = this.model.get('shift');
+
+      if (typeof shift === 'number')
+      {
+        shift = t('core', 'SHIFT:' + shift);
+      }
+      else
+      {
+        shift = '?';
+      }
+
+      this.$property('shift').text(shift);
     },
 
     updateOrgUnit: function()
