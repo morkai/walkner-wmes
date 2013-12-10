@@ -248,6 +248,13 @@ define([
     return this;
   };
 
+  Viewport.prototype.closeAllDialogs = function()
+  {
+    this.dialogQueue = [];
+
+    this.closeDialog();
+  };
+
   Viewport.prototype.setLayout = function(layoutName)
   {
     if (layoutName === this.currentLayoutName)

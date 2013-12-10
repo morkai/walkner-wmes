@@ -112,7 +112,7 @@ window.model = this.model;
 
       this.listenTo(this.model, 'change:shift', function()
       {
-        viewport.closeDialog();
+        viewport.closeAllDialogs();
 
         if (this.model.get('shift'))
         {
