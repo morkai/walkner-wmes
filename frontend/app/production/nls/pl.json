@@ -113,6 +113,11 @@
   "endDowntimeDialog:yes": "Zakończ przestój",
   "endDowntimeDialog:no": "Nie kończ przestoju",
 
+  "continueOrderDialog:title": "Potwierdzenie kontynuacji zlecenia",
+  "continueOrderDialog:message": "<p>Czy na pewno chcesz rozpocząć aktualnie wybrane zlecenie?</p>",
+  "continueOrderDialog:yes": "Kontynuuj zlecenie",
+  "continueOrderDialog:no": "Nie kontynuuj zlecenia",
+
   "endWorkDialog:title": "Potwierdzenie zakończenia pracy",
   "endWorkDialog:warning": "Zakończenie pracy ukończy {downtime, select, true{aktualnie wybrany przestój i zlecenie} other{aktualnie wybrane zlecenie}}. Sprawdź czy pola <em>Wartość wykonana</em> i <em>Osoby pracujące</em> mają prawidłowe wartości, gdyż po zakończeniu pracy nie będzie można ich zmienić.",
   "endWorkDialog:quantityDone": "Ilość wykonana:",

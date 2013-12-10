@@ -9,7 +9,9 @@ define([
   './DowntimePickerView',
   './EndWorkDialogView',
   'app/production/templates/data',
-  'app/production/templates/endDowntimeDialog'
+  'app/production/templates/endDowntimeDialog',
+  'app/production/templates/continueOrderDialog'
+
 ], function(
   _,
   $,
@@ -21,7 +23,8 @@ define([
   DowntimePickerView,
   EndWorkDialogView,
   dataTemplate,
-  endDowntimeDialogTemplate
+  endDowntimeDialogTemplate,
+  continueOrderDialogTemplate
 ) {
   'use strict';
 
@@ -245,7 +248,19 @@ define([
 
     continueOrder: function()
     {
-      this.model.continueOrder();
+      var dialogView = new DialogView({
+        template: continueOrderDialogTemplate
+      });
+
+      this.listenTo(dialogView, 'answered', function(answer)
+      {
+        if (answer === 'yes')
+        {
+          this.model.continueOrder();
+        }
+      });
+
+      viewport.showDialog(dialogView, t('production', 'continueOrderDialog:title'));
     },
 
     showDowntimePickerDialog: function()
