@@ -1,4 +1,15 @@
 <form class="production-newOrderPicker">
+  <% if (replacingOrder) { %>
+  <p class="message message-inline message-warning"><%- t('production', 'newOrderPicker:checkData:warning') %></p>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-quantityDone"><%- t('production', 'newOrderPicker:quantityDone') %></label>
+    <input id="<%- idPrefix %>-quantityDone" class="form-control" type="number" value="<%- quantityDone %>" autofocus>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-workerCount"><%- t('production', 'newOrderPicker:workerCount') %></label>
+    <input id="<%- idPrefix %>-workerCount" class="form-control" type="number" value="<%- workerCount %>">
+  </div>
+  <% } %>
   <% if (offline) { %>
   <p class="message message-inline message-warning"><%- t('production', 'newOrderPicker:offline:warning') %></p>
   <% } else { %>

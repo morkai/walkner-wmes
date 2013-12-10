@@ -58,7 +58,10 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        offline: !this.socket.isConnected()
+        offline: !this.socket.isConnected(),
+        replacingOrder: this.model.hasOrder(),
+        quantityDone: this.model.prodShiftOrder.get('quantityDone') || 0,
+        workerCount: this.model.prodShiftOrder.get('workerCount') || 0
       };
     },
 
@@ -68,18 +71,34 @@ define([
       {
         this.setUpOrderSelect2();
         this.setUpOperationSelect2();
+      }
 
+      this.focusFirstInput();
+    },
+
+    onDialogShown: function(viewport)
+    {
+      this.closeDialog = viewport.closeDialog.bind(viewport);
+
+      this.focusFirstInput();
+    },
+
+    closeDialog: function() {},
+
+    focusFirstInput: function()
+    {
+      if (this.model.hasOrder())
+      {
+        this.$id('quantityDone').select();
+      }
+      else if (this.socket.isConnected())
+      {
         this.$id('order').select2('focus');
       }
       else
       {
-        this.$id('order').focus();
+        this.$id('order').select();
       }
-    },
-
-    onDialogShown: function()
-    {
-      this.$id('order').focus().select2('focus');
     },
 
     setUpOrderSelect2: function()
@@ -243,7 +262,7 @@ define([
 
       delete orderInfo._id;
 
-      this.trigger('orderPicked', orderInfo, operationNo);
+      this.pickOrder(orderInfo, operationNo);
     },
 
     handleOfflinePick: function()
@@ -302,7 +321,37 @@ define([
         operationNo = '0' + operationNo;
       }
 
-      this.trigger('orderPicked', orderInfo, operationNo);
+      this.pickOrder(orderInfo, operationNo);
+    },
+
+    pickOrder: function(orderInfo, operationNo)
+    {
+      if (this.model.hasOrder())
+      {
+        var newQuantityDone = this.parseInt('quantityDone');
+        var newWorkerCount = this.parseInt('workerCount');
+
+        if (newQuantityDone !== this.model.prodShiftOrder.get('quantityDone'))
+        {
+          this.model.changeQuantityDone(newQuantityDone);
+        }
+
+        if (newWorkerCount !== this.model.prodShiftOrder.get('workerCount'))
+        {
+          this.model.changeWorkerCount(newWorkerCount);
+        }
+      }
+
+      this.model.changeOrder(orderInfo, operationNo);
+
+      this.closeDialog();
+    },
+
+    parseInt: function(field)
+    {
+      var value = parseInt(this.$id(field).val(), 10);
+
+      return isNaN(value) || value < 0 ? 0 : value;
     }
 
   });

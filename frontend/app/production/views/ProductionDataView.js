@@ -237,16 +237,10 @@ define([
 
     showNewOrderDialog: function()
     {
-      var newOrderView = new NewOrderPickerView();
-
-      this.listenTo(newOrderView, 'orderPicked', function(orderInfo, operationNo)
-      {
-        viewport.closeDialog();
-
-        this.model.changeOrder(orderInfo, operationNo);
-      });
-
-      viewport.showDialog(newOrderView, t('production', 'newOrderPicker:title'));
+      viewport.showDialog(
+        new NewOrderPickerView({model: this.model}),
+        t('production', 'newOrderPicker:title')
+      );
     },
 
     continueOrder: function()

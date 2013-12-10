@@ -87,6 +87,9 @@
   "newOrderPicker:msg:emptyOperation": "Operacja jest wymagana.",
   "newOrderPicker:online:info": "Wpisz nr lub 12NC zlecenia i wybierz z listy operację aby rozpocząć nowe zlecenie.",
   "newOrderPicker:offline:warning": "Wpisz nr lub 12NC zlecenia oraz nr operacji aby rozpocząć nowe zlecenie.",
+  "newOrderPicker:checkData:warning": "Wybranie nowego zlecenia ukończy aktualnie wybrane zlecenie. Sprawdź czy pola <em>Wartość wykonana</em> i <em>Osoby pracujące</em> aktualnego zlecenia mają prawidłowe wartości, gdyż po wybraniu nowego zlecenia nie będzie można ich zmienić.",
+  "newOrderPicker:quantityDone": "Ilość wykonana:",
+  "newOrderPicker:workerCount": "Osoby pracujące:",
 
   "downtimePicker:title": "Przestój",
   "downtimePicker:submit": "Zacznij przestój",
