@@ -7,6 +7,7 @@ define([
   'app/core/views/DialogView',
   './NewOrderPickerView',
   './DowntimePickerView',
+  './EndWorkDialogView',
   'app/production/templates/data',
   'app/production/templates/endDowntimeDialog'
 ], function(
@@ -18,6 +19,7 @@ define([
   DialogView,
   NewOrderPickerView,
   DowntimePickerView,
+  EndWorkDialogView,
   dataTemplate,
   endDowntimeDialogTemplate
 ) {
@@ -288,7 +290,10 @@ define([
 
     endWork: function()
     {
-      this.model.endWork();
+      viewport.showDialog(
+        new EndWorkDialogView({model: this.model}),
+        t('production', 'endWorkDialog:title')
+      );
     },
 
     showEditor: function($property, oldValue, changeFunction)

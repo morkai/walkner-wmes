@@ -108,5 +108,14 @@
   "endDowntimeDialog:title": "Potwierdzenie zakończenia przestoju",
   "endDowntimeDialog:message": "<p>Czy na pewno chcesz zakończyć aktualny przestój?</p>",
   "endDowntimeDialog:yes": "Zakończ przestój",
-  "endDowntimeDialog:no": "Nie kończ przestoju"
+  "endDowntimeDialog:no": "Nie kończ przestoju",
+
+  "endWorkDialog:title": "Potwierdzenie zakończenia pracy",
+  "endWorkDialog:warning": "Sprawdź czy pola <em>Wartość wykonana</em> i <em>Osoby pracujące</em> mają prawidłowe wartości, gdyż po zakończeniu pracy nie będzie można ich zmienić.",
+  "endWorkDialog:info:false": "Zakończenie pracy ukończy aktualnie wybrane zlecenie.",
+  "endWorkDialog:info:true": "Zakończenie pracy ukończy aktualnie wybrany przestój i zlecenie.",
+  "endWorkDialog:quantityDone": "Ilość wykonana:",
+  "endWorkDialog:workerCount": "Osoby pracujące:",
+  "endWorkDialog:yes": "Zakończ pracę",
+  "endWorkDialog:no": "Nie kończ pracy"
 }

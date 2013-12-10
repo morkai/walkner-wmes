@@ -113,7 +113,8 @@
   vertical-align: top;
 }
 .production-personelPicker .message,
-.production-newOrderPicker .message {
+.production-newOrderPicker .message,
+.production-endWorkDialog .message {
   margin-bottom: 1em;
 }
 .production-dropdown {

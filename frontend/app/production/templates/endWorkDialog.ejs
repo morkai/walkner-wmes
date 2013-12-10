@@ -1,0 +1,16 @@
+<form class="production-endWorkDialog">
+  <p class="message message-inline message-info"><%- t('production', 'endWorkDialog:info:' + downtime) %></p>
+  <p class="message message-inline message-warning"><%- t('production', 'endWorkDialog:warning') %></p>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-quantityDone"><%- t('production', 'endWorkDialog:quantityDone') %></label>
+    <input id="<%- idPrefix %>-quantityDone" class="form-control" type="number" value="<%- quantityDone %>" autofocus>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-workerCount"><%- t('production', 'endWorkDialog:workerCount') %></label>
+    <input id="<%- idPrefix %>-workerCount" class="form-control" type="number" value="<%- workerCount %>">
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-warning" type="submit"><%- t('production', 'endWorkDialog:yes') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('production', 'endWorkDialog:no') %></button>
+  </div>
+</form>
