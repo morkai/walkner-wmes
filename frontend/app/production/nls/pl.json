@@ -103,5 +103,10 @@
   "prodDowntime:startedAt": "Czas zatrzymania",
   "prodDowntime:finishedAt": "Czas wznowienia",
   "prodDowntime:reason": "Powód przestoju",
-  "prodDowntime:aor": "Obszar odpowiedzialności"
+  "prodDowntime:aor": "Obszar odpowiedzialności",
+
+  "endDowntimeDialog:title": "Potwierdzenie zakończenia przestoju",
+  "endDowntimeDialog:message": "<p>Czy na pewno chcesz zakończyć aktualny przestój?</p>",
+  "endDowntimeDialog:yes": "Zakończ przestój",
+  "endDowntimeDialog:no": "Nie kończ przestoju"
 }

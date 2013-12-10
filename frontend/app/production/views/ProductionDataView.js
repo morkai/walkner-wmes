@@ -4,18 +4,22 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/views/DialogView',
   './NewOrderPickerView',
   './DowntimePickerView',
-  'app/production/templates/data'
+  'app/production/templates/data',
+  'app/production/templates/endDowntimeDialog'
 ], function(
   _,
   $,
   t,
   viewport,
   View,
+  DialogView,
   NewOrderPickerView,
   DowntimePickerView,
-  dataTemplate
+  dataTemplate,
+  endDowntimeDialogTemplate
 ) {
   'use strict';
 
@@ -264,7 +268,22 @@ define([
 
     endDowntime: function()
     {
-      this.model.endDowntime();
+      var dialogView = new DialogView({
+        template: endDowntimeDialogTemplate,
+        model: {
+          yesSeverity: this.model.prodShiftOrder.id ? 'success' : 'warning'
+        }
+      });
+
+      this.listenTo(dialogView, 'answered', function(answer)
+      {
+        if (answer === 'yes')
+        {
+          this.model.endDowntime();
+        }
+      });
+
+      viewport.showDialog(dialogView, t('production', 'endDowntimeDialog:title'));
     },
 
     endWork: function()
