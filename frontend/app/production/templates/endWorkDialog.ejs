@@ -1,6 +1,5 @@
 <form class="production-endWorkDialog">
-  <p class="message message-inline message-info"><%- t('production', 'endWorkDialog:info:' + downtime) %></p>
-  <p class="message message-inline message-warning"><%- t('production', 'endWorkDialog:warning') %></p>
+  <p class="message message-inline message-warning"><%- t('production', 'endWorkDialog:warning', {downtime: downtime}) %></p>
   <div class="form-group">
     <label for="<%- idPrefix %>-quantityDone"><%- t('production', 'endWorkDialog:quantityDone') %></label>
     <input id="<%- idPrefix %>-quantityDone" class="form-control" type="number" value="<%- quantityDone %>" autofocus>
