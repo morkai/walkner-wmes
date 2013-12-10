@@ -37,9 +37,7 @@
     "deep-equal": "~0.1.0",
     "cheerio": "~0.12.3",
     "h5.step": "~0.1.0",
-    "h5.buffers": "~0.1.1",
     "h5.pubsub": "git+http://github.com/morkai/h5.pubsub.git",
-    "h5.modbus": "git+http://github.com/morkai/h5.modbus.git",
     "h5.rql": "git+http://github.com/morkai/h5.rql.git",
     "h5.main": "git+http://github.com/morkai/h5.main.git"
   },
