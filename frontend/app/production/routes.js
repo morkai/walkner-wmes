@@ -3,7 +3,7 @@ define([
   '../router',
   '../viewport',
   '../data/prodLines',
-  './ProductionEntry',
+  './ProdShift',
   './pages/ProductionPage',
   'i18n!app/nls/production'
 ], function(
@@ -11,7 +11,7 @@ define([
   router,
   viewport,
   prodLines,
-  ProductionEntry,
+  ProdShift,
   ProductionPage
 ) {
   'use strict';
@@ -26,7 +26,7 @@ define([
     }
 
     viewport.showPage(new ProductionPage({
-      productionEntry: new ProductionEntry({
+      model: new ProdShift({
         prodLine: prodLine.id
       })
     }));
