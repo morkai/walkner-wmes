@@ -116,6 +116,8 @@
 .production-newOrderPicker .message,
 .production-endWorkDialog .message {
   margin-bottom: 1em;
+  line-height: 1.4;
+  text-align: justify;
 }
 .production-dropdown {
   margin-top: 0;
