@@ -44,7 +44,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 
       var secretKey = prodLine.get('secretKey');
 
-      if (typeof secretKey === 'string')
+      if (typeof secretKey === 'string' && secretKey.length === 32)
       {
         return reply(null, secretKey);
       }

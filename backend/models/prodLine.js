@@ -20,8 +20,7 @@ module.exports = function setupProdLineModel(app, mongoose)
     },
     secretKey: {
       type: String,
-      trim: true,
-      required: true
+      trim: true
     }
   }, {
     id: false,
