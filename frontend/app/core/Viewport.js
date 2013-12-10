@@ -282,7 +282,7 @@ define([
 
     if (_.isFunction(this.currentDialog.onDialogShown))
     {
-      this.currentDialog.onDialogShown();
+      this.currentDialog.onDialogShown(this);
     }
   };
 
