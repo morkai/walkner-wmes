@@ -92,7 +92,7 @@ define([
 
     toggleOrderDataProperties: function()
     {
-      this.$('.production-properties-orderData').toggle(!!this.model.prodShiftOrder.id);
+      this.$('.production-properties-orderData').toggle(this.model.hasOrder());
     },
 
     updateWorkerCount: function()
@@ -204,7 +204,7 @@ define([
 
     toggleDowntimeActions: function()
     {
-      if (this.model.prodShiftOrder.id)
+      if (this.model.hasOrder())
       {
         this.appendAction('success', 'endDowntime');
         this.appendAction('warning', 'endWork');
@@ -271,7 +271,7 @@ define([
       var dialogView = new DialogView({
         template: endDowntimeDialogTemplate,
         model: {
-          yesSeverity: this.model.prodShiftOrder.id ? 'success' : 'warning'
+          yesSeverity: this.model.hasOrder() ? 'success' : 'warning'
         }
       });
 

@@ -135,6 +135,16 @@ define([
       }
     },
 
+    saveLocalData: function()
+    {
+      var data = this.toJSON();
+
+      data.prodShiftOrder = this.prodShiftOrder.toJSON();
+      data.prodDowntimes = this.prodDowntimes.toJSON();
+
+      localStorage.setItem(this.getDataStorageKey(), JSON.stringify(data));
+    },
+
     resetShift: function()
     {
       this.set('state', 'idle');
@@ -232,7 +242,7 @@ define([
 
     continueOrder: function()
     {
-      if (this.prodShiftOrder.id)
+      if (this.hasOrder())
       {
         throw new Error("Cannot continue the order: an order is already started!");
       }
@@ -251,7 +261,7 @@ define([
 
     changeQuantityDone: function(newValue)
     {
-      if (!this.prodShiftOrder.id)
+      if (!this.hasOrder())
       {
         throw new Error("Cannot change the quantity done: no prod shift order!");
       }
@@ -265,7 +275,7 @@ define([
 
     changeWorkerCount: function(newValue)
     {
-      if (!this.prodShiftOrder.id)
+      if (!this.hasOrder())
       {
         throw new Error("Cannot change the worker count: no prod shift order!");
       }
@@ -281,7 +291,7 @@ define([
     {
       this.finishDowntime();
 
-      if (this.prodShiftOrder.id)
+      if (this.hasOrder())
       {
         this.set('state', 'working');
       }
@@ -353,14 +363,12 @@ define([
       }
     },
 
-    saveLocalData: function()
+    /**
+     * @returns {boolean}
+     */
+    hasOrder: function()
     {
-      var data = this.toJSON();
-
-      data.prodShiftOrder = this.prodShiftOrder.toJSON();
-      data.prodDowntimes = this.prodDowntimes.toJSON();
-
-      localStorage.setItem(this.getDataStorageKey(), JSON.stringify(data));
+      return !!this.prodShiftOrder.id;
     },
 
     /**
