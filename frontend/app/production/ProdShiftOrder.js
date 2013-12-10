@@ -230,7 +230,7 @@ define([
 
       var operation = orderData.operations ? orderData.operations[operationNo] : null;
 
-      if (!operation)
+      if (!operation || operation.laborTime <= 0 || operation.machineTime <= 0)
       {
         return '?';
       }
