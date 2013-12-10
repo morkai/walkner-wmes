@@ -5,7 +5,7 @@ define([
   './View',
   './util',
   './views/MessagesView',
-  'app/core/templates/dialog'
+  'app/core/templates/dialogContainer'
 ], function(
   require,
   _,
@@ -13,7 +13,7 @@ define([
   View,
   util,
   MessagesView,
-  dialogTemplate
+  dialogContainerTemplate
 ) {
   'use strict';
 
@@ -92,7 +92,7 @@ define([
       return this.closeDialog();
     }
 
-    this.$dialog = $(dialogTemplate()).appendTo(this.el).modal({
+    this.$dialog = $(dialogContainerTemplate()).appendTo(this.el).modal({
       show: false,
       backdrop: true
     });
