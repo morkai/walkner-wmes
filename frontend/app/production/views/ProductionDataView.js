@@ -37,17 +37,20 @@ define([
 
     initialize: function()
     {
-      this.listenTo(this.model, 'change:state', this.toggleActions);
       this.listenTo(this.model, 'locked unlocked', function()
       {
         this.updateWorkerCount();
         this.updateQuantityDone();
         this.toggleActions();
       });
-      this.listenTo(this.model.prodShiftOrder, 'change:orderId', this.updateOrderData);
-      this.listenTo(this.model.prodShiftOrder, 'change:_id', this.toggleOrderDataProperties);
-      this.listenTo(this.model.prodShiftOrder, 'change:quantityDone', this.updateQuantityDone);
-      this.listenTo(this.model.prodShiftOrder, 'change:workerCount', function()
+      this.listenTo(this.model, 'change:state', this.toggleActions);
+
+      var order = this.model.prodShiftOrder;
+
+      this.listenTo(order, 'change:_id', this.updateOrderData);
+      this.listenTo(order, 'change:orderId', this.updateOrderInfo);
+      this.listenTo(order, 'change:quantityDone', this.updateQuantityDone);
+      this.listenTo(order, 'change:workerCount', function()
       {
         this.updateWorkerCount();
         this.updateTaktTime();
@@ -59,20 +62,27 @@ define([
       this.$actions = this.$('.production-actions');
 
       this.updateOrderData();
+      this.updateOrderInfo();
       this.updateWorkerCount();
       this.updateTaktTime();
       this.updateQuantityDone();
       this.toggleActions();
     },
 
+    updateOrderInfo: function()
+    {
+      var order = this.model.prodShiftOrder;
+
+      this.$property('orderNo').text(order.getOrderNo());
+      this.$property('nc12').text(order.getNc12());
+      this.$property('productName').text(order.getProductName());
+      this.$property('operationName').text(order.getOperationName());
+    },
+
     updateOrderData: function()
     {
       this.toggleOrderDataProperties();
 
-      this.$property('orderNo').text(this.model.prodShiftOrder.getOrderNo());
-      this.$property('nc12').text(this.model.prodShiftOrder.getNc12());
-      this.$property('productName').text(this.model.prodShiftOrder.getProductName());
-      this.$property('operationName').text(this.model.prodShiftOrder.getOperationName());
       this.$property('startedAt').text(this.model.prodShiftOrder.getStartedAt());
     },
 
