@@ -1,5 +1,42 @@
 .vis-structure {
+  position: relative;
   text-align: center;
+}
+.vis-structure-legend {
+  position: absolute;
+  bottom: 12px;
+  right: 5px;
+  padding: 0 5px 5px 5px;
+  background: rgba(255, 255, 255, .9);
+  font-size: 16px;
+  text-align: left;
+  line-height: 1;
+}
+.vis-structure-legend-item {
+  margin-top: 5px;
+  padding-left: 5px;
+  border-left: 16px solid #000;
+}
+.vis-structure-legend-item.root {
+  border-color: #0B5ED7;
+}
+.vis-structure-legend-item.division {
+  border-color: #333;
+}
+.vis-structure-legend-item.subdivision {
+  border-color: #e00;
+}
+.vis-structure-legend-item.mrpController {
+  border-color: #a0f;
+}
+.vis-structure-legend-item.prodFlow {
+  border-color: #fa0;
+}
+.vis-structure-legend-item.workCenter {
+  border-color: #af0;
+}
+.vis-structure-legend-item.prodLine {
+  border-color: #0af;
 }
 .vis-structure svg {
   margin: 0 auto;
@@ -7,16 +44,16 @@
 }
 .vis-structure .link {
   stroke: #333;
-  stroke-width: 2px;
+  stroke-width: 1px;
 }
 .vis-structure .node.root path {
   fill: #0B5ED7;
 }
 .vis-structure .node.division path {
-  fill: #e00;
+  fill: #333;
 }
 .vis-structure .node.subdivision path {
-  fill: #f0a;
+  fill: #e00;
 }
 .vis-structure .node.mrpController path {
   fill: #a0f;

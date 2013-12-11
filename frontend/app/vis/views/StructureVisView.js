@@ -10,6 +10,7 @@ define([
   'app/data/workCenters',
   'app/data/prodLines',
   'app/core/View',
+  'app/vis/templates/structureLegend',
   'i18n!app/nls/vis'
 ], function(
   _,
@@ -22,7 +23,8 @@ define([
   prodFlows,
   workCenters,
   prodLines,
-  View
+  View,
+  structureLegendTemplate
 ) {
   'use strict';
 
@@ -53,11 +55,6 @@ define([
         this.force = null;
       }
 
-      if (this.vis)
-      {
-
-      }
-
       this.nodes = null;
       this.links = null;
       this.vis = null;
@@ -80,6 +77,8 @@ define([
       this.onResize = _.debounce(this.onResize.bind(this), 100);
 
       $(window).on('resize', this.onResize);
+
+      this.$el.append(structureLegendTemplate());
     },
 
     getSize: function()
