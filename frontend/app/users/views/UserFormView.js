@@ -70,7 +70,7 @@ define([
         this.$('input[type="password"]').attr('required', true);
       }
 
-      this.$('#' + this.idPrefix + '-aor').select2({
+      this.$('#' + this.idPrefix + '-aors').select2({
         width: '100%',
         allowClear: true
       });
@@ -130,8 +130,13 @@ define([
     {
       formData = _.defaults(formData, {
         privileges: [],
-        aor: null
+        aors: []
       });
+
+      if (typeof formData.aors === 'string')
+      {
+        formData.aors = formData.aors.split(',');
+      }
 
       if (formData.company === 'null')
       {

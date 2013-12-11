@@ -71,8 +71,8 @@
         <div class="col-md-6">
           <div class="orgUnitDropdowns-container"></div>
           <div class="form-group users-form-aor">
-            <label for="<%- idPrefix %>-aor" class="control-label"><%- t('users', 'PROPERTY:aor') %></label>
-            <select id="<%- idPrefix %>-aor" name="aor" data-placeholder="<%- t('users', 'NO_DATA:aor') %>">
+            <label for="<%- idPrefix %>-aors" class="control-label"><%- t('users', 'PROPERTY:aors') %></label>
+            <select id="<%- idPrefix %>-aors" name="aors[]" multiple data-placeholder="<%- t('users', 'NO_DATA:aors') %>">
               <option></option>
               <% aors.forEach(function(aor) { %>
               <option value="<%- aor._id %>"><%= aor.name %>

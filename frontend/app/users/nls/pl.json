@@ -29,7 +29,7 @@
   "PROPERTY:email": "Adres e-mail",
   "PROPERTY:privileges": "Uprawnienia",
   "PROPERTY:prodFunction": "Funkcja na produkcji",
-  "PROPERTY:aor": "Obszar odpowiedzialności",
+  "PROPERTY:aors": "Obszary odpowiedzialności",
   "PROPERTY:company": "Firma",
   "PROPERTY:kdDivision": "Wydział (KD)",
   "PROPERTY:personellId": "Nr kadrowy",
@@ -57,7 +57,7 @@
   "FORM:ERROR:passwordMismatch": "Podane hasła nie pasują do siebie.",
   "FORM:ERROR:addFailure": "Nie udało się dodać użytkownika :-(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować użytkownika :-(",
-  "NO_DATA:aor": "Nieokreślony",
+  "NO_DATA:aors": "Nieokreślone",
   "NO_DATA:company": "Nieokreślona",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia użytkownika",

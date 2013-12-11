@@ -21,10 +21,10 @@ module.exports = function setupUserModel(app, mongoose)
       default: 'unspecified'
     },
     privileges: [String],
-    aor: {
+    aors: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Aor'
-    },
+    }],
     company: {
       type: String,
       ref: 'Company'

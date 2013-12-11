@@ -24,7 +24,7 @@ define([
       email: null,
       prodFunction: 'unspecified',
       privileges: null,
-      aor: null,
+      aors: null,
       company: null,
       kdDivision: null,
       personellId: null,
@@ -41,6 +41,11 @@ define([
       if (!Array.isArray(this.get('privileges')))
       {
         this.set('privileges', []);
+      }
+
+      if (!Array.isArray(this.get('aors')))
+      {
+        this.set('aors', []);
       }
     },
 

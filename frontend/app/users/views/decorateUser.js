@@ -24,19 +24,29 @@ define([
 
     user.company = company ? company.getLabel() : t('users', 'NO_DATA:company');
 
-    if (user.aor)
+    if (Array.isArray(user.aors))
     {
-      var aor = aors.get(user.aor);
+      user.aors = user.aors
+        .map(function(aorId)
+        {
+          var aor = aors.get(aorId);
 
-      if (aor)
-      {
-        user.aor = aor.getLabel();
-      }
+          return aor ? aor.getLabel() : null;
+        })
+        .filter(function(aorLabel)
+        {
+          return !!aorLabel;
+        })
+        .join('; ');
+    }
+    else
+    {
+      user.aors = '';
     }
 
-    if (!user.aor)
+    if (!user.aors.length)
     {
-      user.aor = t('users', 'NO_DATA:aor');
+      user.aors = t('users', 'NO_DATA:aors');
     }
 
     if (user.prodFunction)
