@@ -20,4 +20,19 @@ module.exports = function setUpProdTasksRoutes(app, prodTasksModule)
   express.put('/prodTasks/:id', canManage, crud.editRoute.bind(null, app, ProdTask));
 
   express.del('/prodTasks/:id', canManage, crud.deleteRoute.bind(null, app, ProdTask));
+
+  express.get('/prodTaskTags', canView, getAllTagsRoute);
+
+  function getAllTagsRoute(req, res, next)
+  {
+    ProdTask.distinct('tags', function(err, tags)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.send(tags);
+    });
+  }
 };

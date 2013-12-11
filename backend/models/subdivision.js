@@ -12,7 +12,8 @@ module.exports = function setupSubdivisionModel(app, mongoose)
       type: String,
       trim: true,
       required: true
-    }
+    },
+    prodTaskTags: [String]
   }, {
     id: false
   });

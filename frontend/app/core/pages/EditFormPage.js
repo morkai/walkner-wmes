@@ -36,7 +36,7 @@ define([
     {
       this.model = bindLoadingMessage(this.options.model, this);
 
-      var FormViewClass = this.options.FormView || FormView;
+      var FormViewClass = this.options.FormView || this.FormView || FormView;
       var options = {
         editMode: true,
         model: this.model,

@@ -1,11 +1,9 @@
 define([
-  'app/i18n',
   'app/data/views/renderOrgUnitPath',
   'app/core/views/DetailsView',
   'app/subdivisions/templates/details',
   'i18n!app/nls/subdivisions'
 ], function(
-  t,
   renderOrgUnitPath,
   DetailsView,
   detailsTemplate

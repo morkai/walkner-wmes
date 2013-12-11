@@ -19,6 +19,7 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:division": "Wydział",
   "PROPERTY:name": "Nazwa",
+  "PROPERTY:prodTaskTags": "Tagi zadań produkcyjnych",
 
   "FORM:ACTION:add": "Dodaj dział",
   "FORM:ACTION:edit": "Edytuj dział",

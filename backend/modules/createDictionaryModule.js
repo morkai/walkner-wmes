@@ -20,6 +20,7 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes)
       var Model = mongoose.model(modelName);
 
       module.models = [];
+      module.modelsById = {};
 
       if (setUpRoutes)
       {
@@ -59,6 +60,12 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes)
           }
 
           module.models = models;
+          module.modelsById = {};
+
+          models.forEach(function(model)
+          {
+            module.modelsById[model.get('_id')] = model;
+          });
 
           done();
         });

@@ -21,7 +21,8 @@ define([
 
     defaults: {
       division: null,
-      name: null
+      name: null,
+      prodTaskTags: null
     }
 
   });

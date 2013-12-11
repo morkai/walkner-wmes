@@ -28,7 +28,7 @@ define([
 
     initialize: function()
     {
-      var FormViewClass = this.options.FormView || FormView;
+      var FormViewClass = this.options.FormView || this.FormView || FormView;
       var options = {
         model: this.model,
         formMethod: 'POST',

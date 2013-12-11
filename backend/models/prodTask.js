@@ -8,20 +8,34 @@ module.exports = function setupProdTaskModel(app, mongoose)
       required: true,
       trim: true
     },
-    fteMaster: {
-      type: Boolean,
-      default: true
-    },
-    fteLeader: {
-      type: Boolean,
-      default: true
-    }
+    tags: [String]
   }, {
     id: false
   });
 
+  prodTaskSchema.index({tags: 1});
+
   prodTaskSchema.statics.TOPIC_PREFIX = 'prodTasks';
   prodTaskSchema.statics.BROWSE_LIMIT = 1000;
+
+  prodTaskSchema.statics.getForSubdivision = function(subdivisionId, done)
+  {
+    var subdivision = app.subdivisions.modelsById[subdivisionId];
+
+    if (!subdivision)
+    {
+      return done(null, []);
+    }
+
+    var subdivisionTags = subdivision.get('prodTaskTags');
+
+    if (!Array.isArray(subdivisionTags) || !subdivisionTags.length)
+    {
+      return done(null, []);
+    }
+
+    this.find({tags: {$in: subdivisionTags}}, {name: 1}).lean().exec(done);
+  };
 
   mongoose.model('ProdTask', prodTaskSchema);
 };

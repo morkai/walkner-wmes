@@ -21,8 +21,17 @@ define([
 
     defaults: {
       name: null,
-      fteMaster: true,
-      fteLeader: true
+      tags: null
+    },
+
+    parse: function(data)
+    {
+      if (!Array.isArray(data.tags))
+      {
+        data.tags = [];
+      }
+
+      return data;
     }
 
   });

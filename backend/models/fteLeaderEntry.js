@@ -106,11 +106,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       },
       function queryProdTasksStep()
       {
-        mongoose.model('ProdTask')
-          .find({fteLeader: true}, {name: 1})
-          .sort({name: 1})
-          .lean()
-          .exec(this.next());
+        mongoose.model('ProdTask').getForSubdivision(shiftId.subdivision, this.next());
       },
       function handleProdTasksQueryResultStep(err, prodTasks)
       {

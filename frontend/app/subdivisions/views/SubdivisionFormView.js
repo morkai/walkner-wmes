@@ -1,11 +1,9 @@
 define([
-  'underscore',
   'app/data/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
   'app/subdivisions/templates/form',
-  'i18n!app/nls/divisions'
+  'i18n!app/nls/subdivisions'
 ], function(
-  _,
   OrgUnitDropdownsView,
   FormView,
   formTemplate
@@ -37,6 +35,27 @@ define([
       {
         this.orgUnitDropdownsView.selectValue(this.model).focus();
       });
+
+      this.$id('prodTaskTags').select2({
+        tags: this.model.allTags || [],
+        tokenSeparators: [',']
+      });
+    },
+
+    serializeToForm: function()
+    {
+      var data = this.model.toJSON();
+
+      data.prodTaskTags = data.prodTaskTags ? data.prodTaskTags.join(',') : '';
+
+      return data;
+    },
+
+    serializeForm: function(data)
+    {
+      data.prodTaskTags = typeof data.prodTaskTags === 'string' ? data.prodTaskTags.split(',') : [];
+
+      return data;
     }
 
   });

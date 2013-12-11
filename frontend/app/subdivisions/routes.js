@@ -6,11 +6,11 @@ define([
   './Subdivision',
   '../core/pages/ListPage',
   '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
   '../core/pages/ActionFormPage',
+  './pages/AddSubdivisionFormPage',
+  './pages/EditSubdivisionFormPage',
+  './views/SubdivisionListView',
   './views/SubdivisionDetailsView',
-  './views/SubdivisionFormView',
   'i18n!app/nls/subdivisions'
 ], function(
   router,
@@ -20,11 +20,11 @@ define([
   Subdivision,
   ListPage,
   DetailsPage,
-  AddFormPage,
-  EditFormPage,
   ActionFormPage,
-  SubdivisionDetailsView,
-  SubdivisionFormView
+  AddSubdivisionFormPage,
+  EditSubdivisionFormPage,
+  SubdivisionListView,
+  SubdivisionDetailsView
 ) {
   'use strict';
 
@@ -34,8 +34,8 @@ define([
   router.map('/subdivisions', canView, function()
   {
     viewport.showPage(new ListPage({
-      collection: subdivisions,
-      columns: ['division', 'name']
+      ListView: SubdivisionListView,
+      collection: subdivisions
     }));
   });
 
@@ -49,18 +49,12 @@ define([
 
   router.map('/subdivisions;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      FormView: SubdivisionFormView,
-      model: new Subdivision()
-    }));
+    viewport.showPage(new AddSubdivisionFormPage({model: new Subdivision()}));
   });
 
   router.map('/subdivisions/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      FormView: SubdivisionFormView,
-      model: new Subdivision({_id: req.params.id})
-    }));
+    viewport.showPage(new EditSubdivisionFormPage({model: new Subdivision({_id: req.params.id})}));
   });
 
   router.map('/subdivisions/:id;delete', canManage, function(req, referer)
