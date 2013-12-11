@@ -26,6 +26,11 @@
   white-space: nowrap;
   width: 30%;
 }
+.prop-value > ul,
+.prop-value > ol {
+  padding-left: 0;
+  list-style-position: inside;
+}
 @media (min-width: 992px) {
   .prop:first-child {
     border-top: 0;
