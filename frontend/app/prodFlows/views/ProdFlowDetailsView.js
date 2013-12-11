@@ -1,19 +1,11 @@
 define([
-  'app/i18n',
-  'app/data/views/renderOrgUnitPath',
-  'app/data/divisions',
-  'app/data/subdivisions',
-  'app/data/mrpControllers',
   'app/core/views/DetailsView',
+  './decorateProdFlow',
   'app/prodFlows/templates/details',
   'i18n!app/nls/prodFlows'
 ], function(
-  t,
-  renderOrgUnitPath,
-  divisions,
-  subdivisions,
-  mrpControllers,
   DetailsView,
+  decorateProdFlow,
   detailsTemplate
 ) {
   'use strict';
@@ -30,11 +22,7 @@ define([
 
     serialize: function()
     {
-      var data = DetailsView.prototype.serialize.call(this);
-
-      data.orgUnitPath = renderOrgUnitPath(this.model, true);
-
-      return data;
+      return decorateProdFlow(this.model);
     }
 
   });

@@ -1,26 +1,24 @@
 define([
   'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView',
+  './decorateProdFlow',
   'i18n!app/nls/prodTasks'
 ], function(
   renderOrgUnitPath,
-  ListView
+  ListView,
+  decorateProdFlow
 ) {
   'use strict';
 
   return ListView.extend({
 
-    columns: ['mrpController', 'name'],
+    columns: ['subdivision', 'mrpControllers', 'name'],
 
     serializeRows: function()
     {
-      return this.collection.map(function(prodFlowModel)
+      return this.collection.map(function(prodFlow)
       {
-        var row = prodFlowModel.toJSON();
-
-        row.mrpController = renderOrgUnitPath(prodFlowModel, true);
-
-        return row;
+        return decorateProdFlow(prodFlow, true);
       });
     }
 

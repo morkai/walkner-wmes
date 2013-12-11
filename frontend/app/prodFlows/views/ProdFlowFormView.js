@@ -21,7 +21,8 @@ define([
       FormView.prototype.initialize.call(this);
 
       this.orgUnitDropdownsView = new OrgUnitDropdownsView({
-        orgUnit: OrgUnitDropdownsView.ORG_UNIT.MRP_CONTROLLER
+        orgUnit: OrgUnitDropdownsView.ORG_UNIT.MRP_CONTROLLER,
+        multiple: true
       });
 
       this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);
@@ -35,6 +36,14 @@ define([
       {
         this.orgUnitDropdownsView.selectValue(this.model).focus();
       });
+    },
+
+    serializeForm: function(formData)
+    {
+      formData.mrpController =
+        typeof formData.mrpController === 'string' ? formData.mrpController.split(',') : [];
+
+      return formData;
     }
 
   });

@@ -5,11 +5,10 @@ var step = require('h5.step');
 module.exports = function setupProdFlowModel(app, mongoose)
 {
   var prodFlowSchema = mongoose.Schema({
-    mrpController: {
+    mrpController: [{
       type: 'String',
-      ref: 'MrpController',
-      required: true
-    },
+      ref: 'MrpController'
+    }],
     name: {
       type: String,
       trim: true,
@@ -94,7 +93,9 @@ module.exports = function setupProdFlowModel(app, mongoose)
 
       app.prodFlows.models.forEach(function(prodFlow)
       {
-        if (prodFlow.get('mrpController') === mrpControllerId)
+        var mrpControllers = prodFlow.get('mrpController');
+
+        if (Array.isArray(mrpControllers) && mrpControllers.indexOf(mrpControllerId) !== -1)
         {
           prodFlows.push(prodFlow);
         }

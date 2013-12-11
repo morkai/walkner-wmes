@@ -18,7 +18,8 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:mrpController": "Kontroler MRP",
+  "PROPERTY:subdivision": "Dział",
+  "PROPERTY:mrpControllers": "Kontrolery MRP",
 
   "FORM:ACTION:add": "Dodaj przepływ",
   "FORM:ACTION:edit": "Edytuj przepływ",

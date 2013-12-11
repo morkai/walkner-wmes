@@ -131,12 +131,15 @@ define([
         }
         else
         {
-          var parentIndex = idToIndex[model.get(parentProperty)];
-
-          if (parentIndex)
+          [].concat(model.get(parentProperty)).forEach(function(parentId)
           {
-            links.push({source: index, target: parentIndex});
-          }
+            var parentIndex = idToIndex[parentId];
+
+            if (parentIndex)
+            {
+              links.push({source: index, target: parentIndex});
+            }
+          });
         }
       }
 

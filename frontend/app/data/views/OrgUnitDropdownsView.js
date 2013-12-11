@@ -32,6 +32,15 @@ define([
     PROD_LINE: 6
   };
 
+  var ORG_UNIT_NO_TO_NAME = {
+    1: 'division',
+    2: 'subdivision',
+    3: 'mrpController',
+    4: 'prodFlow',
+    5: 'workCenter',
+    6: 'prodLine'
+  };
+
   function idAndLabel(model)
   {
     return {id: model.id, text: model.getLabel()};
@@ -196,7 +205,8 @@ define([
         return null;
       }
 
-      var parentModel = parentCollection.get(model.get(parentProperty));
+      var parentId = model.get(parentProperty);
+      var parentModel = parentCollection.get(Array.isArray(parentId) ? parentId[0] : parentId);
 
       if (parentSelect !== null)
       {
@@ -209,8 +219,8 @@ define([
       }
 
       this.$id(parentProperty)
-        .select2('val', parentModel.id)
-        .trigger({type: 'change', val: parentModel.id, selectFirst: selectFirst});
+        .select2('val', parentId)
+        .trigger({type: 'change', val: parentId, selectFirst: selectFirst});
 
       return model;
     },
@@ -231,21 +241,39 @@ define([
       return $formGroup.appendTo(this.el).find('input').select2({
         data: data || [],
         placeholder: ' ',
-        allowClear: this.options.allowClear || this.options.orgUnit === ORG_UNIT.PROD_FLOW
+        allowClear: this.options.allowClear || this.options.orgUnit === ORG_UNIT.PROD_FLOW,
+        multiple: this.options.multiple && orgUnit === ORG_UNIT_NO_TO_NAME[this.options.orgUnit]
       });
     },
 
     onChange: function($dropdown, collection, parentProperty, e)
     {
-      var query = {};
-      query[parentProperty] = e.val;
+      var data = [];
 
-      var data = e.val === null ? [] : collection.where(query).map(idAndLabel);
+      if (e.val !== null)
+      {
+        data = collection
+          .filter(function(model)
+          {
+            var parentValue = model.get(parentProperty);
+
+            if (Array.isArray(parentValue))
+            {
+              return parentValue.indexOf(e.val) !== -1;
+            }
+
+            return parentValue === e.val;
+          })
+          .map(idAndLabel);
+      }
+
       var options = {
         data: data,
         placeholder: ' ',
         allowClear: !!this.options.allowClear
-          || (parentProperty === 'mrpController' && this.options.orgUnit === ORG_UNIT.PROD_FLOW)
+          || (parentProperty === 'mrpController' && this.options.orgUnit === ORG_UNIT.PROD_FLOW),
+        multiple: this.options.multiple
+          && $dropdown.attr('name') === ORG_UNIT_NO_TO_NAME[this.options.orgUnit]
       };
 
       $dropdown.select2('val', null);
