@@ -6,7 +6,7 @@
 
   "MSG:LOADING_FAILURE": "Ładowanie przepływów nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie przepływu nie powiodło się :(",
-  "MSG:DELETED": "Przepływ <em>{label}</em> zostało usunięte.",
+  "MSG:DELETED": "Przepływ <em>{label}</em> został usunięty.",
 
   "PAGE_ACTION:add": "Dodaj przepływ",
   "PAGE_ACTION:edit": "Edytuj przepływ",
