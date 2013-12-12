@@ -32,7 +32,12 @@ module.exports = function setUpProdTasksRoutes(app, prodTasksModule)
         return next(err);
       }
 
-      res.send(tags);
+      if (!Array.isArray(tags))
+      {
+        tags = [];
+      }
+
+      res.send(tags.filter(function(tag) { return typeof tag === 'string'; }));
     });
   }
 };
