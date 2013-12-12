@@ -54,7 +54,8 @@ exports.start = function startExpressModule(app, module, done)
     key: module.config.sessionCookieKey,
     cookie: module.config.sessionCookie
   }));
-  module.use(express.bodyParser());
+  module.use(express.json());
+  module.use(express.urlencoded());
   module.use(express.methodOverride());
   module.use(rqlMiddleware());
   module.use(module.router);
