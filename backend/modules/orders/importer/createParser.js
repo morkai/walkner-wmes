@@ -7,7 +7,7 @@ var parseOperInfo = require('./parseOperInfo');
 
 module.exports = function createParser(app, module, filterRe, stepCount, callback)
 {
-  var LATE_DATA_PARSE_DELAY = 600000;
+  var LATE_DATA_PARSE_DELAY = 20 * 60 * 1000;
   var timeKeyToOrderInfoStepsMap = {};
   var timeKeyToOperInfoStepsMap = {};
   var filePathCache = {};
