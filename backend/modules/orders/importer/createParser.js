@@ -67,6 +67,8 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
     stepsMap[step] = fileInfo;
 
+    module.debug("Handling %d %s step for %s...", step, fileInfo.type, timeKey);
+
     if (timeKeyToOrderInfoStepsMap[timeKey].steps < stepCount
       || timeKeyToOperInfoStepsMap[timeKey].steps < stepCount)
     {
@@ -75,15 +77,22 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
         clearTimeout(parseDataTimers[timeKey]);
       }
 
-      parseDataTimers[timeKey] = setTimeout(enqueueAndParse, LATE_DATA_PARSE_DELAY, timeKey);
+      module.debug(
+        "Delaying %s (order steps=%d operation steps=%d)...",
+        timeKey,
+        timeKeyToOrderInfoStepsMap[timeKey].steps,
+        timeKeyToOperInfoStepsMap[timeKey].steps
+      );
+
+      parseDataTimers[timeKey] = setTimeout(enqueueAndParse, LATE_DATA_PARSE_DELAY, timeKey, true);
 
       return;
     }
 
-    enqueueAndParse(timeKey);
+    enqueueAndParse(timeKey, false);
   }
 
-  function enqueueAndParse(timeKey)
+  function enqueueAndParse(timeKey, delayed)
   {
     if (parseDataTimers[timeKey] !== null)
     {
@@ -91,7 +100,14 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
       delete parseDataTimers[timeKey];
     }
 
-    module.debug("Queued %s...", timeKey);
+    if (delayed)
+    {
+      module.debug("Queued %s (delayed)...", timeKey);
+    }
+    else
+    {
+      module.debug("Queued %s...", timeKey);
+    }
 
     parseQueue.push(timeKey);
     parseData();
@@ -148,7 +164,11 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
     for (var i = 1; i <= stepCount; ++i)
     {
-      if (typeof orderFileInfoSteps[i] !== 'undefined')
+      if (typeof orderFileInfoSteps[i] === 'undefined')
+      {
+        module.debug("Missing orders step %d :(", i);
+      }
+      else
       {
         steps.push(createParseOrderInfoStep(orders, orderFileInfoSteps[i]));
       }
@@ -169,7 +189,11 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
     for (var i = 1; i <= stepCount; ++i)
     {
-      if (typeof operFileInfoSteps[i] !== 'undefined')
+      if (typeof operFileInfoSteps[i] === 'undefined')
+      {
+        module.debug("Missing operations step %d :(", i);
+      }
+      else
       {
         steps.push(createParseOperInfoStep(orders, missingOrders, operFileInfoSteps[i]));
       }

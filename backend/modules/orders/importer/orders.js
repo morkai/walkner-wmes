@@ -48,7 +48,9 @@ exports.start = function startOrdersImporterModule(app, module)
     var missingOrderIds = Object.keys(missingOrders);
     var allOrderIds = orderIds.concat(missingOrderIds);
 
-    module.debug("Comparing %d orders and %d missing orders...", orderIds.length, missingOrderIds);
+    module.debug(
+      "Comparing %d orders and %d missing orders...", orderIds.length, missingOrderIds.length
+    );
 
     Order.find({_id: {$in: allOrderIds}}).exec(function(err, orderModels)
     {
