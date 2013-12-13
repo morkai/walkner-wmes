@@ -1,0 +1,27 @@
+{
+  "BREADCRUMBS:browse": "Zlecenia działu mechanicznego",
+
+  "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się :(",
+
+  "PAGE_ACTION:import": "Importuj zlecenia",
+
+  "PANEL:TITLE:details": "Szczegóły zlecenia",
+  "PANEL:TITLE:operations": "Lista operacji zlecenia",
+
+  "PROPERTY:_id": "12NC",
+  "PROPERTY:name": "Nazwa wyrobu",
+  "PROPERTY:importTs": "Czas zaimportowania",
+
+  "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
+
+  "FILTER:PLACEHOLDER:_id": "Dowolny 12NC",
+  "FILTER:LIMIT": "Limit",
+  "FILTER:BUTTON": "Filtruj zlecenia",
+
+  "import:title": "Importowanie zleceń",
+  "import:file": "Plik CSV ze zleceniami:",
+  "import:submit": "Importuj zlecenia",
+  "import:cancel": "Anuluj",
+  "import:msg:success": "Importowanie zleceń przebiegło pomyślnie :)",
+  "import:msg:failure": "Nie udało się zaimportować zleceń :("
+}

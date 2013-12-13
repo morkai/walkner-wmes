@@ -19,6 +19,7 @@ module.exports = [
   'prodTask',
 
   'order',
+  'mechOrder',
   'emptyOrder',
 
   'fteMasterEntry',

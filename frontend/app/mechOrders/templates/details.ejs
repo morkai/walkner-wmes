@@ -1,0 +1,21 @@
+<div class="panel panel-primary mechOrders-details">
+  <div class="panel-heading">
+    <%- t('mechOrders', 'PANEL:TITLE:details') %>
+  </div>
+  <div class="panel-details">
+    <div class="props first">
+      <div class="prop">
+        <div class="prop-name"><%- t('mechOrders', 'PROPERTY:_id') %></div>
+        <div class="prop-value"><%= model._id %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('mechOrders', 'PROPERTY:name') %></div>
+        <div class="prop-value"><%= model.name || '-' %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('mechOrders', 'PROPERTY:importTs') %></div>
+        <div class="prop-value"><%= model.importTs || '-' %></div>
+      </div>
+    </div>
+  </div>
+</div>

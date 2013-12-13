@@ -241,6 +241,7 @@
       'app/fte/routes',
       'app/hourlyPlans/routes',
       'app/orders/routes',
+      'app/mechOrders/routes',
       'app/emptyOrders/routes',
       'app/events/routes',
       'app/users/routes',

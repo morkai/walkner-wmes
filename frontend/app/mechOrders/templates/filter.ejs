@@ -1,0 +1,15 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-_id"><%- t('mechOrders', 'PROPERTY:_id') %></label>
+      <input id="<%- idPrefix %>-_id" class="form-control mechOrders-filter-_id" name="_id" type="text" maxlength="12" placeholder="<%- t('mechOrders', 'FILTER:PLACEHOLDER:_id') %>">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-limit"><%- t('mechOrders', 'FILTER:LIMIT') %></label>
+      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('mechOrders', 'FILTER:BUTTON') %>">
+    </div>
+  </form>
+</div>

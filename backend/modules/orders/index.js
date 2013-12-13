@@ -1,6 +1,7 @@
 'use strict';
 
 var setUpOrdersRoutes = require('./ordersRoutes');
+var setUpMechOrdersRoutes = require('./mechOrdersRoutes');
 var setUpEmptyOrdersRoutes = require('./emptyOrdersRoutes');
 
 exports.DEFAULT_CONFIG = {
@@ -20,6 +21,7 @@ exports.start = function startOrdersModule(app, module)
     function()
     {
       setUpOrdersRoutes(app, module);
+      setUpMechOrdersRoutes(app, module);
       setUpEmptyOrdersRoutes(app, module);
     }
   );
