@@ -14,13 +14,7 @@ define([
       'mechOrders.synced': 'refreshCollection'
     },
 
-    serializeColumns: function()
-    {
-      return [
-        {id: '_id', label: t('orders', 'PROPERTY:_id')},
-        {id: 'name', label: t('orders', 'PROPERTY:name')}
-      ];
-    },
+    columns: ['_id', 'name'],
 
     serializeActions: function()
     {
