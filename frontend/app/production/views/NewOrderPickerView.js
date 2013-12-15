@@ -115,10 +115,10 @@ define([
           cache: true,
           quietMillis: 500,
           url: this.getOrdersUrl.bind(this),
-          results: function(data)
+          results: function(results)
           {
             return {
-              results: (data.collection || []).map(function(order)
+              results: (results || []).map(function(order)
               {
                 order.id = order._id;
                 order.text = order._id + ' - ' + (order.name || '?');
@@ -168,40 +168,11 @@ define([
 
     getOrdersUrl: function(term)
     {
-      var url;
+      var type = /^114[0-9]{0,6}/.test(term) ? 'no' : 'nc12';
 
-      if (/^114/.test(term))
-      {
-        url = '/orders?exclude(changes,importTs)&sort(_id)&limit(20)';
+      this.$id('order').attr('data-type', type);
 
-        if (term.length === 9)
-        {
-          url += '&_id=' + encodeURIComponent(term);
-        }
-        else
-        {
-          url += '&regex(_id,' + encodeURIComponent('^' + term) + ')';
-        }
-
-        this.$id('order').attr('data-type', 'no');
-      }
-      else
-      {
-        url = '/mechOrders?sort(_id)&limit(20)';
-
-        if (/^[0-9]+$/.test(term) && term.length === 12)
-        {
-          url += '&_id=' + encodeURIComponent(term);
-        }
-        else
-        {
-          url += '&regex(_id,' + encodeURIComponent('^' + term) + ')';
-        }
-
-        this.$id('order').attr('data-type', 'nc12');
-      }
-
-      return url;
+      return '/production/orders?' + type + '=' + encodeURIComponent(term);
     },
 
     setUpOperationSelect2: function(data)
