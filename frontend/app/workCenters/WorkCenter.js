@@ -43,7 +43,7 @@ define([
 
         if (prodFlow)
         {
-          mrpController = mrpControllers.get(prodFlow.get('mrpController'));
+          mrpController = mrpControllers.get((prodFlow.get('mrpController') || [])[0]);
         }
       }
 
