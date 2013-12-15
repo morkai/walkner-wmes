@@ -206,7 +206,13 @@ define([
       }
 
       var parentId = model.get(parentProperty);
-      var parentModel = parentCollection.get(Array.isArray(parentId) ? parentId[0] : parentId);
+
+      if (Array.isArray(parentId))
+      {
+        parentId = parentId[0];
+      }
+
+      var parentModel = parentCollection.get(parentId);
 
       if (parentSelect !== null)
       {
