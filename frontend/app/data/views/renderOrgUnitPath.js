@@ -56,7 +56,7 @@ define([
     {
       orgUnits.unshift(model);
 
-      model = mrpControllers.get(model.get('mrpController'));
+      model = mrpControllers.get((model.get('mrpController') || [])[0]);
 
       if (!model)
       {
