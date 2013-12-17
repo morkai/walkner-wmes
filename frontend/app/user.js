@@ -22,6 +22,21 @@ function(
 ) {
   'use strict';
 
+  var computerName = null;
+
+  if (window.location.search.indexOf('COMPUTERNAME=') !== -1)
+  {
+    window.location.search.substr(1).split('&').forEach(function(keyValue)
+    {
+      keyValue = keyValue.split('=');
+
+      if (keyValue[0] === 'COMPUTERNAME' && keyValue[1])
+      {
+        computerName = keyValue[1];
+      }
+    });
+  }
+
   var user = {};
 
   socket.on('user.reload', function(userData)
@@ -92,13 +107,14 @@ function(
   };
 
   /**
-   * @returns {{id: string, label: string, ip: string}}
+   * @returns {{id: string, label: string, ip: string, cname: string}}
    */
   user.getInfo = function()
   {
     return {
       id: user.data._id,
       ip: user.data.ip || user.data.ipAddress || '0.0.0.0',
+      cname: computerName,
       label: user.getLabel()
     };
   };
