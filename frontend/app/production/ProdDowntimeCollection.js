@@ -69,6 +69,8 @@ define([
       }
 
       this.unshift(prodDowntime);
+
+      return prodDowntime;
     }
 
   });

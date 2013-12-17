@@ -1,6 +1,7 @@
 define([
   'underscore',
   'moment',
+  '../user',
   '../time',
   '../socket',
   '../core/Model',
@@ -13,6 +14,7 @@ define([
 ], function(
   _,
   moment,
+  user,
   time,
   socket,
   Model,
@@ -148,7 +150,6 @@ define([
     resetShift: function()
     {
       this.set('state', 'idle');
-      this.prodShiftOrder.clear();
       this.changeShift();
     },
 
@@ -175,6 +176,7 @@ define([
           {planned: 0, actual: 0},
           {planned: 0, actual: 0}
         ],
+        creator: user.getInfo(),
         createdAt: time.getServerMoment().toDate(),
         master: null,
         leader: null,
@@ -256,7 +258,7 @@ define([
 
       this.prodShiftOrder.onOrderContinued(this);
 
-      prodLog.record(this, 'changeOrder', this.prodShiftOrder);
+      prodLog.record(this, 'changeOrder', this.prodShiftOrder.toJSON());
     },
 
     changeQuantityDone: function(newValue)
@@ -315,28 +317,7 @@ define([
 
     startDowntime: function(downtimeInfo)
     {
-      var order = this.get('order');
-
-      var prodDowntime = new ProdDowntime({
-        prodLine: this.prodLine.id,
-        prodShift: this.id,
-        prodShiftOrder: order ? order._id : null,
-        aor: downtimeInfo.aor,
-        reason: downtimeInfo.reason,
-        reasonComment: downtimeInfo.reasonComment,
-        status: ProdDowntime.STATUS.UNDECIDED,
-        startedAt: time.getServerMoment().toDate(),
-        master: this.get('master'),
-        leader: this.get('leader'),
-        operator: this.get('operator')
-      });
-
-      prodDowntime.set(
-        '_id',
-        prodLog.generateId(prodDowntime.get('startedAt'), this.id + downtimeInfo.aor)
-      );
-
-      this.prodDowntimes.addFromInfo(this, downtimeInfo);
+      var prodDowntime = this.prodDowntimes.addFromInfo(this, downtimeInfo);
 
       this.set('state', 'downtime');
 
