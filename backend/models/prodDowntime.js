@@ -83,6 +83,11 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     id: false
   });
 
+  prodDowntimeSchema.index({status: 1});
+  prodDowntimeSchema.index({reason: 1, status: 1});
+  prodDowntimeSchema.index({aor: 1, reason: 1, status: 1});
+  prodDowntimeSchema.index({prodLine: 1, status: 1});
+
   prodDowntimeSchema.statics.TOPIC_PREFIX = 'prodDowntimes';
 
   mongoose.model('ProdDowntime', prodDowntimeSchema);
