@@ -77,7 +77,8 @@ exports.pubsub = {
     '*.added', '*.edited', '*.deleted', '*.synced',
     'shiftChanged',
     'fte.master.*', 'fte.leader.*', 'hourlyPlans.*',
-    'users.syncFailed'
+    'users.syncFailed',
+    'production.synced.*'
   ]
 };
 

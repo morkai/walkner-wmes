@@ -39,11 +39,6 @@ module.exports = function setupProdShiftModel(app, mongoose)
       max: 3,
       required: true
     },
-    state: {
-      type: String,
-      enum: ['idle', 'working', 'downtime'],
-      required: true
-    },
     quantitiesDone: [quantitySchema],
     creator: {},
     createdAt: {

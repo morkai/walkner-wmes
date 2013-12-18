@@ -1,0 +1,39 @@
+'use strict';
+
+module.exports = function(app, productionModule, prodLine, logEntry, done)
+{
+  productionModule.getProdData('order', logEntry.prodShiftOrder, function(err, prodShiftOrder)
+  {
+    if (err)
+    {
+      productionModule.error(
+        "Failed to get the prod shift order [%s] to change the worker count: %s",
+        logEntry.prodShiftOrder,
+        err.stack
+      );
+
+      return done(err);
+    }
+
+    if (!prodShiftOrder)
+    {
+      return done(null);
+    }
+
+    prodShiftOrder.set('workerCount', logEntry.data.newValue);
+
+    prodShiftOrder.save(function(err)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to save the prod shift order [%s] after changing the worker count: %s",
+          prodShiftOrder.get('_id'),
+          err.stack
+        );
+      }
+
+      return done(err);
+    });
+  });
+};

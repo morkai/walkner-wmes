@@ -4,6 +4,10 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 exports.createObject = function(userData, addressData)
 {
+  /**
+   * @name UserInfo
+   * @type {{id: string, ip: string, label: string}}
+   */
   var userInfo = {
     id: null,
     ip: '',

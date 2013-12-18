@@ -21,6 +21,21 @@ module.exports = function setupProdLineModel(app, mongoose)
     secretKey: {
       type: String,
       trim: true
+    },
+    prodShift: {
+      type: String,
+      ref: 'ProdShift',
+      default: null
+    },
+    prodShiftOrder: {
+      type: String,
+      ref: 'ProdShiftOrder',
+      default: null
+    },
+    prodDowntime: {
+      type: String,
+      ref: 'ProdDowntime',
+      default: null
     }
   }, {
     id: false,

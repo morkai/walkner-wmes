@@ -3,6 +3,7 @@
 var crypto = require('crypto');
 var lodash = require('lodash');
 var userInfo = require('../../models/userInfo');
+var logEntryHandlers = require('./logEntryHandlers');
 
 module.exports = function setUpProductionsCommands(app, productionModule)
 {
@@ -54,7 +55,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
         if (err)
         {
           productionModule.error(
-            "Failed to generate a secret key for %s: %s", prodLineId, err.message
+            "Failed to generate a secret key for %s: %s", prodLineId, err.stack
           );
 
           return reply(err);
@@ -70,7 +71,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
           if (err)
           {
             productionModule.error(
-              "Failed to save a secret key for %s: %s", prodLineId, err.message
+              "Failed to save a secret key for %s: %s", prodLineId, err.stack
             );
 
             return reply(err);
@@ -104,12 +105,17 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 
           if (!lodash.isObject(logEntry))
           {
-            return logInvalidEntry(new Error("TYPE"), logEntryJson);
+            return logInvalidEntry(new Error('TYPE'), logEntryJson);
+          }
+
+          if (!lodash.isFunction(logEntryHandlers[logEntry.type]))
+          {
+            return logInvalidEntry(new Error('UNKNOWN_HANDLER'), logEntryJson);
           }
 
           if (!validateSecretKey(logEntry))
           {
-            return logInvalidEntry(new Error("SECRET_KEY"), logEntryJson);
+            return logInvalidEntry(new Error('SECRET_KEY'), logEntryJson);
           }
 
           logEntry.creator = creator;
@@ -128,28 +134,23 @@ module.exports = function setUpProductionsCommands(app, productionModule)
         return reply();
       }
 
-      setImmediate(function()
+      ProdLogEntry.collection.insert(logEntryList, {continueOnError: true}, function(err)
       {
-        productionModule.debug("Saving log entries...");
-
-        ProdLogEntry.collection.insert(logEntryList, {continueOnError: true}, function(err, docs)
+        if (err)
         {
-          if (err)
-          {
-            productionModule.error("Error during saving of log entries: %s", err.message);
-          }
+          productionModule.error("Error during saving of log entries: %s", err.stack);
+        }
 
-          productionModule.debug("Saved %d of %d!", docs ? docs.length : 0, logEntryList.length);
+        reply();
 
-          reply();
-        });
+        app.broker.publish('production.logEntries.saved');
       });
     });
   });
 
   function logInvalidEntry(err, logEntryJson)
   {
-    productionModule.debug("Invalid log entry: %s\n%s", err.message, logEntryJson);
+    productionModule.debug("Invalid log entry: %s\n%s", err.stack, logEntryJson);
   }
 
   function cacheSecretKeys()

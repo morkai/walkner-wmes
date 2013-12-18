@@ -69,15 +69,15 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     operator: {},
     mechOrder: {
       type: Boolean,
-      required: true
+      default: null
     },
     orderId: {
       type: String,
-      required: true
+      default: null
     },
     operationNo: {
       type: String,
-      required: true
+      default: null
     }
   }, {
     id: false
