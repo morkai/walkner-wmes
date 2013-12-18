@@ -26,7 +26,7 @@
         <% if (row._id) { %>data-id="<%- row._id %>"<% } %>
       >
         <% columns.forEach(function(column) { %>
-        <td>
+        <td data-id="<%- column.id %>">
           <% if (row[column.id] == null) { %>
           <em><%- t('core', 'LIST:NO_DATA:cell') %></em>
           <% } else { %>
