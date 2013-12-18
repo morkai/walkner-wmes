@@ -200,7 +200,7 @@ define([
       return '';
     }
 
-    var matches = path.match(/^([a-z0-9][a-z0-9\-]*[a-z0-9]*)/);
+    var matches = path.match(/^([a-z0-9][a-z0-9\-]*[a-z0-9]*)/i);
 
     return matches ? matches[1] : null;
   };
