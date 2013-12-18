@@ -17,7 +17,7 @@ define([
 
     nlsDomain: 'downtimeReasons',
 
-    labelAttribute: '_id',
+    labelAttribute: 'label',
     
     defaults: {
       label: null
