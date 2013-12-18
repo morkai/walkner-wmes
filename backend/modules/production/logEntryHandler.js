@@ -27,6 +27,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
     }
 
     handlingLogEntries = true;
+    haveNewLogEntries = false;
 
     ProdLogEntry.find({todo: true}).sort({prodLine: 1, createdAt: 1}).exec(function(err, logEntries)
     {
