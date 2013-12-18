@@ -96,6 +96,11 @@ define([
       return this.collection.toJSON();
     },
 
+    beforeRender: function()
+    {
+      this.stopListening(this.collection, 'reset', this.render);
+    },
+
     afterRender: function()
     {
       this.listenToOnce(this.collection, 'reset', this.render);
