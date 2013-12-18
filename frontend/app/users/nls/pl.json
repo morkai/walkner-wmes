@@ -20,6 +20,7 @@
   "PANEL:TITLE:editForm": "Formularz edycji użytkownika",
 
   "FILTER:BUTTON": "Filtruj użytkowników",
+  "FILTER:LIMIT": "Limit",
   "FILTER:PLACEHOLDER:personellId": "Dowolny nr",
   "FILTER:PLACEHOLDER:lastName": "Dowolne nazwisko",
 
