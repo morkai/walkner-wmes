@@ -139,7 +139,7 @@ define([
         y -= $navbar.outerHeight();
       }
 
-      $('html, body').animate({scrollTop: y});
+      $('html, body').stop(true, false).animate({scrollTop: y});
     },
 
     getModelFromEvent: function(e)
