@@ -33,3 +33,6 @@
 .filter-form .orgUnitDropdowns .form-group {
   min-width: 150px;
 }
+.filter-btn-group {
+  display: block;
+}
