@@ -15,7 +15,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   app.broker.subscribe('production.logEntries.saved', handleLogEntries);
 
-  setImmediate(handleLogEntries);
+  app.broker.subscribe('app.started', handleLogEntries).setLimit(1);
 
   function handleLogEntries()
   {
