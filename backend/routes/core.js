@@ -25,6 +25,7 @@ module.exports = function startCoreRoutes(app, express)
     var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
     var prodFunctions = app.mongoose.model('User').schema.path('prodFunction').enumValues;
 
+    // TODO: Add caching
     res.render('index', {
       appCache: appCache,
       appData: {
@@ -39,7 +40,14 @@ module.exports = function startCoreRoutes(app, express)
         MRP_CONTROLLERS: JSON.stringify(app.mrpControllers.models),
         PROD_FLOWS: JSON.stringify(app.prodFlows.models),
         WORK_CENTERS: JSON.stringify(app.workCenters.models),
-        PROD_LINES: JSON.stringify(app.prodLines.models),
+        PROD_LINES: JSON.stringify(app.prodLines.models.map(function(prodLine)
+        {
+          return {
+            _id: prodLine.get('_id'),
+            workCenter: prodLine.get('workCenter'),
+            description: prodLine.get('description')
+          };
+        })),
         AORS: JSON.stringify(app.aors.models),
         ORDER_STATUSES: JSON.stringify(app.orderStatuses.models),
         DOWNTIME_REASONS: JSON.stringify(app.downtimeReasons.models)
