@@ -99,8 +99,8 @@ define([
   function generateId(date, str)
   {
     return date.getTime().toString(36)
-      + Math.round(Math.random() * 10000000000000000).toString(36)
-      + hashCode(str).toString(36);
+      + hashCode(str).toString(36)
+      + Math.round(Math.random() * 10000000000000000).toString(36);
   }
 
   return {
