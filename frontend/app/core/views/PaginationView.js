@@ -59,6 +59,8 @@ define([
   PaginationView.prototype.initialize = function()
   {
     _.defaults(this.options, DEFAULT_OPTIONS);
+
+    this.listenTo(this.model, 'change:urlTemplate', this.render);
   };
 
   PaginationView.prototype.afterRender = function()
@@ -69,8 +71,6 @@ define([
     {
       this.$el.hide();
     }
-
-    this.listenToOnce(this.model, 'change:page change:urlTemplate', this.render);
   };
 
   /**
