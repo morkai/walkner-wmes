@@ -55,6 +55,7 @@ define([
       this.prodShiftOrder = new ProdShiftOrder();
 
       this.prodDowntimes = new ProdDowntimeCollection(null, {
+        paginate: false,
         rqlQuery: 'sort(-startedAt)&limit(8)&prodLine=' + encodeURIComponent(this.prodLine.id)
       });
     },
@@ -291,8 +292,6 @@ define([
 
     endDowntime: function()
     {
-      this.finishDowntime();
-
       if (this.hasOrder())
       {
         this.set('state', 'working');
@@ -300,6 +299,11 @@ define([
       else
       {
         this.set('state', 'idle');
+      }
+
+      if (!this.finishDowntime())
+      {
+        this.saveLocalData();
       }
     },
 
@@ -342,6 +346,8 @@ define([
       {
         prodLog.record(this, 'finishDowntime', finishedProdDowntime);
       }
+
+      return !!finishedProdDowntime;
     },
 
     /**
