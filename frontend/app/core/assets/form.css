@@ -31,7 +31,7 @@
 .form-actions:last-child {
   margin-bottom: 0;
 }
-.form-actions .cancel {
+.form-actions a.cancel {
   margin-left: 1em;
 }
 .checkbox,
