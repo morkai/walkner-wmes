@@ -291,6 +291,8 @@ define([
     {
       this.currentDialog.onDialogShown(this);
     }
+
+    this.broker.publish('viewport.dialog.shown', this.currentDialog);
   };
 
   Viewport.prototype.onDialogHidden = function()
@@ -298,6 +300,8 @@ define([
     if (_.isFunction(this.currentDialog.remove))
     {
       this.currentDialog.remove();
+
+      this.broker.publish('viewport.dialog.hidden');
     }
 
     this.currentDialog = null;
