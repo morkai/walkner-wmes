@@ -226,10 +226,6 @@ define([
     {
       actions = [actions];
     }
-    else if (actions.length === 0)
-    {
-      return this;
-    }
 
     this.model.actions = actions.map(this.prepareAction.bind(this));
 
