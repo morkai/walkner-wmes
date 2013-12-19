@@ -47,7 +47,9 @@ define([
 
   time.format = function(date, format)
   {
-    return time.getMoment(date).format(format);
+    var dateMoment = time.getMoment(date);
+
+    return dateMoment.isValid() ? dateMoment.format(format) : null;
   };
 
   /**
