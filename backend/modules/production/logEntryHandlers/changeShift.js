@@ -9,9 +9,16 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   var startedProdShiftData = logEntry.data.startedProdShift;
 
+  // TODO: Remove after a while
   if (!startedProdShiftData.creator)
   {
     startedProdShiftData.creator = logEntry.creator;
+  }
+
+  // TODO: Remove after a while
+  if (!startedProdShiftData.prodLine)
+  {
+    startedProdShiftData.prodLine = logEntry.prodLine;
   }
 
   finishOrders();
