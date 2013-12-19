@@ -235,7 +235,7 @@ define([
         return '?';
       }
 
-      return Math.round(operation.laborTime / operation.machineTime);
+      return Math.max(Math.round(operation.laborTime / operation.machineTime), 1);
     },
 
     getWorkerCount: function()
