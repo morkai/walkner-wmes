@@ -46,11 +46,14 @@ define([
     {
       this.lastRefreshAt = 0;
 
-      this.setView('.pagination-container', new PaginationView({
-        model: this.collection.paginationData
-      }));
+      if (this.collection.paginationData)
+      {
+        this.setView('.pagination-container', new PaginationView({
+          model: this.collection.paginationData
+        }));
 
-      this.listenTo(this.collection.paginationData, 'change:page', this.scrollTop);
+        this.listenTo(this.collection.paginationData, 'change:page', this.scrollTop);
+      }
     },
 
     serialize: function()

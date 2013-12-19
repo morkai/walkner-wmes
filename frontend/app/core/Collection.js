@@ -22,7 +22,7 @@ define([
 
     this.rqlQuery = this.createRqlQuery(options.rqlQuery || this.rqlQuery);
 
-    this.paginationData = new PaginationData();
+    this.paginationData = options.paginate !== false ? new PaginationData() : null;
 
     if (!this.url)
     {
@@ -31,19 +31,25 @@ define([
 
     Backbone.Collection.call(this, models, options);
 
-    this.listenTo(this.paginationData, 'change:page', this.onPageChanged);
+    if (this.paginationData)
+    {
+      this.listenTo(this.paginationData, 'change:page', this.onPageChanged);
+    }
   }
 
   util.inherits(Collection, Backbone.Collection);
 
   Collection.prototype.parse = function(res)
   {
-    this.paginationData.set({
-      totalCount: res.totalCount,
-      urlTemplate: this.genPaginationUrlTemplate(),
-      skip: this.rqlQuery.skip,
-      limit: this.rqlQuery.limit
-    });
+    if (this.paginationData)
+    {
+      this.paginationData.set({
+        totalCount: res.totalCount,
+        urlTemplate: this.genPaginationUrlTemplate(),
+        skip: this.rqlQuery.skip,
+        limit: this.rqlQuery.limit
+      });
+    }
 
     return res.collection;
   };
