@@ -202,6 +202,23 @@ p:last-child {
   -moz-box-sizing: border-box;
 }
 
+.panel-warning {
+  border-color: #f0ad4e;
+}
+.panel-warning > .panel-heading {
+  color: #fff;
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+.panel-success {
+  border-color: #5cb85c;
+}
+.panel-success > .panel-heading {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+
 @-webkit-keyframes yellow-fade {
   0% { background: yellow; }
   100% { background: none; }
