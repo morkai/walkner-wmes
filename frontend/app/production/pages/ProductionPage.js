@@ -38,7 +38,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        'Produkcja',
+        t('production', 'breadcrumbs:productionPage'),
         this.model.getLabel()
       ];
     },
