@@ -75,6 +75,7 @@
   "NAVBAR:FTE:LEADER:CURRENT": "Przydzielanie zasobów",
   "NAVBAR:VIS": "Wizualizacja",
   "NAVBAR:VIS:STRUCTURE": "Struktura organizacyjna",
+  "NAVBAR:PROD_DOWNTIMES": "Przestoje",
 
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
   "ACTION_FORM:BUTTON:delete": "Usuń",

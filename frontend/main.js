@@ -238,6 +238,7 @@
       'app/core/views/LogInFormView',
       'app/time',
       'app/production/routes',
+      'app/prodDowntimes/routes',
       'app/fte/routes',
       'app/hourlyPlans/routes',
       'app/orders/routes',

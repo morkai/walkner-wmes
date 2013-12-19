@@ -1,7 +1,7 @@
 define([
   '../time',
   '../core/Model',
-  './util/getShiftEndDate'
+  '../production/util/getShiftEndDate'
 ], function(
   time,
   Model,
@@ -20,6 +20,12 @@ define([
     urlRoot: '/prodDowntimes',
 
     clientUrlRoot: '#prodDowntimes',
+
+    topicPrefix: 'prodDowntimes',
+
+    privilegePrefix: 'PROD_DOWNTIMES',
+
+    nlsDomain: 'prodDowntimes',
 
     defaults: {
       prodLine: null,

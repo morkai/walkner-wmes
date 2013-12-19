@@ -1,0 +1,16 @@
+.is-withReasonComment > td[data-id="reason"] {
+  cursor: help;
+}
+.prodDowntimes-comment {
+  white-space: pre-line;
+  text-align: justify;
+}
+textarea.prodDowntimes-corroborate-decisionComment {
+  margin-top: 1em;
+  height: 8em;
+}
+.prodDowntimes-corroborate-reasonComment {
+  max-height: 8.5em;
+  overflow: auto;
+  white-space: pre-line;
+}

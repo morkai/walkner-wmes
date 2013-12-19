@@ -66,6 +66,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           err.stack
         );
       }
+      else
+      {
+        app.broker.publish('prodDowntimes.finished.' + prodLine.get('_id'), logEntry.data);
+      }
 
       return done(err);
     });

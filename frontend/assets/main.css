@@ -16,6 +16,7 @@
 @import url("../app/mechOrders/assets/main.css");
 @import url("../app/vis/assets/main.css");
 @import url("../app/production/assets/main.css");
+@import url("../app/prodDowntimes/assets/main.css");
 
 #app-loading {
   position: absolute;

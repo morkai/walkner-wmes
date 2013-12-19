@@ -1,0 +1,115 @@
+<div>
+
+  <div class="panel panel-primary prodDowntimes-details">
+    <div class="panel-heading">
+      <%- t('prodDowntimes', 'PANEL:TITLE:details') %>
+    </div>
+    <div class="panel-details row">
+      <div class="col-md-6">
+        <div class="props first">
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:prodLine') %></div>
+            <div class="prop-value"><%- model.prodLinePath %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:shift') %></div>
+            <div class="prop-value"><%- t('prodDowntimes', 'shift+date', {date: model.date, shift: model.shift}) %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:order') %></div>
+            <div class="prop-value"><%- model.order %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:master') %></div>
+            <div class="prop-value"><%- model.masterInfo %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:leader') %></div>
+            <div class="prop-value"><%- model.leaderInfo %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:operator') %></div>
+            <div class="prop-value"><%- model.operatorInfo %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:creator') %></div>
+            <div class="prop-value"><%- model.creatorInfo %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:startedAt') %></div>
+            <div class="prop-value"><%- model.startedAt %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:finishedAt') %></div>
+            <div class="prop-value"><%- model.finishedAt %></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:aor') %></div>
+            <div class="prop-value"><%= model.aor %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:reason') %></div>
+            <div class="prop-value"><%= model.reason %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:reasonComment') %></div>
+            <div class="prop-value">
+              <% if (model.reasonComment.length) { %>
+              <p class="prodDowntimes-comment"><%= model.reasonComment %></p>
+              <% } else { %>
+              -
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-<%- model.statusClassName %> prodDowntimes-details">
+    <div class="panel-heading">
+      <%- t('prodDowntimes', 'PANEL:TITLE:details:corroboration') %>
+    </div>
+    <% if (model.status === 'undecided') { %>
+    <div class="panel-body">
+      <p><%- t('prodDowntimes', 'NO_DATA:corroboration') %></p>
+    </div>
+    <% } else { %>
+    <div class="panel-details row">
+      <div class="col-md-6">
+        <div class="props first">
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:status') %></div>
+            <div class="prop-value"><%- t('prodDowntimes', 'PROPERTY:status:' + model.status) %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:corroborator') %></div>
+            <div class="prop-value"><%- model.corroboratorInfo %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:corroboratedAt') %></div>
+            <div class="prop-value"><%- model.corroboratedAt %></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:decisionComment') %></div>
+            <div class="prop-value">
+              <% if (model.decisionComment && model.decisionComment.length) { %>
+              <p class="prodDowntimes-comment"><%= model.decisionComment %></p>
+              <% } else { %>
+              -
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>

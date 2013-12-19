@@ -1,0 +1,51 @@
+{
+  "BREADCRUMBS:browse": "Przestoje",
+  "BREADCRUMBS:details": "Przestój",
+  "BREADCRUMBS:corroborate": "Potwierdzanie",
+
+  "MSG:LOADING_FAILURE": "Ładowanie przestojów nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie przestoju nie powiodło się :(",
+
+  "PANEL:TITLE:details": "Szczegóły przestoju",
+  "PANEL:TITLE:details:corroboration": "Potwierdzenie przestoju",
+
+  "FILTER:LIMIT": "Limit",
+  "FILTER:BUTTON": "Filtruj przestoje",
+  "FILTER:PLACEHOLDER:aor": "Dowolny obszar odpowiedzialności",
+  "FILTER:PLACEHOLDER:reason": "Dowolny powód przestoju",
+
+  "LIST:ACTION:corroborate": "Potwierdź przestój",
+
+  "PROPERTY:aor": "Obszar odpowiedzialności",
+  "PROPERTY:prodLine": "Linia produkcyjna/Maszyna",
+  "PROPERTY:reason": "Powód przestoju",
+  "PROPERTY:reasonComment": "Komentarz powodu",
+  "PROPERTY:decisionComment": "Komentarz potwierdzenia",
+  "PROPERTY:order": "Wykonywane zlecenie",
+  "PROPERTY:orderId": "Zlecenie",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas zakończenia",
+  "PROPERTY:status": "Status",
+  "PROPERTY:status:undecided": "Niepotwierdzony",
+  "PROPERTY:status:confirmed": "Potwierdzony",
+  "PROPERTY:status:rejected": "Odrzucony",
+  "PROPERTY:shift": "Zmiana",
+  "PROPERTY:master": "Mistrz",
+  "PROPERTY:leader": "Lider",
+  "PROPERTY:operator": "Operator",
+  "PROPERTY:creator": "Użytkownik rozpoczynający",
+  "PROPERTY:corroborator": "Użytkownik potwierdzający",
+  "PROPERTY:corroboratedAt": "Czas potwierdzenia",
+
+  "shift+date": "{date}, {shift} zmiana",
+
+  "NO_DATA:order": "<em>brak zlecenia</em>",
+  "NO_DATA:finishedAt": "<em>nie ukończony</em>",
+  "NO_DATA:corroboration": "Przestój nie został jeszcze potwierdzony.",
+
+  "corroborate:title": "Potwierdzenie przestoju",
+  "corroborate:decisionComment": "Opcjonalny komentarz do potwierdzenia...",
+  "corroborate:cancel": "Anuluj potwierdzenie",
+  "corroborate:confirm": "Zatwierdź przestój",
+  "corroborate:reject": "Odrzuć przestój"
+}

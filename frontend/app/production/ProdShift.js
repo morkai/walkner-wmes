@@ -8,8 +8,8 @@ define([
   '../data/workCenters',
   '../data/prodLines',
   '../data/prodLog',
-  './ProdDowntime',
-  './ProdDowntimeCollection',
+  '../prodDowntimes/ProdDowntime',
+  '../prodDowntimes/ProdDowntimeCollection',
   './ProdShiftOrder'
 ], function(
   _,

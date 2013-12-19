@@ -24,6 +24,7 @@ exports.modules = [
   'fte',
   'hourlyPlans',
   'production',
+  'prodDowntimes',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'},
   'httpServer',
@@ -78,7 +79,8 @@ exports.pubsub = {
     'shiftChanged',
     'fte.master.*', 'fte.leader.*', 'hourlyPlans.*',
     'users.syncFailed',
-    'production.synced.*'
+    'production.synced.*',
+    'prodDowntimes.created.*', 'prodDowntimes.finished.*', 'prodDowntimes.corroborated.*'
   ]
 };
 
@@ -113,6 +115,7 @@ exports.user = {
     'FTE:LEADER:VIEW', 'FTE:LEADER:MANAGE', 'FTE:LEADER:ALL',
     'FTE:MASTER:VIEW', 'FTE:MASTER:MANAGE', 'FTE:MASTER:ALL',
     'HOURLY_PLANS:VIEW', 'HOURLY_PLANS:MANAGE', 'HOURLY_PLANS:ALL',
+    'PROD_DOWNTIMES:VIEW', 'PROD_DOWNTIMES:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE'
   ]
 };

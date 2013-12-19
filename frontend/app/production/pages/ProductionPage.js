@@ -31,6 +31,10 @@ define([
 
     layoutName: 'blank',
 
+    localTopics: {
+      'socket.connected': 'refreshDowntimes'
+    },
+
     breadcrumbs: function()
     {
       return [
@@ -76,7 +80,10 @@ window.model = this.model;
       this.controlsView = new ProductionControlsView({model: this.model});
       this.headerView = new ProductionHeaderView({model: this.model});
       this.dataView = new ProductionDataView({model: this.model});
-      this.downtimesView = new ProdDowntimeListView({collection: this.model.prodDowntimes});
+      this.downtimesView = new ProdDowntimeListView({
+        collection: this.model.prodDowntimes,
+        prodLine: this.model.prodLine.id
+      });
       this.quantitiesView = new ProductionQuantitiesView({model: this.model});
 
       this.setView('.production-controls-container', this.controlsView);
@@ -127,6 +134,34 @@ window.model = this.model;
       this.listenTo(this.model.prodShiftOrder, 'change:mechOrder', function()
       {
         this.$el.toggleClass('is-mechOrder', !!this.model.prodShiftOrder.get('mechOrder'));
+      });
+
+      this.listenTo(this.downtimesView, 'corroborated', function()
+      {
+        this.model.saveLocalData();
+      });
+    },
+
+    afterRender: function()
+    {
+      if (this.socket.isConnected())
+      {
+        this.refreshDowntimes();
+      }
+    },
+
+    refreshDowntimes: function()
+    {
+      var model = this.model;
+
+      if (!model.prodDowntimes.length)
+      {
+        return;
+      }
+
+      this.promised(model.prodDowntimes.fetch()).then(function()
+      {
+        model.saveLocalData();
       });
     }
 

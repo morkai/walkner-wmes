@@ -14,8 +14,6 @@ define([
 ) {
   'use strict';
 
-  // TODO: Refresh collection on a remote status change
-
   return ListView.extend({
 
     localTopics: {
@@ -23,7 +21,17 @@ define([
       'aors.synced': 'render'
     },
 
-    remoteTopics: {},
+    remoteTopics: function()
+    {
+      var topics = {};
+
+      if (this.options.prodLine)
+      {
+        topics['prodDowntimes.corroborated.' + this.options.prodLine] = 'onCorroborated';
+      }
+
+      return topics;
+    },
 
     initialize: function()
     {
@@ -73,6 +81,18 @@ define([
     serializeActions: function()
     {
       return [];
+    },
+
+    onCorroborated: function(message)
+    {
+      var prodDowntime = this.collection.get(message._id);
+
+      if (prodDowntime)
+      {
+        prodDowntime.set(message);
+
+        this.trigger('corroborated', message._id);
+      }
     }
 
   });

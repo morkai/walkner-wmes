@@ -1,0 +1,27 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-aor"><%- t('prodDowntimes', 'PROPERTY:aor') %></label>
+      <input id="<%- idPrefix %>-aor" name="aor" type="text" data-placeholder="<%- t('prodDowntimes', 'FILTER:PLACEHOLDER:aor') %>">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-reason"><%- t('prodDowntimes', 'PROPERTY:reason') %></label>
+      <input id="<%- idPrefix %>-reason" name="reason" type="text" data-placeholder="<%- t('prodDowntimes', 'FILTER:PLACEHOLDER:reason') %>">
+    </div><div
+      class="form-group">
+      <label><%- t('prodDowntimes', 'PROPERTY:status') %></label>
+      <div class="btn-group filter-btn-group" data-toggle="buttons-checkbox">
+        <button class="btn btn-warning active" type="button" value="undecided"><%- t('prodDowntimes', 'PROPERTY:status:undecided') %></button>
+        <button class="btn btn-success" type="button" value="confirmed"><%- t('prodDowntimes', 'PROPERTY:status:confirmed') %></button>
+        <button class="btn btn-danger" type="button" value="rejected"><%- t('prodDowntimes', 'PROPERTY:status:rejected') %></button>
+      </div>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-limit"><%- t('prodDowntimes', 'FILTER:LIMIT') %></label>
+      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('prodDowntimes', 'FILTER:BUTTON') %>">
+    </div>
+  </form>
+</div>

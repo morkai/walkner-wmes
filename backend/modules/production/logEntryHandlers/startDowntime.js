@@ -70,6 +70,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
             err.stack
           );
         }
+        else
+        {
+          app.broker.publish('prodDowntimes.created.' + prodLine.get('_id'), prodDowntime.toJSON());
+        }
 
         done(err);
       });
