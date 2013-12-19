@@ -218,6 +218,14 @@ p:last-child {
   background-color: #5cb85c;
   border-color: #5cb85c;
 }
+.panel-danger {
+  border-color: #d9534f;
+}
+.panel-danger > .panel-heading {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
 
 @-webkit-keyframes yellow-fade {
   0% { background: yellow; }
