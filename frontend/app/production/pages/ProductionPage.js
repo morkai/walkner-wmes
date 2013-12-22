@@ -63,7 +63,8 @@ define([
     {
       return {
         locked: this.model.isLocked(),
-        state: this.model.get('state')
+        state: this.model.get('state'),
+        mechOrder: !!this.model.prodShiftOrder.get('mechOrder')
       };
     },
 
