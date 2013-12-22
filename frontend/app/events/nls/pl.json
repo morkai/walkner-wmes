@@ -36,6 +36,8 @@
   "TEXT:users.synced": "Dodano {created, plural, one{1 nowego użytkownika} other{# nowych użytkowników}} i zmodyfikowano {updated, plural, one{1 istniejącego użytkownika} other{# istniejących użytkowników}} podczas synchronizacji z bazą KD.",
   "TYPE:users.syncFailed": "Błąd synchronizacji użytkowników",
   "TEXT:users.syncFailed": "Nie udało się zsynchronizować użytkowników z bazą KD: <em>{error}</em>",
+  "TYPE:mechOrders.edited": "Edycja zlecenia działu mechanicznego",
+  "TEXT:mechOrders.edited": "Zmodyfikowano zlecenie działu mechanicznego: <a href='\\#mechOrders/{model->_id}'>{model->_id}</a>",
   "TYPE:mechOrders.synced": "Import zleceń działu mechanicznego",
   "TEXT:mechOrders.synced": "Zaimportowano {count, plural, one{1 zlecenie} few{# zlecenia} other{# zleceń}} działu mechanicznego.",
   "TYPE:emptyOrders.synced": "Synchronizacja pustych zleceń",

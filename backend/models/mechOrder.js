@@ -43,6 +43,11 @@ module.exports = function setupMechOrderModel(app, mongoose)
       trim: true
     },
     operations: [operationSchema],
+    mrp: {
+      type: String,
+      ref: 'MrpController',
+      default: null
+    },
     importTs: Date
   }, {
     id: false

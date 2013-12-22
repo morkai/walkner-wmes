@@ -18,6 +18,8 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
 
   express.post('/mechOrders;import', auth('ORDERS:MANAGE'), multipart({limit: '5mb'}), importRoute);
 
+  express.patch('/mechOrders/:id', crud.editRoute.bind(null, app, MechOrder));
+
   function importRoute(req, res, next)
   {
     if (importing !== null)

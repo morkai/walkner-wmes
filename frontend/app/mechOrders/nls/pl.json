@@ -11,6 +11,7 @@
   "PROPERTY:_id": "12NC",
   "PROPERTY:name": "Nazwa wyrobu",
   "PROPERTY:importTs": "Czas zaimportowania",
+  "PROPERTY:mrp": "Kontroler MRP",
 
   "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
 
@@ -23,5 +24,10 @@
   "import:submit": "Importuj zlecenia",
   "import:cancel": "Anuluj",
   "import:msg:success": "Importowanie zleceń przebiegło pomyślnie :)",
-  "import:msg:failure": "Nie udało się zaimportować zleceń :("
+  "import:msg:failure": "Nie udało się zaimportować zleceń :(",
+
+  "list:mrp:set": "(wybierz kontroler MRP)",
+  "list:mrp:edit": "(zmień kontroler MRP)",
+  "list:mrp:placeholder": "Wybierz kontroler MRP...",
+  "list:mrp:failure": "Nie udało się zmienić kontrolera MRP dla zlecenia <em>{nc12}</em> :("
 }

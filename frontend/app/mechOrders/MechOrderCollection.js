@@ -16,11 +16,12 @@ define([
       return rql.Query.fromObject({
         fields: {
           name: 1,
+          mrp: 1,
           importTs: 1
         },
         limit: 15,
         sort: {
-          importTs: -1
+          _id: 1
         }
       });
     }
