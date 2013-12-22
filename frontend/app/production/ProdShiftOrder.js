@@ -215,7 +215,7 @@ define([
         return '?';
       }
 
-      return Math.round((operation.laborTime * 1.053) / workerCount * 3600 / 100);
+      return Math.max(Math.round((operation.laborTime * 1.053) / workerCount * 3600 / 100), 1);
     },
 
     getWorkerCountSap: function()
