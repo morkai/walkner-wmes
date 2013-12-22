@@ -106,12 +106,15 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
       }
 
       var mechOrder = mechOrders[nc12Queue.shift()];
+      var _id = mechOrder._id;
 
-      MechOrder.collection.update({_id: mechOrder._id}, mechOrder, {upsert: true}, function(err)
+      delete mechOrder._id;
+
+      MechOrder.collection.update({_id: _id}, {$set: mechOrder}, {upsert: true}, function(err)
       {
         if (err)
         {
-          module.warn("Failed to upsert mech order %s: %s", mechOrder._id, err.message);
+          module.warn("Failed to upsert mech order %s: %s", _id, err.message);
         }
         else
         {
