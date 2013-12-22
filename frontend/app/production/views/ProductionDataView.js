@@ -72,8 +72,6 @@ define([
 
       this.updateOrderData();
       this.updateOrderInfo();
-      this.updateWorkerCount();
-      this.updateTaktTime();
       this.updateQuantityDone();
       this.toggleActions();
     },
@@ -91,6 +89,8 @@ define([
     updateOrderData: function()
     {
       this.toggleOrderDataProperties();
+      this.updateTaktTime();
+      this.updateWorkerCount();
 
       this.$property('startedAt').text(this.model.prodShiftOrder.getStartedAt());
     },
