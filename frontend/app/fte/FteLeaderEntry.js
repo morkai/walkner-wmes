@@ -57,6 +57,11 @@ define([
     {
       var tasks = this.get('tasks');
 
+      if (!tasks.length)
+      {
+        return [];
+      }
+
       return tasks[0].companies.map(function(company, companyIndex)
       {
         company.total = tasks.reduce(function(total, task)

@@ -46,23 +46,26 @@ define([
       var totalByCompany = {};
       var totalByProdFunction = {};
 
-      this.get('tasks')[0].functions.forEach(function(taskFunction)
+      if (this.get('tasks').length)
       {
-        totalByProdFunction[taskFunction.id] = {
-          total: 0,
-          companies: {}
-        };
-
-        taskFunction.companies.forEach(function(taskFunctionCompany)
+        this.get('tasks')[0].functions.forEach(function(taskFunction)
         {
-          totalByProdFunction[taskFunction.id].companies[taskFunctionCompany.id] = 0;
-
-          totalByCompany[taskFunctionCompany.id] = {
-            name: taskFunctionCompany.name,
-            total: 0
+          totalByProdFunction[taskFunction.id] = {
+            total: 0,
+            companies: {}
           };
+
+          taskFunction.companies.forEach(function(taskFunctionCompany)
+          {
+            totalByProdFunction[taskFunction.id].companies[taskFunctionCompany.id] = 0;
+
+            totalByCompany[taskFunctionCompany.id] = {
+              name: taskFunctionCompany.name,
+              total: 0
+            };
+          });
         });
-      });
+      }
 
       var tasks = this.serializeTasks(totalByCompany, totalByProdFunction);
       var total = 0;
