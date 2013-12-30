@@ -96,7 +96,12 @@ define([
 
     serializeRows: function()
     {
-      return this.collection.toJSON();
+      return this.collection.map(this.options.serializeRow || this.serializeRow, this);
+    },
+
+    serializeRow: function(model)
+    {
+      return model.toJSON();
     },
 
     beforeRender: function()

@@ -41,7 +41,8 @@ define([
 
       this.view = new ListViewClass({
         collection: this.collection,
-        columns: this.options.columns
+        columns: this.options.columns,
+        serializeRow: this.options.serializeRow
       });
     },
 
