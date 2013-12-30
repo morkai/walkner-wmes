@@ -8,6 +8,11 @@ module.exports = function setupSubdivisionModel(app, mongoose)
       ref: 'Division',
       required: true
     },
+    type: {
+      type: String,
+      enum: ['assembly', 'press', 'storage'],
+      default: 'assembly'
+    },
     name: {
       type: String,
       trim: true,

@@ -20,6 +20,11 @@
   "PROPERTY:division": "Wydział",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:prodTaskTags": "Tagi zadań produkcyjnych",
+  "PROPERTY:type": "Typ",
+
+  "TYPE:assembly": "Montaż",
+  "TYPE:press": "Tłocznia",
+  "TYPE:storage": "Magazyn",
 
   "FORM:ACTION:add": "Dodaj dział",
   "FORM:ACTION:edit": "Edytuj dział",

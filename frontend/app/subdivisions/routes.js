@@ -1,29 +1,33 @@
 define([
   '../router',
   '../viewport',
+  '../i18n',
   '../user',
+  '../data/divisions',
   '../data/subdivisions',
+  '../data/views/renderOrgUnitPath',
   './Subdivision',
   '../core/pages/ListPage',
   '../core/pages/DetailsPage',
   '../core/pages/ActionFormPage',
   './pages/AddSubdivisionFormPage',
   './pages/EditSubdivisionFormPage',
-  './views/SubdivisionListView',
   './views/SubdivisionDetailsView',
   'i18n!app/nls/subdivisions'
 ], function(
   router,
   viewport,
+  t,
   user,
+  divisions,
   subdivisions,
+  renderOrgUnitPath,
   Subdivision,
   ListPage,
   DetailsPage,
   ActionFormPage,
   AddSubdivisionFormPage,
   EditSubdivisionFormPage,
-  SubdivisionListView,
   SubdivisionDetailsView
 ) {
   'use strict';
@@ -34,8 +38,21 @@ define([
   router.map('/subdivisions', canView, function()
   {
     viewport.showPage(new ListPage({
-      ListView: SubdivisionListView,
-      collection: subdivisions
+      collection: subdivisions,
+      columns: ['division', 'type', 'name', 'prodTaskTags'],
+      serializeRow: function(model)
+      {
+        var row = model.toJSON();
+
+        row.division = renderOrgUnitPath(divisions.get(row.division), true, false);
+
+        row.type = t('subdivisions', 'TYPE:' + row.type);
+
+        row.prodTaskTags =
+          row.prodTaskTags && row.prodTaskTags.length ? row.prodTaskTags.join(', ') : null;
+
+        return row;
+      }
     }));
   });
 
