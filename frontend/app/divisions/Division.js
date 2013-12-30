@@ -20,6 +20,7 @@ define([
     labelAttribute: '_id',
 
     defaults: {
+      type: 'prod',
       description: null
     }
 

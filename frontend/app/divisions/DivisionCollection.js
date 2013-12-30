@@ -11,7 +11,7 @@ define([
 
     model: Division,
 
-    rqlQuery: 'select(description)&sort(_id)'
+    rqlQuery: 'select(type,description)&sort(_id)'
 
   });
 });

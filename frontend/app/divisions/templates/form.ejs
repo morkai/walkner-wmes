@@ -8,6 +8,15 @@
         <input id="<%- idPrefix %>-_id" class="form-control" type="text" name="_id" autofocus required maxlength="50">
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-type" class="control-label"><%- t('divisions', 'PROPERTY:type') %></label>
+        <div class="radio">
+          <label><input type="radio" name="type" value="prod" checked> <%- t('divisions', 'TYPE:prod') %></label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="type" value="dist"> <%- t('divisions', 'TYPE:dist') %></label>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-description" class="control-label"><%- t('divisions', 'PROPERTY:description') %></label>
         <input id="<%- idPrefix %>-description" class="form-control" type="text" name="description" required maxlength="150">
       </div>

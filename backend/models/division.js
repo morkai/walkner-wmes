@@ -9,6 +9,11 @@ module.exports = function setupDivisionModel(app, mongoose)
       unique: true,
       trim: true
     },
+    type: {
+      type: String,
+      enum: ['prod', 'dist'],
+      default: 'prod'
+    },
     description: {
       type: String,
       trim: true

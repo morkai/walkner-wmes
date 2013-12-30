@@ -1,6 +1,7 @@
 define([
   '../router',
   '../viewport',
+  '../i18n',
   '../user',
   '../data/divisions',
   './Division',
@@ -15,6 +16,7 @@ define([
 ], function(
   router,
   viewport,
+  t,
   user,
   divisions,
   Division,
@@ -31,11 +33,19 @@ define([
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
-  router.map('/divisions', canView, function(req)
+  router.map('/divisions', canView, function()
   {
     viewport.showPage(new ListPage({
       collection: divisions,
-      columns: ['_id', 'description']
+      columns: ['_id', 'type', 'description'],
+      serializeRow: function(model)
+      {
+        var row = model.toJSON();
+
+        row.type = t('divisions', 'TYPE:' + row.type);
+
+        return row;
+      }
     }));
   });
 

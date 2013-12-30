@@ -18,6 +18,10 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:description": "Opis",
+  "PROPERTY:type": "Typ",
+
+  "TYPE:prod": "Produkcja",
+  "TYPE:dist": "Dystrybucja",
 
   "FORM:ACTION:add": "Dodaj wydział",
   "FORM:ACTION:edit": "Edytuj wydział",
