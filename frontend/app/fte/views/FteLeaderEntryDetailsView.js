@@ -2,11 +2,13 @@ define([
   'underscore',
   'app/core/View',
   'app/fte/templates/leaderEntry',
+  './fractionsUtil',
   'i18n!app/nls/fte'
 ], function(
   _,
   View,
-  leaderEntryTemplate
+  leaderEntryTemplate,
+  fractionsUtil
 ) {
   'use strict';
 
@@ -35,7 +37,10 @@ define([
 
     serialize: function()
     {
-      return _.extend(this.model.serializeWithTotals(), {editable: false});
+      return _.extend(this.model.serializeWithTotals(), {
+        editable: false,
+        round: fractionsUtil.round
+      });
     },
 
     afterRender: function()

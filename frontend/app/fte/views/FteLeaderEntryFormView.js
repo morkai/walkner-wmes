@@ -5,6 +5,7 @@ define([
   'app/user',
   'app/core/View',
   'app/fte/templates/leaderEntry',
+  './fractionsUtil',
   'i18n!app/nls/fte'
 ], function(
   _,
@@ -12,7 +13,8 @@ define([
   t,
   user,
   View,
-  leaderEntryTemplate
+  leaderEntryTemplate,
+  fractionsUtil
 ) {
   'use strict';
 
@@ -59,7 +61,10 @@ define([
 
     serialize: function()
     {
-      return _.extend(this.model.serializeWithTotals(), {editable: true});
+      return _.extend(this.model.serializeWithTotals(), {
+        editable: true,
+        round: fractionsUtil.round
+      });
     },
 
     focusNextInput: function($current)
@@ -88,8 +93,8 @@ define([
         return this.focusNextInput(this.$(e.target));
       }
 
-      var oldCount = parseInt(e.target.getAttribute('data-value'), 10) || 0;
-      var newCount = parseInt(e.target.value, 10) || 0;
+      var oldCount = fractionsUtil.parse(e.target.getAttribute('data-value')) || 0;
+      var newCount = fractionsUtil.parse(e.target.value) || 0;
 
       if (oldCount === newCount)
       {
@@ -157,27 +162,27 @@ define([
 
       $taskTr.find('.fte-leaderEntry-count').each(function()
       {
-        taskTotal += parseInt(this.value, 10) || 0;
+        taskTotal += fractionsUtil.parse(this.value) || 0;
       });
 
       $taskTr.find('.fte-leaderEntry-total-task')
-        .text(taskTotal);
+        .text(fractionsUtil.round(taskTotal));
 
       this.$('.fte-leaderEntry-count[data-company=' + companyIndex + ']').each(function()
       {
-        companyTotal += parseInt(this.value, 10) || 0;
+        companyTotal += fractionsUtil.parse(this.value) || 0;
       });
 
       this.$('td.fte-leaderEntry-total-company[data-company=' + companyIndex + ']')
-        .text(companyTotal);
+        .text(fractionsUtil.round(companyTotal));
 
       this.$('.fte-leaderEntry-total-company').each(function()
       {
-        overallTotal += parseInt(this.innerHTML, 10) || 0;
+        overallTotal += fractionsUtil.parse(this.innerHTML) || 0;
       });
 
       this.$('td.fte-leaderEntry-total-overall')
-        .text(overallTotal);
+        .text(fractionsUtil.round(overallTotal));
     },
 
     onRemoteEdit: function(message)

@@ -7,6 +7,7 @@ define([
   'app/core/View',
   'app/fte/templates/masterEntry',
   'app/fte/templates/absentUserRow',
+  './fractionsUtil',
   'i18n!app/nls/fte'
 ], function(
   _,
@@ -16,7 +17,8 @@ define([
   user,
   View,
   masterEntryTemplate,
-  absentUserRowTemplate
+  absentUserRowTemplate,
+  fractionsUtil
 ) {
   'use strict';
 
@@ -76,7 +78,8 @@ define([
     {
       return _.extend(this.model.serializeWithTotals(), {
         editable: true,
-        renderAbsentUserRow: absentUserRowTemplate
+        renderAbsentUserRow: absentUserRowTemplate,
+        round: fractionsUtil.round
       });
     },
 
@@ -282,8 +285,9 @@ define([
         return this.focusNextInput(this.$(e.target));
       }
 
-      var oldCount = parseInt(e.target.getAttribute('data-value'), 10) || 0;
-      var newCount = parseInt(e.target.value, 10) || 0;
+      var oldCount = fractionsUtil.parse(e.target.getAttribute('data-value'));
+      console.log('newCount', e.target.value);
+      var newCount = fractionsUtil.parse(e.target.value);
 
       if (oldCount === newCount)
       {
@@ -356,8 +360,8 @@ define([
       total = 0;
       countSelector = '.fte-masterEntry-count[data-companyId="' + companyId + '"]';
       totalSelector = '.fte-masterEntry-total-company-task[data-companyId="' + companyId + '"]';
-      $taskTr.find(countSelector).each(function() { total += parseInt(this.value, 10) || 0; });
-      $taskTr.find(totalSelector).text(total);
+      $taskTr.find(countSelector).each(function() { total += fractionsUtil.parse(this.value); });
+      $taskTr.find(totalSelector).text(fractionsUtil.round(total));
 
       total = 0;
       countSelector = '.fte-masterEntry-count'
@@ -370,30 +374,30 @@ define([
       {
         if (!this.disabled)
         {
-          total += parseInt(this.value, 10) || 0;
+          total += fractionsUtil.parse(this.value);
         }
       });
-      this.$(totalSelector).text(total);
+      this.$(totalSelector).text(fractionsUtil.round(total));
 
       total = 0;
       countSelector = '.fte-masterEntry-total-prodFunction-company'
         + '[data-companyId="' + companyId + '"]';
       totalSelector = '.fte-masterEntry-total-company[data-companyId="' + companyId + '"]';
-      this.$(countSelector).each(function() { total += parseInt(this.innerHTML, 10) || 0; });
-      this.$(totalSelector).text(total);
+      this.$(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
+      this.$(totalSelector).text(fractionsUtil.round(total));
 
       total = 0;
       countSelector = '.fte-masterEntry-total-prodFunction-company'
         + '[data-functionId="' + functionId + '"]';
       totalSelector = '.fte-masterEntry-total-prodFunction[data-functionId="' + functionId + '"]';
-      this.$(countSelector).each(function() { total += parseInt(this.innerHTML, 10) || 0; });
-      this.$(totalSelector).text(total);
+      this.$(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
+      this.$(totalSelector).text(fractionsUtil.round(total));
 
       total = 0;
       countSelector = '.fte-masterEntry-total-company';
       totalSelector = '.fte-masterEntry-total';
-      this.$(countSelector).each(function() { total += parseInt(this.innerHTML, 10) || 0; });
-      this.$(totalSelector).text(total);
+      this.$(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
+      this.$(totalSelector).text(fractionsUtil.round(total));
     },
 
     recountAll: function($row)

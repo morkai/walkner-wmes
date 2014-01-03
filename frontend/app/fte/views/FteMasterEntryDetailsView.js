@@ -3,12 +3,14 @@ define([
   'app/core/View',
   'app/fte/templates/masterEntry',
   'app/fte/templates/absentUserRow',
+  './fractionsUtil',
   'i18n!app/nls/fte'
 ], function(
   _,
   View,
   masterEntryTemplate,
-  absentUserRowTemplate
+  absentUserRowTemplate,
+  fractionsUtil
 ) {
   'use strict';
 
@@ -39,7 +41,8 @@ define([
     {
       return _.extend(this.model.serializeWithTotals(), {
         editable: false,
-        renderAbsentUserRow: absentUserRowTemplate
+        renderAbsentUserRow: absentUserRowTemplate,
+        round: fractionsUtil.round
       });
     },
 

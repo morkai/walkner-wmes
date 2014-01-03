@@ -26,15 +26,15 @@
       <thead>
       <tr>
         <th><%- t('fte', 'leaderEntry:column:companyTotal') %>
-        <td class="fte-leaderEntry-total-overall"><%- total %>
+        <td class="fte-leaderEntry-total-overall"><%- round(total) %>
         <% companies.forEach(function(company, companyIndex) { %>
-        <td class="fte-leaderEntry-total-company" data-company="<%= companyIndex %>"><%- company.total %>
+        <td class="fte-leaderEntry-total-company" data-company="<%= companyIndex %>"><%- round(company.total) %>
         <% }) %>
       <tbody>
       <% tasks.forEach(function(task, taskIndex) { %>
       <tr>
         <td><%= task.name %>
-        <td class="fte-leaderEntry-total-task"><%- task.total %>
+        <td class="fte-leaderEntry-total-task"><%- round(task.total) %>
         <% task.companies.forEach(function(company, companyIndex) { %>
         <td <%- editable ? '' : 'class="fte-leaderEntry-count"' %>>
           <% if (editable) { %>

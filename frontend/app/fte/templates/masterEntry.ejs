@@ -30,9 +30,9 @@
       <tr>
         <th>
         <th class="even">
-        <th colspan="<%- companyCount %>" class="fte-masterEntry-total"><%- total %>
+        <th colspan="<%- companyCount %>" class="fte-masterEntry-total"><%- round(total) %>
         <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-        <th class="fte-masterEntry-total-prodFunction <%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" class="fte-masterEntry-total-prodFunction" data-functionId="<%- prodFunctionId %>"><%- totalByProdFunction[prodFunctionId].total %>
+        <th class="fte-masterEntry-total-prodFunction <%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" class="fte-masterEntry-total-prodFunction" data-functionId="<%- prodFunctionId %>"><%- round(totalByProdFunction[prodFunctionId].total) %>
         <% }) %>
       </tr>
       </thead>
@@ -55,7 +55,7 @@
         <th>
         <th class="even">
         <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-        <th class="fte-masterEntry-total-company" data-companyId="<%- companyId %>"><%- totalByCompany[companyId].total %>
+        <th class="fte-masterEntry-total-company" data-companyId="<%- companyId %>"><%- round(totalByCompany[companyId].total) %>
         <% }) %>
         <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
         <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
@@ -81,7 +81,7 @@
           <% } %>
         </td>
         <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
-        <td class="fte-masterEntry-total-company-task" data-companyId="<%- companyId %>"><%- task.totalByCompany[companyId] %></td>
+        <td class="fte-masterEntry-total-company-task" data-companyId="<%- companyId %>"><%- round(task.totalByCompany[companyId]) %></td>
         <% }) %>
         <% task.functions.forEach(function(prodFunction, functionIndex) { %>
         <% prodFunction.companies.forEach(function(company, companyIndex) { %>
