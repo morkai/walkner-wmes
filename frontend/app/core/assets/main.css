@@ -227,6 +227,10 @@ p:last-child {
   border-color: #d9534f;
 }
 
+.btn:active, .btn.active {
+  box-shadow: inset 0 3px 9px rgba(0, 0, 0, 0.25);
+}
+
 @-webkit-keyframes yellow-fade {
   0% { background: yellow; }
   100% { background: none; }
