@@ -13,9 +13,11 @@
   "FILTER:BUTTON": "Filtruj przestoje",
   "FILTER:PLACEHOLDER:aor": "Dowolny obszar odpowiedzialności",
   "FILTER:PLACEHOLDER:reason": "Dowolny powód przestoju",
+  "FILTER:PLACEHOLDER:orgUnit": "Dowolna jednostka organizacyjna",
 
   "LIST:ACTION:corroborate": "Potwierdź przestój",
 
+  "PROPERTY:orgUnit": "Jednostka organizacyjna",
   "PROPERTY:aor": "Obszar odpowiedzialności",
   "PROPERTY:prodLine": "Linia produkcyjna/Maszyna",
   "PROPERTY:reason": "Powód przestoju",

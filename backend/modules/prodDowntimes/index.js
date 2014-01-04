@@ -8,7 +8,9 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   sioId: 'sio',
-  productionId: 'production'
+  productionId: 'production',
+  workCentersId: 'workCenters',
+  prodLinesId: 'prodLines'
 };
 
 exports.start = function startProdDowntimesModule(app, module)
@@ -17,7 +19,9 @@ exports.start = function startProdDowntimesModule(app, module)
     [
       module.config.mongooseId,
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.workCentersId,
+      module.config.prodLinesId
     ],
     setUpRoutes.bind(null, app, module)
   );

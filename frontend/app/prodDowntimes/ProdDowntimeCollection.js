@@ -21,6 +21,24 @@ define([
 
     rqlQuery: function(rql)
     {
+      var selector = [{name: 'eq', args: ['status', 'undecided']}];
+
+      var userSubdivision = user.getSubdivision();
+
+      if (userSubdivision)
+      {
+        selector.push({name: 'eq', args: ['subdivision', userSubdivision.id]});
+      }
+      else
+      {
+        var userDivision = user.getDivision();
+
+        if (userDivision)
+        {
+          selector.push({name: 'eq', args: ['division', userDivision.id]});
+        }
+      }
+
       return rql.Query.fromObject({
         fields: {
           aor: 1,
@@ -39,7 +57,7 @@ define([
         limit: 15,
         selector: {
           name: 'and',
-          args: [{name: 'eq', args: ['status', 'undecided']}]
+          args: selector
         }
       });
     },
@@ -110,7 +128,10 @@ define([
         }
       }
 
-      return this.matchStatus(data) && this.matchAor(data) && this.matchReason(data);
+      return this.matchStatus(data)
+        && this.matchAor(data)
+        && this.matchReason(data)
+        && this.matchOrgUnit(data);
     },
 
     matchStatus: function(data)
@@ -165,6 +186,12 @@ define([
         return data.reason === reasonTerm.args[1];
       }
 
+      return true;
+    },
+
+    matchOrgUnit: function(data)
+    {
+      // TODO
       return true;
     }
 

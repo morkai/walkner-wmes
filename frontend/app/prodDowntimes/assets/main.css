@@ -14,3 +14,12 @@ textarea.prodDowntimes-corroborate-decisionComment {
   overflow: auto;
   white-space: pre-line;
 }
+.prodDowntime-filter-division.select2-disabled {
+  background-color: transparent;
+}
+.prodDowntime-filter-subdivision {
+  padding-left: 1em;
+}
+.prodDowntime-filter-prodFlow {
+  padding-left: 2em;
+}

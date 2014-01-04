@@ -1,6 +1,10 @@
 <div class="well">
   <form id="<%- idPrefix %>-form" class="filter-form">
     <div class="form-group">
+      <label for="<%- idPrefix %>-orgUnit"><%- t('prodDowntimes', 'PROPERTY:orgUnit') %></label>
+      <input id="<%- idPrefix %>-orgUnit" name="orgUnit" type="text" data-placeholder="<%- t('prodDowntimes', 'FILTER:PLACEHOLDER:orgUnit') %>">
+    </div><div
+      class="form-group">
       <label for="<%- idPrefix %>-aor"><%- t('prodDowntimes', 'PROPERTY:aor') %></label>
       <input id="<%- idPrefix %>-aor" name="aor" type="text" data-placeholder="<%- t('prodDowntimes', 'FILTER:PLACEHOLDER:aor') %>">
     </div><div

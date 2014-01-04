@@ -5,6 +5,7 @@ define([
   'app/i18n',
   'app/user',
   'app/data/aors',
+  'app/data/orgUnits',
   'app/core/View',
   'app/data/downtimeReasons',
   'app/prodDowntimes/templates/filter',
@@ -17,6 +18,7 @@ define([
   t,
   user,
   aors,
+  orgUnits,
   View,
   downtimeReasons,
   filterTemplate
@@ -56,6 +58,21 @@ define([
 
       this.toggleStatus(formData.status);
 
+      this.$id('orgUnit').select2({
+        width: '275px',
+        allowClear: !user.getDivision(),
+        data: this.getApplicableOrgUnits(),
+        formatSelection: function(orgUnit)
+        {
+          if (orgUnit.type === 'subdivision')
+          {
+            return orgUnit.model.get('division') + ' \\ ' + orgUnit.text;
+          }
+
+          return orgUnit.text;
+        }
+      });
+
       this.$id('aor').select2({
         width: '275px',
         allowClear: true,
@@ -77,6 +94,81 @@ define([
           {
             return a.id.localeCompare(b.id);
           })
+      });
+    },
+
+    getApplicableOrgUnits: function()
+    {
+      var userOrgUnits = [];
+      var userDivision = user.getDivision();
+      var userSubdivision = user.getSubdivision();
+
+      if (userDivision)
+      {
+        userOrgUnits.push({
+          disabled: !!userSubdivision,
+          id: userDivision.id,
+          text: userDivision.getLabel(),
+          type: 'division',
+          model: userDivision,
+          css: 'prodDowntime-filter-division'
+        });
+      }
+
+      var view = this;
+
+      if (userSubdivision)
+      {
+        this.pushApplicableOrgUnitsForSubdivision(userOrgUnits, userSubdivision);
+      }
+      else if (userDivision)
+      {
+        orgUnits.getSubdivisionsForDivision(userDivision).forEach(function(subdivision)
+        {
+          view.pushApplicableOrgUnitsForSubdivision(userOrgUnits, subdivision);
+        });
+      }
+      else
+      {
+        orgUnits.getAllDivisions().forEach(function(division)
+        {
+          userOrgUnits.push({
+            id: division.id,
+            text: division.getLabel(),
+            type: 'division',
+            model: division,
+            css: 'prodDowntime-filter-division'
+          });
+
+          orgUnits.getSubdivisionsForDivision(division).forEach(function(subdivision)
+          {
+            view.pushApplicableOrgUnitsForSubdivision(userOrgUnits, subdivision);
+          });
+        });
+      }
+
+      return userOrgUnits;
+    },
+
+    pushApplicableOrgUnitsForSubdivision: function(userOrgUnits, subdivision)
+    {
+      userOrgUnits.push({
+        id: subdivision.id,
+        text: subdivision.getLabel(),
+        type: 'subdivision',
+        model: subdivision,
+        css: 'prodDowntime-filter-subdivision'
+      });
+
+      orgUnits.getProdFlowsForSubdivision(subdivision).forEach(function(prodFlow)
+      {
+        userOrgUnits.push({
+          id: prodFlow.id,
+          text: prodFlow.getLabel(),
+          type: 'prodFlow',
+          model: prodFlow,
+          css: 'prodDowntime-filter-prodFlow'
+        });
       });
     },
 
@@ -121,6 +213,7 @@ define([
         aor: null,
         reason: null,
         status: ['undecided'],
+        orgUnit: null,
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
       };
 
@@ -143,6 +236,12 @@ define([
           case 'status':
             formData.status = [].concat(term.args[1]);
             break;
+
+          case 'division':
+          case 'subdivision':
+          case 'prodFlow':
+            formData.orgUnit = term.args[1];
+            break;
         }
       });
 
@@ -153,6 +252,7 @@ define([
     {
       var rqlQuery = this.model.rqlQuery;
       var selector = [];
+      var orgUnit = this.$id('orgUnit').select2('data');
       var aor = this.$id('aor').val();
       var reason = this.$id('reason').val();
       var status = this.fixStatus();
@@ -174,6 +274,11 @@ define([
       else if (status.length > 1)
       {
         selector.push({name: 'in', args: ['status', status]});
+      }
+
+      if (orgUnit)
+      {
+        selector.push({name: 'eq', args: [orgUnit.type, orgUnit.id]});
       }
 
       rqlQuery.selector = {name: 'and', args: selector};
