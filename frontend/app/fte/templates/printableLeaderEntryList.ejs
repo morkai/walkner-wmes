@@ -1,0 +1,46 @@
+<table class="table table-bordered table-condensed fte-leaderEntry-print">
+  <thead>
+    <tr>
+      <th><%- t('fte', 'leaderEntry:column:task') %></th>
+      <th><%- t('fte', 'leaderEntry:column:taskTotal') %></th>
+      <% companies.forEach(function(company) { %>
+      <th colspan="<%- divisions.length %>"><%= company.name %></th>
+      <% }) %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th class="fte-ntb fte-nbb"></th>
+      <th class="fte-nbb"><%- round(total) %></th>
+      <% companies.forEach(function(company, companyIndex) { %>
+      <th class="fte-nbb" colspan="<%- divisions.length %>"><%- round(company.total) %></th>
+      <% }) %>
+    </tr>
+    <% if (divisions.length) { %>
+    <tr>
+      <th class="fte-ntb"></th>
+      <th class="fte-ntb"></th>
+      <% companies.forEach(function(company, companyIndex) { %>
+      <% divisions.forEach(function(division) { %>
+      <th><%- division %></th>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <% } %>
+    <% tasks.forEach(function(task, taskIndex) { %>
+    <tr>
+      <td><%= task.name %>
+      <td><%- round(task.total) %>
+      <% task.companies.forEach(function(company, companyIndex) { %>
+      <% if (Array.isArray(company.count)) { %>
+      <% company.count.forEach(function(companyCount, divisionIndex) { %>
+      <td><%- companyCount.value %></td>
+      <% }) %>
+      <% } else { %>
+      <td colspan="<%- divisions.length %>"><%- company.count %></td>
+      <% } %>
+      <% }) %>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

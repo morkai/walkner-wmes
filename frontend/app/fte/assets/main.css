@@ -51,10 +51,12 @@
 .fte-leaderEntry-print th:first-child {
   width: auto;
 }
-.fte-leaderEntry-print td {
+.fte-leaderEntry-print td,
+.fte-leaderEntry-print th {
   text-align: center;
 }
-.fte-leaderEntry-print td:first-child {
+.fte-leaderEntry-print td:first-child,
+.fte-leaderEntry-print th:first-child{
   text-align: left;
 }
 .fte-leaderEntry-print-total {

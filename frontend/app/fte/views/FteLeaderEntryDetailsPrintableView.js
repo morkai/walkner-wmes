@@ -1,79 +1,28 @@
 define([
+  'underscore',
   'app/i18n',
   'app/core/views/PrintableListView',
+  'app/fte/templates/printableLeaderEntryList',
+  './fractionsUtil',
   'i18n!app/nls/fte'
 ], function(
+  _,
   t,
-  PrintableListView
+  PrintableListView,
+  printableLeaderEntryListTemplate,
+  fractionsUtil
 ) {
   'use strict';
 
   return PrintableListView.extend({
 
-    className: 'fte-leaderEntry-print',
+    template: printableLeaderEntryListTemplate,
 
-    initialize: function()
+    serialize: function()
     {
-      PrintableListView.prototype.initialize.apply(this, arguments);
-
-      this.totalsByCompany = {};
-    },
-
-    serializeColumns: function()
-    {
-      var columns = [
-        {id: 'task', label: t('fte', 'leaderEntry:column:task')},
-        {id: 'total', label: t('fte', 'leaderEntry:column:taskTotal')}
-      ];
-      var totalsByCompany = this.totalsByCompany;
-
-      this.model.serializeCompanies().forEach(function(company)
-      {
-        columns.push({
-          id: company.id,
-          label: company.name
-        });
-
-        totalsByCompany[company.id] = company.total;
+      return _.extend(this.model.serializeWithTotals(), {
+        round: fractionsUtil.round
       });
-
-      return columns;
-    },
-
-    serializeRows: function()
-    {
-      var rows = [];
-      var totalRow = {
-        className: 'fte-leaderEntry-print-total',
-        task: t('fte', 'leaderEntry:column:companyTotal'),
-        total: 0
-      };
-      var totalsByCompany = this.totalsByCompany;
-
-      Object.keys(totalsByCompany).forEach(function(companyId)
-      {
-        totalRow.total += totalsByCompany[companyId];
-        totalRow[companyId] = totalsByCompany[companyId];
-      });
-
-      rows.push(totalRow);
-
-      this.model.serializeTasks().forEach(function(task)
-      {
-        var taskRow = {
-          task: task.name,
-          total: task.total
-        };
-
-        task.companies.forEach(function(company)
-        {
-          taskRow[company.id] = company.count;
-        });
-
-        rows.push(taskRow);
-      });
-
-      return rows;
     },
 
     afterRender: function()
