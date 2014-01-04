@@ -27,6 +27,7 @@ define([
       subdivision: null,
       date: null,
       shift: null,
+      fteDiv: null,
       tasks: null,
       locked: false,
       createdAt: null,
@@ -48,6 +49,7 @@ define([
         shift: this.get('shift'),
         total: companies.reduce(function(total, company) { return total + company.total; }, 0),
         companies: companies,
+        divisions: this.get('fteDiv') || [],
         tasks: this.serializeTasks(),
         locked: !!this.get('locked')
       };
@@ -66,7 +68,19 @@ define([
       {
         company.total = tasks.reduce(function(total, task)
         {
-          return total + task.companies[companyIndex].count;
+          if (Array.isArray(task.companies[companyIndex].count))
+          {
+            task.companies[companyIndex].count.forEach(function(divisionCount)
+            {
+              total += divisionCount.value;
+            });
+          }
+          else
+          {
+            total += task.companies[companyIndex].count;
+          }
+
+          return total;
         }, 0);
 
         return company;
@@ -79,7 +93,16 @@ define([
       {
         task.total = task.companies.reduce(function(total, company)
         {
-          return total + company.count;
+          if (Array.isArray(company.count))
+          {
+            company.count.forEach(function(divisionCount) { total += divisionCount.value; });
+          }
+          else
+          {
+            total += company.count;
+          }
+
+          return total;
         }, 0);
 
         return task;

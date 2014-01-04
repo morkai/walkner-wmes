@@ -7,14 +7,30 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
   var fteLeaderTaskCompanySchema = mongoose.Schema({
     id: String,
     name: String,
-    count: {
-      type: Number,
-      min: 0,
-      default: 0
-    }
+    count: {}
   }, {
     _id: false
   });
+
+  fteLeaderTaskCompanySchema.path('count').validate(
+    function(value)
+    {
+      if (typeof value === 'number')
+      {
+        return value >= 0;
+      }
+
+      return Array.isArray(value) && !value.some(function(el)
+      {
+        return !el
+          || typeof el !== 'object'
+          || typeof el.division !== 'string'
+          || typeof el.value !== 'number'
+          || el.value < 0;
+      });
+    },
+    'INVALID_COUNT'
+  );
 
   var fteLeaderTaskSchema = mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
@@ -70,6 +86,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       type: String,
       default: null
     },
+    fteDiv: [String],
     tasks: [fteLeaderTaskSchema]
   }, {
     id: false
@@ -79,6 +96,11 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   fteLeaderEntrySchema.statics.createForShift = function(shiftId, user, done)
   {
+    var prodDivisions = app.divisions.models
+      .filter(function(division) { return division.type === 'prod'; })
+      .map(function(division) { return division.get('_id'); })
+      .sort();
+
     step(
       function queryCompaniesStep()
       {
@@ -115,14 +137,29 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
           return this.done(done, err);
         }
 
-        var companies = this.companies;
+        var ctx = this;
 
         this.prodTasks = prodTasks.map(function(prodTask)
         {
+          ctx.fteDiv = ctx.fteDiv || prodTask.fteDiv;
+
           return {
             id: prodTask._id,
             name: prodTask.name,
-            companies: companies
+            companies: !prodTask.fteDiv ? ctx.companies : ctx.companies.map(function(company)
+            {
+              return {
+                id: company.id,
+                name: company.name,
+                count: prodDivisions.map(function(prodDivision)
+                {
+                  return {
+                    division: prodDivision,
+                    value: 0
+                  };
+                })
+              };
+            })
           };
         });
       },
@@ -132,6 +169,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
           subdivision: shiftId.subdivision,
           date: shiftId.date,
           shift: shiftId.no,
+          fteDiv: this.fteDiv ? prodDivisions : null,
           tasks: this.prodTasks,
           createdAt: new Date(),
           creator: user._id,

@@ -106,7 +106,7 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
       }
 
       var condition = {_id: data._id};
-      var fields = {date: 1, shift: 1, locked: 1};
+      var fields = {date: 1, shift: 1, locked: 1, fteDiv: 1};
 
       FteLeaderEntry.findOne(condition, fields).exec(function(err, fteLeaderEntry)
       {
@@ -125,12 +125,33 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
           return reply(new Error('ENTRY_LOCKED'));
         }
 
-        var update = {$set: {
-          updatedAt: new Date(),
-          updater: user._id,
-          updaterLabel: user.login
-        }};
-        var field = 'tasks.' + data.taskIndex + '.companies.' + data.companyIndex + '.count';
+        var fteDiv = fteLeaderEntry.get('fteDiv');
+
+        if (Array.isArray(fteDiv)
+          && fteDiv.length > 0
+          && lodash.isNumber(data.divisionIndex)
+          && (data.divisionIndex < 0 || data.divisionIndex >= fteDiv.length))
+        {
+          return reply(new Error('INVALID_INPUT'));
+        }
+
+        var update = {
+          $set: {
+            updatedAt: new Date(),
+            updater: user._id,
+            updaterLabel: user.login
+          }
+        };
+        var field = 'tasks.' + data.taskIndex + '.companies.' + data.companyIndex;
+
+        if (lodash.isNumber(data.divisionIndex))
+        {
+          field += '.count.' + data.divisionIndex + '.value';
+        }
+        else
+        {
+          field += '.count';
+        }
 
         update.$set[field] = data.newCount;
 

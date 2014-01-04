@@ -47,7 +47,7 @@ define([
     {
       this.listenToOnce(this.model, 'change', this.render);
 
-      this.$('.fte-leaderEntry-count').first().focus();
+      this.$('.fte-leaderEntry-count').first().select();
 
       if (this.model.get('locked'))
       {
@@ -73,14 +73,14 @@ define([
 
       if ($nextCell.length)
       {
-        return $nextCell.find('input').focus();
+        return $nextCell.find('input').select();
       }
 
       var $nextRow = $current.closest('tr').next();
 
       if ($nextRow.length)
       {
-        return $nextRow.find('.fte-leaderEntry-count').first().focus();
+        return $nextRow.find('.fte-leaderEntry-count').first().select();
       }
 
       this.el.querySelector('.fte-leaderEntry-count').select();
@@ -101,8 +101,9 @@ define([
         return;
       }
 
-      var timerKey =
-        e.target.getAttribute('data-task') + ':' + e.target.getAttribute('data-company');
+      var timerKey = e.target.getAttribute('data-task')
+        + ':' + e.target.getAttribute('data-company')
+        + ':' + e.target.getAttribute('data-division');
 
       if (this.timers[timerKey])
       {
@@ -126,6 +127,13 @@ define([
         taskIndex: parseInt(countEl.getAttribute('data-task'), 10),
         companyIndex: parseInt(countEl.getAttribute('data-company'), 10)
       };
+
+      var divisionIndex = parseInt(countEl.getAttribute('data-division'), 10);
+
+      if (!isNaN(divisionIndex))
+      {
+        data.divisionIndex = divisionIndex;
+      }
 
       countEl.setAttribute('data-value', data.newCount);
       countEl.setAttribute('data-remote', 'false');
@@ -173,7 +181,7 @@ define([
         companyTotal += fractionsUtil.parse(this.value) || 0;
       });
 
-      this.$('td.fte-leaderEntry-total-company[data-company=' + companyIndex + ']')
+      this.$('.fte-leaderEntry-total-company[data-company=' + companyIndex + ']')
         .text(fractionsUtil.round(companyTotal));
 
       this.$('.fte-leaderEntry-total-company').each(function()
@@ -181,7 +189,7 @@ define([
         overallTotal += fractionsUtil.parse(this.innerHTML) || 0;
       });
 
-      this.$('td.fte-leaderEntry-total-overall')
+      this.$('.fte-leaderEntry-total-overall')
         .text(fractionsUtil.round(overallTotal));
     },
 
@@ -195,6 +203,11 @@ define([
       var selector = '.fte-leaderEntry-count'
         + '[data-company=' + message.companyIndex + ']'
         + '[data-task=' + message.taskIndex + ']';
+
+      if (typeof message.divisionIndex === 'number')
+      {
+        selector += '[data-division="' + message.divisionIndex + '"]';
+      }
 
       var $count = this.$(selector);
 

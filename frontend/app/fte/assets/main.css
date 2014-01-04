@@ -1,13 +1,8 @@
-.fte-leaderEntry-total-overall,
-.fte-leaderEntry-total-company,
-.fte-leaderEntry-total-task {
-  width: 1%;
-  min-width: 100px;
-  white-space: nowrap;
-  text-align: center;
+.fte-ntb {
+  border-top-width: 0!important;
 }
-.fte-leaderEntry-count {
-  text-align: center;
+.fte-nbb {
+  border-bottom-width: 0!important;
 }
 .fte-property {
   display: inline-block;
@@ -29,6 +24,26 @@
 }
 .fte-filter-shift-group {
   margin-top: 5px;
+}
+.fte-leaderEntry th {
+  text-align: center;
+}
+.fte-leaderEntry .fte-leaderEntry-taskColumn {
+  text-align: left;
+}
+.fte-leaderEntry-total-overall,
+.fte-leaderEntry-total-company,
+.fte-leaderEntry-total-task {
+  width: 1%;
+  min-width: 100px;
+  white-space: nowrap;
+  text-align: center;
+}
+.fte-leaderEntry-count {
+  text-align: center;
+}
+.fte-leaderEntry-count[data-division] {
+  min-width: 5em;
 }
 .fte-leaderEntry-print th {
   width: 1%;
