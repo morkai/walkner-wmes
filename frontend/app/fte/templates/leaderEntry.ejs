@@ -31,6 +31,7 @@
           <th class="fte-leaderEntry-total-company fte-nbb" data-company="<%= companyIndex %>" colspan="<%- divisions.length %>"><%- round(company.total) %>
           <% }) %>
         </tr>
+        <% if (divisions.length) { %>
         <tr>
           <th class="fte-ntb">
           <th class="fte-ntb">
@@ -40,6 +41,7 @@
           <% }) %>
           <% }) %>
         </tr>
+        <% } %>
       </thead>
       <tbody>
         <% tasks.forEach(function(task, taskIndex) { %>
