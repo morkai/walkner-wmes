@@ -11,7 +11,7 @@ define([
 
     model: ProdTask,
 
-    rqlQuery: 'select(name,tags)&sort(name)&limit(15)'
+    rqlQuery: 'select(name,tags,fteDiv)&sort(name)&limit(15)'
 
   });
 });

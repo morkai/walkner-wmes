@@ -21,7 +21,8 @@ define([
 
     defaults: {
       name: null,
-      tags: null
+      tags: null,
+      prodDiv: false
     },
 
     parse: function(data)

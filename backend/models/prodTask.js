@@ -8,7 +8,11 @@ module.exports = function setupProdTaskModel(app, mongoose)
       required: true,
       trim: true
     },
-    tags: [String]
+    tags: [String],
+    fteDiv: {
+      type: Boolean,
+      default: false
+    }
   }, {
     id: false
   });

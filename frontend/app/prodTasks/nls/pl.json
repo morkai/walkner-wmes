@@ -19,6 +19,7 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:tags": "Tagi",
+  "PROPERTY:fteDiv": "Podział na wydziały w FTE (magazyn)?",
 
   "FORM:ACTION:add": "Dodaj zadanie produkcyjne",
   "FORM:ACTION:edit": "Edytuj zadanie produkcyjne",

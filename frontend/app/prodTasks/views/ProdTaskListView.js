@@ -10,13 +10,14 @@ define([
 
   return ListView.extend({
 
-    columns: ['name', 'tags'],
+    columns: ['name', 'tags', 'fteDiv'],
 
     serializeRows: function()
     {
       return this.collection.toJSON().map(function(row)
       {
         row.tags = row.tags.length ? row.tags.join(', ') : null;
+        row.fteDiv = t('core', 'BOOL:' + !!row.fteDiv);
 
         return row;
       });
