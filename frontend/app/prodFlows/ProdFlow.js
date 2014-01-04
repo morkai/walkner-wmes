@@ -42,9 +42,16 @@ define([
 
     getSubdivision: function()
     {
-      var mrpController = mrpControllers.get(this.get('mrpController')[0]);
+      var prodFlowMrpControllers = this.get('mrpController');
 
-      return mrpController ? mrpController.getSubdivision() : null;
+      if (!Array.isArray(prodFlowMrpControllers) || !prodFlowMrpControllers.length)
+      {
+        return null;
+      }
+
+      var prodFlowMrpController = mrpControllers.get(prodFlowMrpControllers[0]);
+
+      return prodFlowMrpController ? prodFlowMrpController.getSubdivision() : null;
     }
 
   });
