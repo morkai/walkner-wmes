@@ -49,6 +49,19 @@ define([
 
     prodDowntime.reason = reason ? reason.getLabel() : prodDowntime.reason;
 
+    if (prodDowntime.startedAt && prodDowntime.finishedAt)
+    {
+      var startTime = Date.parse(prodDowntime.startedAt);
+      var endTime = Date.parse(prodDowntime.finishedAt);
+      var duration = Math.round((endTime - startTime) / 1000);
+
+      prodDowntime.duration = time.toString(duration);
+    }
+    else
+    {
+      prodDowntime.duration = '-';
+    }
+
     prodDowntime.startedAt = time.format(prodDowntime.startedAt, 'YYYY-MM-DD HH:mm:ss');
 
     prodDowntime.finishedAt = prodDowntime.finishedAt

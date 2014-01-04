@@ -36,6 +36,7 @@
   "PROPERTY:creator": "Użytkownik rozpoczynający",
   "PROPERTY:corroborator": "Użytkownik potwierdzający",
   "PROPERTY:corroboratedAt": "Czas potwierdzenia",
+  "PROPERTY:duration": "Czas trwania",
 
   "shift+date": "{date}, {shift} zmiana",
 

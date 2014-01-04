@@ -72,7 +72,7 @@ define([
       }
     },
 
-    columns: ['aor', 'prodLine', 'reason', 'startedAt', 'finishedAt'],
+    columns: ['aor', 'prodLine', 'reason', 'startedAt', 'finishedAt', 'duration'],
 
     initialize: function()
     {
