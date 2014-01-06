@@ -1,0 +1,52 @@
+{
+  "BREADCRUMBS:browse": "Karty pracy",
+  "BREADCRUMBS:details": "Karta pracy",
+  "BREADCRUMBS:addForm": "Dodawanie",
+
+  "MSG:LOADING_FAILURE": "Ładowanie kart pracy nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie karty pracy nie powiodło się :(",
+
+  "PAGE_ACTION:add": "Dodaj kartę pracy",
+
+  "PANEL:TITLE:details": "Szczegóły karty pracy",
+  "PANEL:TITLE:addForm": "Formularz dodawania karty pracy",
+  "PANEL:TITLE:details:orders": "Lista części",
+
+  "FILTER:BUTTON": "Filtruj karty pracy",
+  "FILTER:LIMIT": "Limit",
+  "FILTER:PLACEHOLDER:": "Dowolny ...",
+
+  "PROPERTY:operators": "Nastawiacze/operatorzy",
+  "PROPERTY:operator": "Podpisany nastawiacz/operator",
+  "PROPERTY:master": "Podpisany mistrz",
+  "PROPERTY:date": "Data",
+  "PROPERTY:shift": "Zmiana",
+  "PROPERTY:createdAt": "Czas dodania",
+  "PROPERTY:creator": "Dodana przez",
+  "PROPERTY:order.part": "Część",
+  "PROPERTY:order.operation": "Operacja",
+  "PROPERTY:order.#": "Lp.",
+  "PROPERTY:order.nc12": "12NC części",
+  "PROPERTY:order.name": "Nazwa części",
+  "PROPERTY:order.operationName": "Nazwa operacji",
+  "PROPERTY:order.operationNo": "Numer oper.",
+  "PROPERTY:order.prodLine": "Maszyna",
+  "PROPERTY:order.quantityDone": "Ilość dobrych",
+  "PROPERTY:order.startedAt": "Godz. rozp.",
+  "PROPERTY:order.finishedAt": "Godz. zak.",
+  "PROPERTY:order.losses": "Straty materiałowe",
+  "PROPERTY:order.downtimes": "Straty czasu z polecenia mistrza",
+
+  "FORM:ACTION:add": "Dodaj kartę pracy",
+  "FORM:ACTION:edit": "Edytuj kartę pracy",
+  "FORM:ERROR:addFailure": "Nie udało się dodać kartę pracy :-(",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować kartę pracy :-(",
+  "FORM:ERROR:part": "Wymagana jest przynajmniej jedna część!",
+  "FORM:ERROR:prodLine": "Pole <em>Maszyna</em> jest wymagane!",
+  "FORM:ERROR:quantityDone": "Pole <em>Ilość dobrych</em> jest wymagane!",
+  "FORM:ERROR:startedAt": "Pole <em>Godz. rozp.</em> jest wymagane!",
+  "FORM:ERROR:finishedAt": "Pole <em>Godz. zak.</em> jest wymagane!",
+  "FORM:PLACEHOLDER:part": "Szukaj części po 12NC...",
+  "FORM:PLACEHOLDER:operation": "Wybierz operację...",
+  "FORM:PLACEHOLDER:prodLine": "Wybierz maszynę..."
+}

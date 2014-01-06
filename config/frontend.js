@@ -26,6 +26,7 @@ exports.modules = [
   'hourlyPlans',
   'production',
   'prodDowntimes',
+  'pressWorksheets',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'},
   'httpServer',
@@ -117,6 +118,7 @@ exports.user = {
     'FTE:MASTER:VIEW', 'FTE:MASTER:MANAGE', 'FTE:MASTER:ALL',
     'HOURLY_PLANS:VIEW', 'HOURLY_PLANS:MANAGE', 'HOURLY_PLANS:ALL',
     'PROD_DOWNTIMES:VIEW', 'PROD_DOWNTIMES:MANAGE',
+    'PRESS_WORKSHEETS:VIEW', 'PRESS_WORKSHEETS:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE'
   ]
 };

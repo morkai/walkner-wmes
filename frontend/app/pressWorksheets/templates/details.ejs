@@ -1,0 +1,130 @@
+<div>
+  <div class="panel panel-primary pressWorksheets-details">
+    <div class="panel-heading">
+      <%- t('pressWorksheets', 'PANEL:TITLE:details') %>
+    </div>
+    <div class="panel-details row">
+      <div class="col-md-6">
+        <div class="props first">
+          <div class="prop">
+            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:date') %></div>
+            <div class="prop-value"><%- model.date %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:shift') %></div>
+            <div class="prop-value"><%- model.shift %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:master') %></div>
+            <div class="prop-value"><%= model.master || '-' %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:operator') %></div>
+            <div class="prop-value"><%= model.operator || '-' %></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:createdAt') %></div>
+            <div class="prop-value"><%= model.createdAt || '-' %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:creator') %></div>
+            <div class="prop-value"><%= model.creator || '-' %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:operators') %></div>
+            <div class="prop-value">
+              <% if (model.operators.length) { %>
+              <ol>
+                <% model.operators.forEach(function(operator) { %>
+                <li><%= operator %></li>
+                <% }) %>
+              </ol>
+              <% } else { %>
+              -
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default pressWorksheets-details-orders">
+    <div class="panel-heading">
+      <%- t('pressWorksheets', 'PANEL:TITLE:details:orders') %>
+    </div>
+    <table class="table table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.nc12') %></th>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.name') %></th>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.operationName') %></th>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.operationNo') %></th>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
+          <th><%- t('pressWorksheets', 'PROPERTY:order.downtimes') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% model.orders.forEach(function(order) { %>
+        <tr>
+          <td><%= order.nc12 %></td>
+          <td><%= order.name %></td>
+          <td><%= order.operationName || '-' %></td>
+          <td><%= order.operationNo %></td>
+          <td><%= order.prodLine %></td>
+          <td><%= order.quantityDone %></td>
+          <td><%= order.startedAt %></td>
+          <td><%= order.finishedAt %></td>
+          <td class="prodWorksheets-details-tableContainer">
+            <% if (order.losses.length) { %>
+            <table class="table table-bordered table-condensed">
+              <thead>
+                <tr>
+                  <% order.losses.forEach(function(loss) { %>
+                  <th><%= loss.label %></th>
+                  <% }) %>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <% order.losses.forEach(function(loss) { %>
+                  <td><%= loss.count %></td>
+                  <% }) %>
+                </tr>
+              </tbody>
+            </table>
+            <% } %>
+          </td>
+          <td class="prodWorksheets-details-tableContainer">
+            <% if (order.downtimes.length) { %>
+            <table class="table table-bordered table-condensed">
+              <thead>
+                <tr>
+                  <% order.downtimes.forEach(function(downtime) { %>
+                  <th><%= downtime.label %></th>
+                  <% }) %>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <% order.downtimes.forEach(function(downtime) { %>
+                  <td><%= downtime.count %></td>
+                  <% }) %>
+                </tr>
+              </tbody>
+            </table>
+            <% } %>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

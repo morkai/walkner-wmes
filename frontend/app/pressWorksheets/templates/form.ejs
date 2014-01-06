@@ -1,0 +1,72 @@
+<form class="pressWorksheets-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-operators" class="control-label"><%- t('pressWorksheets', 'PROPERTY:operators') %></label>
+          <input id="<%- idPrefix %>-operators" type="text" name="operators" required>
+        </div>
+        <div class="col-md-3 pressWorksheets-form-dateAndShift">
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="<%- idPrefix %>-date" class="control-label"><%- t('pressWorksheets', 'PROPERTY:date') %></label>
+              <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required>
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="<%- idPrefix %>-shift-1"><%- t('pressWorksheets', 'PROPERTY:shift') %></label>
+              <div class="pressWorksheets-form-shiftGroup">
+                <label class="radio-inline"><input id="<%- idPrefix %>-shift-1" name="shift" type="radio" value="1" checked> <%- t('core', 'SHIFT:1') %></label>
+                <label class="radio-inline"><input name="shift" type="radio" value="2"> <%- t('core', 'SHIFT:2') %></label>
+                <label class="radio-inline"><input name="shift" type="radio" value="3"> <%- t('core', 'SHIFT:3') %></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-operator" class="control-label"><%- t('pressWorksheets', 'PROPERTY:operator') %></label>
+          <input id="<%- idPrefix %>-operator" type="text" name="operator" required>
+        </div>
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-master" class="control-label"><%- t('pressWorksheets', 'PROPERTY:master') %></label>
+          <input id="<%- idPrefix %>-master" type="text" name="master" required>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-condensed pressWorksheets-form-orders">
+          <thead>
+            <tr>
+              <th rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.part') %></th>
+              <th rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.operation') %></th>
+              <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
+              <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
+              <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
+              <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
+              <% if (lossReasons.length) { %>
+              <th class="pressWorksheets-form-min" colspan="<%- lossReasons.length %>"><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
+              <% } %>
+              <% if (downtimeReasons.length) { %>
+              <th class="pressWorksheets-form-min" colspan="<%- downtimeReasons.length %>"><%- t('pressWorksheets', 'PROPERTY:order.downtimes') %></th>
+              <% } %>
+            </tr>
+            <% if (rowspan) { %>
+            <tr class="pressWorksheets-form-losses">
+              <% lossReasons.forEach(function(lossReason) { %>
+              <th><span class="pressWorksheets-form-loss"><%- lossReason.label %></span></th>
+              <% }) %>
+              <% downtimeReasons.forEach(function(downtimeReason) { %>
+              <th><span class="pressWorksheets-form-loss"><%- downtimeReason.label %></span></th>
+              <% }) %>
+            </tr>
+            <% } %>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

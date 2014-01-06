@@ -1,0 +1,14 @@
+<tr class="pressWorksheets-form-order">
+  <td><input class="pressWorksheets-form-part" type="string" name="orders[<%- no %>].part" placeholder="<%- t('pressWorksheets', 'FORM:PLACEHOLDER:part') %>"></td>
+  <td><input class="form-control pressWorksheets-form-operation" type="string" name="orders[<%- no %>].operation" placeholder="<%- t('pressWorksheets', 'FORM:PLACEHOLDER:operation') %>"></td>
+  <td><input class="pressWorksheets-form-prodLine" type="string" name="orders[<%- no %>].prodLine" placeholder="<%- t('pressWorksheets', 'FORM:PLACEHOLDER:prodLine') %>"></td>
+  <td><input class="form-control pressWorksheets-form-quantityDone" type="string" name="orders[<%- no %>].quantityDone"></td>
+  <td><input class="form-control pressWorksheets-form-time pressWorksheets-form-startedAt" type="string" name="orders[<%- no %>].startedAt"></td>
+  <td><input class="form-control pressWorksheets-form-time pressWorksheets-form-finishedAt" type="string" name="orders[<%- no %>].finishedAt"></td>
+  <% lossReasons.forEach(function(lossReason) { %>
+  <td><input class="form-control pressWorksheets-form-count" type="string" name="orders[<%- no %>].losses.<%- lossReason._id %>"></td>
+  <% }) %>
+  <% downtimeReasons.forEach(function(downtimeReason) { %>
+  <td><input class="form-control pressWorksheets-form-count" type="string" name="orders[<%- no %>].downtimes.<%- downtimeReason._id %>"></td>
+  <% }) %>
+</tr>

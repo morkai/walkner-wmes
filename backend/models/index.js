@@ -29,6 +29,7 @@ module.exports = [
   'prodLogEntry',
   'prodShift',
   'prodShiftOrder',
-  'prodDowntime'
+  'prodDowntime',
+  'pressWorksheet'
 
 ];

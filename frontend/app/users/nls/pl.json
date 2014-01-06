@@ -87,5 +87,7 @@
   "PRIVILEGE:HOURLY_PLANS:MANAGE": "Plany godzinowe: zarządzanie",
   "PRIVILEGE:HOURLY_PLANS:ALL": "Plany godzinowe: dostęp do wszystkich wydziałów",
   "PRIVILEGE:PROD_DOWNTIMES:VIEW": "Postoje: przeglądanie",
-  "PRIVILEGE:PROD_DOWNTIMES:MANAGE": "Postoje: potwierdzanie"
+  "PRIVILEGE:PROD_DOWNTIMES:MANAGE": "Postoje: potwierdzanie",
+  "PRIVILEGE:PRESS_WORKSHEETS:VIEW": "Karty pracy: przeglądanie",
+  "PRIVILEGE:PRESS_WORKSHEETS:MANAGE": "Karty pracy: dodawanie"
 }
