@@ -2,11 +2,13 @@ define([
   'underscore',
   'moment',
   'js2form',
+  'reltime',
   'app/i18n',
   'app/user',
   'app/data/aors',
   'app/data/orgUnits',
   'app/core/View',
+  'app/core/util/fixTimeRange',
   'app/data/downtimeReasons',
   'app/prodDowntimes/templates/filter',
   'i18n!app/nls/prodDowntimes',
@@ -15,11 +17,13 @@ define([
   _,
   moment,
   js2form,
+  reltime,
   t,
   user,
   aors,
   orgUnits,
   View,
+  fixTimeRange,
   downtimeReasons,
   filterTemplate
 ) {
@@ -210,9 +214,10 @@ define([
     {
       var rqlQuery = this.model.rqlQuery;
       var formData = {
+        startedAt: '',
         aor: null,
         reason: null,
-        status: ['undecided'],
+        status: [],
         orgUnit: null,
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
       };
@@ -225,6 +230,11 @@ define([
 
         switch (property)
         {
+          case 'startedAt':
+            formData[term.name === 'ge' ? 'from' : 'to'] =
+              moment(term.args[1]).format('YYYY-MM-DD HH:mm:ss');
+            break;
+
           case 'aor':
           case 'reason':
             if (term.name === 'eq')
@@ -251,6 +261,7 @@ define([
     changeFilter: function()
     {
       var rqlQuery = this.model.rqlQuery;
+      var timeRange = fixTimeRange(this.$id('from'), this.$id('to'), 'YYYY-MM-DD HH:mm:ss');
       var selector = [];
       var orgUnit = this.$id('orgUnit').select2('data');
       var aor = this.$id('aor').val();
@@ -279,6 +290,16 @@ define([
       if (orgUnit)
       {
         selector.push({name: 'eq', args: [orgUnit.type, orgUnit.id]});
+      }
+
+      if (timeRange.from !== -1)
+      {
+        selector.push({name: 'ge', args: ['startedAt', timeRange.from]});
+      }
+
+      if (timeRange.to !== -1)
+      {
+        selector.push({name: 'le', args: ['startedAt', timeRange.to]});
       }
 
       rqlQuery.selector = {name: 'and', args: selector};

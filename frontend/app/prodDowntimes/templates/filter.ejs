@@ -1,6 +1,14 @@
 <div class="well">
   <form id="<%- idPrefix %>-form" class="filter-form">
     <div class="form-group">
+      <label for="<%- idPrefix %>-from"><%- t('prodDowntimes', 'FILTER:DATE:FROM') %></label>
+      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-to"><%- t('prodDowntimes', 'FILTER:DATE:TO') %></label>
+      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+    </div><div
+      class="form-group">
       <label for="<%- idPrefix %>-orgUnit"><%- t('prodDowntimes', 'PROPERTY:orgUnit') %></label>
       <input id="<%- idPrefix %>-orgUnit" name="orgUnit" type="text" data-placeholder="<%- t('prodDowntimes', 'FILTER:PLACEHOLDER:orgUnit') %>">
     </div><div

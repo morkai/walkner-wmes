@@ -9,6 +9,8 @@
   "PANEL:TITLE:details": "Szczegóły przestoju",
   "PANEL:TITLE:details:corroboration": "Potwierdzenie przestoju",
 
+  "FILTER:DATE:FROM": "Od",
+  "FILTER:DATE:TO": "Do",
   "FILTER:LIMIT": "Limit",
   "FILTER:BUTTON": "Filtruj przestoje",
   "FILTER:PLACEHOLDER:aor": "Dowolny obszar odpowiedzialności",
