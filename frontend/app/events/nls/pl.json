@@ -62,6 +62,12 @@
   "TEXT:downtimeReasons.edited": "Zmodyfikowano powód przestojów: <a href='\\#downtimeReasons/{model->_id}'>{model->_id}</a>",
   "TYPE:downtimeReasons.deleted": "Usunięcie powodu przestojów",
   "TEXT:downtimeReasons.deleted": "Usunięto powód przestojów: <em>{model->_id}</em>",
+  "TYPE:lossReasons.added": "Dodanie powodu strat materiałowych",
+  "TEXT:lossReasons.added": "Dodano powód strat materiałowych: <a href='\\#lossReasons/{model->_id}'>{model->_id}</a>",
+  "TYPE:lossReasons.edited": "Edycja powodu strat materiałowych",
+  "TEXT:lossReasons.edited": "Zmodyfikowano powód strat materiałowych: <a href='\\#lossReasons/{model->_id}'>{model->_id}</a>",
+  "TYPE:lossReasons.deleted": "Usunięcie powodu strat materiałowych",
+  "TEXT:lossReasons.deleted": "Usunięto powód strat materiałowych: <em>{model->_id}</em>",
   "TYPE:aors.added": "Dodanie obszaru odpowiedzialności",
   "TEXT:aors.added": "Dodano obszar odpowiedzialności: <a href='\\#aors/{model->_id}'>{model->name}</a>",
   "TYPE:aors.edited": "Edycja obszaru odpowiedzialności",
@@ -127,5 +133,7 @@
   "TYPE:hourlyPlans.created": "Utworzenie planu godzinowego",
   "TEXT:hourlyPlans.created": "Utworzono nowy plan godzinowy dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
   "TYPE:hourlyPlans.locked": "Zamknięcie planu godzinowego",
-  "TEXT:hourlyPlans.locked": "Zamknięto plan godzinowy dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>."
+  "TEXT:hourlyPlans.locked": "Zamknięto plan godzinowy dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
+  "TYPE:pressWorksheets.added": "Dodanie karty pracy",
+  "TEXT:pressWorksheets.added": "Dodano nową <a href='\\#pressWorksheets/{model->_id}'>kartę pracy</a>."
 }
