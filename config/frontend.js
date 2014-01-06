@@ -19,6 +19,7 @@ exports.modules = [
   'aors',
   'orderStatuses',
   'downtimeReasons',
+  'lossReasons',
   'prodTasks',
   'orders',
   'fte',

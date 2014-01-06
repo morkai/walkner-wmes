@@ -16,6 +16,7 @@ module.exports = [
   'aor',
   'orderStatus',
   'downtimeReason',
+  'lossReason',
   'prodTask',
 
   'order',

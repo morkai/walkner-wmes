@@ -4,6 +4,7 @@ define([
   './dashboard/routes',
   './divisions/routes',
   './downtimeReasons/routes',
+  './lossReasons/routes',
   './events/routes',
   './emptyOrders/routes',
   './fte/routes',

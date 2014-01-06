@@ -77,9 +77,16 @@ define([
         return false;
       }
 
+      var formData = this.serializeForm(form2js(this.el));
+
+      if (!this.checkValidity(formData))
+      {
+        return false;
+      }
+
       var $submitEl = this.$('[type="submit"]').attr('disabled', true);
 
-      var req = this.promised(this.model.save(this.serializeForm(form2js(this.el)), {
+      var req = this.promised(this.model.save(formData, {
         wait: true
       }));
 
@@ -117,6 +124,11 @@ define([
 
         this.$errorMessage = null;
       }
+    },
+
+    checkValidity: function(formData)
+    {
+      return !!formData;
     }
 
   });
