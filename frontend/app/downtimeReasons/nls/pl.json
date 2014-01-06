@@ -18,6 +18,7 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:label": "Opis",
+  "PROPERTY:pressPosition": "Pozycja na karcie pracy",
 
   "FORM:ACTION:add": "Dodaj powód przestojów",
   "FORM:ACTION:edit": "Edytuj powód przestojów",

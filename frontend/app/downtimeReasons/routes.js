@@ -35,7 +35,15 @@ define([
   {
     viewport.showPage(new ListPage({
       collection: downtimeReasons,
-      columns: ['_id', 'label']
+      columns: ['_id', 'label', 'pressPosition'],
+      serializeRow: function(model)
+      {
+        var row = model.toJSON();
+
+        row.pressPosition = row.pressPosition > -1 ? row.pressPosition : '-';
+
+        return row;
+      }
     }));
   });
 

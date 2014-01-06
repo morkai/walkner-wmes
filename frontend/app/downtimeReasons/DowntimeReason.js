@@ -20,7 +20,8 @@ define([
     labelAttribute: 'label',
     
     defaults: {
-      label: null
+      label: null,
+      pressPosition: -1
     },
 
     toJSON: function()

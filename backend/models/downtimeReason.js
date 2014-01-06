@@ -12,6 +12,10 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
     label: {
       type: String,
       trim: true
+    },
+    pressPosition: {
+      type: Number,
+      default: -1
     }
   }, {
     id: false
