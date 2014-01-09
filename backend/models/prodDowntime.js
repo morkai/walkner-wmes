@@ -17,7 +17,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     prodShift: {
       type: String,
       ref: 'ProdShift',
-      required: true
+      default: null
     },
     prodShiftOrder: {
       type: String,
@@ -37,7 +37,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     aor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Aor',
-      required: true
+      default: null
     },
     reason: {
       type: String,

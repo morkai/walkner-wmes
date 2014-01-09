@@ -12,7 +12,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     prodShift: {
       type: String,
       ref: 'ProdShift',
-      required: true
+      default: null
     },
     prodLine: {
       type: String,
@@ -51,6 +51,10 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       type: Number,
       default: 0,
       min: 0
+    },
+    losses: {
+      type: {},
+      default: null
     },
     creator: {},
     startedAt: {

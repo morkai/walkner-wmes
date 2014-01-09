@@ -207,7 +207,7 @@ define([
     {
       var $order = $orders.eq(i);
 
-      var orderData = $order.find('.pressWorksheets-form-part').select2('data');
+      var orderData = $order.find('.pressWorksheets-form-part').select2('data').data;
       var operationData = _.find(orderData.operations, function(operation)
       {
         return operation.no === order.operation;
@@ -347,10 +347,11 @@ define([
             return {
               results: (results || []).map(function(order)
               {
-                order.id = order._id;
-                order.text = order._id + ' - ' + (order.name || '?');
-
-                return order;
+                return {
+                  id: order._id,
+                  text: order._id + ' - ' + (order.name || '?'),
+                  data: order
+                };
               })
             };
           }
@@ -371,7 +372,8 @@ define([
           return;
         }
 
-        var operations = e.added && Array.isArray(e.added.operations) ? e.added.operations : [];
+        var operations =
+          e.added && Array.isArray(e.added.data.operations) ? e.added.data.operations : [];
         var $operation = $row.find('.pressWorksheets-form-operation');
 
         view.setUpOperationSelect2($operation, operations.map(function(operation)

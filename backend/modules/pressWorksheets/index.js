@@ -1,13 +1,11 @@
 'use strict';
 
 var setUpRoutes = require('./routes');
-var setUpCommands = require('./commands');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   userId: 'user',
-  expressId: 'express',
-  sioId: 'sio'
+  expressId: 'express'
 };
 
 exports.start = function startPressWorksheetsModule(app, module)
@@ -18,14 +16,36 @@ exports.start = function startPressWorksheetsModule(app, module)
       module.config.userId,
       module.config.expressId
     ],
-    setUpRoutes.bind(null, app, module)
+    function()
+    {
+      setUpRoutes(app, module);
+
+      app.broker.subscribe('pressWorksheets.added', createOrdersAndDowntimes);
+    }
   );
 
-  app.onModuleReady(
-    [
-      module.config.mongooseId,
-      module.config.sioId
-    ],
-    setUpCommands.bind(null, app, module)
-  );
+  function createOrdersAndDowntimes(message)
+  {
+    var PressWorksheet = app[module.config.mongooseId].model('PressWorksheet');
+
+    PressWorksheet.findById(message.model._id, function(err, pressWorksheet)
+    {
+      if (err)
+      {
+        return module.error(
+          "Failed to find press worksheet [%s]: %s", message.model._id, err.stack
+        );
+      }
+
+      pressWorksheet.createOrdersAndDowntimes(function(err)
+      {
+        if (err)
+        {
+          return module.error(
+            "Failed to create orders and downtimes from [%s]: %s", message.model._id, err.stack
+          );
+        }
+      });
+    });
+  }
 };
