@@ -3,6 +3,7 @@ define([
   '../router',
   '../viewport',
   '../data/prodLines',
+  '../data/orgUnits',
   './ProdShift',
   './pages/ProductionPage',
   'i18n!app/nls/production'
@@ -11,6 +12,7 @@ define([
   router,
   viewport,
   prodLines,
+  orgUnits,
   ProdShift,
   ProductionPage
 ) {
@@ -26,9 +28,7 @@ define([
     }
 
     viewport.showPage(new ProductionPage({
-      model: new ProdShift({
-        prodLine: prodLine.id
-      })
+      model: new ProdShift(orgUnits.getAllForProdLine(prodLine))
     }));
   });
 

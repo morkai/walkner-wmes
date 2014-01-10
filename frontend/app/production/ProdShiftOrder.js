@@ -25,6 +25,11 @@ define([
 
     defaults: {
       prodShift: null,
+      division: null,
+      subdivision: null,
+      mrpControllers: null,
+      prodFlow: null,
+      workCenter: null,
       prodLine: null,
       date: null,
       shift: null,
@@ -54,6 +59,11 @@ define([
       this.set({
         _id: null,
         prodShift: null,
+        division: null,
+        subdivision: null,
+        mrpControllers: null,
+        prodFlow: null,
+        workCenter: null,
         prodLine: null,
         date: null,
         shift: null,
@@ -85,6 +95,11 @@ define([
 
       this.set({
         prodShift: prodShift.id,
+        division: prodShift.get('division'),
+        subdivision: prodShift.get('subdivision'),
+        mrpControllers: prodShift.get('mrpControllers'),
+        prodFlow: prodShift.get('prodFlow'),
+        workCenter: prodShift.get('workCenter'),
         prodLine: prodShift.prodLine.id,
         date: prodShift.get('date'),
         shift: prodShift.get('shift'),
@@ -106,6 +121,11 @@ define([
     {
       this.set({
         prodShift: prodShift.id,
+        division: prodShift.get('division'),
+        subdivision: prodShift.get('subdivision'),
+        mrpControllers: prodShift.get('mrpControllers'),
+        prodFlow: prodShift.get('prodFlow'),
+        workCenter: prodShift.get('workCenter'),
         prodLine: prodShift.prodLine.id,
         date: prodShift.get('date'),
         shift: prodShift.get('shift'),

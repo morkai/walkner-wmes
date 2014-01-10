@@ -134,6 +134,11 @@ define([
         type: type,
         data: data || {},
         createdAt: time.getServerMoment().toDate(),
+        division: prodShift.get('division'),
+        subdivision: prodShift.get('subdivision'),
+        mrpControllers: prodShift.get('mrpControllers'),
+        prodFlow: prodShift.get('prodFlow'),
+        workCenter: prodShift.get('workCenter'),
         prodLine: prodShift.prodLine.id,
         prodShift: prodShift.id,
         prodShiftOrder: prodShift.prodShiftOrder.id || null

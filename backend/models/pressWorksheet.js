@@ -108,7 +108,6 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       var prodShiftOrder = {
         _id: generateId(startedAt, order.prodLine + order.nc12),
         prodShift: null,
-        prodLine: order.prodLine,
         date: date,
         shift: shift,
         mechOrder: true,
@@ -123,6 +122,8 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         finishedAt: finishedAt
       };
 
+      applyProdLineOrgUnits(prodShiftOrder, order.prodLine);
+
       var downtimeStartTime = startedAt.getTime();
 
       (order.downtimes || []).forEach(function(downtime)
@@ -135,6 +136,11 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
         prodDowntimes.push({
           _id: generateId(startedAt, prodShiftOrder._id),
+          division: prodShiftOrder.division,
+          subdivision: prodShiftOrder.subdivision,
+          mrpControllers: prodShiftOrder.mrpControllers,
+          prodFlow: prodShiftOrder.prodFlow,
+          workCenter: prodShiftOrder.workCenter,
           prodLine: prodShiftOrder.prodLine,
           prodShift: null,
           prodShiftOrder: prodShiftOrder._id,
@@ -201,6 +207,77 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     return date.getTime().toString(36)
       + hashCode(str).toString(36)
       + Math.round(Math.random() * 10000000000000000).toString(36);
+  }
+
+  function applyProdLineOrgUnits(orgUnits, prodLineId)
+  {
+    var prodLine = app.prodLines.modelsById[prodLineId];
+
+    orgUnits.division = null;
+    orgUnits.subdivision = null;
+    orgUnits.mrpControllers = null;
+    orgUnits.prodFlow = null;
+    orgUnits.workCenter = null;
+    orgUnits.prodLine = null;
+
+    if (!prodLine)
+    {
+      return;
+    }
+
+    orgUnits.prodLine = prodLine.get('_id');
+
+    var workCenter = app.workCenters.modelsById[prodLine.get('workCenter')];
+
+    if (!workCenter)
+    {
+      return;
+    }
+
+    orgUnits.workCenter = workCenter.get('_id');
+
+    var prodFlow = app.prodFlows.modelsById[workCenter.get('prodFlow')];
+
+    if (!prodFlow)
+    {
+      return;
+    }
+
+    orgUnits.prodFlow = prodFlow.get('_id');
+
+    var mrpController = prodFlow.get('mrpController');
+
+    if (!Array.isArray(mrpController) || !mrpController.length)
+    {
+      return;
+    }
+
+    orgUnits.mrpControllers = mrpController;
+
+    mrpController = app.mrpControllers.modelsById[mrpController[0]];
+
+    if (!mrpController)
+    {
+      return;
+    }
+
+    var subdivision = app.subdivisions.modelsById[mrpController.get('subdivision')];
+
+    if (!subdivision)
+    {
+      return;
+    }
+
+    orgUnits.subdivision = subdivision.get('_id');
+
+    var division = app.divisions.modelsById[subdivision.get('division')];
+
+    if (!division)
+    {
+      return;
+    }
+
+    orgUnits.division = division.get('_id');
   }
 
   mongoose.model('PressWorksheet', pressWorksheetSchema);

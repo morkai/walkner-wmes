@@ -28,6 +28,11 @@ define([
     nlsDomain: 'prodDowntimes',
 
     defaults: {
+      division: null,
+      subdivision: null,
+      mrpControllers: null,
+      prodFlow: null,
+      workCenter: null,
       prodLine: null,
       prodShift: null,
       prodShiftOrder: null,

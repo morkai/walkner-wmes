@@ -36,6 +36,11 @@ define([
     clientUrlRoot: '#prodShift',
 
     defaults: {
+      division: null,
+      subdivision: null,
+      mrpControllers: null,
+      prodFlow: null,
+      workCenter: null,
       prodLine: null,
       date: null,
       shift: null,
@@ -141,6 +146,13 @@ define([
     saveLocalData: function()
     {
       var data = this.toJSON();
+
+      delete data.division;
+      delete data.subdivision;
+      delete data.mrpControllers;
+      delete data.prodFlow;
+      delete data.workCenter;
+      delete data.prodLine;
 
       data.prodShiftOrder = this.prodShiftOrder.toJSON();
       data.prodDowntimes = this.prodDowntimes.toJSON();
