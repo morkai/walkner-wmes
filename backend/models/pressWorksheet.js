@@ -105,6 +105,23 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         return;
       }
 
+      var orderData = order.orderData;
+      var operations = {};
+
+      if (Array.isArray(orderData.operations))
+      {
+        orderData.operations.forEach(function(operation)
+        {
+          operations[operation.no] = operation;
+        });
+      }
+      else if (orderData.operations)
+      {
+        operations = orderData.operations;
+      }
+
+      orderData.operations = operations;
+
       var prodShiftOrder = {
         _id: generateId(startedAt, order.prodLine + order.nc12),
         prodShift: null,
@@ -113,7 +130,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         mechOrder: true,
         orderId: order.nc12,
         operationNo: order.operationNo,
-        orderData: order.orderData,
+        orderData: orderData,
         workerCount: workerCount,
         quantityDone: order.quantityDone,
         losses: Array.isArray(order.losses) && order.losses.length ? order.losses : null,

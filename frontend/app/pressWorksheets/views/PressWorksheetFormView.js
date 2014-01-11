@@ -257,6 +257,7 @@ define([
         name: orderData.name,
         operationNo: operationData.no,
         operationName: operationData.name,
+        orderData: orderData,
         quantityDone: order.quantityDone,
         startedAt: order.startedAt,
         finishedAt: order.finishedAt,
