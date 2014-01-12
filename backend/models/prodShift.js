@@ -55,7 +55,7 @@ module.exports = function setupProdShiftModel(app, mongoose)
     },
     date: {
       type: Date,
-      trim: true
+      required: true
     },
     shift: {
       type: Number,
