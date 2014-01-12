@@ -139,8 +139,50 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           );
         }
 
+        // TODO: Remove after a while
+        fixOrgUnits(prodShift);
+
         return done(err);
       });
+    });
+  }
+
+  function fixOrgUnits(prodShift)
+  {
+    var prodLine = prodShift.get('prodLine');
+    var conditions = {
+      prodLine: prodLine,
+      workCenter: null
+    };
+    var update = {
+      $set: {
+        division: prodShift.get('division'),
+        subdivision: prodShift.get('subdivision'),
+        mrpControllers: prodShift.get('mrpControllers'),
+        prodFlow: prodShift.get('prodFlow'),
+        workCenter: prodShift.get('workCenter')
+      }
+    };
+    var options = {
+      multi: true
+    };
+
+    ProdShift.update(conditions, update, options, function(err, count)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to update org units of prod shifts for prod line [%s]: %s",
+          prodLine,
+          err.stack
+        );
+      }
+      else if (count > 0)
+      {
+        productionModule.debug(
+          "Updated [%d] org units of prod shifts for prod line [%s].", count, prodLine
+        );
+      }
     });
   }
 };
