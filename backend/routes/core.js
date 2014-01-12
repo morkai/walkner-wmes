@@ -50,7 +50,14 @@ module.exports = function startCoreRoutes(app, express)
         })),
         AORS: JSON.stringify(app.aors.models),
         ORDER_STATUSES: JSON.stringify(app.orderStatuses.models),
-        DOWNTIME_REASONS: JSON.stringify(app.downtimeReasons.models)
+        DOWNTIME_REASONS: JSON.stringify(app.downtimeReasons.models.map(function(downtimeReason)
+        {
+          return {
+            _id: downtimeReason.get('_id'),
+            label: downtimeReason.get('label'),
+            pressPosition: downtimeReason.get('pressPosition')
+          }
+        }))
       }
     });
   }

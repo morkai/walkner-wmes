@@ -16,6 +16,10 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
     pressPosition: {
       type: Number,
       default: -1
+    },
+    report1: {
+      type: Boolean,
+      default: true
     }
   }, {
     id: false

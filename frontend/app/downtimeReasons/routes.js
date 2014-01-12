@@ -2,6 +2,7 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../i18n',
   '../data/downtimeReasons',
   './DowntimeReason',
   '../core/pages/ListPage',
@@ -16,6 +17,7 @@ define([
   router,
   viewport,
   user,
+  t,
   downtimeReasons,
   DowntimeReason,
   ListPage,
@@ -35,12 +37,13 @@ define([
   {
     viewport.showPage(new ListPage({
       collection: downtimeReasons,
-      columns: ['_id', 'label', 'pressPosition'],
+      columns: ['_id', 'label', 'pressPosition', 'report1'],
       serializeRow: function(model)
       {
         var row = model.toJSON();
 
         row.pressPosition = row.pressPosition > -1 ? row.pressPosition : '-';
+        row.report1 = t('core', 'BOOL:' + row.report1);
 
         return row;
       }

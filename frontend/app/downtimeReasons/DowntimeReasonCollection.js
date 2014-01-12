@@ -11,7 +11,7 @@ define([
 
     model: DowntimeReason,
 
-    rqlQuery: 'select(label,pressPosition)&sort(_id)'
+    rqlQuery: 'select(label,pressPosition,report1)&sort(_id)'
 
   });
 });
