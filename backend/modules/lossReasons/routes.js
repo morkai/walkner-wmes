@@ -8,7 +8,7 @@ module.exports = function setUpLossReasonsRoutes(app, lossReasonsModule)
   var auth = app[lossReasonsModule.config.userId].auth;
   var LossReason = app[lossReasonsModule.config.mongooseId].model('LossReason');
 
-  var canView = auth('DICTIONARIES:VIEW');
+  var canView = auth('DICTIONARIES:VIEW', 'PRESS_WORKSHEETS:MANAGE');
   var canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/lossReasons', canView, crud.browseRoute.bind(null, app, LossReason));
