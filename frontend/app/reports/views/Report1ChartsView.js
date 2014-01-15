@@ -21,6 +21,25 @@ define([
 
     template: report1ChartsTemplate,
 
+    events: {
+      'dblclick .highcharts-title': function(e)
+      {
+        if (!document.webkitFullscreenEnabled || document.webkit)
+        {
+          return;
+        }
+
+        if (document.webkitIsFullscreen)
+        {
+          return document.webkitExitFullscreen();
+        }
+
+        var $chart = this.$(e.target).closest('.reports-chart');
+
+        $chart[0].webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+      }
+    },
+
     initialize: function()
     {
       this.setView(
