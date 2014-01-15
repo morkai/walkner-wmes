@@ -361,8 +361,9 @@ module.exports = function(mongoose, options, done)
         orderId: order.orderId,
         operationNo: order.operationNo,
         orderData: order.orderData,
-        workerCount: order.workerCount * percent,
-        quantityDone: order.quantityDone * percent
+        workerCount: order.workerCount,
+        quantityDone: order.quantityDone,
+        percent: percent
       });
     }
   }
@@ -453,14 +454,18 @@ module.exports = function(mongoose, options, done)
 
       var typeCoeff = order.mechOrder ? 1 : 1.054;
       var duration = (order.finishedAt.getTime() - order.startedAt.getTime()) / 3600000;
+      var percent = typeof order.percent === 'number' ? order.percent : 1;
+      var laborTime = operation.laborTime * percent;
+      var workerCount = order.workerCount * percent;
+      var quantityDone = order.quantityDone * percent;
 
-      effNum += operation.laborTime * typeCoeff;
-      effDen += duration * order.workerCount * typeCoeff / order.quantityDone;
+      effNum += laborTime * typeCoeff;
+      effDen += duration * typeCoeff * workerCount / quantityDone;
 
       if (options.interval !== 'hour' && typeof orderToDowntime[order._id] !== 'undefined')
       {
-        dtNum = orderToDowntime[order._id].duration * order.workerCount;
-        dtDen = dtDen + order.workerCount;
+        dtNum = orderToDowntime[order._id].duration * workerCount;
+        dtDen = dtDen + workerCount;
 
         downtimeCount += orderToDowntime[order._id].count;
       }
