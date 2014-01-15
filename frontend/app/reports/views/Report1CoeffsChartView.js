@@ -125,15 +125,25 @@ define([
         },
         plotOptions: {
           area: {
-            lineWidth: 2,
+            lineWidth: 0,
             marker: {
-              radius: 2
+              radius: 0,
+              states: {
+                hover: {
+                  radius: 3
+                }
+              }
             }
           },
           line: {
-            lineWidth: 2,
+            lineWidth: 1,
             marker: {
-              radius: 2
+              radius: 0,
+              states: {
+                hover: {
+                  radius: 3
+                }
+              }
             }
           }
         },
