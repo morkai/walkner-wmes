@@ -60,7 +60,15 @@
           <li data-online><a href="#downtimeReasons"><%- t('core', 'NAVBAR:DOWNTIME_REASONS') %></a>
           <li data-online><a href="#lossReasons"><%- t('core', 'NAVBAR:LOSS_REASONS') %></a>
         </ul>
-      <li class="dropdown">
+      <li class="dropdown" data-online data-privilege="REPORTS:VIEW">
+        <a class="dropdown-toggle" data-toggle="dropdown">
+          <%- t('core', 'NAVBAR:REPORTS') %>
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="#reports/1"><%- t('core', 'NAVBAR:REPORTS:1') %></a>
+        </ul>
+      <li class="dropdown" data-online>
         <a class="dropdown-toggle" data-toggle="dropdown">
           <%- t('core', 'NAVBAR:VIS') %>
           <b class="caret"></b>

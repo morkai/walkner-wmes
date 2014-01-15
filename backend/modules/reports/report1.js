@@ -1,0 +1,497 @@
+'use strict';
+
+var step = require('h5.step');
+var moment = require('moment');
+
+module.exports = function(mongoose, options, done)
+{
+  var ProdShift = mongoose.model('ProdShift');
+  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  var ProdDowntime = mongoose.model('ProdDowntime');
+
+  var results = {
+    coeffs: {},
+    downtimes: {
+      byAor: {},
+      byReason: {}
+    }
+  };
+
+  step(
+    findProdShiftsStep,
+    groupQuantitiesDoneStep,
+    calcQuantitiesDoneStep,
+    findProdDowntimesStep,
+    calcDowntimesStep,
+    findProdShiftOrdersStep,
+    groupProdShiftOrdersStep,
+    calcCoeffsStep,
+    function sendResultsStep(err)
+    {
+      if (err)
+      {
+        done(err, null);
+      }
+      else
+      {
+        done(null, results);
+      }
+    }
+  );
+
+  function round(num)
+  {
+    num = Math.round(num * 1000) / 1000;
+
+    return isNaN(num) ? 0 : num;
+  }
+
+  function createConditions()
+  {
+    var conditions = {
+      startedAt: {$gte: options.fromTime, $lt: options.toTime},
+      finishedAt: {$ne: null}
+    };
+
+    if (options.orgUnitType && options.orgUnit)
+    {
+      conditions[options.orgUnitType] = options.orgUnit;
+    }
+
+    if (options.subdivisionType === 'prod')
+    {
+      conditions.mechOrder = false;
+    }
+    else if (options.subdivisionType === 'press')
+    {
+      conditions.mechOrder = true;
+    }
+
+    return conditions;
+  }
+
+  function findProdShiftsStep()
+  {
+    /*jshint validthis:true*/
+
+    var conditions = {
+      date: {$gte: options.fromTime, $lt: options.toTime}
+    };
+
+    if (options.orgUnitType && options.orgUnit)
+    {
+      conditions[options.orgUnitType] = options.orgUnit;
+    }
+
+    conditions.quantitiesDone = {$ne: null};
+
+    var fields = {
+      _id: 0,
+      date: 1,
+      'quantitiesDone.actual': 1
+    };
+
+    ProdShift.find(conditions, fields).sort({date: 1}).lean().exec(this.next());
+  }
+
+  function groupQuantitiesDoneStep(err, prodShifts)
+  {
+    /*jshint validthis:true*/
+
+    if (err)
+    {
+      return this.done(done, err);
+    }
+
+    var now = Math.min(Date.now(), options.toTime);
+    var groupedQuantitiesDone = {};
+
+    prodShifts.forEach(function(prodShift)
+    {
+      var shiftStartTime = prodShift.date.getTime();
+
+      prodShift.quantitiesDone.forEach(function(quantityDone, i)
+      {
+        var startedAt = shiftStartTime + 3600 * 1000 * i;
+
+        if (startedAt + 3599999 < now)
+        {
+          groupObjects(groupedQuantitiesDone, {
+            startedAt: new Date(startedAt),
+            count: quantityDone.actual
+          });
+        }
+      });
+    });
+
+    this.groupedQuantitiesDone = groupedQuantitiesDone;
+
+    setImmediate(this.next());
+  }
+
+  function calcQuantitiesDoneStep()
+  {
+    /*jshint validthis:true*/
+
+    var groupedQuantitiesDone = this.groupedQuantitiesDone;
+
+    Object.keys(groupedQuantitiesDone).forEach(function(groupKey)
+    {
+      if (typeof results.coeffs[groupKey] === 'undefined')
+      {
+        results.coeffs[groupKey] = {quantityDone: 0};
+      }
+
+      groupedQuantitiesDone[groupKey].forEach(function(quantityDone)
+      {
+        results.coeffs[groupKey].quantityDone += quantityDone.count;
+      });
+    });
+
+    this.groupedQuantitiesDone = null;
+
+    setImmediate(this.next());
+  }
+
+  function findProdDowntimesStep()
+  {
+    /*jshint validthis:true*/
+
+    var conditions = createConditions();
+
+    conditions.prodShiftOrder = {$ne: null};
+
+    if (options.ignoredDowntimeReasons.length)
+    {
+      conditions.reason = {$nin: options.ignoredDowntimeReasons};
+    }
+
+    var fields = {
+      _id: 0,
+      prodShiftOrder: 1,
+      aor: 1,
+      reason: 1,
+      startedAt: 1,
+      finishedAt: 1
+    };
+
+    ProdDowntime.find(conditions, fields).lean().exec(this.next());
+  }
+
+  function calcDowntimesStep(err, prodDowntimes)
+  {
+    /*jshint validthis:true*/
+
+    if (err)
+    {
+      return this.done(done, err);
+    }
+
+    var orderToDowntime = options.interval === 'hour' ? null : {};
+    var downtimes = results.downtimes;
+
+    prodDowntimes.forEach(function(prodDowntime)
+    {
+      var duration =
+        (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
+
+      if (orderToDowntime !== null
+        && typeof orderToDowntime[prodDowntime.prodShiftOrder] === 'undefined')
+      {
+        orderToDowntime[prodDowntime.prodShiftOrder] = {
+          count: 0,
+          duration: 0
+        };
+      }
+
+      if (typeof results.downtimes.byAor[prodDowntime.aor] === 'undefined')
+      {
+        results.downtimes.byAor[prodDowntime.aor] = 0;
+      }
+
+      if (typeof results.downtimes.byReason[prodDowntime.reason] === 'undefined')
+      {
+        results.downtimes.byReason[prodDowntime.reason] = 0;
+      }
+
+      if (orderToDowntime !== null)
+      {
+        orderToDowntime[prodDowntime.prodShiftOrder].count += 1;
+        orderToDowntime[prodDowntime.prodShiftOrder].duration += duration;
+      }
+
+      downtimes.byAor[prodDowntime.aor] += duration;
+      downtimes.byReason[prodDowntime.reason] += duration;
+    });
+
+    Object.keys(downtimes.byAor).forEach(function(aor)
+    {
+      downtimes.byAor[aor] = round(downtimes.byAor[aor]);
+    });
+
+    Object.keys(downtimes.byReason).forEach(function(reason)
+    {
+      downtimes.byReason[reason] = round(downtimes.byReason[reason]);
+    });
+
+    this.orderToDowntime = orderToDowntime;
+
+    setImmediate(this.next());
+  }
+
+  function findProdShiftOrdersStep()
+  {
+    /*jshint validthis:true*/
+
+    var fields = {
+      startedAt: 1,
+      finishedAt: 1,
+      mechOrder: 1,
+      orderId: 1,
+      operationNo: 1,
+      'orderData.operations': 1,
+      workerCount: 1,
+      quantityDone: 1
+    };
+
+    ProdShiftOrder.find(createConditions(), fields).sort({startedAt: 1}).lean().exec(this.next());
+  }
+
+  function groupProdShiftOrdersStep(err, prodShiftOrders)
+  {
+    /*jshint validthis:true*/
+
+    if (err)
+    {
+      return this.done(done, err);
+    }
+
+    this.groupedProdShiftOrders = groupProdShiftOrders(prodShiftOrders);
+
+    setImmediate(this.next());
+  }
+
+  function calcCoeffsStep()
+  {
+    /*jshint validthis:true*/
+
+    var orderToDowntime = this.orderToDowntime;
+    var groupedProdShiftOrders = this.groupedProdShiftOrders;
+
+    this.orderToDowntime = null;
+    this.groupedProdShiftOrders = null;
+
+    Object.keys(groupedProdShiftOrders).forEach(function(groupKey)
+    {
+      calcCoeffs(groupKey, groupedProdShiftOrders[groupKey], orderToDowntime);
+    });
+
+    setImmediate(this.next());
+  }
+
+  function groupProdShiftOrders(prodShiftOrders)
+  {
+    var groupedProdShiftOrders = {};
+
+    prodShiftOrders.forEach(function(prodShiftOrder)
+    {
+      if (options.interval === 'hour')
+      {
+        splitProdShiftOrder(groupedProdShiftOrders, prodShiftOrder);
+      }
+      else
+      {
+        groupObjects(groupedProdShiftOrders, prodShiftOrder);
+      }
+    });
+
+    return groupedProdShiftOrders;
+  }
+
+  function splitProdShiftOrder(groupedProdShiftOrders, order)
+  {
+    var startedAtHours = order.startedAt.getHours();
+    var finishedAtHours = order.finishedAt.getHours();
+
+    if (startedAtHours === finishedAtHours)
+    {
+      return groupObjects(groupedProdShiftOrders, order);
+    }
+
+    var totalDuration = order.finishedAt.getTime() - order.startedAt.getTime();
+    var totalHours = -1;
+
+    if (order.startedAt.getDate() === order.finishedAt.getDate())
+    {
+      totalHours = finishedAtHours - startedAtHours + 1;
+    }
+    else
+    {
+      totalHours = 24 - startedAtHours + finishedAtHours + 1;
+    }
+
+    var partDate = new Date(order.startedAt);
+
+    for (var h = 0; h < totalHours; ++h)
+    {
+      var partStartTime = partDate.getTime();
+      var partEndTime = -1;
+
+      if (partDate.getHours() === finishedAtHours)
+      {
+        partEndTime = order.finishedAt.getTime();
+      }
+      else
+      {
+        partDate.setHours(partDate.getHours() + 1);
+        partDate.setMinutes(0);
+        partDate.setSeconds(0);
+        partDate.setMilliseconds(0);
+
+        partEndTime = partDate.getTime() - 1;
+      }
+
+      var percent = (partEndTime - partStartTime) / totalDuration;
+
+      groupObjects(groupedProdShiftOrders, {
+        _id: order._id,
+        startedAt: new Date(partStartTime),
+        finishedAt: new Date(partEndTime),
+        mechOrder: order.mechOrder,
+        orderId: order.orderId,
+        operationNo: order.operationNo,
+        orderData: order.orderData,
+        workerCount: order.workerCount * percent,
+        quantityDone: order.quantityDone * percent
+      });
+    }
+  }
+
+  function groupObjects(groupedObjects, obj)
+  {
+    var groupKey = createGroupKey(obj.startedAt);
+
+    if (typeof groupedObjects[groupKey] === 'undefined')
+    {
+      groupedObjects[groupKey] = [];
+    }
+
+    groupedObjects[groupKey].push(obj);
+  }
+
+  function createGroupKey(date)
+  {
+    /*jshint -W015*/
+
+    var groupKey = moment(date).lang('pl').minutes(0).seconds(0).milliseconds(0);
+
+    switch (options.interval)
+    {
+      case 'shift':
+        var hours = groupKey.hours();
+
+        if (hours >= 6 && hours < 14)
+        {
+          groupKey.hours(6);
+        }
+        else if (hours >= 14 && hours < 22)
+        {
+          groupKey.hours(14);
+        }
+        else
+        {
+          groupKey.hours(22);
+
+          if (hours < 6)
+          {
+            groupKey.date(groupKey.date() - 1);
+          }
+        }
+        break;
+
+      case 'day':
+        groupKey.hours(0);
+        break;
+
+      case 'week':
+        groupKey.weekday(0).hours(0);
+        break;
+
+      case 'month':
+        groupKey.date(1).hours(0);
+        break;
+    }
+
+    return groupKey.toISOString();
+  }
+
+  function calcCoeffs(groupKey, orders, orderToDowntime)
+  {
+    var orderCount = 0;
+    var downtimeCount = 0;
+    var effNum = 0;
+    var effDen = 0;
+    var dtNum = 0;
+    var dtDen = 0;
+
+    orders.forEach(function(order)
+    {
+      if (typeof order.orderData === 'undefined')
+      {
+        return;
+      }
+
+      var operation = order.orderData.operations[order.operationNo];
+
+      if (typeof operation === 'undefined'
+        || typeof operation.laborTime !== 'number'
+        || operation.laborTime <= 0
+        || order.quantityDone <= 0)
+      {
+        return;
+      }
+
+      var typeCoeff = order.mechOrder ? 1 : 1.054;
+      var duration = (order.finishedAt.getTime() - order.startedAt.getTime()) / 3600000;
+
+      effNum += operation.laborTime * typeCoeff;
+      effDen += duration * order.workerCount * typeCoeff / order.quantityDone;
+
+      if (options.interval !== 'hour' && typeof orderToDowntime[order._id] !== 'undefined')
+      {
+        dtNum = orderToDowntime[order._id].duration * order.workerCount;
+        dtDen = dtDen + order.workerCount;
+
+        downtimeCount += orderToDowntime[order._id].count;
+      }
+
+      orderCount += 1;
+    });
+
+    if (orderCount === 0)
+    {
+      return;
+    }
+
+    var coeffs = typeof results.coeffs[groupKey] === 'undefined'
+      ? (results.coeffs[groupKey] = {})
+      : results.coeffs[groupKey];
+
+    if (effDen)
+    {
+      coeffs.efficiency = round(effNum / 100 / effDen);
+    }
+
+    if (dtDen)
+    {
+      coeffs.downtime = round(dtNum / 8 / dtDen);
+    }
+
+    coeffs.orderCount = orderCount;
+
+    if (downtimeCount)
+    {
+      coeffs.downtimeCount = downtimeCount;
+    }
+  }
+};

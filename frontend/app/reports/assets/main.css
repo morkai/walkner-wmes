@@ -1,0 +1,21 @@
+.reports-1-page {
+  display: flex;
+  width: 100%;
+}
+.reports-1-charts {
+  flex: 1 1 20%;
+  border-right: 1px dotted #E7E7E7;
+}
+.reports-1-charts:last-child {
+  border-right: 0;
+}
+.reports-chart {
+  height: 350px;
+}
+.reports-1-downtimesByAor,
+.reports-1-downtimesByReason {
+  height: 200px;
+}
+.reports-chart .highcharts-title {
+  font-weight: bold;
+}

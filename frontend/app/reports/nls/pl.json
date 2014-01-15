@@ -1,0 +1,26 @@
+{
+  "BREADCRUMBS:report1": "Raport 1",
+
+  "report1:overallTitle": "ML",
+
+  "coeffs:quantityDone": "Sztuki",
+  "coeffs:downtime": "Przestoje",
+  "coeffs:efficiency": "Wydajność",
+  "coeffs:productivity": "Produktywność",
+
+  "downtimesByAor:title": "Czas przestojów - obszary odp.",
+  "downtimesByAor:seriesName": "Czas przestojów",
+  "downtimesByAor:press:shortText": "TKP",
+  "downtimesByAor:press:longText": "Tłocznia (karta pracy)",
+
+  "downtimesByReason:title": "Czas przestojów - przyczyny",
+  "downtimesByReason:seriesName": "Czas przestojów",
+
+  "quantityDoneSuffix": " szt.",
+
+  "tooltipHeaderFormat:month": "YYYY MMMM",
+  "tooltipHeaderFormat:week": "wo [tydzień] (LL)",
+  "tooltipHeaderFormat:day": "LL",
+  "tooltipHeaderFormat:shift": "LL[, {shift} zmiana]",
+  "tooltipHeaderFormat:hour": "LLL"
+}

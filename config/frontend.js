@@ -27,6 +27,7 @@ exports.modules = [
   'production',
   'prodDowntimes',
   'pressWorksheets',
+  'reports',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'},
   'httpServer',

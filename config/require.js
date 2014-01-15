@@ -23,7 +23,9 @@ exports.paths = {
   'select2': 'vendor/select2/select2',
   'select2-lang': 'vendor/select2-lang',
   'd3': 'vendor/d3.v3',
-  'visibly': 'vendor/visibly'
+  'visibly': 'vendor/visibly',
+  'highcharts': 'vendor/highcharts/js/highcharts.src',
+  'highcharts-noData': 'vendor/highcharts/js/modules/no-data-to-display.src'
 };
 
 exports.shim = {
@@ -48,6 +50,13 @@ exports.shim = {
   },
   'visibly': {
     exports: 'visibly'
+  },
+  'highcharts': {
+    deps: ['jquery'],
+    exports: 'Highcharts'
+  },
+  'highcharts-noData': {
+    deps: ['highcharts']
   }
 };
 

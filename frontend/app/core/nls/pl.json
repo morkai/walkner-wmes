@@ -78,6 +78,8 @@
   "NAVBAR:VIS:STRUCTURE": "Struktura organizacyjna",
   "NAVBAR:PROD_DOWNTIMES": "Przestoje",
   "NAVBAR:PRESS_WORKSHEETS": "Karty pracy",
+  "NAVBAR:REPORTS": "Raporty",
+  "NAVBAR:REPORTS:1": "Raport 1",
 
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
   "ACTION_FORM:BUTTON:delete": "Usuń",
@@ -94,5 +96,15 @@
 
   "SHIFT:1": "I",
   "SHIFT:2": "II",
-  "SHIFT:3": "III"
+  "SHIFT:3": "III",
+
+  "highcharts:decimalPoint": ",",
+  "highcharts:thousandsSep": ".",
+  "highcharts:noData": "Brak danych :(",
+  "highcharts:resetZoom": "1:1",
+  "highcharts:resetZoomTitle": "Ustaw poziom przybliżenia na 1:1",
+  "highcharts:loading": "Ładowanie...",
+  "highcharts:months": "Styczeń_Luty_Marzec_Kwiecień_Maj_Czerwiec_Lipiec_Sierpień_Wrzesień_Październik_Listopad_Grudzień",
+  "highcharts:shortMonths": "Sty_Lut_Mar_Kwi_Maj_Cze_Lip_Sie_Wrz_Paź_Lis_Gru",
+  "highcharts:weekdays": "Niedziela_Poniedziałek_Wtorek_Środa_Czwartek_Piątek_Sobota"
 }
