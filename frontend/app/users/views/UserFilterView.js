@@ -74,7 +74,7 @@ define([
           case 'lastName':
             if (term.name === 'regex')
             {
-              formData[property] = term.args[1];
+              formData[property] = term.args[1].replace('^', '');
             }
             break;
         }
