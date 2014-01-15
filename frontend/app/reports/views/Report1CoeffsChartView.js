@@ -4,6 +4,7 @@ define([
   'd3',
   'app/time',
   'app/i18n',
+  'app/viewport',
   'app/core/View',
   'app/data/views/renderOrgUnitPath',
   'app/highcharts'
@@ -13,6 +14,7 @@ define([
   d3,
   time,
   t,
+  viewport,
   View,
   renderOrgUnitPath,
   Highcharts
@@ -29,7 +31,11 @@ define([
     initialize: function()
     {
       this.chart = null;
+      this.loading = false;
 
+      this.listenTo(this.model, 'request', this.onModelLoading);
+      this.listenTo(this.model, 'sync', this.onModelLoaded);
+      this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:coeffs', this.render);
     },
 
@@ -42,11 +48,6 @@ define([
       }
     },
 
-    beforeRender: function()
-    {
-
-    },
-
     afterRender: function()
     {
       if (this.chart)
@@ -56,6 +57,11 @@ define([
       else
       {
         this.createChart();
+
+        if (this.loading)
+        {
+          this.chart.showLoading();
+        }
       }
     },
 
@@ -237,6 +243,36 @@ define([
       }
 
       return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, data));
+    },
+
+    onModelLoading: function()
+    {
+      this.loading = true;
+
+      if (this.chart)
+      {
+        this.chart.showLoading();
+      }
+    },
+
+    onModelLoaded: function()
+    {
+      this.loading = false;
+
+      if (this.chart)
+      {
+        this.chart.hideLoading();
+      }
+    },
+
+    onModelError: function()
+    {
+      this.loading = false;
+
+      if (this.chart)
+      {
+        this.chart.hideLoading();
+      }
     }
 
   });

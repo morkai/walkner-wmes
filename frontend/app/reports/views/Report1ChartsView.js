@@ -3,7 +3,6 @@ define([
   'jquery',
   'app/i18n',
   'app/core/View',
-  'app/data/views/renderOrgUnitPath',
   './Report1CoeffsChartView',
   './Report1DowntimesChartView',
   'app/reports/templates/report1Charts'
@@ -12,7 +11,6 @@ define([
   $,
   t,
   View,
-  renderOrgUnitPath,
   Report1CoeffsChartView,
   Report1DowntimesChartView,
   report1ChartsTemplate
@@ -25,12 +23,6 @@ define([
 
     initialize: function()
     {
-      window.model = this.model;
-
-      this.listenTo(this.model, 'request', this.onModelLoading);
-      this.listenTo(this.model, 'sync', this.onModelLoaded);
-      this.listenTo(this.model, 'error', this.onModelError);
-
       this.setView(
         '.reports-1-coeffs-container',
         new Report1CoeffsChartView({
@@ -58,47 +50,9 @@ define([
       );
     },
 
-    destroy: function()
-    {
-
-    },
-
-    serialize: function()
-    {
-      var orgUnit = this.model.get('orgUnit');
-
-      return {
-        title: orgUnit
-          ? renderOrgUnitPath(orgUnit, false, false)
-          : t('reports', 'report1:overallTitle')
-      };
-    },
-
-    beforeRender: function()
-    {
-
-    },
-
     afterRender: function()
     {
       this.promised(this.model.fetch());
-    },
-
-    onModelLoading: function()
-    {
-      this.$('.reports-panel-body').addClass('reports-loading');
-    },
-
-    onModelLoaded: function()
-    {
-      this.$('.reports-panel-body').removeClass('reports-loading');
-    },
-
-    onModelError: function()
-    {
-      this.$('.reports-panel-body')
-        .removeClass('reports-loading')
-        .addClass('reports-loadingFailed');
     }
 
   });
