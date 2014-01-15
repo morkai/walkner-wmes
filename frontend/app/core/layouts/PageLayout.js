@@ -26,7 +26,8 @@ define([
     this.model = {
       id: null,
       actions: [],
-      breadcrumbs: []
+      breadcrumbs: [],
+      title: null
     };
 
     /**
@@ -84,6 +85,8 @@ define([
   {
     this.setId(null);
 
+    this.model.title = null;
+
     if (this.$header)
     {
       this.$header.hide();
@@ -116,6 +119,10 @@ define([
     if (page.breadcrumbs)
     {
       this.setBreadcrumbs(page.breadcrumbs, page);
+    }
+    else if (page.title)
+    {
+      this.setTitle(page.title, page);
     }
     else
     {
@@ -189,6 +196,35 @@ define([
     {
       this.renderBreadcrumbs();
     }
+
+    this.changeTitle();
+
+    return this;
+  };
+
+  /**
+   * @param {function|string|Array.<string>} title
+   * @param {object} [context]
+   * @returns {PageLayout}
+   */
+  PageLayout.prototype.setTitle = function(title, context)
+  {
+    if (title == null)
+    {
+      return this;
+    }
+
+    if (typeof title === 'function')
+    {
+      title = title.call(context);
+    }
+
+    if (!Array.isArray(title))
+    {
+      title = [title];
+    }
+
+    this.model.title = title;
 
     this.changeTitle();
 
@@ -383,9 +419,11 @@ define([
   {
     if (this.isRendered())
     {
-      this.broker.publish(
-        'page.titleChanged', _.pluck(this.model.breadcrumbs, 'label')
-      );
+      var newTitle = Array.isArray(this.model.title)
+        ? [].concat(this.model.title)
+        : _.pluck(this.model.breadcrumbs, 'label');
+
+      this.broker.publish('page.titleChanged', newTitle);
     }
   };
 
