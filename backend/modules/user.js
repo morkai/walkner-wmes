@@ -104,7 +104,7 @@ exports.start = function startUserModule(app, module)
         return res.send(401);
       }
 
-      if (user.super)
+      if (user.super || (!user.isLoggedIn && !anyPrivileges.length))
       {
         return next();
       }
