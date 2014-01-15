@@ -56,7 +56,7 @@ module.exports = function startCoreRoutes(app, express)
             _id: downtimeReason.get('_id'),
             label: downtimeReason.get('label'),
             pressPosition: downtimeReason.get('pressPosition')
-          }
+          };
         }))
       }
     });
