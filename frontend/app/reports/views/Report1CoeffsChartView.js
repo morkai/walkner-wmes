@@ -70,6 +70,7 @@ define([
       var chartData = this.serializeChartData();
       var orgUnit = this.model.get('orgUnit');
       var formatTooltipHeader = this.formatTooltipHeader.bind(this);
+      var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -132,25 +133,11 @@ define([
         plotOptions: {
           area: {
             lineWidth: 0,
-            marker: {
-              radius: 0,
-              states: {
-                hover: {
-                  radius: 3
-                }
-              }
-            }
+            marker: markerStyles
           },
           line: {
             lineWidth: 1,
-            marker: {
-              radius: 0,
-              states: {
-                hover: {
-                  radius: 3
-                }
-              }
-            }
+            marker: markerStyles
           }
         },
         series: [
@@ -216,9 +203,12 @@ define([
       this.chart.yAxis[1].update(yAxis1Options);
 
       var visible = this.model.query.get('interval') !== 'hour';
+      var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
 
-      this.chart.series[1].update({visible: visible});
-      this.chart.series[3].update({visible: visible});
+      this.chart.series[0].update({marker: markerStyles}, false);
+      this.chart.series[1].update({marker: markerStyles, visible: visible}, false);
+      this.chart.series[2].update({marker: markerStyles}, false);
+      this.chart.series[3].update({marker: markerStyles, visible: visible}, false);
 
       this.chart.series[0].setData(chartData.quantityDone, false);
       this.chart.series[1].setData(chartData.downtime, false);
@@ -248,6 +238,18 @@ define([
       }
 
       return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, data));
+    },
+
+    getMarkerStyles: function(dataLength)
+    {
+      return {
+        radius: dataLength > 1 ? 0 : 3,
+        states: {
+          hover: {
+            radius: dataLength > 1 ? 3 : 6
+          }
+        }
+      };
     },
 
     onModelLoading: function()
