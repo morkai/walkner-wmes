@@ -30,7 +30,67 @@ define([
 
         this.changeFilter();
       },
-      'change input[name=mode]': 'onModeChange'
+      'change input[name=mode]': 'onModeChange',
+      'click .btn[data-range]': function(e)
+      {
+        /*jshint -W015*/
+
+        var fromMoment = moment().minutes(0).seconds(0).milliseconds(0);
+        var toMoment;
+        var interval;
+
+        switch (e.target.getAttribute('data-range'))
+        {
+          case 'month':
+            fromMoment.date(1).hours(0);
+            toMoment = fromMoment.clone().add('months', 1);
+            interval = 'week';
+            break;
+
+          case 'week':
+            fromMoment.day(1).hours(0);
+            toMoment = fromMoment.clone().add('days', 7);
+            interval = 'day';
+            break;
+
+          case 'day':
+            fromMoment.hours(6);
+            toMoment = fromMoment.clone().add('days', 1);
+            interval = 'shift';
+            break;
+
+          case 'shift':
+            var hours = fromMoment.hours();
+
+            if (hours >= 6 && hours < 14)
+            {
+              fromMoment.hours(6);
+            }
+            else if (hours >= 14 && hours < 22)
+            {
+              fromMoment.hours(14);
+            }
+            else
+            {
+              fromMoment.hours(22);
+
+              if (hours < 6)
+              {
+                fromMoment.subtract('days', 1);
+              }
+            }
+
+            toMoment = fromMoment.clone().add('hours', 8);
+            interval = 'hour';
+            break;
+        }
+
+        this.$id('from').val(fromMoment.format('YYYY-MM-DD HH:mm:ss'));
+        this.$id('to').val(toMoment.format('YYYY-MM-DD HH:mm:ss'));
+        this.$id('mode-date').click();
+        this.$('.btn[data-interval=' + interval + ']').click();
+        this.$('.filter-form').submit();
+      }
     },
 
     initialize: function()

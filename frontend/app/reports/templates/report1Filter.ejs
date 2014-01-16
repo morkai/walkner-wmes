@@ -47,6 +47,12 @@
       </div>
     </div><div class="form-group filter-actions">
       <input type="submit" class="btn btn-primary" value="<%= t('reports', 'filter:1:submit') %>">
+      <div class="btn-group">
+        <input type="button" class="btn btn-default" value="<%= t('reports', 'filter:1:submit:shift') %>" data-range="shift">
+        <input type="button" class="btn btn-default" value="<%= t('reports', 'filter:1:submit:day') %>" data-range="day">
+        <input type="button" class="btn btn-default" value="<%= t('reports', 'filter:1:submit:week') %>" data-range="week">
+        <input type="button" class="btn btn-default" value="<%= t('reports', 'filter:1:submit:month') %>" data-range="month">
+      </div>
     </div>
   </form>
 </div>
