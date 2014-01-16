@@ -109,8 +109,8 @@ define([
     {
       var rqlQuery = this.model.rqlQuery;
       var timeRange = fixTimeRange(
-        this.$('#' + this.idPrefix + '-from'),
-        this.$('#' + this.idPrefix + '-to'),
+        this.$id('from'),
+        this.$id('to'),
         'YYYY-MM-DD'
       );
       var selector = [];
@@ -130,7 +130,7 @@ define([
       }
 
       rqlQuery.selector = {name: 'and', args: selector};
-      rqlQuery.limit = parseInt(this.$('#' + this.idPrefix + '-limit').val(), 10) || 15;
+      rqlQuery.limit = parseInt(this.$id('limit').val(), 10) || 15;
       rqlQuery.skip = 0;
 
       this.trigger('filterChanged', rqlQuery);
@@ -138,7 +138,7 @@ define([
 
     serializeRegexTerm: function(selector, property, maxLength)
     {
-      var $el = this.$('#' + this.idPrefix + '-' + property);
+      var $el = this.$id(property);
       var value = $el.val().trim();
 
       if (value !== '-')

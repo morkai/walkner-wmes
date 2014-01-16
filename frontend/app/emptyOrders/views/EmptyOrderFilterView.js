@@ -79,7 +79,7 @@ define([
     {
       var rqlQuery = this.model.rqlQuery;
       var selector = [];
-      var dateMoment = moment(this.$('#' + this.idPrefix + '-date').val());
+      var dateMoment = moment(this.$id('date').val());
       var dateProperty = this.$('[name=dateType]:checked').val() + 'Date';
 
       if (dateMoment.isValid())
@@ -88,7 +88,7 @@ define([
       }
 
       rqlQuery.selector = {name: 'and', args: selector};
-      rqlQuery.limit = parseInt(this.$('#' + this.idPrefix + '-limit').val(), 10) || 15;
+      rqlQuery.limit = parseInt(this.$id('limit').val(), 10) || 15;
       rqlQuery.skip = 0;
 
       this.trigger('filterChanged', rqlQuery);

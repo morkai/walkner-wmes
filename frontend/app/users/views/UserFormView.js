@@ -70,7 +70,7 @@ define([
         this.$('input[type="password"]').attr('required', true);
       }
 
-      this.$('#' + this.idPrefix + '-aors').select2({
+      this.$id('aors').select2({
         width: '100%',
         allowClear: true
       });
@@ -101,16 +101,16 @@ define([
 
     validatePasswords: function()
     {
-      var password1 = this.el.querySelector('#' + this.idPrefix + '-password');
-      var password2 = this.el.querySelector('#' + this.idPrefix + '-password2');
+      var $password1 = this.$id('password');
+      var $password2 = this.$id('password2');
 
-      if (password1.value === password2.value)
+      if ($password1.val() === $password2.val())
       {
-        password2.setCustomValidity('');
+        $password2[0].setCustomValidity('');
       }
       else
       {
-        password2.setCustomValidity(t('users', 'FORM:ERROR:passwordMismatch'));
+        $password2[0].setCustomValidity(t('users', 'FORM:ERROR:passwordMismatch'));
       }
 
       this.timers.validatePassword = null;

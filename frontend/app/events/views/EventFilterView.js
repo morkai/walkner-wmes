@@ -55,12 +55,12 @@ define([
 
       this.toggleSeverity(formData.severity);
 
-      this.$('#' + this.idPrefix + '-type').select2({
+      this.$id('type').select2({
         width: 'resolve',
         allowClear: true
       });
 
-      this.$('#' + this.idPrefix + '-user').select2({
+      this.$id('user').select2({
         width: '200px',
         allowClear: true,
         minimumInputLength: 3,
@@ -139,13 +139,13 @@ define([
     {
       var rqlQuery = this.model.rqlQuery;
       var timeRange = fixTimeRange(
-        this.$('#' + this.idPrefix + '-from'),
-        this.$('#' + this.idPrefix + '-to'),
+        this.$id('from'),
+        this.$id('to'),
         'YYYY-MM-DD HH:mm:ss'
       );
       var selector = [];
-      var type = this.$('#' + this.idPrefix + '-type').val().trim();
-      var user = this.$('#' + this.idPrefix + '-user').val().trim();
+      var type = this.$id('type').val().trim();
+      var user = this.$id('user').val().trim();
       var severity = this.fixSeverity();
 
       if (type !== '')
@@ -182,7 +182,7 @@ define([
       }
 
       rqlQuery.selector = {name: 'and', args: selector};
-      rqlQuery.limit = parseInt(this.$('#' + this.idPrefix + '-limit').val(), 10);
+      rqlQuery.limit = parseInt(this.$id('limit').val(), 10);
       rqlQuery.skip = 0;
 
       this.trigger('filterChanged', rqlQuery);
