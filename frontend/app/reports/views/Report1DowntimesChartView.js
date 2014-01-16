@@ -21,6 +21,33 @@ define([
 ) {
   'use strict';
 
+  function wordwrap(line)
+  {
+    if (line < 45)
+    {
+      return line;
+    }
+
+    var words = line.split(' ');
+    var lines = [];
+
+    words.forEach(function(word)
+    {
+      var lastLine = lines.length === 0 ? '' : lines[lines.length - 1];
+
+      if (lines.length === 0 || lastLine.length + word.length > 40)
+      {
+        lines.push(word);
+      }
+      else
+      {
+        lines[lines.length - 1] += ' ' + word;
+      }
+    });
+
+    return lines.join('</span><br><span style="font-size: 10px">');
+  }
+
   return View.extend({
 
     className: function()
@@ -141,7 +168,7 @@ define([
         {
           chartData.categories.push(downtime.shortText);
           chartData.data.push({
-            name: downtime.longText,
+            name: wordwrap(downtime.longText),
             y: downtime.value,
             color: colors.getColor(attrName, downtime.key)
           });
