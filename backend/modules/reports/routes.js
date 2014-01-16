@@ -1,8 +1,5 @@
-/*jshint maxparams:5*/
-
 'use strict';
 
-var lodash = require('lodash');
 var report1 = require('./report1');
 
 module.exports = function setUpReportsRoutes(app, reportsModule)

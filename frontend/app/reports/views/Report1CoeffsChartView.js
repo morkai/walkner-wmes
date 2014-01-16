@@ -175,7 +175,7 @@ define([
             tooltip: {
               valueSuffix: '%'
             },
-            visible: this.model.query.interval !== 'hour'
+            visible: this.model.query.get('interval') !== 'hour'
           },
           {
             name: t('reports', 'coeffs:efficiency'),
@@ -196,7 +196,7 @@ define([
             tooltip: {
               valueSuffix: '%'
             },
-            visible: this.model.query.interval !== 'hour'
+            visible: this.model.query.get('interval') !== 'hour'
           }
         ]
       });
@@ -214,6 +214,11 @@ define([
       }
 
       this.chart.yAxis[1].update(yAxis1Options);
+
+      var visible = this.model.query.get('interval') !== 'hour';
+
+      this.chart.series[1].update({visible: visible});
+      this.chart.series[3].update({visible: visible});
 
       this.chart.series[0].setData(chartData.quantityDone, false);
       this.chart.series[1].setData(chartData.downtime, false);

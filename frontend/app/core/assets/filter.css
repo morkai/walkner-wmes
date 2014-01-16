@@ -36,3 +36,25 @@
 .filter-btn-group {
   display: block;
 }
+.filter-form .filter-dateRange {
+  margin-bottom: 0;
+}
+.filter-dateRange .control-label {
+  margin-top: .5em;
+  margin-bottom: 0;
+  vertical-align: top;
+  font-weight: normal;
+}
+.filter-dateRange label + label {
+  margin-left: .5em;
+}
+.filter-dateRange .form-control {
+  display: inline-block;
+  margin-bottom: 1em;
+  width: 12em;
+}
+.reports-1-filter-intervals > .btn {
+  width: 3.5em;
+  padding-left: 0;
+  padding-right: 0;
+}

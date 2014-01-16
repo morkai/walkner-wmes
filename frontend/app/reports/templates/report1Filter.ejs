@@ -1,0 +1,52 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group filter-dateRange">
+      <div>
+        <label>
+          <input id="<%- idPrefix %>-mode-online" name="mode" type="radio" value="online">
+          <%- t('reports', 'filter:mode:online') %>
+        </label>
+        <label>
+          <input id="<%- idPrefix %>-mode-date" name="mode" type="radio" value="date">
+          <%- t('reports', 'filter:mode:date') %>
+        </label>
+      </div><div>
+        <label for="<%- idPrefix %>-from" class="control-label"><%- t('reports', 'filter:from') %></label>
+        <input id="<%- idPrefix %>-from" class="form-control" name="from" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+        <label for="<%- idPrefix %>-to" class="control-label"><%- t('reports', 'filter:to') %></label>
+        <input id="<%- idPrefix %>-to" class="form-control filter-dateRange-to-field" name="to" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+      </div>
+    </div><div class="form-group">
+      <label><%- t('reports', 'filter:interval') %></label>
+      <div class="btn-group filter-btn-group reports-1-filter-intervals" data-toggle="buttons">
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:month') %>" data-interval="month">
+          <input type="radio" name="interval" value="month"> <%- t('reports', 'filter:interval:month') %>
+        </label>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:week') %>" data-interval="week">
+          <input type="radio" name="interval" value="week"> <%- t('reports', 'filter:interval:week') %>
+        </label>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:day') %>" data-interval="day">
+          <input type="radio" name="interval" value="day"> <%- t('reports', 'filter:interval:day') %>
+        </label>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:shift') %>" data-interval="shift">
+          <input type="radio" name="interval" value="shift"> <%- t('reports', 'filter:interval:shift') %>
+        </label>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:hour') %>" data-interval="hour">
+          <input type="radio" name="interval" value="hour"> <%- t('reports', 'filter:interval:hour') %>
+        </label>
+      </div>
+    </div><div class="form-group">
+      <label><%- t('reports', 'filter:subdivisionType') %></label>
+      <div class="btn-group filter-btn-group reports-1-filter-subdivisionTypes" data-toggle="buttons">
+        <label class="btn btn-default">
+          <input type="checkbox" name="subdivisionType" value="prod"> <%- t('reports', 'filter:subdivisionType:prod') %>
+        </label>
+        <label class="btn btn-default">
+          <input type="checkbox" name="subdivisionType" value="press"> <%- t('reports', 'filter:subdivisionType:press') %>
+        </label>
+      </div>
+    </div><div class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('reports', 'filter:1:submit') %>">
+    </div>
+  </form>
+</div>

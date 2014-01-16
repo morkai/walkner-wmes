@@ -2,7 +2,7 @@
   width: 100%;
   height: 100%;
 }
-.reports-1-page {
+.reports-1-charts-container {
   display: flex;
   width: 100%;
 }
@@ -23,3 +23,4 @@
 .reports-chart .highcharts-title {
   font-weight: bold;
 }
+.reports-

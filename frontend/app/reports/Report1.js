@@ -17,10 +17,30 @@ define([
 
     urlRoot: '/reports/1',
 
-    defaults: {
-      coeffs: null,
-      downtimesByAor: null,
-      downtimesByReason: null
+    defaults: function()
+    {
+      return {
+        orgUnitType: null,
+        orgUnit: null,
+        coeffs: {
+          quantityDone: [],
+          downtime: [],
+          efficiency: [],
+          productivity: []
+        },
+        downtimesByAor: [],
+        downtimesByReason: []
+      };
+    },
+
+    initialize: function(data, options)
+    {
+      if (!options.query)
+      {
+        throw new Error("query option is required!");
+      }
+
+      this.query = options.query;
     },
 
     fetch: function(options)
@@ -30,24 +50,12 @@ define([
         options = {};
       }
 
-      options.data = _.defaults(options.data || {}, this.query);
+      options.data = _.extend(
+        options.data || {},
+        this.query.serializeToObject(this.get('orgUnitType'), this.get('orgUnit'))
+      );
 
       return Model.prototype.fetch.call(this, options);
-    },
-
-    initialize: function(data, options)
-    {
-      this.query = options.query || {};
-
-      if (this.attributes.coeffs === null)
-      {
-        this.attributes.coeffs = {
-          quantityDone: [],
-          downtime: [],
-          efficiency: [],
-          productivity: []
-        };
-      }
     },
 
     parse: function(report)
@@ -80,11 +88,6 @@ define([
         series.downtime.push({x: time, y: Math.round((coeffs.downtime || 0) * 100)});
         series.efficiency.push({x: time, y: Math.round((coeffs.efficiency || 0) * 100)});
         series.productivity.push({x: time, y: Math.round((coeffs.productivity || 0) * 100)});
-
-        /*series.quantityDone.push({x: time, y: Math.round(Math.random() * 3500)});
-        series.downtime.push({x: time, y: Math.round(Math.random() * 100)});
-        series.efficiency.push({x: time, y: Math.round(Math.random() * 100)});
-        series.productivity.push({x: time, y: Math.round(Math.random() * 100)});*/
       });
 
       return series;
