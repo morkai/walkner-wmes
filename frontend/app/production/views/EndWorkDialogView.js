@@ -21,8 +21,11 @@ define([
       {
         e.preventDefault();
 
+        var newQuantitiesDone = this.parseInt('quantityDone');
         var newQuantityDone = this.parseInt('quantityDone');
         var newWorkerCount = this.parseInt('workerCount');
+
+        this.model.changeCurrentQuantitiesDone(newQuantitiesDone);
 
         if (newQuantityDone !== this.model.prodShiftOrder.get('quantityDone'))
         {
@@ -50,6 +53,8 @@ define([
       return {
         idPrefix: this.idPrefix,
         downtime: this.model.isDowntime(),
+        hourRange: this.model.getCurrentQuantityDoneHourRange(),
+        quantitiesDone: this.model.getQuantityDoneInCurrentHour(),
         quantityDone: this.model.prodShiftOrder.get('quantityDone') || 0,
         workerCount: this.model.prodShiftOrder.get('workerCount') || 0
       };

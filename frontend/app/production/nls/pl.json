@@ -121,9 +121,10 @@
   "continueOrderDialog:no": "Nie kontynuuj zlecenia",
 
   "endWorkDialog:title": "Potwierdzenie zakończenia pracy",
-  "endWorkDialog:warning": "Zakończenie pracy ukończy {downtime, select, true{aktualnie wybrany przestój i zlecenie} other{aktualnie wybrane zlecenie}}. Sprawdź czy pola <em>Wartość wykonana</em> i <em>Osoby pracujące</em> mają prawidłowe wartości, gdyż po zakończeniu pracy nie będzie można ich zmienić.",
-  "endWorkDialog:quantityDone": "Ilość wykonana:",
-  "endWorkDialog:workerCount": "Osoby pracujące:",
+  "endWorkDialog:warning": "Zakończenie pracy ukończy {downtime, select, true{aktualnie wybrany przestój i zlecenie} other{aktualnie wybrane zlecenie}}. Sprawdź czy poniższe pola mają prawidłowe wartości, gdyż po zakończeniu pracy nie będzie można ich zmienić.",
+  "endWorkDialog:quantitiesDone": "Wykonana ilość w przedziale godzinowym {hourRange}:",
+  "endWorkDialog:quantityDone": "Wykonana ilość aktualnego zlecenia:",
+  "endWorkDialog:workerCount": "Osoby pracujące przy aktualnym zleceniu:",
   "endWorkDialog:yes": "Zakończ pracę",
   "endWorkDialog:no": "Nie kończ pracy"
 }

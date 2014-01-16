@@ -61,7 +61,7 @@ define([
             time: time,
             planned: quantity.planned,
             actual: quantity.actual,
-            editable: editable
+            editable: editable || quantity.actual > 0
           };
         })
       };

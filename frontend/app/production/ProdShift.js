@@ -225,6 +225,11 @@ define([
       prodLog.record(this, 'changeOperator', userInfo);
     },
 
+    changeCurrentQuantitiesDone: function(newValue)
+    {
+      this.changeQuantitiesDone(this.getCurrentQuantityDoneHourIndex(), newValue);
+    },
+
     changeQuantitiesDone: function(hour, newValue)
     {
       var quantitiesDone = this.get('quantitiesDone');
@@ -232,6 +237,11 @@ define([
       if (!quantitiesDone[hour])
       {
         throw new Error("Invalid hour: " + hour);
+      }
+
+      if (quantitiesDone[hour].actual === newValue)
+      {
+        return;
       }
 
       quantitiesDone[hour].actual = newValue;
@@ -448,6 +458,70 @@ define([
     getTimeToNextShift: function()
     {
       return this.getCurrentShiftMoment().add('hours', 8).diff(time.getServerMoment());
+    },
+
+    /**
+     * @returns {number}
+     */
+    getCurrentQuantityDoneHourIndex: function()
+    {
+      var hour = time.getServerMoment().hours();
+
+      if (hour >= 6 && hour < 14)
+      {
+        return hour - 6;
+      }
+
+      if (hour >= 14 && hour < 22)
+      {
+        return hour - 14;
+      }
+
+      if (hour === 22)
+      {
+        return 0;
+      }
+
+      if (hour === 23)
+      {
+        return 1;
+      }
+
+      return hour + 2;
+    },
+
+    /**
+     * @returns {string}
+     */
+    getCurrentQuantityDoneHourRange: function()
+    {
+      var fromMoment = time.getServerMoment().minutes(0).seconds(0);
+      var from = fromMoment.format('HH:mm:ss');
+      var to = fromMoment.minutes(59).seconds(59).format('HH:mm:ss');
+
+      return from + '-' + to;
+    },
+
+    /**
+     * @returns {number}
+     */
+    getQuantityDoneInCurrentHour: function()
+    {
+      var quantitiesDone = this.get('quantitiesDone');
+
+      if (!Array.isArray(quantitiesDone))
+      {
+        return 0;
+      }
+
+      var hourIndex = this.getCurrentQuantityDoneHourIndex();
+
+      if (hourIndex >= quantitiesDone.length)
+      {
+        return 0;
+      }
+
+      return quantitiesDone[hourIndex].actual;
     },
 
     isIdle: function()
