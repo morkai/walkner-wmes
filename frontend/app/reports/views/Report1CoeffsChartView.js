@@ -166,7 +166,7 @@ define([
           },
           {
             name: t('reports', 'coeffs:downtime'),
-            color: 'rgba(255, 0, 0, .5)',
+            color: 'rgba(255, 0, 0, .75)',
             borderColor: '#AC2925',
             borderWidth: 0,
             type: 'column',
