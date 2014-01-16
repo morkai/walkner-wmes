@@ -103,7 +103,8 @@ module.exports = function(mongoose, options, done)
       return this.done(done, err);
     }
 
-    var now = Math.min(Date.now(), options.toTime);
+    var endTime =
+      Math.min(moment().minutes(59).seconds(59).milliseconds(999).valueOf(), options.toTime);
     var groupedQuantitiesDone = {};
 
     prodShifts.forEach(function(prodShift)
@@ -114,7 +115,7 @@ module.exports = function(mongoose, options, done)
       {
         var startedAt = shiftStartTime + 3600 * 1000 * i;
 
-        if (startedAt + 3599999 < now)
+        if (startedAt + 3599999 <= endTime)
         {
           groupObjects(groupedQuantitiesDone, {
             startedAt: new Date(startedAt),
