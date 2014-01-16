@@ -13,7 +13,7 @@ define([
   'use strict';
 
   Highcharts.setOptions({
-    globals: {
+    global: {
       timezoneOffset: time.getMoment().zone(),
       useUTC: false
     },
