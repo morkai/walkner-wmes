@@ -178,6 +178,7 @@ define([
     changeFilter: function()
     {
       var query = {
+        rnd: Math.random(),
         from: null,
         to: null,
         interval: this.$('.reports-1-filter-intervals > .active > input').val(),
