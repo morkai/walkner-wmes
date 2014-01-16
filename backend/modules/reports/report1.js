@@ -464,8 +464,8 @@ module.exports = function(mongoose, options, done)
 
       if (options.interval !== 'hour' && typeof orderToDowntime[order._id] !== 'undefined')
       {
-        dtNum = orderToDowntime[order._id].duration * workerCount;
-        dtDen = dtDen + workerCount;
+        dtNum += orderToDowntime[order._id].duration * workerCount;
+        dtDen += workerCount;
 
         downtimeCount += orderToDowntime[order._id].count;
       }
