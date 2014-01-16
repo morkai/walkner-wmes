@@ -53,8 +53,6 @@
   margin-bottom: 1em;
   width: 12em;
 }
-.reports-1-filter-intervals > .btn {
-  width: 3.5em;
-  padding-left: 0;
-  padding-right: 0;
+.filter-dateRange input[type=radio] {
+  margin-top: 0;
 }
