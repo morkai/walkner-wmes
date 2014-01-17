@@ -90,9 +90,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
       {
         return res.send(orders.map(function(order)
         {
-          order._id = order.nc12;
-
-          delete order.nc12;
+          order._id = nc12;
 
           return order;
         }));
