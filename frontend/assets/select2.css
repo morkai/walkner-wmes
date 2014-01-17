@@ -82,8 +82,7 @@
   background: #fff;
 }
 .select2-results .select2-highlighted {
-  background-color: #f5f5f5;
-  color: #262626;
+  background-color: #428BCA;
 }
 .select2-drop-active {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);

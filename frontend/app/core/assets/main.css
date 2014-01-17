@@ -234,6 +234,12 @@ p:last-child {
   box-shadow: none;
 }
 
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #fff;
+  background-color: #428BCA;
+}
+
 @-webkit-keyframes yellow-fade {
   0% { background: yellow; }
   100% { background: none; }
