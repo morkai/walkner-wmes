@@ -119,7 +119,6 @@ module.exports = function setUpProductionRoutes(app, productionModule)
       query: {nc12: new RegExp('^' + nc12)},
       out: {inline: 1},
       sort: {nc12: 1},
-      limit: 10,
       map: function()
       {
         if (this.operations && this.operations.length)
