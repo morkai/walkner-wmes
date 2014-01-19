@@ -42,13 +42,13 @@ define([
         switch (e.target.getAttribute('data-range'))
         {
           case 'month':
-            fromMoment.date(1).hours(0);
+            fromMoment.date(1).hours(6);
             toMoment = fromMoment.clone().add('months', 1);
             interval = 'week';
             break;
 
           case 'week':
-            fromMoment.day(1).hours(0);
+            fromMoment.weekday(0).hours(6);
             toMoment = fromMoment.clone().add('days', 7);
             interval = 'day';
             break;
