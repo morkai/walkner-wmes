@@ -118,7 +118,7 @@ exports.start = function startFteModule(app, module)
       $or: [{date: {$ne: currentShift.date}}, {shift: {$ne: currentShift.no}}]
     };
 
-    FteEntryModel.find(condition, {tasks: 0}, function(err, fteEntries)
+    FteEntryModel.find(condition, function(err, fteEntries)
     {
       if (err)
       {
