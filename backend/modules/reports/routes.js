@@ -8,6 +8,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var userModule = app[reportsModule.config.userId];
   var mongoose = app[reportsModule.config.mongooseId];
   var downtimeReasons = app.downtimeReasons;
+  var divisionsModule = app.divisions;
 
   var canView = userModule.auth();
 
@@ -21,8 +22,10 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       interval: req.query.interval || 'hour',
       orgUnitType: req.query.orgUnitType,
       orgUnit: req.query.orgUnit,
+      division: getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnit),
       subdivisionType: req.query.subdivisionType,
-      ignoredDowntimeReasons: []
+      ignoredDowntimeReasons: [],
+      prodDivisionCount: countProdDivisions()
     };
 
     downtimeReasons.models.forEach(function(downtimeReason)
@@ -42,5 +45,40 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
       return res.send(report);
     });
+  }
+
+  function getDivisionByOrgUnit(orgUnitType, orgUnit)
+  {
+    /*jshint -W015*/
+
+    if (!orgUnitType || !orgUnit)
+    {
+      return null;
+    }
+
+    switch (orgUnitType)
+    {
+      case 'division':
+        return orgUnit;
+
+      default:
+        // TODO
+        throw new Error('TODO');
+    }
+  }
+
+  function countProdDivisions()
+  {
+    var prodDivisionCount = 0;
+
+    divisionsModule.models.forEach(function(division)
+    {
+      if (division.type === 'prod')
+      {
+        prodDivisionCount += 1;
+      }
+    });
+
+    return prodDivisionCount;
   }
 };
