@@ -90,6 +90,10 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       type: String,
       default: null
     },
+    total: {
+      type: Number,
+      default: null
+    },
     tasks: [fteMasterTaskSchema],
     absentUsers: [fteMasterAbsentUserSchema]
   }, {
@@ -198,6 +202,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           subdivision: shiftId.subdivision,
           date: shiftId.date,
           shift: shiftId.no,
+          total: null,
           tasks: this.tasks,
           locked: false,
           createdAt: new Date(),
@@ -215,7 +220,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   fteMasterEntrySchema.statics.lock = function(_id, user, done)
   {
-    this.findOne({_id: _id}, {tasks: 0}, function(err, fteMasterEntry)
+    this.findOne({_id: _id}, function(err, fteMasterEntry)
     {
       if (err)
       {
@@ -225,6 +230,11 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       if (!fteMasterEntry)
       {
         return done(new Error('UNKNOWN'));
+      }
+
+      if (fteMasterEntry.get('locked'))
+      {
+        return done(new Error('LOCKED'));
       }
 
       fteMasterEntry.lock(user, done);
@@ -273,14 +283,10 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   fteMasterEntrySchema.methods.lock = function(user, done)
   {
-    if (this.get('locked'))
-    {
-      return done(new Error('LOCKED'));
-    }
-
     this.set({
       updatedAt: new Date(),
-      locked: true
+      locked: true,
+      total: calcTotal(this)
     });
 
     if (user)
@@ -311,6 +317,24 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       done(null, fteMasterEntry);
     });
   };
+
+  function calcTotal(fteMasterEntry)
+  {
+    var total = 0;
+
+    fteMasterEntry.tasks.forEach(function(task)
+    {
+      task.functions.forEach(function(taskFunction)
+      {
+        taskFunction.companies.forEach(function(taskCompany)
+        {
+          total += taskCompany.count;
+        });
+      });
+    });
+
+    return total;
+  }
 
   function getProdFlowTasks(subdivisionId, functions, done)
   {

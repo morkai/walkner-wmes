@@ -87,6 +87,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       default: null
     },
     fteDiv: [String],
+    totals: {},
     tasks: [fteLeaderTaskSchema]
   }, {
     id: false
@@ -170,6 +171,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
           date: shiftId.date,
           shift: shiftId.no,
           fteDiv: this.fteDiv ? prodDivisions : null,
+          totals: null,
           tasks: this.prodTasks,
           createdAt: new Date(),
           creator: user._id,
@@ -183,7 +185,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   fteLeaderEntrySchema.statics.lock = function(_id, user, done)
   {
-    this.findOne({_id: _id}, {tasks: 0}, function(err, fteLeaderEntry)
+    this.findOne({_id: _id}, function(err, fteLeaderEntry)
     {
       if (err)
       {
@@ -195,20 +197,21 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         return done(new Error('UNKNOWN'));
       }
 
+      if (fteLeaderEntry.get('locked'))
+      {
+        return done(new Error('LOCKED'));
+      }
+
       fteLeaderEntry.lock(user, done);
     });
   };
 
   fteLeaderEntrySchema.methods.lock = function(user, done)
   {
-    if (this.get('locked'))
-    {
-      return done(new Error('LOCKED'));
-    }
-
     this.set({
       updatedAt: new Date(),
-      locked: true
+      locked: true,
+      totals: calcTotals(this)
     });
 
     if (user)
@@ -239,6 +242,43 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       done(null, fteLeaderEntry);
     });
   };
+
+  function calcTotals(fteLeaderEntry)
+  {
+    var totals = {
+      overall: 0
+    };
+
+    (fteLeaderEntry.fteDiv || []).forEach(function(divisionId)
+    {
+      totals[divisionId] = 0;
+    });
+
+    var keys = Object.keys(totals);
+
+    fteLeaderEntry.tasks.forEach(function(task)
+    {
+      task.companies.forEach(function(fteCompany)
+      {
+        var count = fteCompany.count;
+
+        if (Array.isArray(count))
+        {
+          count.forEach(function(divisionCount)
+          {
+            totals.overall += divisionCount.value;
+            totals[divisionCount.division] += divisionCount.value;
+          });
+        }
+        else if (typeof count === 'number')
+        {
+          keys.forEach(function(key) { totals[key] += count; });
+        }
+      });
+    });
+
+    return totals;
+  }
 
   mongoose.model('FteLeaderEntry', fteLeaderEntrySchema);
 };
