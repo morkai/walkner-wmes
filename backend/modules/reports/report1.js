@@ -631,7 +631,7 @@ module.exports = function(mongoose, options, done)
       var quantityDone = order.quantityDone * percent;
 
       effNum += laborTime * typeCoeff;
-      effDen += duration * typeCoeff * workerCount / quantityDone;
+      effDen += duration * workerCount / quantityDone;
 
       if (options.interval !== 'hour' && typeof orderToDowntime[order._id] !== 'undefined')
       {
