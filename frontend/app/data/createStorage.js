@@ -61,7 +61,7 @@ define([
     {
       localStorage.setItem(storageKey, JSON.stringify({
         time: Date.now(),
-        data: collection.attributes
+        data: collection.models
       }));
 
       broker.publish(topicPrefix + '.synced');
