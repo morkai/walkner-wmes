@@ -167,11 +167,6 @@ module.exports = function(mongoose, options, done)
 
     conditions.prodShiftOrder = {$ne: null};
 
-    if (options.ignoredDowntimeReasons.length)
-    {
-      conditions.reason = {$nin: options.ignoredDowntimeReasons};
-    }
-
     var fields = {
       _id: 0,
       prodShiftOrder: 1,
@@ -206,8 +201,19 @@ module.exports = function(mongoose, options, done)
       {
         orderToDowntime[prodDowntime.prodShiftOrder] = {
           count: 0,
-          duration: 0
+          duration: 0,
+          breakCount: 0,
+          breakDuration: 0
         };
+      }
+
+      if (orderToDowntime !== null
+        && options.ignoredDowntimeReasons.indexOf(prodDowntime.reason) !== -1)
+      {
+        orderToDowntime[prodDowntime.prodShiftOrder].breakCount += 1;
+        orderToDowntime[prodDowntime.prodShiftOrder].breakDuration += duration;
+
+        return;
       }
 
       if (typeof results.downtimes.byAor[prodDowntime.aor] === 'undefined')
@@ -630,16 +636,18 @@ module.exports = function(mongoose, options, done)
       var workerCount = order.workerCount * percent;
       var quantityDone = order.quantityDone * percent;
 
-      effNum += laborTime * typeCoeff;
-      effDen += duration * workerCount / quantityDone;
-
       if (options.interval !== 'hour' && typeof orderToDowntime[order._id] !== 'undefined')
       {
+        duration -= orderToDowntime[order._id].breakDuration;
+
         dtNum += orderToDowntime[order._id].duration * workerCount;
         dtDen += workerCount;
 
         downtimeCount += orderToDowntime[order._id].count;
       }
+
+      effNum += laborTime * typeCoeff;
+      effDen += duration * workerCount / quantityDone;
 
       orderCount += 1;
     });
