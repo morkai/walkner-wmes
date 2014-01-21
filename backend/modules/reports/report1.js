@@ -207,11 +207,13 @@ module.exports = function(mongoose, options, done)
         };
       }
 
-      if (orderToDowntime !== null
-        && options.ignoredDowntimeReasons.indexOf(prodDowntime.reason) !== -1)
+      if (options.ignoredDowntimeReasons.indexOf(prodDowntime.reason) !== -1)
       {
-        orderToDowntime[prodDowntime.prodShiftOrder].breakCount += 1;
-        orderToDowntime[prodDowntime.prodShiftOrder].breakDuration += duration;
+        if (orderToDowntime !== null)
+        {
+          orderToDowntime[prodDowntime.prodShiftOrder].breakCount += 1;
+          orderToDowntime[prodDowntime.prodShiftOrder].breakDuration += duration;
+        }
 
         return;
       }
