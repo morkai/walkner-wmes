@@ -27,6 +27,7 @@ module.exports = function(mongoose, options, done)
     calcDowntimesStep,
     findProdShiftOrdersStep,
     groupProdShiftOrdersStep,
+    calcDowntimeDurationsStep,
     findFteEntriesStep,
     groupFteEntriesStep,
     calcFteTotalsStep,
@@ -49,6 +50,11 @@ module.exports = function(mongoose, options, done)
     num = Math.round(num * 1000) / 1000;
 
     return isNaN(num) ? 0 : num;
+  }
+
+  function isIgnoredDowntime(prodDowntime)
+  {
+    return options.ignoredDowntimeReasons.indexOf(prodDowntime.reason) !== -1;
   }
 
   function createConditions()
@@ -152,6 +158,11 @@ module.exports = function(mongoose, options, done)
       {
         results.coeffs[groupKey].quantityDone += quantityDone.count;
       });
+
+      if (results.coeffs[groupKey].quantityDone === 0)
+      {
+        results.coeffs[groupKey] = undefined;
+      }
     });
 
     this.groupedQuantitiesDone = null;
@@ -188,33 +199,20 @@ module.exports = function(mongoose, options, done)
       return this.done(done, err);
     }
 
-    var orderToDowntime = options.interval === 'hour' ? null : {};
+    var ordersToDowntimes = {};
     var downtimes = results.downtimes;
 
     prodDowntimes.forEach(function(prodDowntime)
     {
-      var duration =
-        (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
-
-      if (orderToDowntime !== null
-        && typeof orderToDowntime[prodDowntime.prodShiftOrder] === 'undefined')
+      if (typeof ordersToDowntimes[prodDowntime.prodShiftOrder] === 'undefined')
       {
-        orderToDowntime[prodDowntime.prodShiftOrder] = {
-          count: 0,
-          duration: 0,
-          breakCount: 0,
-          breakDuration: 0
-        };
+        ordersToDowntimes[prodDowntime.prodShiftOrder] = [];
       }
 
-      if (options.ignoredDowntimeReasons.indexOf(prodDowntime.reason) !== -1)
-      {
-        if (orderToDowntime !== null)
-        {
-          orderToDowntime[prodDowntime.prodShiftOrder].breakCount += 1;
-          orderToDowntime[prodDowntime.prodShiftOrder].breakDuration += duration;
-        }
+      ordersToDowntimes[prodDowntime.prodShiftOrder].push(prodDowntime);
 
+      if (isIgnoredDowntime(prodDowntime))
+      {
         return;
       }
 
@@ -228,11 +226,8 @@ module.exports = function(mongoose, options, done)
         results.downtimes.byReason[prodDowntime.reason] = 0;
       }
 
-      if (orderToDowntime !== null)
-      {
-        orderToDowntime[prodDowntime.prodShiftOrder].count += 1;
-        orderToDowntime[prodDowntime.prodShiftOrder].duration += duration;
-      }
+      var duration =
+        (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
       downtimes.byAor[prodDowntime.aor] += duration;
       downtimes.byReason[prodDowntime.reason] += duration;
@@ -248,7 +243,7 @@ module.exports = function(mongoose, options, done)
       downtimes.byReason[reason] = round(downtimes.byReason[reason]);
     });
 
-    this.orderToDowntime = orderToDowntime;
+    this.ordersToDowntimes = ordersToDowntimes;
 
     setImmediate(this.next());
   }
@@ -283,8 +278,47 @@ module.exports = function(mongoose, options, done)
 
     var subdivisions = {};
 
-    this.groupedProdShiftOrders = groupProdShiftOrders(prodShiftOrders, subdivisions);
+    this.groupedProdShiftOrders =
+      groupProdShiftOrders(prodShiftOrders, this.ordersToDowntimes, subdivisions);
     this.subdivisions = Object.keys(subdivisions);
+
+    setImmediate(this.next());
+  }
+
+  function calcDowntimeDurationsStep()
+  {
+    /*jshint validthis:true*/
+
+    var ordersToDowntimes = this.ordersToDowntimes;
+
+    Object.keys(ordersToDowntimes).forEach(function(key)
+    {
+      var summary = {
+        count: 0,
+        duration: 0,
+        breakCount: 0,
+        breakDuration: 0
+      };
+
+      ordersToDowntimes[key].forEach(function(prodDowntime)
+      {
+        var duration =
+          (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
+
+        if (isIgnoredDowntime(prodDowntime))
+        {
+          summary.breakCount += 1;
+          summary.breakDuration += duration;
+        }
+        else
+        {
+          summary.count += 1;
+          summary.duration += duration;
+        }
+      });
+
+      ordersToDowntimes[key] = summary;
+    });
 
     setImmediate(this.next());
   }
@@ -419,23 +453,28 @@ module.exports = function(mongoose, options, done)
   {
     /*jshint validthis:true*/
 
-    var orderToDowntime = this.orderToDowntime;
+    var ordersToDowntimes = this.ordersToDowntimes;
     var groupedProdShiftOrders = this.groupedProdShiftOrders;
     var fteTotals = this.fteTotals || {};
 
-    this.orderToDowntime = null;
+    this.ordersToDowntimes = null;
     this.groupedProdShiftOrders = null;
     this.fteTotals = null;
 
     Object.keys(groupedProdShiftOrders).forEach(function(groupKey)
     {
-      calcCoeffs(groupKey, groupedProdShiftOrders[groupKey], fteTotals[groupKey], orderToDowntime);
+      calcCoeffs(
+        groupKey,
+        groupedProdShiftOrders[groupKey],
+        fteTotals[groupKey],
+        ordersToDowntimes
+      );
     });
 
     setImmediate(this.next());
   }
 
-  function groupProdShiftOrders(prodShiftOrders, subdivisions)
+  function groupProdShiftOrders(prodShiftOrders, ordersToDowntimes, subdivisions)
   {
     var groupedProdShiftOrders = {};
 
@@ -448,7 +487,7 @@ module.exports = function(mongoose, options, done)
 
       if (options.interval === 'hour')
       {
-        splitProdShiftOrder(groupedProdShiftOrders, prodShiftOrder);
+        splitProdShiftOrder(groupedProdShiftOrders, prodShiftOrder, ordersToDowntimes);
       }
       else
       {
@@ -459,7 +498,7 @@ module.exports = function(mongoose, options, done)
     return groupedProdShiftOrders;
   }
 
-  function splitProdShiftOrder(groupedProdShiftOrders, order)
+  function splitProdShiftOrder(groupedProdShiftOrders, order, ordersToDowntimes)
   {
     var startedAtHours = order.startedAt.getHours();
     var finishedAtHours = order.finishedAt.getHours();
@@ -469,17 +508,10 @@ module.exports = function(mongoose, options, done)
       return groupObjects(groupedProdShiftOrders, order);
     }
 
-    var totalDuration = order.finishedAt.getTime() - order.startedAt.getTime();
-    var totalHours = -1;
+    splitOrderDowntimes(order._id, ordersToDowntimes);
 
-    if (order.startedAt.getDate() === order.finishedAt.getDate())
-    {
-      totalHours = finishedAtHours - startedAtHours + 1;
-    }
-    else
-    {
-      totalHours = 24 - startedAtHours + finishedAtHours + 1;
-    }
+    var totalDuration = order.finishedAt.getTime() - order.startedAt.getTime();
+    var totalHours = countTotalHours(order, startedAtHours, finishedAtHours);
 
     var partDate = new Date(order.startedAt);
 
@@ -487,14 +519,15 @@ module.exports = function(mongoose, options, done)
     {
       var partStartTime = partDate.getTime();
       var partEndTime = -1;
+      var partHours = partDate.getHours();
 
-      if (partDate.getHours() === finishedAtHours)
+      if (partHours === finishedAtHours)
       {
         partEndTime = order.finishedAt.getTime();
       }
       else
       {
-        partDate.setHours(partDate.getHours() + 1);
+        partDate.setHours(partHours + 1);
         partDate.setMinutes(0);
         partDate.setSeconds(0);
         partDate.setMilliseconds(0);
@@ -505,7 +538,7 @@ module.exports = function(mongoose, options, done)
       var percent = (partEndTime - partStartTime) / totalDuration;
 
       groupObjects(groupedProdShiftOrders, {
-        _id: order._id,
+        _id: order._id + '@' + partHours,
         startedAt: new Date(partStartTime),
         finishedAt: new Date(partEndTime),
         mechOrder: order.mechOrder,
@@ -517,6 +550,88 @@ module.exports = function(mongoose, options, done)
         percent: percent
       });
     }
+  }
+
+  function splitOrderDowntimes(orderId, ordersToDowntimes)
+  {
+    var orderDowntimes = ordersToDowntimes[orderId];
+
+    if (!Array.isArray(orderDowntimes))
+    {
+      return;
+    }
+
+    delete ordersToDowntimes[orderId];
+
+    orderDowntimes.forEach(function(downtime)
+    {
+      var startedAtHours = downtime.startedAt.getHours();
+      var finishedAtHours = downtime.finishedAt.getHours();
+
+      if (startedAtHours === finishedAtHours)
+      {
+        return pushDowntime(downtime);
+      }
+
+      var totalHours = countTotalHours(downtime, startedAtHours, finishedAtHours);
+      var partDate = new Date(downtime.startedAt);
+
+      for (var h = 0; h < totalHours; ++h)
+      {
+        var partStartTime = partDate.getTime();
+        var partEndTime = -1;
+        var partHours = partDate.getHours();
+
+        if (partHours === finishedAtHours)
+        {
+          partEndTime = downtime.finishedAt.getTime();
+        }
+        else
+        {
+          partDate.setHours(partHours + 1);
+          partDate.setMinutes(0);
+          partDate.setSeconds(0);
+          partDate.setMilliseconds(0);
+
+          partEndTime = partDate.getTime() - 1;
+        }
+
+        pushDowntime({
+          startedAt: new Date(partStartTime),
+          finishedAt: new Date(partEndTime),
+          aor: downtime.aor,
+          reason: downtime.reason
+        });
+      }
+    });
+
+    function pushDowntime(downtime)
+    {
+      var newOrderId = orderId + '@' + downtime.startedAt.getHours();
+
+      if (!Array.isArray(ordersToDowntimes[newOrderId]))
+      {
+        ordersToDowntimes[newOrderId] = [];
+      }
+
+      ordersToDowntimes[newOrderId].push(downtime);
+    }
+  }
+
+  function countTotalHours(obj, startedAtHours, finishedAtHours)
+  {
+    var totalHours = -1;
+
+    if (obj.startedAt.getDate() === obj.finishedAt.getDate())
+    {
+      totalHours = finishedAtHours - startedAtHours + 1;
+    }
+    else
+    {
+      totalHours = 24 - startedAtHours + finishedAtHours + 1;
+    }
+
+    return totalHours;
   }
 
   function groupObjects(groupedObjects, obj)
@@ -605,10 +720,11 @@ module.exports = function(mongoose, options, done)
     return new Date(startedAtTime);
   }
 
-  function calcCoeffs(groupKey, orders, fteTotals, orderToDowntime)
+  function calcCoeffs(groupKey, orders, fteTotals, ordersToDowntimes)
   {
     var orderCount = 0;
     var downtimeCount = 0;
+    var breakCount = 0;
     var effNum = 0;
     var effDen = 0;
     var dtNum = 0;
@@ -637,15 +753,17 @@ module.exports = function(mongoose, options, done)
       var laborTime = operation.laborTime * percent;
       var workerCount = order.workerCount * percent;
       var quantityDone = order.quantityDone * percent;
+      var orderDowntime = ordersToDowntimes[order._id];
 
-      if (options.interval !== 'hour' && typeof orderToDowntime[order._id] !== 'undefined')
+      if (typeof orderDowntime === 'object')
       {
-        duration -= orderToDowntime[order._id].breakDuration;
+        duration -= orderDowntime.breakDuration;
 
-        dtNum += orderToDowntime[order._id].duration * workerCount;
+        dtNum += orderDowntime.duration * workerCount;
         dtDen += workerCount;
 
-        downtimeCount += orderToDowntime[order._id].count;
+        downtimeCount += orderDowntime.count;
+        breakCount += orderDowntime.breakCount;
       }
 
       effNum += laborTime * typeCoeff;
@@ -663,12 +781,12 @@ module.exports = function(mongoose, options, done)
       ? (results.coeffs[groupKey] = {})
       : results.coeffs[groupKey];
 
-    if (effDen)
+    if (effNum && effDen)
     {
       coeffs.efficiency = round(effNum / 100 / effDen);
     }
 
-    if (dtDen)
+    if (dtNum && dtDen)
     {
       coeffs.downtime = round(dtNum / 8 / dtDen);
     }
@@ -692,6 +810,11 @@ module.exports = function(mongoose, options, done)
     if (downtimeCount)
     {
       coeffs.downtimeCount = downtimeCount;
+    }
+
+    if (breakCount)
+    {
+      coeffs.breakCount = breakCount;
     }
   }
 };

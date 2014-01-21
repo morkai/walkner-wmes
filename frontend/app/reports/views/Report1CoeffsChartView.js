@@ -161,8 +161,7 @@ define([
             data: chartData.downtime,
             tooltip: {
               valueSuffix: '%'
-            },
-            visible: this.model.query.get('interval') !== 'hour'
+            }
           },
           {
             name: t('reports', 'coeffs:efficiency'),
@@ -206,7 +205,7 @@ define([
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
 
       this.chart.series[0].update({marker: markerStyles}, false);
-      this.chart.series[1].update({marker: markerStyles, visible: visible}, false);
+      this.chart.series[1].update({marker: markerStyles}, false);
       this.chart.series[2].update({marker: markerStyles}, false);
       this.chart.series[3].update({marker: markerStyles, visible: visible}, false);
 
