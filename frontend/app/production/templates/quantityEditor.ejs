@@ -1,6 +1,6 @@
 <form class="production-quantityEditor">
   <label for="<%- idPrefix %>-quantity"><%= t('production', 'quantityEditor:label', {from: from, to: to}) %></label>
-  <input id="<%- idPrefix %>-quantity" class="form-control input-lg" type="number" value="<%= currentQuantity %>">
+  <input id="<%- idPrefix %>-quantity" class="form-control input-lg" type="number" value="<%= currentQuantity %>" min="0">
   <div class="form-actions">
     <button type="submit" class="btn btn-primary"><%- t('production', 'quantityEditor:submit') %></button>
     <button type="button" class="cancel btn btn-link"><%- t('production', 'quantityEditor:cancel') %></button>

@@ -24,7 +24,7 @@ define([
 
         var newQuantity = parseInt(this.$id('quantity').val(), 10);
 
-        if (isNaN(newQuantity) || newQuantity === this.options.currentQuantity)
+        if (isNaN(newQuantity) || newQuantity === this.options.currentQuantity || newQuantity < 0)
         {
           newQuantity = null;
         }
