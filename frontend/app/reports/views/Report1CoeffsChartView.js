@@ -191,15 +191,16 @@ define([
     updateChart: function()
     {
       var chartData = this.serializeChartData();
-      var yAxis1Options = {min: 0, max: 100};
+      var min = 0;
+      var max = 100;
 
       if (!chartData.quantityDone.length)
       {
-        yAxis1Options.min = null;
-        yAxis1Options.max = null;
+        min = null;
+        max = null;
       }
 
-      this.chart.yAxis[1].update(yAxis1Options);
+      this.chart.yAxis[1].setExtremes(min, max, false);
 
       var visible = this.model.query.get('interval') !== 'hour';
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
