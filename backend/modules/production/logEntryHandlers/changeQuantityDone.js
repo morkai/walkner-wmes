@@ -20,7 +20,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       return done(null);
     }
 
-    prodShiftOrder.set('quantityDone', logEntry.data.newValue);
+    prodShiftOrder.set('quantityDone', Math.max(logEntry.data.newValue, 0));
 
     prodShiftOrder.save(function(err)
     {
