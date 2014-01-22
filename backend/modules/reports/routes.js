@@ -9,6 +9,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var mongoose = app[reportsModule.config.mongooseId];
   var downtimeReasons = app.downtimeReasons;
   var divisionsModule = app.divisions;
+  var subdivisionsModule = app.subdivisions;
 
   var canView = userModule.auth();
 
@@ -16,13 +17,15 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   function report1Route(req, res, next)
   {
+    var divisionId = getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnit);
     var options = {
       fromTime: new Date(req.query.from).getTime(),
       toTime: new Date(req.query.to).getTime(),
       interval: req.query.interval || 'hour',
       orgUnitType: req.query.orgUnitType,
       orgUnit: req.query.orgUnit,
-      division: getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnit),
+      division: divisionId,
+      subdivisions: getSubdivisionsByDivision(divisionId),
       subdivisionType: req.query.subdivisionType,
       ignoredDowntimeReasons: [],
       prodDivisionCount: countProdDivisions()
@@ -65,6 +68,14 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
         // TODO
         throw new Error('TODO');
     }
+  }
+
+  function getSubdivisionsByDivision(divisionId)
+  {
+    return !divisionId ? [] : subdivisionsModule.models.filter(function(subdivision)
+    {
+      return subdivision.get('division') === divisionId;
+    });
   }
 
   function countProdDivisions()

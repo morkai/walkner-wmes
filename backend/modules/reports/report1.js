@@ -276,11 +276,7 @@ module.exports = function(mongoose, options, done)
       return this.done(done, err);
     }
 
-    var subdivisions = {};
-
-    this.groupedProdShiftOrders =
-      groupProdShiftOrders(prodShiftOrders, this.ordersToDowntimes, subdivisions);
-    this.subdivisions = Object.keys(subdivisions);
+    this.groupedProdShiftOrders = groupProdShiftOrders(prodShiftOrders, this.ordersToDowntimes);
 
     setImmediate(this.next());
   }
@@ -336,9 +332,9 @@ module.exports = function(mongoose, options, done)
       date: {$gte: options.fromTime, $lt: options.toTime}
     };
 
-    if (this.subdivisions.length)
+    if (options.subdivisions.length)
     {
-      masterConditions.subdivision = {$in: this.subdivisions};
+      masterConditions.subdivision = {$in: options.subdivisions};
     }
 
     masterConditions.total = {$gt: 0};
@@ -474,17 +470,12 @@ module.exports = function(mongoose, options, done)
     setImmediate(this.next());
   }
 
-  function groupProdShiftOrders(prodShiftOrders, ordersToDowntimes, subdivisions)
+  function groupProdShiftOrders(prodShiftOrders, ordersToDowntimes)
   {
     var groupedProdShiftOrders = {};
 
     prodShiftOrders.forEach(function(prodShiftOrder)
     {
-      if (prodShiftOrder.subdivision)
-      {
-        subdivisions[prodShiftOrder.subdivision] = true;
-      }
-
       if (options.interval === 'hour')
       {
         splitProdShiftOrder(groupedProdShiftOrders, prodShiftOrder, ordersToDowntimes);
