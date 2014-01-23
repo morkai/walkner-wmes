@@ -8,6 +8,30 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       required: true
     },
     data: {},
+    division: {
+      type: String,
+      ref: 'Division',
+      default: null
+    },
+    subdivision: {
+      type: String,
+      ref: 'Subdivision',
+      default: null
+    },
+    mrpControllers: [{
+      type: 'String',
+      ref: 'MrpController'
+    }],
+    prodFlow: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ProdFlow',
+      default: null
+    },
+    workCenter: {
+      type: String,
+      ref: 'WorkCenter',
+      default: null
+    },
     prodLine: {
       type: String,
       ref: 'ProdLine',

@@ -1,7 +1,8 @@
-/*jshint maxparams:5*/
 /*globals emit:true*/
 
 'use strict';
+
+var step = require('h5.step');
 
 module.exports = function setUpProductionRoutes(app, productionModule)
 {
@@ -23,6 +24,94 @@ module.exports = function setUpProductionRoutes(app, productionModule)
     }
 
     return res.send(400);
+  });
+
+  express.get('/production/fillOrgUnits', function(req, res, next)
+  {
+    var ProdLogEntry = mongoose.model('ProdLogEntry');
+
+    ProdLogEntry.distinct('prodLine', {division: null}, function(err, prodLineIds)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      var steps = [];
+      var totalCount = 0;
+
+      prodLineIds.forEach(function(prodLineId)
+      {
+        var prodLine = app.prodLines.modelsById[prodLineId];
+
+        if (!prodLine)
+        {
+          return;
+        }
+
+        steps.push(function fixOrgUnitsStep()
+        {
+          var next = this.next();
+
+          var workCenter = app.workCenters.modelsById[prodLine.workCenter];
+
+          if (!workCenter)
+          {
+            return next();
+          }
+
+          var prodFlow = app.prodFlows.modelsById[workCenter.prodFlow];
+
+          if (!prodFlow || !Array.isArray(prodFlow.mrpController) || !prodFlow.mrpController.length)
+          {
+            return next();
+          }
+
+          var mrpController = app.mrpControllers.modelsById[prodFlow.mrpController[0]];
+
+          if (!mrpController)
+          {
+            return next();
+          }
+
+          var subdivision = app.subdivisions.modelsById[mrpController.subdivision];
+
+          if (!subdivision)
+          {
+            return next();
+          }
+
+          var conditions = {
+            prodLine: prodLineId,
+            division: null
+          };
+          var update = {
+            $set: {
+              workCenter: prodLine.workCenter,
+              prodFlow: workCenter.prodFlow,
+              mrpControllers: prodFlow.mrpController,
+              subdivision: mrpController.subdivision,
+              division: subdivision.division
+            }
+          };
+          var options = {multi: true};
+
+          ProdLogEntry.update(conditions, update, options, function(err, count)
+          {
+            totalCount += count;
+
+            next();
+          });
+        });
+      });
+
+      steps.push(function sendResult()
+      {
+        res.send(String(totalCount));
+      });
+
+      step(steps);
+    });
   });
 
   function findOrdersByNo(no, res, next)
