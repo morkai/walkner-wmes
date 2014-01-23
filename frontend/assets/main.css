@@ -18,6 +18,7 @@
 @import url("../app/production/assets/main.css");
 @import url("../app/reports/assets/main.css");
 @import url("../app/prodDowntimes/assets/main.css");
+@import url("../app/prodLogEntries/assets/main.css");
 @import url("../app/pressWorksheets/assets/main.css");
 
 #app-loading {

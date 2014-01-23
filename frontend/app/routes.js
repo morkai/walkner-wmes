@@ -18,6 +18,7 @@ define([
   './prodFlows/routes',
   './prodLines/routes',
   './prodTasks/routes',
+  './prodLogEntries/routes',
   './production/routes',
   './reports/routes',
   './subdivisions/routes',

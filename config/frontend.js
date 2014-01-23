@@ -26,6 +26,7 @@ exports.modules = [
   'hourlyPlans',
   'production',
   'prodDowntimes',
+  'prodLogEntries',
   'pressWorksheets',
   'reports',
   {id: 'messenger/client', name: 'messenger/client:attachments'},
@@ -120,6 +121,7 @@ exports.user = {
     'HOURLY_PLANS:VIEW', 'HOURLY_PLANS:MANAGE', 'HOURLY_PLANS:ALL',
     'PROD_DOWNTIMES:VIEW', 'PROD_DOWNTIMES:MANAGE',
     'PRESS_WORKSHEETS:VIEW', 'PRESS_WORKSHEETS:MANAGE',
+    'PROD_DATA:VIEW',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
     'REPORTS:VIEW'
   ]

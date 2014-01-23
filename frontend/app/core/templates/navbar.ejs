@@ -19,16 +19,26 @@
         </a>
         <ul class="dropdown-menu">
           <li data-privilege="FTE:MASTER:*" class="dropdown-header"><%- t('core', 'NAVBAR:FTE:MASTER') %>
-          <li data-online data-privilege="FTE:MASTER:VIEW"><a href="#fte/master"><%- t('core', 'NAVBAR:FTE:MASTER:LIST') %></a>
-          <li data-online data-privilege="FTE:MASTER:MANAGE"><a href="#fte/master/current"><%- t('core', 'NAVBAR:FTE:MASTER:CURRENT') %></a>
+          <li data-privilege="FTE:MASTER:VIEW"><a href="#fte/master"><%- t('core', 'NAVBAR:FTE:MASTER:LIST') %></a>
+          <li data-privilege="FTE:MASTER:MANAGE"><a href="#fte/master/current"><%- t('core', 'NAVBAR:FTE:MASTER:CURRENT') %></a>
           <li data-privilege="FTE:MASTER:* FTE:LEADER:*" class="divider">
           <li data-privilege="FTE:LEADER:*" class="dropdown-header"><%- t('core', 'NAVBAR:FTE:LEADER') %>
-          <li data-online data-privilege="FTE:LEADER:VIEW"><a href="#fte/leader"><%- t('core', 'NAVBAR:FTE:LEADER:LIST') %></a>
-          <li data-online data-privilege="FTE:LEADER:MANAGE"><a href="#fte/leader/current"><%- t('core', 'NAVBAR:FTE:LEADER:CURRENT') %></a>
+          <li data-privilege="FTE:LEADER:VIEW"><a href="#fte/leader"><%- t('core', 'NAVBAR:FTE:LEADER:LIST') %></a>
+          <li data-privilege="FTE:LEADER:MANAGE"><a href="#fte/leader/current"><%- t('core', 'NAVBAR:FTE:LEADER:CURRENT') %></a>
         </ul>
       <li data-online data-privilege="HOURLY_PLANS:VIEW"><a href="#hourlyPlans"><%- t('core', 'NAVBAR:HOURLY_PLANS') %></a>
-      <li data-online data-privilege="PRESS_WORKSHEETS:VIEW"><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a>
-      <li data-online data-privilege="PROD_DOWNTIMES:VIEW"><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD_DOWNTIMES') %></a>
+      <li data-online class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown">
+          <%- t('core', 'NAVBAR:PROD') %>
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li data-privilege="PRESS_WORKSHEETS:VIEW"><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a>
+          <li data-privilege="PROD_DATA:VIEW"><a href="#prodLogEntries"><%- t('core', 'NAVBAR:PROD:LOG_ENTRIES') %></a>
+          <li data-privilege="PROD_DATA:VIEW" class="disabled"><a href="#prodShifts"><%- t('core', 'NAVBAR:PROD:SHIFTS') %></a>
+          <li data-privilege="PROD_DOWNTIMES:VIEW"><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD:DOWNTIMES') %></a>
+          <li data-privilege="PROD_DATA:VIEW" class="disabled"><a href="#prodShiftOrders"><%- t('core', 'NAVBAR:PROD:SHIFT_ORDERS') %></a>
+        </ul>
       <li data-online class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown">
           <%- t('core', 'NAVBAR:DICTIONARIES') %>

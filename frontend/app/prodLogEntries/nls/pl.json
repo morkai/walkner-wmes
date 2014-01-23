@@ -1,0 +1,48 @@
+{
+  "BREADCRUMBS:browse": "Historia operacji na liniach produkcyjnych",
+
+  "MSG:LOADING_FAILURE": "Ładowanie zmian produkcyjnych nie powiodło się :(",
+
+  "FILTER:DATE:FROM": "Od",
+  "FILTER:DATE:TO": "Do",
+  "FILTER:LIMIT": "Limit",
+  "FILTER:BUTTON": "Filtruj historię",
+  "FILTER:PLACEHOLDER:type": "Dowolny typ",
+  "FILTER:PLACEHOLDER:prodLine": "Dowolna linia produkcyjna",
+
+  "PROPERTY:prodLine": "Linia produkcyjna",
+  "PROPERTY:type": "Typ",
+  "PROPERTY:createdAt": "Czas zmiany",
+  "PROPERTY:creator": "Wykonawca zmiany",
+  "PROPERTY:data": "Dodatkowe informacje",
+  "PROPERTY:prodShift": "Zmiana",
+  "PROPERTY:prodShiftOrder": "Zlecenie",
+
+  "type:changeShift": "Rozpoczęcie zmiany",
+  "type:changeMaster": "Zmiana mistrza",
+  "type:changeLeader": "Zmiana lidera",
+  "type:changeOperator": "Zmiana operatora",
+  "type:changeQuantitiesDone": "Zmiana wykonanej ilości w godzinie",
+  "type:changeOrder": "Rozpoczęcie zlecenia",
+  "type:changeQuantityDone": "Zmiana wykonanej ilości w zleceniu",
+  "type:changeWorkerCount": "Zmiana ilości osób w zleceniu",
+  "type:finishOrder": "Zakończenie zlecenia",
+  "type:startDowntime": "Rozpoczęcie przestoju",
+  "type:finishDowntime": "Zakończenie przestoju",
+  "type:endWork": "Zakończenie pracy",
+
+  "data:changeShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
+  "data:changeMaster": "Nowy mistrz: <em>{name}</em>",
+  "data:changeLeader": "Nowy lider: <em>{name}</em>",
+  "data:changeOperator": "Nowy operator: <em>{name}</em>",
+  "data:changeQuantitiesDone": "Wykonana ilość w <em>{hour}.</em> godzinie: <em>{value}</em>",
+  "data:changeOrder": "Zlecenie: <em>{orderId}</em> (<em>{orderName}</em>); operacja: <em>{operationNo}</em> (<em>{operationName}</em>)",
+  "data:changeQuantityDone": "Wykonana ilość w zleceniu: <em>{value}</em>",
+  "data:changeWorkerCount": "Ilość osób w zleceniu: <em>{value}</em>",
+  "data:finishOrder": "-",
+  "data:startDowntime": "Powód: <em>{reason}</em>; obszar odpowiedzialności: <em>{aor}</em>",
+  "data:finishDowntime": "-",
+  "data:endWork": "-",
+
+  "noData:prodShiftOrder": "<em>brak zlecenia</em>"
+}

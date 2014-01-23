@@ -1,0 +1,41 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-from"><%- t('prodLogEntries', 'FILTER:DATE:FROM') %></label>
+      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-to"><%- t('prodLogEntries', 'FILTER:DATE:TO') %></label>
+      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-prodLine"><%- t('prodLogEntries', 'PROPERTY:prodLine') %></label>
+      <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text" data-placeholder="<%- t('prodLogEntries', 'FILTER:PLACEHOLDER:prodLine') %>">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-type"><%- t('prodLogEntries', 'PROPERTY:type') %></label>
+      <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%- t('prodLogEntries', 'FILTER:PLACEHOLDER:type') %>">
+        <option></option>
+        <option value="changeShift"><%- t('prodLogEntries', 'type:changeShift') %></option>
+        <option value="changeMaster"><%- t('prodLogEntries', 'type:changeMaster') %></option>
+        <option value="changeLeader"><%- t('prodLogEntries', 'type:changeLeader') %></option>
+        <option value="changeOperator"><%- t('prodLogEntries', 'type:changeOperator') %></option>
+        <option value="changeQuantitiesDone"><%- t('prodLogEntries', 'type:changeQuantitiesDone') %></option>
+        <option value="changeOrder"><%- t('prodLogEntries', 'type:changeOrder') %></option>
+        <option value="changeQuantityDone"><%- t('prodLogEntries', 'type:changeQuantityDone') %></option>
+        <option value="changeWorkerCount"><%- t('prodLogEntries', 'type:changeWorkerCount') %></option>
+        <option value="finishOrder"><%- t('prodLogEntries', 'type:finishOrder') %></option>
+        <option value="startDowntime"><%- t('prodLogEntries', 'type:startDowntime') %></option>
+        <option value="finishDowntime"><%- t('prodLogEntries', 'type:finishDowntime') %></option>
+        <option value="endWork"><%- t('prodLogEntries', 'type:endWork') %></option>
+      </select>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-limit"><%- t('prodLogEntries', 'FILTER:LIMIT') %></label>
+      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('prodLogEntries', 'FILTER:BUTTON') %>">
+    </div>
+  </form>
+</div>
