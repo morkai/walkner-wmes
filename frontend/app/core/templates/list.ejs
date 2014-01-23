@@ -18,9 +18,9 @@
       <% } %>
       <% rows.forEach(function(row) { %>
       <tr class="list-item <%- row.className ? row.className : '' %>"
-        <% if (row.data) { %>
-        <% Object.keys(row.data).forEach(function(property) { %>
-        data-<%- property %>="<%= row.data[property] %>"
+        <% if (row.dataAttrs) { %>
+        <% Object.keys(row.dataAttrs).forEach(function(property) { %>
+        data-<%- property %>="<%= row.dataAttrs[property] %>"
         <% }) %>
         <% } %>
         <% if (row._id) { %>data-id="<%- row._id %>"<% } %>
