@@ -28,10 +28,18 @@ exports.browseRoute = function(app, Model, req, res, next)
 
       if (totalCount > 0)
       {
-        Model
-          .find(queryOptions.selector, queryOptions.fields, queryOptions)
-          .lean()
-          .exec(this.next());
+        var query = Model.find(queryOptions.selector, queryOptions.fields, queryOptions).lean();
+
+        try
+        {
+          populateQuery(query, req.rql);
+        }
+        catch (err)
+        {
+          return this.done(next, err);
+        }
+
+        query.exec(this.next());
       }
     },
     function sendResponseStep(err, models)
@@ -95,13 +103,7 @@ exports.readRoute = function(app, Model, req, res, next)
 
   try
   {
-    req.rql.selector.args.forEach(function(term)
-    {
-      if (term.name === 'populate')
-      {
-        query.populate(term.args[0], term.args[1].join(' '));
-      }
-    });
+    populateQuery(query, req.rql);
   }
   catch (err)
   {
@@ -208,3 +210,21 @@ exports.deleteRoute = function(app, Model, req, res, next)
     });
   });
 };
+
+function populateQuery(query, rql)
+{
+  rql.selector.args.forEach(function(term)
+  {
+    if (term.name === 'populate' && term.args.length > 0)
+    {
+      if (Array.isArray(term.args[1]))
+      {
+        query.populate(term.args[0], term.args[1].join(' '));
+      }
+      else
+      {
+        query.populate(term.args[0]);
+      }
+    }
+  });
+}
