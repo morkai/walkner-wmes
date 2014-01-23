@@ -12,16 +12,6 @@
     <ul class="nav navbar-nav">
       <li><a href="#"><%- t('core', 'NAVBAR:DASHBOARD') %></a>
       <li data-online data-privilege="EVENTS:VIEW"><a href="#events"><%- t('core', 'NAVBAR:EVENTS') %></a>
-      <li data-online data-privilege="ORDERS:VIEW" class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown">
-          <%- t('core', 'NAVBAR:ORDERS') %>
-          <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li data-online><a href="#mechOrders"><%- t('core', 'NAVBAR:MECH_ORDERS') %></a>
-          <li data-online><a href="#orders"><%- t('core', 'NAVBAR:OTHER_ORDERS') %></a>
-          <li data-online><a href="#emptyOrders"><%- t('core', 'NAVBAR:EMPTY_ORDERS') %></a>
-        </ul>
       <li data-online data-privilege="FTE:*" class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown">
           <%- t('core', 'NAVBAR:FTE') %>
@@ -39,26 +29,31 @@
       <li data-online data-privilege="HOURLY_PLANS:VIEW"><a href="#hourlyPlans"><%- t('core', 'NAVBAR:HOURLY_PLANS') %></a>
       <li data-online data-privilege="PRESS_WORKSHEETS:VIEW"><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a>
       <li data-online data-privilege="PROD_DOWNTIMES:VIEW"><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD_DOWNTIMES') %></a>
-      <li data-online data-privilege="USERS:VIEW"><a href="#users"><%- t('core', 'NAVBAR:USERS') %></a>
-      <li data-online data-privilege="DICTIONARIES:VIEW" class="dropdown">
+      <li data-online class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown">
           <%- t('core', 'NAVBAR:DICTIONARIES') %>
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
-          <li data-online><a href="#companies"><%- t('core', 'NAVBAR:COMPANIES') %></a>
-          <li data-online><a href="#divisions"><%- t('core', 'NAVBAR:DIVISIONS') %></a>
-          <li data-online><a href="#subdivisions"><%- t('core', 'NAVBAR:SUBDIVISIONS') %></a>
-          <li data-online><a href="#mrpControllers"><%- t('core', 'NAVBAR:MRP_CONTROLLERS') %></a>
-          <li data-online><a href="#prodFlows"><%- t('core', 'NAVBAR:PROD_FLOWS') %></a>
-          <li data-online><a href="#workCenters"><%- t('core', 'NAVBAR:WORK_CENTERS') %></a>
-          <li data-online><a href="#prodLines"><%- t('core', 'NAVBAR:PROD_LINES') %></a>
-          <li data-online><a href="#aors"><%- t('core', 'NAVBAR:AORS') %></a>
-          <li class="divider">
-          <li data-online><a href="#prodTasks"><%- t('core', 'NAVBAR:PROD_TASKS') %></a>
-          <li data-online><a href="#orderStatuses"><%- t('core', 'NAVBAR:ORDER_STATUSES') %></a>
-          <li data-online><a href="#downtimeReasons"><%- t('core', 'NAVBAR:DOWNTIME_REASONS') %></a>
-          <li data-online><a href="#lossReasons"><%- t('core', 'NAVBAR:LOSS_REASONS') %></a>
+          <li data-privilege="ORDERS:VIEW"><a href="#mechOrders"><%- t('core', 'NAVBAR:MECH_ORDERS') %></a>
+          <li data-privilege="ORDERS:VIEW"><a href="#orders"><%- t('core', 'NAVBAR:OTHER_ORDERS') %></a>
+          <li data-privilege="ORDERS:VIEW"><a href="#emptyOrders"><%- t('core', 'NAVBAR:EMPTY_ORDERS') %></a>
+          <li data-privilege="USERS:VIEW ORDERS:VIEW" class="divider">
+          <li data-privilege="USERS:VIEW"><a href="#users"><%- t('core', 'NAVBAR:USERS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW USERS:VIEW" class="divider">
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#companies"><%- t('core', 'NAVBAR:COMPANIES') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#divisions"><%- t('core', 'NAVBAR:DIVISIONS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#subdivisions"><%- t('core', 'NAVBAR:SUBDIVISIONS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#mrpControllers"><%- t('core', 'NAVBAR:MRP_CONTROLLERS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#prodFlows"><%- t('core', 'NAVBAR:PROD_FLOWS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#workCenters"><%- t('core', 'NAVBAR:WORK_CENTERS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#prodLines"><%- t('core', 'NAVBAR:PROD_LINES') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#aors"><%- t('core', 'NAVBAR:AORS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW" class="divider">
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#prodTasks"><%- t('core', 'NAVBAR:PROD_TASKS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#orderStatuses"><%- t('core', 'NAVBAR:ORDER_STATUSES') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#downtimeReasons"><%- t('core', 'NAVBAR:DOWNTIME_REASONS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW"><a href="#lossReasons"><%- t('core', 'NAVBAR:LOSS_REASONS') %></a>
         </ul>
       <li class="dropdown" data-online data-privilege="REPORTS:VIEW">
         <a class="dropdown-toggle" data-toggle="dropdown">
@@ -67,13 +62,7 @@
         </a>
         <ul class="dropdown-menu">
           <li><a href="#reports/1"><%- t('core', 'NAVBAR:REPORTS:1') %></a>
-        </ul>
-      <li class="dropdown" data-online>
-        <a class="dropdown-toggle" data-toggle="dropdown">
-          <%- t('core', 'NAVBAR:VIS') %>
-          <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
+          <li class="divider">
           <li><a href="#vis/structure"><%- t('core', 'NAVBAR:VIS:STRUCTURE') %></a>
         </ul>
     </ul>
