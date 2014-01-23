@@ -1,8 +1,10 @@
 define([
+  'app/user',
   'app/time',
   'app/broker',
   'app/socket'
 ], function(
+  user,
   time,
   broker,
   socket
@@ -134,6 +136,7 @@ define([
         type: type,
         data: data || {},
         createdAt: time.getServerMoment().toDate(),
+        creator: user.getInfo(),
         division: prodShift.get('division'),
         subdivision: prodShift.get('subdivision'),
         mrpControllers: prodShift.get('mrpControllers'),

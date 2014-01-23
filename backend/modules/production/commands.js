@@ -118,7 +118,15 @@ module.exports = function setUpProductionsCommands(app, productionModule)
             return logInvalidEntry(new Error('SECRET_KEY'), logEntryJson);
           }
 
-          logEntry.creator = creator;
+          if (!logEntry.creator)
+          {
+            logEntry.creator = creator;
+          }
+          else
+          {
+            logEntry.creator.ip = creator.ip;
+          }
+
           logEntry.todo = true;
 
           logEntryList.push(new ProdLogEntry(logEntry).toObject());
