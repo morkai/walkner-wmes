@@ -134,6 +134,7 @@ define([
     this.selectActiveNavItem();
     this.setConnectionStatus(this.socket.isConnected() ? 'online' : 'offline');
     this.hideNotAllowedEntries();
+    this.hideEmptyEntries();
   };
 
   NavbarView.prototype.serialize = function()
@@ -315,6 +316,22 @@ define([
         : user.isLoggedIn();
 
       $li[state ? 'show' : 'hide']();
+    });
+  };
+
+  NavbarView.prototype.hideEmptyEntries = function()
+  {
+    this.$('.dropdown > .dropdown-menu').each(function()
+    {
+      var $dropdownMenu = $(this);
+      var visible = false;
+
+      $dropdownMenu.children().each(function()
+      {
+        visible = visible || this.style.display !== 'none';
+      });
+
+      $dropdownMenu.parent().toggle(visible);
     });
   };
 
