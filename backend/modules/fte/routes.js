@@ -1,6 +1,5 @@
 'use strict';
 
-var step = require('h5.step');
 var lodash = require('lodash');
 var crud = require('../express/crud');
 
@@ -33,8 +32,6 @@ module.exports = function setUpFteRoutes(app, fteModule)
   );
 
   express.get('/fte/leader/:id', canViewLeader, crud.readRoute.bind(null, app, FteLeaderEntry));
-
-  express.get('/fte/calcTotals', calcTotalsRoute);
 
   function limitToDivision(req, res, next)
   {
@@ -69,52 +66,5 @@ module.exports = function setUpFteRoutes(app, fteModule)
     divisionTerm.args = ['subdivision', subdivisions];
 
     next();
-  }
-
-  function calcTotalsRoute(req, res, next)
-  {
-    if (!req.session.user.super)
-    {
-      return res.send(403);
-    }
-
-    step(
-      function()
-      {
-        calcTotals(FteMasterEntry, this.parallel());
-        calcTotals(FteLeaderEntry, this.parallel());
-      },
-      function(err)
-      {
-        if (err)
-        {
-          return next(err);
-        }
-
-        res.send(200);
-      }
-    );
-  }
-
-  function calcTotals(FteEntryModel, done)
-  {
-    FteEntryModel.find({locked: true, total: null}, function(err, fteEntries)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      step(
-        function()
-        {
-          for (var i = 0, l = fteEntries.length; i < l; ++i)
-          {
-            fteEntries[i].lock(null, this.parallel());
-          }
-        },
-        done
-      );
-    });
   }
 };
