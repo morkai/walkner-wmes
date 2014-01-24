@@ -71,7 +71,7 @@ define([
           {
             term = encodeURIComponent(term);
 
-            return '/users?select(login)&sort(login)&limit(20)&regex(login,' + term + ')';
+            return '/users?select(login)&sort(login)&limit(20)&regex(login,string:' + term + ')';
           },
           results: function(data, query)
           {
