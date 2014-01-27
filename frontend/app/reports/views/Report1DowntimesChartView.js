@@ -124,7 +124,7 @@ define([
           type: 'column',
           data: chartData.data,
           tooltip: {
-            valueSuffix: ' h'
+            valueSuffix: ' FTE'
           }
         }]
       });
