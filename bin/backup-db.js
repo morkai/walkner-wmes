@@ -1,19 +1,31 @@
 'use strict';
 
+var startTime = Date.now();
+
 var format = require('util').format;
 var exec = require('child_process').exec;
 var config = require(process.argv[2]);
-
-var dbName = 'walkner-wmes';
-var backupPath = 'd:/backups/walkner-wmes/dump';
-var mongodumpExe = 'C:/Programs/mongodb/bin/mongodump.exe';
-var zipExe = 'C:/Program Files/7-Zip/7z.exe';
 
 clean(dump);
 
 function clean(next)
 {
-  exec(format('rmdir /S /Q "%s"', backupPath), next);
+  exec(format('rmdir /S /Q "%s"', config.backupPath), function(err)
+  {
+    if (err)
+    {
+      console.error("Failed to clean the dump: %s", err.message);
+    }
+    else
+    {
+      console.log("Cleaned the dump in %s ms!", Date.now() - startTime);
+    }
+
+    if (next)
+    {
+      next();
+    }
+  });
 }
 
 function dump()
@@ -32,6 +44,8 @@ function dump()
       console.error("Failed to dump the database: %s", err.message);
       process.exit(1);
     }
+
+    console.log("Dumped the database in %s ms!", Date.now() - startTime);
 
     pack();
   });
@@ -56,8 +70,12 @@ function pack()
 
     if (err)
     {
-      console.error("Failed to zip the dump: %s", err.message);
+      console.error("Failed to pack the dump: %s", err.message);
       process.exit(1);
+    }
+    else
+    {
+      console.log("Packed the dump in %s ms!", Date.now() - startTime);
     }
   });
 }
