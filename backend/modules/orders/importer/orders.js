@@ -134,6 +134,11 @@ exports.start = function startOrdersImporterModule(app, module)
 
       if (!deepEqual(oldValue, newValue, {strict: true}))
       {
+        if (key === 'operations' && lodash.isEmpty(newValue))
+        {
+          return;
+        }
+
         different = true;
 
         orderModel.set(key, newValue);
