@@ -1,7 +1,6 @@
 define([
   'underscore',
   'jquery',
-  'd3',
   'app/time',
   'app/i18n',
   'app/core/View',
@@ -11,7 +10,6 @@ define([
 ], function(
   _,
   $,
-  d3,
   time,
   t,
   View,
