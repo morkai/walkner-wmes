@@ -22,7 +22,8 @@ exports.paths = {
   'reltime': 'vendor/reltime',
   'select2': 'vendor/select2/select2',
   'select2-lang': 'vendor/select2-lang',
-  'd3': 'vendor/d3.v3',
+  'd3': 'vendor/d3/d3.v3',
+  'd3.timeline': 'vendor/d3/d3.timeline',
   'visibly': 'vendor/visibly',
   'highcharts': 'vendor/highcharts/js/highcharts.src',
   'highcharts-noData': 'vendor/highcharts/js/modules/no-data-to-display.src'
@@ -44,9 +45,6 @@ exports.shim = {
   'select2': {
     deps: ['jquery'],
     exports: 'Select2'
-  },
-  'd3': {
-    exports: 'd3'
   },
   'visibly': {
     exports: 'visibly'
