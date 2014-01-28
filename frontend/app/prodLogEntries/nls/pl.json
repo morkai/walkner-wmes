@@ -12,8 +12,8 @@
 
   "PROPERTY:prodLine": "Linia produkcyjna",
   "PROPERTY:type": "Typ",
-  "PROPERTY:createdAt": "Czas zmiany",
-  "PROPERTY:creator": "Wykonawca zmiany",
+  "PROPERTY:createdAt": "Czas operacji",
+  "PROPERTY:creator": "Wykonawca operacji",
   "PROPERTY:data": "Dodatkowe informacje",
   "PROPERTY:prodShift": "Zmiana",
   "PROPERTY:prodShiftOrder": "Zlecenie",
