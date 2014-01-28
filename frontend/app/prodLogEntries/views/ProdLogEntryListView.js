@@ -34,7 +34,7 @@ define([
 
     serializeActions: function()
     {
-      return [];
+      return null;
     },
 
     afterRender: function()
@@ -60,7 +60,7 @@ define([
 
     refreshCollection: function(message)
     {
-      if (!message || this.collection.matchesProdLine(message.prodLine))
+      if (!message || this.collection.matches(message))
       {
         return ListView.prototype.refreshCollection.apply(this, arguments);
       }

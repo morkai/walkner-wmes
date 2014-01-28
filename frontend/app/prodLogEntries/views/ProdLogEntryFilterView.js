@@ -58,16 +58,7 @@ define([
       this.$id('prodLine').select2({
         width: '275px',
         allowClear: !user.getDivision(),
-        data: this.getApplicableProdLines(),
-        formatSelection: function(orgUnit)
-        {
-          if (orgUnit.type === 'subdivision')
-          {
-            return orgUnit.model.get('division') + ' \\ ' + orgUnit.text;
-          }
-
-          return orgUnit.text;
-        }
+        data: this.getApplicableProdLines()
       });
 
       this.$id('type').select2({
@@ -78,45 +69,13 @@ define([
 
     getApplicableProdLines: function()
     {
-      var userDivision = user.getDivision();
-      var userSubdivision = user.getSubdivision();
-
-      return prodLines
-        .filter(function(prodLine)
-        {
-          if (user.data.super || !userDivision)
-          {
-            return true;
-          }
-
-          if (userSubdivision)
-          {
-            return prodLine.get('subdivision') === userSubdivision.id;
-          }
-
-          var prodLineSubdivision = prodLine.getSubdivision();
-
-          if (!prodLineSubdivision)
-          {
-            return true;
-          }
-
-          var prodLineDivision = prodLineSubdivision.getDivision();
-
-          if (!prodLineDivision)
-          {
-            return true;
-          }
-
-          return prodLineDivision === userDivision;
-        })
-        .map(function(prodLine)
-        {
-          return {
-            id: prodLine.id,
-            text: prodLine.getLabel()
-          };
-        });
+      return prodLines.getForCurrentUser().map(function(prodLine)
+      {
+        return {
+          id: prodLine.id,
+          text: prodLine.getLabel()
+        };
+      });
     },
 
     serializeRqlQuery: function()

@@ -170,8 +170,16 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   function collectProdChanges(prodLine, logEntries, oldProdData, done)
   {
+    var types = {};
+
+    logEntries.forEach(function(logEntry)
+    {
+      types[logEntry.type] = true;
+    });
+
     var changes = {
-      prodLine: prodLine.get('_id')
+      prodLine: prodLine.get('_id'),
+      types: Object.keys(types)
     };
 
     if (logEntries.length === 1 && applySingleChange(changes, logEntries[0]))
@@ -220,6 +228,8 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
   function applySingleChange(changes, logEntry)
   {
     /*jshint -W015*/
+
+    changes.types.push(logEntry.type);
 
     switch (logEntry.type)
     {
