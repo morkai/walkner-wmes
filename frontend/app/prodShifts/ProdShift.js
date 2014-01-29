@@ -84,17 +84,11 @@ define([
 
     startShiftChangeMonitor: function()
     {
-      var currentShiftTime = this.getCurrentShiftMoment().valueOf();
-
       this.shiftChangeTimer = setTimeout(changeShift, this.getTimeToNextShift(), this);
 
       function changeShift(model)
       {
-        if (model.getCurrentShiftMoment().valueOf() !== currentShiftTime)
-        {
-          model.changeShift();
-        }
-
+        model.changeShift();
         model.startShiftChangeMonitor();
       }
     },
@@ -181,6 +175,13 @@ define([
 
     changeShift: function()
     {
+      var currentDate = this.getCurrentShiftMoment().toDate();
+
+      if (currentDate.getTime() === this.get('date').getTime())
+      {
+        return;
+      }
+
       var finishedProdShiftId = this.id || null;
 
       this.finishOrder();
@@ -189,7 +190,7 @@ define([
       this.prodShiftOrder.onShiftChanged();
 
       this.set({
-        date: this.getCurrentShiftMoment().toDate(),
+        date: currentDate,
         shift: this.getCurrentShift(),
         state: 'idle',
         quantitiesDone: [
