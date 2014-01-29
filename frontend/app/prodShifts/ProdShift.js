@@ -152,6 +152,11 @@ define([
 
     saveLocalData: function()
     {
+      if (this.isLocked())
+      {
+        return;
+      }
+
       var data = this.toJSON();
 
       delete data.division;
@@ -175,9 +180,10 @@ define([
 
     changeShift: function()
     {
-      var currentDate = this.getCurrentShiftMoment().toDate();
+      var newDate = this.getCurrentShiftMoment().toDate();
+      var oldDate = this.get('date');
 
-      if (currentDate.getTime() === this.get('date').getTime())
+      if (oldDate && newDate.getTime() === oldDate.getTime())
       {
         return;
       }
@@ -190,7 +196,7 @@ define([
       this.prodShiftOrder.onShiftChanged();
 
       this.set({
-        date: currentDate,
+        date: newDate,
         shift: this.getCurrentShift(),
         state: 'idle',
         quantitiesDone: [

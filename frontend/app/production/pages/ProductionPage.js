@@ -102,6 +102,7 @@ define([
       this.listenTo(this.model, 'unlocked', function()
       {
         this.$el.removeClass('is-locked').addClass('is-unlocked');
+        this.refreshDowntimes();
       });
 
       this.listenTo(this.model, 'change:state', function()
@@ -158,6 +159,11 @@ define([
         return this.broker
           .subscribe('production.synced', this.delayDowntimesRefresh.bind(this))
           .setLimit(1);
+      }
+
+      if (this.model.isLocked())
+      {
+        return this.listenToOnce(this.model, 'unlocked', this.delayDowntimesRefresh.bind(this));
       }
 
       this.promised(model.prodDowntimes.fetch({reset: true})).then(function()
