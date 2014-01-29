@@ -25,8 +25,9 @@ define(['d3'], function(d3) {
         rotateTicks = false,
         itemHeight = 20,
         itemMargin = 5,
-        showTodayLine = false
-        showTodayFormat = {marginTop: 25, marginBottom: 0, width: 1, color: colorCycle}
+        showTodayLine = false,
+        showTodayFormat = {marginTop: 25, marginBottom: 0, width: 1, color: colorCycle},
+        itemClassName = 'timeline-item'
       ;
 
     function timeline (gParent) {
@@ -108,23 +109,24 @@ define(['d3'], function(d3) {
             .attr("cx", getXPos)
             .attr("r", itemHeight/2)
             .attr("height", itemHeight)
+            .attr("class", itemClassName)
             .style("fill", function(d, i){ 
               if( colorPropertyName ){ 
                 return colorCycle( datum[colorPropertyName] ) 
               } 
-              return colorCycle(index);  
+              return colorCycle ? colorCycle(index) : null;
             })
             .on("mousemove", function (d, i) {
-              hover(d, index, datum);
+              hover.call(this, d, index, datum);
             })
             .on("mouseover", function (d, i) {
-              mouseover(d, i, datum);
+              mouseover.call(this, d, i, datum);
             })
             .on("mouseout", function (d, i) {
-              mouseout(d, i, datum);
+              mouseout.call(this, d, i, datum);
             })
             .on("click", function (d, i) {
-              click(d, index, datum);
+              click.call(this, d, index, datum);
             })
           ;
 
@@ -345,13 +347,19 @@ define(['d3'], function(d3) {
       if (!arguments.length) return showTodayFormat;
       showTodayFormat = todayFormat;
       return timeline;
-    }
+    };
 
     timeline.colorProperty = function(colorProp) {
       if (!arguments.length) return colorPropertyName;
       colorPropertyName = colorProp;
       return timeline;
-    }
+    };
+
+    timeline.itemClassName = function(newItemClassName) {
+      if (!arguments.length) return itemClassName;
+      itemClassName = newItemClassName;
+      return timeline;
+    };
     
     return timeline;
   };

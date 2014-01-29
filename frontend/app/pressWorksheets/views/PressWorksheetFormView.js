@@ -268,6 +268,8 @@ define([
 
     checkValidity: function(formData)
     {
+      // TODO: Make sure that the specified date is not in the future
+
       if (formData.orders.length === 0)
       {
         this.showFieldError(0, 'part');

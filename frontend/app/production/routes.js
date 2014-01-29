@@ -4,7 +4,7 @@ define([
   '../viewport',
   '../data/prodLines',
   '../data/orgUnits',
-  './ProdShift',
+  '../prodShifts/ProdShift',
   './pages/ProductionPage',
   'i18n!app/nls/production'
 ], function(
@@ -28,7 +28,9 @@ define([
     }
 
     viewport.showPage(new ProductionPage({
-      model: new ProdShift(orgUnits.getAllForProdLine(prodLine))
+      model: new ProdShift(orgUnits.getAllForProdLine(prodLine), {
+        production: true
+      })
     }));
   });
 

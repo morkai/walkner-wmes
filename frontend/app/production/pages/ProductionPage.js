@@ -3,7 +3,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/data/prodLog',
-  '../ProdShift',
+  'app/prodShifts/ProdShift',
   '../views/ProductionControlsView',
   '../views/ProductionHeaderView',
   '../views/ProductionDataView',
@@ -72,8 +72,6 @@ define([
     {
       this.model.readLocalData();
       this.model.startShiftChangeMonitor();
-
-window.model = this.model;
     },
 
     defineViews: function()

@@ -1,0 +1,48 @@
+{
+  "BREADCRUMBS:browse": "Zmiany",
+  "BREADCRUMBS:details": "{date}, {shift}",
+
+  "MSG:LOADING_FAILURE": "Ładowanie historii zmian nie powiodło się :(",
+
+  "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
+
+  "PANEL:TITLE:details": "Szczegóły zmiany",
+
+  "FILTER:DATE:FROM": "Od",
+  "FILTER:DATE:TO": "Do",
+  "FILTER:LIMIT": "Limit",
+  "FILTER:BUTTON": "Filtruj historię",
+  "FILTER:PLACEHOLDER:type": "Dowolny typ",
+  "FILTER:PLACEHOLDER:prodLine": "Dowolna linia produkcyjna",
+
+  "PROPERTY:prodLine": "Linia produkcyjna",
+  "PROPERTY:type": "Typ",
+  "PROPERTY:createdAt": "Czas rozpoczęcia",
+  "PROPERTY:creator": "Rozpoczynający",
+  "PROPERTY:date": "Data",
+  "PROPERTY:shift": "Zmiana",
+  "PROPERTY:master": "Mistrz",
+  "PROPERTY:leader": "Lider",
+  "PROPERTY:operator": "Operator",
+  "PROPERTY:quantitiesDone": "Wykonane ilości",
+  "PROPERTY:totalQuantityDone": "Wykonana ilość",
+
+  "totalQuantityDone": "{actual} z {planned}",
+
+  "timeline:title": "Oś czasu",
+  "timeline:popover:idle": "Bezczynność",
+  "timeline:popover:working": "Zlecenie",
+  "timeline:popover:downtime": "Przestój",
+  "timeline:popover:startedAt": "Czas rozpoczęcia",
+  "timeline:popover:finishedAt": "Czas zakończenia",
+  "timeline:popover:duration": "Czas trwania",
+  "timeline:popover:order": "Zlecenie",
+  "timeline:popover:operation": "Operacja",
+  "timeline:popover:reason": "Powód",
+  "timeline:popover:aor": "Obszar",
+
+  "charts:quantitiesDone:title": "Wykonane ilości w przedziałach godzinowych",
+  "charts:quantitiesDone:unit": " szt.",
+  "charts:quantitiesDone:series:planned": "Plan",
+  "charts:quantitiesDone:series:actual": "Wykonane"
+}

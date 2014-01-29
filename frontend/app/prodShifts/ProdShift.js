@@ -1,6 +1,5 @@
 define([
   'underscore',
-  'moment',
   '../user',
   '../time',
   '../socket',
@@ -10,10 +9,9 @@ define([
   '../data/prodLog',
   '../prodDowntimes/ProdDowntime',
   '../prodDowntimes/ProdDowntimeCollection',
-  './ProdShiftOrder'
+  '../production/ProdShiftOrder'
 ], function(
   _,
-  moment,
   user,
   time,
   socket,
@@ -31,9 +29,15 @@ define([
 
   return Model.extend({
 
-    urlRoot: '/prodShift',
+    urlRoot: '/prodShifts',
 
-    clientUrlRoot: '#prodShift',
+    clientUrlRoot: '#prodShifts',
+
+    topicPrefix: 'prodShifts',
+
+    privilegePrefix: 'PROD_DATA',
+
+    nlsDomain: 'prodShifts',
 
     defaults: {
       division: null,
@@ -53,16 +57,19 @@ define([
       operator: null
     },
 
-    initialize: function()
+    initialize: function(attributes, options)
     {
-      this.prodLine = prodLines.get(this.get('prodLine'));
+      if (options && options.production)
+      {
+        this.prodLine = prodLines.get(this.get('prodLine'));
 
-      this.prodShiftOrder = new ProdShiftOrder();
+        this.prodShiftOrder = new ProdShiftOrder();
 
-      this.prodDowntimes = new ProdDowntimeCollection(null, {
-        paginate: false,
-        rqlQuery: 'sort(-startedAt)&limit(8)&prodLine=' + encodeURIComponent(this.prodLine.id)
-      });
+        this.prodDowntimes = new ProdDowntimeCollection(null, {
+          paginate: false,
+          rqlQuery: 'sort(-startedAt)&limit(8)&prodLine=' + encodeURIComponent(this.prodLine.id)
+        });
+      }
     },
 
     sync: function(method)
