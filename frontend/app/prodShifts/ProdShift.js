@@ -84,12 +84,18 @@ define([
 
     startShiftChangeMonitor: function()
     {
+      var currentShiftTime = this.getCurrentShiftMoment().valueOf();
+
       this.shiftChangeTimer = setTimeout(changeShift, this.getTimeToNextShift(), this);
 
       function changeShift(model)
       {
+        if (model.getCurrentShiftMoment().valueOf() !== currentShiftTime)
+        {
+          model.changeShift();
+        }
+
         model.startShiftChangeMonitor();
-        model.changeShift();
       }
     },
 
