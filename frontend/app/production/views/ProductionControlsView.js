@@ -41,10 +41,6 @@ define([
       'production.synced': function()
       {
         this.$syncControl.removeClass('fa-spin');
-      },
-      'production.syncFailed': function()
-      {
-        this.$syncControl.removeClass('fa-spin');
       }
     },
 

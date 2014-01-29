@@ -47,7 +47,7 @@ define([
 
     syncingLogEntries = null;
 
-    broker.publish('production.syncFailed', {message: 'DISCONNECT'});
+    broker.publish('production.synced', {message: 'DISCONNECT'});
   }
 
   function sync()
@@ -72,14 +72,7 @@ define([
     {
       syncingLogEntries = null;
 
-      if (err)
-      {
-        broker.publish('production.syncFailed', err);
-      }
-      else
-      {
-        broker.publish('production.synced');
-      }
+      broker.publish('production.synced', err);
 
       setTimeout(sync, 1);
     });
