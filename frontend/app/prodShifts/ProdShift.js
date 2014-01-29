@@ -184,8 +184,8 @@ define([
 
       var finishedProdShiftId = this.id || null;
 
-      this.finishOrder();
       this.finishDowntime();
+      this.finishOrder();
 
       this.prodShiftOrder.onShiftChanged();
 
@@ -345,8 +345,8 @@ define([
 
     endWork: function()
     {
-      this.finishOrder();
       this.finishDowntime();
+      this.finishOrder();
 
       this.set('state', 'idle');
 
