@@ -153,15 +153,31 @@ define([
     {
       var model = this.model;
 
-      if (!model.prodDowntimes.length)
+      if (prodLog.isSyncing())
       {
-        return;
+        return this.broker
+          .subscribe('production.synced', this.delayDowntimesRefresh.bind(this))
+          .setLimit(1);
       }
 
-      this.promised(model.prodDowntimes.fetch()).then(function()
+      this.promised(model.prodDowntimes.fetch({reset: true})).then(function()
       {
         model.saveLocalData();
       });
+    },
+
+    delayDowntimesRefresh: function()
+    {
+      if (this.timers.refreshDowntimes)
+      {
+        clearTimeout(this.timers.refreshDowntimes);
+      }
+
+      this.timers.refreshDowntimes = setTimeout(function(view)
+      {
+        view.timers.refreshDowntimes = null;
+        view.refreshDowntimes();
+      }, 2500, this);
     }
 
   });
