@@ -3,6 +3,12 @@
 module.exports = function setupProdLogEntryModel(app, mongoose)
 {
   var prodLogEntrySchema = mongoose.Schema({
+    _id: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
     type: {
       type: 'String',
       required: true
