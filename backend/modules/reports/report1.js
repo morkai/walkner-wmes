@@ -723,7 +723,7 @@ module.exports = function(mongoose, options, done)
 
     orders.forEach(function(order)
     {
-      if (typeof order.orderData === 'undefined')
+      if (!order.orderData || !order.orderData.operations)
       {
         return;
       }
