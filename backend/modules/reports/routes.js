@@ -26,7 +26,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       orgUnit: req.query.orgUnit,
       division: divisionId,
       subdivisions: getSubdivisionsByDivision(divisionId),
-      subdivisionType: req.query.subdivisionType,
+      subdivisionType: req.query.subdivisionType || null,
       ignoredDowntimeReasons: [],
       prodDivisionCount: countProdDivisions()
     };
@@ -72,10 +72,14 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   function getSubdivisionsByDivision(divisionId)
   {
-    return !divisionId ? [] : subdivisionsModule.models.filter(function(subdivision)
+    if (!divisionId)
     {
-      return subdivision.get('division') === divisionId;
-    });
+      return [];
+    }
+
+    return subdivisionsModule.models
+      .filter(function(subdivision) { return subdivision.get('division') === divisionId; })
+      .map(function(subdivision) { return subdivision.get('_id'); });
   }
 
   function countProdDivisions()

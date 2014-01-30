@@ -69,7 +69,7 @@ define([
       };
     },
 
-    parseCoeffs: function(timeToCoeffs)
+    parseCoeffs: function(coeffsList)
     {
       var series = {
         quantityDone: [],
@@ -77,42 +77,15 @@ define([
         efficiency: [],
         productivity: []
       };
-      var times = Object.keys(timeToCoeffs);
-      var timeDiff = -1;
-      var lastTime = -1;
 
-      if (times.length > 1)
+      coeffsList.forEach(function(coeffs)
       {
-        timeDiff = Date.parse(times[1]) - Date.parse(times[0]);
-      }
-
-      Object.keys(timeToCoeffs).forEach(function(time)
-      {
-        var coeffs = timeToCoeffs[time];
-
-        time = Date.parse(time);
-
-        if (lastTime !== -1 && time - lastTime > timeDiff)
-        {
-          var missingPoints = (time - lastTime) / timeDiff;
-
-          for (var i = 1; i <= missingPoints; ++i)
-          {
-            var missingPointTime = lastTime + timeDiff * i;
-
-            series.quantityDone.push({x: missingPointTime, y: 0});
-            series.downtime.push({x: missingPointTime, y: 0});
-            series.efficiency.push({x: missingPointTime, y: 0});
-            series.productivity.push({x: missingPointTime, y: 0});
-          }
-        }
+        var time = Date.parse(coeffs.key);
 
         series.quantityDone.push({x: time, y: coeffs.quantityDone || 0});
         series.downtime.push({x: time, y: Math.round((coeffs.downtime || 0) * 100)});
         series.efficiency.push({x: time, y: Math.round((coeffs.efficiency || 0) * 100)});
         series.productivity.push({x: time, y: Math.round((coeffs.productivity || 0) * 100)});
-
-        lastTime = time;
       });
 
       return series;

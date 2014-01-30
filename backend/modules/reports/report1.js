@@ -3,6 +3,13 @@
 var step = require('h5.step');
 var moment = require('moment');
 
+var INTERVAL_STR_TO_NUM = {
+  hour: 3600 * 1000,
+  shift: 8 * 3600 * 1000,
+  day: 24 * 3600 * 1000,
+  week: 7 * 24 * 3600 * 1000
+};
+
 module.exports = function(mongoose, options, done)
 {
   var ProdShift = mongoose.model('ProdShift');
@@ -12,6 +19,7 @@ module.exports = function(mongoose, options, done)
   var FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
   var results = {
+    options: options,
     coeffs: {},
     downtimes: {
       byAor: {},
@@ -32,6 +40,7 @@ module.exports = function(mongoose, options, done)
     groupFteEntriesStep,
     calcFteTotalsStep,
     calcCoeffsStep,
+    sortCoeffsStep,
     function sendResultsStep(err)
     {
       if (err)
@@ -161,7 +170,7 @@ module.exports = function(mongoose, options, done)
 
       if (results.coeffs[groupKey].quantityDone === 0)
       {
-        results.coeffs[groupKey] = undefined;
+        results.coeffs[groupKey].quantityDone = undefined;
       }
     });
 
@@ -470,6 +479,77 @@ module.exports = function(mongoose, options, done)
     setImmediate(this.next());
   }
 
+  function sortCoeffsStep()
+  {
+    /*jshint validthis:true*/
+
+    var coeffsMap = results.coeffs;
+
+    results.coeffs = [];
+
+    var groupKeys = Object.keys(coeffsMap).map(Number).sort(function(a, b) { return a - b; });
+
+    if (groupKeys.length === 0)
+    {
+      return;
+    }
+
+    function pushEmptyCoeffs(groupKey)
+    {
+      results.coeffs.push({
+        key: new Date(groupKey).toISOString()
+      });
+    }
+
+    var createNextGroupKey = createCreateNextGroupKey();
+    var lastGroupKey = createGroupKey(options.fromTime);
+
+    if (groupKeys[0] !== lastGroupKey)
+    {
+      pushEmptyCoeffs(lastGroupKey);
+    }
+
+    groupKeys.forEach(function(groupKey)
+    {
+      while (lastGroupKey < groupKey)
+      {
+        lastGroupKey = createNextGroupKey(lastGroupKey);
+
+        if (lastGroupKey >= groupKey)
+        {
+          break;
+        }
+
+        pushEmptyCoeffs(lastGroupKey);
+      }
+
+      var coeffs = coeffsMap[groupKey];
+
+      coeffs.key = new Date(groupKey).toISOString();
+
+      results.coeffs.push(coeffs);
+
+      lastGroupKey = groupKey;
+    });
+
+    setImmediate(this.next());
+  }
+
+  function createCreateNextGroupKey()
+  {
+    if (options.interval === 'month')
+    {
+      return function(groupKey)
+      {
+        var date = new Date(groupKey);
+
+        return date.setMonth(date.getMonth() + 1);
+      };
+    }
+
+    return function(groupKey) { return groupKey + INTERVAL_STR_TO_NUM[options.interval]; };
+  }
+
   function groupProdShiftOrders(prodShiftOrders, ordersToDowntimes)
   {
     var groupedProdShiftOrders = {};
@@ -700,7 +780,7 @@ module.exports = function(mongoose, options, done)
         break;
     }
 
-    return groupKey.toISOString();
+    return groupKey.valueOf();
   }
 
   function calcFteShiftStartedAt(fteEntry)
