@@ -25,7 +25,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   function isOfflineEntry()
   {
-    return !logEntry.data.orderData || !Array.isArray(logEntry.data.orderData.operations);
+    var orderData = logEntry.data.orderData;
+
+    return !orderData
+      || !orderData.operations
+      || typeof orderData.operations !== 'object'
+      || Array.isArray(orderData.operations);
   }
 
   function fillOrderData()
