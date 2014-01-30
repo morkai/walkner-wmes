@@ -1,8 +1,7 @@
-/*globals emit:true*/
-
 'use strict';
 
 var step = require('h5.step');
+var orderFinder = require('./orderFinder');
 
 module.exports = function setUpProductionRoutes(app, productionModule)
 {
@@ -116,159 +115,20 @@ module.exports = function setUpProductionRoutes(app, productionModule)
 
   function findOrdersByNo(no, res, next)
   {
-    var query;
-
-    if (no.length === 9)
-    {
-      query = Order.findById(no, {changes: 0, importTs: 0});
-    }
-    else
-    {
-      query = Order
-        .find({_id: new RegExp('^' + no)}, {changes: 0, importTs: 0, __v: 0})
-        .sort({_id: 1})
-        .limit(10);
-    }
-
-    query.lean().exec(function(err, result)
+    orderFinder.findOrdersByNo(Order, no, function(err, orders)
     {
       if (err)
       {
         return next(err);
       }
 
-      if (!result)
-      {
-        result = [];
-      }
-      else if (!Array.isArray(result))
-      {
-        result = [result];
-      }
-
-      return res.send(result);
+      return res.send(orders);
     });
   }
 
   function findOrdersByNc12(nc12, res, next)
   {
-    if (nc12.length === 12 || /[a-zA-Z]/.test(nc12))
-    {
-      return findOrderByNc12(nc12, res, next);
-    }
-
-    return findOrdersStartingWithNc12(nc12, res, next);
-  }
-
-  function findOrderByNc12(nc12, res, next)
-  {
-    var query = Order
-      .find({nc12: nc12}, {name: 1, operations: 1})
-      .sort({createdAt: -1})
-      .limit(1)
-      .lean();
-
-    query.exec(function(err, orders)
-    {
-      if (err)
-      {
-        return next(err);
-      }
-
-      if (orders.length === 1)
-      {
-        return res.send(orders.map(function(order)
-        {
-          order._id = nc12;
-
-          return order;
-        }));
-      }
-
-      findMechOrderByNc12(nc12, res, next);
-    });
-  }
-
-  function findMechOrderByNc12(nc12, res, next)
-  {
-    MechOrder.findById(nc12, {name: 1, operations: 1}).lean().exec(function(err, mechOrder)
-    {
-      if (err)
-      {
-        return next(err);
-      }
-
-      res.send(mechOrder ? [mechOrder] : []);
-    });
-  }
-
-  function findOrdersStartingWithNc12(nc12, res, next)
-  {
-    var options = {
-      query: {nc12: new RegExp('^' + nc12)},
-      out: {inline: 1},
-      sort: {nc12: 1},
-      map: function()
-      {
-        if (this.operations && this.operations.length)
-        {
-          emit(this.nc12, {
-            name: this.name,
-            operations: this.operations,
-            createdAt: this.createdAt
-          });
-        }
-      },
-      reduce: function(key, orders)
-      {
-        var latestOrder = null;
-
-        orders.forEach(function(order)
-        {
-          if (latestOrder === null || order.createdAt > latestOrder.createdAt)
-          {
-            latestOrder = order;
-          }
-        });
-
-        return latestOrder;
-      }
-    };
-
-    Order.mapReduce(options, function(err, results)
-    {
-      if (err)
-      {
-        return next(err);
-      }
-
-      if (results.length)
-      {
-        return res.send(results.map(function(result)
-        {
-          var order = result.value;
-
-          order._id = result._id;
-
-          delete order.createdAt;
-
-          return order;
-        }));
-      }
-
-      return findMechOrdersStartingWithNc12(nc12, res, next);
-    });
-  }
-
-  function findMechOrdersStartingWithNc12(nc12, res, next)
-  {
-    var query = MechOrder
-      .find({_id: new RegExp('^' + nc12)}, {name: 1, operations: 1})
-      .sort({_id: 1})
-      .limit(10)
-      .lean();
-
-    query.exec(function(err, mechOrders)
+    orderFinder.findOrdersByNc12(Order, MechOrder, nc12, function(err, mechOrders)
     {
       if (err)
       {
