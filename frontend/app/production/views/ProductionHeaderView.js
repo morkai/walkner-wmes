@@ -2,20 +2,22 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/data/prodLog',
   'app/data/views/renderOrgUnitPath',
+  'app/users/UserCollection',
   './PersonelPickerView',
   'app/production/templates/header'
 ], function(
   t,
   viewport,
   View,
+  prodLog,
   renderOrgUnitPath,
+  UserCollection,
   PersonelPickerView,
   headerTemplate
 ) {
   'use strict';
-
-  // TODO: Sync missing personel data on connect
 
   return View.extend({
 
@@ -35,7 +37,8 @@ define([
       'mrpControllers.synced': 'updateOrgUnit',
       'prodFlows.synced': 'updateOrgUnit',
       'workCenters.synced': 'updateOrgUnit',
-      'prodLines.synced': 'updateOrgUnit'
+      'prodLines.synced': 'updateOrgUnit',
+      'socket.connected': 'fillPersonnelData'
     },
 
     events: {
@@ -72,6 +75,11 @@ define([
       this.updateMaster();
       this.updateLeader();
       this.updateOperator();
+
+      if (this.socket.isConnected())
+      {
+        this.fillPersonnelData();
+      }
     },
 
     updatePageHeader: function()
@@ -222,6 +230,81 @@ define([
       });
 
       viewport.showDialog(personelPickerView, t('production', 'personelPicker:title:' + type));
+    },
+
+    fillPersonnelData: function()
+    {
+      var missingPersonellIds = [];
+      var missingPersonnelProperties = [];
+      var model = this.model;
+
+      ['master', 'leader', 'operator'].forEach(function(personnelProperty)
+      {
+        var userInfo = model.get(personnelProperty);
+
+        if (userInfo && userInfo.id === null && userInfo.label.trim().length > 0)
+        {
+          missingPersonellIds.push(userInfo.label);
+          missingPersonnelProperties.push(personnelProperty);
+        }
+      });
+
+      if (missingPersonellIds.length > 0)
+      {
+        this.fillUserInfo(missingPersonellIds, missingPersonnelProperties);
+      }
+    },
+
+    fillUserInfo: function(missingPersonellIds, missingPersonnelProperties)
+    {
+      if (prodLog.isSyncing())
+      {
+        return this.broker
+          .subscribe('production.synced', this.fillPersonnelData.bind(this))
+          .setLimit(1);
+      }
+
+      var users = new UserCollection(null, {
+        rqlQuery: {
+          fields: {
+            firstName: 1,
+            lastName: 1,
+            personellId: 1
+          },
+          selector: {
+            name: missingPersonellIds.length > 1 ? 'in' : 'eq',
+            args: [
+              'personellId',
+              missingPersonellIds.length > 1 ? missingPersonellIds : missingPersonellIds[0]
+            ]
+          }
+        }
+      });
+
+      var model = this.model;
+
+      this.promised(users.fetch()).then(function()
+      {
+        var updates = 0;
+
+        missingPersonellIds.forEach(function(personellId, i)
+        {
+          var user = users.findWhere({personellId: personellId});
+
+          if (user)
+          {
+            model.set(missingPersonnelProperties[i], {
+              id: user.id,
+              label: user.get('firstName') + ' ' + user.get('lastName')
+            });
+          }
+        });
+
+        if (updates)
+        {
+          model.saveLocalData();
+        }
+      });
     }
 
   });
