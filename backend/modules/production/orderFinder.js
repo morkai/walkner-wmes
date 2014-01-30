@@ -6,7 +6,7 @@ exports.findOrdersByNo = function(Order, no, done)
 
   if (no.length === 9)
   {
-    query = Order.findById(no, {changes: 0, importTs: 0});
+    query = Order.findById(no, {changes: 0, importTs: 0, __v: 0});
   }
   else
   {
@@ -164,6 +164,6 @@ function findMechOrdersStartingWithNc12(MechOrder, nc12, done)
       return done(err);
     }
 
-    return done(mechOrders);
+    return done(null, mechOrders);
   });
 }
