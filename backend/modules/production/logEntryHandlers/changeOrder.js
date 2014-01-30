@@ -1,5 +1,6 @@
 'use strict';
 
+var lodash = require('lodash');
 var orderFinder = require('../orderFinder');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
@@ -30,7 +31,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     return !orderData
       || !orderData.operations
       || typeof orderData.operations !== 'object'
-      || Array.isArray(orderData.operations);
+      || Array.isArray(orderData.operations)
+      || lodash.isEmpty(orderData.operations);
   }
 
   function fillOrderData()
