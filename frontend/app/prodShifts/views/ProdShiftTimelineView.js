@@ -137,19 +137,30 @@ define([
       var i = 0;
       var l = this.collection.length;
 
+      var orderToItemMap = {};
       var idles = [];
       var orders = [];
       var downtimes = [];
 
       function pushDatum(type, list, prodLogEntry, startingTime)
       {
-        list.push({
+        var item = {
           type: type,
           prodLogEntry: prodLogEntry,
           starting_time: startingTime,
           ending_time: -1,
           ended: true
-        });
+        };
+
+        list.push(item);
+
+        if (type === 'working')
+        {
+          item.quantityDone = 0;
+          item.workerCount = 0;
+
+          orderToItemMap[prodLogEntry.get('prodShiftOrder')] = item;
+        }
       }
 
       for (; i < l; ++i)
@@ -157,6 +168,7 @@ define([
         var prodLogEntry = this.collection.at(i);
         var type = prodLogEntry.get('type');
         var data = prodLogEntry.get('data');
+        var item;
 
         if (this.beginning === -1)
         {
@@ -197,6 +209,24 @@ define([
 
           case 'endWork':
             pushDatum('idle', idles, prodLogEntry, Date.parse(prodLogEntry.get('createdAt')));
+            break;
+
+          case 'changeQuantityDone':
+            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+
+            if (item)
+            {
+              item.quantityDone = prodLogEntry.get('data').newValue;
+            }
+            break;
+
+          case 'changeWorkerCount':
+            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+
+            if (item)
+            {
+              item.workerCount = prodLogEntry.get('data').newValue;
+            }
             break;
         }
       }
@@ -321,6 +351,8 @@ define([
       {
         templateData.order = prodLogEntryData.orderId;
         templateData.operation = prodLogEntryData.operationNo;
+        templateData.workerCount = item.workerCount;
+        templateData.quantityDone = item.quantityDone;
 
         return renderTimelineWorkingPopover(templateData);
       }

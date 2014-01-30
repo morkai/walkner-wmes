@@ -40,6 +40,8 @@
   "timeline:popover:operation": "Operacja",
   "timeline:popover:reason": "Powód",
   "timeline:popover:aor": "Obszar",
+  "timeline:popover:workerCount": "Ilość osób",
+  "timeline:popover:quantityDone": "Ilość wykonana",
 
   "charts:quantitiesDone:title": "Wykonane ilości w przedziałach godzinowych",
   "charts:quantitiesDone:unit": " szt.",
