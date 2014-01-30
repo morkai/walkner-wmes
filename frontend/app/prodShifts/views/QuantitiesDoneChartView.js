@@ -83,6 +83,8 @@ define([
           data: chartData.actual
         }]
       });
+
+      this.chart.reflow();
     },
 
     updateChart: function()
