@@ -75,50 +75,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           app.broker.publish('prodDowntimes.created.' + prodLine.get('_id'), prodDowntime.toJSON());
         }
 
-        // TODO: Remove after a while
-        fixOrgUnits(prodDowntime);
-
         done(err);
       });
-    });
-  }
-
-  function fixOrgUnits(prodDowntime)
-  {
-    var prodLine = prodDowntime.get('prodLine');
-    var conditions = {
-      prodLine: prodLine,
-      workCenter: null
-    };
-    var update = {
-      $set: {
-        division: prodDowntime.get('division'),
-        subdivision: prodDowntime.get('subdivision'),
-        mrpControllers: prodDowntime.get('mrpControllers'),
-        prodFlow: prodDowntime.get('prodFlow'),
-        workCenter: prodDowntime.get('workCenter')
-      }
-    };
-    var options = {
-      multi: true
-    };
-
-    ProdDowntime.update(conditions, update, options, function(err, count)
-    {
-      if (err)
-      {
-        productionModule.error(
-          "Failed to update org units of prod downtimes for prod line [%s]: %s",
-          prodLine,
-          err.stack
-        );
-      }
-      else if (count > 0)
-      {
-        productionModule.debug(
-          "Updated [%d] org units of prod downtimes for prod line [%s].", count, prodLine
-        );
-      }
     });
   }
 };

@@ -44,49 +44,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         );
       }
 
-      // TODO: Remove after a while
-      fixOrgUnits();
-
       return done(err);
     });
   });
-
-  function fixOrgUnits()
-  {
-    var prodLine = prodShiftOrder.get('prodLine');
-    var conditions = {
-      prodLine: prodLine,
-      workCenter: null
-    };
-    var update = {
-      $set: {
-        division: prodShiftOrder.get('division'),
-        subdivision: prodShiftOrder.get('subdivision'),
-        mrpControllers: prodShiftOrder.get('mrpControllers'),
-        prodFlow: prodShiftOrder.get('prodFlow'),
-        workCenter: prodShiftOrder.get('workCenter')
-      }
-    };
-    var options = {
-      multi: true
-    };
-
-    ProdShiftOrder.update(conditions, update, options, function(err, count)
-    {
-      if (err)
-      {
-        productionModule.error(
-          "Failed to update org units of prod shift orders for prod line [%s]: %s",
-          prodLine,
-          err.stack
-        );
-      }
-      else if (count > 0)
-      {
-        productionModule.debug(
-          "Updated [%d] org units of prod shift orders for prod line [%s].", count, prodLine
-        );
-      }
-    });
-  }
 };
