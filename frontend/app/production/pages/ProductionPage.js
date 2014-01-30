@@ -72,6 +72,8 @@ define([
     {
       this.model.readLocalData();
       this.model.startShiftChangeMonitor();
+
+      window.PROD_MODEL = this.model;
     },
 
     defineViews: function()

@@ -77,21 +77,7 @@ define([
 
     onOrderChanged: function(prodShift, orderData, operationNo)
     {
-      var operations = {};
-
-      if (Array.isArray(orderData.operations))
-      {
-        orderData.operations.forEach(function(operation)
-        {
-          operations[operation.no] = operation;
-        });
-      }
-      else if (_.isObject(orderData.operations))
-      {
-        operations = orderData.operations;
-      }
-
-      orderData.operations = operations;
+      this.prepareOperations(orderData);
 
       this.set({
         prodShift: prodShift.id,
@@ -306,6 +292,27 @@ define([
         _id: this.id,
         finishedAt: finishedAt
       };
+    },
+
+    prepareOperations: function(orderData)
+    {
+      var operations = {};
+
+      if (Array.isArray(orderData.operations))
+      {
+        orderData.operations.forEach(function(operation)
+        {
+          operations[operation.no] = operation;
+        });
+      }
+      else if (_.isObject(orderData.operations))
+      {
+        operations = orderData.operations;
+      }
+
+      orderData.operations = operations;
+
+      return orderData;
     }
 
   });

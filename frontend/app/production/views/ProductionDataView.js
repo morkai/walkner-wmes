@@ -5,6 +5,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/views/DialogView',
+  'app/data/prodLog',
   './NewOrderPickerView',
   './DowntimePickerView',
   './EndWorkDialogView',
@@ -19,6 +20,7 @@ define([
   viewport,
   View,
   DialogView,
+  prodLog,
   NewOrderPickerView,
   DowntimePickerView,
   EndWorkDialogView,
@@ -33,6 +35,10 @@ define([
   return View.extend({
 
     template: dataTemplate,
+
+    localTopics: {
+      'socket.connected': 'fillOrderData'
+    },
 
     events: {
       'click .production-newOrder': 'showNewOrderDialog',
@@ -74,6 +80,11 @@ define([
       this.updateOrderInfo();
       this.updateQuantityDone();
       this.toggleActions();
+
+      if (this.socket.isConnected())
+      {
+        this.fillOrderData();
+      }
     },
 
     updateOrderInfo: function()
@@ -367,6 +378,65 @@ define([
         this.model.prodShiftOrder.getWorkerCount(),
         'changeWorkerCount'
       );
+    },
+
+    fillOrderData: function()
+    {
+      var orderId = this.model.prodShiftOrder.get('orderId');
+      var orderData = this.model.prodShiftOrder.get('orderData');
+
+      if (orderId && (!orderData || _.isEmpty(orderData.operations)))
+      {
+        if (prodLog.isSyncing())
+        {
+          return this.broker
+            .subscribe('production.synced', this.fillOrderData.bind(this))
+            .setLimit(1);
+        }
+
+        this.fetchOrderData();
+      }
+    },
+
+    fetchOrderData: function()
+    {
+      var view = this;
+      var model = this.model;
+      var searchProperty = model.prodShiftOrder.get('mechOrder') ? 'nc12' : 'no';
+      var orderId = model.prodShiftOrder.get('orderId');
+
+      var req = $.ajax({
+        type: 'GET',
+        url: '/production/orders?' + searchProperty + '=' + encodeURIComponent(orderId)
+      });
+
+      this.promised(req).then(function(orders)
+      {
+        if (!Array.isArray(orders) || !orders.length)
+        {
+          return;
+        }
+
+        var orderData = orders[0];
+
+        if (searchProperty === 'no')
+        {
+          orderData.no = orderData._id;
+        }
+        else
+        {
+          orderData.nc12 = orderData._id;
+          orderData.no = null;
+        }
+
+        delete orderData._id;
+
+        model.prodShiftOrder.set('orderData', model.prodShiftOrder.prepareOperations(orderData));
+        model.saveLocalData();
+
+        view.updateOrderData();
+        view.updateOrderInfo();
+      });
     }
 
   });
