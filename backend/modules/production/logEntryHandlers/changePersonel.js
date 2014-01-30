@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(personelProperty)
+module.exports = function(personnelProperty)
 {
   return function(app, productionModule, prodLine, logEntry, done)
   {
@@ -11,7 +11,7 @@ module.exports = function(personelProperty)
         productionModule.error(
           "Failed to get the prod shift [%s] to change the %s: %s",
           logEntry.prodShift,
-          personelProperty,
+          personnelProperty,
           err.stack
         );
 
@@ -47,7 +47,7 @@ module.exports = function(personelProperty)
             productionModule.error(
               "Failed to find the user [%s] to fill the %s info (prodLogEntry=[%s]): %s",
               personellId,
-              personelProperty,
+              personnelProperty,
               logEntry._id,
               err.stack
             );
@@ -59,7 +59,7 @@ module.exports = function(personelProperty)
           {
             productionModule.warn(
               "Couldn't find a %s by personellId=[%s] (prodLogEntry=[%s]) :(",
-              personelProperty,
+              personnelProperty,
               personellId,
               logEntry._id
             );
@@ -80,7 +80,7 @@ module.exports = function(personelProperty)
 
     function updateProdShift(prodShift)
     {
-      prodShift.set(personelProperty, logEntry.data);
+      prodShift.set(personnelProperty, logEntry.data);
 
       prodShift.save(function(err)
       {
@@ -89,7 +89,7 @@ module.exports = function(personelProperty)
           productionModule.error(
             "Failed to save the prod shift [%s] after changing the %s: %s",
             prodShift.get('_id'),
-            personelProperty,
+            personnelProperty,
             err.stack
           );
         }

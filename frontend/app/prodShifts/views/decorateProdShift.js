@@ -43,7 +43,7 @@ define([
         : '?';
     }
 
-    if (options.personell)
+    if (options.personnel)
     {
       prodShift.master = renderUserInfo({userInfo: prodShift.master});
       prodShift.leader = renderUserInfo({userInfo: prodShift.leader});

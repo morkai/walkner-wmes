@@ -119,20 +119,20 @@ define([
 
     updateMaster: function()
     {
-      this.updatePersonel('master');
+      this.updatePersonnel('master');
     },
 
     updateLeader: function()
     {
-      this.updatePersonel('leader');
+      this.updatePersonnel('leader');
     },
 
     updateOperator: function()
     {
-      this.updatePersonel('operator');
+      this.updatePersonnel('operator');
     },
 
-    updatePersonel: function(type)
+    updatePersonnel: function(type)
     {
       var unlocked = !this.model.isLocked();
       var userInfo = this.model.get(type);

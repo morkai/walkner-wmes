@@ -331,7 +331,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
    */
 
   /**
-   * @typedef {object} ChangePersonelMessageData
+   * @typedef {object} ChangePersonnelMessageData
    * @property {string|null} id
    * @property {string} label
    */

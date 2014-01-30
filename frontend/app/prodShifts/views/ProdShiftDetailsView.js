@@ -29,7 +29,7 @@ define([
       return {
         model: decorateProdShift(this.model, {
           orgUnits: true,
-          personell: true
+          personnel: true
         }),
         totalQuantityDone: totalQuantityDone
       };
