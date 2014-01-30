@@ -1,0 +1,1 @@
+define(["../router","../viewport","../user","./pages/ProdShiftListPage","i18n!app/nls/prodShifts"],function(e,t,n,r){var i=n.auth("PROD_DATA:VIEW");e.map("/prodShifts",i,function(e){t.showPage(new r({rql:e.rql}))}),e.map("/prodShifts/:id",i,function(e){t.loadPage("app/prodShifts/pages/ProdShiftDetailsPage",function(t){return new t({modelId:e.params.id})})})});

@@ -1,0 +1,1 @@
+define(["app/divisions/DivisionCollection","./createStorage"],function(e,t){return t("DIVISIONS","divisions",e)});

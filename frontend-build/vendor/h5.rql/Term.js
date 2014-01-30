@@ -1,0 +1,1 @@
+define(["require","exports","module"],function(e,t,n){function r(e,t){this.name=e||null,this.args=t||[]}n.exports=r});

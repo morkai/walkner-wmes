@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){return e.extend({urlRoot:"/prodLogEntries",clientUrlRoot:"#prodLogEntries",topicPrefix:"prodLogEntries",privilegePrefix:"PROD_DATA",nlsDomain:"prodLogEntries",defaults:{type:null}})});

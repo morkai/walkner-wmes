@@ -1,0 +1,7 @@
+/**
+ * @license RequireJS i18n 2.0.4 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
+ * Available via the MIT or new BSD license.
+ * see: http://github.com/requirejs/i18n for details
+ */
+
+!function(){function e(e,t,n,r,i,o){t[e]&&(n.push(e),(t[e]===!0||1===t[e])&&r.push(i+e+"/"+o))}function t(e,t,n,r,i){var o=r+t+"/"+i;require._fileExists(e.toUrl(o+".js"))&&n.push(o)}function n(e,t,r){var i;for(i in t)!t.hasOwnProperty(i)||e.hasOwnProperty(i)&&!r?"object"==typeof t[i]&&(!e[i]&&t[i]&&(e[i]={}),n(e[i],t[i],r)):e[i]=t[i]}var r=/(^.*(^|\/)nls(\/|$))([^\/]*)\/?([^\/]*)/;define(["module"],function(i){var o=i.config?i.config():{};return{version:"2.0.4",load:function(i,a,s,l){l=l||{},l.locale&&(o.locale=l.locale);var u,c,d,p=r.exec(i),h=p[1],f=p[4],m=p[5],g=f.split("-"),v=[],y={},b="";if(p[5]?(h=p[1],u=h+m):(u=i,m=p[4],f=o.locale,f||(f=o.locale="undefined"==typeof navigator?"root":(navigator.language||navigator.userLanguage||"root").toLowerCase()),g=f.split("-")),l.isBuild){for(v.push(u),t(a,"root",v,h,m),c=0;c<g.length;c++)d=g[c],b+=(b?"-":"")+d,t(a,b,v,h,m);a(v,function(){s()})}else a([u],function(t){var r,i=[];for(e("root",t,i,v,h,m),c=0;c<g.length;c++)r=g[c],b+=(b?"-":"")+r,e(b,t,i,v,h,m);a(v,function(){var e,r,o;for(e=i.length-1;e>-1&&i[e];e--)o=i[e],r=t[o],(r===!0||1===r)&&(r=a(h+o+"/"+m)),n(y,r);s(y)})})}}})}();

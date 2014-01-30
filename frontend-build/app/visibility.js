@@ -1,0 +1,1 @@
+define(["jquery","visibly","app/broker"],function(e,t,n){var r={visible:!t.hidden()};return t.onVisible(function(){r.visible=!0,n.publish("visibility.visible",r)}),t.onHidden(function(){r.visible=!1,n.publish("visibility.hidden",r)}),r});

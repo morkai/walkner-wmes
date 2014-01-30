@@ -1,0 +1,1 @@
+define(["app/data/views/renderOrgUnitPath","app/core/views/ListView","./decorateProdFlow","i18n!app/nls/prodTasks"],function(e,t,n){return t.extend({columns:["subdivision","mrpControllers","name"],serializeRows:function(){return this.collection.map(function(e){return n(e,!0)})}})});

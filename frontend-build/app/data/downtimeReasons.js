@@ -1,0 +1,1 @@
+define(["app/downtimeReasons/DowntimeReasonCollection","./createStorage"],function(e,t){return t("DOWNTIME_REASONS","downtimeReasons",e)});

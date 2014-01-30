@@ -1,0 +1,1 @@
+define(["underscore","app/i18n","app/user","app/data/views/renderOrgUnitPath","app/core/views/ListView","i18n!app/nls/prodTasks"],function(e,t,n,i,r){return r.extend({columns:["subdivision","_id","description"],serializeRows:function(){return this.collection.map(function(e){var t=e.toJSON();return t.subdivision=i(e,!0),t})}})});

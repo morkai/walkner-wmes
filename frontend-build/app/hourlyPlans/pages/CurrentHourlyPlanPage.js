@@ -1,0 +1,1 @@
+define(["app/i18n","app/core/View","../views/CurrentHourlyPlanView","i18n!app/nls/hourlyPlans"],function(e,t,n){return t.extend({layoutName:"page",pageId:"currentHourlyPlan",breadcrumbs:[{label:e.bound("hourlyPlans","BREADCRUMBS:entryList"),href:"#hourlyPlans"},e.bound("hourlyPlans","BREADCRUMBS:currentEntry")],initialize:function(){this.view=new n}})});

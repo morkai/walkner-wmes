@@ -1,0 +1,1 @@
+define(["../core/Collection","./DowntimeReason"],function(e,t){return e.extend({model:t,rqlQuery:"select(label,pressPosition,report1)&sort(_id)"})});

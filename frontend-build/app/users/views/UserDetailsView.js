@@ -1,0 +1,1 @@
+define(["app/i18n","app/core/views/DetailsView","./decorateUser","app/users/templates/details","i18n!app/nls/users"],function(e,t,n,r){return t.extend({template:r,localTopics:{"companies.synced":"render","aors.synced":"render"},serialize:function(){var e=t.prototype.serialize.call(this);return n(e.model),e}})});

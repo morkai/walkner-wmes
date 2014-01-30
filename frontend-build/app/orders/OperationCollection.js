@@ -1,0 +1,1 @@
+define(["../core/Collection","./Operation"],function(e,t){return e.extend({model:t})});

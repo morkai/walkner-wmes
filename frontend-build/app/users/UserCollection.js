@@ -1,0 +1,1 @@
+define(["../core/Collection","./User"],function(e,t){return e.extend({model:t,rqlQuery:"select(personellId,lastName,firstName,company,orgUnitType,orgUnitId,prodFunction)&sort(+lastName,+firstName)&limit(15)"})});

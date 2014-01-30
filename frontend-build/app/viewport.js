@@ -1,0 +1,1 @@
+define(["app/broker","app/core/Viewport"],function(e,t){var n=new t({el:document.body,selector:"#app-viewport"});return e.subscribe("router.executing",function(){window.scrollTo(0,0)}),window.viewport=n,n});

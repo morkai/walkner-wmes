@@ -1,0 +1,1 @@
+define(["../i18n","../core/Collection","./EventType"],function(e,t,i){return t.extend({model:i,parse:function(t){return t.map(function(t){return{value:t,label:e.bound("events","TYPE:"+t)}})}})});

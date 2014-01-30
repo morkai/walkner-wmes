@@ -1,0 +1,1 @@
+define(["../router","../viewport","../user","./pages/EventListPage"],function(e,t,i,n){e.map("/events",i.auth("EVENTS:VIEW"),function(e){t.showPage(new n({rql:e.rql}))})});

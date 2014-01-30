@@ -1,0 +1,1 @@
+define(["app/nls/locale/en"],function(e){var t={locale:{}};return t.locale.en=e,{root:{},pl:!0}});

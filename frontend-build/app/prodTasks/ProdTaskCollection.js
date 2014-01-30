@@ -1,0 +1,1 @@
+define(["../core/Collection","./ProdTask"],function(e,t){return e.extend({model:t,rqlQuery:"select(name,tags,fteDiv)&sort(name)&limit(15)"})});

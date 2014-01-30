@@ -1,0 +1,1 @@
+define(["require","exports","module"],function(e,t,n){function r(){}n.exports=r,r.prototype.destroy=function(){},r.prototype.sandbox=function(){},r.prototype.publish=function(){},r.prototype.subscribe=function(){},r.prototype.unsubscribe=function(){}});

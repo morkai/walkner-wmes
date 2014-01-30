@@ -1,0 +1,1 @@
+define(["app/orderStatuses/OrderStatusCollection","./createStorage"],function(e,t){return t("ORDER_STATUSES","orderStatuses",e)});

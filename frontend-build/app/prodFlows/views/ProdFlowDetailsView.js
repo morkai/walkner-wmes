@@ -1,0 +1,1 @@
+define(["app/core/views/DetailsView","./decorateProdFlow","app/prodFlows/templates/details","i18n!app/nls/prodFlows"],function(e,t,n){return e.extend({template:n,localTopics:{"divisions.synced":"render","subdivisions.synced":"render","mrpControllers.synced":"render"},serialize:function(){return t(this.model)}})});

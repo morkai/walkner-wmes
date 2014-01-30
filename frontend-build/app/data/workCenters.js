@@ -1,0 +1,1 @@
+define(["app/workCenters/WorkCenterCollection","./createStorage"],function(e,t){return t("WORK_CENTERS","workCenters",e)});

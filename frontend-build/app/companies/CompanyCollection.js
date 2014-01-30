@@ -1,0 +1,1 @@
+define(["../core/Collection","./Company"],function(e,n){return e.extend({model:n,rqlQuery:"select(name)&sort(_id)"})});

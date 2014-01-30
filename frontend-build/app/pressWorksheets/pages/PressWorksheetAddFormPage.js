@@ -1,0 +1,1 @@
+define(["jquery","app/core/pages/AddFormPage","app/lossReasons/LossReasonCollection","../views/PressWorksheetFormView"],function(e,t,n,r){return t.extend({FormView:r,load:function(e){return this.model.lossReasons=new n(null,{rqlQuery:"select(label)&sort(position)&position>=0"}),e(this.model.lossReasons.fetch({reset:!0}))}})});

@@ -1,0 +1,1 @@
+define(["../core/Collection","./WorkCenter"],function(e,t){return e.extend({model:t,rqlQuery:"select(mrpController,prodFlow,description)&sort(_id)"})});

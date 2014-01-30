@@ -1,0 +1,1 @@
+define(["app/core/View","app/orders/templates/operationList","i18n!app/nls/orders"],function(e,t){return e.extend({template:t,serialize:function(){return{operations:this.model.get("operations").toJSON()}},afterRender:function(){this.listenToOnce(this.model,"change:operations",this.render)}})});

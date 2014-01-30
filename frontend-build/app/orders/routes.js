@@ -1,0 +1,1 @@
+define(["../router","../viewport","../user","./pages/OrderListPage","./pages/OrderDetailsPage","i18n!app/nls/orders"],function(e,t,n,r,i){var o=n.auth("ORDERS:VIEW");e.map("/orders",o,function(e){t.showPage(new r({rql:e.rql}))}),e.map("/orders/:id",function(e){t.showPage(new i({modelId:e.params.id}))})});

@@ -1,0 +1,1 @@
+define(["app/core/views/DetailsView","./decorateProdShift","app/prodShifts/templates/details"],function(e,t,n){return e.extend({template:n,serialize:function(){var e={planned:0,actual:0};return this.model.get("quantitiesDone").forEach(function(t){e.planned+=t.planned,e.actual+=t.actual}),{model:t(this.model,{orgUnits:!0,personnel:!0}),totalQuantityDone:e}}})});

@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){return e.extend({urlRoot:"/aors",clientUrlRoot:"#aors",topicPrefix:"aors",privilegePrefix:"DICTIONARIES",nlsDomain:"aors",labelAttribute:"name",defaults:{name:null,description:null}})});

@@ -1,0 +1,1 @@
+define(["app/prodFlows/ProdFlowCollection","./createStorage"],function(e,t){return t("PROD_FLOWS","prodFlows",e)});

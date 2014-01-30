@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){return e.extend({urlRoot:"/prodTasks",clientUrlRoot:"#prodTasks",topicPrefix:"prodTasks",privilegePrefix:"DICTIONARIES",nlsDomain:"prodTasks",labelAttribute:"name",defaults:{name:null,tags:null,prodDiv:!1},parse:function(e){return Array.isArray(e.tags)||(e.tags=[]),e}})});

@@ -1,0 +1,1 @@
+define(["app/data/views/renderOrgUnitPath","app/core/views/DetailsView","app/subdivisions/templates/details","i18n!app/nls/subdivisions"],function(e,t,n){return t.extend({template:n,localTopics:{"divisions.synced":"render"},serialize:function(){var n=t.prototype.serialize.call(this);return n.orgUnitPath=e(this.model,!0),n}})});

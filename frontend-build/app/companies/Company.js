@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){return e.extend({urlRoot:"/companies",clientUrlRoot:"#companies",topicPrefix:"companies",privilegePrefix:"DICTIONARIES",nlsDomain:"companies",labelAttribute:"name",defaults:{name:null},toJSON:function(){var n=e.prototype.toJSON.call(this);return n.name||(n.name=n._id),n}})});

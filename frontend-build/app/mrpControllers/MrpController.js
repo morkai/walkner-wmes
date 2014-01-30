@@ -1,0 +1,1 @@
+define(["../core/Model","app/data/subdivisions"],function(e,t){return e.extend({urlRoot:"/mrpControllers",clientUrlRoot:"#mrpControllers",topicPrefix:"mrpControllers",privilegePrefix:"DICTIONARIES",nlsDomain:"mrpControllers",labelAttribute:"_id",defaults:{subdivision:null,description:null},getSubdivision:function(){return t.get(this.get("subdivision"))||null}})});

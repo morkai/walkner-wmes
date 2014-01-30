@@ -1,0 +1,1 @@
+define(["../core/Collection","./ProdFlow"],function(e,t){return e.extend({model:t,rqlQuery:"select(mrpController,name)&sort(name)"})});

@@ -1,0 +1,1 @@
+define(["../core/Collection","./Aor"],function(e,o){return e.extend({model:o,rqlQuery:"select(name,description)&sort(name)"})});

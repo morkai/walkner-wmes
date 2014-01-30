@@ -1,0 +1,1 @@
+define(["app/data/views/renderOrgUnitPath","app/core/views/ListView","i18n!app/nls/workCenters"],function(e,t){return t.extend({columns:["orgUnitPath","_id","description"],serializeRows:function(){return this.collection.map(function(t){var n=t.toJSON();return n.orgUnitPath=e(t,!0),n})}})});

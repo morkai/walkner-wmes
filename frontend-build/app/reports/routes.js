@@ -1,0 +1,1 @@
+define(["../router","../viewport","i18n!app/nls/reports"],function(e,t){e.map("/reports/1",function(e){t.loadPage("app/reports/pages/Report1Page",function(t){return new t({query:e.query})})})});

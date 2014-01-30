@@ -1,0 +1,1 @@
+define(["../core/Collection","./Subdivision"],function(e,t){return e.extend({model:t,rqlQuery:"select(division,type,name,prodTaskTags)&sort(division,name)"})});

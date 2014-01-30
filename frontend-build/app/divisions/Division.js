@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){return e.extend({urlRoot:"/divisions",clientUrlRoot:"#divisions",topicPrefix:"divisions",privilegePrefix:"DICTIONARIES",nlsDomain:"divisions",labelAttribute:"_id",defaults:{type:"prod",description:null}})});

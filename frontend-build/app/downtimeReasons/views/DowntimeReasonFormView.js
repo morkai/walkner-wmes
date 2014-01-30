@@ -1,0 +1,1 @@
+define(["app/core/views/FormView","app/downtimeReasons/templates/form","i18n!app/nls/downtimeReasons"],function(e,t){return e.extend({template:t,afterRender:function(){e.prototype.afterRender.call(this),this.options.editMode&&(this.$(".form-control[name=_id]").attr("readonly",!0),this.$(".form-control[name=label]").focus())}})});

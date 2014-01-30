@@ -1,0 +1,1 @@
+define(["app/router","app/viewport","./pages/DashboardPage","i18n!app/nls/dashboard"],function(e,t,i){e.map("/",function(){t.showPage(new i)})});

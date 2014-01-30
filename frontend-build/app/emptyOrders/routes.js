@@ -1,0 +1,1 @@
+define(["../router","../viewport","../user","./pages/EmptyOrderListPage","./pages/EmptyOrderPrintableListPage","i18n!app/nls/emptyOrders"],function(e,t,i,n,r){var o=i.auth("ORDERS:VIEW");e.map("/emptyOrders",o,function(e){t.showPage(new n({rql:e.rql}))}),e.map("/emptyOrders;print",o,function(e){t.showPage(new r({rql:e.rql}))})});

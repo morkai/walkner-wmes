@@ -1,0 +1,1 @@
+define(["app/i18n","app/core/views/ListView","i18n!app/nls/prodTasks"],function(e,t){return t.extend({columns:["name","tags","fteDiv"],serializeRows:function(){return this.collection.toJSON().map(function(t){return t.tags=t.tags.length?t.tags.join(", "):null,t.fteDiv=e("core","BOOL:"+!!t.fteDiv),t})}})});

@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(e){var t={locale:{}};return t.locale.pl=e,{"BREADCRUMBS:structure":function(){var e="";return e+="Wizualizacja struktury organizacyjnej"}}});
