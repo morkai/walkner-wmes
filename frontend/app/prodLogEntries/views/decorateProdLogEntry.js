@@ -43,7 +43,9 @@ define([
         break;
 
       case 'changeOrder':
-        var operation = prodLogEntry.data.orderData.operations[prodLogEntry.data.operationNo];
+        var operation = prodLogEntry.data.orderData && prodLogEntry.data.orderData.operations
+            ? prodLogEntry.data.orderData.operations[prodLogEntry.data.operationNo]
+            : null;
 
         data.orderId = prodLogEntry.data.orderId;
         data.orderName = prodLogEntry.data.orderData.name || '?';
