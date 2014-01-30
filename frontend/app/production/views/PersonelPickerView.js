@@ -54,20 +54,11 @@ define([
         else
         {
           userInfo.label = this.$id('user').val().trim().replace(/[^0-9]+/g, '');
-
-          if (userInfo.label.length !== 0 && userInfo.label.length !== 8)
-          {
-            this.$id('user').focus();
-
-            return viewport.msg.show({
-              type: 'error',
-              time: 2000,
-              text: t('production', 'personelPicker:msg:invalidPersonellId')
-            });
-          }
         }
 
-        this.trigger('userPicked', userInfo.label === null ? null : userInfo);
+        this.trigger(
+          'userPicked', userInfo.label === null || !userInfo.label.length ? null : userInfo
+        );
       }
     },
 
