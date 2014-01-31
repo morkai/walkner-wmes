@@ -17,10 +17,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to get the prod shift [%s] to start downtime [%s]: %s",
-          logEntry.prodShift,
-          logEntry.data._id,
-          err.stack
+          "Failed to get a prod shift to start a downtime (LOG=[%s]): %s", logEntry._id, err.stack
         );
 
         return done(err);
@@ -46,10 +43,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err && err.code !== 11000)
       {
         productionModule.error(
-          "Failed to save a new prod downtime [%s] for prod line [%s]: %s",
-          prodDowntime.get('_id'),
-          prodLine.get('_id'),
-          err.stack
+          "Failed to save a new prod downtime (LOG=[%s]): %s", logEntry._id, err.stack
         );
 
         return done(err);
@@ -64,9 +58,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save the prod line [%s] after changing the prod downtime to [%s]: %s",
-            prodLine.get('_id'),
-            prodDowntime.get('_id'),
+            "Failed to save the prod line after changing the prod downtime (LOG=[%s]): %s",
+            logEntry._id,
             err.stack
           );
         }

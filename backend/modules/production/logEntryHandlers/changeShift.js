@@ -34,8 +34,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to find unfinished prod shift orders for prod line [%s]: %s",
+            "Failed to find unfinished prod shift orders for prod line [%s] (LOG=[%s]): %s",
             prodLine.get('_id'),
+            logEntry._id,
             err.stack
           );
 
@@ -48,9 +49,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         }
 
         productionModule.debug(
-          "Finishing %d bugged prod shift orders for prod line [%s]...",
+          "Finishing %d bugged prod shift orders for prod line [%s] (LOG=[%s])...",
           prodShiftOrders.length,
-          prodLine.get('_id')
+          prodLine.get('_id'),
+          logEntry._id
         );
 
         step(
@@ -89,9 +91,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save finished prod shift order [%s] for prod line [%s]: %s",
+            "Failed to save finished prod shift order [%s] for prod line [%s] (LOG=[%s]): %s",
             _id,
             prodLine.get('_id'),
+            logEntry._id,
             err.stack
           );
         }
@@ -110,9 +113,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err && err.code !== 11000)
       {
         productionModule.error(
-          "Failed to save a new prod shift [%s] for prod line [%s]: %s",
+          "Failed to save a new prod shift [%s] for prod line [%s] (LOG=[%s]): %s",
           prodShift.get('_id'),
           prodLine.get('_id'),
+          logEntry._id,
           err.stack
         );
 
@@ -132,9 +136,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save the prod line [%s] after changing the shift to [%s]: %s",
+            "Failed to save the prod line [%s] after changing the shift to [%s] (LOG=[%s]): %s",
             prodLine.get('_id'),
             prodShift.get('_id'),
+            logEntry._id,
             err.stack
           );
         }

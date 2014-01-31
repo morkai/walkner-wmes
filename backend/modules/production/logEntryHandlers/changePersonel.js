@@ -9,9 +9,9 @@ module.exports = function(personnelProperty)
       if (err)
       {
         productionModule.error(
-          "Failed to get the prod shift [%s] to change the %s: %s",
-          logEntry.prodShift,
+          "Failed to get the prod shift to change the %s (LOG=[%s]): %s",
           personnelProperty,
+          logEntry._id,
           err.stack
         );
 
@@ -45,7 +45,7 @@ module.exports = function(personnelProperty)
           if (err)
           {
             productionModule.error(
-              "Failed to find the user [%s] to fill the %s info (prodLogEntry=[%s]): %s",
+              "Failed to find the user [%s] to fill the %s info (LOG=[%s]): %s",
               personellId,
               personnelProperty,
               logEntry._id,
@@ -58,7 +58,7 @@ module.exports = function(personnelProperty)
           if (!user)
           {
             productionModule.warn(
-              "Couldn't find a %s by personellId=[%s] (prodLogEntry=[%s]) :(",
+              "Couldn't find a %s by personellId=[%s] (LOG=[%s])",
               personnelProperty,
               personellId,
               logEntry._id
@@ -87,8 +87,8 @@ module.exports = function(personnelProperty)
         if (err)
         {
           productionModule.error(
-            "Failed to save the prod shift [%s] after changing the %s: %s",
-            prodShift.get('_id'),
+            "Failed to save the prod shift after changing the %s (LOG=[%s]): %s",
+            logEntry._id,
             personnelProperty,
             err.stack
           );

@@ -7,7 +7,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get the prod downtime [%s] to finish: %s", logEntry.data._id, err.stack
+        "Failed to get the prod downtime to finish (LOG=[%s]): %s", logEntry._id, err.stack
       );
 
       return done(err);
@@ -26,8 +26,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           if (err)
           {
             productionModule.error(
-              "Failed to find the last prod downtime for the prod line [%s]: %s",
+              "Failed to find the last prod downtime for the prod line [%s] (LOG=[%s]): %s",
               prodLine.get('_id'),
+              logEntry._id,
               err.stack
             );
 
@@ -61,8 +62,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save the prod downtime [%s] after changing the finish time: %s",
-          prodDowntime.get('_id'),
+          "Failed to save the prod downtime after changing the finish time (LOG=[%s]): %s",
+          logEntry._id,
           err.stack
         );
       }

@@ -54,7 +54,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find mech orders to fill order data (prodLogEntry=[%s]): %s",
+          "Failed to find mech orders to fill order data (LOG=[%s]): %s",
           logEntry._id,
           err.stack
         );
@@ -65,7 +65,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (mechOrders.length === 0)
       {
         productionModule.warn(
-          "Couldn't find mech order by nc12=[%s] (prodLogEntry=[%s]) :(",
+          "Couldn't find mech order by nc12=[%s] (LOG=[%s])",
           logEntry.data.orderId,
           logEntry._id
         );
@@ -93,7 +93,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find prod orders to fill order data (prodLogEntry=[%s]): %s",
+          "Failed to find prod orders to fill order data (LOG=[%s]): %s",
           logEntry._id,
           err.stack
         );
@@ -104,7 +104,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (orders.length === 0)
       {
         productionModule.warn(
-          "Couldn't find prod order by no=[%s] (prodLogEntry=[%s]) :(",
+          "Couldn't find a prod order by no=[%s] (LOG=[%s])",
           logEntry.data.orderId,
           logEntry._id
         );
@@ -133,10 +133,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err && err.code !== 11000)
       {
         productionModule.error(
-          "Failed to save a new prod shift order [%s] for prod line [%s]: %s",
-          prodShiftOrder.get('_id'),
-          prodLine.get('_id'),
-          err.stack
+          "Failed to save a new prod shift order (LOG=[%s]): %s", logEntry._id, err.stack
         );
 
         return done(err);
@@ -154,9 +151,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save the prod line [%s] after changing the prod shift order to [%s]: %s",
-            prodLine.get('_id'),
-            prodShiftOrder.get('_id'),
+            "Failed to save the prod line after changing the prod shift order (LOG=[%s]): %s",
+            logEntry._id,
             err.stack
           );
         }

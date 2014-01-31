@@ -7,8 +7,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get the prod shift order [%s] to change the quantity done: %s",
-        logEntry.prodShiftOrder,
+        "Failed to get the prod shift order to change the quantity done (LOG=[%s]): %s",
         err.stack
       );
 
