@@ -38,13 +38,22 @@ define([
       {
         e.preventDefault();
 
+        var submitEl = this.$('.btn-success')[0];
+
+        if (submitEl.disabled)
+        {
+          return;
+        }
+
+        submitEl.disabled = true;
+
         if (this.socket.isConnected())
         {
-          this.handleOnlinePick();
+          this.handleOnlinePick(submitEl);
         }
         else
         {
-          this.handleOfflinePick();
+          this.handleOfflinePick(submitEl);
         }
       }
     },
@@ -190,7 +199,7 @@ define([
       return $operation;
     },
 
-    handleOnlinePick: function()
+    handleOnlinePick: function(submitEl)
     {
       var orderInfo = this.$id('order').select2('data');
       var operationNo = this.$id('operation').select2('val');
@@ -198,6 +207,8 @@ define([
       if (!orderInfo)
       {
         this.$id('order').select2('focus');
+
+        submitEl.disabled = false;
 
         return viewport.msg.show({
           type: 'error',
@@ -209,6 +220,8 @@ define([
       if (!operationNo)
       {
         this.$id('order').select2('focus');
+
+        submitEl.disabled = false;
 
         return viewport.msg.show({
           type: 'error',
@@ -236,7 +249,7 @@ define([
       this.pickOrder(orderInfo, operationNo);
     },
 
-    handleOfflinePick: function()
+    handleOfflinePick: function(submitEl)
     {
       var orderInfo = {
         no: null,
@@ -259,6 +272,8 @@ define([
       {
         this.$id('order').select();
 
+        submitEl.disabled = false;
+
         return viewport.msg.show({
           type: 'error',
           time: 2000,
@@ -274,6 +289,8 @@ define([
       if (!/^[0-9]{1,4}$/.test(operationNo))
       {
         this.$id('operation').select();
+
+        submitEl.disabled = false;
 
         return viewport.msg.show({
           type: 'error',

@@ -46,7 +46,16 @@ define([
       {
         e.preventDefault();
 
-        this.handlePick();
+        var submitEl = this.$('.btn-danger')[0];
+
+        if (submitEl.disabled)
+        {
+          return;
+        }
+
+        submitEl.disabled = true;
+
+        this.handlePick(submitEl);
       }
     },
 
@@ -130,7 +139,7 @@ define([
       });
     },
 
-    handlePick: function()
+    handlePick: function(submitEl)
     {
       var reason = this.$id('reason').select2('val');
       var aor = this.$id('aor').select2('val');
@@ -139,6 +148,8 @@ define([
       if (!reason)
       {
         this.$id('reason').select2('focus');
+
+        submitEl.disabled = false;
 
         return viewport.msg.show({
           type: 'error',
@@ -150,6 +161,8 @@ define([
       if (!aor)
       {
         this.$id('aor').select2('focus');
+
+        submitEl.disabled = false;
 
         return viewport.msg.show({
           type: 'error',

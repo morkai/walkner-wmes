@@ -21,6 +21,15 @@ define([
       {
         e.preventDefault();
 
+        var submitEl = this.$('.btn-warning')[0];
+
+        if (submitEl.disabled)
+        {
+          return;
+        }
+
+        submitEl.disabled = true;
+
         var newQuantitiesDone = this.parseInt('quantityDone');
         var newQuantityDone = this.parseInt('quantityDone');
         var newWorkerCount = this.parseInt('workerCount');

@@ -36,6 +36,15 @@ define([
       {
         e.preventDefault();
 
+        var submitEl = this.$('.btn-primary')[0];
+
+        if (submitEl.disabled)
+        {
+          return;
+        }
+
+        submitEl.disabled = true;
+
         var userInfo = {
           id: null,
           label: null
