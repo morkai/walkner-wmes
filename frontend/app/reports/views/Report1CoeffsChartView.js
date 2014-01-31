@@ -112,6 +112,7 @@ define([
           }
         ],
         tooltip: {
+          borderColor: '#999999',
           shared: true,
           useHTML: true,
           formatter: function()
