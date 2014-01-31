@@ -41,6 +41,8 @@ define([
     6: 'prodLine'
   };
 
+  var DEFAULT_DIVISION_FILTER = function() { return true; };
+
   function idAndLabel(model)
   {
     return {id: model.id, text: model.getLabel()};
@@ -298,7 +300,10 @@ define([
 
     renderDivisionDropdown: function()
     {
-      this.createDropdownElement('division', divisions.map(idAndLabel));
+      this.createDropdownElement(
+        'division',
+        divisions.filter(this.options.divisionFilter || DEFAULT_DIVISION_FILTER).map(idAndLabel)
+      );
     },
 
     renderSubdivisionDropdown: function()
