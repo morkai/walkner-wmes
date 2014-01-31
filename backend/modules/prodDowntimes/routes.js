@@ -15,11 +15,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   var canView = userModule.auth('PROD_DOWNTIMES:VIEW');
 
   express.get(
-    '/prodDowntimes',
-    canView,
-    limitAors,
-    limitOrgUnit,
-    crud.browseRoute.bind(null, app, ProdDowntime)
+    '/prodDowntimes', limitAors, limitOrgUnit, crud.browseRoute.bind(null, app, ProdDowntime)
   );
 
   express.get('/prodDowntimes/:id', canView, crud.readRoute.bind(null, app, ProdDowntime));
