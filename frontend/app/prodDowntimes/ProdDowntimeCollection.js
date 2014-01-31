@@ -94,7 +94,7 @@ define([
         reason: downtimeInfo.reason,
         reasonComment: downtimeInfo.reasonComment,
         status: ProdDowntime.STATUS.UNDECIDED,
-        startedAt: time.getServerMoment().toDate(),
+        startedAt: time.getMoment().toDate(),
         creator: user.getInfo(),
         master: prodShift.get('master'),
         leader: prodShift.get('leader'),

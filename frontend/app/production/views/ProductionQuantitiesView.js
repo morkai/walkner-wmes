@@ -32,7 +32,7 @@ define([
 
     serialize: function()
     {
-      var currentTime = time.getServerMoment().valueOf();
+      var currentTime = time.getMoment().valueOf();
       var currentShiftMoment = this.model.getCurrentShiftMoment();
       var unlocked = !this.model.isLocked();
 
@@ -83,7 +83,7 @@ define([
     scheduleNextRender: function()
     {
       var lastShiftHour = this.model.getCurrentShiftMoment().add('hours', 7).hours();
-      var currentMoment = time.getServerMoment();
+      var currentMoment = time.getMoment();
       var currentTime = currentMoment.valueOf();
       var currentHour = currentMoment.hours();
 

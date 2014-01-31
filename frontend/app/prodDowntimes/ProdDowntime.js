@@ -78,7 +78,7 @@ define([
         return null;
       }
 
-      var finishedAt = time.getServerMoment().toDate();
+      var finishedAt = time.getMoment().toDate();
       var shiftEndDate = getShiftEndDate(this.get('date'), this.get('shift'));
 
       if (finishedAt > shiftEndDate)

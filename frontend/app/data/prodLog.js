@@ -128,7 +128,7 @@ define([
         secretKey: prodShift.getSecretKey(),
         type: type,
         data: data || {},
-        createdAt: time.getServerMoment().toDate(),
+        createdAt: time.getMoment().toDate(),
         creator: user.getInfo(),
         division: prodShift.get('division'),
         subdivision: prodShift.get('subdivision'),

@@ -210,7 +210,7 @@ define([
           {planned: 0, actual: 0}
         ],
         creator: user.getInfo(),
-        createdAt: time.getServerMoment().toDate(),
+        createdAt: time.getMoment().toDate(),
         master: null,
         leader: null,
         operator: null
@@ -420,7 +420,7 @@ define([
      */
     getCurrentTime: function()
     {
-      return time.getServerMoment().format('YYYY-MM-DD HH:mm:ss');
+      return time.getMoment().format('YYYY-MM-DD HH:mm:ss');
     },
 
     /**
@@ -428,7 +428,7 @@ define([
      */
     getCurrentShift: function()
     {
-      var hour = time.getServerMoment().hour();
+      var hour = time.getMoment().hour();
 
       if (hour >= 6 && hour < 14)
       {
@@ -448,7 +448,7 @@ define([
      */
     getCurrentShiftMoment: function()
     {
-      var currentMoment = time.getServerMoment();
+      var currentMoment = time.getMoment();
       var hour = currentMoment.hour();
 
       if (hour >= 6 && hour < 14)
@@ -477,7 +477,7 @@ define([
      */
     getTimeToNextShift: function()
     {
-      return this.getCurrentShiftMoment().add('hours', 8).diff(time.getServerMoment());
+      return this.getCurrentShiftMoment().add('hours', 8).diff(time.getMoment());
     },
 
     /**
@@ -485,7 +485,7 @@ define([
      */
     getCurrentQuantityDoneHourIndex: function()
     {
-      var hour = time.getServerMoment().hours();
+      var hour = time.getMoment().hours();
 
       if (hour >= 6 && hour < 14)
       {
@@ -515,7 +515,7 @@ define([
      */
     getCurrentQuantityDoneHourRange: function()
     {
-      var fromMoment = time.getServerMoment().minutes(0).seconds(0);
+      var fromMoment = time.getMoment().minutes(0).seconds(0);
       var from = fromMoment.format('HH:mm:ss');
       var to = fromMoment.minutes(59).seconds(59).format('HH:mm:ss');
 

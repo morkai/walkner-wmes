@@ -96,7 +96,7 @@ define([
         workerCount: 0,
         quantityDone: 0,
         creator: user.getInfo(),
-        startedAt: time.getServerMoment().toDate(),
+        startedAt: time.getMoment().toDate(),
         finishedAt: null
       });
 
@@ -118,7 +118,7 @@ define([
         workerCount: 0,
         quantityDone: 0,
         creator: user.getInfo(),
-        startedAt: time.getServerMoment().toDate(),
+        startedAt: time.getMoment().toDate(),
         finishedAt: null
       });
 
@@ -278,7 +278,7 @@ define([
         return null;
       }
 
-      var finishedAt = time.getServerMoment().toDate();
+      var finishedAt = time.getMoment().toDate();
       var shiftEndDate = getShiftEndDate(this.get('date'), this.get('shift'));
 
       if (finishedAt > shiftEndDate)

@@ -69,7 +69,7 @@ define([
 
     getFirstShiftMoment: function()
     {
-      var firstShiftMoment = time.getServerMoment();
+      var firstShiftMoment = time.getMoment();
 
       if (firstShiftMoment.hours() >= 0 && firstShiftMoment.hours() < 6)
       {
