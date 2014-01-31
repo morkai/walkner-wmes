@@ -86,8 +86,9 @@ define([
             {
               if (e.resetSelection)
               {
-                view.timers.resetExtremes =
-                  setTimeout(this.yAxis[1].setExtremes.bind(this.yAxis[1], 0, 100, true, false), 1);
+                view.timers.resetExtremes = setTimeout(
+                  this.yAxis[1].setExtremes.bind(this.yAxis[1], 0, null, true, false), 1
+                );
               }
             }
           }
@@ -203,15 +204,13 @@ define([
     {
       var chartData = this.serializeChartData();
       var min = 0;
-      var max = 100;
 
       if (!chartData.quantityDone.length)
       {
         min = null;
-        max = null;
       }
 
-      this.chart.yAxis[1].setExtremes(min, max, false);
+      this.chart.yAxis[1].setExtremes(min, null, false);
 
       var visible = this.model.query.get('interval') !== 'hour';
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
