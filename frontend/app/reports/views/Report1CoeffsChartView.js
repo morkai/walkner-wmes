@@ -107,7 +107,8 @@ define([
           },
           {
             title: false,
-            opposite: true
+            opposite: true,
+            gridLineWidth: 0
           }
         ],
         tooltip: {
