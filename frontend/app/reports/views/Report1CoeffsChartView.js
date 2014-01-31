@@ -69,6 +69,7 @@ define([
       var orgUnit = this.model.get('orgUnit');
       var formatTooltipHeader = this.formatTooltipHeader.bind(this);
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
+      var view = this;
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -78,6 +79,16 @@ define([
             relativeTo: 'chart',
             position: {
               y: 0
+            }
+          },
+          events: {
+            selection: function(e)
+            {
+              if (e.resetSelection)
+              {
+                view.timers.resetExtremes =
+                  setTimeout(this.yAxis[1].setExtremes.bind(this.yAxis[1], 0, 100, true, false), 1);
+              }
             }
           }
         },
