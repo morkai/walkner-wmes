@@ -38,9 +38,10 @@ define([
 
       prodShift.subdivision = subdivision ? subdivision.getLabel() : '?';
       prodShift.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
-      prodShift.mrpControllers = Array.isArray(prodShift.mrpControllers)
-        ? prodShift.mrpControllers.join('; ')
-        : '?';
+      prodShift.mrpControllers =
+        Array.isArray(prodShift.mrpControllers) && prodShift.mrpControllers.length
+          ? prodShift.mrpControllers.join('; ')
+          : '?';
     }
 
     if (options.personnel)

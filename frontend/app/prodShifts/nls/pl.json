@@ -15,6 +15,8 @@
   "FILTER:PLACEHOLDER:type": "Dowolny typ",
   "FILTER:PLACEHOLDER:prodLine": "Dowolna linia produkcyjna",
 
+  "PROPERTY:mrpControllers": "Kontroler MRP",
+  "PROPERTY:prodFlow": "Przepływ",
   "PROPERTY:prodLine": "Linia produkcyjna",
   "PROPERTY:type": "Typ",
   "PROPERTY:createdAt": "Czas rozpoczęcia",

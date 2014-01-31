@@ -23,6 +23,8 @@ define([
     {
       return rql.Query.fromObject({
         fields: {
+          mrpControllers: 1,
+          prodFlow: 1,
           prodLine: 1,
           date: 1,
           shift: 1,

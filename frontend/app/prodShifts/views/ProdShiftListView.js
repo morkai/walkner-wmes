@@ -25,11 +25,14 @@ define([
       'production.synced.**': 'refreshCollection'
     },
 
-    columns: ['prodLine', 'date', 'shift', 'createdAt', 'creator'],
+    columns: ['mrpControllers', 'prodFlow', 'prodLine', 'date', 'shift', 'createdAt', 'creator'],
 
     serializeRows: function()
     {
-      return this.collection.map(decorateProdShift);
+      return this.collection.map(function(model)
+      {
+        return decorateProdShift(model, {orgUnits: true});
+      });
     },
 
     serializeActions: function()
