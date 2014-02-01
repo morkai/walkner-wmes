@@ -26,8 +26,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save the prod shift order [%s] after changing the quantity done: %s",
-          prodShiftOrder.get('_id'),
+          "Failed to save the prod shift order after changing the quantity done (LOG=[%s]): %s",
+          logEntry._id,
           err.stack
         );
       }
