@@ -818,7 +818,7 @@ module.exports = function(mongoose, options, done)
         return;
       }
 
-      var typeCoeff = order.mechOrder ? 1 : 1.054;
+      var typeCoeff = 1;
       var duration = (order.finishedAt.getTime() - order.startedAt.getTime()) / 3600000;
       var percent = typeof order.percent === 'number' ? order.percent : 1;
       var laborTime = operation.laborTime * percent;
@@ -837,8 +837,8 @@ module.exports = function(mongoose, options, done)
         breakCount += orderDowntime.breakCount;
       }
 
-      effNum += laborTime * typeCoeff;
-      effDen += duration * workerCount / quantityDone;
+      effNum += ((laborTime * typeCoeff) / 100) * quantityDone;
+      effDen += duration * workerCount;
 
       orderCount += 1;
     });
@@ -854,7 +854,7 @@ module.exports = function(mongoose, options, done)
 
     if (effNum && effDen)
     {
-      coeffs.efficiency = round(effNum / 100 / effDen);
+      coeffs.efficiency = round(effNum / effDen);
     }
 
     if (dtNum && dtDen)
@@ -864,12 +864,12 @@ module.exports = function(mongoose, options, done)
 
     if (typeof fteTotals === 'object')
     {
-      var prodNum = effNum;
-      var prodDen = fteTotals.master + fteTotals.leader / options.prodDivisionCount;
+      var prodNum = effNum / 8;
+      var prodDen = fteTotals.master + (fteTotals.leader / options.prodDivisionCount);
 
       if (prodNum && prodDen)
       {
-        coeffs.productivity = round(prodNum / 100 / prodDen);
+        coeffs.productivity = round(prodNum / prodDen);
       }
 
       coeffs.fteMasterTotal = fteTotals.master;
