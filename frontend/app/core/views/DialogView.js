@@ -12,7 +12,16 @@ define([
     events: {
       'click .dialog-answer': function(e)
       {
-        var answer = this.$(e.target).closest('.dialog-answer').attr('data-answer');
+        var $answer = this.$(e.target).closest('.dialog-answer');
+
+        if ($answer.prop('disabled'))
+        {
+          return;
+        }
+
+        $answer.prop('disabled', true);
+
+        var answer = $answer.attr('data-answer');
 
         if (_.isString(answer) && answer.length > 0)
         {
