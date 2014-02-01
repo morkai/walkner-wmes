@@ -823,8 +823,14 @@ module.exports = function(mongoose, options, done)
         return;
       }
 
-      var typeCoeff = 1;
       var duration = (order.finishedAt.getTime() - order.startedAt.getTime()) / 3600000;
+
+      if (duration <= 0)
+      {
+        return;
+      }
+
+      var typeCoeff = 1;
       var percent = typeof order.percent === 'number' ? order.percent : 1;
       var laborTime = operation.laborTime * percent;
       var workerCount = order.workerCount * percent;
