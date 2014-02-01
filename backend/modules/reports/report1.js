@@ -213,6 +213,14 @@ module.exports = function(mongoose, options, done)
 
     prodDowntimes.forEach(function(prodDowntime)
     {
+      var duration =
+        (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
+
+      if (duration <= 0)
+      {
+        return;
+      }
+
       if (typeof ordersToDowntimes[prodDowntime.prodShiftOrder] === 'undefined')
       {
         ordersToDowntimes[prodDowntime.prodShiftOrder] = [];
@@ -234,9 +242,6 @@ module.exports = function(mongoose, options, done)
       {
         results.downtimes.byReason[prodDowntime.reason] = 0;
       }
-
-      var duration =
-        (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
       downtimes.byAor[prodDowntime.aor] += duration;
       downtimes.byReason[prodDowntime.reason] += duration;
