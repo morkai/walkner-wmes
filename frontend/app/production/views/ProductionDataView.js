@@ -30,8 +30,6 @@ define([
 ) {
   'use strict';
 
-  // TODO: Sync missing order data on connect
-
   return View.extend({
 
     template: dataTemplate,
