@@ -49,7 +49,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return done(err);
       }
 
-      productionModule.setProdData(prodDowntime);
+      if (!err)
+      {
+        productionModule.setProdData(prodDowntime);
+      }
 
       prodLine.set('prodDowntime', prodDowntime.get('_id'));
 

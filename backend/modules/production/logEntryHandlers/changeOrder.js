@@ -139,7 +139,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return done(err);
       }
 
-      productionModule.setProdData(prodShiftOrder);
+      if (!err)
+      {
+        productionModule.setProdData(prodShiftOrder);
+      }
 
       prodLine.set({
         prodShiftOrder: prodShiftOrder.get('_id'),

@@ -123,7 +123,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return done(err);
       }
 
-      productionModule.setProdData(prodShift);
+      if (!err)
+      {
+        productionModule.setProdData(prodShift);
+      }
 
       prodLine.set({
         prodShift: prodShift.get('_id'),
@@ -136,9 +139,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save the prod line [%s] after changing the shift to [%s] (LOG=[%s]): %s",
-            prodLine.get('_id'),
-            prodShift.get('_id'),
+            "Failed to save the prod line after changing the shift (LOG=[%s]): %s",
             logEntry._id,
             err.stack
           );
