@@ -92,16 +92,21 @@ define([
       $reason.select2({
         dropdownCssClass: 'production-dropdown',
         openOnEnter: null,
-        data: downtimeReasons.map(function(downtimeReason)
-        {
-          return {
-            id: downtimeReason.id,
-            text: downtimeReason.id + ' - ' + downtimeReason.get('label')
-          };
-        }).sort(function(a, b)
-        {
-          return a.id.localeCompare(b.id);
-        })
+        data: downtimeReasons
+          .filter(function(downtimeReason)
+          {
+            return downtimeReason.get('pressPosition') === -1;
+          })
+          .map(function(downtimeReason)
+          {
+            return {
+              id: downtimeReason.id,
+              text: downtimeReason.id + ' - ' + downtimeReason.get('label')
+            };
+          }).sort(function(a, b)
+          {
+            return a.id.localeCompare(b.id);
+          })
       });
 
       $reason.on('change', function()
