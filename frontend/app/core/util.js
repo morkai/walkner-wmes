@@ -100,7 +100,7 @@ define([
     {
       var sandboxedProperty = sandboxedProperties[propertyName];
 
-      if (_.isFunction(sandboxedProperty.destroy))
+      if (sandboxedProperty && _.isFunction(sandboxedProperty.destroy))
       {
         sandboxedProperty.destroy();
       }

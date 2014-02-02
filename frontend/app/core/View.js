@@ -20,6 +20,8 @@ function(
 
   function View(options)
   {
+    this.options = options || {};
+
     this.timers = {};
 
     this.promises = [];
