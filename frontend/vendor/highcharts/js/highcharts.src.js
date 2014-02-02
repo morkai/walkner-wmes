@@ -2252,7 +2252,7 @@ SVGElement.prototype = {
 	on: function (eventType, handler) {
 		var svgElement = this,
 			element = svgElement.element;
-		
+
 		// touch
 		if (hasTouch && eventType === 'click') {
 			element.ontouchstart = function (e) {			
@@ -9691,15 +9691,8 @@ Pointer.prototype = {
 
 		e = this.normalize(e);
 
-		// issue #295, dragging not always working in Firefox
-		if (e.preventDefault) {
-			e.preventDefault();
-		}
-		
 		this.dragStart(e);
 	},
-
-	
 
 	onDocumentMouseUp: function (e) {
 		this.drop(e);
@@ -9792,7 +9785,7 @@ Pointer.prototype = {
 			plotY;
 		
 		e = this.normalize(e);
-		e.cancelBubble = true; // IE specific
+		//e.cancelBubble = true; // IE specific
 
 		if (!chart.cancelClick) {
 			
