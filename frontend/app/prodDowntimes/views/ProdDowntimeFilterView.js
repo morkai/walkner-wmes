@@ -127,7 +127,7 @@ define([
       }
       else if (userDivision)
       {
-        orgUnits.getSubdivisionsForDivision(userDivision).forEach(function(subdivision)
+        orgUnits.getChildren(userDivision).forEach(function(subdivision)
         {
           view.pushApplicableOrgUnitsForSubdivision(userOrgUnits, subdivision);
         });
@@ -144,7 +144,7 @@ define([
             css: 'prodDowntime-filter-division'
           });
 
-          orgUnits.getSubdivisionsForDivision(division).forEach(function(subdivision)
+          orgUnits.getChildren(division).forEach(function(subdivision)
           {
             view.pushApplicableOrgUnitsForSubdivision(userOrgUnits, subdivision);
           });
