@@ -1,6 +1,8 @@
 {
-  "BREADCRUMBS:report1": "Raport 1",
+  "BREADCRUMBS:report1": "Wskaźniki",
+  "BREADCRUMBS:report1:divisions": "Wydziały",
 
+  "report1:pageTitle": "Wskaźniki",
   "report1:overallTitle": "ML",
 
   "coeffs:quantityDone": "Sztuki",
@@ -43,7 +45,7 @@
   "filter:subdivisionType": "Typ działu",
   "filter:subdivisionType:prod": "Montaż",
   "filter:subdivisionType:press": "Tłocznia",
-  "filter:1:submit": "Filtruj raport 1",
+  "filter:1:submit": "Filtruj wskaźniki",
   "filter:1:submit:shift": "Zmiana",
   "filter:1:submit:day": "Dzień",
   "filter:1:submit:week": "Tydzień",

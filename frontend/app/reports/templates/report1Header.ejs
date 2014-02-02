@@ -1,0 +1,25 @@
+<div class="reports-1-header">
+  <h1>
+    <% if (overallQuery) { %>
+    <a href="#reports/1?<%- overallQuery %>"><%- t('reports', 'report1:pageTitle') %></a>
+    <% } else { %>
+    <%- t('reports', 'report1:pageTitle') %>
+    <% } %>
+  </h1>
+  <ul class="reports-1-header-orgUnits">
+    <% orgUnitPath.forEach(function(orgUnit) { %>
+    <li class="reports-1-header-orgUnit">
+      <span class="reports-1-header-orgUnit-label"><%- orgUnit.label %></span>
+      <span class="reports-1-header-orgUnit-value">
+        <% orgUnit.value.forEach(function(value, i) { %>
+          <% if (orgUnit.query[i]) { %>
+          <a href="#reports/1?<%- orgUnit.query[i] %>"><%= value %></a><%- i === orgUnit.lastI ? '' : ';' %>
+          <% } else { %>
+          <%= value %><%- i === orgUnit.lastI ? '' : ';' %>
+          <% } %>
+        <% }) %>
+      </span>
+    </li>
+    <% }) %>
+  </ul>
+</div>

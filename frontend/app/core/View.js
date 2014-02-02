@@ -54,17 +54,7 @@ function(
       this.timers = null;
     }
 
-    if (Array.isArray(this.promises))
-    {
-      var promises = this.promises;
-
-      this.promises = null;
-
-      promises.forEach(function(promise)
-      {
-        promise.abort();
-      });
-    }
+    this.cancelRequests();
   };
 
   View.prototype.isRendered = function()
@@ -100,6 +90,18 @@ function(
     }
 
     return promise;
+  };
+
+  View.prototype.cancelRequests = function()
+  {
+    this.promises.forEach(function(promise) { promise.abort(); });
+
+    this.promises = [];
+  };
+
+  View.prototype.cancelAnimations = function(clearQueue, jumpToEnd)
+  {
+    this.$(':animated').stop(clearQueue !== false, jumpToEnd !== false);
   };
 
   View.prototype.$id = function(idSuffix)

@@ -1,24 +1,24 @@
 define([
   'underscore',
   'jquery',
-  'moment',
   'app/i18n',
-  'app/data/divisions',
+  'app/data/orgUnits',
   'app/core/View',
   '../Report1',
   '../Report1Query',
+  '../views/Report1HeaderView',
   '../views/Report1FilterView',
   '../views/Report1ChartsView',
   'app/reports/templates/report1Page'
 ], function(
   _,
   $,
-  moment,
   t,
-  divisions,
+  orgUnits,
   View,
   Report1,
   Report1Query,
+  Report1HeaderView,
   Report1FilterView,
   Report1ChartsView,
   report1PageTemplate
@@ -33,71 +33,451 @@ define([
 
     template: report1PageTemplate,
 
-    breadcrumbs: [
-      t.bound('reports', 'BREADCRUMBS:report1')
-    ],
+    title: function()
+    {
+      var title = [t.bound('reports', 'BREADCRUMBS:report1')];
+      var orgUnit = orgUnits.getByTypeAndId(
+        this.query.get('orgUnitType'),
+        this.query.get('orgUnitId')
+      );
+
+      if (orgUnit)
+      {
+        var subtitle = this.query.get('orgUnitType') === 'subdivision'
+          ? (orgUnit.get('division') + ' \\ ')
+          : '';
+
+        title.push(subtitle + orgUnit.getLabel());
+      }
+      else
+      {
+        title.push(t.bound('reports', 'BREADCRUMBS:report1:divisions'));
+      }
+
+      return title;
+    },
+
+    events: {
+      'mousedown .reports-1-coeffs .highcharts-title': function(e)
+      {
+        if (e.button === 1)
+        {
+          return false; // Disable scroll cursor
+        }
+      },
+      'mouseup .reports-1-coeffs .highcharts-title': function(e)
+      {
+        if (e.button === 1)
+        {
+          // TODO: Open in a new tab
+          return false;
+        }
+      },
+      'click .reports-1-coeffs .highcharts-title': function(e)
+      {
+        if (!e.ctrlKey && e.button === 0)
+        {
+          this.changeOrgUnit(this.$(e.target).closest('.reports-1-charts'));
+        }
+      }
+    },
 
     initialize: function()
     {
+      this.onKeyDown = this.onKeyDown.bind(this);
+
+      $(this.el.ownerDocument.body).on('keydown', this.onKeyDown);
+
+      this.$chartsContainer = null;
+
       this.defineModels();
       this.defineViews();
-
+      this.setView('.reports-1-header-container', this.headerView);
       this.setView('.filter-container', this.filterView);
+      this.insertChartsViews();
+    },
 
-      this.insertView('.reports-1-charts-container', this.overallReportCharts);
+    destroy: function()
+    {
+      $(this.el.ownerDocument.body).off('keydown', this.onKeyDown);
 
-      this.divisionReportCharts.forEach(function(divisionReportChart)
+      this.$chartsContainer = null;
+
+      this.cancelAnimations();
+    },
+
+    setUpLayout: function(pageLayout)
+    {
+      this.listenTo(this.query, 'change:orgUnitId', function()
       {
-        this.insertView('.reports-1-charts-container', divisionReportChart);
-      }, this);
+        pageLayout.setTitle(this.title, this);
+      });
+    },
+
+    afterRender: function()
+    {
+      this.$chartsContainer = this.$('.reports-1-charts-container');
     },
 
     defineModels: function()
     {
       this.query = new Report1Query(this.options.query);
 
-      this.listenTo(this.query, 'change', this.refreshReports);
+      this.reports = this.query.createReports();
 
-      var options = {query: this.query};
-
-      this.overallReport = new Report1(null, options);
-
-      this.divisionReports = divisions
-        .filter(function(division)
-        {
-          return division.get('type') === 'prod';
-        })
-        .map(function(division)
-        {
-          return new Report1({orgUnitType: 'division', orgUnit: division}, options);
-        });
+      this.listenTo(this.query, 'change', this.onQueryChange);
     },
 
     defineViews: function()
     {
+      this.headerView = new Report1HeaderView({model: this.query});
+
       this.filterView = new Report1FilterView({model: this.query});
 
-      this.overallReportCharts = new Report1ChartsView({model: this.overallReport});
-
-      this.divisionReportCharts = this.divisionReports.map(function(divisionReport)
+      this.chartsViews = this.reports.map(function(report)
       {
-        return new Report1ChartsView({model: divisionReport});
+        return new Report1ChartsView({model: report});
       });
     },
 
-    refreshReports: function()
+    insertChartsViews: function(skipChartsView, insertAt)
     {
-      this.broker.publish('router.navigate', {
-        url: this.overallReport.url() + '?' + this.query.serializeToString(),
-        replace: true,
-        trigger: false
-      });
-      this.promised(this.overallReport.fetch());
+      this.chartsViews.forEach(
+        function(chartsView, i)
+        {
+          if (chartsView !== skipChartsView)
+          {
+            this.insertView(
+              '.reports-1-charts-container',
+              chartsView,
+              insertAt ? {insertAt: i} : null
+            );
+          }
+        },
+        this
+      );
+    },
 
-      this.divisionReports.forEach(function(divisionReport)
+    onQueryChange: function(query, options)
+    {
+      var changes = query.changedAttributes();
+      var orgUnitChanged = typeof changes.orgUnitId !== 'undefined';
+      var refreshAfterDrill = typeof changes.orgUnitType === 'undefined' ? 1 : 2;
+
+      if (!options.reset)
       {
-        this.promised(divisionReport.fetch());
-      }, this);
+        this.broker.publish('router.navigate', {
+          url: this.reports[0].url() + '?' + this.query.serializeToString(),
+          replace: !orgUnitChanged,
+          trigger: false
+        });
+      }
+
+      if (orgUnitChanged)
+      {
+        this.drill(Object.keys(changes).length > refreshAfterDrill);
+      }
+      else
+      {
+        this.refresh();
+      }
+    },
+
+    changeOrgUnit: function($charts)
+    {
+      if (this.$el.hasClass('is-changing'))
+      {
+        return;
+      }
+
+      var orgUnitType = $charts.attr('data-orgUnitType');
+
+      if (!orgUnitType || orgUnitType === 'prodLine')
+      {
+        return;
+      }
+
+      var orgUnitId = $charts.attr('data-orgUnitId');
+
+      if (!$charts.prev().length)
+      {
+        var childOrgUnit = orgUnits.getByTypeAndId(orgUnitType, orgUnitId);
+        var parentOrgUnit = orgUnits.getParent(childOrgUnit);
+
+        orgUnitType = parentOrgUnit ? orgUnits.getType(parentOrgUnit) : null;
+        orgUnitId = parentOrgUnit ? parentOrgUnit.id : null;
+      }
+
+      this.query.set({
+        orgUnitType: orgUnitType,
+        orgUnitId: orgUnitId
+      });
+    },
+
+    refresh: function()
+    {
+      this.reports.forEach(function(report) { this.promised(report.fetch()); }, this);
+    },
+
+    drill: function(refresh)
+    {
+      var relationType;
+
+      if (this.$el.hasClass('is-changing'))
+      {
+        relationType = orgUnits.RELATION_TYPES.UNRELATED;
+
+        this.cancelRequests();
+        this.cancelAnimations();
+
+        this.chartsViews.forEach(function(chartsView) { chartsView.remove(); });
+
+        this.chartsViews = [];
+        this.reports = [];
+      }
+      else
+      {
+        relationType = orgUnits.getRelationType(
+          this.query.previous('orgUnitType'),
+          this.query.previous('orgUnitId'),
+          this.query.get('orgUnitType'),
+          this.query.get('orgUnitId')
+        );
+
+        this.$el.addClass('is-changing');
+      }
+
+      if (relationType === orgUnits.RELATION_TYPES.CHILD)
+      {
+        this.drillDown(refresh);
+      }
+      else if (relationType === orgUnits.RELATION_TYPES.PARENT)
+      {
+        this.drillUp(refresh);
+      }
+      else
+      {
+        this.replace();
+      }
+    },
+
+    drillDown: function(refresh)
+    {
+      var parentReport = this.getCurrentReport();
+      var parentChartsView = this.getChartsViewByReport(parentReport);
+      var siblingChartsViews =
+        this.chartsViews.filter(function(chartsView) { return chartsView !== parentChartsView; });
+      var childChartsViews = [];
+
+      this.reports = this.query.createReports(parentReport);
+      this.chartsViews = this.reports.map(function(report, i)
+      {
+        if (i === 0)
+        {
+          return parentChartsView;
+        }
+
+        var childChartsView = new Report1ChartsView({
+          model: report,
+          skipRenderCharts: true
+        });
+
+        childChartsViews.push(childChartsView);
+
+        return childChartsView;
+      });
+
+      if (refresh)
+      {
+        this.promised(parentReport.fetch());
+      }
+
+      this.moveChartsViews(
+        'drillingDown',
+        siblingChartsViews,
+        childChartsViews,
+        parentChartsView
+      );
+    },
+
+    drillUp: function(refresh)
+    {
+      var workingReport = this.getCurrentReport(true);
+      var workingChartsView = this.getChartsViewByReport(workingReport);
+      var oldChartsViews =
+        this.chartsViews.filter(function(chartsView) { return chartsView !== workingChartsView; });
+      var newChartsViews = [];
+
+      this.reports = this.query.createReports(null, workingReport);
+      this.chartsViews = this.reports.map(function(report)
+      {
+        if (report === workingReport)
+        {
+          return workingChartsView;
+        }
+
+        var siblingChartsView = new Report1ChartsView({
+          model: report,
+          skipRenderCharts: true
+        });
+
+        newChartsViews.push(siblingChartsView);
+
+        return siblingChartsView;
+      });
+
+      if (refresh)
+      {
+        this.promised(workingReport.fetch());
+      }
+
+      this.moveChartsViews(
+        'drillingUp',
+        oldChartsViews,
+        newChartsViews,
+        workingChartsView
+      );
+    },
+
+    replace: function()
+    {
+      var page = this;
+      var chartsViewEls = this.chartsViews.map(function(chartsView) { return chartsView.el; });
+
+      $(chartsViewEls).fadeOut(300).promise().done(function()
+      {
+        page.chartsViews.forEach(function(chartsView) { chartsView.remove(); });
+
+        page.$('.reports-1-charts').remove();
+
+        page.reports = page.query.createReports();
+        page.chartsViews = page.reports.map(function(report)
+        {
+          return new Report1ChartsView({
+            model: report,
+            skipRenderCharts: true
+          });
+        });
+
+        page.insertChartsViews();
+        page.showChartsViews('replacing', page.chartsViews);
+      });
+    },
+
+    moveChartsViews: function(operation, oldChartsViews, newChartsViews, workingChartsView)
+    {
+      var page = this;
+      var workingIndex = this.chartsViews.indexOf(workingChartsView);
+
+      workingChartsView.$el.siblings().fadeTo(400, 0).promise().done(function()
+      {
+        page.$chartsContainer.css('overflow-x', 'hidden');
+
+        var pos = workingChartsView.$el.position();
+
+        workingChartsView.$el.css({
+          position: 'absolute',
+          top: pos.top + 'px',
+          left: pos.left + 'px'
+        });
+
+        oldChartsViews.forEach(function(chartsView) { chartsView.remove(); });
+        page.insertChartsViews(workingChartsView, operation === 'drillingUp');
+
+        workingChartsView.$el.animate({left: workingIndex * 375}, 300).promise().done(function()
+        {
+          workingChartsView.$el.css('position', '');
+          page.$chartsContainer.css('overflow-x', '');
+          page.showChartsViews(operation, newChartsViews);
+        });
+      });
+    },
+
+    showChartsViews: function(operation, chartsViews)
+    {
+      var page = this;
+      var elsToFade = [];
+      var elsToShow = [];
+
+      this.$el.addClass('is-' + operation);
+
+      chartsViews.forEach(function(chartsView, i)
+      {
+        chartsView.render();
+        chartsView.$el.css('opacity', 0);
+
+        if (i < 5)
+        {
+          elsToFade.push(chartsView.el);
+        }
+        else
+        {
+          elsToShow.push(chartsView.el);
+        }
+      });
+
+      this.$el.removeClass('is-' + operation);
+
+      chartsViews.forEach(function(chartsView)
+      {
+        chartsView.renderCharts(true);
+      });
+
+      $(elsToFade).fadeTo(400, 1).promise().done(function()
+      {
+        $(elsToShow).css('opacity', '');
+        page.$el.removeClass('is-changing');
+      });
+    },
+
+    getCurrentReport: function(previous)
+    {
+      var orgUnit = orgUnits.getByTypeAndId(
+        this.query[previous ? 'previous' : 'get']('orgUnitType'),
+        this.query[previous ? 'previous' : 'get']('orgUnitId')
+      );
+
+      return _.find(this.reports, function(report) { return report.get('orgUnit') === orgUnit; });
+    },
+
+    getChartsViewByReport: function(report)
+    {
+      return _.find(this.chartsViews, function(chartsView) { return chartsView.model === report; });
+    },
+
+    onKeyDown: function(e)
+    {
+      if (e.target.tagName === 'INPUT' && !e.target.classList.contains('btn'))
+      {
+        return;
+      }
+
+      if (e.keyCode === 39)
+      {
+        this.scroll(true);
+
+        return false;
+      }
+      else if (e.keyCode === 37)
+      {
+        this.scroll(false);
+
+        return false;
+      }
+    },
+
+    scroll: function(right)
+    {
+      var focusedIndex = Math.round(this.$chartsContainer[0].scrollLeft / 376) + (right ? 1 : -1);
+      var $children = this.$chartsContainer.children();
+      var scrollLeft = 0;
+
+      for (var i = 0; i < focusedIndex; ++i)
+      {
+        scrollLeft += $children.eq(i).outerWidth();
+      }
+
+      this.$chartsContainer.finish().animate({scrollLeft: scrollLeft}, 250);
     }
 
   });

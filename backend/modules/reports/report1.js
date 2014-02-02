@@ -73,9 +73,9 @@ module.exports = function(mongoose, options, done)
       finishedAt: {$ne: null}
     };
 
-    if (options.orgUnitType && options.orgUnit)
+    if (options.orgUnitType && options.orgUnitId)
     {
-      conditions[options.orgUnitType] = options.orgUnit;
+      conditions[options.orgUnitType] = options.orgUnitId;
     }
 
     if (options.subdivisionType === 'prod')
@@ -98,9 +98,9 @@ module.exports = function(mongoose, options, done)
       date: {$gte: options.fromTime, $lt: options.toTime}
     };
 
-    if (options.orgUnitType && options.orgUnit)
+    if (options.orgUnitType && options.orgUnitId)
     {
-      conditions[options.orgUnitType] = options.orgUnit;
+      conditions[options.orgUnitType] = options.orgUnitId;
     }
 
     conditions.quantitiesDone = {$ne: null};

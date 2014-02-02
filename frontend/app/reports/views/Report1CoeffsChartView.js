@@ -28,6 +28,7 @@ define([
 
     initialize: function()
     {
+      this.shouldRenderChart = !this.options.skipRenderChart;
       this.chart = null;
       this.loading = false;
 
@@ -52,7 +53,7 @@ define([
       {
         this.updateChart();
       }
-      else
+      else if (this.shouldRenderChart)
       {
         this.createChart();
 
@@ -61,12 +62,13 @@ define([
           this.chart.showLoading();
         }
       }
+
+      this.shouldRenderChart = true;
     },
 
     createChart: function()
     {
       var chartData = this.serializeChartData();
-      var orgUnit = this.model.get('orgUnit');
       var formatTooltipHeader = this.formatTooltipHeader.bind(this);
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
       var view = this;
@@ -78,7 +80,7 @@ define([
           resetZoomButton: {
             relativeTo: 'chart',
             position: {
-              y: 0
+              y: 5
             }
           },
           events: {
@@ -94,9 +96,8 @@ define([
           }
         },
         title: {
-          text: orgUnit
-            ? renderOrgUnitPath(orgUnit, false, false)
-            : t('reports', 'report1:overallTitle')
+          useHTML: true,
+          text: this.getTitle()
         },
         noData: {},
         xAxis: {
@@ -148,7 +149,12 @@ define([
             marker: markerStyles
           },
           line: {
-            lineWidth: 1,
+            lineWidth: 2,
+            states: {
+              hover: {
+                lineWidth: 2
+              }
+            },
             marker: markerStyles
           }
         },
@@ -161,18 +167,6 @@ define([
             data: chartData.quantityDone,
             tooltip: {
               valueSuffix: t('reports', 'quantityDoneSuffix')
-            }
-          },
-          {
-            name: t('reports', 'coeffs:downtime'),
-            color: 'rgba(255, 0, 0, .75)',
-            borderColor: '#AC2925',
-            borderWidth: 0,
-            type: 'column',
-            yAxis: 1,
-            data: chartData.downtime,
-            tooltip: {
-              valueSuffix: '%'
             }
           },
           {
@@ -195,6 +189,18 @@ define([
               valueSuffix: '%'
             },
             visible: this.model.query.get('interval') !== 'hour'
+          },
+          {
+            name: t('reports', 'coeffs:downtime'),
+            color: 'rgba(255, 0, 0, .75)',
+            borderColor: '#AC2925',
+            borderWidth: 0,
+            type: 'column',
+            yAxis: 1,
+            data: chartData.downtime,
+            tooltip: {
+              valueSuffix: '%'
+            }
           }
         ]
       });
@@ -217,13 +223,13 @@ define([
 
       this.chart.series[0].update({marker: markerStyles}, false);
       this.chart.series[1].update({marker: markerStyles}, false);
-      this.chart.series[2].update({marker: markerStyles}, false);
-      this.chart.series[3].update({marker: markerStyles, visible: visible}, false);
+      this.chart.series[2].update({marker: markerStyles, visible: visible}, false);
+      this.chart.series[3].update({marker: markerStyles}, false);
 
       this.chart.series[0].setData(chartData.quantityDone, false);
-      this.chart.series[1].setData(chartData.downtime, false);
-      this.chart.series[2].setData(chartData.efficiency, false);
-      this.chart.series[3].setData(chartData.productivity, true);
+      this.chart.series[1].setData(chartData.efficiency, false);
+      this.chart.series[2].setData(chartData.productivity, false);
+      this.chart.series[3].setData(chartData.downtime, true);
     },
 
     serializeChartData: function()
@@ -260,6 +266,25 @@ define([
           }
         }
       };
+    },
+
+    getTitle: function()
+    {
+      var orgUnitType = this.model.get('orgUnitType');
+
+      if (!orgUnitType)
+      {
+        return t('reports', 'report1:overallTitle');
+      }
+
+      var orgUnit = this.model.get('orgUnit');
+
+      if (orgUnitType === 'subdivision')
+      {
+        return renderOrgUnitPath(orgUnit, false, false);
+      }
+
+      return orgUnit.getLabel();
     },
 
     onModelLoading: function()

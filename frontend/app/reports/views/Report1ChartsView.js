@@ -22,9 +22,9 @@ define([
     template: report1ChartsTemplate,
 
     events: {
-      'dblclick .highcharts-title': function(e)
+      'click .highcharts-title': function(e)
       {
-        if (!document.webkitFullscreenEnabled || document.webkit)
+        if (!e.ctrlKey || !document.webkitFullscreenEnabled)
         {
           return;
         }
@@ -46,7 +46,7 @@ define([
         '.reports-1-coeffs-container',
         new Report1CoeffsChartView({
           model: this.model,
-          orgUnit: this.options.orgUnit
+          skipRenderChart: this.options.skipRenderCharts
         })
       );
 
@@ -54,8 +54,8 @@ define([
         '.reports-1-downtimesByAor-container',
         new Report1DowntimesChartView({
           model: this.model,
-          orgUnit: this.options.orgUnit,
-          attrName: 'downtimesByAor'
+          attrName: 'downtimesByAor',
+          skipRenderChart: this.options.skipRenderCharts
         })
       );
 
@@ -63,15 +63,47 @@ define([
         '.reports-1-downtimesByReason-container',
         new Report1DowntimesChartView({
           model: this.model,
-          orgUnit: this.options.orgUnit,
-          attrName: 'downtimesByReason'
+          attrName: 'downtimesByReason',
+          skipRenderChart: this.options.skipRenderCharts
         })
       );
     },
 
     afterRender: function()
     {
-      this.promised(this.model.fetch());
+      if (this.options.renderCharts !== false)
+      {
+        this.promised(this.model.fetch());
+      }
+
+      var orgUnitType = this.model.get('orgUnitType');
+
+      this.$el.attr('data-orgUnitType', orgUnitType);
+      this.$el.attr('data-orgUnitId', orgUnitType ? this.model.get('orgUnit').id : undefined);
+    },
+
+    renderCharts: function(load)
+    {
+      this.getViews().forEach(function(view)
+      {
+        view.render();
+      });
+
+      if (load)
+      {
+        this.promised(this.model.fetch());
+      }
+    },
+
+    reflowCharts: function()
+    {
+      this.getViews().forEach(function(view)
+      {
+        if (view.chart)
+        {
+          view.chart.reflow();
+        }
+      });
     }
 
   });

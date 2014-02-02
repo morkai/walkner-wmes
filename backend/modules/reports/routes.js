@@ -8,8 +8,13 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var userModule = app[reportsModule.config.userId];
   var mongoose = app[reportsModule.config.mongooseId];
   var downtimeReasons = app.downtimeReasons;
+  // TODO: Create a proper org unit tree solution
   var divisionsModule = app.divisions;
   var subdivisionsModule = app.subdivisions;
+  var mrpControllersModule = app.mrpControllers;
+  var prodFlowsModule = app.prodFlows;
+  var workCentersModule = app.workCenters;
+  var prodLinesModule = app.prodLines;
 
   var canView = userModule.auth();
 
@@ -17,13 +22,18 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   function report1Route(req, res, next)
   {
-    var divisionId = getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnit);
+    if (req.query.orgUnitType === 'mrpController')
+    {
+      req.query.orgUnitType = 'mrpControllers';
+    }
+
+    var divisionId = getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnitId);
     var options = {
       fromTime: new Date(req.query.from).getTime(),
       toTime: new Date(req.query.to).getTime(),
       interval: req.query.interval || 'hour',
       orgUnitType: req.query.orgUnitType,
-      orgUnit: req.query.orgUnit,
+      orgUnitId: req.query.orgUnitId,
       division: divisionId,
       subdivisions: getSubdivisionsByDivision(divisionId),
       subdivisionType: req.query.subdivisionType || null,
@@ -50,11 +60,11 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     });
   }
 
-  function getDivisionByOrgUnit(orgUnitType, orgUnit)
+  function getDivisionByOrgUnit(orgUnitType, orgUnitId)
   {
     /*jshint -W015*/
 
-    if (!orgUnitType || !orgUnit)
+    if (!orgUnitType || !orgUnitId)
     {
       return null;
     }
@@ -62,12 +72,48 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     switch (orgUnitType)
     {
       case 'division':
-        return orgUnit;
+        return orgUnitId;
+
+      case 'subdivision':
+        var subdivision = subdivisionsModule.modelsById[orgUnitId];
+
+        return subdivision ? subdivision.get('division') : null;
+
+      case 'mrpControllers':
+      case 'mrpController':
+        return getDivisionByParentOrgUnit(mrpControllersModule, orgUnitId, 'subdivision');
+
+      case 'prodFlow':
+        return getDivisionByParentOrgUnit(prodFlowsModule, orgUnitId, 'mrpController');
+
+      case 'workCenter':
+        return getDivisionByParentOrgUnit(workCentersModule, orgUnitId, 'prodFlow');
+
+      case 'prodLine':
+        return getDivisionByParentOrgUnit(prodLinesModule, orgUnitId, 'workCenter');
 
       default:
-        // TODO
-        throw new Error('TODO');
+        return null;
     }
+  }
+
+  function getDivisionByParentOrgUnit(orgUnitsModule, orgUnitId, parentOrgUnitProperty)
+  {
+    var orgUnit = orgUnitsModule.modelsById[orgUnitId];
+
+    if (!orgUnit)
+    {
+      return null;
+    }
+
+    var parentOrgUnit = orgUnit.get(parentOrgUnitProperty);
+
+    if (Array.isArray(parentOrgUnit))
+    {
+      parentOrgUnit = parentOrgUnit[0];
+    }
+
+    return parentOrgUnit ? getDivisionByOrgUnit(parentOrgUnitProperty, parentOrgUnit) : null;
   }
 
   function getSubdivisionsByDivision(divisionId)

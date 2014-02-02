@@ -1,19 +1,13 @@
 define([
-  'underscore',
   'jquery',
-  'app/time',
   'app/i18n',
   'app/core/View',
-  'app/data/views/renderOrgUnitPath',
   'app/data/colors',
   'app/highcharts'
 ], function(
-  _,
   $,
-  time,
   t,
   View,
-  renderOrgUnitPath,
   colors,
   Highcharts
 ) {
@@ -55,6 +49,7 @@ define([
 
     initialize: function()
     {
+      this.shouldRenderChart = !this.options.skipRenderChart;
       this.chart = null;
       this.loading = false;
 
@@ -79,7 +74,7 @@ define([
       {
         this.updateChart();
       }
-      else
+      else if (this.shouldRenderChart)
       {
         this.createChart();
 
@@ -88,6 +83,8 @@ define([
           this.chart.showLoading();
         }
       }
+
+      this.shouldRenderChart = true;
     },
 
     createChart: function()
