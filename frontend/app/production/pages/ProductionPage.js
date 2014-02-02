@@ -1,4 +1,5 @@
 define([
+  'jquery',
   'app/i18n',
   'app/viewport',
   'app/core/View',
@@ -11,6 +12,7 @@ define([
   '../views/ProductionQuantitiesView',
   'app/production/templates/productionPage'
 ], function(
+  $,
   t,
   viewport,
   View,
@@ -50,10 +52,16 @@ define([
       this.defineModels();
       this.defineViews();
       this.defineBindings();
+
+      this.onBeforeUnload = this.onBeforeUnload.bind(this);
+
+      $(window).on('beforeunload', this.onBeforeUnload);
     },
 
     destroy: function()
     {
+      $(window).off('beforeunload', this.onBeforeUnload);
+
       this.model.stopShiftChangeMonitor();
 
       prodLog.disable();
@@ -186,6 +194,18 @@ define([
         view.timers.refreshDowntimes = null;
         view.refreshDowntimes();
       }, 2500, this);
+    },
+
+    onBeforeUnload: function()
+    {
+      if (this.model.isIdle())
+      {
+        return;
+      }
+
+      return this.model.isDowntime()
+        ? t('production', 'unload:downtime')
+        : t('production', 'unload:order');
     }
 
   });

@@ -126,5 +126,8 @@
   "endWorkDialog:quantityDone": "Wykonana ilość aktualnego zlecenia:",
   "endWorkDialog:workerCount": "Osoby pracujące przy aktualnym zleceniu:",
   "endWorkDialog:yes": "Zakończ pracę",
-  "endWorkDialog:no": "Nie kończ pracy"
+  "endWorkDialog:no": "Nie kończ pracy",
+
+  "unload:downtime": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie przestoju?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania przestoju będzie się naliczał do końca zmiany!",
+  "unload:order": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie wykonywania zlecenia?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania zlecenia będzie się naliczał do końca zmiany!"
 }
