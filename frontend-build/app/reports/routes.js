@@ -1,1 +1,1 @@
-define(["../router","../viewport","i18n!app/nls/reports"],function(e,t){e.map("/reports/1",function(e){t.loadPage("app/reports/pages/Report1Page",function(t){return new t({query:e.query})})})});
+define(["../user","../router","../viewport","i18n!app/nls/reports"],function(e,t,n){t.map("/reports/1",e.auth("REPORTS:VIEW"),function(e){return n.currentPage&&"report1"===n.currentPage.pageId?n.currentPage.query.reset(e.query):(n.loadPage("app/reports/pages/Report1Page",function(t){return new t({query:e.query})}),void 0)})});
