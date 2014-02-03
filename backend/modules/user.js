@@ -125,6 +125,11 @@ exports.start = function startUserModule(app, module)
         return res.send(401);
       }
 
+      if (!anyPrivileges.length)
+      {
+        return next();
+      }
+
       for (var i = 0, l = anyPrivileges.length; i < l; ++i)
       {
         var allPrivileges = anyPrivileges[i];
