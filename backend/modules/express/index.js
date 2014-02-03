@@ -41,6 +41,11 @@ exports.start = function startExpressModule(app, module, done)
   module.set('view engine', 'ejs');
   module.set('static path', staticPath);
 
+  app.broker.publish('express.beforeMiddleware', {
+    module: module,
+    express: express
+  });
+
   if (!production)
   {
     setUpDevMiddleware(staticPath);
@@ -72,6 +77,11 @@ exports.start = function startExpressModule(app, module, done)
       showStack: true
     }));
   }
+
+  app.broker.publish('express.beforeRoutes', {
+    module: module,
+    express: express
+  });
 
   app.loadDir(app.pathTo('routes'), [app, module], done);
 
