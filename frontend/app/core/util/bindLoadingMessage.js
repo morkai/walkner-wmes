@@ -42,24 +42,19 @@ define([
       if (options.syncMethod === 'read')
       {
         viewport.msg.loading();
+
+        jqXhr.done(onSync);
+        jqXhr.fail(onError);
       }
     });
 
-    context.listenTo(modelOrCollection, 'sync', function(modelOrCollection, jqXhr, options)
+    function onSync()
     {
-      if (options.syncMethod === 'read')
-      {
-        viewport.msg.loaded();
-      }
-    });
+      viewport.msg.loaded();
+    }
 
-    context.listenTo(modelOrCollection, 'error', function(modelOrCollection, jqXhr, options)
+    function onError(jqXhr)
     {
-      if (options.syncMethod !== 'read')
-      {
-        return;
-      }
-
       var code = jqXhr.statusText;
 
       if (code === 'abort')
@@ -82,7 +77,7 @@ define([
       }
 
       viewport.msg.loadingFailed(t(domain, key, {code: code}));
-    });
+    }
 
     return modelOrCollection;
   };
