@@ -16,7 +16,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var workCentersModule = app.workCenters;
   var prodLinesModule = app.prodLines;
 
-  var canView = userModule.auth();
+  var canView = userModule.auth('REPORTS:VIEW');
 
   express.get('/reports/1', canView, report1Route);
 
