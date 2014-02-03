@@ -55,7 +55,8 @@ exports.start = function startHttpServerModule(app, module, done)
       }
       else
       {
-        res.send(503);
+        res.writeHead(503);
+        res.end();
       }
     });
 
