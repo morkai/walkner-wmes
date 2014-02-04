@@ -155,7 +155,7 @@ define([
           };
         });
 
-      this.$id('operators').select2({
+      var $operators = this.$id('operators').select2({
         width: '100%',
         allowClear: true,
         multiple: true,
@@ -163,7 +163,7 @@ define([
         ajax: SELECT2_USERS_AJAX
       });
 
-      this.$id('operator').select2({
+      var $operator = this.$id('operator').select2({
         width: '100%',
         allowClear: true,
         minimumInputLength: 3,
@@ -179,7 +179,13 @@ define([
 
       this.addOrderRow();
 
-      this.$id('operators').select2('focus');
+      $operators.select2('focus').on('change', function()
+      {
+        if (!$operator.select2('data'))
+        {
+          $operator.select2('data', $operators.select2('data')[0]);
+        }
+      });
     },
 
     serialize: function()
