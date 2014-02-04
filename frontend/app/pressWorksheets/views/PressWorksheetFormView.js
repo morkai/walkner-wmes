@@ -67,6 +67,20 @@ define([
           hh = parseInt(matches[1], 10);
           mm = parseInt(matches[2], 10);
         }
+        else if (time.length === 4)
+        {
+          hh = parseInt(time.substr(0, 2), 10);
+          mm = parseInt(time.substr(2), 10);
+        }
+        else if (time.length === 3)
+        {
+          hh = parseInt(time[0], 10);
+          mm = parseInt(time.substr(1), 10);
+        }
+        else
+        {
+          mm = parseInt(time, 10);
+        }
 
         if (isNaN(hh) || hh >= 24)
         {
