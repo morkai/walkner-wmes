@@ -34,8 +34,8 @@
   "PROPERTY:order.quantityDone": "Ilość dobrych",
   "PROPERTY:order.startedAt": "Godz. rozp.",
   "PROPERTY:order.finishedAt": "Godz. zak.",
-  "PROPERTY:order.losses": "Straty materiałowe",
-  "PROPERTY:order.downtimes": "Straty czasu z polecenia mistrza",
+  "PROPERTY:order.losses": "Straty materiałowe [sztuki]",
+  "PROPERTY:order.downtimes": "Straty czasu z polecenia mistrza [minuty]",
 
   "FORM:ACTION:add": "Dodaj kartę pracy",
   "FORM:ACTION:edit": "Edytuj kartę pracy",
