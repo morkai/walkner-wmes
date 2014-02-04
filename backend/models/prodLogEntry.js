@@ -20,7 +20,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       default: null
     },
     subdivision: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Subdivision',
       default: null
     },

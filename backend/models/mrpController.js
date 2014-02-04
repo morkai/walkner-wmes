@@ -10,7 +10,7 @@ module.exports = function setupMrpControllerModel(app, mongoose)
       trim: true
     },
     subdivision: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Subdivision',
       required: true
     },
