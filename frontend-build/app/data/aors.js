@@ -1,1 +1,1 @@
-define(["app/aors/AorCollection","./createStorage"],function(e,t){return t("AORS","aors",e)});
+define(["app/aors/AorCollection","./createStorage"],function(e,o){return o("AORS","aors",e)});

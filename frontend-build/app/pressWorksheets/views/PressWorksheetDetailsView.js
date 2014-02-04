@@ -1,1 +1,1 @@
-define(["app/i18n","app/core/views/DetailsView","./decoratePressWorksheet","app/pressWorksheets/templates/details","i18n!app/nls/pressWorksheets"],function(e,t,n,r){return t.extend({template:r,serialize:function(){var e=t.prototype.serialize.call(this);return n(e.model),e}})});
+define(["app/i18n","app/core/views/DetailsView","./decoratePressWorksheet","app/pressWorksheets/templates/details","i18n!app/nls/pressWorksheets"],function(e,s,t,r){return s.extend({template:r,serialize:function(){var e=s.prototype.serialize.call(this);return t(e.model),e}})});

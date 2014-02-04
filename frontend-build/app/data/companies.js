@@ -1,1 +1,1 @@
-define(["app/companies/CompanyCollection","./createStorage"],function(e,t){return t("COMPANIES","companies",e)});
+define(["app/companies/CompanyCollection","./createStorage"],function(e,n){return n("COMPANIES","companies",e)});

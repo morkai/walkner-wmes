@@ -1,1 +1,1 @@
-define(["jquery","app/core/pages/AddFormPage","../views/SubdivisionFormView"],function(e,t,n){return t.extend({FormView:n,load:function(t){var n=this.model;return t(e.ajax({url:"/prodTaskTags",success:function(e){n.allTags=e}}))}})});
+define(["jquery","app/core/pages/AddFormPage","../views/SubdivisionFormView"],function(e,r,a){return r.extend({FormView:a,load:function(r){var a=this.model;return r(e.ajax({url:"/prodTaskTags",success:function(e){a.allTags=e}}))}})});

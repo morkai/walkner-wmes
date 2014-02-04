@@ -1,1 +1,1 @@
-define(["app/core/views/PrintableListView","app/hourlyPlans/templates/printableList","i18n!app/nls/hourlyPlans"],function(e,t){return e.extend({template:t,serialize:function(){return this.model.serialize()},afterRender:function(){}})});
+define(["app/core/views/PrintableListView","app/hourlyPlans/templates/printableList","i18n!app/nls/hourlyPlans"],function(e,n){return e.extend({template:n,serialize:function(){return this.model.serialize()},afterRender:function(){}})});

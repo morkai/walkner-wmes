@@ -97,6 +97,10 @@ app/reports/assets/main.css
 ----------------
 app/reports/assets/main.css
 
+app/updater/assets/main.css
+----------------
+app/updater/assets/main.css
+
 app/users/assets/main.css
 ----------------
 app/users/assets/main.css
@@ -130,6 +134,7 @@ assets/../app/prodDowntimes/assets/main.css
 assets/../app/prodLogEntries/assets/main.css
 assets/../app/prodShifts/assets/main.css
 assets/../app/pressWorksheets/assets/main.css
+assets/../app/updater/assets/main.css
 assets/main.css
 
 assets/select2.css
@@ -476,6 +481,13 @@ app/pressWorksheets/templates/details.js
 app/pressWorksheets/views/PressWorksheetDetailsView.js
 app/pressWorksheets/pages/PressWorksheetDetailsPage.js
 app/pressWorksheets/routes.js
+app/updater/views/RestartMessageView.js
+app/updater/templates/backendRestart.js
+app/updater/templates/frontendRestart.js
+app/nls/updater.js
+app/nls/pl/updater.js
+i18n!app/nls/updater
+app/updater/index.js
 app/data/prodLog.js
 app/production/util/getShiftEndDate.js
 app/prodDowntimes/ProdDowntime.js

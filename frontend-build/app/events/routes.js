@@ -1,1 +1,1 @@
-define(["../router","../viewport","../user","./pages/EventListPage"],function(e,t,i,n){e.map("/events",i.auth("EVENTS:VIEW"),function(e){t.showPage(new n({rql:e.rql}))})});
+define(["../router","../viewport","../user","./pages/EventListPage"],function(e,n,t,r){e.map("/events",t.auth("EVENTS:VIEW"),function(e){n.showPage(new r({rql:e.rql}))})});

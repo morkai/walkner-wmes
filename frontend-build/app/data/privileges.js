@@ -1,1 +1,1 @@
-define([],function(){var e="PRIVILEGES",t=window[e]||[];return delete window[e],t});
+define([],function(){var e="PRIVILEGES",n=window[e]||[];return delete window[e],n});
