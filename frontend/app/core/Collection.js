@@ -61,7 +61,7 @@ define([
       options.data = this.rqlQuery.toString();
     }
 
-    return Backbone.sync(type, model, options);
+    return Backbone.Collection.prototype.sync.call(this, type, model, options);
   };
 
   Collection.prototype.genClientUrl = function(action)
