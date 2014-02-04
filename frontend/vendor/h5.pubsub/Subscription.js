@@ -1,4 +1,5 @@
-define(function(require, exports, module) {
+define(function (require, exports, module) {'use strict';
+
 module.exports = Subscription;
 
 /**
@@ -47,7 +48,7 @@ function Subscription(id, topic)
 
   /**
    * @private
-   * @type {(function(*, string, string, object, h5.pubsub.Subscription): boolean)|null}
+   * @type {function|null}
    */
   this.doFilter = null;
 
@@ -63,16 +64,16 @@ function Subscription(id, topic)
 
 /**
  * @param {*} filter
- * @return {function(*, string, string, object, h5.pubsub.Subscription): boolean}
+ * @returns {function}
  * @throws {Error} If the implementation was not supplied by the user.
  */
-Subscription.compileFilter = function(filter)
+Subscription.compileFilter = function()
 {
-  throw new Error('Subscription.compileFilter() is not implemented!');
+  throw new Error("Subscription.compileFilter() is not implemented!");
 };
 
 /**
- * @return {object}
+ * @returns {object}
  */
 Subscription.prototype.toJSON = function()
 {
@@ -92,7 +93,7 @@ Subscription.prototype.toJSON = function()
 };
 
 /**
- * @return {*}
+ * @returns {*}
  */
 Subscription.prototype.getId = function()
 {
@@ -100,7 +101,7 @@ Subscription.prototype.getId = function()
 };
 
 /**
- * @return {string}
+ * @returns {string}
  */
 Subscription.prototype.getTopic = function()
 {
@@ -108,7 +109,7 @@ Subscription.prototype.getTopic = function()
 };
 
 /**
- * @return {object|(function(*, string, string, object, h5.pubsub.Subscription): boolean)|null}
+ * @returns {object|function|null}
  */
 Subscription.prototype.getFilter = function()
 {
@@ -116,8 +117,8 @@ Subscription.prototype.getFilter = function()
 };
 
 /**
- * @param {object|(function(*, string, string, object, h5.pubsub.Subscription): boolean)} filter
- * @return {h5.pubsub.Subscription}
+ * @param {object|function} filter
+ * @returns {h5.pubsub.Subscription}
  */
 Subscription.prototype.setFilter = function(filter)
 {
@@ -133,7 +134,7 @@ Subscription.prototype.setFilter = function(filter)
 
     if (typeof this.doFilter !== 'function')
     {
-      throw new Error('Subscription.compileFilter() must return a function.');
+      throw new Error("Subscription.compileFilter() must return a function.");
     }
   }
 
@@ -141,7 +142,7 @@ Subscription.prototype.setFilter = function(filter)
 };
 
 /**
- * @return {number}
+ * @returns {number}
  */
 Subscription.prototype.getLimit = function()
 {
@@ -150,7 +151,7 @@ Subscription.prototype.getLimit = function()
 
 /**
  * @param {number} limit
- * @return {h5.pubsub.Subscription}
+ * @returns {h5.pubsub.Subscription}
  * @throws {Error} If the specified limit is less than 1.
  */
 Subscription.prototype.setLimit = function(limit)
@@ -166,7 +167,7 @@ Subscription.prototype.setLimit = function(limit)
 };
 
 /**
- * @return {number}
+ * @returns {number}
  */
 Subscription.prototype.getMessageCount = function()
 {
@@ -176,7 +177,7 @@ Subscription.prototype.getMessageCount = function()
 /**
  * @param {string} event
  * @param {function} callback
- * @return {h5.pubsub.Subscription}
+ * @returns {h5.pubsub.Subscription}
  * @throws {Error} If the specified event is unknown.
  */
 Subscription.prototype.on = function(event, callback)
@@ -213,7 +214,7 @@ Subscription.prototype.on = function(event, callback)
 /**
  * @param {string} event
  * @param {function} callback
- * @return {h5.pubsub.Subscription}
+ * @returns {h5.pubsub.Subscription}
  * @throws {Error} If the specified event is unknown.
  */
 Subscription.prototype.off = function(event, callback)

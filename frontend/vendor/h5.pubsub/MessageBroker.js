@@ -1,4 +1,6 @@
-define(function(require, exports, module) {var Subscriptions = require('./Subscriptions');
+define(function (require, exports, module) {'use strict';
+
+var Subscriptions = require('./Subscriptions');
 var Subscription = require('./Subscription');
 var Sandbox = require('./Sandbox');
 
@@ -24,26 +26,27 @@ function MessageBroker()
   this.nextSubscriptionId = 0;
 
   /**
-   * @type {object}
+   * @type {object.<string, Array.<function>>}
    */
   this.listeners = {
-    'subscribe': null,
-    'cancel': null,
-    'new topic': null,
-    'empty topic': null,
-    'message': null
+    'subscribe': [],
+    'cancel': [],
+    'new topic': [],
+    'empty topic': [],
+    'message': []
   };
 }
 
 MessageBroker.prototype.destroy = function()
 {
   this.subscriptions.destroy();
+  this.subscriptions = null;
 
   this.listeners = null;
 };
 
 /**
- * @return {h5.pubsub.Sandbox}
+ * @returns {h5.pubsub.Sandbox}
  */
 MessageBroker.prototype.sandbox = function()
 {
@@ -73,7 +76,7 @@ MessageBroker.prototype.publish = function(topic, message, meta)
 /**
  * @param {string} topic
  * @param {function(string, *, object)} [onMessage]
- * @return {h5.pubsub.Subscription}
+ * @returns {h5.pubsub.Subscription}
  * @throws {Error} If the specified topic is invalid.
  */
 MessageBroker.prototype.subscribe = function(topic, onMessage)
@@ -94,7 +97,7 @@ MessageBroker.prototype.subscribe = function(topic, onMessage)
 
 /**
  * @param {string} topic
- * @return {h5.pubsub.MessageBroker}
+ * @returns {h5.pubsub.MessageBroker}
  * @throws {Error} If the specified topic is invalid.
  */
 MessageBroker.prototype.unsubscribe = function(topic)
@@ -105,12 +108,18 @@ MessageBroker.prototype.unsubscribe = function(topic)
 };
 
 /**
- * @return {object.<string, number>}
+ * @returns {object.<string, number>}
  */
 MessageBroker.prototype.count = function()
 {
-  var prefix = '';
   var result = {};
+
+  if (this.subscriptions === null)
+  {
+    return result;
+  }
+
+  var prefix = '';
 
   this.subscriptions.count(prefix, result);
 
@@ -120,7 +129,7 @@ MessageBroker.prototype.count = function()
 /**
  * @param {string} event
  * @param {function} callback
- * @return {h5.pubsub.MessageBroker}
+ * @returns {h5.pubsub.MessageBroker}
  * @throws {Error} If the specified event is unknown.
  */
 MessageBroker.prototype.on = function(event, callback)
@@ -133,18 +142,7 @@ MessageBroker.prototype.on = function(event, callback)
     throw new Error("Unknown event: " + event);
   }
 
-  if (listeners === null)
-  {
-    this.listeners[event] = callback;
-  }
-  else if (listenersType === 'function')
-  {
-    this.listeners[event] = [listeners, callback];
-  }
-  else
-  {
-    this.listeners[event].push(callback);
-  }
+  listeners.push(callback);
 
   return this;
 };
@@ -152,7 +150,7 @@ MessageBroker.prototype.on = function(event, callback)
 /**
  * @param {string} event
  * @param {function} callback
- * @return {h5.pubsub.MessageBroker}
+ * @returns {h5.pubsub.MessageBroker}
  * @throws {Error} If the specified event is unknown.
  */
 MessageBroker.prototype.off = function(event, callback)
@@ -165,34 +163,11 @@ MessageBroker.prototype.off = function(event, callback)
     throw new Error("Unknown event: " + event);
   }
 
-  if (listenersType === 'function' && listeners === callback)
+  var listenerIndex = listeners.indexOf(callback);
+
+  if (listenerIndex !== -1)
   {
-    this.listeners[event] = null;
-  }
-  else if (listenersType === 'object' && listeners !== null)
-  {
-    var listenerIndex = -1;
-    var listenersCount = listeners.length;
-
-    for (var i = 0; i < listenersCount; ++i)
-    {
-      if (listeners[i] === callback)
-      {
-        listenerIndex = i;
-
-        break;
-      }
-    }
-
-    if (listenerIndex !== -1)
-    {
-      listeners.splice(listenerIndex, 1);
-
-      if (listenersCount === 2)
-      {
-        this.listeners[event] = listeners[0];
-      }
-    }
+    listeners.splice(listenerIndex, 1);
   }
 
   return this;
@@ -201,7 +176,7 @@ MessageBroker.prototype.off = function(event, callback)
 /**
  * @param {string} event
  * @param {...*} args
- * @return {h5.pubsub.MessageBroker}
+ * @returns {h5.pubsub.MessageBroker}
  * @throws {Error} If the specified event is unknown.
  */
 MessageBroker.prototype.emit = function(event, args)
@@ -214,40 +189,12 @@ MessageBroker.prototype.emit = function(event, args)
     throw new Error("Unknown event: " + event);
   }
 
-  if (listeners === null)
+  if (!listeners.length)
   {
     return this;
   }
 
   var argCount = arguments.length;
-
-  if (typeof listeners === 'function')
-  {
-    switch (argCount)
-    {
-      case 4:
-        listeners(arguments[1], arguments[2], arguments[3]);
-        break;
-
-      case 3:
-        listeners(arguments[1], arguments[2]);
-        break;
-
-      case 2:
-        listeners(arguments[1]);
-        break;
-
-      default:
-      {
-        args = Array.prototype.slice.call(arguments);
-        args.shift();
-
-        listeners.apply(null, args);
-      }
-    }
-
-    return this;
-  }
 
   if (argCount > 4)
   {
@@ -283,7 +230,7 @@ MessageBroker.prototype.emit = function(event, args)
 
 /**
  * @private
- * @return {string}
+ * @returns {string}
  */
 MessageBroker.prototype.getNextSubscriptionId = function()
 {

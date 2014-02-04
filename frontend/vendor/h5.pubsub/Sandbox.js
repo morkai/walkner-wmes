@@ -1,4 +1,4 @@
-define(function(require, exports, module) {var Subscription = require('./Subscription');
+define(function (require, exports, module) {'use strict';
 
 module.exports = Sandbox;
 
@@ -33,12 +33,12 @@ Sandbox.prototype.destroy = function()
 {
   var subscriptions = this.subscriptions;
 
-  for (var id in subscriptions)
+  if (subscriptions !== null)
   {
-    if (subscriptions.hasOwnProperty(id))
+    Object.keys(subscriptions).forEach(function(id)
     {
       subscriptions[id].cancel();
-    }
+    });
   }
 
   this.subscriptions = null;
@@ -46,7 +46,7 @@ Sandbox.prototype.destroy = function()
 };
 
 /**
- * @return {h5.pubsub.Sandbox}
+ * @returns {h5.pubsub.Sandbox}
  */
 Sandbox.prototype.sandbox = function()
 {
@@ -57,7 +57,7 @@ Sandbox.prototype.sandbox = function()
  * @param {string} topic
  * @param {*} [message]
  * @param {object} [meta]
- * @return {h5.pubsub.Sandbox}
+ * @returns {h5.pubsub.Sandbox}
  */
 Sandbox.prototype.publish = function(topic, message, meta)
 {
@@ -69,7 +69,7 @@ Sandbox.prototype.publish = function(topic, message, meta)
 /**
  * @param {string} topic
  * @param {function(string, *, object)} [onMessage]
- * @return {h5.pubsub.Subscription}
+ * @returns {h5.pubsub.Subscription}
  */
 Sandbox.prototype.subscribe = function(topic, onMessage)
 {
@@ -84,7 +84,7 @@ Sandbox.prototype.subscribe = function(topic, onMessage)
 
 /**
  * @param {string} topic
- * @return {h5.pubsub.Sandbox}
+ * @returns {h5.pubsub.Sandbox}
  */
 Sandbox.prototype.unsubscribe = function(topic)
 {

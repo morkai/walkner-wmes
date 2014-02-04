@@ -1,4 +1,5 @@
-define(function(require, exports, module) {
+define(function (require, exports, module) {'use strict';
+
 module.exports = Subscriptions;
 
 var EMPTY_TOPIC_PARTS = [];
@@ -18,21 +19,21 @@ function Subscriptions(messageBroker)
 
   /**
    * @private
-   * @type {object.<string, h5.pubsub.Subscriptions>|null}
+   * @type {object.<string, h5.pubsub.Subscriptions>}
    */
-  this.children = null;
+  this.children = {};
 
   /**
    * @private
-   * @type {h5.pubsub.Subscription|Array.<h5.pubsub.Subscription>|null}
+   * @type {Array.<h5.pubsub.Subscription>}
    */
-  this.subscriptions = null;
+  this.subscriptions = [];
 
   /**
    * @private
-   * @type {Array.<number>|null}
+   * @type {Array.<h5.pubsub.Subscription>}
    */
-  this.subscriptionsPendingRemoval = null;
+  this.subscriptionsPendingRemoval = [];
 
   /**
    * @private
@@ -56,18 +57,14 @@ Subscriptions.TOKEN = {
 Subscriptions.prototype.destroy = function()
 {
   var children = this.children;
+  var childTopicParts = Object.keys(children);
 
-  if (children !== null)
+  for (var i = 0, l = childTopicParts.length; i < l; ++i)
   {
-    var childTopicParts = Object.keys(children);
-
-    for (var i = 0, l = childTopicParts.length; i < l; ++i)
-    {
-      children[childTopicParts[i]].destroy();
-    }
-
-    this.children = null;
+    children[childTopicParts[i]].destroy();
   }
+
+  this.children = null;
 
   this.removeSubscriptions();
 
@@ -81,26 +78,29 @@ Subscriptions.prototype.destroy = function()
  */
 Subscriptions.prototype.count = function(prefix, result)
 {
-  if (this.subscriptions !== null)
+  if (this.subscriptions.length)
   {
-    result[prefix] = this.subscriptions.length || 1;
+    result[prefix] = this.subscriptions.length;
   }
 
-  if (this.children !== null)
+  var childTopicParts = Object.keys(this.children);
+  var l = childTopicParts.length;
+
+  if (!l)
   {
-    if (prefix.length !== 0)
-    {
-      prefix += Subscriptions.TOKEN.SEPARATOR;
-    }
+    return;
+  }
 
-    var childTopicParts = Object.keys(this.children);
+  if (prefix.length !== 0)
+  {
+    prefix += Subscriptions.TOKEN.SEPARATOR;
+  }
 
-    for (var i = 0, l = childTopicParts.length; i < l; ++i)
-    {
-      var childTopicPart = childTopicParts[i];
+  for (var i = 0; i < l; ++i)
+  {
+    var childTopicPart = childTopicParts[i];
 
-      this.children[childTopicPart].count(prefix + childTopicPart, result);
-    }
+    this.children[childTopicPart].count(prefix + childTopicPart, result);
   }
 };
 
@@ -144,26 +144,13 @@ Subscriptions.prototype.send = function(topic, message, meta)
  */
 Subscriptions.prototype.addSubscription = function(topicParts, subscription)
 {
-  var subscriptions = this.subscriptions;
-
   if (topicParts.length === 0)
   {
-    if (subscriptions === null)
-    {
-      this.subscriptions = subscription;
-    }
-    else if (typeof subscriptions.length === 'undefined')
-    {
-      this.subscriptions = [subscriptions, subscription];
-    }
-    else
-    {
-      subscriptions.push(subscription);
-    }
+    this.subscriptions.push(subscription);
 
     subscription.on('cancel', this.removeSubscription);
 
-    if (this.subscriptions === subscription)
+    if (this.subscriptions.length === 1)
     {
       this.messageBroker.emit('new topic', subscription.getTopic());
     }
@@ -171,15 +158,10 @@ Subscriptions.prototype.addSubscription = function(topicParts, subscription)
     return;
   }
 
-  if (this.children === null)
-  {
-    this.children = {};
-  }
-
   var children = this.children;
   var topicPart = topicParts.shift();
 
-  if (!(topicPart in children))
+  if (typeof children[topicPart] === 'undefined')
   {
     children[topicPart] = new Subscriptions(this.messageBroker);
   }
@@ -193,33 +175,25 @@ Subscriptions.prototype.addSubscription = function(topicParts, subscription)
  */
 Subscriptions.prototype.removeSubscriptions = function(topicParts)
 {
+  var i;
+  var l;
+
   if (typeof topicParts === 'undefined' || topicParts.length === 0)
   {
     var subscriptions = this.subscriptions;
 
-    if (subscriptions === null)
+    if (!subscriptions.length)
     {
       return;
     }
 
-    this.subscriptions = null;
+    this.subscriptions = [];
 
-    var emptyTopic;
+    var emptyTopic = subscriptions[0].getTopic();
 
-    if (typeof subscriptions.length === 'undefined')
+    for (i = 0, l = subscriptions.length; i < l; ++i)
     {
-      subscriptions.cancel();
-
-      emptyTopic = subscriptions.getTopic();
-    }
-    else
-    {
-      emptyTopic = subscriptions[0].getTopic();
-
-      for (var i = 0, l = subscriptions.length; i < l; ++i)
-      {
-        subscriptions[i].cancel();
-      }
+      subscriptions[i].cancel();
     }
 
     this.messageBroker.emit('empty topic', emptyTopic);
@@ -227,14 +201,9 @@ Subscriptions.prototype.removeSubscriptions = function(topicParts)
     return;
   }
 
-  if (this.children === null)
-  {
-    return;
-  }
-
   var topicPart = topicParts.shift();
 
-  if (topicPart in this.children)
+  if (typeof this.children[topicPart] !== 'undefined')
   {
     this.children[topicPart].removeSubscriptions(topicParts);
   }
@@ -251,9 +220,7 @@ Subscriptions.prototype.sendMessage = function(topicParts, topic, message, meta)
 {
   ++this.sendingMessagesCount;
 
-  var hasAnyChildren = this.children !== null;
-
-  if (hasAnyChildren && Subscriptions.TOKEN.ALL in this.children)
+  if (typeof this.children[Subscriptions.TOKEN.ALL] !== 'undefined')
   {
     this.children[Subscriptions.TOKEN.ALL].sendMessage(
       EMPTY_TOPIC_PARTS, topic, message, meta
@@ -262,33 +229,23 @@ Subscriptions.prototype.sendMessage = function(topicParts, topic, message, meta)
 
   if (topicParts.length === 0)
   {
-    if (this.subscriptions !== null)
+    for (var i = 0, l = this.subscriptions.length; i < l; ++i)
     {
-      if (typeof this.subscriptions.length === 'undefined')
-      {
-        this.subscriptions.send(topic, message, meta);
-      }
-      else
-      {
-        for (var i = 0, l = this.subscriptions.length; i < l; ++i)
-        {
-          this.subscriptions[i].send(topic, message, meta);
-        }
-      }
+      this.subscriptions[i].send(topic, message, meta);
     }
   }
-  else if (hasAnyChildren)
+  else
   {
     var topicPart = topicParts.shift();
 
-    if (Subscriptions.TOKEN.ANY in this.children)
+    if (typeof this.children[Subscriptions.TOKEN.ANY] !== 'undefined')
     {
       this.children[Subscriptions.TOKEN.ANY].sendMessage(
         [].concat(topicParts), topic, message, meta
       );
     }
 
-    if (topicPart in this.children)
+    if (typeof this.children[topicPart] !== 'undefined')
     {
       this.children[topicPart].sendMessage(topicParts, topic, message, meta);
     }
@@ -302,7 +259,7 @@ Subscriptions.prototype.sendMessage = function(topicParts, topic, message, meta)
 /**
  * @private
  * @param {string} topic
- * @return {Array.<string>}
+ * @returns {Array.<string>}
  * @throws {Error} If the specified topic is empty.
  */
 Subscriptions.prototype.splitTopic = function(topic)
@@ -330,61 +287,36 @@ Subscriptions.prototype.removeSubscription = function(subscription)
 {
   this.messageBroker.emit('cancel', subscription);
 
-  var subscriptions = this.subscriptions;
-
-  if (subscriptions === null)
+  if (this.subscriptions.length === 0)
   {
     return;
   }
 
-  if (subscriptions === subscription)
+  if (this.subscriptions.length === 1 && this.subscriptions[0] === subscription)
   {
-    this.subscriptions = null;
+    this.subscriptions.length = 0;
 
     this.messageBroker.emit('empty topic', subscription.getTopic());
 
     return;
   }
 
-  var initialSubscriptionCount = subscriptions.length;
+  this.removeOrQueueRemoval(subscription);
+};
 
-  if (typeof initialSubscriptionCount === 'number')
+/**
+ * @private
+ * @param {h5.pubsub.Subscription} subscription
+ */
+Subscriptions.prototype.removeOrQueueRemoval = function(subscription)
+{
+  if (this.sendingMessagesCount === 0)
   {
-    var subscriptionIndex = -1;
-
-    for (var i = 0; i < initialSubscriptionCount; ++i)
-    {
-      if (subscriptions[i] === subscription)
-      {
-        subscriptionIndex = i;
-
-        break;
-      }
-    }
-
-    if (subscriptionIndex !== -1)
-    {
-      if (this.sendingMessagesCount > 0)
-      {
-        if (this.subscriptionsPendingRemoval === null)
-        {
-          this.subscriptionsPendingRemoval = [subscriptionIndex];
-        }
-        else
-        {
-          this.subscriptionsPendingRemoval.push(subscriptionIndex);
-        }
-
-        return;
-      }
-
-      subscriptions.splice(subscriptionIndex, 1);
-
-      if (initialSubscriptionCount === 2)
-      {
-        this.subscriptions = subscriptions[0];
-      }
-    }
+    this.subscriptions.splice(this.subscriptions.indexOf(subscription), 1);
+  }
+  else
+  {
+    this.subscriptionsPendingRemoval.push(subscription);
   }
 };
 
@@ -394,27 +326,40 @@ Subscriptions.prototype.removeSubscription = function(subscription)
 Subscriptions.prototype.removePendingSubscriptions = function()
 {
   var subscriptionsPendingRemoval = this.subscriptionsPendingRemoval;
+  var subscriptionsPendingRemovalCount = subscriptionsPendingRemoval.length;
 
-  if (subscriptionsPendingRemoval === null || this.sendingMessagesCount > 0)
+  if (!subscriptionsPendingRemovalCount || this.sendingMessagesCount)
   {
     return;
   }
 
   var subscriptions = this.subscriptions;
 
-  for (var i = 0, l = subscriptionsPendingRemoval.length; i < l; ++i)
+  if (subscriptionsPendingRemovalCount === subscriptions.length)
   {
-    subscriptions.splice(subscriptionsPendingRemoval[i], 1);
+    subscriptionsPendingRemoval.length = 0;
+    subscriptions.length = 0;
+
+    return;
   }
 
-  var remainingSubscriptions = subscriptions.length;
+  var indexesToRemove = [];
+  var i;
+  var l;
 
-  if (remainingSubscriptions === 1)
+  for (i = 0; i < subscriptionsPendingRemovalCount; ++i)
   {
-    this.subscriptions = subscriptions[0];
+    indexesToRemove.push(subscriptions.indexOf(subscriptionsPendingRemoval[i]));
   }
 
-  this.subscriptionsPendingRemoval = null;
+  indexesToRemove.sort(function(a, b) { return b - a; });
+
+  for (i = 0, l = indexesToRemove.length; i < l; ++i)
+  {
+    subscriptions.splice(indexesToRemove[i], 1);
+  }
+
+  subscriptionsPendingRemoval.length = 0;
 };
 
 });
