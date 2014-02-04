@@ -2,15 +2,15 @@
   <p class="message message-inline message-warning"><%- t('production', 'endWorkDialog:warning', {downtime: downtime}) %></p>
   <div class="form-group">
     <label for="<%- idPrefix %>-quantitiesDone"><%- t('production', 'endWorkDialog:quantitiesDone', {hourRange: hourRange}) %></label>
-    <input id="<%- idPrefix %>-quantitiesDone" class="form-control" type="number" value="<%- quantitiesDone %>" autofocus>
+    <input id="<%- idPrefix %>-quantitiesDone" class="form-control" type="number" value="<%- quantitiesDone %>" autofocus min="0" max="<%- maxQuantitiesDone %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-quantityDone"><%- t('production', 'endWorkDialog:quantityDone') %></label>
-    <input id="<%- idPrefix %>-quantityDone" class="form-control" type="number" value="<%- quantityDone %>">
+    <input id="<%- idPrefix %>-quantityDone" class="form-control" type="number" value="<%- quantityDone %>" max="<%- maxQuantityDone %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-workerCount"><%- t('production', 'endWorkDialog:workerCount') %></label>
-    <input id="<%- idPrefix %>-workerCount" class="form-control" type="number" value="<%- workerCount %>">
+    <input id="<%- idPrefix %>-workerCount" class="form-control" type="number" value="<%- workerCount %>" max="<%- maxWorkerCount %>">
   </div>
   <div class="form-actions">
     <button class="btn btn-warning" type="submit"><%- t('production', 'endWorkDialog:yes') %></button>

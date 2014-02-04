@@ -128,11 +128,14 @@ define([
       }
 
       var view = this;
+      var maxQuantitiesDone = this.model.getMaxQuantitiesDone();
       var $change = $td.find('.btn-link').hide();
       var $value = $td.find('span').hide();
       var oldValue = parseInt($value.text(), 10);
+      var $form = $('<form></form>').submit(hideAndSave);
       var $input = $('<input class="form-control" type="number" min="0">')
         .attr('placeholder', t('production', 'quantities:newValuePlaceholder'))
+        .attr('max', maxQuantitiesDone)
         .val(oldValue)
         .on('blur', hideAndSave)
         .on('keydown', function(e)
@@ -141,17 +144,15 @@ define([
           {
             setTimeout(hide, 1);
           }
-          else if (e.which === 13)
-          {
-            setTimeout(hideAndSave, 1);
-          }
         })
-        .appendTo($td)
-        .select();
+        .appendTo($form);
+
+      $form.appendTo($td);
+      $input.select();
 
       function hide()
       {
-        $input.remove();
+        $form.remove();
         $change.show();
         $value.show();
       }
@@ -172,6 +173,8 @@ define([
         }
 
         view.$('td[data-hour=' + hour + '] .btn-link').focus();
+
+        return false;
       }
     },
 
@@ -187,7 +190,8 @@ define([
       var options = {
         from: hours[0],
         to: hours[1],
-        currentQuantity: parseInt($td.find('span').text(), 10)
+        currentQuantity: parseInt($td.find('span').text(), 10),
+        maxQuantity: this.model.getMaxQuantitiesDone()
       };
 
       var quantityEditorView = new QuantityEditorView(options);

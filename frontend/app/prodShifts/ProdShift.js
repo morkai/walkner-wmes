@@ -568,6 +568,11 @@ define([
       return this.get('state') === 'working';
     },
 
+    getMaxQuantitiesDone: function()
+    {
+      return 150;
+    },
+
     /**
      * @returns {boolean}
      */

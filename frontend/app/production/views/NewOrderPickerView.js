@@ -71,7 +71,9 @@ define([
         replacingOrder: this.model.hasOrder(),
         quantityDone: this.model.prodShiftOrder.get('quantityDone') || 0,
         workerCount: this.model.prodShiftOrder.get('workerCount') || 0,
-        orderIdType: this.model.getOrderIdType()
+        orderIdType: this.model.getOrderIdType(),
+        maxQuantityDone: this.model.prodShiftOrder.getMaxQuantityDone(),
+        maxWorkerCount: this.model.prodShiftOrder.getMaxWorkerCount()
       };
     },
 

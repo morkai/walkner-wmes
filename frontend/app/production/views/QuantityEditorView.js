@@ -44,7 +44,8 @@ define([
         idPrefix: this.idPrefix,
         from: this.options.from,
         to: this.options.to,
-        currentQuantity: this.options.currentQuantity
+        currentQuantity: this.options.currentQuantity,
+        maxQuantity: this.options.maxQuantity
       };
     },
 

@@ -314,13 +314,15 @@ define([
       );
     },
 
-    showEditor: function($property, oldValue, changeFunction)
+    showEditor: function($property, oldValue, maxValue, changeFunction)
     {
       var $value = $property.find('.production-property-value');
 
       var view = this;
+      var $form = $('<form></form>').submit(function() { hideAndSave(); return false; });
       var $input = $('<input class="form-control input-lg" type="number" min="0">')
         .val(oldValue)
+        .attr('max', maxValue)
         .on('blur', hideAndSave)
         .on('keydown', function(e)
         {
@@ -328,17 +330,15 @@ define([
           {
             setTimeout(hide, 1);
           }
-          else if (e.which === 13)
-          {
-            setTimeout(hideAndSave, 1);
-          }
         }).
         css({
           position: 'absolute',
           width: $value.width() + 'px'
         })
-        .appendTo($value)
-        .select();
+        .appendTo($form);
+
+      $form.appendTo($value);
+      $input.select();
 
       function hide()
       {
@@ -351,7 +351,7 @@ define([
 
         hide();
 
-        if (newValue !== oldValue && newValue >= 0)
+        if (newValue !== oldValue && $input[0].checkValidity())
         {
           view.model[changeFunction](newValue);
         }
@@ -365,6 +365,7 @@ define([
       this.showEditor(
         this.$('.production-property-quantityDone'),
         this.model.prodShiftOrder.getQuantityDone(),
+        this.model.prodShiftOrder.getMaxQuantityDone(),
         'changeQuantityDone'
       );
     },
@@ -374,6 +375,7 @@ define([
       this.showEditor(
         this.$('.production-property-workerCount'),
         this.model.prodShiftOrder.getWorkerCount(),
+        this.model.prodShiftOrder.getMaxWorkerCount(),
         'changeWorkerCount'
       );
     },

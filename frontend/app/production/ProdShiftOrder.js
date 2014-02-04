@@ -249,6 +249,30 @@ define([
       return this.get('workerCount') || 0;
     },
 
+    getMaxWorkerCount: function()
+    {
+      var workerCountSap = this.getWorkerCountSap();
+
+      if (typeof workerCountSap === 'number')
+      {
+        return workerCountSap + Math.max(1, Math.round(workerCountSap * 0.25));
+      }
+
+      return 15;
+    },
+
+    getMaxQuantityDone: function()
+    {
+      var orderData = this.get('orderData');
+
+      if (orderData && orderData.qty)
+      {
+        return Math.ceil(orderData.qty * 1.25);
+      }
+
+      return 999;
+    },
+
     getStartedAt: function()
     {
       var startedAt = this.get('startedAt');
