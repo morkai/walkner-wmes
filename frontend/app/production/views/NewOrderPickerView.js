@@ -70,7 +70,8 @@ define([
         offline: !this.socket.isConnected(),
         replacingOrder: this.model.hasOrder(),
         quantityDone: this.model.prodShiftOrder.get('quantityDone') || 0,
-        workerCount: this.model.prodShiftOrder.get('workerCount') || 0
+        workerCount: this.model.prodShiftOrder.get('workerCount') || 0,
+        orderIdType: this.model.getOrderIdType()
       };
     },
 
@@ -177,7 +178,7 @@ define([
 
     getOrdersUrl: function(term)
     {
-      var type = /^114[0-9]{0,6}/.test(term) ? 'no' : 'nc12';
+      var type = this.model.getOrderIdType();
 
       this.$id('order').attr('data-type', type);
 
@@ -251,6 +252,7 @@ define([
 
     handleOfflinePick: function(submitEl)
     {
+      var orderIdType = this.model.getOrderIdType();
       var orderInfo = {
         no: null,
         nc12: null
@@ -259,12 +261,13 @@ define([
       var orderNoOrNc12 = this.$id('order').val().trim().replace(/[^a-zA-Z0-9]+/g, '');
       var operationNo = this.$id('operation').val().trim().replace(/[^0-9]+/g, '');
 
-      if (/^114[0-9]{6}$/.test(orderNoOrNc12))
+      if (orderIdType === 'no' && /^114[0-9]{6}$/.test(orderNoOrNc12))
       {
         orderInfo.no = orderNoOrNc12;
       }
-      else if (orderNoOrNc12.length === 12
-        || (orderNoOrNc12.length < 9 && /^[a-zA-Z]+[a-zA-Z0-9]*$/.test(orderNoOrNc12)))
+      else if (orderIdType === 'nc12'
+        && (orderNoOrNc12.length === 12
+        || (orderNoOrNc12.length < 9 && /^[a-zA-Z]+[a-zA-Z0-9]*$/.test(orderNoOrNc12))))
       {
         orderInfo.nc12 = orderNoOrNc12;
       }
@@ -281,7 +284,7 @@ define([
             'production',
             orderNoOrNc12 === ''
               ? 'newOrderPicker:msg:emptyOrder'
-              : 'newOrderPicker:msg:invalidOrderOrNc12'
+              : ('newOrderPicker:msg:invalidOrderId:' + orderIdType)
           )
         });
       }

@@ -4,6 +4,7 @@ define([
   '../time',
   '../socket',
   '../core/Model',
+  '../data/subdivisions',
   '../data/workCenters',
   '../data/prodLines',
   '../data/prodLog',
@@ -16,6 +17,7 @@ define([
   time,
   socket,
   Model,
+  subdivisions,
   workCenters,
   prodLines,
   prodLog,
@@ -542,6 +544,13 @@ define([
       }
 
       return quantitiesDone[hourIndex].actual;
+    },
+
+    getOrderIdType: function()
+    {
+      var subdivision = subdivisions.get(this.get('subdivision'));
+
+      return subdivision && subdivision.get('type') === 'press' ? 'nc12' : 'no';
     },
 
     isIdle: function()
