@@ -46,6 +46,7 @@
   "FORM:ERROR:quantityDone": "Pole <em>Ilość dobrych</em> jest wymagane!",
   "FORM:ERROR:startedAt": "Pole <em>Godz. rozp.</em> jest wymagane!",
   "FORM:ERROR:finishedAt": "Pole <em>Godz. zak.</em> jest wymagane!",
+  "FORM:ERROR:date": "Czas zmiany nie może być z przyszłości!",
   "FORM:PLACEHOLDER:part": "Szukaj części po 12NC...",
   "FORM:PLACEHOLDER:operation": "Wybierz operację...",
   "FORM:PLACEHOLDER:prodLine": "Wybierz maszynę..."

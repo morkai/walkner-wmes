@@ -58,7 +58,7 @@ define([
       {
         var time = e.target.value.trim().replace(/[^0-9: \-]+/g, '');
 
-        var matches = time.match(/^([0-9]+)(?::| +|\-)([0-9]+)$/);
+        var matches = time.match(/^([0-9]+)(?::| +|\-)+([0-9]+)$/);
         var hh = 0;
         var mm = 0;
 
@@ -114,7 +114,9 @@ define([
         {
           this.$('.table-responsive').prop('scrollLeft', 0);
         }
-      }
+      },
+      'change input[name=shift]': 'validateShiftStartTime',
+      'change input[name=date]': 'validateShiftStartTime'
     },
 
     initialize: function()
@@ -211,6 +213,7 @@ define([
       formData.operators = this.$id('operators').select2('data').map(userDataToInfo);
       formData.operator = userDataToInfo(this.$id('operator').select2('data'));
       formData.master = userDataToInfo(this.$id('master').select2('data'));
+      formData.shift = parseInt(formData.shift, 10);
 
       function userDataToInfo(userData)
       {
@@ -286,9 +289,26 @@ define([
       };
     },
 
+    validateShiftStartTime: function()
+    {
+      var $date = this.$id('date');
+      var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
+      var shiftStartTime = Date.parse($date.val()) + 6 * 3600000 + (shift - 1) * 8 * 3600000;
+
+      $date[0].setCustomValidity(
+        shiftStartTime > Date.now() ? t('pressWorksheets', 'FORM:ERROR:date') : ''
+      );
+    },
+
     checkValidity: function(formData)
     {
-      // TODO: Make sure that the specified date is not in the future
+      var shiftStartTime =
+        Date.parse(formData.date) + 6 * 3600000 + (formData.shift - 1) * 8 * 3600000;
+
+      if (shiftStartTime > Date.now())
+      {
+        return false;
+      }
 
       if (formData.orders.length === 0)
       {
