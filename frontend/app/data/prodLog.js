@@ -2,12 +2,14 @@ define([
   'app/user',
   'app/time',
   'app/broker',
-  'app/socket'
+  'app/socket',
+  'app/updater/index'
 ], function(
   user,
   time,
   broker,
-  socket
+  socket,
+  updater
 ) {
   'use strict';
 
@@ -16,7 +18,7 @@ define([
   var syncingLogEntries = null;
   var enabled = false;
 
-  broker.subscribe('socket.connected', sync.bind(null, true));
+  broker.subscribe('socket.connected', setTimeout.bind(null, sync, 1337));
 
   broker.subscribe('socket.disconnected', restoreSyncingEntries);
 
@@ -52,7 +54,10 @@ define([
 
   function sync()
   {
-    if (!enabled || !socket.isConnected() || syncingLogEntries !== null)
+    if (!enabled
+      || !socket.isConnected()
+      || syncingLogEntries !== null
+      || updater.isRestarting())
     {
       return;
     }

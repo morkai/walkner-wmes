@@ -17,8 +17,6 @@ module.exports = function startCoreRoutes(app, express)
 
   express.get('/config.js', sendRequireJsConfig);
 
-  express.get('/wmes.appcache', sendAppCacheManifest);
-
   function showIndex(req, res)
   {
     var sessionUser = req.session.user;
@@ -29,6 +27,10 @@ module.exports = function startCoreRoutes(app, express)
     res.render('index', {
       appCache: appCache,
       appData: {
+        VERSIONS: JSON.stringify({
+          backend: app.updater.package.backendVersion,
+          frontend: app.updater.package.frontendVersion
+        }),
         TIME: JSON.stringify(Date.now()),
         LOCALE: JSON.stringify(locale),
         GUEST_USER: JSON.stringify(app.user.guest),
@@ -69,18 +71,5 @@ module.exports = function startCoreRoutes(app, express)
       paths: requirejsPaths,
       shim: requirejsShim
     });
-  }
-
-  function sendAppCacheManifest(req, res)
-  {
-    if (appCache)
-    {
-      res.type('text/cache-manifest');
-      res.sendfile('wmes.appcache', {root: express.get('static path')});
-    }
-    else
-    {
-      res.send(404);
-    }
   }
 };

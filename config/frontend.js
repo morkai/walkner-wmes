@@ -3,6 +3,7 @@
 exports.id = 'frontend';
 
 exports.modules = [
+  'updater',
   'mongoose',
   'events',
   'pubsub',
@@ -30,7 +31,6 @@ exports.modules = [
   'prodShifts',
   'pressWorksheets',
   'reports',
-  {id: 'messenger/client', name: 'messenger/client:attachments'},
   {id: 'messenger/client', name: 'messenger/client:importer'},
   'httpServer',
   'httpsServer',
@@ -85,7 +85,8 @@ exports.pubsub = {
     'fte.master.*', 'fte.leader.*', 'hourlyPlans.*',
     'users.syncFailed',
     'production.synced.*',
-    'prodDowntimes.created.*', 'prodDowntimes.finished.*', 'prodDowntimes.corroborated.*'
+    'prodDowntimes.created.*', 'prodDowntimes.finished.*', 'prodDowntimes.corroborated.*',
+    'updater.newVersion'
   ]
 };
 
@@ -142,4 +143,15 @@ exports['messenger/client:importer'] = {
   repHost: '127.0.0.1',
   repPort: 60021,
   responseTimeout: 5000
+};
+
+exports.updater = {
+  manifestPath: __dirname + '/manifest.appcache',
+  packageJsonPath: __dirname + '/../package.json',
+  restartDelay: 10000,
+  pull: {
+    exe: 'git.exe',
+    cwd: __dirname + '/../',
+    timeout: 30000
+  }
 };

@@ -2,6 +2,7 @@ define([
   'jquery',
   'app/i18n',
   'app/viewport',
+  'app/updater/index',
   'app/core/View',
   'app/data/prodLog',
   'app/prodShifts/ProdShift',
@@ -15,6 +16,7 @@ define([
   $,
   t,
   viewport,
+  updater,
   View,
   prodLog,
   ProdShift,
@@ -47,6 +49,7 @@ define([
 
     initialize: function()
     {
+      updater.disableViews();
       prodLog.enable();
 
       this.defineModels();
@@ -64,6 +67,7 @@ define([
 
       this.model.stopShiftChangeMonitor();
 
+      updater.enableViews();
       prodLog.disable();
     },
 
@@ -198,7 +202,7 @@ define([
 
     onBeforeUnload: function()
     {
-      if (this.model.isIdle())
+      if (this.model.isIdle() || updater.isFrontendReloading())
       {
         return;
       }

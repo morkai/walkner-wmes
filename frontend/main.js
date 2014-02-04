@@ -244,6 +244,7 @@
       'app/time',
       'app/routes',
       'app/visibility',
+      'app/updater/index',
       'bootstrap',
       'moment-lang/' + (window.LOCALE || 'pl'),
       'select2-lang/' + (window.LOCALE || 'pl'),

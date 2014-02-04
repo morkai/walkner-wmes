@@ -1,0 +1,4 @@
+{
+  "restart:backend": "Serwer aplikacji jest restartowany! Komunikacja z serwerem może przez chwilę nie działać...",
+  "restart:frontend": "Dostępna jest nowa wersja aplikacji! <a href='javascript:window.location.reload()'>Kliknij tutaj aby przeładować przeglądarkę</a>..."
+}
