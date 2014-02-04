@@ -1,4 +1,4 @@
-walkner-hydro application is licensed under the Non-Profit Open Software License
+walkner-wmes application is licensed under the Non-Profit Open Software License
 version 3.0 (see 'The Non-Profit Open Software License version 3.0' or visit
 http://opensource.org/licenses/NPOSL-3.0).
 
@@ -7,14 +7,8 @@ Third-party acknowledgements:
   - Everything from `frontend/vendor/` and `node_modules/` directories is licensed
     under its own terms (compatible, open-source licenses).
 
-  - `frontend/favicon.ico` and `frontend/assets/img/tap-water.svg` derived from
-    http://openclipart.org/detail/169893/water-by-scyg
-
-  - `backend/templates/svg/switch-knob.ejs` derived from
-    http://openclipart.org/detail/178177/switch-knobs-by-mi_brami-178177
-
-  - `backend/templates/svg/led.ejs` derived from
-    http://openclipart.org/detail/26900/led-circle-black-by-anonymous
+  - `frontend/favicon.ico` is an icon (fa-cogs) from Font Awesome
+    http://fortawesome.github.io/Font-Awesome/
 
 The Non-Profit Open Software License version 3.0
 
