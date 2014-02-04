@@ -74,6 +74,9 @@
 .pressWorksheets-form .table-responsive > .table-bordered > tfoot > tr > td:last-child {
   border-right: 0;
 }
+.pressWorksheets-form-separator {
+  border-left: 2px solid #ddd!important;
+}
 .prodWorksheets-details-tableContainer {
   padding: 0!important;
   vertical-align: top!important;
