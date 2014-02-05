@@ -258,9 +258,14 @@
   }
 
   var appCache = window.applicationCache;
+  var reload = location.reload.bind(location);
+  var reloadTimer = setTimeout(reload, 60000);
 
   function doStartApp()
   {
+    clearTimeout(reloadTimer);
+    reloadTimer = null;
+
     appCache.onnoupdate = null;
     appCache.oncached = null;
     appCache.onerror = null;
@@ -273,8 +278,8 @@
   appCache.onnoupdate = doStartApp;
   appCache.oncached = doStartApp;
   appCache.onerror = doStartApp;
-  appCache.onobsolete = location.reload.bind(location);
-  appCache.onupdateready = location.reload.bind(location);
+  appCache.onobsolete = reload;
+  appCache.onupdateready = reload;
 
   function monkeyPatch(Backbone, $)
   {
