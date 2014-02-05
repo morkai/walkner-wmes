@@ -16,6 +16,8 @@ define([
 
     template: endWorkDialogTemplate,
 
+    dialogClassName: 'production-modal',
+
     events: {
       'submit': function(e)
       {

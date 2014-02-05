@@ -19,6 +19,8 @@ define([
 
     template: personelPickerTemplate,
 
+    dialogClassName: 'production-modal',
+
     localTopics: {
       'socket.connected': 'render',
       'socket.disconnected': 'render'

@@ -9,6 +9,9 @@
     <label for="<%- idPrefix %>-workerCount"><%- t('production', 'newOrderPicker:workerCount') %></label>
     <input id="<%- idPrefix %>-workerCount" class="form-control" type="number" value="<%- workerCount %>" min="0" max="<%- maxWorkerCount %>">
   </div>
+  <div class="modal-header">
+    <h3 class="modal-title"><%- t('production', 'newOrderPicker:title') %></h3>
+  </div>
   <% } %>
   <% if (offline) { %>
   <p class="message message-inline message-warning"><%- t('production', 'newOrderPicker:offline:warning:' + orderIdType) %></p>
@@ -24,7 +27,7 @@
     <input id="<%- idPrefix %>-operation" class="form-control" type="text" placeholder="<%- t('production', 'newOrderPicker:offline:operation:placeholder') %>">
   </div>
   <div class="form-actions">
-    <button type="submit" class="btn btn-success"><%- t('production', 'newOrderPicker:submit') %></button>
+    <button type="submit" class="btn btn-success"><%- t('production', 'newOrderPicker:submit' + (replacingOrder ? ':replacing' :  '')) %></button>
     <button type="button" class="cancel btn btn-link"><%- t('production', 'newOrderPicker:cancel') %></button>
   </div>
 </form>

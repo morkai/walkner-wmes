@@ -23,6 +23,8 @@ define([
 
     template: downtimePickerTemplate,
 
+    dialogClassName: 'production-modal',
+
     events: {
       'keypress .select2-container': function(e)
       {

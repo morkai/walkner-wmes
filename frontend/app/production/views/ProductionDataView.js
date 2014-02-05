@@ -251,7 +251,7 @@ define([
     {
       viewport.showDialog(
         new NewOrderPickerView({model: this.model}),
-        t('production', 'newOrderPicker:title')
+        t('production', 'newOrderPicker:title' + (this.model.hasOrder() ? ':replacing' : ''))
       );
     },
 
@@ -289,6 +289,7 @@ define([
     endDowntime: function()
     {
       var dialogView = new DialogView({
+        dialogClassName: 'production-modal',
         template: endDowntimeDialogTemplate,
         model: {
           yesSeverity: this.model.hasOrder() ? 'success' : 'warning'

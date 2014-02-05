@@ -4,6 +4,27 @@
 .production * {
   line-height: 1!important;
 }
+.production-modal .modal-body {
+  padding: 0;
+}
+.production-modal .message {
+  margin-top: -1px;
+  margin-bottom: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-left: 0;
+  border-right: 0;
+  box-shadow: none;
+  line-height: 1.4;
+  text-align: justify;
+}
+.production-modal .form-group {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+.production-modal .form-group:first-child {
+  margin-top: 1em;
+}
 .production-pageHeader,
 .production-sectionHeader,
 .production-subsectionHeader {
@@ -112,12 +133,11 @@
   border: 0;
   vertical-align: top;
 }
-.production-personelPicker .message,
-.production-newOrderPicker .message,
-.production-endWorkDialog .message {
-  margin-bottom: 1em;
-  line-height: 1.4;
-  text-align: justify;
+.production-newOrderPicker .modal-header {
+  border-top: 1px dotted #e5e5e5;
+}
+.production-endDowntimeDialog > p {
+  margin: 1em;
 }
 .production-dropdown {
   margin-top: 0;
