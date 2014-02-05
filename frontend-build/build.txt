@@ -16,10 +16,15 @@ app/core/assets/main.css
 app/core/assets/./print.css
 app/core/assets/./navbar.css
 app/core/assets/./form.css
+app/core/assets/./modal.css
 app/core/assets/./properties.css
 app/core/assets/./logInForm.css
 app/core/assets/./filter.css
 app/core/assets/main.css
+
+app/core/assets/modal.css
+----------------
+app/core/assets/modal.css
 
 app/core/assets/navbar.css
 ----------------
