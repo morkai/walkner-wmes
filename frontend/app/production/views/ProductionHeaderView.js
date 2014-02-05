@@ -191,6 +191,7 @@ define([
       if (e)
       {
         e.preventDefault();
+        e.target.blur();
       }
 
       this.showPickerDialog('master', this.model.changeMaster.bind(this.model));
@@ -201,6 +202,7 @@ define([
       if (e)
       {
         e.preventDefault();
+        e.target.blur();
       }
 
       this.showPickerDialog('leader', this.model.changeLeader.bind(this.model));
@@ -211,6 +213,7 @@ define([
       if (e)
       {
         e.preventDefault();
+        e.target.blur();
       }
 
       this.showPickerDialog('operator', this.model.changeOperator.bind(this.model));

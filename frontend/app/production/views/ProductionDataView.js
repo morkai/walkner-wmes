@@ -247,16 +247,26 @@ define([
       return this.$('.production-property-' + propertyName + ' .production-property-value');
     },
 
-    showNewOrderDialog: function()
+    showNewOrderDialog: function(e)
     {
+      if (e)
+      {
+        e.target.blur();
+      }
+
       viewport.showDialog(
         new NewOrderPickerView({model: this.model}),
         t('production', 'newOrderPicker:title' + (this.model.hasOrder() ? ':replacing' : ''))
       );
     },
 
-    continueOrder: function()
+    continueOrder: function(e)
     {
+      if (e)
+      {
+        e.target.blur();
+      }
+
       var dialogView = new DialogView({
         template: continueOrderDialogTemplate
       });
@@ -272,8 +282,13 @@ define([
       viewport.showDialog(dialogView, t('production', 'continueOrderDialog:title'));
     },
 
-    showDowntimePickerDialog: function()
+    showDowntimePickerDialog: function(e)
     {
+      if (e)
+      {
+        e.target.blur();
+      }
+
       var downtimePickerView = new DowntimePickerView();
 
       this.listenTo(downtimePickerView, 'downtimePicked', function(downtimeInfo)
@@ -286,8 +301,13 @@ define([
       viewport.showDialog(downtimePickerView, t('production', 'downtimePicker:title'));
     },
 
-    endDowntime: function()
+    endDowntime: function(e)
     {
+      if (e)
+      {
+        e.target.blur();
+      }
+
       var dialogView = new DialogView({
         dialogClassName: 'production-modal',
         template: endDowntimeDialogTemplate,
@@ -307,8 +327,13 @@ define([
       viewport.showDialog(dialogView, t('production', 'endDowntimeDialog:title'));
     },
 
-    endWork: function()
+    endWork: function(e)
     {
+      if (e)
+      {
+        e.target.blur();
+      }
+
       viewport.showDialog(
         new EndWorkDialogView({model: this.model}),
         t('production', 'endWorkDialog:title')
