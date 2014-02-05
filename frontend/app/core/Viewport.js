@@ -225,6 +225,11 @@ define([
       $header.hide();
     }
 
+    if (dialogView.dialogClassName)
+    {
+      this.$dialog.addClass(_.result(dialogView, 'dialogClassName'));
+    }
+
     this.$dialog.find('.modal-body').empty().append(dialogView.el);
     this.$dialog.modal('show');
 
@@ -297,6 +302,11 @@ define([
 
   Viewport.prototype.onDialogHidden = function()
   {
+    if (this.currentDialog.dialogClassName)
+    {
+      this.$dialog.removeClass(_.result(this.currentDialog, 'dialogClassName'));
+    }
+
     if (_.isFunction(this.currentDialog.remove))
     {
       this.currentDialog.remove();
