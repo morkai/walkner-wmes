@@ -224,7 +224,13 @@ define([
       {
         viewport.closeDialog();
 
-        onUserPicked(userInfo);
+        var currentUserInfo = this.model.get(type);
+
+        if (userInfo.id !== currentUserInfo.id
+          || userInfo.label !== currentUserInfo.label)
+        {
+          onUserPicked(userInfo);
+        }
 
         this.$('.production-property-' + type + ' .btn-link').focus();
       });
