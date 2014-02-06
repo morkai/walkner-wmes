@@ -229,8 +229,14 @@ define([
 
         var currentUserInfo = this.model.get(type);
 
-        if (userInfo.id !== currentUserInfo.id
-          || userInfo.label !== currentUserInfo.label)
+        if (currentUserInfo === null)
+        {
+          if (userInfo !== null)
+          {
+            onUserPicked(userInfo);
+          }
+        }
+        else if (userInfo.id !== currentUserInfo.id || userInfo.label !== currentUserInfo.label)
         {
           onUserPicked(userInfo);
         }
