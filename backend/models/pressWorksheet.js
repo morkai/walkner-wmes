@@ -105,6 +105,11 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         return;
       }
 
+      if (finishedAt.getHours() < 6)
+      {
+        finishedAt = new Date(finishedAt.getTime() + 24 * 3600 * 1000);
+      }
+
       var orderData = order.orderData;
       var operations = {};
 
