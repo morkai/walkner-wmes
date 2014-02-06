@@ -39,12 +39,6 @@ define([
 ) {
   'use strict';
 
-  var PROD_LOG_ENTRY_REFRESH_TYPES = [
-    'finishOrder',
-    'changeQuantityDone',
-    'changeWorkerCount'
-  ];
-
   return View.extend({
 
     template: detailsPageTemplate,
@@ -148,21 +142,6 @@ define([
       this.setView('.prodShiftOrders-operations-container', this.operationListView);
     },
 
-    setUpRemoteTopics: function()
-    {
-      var shiftEndTime = Date.parse(this.prodShiftOrder.get('date') + 8 * 3600 * 1000);
-
-      if (Date.now() >= shiftEndTime)
-      {
-        return;
-      }
-
-      this.pubsub.subscribe(
-        'production.synced.' + this.prodShiftOrder.get('prodLine'),
-        this.handleProdChanges.bind(this)
-      );
-    },
-
     prepareOrderData: function()
     {
       var orderData = _.clone(this.prodShiftOrder.get('orderData'));
@@ -177,17 +156,16 @@ define([
       return orderData;
     },
 
-    handleProdChanges: function(changes)
+    setUpRemoteTopics: function()
     {
-      if (_.intersection(changes.types, PROD_LOG_ENTRY_REFRESH_TYPES).length)
-      {
-        this.prodLogEntries.fetch({reset: true});
-      }
+      this.pubsub.subscribe(
+        'prodShiftOrders.updated.' + this.prodShiftOrder.id, this.handleChanges.bind(this)
+      );
+    },
 
-      if (changes.prodShiftOrder)
-      {
-        this.prodShiftOrder.set(changes.prodShiftOrder);
-      }
+    handleChanges: function(changes)
+    {
+      this.prodShiftOrder.set(changes);
     }
 
   });
