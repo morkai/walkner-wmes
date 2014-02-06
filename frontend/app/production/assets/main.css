@@ -136,7 +136,7 @@
 .production-newOrderPicker .modal-header {
   border-top: 1px dotted #e5e5e5;
 }
-.production-endDowntimeDialog > p {
+.production-question > p {
   margin: 1em;
 }
 .production-dropdown {

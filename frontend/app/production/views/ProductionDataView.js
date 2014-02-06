@@ -268,6 +268,7 @@ define([
       }
 
       var dialogView = new DialogView({
+        dialogClassName: 'production-modal',
         template: continueOrderDialogTemplate
       });
 
