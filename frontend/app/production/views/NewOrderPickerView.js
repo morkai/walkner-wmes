@@ -19,7 +19,17 @@ define([
 
     template: personelPickerTemplate,
 
-    dialogClassName: 'production-modal',
+    dialogClassName: function()
+    {
+      var className = 'production-modal production-newOrderPickerDialog';
+
+      if (this.model.hasOrder())
+      {
+        className += ' is-replacing';
+      }
+
+      return className;
+    },
 
     localTopics: {
       'socket.connected': 'render',

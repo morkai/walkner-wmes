@@ -75,7 +75,7 @@
   "personelPicker:offline:warning": "Brak połączenia z serwerem. Możesz tylko wpisać numer personalny użytkownika.",
 
   "newOrderPicker:title": "Rozpoczynanie nowego zlecenia",
-  "newOrderPicker:title:replacing": "Zakańczanie aktualnego zlecenia",
+  "newOrderPicker:title:replacing": "Kończenie aktualnego zlecenia",
   "newOrderPicker:order:label": "Nowe zlecenie:",
   "newOrderPicker:order:placeholder:no": "Wpisz numer nowego zlecenia...",
   "newOrderPicker:order:placeholder:nc12": "12NC zlecenia",
@@ -96,8 +96,8 @@
   "newOrderPicker:offline:warning:no": "Wpisz numer zlecenia oraz numer operacji aby rozpocząć nowe zlecenie.",
   "newOrderPicker:offline:warning:nc12": "Wpisz 12NC zlecenia oraz numer operacji aby rozpocząć nowe zlecenie.",
   "newOrderPicker:checkData:warning": "Wybranie nowego zlecenia ukończy aktualnie wybrane zlecenie. Sprawdź czy pola <em>Ilość wykonana</em> i <em>Osoby pracujące</em> aktualnego zlecenia mają prawidłowe wartości, gdyż po wybraniu nowego zlecenia nie będzie można ich zmienić.",
-  "newOrderPicker:quantityDone": "Ilość wykonana w zakańczanym zleceniu:",
-  "newOrderPicker:workerCount": "Osoby pracujące przy zakańczanym zleceniu:",
+  "newOrderPicker:quantityDone": "Ilość wykonana w kończonym zleceniu:",
+  "newOrderPicker:workerCount": "Osoby pracujące przy kończonym zleceniu:",
 
   "downtimePicker:title": "Rozpoczynanie przestoju",
   "downtimePicker:submit": "Rozpocznij przestój",

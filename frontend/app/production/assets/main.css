@@ -133,8 +133,25 @@
   border: 0;
   vertical-align: top;
 }
-.production-newOrderPicker .modal-header {
-  border-top: 1px dotted #e5e5e5;
+.production-newOrderPickerDialog .modal-header {
+  background-color: #E8F6FF;
+  border-bottom: 1px solid #B8E2FB;
+}
+.production-newOrderPickerDialog.is-replacing .modal-header {
+  background-color: #F9EDBE;
+  border-bottom-color: #F0C36D;
+}
+.production-newOrderPickerDialog .modal-body .modal-header {
+  border-top: 1px solid #B8E2FB;
+  border-bottom: 1px solid #B8E2FB;
+  background-color: #E8F6FF;
+}
+.production-newOrderPicker > .message {
+  margin-top: 0;
+  padding-top: 1em;
+  padding-bottom: 0;
+  background-color: transparent;
+  border: 0;
 }
 .production-question > p {
   margin: 1em;
