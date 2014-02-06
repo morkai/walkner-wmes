@@ -44,6 +44,8 @@ define([
           aor: 1,
           reason: 1,
           reasonComment: 1,
+          mrpControllers: 1,
+          prodFlow: 1,
           prodLine: 1,
           status: 1,
           startedAt: 1,

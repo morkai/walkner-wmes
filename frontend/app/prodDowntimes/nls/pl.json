@@ -19,6 +19,8 @@
 
   "LIST:ACTION:corroborate": "Potwierdź przestój",
 
+  "PROPERTY:mrpControllers": "Kontroler MRP",
+  "PROPERTY:prodFlow": "Przepływ",
   "PROPERTY:orgUnit": "Jednostka organizacyjna",
   "PROPERTY:aor": "Obszar odpowiedzialności",
   "PROPERTY:prodLine": "Linia produkcyjna/Maszyna",

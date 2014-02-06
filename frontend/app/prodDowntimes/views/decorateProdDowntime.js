@@ -3,6 +3,9 @@ define([
   'app/i18n',
   'app/user',
   'app/data/aors',
+  'app/data/subdivisions',
+  'app/data/mrpControllers',
+  'app/data/prodFlows',
   'app/data/prodLines',
   'app/data/downtimeReasons',
   'app/data/views/renderOrgUnitPath',
@@ -13,6 +16,9 @@ define([
   t,
   user,
   aors,
+  subdivisions,
+  mrpControllers,
+  prodFlows,
   prodLines,
   downtimeReasons,
   renderOrgUnitPath,
@@ -20,85 +26,95 @@ define([
 ) {
   'use strict';
 
-  return function(prodDowntimeModel)
+  return function(model)
   {
     /*jshint -W015*/
 
-    var prodDowntime = prodDowntimeModel.toJSON();
+    var obj = model.toJSON();
 
-    prodDowntime.statusClassName = prodDowntimeModel.getCssClassName();
+    obj.statusClassName = model.getCssClassName();
 
-    prodDowntime.className = prodDowntime.statusClassName;
+    obj.className = obj.statusClassName;
 
-    if (prodDowntime.reasonComment && prodDowntime.reasonComment.trim().length)
+    if (obj.reasonComment && obj.reasonComment.trim().length)
     {
-      prodDowntime.className += ' is-withReasonComment';
+      obj.className += ' is-withReasonComment';
     }
 
-    var aor = aors.get(prodDowntime.aor);
+    var aor = aors.get(obj.aor);
 
-    prodDowntime.aor = aor ? aor.getLabel() : prodDowntime.aor;
+    obj.aor = aor ? aor.getLabel() : obj.aor;
 
-    var prodLine = prodLines.get(prodDowntime.prodLine);
+    var prodLine = prodLines.get(obj.prodLine);
 
     if (prodLine)
     {
-      prodDowntime.prodLine = prodLine.getLabel();
-      prodDowntime.prodLinePath = renderOrgUnitPath(prodLine, false, false);
+      obj.prodLine = prodLine.getLabel();
+      obj.prodLinePath = renderOrgUnitPath(prodLine, false, false);
     }
 
-    var reason = downtimeReasons.get(prodDowntime.reason);
+    var reason = downtimeReasons.get(obj.reason);
 
-    prodDowntime.reason = reason ? reason.getLabel() : prodDowntime.reason;
+    obj.reason = reason ? reason.getLabel() : obj.reason;
 
-    if (prodDowntime.startedAt && prodDowntime.finishedAt)
+    if (obj.startedAt && obj.finishedAt)
     {
-      var startTime = Date.parse(prodDowntime.startedAt);
-      var endTime = Date.parse(prodDowntime.finishedAt);
+      var startTime = Date.parse(obj.startedAt);
+      var endTime = Date.parse(obj.finishedAt);
       var duration = Math.round((endTime - startTime) / 1000);
 
-      prodDowntime.duration = time.toString(duration);
+      obj.duration = time.toString(duration);
     }
     else
     {
-      prodDowntime.duration = '-';
+      obj.duration = '-';
     }
 
-    prodDowntime.startedAt = time.format(prodDowntime.startedAt, 'YYYY-MM-DD HH:mm:ss');
+    obj.startedAt = time.format(obj.startedAt, 'YYYY-MM-DD HH:mm:ss');
 
-    prodDowntime.finishedAt = prodDowntime.finishedAt
-      ? time.format(prodDowntime.finishedAt, 'YYYY-MM-DD HH:mm:ss')
+    obj.finishedAt = obj.finishedAt
+      ? time.format(obj.finishedAt, 'YYYY-MM-DD HH:mm:ss')
       : t('prodDowntimes', 'NO_DATA:finishedAt');
 
-    prodDowntime.corroboratedAt =
-      time.format(prodDowntime.corroboratedAt, 'YYYY-MM-DD HH:mm:ss') || '-';
+    obj.corroboratedAt =
+      time.format(obj.corroboratedAt, 'YYYY-MM-DD HH:mm:ss') || '-';
 
-    prodDowntime.order = prodDowntime.prodShiftOrder
-      ? (prodDowntime.orderId + '; ' + prodDowntime.operationNo)
+    obj.order = obj.prodShiftOrder
+      ? (obj.orderId + '; ' + obj.operationNo)
       : t('prodDowntimes', 'NO_DATA:order');
 
-    if (user.isAllowedTo('PROD_DATA:VIEW'))
+    if (user.isAllowedTo('PROD_DATA:VIEW') && obj.prodShiftOrder)
     {
-      prodDowntime.order = '<a href="#prodShiftOrders/' + prodDowntime.prodShiftOrder + '">'
-        + prodDowntime.order + '</a>';
+      obj.order = '<a href="#prodShiftOrders/' + obj.prodShiftOrder + '">'
+        + obj.order + '</a>';
     }
 
-    prodDowntime.date = prodDowntime.date ? time.format(prodDowntime.date, 'YYYY-MM-DD') : '?';
-    prodDowntime.shift = prodDowntime.shift ? t('core', 'SHIFT:' + prodDowntime.shift) : '?';
-    prodDowntime.prodShiftText = prodDowntime.date + ', ' + prodDowntime.shift;
+    obj.date = obj.date ? time.format(obj.date, 'YYYY-MM-DD') : '?';
+    obj.shift = obj.shift ? t('core', 'SHIFT:' + obj.shift) : '?';
+    obj.prodShiftText = obj.date + ', ' + obj.shift;
 
-    if (user.isAllowedTo('PROD_DATA:VIEW') && prodDowntime.prodShiftText)
+    if (user.isAllowedTo('PROD_DATA:VIEW') && obj.prodShiftText)
     {
-      prodDowntime.prodShiftText = '<a href="#prodShifts/' + prodDowntime.prodShift + '">'
-        + prodDowntime.prodShiftText + '</a>';
+      obj.prodShiftText = '<a href="#prodShifts/' + obj.prodShift + '">'
+        + obj.prodShiftText + '</a>';
     }
 
-    prodDowntime.masterInfo = renderUserInfo({userInfo: prodDowntime.master});
-    prodDowntime.leaderInfo = renderUserInfo({userInfo: prodDowntime.leader});
-    prodDowntime.operatorInfo = renderUserInfo({userInfo: prodDowntime.operator});
-    prodDowntime.creatorInfo = renderUserInfo({userInfo: prodDowntime.creator});
-    prodDowntime.corroboratorInfo = renderUserInfo({userInfo: prodDowntime.corroborator});
+    obj.masterInfo = renderUserInfo({userInfo: obj.master});
+    obj.leaderInfo = renderUserInfo({userInfo: obj.leader});
+    obj.operatorInfo = renderUserInfo({userInfo: obj.operator});
+    obj.creatorInfo = renderUserInfo({userInfo: obj.creator});
+    obj.corroboratorInfo = renderUserInfo({userInfo: obj.corroborator});
 
-    return prodDowntime;
+    var subdivision = subdivisions.get(obj.subdivision);
+    var prodFlow = prodFlows.get(obj.prodFlow);
+
+    obj.subdivision = subdivision ? subdivision.getLabel() : '?';
+    obj.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
+    obj.mrpControllers =
+      Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
+        ? obj.mrpControllers.join('; ')
+        : '?';
+
+    return obj;
   };
 });
