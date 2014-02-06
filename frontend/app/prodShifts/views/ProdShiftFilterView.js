@@ -93,8 +93,11 @@ define([
         switch (property)
         {
           case 'date':
-            formData[term.name === 'ge' ? 'from' : 'to'] =
-              moment(term.args[1]).format('YYYY-MM-DD');
+            if (term.name === 'ge' || term.name === 'le')
+            {
+              formData[term.name === 'ge' ? 'from' : 'to'] =
+                moment(term.args[1]).format('YYYY-MM-DD');
+            }
             break;
 
           case 'prodLine':

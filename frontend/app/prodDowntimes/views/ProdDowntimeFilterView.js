@@ -231,8 +231,11 @@ define([
         switch (property)
         {
           case 'startedAt':
-            formData[term.name === 'ge' ? 'from' : 'to'] =
-              moment(term.args[1]).format('YYYY-MM-DD HH:mm:ss');
+            if (term.name === 'ge' || term.name === 'le')
+            {
+              formData[term.name === 'ge' ? 'from' : 'to'] =
+                moment(term.args[1]).format('YYYY-MM-DD HH:mm:ss');
+            }
             break;
 
           case 'aor':
