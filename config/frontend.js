@@ -87,6 +87,7 @@ exports.pubsub = {
     'users.syncFailed',
     'production.synced.*',
     'prodDowntimes.created.*', 'prodDowntimes.finished.*', 'prodDowntimes.corroborated.*',
+    'prodShiftOrders.created.*', 'prodShiftOrders.updated.*',
     'updater.newVersion'
   ]
 };

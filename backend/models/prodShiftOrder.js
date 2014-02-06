@@ -95,5 +95,32 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
   prodShiftOrderSchema.statics.TOPIC_PREFIX = 'prodShiftOrders';
 
+  prodShiftOrderSchema.pre('save', function(next)
+  {
+    this.wasNew = this.isNew;
+    this.modified = this.modifiedPaths();
+
+    next();
+  });
+
+  prodShiftOrderSchema.post('save', function(doc)
+  {
+    if (this.wasNew)
+    {
+      app.broker.publish('prodShiftOrders.created.' + doc.prodLine, doc.toJSON());
+    }
+    else
+    {
+      var changes = {};
+
+      this.modified.forEach(function(modifiedPath)
+      {
+        changes[modifiedPath] = doc.get(modifiedPath);
+      });
+
+      app.broker.publish('prodShiftOrders.updated.' + doc._id, changes);
+    }
+  });
+
   mongoose.model('ProdShiftOrder', prodShiftOrderSchema);
 };
