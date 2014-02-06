@@ -51,9 +51,9 @@ define([
           html: true,
           content: function()
           {
-            return renderOrgUnitPath(prodLines.get(view.$(this).text().trim()), false, false)
-              .split(' \\ ')
-              .join('<br>\\ ');
+            var path = renderOrgUnitPath(prodLines.get(view.$(this).text().trim()), false, false);
+
+            return path ? path.split(' \\ ').join('<br>\\ ') : '?';
           }
         });
     },
