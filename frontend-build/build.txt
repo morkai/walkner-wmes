@@ -563,6 +563,7 @@ app/nls/pl/prodLogEntries.js
 i18n!app/nls/prodLogEntries
 app/prodLogEntries/pages/ProdLogEntryListPage.js
 app/prodLogEntries/routes.js
+app/core/util/matchesEquals.js
 app/prodShiftOrders/ProdShiftOrder.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
 app/core/util/getShiftStartInfo.js
