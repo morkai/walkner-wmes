@@ -41,6 +41,7 @@
 }
 .prodShifts-timeline .timeline-item-working:hover {
   fill: #47A447;
+  cursor: pointer;
 }
 .prodShifts-timeline .timeline-item-downtime {
   fill: #D9534F;

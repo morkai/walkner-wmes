@@ -1,7 +1,7 @@
 define([
   '../time',
   '../core/Model',
-  '../production/util/getShiftEndDate'
+  '../core/util/getShiftEndDate'
 ], function(
   time,
   Model,

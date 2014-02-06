@@ -1,0 +1,52 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-from"><%- t('prodShiftOrders', 'FILTER:DATE:FROM') %></label>
+      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-to"><%- t('prodShiftOrders', 'FILTER:DATE:TO') %></label>
+      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-shift-any"><%- t('prodShiftOrders', 'PROPERTY:shift') %></label>
+      <div class="fte-filter-shift-group">
+        <label class="radio-inline">
+          <input id="<%- idPrefix %>-shift-any" name="shift" type="radio" value="0">
+          <%- t('fte', 'FILTER:SHIFT:ANY') %>
+        </label>
+        <label class="radio-inline">
+          <input name="shift" type="radio" value="1">
+          <%- t('core', 'SHIFT:1') %>
+        </label>
+        <label class="radio-inline">
+          <input name="shift" type="radio" value="2">
+          <%- t('core', 'SHIFT:2') %>
+        </label>
+        <label class="radio-inline">
+          <input name="shift" type="radio" value="3">
+          <%- t('core', 'SHIFT:3') %>
+        </label>
+      </div>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-orderId"><%- t('prodShiftOrders', 'FILTER:orderId') %></label>
+      <input id="<%- idPrefix %>-orderId" class="form-control prodShiftOrders-filter-orderId" name="orderId" type="text" placeholder="<%- t('prodShiftOrders', 'FILTER:PLACEHOLDER:orderId') %>">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-operationNo"><%- t('prodShiftOrders', 'FILTER:operationNo') %></label>
+      <input id="<%- idPrefix %>-operationNo" class="form-control prodShiftOrders-filter-operationNo" name="operationNo" type="text" placeholder="<%- t('prodShiftOrders', 'FILTER:PLACEHOLDER:operationNo') %>" maxlength="4" pattern="[0-9]+">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-prodLine"><%- t('prodShiftOrders', 'PROPERTY:prodLine') %></label>
+      <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text" data-placeholder="<%- t('prodShiftOrders', 'FILTER:PLACEHOLDER:prodLine') %>">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-limit"><%- t('prodShiftOrders', 'FILTER:LIMIT') %></label>
+      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('prodShiftOrders', 'FILTER:BUTTON') %>">
+    </div>
+  </form>
+</div>

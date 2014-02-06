@@ -1,0 +1,21 @@
+.prodShiftOrders-list-container .popover {
+  max-width: none;
+}
+.prodShiftOrders-downtimes-container,
+.prodShiftOrders-order-container {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.prodShiftOrders-downtimes-container .table {
+  margin-bottom: 0;
+  border: 0;
+}
+.prodShiftOrders-downtimes-container tbody tr:last-child td {
+  border-bottom: 0;
+}
+.prodShiftOrders-filter-orderId {
+
+}
+.prodShiftOrders-filter-operationNo {
+  width: 60px;
+}

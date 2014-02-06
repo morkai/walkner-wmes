@@ -1,0 +1,49 @@
+{
+  "BREADCRUMBS:browse": "Zlecenia",
+  "BREADCRUMBS:details": "{order}; {operation}",
+
+  "MSG:LOADING_FAILURE": "Ładowanie historii zleceń nie powiodło się :(",
+
+  "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
+  "PAGE_ACTION:prodDowntimes": "Pokaż przestoje",
+
+  "PANEL:TITLE:details": "Szczegóły zlecenia produkcyjnego",
+  "PANEL:TITLE:orderDetails": "Szczegóły zlecenia w momencie rozpoczęcia",
+  "PANEL:TITLE:losses": "Straty materiałowe",
+  "PANEL:TITLE:downtimes": "Przestoje rozpoczęte w trakcie wykonywania zlecenia",
+
+  "FILTER:orderId": "Nr/12NC zlecenia",
+  "FILTER:operationNo": "Nr oper.",
+  "FILTER:DATE:FROM": "Od",
+  "FILTER:DATE:TO": "Do",
+  "FILTER:LIMIT": "Limit",
+  "FILTER:BUTTON": "Filtruj historię",
+  "FILTER:PLACEHOLDER:type": "Dowolny typ",
+  "FILTER:PLACEHOLDER:prodLine": "Dowolna linia produkcyjna",
+  "FILTER:PLACEHOLDER:orderId": "Dowolne zlecenie",
+  "FILTER:PLACEHOLDER:operationNo": "0000",
+
+  "PROPERTY:mrpControllers": "Kontroler MRP",
+  "PROPERTY:prodFlow": "Przepływ",
+  "PROPERTY:prodLine": "Linia produkcyjna",
+  "PROPERTY:creator": "Rozpoczynający",
+  "PROPERTY:date": "Data",
+  "PROPERTY:shift": "Zmiana",
+  "PROPERTY:prodShift": "Zmiana",
+  "PROPERTY:master": "Mistrz",
+  "PROPERTY:leader": "Lider",
+  "PROPERTY:operator": "Operator",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas zakończenia",
+  "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:quantityDone": "Ilość wykonana",
+  "PROPERTY:quantityDoneSap": "Ilość wykonana / wg SAP",
+  "PROPERTY:workerCount": "Ilość osób",
+  "PROPERTY:workerCountSap": "Ilość osób / wg SAP",
+  "PROPERTY:taktTime": "Takt Time / wg SAP",
+  "PROPERTY:order": "Zlecenie",
+  "PROPERTY:operation": "Operacja",
+
+  "unit:workerCount": "osoby",
+  "unit:taktTime": "s"
+}

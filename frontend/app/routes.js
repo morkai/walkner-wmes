@@ -19,6 +19,7 @@ define([
   './prodLines/routes',
   './prodTasks/routes',
   './prodLogEntries/routes',
+  './prodShiftOrders/routes',
   './prodShifts/routes',
   './production/routes',
   './reports/routes',

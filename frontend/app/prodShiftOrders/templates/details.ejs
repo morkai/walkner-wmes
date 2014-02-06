@@ -1,0 +1,114 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <%- t('prodShiftOrders', 'PANEL:TITLE:details') %>
+    </div>
+    <div class="panel-details row">
+      <div class="col-md-4">
+        <div class="props first">
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:prodLine') %></div>
+            <div class="prop-value"><%= model.prodLine %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:order') %></div>
+            <div class="prop-value">
+              <% if (model.orderUrl) { %>
+              <a href="<%- model.orderUrl %>"><%- model.order %></a>
+              <% } else { %>
+              <%- model.order %>
+              <% } %>
+            </div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:operation') %></div>
+            <div class="prop-value"><%- model.operation %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:quantityDoneSap') %></div>
+            <div class="prop-value"><%- model.quantityDone %> / <%- model.orderData.qty || '?' %> [<%- model.orderData.unit || '?' %>]</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:workerCountSap') %></div>
+            <div class="prop-value"><%- model.workerCount %> / <%- model.workerCountSap -%> [<%- t('prodShiftOrders', 'unit:workerCount') %>]</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:taktTime') %></div>
+            <div class="prop-value"><%- model.taktTime %> / <%- model.taktTimeSap %> [<%- t('prodShiftOrders', 'unit:taktTime') %>]</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:prodShift') %></div>
+            <div class="prop-value"><%- model.prodShift %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:startedAt') %></div>
+            <div class="prop-value"><%= model.startedAt %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:finishedAt') %></div>
+            <div class="prop-value"><%= model.finishedAt || '-' %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:duration') %></div>
+            <div class="prop-value"><%= model.duration %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:creator') %></div>
+            <div class="prop-value"><%- model.creator %></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name"><%- t('core', 'ORG_UNIT:division') %></div>
+            <div class="prop-value"><%= model.division %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('core', 'ORG_UNIT:subdivision') %></div>
+            <div class="prop-value"><%= model.subdivision %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('core', 'ORG_UNIT:mrpController') %></div>
+            <div class="prop-value"><%= model.mrpControllers %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('core', 'ORG_UNIT:prodFlow') %></div>
+            <div class="prop-value"><%= model.prodFlow %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('core', 'ORG_UNIT:workCenter') %></div>
+            <div class="prop-value"><%= model.workCenter %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% if (model.losses && model.losses.length) { %>
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+      <%- t('prodShiftOrders', 'PANEL:TITLE:losses') %>
+    </div>
+    <table class="table table-bordered table-condensed table-hover">
+      <thead>
+        <tr>
+          <th>Powód</th>
+          <th>Ilość [sztuki]</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% model.losses.forEach(function(loss) { %>
+        <tr>
+          <td><%= loss.label %></td>
+          <td><%= loss.count %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>

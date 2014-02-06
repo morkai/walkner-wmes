@@ -1,10 +1,12 @@
 define([
+  'app/i18n',
   'app/core/views/DetailsView',
   'app/data/orderStatuses',
   'app/orders/templates/details',
   'app/orderStatuses/templates/_orderStatus',
   'i18n!app/nls/orders'
 ], function(
+  t,
   DetailsView,
   orderStatuses,
   detailsTemplate,
@@ -30,7 +32,9 @@ define([
         .join('');
 
       return {
-        model: order
+        model: order,
+        panelType: this.options.panelType || 'primary',
+        panelTitle: this.options.panelTitle || t('orders', 'PANEL:TITLE:details')
       };
     }
 

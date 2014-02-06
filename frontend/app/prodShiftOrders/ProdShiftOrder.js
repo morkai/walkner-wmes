@@ -5,7 +5,7 @@ define([
   '../time',
   '../data/prodLog',
   '../core/Model',
-  './util/getShiftEndDate'
+  '../core/util/getShiftEndDate'
 ], function(
   _,
   moment,
@@ -23,8 +23,14 @@ define([
 
     clientUrlRoot: '#prodShiftOrders',
 
+    topicPrefix: 'prodShiftOrders',
+
+    privilegePrefix: 'PROD_DATA',
+
+    nlsDomain: 'prodShiftOrders',
+
     defaults: {
-      prodShift: null,
+      prodShiftOrder: null,
       division: null,
       subdivision: null,
       mrpControllers: null,
@@ -58,7 +64,7 @@ define([
     {
       this.set({
         _id: null,
-        prodShift: null,
+        prodShiftOrder: null,
         division: null,
         subdivision: null,
         mrpControllers: null,
@@ -75,20 +81,20 @@ define([
       });
     },
 
-    onOrderChanged: function(prodShift, orderData, operationNo)
+    onOrderChanged: function(prodShiftOrder, orderData, operationNo)
     {
       this.prepareOperations(orderData);
 
       this.set({
-        prodShift: prodShift.id,
-        division: prodShift.get('division'),
-        subdivision: prodShift.get('subdivision'),
-        mrpControllers: prodShift.get('mrpControllers'),
-        prodFlow: prodShift.get('prodFlow'),
-        workCenter: prodShift.get('workCenter'),
-        prodLine: prodShift.prodLine.id,
-        date: prodShift.get('date'),
-        shift: prodShift.get('shift'),
+        prodShiftOrder: prodShiftOrder.id,
+        division: prodShiftOrder.get('division'),
+        subdivision: prodShiftOrder.get('subdivision'),
+        mrpControllers: prodShiftOrder.get('mrpControllers'),
+        prodFlow: prodShiftOrder.get('prodFlow'),
+        workCenter: prodShiftOrder.get('workCenter'),
+        prodLine: prodShiftOrder.prodLine.id,
+        date: prodShiftOrder.get('date'),
+        shift: prodShiftOrder.get('shift'),
         mechOrder: orderData.no === null,
         orderId: orderData.no || orderData.nc12,
         operationNo: operationNo,
@@ -100,21 +106,21 @@ define([
         finishedAt: null
       });
 
-      this.generateId(prodShift);
+      this.generateId(prodShiftOrder);
     },
 
-    onOrderContinued: function(prodShift)
+    onOrderContinued: function(prodShiftOrder)
     {
       this.set({
-        prodShift: prodShift.id,
-        division: prodShift.get('division'),
-        subdivision: prodShift.get('subdivision'),
-        mrpControllers: prodShift.get('mrpControllers'),
-        prodFlow: prodShift.get('prodFlow'),
-        workCenter: prodShift.get('workCenter'),
-        prodLine: prodShift.prodLine.id,
-        date: prodShift.get('date'),
-        shift: prodShift.get('shift'),
+        prodShiftOrder: prodShiftOrder.id,
+        division: prodShiftOrder.get('division'),
+        subdivision: prodShiftOrder.get('subdivision'),
+        mrpControllers: prodShiftOrder.get('mrpControllers'),
+        prodFlow: prodShiftOrder.get('prodFlow'),
+        workCenter: prodShiftOrder.get('workCenter'),
+        prodLine: prodShiftOrder.prodLine.id,
+        date: prodShiftOrder.get('date'),
+        shift: prodShiftOrder.get('shift'),
         workerCount: 0,
         quantityDone: 0,
         creator: user.getInfo(),
@@ -122,14 +128,14 @@ define([
         finishedAt: null
       });
 
-      this.generateId(prodShift);
+      this.generateId(prodShiftOrder);
     },
 
-    generateId: function(prodShift)
+    generateId: function(prodShiftOrder)
     {
       this.set(
         '_id',
-        prodLog.generateId(this.get('startedAt'), prodShift.id + this.get('orderId'))
+        prodLog.generateId(this.get('startedAt'), prodShiftOrder.id + this.get('orderId'))
       );
     },
 
@@ -222,6 +228,21 @@ define([
       }
 
       return Math.max(Math.round((operation.laborTime * 1.053) / workerCount * 3600 / 100), 1);
+    },
+
+    getActualTaktTime: function()
+    {
+      var finishedAt = time.getMoment(this.get('finishedAt'));
+
+      if (!finishedAt.isValid())
+      {
+        return '-';
+      }
+
+      var duration = finishedAt.diff(this.get('startedAt'), 'seconds');
+      var quantityDone = this.get('quantityDone');
+
+      return quantityDone ? Math.max(1, Math.round(duration / quantityDone)) : '?';
     },
 
     getWorkerCountSap: function()

@@ -16,7 +16,7 @@
     </thead>
     <tbody>
       <% operations.forEach(function(operation) { %>
-      <tr>
+      <tr class="<%- operation.no === highlighted ? 'info' : '' %>">
         <td><%= operation.no || '-' %>
         <td><%= operation.workCenter || '-' %>
         <td><%= operation.name || '-' %>

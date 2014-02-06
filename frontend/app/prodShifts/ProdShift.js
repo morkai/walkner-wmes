@@ -4,19 +4,21 @@ define([
   '../time',
   '../socket',
   '../core/Model',
+  '../core/util/getShiftStartInfo',
   '../data/subdivisions',
   '../data/workCenters',
   '../data/prodLines',
   '../data/prodLog',
   '../prodDowntimes/ProdDowntime',
   '../prodDowntimes/ProdDowntimeCollection',
-  '../production/ProdShiftOrder'
+  '../prodShiftOrders/ProdShiftOrder'
 ], function(
   _,
   user,
   time,
   socket,
   Model,
+  getShiftStartInfo,
   subdivisions,
   workCenters,
   prodLines,
@@ -450,28 +452,7 @@ define([
      */
     getCurrentShiftMoment: function()
     {
-      var currentMoment = time.getMoment();
-      var hour = currentMoment.hour();
-
-      if (hour >= 6 && hour < 14)
-      {
-        currentMoment.hours(6);
-      }
-      else if (hour >= 14 && hour < 22)
-      {
-        currentMoment.hours(14);
-      }
-      else
-      {
-        currentMoment.hours(22);
-
-        if (hour < 6)
-        {
-          currentMoment.subtract('days', 1);
-        }
-      }
-
-      return currentMoment.minutes(0).seconds(0).milliseconds(0);
+      return getShiftStartInfo(Date.now()).moment.toDate();
     },
 
     /**

@@ -328,6 +328,13 @@ define([
               trigger: true
             });
           }
+          else if (item.type === 'working')
+          {
+            view.broker.publish('router.navigate', {
+              url: '/prodShiftOrders/' + item.prodLogEntry.get('data')._id,
+              trigger: true
+            });
+          }
         });
     },
 

@@ -1,6 +1,7 @@
 define([
   'app/time',
   'app/i18n',
+  'app/user',
   'app/data/aors',
   'app/data/prodLines',
   'app/data/downtimeReasons',
@@ -10,6 +11,7 @@ define([
 ], function(
   time,
   t,
+  user,
   aors,
   prodLines,
   downtimeReasons,
@@ -72,12 +74,24 @@ define([
       time.format(prodDowntime.corroboratedAt, 'YYYY-MM-DD HH:mm:ss') || '-';
 
     prodDowntime.order = prodDowntime.prodShiftOrder
-      ? prodDowntime.orderId
+      ? (prodDowntime.orderId + '; ' + prodDowntime.operationNo)
       : t('prodDowntimes', 'NO_DATA:order');
 
-    prodDowntime.date = prodDowntime.date ? time.format(prodDowntime.date, 'YYYY-MM-DD') : '?';
+    if (user.isAllowedTo('PROD_DATA:VIEW'))
+    {
+      prodDowntime.order = '<a href="#prodShiftOrders/' + prodDowntime.prodShiftOrder + '">'
+        + prodDowntime.order + '</a>';
+    }
 
+    prodDowntime.date = prodDowntime.date ? time.format(prodDowntime.date, 'YYYY-MM-DD') : '?';
     prodDowntime.shift = prodDowntime.shift ? t('core', 'SHIFT:' + prodDowntime.shift) : '?';
+    prodDowntime.prodShiftText = prodDowntime.date + ', ' + prodDowntime.shift;
+
+    if (user.isAllowedTo('PROD_DATA:VIEW') && prodDowntime.prodShiftText)
+    {
+      prodDowntime.prodShiftText = '<a href="#prodShifts/' + prodDowntime.prodShift + '">'
+        + prodDowntime.prodShiftText + '</a>';
+    }
 
     prodDowntime.masterInfo = renderUserInfo({userInfo: prodDowntime.master});
     prodDowntime.leaderInfo = renderUserInfo({userInfo: prodDowntime.leader});

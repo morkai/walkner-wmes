@@ -15,7 +15,8 @@ define([
     serialize: function()
     {
       return {
-        operations: this.model.get('operations').toJSON()
+        operations: this.model.get('operations').toJSON(),
+        highlighted: this.options.highlighted
       };
     },
 

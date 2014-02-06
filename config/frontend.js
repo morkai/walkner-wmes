@@ -29,6 +29,7 @@ exports.modules = [
   'prodDowntimes',
   'prodLogEntries',
   'prodShifts',
+  'prodShiftOrders',
   'pressWorksheets',
   'reports',
   {id: 'messenger/client', name: 'messenger/client:importer'},
