@@ -3,6 +3,7 @@ define([
   '../user',
   '../data/prodLines',
   '../core/Collection',
+  '../core/util/matchesEquals',
   '../core/util/matchesProdLine',
   './ProdShiftOrder'
 ], function(
@@ -10,6 +11,7 @@ define([
   user,
   prodLines,
   Collection,
+  matchesEquals,
   matchesProdLine,
   ProdShiftOrder
 ) {
@@ -48,7 +50,10 @@ define([
 
     matches: function(message)
     {
-      return matchesProdLine(this.rqlQuery, message.prodLine);
+      return matchesProdLine(this.rqlQuery, message.prodLine)
+        && matchesEquals(this.rqlQuery, 'orderId', message.orderId)
+        && matchesEquals(this.rqlQuery, 'operationNo', message.operationNo)
+        && matchesEquals(this.rqlQuery, 'shift', message.shift);
     }
 
   });

@@ -16,13 +16,28 @@ define([
   prodLines,
   renderOrgUnitPath,
   decorateProdShiftOrder
-) {
+  ) {
   'use strict';
 
   return ListView.extend({
 
     remoteTopics: {
-      'production.synced.**': 'refreshCollection'
+      'prodShiftOrders.created.**': function(prodShiftOrder)
+      {
+        if (this.collection.matches(prodShiftOrder))
+        {
+          this.refreshCollection();
+        }
+      },
+      'prodShiftOrders.updated.**': function(changes, topic)
+      {
+        var prodShiftOrder = this.collection.get(topic.split('.').slice(2).join('.'));
+
+        if (prodShiftOrder)
+        {
+          this.refreshCollection();
+        }
+      }
     },
 
     columns: [
@@ -67,14 +82,6 @@ define([
             return path ? path.split(' \\ ').join('<br>\\ ') : '?';
           }
         });
-    },
-
-    refreshCollection: function(message)
-    {
-      if (!message || this.collection.matches(message))
-      {
-        return ListView.prototype.refreshCollection.apply(this, arguments);
-      }
     }
 
   });
