@@ -452,7 +452,7 @@ define([
      */
     getCurrentShiftMoment: function()
     {
-      return getShiftStartInfo(Date.now()).moment.toDate();
+      return getShiftStartInfo(Date.now()).moment;
     },
 
     /**
