@@ -65,7 +65,7 @@ define([
           case '_id':
             var value = term.args[1];
 
-            formData[property] = _.isString(value) ? value.replace(/[^0-9a-zA-Z]/g, '') : '-';
+            formData[property] = _.isString(value) ? value.replace(/[^0-9a-zA-Z]/g, '') : '';
             break;
         }
       });
