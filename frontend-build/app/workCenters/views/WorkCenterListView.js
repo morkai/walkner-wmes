@@ -1,1 +1,1 @@
-define(["app/data/views/renderOrgUnitPath","app/core/views/ListView","i18n!app/nls/workCenters"],function(n,t){return t.extend({columns:["orgUnitPath","_id","description"],serializeRows:function(){return this.collection.map(function(t){var e=t.toJSON();return e.orgUnitPath=n(t,!0),e})}})});
+define(["app/data/views/renderOrgUnitPath","app/core/views/ListView"],function(t,i){return i.extend({columns:["orgUnitPath","_id","description"],serializeRows:function(){return this.collection.map(function(i){var n=i.toJSON();return n.orgUnitPath=t(i,!0),n})}})});

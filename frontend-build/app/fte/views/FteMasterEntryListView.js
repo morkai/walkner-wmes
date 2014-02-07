@@ -1,1 +1,1 @@
-define(["./FteLeaderEntryListView","i18n!app/nls/fte"],function(e){return e.extend({remoteTopics:{"fte.master.created":"refreshCollection","fte.master.locked":"refreshCollection"}})});
+define(["./FteLeaderEntryListView"],function(e){return e.extend({remoteTopics:{"fte.master.created":"refreshCollection","fte.master.locked":"refreshCollection"}})});

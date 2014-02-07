@@ -1,1 +1,1 @@
-define(["app/core/views/PrintableListView","app/fte/templates/printableMasterEntryList","i18n!app/nls/fte"],function(e,t){return e.extend({template:t,serialize:function(){return this.model.serializeWithTotals()},afterRender:function(){}})});
+define(["app/core/views/PrintableListView","app/fte/templates/printableMasterEntryList"],function(e,t){return e.extend({template:t,serialize:function(){return this.model.serializeWithTotals()},afterRender:function(){}})});
