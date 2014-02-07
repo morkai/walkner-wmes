@@ -22,7 +22,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
   function limitAors(req, res, next)
   {
-    var user = req.session.user;
+    var user = req.session.user || {};
     var userAors = user.aors || [];
 
     if (user.super || !userAors.length)
@@ -61,7 +61,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
   function limitOrgUnit(req, res, next)
   {
-    var user = req.session.user;
+    var user = req.session.user || {};
     var selectors = req.rql.selector.args;
     var orgUnitTerm = lodash.find(selectors, function(term)
     {
