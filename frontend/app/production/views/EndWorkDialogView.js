@@ -32,7 +32,7 @@ define([
 
         submitEl.disabled = true;
 
-        var newQuantitiesDone = this.parseInt('quantityDone');
+        var newQuantitiesDone = this.parseInt('quantitiesDone');
         var newQuantityDone = this.parseInt('quantityDone');
         var newWorkerCount = this.parseInt('workerCount');
 
