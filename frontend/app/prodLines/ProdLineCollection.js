@@ -39,14 +39,14 @@ define([
           return true;
         }
 
-        var prodLineDivision = prodLineSubdivision.getDivision();
+        var prodLineDivision = prodLineSubdivision.get('division');
 
         if (!prodLineDivision)
         {
           return true;
         }
 
-        return prodLineDivision === userDivision;
+        return prodLineDivision === userDivision.id;
       });
     }
 
