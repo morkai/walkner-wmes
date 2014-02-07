@@ -107,7 +107,7 @@ define([
     return this;
   };
 
-  Viewport.prototype.loadPage = function(pageModulePath, createPage)
+  Viewport.prototype.loadPage = function(dependencies, createPage)
   {
     this.msg.loading();
 
@@ -118,9 +118,9 @@ define([
 
     var viewport = this;
 
-    require([pageModulePath], function(Page)
+    require([].concat(dependencies), function()
     {
-      viewport.showPage(createPage(Page));
+      viewport.showPage(createPage.apply(null, arguments));
       viewport.msg.loaded();
     });
   };
