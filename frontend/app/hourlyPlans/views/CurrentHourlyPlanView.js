@@ -6,8 +6,7 @@ define([
   'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/View',
-  'app/hourlyPlans/templates/current',
-  'i18n!app/nls/hourlyPlans'
+  'app/hourlyPlans/templates/current'
 ], function(
   t,
   viewport,

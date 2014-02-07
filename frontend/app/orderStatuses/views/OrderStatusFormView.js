@@ -1,8 +1,7 @@
 define([
   'app/core/views/FormView',
   'app/orderStatuses/templates/form',
-  'bootstrap-colorpicker',
-  'i18n!app/nls/orderStatuses'
+  'bootstrap-colorpicker'
 ], function(
   FormView,
   formTemplate

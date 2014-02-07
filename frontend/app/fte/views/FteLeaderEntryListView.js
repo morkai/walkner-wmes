@@ -4,8 +4,7 @@ define([
   'app/user',
   'app/data/subdivisions',
   'app/data/views/renderOrgUnitPath',
-  'app/core/views/ListView',
-  'i18n!app/nls/fte'
+  'app/core/views/ListView'
 ], function(
   moment,
   t,

@@ -1,8 +1,7 @@
 define([
   'app/data/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
-  'app/subdivisions/templates/form',
-  'i18n!app/nls/subdivisions'
+  'app/subdivisions/templates/form'
 ], function(
   OrgUnitDropdownsView,
   FormView,

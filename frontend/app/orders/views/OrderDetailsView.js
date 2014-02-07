@@ -3,8 +3,7 @@ define([
   'app/core/views/DetailsView',
   'app/data/orderStatuses',
   'app/orders/templates/details',
-  'app/orderStatuses/templates/_orderStatus',
-  'i18n!app/nls/orders'
+  'app/orderStatuses/templates/_orderStatus'
 ], function(
   t,
   DetailsView,

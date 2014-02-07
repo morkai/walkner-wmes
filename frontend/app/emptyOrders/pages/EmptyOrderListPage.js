@@ -7,8 +7,7 @@ define([
   '../EmptyOrderCollection',
   '../views/EmptyOrderListView',
   '../views/EmptyOrderFilterView',
-  'app/emptyOrders/templates/listPage',
-  'i18n!app/nls/emptyOrders'
+  'app/emptyOrders/templates/listPage'
 ], function(
   $,
   t,

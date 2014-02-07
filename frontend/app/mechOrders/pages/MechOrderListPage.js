@@ -7,8 +7,7 @@ define([
   '../views/MechOrderListView',
   '../views/MechOrderFilterView',
   '../views/MechOrderImportView',
-  'app/mechOrders/templates/listPage',
-  'i18n!app/nls/mechOrders'
+  'app/mechOrders/templates/listPage'
 ], function(
   t,
   viewport,

@@ -1,8 +1,7 @@
 define([
   'app/i18n',
   'app/core/View',
-  '../views/CurrentHourlyPlanView',
-  'i18n!app/nls/hourlyPlans'
+  '../views/CurrentHourlyPlanView'
 ], function(
   t,
   View,

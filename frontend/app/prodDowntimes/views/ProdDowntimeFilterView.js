@@ -2,7 +2,6 @@ define([
   'underscore',
   'moment',
   'js2form',
-  'reltime',
   'app/i18n',
   'app/user',
   'app/data/aors',
@@ -11,13 +10,11 @@ define([
   'app/core/util/fixTimeRange',
   'app/data/downtimeReasons',
   'app/prodDowntimes/templates/filter',
-  'i18n!app/nls/prodDowntimes',
   'select2'
 ], function(
   _,
   moment,
   js2form,
-  reltime,
   t,
   user,
   aors,

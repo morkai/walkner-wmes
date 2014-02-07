@@ -4,8 +4,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../FteMasterEntry',
-  '../views/FteMasterEntryDetailsView',
-  'i18n!app/nls/fte'
+  '../views/FteMasterEntryDetailsView'
 ], function(
   t,
   user,

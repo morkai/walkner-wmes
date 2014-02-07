@@ -1,8 +1,7 @@
 define([
   'app/data/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
-  'app/mrpControllers/templates/form',
-  'i18n!app/nls/mrpControllers'
+  'app/mrpControllers/templates/form'
 ], function(
   OrgUnitDropdownsView,
   FormView,

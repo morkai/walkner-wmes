@@ -4,8 +4,7 @@ define([
   'app/data/companies',
   'app/data/divisions',
   'app/data/subdivisions',
-  'app/data/views/renderOrgUnitPath',
-  'i18n!app/nls/users'
+  'app/data/views/renderOrgUnitPath'
 ], function(
   t,
   aors,

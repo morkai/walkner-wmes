@@ -6,8 +6,7 @@ define([
   '../OrderCollection',
   '../views/OrderListView',
   '../views/OrderFilterView',
-  'app/orders/templates/listPage',
-  'i18n!app/nls/orders'
+  'app/orders/templates/listPage'
 ], function(
   t,
   bindLoadingMessage,

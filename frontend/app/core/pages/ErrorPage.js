@@ -3,8 +3,7 @@ define([
   '../View',
   'app/core/templates/error400',
   'app/core/templates/error401',
-  'app/core/templates/error404',
-  'i18n!app/nls/core'
+  'app/core/templates/error404'
 ], function(
   t,
   View,

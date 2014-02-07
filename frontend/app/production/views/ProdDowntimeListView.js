@@ -3,8 +3,7 @@ define([
   'app/time',
   'app/data/aors',
   'app/data/downtimeReasons',
-  'app/core/views/ListView',
-  'i18n!app/nls/production'
+  'app/core/views/ListView'
 ], function(
   t,
   time,

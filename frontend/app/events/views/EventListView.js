@@ -6,8 +6,7 @@ define([
   'app/data/subdivisions',
   'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView',
-  'app/events/templates/list',
-  'i18n!app/nls/events'
+  'app/events/templates/list'
 ], function(
   _,
   moment,

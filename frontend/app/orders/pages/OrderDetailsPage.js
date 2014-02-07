@@ -5,8 +5,7 @@ define([
   '../views/OrderDetailsView',
   '../views/OperationListView',
   '../views/OrderChangesView',
-  'app/orders/templates/detailsPage',
-  'i18n!app/nls/orders'
+  'app/orders/templates/detailsPage'
 ], function(
   bindLoadingMessage,
   DetailsPage,

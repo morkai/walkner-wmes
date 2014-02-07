@@ -4,8 +4,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
-  'app/mechOrders/templates/import',
-  'i18n!app/nls/mechOrders'
+  'app/mechOrders/templates/import'
 ], function(
   $,
   _,

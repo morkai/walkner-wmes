@@ -6,8 +6,7 @@ define([
   'app/i18n',
   'app/core/View',
   'app/core/util/fixTimeRange',
-  'app/orders/templates/filter',
-  'i18n!app/nls/events'
+  'app/orders/templates/filter'
 ], function(
   _,
   moment,

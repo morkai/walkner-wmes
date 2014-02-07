@@ -8,8 +8,7 @@ define([
   'app/core/Model',
   'app/core/views/FormView',
   'app/pressWorksheets/templates/form',
-  'app/pressWorksheets/templates/orderRow',
-  'i18n!app/nls/pressWorksheets'
+  'app/pressWorksheets/templates/orderRow'
 ], function(
   _,
   $,

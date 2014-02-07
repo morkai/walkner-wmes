@@ -6,7 +6,6 @@ define([
   'app/i18n',
   'app/core/View',
   'app/users/templates/filter',
-  'i18n!app/nls/users',
   'select2'
 ], function(
   _,

@@ -5,8 +5,7 @@ define([
   'app/viewport',
   'app/core/views/ListView',
   './CorroborateProdDowntimeView',
-  './decorateProdDowntime',
-  'i18n!app/nls/prodDowntimes'
+  './decorateProdDowntime'
 ], function(
   _,
   t,

@@ -7,8 +7,7 @@ define([
   '../HourlyPlanCollection',
   '../views/HourlyPlanListView',
   'app/fte/views/FteEntryFilterView',
-  'app/hourlyPlans/templates/listPage',
-  'i18n!app/nls/hourlyPlans'
+  'app/hourlyPlans/templates/listPage'
 ], function(
   $,
   t,

@@ -7,8 +7,7 @@ define([
   'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/View',
-  'app/fte/templates/currentEntry',
-  'i18n!app/nls/fte'
+  'app/fte/templates/currentEntry'
 ], function(
   t,
   viewport,

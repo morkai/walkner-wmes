@@ -6,8 +6,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../FteLeaderEntry',
-  '../views/FteLeaderEntryDetailsPrintableView',
-  'i18n!app/nls/fte'
+  '../views/FteLeaderEntryDetailsPrintableView'
 ], function(
   moment,
   t,

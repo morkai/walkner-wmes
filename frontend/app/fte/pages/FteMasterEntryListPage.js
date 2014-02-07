@@ -7,8 +7,7 @@ define([
   '../FteMasterEntryCollection',
   '../views/FteMasterEntryListView',
   '../views/FteEntryFilterView',
-  'app/fte/templates/listPage',
-  'i18n!app/nls/fte'
+  'app/fte/templates/listPage'
 ], function(
   $,
   t,

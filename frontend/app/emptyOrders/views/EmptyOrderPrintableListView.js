@@ -1,7 +1,6 @@
 define([
   'app/i18n',
-  'app/core/views/PrintableListView',
-  'i18n!app/nls/emptyOrders'
+  'app/core/views/PrintableListView'
 ], function(
   t,
   PrintableListView

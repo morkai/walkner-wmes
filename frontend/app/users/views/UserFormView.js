@@ -10,8 +10,7 @@ define([
   'app/data/subdivisions',
   'app/data/prodFunctions',
   'app/data/privileges',
-  'app/users/templates/form',
-  'i18n!app/nls/users'
+  'app/users/templates/form'
 ], function(
   _,
   t,

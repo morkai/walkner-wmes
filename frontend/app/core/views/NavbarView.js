@@ -4,8 +4,7 @@ define([
   'app/i18n',
   'app/user',
   '../View',
-  'app/core/templates/navbar',
-  'i18n!app/nls/core'
+  'app/core/templates/navbar'
 ], function(
   $,
   _,

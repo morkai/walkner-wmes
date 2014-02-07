@@ -2,8 +2,7 @@ define([
   'app/i18n',
   'app/core/View',
   '../FteLeaderEntry',
-  '../views/FteCurrentEntryView',
-  'i18n!app/nls/fte'
+  '../views/FteCurrentEntryView'
 ], function(
   t,
   View,

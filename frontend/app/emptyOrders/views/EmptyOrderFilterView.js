@@ -4,8 +4,7 @@ define([
   'js2form',
   'app/i18n',
   'app/core/View',
-  'app/emptyOrders/templates/filter',
-  'i18n!app/nls/emptyOrders'
+  'app/emptyOrders/templates/filter'
 ], function(
   _,
   moment,

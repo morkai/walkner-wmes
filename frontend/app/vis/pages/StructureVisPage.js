@@ -2,8 +2,7 @@ define([
   'jquery',
   'app/i18n',
   'app/core/View',
-  '../views/StructureVisView',
-  'i18n!app/nls/vis'
+  '../views/StructureVisView'
 ], function(
   $,
   t,

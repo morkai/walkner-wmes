@@ -2,8 +2,7 @@ define([
   'app/i18n',
   'app/data/views/renderOrgUnitPath',
   'app/core/views/DetailsView',
-  'app/mrpControllers/templates/details',
-  'i18n!app/nls/mrpControllers'
+  'app/mrpControllers/templates/details'
 ], function(
   t,
   renderOrgUnitPath,

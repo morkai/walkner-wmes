@@ -2,8 +2,7 @@ define([
   'underscore',
   'app/core/View',
   'app/fte/templates/leaderEntry',
-  './fractionsUtil',
-  'i18n!app/nls/fte'
+  './fractionsUtil'
 ], function(
   _,
   View,

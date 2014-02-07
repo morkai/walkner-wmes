@@ -3,8 +3,7 @@ define([
   'app/i18n',
   'app/core/View',
   './decorateProdDowntime',
-  'app/prodDowntimes/templates/details',
-  'i18n!app/nls/prodDowntimes'
+  'app/prodDowntimes/templates/details'
 ], function(
   _,
   t,

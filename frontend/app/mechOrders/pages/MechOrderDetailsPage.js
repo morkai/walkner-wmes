@@ -4,8 +4,7 @@ define([
   '../MechOrder',
   'app/orders/views/OperationListView',
   'app/mechOrders/views/MechOrderDetailsView',
-  'app/mechOrders/templates/detailsPage',
-  'i18n!app/nls/mechOrders'
+  'app/mechOrders/templates/detailsPage'
 ], function(
   bindLoadingMessage,
   DetailsPage,

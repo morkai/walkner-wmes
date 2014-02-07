@@ -8,8 +8,7 @@ define([
   '../EventTypeCollection',
   '../views/EventListView',
   '../views/EventFilterView',
-  'app/events/templates/listPage',
-  'i18n!app/nls/events'
+  'app/events/templates/listPage'
 ], function(
   $,
   viewport,

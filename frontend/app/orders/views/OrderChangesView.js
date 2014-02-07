@@ -10,8 +10,7 @@ define([
   '../Order',
   '../OperationCollection',
   'app/orders/templates/changes',
-  'app/orderStatuses/templates/_orderStatus',
-  'i18n!app/nls/orders'
+  'app/orderStatuses/templates/_orderStatus'
 ], function(
   _,
   $,

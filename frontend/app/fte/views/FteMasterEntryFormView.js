@@ -7,8 +7,7 @@ define([
   'app/core/View',
   'app/fte/templates/masterEntry',
   'app/fte/templates/absentUserRow',
-  './fractionsUtil',
-  'i18n!app/nls/fte'
+  './fractionsUtil'
 ], function(
   _,
   $,

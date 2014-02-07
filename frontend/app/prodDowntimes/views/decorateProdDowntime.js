@@ -9,8 +9,7 @@ define([
   'app/data/prodLines',
   'app/data/downtimeReasons',
   'app/data/views/renderOrgUnitPath',
-  'app/core/templates/userInfo',
-  'i18n!app/nls/prodDowntimes'
+  'app/core/templates/userInfo'
 ], function(
   time,
   t,

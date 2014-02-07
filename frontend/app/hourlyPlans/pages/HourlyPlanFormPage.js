@@ -5,8 +5,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../HourlyPlan',
-  '../views/HourlyPlanFormView',
-  'i18n!app/nls/hourlyPlans'
+  '../views/HourlyPlanFormView'
 ], function(
   $,
   t,

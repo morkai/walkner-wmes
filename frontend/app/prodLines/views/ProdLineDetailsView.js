@@ -1,8 +1,7 @@
 define([
   'app/data/views/renderOrgUnitPath',
   'app/core/views/DetailsView',
-  'app/prodLines/templates/details',
-  'i18n!app/nls/prodLines'
+  'app/prodLines/templates/details'
 ], function(
   renderOrgUnitPath,
   DetailsView,

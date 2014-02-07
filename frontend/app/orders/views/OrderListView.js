@@ -3,8 +3,7 @@ define([
   'app/user',
   'app/core/views/ListView',
   'app/data/orderStatuses',
-  'app/orderStatuses/templates/_orderStatus',
-  'i18n!app/nls/orders'
+  'app/orderStatuses/templates/_orderStatus'
 ], function(
   t,
   user,

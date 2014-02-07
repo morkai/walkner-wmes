@@ -1,8 +1,7 @@
 define([
   'app/core/views/DetailsView',
   './decorateProdFlow',
-  'app/prodFlows/templates/details',
-  'i18n!app/nls/prodFlows'
+  'app/prodFlows/templates/details'
 ], function(
   DetailsView,
   decorateProdFlow,

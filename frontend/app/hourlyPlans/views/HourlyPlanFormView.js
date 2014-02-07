@@ -5,8 +5,7 @@ define([
   'app/i18n',
   'app/user',
   'app/core/View',
-  'app/hourlyPlans/templates/entry',
-  'i18n!app/nls/hourlyPlans'
+  'app/hourlyPlans/templates/entry'
 ], function(
   _,
   $,

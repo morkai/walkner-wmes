@@ -4,8 +4,7 @@ define([
   'app/i18n',
   '../View',
   'app/core/templates/messages',
-  'app/core/templates/message',
-  'i18n!app/nls/core'
+  'app/core/templates/message'
 ], function(
   _,
   $,

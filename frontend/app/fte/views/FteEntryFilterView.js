@@ -9,8 +9,7 @@ define([
   'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/View',
-  'app/fte/templates/filter',
-  'i18n!app/nls/fte'
+  'app/fte/templates/filter'
 ], function(
   _,
   moment,

@@ -8,8 +8,7 @@ define([
   '../UserCollection',
   '../views/UserListView',
   '../views/UserFilterView',
-  'app/users/templates/listPage',
-  'i18n!app/nls/users'
+  'app/users/templates/listPage'
 ], function(
   $,
   t,

@@ -2,8 +2,7 @@ define([
   'app/i18n',
   'app/user',
   'app/data/views/renderOrgUnitPath',
-  'app/core/views/ListView',
-  'i18n!app/nls/prodLines'
+  'app/core/views/ListView'
 ], function(
   t,
   user,

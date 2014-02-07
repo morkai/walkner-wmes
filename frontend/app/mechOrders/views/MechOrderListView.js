@@ -4,8 +4,7 @@ define([
   'app/user',
   'app/viewport',
   'app/data/mrpControllers',
-  'app/core/views/ListView',
-  'i18n!app/nls/mechOrders'
+  'app/core/views/ListView'
 ], function(
   $,
   t,

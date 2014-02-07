@@ -1,8 +1,7 @@
 define([
   'underscore',
   'app/core/View',
-  'app/hourlyPlans/templates/entry',
-  'i18n!app/nls/hourlyPlans'
+  'app/hourlyPlans/templates/entry'
 ], function(
   _,
   View,

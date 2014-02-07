@@ -3,8 +3,7 @@ define([
   'js2form',
   'app/i18n',
   'app/core/View',
-  'app/mechOrders/templates/filter',
-  'i18n!app/nls/mechOrders'
+  'app/mechOrders/templates/filter'
 ], function(
   _,
   js2form,

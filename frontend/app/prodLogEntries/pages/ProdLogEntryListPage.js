@@ -8,8 +8,7 @@ define([
   '../ProdLogEntryCollection',
   '../views/ProdLogEntryListView',
   '../views/ProdLogEntryFilterView',
-  'app/prodLogEntries/templates/listPage',
-  'i18n!app/nls/prodLogEntries'
+  'app/prodLogEntries/templates/listPage'
 ], function(
   $,
   t,

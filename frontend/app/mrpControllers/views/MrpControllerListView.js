@@ -3,8 +3,7 @@ define([
   'app/i18n',
   'app/user',
   'app/data/views/renderOrgUnitPath',
-  'app/core/views/ListView',
-  'i18n!app/nls/prodTasks'
+  'app/core/views/ListView'
 ], function(
   _,
   t,

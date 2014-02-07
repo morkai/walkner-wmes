@@ -7,8 +7,7 @@ define([
   'app/core/View',
   '../PressWorksheetCollection',
   '../views/PressWorksheetListView',
-  'app/pressWorksheets/templates/listPage',
-  'i18n!app/nls/pressWorksheets'
+  'app/pressWorksheets/templates/listPage'
 ], function(
   $,
   t,

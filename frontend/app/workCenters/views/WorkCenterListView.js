@@ -1,7 +1,6 @@
 define([
   'app/data/views/renderOrgUnitPath',
-  'app/core/views/ListView',
-  'i18n!app/nls/workCenters'
+  'app/core/views/ListView'
 ], function(
   renderOrgUnitPath,
   ListView

@@ -8,8 +8,7 @@ define([
   '../ProdDowntimeCollection',
   '../views/ProdDowntimeListView',
   '../views/ProdDowntimeFilterView',
-  'app/prodDowntimes/templates/listPage',
-  'i18n!app/nls/prodDowntimes'
+  'app/prodDowntimes/templates/listPage'
 ], function(
   $,
   t,

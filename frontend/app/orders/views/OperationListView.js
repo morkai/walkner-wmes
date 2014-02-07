@@ -1,7 +1,6 @@
 define([
   'app/core/View',
-  'app/orders/templates/operationList',
-  'i18n!app/nls/orders'
+  'app/orders/templates/operationList'
 ], function(
   View,
   operationListTemplate

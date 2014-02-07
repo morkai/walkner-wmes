@@ -6,8 +6,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../HourlyPlan',
-  '../views/HourlyPlanDetailsPrintableView',
-  'i18n!app/nls/hourlyPlans'
+  '../views/HourlyPlanDetailsPrintableView'
 ], function(
   moment,
   t,

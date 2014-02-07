@@ -5,8 +5,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../FteLeaderEntry',
-  '../views/FteLeaderEntryFormView',
-  'i18n!app/nls/fte'
+  '../views/FteLeaderEntryFormView'
 ], function(
   $,
   t,

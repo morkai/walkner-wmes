@@ -2,8 +2,7 @@ define([
   'app/i18n',
   'app/core/views/DetailsView',
   './decorateUser',
-  'app/users/templates/details',
-  'i18n!app/nls/users'
+  'app/users/templates/details'
 ], function(
   t,
   DetailsView,

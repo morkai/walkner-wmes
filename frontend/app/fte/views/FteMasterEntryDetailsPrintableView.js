@@ -1,7 +1,6 @@
 define([
   'app/core/views/PrintableListView',
-  'app/fte/templates/printableMasterEntryList',
-  'i18n!app/nls/fte'
+  'app/fte/templates/printableMasterEntryList'
 ], function(
   PrintableListView,
   printableMasterEntryListTemplate

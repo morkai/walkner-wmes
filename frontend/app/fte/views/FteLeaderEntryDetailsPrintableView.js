@@ -3,8 +3,7 @@ define([
   'app/i18n',
   'app/core/views/PrintableListView',
   'app/fte/templates/printableLeaderEntryList',
-  './fractionsUtil',
-  'i18n!app/nls/fte'
+  './fractionsUtil'
 ], function(
   _,
   t,

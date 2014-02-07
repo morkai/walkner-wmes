@@ -1,7 +1,6 @@
 define([
   'app/core/views/FormView',
-  'app/companies/templates/form',
-  'i18n!app/nls/companies'
+  'app/companies/templates/form'
 ], function(
   FormView,
   formTemplate

@@ -1,7 +1,6 @@
 define([
   'app/i18n',
-  'app/core/views/ListView',
-  'i18n!app/nls/prodTasks'
+  'app/core/views/ListView'
 ], function(
   t,
   ListView

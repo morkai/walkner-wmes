@@ -1,8 +1,7 @@
 define([
   'app/i18n',
   'app/core/views/ListView',
-  './decorateUser',
-  'i18n!app/nls/users'
+  './decorateUser'
 ], function(
   t,
   ListView,

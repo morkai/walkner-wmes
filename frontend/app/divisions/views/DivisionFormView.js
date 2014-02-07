@@ -1,8 +1,7 @@
 define([
   'underscore',
   'app/core/views/FormView',
-  'app/divisions/templates/form',
-  'i18n!app/nls/divisions'
+  'app/divisions/templates/form'
 ], function(
   _,
   FormView,

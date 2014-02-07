@@ -1,6 +1,5 @@
 define([
-  './FteLeaderEntryListView',
-  'i18n!app/nls/fte'
+  './FteLeaderEntryListView'
 ], function(
   FteLeaderEntryListView
 ) {

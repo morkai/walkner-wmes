@@ -2,7 +2,8 @@ define([
   '../router',
   '../viewport',
   '../user',
-  './pages/EventListPage'
+  './pages/EventListPage',
+  'i18n!app/nls/events'
 ], function(
   router,
   viewport,

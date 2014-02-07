@@ -1,8 +1,7 @@
 define([
   'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView',
-  './decorateProdFlow',
-  'i18n!app/nls/prodTasks'
+  './decorateProdFlow'
 ], function(
   renderOrgUnitPath,
   ListView,

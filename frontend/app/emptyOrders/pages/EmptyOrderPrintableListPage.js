@@ -6,8 +6,7 @@ define([
   'app/core/util/pageActions',
   'app/core/View',
   '../EmptyOrderCollection',
-  '../views/EmptyOrderPrintableListView',
-  'i18n!app/nls/emptyOrders'
+  '../views/EmptyOrderPrintableListView'
 ], function(
   _,
   moment,

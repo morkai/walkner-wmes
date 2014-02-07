@@ -10,8 +10,7 @@ define([
   'app/data/workCenters',
   'app/data/prodLines',
   'app/core/View',
-  'app/vis/templates/structureLegend',
-  'i18n!app/nls/vis'
+  'app/vis/templates/structureLegend'
 ], function(
   _,
   $,

@@ -5,8 +5,7 @@ define([
   'app/viewport',
   'app/router',
   '../View',
-  'app/core/templates/actionForm',
-  'i18n!app/nls/core'
+  'app/core/templates/actionForm'
 ], function(
   _,
   $,

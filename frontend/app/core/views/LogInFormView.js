@@ -2,8 +2,7 @@ define([
   'jquery',
   'app/user',
   '../View',
-  'app/core/templates/logInForm',
-  'i18n!app/nls/core'
+  'app/core/templates/logInForm'
 ], function(
   $,
   user,

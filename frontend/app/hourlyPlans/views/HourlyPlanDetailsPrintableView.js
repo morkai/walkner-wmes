@@ -1,7 +1,6 @@
 define([
   'app/core/views/PrintableListView',
-  'app/hourlyPlans/templates/printableList',
-  'i18n!app/nls/hourlyPlans'
+  'app/hourlyPlans/templates/printableList'
 ], function(
   PrintableListView,
   printableListTemplate

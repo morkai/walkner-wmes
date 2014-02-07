@@ -4,8 +4,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../HourlyPlan',
-  '../views/HourlyPlanDetailsView',
-  'i18n!app/nls/hourlyPlans'
+  '../views/HourlyPlanDetailsView'
 ], function(
   t,
   user,

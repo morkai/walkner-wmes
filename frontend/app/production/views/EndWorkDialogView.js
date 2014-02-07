@@ -2,8 +2,7 @@ define([
   'underscore',
   'app/i18n',
   'app/core/View',
-  'app/production/templates/endWorkDialog',
-  'i18n!app/nls/production'
+  'app/production/templates/endWorkDialog'
 ], function(
   _,
   t,

@@ -1,7 +1,6 @@
 define([
   'app/core/views/FormView',
-  'app/prodTasks/templates/form',
-  'i18n!app/nls/prodTasks'
+  'app/prodTasks/templates/form'
 ], function(
   FormView,
   formTemplate

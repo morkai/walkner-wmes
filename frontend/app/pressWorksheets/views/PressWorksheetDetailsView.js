@@ -2,8 +2,7 @@ define([
   'app/i18n',
   'app/core/views/DetailsView',
   './decoratePressWorksheet',
-  'app/pressWorksheets/templates/details',
-  'i18n!app/nls/pressWorksheets'
+  'app/pressWorksheets/templates/details'
 ], function(
   t,
   DetailsView,
