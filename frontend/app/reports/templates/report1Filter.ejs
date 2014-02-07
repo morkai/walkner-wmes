@@ -11,10 +11,16 @@
           <%- t('reports', 'filter:mode:date') %>
         </label>
       </div><div>
-        <label for="<%- idPrefix %>-from" class="control-label"><%- t('reports', 'filter:from') %></label>
-        <input id="<%- idPrefix %>-from" class="form-control" name="from" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
-        <label for="<%- idPrefix %>-to" class="control-label"><%- t('reports', 'filter:to') %></label>
-        <input id="<%- idPrefix %>-to" class="form-control filter-dateRange-to-field" name="to" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+        <label for="<%- idPrefix %>-from-date" class="control-label"><%- t('reports', 'filter:from') %></label>
+        <div id="<%- idPrefix %>-from" class="form-group-datetime">
+          <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD">
+          <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
+        </div>
+        <label for="<%- idPrefix %>-to-date" class="control-label"><%- t('reports', 'filter:to') %></label>
+        <div id="<%- idPrefix %>-to" class="form-group-datetime">
+          <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD">
+          <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
+        </div>
       </div>
     </div><div class="form-group">
       <label><%- t('reports', 'filter:interval') %></label>

@@ -29,8 +29,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
     var divisionId = getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnitId);
     var options = {
-      fromTime: new Date(req.query.from).getTime(),
-      toTime: new Date(req.query.to).getTime(),
+      fromTime: getTime(req.query.from),
+      toTime: getTime(req.query.to),
       interval: req.query.interval || 'hour',
       orgUnitType: req.query.orgUnitType,
       orgUnitId: req.query.orgUnitId,
@@ -58,6 +58,11 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
       return res.send(report);
     });
+  }
+
+  function getTime(date)
+  {
+    return /^[0-9]+$/.test(date) ? parseInt(date, 10) : Date.parse(date);
   }
 
   function getDivisionByOrgUnit(orgUnitType, orgUnitId)

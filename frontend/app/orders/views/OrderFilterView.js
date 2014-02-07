@@ -89,8 +89,7 @@ define([
         {
           case 'startDate':
           case 'finishDate':
-            formData[term.name === 'ge' ? 'from' : 'to'] =
-              moment(term.args[1]).format('YYYY-MM-DD');
+            fixTimeRange.toFormData(formData, term, 'date');
             break;
 
           case '_id':
@@ -108,23 +107,19 @@ define([
     changeFilter: function()
     {
       var rqlQuery = this.model.rqlQuery;
-      var timeRange = fixTimeRange(
-        this.$id('from'),
-        this.$id('to'),
-        'YYYY-MM-DD'
-      );
+      var timeRange = fixTimeRange.fromView(this);
       var selector = [];
-      var date = this.$('[name=date]:checked').val() + 'Date';
+      var date = this.$('input[name=date]:checked').val() + 'Date';
 
       this.serializeRegexTerm(selector, '_id', 9);
       this.serializeRegexTerm(selector, 'nc12', 12);
 
-      if (timeRange.from !== -1)
+      if (timeRange.from)
       {
         selector.push({name: 'ge', args: [date, timeRange.from]});
       }
 
-      if (timeRange.to !== -1)
+      if (timeRange.to)
       {
         selector.push({name: 'le', args: [date, timeRange.to]});
       }

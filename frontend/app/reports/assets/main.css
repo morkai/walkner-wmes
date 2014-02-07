@@ -12,6 +12,10 @@
   margin-top: 1em;
   margin-bottom: 0;
 }
+.reports-1-page .form-group-datetime {
+  display: inline-flex;
+  width: 256px;
+}
 .reports-1-header > h1 {
   display: inline-block;
   margin: 0;

@@ -79,7 +79,6 @@ define([
       var formData = {
         createdAt: '',
         prodLine: null,
-        type: null,
         shift: 0,
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
       };
@@ -93,11 +92,7 @@ define([
         switch (property)
         {
           case 'date':
-            if (term.name === 'ge' || term.name === 'le')
-            {
-              formData[term.name === 'ge' ? 'from' : 'to'] =
-                moment(term.args[1]).format('YYYY-MM-DD');
-            }
+            fixTimeRange.toFormData(formData, term, 'date');
             break;
 
           case 'prodLine':
@@ -116,7 +111,7 @@ define([
     changeFilter: function()
     {
       var rqlQuery = this.model.rqlQuery;
-      var timeRange = fixTimeRange(this.$id('from'), this.$id('to'), 'YYYY-MM-DD');
+      var timeRange = fixTimeRange.fromView(this);
       var selector = [];
       var prodLine = this.$id('prodLine').val();
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
@@ -131,12 +126,12 @@ define([
         selector.push({name: 'eq', args: ['shift', shift]});
       }
 
-      if (timeRange.from !== -1)
+      if (timeRange.from)
       {
         selector.push({name: 'ge', args: ['date', timeRange.from]});
       }
 
-      if (timeRange.to !== -1)
+      if (timeRange.to)
       {
         selector.push({name: 'le', args: ['date', timeRange.to]});
       }

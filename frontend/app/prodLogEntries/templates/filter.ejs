@@ -2,11 +2,17 @@
   <form id="<%- idPrefix %>-form" class="filter-form">
     <div class="form-group">
       <label for="<%- idPrefix %>-from"><%- t('prodLogEntries', 'FILTER:DATE:FROM') %></label>
-      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+      <div id="<%- idPrefix %>-from" class="form-group-datetime">
+        <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD">
+        <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
+      </div>
     </div><div
       class="form-group">
       <label for="<%- idPrefix %>-to"><%- t('prodLogEntries', 'FILTER:DATE:TO') %></label>
-      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+      <div id="<%- idPrefix %>-to" class="form-group-datetime">
+        <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD">
+        <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
+      </div>
     </div><div
       class="form-group">
       <label for="<%- idPrefix %>-prodLine"><%- t('prodLogEntries', 'PROPERTY:prodLine') %></label>

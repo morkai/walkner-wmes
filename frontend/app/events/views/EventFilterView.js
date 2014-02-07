@@ -7,7 +7,6 @@ define([
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/events/templates/filter',
-  'i18n!app/nls/events',
   'select2'
 ], function(
   _,
@@ -113,8 +112,7 @@ define([
         switch (property)
         {
           case 'time':
-            formData[term.name === 'ge' ? 'from' : 'to'] =
-              moment(term.args[1]).format('YYYY-MM-DD HH:mm:ss');
+            fixTimeRange.toFormData(formData, term, 'date+time');
             break;
 
           case 'type':
@@ -138,11 +136,7 @@ define([
     changeFilter: function()
     {
       var rqlQuery = this.model.rqlQuery;
-      var timeRange = fixTimeRange(
-        this.$id('from'),
-        this.$id('to'),
-        'YYYY-MM-DD HH:mm:ss'
-      );
+      var timeRange = fixTimeRange.fromView(this);
       var selector = [];
       var type = this.$id('type').val().trim();
       var user = this.$id('user').val().trim();
@@ -162,12 +156,12 @@ define([
         selector.push({name: 'eq', args: ['user.login', user]});
       }
 
-      if (timeRange.from !== -1)
+      if (timeRange.from)
       {
         selector.push({name: 'ge', args: ['time', timeRange.from]});
       }
 
-      if (timeRange.to !== -1)
+      if (timeRange.to)
       {
         selector.push({name: 'le', args: ['time', timeRange.to]});
       }

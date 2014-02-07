@@ -23,3 +23,10 @@ textarea.prodDowntimes-corroborate-decisionComment {
 .prodDowntime-filter-prodFlow {
   padding-left: 2em;
 }
+.page[data-id="prodDowntimeList"] .filter-container {
+  float: left;
+  width: 286px;
+}
+.prodDowntimes-list-container {
+  margin-left: 300px;
+}

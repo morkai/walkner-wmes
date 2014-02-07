@@ -60,10 +60,8 @@ define([
 
       js2form(this.el.querySelector('.filter-form'), formData);
 
-      this.toggleStatus(formData.status);
-
       this.$id('orgUnit').select2({
-        width: '275px',
+        width: '256px',
         allowClear: !user.getDivision(),
         data: this.getApplicableOrgUnits(),
         formatSelection: function(orgUnit)
@@ -78,13 +76,13 @@ define([
       });
 
       this.$id('aor').select2({
-        width: '275px',
+        width: '256px',
         allowClear: true,
         data: this.getApplicableAors()
       });
 
       this.$id('reason').select2({
-        width: '275px',
+        width: '256px',
         allowClear: true,
         data: downtimeReasons
           .map(function(downtimeReason)
@@ -217,7 +215,7 @@ define([
         startedAt: '',
         aor: null,
         reason: null,
-        status: [],
+        status: ['undecided', 'confirmed', 'rejected'],
         orgUnit: null,
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
       };
@@ -231,11 +229,7 @@ define([
         switch (property)
         {
           case 'startedAt':
-            if (term.name === 'ge' || term.name === 'le')
-            {
-              formData[term.name === 'ge' ? 'from' : 'to'] =
-                moment(term.args[1]).format('YYYY-MM-DD HH:mm:ss');
-            }
+            fixTimeRange.toFormData(formData, term, 'date+time');
             break;
 
           case 'aor':
@@ -264,7 +258,7 @@ define([
     changeFilter: function()
     {
       var rqlQuery = this.model.rqlQuery;
-      var timeRange = fixTimeRange(this.$id('from'), this.$id('to'), 'YYYY-MM-DD HH:mm:ss');
+      var timeRange = fixTimeRange.fromView(this);
       var selector = [];
       var orgUnit = this.$id('orgUnit').select2('data');
       var aor = this.$id('aor').val();
@@ -295,12 +289,12 @@ define([
         selector.push({name: 'eq', args: [orgUnit.type, orgUnit.id]});
       }
 
-      if (timeRange.from !== -1)
+      if (timeRange.from)
       {
         selector.push({name: 'ge', args: ['startedAt', timeRange.from]});
       }
 
-      if (timeRange.to !== -1)
+      if (timeRange.to)
       {
         selector.push({name: 'le', args: ['startedAt', timeRange.to]});
       }
@@ -314,34 +308,17 @@ define([
 
     fixStatus: function()
     {
-      var $allStatuses = this.$('.filter-btn-group > .btn');
-      var $activeStatuses = $allStatuses.filter('.active');
+      var $allStatuses = this.$('input[name="status[]"]');
+      var $activeStatuses = $allStatuses.filter(':checked');
 
       if ($activeStatuses.length === 0)
       {
-        $allStatuses.addClass('active');
+        $activeStatuses = $allStatuses.prop('checked', true);
       }
 
       var selectedStatuses = $activeStatuses.map(function() { return this.value; }).get();
 
       return selectedStatuses.length === $allStatuses.length ? [] : selectedStatuses;
-    },
-
-    toggleStatus: function(statuses)
-    {
-      var $allStatuses = this.$('.filter-btn-group > .btn');
-
-      if (statuses.length === 0)
-      {
-        $allStatuses.addClass('active');
-      }
-      else
-      {
-        statuses.forEach(function(severity)
-        {
-          $allStatuses.filter('[value="' + severity + '"]').addClass('active');
-        });
-      }
     }
 
   });

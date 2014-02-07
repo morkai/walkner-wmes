@@ -46,3 +46,13 @@
 .control-label + .radio {
   margin-top: 0;
 }
+.form-group-datetime {
+  display: flex;
+}
+.form-group-datetime > input[type="date"] {
+  width: 155px;
+  margin-right: 1px;
+}
+.form-group-datetime > input[type="time"] {
+  width: 100px;
+}

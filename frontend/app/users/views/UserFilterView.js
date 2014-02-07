@@ -5,7 +5,6 @@ define([
   'reltime',
   'app/i18n',
   'app/core/View',
-  'app/core/util/fixTimeRange',
   'app/users/templates/filter',
   'i18n!app/nls/users',
   'select2'
@@ -16,7 +15,6 @@ define([
   reltime,
   t,
   View,
-  fixTimeRange,
   filterTemplate
 ) {
   'use strict';

@@ -1,12 +1,18 @@
 <div class="well">
-  <form id="<%- idPrefix %>-form" class="filter-form">
+  <form id="<%- idPrefix %>-form" class="filter-form is-vertical">
     <div class="form-group">
-      <label for="<%- idPrefix %>-from"><%- t('prodDowntimes', 'FILTER:DATE:FROM') %></label>
-      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+      <label for="<%- idPrefix %>-from-date"><%- t('prodDowntimes', 'FILTER:DATE:FROM') %></label>
+      <div id="<%- idPrefix %>-from" class="form-group-datetime">
+        <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD">
+        <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
+      </div>
     </div><div
       class="form-group">
-      <label for="<%- idPrefix %>-to"><%- t('prodDowntimes', 'FILTER:DATE:TO') %></label>
-      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="text" placeholder="YYYY-MM-DD hh:mm:ss">
+      <label for="<%- idPrefix %>-to-date"><%- t('prodDowntimes', 'FILTER:DATE:TO') %></label>
+      <div id="<%- idPrefix %>-to" class="form-group-datetime">
+        <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD">
+        <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
+      </div>
     </div><div
       class="form-group">
       <label for="<%- idPrefix %>-orgUnit"><%- t('prodDowntimes', 'PROPERTY:orgUnit') %></label>
@@ -21,11 +27,24 @@
       <input id="<%- idPrefix %>-reason" name="reason" type="text" data-placeholder="<%- t('prodDowntimes', 'FILTER:PLACEHOLDER:reason') %>">
     </div><div
       class="form-group">
-      <label><%- t('prodDowntimes', 'PROPERTY:status') %></label>
-      <div class="btn-group filter-btn-group" data-toggle="buttons-checkbox">
-        <button class="btn btn-warning active" type="button" value="undecided" title="<%- t('prodDowntimes', 'PROPERTY:status:undecided') %>">&nbsp;</button>
-        <button class="btn btn-success" type="button" value="confirmed" title="<%- t('prodDowntimes', 'PROPERTY:status:confirmed') %>">&nbsp;</button>
-        <button class="btn btn-danger" type="button" value="rejected" title="<%- t('prodDowntimes', 'PROPERTY:status:rejected') %>">&nbsp;</button>
+      <label class="control-label"><%- t('prodDowntimes', 'PROPERTY:status') %></label>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="status[]" value="undecided">
+          <%- t('prodDowntimes', 'PROPERTY:status:undecided') %>
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="status[]" value="confirmed">
+          <%- t('prodDowntimes', 'PROPERTY:status:confirmed') %>
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="status[]" value="rejected">
+          <%- t('prodDowntimes', 'PROPERTY:status:rejected') %>
+        </label>
       </div>
     </div><div
       class="form-group">
