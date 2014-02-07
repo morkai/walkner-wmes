@@ -2,18 +2,19 @@ define([
   '../router',
   '../viewport',
   '../user',
-  './pages/EventListPage',
   'i18n!app/nls/events'
 ], function(
   router,
   viewport,
-  user,
-  EventListPage
+  user
 ) {
   'use strict';
 
   router.map('/events', user.auth('EVENTS:VIEW'), function(req)
   {
-    viewport.showPage(new EventListPage({rql: req.rql}));
+    viewport.loadPage('app/events/pages/EventListPage', function(EventListPage)
+    {
+      return new EventListPage({rql: req.rql});
+    });
   });
 });

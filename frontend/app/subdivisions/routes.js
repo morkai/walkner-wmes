@@ -3,32 +3,22 @@ define([
   '../viewport',
   '../i18n',
   '../user',
+  '../core/util/showDeleteFormPage',
   '../data/divisions',
   '../data/subdivisions',
   '../data/views/renderOrgUnitPath',
   './Subdivision',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/ActionFormPage',
-  './pages/AddSubdivisionFormPage',
-  './pages/EditSubdivisionFormPage',
-  './views/SubdivisionDetailsView',
   'i18n!app/nls/subdivisions'
 ], function(
   router,
   viewport,
   t,
   user,
+  showDeleteFormPage,
   divisions,
   subdivisions,
   renderOrgUnitPath,
-  Subdivision,
-  ListPage,
-  DetailsPage,
-  ActionFormPage,
-  AddSubdivisionFormPage,
-  EditSubdivisionFormPage,
-  SubdivisionDetailsView
+  Subdivision
 ) {
   'use strict';
 
@@ -37,56 +27,64 @@ define([
 
   router.map('/subdivisions', canView, function()
   {
-    viewport.showPage(new ListPage({
-      collection: subdivisions,
-      columns: ['division', 'type', 'name', 'prodTaskTags'],
-      serializeRow: function(model)
-      {
-        var row = model.toJSON();
+    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    {
+      return new ListPage({
+        collection: subdivisions,
+        columns: ['division', 'type', 'name', 'prodTaskTags'],
+        serializeRow: function(model)
+        {
+          var row = model.toJSON();
 
-        row.division = renderOrgUnitPath(divisions.get(row.division), true, false);
+          row.division = renderOrgUnitPath(divisions.get(row.division), true, false);
 
-        row.type = t('subdivisions', 'TYPE:' + row.type);
+          row.type = t('subdivisions', 'TYPE:' + row.type);
 
-        row.prodTaskTags =
-          row.prodTaskTags && row.prodTaskTags.length ? row.prodTaskTags.join(', ') : null;
+          row.prodTaskTags =
+            row.prodTaskTags && row.prodTaskTags.length ? row.prodTaskTags.join(', ') : null;
 
-        return row;
-      }
-    }));
+          return row;
+        }
+      });
+    });
   });
 
   router.map('/subdivisions/:id', function(req)
   {
-    viewport.showPage(new DetailsPage({
-      DetailsView: SubdivisionDetailsView,
-      model: new Subdivision({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      ['app/core/pages/DetailsPage', 'app/subdivisions/views/SubdivisionDetailsView'],
+      function(DetailsPage, SubdivisionDetailsView)
+      {
+        return new DetailsPage({
+          DetailsView: SubdivisionDetailsView,
+          model: new Subdivision({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/subdivisions;add', canManage, function()
   {
-    viewport.showPage(new AddSubdivisionFormPage({model: new Subdivision()}));
+    viewport.loadPage(
+      'app/subdivisions/pages/AddSubdivisionFormPage',
+      function(AddSubdivisionFormPage)
+      {
+        return new AddSubdivisionFormPage({model: new Subdivision()});
+      }
+    );
   });
 
   router.map('/subdivisions/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditSubdivisionFormPage({model: new Subdivision({_id: req.params.id})}));
+    viewport.loadPage(
+      'app/subdivisions/pages/EditSubdivisionFormPage',
+      function(EditSubdivisionFormPage)
+      {
+        return new EditSubdivisionFormPage({model: new Subdivision({_id: req.params.id})});
+      }
+    );
   });
 
-  router.map('/subdivisions/:id;delete', canManage, function(req, referer)
-  {
-    var model = new Subdivision({_id: req.params.id});
-
-    viewport.showPage(new ActionFormPage({
-      model: model,
-      actionKey: 'delete',
-      successUrl: model.genClientUrl('base'),
-      cancelUrl: referer || model.genClientUrl('base'),
-      formMethod: 'DELETE',
-      formAction: model.url(),
-      formActionSeverity: 'danger'
-    }));
-  });
+  router.map('/subdivisions/:id;delete', canManage, showDeleteFormPage.bind(null, Subdivision));
 
 });

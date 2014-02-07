@@ -2,17 +2,11 @@ define([
   '../router',
   '../viewport',
   '../user',
-  './pages/ProdDowntimeListPage',
-  './pages/ProdDowntimeDetailsPage',
-  './pages/CorroborateProdDowntimePage',
   'i18n!app/nls/prodDowntimes'
 ], function(
   router,
   viewport,
-  user,
-  ProdDowntimeListPage,
-  ProdDowntimeDetailsPage,
-  CorroborateProdDowntimePage
+  user
 ) {
   'use strict';
 
@@ -21,21 +15,37 @@ define([
 
   router.map('/prodDowntimes', canView, function(req)
   {
-    viewport.showPage(new ProdDowntimeListPage({rql: req.rql}));
+    viewport.loadPage(
+      ['app/prodDowntimes/pages/ProdDowntimeListPage'],
+      function(ProdDowntimeListPage)
+      {
+        return new ProdDowntimeListPage({rql: req.rql});
+      }
+    );
   });
 
   router.map('/prodDowntimes/:id', function(req)
   {
-    viewport.showPage(new ProdDowntimeDetailsPage({
-      modelId: req.params.id
-    }));
+    viewport.loadPage(
+      ['app/prodDowntimes/pages/ProdDowntimeDetailsPage'],
+      function(ProdDowntimeDetailsPage)
+      {
+        return new ProdDowntimeDetailsPage({modelId: req.params.id});
+      }
+    );
   });
 
   router.map('/prodDowntimes/:id;corroborate', canManage, function(req, referer)
   {
-    viewport.showPage(new CorroborateProdDowntimePage({
-      cancelUrl: referer,
-      modelId: req.params.id
-    }));
+    viewport.loadPage(
+      ['app/prodDowntimes/pages/CorroborateProdDowntimePage'],
+      function(CorroborateProdDowntimePage)
+      {
+        return new CorroborateProdDowntimePage({
+          cancelUrl: referer,
+          modelId: req.params.id
+        });
+      }
+    );
   });
 });

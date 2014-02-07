@@ -2,31 +2,17 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   './ProdTaskCollection',
   './ProdTask',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/ActionFormPage',
-  './pages/AddProdTaskFormPage',
-  './pages/EditProdTaskFormPage',
-  './views/ProdTaskListView',
-  './views/ProdTaskFormView',
-  'app/prodTasks/templates/details',
   'i18n!app/nls/prodTasks'
 ], function(
   router,
   viewport,
   user,
+  showDeleteFormPage,
   ProdTaskCollection,
-  ProdTask,
-  ListPage,
-  DetailsPage,
-  ActionFormPage,
-  AddProdTaskFormPage,
-  EditProdTaskFormPage,
-  ProdTaskListView,
-  ProdTaskFormView,
-  detailsTemplate
+  ProdTask
 ) {
   'use strict';
 
@@ -35,43 +21,48 @@ define([
 
   router.map('/prodTasks', canView, function(req)
   {
-    viewport.showPage(new ListPage({
-      ListView: ProdTaskListView,
-      collection: new ProdTaskCollection({rqlQuery: req.rql})
-    }));
+    viewport.loadPage(
+      ['app/core/pages/ListPage', 'app/prodTasks/views/ProdTaskListView'],
+      function(ListPage, ProdTaskListView)
+      {
+        return new ListPage({
+          ListView: ProdTaskListView,
+          collection: new ProdTaskCollection({rqlQuery: req.rql})
+        });
+      }
+    );
   });
 
   router.map('/prodTasks/:id', function(req)
   {
-    viewport.showPage(new DetailsPage({
-      model: new ProdTask({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      ['app/core/pages/DetailsPage', 'app/prodTasks/templates/details'],
+      function(DetailsPage, detailsTemplate)
+      {
+        return new DetailsPage({
+          model: new ProdTask({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/prodTasks;add', canManage, function()
   {
-    viewport.showPage(new AddProdTaskFormPage({model: new ProdTask()}));
+    viewport.loadPage('app/prodTasks/pages/AddProdTaskFormPage', function(AddProdTaskFormPage)
+    {
+      return new AddProdTaskFormPage({model: new ProdTask()});
+    });
   });
 
   router.map('/prodTasks/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditProdTaskFormPage({model: new ProdTask({_id: req.params.id})}));
+    viewport.loadPage('app/prodTasks/views/EditProdTaskFormPage', function(EditProdTaskFormPage)
+    {
+      return new EditProdTaskFormPage({model: new ProdTask({_id: req.params.id})});
+    });
   });
 
-  router.map('/prodTasks/:id;delete', canManage, function(req, referer)
-  {
-    var model = new ProdTask({_id: req.params.id});
-
-    viewport.showPage(new ActionFormPage({
-      model: model,
-      actionKey: 'delete',
-      successUrl: model.genClientUrl('base'),
-      cancelUrl: referer || model.genClientUrl('base'),
-      formMethod: 'DELETE',
-      formAction: model.url(),
-      formActionSeverity: 'danger'
-    }));
-  });
+  router.map('/prodTasks/:id;delete', canManage, showDeleteFormPage.bind(null, ProdTask));
 
 });

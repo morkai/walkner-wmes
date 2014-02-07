@@ -2,31 +2,17 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   '../data/prodLines',
   './ProdLine',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/ProdLineListView',
-  './views/ProdLineDetailsView',
-  './views/ProdLineFormView',
   'i18n!app/nls/prodLines'
 ], function(
   router,
   viewport,
   user,
+  showDeleteFormPage,
   prodLines,
-  ProdLine,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  ProdLineListView,
-  ProdLineDetailsView,
-  ProdLineFormView
+  ProdLine
 ) {
   'use strict';
 
@@ -35,49 +21,60 @@ define([
 
   router.map('/prodLines', canView, function()
   {
-    viewport.showPage(new ListPage({
-      ListView: ProdLineListView,
-      collection: prodLines
-    }));
+    viewport.loadPage(
+      ['app/core/pages/ListPage', 'app/prodLines/views/ProdLineListView'],
+      function(ListPage, ProdLineListView)
+      {
+        return new ListPage({
+          ListView: ProdLineListView,
+          collection: prodLines
+        });
+      }
+    );
   });
 
   router.map('/prodLines/:id', function(req)
   {
-    viewport.showPage(new DetailsPage({
-      DetailsView: ProdLineDetailsView,
-      model: new ProdLine({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      ['app/core/pages/DetailsPage', 'app/prodLines/views/ProdLineDetailsView'],
+      function(DetailsPage, ProdLineDetailsView)
+      {
+        return new DetailsPage({
+          DetailsView: ProdLineDetailsView,
+          model: new ProdLine({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/prodLines;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      FormView: ProdLineFormView,
-      model: new ProdLine()
-    }));
+    viewport.loadPage(
+      ['app/core/pages/AddFormPage', 'app/prodLines/views/ProdLineFormView'],
+      function(AddFormPage, ProdLineFormView)
+      {
+        return new AddFormPage({
+          FormView: ProdLineFormView,
+          model: new ProdLine()
+        });
+      }
+    );
   });
 
   router.map('/prodLines/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      FormView: ProdLineFormView,
-      model: new ProdLine({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      ['app/core/pages/EditFormPage', 'app/prodLines/views/ProdLineFormView'],
+      function(EditFormPage, ProdLineFormView)
+      {
+        return new EditFormPage({
+          FormView: ProdLineFormView,
+          model: new ProdLine({_id: req.params.id})
+        });
+      }
+    );
   });
 
-  router.map('/prodLines/:id;delete', canManage, function(req, referer)
-  {
-    var model = new ProdLine({_id: req.params.id});
-
-    viewport.showPage(new ActionFormPage({
-      model: model,
-      actionKey: 'delete',
-      successUrl: model.genClientUrl('base'),
-      cancelUrl: referer || model.genClientUrl('base'),
-      formMethod: 'DELETE',
-      formAction: model.url(),
-      formActionSeverity: 'danger'
-    }));
-  });
+  router.map('/prodLines/:id;delete', canManage, showDeleteFormPage.bind(null, ProdLine));
 
 });

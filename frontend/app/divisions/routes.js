@@ -3,30 +3,18 @@ define([
   '../viewport',
   '../i18n',
   '../user',
+  '../core/util/showDeleteFormPage',
   '../data/divisions',
   './Division',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/DivisionFormView',
-  'app/divisions/templates/details',
   'i18n!app/nls/divisions'
 ], function(
   router,
   viewport,
   t,
   user,
+  showDeleteFormPage,
   divisions,
-  Division,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  DivisionFormView,
-  detailsTemplate
+  Division
 ) {
   'use strict';
 
@@ -35,57 +23,65 @@ define([
 
   router.map('/divisions', canView, function()
   {
-    viewport.showPage(new ListPage({
-      collection: divisions,
-      columns: ['_id', 'type', 'description'],
-      serializeRow: function(model)
-      {
-        var row = model.toJSON();
+    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    {
+      return new ListPage({
+        collection: divisions,
+        columns: ['_id', 'type', 'description'],
+        serializeRow: function(model)
+        {
+          var row = model.toJSON();
 
-        row.type = t('divisions', 'TYPE:' + row.type);
+          row.type = t('divisions', 'TYPE:' + row.type);
 
-        return row;
-      }
-    }));
+          return row;
+        }
+      });
+    });
   });
 
   router.map('/divisions/:id', function(req)
   {
-    viewport.showPage(new DetailsPage({
-      model: new Division({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      ['app/core/pages/DetailsPage', 'app/divisions/templates/details'],
+      function(DetailsPage, detailsTemplate)
+      {
+        return new DetailsPage({
+          model: new Division({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/divisions;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      FormView: DivisionFormView,
-      model: new Division()
-    }));
+    viewport.loadPage(
+      ['app/core/pages/AddFormPage', 'app/divisions/views/DivisionFormView'],
+      function(AddFormPage, DivisionFormView)
+      {
+        return new AddFormPage({
+          FormView: DivisionFormView,
+          model: new Division()
+        });
+      }
+    );
   });
 
   router.map('/divisions/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      FormView: DivisionFormView,
-      model: new Division({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      ['app/core/pages/EditFormPage', 'app/divisions/views/DivisionFormView'],
+      function(EditFormPage, DivisionFormView)
+      {
+        return new EditFormPage({
+          FormView: DivisionFormView,
+          model: new Division({_id: req.params.id})
+        });
+      }
+    );
   });
 
-  router.map('/divisions/:id;delete', canManage, function(req, referer)
-  {
-    var model = new Division({_id: req.params.id});
-
-    viewport.showPage(new ActionFormPage({
-      model: model,
-      actionKey: 'delete',
-      successUrl: model.genClientUrl('base'),
-      cancelUrl: referer || model.genClientUrl('base'),
-      formMethod: 'DELETE',
-      formAction: model.url(),
-      formActionSeverity: 'danger'
-    }));
-  });
+  router.map('/divisions/:id;delete', canManage, showDeleteFormPage.bind(null, Division));
 
 });

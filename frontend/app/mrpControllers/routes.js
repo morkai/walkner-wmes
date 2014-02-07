@@ -4,12 +4,10 @@ define([
   '../user',
   '../data/mrpControllers',
   './MrpController',
-  '../core/pages/ListPage',
   '../core/pages/DetailsPage',
   '../core/pages/AddFormPage',
   '../core/pages/EditFormPage',
   '../core/pages/ActionFormPage',
-  './views/MrpControllerListView',
   './views/MrpControllerDetailsView',
   './views/MrpControllerFormView',
   'i18n!app/nls/mrpControllers'
@@ -19,12 +17,10 @@ define([
   user,
   mrpControllers,
   MrpController,
-  ListPage,
   DetailsPage,
   AddFormPage,
   EditFormPage,
   ActionFormPage,
-  MrpControllerListView,
   MrpControllerDetailsView,
   MrpControllerFormView
 ) {
@@ -35,10 +31,16 @@ define([
 
   router.map('/mrpControllers', canView, function()
   {
-    viewport.showPage(new ListPage({
-      ListView: MrpControllerListView,
-      collection: mrpControllers
-    }));
+    viewport.loadPage(
+      ['app/core/pages/ListPage', 'app/mrpControllers/views/MrpControllerListView'],
+      function(ListPage, MrpControllerListView)
+      {
+        return new ListPage({
+          ListView: MrpControllerListView,
+          collection: mrpControllers
+        });
+      }
+    );
   });
 
   router.map('/mrpControllers/:id', function(req)

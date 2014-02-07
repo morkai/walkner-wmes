@@ -2,29 +2,15 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   './User',
-  './UserCollection',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './pages/UserListPage',
-  './views/UserDetailsView',
-  './views/UserFormView',
   'i18n!app/nls/users'
 ], function(
   router,
   viewport,
   user,
-  User,
-  UserCollection,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  UserListPage,
-  UserDetailsView,
-  UserFormView
+  showDeleteFormPage,
+  User
 ) {
   'use strict';
 
@@ -33,7 +19,10 @@ define([
 
   router.map('/users', canView, function(req)
   {
-    viewport.showPage(new UserListPage({rql: req.rql}));
+    viewport.loadPage(['app/users/pages/UserListPage'], function(UserListPage)
+    {
+      return new UserListPage({rql: req.rql});
+    });
   });
 
   router.map(
@@ -51,41 +40,46 @@ define([
     },
     function(req)
     {
-      viewport.showPage(new DetailsPage({
-        DetailsView: UserDetailsView,
-        model: new User({_id: req.params.id})
-      }));
+      viewport.loadPage(
+        ['app/core/pages/DetailsPage', 'app/users/views/UserDetailsView'],
+        function(DetailsPage, UserDetailsView)
+        {
+          return new DetailsPage({
+            DetailsView: UserDetailsView,
+            model: new User({_id: req.params.id})
+          });
+        }
+      );
     }
   );
 
   router.map('/users;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      FormView: UserFormView,
-      model: new User()
-    }));
+    viewport.loadPage(
+      ['app/core/pages/AddFormPage', 'app/users/views/UserFormView'],
+      function(AddFormPage, UserFormView)
+      {
+        return new AddFormPage({
+          FormView: UserFormView,
+          model: new User()
+        });
+      }
+    );
   });
 
   router.map('/users/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      FormView: UserFormView,
-      model: new User({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      ['app/core/pages/EditFormPage', 'app/users/views/UserFormView'],
+      function(EditFormPage, UserFormView)
+      {
+        return new EditFormPage({
+          FormView: UserFormView,
+          model: new User({_id: req.params.id})
+        });
+      }
+    );
   });
 
-  router.map('/users/:id;delete', canManage, function(req, referer)
-  {
-    var model = new User({_id: req.params.id});
-
-    viewport.showPage(new ActionFormPage({
-      model: model,
-      actionKey: 'delete',
-      successUrl: model.genClientUrl('base'),
-      cancelUrl: referer || model.genClientUrl('base'),
-      formMethod: 'DELETE',
-      formAction: model.url(),
-      formActionSeverity: 'danger'
-    }));
-  });
+  router.map('/users/:id;delete', canManage, showDeleteFormPage.bind(null, User));
 });
