@@ -48,6 +48,9 @@ module.exports = function setupMechOrderModel(app, mongoose)
       ref: 'MrpController',
       default: null
     },
+    materialNorm: {
+      type: Number
+    },
     importTs: Date
   }, {
     id: false

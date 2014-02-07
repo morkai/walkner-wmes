@@ -25,6 +25,8 @@ define([
 
     defaults: {
       name: null,
+      mrp: null,
+      materialNorm: null,
       operations: null,
       importTs: null
     },

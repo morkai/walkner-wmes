@@ -12,6 +12,7 @@
   "PROPERTY:name": "Nazwa wyrobu",
   "PROPERTY:importTs": "Czas zaimportowania",
   "PROPERTY:mrp": "Kontroler MRP",
+  "PROPERTY:materialNorm": "Norma materiałowa [kg]",
 
   "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
 

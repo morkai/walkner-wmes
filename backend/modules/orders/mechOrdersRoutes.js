@@ -50,8 +50,7 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
       .from.stream(fs.createReadStream(mechOrdersFile.path))
       .on('record', function(row)
       {
-        if (row.length !== 10
-          || !/^[0-9]{12}$/.test(row[0]))
+        if (row.length < 12 || !/^[0-9]{12}$/.test(row[0]))
         {
           return;
         }
@@ -62,9 +61,18 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
         {
           nc12Queue.push(nc12);
 
+          var mrp = row[11].trim();
+
+          if (mrp.length === 0 || mrp.toUpperCase() === 'BRAK')
+          {
+            mrp = null;
+          }
+
           mechOrders[nc12] = {
             _id: row[0],
             name: row[1],
+            mrp: mrp,
+            materialNorm: parseTime(row[10]),
             operations: [],
             importTs: importTs
           };

@@ -17,7 +17,7 @@ define([
         fields: {
           name: 1,
           mrp: 1,
-          importTs: 1
+          materialNorm: 1
         },
         limit: 15,
         sort: {

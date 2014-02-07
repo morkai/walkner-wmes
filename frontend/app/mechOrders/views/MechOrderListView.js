@@ -44,7 +44,7 @@ define([
       'click .mechOrders-editMrp': 'showMrpEditor'
     },
 
-    columns: ['_id', 'name', 'mrp'],
+    columns: ['_id', 'name', 'mrp', 'materialNorm'],
 
     serializeActions: function()
     {
