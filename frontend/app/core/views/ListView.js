@@ -147,7 +147,10 @@ define([
         y -= $navbar.outerHeight();
       }
 
-      $('html, body').stop(true, false).animate({scrollTop: y});
+      if (window.scrollY > y)
+      {
+        $('html, body').stop(true, false).animate({scrollTop: y});
+      }
     },
 
     getModelFromEvent: function(e)
