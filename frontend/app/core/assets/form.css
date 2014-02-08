@@ -54,5 +54,8 @@
   margin-right: 1px;
 }
 .form-group-datetime > input[type="time"] {
-  width: 100px;
+  width: 110px;
+}
+input::-webkit-datetime-edit {
+  font-size: 12px;
 }
