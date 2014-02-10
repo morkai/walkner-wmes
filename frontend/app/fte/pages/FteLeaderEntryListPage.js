@@ -34,7 +34,7 @@ define([
     ],
 
     actions: [{
-      label: t('fte', 'PAGE_ACTION:currentEntry'),
+      label: t.bound('fte', 'PAGE_ACTION:currentEntry'),
       href: '#fte/leader/current',
       icon: 'edit',
       privileges: 'FTE:LEADER:MANAGE'

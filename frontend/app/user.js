@@ -45,7 +45,7 @@ function(
   });
 
   user.data = _.extend(window.GUEST_USER || {}, {
-    name: t('core', 'GUEST_USER_NAME')
+    name: t.bound('core', 'GUEST_USER_NAME')
   });
 
   delete window.GUEST_USER;
@@ -66,7 +66,7 @@ function(
     {
       if (userData.loggedIn === false)
       {
-        userData.name = t('core', 'GUEST_USER_NAME');
+        userData.name = t.bound('core', 'GUEST_USER_NAME');
       }
 
       user.data = userData;

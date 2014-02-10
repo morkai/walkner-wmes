@@ -34,7 +34,7 @@ define([
     ],
 
     actions: [{
-      label: t('hourlyPlans', 'PAGE_ACTION:currentEntry'),
+      label: t.bound('hourlyPlans', 'PAGE_ACTION:currentEntry'),
       href: '#hourlyPlans/current',
       icon: 'edit',
       privileges: 'HOURLY_PLANS:MANAGE'
