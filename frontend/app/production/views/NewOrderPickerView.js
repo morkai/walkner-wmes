@@ -169,7 +169,19 @@ define([
 
       $order.on('change', function(e)
       {
-        var operations = e.added && Array.isArray(e.added.operations) ? e.added.operations : [];
+        var operations;
+
+        if (e.added && Array.isArray(e.added.operations))
+        {
+          operations = e.added.operations.filter(function(operation)
+          {
+            return operation.laborTime !== -1;
+          });
+        }
+        else
+        {
+          operations = [];
+        }
 
         var $operation = view.setUpOperationSelect2(operations.map(function(operation)
         {
@@ -188,6 +200,19 @@ define([
           _.defer(function() { $order.select2('focus'); });
         }
       });
+
+      function filterOperation(operation)
+      {
+        return operation.laborTime !== -1;
+      }
+
+      function mapOperation(operation)
+      {
+        return {
+          id: operation.no,
+          text: operation.no + ' - ' + operation.name
+        };
+      }
     },
 
     getOrdersUrl: function(term)
