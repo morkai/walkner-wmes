@@ -105,58 +105,25 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
   fteMasterEntrySchema.statics.createForShift = function(shiftId, user, done)
   {
     step(
-      function queryCompaniesStep()
+      function prepareProdFunctionsStep()
       {
-        mongoose.model('Company')
-          .find({$or: [{fteMaster: true}, {fteMasterMaster: true}]})
-          .sort({name: 1})
-          .lean()
-          .exec(this.next());
-      },
-      function handleCompaniesQueryResultStep(err, companies)
-      {
-        if (err)
-        {
-          return this.done(done, err);
-        }
-
-        var functions = [{
-          id: 'master',
-          companies: []
-        }];
-        var otherCompanies = [];
-
-        companies.forEach(function(company)
-        {
-          var companyEntry = {
-            id: company._id,
-            name: company.name,
-            count: 0
-          };
-
-          if (company.fteMasterMaster)
+        this.functions = app.prodFunctions.models
+          .filter(function(prodFunction)
           {
-            functions[0].companies.push(companyEntry);
-          }
-
-          if (company.fteMaster)
+            return prodFunction.fteMasterPosition > -1;
+          })
+          .sort(function(a, b) { return a.fteMasterPosition - b.fteMasterPosition; })
+          .map(function(prodFunction)
           {
-            otherCompanies.push(companyEntry);
-          }
-        });
-
-        mongoose.model('User').schema.path('prodFunction').enumValues.forEach(function(prodFunction)
-        {
-          if (prodFunction !== 'master' && prodFunction !== 'unspecified')
+            return {
+              id: prodFunction._id,
+              companies: getProdFunctionCompanyEntries(prodFunction)
+            };
+          })
+          .filter(function(functionEntry)
           {
-            functions.push({
-              id: prodFunction,
-              companies: otherCompanies
-            });
-          }
-        });
-
-        this.functions = functions;
+            return functionEntry.companies.length > 0;
+          });
       },
       function queryProdFlowsStep()
       {
@@ -334,6 +301,27 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     });
 
     return total;
+  }
+
+  function getProdFunctionCompanyEntries(prodFunction)
+  {
+    var companyEntries = [];
+
+    prodFunction.companies.forEach(function(companyId)
+    {
+      var company = app.companies.modelsById[companyId];
+
+      if (company && company.fteMasterPosition > -1)
+      {
+        companyEntries.push({
+          id: companyId,
+          name: company.name,
+          count: 0
+        });
+      }
+    });
+
+    return companyEntries;
   }
 
   function getProdFlowTasks(subdivisionId, functions, done)

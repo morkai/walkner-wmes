@@ -1,11 +1,13 @@
 define([
   'moment',
   '../data/subdivisions',
+  '../data/prodFunctions',
   '../data/views/renderOrgUnitPath',
   '../core/Model'
 ], function(
   moment,
   subdivisions,
+  prodFunctions,
   renderOrgUnitPath,
   Model
 ) {
@@ -50,7 +52,10 @@ define([
       {
         this.get('tasks')[0].functions.forEach(function(taskFunction)
         {
+          var prodFunction = prodFunctions.get(taskFunction.id);
+
           totalByProdFunction[taskFunction.id] = {
+            prodFunction: prodFunction ? prodFunction.getLabel() : taskFunction.id,
             total: 0,
             companies: {}
           };

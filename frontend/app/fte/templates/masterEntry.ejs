@@ -22,7 +22,7 @@
         <th class="even"><%- t('fte', 'masterEntry:column:noPlan') %>
         <th colspan="2"><%- t('fte', 'masterEntry:column:total') %></th>
         <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-        <th class="<%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- t('users', 'PROD_FUNCTION:' + prodFunctionId) %></th>
+        <th class="<%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- totalByProdFunction[prodFunctionId].prodFunction %></th>
         <% }) %>
       </tr>
       </thead>
