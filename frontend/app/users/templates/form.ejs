@@ -35,36 +35,24 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <div class="row users-form-choicesRow">
-            <div class="col-md-4 form-group">
-              <label class="control-label"><%- t('users', 'PROPERTY:privileges') %></label>
-              <% privileges.forEach(function(privilege) { %>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" name="privileges[]" value="<%- privilege %>">
-                  <%- t('users', 'PRIVILEGE:' + privilege) %>
-                </label>
-              </div>
-              <% }) %>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="<%- idPrefix %>-kdDivision" class="control-label"><%- t('users', 'PROPERTY:kdDivision') %></label>
+              <input id="<%- idPrefix %>-kdDivision" class="form-control" type="text" name="kdDivision" maxlength="100">
             </div>
-            <div class="col-md-4 form-group">
-              <label for="<%- idPrefix %>-company" class="control-label"><%- t('users', 'PROPERTY:company') %></label>
-              <% companies.forEach(function(company) { %>
-              <div class="radio">
-                <label><input type="radio" name="company" value="<%- company._id %>"> <%= company.name %></label>
-              </div>
-              <% }) %>
-              <div class="radio">
-                <label><input type="radio" name="company" value="null"> <%- t('users', 'NO_DATA:company') %></label>
-              </div>
+            <div class="col-md-6 form-group">
+              <label for="<%- idPrefix %>-kdPosition" class="control-label"><%- t('users', 'PROPERTY:kdPosition') %></label>
+              <input id="<%- idPrefix %>-kdPosition" class="form-control" type="text" name="kdPosition" maxlength="100">
             </div>
-            <div class="col-md-4 form-group">
-              <label for="<%- idPrefix %>-prodFunction" class="control-label"><%- t('users', 'PROPERTY:prodFunction') %></label>
-              <% prodFunctions.forEach(function(prodFunction) { %>
-              <div class="radio">
-                <label><input type="radio" name="prodFunction" value="<%- prodFunction %>"> <%- t('users', 'PROD_FUNCTION:' + prodFunction) %></label>
-              </div>
-              <% }) %>
+          </div>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="<%- idPrefix %>-personellId" class="control-label"><%- t('users', 'PROPERTY:personellId') %></label>
+              <input id="<%- idPrefix %>-personellId" class="form-control" type="text" name="personellId" maxlength="15">
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="<%- idPrefix %>-card" class="control-label"><%- t('users', 'PROPERTY:card') %></label>
+              <input id="<%- idPrefix %>-card" class="form-control" type="text" name="card" maxlength="15">
             </div>
           </div>
         </div>
@@ -81,28 +69,37 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-kdDivision" class="control-label"><%- t('users', 'PROPERTY:kdDivision') %></label>
-          <input id="<%- idPrefix %>-kdDivision" class="form-control" type="text" name="kdDivision" maxlength="100">
-        </div>
-        <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-kdPosition" class="control-label"><%- t('users', 'PROPERTY:kdPosition') %></label>
-          <input id="<%- idPrefix %>-kdPosition" class="form-control" type="text" name="kdPosition" maxlength="100">
-        </div>
+      <div class="form-group">
+        <label class="control-label checkbox"><input type="checkbox" name="active" value="true"> <%- t('users', 'PROPERTY:active') %></label>
       </div>
-      <div class="row">
-        <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-personellId" class="control-label"><%- t('users', 'PROPERTY:personellId') %></label>
-          <input id="<%- idPrefix %>-personellId" class="form-control" type="text" name="personellId" maxlength="15">
+      <div class="row users-form-choicesRow">
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-company" class="control-label"><%- t('users', 'PROPERTY:company') %></label>
+          <% companies.forEach(function(company) { %>
+          <div class="radio">
+            <label><input type="radio" name="company" value="<%- company._id %>"> <%= company.name %></label>
+          </div>
+          <% }) %>
+          <div class="radio">
+            <label><input type="radio" name="company" value="null"> <%- t('users', 'NO_DATA:company') %></label>
+          </div>
         </div>
-        <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-card" class="control-label"><%- t('users', 'PROPERTY:card') %></label>
-          <input id="<%- idPrefix %>-card" class="form-control" type="text" name="card" maxlength="15">
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-prodFunction" class="control-label"><%- t('users', 'PROPERTY:prodFunction') %></label>
+          <% prodFunctions.forEach(function(prodFunction) { %>
+          <div class="radio">
+            <label><input type="radio" name="prodFunction" value="<%- prodFunction %>"> <%- t('users', 'PROD_FUNCTION:' + prodFunction) %></label>
+          </div>
+          <% }) %>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label checkbox"><input type="checkbox" name="active" value="true"> <%- t('users', 'PROPERTY:active') %></label>
+        <label for="<%- idPrefix %>-privileges" class="control-label"><%- t('users', 'PROPERTY:privileges') %></label>
+        <select id="<%- idPrefix %>-privileges" multiple name="privileges[]">
+          <% privileges.forEach(function(privilege) { %>
+          <option value="<%- privilege %>"><%- t('users', 'PRIVILEGE:' + privilege) %></option>
+          <% }) %>
+        </select>
       </div>
     </div>
     <div class="panel-footer">

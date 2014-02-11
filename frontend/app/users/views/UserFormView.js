@@ -74,6 +74,11 @@ define([
         allowClear: true
       });
 
+      this.$id('privileges').select2({
+        width: '100%',
+        allowClear: false
+      });
+
       this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
       {
         /*jshint -W015*/
