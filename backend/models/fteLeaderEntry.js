@@ -106,8 +106,8 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       function queryCompaniesStep()
       {
         mongoose.model('Company')
-          .find({fteLeader: true}, {name: 1})
-          .sort({name: 1})
+          .find({fteLeaderPosition: {$ne: -1}}, {name: 1})
+          .sort({fteLeaderPosition: 1})
           .lean()
           .exec(this.next());
       },
