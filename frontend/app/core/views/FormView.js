@@ -30,9 +30,12 @@ define([
       this.idPrefix = _.uniqueId(this.idPrefix);
       this.$errorMessage = null;
 
-      this.listenTo(this.model, 'change', function(model)
+      this.listenTo(this.model, 'change', function()
       {
-        js2form(this.el, this.serializeToForm());
+        if (this.isRendered())
+        {
+          js2form(this.el, this.serializeToForm());
+        }
       });
     },
 
