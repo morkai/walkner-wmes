@@ -318,6 +318,9 @@ app/nls/emptyOrders.js
 app/nls/pl/emptyOrders.js
 i18n!app/nls/emptyOrders
 app/emptyOrders/routes.js
+app/prodFunctions/ProdFunction.js
+app/prodFunctions/ProdFunctionCollection.js
+app/data/prodFunctions.js
 app/mrpControllers/MrpController.js
 app/mrpControllers/MrpControllerCollection.js
 app/data/mrpControllers.js
@@ -470,6 +473,10 @@ app/nls/prodFlows.js
 app/nls/pl/prodFlows.js
 i18n!app/nls/prodFlows
 app/prodFlows/routes.js
+app/nls/prodFunctions.js
+app/nls/pl/prodFunctions.js
+i18n!app/nls/prodFunctions
+app/prodFunctions/routes.js
 app/nls/prodLines.js
 app/nls/pl/prodLines.js
 i18n!app/nls/prodLines

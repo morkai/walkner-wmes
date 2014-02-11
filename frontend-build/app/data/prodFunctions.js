@@ -1,1 +1,1 @@
-define([],function(){var e="PROD_FUNCTIONS",n=window[e]||[];return delete window[e],n});
+define(["app/prodFunctions/ProdFunctionCollection","./createStorage"],function(n,o){return o("PROD_FUNCTIONS","prodFunctions",n)});

@@ -1,0 +1,1 @@
+define(["app/core/views/DetailsView","./decorateProdFunction","app/prodFunctions/templates/details"],function(e,n,t){return e.extend({template:t,localTopics:{"companies.synced":"render"},serialize:function(){return{model:n(this.model)}}})});

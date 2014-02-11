@@ -1,0 +1,1 @@
+define(["../core/Collection","./ProdFunction"],function(e,o){return e.extend({model:o,rqlQuery:"sort(fteMasterPosition)"})});

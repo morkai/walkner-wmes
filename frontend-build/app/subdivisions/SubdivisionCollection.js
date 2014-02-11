@@ -1,1 +1,1 @@
-define(["../core/Collection","./Subdivision"],function(e,i){return e.extend({model:i,rqlQuery:"select(division,type,name,prodTaskTags)&sort(division,name)"})});
+define(["../core/Collection","./Subdivision"],function(e,i){return e.extend({model:i,rqlQuery:"select(division,type,name,prodTaskTags,aor)&sort(division,name)"})});
