@@ -26,6 +26,19 @@ define([
     data.creator = formatUser(data.creator);
     data.createdAt = data.createdAt ? time.format(data.createdAt, 'LLLL') : null;
 
+    if (data.paintShop && data.orders)
+    {
+      data.orders = data.orders.map(function(order)
+      {
+        order.startedAt = time.getMoment(order.startedAt).format('HH:mm:ss');
+        order.finishedAt = time.getMoment(order.finishedAt).format('HH:mm:ss');
+
+        return order;
+      });
+    }
+
+    data.paintShop = t('core', 'BOOL:' + data.paintShop);
+
     return data;
   };
 });

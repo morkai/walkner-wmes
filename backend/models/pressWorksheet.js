@@ -1,5 +1,7 @@
 'use strict';
 
+var moment = require('moment');
+
 module.exports = function setupPressWorksheetModel(app, mongoose)
 {
   var pressWorksheetOrderSchema = mongoose.Schema({
@@ -32,17 +34,37 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     },
     startedAt: {
       type: String,
-      required: true
+      default: null
     },
     finishedAt: {
       type: String,
-      required: true
+      default: null
     },
     losses: [{}],
     downtimes: [{}]
   }, {
     _id: false
   });
+
+  pressWorksheetOrderSchema.methods.getDowntimeDuration = function()
+  {
+    return (this.get('downtimes') || []).reduce(
+      function(duration, downtime) { return duration + downtime.count * 60 * 1000; },
+      0
+    );
+  };
+
+  pressWorksheetOrderSchema.methods.calcTimes = function(
+    startedAtMoment, unitDuration, lastOrder, lastOrderFinishedAt)
+  {
+    this.startedAt = startedAtMoment.toISOString();
+
+    startedAtMoment.add(
+      'ms', Math.floor(unitDuration * this.quantityDone + this.getDowntimeDuration())
+    );
+
+    this.finishedAt = lastOrder ? lastOrderFinishedAt : startedAtMoment.toISOString();
+  };
 
   var pressWorksheetSchema = mongoose.Schema({
     date: {
@@ -54,6 +76,18 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       required: true,
       min: 1,
       max: 3
+    },
+    paintShop: {
+      type: Boolean,
+      default: false
+    },
+    startedAt: {
+      type: String,
+      default: null
+    },
+    finishedAt: {
+      type: String,
+      default: null
     },
     master: {},
     operator: {},
@@ -70,44 +104,76 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
   pressWorksheetSchema.statics.TOPIC_PREFIX = 'pressWorksheets';
 
+  pressWorksheetSchema.pre('save', function(next)
+  {
+    if (this.paintShop)
+    {
+      this.calcOrdersTimes();
+    }
+
+    next();
+  });
+
+  pressWorksheetSchema.methods.getTotalQuantityDone = function()
+  {
+    return this.get('orders').reduce(
+      function(total, order) { return total + order.quantityDone; },
+      0
+    );
+  };
+
+  pressWorksheetSchema.methods.getTotalDowntimeDuration = function()
+  {
+    return this.get('orders').reduce(
+      function(total, order) { return total + order.getDowntimeDuration(); },
+      0
+    );
+  };
+
+  pressWorksheetSchema.methods.calcOrdersTimes = function()
+  {
+    var ordersStartedAt = getDateFromTimeString(this.date, this.startedAt, false);
+    var ordersFinishedAt = getDateFromTimeString(this.date, this.finishedAt, true);
+    var totalDuration = ordersFinishedAt.getTime() - ordersStartedAt.getTime();
+    var workDuration = totalDuration - this.getTotalDowntimeDuration();
+    var unitDuration = workDuration / this.getTotalQuantityDone();
+    var startedAtMoment = moment(ordersStartedAt);
+
+    var lastIndex = this.orders.length - 1;
+    var finishedAt = ordersFinishedAt.toISOString();
+
+    this.orders.forEach(function(order, i)
+    {
+      order.calcTimes(startedAtMoment, unitDuration, i === lastIndex, finishedAt);
+    });
+  };
+
   pressWorksheetSchema.methods.createOrdersAndDowntimes = function(done)
   {
-    var date = this.get('date');
-    var shift = this.get('shift');
-    var operators = this.get('operators');
+    var date = this.date;
+    var shift = this.shift;
+    var operators = this.operators;
     var workerCount = Array.isArray(operators) ? operators.length : 0;
-    var creator = this.get('creator');
-    var master = this.get('master');
-    var operator = this.get('operator');
-    var prodShiftOrders = [];
-    var prodDowntimes = [];
+    var creator = this.creator;
+    var master = this.master;
+    var operator = this.operator;
 
     if (!operator && workerCount)
     {
       operator = operators[0];
     }
 
-    this.get('orders').forEach(function(order)
+    var prodShiftOrders = [];
+    var prodDowntimes = [];
+
+    this.orders.forEach(function(order)
     {
-      var startTime = typeof order.startedAt === 'string' ? order.startedAt.split(':') : [];
-      var finishTime = typeof order.finishedAt === 'string' ? order.finishedAt.split(':') : [];
+      var startedAt = getDateFromTimeString(date, order.startedAt, false);
+      var finishedAt = getDateFromTimeString(date, order.finishedAt, true);
 
-      var startedAt = new Date(date);
-      startedAt.setHours(startTime[0]);
-      startedAt.setMinutes(startTime[1]);
-
-      var finishedAt = new Date(date);
-      finishedAt.setHours(finishTime[0]);
-      finishedAt.setMinutes(finishTime[1]);
-
-      if (isNaN(startedAt.getTime()) || isNaN(startedAt.getTime()))
+      if (isNaN(startedAt.getTime()) || isNaN(finishedAt.getTime()))
       {
         return;
-      }
-
-      if (finishedAt.getHours() < 6)
-      {
-        finishedAt = new Date(finishedAt.getTime() + 24 * 3600 * 1000);
       }
 
       var orderData = order.orderData;
@@ -210,6 +276,46 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       mongoose.model('ProdDowntime').create(prodDowntimes, done);
     });
   };
+
+  function getDateFromTimeString(date, time, finish)
+  {
+    if (typeof time !== 'string')
+    {
+      return null;
+    }
+
+    if (/^[0-9]{2}:[0-9]{2}$/.test(time))
+    {
+      time = time.split(':').map(Number);
+      date = new Date(date);
+      date.setHours(time[0]);
+      date.setMinutes(time[1]);
+
+      if (finish && time[0] === 6 && time[1] === 0)
+      {
+        date.setHours(5);
+        date.setMinutes(59);
+        date.setSeconds(59);
+        date.setMilliseconds(999);
+      }
+
+      return date.getHours() < 6 ? new Date(date.getTime() + 24 * 3600 * 1000) : date;
+    }
+
+    var isoMoment = moment(time);
+
+    if (!isoMoment.isValid())
+    {
+      return null;
+    }
+
+    if (finish && isoMoment.hours() === 6 && isoMoment.minutes() === 0)
+    {
+      isoMoment.hours(5).minutes(59).seconds(59).milliseconds(999);
+    }
+
+    return isoMoment.toDate();
+  }
 
   // http://stackoverflow.com/a/7616484
   function hashCode(str)

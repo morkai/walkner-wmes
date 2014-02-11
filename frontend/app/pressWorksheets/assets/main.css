@@ -7,7 +7,7 @@
 .pressWorksheets-form-dateAndShift input[type="date"] {
   width: 100%;
 }
-.pressWorksheets-form-shiftGroup {
+.pressWorksheets-form-group-shift-checkboxes {
   margin-top: 5px;
 }
 .pressWorksheets-form-min {
@@ -60,22 +60,32 @@
 }
 .pressWorksheets-form .table-responsive > .table-bordered > thead > tr > th:first-child,
 .pressWorksheets-form .table-responsive > .table-bordered > tbody > tr > th:first-child,
-.pressWorksheets-form .table-responsive > .table-bordered > tfoot > tr > th:first-child,
 .pressWorksheets-form .table-responsive > .table-bordered > thead > tr > td:first-child,
-.pressWorksheets-form .table-responsive > .table-bordered > tbody > tr > td:first-child,
-.pressWorksheets-form .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+.pressWorksheets-form .table-responsive > .table-bordered > tbody > tr > td:first-child {
   border-left: 0;
 }
 .pressWorksheets-form .table-responsive > .table-bordered > thead > tr > th:last-child,
 .pressWorksheets-form .table-responsive > .table-bordered > tbody > tr > th:last-child,
-.pressWorksheets-form .table-responsive > .table-bordered > tfoot > tr > th:last-child,
 .pressWorksheets-form .table-responsive > .table-bordered > thead > tr > td:last-child,
-.pressWorksheets-form .table-responsive > .table-bordered > tbody > tr > td:last-child,
-.pressWorksheets-form .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+.pressWorksheets-form .table-responsive > .table-bordered > tbody > tr > td:last-child {
   border-right: 0;
 }
 .pressWorksheets-form-separator {
   border-left: 2px solid #ddd!important;
+}
+.pressWorksheets-form-paintShop .pressWorksheets-form-timeCell,
+.pressWorksheets-form-group-paintShop {
+  display: none;
+}
+.pressWorksheets-form-paintShop .pressWorksheets-form-group-paintShop {
+  display: block;
+}
+.pressWorksheets-form-group-paintShop > .form-group {
+  display: inline-block;
+  width: 7em;
+}
+.pressWorksheets-form-group-paintShop .pressWorksheets-form-time {
+
 }
 .prodWorksheets-details-tableContainer {
   padding: 0!important;

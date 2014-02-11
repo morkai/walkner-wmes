@@ -1,6 +1,7 @@
 define([
   'underscore',
   'jquery',
+  'app/time',
   'app/i18n',
   'app/viewport',
   'app/data/downtimeReasons',
@@ -12,6 +13,7 @@ define([
 ], function(
   _,
   $,
+  time,
   t,
   viewport,
   downtimeReasons,
@@ -113,9 +115,18 @@ define([
         {
           this.$('.table-responsive').prop('scrollLeft', 0);
         }
+        else if (e.target.classList.contains('pressWorksheets-form-time')
+          && e.target.parentNode.classList.contains('form-group'))
+        {
+          this.paintShopTimeFocused = true;
+        }
       },
       'change input[name=shift]': 'validateShiftStartTime',
-      'change input[name=date]': 'validateShiftStartTime'
+      'change input[name=date]': 'validateShiftStartTime',
+      'change input[name=paintShop]': function(e)
+      {
+        this.$el.toggleClass('pressWorksheets-form-paintShop', e.target.checked);
+      }
     },
 
     initialize: function()
@@ -125,6 +136,8 @@ define([
       this.lastOrderNo = -1;
 
       this.lossReasons = [];
+
+      this.paintShopTimeFocused = false;
 
       this.downtimeReasons = downtimeReasons
         .filter(function(downtimeReason) { return downtimeReason.get('pressPosition') >= 0; })
@@ -180,13 +193,15 @@ define([
 
       this.addOrderRow();
 
-      $operators.select2('focus').on('change', function()
+      $operators.on('change', function()
       {
         if (!$operator.select2('data'))
         {
           $operator.select2('data', $operators.select2('data')[0]);
         }
       });
+
+      this.$id('paintShop').focus();
     },
 
     serialize: function()
@@ -281,8 +296,8 @@ define([
         operationName: operationData.name,
         orderData: orderData,
         quantityDone: order.quantityDone,
-        startedAt: order.startedAt,
-        finishedAt: order.finishedAt,
+        startedAt: order.startedAt || null,
+        finishedAt: order.finishedAt || null,
         losses: losses,
         downtimes: downtimes
       };
@@ -291,27 +306,50 @@ define([
     validateShiftStartTime: function()
     {
       var $date = this.$id('date');
-      var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
-      var shiftStartTime = Date.parse($date.val()) + 6 * 3600000 + (shift - 1) * 8 * 3600000;
+      var shiftMoment = this.getShiftMoment();
 
       $date[0].setCustomValidity(
-        shiftStartTime > Date.now() ? t('pressWorksheets', 'FORM:ERROR:date') : ''
+        shiftMoment.valueOf() > Date.now() ? t('pressWorksheets', 'FORM:ERROR:date') : ''
       );
+
+      if (this.$id('paintShop')[0].checked)
+      {
+        var $startedAt = this.$id('startedAt');
+        var $finishedAt = this.$id('finishedAt');
+
+        if (!shiftMoment.isValid())
+        {
+          return;
+        }
+
+        if (!this.paintShopTimeFocused)
+        {
+          $startedAt.val(shiftMoment.format('HH:mm'));
+          $finishedAt.val(shiftMoment.add('hours', 8).format('HH:mm'));
+        }
+      }
+    },
+
+    getShiftMoment: function()
+    {
+      var $date = this.$id('date');
+      var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
+
+      return time.getMoment($date.val()).hours(6).add('h', (shift - 1) * 8);
     },
 
     checkValidity: function(formData)
     {
-      var shiftStartTime =
-        Date.parse(formData.date) + 6 * 3600000 + (formData.shift - 1) * 8 * 3600000;
+      var paintShop = this.$id('paintShop')[0].checked;
 
-      if (shiftStartTime > Date.now())
+      if (paintShop && !this.checkPaintShopValidity())
       {
         return false;
       }
 
       if (formData.orders.length === 0)
       {
-        this.showFieldError(0, 'part');
+        this.showOrderFieldError(0, 'part');
 
         return false;
       }
@@ -322,34 +360,87 @@ define([
       {
         if (!order.prodLine || !order.prodLine.length)
         {
-          return view.showFieldError(i, 'prodLine');
+          return view.showOrderFieldError(i, 'prodLine');
         }
 
         if (isNaN(parseInt(order.quantityDone, 10)))
         {
-          return view.showFieldError(i, 'quantityDone');
+          return view.showOrderFieldError(i, 'quantityDone');
         }
 
-        if (!order.startedAt || !order.startedAt.length)
+        if (!paintShop && (!order.startedAt || !order.startedAt.length))
         {
-          return view.showFieldError(i, 'startedAt');
+          return view.showOrderFieldError(i, 'startedAt');
         }
 
-        if (!order.finishedAt || !order.finishedAt.length)
+        if (!paintShop && (!order.finishedAt || !order.finishedAt.length))
         {
-          return view.showFieldError(i, 'finishedAt');
+          return view.showOrderFieldError(i, 'finishedAt');
         }
 
         return false;
       });
     },
 
-    showFieldError: function(row, field)
+    getTimeFromString: function(date, timeString, finish)
     {
-      var $field = this.$('.pressWorksheets-form-order')
-        .eq(row)
-        .find('.pressWorksheets-form-' + field);
+      var timeMoment = time.getMoment(date + ' ' + timeString + ':00');
 
+      if (finish && timeMoment.hours() === 6 && timeMoment.minutes() === 0)
+      {
+        timeMoment.hours(5).minutes(59).seconds(59).milliseconds(999);
+      }
+
+      if (timeMoment.hours() < 6)
+      {
+        timeMoment.add('days', 1);
+      }
+
+      return timeMoment.valueOf();
+    },
+
+    checkPaintShopValidity: function()
+    {
+      var $startedAt = this.$id('startedAt');
+      var $finishedAt = this.$id('finishedAt');
+
+      if ($startedAt.val().trim() === '')
+      {
+        return this.showFieldError($startedAt, 'startedAt');
+      }
+
+      if ($finishedAt.val().trim() === '')
+      {
+        return this.showFieldError($finishedAt, 'finishedAt');
+      }
+
+      var shiftMoment = this.getShiftMoment();
+      var shiftStartTime = shiftMoment.valueOf();
+      var shiftEndTime = shiftStartTime + 8 * 3600 * 1000;
+      var date = this.$id('date').val();
+      var startedAt = this.getTimeFromString(date, $startedAt.val(), false);
+      var finishedAt = this.getTimeFromString(date, $finishedAt.val(), true);
+
+      if (startedAt < shiftStartTime || startedAt > shiftEndTime)
+      {
+        return this.showFieldError($startedAt, 'startedAt:boundries');
+      }
+
+      if (finishedAt < shiftStartTime || finishedAt > shiftEndTime)
+      {
+        return this.showFieldError($finishedAt, 'finishedAt:boundries');
+      }
+
+      if (finishedAt <= startedAt)
+      {
+        return this.showFieldError($finishedAt, 'finishedAt:gt');
+      }
+
+      return true;
+    },
+
+    showFieldError: function($field, field)
+    {
       if ($field.hasClass('select2-offscreen'))
       {
         $field.select2('focus');
@@ -364,6 +455,17 @@ define([
         time: 3000,
         text: t('pressWorksheets', 'FORM:ERROR:' + field)
       });
+
+      return false;
+    },
+
+    showOrderFieldError: function(row, field)
+    {
+      var $field = this.$('.pressWorksheets-form-order')
+        .eq(row)
+        .find('.pressWorksheets-form-' + field);
+
+      this.showFieldError($field, field);
 
       return true;
     },

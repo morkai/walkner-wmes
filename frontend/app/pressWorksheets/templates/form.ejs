@@ -3,6 +3,14 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
+      <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input id="<%- idPrefix %>-paintShop" type="checkbox" name="paintShop" value="true">
+            <%- t('pressWorksheets', 'PROPERTY:paintShop') %>
+          </label>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-3 form-group">
           <label for="<%- idPrefix %>-operators" class="control-label"><%- t('pressWorksheets', 'PROPERTY:operators') %></label>
@@ -14,9 +22,9 @@
               <label for="<%- idPrefix %>-date" class="control-label"><%- t('pressWorksheets', 'PROPERTY:date') %></label>
               <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-6 form-group pressWorksheets-form-group-shift">
               <label for="<%- idPrefix %>-shift-1"><%- t('pressWorksheets', 'PROPERTY:shift') %></label>
-              <div class="pressWorksheets-form-shiftGroup">
+              <div class="pressWorksheets-form-group-shift-checkboxes">
                 <label class="radio-inline"><input id="<%- idPrefix %>-shift-1" name="shift" type="radio" value="1" checked> <%- t('core', 'SHIFT:1') %></label>
                 <label class="radio-inline"><input name="shift" type="radio" value="2"> <%- t('core', 'SHIFT:2') %></label>
                 <label class="radio-inline"><input name="shift" type="radio" value="3"> <%- t('core', 'SHIFT:3') %></label>
@@ -33,6 +41,16 @@
           <input id="<%- idPrefix %>-master" type="text" name="master" required>
         </div>
       </div>
+      <div class="pressWorksheets-form-group-paintShop">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-startedAt" class="control-label"><%- t('pressWorksheets', 'PROPERTY:startedAt') %></label>
+          <input id="<%- idPrefix %>-startedAt" class="form-control pressWorksheets-form-time" type="text" name="startedAt">
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-finishedAt" class="control-label"><%- t('pressWorksheets', 'PROPERTY:finishedAt') %></label>
+          <input id="<%- idPrefix %>-finishedAt" class="form-control pressWorksheets-form-time" type="text" name="finishedAt">
+        </div>
+      </div>
       <div class="table-responsive">
         <table class="table table-bordered table-condensed pressWorksheets-form-orders">
           <thead>
@@ -41,8 +59,8 @@
               <th rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.operation') %></th>
               <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
               <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
-              <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
-              <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
+              <th class="pressWorksheets-form-min pressWorksheets-form-timeCell" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
+              <th class="pressWorksheets-form-min pressWorksheets-form-timeCell" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
               <% if (lossReasons.length) { %>
               <th class="pressWorksheets-form-min pressWorksheets-form-separator" colspan="<%- lossReasons.length %>"><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
               <% } %>

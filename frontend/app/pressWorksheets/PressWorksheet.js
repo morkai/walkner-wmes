@@ -1,8 +1,8 @@
 define([
-  'moment',
+  '../time',
   '../core/Model'
 ], function(
-  moment,
+  time,
   Model
 ) {
   'use strict';
@@ -24,8 +24,11 @@ define([
     defaults: function()
     {
       return {
-        date: moment().format('YYYY-MM-DD'),
+        date: time.format('YYYY-MM-DD'),
         shift: 1,
+        paintShop: false,
+        startedAt: null,
+        finishedAt: null,
         master: null,
         operator: null,
         operators: null,
