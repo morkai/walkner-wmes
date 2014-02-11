@@ -13,7 +13,7 @@ module.exports = function setupProdFunctionModel(app, mongoose)
       type: String,
       trim: true
     },
-    position: {
+    fteMasterPosition: {
       type: Number,
       min: -1,
       default: -1

@@ -11,7 +11,7 @@ define([
 
     model: ProdFunction,
 
-    rqlQuery: 'sort(position)'
+    rqlQuery: 'sort(fteMasterPosition)'
 
   });
 });

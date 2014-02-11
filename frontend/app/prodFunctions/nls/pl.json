@@ -18,7 +18,7 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:label": "Opis",
-  "PROPERTY:position": "Pozycja",
+  "PROPERTY:fteMasterPosition": "Pozycja w FTE (produkcja)",
   "PROPERTY:direct": "DIRECT/INDIRECT",
   "PROPERTY:companies": "Firmy",
 

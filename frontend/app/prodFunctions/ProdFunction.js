@@ -23,7 +23,7 @@ define([
     {
       return {
         label: '',
-        position: -1,
+        fteMasterPosition: -1,
         direct: false,
         companies: []
       };

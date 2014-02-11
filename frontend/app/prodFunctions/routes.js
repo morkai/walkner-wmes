@@ -27,7 +27,7 @@ define([
       {
         return new ListPage({
           collection: prodFunctions,
-          columns: ['_id', 'label', 'position', 'direct', 'companies'],
+          columns: ['_id', 'label', 'fteMasterPosition', 'direct', 'companies'],
           serializeRow: decorateProdFunction
         });
       }
