@@ -21,6 +21,7 @@ exports.modules = [
   'orderStatuses',
   'downtimeReasons',
   'lossReasons',
+  'prodFunctions',
   'prodTasks',
   'orders',
   'fte',

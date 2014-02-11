@@ -5,7 +5,6 @@ module.exports = [
   'event',
   'user',
 
-  'company',
   'division',
   'subdivision',
   'mrpController',
@@ -13,6 +12,8 @@ module.exports = [
   'prodFlow',
   'prodLine',
 
+  'company',
+  'prodFunction',
   'aor',
   'orderStatus',
   'downtimeReason',

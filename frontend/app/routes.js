@@ -16,6 +16,7 @@ define([
   './pressWorksheets/routes',
   './prodDowntimes/routes',
   './prodFlows/routes',
+  './prodFunctions/routes',
   './prodLines/routes',
   './prodTasks/routes',
   './prodLogEntries/routes',

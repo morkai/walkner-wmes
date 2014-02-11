@@ -1,14 +1,11 @@
 define([
-
+  'app/prodFunctions/ProdFunctionCollection',
+  './createStorage'
 ], function(
-
+  ProdFunctionCollection,
+  createStorage
 ) {
   'use strict';
 
-  var STORAGE_KEY = 'PROD_FUNCTIONS';
-  var prodFunctions = window[STORAGE_KEY] || [];
-
-  delete window[STORAGE_KEY];
-
-  return prodFunctions;
+  return createStorage('PROD_FUNCTIONS', 'prodFunctions', ProdFunctionCollection);
 });
