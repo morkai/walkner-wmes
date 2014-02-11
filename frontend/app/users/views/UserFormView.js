@@ -74,6 +74,9 @@ define([
         allowClear: true
       });
 
+      this.setUpProdFunctionSelect2();
+      this.setUpCompanySelect2();
+
       this.$id('privileges').select2({
         width: '100%',
         allowClear: false
@@ -101,6 +104,64 @@ define([
 
         this.orgUnitDropdownsView.selectValue(model, orgUnit);
       });
+
+      this.$id('company').on('change', function()
+      {
+
+      });
+    },
+
+    setUpProdFunctionSelect2: function()
+    {
+      this.$id('prodFunction').select2({
+        width: '100%',
+        allowClear: true,
+        data: this.getProdFunctionsForCompany()
+      });
+    },
+
+    setUpCompanySelect2: function()
+    {
+      var $company = this.$id('company').select2({
+        width: '100%',
+        allowClear: true
+      });
+      var $prodFunction = this.$id('prodFunction');
+      var view = this;
+
+      $company.on('change', function(e)
+      {
+        var oldValue = $prodFunction.val();
+
+        $prodFunction.select2('val', null);
+
+        view.setUpProdFunctionSelect2();
+
+        $prodFunction.select2('val', oldValue);
+      });
+    },
+
+    getProdFunctionsForCompany: function()
+    {
+      var company = this.$id('company').val();
+
+      if (company === '')
+      {
+        return [];
+      }
+
+      return prodFunctions
+        .filter(function(prodFunction)
+        {
+          return prodFunction.get('companies').indexOf(company) !== -1;
+        })
+        .map(function(prodFunction)
+        {
+          return {
+            id: prodFunction.id,
+            text: prodFunction.getLabel()
+          };
+        });
     },
 
     validatePasswords: function()
@@ -125,7 +186,6 @@ define([
       return _.extend(FormView.prototype.serialize.call(this), {
         aors: aors.toJSON(),
         companies: companies.toJSON(),
-        prodFunctions: prodFunctions,
         privileges: privileges
       });
     },
@@ -142,9 +202,14 @@ define([
         formData.aors = formData.aors.split(',');
       }
 
-      if (formData.company === 'null')
+      if (!formData.company || !formData.company.length)
       {
         formData.company = null;
+      }
+
+      if (!formData.prodFunction || !formData.prodFunction.length)
+      {
+        formData.prodFunction = null;
       }
 
       if (formData.subdivision)

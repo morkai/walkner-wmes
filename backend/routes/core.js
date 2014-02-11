@@ -21,7 +21,6 @@ module.exports = function startCoreRoutes(app, express)
   {
     var sessionUser = req.session.user;
     var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
-    var prodFunctions = app.mongoose.model('User').schema.path('prodFunction').enumValues;
 
     // TODO: Add caching
     res.render('index', {
@@ -35,7 +34,7 @@ module.exports = function startCoreRoutes(app, express)
         LOCALE: JSON.stringify(locale),
         GUEST_USER: JSON.stringify(app.user.guest),
         PRIVILEGES: JSON.stringify(app.user.config.privileges),
-        PROD_FUNCTIONS: JSON.stringify(prodFunctions),
+        PROD_FUNCTIONS: JSON.stringify(app.prodFunctions.models),
         COMPANIES: JSON.stringify(app.companies.models),
         DIVISIONS: JSON.stringify(app.divisions.models),
         SUBDIVISIONS: JSON.stringify(app.subdivisions.models),

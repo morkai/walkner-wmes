@@ -17,8 +17,8 @@ module.exports = function setupUserModel(app, mongoose)
     email: String,
     prodFunction: {
       type: String,
-      enum: ['master', 'leader', 'mizusumashi', 'adjuster', 'operator', 'unspecified'],
-      default: 'unspecified'
+      ref: 'ProdFunction',
+      default: null
     },
     privileges: [String],
     aors: [{

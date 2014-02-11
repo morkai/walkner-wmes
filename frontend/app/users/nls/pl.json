@@ -43,13 +43,6 @@
   "PROPERTY:active": "Aktywny?",
   "PROPERTY:orgUnit": "Jednostka organizacyjna",
 
-  "PROD_FUNCTION:master": "Mistrz",
-  "PROD_FUNCTION:leader": "Lider",
-  "PROD_FUNCTION:mizusumashi": "Mizusumashi",
-  "PROD_FUNCTION:adjuster": "Ustawiacz",
-  "PROD_FUNCTION:operator": "Operator",
-  "PROD_FUNCTION:unspecified": "Nieokreślona",
-
   "ACTIVE:true": "Tak",
   "ACTIVE:false": "Nie",
 
@@ -60,6 +53,7 @@
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować użytkownika :-(",
   "NO_DATA:aors": "Wszystkie",
   "NO_DATA:company": "Nieokreślona",
+  "NO_DATA:prodFunction": "Nieokreślona",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia użytkownika",
   "ACTION_FORM:BUTTON:delete": "Usuń użytkownika",

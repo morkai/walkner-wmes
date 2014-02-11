@@ -2,6 +2,7 @@ define([
   'app/i18n',
   'app/data/aors',
   'app/data/companies',
+  'app/data/prodFunctions',
   'app/data/divisions',
   'app/data/subdivisions',
   'app/data/views/renderOrgUnitPath'
@@ -9,6 +10,7 @@ define([
   t,
   aors,
   companies,
+  prodFunctions,
   divisions,
   subdivisions,
   renderOrgUnitPath
@@ -48,10 +50,9 @@ define([
       user.aors = t('users', 'NO_DATA:aors');
     }
 
-    if (user.prodFunction)
-    {
-      user.prodFunction = t('users', 'PROD_FUNCTION:' + user.prodFunction);
-    }
+    var prodFunction = prodFunctions.get(user.prodFunction);
+
+    user.prodFunction = prodFunction ? prodFunction.getLabel() : t('users', 'NO_DATA:prodFunction');
 
     if (user.orgUnitType && user.orgUnitId)
     {
