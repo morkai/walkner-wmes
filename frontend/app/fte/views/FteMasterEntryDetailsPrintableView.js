@@ -1,9 +1,13 @@
 define([
+  'underscore',
   'app/core/views/PrintableListView',
-  'app/fte/templates/printableMasterEntryList'
+  'app/fte/templates/printableMasterEntryList',
+  './fractionsUtil'
 ], function(
+  _,
   PrintableListView,
-  printableMasterEntryListTemplate
+  printableMasterEntryListTemplate,
+  fractionsUtil
 ) {
   'use strict';
 
@@ -13,7 +17,9 @@ define([
 
     serialize: function()
     {
-      return this.model.serializeWithTotals();
+      return _.extend(this.model.serializeWithTotals(), {
+        round: fractionsUtil.round
+      });
     },
 
     afterRender: function()

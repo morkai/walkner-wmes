@@ -23,19 +23,19 @@
   <tr>
     <th>
     <th>
-    <th colspan="<%- companyCount %>"><%- total %>
+    <th colspan="<%- companyCount %>"><%- round(total) %>
     <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-    <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- totalByProdFunction[prodFunctionId].total %>
+    <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- round(totalByProdFunction[prodFunctionId].total) %>
     <% }) %>
   <tr>
     <th>
     <th>
     <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-    <th><%- totalByCompany[companyId].total %>
+    <th><%- round(totalByCompany[companyId].total) %>
     <% }) %>
     <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
     <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-    <th><%- totalByProdFunction[prodFunctionId].companies[companyId] %>
+    <th><%- round(totalByProdFunction[prodFunctionId].companies[companyId]) %>
     <% }) %>
     <% }) %>
   <% tasks.forEach(function(task, taskIndex) { %>
@@ -48,7 +48,7 @@
       <% } %>
     <td><i class="fa fa-<%- task.noPlan ? 'check' : 'times' %>"></i>
     <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
-    <td><%- task.totalByCompany[companyId] %></td>
+    <td><%- round(task.totalByCompany[companyId]) %></td>
     <% }) %>
     <% task.functions.forEach(function(prodFunction, functionIndex) { %>
     <% prodFunction.companies.forEach(function(company, companyIndex) { %>
