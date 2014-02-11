@@ -24,6 +24,11 @@ function(
       .filter(function(label) { return !!label; })
       .join('; ');
 
+    if (!obj.companies.length)
+    {
+      obj.companies = '-';
+    }
+
     return obj;
   };
 });
