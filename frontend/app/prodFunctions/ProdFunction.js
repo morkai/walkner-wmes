@@ -23,7 +23,7 @@ define([
     {
       return {
         label: '',
-        position: 0,
+        position: -1,
         direct: false,
         companies: []
       };

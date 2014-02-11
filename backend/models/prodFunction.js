@@ -15,7 +15,8 @@ module.exports = function setupProdFunctionModel(app, mongoose)
     },
     position: {
       type: Number,
-      default: 0
+      min: -1,
+      default: -1
     },
     direct: {
       type: Boolean,
