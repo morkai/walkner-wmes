@@ -95,7 +95,7 @@ function(
   {
     if (user.data.name)
     {
-      return user.data.name;
+      return String(user.data.name);
     }
 
     if (user.data.lastName && user.data.firstName)
