@@ -69,8 +69,6 @@
 
   "PRIVILEGE:ORDERS:VIEW": "Przeglądanie zleceń",
   "PRIVILEGE:ORDERS:MANAGE": "Zarządzanie zleceniami",
-  "PRIVILEGE:LINES:VIEW": "Przeglądanie linii produkcyjnych",
-  "PRIVILEGE:LINES:MANAGE": "Zarządzanie liniami produkcyjnymi",
   "PRIVILEGE:EVENTS:VIEW": "Przeglądanie zdarzeń",
   "PRIVILEGE:EVENTS:MANAGE": "Zarządzanie zdarzeniami",
   "PRIVILEGE:USERS:VIEW": "Przeglądanie użytkowników",
