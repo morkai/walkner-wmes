@@ -234,7 +234,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
           prodShiftOrder: prodShiftOrder._id,
           date: prodShiftOrder.date,
           shift: prodShiftOrder.shift,
-          aor: null,
+          aor: getSubdivisionAor(prodShiftOrder.subdivision),
           reason: downtime._id,
           reasonComment: '',
           decisionComment: '',
@@ -406,6 +406,18 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     }
 
     orgUnits.division = division.get('_id');
+  }
+
+  function getSubdivisionAor(subdivisionId)
+  {
+    var subdivision = app.subdivisions.modelsById[subdivisionId];
+
+    if (!subdivision)
+    {
+      return null;
+    }
+
+    return subdivision.aor || null;
   }
 
   mongoose.model('PressWorksheet', pressWorksheetSchema);
