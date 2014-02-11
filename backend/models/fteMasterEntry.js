@@ -305,7 +305,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   function getProdFunctionCompanyEntries(prodFunction)
   {
-    var companyEntries = [];
+    var companies = [];
 
     prodFunction.companies.forEach(function(companyId)
     {
@@ -313,15 +313,20 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
       if (company && company.fteMasterPosition > -1)
       {
-        companyEntries.push({
-          id: companyId,
-          name: company.name,
-          count: 0
-        });
+        companies.push(company);
       }
     });
 
-    return companyEntries;
+    return companies
+      .sort(function(a, b) { return a.fteMasterPosition - b.fteMasterPosition; })
+      .map(function(company)
+      {
+        return {
+          id: company._id,
+          name: company.name,
+          count: 0
+        };
+      });
   }
 
   function getProdFlowTasks(subdivisionId, functions, done)
