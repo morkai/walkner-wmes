@@ -21,6 +21,7 @@
   "PROPERTY:name": "Nazwa",
   "PROPERTY:prodTaskTags": "Tagi zadań produkcyjnych",
   "PROPERTY:type": "Typ",
+  "PROPERTY:aor": "Domyślny obszar odp.",
 
   "TYPE:assembly": "Montaż",
   "TYPE:press": "Tłocznia",
@@ -30,6 +31,7 @@
   "FORM:ACTION:edit": "Edytuj dział",
   "FORM:ERROR:addFailure": "Nie udało się dodać działu :-(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować działu :-(",
+  "FORM:PLACEHOLDER:aor": "Wybierz obszar odpowiedzialności...",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia działu",
   "ACTION_FORM:BUTTON:delete": "Usuń dział",

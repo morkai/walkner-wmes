@@ -4,9 +4,7 @@ define([
   '../i18n',
   '../user',
   '../core/util/showDeleteFormPage',
-  '../data/divisions',
   '../data/subdivisions',
-  '../data/views/renderOrgUnitPath',
   './Subdivision',
   'i18n!app/nls/subdivisions'
 ], function(
@@ -15,9 +13,7 @@ define([
   t,
   user,
   showDeleteFormPage,
-  divisions,
   subdivisions,
-  renderOrgUnitPath,
   Subdivision
 ) {
   'use strict';
@@ -27,26 +23,17 @@ define([
 
   router.map('/subdivisions', canView, function()
   {
-    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
-    {
-      return new ListPage({
-        collection: subdivisions,
-        columns: ['division', 'type', 'name', 'prodTaskTags'],
-        serializeRow: function(model)
-        {
-          var row = model.toJSON();
-
-          row.division = renderOrgUnitPath(divisions.get(row.division), true, false);
-
-          row.type = t('subdivisions', 'TYPE:' + row.type);
-
-          row.prodTaskTags =
-            row.prodTaskTags && row.prodTaskTags.length ? row.prodTaskTags.join(', ') : null;
-
-          return row;
-        }
-      });
-    });
+    viewport.loadPage(
+      ['app/core/pages/ListPage', 'app/subdivisions/views/decorateSubdivision'],
+      function(ListPage, decorateSubdivision)
+      {
+        return new ListPage({
+          collection: subdivisions,
+          columns: ['division', 'type', 'name', 'prodTaskTags', 'aor'],
+          serializeRow: decorateSubdivision
+        });
+      }
+    );
   });
 
   router.map('/subdivisions/:id', function(req)

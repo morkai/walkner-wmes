@@ -18,7 +18,12 @@ module.exports = function setupSubdivisionModel(app, mongoose)
       trim: true,
       required: true
     },
-    prodTaskTags: [String]
+    prodTaskTags: [String],
+    aor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Aor',
+      default: null
+    }
   }, {
     id: false
   });

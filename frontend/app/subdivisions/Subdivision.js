@@ -23,7 +23,8 @@ define([
       division: null,
       type: 'assembly',
       name: null,
-      prodTaskTags: null
+      prodTaskTags: null,
+      aor: null
     }
 
   });

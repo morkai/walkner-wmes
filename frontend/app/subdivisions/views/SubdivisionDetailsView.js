@@ -1,10 +1,10 @@
 define([
-  'app/data/views/renderOrgUnitPath',
   'app/core/views/DetailsView',
+  './decorateSubdivision',
   'app/subdivisions/templates/details'
 ], function(
-  renderOrgUnitPath,
   DetailsView,
+  decorateSubdivision,
   detailsTemplate
 ) {
   'use strict';
@@ -19,11 +19,7 @@ define([
 
     serialize: function()
     {
-      var data = DetailsView.prototype.serialize.call(this);
-
-      data.orgUnitPath = renderOrgUnitPath(this.model, true);
-
-      return data;
+      return {model: decorateSubdivision(this.model)};
     }
 
   });

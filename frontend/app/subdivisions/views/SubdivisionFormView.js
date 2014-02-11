@@ -1,8 +1,10 @@
 define([
+  'app/data/aors',
   'app/data/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
   'app/subdivisions/templates/form'
 ], function(
+  aors,
   OrgUnitDropdownsView,
   FormView,
   formTemplate
@@ -39,6 +41,17 @@ define([
         tags: this.model.allTags || [],
         tokenSeparators: [',']
       });
+
+      this.$id('aor').select2({
+        allowClear: true,
+        data: aors.map(function(aor)
+        {
+          return {
+            id: aor.id,
+            text: aor.getLabel()
+          };
+        })
+      });
     },
 
     serializeToForm: function()
@@ -53,6 +66,7 @@ define([
     serializeForm: function(data)
     {
       data.prodTaskTags = typeof data.prodTaskTags === 'string' ? data.prodTaskTags.split(',') : [];
+      data.aor = aors.get(data.aor) ? data.aor : null;
 
       return data;
     }

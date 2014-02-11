@@ -6,11 +6,11 @@
     <div class="props first">
       <div class="prop">
         <div class="prop-name"><%- t('subdivisions', 'PROPERTY:division') %></div>
-        <div class="prop-value"><%- orgUnitPath || '-' %></div>
+        <div class="prop-value"><%- model.division || '-' %></div>
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('subdivisions', 'PROPERTY:type') %></div>
-        <div class="prop-value"><%- t('subdivisions', 'TYPE:' + model.type) %></div>
+        <div class="prop-value"><%= model.type %></div>
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('subdivisions', 'PROPERTY:name') %></div>
@@ -18,7 +18,11 @@
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('subdivisions', 'PROPERTY:prodTaskTags') %></div>
-        <div class="prop-value"><%= model.prodTaskTags && model.prodTaskTags.length ? model.prodTaskTags.join(', ') : '-' %></div>
+        <div class="prop-value"><%= model.prodTaskTags || '-' %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('subdivisions', 'PROPERTY:aor') %></div>
+        <div class="prop-value"><%= model.aor || '-' %></div>
       </div>
     </div>
   </div>
