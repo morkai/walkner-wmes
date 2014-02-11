@@ -170,6 +170,7 @@
             }
 
             nameNormalized = normalizeName(name, delimiter, arrayIndexes);
+            nameNormalized = nameNormalized.replace(_arrayItemRegexp, '[]');
             result[nameNormalized] = currNode;
           }
         }
