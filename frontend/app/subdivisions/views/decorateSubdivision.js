@@ -28,5 +28,5 @@ function(
     obj.aor = aor ? aor.getLabel() : null;
 
     return obj;
-  }
+  };
 });
