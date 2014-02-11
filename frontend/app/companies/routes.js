@@ -23,7 +23,7 @@ define([
     {
       return new ListPage({
         collection: companies,
-        columns: ['_id', 'name']
+        columns: ['_id', 'name', 'fteMasterPosition', 'fteLeaderPosition']
       });
     });
   });

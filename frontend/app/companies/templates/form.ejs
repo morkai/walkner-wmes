@@ -11,23 +11,13 @@
         <label for="<%- idPrefix %>-name" class="control-label"><%- t('companies', 'PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required maxlength="100">
       </div>
-      <div class="checkbox">
-        <label class="control-label">
-          <input type="checkbox" name="fteMasterMaster" value="true">
-          <%- t('companies', 'PROPERTY:fteMasterMaster') %>
-        </label>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-fteMasterPosition" class="control-label"><%- t('companies', 'PROPERTY:fteMasterPosition') %></label>
+        <input id="<%- idPrefix %>-fteMasterPosition" class="form-control" type="number" name="fteMasterPosition" min="-1">
       </div>
-      <div class="checkbox">
-        <label class="control-label">
-          <input type="checkbox" name="fteMaster" value="true">
-          <%- t('companies', 'PROPERTY:fteMaster') %>
-        </label>
-      </div>
-      <div class="checkbox">
-        <label class="control-label">
-          <input type="checkbox" name="fteLeader" value="true">
-          <%- t('companies', 'PROPERTY:fteLeader') %>
-        </label>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-fteLeaderPosition" class="control-label"><%- t('companies', 'PROPERTY:fteLeaderPosition') %></label>
+        <input id="<%- idPrefix %>-fteLeaderPosition" class="form-control" type="number" name="fteLeaderPosition" min="-1">
       </div>
     </div>
     <div class="panel-footer">

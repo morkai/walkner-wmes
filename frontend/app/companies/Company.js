@@ -18,9 +18,11 @@ define([
     nlsDomain: 'companies',
 
     labelAttribute: 'name',
-    
+
     defaults: {
-      name: null
+      name: null,
+      fteMasterPosition: -1,
+      fteLeaderPosition: -1
     },
 
     toJSON: function()

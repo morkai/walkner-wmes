@@ -18,9 +18,8 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:fteMaster": "Dostępna w FTE (produkcja) dla innych funkcji",
-  "PROPERTY:fteMasterMaster": "Dostępna w FTE (produkcja) dla funkcji Mistrz",
-  "PROPERTY:fteLeader": "Dostępna w FTE (magazyn)",
+  "PROPERTY:fteMasterPosition": "Pozycja w FTE (produkcja)",
+  "PROPERTY:fteLeaderPosition": "Pozycja w FTE (magazyn)",
 
   "FORM:ACTION:add": "Dodaj firmę",
   "FORM:ACTION:edit": "Edytuj firmę",
