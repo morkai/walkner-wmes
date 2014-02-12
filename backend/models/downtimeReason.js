@@ -20,6 +20,10 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
     report1: {
       type: Boolean,
       default: true
+    },
+    auto: {
+      type: Boolean,
+      default: false
     }
   }, {
     id: false

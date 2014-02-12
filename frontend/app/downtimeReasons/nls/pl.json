@@ -20,6 +20,7 @@
   "PROPERTY:label": "Opis",
   "PROPERTY:pressPosition": "Pozycja na karcie pracy",
   "PROPERTY:report1": "W raporcie 1?",
+  "PROPERTY:auto": "Automatyczne potwierdzenie?",
 
   "FORM:ACTION:add": "Dodaj powód przestojów",
   "FORM:ACTION:edit": "Edytuj powód przestojów",

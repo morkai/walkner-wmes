@@ -21,6 +21,12 @@
           <%- t('downtimeReasons', 'PROPERTY:report1') %>
         </label>
       </div>
+      <div class="form-group">
+        <label class="control-label checkbox">
+          <input id="<%- idPrefix %>-auto" type="checkbox" name="auto" value="true">
+          <%- t('downtimeReasons', 'PROPERTY:auto') %>
+        </label>
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

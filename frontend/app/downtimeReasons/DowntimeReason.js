@@ -22,7 +22,8 @@ define([
     defaults: {
       label: null,
       pressPosition: -1,
-      report1: true
+      report1: true,
+      auto: false
     },
 
     toJSON: function()

@@ -37,13 +37,13 @@ define([
   {
     viewport.showPage(new ListPage({
       collection: downtimeReasons,
-      columns: ['_id', 'label', 'pressPosition', 'report1'],
+      columns: ['_id', 'label', 'pressPosition', 'report1', 'auto'],
       serializeRow: function(model)
       {
         var row = model.toJSON();
 
-        row.pressPosition = row.pressPosition > -1 ? row.pressPosition : '-';
         row.report1 = t('core', 'BOOL:' + row.report1);
+        row.auto = t('core', 'BOOL:' + row.auto);
 
         return row;
       }
