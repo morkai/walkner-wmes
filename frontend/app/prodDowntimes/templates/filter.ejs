@@ -1,5 +1,5 @@
 <div class="well">
-  <form id="<%- idPrefix %>-form" class="filter-form is-vertical">
+  <form id="<%- idPrefix %>-form" class="filter-form is-vertical prodDowntimes-filter-form">
     <div class="form-group">
       <label for="<%- idPrefix %>-from-date"><%- t('prodDowntimes', 'FILTER:DATE:FROM') %></label>
       <div id="<%- idPrefix %>-from" class="form-group-datetime">
@@ -19,11 +19,17 @@
       <input id="<%- idPrefix %>-orgUnit" name="orgUnit" type="text" data-placeholder="<%- t('prodDowntimes', 'FILTER:PLACEHOLDER:orgUnit') %>">
     </div><div
       class="form-group">
-      <label for="<%- idPrefix %>-aor"><%- t('prodDowntimes', 'PROPERTY:aor') %></label>
+      <label for="<%- idPrefix %>-aor">
+        <input id="<%- idPrefix %>-aorIn" class="filter-inLabel" name="aorIn" type="checkbox" value="true" title="<%- t('prodDowntimes', 'FILTER:TOOLTIP:in') %>">
+        <%- t('prodDowntimes', 'PROPERTY:aor') %>
+      </label>
       <input id="<%- idPrefix %>-aor" name="aor" type="text" data-placeholder="<%- t('prodDowntimes', 'FILTER:PLACEHOLDER:aor') %>">
     </div><div
       class="form-group">
-      <label for="<%- idPrefix %>-reason"><%- t('prodDowntimes', 'PROPERTY:reason') %></label>
+      <label for="<%- idPrefix %>-reason">
+        <input id="<%- idPrefix %>-reasonIn" class="filter-inLabel" name="reasonIn" type="checkbox" value="true" title="<%- t('prodDowntimes', 'FILTER:TOOLTIP:in') %>">
+        <%- t('prodDowntimes', 'PROPERTY:reason') %>
+      </label>
       <input id="<%- idPrefix %>-reason" name="reason" type="text" data-placeholder="<%- t('prodDowntimes', 'FILTER:PLACEHOLDER:reason') %>">
     </div><div
       class="form-group">

@@ -64,3 +64,7 @@
 .filter-dateRange input[type=radio] {
   margin-top: 0;
 }
+input[type=checkbox].filter-inLabel {
+  margin-top: -2px;
+  vertical-align: middle;
+}

@@ -75,12 +75,25 @@ define([
       this.$id('aor').select2({
         width: '256px',
         allowClear: true,
-        data: this.getApplicableAors()
+        multiple: true,
+        data: aors
+          .map(function(aor)
+          {
+            return {
+              id: aor.id,
+              text: aor.getLabel()
+            };
+          })
+          .sort(function(a, b)
+          {
+            return a.text.localeCompare(b.text);
+          })
       });
 
       this.$id('reason').select2({
         width: '256px',
         allowClear: true,
+        multiple: true,
         data: downtimeReasons
           .map(function(downtimeReason)
           {
@@ -171,47 +184,15 @@ define([
       });
     },
 
-    getApplicableAors: function()
-    {
-      var userAors = user.data.aors || [];
-      var result = [];
-
-      if (userAors.length)
-      {
-        userAors.forEach(function(aorId)
-        {
-          var aor = aors.get(aorId);
-
-          if (aor)
-          {
-            result.push({
-              id: aorId,
-              text: aor.getLabel()
-            });
-          }
-        });
-      }
-      else
-      {
-        aors.each(function(aor)
-        {
-          result.push({
-            id: aor.id,
-            text: aor.getLabel()
-          });
-        });
-      }
-
-      return result;
-    },
-
     serializeRqlQuery: function()
     {
       var rqlQuery = this.model.rqlQuery;
       var formData = {
         startedAt: '',
         aor: null,
+        aorIn: true,
         reason: null,
+        reasonIn: true,
         status: ['undecided', 'confirmed', 'rejected'],
         orgUnit: null,
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
@@ -231,9 +212,15 @@ define([
 
           case 'aor':
           case 'reason':
-            if (term.name === 'eq')
+            if (term.name === 'eq' || term.name === 'ne')
             {
+              formData[property + 'In'] = term.name === 'eq';
               formData[property] = term.args[1];
+            }
+            else if (term.name === 'in' || term.name === 'nin')
+            {
+              formData[property + 'In'] = term.name === 'in';
+              formData[property] = term.args[1].join(',');
             }
             break;
 
@@ -258,19 +245,11 @@ define([
       var timeRange = fixTimeRange.fromView(this);
       var selector = [];
       var orgUnit = this.$id('orgUnit').select2('data');
-      var aor = this.$id('aor').val();
-      var reason = this.$id('reason').val();
+      var aor = this.$id('aor').select2('val');
+      var aorIn = this.$id('aorIn').prop('checked');
+      var reason = this.$id('reason').select2('val');
+      var reasonIn = this.$id('reasonIn').prop('checked');
       var status = this.fixStatus();
-
-      if (aor && aor.length)
-      {
-        selector.push({name: 'eq', args: ['aor', aor]});
-      }
-
-      if (reason && reason.length)
-      {
-        selector.push({name: 'eq', args: ['reason', reason]});
-      }
 
       if (status.length === 1)
       {
@@ -281,11 +260,6 @@ define([
         selector.push({name: 'in', args: ['status', status]});
       }
 
-      if (orgUnit)
-      {
-        selector.push({name: 'eq', args: [orgUnit.type, orgUnit.id]});
-      }
-
       if (timeRange.from)
       {
         selector.push({name: 'ge', args: ['startedAt', timeRange.from]});
@@ -294,6 +268,29 @@ define([
       if (timeRange.to)
       {
         selector.push({name: 'le', args: ['startedAt', timeRange.to]});
+      }
+
+      if (aor.length === 1)
+      {
+        selector.push({name: aorIn ? 'eq' : 'ne', args: ['aor', aor[0]]});
+      }
+      else if (aor.length > 1)
+      {
+        selector.push({name: aorIn ? 'in' : 'nin', args: ['aor', aor]});
+      }
+
+      if (reason.length === 1)
+      {
+        selector.push({name: reasonIn ? 'eq' : 'ne', args: ['reason', reason[0]]});
+      }
+      else if (reason.length > 1)
+      {
+        selector.push({name: reasonIn ? 'in' : 'nin', args: ['reason', reason]});
+      }
+
+      if (orgUnit)
+      {
+        selector.push({name: 'eq', args: [orgUnit.type, orgUnit.id]});
       }
 
       rqlQuery.selector = {name: 'and', args: selector};

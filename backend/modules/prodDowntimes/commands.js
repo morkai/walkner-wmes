@@ -44,6 +44,11 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
           return reply(new Error('UNKNOWN_PROD_DOWNTIME'));
         }
 
+        if (!canCorroborate(user, prodDowntime))
+        {
+          return reply(new Error('NO_AUTH'));
+        }
+
         var corroborator = userInfo.createObject(user, socket);
 
         if (lodash.isObject(data.corroborator) && lodash.isString(data.corroborator.cname))
@@ -69,4 +74,12 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
       });
     });
   });
+
+  function canCorroborate(user, prodDowntime)
+  {
+    return !prodDowntime.aor
+      || !user.aors
+      || !user.aors.length
+      || user.aors.indexOf(prodDowntime.aor) !== -1;
+  }
 };

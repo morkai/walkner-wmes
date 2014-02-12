@@ -13,6 +13,7 @@
   "FILTER:DATE:TO": "Do",
   "FILTER:LIMIT": "Limit",
   "FILTER:BUTTON": "Filtruj przestoje",
+  "FILTER:TOOLTIP:in": "Zaznaczony: wszystkie wybrane\nNiezaznaczony: wszystkie oprócz wybranych",
   "FILTER:PLACEHOLDER:aor": "Dowolny obszar odpowiedzialności",
   "FILTER:PLACEHOLDER:reason": "Dowolny powód przestoju",
   "FILTER:PLACEHOLDER:orgUnit": "Dowolna jednostka organizacyjna",

@@ -30,3 +30,10 @@ textarea.prodDowntimes-corroborate-decisionComment {
 .prodDowntimes-list-container {
   margin-left: 300px;
 }
+.prodDowntimes-filter-form .tooltip {
+  opacity: .8;
+}
+.prodDowntimes-filter-form .tooltip-inner {
+  text-align: left;
+  max-width: none;
+}

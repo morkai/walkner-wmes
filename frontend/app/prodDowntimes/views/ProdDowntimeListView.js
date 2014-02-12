@@ -99,7 +99,9 @@ define([
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];
 
-        if (row.status === 'undecided' && user.isAllowedTo('PROD_DOWNTIMES:MANAGE'))
+        if (row.status === 'undecided'
+          && user.isAllowedTo('PROD_DOWNTIMES:MANAGE')
+          && user.hasAccessToAor(model.get('aor')))
         {
           actions.push({
             id: 'corroborate',
