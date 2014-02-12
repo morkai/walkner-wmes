@@ -241,7 +241,7 @@ module.exports = function setUpUsersCommands(app, usersModule)
       {
         usersModule.error("Failed to save a user with KD ID %s: %s", userModel.kdId, err.message);
 
-        if (err.code === 'E11000' && !isRetry)
+        if (err.code === 11000 && !isRetry)
         {
           userModel.login += '-' + userModel.kdId;
 
