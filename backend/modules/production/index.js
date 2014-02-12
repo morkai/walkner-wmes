@@ -9,7 +9,8 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   sioId: 'sio',
-  prodLinesId: 'prodLines'
+  prodLinesId: 'prodLines',
+  downtimeReasonsId: 'downtimeReasons'
 };
 
 exports.start = function startProductionModule(app, module)
