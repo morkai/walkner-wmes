@@ -150,7 +150,7 @@ module.exports = function setUpUsersCommands(app, usersModule)
     {
       var companyId = companyModel.get('_id').replace(/'/g, "\\'");
 
-      where.push("[USERS].[US_ADD_FIELDS] LIKE '10001%" + companyId + "&%'");
+      where.push("[USERS].[US_ADD_FIELDS] LIKE '10001&" + companyId + "&%'");
     });
 
     return sql + " WHERE " + where.join(" OR ");
