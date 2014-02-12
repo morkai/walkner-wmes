@@ -15,6 +15,13 @@ define([
 ) {
   'use strict';
 
+  var VALID_TERM_NAMES = {
+    eq: true,
+    ne: true,
+    in: true,
+    nin: true
+  };
+
   return Collection.extend({
 
     model: ProdDowntime,
@@ -165,32 +172,67 @@ define([
     {
       var aorTerm = _.find(this.rqlQuery.selector.args, function(term)
       {
-        return term.name === 'eq' && term.args[0] === 'aor';
+        return term.args[0] === 'aor' && VALID_TERM_NAMES[term.name];
       });
 
-      if (aorTerm)
-      {
-        return data.aor === aorTerm.args[1];
-      }
-
-      if (!Array.isArray(user.data.aors) || user.data.aors.length === 0)
+      if (!aorTerm)
       {
         return true;
       }
 
-      return user.data.aors.indexOf(data.aor) !== -1;
+      if (aorTerm.name === 'eq')
+      {
+        return data.aor === aorTerm.args[1];
+      }
+
+      if (aorTerm.name === 'ne')
+      {
+        return data.aor !== aorTerm.args[1];
+      }
+
+      if (aorTerm.name === 'in')
+      {
+        return aorTerm.args[1].indexOf(data.aor) !== -1;
+      }
+
+      if (aorTerm.name === 'nin')
+      {
+        return aorTerm.args[1].indexOf(data.aor) === -1;
+      }
+
+      return true;
     },
 
     matchReason: function(data)
     {
       var reasonTerm = _.find(this.rqlQuery.selector.args, function(term)
       {
-        return term.name === 'eq' && term.args[0] === 'reason';
+        return term.args[0] === 'reason' && VALID_TERM_NAMES[term.name];
       });
 
-      if (reasonTerm)
+      if (!reasonTerm)
+      {
+        return true;
+      }
+
+      if (reasonTerm.name === 'eq')
       {
         return data.reason === reasonTerm.args[1];
+      }
+
+      if (reasonTerm.name === 'ne')
+      {
+        return data.reason !== reasonTerm.args[1];
+      }
+
+      if (reasonTerm.name === 'in')
+      {
+        return reasonTerm.args[1].indexOf(data.reason) !== -1;
+      }
+
+      if (reasonTerm.name === 'nin')
+      {
+        return reasonTerm.args[1].indexOf(data.reason) === -1;
       }
 
       return true;
