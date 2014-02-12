@@ -47,7 +47,7 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
     var nc12Queue = [];
 
     csv()
-      .from.stream(fs.createReadStream(mechOrdersFile.path))
+      .from.stream(fs.createReadStream(mechOrdersFile.path), {delimiter: ';'})
       .on('record', function(row)
       {
         if (row.length < 12 || !/^[0-9]{12}$/.test(row[0]))
