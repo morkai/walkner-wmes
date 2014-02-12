@@ -122,7 +122,7 @@ module.exports = function setUpUsersCommands(app, usersModule)
             rows.push(prepareUserRow(row));
           }
 
-          syncNextUserRow(rows, {created: 0, updated: 0});
+          syncNextUserRow(rows, {created: 0, updated: 0, errors: 0});
         });
       }
     });
@@ -229,23 +229,42 @@ module.exports = function setUpUsersCommands(app, usersModule)
         userModel.set(data);
       }
 
-      userModel.save(function(err)
+      saveUser(userModel, isNew, false, rows, stats);
+    });
+  }
+
+  function saveUser(userModel, isNew, isRetry, rows, stats)
+  {
+    userModel.save(function(err)
+    {
+      if (err)
       {
-        if (err)
+        usersModule.error("Failed to save a user with KD ID %s: %s", userModel.kdId, err.message);
+
+        if (err.code === 'E11000' && !isRetry)
         {
-          usersModule.error("Failed to save a user with KD ID %s: %s", kdId, err.message);
-        }
-        else if (isNew)
-        {
-          ++stats.created;
-        }
-        else
-        {
-          ++stats.updated;
+          userModel.login += '-' + userModel.kdId;
+
+          process.nextTick(function()
+          {
+            saveUser(userModel, isNew, true, rows, stats);
+          });
+
+          return;
         }
 
-        return syncNextUserRow(rows, stats);
-      });
+        ++stats.errors;
+      }
+      else if (isNew)
+      {
+        ++stats.created;
+      }
+      else
+      {
+        ++stats.updated;
+      }
+
+      return syncNextUserRow(rows, stats);
     });
   }
 };
