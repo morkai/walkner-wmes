@@ -554,6 +554,19 @@ define([
       return 150;
     },
 
+    getBreakReason: function()
+    {
+      // TODO: Make configurable
+      return 'A';
+    },
+
+    getDefaultAor: function()
+    {
+      var subdivision = this.prodLine.getSubdivision();
+
+      return subdivision ? subdivision.get('aor') : null;
+    },
+
     /**
      * @returns {boolean}
      */

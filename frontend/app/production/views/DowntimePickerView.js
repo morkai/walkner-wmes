@@ -75,15 +75,40 @@ define([
 
     afterRender: function()
     {
+      if (this.reason)
+      {
+        this.$id('reason').val(this.reason);
+      }
+
+      if (this.aor)
+      {
+        this.$id('aor').val(this.aor);
+      }
+
       this.setUpReasonSelect2();
       this.setUpAorSelect2();
-
-      this.$id('reason').select2('focus');
+      this.focusControl();
     },
 
     onDialogShown: function()
     {
-      this.$id('reason').select2('focus');
+      this.focusControl();
+    },
+
+    focusControl: function()
+    {
+      if (!this.reason)
+      {
+        this.$id('reason').select2('focus');
+      }
+      else if (!this.aor)
+      {
+        this.$id('aor').select2('focus');
+      }
+      else
+      {
+        this.$('.btn-danger').focus();
+      }
     },
 
     setUpReasonSelect2: function()

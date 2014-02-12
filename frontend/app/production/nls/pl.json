@@ -49,6 +49,7 @@
   "action:newOrder": "Nowe zlecenie",
   "action:continueOrder": "Kontynuuj zlecenie",
   "action:startDowntime": "Przestój",
+  "action:startBreak": "Przerwa",
   "action:endDowntime": "Koniec przestoju",
   "action:endWork": "Koniec pracy",
 

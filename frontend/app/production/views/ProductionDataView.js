@@ -39,9 +39,10 @@ define([
     },
 
     events: {
-      'click .production-newOrder': 'showNewOrderDialog',
+      'click .production-newOrder': 'newOrder',
       'click .production-continueOrder': 'continueOrder',
-      'click .production-startDowntime': 'showDowntimePickerDialog',
+      'click .production-startDowntime': 'startDowntime',
+      'click .production-startBreak': 'startBreak',
       'click .production-endDowntime': 'endDowntime',
       'click .production-endWork': 'endWork',
       'click .production-property-quantityDone .btn-link': 'showQuantityDoneEditor',
@@ -198,6 +199,11 @@ define([
         {
           view.appendAction('danger', 'startDowntime');
 
+          if (view.model.getDefaultAor())
+          {
+            view.appendAction('danger', 'startBreak');
+          }
+
           if (view.model.prodShiftOrder.hasOrderData())
           {
             view.appendAction('success', 'continueOrder');
@@ -212,6 +218,12 @@ define([
     toggleWorkingActions: function()
     {
       this.appendAction('danger', 'startDowntime');
+
+      if (this.model.getDefaultAor())
+      {
+        this.appendAction('danger', 'startBreak');
+      }
+
       this.appendAction('success', 'newOrder');
       this.appendAction('warning', 'endWork');
     },
@@ -247,7 +259,7 @@ define([
       return this.$('.production-property-' + propertyName + ' .production-property-value');
     },
 
-    showNewOrderDialog: function(e)
+    newOrder: function(e)
     {
       if (e)
       {
@@ -283,14 +295,16 @@ define([
       viewport.showDialog(dialogView, t('production', 'continueOrderDialog:title'));
     },
 
-    showDowntimePickerDialog: function(e)
+    startDowntime: function(e, options)
     {
+      console.log(options);
+
       if (e)
       {
         e.target.blur();
       }
 
-      var downtimePickerView = new DowntimePickerView();
+      var downtimePickerView = new DowntimePickerView(options);
 
       this.listenTo(downtimePickerView, 'downtimePicked', function(downtimeInfo)
       {
@@ -300,6 +314,14 @@ define([
       });
 
       viewport.showDialog(downtimePickerView, t('production', 'downtimePicker:title'));
+    },
+
+    startBreak: function(e)
+    {
+      this.startDowntime(e, {
+        reason: this.model.getBreakReason(),
+        aor: this.model.getDefaultAor()
+      });
     },
 
     endDowntime: function(e)
