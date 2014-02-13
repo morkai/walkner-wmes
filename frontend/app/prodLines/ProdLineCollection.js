@@ -27,16 +27,16 @@ define([
           return true;
         }
 
-        if (userSubdivision)
-        {
-          return prodLine.get('subdivision') === userSubdivision.id;
-        }
-
         var prodLineSubdivision = prodLine.getSubdivision();
 
         if (!prodLineSubdivision)
         {
           return true;
+        }
+
+        if (userSubdivision)
+        {
+          return prodLineSubdivision.id === userSubdivision.id;
         }
 
         var prodLineDivision = prodLineSubdivision.get('division');
