@@ -1,9 +1,9 @@
 define([
   'underscore',
-  'moment',
   'js2form',
   'app/i18n',
   'app/user',
+  'app/time',
   'app/data/divisions',
   'app/data/subdivisions',
   'app/data/views/OrgUnitDropdownsView',
@@ -12,10 +12,10 @@ define([
   'app/fte/templates/filter'
 ], function(
   _,
-  moment,
   js2form,
   t,
   user,
+  time,
   divisions,
   subdivisions,
   OrgUnitDropdownsView,
@@ -98,10 +98,16 @@ define([
         shift: 0,
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
       };
+      var view = this;
 
       rqlQuery.selector.args.forEach(function(term)
       {
         /*jshint -W015*/
+
+        if (term.name !== 'eq' && term.name !== 'in')
+        {
+          return;
+        }
 
         var property = term.args[0];
 
@@ -118,16 +124,21 @@ define([
             break;
 
           case 'date':
-            formData.date = moment(term.args[1]).format('YYYY-MM-DD');
+            if (term.name === 'in')
+            {
+              formData.date = time.format(term.args[1][0], 'YYYY-MM-DD');
+            }
+            else
+            {
+              var dateMoment = time.getMoment(term.args[1]);
+
+              formData.date = dateMoment.format('YYYY-MM-DD');
+              formData.shift = view.getShiftNoFromMoment(dateMoment);
+            }
             break;
 
           case 'shift':
-            formData.shift = parseInt(term.args[1], 10);
-
-            if (formData.shift < 0 || formData.shift > 3)
-            {
-              formData.shift = 0;
-            }
+            formData.shift = term.args[1];
             break;
         }
       });
@@ -141,8 +152,10 @@ define([
       var selector = [];
       var division = this.orgUnitDropdownsView.$id('division').val();
       var subdivision = this.orgUnitDropdownsView.$id('subdivision').val();
-      var dateMoment = moment(this.$id('date').val());
-      var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
+      var dateMoment = time.getMoment(this.$id('date').val());
+      var shiftNo = parseInt(this.$('input[name=shift]:checked').val(), 10);
+
+      this.setHoursByShiftNo(dateMoment, shiftNo);
 
       if (!_.isEmpty(subdivision))
       {
@@ -155,12 +168,30 @@ define([
 
       if (dateMoment.isValid())
       {
-        selector.push({name: 'eq', args: ['date', dateMoment.valueOf()]});
-      }
+        if (shiftNo === 0)
+        {
+          var startTime = dateMoment.valueOf();
 
-      if (shift > 0)
+          selector.push({
+            name: 'in',
+            args: [
+              'date',
+              [
+                startTime + 6 * 3600 * 1000,
+                startTime + 14 * 3600 * 1000,
+                startTime + 22 * 3600 * 1000
+              ]
+            ]
+          });
+        }
+        else
+        {
+          selector.push({name: 'eq', args: ['date', dateMoment.valueOf()]});
+        }
+      }
+      else if (shiftNo !== 0)
       {
-        selector.push({name: 'eq', args: ['shift', shift]});
+        selector.push({name: 'eq', args: ['shift', shiftNo]});
       }
 
       rqlQuery.selector = {name: 'and', args: selector};
@@ -168,6 +199,48 @@ define([
       rqlQuery.skip = 0;
 
       this.trigger('filterChanged', rqlQuery);
+    },
+
+    getShiftNoFromMoment: function(moment)
+    {
+      var hours = moment.hours();
+
+      if (hours === 6)
+      {
+        return 1;
+      }
+
+      if (hours === 14)
+      {
+        return 2;
+      }
+
+      if (hours === 22)
+      {
+        return 3;
+      }
+
+      return 0;
+    },
+
+    setHoursByShiftNo: function(moment, shiftNo)
+    {
+      if (shiftNo === 1)
+      {
+        moment.hours(6);
+      }
+      else if (shiftNo === 2)
+      {
+        moment.hours(14);
+      }
+      else if (shiftNo === 3)
+      {
+        moment.hours(22);
+      }
+      else
+      {
+        moment.hours(0);
+      }
     }
 
   });

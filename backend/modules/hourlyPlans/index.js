@@ -53,7 +53,7 @@ exports.start = function startFteModule(app, module)
     var currentShift = app[module.config.fteId].getCurrentShift();
     var condition = {
       locked: false,
-      $or: [{date: {$ne: currentShift.date}}, {shift: {$ne: currentShift.no}}]
+      date: {$ne: currentShift.date}
     };
 
     HourlyPlan.find(condition, {flows: 0}, function(err, hourlyPlans)

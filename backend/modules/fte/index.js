@@ -58,11 +58,8 @@ exports.start = function startFteModule(app, module)
 
   function setUpShiftChangeBroadcast()
   {
-    var h6 = 6 * 3600 * 1000;
-    var h8 = 8 * 3600 * 1000;
     var currentShift = getCurrentShift();
-    var currentShiftTime = currentShift.date.getTime() + h6 + (currentShift.no - 1) * h8;
-    var nextShiftTime = currentShiftTime + h8;
+    var nextShiftTime = currentShift.date.getTime() + 8 * 3600 * 1000;
 
     setTimeout(broadcastShiftChange, nextShiftTime - Date.now());
   }
@@ -87,17 +84,19 @@ exports.start = function startFteModule(app, module)
     if (hours >= 6 && hours < 14)
     {
       no = 1;
+      date.setHours(6);
     }
     else if (hours >= 14 && hours < 22)
     {
       no = 2;
+      date.setHours(14);
     }
     else if (hours < 6)
     {
       date = new Date(date.getTime() - 24 * 3600 * 1000);
+      date.setHours(22);
     }
 
-    date.setHours(0);
     date.setMinutes(0);
     date.setSeconds(0);
     date.setMilliseconds(0);
@@ -115,7 +114,7 @@ exports.start = function startFteModule(app, module)
     var currentShift = getCurrentShift();
     var condition = {
       locked: false,
-      $or: [{date: {$ne: currentShift.date}}, {shift: {$ne: currentShift.no}}]
+      date: {$ne: currentShift.date}
     };
 
     FteEntryModel.find(condition, function(err, fteEntries)

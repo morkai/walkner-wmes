@@ -51,8 +51,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
     var currentShift = fteModule.getCurrentShift();
     var condition = {
       division: divisionId,
-      date: currentShift.date,
-      shift: currentShift.no
+      date: currentShift.date
     };
     var fields = {_id: 1, locked: 1};
 
