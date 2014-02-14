@@ -81,22 +81,26 @@ module.exports = function setupProdFlowModel(app, mongoose)
     }
 
     var prodFlows = [];
+    var idMap = {};
 
     app.mrpControllers.models.forEach(function(mrpController)
     {
-      if (String(mrpController.get('subdivision')) !== subdivisionId)
+      if (String(mrpController.subdivision) !== subdivisionId)
       {
         return;
       }
 
-      var mrpControllerId = mrpController.get('_id');
+      var mrpControllerId = mrpController._id;
 
       app.prodFlows.models.forEach(function(prodFlow)
       {
-        var mrpControllers = prodFlow.get('mrpController');
+        var mrpControllers = prodFlow.mrpController;
 
-        if (Array.isArray(mrpControllers) && mrpControllers.indexOf(mrpControllerId) !== -1)
+        if (Array.isArray(mrpControllers)
+          && mrpControllers.indexOf(mrpControllerId) !== -1
+          && typeof idMap[prodFlow._id] === 'undefined')
         {
+          idMap[prodFlow._id] = true;
           prodFlows.push(prodFlow);
         }
       });

@@ -338,25 +338,16 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
         return done(err);
       }
 
-      var idMap = {};
       var result = [];
 
       prodFlows.forEach(function(prodFlow)
       {
-        var id = prodFlow.get('_id');
-        var idStr = id.toString();
-
-        if (typeof idMap[idStr] === 'undefined')
-        {
-          result.push({
-            type: 'prodFlow',
-            id: id,
-            name: prodFlow.get('name'),
-            functions: functions
-          });
-
-          idMap[idStr] = true;
-        }
+        result.push({
+          type: 'prodFlow',
+          id: prodFlow.get('_id').toString(),
+          name: prodFlow.get('name'),
+          functions: functions
+        });
       });
 
       done(null, result);
