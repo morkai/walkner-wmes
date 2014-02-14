@@ -454,13 +454,13 @@ module.exports = function(mongoose, options, done)
 
       groupedFteLeaderEntries[groupKey].forEach(function(fteLeaderEntry)
       {
-        if (options.division === null)
-        {
-          fteTotals[groupKey].leader += fteLeaderEntry.totals.overall;
-        }
-        else if (typeof fteLeaderEntry.totals[options.division] === 'number')
+        if (typeof fteLeaderEntry.totals[options.division] === 'number')
         {
           fteTotals[groupKey].leader += fteLeaderEntry.totals[options.division];
+        }
+        else
+        {
+          fteTotals[groupKey].leader += fteLeaderEntry.totals.overall;
         }
       });
     });
@@ -806,10 +806,7 @@ module.exports = function(mongoose, options, done)
 
   function calcFteShiftStartedAt(fteEntry)
   {
-    var firstShiftTime = fteEntry.date.getTime() + 6 * 3600 * 1000;
-    var startedAtTime = firstShiftTime + (fteEntry.shift - 1) * 8 * 3600 * 1000;
-
-    return new Date(startedAtTime);
+    return new Date(fteEntry.date.getTime());
   }
 
   function calcCoeffs(groupKey, orders, fteTotals, orderToDowntimes)
