@@ -1,5 +1,6 @@
 'use strict';
 
+var inspect = require('util').inspect;
 var crypto = require('crypto');
 var lodash = require('lodash');
 var userInfo = require('../../models/userInfo');
@@ -146,7 +147,22 @@ module.exports = function setUpProductionsCommands(app, productionModule)
       {
         if (err)
         {
-          productionModule.error("Error during saving of log entries: %s", err.stack);
+          if (err.code === 11000)
+          {
+            var dupEntryId = err.message.match(/"(.*?)"/)[1];
+            var dupEntry = lodash.find(logEntryList, function(logEntry)
+            {
+              return logEntry._id === dupEntryId;
+            });
+
+            productionModule.warn(
+              "Duplicate log entry detected: %s", inspect(dupEntry, {colors: false, depth: 10})
+            );
+          }
+          else
+          {
+            productionModule.error("Error during saving of log entries: %s", err.stack);
+          }
         }
 
         reply();

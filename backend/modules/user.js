@@ -146,10 +146,14 @@ exports.start = function startUserModule(app, module)
         }
       }
 
-      var err = new Error('AUTH');
-      err.status = 401;
+      module.debug(
+        "[auth] %s (%s) tried to access [%s] without sufficient privileges :(",
+        user.login,
+        user.ipAddress,
+        req.url
+      );
 
-      return next(err);
+      return res.send(403);
     };
   }
 
