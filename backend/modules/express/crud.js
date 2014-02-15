@@ -279,6 +279,11 @@ exports.exportRoute = function(filename, serializeRow, Model, req, res, next)
       return;
     }
 
+    if (columnNames === null)
+    {
+      return res.send(204);
+    }
+
     res.attachment(filename + '.csv');
 
     var line = columnNames
