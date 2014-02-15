@@ -287,7 +287,9 @@ define([
 
     if (typeof action.href === 'string')
     {
-      if (action.href[0] !== '#')
+      var firstChar = action.href.charAt(0);
+
+      if (firstChar !== '#' && firstChar !== '/')
       {
         action.href = '#' + action.href;
       }
