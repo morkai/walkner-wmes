@@ -73,7 +73,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return createProdShiftOrder();
       }
 
-      var orderData = mechOrders[0];
+      var orderData = prepareOperations(mechOrders[0]);
 
       orderData.nc12 = orderData._id;
       orderData.no = null;
@@ -112,7 +112,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return createProdShiftOrder();
       }
 
-      var orderData = orders[0];
+      var orderData = prepareOperations(orders[0]);
 
       orderData.no = orderData._id;
 
@@ -163,5 +163,26 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return done(err);
       });
     });
+  }
+
+  function prepareOperations(orderData)
+  {
+    if (Array.isArray(orderData.operations))
+    {
+      var operations = {};
+
+      orderData.operations.forEach(function(operation)
+      {
+        operations[operation.no] = operation;
+      });
+
+      orderData.operations = operations;
+    }
+    else if (!lodash.isObject(orderData.operations))
+    {
+      orderData.operations = {};
+    }
+
+    return orderData;
   }
 };
