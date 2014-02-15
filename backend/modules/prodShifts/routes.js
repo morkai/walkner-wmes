@@ -37,12 +37,11 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   function exportProdShift(doc)
   {
-    var date = moment(doc.startedAt);
     var subdivision = subdivisionsModule.modelsById[doc.subdivision];
     var prodFlow = prodFlowsModule.modelsById[doc.prodFlow];
 
     return {
-      'date': date.format('YYYY-MM-DD'),
+      'date': moment(doc.date).format('YYYY-MM-DD'),
       'shiftNo': doc.shift,
       'h1': doc.quantitiesDone[0].actual,
       'h2': doc.quantitiesDone[1].actual,
