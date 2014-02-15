@@ -45,13 +45,33 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
   function exportRoute(req, res, next)
   {
     var queryOptions = mongoSerializer.fromQuery(req.rql);
-    var queryStream = ProdShiftOrder.find(queryOptions.selector).sort('startedAt').lean().stream();
+    var headersSet = false;
 
-    res.attachment('ProdShiftOrders.csv');
-    res.write(EXPORT_COLUMNS + '\r\n');
+    function sendHeaders()
+    {
+      if (!headersSet)
+      {
+        res.attachment('ProdShiftOrders.csv');
+        res.write(EXPORT_COLUMNS + '\r\n');
+
+        headersSet = true;
+      }
+    }
+
+    var queryStream = ProdShiftOrder
+      .find(queryOptions.selector, queryOptions.fields)
+      .sort(queryOptions.sort)
+      .lean()
+      .stream();
 
     queryStream.on('error', next);
-    queryStream.on('close', function() { res.end(); });
+
+    queryStream.on('close', function()
+    {
+      sendHeaders();
+      res.end();
+    });
+
     queryStream.on('data', function(pso)
     {
       if (!pso.finishedAt || !pso.orderData)
@@ -90,6 +110,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
       var subdivision = subdivisionsModule.modelsById[pso.subdivision];
       var prodFlow = prodFlowsModule.modelsById[pso.prodFlow];
+
+      sendHeaders();
 
       res.write([
         quote(pso.mechOrder ? '' : pso.orderId),
