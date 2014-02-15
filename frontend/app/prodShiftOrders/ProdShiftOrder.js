@@ -1,6 +1,5 @@
 define([
   'underscore',
-  'moment',
   '../user',
   '../time',
   '../data/prodLog',
@@ -8,7 +7,6 @@ define([
   '../core/util/getShiftEndDate'
 ], function(
   _,
-  moment,
   user,
   time,
   prodLog,
@@ -30,7 +28,7 @@ define([
     nlsDomain: 'prodShiftOrders',
 
     defaults: {
-      prodShiftOrder: null,
+      prodShift: null,
       division: null,
       subdivision: null,
       mrpControllers: null,
@@ -64,7 +62,7 @@ define([
     {
       this.set({
         _id: null,
-        prodShiftOrder: null,
+        prodShift: null,
         division: null,
         subdivision: null,
         mrpControllers: null,
@@ -81,20 +79,20 @@ define([
       });
     },
 
-    onOrderChanged: function(prodShiftOrder, orderData, operationNo)
+    onOrderChanged: function(prodShift, orderData, operationNo)
     {
       this.prepareOperations(orderData);
 
       this.set({
-        prodShiftOrder: prodShiftOrder.id,
-        division: prodShiftOrder.get('division'),
-        subdivision: prodShiftOrder.get('subdivision'),
-        mrpControllers: prodShiftOrder.get('mrpControllers'),
-        prodFlow: prodShiftOrder.get('prodFlow'),
-        workCenter: prodShiftOrder.get('workCenter'),
-        prodLine: prodShiftOrder.prodLine.id,
-        date: prodShiftOrder.get('date'),
-        shift: prodShiftOrder.get('shift'),
+        prodShift: prodShift.id,
+        division: prodShift.get('division'),
+        subdivision: prodShift.get('subdivision'),
+        mrpControllers: prodShift.get('mrpControllers'),
+        prodFlow: prodShift.get('prodFlow'),
+        workCenter: prodShift.get('workCenter'),
+        prodLine: prodShift.prodLine.id,
+        date: prodShift.get('date'),
+        shift: prodShift.get('shift'),
         mechOrder: orderData.no === null,
         orderId: orderData.no || orderData.nc12,
         operationNo: operationNo,
@@ -106,21 +104,21 @@ define([
         finishedAt: null
       });
 
-      this.generateId(prodShiftOrder);
+      this.generateId(prodShift);
     },
 
-    onOrderContinued: function(prodShiftOrder)
+    onOrderContinued: function(prodShift)
     {
       this.set({
-        prodShiftOrder: prodShiftOrder.id,
-        division: prodShiftOrder.get('division'),
-        subdivision: prodShiftOrder.get('subdivision'),
-        mrpControllers: prodShiftOrder.get('mrpControllers'),
-        prodFlow: prodShiftOrder.get('prodFlow'),
-        workCenter: prodShiftOrder.get('workCenter'),
-        prodLine: prodShiftOrder.prodLine.id,
-        date: prodShiftOrder.get('date'),
-        shift: prodShiftOrder.get('shift'),
+        prodShift: prodShift.id,
+        division: prodShift.get('division'),
+        subdivision: prodShift.get('subdivision'),
+        mrpControllers: prodShift.get('mrpControllers'),
+        prodFlow: prodShift.get('prodFlow'),
+        workCenter: prodShift.get('workCenter'),
+        prodLine: prodShift.prodLine.id,
+        date: prodShift.get('date'),
+        shift: prodShift.get('shift'),
         workerCount: 0,
         quantityDone: 0,
         creator: user.getInfo(),
@@ -128,14 +126,14 @@ define([
         finishedAt: null
       });
 
-      this.generateId(prodShiftOrder);
+      this.generateId(prodShift);
     },
 
-    generateId: function(prodShiftOrder)
+    generateId: function(prodShift)
     {
       this.set(
         '_id',
-        prodLog.generateId(this.get('startedAt'), prodShiftOrder.id + this.get('orderId'))
+        prodLog.generateId(this.get('startedAt'), prodShift.id + this.get('orderId'))
       );
     },
 
