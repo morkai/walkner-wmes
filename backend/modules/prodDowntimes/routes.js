@@ -188,6 +188,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
       '"workCenter': doc.workCenter,
       '"prodLine': doc.prodLine,
       '"downtimeId': doc._id,
+      '"shiftId': doc.prodShift || '',
       '"orderId': doc.prodShiftOrder || ''
     };
   }

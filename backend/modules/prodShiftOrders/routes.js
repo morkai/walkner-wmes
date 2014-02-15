@@ -80,7 +80,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
       '"workCenter': doc.workCenter,
       '"prodLine': doc.prodLine,
-      '"orderId': doc._id
+      '"orderId': doc._id,
+      '"shiftId': doc.prodShift || ''
     };
   }
 };
