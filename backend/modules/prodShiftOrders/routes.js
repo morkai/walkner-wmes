@@ -1,7 +1,6 @@
 'use strict';
 
 var moment = require('moment');
-var mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
 var crud = require('../express/crud');
 var limitOrgUnit = require('../prodLines/limitOrgUnit');
 
@@ -14,31 +13,11 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
   var prodFlowsModule = app[prodShiftOrdersModule.config.prodFlowsId];
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
 
-  var EXPORT_COLUMNS = [
-    'OrderNo',
-    '12NC',
-    'OperationNo',
-    'StartedAt',
-    'FinishedAt',
-    'Duration',
-    'QuantityDone',
-    'WorkerCount',
-    'LaborTime',
-    'Division',
-    'Subdivision',
-    'MRPControllers',
-    'ProdFlow',
-    'WorkCenter',
-    'ProdLine'
-  ].join(';');
-
   var canView = userModule.auth('PROD_DATA:VIEW');
 
   express.get(
     '/prodShiftOrders', canView, limitOrgUnit, crud.browseRoute.bind(null, app, ProdShiftOrder)
   );
-
-  express.get('/prodShiftOrders/:id', canView, crud.readRoute.bind(null, app, ProdShiftOrder));
 
   express.get(
     '/prodShiftOrders;export',
@@ -46,6 +25,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
     limitOrgUnit,
     crud.exportRoute.bind(null, 'WMES-ORDERS', exportProdShiftOrder, ProdShiftOrder)
   );
+
+  express.get('/prodShiftOrders/:id', canView, crud.readRoute.bind(null, app, ProdShiftOrder));
 
   function exportProdShiftOrder(doc)
   {
@@ -98,7 +79,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       '"mrp': doc.mrpControllers.join(','),
       '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
       '"workCenter': doc.workCenter,
-      '"prodLine': doc.prodLine
+      '"prodLine': doc.prodLine,
+      '"orderId': doc._id
     };
   }
 };
