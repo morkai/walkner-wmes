@@ -6,6 +6,8 @@
   "MSG:LOADING_FAILURE": "Ładowanie przestojów nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie przestoju nie powiodło się :(",
 
+  "PAGE_ACTION:export": "Eksportuj przestoje",
+
   "PANEL:TITLE:details": "Szczegóły przestoju",
   "PANEL:TITLE:details:corroboration": "Potwierdzenie przestoju",
 

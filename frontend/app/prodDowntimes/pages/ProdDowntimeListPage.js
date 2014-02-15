@@ -35,13 +35,30 @@ define([
       t.bound('prodDowntimes', 'BREADCRUMBS:browse')
     ],
 
+    actions: function()
+    {
+      return [{
+        label: t.bound('prodDowntimes', 'PAGE_ACTION:export'),
+        icon: 'download',
+        href: '/prodDowntimes;export?' + this.prodDowntimeList.rqlQuery,
+        privileges: 'PROD_DATA:VIEW'
+      }];
+    },
+
     initialize: function()
     {
+      this.layout = null;
+
       this.defineModels();
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
       this.setView('.prodDowntimes-list-container', this.listView);
+    },
+
+    setUpLayout: function(layout)
+    {
+      this.layout = layout;
     },
 
     defineModels: function()
@@ -80,6 +97,11 @@ define([
         trigger: false,
         replace: true
       });
+
+      if (this.layout && this.layout.setActions)
+      {
+        this.layout.setActions(this.actions, this);
+      }
     }
 
   });

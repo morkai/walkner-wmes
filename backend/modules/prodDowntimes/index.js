@@ -9,6 +9,10 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   sioId: 'sio',
   productionId: 'production',
+  aorsId: 'aors',
+  downtimeReasonsId: 'downtimeReasons',
+  subdivisionsId: 'subdivisions',
+  prodFlowsId: 'prodFlows',
   workCentersId: 'workCenters',
   prodLinesId: 'prodLines'
 };
@@ -20,6 +24,10 @@ exports.start = function startProdDowntimesModule(app, module)
       module.config.mongooseId,
       module.config.userId,
       module.config.expressId,
+      module.config.aorsId,
+      module.config.downtimeReasonsId,
+      module.config.subdivisionsId,
+      module.config.prodFlowsId,
       module.config.workCentersId,
       module.config.prodLinesId
     ],

@@ -1,5 +1,6 @@
 'use strict';
 
+var moment = require('moment');
 var lodash = require('lodash');
 var crud = require('../express/crud');
 
@@ -7,6 +8,10 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 {
   var express = app[prodDowntimesModule.config.expressId];
   var userModule = app[prodDowntimesModule.config.userId];
+  var aorsModule = app[prodDowntimesModule.config.aorsId];
+  var downtimeReasonsModule = app[prodDowntimesModule.config.downtimeReasonsId];
+  var subdivisionsModule = app[prodDowntimesModule.config.subdivisionsId];
+  var prodFlowsModule = app[prodDowntimesModule.config.prodFlowsId];
   var workCentersModule = app[prodDowntimesModule.config.workCentersId];
   var prodLinesModule = app[prodDowntimesModule.config.prodLinesId];
   var mongoose = app[prodDowntimesModule.config.mongooseId];
@@ -15,6 +20,25 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   var canView = userModule.auth('PROD_DOWNTIMES:VIEW');
 
   express.get('/prodDowntimes', limitOrgUnit, crud.browseRoute.bind(null, app, ProdDowntime));
+
+  express.get(
+    '/prodDowntimes;export',
+    canView,
+    limitOrgUnit,
+    function(req, res, next)
+    {
+      req.rql.fields = {
+        reasonComment: 0,
+        decisionComment: 0,
+        prodShift: 0,
+        date: 0,
+        shift: 0
+      };
+
+      next();
+    },
+    crud.exportRoute.bind(null, 'WMES-DOWNTIMES', exportProdDowntime, ProdDowntime)
+  );
 
   express.get('/prodDowntimes/:id', canView, crud.readRoute.bind(null, app, ProdDowntime));
 
@@ -112,5 +136,59 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
     });
 
     return prodLineIds;
+  }
+
+  function exportProdDowntime(doc)
+  {
+    if (!doc.finishedAt)
+    {
+      return;
+    }
+
+    var startedAt = moment(doc.startedAt);
+
+    if (startedAt.isBefore('2013-01-01'))
+    {
+      return;
+    }
+
+    var finishedAt = moment(doc.finishedAt);
+    var duration = Math.round(finishedAt.diff(startedAt, 'ms') / 3600000 * 1000) / 1000;
+
+    if (duration < 0)
+    {
+      return;
+    }
+
+    var aor = aorsModule.modelsById[doc.aor];
+    var reason = downtimeReasonsModule.modelsById[doc.reason];
+    var subdivision = subdivisionsModule.modelsById[doc.subdivision];
+    var prodFlow = prodFlowsModule.modelsById[doc.prodFlow];
+
+    if (!doc.orderId)
+    {
+      doc.orderId = '';
+    }
+
+    return {
+      '"reasonId': doc.reason,
+      '"reason': reason ? reason.label : '?',
+      '"aor': aor ? aor.name : doc.aor,
+      '"orderNo': doc.mechOrder ? '' : doc.orderId,
+      '"12nc': doc.mechOrder ? doc.orderId : '',
+      '"operationNo': doc.operationNo || '',
+      'startedAt': startedAt.format('YYYY-MM-DD HH:mm:ss'),
+      'finishedAt': finishedAt.format('YYYY-MM-DD HH:mm:ss'),
+      '#duration': duration,
+      '"status': doc.status,
+      '"division': doc.division,
+      '"subdivision': subdivision ? subdivision.name : doc.subdivision,
+      '"mrp': doc.mrpControllers.join(','),
+      '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
+      '"workCenter': doc.workCenter,
+      '"prodLine': doc.prodLine,
+      '"downtimeId': doc._id,
+      '"orderId': doc.prodShiftOrder || ''
+    };
   }
 };
