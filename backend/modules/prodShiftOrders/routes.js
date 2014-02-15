@@ -61,13 +61,6 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       return;
     }
 
-    var operation = orderData.operations[doc.operationNo];
-
-    if (operation.laborTime === -1)
-    {
-      return;
-    }
-
     var startedAt = moment(doc.startedAt);
 
     if (startedAt.isBefore('2013-01-01'))
@@ -83,22 +76,26 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       return;
     }
 
+    var operation = orderData.operations[doc.operationNo];
     var subdivision = subdivisionsModule.modelsById[doc.subdivision];
     var prodFlow = prodFlowsModule.modelsById[doc.prodFlow];
 
     return {
       '"orderNo': doc.mechOrder ? '' : doc.orderId,
-      '"12NC': doc.mechOrder ? doc.orderId : orderData.nc12,
+      '"12nc': doc.mechOrder ? doc.orderId : orderData.nc12,
       '"operationNo': doc.operationNo,
       'startedAt': startedAt.format('YYYY-MM-DD HH:mm:ss'),
       'finishedAt': finishedAt.format('YYYY-MM-DD HH:mm:ss'),
-      '#duration': duration.toFixed(3).replace('.', ','),
+      '#duration': duration,
       '#quantityDone': doc.quantityDone,
       '#workerCount': doc.workerCount,
-      '#laborTime': operation.laborTime,
+      '#laborTime': operation.laborTime === -1 ? 0 : operation.laborTime,
+      '#machineTime': operation.machineTime === -1 ? 0 : operation.machineTime,
+      '"orderMrp': orderData.mrp || '',
+      '"operationWorkCenter': operation.workCenter || '',
       '"division': doc.division,
       '"subdivision': subdivision ? subdivision.name : doc.subdivision,
-      '"mrpControllers': doc.mrpControllers.join(','),
+      '"mrp': doc.mrpControllers.join(','),
       '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
       '"workCenter': doc.workCenter,
       '"prodLine': doc.prodLine
