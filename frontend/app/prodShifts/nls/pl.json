@@ -5,6 +5,7 @@
   "MSG:LOADING_FAILURE": "Ładowanie historii zmian nie powiodło się :(",
 
   "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
+  "PAGE_ACTION:export": "Eksportuj zmiany",
 
   "PANEL:TITLE:details": "Szczegóły zmiany",
 

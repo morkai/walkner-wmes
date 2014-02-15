@@ -35,13 +35,30 @@ define([
       t.bound('prodShifts', 'BREADCRUMBS:browse')
     ],
 
+    actions: function()
+    {
+      return [{
+        label: t.bound('prodShifts', 'PAGE_ACTION:export'),
+        icon: 'download',
+        href: '/prodShifts;export?' + this.prodShiftList.rqlQuery,
+        privileges: 'PROD_DATA:VIEW'
+      }];
+    },
+
     initialize: function()
     {
+      this.layout = null;
+
       this.defineModels();
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
       this.setView('.prodShifts-list-container', this.listView);
+    },
+
+    setUpLayout: function(layout)
+    {
+      this.layout = layout;
     },
 
     defineModels: function()
@@ -80,6 +97,11 @@ define([
         trigger: false,
         replace: true
       });
+
+      if (this.layout && this.layout.setActions)
+      {
+        this.layout.setActions(this.actions, this);
+      }
     }
 
   });
