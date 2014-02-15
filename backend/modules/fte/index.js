@@ -91,9 +91,13 @@ exports.start = function startFteModule(app, module)
       no = 2;
       date.setHours(14);
     }
-    else if (hours < 6)
+    else
     {
-      date = new Date(date.getTime() - 24 * 3600 * 1000);
+      if (hours < 6)
+      {
+        date = new Date(date.getTime() - 24 * 3600 * 1000);
+      }
+
       date.setHours(22);
     }
 
