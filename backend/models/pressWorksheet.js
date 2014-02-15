@@ -19,7 +19,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     },
     operationName: {
       type: String,
-      required: true
+      default: null
     },
     orderData: {},
     prodLine: {
