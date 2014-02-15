@@ -167,7 +167,7 @@ define([
 
     if (typeof breadcrumbs === 'function')
     {
-      breadcrumbs = breadcrumbs.call(context);
+      breadcrumbs = breadcrumbs.call(context, this);
     }
 
     if (!Array.isArray(breadcrumbs))
@@ -216,7 +216,7 @@ define([
 
     if (typeof title === 'function')
     {
-      title = title.call(context);
+      title = title.call(context, this);
     }
 
     if (!Array.isArray(title))
@@ -250,7 +250,7 @@ define([
 
     if (typeof actions === 'function')
     {
-      actions = actions.call(context);
+      actions = actions.call(context, this);
     }
 
     if (!actions)
