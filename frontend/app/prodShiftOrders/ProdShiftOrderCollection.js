@@ -25,17 +25,9 @@ define([
     {
       return rql.Query.fromObject({
         fields: {
-          mrpControllers: 1,
-          prodFlow: 1,
-          prodLine: 1,
-          prodShift: 1,
-          orderId: 1,
-          operationNo: 1,
-          quantityDone: 1,
-          workerCount: 1,
-          orderData: 1,
-          startedAt: 1,
-          finishedAt: 1
+          creator: 0,
+          losses: 0,
+          mechOrder: 0
         },
         sort: {
           startedAt: -1
