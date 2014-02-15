@@ -40,101 +40,68 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
   express.get('/prodShiftOrders/:id', canView, crud.readRoute.bind(null, app, ProdShiftOrder));
 
-  express.get('/prodShiftOrders;export', canView, limitOrgUnit, exportRoute);
+  express.get(
+    '/prodShiftOrders;export',
+    canView,
+    limitOrgUnit,
+    crud.exportRoute.bind(null, 'WMES-ORDERS', exportProdShiftOrder, ProdShiftOrder)
+  );
 
-  function exportRoute(req, res, next)
+  function exportProdShiftOrder(doc)
   {
-    var queryOptions = mongoSerializer.fromQuery(req.rql);
-    var headersSet = false;
-
-    function sendHeaders()
+    if (!doc.finishedAt || !doc.orderData)
     {
-      if (!headersSet)
-      {
-        res.attachment('ProdShiftOrders.csv');
-        res.write(EXPORT_COLUMNS + '\r\n');
-
-        headersSet = true;
-      }
+      return;
     }
 
-    var queryStream = ProdShiftOrder
-      .find(queryOptions.selector, queryOptions.fields)
-      .sort(queryOptions.sort)
-      .lean()
-      .stream();
+    var orderData = doc.orderData;
 
-    queryStream.on('error', next);
-
-    queryStream.on('close', function()
+    if (!orderData.operations || !orderData.operations[doc.operationNo])
     {
-      sendHeaders();
-      res.end();
-    });
+      return;
+    }
 
-    queryStream.on('data', function(pso)
+    var operation = orderData.operations[doc.operationNo];
+
+    if (operation.laborTime === -1)
     {
-      if (!pso.finishedAt || !pso.orderData)
-      {
-        return;
-      }
+      return;
+    }
 
-      var orderData = pso.orderData;
+    var startedAt = moment(doc.startedAt);
 
-      if (!orderData.operations || !orderData.operations[pso.operationNo])
-      {
-        return;
-      }
+    if (startedAt.isBefore('2013-01-01'))
+    {
+      return;
+    }
 
-      var operation = orderData.operations[pso.operationNo];
+    var finishedAt = moment(doc.finishedAt);
+    var duration = Math.round(finishedAt.diff(startedAt, 'ms') / 3600000 * 1000) / 1000;
 
-      if (operation.laborTime === -1)
-      {
-        return;
-      }
+    if (duration < 0)
+    {
+      return;
+    }
 
-      var startedAt = moment(pso.startedAt);
+    var subdivision = subdivisionsModule.modelsById[doc.subdivision];
+    var prodFlow = prodFlowsModule.modelsById[doc.prodFlow];
 
-      if (startedAt.isBefore('2013-01-01'))
-      {
-        return;
-      }
-
-      var finishedAt = moment(pso.finishedAt);
-      var duration = Math.round(finishedAt.diff(startedAt, 'ms') / 3600000 * 1000) / 1000;
-
-      if (duration < 0)
-      {
-        return;
-      }
-
-      var subdivision = subdivisionsModule.modelsById[pso.subdivision];
-      var prodFlow = prodFlowsModule.modelsById[pso.prodFlow];
-
-      sendHeaders();
-
-      res.write([
-        quote(pso.mechOrder ? '' : pso.orderId),
-        quote(pso.mechOrder ? pso.orderId : orderData.nc12),
-        quote(pso.operationNo),
-        startedAt.format('YYYY-MM-DD HH:mm:ss'),
-        finishedAt.format('YYYY-MM-DD HH:mm:ss'),
-        duration.toFixed(3).replace('.', ','),
-        pso.quantityDone,
-        pso.workerCount,
-        operation.laborTime.toFixed(3).replace('.', ','),
-        quote(pso.division),
-        quote(subdivision ? subdivision.name : pso.subdivision),
-        quote(pso.mrpControllers.join(',')),
-        quote(prodFlow ? prodFlow.name : pso.prodFlow),
-        quote(pso.workCenter),
-        quote(pso.prodLine)
-      ].join(';') + '\r\n');
-    });
-  }
-
-  function quote(str)
-  {
-    return '"' + str + '"';
+    return {
+      '"orderNo': doc.mechOrder ? '' : doc.orderId,
+      '"12NC': doc.mechOrder ? doc.orderId : orderData.nc12,
+      '"operationNo': doc.operationNo,
+      'startedAt': startedAt.format('YYYY-MM-DD HH:mm:ss'),
+      'finishedAt': finishedAt.format('YYYY-MM-DD HH:mm:ss'),
+      '#duration': duration.toFixed(3).replace('.', ','),
+      '#quantityDone': doc.quantityDone,
+      '#workerCount': doc.workerCount,
+      '#laborTime': operation.laborTime,
+      '"division': doc.division,
+      '"subdivision': subdivision ? subdivision.name : doc.subdivision,
+      '"mrpControllers': doc.mrpControllers.join(','),
+      '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
+      '"workCenter': doc.workCenter,
+      '"prodLine': doc.prodLine
+    };
   }
 };

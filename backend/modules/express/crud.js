@@ -3,6 +3,19 @@
 var step = require('h5.step');
 var mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
 
+var CSV_COLUMN_SEPARATOR = ';';
+var CSV_ROW_SEPARATOR = '\r\n';
+var CSV_FORMATTERS = {
+  '"': function(value)
+  {
+    return '"' + value + '"';
+  },
+  '#': function(value)
+  {
+    return Number(value).toFixed(3).replace('.', ',');
+  }
+};
+
 exports.browseRoute = function(app, Model, req, res, next)
 {
   var queryOptions = mongoSerializer.fromQuery(req.rql);
@@ -209,6 +222,76 @@ exports.deleteRoute = function(app, Model, req, res, next)
       });
     });
   });
+};
+
+exports.exportRoute = function(filename, serializeRow, Model, req, res, next)
+{
+  var queryOptions = mongoSerializer.fromQuery(req.rql);
+  var headerWritten = false;
+  var columnNames = null;
+
+  var queryStream = Model
+    .find(queryOptions.selector, queryOptions.fields)
+    .sort(queryOptions.sort)
+    .lean()
+    .stream();
+
+  queryStream.on('error', next);
+
+  queryStream.on('close', function()
+  {
+    writeHeader();
+    res.end();
+  });
+
+  queryStream.on('data', function(doc)
+  {
+    var row = serializeRow(doc);
+
+    if (!row)
+    {
+      return;
+    }
+
+    if (columnNames === null)
+    {
+      columnNames = Object.keys(row);
+    }
+
+    writeHeader();
+
+    var line = columnNames
+      .map(function(columnName)
+      {
+        var formatter = CSV_FORMATTERS[columnName.charAt(0)];
+
+        return formatter ? formatter(row[columnName]) : row[columnName];
+      })
+      .join(CSV_COLUMN_SEPARATOR);
+
+    res.write(line + CSV_ROW_SEPARATOR);
+  });
+
+  function writeHeader()
+  {
+    if (headerWritten)
+    {
+      return;
+    }
+
+    res.attachment(filename + '.csv');
+
+    var line = columnNames
+      .map(function(columnName)
+      {
+        return CSV_FORMATTERS[columnName.charAt(0)] ? columnName.substr(1) : columnName;
+      })
+      .join(CSV_COLUMN_SEPARATOR);
+
+    res.write(line + CSV_ROW_SEPARATOR);
+
+    headerWritten = true;
+  }
 };
 
 function populateQuery(query, rql)
