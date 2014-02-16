@@ -173,7 +173,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
     return {
       '"reasonId': doc.reason,
       '"reason': reason ? reason.label : '?',
-      '"aor': aor ? aor.name : doc.aor,
+      '"aor': aor ? aor.name : (doc.aor || ''),
       '"orderNo': doc.mechOrder ? '' : doc.orderId,
       '"12nc': doc.mechOrder ? doc.orderId : '',
       '"operationNo': doc.operationNo || '',
