@@ -1,1 +1,1 @@
-define(["../core/Collection","./OrderStatus"],function(e,n){return e.extend({model:n,rqlQuery:"select(label,color)&sort(_id)",findAndFill:function(e){var r=this;return e.map(function(e){var t=r.get(e);return t||(t=new n({_id:e})),t.toJSON()})}})});
+define(["../core/Collection","./OrderStatus"],function(e,t){return e.extend({model:t,rqlQuery:"select(label,color)&sort(_id)",findAndFill:function(e){var n=this;return e.map(function(e){var r=n.get(e);return r||(r=new t({_id:e})),r.toJSON()})}})});

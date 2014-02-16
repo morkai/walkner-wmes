@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(e){var l={locale:{}};return l.locale.en=e,{root:{},pl:!0}});
+define(["app/nls/locale/en"],function(e){var t={locale:{}};return t.locale.en=e,{root:{},pl:!0}});

@@ -1,1 +1,1 @@
-define(["jquery","app/core/pages/EditFormPage","../views/ProdTaskFormView"],function(e,o,s){return o.extend({FormView:s,load:function(o){var s=this.model;return o(this.model.fetch(this.options.fetchOptions),e.ajax({url:"/prodTaskTags",success:function(e){s.allTags=e}}))}})});
+define(["jquery","app/core/pages/EditFormPage","../views/ProdTaskFormView"],function(e,t,n){return t.extend({FormView:n,load:function(t){var n=this.model;return t(this.model.fetch(this.options.fetchOptions),e.ajax({url:"/prodTaskTags",success:function(e){n.allTags=e}}))}})});

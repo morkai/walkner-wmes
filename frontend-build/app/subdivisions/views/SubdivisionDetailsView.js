@@ -1,1 +1,1 @@
-define(["app/core/views/DetailsView","./decorateSubdivision","app/subdivisions/templates/details"],function(e,i,s){return e.extend({template:s,localTopics:{"divisions.synced":"render"},serialize:function(){return{model:i(this.model)}}})});
+define(["app/core/views/DetailsView","./decorateSubdivision","app/subdivisions/templates/details"],function(e,t,n){return e.extend({template:n,localTopics:{"divisions.synced":"render"},serialize:function(){return{model:t(this.model)}}})});

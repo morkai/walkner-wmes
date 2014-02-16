@@ -1,1 +1,1 @@
-define(["../core/Collection","./MrpController"],function(e,o){return e.extend({model:o,rqlQuery:"select(subdivision,description)&sort(_id)"})});
+define(["../core/Collection","./MrpController"],function(e,t){return e.extend({model:t,rqlQuery:"select(subdivision,description)&sort(_id)"})});

@@ -1,1 +1,1 @@
-define(["../core/Collection","./LossReason"],function(e,o){return e.extend({model:o,rqlQuery:"select(label,position)&sort(position)"})});
+define(["../core/Collection","./LossReason"],function(e,t){return e.extend({model:t,rqlQuery:"select(label,position)&sort(position)"})});

@@ -1,1 +1,1 @@
-define(["app/core/views/DetailsView","./decorateProdShiftOrder","app/prodShiftOrders/templates/details"],function(e,r,t){return e.extend({template:t,serialize:function(){return{model:r(this.model,{orgUnits:!0,orderUrl:!0})}}})});
+define(["app/core/views/DetailsView","./decorateProdShiftOrder","app/prodShiftOrders/templates/details"],function(e,t,n){return e.extend({template:n,serialize:function(){return{model:t(this.model,{orgUnits:!0,orderUrl:!0})}}})});

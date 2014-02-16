@@ -1,1 +1,1 @@
-define(["../router","../viewport","../user","./pages/ProdLogEntryListPage","i18n!app/nls/prodLogEntries"],function(r,e,n,o){var t=n.auth("PROD_DATA:VIEW");r.map("/prodLogEntries",t,function(r){e.showPage(new o({rql:r.rql}))})});
+define(["../router","../viewport","../user","./pages/ProdLogEntryListPage","i18n!app/nls/prodLogEntries"],function(e,t,n,r){var i=n.auth("PROD_DATA:VIEW");e.map("/prodLogEntries",i,function(e){t.showPage(new r({rql:e.rql}))})});

@@ -1,1 +1,1 @@
-define(["../core/Collection","./DowntimeReason"],function(e,o){return e.extend({model:o,rqlQuery:"select(label,pressPosition,report1,auto)&sort(_id)"})});
+define(["../core/Collection","./DowntimeReason"],function(e,t){return e.extend({model:t,rqlQuery:"select(label,pressPosition,report1,auto)&sort(_id)"})});

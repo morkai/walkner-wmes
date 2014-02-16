@@ -1,1 +1,1 @@
-define(["app/core/View","app/dashboard/templates/dashboard"],function(e,a){return e.extend({template:a})});
+define(["app/core/View","app/dashboard/templates/dashboard"],function(e,t){return e.extend({template:t})});

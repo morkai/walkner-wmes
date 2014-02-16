@@ -1,1 +1,1 @@
-define(["../core/Collection","./Company"],function(e,o){return e.extend({model:o,rqlQuery:"select(name,fteMasterPosition,fteLeaderPosition)&sort(_id)"})});
+define(["../core/Collection","./Company"],function(e,n){return e.extend({model:n,rqlQuery:"select(name,fteMasterPosition,fteLeaderPosition)&sort(_id)"})});
