@@ -54,6 +54,13 @@ define([
     idPrefix: 'pressWorksheetForm',
 
     events: {
+      'keydown': function(e)
+      {
+        if (e.keyCode === 13)
+        {
+          return false;
+        }
+      },
       'submit': 'submitForm',
       'blur .pressWorksheets-form-time': function(e)
       {
