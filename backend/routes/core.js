@@ -1,12 +1,17 @@
 'use strict';
 
-var requirejsConfig = require('../../config/require');
-
 module.exports = function startCoreRoutes(app, express)
 {
   var appCache = app.options.env === 'production';
-  var requirejsPaths = JSON.stringify(requirejsConfig.paths);
-  var requirejsShim = JSON.stringify(requirejsConfig.shim);
+  var requirejsPaths;
+  var requirejsShim;
+
+  app.broker.subscribe('updater.newVersion', reloadRequirejsConfig).setFilter(function(message)
+  {
+    return message.service === 'frontend';
+  });
+
+  reloadRequirejsConfig();
 
   express.get('/', showIndex);
 
@@ -70,5 +75,17 @@ module.exports = function startCoreRoutes(app, express)
       paths: requirejsPaths,
       shim: requirejsShim
     });
+  }
+
+  function reloadRequirejsConfig()
+  {
+    var configPath = require.resolve('../../config/require');
+
+    delete require.cache[configPath];
+
+    var requirejsConfig = require(configPath);
+
+    requirejsPaths = JSON.stringify(requirejsConfig.paths);
+    requirejsShim = JSON.stringify(requirejsConfig.shim);
   }
 };
