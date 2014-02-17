@@ -80,6 +80,6 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
     return !prodDowntime.aor
       || !user.aors
       || !user.aors.length
-      || user.aors.indexOf(prodDowntime.aor) !== -1;
+      || user.aors.indexOf(String(prodDowntime.aor)) !== -1;
   }
 };

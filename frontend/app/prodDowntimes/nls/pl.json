@@ -57,5 +57,6 @@
   "corroborate:decisionComment": "Opcjonalny komentarz do potwierdzenia...",
   "corroborate:cancel": "Anuluj potwierdzenie",
   "corroborate:confirm": "Zatwierdź przestój",
-  "corroborate:reject": "Odrzuć przestój"
+  "corroborate:reject": "Odrzuć przestój",
+  "corroborate:msg:failure": "Nie udało się potwierdzić przestoju: {error}"
 }

@@ -1,5 +1,6 @@
 define([
   'app/i18n',
+  'app/user',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
@@ -8,6 +9,7 @@ define([
   '../views/CorroborateProdDowntimeView'
 ], function(
   t,
+  user,
   viewport,
   bindLoadingMessage,
   View,
@@ -46,9 +48,13 @@ define([
 
     actions: function()
     {
-      if (this.model.get('status') !== 'undecided')
+      var actions = [];
+
+      if (this.model.get('status') !== 'undecided'
+        || !user.isAllowedTo('PROD_DOWNTIMES:MANAGE')
+        || !user.hasAccessToAor(this.model.get('aor')))
       {
-        return [];
+        return actions;
       }
 
       var view = this;
@@ -58,7 +64,6 @@ define([
         icon: 'gavel',
         label: t('prodDowntimes', 'LIST:ACTION:corroborate'),
         href: this.model.genClientUrl('corroborate'),
-        privileges: 'PROD_DOWNTIMES:MANAGE',
         callback: function(e)
         {
           e.preventDefault();
