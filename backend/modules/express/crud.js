@@ -247,29 +247,28 @@ exports.exportRoute = function(filename, serializeRow, Model, req, res, next)
   queryStream.on('data', function(doc)
   {
     var row = serializeRow(doc);
+    var multiple = Array.isArray(row);
 
-    if (!row)
+    if (!row || (multiple && !row.length))
     {
       return;
     }
 
     if (columnNames === null)
     {
-      columnNames = Object.keys(row);
+      columnNames = Object.keys(multiple ? row[0] : row);
     }
 
     writeHeader();
 
-    var line = columnNames
-      .map(function(columnName)
-      {
-        var formatter = CSV_FORMATTERS[columnName.charAt(0)];
-
-        return formatter ? formatter(row[columnName]) : row[columnName];
-      })
-      .join(CSV_COLUMN_SEPARATOR);
-
-    res.write(line + CSV_ROW_SEPARATOR);
+    if (multiple)
+    {
+      row.forEach(writeRow);
+    }
+    else
+    {
+      writeRow(row);
+    }
   });
 
   function writeHeader()
@@ -296,6 +295,20 @@ exports.exportRoute = function(filename, serializeRow, Model, req, res, next)
     res.write(line + CSV_ROW_SEPARATOR);
 
     headerWritten = true;
+  }
+
+  function writeRow(row)
+  {
+    var line = columnNames
+      .map(function(columnName)
+      {
+        var formatter = CSV_FORMATTERS[columnName.charAt(0)];
+
+        return formatter ? formatter(row[columnName]) : row[columnName];
+      })
+      .join(CSV_COLUMN_SEPARATOR);
+
+    res.write(line + CSV_ROW_SEPARATOR);
   }
 };
 
