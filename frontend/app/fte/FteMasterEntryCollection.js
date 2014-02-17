@@ -17,7 +17,7 @@ define([
     {
       var selector;
 
-      if (user.data.orgUnitType !== 'unspecified')
+      if (user.data.orgUnitType && user.data.orgUnitType !== 'unspecified')
       {
         selector = {
           name: 'and',
