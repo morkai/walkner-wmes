@@ -26,7 +26,8 @@ exports.paths = {
   'd3.timeline': 'vendor/d3/d3.timeline',
   'visibly': 'vendor/visibly',
   'highcharts': 'vendor/highcharts/js/highcharts.src',
-  'highcharts-noData': 'vendor/highcharts/js/modules/no-data-to-display.src'
+  'highcharts-noData': 'vendor/highcharts/js/modules/no-data-to-display.src',
+  'zeroclipboard': 'vendor/zeroclipboard/ZeroClipboard'
 };
 
 exports.shim = {

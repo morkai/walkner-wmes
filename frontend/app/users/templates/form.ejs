@@ -86,11 +86,12 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-privileges" class="control-label"><%- t('users', 'PROPERTY:privileges') %></label>
-        <select id="<%- idPrefix %>-privileges" multiple name="privileges[]">
-          <% privileges.forEach(function(privilege) { %>
-          <option value="<%- privilege %>"><%- t('users', 'PRIVILEGE:' + privilege) %></option>
-          <% }) %>
-        </select>
+        <div class="input-group">
+          <input id="<%- idPrefix %>-privileges" type="text" name="privileges">
+          <span class="input-group-btn">
+            <button id="<%- idPrefix %>-copyPrivileges" class="btn btn-default" type="button"><i class="fa fa-copy"></i></button>
+          </span>
+        </div>
       </div>
       <div class="form-group">
         <div class="checkbox">

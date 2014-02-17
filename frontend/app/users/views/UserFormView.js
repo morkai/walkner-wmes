@@ -1,5 +1,6 @@
 define([
   'underscore',
+  'app/ZeroClipboard',
   'app/i18n',
   'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
@@ -13,6 +14,7 @@ define([
   'app/users/templates/form'
 ], function(
   _,
+  ZeroClipboard,
   t,
   OrgUnitDropdownsView,
   Model,
@@ -60,6 +62,14 @@ define([
       this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);
     },
 
+    destroy: function()
+    {
+      if (this.privilegesCopyClient)
+      {
+        this.privilegesCopyClient.destroy();
+      }
+    },
+
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);
@@ -76,11 +86,7 @@ define([
 
       this.setUpProdFunctionSelect2();
       this.setUpCompanySelect2();
-
-      this.$id('privileges').select2({
-        width: '100%',
-        allowClear: false
-      });
+      this.setUpPrivilegesControls();
 
       this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
       {
@@ -104,10 +110,65 @@ define([
 
         this.orgUnitDropdownsView.selectValue(model, orgUnit);
       });
+    },
 
-      this.$id('company').on('change', function()
+    setUpPrivilegesControls: function()
+    {
+      var privilegeMap = {};
+      var privilegeList = [];
+
+      privileges.forEach(function(privilege)
       {
+        var tag = t('users', 'PRIVILEGE:' + privilege);
 
+        privilegeMap[tag] = privilege;
+        privilegeList.push({
+          id: privilege,
+          text: tag
+        });
+      });
+
+      var $privileges = this.$id('privileges').select2({
+        width: '100%',
+        allowClear: false,
+        tags: privilegeList,
+        tokenSeparators: [';'],
+        createSearchChoice: function(term)
+        {
+          var tag = term.trim();
+          var privilege = privilegeMap[tag];
+
+          return !privilege ? null : {
+            id: privilege,
+            text: tag
+          };
+        }
+      });
+
+      this.privilegesCopyClient = new ZeroClipboard(this.$id('copyPrivileges'));
+
+      this.privilegesCopyClient.on('load', function(client)
+      {
+        client.on('datarequested', function(client)
+        {
+          var selectedOptions = $privileges.select2('data');
+
+          if (selectedOptions.length === 0)
+          {
+            client.setText('');
+          }
+          else
+          {
+            client.setText(
+              selectedOptions.map(function(data) { return data.text; }).join(';') + ';'
+            );
+          }
+        });
+      } );
+
+      this.privilegesCopyClient.on('wrongflash noflash', function()
+      {
+        ZeroClipboard.destroy();
       });
     },
 
@@ -129,7 +190,7 @@ define([
       var $prodFunction = this.$id('prodFunction');
       var view = this;
 
-      $company.on('change', function(e)
+      $company.on('change', function()
       {
         var oldValue = $prodFunction.val();
 
@@ -190,6 +251,15 @@ define([
       });
     },
 
+    serializeToForm: function()
+    {
+      var formData = this.model.toJSON();
+
+      formData.privileges = formData.privileges.join(',');
+
+      return formData;
+    },
+
     serializeForm: function(formData)
     {
       formData = _.defaults(formData, {
@@ -200,6 +270,11 @@ define([
       if (typeof formData.aors === 'string')
       {
         formData.aors = formData.aors.split(',');
+      }
+
+      if (typeof formData.privileges === 'string')
+      {
+        formData.privileges = formData.privileges.split(',');
       }
 
       if (!formData.company || !formData.company.length)
