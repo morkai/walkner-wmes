@@ -134,7 +134,7 @@ define([
         dropdownCssClass: 'production-dropdown',
         openOnEnter: null,
         allowClear: true,
-        minimumInputLength: 3,
+        minimumInputLength: 6,
         ajax: {
           cache: true,
           quietMillis: 500,
