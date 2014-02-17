@@ -200,19 +200,6 @@ define([
           _.defer(function() { $order.select2('focus'); });
         }
       });
-
-      function filterOperation(operation)
-      {
-        return operation.laborTime !== -1;
-      }
-
-      function mapOperation(operation)
-      {
-        return {
-          id: operation.no,
-          text: operation.no + ' - ' + operation.name
-        };
-      }
     },
 
     getOrdersUrl: function(term)
