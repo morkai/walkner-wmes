@@ -12,7 +12,7 @@ var CSV_FORMATTERS = {
   },
   '#': function(value)
   {
-    return Number(value).toFixed(3).replace('.', ',');
+    return parseFloat(Number(value).toFixed(3)).toString().replace('.', ',');
   }
 };
 
