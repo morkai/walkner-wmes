@@ -1,5 +1,6 @@
 'use strict';
 
+var EventEmitter = require('events').EventEmitter;
 var step = require('h5.step');
 var mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
 
@@ -224,52 +225,67 @@ exports.deleteRoute = function(app, Model, req, res, next)
   });
 };
 
-exports.exportRoute = function(filename, serializeRow, Model, req, res, next)
+exports.exportRoute = function(options, req, res, next)
 {
   var queryOptions = mongoSerializer.fromQuery(req.rql);
   var headerWritten = false;
   var columnNames = null;
 
-  var queryStream = Model
+  var query = options.model
     .find(queryOptions.selector, queryOptions.fields)
     .sort(queryOptions.sort)
-    .lean()
-    .stream();
+    .lean();
 
-  queryStream.on('error', next);
-
-  queryStream.on('close', function()
+  if (options.serializeStream)
   {
-    writeHeader();
-    res.end();
-  });
+    var emitter = new EventEmitter();
 
-  queryStream.on('data', function(doc)
+    handleExportStream(emitter, false);
+
+    options.serializeStream(query.stream(), emitter);
+  }
+  else
   {
-    var row = serializeRow(doc);
-    var multiple = Array.isArray(row);
+    handleExportStream(query.stream(), true);
+  }
 
-    if (!row || (multiple && !row.length))
-    {
-      return;
-    }
+  function handleExportStream(queryStream, serializeRow)
+  {
+    queryStream.on('error', next);
 
-    if (columnNames === null)
+    queryStream.on('close', function()
     {
-      columnNames = Object.keys(multiple ? row[0] : row);
-    }
+      writeHeader();
+      res.end();
+    });
 
-    writeHeader();
+    queryStream.on('data', function(doc)
+    {
+      var row = serializeRow ? options.serializeRow(doc) : doc;
+      var multiple = Array.isArray(row);
 
-    if (multiple)
-    {
-      row.forEach(writeRow);
-    }
-    else
-    {
-      writeRow(row);
-    }
-  });
+      if (!row || (multiple && !row.length))
+      {
+        return;
+      }
+
+      if (columnNames === null)
+      {
+        columnNames = Object.keys(multiple ? row[0] : row);
+      }
+
+      writeHeader();
+
+      if (multiple)
+      {
+        row.forEach(writeRow);
+      }
+      else
+      {
+        writeRow(row);
+      }
+    });
+  }
 
   function writeHeader()
   {
@@ -283,7 +299,7 @@ exports.exportRoute = function(filename, serializeRow, Model, req, res, next)
       return res.send(204);
     }
 
-    res.attachment(filename + '.csv');
+    res.attachment(options.filename + '.csv');
 
     var line = columnNames
       .map(function(columnName)

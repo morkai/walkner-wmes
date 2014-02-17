@@ -23,7 +23,11 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
 
       next();
     },
-    crud.exportRoute.bind(null, 'WMES-HOURLY_PLANS', exportHourlyPlan, HourlyPlan)
+    crud.exportRoute.bind(null, {
+      filename: 'WMES-HOURLY_PLANS',
+      serializeRow: exportHourlyPlan,
+      model: HourlyPlan
+    })
   );
 
   express.get('/hourlyPlans/:id', canView, crud.readRoute.bind(null, app, HourlyPlan));

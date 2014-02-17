@@ -37,7 +37,11 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
       next();
     },
-    crud.exportRoute.bind(null, 'WMES-DOWNTIMES', exportProdDowntime, ProdDowntime)
+    crud.exportRoute.bind(null, {
+      filename: 'WMES-DOWNTIMES',
+      serializeRow: exportProdDowntime,
+      model: ProdDowntime
+    })
   );
 
   express.get('/prodDowntimes/:id', canView, crud.readRoute.bind(null, app, ProdDowntime));

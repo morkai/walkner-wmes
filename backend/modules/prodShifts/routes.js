@@ -30,7 +30,11 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
       next();
     },
-    crud.exportRoute.bind(null, 'WMES-SHIFTS', exportProdShift, ProdShift)
+    crud.exportRoute.bind(null, {
+      filename: 'WMES-SHIFTS',
+      serializeRow: exportProdShift,
+      model: ProdShift
+    })
   );
 
   express.get('/prodShifts/:id', canView, crud.readRoute.bind(null, app, ProdShift));

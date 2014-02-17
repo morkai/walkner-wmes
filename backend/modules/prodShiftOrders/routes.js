@@ -23,7 +23,11 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
     '/prodShiftOrders;export',
     canView,
     limitOrgUnit,
-    crud.exportRoute.bind(null, 'WMES-ORDERS', exportProdShiftOrder, ProdShiftOrder)
+    crud.exportRoute.bind(null, {
+      filename: 'WMES-ORDERS',
+      serializeRow: exportProdShiftOrder,
+      model: ProdShiftOrder
+    })
   );
 
   express.get('/prodShiftOrders/:id', canView, crud.readRoute.bind(null, app, ProdShiftOrder));
