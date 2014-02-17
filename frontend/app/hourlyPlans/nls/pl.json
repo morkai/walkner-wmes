@@ -11,6 +11,7 @@
   "PAGE_ACTION:print": "Pokaż wersję do druku",
   "PAGE_ACTION:lock": "Zamknij wpis",
   "PAGE_ACTION:edit": "Edytuj wpis",
+  "PAGE_ACTION:export": "Eksportuj plany godzinowe",
   "LIST:ACTION:print": "Pokaż wersję do druku",
   "LIST:ACTION:edit": "Edytuj wpis",
 

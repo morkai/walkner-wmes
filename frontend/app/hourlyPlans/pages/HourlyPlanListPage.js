@@ -33,12 +33,18 @@ define([
       t.bound('hourlyPlans', 'BREADCRUMBS:entryList')
     ],
 
-    actions: [{
-      label: t.bound('hourlyPlans', 'PAGE_ACTION:currentEntry'),
-      href: '#hourlyPlans/current',
-      icon: 'edit',
-      privileges: 'HOURLY_PLANS:MANAGE'
-    }],
+    actions: function(layout)
+    {
+      return [
+        {
+          label: t.bound('hourlyPlans', 'PAGE_ACTION:currentEntry'),
+          href: '#hourlyPlans/current',
+          icon: 'edit',
+          privileges: 'HOURLY_PLANS:MANAGE'
+        },
+        pageActions.export(layout, this, this.collection)
+      ];
+    },
 
     initialize: function()
     {
