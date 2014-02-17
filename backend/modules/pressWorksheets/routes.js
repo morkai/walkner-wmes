@@ -24,7 +24,22 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
   function prepareData(req, res, next)
   {
-    req.body.date = new Date(req.body.date + ' 00:00:00');
+    var date = new Date(req.body.date + ' 00:00:00');
+
+    if (req.body.shift === 1)
+    {
+      date.setHours(6);
+    }
+    else if (req.body.shift === 2)
+    {
+      date.setHours(14);
+    }
+    else
+    {
+      date.setHours(22);
+    }
+
+    req.body.date = date;
     req.body.createdAt = new Date();
     req.body.creator = userInfo.createObject(req.session.user, req);
 
