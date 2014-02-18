@@ -21,6 +21,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 
       if (!user.super && user.privileges.indexOf('PROD_DOWNTIMES:MANAGE') === -1)
       {
+        console.log('NO_AUTH 1');
         return reply(new Error('NO_AUTH'));
       }
 
@@ -80,6 +81,6 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
     return !prodDowntime.aor
       || !user.aors
       || !user.aors.length
-      || user.aors.indexOf(String(prodDowntime.aor)) !== -1;
+      || user.aors.map(String).indexOf(String(prodDowntime.aor)) !== -1;
   }
 };
