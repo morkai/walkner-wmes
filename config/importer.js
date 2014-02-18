@@ -7,7 +7,9 @@ exports.modules = [
   'events',
   'messenger/server',
   'directoryWatcher',
-  {id: 'orders/importer/orders', name: 'orderImporter'},
+  {id: 'orders/importer/orders', name: 'currentDayOrderImporter'},
+  {id: 'orders/importer/orders', name: 'nextDayOrderImporter'},
+  {id: 'orders/importer/orders', name: 'prevDayOrderImporter'},
   {id: 'orders/importer/emptyOrders', name: 'emptyOrderImporter'}
 ];
 
@@ -51,10 +53,20 @@ exports.directoryWatcher = {
   path: __dirname + '/../data/attachments'
 };
 
-exports.orderImporter = {
-  stepCount: 8
+exports.currentDayOrderImporter = {
+  stepCount: 10
+};
+
+exports.nextDayOrderImporter = {
+  stepCount: 10,
+  filterRe: /^Job PL02_(ORDER|OPER)_INFO_2D, Step ([0-9]+)\.html?$/
+};
+
+exports.prevDayOrderImporter = {
+  stepCount: 10,
+  filterRe: /^Job PL02_(ORDER|OPER)_INFO_3D, Step ([0-9]+)\.html?$/
 };
 
 exports.emptyOrderImporter = {
-  stepCount: 8
+  stepCount: 10
 };
