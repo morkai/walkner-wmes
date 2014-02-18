@@ -62,7 +62,7 @@ define([
       var order = this.model.prodShiftOrder;
 
       this.listenTo(order, 'change:_id', this.updateOrderData);
-      this.listenTo(order, 'change:orderId', this.updateOrderInfo);
+      this.listenTo(order, 'change:orderId change:operationNo', this.updateOrderInfo);
       this.listenTo(order, 'change:quantityDone', this.updateQuantityDone);
       this.listenTo(order, 'change:workerCount', function()
       {
@@ -297,8 +297,6 @@ define([
 
     startDowntime: function(e, options)
     {
-      console.log(options);
-
       if (e)
       {
         e.target.blur();
