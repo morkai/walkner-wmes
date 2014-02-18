@@ -78,7 +78,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 5000,
-            text: t('prodDowntimes', 'corroborate:msg:failure', {error: err})
+            text: t('prodDowntimes', 'corroborate:msg:failure', {error: err.message})
           });
 
           $confirmBtn.attr('disabled', false);
