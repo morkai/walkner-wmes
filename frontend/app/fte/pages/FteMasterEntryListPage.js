@@ -61,6 +61,10 @@ define([
       this.filterView = new FteEntryFilterView({
         model: {
           rqlQuery: this.collection.rqlQuery
+        },
+        divisionFilter: function(division)
+        {
+          return division.get('type') === 'prod';
         }
       });
 

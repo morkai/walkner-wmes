@@ -39,6 +39,10 @@ define([
 
       this.oudView = new OrgUnitDropdownsView({
         orgUnit: ORG_UNIT.DIVISION,
+        divisionFilter: function(division)
+        {
+          return division.get('type') === 'prod';
+        },
         allowClear: true,
         noGrid: true
       });

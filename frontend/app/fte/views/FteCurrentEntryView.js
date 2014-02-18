@@ -41,6 +41,7 @@ define([
 
       this.oudView = new OrgUnitDropdownsView({
         orgUnit: ORG_UNIT.SUBDIVISION,
+        divisionFilter: this.options.divisionFilter,
         allowClear: true,
         noGrid: true
       });

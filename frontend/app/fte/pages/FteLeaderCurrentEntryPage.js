@@ -28,7 +28,11 @@ define([
     initialize: function()
     {
       this.view = new FteCurrentEntryView({
-        model: new FteLeaderEntry({_id: 'current'})
+        model: new FteLeaderEntry({_id: 'current'}),
+        divisionFilter: function(division)
+        {
+          return division.get('type') === 'dist';
+        }
       });
     }
 

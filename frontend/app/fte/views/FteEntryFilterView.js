@@ -46,6 +46,7 @@ define([
 
       this.orgUnitDropdownsView = new OrgUnitDropdownsView({
         orgUnit: this.options.divisionOnly ? ORG_UNIT.DIVISION : ORG_UNIT.SUBDIVISION,
+        divisionFilter: this.options.divisionFilter || null,
         allowClear: true,
         noGrid: true
       });
