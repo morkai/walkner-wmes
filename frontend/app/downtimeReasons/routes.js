@@ -37,7 +37,7 @@ define([
   {
     viewport.showPage(new ListPage({
       collection: downtimeReasons,
-      columns: ['_id', 'label', 'pressPosition', 'report1', 'auto'],
+      columns: ['_id', 'label', 'opticsPosition', 'pressPosition', 'report1', 'auto'],
       serializeRow: function(model)
       {
         var row = model.toJSON();

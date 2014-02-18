@@ -26,7 +26,7 @@ define([
     data.creator = formatUser(data.creator);
     data.createdAt = data.createdAt ? time.format(data.createdAt, 'LLLL') : null;
 
-    if (data.paintShop && data.orders)
+    if (data.type === 'paintShop' && data.orders)
     {
       data.orders = data.orders.map(function(order)
       {
@@ -37,7 +37,7 @@ define([
       });
     }
 
-    data.paintShop = t('core', 'BOOL:' + data.paintShop);
+    data.type = t('pressWorksheets', 'PROPERTY:type:' + data.type);
 
     return data;
   };

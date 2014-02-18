@@ -11,8 +11,12 @@
         <div class="prop-value"><%= model.label || '-' %></div>
       </div>
       <div class="prop">
+        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:opticsPosition') %></div>
+        <div class="prop-value"><%- model.opticsPosition %></div>
+      </div>
+      <div class="prop">
         <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:pressPosition') %></div>
-        <div class="prop-value"><%- model.pressPosition > -1 ? model.pressPosition : '-' %></div>
+        <div class="prop-value"><%- model.pressPosition %></div>
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:report1') %></div>

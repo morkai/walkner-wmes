@@ -84,8 +84,9 @@
   display: inline-block;
   width: 7em;
 }
-.pressWorksheets-form-group-paintShop .pressWorksheets-form-time {
-
+.pressWorksheets-form .message-warning {
+  display: none;
+  margin-bottom: 15px;
 }
 .prodWorksheets-details-tableContainer {
   padding: 0!important;

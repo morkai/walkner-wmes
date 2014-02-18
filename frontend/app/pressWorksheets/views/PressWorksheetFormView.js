@@ -9,7 +9,8 @@ define([
   'app/core/Model',
   'app/core/views/FormView',
   'app/pressWorksheets/templates/form',
-  'app/pressWorksheets/templates/orderRow'
+  'app/pressWorksheets/templates/ordersTable',
+  'app/pressWorksheets/templates/ordersTableRow'
 ], function(
   _,
   $,
@@ -21,7 +22,8 @@ define([
   Model,
   FormView,
   formTemplate,
-  renderOrderRow
+  renderOrdersTable,
+  renderOrdersTableRow
 ) {
   'use strict';
 
@@ -130,9 +132,11 @@ define([
       },
       'change input[name=shift]': 'validateShiftStartTime',
       'change input[name=date]': 'validateShiftStartTime',
-      'change input[name=paintShop]': function(e)
+      'change input[name=type]': function()
       {
-        this.$el.toggleClass('pressWorksheets-form-paintShop', e.target.checked);
+        this.$el.toggleClass('pressWorksheets-form-paintShop', this.isPaintShop());
+        this.renderOrdersTable();
+        this.addOrderRow();
       }
     },
 
@@ -141,20 +145,9 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.lastOrderNo = -1;
-
       this.lossReasons = [];
-
+      this.downtimeReasons = [];
       this.paintShopTimeFocused = false;
-
-      this.downtimeReasons = downtimeReasons
-        .filter(function(downtimeReason) { return downtimeReason.get('pressPosition') >= 0; })
-        .map(function(downtimeReason) { return downtimeReason.toJSON(); })
-        .sort(function(a, b) { return a.pressPosition - b.pressPosition; });
-    },
-
-    beforeRender: function()
-    {
-      this.lossReasons = this.model.lossReasons.toJSON();
     },
 
     afterRender: function()
@@ -198,6 +191,7 @@ define([
         ajax: SELECT2_USERS_AJAX
       });
 
+      this.renderOrdersTable();
       this.addOrderRow();
 
       $operators.on('change', function()
@@ -208,16 +202,30 @@ define([
         }
       });
 
-      this.$id('paintShop').focus();
+      this.$id('type').focus();
     },
 
-    serialize: function()
+    renderOrdersTable: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      var optics = this.getType() === 'optics';
+
+      this.lossReasons = optics ? [] : this.model.lossReasons.toJSON();
+
+      this.downtimeReasons = downtimeReasons
+        .filter(function(downtimeReason)
+        {
+          return downtimeReason.get(optics ? 'opticsPosition' : 'pressPosition') >= 0;
+        })
+        .map(function(downtimeReason) { return downtimeReason.toJSON(); })
+        .sort(function(a, b) { return a.pressPosition - b.pressPosition; });
+
+      this.lastOrderNo = -1;
+
+      this.$id('ordersTable').html(renderOrdersTable({
         rowspan: this.lossReasons.length || this.downtimeReasons.length ? 2 : 0,
         lossReasons: this.lossReasons,
         downtimeReasons: this.downtimeReasons
-      });
+      }));
     },
 
     serializeForm: function(formData)
@@ -319,7 +327,7 @@ define([
         shiftMoment.valueOf() > Date.now() ? t('pressWorksheets', 'FORM:ERROR:date') : ''
       );
 
-      if (this.$id('paintShop')[0].checked)
+      if (this.isPaintShop())
       {
         var $startedAt = this.$id('startedAt');
         var $finishedAt = this.$id('finishedAt');
@@ -345,9 +353,19 @@ define([
       return time.getMoment($date.val()).hours(6).add('h', (shift - 1) * 8);
     },
 
+    getType: function()
+    {
+      return this.$('input[name=type]:checked').val();
+    },
+
+    isPaintShop: function()
+    {
+      return this.getType() === 'paintShop';
+    },
+
     checkValidity: function(formData)
     {
-      var paintShop = this.$id('paintShop')[0].checked;
+      var paintShop = this.isPaintShop();
 
       if (paintShop && !this.checkPaintShopValidity())
       {
@@ -518,7 +536,15 @@ define([
         {
           ($row.next() || $row.prev()).find('.pressWorksheets-form-part').select2('focus');
 
-          $row.fadeOut(function() { $row.remove(); });
+          $row.fadeOut(function()
+          {
+            $row.remove();
+          });
+
+          if (!e.added && view.$('.pressWorksheets-form-order').length === 2)
+          {
+            view.$('.message-warning').fadeOut();
+          }
 
           return;
         }
@@ -591,7 +617,7 @@ define([
     {
       ++this.lastOrderNo;
 
-      var $orderRow = $(renderOrderRow({
+      var $orderRow = $(renderOrdersTableRow({
         no: this.lastOrderNo,
         lossReasons: this.lossReasons,
         downtimeReasons: this.downtimeReasons
@@ -611,6 +637,17 @@ define([
 
       this.setUpOrderSelect2($orderRow.find('.pressWorksheets-form-part'));
       this.setUpProdLineSelect2($orderRow.find('.pressWorksheets-form-prodLine'), $lastRow);
+
+      var $warning = this.$('.message-warning');
+
+      if (this.lastOrderNo > 0)
+      {
+        $warning.fadeIn();
+      }
+      else
+      {
+        $warning.fadeOut();
+      }
     }
 
   });

@@ -77,9 +77,10 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       min: 1,
       max: 3
     },
-    paintShop: {
-      type: Boolean,
-      default: false
+    type: {
+      type: String,
+      required: true,
+      enum: ['mech', 'paintShop', 'optics']
     },
     startedAt: {
       type: String,
@@ -106,7 +107,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
   pressWorksheetSchema.pre('save', function(next)
   {
-    if (this.paintShop)
+    if (this.type === 'paintShop')
     {
       this.calcOrdersTimes();
     }

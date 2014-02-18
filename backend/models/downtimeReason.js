@@ -17,6 +17,10 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
       type: Number,
       default: -1
     },
+    opticsPosition: {
+      type: Number,
+      default: -1
+    },
     report1: {
       type: Boolean,
       default: true

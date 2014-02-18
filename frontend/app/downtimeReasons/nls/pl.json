@@ -18,7 +18,8 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:label": "Opis",
-  "PROPERTY:pressPosition": "Pozycja na karcie pracy",
+  "PROPERTY:opticsPosition": "Pozycja na karcie pracy (montaż optyki)",
+  "PROPERTY:pressPosition": "Pozycja na karcie pracy (inne)",
   "PROPERTY:report1": "W raporcie 1?",
   "PROPERTY:auto": "Automatyczne potwierdzenie?",
 

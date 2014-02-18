@@ -21,6 +21,7 @@ define([
     
     defaults: {
       label: null,
+      opticsPosition: -1,
       pressPosition: -1,
       report1: true,
       auto: false

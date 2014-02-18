@@ -21,7 +21,10 @@
   "PROPERTY:master": "Podpisany mistrz",
   "PROPERTY:date": "Data",
   "PROPERTY:shift": "Zmiana",
-  "PROPERTY:paintShop": "Malarnia?",
+  "PROPERTY:type": "Typ",
+  "PROPERTY:type:mech": "Obróbka mechaniczna",
+  "PROPERTY:type:paintShop": "Malarnia",
+  "PROPERTY:type:optics": "Montaż optyki",
   "PROPERTY:startedAt": "Godz. rozp.",
   "PROPERTY:finishedAt": "Godz. zak.",
   "PROPERTY:createdAt": "Czas dodania",
@@ -55,5 +58,6 @@
   "FORM:ERROR:date": "Czas zmiany nie może być z przyszłości!",
   "FORM:PLACEHOLDER:part": "Szukaj części po 12NC...",
   "FORM:PLACEHOLDER:operation": "Wybierz operację...",
-  "FORM:PLACEHOLDER:prodLine": "Wybierz maszynę..."
+  "FORM:PLACEHOLDER:prodLine": "Wybierz maszynę...",
+  "FORM:typeChangeWarning": "<strong>UWAGA!</strong> Zmiana typu wyczyści wszystkie wpisane części!"
 }

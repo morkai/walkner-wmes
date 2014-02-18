@@ -26,7 +26,7 @@ define([
       return {
         date: time.format('YYYY-MM-DD'),
         shift: 1,
-        paintShop: false,
+        type: 'mech',
         startedAt: null,
         finishedAt: null,
         master: null,

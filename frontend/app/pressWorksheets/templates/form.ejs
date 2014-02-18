@@ -3,13 +3,20 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
+      <div class="message message-inline message-warning"><%- t('pressWorksheets', 'FORM:typeChangeWarning') %></div>
       <div class="form-group">
-        <div class="checkbox">
-          <label class="control-label">
-            <input id="<%- idPrefix %>-paintShop" type="checkbox" name="paintShop" value="true">
-            <%- t('pressWorksheets', 'PROPERTY:paintShop') %>
-          </label>
-        </div>
+        <label class="radio-inline">
+          <input id="<%- idPrefix %>-type" type="radio" name="type" value="mech">
+          <%- t('pressWorksheets', 'PROPERTY:type:mech') %>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="type" value="optics">
+          <%- t('pressWorksheets', 'PROPERTY:type:optics') %>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="type" value="paintShop">
+          <%- t('pressWorksheets', 'PROPERTY:type:paintShop') %>
+        </label>
       </div>
       <div class="row">
         <div class="col-md-3 form-group">
@@ -51,37 +58,7 @@
           <input id="<%- idPrefix %>-finishedAt" class="form-control pressWorksheets-form-time" type="text" name="finishedAt">
         </div>
       </div>
-      <div class="table-responsive">
-        <table class="table table-bordered table-condensed pressWorksheets-form-orders">
-          <thead>
-            <tr>
-              <th rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.part') %></th>
-              <th rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.operation') %></th>
-              <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
-              <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
-              <th class="pressWorksheets-form-min pressWorksheets-form-timeCell" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
-              <th class="pressWorksheets-form-min pressWorksheets-form-timeCell" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
-              <% if (lossReasons.length) { %>
-              <th class="pressWorksheets-form-min pressWorksheets-form-separator" colspan="<%- lossReasons.length %>"><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
-              <% } %>
-              <% if (downtimeReasons.length) { %>
-              <th class="pressWorksheets-form-min pressWorksheets-form-separator" colspan="<%- downtimeReasons.length %>"><%- t('pressWorksheets', 'PROPERTY:order.downtimes') %></th>
-              <% } %>
-            </tr>
-            <% if (rowspan) { %>
-            <tr class="pressWorksheets-form-losses">
-              <% lossReasons.forEach(function(lossReason, i) { %>
-              <th class="<%- i ? '' : 'pressWorksheets-form-separator' %>"><span class="pressWorksheets-form-loss"><%- lossReason.label %></span></th>
-              <% }) %>
-              <% downtimeReasons.forEach(function(downtimeReason, i) { %>
-              <th class="<%- i ? '' : 'pressWorksheets-form-separator' %>"><span class="pressWorksheets-form-loss"><%- downtimeReason.label %></span></th>
-              <% }) %>
-            </tr>
-            <% } %>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+      <div id="<%- idPrefix %>-ordersTable" class="table-responsive"></div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>
