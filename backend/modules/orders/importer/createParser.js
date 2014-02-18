@@ -259,8 +259,9 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
     timeKey += date.getUTCFullYear();
     timeKey += (date.getUTCMonth() < 9 ? '0' : '') + (date.getUTCMonth() + 1);
-    timeKey += (date.getUTCDate() < 10 ? '0' : '') + date.getUTCDate();
-    timeKey += (date.getUTCHours() < 10 ? '0' : '') + date.getUTCHours();
+    //TODO: Need better time key
+    //timeKey += (date.getUTCDate() < 10 ? '0' : '') + date.getUTCDate();
+    //timeKey += (date.getUTCHours() < 10 ? '0' : '') + date.getUTCHours();
 
     return timeKey;
   }
