@@ -30,19 +30,22 @@ define([
     {
       var selector = [{name: 'eq', args: ['status', 'undecided']}];
 
-      var userSubdivision = user.getSubdivision();
-
-      if (userSubdivision)
+      if (!user.isAllowedTo('PROD_DOWNTIMES:ALL'))
       {
-        selector.push({name: 'eq', args: ['subdivision', userSubdivision.id]});
-      }
-      else
-      {
-        var userDivision = user.getDivision();
+        var userSubdivision = user.getSubdivision();
 
-        if (userDivision)
+        if (userSubdivision)
         {
-          selector.push({name: 'eq', args: ['division', userDivision.id]});
+          selector.push({name: 'eq', args: ['subdivision', userSubdivision.id]});
+        }
+        else
+        {
+          var userDivision = user.getDivision();
+
+          if (userDivision)
+          {
+            selector.push({name: 'eq', args: ['division', userDivision.id]});
+          }
         }
       }
 

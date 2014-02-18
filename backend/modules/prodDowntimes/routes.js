@@ -58,7 +58,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
     if (!orgUnitTerm)
     {
-      if (user.super || !user.orgUnitId)
+      if (user.super || !user.orgUnitId || user.privileges.indexOf('PROD_DOWNTIMES:ALL') !== -1)
       {
         return next();
       }

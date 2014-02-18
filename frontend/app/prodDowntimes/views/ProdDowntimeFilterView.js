@@ -59,7 +59,7 @@ define([
 
       this.$id('orgUnit').select2({
         width: '256px',
-        allowClear: !user.getDivision(),
+        allowClear: !user.getDivision() || user.isAllowedTo('PROD_DOWNTIMES:ALL'),
         data: this.getApplicableOrgUnits(),
         formatSelection: function(orgUnit)
         {
@@ -114,8 +114,9 @@ define([
       var userOrgUnits = [];
       var userDivision = user.getDivision();
       var userSubdivision = user.getSubdivision();
+      var canAccessAll = user.isAllowedTo('PROD_DOWNTIMES:ALL');
 
-      if (userDivision)
+      if (!canAccessAll && userDivision)
       {
         userOrgUnits.push({
           disabled: !!userSubdivision,
@@ -129,11 +130,11 @@ define([
 
       var view = this;
 
-      if (userSubdivision)
+      if (!canAccessAll && userSubdivision)
       {
         this.pushApplicableOrgUnitsForSubdivision(userOrgUnits, userSubdivision);
       }
-      else if (userDivision)
+      else if (!canAccessAll && userDivision)
       {
         orgUnits.getChildren(userDivision).forEach(function(subdivision)
         {

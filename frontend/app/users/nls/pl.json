@@ -80,6 +80,7 @@
   "PRIVILEGE:HOURLY_PLANS:ALL": "Plany godzinowe: dostęp do wszystkich wydziałów",
   "PRIVILEGE:PROD_DOWNTIMES:VIEW": "Przestoje: przeglądanie",
   "PRIVILEGE:PROD_DOWNTIMES:MANAGE": "Przestoje: potwierdzanie",
+  "PRIVILEGE:PROD_DOWNTIMES:ALL": "Przestoje: dostęp do wszystkich wydziałów",
   "PRIVILEGE:PRESS_WORKSHEETS:VIEW": "Karty pracy: przeglądanie",
   "PRIVILEGE:PRESS_WORKSHEETS:MANAGE": "Karty pracy: dodawanie",
   "PRIVILEGE:PROD_DATA:VIEW": "Dane produkcyjne: przeglądanie",
