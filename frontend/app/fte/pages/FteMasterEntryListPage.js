@@ -33,12 +33,18 @@ define([
       t.bound('fte', 'BREADCRUMBS:master:entryList')
     ],
 
-    actions: [{
-      label: t.bound('fte', 'PAGE_ACTION:currentEntry'),
-      href: '#fte/master/current',
-      icon: 'edit',
-      privileges: 'FTE:MASTER:MANAGE'
-    }],
+    actions: function(layout)
+    {
+      return [
+        {
+          label: t.bound('fte', 'PAGE_ACTION:currentEntry'),
+          href: '#fte/master/current',
+          icon: 'edit',
+          privileges: 'FTE:MASTER:MANAGE'
+        },
+        pageActions.export(layout, this, this.collection)
+      ];
+    },
 
     initialize: function()
     {
