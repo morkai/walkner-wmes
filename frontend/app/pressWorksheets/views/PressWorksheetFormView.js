@@ -208,16 +208,17 @@ define([
     renderOrdersTable: function()
     {
       var optics = this.getType() === 'optics';
+      var sortProperty = optics ? 'opticsPosition' : 'pressPosition';
 
       this.lossReasons = optics ? [] : this.model.lossReasons.toJSON();
 
       this.downtimeReasons = downtimeReasons
         .filter(function(downtimeReason)
         {
-          return downtimeReason.get(optics ? 'opticsPosition' : 'pressPosition') >= 0;
+          return downtimeReason.get(sortProperty) >= 0;
         })
         .map(function(downtimeReason) { return downtimeReason.toJSON(); })
-        .sort(function(a, b) { return a.pressPosition - b.pressPosition; });
+        .sort(function(a, b) { return a[sortProperty] - b[sortProperty]; });
 
       this.lastOrderNo = -1;
 
