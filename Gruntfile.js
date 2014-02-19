@@ -97,6 +97,11 @@ module.exports = function(grunt)
           baseUrl: './build/frontend',
           dir: './frontend-build',
           optimize: 'uglify2',
+          uglify2: {
+            compress: {
+              drop_console: true
+            }
+          },
           optimizeCss: 'standard',
           modules: [{name: 'main'}],
           paths: requirejsConfig.buildPaths,
