@@ -70,6 +70,11 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         );
       }
 
+      if (currentShift.no !== 1)
+      {
+        return reply(new Error('SHIFT_NO'));
+      }
+
       currentShift.division = divisionId;
 
       HourlyPlan.createForShift(currentShift, user, function(err, hourlyPlan)

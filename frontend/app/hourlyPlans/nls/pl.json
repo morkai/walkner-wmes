@@ -37,5 +37,5 @@
   "current:panel:warning": "<p>Jeżeli wybrany wydział nie będzie miał wpisu dla aktualnej zmiany, zostanie utworzony nowy wpis.</p>",
   "current:submit": "Planuj",
   "current:msg:offline": "Nie można planować: brak połączenia z serwerem :(",
-  "current:msg:failure": "Nie udało się utworzyć wpisu :("
+  "current:msg:failure": "Nie udało się utworzyć wpisu: {error, select, SHIFT_NO{wpis można utworzyć tylko na I zmianie!} AUTH{brak uprawnień!} INPUT{nieprawidłowy dział!} other{{error}}}"
 }

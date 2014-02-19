@@ -136,12 +136,10 @@ define([
             $division.select2('readonly', view.readonlyDivision);
             view.$submit.attr('disabled', false).focus();
 
-            console.error(err);
-
             return viewport.msg.show({
               type: 'error',
               time: 5000,
-              text: t('hourlyPlans', 'msg:failure')
+              text: t('hourlyPlans', 'current:msg:failure', {error: err.message})
             });
           }
 
