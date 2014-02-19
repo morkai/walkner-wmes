@@ -1,1 +1,1 @@
-define(["../router","../viewport","../user","i18n!app/nls/events"],function(e,t,i){e.map("/events",i.auth("EVENTS:VIEW"),function(e){t.loadPage("app/events/pages/EventListPage",function(t){return new t({rql:e.rql})})})});
+define(["../router","../viewport","../user","i18n!app/nls/events"],function(e,n,t){e.map("/events",t.auth("EVENTS:VIEW"),function(e){n.loadPage("app/events/pages/EventListPage",function(n){return new n({rql:e.rql})})})});

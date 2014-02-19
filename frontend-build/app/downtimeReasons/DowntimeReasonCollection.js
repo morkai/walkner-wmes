@@ -1,1 +1,1 @@
-define(["../core/Collection","./DowntimeReason"],function(e,t){return e.extend({model:t,rqlQuery:"sort(_id)"})});
+define(["../core/Collection","./DowntimeReason"],function(e,n){return e.extend({model:n,rqlQuery:"sort(_id)"})});

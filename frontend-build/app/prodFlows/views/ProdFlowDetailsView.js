@@ -1,1 +1,1 @@
-define(["app/core/views/DetailsView","./decorateProdFlow","app/prodFlows/templates/details"],function(e,t,n){return e.extend({template:n,localTopics:{"divisions.synced":"render","subdivisions.synced":"render","mrpControllers.synced":"render"},serialize:function(){return t(this.model)}})});
+define(["app/core/views/DetailsView","./decorateProdFlow","app/prodFlows/templates/details"],function(e,r,i){return e.extend({template:i,localTopics:{"divisions.synced":"render","subdivisions.synced":"render","mrpControllers.synced":"render"},serialize:function(){return r(this.model)}})});

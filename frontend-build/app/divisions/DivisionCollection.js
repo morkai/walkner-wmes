@@ -1,1 +1,1 @@
-define(["../core/Collection","./Division"],function(e,t){return e.extend({model:t,rqlQuery:"select(type,description)&sort(_id)"})});
+define(["../core/Collection","./Division"],function(e,i){return e.extend({model:i,rqlQuery:"select(type,description)&sort(_id)"})});

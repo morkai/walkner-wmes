@@ -1,1 +1,1 @@
-define(["app/time"],function(e){return function(t,n){var i=e.getMoment(t);return 1===n?i.hours(6):2===n?i.hours(14):i.hours(22),i.add("hours",8).subtract("seconds",1),i.toDate()}});
+define(["app/time"],function(t){return function(e,n){var r=t.getMoment(e);return r.hours(1===n?6:2===n?14:22),r.add("hours",8).subtract("seconds",1),r.toDate()}});

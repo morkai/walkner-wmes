@@ -1,1 +1,1 @@
-define([],function(){var e={locale:{}};return e.locale.pl=function(e){return 1==e?"one":e%10>=2&&4>=e%10&&(12>e%100||e%100>14)&&e==Math.floor(e)?"few":0===e%10||1!=e&&1==e%10||(e%10>=5&&9>=e%10||e%100>=12&&14>=e%100)&&e==Math.floor(e)?"many":"other"}});
+define([],function(){var o={locale:{}};return o.locale.pl=function(o){return 1==o?"one":o%10>=2&&4>=o%10&&(12>o%100||o%100>14)&&o==Math.floor(o)?"few":o%10===0||1!=o&&o%10==1||(o%10>=5&&9>=o%10||o%100>=12&&14>=o%100)&&o==Math.floor(o)?"many":"other"}});

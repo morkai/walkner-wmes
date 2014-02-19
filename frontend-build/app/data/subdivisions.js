@@ -1,1 +1,1 @@
-define(["app/subdivisions/SubdivisionCollection","./createStorage"],function(e,t){return t("SUBDIVISIONS","subdivisions",e)});
+define(["app/subdivisions/SubdivisionCollection","./createStorage"],function(i,n){return n("SUBDIVISIONS","subdivisions",i)});

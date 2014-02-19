@@ -1,1 +1,1 @@
-define(["h5.pubsub/MessageBroker"],function(e){var n=new e;return n.on("message",function(e,n){"controller.tagValuesChanged"!==e&&("undefined"==typeof n?console.log("[%s]",e):console.log("[%s]",e,n))}),window.broker=n,n});
+define(["h5.pubsub/MessageBroker"],function(e){var n=new e;return n.on("message",function(e,n){}),window.broker=n,n});

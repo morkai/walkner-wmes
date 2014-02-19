@@ -1,1 +1,1 @@
-define(["app/prodFlows/ProdFlowCollection","./createStorage"],function(e,t){return t("PROD_FLOWS","prodFlows",e)});
+define(["app/prodFlows/ProdFlowCollection","./createStorage"],function(o,e){return e("PROD_FLOWS","prodFlows",o)});

@@ -1,1 +1,1 @@
-define(["app/core/View","../views/DashboardView"],function(e,t){return e.extend({layoutName:"page",pageId:"dashboard",initialize:function(){this.view=new t}})});
+define(["app/core/View","../views/DashboardView"],function(e,i){return e.extend({layoutName:"page",pageId:"dashboard",initialize:function(){this.view=new i}})});

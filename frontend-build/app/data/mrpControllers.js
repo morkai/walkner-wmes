@@ -1,1 +1,1 @@
-define(["app/mrpControllers/MrpControllerCollection","./createStorage"],function(e,t){return t("MRP_CONTROLLERS","mrpControllers",e)});
+define(["app/mrpControllers/MrpControllerCollection","./createStorage"],function(r,e){return e("MRP_CONTROLLERS","mrpControllers",r)});

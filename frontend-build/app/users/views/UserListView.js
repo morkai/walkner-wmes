@@ -1,1 +1,1 @@
-define(["app/i18n","app/core/views/ListView","./decorateUser"],function(e,t,n){return t.extend({localTopics:{"companies.synced":"render"},columns:["personellId","lastName","firstName","company","orgUnit","prodFunction"],serializeRows:function(){return this.collection.toJSON().map(n)}})});
+define(["app/i18n","app/core/views/ListView","./decorateUser"],function(e,n,o){return n.extend({localTopics:{"companies.synced":"render"},columns:["personellId","lastName","firstName","company","orgUnit","prodFunction"],serializeRows:function(){return this.collection.toJSON().map(o)}})});

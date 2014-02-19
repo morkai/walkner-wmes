@@ -1,1 +1,1 @@
-define(["jquery","visibly","app/broker"],function(e,t,n){var r={visible:!t.hidden()};return t.onVisible(function(){r.visible=!0,n.publish("visibility.visible",r)}),t.onHidden(function(){r.visible=!1,n.publish("visibility.hidden",r)}),r});
+define(["jquery","visibly","app/broker"],function(i,e,n){var b={visible:!e.hidden()};return e.onVisible(function(){b.visible=!0,n.publish("visibility.visible",b)}),e.onHidden(function(){b.visible=!1,n.publish("visibility.hidden",b)}),b});

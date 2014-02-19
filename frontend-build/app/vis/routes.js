@@ -1,1 +1,1 @@
-define(["../router","../viewport","i18n!app/nls/vis"],function(e,t){e.map("/vis/structure",t.loadPage.bind(t,"app/vis/pages/StructureVisPage"))});
+define(["../router","../viewport","i18n!app/nls/vis"],function(e,i){e.map("/vis/structure",i.loadPage.bind(i,"app/vis/pages/StructureVisPage"))});
