@@ -13,6 +13,20 @@ module.exports = function startCoreRoutes(app, express)
 
   reloadRequirejsConfig();
 
+  [
+    'prodFunctions',
+    'companies',
+    'divisions',
+    'subdivisions',
+    'mrpControllers',
+    'prodFlows',
+    'workCenters',
+    'prodLines',
+    'aors',
+    'orderStatuses',
+    'downtimeReasons'
+  ].forEach(setUpFrontendVersionUpdater);
+
   express.get('/', showIndex);
 
   express.get('/time', function(req, res)
@@ -73,5 +87,12 @@ module.exports = function startCoreRoutes(app, express)
 
     requirejsPaths = JSON.stringify(requirejsConfig.paths);
     requirejsShim = JSON.stringify(requirejsConfig.shim);
+  }
+
+  function setUpFrontendVersionUpdater(topicPrefix)
+  {
+    app.broker.subscribe(topicPrefix + '.added', app.updater.updateFrontendVersion);
+    app.broker.subscribe(topicPrefix + '.edited', app.updater.updateFrontendVersion);
+    app.broker.subscribe(topicPrefix + '.deleted', app.updater.updateFrontendVersion);
   }
 };

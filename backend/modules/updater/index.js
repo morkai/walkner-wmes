@@ -34,6 +34,11 @@ exports.start = function startUpdaterModule(app, module)
     ? fs.readFileSync(module.config.manifestPath, 'utf8')
     : null;
 
+  module.updateFrontendVersion = function()
+  {
+    module.package.frontendVersion = Date.now();
+  };
+
   app.broker
     .subscribe('express.beforeMiddleware')
     .setLimit(1)
