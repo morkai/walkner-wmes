@@ -14,7 +14,7 @@ define([
     var remoteData = window[storageKey] || [];
     var localData = JSON.parse(localStorage.getItem(storageKey) || 'null');
 
-    if (!localData || navigator.onLine)
+    if (!localData)
     {
       localData = {
         time: time.appData,
