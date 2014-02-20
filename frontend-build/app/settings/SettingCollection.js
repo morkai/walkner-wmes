@@ -1,0 +1,1 @@
+define(["../core/Collection","./Setting"],function(t,e){return t.extend({model:e,rqlQuery:"select(value)",matchSettingId:null,initialize:function(t){if(t.pubsub){var e=this;t.pubsub.subscribe("settings.updated.**",function(t){var i=e.get(t._id);i?i.set(t):e.matchSettingId&&e.matchSettingId(t._id)&&e.add(t)})}}})});
