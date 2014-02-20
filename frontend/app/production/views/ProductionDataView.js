@@ -2,6 +2,7 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/time',
   'app/viewport',
   'app/core/View',
   'app/core/views/DialogView',
@@ -12,11 +13,11 @@ define([
   'app/production/templates/data',
   'app/production/templates/endDowntimeDialog',
   'app/production/templates/continueOrderDialog'
-
 ], function(
   _,
   $,
   t,
+  time,
   viewport,
   View,
   DialogView,
@@ -297,6 +298,8 @@ define([
 
     startDowntime: function(e, options)
     {
+      var startedAt = time.getMoment().toDate();
+
       if (e)
       {
         e.target.blur();
@@ -308,7 +311,7 @@ define([
       {
         viewport.closeDialog();
 
-        this.model.startDowntime(downtimeInfo);
+        this.model.startDowntime(downtimeInfo, startedAt);
       });
 
       viewport.showDialog(downtimePickerView, t('production', 'downtimePicker:title'));

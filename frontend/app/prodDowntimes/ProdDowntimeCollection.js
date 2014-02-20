@@ -89,7 +89,7 @@ define([
       return prodDowntime ? prodDowntime.finish() : null;
     },
 
-    addFromInfo: function(prodShift, downtimeInfo)
+    addFromInfo: function(prodShift, downtimeInfo, startedAt)
     {
       var prodDowntime = new ProdDowntime({
         division: prodShift.get('division'),
@@ -106,7 +106,7 @@ define([
         reason: downtimeInfo.reason,
         reasonComment: downtimeInfo.reasonComment,
         status: ProdDowntime.STATUS.UNDECIDED,
-        startedAt: time.getMoment().toDate(),
+        startedAt: startedAt || time.getMoment().toDate(),
         creator: user.getInfo(),
         master: prodShift.get('master'),
         leader: prodShift.get('leader'),

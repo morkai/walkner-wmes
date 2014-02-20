@@ -365,9 +365,9 @@ define([
       prodLog.record(this, 'endWork', {});
     },
 
-    startDowntime: function(downtimeInfo)
+    startDowntime: function(downtimeInfo, startedAt)
     {
-      var prodDowntime = this.prodDowntimes.addFromInfo(this, downtimeInfo);
+      var prodDowntime = this.prodDowntimes.addFromInfo(this, downtimeInfo, startedAt);
 
       this.set('state', 'downtime');
 
