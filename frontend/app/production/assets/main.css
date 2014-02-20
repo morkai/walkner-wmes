@@ -119,7 +119,7 @@
   cursor: pointer;
 }
 .production .btn-link {
-  padding: 3px 0;
+  padding: 0;
   text-decoration: none;
 }
 .production.is-mechOrder .production-property-orderNo {
@@ -187,6 +187,62 @@
 .production.is-locked .production-controls-lock,
 .production.is-unlocked .production-controls-unlock {
   display: none;
+}
+@media (max-width: 1680px) {
+  .production {
+    margin: 0;
+  }
+  .production-controls {
+    top: 19px;
+  }
+  .production-controls > .fa {
+    margin-bottom: 0;
+  }
+  .production-pageHeader,
+  .production-sectionHeader,
+  .production-subsectionHeader {
+    margin-top: 15px;
+    margin-bottom: 0;
+  }
+  .production-actions {
+    margin: 15px 15px 0 15px;
+  }
+  .production-action {
+    margin: 0 7.5px;
+  }
+  .production-subsectionHeader {
+    margin-top: 0;
+  }
+  .production-ft > .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .production-ft .table-responsive {
+    margin-bottom: 15px;
+  }
+  .production-property-value {
+    font-size: 20px;
+  }
+}
+@media (max-width: 1440px) {
+  .production-pageHeader {
+    font-size: 30px;
+    padding: 10px 0;
+  }
+  .production-sectionHeader {
+    font-size: 24px;
+    padding: 10px 0;
+  }
+  .production-subsectionHeader {
+    font-size: 18px;
+    padding: 10px 0;
+  }
+  .production-property-value {
+    font-size: 18px;
+  }
+  .production-controls > .fa {
+    margin-bottom: 6px;
+  }
 }
 @media (max-width: 1150px) {
   .production-actions {
