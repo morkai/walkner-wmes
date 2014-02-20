@@ -167,12 +167,15 @@ define([
         subdivisionType: this.model.get('subdivisionType')
       };
 
-      formData['from-date'] = time.format(this.model.get('from'), 'YYYY-MM-DD');
-      formData['from-time'] = time.format(this.model.get('from'), 'HH:mm');
-      formData['to-date'] = time.format(this.model.get('to'), 'YYYY-MM-DD');
-      formData['to-time'] = time.format(this.model.get('to'), 'HH:mm');
+      var from = parseInt(this.model.get('from'), 10);
+      var to = parseInt(this.model.get('to'), 10);
 
-      if (formData.from && formData.to)
+      formData['from-date'] = time.format(from, 'YYYY-MM-DD');
+      formData['from-time'] = time.format(from, 'HH:mm');
+      formData['to-date'] = time.format(to, 'YYYY-MM-DD');
+      formData['to-time'] = time.format(to, 'HH:mm');
+
+      if (from || to)
       {
         formData.mode = 'date';
       }
