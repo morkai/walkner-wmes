@@ -74,7 +74,7 @@ function(
 
   View.prototype.promised = function(promise)
   {
-    if (_.isFunction(promise.abort))
+    if (promise && _.isFunction(promise.abort))
     {
       this.promises.push(promise);
 
