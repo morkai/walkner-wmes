@@ -360,14 +360,15 @@ define([
       );
     },
 
-    showEditor: function($property, oldValue, maxValue, changeFunction)
+    showEditor: function($property, oldValue, minValue, maxValue, changeFunction)
     {
       var $value = $property.find('.production-property-value');
 
       var view = this;
       var $form = $('<form></form>').submit(function() { hideAndSave(); return false; });
-      var $input = $('<input class="form-control input-lg" type="number" min="0">')
+      var $input = $('<input class="form-control input-lg" type="number">')
         .val(oldValue)
+        .attr('min', minValue)
         .attr('max', maxValue)
         .on('blur', hideAndSave)
         .on('keydown', function(e)
@@ -397,7 +398,7 @@ define([
 
         hide();
 
-        if (newValue !== oldValue && $input[0].checkValidity())
+        if (!isNaN(newValue))
         {
           view.model[changeFunction](newValue);
         }
@@ -411,6 +412,7 @@ define([
       this.showEditor(
         this.$('.production-property-quantityDone'),
         this.model.prodShiftOrder.getQuantityDone(),
+        0,
         this.model.prodShiftOrder.getMaxQuantityDone(),
         'changeQuantityDone'
       );
@@ -420,7 +422,8 @@ define([
     {
       this.showEditor(
         this.$('.production-property-workerCount'),
-        this.model.prodShiftOrder.getWorkerCount(),
+        this.model.prodShiftOrder.getWorkerCountForEdit(),
+        1,
         this.model.prodShiftOrder.getMaxWorkerCount(),
         'changeWorkerCount'
       );

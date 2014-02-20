@@ -268,6 +268,25 @@ define([
       return this.get('workerCount') || 0;
     },
 
+    getWorkerCountForEdit: function()
+    {
+      var workerCount = this.getWorkerCount();
+
+      if (workerCount !== 0)
+      {
+        return workerCount;
+      }
+
+      workerCount = this.getWorkerCountSap();
+
+      if (typeof workerCount === 'string' || workerCount === 0)
+      {
+        return 0;
+      }
+
+      return workerCount;
+    },
+
     getMaxWorkerCount: function()
     {
       var workerCountSap = this.getWorkerCountSap();

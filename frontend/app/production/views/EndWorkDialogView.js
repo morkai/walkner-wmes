@@ -66,7 +66,7 @@ define([
         hourRange: this.model.getCurrentQuantityDoneHourRange(),
         quantitiesDone: this.model.getQuantityDoneInCurrentHour(),
         quantityDone: this.model.prodShiftOrder.get('quantityDone') || 0,
-        workerCount: this.model.prodShiftOrder.get('workerCount') || 0,
+        workerCount: this.model.prodShiftOrder.getWorkerCountForEdit(),
         maxQuantitiesDone: this.model.getMaxQuantitiesDone(),
         maxQuantityDone: this.model.prodShiftOrder.getMaxQuantityDone(),
         maxWorkerCount: this.model.prodShiftOrder.getMaxWorkerCount()

@@ -10,7 +10,7 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-workerCount"><%- t('production', 'endWorkDialog:workerCount') %></label>
-    <input id="<%- idPrefix %>-workerCount" class="form-control" type="number" value="<%- workerCount %>" max="<%- maxWorkerCount %>">
+    <input id="<%- idPrefix %>-workerCount" class="form-control" type="number" value="<%- workerCount %>" min="1" max="<%- maxWorkerCount %>">
   </div>
   <div class="form-actions">
     <button class="btn btn-warning" type="submit"><%- t('production', 'endWorkDialog:yes') %></button>
