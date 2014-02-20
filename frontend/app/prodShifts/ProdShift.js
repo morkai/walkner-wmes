@@ -256,6 +256,11 @@ define([
 
     changeQuantitiesDone: function(hour, newValue)
     {
+      if (typeof newValue !== 'number')
+      {
+        newValue = 0;
+      }
+
       var quantitiesDone = this.get('quantitiesDone');
 
       if (!quantitiesDone[hour])
@@ -315,6 +320,11 @@ define([
         throw new Error("Cannot change the quantity done: no prod shift order!");
       }
 
+      if (typeof newValue !== 'number')
+      {
+        newValue = 0;
+      }
+
       this.prodShiftOrder.set('quantityDone', newValue);
 
       prodLog.record(this, 'changeQuantityDone', {
@@ -327,6 +337,11 @@ define([
       if (!this.hasOrder())
       {
         throw new Error("Cannot change the worker count: no prod shift order!");
+      }
+
+      if (typeof newValue !== 'number')
+      {
+        newValue = 0;
       }
 
       this.prodShiftOrder.set('workerCount', newValue);
