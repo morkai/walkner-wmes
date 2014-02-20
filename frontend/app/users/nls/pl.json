@@ -84,5 +84,6 @@
   "PRIVILEGE:PRESS_WORKSHEETS:VIEW": "Karty pracy: przeglądanie",
   "PRIVILEGE:PRESS_WORKSHEETS:MANAGE": "Karty pracy: dodawanie",
   "PRIVILEGE:PROD_DATA:VIEW": "Dane produkcyjne: przeglądanie",
-  "PRIVILEGE:REPORTS:VIEW": "Raporty: przeglądanie"
+  "PRIVILEGE:REPORTS:VIEW": "Raporty: przeglądanie",
+  "PRIVILEGE:REPORTS:MANAGE": "Raporty: zarządzanie"
 }

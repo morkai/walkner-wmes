@@ -8,6 +8,7 @@ var messageFormatAmd = require('messageformat-amd');
 var MongoStore = require('./MongoStore')(express.session.Store);
 var wrapAmd = require('./wrapAmd');
 var rqlMiddleware = require('./rqlMiddleware');
+var crud = require('./crud');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -33,6 +34,8 @@ exports.start = function startExpressModule(app, module, done)
   }
 
   module = app[module.name] = lodash.merge(express(), module);
+
+  module.crud = crud;
 
   var production = app.options.env === 'production';
   var staticPath = module.config[production ? 'staticBuildPath' : 'staticPath'];

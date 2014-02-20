@@ -7,6 +7,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var express = app[reportsModule.config.expressId];
   var userModule = app[reportsModule.config.userId];
   var mongoose = app[reportsModule.config.mongooseId];
+  var settings = app[reportsModule.config.settingsId];
   var downtimeReasons = app.downtimeReasons;
   // TODO: Create a proper org unit tree solution
   var divisionsModule = app.divisions;
@@ -17,8 +18,26 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var prodLinesModule = app.prodLines;
 
   var canView = userModule.auth('REPORTS:VIEW');
+  var canManage = userModule.auth('REPORTS:MANAGE');
 
   express.get('/reports/1', canView, report1Route);
+
+  express.get(
+    '/reports/metricRefs',
+    canView,
+    function limitToMetricRefs(req, res, next)
+    {
+      req.rql.selector = {
+        name: 'regex',
+        args: ['_id', '^metricRefs\\.']
+      };
+
+      return next();
+    },
+    express.crud.browseRoute.bind(null, app, settings.Setting)
+  );
+
+  express.put('/reports/metricRefs/:id', canManage, settings.updateRoute);
 
   function report1Route(req, res, next)
   {

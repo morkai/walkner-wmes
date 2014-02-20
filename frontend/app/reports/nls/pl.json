@@ -1,6 +1,10 @@
 {
+  "BREADCRUMBS:reports": "Raporty",
+  "BREADCRUMBS:metricRefs": "Wartości referencyjne",
   "BREADCRUMBS:report1": "Wskaźniki",
   "BREADCRUMBS:report1:divisions": "Wydziały",
+
+  "PAGE_ACTION:editMetricRefs": "Zmień wartości referencyjne",
 
   "report1:pageTitle": "Wskaźniki",
   "report1:overallTitle": "ML",
@@ -49,5 +53,11 @@
   "filter:1:submit:shift": "Zmiana",
   "filter:1:submit:day": "Dzień",
   "filter:1:submit:week": "Tydzień",
-  "filter:1:submit:month": "Miesiąc"
+  "filter:1:submit:month": "Miesiąc",
+
+  "metricRefs:efficiency": "Wydajność",
+  "metricRefs:productivity": "Produktywność",
+  "metricRefs:overall": "ML",
+  "metricRefs:overall:prod": "Montaż",
+  "metricRefs:overall:press": "Tłocznia"
 }

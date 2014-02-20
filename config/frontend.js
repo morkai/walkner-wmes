@@ -5,6 +5,7 @@ exports.id = 'frontend';
 exports.modules = [
   'updater',
   'mongoose',
+  'settings',
   'events',
   'pubsub',
   'user',
@@ -89,7 +90,8 @@ exports.pubsub = {
     'production.synced.*',
     'prodDowntimes.created.*', 'prodDowntimes.finished.*', 'prodDowntimes.corroborated.*',
     'prodShiftOrders.created.*', 'prodShiftOrders.updated.*',
-    'updater.newVersion'
+    'updater.newVersion',
+    'settings.updated.**'
   ]
 };
 
@@ -127,7 +129,7 @@ exports.user = {
     'PRESS_WORKSHEETS:VIEW', 'PRESS_WORKSHEETS:MANAGE',
     'PROD_DATA:VIEW',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
-    'REPORTS:VIEW'
+    'REPORTS:VIEW', 'REPORTS:MANAGE'
   ]
 };
 

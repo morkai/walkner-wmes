@@ -46,6 +46,7 @@ define([
         '.reports-1-coeffs-container',
         new Report1CoeffsChartView({
           model: this.model,
+          metricRefs: this.metricRefs,
           skipRenderChart: this.options.skipRenderCharts
         })
       );

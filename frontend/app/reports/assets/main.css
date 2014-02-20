@@ -119,3 +119,23 @@
 .reports-1-page.is-changing * {
   cursor: wait!important;
 }
+.reports-metricRefs .panel {
+  border-top: 0;
+}
+.reports-metricRefs-tab {
+  font-weight: bold;
+}
+.reports-metricRefs-tab[data-metric="efficiency"] > a {
+  color: #0c0!important;
+}
+.reports-metricRefs-tab[data-metric="productivity"] > a {
+  color: #fa0!important;
+}
+.reports-metricRefs-group:last-child > .form-group {
+  margin-bottom: 0;
+}
+.reports-metricRefs-group > .form-group {
+  display: inline-block;
+  margin-right: 15px;
+  width: 100px;
+}

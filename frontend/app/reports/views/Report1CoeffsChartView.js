@@ -5,6 +5,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/data/orgUnits',
   'app/data/views/renderOrgUnitPath',
   'app/highcharts'
 ], function(
@@ -14,6 +15,7 @@ define([
   t,
   viewport,
   View,
+  orgUnits,
   renderOrgUnitPath,
   Highcharts
 ) {
@@ -36,6 +38,12 @@ define([
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:coeffs', this.render);
+
+      if (this.metricRefs)
+      {
+        this.listenTo(this.metricRefs, 'add', this.onMetricRefUpdate);
+        this.listenTo(this.metricRefs, 'change', this.onMetricRefUpdate);
+      }
     },
 
     destroy: function()
@@ -177,6 +185,10 @@ define([
             data: chartData.efficiency,
             tooltip: {
               valueSuffix: '%'
+            },
+            events: {
+              show: this.updateEfficiencyRef.bind(this),
+              hide: this.updateEfficiencyRef.bind(this)
             }
           },
           {
@@ -188,7 +200,11 @@ define([
             tooltip: {
               valueSuffix: '%'
             },
-            visible: this.model.query.get('interval') !== 'hour'
+            visible: this.model.query.get('interval') !== 'hour',
+            events: {
+              show: this.updateProductivityRef.bind(this),
+              hide: this.updateProductivityRef.bind(this)
+            }
           },
           {
             name: t('reports', 'coeffs:downtime'),
@@ -230,6 +246,113 @@ define([
       this.chart.series[1].setData(chartData.efficiency, false);
       this.chart.series[2].setData(chartData.productivity, false);
       this.chart.series[3].setData(chartData.downtime, true);
+
+      this.updatePlotLines();
+    },
+
+    updatePlotLines: function()
+    {
+      if (!this.metricRefs)
+      {
+        return;
+      }
+
+      this.updateEfficiencyRef();
+      this.updateProductivityRef();
+    },
+
+    updatePlotLine: function(metric, yAxis, series, color, dashStyle)
+    {
+      yAxis.removePlotLine(metric);
+
+      if (series.visible)
+      {
+        var efficiencyRef = this.getMetricRef(metric);
+
+        if (efficiencyRef)
+        {
+          yAxis.addPlotLine({
+            id: metric,
+            color: color,
+            dashStyle: dashStyle,
+            value: efficiencyRef,
+            width: 1,
+            zIndex: 4
+          });
+        }
+      }
+    },
+
+    updateEfficiencyRef: function()
+    {
+      if (this.chart)
+      {
+        this.updatePlotLine(
+          'efficiency', this.chart.yAxis[1], this.chart.series[1], '#00ee00', 'dash'
+        );
+      }
+    },
+
+    updateProductivityRef: function()
+    {
+      if (this.chart)
+      {
+        this.updatePlotLine(
+          'productivity', this.chart.yAxis[1], this.chart.series[2], '#ffaa00', 'dash'
+        );
+      }
+    },
+
+    getMetricRef: function(metric)
+    {
+      return this.metricRefs.getValue(metric, this.getMetricRefOrgUnitId());
+    },
+
+    getMetricRefOrgUnitId: function()
+    {
+      var orgUnitType = this.model.get('orgUnitType');
+      var orgUnit = this.model.get('orgUnit');
+      var subdivisionType = this.model.query.get('subdivisionType');
+
+      if (orgUnitType === null)
+      {
+        return 'overall' + (subdivisionType ? ('.' + subdivisionType) : '');
+      }
+
+      if (orgUnitType === 'division')
+      {
+        return this.getMetricRefOrgUnitIdByDivision(subdivisionType, orgUnit);
+      }
+
+      if (orgUnitType === 'subdivision')
+      {
+        return orgUnit.id;
+      }
+
+      var subdivision = orgUnits.getSubdivisionFor(orgUnit);
+
+      return subdivision ? subdivision.id : null;
+    },
+
+    getMetricRefOrgUnitIdByDivision: function(subdivisionType, orgUnit)
+    {
+      if (subdivisionType === null)
+      {
+        return orgUnit.id;
+      }
+
+      // TODO: Change prod to assembly EVERYWHERE
+      if (subdivisionType === 'prod')
+      {
+        subdivisionType = 'assembly';
+      }
+
+      var subdivisions = orgUnits.getChildren(orgUnit).filter(function(subdivision)
+      {
+        return subdivision.get('type') === subdivisionType;
+      });
+
+      return subdivisions.length ? subdivisions[0].id : null;
     },
 
     serializeChartData: function()
@@ -314,6 +437,30 @@ define([
       if (this.chart)
       {
         this.chart.hideLoading();
+      }
+    },
+
+    onMetricRefUpdate: function(metricRef)
+    {
+      var metricInfo = this.metricRefs.parseSettingId(metricRef.id);
+
+      if (metricInfo.metric !== 'efficiency' && metricInfo.metric !== 'productivity')
+      {
+        return;
+      }
+
+      if (metricInfo.orgUnit !== this.getMetricRefOrgUnitId())
+      {
+        return;
+      }
+
+      if (metricInfo.metric === 'efficiency')
+      {
+        this.updateEfficiencyRef();
+      }
+      else
+      {
+        this.updateProductivityRef();
       }
     }
 

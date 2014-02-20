@@ -280,6 +280,20 @@ define([
       }
 
       return this.RELATION_TYPES.UNRELATED;
+    },
+    getSubdivisionFor: function(orgUnit)
+    {
+      if (!orgUnit || orgUnit.constructor === divisions.model)
+      {
+        return null;
+      }
+
+      if (orgUnit.constructor === subdivisions.model)
+      {
+        return orgUnit;
+      }
+
+      return this.getSubdivisionFor(this.getParent(orgUnit));
     }
   };
 });

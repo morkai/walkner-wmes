@@ -6,6 +6,7 @@ define([
   'app/core/View',
   '../Report1',
   '../Report1Query',
+  '../MetricRefCollection',
   '../views/Report1HeaderView',
   '../views/Report1FilterView',
   '../views/Report1ChartsView',
@@ -18,6 +19,7 @@ define([
   View,
   Report1,
   Report1Query,
+  MetricRefCollection,
   Report1HeaderView,
   Report1FilterView,
   Report1ChartsView,
@@ -56,6 +58,13 @@ define([
 
       return title;
     },
+
+    actions: [{
+      label: t.bound('reports', 'PAGE_ACTION:editMetricRefs'),
+      icon: 'crosshairs',
+      privileges: 'REPORTS:MANAGE',
+      href: '#reports;metricRefs'
+    }],
 
     events: {
       'mousedown .reports-1-coeffs .highcharts-title': function(e)
@@ -121,6 +130,10 @@ define([
 
     defineModels: function()
     {
+      this.metricRefs = new MetricRefCollection({
+        pubsub: this.pubsub
+      });
+
       this.query = new Report1Query(this.options.query);
 
       this.reports = this.query.createReports();
@@ -134,10 +147,20 @@ define([
 
       this.filterView = new Report1FilterView({model: this.query});
 
+      var metricRefs = this.metricRefs;
+
       this.chartsViews = this.reports.map(function(report)
       {
-        return new Report1ChartsView({model: report});
+        return new Report1ChartsView({
+          model: report,
+          metricRefs: metricRefs
+        });
       });
+    },
+
+    load: function(when)
+    {
+      return when(this.metricRefs.fetch({reset: true}));
     },
 
     insertChartsViews: function(skipChartsView, insertAt)
@@ -268,6 +291,7 @@ define([
       var siblingChartsViews =
         this.chartsViews.filter(function(chartsView) { return chartsView !== parentChartsView; });
       var childChartsViews = [];
+      var metricRefs = this.metricRefs;
 
       this.reports = this.query.createReports(parentReport);
       this.chartsViews = this.reports.map(function(report, i)
@@ -279,6 +303,7 @@ define([
 
         var childChartsView = new Report1ChartsView({
           model: report,
+          metricRefs: metricRefs,
           skipRenderCharts: true
         });
 
@@ -307,6 +332,7 @@ define([
       var oldChartsViews =
         this.chartsViews.filter(function(chartsView) { return chartsView !== workingChartsView; });
       var newChartsViews = [];
+      var metricRefs = this.metricRefs;
 
       this.reports = this.query.createReports(null, workingReport);
       this.chartsViews = this.reports.map(function(report)
@@ -318,6 +344,7 @@ define([
 
         var siblingChartsView = new Report1ChartsView({
           model: report,
+          metricRefs: metricRefs,
           skipRenderCharts: true
         });
 
@@ -355,6 +382,7 @@ define([
         {
           return new Report1ChartsView({
             model: report,
+            metricRefs: page.metricRefs,
             skipRenderCharts: true
           });
         });

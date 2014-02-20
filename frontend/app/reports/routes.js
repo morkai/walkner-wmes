@@ -23,4 +23,14 @@ define([
     });
   });
 
+  router.map('/reports;metricRefs', user.auth('REPORTS:MANAGE'), function(req)
+  {
+    viewport.loadPage('app/reports/pages/MetricRefsPage', function(MetricRefsPage)
+    {
+      return new MetricRefsPage({
+        initialTab: req.query.tab || 'efficiency'
+      });
+    });
+  });
+
 });

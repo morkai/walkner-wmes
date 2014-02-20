@@ -5,7 +5,8 @@ var setUpRoutes = require('./routes');
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
-  userId: 'user'
+  userId: 'user',
+  settingsId: 'settings'
 };
 
 exports.start = function startReportsModule(app, module)
