@@ -99,16 +99,12 @@ define([
 
     updateOrderData: function()
     {
-      this.toggleOrderDataProperties();
+      this.$el.toggleClass('has-order', this.model.hasOrder());
+
       this.updateTaktTime();
       this.updateWorkerCount();
 
       this.$property('startedAt').text(this.model.prodShiftOrder.getStartedAt());
-    },
-
-    toggleOrderDataProperties: function()
-    {
-      this.$('.production-properties-orderData').toggle(this.model.hasOrder());
     },
 
     updateWorkerCount: function()

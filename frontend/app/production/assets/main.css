@@ -128,6 +128,22 @@
 .production.is-mechOrder .production-property-nc12 {
   border-left: 0;
 }
+.production-property-startedAt,
+.production-property-quantityDone,
+.production-property-workerCount {
+  display: none;
+}
+.production-property + .production-property-workerCountSap {
+  border-left: 0;
+}
+.production-data.has-order .production-property-workerCountSap {
+  border-left: 1px dotted #DDD;
+}
+.production-data.has-order .production-property-startedAt,
+.production-data.has-order .production-property-quantityDone,
+.production-data.has-order .production-property-workerCount {
+  display: block;
+}
 .production-quantities-actual .btn-link {
   padding: 0;
   border: 0;
