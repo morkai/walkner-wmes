@@ -50,6 +50,11 @@ define([
 
     serialize: function()
     {
+      function ascByLabel(a, b)
+      {
+        return a.label.localeCompare(b.label);
+      }
+
       return {
         idPrefix: this.idPrefix,
         divisions: orgUnits.getAllDivisions()
@@ -59,15 +64,18 @@ define([
             return {
               _id: division.id,
               label: division.getLabel(),
-              subdivisions: orgUnits.getChildren(division).map(function(subdivision)
-              {
-                return {
-                  _id: subdivision.id,
-                  label: subdivision.getLabel()
-                };
-              })
+              subdivisions: orgUnits.getChildren(division)
+                .map(function(subdivision)
+                {
+                  return {
+                    _id: subdivision.id,
+                    label: subdivision.getLabel()
+                  };
+                })
+                .sort(ascByLabel)
             };
           })
+          .sort(ascByLabel)
       };
     },
 
