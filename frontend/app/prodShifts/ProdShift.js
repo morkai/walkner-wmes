@@ -256,7 +256,7 @@ define([
 
     changeQuantitiesDone: function(hour, newValue)
     {
-      if (typeof newValue !== 'number')
+      if (typeof newValue !== 'number' || isNaN(newValue))
       {
         newValue = 0;
       }
@@ -320,9 +320,14 @@ define([
         throw new Error("Cannot change the quantity done: no prod shift order!");
       }
 
-      if (typeof newValue !== 'number')
+      if (typeof newValue !== 'number' || isNaN(newValue))
       {
         newValue = 0;
+      }
+
+      if (newValue === this.prodShiftOrder.get('quantityDone'))
+      {
+        return;
       }
 
       this.prodShiftOrder.set('quantityDone', newValue);
@@ -339,9 +344,14 @@ define([
         throw new Error("Cannot change the worker count: no prod shift order!");
       }
 
-      if (typeof newValue !== 'number')
+      if (typeof newValue !== 'number' || isNaN(newValue))
       {
         newValue = 0;
+      }
+
+      if (newValue === this.prodShiftOrder.get('workerCount'))
+      {
+        return;
       }
 
       this.prodShiftOrder.set('workerCount', newValue);
