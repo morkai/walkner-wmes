@@ -55,6 +55,15 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   function finishDowntime(prodDowntime)
   {
+    if (prodDowntime.finishedAt)
+    {
+      productionModule.warn(
+        "Tried to finish an already finished prod downtime (LOG=[%s])", logEntry._id
+      );
+
+      return done();
+    }
+
     prodDowntime.set('finishedAt', logEntry.data.finishedAt);
 
     var downtimeReason =

@@ -18,6 +18,15 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       return done(null);
     }
 
+    if (prodShiftOrder.finishedAt)
+    {
+      productionModule.warn(
+        "Tried to finish already finished prod shift order (LOG=[%s])", logEntry._id
+      );
+
+      return done();
+    }
+
     prodShiftOrder.set('finishedAt', logEntry.data.finishedAt);
 
     prodShiftOrder.save(function(err)
