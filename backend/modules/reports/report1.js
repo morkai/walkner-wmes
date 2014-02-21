@@ -820,6 +820,7 @@ module.exports = function(mongoose, options, done)
     var effDen = 0;
     var dtNum = 0;
     var dtDen = 0;
+    var lastOrderFinishedAt;
 
     orders.forEach(function(order)
     {
@@ -832,8 +833,7 @@ module.exports = function(mongoose, options, done)
 
       if (typeof operation === 'undefined'
         || typeof operation.laborTime !== 'number'
-        || operation.laborTime <= 0
-        || order.quantityDone <= 0)
+        || operation.laborTime <= 0)
       {
         return;
       }
@@ -845,10 +845,15 @@ module.exports = function(mongoose, options, done)
         return;
       }
 
-      var typeCoeff = 1;
       var percent = typeof order.percent === 'number' ? order.percent : 1;
-      var laborTime = operation.laborTime * percent;
       var workerCount = order.workerCount * percent;
+
+      if (workerCount === 0)
+      {
+        return;
+      }
+
+      var laborTime = operation.laborTime * percent;
       var quantityDone = order.quantityDone * percent;
       var orderDowntime = orderToDowntimes[order._id];
 
@@ -863,10 +868,12 @@ module.exports = function(mongoose, options, done)
         breakCount += orderDowntime.breakCount;
       }
 
-      effNum += laborTime * typeCoeff / 100 * quantityDone;
+      effNum += laborTime / 100 * quantityDone;
       effDen += duration * workerCount;
 
       orderCount += 1;
+
+      lastOrderFinishedAt = order.finishedAt;
     });
 
     if (orderCount === 0)
@@ -881,6 +888,17 @@ module.exports = function(mongoose, options, done)
     if (effNum && effDen)
     {
       coeffs.efficiency = round(effNum / effDen);
+
+      if (options.interval === 'hour')
+      {
+        var endOfHour = parseInt(groupKey, 10) + 3599999;
+        var percent = 1 - lastOrderFinishedAt.getTime() / endOfHour;
+
+        if (percent !== 0)
+        {
+          coeffs.efficiency *= percent;
+        }
+      }
     }
 
     if (dtNum && dtDen)
