@@ -13,6 +13,11 @@ exports.findOrdersByNo = function(Order, no, done)
 {
   var query;
 
+  if (typeof no !== 'string')
+  {
+    return done(new Error('INVALID_INPUT'));
+  }
+
   if (no.length === 9)
   {
     query = Order.findById(no, {changes: 0, importTs: 0, __v: 0});
@@ -47,6 +52,11 @@ exports.findOrdersByNo = function(Order, no, done)
 
 exports.findOrdersByNc12 = function(Order, MechOrder, nc12, done)
 {
+  if (typeof nc12 !== 'string')
+  {
+    return done(new Error('INVALID_INPUT'));
+  }
+
   if (nc12.length === 12 || /[a-zA-Z]/.test(nc12))
   {
     return findOrderByNc12(Order, MechOrder, nc12, done);
