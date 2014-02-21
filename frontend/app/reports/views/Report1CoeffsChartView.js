@@ -276,7 +276,7 @@ define([
             color: color,
             dashStyle: dashStyle,
             value: efficiencyRef,
-            width: 1,
+            width: 2,
             zIndex: 4
           });
         }
