@@ -84,8 +84,6 @@ define([
     {
       this.model.readLocalData();
       this.model.startShiftChangeMonitor();
-
-      window.PROD_MODEL = this.model;
     },
 
     defineViews: function()
@@ -202,10 +200,19 @@ define([
 
     onBeforeUnload: function()
     {
+      if (this.model.isLocked())
+      {
+        return;
+      }
+
+      prodLog.disable();
+
       if (this.model.isIdle() || updater.isFrontendReloading())
       {
         return;
       }
+
+      this.timers.enableProdLog = setTimeout(prodLog.enable.bind(prodLog), 1000);
 
       return this.model.isDowntime()
         ? t('production', 'unload:downtime')

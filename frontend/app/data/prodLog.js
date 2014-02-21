@@ -1,10 +1,12 @@
 define([
+  'app/i18n',
   'app/user',
   'app/time',
   'app/broker',
   'app/socket',
   'app/updater/index'
 ], function(
+  t,
   user,
   time,
   broker,
@@ -14,6 +16,7 @@ define([
   'use strict';
 
   var STORAGE_KEY = 'PRODUCTION:LOG';
+  var LOCK_KEY = 'PRODUCTION:LOCK';
   var storage = localStorage;
   var syncingLogEntries = null;
   var enabled = false;
@@ -103,14 +106,54 @@ define([
       + Math.round(Math.random() * 10000000000000000).toString(36);
   }
 
+  function getLock()
+  {
+    return parseInt(localStorage.getItem(LOCK_KEY) || '0', 10);
+  }
+
+  function setLock(value)
+  {
+    localStorage.setItem(LOCK_KEY, value);
+  }
+
   return {
     generateId: generateId,
+    isEnabled: function()
+    {
+      return enabled;
+    },
     enable: function()
     {
+      if (enabled)
+      {
+        return;
+      }
+
+      var lock = getLock();
+
+      if (lock !== 0)
+      {
+        var answer = window.confirm(t('production', 'locked'));
+
+        if (!answer)
+        {
+          return;
+        }
+      }
+
+      setLock(1);
+
       enabled = true;
     },
     disable: function()
     {
+      if (!enabled)
+      {
+        return;
+      }
+
+      setLock(0);
+
       enabled = false;
     },
     isSyncing: function()

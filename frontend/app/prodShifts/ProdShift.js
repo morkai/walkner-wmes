@@ -612,7 +612,7 @@ define([
      */
     isLocked: function()
     {
-      return this.getSecretKey() === null;
+      return !prodLog.isEnabled() || this.getSecretKey() === null;
     },
 
     /**

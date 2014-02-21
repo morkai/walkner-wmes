@@ -139,6 +139,7 @@
   "endWorkDialog:yes": "Zakończ pracę",
   "endWorkDialog:no": "Anuluj",
 
+  "locked": "Sprawdź, czy formatka operatora nie jest uruchomiona w innym oknie!\n\nJeżeli formatka operatora jest otwarta w innym oknie, to wciśnij przycisk Anuluj i zamknij to okno.\n\nJeżeli chcesz kontynuować pracę w tym oknie, to wciśnij przycisk OK.",
   "unload:downtime": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie przestoju?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania przestoju będzie się naliczał do końca zmiany!",
   "unload:order": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie wykonywania zlecenia?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania zlecenia będzie się naliczał do końca zmiany!"
 }
