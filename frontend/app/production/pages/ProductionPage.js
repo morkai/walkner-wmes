@@ -36,7 +36,11 @@ define([
     layoutName: 'blank',
 
     localTopics: {
-      'socket.connected': 'refreshDowntimes'
+      'socket.connected': 'refreshDowntimes',
+      'updater.frontendReloading': function()
+      {
+        this.model.saveLocalData();
+      }
     },
 
     breadcrumbs: function()
