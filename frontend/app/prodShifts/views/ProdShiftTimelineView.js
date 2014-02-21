@@ -138,6 +138,7 @@ define([
       var l = this.collection.length;
 
       var orderToItemMap = {};
+      var downtimeToItemMap = {};
       var idles = [];
       var orders = [];
       var downtimes = [];
@@ -160,6 +161,10 @@ define([
           item.workerCount = 0;
 
           orderToItemMap[prodLogEntry.get('prodShiftOrder')] = item;
+        }
+        else if (type === 'downtime')
+        {
+          downtimeToItemMap[prodLogEntry.get('data')._id] = item;
         }
       }
 
@@ -196,7 +201,12 @@ define([
             break;
 
           case 'finishOrder':
-            orders[orders.length - 1].ending_time = Date.parse(data.finishedAt);
+            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+
+            if (item && item.ending_time === -1)
+            {
+              item.ending_time = Date.parse(data.finishedAt);
+            }
             break;
 
           case 'startDowntime':
@@ -204,7 +214,12 @@ define([
             break;
 
           case 'finishDowntime':
-            downtimes[downtimes.length - 1].ending_time = Date.parse(data.finishedAt);
+            item = downtimeToItemMap[prodLogEntry.get('data')._id];
+
+            if (item && item.ending_time === -1)
+            {
+              item.ending_time = Date.parse(data.finishedAt);
+            }
             break;
 
           case 'endWork':
