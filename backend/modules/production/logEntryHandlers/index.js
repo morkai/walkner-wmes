@@ -8,6 +8,7 @@ exports.changeQuantitiesDone = require('./changeQuantitiesDone');
 exports.changeQuantityDone = require('./changeQuantityDone');
 exports.changeShift = require('./changeShift');
 exports.changeWorkerCount = require('./changeWorkerCount');
+exports.correctOrder = require('./correctOrder');
 exports.endWork = require('./endWork');
 exports.finishDowntime = require('./finishDowntime');
 exports.finishOrder = require('./finishOrder');

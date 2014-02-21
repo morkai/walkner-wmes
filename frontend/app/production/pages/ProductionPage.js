@@ -147,7 +147,7 @@ define([
 
       this.listenTo(this.model.prodShiftOrder, 'change:mechOrder', function()
       {
-        this.$el.toggleClass('is-mechOrder', !!this.model.prodShiftOrder.get('mechOrder'));
+        this.$el.toggleClass('is-mechOrder', this.model.prodShiftOrder.isMechOrder());
       });
 
       this.listenTo(this.downtimesView, 'corroborated', function()

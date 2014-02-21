@@ -294,6 +294,21 @@ define([
       prodLog.record(this, 'changeOrder', this.prodShiftOrder.toJSON());
     },
 
+    correctOrder: function(orderInfo, operationNo)
+    {
+      if (!this.hasOrder())
+      {
+        throw new Error("Cannot correct the order: no order is started!");
+      }
+
+      var changes = this.prodShiftOrder.onOrderCorrected(this, orderInfo, operationNo);
+
+      if (changes)
+      {
+        prodLog.record(this, 'correctOrder', changes);
+      }
+    },
+
     continueOrder: function()
     {
       if (this.hasOrder())

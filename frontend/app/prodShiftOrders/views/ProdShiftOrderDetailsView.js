@@ -13,6 +13,8 @@ define([
 
     template: detailsTemplate,
 
+    remoteTopics: {},
+
     serialize: function()
     {
       return {

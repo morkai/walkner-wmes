@@ -46,6 +46,8 @@ define([
       'click .production-startBreak': 'startBreak',
       'click .production-endDowntime': 'endDowntime',
       'click .production-endWork': 'endWork',
+      'click .production-property-orderNo .btn-link': 'correctOrder',
+      'click .production-property-nc12 .btn-link': 'correctOrder',
       'click .production-property-quantityDone .btn-link': 'showQuantityDoneEditor',
       'click .production-property-workerCount .btn-link': 'showWorkerCountEditor'
     },
@@ -63,7 +65,12 @@ define([
       var order = this.model.prodShiftOrder;
 
       this.listenTo(order, 'change:_id', this.updateOrderData);
-      this.listenTo(order, 'change:orderId change:operationNo', this.updateOrderInfo);
+      this.listenTo(order, 'change:orderId change:operationNo', function()
+      {
+        this.updateOrderInfo();
+        this.updateWorkerCount();
+        this.updateTaktTime();
+      });
       this.listenTo(order, 'change:quantityDone', this.updateQuantityDone);
       this.listenTo(order, 'change:workerCount', function()
       {
@@ -91,8 +98,8 @@ define([
     {
       var order = this.model.prodShiftOrder;
 
-      this.$property('orderNo').text(order.getOrderNo());
-      this.$property('nc12').text(order.getNc12());
+      this.updateOrderNo();
+      this.updateNc12();
       this.$property('productName').text(order.getProductName());
       this.$property('operationName').text(order.getOperationName());
     },
@@ -105,6 +112,34 @@ define([
       this.updateWorkerCount();
 
       this.$property('startedAt').text(this.model.prodShiftOrder.getStartedAt());
+    },
+
+    updateOrderNo: function()
+    {
+      var html = this.model.prodShiftOrder.getOrderNo();
+
+      if (!this.model.isLocked() && !this.model.prodShiftOrder.isMechOrder())
+      {
+        html += ' <button class="btn btn-link">'
+          + t('production', 'property:orderNo:change')
+          + '</button>';
+      }
+
+      this.$property('orderNo').html(html);
+    },
+
+    updateNc12: function()
+    {
+      var html = this.model.prodShiftOrder.getNc12();
+
+      if (!this.model.isLocked() && this.model.prodShiftOrder.isMechOrder())
+      {
+        html += ' <button class="btn btn-link">'
+          + t('production', 'property:nc12:change')
+          + '</button>';
+      }
+
+      this.$property('nc12').html(html);
     },
 
     updateWorkerCount: function()
@@ -290,6 +325,19 @@ define([
       });
 
       viewport.showDialog(dialogView, t('production', 'continueOrderDialog:title'));
+    },
+
+    correctOrder: function(e)
+    {
+      if (e)
+      {
+        e.target.blur();
+      }
+
+      viewport.showDialog(
+        new NewOrderPickerView({model: this.model, correctingOrder: true}),
+        t('production', 'newOrderPicker:title:correcting')
+      );
     },
 
     startDowntime: function(e, options)

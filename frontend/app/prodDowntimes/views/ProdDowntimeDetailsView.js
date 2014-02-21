@@ -17,21 +17,31 @@ define([
 
     template: detailsTemplate,
 
-    remoteTopics: {
-      'prodDowntimes.finished.*': function(message)
-      {
-        if (this.model.id === message._id)
+    remoteTopics: function()
+    {
+      var remoteTopics = {
+        'prodDowntimes.finished.*': function(message)
         {
-          this.model.set('finishedAt', new Date(message.finishedAt));
-        }
-      },
-      'prodDowntimes.corroborated.*': function(message)
-      {
-        if (this.model.id === message._id)
+          if (this.model.id === message._id)
+          {
+            this.model.set('finishedAt', new Date(message.finishedAt));
+          }
+        },
+        'prodDowntimes.corroborated.*': function(message)
         {
-          this.model.set(message);
+          if (this.model.id === message._id)
+          {
+            this.model.set(message);
+          }
         }
-      }
+      };
+
+      remoteTopics['prodDowntimes.updated.' + this.model.id] = function(message)
+      {
+        this.model.set(message);
+      };
+
+      return remoteTopics;
     },
 
     initialize: function()

@@ -157,6 +157,10 @@
   background-color: #F9EDBE;
   border-bottom-color: #F0C36D;
 }
+.production-newOrderPickerDialog.is-correcting .modal-header {
+  background-color: #fff;
+  border-bottom-color: #E5E5E5;
+}
 .production-newOrderPickerDialog .modal-body .modal-header {
   border-top: 1px solid #B8E2FB;
   border-bottom: 1px solid #B8E2FB;

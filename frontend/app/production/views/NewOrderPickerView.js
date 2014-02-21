@@ -23,7 +23,11 @@ define([
     {
       var className = 'production-modal production-newOrderPickerDialog';
 
-      if (this.model.hasOrder())
+      if (this.options.correctingOrder)
+      {
+        className += ' is-correcting';
+      }
+      else if (this.model.hasOrder())
       {
         className += ' is-replacing';
       }
@@ -50,7 +54,7 @@ define([
       {
         e.preventDefault();
 
-        var submitEl = this.$('.btn-success')[0];
+        var submitEl = this.$('button[type=submit]')[0];
 
         if (submitEl.disabled)
         {
@@ -75,12 +79,19 @@ define([
       this.idPrefix = _.uniqueId('newOrderPicker');
     },
 
+    destroy: function()
+    {
+      this.$id('order').select2('destroy');
+      this.$id('operation').select2('destroy');
+    },
+
     serialize: function()
     {
       return {
         idPrefix: this.idPrefix,
         offline: !this.socket.isConnected(),
-        replacingOrder: this.model.hasOrder(),
+        replacingOrder: !this.options.correctingOrder && this.model.hasOrder(),
+        correctingOrder: !!this.options.correctingOrder,
         quantityDone: this.model.prodShiftOrder.get('quantityDone') || 0,
         workerCount: this.model.prodShiftOrder.getWorkerCountForEdit(),
         orderIdType: this.model.getOrderIdType(),
@@ -95,6 +106,16 @@ define([
       {
         this.setUpOrderSelect2();
         this.setUpOperationSelect2();
+
+        if (this.options.correctingOrder)
+        {
+          this.selectCurrentOrder();
+        }
+      }
+      else if (this.options.correctingOrder)
+      {
+        this.$id('order').val(this.model.prodShiftOrder.get('orderId'));
+        this.$id('operation').val(this.model.prodShiftOrder.get('operationNo'));
       }
 
       this.focusFirstInput();
@@ -111,7 +132,7 @@ define([
 
     focusFirstInput: function()
     {
-      if (this.model.hasOrder())
+      if (!this.options.correctingOrder && this.model.hasOrder())
       {
         this.$id('quantityDone').select();
       }
@@ -167,16 +188,22 @@ define([
         }
       });
 
+      function withLaborTime(operation)
+      {
+        return operation.laborTime !== -1;
+      }
+
       $order.on('change', function(e)
       {
         var operations;
 
-        if (e.added && Array.isArray(e.added.operations))
+        if (Array.isArray(e.operations))
         {
-          operations = e.added.operations.filter(function(operation)
-          {
-            return operation.laborTime !== -1;
-          });
+          operations = e.operations.filter(withLaborTime);
+        }
+        else if (e.added && Array.isArray(e.added.operations))
+        {
+          operations = e.added.operations.filter(withLaborTime);
         }
         else
         {
@@ -193,7 +220,7 @@ define([
 
         if (operations.length)
         {
-          $operation.select2('val', operations[0].no).select2('focus');
+          $operation.select2('val', e.selectedOperationNo || operations[0].no).select2('focus');
         }
         else
         {
@@ -216,6 +243,7 @@ define([
       var $operation = this.$id('operation').attr('placeholder', null).removeClass('form-control');
 
       $operation.select2({
+        width: '100%',
         dropdownCssClass: 'production-dropdown',
         placeholder: t('production', 'newOrderPicker:online:operation:placeholder'),
         openOnEnter: null,
@@ -224,6 +252,25 @@ define([
       });
 
       return $operation;
+    },
+
+    selectCurrentOrder: function()
+    {
+      var orderId = this.model.prodShiftOrder.get('orderId');
+      var orderData = this.model.prodShiftOrder.get('orderData');
+      var $order = this.$id('order');
+
+      $order.select2('data', {
+        id: orderId,
+        text: orderId + ' - ' + (orderData.name || '?'),
+        sameOrder: true
+      });
+
+      $order.trigger({
+        type: 'change',
+        operations: _.values(orderData.operations),
+        selectedOperationNo: this.model.prodShiftOrder.get('operationNo')
+      });
     },
 
     handleOnlinePick: function(submitEl)
@@ -257,21 +304,28 @@ define([
         });
       }
 
-      delete orderInfo.__v;
-      delete orderInfo.id;
-      delete orderInfo.text;
-
-      if (/^114[0-9]{6}$/.test(orderInfo._id))
+      if (orderInfo.sameOrder)
       {
-        orderInfo.no = orderInfo._id;
+        orderInfo = this.model.prodShiftOrder.get('orderData');
       }
       else
       {
-        orderInfo.no = null;
-        orderInfo.nc12 = orderInfo._id;
-      }
+        delete orderInfo.__v;
+        delete orderInfo.id;
+        delete orderInfo.text;
 
-      delete orderInfo._id;
+        if (/^114[0-9]{6}$/.test(orderInfo._id))
+        {
+          orderInfo.no = orderInfo._id;
+        }
+        else
+        {
+          orderInfo.no = null;
+          orderInfo.nc12 = orderInfo._id;
+        }
+
+        delete orderInfo._id;
+      }
 
       this.pickOrder(orderInfo, operationNo);
     },
@@ -343,23 +397,20 @@ define([
 
     pickOrder: function(orderInfo, operationNo)
     {
-      if (this.model.hasOrder())
+      if (!this.options.correctingOrder && this.model.hasOrder())
       {
-        var newQuantityDone = this.parseInt('quantityDone');
-        var newWorkerCount = this.parseInt('workerCount');
-
-        if (newQuantityDone !== this.model.prodShiftOrder.get('quantityDone'))
-        {
-          this.model.changeQuantityDone(newQuantityDone);
-        }
-
-        if (newWorkerCount !== this.model.prodShiftOrder.get('workerCount'))
-        {
-          this.model.changeWorkerCount(newWorkerCount);
-        }
+        this.model.changeQuantityDone(this.parseInt('quantityDone'));
+        this.model.changeWorkerCount(this.parseInt('workerCount'));
       }
 
-      this.model.changeOrder(orderInfo, operationNo);
+      if (this.options.correctingOrder)
+      {
+        this.model.correctOrder(orderInfo, operationNo);
+      }
+      else
+      {
+        this.model.changeOrder(orderInfo, operationNo);
+      }
 
       this.closeDialog();
     },

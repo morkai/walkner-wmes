@@ -107,6 +107,40 @@ define([
       this.generateId(prodShift);
     },
 
+    onOrderCorrected: function(prodShift, orderData, operationNo)
+    {
+      var orderId = orderData.no || orderData.nc12;
+
+      if (orderId === this.get('orderId') && operationNo === this.get('operationNo'))
+      {
+        return null;
+      }
+
+      this.prepareOperations(orderData);
+
+      var changes = {
+        mechOrder: orderData.no === null,
+        orderId: orderId,
+        operationNo: operationNo,
+        orderData: orderData,
+        creator: user.getInfo()
+      };
+
+      this.set(changes);
+
+      if (this.get('workerCount') > this.getMaxWorkerCount())
+      {
+        prodShift.changeWorkerCount(0);
+      }
+
+      if (this.get('quantityDone') > this.getMaxQuantityDone())
+      {
+        prodShift.changeQuantityDone(0);
+      }
+
+      return changes;
+    },
+
     onOrderContinued: function(prodShift)
     {
       this.set({
@@ -140,6 +174,11 @@ define([
     onWorkEnded: function()
     {
       this.clear();
+    },
+
+    isMechOrder: function()
+    {
+      return this.get('mechOrder');
     },
 
     getOrderNo: function()

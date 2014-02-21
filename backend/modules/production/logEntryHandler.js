@@ -258,6 +258,11 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
         return true;
 
+      case 'correctOrder':
+        changes.prodShiftOrder = logEntry.data;
+
+        return true;
+
       default:
         return false;
     }

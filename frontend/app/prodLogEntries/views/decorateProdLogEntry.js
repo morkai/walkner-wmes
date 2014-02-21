@@ -43,6 +43,7 @@ define([
         break;
 
       case 'changeOrder':
+      case 'correctOrder':
         var operation = prodLogEntry.data.orderData && prodLogEntry.data.orderData.operations
             ? prodLogEntry.data.orderData.operations[prodLogEntry.data.operationNo]
             : null;
