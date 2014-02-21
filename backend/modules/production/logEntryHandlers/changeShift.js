@@ -128,6 +128,11 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         productionModule.setProdData(prodShift);
       }
 
+      if (prodLine.isNew)
+      {
+        return done();
+      }
+
       prodLine.set({
         prodShift: prodShift.get('_id'),
         prodShiftOrder: null,

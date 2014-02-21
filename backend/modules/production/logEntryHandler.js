@@ -7,6 +7,7 @@ var logEntryHandlers = require('./logEntryHandlers');
 module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 {
   var mongoose = app[productionModule.config.mongooseId];
+  var ProdLine = mongoose.model('ProdLine');
   var ProdLogEntry = mongoose.model('ProdLogEntry');
   var prodLines = app[productionModule.config.prodLinesId];
 
@@ -47,11 +48,14 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
           Object.keys(groupedLogEntries).forEach(function(prodLineId)
           {
-            handleProdLineLogEntries(
-              prodLines.modelsById[prodLineId],
-              groupedLogEntries[prodLineId],
-              step.parallel()
-            );
+            var prodLine = prodLines.modelsById[prodLineId];
+
+            if (!prodLine)
+            {
+              prodLine = new ProdLine({_id: prodLineId});
+            }
+
+            handleProdLineLogEntries(prodLine, groupedLogEntries[prodLineId], step.parallel());
           });
         },
         function finalizeLogEntryHandling()
@@ -86,7 +90,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   function handleProdLineLogEntries(prodLine, logEntries, done)
   {
-    var oldProdData = {
+    var oldProdData = prodLine.isNew ? null : {
       prodShift: null,
       prodShiftOrder: null,
       prodDowntime: null
@@ -94,20 +98,23 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
     var steps = [];
     var handledLogEntries = [];
 
-    steps.push(
-      function getOldProdDataStep()
-      {
-        productionModule.getProdData('shift', prodLine.get('prodShift'), this.parallel());
-        productionModule.getProdData('order', prodLine.get('prodShiftOrder'), this.parallel());
-        productionModule.getProdData('downtime', prodLine.get('prodDowntime'), this.parallel());
-      },
-      function setOldProdDataStep(err, prodShift, prodShiftOrder, prodDowntime)
-      {
-        oldProdData.prodShift = prodShift ? prodShift.toJSON() : null;
-        oldProdData.prodShiftOrder = prodShiftOrder ? prodShiftOrder.toJSON() : null;
-        oldProdData.prodDowntime = prodDowntime ? prodDowntime.toJSON() : null;
-      }
-    );
+    if (oldProdData !== null)
+    {
+      steps.push(
+        function getOldProdDataStep()
+        {
+          productionModule.getProdData('shift', prodLine.get('prodShift'), this.parallel());
+          productionModule.getProdData('order', prodLine.get('prodShiftOrder'), this.parallel());
+          productionModule.getProdData('downtime', prodLine.get('prodDowntime'), this.parallel());
+        },
+        function setOldProdDataStep(err, prodShift, prodShiftOrder, prodDowntime)
+        {
+          oldProdData.prodShift = prodShift ? prodShift.toJSON() : null;
+          oldProdData.prodShiftOrder = prodShiftOrder ? prodShiftOrder.toJSON() : null;
+          oldProdData.prodDowntime = prodDowntime ? prodDowntime.toJSON() : null;
+        }
+      );
+    }
 
     logEntries.forEach(function(logEntry)
     {
@@ -154,10 +161,13 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
           );
         }
 
-        collectProdChanges(prodLine, handledLogEntries, oldProdData, function(changes)
+        if (oldProdData !== null)
         {
-          app.broker.publish('production.synced.' + changes.prodLine, changes);
-        });
+          collectProdChanges(prodLine, handledLogEntries, oldProdData, function(changes)
+          {
+            app.broker.publish('production.synced.' + changes.prodLine, changes);
+          });
+        }
 
         handlingLogEntries = false;
 

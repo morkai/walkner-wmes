@@ -46,6 +46,11 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         productionModule.setProdData(prodShiftOrder);
       }
 
+      if (prodLine.isNew)
+      {
+        return done();
+      }
+
       prodLine.set({
         prodShiftOrder: prodShiftOrder.get('_id'),
         prodDowntime: null

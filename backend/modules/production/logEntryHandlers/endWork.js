@@ -2,6 +2,11 @@
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
+  if (prodLine.isNew)
+  {
+    return done();
+  }
+
   prodLine.set({
     prodShiftOrder: null,
     prodDowntime: null
