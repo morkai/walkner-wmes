@@ -54,19 +54,19 @@ exports.directoryWatcher = {
 };
 
 exports.currentDayOrderImporter = {
-  stepCount: 10
+  stepCount: 8
 };
 
 exports.nextDayOrderImporter = {
-  stepCount: 10,
+  stepCount: 8,
   filterRe: /^Job PL02_(ORDER|OPER)_INFO_2D, Step ([0-9]+)\.html?$/
 };
 
 exports.prevDayOrderImporter = {
-  stepCount: 10,
+  stepCount: 8,
   filterRe: /^Job PL02_(ORDER|OPER)_INFO_3D, Step ([0-9]+)\.html?$/
 };
 
 exports.emptyOrderImporter = {
-  stepCount: 10
+  stepCount: 8
 };
