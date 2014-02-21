@@ -60,17 +60,13 @@ define([
 
     actions: function()
     {
-      var from = Date.parse(this.prodShift.get('date'));
-      var to = from + 8 * 3600 * 1000;
-
       return [
         {
           label: t.bound('prodShifts', 'PAGE_ACTION:prodLogEntries'),
           icon: 'edit',
           href: '#prodLogEntries?sort(createdAt)&limit(20)'
             + '&prodLine=' + encodeURIComponent(this.prodShift.get('prodLine'))
-            + '&createdAt>=' + from
-            + '&createdAt<' + to
+            + '&prodShift=' + encodeURIComponent(this.prodShift.id)
         }
       ];
     },
