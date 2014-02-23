@@ -1,18 +1,23 @@
 {
   "BREADCRUMBS:reports": "Raporty",
   "BREADCRUMBS:metricRefs": "Wartości referencyjne",
-  "BREADCRUMBS:report1": "Wskaźniki",
-  "BREADCRUMBS:report1:divisions": "Wydziały",
+  "BREADCRUMBS:1": "Wskaźniki",
+  "BREADCRUMBS:divisions": "Wydziały",
+  "BREADCRUMBS:2": "CLIP",
 
   "PAGE_ACTION:editMetricRefs": "Zmień wartości referencyjne",
 
-  "report1:pageTitle": "Wskaźniki",
-  "report1:overallTitle": "ML",
+  "1:pageTitle": "Wskaźniki",
+  "2:pageTitle": "CLIP",
+  "charts:title:overall": "ML",
 
   "coeffs:quantityDone": "Sztuki",
   "coeffs:downtime": "Przestoje",
   "coeffs:efficiency": "Wydajność",
   "coeffs:productivity": "Produktywność",
+  "metrics:clip:orderCount": "Ilość zleceń",
+  "metrics:clip:production": "CLIP Produkcja",
+  "metrics:clip:endToEnd": "CLIP End2End",
 
   "downtimesByAor:title": "Czas przestojów - obszary odp.",
   "downtimesByAor:seriesName": "Czas przestojów",
@@ -23,6 +28,18 @@
   "downtimesByReason:seriesName": "Czas przestojów",
 
   "quantityDoneSuffix": " szt.",
+
+  "dirIndir:title": "DIR/INDIR",
+  "dirIndir:seriesName": "FTE",
+
+  "effIneff:title": "Podział zasobów",
+  "effIneff:seriesName": "FTE",
+  "effIneff:category:value": "I/E",
+  "effIneff:category:dirIndir": "D/I",
+  "effIneff:category:other": "...",
+  "effIneff:name:value": "INEFF/EFF",
+  "effIneff:name:dirIndir": "DIRECT/INDIRECT",
+  "effIneff:name:other": "Inne",
 
   "tooltipHeaderFormat:month": "YYYY MMMM",
   "tooltipHeaderFormat:week": "wo [tydzień] (LL)",
@@ -49,11 +66,13 @@
   "filter:subdivisionType": "Typ działu",
   "filter:subdivisionType:prod": "Montaż",
   "filter:subdivisionType:press": "Tłocznia",
-  "filter:1:submit": "Filtruj wskaźniki",
-  "filter:1:submit:shift": "Zmiana",
-  "filter:1:submit:day": "Dzień",
-  "filter:1:submit:week": "Tydzień",
-  "filter:1:submit:month": "Miesiąc",
+  "filter:submit": "Filtruj raport",
+  "filter:submit:shift": "Zmiana",
+  "filter:submit:today": "Dzisiaj",
+  "filter:submit:yesterday": "Wczoraj",
+  "filter:submit:day": "Dzień",
+  "filter:submit:week": "Tydzień",
+  "filter:submit:month": "Miesiąc",
 
   "metricRefs:efficiency": "Wydajność",
   "metricRefs:productivity": "Produktywność",

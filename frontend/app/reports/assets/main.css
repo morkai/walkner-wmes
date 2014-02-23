@@ -1,22 +1,36 @@
-.page[data-id="report1"] > .ft {
+.page[data-id="report1"] > .ft,
+.page[data-id="report2"] > .ft{
   display: none;
 }
-.page[data-id="report1"] > .bd {
+.page[data-id="report1"] > .bd,
+.page[data-id="report2"] > .bd {
   margin-bottom: 0;
 }
-.reports-chart:-webkit-full-screen {
-  width: 100%;
-  height: 100%;
+.reports-chart:fullscreen {
+  width: 100%!important;
+  height: 100%!important;
 }
-.reports-1-page .filter-container {
+.reports-chart:-webkit-full-screen {
+  width: 100%!important;
+  height: 100%!important;
+}
+.reports-chart:-moz-full-screen {
+  width: 100%!important;
+  height: 100%!important;
+}
+.reports-chart:-ms-fullscreen {
+  width: 100%!important;
+  height: 100%!important;
+}
+.reports-drillingChartsPage .filter-container {
   margin-top: 1em;
   margin-bottom: 0;
 }
-.reports-1-page .form-group-datetime {
+.reports-drillingChartsPage .form-group-datetime {
   display: inline-flex;
   width: 256px;
 }
-.reports-1-header > h1 {
+.reports-drillingHeader > h1 {
   display: inline-block;
   margin: 0;
   vertical-align: top;
@@ -24,31 +38,31 @@
   font-weight: bold;
   font-size: 38.5px;
 }
-.reports-1-header-orgUnits {
+.reports-drillingHeader-orgUnits {
   display: inline-block;
   padding: 0;
   margin: 0;
   line-height: 1;
   list-style: none;
 }
-.reports-1-header-orgUnit {
+.reports-drillingHeader-orgUnit {
   display: inline-block;
   margin-left: 1em;
   padding-left: 1em;
   border-left: 1px dotted #ddd;
 }
-.reports-1-header-orgUnit-label {
+.reports-drillingHeader-orgUnit-label {
   display: block;
   font-weight: bold;
   font-size: 16px;
   font-variant: small-caps;
   text-transform: lowercase;
 }
-.reports-1-header-orgUnit-value {
+.reports-drillingHeader-orgUnit-value {
   display: block;
   font-size: 20px;
 }
-.reports-1-charts-container {
+.reports-drillingCharts-container {
   position: relative;
   display: flex;
   flex-wrap: nowrap;
@@ -57,11 +71,11 @@
   overflow-y: hidden;
   overflow-x: scroll;
 }
-.reports-1-charts {
+.reports-drillingCharts {
   flex: 0 0 375px;
   border-right: 1px dotted #E7E7E7;
 }
-.reports-1-charts:last-child {
+.reports-drillingCharts:last-child {
   border-right: 0;
 }
 .reports-chart {
@@ -73,7 +87,9 @@
   user-select: none;
 }
 .reports-1-downtimesByAor,
-.reports-1-downtimesByReason {
+.reports-1-downtimesByReason,
+.reports-2-dirIndir,
+.reports-2-effIneff {
   height: 200px;
 }
 .reports-chart .highcharts-container {
@@ -83,7 +99,7 @@
   font-weight: bold;
   fill: #428BCA!important;
 }
-.reports-1-charts[data-orgUnitType] .reports-1-coeffs .highcharts-title {
+.reports-drillingCharts[data-orgUnitType] .reports-drillingChart .highcharts-title {
   cursor: zoom-in;
   cursor: -webkit-zoom-in;
   cursor: -moz-zoom-in;
@@ -92,31 +108,32 @@
   text-align: center;
   white-space: nowrap!important;
 }
-.reports-1-charts[data-orgUnitType="prodLine"] .reports-1-coeffs .highcharts-title {
+.reports-drillingCharts[data-orgUnitType="prodFlow"] .reports-2-clip .highcharts-title,
+.reports-drillingCharts[data-orgUnitType="prodLine"] .reports-1-coeffs .highcharts-title{
   cursor: default;
 }
-.reports-1-coeffs .highcharts-title:hover {
+.reports-drillingChart .highcharts-title:hover {
   -webkit-transform: scale(1.4);
   -moz-transform: scale(1.4);
   -ms-transform: scale(1.4);
   transform: scale(1.4);
   fill: #2A6496!important;
 }
-.reports-1-charts[data-orgUnitType]:first-child .reports-1-coeffs .highcharts-title {
+.reports-drillingCharts[data-orgUnitType]:first-child .reports-drillingChart .highcharts-title {
   cursor: zoom-out;
   cursor: -webkit-zoom-out;
   cursor: -moz-zoom-out;
 }
-.reports-1-page.is-drillingDown .reports-1-charts {
+.reports-drillingChartsPage.is-drillingDown .reports-drillingCharts {
   opacity: 0.01;
 }
-.reports-1-page.is-drillingDown .reports-1-charts:first-child {
+.reports-drillingChartsPage.is-drillingDown .reports-drillingCharts:first-child {
   opacity: 1;
 }
-.reports-1-page.is-replacing .reports-1-charts {
+.reports-drillingChartsPage.is-replacing .reports-drillingCharts {
   opacity: 0.01;
 }
-.reports-1-page.is-changing * {
+.reports-drillingChartsPage.is-changing * {
   cursor: wait!important;
 }
 .reports-metricRefs .panel {

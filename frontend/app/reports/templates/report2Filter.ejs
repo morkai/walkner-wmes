@@ -1,0 +1,33 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-from"><%- t('reports', 'filter:from') %></label>
+      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-to"><%- t('reports', 'filter:to') %></label>
+      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
+    </div><div class="form-group">
+      <label><%- t('reports', 'filter:interval') %></label>
+      <div class="btn-group filter-btn-group reports-2-filter-intervals" data-toggle="buttons">
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:month') %>" data-interval="month">
+          <input type="radio" name="interval" value="month"> <%- t('reports', 'filter:interval:month') %>
+        </label>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:week') %>" data-interval="week">
+          <input type="radio" name="interval" value="week"> <%- t('reports', 'filter:interval:week') %>
+        </label>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:day') %>" data-interval="day">
+          <input type="radio" name="interval" value="day"> <%- t('reports', 'filter:interval:day') %>
+        </label>
+      </div>
+    </div><div class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('reports', 'filter:submit') %>">
+      <div class="btn-group">
+        <input type="button" class="btn btn-default" value="<%= t('reports', 'filter:submit:today') %>" data-range="today">
+        <input type="button" class="btn btn-default" value="<%= t('reports', 'filter:submit:yesterday') %>" data-range="yesterday">
+        <input type="button" class="btn btn-default" value="<%= t('reports', 'filter:submit:week') %>" data-range="week">
+        <input type="button" class="btn btn-default" value="<%= t('reports', 'filter:submit:month') %>" data-range="month">
+      </div>
+    </div>
+  </form>
+</div>

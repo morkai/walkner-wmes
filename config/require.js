@@ -27,7 +27,8 @@ exports.paths = {
   'visibly': 'vendor/visibly',
   'highcharts': 'vendor/highcharts/js/highcharts.src',
   'highcharts-noData': 'vendor/highcharts/js/modules/no-data-to-display.src',
-  'zeroclipboard': 'vendor/zeroclipboard/ZeroClipboard'
+  'zeroclipboard': 'vendor/zeroclipboard/ZeroClipboard',
+  'screenfull': 'vendor/screenfull'
 };
 
 exports.shim = {
@@ -56,6 +57,9 @@ exports.shim = {
   },
   'highcharts-noData': {
     deps: ['highcharts']
+  },
+  'screenfull': {
+    exports: 'screenfull'
   }
 };
 

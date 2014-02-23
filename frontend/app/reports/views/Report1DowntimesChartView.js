@@ -1,44 +1,17 @@
 define([
-  'jquery',
+  'app/highcharts',
   'app/i18n',
   'app/core/View',
-  'app/data/colors',
-  'app/highcharts'
+  'app/data/colorFactory',
+  './wordwrapTooltip'
 ], function(
-  $,
+  Highcharts,
   t,
   View,
-  colors,
-  Highcharts
+  colorFactory,
+  wordwrapTooltip
 ) {
   'use strict';
-
-  function wordwrap(line)
-  {
-    if (line < 45)
-    {
-      return line;
-    }
-
-    var words = line.split(' ');
-    var lines = [];
-
-    words.forEach(function(word)
-    {
-      var lastLine = lines.length === 0 ? '' : lines[lines.length - 1];
-
-      if (lines.length === 0 || lastLine.length + word.length > 40)
-      {
-        lines.push(word);
-      }
-      else
-      {
-        lines[lines.length - 1] += ' ' + word;
-      }
-    });
-
-    return lines.join('</span><br><span style="font-size: 10px">');
-  }
 
   return View.extend({
 
@@ -163,9 +136,9 @@ define([
         {
           chartData.categories.push(downtime.shortText);
           chartData.data.push({
-            name: wordwrap(downtime.longText),
+            name: wordwrapTooltip(downtime.longText),
             y: downtime.value,
-            color: colors.getColor(attrName, downtime.key)
+            color: colorFactory.getColor(attrName, downtime.key)
           });
         }
       });

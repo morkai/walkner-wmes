@@ -1,4 +1,6 @@
 define([
+  'underscore',
+  'jquery',
   'app/time',
   'app/i18n',
   'app/viewport',
@@ -7,6 +9,8 @@ define([
   'app/data/views/renderOrgUnitPath',
   'app/highcharts'
 ], function(
+  _,
+  $,
   time,
   t,
   viewport,
@@ -21,7 +25,7 @@ define([
 
     className: function()
     {
-      return 'reports-chart reports-drillingChart reports-1-coeffs';
+      return 'reports-chart reports-drillingChart reports-2-clip';
     },
 
     initialize: function()
@@ -33,7 +37,7 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:coeffs', this.render);
+      this.listenTo(this.model, 'change:clip', this.render);
 
       if (this.metricRefs)
       {
@@ -74,7 +78,7 @@ define([
     {
       var chartData = this.serializeChartData();
       var formatTooltipHeader = this.formatTooltipHeader.bind(this);
-      var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
+      var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
       var view = this;
 
       this.chart = new Highcharts.Chart({
@@ -132,7 +136,7 @@ define([
             {
               str += '<tr><td style="color: ' + point.series.color + '">'
                 + point.series.name + ':</td><td>'
-                + point.y + point.series.tooltipOptions.valueSuffix
+                + point.y + (point.series.tooltipOptions.valueSuffix || '')
                 + '</td></tr>';
             });
 
@@ -167,54 +171,38 @@ define([
         },
         series: [
           {
-            name: t('reports', 'coeffs:quantityDone'),
+            name: t('reports', 'metrics:clip:orderCount'),
             color: '#00aaff',
             type: 'area',
             yAxis: 0,
-            data: chartData.quantityDone,
-            tooltip: {
-              valueSuffix: t('reports', 'quantityDoneSuffix')
-            }
+            data: chartData.orderCount
           },
           {
-            name: t('reports', 'coeffs:efficiency'),
-            color: '#00ee00',
+            name: t('reports', 'metrics:clip:production'),
+            color: '#aa00ff',
             type: 'line',
             yAxis: 1,
-            data: chartData.efficiency,
+            data: chartData.production,
             tooltip: {
               valueSuffix: '%'
             },
             events: {
-              show: this.updateEfficiencyRef.bind(this),
-              hide: this.updateEfficiencyRef.bind(this)
+              show: this.updateProductionRef.bind(this),
+              hide: this.updateProductionRef.bind(this)
             }
           },
           {
-            name: t('reports', 'coeffs:productivity'),
-            color: '#ffaa00',
+            name: t('reports', 'metrics:clip:endToEnd'),
+            color: '#FF007F',
             type: 'line',
             yAxis: 1,
-            data: chartData.productivity,
+            data: chartData.endToEnd,
             tooltip: {
               valueSuffix: '%'
             },
-            visible: this.model.query.get('interval') !== 'hour',
             events: {
-              show: this.updateProductivityRef.bind(this),
-              hide: this.updateProductivityRef.bind(this)
-            }
-          },
-          {
-            name: t('reports', 'coeffs:downtime'),
-            color: 'rgba(255, 0, 0, .75)',
-            borderColor: '#AC2925',
-            borderWidth: 0,
-            type: 'column',
-            yAxis: 1,
-            data: chartData.downtime,
-            tooltip: {
-              valueSuffix: '%'
+              show: this.updateEndToEndRef.bind(this),
+              hide: this.updateEndToEndRef.bind(this)
             }
           }
         ]
@@ -226,25 +214,22 @@ define([
       var chartData = this.serializeChartData();
       var min = 0;
 
-      if (!chartData.quantityDone.length)
+      if (!chartData.orderCount.length)
       {
         min = null;
       }
 
       this.chart.yAxis[1].setExtremes(min, null, false);
 
-      var visible = this.model.query.get('interval') !== 'hour';
-      var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
+      var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
 
       this.chart.series[0].update({marker: markerStyles}, false);
       this.chart.series[1].update({marker: markerStyles}, false);
-      this.chart.series[2].update({marker: markerStyles, visible: visible}, false);
-      this.chart.series[3].update({marker: markerStyles}, false);
+      this.chart.series[2].update({marker: markerStyles}, false);
 
-      this.chart.series[0].setData(chartData.quantityDone, false);
-      this.chart.series[1].setData(chartData.efficiency, false);
-      this.chart.series[2].setData(chartData.productivity, false);
-      this.chart.series[3].setData(chartData.downtime, true);
+      this.chart.series[0].setData(chartData.orderCount, false);
+      this.chart.series[1].setData(chartData.production, false);
+      this.chart.series[2].setData(chartData.endToEnd, true);
 
       this.updatePlotLines();
     },
@@ -256,8 +241,8 @@ define([
         return;
       }
 
-      this.updateEfficiencyRef();
-      this.updateProductivityRef();
+      this.updateProductionRef();
+      this.updateEndToEndRef();
     },
 
     updatePlotLine: function(metric, yAxis, series, color, dashStyle)
@@ -282,22 +267,22 @@ define([
       }
     },
 
-    updateEfficiencyRef: function()
+    updateProductionRef: function()
     {
       if (this.chart)
       {
         this.updatePlotLine(
-          'efficiency', this.chart.yAxis[1], this.chart.series[1], '#00ee00', 'dash'
+          'production', this.chart.yAxis[1], this.chart.series[1], '#aa00ff', 'dash'
         );
       }
     },
 
-    updateProductivityRef: function()
+    updateEndToEndRef: function()
     {
       if (this.chart)
       {
         this.updatePlotLine(
-          'productivity', this.chart.yAxis[1], this.chart.series[2], '#ffaa00', 'dash'
+          'endToEnd', this.chart.yAxis[1], this.chart.series[2], '#FF007F', 'dash'
         );
       }
     },
@@ -356,7 +341,7 @@ define([
 
     serializeChartData: function()
     {
-      return this.model.get('coeffs');
+      return this.model.get('clip');
     },
 
     formatTooltipHeader: function(epoch)
@@ -364,7 +349,7 @@ define([
       /*jshint -W015*/
 
       var timeMoment = time.getMoment(epoch);
-      var interval = this.model.query.get('interval') || 'hour';
+      var interval = this.model.query.get('interval');
       var data;
 
       if (interval === 'shift')
@@ -443,7 +428,7 @@ define([
     {
       var metricInfo = this.metricRefs.parseSettingId(metricRef.id);
 
-      if (metricInfo.metric !== 'efficiency' && metricInfo.metric !== 'productivity')
+      if (metricInfo.metric !== 'production' && metricInfo.metric !== 'endToEnd')
       {
         return;
       }
@@ -453,7 +438,7 @@ define([
         return;
       }
 
-      if (metricInfo.metric === 'efficiency')
+      if (metricInfo.metric === 'production')
       {
         this.updateEfficiencyRef();
       }

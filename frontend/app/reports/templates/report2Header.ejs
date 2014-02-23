@@ -1,9 +1,9 @@
 <div class="reports-drillingHeader">
   <h1>
     <% if (overallQuery) { %>
-    <a href="#reports/1?<%- overallQuery %>"><%- t('reports', '1:pageTitle') %></a>
+    <a href="#reports/2?<%- overallQuery %>"><%- t('reports', '2:pageTitle') %></a>
     <% } else { %>
-    <%- t('reports', '1:pageTitle') %>
+    <%- t('reports', '2:pageTitle') %>
     <% } %>
   </h1>
   <ul class="reports-drillingHeader-orgUnits">
@@ -13,7 +13,7 @@
       <span class="reports-drillingHeader-orgUnit-value">
         <% orgUnit.value.forEach(function(value, i) { %>
           <% if (orgUnit.query[i]) { %>
-          <a href="#reports/1?<%- orgUnit.query[i] %>"><%= value %></a><%- i === orgUnit.lastI ? '' : ';' %>
+          <a href="#reports/2?<%- orgUnit.query[i] %>"><%= value %></a><%- i === orgUnit.lastI ? '' : ';' %>
           <% } else { %>
           <%= value %><%- i === orgUnit.lastI ? '' : ';' %>
           <% } %>

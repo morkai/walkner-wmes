@@ -4,26 +4,26 @@ define([
   'app/i18n',
   'app/data/orgUnits',
   'app/core/View',
-  '../Report1',
-  '../Report1Query',
+  '../Report2',
+  '../Report2Query',
   '../MetricRefCollection',
-  '../views/Report1HeaderView',
-  '../views/Report1FilterView',
-  '../views/Report1ChartsView',
-  'app/reports/templates/report1Page'
+  '../views/Report2HeaderView',
+  '../views/Report2FilterView',
+  '../views/Report2ChartsView',
+  'app/reports/templates/report2Page'
 ], function(
   _,
   $,
   t,
   orgUnits,
   View,
-  Report1,
-  Report1Query,
+  Report2,
+  Report2Query,
   MetricRefCollection,
-  Report1HeaderView,
-  Report1FilterView,
-  Report1ChartsView,
-  report1PageTemplate
+  Report2HeaderView,
+  Report2FilterView,
+  Report2ChartsView,
+  report2PageTemplate
 ) {
   'use strict';
 
@@ -31,13 +31,13 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'report1',
+    pageId: 'report2',
 
-    template: report1PageTemplate,
+    template: report2PageTemplate,
 
     title: function()
     {
-      var title = [t.bound('reports', 'BREADCRUMBS:1')];
+      var title = [t.bound('reports', 'BREADCRUMBS:2')];
       var orgUnit = orgUnits.getByTypeAndId(
         this.query.get('orgUnitType'),
         this.query.get('orgUnitId')
@@ -59,22 +59,15 @@ define([
       return title;
     },
 
-    actions: [{
-      label: t.bound('reports', 'PAGE_ACTION:editMetricRefs'),
-      icon: 'crosshairs',
-      privileges: 'REPORTS:MANAGE',
-      href: '#reports;metricRefs'
-    }],
-
     events: {
-      'mousedown .reports-1-coeffs .highcharts-title': function(e)
+      'mousedown .reports-2-clip .highcharts-title': function(e)
       {
         if (e.button === 1)
         {
           return false; // Disable scroll cursor
         }
       },
-      'mouseup .reports-1-coeffs .highcharts-title': function(e)
+      'mouseup .reports-2-clip .highcharts-title': function(e)
       {
         if (e.button === 1)
         {
@@ -82,7 +75,7 @@ define([
           return false;
         }
       },
-      'click .reports-1-coeffs .highcharts-title': function(e)
+      'click .reports-2-clip .highcharts-title': function(e)
       {
         if (!e.ctrlKey && e.button === 0)
         {
@@ -134,7 +127,7 @@ define([
         pubsub: this.pubsub
       });
 
-      this.query = new Report1Query(this.options.query);
+      this.query = new Report2Query(this.options.query);
 
       this.reports = this.query.createReports();
 
@@ -143,15 +136,15 @@ define([
 
     defineViews: function()
     {
-      this.headerView = new Report1HeaderView({model: this.query});
+      this.headerView = new Report2HeaderView({model: this.query});
 
-      this.filterView = new Report1FilterView({model: this.query});
+      this.filterView = new Report2FilterView({model: this.query});
 
       var metricRefs = this.metricRefs;
 
       this.chartsViews = this.reports.map(function(report)
       {
-        return new Report1ChartsView({
+        return new Report2ChartsView({
           model: report,
           metricRefs: metricRefs
         });
@@ -215,7 +208,7 @@ define([
 
       var orgUnitType = $charts.attr('data-orgUnitType');
 
-      if (!orgUnitType || orgUnitType === 'prodLine')
+      if (!orgUnitType || orgUnitType === 'prodFlow')
       {
         return;
       }
@@ -301,7 +294,7 @@ define([
           return parentChartsView;
         }
 
-        var childChartsView = new Report1ChartsView({
+        var childChartsView = new Report2ChartsView({
           model: report,
           metricRefs: metricRefs,
           skipRenderCharts: true
@@ -342,7 +335,7 @@ define([
           return workingChartsView;
         }
 
-        var siblingChartsView = new Report1ChartsView({
+        var siblingChartsView = new Report2ChartsView({
           model: report,
           metricRefs: metricRefs,
           skipRenderCharts: true
@@ -380,7 +373,7 @@ define([
         page.reports = page.query.createReports();
         page.chartsViews = page.reports.map(function(report)
         {
-          return new Report1ChartsView({
+          return new Report2ChartsView({
             model: report,
             metricRefs: page.metricRefs,
             skipRenderCharts: true

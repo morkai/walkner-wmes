@@ -2,13 +2,7 @@
 
 var step = require('h5.step');
 var moment = require('moment');
-
-var INTERVAL_STR_TO_NUM = {
-  hour: 3600 * 1000,
-  shift: 8 * 3600 * 1000,
-  day: 24 * 3600 * 1000,
-  week: 7 * 24 * 3600 * 1000
-};
+var util = require('./util');
 
 module.exports = function(mongoose, options, done)
 {
@@ -54,13 +48,6 @@ module.exports = function(mongoose, options, done)
     }
   );
 
-  function round(num)
-  {
-    num = Math.round(num * 1000) / 1000;
-
-    return isNaN(num) ? 0 : num;
-  }
-
   function isIgnoredDowntime(prodDowntime)
   {
     return options.ignoredDowntimeReasons.indexOf(prodDowntime.reason) !== -1;
@@ -69,8 +56,7 @@ module.exports = function(mongoose, options, done)
   function createConditions()
   {
     var conditions = {
-      startedAt: {$gte: options.fromTime, $lt: options.toTime},
-      finishedAt: {$ne: null}
+      startedAt: {$gte: options.fromTime, $lt: options.toTime}
     };
 
     if (options.orgUnitType && options.orgUnitId)
@@ -86,6 +72,8 @@ module.exports = function(mongoose, options, done)
     {
       conditions.mechOrder = true;
     }
+
+    conditions.finishedAt = {$ne: null};
 
     return conditions;
   }
@@ -337,12 +325,12 @@ module.exports = function(mongoose, options, done)
   {
     Object.keys(results.downtimes.byAor).forEach(function(aor)
     {
-      results.downtimes.byAor[aor] = round(results.downtimes.byAor[aor] / 8);
+      results.downtimes.byAor[aor] = util.round(results.downtimes.byAor[aor] / 8);
     });
 
     Object.keys(results.downtimes.byReason).forEach(function(reason)
     {
-      results.downtimes.byReason[reason] = round(results.downtimes.byReason[reason] / 8);
+      results.downtimes.byReason[reason] = util.round(results.downtimes.byReason[reason] / 8);
     });
   }
 
@@ -401,14 +389,14 @@ module.exports = function(mongoose, options, done)
 
     fteMasterEntries.forEach(function(fteMasterEntry)
     {
-      fteMasterEntry.startedAt = calcFteShiftStartedAt(fteMasterEntry);
+      fteMasterEntry.startedAt = fteMasterEntry.date.getTime();
 
       groupObjects(groupedFteMasterEntries, fteMasterEntry);
     });
 
     fteLeaderEntries.forEach(function(fteLeaderEntry)
     {
-      fteLeaderEntry.startedAt = calcFteShiftStartedAt(fteLeaderEntry);
+      fteLeaderEntry.startedAt = fteLeaderEntry.date.getTime();
 
       groupObjects(groupedFteLeaderEntries, fteLeaderEntry);
     });
@@ -519,7 +507,7 @@ module.exports = function(mongoose, options, done)
       });
     }
 
-    var createNextGroupKey = createCreateNextGroupKey();
+    var createNextGroupKey = util.createCreateNextGroupKey(options.interval);
     var lastGroupKey = createGroupKey(options.fromTime);
 
     if (groupKeys[0] !== lastGroupKey)
@@ -551,21 +539,6 @@ module.exports = function(mongoose, options, done)
     });
 
     setImmediate(this.next());
-  }
-
-  function createCreateNextGroupKey()
-  {
-    if (options.interval === 'month')
-    {
-      return function(groupKey)
-      {
-        var date = new Date(groupKey);
-
-        return date.setMonth(date.getMonth() + 1);
-      };
-    }
-
-    return function(groupKey) { return groupKey + INTERVAL_STR_TO_NUM[options.interval]; };
   }
 
   function groupProdShiftOrders(prodShiftOrders, orderToDowntimes, orderToWorkerCount)
@@ -804,11 +777,6 @@ module.exports = function(mongoose, options, done)
     return groupKey.valueOf();
   }
 
-  function calcFteShiftStartedAt(fteEntry)
-  {
-    return new Date(fteEntry.date.getTime());
-  }
-
   function calcCoeffs(groupKey, orders, fteTotals, orderToDowntimes)
   {
     /*jshint validthis:true*/
@@ -887,7 +855,7 @@ module.exports = function(mongoose, options, done)
 
     if (effNum && effDen)
     {
-      coeffs.efficiency = round(effNum / effDen);
+      coeffs.efficiency = util.round(effNum / effDen);
 
       if (options.interval === 'hour')
       {
@@ -903,7 +871,7 @@ module.exports = function(mongoose, options, done)
 
     if (dtNum && dtDen)
     {
-      coeffs.downtime = round(dtNum / 8 / dtDen);
+      coeffs.downtime = util.round(dtNum / 8 / dtDen);
     }
 
     if (typeof fteTotals === 'object')
@@ -913,11 +881,11 @@ module.exports = function(mongoose, options, done)
 
       if (prodNum && prodDen)
       {
-        coeffs.productivity = round(prodNum / prodDen);
+        coeffs.productivity = util.round(prodNum / prodDen);
       }
 
-      coeffs.fteMasterTotal = fteTotals.master;
-      coeffs.fteLeaderTotal = fteTotals.leader;
+      coeffs.fteMasterTotal = util.round(fteTotals.master);
+      coeffs.fteLeaderTotal = util.round(fteTotals.leader);
     }
 
     coeffs.orderCount = orderCount;

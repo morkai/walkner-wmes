@@ -1,6 +1,7 @@
 'use strict';
 
 var report1 = require('./report1');
+var report2 = require('./report2');
 
 module.exports = function setUpReportsRoutes(app, reportsModule)
 {
@@ -8,7 +9,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var userModule = app[reportsModule.config.userId];
   var mongoose = app[reportsModule.config.mongooseId];
   var settings = app[reportsModule.config.settingsId];
-  var downtimeReasons = app.downtimeReasons;
+  var downtimeReasonsModule = app.downtimeReasons;
+  var prodFunctionsModule = app.prodFunctions;
   // TODO: Create a proper org unit tree solution
   var divisionsModule = app.divisions;
   var subdivisionsModule = app.subdivisions;
@@ -17,10 +19,14 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var workCentersModule = app.workCenters;
   var prodLinesModule = app.prodLines;
 
+  var KS_MRP_RE = /^KS/;
+
   var canView = userModule.auth('REPORTS:VIEW');
   var canManage = userModule.auth('REPORTS:MANAGE');
 
   express.get('/reports/1', canView, report1Route);
+
+  express.get('/reports/2', canView, report2Route);
 
   express.get(
     '/reports/metricRefs',
@@ -60,7 +66,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       prodDivisionCount: countProdDivisions()
     };
 
-    downtimeReasons.models.forEach(function(downtimeReason)
+    downtimeReasonsModule.models.forEach(function(downtimeReason)
     {
       if (!downtimeReason.get('report1'))
       {
@@ -79,9 +85,51 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     });
   }
 
+  function report2Route(req, res, next)
+  {
+    if (req.query.orgUnitType === 'mrpController')
+    {
+      req.query.orgUnitType = 'mrpControllers';
+    }
+
+    var mrpControllers =
+      getAssemblyMrpControllersByOrgUnit(req.query.orgUnitType, req.query.orgUnitId);
+
+    if (mrpControllers === null)
+    {
+      return next(new Error('INVALID_ORG_UNIT'));
+    }
+
+    var divisionId = getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnitId);
+    var subdivisions = getSubdivisionsByDivision(divisionId, 'assembly');
+    var options = {
+      fromTime: getTime(req.query.from),
+      toTime: getTime(req.query.to),
+      interval: req.query.interval || 'shift',
+      orgUnitType: req.query.orgUnitType,
+      orgUnitId: req.query.orgUnitId,
+      division: divisionId,
+      subdivisions: subdivisions,
+      mrpControllers: mrpControllers,
+      prodFlows: getProdFlowsByMrpControllers(mrpControllers),
+      directProdFunctions: getDirectProdFunctions(),
+      prodDivisionCount: countProdDivisions()
+    };
+
+    report2(mongoose, options, function(err, report)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      return res.send(report);
+    });
+  }
+
   function getTime(date)
   {
-    return /^[0-9]+$/.test(date) ? parseInt(date, 10) : Date.parse(date);
+    return (/^[0-9]+$/).test(date) ? parseInt(date, 10) : Date.parse(date);
   }
 
   function getDivisionByOrgUnit(orgUnitType, orgUnitId)
@@ -140,16 +188,116 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     return parentOrgUnit ? getDivisionByOrgUnit(parentOrgUnitProperty, parentOrgUnit) : null;
   }
 
-  function getSubdivisionsByDivision(divisionId)
+  function getSubdivisionsByDivision(divisionId, type)
   {
     if (!divisionId)
     {
-      return [];
+      return !type ? [] : subdivisionsModule.models
+        .filter(function(subdivision) { return subdivision.get('type') === type; })
+        .map(function(subdivision) { return subdivision.get('_id'); });
     }
 
     return subdivisionsModule.models
-      .filter(function(subdivision) { return subdivision.get('division') === divisionId; })
+      .filter(function(subdivision)
+      {
+        return subdivision.get('division') === divisionId
+          && (!type || subdivision.get('type') === type);
+      })
       .map(function(subdivision) { return subdivision.get('_id'); });
+  }
+
+  function getAssemblyMrpControllersByOrgUnit(orgUnitType, orgUnitId)
+  {
+    /*jshint -W015*/
+
+    if (!orgUnitType || !orgUnitId)
+    {
+      return mrpControllersModule.models
+        .map(function(mrpController) { return mrpController._id; })
+        .filter(onlyAssemblyMrpControllers);
+    }
+
+    switch (orgUnitType)
+    {
+      case 'division':
+        return subdivisionsModule.models
+          .filter(function(subdivision)
+          {
+            return subdivision.division === orgUnitId && subdivision.type === 'assembly';
+          })
+          .reduce(
+            function(mrpControllers, subdivision)
+            {
+              return mrpControllers.concat(
+                getAssemblyMrpControllersByOrgUnit('subdivision', subdivision._id.toString())
+              );
+            },
+            []
+          );
+
+      case 'subdivision':
+        var subdivision = subdivisionsModule.modelsById[orgUnitId];
+
+        if (!subdivision)
+        {
+          return null;
+        }
+
+        if (subdivision.type !== 'assembly')
+        {
+          return [];
+        }
+
+        return mrpControllersModule.models
+          .filter(function(mrpController)
+          {
+            return mrpController.subdivision
+              && mrpController.subdivision.toString() === orgUnitId
+              && !KS_MRP_RE.test(mrpController._id);
+          })
+          .map(function(mrpController) { return mrpController._id; });
+
+      case 'mrpControllers':
+        return [orgUnitId].filter(onlyAssemblyMrpControllers);
+
+      case 'prodFlow':
+        var prodFlow = prodFlowsModule.modelsById[orgUnitId];
+
+        if (!prodFlow)
+        {
+          return null;
+        }
+
+        return (prodFlow ? prodFlow.mrpController : []).filter(onlyAssemblyMrpControllers);
+
+      case 'workCenter':
+        return null;
+
+      case 'prodLine':
+        return null;
+
+      default:
+        return null;
+    }
+  }
+
+  function onlyAssemblyMrpControllers(mrpControllerId)
+  {
+    if (KS_MRP_RE.test(mrpControllerId))
+    {
+      return false;
+    }
+
+    var mrpController = mrpControllersModule.modelsById[mrpControllerId];
+
+    if (!mrpController)
+    {
+      return false;
+    }
+
+    var subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
+
+    return subdivision && subdivision.type === 'assembly';
   }
 
   function countProdDivisions()
@@ -165,5 +313,43 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     });
 
     return prodDivisionCount;
+  }
+
+  function getProdFlowsByMrpControllers(mrpControllers)
+  {
+    var prodFlows = {};
+
+    prodFlowsModule.models.forEach(function(prodFlow)
+    {
+      if (mrpControllers.length === 0)
+      {
+        prodFlows[prodFlow._id] = true;
+      }
+
+      prodFlow.mrpController.forEach(function(mrpControllerId)
+      {
+        if (mrpControllers.indexOf(mrpControllerId) !== -1)
+        {
+          prodFlows[prodFlow._id] = true;
+        }
+      });
+    });
+
+    return prodFlows;
+  }
+
+  function getDirectProdFunctions()
+  {
+    var prodFunctions = {};
+
+    prodFunctionsModule.models.forEach(function(prodFunction)
+    {
+      if (prodFunction.direct)
+      {
+        prodFunctions[prodFunction._id] = true;
+      }
+    });
+
+    return prodFunctions;
   }
 };

@@ -2,22 +2,24 @@ define([
   'screenfull',
   'app/i18n',
   'app/core/View',
-  './Report1CoeffsChartView',
-  './Report1DowntimesChartView',
-  'app/reports/templates/report1Charts'
+  './Report2ClipChartView',
+  './Report2DirIndirChartView',
+  './Report2EffIneffChartView',
+  'app/reports/templates/report2Charts'
 ], function(
   screenfull,
   t,
   View,
-  Report1CoeffsChartView,
-  Report1DowntimesChartView,
-  report1ChartsTemplate
+  Report2ClipChartView,
+  Report2DirIndirChartView,
+  Report2EffIneffChartView,
+  report2ChartsTemplate
 ) {
   'use strict';
 
   return View.extend({
 
-    template: report1ChartsTemplate,
+    template: report2ChartsTemplate,
 
     events: {
       'click .highcharts-title': function(e)
@@ -41,8 +43,8 @@ define([
     initialize: function()
     {
       this.setView(
-        '.reports-1-coeffs-container',
-        new Report1CoeffsChartView({
+        '.reports-2-clip-container',
+        new Report2ClipChartView({
           model: this.model,
           metricRefs: this.metricRefs,
           skipRenderChart: this.options.skipRenderCharts
@@ -50,19 +52,17 @@ define([
       );
 
       this.setView(
-        '.reports-1-downtimesByAor-container',
-        new Report1DowntimesChartView({
+        '.reports-2-dirIndir-container',
+        new Report2DirIndirChartView({
           model: this.model,
-          attrName: 'downtimesByAor',
           skipRenderChart: this.options.skipRenderCharts
         })
       );
 
       this.setView(
-        '.reports-1-downtimesByReason-container',
-        new Report1DowntimesChartView({
+        '.reports-2-effIneff-container',
+        new Report2EffIneffChartView({
           model: this.model,
-          attrName: 'downtimesByReason',
           skipRenderChart: this.options.skipRenderCharts
         })
       );

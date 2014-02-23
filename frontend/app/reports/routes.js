@@ -23,6 +23,19 @@ define([
     });
   });
 
+  router.map('/reports/2', user.auth('REPORTS:VIEW'), function(req)
+  {
+    if (viewport.currentPage && viewport.currentPage.pageId === 'report2')
+    {
+      return viewport.currentPage.query.reset(req.query);
+    }
+
+    viewport.loadPage('app/reports/pages/Report2Page', function(Report2Page)
+    {
+      return new Report2Page({query: req.query});
+    });
+  });
+
   router.map('/reports;metricRefs', user.auth('REPORTS:MANAGE'), function(req)
   {
     viewport.loadPage('app/reports/pages/MetricRefsPage', function(MetricRefsPage)
