@@ -86,7 +86,8 @@ module.exports = function setupOrderModel(app, mongoose)
 
   orderSchema.statics.TOPIC_PREFIX = 'orders';
 
-  orderSchema.index({nc12: 1});
+  orderSchema.index({nc12: 1, finishDate: -1});
+  orderSchema.index({finishDate: -1, mrp: 1});
 
   orderSchema.pre('save', function(next)
   {

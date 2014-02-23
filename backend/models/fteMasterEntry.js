@@ -102,6 +102,9 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   fteMasterEntrySchema.statics.TOPIC_PREFIX = 'fte.master';
 
+  fteMasterEntrySchema.index({subdivision: 1});
+  fteMasterEntrySchema.index({date: -1, subdivision: 1});
+
   fteMasterEntrySchema.statics.createForShift = function(shiftId, user, done)
   {
     step(

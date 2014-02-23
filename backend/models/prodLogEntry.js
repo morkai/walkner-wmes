@@ -66,5 +66,11 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     id: false
   });
 
+  prodLogEntrySchema.index({todo: 1});
+  prodLogEntrySchema.index({type: 1, createdAt: -1});
+  prodLogEntrySchema.index({prodShift: 1});
+  prodLogEntrySchema.index({prodShiftOrder: 1});
+  prodLogEntrySchema.index({prodLine: 1, createdAt: -1});
+
   mongoose.model('ProdLogEntry', prodLogEntrySchema);
 };

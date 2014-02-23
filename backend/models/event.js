@@ -29,8 +29,9 @@ module.exports = function setupEventModel(app, mongoose)
 
   eventSchema.statics.TOPIC_PREFIX = 'events';
 
-  eventSchema.index({time: -1, severity: 1});
-  eventSchema.index({time: -1, type: 1});
+  eventSchema.index({time: -1});
+  eventSchema.index({severity: 1, time: -1});
+  eventSchema.index({type: 1, time: -1});
 
   mongoose.model('Event', eventSchema);
 };

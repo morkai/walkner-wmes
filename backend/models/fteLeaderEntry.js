@@ -95,6 +95,8 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   fteLeaderEntrySchema.statics.TOPIC_PREFIX = 'fte.leader';
 
+  fteLeaderEntrySchema.index({date: -1});
+
   fteLeaderEntrySchema.statics.createForShift = function(shiftId, user, done)
   {
     var prodDivisions = app.divisions.models
