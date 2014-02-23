@@ -75,6 +75,7 @@ module.exports = function setupOrderModel(app, mongoose)
     },
     startDate: Date,
     finishDate: Date,
+    tzOffsetMs: Number,
     statuses: [String],
     operations: [operationSchema],
     changes: [changeSchema],
