@@ -14,8 +14,6 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
   var queue = 0;
   var allDone = false;
   var fields = {
-    startedAt: 1,
-    finishedAt: 1,
     operationNo: 1,
     'orderData.operations': 1
   };
@@ -45,17 +43,9 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
       laborTime = operation.laborTime;
     }
 
-    var duration = 0;
-
-    if (doc.finishedAt)
-    {
-      duration = (doc.finishedAt - doc.startedAt) / 3600000;
-    }
-
     var update = {
       $set: {
-        laborTime: laborTime,
-        duration: Math.round(duration * 10000) / 10000
+        laborTime: laborTime
       }
     };
 

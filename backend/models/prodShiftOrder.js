@@ -94,7 +94,22 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       type: Date,
       default: null
     },
-    duration: {
+    totalDuration: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    workDuration: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    downtimeDuration: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    breakDuration: {
       type: Number,
       default: 0,
       min: 0
@@ -131,6 +146,60 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       app.broker.publish('prodShiftOrders.updated.' + doc._id, changes);
     }
   });
+
+  prodShiftOrderSchema.methods.recalcDurations = function(save, done)
+  {
+    this.totalDuration = 0;
+    this.workDuration = 0;
+    this.downtimeDuration = 0;
+    this.breakDuration = 0;
+
+    if (!this.finishedAt)
+    {
+      return save ? this.save(done) : done();
+    }
+
+    var conditions = {
+      prodShiftOrder: this._id,
+      finishedAt: {$ne: null}
+    };
+    var fields = {
+      reason: 1,
+      startedAt: 1,
+      finishedAt: 1
+    };
+    var prodShiftOrder = this;
+
+    mongoose.model('ProdDowntime').find(conditions, fields).lean().exec(function(err, prodDowntimes)
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      prodShiftOrder.totalDuration =
+        (prodShiftOrder.finishedAt - prodShiftOrder.startedAt) / 3600000;
+
+      prodDowntimes.forEach(function(prodDowntime)
+      {
+        var reason = app.downtimeReasons.modelsById[prodDowntime.reason];
+        var property = reason && !reason.report1 ? 'breakDuration' : 'downtimeDuration';
+
+        prodShiftOrder[property] += (prodDowntime.finishedAt - prodDowntime.startedAt) / 3600000;
+      });
+
+      prodShiftOrder.workDuration = prodShiftOrder.totalDuration - prodShiftOrder.breakDuration;
+
+      if (save)
+      {
+        prodShiftOrder.save(done);
+      }
+      else
+      {
+        done();
+      }
+    });
+  };
 
   mongoose.model('ProdShiftOrder', prodShiftOrderSchema);
 };
