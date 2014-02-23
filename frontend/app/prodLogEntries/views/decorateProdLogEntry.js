@@ -68,10 +68,25 @@ define([
         break;
     }
 
+    var timeDiff = null;
+
+    if (prodLogEntry.savedAt)
+    {
+      timeDiff = (Date.parse(prodLogEntry.savedAt) - Date.parse(prodLogEntry.createdAt)) / 1000;
+    }
+
     prodLogEntry.data = t('prodLogEntries', 'data:' + prodLogEntry.type, data);
     prodLogEntry.type = t('prodLogEntries', 'type:' + prodLogEntry.type);
     prodLogEntry.createdAt = time.format(prodLogEntry.createdAt, 'YYYY-MM-DD HH:mm:ss');
     prodLogEntry.creator = renderUserInfo({userInfo: prodLogEntry.creator});
+
+    if (timeDiff)
+    {
+      prodLogEntry.createdAt += ' ('
+        + (timeDiff < 0 ? '-' : '+')
+        + time.toString(Math.abs(timeDiff), false, true)
+        + ')';
+    }
 
     if (prodLogEntry.prodShift)
     {

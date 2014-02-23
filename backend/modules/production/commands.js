@@ -128,6 +128,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
             logEntry.creator.ip = creator.ip;
           }
 
+          logEntry.savedAt = new Date();
           logEntry.todo = true;
 
           logEntryList.push(new ProdLogEntry(logEntry).toObject());
