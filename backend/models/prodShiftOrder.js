@@ -66,6 +66,11 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       required: true
     },
     orderData: {},
+    laborTime: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
     workerCount: {
       type: Number,
       default: 0,
@@ -88,6 +93,11 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     finishedAt: {
       type: Date,
       default: null
+    },
+    duration: {
+      type: Number,
+      default: 0,
+      min: 0
     }
   }, {
     id: false

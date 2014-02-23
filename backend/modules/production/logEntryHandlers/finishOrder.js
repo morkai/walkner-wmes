@@ -29,6 +29,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
     prodShiftOrder.set('finishedAt', logEntry.data.finishedAt);
 
+    var duration = (prodShiftOrder.finishedAt - prodShiftOrder.startedAt) / 3600000;
+
+    prodShiftOrder.set('duration', Math.round(duration * 10000) / 10000);
+
     prodShiftOrder.save(function(err)
     {
       if (err)
