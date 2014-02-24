@@ -133,6 +133,8 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     this.wasNew = this.isNew;
     this.modified = this.modifiedPaths();
 
+    this.copyOperationData();
+
     next();
   });
 
@@ -154,6 +156,42 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       app.broker.publish('prodShiftOrders.updated.' + doc._id, changes);
     }
   });
+
+  prodShiftOrderSchema.statics.calcDurations = function(prodShiftOrder, prodDowntimes)
+  {
+    prodShiftOrder.totalDuration = (prodShiftOrder.finishedAt - prodShiftOrder.startedAt) / 3600000;
+    prodShiftOrder.breakDuration = 0;
+    prodShiftOrder.downtimeDuration = 0;
+
+    prodDowntimes.forEach(function(prodDowntime)
+    {
+      var reason = app.downtimeReasons.modelsById[prodDowntime.reason];
+      var property = reason && !reason.report1 ? 'breakDuration' : 'downtimeDuration';
+
+      prodShiftOrder[property] += (prodDowntime.finishedAt - prodDowntime.startedAt) / 3600000;
+    });
+
+    prodShiftOrder.workDuration = prodShiftOrder.totalDuration - prodShiftOrder.breakDuration;
+  };
+
+  prodShiftOrderSchema.methods.copyOperationData = function()
+  {
+    if (!this.operationNo || !this.orderData)
+    {
+      return;
+    }
+
+    var operations = this.orderData.operations;
+
+    if (!operations)
+    {
+      return 0;
+    }
+
+    var operation = operations[this.operationNo];
+
+    this.laborTime = operation && operation.laborTime > 0 ? operation.laborTime : 0;
+  };
 
   prodShiftOrderSchema.methods.recalcDurations = function(save, done)
   {
@@ -185,18 +223,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
         return done(err);
       }
 
-      prodShiftOrder.totalDuration =
-        (prodShiftOrder.finishedAt - prodShiftOrder.startedAt) / 3600000;
-
-      prodDowntimes.forEach(function(prodDowntime)
-      {
-        var reason = app.downtimeReasons.modelsById[prodDowntime.reason];
-        var property = reason && !reason.report1 ? 'breakDuration' : 'downtimeDuration';
-
-        prodShiftOrder[property] += (prodDowntime.finishedAt - prodDowntime.startedAt) / 3600000;
-      });
-
-      prodShiftOrder.workDuration = prodShiftOrder.totalDuration - prodShiftOrder.breakDuration;
+      prodShiftOrder.constructor.calcDurations(prodShiftOrder, prodDowntimes);
 
       if (save)
       {

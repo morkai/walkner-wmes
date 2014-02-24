@@ -43,7 +43,6 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     }
 
     prodShiftOrder.set(logEntry.data);
-    prodShiftOrder.set('laborTime', util.getLaborTime(prodShiftOrder));
 
     prodShiftOrder.save(function(err)
     {

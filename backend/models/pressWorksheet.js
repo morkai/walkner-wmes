@@ -164,6 +164,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       operator = operators[0];
     }
 
+    var ProdShiftOrder = mongoose.model('ProdShiftOrder');
     var prodShiftOrders = [];
     var prodDowntimes = [];
 
@@ -253,6 +254,8 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
           operationNo: prodShiftOrder.operationNo
         });
       });
+
+      ProdShiftOrder.calcDurations(prodShiftOrder, prodDowntimes);
 
       prodShiftOrders.push(prodShiftOrder);
     });

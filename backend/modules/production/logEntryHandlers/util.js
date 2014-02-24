@@ -26,31 +26,6 @@ exports.fillOrderData = function(app, productionModule, logEntry, done)
   }
 };
 
-exports.getLaborTime = function(prodShiftOrder)
-{
-  if (!prodShiftOrder || !prodShiftOrder.operationNo || !prodShiftOrder.orderData)
-  {
-    console.log('1 :(');
-    return 0;
-  }
-
-  var operations = prodShiftOrder.orderData.operations;
-
-  if (!operations)
-  {
-    return 0;
-  }
-
-  var operation = operations[prodShiftOrder.operationNo];
-
-  if (!operation || typeof operation.laborTime !== 'number' || operation.laborTime === -1)
-  {
-    return 0;
-  }
-
-  return operation.laborTime;
-};
-
 function fillMechOrderData(app, productionModule, logEntry, done)
 {
   var mongoose = app[productionModule.config.mongooseId];
