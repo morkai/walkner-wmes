@@ -1,1 +1,1 @@
-define(["../core/Collection","./DowntimeReason"],function(e,n){return e.extend({model:n,rqlQuery:"sort(_id)"})});
+define(["../core/Collection","./DowntimeReason"],function(i,n){return i.extend({model:n,rqlQuery:"sort(_id)",findBySubdivisionType:function(i){return this.filter(function(n){return-1!==n.get("subdivisionTypes").indexOf(i)})},findFirstBreakIdBySubdivisionType:function(i){var n=this.find(function(n){return"break"!==n.get("type")?!1:-1!==n.get("subdivisionTypes").indexOf(i)});return n?n.id:null}})});

@@ -283,6 +283,7 @@ app/core/views/FormView.js
 app/core/pages/AddFormPage.js
 app/core/pages/EditFormPage.js
 app/core/pages/ActionFormPage.js
+app/downtimeReasons/views/decorateDowntimeReason.js
 app/downtimeReasons/templates/form.js
 app/downtimeReasons/views/DowntimeReasonFormView.js
 app/downtimeReasons/templates/details.js
