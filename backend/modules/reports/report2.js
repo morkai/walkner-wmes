@@ -404,8 +404,11 @@ function handleFteLeaderEntryStream(options, results, stream, done)
           ? getDivisionCount(options.division, comp.count)
           : comp.count;
 
-        results.dirIndir.indirect += count;
-        results.dirIndir.storage += count;
+        if (options.orgUnitType == null)
+        {
+          results.dirIndir.indirect += count;
+          results.dirIndir.storage += count;
+        }
 
         addToProperty(results.dirIndir.storageByProdTasks, task.id, count);
 
