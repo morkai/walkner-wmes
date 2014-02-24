@@ -17,14 +17,14 @@ define([
 
     defaults: function()
     {
-      var today = time.getMoment();
+      var today = time.getMoment().hours(0).minutes(0).seconds(0).milliseconds(0);
 
       return {
         orgUnitType: null,
         orgUnitId: null,
         to: today.valueOf(),
         from: today.subtract('days', 1).valueOf(),
-        interval: 'shift'
+        interval: 'day'
       };
     },
 
