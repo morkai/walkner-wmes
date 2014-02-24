@@ -5,6 +5,7 @@ define([
   '../socket',
   '../core/Model',
   '../core/util/getShiftStartInfo',
+  '../data/downtimeReasons',
   '../data/subdivisions',
   '../data/workCenters',
   '../data/prodLines',
@@ -19,6 +20,7 @@ define([
   socket,
   Model,
   getShiftStartInfo,
+  downtimeReasons,
   subdivisions,
   workCenters,
   prodLines,
@@ -594,10 +596,21 @@ define([
       return 150;
     },
 
+    getSubdivisionType: function()
+    {
+      var subdivision = subdivisions.get(this.get('subdivision'));
+
+      return subdivision ? subdivision.get('type') : null;
+    },
+
+    getDowntimeReasons: function()
+    {
+      return downtimeReasons.findBySubdivisionType(this.getSubdivisionType());
+    },
+
     getBreakReason: function()
     {
-      // TODO: Make configurable
-      return 'A';
+      return downtimeReasons.findFirstBreakIdBySubdivisionType(this.getSubdivisionType());
     },
 
     getDefaultAor: function()

@@ -166,7 +166,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     prodDowntimes.forEach(function(prodDowntime)
     {
       var reason = app.downtimeReasons.modelsById[prodDowntime.reason];
-      var property = reason && !reason.report1 ? 'breakDuration' : 'downtimeDuration';
+      var property = reason && reason.type === 'break' ? 'breakDuration' : 'downtimeDuration';
 
       prodShiftOrder[property] += (prodDowntime.finishedAt - prodDowntime.startedAt) / 3600000;
     });

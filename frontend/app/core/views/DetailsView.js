@@ -25,8 +25,13 @@ define([
     serialize: function()
     {
       return {
-        model: this.model.toJSON()
+        model: this.serializeDetails(this.model)
       };
+    },
+
+    serializeDetails: function(model)
+    {
+      return model.toJSON();
     },
 
     afterRender: function()

@@ -119,18 +119,15 @@ define([
       $reason.select2({
         dropdownCssClass: 'production-dropdown',
         openOnEnter: null,
-        data: downtimeReasons
-          .filter(function(downtimeReason)
-          {
-            return downtimeReason.get('pressPosition') === -1;
-          })
+        data: this.model.getDowntimeReasons()
           .map(function(downtimeReason)
           {
             return {
               id: downtimeReason.id,
               text: downtimeReason.id + ' - ' + downtimeReason.get('label')
             };
-          }).sort(function(a, b)
+          })
+          .sort(function(a, b)
           {
             return a.id.localeCompare(b.id);
           })

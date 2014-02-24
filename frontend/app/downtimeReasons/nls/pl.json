@@ -18,10 +18,22 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:label": "Opis",
+  "PROPERTY:type": "Typ",
+  "PROPERTY:subdivisionTypes": "Typy działów",
   "PROPERTY:opticsPosition": "Pozycja na karcie pracy (montaż optyki)",
   "PROPERTY:pressPosition": "Pozycja na karcie pracy (inne)",
-  "PROPERTY:report1": "W raporcie 1?",
-  "PROPERTY:auto": "Automatyczne potwierdzenie?",
+  "PROPERTY:scheduled": "Planowany?",
+  "PROPERTY:auto": "Automatyczne potwierdzanie?",
+
+  "type:other": "Inny",
+  "type:malfunction": "Awaria",
+  "type:renovation": "Przegląd/remont",
+  "type:maintenance": "Konserwacja",
+  "type:break": "Przerwa",
+
+  "subdivisionType:none": "Żadne",
+  "subdivisionType:assembly": "Montaż",
+  "subdivisionType:press": "Tłocznia",
 
   "FORM:ACTION:add": "Dodaj powód przestojów",
   "FORM:ACTION:edit": "Edytuj powód przestojów",

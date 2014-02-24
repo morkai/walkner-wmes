@@ -52,6 +52,11 @@ define([
         options.template = this.options.detailsTemplate;
       }
 
+      if (typeof this.options.serializeDetails === 'function')
+      {
+        options.serializeDetails = this.options.serializeDetails;
+      }
+
       this.view = new DetailsViewClass(options);
     },
 

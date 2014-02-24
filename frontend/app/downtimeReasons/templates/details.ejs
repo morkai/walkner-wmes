@@ -8,7 +8,15 @@
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:label') %></div>
-        <div class="prop-value"><%= model.label || '-' %></div>
+        <div class="prop-value"><%= model.label %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:type') %></div>
+        <div class="prop-value"><%= model.type %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:subdivisionTypes') %></div>
+        <div class="prop-value"><%= model.subdivisionTypes %></div>
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:opticsPosition') %></div>
@@ -19,12 +27,12 @@
         <div class="prop-value"><%- model.pressPosition %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:report1') %></div>
-        <div class="prop-value"><%- t('core', 'BOOL:' + model.report1) %></div>
+        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:auto') %></div>
+        <div class="prop-value"><%- model.auto %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:auto') %></div>
-        <div class="prop-value"><%- t('core', 'BOOL:' + model.auto) %></div>
+        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:scheduled') %></div>
+        <div class="prop-value"><%- model.scheduled %></div>
       </div>
     </div>
   </div>

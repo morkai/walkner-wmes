@@ -10,6 +10,7 @@ define([
   '../core/pages/AddFormPage',
   '../core/pages/EditFormPage',
   '../core/pages/ActionFormPage',
+  './views/decorateDowntimeReason',
   './views/DowntimeReasonFormView',
   'app/downtimeReasons/templates/details',
   'i18n!app/nls/downtimeReasons'
@@ -25,6 +26,7 @@ define([
   AddFormPage,
   EditFormPage,
   ActionFormPage,
+  decorateDowntimeReason,
   DowntimeReasonFormView,
   detailsTemplate
 ) {
@@ -37,16 +39,17 @@ define([
   {
     viewport.showPage(new ListPage({
       collection: downtimeReasons,
-      columns: ['_id', 'label', 'opticsPosition', 'pressPosition', 'report1', 'auto'],
-      serializeRow: function(model)
-      {
-        var row = model.toJSON();
-
-        row.report1 = t('core', 'BOOL:' + row.report1);
-        row.auto = t('core', 'BOOL:' + row.auto);
-
-        return row;
-      }
+      columns: [
+        '_id',
+        'label',
+        'type',
+        'subdivisionTypes',
+        'opticsPosition',
+        'pressPosition',
+        'auto',
+        'scheduled'
+      ],
+      serializeRow: decorateDowntimeReason
     }));
   });
 
@@ -54,7 +57,8 @@ define([
   {
     viewport.showPage(new DetailsPage({
       model: new DowntimeReason({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
+      detailsTemplate: detailsTemplate,
+      serializeDetails: decorateDowntimeReason
     }));
   });
 

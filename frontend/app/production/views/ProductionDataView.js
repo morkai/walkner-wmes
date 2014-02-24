@@ -349,7 +349,7 @@ define([
         e.target.blur();
       }
 
-      var downtimePickerView = new DowntimePickerView(options);
+      var downtimePickerView = new DowntimePickerView(_.extend({model: this.model}, options));
 
       this.listenTo(downtimePickerView, 'downtimePicked', function(downtimeInfo)
       {

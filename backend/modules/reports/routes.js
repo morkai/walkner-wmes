@@ -68,7 +68,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
     downtimeReasonsModule.models.forEach(function(downtimeReason)
     {
-      if (!downtimeReason.get('report1'))
+      if (downtimeReason.get('type') === 'break')
       {
         options.ignoredDowntimeReasons.push(downtimeReason.get('_id'));
       }

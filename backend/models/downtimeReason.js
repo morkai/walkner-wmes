@@ -11,8 +11,19 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
     },
     label: {
       type: String,
-      trim: true
+      trim: true,
+      required: true
     },
+    type: {
+      type: String,
+      enum: ['maintenance', 'renovation', 'malfunction', 'break', 'other'],
+      required: true
+    },
+    subdivisionTypes: [{
+      type: String,
+      enum: ['assembly', 'press'],
+      required: true
+    }],
     pressPosition: {
       type: Number,
       default: -1
@@ -21,11 +32,11 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
       type: Number,
       default: -1
     },
-    report1: {
-      type: Boolean,
-      default: true
-    },
     auto: {
+      type: Boolean,
+      default: false
+    },
+    scheduled: {
       type: Boolean,
       default: false
     }

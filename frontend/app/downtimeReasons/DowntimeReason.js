@@ -19,24 +19,17 @@ define([
 
     labelAttribute: 'label',
     
-    defaults: {
-      label: null,
-      opticsPosition: -1,
-      pressPosition: -1,
-      report1: true,
-      auto: false
-    },
-
-    toJSON: function()
+    defaults: function()
     {
-      var downtimeReason = Model.prototype.toJSON.call(this);
-
-      if (!downtimeReason.label)
-      {
-        downtimeReason.label = downtimeReason._id;
-      }
-
-      return downtimeReason;
+      return {
+        label: null,
+        type: 'other',
+        subdivisionTypes: ['assembly', 'press'],
+        opticsPosition: -1,
+        pressPosition: -1,
+        auto: false,
+        scheduled: false
+      };
     }
 
   });
