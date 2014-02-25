@@ -68,8 +68,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     orderData: {},
     laborTime: {
       type: Number,
-      default: 0,
-      min: 0
+      default: 0
     },
     workerCount: {
       type: Number,
@@ -96,23 +95,19 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     },
     totalDuration: {
       type: Number,
-      default: 0,
-      min: 0
+      default: 0
     },
     workDuration: {
       type: Number,
-      default: 0,
-      min: 0
+      default: 0
     },
     downtimeDuration: {
       type: Number,
-      default: 0,
-      min: 0
+      default: 0
     },
     breakDuration: {
       type: Number,
-      default: 0,
-      min: 0
+      default: 0
     }
   }, {
     id: false
