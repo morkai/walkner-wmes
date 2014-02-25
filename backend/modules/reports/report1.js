@@ -859,13 +859,11 @@ module.exports = function(mongoose, options, done)
 
       if (options.interval === 'hour')
       {
-        var endOfHour = parseInt(groupKey, 10) + 3599999;
-        var percent = 1 - lastOrderFinishedAt.getTime() / endOfHour;
+        var startOfHour = parseInt(groupKey, 10);
+        var endOfHour = startOfHour + 3599999;
 
-        if (percent !== 0)
-        {
-          coeffs.efficiency *= percent;
-        }
+        coeffs.efficiency *=
+          (lastOrderFinishedAt.getTime() - startOfHour) / (endOfHour - startOfHour);
       }
     }
 
