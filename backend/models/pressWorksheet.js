@@ -215,6 +215,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       applyProdLineOrgUnits(prodShiftOrder, order.prodLine);
 
       var downtimeStartTime = startedAt.getTime();
+      var orderDowntimes = [];
 
       (order.downtimes || []).forEach(function(downtime)
       {
@@ -223,8 +224,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         downtimeStartTime = downtimeStartTime + downtime.count * 60 * 1000;
 
         var finishedAt = new Date(downtimeStartTime);
-
-        prodDowntimes.push({
+        var prodDowntime = {
           _id: generateId(startedAt, prodShiftOrder._id),
           division: prodShiftOrder.division,
           subdivision: prodShiftOrder.subdivision,
@@ -252,10 +252,13 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
           mechOrder: true,
           orderId: prodShiftOrder.orderId,
           operationNo: prodShiftOrder.operationNo
-        });
+        };
+
+        orderDowntimes.push(prodDowntime);
+        prodDowntimes.push(prodDowntime);
       });
 
-      ProdShiftOrder.calcDurations(prodShiftOrder, prodDowntimes);
+      ProdShiftOrder.calcDurations(prodShiftOrder, orderDowntimes);
 
       prodShiftOrders.push(prodShiftOrder);
     });
