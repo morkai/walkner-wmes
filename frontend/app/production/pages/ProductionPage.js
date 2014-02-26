@@ -1,5 +1,6 @@
 define([
   'jquery',
+  'app/user',
   'app/i18n',
   'app/viewport',
   'app/updater/index',
@@ -14,6 +15,7 @@ define([
   'app/production/templates/productionPage'
 ], function(
   $,
+  user,
   t,
   viewport,
   updater,
@@ -36,7 +38,19 @@ define([
     layoutName: 'blank',
 
     localTopics: {
-      'socket.connected': 'refreshDowntimes',
+      'socket.connected': function()
+      {
+        this.setUpTimeLog();
+        this.refreshDowntimes();
+      },
+      'socket.disconnected': function()
+      {
+        if (this.timers.diagTimeLog)
+        {
+          clearTimeout(this.timers.diagTimeLog);
+          this.timers.diagTimeLog = null;
+        }
+      },
       'updater.frontendReloading': function()
       {
         this.model.saveLocalData();
@@ -162,6 +176,7 @@ define([
     {
       if (this.socket.isConnected())
       {
+        this.setUpTimeLog();
         this.refreshDowntimes();
       }
     },
@@ -221,6 +236,37 @@ define([
       return this.model.isDowntime()
         ? t('production', 'unload:downtime')
         : t('production', 'unload:order');
+    },
+
+    setUpTimeLog: function()
+    {
+      if (this.timers.diagTimeLog != null)
+      {
+        return;
+      }
+
+      this.socket.emit('diag.log', {
+        createdAt: new Date(),
+        creator: user.getInfo(),
+        prodLine: this.model.prodLine.id,
+        type: 'connected',
+        data: {
+          versions: updater.versions
+        }
+      });
+
+      this.timers.diagTimeLog = setInterval(this.logTime.bind(this), 60000);
+    },
+
+    logTime: function()
+    {
+      this.socket.emit('diag.log', {
+        createdAt: new Date(),
+        creator: user.getInfo(),
+        prodLine: this.model.prodLine.id,
+        type: 'ping',
+        data: null
+      });
     }
 
   });

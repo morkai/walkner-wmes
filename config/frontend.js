@@ -4,6 +4,7 @@ exports.id = 'frontend';
 
 exports.modules = [
   'updater',
+  'diag',
   'mongoose',
   'settings',
   'events',

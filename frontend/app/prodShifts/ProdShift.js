@@ -148,8 +148,7 @@ define([
       {
         this.set(data);
 
-        if (this.get('date').getTime() !== this.getCurrentShiftMoment().valueOf()
-          || this.get('shift') !== this.getCurrentShift())
+        if (this.get('date').getTime() !== this.getCurrentShiftMoment().valueOf())
         {
           this.resetShift();
         }
