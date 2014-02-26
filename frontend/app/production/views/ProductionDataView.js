@@ -64,19 +64,19 @@ define([
 
       var order = this.model.prodShiftOrder;
 
-      this.listenTo(order, 'change:_id', this.updateOrderData);
-      this.listenTo(order, 'change:orderId change:operationNo', function()
+      this.listenTo(order, 'change:_id change:orderId change:operationNo', _.debounce(function()
       {
+        this.updateOrderData();
         this.updateOrderInfo();
         this.updateWorkerCount();
         this.updateTaktTime();
-      });
+      }, 1));
       this.listenTo(order, 'change:quantityDone', this.updateQuantityDone);
-      this.listenTo(order, 'change:workerCount', function()
+      this.listenTo(order, 'change:workerCount', _.debounce(function()
       {
         this.updateWorkerCount();
         this.updateTaktTime();
-      });
+      }, 1));
     },
 
     afterRender: function()
@@ -118,7 +118,9 @@ define([
     {
       var html = this.model.prodShiftOrder.getOrderNo();
 
-      if (!this.model.isLocked() && !this.model.prodShiftOrder.isMechOrder())
+      if (!this.model.isLocked()
+        && this.model.hasOrder()
+        && !this.model.prodShiftOrder.isMechOrder())
       {
         html += ' <button class="btn btn-link">'
           + t('production', 'property:orderNo:change')
@@ -132,7 +134,9 @@ define([
     {
       var html = this.model.prodShiftOrder.getNc12();
 
-      if (!this.model.isLocked() && this.model.prodShiftOrder.isMechOrder())
+      if (!this.model.isLocked()
+        && this.model.hasOrder()
+        && this.model.prodShiftOrder.isMechOrder())
       {
         html += ' <button class="btn btn-link">'
           + t('production', 'property:nc12:change')
