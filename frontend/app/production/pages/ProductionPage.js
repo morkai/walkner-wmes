@@ -240,7 +240,7 @@ define([
 
     setUpTimeLog: function()
     {
-      if (this.timers.diagTimeLog != null)
+      if (true || this.timers.diagTimeLog != null)
       {
         return;
       }
