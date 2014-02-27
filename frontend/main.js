@@ -88,27 +88,13 @@
     NavbarView,
     LogInFormView)
   {
+    var startBroker = null;
+
     monkeyPatch(Backbone, $);
 
     socket.connect();
 
     moment.lang(window.LOCALE || 'pl');
-
-    var startBroker = broker.sandbox();
-
-    startBroker.subscribe('socket.connected', function()
-    {
-      startBroker.subscribe('user.reloaded', doStartApp);
-    });
-
-    startBroker.subscribe('socket.connectFailed', doStartApp);
-
-    broker.subscribe('page.titleChanged', function(newTitle)
-    {
-      newTitle.unshift(i18n('core', 'TITLE'));
-
-      document.title = newTitle.reverse().join(' < ');
-    });
 
     $.ajaxSetup({
       dataType: 'json',
@@ -144,6 +130,29 @@
       return new BlankLayout();
     });
 
+    if (navigator.onLine)
+    {
+      startBroker = broker.sandbox();
+
+      startBroker.subscribe('socket.connected', function()
+      {
+        startBroker.subscribe('user.reloaded', doStartApp);
+      });
+
+      startBroker.subscribe('socket.connectFailed', doStartApp);
+
+      broker.subscribe('page.titleChanged', function(newTitle)
+      {
+        newTitle.unshift(i18n('core', 'TITLE'));
+
+        document.title = newTitle.reverse().join(' < ');
+      });
+    }
+    else
+    {
+      doStartApp();
+    }
+
     function createNavbarView()
     {
       var req = router.getCurrentRequest();
@@ -178,8 +187,11 @@
 
     function doStartApp()
     {
-      startBroker.destroy();
-      startBroker = null;
+      if (startBroker !== null)
+      {
+        startBroker.destroy();
+        startBroker = null;
+      }
 
       broker.subscribe('i18n.reloaded', function()
       {
@@ -252,7 +264,7 @@
     ], startApp);
   }
 
-  if (!document.getElementsByTagName('html')[0].hasAttribute('manifest'))
+  if (!navigator.onLine || !document.getElementsByTagName('html')[0].hasAttribute('manifest'))
   {
     return requireApp();
   }
