@@ -135,6 +135,7 @@ define([
 
     serializeChartData: function()
     {
+      var isFullscreen = screenfull.isFullscreen;
       var tasks = this.model.get('tasks');
       var effIneff = this.model.get('effIneff');
       var categories = [];
@@ -148,49 +149,44 @@ define([
         };
       }
 
-      categories.push(
-        t('reports', 'effIneff:category:value'),
-        t('reports', 'effIneff:category:dirIndir')
-      );
-
       data.push({
+        category: t('reports', 'effIneff:category:value'),
         name: t('reports', 'effIneff:name:value'),
         y: Math.abs(effIneff.value),
         color: effIneff > 0 ? '#00ee00' : '#ee0000'
       }, {
+        category: t('reports', 'effIneff:category:dirIndir'),
         name: t('reports', 'effIneff:name:dirIndir'),
         y: effIneff.dirIndir,
         color: '#eeee00'
       });
 
-      var prodTasksData = [];
-
       Object.keys(effIneff.prodTasks).forEach(function(taskId)
       {
-        prodTasksData.push({
-          taskId: taskId,
+        data.push({
+          category: categoryFactory.getCategory('tasks', taskId),
           name: wordwrapTooltip(tasks[taskId] || taskId),
           y: effIneff.prodTasks[taskId],
           color: '#eeee00'
         });
       });
 
-      prodTasksData.sort(function(a, b) { return b.y - a.y; }).forEach(function(prodTaskData)
+      data.sort(function(a, b) { return b.y - a.y; }).forEach(function(dataPoint)
       {
-        categories.push(categoryFactory.getCategory('tasks', prodTaskData.taskId));
-        data.push(prodTaskData);
+        categories.push(dataPoint.category);
       });
 
       var categoryCount = categories.length;
+      var maxCategories = 10;
 
-      if (!screenfull.isFullscreen && categoryCount > 10)
+      if (!isFullscreen && categoryCount > maxCategories)
       {
-        var limitedCategories = categories.slice(0, 9);
-        var limitedData = data.slice(0, 9);
+        var limitedCategories = categories.slice(0, maxCategories - 1);
+        var limitedData = data.slice(0, maxCategories - 1);
 
         var otherCount = 0;
 
-        for (var i = 9; i < categoryCount; ++i)
+        for (var i = maxCategories; i < categoryCount; ++i)
         {
           otherCount += data[i].y;
         }
@@ -206,12 +202,12 @@ define([
         data = limitedData;
       }
 
-      if (!screenfull.isFullscreen)
+      if (isFullscreen)
       {
-        data.forEach(function(dataEntry)
+        for (var j = 0; j < categoryCount; ++j)
         {
-          dataEntry.y = Math.round(dataEntry.y);
-        });
+          categories[j] = data[j].name;
+        }
       }
 
       return {
