@@ -101,7 +101,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     }
 
     var divisionId = getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnitId);
-    var subdivisions = getSubdivisionsByDivision(divisionId, 'assembly');
+    var subdivisions = getSubdivisionsByDivision(divisionId);
     var options = {
       fromTime: getTime(req.query.from),
       toTime: getTime(req.query.to),
@@ -111,7 +111,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       division: divisionId,
       subdivisions: subdivisions,
       mrpControllers: mrpControllers,
-      prodFlows: getProdFlowsByMrpControllers(mrpControllers),
+      prodFlows: getProdFlowsByOrgUnit(req.query.orgUnitType, req.query.orgUnitId),
       directProdFunctions: getDirectProdFunctions(),
       prodDivisionCount: countProdDivisions()
     };
@@ -336,6 +336,64 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     });
 
     return prodFlows;
+  }
+
+  function getProdFlowsByOrgUnit(orgUnitType, orgUnitId)
+  {
+    /*jshint -W015*/
+
+    if (!orgUnitType || !orgUnitId)
+    {
+      return null;
+    }
+
+    switch (orgUnitType)
+    {
+      case 'division':
+        return subdivisionsModule.models
+          .filter(function(subdivision){ return subdivision.division === orgUnitId; })
+          .reduce(function(prodFlows, subdivision)
+          {
+            return prodFlows.concat(
+              getProdFlowsByOrgUnit('subdivision', subdivision._id.toString())
+            );
+          }, []);
+
+      case 'subdivision':
+        var subdivision = subdivisionsModule.modelsById[orgUnitId];
+
+        if (!subdivision)
+        {
+          return null;
+        }
+
+        return mrpControllersModule.models
+          .filter(function(mrpController)
+          {
+            return mrpController.subdivision && mrpController.subdivision.toString() === orgUnitId;
+          })
+          .reduce(function(prodFlows, mrpController)
+          {
+            return prodFlows.concat(getProdFlowsByOrgUnit('mrpControllers', mrpController._id));
+          }, []);
+
+      case 'mrpControllers':
+        return prodFlowsModule.models
+          .filter(function(prodFlow) { return prodFlow.mrpController.indexOf(orgUnitId) !== -1; })
+          .map(function(prodFlow) { return prodFlow._id.toString(); });
+
+      case 'prodFlow':
+        return [orgUnitId];
+
+      case 'workCenter':
+        return null;
+
+      case 'prodLine':
+        return null;
+
+      default:
+        return null;
+    }
   }
 
   function getDirectProdFunctions()

@@ -3,6 +3,7 @@
 var step = require('h5.step');
 var lodash = require('lodash');
 var moment = require('moment');
+var ObjectId = require('mongoose').Types.ObjectId;
 var util = require('./util');
 
 module.exports = function(mongoose, options, done)
@@ -13,6 +14,13 @@ module.exports = function(mongoose, options, done)
   var Order = mongoose.model('Order');
   var FteMasterEntry = mongoose.model('FteMasterEntry');
   var FteLeaderEntry = mongoose.model('FteLeaderEntry');
+
+  var prodFlowMap = {};
+
+  (options.prodFlows || []).forEach(function(prodFlowId)
+  {
+    prodFlowMap[prodFlowId] = true;
+  });
 
   var results = {
     options: options,
@@ -221,7 +229,9 @@ module.exports = function(mongoose, options, done)
       .lean()
       .stream();
 
-    handleFteMasterEntryStream(options, results, fteMasterEntryStream, this.parallel());
+    handleFteMasterEntryStream(
+      prodFlowMap, options, results, fteMasterEntryStream, this.parallel()
+    );
 
     var leaderConditions = {
       date: {$gte: this.from, $lt: this.to},
@@ -251,28 +261,36 @@ module.exports = function(mongoose, options, done)
 
   function calcEfficiencyStep()
   {
+    var $match = {
+      startedAt: {$gte: this.from, $lt: this.to},
+      laborTime: {$gt: 0},
+      workerCount: {$gt: 0},
+      workDuration: {$gt: 0}
+    };
+
+    if (options.orgUnitType)
+    {
+      $match[options.orgUnitType] = prepareOrgUnitId(options.orgUnitType, options.orgUnitId);
+    }
+
     ProdShiftOrder.aggregate(
-      [{$match: {
-        startedAt: {$gte: this.from, $lt: this.to},
-        prodFlow: {$in: Object.keys(options.prodFlows).map(mongoose.Types.ObjectId)},
-        laborTime: {$ne: 0},
-        workerCount: {$ne: 0},
-        workDuration: {$gt: 0}
-      }},
+      [{$match: $match},
       {$project: {
         _id: 0,
         num: {$multiply: [{$divide: ['$laborTime', 100]}, '$quantityDone']},
         den: {$multiply: ['$workDuration', '$workerCount']},
-        quantityDone: 1
+        quantityDone: 1,
+        mechOrder: 1
       }},
       {$group: {
         _id: null,
         num: {$sum: '$num'},
         den: {$sum: '$den'},
-        qty: {$sum: '$quantityDone'}
+        qty: {$sum: {$cond: ['$mechOrder', 0, '$quantityDone']}}
       }},
       {$project: {
         num: '$num',
+        den: '$den',
         eff: {$divide: ['$num', '$den']},
         qty: '$qty'
       }}],
@@ -323,7 +341,7 @@ function roundObjectValues(obj)
   });
 }
 
-function handleFteMasterEntryStream(options, results, stream, done)
+function handleFteMasterEntryStream(prodFlowMap, options, results, stream, done)
 {
   stream.on('error', done);
 
@@ -339,11 +357,6 @@ function handleFteMasterEntryStream(options, results, stream, done)
       var task = fteMasterEntry.tasks[taskI];
       var isProdFlow = task.type === 'prodFlow';
 
-      if (isProdFlow && !options.prodFlows[task.id])
-      {
-        continue;
-      }
-
       for (var funcI = 0, funcL = task.functions.length; funcI < funcL; ++funcI)
       {
         var func = task.functions[funcI];
@@ -353,14 +366,19 @@ function handleFteMasterEntryStream(options, results, stream, done)
         {
           var count = func.companies[compI].count;
 
+          results.dirIndir.production += count;
+
+          if (isProdFlow && options.prodFlows !== null && !prodFlowMap[task.id])
+          {
+            continue;
+          }
+
           addToDirIndir(results.dirIndir, isProdFlow, isDirect, func.id, count);
 
           if (!isProdFlow)
           {
             addToProperty(results.effIneff.prodTasks, task.id, count);
           }
-
-          results.dirIndir.production += count;
 
           results.tasks[task.id] = task.name;
         }
@@ -499,4 +517,11 @@ function addToProperty(obj, prop, num)
   {
     obj[prop] += num;
   }
+}
+
+function prepareOrgUnitId(orgUnitType, orgUnitId)
+{
+  return orgUnitType !== 'subdivision' && orgUnitType !== 'prodFlow'
+    ? orgUnitId
+    : new ObjectId(orgUnitId);
 }
