@@ -354,7 +354,11 @@ function handleFteMasterEntryStream(options, results, stream, done)
           var count = func.companies[compI].count;
 
           addToDirIndir(results.dirIndir, isProdFlow, isDirect, func.id, count);
-          addToProperty(results.effIneff.prodTasks, task.id, count);
+
+          if (!isProdFlow)
+          {
+            addToProperty(results.effIneff.prodTasks, task.id, count);
+          }
 
           results.dirIndir.production += count;
 
