@@ -3,7 +3,6 @@ define([
   'app/highcharts',
   'app/i18n',
   'app/data/prodFunctions',
-  'app/data/categoryFactory',
   'app/core/View',
   './wordwrapTooltip'
 ], function(
@@ -11,7 +10,6 @@ define([
   Highcharts,
   t,
   prodFunctions,
-  categoryFactory,
   View,
   wordwrapTooltip
 ) {
@@ -235,9 +233,11 @@ define([
 
       Object.keys(dirIndir.storageByProdTasks).forEach(function(taskId)
       {
+        var name = tasks[taskId] || taskId;
+
         prodTasksData.push({
-          taskId: taskId,
-          name: wordwrapTooltip(tasks[taskId] || taskId),
+          categoryName: name,
+          name: wordwrapTooltip(name),
           y: dirIndir.storageByProdTasks[taskId],
           color: COLOR_INDIRECT
         });
@@ -245,7 +245,7 @@ define([
 
       prodTasksData.sort(function(a, b) { return b.y - a.y; }).forEach(function(prodTaskData)
       {
-        chartData.categories.push(categoryFactory.getCategory('tasks', prodTaskData.taskId));
+        chartData.categories.push(prodTaskData.categoryName);
         chartData.data.push(prodTaskData);
         chartData.quantityDone.push(dirIndir.quantityDone);
       });
