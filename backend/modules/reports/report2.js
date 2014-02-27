@@ -27,6 +27,7 @@ module.exports = function(mongoose, options, done)
       directByProdFunction: {},
       indirectByProdFunction: {},
       production: 0,
+      totalStorage: 0,
       storage: 0,
       storageByProdTasks: {}
     },
@@ -300,7 +301,7 @@ module.exports = function(mongoose, options, done)
 
     var prodNum = doc.num / 8;
     var prodDen =
-      results.dirIndir.production + (results.dirIndir.storage / options.prodDivisionCount);
+      results.dirIndir.production + (results.dirIndir.totalStorage / options.prodDivisionCount);
 
     results.dirIndir.productivity = util.round(prodNum / prodDen);
     results.dirIndir.quantityDone = doc.qty;
@@ -409,6 +410,8 @@ function handleFteLeaderEntryStream(options, results, stream, done)
           results.dirIndir.indirect += count;
           results.dirIndir.storage += count;
         }
+
+        results.dirIndir.totalStorage += count;
 
         addToProperty(results.dirIndir.storageByProdTasks, task.id, count);
 
