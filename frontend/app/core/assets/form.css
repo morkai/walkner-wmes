@@ -59,3 +59,8 @@
 input::-webkit-datetime-edit {
   font-size: 12px;
 }
+input:enabled:read-write::-webkit-calendar-picker-indicator,
+input:enabled:read-write::-webkit-inner-spin-button,
+input:enabled:read-write::-webkit-clear-button {
+  opacity: 1;
+}
