@@ -65,6 +65,8 @@ define([
 
     initialize: function(attributes, options)
     {
+      this.shiftChangeMonitor = null;
+
       if (options && options.production)
       {
         this.prodLine = prodLines.get(this.get('prodLine'));
@@ -90,21 +92,22 @@ define([
 
     startShiftChangeMonitor: function()
     {
-      this.shiftChangeTimer = setTimeout(changeShift, this.getTimeToNextShift(), this);
+      this.stopShiftChangeMonitor();
 
-      function changeShift(model)
+      this.shiftChangeTimer = setTimeout(function(prodShift)
       {
-        model.changeShift();
-        model.startShiftChangeMonitor();
-      }
+        prodShift.shiftChangeMonitor = null;
+        prodShift.changeShift();
+        prodShift.startShiftChangeMonitor();
+      }, 1000, this);
     },
 
     stopShiftChangeMonitor: function()
     {
-      if (this.shiftChangeTimer != null)
+      if (this.shiftChangeTimer !== null)
       {
         clearTimeout(this.shiftChangeTimer);
-        delete this.shiftChangeTimer;
+        this.shiftChangeTimer = null;
       }
     },
 
