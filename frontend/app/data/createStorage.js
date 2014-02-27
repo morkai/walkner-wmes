@@ -11,21 +11,19 @@ define([
 
   return function(storageKey, topicPrefix, Collection)
   {
-    var remoteData = window[storageKey] || [];
+    var remoteData = {
+      time: time.appData,
+      data: window[storageKey] || []
+    };
     var localData = JSON.parse(localStorage.getItem(storageKey) || 'null');
 
-    if (!localData)
+    var freshestData = localData && localData.time > remoteData.time ? localData : remoteData;
+    var collection = new Collection(freshestData.data);
+
+    if (freshestData === remoteData)
     {
-      localData = {
-        time: time.appData,
-        data: remoteData
-      };
-
-      localStorage.setItem(storageKey, JSON.stringify(localData));
+      storeLocally();
     }
-
-    var freshestData = localData.time > remoteData.time ? localData : remoteData;
-    var collection = new Collection(freshestData);
 
     collection.on('add', storeLocally);
     collection.on('remove', storeLocally);
