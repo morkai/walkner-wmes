@@ -63,10 +63,20 @@ define([
           return false;
         }
       },
-      'submit': 'submitForm',
+      'submit': function(e)
+      {
+        this.removeIsOverlapping();
+
+        return this.submitForm(e);
+      },
       'blur .pressWorksheets-form-time': function(e)
       {
         var time = e.target.value.trim().replace(/[^0-9: \-]+/g, '');
+
+        if (time.length === 0)
+        {
+          return;
+        }
 
         var matches = time.match(/^([0-9]+)(?::| +|\-)+([0-9]+)$/);
         var hh = 0;
@@ -92,30 +102,40 @@ define([
           mm = parseInt(time, 10);
         }
 
-        if (isNaN(hh) || hh >= 24)
+        var invalidH = isNaN(hh) || hh >= 24;
+        var invalidM = isNaN(mm) || mm >= 60;
+
+        if (invalidH)
         {
           hh = 0;
         }
 
-        if (isNaN(mm) || mm >= 60)
+        if (invalidM)
         {
           mm = 0;
         }
 
         e.target.value = (hh < 10 ? '0' : '') + hh.toString(10)
           + ':' + (mm < 10 ? '0' : '') + mm.toString(10);
+
+        this.validateTimes(e.target);
       },
       'blur .pressWorksheets-form-count': function(e)
       {
         var num = parseInt(e.target.value, 10);
 
         e.target.value = isNaN(num) ? '' : num;
+
+        if (e.target.classList.contains('is-downtime'))
+        {
+          this.validateTimes(e.target);
+        }
       },
       'blur .pressWorksheets-form-quantityDone': function(e)
       {
         var num = parseInt(e.target.value, 10);
 
-        e.target.value = isNaN(num) || num < 0 ? 0 : num;
+        e.target.value = isNaN(num) || num < 0 ? '' : num;
       },
       'focus input': function(e)
       {
@@ -130,11 +150,15 @@ define([
           this.paintShopTimeFocused = true;
         }
       },
-      'change input[name=shift]': 'validateShiftStartTime',
-      'change input[name=date]': 'validateShiftStartTime',
+      'change input[name=shift]': function()
+      {
+        this.checkShiftStartTimeValidity();
+        this.validateTimes(null);
+      },
+      'change input[name=date]': 'checkShiftStartTimeValidity',
       'change input[name=type]': function()
       {
-        this.$el.toggleClass('pressWorksheets-form-paintShop', this.isPaintShop());
+        this.togglePaintShop();
         this.renderOrdersTable();
         this.addOrderRow();
       }
@@ -177,6 +201,14 @@ define([
         ajax: SELECT2_USERS_AJAX
       });
 
+      $operators.on('change', function()
+      {
+        if (!$operator.select2('data'))
+        {
+          $operator.select2('data', $operators.select2('data')[0]);
+        }
+      });
+
       var $operator = this.$id('operator').select2({
         width: '100%',
         allowClear: true,
@@ -193,14 +225,6 @@ define([
 
       this.renderOrdersTable();
       this.addOrderRow();
-
-      $operators.on('change', function()
-      {
-        if (!$operator.select2('data'))
-        {
-          $operator.select2('data', $operators.select2('data')[0]);
-        }
-      });
 
       this.$id('type').focus();
     },
@@ -319,7 +343,7 @@ define([
       };
     },
 
-    validateShiftStartTime: function()
+    checkShiftStartTimeValidity: function()
     {
       var $date = this.$id('date');
       var shiftMoment = this.getShiftMoment();
@@ -351,7 +375,7 @@ define([
       var $date = this.$id('date');
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
 
-      return time.getMoment($date.val()).hours(6).add('h', (shift - 1) * 8);
+      return time.getMoment($date.val() + ' 06:00:00').add('h', (shift - 1) * 8);
     },
 
     getType: function()
@@ -362,107 +386,6 @@ define([
     isPaintShop: function()
     {
       return this.getType() === 'paintShop';
-    },
-
-    checkValidity: function(formData)
-    {
-      var paintShop = this.isPaintShop();
-
-      if (paintShop && !this.checkPaintShopValidity())
-      {
-        return false;
-      }
-
-      if (formData.orders.length === 0)
-      {
-        this.showOrderFieldError(0, 'part');
-
-        return false;
-      }
-
-      var view = this;
-
-      return !formData.orders.some(function(order, i)
-      {
-        if (!order.prodLine || !order.prodLine.length)
-        {
-          return view.showOrderFieldError(i, 'prodLine');
-        }
-
-        if (isNaN(parseInt(order.quantityDone, 10)))
-        {
-          return view.showOrderFieldError(i, 'quantityDone');
-        }
-
-        if (!paintShop && (!order.startedAt || !order.startedAt.length))
-        {
-          return view.showOrderFieldError(i, 'startedAt');
-        }
-
-        if (!paintShop && (!order.finishedAt || !order.finishedAt.length))
-        {
-          return view.showOrderFieldError(i, 'finishedAt');
-        }
-
-        return false;
-      });
-    },
-
-    getTimeFromString: function(date, timeString, finish)
-    {
-      var timeMoment = time.getMoment(date + ' ' + timeString + ':00');
-
-      if (finish && timeMoment.hours() === 6 && timeMoment.minutes() === 0)
-      {
-        timeMoment.hours(5).minutes(59).seconds(59).milliseconds(999);
-      }
-
-      if (timeMoment.hours() < 6)
-      {
-        timeMoment.add('days', 1);
-      }
-
-      return timeMoment.valueOf();
-    },
-
-    checkPaintShopValidity: function()
-    {
-      var $startedAt = this.$id('startedAt');
-      var $finishedAt = this.$id('finishedAt');
-
-      if ($startedAt.val().trim() === '')
-      {
-        return this.showFieldError($startedAt, 'startedAt');
-      }
-
-      if ($finishedAt.val().trim() === '')
-      {
-        return this.showFieldError($finishedAt, 'finishedAt');
-      }
-
-      var shiftMoment = this.getShiftMoment();
-      var shiftStartTime = shiftMoment.valueOf();
-      var shiftEndTime = shiftStartTime + 8 * 3600 * 1000;
-      var date = this.$id('date').val();
-      var startedAt = this.getTimeFromString(date, $startedAt.val(), false);
-      var finishedAt = this.getTimeFromString(date, $finishedAt.val(), true);
-
-      if (startedAt < shiftStartTime || startedAt > shiftEndTime)
-      {
-        return this.showFieldError($startedAt, 'startedAt:boundries');
-      }
-
-      if (finishedAt < shiftStartTime || finishedAt > shiftEndTime)
-      {
-        return this.showFieldError($finishedAt, 'finishedAt:boundries');
-      }
-
-      if (finishedAt <= startedAt)
-      {
-        return this.showFieldError($finishedAt, 'finishedAt:gt');
-      }
-
-      return true;
     },
 
     showFieldError: function($field, field)
@@ -483,17 +406,6 @@ define([
       });
 
       return false;
-    },
-
-    showOrderFieldError: function(row, field)
-    {
-      var $field = this.$('.pressWorksheets-form-order')
-        .eq(row)
-        .find('.pressWorksheets-form-' + field);
-
-      this.showFieldError($field, field);
-
-      return true;
     },
 
     setUpOrderSelect2: function($order)
@@ -540,6 +452,7 @@ define([
           $row.fadeOut(function()
           {
             $row.remove();
+            view.setUpPartValidation();
           });
 
           if (!e.added && view.$('.pressWorksheets-form-order').length === 2)
@@ -629,6 +542,15 @@ define([
         $orderRow.hide();
       }
 
+      this.$('.pressWorksheets-form-prodLine:last-child').attr('required', true);
+      this.$('.pressWorksheets-form-quantityDone:last-child').attr('required', true);
+
+      if (!this.isPaintShop())
+      {
+        this.$('.pressWorksheets-form-startedAt:last-child').attr('required', true);
+        this.$('.pressWorksheets-form-finishedAt:last-child').attr('required', true);
+      }
+
       this.$('.pressWorksheets-form-orders > tbody').append($orderRow);
 
       if (this.lastOrderNo > 0)
@@ -649,6 +571,256 @@ define([
       {
         $warning.fadeOut();
       }
+
+      this.setUpPartValidation();
+    },
+
+    setUpPartValidation: function()
+    {
+      var $allParts = this.$('input.pressWorksheets-form-part');
+
+      $allParts.last().attr('required', $allParts.length === 1);
+    },
+
+    togglePaintShop: function()
+    {
+      var isPaintShop = this.isPaintShop();
+
+      this.$el.toggleClass('pressWorksheets-form-paintShop', isPaintShop);
+      this.$('.pressWorksheets-form-group-paintShop input').attr('required', isPaintShop);
+    },
+
+    validateTimes: function(targetEl)
+    {
+      if (this.isPaintShop())
+      {
+        this.checkPaintShopValidity();
+      }
+      else
+      {
+        if (targetEl)
+        {
+          this.checkOrderTimesValidity(targetEl);
+        }
+        else
+        {
+          var view = this;
+
+          this.$('.pressWorksheets-form-startedAt').each(function()
+          {
+            view.checkOrderTimesValidity(this);
+          });
+        }
+      }
+    },
+
+    checkPaintShopValidity: function()
+    {
+      var $startedAt = this.$id('startedAt');
+      var $finishedAt = this.$id('finishedAt');
+
+      $startedAt[0].setCustomValidity('');
+      $finishedAt[0].setCustomValidity('');
+
+      this.checkTimesValidity(null, $startedAt, $finishedAt);
+    },
+
+    checkOrderTimesValidity: function(targetEl)
+    {
+      var $orderRow = this.$(targetEl).closest('.pressWorksheets-form-order');
+      var $startedAt = $orderRow.find('.pressWorksheets-form-startedAt');
+      var $finishedAt = $orderRow.find('.pressWorksheets-form-finishedAt');
+
+      $startedAt[0].setCustomValidity('');
+      $finishedAt[0].setCustomValidity('');
+
+      if (!$startedAt.prop('required')
+        || $startedAt.val() === ''
+        || $finishedAt.val() === '')
+      {
+        return;
+      }
+
+      this.checkTimesValidity($orderRow, $startedAt, $finishedAt);
+    },
+
+    checkTimesValidity: function($orderRow, $startedAt, $finishedAt)
+    {
+      var date = this.$id('date').val();
+
+      if (!date)
+      {
+        date = time.format(new Date(), 'YYYY-MM-DD');
+      }
+
+      var shiftMoment = this.getShiftMoment();
+      var shiftStartTime = shiftMoment.valueOf();
+      var shiftEndTime = shiftStartTime + 8 * 3600 * 1000;
+      var startedAt = this.getTimeFromString(date, $startedAt.val(), false);
+      var finishedAt = this.getTimeFromString(date, $finishedAt.val(), true);
+
+      if (startedAt < shiftStartTime || startedAt > shiftEndTime)
+      {
+        return $startedAt[0].setCustomValidity(
+          t('pressWorksheets', 'FORM:ERROR:startedAt:boundries')
+        );
+      }
+
+      if (finishedAt < shiftStartTime || finishedAt > shiftEndTime)
+      {
+        return $finishedAt[0].setCustomValidity(
+          t('pressWorksheets', 'FORM:ERROR:finishedAt:boundries')
+        );
+      }
+
+      if (finishedAt <= startedAt)
+      {
+        return $finishedAt[0].setCustomValidity(
+          t('pressWorksheets', 'FORM:ERROR:finishedAt:gt')
+        );
+      }
+
+      var orderDuration = (finishedAt - startedAt) / 3600000;
+      var downtimeDuration = this.countDowntimeDuration(this.isPaintShop() ? null : $orderRow);
+
+      if (downtimeDuration >= orderDuration)
+      {
+        return $finishedAt[0].setCustomValidity(
+          t('pressWorksheets', 'FORM:ERROR:finishedAt:downtime')
+        );
+      }
+    },
+
+    checkValidity: function()
+    {
+      var orderRowEls = this.el.querySelectorAll('.pressWorksheets-form-order');
+      var lastIndex = orderRowEls.length - 1;
+      var date = this.$id('date').val();
+      var timesByProdLine = {};
+
+      for (var i = 0; i < lastIndex; ++i)
+      {
+        var orderRowEl = orderRowEls[i];
+        var prodLine = orderRowEl.querySelector('input.pressWorksheets-form-prodLine').value;
+
+        if (!timesByProdLine[prodLine])
+        {
+          timesByProdLine[prodLine] = [];
+        }
+
+        timesByProdLine[prodLine].push({
+          orderRowEl: orderRowEl,
+          startedAt: this.getTimeFromString(
+            date, orderRowEl.querySelector('.pressWorksheets-form-startedAt').value, false
+          ),
+          finishedAt: this.getTimeFromString(
+            date, orderRowEl.querySelector('.pressWorksheets-form-finishedAt').value, false
+          )
+        });
+      }
+
+      var valid = true;
+      var view = this;
+
+      Object.keys(timesByProdLine).forEach(function(prodLine)
+      {
+        if (!valid)
+        {
+          return;
+        }
+
+        var allTimes = timesByProdLine[prodLine];
+
+        while (allTimes.length)
+        {
+          var checkingTimes = allTimes.shift();
+
+          for (var j = 0, l = allTimes.length; j < l; ++j)
+          {
+            var times = allTimes[j];
+
+            if ((times.startedAt >= checkingTimes.startedAt
+              && times.startedAt < checkingTimes.finishedAt)
+              || (times.finishedAt > checkingTimes.startedAt
+              && times.finishedAt <= checkingTimes.finishedAt))
+            {
+              valid = view.showOverlappingError(checkingTimes, times);
+
+              return;
+            }
+
+            if ((checkingTimes.startedAt >= times.startedAt
+              && checkingTimes.startedAt < times.finishedAt)
+              || (checkingTimes.finishedAt > times.startedAt
+              && checkingTimes.finishedAt <= times.finishedAt))
+            {
+              valid = view.showOverlappingError(times, checkingTimes);
+
+              return;
+            }
+          }
+        }
+      });
+
+      return valid;
+    },
+
+    showOverlappingError: function(a, b)
+    {
+      this.$errorMessage = viewport.msg.show({
+        type: 'error',
+        time: 5000,
+        text: t('pressWorksheets', 'FORM:ERROR:overlapping')
+      });
+
+      a.orderRowEl.classList.add('is-overlapping');
+      b.orderRowEl.classList.add('is-overlapping');
+
+      this.timers.removeIsOverlapping = setTimeout(this.removeIsOverlapping.bind(this), 5000);
+
+      return false;
+    },
+
+    removeIsOverlapping: function()
+    {
+      if (this.timers.removeIsOverlapping)
+      {
+        clearTimeout(this.timers.removeIsOverlapping);
+        this.timers.removeIsOverlapping = null;
+      }
+
+      this.$('.is-overlapping').removeClass('is-overlapping');
+    },
+
+    countDowntimeDuration: function($orderRow)
+    {
+      var downtimeDuration = 0;
+
+      ($orderRow || this.$el).find('.pressWorksheets-form-count.is-downtime').each(function()
+      {
+        var duration = parseInt(this.value, 10);
+
+        downtimeDuration += isNaN(duration) || duration <= 0 ? 0 : duration;
+      });
+
+      return downtimeDuration / 60;
+    },
+
+    getTimeFromString: function(date, timeString, finish)
+    {
+      var timeMoment = time.getMoment(date + ' ' + timeString + ':00');
+
+      if (finish && timeMoment.hours() === 6 && timeMoment.minutes() === 0)
+      {
+        timeMoment.hours(5).minutes(59).seconds(59).milliseconds(999);
+      }
+
+      if (timeMoment.hours() < 6)
+      {
+        timeMoment.add('days', 1);
+      }
+
+      return timeMoment.valueOf();
     }
 
   });

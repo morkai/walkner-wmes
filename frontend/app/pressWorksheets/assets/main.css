@@ -84,9 +84,26 @@
   display: inline-block;
   width: 7em;
 }
+.pressWorksheets-form-group-paintShop .form-control {
+  text-align: left;
+}
+.pressWorksheets-form-timeCell input::-webkit-clear-button,
+.pressWorksheets-form-timeCell input::-webkit-inner-spin-button {
+  display: none;
+}
+.is-overlapping .pressWorksheets-form-time {
+  background-color: rgba(255, 0, 0, .25);
+}
 .pressWorksheets-form .message-warning {
   display: none;
   margin-bottom: 15px;
+}
+.pressWorksheets-form-order > td {
+  position: relative;
+}
+.pressWorksheets-form .pressWorksheets-form-part.select2-offscreen,
+.pressWorksheets-form .pressWorksheets-form-prodLine.select2-offscreen {
+  bottom: 5px!important;
 }
 .prodWorksheets-details-tableContainer {
   padding: 0!important;

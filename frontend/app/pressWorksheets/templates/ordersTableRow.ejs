@@ -3,12 +3,12 @@
   <td><input class="form-control pressWorksheets-form-operation" type="string" name="orders[<%- no %>].operation" placeholder="<%- t('pressWorksheets', 'FORM:PLACEHOLDER:operation') %>"></td>
   <td><input class="pressWorksheets-form-prodLine" type="string" name="orders[<%- no %>].prodLine" placeholder="<%- t('pressWorksheets', 'FORM:PLACEHOLDER:prodLine') %>"></td>
   <td><input class="form-control pressWorksheets-form-quantityDone" type="string" name="orders[<%- no %>].quantityDone"></td>
-  <td class="pressWorksheets-form-timeCell"><input class="form-control pressWorksheets-form-time pressWorksheets-form-startedAt" type="string" name="orders[<%- no %>].startedAt"></td>
-  <td class="pressWorksheets-form-timeCell"><input class="form-control pressWorksheets-form-time pressWorksheets-form-finishedAt" type="string" name="orders[<%- no %>].finishedAt"></td>
+  <td class="pressWorksheets-form-timeCell"><input class="form-control pressWorksheets-form-time pressWorksheets-form-startedAt" type="time" name="orders[<%- no %>].startedAt"></td>
+  <td class="pressWorksheets-form-timeCell"><input class="form-control pressWorksheets-form-time pressWorksheets-form-finishedAt" type="time" name="orders[<%- no %>].finishedAt"></td>
   <% lossReasons.forEach(function(lossReason, i) { %>
-  <td class="<%- i ? '' : 'pressWorksheets-form-separator' %>"><input class="form-control pressWorksheets-form-count" type="string" name="orders[<%- no %>].losses.<%- lossReason._id %>"></td>
+  <td class="<%- i ? '' : 'pressWorksheets-form-separator' %>"><input class="form-control pressWorksheets-form-count is-loss" type="string" name="orders[<%- no %>].losses.<%- lossReason._id %>"></td>
   <% }) %>
   <% downtimeReasons.forEach(function(downtimeReason, i) { %>
-  <td class="<%- i ? '' : 'pressWorksheets-form-separator' %>"><input class="form-control pressWorksheets-form-count" type="string" name="orders[<%- no %>].downtimes.<%- downtimeReason._id %>"></td>
+  <td class="<%- i ? '' : 'pressWorksheets-form-separator' %>"><input class="form-control pressWorksheets-form-count is-downtime" type="string" name="orders[<%- no %>].downtimes.<%- downtimeReason._id %>"></td>
   <% }) %>
 </tr>
