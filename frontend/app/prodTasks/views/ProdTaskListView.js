@@ -9,7 +9,7 @@ define([
 
   return ListView.extend({
 
-    columns: ['name', 'tags', 'fteDiv'],
+    columns: ['name', 'tags', 'fteDiv', 'clipColor'],
 
     serializeRows: function()
     {
@@ -17,6 +17,13 @@ define([
       {
         row.tags = row.tags.length ? row.tags.join(', ') : null;
         row.fteDiv = t('core', 'BOOL:' + !!row.fteDiv);
+
+        if (row.clipColor)
+        {
+          row.clipColor = '<span class="label" style="background: ' + row.clipColor + '">'
+            + row.clipColor
+            + '</span>';
+        }
 
         return row;
       });

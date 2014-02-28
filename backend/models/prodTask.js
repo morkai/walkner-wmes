@@ -12,6 +12,10 @@ module.exports = function setupProdTaskModel(app, mongoose)
     fteDiv: {
       type: Boolean,
       default: false
+    },
+    clipColor: {
+      type: String,
+      default: '#eeee00'
     }
   }, {
     id: false

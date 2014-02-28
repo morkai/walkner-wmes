@@ -57,7 +57,7 @@ define([
 
   router.map('/prodTasks/:id;edit', canManage, function(req)
   {
-    viewport.loadPage('app/prodTasks/views/EditProdTaskFormPage', function(EditProdTaskFormPage)
+    viewport.loadPage('app/prodTasks/pages/EditProdTaskFormPage', function(EditProdTaskFormPage)
     {
       return new EditProdTaskFormPage({model: new ProdTask({_id: req.params.id})});
     });

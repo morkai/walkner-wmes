@@ -20,6 +20,7 @@
   "PROPERTY:name": "Nazwa",
   "PROPERTY:tags": "Tagi",
   "PROPERTY:fteDiv": "Podział na wydziały w FTE (magazyn)?",
+  "PROPERTY:clipColor": "Kolor w raporcie CLIP",
 
   "FORM:ACTION:add": "Dodaj zadanie produkcyjne",
   "FORM:ACTION:edit": "Edytuj zadanie produkcyjne",

@@ -22,7 +22,8 @@ define([
     defaults: {
       name: null,
       tags: null,
-      prodDiv: false
+      prodDiv: false,
+      clipColor: '#eeee00'
     },
 
     parse: function(data)
@@ -30,6 +31,11 @@ define([
       if (!Array.isArray(data.tags))
       {
         data.tags = [];
+      }
+
+      if (!data.clipColor)
+      {
+        data.clipColor = '#eeee00';
       }
 
       return data;

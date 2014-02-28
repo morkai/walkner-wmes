@@ -12,6 +12,13 @@
         <input id="<%- idPrefix %>-tags" type="text" name="tags" value="">
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-color" class="control-label"><%- t('prodTasks', 'PROPERTY:clipColor') %></label>
+        <div class="input-group colorpicker-component prodTasks-form-color-picker" data-color="<%- model.clipColor %>" data-color-format="hex">
+          <input id="<%- idPrefix %>-color" class="form-control prodTasks-form-color-input" name="clipColor" type="text" value="<%- model.clipColor %>">
+          <span class="input-group-addon"><i style="background-color: <%- model.clipColor %>"></i></span>
+        </div>
+      </div>
+      <div class="form-group">
         <label class="control-label checkbox">
           <input type="checkbox" name="fteDiv" value="true">
           <%- t('prodTasks', 'PROPERTY:fteDiv') %>

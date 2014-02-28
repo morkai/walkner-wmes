@@ -16,6 +16,16 @@
         <div class="prop-name"><%- t('prodTasks', 'PROPERTY:fteDiv') %></div>
         <div class="prop-value"><%= t('core', 'BOOL:' + model.fteDiv) %></div>
       </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('prodTasks', 'PROPERTY:clipColor') %></div>
+        <div class="prop-value">
+          <% if (model.clipColor) { %>
+          <span class="label" style="background: <%- model.clipColor %>"><%- model.clipColor %></span>
+          <% } else { %>
+          -
+          <% } %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

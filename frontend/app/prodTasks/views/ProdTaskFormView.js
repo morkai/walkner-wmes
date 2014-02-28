@@ -1,6 +1,7 @@
 define([
   'app/core/views/FormView',
-  'app/prodTasks/templates/form'
+  'app/prodTasks/templates/form',
+  'bootstrap-colorpicker'
 ], function(
   FormView,
   formTemplate
@@ -11,6 +12,24 @@ define([
 
     template: formTemplate,
 
+    events: {
+      'submit': 'submitForm',
+      'change .prodTasks-form-color-input': 'updatePickerColor'
+    },
+
+    $colorPicker: null,
+
+    destroy: function()
+    {
+      if (this.$colorPicker !== null)
+      {
+        this.$colorPicker.colorpicker('destroy');
+        this.$colorPicker = null;
+      }
+
+      FormView.prototype.destroy.call(this);
+    },
+
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);
@@ -19,6 +38,8 @@ define([
         tags: this.model.allTags || [],
         tokenSeparators: [',']
       });
+
+      this.$colorPicker = this.$('.prodTasks-form-color-picker').colorpicker();
     },
 
     serializeToForm: function()
@@ -35,6 +56,14 @@ define([
       data.tags = typeof data.tags === 'string' ? data.tags.split(',') : [];
 
       return data;
+    },
+
+    updatePickerColor: function(e)
+    {
+      if (e.originalEvent)
+      {
+        this.$colorPicker.colorpicker('setValue', e.target.value);
+      }
     }
 
   });
