@@ -1,1 +1,1 @@
-define(["../core/Collection","./ProdTask"],function(e,t){return e.extend({model:t,rqlQuery:"select(name,tags,fteDiv)&sort(name)&limit(15)"})});
+define(["../core/Collection","./ProdTask"],function(e,o){return e.extend({model:o,rqlQuery:"select(name,tags,fteDiv,clipColor)&sort(name)"})});
