@@ -11,6 +11,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var settings = app[reportsModule.config.settingsId];
   var downtimeReasonsModule = app.downtimeReasons;
   var prodFunctionsModule = app.prodFunctions;
+  var prodTasksModue = app.prodTasks;
   // TODO: Create a proper org unit tree solution
   var divisionsModule = app.divisions;
   var subdivisionsModule = app.subdivisions;
@@ -113,7 +114,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       mrpControllers: mrpControllers,
       prodFlows: getProdFlowsByOrgUnit(req.query.orgUnitType, req.query.orgUnitId),
       directProdFunctions: getDirectProdFunctions(),
-      prodDivisionCount: countProdDivisions()
+      prodDivisionCount: countProdDivisions(),
+      prodTasks: getProdTasks()
     };
 
     report2(mongoose, options, function(err, report)
@@ -409,5 +411,23 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     });
 
     return prodFunctions;
+  }
+
+  function getProdTasks()
+  {
+    var prodTasks = {};
+
+    prodTasksModue.models.forEach(function(prodTask)
+    {
+      if (Array.isArray(prodTask.tags) && prodTask.tags.length)
+      {
+        prodTasks[prodTask._id] = {
+          label: prodTask.name,
+          color: prodTask.clipColor
+        };
+      }
+    });
+
+    return prodTasks;
   }
 };

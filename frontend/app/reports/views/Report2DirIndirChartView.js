@@ -1,4 +1,5 @@
 define([
+  'underscore',
   'screenfull',
   'app/highcharts',
   'app/i18n',
@@ -6,6 +7,7 @@ define([
   'app/core/View',
   './wordwrapTooltip'
 ], function(
+  _,
   screenfull,
   Highcharts,
   t,
@@ -16,7 +18,10 @@ define([
   'use strict';
 
   var COLOR_DIRECT = '#00ee00';
-  var COLOR_INDIRECT = '#eeee00';
+  var COLOR_INDIRECT = '#ffaa00';
+  var COLOR_PROD_FUNCTION = '#ffaa00';
+  var COLOR_PROD_TASK = '#eeee00';
+  var COLOR_WAREHOUSE = '#eeee00';
   var COLOR_PRODUCTIVITY = '#ffaa00';
   var COLOR_QUANTITY_DONE = '#00aaff';
 
@@ -46,7 +51,7 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:dirIndir', this.render);
+      this.listenTo(this.model, 'change:dirIndir change:prodTasks', _.debounce(this.render, 1));
 
       this.onFullscreenChange = this.onFullscreenChange.bind(this);
 
@@ -195,14 +200,34 @@ define([
         return this.serializeChartDataByProdFunction(chartData);
       }
 
-      chartData.productivity.push(dirIndir.productivity, dirIndir.productivity);
-      chartData.categories.push('DIRECT', 'INDIRECT');
+      var indirect = dirIndir.indirect;
+
+      if (!this.model.get('orgUnitType'))
+      {
+        indirect -= dirIndir.storage;
+      }
+
+      chartData.productivity.push(
+        dirIndir.productivity,
+        dirIndir.productivity,
+        dirIndir.productivity
+      );
+
+      chartData.categories.push(
+        'DIRECT',
+        'INDIRECT',
+        'WAREHOUSE'
+      );
+
       chartData.data.push({
         y: dirIndir.direct,
         color: COLOR_DIRECT
       }, {
-        y: dirIndir.indirect,
+        y: Math.round(indirect * 10) / 10,
         color: COLOR_INDIRECT
+      }, {
+        y: dirIndir.storage,
+        color: COLOR_WAREHOUSE
       });
 
       return chartData;
@@ -210,11 +235,12 @@ define([
 
     serializeChartDataByProdFunction: function(chartData)
     {
-      var tasks = this.model.get('tasks');
+      var prodTasks = this.model.get('prodTasks');
       var dirIndir = this.model.get('dirIndir');
+      var dataPoints = [];
 
       this.pushByProdFunction(
-        chartData,
+        dataPoints,
         dirIndir.quantityDone,
         dirIndir.directByProdFunction,
         ' (DIR)',
@@ -222,59 +248,48 @@ define([
       );
 
       this.pushByProdFunction(
-        chartData,
+        dataPoints,
         dirIndir.quantityDone,
         dirIndir.indirectByProdFunction,
         ' (INDIR)',
-        COLOR_INDIRECT
+        COLOR_PROD_FUNCTION
       );
-
-      var prodTasksData = [];
 
       Object.keys(dirIndir.storageByProdTasks).forEach(function(taskId)
       {
-        var name = tasks[taskId] || taskId;
+        var prodTask = prodTasks[taskId];
 
-        prodTasksData.push({
-          categoryName: name,
-          name: wordwrapTooltip(name),
+        dataPoints.push({
+          categoryName: prodTask ? prodTask.label : taskId,
+          name: wordwrapTooltip(prodTask ? prodTask.label : taskId),
           y: dirIndir.storageByProdTasks[taskId],
-          color: COLOR_INDIRECT
+          color: prodTask ? prodTask.color : COLOR_PROD_TASK
         });
       });
 
-      prodTasksData.sort(function(a, b) { return b.y - a.y; }).forEach(function(prodTaskData)
+      dataPoints.sort(function(a, b) { return b.y - a.y; }).forEach(function(dataPoint)
       {
-        chartData.categories.push(prodTaskData.categoryName);
-        chartData.data.push(prodTaskData);
+        chartData.categories.push(dataPoint.categoryName);
+        chartData.data.push(dataPoint);
         chartData.quantityDone.push(dirIndir.quantityDone);
       });
 
       return chartData;
     },
 
-    pushByProdFunction: function(chartData, quantityDone, byProdFunction, suffix, color)
+    pushByProdFunction: function(dataPoints, quantityDone, byProdFunction, suffix, color)
     {
-      var unorderedData = [];
-
       Object.keys(byProdFunction).forEach(function(prodFunctionId)
       {
         var prodFunction = prodFunctions.get(prodFunctionId);
         var label = prodFunction ? prodFunction.getLabel() : prodFunctionId;
 
-        unorderedData.push({
-          category: label,
+        dataPoints.push({
+          categoryName: label,
           name: label + suffix,
           y: byProdFunction[prodFunctionId],
           color: color
         });
-      });
-
-      unorderedData.sort(function(a, b) { return b.y - a.y; }).forEach(function(orderedData)
-      {
-        chartData.categories.push(orderedData.category);
-        chartData.data.push(orderedData);
-        chartData.quantityDone.push(quantityDone);
       });
     },
 

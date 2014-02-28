@@ -1,4 +1,5 @@
 define([
+  'underscore',
   'screenfull',
   'app/highcharts',
   'app/i18n',
@@ -6,6 +7,7 @@ define([
   'app/data/categoryFactory',
   './wordwrapTooltip'
 ], function(
+  _,
   screenfull,
   Highcharts,
   t,
@@ -14,6 +16,12 @@ define([
   wordwrapTooltip
 ) {
   'use strict';
+
+  var COLOR_EFF = '#0e0';
+  var COLOR_INEFF = '#e00';
+  var COLOR_DIR_INDIR = '#ee0';
+  var COLOR_PROD_TASK = '#ee0';
+  var COLOR_OTHER = '#000';
 
   return View.extend({
 
@@ -41,7 +49,7 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:effIneff', this.render);
+      this.listenTo(this.model, 'change:effIneff change:prodTasks', _.debounce(this.render, 1));
 
       this.onFullscreenChange = this.onFullscreenChange.bind(this);
 
@@ -136,7 +144,7 @@ define([
     serializeChartData: function()
     {
       var isFullscreen = screenfull.isFullscreen;
-      var tasks = this.model.get('tasks');
+      var prodTasks = this.model.get('prodTasks');
       var effIneff = this.model.get('effIneff');
       var categories = [];
       var data = [];
@@ -153,21 +161,23 @@ define([
         category: t('reports', 'effIneff:category:value'),
         name: t('reports', 'effIneff:name:value'),
         y: Math.abs(effIneff.value),
-        color: effIneff > 0 ? '#00ee00' : '#ee0000'
+        color: effIneff > 0 ? COLOR_EFF : COLOR_INEFF
       }, {
         category: t('reports', 'effIneff:category:dirIndir'),
         name: t('reports', 'effIneff:name:dirIndir'),
         y: effIneff.dirIndir,
-        color: '#eeee00'
+        color: COLOR_DIR_INDIR
       });
 
       Object.keys(effIneff.prodTasks).forEach(function(taskId)
       {
+        var prodTask = prodTasks[taskId];
+
         data.push({
           category: categoryFactory.getCategory('tasks', taskId),
-          name: wordwrapTooltip(tasks[taskId] || taskId),
+          name: wordwrapTooltip(prodTask ? prodTask.label : taskId),
           y: effIneff.prodTasks[taskId],
-          color: '#eeee00'
+          color: prodTask ? prodTask.color : COLOR_PROD_TASK
         });
       });
 
@@ -177,9 +187,9 @@ define([
       });
 
       var categoryCount = categories.length;
-      var maxCategories = 10;
+      var maxCategories = 7;
 
-      if (!isFullscreen && categoryCount > maxCategories)
+      if (!isFullscreen && categoryCount > maxCategories + 1)
       {
         var limitedCategories = categories.slice(0, maxCategories - 1);
         var limitedData = data.slice(0, maxCategories - 1);
@@ -195,7 +205,7 @@ define([
         limitedData.push({
           name: t('reports', 'effIneff:name:other'),
           y: Math.round(otherCount * 10) / 10,
-          color: '#000'
+          color: COLOR_OTHER
         });
 
         categories = limitedCategories;

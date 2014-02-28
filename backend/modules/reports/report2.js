@@ -24,7 +24,6 @@ module.exports = function(mongoose, options, done)
 
   var results = {
     options: options,
-    tasks: {},
     clip: [],
     dirIndir: {
       quantityDone: 0,
@@ -380,7 +379,13 @@ function handleFteMasterEntryStream(prodFlowMap, options, results, stream, done)
             addToProperty(results.effIneff.prodTasks, task.id, count);
           }
 
-          results.tasks[task.id] = task.name;
+          if (options.prodTasks[task.id] === undefined)
+          {
+            options.prodTasks[task.id] = {
+              label: task.name,
+              color: '#eeee00'
+            };
+          }
         }
       }
     }
@@ -426,18 +431,31 @@ function handleFteLeaderEntryStream(options, results, stream, done)
         var count = Array.isArray(comp.count)
           ? getDivisionCount(options.division, comp.count)
           : comp.count;
+        var divisionCount = count;
 
         if (options.orgUnitType == null)
         {
           results.dirIndir.indirect += count;
           results.dirIndir.storage += count;
         }
+        else
+        {
+          divisionCount /= Array.isArray(comp.count) ? 1 : options.prodDivisionCount;
+
+          results.dirIndir.storage += divisionCount;
+        }
 
         results.dirIndir.totalStorage += count;
 
-        addToProperty(results.dirIndir.storageByProdTasks, task.id, count);
+        addToProperty(results.dirIndir.storageByProdTasks, task.id, divisionCount);
 
-        results.tasks[task.id] = task.name;
+        if (options.prodTasks[task.id] === undefined)
+        {
+          options.prodTasks[task.id] = {
+            label: task.name,
+            color: '#eeee00'
+          };
+        }
       }
     }
   });

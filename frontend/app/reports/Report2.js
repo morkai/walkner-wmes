@@ -22,7 +22,7 @@ define([
       return {
         orgUnitType: null,
         orgUnit: null,
-        tasks: {},
+        prodTasks: {},
         clip: {
           orderCount: [],
           production: [],
@@ -76,7 +76,7 @@ define([
     parse: function(report)
     {
       return {
-        tasks: report.tasks,
+        prodTasks: report.options.prodTasks,
         clip: this.parseClip(report.clip),
         dirIndir: this.parseDirIndir(report.dirIndir),
         effIneff: this.parseEffIneff(report.effIneff)
