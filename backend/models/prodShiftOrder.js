@@ -14,6 +14,11 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       ref: 'ProdShift',
       default: null
     },
+    pressWorksheet: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'PressWorksheet',
+      default: null
+    },
     division: {
       type: String,
       ref: 'Division',

@@ -28,6 +28,7 @@ define([
     nlsDomain: 'prodShiftOrders',
 
     defaults: {
+      pressWorksheet: null,
       prodShift: null,
       division: null,
       subdivision: null,

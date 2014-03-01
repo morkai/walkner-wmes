@@ -44,6 +44,7 @@
   "PROPERTY:taktTime": "Takt Time / wg SAP",
   "PROPERTY:order": "Zlecenie",
   "PROPERTY:operation": "Operacja",
+  "PROPERTY:pressWorksheet": "Karta pracy",
 
   "unit:workerCount": "osoby",
   "unit:taktTime": "s"

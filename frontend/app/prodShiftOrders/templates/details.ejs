@@ -41,6 +41,20 @@
       <div class="col-md-4">
         <div class="props">
           <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:pressWorksheet') %></div>
+            <div class="prop-value">
+              <% if (model.pressWorksheet) { %>
+              <% if (user.isAllowedTo('PRESS_WORKSHEETS:VIEW')) { %>
+              <a href="#pressWorksheets/<%- model.pressWorksheet %>"><%- t('core', 'BOOL:true') %></a>
+              <% } else { %>
+              <%- t('core', 'BOOL:true') %>
+              <% } %>
+              <% } else { %>
+              -
+              <% } %>
+            </div>
+          </div>
+          <div class="prop">
             <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:prodShift') %></div>
             <div class="prop-value"><%- model.prodShift %></div>
           </div>

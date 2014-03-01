@@ -78,7 +78,13 @@
       <tbody>
         <% model.orders.forEach(function(order) { %>
         <tr>
-          <td><%= order.nc12 %></td>
+          <td>
+            <% if (order.prodShiftOrder && user.isAllowedTo('PROD_DATA:VIEW')) { %>
+            <a href="#prodShiftOrders/<%- order.prodShiftOrder %>"><%= order.nc12 %></a>
+            <% } else { %>
+            <%= order.nc12 %>
+            <% } %>
+          </td>
           <td><%= order.name %></td>
           <td><%= order.operationName || '-' %></td>
           <td><%= order.operationNo %></td>
@@ -112,14 +118,20 @@
               <thead>
                 <tr>
                   <% order.downtimes.forEach(function(downtime) { %>
-                  <th><%= downtime.label %></th>
+                  <th>
+                    <% if (downtime.prodDowntime && user.isAllowedTo('PROD_DOWNTIMES:VIEW')) { %>
+                    <a href="#prodDowntimes/<%- downtime.prodDowntime %>"><%= downtime.label %></a>
+                    <% } else { %>
+                    <%= downtime.label %>
+                    <% } %>
+                  </th>
                   <% }) %>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <% order.downtimes.forEach(function(downtime) { %>
-                  <td><%= downtime.count %></td>
+                  <td><%= downtime.duration %></td>
                   <% }) %>
                 </tr>
               </tbody>

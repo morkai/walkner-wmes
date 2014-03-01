@@ -4,7 +4,57 @@ var moment = require('moment');
 
 module.exports = function setupPressWorksheetModel(app, mongoose)
 {
+  var pressWorksheetDowntimeSchema = mongoose.Schema({
+    prodDowntime: {
+      type: String,
+      ref: 'ProdDowntime',
+      default: null
+    },
+    reason: {
+      type: String,
+      ref: 'DowntimeReason',
+      required: true
+    },
+    label: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    duration: {
+      type: Number,
+      min: 1,
+      max: 8 * 60
+    }
+  }, {
+    _id: false
+  });
+
+  var pressWorksheetLossSchema = mongoose.Schema({
+    reason: {
+      type: String,
+      ref: 'LossReason',
+      required: true
+    },
+    label: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    count: {
+      type: Number,
+      required: true,
+      min: 1
+    }
+  }, {
+    _id: false
+  });
+
   var pressWorksheetOrderSchema = mongoose.Schema({
+    prodShiftOrder: {
+      type: String,
+      ref: 'ProdShiftOrder',
+      default: null
+    },
     nc12: {
       type: String,
       required: true
@@ -40,8 +90,8 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       type: String,
       default: null
     },
-    losses: [{}],
-    downtimes: [{}]
+    losses: [pressWorksheetLossSchema],
+    downtimes: [pressWorksheetDowntimeSchema]
   }, {
     _id: false
   });
@@ -151,12 +201,9 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
   pressWorksheetSchema.methods.createOrdersAndDowntimes = function(done)
   {
-    var date = this.date;
-    var shift = this.shift;
+    var pressWorksheet = this;
     var operators = this.operators;
     var workerCount = Array.isArray(operators) ? operators.length : 0;
-    var creator = this.creator;
-    var master = this.master;
     var operator = this.operator;
 
     if (!operator && workerCount)
@@ -167,11 +214,12 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     var ProdShiftOrder = mongoose.model('ProdShiftOrder');
     var prodShiftOrders = [];
     var prodDowntimes = [];
+    var updatedIds = 0;
 
     this.orders.forEach(function(order)
     {
-      var startedAt = getDateFromTimeString(date, order.startedAt, false);
-      var finishedAt = getDateFromTimeString(date, order.finishedAt, true);
+      var startedAt = getDateFromTimeString(pressWorksheet.date, order.startedAt, false);
+      var finishedAt = getDateFromTimeString(pressWorksheet.date, order.finishedAt, true);
 
       if (isNaN(startedAt.getTime()) || isNaN(finishedAt.getTime()))
       {
@@ -195,11 +243,13 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
       orderData.operations = operations;
 
+      var needsId = order.prodShiftOrder === null;
       var prodShiftOrder = {
-        _id: generateId(startedAt, order.prodLine + order.nc12),
+        _id: needsId ? generateId(startedAt, order.prodLine + order.nc12) : order.prodShiftOrder,
         prodShift: null,
-        date: date,
-        shift: shift,
+        pressWorksheet: pressWorksheet._id,
+        date: pressWorksheet.date,
+        shift: pressWorksheet.shift,
         mechOrder: true,
         orderId: order.nc12,
         operationNo: order.operationNo,
@@ -207,10 +257,16 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         workerCount: workerCount,
         quantityDone: order.quantityDone,
         losses: Array.isArray(order.losses) && order.losses.length ? order.losses : null,
-        creator: creator,
+        creator: pressWorksheet.creator,
         startedAt: startedAt,
         finishedAt: finishedAt
       };
+
+      if (needsId)
+      {
+        updatedIds += 1;
+        order.prodShiftOrder = prodShiftOrder._id;
+      }
 
       applyProdLineOrgUnits(prodShiftOrder, order.prodLine);
 
@@ -221,11 +277,12 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       {
         var startedAt = new Date(downtimeStartTime);
 
-        downtimeStartTime = downtimeStartTime + downtime.count * 60 * 1000;
+        downtimeStartTime = downtimeStartTime + downtime.duration * 60 * 1000;
 
         var finishedAt = new Date(downtimeStartTime);
+        var needsId = downtime.prodDowntime === null;
         var prodDowntime = {
-          _id: generateId(startedAt, prodShiftOrder._id),
+          _id: needsId ? generateId(startedAt, prodShiftOrder._id) : downtime.prodDowntime,
           division: prodShiftOrder.division,
           subdivision: prodShiftOrder.subdivision,
           mrpControllers: prodShiftOrder.mrpControllers,
@@ -237,22 +294,28 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
           date: prodShiftOrder.date,
           shift: prodShiftOrder.shift,
           aor: getSubdivisionAor(prodShiftOrder.subdivision),
-          reason: downtime._id,
+          reason: downtime.reason,
           reasonComment: '',
           decisionComment: '',
           status: 'confirmed',
           startedAt: startedAt,
           finishedAt: finishedAt,
-          corroborator: master,
+          corroborator: pressWorksheet.master,
           corroboratedAt: startedAt,
           creator: null,
-          master: master,
+          master: pressWorksheet.master,
           leader: null,
           operator: operator,
           mechOrder: true,
           orderId: prodShiftOrder.orderId,
           operationNo: prodShiftOrder.operationNo
         };
+
+        if (needsId)
+        {
+          updatedIds += 1;
+          downtime.prodDowntime = prodDowntime._id;
+        }
 
         orderDowntimes.push(prodDowntime);
         prodDowntimes.push(prodDowntime);
@@ -280,7 +343,21 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         return done();
       }
 
-      mongoose.model('ProdDowntime').create(prodDowntimes, done);
+      mongoose.model('ProdDowntime').create(prodDowntimes, function(err)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        if (updatedIds === 0)
+        {
+          return done();
+        }
+
+        pressWorksheet.markModified('orders');
+        pressWorksheet.save(done);
+      });
     });
   };
 

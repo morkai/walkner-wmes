@@ -301,7 +301,7 @@ define([
           if (order.losses[lossReason.id] > 0)
           {
             losses.push({
-              _id: lossReason.id,
+              reason: lossReason.id,
               label: lossReason.get('label'),
               count: order.losses[lossReason.id]
             });
@@ -320,15 +320,17 @@ define([
           if (order.downtimes[downtimeReason.id] > 0)
           {
             downtimes.push({
-              _id: downtimeReason.id,
+              prodDowntime: null,
+              reason: downtimeReason.id,
               label: downtimeReason.get('label'),
-              count: order.downtimes[downtimeReason.id]
+              duration: order.downtimes[downtimeReason.id]
             });
           }
         });
       }
 
       return {
+        prodShiftOrder: null,
         prodLine: order.prodLine,
         nc12: orderData._id,
         name: orderData.name,
