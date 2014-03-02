@@ -92,7 +92,7 @@ define([
     obj.shift = obj.shift ? t('core', 'SHIFT:' + obj.shift) : '?';
     obj.prodShiftText = obj.date + ', ' + obj.shift;
 
-    if (user.isAllowedTo('PROD_DATA:VIEW') && obj.prodShiftText)
+    if (user.isAllowedTo('PROD_DATA:VIEW') && obj.prodShift)
     {
       obj.prodShiftText = '<a href="#prodShifts/' + obj.prodShift + '">'
         + obj.prodShiftText + '</a>';
