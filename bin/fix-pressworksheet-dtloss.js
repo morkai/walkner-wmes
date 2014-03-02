@@ -12,67 +12,62 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
 
   var collection = db.collection('pressworksheets');
   var queue = 0;
-  var allDone = false;
 
-  collection.find(null, {orders: 1}).each(function(err, doc)
+  collection.find(null, {orders: 1}).toArray(function(err, docs)
   {
     if (err)
     {
       return console.error(err.stack);
     }
 
-    if (!doc)
+    queue = docs.length;
+
+    docs.forEach(function(doc)
     {
-      allDone = true;
-
-      return;
-    }
-
-    queue++;
-
-    var orders = doc.orders.map(function(order)
-    {
-      order.downtimes = order.downtimes.map(function(downtime)
+      var orders = doc.orders.map(function(order, i)
       {
-        return {
-          prodDowntime: null,
-          reason: downtime._id,
-          label: downtime.label,
-          duration: downtime.count
-        };
+        order.downtimes = order.downtimes.map(function(downtime)
+        {
+          return {
+            prodDowntime: null,
+            reason: String(downtime._id),
+            label: String(downtime.label),
+            duration: Number(downtime.count)
+          };
+        });
+
+        order.losses = order.losses.map(function(loss)
+        {
+          return {
+            reason: String(loss._id),
+            label: String(loss.label),
+            count: Number(loss.count)
+          };
+        });
+
+        return order;
       });
 
-      order.losses = order.losses.map(function(loss)
+      var update = {
+        $set: {orders: orders}
+      };
+
+      collection.update({_id: doc._id}, update, function(err)
       {
-        return {
-          reason: loss._id,
-          label: loss.label,
-          count: loss.count
-        };
+        --queue;
+
+        if (queue === 0)
+        {
+          db.close();
+
+          return console.log('ALL DONE!');
+        }
+
+        if (err)
+        {
+          return console.error(err.stack);
+        }
       });
-
-      return order;
-    });
-
-    var update = {
-      $set: {orders: orders}
-    };
-
-    collection.update({_id: doc._id}, update, function(err)
-    {
-      --queue;
-
-      if (queue === 0 && allDone)
-      {
-        db.close();
-
-        return console.log('ALL DONE!');
-      }
-
-      if (err)
-      {
-        return console.error(err.stack);
-      }
     });
   });
 });

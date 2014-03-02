@@ -303,7 +303,7 @@ define([
             losses.push({
               reason: lossReason.id,
               label: lossReason.get('label'),
-              count: order.losses[lossReason.id]
+              count: parseInt(order.losses[lossReason.id], 10)
             });
           }
         });
@@ -323,7 +323,7 @@ define([
               prodDowntime: null,
               reason: downtimeReason.id,
               label: downtimeReason.get('label'),
-              duration: order.downtimes[downtimeReason.id]
+              duration: parseInt(order.downtimes[downtimeReason.id], 10)
             });
           }
         });

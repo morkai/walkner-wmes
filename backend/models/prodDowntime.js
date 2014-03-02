@@ -48,6 +48,11 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       ref: 'ProdShift',
       default: null
     },
+    pressWorksheet: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'PressWorksheet',
+      default: null
+    },
     date: {
       type: Date,
       required: true

@@ -4,6 +4,9 @@ var moment = require('moment');
 
 module.exports = function setupPressWorksheetModel(app, mongoose)
 {
+  var TIME_RE =
+    /^([0-9]{2}:[0-9]{2}|[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)$/;
+
   var pressWorksheetDowntimeSchema = mongoose.Schema({
     prodDowntime: {
       type: String,
@@ -84,10 +87,12 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     },
     startedAt: {
       type: String,
+      match: TIME_RE,
       default: null
     },
     finishedAt: {
       type: String,
+      match: TIME_RE,
       default: null
     },
     losses: [pressWorksheetLossSchema],
@@ -99,7 +104,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
   pressWorksheetOrderSchema.methods.getDowntimeDuration = function()
   {
     return (this.get('downtimes') || []).reduce(
-      function(duration, downtime) { return duration + downtime.count * 60 * 1000; },
+      function(duration, downtime) { return duration + downtime.duration * 60 * 1000; },
       0
     );
   };
@@ -134,10 +139,12 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     },
     startedAt: {
       type: String,
+      match: TIME_RE,
       default: null
     },
     finishedAt: {
       type: String,
+      match: TIME_RE,
       default: null
     },
     master: {},
@@ -211,6 +218,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       operator = operators[0];
     }
 
+    var ProdLogEntry = mongoose.model('ProdLogEntry');
     var ProdShiftOrder = mongoose.model('ProdShiftOrder');
     var prodShiftOrders = [];
     var prodDowntimes = [];
@@ -245,7 +253,9 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
       var needsId = order.prodShiftOrder === null;
       var prodShiftOrder = {
-        _id: needsId ? generateId(startedAt, order.prodLine + order.nc12) : order.prodShiftOrder,
+        _id: needsId
+          ? ProdLogEntry.generateId(startedAt, order.prodLine + order.nc12)
+          : order.prodShiftOrder,
         prodShift: null,
         pressWorksheet: pressWorksheet._id,
         date: pressWorksheet.date,
@@ -270,6 +280,11 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
       applyProdLineOrgUnits(prodShiftOrder, order.prodLine);
 
+      if (prodShiftOrder.prodLine === null)
+      {
+        return;
+      }
+
       var downtimeStartTime = startedAt.getTime();
       var orderDowntimes = [];
 
@@ -282,7 +297,9 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         var finishedAt = new Date(downtimeStartTime);
         var needsId = downtime.prodDowntime === null;
         var prodDowntime = {
-          _id: needsId ? generateId(startedAt, prodShiftOrder._id) : downtime.prodDowntime,
+          _id: needsId
+            ? ProdLogEntry.generateId(startedAt, prodShiftOrder._id)
+            : downtime.prodDowntime,
           division: prodShiftOrder.division,
           subdivision: prodShiftOrder.subdivision,
           mrpControllers: prodShiftOrder.mrpControllers,
@@ -291,6 +308,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
           prodLine: prodShiftOrder.prodLine,
           prodShift: null,
           prodShiftOrder: prodShiftOrder._id,
+          pressWorksheet: pressWorksheet._id,
           date: prodShiftOrder.date,
           shift: prodShiftOrder.shift,
           aor: getSubdivisionAor(prodShiftOrder.subdivision),
@@ -301,7 +319,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
           startedAt: startedAt,
           finishedAt: finishedAt,
           corroborator: pressWorksheet.master,
-          corroboratedAt: startedAt,
+          corroboratedAt: finishedAt,
           creator: null,
           master: pressWorksheet.master,
           leader: null,
@@ -371,6 +389,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     if (/^[0-9]{2}:[0-9]{2}$/.test(time))
     {
       time = time.split(':').map(Number);
+
       date = new Date(date);
       date.setHours(time[0]);
       date.setMinutes(time[1]);
@@ -399,26 +418,6 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     }
 
     return isoMoment.toDate();
-  }
-
-  // http://stackoverflow.com/a/7616484
-  function hashCode(str)
-  {
-    var hash = 0;
-
-    for (var i = 0, l = str.length; i < l; ++i)
-    {
-      hash = (((hash << 5) - hash) + str.charCodeAt(i)) | 0;
-    }
-
-    return hash;
-  }
-
-  function generateId(date, str)
-  {
-    return date.getTime().toString(36)
-      + hashCode(str).toString(36)
-      + Math.round(Math.random() * 10000000000000000).toString(36);
   }
 
   function applyProdLineOrgUnits(orgUnits, prodLineId)

@@ -168,7 +168,10 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 
         reply();
 
-        app.broker.publish('production.logEntries.saved');
+        if (!productionModule.recreating)
+        {
+          app.broker.publish('production.logEntries.saved');
+        }
       });
     });
   });

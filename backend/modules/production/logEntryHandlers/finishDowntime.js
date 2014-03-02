@@ -2,6 +2,8 @@
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
+  var ProdLogEntry = app[productionModule.config.mongooseId].model('ProdLogEntry');
+
   productionModule.getProdData('downtime', logEntry.data._id, function(err, prodDowntime)
   {
     if (err)
@@ -55,7 +57,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   function finishDowntime(prodDowntime)
   {
-    if (prodDowntime.finishedAt)
+    if (prodDowntime.finishedAt
+      && prodDowntime.finishedAt <= Date.parse(logEntry.data.finishedAt))
     {
       productionModule.warn(
         "Tried to finish an already finished prod downtime (LOG=[%s])", logEntry._id
@@ -70,7 +73,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       app[productionModule.config.downtimeReasonsId].modelsById[prodDowntime.reason];
     var corroborated = null;
 
-    if (prodDowntime.status === 'undecided' && downtimeReason && downtimeReason.auto)
+    if (!productionModule.recreating
+      && prodDowntime.status === 'undecided'
+      && downtimeReason
+      && downtimeReason.auto)
     {
       corroborated = {
         status: 'confirmed',
@@ -86,6 +92,37 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       prodDowntime.set(corroborated);
 
       corroborated._id = prodDowntime._id;
+
+      var corroborateLogEntry = new ProdLogEntry({
+        _id: ProdLogEntry.generateId(corroborated.corroboratedAt, logEntry.prodShift),
+        type: 'corroborateDowntime',
+        data: corroborated,
+        division: logEntry.division,
+        subdivision: logEntry.subdivision,
+        mrpControllers: logEntry.mrpControllers,
+        prodFlow: logEntry.prodFlow,
+        workCenter: logEntry.workCenter,
+        prodLine: logEntry.prodLine,
+        prodShift: logEntry.prodShift,
+        prodShiftOrder: logEntry.prodShiftOrder,
+        creator: corroborated.corroborator,
+        createdAt: corroborated.corroboratedAt,
+        savedAt: corroborated.corroboratedAt,
+        todo: false
+      });
+      corroborateLogEntry.save(function(err)
+      {
+        if (err)
+        {
+          productionModule.error(
+            "Failed to create a ProdLogEntry during auto corroboration of the "
+              + "[%s] ProdDowntime (LOG=[%s]): %s",
+            prodDowntime._id,
+            logEntry._id,
+            err.stack
+          );
+        }
+      });
     }
 
     prodDowntime.save(function(err)

@@ -3,6 +3,7 @@
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var setUpLogEntryHandler = require('./logEntryHandler');
+var recreate = require('./recreate');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -83,6 +84,10 @@ exports.start = function startProductionModule(app, module)
       return done(null, model);
     });
   };
+
+  module.recreating = false;
+
+  module.recreate = recreate.bind(null, app, module);
 
   app.broker.subscribe('shiftChanged', function clearProdDataCache(newShift)
   {

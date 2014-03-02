@@ -67,12 +67,34 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     id: false
   });
 
-  prodLogEntrySchema.index({todo: 1});
+  prodLogEntrySchema.index({todo: 1, prodLine: 1, createdAt: 1});
   prodLogEntrySchema.index({createdAt: -1});
   prodLogEntrySchema.index({prodLine: 1, createdAt: -1});
   prodLogEntrySchema.index({type: 1, createdAt: -1});
   prodLogEntrySchema.index({prodShift: 1});
   prodLogEntrySchema.index({prodShiftOrder: 1});
 
+  prodLogEntrySchema.statics.generateId = generateId;
+
   mongoose.model('ProdLogEntry', prodLogEntrySchema);
 };
+
+// http://stackoverflow.com/a/7616484
+function hashCode(str)
+{
+  var hash = 0;
+
+  for (var i = 0, l = str.length; i < l; ++i)
+  {
+    hash = (((hash << 5) - hash) + str.charCodeAt(i)) | 0;
+  }
+
+  return hash;
+}
+
+function generateId(date, str)
+{
+  return date.getTime().toString(36)
+    + hashCode(String(str)).toString(36)
+    + Math.round(Math.random() * 10000000000000000).toString(36);
+}

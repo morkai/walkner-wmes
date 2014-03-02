@@ -30,6 +30,7 @@
   "type:finishOrder": "Zakończenie zlecenia",
   "type:startDowntime": "Rozpoczęcie przestoju",
   "type:finishDowntime": "Zakończenie przestoju",
+  "type:corroborateDowntime": "Potwierdzenie przestoju",
   "type:endWork": "Zakończenie pracy",
 
   "data:changeShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
@@ -42,8 +43,9 @@
   "data:changeWorkerCount": "Ilość osób w zleceniu: <em>{value}</em>",
   "data:correctOrder": "Zlecenie: <em>{orderId}</em> (<em>{orderName}</em>); operacja: <em>{operationNo}</em> (<em>{operationName}</em>)",
   "data:finishOrder": "-",
-  "data:startDowntime": "Powód: <em>{reason}</em>; obszar odpowiedzialności: <em>{aor}</em>",
-  "data:finishDowntime": "-",
+  "data:startDowntime": "<a href='\\#prodDowntimes/{_id}'>Powód: <em>{reason}</em>; obszar odpowiedzialności: <em>{aor}</em></a>",
+  "data:finishDowntime": "Zakończono <a href='\\#prodDowntimes/{_id}'>przestój</a>.",
+  "data:corroborateDowntime": "{status, select, confirmed{Zatwierdzono} rejected{Odrzucono} other{Potwierdzono}} <a href='\\#prodDowntimes/{_id}'>przestój</a>.",
   "data:endWork": "-",
 
   "noData:prodShiftOrder": "<em>brak zlecenia</em>"

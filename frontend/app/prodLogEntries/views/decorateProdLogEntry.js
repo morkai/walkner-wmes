@@ -63,8 +63,13 @@ define([
         var reason = downtimeReasons.get(prodLogEntry.data.reason);
         var aor = aors.get(prodLogEntry.data.aor);
 
+        data._id = prodLogEntry.data._id;
         data.reason = reason ? reason.getLabel() : prodLogEntry.data.reason;
         data.aor = aor ? aor.getLabel() : prodLogEntry.data.aor;
+        break;
+
+      default:
+        data = prodLogEntry.data;
         break;
     }
 

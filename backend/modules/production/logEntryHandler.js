@@ -14,15 +14,22 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
   var handlingLogEntries = false;
   var haveNewLogEntries = false;
 
+  productionModule.handleLogEntries = handleLogEntries;
+
   app.broker.subscribe('production.logEntries.saved', handleLogEntries);
 
   app.broker.subscribe('app.started', handleLogEntries).setLimit(1);
 
-  function handleLogEntries()
+  function handleLogEntries(done)
   {
     if (handlingLogEntries)
     {
       haveNewLogEntries = true;
+
+      if (typeof done === 'function')
+      {
+        done(new Error('IN_PROGRESS'));
+      }
 
       return;
     }
@@ -58,13 +65,18 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
             handleProdLineLogEntries(prodLine, groupedLogEntries[prodLineId], step.parallel());
           });
         },
-        function finalizeLogEntryHandling()
+        function finalizeLogEntryHandling(err)
         {
           handlingLogEntries = false;
 
           if (haveNewLogEntries)
           {
             setImmediate(handleLogEntries);
+          }
+
+          if (typeof done === 'function')
+          {
+            done(err);
           }
         }
       );
@@ -90,7 +102,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   function handleProdLineLogEntries(prodLine, logEntries, done)
   {
-    var oldProdData = prodLine.isNew ? null : {
+    var oldProdData = productionModule.recreating || prodLine.isNew ? null : {
       prodShift: null,
       prodShiftOrder: null,
       prodDowntime: null
@@ -141,11 +153,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
         return done(new Error('NO_ENTRIES_HANDLED'));
       }
 
-      var handledLogEntryIds = handledLogEntries.map(function(logEntry)
-      {
-        return logEntry.get('_id');
-      });
-
+      var handledLogEntryIds = handledLogEntries.map(function(logEntry) { return logEntry._id; });
       var cond = {_id: {$in: handledLogEntryIds}};
       var update = {$set: {todo: false}};
 

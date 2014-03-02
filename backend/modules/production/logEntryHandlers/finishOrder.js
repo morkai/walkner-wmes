@@ -18,10 +18,11 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       return done(null);
     }
 
-    if (prodShiftOrder.finishedAt)
+    if (prodShiftOrder.finishedAt
+      && prodShiftOrder.finishedAt <= Date.parse(logEntry.data.finishedAt))
     {
       productionModule.warn(
-        "Tried to finish already finished prod shift order (LOG=[%s])", logEntry._id
+        "Tried to finish an already finished prod shift order (LOG=[%s])", logEntry._id
       );
 
       return done();

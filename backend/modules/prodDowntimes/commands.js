@@ -7,6 +7,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 {
   var sio = app[prodDowntimesModule.config.sioId];
   var productionModule = app[prodDowntimesModule.config.productionId];
+  var ProdLogEntry = app[prodDowntimesModule.config.mongooseId].model('ProdLogEntry');
 
   sio.sockets.on('connection', function(socket)
   {
@@ -21,7 +22,6 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 
       if (!user.super && user.privileges.indexOf('PROD_DOWNTIMES:MANAGE') === -1)
       {
-        console.log('NO_AUTH 1');
         return reply(new Error('NO_AUTH'));
       }
 
@@ -59,6 +59,35 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 
         data.corroborator = corroborator;
         data.corroboratedAt = new Date();
+
+        var prodLogEntry = new ProdLogEntry({
+          _id: ProdLogEntry.generateId(data.corroboratedAt, prodDowntime.prodShift),
+          type: 'corroborateDowntime',
+          data: data,
+          division: prodDowntime.division,
+          subdivision: prodDowntime.subdivision,
+          mrpControllers: prodDowntime.mrpControllers,
+          prodFlow: prodDowntime.prodFlow,
+          workCenter: prodDowntime.workCenter,
+          prodLine: prodDowntime.prodLine,
+          prodShift: prodDowntime.prodShift,
+          prodShiftOrder: prodDowntime.prodShiftOrder,
+          creator: data.corroborator,
+          createdAt: data.corroboratedAt,
+          savedAt: new Date(),
+          todo: false
+        });
+        prodLogEntry.save(function(err)
+        {
+          if (err)
+          {
+            prodDowntimesModule.error(
+              "Failed to create a ProdLogEntry during corroboration of the [%s] ProdDowntime: %s",
+              prodDowntime._id,
+              err.stack
+            );
+          }
+        });
 
         prodDowntime.set(data);
         prodDowntime.save(function(err)
