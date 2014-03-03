@@ -29,6 +29,7 @@
   "type:malfunction": "Awaria",
   "type:renovation": "Przegląd/remont",
   "type:maintenance": "Konserwacja",
+  "type:adjusting": "Ustawianie/przezbrojenie",
   "type:break": "Przerwa",
 
   "subdivisionType:none": "Żadne",
