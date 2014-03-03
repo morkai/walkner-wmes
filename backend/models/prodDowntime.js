@@ -116,13 +116,12 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
   prodDowntimeSchema.index({status: 1, startedAt: -1});
   prodDowntimeSchema.index({reason: 1, startedAt: -1});
   prodDowntimeSchema.index({aor: 1, startedAt: -1});
-  prodDowntimeSchema.index({orderId: 1});
   prodDowntimeSchema.index({division: 1, startedAt: -1});
   prodDowntimeSchema.index({subdivision: 1, startedAt: -1});
   prodDowntimeSchema.index({mrpController: 1, startedAt: -1});
   prodDowntimeSchema.index({prodFlow: 1, startedAt: -1});
   prodDowntimeSchema.index({workCenter: 1, startedAt: -1});
-  prodDowntimeSchema.index({prodLine: 1, startedAt: -1});
+  prodDowntimeSchema.index({startedAt: -1, prodLine: 1});
 
   prodDowntimeSchema.statics.TOPIC_PREFIX = 'prodDowntimes';
 
