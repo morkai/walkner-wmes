@@ -35,6 +35,7 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
     queue += 1;
 
     var laborTime = 0;
+    var machineTime = 0;
     var operation = doc.orderData && doc.orderData.operations
       ? doc.orderData.operations[doc.operationNo] : null;
 
@@ -43,9 +44,15 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
       laborTime = operation.laborTime;
     }
 
+    if (operation && typeof operation.machineTime === 'number' && operation.machineTime !== -1)
+    {
+      machineTime = operation.machineTime;
+    }
+
     var update = {
       $set: {
-        laborTime: laborTime
+        laborTime: laborTime,
+        machineTime: machineTime
       }
     };
 
@@ -55,6 +62,8 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
 
       if (queue === 0 && allDone)
       {
+        db.close();
+
         return console.log('ALL DONE!');
       }
 

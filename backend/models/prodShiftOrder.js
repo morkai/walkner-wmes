@@ -75,6 +75,10 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       type: Number,
       default: 0
     },
+    machineTime: {
+      type: Number,
+      default: 0
+    },
     workerCount: {
       type: Number,
       default: 0,
@@ -191,6 +195,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     var operation = operations[this.operationNo];
 
     this.laborTime = operation && operation.laborTime > 0 ? operation.laborTime : 0;
+    this.machineTime = operation && operation.machineTime > 0 ? operation.machineTime : 0;
   };
 
   prodShiftOrderSchema.methods.recalcDurations = function(save, done)
