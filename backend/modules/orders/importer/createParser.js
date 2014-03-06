@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 var step = require('h5.step');
 var parseOrderInfo = require('./parseOrderInfo');
 var parseOperInfo = require('./parseOperInfo');
@@ -288,13 +289,40 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
   {
     filePaths.forEach(function(filePath)
     {
-      fs.unlink(filePath, function(err)
+      if (module.config.parsedOutputDir)
       {
-        if (err)
-        {
-          module.error("Failed to delete file `%s`: %s", filePath, err.message);
-        }
-      });
+        moveFileInfoStepFile(filePath);
+      }
+      else
+      {
+        deleteFileInfoStepFile(filePath);
+      }
+    });
+  }
+
+  function moveFileInfoStepFile(oldFilePath)
+  {
+    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+
+    fs.rename(oldFilePath, newFilePath, function(err)
+    {
+      if (err)
+      {
+        module.error(
+          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+        );
+      }
+    });
+  }
+
+  function deleteFileInfoStepFile(filePath)
+  {
+    fs.unlink(filePath, function(err)
+    {
+      if (err)
+      {
+        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+      }
     });
   }
 
