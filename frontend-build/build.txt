@@ -1,4 +1,8 @@
 
+app/core/assets/dataTables.css
+----------------
+app/core/assets/dataTables.css
+
 app/core/assets/filter.css
 ----------------
 app/core/assets/filter.css
@@ -20,6 +24,7 @@ app/core/assets/./modal.css
 app/core/assets/./properties.css
 app/core/assets/./logInForm.css
 app/core/assets/./filter.css
+app/core/assets/./dataTables.css
 app/core/assets/main.css
 
 app/core/assets/modal.css
@@ -124,6 +129,8 @@ assets/../vendor/bootstrap/css/bootstrap.css
 assets/../vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 assets/../vendor/font-awesome/css/font-awesome.css
 assets/../vendor/select2/select2.css
+assets/../vendor/datatables/media/css/jquery.dataTables.css
+assets/../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css
 assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/events/assets/main.css
@@ -158,6 +165,26 @@ vendor/bootstrap/css/bootstrap.css
 vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 ----------------
 vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
+
+vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css
+----------------
+vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css
+
+vendor/datatables/extensions/FixedHeader/css/dataTables.fixedHeader.css
+----------------
+vendor/datatables/extensions/FixedHeader/css/dataTables.fixedHeader.css
+
+vendor/datatables/extensions/Scroller/css/dataTables.scroller.css
+----------------
+vendor/datatables/extensions/Scroller/css/dataTables.scroller.css
+
+vendor/datatables/extensions/TableTools/css/dataTables.tableTools.css
+----------------
+vendor/datatables/extensions/TableTools/css/dataTables.tableTools.css
+
+vendor/datatables/media/css/jquery.dataTables.css
+----------------
+vendor/datatables/media/css/jquery.dataTables.css
 
 vendor/font-awesome/css/font-awesome.css
 ----------------
