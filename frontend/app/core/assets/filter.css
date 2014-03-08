@@ -21,15 +21,24 @@
   text-align: right;
 }
 .filter-form .filter-actions {
-  padding-left: 1em;
   margin-left: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
   border-left: 1px solid #e3e3e3;
+  border-right: 1px solid #e3e3e3;
   vertical-align: bottom;
+}
+.filter-form .filter-actions:last-child {
+  padding-right: 0;
+  border-right: none;
 }
 .filter-form.is-vertical .filter-actions {
   padding-left: 0;
   margin-left: 1em;
   border-left: 0;
+}
+.filter-actions .dropdown-menu a {
+  cursor: pointer;
 }
 .filter-label.radio {
   margin-top: 0;

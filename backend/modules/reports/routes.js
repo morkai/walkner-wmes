@@ -2,6 +2,7 @@
 
 var report1 = require('./report1');
 var report2 = require('./report2');
+var report3 = require('./report3');
 
 module.exports = function setUpReportsRoutes(app, reportsModule)
 {
@@ -28,6 +29,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   express.get('/reports/1', canView, report1Route);
 
   express.get('/reports/2', canView, report2Route);
+
+  express.get('/reports/3', canView, report3Route);
 
   express.get(
     '/reports/metricRefs',
@@ -66,6 +69,11 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       ignoredDowntimeReasons: [],
       prodDivisionCount: countProdDivisions()
     };
+
+    if (isNaN(options.fromTime) || isNaN(options.toTime))
+    {
+      return next(new Error('INVALID_TIME'));
+    }
 
     downtimeReasonsModule.models.forEach(function(downtimeReason)
     {
@@ -106,7 +114,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     var options = {
       fromTime: getTime(req.query.from),
       toTime: getTime(req.query.to),
-      interval: req.query.interval || 'shift',
+      interval: req.query.interval || 'day',
       orgUnitType: req.query.orgUnitType,
       orgUnitId: req.query.orgUnitId,
       division: divisionId,
@@ -118,7 +126,40 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       prodTasks: getProdTasks()
     };
 
+    if (isNaN(options.fromTime) || isNaN(options.toTime))
+    {
+      return next(new Error('INVALID_TIME'));
+    }
+
     report2(mongoose, options, function(err, report)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      return res.send(report);
+    });
+  }
+
+  function report3Route(req, res, next)
+  {
+    var options = {
+      fromTime: getTime(req.query.from),
+      toTime: getTime(req.query.to),
+      interval: req.query.interval || 'day',
+      // TODO: Make the default value configurable
+      majorMalfunction: parseFloat(req.query.majorMalfunction) || 1.5,
+      downtimeReasons: getDowntimeReasons(),
+      prodLines: getProdLines()
+    };
+
+    if (isNaN(options.fromTime) || isNaN(options.toTime))
+    {
+      return next(new Error('INVALID_TIME'));
+    }
+
+    report3(mongoose, options, function(err, report)
     {
       if (err)
       {
@@ -317,29 +358,6 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     return prodDivisionCount;
   }
 
-  function getProdFlowsByMrpControllers(mrpControllers)
-  {
-    var prodFlows = {};
-
-    prodFlowsModule.models.forEach(function(prodFlow)
-    {
-      if (mrpControllers.length === 0)
-      {
-        prodFlows[prodFlow._id] = true;
-      }
-
-      prodFlow.mrpController.forEach(function(mrpControllerId)
-      {
-        if (mrpControllers.indexOf(mrpControllerId) !== -1)
-        {
-          prodFlows[prodFlow._id] = true;
-        }
-      });
-    });
-
-    return prodFlows;
-  }
-
   function getProdFlowsByOrgUnit(orgUnitType, orgUnitId)
   {
     /*jshint -W015*/
@@ -429,5 +447,70 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     });
 
     return prodTasks;
+  }
+
+  function getDowntimeReasons()
+  {
+    var downtimeReasons = {};
+
+    downtimeReasonsModule.models.forEach(function(downtimeReason)
+    {
+      downtimeReasons[downtimeReason._id] = {
+        type: downtimeReason.type,
+        scheduled: downtimeReason.scheduled
+      };
+    });
+
+    return downtimeReasons;
+  }
+
+  function getProdLines()
+  {
+    var prodLines = {};
+
+    prodLinesModule.models.forEach(function(prodLine)
+    {
+      var subdivision = getSubdivisionByProdLine(prodLine);
+
+      if (!subdivision)
+      {
+        return;
+      }
+
+      prodLines[prodLine._id] = {
+        division: subdivision.division,
+        subdivisionType: subdivision.type
+      };
+    });
+
+    return prodLines;
+  }
+
+  function getSubdivisionByProdLine(prodLine)
+  {
+    var workCenter = workCentersModule.modelsById[prodLine.workCenter];
+
+    if (!workCenter)
+    {
+      return null;
+    }
+
+    var prodFlow = prodFlowsModule.modelsById[workCenter.prodFlow];
+
+    if (!prodFlow)
+    {
+      return null;
+    }
+
+    var mrpController = mrpControllersModule.modelsById[[].concat(prodFlow.mrpController)[0]];
+
+    if (!mrpController)
+    {
+      return null;
+    }
+
+    var subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
+
+    return subdivision || null;
   }
 };

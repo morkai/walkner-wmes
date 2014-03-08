@@ -38,7 +38,7 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
     },
     scheduled: {
       type: Boolean,
-      default: false
+      default: null
     }
   }, {
     id: false

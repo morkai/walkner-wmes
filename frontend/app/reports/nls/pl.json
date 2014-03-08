@@ -1,9 +1,10 @@
 {
   "BREADCRUMBS:reports": "Raporty",
   "BREADCRUMBS:metricRefs": "Wartości referencyjne",
-  "BREADCRUMBS:1": "Wskaźniki",
   "BREADCRUMBS:divisions": "Wydziały",
+  "BREADCRUMBS:1": "Wskaźniki",
   "BREADCRUMBS:2": "CLIP",
+  "BREADCRUMBS:3": "Wykorzystanie zasobów",
 
   "PAGE_ACTION:editMetricRefs": "Zmień wartości referencyjne",
 
@@ -27,7 +28,7 @@
   "downtimesByReason:title": "Czas przestojów - przyczyny",
   "downtimesByReason:seriesName": "Czas przestojów",
 
-  "quantityDoneSuffix": " szt.",
+  "quantitySuffix": " szt.",
 
   "dirIndir:title": "DIR/INDIR",
   "dirIndir:seriesName": "FTE",
@@ -70,13 +71,40 @@
   "filter:submit:shift": "Zmiana",
   "filter:submit:today": "Dzisiaj",
   "filter:submit:yesterday": "Wczoraj",
+  "filter:submit:currentWeek": "Aktualny tydzień",
+  "filter:submit:prevWeek": "Poprzedni tydzień",
+  "filter:submit:currentMonth": "Aktualny miesiąc",
+  "filter:submit:prevMonth": "Poprzedni miesiąc",
   "filter:submit:day": "Dzień",
   "filter:submit:week": "Tydzień",
   "filter:submit:month": "Miesiąc",
+  "filter:divisions": "Wydział",
+  "filter:majorMalfunction": "Poważna awaria [h]",
 
   "metricRefs:efficiency": "Wydajność",
   "metricRefs:productivity": "Produktywność",
   "metricRefs:overall": "ML",
   "metricRefs:overall:prod": "Montaż",
-  "metricRefs:overall:press": "Tłocznia"
+  "metricRefs:overall:press": "Tłocznia",
+
+  "oee:table:loading": "Ładowanie...",
+  "oee:table:loadingFailed": "Ładowanie nie powiodło się :(",
+  "oee:no": "Lp.",
+  "oee:division": "Wydział",
+  "oee:prodLine": "Nazwa maszyny",
+  "oee:inventoryNo": "Nr inwent.",
+  "oee:totalAvailability": "Dyspoz. maszyn całkowita [h]",
+  "oee:operationalAvailability:h": "Dyspoz. maszyn oper. [h]",
+  "oee:operationalAvailability:%": "Dyspoz. maszyn oper. [%]",
+  "oee:exploitation:h": "Wykorz. maszyn [h]",
+  "oee:exploitation:%": "Wykorz. maszyn [%]",
+  "oee:oee": "OEE [%]",
+  "oee:adjusting:duration": "Czas ustaw. / przezbr. [h]",
+  "oee:maintenance:duration": "Czas konserw. [h]",
+  "oee:renovation:duration": "Czas przeglądów / remontów [h]",
+  "oee:malfunction:duration": "Czas wszystkich awarii [h]",
+  "oee:malfunction:count": "Ilość wszystkich awarii [szt]",
+  "oee:majorMalfunction:count": "Ilość poważnych awarii [szt]",
+  "oee:mttr": "MTTR [h]",
+  "oee:mtbf": "MTBF [h]"
 }

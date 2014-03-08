@@ -34,31 +34,27 @@ define([
 
         var fromMoment = time.getMoment();
         var toMoment;
-        var interval;
+        var interval = 'day';
 
         switch (e.target.getAttribute('data-range'))
         {
           case 'month':
             fromMoment.date(1);
             toMoment = fromMoment.clone().add('months', 1);
-            interval = 'week';
             break;
 
           case 'week':
             fromMoment.weekday(0);
             toMoment = fromMoment.clone().add('days', 7);
-            interval = 'day';
             break;
 
           case 'today':
             toMoment = fromMoment.clone().add('days', 1);
-            interval = 'day';
             break;
 
           case 'yesterday':
             toMoment = fromMoment.clone();
             fromMoment.subtract('days', 1);
-            interval = 'day';
             break;
         }
 

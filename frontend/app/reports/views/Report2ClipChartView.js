@@ -3,7 +3,6 @@ define([
   'jquery',
   'app/time',
   'app/i18n',
-  'app/viewport',
   'app/core/View',
   'app/data/orgUnits',
   'app/data/views/renderOrgUnitPath',
@@ -13,7 +12,6 @@ define([
   $,
   time,
   t,
-  viewport,
   View,
   orgUnits,
   renderOrgUnitPath,
@@ -23,10 +21,7 @@ define([
 
   return View.extend({
 
-    className: function()
-    {
-      return 'reports-chart reports-drillingChart reports-2-clip';
-    },
+    className: 'reports-chart reports-drillingChart reports-2-clip',
 
     initialize: function()
     {
@@ -125,7 +120,6 @@ define([
           }
         ],
         tooltip: {
-          borderColor: '#999999',
           shared: true,
           useHTML: true,
           formatter: function()
@@ -148,11 +142,7 @@ define([
         legend: {
           layout: 'horizontal',
           align: 'center',
-          verticalAlign: 'bottom',
-          backgroundColor: '#FFFFFF',
-          itemStyle: {
-            fontSize: '10px'
-          }
+          verticalAlign: 'bottom'
         },
         plotOptions: {
           area: {

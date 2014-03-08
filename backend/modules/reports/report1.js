@@ -508,7 +508,7 @@ module.exports = function(mongoose, options, done)
     }
 
     var createNextGroupKey = util.createCreateNextGroupKey(options.interval);
-    var lastGroupKey = createGroupKey(options.fromTime);
+    var lastGroupKey = util.createGroupKey(options.interval, options.fromTime);
 
     if (groupKeys[0] !== lastGroupKey)
     {
@@ -701,7 +701,7 @@ module.exports = function(mongoose, options, done)
 
   function groupObjects(groupedObjects, obj)
   {
-    var groupKey = createGroupKey(obj.startedAt);
+    var groupKey = util.createGroupKey(options.interval, obj.startedAt);
 
     if (typeof groupedObjects[groupKey] === 'undefined')
     {
@@ -709,72 +709,6 @@ module.exports = function(mongoose, options, done)
     }
 
     groupedObjects[groupKey].push(obj);
-  }
-
-  function createGroupKey(date)
-  {
-    /*jshint -W015*/
-
-    var groupKey = moment(date).lang('pl');
-    var hours = groupKey.hours();
-
-    groupKey.minutes(0).seconds(0).milliseconds(0);
-
-    switch (options.interval)
-    {
-      case 'shift':
-        if (hours >= 6 && hours < 14)
-        {
-          groupKey.hours(6);
-        }
-        else if (hours >= 14 && hours < 22)
-        {
-          groupKey.hours(14);
-        }
-        else
-        {
-          groupKey.hours(22);
-
-          if (hours < 6)
-          {
-            groupKey.date(groupKey.date() - 1);
-          }
-        }
-        break;
-
-      case 'day':
-        if (hours < 6)
-        {
-          groupKey.date(groupKey.date() - 1);
-        }
-
-        groupKey.hours(6);
-        break;
-
-      case 'week':
-        var weekday = groupKey.weekday();
-
-        if (weekday === 0 && hours < 6)
-        {
-          groupKey.date(groupKey.date() - 1);
-        }
-
-        groupKey.weekday(0).hours(6);
-        break;
-
-      case 'month':
-        var dayOfMonth = groupKey.date();
-
-        if (dayOfMonth === 1 && hours < 6)
-        {
-          groupKey.date(dayOfMonth - 1);
-        }
-
-        groupKey.date(1).hours(6);
-        break;
-    }
-
-    return groupKey.valueOf();
   }
 
   function calcCoeffs(groupKey, orders, fteTotals, orderToDowntimes)

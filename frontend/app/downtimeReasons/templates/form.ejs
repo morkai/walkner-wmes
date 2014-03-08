@@ -80,10 +80,25 @@
         </label>
       </div>
       <div class="form-group">
-        <label class="control-label checkbox">
-          <input id="<%- idPrefix %>-scheduled" type="checkbox" name="scheduled" value="true">
-          <%- t('downtimeReasons', 'PROPERTY:scheduled') %>
-        </label>
+        <label for="<%- idPrefix %>-scheduled-yes" class="control-label"><%- t('downtimeReasons', 'PROPERTY:scheduled') %></label>
+        <div class="radio">
+          <label>
+            <input id="<%- idPrefix %>-type-yes" type="radio" name="scheduled" value="true">
+            <%- t('core', 'BOOL:true') %>
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="scheduled" value="false">
+            <%- t('core', 'BOOL:false') %>
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="scheduled" value="null">
+            <%- t('core', 'BOOL:null') %>
+          </label>
+        </div>
       </div>
     </div>
     <div class="panel-footer">

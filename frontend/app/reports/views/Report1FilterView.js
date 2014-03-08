@@ -37,20 +37,18 @@ define([
 
         var fromMoment = moment().minutes(0).seconds(0).milliseconds(0);
         var toMoment;
-        var interval;
+        var interval = 'day';
 
         switch (e.target.getAttribute('data-range'))
         {
           case 'month':
             fromMoment.date(1).hours(6);
             toMoment = fromMoment.clone().add('months', 1);
-            interval = 'week';
             break;
 
           case 'week':
             fromMoment.weekday(0).hours(6);
             toMoment = fromMoment.clone().add('days', 7);
-            interval = 'day';
             break;
 
           case 'day':

@@ -115,7 +115,6 @@ define([
         },
         noData: {},
         tooltip: {
-          borderColor: '#999999',
           shared: true
         },
         xAxis: {
@@ -164,7 +163,7 @@ define([
           yAxis: 2,
           data: [],
           tooltip: {
-            valueSuffix: t('reports', 'quantityDoneSuffix')
+            valueSuffix: t('reports', 'quantitySuffix')
           }
         }]
       });

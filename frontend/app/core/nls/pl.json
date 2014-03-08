@@ -35,6 +35,7 @@
 
   "BOOL:true": "Tak",
   "BOOL:false": "Nie",
+  "BOOL:null": "Nie dotyczy",
 
   "GUEST_USER_NAME": "Gość",
 
@@ -81,7 +82,7 @@
   "NAVBAR:REPORTS": "Raporty",
   "NAVBAR:REPORTS:1": "Wskaźniki",
   "NAVBAR:REPORTS:2": "CLIP",
-  "NAVBAR:REPORTS:3": "OEE",
+  "NAVBAR:REPORTS:3": "Wykorzystanie zasobów",
   "NAVBAR:PROD": "Produkcja",
   "NAVBAR:PROD:LOG_ENTRIES": "Historia operacji",
   "NAVBAR:PROD:SHIFTS": "Zmiany",
@@ -113,5 +114,9 @@
   "highcharts:loading": "Ładowanie...",
   "highcharts:months": "Styczeń_Luty_Marzec_Kwiecień_Maj_Czerwiec_Lipiec_Sierpień_Wrzesień_Październik_Listopad_Grudzień",
   "highcharts:shortMonths": "Sty_Lut_Mar_Kwi_Maj_Cze_Lip_Sie_Wrz_Paź_Lis_Gru",
-  "highcharts:weekdays": "Niedziela_Poniedziałek_Wtorek_Środa_Czwartek_Piątek_Sobota"
+  "highcharts:weekdays": "Niedziela_Poniedziałek_Wtorek_Środa_Czwartek_Piątek_Sobota",
+
+  "dataTables:emptyTable": "Brak danych.",
+  "dataTables:loadingRecords": "Ładowanie danych...",
+  "dataTables:loadingFailed": "Ładowanie danych nie powiodło się :("
 }

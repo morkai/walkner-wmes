@@ -25,6 +25,17 @@ define([
     },
     credits: {
       enabled: false
+    },
+    legend: {
+      borderRadius: 0,
+      borderColor: '#E3E3E3',
+      backgroundColor: '#F5F5F5',
+      itemStyle: {
+        fontSize: '10px'
+      }
+    },
+    tooltip: {
+      borderColor: '#999999'
     }
   });
 

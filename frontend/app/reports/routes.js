@@ -10,7 +10,9 @@ define([
 ) {
   'use strict';
 
-  router.map('/reports/1', user.auth('REPORTS:VIEW'), function(req)
+  var canView = user.auth('REPORTS:VIEW');
+
+  router.map('/reports/1', canView, function(req)
   {
     if (viewport.currentPage && viewport.currentPage.pageId === 'report1')
     {
@@ -23,7 +25,7 @@ define([
     });
   });
 
-  router.map('/reports/2', user.auth('REPORTS:VIEW'), function(req)
+  router.map('/reports/2', canView, function(req)
   {
     if (viewport.currentPage && viewport.currentPage.pageId === 'report2')
     {
@@ -33,6 +35,14 @@ define([
     viewport.loadPage('app/reports/pages/Report2Page', function(Report2Page)
     {
       return new Report2Page({query: req.query});
+    });
+  });
+
+  router.map('/reports/3', canView, function(req)
+  {
+    viewport.loadPage('app/reports/pages/Report3Page', function(Report3Page)
+    {
+      return new Report3Page({query: req.rql});
     });
   });
 

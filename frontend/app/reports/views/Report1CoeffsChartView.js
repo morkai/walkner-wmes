@@ -1,15 +1,15 @@
 define([
+  'underscore',
   'app/time',
   'app/i18n',
-  'app/viewport',
   'app/core/View',
   'app/data/orgUnits',
   'app/data/views/renderOrgUnitPath',
   'app/highcharts'
 ], function(
+  _,
   time,
   t,
-  viewport,
   View,
   orgUnits,
   renderOrgUnitPath,
@@ -121,7 +121,6 @@ define([
           }
         ],
         tooltip: {
-          borderColor: '#999999',
           shared: true,
           useHTML: true,
           formatter: function()
@@ -144,11 +143,7 @@ define([
         legend: {
           layout: 'horizontal',
           align: 'center',
-          verticalAlign: 'bottom',
-          backgroundColor: '#FFFFFF',
-          itemStyle: {
-            fontSize: '10px'
-          }
+          verticalAlign: 'bottom'
         },
         plotOptions: {
           area: {
@@ -173,7 +168,7 @@ define([
             yAxis: 0,
             data: chartData.quantityDone,
             tooltip: {
-              valueSuffix: t('reports', 'quantityDoneSuffix')
+              valueSuffix: t('reports', 'quantitySuffix')
             }
           },
           {

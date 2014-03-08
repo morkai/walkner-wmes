@@ -5,6 +5,7 @@
 @import url(./properties.css);
 @import url(./logInForm.css);
 @import url(./filter.css);
+@import url(./dataTables.css);
 
 body {
   cursor: default;

@@ -76,9 +76,6 @@ define([
           }
         },
         noData: {},
-        tooltip: {
-          borderColor: '#999999'
-        },
         xAxis: {
           categories: chartData.categories
         },

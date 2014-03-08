@@ -28,7 +28,12 @@ exports.paths = {
   'highcharts': 'vendor/highcharts/js/highcharts.src',
   'highcharts-noData': 'vendor/highcharts/js/modules/no-data-to-display.src',
   'zeroclipboard': 'vendor/zeroclipboard/ZeroClipboard',
-  'screenfull': 'vendor/screenfull'
+  'screenfull': 'vendor/screenfull',
+  'datatables': 'vendor/datatables/media/js/jquery.dataTables',
+  'datatables-fixedcolumns': 'vendor/datatables/extensions/FixedColumns/js/dataTables.fixedColumns',
+  'datatables-fixedheader': 'vendor/datatables/extensions/FixedHeader/js/dataTables.fixedHeader',
+  'datatables-scroller': 'vendor/datatables/extensions/Scroller/js/dataTables.scroller',
+  'datatables-tabletools': 'vendor/datatables/extensions/TableTools/js/dataTables.tableTools'
 };
 
 exports.shim = {
