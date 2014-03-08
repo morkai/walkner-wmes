@@ -340,7 +340,7 @@ define([
 
     onTableSummaryChanged: function()
     {
-      if (this.dataTable)
+      if (this.dataTable && this.loading !== 1)
       {
         this.dataTable.clear();
         this.dataTable.rows.add(this.model.get('tableSummary'));
