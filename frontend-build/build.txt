@@ -478,6 +478,8 @@ i18n!app/nls/orderStatuses
 app/orderStatuses/routes.js
 app/pressWorksheets/PressWorksheet.js
 app/pressWorksheets/PressWorksheetCollection.js
+app/pressWorksheets/templates/filter.js
+app/pressWorksheets/views/PressWorksheetFilterView.js
 app/pressWorksheets/views/decoratePressWorksheet.js
 app/pressWorksheets/views/PressWorksheetListView.js
 app/pressWorksheets/templates/listPage.js
