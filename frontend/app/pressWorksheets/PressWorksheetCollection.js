@@ -11,7 +11,7 @@ define([
 
     model: PressWorksheet,
 
-    rqlQuery: 'exclude(orders,operators)&sort(-date,-shift)&limit(15)'
+    rqlQuery: 'exclude(orders,operators)&sort(-date)&limit(15)'
 
   });
 });

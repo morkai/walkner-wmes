@@ -6,6 +6,7 @@ define([
   'app/core/util/pageActions',
   'app/core/View',
   '../PressWorksheetCollection',
+  '../views/PressWorksheetFilterView',
   '../views/PressWorksheetListView',
   'app/pressWorksheets/templates/listPage'
 ], function(
@@ -16,6 +17,7 @@ define([
   pageActions,
   View,
   PressWorksheetCollection,
+  PressWorksheetFilterView,
   PressWorksheetListView,
   listPageTemplate
 ) {
@@ -43,6 +45,7 @@ define([
       this.defineModels();
       this.defineViews();
 
+      this.setView('.filter-container', this.filterView);
       this.setView('.pressWorksheets-list-container', this.listView);
     },
 
@@ -55,7 +58,15 @@ define([
 
     defineViews: function()
     {
+      this.filterView = new PressWorksheetFilterView({
+        model: {
+          rqlQuery: this.pressWorksheetList.rqlQuery
+        }
+      });
+
       this.listView = new PressWorksheetListView({collection: this.pressWorksheetList});
+
+      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },
 
     load: function(when)

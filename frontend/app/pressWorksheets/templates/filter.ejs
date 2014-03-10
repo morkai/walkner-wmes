@@ -1,0 +1,49 @@
+<div class="well">
+  <form id="<%- idPrefix %>-form" class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-date"><%- t('pressWorksheets', 'FILTER:DATE') %></label>
+      <input id="<%- idPrefix %>-date" class="form-control" name="date" type="date">
+    </div><div
+      class="form-group">
+      <label><%- t('pressWorksheets', 'FILTER:SHIFT') %></label>
+      <div id="<%- idPrefix %>-shift" class="btn-group filter-btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+          <input type="radio" name="shift" value="0"> <%- t('core', 'SHIFT:ANY') %>
+        </label>
+        <label class="btn btn-default">
+          <input type="radio" name="shift" value="1"> <%- t('core', 'SHIFT:1') %>
+        </label>
+        <label class="btn btn-default">
+          <input type="radio" name="shift" value="2"> <%- t('core', 'SHIFT:2') %>
+        </label>
+        <label class="btn btn-default">
+          <input type="radio" name="shift" value="3"> <%- t('core', 'SHIFT:3') %>
+        </label>
+      </div>
+    </div><div
+      class="form-group">
+      <label><%- t('pressWorksheets', 'PROPERTY:type') %></label>
+      <div id="<%- idPrefix %>-type" class="btn-group filter-btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+          <input type="radio" name="type" value="any"> <%- t('pressWorksheets', 'FILTER:type:any') %>
+        </label>
+        <label class="btn btn-default">
+          <input type="radio" name="type" value="mech"> <%- t('pressWorksheets', 'PROPERTY:type:mech') %>
+        </label>
+        <label class="btn btn-default">
+          <input type="radio" name="type" value="paintShop"> <%- t('pressWorksheets', 'PROPERTY:type:paintShop') %>
+        </label>
+        <label class="btn btn-default">
+          <input type="radio" name="type" value="optics"> <%- t('pressWorksheets', 'PROPERTY:type:optics') %>
+        </label>
+      </div>
+    </div><div
+      class="form-group">
+      <label for="<%- idPrefix %>-limit"><%- t('pressWorksheets', 'FILTER:LIMIT') %></label>
+      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
+    </div><div
+      class="form-group filter-actions">
+      <input type="submit" class="btn btn-primary" value="<%= t('pressWorksheets', 'FILTER:BUTTON') %>">
+    </div>
+  </form>
+</div>

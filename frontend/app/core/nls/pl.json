@@ -105,6 +105,7 @@
   "SHIFT:1": "I",
   "SHIFT:2": "II",
   "SHIFT:3": "III",
+  "SHIFT:ANY": "Dowolna",
 
   "highcharts:decimalPoint": ",",
   "highcharts:thousandsSep": ".",

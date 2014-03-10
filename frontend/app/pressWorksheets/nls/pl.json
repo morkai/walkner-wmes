@@ -14,7 +14,12 @@
 
   "FILTER:BUTTON": "Filtruj karty pracy",
   "FILTER:LIMIT": "Limit",
-  "FILTER:PLACEHOLDER:": "Dowolny ...",
+  "FILTER:DATE": "Data",
+  "FILTER:SHIFT": "Zmiana",
+  "FILTER:type:any": "Dowolny",
+  "FILTER:type:mech": "Obr. mech.",
+  "FILTER:type:paintShop": "Malarnia",
+  "FILTER:type:optics": "M. optyki",
 
   "PROPERTY:operators": "Nastawiacze/operatorzy",
   "PROPERTY:operator": "Podpisany nastawiacz/operator",
