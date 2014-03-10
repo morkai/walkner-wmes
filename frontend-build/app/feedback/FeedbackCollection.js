@@ -1,0 +1,1 @@
+define(["../core/Collection","./Feedback"],function(e,t){return e.extend({model:t,rqlQuery:"&sort(createdAt)&limit(15)"})});
