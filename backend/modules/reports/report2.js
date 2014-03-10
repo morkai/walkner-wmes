@@ -75,7 +75,7 @@ module.exports = function(mongoose, options, done)
     }
 
     var conditions = {
-      finishDate: {$gte: new Date(options.fromTime), $lt: new Date(options.toTime)},
+      startDate: {$gte: new Date(options.fromTime), $lt: new Date(options.toTime)},
       mrp: {$in: options.mrpControllers}
     };
     var groupOperator = getGroupOperator(options.interval);
@@ -89,7 +89,7 @@ module.exports = function(mongoose, options, done)
 
     Order.aggregate(
       {$match: conditions},
-      {$project: {_id: 0, statuses: 1, finishDate: 1, tzOffsetMs: 1}},
+      {$project: {_id: 0, statuses: 1, startDate: 1, tzOffsetMs: 1}},
       {$unwind: '$statuses'},
       {$match: {statuses: {$in: ['CNF', 'DLV']}}},
       {$group: {
@@ -120,46 +120,46 @@ module.exports = function(mongoose, options, done)
     var to = options.fromTime;
     var i;
     var l;
-    var finishTime;
+    var startTime;
 
     for (i = 0, l = totalResults.length; i < l; ++i)
     {
       var totalResult = totalResults[i];
 
-      finishTime = getFinishTimeFromGroupKey(options.interval, totalResult._id);
+      startTime = getStartTimeFromGroupKey(options.interval, totalResult._id);
 
-      if (finishTime < from)
+      if (startTime < from)
       {
-        from = finishTime;
+        from = startTime;
       }
 
-      if (finishTime > to)
+      if (startTime > to)
       {
-        to = finishTime;
+        to = startTime;
       }
 
-      totalMap[finishTime] = totalResult.count;
+      totalMap[startTime] = totalResult.count;
     }
 
     for (i = 0, l = statusResults.length; i < l; ++i)
     {
       var statusResult = statusResults[i];
 
-      finishTime = getFinishTimeFromGroupKey(options.interval, statusResult._id.groupKey);
+      startTime = getStartTimeFromGroupKey(options.interval, statusResult._id.groupKey);
 
-      if (finishTime < from)
+      if (startTime < from)
       {
-        from = finishTime;
+        from = startTime;
       }
 
-      if (finishTime > to)
+      if (startTime > to)
       {
-        to = finishTime;
+        to = startTime;
       }
 
       var statusMap = statusResult._id.status === 'CNF' ? productionMap : endToEndMap;
 
-      statusMap[finishTime] = statusResult.count;
+      statusMap[startTime] = statusResult.count;
     }
 
     this.fromGroupKey = from;
@@ -482,7 +482,7 @@ function getDivisionCount(division, divisionsCount)
 function getGroupOperator(interval)
 {
   var operator = {};
-  var addTzOffsetMs = [{$add: ['$finishDate', '$tzOffsetMs']}];
+  var addTzOffsetMs = [{$add: ['$startDate', '$tzOffsetMs']}];
 
   operator.y = {$year: addTzOffsetMs};
 
@@ -503,21 +503,21 @@ function getGroupOperator(interval)
   return operator;
 }
 
-function getFinishTimeFromGroupKey(interval, groupKey)
+function getStartTimeFromGroupKey(interval, groupKey)
 {
-  var finishTimeStr = groupKey.y + '-';
+  var startTimeStr = groupKey.y + '-';
 
   if (interval === 'week')
   {
-    finishTimeStr += 'W' + util.pad0(groupKey.w + 1) + '-1';
+    startTimeStr += 'W' + util.pad0(groupKey.w + 1) + '-1';
   }
   else
   {
-    finishTimeStr += util.pad0(groupKey.m) + '-'
+    startTimeStr += util.pad0(groupKey.m) + '-'
       + (interval === 'day' ? util.pad0(groupKey.d) : '01');
   }
 
-  return moment(finishTimeStr).valueOf();
+  return moment(startTimeStr).valueOf();
 }
 
 function addToProperty(obj, prop, num)

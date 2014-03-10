@@ -14,7 +14,7 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
   var queue = 0;
   var allDone = false;
 
-  collection.find(null, {finishDate: 1}).each(function(err, doc)
+  collection.find(null, {startDate: 1}).each(function(err, doc)
   {
     if (err)
     {
@@ -28,14 +28,14 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
       return;
     }
 
-    if (!doc.finishDate)
+    if (!doc.startDate)
     {
       return;
     }
 
     queue++;
 
-    var tzOffsetMs = doc.finishDate.getTimezoneOffset() * 60 * 1000 * -1;
+    var tzOffsetMs = doc.startDate.getTimezoneOffset() * 60 * 1000 * -1;
 
     collection.update({_id: doc._id}, {$set: {tzOffsetMs: tzOffsetMs}}, function(err)
     {
@@ -43,6 +43,8 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
 
       if (queue === 0 && allDone)
       {
+        db.close();
+
         return console.log('ALL DONE!');
       }
 

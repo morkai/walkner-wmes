@@ -87,7 +87,8 @@ module.exports = function setupOrderModel(app, mongoose)
   orderSchema.statics.TOPIC_PREFIX = 'orders';
 
   orderSchema.index({nc12: 1, finishDate: -1});
-  orderSchema.index({finishDate: -1, mrp: 1});
+  orderSchema.index({finishDate: -1});
+  orderSchema.index({startDate: -1, mrp: 1});
 
   orderSchema.pre('save', function(next)
   {
@@ -104,7 +105,7 @@ module.exports = function setupOrderModel(app, mongoose)
 
     if (this.finishDate)
     {
-      this.tzOffsetMs = this.finishDate.getTimezoneOffset() * 60 * 1000 * -1;
+      this.tzOffsetMs = this.startDate.getTimezoneOffset() * 60 * 1000 * -1;
     }
 
     next();
