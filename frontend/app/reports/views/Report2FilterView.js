@@ -5,7 +5,8 @@ define([
   'app/time',
   'app/core/View',
   'app/core/util/fixTimeRange',
-  'app/reports/templates/report2Filter'
+  'app/reports/templates/report2Filter',
+  './prepareDateRange'
 ], function(
   _,
   js2form,
@@ -13,7 +14,8 @@ define([
   time,
   View,
   fixTimeRange,
-  filterTemplate
+  filterTemplate,
+  prepareDateRange
 ) {
   'use strict';
 
@@ -28,39 +30,15 @@ define([
 
         this.changeFilter();
       },
-      'click .btn[data-range]': function(e)
+      'click a[data-range]': function(e)
       {
         /*jshint -W015*/
 
-        var fromMoment = time.getMoment();
-        var toMoment;
-        var interval = 'day';
+        var dateRange = prepareDateRange(e.target.getAttribute('data-range'));
 
-        switch (e.target.getAttribute('data-range'))
-        {
-          case 'month':
-            fromMoment.date(1);
-            toMoment = fromMoment.clone().add('months', 1);
-            break;
-
-          case 'week':
-            fromMoment.weekday(0);
-            toMoment = fromMoment.clone().add('days', 7);
-            break;
-
-          case 'today':
-            toMoment = fromMoment.clone().add('days', 1);
-            break;
-
-          case 'yesterday':
-            toMoment = fromMoment.clone();
-            fromMoment.subtract('days', 1);
-            break;
-        }
-
-        this.$id('from').val(fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(toMoment.format('YYYY-MM-DD'));
-        this.$('.btn[data-interval=' + interval + ']').click();
+        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
+        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
+        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
         this.$('.filter-form').submit();
       }
     },
@@ -83,7 +61,7 @@ define([
 
       js2form(this.el.querySelector('.filter-form'), formData);
 
-      this.$('[name=interval]:checked').closest('.btn').addClass('active');
+      this.$('input[name=interval]:checked').closest('.btn').addClass('active');
     },
 
     serializeFormData: function()
@@ -101,7 +79,7 @@ define([
         rnd: Math.random(),
         from: null,
         to: null,
-        interval: this.$('.reports-2-filter-intervals > .active > input').val()
+        interval: this.$id('intervals').find('.active > input').val()
       };
 
       var timeRange = fixTimeRange.fromView(this);
@@ -117,7 +95,7 @@ define([
 
     getSelectedInterval: function()
     {
-      return this.$('.reports-2-filter-intervals > .active').attr('data-interval');
+      return this.$id('intervals').find('.active').attr('data-interval');
     },
 
     getFromMomentForSelectedInterval: function()

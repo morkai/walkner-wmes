@@ -6,7 +6,8 @@ define([
   'app/data/divisions',
   'app/core/View',
   'app/core/util/fixTimeRange',
-  'app/reports/templates/report3Filter'
+  'app/reports/templates/report3Filter',
+  './prepareDateRange'
 ], function(
   _,
   js2form,
@@ -15,7 +16,8 @@ define([
   divisions,
   View,
   fixTimeRange,
-  filterTemplate
+  filterTemplate,
+  prepareDateRange
 ) {
   'use strict';
 
@@ -34,47 +36,11 @@ define([
       },
       'click a[data-range]': function(e)
       {
-        /*jshint -W015*/
+        var dateRange = prepareDateRange(e.target.getAttribute('data-range'));
 
-        var fromMoment = time.getMoment();
-        var toMoment;
-        var interval = 'day';
-
-        switch (e.target.getAttribute('data-range'))
-        {
-          case 'currentMonth':
-            fromMoment.date(1);
-            toMoment = fromMoment.clone().add('months', 1);
-            break;
-
-          case 'prevMonth':
-            fromMoment.date(1).subtract('months', 1);
-            toMoment = fromMoment.clone().add('months', 1);
-            break;
-
-          case 'currentWeek':
-            fromMoment.weekday(0);
-            toMoment = fromMoment.clone().add('days', 7);
-            break;
-
-          case 'prevWeek':
-            fromMoment.weekday(0).subtract('days', 7);
-            toMoment = fromMoment.clone().add('days', 7);
-            break;
-
-          case 'today':
-            toMoment = fromMoment.clone().add('days', 1);
-            break;
-
-          case 'yesterday':
-            toMoment = fromMoment.clone();
-            fromMoment.subtract('days', 1);
-            break;
-        }
-
-        this.$id('from').val(fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(toMoment.format('YYYY-MM-DD'));
-        this.$('.btn[data-interval=' + interval + ']').click();
+        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
+        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
+        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
         this.$('.filter-form').submit();
       },
       'change input[name="divisions[]"]': function()

@@ -6,7 +6,8 @@ define([
   'app/time',
   'app/core/View',
   'app/core/util/fixTimeRange',
-  'app/reports/templates/report1Filter'
+  'app/reports/templates/report1Filter',
+  './prepareDateRange'
 ], function(
   _,
   js2form,
@@ -15,7 +16,8 @@ define([
   time,
   View,
   fixTimeRange,
-  filterTemplate
+  filterTemplate,
+  prepareDateRange
 ) {
   'use strict';
 
@@ -31,64 +33,16 @@ define([
         this.changeFilter();
       },
       'change input[name=mode]': 'onModeChange',
-      'click .btn[data-range]': function(e)
+      'click a[data-range]': function(e)
       {
-        /*jshint -W015*/
+        var dateRange = prepareDateRange(e.target.getAttribute('data-range'), true);
 
-        var fromMoment = moment().minutes(0).seconds(0).milliseconds(0);
-        var toMoment;
-        var interval = 'day';
-
-        switch (e.target.getAttribute('data-range'))
-        {
-          case 'month':
-            fromMoment.date(1).hours(6);
-            toMoment = fromMoment.clone().add('months', 1);
-            break;
-
-          case 'week':
-            fromMoment.weekday(0).hours(6);
-            toMoment = fromMoment.clone().add('days', 7);
-            break;
-
-          case 'day':
-            fromMoment.hours(6);
-            toMoment = fromMoment.clone().add('days', 1);
-            interval = 'shift';
-            break;
-
-          case 'shift':
-            var hours = fromMoment.hours();
-
-            if (hours >= 6 && hours < 14)
-            {
-              fromMoment.hours(6);
-            }
-            else if (hours >= 14 && hours < 22)
-            {
-              fromMoment.hours(14);
-            }
-            else
-            {
-              fromMoment.hours(22);
-
-              if (hours < 6)
-              {
-                fromMoment.subtract('days', 1);
-              }
-            }
-
-            toMoment = fromMoment.clone().add('hours', 8);
-            interval = 'hour';
-            break;
-        }
-
-        this.$id('from-date').val(fromMoment.format('YYYY-MM-DD'));
-        this.$id('from-time').val(fromMoment.format('HH:mm'));
-        this.$id('to-date').val(toMoment.format('YYYY-MM-DD'));
-        this.$id('to-time').val(toMoment.format('HH:mm'));
+        this.$id('from-date').val(dateRange.fromMoment.format('YYYY-MM-DD'));
+        this.$id('from-time').val(dateRange.fromMoment.format('HH:mm'));
+        this.$id('to-date').val(dateRange.toMoment.format('YYYY-MM-DD'));
+        this.$id('to-time').val(dateRange.toMoment.format('HH:mm'));
         this.$id('mode-date').click();
-        this.$('.btn[data-interval=' + interval + ']').click();
+        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
         this.$('.filter-form').submit();
       }
     },
@@ -136,7 +90,7 @@ define([
 
       this.$('.filter-dateRange .form-control').attr('disabled', online);
 
-      var $intervals = this.$('.reports-1-filter-intervals > .btn');
+      var $intervals = this.$id('intervals').find('.btn');
 
       $intervals
         .filter('[data-interval=month], [data-interval=week], [data-interval=day]')
@@ -187,7 +141,7 @@ define([
         rnd: Math.random(),
         from: null,
         to: null,
-        interval: this.$('.reports-1-filter-intervals > .active > input').val(),
+        interval: this.$id('intervals').find('.active > input').val(),
         subdivisionType: null
       };
 
@@ -232,7 +186,7 @@ define([
 
     getSelectedInterval: function()
     {
-      return this.$('.reports-1-filter-intervals > .active').attr('data-interval');
+      return this.$id('intervals').find('.active').attr('data-interval');
     },
 
     getFromMomentForSelectedInterval: function()
