@@ -70,12 +70,12 @@ exports.events = {
 
 exports.httpServer = {
   host: '0.0.0.0',
-  port: 6080
+  port: 80
 };
 
 exports.httpsServer = {
   host: '0.0.0.0',
-  port: 6443,
+  port: 443,
   key: __dirname + '/privatekey.pem',
   cert: __dirname + '/certificate.pem'
 };
