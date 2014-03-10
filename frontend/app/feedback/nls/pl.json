@@ -1,0 +1,13 @@
+{
+  "dialog:title": "Feedback",
+
+  "form:submit": "Wyślij feedback",
+  "form:message:failure": "Nie udało się wysłać formularza :(",
+  "form:message:success": "Komentarz został zapisany pomyślnie - dziękujemy :)",
+
+  "property:page:title": "Tytuł wyświetlanej strony",
+  "property:page:url": "Adres wyświetlanej strony",
+  "property:comment": "Komentarz",
+
+  "comment:placeholder": "Błędy, uwagi, opinie, pomysły..."
+}

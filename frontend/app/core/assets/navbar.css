@@ -35,3 +35,14 @@
 .navbar-default .dropdown-header {
   font-weight: bold;
 }
+.navbar-feedback {
+  font-variant: small-caps;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: 1.4em;
+  text-shadow: 1px 1px 1px #333;
+  margin-right: 14px;
+}
+.navbar-feedback:active {
+  text-shadow: 1px 1px 3px #333;
+}

@@ -119,5 +119,8 @@
 
   "dataTables:emptyTable": "Brak danych.",
   "dataTables:loadingRecords": "Ładowanie danych...",
-  "dataTables:loadingFailed": "Ładowanie danych nie powiodło się :("
+  "dataTables:loadingFailed": "Ładowanie danych nie powiodło się :(",
+
+  "feedback:button:text": "Feedback",
+  "feedback:button:tooltip": "Zgłoś błędy, uwagi, opinie lub pomysły!"
 }

@@ -35,6 +35,7 @@ exports.modules = [
   'prodShiftOrders',
   'pressWorksheets',
   'reports',
+  'feedback',
   {id: 'messenger/client', name: 'messenger/client:importer'},
   'httpServer',
   'httpsServer',

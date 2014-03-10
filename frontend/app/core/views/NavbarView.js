@@ -69,6 +69,17 @@ define([
         e.preventDefault();
 
         this.trigger('logOut');
+      },
+      'click .navbar-feedback': function onFeedbackClick(e)
+      {
+        e.preventDefault();
+
+        e.target.disabled = true;
+
+        this.trigger('feedback', function()
+        {
+          e.target.disabled = false;
+        });
       }
     }
 

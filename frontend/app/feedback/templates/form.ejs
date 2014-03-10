@@ -1,0 +1,17 @@
+<form class="feedback-form" method="post" action="/feedback">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-page-title" class="control-label"><%- t('feedback', 'property:page:title') %></label>
+    <input id="<%- idPrefix %>-page-title" class="form-control" type="text" name="page.title" readonly>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-page-url" class="control-label"><%- t('feedback', 'property:page:url') %></label>
+    <input id="<%- idPrefix %>-page-url" class="form-control" type="text" name="page.url" readonly>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-comment" class="control-label"><%- t('feedback', 'property:comment') %></label>
+    <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="10" placeholder="<%- t('feedback', 'comment:placeholder') %>" autofocus required></textarea>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('feedback', 'form:submit') %></button>
+  </div>
+</form>

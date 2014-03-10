@@ -34,6 +34,7 @@ module.exports = [
   'prodDowntime',
   'pressWorksheet',
 
-  'diagLogEntry'
+  'diagLogEntry',
+  'feedback'
 
 ];

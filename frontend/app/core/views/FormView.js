@@ -97,10 +97,17 @@ define([
 
       req.done(function()
       {
-        view.broker.publish('router.navigate', {
-          url: view.model.genClientUrl(),
-          trigger: true
-        });
+        if (typeof view.options.done === 'function')
+        {
+          view.options.done(true);
+        }
+        else
+        {
+          view.broker.publish('router.navigate', {
+            url: view.model.genClientUrl(),
+            trigger: true
+          });
+        }
       });
 
       req.fail(function()

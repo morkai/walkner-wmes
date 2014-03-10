@@ -182,6 +182,40 @@
           });
       });
 
+      navbarView.on('feedback', function(done)
+      {
+        require(
+          [
+            'app/feedback/Feedback',
+            'app/feedback/views/FeedbackFormView',
+            'i18n!app/nls/feedback'
+          ],
+          function(Feedback, FeedbackFormView)
+          {
+            var feedbackFormView = new FeedbackFormView({
+              done: function(added)
+              {
+                done();
+
+                if (added)
+                {
+                  viewport.closeDialog();
+                  viewport.msg.show({
+                    type: 'success',
+                    time: 3000,
+                    text: i18n('feedback', 'form:message:success')
+                  });
+                }
+              },
+              model: new Feedback(),
+              failureText: i18n('feedback', 'form:message:failure')
+            });
+
+            viewport.showDialog(feedbackFormView, i18n('feedback', 'dialog:title'));
+          }
+        );
+      });
+
       return navbarView;
     }
 
