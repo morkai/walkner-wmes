@@ -228,13 +228,11 @@ exports.start = function startOrdersImporterModule(app, module)
 
       module.info("Synced %d new and %d existing orders", createdOrdersCount, updatedOrdersCount);
 
-      if (createdOrdersCount > 0 || updatedOrdersCount > 0)
-      {
-        app.broker.publish('orders.synced', {
-          created: createdOrdersCount,
-          updated: updatedOrdersCount
-        });
-      }
+      app.broker.publish('orders.synced', {
+        created: createdOrdersCount,
+        updated: updatedOrdersCount,
+        moduleName: module.name
+      });
 
       unlock();
     });
