@@ -27,6 +27,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
   express.get(
     '/fte/master;export',
     canViewMaster,
+    limitToDivision,
     function(req, res, next)
     {
       req.rql.fields = {};
@@ -52,6 +53,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
   express.get(
     '/fte/leader;export',
     canViewLeader,
+    limitToDivision,
     function(req, res, next)
     {
       req.rql.fields = {};
