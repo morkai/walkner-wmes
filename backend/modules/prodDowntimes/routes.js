@@ -30,7 +30,6 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
       req.rql.fields = {
         reasonComment: 0,
         decisionComment: 0,
-        prodShift: 0,
         date: 0,
         shift: 0
       };
