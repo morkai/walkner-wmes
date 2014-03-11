@@ -314,7 +314,7 @@ define([
         delete orderInfo.id;
         delete orderInfo.text;
 
-        if (/^114[0-9]{6}$/.test(orderInfo._id))
+        if (this.model.getOrderIdType() === 'no')
         {
           orderInfo.no = orderInfo._id;
         }
@@ -341,7 +341,7 @@ define([
       var orderNoOrNc12 = this.$id('order').val().trim().replace(/[^a-zA-Z0-9]+/g, '');
       var operationNo = this.$id('operation').val().trim().replace(/[^0-9]+/g, '');
 
-      if (orderIdType === 'no' && /^114[0-9]{6}$/.test(orderNoOrNc12))
+      if (orderIdType === 'no' && /^[0-9]{9,}$/.test(orderNoOrNc12))
       {
         orderInfo.no = orderNoOrNc12;
       }
