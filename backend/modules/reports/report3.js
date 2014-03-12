@@ -51,7 +51,8 @@ module.exports = function(mongoose, options, done)
       startedAt: 1,
       finishedAt: 1,
       machineTime: 1,
-      quantityDone: 1
+      quantityDone: 1,
+      quantityLost: 1
     };
     var downtimeFields = {
       prodLine: 1,
@@ -329,6 +330,8 @@ function Report3ProdLineSummary()
   this.weekendWorkDayCount = 0;
   this.specialWorkDays = {};
   this.exploitation = 0;
+  this.quantityDone = 0;
+  this.quantityLost = 0;
   this.downtimeCount = 0;
   this.downtimes = {};
   this.firstMalfunctionStartedAt = null;
@@ -342,6 +345,8 @@ Report3ProdLineSummary.prototype.toJSON = function()
     w: this.weekendWorkDayCount === 0 ? undefined : this.weekendWorkDayCount,
     e: this.exploitation,
     d: this.downtimeCount === 0 ? undefined : this.downtimes,
+    q: this.quantityDone === 0 ? undefined : this.quantityDone,
+    l: this.quantityLost === 0 ? undefined : this.quantityLost,
     m: this.firstMalfunctionStartedAt === null ? undefined : {
       s: this.firstMalfunctionStartedAt,
       f: this.lastMalfunctionFinishedAt,
@@ -372,7 +377,10 @@ Report3ProdLineSummary.prototype.handleProdShiftOrder = function(prodShiftOrder)
   this.increaseWeekendWorkDays(prodShiftOrder.startedAt);
   this.increaseWeekendWorkDays(prodShiftOrder.finishedAt);
 
-  this.exploitation += prodShiftOrder.machineTime / 100 * prodShiftOrder.quantityDone;
+  this.exploitation +=
+    prodShiftOrder.machineTime / 100 * (prodShiftOrder.quantityDone + prodShiftOrder.quantityLost);
+  this.quantityDone += prodShiftOrder.quantityDone;
+  this.quantityLost += prodShiftOrder.quantityLost;
 };
 
 Report3ProdLineSummary.prototype.handleProdDowntime = function(

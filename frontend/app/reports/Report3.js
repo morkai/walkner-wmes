@@ -127,6 +127,8 @@ define([
         var malfunctionCount = 0;
         var majorMalfunctionCount = 0;
         var mtbfNum = 0;
+        var quantityDone = 0;
+        var quantityLost = 0;
 
         for (var ii = 0, ll = tableSummary.length; ii < ll; ++ii)
         {
@@ -155,17 +157,22 @@ define([
           malfunctionCount += dataPoint.malfunctionCount;
           majorMalfunctionCount += dataPoint.majorMalfunctionCount;
           mtbfNum += dataPoint.mtbfNum;
+          quantityDone += dataPoint.quantityDone;
+          quantityLost += dataPoint.quantityLost;
         }
 
         var operationalAvailabilityH = totalAvailabilityH - scheduledDuration - unscheduledDuration;
         var operationalAvailabilityP = operationalAvailabilityH / totalAvailabilityH * 100;
         var exploitationP = exploitationH / operationalAvailabilityH * 100;
+        var oee = this.calcOee(
+          operationalAvailabilityH, totalAvailabilityH, exploitationH, quantityDone, quantityLost
+        );
         var time = +groupKey;
 
         chartSummary.totalAvailabilityH.push([time, totalAvailabilityH]);
         chartSummary.operationalAvailabilityH.push([time, round(operationalAvailabilityH)]);
         chartSummary.exploitationH.push([time, round(exploitationH)]);
-        chartSummary.oee.push([time, 0]);
+        chartSummary.oee.push([time, round(oee)]);
         chartSummary.operationalAvailabilityP.push([time, round(operationalAvailabilityP)]);
         chartSummary.exploitationP.push([time, round(exploitationP)]);
         chartSummary.adjustingDuration.push([time, round(adjustingDuration)]);
@@ -209,7 +216,9 @@ define([
         malfunctions: null,
         mttr: 0,
         mtbfNum: 0,
-        mtbf: 0
+        mtbf: 0,
+        quantityDone: 0,
+        quantityLost: 0
       };
     },
 
@@ -278,6 +287,8 @@ define([
           mttr: 0,
           mtbfNum: 0,
           mtbf: 0,
+          quantityDone: 0,
+          quantityLost: 0,
           data: {}
         };
 
@@ -292,6 +303,8 @@ define([
 
     parseProdLineData: function(options, prodLine, prodLineData, groupKeys)
     {
+      var report = this;
+
       Object.keys(prodLineData).forEach(function(groupKey)
       {
         groupKeys[groupKey] = true;
@@ -314,6 +327,8 @@ define([
         var majorMalfunctionCount = getDowntime(dataPoint.d, 'majorMalfunction')[0];
         var malfunctions = dataPoint.m || null;
         var mtbfNum = malfunctions ? sum(malfunctions.h) : 0;
+        var quantityDone = dataPoint.q || 0;
+        var quantityLost = dataPoint.l || 0;
 
         prodLine.workDays += weekendWorkDays;
         prodLine.scheduledDuration += scheduledDuration;
@@ -325,6 +340,8 @@ define([
         prodLine.malfunctionCount += malfunctionCount;
         prodLine.malfunctionDuration += malfunctionDuration;
         prodLine.majorMalfunctionCount += majorMalfunctionCount;
+        prodLine.quantityDone += quantityDone;
+        prodLine.quantityLost += quantityLost;
 
         prodLine.data[groupKey] = {
           workDays: workDays,
@@ -345,8 +362,12 @@ define([
           malfunctions: malfunctions,
           mttr: malfunctionDuration / malfunctionCount,
           mtbfNum: mtbfNum,
-          mtbf: mtbfNum ? (mtbfNum / malfunctions.h.length) : 0
+          mtbf: mtbfNum ? (mtbfNum / malfunctions.h.length) : 0,
+          quantityDone: quantityDone,
+          quantityLost: quantityLost
         };
+
+        report.calcProdLineOee(prodLine.data[groupKey], false);
       });
     },
 
@@ -370,6 +391,8 @@ define([
       prodLine.mttr = prodLine.malfunctionCount > 0
         ? round(prodLine.malfunctionDuration / prodLine.malfunctionCount)
         : 0;
+
+      this.calcProdLineOee(prodLine, true);
 
       if (prodLine.malfunctionCount > 1)
       {
@@ -412,6 +435,36 @@ define([
 
       prodLine.mtbfNum = sum(hoursBetween);
       prodLine.mtbf = round(prodLine.mtbfNum / prodLine.malfunctionCount);
+    },
+
+    calcProdLineOee: function(prodLine, roundValue)
+    {
+      var oee = this.calcOee(
+        prodLine.operationalAvailabilityH,
+        prodLine.totalAvailabilityH,
+        prodLine.exploitationH,
+        prodLine.quantityDone,
+        prodLine.quantityLost
+      );
+
+      prodLine.oee = roundValue ? round(oee) : oee;
+    },
+
+    calcOee: function(
+      operationalAvailabilityH, totalAvailabilityH, exploitationH, quantityDone, quantityLost)
+    {
+      var totalQuantity = quantityDone + quantityLost;
+
+      if (totalAvailabilityH === 0 || operationalAvailabilityH === 0 || totalQuantity === 0)
+      {
+        return 0;
+      }
+
+      var availability = operationalAvailabilityH / totalAvailabilityH;
+      var performance = exploitationH / operationalAvailabilityH;
+      var quality = quantityDone / totalQuantity;
+
+      return availability * performance * quality * 100;
     },
 
     parseGroupKeys: function(groupKeys)
