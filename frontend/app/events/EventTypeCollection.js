@@ -19,7 +19,9 @@ define([
       {
         return {value: type, label: t.bound('events', 'TYPE:' + type)};
       });
-    }
+    },
+
+    comparator: 'label'
 
   });
 });

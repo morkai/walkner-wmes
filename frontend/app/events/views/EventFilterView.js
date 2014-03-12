@@ -42,7 +42,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        types: this.model.eventTypes.toJSON()
+        types: this.model.eventTypes.sort().toJSON()
       };
     },
 
