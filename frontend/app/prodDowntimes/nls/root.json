@@ -1,6 +1,65 @@
 {
   "root": {
+    "BREADCRUMBS:browse": "Downtimes",
+    "BREADCRUMBS:details": "Downtime",
+    "BREADCRUMBS:corroborate": "Corroboration",
 
+    "MSG:LOADING_FAILURE": "Failed to load the downtimes :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the downtime :(",
+
+    "PAGE_ACTION:export": "Export downtimes",
+
+    "PANEL:TITLE:details": "Downtime's details",
+    "PANEL:TITLE:details:corroboration": "Downtime corroboration",
+
+    "FILTER:DATE:FROM": "From",
+    "FILTER:DATE:TO": "To",
+    "FILTER:LIMIT": "Limit",
+    "FILTER:BUTTON": "Filter downtimes",
+    "FILTER:TOOLTIP:in": "Checked: all selected\nUnchecked: all but the selected",
+    "FILTER:PLACEHOLDER:aor": "Any area of responsibility",
+    "FILTER:PLACEHOLDER:reason": "Any downtime reason",
+    "FILTER:PLACEHOLDER:orgUnit": "Any Org Unit",
+
+    "LIST:ACTION:corroborate": "Corroborate downtime",
+
+    "PROPERTY:mrpControllers": "MRP Controller",
+    "PROPERTY:prodFlow": "Production flow",
+    "PROPERTY:orgUnit": "Org Unit",
+    "PROPERTY:aor": "Area of responsibility",
+    "PROPERTY:prodLine": "Production line",
+    "PROPERTY:reason": "Downtime reason",
+    "PROPERTY:reasonComment": "Reason comment",
+    "PROPERTY:decisionComment": "Decision comment",
+    "PROPERTY:order": "Order",
+    "PROPERTY:orderId": "Order ID",
+    "PROPERTY:startedAt": "Started at",
+    "PROPERTY:finishedAt": "Finished at",
+    "PROPERTY:status": "Status",
+    "PROPERTY:status:undecided": "Undecided",
+    "PROPERTY:status:confirmed": "Confirmed",
+    "PROPERTY:status:rejected": "Rejected",
+    "PROPERTY:shift": "Shift",
+    "PROPERTY:master": "Master",
+    "PROPERTY:leader": "Leader",
+    "PROPERTY:operator": "Operator",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:corroborator": "Corroborator",
+    "PROPERTY:corroboratedAt": "Corroborated at",
+    "PROPERTY:duration": "Duration",
+
+    "shift+date": "{date}, {shift} shift",
+
+    "NO_DATA:order": "<em>no order</em>",
+    "NO_DATA:finishedAt": "<em>unfinished</em>",
+    "NO_DATA:corroboration": "Downtime wasn't corroborated yet.",
+
+    "corroborate:title": "Downtime corroboration",
+    "corroborate:decisionComment": "Optional decision comment...",
+    "corroborate:cancel": "Cancel corroboration",
+    "corroborate:confirm": "Confirm downtime",
+    "corroborate:reject": "Reject downtime",
+    "corroborate:msg:failure": "Failed to corroborate the downtime: {error}"
   },
   "pl": true
 }

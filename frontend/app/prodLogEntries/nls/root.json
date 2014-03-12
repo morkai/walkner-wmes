@@ -1,6 +1,55 @@
 {
   "root": {
+    "BREADCRUMBS:browse": "Operation log",
 
+    "MSG:LOADING_FAILURE": "Failed to load the operation log :(",
+
+    "FILTER:DATE:FROM": "From",
+    "FILTER:DATE:TO": "To",
+    "FILTER:LIMIT": "Limit",
+    "FILTER:BUTTON": "Filter operations",
+    "FILTER:PLACEHOLDER:type": "Any type",
+    "FILTER:PLACEHOLDER:prodLine": "Any production line",
+
+    "PROPERTY:prodLine": "Production line",
+    "PROPERTY:type": "Type",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:data": "Additional info",
+    "PROPERTY:prodShift": "Shift",
+    "PROPERTY:prodShiftOrder": "Order",
+
+    "type:changeShift": "Shift start",
+    "type:changeMaster": "Master change",
+    "type:changeLeader": "Leader change",
+    "type:changeOperator": "Operator change",
+    "type:changeQuantitiesDone": "Quantities done in an hour change",
+    "type:changeOrder": "Order start",
+    "type:changeQuantityDone": "Order's quantity done change",
+    "type:changeWorkerCount": "Order's worker count change",
+    "type:correctOrder": "Order correction",
+    "type:finishOrder": "Order finish",
+    "type:startDowntime": "Downtime start",
+    "type:finishDowntime": "Downtime finish",
+    "type:corroborateDowntime": "Downtime corroboration",
+    "type:endWork": "End of work",
+
+    "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
+    "data:changeMaster": "New master: <em>{name}</em>",
+    "data:changeLeader": "New leader: <em>{name}</em>",
+    "data:changeOperator": "New operator: <em>{name}</em>",
+    "data:changeQuantitiesDone": "Quantity done in the <em>{hour}.</em> hour: <em>{value}</em>",
+    "data:changeOrder": "Order: <em>{orderId}</em> (<em>{orderName}</em>); operation: <em>{operationNo}</em> (<em>{operationName}</em>)",
+    "data:changeQuantityDone": "Quantity done in the order: <em>{value}</em>",
+    "data:changeWorkerCount": "Worker count in the order: <em>{value}</em>",
+    "data:correctOrder": "Order: <em>{orderId}</em> (<em>{orderName}</em>); operation: <em>{operationNo}</em> (<em>{operationName}</em>)",
+    "data:finishOrder": "-",
+    "data:startDowntime": "<a href='\\#prodDowntimes/{_id}'>Reason: <em>{reason}</em>; AOR: <em>{aor}</em></a>",
+    "data:finishDowntime": "Finished <a href='\\#prodDowntimes/{_id}'>downtime</a>.",
+    "data:corroborateDowntime": "{status, select, confirmed{Confirmed} rejected{Rejected} other{Corroborated}} <a href='\\#prodDowntimes/{_id}'>downtime</a>.",
+    "data:endWork": "-",
+
+    "noData:prodShiftOrder": "<em>no order</em>"
   },
   "pl": true
 }

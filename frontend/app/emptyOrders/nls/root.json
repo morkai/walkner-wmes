@@ -1,6 +1,27 @@
 {
   "root": {
+    "BREADCRUMBS:browse": "Empty orders",
 
+    "MSG:LOADING_FAILURE": "Failed to load the empty orders :(",
+
+    "PAGE_ACTION:print": "Show printable version",
+
+    "PRINT_PAGE:HD:LEFT:all": "All orders without any operations",
+    "PRINT_PAGE:HD:LEFT:startDate": "Orders without any operations starting at {date}",
+    "PRINT_PAGE:HD:LEFT:finishDate": "Orders without any operations finishing at {date}",
+    "PRINT_PAGE:FT:PAGE_NO": "Page <span class=print-page-no>?</span> of <span class=print-page-count>?</span>",
+    "PRINT_PAGE:FT:INFO": "Printout generated at <span class=print-page-date>?</span> by <span class=print-page-user>?</span>.",
+
+    "PROPERTY:_id": "Order no",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:nc12": "12NC",
+    "PROPERTY:mrp": "MRP",
+    "PROPERTY:startDate": "Start date",
+    "PROPERTY:finishDate": "Finish date",
+    "PROPERTY:statuses": "Status",
+
+    "FILTER:LIMIT": "Limit",
+    "FILTER:BUTTON": "Filter empty orders"
   },
   "pl": true
 }

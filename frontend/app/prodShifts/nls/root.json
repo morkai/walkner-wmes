@@ -1,6 +1,55 @@
 {
   "root": {
+    "BREADCRUMBS:browse": "Shifts",
+    "BREADCRUMBS:details": "{date}, {shift}",
 
+    "MSG:LOADING_FAILURE": "Failed to load the shifts :(",
+
+    "PAGE_ACTION:prodLogEntries": "Show operation log",
+    "PAGE_ACTION:export": "Export shifts",
+
+    "PANEL:TITLE:details": "Shift's details",
+
+    "FILTER:DATE:FROM": "From",
+    "FILTER:DATE:TO": "To",
+    "FILTER:LIMIT": "Limit",
+    "FILTER:BUTTON": "Filter shifts",
+    "FILTER:PLACEHOLDER:prodLine": "Any production line",
+
+    "PROPERTY:mrpControllers": "MRP Controller",
+    "PROPERTY:prodFlow": "Production flow",
+    "PROPERTY:prodLine": "Production line",
+    "PROPERTY:type": "Type",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:date": "Date",
+    "PROPERTY:shift": "Shift",
+    "PROPERTY:master": "Master",
+    "PROPERTY:leader": "Leader",
+    "PROPERTY:operator": "Operator",
+    "PROPERTY:quantitiesDone": "Quantities done",
+    "PROPERTY:totalQuantityDone": "Quantity done",
+
+    "totalQuantityDone": "{actual} of {planned}",
+
+    "timeline:title": "Timeline",
+    "timeline:popover:idle": "Idle",
+    "timeline:popover:working": "Order",
+    "timeline:popover:downtime": "Downtime",
+    "timeline:popover:startedAt": "Started at",
+    "timeline:popover:finishedAt": "Finished at",
+    "timeline:popover:duration": "Duration",
+    "timeline:popover:order": "Order",
+    "timeline:popover:operation": "Operation",
+    "timeline:popover:reason": "Reason",
+    "timeline:popover:aor": "AOR",
+    "timeline:popover:workerCount": "Worker count",
+    "timeline:popover:quantityDone": "Quantiy done",
+
+    "charts:quantitiesDone:title": "Quantities done in specific hours",
+    "charts:quantitiesDone:unit": " items",
+    "charts:quantitiesDone:series:planned": "Planned",
+    "charts:quantitiesDone:series:actual": "Actual"
   },
   "pl": true
 }

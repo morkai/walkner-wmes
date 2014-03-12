@@ -1,6 +1,41 @@
 {
   "root": {
+    "BREADCRUMBS:browse": "Production functions",
+    "BREADCRUMBS:addForm": "Adding",
+    "BREADCRUMBS:editForm": "Editing",
+    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
+    "MSG:LOADING_FAILURE": "Failed to load the production functions :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the production function :(",
+    "MSG:DELETED": "Production function <em>{label}</em> was deleted.",
+
+    "PAGE_ACTION:add": "Add production function",
+    "PAGE_ACTION:edit": "Edit production function",
+    "PAGE_ACTION:delete": "Delete production function",
+
+    "PANEL:TITLE:details": "Production function's details",
+    "PANEL:TITLE:addForm": "Add production function form",
+    "PANEL:TITLE:editForm": "Edit production function form",
+
+    "PROPERTY:_id": "ID",
+    "PROPERTY:label": "Label",
+    "PROPERTY:fteMasterPosition": "Position in FTE (production)",
+    "PROPERTY:direct": "DIRECT/INDIRECT",
+    "PROPERTY:companies": "Companies",
+
+    "direct:true": "DIRECT",
+    "direct:false": "INDIRECT",
+
+    "FORM:ACTION:add": "Add production function",
+    "FORM:ACTION:edit": "Edit production function",
+    "FORM:ERROR:addFailure": "Failed to add the new production function :-(",
+    "FORM:ERROR:editFailure": "Failed to edit the production function :-(",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "Production function deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete production function",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen production function?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> production function?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the production function :-("
   },
   "pl": true
 }

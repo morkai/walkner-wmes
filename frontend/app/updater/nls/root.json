@@ -1,6 +1,7 @@
 {
   "root": {
-
+    "restart:backend": "Application server is being restarted! Communication with the server might not work for a short while...",
+    "restart:frontend": "A new version of the application is available! <a href='javascript:window.location.reload()'>Click here to reload the browser</a>..."
   },
   "pl": true
 }

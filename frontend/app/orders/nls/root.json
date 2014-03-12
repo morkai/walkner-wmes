@@ -1,6 +1,51 @@
 {
   "root": {
+    "BREADCRUMBS:browse": "Production orders",
 
+    "MSG:LOADING_FAILURE": "Failed to load the orders :(",
+
+    "PANEL:TITLE:details": "Order's details",
+    "PANEL:TITLE:operations": "Order's operations",
+    "PANEL:TITLE:changes": "Change log",
+
+    "PROPERTY:_id": "Order no",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:updatedAt": "Updated at",
+    "PROPERTY:nc12": "12NC",
+    "PROPERTY:name": "Product name",
+    "PROPERTY:mrp": "MRP",
+    "PROPERTY:qty": "Quantity",
+    "PROPERTY:unit": "Unit",
+    "PROPERTY:startDate": "Start date",
+    "PROPERTY:finishDate": "Finish date",
+    "PROPERTY:statuses": "Status",
+    "PROPERTY:operations": "Operations",
+    "PROPERTY:operations.no": "Operation no",
+    "PROPERTY:operations.workCenter": "WorkCenter",
+    "PROPERTY:operations.name": "Name",
+    "PROPERTY:operations.qty": "Quantity",
+    "PROPERTY:operations.unit": "Unit",
+    "PROPERTY:operations.machineSetupTime": "<em>Machine Setup</em> Time",
+    "PROPERTY:operations.laborSetupTime": "<em>Labor Setup</em> Time",
+    "PROPERTY:operations.machineTime": "<em>Machine</em> Time",
+    "PROPERTY:operations.laborTime": "<em>Labor</em> Time",
+
+    "OPERATIONS:NO_DATA": "Order does not have any operations.",
+
+    "CHANGES:NO_DATA": "Order was not modified.",
+    "CHANGES:operations": "{count, plural, one{1 operation} other{# operations}}",
+    "CHANGES:time": "Time",
+    "CHANGES:user": "User",
+    "CHANGES:property": "Property",
+    "CHANGES:oldValue": "Old value",
+    "CHANGES:newValue": "New value",
+
+    "FILTER:PLACEHOLDER:_id": "Any no",
+    "FILTER:PLACEHOLDER:nc12": "Any 12NC",
+    "FILTER:DATE:FROM": "From:",
+    "FILTER:DATE:TO": "To:",
+    "FILTER:LIMIT": "Limit",
+    "FILTER:BUTTON": "Filter orders"
   },
   "pl": true
 }

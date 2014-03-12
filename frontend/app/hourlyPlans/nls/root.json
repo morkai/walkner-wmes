@@ -1,6 +1,43 @@
 {
   "root": {
+    "BREADCRUMBS:entryList": "Hourly plans",
+    "BREADCRUMBS:entryForm": "Planning",
+    "BREADCRUMBS:entryDetails": "Hourly plan",
+    "BREADCRUMBS:currentEntry": "Division picking",
 
+    "MSG:LOADING_FAILURE": "Failed to load the hourly plans :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the hourly plan :(",
+
+    "PAGE_ACTION:currentEntry": "Plan",
+    "PAGE_ACTION:print": "Show printable version",
+    "PAGE_ACTION:lock": "Lock entry",
+    "PAGE_ACTION:edit": "Edit entry",
+    "PAGE_ACTION:export": "Export hourly plans",
+    "LIST:ACTION:print": "Show printable version",
+    "LIST:ACTION:edit": "Edit entry",
+
+    "FILTER:DATE": "Date:",
+    "FILTER:LIMIT": "Limit:",
+    "FILTER:SHIFT": "Shift:",
+    "FILTER:BUTTON": "Filtruj hourly plans",
+
+    "panel:title": "Hourly plan",
+    "panel:title:editable": "Hourly plan form",
+    "column:flow": "Production flow",
+    "column:noPlan": "No<br>plan?",
+    "column:level": "Level",
+    "property:shift": "Shift",
+    "property:date": "Date",
+    "msg:lockFailure": "Failed to lock the hourly plan :(",
+
+    "print:hdLeft": "Hourly plan for {division}",
+    "print:hdRight": "{date}, {shift} shift",
+
+    "current:panel:title": "Division picker for hourly plan form",
+    "currentEntry:panel:warning": "<p>A new entry will be created, if the chosen division won't have an entry for the current shift.</p>",
+    "current:submit": "Plan",
+    "current:msg:offline": "Cannot plan: no connection to the server :(",
+    "current:msg:failure": "Failed to create the hourly plan: {error, select, SHIFT_NO{entry can be created only during the I shift!} AUTH{no privileges!} INPUT{invalid division!} other{{error}}}"
   },
   "pl": true
 }

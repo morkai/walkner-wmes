@@ -4,7 +4,7 @@ require = {
   shim: <%- shim %>,
   config: {
     i18n: {
-      locale: typeof window === 'object' && window.LOCALE ? window.LOCALE : 'pl'
+      locale: localStorage.getItem('LOCALE') || navigator.language || 'pl'
     }
   }
 };

@@ -2,6 +2,13 @@
 {
   'use strict';
 
+  var locale = localStorage.getItem('LOCALE') || navigator.language || 'pl';
+
+  if (locale !== 'pl')
+  {
+    locale = 'en';
+  }
+
   var domains = [];
   var i18n = null;
   var select2 = null;
@@ -94,7 +101,7 @@
 
     socket.connect();
 
-    moment.lang(window.LOCALE || 'pl');
+    moment.lang(locale);
 
     $.ajaxSetup({
       dataType: 'json',
@@ -227,8 +234,9 @@
         startBroker = null;
       }
 
-      broker.subscribe('i18n.reloaded', function()
+      broker.subscribe('i18n.reloaded', function(message)
       {
+        localStorage.setItem('LOCALE', message.newLocale);
         viewport.render();
       });
 
@@ -292,8 +300,8 @@
       'app/visibility',
       'app/updater/index',
       'bootstrap',
-      'moment-lang/' + (window.LOCALE || 'pl'),
-      'select2-lang/' + (window.LOCALE || 'pl'),
+      'moment-lang/pl',
+      'select2-lang/' + locale,
       'i18n!app/nls/core'
     ], startApp);
   }

@@ -1,6 +1,54 @@
 {
   "root": {
+    "BREADCRUMBS:browse": "Orders",
+    "BREADCRUMBS:details": "{order}; {operation}",
 
+    "MSG:LOADING_FAILURE": "Failed to load the orders :(",
+
+    "PAGE_ACTION:prodLogEntries": "Show operation log",
+    "PAGE_ACTION:prodDowntimes": "Show downtimes",
+    "PAGE_ACTION:export": "Export orders",
+
+    "PANEL:TITLE:details": "Order's production details",
+    "PANEL:TITLE:orderDetails": "Order's details at the moment of start",
+    "PANEL:TITLE:losses": "Losses",
+    "PANEL:TITLE:downtimes": "Downtimes",
+
+    "FILTER:orderId": "Order no/12NC",
+    "FILTER:operationNo": "Oper. no",
+    "FILTER:DATE:FROM": "From",
+    "FILTER:DATE:TO": "To",
+    "FILTER:LIMIT": "Limit",
+    "FILTER:BUTTON": "Filter orders",
+    "FILTER:PLACEHOLDER:type": "Any type",
+    "FILTER:PLACEHOLDER:prodLine": "Any production line",
+    "FILTER:PLACEHOLDER:orderId": "Any order",
+    "FILTER:PLACEHOLDER:operationNo": "0000",
+
+    "PROPERTY:mrpControllers": "MRP Controller",
+    "PROPERTY:prodFlow": "Production flow",
+    "PROPERTY:prodLine": "Production line",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:date": "Date",
+    "PROPERTY:shift": "Shift",
+    "PROPERTY:prodShift": "Shift",
+    "PROPERTY:master": "Master",
+    "PROPERTY:leader": "Leader",
+    "PROPERTY:operator": "Operator",
+    "PROPERTY:startedAt": "Started at",
+    "PROPERTY:finishedAt": "Finished at",
+    "PROPERTY:duration": "Duration",
+    "PROPERTY:quantityDone": "Quantity done",
+    "PROPERTY:quantityDoneSap": "Quantity done / as per SAP",
+    "PROPERTY:workerCount": "Worker count",
+    "PROPERTY:workerCountSap": "Worker count / as per SAP",
+    "PROPERTY:taktTime": "Takt Time / wg SAP",
+    "PROPERTY:order": "Order",
+    "PROPERTY:operation": "Operation",
+    "PROPERTY:pressWorksheet": "Worksheet",
+
+    "unit:workerCount": "persons",
+    "unit:taktTime": "s"
   },
   "pl": true
 }

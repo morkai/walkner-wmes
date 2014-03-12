@@ -1,6 +1,43 @@
 {
   "root": {
+    "BREADCRUMBS:browse": "Subdivisions",
+    "BREADCRUMBS:addForm": "Adding",
+    "BREADCRUMBS:editForm": "Editing",
+    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
+    "MSG:LOADING_FAILURE": "Failed to load the subdivisions :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the subdivision :(",
+    "MSG:DELETED": "Subdivision <em>{label}</em> was deleted.",
+
+    "PAGE_ACTION:add": "Add subdivision",
+    "PAGE_ACTION:edit": "Edit subdivision",
+    "PAGE_ACTION:delete": "Delete subdivision",
+
+    "PANEL:TITLE:details": "Subdivision's details",
+    "PANEL:TITLE:addForm": "Add subdivision form",
+    "PANEL:TITLE:editForm": "Edit subdivision form",
+
+    "PROPERTY:_id": "ID",
+    "PROPERTY:division": "Division",
+    "PROPERTY:name": "Name",
+    "PROPERTY:prodTaskTags": "Production task tags",
+    "PROPERTY:type": "Type",
+    "PROPERTY:aor": "Default AOR",
+
+    "TYPE:assembly": "Assembly",
+    "TYPE:press": "Press",
+    "TYPE:storage": "Warehouse",
+
+    "FORM:ACTION:add": "Add subdivision",
+    "FORM:ACTION:edit": "Edit subdivision",
+    "FORM:ERROR:addFailure": "Failed to add the new subdivision :-(",
+    "FORM:ERROR:editFailure": "Failed to edit the subdivision :-(",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "Subdivision deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete subdivision",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen subdivision?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> subdivision?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the subdivision :-("
   },
   "pl": true
 }
