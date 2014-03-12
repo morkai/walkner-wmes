@@ -77,5 +77,5 @@ exports.emptyOrderImporter = {
 };
 
 exports['reports/clipOrderCount'] = {
-  ordersImporterId: 'currentDayOrderImporter'
+  importerId: 'currentDayOrderImporter'
 };
