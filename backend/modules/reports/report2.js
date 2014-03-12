@@ -11,7 +11,7 @@ module.exports = function(mongoose, options, done)
   /*jshint validthis:true*/
 
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var Order = mongoose.model('Order');
+  var ClipOrderCount = mongoose.model('ClipOrderCount');
   var FteMasterEntry = mongoose.model('FteMasterEntry');
   var FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
@@ -75,40 +75,32 @@ module.exports = function(mongoose, options, done)
     }
 
     var conditions = {
-      startDate: {$gte: new Date(options.fromTime), $lt: new Date(options.toTime)},
+      date: {$gte: new Date(options.fromTime), $lt: new Date(options.toTime)},
       mrp: {$in: options.mrpControllers}
     };
     var groupOperator = getGroupOperator(options.interval);
 
-    Order.aggregate(
+    ClipOrderCount.aggregate(
       {$match: conditions},
-      {$group: {_id: groupOperator, count: {$sum: 1}}},
-      {$sort: {_id: 1}},
-      this.parallel()
-    );
-
-    Order.aggregate(
-      {$match: conditions},
-      {$project: {_id: 0, statuses: 1, startDate: 1, tzOffsetMs: 1}},
-      {$unwind: '$statuses'},
-      {$match: {statuses: {$in: ['CNF', 'DLV']}}},
       {$group: {
-        _id: {status: '$statuses', groupKey: groupOperator},
-        count: {$sum: 1}
+        _id: groupOperator,
+        all: {$sum: '$all'},
+        cnf: {$sum: '$cnf'},
+        dlv: {$sum: '$dlv'}
       }},
       {$sort: {_id: 1}},
-      this.parallel()
+      this.next()
     );
   }
 
-  function groupOrderCountResultsStep(err, totalResults, statusResults)
+  function groupOrderCountResultsStep(err, results)
   {
     if (err)
     {
       return this.done(done, err);
     }
 
-    if (!totalResults)
+    if (!results)
     {
       return;
     }
@@ -122,11 +114,11 @@ module.exports = function(mongoose, options, done)
     var l;
     var startTime;
 
-    for (i = 0, l = totalResults.length; i < l; ++i)
+    for (i = 0, l = results.length; i < l; ++i)
     {
-      var totalResult = totalResults[i];
+      var result = results[i];
 
-      startTime = getStartTimeFromGroupKey(options.interval, totalResult._id);
+      startTime = getStartTimeFromGroupKey(options.interval, result._id);
 
       if (startTime < from)
       {
@@ -138,28 +130,9 @@ module.exports = function(mongoose, options, done)
         to = startTime;
       }
 
-      totalMap[startTime] = totalResult.count;
-    }
-
-    for (i = 0, l = statusResults.length; i < l; ++i)
-    {
-      var statusResult = statusResults[i];
-
-      startTime = getStartTimeFromGroupKey(options.interval, statusResult._id.groupKey);
-
-      if (startTime < from)
-      {
-        from = startTime;
-      }
-
-      if (startTime > to)
-      {
-        to = startTime;
-      }
-
-      var statusMap = statusResult._id.status === 'CNF' ? productionMap : endToEndMap;
-
-      statusMap[startTime] = statusResult.count;
+      totalMap[startTime] = result.all;
+      productionMap[startTime] = result.cnf;
+      endToEndMap[startTime] = result.dlv;
     }
 
     this.fromGroupKey = from;
@@ -482,7 +455,7 @@ function getDivisionCount(division, divisionsCount)
 function getGroupOperator(interval)
 {
   var operator = {};
-  var addTzOffsetMs = [{$add: ['$startDate', '$tzOffsetMs']}];
+  var addTzOffsetMs = [{$add: ['$date', '$tzOffsetMs']}];
 
   operator.y = {$year: addTzOffsetMs};
 
