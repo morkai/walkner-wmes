@@ -84,7 +84,17 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       default: 0,
       min: 0
     },
+    totalQuantity: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
     quantityDone: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    quantityLost: {
       type: Number,
       default: 0,
       min: 0
@@ -137,6 +147,12 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     this.wasNew = this.isNew;
     this.modified = this.modifiedPaths();
 
+    if (this.modified.indexOf('quantityDone') !== -1
+      || this.modified.indexOf('losses') !== -1)
+    {
+      this.recountTotals();
+    }
+
     this.copyOperationData();
 
     next();
@@ -156,6 +172,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       {
         changes[modifiedPath] = doc.get(modifiedPath);
       });
+      this.modified = null;
 
       app.broker.publish('prodShiftOrders.updated.' + doc._id, changes);
     }
@@ -196,6 +213,14 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
     this.laborTime = operation && operation.laborTime > 0 ? operation.laborTime : 0;
     this.machineTime = operation && operation.machineTime > 0 ? operation.machineTime : 0;
+  };
+
+  prodShiftOrderSchema.methods.recountTotals = function()
+  {
+    this.quantityLost = Array.isArray(this.losses)
+      ? this.losses.reduce(function(sum, loss) { return sum + loss.count; }, 0)
+      : 0;
+    this.totalQuantity = this.quantityDone + this.quantityLost;
   };
 
   prodShiftOrderSchema.methods.recalcDurations = function(save, done)
