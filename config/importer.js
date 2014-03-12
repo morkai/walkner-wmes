@@ -10,7 +10,8 @@ exports.modules = [
   {id: 'orders/importer/orders', name: 'currentDayOrderImporter'},
   {id: 'orders/importer/orders', name: 'nextDayOrderImporter'},
   {id: 'orders/importer/orders', name: 'prevDayOrderImporter'},
-  {id: 'orders/importer/emptyOrders', name: 'emptyOrderImporter'}
+  {id: 'orders/importer/emptyOrders', name: 'emptyOrderImporter'},
+  'reports/clipOrderCount'
 ];
 
 exports.events = {
@@ -73,4 +74,8 @@ exports.prevDayOrderImporter = {
 exports.emptyOrderImporter = {
   stepCount: 8,
   parsedOutputDir: __dirname + '/../data/attachments-imported'
+};
+
+exports['reports/clipOrderCount'] = {
+  ordersImporterId: 'currentDayOrderImporter'
 };
