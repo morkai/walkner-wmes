@@ -103,7 +103,7 @@ module.exports = function setupOrderModel(app, mongoose)
       this.updatedAt = new Date();
     }
 
-    if (this.finishDate)
+    if (this.startDate)
     {
       this.tzOffsetMs = this.startDate.getTimezoneOffset() * 60 * 1000 * -1;
     }
