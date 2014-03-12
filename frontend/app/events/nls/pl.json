@@ -43,7 +43,7 @@
   "TYPE:emptyOrders.synced": "Synchronizacja pustych zleceń",
   "TEXT:emptyOrders.synced": "Dodano {count, plural, one{1 nowe puste zlecenie} few {# nowe puste zlecenia} other{# nowych pustych zleceń}}.",
   "TYPE:orders.synced": "Synchronizacja zleceń",
-  "TEXT:orders.synced": "Dodano {created, plural, one{1 nowe zlecenie} few{# nowe zlecenia} other{# nowych zleceń}} i zmodyfikowano {updated, plural, one{1 istniejące zlecenie} few{# istniejące zlecenia} other{# istniejących zleceń}}.",
+  "TEXT:orders.synced": "Dodano {created, plural, one{1 nowe} few{# nowe} other{# nowych}} i zmodyfikowano {updated, plural, one{1 istniejące zlecenie} few{# istniejące zlecenia} other{# istniejących zleceń}}{moduleName, select, currentDayOrderImporter{&nbsp;z aktualnego dnia} nextDayOrderImporter{&nbsp;z następnego dnia} prevDayOrderImporter{&nbsp;z poprzedniego dnia} other{}}.",
   "TYPE:orders.added": "Dodanie zlecenia",
   "TEXT:orders.added": "Dodano zlecenie: <a href='\\#orders/{model->_id}'>{model->_id}</a>",
   "TYPE:orders.edited": "Edycja zlecenia",
