@@ -636,6 +636,7 @@ app/routes.js
 vendor/visibly.js
 app/visibility.js
 vendor/bootstrap/js/bootstrap.js
+vendor/moment/lang/pl.js
 app/nls/core.js
 app/nls/pl/core.js
 i18n!app/nls/core

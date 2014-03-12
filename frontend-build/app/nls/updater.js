@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(e){var l={locale:{}};return l.locale.en=e,{root:{},pl:!0}});
+define(["app/nls/locale/en"],function(e){var r={locale:{}};return r.locale.en=e,{root:{"restart:backend":function(){var e="";return e+="Application server is being restarted! Communication with the server might not work for a short while..."},"restart:frontend":function(){var e="";return e+="A new version of the application is available! <a href='javascript:window.location.reload()'>Click here to reload the browser</a>..."}},pl:!0}});
