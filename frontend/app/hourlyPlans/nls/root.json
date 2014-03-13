@@ -34,7 +34,7 @@
     "print:hdRight": "{date}, {shift} shift",
 
     "current:panel:title": "Division picker for hourly plan form",
-    "currentEntry:panel:warning": "<p>A new entry will be created, if the chosen division won't have an entry for the current shift.</p>",
+    "current:panel:warning": "<p>A new entry will be created, if the chosen division won't have an entry for the current shift.</p>",
     "current:submit": "Plan",
     "current:msg:offline": "Cannot plan: no connection to the server :(",
     "current:msg:failure": "Failed to create the hourly plan: {error, select, SHIFT_NO{entry can be created only during the I shift!} AUTH{no privileges!} INPUT{invalid division!} other{{error}}}"
