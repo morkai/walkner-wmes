@@ -81,7 +81,6 @@ exports.start = function startControllerModule(app, module)
     subSocket = axon.socket('sub');
 
     subSocket.set('hwm', 10);
-    subSocket.format('json');
     subSocket.connect(module.config.pubPort, module.config.pubHost);
 
     subSocket.on('error', function(err)
@@ -126,7 +125,6 @@ exports.start = function startControllerModule(app, module)
     reqSocket = axon.socket('req');
 
     reqSocket.set('hwm', 10);
-    reqSocket.format('json');
     reqSocket.connect(module.config.repPort, module.config.repHost);
 
     reqSocket.on('error', function(err)

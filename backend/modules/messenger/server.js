@@ -81,7 +81,6 @@ exports.start = function startMessengerServerModule(app, module, done)
     var pub = axon.socket('pub');
 
     pub.set('hwm', 10);
-    pub.format('json');
     pub.bind(module.config.pubPort, module.config.pubHost);
 
     pub.once('error', done);
@@ -103,7 +102,6 @@ exports.start = function startMessengerServerModule(app, module, done)
     var rep = axon.socket('rep');
 
     rep.set('hwm', 10);
-    rep.format('json');
     rep.bind(module.config.repPort, module.config.repHost);
 
     rep.once('error', done);
