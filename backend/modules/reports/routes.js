@@ -10,6 +10,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var userModule = app[reportsModule.config.userId];
   var mongoose = app[reportsModule.config.mongooseId];
   var settings = app[reportsModule.config.settingsId];
+  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
   var downtimeReasonsModule = app.downtimeReasons;
   var prodFunctionsModule = app.prodFunctions;
   var prodTasksModue = app.prodTasks;
@@ -20,8 +21,6 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var prodFlowsModule = app.prodFlows;
   var workCentersModule = app.workCenters;
   var prodLinesModule = app.prodLines;
-
-  var KS_MRP_RE = /^KS/;
 
   var canView = userModule.auth('REPORTS:VIEW');
   var canManage = userModule.auth('REPORTS:MANAGE');
@@ -51,37 +50,43 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   function report1Route(req, res, next)
   {
-    if (req.query.orgUnitType === 'mrpController')
+    var orgUnit = orgUnitsModule.getByTypeAndId(req.query.orgUnitType, req.query.orgUnitId);
+
+    if (orgUnit === null && (req.query.orgUnitType || req.query.orgUnitId))
     {
-      req.query.orgUnitType = 'mrpControllers';
+      return res.send(400);
     }
 
-    var divisionId = getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnitId);
+    var division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
+
+    if (orgUnit !== null && !division)
+    {
+      return res.send(400);
+    }
+
+    var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
+
     var options = {
       fromTime: getTime(req.query.from),
       toTime: getTime(req.query.to),
       interval: req.query.interval || 'hour',
-      orgUnitType: req.query.orgUnitType,
-      orgUnitId: req.query.orgUnitId,
-      division: divisionId,
-      subdivisions: getSubdivisionsByDivision(divisionId),
+      orgUnitType: orgUnit ? req.query.orgUnitType : null,
+      orgUnitId: orgUnit ? req.query.orgUnitId : null,
+      division: idToStr(division),
+      subdivisions: idToStr(subdivisions),
       subdivisionType: req.query.subdivisionType || null,
-      ignoredDowntimeReasons: [],
-      prodDivisionCount: countProdDivisions()
+      prodFlows: idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
+      orgUnits: getOrgUnitsForFte(req.query.orgUnitType, orgUnit),
+      ignoredDowntimeReasons: idToStr(downtimeReasonsModule.models.filter(function(downtimeReason)
+      {
+        return downtimeReason.type === 'break';
+      }))
     };
 
     if (isNaN(options.fromTime) || isNaN(options.toTime))
     {
       return next(new Error('INVALID_TIME'));
     }
-
-    downtimeReasonsModule.models.forEach(function(downtimeReason)
-    {
-      if (downtimeReason.get('type') === 'break')
-      {
-        options.ignoredDowntimeReasons.push(downtimeReason.get('_id'));
-      }
-    });
 
     report1(mongoose, options, function(err, report)
     {
@@ -96,33 +101,43 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   function report2Route(req, res, next)
   {
-    if (req.query.orgUnitType === 'mrpController')
+    var orgUnit = orgUnitsModule.getByTypeAndId(req.query.orgUnitType, req.query.orgUnitId);
+
+    if (orgUnit === null && (req.query.orgUnitType || req.query.orgUnitId))
     {
-      req.query.orgUnitType = 'mrpControllers';
+      return res.send(400);
     }
 
-    var mrpControllers =
-      getAssemblyMrpControllersByOrgUnit(req.query.orgUnitType, req.query.orgUnitId);
+    var division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
+
+    if (orgUnit !== null && !division)
+    {
+      return res.send(400);
+    }
+
+    var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(
+      req.query.orgUnitType, req.query.orgUnitId
+    );
 
     if (mrpControllers === null)
     {
       return next(new Error('INVALID_ORG_UNIT'));
     }
 
-    var divisionId = getDivisionByOrgUnit(req.query.orgUnitType, req.query.orgUnitId);
-    var subdivisions = getSubdivisionsByDivision(divisionId);
+    var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
+
     var options = {
       fromTime: getTime(req.query.from),
       toTime: getTime(req.query.to),
       interval: req.query.interval || 'day',
-      orgUnitType: req.query.orgUnitType,
-      orgUnitId: req.query.orgUnitId,
-      division: divisionId,
-      subdivisions: subdivisions,
+      orgUnitType: orgUnit ? req.query.orgUnitType : null,
+      orgUnitId: orgUnit ? req.query.orgUnitId : null,
+      division: idToStr(division),
+      subdivisions: idToStr(subdivisions),
       mrpControllers: mrpControllers,
-      prodFlows: getProdFlowsByOrgUnit(req.query.orgUnitType, req.query.orgUnitId),
+      prodFlows: idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
+      orgUnits: getOrgUnitsForFte(req.query.orgUnitType, orgUnit),
       directProdFunctions: getDirectProdFunctions(),
-      prodDivisionCount: countProdDivisions(),
       prodTasks: getProdTasks()
     };
 
@@ -148,7 +163,6 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       fromTime: getTime(req.query.from),
       toTime: getTime(req.query.to),
       interval: req.query.interval || 'day',
-      // TODO: Make the default value configurable
       majorMalfunction: parseFloat(req.query.majorMalfunction) || 1.5,
       downtimeReasons: getDowntimeReasons(),
       prodLines: getProdLines()
@@ -175,245 +189,45 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     return (/^[0-9]+$/).test(date) ? parseInt(date, 10) : Date.parse(date);
   }
 
-  function getDivisionByOrgUnit(orgUnitType, orgUnitId)
+  function getOrgUnitsForFte(orgUnitType, orgUnit)
   {
     /*jshint -W015*/
 
-    if (!orgUnitType || !orgUnitId)
-    {
-      return null;
-    }
+    var orgUnits = {
+      tasks: null,
+      flows: null
+    };
 
     switch (orgUnitType)
     {
-      case 'division':
-        return orgUnitId;
-
       case 'subdivision':
-        var subdivision = subdivisionsModule.modelsById[orgUnitId];
+        orgUnits.tasks = idToStr(orgUnitsModule.getSubdivisionsFor('division', orgUnit.division));
+        break;
 
-        return subdivision ? subdivision.get('division') : null;
-
-      case 'mrpControllers':
       case 'mrpController':
-        return getDivisionByParentOrgUnit(mrpControllersModule, orgUnitId, 'subdivision');
-
       case 'prodFlow':
-        return getDivisionByParentOrgUnit(prodFlowsModule, orgUnitId, 'mrpController');
-
       case 'workCenter':
-        return getDivisionByParentOrgUnit(workCentersModule, orgUnitId, 'prodFlow');
-
       case 'prodLine':
-        return getDivisionByParentOrgUnit(prodLinesModule, orgUnitId, 'workCenter');
+        orgUnits.tasks = idToStr(orgUnitsModule.getAllByTypeForSubdivision(
+          orgUnitType, orgUnitsModule.getSubdivisionFor(orgUnit)
+        ));
 
-      default:
-        return null;
-    }
-  }
-
-  function getDivisionByParentOrgUnit(orgUnitsModule, orgUnitId, parentOrgUnitProperty)
-  {
-    var orgUnit = orgUnitsModule.modelsById[orgUnitId];
-
-    if (!orgUnit)
-    {
-      return null;
-    }
-
-    var parentOrgUnit = orgUnit.get(parentOrgUnitProperty);
-
-    if (Array.isArray(parentOrgUnit))
-    {
-      parentOrgUnit = parentOrgUnit[0];
-    }
-
-    return parentOrgUnit ? getDivisionByOrgUnit(parentOrgUnitProperty, parentOrgUnit) : null;
-  }
-
-  function getSubdivisionsByDivision(divisionId, type)
-  {
-    if (!divisionId)
-    {
-      return !type ? [] : subdivisionsModule.models
-        .filter(function(subdivision) { return subdivision.get('type') === type; })
-        .map(function(subdivision) { return subdivision.get('_id'); });
-    }
-
-    return subdivisionsModule.models
-      .filter(function(subdivision)
-      {
-        return subdivision.get('division') === divisionId
-          && (!type || subdivision.get('type') === type);
-      })
-      .map(function(subdivision) { return subdivision.get('_id'); });
-  }
-
-  function getAssemblyMrpControllersByOrgUnit(orgUnitType, orgUnitId)
-  {
-    /*jshint -W015*/
-
-    if (!orgUnitType || !orgUnitId)
-    {
-      return mrpControllersModule.models
-        .map(function(mrpController) { return mrpController._id; })
-        .filter(onlyAssemblyMrpControllers);
-    }
-
-    switch (orgUnitType)
-    {
-      case 'division':
-        return subdivisionsModule.models
-          .filter(function(subdivision)
-          {
-            return subdivision.division === orgUnitId && subdivision.type === 'assembly';
-          })
-          .reduce(
-            function(mrpControllers, subdivision)
-            {
-              return mrpControllers.concat(
-                getAssemblyMrpControllersByOrgUnit('subdivision', subdivision._id.toString())
-              );
-            },
-            []
-          );
-
-      case 'subdivision':
-        var subdivision = subdivisionsModule.modelsById[orgUnitId];
-
-        if (!subdivision)
+        if (orgUnitType === 'workCenter')
         {
-          return null;
+          orgUnits.flows = idToStr(orgUnitsModule.getWorkCentersInProdFlow(
+            orgUnitsModule.getByTypeAndId('prodFlow', orgUnit.prodFlow)
+          ));
         }
-
-        if (subdivision.type !== 'assembly')
+        else if (orgUnitType === 'prodLine')
         {
-          return [];
+          orgUnits.flows = idToStr(orgUnitsModule.getProdLinesInProdFlow(
+            orgUnitsModule.getParent(orgUnitsModule.getParent(orgUnit))
+          ));
         }
-
-        return mrpControllersModule.models
-          .filter(function(mrpController)
-          {
-            return mrpController.subdivision
-              && mrpController.subdivision.toString() === orgUnitId
-              && !KS_MRP_RE.test(mrpController._id);
-          })
-          .map(function(mrpController) { return mrpController._id; });
-
-      case 'mrpControllers':
-        return [orgUnitId].filter(onlyAssemblyMrpControllers);
-
-      case 'prodFlow':
-        var prodFlow = prodFlowsModule.modelsById[orgUnitId];
-
-        if (!prodFlow)
-        {
-          return null;
-        }
-
-        return (prodFlow ? prodFlow.mrpController : []).filter(onlyAssemblyMrpControllers);
-
-      case 'workCenter':
-        return null;
-
-      case 'prodLine':
-        return null;
-
-      default:
-        return null;
-    }
-  }
-
-  function onlyAssemblyMrpControllers(mrpControllerId)
-  {
-    if (KS_MRP_RE.test(mrpControllerId))
-    {
-      return false;
+        break;
     }
 
-    var mrpController = mrpControllersModule.modelsById[mrpControllerId];
-
-    if (!mrpController)
-    {
-      return false;
-    }
-
-    var subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
-
-    return subdivision && subdivision.type === 'assembly';
-  }
-
-  function countProdDivisions()
-  {
-    var prodDivisionCount = 0;
-
-    divisionsModule.models.forEach(function(division)
-    {
-      if (division.type === 'prod')
-      {
-        prodDivisionCount += 1;
-      }
-    });
-
-    return prodDivisionCount;
-  }
-
-  function getProdFlowsByOrgUnit(orgUnitType, orgUnitId)
-  {
-    /*jshint -W015*/
-
-    if (!orgUnitType || !orgUnitId)
-    {
-      return null;
-    }
-
-    switch (orgUnitType)
-    {
-      case 'division':
-        return subdivisionsModule.models
-          .filter(function(subdivision){ return subdivision.division === orgUnitId; })
-          .reduce(function(prodFlows, subdivision)
-          {
-            return prodFlows.concat(
-              getProdFlowsByOrgUnit('subdivision', subdivision._id.toString())
-            );
-          }, []);
-
-      case 'subdivision':
-        var subdivision = subdivisionsModule.modelsById[orgUnitId];
-
-        if (!subdivision)
-        {
-          return null;
-        }
-
-        return mrpControllersModule.models
-          .filter(function(mrpController)
-          {
-            return mrpController.subdivision && mrpController.subdivision.toString() === orgUnitId;
-          })
-          .reduce(function(prodFlows, mrpController)
-          {
-            return prodFlows.concat(getProdFlowsByOrgUnit('mrpControllers', mrpController._id));
-          }, []);
-
-      case 'mrpControllers':
-        return prodFlowsModule.models
-          .filter(function(prodFlow) { return prodFlow.mrpController.indexOf(orgUnitId) !== -1; })
-          .map(function(prodFlow) { return prodFlow._id.toString(); });
-
-      case 'prodFlow':
-        return [orgUnitId];
-
-      case 'workCenter':
-        return null;
-
-      case 'prodLine':
-        return null;
-
-      default:
-        return null;
-    }
+    return orgUnits;
   }
 
   function getDirectProdFunctions()
@@ -512,5 +326,20 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     var subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
 
     return subdivision || null;
+  }
+
+  function idToStr(input)
+  {
+    if (Array.isArray(input))
+    {
+      return input.map(function(model) { return String(model._id); });
+    }
+
+    if (input === null)
+    {
+      return null;
+    }
+
+    return String(input._id);
   }
 };

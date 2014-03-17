@@ -19,6 +19,7 @@ exports.modules = [
   'workCenters',
   'prodFlows',
   'prodLines',
+  'orgUnits',
   'aors',
   'orderStatuses',
   'downtimeReasons',

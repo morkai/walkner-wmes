@@ -6,7 +6,8 @@ exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
   userId: 'user',
-  settingsId: 'settings'
+  settingsId: 'settings',
+  orgUnitsId: 'orgUnits'
 };
 
 exports.start = function startReportsModule(app, module)
@@ -15,7 +16,9 @@ exports.start = function startReportsModule(app, module)
     [
       module.config.mongooseId,
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.orgUnitsId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );

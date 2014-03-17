@@ -5,6 +5,7 @@ var lodash = require('lodash');
 var moment = require('moment');
 var ObjectId = require('mongoose').Types.ObjectId;
 var util = require('./util');
+var calcFte = require('./calcFte');
 
 module.exports = function(mongoose, options, done)
 {
@@ -189,7 +190,7 @@ module.exports = function(mongoose, options, done)
       date: {$gte: this.from, $lt: this.to}
     };
 
-    if (options.subdivisions.length)
+    if (Array.isArray(options.subdivisions) && options.subdivisions.length)
     {
       masterConditions.subdivision = {$in: options.subdivisions};
     }
@@ -242,7 +243,11 @@ module.exports = function(mongoose, options, done)
 
     if (options.orgUnitType)
     {
-      $match[options.orgUnitType] = prepareOrgUnitId(options.orgUnitType, options.orgUnitId);
+      var orgUnitProperty = options.orgUnitType === 'mrpController'
+        ? 'mrpControllers'
+        : options.orgUnitType;
+
+      $match[orgUnitProperty] = prepareOrgUnitId(options.orgUnitType, options.orgUnitId);
     }
 
     ProdShiftOrder.aggregate(
@@ -266,11 +271,13 @@ module.exports = function(mongoose, options, done)
         eff: {$divide: ['$num', '$den']},
         qty: '$qty'
       }}],
-      this.next()
+      this.parallel()
     );
+
+    calcFte(mongoose, options, this.parallel());
   }
 
-  function calcMetricsStep(err, docs)
+  function calcMetricsStep(err, docs, fteTotals)
   {
     if (err)
     {
@@ -290,11 +297,13 @@ module.exports = function(mongoose, options, done)
     );
 
     var prodNum = doc.num / 8;
-    var prodDen =
-      results.dirIndir.production + (results.dirIndir.totalStorage / options.prodDivisionCount);
+    var prodDen = fteTotals.total;
 
     results.dirIndir.productivity = util.round(prodNum / prodDen);
     results.dirIndir.quantityDone = doc.qty;
+
+    results.prodNum = prodNum;
+    results.prodDen = prodDen;
   }
 };
 

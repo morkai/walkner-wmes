@@ -3,14 +3,13 @@
 var step = require('h5.step');
 var moment = require('moment');
 var util = require('./util');
+var calcFte = require('./calcFte');
 
 module.exports = function(mongoose, options, done)
 {
   var ProdShift = mongoose.model('ProdShift');
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
   var ProdDowntime = mongoose.model('ProdDowntime');
-  var FteMasterEntry = mongoose.model('FteMasterEntry');
-  var FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
   var results = {
     options: options,
@@ -30,9 +29,7 @@ module.exports = function(mongoose, options, done)
     findProdShiftOrdersStep,
     groupProdShiftOrdersStep,
     calcDowntimeDurationsStep,
-    findFteEntriesStep,
-    groupFteEntriesStep,
-    calcFteTotalsStep,
+    calcFteStep,
     calcCoeffsStep,
     sortCoeffsStep,
     function sendResultsStep(err)
@@ -61,7 +58,11 @@ module.exports = function(mongoose, options, done)
 
     if (options.orgUnitType && options.orgUnitId)
     {
-      conditions[options.orgUnitType] = options.orgUnitId;
+      var orgUnitProperty = options.orgUnitType === 'mrpController'
+        ? 'mrpControllers'
+        : options.orgUnitType;
+
+      conditions[orgUnitProperty] = options.orgUnitId;
     }
 
     if (options.subdivisionType === 'prod')
@@ -88,7 +89,11 @@ module.exports = function(mongoose, options, done)
 
     if (options.orgUnitType && options.orgUnitId)
     {
-      conditions[options.orgUnitType] = options.orgUnitId;
+      var orgUnitProperty = options.orgUnitType === 'mrpController'
+        ? 'mrpControllers'
+        : options.orgUnitType;
+
+      conditions[orgUnitProperty] = options.orgUnitId;
     }
 
     conditions.quantitiesDone = {$ne: null};
@@ -226,6 +231,7 @@ module.exports = function(mongoose, options, done)
     /*jshint validthis:true*/
 
     var fields = {
+      division: 1,
       startedAt: 1,
       finishedAt: 1,
       subdivision: 1,
@@ -334,143 +340,28 @@ module.exports = function(mongoose, options, done)
     });
   }
 
-  function findFteEntriesStep()
+  function calcFteStep()
   {
     /*jshint validthis:true*/
 
-    if (options.interval === 'hour')
-    {
-      return;
-    }
-
-    var masterConditions = {
-      date: {$gte: options.fromTime, $lt: options.toTime}
-    };
-
-    if (options.subdivisions.length)
-    {
-      masterConditions.subdivision = {$in: options.subdivisions};
-    }
-
-    masterConditions.total = {$gt: 0};
-
-    FteMasterEntry
-      .find(masterConditions, {_id: 0, date: 1, shift: 1, total: 1})
-      .lean()
-      .exec(this.parallel());
-
-    var leaderConditions = {
-      date: {$gte: options.fromTime, $lt: options.toTime},
-      'totals.overall': {$gt: 0}
-    };
-
-    FteLeaderEntry
-      .find(leaderConditions, {_id: 0, date: 1, shift: 1, totals: 1})
-      .lean()
-      .exec(this.parallel());
+    calcFte(mongoose, options, this.next());
   }
 
-  function groupFteEntriesStep(err, fteMasterEntries, fteLeaderEntries)
+  function calcCoeffsStep(err, fteResults)
   {
     /*jshint validthis:true*/
-
-    if (options.interval === 'hour')
-    {
-      return;
-    }
 
     if (err)
     {
       return this.done(done, err);
     }
 
-    var groupedFteMasterEntries = {};
-    var groupedFteLeaderEntries = {};
-
-    fteMasterEntries.forEach(function(fteMasterEntry)
-    {
-      fteMasterEntry.startedAt = fteMasterEntry.date.getTime();
-
-      groupObjects(groupedFteMasterEntries, fteMasterEntry);
-    });
-
-    fteLeaderEntries.forEach(function(fteLeaderEntry)
-    {
-      fteLeaderEntry.startedAt = fteLeaderEntry.date.getTime();
-
-      groupObjects(groupedFteLeaderEntries, fteLeaderEntry);
-    });
-
-    this.groupedFteMasterEntries = groupedFteMasterEntries;
-    this.groupedFteLeaderEntries = groupedFteLeaderEntries;
-
-    setImmediate(this.next());
-  }
-
-  function calcFteTotalsStep()
-  {
-    /*jshint validthis:true*/
-
-    if (options.interval === 'hour')
-    {
-      return;
-    }
-
-    var fteTotals = {};
-    var groupedFteMasterEntries = this.groupedFteMasterEntries;
-    var groupedFteLeaderEntries = this.groupedFteLeaderEntries;
-
-    Object.keys(groupedFteMasterEntries).forEach(function(groupKey)
-    {
-      if (typeof fteTotals[groupKey] === 'undefined')
-      {
-        fteTotals[groupKey] = {master: 0, leader: 0};
-      }
-
-      groupedFteMasterEntries[groupKey].forEach(function(fteMasterEntry)
-      {
-        fteTotals[groupKey].master += fteMasterEntry.total;
-      });
-    });
-
-    Object.keys(groupedFteLeaderEntries).forEach(function(groupKey)
-    {
-      if (typeof fteTotals[groupKey] === 'undefined')
-      {
-        fteTotals[groupKey] = {master: 0, leader: 0};
-      }
-
-      groupedFteLeaderEntries[groupKey].forEach(function(fteLeaderEntry)
-      {
-        if (typeof fteLeaderEntry.totals[options.division] === 'number')
-        {
-          fteTotals[groupKey].leader += fteLeaderEntry.totals[options.division];
-        }
-        else
-        {
-          fteTotals[groupKey].leader += fteLeaderEntry.totals.overall;
-        }
-      });
-    });
-
-    this.groupedFteMasterEntries = null;
-    this.groupedFteLeaderEntries = null;
-    this.fteTotals = fteTotals;
-
-    setImmediate(this.next());
-  }
-
-  function calcCoeffsStep()
-  {
-    /*jshint validthis:true*/
-
     var orderToDowntimes = this.orderToDowntimes;
     var groupedProdShiftOrders = this.groupedProdShiftOrders;
-    var fteTotals = this.fteTotals || {};
+    var fteTotals = fteResults.grouped;
 
     this.orderToDowntimes = null;
     this.groupedProdShiftOrders = null;
-    this.fteTotals = null;
 
     Object.keys(groupedProdShiftOrders).forEach(function(groupKey)
     {
@@ -605,6 +496,7 @@ module.exports = function(mongoose, options, done)
         _id: order._id + '@' + partHours,
         startedAt: new Date(partStartTime),
         finishedAt: new Date(partEndTime),
+        division: order.division,
         mechOrder: order.mechOrder,
         orderId: order.orderId,
         operationNo: order.operationNo,
@@ -711,7 +603,7 @@ module.exports = function(mongoose, options, done)
     groupedObjects[groupKey].push(obj);
   }
 
-  function calcCoeffs(groupKey, orders, fteTotals, orderToDowntimes)
+  function calcCoeffs(groupKey, orders, fteTotal, orderToDowntimes)
   {
     /*jshint validthis:true*/
 
@@ -806,18 +698,11 @@ module.exports = function(mongoose, options, done)
       coeffs.downtime = util.round(dtNum / 8 / dtDen);
     }
 
-    if (typeof fteTotals === 'object')
+    if (effNum && fteTotal)
     {
-      var prodNum = effNum / 8;
-      var prodDen = fteTotals.master + (fteTotals.leader / options.prodDivisionCount);
-
-      if (prodNum && prodDen)
-      {
-        coeffs.productivity = util.round(prodNum / prodDen);
-      }
-
-      coeffs.fteMasterTotal = util.round(fteTotals.master);
-      coeffs.fteLeaderTotal = util.round(fteTotals.leader);
+      coeffs.productivity = util.round(effNum / 8 / fteTotal);
+      coeffs.prodNum = effNum / 8;
+      coeffs.prodDen = fteTotal;
     }
 
     coeffs.orderCount = orderCount;

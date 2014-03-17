@@ -19,6 +19,7 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes)
 
       var Model = mongoose.model(modelName);
 
+      module.Model = Model;
       module.models = [];
       module.modelsById = {};
 
