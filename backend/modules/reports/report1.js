@@ -701,8 +701,6 @@ module.exports = function(mongoose, options, done)
     if (effNum && fteTotal)
     {
       coeffs.productivity = util.round(effNum / 8 / fteTotal);
-      coeffs.prodNum = effNum / 8;
-      coeffs.prodDen = fteTotal;
     }
 
     coeffs.orderCount = orderCount;

@@ -86,6 +86,11 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       type: String,
       default: null
     },
+    prodDivisionCount: {
+      type: Number,
+      required: true,
+      min: 0
+    },
     fteDiv: [String],
     totals: {},
     tasks: [fteLeaderTaskSchema]
@@ -172,6 +177,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
           subdivision: shiftId.subdivision,
           date: shiftId.date,
           shift: shiftId.no,
+          prodDivisionCount: prodDivisions.length,
           fteDiv: this.fteDiv ? prodDivisions : null,
           totals: null,
           tasks: this.prodTasks,

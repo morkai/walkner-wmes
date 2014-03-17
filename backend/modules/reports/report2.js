@@ -212,7 +212,7 @@ module.exports = function(mongoose, options, done)
     };
 
     var fteLeaderEntryStream = FteLeaderEntry
-      .find(leaderConditions, {_id: 0, date: 1, totals: 1, tasks: 1})
+      .find(leaderConditions, {_id: 0, date: 1, prodDivisionCount: 1, totals: 1, tasks: 1})
       .lean()
       .stream();
 
@@ -422,7 +422,7 @@ function handleFteLeaderEntryStream(options, results, stream, done)
         }
         else
         {
-          divisionCount /= Array.isArray(comp.count) ? 1 : options.prodDivisionCount;
+          divisionCount /= Array.isArray(comp.count) ? 1 : fteLeaderEntry.prodDivisionCount;
 
           results.dirIndir.storage += divisionCount;
         }
