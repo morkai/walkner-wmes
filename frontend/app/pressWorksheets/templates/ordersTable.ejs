@@ -1,26 +1,27 @@
 <table class="table table-bordered table-condensed pressWorksheets-form-orders">
   <thead>
     <tr>
-      <th rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.part') %></th>
-      <th rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.operation') %></th>
-      <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
-      <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
-      <th class="pressWorksheets-form-min pressWorksheets-form-timeCell" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
-      <th class="pressWorksheets-form-min pressWorksheets-form-timeCell" rowspan="<%- rowspan %>"><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
+      <th rowspan="<%- rowspan %>"><%- t('core', '#') %></th>
+      <th rowspan="<%- rowspan %>" data-column="part"><%- t('pressWorksheets', 'PROPERTY:order.part') %></th>
+      <th rowspan="<%- rowspan %>" data-column="operation"><%- t('pressWorksheets', 'PROPERTY:order.operation') %></th>
+      <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>" data-column="prodLine"><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
+      <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>" data-column="quantityDone"><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
+      <th class="pressWorksheets-form-min pressWorksheets-form-timeCell" rowspan="<%- rowspan %>" data-column="startedAt"><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
+      <th class="pressWorksheets-form-min pressWorksheets-form-timeCell" rowspan="<%- rowspan %>" data-column="finishedAt"><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
       <% if (lossReasons.length) { %>
-      <th class="pressWorksheets-form-min pressWorksheets-form-separator" colspan="<%- lossReasons.length %>"><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
+      <th class="pressWorksheets-form-lossCell pressWorksheets-form-min pressWorksheets-form-separator" colspan="<%- lossReasons.length %>"><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
       <% } %>
       <% if (downtimeReasons.length) { %>
-      <th class="pressWorksheets-form-min pressWorksheets-form-separator" colspan="<%- downtimeReasons.length %>"><%- t('pressWorksheets', 'PROPERTY:order.downtimes') %></th>
+      <th class="pressWorksheets-form-downtimeCell pressWorksheets-form-min pressWorksheets-form-separator" colspan="<%- downtimeReasons.length %>"><%- t('pressWorksheets', 'PROPERTY:order.downtimes') %></th>
       <% } %>
     </tr>
     <% if (rowspan) { %>
     <tr class="pressWorksheets-form-losses">
       <% lossReasons.forEach(function(lossReason, i) { %>
-      <th class="<%- i ? '' : 'pressWorksheets-form-separator' %>"><span class="pressWorksheets-form-loss"><%- lossReason.label %></span></th>
+      <th class="pressWorksheets-form-lossCell <%- i ? '' : 'pressWorksheets-form-separator' %>" data-column="loss.<%- i %>"><span class="pressWorksheets-form-loss"><%- lossReason.label %></span></th>
       <% }) %>
       <% downtimeReasons.forEach(function(downtimeReason, i) { %>
-      <th class="<%- i ? '' : 'pressWorksheets-form-separator' %>"><span class="pressWorksheets-form-loss"><%- downtimeReason.label %></span></th>
+      <th class="pressWorksheets-form-downtimeCell <%- i ? '' : 'pressWorksheets-form-separator' %>" data-column="downtime.<%- i %>"><span class="pressWorksheets-form-loss"><%- downtimeReason.label %></span></th>
       <% }) %>
     </tr>
     <% } %>

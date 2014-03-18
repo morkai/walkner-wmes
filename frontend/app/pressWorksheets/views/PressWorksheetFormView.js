@@ -150,6 +150,27 @@ define([
           this.paintShopTimeFocused = true;
         }
       },
+      'focus .pressWorksheets-form-order input': function(e)
+      {
+        var $input = this.$(e.target);
+
+        $input.closest('td').addClass('is-focused');
+
+        if ($input.hasClass('select2-focusser'))
+        {
+          $input = $input.parent().next('.select2-offscreen');
+        }
+
+        if ($input[0].dataset.column)
+        {
+          this.$('th[data-column="' + $input[0].dataset.column + '"]').addClass('is-focused');
+        }
+      },
+      'blur .pressWorksheets-form-order input': function(e)
+      {
+        this.$(e.target).closest('td').removeClass('is-focused');
+        this.$('th.is-focused').removeClass('is-focused');
+      },
       'change input[name=shift]': function()
       {
         this.checkShiftStartTimeValidity();
@@ -455,6 +476,7 @@ define([
           {
             $row.remove();
             view.setUpPartValidation();
+            view.recalcOrderNoColumn();
           });
 
           if (!e.added && view.$('.pressWorksheets-form-order').length === 2)
@@ -575,6 +597,7 @@ define([
       }
 
       this.setUpPartValidation();
+      this.recalcOrderNoColumn();
     },
 
     setUpPartValidation: function()
@@ -582,6 +605,14 @@ define([
       var $allParts = this.$('input.pressWorksheets-form-part');
 
       $allParts.last().attr('required', $allParts.length === 1);
+    },
+
+    recalcOrderNoColumn: function()
+    {
+      this.$('.pressWorksheets-form-order > td:first-child').each(function(i)
+      {
+        this.innerHTML = (i + 1) + '.';
+      });
     },
 
     togglePaintShop: function()

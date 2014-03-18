@@ -37,6 +37,8 @@
   "BOOL:false": "Nie",
   "BOOL:null": "Nie dotyczy",
 
+  "#": "Lp.",
+
   "GUEST_USER_NAME": "Gość",
 
   "NAVBAR:TOGGLE": "Pokaż menu",

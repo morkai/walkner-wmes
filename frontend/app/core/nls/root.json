@@ -38,6 +38,8 @@
     "BOOL:false": "No",
     "BOOL:null": "N/A",
 
+    "#": "No.",
+
     "GUEST_USER_NAME": "Guest",
 
     "NAVBAR:TOGGLE": "Show menu",

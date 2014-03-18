@@ -98,12 +98,31 @@
   display: none;
   margin-bottom: 15px;
 }
+.pressWorksheets-form-order:nth-child(even) {
+  background: rgba(0, 0, 0, .075);
+}
+.pressWorksheets-form-orders .is-focused {
+  background: #FFFFD6;
+}
 .pressWorksheets-form-order > td {
   position: relative;
 }
 .pressWorksheets-form .pressWorksheets-form-part.select2-offscreen,
 .pressWorksheets-form .pressWorksheets-form-prodLine.select2-offscreen {
   bottom: 5px!important;
+}
+.pressWorksheets-form-no {
+  font-weight: bold;
+  text-align: right;
+  width: 1%;
+}
+.pressWorksheets-form-lossCell {
+  background: rgba(0, 255, 255, .1);
+  border-color: #ccc!important;
+}
+.pressWorksheets-form-downtimeCell {
+  background: rgba(255, 0, 0, .1);
+  border-color: #bbb!important;
 }
 .prodWorksheets-details-tableContainer {
   padding: 0!important;
