@@ -37,3 +37,13 @@ textarea.prodDowntimes-corroborate-decisionComment {
   text-align: left;
   max-width: none;
 }
+.prodDowntimes-filter-message {
+  line-height: 1.5;
+  text-align: justify;
+}
+.prodDowntimes-filter-message > .fa {
+  float: left;
+  margin-right: 7px;
+  font-size: 60px;
+  line-height: 1;
+}

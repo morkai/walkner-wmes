@@ -58,5 +58,7 @@
   "corroborate:cancel": "Anuluj potwierdzenie",
   "corroborate:confirm": "Zatwierdź przestój",
   "corroborate:reject": "Odrzuć przestój",
-  "corroborate:msg:failure": "Nie udało się potwierdzić przestoju: {error}"
+  "corroborate:msg:failure": "Nie udało się potwierdzić przestoju: {error}",
+
+  "filter:message": "Jeżeli po przejściu do ekranu szczegołów wybranego przestoju chcesz wrócić do ekranu listy przestojów zachowując wcześniej zdefiniowane filtry, to skorzystaj z przycisku <em><i class='fa fa-arrow-left'></i> Wstecz</em> przeglądarki lub wciśnij klawisz <kbd><i class='fa fa-long-arrow-left'></i> Backspace</kbd> na klawiaturze."
 }

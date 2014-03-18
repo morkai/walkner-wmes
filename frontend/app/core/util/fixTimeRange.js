@@ -47,7 +47,7 @@ define([
     if ($el.hasClass('form-group-datetime'))
     {
       $el.find('input[type=date]').val(valid ? elMoment.format('YYYY-MM-DD') : '');
-      $el.find('input[type=time]').val(valid ? elMoment.format('HH:mm') : defaultTime);
+      $el.find('input[type=time]').val(valid ? elMoment.format('HH:mm') : '');
     }
     else if (!valid)
     {

@@ -243,7 +243,7 @@ define([
     changeFilter: function()
     {
       var rqlQuery = this.model.rqlQuery;
-      var timeRange = fixTimeRange.fromView(this);
+      var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
       var selector = [];
       var orgUnit = this.$id('orgUnit').select2('data');
       var aor = this.$id('aor').select2('val');
