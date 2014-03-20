@@ -1,6 +1,7 @@
 'use strict';
 
 var moment = require('moment');
+var createOrderLossSchema = require('./createOrderLossSchema');
 
 module.exports = function setupPressWorksheetModel(app, mongoose)
 {
@@ -27,26 +28,6 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       type: Number,
       min: 1,
       max: 8 * 60
-    }
-  }, {
-    _id: false
-  });
-
-  var pressWorksheetLossSchema = mongoose.Schema({
-    reason: {
-      type: String,
-      ref: 'LossReason',
-      required: true
-    },
-    label: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    count: {
-      type: Number,
-      required: true,
-      min: 1
     }
   }, {
     _id: false
@@ -95,7 +76,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       match: TIME_RE,
       default: null
     },
-    losses: [pressWorksheetLossSchema],
+    losses: [createOrderLossSchema(mongoose)],
     downtimes: [pressWorksheetDowntimeSchema]
   }, {
     _id: false

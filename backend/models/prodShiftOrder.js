@@ -1,5 +1,7 @@
 'use strict';
 
+var createOrderLossSchema = require('./createOrderLossSchema');
+
 module.exports = function setupProdShiftOrderModel(app, mongoose)
 {
   var prodShiftOrderSchema = mongoose.Schema({
@@ -100,7 +102,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       min: 0
     },
     losses: {
-      type: {},
+      type: [createOrderLossSchema(mongoose)],
       default: null
     },
     creator: {},
