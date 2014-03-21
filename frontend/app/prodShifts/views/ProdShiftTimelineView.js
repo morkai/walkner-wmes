@@ -200,6 +200,18 @@ define([
             pushDatum('working', orders, prodLogEntry, startingTime);
             break;
 
+          case 'correctOrder':
+            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+
+            if (item)
+            {
+              var relatedEntryData = item.prodLogEntry.get('data');
+
+              relatedEntryData.orderId = data.orderId;
+              relatedEntryData.operationNo = data.operationNo;
+            }
+            break;
+
           case 'finishOrder':
             item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
 
