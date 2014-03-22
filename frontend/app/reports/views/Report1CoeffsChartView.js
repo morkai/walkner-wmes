@@ -1,5 +1,6 @@
 define([
   'underscore',
+  'jquery',
   'app/time',
   'app/i18n',
   'app/core/View',
@@ -8,6 +9,7 @@ define([
   'app/highcharts'
 ], function(
   _,
+  $,
   time,
   t,
   View,
