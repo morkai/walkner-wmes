@@ -71,7 +71,8 @@ module.exports = function setupProdShiftModel(app, mongoose)
     },
     master: {},
     leader: {},
-    operator: {}
+    operator: {},
+    operators: [{}]
   }, {
     id: false
   });

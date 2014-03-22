@@ -201,6 +201,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
     var ProdLogEntry = mongoose.model('ProdLogEntry');
     var ProdShiftOrder = mongoose.model('ProdShiftOrder');
+    var ProdDowntime = mongoose.model('ProdDowntime');
     var prodShiftOrders = [];
     var prodDowntimes = [];
     var updatedIds = 0;
@@ -250,7 +251,11 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         losses: Array.isArray(order.losses) && order.losses.length ? order.losses : null,
         creator: pressWorksheet.creator,
         startedAt: startedAt,
-        finishedAt: finishedAt
+        finishedAt: finishedAt,
+        master: pressWorksheet.master,
+        leader: null,
+        operator: operator,
+        operators: operators
       };
 
       if (needsId)
@@ -305,6 +310,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
           master: pressWorksheet.master,
           leader: null,
           operator: operator,
+          operators: operators,
           mechOrder: true,
           orderId: prodShiftOrder.orderId,
           operationNo: prodShiftOrder.operationNo
@@ -330,7 +336,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       return done();
     }
 
-    mongoose.model('ProdShiftOrder').create(prodShiftOrders, function(err)
+    ProdShiftOrder.create(prodShiftOrders, function(err)
     {
       if (err)
       {
@@ -342,7 +348,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         return done();
       }
 
-      mongoose.model('ProdDowntime').create(prodDowntimes, function(err)
+      ProdDowntime.create(prodDowntimes, function(err)
       {
         if (err)
         {

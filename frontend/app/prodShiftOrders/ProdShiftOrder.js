@@ -43,10 +43,16 @@ define([
       operationNo: null,
       orderData: null,
       workerCount: null,
+      totalQuantity: null,
       quantityDone: null,
+      quantityLost: null,
       creator: null,
       startedAt: null,
-      finishedAt: null
+      finishedAt: null,
+      master: null,
+      leader: null,
+      operator: null,
+      operators: null
     },
 
     sync: function(method)
@@ -73,10 +79,17 @@ define([
         date: null,
         shift: null,
         workerCount: null,
+        totalQuantity: null,
         quantityDone: null,
+        quantityLost: null,
+        losses: null,
         creator: null,
         startedAt: null,
-        finishedAt: null
+        finishedAt: null,
+        master: null,
+        leader: null,
+        operator: null,
+        operators: null
       });
     },
 
@@ -99,10 +112,17 @@ define([
         operationNo: operationNo,
         orderData: orderData,
         workerCount: 0,
+        totalQuantity: 0,
         quantityDone: 0,
+        quantityLost: 0,
+        losses: null,
         creator: user.getInfo(),
         startedAt: time.getMoment().toDate(),
-        finishedAt: null
+        finishedAt: null,
+        master: prodShift.get('master'),
+        leader: prodShift.get('leader'),
+        operator: prodShift.get('operator'),
+        operators: prodShift.get('operators')
       });
 
       this.generateId(prodShift);
@@ -155,10 +175,17 @@ define([
         date: prodShift.get('date'),
         shift: prodShift.get('shift'),
         workerCount: 0,
+        totalQuantity: 0,
         quantityDone: 0,
+        quantityLost: 0,
+        losses: null,
         creator: user.getInfo(),
         startedAt: time.getMoment().toDate(),
-        finishedAt: null
+        finishedAt: null,
+        master: prodShift.get('master'),
+        leader: prodShift.get('leader'),
+        operator: prodShift.get('operator'),
+        operators: prodShift.get('operators')
       });
 
       this.generateId(prodShift);

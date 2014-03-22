@@ -86,15 +86,16 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           cname: 'LOCALHOST',
           label: 'System'
         },
-        corroboratedAt: new Date()
+        corroboratedAt: new Date(logEntry.savedAt.getTime() + 1)
       };
 
       prodDowntime.set(corroborated);
 
       corroborated._id = prodDowntime._id;
 
+      var createdAt = new Date(Date.parse(logEntry.createdAt) + 1);
       var corroborateLogEntry = new ProdLogEntry({
-        _id: ProdLogEntry.generateId(corroborated.corroboratedAt, logEntry.prodShift),
+        _id: ProdLogEntry.generateId(createdAt, logEntry.prodShift),
         type: 'corroborateDowntime',
         data: corroborated,
         division: logEntry.division,
@@ -106,7 +107,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         prodShift: logEntry.prodShift,
         prodShiftOrder: logEntry.prodShiftOrder,
         creator: corroborated.corroborator,
-        createdAt: corroborated.corroboratedAt,
+        createdAt: createdAt,
         savedAt: corroborated.corroboratedAt,
         todo: false
       });

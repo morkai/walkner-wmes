@@ -9,8 +9,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     logEntry.data.creator = logEntry.creator;
   }
 
-  // TODO: Remove after a while
-  if (!logEntry.data.date || !logEntry.data.shift)
+  if (logEntry.data.date === undefined || logEntry.data.operators === undefined)
   {
     productionModule.getProdData('shift', logEntry.prodShift, function(err, prodShift)
     {
@@ -23,8 +22,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return done(err);
       }
 
-      logEntry.data.date = prodShift.date;
-      logEntry.data.shift = prodShift.shift;
+      if (prodShift)
+      {
+        logEntry.data.date = prodShift.date;
+        logEntry.data.shift = prodShift.shift;
+        logEntry.data.operators = prodShift.operators;
+      }
 
       createProdDowntime();
     });

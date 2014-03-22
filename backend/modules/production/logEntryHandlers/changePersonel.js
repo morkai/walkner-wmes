@@ -1,9 +1,14 @@
 'use strict';
 
+var step = require('h5.step');
+
 module.exports = function(personnelProperty)
 {
   return function(app, productionModule, prodLine, logEntry, done)
   {
+    var mongoose = app[productionModule.config.mongooseId];
+    var subdivisionsModule = app[productionModule.config.subdivisionsId];
+
     productionModule.getProdData('shift', logEntry.prodShift, function(err, prodShift)
     {
       if (err)
@@ -29,7 +34,7 @@ module.exports = function(personnelProperty)
       }
       else
       {
-        updateProdShift(prodShift);
+        updatePersonnel(prodShift);
       }
     });
 
@@ -37,7 +42,14 @@ module.exports = function(personnelProperty)
     {
       var personellId = logEntry.data.label;
 
-      app[productionModule.config.mongooseId].model('User')
+      if (typeof personellId !== 'string' || personellId.length === 0)
+      {
+        logEntry.data = null;
+
+        return updatePersonnel(prodShift);
+      }
+
+      mongoose.model('User')
         .findOne({personellId: personellId}, {_id: 1, firstName: 1, lastName: 1})
         .lean()
         .exec(function(err, user)
@@ -64,7 +76,7 @@ module.exports = function(personnelProperty)
               logEntry._id
             );
 
-            return updateProdShift(prodShift);
+            return updatePersonnel(prodShift);
           }
 
           logEntry.data.id = user._id.toString();
@@ -74,28 +86,83 @@ module.exports = function(personnelProperty)
             logEntry.data.label = user.firstName + ' ' + user.lastName;
           }
 
-          return updateProdShift(prodShift);
+          return updatePersonnel(prodShift);
         });
     }
 
-    function updateProdShift(prodShift)
+    function updatePersonnel(prodShift)
     {
-      prodShift.set(personnelProperty, logEntry.data);
-
-      prodShift.save(function(err)
-      {
-        if (err)
+      step(
+        function()
         {
-          productionModule.error(
-            "Failed to save the prod shift after changing the %s (LOG=[%s]): %s",
-            logEntry._id,
-            personnelProperty,
-            err.stack
-          );
-        }
+          if (prodLine.prodShiftOrder)
+          {
+            productionModule.getProdData('order', prodLine.prodShiftOrder, this.parallel());
+          }
+          else
+          {
+            this.parallel()(null, null);
+          }
 
-        return done(err);
-      });
+          if (prodLine.prodDowntime)
+          {
+            productionModule.getProdData('downtime', prodLine.prodDowntime, this.parallel());
+          }
+          else
+          {
+            this.parallel()(null, null);
+          }
+        },
+        function(err, prodShiftOrder, prodDowntime)
+        {
+          var subdivision = subdivisionsModule.modelsById[prodShift.subdivision];
+          var assembly = subdivision && subdivision.type === 'assembly';
+
+          if (prodShiftOrder)
+          {
+            updateProdDataModel(
+              assembly, prodShiftOrder, personnelProperty, logEntry.data, this.parallel()
+            );
+          }
+
+          if (prodDowntime)
+          {
+            updateProdDataModel(
+              assembly, prodDowntime, personnelProperty, logEntry.data, this.parallel()
+            );
+          }
+
+          updateProdDataModel(
+            assembly, prodShift, personnelProperty, logEntry.data, this.parallel()
+          );
+        },
+        function(err)
+        {
+          if (err)
+          {
+            productionModule.error(
+              "Failed to save the prod data after changing the %s (LOG=[%s]): %s",
+              logEntry._id,
+              personnelProperty,
+              err.stack
+            );
+          }
+
+          return done(err);
+        }
+      );
     }
   };
+
+  function updateProdDataModel(assembly, prodDataModel, personnelProperty, personnelInfo, done)
+  {
+    if (personnelProperty === 'operator' && assembly)
+    {
+      prodDataModel.operators = personnelInfo ? [personnelInfo] : null;
+    }
+
+    prodDataModel[personnelProperty] = personnelInfo;
+
+    prodDataModel.save(done);
+  }
 };

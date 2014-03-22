@@ -1,3 +1,5 @@
+/*jshint maxlen:999*/
+
 'use strict';
 
 var step = require('h5.step');
@@ -16,10 +18,13 @@ module.exports = function startFixRoutes(app, express)
     return res.send(403);
   }
 
-  express.get('/fix/prodShiftOrderDurations', onlySuper, fixProdShiftOrderDurations);
-  express.get('/fix/corroborateDowntimeLogEntries', onlySuper, corroborateDowntimeLogEntries);
-  express.get('/fix/fillOrgUnits', onlySuper, fillOrgUnits);
-  express.get('/fix/recreateProdData', onlySuper, recreateProdData);
+  express.get('/fix/prodShiftOrders/durations', onlySuper, fixProdShiftOrderDurations);
+  express.get('/fix/pressWorksheets/METALASS', onlySuper, fixProdWorksheetMetalass);
+  express.get('/fix/prodLogEntries/saved-at', onlySuper, fixProdLogEntriesSavedAt);
+  express.get('/fix/prodLogEntries/corroborated-before-created', onlySuper, fixProdLogEntriesCorroboratedBeforeCreated);
+  express.get('/fix/prodLogEntries/fill-org-units', onlySuper, fillOrgUnits);
+  express.get('/fix/prodLogEntries/corroborate-downtimes', onlySuper, corroborateDowntimeLogEntries);
+  express.get('/fix/prodLogEntries/recreate', onlySuper, recreateProdData);
 
   function fixProdShiftOrderDurations(req, res, next)
   {
@@ -331,5 +336,163 @@ module.exports = function startFixRoutes(app, express)
     }
 
     orgUnits.division = division.get('_id');
+  }
+
+  function fixProdWorksheetMetalass(req, res, next)
+  {
+    var PressWorksheet = app.mongoose.model('PressWorksheet');
+
+    step(
+      function findMetalassWorksheetsStep()
+      {
+        PressWorksheet.find({'orders.prodLine': 'METALASS'}, {orders: 1}).exec(this.next());
+      },
+      function fixMetalassWorksheetsStep(err, pressWorksheets)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        for (var i = 0, l = pressWorksheets.length; i < l; ++i)
+        {
+          var pressWorksheet = pressWorksheets[i];
+
+          for (var ii = 0, ll = pressWorksheet.orders.length; ii < ll; ++ii)
+          {
+            var order = pressWorksheet.orders[ii];
+
+            if (order.prodLine === 'METALASS')
+            {
+              order.prodLine = 'METALASS_';
+            }
+          }
+
+          pressWorksheet.save(this.parallel());
+        }
+      },
+      function sendResponseStep(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.type('txt');
+        res.send("ALL DONE!");
+      }
+    );
+  }
+
+  function fixProdLogEntriesSavedAt(req, res, next)
+  {
+    var ProdLogEntry = app.mongoose.model('ProdLogEntry');
+
+    ProdLogEntry.find({savedAt: null}, {createdAt: 1}).exec(function(err, logEntries)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      step(
+        function()
+        {
+          for (var i = 0, l = logEntries.length; i < l; ++i)
+          {
+            ProdLogEntry.update({_id: logEntries[i]._id}, {$set: {savedAt: logEntries[i].createdAt}}, this.parallel());
+          }
+        },
+        function(err)
+        {
+          if (err)
+          {
+            return next(err);
+          }
+
+          res.type('txt');
+          res.send("ALL DONE!");
+        }
+      );
+    });
+  }
+
+  function fixProdLogEntriesCorroboratedBeforeCreated(req, res, next)
+  {
+    var ProdLogEntry = app.mongoose.model('ProdLogEntry');
+    var prodDowntimeIds = [];
+    var corroborateDowntimeMap = {};
+
+    ProdLogEntry.find({type: 'corroborateDowntime'}).exec(function(err, corroborateDowntimeEntries)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      corroborateDowntimeEntries.forEach(function(corroborateDowntimeEntry)
+      {
+        prodDowntimeIds.push(corroborateDowntimeEntry.data._id);
+
+        corroborateDowntimeMap[corroborateDowntimeEntry.data._id] = corroborateDowntimeEntry;
+      });
+
+      ProdLogEntry.find({type: 'finishDowntime', 'data._id': {$in: prodDowntimeIds}}, {createdAt: 1, savedAt: 1, 'data._id': 1}).exec(function(err, finishDowntimeEntries)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        var updates = [];
+
+        finishDowntimeEntries.forEach(function(finishDowntimeEntry)
+        {
+          var corroborateDowntimeEntry = corroborateDowntimeMap[finishDowntimeEntry.data._id];
+
+          if (!corroborateDowntimeEntry)
+          {
+            return;
+          }
+
+          if (corroborateDowntimeEntry.savedAt <= finishDowntimeEntry.savedAt
+            || corroborateDowntimeEntry.createdAt <= finishDowntimeEntry.createdAt)
+          {
+            corroborateDowntimeEntry.savedAt = new Date(finishDowntimeEntry.savedAt.getTime() + 1);
+            corroborateDowntimeEntry.createdAt = new Date(finishDowntimeEntry.createdAt.getTime() + 1);
+            corroborateDowntimeEntry.data.corroboratedAt = corroborateDowntimeEntry.savedAt;
+
+            updates.push({
+              _id: corroborateDowntimeEntry._id,
+              $set: {
+                savedAt: corroborateDowntimeEntry.savedAt,
+                createdAt: corroborateDowntimeEntry.createdAt,
+                'data.corroboratedAt': corroborateDowntimeEntry.data.corroboratedAt
+              }
+            });
+          }
+        });
+
+        step(
+          function()
+          {
+            for (var i = 0, l = updates.length; i < l; ++i)
+            {
+              ProdLogEntry.update({_id: updates[i]._id}, {$set: updates[i].$set}, this.parallel());
+            }
+          },
+          function(err)
+          {
+            if (err)
+            {
+              return next(err);
+            }
+
+            res.type('txt');
+            res.send("ALL DONE!");
+          }
+        );
+      });
+    });
   }
 };

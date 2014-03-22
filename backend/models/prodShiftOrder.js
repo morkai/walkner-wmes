@@ -129,7 +129,11 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     breakDuration: {
       type: Number,
       default: 0
-    }
+    },
+    master: {},
+    leader: {},
+    operator: {},
+    operators: [{}]
   }, {
     id: false
   });
@@ -219,9 +223,17 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
   prodShiftOrderSchema.methods.recountTotals = function()
   {
-    this.quantityLost = Array.isArray(this.losses)
-      ? this.losses.reduce(function(sum, loss) { return sum + loss.count; }, 0)
-      : 0;
+    if (Array.isArray(this.losses) && this.losses.length === 1 && this.losses[0] === null)
+    {
+      this.losses = null;
+    }
+
+    this.quantityLost = !Array.isArray(this.losses)
+      ? 0
+      : this.losses.reduce(function(sum, loss)
+        {
+          return sum + (loss && typeof loss.count === 'number' ? loss.count : 0);
+        }, 0);
     this.totalQuantity = this.quantityDone + this.quantityLost;
   };
 

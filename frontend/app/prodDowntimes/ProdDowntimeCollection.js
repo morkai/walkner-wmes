@@ -111,6 +111,7 @@ define([
         master: prodShift.get('master'),
         leader: prodShift.get('leader'),
         operator: prodShift.get('operator'),
+        operators: prodShift.get('operators'),
         mechOrder: prodShift.prodShiftOrder.get('mechOrder'),
         orderId: prodShift.prodShiftOrder.get('orderId'),
         operationNo: prodShift.prodShiftOrder.get('operationNo')

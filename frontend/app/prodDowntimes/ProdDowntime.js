@@ -51,6 +51,7 @@ define([
       master: null,
       leader: null,
       operator: null,
+      operators: null,
       mechOrder: null,
       orderId: null,
       operationNo: null

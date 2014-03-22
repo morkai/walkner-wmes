@@ -12,13 +12,49 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     logEntry.data.creator = logEntry.creator;
   }
 
-  if (util.isOfflineEntry(logEntry))
+  if (logEntry.data.master === undefined)
   {
-    util.fillOrderData(app, productionModule, logEntry, createProdShiftOrder);
+    copyPersonnelData();
   }
   else
   {
-    createProdShiftOrder();
+    handleOfflineEntry();
+  }
+
+  function copyPersonnelData()
+  {
+    productionModule.getProdData('shift', logEntry.prodShift, function(err, prodShift)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to find prod shift to copy personnel data (LOG=[%s]): %s",
+          logEntry._id,
+          err.stack
+        );
+      }
+      else if (prodShift)
+      {
+        logEntry.data.master = prodShift.master;
+        logEntry.data.leader = prodShift.leader;
+        logEntry.data.operator = prodShift.operator;
+        logEntry.data.operators = prodShift.operators;
+      }
+
+      return handleOfflineEntry();
+    });
+  }
+
+  function handleOfflineEntry()
+  {
+    if (util.isOfflineEntry(logEntry))
+    {
+      util.fillOrderData(app, productionModule, logEntry, createProdShiftOrder);
+    }
+    else
+    {
+      createProdShiftOrder();
+    }
   }
 
   function createProdShiftOrder(err)

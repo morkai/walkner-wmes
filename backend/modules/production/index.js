@@ -10,6 +10,7 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   sioId: 'sio',
+  subdivisionsId: 'subdivisions',
   prodLinesId: 'prodLines',
   downtimeReasonsId: 'downtimeReasons'
 };
@@ -126,6 +127,7 @@ exports.start = function startProductionModule(app, module)
 
   app.onModuleReady(
     [
+      module.config.subdivisionsId,
       module.config.prodLinesId
     ],
     setUpLogEntryHandler.bind(null, app, module)

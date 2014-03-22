@@ -60,7 +60,8 @@ define([
       createdAt: null,
       master: null,
       leader: null,
-      operator: null
+      operator: null,
+      operators: null
     },
 
     initialize: function(attributes, options)
@@ -221,7 +222,8 @@ define([
         createdAt: time.getMoment().toDate(),
         master: null,
         leader: null,
-        operator: null
+        operator: null,
+        operators: null
       });
 
       this.set('_id', prodLog.generateId(this.get('createdAt'), this.prodLine.id));
@@ -236,12 +238,16 @@ define([
     {
       this.set('master', userInfo);
 
+      this.onPersonnelChanged('master');
+
       prodLog.record(this, 'changeMaster', userInfo);
     },
 
     changeLeader: function(userInfo)
     {
       this.set('leader', userInfo);
+
+      this.onPersonnelChanged('leader');
 
       prodLog.record(this, 'changeLeader', userInfo);
     },
@@ -250,7 +256,32 @@ define([
     {
       this.set('operator', userInfo);
 
+      this.onPersonnelChanged('operator');
+
       prodLog.record(this, 'changeOperator', userInfo);
+    },
+
+    onPersonnelChanged: function(type)
+    {
+      var personnelInfo = this.get(type);
+
+      if (this.prodShiftOrder.id)
+      {
+        this.prodShiftOrder.set(type, personnelInfo);
+      }
+
+      var prodDowntime = this.prodDowntimes.findFirstUnfinished();
+
+      if (prodDowntime)
+      {
+        prodDowntime.set(type, personnelInfo);
+      }
+
+      if (type === 'operator' && this.getSubdivisionType() === 'assembly')
+      {
+        this.set('operators', personnelInfo ? [personnelInfo] : null);
+        this.onPersonnelChanged('operators');
+      }
     },
 
     changeCurrentQuantitiesDone: function(newValue)
@@ -573,9 +604,7 @@ define([
 
     getOrderIdType: function()
     {
-      var subdivision = subdivisions.get(this.get('subdivision'));
-
-      return subdivision && subdivision.get('type') === 'press' ? 'nc12' : 'no';
+      return this.getSubdivisionType() === 'press' ? 'nc12' : 'no';
     },
 
     isIdle: function()
