@@ -16,7 +16,15 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
     },
     type: {
       type: String,
-      enum: ['maintenance', 'renovation', 'malfunction', 'adjusting', 'break', 'other'],
+      enum: [
+        'maintenance',
+        'renovation',
+        'malfunction',
+        'adjusting',
+        'break',
+        'otherWorks',
+        'other'
+      ],
       required: true
     },
     subdivisionTypes: [{

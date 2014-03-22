@@ -31,6 +31,7 @@
   "type:maintenance": "Konserwacja",
   "type:adjusting": "Ustawianie/przezbrojenie",
   "type:break": "Przerwa",
+  "type:otherWorks": "Inne prace",
 
   "subdivisionType:none": "Żadne",
   "subdivisionType:assembly": "Montaż",
