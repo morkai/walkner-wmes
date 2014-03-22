@@ -6,6 +6,7 @@
     "BREADCRUMBS:1": "PROD, EFF, Downtime",
     "BREADCRUMBS:2": "CLIP",
     "BREADCRUMBS:3": "OEE",
+    "BREADCRUMBS:4": "Operators",
 
     "PAGE_ACTION:editMetricRefs": "Change the reference values",
 
@@ -105,7 +106,30 @@
     "oee:malfunction:count": "Malfunction count",
     "oee:majorMalfunction:count": "Major malfunction count",
     "oee:mttr": "MTTR [h]",
-    "oee:mtbf": "MTBF [h]"
+    "oee:mtbf": "MTBF [h]",
+
+    "operator:filter:mode:shift": "Shift",
+    "operator:filter:mode:masters": "Masters",
+    "operator:filter:mode:operators": "Operators",
+    "operator:filter:users:placeholder": "Search by personell ID or last name...",
+    "operator:effAndProd:title": "Efficiency/Productivity",
+    "operator:efficiency:byDivision": "{division}'s efficiency",
+    "operator:efficiency": "Operators' efficiency",
+    "operator:productivity": "Operators' productivity",
+    "operator:workTimes:title": "Time worked/Downtimes",
+    "operator:workTimes:total": "Total time worked",
+    "operator:workTimes:sap": "Time worked (SAP)",
+    "operator:workTimes:otherWorks": "Time of other works",
+    "operator:workTimes:downtime": "Downtime",
+    "operator:machineTimes:title": "Machines - work time/adjusting time",
+    "operator:machineTimes:machineMedian": "Machine's adjusting median",
+    "operator:machineTimes:work": "Time worked",
+    "operator:machineTimes:operatorMedian": "Operators' adjusting median",
+    "operator:quantities:title": "Quantities done/Material losses",
+    "operator:quantities:good": "Good",
+    "operator:quantities:bad": "Bad",
+    "operator:quantities:total": "Total",
+    "operator:quantities:loss": "Losses"
   },
   "pl": true
 }

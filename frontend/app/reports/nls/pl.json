@@ -5,6 +5,7 @@
   "BREADCRUMBS:1": "Wskaźniki",
   "BREADCRUMBS:2": "CLIP",
   "BREADCRUMBS:3": "Wykorzystanie zasobów",
+  "BREADCRUMBS:4": "Operatorzy",
 
   "PAGE_ACTION:editMetricRefs": "Zmień wartości referencyjne",
 
@@ -19,6 +20,7 @@
   "metrics:clip:orderCount": "Ilość zleceń",
   "metrics:clip:production": "CLIP Produkcja",
   "metrics:clip:endToEnd": "CLIP End2End",
+
 
   "downtimesByAor:title": "Czas przestojów - obszary odp.",
   "downtimesByAor:seriesName": "Czas przestojów",
@@ -104,5 +106,28 @@
   "oee:malfunction:count": "Ilość wszystkich awarii [szt]",
   "oee:majorMalfunction:count": "Ilość poważnych awarii [szt]",
   "oee:mttr": "MTTR [h]",
-  "oee:mtbf": "MTBF [h]"
+  "oee:mtbf": "MTBF [h]",
+
+  "operator:filter:mode:shift": "Zmiana",
+  "operator:filter:mode:masters": "Mistrzowie",
+  "operator:filter:mode:operators": "Operatorzy",
+  "operator:filter:users:placeholder": "Szukaj po nr kadrowym lub nazwisku...",
+  "operator:effAndProd:title": "Wydajność/Produktywność",
+  "operator:efficiency:byDivision": "Wydajność {division}",
+  "operator:efficiency": "Wydajność operatorów",
+  "operator:productivity": "Produktywność operatorów",
+  "operator:workTimes:title": "Przepracowany czas/Przestoje",
+  "operator:workTimes:total": "Całkowity przepracowany czas",
+  "operator:workTimes:sap": "Czas przepracowany (SAP)",
+  "operator:workTimes:otherWorks": "Czas innych prac",
+  "operator:workTimes:downtime": "Czas przestoju",
+  "operator:machineTimes:title": "Maszyny - czas pracy/czasy przezbrojeń",
+  "operator:machineTimes:machineMedian": "Mediana przezbrojeń maszyny",
+  "operator:machineTimes:work": "Czas przepracowany",
+  "operator:machineTimes:operatorMedian": "Mediana przezbrojeń operatorów",
+  "operator:quantities:title": "Ilości wykonane/Straty materiałowe",
+  "operator:quantities:good": "Dobre",
+  "operator:quantities:bad": "Wadliwe",
+  "operator:quantities:total": "Suma",
+  "operator:quantities:loss": "Straty"
 }

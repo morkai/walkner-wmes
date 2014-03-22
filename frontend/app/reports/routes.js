@@ -46,6 +46,14 @@ define([
     });
   });
 
+  router.map('/reports/4', canView, function(req)
+  {
+    viewport.loadPage('app/reports/pages/Report4Page', function(Report4Page)
+    {
+      return new Report4Page({query: req.query});
+    });
+  });
+
   router.map('/reports;metricRefs', user.auth('REPORTS:MANAGE'), function(req)
   {
     viewport.loadPage('app/reports/pages/MetricRefsPage', function(MetricRefsPage)

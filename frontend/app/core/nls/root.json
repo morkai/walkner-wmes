@@ -86,6 +86,7 @@
     "NAVBAR:REPORTS:1": "PROD, EFF, Downtime",
     "NAVBAR:REPORTS:2": "CLIP",
     "NAVBAR:REPORTS:3": "OEE",
+    "NAVBAR:REPORTS:4": "Operators",
     "NAVBAR:PROD": "Production",
     "NAVBAR:PROD:LOG_ENTRIES": "Operation log",
     "NAVBAR:PROD:SHIFTS": "Shifts",

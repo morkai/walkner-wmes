@@ -3,6 +3,7 @@
 var report1 = require('./report1');
 var report2 = require('./report2');
 var report3 = require('./report3');
+var report4 = require('./report4');
 
 module.exports = function setUpReportsRoutes(app, reportsModule)
 {
@@ -15,7 +16,6 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var prodFunctionsModule = app.prodFunctions;
   var prodTasksModue = app.prodTasks;
   // TODO: Create a proper org unit tree solution
-  var divisionsModule = app.divisions;
   var subdivisionsModule = app.subdivisions;
   var mrpControllersModule = app.mrpControllers;
   var prodFlowsModule = app.prodFlows;
@@ -30,6 +30,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   express.get('/reports/2', canView, report2Route);
 
   express.get('/reports/3', canView, report3Route);
+
+  express.get('/reports/4', canView, report4Route);
 
   express.get(
     '/reports/metricRefs',
@@ -164,7 +166,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       toTime: getTime(req.query.to),
       interval: req.query.interval || 'day',
       majorMalfunction: parseFloat(req.query.majorMalfunction) || 1.5,
-      downtimeReasons: getDowntimeReasons(),
+      downtimeReasons: getDowntimeReasons(false),
       prodLines: getProdLines()
     };
 
@@ -184,9 +186,101 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     });
   }
 
+  function report4Route(req, res, next)
+  {
+    var options = {
+      fromTime: getTime(req.query.from),
+      toTime: getTime(req.query.to),
+      interval: req.query.interval || 'day',
+      mode: req.query.mode,
+      downtimeReasons: getDowntimeReasons(true),
+      subdivisions: orgUnitsModule.getAllByType('subdivision')
+        .filter(function(subdivision) { return subdivision.type === 'press'; })
+        .map(function(subdivision) { return subdivision._id; })
+    };
+
+    if (isNaN(options.fromTime) || isNaN(options.toTime))
+    {
+      return next(new Error('INVALID_TIME'));
+    }
+
+    if (options.mode === 'shift')
+    {
+      options.shift = parseInt(req.query.shift, 10);
+
+      if (options.shift !== 1 && options.shift !== 2 && options.shift !== 3)
+      {
+        return next(new Error('INVALID_SHIFT'));
+      }
+    }
+    else if (options.mode === 'masters' || options.mode === 'operators')
+    {
+      options[options.mode] = (req.query[options.mode] || '')
+        .split(',')
+        .filter(function(personellId) { return (/^[0-9]+$/).test(personellId); });
+
+      if (options[options.mode].length === 0)
+      {
+        return next(new Error('INVALID_PERSONELL_IDS'));
+      }
+    }
+    else
+    {
+      options.mode = null;
+    }
+
+    if (options.mode === 'masters' || options.mode === 'operators')
+    {
+      findUsers();
+    }
+    else
+    {
+      report();
+    }
+
+    function findUsers()
+    {
+      mongoose.model('User')
+        .find(
+          {personellId: {$in: options[options.mode]}},
+          {_id: 1, personellId: 1, firstName: 1, lastName: 1}
+        )
+        .lean()
+        .exec(function(err, users)
+        {
+          if (err)
+          {
+            return next(err);
+          }
+
+          if (users.length !== options[options.mode].length)
+          {
+            return next(new Error('NONEXISTENT_USERS'));
+          }
+
+          options[options.mode] = users;
+
+          report();
+        });
+    }
+
+    function report()
+    {
+      report4(mongoose, options, function(err, report)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        return res.send(report);
+      });
+    }
+  }
+
   function getTime(date)
   {
-    return (/^[0-9]+$/).test(date) ? parseInt(date, 10) : Date.parse(date);
+    return (/^-?[0-9]+$/).test(date) ? parseInt(date, 10) : Date.parse(date);
   }
 
   function getOrgUnitsForFte(orgUnitType, orgUnit)
@@ -263,16 +357,23 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     return prodTasks;
   }
 
-  function getDowntimeReasons()
+  function getDowntimeReasons(typesOnly)
   {
     var downtimeReasons = {};
 
     downtimeReasonsModule.models.forEach(function(downtimeReason)
     {
-      downtimeReasons[downtimeReason._id] = {
-        type: downtimeReason.type,
-        scheduled: downtimeReason.scheduled
-      };
+      if (typesOnly)
+      {
+        downtimeReasons[downtimeReason._id] = downtimeReason.type;
+      }
+      else
+      {
+        downtimeReasons[downtimeReason._id] = {
+          type: downtimeReason.type,
+          scheduled: downtimeReason.scheduled
+        };
+      }
     });
 
     return downtimeReasons;

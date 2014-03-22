@@ -1,0 +1,197 @@
+define([
+  'underscore',
+  'h5.rql/index',
+  '../time',
+  '../core/Model',
+  '../core/util/getShiftStartInfo'
+], function(
+  _,
+  rql,
+  time,
+  Model,
+  getShiftStartInfo
+) {
+  'use strict';
+
+  return Model.extend({
+
+    defaults: function()
+    {
+      var from = time.getMoment().weekday(0).hours(0).minutes(0).seconds(0).milliseconds(0);
+      var shiftStartInfo = getShiftStartInfo(new Date());
+
+      return {
+        from: from.valueOf(),
+        to: from.add('days', 7).valueOf(),
+        interval: 'day',
+        mode: 'shift',
+        shift: shiftStartInfo.shift,
+        masters: undefined,
+        operators: undefined
+      };
+    },
+
+    serializeToObject: function()
+    {
+      var obj = {
+        from: this.get('from'),
+        to: this.get('to'),
+        interval: this.get('interval'),
+        mode: this.get('mode')
+      };
+
+      if (obj.mode)
+      {
+        obj[obj.mode] = this.get(obj.mode);
+
+        if (Array.isArray(obj[obj.mode]))
+        {
+          obj[obj.mode] = this.serializeUsers();
+        }
+      }
+
+      return obj;
+    },
+
+    serializeToString: function()
+    {
+      var attrs = this.attributes;
+      var str = 'from=' + attrs.from + '&to=' + attrs.to + '&interval=' + attrs.interval;
+
+      if (attrs.mode)
+      {
+        str += '&mode=' + attrs.mode;
+        str += '&' + attrs.mode + '=';
+
+        if (Array.isArray(attrs[attrs.mode]))
+        {
+          str += this.serializeUsers();
+        }
+        else
+        {
+          str += attrs[attrs.mode];
+        }
+      }
+
+      return str;
+    },
+
+    serializeUsers: function()
+    {
+      var users = this.get(this.get('mode'));
+
+      if (!Array.isArray(users))
+      {
+        return '';
+      }
+
+      return users
+        .map(function(user) { return user.personellId ? user.personellId : user; })
+        .join(',');
+    },
+
+    getUsersForSelect2: function()
+    {
+      if (this.get('mode') === 'shift')
+      {
+        return [];
+      }
+
+      var users = this.get(this.get('mode'));
+
+      if (!Array.isArray(users))
+      {
+        return [];
+      }
+
+      return users
+        .map(function(user)
+        {
+          if (typeof user === 'string')
+          {
+            return {id: user, text: user};
+          }
+
+          if (user && user.personellId)
+          {
+            return {
+              id: user.personellId,
+              text: user.lastName && user.firstName
+                ? (user.lastName + ' ' + user.firstName)
+                : user.personellId
+            };
+          }
+
+          return null;
+        })
+        .filter(function(user)
+        {
+          return user !== null;
+        });
+    },
+
+    updateUsers: function(users)
+    {
+      if (this.get('mode') === 'shift')
+      {
+        return;
+      }
+
+      this.set(this.get('mode'), users);
+    }
+
+  }, {
+
+    fromQuery: function(query)
+    {
+      var Report4Query = this;
+      var attrs = {};
+
+      if (query.from && query.to)
+      {
+        attrs.from = parseInt(query.from, 10);
+        attrs.to = parseInt(query.to, 10);
+      }
+
+      if (query.interval)
+      {
+        attrs.interval = query.interval;
+      }
+
+      if (query.mode)
+      {
+        attrs.mode = query.mode;
+
+        if (query.mode === 'shift')
+        {
+          attrs.shift = parseInt(query.shift, 10);
+
+          if (attrs.shift < 1 || attrs.shift > 3)
+          {
+            delete attrs.mode;
+            delete attrs.shift;
+          }
+        }
+        else if (query.mode === 'masters' || query.mode === 'operators')
+        {
+          attrs[attrs.mode] = String(query[attrs.mode])
+            .split(',')
+            .filter(function(personellId) { return (/^[0-9]+$/).test(personellId); });
+
+          if (attrs[attrs.mode].length === 0)
+          {
+            delete attrs.mode;
+            delete attrs[attrs.mode];
+          }
+        }
+        else
+        {
+          delete attrs.mode;
+        }
+      }
+
+      return new Report4Query(attrs);
+    }
+
+  });
+});

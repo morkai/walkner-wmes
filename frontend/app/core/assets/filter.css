@@ -80,3 +80,10 @@ input[type=checkbox].filter-inLabel {
 .filter-radio-group {
   margin-top: 5px;
 }
+.filter-radioLabels > label {
+  margin-left: 1em;
+  margin-bottom: 3px;
+}
+.filter-radioLabels > label:first-child {
+  margin-left: 0;
+}

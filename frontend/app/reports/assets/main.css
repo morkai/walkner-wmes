@@ -1,5 +1,5 @@
 .page[data-id="report1"] > .ft,
-.page[data-id="report2"] > .ft{
+.page[data-id="report2"] > .ft {
   display: none;
 }
 .page[data-id="report1"] > .bd,
@@ -203,4 +203,14 @@
   .reports-3-tableSummary-container {
     padding-right: 0;
   }
+}
+.reports-4-container {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.reports-4-effAndProd,
+.reports-4-workTimes,
+.reports-4-machineTimes,
+.reports-4-quantities {
+  height: 355px;
 }
