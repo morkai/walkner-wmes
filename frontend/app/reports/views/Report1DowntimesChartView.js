@@ -68,6 +68,9 @@ define([
         chart: {
           renderTo: this.el
         },
+        exporting: {
+          filename: t('reports', 'filenames:1:' + this.options.attrName)
+        },
         title: {
           text: t('reports', this.options.attrName + ':title'),
           style: {

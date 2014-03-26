@@ -7,7 +7,8 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   settingsId: 'settings',
-  orgUnitsId: 'orgUnits'
+  orgUnitsId: 'orgUnits',
+  javaBatik: null
 };
 
 exports.start = function startReportsModule(app, module)

@@ -90,4 +90,7 @@ body.print {
   .page-breadcrumbs li {
     font-size: 24px!important;
   }
+  .highcharts-button {
+    display: none;
+  }
 }

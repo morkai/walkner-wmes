@@ -96,14 +96,10 @@ define([
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
-          zoomType: 'x',
-          plotBorderWidth: 1,
-          resetZoomButton: {
-            relativeTo: 'chart',
-            position: {
-              y: 5
-            }
-          }
+          plotBorderWidth: 1
+        },
+        exporting: {
+          filename: t('reports', 'filenames:4:effAndProd')
         },
         title: {
           text: t('reports', 'operator:effAndProd:title')

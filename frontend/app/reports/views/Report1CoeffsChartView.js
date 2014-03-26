@@ -82,13 +82,6 @@ define([
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
-          zoomType: 'x',
-          resetZoomButton: {
-            relativeTo: 'chart',
-            position: {
-              y: 5
-            }
-          },
           events: {
             selection: function(e)
             {
@@ -100,6 +93,9 @@ define([
               }
             }
           }
+        },
+        exporting: {
+          filename: t('reports', 'filenames:1:coeffs')
         },
         title: {
           useHTML: true,

@@ -80,16 +80,12 @@ define([
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
-          zoomType: 'x',
           plotBorderWidth: 1,
           spacing: [0, 0, 0, 0],
-          reflow: false,
-          resetZoomButton: {
-            relativeTo: 'chart',
-            position: {
-              y: 5
-            }
-          }
+          reflow: false
+        },
+        exporting: {
+          filename: t('reports', 'filenames:3:downtime')
         },
         title: false,
         noData: {},

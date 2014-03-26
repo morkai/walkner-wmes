@@ -162,3 +162,7 @@ exports.updater = {
     timeout: 30000
   }
 };
+
+exports.reports = {
+  javaBatik: 'java -jar c:/programs/batik/batik-rasterizer.jar'
+};

@@ -129,7 +129,20 @@
     "operator:quantities:good": "Good",
     "operator:quantities:bad": "Bad",
     "operator:quantities:total": "Total",
-    "operator:quantities:loss": "Losses"
+    "operator:quantities:loss": "Losses",
+
+    "filenames:1:coeffs": "WMES_EffProd",
+    "filenames:1:downtimesByAor": "WMES_Downtimes_AOR",
+    "filenames:1:downtimesByReason": "WMES_Downtimes_Reasons",
+    "filenames:2:clip": "WMES_CLIP",
+    "filenames:2:dirIndir": "WMES_DirIndir",
+    "filenames:2:effIneff": "WMES_EffIneff",
+    "filenames:3:oee": "WMES_OEE",
+    "filenames:3:downtime": "WMES_OEE_Downtime",
+    "filenames:4:effAndProd": "WMES_Operators_EffProd",
+    "filenames:4:workTimes": "WMES_Operators_WorkTimes",
+    "filenames:4:machineTimes": "WMES_Operators_MachineTimes",
+    "filenames:4:quantities": "WMES_Operators_Quantities"
   },
   "pl": true
 }

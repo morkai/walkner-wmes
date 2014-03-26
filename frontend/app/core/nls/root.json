@@ -111,6 +111,12 @@
     "SHIFT:3": "III",
     "SHIFT:ANY": "Any",
 
+    "highcharts:contextButtonTitle": "Chart's context menu",
+    "highcharts:downloadJPEG": "Save as JPEG",
+    "highcharts:downloadPDF": "Save as PDF",
+    "highcharts:downloadPNG": "Save as PNG",
+    "highcharts:downloadSVG": "Save as SVG",
+    "highcharts:printChart": "Print the chart",
     "highcharts:decimalPoint": ".",
     "highcharts:thousandsSep": ",",
     "highcharts:noData": "No data :(",

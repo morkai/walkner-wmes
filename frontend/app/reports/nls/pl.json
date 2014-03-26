@@ -129,5 +129,18 @@
   "operator:quantities:good": "Dobre",
   "operator:quantities:bad": "Wadliwe",
   "operator:quantities:total": "Suma",
-  "operator:quantities:loss": "Straty"
+  "operator:quantities:loss": "Straty",
+
+  "filenames:1:coeffs": "WMES_Wskazniki_WydProd",
+  "filenames:1:downtimesByAor": "WMES_Przestoje_ObszOdp",
+  "filenames:1:downtimesByReason": "WMES_Przestoje_Powody",
+  "filenames:2:clip": "WMES_CLIP",
+  "filenames:2:dirIndir": "WMES_DirIndir",
+  "filenames:2:effIneff": "WMES_PodzialZasobow",
+  "filenames:3:oee": "WMES_WykZas_OEE",
+  "filenames:3:downtime": "WMES_WykZas_Przestoje",
+  "filenames:4:effAndProd": "WMES_Operatorzy_WydProd",
+  "filenames:4:workTimes": "WMES_Operatorzy_CzasPracy",
+  "filenames:4:machineTimes": "WMES_Operatorzy_CzasPrzezbr",
+  "filenames:4:quantities": "WMES_Operatorzy_WykIlosci"
 }

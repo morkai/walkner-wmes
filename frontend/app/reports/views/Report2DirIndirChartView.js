@@ -106,6 +106,9 @@ define([
         chart: {
           renderTo: this.el
         },
+        exporting: {
+          filename: t('reports', 'filenames:2:dirIndir')
+        },
         title: {
           text: t('reports', 'dirIndir:title'),
           style: {

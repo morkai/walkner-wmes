@@ -1,5 +1,10 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
+var exec = require('child_process').exec;
+var tmpdir = require('os').tmpdir;
+var multipart = require('express').multipart;
 var report1 = require('./report1');
 var report2 = require('./report2');
 var report3 = require('./report3');
@@ -49,6 +54,121 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   );
 
   express.put('/reports/metricRefs/:id', canManage, settings.updateRoute);
+
+  if (reportsModule.config.javaBatik)
+  {
+    express.post('/reports;export', canView, multipart(), exportRoute);
+  }
+
+  function exportRoute(req, res, next)
+  {
+    /*jshint -W015*/
+
+    var input = req.body;
+    var svg = input.svg;
+
+    if (typeof svg !== 'string'
+      || svg.length === 0
+      || svg.indexOf('<!ENTITY') !== -1
+      || svg.indexOf('<!DOCTYPE') !== -1)
+    {
+      console.log(typeof svg);
+      console.log(svg.length);
+      console.log(svg.indexOf('<!ENTITY'));
+      console.log(svg.indexOf('<!DOCTYPE'));
+      return res.send(400);
+    }
+
+    var filename = input.filename;
+
+    if (typeof filename !== 'string' || !/^[A-Za-z0-9-_ ]+$/.test(filename))
+    {
+      filename = 'chart';
+    }
+
+    var typeArg = null;
+    var ext = null;
+
+    switch (input.type)
+    {
+      case 'image/png':
+        typeArg = '-m image/png';
+        ext = 'png';
+        break;
+
+      case 'image/jpeg':
+        typeArg = '-m image/jpeg';
+        ext = 'jpg';
+        break;
+
+      case 'application/pdf':
+        typeArg = '-m application/pdf';
+        ext = 'pdf';
+        break;
+    }
+
+    if (typeArg === null)
+    {
+      res.attachment(filename + '.svg');
+
+      return res.send(svg);
+    }
+
+    var width = parseInt(input.width, 10);
+
+    if (isNaN(width))
+    {
+      width = 0;
+    }
+
+    var tmpDir = tmpdir();
+    var tmpFilename = (Date.now() + Math.random()).toString();
+    var tmpFile = path.join(tmpDir, tmpFilename) + '.svg';
+    var outFile = path.join(tmpDir, tmpFilename + '.' + ext);
+
+    var cmd = reportsModule.config.javaBatik + ' ' + typeArg + ' -d "' + outFile + '"';
+
+    if (width > 0)
+    {
+      cmd += ' ' + width;
+    }
+
+    cmd += ' "' + tmpFile + '"';
+
+    fs.writeFile(tmpFile, svg, 'utf8', function(err)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      exec(cmd, function(err, stdout, stderr)
+      {
+        if (err)
+        {
+          cleanup();
+
+          return next(err);
+        }
+
+        if (stderr.length)
+        {
+          cleanup();
+
+          return res.send(stderr, 500);
+        }
+
+        res.attachment(filename + '.' + ext);
+        res.sendfile(outFile, cleanup);
+      });
+    });
+
+    function cleanup()
+    {
+      fs.unlink(tmpFile);
+      fs.unlink(outFile);
+    }
+  }
 
   function report1Route(req, res, next)
   {

@@ -3,7 +3,8 @@ define([
   './i18n',
   './time',
   './broker',
-  'highcharts-noData'
+  'highcharts-noData',
+  'highcharts-exporting'
 ], function(
   Highcharts,
   t,
@@ -17,11 +18,15 @@ define([
       timezoneOffset: time.getMoment().zone(),
       useUTC: false
     },
-    lang: {
-      noData: t('core', 'highcharts:noData'),
-      resetZoom: t('core', 'highcharts:resetZoom'),
-      resetZoomTitle: t('core', 'highcharts:resetZoomTitle'),
-      loading: t('core', 'highcharts:loading')
+    chart: {
+      zoomType: 'x',
+      resetZoomButton: {
+        theme: {
+          style: {
+            top: 'display: none'
+          }
+        }
+      }
     },
     credits: {
       enabled: false
@@ -36,6 +41,17 @@ define([
     },
     tooltip: {
       borderColor: '#999999'
+    },
+    exporting: {
+      chartOptions: {
+        chart: {
+          spacing: [10, 10, 10, 10]
+        }
+      },
+      scale: 2,
+      sourceWidth: 800,
+      sourceHeight: 600,
+      url: '/reports;export'
     }
   });
 
@@ -47,11 +63,34 @@ define([
   {
     Highcharts.setOptions({
       lang: {
+        contextButtonTitle: t('core', 'highcharts:contextButtonTitle'),
+        downloadJPEG: t('core', 'highcharts:downloadJPEG'),
+        downloadPDF: t('core', 'highcharts:downloadPDF'),
+        downloadPNG: t('core', 'highcharts:downloadPNG'),
+        downloadSVG: t('core', 'highcharts:downloadSVG'),
+        printChart: t('core', 'highcharts:printChart'),
+        noData: t('core', 'highcharts:noData'),
+        resetZoom: t('core', 'highcharts:resetZoom'),
+        resetZoomTitle: t('core', 'highcharts:resetZoomTitle'),
+        loading: t('core', 'highcharts:loading'),
         decimalPoint: t('core', 'highcharts:decimalPoint'),
         thousandsSep: t('core', 'highcharts:thousandsSep'),
         shortMonths: t('core', 'highcharts:shortMonths').split('_'),
         weekdays: t('core', 'highcharts:weekdays').split('_'),
         months: t('core', 'highcharts:months').split('_')
+      },
+      exporting: {
+        buttons: {
+          contextButton: {
+            menuItems: [{
+              text: t('core', 'highcharts:downloadPDF'),
+              onclick: function() { this.exportChart({type: 'application/pdf'}); }
+            }, {
+              text: t('core', 'highcharts:downloadPNG'),
+              onclick: function() { this.exportChart({type: 'image/png'}); }
+            }]
+          }
+        }
       }
     });
   }
