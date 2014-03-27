@@ -93,7 +93,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       corroborated._id = prodDowntime._id;
 
-      var createdAt = new Date(Date.parse(logEntry.createdAt) + 1);
+      var createdAt = new Date(logEntry.createdAt.getTime() + 1);
       var corroborateLogEntry = new ProdLogEntry({
         _id: ProdLogEntry.generateId(createdAt, logEntry.prodShift),
         type: 'corroborateDowntime',
