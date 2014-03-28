@@ -34,6 +34,11 @@ define([
       return model.toJSON();
     },
 
+    beforeRender: function()
+    {
+      this.stopListening(this.collection, 'change', this.render);
+    },
+
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change', this.render);
