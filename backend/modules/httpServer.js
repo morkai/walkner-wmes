@@ -41,7 +41,7 @@ exports.start = function startHttpServerModule(app, module, done)
       {
         if (err.code !== 'ECONNRESET')
         {
-          module.error(err.message);
+          module.error(err.stack);
         }
 
         reqDomain.dispose();
