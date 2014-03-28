@@ -66,7 +66,7 @@ define([
     {
       return [{
         label: t.bound('prodShiftOrders', 'PAGE_ACTION:prodLogEntries'),
-        icon: 'edit',
+        icon: 'list-ol',
         href: '#prodLogEntries?sort(createdAt)&limit(20)'
           + '&prodShiftOrder=' + encodeURIComponent(this.prodShiftOrder.id)
       }];

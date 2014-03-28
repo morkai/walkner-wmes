@@ -63,7 +63,7 @@ define([
       return [
         {
           label: t.bound('prodShifts', 'PAGE_ACTION:prodLogEntries'),
-          icon: 'edit',
+          icon: 'list-ol',
           href: '#prodLogEntries?sort(createdAt)&limit(20)'
             + '&prodLine=' + encodeURIComponent(this.prodShift.get('prodLine'))
             + '&prodShift=' + encodeURIComponent(this.prodShift.id)
