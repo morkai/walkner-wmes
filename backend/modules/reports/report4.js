@@ -292,8 +292,10 @@ Report4.prototype.finalizeEffAndProd = function()
 
     if (groupData)
     {
+      var prodDen = Object.keys(groupData.prodDen).length;
+
       effAndProd.eff = groupData.effDen ? (groupData.effNum / groupData.effDen) : 0;
-      effAndProd.prod = groupData.prodDen ? (groupData.effNum / 8 / groupData.prodDen) : 0;
+      effAndProd.prod = prodDen ? (groupData.effNum / 8 / prodDen) : 0;
 
       var divisionIds = Object.keys(groupData.byDivision);
 
@@ -447,7 +449,7 @@ Report4.prototype.handleEffAndProd = function(prodShiftOrder, workerCount)
     groupData = this.effAndProd[groupKey] = {
       effNum: 0,
       effDen: 0,
-      prodDen: 0,
+      prodDen: {},
       byDivision: {}
     };
   }
@@ -462,15 +464,21 @@ Report4.prototype.handleEffAndProd = function(prodShiftOrder, workerCount)
     };
   }
 
+  var totalQuantity = prodShiftOrder.quantityDone + prodShiftOrder.quantityLost;
+
   if (workerCount.match)
   {
     groupData.effNum +=
-      prodShiftOrder.laborTime / 100 * (prodShiftOrder.quantityDone * workerCount.ratio);
+      prodShiftOrder.laborTime / 100 * (totalQuantity * workerCount.ratio);
     groupData.effDen += prodShiftOrder.workDuration * workerCount.match;
-    groupData.prodDen += workerCount.match;
+
+    for (var i = 0, l = prodShiftOrder.operators.length; i < l; ++i)
+    {
+      groupData.prodDen[prodShiftOrder.operators[i].id] = true;
+    }
   }
 
-  byDivision.effNum = prodShiftOrder.laborTime / 100 * prodShiftOrder.quantityDone;
+  byDivision.effNum = prodShiftOrder.laborTime / 100 * totalQuantity;
   byDivision.effDen = prodShiftOrder.workDuration * prodShiftOrder.operators.length;
 };
 
