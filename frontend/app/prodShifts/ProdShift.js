@@ -66,10 +66,10 @@ define([
 
     initialize: function(attributes, options)
     {
-      this.shiftChangeMonitor = null;
-
       if (options && options.production)
       {
+        this.shiftChangeTimer = null;
+
         this.prodLine = prodLines.get(this.get('prodLine'));
 
         this.prodShiftOrder = new ProdShiftOrder();
@@ -97,7 +97,7 @@ define([
 
       this.shiftChangeTimer = setTimeout(function(prodShift)
       {
-        prodShift.shiftChangeMonitor = null;
+        prodShift.shiftChangeTimer = null;
         prodShift.changeShift();
         prodShift.startShiftChangeMonitor();
       }, 1000, this);
@@ -144,19 +144,12 @@ define([
       }
       catch (err) {}
 
-      if (_.isEmpty(data))
-      {
-        this.resetShift();
-      }
-      else
+      if (!_.isEmpty(data))
       {
         this.set(data);
-
-        if (this.get('date').getTime() !== this.getCurrentShiftMoment().valueOf())
-        {
-          this.resetShift();
-        }
       }
+
+      this.changeShift();
     },
 
     saveLocalData: function()
@@ -179,12 +172,6 @@ define([
       data.prodDowntimes = this.prodDowntimes.toJSON();
 
       localStorage.setItem(this.getDataStorageKey(), JSON.stringify(data));
-    },
-
-    resetShift: function()
-    {
-      this.set('state', 'idle');
-      this.changeShift();
     },
 
     changeShift: function()
@@ -219,7 +206,7 @@ define([
           {planned: 0, actual: 0}
         ],
         creator: user.getInfo(),
-        createdAt: time.getMoment().toDate(),
+        createdAt: new Date(),
         master: null,
         leader: null,
         operator: null,

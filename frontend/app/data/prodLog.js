@@ -16,6 +16,7 @@ define([
   'use strict';
 
   var STORAGE_KEY = 'PRODUCTION:LOG';
+  var SYNCING_KEY = 'PRODUCTION:LOG:SYNCING';
   var LOCK_KEY = 'PRODUCTION:LOCK';
   var storage = localStorage;
   var syncingLogEntries = null;
@@ -34,7 +35,7 @@ define([
 
   function restoreSyncingEntries()
   {
-    if (!enabled || syncingLogEntries === null)
+    if (syncingLogEntries === null)
     {
       return;
     }
@@ -43,14 +44,16 @@ define([
 
     if (newLogEntries === null)
     {
-      storage.setItem(STORAGE_KEY, syncingLogEntries + '\n' + newLogEntries);
+      storage.setItem(STORAGE_KEY, syncingLogEntries);
     }
     else
     {
-      storage.setItem(STORAGE_KEY, syncingLogEntries);
+      storage.setItem(STORAGE_KEY, syncingLogEntries + '\n' + newLogEntries);
     }
 
     syncingLogEntries = null;
+
+    storage.removeItem(SYNCING_KEY);
 
     broker.publish('production.synced', {message: 'DISCONNECT'});
   }
@@ -74,11 +77,22 @@ define([
 
     storage.removeItem(STORAGE_KEY);
 
+    var unsyncedLogEntries = storage.getItem(SYNCING_KEY);
+
+    if (unsyncedLogEntries !== null)
+    {
+      syncingLogEntries = unsyncedLogEntries + '\n' + syncingLogEntries;
+    }
+
+    storage.setItem(SYNCING_KEY, syncingLogEntries);
+
     broker.publish('production.syncing');
 
     socket.emit('production.sync', syncingLogEntries, function(err)
     {
       syncingLogEntries = null;
+
+      storage.removeItem(SYNCING_KEY);
 
       broker.publish('production.synced', err);
 
