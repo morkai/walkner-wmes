@@ -296,7 +296,7 @@ define([
     }
     else
     {
-      action.href = '#';
+      action.href = null;
     }
 
     if (typeof action.icon === 'string')
@@ -385,15 +385,21 @@ define([
       }
       else
       {
-        html +=
-          '<a class="' + action.className + '" href="' + action.href + '">';
+        if (action.href === null)
+        {
+          html += '<button class="' + action.className + '">';
+        }
+        else
+        {
+          html += '<a class="' + action.className + '" href="' + action.href + '">';
+        }
 
         if (typeof action.icon === 'string')
         {
           html += '<i class="fa ' + action.icon + '"></i>';
         }
 
-        html += '<span>' + action.label + '</span></a>';
+        html += '<span>' + action.label + '</span>' + (action.href ? '</a>' : '</button>');
       }
     }
 
