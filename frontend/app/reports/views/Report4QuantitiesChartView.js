@@ -145,7 +145,7 @@ define([
         },
         series: [{
           name: t('reports', 'operator:quantities:bad'),
-          color: '#ee0000',
+          color: 'rgba(255,0,0,.75)',
           borderWidth: 0,
           type: 'column',
           data: chartData.bad,
@@ -156,7 +156,7 @@ define([
           groupPadding: 0
         }, {
           name: t('reports', 'operator:quantities:good'),
-          color: '#66cc00',
+          color: 'rgba(102,204,0,.75)',
           borderWidth: 0,
           type: 'column',
           data: chartData.good,

@@ -151,7 +151,7 @@ define([
         },
         series: [{
           name: t('reports', 'operator:workTimes:otherWorks'),
-          color: '#00aaff',
+          color: 'rgba(0,170,255,.75)', //'#00aaff',
           borderWidth: 0,
           type: 'column',
           data: chartData.otherWorks,
@@ -162,7 +162,7 @@ define([
           groupPadding: 0
         }, {
           name: t('reports', 'operator:workTimes:sap'),
-          color: '#66cc00',
+          color: 'rgba(102,204,0,.75)',
           borderWidth: 0,
           type: 'column',
           data: chartData.sap,
@@ -173,7 +173,7 @@ define([
           groupPadding: 0
         }, {
           name: t('reports', 'operator:workTimes:downtime'),
-          color: '#ee0000',
+          color: 'rgba(255,0,0,.85)',
           borderWidth: 0,
           type: 'column',
           data: chartData.downtimes,
