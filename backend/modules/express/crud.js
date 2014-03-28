@@ -154,7 +154,20 @@ exports.readRoute = function(app, Model, req, res, next)
 
 exports.editRoute = function(app, Model, req, res, next)
 {
-  Model.findById(req.params.id, function(err, model)
+  if (req.model === null)
+  {
+    edit(null, null);
+  }
+  else if (typeof req.model === 'object')
+  {
+    edit(null, req.model);
+  }
+  else
+  {
+    Model.findById(req.params.id, edit);
+  }
+
+  function edit(err, model)
   {
     if (err)
     {
@@ -167,6 +180,12 @@ exports.editRoute = function(app, Model, req, res, next)
     }
 
     model.set(req.body);
+
+    if (!model.isModified())
+    {
+      return sendResponse(res, model);
+    }
+
     model.save(function(err)
     {
       if (err)
@@ -174,19 +193,24 @@ exports.editRoute = function(app, Model, req, res, next)
         return next(err);
       }
 
-      res.format({
-        json: function()
-        {
-          res.send(model);
-        }
-      });
+      sendResponse(res, model);
 
       app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.edited', {
         model: model.toJSON(),
         user: req.session.user
       });
     });
-  });
+  }
+
+  function sendResponse(res, model)
+  {
+    res.format({
+      json: function()
+      {
+        res.send(model);
+      }
+    });
+  }
 };
 
 exports.deleteRoute = function(app, Model, req, res, next)
