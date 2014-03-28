@@ -8,6 +8,7 @@ var messageFormatAmd = require('messageformat-amd');
 var MongoStore = require('./MongoStore')(express.session.Store);
 var wrapAmd = require('./wrapAmd');
 var rqlMiddleware = require('./rqlMiddleware');
+var errorHandlerMiddleware = require('./errorHandlerMiddleware');
 var crud = require('./crud');
 
 exports.DEFAULT_CONFIG = {
@@ -69,17 +70,17 @@ exports.start = function startExpressModule(app, module, done)
   module.use(module.router);
   module.use(express.static(staticPath));
 
-  if (production)
+  var errorHandlerOptions = {
+    title: 'WMES',
+    basePath: path.resolve(__dirname, '../../../')
+  };
+
+  if (!production)
   {
-    module.use(express.errorHandler());
+
   }
-  else
-  {
-    module.use(express.errorHandler({
-      dumpExceptions: true,
-      showStack: true
-    }));
-  }
+
+  module.use(errorHandlerMiddleware(module, errorHandlerOptions));
 
   app.broker.publish('express.beforeRoutes', {
     module: module,
