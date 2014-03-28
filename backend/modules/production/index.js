@@ -48,22 +48,7 @@ exports.start = function startProductionModule(app, module)
       return done(null, cachedProdData[_id]);
     }
 
-    var Model;
-
-    switch (type)
-    {
-      case 'shift':
-        Model = ProdShift;
-        break;
-
-      case 'order':
-        Model = ProdShiftOrder;
-        break;
-
-      case 'downtime':
-        Model = ProdDowntime;
-        break;
-    }
+    var Model = getModelByType(type);
 
     if (!Model)
     {
@@ -84,6 +69,81 @@ exports.start = function startProductionModule(app, module)
 
       return done(null, model);
     });
+  };
+
+  module.getCachedProdData = function(_id)
+  {
+    return cachedProdData[_id] || null;
+  };
+
+  module.getMultipleProdData = function(type, idList, done)
+  {
+    if (!Array.isArray(idList) || idList.length === 0)
+    {
+      return {};
+    }
+
+    if (idList.length === 1)
+    {
+      return module.getProdData(type, idList[0], function(err, model)
+      {
+        if (err)
+        {
+          return done(err, null);
+        }
+
+        return done(null, model ? [model] : []);
+      });
+    }
+
+    var Model = getModelByType(type);
+
+    if (!Model)
+    {
+      return done(null, null);
+    }
+
+    var idToFind = idList.filter(function(id) { return cachedProdData[id] === undefined; });
+
+    if (idToFind.length === 0)
+    {
+      return mergeModels([]);
+    }
+
+    Model.find({_id: {$in: idToFind}}, function(err, models)
+    {
+      if (err)
+      {
+        return done(err, null);
+      }
+
+      return mergeModels(models);
+    });
+
+    function mergeModels(models)
+    {
+      var prodData = [];
+
+      idList.forEach(function(id)
+      {
+        if (cachedProdData[id] !== undefined)
+        {
+          prodData.push(cachedProdData[id]);
+        }
+      });
+
+      models.forEach(function(model)
+      {
+        if (cachedProdData[model._id] === undefined)
+        {
+          module.setProdData(model);
+
+          prodData.push(model);
+        }
+      });
+
+      return done(null, prodData);
+    }
   };
 
   module.recreating = false;
@@ -132,4 +192,24 @@ exports.start = function startProductionModule(app, module)
     ],
     setUpLogEntryHandler.bind(null, app, module)
   );
+
+  function getModelByType(type)
+  {
+    /*jshint -W015*/
+
+    switch (type)
+    {
+      case 'shift':
+        return ProdShift;
+
+      case 'order':
+        return ProdShiftOrder;
+
+      case 'downtime':
+        return ProdDowntime;
+
+      default:
+        return null;
+    }
+  }
 };

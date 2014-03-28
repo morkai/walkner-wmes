@@ -86,5 +86,13 @@ module.exports = function setupProdShiftModel(app, mongoose)
   prodShiftSchema.index({workCenter: 1, date: -1});
   prodShiftSchema.index({date: -1, prodLine: 1});
 
+  prodShiftSchema.methods.hasEnded = function()
+  {
+    var prodShiftTime = this.date.getTime();
+    var currentShiftTime = app.fte.getCurrentShift().date.getTime();
+
+    return prodShiftTime < currentShiftTime;
+  };
+
   mongoose.model('ProdShift', prodShiftSchema);
 };

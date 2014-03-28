@@ -2,13 +2,16 @@
   "root": {
     "BREADCRUMBS:browse": "Shifts",
     "BREADCRUMBS:details": "{date}, {shift}",
+    "BREADCRUMBS:editForm": "Editing",
 
     "MSG:LOADING_FAILURE": "Failed to load the shifts :(",
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
     "PAGE_ACTION:export": "Export shifts",
+    "PAGE_ACTION:edit": "Edit shift",
 
     "PANEL:TITLE:details": "Shift's details",
+    "PANEL:TITLE:editForm": "Edit shift form",
 
     "FILTER:DATE:FROM": "From",
     "FILTER:DATE:TO": "To",
@@ -27,8 +30,14 @@
     "PROPERTY:master": "Master",
     "PROPERTY:leader": "Leader",
     "PROPERTY:operator": "Operator",
+    "PROPERTY:operators": "Operators",
     "PROPERTY:quantitiesDone": "Quantities done",
+    "PROPERTY:quantitiesDone:planned": "Planned",
+    "PROPERTY:quantitiesDone:actual": "Actual",
     "PROPERTY:totalQuantityDone": "Quantity done",
+
+    "FORM:ACTION:edit": "Edit shift",
+    "FORM:ERROR:editFailure": "Failed to edit the shift :-(",
 
     "totalQuantityDone": "{actual} of {planned}",
 

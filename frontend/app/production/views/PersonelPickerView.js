@@ -3,12 +3,14 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/users/util/setUpUserSelect2',
   'app/production/templates/personelPicker'
 ], function(
   _,
   t,
   viewport,
   View,
+  setUpUserSelect2,
   personelPickerTemplate
 ) {
   'use strict';
@@ -97,7 +99,9 @@ define([
 
       if (this.socket.isConnected())
       {
-        this.setUpSelect2($user.removeClass('form-control'));
+        setUpUserSelect2($user.removeClass('form-control'), {
+          dropdownCssClass: 'production-dropdown'
+        });
 
         $user.select2('focus');
       }
@@ -110,51 +114,6 @@ define([
     onDialogShown: function()
     {
       this.$id('user').focus().select2('focus');
-    },
-
-    setUpSelect2: function($user)
-    {
-      $user.select2({
-        dropdownCssClass: 'production-dropdown',
-        openOnEnter: null,
-        allowClear: true,
-        minimumInputLength: 3,
-        ajax: {
-          cache: true,
-          quietMillis: 500,
-          url: function(term)
-          {
-            term = term.trim();
-
-            var property = /^[0-9]+$/.test(term) ? 'personellId' : 'lastName';
-
-            term = encodeURIComponent('^' + term);
-
-            return '/users'
-              + '?select(personellId,lastName,firstName)'
-              + '&sort(lastName)'
-              + '&limit(20)&regex(' + property + ',' + term + ',i)';
-          },
-          results: function(data)
-          {
-            return {
-              results: (data.collection || []).map(function(user)
-              {
-                var name = user.lastName && user.firstName
-                  ? (user.firstName + ' ' + user.lastName)
-                  : '-';
-                var personellId = user.personellId ? user.personellId : '-';
-
-                return {
-                  id: user._id,
-                  text: name + ' (' + personellId + ')',
-                  name: name
-                };
-              })
-            };
-          }
-        }
-      });
     }
 
   });

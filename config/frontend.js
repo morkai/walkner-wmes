@@ -90,7 +90,7 @@ exports.pubsub = {
     'shiftChanged',
     'fte.master.*', 'fte.leader.*', 'hourlyPlans.*',
     'users.syncFailed',
-    'production.synced.*',
+    'production.synced.*', 'production.edited.**',
     'prodDowntimes.**',
     'prodShiftOrders.created.*', 'prodShiftOrders.updated.*',
     'updater.newVersion',

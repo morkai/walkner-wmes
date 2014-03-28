@@ -1,19 +1,24 @@
 'use strict';
 
+var step = require('h5.step');
 var moment = require('moment');
+var userInfo = require('../../models/userInfo');
 var crud = require('../express/crud');
 var limitOrgUnit = require('../prodLines/limitOrgUnit');
+var logEntryHandlers = require('../production/logEntryHandlers');
 
 module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 {
   var express = app[prodShiftsModule.config.expressId];
   var userModule = app[prodShiftsModule.config.userId];
   var mongoose = app[prodShiftsModule.config.mongooseId];
-  var subdivisionsModule = app[prodShiftsModule.config.subdivisionsId];
-  var prodFlowsModule = app[prodShiftsModule.config.prodFlowsId];
+  var orgUnitsModule = app[prodShiftsModule.config.orgUnitsId];
+  var productionModule = app[prodShiftsModule.config.productionId];
   var ProdShift = mongoose.model('ProdShift');
+  var ProdLogEntry = mongoose.model('ProdLogEntry');
 
   var canView = userModule.auth('PROD_DATA:VIEW');
+  var canManage = userModule.auth('PROD_DATA:MANAGE');
 
   express.get('/prodShifts', canView, limitOrgUnit, crud.browseRoute.bind(null, app, ProdShift));
 
@@ -21,7 +26,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
     '/prodShifts;export',
     canView,
     limitOrgUnit,
-    function(req, res, next)
+    function overrideFields(req, res, next)
     {
       req.rql.fields = {
         creator: 0,
@@ -39,10 +44,12 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   express.get('/prodShifts/:id', canView, crud.readRoute.bind(null, app, ProdShift));
 
+  express.put('/prodShifts/:id', canManage, editProdShiftRoute);
+
   function exportProdShift(doc)
   {
-    var subdivision = subdivisionsModule.modelsById[doc.subdivision];
-    var prodFlow = prodFlowsModule.modelsById[doc.prodFlow];
+    var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
+    var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
 
     return {
       'date': moment(doc.date).format('YYYY-MM-DD'),
@@ -66,5 +73,89 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
       '"prodLine': doc.prodLine,
       '"shiftId': doc._id
     };
+  }
+
+  function editProdShiftRoute(req, res, next)
+  {
+    step(
+      function getProdDataStep()
+      {
+        productionModule.getProdData('shift', req.params.id, this.next());
+      },
+      function createLogEntryStep(err, prodShift)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!prodShift)
+        {
+          return this.skip(null, 404);
+        }
+
+        if (!prodShift.hasEnded())
+        {
+          return this.skip(new Error('SHIFT_NOT_ENDED'), 400);
+        }
+
+        var logEntry = ProdLogEntry.editShift(
+          prodShift, userInfo.createObject(req.session.user, req), req.body
+        );
+
+        if (!logEntry)
+        {
+          return this.skip(new Error('INVALID_CHANGES'), 400);
+        }
+
+        logEntry.save(this.next());
+      },
+      function handleLogEntryStep(err, logEntry)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var next = this.next();
+
+        logEntryHandlers.editShift(
+          app,
+          productionModule,
+          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
+          logEntry,
+          function(err)
+          {
+            if (err)
+            {
+              return next(err, null, null);
+            }
+
+            return next(null, null, logEntry);
+          }
+        );
+      },
+      function sendResponseStep(err, statusCode, logEntry)
+      {
+        if (statusCode)
+        {
+          res.statusCode = statusCode;
+        }
+
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (statusCode)
+        {
+          return res.send(statusCode);
+        }
+
+        res.send(logEntry.data);
+
+        app.broker.publish('production.edited.shift.' + logEntry.prodShift, logEntry.data);
+      }
+    );
   }
 };

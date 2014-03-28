@@ -2,12 +2,14 @@ define([
   '../router',
   '../viewport',
   '../user',
+  './ProdShift',
   './pages/ProdShiftListPage',
   'i18n!app/nls/prodShifts'
 ], function(
   router,
   viewport,
   user,
+  ProdShift,
   ProdShiftListPage
 ) {
   'use strict';
@@ -25,5 +27,18 @@ define([
     {
       return new ProdShiftDetailsPage({modelId: req.params.id});
     });
+  });
+
+  router.map('/prodShifts/:id;edit', user.auth('PROD_DATA:MANAGE'), function(req)
+  {
+    viewport.loadPage(
+      ['app/prodShifts/pages/EditProdShiftFormPage'],
+      function(EditProdShiftFormPage)
+      {
+        return new EditProdShiftFormPage({
+          model: new ProdShift({_id: req.params.id})
+        });
+      }
+    );
   });
 });

@@ -81,16 +81,6 @@ define([
       }
     },
 
-    sync: function(method)
-    {
-      if (method === 'read')
-      {
-        return Model.prototype.sync.apply(this, arguments);
-      }
-
-      throw new Error("Method not supported: " + method);
-    },
-
     startShiftChangeMonitor: function()
     {
       this.stopShiftChangeMonitor();
@@ -471,6 +461,11 @@ define([
      */
     getLabel: function()
     {
+      if (!this.prodLine)
+      {
+        return this.get('prodLine');
+      }
+
       var description = this.prodLine.get('description');
 
       if (_.isString(description) && description.length)
@@ -636,6 +631,14 @@ define([
       var subdivision = this.prodLine.getSubdivision();
 
       return subdivision ? subdivision.get('aor') : null;
+    },
+
+    hasEnded: function()
+    {
+      var prodShiftStartTime = time.getMoment(this.get('date')).valueOf();
+      var currentShiftStartTime = getShiftStartInfo(new Date()).moment.valueOf();
+
+      return prodShiftStartTime < currentShiftStartTime;
     },
 
     /**

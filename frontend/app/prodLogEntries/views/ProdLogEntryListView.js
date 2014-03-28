@@ -22,7 +22,11 @@ define([
   return ListView.extend({
 
     remoteTopics: {
-      'production.synced.**': 'refreshCollection'
+      'production.synced.**': 'refreshCollection',
+      'production.edited.**': function()
+      {
+        this.refreshCollection();
+      }
     },
 
     columns: ['prodLine', 'type', 'data', 'prodShift', 'prodShiftOrder', 'createdAt', 'creator'],

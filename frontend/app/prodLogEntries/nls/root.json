@@ -33,6 +33,7 @@
     "type:finishDowntime": "Downtime finish",
     "type:corroborateDowntime": "Downtime corroboration",
     "type:endWork": "End of work",
+    "type:editShift": "Shift edit",
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:changeMaster": "New master: <em>{name}</em>",
@@ -48,6 +49,7 @@
     "data:finishDowntime": "Finished <a href='\\#prodDowntimes/{_id}'>downtime</a>.",
     "data:corroborateDowntime": "{status, select, confirmed{Confirmed} rejected{Rejected} other{Corroborated}} <a href='\\#prodDowntimes/{_id}'>downtime</a>.",
     "data:endWork": "-",
+    "data:editShift": "Changed attributes: {changedProperties}",
 
     "noData:prodShiftOrder": "<em>no order</em>"
   },

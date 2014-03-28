@@ -68,6 +68,11 @@ define([
         data.aor = aor ? aor.getLabel() : prodLogEntry.data.aor;
         break;
 
+      case 'editShift':
+        data.changedProperties = Object.keys(prodLogEntry.data)
+          .map(function(property) { return t('prodShifts', 'PROPERTY:' + property); }).join(', ');
+        break;
+
       default:
         data = prodLogEntry.data;
         break;

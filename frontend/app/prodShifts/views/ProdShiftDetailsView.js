@@ -13,6 +13,11 @@ define([
 
     template: detailsTemplate,
 
+    initialize: function()
+    {
+      this.editing = false;
+    },
+
     serialize: function()
     {
       var totalQuantityDone = {
@@ -27,12 +32,28 @@ define([
       });
 
       return {
+        editing: this.editing,
         model: decorateProdShift(this.model, {
           orgUnits: true,
           personnel: true
         }),
         totalQuantityDone: totalQuantityDone
       };
+    },
+
+    afterRender: function()
+    {
+      DetailsView.prototype.afterRender.call(this);
+
+      if (this.editing)
+      {
+        this.setUpEditing();
+      }
+    },
+
+    setUpEditing: function()
+    {
+
     }
 
   });

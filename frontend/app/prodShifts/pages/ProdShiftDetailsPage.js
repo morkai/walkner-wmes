@@ -1,9 +1,11 @@
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   'app/time',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/getShiftStartInfo',
   'app/core/View',
   'app/prodLogEntries/ProdLogEntryCollection',
   '../ProdShift',
@@ -13,10 +15,12 @@ define([
   'app/prodShifts/templates/detailsPage'
 ], function(
   _,
+  $,
   t,
   time,
   viewport,
   bindLoadingMessage,
+  getShiftStartInfo,
   View,
   ProdLogEntryCollection,
   ProdShift,
@@ -24,7 +28,7 @@ define([
   ProdShiftTimelineView,
   QuantitiesDoneChartView,
   detailsPageTemplate
-  ) {
+) {
   'use strict';
 
   var PROD_LOG_ENTRY_REFRESH_TYPES = [
@@ -60,15 +64,24 @@ define([
 
     actions: function()
     {
-      return [
-        {
-          label: t.bound('prodShifts', 'PAGE_ACTION:prodLogEntries'),
-          icon: 'list-ol',
-          href: '#prodLogEntries?sort(createdAt)&limit(20)'
-            + '&prodLine=' + encodeURIComponent(this.prodShift.get('prodLine'))
-            + '&prodShift=' + encodeURIComponent(this.prodShift.id)
-        }
-      ];
+      var actions = [{
+        label: t.bound('prodShifts', 'PAGE_ACTION:prodLogEntries'),
+        icon: 'list-ol',
+        href: '#prodLogEntries?sort(createdAt)&limit(20)'
+          + '&prodShift=' + encodeURIComponent(this.prodShift.id)
+      }];
+
+      if (this.prodShift.hasEnded())
+      {
+        actions.push({
+          label: t.bound('prodShifts', 'PAGE_ACTION:edit'),
+          icon: 'edit',
+          href: this.prodShift.genClientUrl('edit'),
+          privilege: 'PROD_DATA:MANAGE'
+        });
+      }
+
+      return actions;
     },
 
     initialize: function()
@@ -115,16 +128,21 @@ define([
 
     setUpRemoteTopics: function()
     {
-      var shiftEndTime = Date.parse(this.prodShift.get('date') + 8 * 3600 * 1000);
+      var prodShift = this.prodShift;
 
-      if (Date.now() >= shiftEndTime)
+      if (prodShift.hasEnded())
       {
-        return;
+        this.pubsub.subscribe('production.edited.shift.' + prodShift.id, function(changes)
+        {
+          prodShift.set(changes);
+        });
       }
-
-      this.pubsub.subscribe(
-        'production.synced.' + this.prodShift.get('prodLine'), this.handleProdChanges.bind(this)
-      );
+      else
+      {
+        this.pubsub.subscribe(
+          'production.synced.' + prodShift.get('prodLine'), this.handleProdChanges.bind(this)
+        );
+      }
     },
 
     handleProdChanges: function(changes)

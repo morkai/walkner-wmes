@@ -1,0 +1,44 @@
+<form class="prodShifts-editForm" method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%= formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-master" class="control-label"><%- t('prodShifts', 'PROPERTY:master') %></label>
+        <input id="<%- idPrefix %>-master" type="text" name="master" placeholder="<%- t('prodShifts', 'FORM:PLACEHOLDER:personnel') %>">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-leader" class="control-label"><%- t('prodShifts', 'PROPERTY:leader') %></label>
+        <input id="<%- idPrefix %>-leader" type="text" name="leader" placeholder="<%- t('prodShifts', 'FORM:PLACEHOLDER:personnel') %>">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-operator" class="control-label"><%- t('prodShifts', 'PROPERTY:operator') %></label>
+        <input id="<%- idPrefix %>-operator" type="text" name="operator" placeholder="<%- t('prodShifts', 'FORM:PLACEHOLDER:personnel') %>">
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('prodShifts', 'PROPERTY:quantitiesDone') %></label>
+        <table class="table table-bordered table-condensed prodShifts-editForm-quantitiesDone">
+          <thead>
+            <tr>
+              <th><%- t('prodShifts', 'PROPERTY:quantitiesDone:hour') %></th>
+              <th><%- t('prodShifts', 'PROPERTY:quantitiesDone:planned') %></th>
+              <th><%- t('prodShifts', 'PROPERTY:quantitiesDone:actual') %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (var h = 0; h < 8; ++h) { %>
+            <tr>
+              <td><%- h + 1 %>.</td>
+              <td><input class="form-control" type="number" name="quantitiesDone[<%- h %>].planned" value="0" min="0"></td>
+              <td><input class="form-control" type="number" name="quantitiesDone[<%- h %>].actual" value="0" min="0"></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

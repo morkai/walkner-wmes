@@ -74,3 +74,9 @@
 .prodShifts-timeline .popover-downtime > .popover-title {
   background-color: #D9534F;
 }
+.prodShifts-editForm-quantitiesDone {
+  width: 300px;
+}
+.prodShifts-editForm-quantitiesDone td:first-child {
+  text-align: right;
+}

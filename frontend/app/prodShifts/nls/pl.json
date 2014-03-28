@@ -1,13 +1,16 @@
 {
   "BREADCRUMBS:browse": "Zmiany",
   "BREADCRUMBS:details": "{date}, {shift}",
+  "BREADCRUMBS:editForm": "Edycja",
 
   "MSG:LOADING_FAILURE": "Ładowanie historii zmian nie powiodło się :(",
 
   "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
   "PAGE_ACTION:export": "Eksportuj zmiany",
+  "PAGE_ACTION:edit": "Edytuj zmianę",
 
   "PANEL:TITLE:details": "Szczegóły zmiany",
+  "PANEL:TITLE:editForm": "Formularz edycji danych zmiany produkcyjnej",
 
   "FILTER:DATE:FROM": "Od",
   "FILTER:DATE:TO": "Do",
@@ -27,8 +30,16 @@
   "PROPERTY:master": "Mistrz",
   "PROPERTY:leader": "Lider",
   "PROPERTY:operator": "Operator",
+  "PROPERTY:operators": "Operatorzy",
   "PROPERTY:quantitiesDone": "Wykonane ilości",
+  "PROPERTY:quantitiesDone:hour": "Godz.",
+  "PROPERTY:quantitiesDone:planned": "Plan",
+  "PROPERTY:quantitiesDone:actual": "Wykonane",
   "PROPERTY:totalQuantityDone": "Wykonana ilość",
+
+  "FORM:ACTION:edit": "Edytuj zmianę",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zmiany :-(",
+  "FORM:PLACEHOLDER:personnel": "Szukaj użytkownika po nr kadrowym lub nazwisku...",
 
   "totalQuantityDone": "{actual} z {planned}",
 

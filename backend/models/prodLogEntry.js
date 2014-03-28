@@ -1,5 +1,8 @@
 'use strict';
 
+var lodash = require('lodash');
+var logEntryHandlers = require('../modules/production/logEntryHandlers');
+
 module.exports = function setupProdLogEntryModel(app, mongoose)
 {
   var prodLogEntrySchema = mongoose.Schema({
@@ -11,6 +14,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     },
     type: {
       type: 'String',
+      enum: Object.keys(logEntryHandlers),
       required: true
     },
     data: {},
@@ -76,6 +80,76 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 
   prodLogEntrySchema.statics.generateId = generateId;
 
+  prodLogEntrySchema.statics.editShift = function(prodShift, creator, changes)
+  {
+    if (lodash.isEmpty(changes))
+    {
+      return null;
+    }
+
+    var ProdLogEntry = this;
+    var createdAt = new Date();
+    var data = {};
+    var prodShiftData = prodShift.toJSON();
+
+    if (validateQuantitiesDone(changes.quantitiesDone))
+    {
+      data.quantitiesDone = changes.quantitiesDone.map(function(quantityDone)
+      {
+        return lodash.pick(quantityDone, ['actual', 'planned']);
+      });
+
+      compareProperty(data, prodShiftData, 'quantitiesDone');
+    }
+
+    ['master', 'leader', 'operator'].forEach(function(personnelProperty)
+    {
+      var userInfo = changes[personnelProperty];
+
+      if (validateUserInfo(userInfo))
+      {
+        data[personnelProperty] = userInfo === null
+          ? null
+          : lodash.pick(userInfo, ['id', 'label']);
+
+        compareProperty(data, prodShiftData, personnelProperty);
+      }
+    });
+
+    if (Array.isArray(changes.operators))
+    {
+      data.operators = changes.operators.filter(validateUserInfo).map(function(userInfo)
+      {
+        return lodash.pick(userInfo, ['id', 'label']);
+      });
+
+      compareProperty(data, prodShiftData, 'operators');
+    }
+
+    if (lodash.isEmpty(data))
+    {
+      return null;
+    }
+
+    return new ProdLogEntry({
+      _id: generateId(createdAt, prodShiftData.prodLine),
+      type: 'editShift',
+      division: prodShiftData.division,
+      subdivision: prodShiftData.subdivision,
+      mrpControllers: prodShiftData.mrpControllers,
+      prodFlow: prodShiftData.prodFlow,
+      workCenter: prodShiftData.workCenter,
+      prodLine: prodShiftData.prodLine,
+      prodShift: prodShiftData._id,
+      prodShiftOrder: null,
+      creator: creator,
+      createdAt: createdAt,
+      savedAt: createdAt,
+      todo: false,
+      data: data
+    });
+  };
+
   mongoose.model('ProdLogEntry', prodLogEntrySchema);
 };
 
@@ -97,4 +171,30 @@ function generateId(date, str)
   return date.getTime().toString(36)
     + hashCode(String(str)).toString(36)
     + Math.round(Math.random() * 10000000000000000).toString(36);
+}
+
+function validateQuantitiesDone(quantitiesDone)
+{
+  return Array.isArray(quantitiesDone)
+    && quantitiesDone.length === 8
+    && quantitiesDone.every(function(quantityDone)
+    {
+      return quantityDone.planned >= 0 && quantityDone.actual >= 0;
+    });
+}
+
+function validateUserInfo(userInfo)
+{
+  return userInfo === null
+    || (typeof userInfo === 'object'
+      && typeof userInfo.id === 'string'
+      && typeof userInfo.label === 'string');
+}
+
+function compareProperty(data, model, property)
+{
+  if (lodash.isEqual(data[property], model[property], property))
+  {
+    delete data[property];
+  }
 }
