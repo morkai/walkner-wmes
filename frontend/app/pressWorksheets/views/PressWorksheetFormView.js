@@ -311,6 +311,10 @@ define([
       var $order = $orders.eq(i);
 
       var orderData = $order.find('.pressWorksheets-form-part').select2('data').data;
+
+      orderData.nc12 = orderData._id;
+      delete orderData._id;
+
       var operationData = _.find(orderData.operations, function(operation)
       {
         return operation.no === order.operation;
@@ -358,7 +362,7 @@ define([
       return {
         prodShiftOrder: null,
         prodLine: order.prodLine,
-        nc12: orderData._id,
+        nc12: orderData.nc12,
         name: orderData.name,
         operationNo: operationData.no,
         operationName: operationData.name,
@@ -447,7 +451,7 @@ define([
         minimumInputLength: 6,
         ajax: {
           cache: true,
-          quietMillis: 500,
+          quietMillis: 300,
           url: function(term)
           {
             return '/production/orders?nc12=' + encodeURIComponent(term);
