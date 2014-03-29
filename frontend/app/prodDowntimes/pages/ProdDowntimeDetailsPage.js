@@ -50,37 +50,47 @@ define([
     {
       var actions = [];
 
-      if (this.model.get('status') !== 'undecided'
-        || !user.isAllowedTo('PROD_DOWNTIMES:MANAGE')
-        || !user.hasAccessToAor(this.model.get('aor')))
+      if (this.model.get('status') === 'undecided'
+        && user.isAllowedTo('PROD_DOWNTIMES:MANAGE')
+        && user.hasAccessToAor(this.model.get('aor')))
       {
-        return actions;
+        var view = this;
+
+        actions.push({
+          id: 'corroborate',
+          icon: 'gavel',
+          label: t('prodDowntimes', 'LIST:ACTION:corroborate'),
+          href: this.model.genClientUrl('corroborate'),
+          callback: function(e)
+          {
+            e.preventDefault();
+
+            view.broker.subscribe('viewport.dialog.hidden', function()
+            {
+              view.corroborating = false;
+            });
+
+            view.corroborating = true;
+
+            viewport.showDialog(
+              new CorroborateProdDowntimeView({model: view.model}),
+              t('prodDowntimes', 'corroborate:title')
+            );
+          }
+        });
       }
 
-      var view = this;
+      if (this.model.isEditable())
+      {
+        actions.push({
+          label: t.bound('prodDowntimes', 'PAGE_ACTION:edit'),
+          icon: 'edit',
+          href: this.model.genClientUrl('edit'),
+          privilege: 'PROD_DATA:MANAGE'
+        });
+      }
 
-      return [{
-        id: 'corroborate',
-        icon: 'gavel',
-        label: t('prodDowntimes', 'LIST:ACTION:corroborate'),
-        href: this.model.genClientUrl('corroborate'),
-        callback: function(e)
-        {
-          e.preventDefault();
-
-          view.broker.subscribe('viewport.dialog.hidden', function()
-          {
-            view.corroborating = false;
-          });
-
-          view.corroborating = true;
-
-          viewport.showDialog(
-            new CorroborateProdDowntimeView({model: view.model}),
-            t('prodDowntimes', 'corroborate:title')
-          );
-        }
-      }];
+      return actions;
     },
 
     initialize: function()

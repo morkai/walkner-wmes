@@ -154,5 +154,10 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     }
   });
 
+  prodDowntimeSchema.methods.isEditable = function()
+  {
+    return this.finishedAt !== null && this.pressWorksheet === null;
+  };
+
   mongoose.model('ProdDowntime', prodDowntimeSchema);
 };

@@ -21,12 +21,13 @@ define([
 
   var EDIT_TYPE_TO_NLS_DOMAIN = {
     editShift: 'prodShifts',
-    editOrder: 'prodShiftOrders'
+    editOrder: 'prodShiftOrders',
+    editDowntime: 'prodDowntimes'
   };
 
   function prepareChangedProperties(type, changes)
   {
-    var properties = Object.keys(changes);
+    var properties = _.without(Object.keys(changes), '_id');
 
     if (type === 'editOrder')
     {
@@ -96,6 +97,12 @@ define([
 
       case 'editShift':
       case 'editOrder':
+      case 'editDowntime':
+        if (prodLogEntry.type === 'editDowntime')
+        {
+          data._id = prodLogEntry.data._id;
+        }
+
         data.changedProperties = prepareChangedProperties(prodLogEntry.type, prodLogEntry.data);
         break;
 

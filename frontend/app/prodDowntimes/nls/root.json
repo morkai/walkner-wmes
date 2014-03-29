@@ -3,14 +3,17 @@
     "BREADCRUMBS:browse": "Downtimes",
     "BREADCRUMBS:details": "Downtime",
     "BREADCRUMBS:corroborate": "Corroboration",
+    "BREADCRUMBS:editForm": "Editing",
 
     "MSG:LOADING_FAILURE": "Failed to load the downtimes :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the downtime :(",
 
     "PAGE_ACTION:export": "Export downtimes",
+    "PAGE_ACTION:edit": "Edit downtime",
 
     "PANEL:TITLE:details": "Downtime's details",
     "PANEL:TITLE:details:corroboration": "Downtime corroboration",
+    "PANEL:TITLE:editForm": "Edit downtime form",
 
     "FILTER:DATE:FROM": "From",
     "FILTER:DATE:TO": "To",
@@ -43,10 +46,16 @@
     "PROPERTY:master": "Master",
     "PROPERTY:leader": "Leader",
     "PROPERTY:operator": "Operator",
+    "PROPERTY:operators": "Operators",
     "PROPERTY:creator": "Creator",
     "PROPERTY:corroborator": "Corroborator",
     "PROPERTY:corroboratedAt": "Corroborated at",
     "PROPERTY:duration": "Duration",
+
+    "FORM:ACTION:edit": "Edit downtime",
+    "FORM:ERROR:editFailure": "Failed to edit the downtime :-(",
+    "FORM:ERROR:INVALID_CHANGES": "Cannot edit the downtime: no valid changes were detected :(",
+    "FORM:PLACEHOLDER:personnel": "Search by last name or personell ID...",
 
     "shift+date": "{date}, {shift} shift",
 

@@ -169,6 +169,61 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     });
   };
 
+  prodLogEntrySchema.statics.editDowntime = function(prodDowntime, creator, changes)
+  {
+    if (lodash.isEmpty(changes))
+    {
+      return null;
+    }
+
+    var ProdLogEntry = this;
+    var createdAt = new Date();
+    var data = {};
+    var modelData = prodDowntime.toJSON();
+
+    editPersonnel(data, changes, modelData);
+    editStringValue(data, changes, modelData, 'reason');
+    editStringValue(data, changes, modelData, 'reasonComment');
+    editStringValue(data, changes, modelData, 'aor');
+
+    if (prodDowntime.status !== 'undecided')
+    {
+      editStringValue(data, changes, modelData, 'status');
+      editStringValue(data, changes, modelData, 'decisionComment');
+
+      if (data.status)
+      {
+        data.corroborator = creator;
+        data.corroboratedAt = createdAt;
+      }
+    }
+
+    if (lodash.isEmpty(data))
+    {
+      return null;
+    }
+
+    data._id = prodDowntime._id;
+
+    return new ProdLogEntry({
+      _id: generateId(createdAt, modelData.prodLine),
+      type: 'editDowntime',
+      division: modelData.division,
+      subdivision: modelData.subdivision,
+      mrpControllers: modelData.mrpControllers,
+      prodFlow: modelData.prodFlow,
+      workCenter: modelData.workCenter,
+      prodLine: modelData.prodLine,
+      prodShift: modelData.prodShift,
+      prodShiftOrder: modelData.prodShiftOrder,
+      creator: creator,
+      createdAt: createdAt,
+      savedAt: createdAt,
+      todo: false,
+      data: data
+    });
+  };
+
   mongoose.model('ProdLogEntry', prodLogEntrySchema);
 };
 
@@ -229,6 +284,16 @@ function editNumericValue(data, changes, modelData, numericProperty, minValue)
   }
 }
 
+function editStringValue(data, changes, modelData, stringProperty)
+{
+  var value = changes[stringProperty];
+
+  if (typeof value === 'string' && value !== String(modelData[stringProperty]))
+  {
+    data[stringProperty] = value;
+  }
+}
+
 function editOrder(data, changes, modelData)
 {
   if (changes.orderId && !lodash.isEqual(changes.orderId, modelData.orderId))
@@ -264,7 +329,7 @@ function validateUserInfo(userInfo)
 
 function compareProperty(logEntryData, modelData, property)
 {
-  if (lodash.isEqual(logEntryData[property], modelData[property], property))
+  if (lodash.isEqual(logEntryData[property], modelData[property]))
   {
     delete logEntryData[property];
   }

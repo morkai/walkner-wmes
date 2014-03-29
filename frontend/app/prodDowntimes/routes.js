@@ -2,11 +2,13 @@ define([
   '../router',
   '../viewport',
   '../user',
+  './ProdDowntime',
   'i18n!app/nls/prodDowntimes'
 ], function(
   router,
   viewport,
-  user
+  user,
+  ProdDowntime
 ) {
   'use strict';
 
@@ -44,6 +46,19 @@ define([
         return new CorroborateProdDowntimePage({
           cancelUrl: referer,
           modelId: req.params.id
+        });
+      }
+    );
+  });
+
+  router.map('/prodDowntimes/:id;edit', user.auth('PROD_DATA:MANAGE'), function(req)
+  {
+    viewport.loadPage(
+      ['app/prodDowntimes/pages/EditProdDowntimeFormPage'],
+      function(EditProdDowntimeFormPage)
+      {
+        return new EditProdDowntimeFormPage({
+          model: new ProdDowntime({_id: req.params.id})
         });
       }
     );

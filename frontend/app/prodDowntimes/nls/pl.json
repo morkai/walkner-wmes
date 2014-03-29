@@ -2,14 +2,17 @@
   "BREADCRUMBS:browse": "Przestoje",
   "BREADCRUMBS:details": "Przestój",
   "BREADCRUMBS:corroborate": "Potwierdzanie",
+  "BREADCRUMBS:editForm": "Edycja",
 
   "MSG:LOADING_FAILURE": "Ładowanie przestojów nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie przestoju nie powiodło się :(",
 
   "PAGE_ACTION:export": "Eksportuj przestoje",
+  "PAGE_ACTION:edit": "Edytuj przestój",
 
   "PANEL:TITLE:details": "Szczegóły przestoju",
   "PANEL:TITLE:details:corroboration": "Potwierdzenie przestoju",
+  "PANEL:TITLE:editForm": "Formularz edycji danych przestoju",
 
   "FILTER:DATE:FROM": "Od",
   "FILTER:DATE:TO": "Do",
@@ -42,10 +45,16 @@
   "PROPERTY:master": "Mistrz",
   "PROPERTY:leader": "Lider",
   "PROPERTY:operator": "Operator",
+  "PROPERTY:operators": "Operatorzy",
   "PROPERTY:creator": "Użytkownik rozpoczynający",
   "PROPERTY:corroborator": "Użytkownik potwierdzający",
   "PROPERTY:corroboratedAt": "Czas potwierdzenia",
   "PROPERTY:duration": "Czas trwania",
+
+  "FORM:ACTION:edit": "Edytuj przestój",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować przestoju :-(",
+  "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować przestoju: nie wykryto żadnych poprawnych zmian :(",
+  "FORM:PLACEHOLDER:personnel": "Szukaj użytkownika po nr kadrowym lub nazwisku...",
 
   "shift+date": "{date}, {shift} zmiana",
 

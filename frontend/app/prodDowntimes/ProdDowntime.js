@@ -57,16 +57,6 @@ define([
       operationNo: null
     },
 
-    sync: function(method)
-    {
-      if (method === 'read')
-      {
-        return Model.prototype.sync.apply(this, arguments);
-      }
-
-      throw new Error("Method not supported: " + method);
-    },
-
     getCssClassName: function()
     {
       return STATUS_TO_CSS_CLASS_NAME[this.get('status')];
@@ -93,6 +83,11 @@ define([
         _id: this.id,
         finishedAt: finishedAt
       };
+    },
+
+    isEditable: function()
+    {
+      return this.get('finishedAt') != null && this.get('pressWorksheet') === null;
     }
 
   }, {

@@ -11,10 +11,7 @@ exports.DEFAULT_CONFIG = {
   productionId: 'production',
   aorsId: 'aors',
   downtimeReasonsId: 'downtimeReasons',
-  subdivisionsId: 'subdivisions',
-  prodFlowsId: 'prodFlows',
-  workCentersId: 'workCenters',
-  prodLinesId: 'prodLines'
+  orgUnitsId: 'orgUnits'
 };
 
 exports.start = function startProdDowntimesModule(app, module)
@@ -26,10 +23,8 @@ exports.start = function startProdDowntimesModule(app, module)
       module.config.expressId,
       module.config.aorsId,
       module.config.downtimeReasonsId,
-      module.config.subdivisionsId,
-      module.config.prodFlowsId,
-      module.config.workCentersId,
-      module.config.prodLinesId
+      module.config.orgUnitsId,
+      module.config.productionId
     ],
     setUpRoutes.bind(null, app, module)
   );

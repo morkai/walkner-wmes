@@ -1,8 +1,11 @@
 'use strict';
 
+var step = require('h5.step');
 var moment = require('moment');
 var lodash = require('lodash');
 var crud = require('../express/crud');
+var userInfo = require('../../models/userInfo');
+var logEntryHandlers = require('../production/logEntryHandlers');
 
 module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 {
@@ -10,12 +13,11 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   var userModule = app[prodDowntimesModule.config.userId];
   var aorsModule = app[prodDowntimesModule.config.aorsId];
   var downtimeReasonsModule = app[prodDowntimesModule.config.downtimeReasonsId];
-  var subdivisionsModule = app[prodDowntimesModule.config.subdivisionsId];
-  var prodFlowsModule = app[prodDowntimesModule.config.prodFlowsId];
-  var workCentersModule = app[prodDowntimesModule.config.workCentersId];
-  var prodLinesModule = app[prodDowntimesModule.config.prodLinesId];
+  var orgUnitsModule = app[prodDowntimesModule.config.orgUnitsId];
+  var productionModule = app[prodDowntimesModule.config.productionId];
   var mongoose = app[prodDowntimesModule.config.mongooseId];
   var ProdDowntime = mongoose.model('ProdDowntime');
+  var ProdLogEntry = mongoose.model('ProdLogEntry');
 
   var canView = userModule.auth('PROD_DOWNTIMES:VIEW');
 
@@ -44,6 +46,8 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   );
 
   express.get('/prodDowntimes/:id', canView, crud.readRoute.bind(null, app, ProdDowntime));
+
+  express.put('/prodDowntimes/:id', userModule.auth('PROD_DATA:MANAGE'), editProdDowntimeRoute);
 
   function limitOrgUnit(req, res, next)
   {
@@ -120,7 +124,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
     var prodLineIds = [];
     var workCenterIds = {};
 
-    workCentersModule.models.forEach(function(workCenter)
+    orgUnitsModule.getAllByType('workCenter').forEach(function(workCenter)
     {
       var wcProdFlow = workCenter.get('prodFlow');
 
@@ -130,7 +134,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
       }
     });
 
-    prodLinesModule.models.forEach(function(prodLine)
+    orgUnitsModule.getAllByType('prodLine').forEach(function(prodLine)
     {
       if (workCenterIds[prodLine.get('workCenter')])
       {
@@ -165,8 +169,8 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
     var aor = aorsModule.modelsById[doc.aor];
     var reason = downtimeReasonsModule.modelsById[doc.reason];
-    var subdivision = subdivisionsModule.modelsById[doc.subdivision];
-    var prodFlow = prodFlowsModule.modelsById[doc.prodFlow];
+    var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
+    var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
 
     if (!doc.orderId)
     {
@@ -194,5 +198,89 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
       '"shiftId': doc.prodShift || '',
       '"orderId': doc.prodShiftOrder || ''
     };
+  }
+
+  function editProdDowntimeRoute(req, res, next)
+  {
+    step(
+      function getProdDataStep()
+      {
+        productionModule.getProdData('downtime', req.params.id, this.next());
+      },
+      function createLogEntryStep(err, prodDowntime)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!prodDowntime)
+        {
+          return this.skip(null, 404);
+        }
+
+        if (!prodDowntime.isEditable())
+        {
+          return this.skip(new Error('DOWNTIME_NOT_EDITABLE'), 400);
+        }
+
+        var logEntry = ProdLogEntry.editDowntime(
+          prodDowntime, userInfo.createObject(req.session.user, req), req.body
+        );
+
+        if (!logEntry)
+        {
+          return this.skip(new Error('INVALID_CHANGES'), 400);
+        }
+
+        logEntry.save(this.next());
+      },
+      function handleLogEntryStep(err, logEntry)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var next = this.next();
+
+        logEntryHandlers.editDowntime(
+          app,
+          productionModule,
+          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
+          logEntry,
+          function(err)
+          {
+            if (err)
+            {
+              return next(err, null, null);
+            }
+
+            return next(null, null, logEntry);
+          }
+        );
+      },
+      function sendResponseStep(err, statusCode, logEntry)
+      {
+        if (statusCode)
+        {
+          res.statusCode = statusCode;
+        }
+
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (statusCode)
+        {
+          return res.send(statusCode);
+        }
+
+        res.send(logEntry.data);
+
+        app.broker.publish('production.edited.downtime.' + logEntry.data._id, logEntry.data);
+      }
+    );
   }
 };

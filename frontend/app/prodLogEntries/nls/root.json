@@ -35,6 +35,7 @@
     "type:endWork": "End of work",
     "type:editShift": "Shift edit",
     "type:editOrder": "Order edit",
+    "type:editDowntime": "Downtime edit",
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:changeMaster": "New master: <em>{name}</em>",
@@ -52,6 +53,7 @@
     "data:endWork": "-",
     "data:editShift": "Changed attributes: {changedProperties}",
     "data:editOrder": "Changed attributes: {changedProperties}",
+    "data:editDowntime": "Changed attributes of <a href='\\#prodDowntimes/{_id}'>downtime</a>: {changedProperties}",
 
     "noData:prodShiftOrder": "<em>no order</em>"
   },
