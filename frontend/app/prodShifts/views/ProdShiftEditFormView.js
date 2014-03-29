@@ -1,10 +1,14 @@
 define([
   'underscore',
+  'app/i18n',
+  'app/viewport',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
   'app/prodShifts/templates/editForm'
 ], function(
   _,
+  t,
+  viewport,
   FormView,
   setUpUserSelect2,
   formTemplate
@@ -72,6 +76,24 @@ define([
         id: userInfo.id,
         label: userInfo.name
       };
+    },
+
+    handleFailure: function(xhr)
+    {
+      if (xhr.responseJSON
+        && xhr.responseJSON.error
+        && xhr.responseJSON.error.message === 'INVALID_CHANGES')
+      {
+        this.$errorMessage = viewport.msg.show({
+          type: 'warning',
+          time: 5000,
+          text: t('prodShifts', 'FORM:ERROR:INVALID_CHANGES')
+        });
+      }
+      else
+      {
+        FormView.prototype.handleFailure.apply(this, arguments);
+      }
     }
 
   });

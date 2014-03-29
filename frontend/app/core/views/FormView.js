@@ -110,13 +110,7 @@ define([
         }
       });
 
-      req.fail(function()
-      {
-        view.$errorMessage = viewport.msg.show({
-          type: 'error',
-          text: view.options.failureText
-        });
-      });
+      req.fail(this.handleFailure.bind(this));
 
       req.always(function()
       {
@@ -139,6 +133,14 @@ define([
     checkValidity: function(formData)
     {
       return !!formData;
+    },
+
+    handleFailure: function()
+    {
+      this.$errorMessage = viewport.msg.show({
+        type: 'error',
+        text: this.options.failureText
+      });
     }
 
   });

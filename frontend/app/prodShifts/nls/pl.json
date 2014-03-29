@@ -39,6 +39,7 @@
 
   "FORM:ACTION:edit": "Edytuj zmianę",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zmiany :-(",
+  "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zmiany produkcyjnej: nie wykryto żadnych poprawnych zmian :(",
   "FORM:PLACEHOLDER:personnel": "Szukaj użytkownika po nr kadrowym lub nazwisku...",
 
   "totalQuantityDone": "{actual} z {planned}",
