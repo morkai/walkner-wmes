@@ -80,6 +80,11 @@ define([
       this.idPrefix = _.uniqueId('personelPicker');
     },
 
+    destroy: function()
+    {
+      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
+    },
+
     serialize: function()
     {
       var offline = !this.socket.isConnected();

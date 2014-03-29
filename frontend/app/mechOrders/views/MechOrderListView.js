@@ -45,6 +45,11 @@ define([
 
     columns: ['_id', 'name', 'mrp', 'materialNorm'],
 
+    destroy: function()
+    {
+      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
+    },
+
     serializeActions: function()
     {
       var collection = this.collection;

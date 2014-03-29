@@ -21,6 +21,8 @@ define([
 
     destroy: function()
     {
+      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
+
       if (this.$colorPicker !== null)
       {
         this.$colorPicker.colorpicker('destroy');

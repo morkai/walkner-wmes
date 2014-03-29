@@ -59,6 +59,11 @@ define([
       this.idPrefix = _.uniqueId('orgUnitDropdown');
     },
 
+    destroy: function()
+    {
+      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
+    },
+
     afterRender: function()
     {
       if (this.$el.children().length !== 0)

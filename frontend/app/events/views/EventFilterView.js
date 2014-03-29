@@ -38,6 +38,11 @@ define([
       this.idPrefix = _.uniqueId('eventFilter');
     },
 
+    destroy: function()
+    {
+      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
+    },
+
     serialize: function()
     {
       return {
