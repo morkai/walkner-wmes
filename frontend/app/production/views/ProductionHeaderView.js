@@ -236,7 +236,9 @@ define([
             onUserPicked(userInfo);
           }
         }
-        else if (userInfo.id !== currentUserInfo.id || userInfo.label !== currentUserInfo.label)
+        else if (currentUserInfo !== userInfo
+          || (userInfo
+            && (userInfo.id !== currentUserInfo.id || userInfo.label !== currentUserInfo.label)))
         {
           onUserPicked(userInfo);
         }
