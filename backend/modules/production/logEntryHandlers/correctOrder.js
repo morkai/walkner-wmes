@@ -121,7 +121,6 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       };
 
       prodDowntime.set(changes);
-
       prodDowntime.save(function(err)
       {
         if (err)
@@ -133,12 +132,6 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
             logEntry._id,
             err.stack
           );
-        }
-        else
-        {
-          changes._id = prodDowntimeId;
-
-          app.broker.publish('prodDowntimes.updated.' + prodDowntimeId, changes);
         }
 
         return done();

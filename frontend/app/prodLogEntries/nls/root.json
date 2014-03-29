@@ -34,6 +34,7 @@
     "type:corroborateDowntime": "Downtime corroboration",
     "type:endWork": "End of work",
     "type:editShift": "Shift edit",
+    "type:editOrder": "Order edit",
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:changeMaster": "New master: <em>{name}</em>",
@@ -50,6 +51,7 @@
     "data:corroborateDowntime": "{status, select, confirmed{Confirmed} rejected{Rejected} other{Corroborated}} <a href='\\#prodDowntimes/{_id}'>downtime</a>.",
     "data:endWork": "-",
     "data:editShift": "Changed attributes: {changedProperties}",
+    "data:editOrder": "Changed attributes: {changedProperties}",
 
     "noData:prodShiftOrder": "<em>no order</em>"
   },

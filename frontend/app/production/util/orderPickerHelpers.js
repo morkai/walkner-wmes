@@ -130,6 +130,40 @@ define([
         operations: _.values(orderData.operations),
         selectedOperationNo: prodShiftOrder.get('operationNo')
       });
+    },
+    prepareOrderInfo: function(model, orderInfo)
+    {
+      delete orderInfo.__v;
+      delete orderInfo.id;
+      delete orderInfo.text;
+
+      if (model.getOrderIdType() === 'no')
+      {
+        orderInfo.no = orderInfo._id;
+      }
+      else
+      {
+        orderInfo.no = null;
+        orderInfo.nc12 = orderInfo._id;
+      }
+
+      delete orderInfo._id;
+
+      if (Array.isArray(orderInfo.operations))
+      {
+        var operations = {};
+
+        orderInfo.operations.forEach(function(operation)
+        {
+          operations[operation.no] = operation;
+        });
+
+        orderInfo.operations = operations;
+      }
+      else if (!_.isObject(orderInfo.operations))
+      {
+        orderInfo.operations = {};
+      }
     }
   };
 });

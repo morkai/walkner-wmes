@@ -1,19 +1,24 @@
 'use strict';
 
+var step = require('h5.step');
 var moment = require('moment');
 var crud = require('../express/crud');
 var limitOrgUnit = require('../prodLines/limitOrgUnit');
+var userInfo = require('../../models/userInfo');
+var logEntryHandlers = require('../production/logEntryHandlers');
 
 module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 {
   var express = app[prodShiftOrdersModule.config.expressId];
   var userModule = app[prodShiftOrdersModule.config.userId];
   var mongoose = app[prodShiftOrdersModule.config.mongooseId];
-  var subdivisionsModule = app[prodShiftOrdersModule.config.subdivisionsId];
-  var prodFlowsModule = app[prodShiftOrdersModule.config.prodFlowsId];
+  var orgUnitsModule = app[prodShiftOrdersModule.config.orgUnitsId];
+  var productionModule = app[prodShiftOrdersModule.config.productionId];
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  var ProdLogEntry = mongoose.model('ProdLogEntry');
 
   var canView = userModule.auth('PROD_DATA:VIEW');
+  var canManage = userModule.auth('PROD_DATA:MANAGE');
 
   express.get(
     '/prodShiftOrders', canView, limitOrgUnit, crud.browseRoute.bind(null, app, ProdShiftOrder)
@@ -31,6 +36,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
   );
 
   express.get('/prodShiftOrders/:id', canView, crud.readRoute.bind(null, app, ProdShiftOrder));
+
+  express.put('/prodShiftOrders/:id', canManage, editProdShiftOrderRoute);
 
   function exportProdShiftOrder(doc)
   {
@@ -62,8 +69,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
     }
 
     var operation = orderData.operations[doc.operationNo];
-    var subdivision = subdivisionsModule.modelsById[doc.subdivision];
-    var prodFlow = prodFlowsModule.modelsById[doc.prodFlow];
+    var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
+    var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
 
     return {
       '"orderNo': doc.mechOrder ? '' : doc.orderId,
@@ -87,5 +94,89 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       '"orderId': doc._id,
       '"shiftId': doc.prodShift || ''
     };
+  }
+
+  function editProdShiftOrderRoute(req, res, next)
+  {
+    step(
+      function getProdDataStep()
+      {
+        productionModule.getProdData('order', req.params.id, this.next());
+      },
+      function createLogEntryStep(err, prodShiftOrder)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!prodShiftOrder)
+        {
+          return this.skip(null, 404);
+        }
+
+        if (!prodShiftOrder.isEditable())
+        {
+          return this.skip(new Error('NOT_EDITABLE'), 400);
+        }
+
+        var logEntry = ProdLogEntry.editOrder(
+          prodShiftOrder, userInfo.createObject(req.session.user, req), req.body
+        );
+
+        if (!logEntry)
+        {
+          return this.skip(new Error('INVALID_CHANGES'), 400);
+        }
+
+        logEntry.save(this.next());
+      },
+      function handleLogEntryStep(err, logEntry)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var next = this.next();
+
+        logEntryHandlers.editOrder(
+          app,
+          productionModule,
+          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
+          logEntry,
+          function(err)
+          {
+            if (err)
+            {
+              return next(err, null, null);
+            }
+
+            return next(null, null, logEntry);
+          }
+        );
+      },
+      function sendResponseStep(err, statusCode, logEntry)
+      {
+        if (statusCode)
+        {
+          res.statusCode = statusCode;
+        }
+
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (statusCode)
+        {
+          return res.send(statusCode);
+        }
+
+        res.send(logEntry.data);
+
+        app.broker.publish('production.edited.order.' + logEntry.prodShiftOrder, logEntry.data);
+      }
+    );
   }
 };

@@ -1,17 +1,20 @@
 {
   "BREADCRUMBS:browse": "Zlecenia",
   "BREADCRUMBS:details": "{order}; {operation}",
+  "BREADCRUMBS:editForm": "Edycja",
 
   "MSG:LOADING_FAILURE": "Ładowanie historii zleceń nie powiodło się :(",
 
   "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
   "PAGE_ACTION:prodDowntimes": "Pokaż przestoje",
   "PAGE_ACTION:export": "Eksportuj zlecenia",
+  "PAGE_ACTION:edit": "Edytuj zlecenie",
 
   "PANEL:TITLE:details": "Szczegóły zlecenia produkcyjnego",
   "PANEL:TITLE:orderDetails": "Szczegóły zlecenia w momencie rozpoczęcia",
   "PANEL:TITLE:losses": "Straty materiałowe",
   "PANEL:TITLE:downtimes": "Przestoje rozpoczęte w trakcie wykonywania zlecenia",
+  "PANEL:TITLE:editForm": "Formularz edycji danych zlecenia produkcyjnego",
 
   "FILTER:orderId": "Nr/12NC zlecenia",
   "FILTER:operationNo": "Nr oper.",
@@ -24,6 +27,13 @@
   "FILTER:PLACEHOLDER:orderId": "Dowolne zlecenie",
   "FILTER:PLACEHOLDER:operationNo": "0000",
 
+  "FORM:ACTION:edit": "Edytuj zlecenie",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zlecenia :-(",
+  "FORM:ERROR:order": "Zlecenie jest wymagane!",
+  "FORM:ERROR:operation": "Operacja jest wymagana!",
+  "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zlecenia: nie wykryto żadnych poprawnych zmian :(",
+  "FORM:PLACEHOLDER:personnel": "Szukaj użytkownika po nr kadrowym lub nazwisku...",
+
   "PROPERTY:mrpControllers": "Kontroler MRP",
   "PROPERTY:prodFlow": "Przepływ",
   "PROPERTY:prodLine": "Linia produkcyjna",
@@ -34,6 +44,7 @@
   "PROPERTY:master": "Mistrz",
   "PROPERTY:leader": "Lider",
   "PROPERTY:operator": "Operator",
+  "PROPERTY:operators": "Operatorzy",
   "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas zakończenia",
   "PROPERTY:duration": "Czas trwania",
@@ -43,7 +54,9 @@
   "PROPERTY:workerCountSap": "Ilość osób / wg SAP",
   "PROPERTY:taktTime": "Takt Time / wg SAP",
   "PROPERTY:order": "Zlecenie",
+  "PROPERTY:orderId": "Zlecenie",
   "PROPERTY:operation": "Operacja",
+  "PROPERTY:operationNo": "Operacja",
   "PROPERTY:pressWorksheet": "Karta pracy",
 
   "unit:workerCount": "osoby",

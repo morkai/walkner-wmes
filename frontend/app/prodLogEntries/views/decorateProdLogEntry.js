@@ -1,4 +1,5 @@
 define([
+  'underscore',
   'app/time',
   'app/i18n',
   'app/data/aors',
@@ -7,6 +8,7 @@ define([
   'app/data/views/renderOrgUnitPath',
   'app/core/templates/userInfo'
 ], function(
+  _,
   time,
   t,
   aors,
@@ -16,6 +18,30 @@ define([
   renderUserInfo
 ) {
   'use strict';
+
+  var EDIT_TYPE_TO_NLS_DOMAIN = {
+    editShift: 'prodShifts',
+    editOrder: 'prodShiftOrders'
+  };
+
+  function prepareChangedProperties(type, changes)
+  {
+    var properties = Object.keys(changes);
+
+    if (type === 'editOrder')
+    {
+      properties = _.without(properties, 'mechOrder', 'orderData');
+
+      if (properties.indexOf('orderId') !== -1)
+      {
+        properties = _.without(properties, 'operationNo');
+      }
+    }
+
+    return properties
+      .map(function(property) { return t(EDIT_TYPE_TO_NLS_DOMAIN[type], 'PROPERTY:' + property); })
+      .join(', ');
+  }
 
   return function(prodLogEntryModel)
   {
@@ -69,8 +95,8 @@ define([
         break;
 
       case 'editShift':
-        data.changedProperties = Object.keys(prodLogEntry.data)
-          .map(function(property) { return t('prodShifts', 'PROPERTY:' + property); }).join(', ');
+      case 'editOrder':
+        data.changedProperties = prepareChangedProperties(prodLogEntry.type, prodLogEntry.data);
         break;
 
       default:

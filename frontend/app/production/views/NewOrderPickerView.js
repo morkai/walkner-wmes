@@ -210,21 +210,7 @@ define([
       }
       else
       {
-        delete orderInfo.__v;
-        delete orderInfo.id;
-        delete orderInfo.text;
-
-        if (this.model.getOrderIdType() === 'no')
-        {
-          orderInfo.no = orderInfo._id;
-        }
-        else
-        {
-          orderInfo.no = null;
-          orderInfo.nc12 = orderInfo._id;
-        }
-
-        delete orderInfo._id;
+        orderPickerHelpers.prepareOrderInfo(this.model, orderInfo);
       }
 
       this.pickOrder(orderInfo, operationNo);

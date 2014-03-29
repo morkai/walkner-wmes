@@ -3,6 +3,7 @@ define([
   '../user',
   '../time',
   '../data/prodLog',
+  '../data/subdivisions',
   '../core/Model',
   '../core/util/getShiftEndDate'
 ], function(
@@ -10,6 +11,7 @@ define([
   user,
   time,
   prodLog,
+  subdivisions,
   Model,
   getShiftEndDate
 ) {
@@ -53,16 +55,6 @@ define([
       leader: null,
       operator: null,
       operators: null
-    },
-
-    sync: function(method)
-    {
-      if (method === 'read')
-      {
-        return Model.prototype.sync.apply(this, arguments);
-      }
-
-      throw new Error("Method not supported: " + method);
     },
 
     onShiftChanged: function()
@@ -395,14 +387,41 @@ define([
       return this.get('quantityDone') || 0;
     },
 
+    getSubdivisionType: function()
+    {
+      var subdivision = subdivisions.get(this.get('subdivision'));
+
+      return subdivision ? subdivision.get('type') : null;
+    },
+
+    getOrderIdType: function()
+    {
+      return this.getSubdivisionType() === 'press' ? 'nc12' : 'no';
+    },
+
     hasOrderData: function()
     {
       return !!this.get('orderId') && !!this.get('operationNo') && !!this.get('orderData');
     },
 
+    isEditable: function()
+    {
+      return this.hasEnded() && !this.isFromPressWorksheet();
+    },
+
+    hasEnded: function()
+    {
+      return this.get('finishedAt') != null;
+    },
+
+    isFromPressWorksheet: function()
+    {
+      return this.get('pressWorksheet') != null;
+    },
+
     finish: function()
     {
-      if (!this.id || this.get('finishedAt') != null)
+      if (!this.id || this.hasEnded())
       {
         return null;
       }
@@ -425,21 +444,21 @@ define([
 
     prepareOperations: function(orderData)
     {
-      var operations = {};
-
       if (Array.isArray(orderData.operations))
       {
+        var operations = {};
+
         orderData.operations.forEach(function(operation)
         {
           operations[operation.no] = operation;
         });
-      }
-      else if (_.isObject(orderData.operations))
-      {
-        operations = orderData.operations;
-      }
 
-      orderData.operations = operations;
+        orderData.operations = operations;
+      }
+      else if (!_.isObject(orderData.operations))
+      {
+        orderData.operations = {};
+      }
 
       return orderData;
     }

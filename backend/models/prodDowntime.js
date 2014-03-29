@@ -126,5 +126,33 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
 
   prodDowntimeSchema.statics.TOPIC_PREFIX = 'prodDowntimes';
 
+  prodDowntimeSchema.pre('save', function(next)
+  {
+    this.wasNew = this.isNew;
+    this.modified = this.modifiedPaths();
+
+    next();
+  });
+
+  prodDowntimeSchema.post('save', function(doc)
+  {
+    if (this.wasNew)
+    {
+      app.broker.publish('prodDowntimes.created.' + doc.prodLine, doc.toJSON());
+    }
+    else
+    {
+      var changes = {};
+
+      this.modified.forEach(function(modifiedPath)
+      {
+        changes[modifiedPath] = doc.get(modifiedPath);
+      });
+      this.modified = null;
+
+      app.broker.publish('prodDowntimes.updated.' + doc._id, changes);
+    }
+  });
+
   mongoose.model('ProdDowntime', prodDowntimeSchema);
 };

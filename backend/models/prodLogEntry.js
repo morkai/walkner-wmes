@@ -90,7 +90,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     var ProdLogEntry = this;
     var createdAt = new Date();
     var data = {};
-    var prodShiftData = prodShift.toJSON();
+    var modelData = prodShift.toJSON();
 
     if (validateQuantitiesDone(changes.quantitiesDone))
     {
@@ -99,32 +99,10 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
         return lodash.pick(quantityDone, ['actual', 'planned']);
       });
 
-      compareProperty(data, prodShiftData, 'quantitiesDone');
+      compareProperty(data, modelData, 'quantitiesDone');
     }
 
-    ['master', 'leader', 'operator'].forEach(function(personnelProperty)
-    {
-      var userInfo = changes[personnelProperty];
-
-      if (validateUserInfo(userInfo))
-      {
-        data[personnelProperty] = userInfo === null
-          ? null
-          : lodash.pick(userInfo, ['id', 'label']);
-
-        compareProperty(data, prodShiftData, personnelProperty);
-      }
-    });
-
-    if (Array.isArray(changes.operators))
-    {
-      data.operators = changes.operators.filter(validateUserInfo).map(function(userInfo)
-      {
-        return lodash.pick(userInfo, ['id', 'label']);
-      });
-
-      compareProperty(data, prodShiftData, 'operators');
-    }
+    editPersonnel(data, changes, modelData);
 
     if (lodash.isEmpty(data))
     {
@@ -132,16 +110,57 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     }
 
     return new ProdLogEntry({
-      _id: generateId(createdAt, prodShiftData.prodLine),
+      _id: generateId(createdAt, modelData.prodLine),
       type: 'editShift',
-      division: prodShiftData.division,
-      subdivision: prodShiftData.subdivision,
-      mrpControllers: prodShiftData.mrpControllers,
-      prodFlow: prodShiftData.prodFlow,
-      workCenter: prodShiftData.workCenter,
-      prodLine: prodShiftData.prodLine,
-      prodShift: prodShiftData._id,
+      division: modelData.division,
+      subdivision: modelData.subdivision,
+      mrpControllers: modelData.mrpControllers,
+      prodFlow: modelData.prodFlow,
+      workCenter: modelData.workCenter,
+      prodLine: modelData.prodLine,
+      prodShift: modelData._id,
       prodShiftOrder: null,
+      creator: creator,
+      createdAt: createdAt,
+      savedAt: createdAt,
+      todo: false,
+      data: data
+    });
+  };
+
+  prodLogEntrySchema.statics.editOrder = function(prodShiftOrder, creator, changes)
+  {
+    if (lodash.isEmpty(changes))
+    {
+      return null;
+    }
+
+    var ProdLogEntry = this;
+    var createdAt = new Date();
+    var data = {};
+    var modelData = prodShiftOrder.toJSON();
+
+    editPersonnel(data, changes, modelData);
+    editNumericValue(data, changes, modelData, 'quantityDone', 0);
+    editNumericValue(data, changes, modelData, 'workerCount', 1);
+    editOrder(data, changes, modelData);
+
+    if (lodash.isEmpty(data))
+    {
+      return null;
+    }
+
+    return new ProdLogEntry({
+      _id: generateId(createdAt, modelData.prodLine),
+      type: 'editOrder',
+      division: modelData.division,
+      subdivision: modelData.subdivision,
+      mrpControllers: modelData.mrpControllers,
+      prodFlow: modelData.prodFlow,
+      workCenter: modelData.workCenter,
+      prodLine: modelData.prodLine,
+      prodShift: modelData.prodShift,
+      prodShiftOrder: modelData._id,
       creator: creator,
       createdAt: createdAt,
       savedAt: createdAt,
@@ -173,6 +192,58 @@ function generateId(date, str)
     + Math.round(Math.random() * 10000000000000000).toString(36);
 }
 
+function editPersonnel(logEntryData, changes, modelData)
+{
+  ['master', 'leader', 'operator'].forEach(function(personnelProperty)
+  {
+    var userInfo = changes[personnelProperty];
+
+    if (validateUserInfo(userInfo))
+    {
+      logEntryData[personnelProperty] = userInfo === null
+        ? null
+        : lodash.pick(userInfo, ['id', 'label']);
+
+      compareProperty(logEntryData, modelData, personnelProperty);
+    }
+  });
+
+  if (Array.isArray(changes.operators))
+  {
+    logEntryData.operators = changes.operators.filter(validateUserInfo).map(function(userInfo)
+    {
+      return lodash.pick(userInfo, ['id', 'label']);
+    });
+
+    compareProperty(logEntryData, modelData, 'operators');
+  }
+}
+
+function editNumericValue(data, changes, modelData, numericProperty, minValue)
+{
+  var value = changes[numericProperty];
+
+  if (typeof value === 'number' && value >= minValue && value !== modelData[numericProperty])
+  {
+    data[numericProperty] = value;
+  }
+}
+
+function editOrder(data, changes, modelData)
+{
+  if (changes.orderId && !lodash.isEqual(changes.orderId, modelData.orderId))
+  {
+    data.mechOrder = !!changes.mechOrder;
+    data.orderId = changes.orderId;
+    data.orderData = changes.orderData;
+  }
+
+  if (changes.operationNo && !lodash.isEqual(changes.operationNo, modelData.operationNo))
+  {
+    data.operationNo = changes.operationNo;
+  }
+}
+
 function validateQuantitiesDone(quantitiesDone)
 {
   return Array.isArray(quantitiesDone)
@@ -191,10 +262,10 @@ function validateUserInfo(userInfo)
       && typeof userInfo.label === 'string');
 }
 
-function compareProperty(data, model, property)
+function compareProperty(logEntryData, modelData, property)
 {
-  if (lodash.isEqual(data[property], model[property], property))
+  if (lodash.isEqual(logEntryData[property], modelData[property], property))
   {
-    delete data[property];
+    delete logEntryData[property];
   }
 }

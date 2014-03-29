@@ -33,6 +33,7 @@
   "type:corroborateDowntime": "Potwierdzenie przestoju",
   "type:endWork": "Zakończenie pracy",
   "type:editShift": "Edycja zmiany",
+  "type:editOrder": "Edycja zlecenia",
 
   "data:changeShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
   "data:changeMaster": "Nowy mistrz: <em>{name}</em>",
@@ -49,6 +50,7 @@
   "data:corroborateDowntime": "{status, select, confirmed{Zatwierdzono} rejected{Odrzucono} other{Potwierdzono}} <a href='\\#prodDowntimes/{_id}'>przestój</a>.",
   "data:endWork": "-",
   "data:editShift": "Zmienione atrybuty: {changedProperties}",
+  "data:editOrder": "Zmienione atrybuty: {changedProperties}",
 
   "noData:prodShiftOrder": "<em>brak zlecenia</em>"
 }

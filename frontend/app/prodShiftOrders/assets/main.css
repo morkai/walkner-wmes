@@ -13,9 +13,6 @@
 .prodShiftOrders-downtimes-container tbody tr:last-child td {
   border-bottom: 0;
 }
-.prodShiftOrders-filter-orderId {
-
-}
 .prodShiftOrders-filter-operationNo {
   width: 60px;
 }

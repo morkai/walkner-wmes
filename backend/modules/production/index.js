@@ -146,6 +146,24 @@ exports.start = function startProductionModule(app, module)
     }
   };
 
+  module.swapToCachedProdData = function(models, cachedModels)
+  {
+    models.forEach(function(model)
+    {
+      var cachedModel = module.getCachedProdData(model._id);
+
+      if (cachedModel)
+      {
+        cachedModels.push(cachedModel);
+      }
+      else
+      {
+        module.setProdData(model);
+        cachedModels.push(model);
+      }
+    });
+  };
+
   module.recreating = false;
 
   module.recreate = recreate.bind(null, app, module);

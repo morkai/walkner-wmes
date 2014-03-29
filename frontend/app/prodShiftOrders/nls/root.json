@@ -2,17 +2,26 @@
   "root": {
     "BREADCRUMBS:browse": "Orders",
     "BREADCRUMBS:details": "{order}; {operation}",
+    "BREADCRUMBS:editForm": "Editing",
 
     "MSG:LOADING_FAILURE": "Failed to load the orders :(",
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
     "PAGE_ACTION:prodDowntimes": "Show downtimes",
     "PAGE_ACTION:export": "Export orders",
+    "PAGE_ACTION:edit": "Edit order",
 
     "PANEL:TITLE:details": "Order's production details",
     "PANEL:TITLE:orderDetails": "Order's details at the moment of start",
     "PANEL:TITLE:losses": "Losses",
     "PANEL:TITLE:downtimes": "Downtimes",
+
+    "FORM:ACTION:edit": "Edit order",
+    "FORM:ERROR:editFailure": "Failed to edit the order :-(",
+    "FORM:ERROR:order": "Order is required!",
+    "FORM:ERROR:operation": "Operation is required!",
+    "FORM:ERROR:INVALID_CHANGES": "Cannot edit the order: no valid changes were detected :(",
+    "FORM:PLACEHOLDER:personnel": "Search by last name or personell ID...",
 
     "FILTER:orderId": "Order no/12NC",
     "FILTER:operationNo": "Oper. no",
@@ -35,6 +44,7 @@
     "PROPERTY:master": "Master",
     "PROPERTY:leader": "Leader",
     "PROPERTY:operator": "Operator",
+    "PROPERTY:operators": "Operators",
     "PROPERTY:startedAt": "Started at",
     "PROPERTY:finishedAt": "Finished at",
     "PROPERTY:duration": "Duration",
@@ -44,7 +54,9 @@
     "PROPERTY:workerCountSap": "Worker count / as per SAP",
     "PROPERTY:taktTime": "Takt Time / wg SAP",
     "PROPERTY:order": "Order",
+    "PROPERTY:orderId": "Order",
     "PROPERTY:operation": "Operation",
+    "PROPERTY:operationNo": "Operation",
     "PROPERTY:pressWorksheet": "Worksheet",
 
     "unit:workerCount": "persons",

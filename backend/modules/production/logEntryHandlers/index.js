@@ -10,6 +10,7 @@ exports.changeShift = require('./changeShift');
 exports.changeWorkerCount = require('./changeWorkerCount');
 exports.correctOrder = require('./correctOrder');
 exports.corroborateDowntime = require('./corroborateDowntime');
+exports.editOrder = require('./editOrder');
 exports.editShift = require('./editShift');
 exports.endWork = require('./endWork');
 exports.finishDowntime = require('./finishDowntime');

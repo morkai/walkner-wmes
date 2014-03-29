@@ -64,12 +64,24 @@ define([
 
     actions: function()
     {
-      return [{
+      var actions = [{
         label: t.bound('prodShiftOrders', 'PAGE_ACTION:prodLogEntries'),
         icon: 'list-ol',
         href: '#prodLogEntries?sort(createdAt)&limit(20)'
           + '&prodShiftOrder=' + encodeURIComponent(this.prodShiftOrder.id)
       }];
+
+      if (this.prodShiftOrder.isEditable())
+      {
+        actions.push({
+          label: t.bound('prodShiftOrders', 'PAGE_ACTION:edit'),
+          icon: 'edit',
+          href: this.prodShiftOrder.genClientUrl('edit'),
+          privilege: 'PROD_DATA:MANAGE'
+        });
+      }
+
+      return actions;
     },
 
     initialize: function()

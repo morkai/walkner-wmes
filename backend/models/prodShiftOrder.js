@@ -201,6 +201,11 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     prodShiftOrder.workDuration = prodShiftOrder.totalDuration - prodShiftOrder.breakDuration;
   };
 
+  prodShiftOrderSchema.methods.isEditable = function()
+  {
+    return this.finishedAt !== null && this.pressWorksheet === null;
+  };
+
   prodShiftOrderSchema.methods.copyOperationData = function()
   {
     if (!this.operationNo || !this.orderData)

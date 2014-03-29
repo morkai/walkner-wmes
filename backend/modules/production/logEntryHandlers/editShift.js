@@ -37,12 +37,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       if (Array.isArray(prodShiftOrders))
       {
-        swapToCachedModels(prodShiftOrders, cachedProdShiftOrders);
+        productionModule.swapToCachedProdData(prodShiftOrders, cachedProdShiftOrders);
       }
 
       if (Array.isArray(prodDowntimes))
       {
-        swapToCachedModels(prodDowntimes, cachedProdDowntimes);
+        productionModule.swapToCachedProdData(prodDowntimes, cachedProdDowntimes);
       }
 
       setImmediate(this.next().bind(null, prodShift, cachedProdShiftOrders, cachedProdDowntimes));
@@ -68,61 +68,17 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
         prodShiftOrders.forEach(function(prodShiftOrder)
         {
-          var done = step.parallel();
-
           prodShiftOrder.set(personnelChanges);
-          prodShiftOrder.save(function(err, prodShiftOrder)
-          {
-            if (!err)
-            {
-              app.broker.publish(
-                'prodShiftOrders.updated.' + prodShiftOrder._id,
-                personnelChanges
-              );
-            }
-
-            done(err);
-          });
+          prodShiftOrder.save(step.parallel());
         });
 
         prodDowntimes.forEach(function(prodDowntime)
         {
-          var done = step.parallel();
-
           prodDowntime.set(personnelChanges);
-          prodDowntime.save(function(err, prodDowntime)
-          {
-            if (!err)
-            {
-              app.broker.publish(
-                'prodDowntimes.updated.' + prodDowntime._id,
-                personnelChanges
-              );
-            }
-
-            done(err);
-          });
+          prodDowntime.save(step.parallel());
         });
       }
     },
     done
   );
-
-  function swapToCachedModels(models, cachedModels)
-  {
-    models.forEach(function(model)
-    {
-      var cachedModel = productionModule.getCachedProdData(model._id);
-
-      if (cachedModel)
-      {
-        cachedModels.push(cachedModel);
-      }
-      else
-      {
-        productionModule.setProdData(model);
-        cachedModels.push(model);
-      }
-    });
-  }
 };
