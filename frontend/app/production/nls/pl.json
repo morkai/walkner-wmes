@@ -72,10 +72,10 @@
   "personelPicker:submit": "Wybierz użytkownika",
   "personelPicker:cancel": "Anuluj wybieranie",
   "personelPicker:online:label": "Użytkownik:",
-  "personelPicker:online:placeholder": "Szukaj po numerze personalnym lub nazwisku",
+  "personelPicker:online:placeholder": "Szukaj po numerze kadrowym lub nazwisku",
   "personelPicker:offline:label": "Użytkownik:",
-  "personelPicker:offline:placeholder": "Numer personalny użytkownika",
-  "personelPicker:offline:warning": "Brak połączenia z serwerem. Możesz tylko wpisać numer personalny użytkownika.",
+  "personelPicker:offline:placeholder": "Numer kadrowy użytkownika",
+  "personelPicker:offline:warning": "Brak połączenia z serwerem. Możesz tylko wpisać numer kadrowy użytkownika.",
 
   "newOrderPicker:title": "Rozpoczynanie nowego zlecenia",
   "newOrderPicker:title:replacing": "Kończenie aktualnego zlecenia",
