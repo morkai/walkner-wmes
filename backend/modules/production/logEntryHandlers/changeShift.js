@@ -6,21 +6,15 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
   var mongoose = app[productionModule.config.mongooseId];
   var ProdShift = mongoose.model('ProdShift');
-
-  var startedProdShiftData = logEntry.data.startedProdShift;
-
-  // TODO: Remove after a while
-  if (!startedProdShiftData.creator)
-  {
-    startedProdShiftData.creator = logEntry.creator;
-  }
+  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  var ProdDowntime = mongoose.model('ProdDowntime');
 
   finishOrders();
 
   function finishOrders()
   {
-    mongoose.model('ProdShiftOrder')
-      .find({prodLine: prodLine.get('_id'), finishedAt: null})
+    ProdShiftOrder
+      .find({prodLine: prodLine._id, finishedAt: null})
       .sort({date: 1})
       .exec(function(err, prodShiftOrders)
       {
@@ -33,12 +27,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
             err.stack
           );
 
-          return createNewShift();
+          return finishDowntimes();
         }
 
         if (prodShiftOrders.length === 0)
         {
-          return createNewShift();
+          return finishDowntimes();
         }
 
         productionModule.debug(
@@ -65,13 +59,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   function finishDowntimes()
   {
-    if (logEntry.data.finishedProdShiftId === null)
-    {
-      return createNewShift();
-    }
-
-    mongoose.model('ProdDowntime')
-      .find({prodShift: logEntry.data.finishedProdShiftId, finishedAt: null})
+    ProdDowntime
+      .find({prodLine: prodLine._id, finishedAt: null})
       .sort({date: 1})
       .exec(function(err, prodDowntimes)
       {
@@ -125,9 +114,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         buggedProdModel = cachedProdModel;
       }
 
-      var finishedAt = buggedProdModel.get('date').getTime() + (8 * 3600 * 1000) - 1;
+      buggedProdModel.finishedAt = new Date(buggedProdModel.date.getTime() + (8 * 3600 * 1000) - 1);
 
-      buggedProdModel.set('finishedAt', new Date(finishedAt));
       buggedProdModel.save(function(err)
       {
         if (err)
@@ -149,7 +137,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   function createNewShift()
   {
-    var prodShift = new ProdShift(startedProdShiftData);
+    var prodShift = new ProdShift(logEntry.data.startedProdShift);
 
     prodShift.save(function(err)
     {
