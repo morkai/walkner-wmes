@@ -24,7 +24,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
     {
       if (!lodash.isFunction(reply))
       {
-        reply = function() {};
+        return;
       }
 
       var user = socket.handshake.user;
@@ -172,6 +172,34 @@ module.exports = function setUpProductionsCommands(app, productionModule)
         {
           app.broker.publish('production.logEntries.saved');
         }
+      });
+    });
+
+    socket.on('production.getPlannedQuantities', function(prodShiftId, reply)
+    {
+      if (!lodash.isFunction(reply))
+      {
+        return;
+      }
+
+      productionModule.getProdData('shift', prodShiftId, function(err, prodShift)
+      {
+        if (err)
+        {
+          return reply(err);
+        }
+
+        if (!prodShift)
+        {
+          return reply(new Error('UNKNOWN_PROD_SHIFT'));
+        }
+
+        var plannedQuantities = prodShift.quantitiesDone.map(function(quantityDone)
+        {
+          return quantityDone.planned;
+        });
+
+        reply(null, plannedQuantities);
       });
     });
   });

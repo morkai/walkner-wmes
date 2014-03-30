@@ -3,6 +3,7 @@
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var setUpLogEntryHandler = require('./logEntryHandler');
+var setUpActiveProdLines = require('./activeProdLines');
 var recreate = require('./recreate');
 
 exports.DEFAULT_CONFIG = {
@@ -12,7 +13,9 @@ exports.DEFAULT_CONFIG = {
   sioId: 'sio',
   subdivisionsId: 'subdivisions',
   prodLinesId: 'prodLines',
-  downtimeReasonsId: 'downtimeReasons'
+  downtimeReasonsId: 'downtimeReasons',
+  fteId: 'fte',
+  orgUnitsId: 'orgUnits'
 };
 
 exports.start = function startProductionModule(app, module)
@@ -186,6 +189,16 @@ exports.start = function startProductionModule(app, module)
     });
   });
 
+  app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(message)
+  {
+    if (!module.recreating)
+    {
+      app.broker.publish('production.edited.shift.' + message.prodShift, {
+        quantitiesDone: message.quantitiesDone
+      });
+    }
+  });
+
   app.onModuleReady(
     [
       module.config.userId,
@@ -201,6 +214,15 @@ exports.start = function startProductionModule(app, module)
       module.config.prodLinesId
     ],
     setUpCommands.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId,
+      module.config.fteId,
+      module.config.orgUnitsId
+    ],
+    setUpActiveProdLines.bind(null, app, module)
   );
 
   app.onModuleReady(

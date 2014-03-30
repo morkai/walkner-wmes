@@ -130,14 +130,12 @@ define([
     {
       var prodShift = this.prodShift;
 
-      if (prodShift.hasEnded())
+      this.pubsub.subscribe('production.edited.shift.' + prodShift.id, function(changes)
       {
-        this.pubsub.subscribe('production.edited.shift.' + prodShift.id, function(changes)
-        {
-          prodShift.set(changes);
-        });
-      }
-      else
+        prodShift.set(changes);
+      });
+
+      if (!prodShift.hasEnded())
       {
         this.pubsub.subscribe(
           'production.synced.' + prodShift.get('prodLine'), this.handleProdChanges.bind(this)

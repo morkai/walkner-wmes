@@ -9,7 +9,9 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   sioId: 'sio',
   divisionsId: 'divisions',
-  fteId: 'fte'
+  fteId: 'fte',
+  orgUnitsId: 'orgUnits',
+  prodShiftsId: 'prodShifts'
 };
 
 exports.start = function startFteModule(app, module)
@@ -47,6 +49,24 @@ exports.start = function startFteModule(app, module)
     }
   );
 
+  app.onModuleReady(
+    [
+      module.config.mongooseId,
+      module.config.orgUnitsId,
+      module.config.prodShiftsId,
+      module.config.fteId
+    ],
+    function()
+    {
+      app.broker.subscribe('production.prodLineActivated', function(message)
+      {
+        recountPlannedQuantities(
+          message.shiftId, message.prodFlow, message.activeProdLinesInProdFlow
+        );
+      });
+    }
+  );
+
   function lockEntries()
   {
     var HourlyPlan = app[module.config.mongooseId].model('HourlyPlan');
@@ -81,5 +101,43 @@ exports.start = function startFteModule(app, module)
         });
       });
     });
+  }
+
+  function recountPlannedQuantities(shiftId, prodFlowId, activeProdLineIds)
+  {
+    module.debug("Recounting planned quantities for prod flow [%s]...", prodFlowId);
+
+    var division = app[module.config.orgUnitsId].getDivisionFor('prodFlow', prodFlowId);
+
+    if (!division)
+    {
+      return module.error("Couldn't find a division for prod flow [%s]", prodFlowId);
+    }
+
+    app[module.config.mongooseId].model('HourlyPlan').recountPlannedQuantities(
+      division._id,
+      shiftId,
+      prodFlowId,
+      activeProdLineIds,
+      function(err, prodShifts)
+      {
+        if (err)
+        {
+          return module.error(
+            "Failed to recount planned quantities for prod flow [%s]: %s", prodFlowId, err.stack
+          );
+        }
+
+        prodShifts.forEach(function(prodShift)
+        {
+          app.broker.publish('hourlyPlans.quantitiesPlanned', {
+            prodLine: prodShift.prodLine,
+            prodShift: prodShift._id,
+            date: prodShift.date,
+            quantitiesDone: prodShift.toJSON().quantitiesDone
+          });
+        });
+      }
+    );
   }
 };

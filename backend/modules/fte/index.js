@@ -58,6 +58,7 @@ exports.start = function startFteModule(app, module)
 
   function setUpShiftChangeBroadcast()
   {
+    // TODO: Handle DST changes
     var currentShift = getCurrentShift();
     var nextShiftTime = currentShift.date.getTime() + 8 * 3600 * 1000;
 

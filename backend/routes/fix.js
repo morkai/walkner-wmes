@@ -25,6 +25,7 @@ module.exports = function startFixRoutes(app, express)
   express.get('/fix/prodLogEntries/fill-org-units', onlySuper, fillOrgUnits);
   express.get('/fix/prodLogEntries/corroborate-downtimes', onlySuper, corroborateDowntimeLogEntries);
   express.get('/fix/prodLogEntries/recreate', onlySuper, recreateProdData);
+  express.get('/fix/hourlyPlans/recount-planned-quantities', onlySuper, recountPlannedQuantities);
 
   function fixProdShiftOrderDurations(req, res, next)
   {
@@ -494,5 +495,39 @@ module.exports = function startFixRoutes(app, express)
         );
       });
     });
+  }
+
+  function recountPlannedQuantities(req, res, next)
+  {
+    app.mongoose.model('HourlyPlan')
+      .find()
+      .sort({date: 1, division: 1})
+      .exec(function(err, hourlyPlans)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        step(
+          function()
+          {
+            for (var i = 0, l = hourlyPlans.length; i < l; ++i)
+            {
+              hourlyPlans[i].recountPlannedQuantities(this.parallel());
+            }
+          },
+          function(err)
+          {
+            if (err)
+            {
+              return next(err);
+            }
+
+            res.type('txt');
+            res.send("ALL DONE!");
+          }
+        );
+      });
   }
 };

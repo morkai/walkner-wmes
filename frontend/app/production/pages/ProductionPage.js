@@ -42,6 +42,7 @@ define([
       {
         this.setUpTimeLog();
         this.refreshDowntimes();
+        this.refreshPlannedQuantities();
       },
       'socket.disconnected': function()
       {
@@ -67,6 +68,8 @@ define([
 
     initialize: function()
     {
+      this.shiftEditedSub = null;
+
       updater.disableViews();
       prodLog.enable();
 
@@ -81,6 +84,8 @@ define([
 
     destroy: function()
     {
+      this.shiftEditedSub = null;
+
       $(window).off('beforeunload', this.onBeforeUnload);
 
       this.model.stopShiftChangeMonitor();
@@ -132,6 +137,7 @@ define([
       {
         this.$el.removeClass('is-locked').addClass('is-unlocked');
         this.refreshDowntimes();
+        this.refreshPlannedQuantities();
       });
 
       this.listenTo(this.model, 'change:state', function()
@@ -160,6 +166,13 @@ define([
         }
       });
 
+      this.listenTo(this.model, 'change:_id', this.subscribeForShiftChanges);
+
+      if (this.model.id)
+      {
+        this.subscribeForShiftChanges();
+      }
+
       this.listenTo(this.model.prodShiftOrder, 'change:mechOrder', function()
       {
         this.$el.toggleClass('is-mechOrder', this.model.prodShiftOrder.isMechOrder());
@@ -177,6 +190,7 @@ define([
       {
         this.setUpTimeLog();
         this.refreshDowntimes();
+        this.refreshPlannedQuantities();
       }
     },
 
@@ -214,6 +228,30 @@ define([
         view.timers.refreshDowntimes = null;
         view.refreshDowntimes();
       }, 2500, this);
+    },
+
+    refreshPlannedQuantities: function()
+    {
+      if (this.model.isLocked())
+      {
+        return this.listenToOnce(this.model, 'unlocked', this.refreshPlannedQuantities.bind(this));
+      }
+
+      var page = this;
+
+      this.socket.emit(
+        'production.getPlannedQuantities',
+        this.model.id,
+        function(err, plannedQuantities)
+        {
+          if (err || !page.shiftEditedSub)
+          {
+            return;
+          }
+
+          page.model.updatePlannedQuantities(plannedQuantities);
+        }
+      );
     },
 
     onBeforeUnload: function()
@@ -266,6 +304,25 @@ define([
         type: 'ping',
         data: null
       });
+    },
+
+    subscribeForShiftChanges: function()
+    {
+      if (this.shiftEditedSub)
+      {
+        this.shiftEditedSub.cancel();
+      }
+
+      if (!this.model.id)
+      {
+        return;
+      }
+
+      var model = this.model;
+
+      this.shiftEditedSub = this.pubsub
+        .subscribe('production.edited.shift.' + this.model.id)
+        .on('message', function(changes) { model.set(changes); });
     }
 
   });

@@ -641,6 +641,24 @@ define([
       return prodShiftStartTime < currentShiftStartTime;
     },
 
+    updatePlannedQuantities: function(plannedQuantities)
+    {
+      if (!Array.isArray(plannedQuantities)
+        || plannedQuantities.length !== 8
+        || !Array.isArray(this.attributes.quantitiesDone))
+      {
+        return;
+      }
+
+      for (var h = 0; h < 8; ++h)
+      {
+        this.attributes.quantitiesDone[h].planned = plannedQuantities[h];
+      }
+
+      this.saveLocalData();
+      this.trigger('change:quantitiesDone', this, {});
+    },
+
     /**
      * @returns {boolean}
      */
