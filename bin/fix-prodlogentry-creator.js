@@ -18,20 +18,36 @@ MongoClient.connect(config.uri, config, function(err, db)
     {
       prodLogEntries
         .find({type: 'changeShift', 'data.startedProdShift.creator': null}, {creator: 1})
-        .toArray(this.next());
+        .toArray(this.parallel());
+
+      prodLogEntries
+        .find({type: 'startDowntime', 'data.creator': null}, {creator: 1})
+        .toArray(this.parallel());
     },
-    function fixProdLogEntriesStep(err, docs)
+    function fixProdLogEntriesStep(err, changeShiftDocs, startDowntimeDocs)
     {
       if (err)
       {
         return this.skip(err);
       }
 
-      for (var i = 0, l = docs.length; i < l; ++i)
+      var i;
+      var l;
+
+      for (i = 0, l = changeShiftDocs.length; i < l; ++i)
       {
         prodLogEntries.update(
-          {_id: docs[i]._id},
-          {$set: {'data.startedProdShift.creator': docs[i].creator}},
+          {_id: changeShiftDocs[i]._id},
+          {$set: {'data.startedProdShift.creator': changeShiftDocs[i].creator}},
+          this.parallel()
+        );
+      }
+
+      for (i = 0, l = startDowntimeDocs.length; i < l; ++i)
+      {
+        prodLogEntries.update(
+          {_id: startDowntimeDocs[i]._id},
+          {$set: {'data.creator': startDowntimeDocs[i].creator}},
           this.parallel()
         );
       }

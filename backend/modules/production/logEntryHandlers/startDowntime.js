@@ -4,11 +4,6 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
   var ProdDowntime = app[productionModule.config.mongooseId].model('ProdDowntime');
 
-  if (!logEntry.data.creator)
-  {
-    logEntry.data.creator = logEntry.creator;
-  }
-
   if (logEntry.data.date === undefined || logEntry.data.operators === undefined)
   {
     productionModule.getProdData('shift', logEntry.prodShift, function(err, prodShift)
