@@ -101,7 +101,6 @@ define([
     defineModels: function()
     {
       this.model.readLocalData();
-      this.model.startShiftChangeMonitor();
     },
 
     defineViews: function()

@@ -671,6 +671,7 @@ define([
 
         this.prodShiftOrder.clear();
         this.prodDowntimes.reset();
+        this.stopShiftChangeMonitor();
         this.clear();
         this.trigger('locked');
       }
@@ -680,6 +681,7 @@ define([
 
         this.trigger('unlocked');
         this.readLocalData();
+        this.startShiftChangeMonitor();
       }
     },
 
