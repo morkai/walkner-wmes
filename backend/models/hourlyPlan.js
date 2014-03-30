@@ -72,6 +72,9 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
     id: false
   });
 
+  hourlyPlanSchema.index({date: -1, division: 1});
+  hourlyPlanSchema.index({division: 1});
+
   hourlyPlanSchema.statics.TOPIC_PREFIX = 'hourlyPlans';
 
   hourlyPlanSchema.statics.createForShift = function(shiftId, user, done)
