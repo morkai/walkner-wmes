@@ -1,5 +1,6 @@
 'use strict';
 
+var moment = require('moment');
 var step = require('h5.step');
 var util = require('./util');
 
@@ -56,6 +57,7 @@ module.exports = function(mongoose, options, done)
       master: 1,
       operators: 1,
       startedAt: 1,
+      date: 1,
       shift: 1,
       division: 1,
       prodLine: 1
@@ -293,9 +295,10 @@ Report4.prototype.finalizeEffAndProd = function()
     if (groupData)
     {
       var prodDen = Object.keys(groupData.prodDen).length;
+      var shifts = Object.keys(groupData.shifts).length;
 
       effAndProd.eff = groupData.effDen ? (groupData.effNum / groupData.effDen) : 0;
-      effAndProd.prod = prodDen ? (groupData.effNum / 8 / prodDen) : 0;
+      effAndProd.prod = prodDen ? (groupData.effNum / (8 * shifts) / prodDen) : 0;
 
       var divisionIds = Object.keys(groupData.byDivision);
 
@@ -450,6 +453,7 @@ Report4.prototype.handleEffAndProd = function(prodShiftOrder, workerCount)
       effNum: 0,
       effDen: 0,
       prodDen: {},
+      shifts: {},
       byDivision: {}
     };
   }
@@ -476,6 +480,8 @@ Report4.prototype.handleEffAndProd = function(prodShiftOrder, workerCount)
     {
       groupData.prodDen[prodShiftOrder.operators[i].id] = true;
     }
+
+    groupData.shifts[prodShiftOrder.date.getTime()] = true;
   }
 
   byDivision.effNum = prodShiftOrder.laborTime / 100 * totalQuantity;
