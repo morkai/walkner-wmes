@@ -7,7 +7,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get a prod downtime to corroborate (LOG=[%s]): %s", logEntry._id, err.stack
+        "Failed to get prod downtime [%s] to corroborate (LOG=[%s]): %s",
+        logEntry.data._id,
+        logEntry._id,
+        err.stack
       );
 
       return done(err);
@@ -16,7 +19,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (!prodDowntime)
     {
       productionModule.warn(
-        "Couldn't find a prod downtime to corroborate (LOG=[%s])", logEntry._id
+        "Couldn't find prod downtime [%s] to corroborate (LOG=[%s])",
+        logEntry.data._id,
+        logEntry._id
       );
 
       return done();
@@ -28,7 +33,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save a prod downtime after corroborating (LOG=[%s]): %s",
+          "Failed to save prod downtime [%s] after corroborating (LOG=[%s]): %s",
+          logEntry.data._id,
           logEntry._id,
           err.stack
         );

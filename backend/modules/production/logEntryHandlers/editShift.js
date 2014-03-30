@@ -29,6 +29,13 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     {
       if (err)
       {
+        productionModule.error(
+          "Failed to find models while editing shift [%s] (LOG=[%s]): %s",
+          logEntry.prodShift,
+          logEntry._id,
+          err.stack
+        );
+
         return this.done(done, err);
       }
 

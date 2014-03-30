@@ -7,7 +7,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get the prod shift order to change the quantity done (LOG=[%s]): %s",
+        "Failed to get prod shift order [%s] to change the quantity done (LOG=[%s]): %s",
+        logEntry.prodShiftOrder,
+        logEntry._id,
         err.stack
       );
 
@@ -16,17 +18,24 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
     if (!prodShiftOrder)
     {
-      return done(null);
+      productionModule.warn(
+        "Couldn't find prod shift order [%s] to change the quantity done (LOG=[%s])",
+        logEntry.prodShiftOrder,
+        logEntry._id
+      );
+
+      return done();
     }
 
-    prodShiftOrder.set('quantityDone', Math.max(logEntry.data.newValue, 0));
+    prodShiftOrder.quantityDone = Math.max(logEntry.data.newValue, 0);
 
     prodShiftOrder.save(function(err)
     {
       if (err)
       {
         productionModule.error(
-          "Failed to save the prod shift order after changing the quantity done (LOG=[%s]): %s",
+          "Failed to save prod shift order [%s] after changing the quantity done (LOG=[%s]): %s",
+          logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
         );

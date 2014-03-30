@@ -7,7 +7,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get the prod shift to change the quantities done (LOG=[%s]): %s",
+        "Failed to get a prod shift [%s] to change the quantities done (LOG=[%s]): %s",
+        logEntry.prodShift,
         logEntry._id,
         err.stack
       );
@@ -17,7 +18,13 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
     if (!prodShift)
     {
-      return done(null);
+      productionModule.warn(
+        "Couldn't find prod shift [%s] to change the quantities done (LOG=[%s])",
+        logEntry.prodShift,
+        logEntry._id
+      );
+
+      return done();
     }
 
     prodShift.quantitiesDone[logEntry.data.hour].actual = Math.max(logEntry.data.newValue, 0);
@@ -27,7 +34,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save the prod shift after changing the quantities done (LOG=[%s]): %s",
+          "Failed to save prod shift [%s] after changing the quantities done (LOG=[%s]): %s",
+          logEntry.prodShift,
           logEntry._id,
           err.stack
         );

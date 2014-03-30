@@ -7,11 +7,6 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
   var mongoose = app[productionModule.config.mongooseId];
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
 
-  if (!logEntry.data.creator)
-  {
-    logEntry.data.creator = logEntry.creator;
-  }
-
   if (logEntry.data.master === undefined)
   {
     copyPersonnelData();
@@ -28,7 +23,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find prod shift to copy personnel data (LOG=[%s]): %s",
+          "Failed to find prod shift [%s] to copy personnel data (LOG=[%s]): %s",
+          logEntry.prodShift,
           logEntry._id,
           err.stack
         );
@@ -88,7 +84,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       }
 
       prodLine.set({
-        prodShiftOrder: prodShiftOrder.get('_id'),
+        prodShiftOrder: prodShiftOrder._id,
         prodDowntime: null
       });
 
@@ -97,7 +93,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save the prod line after changing the prod shift order (LOG=[%s]): %s",
+            "Failed to save prod line [%s] after changing the prod shift order to [%s]"
+              + " (LOG=[%s]): %s",
+            prodLine._id,
+            prodShiftOrder._id,
             logEntry._id,
             err.stack
           );

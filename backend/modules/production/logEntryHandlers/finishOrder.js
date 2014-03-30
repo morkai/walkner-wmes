@@ -7,7 +7,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get the prod shift order to finish (LOG=[%s]): %s", logEntry._id, err.stack
+        "Failed to get the prod shift order [%s] to finish (LOG=[%s]): %s",
+        logEntry.data._id,
+        logEntry._id,
+        err.stack
       );
 
       return done(err);
@@ -15,26 +18,36 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
     if (!prodShiftOrder)
     {
-      return done(null);
+      productionModule.warn(
+        "Couldn't find prod shift order [%s] to finish (LOG=[%s])",
+        logEntry.data._id,
+        logEntry._id
+      );
+
+      return done();
     }
 
     if (prodShiftOrder.finishedAt
       && prodShiftOrder.finishedAt <= Date.parse(logEntry.data.finishedAt))
     {
       productionModule.warn(
-        "Tried to finish an already finished prod shift order (LOG=[%s])", logEntry._id
+        "Tried to finish an already finished prod shift order [%s] (LOG=[%s])",
+        logEntry.data._id,
+        logEntry._id
       );
 
       return done();
     }
 
-    prodShiftOrder.set('finishedAt', logEntry.data.finishedAt);
+    prodShiftOrder.finishedAt = logEntry.data.finishedAt;
+
     prodShiftOrder.recalcDurations(false, function(err)
     {
       if (err)
       {
         productionModule.error(
-          "Failed to recalculate prod shift order durations (LOG=[%s]): %s",
+          "Failed to recalculate durations of prod shift order [%s] (LOG=[%s]): %s",
+          prodShiftOrder._id,
           logEntry._id,
           err.stack
         );
@@ -45,7 +58,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save the prod shift order after changing the finish time (LOG=[%s]): %s",
+            "Failed to save prod shift order [%s] after changing the finish time (LOG=[%s]): %s",
+            prodShiftOrder._id,
             logEntry._id,
             err.stack
           );

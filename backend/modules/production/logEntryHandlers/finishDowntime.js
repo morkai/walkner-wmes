@@ -9,45 +9,23 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get the prod downtime to finish (LOG=[%s]): %s", logEntry._id, err.stack
+        "Failed to get prod downtime [%s] to finish (LOG=[%s]): %s",
+        logEntry.data._id,
+        logEntry._id,
+        err.stack
       );
 
       return done(err);
     }
 
+
     if (!prodDowntime)
     {
-      // TODO: Remove after a while
-      app[productionModule.config.mongooseId]
-        .model('ProdDowntime')
-        .find({prodLine: prodLine._id, finishedAt: null})
-        .sort({startedAt: -1})
-        .limit(1)
-        .exec(function(err, prodDowntimes)
-        {
-          if (err)
-          {
-            productionModule.error(
-              "Failed to find the last prod downtime for the prod line [%s] (LOG=[%s]): %s",
-              prodLine._id,
-              logEntry._id,
-              err.stack
-            );
+      productionModule.warn(
+        "Couldn't find prod downtime [%s] to finish (LOG=[%s])", logEntry.data._id, logEntry._id
+      );
 
-            return done(err);
-          }
-
-          var prodDowntime = prodDowntimes[0];
-
-          if (!prodDowntime)
-          {
-            return done(null);
-          }
-
-          productionModule.setProdData(prodDowntime);
-
-          finishDowntime(prodDowntime);
-        });
+      return done();
     }
     else
     {
@@ -61,13 +39,15 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       && prodDowntime.finishedAt <= Date.parse(logEntry.data.finishedAt))
     {
       productionModule.warn(
-        "Tried to finish an already finished prod downtime (LOG=[%s])", logEntry._id
+        "Tried to finish an already finished prod downtime [%s] (LOG=[%s])",
+        prodDowntime._id,
+        logEntry._id
       );
 
       return done();
     }
 
-    prodDowntime.set('finishedAt', logEntry.data.finishedAt);
+    prodDowntime.finishedAt = logEntry.data.finishedAt;
 
     var downtimeReason =
       app[productionModule.config.downtimeReasonsId].modelsById[prodDowntime.reason];
@@ -116,8 +96,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to create a ProdLogEntry during auto corroboration of the "
-              + "[%s] ProdDowntime (LOG=[%s]): %s",
+            "Failed to create a ProdLogEntry during an auto corroboration of the prod downtime [%s]"
+              + " (LOG=[%s]): %s",
             prodDowntime._id,
             logEntry._id,
             err.stack
@@ -131,7 +111,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save the prod downtime after changing the finish time (LOG=[%s]): %s",
+          "Failed to save prod downtime [%s] after changing the finish time (LOG=[%s]): %s",
+          prodDowntime._id,
           logEntry._id,
           err.stack
         );

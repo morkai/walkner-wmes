@@ -175,7 +175,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save the prod line after changing the shift (LOG=[%s]): %s",
+            "Failed to save prod line [%s] after changing the shift (LOG=[%s]): %s",
+            prodLine._id,
             logEntry._id,
             err.stack
           );

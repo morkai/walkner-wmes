@@ -15,6 +15,13 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     {
       if (err)
       {
+        productionModule.error(
+          "Failed to find downtime [%s] to edit (LOG=[%s]): %s",
+          logEntry.data._id,
+          logEntry._id,
+          err.stack
+        );
+
         return this.skip(err);
       }
 

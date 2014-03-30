@@ -12,7 +12,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get the prod shift order to correct (LOG=[%s]): %s", logEntry._id, err.stack
+        "Failed to get the prod shift order [%s] to correct (LOG=[%s]): %s",
+        logEntry.prodShiftOrder,
+        logEntry._id,
+        err.stack
       );
 
       return done(err);
@@ -20,7 +23,13 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
     if (!prodShiftOrder)
     {
-      return done(null);
+      productionModule.warn(
+        "Couldn't find prod shift order [%s] to correct (LOG=[%s])",
+        logEntry.prodShiftOrder,
+        logEntry._id
+      );
+
+      return done();
     }
 
     if (util.isOfflineEntry(logEntry))
@@ -49,7 +58,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save the prod shift order after correcting it (LOG=[%s]): %s",
+          "Failed to save prod shift order [%s] after correcting it (LOG=[%s]): %s",
+          logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
         );
@@ -70,7 +80,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find prod downtimes after correcting the prod shift order (LOG=[%s]): %s",
+          "Failed to find prod downtimes after correcting prod shift order [%s] (LOG=[%s]): %s",
+          logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
         );
@@ -105,8 +116,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find prod downtime [%s] after correcting the prod shift order (LOG=[%s]): %s",
+          "Failed to find prod downtime [%s] after correcting prod shift order [%s]"
+            + " (LOG=[%s]): %s",
           prodDowntimeId,
+          logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
         );
@@ -126,9 +139,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save prod downtime [%s] after correcting the prod shift order "
-              + "(LOG=[%s]): %s",
+            "Failed to save prod downtime [%s] after correcting prod shift order [%s]"
+              + " (LOG=[%s]): %s",
             prodDowntimeId,
+            logEntry.prodShiftOrder,
             logEntry._id,
             err.stack
           );

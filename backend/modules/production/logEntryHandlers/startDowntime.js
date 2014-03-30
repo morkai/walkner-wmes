@@ -16,7 +16,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to get a prod shift to start a downtime (LOG=[%s]): %s", logEntry._id, err.stack
+          "Failed to get prod shift [%s] to start a downtime (LOG=[%s]): %s",
+          logEntry.prodShift,
+          logEntry._id,
+          err.stack
         );
 
         return done(err);
@@ -62,21 +65,23 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return done();
       }
 
-      prodLine.set('prodDowntime', prodDowntime.get('_id'));
+      prodLine.prodDowntime = prodDowntime._id;
 
       prodLine.save(function(err)
       {
         if (err)
         {
           productionModule.error(
-            "Failed to save the prod line after changing the prod downtime (LOG=[%s]): %s",
+            "Failed to save prod line [%s] after changing the prod downtime [%s] (LOG=[%s]): %s",
+            prodLine._id,
+            prodDowntime._id,
             logEntry._id,
             err.stack
           );
         }
         else
         {
-          app.broker.publish('prodDowntimes.created.' + prodLine.get('_id'), prodDowntime.toJSON());
+          app.broker.publish('prodDowntimes.created.' + prodLine._id, prodDowntime.toJSON());
         }
 
         done(err);

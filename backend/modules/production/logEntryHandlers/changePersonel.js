@@ -6,15 +6,16 @@ module.exports = function(personnelProperty)
 {
   return function(app, productionModule, prodLine, logEntry, done)
   {
-    var mongoose = app[productionModule.config.mongooseId];
     var subdivisionsModule = app[productionModule.config.subdivisionsId];
+    var User = app[productionModule.config.mongooseId].model('User');
 
     productionModule.getProdData('shift', logEntry.prodShift, function(err, prodShift)
     {
       if (err)
       {
         productionModule.error(
-          "Failed to get the prod shift to change the %s (LOG=[%s]): %s",
+          "Failed to get prod shift [%s] to change the %s (LOG=[%s]): %s",
+          logEntry.prodShift,
           personnelProperty,
           logEntry._id,
           err.stack
@@ -25,7 +26,14 @@ module.exports = function(personnelProperty)
 
       if (!prodShift)
       {
-        return done(null);
+        productionModule.warn(
+          "Couldn't find prod shift [%s] to change the %s (LOG=[%s])",
+          logEntry.prodShift,
+          personnelProperty,
+          logEntry._id
+        );
+
+        return done();
       }
 
       if (logEntry.data && logEntry.data.id === null)
@@ -49,7 +57,7 @@ module.exports = function(personnelProperty)
         return updatePersonnel(prodShift);
       }
 
-      mongoose.model('User')
+      User
         .findOne({personellId: personellId}, {_id: 1, firstName: 1, lastName: 1})
         .lean()
         .exec(function(err, user)
@@ -57,7 +65,7 @@ module.exports = function(personnelProperty)
           if (err)
           {
             productionModule.error(
-              "Failed to find the user [%s] to fill the %s info (LOG=[%s]): %s",
+              "Failed to find user [%s] to fill the %s info (LOG=[%s]): %s",
               personellId,
               personnelProperty,
               logEntry._id,
@@ -141,9 +149,9 @@ module.exports = function(personnelProperty)
           if (err)
           {
             productionModule.error(
-              "Failed to save the prod data after changing the %s (LOG=[%s]): %s",
-              logEntry._id,
+              "Failed to save prod data after changing the %s (LOG=[%s]): %s",
               personnelProperty,
+              logEntry._id,
               err.stack
             );
           }
