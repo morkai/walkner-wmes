@@ -514,6 +514,8 @@ app/nls/pressWorksheets.js
 app/nls/pl/pressWorksheets.js
 i18n!app/nls/pressWorksheets
 app/pressWorksheets/routes.js
+app/core/util/getShiftEndDate.js
+app/prodDowntimes/ProdDowntime.js
 app/nls/prodDowntimes.js
 app/nls/pl/prodDowntimes.js
 i18n!app/nls/prodDowntimes
@@ -551,10 +553,9 @@ app/nls/prodLogEntries.js
 app/nls/pl/prodLogEntries.js
 i18n!app/nls/prodLogEntries
 app/prodLogEntries/routes.js
-app/core/util/matchesEquals.js
 app/data/prodLog.js
-app/core/util/getShiftEndDate.js
 app/prodShiftOrders/ProdShiftOrder.js
+app/core/util/matchesEquals.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
 app/core/util/getShiftStartInfo.js
 app/prodShiftOrders/views/decorateProdShiftOrder.js
@@ -567,7 +568,6 @@ app/nls/prodShiftOrders.js
 app/nls/pl/prodShiftOrders.js
 i18n!app/nls/prodShiftOrders
 app/prodShiftOrders/routes.js
-app/prodDowntimes/ProdDowntime.js
 app/prodDowntimes/ProdDowntimeCollection.js
 app/prodShifts/ProdShift.js
 app/prodShifts/ProdShiftCollection.js
@@ -586,11 +586,13 @@ app/production/templates/controls.js
 app/production/views/ProductionControlsView.js
 app/users/User.js
 app/users/UserCollection.js
+app/users/util/setUpUserSelect2.js
 app/production/templates/personelPicker.js
 app/production/views/PersonelPickerView.js
 app/production/templates/header.js
 app/production/views/ProductionHeaderView.js
 app/core/views/DialogView.js
+app/production/util/orderPickerHelpers.js
 app/production/templates/newOrderPicker.js
 app/production/views/NewOrderPickerView.js
 app/production/templates/downtimePicker.js
