@@ -77,7 +77,7 @@ define([
           label: t.bound('prodShifts', 'PAGE_ACTION:edit'),
           icon: 'edit',
           href: this.prodShift.genClientUrl('edit'),
-          privilege: 'PROD_DATA:MANAGE'
+          privileges: 'PROD_DATA:MANAGE'
         });
       }
 

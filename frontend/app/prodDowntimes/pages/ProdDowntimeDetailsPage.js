@@ -86,7 +86,7 @@ define([
           label: t.bound('prodDowntimes', 'PAGE_ACTION:edit'),
           icon: 'edit',
           href: this.model.genClientUrl('edit'),
-          privilege: 'PROD_DATA:MANAGE'
+          privileges: 'PROD_DATA:MANAGE'
         });
       }
 

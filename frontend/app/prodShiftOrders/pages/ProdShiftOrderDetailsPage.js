@@ -77,7 +77,7 @@ define([
           label: t.bound('prodShiftOrders', 'PAGE_ACTION:edit'),
           icon: 'edit',
           href: this.prodShiftOrder.genClientUrl('edit'),
-          privilege: 'PROD_DATA:MANAGE'
+          privileges: 'PROD_DATA:MANAGE'
         });
       }
 
