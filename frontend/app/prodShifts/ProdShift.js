@@ -171,7 +171,7 @@ define([
 
       if (oldDate && newDate.getTime() === oldDate.getTime())
       {
-        return;
+        return this.startShiftChangeMonitor();
       }
 
       var finishedProdShiftId = this.id || null;
@@ -209,6 +209,8 @@ define([
         finishedProdShiftId: finishedProdShiftId,
         startedProdShift: this.toJSON()
       });
+
+      this.startShiftChangeMonitor();
     },
 
     changeMaster: function(userInfo)
@@ -699,7 +701,6 @@ define([
 
         this.trigger('unlocked');
         this.readLocalData();
-        this.startShiftChangeMonitor();
       }
     },
 
