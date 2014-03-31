@@ -128,6 +128,15 @@ exports.start = function startFteModule(app, module)
           );
         }
 
+        if (!Array.isArray(prodShifts))
+        {
+          return module.error(
+            "Expected prodShifts to be Array, got [%s]:",
+            typeof prodShifts,
+            require('util').inspect(prodShifts)
+          );
+        }
+
         prodShifts.forEach(function(prodShift)
         {
           app.broker.publish('hourlyPlans.quantitiesPlanned', {

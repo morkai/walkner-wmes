@@ -182,7 +182,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
 
   hourlyPlanSchema.statics.lock = function(_id, user, done)
   {
-    this.findOne({_id: _id}, {tasks: 0}, function(err, hourlyPlan)
+    this.findOne({_id: _id}, function(err, hourlyPlan)
     {
       if (err)
       {
