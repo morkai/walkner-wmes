@@ -20,6 +20,9 @@
     "FORM:ERROR:editFailure": "Failed to edit the order :-(",
     "FORM:ERROR:order": "Order is required!",
     "FORM:ERROR:operation": "Operation is required!",
+    "FORM:ERROR:startedAt": "Started at must be between the shift's time boundries!",
+    "FORM:ERROR:finishedAt": "Finished at must be between the shift's time boundries!",
+    "FORM:ERROR:times": "Finished at must be after Started at!",
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the order: no valid changes were detected :(",
     "FORM:PLACEHOLDER:personnel": "Search by last name or personell ID...",
 

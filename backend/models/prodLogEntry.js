@@ -144,6 +144,8 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editNumericValue(data, changes, modelData, 'quantityDone', 0);
     editNumericValue(data, changes, modelData, 'workerCount', 1);
     editOrder(data, changes, modelData);
+    editDateValue(data, changes, modelData, 'startedAt');
+    editDateValue(data, changes, modelData, 'finishedAt');
 
     if (lodash.isEmpty(data))
     {
@@ -185,6 +187,8 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editStringValue(data, changes, modelData, 'reason');
     editStringValue(data, changes, modelData, 'reasonComment');
     editStringValue(data, changes, modelData, 'aor');
+    editDateValue(data, changes, modelData, 'startedAt');
+    editDateValue(data, changes, modelData, 'finishedAt');
 
     if (prodDowntime.status !== 'undecided')
     {
@@ -291,6 +295,36 @@ function editStringValue(data, changes, modelData, stringProperty)
   if (typeof value === 'string' && value !== String(modelData[stringProperty]))
   {
     data[stringProperty] = value;
+  }
+}
+
+function editDateValue(data, changes, modelData, dateProperty)
+{
+  var newValue = changes[dateProperty];
+
+  if (typeof newValue === 'string')
+  {
+    newValue = Date.parse(newValue);
+  }
+
+  if (isNaN(newValue) || typeof newValue !== 'number' || newValue <= 0)
+  {
+    return;
+  }
+
+  var oldValue = modelData[dateProperty];
+
+  if (oldValue === newValue)
+  {
+    return;
+  }
+
+  var oldTime = Math.floor(oldValue.getTime() / 1000);
+  var newTime = Math.floor(newValue / 1000);
+
+  if (oldValue === null || newTime !== oldTime)
+  {
+    data[dateProperty] = new Date(newValue);
   }
 }
 

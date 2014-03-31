@@ -1,6 +1,7 @@
 define([
   'underscore',
   'app/i18n',
+  'app/time',
   'app/viewport',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
@@ -9,6 +10,7 @@ define([
 ], function(
   _,
   t,
+  time,
   viewport,
   FormView,
   setUpUserSelect2,
@@ -59,29 +61,66 @@ define([
       }
     },
 
+    showErrorMessage: function(message)
+    {
+      this.$errorMessage = viewport.msg.show({
+        type: 'error',
+        text: t('prodShiftOrders', 'FORM:ERROR:' + message)
+      });
+
+      return false;
+    },
+
     checkValidity: function(formData)
     {
       if (typeof formData.orderId !== 'string' || !formData.orderId.length)
       {
-        this.$errorMessage = viewport.msg.show({
-          type: 'error',
-          text: t('prodShiftOrders', 'FORM:ERROR:order')
-        });
-
-        return false;
+        return this.showErrorMessage('order');
       }
 
       if (typeof formData.operationNo !== 'string' || !formData.operationNo.length)
       {
-        this.$errorMessage = viewport.msg.show({
-          type: 'error',
-          text: t('prodShiftOrders', 'FORM:ERROR:operation')
-        });
+        return this.showErrorMessage('operation');
+      }
 
-        return false;
+      if (formData.finishedAt <= formData.startedAt)
+      {
+        return this.showErrorMessage('times');
+      }
+
+      return this.checkTimeValidity(formData, 'startedAt')
+        && this.checkTimeValidity(formData, 'finishedAt');
+    },
+
+    checkTimeValidity: function(formData, timeProperty)
+    {
+      var time = formData[timeProperty].getTime();
+      var shiftStartTime = Date.parse(this.model.get('date'));
+      var shiftEndTime = shiftStartTime + 8 * 3600 * 1000;
+
+      if (time === shiftEndTime)
+      {
+        time -= 1;
+      }
+
+      if (time < shiftStartTime || time >= shiftEndTime)
+      {
+        return this.showErrorMessage(timeProperty);
       }
 
       return true;
+    },
+
+    serializeToForm: function()
+    {
+      var formData = this.model.toJSON();
+
+      formData.startedAtDate = time.format(formData.startedAt, 'YYYY-MM-DD');
+      formData.startedAtTime = time.format(formData.startedAt, 'HH:mm:ss');
+      formData.finishedAtDate = time.format(formData.finishedAt, 'YYYY-MM-DD');
+      formData.finishedAtTime = time.format(formData.finishedAt, 'HH:mm:ss');
+
+      return formData;
     },
 
     serializeForm: function(formData)
@@ -123,6 +162,14 @@ define([
         formData.mechOrder = formData.orderData.no === null;
         formData.orderId = formData.orderData[formData.mechOrder ? 'nc12' : 'no'];
       }
+
+      formData.startedAt = new Date(formData.startedAtDate + ' ' + formData.startedAtTime);
+      formData.finishedAt = new Date(formData.finishedAtDate + ' ' + formData.finishedAtTime);
+
+      delete formData.startedAtDate;
+      delete formData.startedAtTime;
+      delete formData.finishedAtDate;
+      delete formData.finishedAtTime;
 
       return formData;
     },

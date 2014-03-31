@@ -226,7 +226,7 @@ define([
             break;
 
           case 'finishDowntime':
-            item = downtimeToItemMap[prodLogEntry.get('data')._id];
+            item = downtimeToItemMap[data._id];
 
             if (item && item.ending_time === -1)
             {
@@ -243,7 +243,7 @@ define([
 
             if (item)
             {
-              item.quantityDone = prodLogEntry.get('data').newValue;
+              item.quantityDone = data.newValue;
             }
             break;
 
@@ -252,8 +252,60 @@ define([
 
             if (item)
             {
-              item.workerCount = prodLogEntry.get('data').newValue;
+              item.workerCount = data.newValue;
             }
+            break;
+
+          case 'editOrder':
+            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+
+            if (!item)
+            {
+              break;
+            }
+
+            if (data.quantityDone !== undefined)
+            {
+              item.quantityDone = data.quantityDone;
+            }
+
+            if (data.workerCount !== undefined)
+            {
+              item.workerCount = data.workerCount;
+            }
+
+            if (data.startedAt !== undefined)
+            {
+              item.starting_time = Date.parse(data.startedAt);
+            }
+
+            if (data.finishedAt !== undefined)
+            {
+              item.ending_time = Date.parse(data.finishedAt);
+            }
+
+            item.prodLogEntry.set('data', _.extend(item.prodLogEntry.get('data'), data));
+            break;
+
+          case 'editDowntime':
+            item = downtimeToItemMap[data._id];
+
+            if (!item)
+            {
+              break;
+            }
+
+            if (data.startedAt !== undefined)
+            {
+              item.starting_time = Date.parse(data.startedAt);
+            }
+
+            if (data.finishedAt !== undefined)
+            {
+              item.ending_time = Date.parse(data.finishedAt);
+            }
+
+            item.prodLogEntry.set('data', _.extend(item.prodLogEntry.get('data'), data));
             break;
         }
       }
