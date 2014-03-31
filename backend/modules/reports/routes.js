@@ -72,10 +72,6 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       || svg.indexOf('<!ENTITY') !== -1
       || svg.indexOf('<!DOCTYPE') !== -1)
     {
-      console.log(typeof svg);
-      console.log(svg.length);
-      console.log(svg.indexOf('<!ENTITY'));
-      console.log(svg.indexOf('<!DOCTYPE'));
       return res.send(400);
     }
 
@@ -158,8 +154,11 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
           return res.send(stderr, 500);
         }
 
-        res.attachment(filename + '.' + ext);
-        res.sendfile(outFile, cleanup);
+        if (!res.headersSent)
+        {
+          res.attachment(filename + '.' + ext);
+          res.sendfile(outFile, cleanup);
+        }
       });
     });
 
