@@ -85,6 +85,7 @@
     "PRIVILEGE:PRESS_WORKSHEETS:VIEW": "Worksheets: view",
     "PRIVILEGE:PRESS_WORKSHEETS:MANAGE": "Worksheets: manage",
     "PRIVILEGE:PROD_DATA:VIEW": "Production data: view",
+    "PRIVILEGE:PROD_DATA:MANAGE": "Production data: manage",
     "PRIVILEGE:REPORTS:VIEW": "Reports: view",
     "PRIVILEGE:REPORTS:MANAGE": "Reports: manage"
   },
