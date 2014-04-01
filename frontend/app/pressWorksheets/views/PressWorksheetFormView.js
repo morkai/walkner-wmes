@@ -312,8 +312,11 @@ define([
 
       var orderData = $order.find('.pressWorksheets-form-part').select2('data').data;
 
-      orderData.nc12 = orderData._id;
-      delete orderData._id;
+      if (orderData._id)
+      {
+        orderData.nc12 = orderData._id;
+        delete orderData._id;
+      }
 
       var operationData = _.find(orderData.operations, function(operation)
       {
