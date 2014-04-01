@@ -75,11 +75,6 @@ exports.start = function startExpressModule(app, module, done)
     basePath: path.resolve(__dirname, '../../../')
   };
 
-  if (!production)
-  {
-
-  }
-
   module.use(errorHandlerMiddleware(module, errorHandlerOptions));
 
   app.broker.publish('express.beforeRoutes', {

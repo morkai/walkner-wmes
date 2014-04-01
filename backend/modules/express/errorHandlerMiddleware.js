@@ -22,7 +22,23 @@ exports = module.exports = function createErrorHandlerMiddleware(appModule, opti
       res.statusCode = 500;
     }
 
-    appModule.warn('%s %s\n%s', req.method, req.url, err.stack);
+    if (req.method !== 'GET' && req.body !== null && typeof req.body === 'object')
+    {
+      try
+      {
+        appModule.warn(
+          '%s %s\n%s\nRequest body:\n%s', req.method, req.url, err.stack, JSON.stringify(req.body)
+        );
+      }
+      catch (err)
+      {
+        appModule.warn('%s %s\n%s', req.method, req.url, err.stack);
+      }
+    }
+    else
+    {
+      appModule.warn('%s %s\n%s', req.method, req.url, err.stack);
+    }
 
     var accept = req.headers.accept || '';
 
