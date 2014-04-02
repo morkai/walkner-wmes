@@ -76,7 +76,7 @@ exports.start = function startFteModule(app, module)
       date: {$ne: currentShift.date}
     };
 
-    HourlyPlan.find(condition, {flows: 0}, function(err, hourlyPlans)
+    HourlyPlan.find(condition, function(err, hourlyPlans)
     {
       if (err)
       {
