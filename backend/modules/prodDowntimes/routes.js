@@ -23,6 +23,8 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
   express.get('/prodDowntimes', limitOrgUnit, crud.browseRoute.bind(null, app, ProdDowntime));
 
+  express.get('/prodDowntimes;rid', canView, findByRidRoute);
+
   express.get(
     '/prodDowntimes;export',
     canView,
@@ -48,6 +50,31 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   express.get('/prodDowntimes/:id', canView, crud.readRoute.bind(null, app, ProdDowntime));
 
   express.put('/prodDowntimes/:id', userModule.auth('PROD_DATA:MANAGE'), editProdDowntimeRoute);
+
+  function findByRidRoute(req, res, next)
+  {
+    var rid = parseInt(req.query.rid, 10);
+
+    if (isNaN(rid) || rid <= 0)
+    {
+      return res.send(400);
+    }
+
+    ProdDowntime.findOne({rid: rid}, {_id: 1}).lean().exec(function(err, prodDowntime)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (prodDowntime)
+      {
+        return res.json(prodDowntime._id);
+      }
+
+      return res.send(404);
+    });
+  }
 
   function limitOrgUnit(req, res, next)
   {

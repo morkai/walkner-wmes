@@ -72,7 +72,7 @@ define([
     },
 
     columns: [
-      'mrpControllers', 'prodFlow', 'aor', 'prodLine', 'reason',
+      'rid', 'mrpControllers', 'prodFlow', 'aor', 'prodLine', 'reason',
       'startedAt', 'finishedAt', 'duration'
     ],
 

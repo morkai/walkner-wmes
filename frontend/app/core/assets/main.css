@@ -154,6 +154,7 @@ kbd {
 .page-actions li {
   display: inline-block;
   margin-left: 1em;
+  vertical-align: top;
 }
 [class^="fa-"] + span,
 [class*=" fa-"] + span {

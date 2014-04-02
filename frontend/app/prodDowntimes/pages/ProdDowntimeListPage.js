@@ -8,7 +8,8 @@ define([
   '../ProdDowntimeCollection',
   '../views/ProdDowntimeListView',
   '../views/ProdDowntimeFilterView',
-  'app/prodDowntimes/templates/listPage'
+  'app/prodDowntimes/templates/listPage',
+  'app/prodDowntimes/templates/jumpAction'
 ], function(
   $,
   t,
@@ -19,7 +20,8 @@ define([
   ProdDowntimeCollection,
   ProdDowntimeListView,
   ProdDowntimeFilterView,
-  listPageTemplate
+  listPageTemplate,
+  jumpActionTemplate
 ) {
   'use strict';
 
@@ -37,7 +39,20 @@ define([
 
     actions: function(layout)
     {
-      return [pageActions.export(layout, this, this.prodDowntimeList)];
+      var page = this;
+
+      return [
+        {
+          template: jumpActionTemplate,
+          afterRender: function($action)
+          {
+            var $form = $action.find('form');
+
+            $form.submit(page.jumpToDowntime.bind(page, $form));
+          }
+        },
+        pageActions.export(layout, this, this.prodDowntimeList)
+      ];
     },
 
     initialize: function()
@@ -85,6 +100,60 @@ define([
         trigger: false,
         replace: true
       });
+    },
+
+    jumpToDowntime: function($form)
+    {
+      var ridEl = $form[0].rid;
+
+      if (ridEl.readOnly)
+      {
+        return false;
+      }
+
+      var rid = parseInt(ridEl.value, 10);
+
+      if (isNaN(rid) || rid <= 0)
+      {
+        ridEl.value = '';
+
+        return false;
+      }
+
+      ridEl.readOnly = true;
+      ridEl.value = rid;
+
+      var $iconEl = $form.find('.fa').removeClass('fa-search').addClass('fa-spinner fa-spin');
+
+      var page = this;
+      var req = this.promised($.ajax({
+        url: '/prodDowntimes;rid',
+        data: {rid: rid}
+      }));
+
+      req.done(function(prodDowntimeId)
+      {
+        page.broker.publish('router.navigate', {
+          url: '/prodDowntimes/' + prodDowntimeId,
+          trigger: true
+        });
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 2000,
+          text: t('prodDowntimes', 'MSG:jump:404', {rid: rid})
+        });
+
+        $iconEl.removeClass('fa-spinner fa-spin').addClass('fa-search');
+
+        ridEl.readOnly = false;
+        ridEl.select();
+      });
+
+      return false;
     }
 
   });

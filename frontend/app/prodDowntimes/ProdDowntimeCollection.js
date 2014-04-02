@@ -51,6 +51,7 @@ define([
 
       return rql.Query.fromObject({
         fields: {
+          rid: 1,
           aor: 1,
           reason: 1,
           reasonComment: 1,

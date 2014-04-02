@@ -6,9 +6,12 @@
 
   "MSG:LOADING_FAILURE": "Ładowanie przestojów nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie przestoju nie powiodło się :(",
+  "MSG:jump:404": "Nie znaleziono przestoju o ID <em>{rid}</em> :(",
 
   "PAGE_ACTION:export": "Eksportuj przestoje",
   "PAGE_ACTION:edit": "Edytuj przestój",
+  "PAGE_ACTION:jump:title": "Skocz do przestoju po ID",
+  "PAGE_ACTION:jump:placeholder": "ID przestoju",
 
   "PANEL:TITLE:details": "Szczegóły przestoju",
   "PANEL:TITLE:details:corroboration": "Potwierdzenie przestoju",
@@ -25,6 +28,7 @@
 
   "LIST:ACTION:corroborate": "Potwierdź przestój",
 
+  "PROPERTY:rid": "ID",
   "PROPERTY:mrpControllers": "Kontroler MRP",
   "PROPERTY:prodFlow": "Przepływ",
   "PROPERTY:orgUnit": "Jednostka organizacyjna",

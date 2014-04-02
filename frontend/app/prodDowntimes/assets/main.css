@@ -47,3 +47,6 @@ textarea.prodDowntimes-corroborate-decisionComment {
   font-size: 60px;
   line-height: 1;
 }
+.prodDowntimes-pageActions-jump {
+  width: 135px;
+}

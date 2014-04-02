@@ -7,9 +7,12 @@
 
     "MSG:LOADING_FAILURE": "Failed to load the downtimes :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the downtime :(",
+    "MSG:jump:404": "Couldn't find a downtime with ID <em>{rid}</em> :(",
 
     "PAGE_ACTION:export": "Export downtimes",
     "PAGE_ACTION:edit": "Edit downtime",
+    "PAGE_ACTION:jump:title": "Jump to downtime by ID",
+    "PAGE_ACTION:jump:placeholder": "Downtime ID",
 
     "PANEL:TITLE:details": "Downtime's details",
     "PANEL:TITLE:details:corroboration": "Downtime corroboration",
@@ -26,6 +29,7 @@
 
     "LIST:ACTION:corroborate": "Corroborate downtime",
 
+    "PROPERTY:rid": "ID",
     "PROPERTY:mrpControllers": "MRP Controller",
     "PROPERTY:prodFlow": "Production flow",
     "PROPERTY:orgUnit": "Org Unit",

@@ -2,6 +2,7 @@
 
 var lodash = require('lodash');
 var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment');
 
 exports.DEFAULT_CONFIG = {
   maxConnectTries: 10,
@@ -37,6 +38,7 @@ exports.start = function startDbModule(app, module, done)
         );
       }
 
+      initializeAutoIncrement();
       loadModels();
     });
   }
@@ -50,5 +52,13 @@ exports.start = function startDbModule(app, module, done)
     var modelsList = require(app.pathTo('models', 'index'));
 
     app.loadFiles(modelsDir, modelsList, [app, module], done);
+  }
+
+  /**
+   * @private
+   */
+  function initializeAutoIncrement()
+  {
+    autoIncrement.initialize(module.connection);
   }
 };

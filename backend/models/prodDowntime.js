@@ -1,5 +1,7 @@
 'use strict';
 
+var autoIncrement = require('mongoose-auto-increment');
+
 module.exports = function setupProdDowntimeModel(app, mongoose)
 {
   var prodDowntimeSchema = mongoose.Schema({
@@ -111,6 +113,13 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     }
   }, {
     id: false
+  });
+
+  prodDowntimeSchema.plugin(autoIncrement.plugin, {
+    model: 'ProdDowntime',
+    field: 'rid',
+    startAt: 1,
+    incrementBy: 1
   });
 
   prodDowntimeSchema.index({prodShiftOrder: 1});
