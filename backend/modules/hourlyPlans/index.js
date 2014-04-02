@@ -128,13 +128,9 @@ exports.start = function startFteModule(app, module)
           );
         }
 
-        if (!Array.isArray(prodShifts))
+        if (!Array.isArray(prodShifts) || !prodShifts.length)
         {
-          return module.error(
-            "Expected prodShifts to be Array, got [%s]:",
-            typeof prodShifts,
-            require('util').inspect(prodShifts)
-          );
+          return;
         }
 
         prodShifts.forEach(function(prodShift)

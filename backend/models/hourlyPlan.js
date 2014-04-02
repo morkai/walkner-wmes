@@ -157,7 +157,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
 
         if (!hourlyPlan)
         {
-          return done(null, {});
+          return done(null, []);
         }
 
         var flow = lodash.find(hourlyPlan.flows, function(flow)
@@ -167,7 +167,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
 
         if (!flow || flow.noPlan)
         {
-          return done(null, {});
+          return done(null, []);
         }
 
         var i = shiftId.no === 1 ? 0 : shiftId.no === 2 ? 8 : 16;
