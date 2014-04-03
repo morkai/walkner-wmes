@@ -5,6 +5,7 @@
     "BREADCRUMBS:editForm": "Editing",
 
     "MSG:LOADING_FAILURE": "Failed to load the shifts :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the shift :(",
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
     "PAGE_ACTION:export": "Export shifts",
