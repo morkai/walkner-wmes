@@ -114,21 +114,33 @@ define([
       this.listenToOnce(this.collection, 'reset', this.render);
     },
 
-    refreshCollection: function()
+    refreshCollection: function(message)
     {
-      if (this.timers.refreshCollection)
+      if (message && this.timers.refreshCollection)
       {
         return;
       }
 
-      this.timers.refreshCollection = setTimeout(function(view)
+      if (message)
       {
-        view.lastRefreshAt = Date.now();
+        this.timers.refreshCollection = setTimeout(this.refreshCollectionNow.bind(this), 2000);
+      }
+      else
+      {
+        this.refreshCollectionNow();
+      }
+    },
 
-        delete view.timers.refreshCollection;
+    refreshCollectionNow: function()
+    {
+      if (this.timers.refreshCollection)
+      {
+        clearTimeout(this.timers.refreshCollection);
+      }
 
-        view.promised(view.collection.fetch({reset: true}));
-      }, 2000, this);
+      delete this.timers.refreshCollection;
+
+      this.promised(this.collection.fetch({reset: true}));
     },
 
     scrollTop: function()
