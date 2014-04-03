@@ -116,25 +116,19 @@ define([
 
     refreshCollection: function()
     {
-      var now = Date.now();
-      var diff = now - this.lastRefreshAt;
-
-      if (diff < 1000)
+      if (this.timers.refreshCollection)
       {
-        if (!this.timers.refreshCollection)
-        {
-          this.timers.refreshCollection =
-            setTimeout(this.refreshCollection.bind(this), 1000 - diff);
-        }
+        return;
       }
-      else
+
+      this.timers.refreshCollection = setTimeout(function(view)
       {
-        this.lastRefreshAt = Date.now();
+        view.lastRefreshAt = Date.now();
 
-        delete this.timers.refreshCollection;
+        delete view.timers.refreshCollection;
 
-        this.promised(this.collection.fetch({reset: true}));
-      }
+        view.promised(view.collection.fetch({reset: true}));
+      }, 2000, this);
     },
 
     scrollTop: function()
