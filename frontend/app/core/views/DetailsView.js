@@ -1,11 +1,13 @@
 define([
   'app/viewport',
   'app/i18n',
-  '../View'
+  '../View',
+  '../util/onModelDeleted'
 ], function(
   viewport,
   t,
-  View
+  View,
+  onModelDeleted
 ) {
   'use strict';
 
@@ -56,30 +58,7 @@ define([
 
     onModelDeleted: function(message)
     {
-      var remoteModel = message.model;
-
-      if (!remoteModel || remoteModel._id !== this.model.id)
-      {
-        return;
-      }
-
-      var localModel = this.model;
-
-      this.broker.subscribe('router.executing').setLimit(1).on('message', function()
-      {
-        viewport.msg.show({
-          type: 'warning',
-          time: 5000,
-          text: t(localModel.getNlsDomain() || 'core', 'MSG:DELETED', {
-            label: localModel.getLabel()
-          })
-        });
-      });
-
-      this.broker.publish('router.navigate', {
-        url: localModel.genClientUrl('base'),
-        trigger: true
-      });
+      onModelDeleted(this.broker, this.model, message);
     }
 
   });

@@ -5,6 +5,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/onModelDeleted',
   'app/core/View',
   'app/mechOrders/MechOrder',
   'app/mechOrders/views/MechOrderDetailsView',
@@ -24,6 +25,7 @@ define([
   user,
   viewport,
   bindLoadingMessage,
+  onModelDeleted,
   View,
   MechOrder,
   MechOrderDetailsView,
@@ -171,13 +173,55 @@ define([
     setUpRemoteTopics: function()
     {
       this.pubsub.subscribe(
-        'prodShiftOrders.updated.' + this.prodShiftOrder.id, this.handleChanges.bind(this)
+        'prodShiftOrders.updated.' + this.prodShiftOrder.id,
+        this.onProdShiftOrderUpdated.bind(this)
+      );
+
+      var pressWorksheetId = this.prodShiftOrder.get('pressWorksheet');
+
+      if (pressWorksheetId)
+      {
+        this.pubsub
+          .subscribe('pressWorksheets.edited', this.onWorksheetEdited.bind(this))
+          .setFilter(filterWorksheet);
+
+        this.pubsub
+          .subscribe('pressWorksheets.deleted', this.onWorksheetDeleted.bind(this))
+          .setFilter(filterWorksheet);
+      }
+
+      function filterWorksheet(message)
+      {
+        return message.model._id === pressWorksheetId;
+      }
+    },
+
+    onProdShiftOrderUpdated: function(changes)
+    {
+      this.prodShiftOrder.set(changes);
+    },
+
+    onWorksheetEdited: function()
+    {
+      this.timers.refreshData = setTimeout(
+        function(page)
+        {
+          page.promised(page.prodShiftOrder.fetch()).fail(function(xhr)
+          {
+            if (xhr.status === 404)
+            {
+              page.onWorksheetDeleted();
+            }
+          });
+        },
+        2500,
+        this
       );
     },
 
-    handleChanges: function(changes)
+    onWorksheetDeleted: function()
     {
-      this.prodShiftOrder.set(changes);
+      onModelDeleted(this.broker, this.prodShiftOrder, null, true);
     }
 
   });

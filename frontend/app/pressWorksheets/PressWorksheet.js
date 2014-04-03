@@ -19,11 +19,12 @@ define([
 
     nlsDomain: 'pressWorksheets',
 
-    labelAttribute: '_id',
+    labelAttribute: 'rid',
 
     defaults: function()
     {
       return {
+        rid: null,
         date: time.format('YYYY-MM-DD'),
         shift: 1,
         type: 'mech',

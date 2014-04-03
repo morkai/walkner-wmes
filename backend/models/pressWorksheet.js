@@ -1,6 +1,7 @@
 'use strict';
 
 var moment = require('moment');
+var autoIncrement = require('mongoose-auto-increment');
 var createOrderLossSchema = require('./createOrderLossSchema');
 
 module.exports = function setupPressWorksheetModel(app, mongoose)
@@ -136,9 +137,21 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       type: Date,
       required: true
     },
-    creator: {}
+    creator: {},
+    updatedAt: {
+      type: Date,
+      default: null
+    },
+    updater: {}
   }, {
     id: false
+  });
+
+  pressWorksheetSchema.plugin(autoIncrement.plugin, {
+    model: 'PressWorksheet',
+    field: 'rid',
+    startAt: 1,
+    incrementBy: 1
   });
 
   pressWorksheetSchema.statics.TOPIC_PREFIX = 'pressWorksheets';

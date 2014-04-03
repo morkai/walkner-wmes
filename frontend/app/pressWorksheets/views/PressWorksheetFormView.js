@@ -180,8 +180,12 @@ define([
       'change input[name=type]': function()
       {
         this.togglePaintShop();
-        this.renderOrdersTable();
-        this.addOrderRow();
+
+        if (!this.filling)
+        {
+          this.renderOrdersTable();
+          this.addOrderRow();
+        }
       }
     },
 
@@ -189,6 +193,7 @@ define([
     {
       FormView.prototype.initialize.apply(this, arguments);
 
+      this.filling = false;
       this.lastOrderNo = -1;
       this.lossReasons = [];
       this.downtimeReasons = [];
@@ -249,10 +254,15 @@ define([
         ajax: SELECT2_USERS_AJAX
       });
 
+      this.fillType();
       this.renderOrdersTable();
+      this.fillModelData();
       this.addOrderRow();
 
-      this.$id('type').focus();
+      if (!this.model.id)
+      {
+        this.$id('type').focus();
+      }
     },
 
     renderOrdersTable: function()
@@ -309,8 +319,9 @@ define([
     serializeOrder: function($orders, lossReasons, order, i)
     {
       var $order = $orders.eq(i);
+      var $part = $order.find('.pressWorksheets-form-part');
 
-      var orderData = $order.find('.pressWorksheets-form-part').select2('data').data;
+      var orderData = $part.select2('data').data;
 
       if (orderData._id)
       {
@@ -348,22 +359,26 @@ define([
       {
         Object.keys(order.downtimes).forEach(function(downtimeReason)
         {
-          downtimeReason = downtimeReasons.get(downtimeReason);
+          var duration = parseInt(order.downtimes[downtimeReason], 10);
 
-          if (order.downtimes[downtimeReason.id] > 0)
+          if (duration > 0)
           {
+            downtimeReason = downtimeReasons.get(downtimeReason);
+
+            var $downtime = $order.find('.is-downtime[data-reason="' + downtimeReason.id + '"]');
+
             downtimes.push({
-              prodDowntime: null,
+              prodDowntime: $downtime.attr('data-prodDowntime') || null,
               reason: downtimeReason.id,
               label: downtimeReason.get('label'),
-              duration: parseInt(order.downtimes[downtimeReason.id], 10)
+              duration: duration
             });
           }
         });
       }
 
       return {
-        prodShiftOrder: null,
+        prodShiftOrder: $part.attr('data-prodShiftOrder') || null,
         prodLine: order.prodLine,
         nc12: orderData.nc12,
         name: orderData.name,
@@ -507,7 +522,7 @@ define([
         {
           return {
             id: operation.no,
-            text: operation.no + ' - ' + operation.name
+            text: operation.no + ' - ' + (operation.name || '?')
           };
         }));
 
@@ -563,8 +578,10 @@ define([
       return this.$('.pressWorksheets-form-order:last-child')[0] === $row[0];
     },
 
-    addOrderRow: function($lastRow)
+    addOrderRow: function($lastRow, single)
     {
+      single = single !== false;
+
       ++this.lastOrderNo;
 
       var $orderRow = $(renderOrdersTableRow({
@@ -573,7 +590,7 @@ define([
         downtimeReasons: this.downtimeReasons
       }));
 
-      if (this.lastOrderNo > 0)
+      if (this.lastOrderNo > 0 && single)
       {
         $orderRow.hide();
       }
@@ -589,7 +606,7 @@ define([
 
       this.$('.pressWorksheets-form-orders > tbody').append($orderRow);
 
-      if (this.lastOrderNo > 0)
+      if (this.lastOrderNo > 0 && single)
       {
         $orderRow.fadeIn();
       }
@@ -599,17 +616,29 @@ define([
 
       var $warning = this.$('.message-warning');
 
-      if (this.lastOrderNo > 0)
+      if (single)
       {
-        $warning.fadeIn();
+        if (this.lastOrderNo > 0)
+        {
+          $warning.fadeIn();
+        }
+        else
+        {
+          $warning.fadeOut();
+        }
       }
       else
       {
-        $warning.fadeOut();
+        $warning.toggle(this.lastOrderNo > 0);
       }
 
-      this.setUpPartValidation();
-      this.recalcOrderNoColumn();
+      if (single)
+      {
+        this.setUpPartValidation();
+        this.recalcOrderNoColumn();
+      }
+
+      return $orderRow;
     },
 
     setUpPartValidation: function()
@@ -866,6 +895,131 @@ define([
       }
 
       return timeMoment.valueOf();
+    },
+
+    serializeToForm: function()
+    {
+      return {};
+    },
+
+    fillModelData: function()
+    {
+      this.filling = true;
+
+      this.fillPersonnel();
+      this.fillDateAndTimes();
+
+      var orders = this.model.get('orders');
+
+      if (Array.isArray(orders) && orders.length)
+      {
+        orders.forEach(this.fillOrder, this);
+      }
+
+      this.filling = false;
+    },
+
+    fillType: function()
+    {
+      this.$('input[name=type][value=' + this.model.get('type') + ']').trigger('click', true);
+    },
+
+    fillPersonnel: function()
+    {
+      var operators = this.model.get('operators');
+      var operator = this.model.get('operator');
+      var master = this.model.get('master');
+
+      if (Array.isArray(operators) && operators.length)
+      {
+        this.$id('operators').select2('data', operators.map(userInfoToData));
+      }
+
+      if (operator)
+      {
+        this.$id('operator').select2('data', userInfoToData(operator));
+      }
+
+      if (master)
+      {
+        this.$id('master').select2('data', userInfoToData(master));
+      }
+
+      function userInfoToData(userInfo)
+      {
+        return {
+          id: userInfo.id,
+          text: userInfo.label
+        };
+      }
+    },
+
+    fillDateAndTimes: function()
+    {
+      this.$id('date').val(time.format(this.model.get('date'), 'YYYY-MM-DD'));
+      this.$('input[name=shift][value=' + this.model.get('shift') + ']').click();
+
+      if (this.model.get('type') === 'paintShop')
+      {
+        this.$id('startedAt').val(this.model.get('startedAt'));
+        this.$id('finishedAt').val(this.model.get('finishedAt'));
+      }
+    },
+
+    fillOrder: function(order)
+    {
+      var $orderRow = this.addOrderRow(null, false);
+      var $part = $orderRow.find('.pressWorksheets-form-part');
+      var $operation = $orderRow.find('.pressWorksheets-form-operation');
+
+      $part.attr('data-prodShiftOrder', order.prodShiftOrder).select2('data', {
+        id: order.nc12,
+        text: order.nc12 + ' - ' + (order.name || '?'),
+        data: order.orderData
+      });
+
+      this.setUpOperationSelect2($operation, _.map(order.orderData.operations, function(operation)
+      {
+        return {
+          id: operation.no,
+          text: operation.no + ' - ' + (operation.name || '?')
+        };
+      }));
+
+      $operation.select2('val', order.operationNo);
+
+      $orderRow.find('.pressWorksheets-form-prodLine').select2('val', order.prodLine);
+      $orderRow.find('.pressWorksheets-form-quantityDone').val(order.quantityDone);
+
+      if (Array.isArray(order.losses))
+      {
+        order.losses.forEach(this.fillLoss.bind(this, $orderRow));
+      }
+
+      if (Array.isArray(order.downtimes))
+      {
+        order.downtimes.forEach(this.fillDowntime.bind(this, $orderRow));
+      }
+
+      if (this.model.get('type') !== 'paintShop')
+      {
+        $orderRow.find('.pressWorksheets-form-startedAt').val(order.startedAt);
+        $orderRow.find('.pressWorksheets-form-finishedAt').val(order.finishedAt);
+      }
+    },
+
+    fillLoss: function($orderRow, loss)
+    {
+      $orderRow.find('.is-loss[data-reason="' + loss.reason + '"]').val(loss.count);
+    },
+
+    fillDowntime: function($orderRow, downtime)
+    {
+      var $downtime = $orderRow.find('.is-downtime[data-reason="' + downtime.reason + '"]');
+
+      $downtime
+        .attr('data-prodDowntime', downtime.prodDowntime)
+        .val(downtime.duration);
     }
 
   });

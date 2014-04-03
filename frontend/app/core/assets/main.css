@@ -156,6 +156,9 @@ kbd {
   margin-left: 1em;
   vertical-align: top;
 }
+.page-actions-jump {
+  width: 150px;
+}
 [class^="fa-"] + span,
 [class*=" fa-"] + span {
   margin-left: 7px;
@@ -278,3 +281,5 @@ kbd {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+

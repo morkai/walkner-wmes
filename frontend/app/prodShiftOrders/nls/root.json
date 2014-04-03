@@ -6,6 +6,7 @@
 
     "MSG:LOADING_FAILURE": "Failed to load the orders :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order :(",
+    "MSG:DELETED": "Order <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
     "PAGE_ACTION:prodDowntimes": "Show downtimes",

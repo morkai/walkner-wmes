@@ -42,19 +42,19 @@ define([
     {
       this.model = bindLoadingMessage(this.options.model, this);
 
-      var DetailsViewClass = this.options.DetailsView || DetailsView;
+      var DetailsViewClass = this.DetailsView || DetailsView;
       var options = {
         model: this.model
       };
 
-      if (typeof this.options.detailsTemplate === 'function')
+      if (typeof this.detailsTemplate === 'function')
       {
-        options.template = this.options.detailsTemplate;
+        options.template = this.detailsTemplate;
       }
 
-      if (typeof this.options.serializeDetails === 'function')
+      if (typeof this.serializeDetails === 'function')
       {
-        options.serializeDetails = this.options.serializeDetails;
+        options.serializeDetails = this.serializeDetails;
       }
 
       this.view = new DetailsViewClass(options);
@@ -62,7 +62,7 @@ define([
 
     load: function(when)
     {
-      return when(this.model.fetch(this.options.fetchOptions));
+      return when(this.model.fetch(this.fetchOptions));
     }
 
   });

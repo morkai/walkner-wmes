@@ -6,6 +6,7 @@
 
   "MSG:LOADING_FAILURE": "Ładowanie przestojów nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie przestoju nie powiodło się :(",
+  "MSG:DELETED": "Przestój <em>{label}</em> został usunięty.",
   "MSG:jump:404": "Nie znaleziono przestoju o ID <em>{rid}</em> :(",
 
   "PAGE_ACTION:export": "Eksportuj przestoje",
@@ -54,6 +55,7 @@
   "PROPERTY:corroborator": "Użytkownik potwierdzający",
   "PROPERTY:corroboratedAt": "Czas potwierdzenia",
   "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:pressWorksheet": "Karta pracy",
 
   "FORM:ACTION:edit": "Edytuj przestój",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować przestoju :-(",

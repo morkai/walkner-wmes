@@ -1,7 +1,5 @@
 define([
-  'jquery',
   'app/i18n',
-  'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/View',
@@ -10,9 +8,7 @@ define([
   '../views/PressWorksheetListView',
   'app/pressWorksheets/templates/listPage'
 ], function(
-  $,
   t,
-  viewport,
   bindLoadingMessage,
   pageActions,
   View,
@@ -37,7 +33,10 @@ define([
 
     actions: function()
     {
-      return [pageActions.add(this.pressWorksheetList)];
+      return [
+        pageActions.jump(this, this.pressWorksheetList),
+        pageActions.add(this.pressWorksheetList)
+      ];
     },
 
     initialize: function()

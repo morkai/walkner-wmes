@@ -3,6 +3,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/onModelDeleted',
   'app/core/View',
   '../ProdDowntime',
   '../views/ProdDowntimeDetailsView',
@@ -12,6 +13,7 @@ define([
   user,
   viewport,
   bindLoadingMessage,
+  onModelDeleted,
   View,
   ProdDowntime,
   ProdDowntimeDetailsView,
@@ -23,17 +25,7 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'details',
-
-    remoteTopics: {
-      'prodDowntimes.corroborated.*': function(message)
-      {
-        if (this.corroborating && message._id === this.model.id)
-        {
-          viewport.closeDialog();
-        }
-      }
-    },
+    pageId: 'prodDowntimeDetails',
 
     breadcrumbs: function()
     {
@@ -100,6 +92,8 @@ define([
       this.model = bindLoadingMessage(new ProdDowntime({_id: this.options.modelId}), this);
 
       this.view = new ProdDowntimeDetailsView({model: this.model});
+
+      this.listenToOnce(this.model, 'sync', this.setUpRemoteTopics);
     },
 
     setUpLayout: function(pageLayout)
@@ -113,6 +107,63 @@ define([
     load: function(when)
     {
       return when(this.model.fetch(this.options.fetchOptions));
+    },
+
+    setUpRemoteTopics: function()
+    {
+      var page = this;
+
+      if (this.model.get('status') === 'undecided')
+      {
+        this.pubsub.subscribe('prodDowntimes.corroborated.*', function(message)
+        {
+          if (page.corroborating && message._id === page.model.id)
+          {
+            viewport.closeDialog();
+          }
+        });
+      }
+
+      var pressWorksheetId = this.model.get('pressWorksheet');
+
+      if (pressWorksheetId)
+      {
+        this.pubsub
+          .subscribe('pressWorksheets.edited', this.onWorksheetEdited.bind(this))
+          .setFilter(filterWorksheet);
+
+        this.pubsub
+          .subscribe('pressWorksheets.deleted', this.onWorksheetDeleted.bind(this))
+          .setFilter(filterWorksheet);
+      }
+
+      function filterWorksheet(message)
+      {
+        return message.model._id === pressWorksheetId;
+      }
+    },
+
+    onWorksheetEdited: function()
+    {
+      this.timers.refreshData = setTimeout(
+        function(page)
+        {
+          page.promised(page.model.fetch()).fail(function(xhr)
+          {
+            if (xhr.status === 404)
+            {
+              page.onWorksheetDeleted();
+            }
+          });
+        },
+        2500,
+        this
+      );
+    },
+
+    onWorksheetDeleted: function()
+    {
+      onModelDeleted(this.broker, this.model, null, true);
     }
 
   });

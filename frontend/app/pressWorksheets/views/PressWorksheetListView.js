@@ -17,20 +17,36 @@ define([
       'companies.synced': 'render'
     },
 
-    columns: ['type', 'date', 'shift', 'master', 'operator'],
+    columns: ['rid', 'type', 'date', 'shift', 'master', 'operator'],
 
     serializeActions: function()
     {
       var collection = this.collection;
+      var canManageProdData = user.isAllowedTo('PROD_DATA:MANAGE');
+      var eightHours = 8 * 3600 * 1000;
+      var now = Date.now();
+
+      function canManage(model)
+      {
+        if (canManageProdData)
+        {
+          return true;
+        }
+
+        return user.isAllowedTo('PRESS_WORKSHEETS:MANAGE')
+          && user.data._id === model.get('creator').id
+          && Date.parse(model.get('createdAt')) + eightHours > now;
+      }
 
       return function(row)
       {
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];
 
-        if (user.isAllowedTo(model.getPrivilegePrefix() + ':MANAGE'))
+        if (canManage(model))
         {
-          //actions.push(ListView.actions.delete(model));
+          actions.push(ListView.actions.edit(model));
+          actions.push(ListView.actions.delete(model));
         }
 
         return actions;
@@ -39,7 +55,7 @@ define([
 
     serializeRows: function()
     {
-      return this.collection.toJSON().map(decoratePressWorksheet);
+      return this.collection.map(decoratePressWorksheet);
     }
 
   });

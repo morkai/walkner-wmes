@@ -1,5 +1,4 @@
 <div>
-
   <div class="panel panel-primary prodDowntimes-details">
     <div class="panel-heading">
       <%- t('prodDowntimes', 'PANEL:TITLE:details') %>
@@ -10,6 +9,20 @@
           <div class="prop">
             <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:prodLine') %></div>
             <div class="prop-value"><%- model.prodLinePath || model.prodLine %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:pressWorksheet') %></div>
+            <div class="prop-value">
+              <% if (model.pressWorksheet) { %>
+              <% if (user.isAllowedTo('PRESS_WORKSHEETS:VIEW')) { %>
+              <a href="#pressWorksheets/<%- model.pressWorksheet %>"><%- t('core', 'BOOL:true') %></a>
+              <% } else { %>
+              <%- t('core', 'BOOL:true') %>
+              <% } %>
+              <% } else { %>
+              -
+              <% } %>
+            </div>
           </div>
           <div class="prop">
             <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:shift') %></div>
@@ -35,6 +48,10 @@
             <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:creator') %></div>
             <div class="prop-value"><%- model.creatorInfo %></div>
           </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="props">
           <div class="prop">
             <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:startedAt') %></div>
             <div class="prop-value"><%- model.startedAt %></div>
@@ -47,10 +64,6 @@
             <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:duration') %></div>
             <div class="prop-value"><%- model.duration %></div>
           </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="props">
           <div class="prop">
             <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:aor') %></div>
             <div class="prop-value"><%= model.aor || '-' %></div>

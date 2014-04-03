@@ -1,5 +1,6 @@
 'use strict';
 
+var step = require('h5.step');
 var setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
@@ -21,31 +22,101 @@ exports.start = function startPressWorksheetsModule(app, module)
       setUpRoutes(app, module);
 
       app.broker.subscribe('pressWorksheets.added', createOrdersAndDowntimes);
+      app.broker.subscribe('pressWorksheets.edited', recreateOrdersAndDowntimes);
+      app.broker.subscribe('pressWorksheets.deleted', removeOrdersAndDowntimes);
     }
   );
 
   function createOrdersAndDowntimes(message)
   {
-    var PressWorksheet = app[module.config.mongooseId].model('PressWorksheet');
+    var pressWorksheetId = message.model._id;
 
-    PressWorksheet.findById(message.model._id, function(err, pressWorksheet)
+    createRelatedModels(pressWorksheetId, function(err)
     {
       if (err)
       {
         return module.error(
-          "Failed to find press worksheet [%s]: %s", message.model._id, err.stack
+          "Failed to create orders and downtimes from [%s]: %s", pressWorksheetId, err.stack
         );
       }
+    });
+  }
 
-      pressWorksheet.createOrdersAndDowntimes(function(err)
+  function recreateOrdersAndDowntimes(message)
+  {
+    var pressWorksheetId = message.model._id;
+
+    removeRelatedModels(pressWorksheetId, function()
+    {
+      createRelatedModels(pressWorksheetId, function(err)
       {
         if (err)
         {
           return module.error(
-            "Failed to create orders and downtimes from [%s]: %s", message.model._id, err.stack
+            "Failed to recreate orders and downtimes from [%s]: %s", pressWorksheetId, err.stack
           );
         }
       });
     });
+  }
+
+  function removeOrdersAndDowntimes(message)
+  {
+    removeRelatedModels(message.model._id, function() {});
+  }
+
+  function createRelatedModels(pressWorksheetId, done)
+  {
+    var PressWorksheet = app[module.config.mongooseId].model('PressWorksheet');
+
+    PressWorksheet.findById(pressWorksheetId, function(err, pressWorksheet)
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      pressWorksheet.createOrdersAndDowntimes(done);
+    });
+  }
+
+  function removeRelatedModels(pressWorksheetId, done)
+  {
+    var mongoose = app[module.config.mongooseId];
+    var ProdShiftOrder = mongoose.model('ProdShiftOrder');
+    var ProdDowntime = mongoose.model('ProdDowntime');
+
+    step(
+      function removeRelatedModelsStep()
+      {
+        var doneRemovingOrders = this.parallel();
+        var doneRemovingDowntimes = this.parallel();
+
+        ProdShiftOrder.remove({pressWorksheet: pressWorksheetId}, function(err)
+        {
+          if (err)
+          {
+            return module.error(
+              "Failed to remove orders for press worksheet [%s]: %s", pressWorksheetId, err.stack
+            );
+          }
+
+          return doneRemovingOrders();
+        });
+
+        ProdDowntime.remove({pressWorksheet: pressWorksheetId}, function(err)
+        {
+          if (err)
+          {
+            return module.error(
+              "Failed to remove downtimes for press worksheet [%s]: %s", pressWorksheetId, err.stack
+            );
+          }
+
+          return doneRemovingDowntimes();
+        });
+      },
+      done
+    );
   }
 };

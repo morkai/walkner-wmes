@@ -1,51 +1,41 @@
 define([
-  'jquery',
-  'app/i18n',
-  'app/viewport',
-  'app/core/util/bindLoadingMessage',
-  'app/core/View',
-  '../views/PressWorksheetDetailsView'
+  'app/user',
+  'app/core/util/pageActions',
+  'app/core/pages/DetailsPage',
+  '../views/decoratePressWorksheet',
+  'app/pressWorksheets/templates/details'
 ], function(
-  $,
-  t,
-  viewport,
-  bindLoadingMessage,
-  View,
-  PressWorksheetDetailsView
+  user,
+  pageActions,
+  DetailsPage,
+  decoratePressWorksheet,
+  detailsTemplate
 ) {
   'use strict';
 
-  return View.extend({
+  return DetailsPage.extend({
 
-    layoutName: 'page',
+    detailsTemplate: detailsTemplate,
 
-    pageId: 'pressWorksheetDetails',
+    serializeDetails: decoratePressWorksheet,
 
-    breadcrumbs: function()
+    actions: function()
     {
-      return [
-        {
-          label: t.bound(this.model.nlsDomain, 'BREADCRUMBS:browse'),
-          href: this.model.genClientUrl('base')
-        },
-        t.bound(this.model.nlsDomain, 'BREADCRUMBS:details')
-      ];
-    },
+      var eightHours = 8 * 3600 * 1000;
+      var now = Date.now();
+      var actions = [];
 
-    actions: [],
+      if (user.isAllowedTo('PROD_DATA:MANAGE')
+        || (user.data._id === this.model.get('creator').id
+          && Date.parse(this.model.get('createdAt')) + eightHours > now))
+      {
+        actions.push(
+          pageActions.edit(this.model),
+          pageActions.delete(this.model)
+        );
+      }
 
-    initialize: function()
-    {
-      this.model = bindLoadingMessage(this.options.model, this);
-
-      this.view = new PressWorksheetDetailsView({
-        model: this.model
-      });
-    },
-
-    load: function(when)
-    {
-      return when(this.model.fetch());
+      return actions;
     }
 
   });

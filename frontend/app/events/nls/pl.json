@@ -136,6 +136,10 @@
   "TEXT:hourlyPlans.locked": "Zamknięto <a href='\\#hourlyPlans/{model->_id}'>plan godzinowy</a> dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
   "TYPE:pressWorksheets.added": "Karty pracy: dodanie",
   "TEXT:pressWorksheets.added": "Dodano nową <a href='\\#pressWorksheets/{model->_id}'>kartę pracy</a>.",
+  "TYPE:pressWorksheets.edited": "Karty pracy: edycja",
+  "TEXT:pressWorksheets.edited": "Zmodyfikowano kartę pracy: <a href='\\#pressWorksheets/{model->_id}'>{model->rid}</a>",
+  "TYPE:pressWorksheets.deleted": "Karty pracy: usunięcie",
+  "TEXT:pressWorksheets.deleted": "Usunięto kartę pracy: <em>{model->rid}</em>",
   "TYPE:feedback.added": "Feedback: dodanie",
   "TEXT:feedback.added": "Dodano nowy feedback."
 }

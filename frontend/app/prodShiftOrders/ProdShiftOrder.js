@@ -57,6 +57,11 @@ define([
       operators: null
     },
 
+    getLabel: function()
+    {
+      return this.get('orderId') + ', ' + this.get('operationNo');
+    },
+
     onShiftChanged: function()
     {
       this.set({

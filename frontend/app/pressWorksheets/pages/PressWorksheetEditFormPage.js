@@ -1,15 +1,15 @@
 define([
-  'app/core/pages/AddFormPage',
+  'app/core/pages/EditFormPage',
   'app/lossReasons/LossReasonCollection',
   '../views/PressWorksheetFormView'
 ], function(
-  AddFormPage,
+  EditFormPage,
   LossReasonCollection,
   PressWorksheetFormView
 ) {
   'use strict';
 
-  return AddFormPage.extend({
+  return EditFormPage.extend({
 
     FormView: PressWorksheetFormView,
 
@@ -19,7 +19,10 @@ define([
         rqlQuery: 'select(label)&sort(position)&position>=0'
       });
 
-      return when(this.model.lossReasons.fetch({reset: true}));
+      return when(
+        this.model.fetch(),
+        this.model.lossReasons.fetch({reset: true})
+      );
     }
 
   });

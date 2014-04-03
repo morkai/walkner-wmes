@@ -2,19 +2,23 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   './PressWorksheet',
   './pages/PressWorksheetListPage',
-  './pages/PressWorksheetAddFormPage',
   './pages/PressWorksheetDetailsPage',
+  './pages/PressWorksheetAddFormPage',
+  './pages/PressWorksheetEditFormPage',
   'i18n!app/nls/pressWorksheets'
 ], function(
   router,
   viewport,
   user,
+  showDeleteFormPage,
   PressWorksheet,
   PressWorksheetListPage,
+  PressWorksheetDetailsPage,
   PressWorksheetAddFormPage,
-  PressWorksheetDetailsPage
+  PressWorksheetEditFormPage
 ) {
   'use strict';
 
@@ -26,17 +30,28 @@ define([
     viewport.showPage(new PressWorksheetListPage({rql: req.rql}));
   });
 
-  router.map('/pressWorksheets/:id', function(req)
-  {
-    viewport.showPage(new PressWorksheetDetailsPage({
-      model: new PressWorksheet({_id: req.params.id})
-    }));
-  });
-
   router.map('/pressWorksheets;add', canManage, function()
   {
     viewport.showPage(new PressWorksheetAddFormPage({
       model: new PressWorksheet()
     }));
   });
+
+  router.map('/pressWorksheets/:id', canView, function(req)
+  {
+    viewport.showPage(new PressWorksheetDetailsPage({
+      model: new PressWorksheet({_id: req.params.id})
+    }));
+  });
+
+  router.map('/pressWorksheets/:id;edit', canManage, function(req)
+  {
+    viewport.showPage(new PressWorksheetEditFormPage({
+      model: new PressWorksheet({_id: req.params.id})
+    }));
+  });
+
+  router.map(
+    '/pressWorksheets/:id;delete', canManage, showDeleteFormPage.bind(null, PressWorksheet)
+  );
 });

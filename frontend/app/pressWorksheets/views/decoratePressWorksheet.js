@@ -12,9 +12,11 @@ define([
     return user && user.label ? user.label : null;
   }
 
-  return function(data)
+  return function(model)
   {
     /*jshint -W015*/
+
+    var data = model.toJSON();
 
     data.date = time.format(data.date, 'YYYY-MM-DD');
     data.shift = t('core', 'SHIFT:' + data.shift);

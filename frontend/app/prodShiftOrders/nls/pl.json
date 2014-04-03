@@ -5,6 +5,7 @@
 
   "MSG:LOADING_FAILURE": "Ładowanie historii zleceń nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych zlecenia nie powiodło się :(",
+  "MSG:DELETED": "Zlecenie <em>{label}</em> zostało usunięte.",
 
   "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
   "PAGE_ACTION:prodDowntimes": "Pokaż przestoje",

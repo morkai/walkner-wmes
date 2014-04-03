@@ -27,6 +27,8 @@ define([
 
     nlsDomain: 'prodDowntimes',
 
+    labelAttribute: 'rid',
+
     defaults: {
       division: null,
       subdivision: null,

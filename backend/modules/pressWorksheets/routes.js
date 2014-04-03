@@ -14,15 +14,52 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
   express.get('/pressWorksheets', canView, crud.browseRoute.bind(null, app, PressWorksheet));
 
+  express.get('/pressWorksheets;rid', canView, findByRidRoute);
+
   express.post(
-    '/pressWorksheets', canManage, prepareData, crud.addRoute.bind(null, app, PressWorksheet)
+    '/pressWorksheets',
+    canManage,
+    prepareDataForAdd,
+    crud.addRoute.bind(null, app, PressWorksheet)
   );
 
   express.get('/pressWorksheets/:id', canView, crud.readRoute.bind(null, app, PressWorksheet));
 
+  express.put(
+    '/pressWorksheets/:id',
+    canManage,
+    prepareDataForEdit,
+    crud.editRoute.bind(null, app, PressWorksheet)
+  );
+
   express.del('/pressWorksheets/:id', canManage, crud.deleteRoute.bind(null, app, PressWorksheet));
 
-  function prepareData(req, res, next)
+  function findByRidRoute(req, res, next)
+  {
+    var rid = parseInt(req.query.rid, 10);
+
+    if (isNaN(rid) || rid <= 0)
+    {
+      return res.send(400);
+    }
+
+    PressWorksheet.findOne({rid: rid}, {_id: 1}).lean().exec(function(err, pressWorksheet)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (pressWorksheet)
+      {
+        return res.json(pressWorksheet._id);
+      }
+
+      return res.send(404);
+    });
+  }
+
+  function prepareDataForAdd(req, res, next)
   {
     var date = new Date(req.body.date + ' 00:00:00');
 
@@ -44,5 +81,39 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
     req.body.creator = userInfo.createObject(req.session.user, req);
 
     return next();
+  }
+
+  function prepareDataForEdit(req, res, next)
+  {
+    var date = new Date(req.body.date + ' 00:00:00');
+
+    if (req.body.shift === 1)
+    {
+      date.setHours(6);
+    }
+    else if (req.body.shift === 2)
+    {
+      date.setHours(14);
+    }
+    else
+    {
+      date.setHours(22);
+    }
+
+    req.body.date = date;
+    req.body.updatedAt = new Date();
+    req.body.updater = userInfo.createObject(req.session.user, req);
+
+    PressWorksheet.findById(req.params.id, function(err, pressWorksheet)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      req.model = pressWorksheet;
+
+      return next();
+    });
   }
 };
