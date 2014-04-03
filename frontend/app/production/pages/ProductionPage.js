@@ -196,8 +196,6 @@ define([
 
     refreshDowntimes: function()
     {
-      var model = this.model;
-
       if (prodLog.isSyncing())
       {
         return this.broker
@@ -210,10 +208,29 @@ define([
         return this.listenToOnce(this.model, 'unlocked', this.delayDowntimesRefresh.bind(this));
       }
 
-      this.promised(model.prodDowntimes.fetch({reset: true})).then(function()
+      if (this.timers.refreshingDowntimes)
       {
-        model.saveLocalData();
-      });
+        clearTimeout(this.timers.refreshingDowntimes);
+      }
+
+      var page = this;
+
+      this.timers.refreshingDowntimes = setTimeout(function()
+      {
+        delete page.timers.refreshingDowntimes;
+
+        if (!page.socket.isConnected())
+        {
+          return;
+        }
+
+        var req = page.model.prodDowntimes.fetch({reset: true});
+
+        page.promised(req).done(function()
+        {
+          page.model.saveLocalData();
+        });
+      }, 3000);
     },
 
     delayDowntimesRefresh: function()
