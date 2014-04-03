@@ -1,5 +1,6 @@
 'use strict';
 
+var lodash = require('lodash');
 var crud = require('../express/crud');
 var userInfo = require('../../models/userInfo');
 
@@ -12,7 +13,9 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
   var canView = user.auth('PRESS_WORKSHEETS:VIEW');
   var canManage = user.auth('PRESS_WORKSHEETS:MANAGE');
 
-  express.get('/pressWorksheets', canView, crud.browseRoute.bind(null, app, PressWorksheet));
+  express.get(
+    '/pressWorksheets', canView, limitToMine, crud.browseRoute.bind(null, app, PressWorksheet)
+  );
 
   express.get('/pressWorksheets;rid', canView, findByRidRoute);
 
@@ -115,5 +118,27 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
       return next();
     });
+  }
+
+  function limitToMine(req, res, next)
+  {
+    var selector = req.rql.selector;
+
+    if (!Array.isArray(selector.args) || !selector.args.length)
+    {
+      return next();
+    }
+
+    var mineTerm = lodash.find(selector.args, function(term)
+    {
+      return term.name === 'eq' && term.args[0] === 'mine';
+    });
+
+    if (mineTerm)
+    {
+      mineTerm.args = ['creator.id', req.session.user._id];
+    }
+
+    return next();
   }
 };

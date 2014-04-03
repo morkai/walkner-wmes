@@ -52,6 +52,7 @@ define([
 
       this.toggleButtonGroup('shift');
       this.toggleButtonGroup('type');
+      this.toggleButtonGroup('mine');
     },
 
     toggleButtonGroup: function(groupName)
@@ -66,7 +67,8 @@ define([
         date: '',
         shift: 0,
         type: 'any',
-        limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
+        limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit),
+        mine: false
       };
       var view = this;
 
@@ -99,6 +101,7 @@ define([
 
           case 'shift':
           case 'type':
+          case 'mine':
             formData[property] = term.args[1];
             break;
         }
@@ -114,6 +117,7 @@ define([
       var dateMoment = time.getMoment(this.$id('date').val());
       var shiftNo = parseInt(this.$('input[name=shift]:checked').val(), 10);
       var type = this.$('input[name=type]:checked').val();
+      var mine = this.$('input[name=mine]:checked').val();
 
       this.setHoursByShiftNo(dateMoment, shiftNo);
 
@@ -148,6 +152,21 @@ define([
       if (type !== 'any')
       {
         selector.push({name: 'eq', args: ['type', type]});
+      }
+
+      if (mine)
+      {
+        selector.push({name: 'eq', args: ['mine', 1]});
+
+        rqlQuery.sort = {
+          createdAt: -1
+        };
+      }
+      else
+      {
+        rqlQuery.sort = {
+          date: -1
+        };
       }
 
       rqlQuery.selector = {name: 'and', args: selector};

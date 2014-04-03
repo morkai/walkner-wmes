@@ -42,6 +42,14 @@
       <label for="<%- idPrefix %>-limit"><%- t('pressWorksheets', 'FILTER:LIMIT') %></label>
       <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
     </div><div
+      class="form-group">
+      <label>&nbsp;</label>
+      <div id="<%- idPrefix %>-mine" class="btn-group filter-btn-group" data-toggle="buttons">
+        <label class="btn btn-default" title="<%- t('pressWorksheets', 'FILTER:mine:title') %>">
+          <input type="checkbox" name="mine" value="1"> <%- t('pressWorksheets', 'FILTER:mine') %>
+        </label>
+      </div>
+    </div><div
       class="form-group filter-actions">
       <input type="submit" class="btn btn-primary" value="<%= t('pressWorksheets', 'FILTER:BUTTON') %>">
     </div>

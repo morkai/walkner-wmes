@@ -30,6 +30,8 @@
     "FILTER:type:mech": "Treatment",
     "FILTER:type:paintShop": "Paint shop",
     "FILTER:type:optics": "Optics",
+    "FILTER:mine": "Only mine",
+    "FILTER:mine:title": "Limit the worksheet to those added by you from the newest to the oldest!",
 
     "PROPERTY:rid": "ID",
     "PROPERTY:operators": "Operators",

@@ -29,6 +29,8 @@
   "FILTER:type:mech": "Obr. mech.",
   "FILTER:type:paintShop": "Malarnia",
   "FILTER:type:optics": "M. optyki",
+  "FILTER:mine": "Tylko moje",
+  "FILTER:mine:title": "Ogranicz listę kart pracy do dodanych przez Ciebie w kolejności od najnowszej do najstarszej!",
 
   "PROPERTY:rid": "ID",
   "PROPERTY:operators": "Nastawiacze/operatorzy",
