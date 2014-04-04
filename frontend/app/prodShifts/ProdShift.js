@@ -692,7 +692,18 @@ define([
         this.prodShiftOrder.clear();
         this.prodDowntimes.reset();
         this.stopShiftChangeMonitor();
-        this.clear();
+        this.set({
+          date: null,
+          shift: null,
+          state: null,
+          quantitiesDone: null,
+          creator: null,
+          createdAt: null,
+          master: null,
+          leader: null,
+          operator: null,
+          operators: null
+        });
         this.trigger('locked');
       }
       else
