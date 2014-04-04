@@ -9,6 +9,11 @@ var CSV_ROW_SEPARATOR = '\r\n';
 var CSV_FORMATTERS = {
   '"': function(value)
   {
+    if (value === null || value === 'undefined' || value === '')
+    {
+      return '""';
+    }
+
     return '"' + value + '"';
   },
   '#': function(value)
