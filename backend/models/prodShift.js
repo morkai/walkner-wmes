@@ -116,20 +116,22 @@ module.exports = function setupProdShiftModel(app, mongoose)
         app.production.swapToCachedProdData(prodShifts, cachedProdShifts);
 
         var prodLineCount = prodLineIds.length;
-        var dividedQuantities = prodLineIds.map(function() { return []; });
+        var dividedQuantities = prodLineIds.map(function() { return [0, 0, 0, 0, 0, 0, 0, 0]; });
 
-        for (var h = 0; h < 8; ++h)
+        plannedQuantities.forEach(function(plannedQuantity, hour)
         {
-          var plannedQuantity = plannedQuantities[h];
-          var perProdLine = Math.ceil(plannedQuantity / prodLineCount);
+          var quantityForProdLine = Math.floor(plannedQuantity / prodLineCount);
 
-          for (var p = 0; p < prodLineCount; ++p)
+          dividedQuantities.forEach(function(quantitiesForProdLine)
           {
-            dividedQuantities[p].push(Math.max(Math.min(perProdLine, plannedQuantity), 0));
+            quantitiesForProdLine[hour] = quantityForProdLine;
+          });
 
-            plannedQuantity -= perProdLine;
+          for (var i = 0, l = plannedQuantity % prodLineCount; i < l; ++i)
+          {
+            dividedQuantities[hour % 2 ? (prodLineCount - 1 - i) : i][hour] += 1;
           }
-        }
+        });
 
         step(
           function()

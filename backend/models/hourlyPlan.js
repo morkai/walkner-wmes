@@ -126,13 +126,6 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
   hourlyPlanSchema.statics.recountPlannedQuantities = function(
     divisionId, shiftId, prodFlowId, activeProdLineIds, done)
   {
-    var firstShiftDate = new Date(shiftId.date.getTime());
-
-    if (shiftId !== 1)
-    {
-      firstShiftDate.setHours(6);
-    }
-
     step(
       function findHourlyPlanStep()
       {
