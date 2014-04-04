@@ -31,12 +31,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
     limitOrgUnit,
     function(req, res, next)
     {
-      req.rql.fields = {
-        reasonComment: 0,
-        decisionComment: 0,
-        date: 0,
-        shift: 0
-      };
+      req.rql.fields = {};
 
       next();
     },
@@ -199,22 +194,29 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
     var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
     var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
 
-    if (!doc.orderId)
-    {
-      doc.orderId = '';
-    }
+    var corroboratedAt = doc.corroboratedAt ? moment(doc.corroboratedAt) : null;
 
     return {
+      '#rid': doc.rid,
       '"reasonId': doc.reason,
       '"reason': reason ? reason.label : '?',
-      '"aor': aor ? aor.name : (doc.aor || ''),
+      '"reasonComment': doc.reasonComment,
+      '"aor': aor ? aor.name : doc.aor,
       '"orderNo': doc.mechOrder ? '' : doc.orderId,
       '"12nc': doc.mechOrder ? doc.orderId : '',
-      '"operationNo': doc.operationNo || '',
+      '"operationNo': doc.operationNo,
+      'date': moment(doc.date).format('YYYY-MM-DD'),
+      '#shift': doc.shift,
       'startedAt': startedAt.format('YYYY-MM-DD HH:mm:ss'),
       'finishedAt': finishedAt.format('YYYY-MM-DD HH:mm:ss'),
       '#duration': duration,
+      '"master': exportUserInfo(doc.master),
+      '"leader': exportUserInfo(doc.leader),
+      '"operator': exportUserInfo(doc.operator),
+      '"corroborator': exportUserInfo(doc.corroborator),
+      'corroboratedAt': corroboratedAt ? corroboratedAt.format('YYYY-MM-DD HH:mm:ss') : '',
       '"status': doc.status,
+      '"decisionComment': doc.decisionComment,
       '"division': doc.division,
       '"subdivision': subdivision ? subdivision.name : doc.subdivision,
       '"mrp': doc.mrpControllers.join(','),
@@ -222,9 +224,30 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
       '"workCenter': doc.workCenter,
       '"prodLine': doc.prodLine,
       '"downtimeId': doc._id,
-      '"shiftId': doc.prodShift || '',
-      '"orderId': doc.prodShiftOrder || ''
+      '"shiftId': doc.prodShift,
+      '"orderId': doc.prodShiftOrder,
+      '"worksheetId': doc.pressWorksheet
     };
+  }
+
+  function exportUserInfo(userInfo)
+  {
+    if (!userInfo)
+    {
+      return '';
+    }
+
+    if (userInfo.label)
+    {
+      return userInfo.label;
+    }
+
+    if (userInfo.id)
+    {
+      return userInfo.id;
+    }
+
+    return '?';
   }
 
   function editProdDowntimeRoute(req, res, next)
