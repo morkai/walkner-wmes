@@ -160,7 +160,7 @@ define([
           item.quantityDone = 0;
           item.workerCount = 0;
 
-          orderToItemMap[prodLogEntry.get('prodShiftOrder')] = item;
+          orderToItemMap[prodLogEntry.get('prodShiftOrder')._id] = item;
         }
         else if (type === 'downtime')
         {
@@ -171,6 +171,8 @@ define([
       for (; i < l; ++i)
       {
         var prodLogEntry = this.collection.at(i);
+        var prodShiftOrder = prodLogEntry.get('prodShiftOrder');
+        var prodShiftOrderId = prodShiftOrder ? prodShiftOrder._id : null;
         var type = prodLogEntry.get('type');
         var data = prodLogEntry.get('data');
         var item;
@@ -201,7 +203,7 @@ define([
             break;
 
           case 'correctOrder':
-            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+            item = orderToItemMap[prodShiftOrderId];
 
             if (item)
             {
@@ -213,7 +215,7 @@ define([
             break;
 
           case 'finishOrder':
-            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+            item = orderToItemMap[prodShiftOrderId];
 
             if (item && item.ending_time === -1)
             {
@@ -239,7 +241,7 @@ define([
             break;
 
           case 'changeQuantityDone':
-            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+            item = orderToItemMap[prodShiftOrderId];
 
             if (item)
             {
@@ -248,7 +250,7 @@ define([
             break;
 
           case 'changeWorkerCount':
-            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+            item = orderToItemMap[prodShiftOrderId];
 
             if (item)
             {
@@ -257,7 +259,7 @@ define([
             break;
 
           case 'editOrder':
-            item = orderToItemMap[prodLogEntry.get('prodShiftOrder')];
+            item = orderToItemMap[prodShiftOrderId];
 
             if (!item)
             {
