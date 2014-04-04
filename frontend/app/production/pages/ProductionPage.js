@@ -219,7 +219,7 @@ define([
       {
         delete page.timers.refreshingDowntimes;
 
-        if (!page.socket.isConnected())
+        if (!page.socket.isConnected() || page.model.isLocked())
         {
           return;
         }
