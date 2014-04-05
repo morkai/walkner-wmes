@@ -194,6 +194,8 @@ module.exports = function startFixRoutes(app, express)
 
   function recreateProdData(req, res, next)
   {
+    res.setTimeout(30 * 60 * 1000);
+
     app.production.recreate(function(err)
     {
       if (err)

@@ -145,6 +145,11 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
 
   prodDowntimeSchema.post('save', function(doc)
   {
+    if (app.production.recreating)
+    {
+      return;
+    }
+
     if (this.wasNew)
     {
       app.broker.publish('prodDowntimes.created.' + doc.prodLine, doc.toJSON());

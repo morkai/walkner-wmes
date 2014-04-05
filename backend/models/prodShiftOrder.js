@@ -166,6 +166,11 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
   prodShiftOrderSchema.post('save', function(doc)
   {
+    if (app.production.recreating)
+    {
+      return;
+    }
+
     if (this.wasNew)
     {
       app.broker.publish('prodShiftOrders.created.' + doc.prodLine, doc.toJSON());

@@ -32,9 +32,14 @@ exports.start = function startProductionModule(app, module)
   var ProdDowntime = mongoose.model('ProdDowntime');
   var cachedProdData = {};
 
+  module.clearProdData = function()
+  {
+    cachedProdData = {};
+  };
+
   module.setProdData = function(model)
   {
-    cachedProdData[model.get('_id')] = model;
+    cachedProdData[model._id] = model;
   };
 
   module.getProdData = function(type, _id, done)

@@ -1,6 +1,7 @@
 'use strict';
 
 var step = require('h5.step');
+var moment = require('moment');
 
 module.exports = function(app, productionModule, done)
 {
@@ -39,7 +40,7 @@ module.exports = function(app, productionModule, done)
       productionModule.info("Resetting the todo flag...");
 
       mongoose.model('ProdLogEntry')
-        .update({todo: false}, {todo: true}, {multi: true}, this.next());
+        .update({todo: true}, {todo: false}, {multi: true}, this.next());
     },
     function handleResetTodoResultStep(err)
     {
@@ -106,10 +107,87 @@ module.exports = function(app, productionModule, done)
     {
       productionModule.info("Recreating the prod log entries...");
 
-      productionModule.handleLogEntries(this.next());
+      var next = this.next();
+
+      mongoose.model('ProdLogEntry').aggregate(
+        {$group: {_id: null, max: {$max: '$createdAt'}, min: {$min: '$createdAt'}}},
+        function(err, results)
+        {
+          if (err)
+          {
+            return next(err);
+          }
+
+          if (!results || !results.length)
+          {
+            return next();
+          }
+
+          var fromMoment = moment(results[0].min).weekday(0);
+          var maxTime = moment(results[0].max).weekday(0).add('weeks', 1).valueOf();
+
+          productionModule.info(
+            "Recreating the prod log entries from %s to %s...",
+            fromMoment.format('YYYY-MM-DD'),
+            moment(maxTime).format('YYYY-MM-DD')
+          );
+
+          var steps = [];
+
+          while (fromMoment.valueOf() < maxTime)
+          {
+            var from = new Date(fromMoment.valueOf());
+            var to = new Date(fromMoment.add('weeks', 1).valueOf());
+
+            steps.push(createHandleWeekOfLogEntriesStep(from, to));
+          }
+
+          steps.push(next);
+
+          step(steps);
+        });
+    },
+    function handleRecreateProdLogEntryDataResultStep(err)
+    {
+      if (err)
+      {
+        productionModule.error("Failed to recreate the prod log entries :(");
+
+        return this.skip(err);
+      }
+    },
+    function recountPlannedQuantitiesStep()
+    {
+      productionModule.info("Recounting the planned quantities...");
+
+      var next = this.next();
+
+      mongoose.model('HourlyPlan')
+        .find()
+        .sort({date: 1, division: 1})
+        .exec(function(err, hourlyPlans)
+        {
+          if (err)
+          {
+            return next(err);
+          }
+
+          step(
+            function()
+            {
+              for (var i = 0, l = hourlyPlans.length; i < l; ++i)
+              {
+                hourlyPlans[i].recountPlannedQuantities(this.parallel());
+              }
+            },
+            next
+          );
+        });
     },
     function finishRecreatingStep(err)
     {
+      productionModule.clearProdData();
+
       if (err)
       {
         productionModule.error("Failed to recreate the production data: %s", err.stack);
@@ -129,4 +207,44 @@ module.exports = function(app, productionModule, done)
       }
     }
   );
+
+  function createHandleWeekOfLogEntriesStep(from, to)
+  {
+    return function handleWeekOfLogEntriesStep()
+    {
+      var week = moment(from).format('YYYY-MM-DD');
+
+      productionModule.info("Recreating week %s...", week);
+
+      var next = this.next();
+      var conditions = {createdAt: {$gte: from, $lt: to}};
+      var update = {$set: {todo: true}};
+
+      mongoose.model('ProdLogEntry').update(conditions, update, {multi: true}, function(err)
+      {
+        if (err)
+        {
+          productionModule.error(
+            "Failed to reset todo flag of log entries for week %s: %s", week, err.stack
+          );
+
+          return next(err);
+        }
+
+        productionModule.handleLogEntries(function(err)
+        {
+          productionModule.clearProdData();
+
+          if (err)
+          {
+            productionModule.error(
+              "Failed to handle log entries for week %s: %s", week, err.stack
+            );
+          }
+
+          return next(err);
+        });
+      });
+    };
+  }
 };

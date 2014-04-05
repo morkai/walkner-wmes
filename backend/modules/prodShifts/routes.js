@@ -154,7 +154,10 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
         res.send(logEntry.data);
 
-        app.broker.publish('production.edited.shift.' + logEntry.prodShift, logEntry.data);
+        if (!productionModule.recreating)
+        {
+          app.broker.publish('production.edited.shift.' + logEntry.prodShift, logEntry.data);
+        }
       }
     );
   }
