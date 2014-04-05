@@ -86,7 +86,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         productionModule.setProdData(prodShift);
       }
 
-      if (prodLine.isNew)
+      if (prodLine.isNew || !prodShift)
       {
         return done();
       }
@@ -132,12 +132,23 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save finished %s [%s] for prod line [%s] (LOG=[%s]): %s",
+            "Failed to save finished, bugged %s [%s] for prod line [%s] (LOG=[%s]): %s",
             type,
             _id,
             prodLine._id,
             logEntry._id,
             err.stack
+          );
+        }
+        else
+        {
+          productionModule.debug(
+            "Finished bugged %s [%s] in shift [%s] of prod line [%s] (LOG=[%s])",
+            type,
+            _id,
+            logEntry.prodShift,
+            prodLine._id,
+            logEntry._id
           );
         }
 
