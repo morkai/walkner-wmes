@@ -285,7 +285,6 @@ define([
       }
 
       var oldCount = fractionsUtil.parse(e.target.getAttribute('data-value'));
-      console.log('newCount', e.target.value);
       var newCount = fractionsUtil.parse(e.target.value);
 
       if (oldCount === newCount)
