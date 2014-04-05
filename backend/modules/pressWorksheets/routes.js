@@ -11,7 +11,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
   var PressWorksheet = app[pressWorksheetsModule.config.mongooseId].model('PressWorksheet');
 
   var canView = user.auth('PRESS_WORKSHEETS:VIEW');
-  var canManage = user.auth('PRESS_WORKSHEETS:MANAGE');
+  var canManage = user.auth('PRESS_WORKSHEETS:MANAGE', 'PROD_DATA:MANAGE');
 
   express.get(
     '/pressWorksheets', canView, limitToMine, crud.browseRoute.bind(null, app, PressWorksheet)
