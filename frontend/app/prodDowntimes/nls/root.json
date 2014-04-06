@@ -12,6 +12,7 @@
 
     "PAGE_ACTION:export": "Export downtimes",
     "PAGE_ACTION:edit": "Edit downtime",
+    "PAGE_ACTION:delete": "Delete downtime",
     "PAGE_ACTION:jump:title": "Jump to downtime by ID",
     "PAGE_ACTION:jump:placeholder": "Downtime ID",
 
@@ -78,6 +79,12 @@
     "corroborate:confirm": "Confirm downtime",
     "corroborate:reject": "Reject downtime",
     "corroborate:msg:failure": "Failed to corroborate the downtime: {error}",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "Downtime deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete downtime",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen downtime?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> downtime?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the downtime :-(",
 
     "filter:message": "If after going to the downtime details page you want to go back to the downtimes list page with the previously set filters, then you should use the browser's <em><i class='fa fa-arrow-left'></i> Back</em> button or press the <kbd><i class='fa fa-long-arrow-left'></i> Backspace</kbd> key on your keyboard."
   },

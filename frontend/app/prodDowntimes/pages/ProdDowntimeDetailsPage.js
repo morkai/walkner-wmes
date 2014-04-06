@@ -3,6 +3,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
   'app/core/View',
   '../ProdDowntime',
@@ -13,6 +14,7 @@ define([
   user,
   viewport,
   bindLoadingMessage,
+  pageActions,
   onModelDeleted,
   View,
   ProdDowntime,
@@ -74,12 +76,10 @@ define([
 
       if (this.model.isEditable())
       {
-        actions.push({
-          label: t.bound('prodDowntimes', 'PAGE_ACTION:edit'),
-          icon: 'edit',
-          href: this.model.genClientUrl('edit'),
-          privileges: 'PROD_DATA:MANAGE'
-        });
+        actions.push(
+          pageActions.edit(this.model, 'PROD_DATA:MANAGE'),
+          pageActions.delete(this.model, 'PROD_DATA:MANAGE')
+        );
       }
 
       return actions;
@@ -111,18 +111,14 @@ define([
 
     setUpRemoteTopics: function()
     {
-      var page = this;
-
       if (this.model.get('status') === 'undecided')
       {
-        this.pubsub.subscribe('prodDowntimes.corroborated.*', function(message)
-        {
-          if (page.corroborating && message._id === page.model.id)
-          {
-            viewport.closeDialog();
-          }
-        });
+        this.pubsub.subscribe('prodDowntimes.corroborated.*', this.onCorroborated.bind(this));
       }
+
+      this.pubsub.subscribe(
+        'prodDowntimes.deleted.' + this.model.id, this.onModelDeleted.bind(this)
+      );
 
       var pressWorksheetId = this.model.get('pressWorksheet');
 
@@ -133,13 +129,21 @@ define([
           .setFilter(filterWorksheet);
 
         this.pubsub
-          .subscribe('pressWorksheets.deleted', this.onWorksheetDeleted.bind(this))
+          .subscribe('pressWorksheets.deleted', onModelDeleted)
           .setFilter(filterWorksheet);
       }
 
       function filterWorksheet(message)
       {
         return message.model._id === pressWorksheetId;
+      }
+    },
+
+    onCorroborated: function(message)
+    {
+      if (this.corroborating && message._id === this.model.id)
+      {
+        viewport.closeDialog();
       }
     },
 
@@ -161,7 +165,7 @@ define([
       );
     },
 
-    onWorksheetDeleted: function()
+    onModelDeleted: function()
     {
       onModelDeleted(this.broker, this.model, null, true);
     }

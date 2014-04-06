@@ -11,6 +11,7 @@
 
   "PAGE_ACTION:export": "Eksportuj przestoje",
   "PAGE_ACTION:edit": "Edytuj przestój",
+  "PAGE_ACTION:delete": "Usuń przestój",
   "PAGE_ACTION:jump:title": "Skocz do przestoju po ID",
   "PAGE_ACTION:jump:placeholder": "ID przestoju",
 
@@ -77,6 +78,12 @@
   "corroborate:confirm": "Zatwierdź przestój",
   "corroborate:reject": "Odrzuć przestój",
   "corroborate:msg:failure": "Nie udało się potwierdzić przestoju: {error}",
+
+  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia przestoju",
+  "ACTION_FORM:BUTTON:delete": "Usuń przestój",
+  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany przestój?",
+  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć przestój <em>{label}</em>?",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć przestoju :-(",
 
   "filter:message": "Jeżeli po przejściu do ekranu szczegołów wybranego przestoju chcesz wrócić do ekranu listy przestojów zachowując wcześniej zdefiniowane filtry, to skorzystaj z przycisku <em><i class='fa fa-arrow-left'></i> Wstecz</em> przeglądarki lub wciśnij klawisz <kbd><i class='fa fa-long-arrow-left'></i> Backspace</kbd> na klawiaturze."
 }

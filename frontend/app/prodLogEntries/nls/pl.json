@@ -35,6 +35,7 @@
   "type:editShift": "Edycja zmiany",
   "type:editOrder": "Edycja zlecenia",
   "type:editDowntime": "Edycja przestoju",
+  "type:deleteDowntime": "Usunięcie przestoju",
 
   "data:changeShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
   "data:changeMaster": "Nowy mistrz: <em>{name}</em>",
@@ -53,6 +54,7 @@
   "data:editShift": "Zmienione atrybuty: {changedProperties}",
   "data:editOrder": "Zmienione atrybuty: {changedProperties}",
   "data:editDowntime": "Zmienione atrybuty <a href='\\#prodDowntimes/{_id}'>przestoju</a>: {changedProperties}",
+  "data:deleteDowntime": "Usunięto przestój <em>{rid}</em>.",
 
   "noData:prodShiftOrder": "<em>brak zlecenia</em>"
 }

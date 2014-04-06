@@ -309,6 +309,19 @@ define([
 
             item.prodLogEntry.set('data', _.extend(item.prodLogEntry.get('data'), data));
             break;
+
+          case 'deleteDowntime':
+            item = downtimeToItemMap[data._id];
+
+            if (!item)
+            {
+              break;
+            }
+
+            delete downtimeToItemMap[data._id];
+
+            downtimes.splice(downtimes.indexOf(item), 1);
+            break;
         }
       }
 

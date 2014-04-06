@@ -87,8 +87,6 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       return null;
     }
 
-    var ProdLogEntry = this;
-    var createdAt = new Date();
     var data = {};
     var modelData = prodShift.toJSON();
 
@@ -109,23 +107,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       return null;
     }
 
-    return new ProdLogEntry({
-      _id: generateId(createdAt, modelData.prodLine),
-      type: 'editShift',
-      division: modelData.division,
-      subdivision: modelData.subdivision,
-      mrpControllers: modelData.mrpControllers,
-      prodFlow: modelData.prodFlow,
-      workCenter: modelData.workCenter,
-      prodLine: modelData.prodLine,
-      prodShift: modelData._id,
-      prodShiftOrder: null,
-      creator: creator,
-      createdAt: createdAt,
-      savedAt: createdAt,
-      todo: false,
-      data: data
-    });
+    return this.createFromProdModel(prodShift, creator, 'editShift', data);
   };
 
   prodLogEntrySchema.statics.editOrder = function(prodShiftOrder, creator, changes)
@@ -135,8 +117,6 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       return null;
     }
 
-    var ProdLogEntry = this;
-    var createdAt = new Date();
     var data = {};
     var modelData = prodShiftOrder.toJSON();
 
@@ -152,23 +132,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       return null;
     }
 
-    return new ProdLogEntry({
-      _id: generateId(createdAt, modelData.prodLine),
-      type: 'editOrder',
-      division: modelData.division,
-      subdivision: modelData.subdivision,
-      mrpControllers: modelData.mrpControllers,
-      prodFlow: modelData.prodFlow,
-      workCenter: modelData.workCenter,
-      prodLine: modelData.prodLine,
-      prodShift: modelData.prodShift,
-      prodShiftOrder: modelData._id,
-      creator: creator,
-      createdAt: createdAt,
-      savedAt: createdAt,
-      todo: false,
-      data: data
-    });
+    return this.createFromProdModel(prodShiftOrder, creator, 'editOrder', data);
   };
 
   prodLogEntrySchema.statics.editDowntime = function(prodDowntime, creator, changes)
@@ -178,7 +142,6 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       return null;
     }
 
-    var ProdLogEntry = this;
     var createdAt = new Date();
     var data = {};
     var modelData = prodDowntime.toJSON();
@@ -209,17 +172,57 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 
     data._id = prodDowntime._id;
 
+    return this.createFromProdModel(prodDowntime, creator, 'editDowntime', data, createdAt);
+  };
+
+  prodLogEntrySchema.statics.deleteDowntime = function(prodDowntime, creator)
+  {
+    return this.createFromProdModel(
+      prodDowntime, creator, 'deleteDowntime', prodDowntime.toJSON()
+    );
+  };
+
+  prodLogEntrySchema.statics.createFromProdModel = function(
+    prodModel, creator, type, data, createdAt)
+  {
+    var ProdLogEntry = this;
+
+    if (createdAt === undefined)
+    {
+      createdAt = new Date();
+    }
+
+    var modelName = prodModel.constructor.modelName;
+    var prodShift;
+    var prodShiftOrder;
+
+    if (modelName === 'ProdShift')
+    {
+      prodShift = prodModel._id;
+      prodShiftOrder = null;
+    }
+    else if (modelName === 'ProdShiftOrder')
+    {
+      prodShift = prodModel.prodShift;
+      prodShiftOrder = prodModel._id;
+    }
+    else if (modelName === 'ProdDowntime')
+    {
+      prodShift = prodModel.prodShift;
+      prodShiftOrder = prodModel.prodShiftOrder;
+    }
+
     return new ProdLogEntry({
-      _id: generateId(createdAt, modelData.prodLine),
-      type: 'editDowntime',
-      division: modelData.division,
-      subdivision: modelData.subdivision,
-      mrpControllers: modelData.mrpControllers,
-      prodFlow: modelData.prodFlow,
-      workCenter: modelData.workCenter,
-      prodLine: modelData.prodLine,
-      prodShift: modelData.prodShift,
-      prodShiftOrder: modelData.prodShiftOrder,
+      _id: generateId(createdAt, prodModel.prodLine),
+      type: type,
+      division: prodModel.division,
+      subdivision: prodModel.subdivision,
+      mrpControllers: prodModel.mrpControllers,
+      prodFlow: prodModel.prodFlow,
+      workCenter: prodModel.workCenter,
+      prodLine: prodModel.prodLine,
+      prodShift: prodShift,
+      prodShiftOrder: prodShiftOrder,
       creator: creator,
       createdAt: createdAt,
       savedAt: createdAt,

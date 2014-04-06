@@ -20,6 +20,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   var ProdLogEntry = mongoose.model('ProdLogEntry');
 
   var canView = userModule.auth('PROD_DOWNTIMES:VIEW');
+  var canManage = userModule.auth('PROD_DATA:MANAGE');
 
   express.get('/prodDowntimes', limitOrgUnit, crud.browseRoute.bind(null, app, ProdDowntime));
 
@@ -44,7 +45,9 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
   express.get('/prodDowntimes/:id', canView, crud.readRoute.bind(null, app, ProdDowntime));
 
-  express.put('/prodDowntimes/:id', userModule.auth('PROD_DATA:MANAGE'), editProdDowntimeRoute);
+  express.put('/prodDowntimes/:id', canManage, editProdDowntimeRoute);
+
+  express.del('/prodDowntimes/:id', canView, deleteProdDowntimeRoute);
 
   function findByRidRoute(req, res, next)
   {
@@ -329,7 +332,87 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
         res.send(logEntry.data);
 
-        app.broker.publish('production.edited.downtime.' + logEntry.data._id, logEntry.data);
+        if (!productionModule.recreating)
+        {
+          app.broker.publish('production.edited.downtime.' + logEntry.data._id, logEntry.data);
+        }
+      }
+    );
+  }
+
+  function deleteProdDowntimeRoute(req, res, next)
+  {
+    step(
+      function getProdDataStep()
+      {
+        productionModule.getProdData('downtime', req.params.id, this.next());
+      },
+      function createLogEntryStep(err, prodDowntime)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!prodDowntime)
+        {
+          return this.skip(null, 404);
+        }
+
+        if (!prodDowntime.isEditable())
+        {
+          return this.skip(new Error('DOWNTIME_NOT_EDITABLE'), 400);
+        }
+
+        var logEntry = ProdLogEntry.deleteDowntime(
+          prodDowntime, userInfo.createObject(req.session.user, req)
+        );
+
+        logEntry.save(this.next());
+      },
+      function handleLogEntryStep(err, logEntry)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var next = this.next();
+
+        logEntryHandlers.deleteDowntime(
+          app,
+          productionModule,
+          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
+          logEntry,
+          function(err)
+          {
+            if (err)
+            {
+              return next(err, null, null);
+            }
+
+            return next(null, null, logEntry);
+          }
+        );
+      },
+      function sendResponseStep(err, statusCode, logEntry)
+      {
+        if (statusCode)
+        {
+          res.statusCode = statusCode;
+        }
+
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (statusCode)
+        {
+          return res.send(statusCode);
+        }
+
+        res.send(logEntry.data);
       }
     );
   }

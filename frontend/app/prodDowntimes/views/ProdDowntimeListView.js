@@ -27,6 +27,13 @@ define([
           this.refreshCollection();
         }
       },
+      'prodDowntimes.deleted.*': function(message)
+      {
+        if (this.collection.hasOrMatches(message))
+        {
+          this.refreshCollection();
+        }
+      },
       'prodDowntimes.finished.*': function(message)
       {
         var prodDowntime = this.collection.get(message._id);
