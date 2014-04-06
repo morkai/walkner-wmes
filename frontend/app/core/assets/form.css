@@ -56,6 +56,14 @@
 .form-group-datetime > input[type="time"] {
   width: 110px;
 }
+.form-group.has-required-select2 {
+  position: relative;
+}
+.form-group.has-required-select2 > input[tabindex="-1"] {
+  top: auto!important;
+  bottom: 0!important;
+  left: 50%!important;
+}
 input::-webkit-datetime-edit {
   font-size: 12px;
 }
