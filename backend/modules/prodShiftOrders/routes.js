@@ -175,7 +175,10 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
         res.send(logEntry.data);
 
-        app.broker.publish('production.edited.order.' + logEntry.prodShiftOrder, logEntry.data);
+        if (!productionModule.recreating)
+        {
+          app.broker.publish('production.edited.order.' + logEntry.prodShiftOrder, logEntry.data);
+        }
       }
     );
   }
