@@ -51,6 +51,22 @@ module.exports = function(app, productionModule, done)
         return this.skip(err);
       }
     },
+    function resetIdCountersStep()
+    {
+      productionModule.info("Resetting ID counters...");
+
+      mongoose.model('IdentityCounter')
+        .update({model: 'ProdDowntime', field: 'rid'}, {$set: {count: 0}}, this.next());
+    },
+    function handleResetIdCountersResultStep(err)
+    {
+      if (err)
+      {
+        productionModule.error("Failed to reset the ID counters :(");
+
+        return this.skip(err);
+      }
+    },
     function countPressWorksheetsStep()
     {
       productionModule.info("Counting the press worksheets...");
