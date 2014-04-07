@@ -83,6 +83,7 @@ input[type=checkbox].filter-inLabel {
 .filter-radioLabels > label {
   margin-left: 1em;
   margin-bottom: 3px;
+  vertical-align: top;
 }
 .filter-radioLabels > label:first-child {
   margin-left: 0;
