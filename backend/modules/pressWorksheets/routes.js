@@ -1,5 +1,6 @@
 'use strict';
 
+var ObjectId = require('mongoose').Types.ObjectId;
 var lodash = require('lodash');
 var crud = require('../express/crud');
 var userInfo = require('../../models/userInfo');
@@ -136,7 +137,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
     if (mineTerm)
     {
-      mineTerm.args = ['creator.id', req.session.user._id];
+      mineTerm.args = ['creator.id', new ObjectId(req.session.user._id)];
     }
 
     return next();
