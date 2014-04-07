@@ -129,6 +129,9 @@
   font-size: 0.8em;
   display: block;
 }
+.pressWorksheets-form .btn-danger {
+  display: none;
+}
 .prodWorksheets-details-tableContainer {
   padding: 0!important;
   vertical-align: top!important;

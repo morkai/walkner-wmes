@@ -65,6 +65,10 @@ define([
           e.preventDefault();
         }
       },
+      'click button[type=submit]': function(e)
+      {
+        this.checkOverlapping = e.target.classList.contains('btn-primary');
+      },
       'submit': function(e)
       {
         this.removeIsOverlapping();
@@ -204,6 +208,7 @@ define([
     {
       FormView.prototype.initialize.apply(this, arguments);
 
+      this.checkOverlapping = true;
       this.filling = false;
       this.lastOrderNo = -1;
       this.lossReasons = [];
@@ -817,6 +822,11 @@ define([
 
     checkValidity: function()
     {
+      if (!this.checkOverlapping)
+      {
+        return true;
+      }
+
       var orderRowEls = this.el.querySelectorAll('.pressWorksheets-form-order');
       var lastIndex = orderRowEls.length - 1;
       var date = this.$id('date').val();
@@ -902,6 +912,8 @@ define([
 
       this.timers.removeIsOverlapping = setTimeout(this.removeIsOverlapping.bind(this), 5000);
 
+      this.$('.btn-danger').fadeIn();
+
       return false;
     },
 
@@ -914,6 +926,7 @@ define([
       }
 
       this.$('.is-overlapping').removeClass('is-overlapping');
+      this.$('.btn-danger').fadeOut();
     },
 
     countDowntimeDuration: function($orderRow)
