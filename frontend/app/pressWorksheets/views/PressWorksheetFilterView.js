@@ -6,6 +6,7 @@ define([
   'app/time',
   'app/core/Model',
   'app/core/View',
+  'app/users/util/setUpUserSelect2',
   'app/pressWorksheets/templates/filter'
 ], function(
   _,
@@ -15,6 +16,7 @@ define([
   time,
   Model,
   View,
+  setUpUserSelect2,
   filterTemplate
 ) {
   'use strict';
@@ -53,6 +55,10 @@ define([
       this.toggleButtonGroup('shift');
       this.toggleButtonGroup('type');
       this.toggleButtonGroup('mine');
+
+      setUpUserSelect2(this.$id('user')).select2(
+        'data', formData.user.id === null ? null : formData.user
+      );
     },
 
     toggleButtonGroup: function(groupName)
@@ -68,7 +74,12 @@ define([
         shift: 0,
         type: 'any',
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit),
-        mine: false
+        mine: false,
+        userType: 'operators',
+        user: {
+          id: null,
+          text: null
+        }
       };
       var view = this;
 
@@ -104,6 +115,22 @@ define([
           case 'mine':
             formData[property] = term.args[1];
             break;
+
+          case 'master.id':
+          case 'operator.id':
+          case 'operators.id':
+            formData.userType = property.split('.')[0];
+            formData.user.id = term.args[1];
+
+            if (formData.user.text === null)
+            {
+              formData.user.text = term.args[1];
+            }
+            break;
+
+          case 'user':
+            formData.user.text = term.args[1];
+            break;
         }
       });
 
@@ -118,6 +145,8 @@ define([
       var shiftNo = parseInt(this.$('input[name=shift]:checked').val(), 10);
       var type = this.$('input[name=type]:checked').val();
       var mine = this.$('input[name=mine]:checked').val();
+      var userType = this.$('input[name=userType]:checked').val();
+      var user = this.$id('user').select2('data');
 
       this.setHoursByShiftNo(dateMoment, shiftNo);
 
@@ -152,6 +181,12 @@ define([
       if (type !== 'any')
       {
         selector.push({name: 'eq', args: ['type', type]});
+      }
+
+      if (user)
+      {
+        selector.push({name: 'eq', args: [userType + '.id', user.id]});
+        selector.push({name: 'eq', args: ['user', user.text]});
       }
 
       if (mine)

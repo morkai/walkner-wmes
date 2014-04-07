@@ -32,6 +32,9 @@
     "FILTER:type:optics": "Optics",
     "FILTER:mine": "Only mine",
     "FILTER:mine:title": "Limit the worksheet to those added by you from the newest to the oldest!",
+    "FILTER:user:master": "Master",
+    "FILTER:user:operators": "Operator",
+    "FILTER:user:placeholder": "Search by last name or personnel ID",
 
     "PROPERTY:rid": "ID",
     "PROPERTY:operators": "Operators",

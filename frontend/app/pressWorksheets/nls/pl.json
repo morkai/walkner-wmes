@@ -31,6 +31,9 @@
   "FILTER:type:optics": "M. optyki",
   "FILTER:mine": "Tylko moje",
   "FILTER:mine:title": "Ogranicz listę kart pracy do dodanych przez Ciebie w kolejności od najnowszej do najstarszej!",
+  "FILTER:user:master": "Mistrz",
+  "FILTER:user:operators": "Operator",
+  "FILTER:user:placeholder": "Szukaj po nazwisku lub nr kadrowym",
 
   "PROPERTY:rid": "ID",
   "PROPERTY:operators": "Nastawiacze/operatorzy",
