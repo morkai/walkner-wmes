@@ -498,6 +498,7 @@ i18n!app/nls/orderStatuses
 app/orderStatuses/routes.js
 app/pressWorksheets/PressWorksheet.js
 app/pressWorksheets/PressWorksheetCollection.js
+app/users/util/setUpUserSelect2.js
 app/pressWorksheets/templates/filter.js
 app/pressWorksheets/views/PressWorksheetFilterView.js
 app/pressWorksheets/views/decoratePressWorksheet.js
@@ -588,7 +589,6 @@ app/production/templates/controls.js
 app/production/views/ProductionControlsView.js
 app/users/User.js
 app/users/UserCollection.js
-app/users/util/setUpUserSelect2.js
 app/production/templates/personelPicker.js
 app/production/views/PersonelPickerView.js
 app/production/templates/header.js
