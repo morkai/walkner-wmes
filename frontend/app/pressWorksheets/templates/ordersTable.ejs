@@ -2,7 +2,10 @@
   <thead>
     <tr>
       <th rowspan="<%- rowspan %>"><%- t('core', '#') %></th>
-      <th rowspan="<%- rowspan %>" data-column="part"><%- t('pressWorksheets', 'PROPERTY:order.part') %></th>
+      <th rowspan="<%- rowspan %>" data-column="part">
+        <%- t('pressWorksheets', 'PROPERTY:order.part') %>
+        <span class="pressWorksheets-form-focusLastPart"><%- t('pressWorksheets', 'FORM:focusLastPart') %></span>
+      </th>
       <th rowspan="<%- rowspan %>" data-column="operation"><%- t('pressWorksheets', 'PROPERTY:order.operation') %></th>
       <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>" data-column="prodLine"><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
       <th class="pressWorksheets-form-min" rowspan="<%- rowspan %>" data-column="quantityDone"><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>

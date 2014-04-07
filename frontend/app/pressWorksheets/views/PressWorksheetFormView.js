@@ -62,7 +62,7 @@ define([
       {
         if (e.keyCode === 13)
         {
-          return false;
+          e.preventDefault();
         }
       },
       'submit': function(e)
@@ -209,6 +209,7 @@ define([
       this.lossReasons = [];
       this.downtimeReasons = [];
       this.paintShopTimeFocused = false;
+      this.onKeyDown = this.onKeyDown.bind(this);
       this.existingWorksheets = new PressWorksheetCollection(null, {rqlQuery: 'select(rid)'});
 
       this.listenTo(this.existingWorksheets, 'request', function()
@@ -217,10 +218,14 @@ define([
       });
 
       this.listenTo(this.existingWorksheets, 'reset', this.toggleExistingWarning);
+
+      $('body').on('keydown', this.onKeyDown);
     },
 
     destroy: function()
     {
+      $('body').off('keydown', this.onKeyDown);
+
       this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
     },
 
@@ -659,7 +664,31 @@ define([
         this.recalcOrderNoColumn();
       }
 
+      if ($lastRow)
+      {
+        this.copyDataFromPrevRow($lastRow);
+      }
+
       return $orderRow;
+    },
+
+    copyDataFromPrevRow: function($row)
+    {
+      var $prevRow = $row.prev();
+
+      if (!$prevRow.length)
+      {
+        return;
+      }
+
+      $row.find('.pressWorksheets-form-prodLine').select2(
+        'val',
+        $prevRow.find('.pressWorksheets-form-prodLine').select2('val')
+      );
+
+      $row.find('.pressWorksheets-form-startedAt').val(
+        $prevRow.find('.pressWorksheets-form-finishedAt').val()
+      );
     },
 
     setUpPartValidation: function()
@@ -1103,6 +1132,16 @@ define([
       }
 
       this.promised(this.existingWorksheets.fetch({reset: true}));
+    },
+
+    onKeyDown: function(e)
+    {
+      if (e.altKey && (e.keyCode === 83 || e.keyCode === 13))
+      {
+        this.$('.pressWorksheets-form-order:last-child')
+          .find('.pressWorksheets-form-part')
+          .select2('focus');
+      }
     }
 
   });

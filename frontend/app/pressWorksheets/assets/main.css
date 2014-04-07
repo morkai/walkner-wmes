@@ -124,6 +124,11 @@
   background: rgba(255, 0, 0, .1);
   border-color: #bbb!important;
 }
+.pressWorksheets-form-focusLastPart {
+  font-weight: normal;
+  font-size: 0.8em;
+  display: block;
+}
 .prodWorksheets-details-tableContainer {
   padding: 0!important;
   vertical-align: top!important;
