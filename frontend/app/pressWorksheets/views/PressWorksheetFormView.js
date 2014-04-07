@@ -8,6 +8,7 @@ define([
   'app/data/prodLines',
   'app/core/Model',
   'app/core/views/FormView',
+  '../PressWorksheetCollection',
   'app/pressWorksheets/templates/form',
   'app/pressWorksheets/templates/ordersTable',
   'app/pressWorksheets/templates/ordersTableRow'
@@ -21,6 +22,7 @@ define([
   prodLines,
   Model,
   FormView,
+  PressWorksheetCollection,
   formTemplate,
   renderOrdersTable,
   renderOrdersTableRow
@@ -175,8 +177,17 @@ define([
       {
         this.checkShiftStartTimeValidity();
         this.validateTimes(null);
+        this.checkForExistingWorksheet();
       },
-      'change input[name=date]': 'checkShiftStartTimeValidity',
+      'change input[name=date]': function()
+      {
+        this.checkShiftStartTimeValidity();
+        this.checkForExistingWorksheet();
+      },
+      'change input[name=operator]': function()
+      {
+        this.checkForExistingWorksheet();
+      },
       'change input[name=type]': function()
       {
         this.togglePaintShop();
@@ -198,6 +209,14 @@ define([
       this.lossReasons = [];
       this.downtimeReasons = [];
       this.paintShopTimeFocused = false;
+      this.existingWorksheets = new PressWorksheetCollection(null, {rqlQuery: 'select(rid)'});
+
+      this.listenTo(this.existingWorksheets, 'request', function()
+      {
+        this.$id('existingWarning').fadeOut();
+      });
+
+      this.listenTo(this.existingWorksheets, 'reset', this.toggleExistingWarning);
     },
 
     destroy: function()
@@ -231,12 +250,14 @@ define([
         minimumInputLength: 3,
         ajax: SELECT2_USERS_AJAX
       });
+      var view = this;
 
       $operators.on('change', function()
       {
         if (!$operator.select2('data'))
         {
           $operator.select2('data', $operators.select2('data')[0]);
+          view.checkForExistingWorksheet();
         }
       });
 
@@ -508,7 +529,7 @@ define([
 
           if (!e.added && view.$('.pressWorksheets-form-order').length === 2)
           {
-            view.$('.message-warning').fadeOut();
+            view.$id('typeChangeWarning').fadeOut();
           }
 
           return;
@@ -614,7 +635,7 @@ define([
       this.setUpOrderSelect2($orderRow.find('.pressWorksheets-form-part'));
       this.setUpProdLineSelect2($orderRow.find('.pressWorksheets-form-prodLine'), $lastRow);
 
-      var $warning = this.$('.message-warning');
+      var $warning = this.$id('typeChangeWarning');
 
       if (single)
       {
@@ -1020,6 +1041,68 @@ define([
       $downtime
         .attr('data-prodDowntime', downtime.prodDowntime)
         .val(downtime.duration);
+    },
+
+    toggleExistingWarning: function()
+    {
+      var $warning = this.$id('existingWarning');
+
+      if (this.existingWorksheets.length)
+      {
+        $warning
+          .html(t('pressWorksheets', 'FORM:existingWarning', {
+            count: this.existingWorksheets.length,
+            links: this.existingWorksheets
+              .map(function(pressWorksheet)
+              {
+                return '<a href="' + pressWorksheet.genClientUrl() + '">'
+                  + pressWorksheet.getLabel()
+                  + '</a>';
+              })
+              .join(', ')
+          }))
+          .fadeIn();
+      }
+      else
+      {
+        $warning.fadeOut();
+      }
+    },
+
+    checkForExistingWorksheet: function()
+    {
+      var date = new Date(this.$id('date').val() + ' 06:00:00');
+      var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
+      var operator = this.$id('operator').val();
+      var $warning = this.$id('existingWarning');
+
+      if (isNaN(date.getTime()) || !shift || !operator.length)
+      {
+        return $warning.fadeOut();
+      }
+
+      if (shift === 2)
+      {
+        date.setHours(14);
+      }
+      else if (shift === 3)
+      {
+        date.setHours(22);
+      }
+
+      var selector = this.existingWorksheets.rqlQuery.selector;
+
+      selector.args = [
+        {name: 'eq', args: ['date', date.getTime()]},
+        {name: 'eq', args: ['operators.id', operator]}
+      ];
+
+      if (this.model.id)
+      {
+        selector.args.push({name: 'ne', args: ['_id', this.model.id]});
+      }
+
+      this.promised(this.existingWorksheets.fetch({reset: true}));
     }
 
   });
