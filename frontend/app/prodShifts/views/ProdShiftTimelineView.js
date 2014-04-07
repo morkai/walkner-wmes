@@ -164,6 +164,8 @@ define([
         }
         else if (type === 'downtime')
         {
+          item.hasOrder = prodLogEntry.get('data').prodShiftOrder !== null;
+
           downtimeToItemMap[prodLogEntry.get('data')._id] = item;
         }
       }
@@ -393,6 +395,14 @@ define([
         .itemClassName(function(item)
         {
           return 'timeline-item timeline-item-' + item.type;
+        })
+        .afterRender(function(item)
+        {
+          if (item.type === 'downtime' && item.hasOrder)
+          {
+            this.setAttribute('height', '50');
+            this.setAttribute('y', 11);
+          }
         })
         .mouseover(function(item)
         {

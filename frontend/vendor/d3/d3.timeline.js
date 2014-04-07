@@ -8,6 +8,7 @@ define(['d3'], function(d3) {
         mouseout = function () {},
         click = function () {},
         scroll = function () {},
+        afterRender = function () {},
         orient = "bottom",
         width = null,
         height = null,
@@ -128,6 +129,7 @@ define(['d3'], function(d3) {
             .on("click", function (d, i) {
               click.call(this, d, index, datum);
             })
+            .each(afterRender)
           ;
 
           // add the label
@@ -303,12 +305,18 @@ define(['d3'], function(d3) {
       click = clickFunc;
       return timeline;
     };
-    
+
     timeline.scroll = function (scrollFunc) {
       if (!arguments.length) return scroll;
       scroll = scrollFunc;
       return timeline;
-    }
+    };
+
+    timeline.afterRender = function (afterRenderFunc) {
+      if (!arguments.length) return afterRender;
+      afterRender = afterRenderFunc;
+      return timeline;
+    };
 
     timeline.colors = function (colorFormat) {
       if (!arguments.length) return colorCycle;
