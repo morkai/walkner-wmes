@@ -3,7 +3,7 @@
   "name": "walkner-wmes",
   "version": "0.0.0",
   "backendVersion": 43,
-  "frontendVersion": 46,
+  "frontendVersion": 47,
   "description": "Wannabe MES application in Node.js.",
   "license": "NPOSL-3.0",
   "homepage": "https://github.com/morkai/walkner-wmes",
