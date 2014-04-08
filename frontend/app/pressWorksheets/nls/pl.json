@@ -83,7 +83,7 @@
   "FORM:PLACEHOLDER:part": "Szukaj części po 12NC...",
   "FORM:PLACEHOLDER:operation": "Wybierz operację...",
   "FORM:PLACEHOLDER:prodLine": "Wybierz maszynę...",
-  "FORM:focusLastPart": "(skrót ALT+S lub ALT+Enter zaznaczy ostatnie pole)",
+  "FORM:focusLastPart": "(skrót ALT+Enter zaznaczy ostatnie pole)",
   "FORM:typeChangeWarning": "<strong>UWAGA!</strong> Zmiana typu wyczyści listę wykonanych części!",
   "FORM:existingWarning": "<strong>UWAGA!</strong> Dla wybranej Daty, Zmiany i Podpisanego nastawiacza/operatora {count, plural, one{istnieje już karta pracy} other{istnieją już karty pracy}}: {links}."
 }

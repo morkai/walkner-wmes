@@ -1149,7 +1149,7 @@ define([
 
     onKeyDown: function(e)
     {
-      if (e.altKey && (e.keyCode === 83 || e.keyCode === 13))
+      if (e.altKey && e.keyCode === 13)
       {
         this.$('.pressWorksheets-form-order:last-child')
           .find('.pressWorksheets-form-part')
