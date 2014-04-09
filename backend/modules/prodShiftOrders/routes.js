@@ -53,21 +53,6 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       return;
     }
 
-    var startedAt = moment(doc.startedAt);
-
-    if (startedAt.isBefore('2013-01-01'))
-    {
-      return;
-    }
-
-    var finishedAt = moment(doc.finishedAt);
-    var duration = Math.round(finishedAt.diff(startedAt, 'ms') / 3600000 * 1000) / 1000;
-
-    if (duration < 0)
-    {
-      return;
-    }
-
     var operation = orderData.operations[doc.operationNo];
     var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
     var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
@@ -76,13 +61,22 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       '"orderNo': doc.mechOrder ? '' : doc.orderId,
       '"12nc': doc.mechOrder ? doc.orderId : orderData.nc12,
       '"operationNo': doc.operationNo,
-      'startedAt': startedAt.format('YYYY-MM-DD HH:mm:ss'),
-      'finishedAt': finishedAt.format('YYYY-MM-DD HH:mm:ss'),
-      '#duration': duration,
+      'startedAt': moment(startedAt).format('YYYY-MM-DD HH:mm:ss'),
+      'finishedAt': moment(finishedAt).format('YYYY-MM-DD HH:mm:ss'),
+      '#totalDuration': doc.totalDuration,
+      '#breakDuration': doc.breakDuration,
+      '#downtimeDuration': doc.downtimeDuration,
+      '#workDuration': doc.workDuration,
+      '#totalQuantity': doc.totalQuantity,
       '#quantityDone': doc.quantityDone,
+      '#quantityLost': doc.quantityLost,
       '#workerCount': doc.workerCount,
       '#laborTime': operation.laborTime === -1 ? 0 : operation.laborTime,
       '#machineTime': operation.machineTime === -1 ? 0 : operation.machineTime,
+      '"master': exportUserInfo(doc.master),
+      '"leader': exportUserInfo(doc.leader),
+      '"operator': exportUserInfo(doc.operator),
+      '"operators': Array.isArray(doc.operators) ? doc.operators.map(exportUserInfo).join(';') : '',
       '"orderMrp': orderData.mrp || '',
       '"operationWorkCenter': operation.workCenter || '',
       '"division': doc.division,
@@ -94,6 +88,26 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       '"orderId': doc._id,
       '"shiftId': doc.prodShift || ''
     };
+  }
+
+  function exportUserInfo(userInfo)
+  {
+    if (!userInfo)
+    {
+      return '';
+    }
+
+    if (userInfo.label)
+    {
+      return userInfo.label;
+    }
+
+    if (userInfo.id)
+    {
+      return userInfo.id;
+    }
+
+    return '?';
   }
 
   function editProdShiftOrderRoute(req, res, next)
