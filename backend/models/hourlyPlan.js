@@ -39,36 +39,16 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
       max: 3,
       required: true
     },
-    locked: {
-      type: Boolean,
-      default: false
-    },
     createdAt: {
       type: Date,
       required: true
     },
+    creator: {},
     updatedAt: {
       type: Date,
       default: null
     },
-    creator: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
-    },
-    creatorLabel: {
-      type: String,
-      required: true
-    },
-    updater: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      default: null
-    },
-    updaterLabel: {
-      type: String,
-      default: null
-    },
+    updater: {},
     flows: [hourlyPlanFlowSchema]
   }, {
     id: false
@@ -79,12 +59,12 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
 
   hourlyPlanSchema.statics.TOPIC_PREFIX = 'hourlyPlans';
 
-  hourlyPlanSchema.statics.createForShift = function(shiftId, user, done)
+  hourlyPlanSchema.statics.createForShift = function(options, creator, done)
   {
     step(
       function queryProdFlowsStep()
       {
-        mongoose.model('ProdFlow').getAllByDivisionId(shiftId.division, this.next());
+        mongoose.model('ProdFlow').getAllByDivisionId(options.division, this.next());
       },
       function handleProdFlowsQueryResultStep(err, prodFlows)
       {
@@ -96,7 +76,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
         this.flows = prodFlows.map(function(prodFlow)
         {
           return {
-            id: prodFlow.get('_id'),
+            id: prodFlow._id,
             name: prodFlow.name,
             hours: [
               0, 0, 0, 0, 0, 0, 0, 0,
@@ -109,13 +89,12 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
       function createHourlyPlanStep()
       {
         var hourlyPlanData = {
-          division: shiftId.division,
-          date: shiftId.date,
-          shift: shiftId.no,
+          division: options.division,
+          date: options.date,
+          shift: options.shift,
           flows: this.flows,
           createdAt: new Date(),
-          creator: user._id,
-          creatorLabel: user.login
+          creator: creator
         };
 
         mongoose.model('HourlyPlan').create(hourlyPlanData, done);
@@ -171,67 +150,6 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
           .setPlannedQuantities(activeProdLineIds, shiftId.date, plannedQuantities, done);
       }
     );
-  };
-
-  hourlyPlanSchema.statics.lock = function(_id, user, done)
-  {
-    this.findOne({_id: _id}, function(err, hourlyPlan)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      if (!hourlyPlan)
-      {
-        return done(new Error('UNKNOWN'));
-      }
-
-      hourlyPlan.lock(user, done);
-    });
-  };
-
-  hourlyPlanSchema.methods.lock = function(user, done)
-  {
-    if (this.get('locked'))
-    {
-      return done(new Error('LOCKED'));
-    }
-
-    this.set({
-      updatedAt: new Date(),
-      locked: true
-    });
-
-    if (user)
-    {
-      this.set({
-        updater: user._id,
-        updaterLabel: user.login
-      });
-    }
-
-    this.save(function(err, hourlyPlan)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      app.broker.publish('hourlyPlans.locked', {
-        user: user,
-        model: {
-          _id: hourlyPlan.get('_id'),
-          division: hourlyPlan.get('division'),
-          date: hourlyPlan.get('date'),
-          shift: hourlyPlan.get('shift')
-        }
-      });
-
-      done(null, hourlyPlan);
-
-      hourlyPlan.recountPlannedQuantities();
-    });
   };
 
   hourlyPlanSchema.methods.recountPlannedQuantities = function(done)

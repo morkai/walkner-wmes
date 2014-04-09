@@ -1,10 +1,12 @@
 define([
-  'moment',
+  '../i18n',
+  '../time',
   '../data/divisions',
   '../data/views/renderOrgUnitPath',
   '../core/Model'
 ], function(
-  moment,
+  t,
+  time,
   divisions,
   renderOrgUnitPath,
   Model
@@ -28,13 +30,15 @@ define([
       date: null,
       shift: null,
       flows: null,
-      locked: false,
       createdAt: null,
-      creatorId: null,
-      creatorLabel: null,
+      creator: null,
       updatedAt: null,
-      updaterId: null,
-      updaterLabel: null
+      updater: null
+    },
+
+    getLabel: function()
+    {
+      return this.get('division') + ', ' + time.format(this.get('date'), 'LL');
     },
 
     serialize: function()
@@ -43,11 +47,78 @@ define([
 
       return {
         division: division ? renderOrgUnitPath(division, false, false) : '?',
-        date: moment(this.get('date')).format('LL'),
-        shift: this.get('shift'),
-        flows: this.get('flows'),
-        locked: !!this.get('locked')
+        date: time.format(this.get('date'), 'LL'),
+        shift: t('core', 'SHIFT:' + this.get('shift')),
+        flows: this.get('flows')
       };
+    },
+
+    isEditable: function(user)
+    {
+      if (user.isAllowedTo('PROD_DATA:MANAGE'))
+      {
+        return true;
+      }
+
+      if (!user.isAllowedTo('HOURLY_PLANS:MANAGE'))
+      {
+        return false;
+      }
+
+      var userDivision = user.getDivision();
+
+      if (!user.isAllowedTo('HOURLY_PLANS:ALL')
+        && userDivision
+        && userDivision.id !== this.get('division'))
+      {
+        return false;
+      }
+
+      var createdAt = Date.parse(this.get('createdAt'));
+
+      return Date.now() < createdAt + 8 * 3600 * 1000;
+    },
+
+    handleUpdateMessage: function(message)
+    {
+      var flows = this.get('flows');
+
+      if (!flows)
+      {
+        return;
+      }
+
+      var flow = flows[message.flowIndex];
+
+      if (!flow)
+      {
+        return;
+      }
+
+      if (message.type === 'plan')
+      {
+        flow.noPlan = message.newValue;
+        flow.level = 0;
+        flow.hours = flow.hours.map(function() { return 0; });
+      }
+      else if (message.type === 'count')
+      {
+        if (typeof message.hourIndex === 'number')
+        {
+          flow.hours[message.hourIndex] = message.newValue;
+        }
+        else
+        {
+          flow.level = message.newValue;
+        }
+      }
+      else
+      {
+        return;
+      }
+
+      this.trigger('change:flows');
+      this.trigger('change');
     }
 
   });

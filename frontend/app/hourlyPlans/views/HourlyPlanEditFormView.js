@@ -170,11 +170,10 @@ define([
       {
         if (err)
         {
-          console.error(err);
-
           e.target.checked = !e.target.checked;
 
           view.toggleCountsInRow($noPlan);
+          view.trigger('remoteError', err);
         }
       });
     },
@@ -229,18 +228,20 @@ define([
       countEl.setAttribute('data-value', data.newValue);
       countEl.setAttribute('data-remote', 'false');
 
+      var view = this;
+
       this.socket.emit('hourlyPlans.updateCount', data, function(err)
       {
         if (err)
         {
-          console.error(err);
-
           if (countEl.getAttribute('data-remote') !== 'true')
           {
             countEl.value = oldCount;
             countEl.setAttribute('data-value', oldCount);
             countEl.setAttribute('data-remote', oldRemote);
           }
+
+          view.trigger('remoteError', err);
         }
       });
     },

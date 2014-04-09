@@ -15,6 +15,7 @@
     "LIST:ACTION:viewDetails": "View details",
     "LIST:ACTION:edit": "Edit",
     "LIST:ACTION:delete": "Delete",
+    "LIST:ACTION:print": "Print",
 
     "BREADCRUMBS:edit": "Editing",
     "BREADCRUMBS:delete": "Deleting",

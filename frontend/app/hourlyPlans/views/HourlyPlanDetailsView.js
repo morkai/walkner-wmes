@@ -1,10 +1,12 @@
 define([
   'underscore',
   'app/core/View',
+  'app/core/util/onModelDeleted',
   'app/hourlyPlans/templates/entry'
 ], function(
   _,
   View,
+  onModelDeleted,
   entryTemplate
 ) {
   'use strict';
@@ -15,21 +17,20 @@ define([
 
     idPrefix: 'hourlyPlanDetails',
 
+    remoteTopics: function()
+    {
+      var topics = {};
+
+      topics['hourlyPlans.updated.' + this.model.id] =
+        this.model.handleUpdateMessage.bind(this.model);
+      topics['hourlyPlans.deleted'] = this.onModelDeleted.bind(this);
+
+      return topics;
+    },
+
     initialize: function()
     {
       this.lastRefreshAt = 0;
-
-      var view = this;
-
-      this.listenToOnce(this.model, 'sync', function()
-      {
-        if (view.model.get('locked'))
-        {
-          return;
-        }
-
-        view.pubsub.subscribe('hourlyPlans.updated.' + view.model.id, this.refreshModel.bind(this));
-      });
     },
 
     serialize: function()
@@ -39,31 +40,19 @@ define([
       });
     },
 
+    beforeRender: function()
+    {
+      this.stopListening(this.model, 'change', this.render);
+    },
+
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change', this.render);
     },
 
-    refreshModel: function()
+    onModelDeleted: function(message)
     {
-      var now = Date.now();
-      var diff = now - this.lastRefreshAt;
-
-      if (diff < 1000)
-      {
-        if (!this.timers.refresh)
-        {
-          this.timers.refresh = setTimeout(this.refreshModel.bind(this), 1000 - diff);
-        }
-      }
-      else
-      {
-        this.lastRefreshAt = Date.now();
-
-        delete this.timers.refresh;
-
-        this.promised(this.model.fetch());
-      }
+      onModelDeleted(this.broker, this.model, message);
     }
 
   });

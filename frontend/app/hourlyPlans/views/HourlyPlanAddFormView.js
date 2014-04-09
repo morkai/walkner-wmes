@@ -1,21 +1,25 @@
 define([
   'app/i18n',
+  'app/time',
   'app/viewport',
   'app/user',
   'app/data/divisions',
   'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/View',
-  'app/hourlyPlans/templates/current'
+  'app/core/util/getShiftStartInfo',
+  'app/hourlyPlans/templates/addForm'
 ], function(
   t,
+  time,
   viewport,
   user,
   divisions,
   OrgUnitDropdownsView,
   Model,
   View,
-  currentTemplate
+  getShiftStartInfo,
+  addFormTemplate
 ) {
   'use strict';
 
@@ -23,9 +27,9 @@ define([
 
   return View.extend({
 
-    template: currentTemplate,
+    template: addFormTemplate,
 
-    idPrefix: 'currentHourlyPlan',
+    idPrefix: 'hourlyPlanAddForm',
 
     events: {
       'click .btn-primary': 'onSubmit'
@@ -39,10 +43,7 @@ define([
 
       this.oudView = new OrgUnitDropdownsView({
         orgUnit: ORG_UNIT.DIVISION,
-        divisionFilter: function(division)
-        {
-          return division.get('type') === 'prod';
-        },
+        divisionFilter: function(division) { return division.get('type') === 'prod'; },
         allowClear: true,
         noGrid: true
       });
@@ -57,6 +58,14 @@ define([
         this.$submit.remove();
         this.$submit = null;
       }
+    },
+
+    serialize: function()
+    {
+      return {
+        idPrefix: this.idPrefix,
+        date: getShiftStartInfo(new Date()).moment.format('YYYY-MM-DD')
+      };
     },
 
     afterRender: function()
@@ -106,7 +115,7 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 5000,
-          text: t('hourlyPlans', 'msg:offline')
+          text: t('hourlyPlans', 'addForm:msg:offline')
         });
       }
 
@@ -117,38 +126,39 @@ define([
       $division.select2('readonly', true);
       this.$submit.attr('disabled', true);
 
-      this.socket.emit(
-        'hourlyPlans.getCurrentEntryId',
-        $division.select2('val'),
-        function(err, currentEntryId)
+      var options = {
+        division: $division.select2('val'),
+        date: new Date(this.$id('date').val() + ' 00:00:00'),
+        shift: 1
+      };
+
+      this.socket.emit('hourlyPlans.findOrCreate', options, function(err, hourlyPlanId)
+      {
+        if (hourlyPlanId)
         {
-          if (err)
+          view.model.set('_id', hourlyPlanId);
+        }
+
+        if (err)
+        {
+          if (err.message === 'AUTH' && hourlyPlanId)
           {
-            if (err.message === 'LOCKED')
-            {
-              return view.broker.publish('router.navigate', {
-                url: '#hourlyPlans/' + currentEntryId,
-                trigger: true
-              });
-            }
-
-            $icon.removeClass('fa-spinner fa-spin').addClass('fa-edit');
-            $division.select2('readonly', view.readonlyDivision);
-            view.$submit.attr('disabled', false).focus();
-
-            return viewport.msg.show({
-              type: 'error',
-              time: 5000,
-              text: t('hourlyPlans', 'current:msg:failure', {error: err.message})
-            });
+            return view.trigger('uneditable', view.model);
           }
 
-          view.broker.publish('router.navigate', {
-            url: '#hourlyPlans/' + currentEntryId + ';edit',
-            trigger: true
+          $icon.removeClass('fa-spinner fa-spin').addClass('fa-edit');
+          $division.select2('readonly', view.readonlyDivision);
+          view.$submit.attr('disabled', false).focus();
+
+          return viewport.msg.show({
+            type: 'error',
+            time: 5000,
+            text: t('hourlyPlans', 'addForm:msg:failure', {error: err.message})
           });
         }
-      );
+
+        view.trigger('editable', view.model);
+      });
     }
 
   });

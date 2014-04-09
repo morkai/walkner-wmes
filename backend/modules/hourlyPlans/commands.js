@@ -1,34 +1,38 @@
 'use strict';
 
+var moment = require('moment');
 var lodash = require('lodash');
+var userInfo = require('../../models/userInfo');
+var canManage = require('./canManage');
 
 module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 {
   var mongoose = app[hourlyPlansModule.config.mongooseId];
   var divisions = app[hourlyPlansModule.config.divisionsId];
-  var fteModule = app[hourlyPlansModule.config.fteId];
   var HourlyPlan = mongoose.model('HourlyPlan');
   
   app[hourlyPlansModule.config.sioId].sockets.on('connection', function(socket)
   {
-    socket.on('hourlyPlans.getCurrentEntryId', getCurrentEntryId.bind(null, socket));
+    socket.on('hourlyPlans.findOrCreate', findOrCreate.bind(null, socket));
     socket.on('hourlyPlans.updateCount', updateCount.bind(null, socket));
     socket.on('hourlyPlans.updatePlan', updatePlan.bind(null, socket));
-    socket.on('hourlyPlans.lockEntry', lockEntry.bind(null, socket));
   });
 
-  function canManage(user)
-  {
-    return user.super
-      || (Array.isArray(user.privileges)
-        && user.privileges.indexOf('HOURLY_PLANS:MANAGE') !== -1);
-  }
-
-  function getCurrentEntryId(socket, divisionId, reply)
+  function findOrCreate(socket, data, reply)
   {
     if (!lodash.isFunction(reply))
     {
       reply = function() {};
+    }
+
+    var shiftMoment = moment(data.date);
+
+    if (!shiftMoment.isValid()
+      || !lodash.isString(data.division)
+      || !divisions.modelsById[data.division]
+      || !lodash.isNumber(data.shift))
+    {
+      return reply(new Error('INPUT'));
     }
 
     var user = socket.handshake.user;
@@ -38,56 +42,61 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('AUTH'));
     }
 
-    var validDivision = divisions.models.some(function(division)
-    {
-      return division.get('_id').toString() === divisionId;
-    });
+    shiftMoment.hours(0).minutes(0).seconds(0).milliseconds(0);
 
-    if (!validDivision)
+    if (shiftMoment.valueOf() > moment().hours(0).minutes(0).seconds(0).milliseconds(0).valueOf())
     {
       return reply(new Error('INPUT'));
     }
 
-    var currentShift = fteModule.getCurrentShift();
-    var condition = {
-      division: divisionId,
-      date: currentShift.date
-    };
-    var fields = {_id: 1, locked: 1};
+    if (data.shift === 3)
+    {
+      shiftMoment.hours(22);
+    }
+    else if (data.shift === 2)
+    {
+      shiftMoment.hours(14);
+    }
+    else
+    {
+      data.shift = 1;
 
-    HourlyPlan.findOne(condition, fields).lean().exec(function(err, hourlyPlan)
+      shiftMoment.hours(6);
+    }
+
+    var condition = {
+      division: data.division,
+      date: shiftMoment.toDate(),
+      shift: data.shift
+    };
+
+    HourlyPlan.findOne(condition, function(err, hourlyPlan)
     {
       if (err)
       {
         return reply(err);
       }
 
-      if (hourlyPlan !== null)
+      if (hourlyPlan)
       {
         return reply(
-          hourlyPlan.locked ? new Error('LOCKED') : null,
-          hourlyPlan._id.toString()
+          canManage(user, hourlyPlan) ? null : new Error('AUTH'), hourlyPlan._id.toString()
         );
       }
 
-      if (currentShift.no !== 1)
-      {
-        return reply(new Error('SHIFT_NO'));
-      }
+      var creator = userInfo.createObject(user, socket);
 
-      currentShift.division = divisionId;
-
-      HourlyPlan.createForShift(currentShift, user, function(err, hourlyPlan)
+      HourlyPlan.createForShift(condition, creator, function(err, hourlyPlan)
       {
         if (hourlyPlan)
         {
           app.broker.publish('hourlyPlans.created', {
             user: user,
             model: {
-              _id: hourlyPlan.get('_id'),
-              division: currentShift.division,
-              date: currentShift.date,
-              shift: currentShift.no
+              _id: hourlyPlan._id,
+              division: condition.division,
+              date: condition.date,
+              shift: condition.shift
             }
           });
         }
@@ -108,20 +117,12 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       || !lodash.isNumber(data.flowIndex)
       || !lodash.isNumber(data.newValue))
     {
-      return reply(new Error('INVALID_INPUT'));
+      return reply(new Error('INPUT'));
     }
 
     var user = socket.handshake.user;
 
-    if (!canManage(user))
-    {
-      return reply(new Error('AUTH'));
-    }
-
-    var condition = {_id: data._id};
-    var fields = {locked: 1};
-
-    HourlyPlan.findOne(condition, fields).exec(function(err, hourlyPlan)
+    HourlyPlan.findById(data._id, {createdAt: 1}).exec(function(err, hourlyPlan)
     {
       if (err)
       {
@@ -130,12 +131,12 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       if (hourlyPlan === null)
       {
-        return reply(new Error('UNKNOWN_ENTRY'));
+        return reply(new Error('UNKNOWN'));
       }
 
-      if (hourlyPlan.get('locked'))
+      if (!canManage(user, hourlyPlan))
       {
-        return reply(new Error('ENTRY_LOCKED'));
+        return reply(new Error('AUTH'));
       }
 
       var update = {$set: {
@@ -156,21 +157,16 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       update.$set[field] = data.newValue;
 
-      HourlyPlan.update(condition, update, function(err, updatedCount)
+      HourlyPlan.update({_id: hourlyPlan._id}, update, function(err)
       {
         if (err)
         {
           return reply(err);
         }
 
-        if (updatedCount !== 1)
-        {
-          return reply(new Error('UNKNOWN_ENTRY'));
-        }
-
         reply();
 
-        app.pubsub.publish('hourlyPlans.updated.' + data._id, data);
+        app.broker.publish('hourlyPlans.updated.' + data._id, data);
       });
     });
   }
@@ -186,7 +182,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       || !lodash.isBoolean(data.newValue)
       || !lodash.isNumber(data.flowIndex))
     {
-      return reply(new Error('INVALID_INPUT'));
+      return reply(new Error('INPUT'));
     }
 
     var user = socket.handshake.user;
@@ -196,10 +192,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('AUTH'));
     }
 
-    var condition = {_id: data._id};
-    var fields = {locked: 1};
-
-    HourlyPlan.findOne(condition, fields).exec(function(err, hourlyPlan)
+    HourlyPlan.findById(data._id, {createdAt: 1}).exec(function(err, hourlyPlan)
     {
       if (err)
       {
@@ -208,12 +201,12 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       if (hourlyPlan === null)
       {
-        return reply(new Error('UNKNOWN_ENTRY'));
+        return reply(new Error('UNKNOWN'));
       }
 
-      if (hourlyPlan.get('locked'))
+      if (!canManage(user, hourlyPlan))
       {
-        return reply(new Error('ENTRY_LOCKED'));
+        return reply(new Error('AUTH'));
       }
 
       var update = {$set: {
@@ -234,49 +227,17 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         ];
       }
 
-      HourlyPlan.update(condition, update, function(err, updatedCount)
+      HourlyPlan.update({_id: hourlyPlan._id}, update, function(err)
       {
         if (err)
         {
           return reply(err);
         }
 
-        if (updatedCount !== 1)
-        {
-          return reply(new Error('UNKNOWN_ENTRY'));
-        }
-
         reply();
 
-        app.pubsub.publish('hourlyPlans.updated.' + data._id, data);
+        app.broker.publish('hourlyPlans.updated.' + data._id, data);
       });
-    });
-  }
-
-  function lockEntry(socket, hourlyPlanId, reply)
-  {
-    if (!lodash.isFunction(reply))
-    {
-      reply = function() {};
-    }
-
-    var user = socket.handshake.user;
-
-    if (!canManage(user))
-    {
-      return reply(new Error('AUTH'));
-    }
-
-    HourlyPlan.lock(hourlyPlanId, user, function(err)
-    {
-      if (err)
-      {
-        return reply(err);
-      }
-
-      reply();
-
-      app.pubsub.publish('hourlyPlans.locked.' + hourlyPlanId);
     });
   }
 };

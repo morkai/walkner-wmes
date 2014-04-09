@@ -134,6 +134,8 @@
   "TEXT:hourlyPlans.created": "Utworzono <a href='\\#hourlyPlans/{model->_id}'>nowy plan godzinowy</a> dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
   "TYPE:hourlyPlans.locked": "Plany godzinowe: zamknięcie",
   "TEXT:hourlyPlans.locked": "Zamknięto <a href='\\#hourlyPlans/{model->_id}'>plan godzinowy</a> dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
+  "TYPE:hourlyPlans.deleted": "Plany godzinowe: usunięcie",
+  "TEXT:hourlyPlans.deleted": "Usunięto plan godzinowy dla <em>{model->shift}</em> zmiany dnia <em>{model->date}</em> dla wydziału <em>{model->division}</em>.",
   "TYPE:pressWorksheets.added": "Karty pracy: dodanie",
   "TEXT:pressWorksheets.added": "Dodano nową <a href='\\#pressWorksheets/{model->_id}'>kartę pracy</a>.",
   "TYPE:pressWorksheets.edited": "Karty pracy: edycja",

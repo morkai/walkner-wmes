@@ -220,7 +220,20 @@ exports.editRoute = function(app, Model, req, res, next)
 
 exports.deleteRoute = function(app, Model, req, res, next)
 {
-  Model.findById(req.params.id, function(err, model)
+  if (req.model === null)
+  {
+    del(null, null);
+  }
+  else if (typeof req.model === 'object')
+  {
+    del(null, req.model);
+  }
+  else
+  {
+    Model.findById(req.params.id, del);
+  }
+
+  function del(err, model)
   {
     if (err)
     {
@@ -251,7 +264,7 @@ exports.deleteRoute = function(app, Model, req, res, next)
         user: req.session.user
       });
     });
-  });
+  }
 };
 
 exports.exportRoute = function(options, req, res, next)

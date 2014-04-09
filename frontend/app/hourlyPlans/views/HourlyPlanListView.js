@@ -19,7 +19,7 @@ define([
 
     remoteTopics: {
       'hourlyPlans.created': 'refreshCollection',
-      'hourlyPlans.locked': 'refreshCollection'
+      'hourlyPlans.deleted': 'refreshCollection'
     },
 
     serializeColumns: function()
@@ -38,33 +38,21 @@ define([
       return function(row)
       {
         var model = collection.get(row._id);
-        var actions = [ListView.actions.viewDetails(model)];
-
-        if (row.locked)
-        {
-          actions.push({
-            icon: 'print',
-            label: t('hourlyPlans', 'LIST:ACTION:print'),
-            href: model.genClientUrl('print')
-          });
-        }
-        else if (user.isAllowedTo('HOURLY_PLANS:MANAGE'))
-        {
-          if (!user.isAllowedTo('HOURLY_PLANS:ALL'))
+        var actions = [
+          ListView.actions.viewDetails(model),
           {
-            var userDivision = user.getDivision();
-
-            if (userDivision && userDivision.id !== model.get('division'))
-            {
-              return actions;
-            }
+            icon: 'print',
+            label: t('core', 'LIST:ACTION:print'),
+            href: model.genClientUrl('print')
           }
+        ];
 
-          actions.push({
-            icon: 'edit',
-            label: t('hourlyPlans', 'LIST:ACTION:edit'),
-            href: model.genClientUrl('edit')
-          });
+        if (model.isEditable(user))
+        {
+          actions.push(
+            ListView.actions.edit(model),
+            ListView.actions.delete(model)
+          );
         }
 
         return actions;

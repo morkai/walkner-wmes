@@ -30,17 +30,17 @@ define([
     pageId: 'hourlyPlanList',
 
     breadcrumbs: [
-      t.bound('hourlyPlans', 'BREADCRUMBS:entryList')
+      t.bound('hourlyPlans', 'BREADCRUMBS:browse')
     ],
 
     actions: function(layout)
     {
       return [
         {
-          label: t.bound('hourlyPlans', 'PAGE_ACTION:currentEntry'),
-          href: '#hourlyPlans/current',
-          icon: 'edit',
-          privileges: 'HOURLY_PLANS:MANAGE'
+          label: t.bound('hourlyPlans', 'PAGE_ACTION:add'),
+          href: '#hourlyPlans;add',
+          icon: 'plus',
+          privileges: ['HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE']
         },
         pageActions.export(layout, this, this.collection)
       ];

@@ -2,6 +2,7 @@ define([
   'app/i18n',
   'app/user',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/pageActions',
   'app/core/View',
   '../HourlyPlan',
   '../views/HourlyPlanDetailsView'
@@ -9,6 +10,7 @@ define([
   t,
   user,
   bindLoadingMessage,
+  pageActions,
   View,
   HourlyPlan,
   HourlyPlanDetailsView
@@ -21,52 +23,34 @@ define([
 
     pageId: 'hourlyPlanDetails',
 
-    breadcrumbs: [
-      {
-        label: t.bound('hourlyPlans', 'BREADCRUMBS:entryList'),
-        href: '#hourlyPlans'
-      },
-      t.bound('hourlyPlans', 'BREADCRUMBS:entryDetails')
-    ],
+    breadcrumbs: function()
+    {
+      return [
+        {
+          label: t.bound('hourlyPlans', 'BREADCRUMBS:browse'),
+          href: this.model.genClientUrl('base')
+        },
+        this.model.getLabel()
+      ];
+    },
 
     actions: function()
     {
-      var actions = [];
+      var actions = [{
+        label: t.bound('hourlyPlans', 'PAGE_ACTION:print'),
+        icon: 'print',
+        href: this.model.genClientUrl('print')
+      }];
 
-      if (this.model.get('locked'))
+      if (this.model.isEditable(user))
       {
-        actions.push({
-          label: t.bound('hourlyPlans', 'PAGE_ACTION:print'),
-          icon: 'print',
-          href: this.model.genClientUrl('print')
-        });
-      }
-      else if (user.isAllowedTo('HOURLY_PLANS:MANAGE'))
-      {
-        if (!user.isAllowedTo('HOURLY_PLANS:ALL'))
-        {
-          var userDivision = user.getDivision();
-
-          if (userDivision && userDivision.get('_id') !== this.model.get('division'))
-          {
-            return actions;
-          }
-        }
-
-        actions.push({
-          label: t.bound('hourlyPlans', 'PAGE_ACTION:edit'),
-          icon: 'edit',
-          href: this.model.genClientUrl('edit'),
-          privileges: 'HOURLY_PLANS:MANAGE'
-        });
+        actions.push(
+          pageActions.edit(this.model),
+          pageActions.delete(this.model)
+        );
       }
 
       return actions;
-    },
-
-    setUpLayout: function(layout)
-    {
-      this.layout = layout;
     },
 
     initialize: function()
@@ -74,26 +58,6 @@ define([
       this.model = bindLoadingMessage(new HourlyPlan({_id: this.options.modelId}), this);
 
       this.view = new HourlyPlanDetailsView({model: this.model});
-
-      var page = this;
-
-      this.listenToOnce(this.model, 'sync', function()
-      {
-        if (page.model.get('locked'))
-        {
-          return;
-        }
-
-        page.pubsub.subscribe('hourlyPlans.locked.' + page.model.id, function()
-        {
-          page.model.set({locked: true});
-
-          if (page.layout)
-          {
-            page.layout.setActions(page.actions());
-          }
-        });
-      });
     },
 
     load: function(when)

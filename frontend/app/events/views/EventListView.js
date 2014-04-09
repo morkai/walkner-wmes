@@ -81,14 +81,17 @@ define([
 
           data.model.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
           data.model.date = moment(data.model.date).format('YYYY-MM-DD');
+          data.model.shift = t('core', 'SHIFT:' + data.model.shift);
           break;
 
         case 'hourlyPlans.created':
         case 'hourlyPlans.locked':
+        case 'hourlyPlans.deleted':
           var division = divisions.get(data.model.division);
 
           data.model.division = division ? renderOrgUnitPath(division, false, false) : '?';
           data.model.date = moment(data.model.date).format('YYYY-MM-DD');
+          data.model.shift = t('core', 'SHIFT:' + data.model.shift);
           break;
       }
 

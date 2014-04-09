@@ -16,6 +16,8 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startFteModule(app, module)
 {
+  var recountTimers = {};
+
   app.onModuleReady(
     [
       module.config.mongooseId,
@@ -39,19 +41,6 @@ exports.start = function startFteModule(app, module)
   app.onModuleReady(
     [
       module.config.mongooseId,
-      module.config.fteId
-    ],
-    function()
-    {
-      app.broker.subscribe('shiftChanged', lockEntries);
-
-      lockEntries();
-    }
-  );
-
-  app.onModuleReady(
-    [
-      module.config.mongooseId,
       module.config.orgUnitsId,
       module.config.prodShiftsId,
       module.config.fteId
@@ -60,47 +49,34 @@ exports.start = function startFteModule(app, module)
     {
       app.broker.subscribe('production.prodLineActivated', function(message)
       {
-        recountPlannedQuantities(
+        schedulePlannedQuantitiesRecountForProdFlow(
           message.shiftId, message.prodFlow, message.activeProdLinesInProdFlow
         );
+      });
+
+      app.broker.subscribe('hourlyPlans.updated.*', function(message)
+      {
+        scheduleAllPlannedQuantitiesRecount(message._id);
       });
     }
   );
 
-  function lockEntries()
+  function schedulePlannedQuantitiesRecountForProdFlow(shiftId, prodFlowId, activeProdLineIds)
   {
-    var HourlyPlan = app[module.config.mongooseId].model('HourlyPlan');
-    var currentShift = app[module.config.fteId].getCurrentShift();
-    var condition = {
-      locked: false,
-      date: {$ne: currentShift.date}
-    };
-
-    HourlyPlan.find(condition, function(err, hourlyPlans)
+    if (recountTimers[prodFlowId] !== undefined)
     {
-      if (err)
-      {
-        return module.error("Failed to lock plans: %s", err.message);
-      }
+      clearTimeout(recountTimers[prodFlowId]);
+    }
 
-      if (!hourlyPlans.length)
+    recountTimers[prodFlowId] = setTimeout(
+      function()
       {
-        return;
-      }
+        delete recountTimers[prodFlowId];
 
-      module.info("Locking %d plans...", hourlyPlans.length);
-
-      hourlyPlans.forEach(function(hourlyPlan)
-      {
-        hourlyPlan.lock(null, function(err)
-        {
-          if (err)
-          {
-            module.error("Failed to lock a plan (%s): %s", hourlyPlan.get('_id'), err.message);
-          }
-        });
-      });
-    });
+        recountPlannedQuantities(shiftId, prodFlowId, activeProdLineIds);
+      },
+      5000
+    );
   }
 
   function recountPlannedQuantities(shiftId, prodFlowId, activeProdLineIds)
@@ -144,5 +120,42 @@ exports.start = function startFteModule(app, module)
         });
       }
     );
+  }
+
+  function scheduleAllPlannedQuantitiesRecount(hourlyPlanId)
+  {
+    if (recountTimers[hourlyPlanId] !== undefined)
+    {
+      clearTimeout(recountTimers[hourlyPlanId]);
+    }
+
+    recountTimers[hourlyPlanId] = setTimeout(
+      function()
+      {
+        delete recountTimers[hourlyPlanId];
+
+        findAndRecountPlannedQuantities(hourlyPlanId);
+      },
+      60000
+    );
+  }
+
+  function findAndRecountPlannedQuantities(hourlyPlanId)
+  {
+    var HourlyPlan = app[module.config.mongooseId].model('HourlyPlan');
+
+    HourlyPlan.findById(hourlyPlanId).exec(function(err, hourlyPlan)
+    {
+      if (err)
+      {
+        return module.error(
+          "Failed to find hourly plan [%s] to recount planned quantities: %s",
+          hourlyPlanId,
+          err.stack
+        );
+      }
+
+      hourlyPlan.recountPlannedQuantities();
+    });
   }
 };

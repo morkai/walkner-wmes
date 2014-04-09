@@ -1,19 +1,18 @@
 {
-  "BREADCRUMBS:entryList": "Plany godzinowe",
-  "BREADCRUMBS:entryForm": "Planowanie",
-  "BREADCRUMBS:entryDetails": "Plan godzinowy",
-  "BREADCRUMBS:currentEntry": "Wybór wydziału",
+  "BREADCRUMBS:browse": "Plany godzinowe",
+  "BREADCRUMBS:addForm": "Wybieranie planu",
+  "BREADCRUMBS:editForm": "Planowanie",
+  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
   "MSG:LOADING_FAILURE": "Ładowanie planów godzinowych nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie planu godzinowego nie powiodło się :(",
+  "MSG:DELETED": "Plan godzinowy <em>{label}</em> został usunięty.",
 
-  "PAGE_ACTION:currentEntry": "Planuj",
   "PAGE_ACTION:print": "Pokaż wersję do druku",
-  "PAGE_ACTION:lock": "Zamknij wpis",
-  "PAGE_ACTION:edit": "Edytuj wpis",
+  "PAGE_ACTION:add": "Planuj",
+  "PAGE_ACTION:edit": "Edytuj plan",
+  "PAGE_ACTION:delete": "Usuń plan",
   "PAGE_ACTION:export": "Eksportuj plany godzinowe",
-  "LIST:ACTION:print": "Pokaż wersję do druku",
-  "LIST:ACTION:edit": "Edytuj wpis",
 
   "FILTER:DATE": "Data:",
   "FILTER:LIMIT": "Limit:",
@@ -22,20 +21,25 @@
   "FILTER:BUTTON": "Filtruj plany",
 
   "panel:title": "Plan godzinowy",
-  "panel:title:editable": "Formularz planu godzinowego",
+  "panel:title:editable": "Formularz edycji planu godzinowego",
+  "panel:info": "Wszystkie zmiany w formularzu zapisywane są na bieżąco. Planowane ilości rozdzielone zostaną dla pracujących Linii produkcyjnych minutę po ostatniej zmianie!",
   "column:flow": "Przepływ",
   "column:noPlan": "Brak<br>planu?",
   "column:level": "Poziom",
   "property:shift": "Zmiana:",
   "property:date": "Data:",
-  "msg:lockFailure": "Nie udało się zamknąć wpisu :(",
 
   "print:hdLeft": "Plan godzinowy dla {division}",
   "print:hdRight": "{date}, {shift} zmiana",
 
-  "current:panel:title": "Formularz wyboru wydziału do planów godzinowych",
-  "current:panel:warning": "<p>Jeżeli wybrany wydział nie będzie miał wpisu dla aktualnej zmiany, zostanie utworzony nowy wpis.</p>",
-  "current:submit": "Planuj",
-  "current:msg:offline": "Nie można planować: brak połączenia z serwerem :(",
-  "current:msg:failure": "Nie udało się utworzyć wpisu: {error, select, SHIFT_NO{wpis można utworzyć tylko na I zmianie!} AUTH{brak uprawnień!} INPUT{nieprawidłowy dział!} other{{error}}}"
+  "addForm:panel:title": "Formularz wyszukiwania/tworzenia planu godzinowego",
+  "addForm:submit": "Planuj",
+  "addForm:msg:offline": "Nie można planować: brak połączenia z serwerem :(",
+  "addForm:msg:failure": "Nie udało się znaleźć/utworzyć wpisu do edycji: {error, select, AUTH{brak uprawnień!} INPUT{nieprawidłowe dane wejściowe!} other{{error}}}",
+
+  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia planu godzinowego",
+  "ACTION_FORM:BUTTON:delete": "Usuń plan godzinowy",
+  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany plan godzinowy?",
+  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć plan godzinowy <em>{label}</em>?",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć planu godzinowego :-("
 }

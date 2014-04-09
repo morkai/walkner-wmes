@@ -14,6 +14,7 @@
   "LIST:ACTION:viewDetails": "Pokaż szczegóły",
   "LIST:ACTION:edit": "Edytuj",
   "LIST:ACTION:delete": "Usuń",
+  "LIST:ACTION:print": "Drukuj",
 
   "BREADCRUMBS:edit": "Edycja",
   "BREADCRUMBS:delete": "Usuwanie",

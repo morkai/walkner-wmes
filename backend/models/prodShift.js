@@ -106,7 +106,7 @@ module.exports = function setupProdShiftModel(app, mongoose)
         if (prodLineIds.length !== prodShifts.length)
         {
           return done(new Error(
-            prodShifts.length + " prod shifts were found for "
+            prodShifts.length + " prod shifts (" + date + ") were found for "
               + prodLineIds.length + " prod lines: " + prodLineIds.join(', ')
           ));
         }

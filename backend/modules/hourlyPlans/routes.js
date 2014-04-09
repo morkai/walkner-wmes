@@ -2,6 +2,7 @@
 
 var moment = require('moment');
 var crud = require('../express/crud');
+var canManage = require('./canManage');
 
 module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
 {
@@ -31,6 +32,30 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   );
 
   express.get('/hourlyPlans/:id', canView, crud.readRoute.bind(null, app, HourlyPlan));
+
+  express.del(
+    '/hourlyPlans/:id', canDelete, crud.deleteRoute.bind(null, app, HourlyPlan)
+  );
+
+  function canDelete(req, res, next)
+  {
+    HourlyPlan.findById(req.params.id).exec(function(err, hourlyPlan)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      req.model = hourlyPlan;
+
+      if (hourlyPlan && !canManage(req.session.user, hourlyPlan))
+      {
+        return res.send(403);
+      }
+
+      return next();
+    });
+  }
 
   function exportHourlyPlan(doc)
   {

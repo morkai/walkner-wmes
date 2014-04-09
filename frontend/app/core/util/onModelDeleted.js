@@ -29,7 +29,8 @@ define([
 
     broker.publish('router.navigate', {
       url: localModel.genClientUrl('base'),
-      trigger: true
+      trigger: true,
+      replace: true
     });
   };
 });
