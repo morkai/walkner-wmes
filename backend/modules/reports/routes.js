@@ -433,7 +433,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
         }
         else if (orgUnitType === 'prodLine')
         {
-          orgUnits.flows = idToStr(orgUnitsModule.getProdLinesInProdFlow(
+          orgUnits.flows = idToStr(orgUnitsModule.getProdLinesFor(
             orgUnitsModule.getParent(orgUnitsModule.getParent(orgUnit))
           ));
         }

@@ -379,6 +379,59 @@ exports.start = function startOrgUnitsModule(app, module)
     }
   };
 
+  module.getProdLinesFor = function(orgUnitType, orgUnitId)
+  {
+    var orgUnit = arguments.length === 2
+      ? this.getByTypeAndId(orgUnitType, orgUnitId)
+      : orgUnitType;
+
+    if (!orgUnit)
+    {
+      return null;
+    }
+
+    if (orgUnit.constructor === prodLinesModule.Model)
+    {
+      return [orgUnit];
+    }
+
+    if (orgUnit.constructor === workCentersModule.Model)
+    {
+      return filterByParent(prodLinesModule.models, 'workCenter', orgUnit);
+    }
+
+    var workCenterIds = {};
+
+    if (orgUnit.constructor === prodFlowsModule.Model)
+    {
+      this.getWorkCentersInProdFlow(orgUnit).forEach(function(workCenter)
+      {
+        workCenterIds[workCenter._id] = true;
+      });
+    }
+    else
+    {
+      var prodFlows = this.getProdFlowsFor(orgUnit);
+
+      workCenterIds = [];
+
+      for (var i = 0, l = prodFlows.length; i < l; ++i)
+      {
+        var workCenters = this.getWorkCentersInProdFlow(prodFlows[i]);
+
+        for (var ii = 0, ll = workCenters.length; ii < ll; ++ii)
+        {
+          workCenterIds[workCenters[ii]._id] = true;
+        }
+      }
+    }
+
+    return prodLinesModule.models.filter(function(prodLine)
+    {
+      return workCenterIds[prodLine.workCenter] === true;
+    });
+  };
+
   function filterByParent(orgUnits, parentProperty, parentOrgUnit)
   {
     return orgUnits.filter(function(orgUnit)
