@@ -407,7 +407,8 @@ Report4.prototype.countWorkers = function(prodShiftOrder)
   var workerCount = {
     total: operatorCount,
     match: 0,
-    ratio: 0
+    ratio: 0,
+    operators: null
   };
 
   if (this.options.mode === 'shift')
@@ -415,6 +416,10 @@ Report4.prototype.countWorkers = function(prodShiftOrder)
     if (prodShiftOrder.shift === this.options.shift)
     {
       workerCount.match = operatorCount;
+      workerCount.operators = prodShiftOrder.operators.map(function(userInfo)
+      {
+        return userInfo.id;
+      });
     }
   }
   else if (this.options.mode === 'masters')
@@ -422,17 +427,24 @@ Report4.prototype.countWorkers = function(prodShiftOrder)
     if (prodShiftOrder.master && this.users[prodShiftOrder.master.id])
     {
       workerCount.match = operatorCount;
+      workerCount.operators = prodShiftOrder.operators.map(function(userInfo)
+      {
+        return userInfo.id;
+      });
     }
   }
   else if (this.options.mode === 'operators')
   {
+    workerCount.operators = [];
+
     for (var i = 0; i < operatorCount; ++i)
     {
       var operator = prodShiftOrder.operators[i];
 
       if (operator && this.users[operator.id])
       {
-        ++workerCount.match;
+        workerCount.match += 1;
+        workerCount.operators.push(operator.id);
       }
     }
   }
@@ -476,9 +488,9 @@ Report4.prototype.handleEffAndProd = function(prodShiftOrder, workerCount)
       prodShiftOrder.laborTime / 100 * (totalQuantity * workerCount.ratio);
     groupData.effDen += prodShiftOrder.workDuration * workerCount.match;
 
-    for (var i = 0, l = prodShiftOrder.operators.length; i < l; ++i)
+    for (var i = 0, l = workerCount.operators.length; i < l; ++i)
     {
-      groupData.prodDen[prodShiftOrder.operators[i].id] = true;
+      groupData.prodDen[workerCount.operators[i]] = true;
     }
 
     groupData.shifts[prodShiftOrder.date.getTime()] = true;
