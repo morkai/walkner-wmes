@@ -100,8 +100,8 @@ define([
               results: (data.collection || []).map(function(user)
               {
                 return {
-                  id: user.personellId,
-                  text: user.lastName + ' ' + user.firstName
+                  id: user._id,
+                  text: user.lastName + ' ' + user.firstName + ' (' + user.personellId + ')'
                 };
               })
             };

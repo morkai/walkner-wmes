@@ -86,7 +86,7 @@ define([
       }
 
       return users
-        .map(function(user) { return user.personellId ? user.personellId : user; })
+        .map(function(user) { return user._id ? user._id : user; })
         .join(',');
     },
 
@@ -112,13 +112,11 @@ define([
             return {id: user, text: user};
           }
 
-          if (user && user.personellId)
+          if (user && user._id)
           {
             return {
-              id: user.personellId,
-              text: user.lastName && user.firstName
-                ? (user.lastName + ' ' + user.firstName)
-                : user.personellId
+              id: user._id,
+              text: user.lastName + ' ' + user.firstName + ' (' + user.personellId + ')'
             };
           }
 
@@ -174,9 +172,7 @@ define([
         }
         else if (query.mode === 'masters' || query.mode === 'operators')
         {
-          attrs[attrs.mode] = String(query[attrs.mode])
-            .split(',')
-            .filter(function(personellId) { return (/^[0-9]+$/).test(personellId); });
+          attrs[attrs.mode] = String(query[attrs.mode]).split(',');
 
           if (attrs[attrs.mode].length === 0)
           {

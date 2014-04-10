@@ -336,11 +336,11 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     {
       options[options.mode] = (req.query[options.mode] || '')
         .split(',')
-        .filter(function(personellId) { return (/^[0-9]+$/).test(personellId); });
+        .filter(function(userId) { return (/^[a-zA-Z0-9]{24}$/).test(userId); });
 
       if (options[options.mode].length === 0)
       {
-        return next(new Error('INVALID_PERSONELL_IDS'));
+        return next(new Error('INVALID_USER_IDS'));
       }
     }
     else
@@ -361,7 +361,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     {
       mongoose.model('User')
         .find(
-          {personellId: {$in: options[options.mode]}},
+          {_id: {$in: options[options.mode]}},
           {_id: 1, personellId: 1, firstName: 1, lastName: 1}
         )
         .lean()
