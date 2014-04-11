@@ -135,6 +135,9 @@ exports.start = function startEventsModule(app, module)
     {
       user = {
         _id: String(data.user._id),
+        name: data.user.lastName && data.user.firstName
+          ? (data.user.lastName + ' ' + data.user.firstName)
+          : data.user.login,
         login: data.user.login,
         ipAddress: data.user.ipAddress
       };

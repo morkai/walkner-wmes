@@ -18,7 +18,7 @@
             <% if (event.user.login === 'root') { %>
               <%- event.user.login %>
             <% } else { %>
-              <a href="#users/<%- event.user._id %>"><%- event.user.login %></a>
+              <a href="#users/<%- event.user._id %>"><%- event.user.name %></a>
             <% } %>
             <% if (event.user.ipAddress) { %>(<%- event.user.ipAddress %>)<% } %>
           <% } else { %>
