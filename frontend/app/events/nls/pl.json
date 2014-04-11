@@ -7,7 +7,6 @@
   "FILTER:DATE:FROM": "Od",
   "FILTER:DATE:TO": "Do",
   "FILTER:PLACEHOLDER:type": "Dowolny typ",
-  "FILTER:PLACEHOLDER:user": "Dowolny użytkownik",
   "FILTER:SYSTEM_USER": "System",
   "FILTER:LIMIT": "Limit",
   "FILTER:BUTTON": "Filtruj zdarzenia",

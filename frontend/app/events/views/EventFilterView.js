@@ -1,21 +1,19 @@
 define([
   'underscore',
-  'moment',
   'js2form',
-  'reltime',
   'app/i18n',
   'app/core/View',
   'app/core/util/fixTimeRange',
+  'app/users/util/setUpUserSelect2',
   'app/events/templates/filter',
   'select2'
 ], function(
   _,
-  moment,
   js2form,
-  reltime,
   t,
   View,
   fixTimeRange,
+  setUpUsersSelect2,
   filterTemplate
 ) {
   'use strict';
@@ -64,37 +62,8 @@ define([
         allowClear: true
       });
 
-      this.$id('user').select2({
-        width: '200px',
-        allowClear: true,
-        minimumInputLength: 3,
-        ajax: {
-          cache: true,
-          quietMillis: 500,
-          url: function(term)
-          {
-            term = encodeURIComponent(term);
-
-            return '/users?select(login)&sort(login)&limit(20)&regex(login,string:' + term + ')';
-          },
-          results: function(data, query)
-          {
-            var results = [
-              {id: '$SYSTEM', text: t('events', 'FILTER_USER_SYSTEM')},
-              {id: 'root', text: 'root'}
-            ].filter(function(user)
-            {
-              return user.text.indexOf(query.term) !== -1;
-            });
-
-            return {
-              results: results.concat((data.collection || []).map(function(user)
-              {
-                return {id: user.login, text: user.login};
-              }))
-            };
-          }
-        }
+      setUpUsersSelect2(this.$id('user'), {
+        width: 300
       });
     },
 
@@ -124,7 +93,7 @@ define([
             formData.type = term.args[1];
             break;
 
-          case 'user':
+          case 'user._id':
             formData.user = term.args[1] === null ? '$SYSTEM' : term.args[1];
             break;
 
@@ -144,7 +113,7 @@ define([
       var timeRange = fixTimeRange.fromView(this);
       var selector = [];
       var type = this.$id('type').val().trim();
-      var user = this.$id('user').val().trim();
+      var user = this.$id('user').select2('data');
       var severity = this.fixSeverity();
 
       if (type !== '')
@@ -152,13 +121,9 @@ define([
         selector.push({name: 'eq', args: ['type', type]});
       }
 
-      if (user === '$SYSTEM')
+      if (user)
       {
-        selector.push({name: 'eq', args: ['user', null]});
-      }
-      else if (user !== '')
-      {
-        selector.push({name: 'eq', args: ['user.login', user]});
+        selector.push({name: 'eq', args: ['user._id', user.id === '$SYSTEM' ? null : user.id]});
       }
 
       if (timeRange.from)

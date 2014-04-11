@@ -8,7 +8,6 @@
     "FILTER:DATE:FROM": "From",
     "FILTER:DATE:TO": "To",
     "FILTER:PLACEHOLDER:type": "Any type",
-    "FILTER:PLACEHOLDER:user": "Any user",
     "FILTER:SYSTEM_USER": "System",
     "FILTER:LIMIT": "Limit",
     "FILTER:BUTTON": "Filter events",
