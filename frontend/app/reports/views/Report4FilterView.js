@@ -6,6 +6,7 @@ define([
   'app/data/divisions',
   'app/core/View',
   'app/core/util/fixTimeRange',
+  'app/users/util/setUpUserSelect2',
   'app/reports/templates/report4Filter',
   './prepareDateRange'
 ], function(
@@ -16,6 +17,7 @@ define([
   divisions,
   View,
   fixTimeRange,
+  setUpUsersSelect2,
   filterTemplate,
   prepareDateRange
 ) {
@@ -74,39 +76,9 @@ define([
       this.$('input[name=interval]:checked').closest('.btn').addClass('active');
       this.$('input[name=shift]:checked').closest('.btn').addClass('active');
 
-      var $users = this.$id('users');
-
-      $users.select2({
+      var $users = setUpUsersSelect2(this.$id('users'), {
         width: 550,
-        allowClear: true,
-        multiple: true,
-        minimumInputLength: 3,
-        ajax: {
-          cache: true,
-          quietMillis: 500,
-          url: function(term)
-          {
-            var property = /^[0-9]+$/.test(term) ? 'personellId' : 'lastName';
-
-            return '/users'
-              + '?select(personellId,lastName,firstName)'
-              + '&sort(lastName,firstName)'
-              + '&limit(20)'
-              + '&regex(' + property + ',' + encodeURIComponent('^' + term) + ',i)';
-          },
-          results: function(data)
-          {
-            return {
-              results: (data.collection || []).map(function(user)
-              {
-                return {
-                  id: user._id,
-                  text: user.lastName + ' ' + user.firstName + ' (' + user.personellId + ')'
-                };
-              })
-            };
-          }
-        }
+        multiple: true
       });
       $users.select2('data', this.model.getUsersForSelect2());
       $users.on('change', this.toggleSubmit.bind(this));

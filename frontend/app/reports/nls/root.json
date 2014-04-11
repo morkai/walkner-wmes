@@ -111,7 +111,6 @@
     "operator:filter:mode:shift": "Shift",
     "operator:filter:mode:masters": "Masters",
     "operator:filter:mode:operators": "Operators",
-    "operator:filter:users:placeholder": "Search by personell ID or last name...",
     "operator:effAndProd:title": "Efficiency/Productivity",
     "operator:efficiency:byDivision": "{division}'s efficiency",
     "operator:efficiency": "Operators' efficiency",

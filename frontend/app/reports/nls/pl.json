@@ -111,7 +111,6 @@
   "operator:filter:mode:shift": "Zmiana",
   "operator:filter:mode:masters": "Mistrzowie",
   "operator:filter:mode:operators": "Operatorzy",
-  "operator:filter:users:placeholder": "Szukaj po nr kadrowym lub nazwisku...",
   "operator:effAndProd:title": "Wydajność/Produktywność",
   "operator:efficiency:byDivision": "Wydajność {division}",
   "operator:efficiency": "Wydajność operatorów",
