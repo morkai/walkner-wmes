@@ -141,7 +141,9 @@ define([
 
       if (label)
       {
-        html = label;
+        var matches = label.match(/^(.*?) \(.*?\)$/);
+
+        html = matches === null ? label : matches[1].trim();
 
         if (unlocked)
         {

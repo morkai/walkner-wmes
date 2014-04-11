@@ -61,7 +61,7 @@ define([
           if (userData)
           {
             userInfo.id = userData.id;
-            userInfo.label = userData.name;
+            userInfo.label = userData.text;
           }
         }
         else
@@ -92,9 +92,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         offline: offline,
-        label: t('production', 'personelPicker:' + (offline ? 'offline' : 'online') + ':label'),
-        placeholder:
-          t('production', 'personelPicker:' + (offline ? 'offline' : 'online') + ':placeholder')
+        label: t('production', 'personelPicker:' + (offline ? 'offline' : 'online') + ':label')
       };
     },
 
@@ -112,7 +110,7 @@ define([
       }
       else
       {
-        $user.focus();
+        $user.attr('placeholder', t('production', 'personelPicker:offline:placeholder')).focus();
       }
     },
 
