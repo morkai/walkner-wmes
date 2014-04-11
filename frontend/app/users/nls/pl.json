@@ -88,5 +88,6 @@
   "PRIVILEGE:REPORTS:VIEW": "Raporty: przeglądanie",
   "PRIVILEGE:REPORTS:MANAGE": "Raporty: zarządzanie",
 
-  "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym..."
+  "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
+  "select2:users:system": "System"
 }

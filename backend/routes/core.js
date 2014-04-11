@@ -1,5 +1,7 @@
 'use strict';
 
+var lodash = require('lodash');
+
 module.exports = function startCoreRoutes(app, express)
 {
   var appCache = app.options.env === 'production';
@@ -51,6 +53,7 @@ module.exports = function startCoreRoutes(app, express)
         }),
         TIME: JSON.stringify(Date.now()),
         LOCALE: JSON.stringify(locale),
+        ROOT_USER: JSON.stringify(lodash.omit(app.user.root, 'password')),
         GUEST_USER: JSON.stringify(app.user.guest),
         PRIVILEGES: JSON.stringify(app.user.config.privileges),
         PROD_FUNCTIONS: JSON.stringify(app.prodFunctions.models),

@@ -233,6 +233,18 @@ function(
     return subdivisions.get(user.data.orgUnitId) || null;
   };
 
+  user.getRootUserData = function()
+  {
+    return window.ROOT_USER || {
+      id: null,
+      login: 'root',
+      name: 'root',
+      loggedIn: true,
+      super: true,
+      privileges: []
+    };
+  };
+
   window.user = user;
 
   return user;
