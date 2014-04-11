@@ -8,6 +8,7 @@ define([
   'app/data/prodLines',
   'app/core/Model',
   'app/core/views/FormView',
+  'app/users/util/setUpUserSelect2',
   '../PressWorksheetCollection',
   'app/pressWorksheets/templates/form',
   'app/pressWorksheets/templates/ordersTable',
@@ -22,34 +23,13 @@ define([
   prodLines,
   Model,
   FormView,
+  setUpUserSelect2,
   PressWorksheetCollection,
   formTemplate,
   renderOrdersTable,
   renderOrdersTableRow
 ) {
   'use strict';
-
-  var SELECT2_USERS_AJAX = {
-    cache: true,
-    quietMillis: 500,
-    url: function(term)
-    {
-      return '/users'
-        + '?select(lastName,firstName)'
-        + '&sort(lastName,firstName)'
-        + '&limit(20)'
-        + '&regex(lastName,' + encodeURIComponent('^' + term) + ',i)';
-    },
-    results: function(data)
-    {
-      return {
-        results: (data.collection || []).map(function(user)
-        {
-          return {id: user._id, text: user.lastName + ' ' + user.firstName};
-        })
-      };
-    }
-  };
 
   return FormView.extend({
 
@@ -253,12 +233,11 @@ define([
           };
         });
 
-      var $operators = this.$id('operators').select2({
-        width: '100%',
-        allowClear: true,
-        multiple: true,
-        minimumInputLength: 3,
-        ajax: SELECT2_USERS_AJAX
+      setUpUserSelect2(this.$id('master'));
+
+      var $operator = setUpUserSelect2(this.$id('operator'));
+      var $operators = setUpUserSelect2(this.$id('operators'), {
+        multiple: true
       });
       var view = this;
 
@@ -269,20 +248,6 @@ define([
           $operator.select2('data', $operators.select2('data')[0]);
           view.checkForExistingWorksheet();
         }
-      });
-
-      var $operator = this.$id('operator').select2({
-        width: '100%',
-        allowClear: true,
-        minimumInputLength: 3,
-        ajax: SELECT2_USERS_AJAX
-      });
-
-      this.$id('master').select2({
-        width: '100%',
-        allowClear: true,
-        minimumInputLength: 3,
-        ajax: SELECT2_USERS_AJAX
       });
 
       this.fillType();
