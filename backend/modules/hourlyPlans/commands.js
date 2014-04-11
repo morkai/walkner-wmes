@@ -25,6 +25,13 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       reply = function() {};
     }
 
+    var user = socket.handshake.user;
+
+    if (!canManage(user))
+    {
+      return reply(new Error('AUTH'));
+    }
+
     var shiftMoment = moment(data.date);
 
     if (!shiftMoment.isValid()
@@ -33,13 +40,6 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       || !lodash.isNumber(data.shift))
     {
       return reply(new Error('INPUT'));
-    }
-
-    var user = socket.handshake.user;
-
-    if (!canManage(user))
-    {
-      return reply(new Error('AUTH'));
     }
 
     shiftMoment.hours(0).minutes(0).seconds(0).milliseconds(0);
