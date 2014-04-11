@@ -1,10 +1,12 @@
 define([
-  'moment',
+  '../i18n',
+  '../time',
   '../data/subdivisions',
   '../data/views/renderOrgUnitPath',
   '../core/Model'
 ], function(
-  moment,
+  t,
+  time,
   subdivisions,
   renderOrgUnitPath,
   Model
@@ -29,29 +31,40 @@ define([
       shift: null,
       fteDiv: null,
       tasks: null,
-      locked: false,
       createdAt: null,
-      creatorId: null,
-      creatorLabel: null,
+      creator: null,
       updatedAt: null,
-      updaterId: null,
-      updaterLabel: null
+      updater: null
+    },
+
+    getLabel: function()
+    {
+      return t(this.nlsDomain, 'label', {
+        subdivision: this.getSubdivisionPath(),
+        date: time.format(this.get('date'), 'LL'),
+        shift: t('core', 'SHIFT:' + this.get('shift'))
+      });
+    },
+
+    getSubdivisionPath: function()
+    {
+      var subdivision = subdivisions.get(this.get('subdivision'));
+
+      return subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
     },
 
     serializeWithTotals: function()
     {
       var companies = this.serializeCompanies();
-      var subdivision = subdivisions.get(this.get('subdivision'));
 
       return {
-        subdivision: subdivision ? renderOrgUnitPath(subdivision, false, false) : '?',
-        date: moment(this.get('date')).format('LL'),
-        shift: this.get('shift'),
+        subdivision: this.getSubdivisionPath(),
+        date: time.format(this.get('date'), 'LL'),
+        shift: t('core', 'SHIFT:' + this.get('shift')),
         total: companies.reduce(function(total, company) { return total + company.total; }, 0),
         companies: companies,
         divisions: this.get('fteDiv') || [],
-        tasks: this.serializeTasks(),
-        locked: !!this.get('locked')
+        tasks: this.serializeTasks()
       };
     },
 
@@ -107,6 +120,81 @@ define([
 
         return task;
       });
+    },
+
+    isEditable: function(user)
+    {
+      if (user.isAllowedTo('PROD_DATA:MANAGE'))
+      {
+        return true;
+      }
+
+      if (!user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
+      {
+        return false;
+      }
+
+      var userDivision = user.getDivision();
+
+      if (!user.isAllowedTo(this.privilegePrefix + ':ALL') && userDivision)
+      {
+        var subdivision = subdivisions.get(this.get('subdivision'));
+
+        if (!subdivision || subdivision.get('division') !== userDivision.id)
+        {
+          return false;
+        }
+      }
+
+      var createdAt = Date.parse(this.get('createdAt'));
+
+      return Date.now() < createdAt + 8 * 3600 * 1000;
+    },
+
+    handleUpdateMessage: function(message, silent)
+    {
+      var tasks = this.get('tasks');
+
+      if (!tasks)
+      {
+        return;
+      }
+
+      var task = tasks[message.taskIndex];
+
+      if (!task)
+      {
+        return;
+      }
+
+      var company = task.companies[message.companyIndex];
+
+      if (!company)
+      {
+        return;
+      }
+
+      if (typeof message.divisionIndex === 'number')
+      {
+        var division = company.count[message.divisionIndex];
+
+        if (!division)
+        {
+          return;
+        }
+
+        division.value = message.newCount;
+      }
+      else
+      {
+        company.count = message.newCount;
+      }
+
+      if (!silent)
+      {
+        this.trigger('change:tasks');
+        this.trigger('change');
+      }
     }
 
   });

@@ -75,8 +75,10 @@ define([
       {
         case 'fte.leader.created':
         case 'fte.leader.locked':
+        case 'fte.leader.deleted':
         case 'fte.master.created':
         case 'fte.master.locked':
+        case 'fte.master.deleted':
           var subdivision = subdivisions.get(data.model.subdivision);
 
           data.model.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';

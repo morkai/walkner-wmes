@@ -1,11 +1,15 @@
 define([
-  'moment',
+  'underscore',
+  '../i18n',
+  '../time',
   '../data/subdivisions',
   '../data/prodFunctions',
   '../data/views/renderOrgUnitPath',
   '../core/Model'
 ], function(
-  moment,
+  _,
+  t,
+  time,
   subdivisions,
   prodFunctions,
   renderOrgUnitPath,
@@ -21,7 +25,7 @@ define([
 
     topicPrefix: 'fte.master',
 
-    privilegePrefix: 'FTE:LEADER',
+    privilegePrefix: 'FTE:MASTER',
 
     nlsDomain: 'fte',
 
@@ -31,20 +35,31 @@ define([
       shift: null,
       flows: null,
       tasks: null,
-      locked: false,
       createdAt: null,
-      creatorId: null,
-      creatorLabel: null,
+      creator: null,
       updatedAt: null,
-      updaterId: null,
-      updaterLabel: null,
+      updater: null,
       absentUsers: null
+    },
+
+    getLabel: function()
+    {
+      return t(this.nlsDomain, 'label', {
+        subdivision: this.getSubdivisionPath(),
+        date: time.format(this.get('date'), 'LL'),
+        shift: t('core', 'SHIFT:' + this.get('shift'))
+      });
+    },
+
+    getSubdivisionPath: function()
+    {
+      var subdivision = subdivisions.get(this.get('subdivision'));
+
+      return subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
     },
 
     serializeWithTotals: function()
     {
-      var subdivision = subdivisions.get(this.get('subdivision'));
-
       var totalByCompany = {};
       var totalByProdFunction = {};
 
@@ -81,15 +96,14 @@ define([
       });
 
       return {
-        subdivision: subdivision ? renderOrgUnitPath(subdivision, false, false) : '?',
-        date: moment(this.get('date')).format('LL'),
-        shift: this.get('shift'),
+        subdivision: this.getSubdivisionPath(),
+        date: time.format(this.get('date'), 'LL'),
+        shift: t('core', 'SHIFT:' + this.get('shift')),
         companyCount: Object.keys(totalByCompany).length,
         totalByCompany: totalByCompany,
         totalByProdFunction: totalByProdFunction,
         total: total,
         tasks: tasks,
-        locked: !!this.get('locked'),
         absentUsers: (this.get('absentUsers') || []).filter(function(absentUser)
         {
           return !!absentUser;
@@ -129,6 +143,166 @@ define([
 
         return task;
       });
+    },
+
+    isEditable: function(user)
+    {
+      if (user.isAllowedTo('PROD_DATA:MANAGE'))
+      {
+        return true;
+      }
+
+      if (!user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
+      {
+        return false;
+      }
+
+      var userDivision = user.getDivision();
+
+      if (!user.isAllowedTo(this.privilegePrefix + ':ALL') && userDivision)
+      {
+        var subdivision = subdivisions.get(this.get('subdivision'));
+
+        if (!subdivision || subdivision.get('division') !== userDivision.id)
+        {
+          return false;
+        }
+      }
+
+      var createdAt = Date.parse(this.get('createdAt'));
+
+      return Date.now() < createdAt + 8 * 3600 * 1000;
+    },
+
+    handleUpdateMessage: function(message, silent)
+    {
+      if (message.type === 'count')
+      {
+        this.handleCountMessage(message, silent);
+      }
+      else if (message.type === 'plan')
+      {
+        this.handlePlanMessage(message, silent);
+      }
+      else if (message.type === 'addAbsentUser')
+      {
+        this.handleAddAbsentUserMessage(message, silent);
+      }
+      else if (message.type === 'removeAbsentUser')
+      {
+        this.handleRemoveAbsentUserMessage(message, silent);
+      }
+    },
+
+    handleCountMessage: function(message, silent)
+    {
+      var tasks = this.get('tasks');
+
+      if (!tasks)
+      {
+        return;
+      }
+
+      var task = tasks[message.taskIndex];
+
+      if (!task)
+      {
+        return;
+      }
+
+      var prodFunction = task.functions[message.functionIndex];
+
+      if (!prodFunction)
+      {
+        return;
+      }
+
+      var company = prodFunction.companies[message.companyIndex];
+
+      if (!company)
+      {
+        return;
+      }
+
+      company.count = message.newCount;
+
+      if (!silent)
+      {
+        this.trigger('change:tasks');
+        this.trigger('change');
+      }
+    },
+
+    handlePlanMessage: function(message, silent)
+    {
+      var task = _.find(this.get('tasks'), function(task)
+      {
+        return task.id === message.taskId;
+      });
+
+      if (!task)
+      {
+        return;
+      }
+
+      task.noPlan = message.newValue;
+
+      if (task.noPlan)
+      {
+        task.functions.forEach(function(prodFunction)
+        {
+          prodFunction.companies.forEach(function(company)
+          {
+            company.count = 0;
+          });
+        });
+      }
+
+      if (!silent)
+      {
+        this.trigger('change:tasks');
+        this.trigger('change');
+      }
+    },
+
+    handleAddAbsentUserMessage: function(message, silent)
+    {
+      var absentUsers = this.get('absentUsers') || [];
+
+      absentUsers.push(message.user);
+
+      if (!silent)
+      {
+        this.trigger('change:absentUsers');
+        this.trigger('change');
+      }
+    },
+
+    handleRemoveAbsentUserMessage: function(message, silent)
+    {
+      var absentUsers = this.get('absentUsers') || [];
+      var index = -1;
+
+      for (var i = 0, l = absentUsers.length; i < l; ++i)
+      {
+        if (absentUsers[i].id === message.userId)
+        {
+          index = i;
+
+          break;
+        }
+      }
+
+      if (index !== -1)
+      {
+        absentUsers.splice(index, 1);
+
+        if (!silent)
+        {
+          this.trigger('change:absentUsers');
+          this.trigger('change');
+        }
+      }
     }
 
   });

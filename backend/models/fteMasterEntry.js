@@ -1,5 +1,6 @@
 'use strict';
 
+var lodash = require('lodash');
 var step = require('h5.step');
 
 module.exports = function setupFteMasterEntryModel(app, mongoose)
@@ -60,36 +61,16 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       max: 3,
       required: true
     },
-    locked: {
-      type: Boolean,
-      default: false
-    },
     createdAt: {
       type: Date,
       required: true
     },
+    creator: {},
     updatedAt: {
       type: Date,
       default: null
     },
-    creator: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
-    },
-    creatorLabel: {
-      type: String,
-      required: true
-    },
-    updater: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      default: null
-    },
-    updaterLabel: {
-      type: String,
-      default: null
-    },
+    updater: {},
     total: {
       type: Number,
       default: null
@@ -105,7 +86,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
   fteMasterEntrySchema.index({subdivision: 1});
   fteMasterEntrySchema.index({date: -1, subdivision: 1});
 
-  fteMasterEntrySchema.statics.createForShift = function(shiftId, user, done)
+  fteMasterEntrySchema.statics.createForShift = function(options, creator, done)
   {
     step(
       function prepareProdFunctionsStep()
@@ -130,7 +111,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       },
       function queryProdFlowsStep()
       {
-        getProdFlowTasks(shiftId.subdivision, this.functions, this.next());
+        getProdFlowTasks(options.subdivision, this.functions, this.next());
       },
       function handleProdFlowsQueryResultStep(err, prodFlows)
       {
@@ -143,7 +124,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       },
       function queryProdTasksStep()
       {
-        mongoose.model('ProdTask').getForSubdivision(shiftId.subdivision, this.next());
+        mongoose.model('ProdTask').getForSubdivision(options.subdivision, this.next());
       },
       function handleProdTasksQueryResultStep(err, prodTasks)
       {
@@ -169,18 +150,16 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       function createFteMasterEntryStep()
       {
         var fteMasterEntryData = {
-          subdivision: shiftId.subdivision,
-          date: shiftId.date,
-          shift: shiftId.no,
+          subdivision: options.subdivision,
+          date: options.date,
+          shift: options.shift,
           total: null,
           tasks: this.tasks,
           locked: false,
           createdAt: new Date(),
-          creator: user._id,
-          creatorLabel: user.login,
+          creator: creator,
           updatedAt: null,
-          updater: null,
-          updaterLabel: null
+          updater: null
         };
 
         mongoose.model('FteMasterEntry').create(fteMasterEntryData, done);
@@ -188,111 +167,41 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     );
   };
 
-  fteMasterEntrySchema.statics.lock = function(_id, user, done)
-  {
-    this.findOne({_id: _id}, function(err, fteMasterEntry)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      if (!fteMasterEntry)
-      {
-        return done(new Error('UNKNOWN'));
-      }
-
-      if (fteMasterEntry.get('locked'))
-      {
-        return done(new Error('LOCKED'));
-      }
-
-      fteMasterEntry.lock(user, done);
-    });
-  };
-
-  fteMasterEntrySchema.statics.addAbsentUser = function(_id, absentUser, user, done)
+  fteMasterEntrySchema.statics.addAbsentUser = function(_id, absentUser, updater, done)
   {
     var update = {
       $set: {
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        updater: updater
       },
       $push: {
         absentUsers: absentUser
       }
     };
 
-    if (user)
-    {
-      update.$set.updater = user._id;
-      update.$set.updaterLabel = user.login;
-    }
-
     this.update({_id: _id}, update, done);
   };
 
-  fteMasterEntrySchema.statics.removeAbsentUser = function(_id, absentUserId, user, done)
+  fteMasterEntrySchema.statics.removeAbsentUser = function(_id, absentUserId, updater, done)
   {
     var update = {
       $set: {
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        updater: updater
       },
       $pull: {
         absentUsers: {id: absentUserId}
       }
     };
 
-    if (user)
-    {
-      update.$set.updater = user._id;
-      update.$set.updaterLabel = user.login;
-    }
-
     this.update({_id: _id}, update, done);
   };
 
-  fteMasterEntrySchema.methods.lock = function(user, done)
-  {
-    this.set({
-      updatedAt: new Date(),
-      locked: true,
-      total: calcTotal(this)
-    });
-
-    if (user)
-    {
-      this.set({
-        updater: user._id,
-        updaterLabel: user.login
-      });
-    }
-
-    this.save(function(err, fteMasterEntry)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      app.broker.publish('fte.master.locked', {
-        user: user,
-        model: {
-          _id: fteMasterEntry.get('_id'),
-          subdivision: fteMasterEntry.get('subdivision'),
-          date: fteMasterEntry.get('date'),
-          shift: fteMasterEntry.get('shift')
-        }
-      });
-
-      done(null, fteMasterEntry);
-    });
-  };
-
-  function calcTotal(fteMasterEntry)
+  fteMasterEntrySchema.methods.calcTotal = function()
   {
     var total = 0;
 
-    fteMasterEntry.tasks.forEach(function(task)
+    this.tasks.forEach(function(task)
     {
       task.functions.forEach(function(taskFunction)
       {
@@ -303,8 +212,86 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       });
     });
 
-    return total;
-  }
+    this.total = total;
+  };
+
+  fteMasterEntrySchema.methods.updateCount = function(options, updater, done)
+  {
+    var task = this.tasks[options.taskIndex];
+
+    if (!task)
+    {
+      return done(new Error('INPUT'));
+    }
+
+    var prodFunction = task.functions[options.functionIndex];
+
+    if (!prodFunction)
+    {
+      return done(new Error('INPUT'));
+    }
+
+    var company = prodFunction.companies[options.companyIndex];
+
+    if (!company)
+    {
+      return done(new Error('INPUT'));
+    }
+
+    if (company.count === options.newCount)
+    {
+      return done();
+    }
+
+    company.count = options.newCount;
+
+    this.markModified('tasks');
+    this.calcTotal();
+    this.set({
+      updatedAt: new Date(),
+      updater: updater
+    });
+    this.save(done);
+  };
+
+  fteMasterEntrySchema.methods.updatePlan = function(options, updater, done)
+  {
+    var task = lodash.find(this.tasks, function(task)
+    {
+      return String(task.id) === options.taskId;
+    });
+
+    if (!task)
+    {
+      return done(new Error('INPUT'));
+    }
+
+    if (task.noPlan === options.newValue)
+    {
+      return done();
+    }
+
+    if (options.newValue)
+    {
+      task.functions.forEach(function(prodFunction)
+      {
+        prodFunction.companies.forEach(function(company)
+        {
+          company.count = 0;
+        });
+      });
+    }
+
+    task.noPlan = options.newValue;
+
+    this.markModified('tasks');
+    this.calcTotal();
+    this.set({
+      updatedAt: new Date(),
+      updater: updater
+    });
+    this.save(done);
+  };
 
   function getProdFunctionCompanyEntries(prodFunction)
   {

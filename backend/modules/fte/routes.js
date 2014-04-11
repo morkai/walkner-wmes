@@ -4,6 +4,7 @@ var lodash = require('lodash');
 var crud = require('../express/crud');
 var exportFteLeaderEntries = require('./exportFteLeaderEntries');
 var exportFteMasterEntries = require('./exportFteMasterEntries');
+var canManage = require('./canManage');
 
 module.exports = function setUpFteRoutes(app, fteModule)
 {
@@ -43,6 +44,12 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
   express.get('/fte/master/:id', canViewMaster, crud.readRoute.bind(null, app, FteMasterEntry));
 
+  express.del(
+    '/fte/master/:id',
+    canDelete.bind(null, FteMasterEntry),
+    crud.deleteRoute.bind(null, app, FteMasterEntry)
+  );
+
   express.get(
     '/fte/leader',
     canViewLeader,
@@ -61,13 +68,19 @@ module.exports = function setUpFteRoutes(app, fteModule)
       next();
     },
     crud.exportRoute.bind(null, {
-      filename: 'WMES-FTE_STORAGE',
+      filename: 'WMES-FTE_WAREHOUSE',
       serializeStream: exportFteLeaderEntries.bind(null, subdivisionsModule),
       model: FteLeaderEntry
     })
   );
 
   express.get('/fte/leader/:id', canViewLeader, crud.readRoute.bind(null, app, FteLeaderEntry));
+
+  express.del(
+    '/fte/leader/:id',
+    canDelete.bind(null, FteLeaderEntry),
+    crud.deleteRoute.bind(null, app, FteLeaderEntry)
+  );
 
   function limitToDivision(req, res, next)
   {
@@ -92,9 +105,9 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
     subdivisionsModule.models.forEach(function(subdivisionModel)
     {
-      if (subdivisionModel.get('division') === divisionTerm.args[1])
+      if (subdivisionModel.division === divisionTerm.args[1])
       {
-        subdivisions.push(subdivisionModel.get('_id').toString());
+        subdivisions.push(subdivisionModel._id.toString());
       }
     });
 
@@ -102,5 +115,25 @@ module.exports = function setUpFteRoutes(app, fteModule)
     divisionTerm.args = ['subdivision', subdivisions];
 
     next();
+  }
+
+  function canDelete(FteEntry, req, res, next)
+  {
+    FteEntry.findById(req.params.id).exec(function(err, fteEntry)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      req.model = fteEntry;
+
+      if (fteEntry && !canManage(req.session.user, fteEntry))
+      {
+        return res.send(403);
+      }
+
+      return next();
+    });
   }
 };

@@ -1,20 +1,22 @@
 define([
   'underscore',
   'jquery',
-  'moment',
   'app/i18n',
   'app/user',
   'app/core/View',
+  'app/core/util/onModelDeleted',
+  'app/users/util/setUpUserSelect2',
   'app/fte/templates/masterEntry',
   'app/fte/templates/absentUserRow',
   './fractionsUtil'
 ], function(
   _,
   $,
-  moment,
   t,
   user,
   View,
+  onModelDeleted,
+  setUpUserSelect2,
   masterEntryTemplate,
   absentUserRowTemplate,
   fractionsUtil
@@ -41,35 +43,26 @@ define([
       'click .fte-masterEntry-absence-remove': 'removeAbsentUser'
     },
 
-    initialize: function()
+    remoteTopics: function()
     {
-      var view = this;
+      var topics = {};
 
-      this.listenToOnce(this.model, 'sync', function()
-      {
-        var redirectToDetails = view.redirectToDetails.bind(view);
+      topics['fte.master.updated.' + this.model.id] = 'onRemoteEdit';
+      topics['fte.master.deleted'] = 'onModelDeleted';
 
-        view.pubsub.subscribe('fte.master.updated.' + view.model.id, view.onRemoteEdit.bind(view));
-        view.pubsub.subscribe('fte.master.locked.' + view.model.id, redirectToDetails);
-        view.pubsub.subscribe('shiftChanged', redirectToDetails);
-      });
+      return topics;
+    },
+
+    beforeRender: function()
+    {
+      this.stopListening(this.model, 'change', this.render);
     },
 
     afterRender: function()
     {
-      if (this.model.get('locked'))
-      {
-        return this.broker.publish('router.navigate', {
-          url: this.model.genClientUrl(),
-          replace: true,
-          trigger: true
-        });
-      }
-
       this.listenToOnce(this.model, 'change', this.render);
 
       this.setUpUserFinder();
-
       this.focusFirstEnabledInput();
     },
 
@@ -84,9 +77,17 @@ define([
 
     setUpUserFinder: function()
     {
-      var $userFinder = this.$('.fte-masterEntry-absence-userFinder');
+      var view = this;
       var $entries = this.$('.fte-masterEntry-absence-entries');
       var $noEntries = this.$('.fte-masterEntry-absence-noEntries');
+      var $userFinder = setUpUserSelect2(this.$('.fte-masterEntry-absence-userFinder'), {
+        userFilter: function(user)
+        {
+          var selector = '.fte-masterEntry-absence-remove[data-userId="' + user._id + '"]';
+
+          return $entries.find(selector).length === 0;
+        }
+      });
 
       if ($entries.children().length)
       {
@@ -96,56 +97,6 @@ define([
       {
         $entries.hide();
       }
-
-      $userFinder.select2({
-        allowClear: true,
-        minimumInputLength: 3,
-        ajax: {
-          cache: true,
-          quietMillis: 500,
-          url: function(term)
-          {
-            term = term.trim();
-
-            var property = /^[0-9]+$/.test(term) ? 'personellId' : 'lastName';
-
-            term = encodeURIComponent('^' + term);
-
-            return '/users'
-              + '?select(personellId,lastName,firstName)'
-              + '&sort(lastName)'
-              + '&limit(20)&regex(' + property + ',' + term + ',i)';
-          },
-          results: function(data)
-          {
-            return {
-              results: (data.collection || [])
-                .filter(function(user)
-                {
-                  var selector = '.fte-masterEntry-absence-remove[data-userId="' + user._id + '"]';
-
-                  return $entries.find(selector).length === 0;
-                })
-                .map(function(user)
-                {
-                  var name = user.lastName && user.firstName
-                    ? (user.firstName + ' ' + user.lastName)
-                    : '-';
-                  var personellId = user.personellId ? user.personellId : '-';
-
-                  return {
-                    id: user._id,
-                    text: name + ' (' + personellId + ')',
-                    name: name,
-                    personellId: personellId
-                  };
-                })
-            };
-          }
-        }
-      });
-
-      var view = this;
 
       $userFinder.on('change', function(e)
       {
@@ -162,7 +113,7 @@ define([
         {
           if (err)
           {
-            console.error(err);
+            view.trigger('remoteError', err);
           }
           else
           {
@@ -268,11 +219,11 @@ define([
       {
         if (err)
         {
-          console.error(err);
-
           e.target.checked = !e.target.checked;
 
           view.toggleCountsInRow($noPlan);
+
+          view.trigger('remoteError', err);
         }
       });
     },
@@ -330,8 +281,6 @@ define([
       {
         if (err)
         {
-          console.error(err);
-
           if (countEl.getAttribute('data-remote') !== 'true')
           {
             countEl.value = oldCount;
@@ -340,6 +289,8 @@ define([
 
             view.recount(countEl);
           }
+
+          view.trigger('remoteError', err);
         }
       });
 
@@ -428,9 +379,9 @@ define([
       {
         if (err)
         {
-          console.error(err);
-
           $button.attr('disabled', false);
+
+          view.trigger('remoteError', err);
         }
         else
         {
@@ -447,6 +398,8 @@ define([
       {
         return;
       }
+
+      this.model.handleUpdateMessage(message, true);
 
       switch (message.type)
       {
@@ -543,12 +496,9 @@ define([
       this.recount($count[0], message.taskIndex, message.companyIndex);
     },
 
-    redirectToDetails: function()
+    onModelDeleted: function(message)
     {
-      this.broker.publish('router.navigate', {
-        url: this.model.genClientUrl(),
-        trigger: true
-      });
+      onModelDeleted(this.broker, this.model, message);
     }
 
   });

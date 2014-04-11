@@ -28,11 +28,6 @@ define([
       return topics;
     },
 
-    initialize: function()
-    {
-      this.lastRefreshAt = 0;
-    },
-
     serialize: function()
     {
       return _.extend(this.model.serialize(), {

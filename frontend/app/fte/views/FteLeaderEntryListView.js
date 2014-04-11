@@ -19,7 +19,7 @@ define([
 
     remoteTopics: {
       'fte.leader.created': 'refreshCollection',
-      'fte.leader.locked': 'refreshCollection'
+      'fte.leader.deleted': 'onModelDeleted'
     },
 
     serializeColumns: function()
@@ -38,35 +38,21 @@ define([
       return function(row)
       {
         var model = collection.get(row._id);
-        var actions = [ListView.actions.viewDetails(model)];
-        var privilegePrefix = model.getPrivilegePrefix();
-
-        if (row.locked)
-        {
-          actions.push({
-            icon: 'print',
-            label: t(model.getNlsDomain(), 'LIST:ACTION:print'),
-            href: model.genClientUrl('print')
-          });
-        }
-        else if (user.isAllowedTo(privilegePrefix + ':MANAGE'))
-        {
-          if (!user.isAllowedTo(privilegePrefix + ':ALL'))
+        var actions = [
+          ListView.actions.viewDetails(model),
           {
-            var userDivision = user.getDivision();
-            var subdivision = subdivisions.get(model.get('subdivision'));
-
-            if (userDivision && userDivision.get('_id') !== subdivision.get('division'))
-            {
-              return actions;
-            }
+            icon: 'print',
+            label: t('core', 'LIST:ACTION:print'),
+            href: model.genClientUrl('print')
           }
+        ];
 
-          actions.push({
-            icon: 'edit',
-            label: t(model.getNlsDomain(), 'LIST:ACTION:edit'),
-            href: model.genClientUrl('edit')
-          });
+        if (model.isEditable(user))
+        {
+          actions.push(
+            ListView.actions.edit(model),
+            ListView.actions.delete(model)
+          );
         }
 
         return actions;
@@ -77,10 +63,9 @@ define([
     {
       return this.collection.map(function(model)
       {
-        var subdivision = subdivisions.get(model.get('subdivision'));
         var row = model.toJSON();
 
-        row.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
+        row.subdivision = model.getSubdivisionPath();
         row.date = moment(row.date).format('LL');
         row.shift = t('core', 'SHIFT:' + row.shift);
 

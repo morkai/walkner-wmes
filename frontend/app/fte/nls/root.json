@@ -1,58 +1,61 @@
 {
   "root": {
-    "BREADCRUMBS:leader:entryList": "FTE (distribution)",
-    "BREADCRUMBS:leader:entryForm": "Allocation",
-    "BREADCRUMBS:leader:entryDetails": "Details",
-    "BREADCRUMBS:leader:currentEntry": "Subdivision picking",
-    "BREADCRUMBS:master:entryList": "FTE (production)",
-    "BREADCRUMBS:master:entryForm": "Allocation",
-    "BREADCRUMBS:master:entryDetails": "Details",
-    "BREADCRUMBS:master:currentEntry": "Division picking",
+    "BREADCRUMBS:leader:browse": "FTE (warehouse)",
+    "BREADCRUMBS:master:browse": "FTE (production)",
+    "BREADCRUMBS:addForm": "Choosing",
+    "BREADCRUMBS:editForm": "Editing",
+    "BREADCRUMBS:details": "Resources",
+    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
     "MSG:LOADING_FAILURE": "Failed to load the FTE data :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the specific FTE data :(",
+    "MSG:DELETED": "FTE entry <em>{label}</em> was deleted.",
 
-    "PAGE_ACTION:currentEntry": "Allocate FTE",
     "PAGE_ACTION:print": "Show printable version",
-    "PAGE_ACTION:lock": "Lock entry",
+    "PAGE_ACTION:add": "Allocate resources",
     "PAGE_ACTION:edit": "Edit entry",
-    "PAGE_ACTION:export": "Export entry",
-    "LIST:ACTION:print": "Show printable version",
-    "LIST:ACTION:edit": "Edit entry",
+    "PAGE_ACTION:delete": "Delete entry",
+    "PAGE_ACTION:export": "Export entries",
 
     "FILTER:DATE": "Date:",
     "FILTER:LIMIT": "Limit:",
     "FILTER:SHIFT": "Shift:",
-    "FILTER:BUTTON": "Filter FTE",
+    "FILTER:BUTTON": "Filter entries",
 
-    "currentEntry:panel:title": "Subdivision picker for FTE allocation form",
-    "currentEntry:panel:warning": "<p>A new entry will be created, if the chosen subdivision won't have an entry for the current shift.</p>",
-    "currentEntry:submit": "Allocate FTE",
-    "currentEntry:msg:offline": "Cannot allocate FTE: no connection with the server :(",
-    "currentEntry:msg:failure": "Failed to create the FTE entry :(",
-
-    "leaderEntry:panel:title": "FTE allocation",
-    "leaderEntry:panel:title:editable": "FTE allocation form",
-    "leaderEntry:column:task": "Production task",
-    "leaderEntry:column:taskTotal": "Total",
-    "leaderEntry:column:companyTotal": "Total",
-    "leaderEntry:msg:lockFailure": "Failed to lock the FTE entry :(",
+    "addForm:panel:title": "FTE entry find/create form",
+    "addForm:submit": "Allocate resources",
+    "addForm:msg:offline": "Cannot allocate FTE: no connection with the server :(",
+    "addForm:msg:failure": "Failed to find/create the FTE entry for editing: {error, select, AUTH{no privileges!} INPUT{invalid input data!} other{{error}}}",
 
     "property:date": "Date",
     "property:shift": "Shift",
 
-    "masterEntry:tasksPanel:title": "FTE allocation",
-    "masterEntry:tasksPanel:title:editable": "FTE allocation form",
-    "masterEntry:absencePanel:title": "Personell absence",
-    "masterEntry:absencePanel:title:editable": "Personell absence form",
-    "masterEntry:absence:searchPlaceholder": "Search users by last name or personell ID...",
+    "label": "{subdivision}, {date}, {shift} shift",
+
+    "panel:info": "All changes are saved on-the-fly!",
+
+    "leaderEntry:panel:title": "Resource allocation",
+    "leaderEntry:panel:title:editable": "Resource allocation form",
+    "leaderEntry:column:task": "Production task",
+    "leaderEntry:column:taskTotal": "Total",
+    "leaderEntry:column:companyTotal": "Total",
+
+    "masterEntry:tasksPanel:title": "Resource allocation",
+    "masterEntry:tasksPanel:title:editable": "Resource allocation form",
+    "masterEntry:absencePanel:title": "Personnel absence",
+    "masterEntry:absencePanel:title:editable": "Personnel absence form",
     "masterEntry:column:task": "Production flow/<em>Production task</em>",
     "masterEntry:column:noPlan": "No plan?",
     "masterEntry:column:total": "Total",
-    "masterEntry:msg:lockFailure": "Failed to lock the FTE entry :(",
 
     "print:hdLeft": "FTE allocated to {subdivision}",
-    "print:hdRight": "{date}, {shift} shift"
+    "print:hdRight": "{date}, {shift} shift",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "FTE entry deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete FTE entry",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen FTE entry?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> FTE entry?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the FTE entry :-("
   },
   "pl": true
 }

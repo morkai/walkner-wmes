@@ -1,0 +1,28 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <%- t('fte', 'addForm:panel:title') %>
+  </div>
+  <div class="panel-body">
+    <div class="form-group orgUnitDropdowns-container"></div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-date" class="control-label"><%- t('fte', 'property:date') %></label>
+      <input id="<%- idPrefix %>-date" class="form-control" type="date" value="<%- date %>" max="<%- date %>" min="2013-12-01" required>
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-shift-any"><%- t('fte', 'property:shift') %></label>
+      <div class="filter-radio-group">
+        <% [1, 2, 3].forEach(function(shiftNo) { %>
+        <label class="radio-inline">
+          <input name="shift" type="radio" value="<%- shiftNo %>" <%- shift === shiftNo ? 'checked' : '' %>> <%- t('core', 'SHIFT:' + shiftNo) %>
+        </label>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary">
+      <i class="fa fa-plus"></i>
+      <span><%= t('fte', 'addForm:submit') %></span>
+    </button>
+  </div>
+</div>

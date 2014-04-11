@@ -1,12 +1,14 @@
 define([
   'underscore',
   'app/core/View',
+  'app/core/util/onModelDeleted',
   'app/fte/templates/masterEntry',
   'app/fte/templates/absentUserRow',
   './fractionsUtil'
 ], function(
   _,
   View,
+  onModelDeleted,
   masterEntryTemplate,
   absentUserRowTemplate,
   fractionsUtil
@@ -19,21 +21,14 @@ define([
 
     idPrefix: 'masterEntryDetails',
 
-    initialize: function()
+    remoteTopics: function()
     {
-      this.lastRefreshAt = 0;
+      var topics = {};
 
-      var view = this;
+      topics['fte.master.updated.' + this.model.id] = 'onModelUpdated';
+      topics['fte.master.deleted'] = 'onModelDeleted';
 
-      this.listenToOnce(this.model, 'sync', function()
-      {
-        if (view.model.get('locked'))
-        {
-          return;
-        }
-
-        view.pubsub.subscribe('fte.master.updated.' + view.model.id, this.refreshModel.bind(this));
-      });
+      return topics;
     },
 
     serialize: function()
@@ -43,6 +38,11 @@ define([
         renderAbsentUserRow: absentUserRowTemplate,
         round: fractionsUtil.round
       });
+    },
+
+    beforeRender: function()
+    {
+      this.stopListening(this.model, 'change', this.render);
     },
 
     afterRender: function()
@@ -62,26 +62,14 @@ define([
       }
     },
 
-    refreshModel: function()
+    onModelUpdated: function(message)
     {
-      var now = Date.now();
-      var diff = now - this.lastRefreshAt;
+      this.model.handleUpdateMessage(message);
+    },
 
-      if (diff < 1000)
-      {
-        if (!this.timers.refresh)
-        {
-          this.timers.refresh = setTimeout(this.refreshModel.bind(this), 1000 - diff);
-        }
-      }
-      else
-      {
-        this.lastRefreshAt = Date.now();
-
-        delete this.timers.refresh;
-
-        this.promised(this.model.fetch());
-      }
+    onModelDeleted: function(message)
+    {
+      onModelDeleted(this.broker, this.model, message);
     }
 
   });

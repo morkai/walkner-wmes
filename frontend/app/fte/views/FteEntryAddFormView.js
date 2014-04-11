@@ -7,7 +7,8 @@ define([
   'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/View',
-  'app/fte/templates/currentEntry'
+  'app/core/util/getShiftStartInfo',
+  'app/fte/templates/addForm'
 ], function(
   t,
   viewport,
@@ -17,7 +18,8 @@ define([
   OrgUnitDropdownsView,
   Model,
   View,
-  currentEntryTemplate
+  getShiftStartInfo,
+  addFormTemplate
 ) {
   'use strict';
 
@@ -25,9 +27,9 @@ define([
 
   return View.extend({
 
-    template: currentEntryTemplate,
+    template: addFormTemplate,
 
-    idPrefix: 'currentEntry',
+    idPrefix: 'addFteEntryForm',
 
     events: {
       'click .btn-primary': 'onSubmit'
@@ -56,6 +58,17 @@ define([
         this.$submit.remove();
         this.$submit = null;
       }
+    },
+
+    serialize: function()
+    {
+      var shiftStartInfo = getShiftStartInfo(new Date());
+
+      return {
+        idPrefix: this.idPrefix,
+        date: shiftStartInfo.moment.format('YYYY-MM-DD'),
+        shift: shiftStartInfo.shift
+      };
     },
 
     afterRender: function()
@@ -90,10 +103,15 @@ define([
         view.oudView.selectValue(model, orgUnit);
 
         view.readonlyDivision =
-          !(user.isAllowedTo(view.model.getPrivilegePrefix() + ':ALL') && !userDivision);
+          !user.isAllowedTo(view.model.getPrivilegePrefix() + ':ALL') && userDivision;
 
         view.oudView.$id('division').select2('readonly', view.readonlyDivision);
         view.oudView.$id(view.readonlyDivision ? 'subdivision' : 'division').select2('focus');
+
+        if (view.readonlyDivision && !view.options.divisionFilter(userDivision))
+        {
+          view.oudView.$id('subdivision').select2('readonly', true);
+        }
       });
     },
 
@@ -104,7 +122,7 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 5000,
-          text: t(this.model.getNlsDomain(), 'currentEntry:msg:offline')
+          text: t('fte', 'addForm:msg:offline')
         });
       }
 
@@ -117,46 +135,41 @@ define([
       $subdivision.select2('readonly', true);
       this.$submit.attr('disabled', true);
 
-      this.socket.emit(
-        this.model.getTopicPrefix() + '.getCurrentEntryId',
-        $subdivision.select2('val'),
-        function(err, currentEntryId)
+      var messageType = this.model.getTopicPrefix() + '.findOrCreate';
+      var options = {
+        subdivision: $subdivision.select2('val'),
+        date: new Date(this.$id('date').val() + ' 00:00:00'),
+        shift: parseInt(this.$('input[name=shift]:checked').val(), 10)
+      };
+
+      this.socket.emit(messageType, options, function(err, fteEntryId)
+      {
+        if (fteEntryId)
         {
-          if (currentEntryId)
+          view.model.set('_id', fteEntryId);
+        }
+
+        if (err)
+        {
+          if (err.message === 'AUTH' && fteEntryId)
           {
-            view.model.set('_id', currentEntryId);
+            return view.trigger('uneditable', view.model);
           }
 
-          if (err)
-          {
-            if (err.message === 'LOCKED')
-            {
-              return view.broker.publish('router.navigate', {
-                url: view.model.genClientUrl(),
-                trigger: true
-              });
-            }
+          $icon.removeClass('fa-spinner fa-spin').addClass('fa-edit');
+          $division.select2('readonly', view.readonlyDivision);
+          $subdivision.select2('readonly', false);
+          view.$submit.attr('disabled', false).focus();
 
-            $icon.removeClass('fa-spinner fa-spin').addClass('fa-edit');
-            $division.select2('readonly', view.readonlyDivision);
-            $subdivision.select2('readonly', false);
-            view.$submit.attr('disabled', false).focus();
-
-            console.error(err);
-
-            return viewport.msg.show({
-              type: 'error',
-              time: 5000,
-              text: t(view.model.getNlsDomain(), 'currentEntry:msg:failure')
-            });
-          }
-
-          view.broker.publish('router.navigate', {
-            url: view.model.genClientUrl('edit'),
-            trigger: true
+          return viewport.msg.show({
+            type: 'error',
+            time: 5000,
+            text: t('fte', 'addForm:msg:failure', {error: err.message})
           });
         }
-      );
+
+        view.trigger('editable', view.model);
+      });
     }
 
   });

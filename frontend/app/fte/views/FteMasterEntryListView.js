@@ -9,7 +9,7 @@ define([
 
     remoteTopics: {
       'fte.master.created': 'refreshCollection',
-      'fte.master.locked': 'refreshCollection'
+      'fte.master.deleted': 'onModelDeleted'
     }
 
   });

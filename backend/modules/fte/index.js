@@ -37,23 +37,6 @@ exports.start = function startFteModule(app, module)
     setUpCommands.bind(null, app, module)
   );
 
-  app.onModuleReady(
-    [
-      module.config.mongooseId
-    ],
-    function()
-    {
-      var lockMasterEntries = lockEntries.bind(null, 'master');
-      var lockLeaderEntries = lockEntries.bind(null, 'leader');
-
-      app.broker.subscribe('shiftChanged', lockMasterEntries);
-      app.broker.subscribe('shiftChanged', lockLeaderEntries);
-
-      lockMasterEntries();
-      lockLeaderEntries();
-    }
-  );
-
   setUpShiftChangeBroadcast();
 
   function setUpShiftChangeBroadcast()
@@ -110,44 +93,5 @@ exports.start = function startFteModule(app, module)
       date: date,
       no: no
     };
-  }
-
-  function lockEntries(type)
-  {
-    var FteEntryModel =
-      app[module.config.mongooseId].model(type === 'master' ? 'FteMasterEntry': 'FteLeaderEntry');
-    var currentShift = getCurrentShift();
-    var condition = {
-      locked: false,
-      date: {$ne: currentShift.date}
-    };
-
-    FteEntryModel.find(condition, function(err, fteEntries)
-    {
-      if (err)
-      {
-        return module.error("Failed to lock %s entries: %s", type, err.message);
-      }
-
-      if (!fteEntries.length)
-      {
-        return;
-      }
-
-      module.info("Locking %d %s entries...", fteEntries.length, type);
-
-      fteEntries.forEach(function(fteEntry)
-      {
-        fteEntry.lock(null, function(err)
-        {
-          if (err)
-          {
-            module.error(
-              "Failed to lock %s entry (%s): %s", type, fteEntry.get('_id'), err.message
-            );
-          }
-        });
-      });
-    });
   }
 };

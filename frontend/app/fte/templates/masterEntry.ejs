@@ -10,11 +10,14 @@
     </div>
     <div class="fte-property">
       <span class="fte-property-name"><%- t('fte', 'property:shift') %></span>
-      <span class="fte-property-value"><%- t('core', 'SHIFT:' + shift) %></span>
+      <span class="fte-property-value"><%- shift %></span>
     </div>
   </div>
   <div class="panel panel-primary">
     <div class="panel-heading"><%- t('fte', 'masterEntry:tasksPanel:title' + (editable ? ':editable': '')) %></div>
+    <% if (editable) { %>
+    <div class="message message-inline message-info"><%- t('fte', 'panel:info') %></div>
+    <% } %>
     <table class="table table-bordered table-condensed table-hover fte-masterEntry">
       <thead>
       <tr>
@@ -115,7 +118,7 @@
     <div class="panel-heading"><%- t('fte', 'masterEntry:absencePanel:title' + (editable ? ':editable': '')) %></div>
     <% if (editable) { %>
     <div class="fte-masterEntry-absence-userFinder-container">
-      <input class="fte-masterEntry-absence-userFinder" type="text" data-placeholder="<%- t('fte', 'masterEntry:absence:searchPlaceholder') %>">
+      <input class="fte-masterEntry-absence-userFinder" type="text">
     </div>
     <% } %>
     <table class="table table-bordered table-condensed table-hover fte-masterEntry-absence">

@@ -1,5 +1,4 @@
 define([
-  'jquery',
   'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
@@ -9,7 +8,6 @@ define([
   '../views/FteEntryFilterView',
   'app/fte/templates/listPage'
 ], function(
-  $,
   t,
   bindLoadingMessage,
   pageActions,
@@ -30,17 +28,17 @@ define([
     pageId: 'fteMasterEntryList',
 
     breadcrumbs: [
-      t.bound('fte', 'BREADCRUMBS:master:entryList')
+      t.bound('fte', 'BREADCRUMBS:master:browse')
     ],
 
     actions: function(layout)
     {
       return [
         {
-          label: t.bound('fte', 'PAGE_ACTION:currentEntry'),
-          href: '#fte/master/current',
-          icon: 'edit',
-          privileges: 'FTE:MASTER:MANAGE'
+          label: t.bound('fte', 'PAGE_ACTION:add'),
+          href: '#fte/master;add',
+          icon: 'plus',
+          privileges: 'FTE:MASTER:MANAGE|PROD_DATA:MANAGE'
         },
         pageActions.export(layout, this, this.collection)
       ];

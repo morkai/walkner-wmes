@@ -2,14 +2,17 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
+  './FteMasterEntry',
+  './FteLeaderEntry',
   './pages/FteMasterEntryListPage',
-  './pages/FteMasterCurrentEntryPage',
-  './pages/FteMasterEntryFormPage',
+  './pages/FteMasterEntryAddFormPage',
+  './pages/FteMasterEntryEditFormPage',
   './pages/FteMasterEntryDetailsPage',
   './pages/FteMasterEntryDetailsPrintablePage',
   './pages/FteLeaderEntryListPage',
-  './pages/FteLeaderCurrentEntryPage',
-  './pages/FteLeaderEntryFormPage',
+  './pages/FteLeaderEntryAddFormPage',
+  './pages/FteLeaderEntryEditFormPage',
   './pages/FteLeaderEntryDetailsPage',
   './pages/FteLeaderEntryDetailsPrintablePage',
   'i18n!app/nls/fte'
@@ -17,27 +20,35 @@ define([
   router,
   viewport,
   user,
+  showDeleteFormPage,
+  FteMasterEntry,
+  FteLeaderEntry,
   FteMasterEntryListPage,
-  FteMasterCurrentEntryPage,
-  FteMasterEntryFormPage,
+  FteMasterEntryAddFormPage,
+  FteMasterEntryEditFormPage,
   FteMasterEntryDetailsPage,
   FteMasterEntryDetailsPrintablePage,
   FteLeaderEntryListPage,
-  FteLeaderCurrentEntryPage,
-  FteLeaderEntryFormPage,
+  FteLeaderEntryAddFormPage,
+  FteLeaderEntryEditFormPage,
   FteLeaderEntryDetailsPage,
   FteLeaderEntryDetailsPrintablePage
 ) {
   'use strict';
 
   var canViewMaster = user.auth('FTE:MASTER:VIEW');
-  var canManageMaster = user.auth('FTE:MASTER:MANAGE');
+  var canManageMaster = user.auth('FTE:MASTER:MANAGE|PROD_DATA:MANAGE');
   var canViewLeader = user.auth('FTE:LEADER:VIEW');
-  var canManageLeader = user.auth('FTE:LEADER:MANAGE');
+  var canManageLeader = user.auth('FTE:LEADER:MANAGE|PROD_DATA:MANAGE');
 
   router.map('/fte/master', canViewMaster, function(req)
   {
     viewport.showPage(new FteMasterEntryListPage({rql: req.rql}));
+  });
+
+  router.map('/fte/master;add', canManageMaster, function()
+  {
+    viewport.showPage(new FteMasterEntryAddFormPage());
   });
 
   router.map('/fte/master/:id', canViewMaster, function(req)
@@ -47,7 +58,7 @@ define([
 
   router.map('/fte/master/:id;edit', canManageMaster, function(req)
   {
-    viewport.showPage(new FteMasterEntryFormPage({modelId: req.params.id}));
+    viewport.showPage(new FteMasterEntryEditFormPage({modelId: req.params.id}));
   });
 
   router.map('/fte/master/:id;print', canViewMaster, function(req)
@@ -55,14 +66,18 @@ define([
     viewport.showPage(new FteMasterEntryDetailsPrintablePage({modelId: req.params.id}));
   });
 
-  router.map('/fte/master/current', canManageMaster, function()
-  {
-    viewport.showPage(new FteMasterCurrentEntryPage());
-  });
+  router.map(
+    '/fte/master/:id;delete', canManageMaster, showDeleteFormPage.bind(null, FteMasterEntry)
+  );
 
   router.map('/fte/leader', canViewLeader, function(req)
   {
     viewport.showPage(new FteLeaderEntryListPage({rql: req.rql}));
+  });
+
+  router.map('/fte/leader;add', canManageLeader, function()
+  {
+    viewport.showPage(new FteLeaderEntryAddFormPage());
   });
 
   router.map('/fte/leader/:id', canViewLeader, function(req)
@@ -72,7 +87,7 @@ define([
 
   router.map('/fte/leader/:id;edit', canManageLeader, function(req)
   {
-    viewport.showPage(new FteLeaderEntryFormPage({modelId: req.params.id}));
+    viewport.showPage(new FteLeaderEntryEditFormPage({modelId: req.params.id}));
   });
 
   router.map('/fte/leader/:id;print', canViewLeader, function(req)
@@ -80,8 +95,7 @@ define([
     viewport.showPage(new FteLeaderEntryDetailsPrintablePage({modelId: req.params.id}));
   });
 
-  router.map('/fte/leader/current', canManageLeader, function()
-  {
-    viewport.showPage(new FteLeaderCurrentEntryPage());
-  });
+  router.map(
+    '/fte/leader/:id;delete', canManageLeader, showDeleteFormPage.bind(null, FteLeaderEntry)
+  );
 });

@@ -10,11 +10,14 @@
     </div>
     <div class="fte-property">
       <span class="fte-property-name"><%- t('fte', 'property:shift') %></span>
-      <span class="fte-property-value"><%- t('core', 'SHIFT:' + shift) %></span>
+      <span class="fte-property-value"><%- shift %></span>
     </div>
   </div>
   <div class="panel panel-primary">
     <div class="panel-heading"><%- t('fte', 'leaderEntry:panel:title' + (editable ? ':editable': '')) %></div>
+    <% if (editable) { %>
+    <div class="message message-inline message-info"><%- t('fte', 'panel:info') %></div>
+    <% } %>
     <table class="table table-bordered table-condensed table-hover fte-leaderEntry">
       <thead>
         <tr>

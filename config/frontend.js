@@ -51,9 +51,8 @@ exports.events = {
       'app.started',
       'users.login', 'users.logout',
       '*.added', '*.edited',
-      'fte.leader.created', 'fte.leader.locked',
-      'fte.master.created', 'fte.master.locked',
-      'hourlyPlans.created', 'hourlyPlans.locked'
+      'fte.leader.created', 'fte.master.created',
+      'hourlyPlans.created'
     ],
     info: [
       'events.**',
@@ -62,7 +61,8 @@ exports.events = {
     ],
     warning: [
       'users.loginFailure',
-      '*.deleted'
+      '*.deleted',
+      'fte.leader.deleted', 'fte.master.deleted'
     ],
     error: [
       'users.syncFailed'
@@ -88,7 +88,7 @@ exports.pubsub = {
     'events.saved',
     '*.added', '*.edited', '*.deleted', '*.synced',
     'shiftChanged',
-    'fte.master.*', 'fte.leader.*',
+    'fte.master.**', 'fte.leader.**',
     'hourlyPlans.created', 'hourlyPlans.updated.*',
     'users.syncFailed',
     'production.synced.*', 'production.edited.**',

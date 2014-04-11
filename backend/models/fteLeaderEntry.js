@@ -56,36 +56,16 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       max: 3,
       required: true
     },
-    locked: {
-      type: Boolean,
-      default: false
-    },
     createdAt: {
       type: Date,
       required: true
     },
+    creator: {},
     updatedAt: {
       type: Date,
       default: null
     },
-    creator: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
-    },
-    creatorLabel: {
-      type: String,
-      required: true
-    },
-    updater: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      default: null
-    },
-    updaterLabel: {
-      type: String,
-      default: null
-    },
+    updater: {},
     prodDivisionCount: {
       type: Number,
       required: true,
@@ -102,11 +82,11 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   fteLeaderEntrySchema.index({date: -1});
 
-  fteLeaderEntrySchema.statics.createForShift = function(shiftId, user, done)
+  fteLeaderEntrySchema.statics.createForShift = function(options, creator, done)
   {
     var prodDivisions = app.divisions.models
       .filter(function(division) { return division.type === 'prod'; })
-      .map(function(division) { return division.get('_id'); })
+      .map(function(division) { return division._id; })
       .sort();
 
     step(
@@ -136,7 +116,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       },
       function queryProdTasksStep()
       {
-        mongoose.model('ProdTask').getForSubdivision(shiftId.subdivision, this.next());
+        mongoose.model('ProdTask').getForSubdivision(options.subdivision, this.next());
       },
       function handleProdTasksQueryResultStep(err, prodTasks)
       {
@@ -174,16 +154,15 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       function createFteLeaderEntryStep()
       {
         var fteLeaderEntryData = {
-          subdivision: shiftId.subdivision,
-          date: shiftId.date,
-          shift: shiftId.no,
+          subdivision: options.subdivision,
+          date: options.date,
+          shift: options.shift,
           prodDivisionCount: prodDivisions.length,
           fteDiv: this.fteDiv ? prodDivisions : null,
           totals: null,
           tasks: this.prodTasks,
           createdAt: new Date(),
-          creator: user._id,
-          creatorLabel: user.login
+          creator: creator
         };
 
         mongoose.model('FteLeaderEntry').create(fteLeaderEntryData, done);
@@ -191,80 +170,20 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     );
   };
 
-  fteLeaderEntrySchema.statics.lock = function(_id, user, done)
-  {
-    this.findOne({_id: _id}, function(err, fteLeaderEntry)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      if (!fteLeaderEntry)
-      {
-        return done(new Error('UNKNOWN'));
-      }
-
-      if (fteLeaderEntry.get('locked'))
-      {
-        return done(new Error('LOCKED'));
-      }
-
-      fteLeaderEntry.lock(user, done);
-    });
-  };
-
-  fteLeaderEntrySchema.methods.lock = function(user, done)
-  {
-    this.set({
-      updatedAt: new Date(),
-      locked: true,
-      totals: calcTotals(this)
-    });
-
-    if (user)
-    {
-      this.set({
-        updater: user._id,
-        updaterLabel: user.login
-      });
-    }
-
-    this.save(function(err, fteLeaderEntry)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      app.broker.publish('fte.leader.locked', {
-        user: user,
-        model: {
-          _id: fteLeaderEntry.get('_id'),
-          subdivision: fteLeaderEntry.get('subdivision'),
-          date: fteLeaderEntry.get('date'),
-          shift: fteLeaderEntry.get('shift')
-        }
-      });
-
-      done(null, fteLeaderEntry);
-    });
-  };
-
-  function calcTotals(fteLeaderEntry)
+  fteLeaderEntrySchema.methods.calcTotals = function()
   {
     var totals = {
       overall: 0
     };
 
-    (fteLeaderEntry.fteDiv || []).forEach(function(divisionId)
+    (this.fteDiv || []).forEach(function(divisionId)
     {
       totals[divisionId] = 0;
     });
 
     var keys = Object.keys(totals);
 
-    fteLeaderEntry.tasks.forEach(function(task)
+    this.tasks.forEach(function(task)
     {
       task.companies.forEach(function(fteCompany)
       {
@@ -285,8 +204,49 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       });
     });
 
-    return totals;
-  }
+    this.totals = totals;
+  };
+
+  fteLeaderEntrySchema.methods.updateCount = function(options, updater, done)
+  {
+    var task = this.tasks[options.taskIndex];
+
+    if (!task)
+    {
+      return done(new Error('INPUT'));
+    }
+
+    var company = task.companies[options.companyIndex];
+
+    if (!company)
+    {
+      return done(new Error('INPUT'));
+    }
+
+    if (typeof options.divisionIndex === 'number')
+    {
+      var division = company.count[options.divisionIndex];
+
+      if (!division)
+      {
+        return done(new Error('INPUT'));
+      }
+
+      division.value = options.newCount;
+    }
+    else
+    {
+      company.count = options.newCount;
+    }
+
+    this.markModified('tasks');
+    this.calcTotals();
+    this.set({
+      updatedAt: new Date(),
+      updater: updater
+    });
+    this.save(done);
+  };
 
   mongoose.model('FteLeaderEntry', fteLeaderEntrySchema);
 };

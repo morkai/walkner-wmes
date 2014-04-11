@@ -1,17 +1,17 @@
 define([
   'underscore',
-  'moment',
   'app/i18n',
   'app/user',
   'app/core/View',
+  'app/core/util/onModelDeleted',
   'app/fte/templates/leaderEntry',
   './fractionsUtil'
 ], function(
   _,
-  moment,
   t,
   user,
   View,
+  onModelDeleted,
   leaderEntryTemplate,
   fractionsUtil
 ) {
@@ -28,18 +28,19 @@ define([
       'keyup .fte-leaderEntry-count': 'updateCount'
     },
 
-    initialize: function()
+    remoteTopics: function()
     {
-      var view = this;
+      var topics = {};
 
-      this.listenToOnce(this.model, 'sync', function()
-      {
-        var redirectToDetails = view.redirectToDetails.bind(view);
+      topics['fte.leader.updated.' + this.model.id] = this.onRemoteEdit.bind(this);
+      topics['fte.leader.deleted'] = this.onModelDeleted.bind(this);
 
-        view.pubsub.subscribe('fte.leader.updated.' + view.model.id, view.onRemoteEdit.bind(view));
-        view.pubsub.subscribe('fte.leader.locked.' + view.model.id, redirectToDetails);
-        view.pubsub.subscribe('shiftChanged', redirectToDetails);
-      });
+      return topics;
+    },
+
+    beforeRender: function()
+    {
+      this.stopListening(this.model, 'change', this.render);
     },
 
     afterRender: function()
@@ -47,15 +48,6 @@ define([
       this.listenToOnce(this.model, 'change', this.render);
 
       this.$('.fte-leaderEntry-count').first().select();
-
-      if (this.model.get('locked'))
-      {
-        this.broker.publish('router.navigate', {
-          url: this.model.genClientUrl(),
-          replace: true,
-          trigger: true
-        });
-      }
     },
 
     serialize: function()
@@ -143,8 +135,6 @@ define([
       {
         if (err)
         {
-          console.error(err);
-
           if (countEl.getAttribute('data-remote') !== 'true')
           {
             countEl.value = oldCount;
@@ -152,11 +142,19 @@ define([
             countEl.setAttribute('data-remote', oldRemote);
 
             view.recount(countEl, data.taskIndex, data.companyIndex);
+
+            data.newCount = oldCount;
+
+            view.model.handleUpdateMessage(data, true);
           }
+
+          view.trigger('remoteError', err);
         }
       });
 
       this.recount(countEl, data.taskIndex, data.companyIndex);
+
+      this.model.handleUpdateMessage(data, true);
     },
 
     recount: function(countEl, taskIndex, companyIndex)
@@ -222,14 +220,13 @@ define([
       });
 
       this.recount($count[0], message.taskIndex, message.companyIndex);
+
+      this.model.handleUpdateMessage(message, true);
     },
 
-    redirectToDetails: function()
+    onModelDeleted: function(message)
     {
-      this.broker.publish('router.navigate', {
-        url: this.model.genClientUrl(),
-        trigger: true
-      });
+      onModelDeleted(this.broker, this.model, message);
     }
 
   });
