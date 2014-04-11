@@ -141,8 +141,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       var update = {$set: {
         updatedAt: new Date(),
-        updater: user._id,
-        updaterLabel: user.login
+        updater: userInfo.createObject(user, socket)
       }};
       var field = 'flows.' + data.flowIndex;
 
@@ -211,8 +210,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       var update = {$set: {
         updatedAt: new Date(),
-        updater: user._id,
-        updaterLabel: user.login
+        updater: userInfo.createObject(user, socket)
       }};
 
       update.$set['flows.' + data.flowIndex + '.noPlan'] = data.newValue;
