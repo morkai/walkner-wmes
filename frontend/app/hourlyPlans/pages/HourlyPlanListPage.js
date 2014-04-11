@@ -40,7 +40,7 @@ define([
           label: t.bound('hourlyPlans', 'PAGE_ACTION:add'),
           href: '#hourlyPlans;add',
           icon: 'plus',
-          privileges: ['HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE']
+          privileges: 'HOURLY_PLANS:MANAGE|PROD_DATA:MANAGE'
         },
         pageActions.export(layout, this, this.collection)
       ];
