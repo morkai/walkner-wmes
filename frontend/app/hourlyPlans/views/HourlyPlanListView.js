@@ -19,7 +19,7 @@ define([
 
     remoteTopics: {
       'hourlyPlans.created': 'refreshCollection',
-      'hourlyPlans.deleted': 'refreshCollection'
+      'hourlyPlans.deleted': 'onModelDeleted'
     },
 
     serializeColumns: function()

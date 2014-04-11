@@ -282,4 +282,10 @@ kbd {
   margin-bottom: 5px;
 }
 
-
+.list-item.is-deleted > td {
+  opacity: .5;
+  text-decoration: line-through!important;
+}
+.list-item.is-deleted > td.actions {
+  text-decoration: none!important;
+}

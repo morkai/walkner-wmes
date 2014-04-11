@@ -28,7 +28,7 @@ define([
 
       topics[topicPrefix + '.added'] = 'refreshCollection';
       topics[topicPrefix + '.edited'] = 'refreshCollection';
-      topics[topicPrefix + '.deleted'] = 'refreshCollection';
+      topics[topicPrefix + '.deleted'] = 'onModelDeleted';
 
       return topics;
     },
@@ -112,6 +112,18 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.collection, 'reset', this.render);
+    },
+
+    onModelDeleted: function(message)
+    {
+      if (!message || !message.model || !message.model._id)
+      {
+        return;
+      }
+
+      this.$('.list-item[data-id="' + message.model._id + '"]').addClass('is-deleted');
+
+      this.refreshCollection(message);
     },
 
     refreshCollection: function(message)

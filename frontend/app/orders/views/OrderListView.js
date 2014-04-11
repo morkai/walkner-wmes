@@ -23,7 +23,7 @@ define([
       'orders.synced': 'refreshCollection',
       'orders.added': 'refreshCollection',
       'orders.edited': 'refreshCollection',
-      'orders.deleted': 'refreshCollection'
+      'orders.deleted': 'onModelDeleted'
     },
 
     serializeColumns: function()
