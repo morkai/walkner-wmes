@@ -32,6 +32,11 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('AUTH'));
     }
 
+    if (!lodash.isObject(data))
+    {
+      return reply(new Error('INPUT'));
+    }
+
     var shiftMoment = moment(data.date);
 
     if (!shiftMoment.isValid()
@@ -113,7 +118,8 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       reply = function() {};
     }
 
-    if (!lodash.isString(data._id)
+    if (!lodash.isObject(data)
+      || !lodash.isString(data._id)
       || !lodash.isNumber(data.flowIndex)
       || !lodash.isNumber(data.newValue))
     {
@@ -177,7 +183,8 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       reply = function() {};
     }
 
-    if (!lodash.isString(data._id)
+    if (!lodash.isObject(data)
+      || !lodash.isString(data._id)
       || !lodash.isBoolean(data.newValue)
       || !lodash.isNumber(data.flowIndex))
     {
