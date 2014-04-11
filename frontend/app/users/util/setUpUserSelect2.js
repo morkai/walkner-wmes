@@ -32,7 +32,7 @@ define(['underscore', 'app/i18n'], function(_, t)
               .map(function(user)
               {
                 var name = user.lastName && user.firstName
-                  ? (user.firstName + ' ' + user.lastName)
+                  ? (user.lastName + ' ' + user.firstName)
                   : '-';
                 var personellId = user.personellId ? user.personellId : '-';
 
