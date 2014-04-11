@@ -44,14 +44,22 @@ define([
             id: root._id,
             text: root.name || root.login,
             name: root.name || root.login,
-            login: root.login
+            login: root.login,
+            personellId: '-'
           }].filter(function(user)
           {
             return user.text.indexOf(query.term) !== -1;
           });
 
+          var users = results.concat(data.collection || []);
+
+          if (options.userFilter)
+          {
+            users = users.filter(options.userFilter);
+          }
+
           return {
-            results: results.concat((data.collection || []).map(function(user)
+            results: users.map(function(user)
             {
               var name = user.lastName && user.firstName
                 ? (user.lastName + ' ' + user.firstName)
@@ -62,13 +70,14 @@ define([
                 id: user._id,
                 text: name + ' (' + personellId + ')',
                 name: name,
-                login: user.login
+                login: user.login,
+                personellId: personellId
               };
             })
             .sort(function(a, b)
             {
               return a.text.localeCompare(b.text);
-            }))
+            })
           };
         }
       }
