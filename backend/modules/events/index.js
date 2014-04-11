@@ -129,6 +129,17 @@ exports.start = function startEventsModule(app, module)
       return fetchAllTypes();
     }
 
+    var user = null;
+
+    if (lodash.isObject(data.user))
+    {
+      user = {
+        _id: String(data.user._id),
+        login: data.user.login,
+        ipAddress: data.user.ipAddress
+      };
+    }
+
     if (!lodash.isObject(data))
     {
       data = {};
@@ -139,7 +150,6 @@ exports.start = function startEventsModule(app, module)
     }
 
     var type = topic.replace(/^events\./, '');
-    var user = null;
 
     if (lodash.isString(data.severity))
     {
@@ -148,14 +158,8 @@ exports.start = function startEventsModule(app, module)
       delete data.severity;
     }
 
-    if (lodash.isObject(data.user))
+    if (user !== null)
     {
-      user = {
-        _id: data.user._id,
-        login: data.user.login,
-        ipAddress: data.user.ipAddress
-      };
-
       delete data.user;
     }
 
