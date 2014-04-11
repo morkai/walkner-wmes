@@ -1,4 +1,4 @@
-define(['underscore'], function(_)
+define(['underscore', 'app/i18n'], function(_, t)
 {
   'use strict';
 
@@ -8,6 +8,7 @@ define(['underscore'], function(_)
       openOnEnter: null,
       allowClear: true,
       minimumInputLength: 3,
+      placeholder: t('users', 'select2:placeholder'),
       ajax: {
         cache: true,
         quietMillis: 300,

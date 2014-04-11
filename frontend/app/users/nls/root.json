@@ -87,7 +87,9 @@
     "PRIVILEGE:PROD_DATA:VIEW": "Production data: view",
     "PRIVILEGE:PROD_DATA:MANAGE": "Production data: manage",
     "PRIVILEGE:REPORTS:VIEW": "Reports: view",
-    "PRIVILEGE:REPORTS:MANAGE": "Reports: manage"
+    "PRIVILEGE:REPORTS:MANAGE": "Reports: manage",
+
+    "select2:placeholder": "Search by last name or personnel ID..."
   },
   "pl": true
 }
