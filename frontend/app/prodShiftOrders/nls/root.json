@@ -26,7 +26,6 @@
     "FORM:ERROR:finishedAt": "Finished at must be between the shift's time boundries!",
     "FORM:ERROR:times": "Finished at must be after Started at!",
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the order: no valid changes were detected :(",
-    "FORM:PLACEHOLDER:personnel": "Search by last name or personell ID...",
 
     "FILTER:orderId": "Order no/12NC",
     "FILTER:operationNo": "Oper. no",

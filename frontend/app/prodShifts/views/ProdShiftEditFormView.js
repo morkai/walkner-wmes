@@ -40,8 +40,7 @@ define([
       {
         $user.select2('data', {
           id: userInfo.id,
-          text: userInfo.label,
-          name: userInfo.label
+          text: userInfo.label
         });
       }
     },
@@ -74,7 +73,7 @@ define([
 
       return {
         id: userInfo.id,
-        label: userInfo.name
+        label: userInfo.text
       };
     },
 

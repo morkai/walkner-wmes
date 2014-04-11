@@ -40,7 +40,6 @@
     "FORM:ACTION:edit": "Edit shift",
     "FORM:ERROR:editFailure": "Failed to edit the shift :-(",
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the shift: no valid changes were detected :(",
-    "FORM:PLACEHOLDER:personnel": "Search by last name or personell ID...",
 
     "totalQuantityDone": "{actual} of {planned}",
 
