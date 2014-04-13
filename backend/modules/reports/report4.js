@@ -1,6 +1,5 @@
 'use strict';
 
-var moment = require('moment');
 var step = require('h5.step');
 var util = require('./util');
 
