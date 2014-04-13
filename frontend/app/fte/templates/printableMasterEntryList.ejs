@@ -52,7 +52,7 @@
     <% }) %>
     <% task.functions.forEach(function(prodFunction, functionIndex) { %>
     <% prodFunction.companies.forEach(function(company, companyIndex) { %>
-    <td><%- company.count %>
+    <td><%- round(company.count) %>
     <% }) %>
     <% }) %>
   <% }) %>

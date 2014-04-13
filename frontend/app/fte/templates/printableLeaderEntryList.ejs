@@ -34,10 +34,10 @@
       <% task.companies.forEach(function(company, companyIndex) { %>
       <% if (Array.isArray(company.count)) { %>
       <% company.count.forEach(function(companyCount, divisionIndex) { %>
-      <td><%- companyCount.value %></td>
+      <td><%- round(companyCount.value) %></td>
       <% }) %>
       <% } else { %>
-      <td colspan="<%- divisions.length %>"><%- company.count %></td>
+      <td colspan="<%- divisions.length %>"><%- round(company.count) %></td>
       <% } %>
       <% }) %>
     </tr>
