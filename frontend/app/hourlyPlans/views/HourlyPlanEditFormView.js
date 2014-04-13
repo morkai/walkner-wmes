@@ -1,5 +1,6 @@
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   'app/user',
   'app/core/View',
@@ -7,6 +8,7 @@ define([
   'app/hourlyPlans/templates/entry'
 ], function(
   _,
+  $,
   t,
   user,
   View,
@@ -31,6 +33,20 @@ define([
         {
           this.$(e.target).find('.hourlyPlan-noPlan').click();
         }
+      },
+      'focus .hourlyPlan-count, .hourlyPlan-noPlan': function(e)
+      {
+        this.focused = [
+          e.target.parentNode,
+          e.target.parentNode.parentNode.children[0],
+          this.el.querySelector('.hourlyPlan-column-' + e.target.parentNode.dataset.column)
+        ];
+
+        $(this.focused).addClass('is-focused');
+      },
+      'blur .hourlyPlan-count, .hourlyPlan-noPlan': function()
+      {
+        $(this.focused).removeClass('is-focused');
       }
     },
 
@@ -42,6 +58,16 @@ define([
       topics['hourlyPlans.deleted'] = 'onModelDeleted';
 
       return topics;
+    },
+
+    initialize: function()
+    {
+      this.focused = [];
+    },
+
+    destroy: function()
+    {
+      this.focused = null;
     },
 
     afterRender: function()

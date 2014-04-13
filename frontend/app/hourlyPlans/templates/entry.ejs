@@ -25,20 +25,20 @@
         <th class="hourlyPlan-column-noPlan even"><%- t('hourlyPlans', 'column:noPlan') %>
         <th class="hourlyPlan-column-level"><%- t('hourlyPlans', 'column:level') %>
         <% [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4, 5].forEach(function(hour, hourIndex) { %>
-        <th class="<%- hourIndex % 2 ? '' : 'even' %>">
+        <th class="hourlyPlan-column-<%- hourIndex %> <%- hourIndex % 2 ? '' : 'even' %>">
           <span><%- hour < 10 ? '0' : '' %><%- hour %><!--:00-<%- hour === 23 ? '00' : ((hour + 1 < 10 ? '0' : '') + (hour + 1)) %>:00//--></span>
         <% }) %>
       <tbody>
       <% flows.forEach(function(flow, flowIndex) { %>
       <tr>
         <td><%= flow.name %>
-        <td class="even <% if (editable) { %>hourlyPlan-noPlan-container<% } %>">
+        <td class="even <% if (editable) { %>hourlyPlan-noPlan-container<% } %>" data-column="noPlan">
           <% if (editable) { %>
           <input class="hourlyPlan-noPlan" type="checkbox" data-flow="<%- flowIndex %>" <%- flow.noPlan ? 'checked' : '' %>>
           <% } else { %>
           <i class="fa fa-<%- flow.noPlan ? 'check' : 'times' %>"></i>
           <% } %>
-        <td>
+        <td data-column="level">
           <% if (editable) { %>
           <input
             class="form-control hourlyPlan-count"
@@ -54,7 +54,7 @@
           <%- flow.level %>
           <% } %>
         <% flow.hours.forEach(function(count, hourIndex) { %>
-        <td class="hourlyPlan-cell-count <%- hourIndex % 2 ? '' : 'even' %>">
+        <td class="hourlyPlan-cell-count <%- hourIndex % 2 ? '' : 'even' %>" data-column="<%- hourIndex %>">
           <% if (editable) { %>
           <input
             class="form-control hourlyPlan-count"

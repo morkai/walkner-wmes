@@ -41,3 +41,9 @@
 .hourlyPlan-count {
   text-align: center;
 }
+.hourlyPlan .is-focused {
+  background: #FFFFD6;
+}
+.hourlyPlan > tbody > tr:hover > td.is-focused {
+  background: #FFFFA6!important;
+}
