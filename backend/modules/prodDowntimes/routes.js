@@ -47,7 +47,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
   express.put('/prodDowntimes/:id', canManage, editProdDowntimeRoute);
 
-  express.del('/prodDowntimes/:id', canView, deleteProdDowntimeRoute);
+  express.del('/prodDowntimes/:id', canManage, deleteProdDowntimeRoute);
 
   function findByRidRoute(req, res, next)
   {
