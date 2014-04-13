@@ -232,7 +232,10 @@ define([
 
       var dialogView = new ActionFormView(options);
 
-      dialogView.on('success', viewport.closeDialog);
+      dialogView.on('success', function()
+      {
+        viewport.closeDialog();
+      });
 
       viewport.showDialog(dialogView, dialogTitle);
 
