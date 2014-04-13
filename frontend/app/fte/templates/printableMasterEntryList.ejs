@@ -1,8 +1,8 @@
 <table class="table table-bordered table-condensed fte-masterEntry fte-masterEntry-print">
   <thead>
   <tr>
-    <th><%- t('fte', 'masterEntry:column:task') %>
-    <th><%- t('fte', 'masterEntry:column:noPlan') %>
+    <th class="fte-masterEntry-column-task"><%- t('fte', 'masterEntry:column:task') %>
+    <th class="fte-masterEntry-column-noPlan"><%- t('fte', 'masterEntry:column:noPlan') %>
     <th colspan="2"><%- t('fte', 'masterEntry:column:total') %></th>
     <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
     <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- totalByProdFunction[prodFunctionId].prodFunction %></th>
@@ -40,7 +40,7 @@
     <% }) %>
   <% tasks.forEach(function(task, taskIndex) { %>
   <tr>
-    <td>
+    <td class="fte-masterEntry-cell-task">
       <% if (task.type === 'prodFlow') { %>
       <%= task.name %>
       <% } else { %>

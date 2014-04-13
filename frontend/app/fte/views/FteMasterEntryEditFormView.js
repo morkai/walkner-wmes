@@ -39,7 +39,44 @@ define([
           this.$(e.target).find('.fte-masterEntry-noPlan').click();
         }
       },
-      'click .fte-masterEntry-absence-remove': 'removeAbsentUser'
+      'click .fte-masterEntry-absence-remove': 'removeAbsentUser',
+      'focus .fte-masterEntry-count, .fte-masterEntry-noPlan': function(e)
+      {
+        var inputEl = e.target;
+        var rowEl = inputEl.parentNode.parentNode;
+        var dataset = inputEl.dataset;
+        var cachedColumns = this.cachedColumns;
+
+        this.focused = [
+          inputEl.parentNode,
+          rowEl.children[0]
+        ];
+
+        if (inputEl.classList.contains('fte-masterEntry-noPlan'))
+        {
+          this.focused.push(this.el.querySelector('.fte-masterEntry-column-noPlan'));
+        }
+        else
+        {
+          var companyColumnIndex = dataset.function + ':' + dataset.company;
+
+          this.focused.push(
+            cachedColumns.prodFunctions[dataset.function],
+            cachedColumns.prodFunctionTotals[dataset.function],
+            cachedColumns.companies[companyColumnIndex],
+            cachedColumns.companyTotals[companyColumnIndex],
+            rowEl.querySelector(
+              '.fte-masterEntry-total-company-task[data-companyindex="' + dataset.company + '"]'
+            )
+          );
+        }
+
+        $(this.focused).addClass('is-focused');
+      },
+      'blur .fte-masterEntry-count, .fte-masterEntry-noPlan': function()
+      {
+        $(this.focused).removeClass('is-focused');
+      }
     },
 
     remoteTopics: function()
@@ -52,9 +89,23 @@ define([
       return topics;
     },
 
+    initialize: function()
+    {
+      this.focused = null;
+      this.cachedColumns = {
+        prodFunctions: null,
+        prodFunctionTotals: null,
+        companies: null,
+        companyTotals: null
+      };
+    },
+
     destroy: function()
     {
       this.$('.fte-masterEntry').stickyTableHeaders('destroy');
+
+      this.focused = null;
+      this.cachedColumns = null;
     },
 
     beforeRender: function()
@@ -68,6 +119,7 @@ define([
 
       this.setUpUserFinder();
       this.setUpStickyHeaders();
+      this.cacheColumns();
       this.focusFirstEnabledInput();
     },
 
@@ -131,6 +183,32 @@ define([
     setUpStickyHeaders: function()
     {
       this.$('.fte-masterEntry').stickyTableHeaders({fixedOffset: $('.navbar-fixed-top')});
+    },
+
+    cacheColumns: function()
+    {
+      var cachedColumns = {
+        prodFunctions: {},
+        prodFunctionTotals: {},
+        companies: {},
+        companyTotals: {}
+      };
+      var $thead = this.$('.tableFloatingHeaderOriginal');
+
+      cacheColumns('column-prodFunction', 'prodFunctions');
+      cacheColumns('total-prodFunction', 'prodFunctionTotals');
+      cacheColumns('column-company', 'companies');
+      cacheColumns('total-prodFunction-company', 'companyTotals');
+
+      this.cachedColumns = cachedColumns;
+
+      function cacheColumns(selector, property)
+      {
+        $thead.find('.fte-masterEntry-' + selector).each(function()
+        {
+          cachedColumns[property][this.dataset.column] = this;
+        });
+      }
     },
 
     focusNextInput: function($current)

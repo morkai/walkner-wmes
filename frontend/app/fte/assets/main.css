@@ -64,19 +64,17 @@
 .fte-masterEntry th {
   text-align: center;
 }
-.fte-masterEntry th:first-child,
-.fte-masterEntry td:first-child {
+th.fte-masterEntry-column-task,
+.fte-masterEntry-cell-task {
   text-align: left;
 }
-.fte-masterEntry th {
-  border-bottom-width: 0!important;
+.fte-masterEntry th,
+.fte-masterEntry-print th.fte-masterEntry-column-task ,
+.fte-masterEntry-print th.fte-masterEntry-column-noPlan {
+  border-width: 1px!important;
 }
-.fte-masterEntry th:nth-child(1),
-.fte-masterEntry th:nth-child(2) {
-  border-top-width: 0;
-  border-bottom-width: 0;
-}
-.fte-masterEntry thead:nth-child(4) th {
+th.fte-masterEntry-column-task,
+th.fte-masterEntry-column-noPlan {
   border-bottom-width: 2px!important;
 }
 .fte-masterEntry-noPlan-container,
@@ -92,14 +90,23 @@
 .fte-masterEntry tr:hover td.even {
   background-color: #efefef;
 }
-.fte-masterEntry .tableFloatingHeaderOriginal > tr:last-child > th {
-  border-bottom: 1px solid #ddd!important;
+.fte-masterEntry .is-focused {
+  background: #FFFFD6;
+}
+.fte-masterEntry > tbody > tr:hover > td.is-focused {
+  background: #FFFFA6!important;
+}
+.fte-masterEntry > thead:first-child > tr:last-child > th {
+  border-bottom: 2px solid #ddd!important;
 }
 .fte-masterEntry-column-noPlan {
   width: 1%;
 }
 .fte-masterEntry-column-company {
   width: 75px;
+}
+.fte-masterEntry-count {
+  text-align: center;
 }
 .fte-masterEntry-absence-userFinder-container {
   padding: 10px;

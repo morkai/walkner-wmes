@@ -72,3 +72,7 @@ input:enabled:read-write::-webkit-inner-spin-button,
 input:enabled:read-write::-webkit-clear-button {
   opacity: 1;
 }
+input.no-controls::-webkit-clear-button,
+input.no-controls::-webkit-inner-spin-button {
+  display: none;
+}
