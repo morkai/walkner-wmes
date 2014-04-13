@@ -72,15 +72,6 @@ define([
 
     afterRender: function()
     {
-      if (this.model.get('locked'))
-      {
-        return this.broker.publish('router.navigate', {
-          url: this.model.genClientUrl(),
-          replace: true,
-          trigger: true
-        });
-      }
-
       this.listenToOnce(this.model, 'change', this.render);
 
       this.focusFirstEnabledInput();
