@@ -39,6 +39,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
   express.put('/prodShiftOrders/:id', canManage, editProdShiftOrderRoute);
 
+  express.del('/prodShiftOrders/:id', canManage, deleteProdShiftOrderRoute);
+
   function exportProdShiftOrder(doc)
   {
     if (!doc.finishedAt || !doc.orderData)
@@ -193,6 +195,83 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
         {
           app.broker.publish('production.edited.order.' + logEntry.prodShiftOrder, logEntry.data);
         }
+      }
+    );
+  }
+
+  function deleteProdShiftOrderRoute(req, res, next)
+  {
+    step(
+      function getProdDataStep()
+      {
+        productionModule.getProdData('order', req.params.id, this.next());
+      },
+      function createLogEntryStep(err, prodShiftOrder)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!prodShiftOrder)
+        {
+          return this.skip(null, 404);
+        }
+
+        if (!prodShiftOrder.isEditable())
+        {
+          return this.skip(new Error('ORDER_NOT_EDITABLE'), 400);
+        }
+
+        var logEntry = ProdLogEntry.deleteOrder(
+          prodShiftOrder, userInfo.createObject(req.session.user, req)
+        );
+
+        logEntry.save(this.next());
+      },
+      function handleLogEntryStep(err, logEntry)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var next = this.next();
+
+        logEntryHandlers.deleteOrder(
+          app,
+          productionModule,
+          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
+          logEntry,
+          function(err)
+          {
+            if (err)
+            {
+              return next(err, null, null);
+            }
+
+            return next(null, null, logEntry);
+          }
+        );
+      },
+      function sendResponseStep(err, statusCode, logEntry)
+      {
+        if (statusCode)
+        {
+          res.statusCode = statusCode;
+        }
+
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (statusCode)
+        {
+          return res.send(statusCode);
+        }
+
+        res.send(logEntry.data);
       }
     );
   }

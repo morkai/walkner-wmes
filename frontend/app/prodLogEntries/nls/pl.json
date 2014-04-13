@@ -36,6 +36,7 @@
   "type:editOrder": "Edycja zlecenia",
   "type:editDowntime": "Edycja przestoju",
   "type:deleteDowntime": "Usunięcie przestoju",
+  "type:deleteOrder": "Usunięcie zlecenia",
 
   "data:changeShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
   "data:changeMaster": "Nowy mistrz: <em>{name}</em>",
@@ -51,10 +52,11 @@
   "data:finishDowntime": "Zakończono <a href='\\#prodDowntimes/{_id}'>przestój</a>.",
   "data:corroborateDowntime": "{status, select, confirmed{Zatwierdzono} rejected{Odrzucono} other{Potwierdzono}} <a href='\\#prodDowntimes/{_id}'>przestój</a>.",
   "data:endWork": "-",
-  "data:editShift": "Zmienione atrybuty: {changedProperties}",
-  "data:editOrder": "Zmienione atrybuty: {changedProperties}",
-  "data:editDowntime": "Zmienione atrybuty <a href='\\#prodDowntimes/{_id}'>przestoju</a>: {changedProperties}",
+  "data:editShift": "Zmienione atrybuty: <em>{changedProperties}</em>",
+  "data:editOrder": "Zmienione atrybuty: <em>{changedProperties}</em>",
+  "data:editDowntime": "Zmienione atrybuty <a href='\\#prodDowntimes/{_id}'>przestoju</a>: <em>{changedProperties}</em>",
   "data:deleteDowntime": "Usunięto przestój <em>{rid}</em>.",
+  "data:deleteOrder": "Usunięto zlecenie <em>{orderId}; {operationNo}</em>.",
 
   "noData:prodShiftOrder": "<em>brak zlecenia</em>"
 }

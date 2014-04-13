@@ -5,6 +5,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
   'app/core/View',
   'app/mechOrders/MechOrder',
@@ -25,6 +26,7 @@ define([
   user,
   viewport,
   bindLoadingMessage,
+  pageActions,
   onModelDeleted,
   View,
   MechOrder,
@@ -56,8 +58,8 @@ define([
           label: t.bound('prodShiftOrders', 'BREADCRUMBS:browse'),
           href: this.prodShiftOrder.genClientUrl('base')
         },
-        this.prodShiftOrder.get('prodLine'),
         t.bound('prodShiftOrders', 'BREADCRUMBS:details', {
+          prodLine: this.prodShiftOrder.get('prodLine'),
           order: this.prodShiftOrder.get('orderId'),
           operation: this.prodShiftOrder.get('operationNo')
         })
@@ -75,12 +77,10 @@ define([
 
       if (this.prodShiftOrder.isEditable())
       {
-        actions.push({
-          label: t.bound('prodShiftOrders', 'PAGE_ACTION:edit'),
-          icon: 'edit',
-          href: this.prodShiftOrder.genClientUrl('edit'),
-          privileges: 'PROD_DATA:MANAGE'
-        });
+        actions.push(
+          pageActions.edit(this.prodShiftOrder, 'PROD_DATA:MANAGE'),
+          pageActions.delete(this.prodShiftOrder, 'PROD_DATA:MANAGE')
+        );
       }
 
       return actions;
@@ -172,11 +172,6 @@ define([
 
     setUpRemoteTopics: function()
     {
-      this.pubsub.subscribe(
-        'prodShiftOrders.updated.' + this.prodShiftOrder.id,
-        this.onProdShiftOrderUpdated.bind(this)
-      );
-
       var pressWorksheetId = this.prodShiftOrder.get('pressWorksheet');
 
       if (pressWorksheetId)
@@ -186,8 +181,20 @@ define([
           .setFilter(filterWorksheet);
 
         this.pubsub
-          .subscribe('pressWorksheets.deleted', this.onWorksheetDeleted.bind(this))
+          .subscribe('pressWorksheets.deleted', this.onModelDeleted.bind(this))
           .setFilter(filterWorksheet);
+      }
+      else
+      {
+        this.pubsub.subscribe(
+          'prodShiftOrders.updated.' + this.prodShiftOrder.id,
+          this.onProdShiftOrderUpdated.bind(this)
+        );
+
+        this.pubsub.subscribe(
+          'prodShiftOrders.deleted.' + this.prodShiftOrder.id,
+          this.onModelDeleted.bind(this)
+        );
       }
 
       function filterWorksheet(message)
@@ -210,7 +217,7 @@ define([
           {
             if (xhr.status === 404)
             {
-              page.onWorksheetDeleted();
+              page.onModelDeleted();
             }
           });
         },
@@ -219,7 +226,7 @@ define([
       );
     },
 
-    onWorksheetDeleted: function()
+    onModelDeleted: function()
     {
       onModelDeleted(this.broker, this.prodShiftOrder, null, true);
     }

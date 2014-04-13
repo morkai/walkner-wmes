@@ -155,18 +155,20 @@ define([
 
         list.push(item);
 
+        var data = prodLogEntry.get('data');
+
         if (type === 'working')
         {
           item.quantityDone = 0;
           item.workerCount = 0;
 
-          orderToItemMap[prodLogEntry.get('prodShiftOrder')._id] = item;
+          orderToItemMap[data._id] = item;
         }
         else if (type === 'downtime')
         {
-          item.hasOrder = prodLogEntry.get('data').prodShiftOrder !== null;
+          item.hasOrder = data.prodShiftOrder !== null;
 
-          downtimeToItemMap[prodLogEntry.get('data')._id] = item;
+          downtimeToItemMap[data._id] = item;
         }
       }
 
@@ -323,6 +325,19 @@ define([
             delete downtimeToItemMap[data._id];
 
             downtimes.splice(downtimes.indexOf(item), 1);
+            break;
+
+          case 'deleteOrder':
+            item = orderToItemMap[data._id];
+
+            if (!item)
+            {
+              break;
+            }
+
+            delete orderToItemMap[data._id];
+
+            orders.splice(orders.indexOf(item), 1);
             break;
         }
       }

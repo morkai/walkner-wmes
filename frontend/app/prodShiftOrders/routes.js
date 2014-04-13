@@ -2,6 +2,7 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   './ProdShiftOrder',
   './pages/ProdShiftOrderListPage',
   'i18n!app/nls/prodShiftOrders'
@@ -9,12 +10,14 @@ define([
   router,
   viewport,
   user,
+  showDeleteFormPage,
   ProdShiftOrder,
   ProdShiftOrderListPage
 ) {
   'use strict';
 
   var canView = user.auth('PROD_DATA:VIEW');
+  var canManage = user.auth('PROD_DATA:VIEW');
 
   router.map('/prodShiftOrders', canView, function(req)
   {
@@ -32,7 +35,7 @@ define([
     );
   });
 
-  router.map('/prodShiftOrders/:id;edit', user.auth('PROD_DATA:MANAGE'), function(req)
+  router.map('/prodShiftOrders/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
       ['app/prodShiftOrders/pages/EditProdShiftOrderFormPage'],
@@ -44,4 +47,8 @@ define([
       }
     );
   });
+
+  router.map(
+    '/prodShiftOrders/:id;delete', canManage, showDeleteFormPage.bind(null, ProdShiftOrder)
+  );
 });

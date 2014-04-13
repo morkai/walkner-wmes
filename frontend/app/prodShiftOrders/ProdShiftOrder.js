@@ -59,7 +59,7 @@ define([
 
     getLabel: function()
     {
-      return this.get('orderId') + ', ' + this.get('operationNo');
+      return this.get('prodLine') + ': ' + this.get('orderId') + ', ' + this.get('operationNo');
     },
 
     onShiftChanged: function()

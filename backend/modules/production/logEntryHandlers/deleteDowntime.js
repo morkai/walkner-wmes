@@ -86,7 +86,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       {
         app.broker.publish('prodDowntimes.deleted.' + this.prodDowntime._id, {
           _id: this.prodDowntime._id,
-          rid: this.prodDowntime.rid
+          rid: this.prodDowntime.rid,
+          prodLine: this.prodDowntime.prodLine,
+          prodShift: this.prodDowntime.prodShift,
+          prodShiftOrder: this.prodDowntime.prodShiftOrder
         });
       }
 

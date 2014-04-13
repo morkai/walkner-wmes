@@ -16,7 +16,7 @@ define([
   prodLines,
   renderOrgUnitPath,
   decorateProdShiftOrder
-  ) {
+) {
   'use strict';
 
   return ListView.extend({
@@ -24,7 +24,7 @@ define([
     remoteTopics: {
       'prodShiftOrders.created.**': function(prodShiftOrder)
       {
-        if (this.collection.matches(prodShiftOrder))
+        if (this.collection.hasOrMatches(prodShiftOrder))
         {
           this.refreshCollection();
         }
@@ -34,6 +34,13 @@ define([
         var prodShiftOrder = this.collection.get(topic.split('.').slice(2).join('.'));
 
         if (prodShiftOrder)
+        {
+          this.refreshCollection();
+        }
+      },
+      'prodShiftOrders.deleted.**': function(message)
+      {
+        if (this.collection.hasOrMatches(message))
         {
           this.refreshCollection();
         }

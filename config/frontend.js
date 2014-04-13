@@ -93,7 +93,7 @@ exports.pubsub = {
     'users.syncFailed',
     'production.synced.*', 'production.edited.**',
     'prodDowntimes.**',
-    'prodShiftOrders.created.*', 'prodShiftOrders.updated.*',
+    'prodShiftOrders.**',
     'updater.newVersion',
     'settings.updated.**'
   ]

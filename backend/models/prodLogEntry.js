@@ -182,6 +182,13 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     );
   };
 
+  prodLogEntrySchema.statics.deleteOrder = function(prodShiftOrder, creator)
+  {
+    return this.createFromProdModel(
+      prodShiftOrder, creator, 'deleteOrder', prodShiftOrder.toJSON()
+    );
+  };
+
   prodLogEntrySchema.statics.createFromProdModel = function(
     prodModel, creator, type, data, createdAt)
   {

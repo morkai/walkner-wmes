@@ -37,6 +37,7 @@
     "type:editOrder": "Order edit",
     "type:editDowntime": "Downtime edit",
     "type:deleteDowntime": "Downtime deletion",
+    "type:deleteOrder": "Order deletion",
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:changeMaster": "New master: <em>{name}</em>",
@@ -52,10 +53,11 @@
     "data:finishDowntime": "Finished <a href='\\#prodDowntimes/{_id}'>downtime</a>.",
     "data:corroborateDowntime": "{status, select, confirmed{Confirmed} rejected{Rejected} other{Corroborated}} <a href='\\#prodDowntimes/{_id}'>downtime</a>.",
     "data:endWork": "-",
-    "data:editShift": "Changed attributes: {changedProperties}",
-    "data:editOrder": "Changed attributes: {changedProperties}",
-    "data:editDowntime": "Changed attributes of <a href='\\#prodDowntimes/{_id}'>downtime</a>: {changedProperties}",
+    "data:editShift": "Changed attributes: <em>{changedProperties}</em>",
+    "data:editOrder": "Changed attributes: <em>{changedProperties}</em>",
+    "data:editDowntime": "Changed attributes of <a href='\\#prodDowntimes/{_id}'>downtime</a>: <em>{changedProperties}</em>",
     "data:deleteDowntime": "Deleted downtime <em>{rid}</em>",
+    "data:deleteOrder": "Deleted order <em>{orderId}; {operationNo}</em>",
 
     "noData:prodShiftOrder": "<em>no order</em>"
   },

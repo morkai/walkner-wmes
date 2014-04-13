@@ -1,8 +1,9 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Orders",
-    "BREADCRUMBS:details": "{order}; {operation}",
+    "BREADCRUMBS:details": "{prodLine}: {order}, {operation}",
     "BREADCRUMBS:editForm": "Editing",
+    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
     "MSG:LOADING_FAILURE": "Failed to load the orders :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order :(",
@@ -12,6 +13,7 @@
     "PAGE_ACTION:prodDowntimes": "Show downtimes",
     "PAGE_ACTION:export": "Export orders",
     "PAGE_ACTION:edit": "Edit order",
+    "PAGE_ACTION:delete": "Delete order",
 
     "PANEL:TITLE:details": "Order's production details",
     "PANEL:TITLE:orderDetails": "Order's details at the moment of start",
@@ -64,7 +66,13 @@
     "PROPERTY:pressWorksheet": "Worksheet",
 
     "unit:workerCount": "persons",
-    "unit:taktTime": "s"
+    "unit:taktTime": "s",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "Order deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete order",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen order?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> order?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the order :-("
   },
   "pl": true
 }

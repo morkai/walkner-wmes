@@ -39,8 +39,13 @@ define([
       });
     },
 
-    matches: function(message)
+    hasOrMatches: function(message)
     {
+      if (this.get(message._id))
+      {
+        return true;
+      }
+
       return matchesProdLine(this.rqlQuery, message.prodLine)
         && matchesEquals(this.rqlQuery, 'orderId', message.orderId)
         && matchesEquals(this.rqlQuery, 'operationNo', message.operationNo)

@@ -11,6 +11,7 @@ exports.changeWorkerCount = require('./changeWorkerCount');
 exports.correctOrder = require('./correctOrder');
 exports.corroborateDowntime = require('./corroborateDowntime');
 exports.deleteDowntime = require('./deleteDowntime');
+exports.deleteOrder = require('./deleteOrder');
 exports.editDowntime = require('./editDowntime');
 exports.editOrder = require('./editOrder');
 exports.editShift = require('./editShift');
