@@ -1,1 +1,1 @@
-define([],function(){return{parse:function(r){var e=parseFloat(r.replace(",",".").replace(/[^0-9\.]+/g,""));return isNaN(e)||0>e?0:e},round:function(r){return(Math.round(1e4*r)/1e4).toString()}}});
+define([],function(){var r="function"==typeof Number.prototype.toLocaleString?"toLocaleString":"toString";return{parse:function(r){var e=parseFloat(r.replace(",",".").replace(/[^0-9\.]+/g,""));return isNaN(e)||0>e?0:e},round:function(e){return(Math.round(1e4*e)/1e4)[r]()}}});
