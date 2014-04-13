@@ -82,6 +82,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.skip(err);
       }
 
+      if (!productionModule.recreating)
+      {
+        app.broker.publish('prodDowntimes.deleted.' + this.prodDowntime._id, {
+          _id: this.prodDowntime._id,
+          rid: this.prodDowntime.rid
+        });
+      }
+
       if (this.prodShiftOrder)
       {
         this.prodShiftOrder.recalcDurations(true, this.next());
@@ -98,21 +106,6 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           logEntry._id,
           err.stack
         );
-      }
-    },
-    function broadcastStep(err, prodDowntime)
-    {
-      if (err)
-      {
-        return this.done(done, err);
-      }
-
-      if (!productionModule.recreating)
-      {
-        app.broker.publish('prodDowntimes.deleted.' + this.prodDowntime._id, {
-          _id: this.prodDowntime._id,
-          rid: this.prodDowntime.rid
-        });
       }
     },
     done
