@@ -1,5 +1,6 @@
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   'app/user',
   'app/core/View',
@@ -8,6 +9,7 @@ define([
   './fractionsUtil'
 ], function(
   _,
+  $,
   t,
   user,
   View,
@@ -25,17 +27,66 @@ define([
 
     events: {
       'change .fte-leaderEntry-count': 'updateCount',
-      'keyup .fte-leaderEntry-count': 'updateCount'
+      'keyup .fte-leaderEntry-count': 'updateCount',
+      'focus .fte-leaderEntry-count': function(e)
+      {
+        var inputEl = e.target;
+        var dataset = inputEl.dataset;
+
+        this.focused = [
+          inputEl.parentNode,
+          inputEl.parentNode.parentNode.children[0],
+          this.theadEl.querySelector(
+            '.fte-leaderEntry-column-company[data-column="' + dataset.company + '"]'
+          ),
+          this.theadEl.querySelector(
+            '.fte-leaderEntry-total-company[data-column="' + dataset.company + '"]'
+          )
+        ];
+
+        if (inputEl.dataset.division === undefined)
+        {
+          this.focused.push.apply(this.focused, this.theadEl.querySelectorAll(
+            '.fte-leaderEntry-column-division[data-column^="' + dataset.company + '"]'
+          ));
+        }
+        else
+        {
+          this.focused.push(this.theadEl.querySelector(
+            '.fte-leaderEntry-column-division[data-column="'
+            + dataset.company + ':' + dataset.division
+            + '"]'
+          ));
+        }
+
+        $(this.focused).addClass('is-focused');
+      },
+      'blur .fte-leaderEntry-count': function()
+      {
+        $(this.focused).removeClass('is-focused');
+      }
     },
 
     remoteTopics: function()
     {
       var topics = {};
 
-      topics['fte.leader.updated.' + this.model.id] = this.onRemoteEdit.bind(this);
-      topics['fte.leader.deleted'] = this.onModelDeleted.bind(this);
+      topics['fte.leader.updated.' + this.model.id] = 'onRemoteEdit';
+      topics['fte.leader.deleted'] = 'onModelDeleted';
 
       return topics;
+    },
+
+    initialize: function()
+    {
+      this.focused = null;
+      this.theadEl = null;
+    },
+
+    destroy: function()
+    {
+      this.focused = null;
+      this.theadEl = null;
     },
 
     beforeRender: function()
@@ -46,6 +97,8 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change', this.render);
+
+      this.theadEl = this.el.getElementsByTagName('thead')[0];
 
       this.$('.fte-leaderEntry-count').first().select();
     },
@@ -84,7 +137,8 @@ define([
         return this.focusNextInput(this.$(e.target));
       }
 
-      var oldCount = fractionsUtil.parse(e.target.getAttribute('data-value')) || 0;
+      var dataset = e.target.dataset;
+      var oldCount = fractionsUtil.parse(dataset.value) || 0;
       var newCount = fractionsUtil.parse(e.target.value) || 0;
 
       if (oldCount === newCount)
@@ -92,9 +146,7 @@ define([
         return;
       }
 
-      var timerKey = e.target.getAttribute('data-task')
-        + ':' + e.target.getAttribute('data-company')
-        + ':' + e.target.getAttribute('data-division');
+      var timerKey = dataset.task + ':' + dataset.company + ':' + dataset.division;
 
       if (this.timers[timerKey])
       {
@@ -110,24 +162,25 @@ define([
     {
       delete this.timers[timerKey];
 
-      var oldRemote = countEl.getAttribute('data-remote');
+      var dataset = countEl.dataset;
+      var oldRemote = dataset.remote;
       var data = {
         socketId: this.socket.getId(),
         _id: this.model.id,
         newCount: newCount,
-        taskIndex: parseInt(countEl.getAttribute('data-task'), 10),
-        companyIndex: parseInt(countEl.getAttribute('data-company'), 10)
+        taskIndex: parseInt(dataset.task, 10),
+        companyIndex: parseInt(dataset.company, 10)
       };
 
-      var divisionIndex = parseInt(countEl.getAttribute('data-division'), 10);
+      var divisionIndex = parseInt(dataset.division, 10);
 
       if (!isNaN(divisionIndex))
       {
         data.divisionIndex = divisionIndex;
       }
 
-      countEl.setAttribute('data-value', data.newCount);
-      countEl.setAttribute('data-remote', 'false');
+      dataset.value = data.newCount;
+      dataset.remote = 'false';
 
       var view = this;
 
@@ -135,11 +188,11 @@ define([
       {
         if (err)
         {
-          if (countEl.getAttribute('data-remote') !== 'true')
+          if (dataset.remote !== 'true')
           {
             countEl.value = oldCount;
-            countEl.setAttribute('data-value', oldCount);
-            countEl.setAttribute('data-remote', oldRemote);
+            dataset.value = oldCount;
+            dataset.remote = oldRemote;
 
             view.recount(countEl, data.taskIndex, data.companyIndex);
 
@@ -178,7 +231,7 @@ define([
         companyTotal += fractionsUtil.parse(this.value) || 0;
       });
 
-      this.$('.fte-leaderEntry-total-company[data-company=' + companyIndex + ']')
+      this.$('.fte-leaderEntry-total-company[data-column=' + companyIndex + ']')
         .text(fractionsUtil.round(companyTotal));
 
       this.$('.fte-leaderEntry-total-company').each(function()

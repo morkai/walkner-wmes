@@ -21,26 +21,23 @@
     <table class="table table-bordered table-condensed table-hover fte-leaderEntry">
       <thead>
         <tr>
-          <th class="fte-leaderEntry-taskColumn fte-nbb"><%- t('fte', 'leaderEntry:column:task') %>
-          <th class="fte-nbb"><%- t('fte', 'leaderEntry:column:taskTotal') %>
-          <% companies.forEach(function(company) { %>
-          <th class="fte-nbb" colspan="<%- divisions.length %>"><%= company.name %>
+          <th class="fte-leaderEntry-column-task" rowspan="3"><%- t('fte', 'leaderEntry:column:task') %>
+          <th><%- t('fte', 'leaderEntry:column:taskTotal') %>
+          <% companies.forEach(function(company, companyIndex) { %>
+          <th class="fte-leaderEntry-column-company" colspan="<%- divisions.length %>" data-column="<%- companyIndex %>"><%= company.name %>
           <% }) %>
         </tr>
         <tr>
-          <th class="fte-ntb fte-nbb">
-          <th class="fte-leaderEntry-total-overall fte-nbb"><%- round(total) %>
+          <th class="fte-leaderEntry-total-overall" rowspan="2"><%- round(total) %>
           <% companies.forEach(function(company, companyIndex) { %>
-          <th class="fte-leaderEntry-total-company fte-nbb" data-company="<%= companyIndex %>" colspan="<%- divisions.length %>"><%- round(company.total) %>
+          <th class="fte-leaderEntry-total-company" colspan="<%- divisions.length %>" data-column="<%= companyIndex %>"><%- round(company.total) %>
           <% }) %>
         </tr>
         <% if (divisions.length) { %>
         <tr>
-          <th class="fte-ntb">
-          <th class="fte-ntb">
           <% companies.forEach(function(company, companyIndex) { %>
-          <% divisions.forEach(function(division) { %>
-          <th><%- division %>
+          <% divisions.forEach(function(division, divisionIndex) { %>
+          <th class="fte-leaderEntry-column-division" data-column="<%- companyIndex %>:<%- divisionIndex %>"><%- division %>
           <% }) %>
           <% }) %>
         </tr>
@@ -57,7 +54,7 @@
           <td <%- editable ? '' : 'class="fte-leaderEntry-count"' %>>
             <% if (editable) { %>
             <input
-              class="form-control fte-leaderEntry-count"
+              class="form-control no-controls fte-leaderEntry-count"
               type="number"
               min="0"
               max="9999"
@@ -67,7 +64,7 @@
               data-company="<%- companyIndex %>"
               data-division="<%- divisionIndex %>">
             <% } else { %>
-            <%- companyCount.value %>
+            <%- round(companyCount.value) %>
             <% } %>
           </td>
           <% }) %>
@@ -75,7 +72,7 @@
           <td <%- editable ? '' : 'class="fte-leaderEntry-count"' %> colspan="<%- divisions.length %>">
             <% if (editable) { %>
             <input
-              class="form-control fte-leaderEntry-count"
+              class="form-control no-controls fte-leaderEntry-count"
               type="number"
               min="0"
               max="9999"
@@ -84,7 +81,7 @@
               data-task="<%- taskIndex %>"
               data-company="<%- companyIndex %>">
             <% } else { %>
-            <%- company.count %>
+            <%- round(company.count) %>
             <% } %>
           </td>
           <% } %>
