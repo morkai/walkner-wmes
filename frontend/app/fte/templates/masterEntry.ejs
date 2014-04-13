@@ -92,7 +92,7 @@
             data-companyId="<%- company.id %>"
             <%- task.noPlan ? 'disabled' : '' %>>
           <% } else { %>
-          <%- company.count %>
+          <%- round(company.count) %>
           <% } %>
         </td>
         <% }) %>

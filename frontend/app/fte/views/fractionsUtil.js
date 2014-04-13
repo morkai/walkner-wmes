@@ -2,6 +2,10 @@ define(function()
 {
   'use strict';
 
+  var toString = typeof Number.prototype.toLocaleString === 'function'
+    ? 'toLocaleString'
+    : 'toString';
+
   return {
     parse: function(val)
     {
@@ -11,7 +15,7 @@ define(function()
     },
     round: function(num)
     {
-      return (Math.round(num * 10000) / 10000).toString();
+      return (Math.round(num * 10000) / 10000)[toString]();
     }
   };
 });
