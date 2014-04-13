@@ -391,6 +391,7 @@ define([
       var totalSelector;
       var total;
       var $taskTr = this.$(countEl).closest('tr');
+      var $thead = this.$('.tableFloatingHeaderOriginal');
       var functionId = countEl.getAttribute('data-functionId');
       var companyId = countEl.getAttribute('data-companyId');
 
@@ -414,27 +415,27 @@ define([
           total += fractionsUtil.parse(this.value);
         }
       });
-      this.$(totalSelector).text(fractionsUtil.round(total));
+      $thead.find(totalSelector).text(fractionsUtil.round(total));
 
       total = 0;
       countSelector = '.fte-masterEntry-total-prodFunction-company'
         + '[data-companyId="' + companyId + '"]';
       totalSelector = '.fte-masterEntry-total-company[data-companyId="' + companyId + '"]';
-      this.$(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
-      this.$(totalSelector).text(fractionsUtil.round(total));
+      $thead.find(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
+      $thead.find(totalSelector).text(fractionsUtil.round(total));
 
       total = 0;
       countSelector = '.fte-masterEntry-total-prodFunction-company'
         + '[data-functionId="' + functionId + '"]';
       totalSelector = '.fte-masterEntry-total-prodFunction[data-functionId="' + functionId + '"]';
-      this.$(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
-      this.$(totalSelector).text(fractionsUtil.round(total));
+      $thead.find(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
+      $thead.find(totalSelector).text(fractionsUtil.round(total));
 
       total = 0;
       countSelector = '.fte-masterEntry-total-company';
       totalSelector = '.fte-masterEntry-total';
-      this.$(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
-      this.$(totalSelector).text(fractionsUtil.round(total));
+      $thead.find(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
+      $thead.find(totalSelector).text(fractionsUtil.round(total));
     },
 
     recountAll: function($row)
