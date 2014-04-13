@@ -3,6 +3,7 @@
   "BREADCRUMBS:details": "Przestój",
   "BREADCRUMBS:corroborate": "Potwierdzanie",
   "BREADCRUMBS:editForm": "Edycja",
+  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
   "MSG:LOADING_FAILURE": "Ładowanie przestojów nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie przestoju nie powiodło się :(",

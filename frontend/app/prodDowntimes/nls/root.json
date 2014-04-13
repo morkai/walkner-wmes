@@ -4,6 +4,7 @@
     "BREADCRUMBS:details": "Downtime",
     "BREADCRUMBS:corroborate": "Corroboration",
     "BREADCRUMBS:editForm": "Editing",
+    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
     "MSG:LOADING_FAILURE": "Failed to load the downtimes :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the downtime :(",

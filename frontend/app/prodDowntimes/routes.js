@@ -2,12 +2,14 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   './ProdDowntime',
   'i18n!app/nls/prodDowntimes'
 ], function(
   router,
   viewport,
   user,
+  showDeleteFormPage,
   ProdDowntime
 ) {
   'use strict';
@@ -63,4 +65,6 @@ define([
       }
     );
   });
+
+  router.map('/prodDowntimes/:id;delete', canManage, showDeleteFormPage.bind(null, ProdDowntime));
 });
