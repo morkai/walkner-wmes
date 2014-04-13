@@ -87,10 +87,6 @@
 .pressWorksheets-form-group-paintShop .form-control {
   text-align: left;
 }
-.pressWorksheets-form-timeCell input::-webkit-clear-button,
-.pressWorksheets-form-timeCell input::-webkit-inner-spin-button {
-  display: none;
-}
 .is-overlapping .pressWorksheets-form-time {
   background-color: rgba(255, 0, 0, .25);
 }
