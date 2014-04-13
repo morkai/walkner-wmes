@@ -2,18 +2,17 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
-  'app/user',
   'app/core/View',
   'app/core/util/onModelDeleted',
   'app/users/util/setUpUserSelect2',
   'app/fte/templates/masterEntry',
   'app/fte/templates/absentUserRow',
-  './fractionsUtil'
+  './fractionsUtil',
+  'jquery.stickytableheaders'
 ], function(
   _,
   $,
   t,
-  user,
   View,
   onModelDeleted,
   setUpUserSelect2,
@@ -53,6 +52,11 @@ define([
       return topics;
     },
 
+    destroy: function()
+    {
+      this.$('.fte-masterEntry').stickyTableHeaders('destroy');
+    },
+
     beforeRender: function()
     {
       this.stopListening(this.model, 'change', this.render);
@@ -63,6 +67,7 @@ define([
       this.listenToOnce(this.model, 'change', this.render);
 
       this.setUpUserFinder();
+      this.setUpStickyHeaders();
       this.focusFirstEnabledInput();
     },
 
@@ -121,6 +126,11 @@ define([
           }
         });
       });
+    },
+
+    setUpStickyHeaders: function()
+    {
+      this.$('.fte-masterEntry').stickyTableHeaders({fixedOffset: $('.navbar-fixed-top')});
     },
 
     focusNextInput: function($current)

@@ -22,14 +22,12 @@
       <thead>
       <tr>
         <th><%- t('fte', 'masterEntry:column:task') %>
-        <th class="even"><%- t('fte', 'masterEntry:column:noPlan') %>
+        <th class="fte-masterEntry-column-noPlan even"><%- t('fte', 'masterEntry:column:noPlan') %>
         <th colspan="2"><%- t('fte', 'masterEntry:column:total') %></th>
         <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
         <th class="<%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- totalByProdFunction[prodFunctionId].prodFunction %></th>
         <% }) %>
       </tr>
-      </thead>
-      <thead>
       <tr>
         <th>
         <th class="even">
@@ -38,22 +36,18 @@
         <th class="fte-masterEntry-total-prodFunction <%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" class="fte-masterEntry-total-prodFunction" data-functionId="<%- prodFunctionId %>"><%- round(totalByProdFunction[prodFunctionId].total) %>
         <% }) %>
       </tr>
-      </thead>
-      <thead>
       <tr>
         <th>
         <th class="even">
         <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-        <th><%- totalByCompany[companyId].name %>
+        <th class="fte-masterEntry-column-company"><%- totalByCompany[companyId].name %>
         <% }) %>
         <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
         <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-        <th class="<%- functionIndex % 2 ? '' : 'even' %>"><%= totalByCompany[companyId].name %>
+        <th class="fte-masterEntry-column-company <%- functionIndex % 2 ? '' : 'even' %>"><%= totalByCompany[companyId].name %>
         <% }) %>
         <% }) %>
       </tr>
-      </thead>
-      <thead>
       <tr>
         <th>
         <th class="even">

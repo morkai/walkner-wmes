@@ -83,16 +83,28 @@
 .fte-masterEntry-noPlan {
   cursor: pointer;
 }
+.fte-masterEntry th {
+  background-color: #fff;
+}
 .fte-masterEntry .even {
   background-color: #f5f5f5;
 }
 .fte-masterEntry tr:hover td.even {
   background-color: #efefef;
 }
+.fte-masterEntry .tableFloatingHeaderOriginal > tr:last-child > th {
+  border-bottom: 1px solid #ddd!important;
+}
+.fte-masterEntry-column-noPlan {
+  width: 1%;
+}
+.fte-masterEntry-column-company {
+  width: 75px;
+}
 .fte-masterEntry-absence-userFinder-container {
   padding: 10px;
   background-color: #f5f5f5;
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #ddd;
 }
 .fte-masterEntry-print {
   border-left-width: 0;
