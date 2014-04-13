@@ -1,18 +1,16 @@
 define([
   'underscore',
-  'jquery',
-  'moment',
   'app/i18n',
   'app/user',
   'app/core/View',
+  'app/core/util/onModelDeleted',
   'app/hourlyPlans/templates/entry'
 ], function(
   _,
-  $,
-  moment,
   t,
   user,
   View,
+  onModelDeleted,
   entryTemplate
 ) {
   'use strict';
@@ -36,18 +34,14 @@ define([
       }
     },
 
-    initialize: function()
+    remoteTopics: function()
     {
-      var view = this;
+      var topics = {};
 
-      this.listenToOnce(this.model, 'sync', function()
-      {
-        var redirectToDetails = view.redirectToDetails.bind(view);
+      topics['hourlyPlans.updated.' + this.model.id] = 'onRemoteEdit';
+      topics['hourlyPlans.deleted'] = 'onModelDeleted';
 
-        view.pubsub.subscribe('hourlyPlans.updated.' + view.model.id, view.onRemoteEdit.bind(view));
-        view.pubsub.subscribe('hourlyPlans.locked.' + view.model.id, redirectToDetails);
-        view.pubsub.subscribe('shiftChanged', redirectToDetails);
-      });
+      return topics;
     },
 
     afterRender: function()
@@ -308,12 +302,9 @@ define([
       });
     },
 
-    redirectToDetails: function()
+    onModelDeleted: function(message)
     {
-      this.broker.publish('router.navigate', {
-        url: this.model.genClientUrl(),
-        trigger: true
-      });
+      onModelDeleted(this.broker, this.model, message);
     }
 
   });
