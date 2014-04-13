@@ -40,6 +40,7 @@
 }
 .hourlyPlan-count {
   text-align: center;
+  padding: 6px 2px;
 }
 .hourlyPlan .is-focused {
   background: #FFFFD6;
