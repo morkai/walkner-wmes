@@ -53,7 +53,7 @@ define([
 
           var users = results.concat(data.collection || []);
 
-          if (options.userFilter)
+          if (options && options.userFilter)
           {
             users = users.filter(options.userFilter);
           }
