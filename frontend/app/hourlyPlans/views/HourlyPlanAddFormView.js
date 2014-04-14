@@ -93,7 +93,7 @@ define([
 
         view.oudView.selectValue(model, orgUnit);
 
-        view.readonlyDivision = !(user.isAllowedTo('HOURLY_PLANS:ALL') && !userDivision);
+        view.readonlyDivision = !user.isAllowedTo('HOURLY_PLANS:ALL') && userDivision;
 
         view.oudView.$id('division').select2('readonly', view.readonlyDivision);
 

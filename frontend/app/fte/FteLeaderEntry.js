@@ -134,6 +134,13 @@ define([
         return false;
       }
 
+      var creator = this.get('creator');
+
+      if (creator && user.data._id !== creator.id)
+      {
+        return false;
+      }
+
       var userDivision = user.getDivision();
 
       if (!user.isAllowedTo(this.privilegePrefix + ':ALL') && userDivision)
