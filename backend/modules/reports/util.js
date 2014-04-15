@@ -6,32 +6,23 @@
 
 var moment = require('moment');
 
-var INTERVAL_STR_TO_NUM = {
-  hour: 3600 * 1000,
-  shift: 8 * 3600 * 1000,
-  day: 24 * 3600 * 1000,
-  week: 7 * 24 * 3600 * 1000
-};
-
 /**
  * @param {string} interval
  * @returns {function(number): number}
  */
 exports.createCreateNextGroupKey = function(interval)
 {
-  if (interval === 'month')
-  {
-    return function createNextGroupKey(groupKey)
-    {
-      var date = new Date(groupKey);
+  var multiple = 1;
 
-      return date.setMonth(date.getMonth() + 1);
-    };
+  if (interval === 'shift')
+  {
+    interval = 'hour';
+    multiple = 8;
   }
 
   return function createNextGroupKey(groupKey)
   {
-    return groupKey + INTERVAL_STR_TO_NUM[interval];
+    return moment(groupKey).add(interval, multiple).valueOf();
   };
 };
 
