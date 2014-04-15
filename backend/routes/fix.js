@@ -2,6 +2,7 @@
 
 'use strict';
 
+var lodash = require('lodash');
 var step = require('h5.step');
 
 module.exports = function startFixRoutes(app, express)
@@ -23,6 +24,7 @@ module.exports = function startFixRoutes(app, express)
   express.get('/fix/prodLogEntries/corroborate-downtimes', onlySuper, corroborateDowntimeLogEntries);
   express.get('/fix/prodLogEntries/recreate', onlySuper, recreateProdData);
   express.get('/fix/hourlyPlans/recount-planned-quantities', onlySuper, recountPlannedQuantities);
+  express.get('/fix/duplicate-users', fixDuplicateUsers);
 
   function fixProdShiftOrderDurations(req, res, next)
   {
@@ -316,5 +318,173 @@ module.exports = function startFixRoutes(app, express)
           }
         );
       });
+  }
+
+  function fixDuplicateUsers(req, res, next)
+  {
+    step(
+      function()
+      {
+        app.mongoose.model('User').aggregate(
+          {
+            $group: {
+              _id: '$personellId',
+              count: {$sum: 1},
+              users: {
+                $addToSet: {
+                  _id: '$_id',
+                  lastName: '$lastName',
+                  firstName: '$firstName',
+                  kdId: '$kdId'
+                }
+              }
+            }
+          },
+          {$match: {count: {$ne: 1}}},
+          this.next()
+        );
+      },
+      function(err, results)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        var userStringIds = [];
+        var users = {};
+
+        results.forEach(function(result)
+        {
+          result.users.forEach(function(user)
+          {
+            user.personellId = result._id;
+            user.pressWorksheets = [];
+            user.prodShifts = [];
+
+            users[user._id] = user;
+
+            userStringIds.push(user._id.toString());
+          });
+        });
+
+        app.mongoose.model('PressWorksheet').find({
+          $or: [
+            {master: {$in: userStringIds}},
+            {operator: {$in: userStringIds}},
+            {'operators.id': {$in: userStringIds}}
+          ]
+        }, {
+          rid: 1,
+          master: 1,
+          operator: 1,
+          operators: 1
+        }).lean().exec(this.parallel());
+
+        app.mongoose.model('ProdShift').find({
+          $or: [
+            {master: {$in: userStringIds}},
+            {leader: {$in: userStringIds}},
+            {operator: {$in: userStringIds}}
+          ]
+        }, {
+          master: 1,
+          leader: 1,
+          operator: 1
+        }).lean().exec(this.parallel());
+
+        this.users = users;
+      },
+      function(err, pressWorksheets, prodShifts)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        var users = this.users;
+
+        pressWorksheets.forEach(function(pressWorksheet)
+        {
+          if (users[pressWorksheet.master.id])
+          {
+            users[pressWorksheet.master.id].pressWorksheets.push(pressWorksheet._id);
+          }
+
+          if (users[pressWorksheet.operator.id])
+          {
+            users[pressWorksheet.operator.id].pressWorksheets.push(pressWorksheet._id);
+          }
+
+          pressWorksheet.operators.forEach(function(operator)
+          {
+            if (operator.id !== pressWorksheet.operator.id && users[operator.id])
+            {
+              users[operator.id].pressWorksheets.push(pressWorksheet._id);
+            }
+          });
+        });
+
+        prodShifts.forEach(function(prodShift)
+        {
+          if (prodShift.master && users[prodShift.master.id])
+          {
+            users[prodShift.master.id].prodShifts.push(prodShift._id);
+          }
+
+          if (prodShift.leader && users[prodShift.leader.id])
+          {
+            users[prodShift.leader.id].prodShifts.push(prodShift._id);
+          }
+
+          if (prodShift.operator && users[prodShift.operator.id])
+          {
+            users[prodShift.operator.id].prodShifts.push(prodShift._id);
+          }
+        });
+
+        users = lodash.values(users).sort(function(a, b)
+        {
+          return (b.pressWorksheets.length + b.prodShifts.length) - (a.pressWorksheets.length + a.prodShifts.length);
+        });
+
+        var groupedUsers = {};
+
+        users.forEach(function(user)
+        {
+          if (!groupedUsers[user.personellId])
+          {
+            groupedUsers[user.personellId] = {
+              _id: user.personellId,
+              count: 0,
+              users: []
+            };
+          }
+
+          groupedUsers[user.personellId].count += user.pressWorksheets.length + user.prodShifts.length;
+          groupedUsers[user.personellId].users.push(user);
+        });
+
+        var results = lodash.values(groupedUsers).sort(function(a, b)
+        {
+          return b.count - a.count;
+        });
+
+        return res.send(results);
+
+        res.type('txt');
+        res.write('personellId;lastName;firstName;worksheets;shifts;kdId;wmesId\r\n');
+
+        results.forEach(function(result)
+        {
+          result.users.forEach(function(user)
+          {
+            res.write(result._id + ';' + user.lastName + ';' + user.firstName + ';' + user.pressWorksheets.length + ';' + user.prodShifts.length + ';' + user.kdId + ';' + user._id + '\r\n');
+          });
+        });
+
+        res.end();
+      }
+    );
   }
 };

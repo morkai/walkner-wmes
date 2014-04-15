@@ -1,8 +1,12 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 'use strict';
 
 var crud = require('../express/crud');
 
-module.exports = function setUpDivisionsRoutes(app, subdivisionsModule)
+module.exports = function setUpSubdivisionsRoutes(app, subdivisionsModule)
 {
   var express = app[subdivisionsModule.config.expressId];
   var auth = app[subdivisionsModule.config.userId].auth;
