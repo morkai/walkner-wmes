@@ -228,7 +228,7 @@ define([
         y: Math.round(indirect * 10) / 10,
         color: COLOR_INDIRECT
       }, {
-        y: dirIndir.storage,
+        y: Math.round(dirIndir.storage * 100) / 100,
         color: COLOR_WAREHOUSE
       });
 
