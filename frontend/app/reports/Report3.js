@@ -40,7 +40,6 @@ define([
     {
       return {
         workDays: {},
-        groupKeyToWorkDayCount: {},
         groupKeys: [],
         prodLines: [],
         tableSummary: [],
