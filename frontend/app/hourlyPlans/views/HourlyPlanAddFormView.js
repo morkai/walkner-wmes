@@ -36,7 +36,7 @@ define([
     idPrefix: 'hourlyPlanAddForm',
 
     events: {
-      'click .btn-primary': 'onSubmit'
+      'submit': 'submitForm'
     },
 
     initialize: function()
@@ -112,8 +112,10 @@ define([
       });
     },
 
-    onSubmit: function()
+    submitForm: function(e)
     {
+      e.preventDefault();
+
       if (!this.socket.isConnected())
       {
         return viewport.msg.show({
