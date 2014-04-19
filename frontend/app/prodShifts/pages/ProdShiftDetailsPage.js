@@ -11,7 +11,8 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/util/getShiftStartInfo',
   'app/core/View',
-  'app/prodLogEntries/ProdLogEntryCollection',
+  'app/prodShiftOrders/ProdShiftOrderCollection',
+  'app/prodDowntimes/ProdDowntimeCollection',
   '../ProdShift',
   '../views/ProdShiftDetailsView',
   '../views/ProdShiftTimelineView',
@@ -26,7 +27,8 @@ define([
   bindLoadingMessage,
   getShiftStartInfo,
   View,
-  ProdLogEntryCollection,
+  ProdShiftOrderCollection,
+  ProdDowntimeCollection,
   ProdShift,
   ProdShiftDetailsView,
   ProdShiftTimelineView,
@@ -34,14 +36,6 @@ define([
   detailsPageTemplate
 ) {
   'use strict';
-
-  var PROD_LOG_ENTRY_REFRESH_TYPES = [
-    'changeOrder',
-    'finishOrder',
-    'startDowntime',
-    'finishDowntime',
-    'endWork'
-  ];
 
   return View.extend({
 
@@ -104,59 +98,186 @@ define([
     {
       this.prodShift = bindLoadingMessage(new ProdShift({_id: this.options.modelId}), this);
 
-      this.prodLogEntries = bindLoadingMessage(new ProdLogEntryCollection(null, {
+      this.prodShiftOrders = bindLoadingMessage(new ProdShiftOrderCollection(null, {
         rqlQuery: {
-          sort: {createdAt: 1, type: -1},
+          fields: {
+            startedAt: 1,
+            finishedAt: 1,
+            quantityDone: 1,
+            workerCount: 1,
+            orderId: 1,
+            operationNo: 1
+          },
+          sort: {startedAt: 1},
           limit: 9999,
           selector: {
             name: 'and',
-            args: [{name: 'eq', args: ['prodShift', this.options.modelId]}]
+            args: [{name: 'eq', args: ['prodShift', this.prodShift.id]}]
           }
-        }
+        },
+        comparator: sortByStartedAt
       }), this);
+
+      this.prodDowntimes = bindLoadingMessage(new ProdDowntimeCollection(null, {
+        rqlQuery: {
+          fields: {
+            prodShiftOrder: 1,
+            startedAt: 1,
+            finishedAt: 1,
+            status: 1,
+            reason: 1,
+            aor: 1
+          },
+          sort: {startedAt: 1},
+          limit: 9999,
+          selector: {
+            name: 'and',
+            args: [{name: 'eq', args: ['prodShift', this.prodShift.id]}]
+          }
+        },
+        comparator: sortByStartedAt
+      }), this);
+
+      function sortByStartedAt(a, b)
+      {
+        return Date.parse(a.get('startedAt')) - Date.parse(b.get('startedAt'));
+      }
     },
 
     defineViews: function()
     {
       this.detailsView = new ProdShiftDetailsView({model: this.prodShift});
 
-      this.timelineView = new ProdShiftTimelineView({collection: this.prodLogEntries});
+      this.timelineView = new ProdShiftTimelineView({
+        prodShift: this.prodShift,
+        prodShiftOrders: this.prodShiftOrders,
+        prodDowntimes: this.prodDowntimes
+      });
 
       this.quantitiesDoneChartView = new QuantitiesDoneChartView({model: this.prodShift});
     },
 
     load: function(when)
     {
-      return when(this.prodShift.fetch(), this.prodLogEntries.fetch({reset: true}));
+      return when(
+        this.prodShift.fetch(),
+        this.prodShiftOrders.fetch({reset: true}),
+        this.prodDowntimes.fetch({reset: true})
+      );
     },
 
     setUpRemoteTopics: function()
     {
-      var prodShift = this.prodShift;
+      this.pubsub.subscribe(
+        'production.edited.shift.' + this.prodShift.id,
+        this.onProdShiftEdited.bind(this)
+      );
 
-      this.pubsub.subscribe('production.edited.shift.' + prodShift.id, function(changes)
-      {
-        prodShift.set(changes);
-      });
+      this.pubsub.subscribe(
+        'prodShiftOrders.created.' + this.prodShift.get('prodLine'),
+        this.onProdShiftOrderCreated.bind(this)
+      );
 
-      if (!prodShift.hasEnded())
+      this.pubsub.subscribe(
+        'prodShiftOrders.updated.*',
+        this.onProdShiftOrderUpdated.bind(this)
+      );
+
+      this.pubsub.subscribe(
+        'prodShiftOrders.deleted.*',
+        this.onProdShiftOrderDeleted.bind(this)
+      );
+
+      this.pubsub.subscribe(
+        'prodDowntimes.created.' + this.prodShift.get('prodLine'),
+        this.onProdDowntimeCreated.bind(this)
+      );
+
+      this.pubsub.subscribe(
+        'prodDowntimes.updated.*',
+        this.onProdDowntimeUpdated.bind(this)
+      );
+
+      this.pubsub.subscribe(
+        'prodDowntimes.deleted.*',
+        this.onProdDowntimeDeleted.bind(this)
+      );
+
+      if (!this.prodShift.hasEnded())
       {
         this.pubsub.subscribe(
-          'production.synced.' + prodShift.get('prodLine'), this.handleProdChanges.bind(this)
+          'production.synced.' + this.prodShift.get('prodLine'),
+          this.onProdShiftSynced.bind(this)
         );
       }
     },
 
-    handleProdChanges: function(changes)
+    onProdShiftEdited: function(message)
     {
-      if (_.intersection(changes.types, PROD_LOG_ENTRY_REFRESH_TYPES).length)
-      {
-        this.prodLogEntries.fetch({reset: true});
-      }
+      this.prodShift.set(message);
+    },
 
-      if (changes.prodShift)
+    onProdShiftSynced: function(message)
+    {
+      if (message.prodShift)
       {
-        this.prodShift.set(changes.prodShift);
+        this.prodShift.set(message.prodShift);
+      }
+    },
+
+    onProdShiftOrderCreated: function(message)
+    {
+      if (message.prodShift === this.prodShift.id)
+      {
+        this.prodShiftOrders.add(message);
+      }
+    },
+
+    onProdShiftOrderUpdated: function(message)
+    {
+      var prodShiftOrder = this.prodShiftOrders.get(message._id);
+
+      if (prodShiftOrder)
+      {
+        prodShiftOrder.set(message);
+      }
+    },
+
+    onProdShiftOrderDeleted: function(message)
+    {
+      var prodShiftOrder = this.prodShiftOrders.get(message._id);
+
+      if (prodShiftOrder)
+      {
+        this.prodShiftOrders.remove(prodShiftOrder);
+      }
+    },
+
+    onProdDowntimeCreated: function(message)
+    {
+      if (message.prodShift === this.prodShift.id)
+      {
+        this.prodDowntimes.add(message);
+      }
+    },
+
+    onProdDowntimeUpdated: function(message)
+    {
+      var prodDowntime = this.prodDowntimes.get(message._id);
+
+      if (prodDowntime)
+      {
+        prodDowntime.set(message);
+      }
+    },
+
+    onProdDowntimeDeleted: function(message)
+    {
+      var prodDowntime = this.prodDowntimes.get(message._id);
+
+      if (prodDowntime)
+      {
+        this.prodDowntimes.remove(prodDowntime);
       }
     }
 

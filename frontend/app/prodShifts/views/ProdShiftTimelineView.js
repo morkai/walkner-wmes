@@ -48,6 +48,13 @@ define([
       this.onResize = _.debounce(this.onResize.bind(this), 100);
 
       $(window).resize(this.onResize);
+
+      this.listenTo(this.prodShiftOrders, 'add', this.render);
+      this.listenTo(this.prodShiftOrders, 'remove', this.render);
+      this.listenTo(this.prodShiftOrders, 'change', this.render);
+      this.listenTo(this.prodDowntimes, 'add', this.render);
+      this.listenTo(this.prodDowntimes, 'remove', this.render);
+      this.listenTo(this.prodDowntimes, 'change', this.render);
     },
 
     destroy: function()
@@ -72,15 +79,8 @@ define([
       }
     },
 
-    beforeRender: function()
-    {
-      this.stopListening(this.collection, 'reset', this.render);
-    },
-
     afterRender: function()
     {
-      this.listenToOnce(this.collection, 'reset', this.render);
-
       this.serializeDatum();
 
       if (this.chart === null)
@@ -134,219 +134,108 @@ define([
 
     serializeDatum: function()
     {
-      /*jshint -W015*/
-
-      this.beginning = -1;
-
-      var i = 0;
-      var l = this.collection.length;
-
-      var orderToItemMap = {};
-      var downtimeToItemMap = {};
       var idles = [];
       var orders = [];
       var downtimes = [];
+      var activeTimes = [];
 
-      function pushDatum(type, list, prodLogEntry, startingTime)
+      this.beginning = Date.parse(this.prodShift.get('date'));
+
+      var shiftEndTime = this.beginning + 8 * 3600 * 1000;
+      var nowTime = Date.now();
+      var shiftEnded = nowTime >= shiftEndTime;
+      var endingTime = Math.min(nowTime, shiftEndTime);
+
+      this.ending = endingTime;
+
+      this.prodShiftOrders.forEach(function(prodShiftOrder)
       {
-        var item = {
-          type: type,
-          prodLogEntry: prodLogEntry,
+        var startingTime = Date.parse(prodShiftOrder.get('startedAt'));
+        var endingTime = Date.parse(prodShiftOrder.get('finishedAt'));
+
+        activeTimes.push({from: startingTime, to: endingTime});
+
+        orders.push({
+          type: 'working',
           starting_time: startingTime,
-          ending_time: -1,
-          ended: true
-        };
+          ending_time: endingTime || -1,
+          ended: !isNaN(endingTime),
+          data: prodShiftOrder.toJSON()
+        });
+      });
 
-        list.push(item);
-
-        var data = prodLogEntry.get('data');
-
-        if (type === 'working')
-        {
-          item.quantityDone = 0;
-          item.workerCount = 0;
-
-          orderToItemMap[data._id] = item;
-        }
-        else if (type === 'downtime')
-        {
-          item.hasOrder = data.prodShiftOrder !== null;
-
-          downtimeToItemMap[data._id] = item;
-        }
-      }
-
-      for (; i < l; ++i)
+      this.prodDowntimes.forEach(function(prodDowntime)
       {
-        var prodLogEntry = this.collection.at(i);
-        var prodShiftOrder = prodLogEntry.get('prodShiftOrder');
-        var prodShiftOrderId = prodShiftOrder ? prodShiftOrder._id : null;
-        var type = prodLogEntry.get('type');
-        var data = prodLogEntry.get('data');
-        var item;
+        var startingTime = Date.parse(prodDowntime.get('startedAt'));
+        var endingTime = Date.parse(prodDowntime.get('finishedAt'));
 
-        if (this.beginning === -1)
+        if (!prodDowntime.get('prodShiftOrder'))
         {
-          if (type === 'changeShift')
-          {
-            this.beginning = Date.parse(data.startedProdShift.date);
-
-            pushDatum('idle', idles, prodLogEntry, this.beginning);
-          }
-
-          continue;
+          activeTimes.push({from: startingTime, to: endingTime});
         }
 
-        switch (type)
+        downtimes.push({
+          type: 'downtime',
+          starting_time: startingTime,
+          ending_time: endingTime || -1,
+          ended: !isNaN(endingTime),
+          data: prodDowntime.toJSON()
+        });
+      });
+
+      activeTimes.sort(function(a, b)
+      {
+        return a.from - b.from;
+      });
+
+      var idleEndingTime = activeTimes.length === 0
+        ? (shiftEnded ? endingTime : -1)
+        : activeTimes[0].from;
+
+      idles.push({
+        type: 'idle',
+        starting_time: this.beginning,
+        ending_time: idleEndingTime,
+        ended: idleEndingTime !== -1
+      });
+
+      for (var i = 0, l = activeTimes.length; i < l; ++i)
+      {
+        var b = activeTimes[i + 1];
+
+        if (!b)
         {
-          case 'changeOrder':
-            var startingTime = Date.parse(data.startedAt);
+          break;
+        }
 
-            if (idles[idles.length - 1].ending_time === -1)
-            {
-              idles[idles.length - 1].ending_time = startingTime;
-            }
+        var a = activeTimes[i];
 
-            pushDatum('working', orders, prodLogEntry, startingTime);
-            break;
-
-          case 'correctOrder':
-            item = orderToItemMap[prodShiftOrderId];
-
-            if (item)
-            {
-              var relatedEntryData = item.prodLogEntry.get('data');
-
-              relatedEntryData.orderId = data.orderId;
-              relatedEntryData.operationNo = data.operationNo;
-            }
-            break;
-
-          case 'finishOrder':
-            item = orderToItemMap[prodShiftOrderId];
-
-            if (item && item.ending_time === -1)
-            {
-              item.ending_time = Date.parse(data.finishedAt);
-            }
-            break;
-
-          case 'startDowntime':
-            pushDatum('downtime', downtimes, prodLogEntry, Date.parse(data.startedAt));
-            break;
-
-          case 'finishDowntime':
-            item = downtimeToItemMap[data._id];
-
-            if (item && item.ending_time === -1)
-            {
-              item.ending_time = Date.parse(data.finishedAt);
-            }
-            break;
-
-          case 'endWork':
-            pushDatum('idle', idles, prodLogEntry, Date.parse(prodLogEntry.get('createdAt')));
-            break;
-
-          case 'changeQuantityDone':
-            item = orderToItemMap[prodShiftOrderId];
-
-            if (item)
-            {
-              item.quantityDone = data.newValue;
-            }
-            break;
-
-          case 'changeWorkerCount':
-            item = orderToItemMap[prodShiftOrderId];
-
-            if (item)
-            {
-              item.workerCount = data.newValue;
-            }
-            break;
-
-          case 'editOrder':
-            item = orderToItemMap[prodShiftOrderId];
-
-            if (!item)
-            {
-              break;
-            }
-
-            if (data.quantityDone !== undefined)
-            {
-              item.quantityDone = data.quantityDone;
-            }
-
-            if (data.workerCount !== undefined)
-            {
-              item.workerCount = data.workerCount;
-            }
-
-            if (data.startedAt !== undefined)
-            {
-              item.starting_time = Date.parse(data.startedAt);
-            }
-
-            if (data.finishedAt !== undefined)
-            {
-              item.ending_time = Date.parse(data.finishedAt);
-            }
-
-            item.prodLogEntry.set('data', _.extend(item.prodLogEntry.get('data'), data));
-            break;
-
-          case 'editDowntime':
-            item = downtimeToItemMap[data._id];
-
-            if (!item)
-            {
-              break;
-            }
-
-            if (data.startedAt !== undefined)
-            {
-              item.starting_time = Date.parse(data.startedAt);
-            }
-
-            if (data.finishedAt !== undefined)
-            {
-              item.ending_time = Date.parse(data.finishedAt);
-            }
-
-            item.prodLogEntry.set('data', _.extend(item.prodLogEntry.get('data'), data));
-            break;
-
-          case 'deleteDowntime':
-            item = downtimeToItemMap[data._id];
-
-            if (!item)
-            {
-              break;
-            }
-
-            delete downtimeToItemMap[data._id];
-
-            downtimes.splice(downtimes.indexOf(item), 1);
-            break;
-
-          case 'deleteOrder':
-            item = orderToItemMap[data._id];
-
-            if (!item)
-            {
-              break;
-            }
-
-            delete orderToItemMap[data._id];
-
-            orders.splice(orders.indexOf(item), 1);
-            break;
+        if (b.from - a.to > 1000)
+        {
+          idles.push({
+            type: 'idle',
+            starting_time: a.to,
+            ending_time: b.from,
+            ended: true
+          });
         }
       }
 
-      var endingTime = this.ending = Math.min(Date.now(), this.beginning + 8 * 3600 * 1000);
+      if (activeTimes.length && activeTimes[activeTimes.length - 1].to < shiftEndTime)
+      {
+        idles.push({
+          type: 'idle',
+          starting_time: activeTimes[activeTimes.length - 1].to,
+          ending_time: shiftEnded ? shiftEndTime : -1,
+          ended: shiftEnded
+        });
+      }
+
+      this.datum = [
+        {type: 'idle', times: endDatum(idles)},
+        {type: 'working', times: endDatum(orders)},
+        {type: 'downtime', times: endDatum(downtimes)}
+      ];
 
       function endDatum(list)
       {
@@ -358,12 +247,6 @@ define([
 
         return list;
       }
-
-      this.datum = [
-        {type: 'idle', times: endDatum(idles)},
-        {type: 'working', times: endDatum(orders)},
-        {type: 'downtime', times: endDatum(downtimes)}
-      ];
     },
 
     extendDatum: function()
@@ -417,7 +300,7 @@ define([
         })
         .afterRender(function(item)
         {
-          if (item.type === 'downtime' && item.hasOrder)
+          if (item.type === 'downtime' && item.data.prodShiftOrder)
           {
             this.setAttribute('height', '50');
             this.setAttribute('y', 11);
@@ -447,14 +330,14 @@ define([
           if (item.type === 'downtime' && user.isAllowedTo('PROD_DOWNTIMES:VIEW'))
           {
             view.broker.publish('router.navigate', {
-              url: '/prodDowntimes/' + item.prodLogEntry.get('data')._id,
+              url: '/prodDowntimes/' + item.data._id,
               trigger: true
             });
           }
           else if (item.type === 'working')
           {
             view.broker.publish('router.navigate', {
-              url: '/prodShiftOrders/' + item.prodLogEntry.get('data')._id,
+              url: '/prodShiftOrders/' + item.data._id,
               trigger: true
             });
           }
@@ -475,25 +358,23 @@ define([
         return renderTimelineIdlePopover(templateData);
       }
 
-      var prodLogEntryData = item.prodLogEntry.get('data');
-
       if (item.type === 'working')
       {
-        templateData.order = prodLogEntryData.orderId;
-        templateData.operation = prodLogEntryData.operationNo;
-        templateData.workerCount = item.workerCount;
-        templateData.quantityDone = item.quantityDone;
+        templateData.order = item.data.orderId;
+        templateData.operation = item.data.operationNo;
+        templateData.workerCount = item.data.workerCount;
+        templateData.quantityDone = item.data.quantityDone;
 
         return renderTimelineWorkingPopover(templateData);
       }
 
       if (item.type === 'downtime')
       {
-        var reason = downtimeReasons.get(prodLogEntryData.reason);
-        var aor = aors.get(prodLogEntryData.aor);
+        var reason = downtimeReasons.get(item.data.reason);
+        var aor = aors.get(item.data.aor);
 
-        templateData.reason = reason ? reason.getLabel() : prodLogEntryData.reason;
-        templateData.aor = aor ? aor.getLabel() : prodLogEntryData.aor;
+        templateData.reason = reason ? reason.getLabel() : item.data.reason;
+        templateData.aor = aor ? aor.getLabel() : item.data.aor;
 
         return renderTimelineDowntimePopover(templateData);
       }
