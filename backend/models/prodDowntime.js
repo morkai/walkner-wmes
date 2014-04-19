@@ -161,7 +161,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     }
     else
     {
-      var changes = {};
+      var changes = {_id: doc._id};
 
       this.modified.forEach(function(modifiedPath)
       {
