@@ -127,6 +127,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
   });
 
   prodDowntimeSchema.index({prodShiftOrder: 1});
+  prodDowntimeSchema.index({prodShift: 1});
   prodDowntimeSchema.index({status: 1, startedAt: -1});
   prodDowntimeSchema.index({reason: 1, startedAt: -1});
   prodDowntimeSchema.index({aor: 1, startedAt: -1});
