@@ -33,6 +33,7 @@
     "PROPERTY:operator": "Operator",
     "PROPERTY:operators": "Operators",
     "PROPERTY:quantitiesDone": "Quantities done",
+    "PROPERTY:quantitiesDone:hour": "Hour",
     "PROPERTY:quantitiesDone:planned": "Planned",
     "PROPERTY:quantitiesDone:actual": "Actual",
     "PROPERTY:totalQuantityDone": "Quantity done",
