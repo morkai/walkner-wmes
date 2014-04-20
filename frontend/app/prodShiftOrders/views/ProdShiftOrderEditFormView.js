@@ -166,8 +166,10 @@ define([
         formData.orderId = formData.orderData[formData.mechOrder ? 'nc12' : 'no'];
       }
 
-      formData.startedAt = new Date(formData.startedAtDate + ' ' + formData.startedAtTime);
-      formData.finishedAt = new Date(formData.finishedAtDate + ' ' + formData.finishedAtTime);
+      formData.startedAt =
+        time.getMoment(formData.startedAtDate + ' ' + formData.startedAtTime).toDate();
+      formData.finishedAt =
+        time.getMoment(formData.finishedAtDate + ' ' + formData.finishedAtTime).toDate();
 
       delete formData.startedAtDate;
       delete formData.startedAtTime;
