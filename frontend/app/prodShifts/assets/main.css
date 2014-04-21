@@ -87,9 +87,10 @@
   font-weight: bold;
   text-shadow: 1px 1px 1px #666;
 }
-.prodShifts-editForm-quantitiesDone {
+.prodShifts-form-quantitiesDone {
   width: 300px;
+  margin-bottom: 0;
 }
-.prodShifts-editForm-quantitiesDone td:first-child {
+.prodShifts-form-quantitiesDone td:first-child {
   text-align: right;
 }

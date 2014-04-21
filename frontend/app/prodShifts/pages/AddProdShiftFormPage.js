@@ -4,18 +4,16 @@
 
 define([
   'app/i18n',
-  'app/time',
-  'app/core/pages/EditFormPage',
+  'app/core/pages/AddFormPage',
   '../views/ProdShiftFormView'
 ], function(
   t,
-  time,
-  EditFormPage,
+  AddFormPage,
   ProdShiftFormView
 ) {
   'use strict';
 
-  return EditFormPage.extend({
+  return AddFormPage.extend({
 
     FormView: ProdShiftFormView,
 
@@ -26,11 +24,7 @@ define([
           label: t.bound('prodShifts', 'BREADCRUMBS:browse'),
           href: this.model.genClientUrl('base')
         },
-        {
-          label: this.model.getLabel(),
-          href: this.model.genClientUrl()
-        },
-        t.bound('prodShifts', 'BREADCRUMBS:editForm')
+        t.bound('prodShifts', 'BREADCRUMBS:addForm')
       ];
     }
 

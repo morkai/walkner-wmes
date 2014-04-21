@@ -1,5 +1,6 @@
 {
   "BREADCRUMBS:browse": "Zmiany",
+  "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
@@ -8,10 +9,12 @@
 
   "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
   "PAGE_ACTION:export": "Eksportuj zmiany",
+  "PAGE_ACTION:add": "Dodaj zmianę",
   "PAGE_ACTION:edit": "Edytuj zmianę",
   "PAGE_ACTION:delete": "Usuń zmianę",
 
   "PANEL:TITLE:details": "Szczegóły zmiany",
+  "PANEL:TITLE:addForm": "Formularz dodawania zmiany produkcyjnej",
   "PANEL:TITLE:editForm": "Formularz edycji danych zmiany produkcyjnej",
 
   "FILTER:DATE:FROM": "Od",
@@ -39,9 +42,14 @@
   "PROPERTY:quantitiesDone:actual": "Wykonane",
   "PROPERTY:totalQuantityDone": "Wykonana ilość",
 
+  "FORM:ACTION:add": "Dodaj zmianę",
   "FORM:ACTION:edit": "Edytuj zmianę",
+  "FORM:ERROR:addFailure": "Nie udało się dodać zmiany :-(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zmiany :-(",
   "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zmiany produkcyjnej: nie wykryto żadnych poprawnych zmian :(",
+  "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
+  "FORM:ERROR:SHIFT_NOT_ENDED": "Wybrana zmiana jeszcze się nie skończyła!",
+  "FORM:ERROR:EXISTING": "Wybrana zmiana już istnieje!",
 
   "totalQuantityDone": "{actual} z {planned}",
 

@@ -26,6 +26,8 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   express.get('/prodShifts', canView, limitOrgUnit, crud.browseRoute.bind(null, app, ProdShift));
 
+  express.post('/prodShifts', canManage, addProdShiftRoute);
+
   express.get(
     '/prodShifts;export',
     canView,
@@ -79,6 +81,118 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
       '"prodLine': doc.prodLine,
       '"shiftId': doc._id
     };
+  }
+
+  function addProdShiftRoute(req, res, next)
+  {
+    step(
+      function validateInputStep()
+      {
+        req.body.shift = parseInt(req.body.shift, 10);
+
+        var dateMoment = moment(req.body.date);
+
+        app.orgUnits.getAllForProdLine(req.body.prodLine, req.body);
+
+        if (!dateMoment.isValid()
+          || req.body.shift < 1
+          || req.body.shift > 3
+          || req.body.division === null)
+        {
+          return this.skip(new Error('INPUT'), 400);
+        }
+
+        dateMoment.hours(req.body.shift === 1 ? 6 : req.body.shift === 2 ? 14 : 22);
+
+        if (Date.now() <= dateMoment.clone().add('hours', 8).valueOf())
+        {
+          return this.skip(new Error('SHIFT_NOT_ENDED'), 400);
+        }
+
+        req.body.date = dateMoment.toDate();
+      },
+      function findExistingProdShiftsStep()
+      {
+        ProdShift
+          .find({date: req.body.date, prodLine: req.body.prodLine}, {_id: 1})
+          .lean()
+          .exec(this.next());
+      },
+      function handleExistingProdShiftsStep(err, prodShifts)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (prodShifts.length !== 0)
+        {
+          return this.skip(new Error('EXISTING'), 400);
+        }
+      },
+      function createLogEntryStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var logEntry = ProdLogEntry.addShift(
+          userInfo.createObject(req.session.user, req), req.body
+        );
+
+        if (!logEntry)
+        {
+          return this.skip(new Error('INPUT'), 400);
+        }
+
+        logEntry.save(this.next());
+      },
+      function handleLogEntryStep(err, logEntry)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var next = this.next();
+
+        logEntryHandlers.addShift(
+          app,
+          productionModule,
+          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
+          logEntry,
+          function(err)
+          {
+            if (err)
+            {
+              return next(err, null, null);
+            }
+
+            return next(null, null, logEntry);
+          }
+        );
+      },
+      function sendResponseStep(err, statusCode, logEntry)
+      {
+        if (statusCode)
+        {
+          res.statusCode = statusCode;
+        }
+
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (statusCode)
+        {
+          return res.send(statusCode);
+        }
+
+        res.send(logEntry.data);
+      }
+    );
   }
 
   function editProdShiftRoute(req, res, next)

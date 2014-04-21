@@ -51,23 +51,35 @@ define([
 
     nlsDomain: 'prodShifts',
 
-    defaults: {
-      division: null,
-      subdivision: null,
-      mrpControllers: null,
-      prodFlow: null,
-      workCenter: null,
-      prodLine: null,
-      date: null,
-      shift: null,
-      state: null,
-      quantitiesDone: null,
-      creator: null,
-      createdAt: null,
-      master: null,
-      leader: null,
-      operator: null,
-      operators: null
+    defaults: function()
+    {
+      return {
+        division: null,
+        subdivision: null,
+        mrpControllers: null,
+        prodFlow: null,
+        workCenter: null,
+        prodLine: null,
+        date: null,
+        shift: null,
+        state: null,
+        quantitiesDone: [
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0}
+        ],
+        creator: null,
+        createdAt: null,
+        master: null,
+        leader: null,
+        operator: null,
+        operators: null
+      };
     },
 
     initialize: function(attributes, options)

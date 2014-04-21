@@ -51,6 +51,7 @@ define([
     serialize: function()
     {
       return {
+        editMode: !!this.options.editMode,
         idPrefix: this.idPrefix,
         formMethod: this.options.formMethod,
         formAction: this.options.formAction,

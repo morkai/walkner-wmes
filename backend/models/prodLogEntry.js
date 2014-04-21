@@ -84,6 +84,29 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 
   prodLogEntrySchema.statics.generateId = generateId;
 
+  prodLogEntrySchema.statics.addShift = function(creator, data)
+  {
+    if (!validateQuantitiesDone(data.quantitiesDone))
+    {
+      return null;
+    }
+
+    data.quantitiesDone = data.quantitiesDone.map(function(quantityDone)
+    {
+      return lodash.pick(quantityDone, ['actual', 'planned']);
+    });
+
+    editPersonnel(data, data);
+
+    data.creator = creator;
+    data.createdAt = new Date();
+    data._id = generateId(data.createdAt, data.prodLine);
+
+    var ProdShift = mongoose.model('ProdShift');
+
+    return this.createFromProdModel(new ProdShift(data), creator, 'addShift', data, data.createdAt);
+  };
+
   prodLogEntrySchema.statics.editShift = function(prodShift, creator, changes)
   {
     if (lodash.isEmpty(changes))
@@ -282,7 +305,10 @@ function editPersonnel(logEntryData, changes, modelData)
         ? null
         : lodash.pick(userInfo, ['id', 'label']);
 
-      compareProperty(logEntryData, modelData, personnelProperty);
+      if (modelData)
+      {
+        compareProperty(logEntryData, modelData, personnelProperty);
+      }
     }
   });
 
@@ -293,7 +319,10 @@ function editPersonnel(logEntryData, changes, modelData)
       return lodash.pick(userInfo, ['id', 'label']);
     });
 
-    compareProperty(logEntryData, modelData, 'operators');
+    if (modelData)
+    {
+      compareProperty(logEntryData, modelData, 'operators');
+    }
   }
 }
 

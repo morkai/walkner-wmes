@@ -41,7 +41,10 @@ define([
 
     actions: function(layout)
     {
-      return [pageActions.export(layout, this, this.prodShiftList)];
+      return [
+        pageActions.export(layout, this, this.prodShiftList),
+        pageActions.add(this.prodShiftList, 'PROD_DATA:MANAGE')
+      ];
     },
 
     initialize: function()

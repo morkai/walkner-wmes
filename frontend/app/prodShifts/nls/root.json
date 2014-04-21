@@ -1,6 +1,7 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Shifts",
+    "BREADCRUMBS:addForm": "Adding",
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
@@ -10,10 +11,12 @@
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
     "PAGE_ACTION:export": "Export shifts",
+    "PAGE_ACTION:add": "Add shift",
     "PAGE_ACTION:edit": "Edit shift",
     "PAGE_ACTION:delete": "Delete shift",
 
     "PANEL:TITLE:details": "Shift's details",
+    "PANEL:TITLE:addForm": "Add shift form",
     "PANEL:TITLE:editForm": "Edit shift form",
 
     "FILTER:DATE:FROM": "From",
@@ -40,9 +43,14 @@
     "PROPERTY:quantitiesDone:actual": "Actual",
     "PROPERTY:totalQuantityDone": "Quantity done",
 
+    "FORM:ACTION:add": "Add shift",
     "FORM:ACTION:edit": "Edit shift",
+    "FORM:ERROR:addFailure": "Failed to add the shift :-(",
     "FORM:ERROR:editFailure": "Failed to edit the shift :-(",
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the shift: no valid changes were detected :(",
+    "FORM:ERROR:INPUT": "Invalid input data!",
+    "FORM:ERROR:SHIFT_NOT_ENDED": "The specified shift didn't end yet!",
+    "FORM:ERROR:EXISTING": "The specified shift already exists!",
 
     "totalQuantityDone": "{actual} of {planned}",
 

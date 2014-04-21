@@ -34,6 +34,7 @@ define([
     {
       var FormViewClass = this.options.FormView || this.FormView || FormView;
       var options = {
+        editMode: false,
         model: this.model,
         formMethod: 'POST',
         formAction: this.model.url(),

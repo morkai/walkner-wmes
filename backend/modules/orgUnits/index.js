@@ -436,6 +436,92 @@ exports.start = function startOrgUnitsModule(app, module)
     });
   };
 
+  module.getAllForProdLine = function(prodLine, orgUnits)
+  {
+    if (!orgUnits)
+    {
+      orgUnits = {};
+    }
+
+    orgUnits.division = null;
+    orgUnits.subdivision = null;
+    orgUnits.mrpControllers = null;
+    orgUnits.prodFlow = null;
+    orgUnits.workCenter = null;
+    orgUnits.prodLine = null;
+
+    if (!prodLine)
+    {
+      return orgUnits;
+    }
+
+    if (prodLine.constructor !== prodLinesModule.Model)
+    {
+      prodLine = this.getByTypeAndId('prodLine', prodLine);
+    }
+
+    if (!prodLine)
+    {
+      return orgUnits;
+    }
+
+    orgUnits.prodLine = prodLine._id;
+
+    var workCenter = workCentersModule.modelsById[prodLine.workCenter];
+
+    if (!workCenter)
+    {
+      return orgUnits;
+    }
+
+    orgUnits.workCenter = workCenter._id;
+
+    var prodFlow = prodFlowsModule.modelsById[workCenter.prodFlow];
+
+    if (!prodFlow)
+    {
+      return orgUnits;
+    }
+
+    orgUnits.prodFlow = prodFlow._id;
+
+    var mrpController = prodFlow.mrpController;
+
+    if (!Array.isArray(mrpController) || !mrpController.length)
+    {
+      return orgUnits;
+    }
+
+    orgUnits.mrpControllers = mrpController;
+
+    mrpController = mrpControllersModule.modelsById[mrpController[0]];
+
+    if (!mrpController)
+    {
+      return;
+    }
+
+    var subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
+
+    if (!subdivision)
+    {
+      return orgUnits;
+    }
+
+    orgUnits.subdivision = subdivision._id;
+
+    var division = divisionsModule.modelsById[subdivision.division];
+
+    if (!division)
+    {
+      return orgUnits;
+    }
+
+    orgUnits.division = division._id;
+
+    return orgUnits;
+  };
+
   function filterByParent(orgUnits, parentProperty, parentOrgUnit)
   {
     return orgUnits.filter(function(orgUnit)

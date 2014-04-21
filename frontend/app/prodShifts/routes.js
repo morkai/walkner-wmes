@@ -19,10 +19,21 @@ define([
   'use strict';
 
   var canView = user.auth('PROD_DATA:VIEW');
+  var canManage = user.auth('PROD_DATA:MANAGE');
 
   router.map('/prodShifts', canView, function(req)
   {
     viewport.showPage(new ProdShiftListPage({rql: req.rql}));
+  });
+
+  router.map('/prodShifts;add', canManage, function()
+  {
+    viewport.loadPage(['app/prodShifts/pages/AddProdShiftFormPage'], function(AddProdShiftFormPage)
+    {
+      return new AddProdShiftFormPage({
+        model: new ProdShift()
+      });
+    });
   });
 
   router.map('/prodShifts/:id', canView, function(req)
@@ -33,7 +44,7 @@ define([
     });
   });
 
-  router.map('/prodShifts/:id;edit', user.auth('PROD_DATA:MANAGE'), function(req)
+  router.map('/prodShifts/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
       ['app/prodShifts/pages/EditProdShiftFormPage'],
