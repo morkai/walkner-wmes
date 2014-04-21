@@ -50,6 +50,8 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   express.put('/prodShifts/:id', canManage, editProdShiftRoute);
 
+  express.del('/prodShifts/:id', canManage, deleteProdShiftRoute);
+
   function exportProdShift(doc)
   {
     var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
@@ -162,6 +164,83 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
         {
           app.broker.publish('production.edited.shift.' + logEntry.prodShift, logEntry.data);
         }
+      }
+    );
+  }
+
+  function deleteProdShiftRoute(req, res, next)
+  {
+    step(
+      function getProdDataStep()
+      {
+        productionModule.getProdData('shift', req.params.id, this.next());
+      },
+      function createLogEntryStep(err, prodShift)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!prodShift)
+        {
+          return this.skip(null, 404);
+        }
+
+        if (!prodShift.isEditable())
+        {
+          return this.skip(new Error('SHIFT_NOT_EDITABLE'), 400);
+        }
+
+        var logEntry = ProdLogEntry.deleteShift(
+          prodShift, userInfo.createObject(req.session.user, req)
+        );
+
+        logEntry.save(this.next());
+      },
+      function handleLogEntryStep(err, logEntry)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var next = this.next();
+
+        logEntryHandlers.deleteShift(
+          app,
+          productionModule,
+          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
+          logEntry,
+          function(err)
+          {
+            if (err)
+            {
+              return next(err, null, null);
+            }
+
+            return next(null, null, logEntry);
+          }
+        );
+      },
+      function sendResponseStep(err, statusCode, logEntry)
+      {
+        if (statusCode)
+        {
+          res.statusCode = statusCode;
+        }
+
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (statusCode)
+        {
+          return res.send(statusCode);
+        }
+
+        res.send(logEntry.data);
       }
     );
   }

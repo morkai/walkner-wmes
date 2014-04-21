@@ -10,6 +10,8 @@ define([
   'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/util/getShiftStartInfo',
+  'app/core/util/pageActions',
+  'app/core/util/onModelDeleted',
   'app/core/View',
   'app/prodShiftOrders/ProdShiftOrderCollection',
   'app/prodDowntimes/ProdDowntimeCollection',
@@ -26,6 +28,8 @@ define([
   viewport,
   bindLoadingMessage,
   getShiftStartInfo,
+  pageActions,
+  onModelDeleted,
   View,
   ProdShiftOrderCollection,
   ProdDowntimeCollection,
@@ -52,11 +56,7 @@ define([
           label: t.bound('prodShifts', 'BREADCRUMBS:browse'),
           href: this.prodShift.genClientUrl('base')
         },
-        this.prodShift.get('prodLine'),
-        t.bound('prodShifts', 'BREADCRUMBS:details', {
-          date: time.format(this.prodShift.get('date'), 'YYYY-MM-DD'),
-          shift: t('core', 'SHIFT:' + this.prodShift.get('shift'))
-        })
+        this.prodShift.getLabel()
       ];
     },
 
@@ -71,12 +71,10 @@ define([
 
       if (this.prodShift.hasEnded())
       {
-        actions.push({
-          label: t.bound('prodShifts', 'PAGE_ACTION:edit'),
-          icon: 'edit',
-          href: this.prodShift.genClientUrl('edit'),
-          privileges: 'PROD_DATA:MANAGE'
-        });
+        actions.push(
+          pageActions.edit(this.prodShift, 'PROD_DATA:MANAGE'),
+          pageActions.delete(this.prodShift, 'PROD_DATA:MANAGE')
+        );
       }
 
       return actions;
@@ -169,8 +167,13 @@ define([
     setUpRemoteTopics: function()
     {
       this.pubsub.subscribe(
-        'production.edited.shift.' + this.prodShift.id,
-        this.onProdShiftEdited.bind(this)
+        'prodShifts.updated.' + this.prodShift.id,
+        this.onProdShiftUpdated.bind(this)
+      );
+
+      this.pubsub.subscribe(
+        'prodShifts.deleted.' + this.prodShift.id,
+        this.onProdShiftDeleted.bind(this)
       );
 
       this.pubsub.subscribe(
@@ -202,27 +205,16 @@ define([
         'prodDowntimes.deleted.*',
         this.onProdDowntimeDeleted.bind(this)
       );
-
-      if (!this.prodShift.hasEnded())
-      {
-        this.pubsub.subscribe(
-          'production.synced.' + this.prodShift.get('prodLine'),
-          this.onProdShiftSynced.bind(this)
-        );
-      }
     },
 
-    onProdShiftEdited: function(message)
+    onProdShiftUpdated: function(message)
     {
       this.prodShift.set(message);
     },
 
-    onProdShiftSynced: function(message)
+    onProdShiftDeleted: function()
     {
-      if (message.prodShift)
-      {
-        this.prodShift.set(message.prodShift);
-      }
+      onModelDeleted(this.broker, this.prodShift, null, true);
     },
 
     onProdShiftOrderCreated: function(message)

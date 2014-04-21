@@ -92,6 +92,7 @@ exports.pubsub = {
     'hourlyPlans.created', 'hourlyPlans.updated.*',
     'users.syncFailed',
     'production.synced.*', 'production.edited.**',
+    'prodShifts.**',
     'prodDowntimes.**',
     'prodShiftOrders.**',
     'updater.newVersion',

@@ -8,6 +8,7 @@ define([
   '../data/prodLines',
   '../core/Collection',
   '../core/util/matchesProdLine',
+  '../core/util/matchesEquals',
   './ProdShift'
 ], function(
   _,
@@ -15,6 +16,7 @@ define([
   prodLines,
   Collection,
   matchesProdLine,
+  matchesEquals,
   ProdShift
 ) {
   'use strict';
@@ -46,10 +48,15 @@ define([
       });
     },
 
-    matches: function(message)
+    hasOrMatches: function(message)
     {
-      return message.types.indexOf('changeShift') !== -1
-        && matchesProdLine(this.rqlQuery, message.prodLine);
+      if (this.get(message._id))
+      {
+        return true;
+      }
+
+      return matchesProdLine(this.rqlQuery, message.prodLine)
+        && matchesEquals(this.rqlQuery, 'shift', message.shift);
     }
 
   });

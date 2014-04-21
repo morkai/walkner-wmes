@@ -88,7 +88,9 @@ define([
 
     updatePageHeader: function()
     {
-      this.$('.production-pageHeader').text(this.model.getLabel());
+      this.$('.production-pageHeader').text(
+        this.model.prodLine.get('description') || this.model.prodLine.id
+      );
     },
 
     updateCurrentTime: function()

@@ -26,12 +26,8 @@ define([
           label: t.bound('prodShifts', 'BREADCRUMBS:browse'),
           href: this.model.genClientUrl('base')
         },
-        this.model.get('prodLine'),
         {
-          label: t.bound('prodShifts', 'BREADCRUMBS:details', {
-            date: time.format(this.model.get('date'), 'YYYY-MM-DD'),
-            shift: t('core', 'SHIFT:' + this.model.get('shift'))
-          }),
+          label: this.model.getLabel(),
           href: this.model.genClientUrl()
         },
         t.bound('prodShifts', 'BREADCRUMBS:editForm')

@@ -92,6 +92,31 @@ module.exports = function setupProdShiftModel(app, mongoose)
   prodShiftSchema.index({workCenter: 1, date: -1});
   prodShiftSchema.index({date: -1, prodLine: 1});
 
+  prodShiftSchema.post('save', function(doc)
+  {
+    if (app.production.recreating)
+    {
+      return;
+    }
+
+    if (this.wasNew)
+    {
+      app.broker.publish('prodShifts.created.' + doc.prodLine, doc.toJSON());
+    }
+    else
+    {
+      var changes = {_id: doc._id};
+
+      this.modified.forEach(function(modifiedPath)
+      {
+        changes[modifiedPath] = doc.get(modifiedPath);
+      });
+      this.modified = null;
+
+      app.broker.publish('prodShifts.updated.' + doc._id, changes);
+    }
+  });
+
   prodShiftSchema.statics.setPlannedQuantities = function(
     prodLineIds, date, plannedQuantities, done)
   {
@@ -173,6 +198,11 @@ module.exports = function setupProdShiftModel(app, mongoose)
     var currentShiftTime = app.fte.getCurrentShift().date.getTime();
 
     return prodShiftTime < currentShiftTime;
+  };
+
+  prodShiftSchema.methods.isEditable = function()
+  {
+    return this.hasEnded();
   };
 
   mongoose.model('ProdShift', prodShiftSchema);

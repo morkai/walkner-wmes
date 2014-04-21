@@ -193,6 +193,11 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     );
   };
 
+  prodLogEntrySchema.statics.deleteShift = function(prodShift, creator)
+  {
+    return this.createFromProdModel(prodShift, creator, 'deleteShift', {});
+  };
+
   prodLogEntrySchema.statics.createFromProdModel = function(
     prodModel, creator, type, data, createdAt)
   {

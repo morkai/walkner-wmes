@@ -4,6 +4,7 @@
 
 define([
   'underscore',
+  '../i18n',
   '../user',
   '../time',
   '../socket',
@@ -19,6 +20,7 @@ define([
   '../prodShiftOrders/ProdShiftOrder'
 ], function(
   _,
+  t,
   user,
   time,
   socket,
@@ -467,19 +469,9 @@ define([
      */
     getLabel: function()
     {
-      if (!this.prodLine)
-      {
-        return this.get('prodLine');
-      }
-
-      var description = this.prodLine.get('description');
-
-      if (_.isString(description) && description.length)
-      {
-        return description;
-      }
-
-      return this.prodLine.id;
+      return this.get('prodLine')
+        + ': ' + time.format(this.get('date'), 'YYYY-MM-DD')
+        + ', ' + t('core', 'SHIFT:' + this.get('shift'));
     },
 
     /**

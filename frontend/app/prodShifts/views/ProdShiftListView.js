@@ -3,19 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
-  'app/i18n',
-  'app/user',
-  'app/viewport',
   'app/core/views/ListView',
   'app/data/prodLines',
   'app/data/views/renderOrgUnitPath',
   './decorateProdShift'
 ], function(
-  _,
-  t,
-  user,
-  viewport,
   ListView,
   prodLines,
   renderOrgUnitPath,
@@ -26,7 +18,9 @@ define([
   return ListView.extend({
 
     remoteTopics: {
-      'production.synced.**': 'refreshCollection'
+      'prodShifts.created.*': 'refreshIfMatches',
+      'prodShifts.updated.*': 'refreshIfMatches',
+      'prodShifts.deleted.*': 'refreshIfMatches'
     },
 
     columns: ['mrpControllers', 'prodFlow', 'prodLine', 'date', 'shift', 'createdAt', 'creator'],
@@ -70,11 +64,11 @@ define([
         });
     },
 
-    refreshCollection: function(message)
+    refreshIfMatches: function(message)
     {
-      if (!message || this.collection.matches(message))
+      if (this.collection.hasOrMatches(message))
       {
-        return ListView.prototype.refreshCollection.apply(this, arguments);
+        this.refreshCollection();
       }
     }
 
