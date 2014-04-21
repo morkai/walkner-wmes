@@ -7,6 +7,9 @@
 .modal-body {
   padding: 1em;
 }
+.modal-body .form-actions:last-child {
+  margin: 1em -1em -1em -1em;
+}
 .modal.has-panel .modal-body {
   padding: 0;
 }
