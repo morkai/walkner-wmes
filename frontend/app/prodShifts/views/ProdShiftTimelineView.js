@@ -42,15 +42,12 @@ define([
     className: 'prodShifts-timeline',
 
     events: {
-      'click .prodShifts-timeline-addOrder': function()
-      {
-        console.log('addOrder');
-      },
+      'click .prodShifts-timeline-addOrder': 'showAddOrderDialog',
       'click .prodShifts-timeline-editOrder': function()
       {
         this.showEditDialog(
           this.prodShiftOrders,
-          'app/prodShiftOrders/views/ProdShiftOrderEditFormView'
+          'app/prodShiftOrders/views/ProdShiftOrderFormView'
         );
       },
       'click .prodShifts-timeline-deleteOrder': function()
@@ -65,7 +62,7 @@ define([
       {
         this.showEditDialog(
           this.prodDowntimes,
-          'app/prodDowntimes/views/ProdDowntimeEditFormView'
+          'app/prodDowntimes/views/ProdDowntimeFormView'
         );
       },
       'click .prodShifts-timeline-deleteDowntime': function()
@@ -467,6 +464,49 @@ define([
 
         return renderTimelineDowntimePopover(templateData);
       }
+    },
+
+    showAddOrderDialog: function()
+    {
+      var view = this;
+      var popoverItem = this.popover.item;
+
+      require(
+        [
+          'app/prodShiftOrders/views/ProdShiftOrderFormView',
+          'app/prodShiftOrders/ProdShiftOrder'
+        ],
+        function(AddFormView, ProdShiftOrder)
+        {
+          var prodShiftOrder = new ProdShiftOrder({
+            prodShift: view.prodShift.id,
+            master: view.prodShift.get('master'),
+            leader: view.prodShift.get('leader'),
+            operator: view.prodShift.get('operator'),
+            operators: view.prodShift.get('operators'),
+            workerCount: 1,
+            quantityDone: 0,
+            startedAt: new Date(popoverItem.starting_time),
+            finishedAt: new Date(popoverItem.ending_time)
+          });
+          var nlsDomain = prodShiftOrder.getNlsDomain();
+
+          viewport.showDialog(new AddFormView({
+            dialogClassName: 'has-panel',
+            model: prodShiftOrder,
+            editMode: false,
+            formMethod: 'POST',
+            formAction: prodShiftOrder.url(),
+            formActionText: t(nlsDomain, 'FORM:ACTION:add'),
+            failureText: t(nlsDomain, 'FORM:ERROR:addFailure'),
+            panelTitleText: t(nlsDomain, 'PANEL:TITLE:addForm'),
+            done: function()
+            {
+              viewport.closeDialog();
+            }
+          }));
+        }
+      );
     },
 
     showEditDialog: function(collection, editFormViewModule)

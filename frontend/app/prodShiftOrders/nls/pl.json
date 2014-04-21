@@ -17,6 +17,7 @@
   "PANEL:TITLE:orderDetails": "Szczegóły zlecenia w momencie rozpoczęcia",
   "PANEL:TITLE:losses": "Straty materiałowe",
   "PANEL:TITLE:downtimes": "Przestoje rozpoczęte w trakcie wykonywania zlecenia",
+  "PANEL:TITLE:addForm": "Formularz dodawania zlecenia produkcyjnego",
   "PANEL:TITLE:editForm": "Formularz edycji danych zlecenia produkcyjnego",
 
   "FILTER:orderId": "Nr/12NC zlecenia",
@@ -30,7 +31,9 @@
   "FILTER:PLACEHOLDER:orderId": "Dowolne zlecenie",
   "FILTER:PLACEHOLDER:operationNo": "0000",
 
+  "FORM:ACTION:add": "Dodaj zlecenie",
   "FORM:ACTION:edit": "Edytuj zlecenie",
+  "FORM:ERROR:addFailure": "Nie udało się dodać zlecenia :-(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zlecenia :-(",
   "FORM:ERROR:order": "Zlecenie jest wymagane!",
   "FORM:ERROR:operation": "Operacja jest wymagana!",
@@ -38,6 +41,7 @@
   "FORM:ERROR:finishedAt": "Czas zakończenia musi mieścić się w ramach Zmiany produkcyjnej!",
   "FORM:ERROR:times": "Czas zakończenia musi być po Czasie rozpoczęcia!",
   "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zlecenia: nie wykryto żadnych poprawnych zmian :(",
+  "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
 
   "PROPERTY:mrpControllers": "Kontroler MRP",
   "PROPERTY:prodFlow": "Przepływ",

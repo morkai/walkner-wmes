@@ -6,18 +6,18 @@ define([
   'app/i18n',
   'app/time',
   'app/core/pages/EditFormPage',
-  '../views/ProdShiftOrderEditFormView'
+  '../views/ProdShiftOrderFormView'
 ], function(
   t,
   time,
   EditFormPage,
-  ProdShiftOrderEditFormView
+  ProdShiftOrderFormView
 ) {
   'use strict';
 
   return EditFormPage.extend({
 
-    FormView: ProdShiftOrderEditFormView,
+    FormView: ProdShiftOrderFormView,
 
     breadcrumbs: function()
     {

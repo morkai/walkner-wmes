@@ -28,6 +28,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
     '/prodShiftOrders', canView, limitOrgUnit, crud.browseRoute.bind(null, app, ProdShiftOrder)
   );
 
+  express.post('/prodShiftOrders', canManage, addProdShiftOrderRoute);
+
   express.get(
     '/prodShiftOrders;export',
     canView,
@@ -114,6 +116,91 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
     }
 
     return '?';
+  }
+
+  function addProdShiftOrderRoute(req, res, next)
+  {
+    step(
+      function getProdShiftStep()
+      {
+        productionModule.getProdData('shift', req.body.prodShift, this.next());
+      },
+      function createLogEntryStep(err, prodShift)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!prodShift)
+        {
+          return this.skip(new Error('INPUT'), 400);
+        }
+
+        [
+          'date', 'shift',
+          'division', 'subdivision', 'mrpControllers', 'prodFlow', 'workCenter', 'prodLine'
+        ].forEach(function(property)
+        {
+          req.body[property] = prodShift[property];
+        });
+
+        var logEntry = ProdLogEntry.addOrder(
+          userInfo.createObject(req.session.user, req), req.body
+        );
+
+        if (!logEntry)
+        {
+          return this.skip(new Error('INPUT'), 400);
+        }
+
+        logEntry.save(this.next());
+      },
+      function handleLogEntryStep(err, logEntry)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var next = this.next();
+
+        logEntryHandlers.addOrder(
+          app,
+          productionModule,
+          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
+          logEntry,
+          function(err)
+          {
+            if (err)
+            {
+              return next(err, null, null);
+            }
+
+            return next(null, null, logEntry);
+          }
+        );
+      },
+      function sendResponseStep(err, statusCode, logEntry)
+      {
+        if (statusCode)
+        {
+          res.statusCode = statusCode;
+        }
+
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (statusCode)
+        {
+          return res.send(statusCode);
+        }
+
+        res.send(logEntry.data);
+      }
+    );
   }
 
   function editProdShiftOrderRoute(req, res, next)

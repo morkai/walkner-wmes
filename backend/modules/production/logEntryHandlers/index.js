@@ -4,6 +4,7 @@
 
 'use strict';
 
+exports.addOrder = require('./addOrder');
 exports.addShift = require('./addShift');
 exports.changeOrder = require('./changeOrder');
 exports.changeMaster = require('./changePersonel')('master');

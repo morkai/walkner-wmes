@@ -3,16 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/time',
   'app/viewport',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
   'app/production/util/orderPickerHelpers',
-  'app/prodShiftOrders/templates/editForm'
+  'app/prodShiftOrders/templates/form'
 ], function(
-  _,
   t,
   time,
   viewport,
@@ -27,7 +25,7 @@ define([
 
     template: formTemplate,
 
-    idPrefix: 'prodShiftOrderEditForm',
+    idPrefix: 'prodShiftOrderForm',
 
     destroy: function()
     {
@@ -198,13 +196,9 @@ define([
     {
       if (xhr.responseJSON
         && xhr.responseJSON.error
-        && xhr.responseJSON.error.message === 'INVALID_CHANGES')
+        && t.has('prodShiftOrders', 'FORM:ERROR:' + xhr.responseJSON.error.message))
       {
-        this.$errorMessage = viewport.msg.show({
-          type: 'warning',
-          time: 5000,
-          text: t('prodShiftOrders', 'FORM:ERROR:INVALID_CHANGES')
-        });
+        this.showErrorMessage(xhr.responseJSON.error.message);
       }
       else
       {

@@ -18,8 +18,12 @@
     "PANEL:TITLE:orderDetails": "Order's details at the moment of start",
     "PANEL:TITLE:losses": "Losses",
     "PANEL:TITLE:downtimes": "Downtimes",
+    "PANEL:TITLE:addForm": "Add order form",
+    "PANEL:TITLE:editForm": "Edit order form",
 
+    "FORM:ACTION:add": "Add order",
     "FORM:ACTION:edit": "Edit order",
+    "FORM:ERROR:addFailure": "Failed to add the order :-(",
     "FORM:ERROR:editFailure": "Failed to edit the order :-(",
     "FORM:ERROR:order": "Order is required!",
     "FORM:ERROR:operation": "Operation is required!",
@@ -27,6 +31,7 @@
     "FORM:ERROR:finishedAt": "Finished at must be between the shift's time boundries!",
     "FORM:ERROR:times": "Finished at must be after Started at!",
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the order: no valid changes were detected :(",
+    "FORM:ERROR:INPUT": "Invalid input data!",
 
     "FILTER:orderId": "Order no/12NC",
     "FILTER:operationNo": "Oper. no",
