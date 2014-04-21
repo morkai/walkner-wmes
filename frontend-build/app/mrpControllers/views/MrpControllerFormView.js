@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["app/data/views/OrgUnitDropdownsView","app/core/views/FormView","app/mrpControllers/templates/form"],function(i,t,e){return t.extend({template:e,idPrefix:"mrpControllerForm",initialize:function(){t.prototype.initialize.call(this),this.orgUnitDropdownsView=new i({orgUnit:i.ORG_UNIT.SUBDIVISION}),this.setView(".orgUnitDropdowns-container",this.orgUnitDropdownsView)},afterRender:function(){t.prototype.afterRender.call(this),this.options.editMode&&this.$id("_id").attr("disabled",!0),this.listenToOnce(this.orgUnitDropdownsView,"afterRender",function(){this.orgUnitDropdownsView.selectValue(this.model).focus()})}})});

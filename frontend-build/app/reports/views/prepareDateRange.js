@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["app/time"],function(e){return function(a,t){var s,r=e.getMoment().minutes(0).seconds(0).milliseconds(0),o="day",c=r.hours();switch(t&&r.hours(6),a){case"currentMonth":r.date(1),s=r.clone().add("months",1);break;case"prevMonth":r.date(1).subtract("months",1),s=r.clone().add("months",1);break;case"currentWeek":r.weekday(0),s=r.clone().add("days",7);break;case"prevWeek":r.weekday(0).subtract("days",7),s=r.clone().add("days",7);break;case"today":s=r.clone().add("days",1),t&&(o="shift");break;case"yesterday":s=r.clone(),r.subtract("days",1),t&&(o="shift");break;case"currentShift":case"prevShift":c>=6&&14>c?r.hours(6):c>=14&&22>c?r.hours(14):(r.hours(22),6>c&&r.subtract("days",1)),s=r.clone().add("hours",8),o="hour","prevShift"===a&&(r.subtract("hours",8),s.subtract("hours",8))}return{fromMoment:r,toMoment:s,interval:o}}});

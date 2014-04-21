@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["../router","../viewport","../user","../core/util/showDeleteFormPage","./HourlyPlan","./pages/HourlyPlanListPage","./pages/HourlyPlanAddFormPage","./pages/HourlyPlanEditFormPage","./pages/HourlyPlanDetailsPage","./pages/HourlyPlanDetailsPrintablePage","i18n!app/nls/hourlyPlans"],function(a,e,l,n,o,r,P,s,i,u){var d=l.auth("HOURLY_PLANS:VIEW"),t=l.auth("HOURLY_PLANS:MANAGE|PROD_DATA:MANAGE");a.map("/hourlyPlans",d,function(a){e.showPage(new r({rql:a.rql}))}),a.map("/hourlyPlans;add",t,function(){e.showPage(new P)}),a.map("/hourlyPlans/:id",d,function(a){e.showPage(new i({modelId:a.params.id}))}),a.map("/hourlyPlans/:id;edit",t,function(a){e.showPage(new s({modelId:a.params.id}))}),a.map("/hourlyPlans/:id;print",d,function(a){e.showPage(new u({modelId:a.params.id}))}),a.map("/hourlyPlans/:id;delete",t,n.bind(null,o))});

@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["app/i18n","app/data/aors","app/data/companies","app/data/prodFunctions","app/data/divisions","app/data/subdivisions","app/data/views/renderOrgUnitPath"],function(a,n,r,t,i,o,e){return function(s){var p=r.get(s.company);s.company=p?p.getLabel():a("users","NO_DATA:company"),s.aors=Array.isArray(s.aors)?s.aors.map(function(a){var r=n.get(a);return r?r.getLabel():null}).filter(function(a){return!!a}).join("; "):"",s.aors.length||(s.aors=a("users","NO_DATA:aors"));var d=t.get(s.prodFunction);if(s.prodFunction=d?d.getLabel():a("users","NO_DATA:prodFunction"),s.orgUnitType&&s.orgUnitId){var u;switch(s.orgUnitType){case"division":u=i.get(s.orgUnitId);break;case"subdivision":u=o.get(s.orgUnitId)}u&&(s.orgUnit=e(u,!1,!1))}return s}});

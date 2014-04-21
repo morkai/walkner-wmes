@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["app/viewport","app/i18n","../View","../util/onModelDeleted"],function(e,i,t,n){return t.extend({remoteTopics:function(){var e={},i=this.model.getTopicPrefix();return e[i+".edited"]="onModelEdited",e[i+".deleted"]="onModelDeleted",e},serialize:function(){return{model:this.serializeDetails(this.model)}},serializeDetails:function(e){return e.toJSON()},beforeRender:function(){this.stopListening(this.collection,"change",this.render)},afterRender:function(){this.listenToOnce(this.model,"change",this.render)},onModelEdited:function(e){var i=e.model;i&&i._id===this.model.id&&this.model.set(i)},onModelDeleted:function(e){n(this.broker,this.model,e)}})});

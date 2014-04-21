@@ -1,1 +1,1 @@
-.modal-header{padding:1em;}.modal-title{line-height:1;}.modal-body{padding:1em;}
+.modal-header{padding:1em;}.modal-title{line-height:1;}.modal-body{padding:1em;}.modal-body .form-actions:last-child{margin:1em -1em -1em -1em;}.modal.has-panel .modal-body{padding:0;}.modal.has-panel .panel{border:none;margin-bottom:0;}.modal.has-panel .row .select2-choice{overflow:visible;}@media screen and (min-width:1280px){.modal.has-panel .modal-dialog{width:900px;}}

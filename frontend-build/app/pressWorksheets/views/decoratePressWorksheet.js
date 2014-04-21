@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["app/time","app/i18n"],function(t,e){function r(t){return t&&t.label?t.label:null}return function(o){var a=o.toJSON();return a.date=t.format(a.date,"YYYY-MM-DD"),a.shift=e("core","SHIFT:"+a.shift),a.master=r(a.master),a.operator=r(a.operator),a.operators=(a.operators||[]).map(r).filter(function(t){return!!t}),a.creator=r(a.creator),a.createdAt=a.createdAt?t.format(a.createdAt,"LLLL"):null,"paintShop"===a.type&&a.orders&&(a.orders=a.orders.map(function(e){return e.startedAt=t.getMoment(e.startedAt).format("HH:mm:ss"),e.finishedAt=t.getMoment(e.finishedAt).format("HH:mm:ss"),e})),a.type=e("pressWorksheets","PROPERTY:type:"+a.type),a}});

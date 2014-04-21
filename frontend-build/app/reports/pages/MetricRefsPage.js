@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["underscore","jquery","app/i18n","app/data/orgUnits","app/core/View","../MetricRefCollection","../views/MetricRefsView"],function(e,i,t,n,s,r,o){return s.extend({layoutName:"page",pageId:"metricRefs",breadcrumbs:function(){return[t.bound("reports","BREADCRUMBS:reports"),t.bound("reports","BREADCRUMBS:metricRefs")]},initialize:function(){this.defineModels(),this.defineViews()},defineModels:function(){this.metricRefs=new r({pubsub:this.pubsub})},defineViews:function(){this.view=new o({initialTab:this.options.initialTab,metricRefs:this.metricRefs})},load:function(e){return e(this.metricRefs.fetch({reset:!0}))}})});

@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["app/time","app/broker","app/pubsub"],function(e,t,d){return function(n,o,a){function i(){localStorage.setItem(n,JSON.stringify({time:Date.now(),data:u.models})),t.publish(o+".synced")}var r={time:e.appData,data:window[n]||[]},s=JSON.parse(localStorage.getItem(n)||"null"),m=s&&s.time>r.time?s:r,u=new a(m.data);return m===r&&i(),u.on("add",i),u.on("remove",i),u.on("destroy",i),u.on("change",i),u.on("sync",i),d.subscribe(o+".added",function(e){u.add(e.model)}),d.subscribe(o+".edited",function(e){var t=u.get(e.model._id);t?t.set(e.model):u.add(e.model)}),d.subscribe(o+".deleted",function(e){u.remove(e.model._id)}),u}});

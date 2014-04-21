@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["app/i18n","../util/bindLoadingMessage","../util/pageActions","../View","../views/DetailsView"],function(e,i,t,s,l){return s.extend({layoutName:"page",pageId:"details",breadcrumbs:function(){return[{label:e.bound(this.model.nlsDomain,"BREADCRUMBS:browse"),href:this.model.genClientUrl("base")},this.model.getLabel()]},actions:function(){return[t.edit(this.model,this.model.privilegePrefix+":MANAGE"),t.delete(this.model,this.model.privilegePrefix+":MANAGE")]},initialize:function(){this.model=i(this.options.model,this);var e=this.DetailsView||l,t={model:this.model};"function"==typeof this.detailsTemplate&&(t.template=this.detailsTemplate),"function"==typeof this.serializeDetails&&(t.serializeDetails=this.serializeDetails),this.view=new e(t)},load:function(e){return e(this.model.fetch(this.fetchOptions))}})});

@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["moment","../core/Model","app/orders/OperationCollection"],function(r,e,o){return e.extend({urlRoot:"/mechOrders",clientUrlRoot:"#mechOrders",topicPrefix:"mechOrders",privilegePrefix:"ORDERS",nlsDomain:"mechOrders",labelAttribute:"_id",defaults:{name:null,mrp:null,materialNorm:null,operations:null,importTs:null},parse:function(r,t){return r=e.prototype.parse.call(this,r,t),r.operations=new o(r.operations),r},toJSON:function(){var o=e.prototype.toJSON.call(this);return o.importTs&&(o.importTs=r(o.importTs).format("YYYY-MM-DD HH:mm:ss")),o.operations=null===o.operations?[]:o.operations.toJSON(),o}})});

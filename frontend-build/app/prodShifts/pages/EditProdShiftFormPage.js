@@ -1,1 +1,5 @@
-define(["app/i18n","app/time","app/core/pages/EditFormPage","../views/ProdShiftEditFormView"],function(e,t,i,o){return i.extend({FormView:o,breadcrumbs:function(){return[{label:e.bound("prodShifts","BREADCRUMBS:browse"),href:this.model.genClientUrl("base")},this.model.get("prodLine"),{label:e.bound("prodShifts","BREADCRUMBS:details",{date:t.format(this.model.get("date"),"YYYY-MM-DD"),shift:e("core","SHIFT:"+this.model.get("shift"))}),href:this.model.genClientUrl()},e.bound("prodShifts","BREADCRUMBS:editForm")]}})});
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["app/i18n","app/time","app/core/pages/EditFormPage","../views/ProdShiftFormView"],function(e,r,i,t){return i.extend({FormView:t,breadcrumbs:function(){return[{label:e.bound("prodShifts","BREADCRUMBS:browse"),href:this.model.genClientUrl("base")},{label:this.model.getLabel(),href:this.model.genClientUrl()},e.bound("prodShifts","BREADCRUMBS:editForm")]}})});

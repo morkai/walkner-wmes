@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["underscore","app/data/companies","app/core/views/FormView","app/prodFunctions/templates/form"],function(e,t,o,n){return o.extend({template:n,destroy:function(){this.$('.select2-offscreen[tabindex="-1"]').select2("destroy")},afterRender:function(){o.prototype.afterRender.call(this),this.options.editMode&&(this.$(".form-control[name=_id]").attr("readonly",!0),this.$(".form-control[name=label]").focus()),this.$id("companies").select2({allowClear:!0,multiple:!0,data:t.map(function(e){return{id:e.id,text:e.getLabel()}})})},serializeToForm:function(){var e=this.model.toJSON();return e.companies=e.companies.join(","),e},serializeForm:function(e){return e.companies=(e.companies||"").split(","),e}})});

@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["jquery","underscore","app/i18n","app/viewport","app/core/View","app/mechOrders/templates/import"],function(e,t,i,r,o,n){return o.extend({template:n,events:{submit:"upload"},initialize:function(){this.idPrefix=t.uniqueId("mechOrderImport")},serialize:function(){return{idPrefix:this.idPrefix}},onDialogShown:function(e){this.closeDialog=e.closeDialog.bind(e)},closeDialog:function(){},upload:function(t){t.preventDefault();var o=this.$("[type=submit]").attr("disabled",!0),n=new FormData(this.el),s=e.ajax({type:"POST",url:"/mechOrders;import",data:n,processData:!1,contentType:!1}),a=this.closeDialog;s.then(function(){r.msg.show({type:"info",time:2500,text:i("mechOrders","import:msg:success")}),a()}),s.fail(function(){r.msg.show({type:"error",time:5e3,text:i("mechOrders","import:msg:failure")})}),s.always(function(){o.attr("disabled",!1)})}})});

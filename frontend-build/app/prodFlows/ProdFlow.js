@@ -1,1 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
 define(["../core/Model","app/data/mrpControllers"],function(r,l){return r.extend({urlRoot:"/prodFlows",clientUrlRoot:"#prodFlows",topicPrefix:"prodFlows",privilegePrefix:"DICTIONARIES",nlsDomain:"prodFlows",labelAttribute:"name",defaults:{mrpController:null,name:null},parse:function(r){return"string"==typeof r.mrpController?r.mrpController=[r.mrpController]:Array.isArray(r.mrpController)||(r.mrpController=[]),r},getSubdivision:function(){var r=this.get("mrpController");if(!Array.isArray(r)||!r.length)return null;var o=l.get(r[0]);return o?o.getSubdivision():null}})});
