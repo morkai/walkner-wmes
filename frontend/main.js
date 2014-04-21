@@ -351,5 +351,36 @@
     };
 
     $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+
+    $.fn.modal.Constructor.prototype.escape = function()
+    {
+      if (this.isShown && this.options.keyboard)
+      {
+        this.$element.on(
+          'keydown.dismiss.bs.modal',
+          $.proxy(function (e) { if (e.which === 27) { this.hide(); } }, this)
+        );
+      }
+      else if (!this.isShown)
+      {
+        this.$element.off('keydown.dismiss.bs.modal');
+      }
+    };
+
+    var $body = $(document.body);
+
+    $.fn.select2.defaults.dropdownContainer = function(select2)
+    {
+      var $modalBody = select2.container.closest('.modal-body');
+
+      if ($modalBody.length === 0)
+      {
+        return $body;
+      }
+
+      var $modalDialog = $modalBody.closest('.modal-dialog');
+
+      return $modalDialog.length === 0 ? $body : $modalDialog;
+    };
   }
 })();

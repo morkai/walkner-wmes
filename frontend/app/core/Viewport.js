@@ -213,7 +213,16 @@ define([
       return this;
     }
 
-    dialogView.render();
+    var afterRender = dialogView.afterRender;
+    var viewport = this;
+
+    dialogView.afterRender = function()
+    {
+      viewport.$dialog.find('.modal-body').empty().append(dialogView.el);
+      viewport.$dialog.modal('show');
+
+      afterRender.apply(dialogView, arguments);
+    };
 
     this.currentDialog = dialogView;
 
@@ -234,8 +243,7 @@ define([
       this.$dialog.addClass(_.result(dialogView, 'dialogClassName'));
     }
 
-    this.$dialog.find('.modal-body').empty().append(dialogView.el);
-    this.$dialog.modal('show');
+    dialogView.render();
 
     return this;
   };
