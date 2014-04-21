@@ -7,6 +7,9 @@
 .production-modal .modal-body {
   padding: 0;
 }
+.production-modal .modal-body .form-actions {
+  margin: 0;
+}
 .production-modal .message {
   margin-top: -1px;
   margin-bottom: 1em;
