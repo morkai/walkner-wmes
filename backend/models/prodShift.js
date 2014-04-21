@@ -92,6 +92,14 @@ module.exports = function setupProdShiftModel(app, mongoose)
   prodShiftSchema.index({workCenter: 1, date: -1});
   prodShiftSchema.index({date: -1, prodLine: 1});
 
+  prodShiftSchema.pre('save', function(next)
+  {
+    this.wasNew = this.isNew;
+    this.modified = this.modifiedPaths();
+
+    next();
+  });
+
   prodShiftSchema.post('save', function(doc)
   {
     if (app.production.recreating)
