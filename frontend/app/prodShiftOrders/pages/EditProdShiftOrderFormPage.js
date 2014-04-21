@@ -27,11 +27,7 @@ define([
           href: this.model.genClientUrl('base')
         },
         {
-          label: t.bound('prodShiftOrders', 'BREADCRUMBS:details', {
-            prodLine: this.model.get('prodLine'),
-            order: this.model.get('orderId'),
-            operation: this.model.get('operationNo')
-          }),
+          label: this.model.getLabel(),
           href: this.model.genClientUrl()
         },
         t.bound('prodShiftOrders', 'BREADCRUMBS:editForm')

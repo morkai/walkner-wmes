@@ -1,6 +1,5 @@
 {
   "BREADCRUMBS:browse": "Zlecenia",
-  "BREADCRUMBS:details": "{prodLine}: {order}, {operation}",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 

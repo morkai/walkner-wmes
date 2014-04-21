@@ -62,11 +62,7 @@ define([
           label: t.bound('prodShiftOrders', 'BREADCRUMBS:browse'),
           href: this.prodShiftOrder.genClientUrl('base')
         },
-        t.bound('prodShiftOrders', 'BREADCRUMBS:details', {
-          prodLine: this.prodShiftOrder.get('prodLine'),
-          order: this.prodShiftOrder.get('orderId'),
-          operation: this.prodShiftOrder.get('operationNo')
-        })
+        this.prodShiftOrder.getLabel()
       ];
     },
 

@@ -1,7 +1,6 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Orders",
-    "BREADCRUMBS:details": "{prodLine}: {order}, {operation}",
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 

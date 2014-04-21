@@ -25,7 +25,7 @@ define([
           href: this.model.genClientUrl('base')
         },
         {
-          label: this.model.get('rid'),
+          label: this.model.getLabel(),
           href: this.model.genClientUrl()
         },
         t.bound('prodDowntimes', 'BREADCRUMBS:editForm')

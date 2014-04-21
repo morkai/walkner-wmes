@@ -40,7 +40,7 @@ define([
           label: t.bound('prodDowntimes', 'BREADCRUMBS:browse'),
           href: this.model.genClientUrl('base')
         },
-        String(this.model.get('rid'))
+        this.model.getLabel()
       ];
     },
 
