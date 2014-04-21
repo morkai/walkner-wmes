@@ -115,7 +115,8 @@ define([
         openOnEnter: null,
         allowClear: false,
         minimumResultsForSearch: -1,
-        data: data || []
+        data: data || [],
+        shouldFocusInput: function() { return true; }
       }, options));
     },
     selectOrder: function($order, prodShiftOrder)

@@ -1,7 +1,7 @@
 /*
 Copyright 2012 Igor Vaynberg
 
-Version: @@ver@@ Timestamp: @@timestamp@@
+Version: 3.4.6 Timestamp: Sat Mar 22 22:30:15 EDT 2014
 
 This software is licensed under the Apache License, Version 2.0 (the "Apache License") or the GNU
 General Public License version 2 (the "GPL License"). You may choose either license to govern your
@@ -114,12 +114,16 @@ the specific language governing permissions and limitations under the Apache Lic
     }
 
     function stripDiacritics(str) {
-        // Used 'uni range + named function' from http://jsperf.com/diacritics/18
-        function match(a) {
-            return DIACRITICS[a] || a;
-        }
+        var ret, i, l, c;
 
-        return str.replace(/[^\u0000-\u007E]/g, match);
+        if (!str || str.length < 1) return str;
+
+        ret = "";
+        for (i = 0, l = str.length; i < l; i++) {
+            c = str.charAt(i);
+            ret += DIACRITICS[c] || c;
+        }
+        return ret;
     }
 
     function indexOf(value, array) {
@@ -451,7 +455,8 @@ the specific language governing permissions and limitations under the Apache Lic
                     dataType: options.dataType,
                     data: data,
                     success: function (data) {
-                        var results = options.results(data, query);
+                        // TODO - replace query.page with query so users have access to term, page, etc.
+                        var results = options.results(data, query.page);
                         query.callback(results);
                     }
                 });
@@ -468,7 +473,7 @@ the specific language governing permissions and limitations under the Apache Lic
      *
      * If the array form is used it is assumed that it contains objects with 'id' and 'text' keys.
      *
-     * If the object form is used it is assumed that it contains 'data' and 'text' keys. The 'data' key should contain
+     * If the object form is used ti is assumed that it contains 'data' and 'text' keys. The 'data' key should contain
      * an array of objects that will be used as choices. These objects must contain at least an 'id' key. The 'text'
      * key can either be a String in which case it is expected that each element in the 'data' array has a key with the
      * value of 'text' which will be used to match choices. Alternatively, text can be a function(item) that can extract
@@ -689,8 +694,6 @@ the specific language governing permissions and limitations under the Apache Lic
             this.containerSelector="#"+this.containerId;
             this.container.attr("id", this.containerId);
 
-            this.container.attr("title", opts.element.attr("title"));
-
             var self = this;
 
             // cache the body so future lookups are cheap
@@ -742,23 +745,10 @@ the specific language governing permissions and limitations under the Apache Lic
             this.container.on("click", killEvent);
 
             installFilteredMouseMove(this.results);
-
-            this.dropdown.on("mousemove-filtered", resultsSelector, this.bind(this.highlightUnderEvent));
-            this.dropdown.on("touchstart touchmove touchend", resultsSelector, this.bind(function (event) {
-                this._touchEvent = true;
-                this.highlightUnderEvent(event);
-            }));
+            this.dropdown.on("mousemove-filtered touchstart touchmove touchend", resultsSelector, this.bind(this.highlightUnderEvent));
+            this.dropdown.on("touchend", resultsSelector, this.bind(this.selectHighlighted));
             this.dropdown.on("touchmove", resultsSelector, this.bind(this.touchMoved));
             this.dropdown.on("touchstart touchend", resultsSelector, this.bind(this.clearTouchMoved));
-
-            // Waiting for a click event on touch devices to select option and hide dropdown
-            // otherwise click will be triggered on an underlying element
-            this.dropdown.on('click', this.bind(function (event) {
-                if (this._touchEvent) {
-                    this._touchEvent = false;
-                    this.selectHighlighted();
-                }
-            }));
 
             installDebouncedScroll(80, this.results);
             this.dropdown.on("scroll-debounced", resultsSelector, this.bind(this.loadMoreIfNeeded));
@@ -797,7 +787,7 @@ the specific language governing permissions and limitations under the Apache Lic
             // for mouse events outside of itself so it can close itself. since the dropdown is now outside the select2's
             // dom it will trigger the popup close, which is not what we want
             // focusin can cause focus wars between modals and select2 since the dropdown is outside the modal.
-            this.dropdown.on("click mouseup mousedown touchstart touchend focusin", function (e) { e.stopPropagation(); });
+            this.dropdown.on("click mouseup mousedown focusin", function (e) { e.stopPropagation(); });
 
             this.nextSearchTerm = undefined;
 
@@ -1088,13 +1078,9 @@ the specific language governing permissions and limitations under the Apache Lic
 
             });
 
-            // IE8-10 (IE9/10 won't fire propertyChange via attachEventListener)
-            if (el.length && el[0].attachEvent) {
-                el.each(function() {
-                    this.attachEvent("onpropertychange", sync);
-                });
-            }
-            
+            // IE8-10
+            el.on("propertychange.select2", sync);
+
             // hold onto a reference of the callback to work around a chromium bug
             if (this.mutationCallback === undefined) {
                 this.mutationCallback = function (mutations) {
@@ -1245,9 +1231,6 @@ the specific language governing permissions and limitations under the Apache Lic
                 dropWidth = $dropdown.outerWidth(false);
                 enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight;
                 $dropdown.show();
-
-                // fix so the cursor does not move to the left within the search-textbox in IE
-                this.focusSearch();
             }
 
             if (this.opts.dropdownAutoWidth) {
@@ -1833,7 +1816,7 @@ the specific language governing permissions and limitations under the Apache Lic
                     //Determine the placeholder option based on the specified placeholderOption setting
                     return (this.opts.placeholderOption === "first" && firstOption) ||
                            (typeof this.opts.placeholderOption === "function" && this.opts.placeholderOption(this.select));
-                } else if ($.trim(firstOption.text()) === "" && firstOption.val() === "") {
+                } else if (firstOption.text() === "" && firstOption.val() === "") {
                     //No explicit placeholder option specified, use the first if it's blank
                     return firstOption;
                 }
@@ -1902,7 +1885,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 "class": "select2-container"
             }).html([
                 "<a href='javascript:void(0)' class='select2-choice' tabindex='-1'>",
-                "   <span class='select2-chosen'>&#160;</span><abbr class='select2-search-choice-close'></abbr>",
+                "   <span class='select2-chosen'>&nbsp;</span><abbr class='select2-search-choice-close'></abbr>",
                 "   <span class='select2-arrow' role='presentation'><b role='presentation'></b></span>",
                 "</a>",
                 "<label for='' class='select2-offscreen'></label>",
@@ -1942,19 +1925,17 @@ the specific language governing permissions and limitations under the Apache Lic
 
                 this.search.val(this.focusser.val());
             }
-            if (this.opts.shouldFocusInput(this)) {
-                this.search.focus();
-                // move the cursor to the end after focussing, otherwise it will be at the beginning and
-                // new text will appear *before* focusser.val()
-                el = this.search.get(0);
-                if (el.createTextRange) {
-                    range = el.createTextRange();
-                    range.collapse(false);
-                    range.select();
-                } else if (el.setSelectionRange) {
-                    len = this.search.val().length;
-                    el.setSelectionRange(len, len);
-                }
+            this.search.focus();
+            // move the cursor to the end after focussing, otherwise it will be at the beginning and
+            // new text will appear *before* focusser.val()
+            el = this.search.get(0);
+            if (el.createTextRange) {
+                range = el.createTextRange();
+                range.collapse(false);
+                range.select();
+            } else if (el.setSelectionRange) {
+                len = this.search.val().length;
+                el.setSelectionRange(len, len);
             }
 
             // initializes search's value with nextSearchTerm (if defined by user)
@@ -2171,11 +2152,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 killEvent(e);
             }));
 
-            dropdown.on("mousedown touchstart", this.bind(function() {
-                if (this.opts.shouldFocusInput(this)) {
-                    this.search.focus();
-                }
-            }));
+            dropdown.on("mousedown touchstart", this.bind(function() { this.search.focus(); }));
 
             selection.on("focus", this.bind(function(e) {
                 killEvent(e);
@@ -2252,7 +2229,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
         isPlaceholderOptionSelected: function() {
             var placeholderOption;
-            if (this.getPlaceholder() === undefined) return false; // no placeholder specified so no option should be considered
+            if (!this.getPlaceholder()) return false; // no placeholder specified so no option should be considered
             return ((placeholderOption = this.getPlaceholderOption()) !== undefined && placeholderOption.prop("selected"))
                 || (this.opts.element.val() === "")
                 || (this.opts.element.val() === undefined)
@@ -2854,9 +2831,7 @@ the specific language governing permissions and limitations under the Apache Lic
             }
 
             this.updateResults(true);
-            if (this.opts.shouldFocusInput(this)) {
-                this.search.focus();
-            }
+            this.search.focus();
             this.opts.element.trigger($.Event("select2-open"));
         },
 
@@ -3333,7 +3308,7 @@ the specific language governing permissions and limitations under the Apache Lic
                     value = select2[method].apply(select2, args.slice(1));
                 }
                 if (indexOf(args[0], valueMethods) >= 0
-                    || (indexOf(args[0], propertyMethods) >= 0 && args.length == 1)) {
+                    || (indexOf(args[0], propertyMethods) && args.length == 1)) {
                     return false; // abort the iteration, ready to return first matched value
                 }
             } else {
