@@ -19,6 +19,7 @@
     "PANEL:TITLE:details": "Downtime's details",
     "PANEL:TITLE:details:corroboration": "Downtime corroboration",
     "PANEL:TITLE:editForm": "Edit downtime form",
+    "PANEL:TITLE:addForm": "Add downtime form",
 
     "FILTER:DATE:FROM": "From",
     "FILTER:DATE:TO": "To",
@@ -59,12 +60,15 @@
     "PROPERTY:duration": "Duration",
     "PROPERTY:pressWorksheet": "Worksheet",
 
+    "FORM:ACTION:add": "Add downtime",
     "FORM:ACTION:edit": "Edit downtime",
+    "FORM:ERROR:addFailure": "Failed to add the downtime :-(",
     "FORM:ERROR:editFailure": "Failed to edit the downtime :-(",
     "FORM:ERROR:startedAt": "Started at must be between the shift's time boundries!",
     "FORM:ERROR:finishedAt": "Finished at must be between the shift's time boundries!",
     "FORM:ERROR:times": "Finished at must be after Started at!",
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the downtime: no valid changes were detected :(",
+    "FORM:ERROR:INPUT": "Invalid input data!",
 
     "shift+date": "{date}, {shift} shift",
 

@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/time',
   'app/viewport',
@@ -11,9 +10,8 @@ define([
   'app/data/aors',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
-  'app/prodDowntimes/templates/editForm'
+  'app/prodDowntimes/templates/form'
 ], function(
-  _,
   t,
   time,
   viewport,
@@ -186,13 +184,9 @@ define([
     {
       if (xhr.responseJSON
         && xhr.responseJSON.error
-        && xhr.responseJSON.error.message === 'INVALID_CHANGES')
+        && t.has('prodDowntimes', 'FORM:ERROR:' + xhr.responseJSON.error.message))
       {
-        this.$errorMessage = viewport.msg.show({
-          type: 'warning',
-          time: 5000,
-          text: t('prodDowntimes', 'FORM:ERROR:INVALID_CHANGES')
-        });
+        this.showErrorMessage(xhr.responseJSON.error.message);
       }
       else
       {

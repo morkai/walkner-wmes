@@ -156,13 +156,17 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editNumericValue(data, data, null, 'workerCount', 1);
     editOrder(data, data);
 
+    var createdAt = new Date();
+
     data.creator = creator;
-    data._id = generateId(data.startedAt, data.prodLine);
+    data._id = generateId(createdAt, data.prodLine);
 
     var ProdShiftOrder = mongoose.model('ProdShiftOrder');
     var prodShiftOrder = new ProdShiftOrder(data);
 
-    return this.createFromProdModel(prodShiftOrder, creator, 'addOrder', prodShiftOrder.toJSON());
+    return this.createFromProdModel(
+      prodShiftOrder, creator, 'addOrder', prodShiftOrder.toJSON(), createdAt
+    );
   };
 
   prodLogEntrySchema.statics.editOrder = function(prodShiftOrder, creator, changes)
@@ -194,6 +198,49 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     }
 
     return this.createFromProdModel(prodShiftOrder, creator, 'editOrder', data);
+  };
+
+  prodLogEntrySchema.statics.addDowntime = function(prodShiftOrder, creator, data)
+  {
+    editDateValue(data, data, null, 'startedAt');
+    editDateValue(data, data, null, 'finishedAt');
+
+    var min = prodShiftOrder ? prodShiftOrder.startedAt : data.date;
+    var max = prodShiftOrder ? prodShiftOrder.finishedAt : null;
+
+    if (!validateTimes(data.startedAt, data.finishedAt, min, max))
+    {
+      return null;
+    }
+
+    editPersonnel(data, data);
+    editStringValue(data, data, null, 'reason');
+    editStringValue(data, data, null, 'reasonComment');
+    editStringValue(data, data, null, 'aor');
+
+    var createdAt = new Date();
+
+    if (data.status !== 'undecided')
+    {
+      editStringValue(data, data, null, 'status');
+      editStringValue(data, data, null, 'decisionComment');
+
+      if (data.status)
+      {
+        data.corroborator = creator;
+        data.corroboratedAt = createdAt;
+      }
+    }
+
+    data.creator = creator;
+    data._id = generateId(createdAt, data.prodLine);
+
+    var ProdDowntime = mongoose.model('ProdDowntime');
+    var prodDowntime = new ProdDowntime(data);
+
+    return this.createFromProdModel(
+      prodDowntime, creator, 'addDowntime', prodDowntime.toJSON(), createdAt
+    );
   };
 
   prodLogEntrySchema.statics.editDowntime = function(prodDowntime, creator, changes)
@@ -457,17 +504,23 @@ function validateUserInfo(userInfo)
       && typeof userInfo.label === 'string');
 }
 
-function validateTimes(startedAt, finishedAt, shiftDate)
+function validateTimes(startedAt, finishedAt, min, max)
 {
   startedAt = moment(startedAt).valueOf();
   finishedAt = moment(finishedAt).valueOf();
-  shiftDate = moment(shiftDate);
+  min = moment(min).valueOf();
+
+  if (!max)
+  {
+    max = moment(min).add('hours', 8).valueOf();
+  }
 
   return !isNaN(startedAt)
     && !isNaN(finishedAt)
+    && !isNaN(min)
     && startedAt !== finishedAt
-    && startedAt >= shiftDate.valueOf()
-    && finishedAt <= shiftDate.clone().add('hours', 8).valueOf();
+    && startedAt >= min
+    && finishedAt <= max;
 }
 
 function compareProperty(logEntryData, modelData, property)

@@ -28,6 +28,8 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
   express.get('/prodDowntimes', limitOrgUnit, crud.browseRoute.bind(null, app, ProdDowntime));
 
+  express.post('/prodDowntimes', canManage, addProdDowntimeRoute);
+
   express.get('/prodDowntimes;rid', canView, findByRidRoute);
 
   express.get(
@@ -255,6 +257,110 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
     }
 
     return '?';
+  }
+
+  function addProdDowntimeRoute(req, res, next)
+  {
+    step(
+      function getProdShiftStep()
+      {
+        productionModule.getProdData('shift', req.body.prodShift, this.parallel());
+
+        if (req.body.prodShiftOrder)
+        {
+          productionModule.getProdData('order', req.body.prodShiftOrder, this.parallel());
+        }
+      },
+      function createLogEntryStep(err, prodShift, prodShiftOrder)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!prodShift
+          || lodash.isEmpty(req.body.aor)
+          || lodash.isEmpty(req.body.reason))
+        {
+          return this.skip(new Error('INPUT'), 400);
+        }
+
+        if (req.body.prodShiftOrder)
+        {
+          if (!prodShiftOrder || prodShiftOrder.prodShift !== prodShift._id)
+          {
+            return this.skip(new Error('INPUT'), 400);
+          }
+
+          req.body.mechOrder = prodShiftOrder.mechOrder;
+          req.body.orderId = prodShiftOrder.orderId;
+          req.body.operationNo = prodShiftOrder.operationNo;
+        }
+
+        [
+          'date', 'shift',
+          'division', 'subdivision', 'mrpControllers', 'prodFlow', 'workCenter', 'prodLine'
+        ].forEach(function(property)
+        {
+          req.body[property] = prodShift[property];
+        });
+
+        var logEntry = ProdLogEntry.addDowntime(
+          prodShiftOrder, userInfo.createObject(req.session.user, req), req.body
+        );
+
+        if (!logEntry)
+        {
+          return this.skip(new Error('INPUT'), 400);
+        }
+
+        logEntry.save(this.next());
+      },
+      function handleLogEntryStep(err, logEntry)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var next = this.next();
+
+        logEntryHandlers.addDowntime(
+          app,
+          productionModule,
+          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
+          logEntry,
+          function(err)
+          {
+            if (err)
+            {
+              return next(err, null, null);
+            }
+
+            return next(null, null, logEntry);
+          }
+        );
+      },
+      function sendResponseStep(err, statusCode, logEntry)
+      {
+        if (statusCode)
+        {
+          res.statusCode = statusCode;
+        }
+
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (statusCode)
+        {
+          return res.send(statusCode);
+        }
+
+        res.send(logEntry.data);
+      }
+    );
   }
 
   function editProdDowntimeRoute(req, res, next)

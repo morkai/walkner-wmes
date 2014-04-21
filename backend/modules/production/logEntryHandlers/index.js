@@ -4,6 +4,7 @@
 
 'use strict';
 
+exports.addDowntime = require('./addDowntime');
 exports.addOrder = require('./addOrder');
 exports.addShift = require('./addShift');
 exports.changeOrder = require('./changeOrder');

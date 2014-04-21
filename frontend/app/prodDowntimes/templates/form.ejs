@@ -1,4 +1,4 @@
-<form class="prodDowntimes-editForm" method="post" action="<%- formAction %>">
+<form class="prodDowntimes-form" method="post" action="<%- formAction %>">
   <input type="hidden" name="_method" value="<%= formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
@@ -18,13 +18,13 @@
         </div>
       </div>
       <div class="row">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-4 has-required-select2">
           <label for="<%- idPrefix %>-reason" class="control-label"><%- t('prodDowntimes', 'PROPERTY:reason') %></label>
-          <input id="<%- idPrefix %>-reason" type="text" name="reason">
+          <input id="<%- idPrefix %>-reason" type="text" name="reason" required>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-4 has-required-select2">
           <label for="<%- idPrefix %>-aor" class="control-label"><%- t('prodDowntimes', 'PROPERTY:aor') %></label>
-          <input id="<%- idPrefix %>-aor" type="text" name="aor">
+          <input id="<%- idPrefix %>-aor" type="text" name="aor" required>
         </div>
       </div>
       <div class="form-group">
@@ -48,13 +48,13 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-status" class="control-label"><%- t('prodDowntimes', 'PROPERTY:status') %></label>
         <div class="radio">
-          <label><input type="radio" name="status" value="undecided"> <%- t('prodDowntimes', 'PROPERTY:status:undecided') %></label>
+          <label><input type="radio" name="status" value="undecided" required> <%- t('prodDowntimes', 'PROPERTY:status:undecided') %></label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="status" value="confirmed"> <%- t('prodDowntimes', 'PROPERTY:status:confirmed') %></label>
+          <label><input type="radio" name="status" value="confirmed" required> <%- t('prodDowntimes', 'PROPERTY:status:confirmed') %></label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="status" value="rejected"> <%- t('prodDowntimes', 'PROPERTY:status:rejected') %></label>
+          <label><input type="radio" name="status" value="rejected" required> <%- t('prodDowntimes', 'PROPERTY:status:rejected') %></label>
         </div>
       </div>
       <div class="form-group">

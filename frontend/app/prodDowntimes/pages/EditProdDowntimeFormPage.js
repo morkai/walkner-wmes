@@ -5,17 +5,17 @@
 define([
   'app/i18n',
   'app/core/pages/EditFormPage',
-  '../views/ProdDowntimeEditFormView'
+  '../views/ProdDowntimeFormView'
 ], function(
   t,
   EditFormPage,
-  ProdDowntimeEditFormView
+  ProdDowntimeFormView
 ) {
   'use strict';
 
   return EditFormPage.extend({
 
-    FormView: ProdDowntimeEditFormView,
+    FormView: ProdDowntimeFormView,
 
     breadcrumbs: function()
     {

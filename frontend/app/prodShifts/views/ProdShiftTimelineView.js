@@ -54,10 +54,7 @@ define([
       {
         this.showDeleteDialog(this.prodShiftOrders);
       },
-      'click .prodShifts-timeline-addDowntime': function()
-      {
-        console.log('addDowntime');
-      },
+      'click .prodShifts-timeline-addDowntime': 'showAddDowntimeDialog',
       'click .prodShifts-timeline-editDowntime': function()
       {
         this.showEditDialog(
@@ -497,6 +494,49 @@ define([
             editMode: false,
             formMethod: 'POST',
             formAction: prodShiftOrder.url(),
+            formActionText: t(nlsDomain, 'FORM:ACTION:add'),
+            failureText: t(nlsDomain, 'FORM:ERROR:addFailure'),
+            panelTitleText: t(nlsDomain, 'PANEL:TITLE:addForm'),
+            done: function()
+            {
+              viewport.closeDialog();
+            }
+          }));
+        }
+      );
+    },
+
+    showAddDowntimeDialog: function()
+    {
+      var view = this;
+      var popoverItem = this.popover.item;
+
+      require(
+        [
+          'app/prodDowntimes/views/ProdDowntimeFormView',
+          'app/prodDowntimes/ProdDowntime'
+        ],
+        function(AddFormView, ProdDowntime)
+        {
+          var prodDowntime = new ProdDowntime({
+            prodShift: view.prodShift.id,
+            prodShiftOrder: popoverItem.type === 'working' ? popoverItem.data._id : null,
+            master: view.prodShift.get('master'),
+            leader: view.prodShift.get('leader'),
+            operator: view.prodShift.get('operator'),
+            operators: view.prodShift.get('operators'),
+            startedAt: new Date(popoverItem.starting_time),
+            finishedAt: new Date(popoverItem.ending_time),
+            status: 'undecided'
+          });
+          var nlsDomain = prodDowntime.getNlsDomain();
+
+          viewport.showDialog(new AddFormView({
+            dialogClassName: 'has-panel',
+            model: prodDowntime,
+            editMode: false,
+            formMethod: 'POST',
+            formAction: prodDowntime.url(),
             formActionText: t(nlsDomain, 'FORM:ACTION:add'),
             failureText: t(nlsDomain, 'FORM:ERROR:addFailure'),
             panelTitleText: t(nlsDomain, 'PANEL:TITLE:addForm'),

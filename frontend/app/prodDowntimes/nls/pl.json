@@ -18,6 +18,7 @@
   "PANEL:TITLE:details": "Szczegóły przestoju",
   "PANEL:TITLE:details:corroboration": "Potwierdzenie przestoju",
   "PANEL:TITLE:editForm": "Formularz edycji danych przestoju",
+  "PANEL:TITLE:addForm": "Formularz dodawania przestoju",
 
   "FILTER:DATE:FROM": "Od",
   "FILTER:DATE:TO": "Do",
@@ -58,12 +59,15 @@
   "PROPERTY:duration": "Czas trwania",
   "PROPERTY:pressWorksheet": "Karta pracy",
 
+  "FORM:ACTION:add": "Dodaj przestój",
   "FORM:ACTION:edit": "Edytuj przestój",
+  "FORM:ERROR:addFailure": "Nie udało się dodać przestoju :-(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować przestoju :-(",
   "FORM:ERROR:startedAt": "Czas rozpoczęcia musi mieścić się w ramach Zmiany produkcyjnej!",
   "FORM:ERROR:finishedAt": "Czas zakończenia musi mieścić się w ramach Zmiany produkcyjnej!",
   "FORM:ERROR:times": "Czas zakończenia musi być po Czasie rozpoczęcia!",
   "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować przestoju: nie wykryto żadnych poprawnych zmian :(",
+  "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
 
   "shift+date": "{date}, {shift} zmiana",
 

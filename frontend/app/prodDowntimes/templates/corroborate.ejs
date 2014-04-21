@@ -27,7 +27,7 @@
     <div class="prop">
       <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:reasonComment') %></div>
       <div class="prop-value">
-        <% if (model.reasonComment.length) { %>
+        <% if (model.reasonComment && model.reasonComment.length) { %>
         <p class="prodDowntimes-corroborate-reasonComment"><%= model.reasonComment %></p>
         <% } else { %>
         -
