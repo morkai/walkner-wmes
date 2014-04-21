@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'require',
   'underscore',
   'jquery',
   'd3',
@@ -10,6 +11,7 @@ define([
   'app/time',
   'app/i18n',
   'app/user',
+  'app/viewport',
   'app/core/View',
   'app/data/downtimeReasons',
   'app/data/aors',
@@ -17,6 +19,7 @@ define([
   'app/prodShifts/templates/timelineWorkingPopover',
   'app/prodShifts/templates/timelineDowntimePopover'
 ], function(
+  require,
   _,
   $,
   d3,
@@ -24,6 +27,7 @@ define([
   time,
   t,
   user,
+  viewport,
   View,
   downtimeReasons,
   aors,
@@ -37,6 +41,39 @@ define([
 
     className: 'prodShifts-timeline',
 
+    events: {
+      'click .prodShifts-timeline-addOrder': function()
+      {
+        console.log('addOrder');
+      },
+      'click .prodShifts-timeline-editOrder': function()
+      {
+        this.showEditDialog(
+          this.prodShiftOrders,
+          'app/prodShiftOrders/views/ProdShiftOrderEditFormView'
+        );
+      },
+      'click .prodShifts-timeline-deleteOrder': function()
+      {
+        this.showDeleteDialog(this.prodShiftOrders);
+      },
+      'click .prodShifts-timeline-addDowntime': function()
+      {
+        console.log('addDowntime');
+      },
+      'click .prodShifts-timeline-editDowntime': function()
+      {
+        this.showEditDialog(
+          this.prodDowntimes,
+          'app/prodDowntimes/views/ProdDowntimeEditFormView'
+        );
+      },
+      'click .prodShifts-timeline-deleteDowntime': function()
+      {
+        this.showDeleteDialog(this.prodDowntimes);
+      }
+    },
+
     initialize: function()
     {
       this.chart = null;
@@ -44,10 +81,13 @@ define([
       this.beginning = -1;
       this.ending = -1;
       this.lastWidth = -1;
+      this.popover = null;
 
-      this.onResize = _.debounce(this.onResize.bind(this), 100);
+      this.onWindowResize = _.debounce(this.onWindowResize.bind(this), 250);
+      this.onDocumentClick = this.onDocumentClick.bind(this);
 
-      $(window).resize(this.onResize);
+      $(window).on('resize', this.onWindowResize);
+      $(document.body).on('click', this.onDocumentClick);
 
       this.listenTo(this.prodShiftOrders, 'add', this.render);
       this.listenTo(this.prodShiftOrders, 'remove', this.render);
@@ -62,20 +102,29 @@ define([
       this.chart = null;
       this.datum = null;
 
-      $(window).off('resize', this.onResize);
+      $(window).off('resize', this.onWindowResize);
+      $(document.body).off('click', this.onDocumentClick);
 
       d3.select(this.el).select('svg').remove();
     },
 
-    onResize: function()
+    onWindowResize: function()
     {
-      var width = this.el.getBoundingClientRect().width;
+      var width = this.el.getBoundingClientRect().width - 28;
 
       if (width !== this.lastWidth)
       {
         this.lastWidth = width;
 
         this.renderChart();
+      }
+    },
+
+    onDocumentClick: function(e)
+    {
+      if (e.target === document.body || !$(e.target).closest('.prodShifts-timeline-popover').length)
+      {
+        this.hidePopover();
       }
     },
 
@@ -106,8 +155,11 @@ define([
 
       function extendDatum(view)
       {
-        view.extendDatum();
-        view.renderChart();
+        if (view.popover === null)
+        {
+          view.extendDatum();
+          view.renderChart();
+        }
       }
 
       this.timers.extendDatum = setInterval(extendDatum, 10000, this);
@@ -123,13 +175,25 @@ define([
         timelineEl.remove();
       }
 
-      this.chart.width(null);
+      var width = this.el.getBoundingClientRect().width - 28;
+
+      this.hidePopover();
+      this.chart.width(width);
 
       parentEl
         .append('svg')
-        .attr('width', this.el.getBoundingClientRect().width)
+        .attr('width', width)
         .datum(this.datum)
         .call(this.chart);
+    },
+
+    hidePopover: function()
+    {
+      if (this.popover !== null)
+      {
+        $(this.popover.el).popover('destroy');
+        this.popover = null;
+      }
     },
 
     serializeDatum: function()
@@ -276,6 +340,7 @@ define([
     createChart: function()
     {
       var view = this;
+      var canManage = user.isAllowedTo('PROD_DATA:MANAGE');
 
       this.chart = timeline()
         .beginning(this.beginning)
@@ -303,30 +368,52 @@ define([
           if (item.type === 'downtime' && item.data.prodShiftOrder)
           {
             this.setAttribute('height', '50');
-            this.setAttribute('y', 11);
           }
         })
         .mouseover(function(item)
         {
-          var $item = $(d3.event.target);
+          var itemEl = d3.event.target;
+
+          if (view.popover !== null && view.popover.el === itemEl)
+          {
+            return;
+          }
+
+          view.hidePopover();
+
+          var managing = canManage && d3.event.ctrlKey && item.ended;
+          var $item = $(itemEl);
 
           $item.popover({
             trigger: 'manual',
             container: view.el,
-            placement: 'auto top',
+            placement: 'top',
             html: true,
             title: t('prodShifts', 'timeline:popover:' + item.type),
-            content: view.renderPopover(item)
+            content: view.renderPopover(item, managing)
           });
           $item.popover('show');
           $item.data('bs.popover').$tip.addClass('popover-' + item.type);
+
+          view.popover = {
+            el: itemEl,
+            item: item
+          };
         })
         .mouseout(function()
         {
-          $(this).popover('destroy');
+          if (!d3.event.ctrlKey)
+          {
+            view.hidePopover();
+          }
         })
         .click(function(item)
         {
+          if (canManage && d3.event.ctrlKey)
+          {
+            return;
+          }
+
           if (item.type === 'downtime' && user.isAllowedTo('PROD_DOWNTIMES:VIEW'))
           {
             view.broker.publish('router.navigate', {
@@ -344,13 +431,14 @@ define([
         });
     },
 
-    renderPopover: function(item)
+    renderPopover: function(item, managing)
     {
       var duration = time.toString((item.ending_time - item.starting_time) / 1000);
       var templateData = {
         startedAt: time.format(item.starting_time, 'HH:mm:ss'),
         finishedAt: item.ended ? time.format(item.ending_time, 'HH:mm:ss') : '-',
-        duration: duration
+        duration: duration,
+        managing: managing
       };
 
       if (item.type === 'idle')
@@ -375,9 +463,61 @@ define([
 
         templateData.reason = reason ? reason.getLabel() : item.data.reason;
         templateData.aor = aor ? aor.getLabel() : item.data.aor;
+        templateData.hasOrder = !!item.data.prodShiftOrder;
 
         return renderTimelineDowntimePopover(templateData);
       }
+    },
+
+    showEditDialog: function(collection, editFormViewModule)
+    {
+      var model = collection.get(this.popover.item.data._id);
+
+      if (!model)
+      {
+        return;
+      }
+
+      this.promised(model.fetch()).then(function()
+      {
+        require([editFormViewModule], function(EditFormView)
+        {
+          var nlsDomain = model.getNlsDomain();
+
+          viewport.showDialog(new EditFormView({
+            dialogClassName: 'has-panel',
+            model: model,
+            editMode: true,
+            formMethod: 'PUT',
+            formAction: model.url(),
+            formActionText: t(nlsDomain, 'FORM:ACTION:edit'),
+            failureText: t(nlsDomain, 'FORM:ERROR:editFailure'),
+            panelTitleText: t(nlsDomain, 'PANEL:TITLE:editForm'),
+            done: function()
+            {
+              viewport.closeDialog();
+            }
+          }));
+        });
+      });
+    },
+
+    showDeleteDialog: function(collection)
+    {
+      var model = collection.get(this.popover.item.data._id);
+
+      if (!model)
+      {
+        return;
+      }
+
+      this.promised(model.fetch()).then(function()
+      {
+        require(['app/core/views/ActionFormView'], function(ActionFormView)
+        {
+          ActionFormView.showDeleteDialog({model: model});
+        });
+      });
     }
 
   });

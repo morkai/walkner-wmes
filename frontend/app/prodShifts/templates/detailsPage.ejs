@@ -2,6 +2,9 @@
   <div class="prodShifts-details-container"></div>
   <div>
     <h3 class="prodShifts-timeline-title"><%- t('prodShifts', 'timeline:title') %></h3>
+    <% if (user.isAllowedTo('PROD_DATA:MANAGE')) { %>
+    <h4 class="prodShifts-timeline-title-manage"><%- t('prodShifts', 'timeline:title:manage') %></h4>
+    <% } %>
     <div class="prodShifts-timeline-container"></div>
   </div>
   <div class="prodShifts-quantitiesDone-container"></div>

@@ -1,30 +1,45 @@
 <table class="prodShifts-timeline-popover">
-  <tr>
-    <th><%- t('prodShifts', 'timeline:popover:startedAt') %></th>
-    <td><%- startedAt %></td>
-  </tr>
-  <tr>
-    <th><%- t('prodShifts', 'timeline:popover:finishedAt') %></th>
-    <td><%- finishedAt %></td>
-  </tr>
-  <tr>
-    <th><%- t('prodShifts', 'timeline:popover:duration') %></th>
-    <td><%- duration %></td>
-  </tr>
-  <tr>
-    <th><%- t('prodShifts', 'timeline:popover:order') %></th>
-    <td><%- order %></td>
-  </tr>
-  <tr>
-    <th><%- t('prodShifts', 'timeline:popover:operation') %></th>
-    <td><%- operation %></td>
-  </tr>
-  <tr>
-    <th><%- t('prodShifts', 'timeline:popover:workerCount') %></th>
-    <td><%- workerCount %></td>
-  </tr>
-  <tr>
-    <th><%- t('prodShifts', 'timeline:popover:quantityDone') %></th>
-    <td><%- quantityDone %></td>
-  </tr>
+  <% if (managing) { %>
+  <tfoot>
+    <tr>
+      <td colspan="2"><button class="btn btn-block btn-danger prodShifts-timeline-addDowntime" disabled><%- t('prodShifts', 'timeline:action:addDowntime') %></button></td>
+    </tr>
+    <tr>
+      <td colspan="2"><button class="btn btn-block btn-success prodShifts-timeline-editOrder"><%- t('prodShifts', 'timeline:action:editOrder') %></button></td>
+    </tr>
+    <tr>
+      <td colspan="2"><button class="btn btn-block btn-warning prodShifts-timeline-deleteOrder"><%- t('prodShifts', 'timeline:action:deleteOrder') %></button></td>
+    </tr>
+  </tfoot>
+  <% } %>
+  <tbody>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:startedAt') %></th>
+      <td><%- startedAt %></td>
+    </tr>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:finishedAt') %></th>
+      <td><%- finishedAt %></td>
+    </tr>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:duration') %></th>
+      <td><%- duration %></td>
+    </tr>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:order') %></th>
+      <td><%- order %></td>
+    </tr>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:operation') %></th>
+      <td><%- operation %></td>
+    </tr>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:workerCount') %></th>
+      <td><%- workerCount %></td>
+    </tr>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:quantityDone') %></th>
+      <td><%- quantityDone %></td>
+    </tr>
+  </tbody>
 </table>

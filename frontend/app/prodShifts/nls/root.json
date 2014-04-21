@@ -45,6 +45,13 @@
     "totalQuantityDone": "{actual} of {planned}",
 
     "timeline:title": "Timeline",
+    "timeline:title:manage": "(hold Ctrl while hovering over an area, to enable additional actions)",
+    "timeline:action:addOrder": "Add order",
+    "timeline:action:addDowntime": "Add downtime",
+    "timeline:action:editOrder": "Edit order",
+    "timeline:action:editDowntime": "Edit downtime",
+    "timeline:action:deleteOrder": "Delete order",
+    "timeline:action:deleteDowntime": "Delete downtime",
     "timeline:popover:idle": "Idle",
     "timeline:popover:working": "Order",
     "timeline:popover:downtime": "Downtime",

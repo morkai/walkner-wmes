@@ -7,12 +7,17 @@
 .prodShifts-timeline {
   text-align: center;
 }
-.prodShifts-timeline-title {
+.prodShifts-timeline-title,
+.prodShifts-timeline-title-manage {
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
   font-size: 18px;
   text-align: center;
   margin-top: 20px;
   margin-bottom: 10px;
+}
+.prodShifts-timeline-title-manage {
+  font-size: 12px;
+  margin-top: -5px;
 }
 .prodShifts-timeline .axis path,
 .prodShifts-timeline .axis line {
@@ -62,7 +67,10 @@
 .prodShifts-timeline .popover-content {
   padding: 5px;
 }
-.prodShifts-timeline .popover-content td {
+.prodShifts-timeline tfoot td {
+  padding: 0;
+}
+.prodShifts-timeline tbody td {
   padding-left: 10px;
 }
 .prodShifts-timeline .popover-idle > .popover-title {
@@ -73,6 +81,11 @@
 }
 .prodShifts-timeline .popover-downtime > .popover-title {
   background-color: #D9534F;
+}
+.prodShifts-timeline .btn-block {
+  padding: 2px 0;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px #666;
 }
 .prodShifts-editForm-quantitiesDone {
   width: 300px;

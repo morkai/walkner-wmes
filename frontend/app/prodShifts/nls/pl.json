@@ -45,6 +45,13 @@
   "totalQuantityDone": "{actual} z {planned}",
 
   "timeline:title": "Oś czasu",
+  "timeline:title:manage": "(przytrzymaj Ctrl przy najeżdżaniu na obszar, aby wyświetlić opcje zarządzania)",
+  "timeline:action:addOrder": "Dodaj zlecenie",
+  "timeline:action:addDowntime": "Dodaj przestój",
+  "timeline:action:editOrder": "Edytuj zlecenie",
+  "timeline:action:editDowntime": "Edytuj przestój",
+  "timeline:action:deleteOrder": "Usuń zlecenie",
+  "timeline:action:deleteDowntime": "Usuń przestój",
   "timeline:popover:idle": "Bezczynność",
   "timeline:popover:working": "Zlecenie",
   "timeline:popover:downtime": "Przestój",
