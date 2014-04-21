@@ -24,39 +24,14 @@ define([
   return ListView.extend({
 
     remoteTopics: {
-      'prodDowntimes.created.*': function(message)
-      {
-        if (this.collection.hasOrMatches(message))
-        {
-          this.refreshCollection();
-        }
-      },
-      'prodDowntimes.deleted.*': function(message)
-      {
-        if (this.collection.hasOrMatches(message))
-        {
-          this.refreshCollection();
-        }
-      },
-      'prodDowntimes.finished.*': function(message)
-      {
-        var prodDowntime = this.collection.get(message._id);
-
-        if (prodDowntime)
-        {
-          prodDowntime.set('finishedAt', new Date(message.finishedAt));
-        }
-      },
+      'prodDowntimes.created.*': 'refreshIfMatches',
+      'prodDowntimes.updated.*': 'refreshIfMatches',
+      'prodDowntimes.deleted.*': 'refreshIfMatches',
       'prodDowntimes.corroborated.*': function(message)
       {
         if (message._id === this.corroboratingId)
         {
           viewport.closeDialog();
-        }
-
-        if (this.collection.hasOrMatches(message))
-        {
-          this.refreshCollection();
         }
       }
     },
@@ -149,6 +124,14 @@ define([
         {
           view.$(this).data('bs.popover').$tip.addClass('prodDowntimes-comment');
         });
+    },
+
+    refreshIfMatches: function(message)
+    {
+      if (this.collection.hasOrMatches(message))
+      {
+        this.refreshCollection();
+      }
     }
 
   });

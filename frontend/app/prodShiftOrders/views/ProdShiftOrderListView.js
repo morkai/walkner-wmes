@@ -26,29 +26,9 @@ define([
   return ListView.extend({
 
     remoteTopics: {
-      'prodShiftOrders.created.**': function(prodShiftOrder)
-      {
-        if (this.collection.hasOrMatches(prodShiftOrder))
-        {
-          this.refreshCollection();
-        }
-      },
-      'prodShiftOrders.updated.**': function(changes, topic)
-      {
-        var prodShiftOrder = this.collection.get(topic.split('.').slice(2).join('.'));
-
-        if (prodShiftOrder)
-        {
-          this.refreshCollection();
-        }
-      },
-      'prodShiftOrders.deleted.**': function(message)
-      {
-        if (this.collection.hasOrMatches(message))
-        {
-          this.refreshCollection();
-        }
-      }
+      'prodShiftOrders.created.*': 'refreshIfMatches',
+      'prodShiftOrders.updated.*': 'refreshIfMatches',
+      'prodShiftOrders.deleted.*': 'refreshIfMatches'
     },
 
     columns: [
@@ -93,6 +73,14 @@ define([
             return path ? path.split(' \\ ').join('<br>\\ ') : '?';
           }
         });
+    },
+
+    refreshIfMatches: function(message)
+    {
+      if (this.collection.hasOrMatches(message))
+      {
+        this.refreshCollection();
+      }
     }
 
   });
