@@ -221,7 +221,10 @@ define([
       viewport.$dialog.find('.modal-body').empty().append(dialogView.el);
       viewport.$dialog.modal('show');
 
-      afterRender.apply(dialogView, arguments);
+      if (_.isFunction(afterRender))
+      {
+        afterRender.apply(dialogView, arguments);
+      }
     };
 
     this.currentDialog = dialogView;
