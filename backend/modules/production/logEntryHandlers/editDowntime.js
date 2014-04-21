@@ -30,9 +30,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       }
 
       var next = this.next();
-      var orderId = prodDowntime.prodShiftOrder && (changes.startedAt || changes.finishedAt);
+      var orderId = prodDowntime.prodShiftOrder;
 
-      if (orderId)
+      if (orderId && (changes.startedAt || changes.finishedAt))
       {
         productionModule.getProdData('order', orderId, function(err, prodShiftOrder)
         {
