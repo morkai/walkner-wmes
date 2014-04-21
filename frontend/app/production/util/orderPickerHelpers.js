@@ -123,6 +123,11 @@ define([
       var orderId = prodShiftOrder.get('orderId');
       var orderData = prodShiftOrder.get('orderData');
 
+      if (!orderId || !orderData)
+      {
+        return;
+      }
+
       $order.select2('data', {
         id: orderId,
         text: orderId + ' - ' + (orderData.name || '?'),
@@ -141,17 +146,20 @@ define([
       delete orderInfo.id;
       delete orderInfo.text;
 
-      if (model.getOrderIdType() === 'no')
+      if (orderInfo._id)
       {
-        orderInfo.no = orderInfo._id;
-      }
-      else
-      {
-        orderInfo.no = null;
-        orderInfo.nc12 = orderInfo._id;
-      }
+        if (model.getOrderIdType() === 'no')
+        {
+          orderInfo.no = orderInfo._id;
+        }
+        else
+        {
+          orderInfo.no = null;
+          orderInfo.nc12 = orderInfo._id;
+        }
 
-      delete orderInfo._id;
+        delete orderInfo._id;
+      }
 
       if (Array.isArray(orderInfo.operations))
       {
