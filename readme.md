@@ -53,4 +53,4 @@ TODO
 ## License
 
 This project is released under the
-[NPOSL-3.0](https://raw.github.com/morkai/walkner-wmes/master/license.md).
+[CC BY-NC-SA 4.0](https://raw.github.com/morkai/walkner-wmes/master/license.md).
