@@ -257,7 +257,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editDateValue(data, changes, modelData, 'startedAt');
     editDateValue(data, changes, modelData, 'finishedAt');
 
-    if (!validateTimes(data.startedAt, data.finishedAt, prodDowntime.date))
+    if (!validateTimes(changes.startedAt, changes.finishedAt, prodDowntime.date))
     {
       return null;
     }
@@ -266,6 +266,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editStringValue(data, changes, modelData, 'reason');
     editStringValue(data, changes, modelData, 'reasonComment');
     editStringValue(data, changes, modelData, 'aor');
+
 
     if (prodDowntime.status !== 'undecided')
     {
