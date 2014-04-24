@@ -84,7 +84,10 @@ function findOrderByNc12(Order, MechOrder, nc12, done)
       return done(err);
     }
 
-    if (orders.length === 1)
+    if (Array.isArray(orders)
+      && orders[0]
+      && Array.isArray(orders[0].operations)
+      && orders[0].operations.length)
     {
       return setMechOrderData(MechOrder, orders.map(function(order)
       {
