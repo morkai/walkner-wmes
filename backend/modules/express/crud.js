@@ -354,6 +354,7 @@ exports.exportRoute = function(options, req, res, next)
       })
       .join(CSV_COLUMN_SEPARATOR);
 
+    res.write(new Buffer([0xEF, 0xBB, 0xBF]));
     res.write(line + CSV_ROW_SEPARATOR);
 
     headerWritten = true;
