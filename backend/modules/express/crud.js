@@ -18,7 +18,7 @@ var CSV_FORMATTERS = {
       return '""';
     }
 
-    return '"' + value.replace(/"/g, '""') + '"';
+    return '"' + String(value).replace(/"/g, '""') + '"';
   },
   '#': function(value)
   {
