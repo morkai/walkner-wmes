@@ -13,7 +13,7 @@ var CSV_ROW_SEPARATOR = '\r\n';
 var CSV_FORMATTERS = {
   '"': function(value)
   {
-    if (value === null || value === 'undefined' || value === '')
+    if (value === null || value === undefined || value === '')
     {
       return '""';
     }
@@ -22,6 +22,11 @@ var CSV_FORMATTERS = {
   },
   '#': function(value)
   {
+    if (value === null || value === undefined || value === '')
+    {
+      return '';
+    }
+
     return parseFloat(Number(value).toFixed(3)).toString().replace('.', ',');
   }
 };
@@ -281,6 +286,15 @@ exports.exportRoute = function(options, req, res, next)
     .find(queryOptions.selector, queryOptions.fields)
     .sort(queryOptions.sort)
     .lean();
+
+  try
+  {
+    populateQuery(query, req.rql);
+  }
+  catch (err)
+  {
+    return next(err);
+  }
 
   if (options.serializeStream)
   {
