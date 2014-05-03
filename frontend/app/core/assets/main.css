@@ -6,6 +6,7 @@
 @import url(./logInForm.css);
 @import url(./filter.css);
 @import url(./dataTables.css);
+@import url(./highlight.css);
 
 body {
   cursor: default;
@@ -151,7 +152,7 @@ kbd {
   list-style: none;
   margin: 4.5px 0 0 0;
 }
-.page-actions li {
+.page-actions > li {
   display: inline-block;
   margin-left: 1em;
   vertical-align: top;

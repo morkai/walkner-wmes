@@ -35,7 +35,8 @@ exports.paths = {
   'datatables-fixedheader': 'vendor/datatables/extensions/FixedHeader/js/dataTables.fixedHeader',
   'datatables-scroller': 'vendor/datatables/extensions/Scroller/js/dataTables.scroller',
   'datatables-tabletools': 'vendor/datatables/extensions/TableTools/js/dataTables.tableTools',
-  'jquery.stickytableheaders': 'vendor/jquery.stickytableheaders'
+  'jquery.stickytableheaders': 'vendor/jquery.stickytableheaders',
+  'highlight': 'vendor/highlight/highlight.pack'
 };
 
 exports.shim = {
@@ -71,7 +72,10 @@ exports.shim = {
   'screenfull': {
     exports: 'screenfull'
   },
-  'jquery.stickytableheaders': ['jquery']
+  'jquery.stickytableheaders': ['jquery'],
+  'highlight': {
+    exports: 'hljs'
+  }
 };
 
 exports.buildPaths = exports.paths;
