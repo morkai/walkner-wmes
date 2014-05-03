@@ -1,7 +1,5 @@
 'use strict';
 
-var fs = require('fs');
-
 exports.id = 'xiconf';
 
 exports.modules = [
@@ -52,8 +50,5 @@ exports.directoryWatcher = {
 
 exports.xiconf = {
   featureDbPath: __dirname + '/../data/xiconf-features',
-  licenseEd: {
-    pem: fs.readFileSync(__dirname + '/license.ed.private.pem'),
-    password: 'walknerXSQ1@3xsqed'
-  }
+  licenseEd: null
 };
