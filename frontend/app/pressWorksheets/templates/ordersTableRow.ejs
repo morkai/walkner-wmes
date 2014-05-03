@@ -10,6 +10,6 @@
   <td class="pressWorksheets-form-lossCell <%- i ? '' : 'pressWorksheets-form-separator' %>"><input class="form-control no-controls pressWorksheets-form-count is-loss" type="number" name="orders[<%- no %>].losses.<%- lossReason._id %>" data-column="loss.<%- i %>" data-reason="<%- lossReason._id %>"></td>
   <% }) %>
   <% downtimeReasons.forEach(function(downtimeReason, i) { %>
-  <td class="pressWorksheets-form-downtimeCell <%- i ? '' : 'pressWorksheets-form-separator' %>"><input class="form-control no-controls pressWorksheets-form-count is-downtime" type="number" name="orders[<%- no %>].downtimes.<%- downtimeReason._id %>" data-column="downtime.<%- i %>" data-reason="<%- downtimeReason._id %>"></td>
+  <td class="pressWorksheets-form-downtimeCell <%- i ? '' : 'pressWorksheets-form-separator' %>" data-type="<%- downtimeReason.type %>"><input class="form-control no-controls pressWorksheets-form-count is-downtime" type="number" name="orders[<%- no %>].downtimes.<%- downtimeReason._id %>" data-column="downtime.<%- i %>" data-reason="<%- downtimeReason._id %>"></td>
   <% }) %>
 </tr>

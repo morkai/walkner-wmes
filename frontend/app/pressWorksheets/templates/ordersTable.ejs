@@ -24,7 +24,7 @@
       <th class="pressWorksheets-form-lossCell <%- i ? '' : 'pressWorksheets-form-separator' %>" data-column="loss.<%- i %>"><span class="pressWorksheets-form-loss"><%- lossReason.label %></span></th>
       <% }) %>
       <% downtimeReasons.forEach(function(downtimeReason, i) { %>
-      <th class="pressWorksheets-form-downtimeCell <%- i ? '' : 'pressWorksheets-form-separator' %>" data-column="downtime.<%- i %>"><span class="pressWorksheets-form-loss"><%- downtimeReason.label %></span></th>
+      <th class="pressWorksheets-form-downtimeCell <%- i ? '' : 'pressWorksheets-form-separator' %>" data-column="downtime.<%- i %>" data-type="<%- downtimeReason.type %>"><span class="pressWorksheets-form-loss"><%- downtimeReason.label %></span></th>
       <% }) %>
     </tr>
     <% } %>

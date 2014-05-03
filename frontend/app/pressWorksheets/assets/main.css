@@ -98,7 +98,7 @@
   background: rgba(0, 0, 0, .075);
 }
 .pressWorksheets-form-orders .is-focused {
-  background: #FFFFD6;
+  background: #FFFFD6!important;
 }
 .pressWorksheets-form-order > td {
   position: relative;
@@ -119,6 +119,9 @@
 .pressWorksheets-form-downtimeCell {
   background: rgba(255, 0, 0, .1);
   border-color: #bbb!important;
+}
+.pressWorksheets-form-downtimeCell[data-type="otherWorks"] {
+  background: rgba(255, 0, 255, .1);
 }
 .pressWorksheets-form-focusLastPart {
   font-weight: normal;
