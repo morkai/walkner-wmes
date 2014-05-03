@@ -87,6 +87,8 @@
   "PRIVILEGE:PROD_DATA:MANAGE": "Dane produkcyjne: zarządzanie",
   "PRIVILEGE:REPORTS:VIEW": "Raporty: przeglądanie",
   "PRIVILEGE:REPORTS:MANAGE": "Raporty: zarządzanie",
+  "PRIVILEGE:XICONF:VIEW": "Xiconf: przeglądanie",
+  "PRIVILEGE:XICONF:MANAGE": "Xiconf: zarządzanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System"

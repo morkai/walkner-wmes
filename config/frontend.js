@@ -37,7 +37,9 @@ exports.modules = [
   'pressWorksheets',
   'reports',
   'feedback',
+  'xiconf',
   {id: 'messenger/client', name: 'messenger/client:importer'},
+  {id: 'messenger/client', name: 'messenger/client:xiconf'},
   'httpServer',
   'httpsServer',
   'sio'
@@ -112,7 +114,9 @@ exports.mongoose = {
     'order', 'mechOrder', 'emptyOrder', 'clipOrderCount',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
-    'diagLogEntry', 'feedback'
+    'diagLogEntry', 'feedback',
+    'license',
+    'xiconfOrder', 'xiconfResult'
   ]
 };
 
@@ -143,7 +147,8 @@ exports.user = {
     'PRESS_WORKSHEETS:VIEW', 'PRESS_WORKSHEETS:MANAGE',
     'PROD_DATA:VIEW', 'PROD_DATA:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
-    'REPORTS:VIEW', 'REPORTS:MANAGE'
+    'REPORTS:VIEW', 'REPORTS:MANAGE',
+    'XICONF:VIEW', 'XICONF:MANAGE'
   ]
 };
 
@@ -163,6 +168,14 @@ exports['messenger/client:importer'] = {
   responseTimeout: 5000
 };
 
+exports['messenger/client:xiconf'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60030,
+  repHost: '127.0.0.1',
+  repPort: 60031,
+  responseTimeout: 5000
+};
+
 exports.updater = {
   manifestPath: __dirname + '/manifest.appcache',
   packageJsonPath: __dirname + '/../package.json',
@@ -176,4 +189,9 @@ exports.updater = {
 
 exports.reports = {
   javaBatik: 'java -jar c:/programs/batik/batik-rasterizer.jar'
+};
+
+exports.xiconf = {
+  zipStoragePath: __dirname + '/../data/xiconf',
+  featureDbPath: __dirname + '/../data/xiconf-features'
 };

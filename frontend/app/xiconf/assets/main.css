@@ -1,0 +1,28 @@
+.xiconf-entry {
+  cursor: pointer;
+}
+.xiconf-filter .form-control[name="no"] {
+  width: 100px;
+}
+.xiconf-filter .form-control[name="nc12"] {
+  width: 120px;
+}
+.xiconf-tabs .tab-pane > pre {
+  border-top: none;
+  border-color: #DDD;
+  background: #fff;
+  overflow: auto;
+}
+.xiconf-log,
+.xiconf-log > tbody > tr:first-child > td {
+  border-top: none;
+}
+.xiconf-log > tbody > tr > td:first-child {
+  border-right: none;
+  width: 1%;
+  font-family: monospace;
+  color: #666;
+}
+.xiconf-log > tbody > tr > td:last-child {
+  border-left: none;
+}

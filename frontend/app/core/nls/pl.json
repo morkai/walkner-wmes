@@ -92,6 +92,8 @@
   "NAVBAR:PROD:SHIFTS": "Zmiany",
   "NAVBAR:PROD:SHIFT_ORDERS": "Zlecenia",
   "NAVBAR:PROD:DOWNTIMES": "Przestoje",
+  "NAVBAR:XICONF": "Walkner Xiconf",
+  "NAVBAR:XICONF:RESULTS": "Wyniki programowania",
 
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
   "ACTION_FORM:BUTTON:delete": "Usuń",

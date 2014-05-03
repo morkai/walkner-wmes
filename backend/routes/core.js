@@ -40,6 +40,12 @@ module.exports = function startCoreRoutes(app, express)
     res.send(Date.now().toString());
   });
 
+  express.get('/ping', function(req, res)
+  {
+    res.type('text/plain');
+    res.send('pong');
+  });
+
   express.get('/config.js', sendRequireJsConfig);
 
   function showIndex(req, res)

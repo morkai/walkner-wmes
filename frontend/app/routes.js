@@ -31,7 +31,8 @@ define([
   './subdivisions/routes',
   './users/routes',
   './vis/routes',
-  './workCenters/routes'
+  './workCenters/routes',
+  './xiconf/routes'
 ], function()
 {
   'use strict';

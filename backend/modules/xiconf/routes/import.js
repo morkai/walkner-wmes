@@ -1,0 +1,101 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+'use strict';
+
+var fs = require('fs');
+var path = require('path');
+var crypto = require('crypto');
+var moment = require('moment');
+var step = require('h5.step');
+
+module.exports = function importRoute(app, xiconfModule, req, res, next)
+{
+  if (!req.is('application/zip'))
+  {
+    res.statusCode = 400;
+
+    return next(new Error('INVALID_CONTENT_TYPE'));
+  }
+
+  var uuid = req.query.uuid;
+
+  if (!/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/.test(uuid))
+  {
+    res.statusCode = 400;
+
+    return next(new Error('INVALID_UUID'));
+  }
+
+  var mongoose = app[xiconfModule.config.mongooseId];
+  var License = mongoose.model('License');
+  var XiconfResult = mongoose.model('XiconfResult');
+
+  var srcIp = req.socket.remoteAddress;
+  var zipFileHash = crypto.createHash('md5')
+    .update(uuid)
+    .update(Math.random().toString())
+    .digest('hex');
+  var zipFileName = Math.round(Date.now() / 1000).toString() + '@' + srcIp + '@' + zipFileHash;
+  var zipFilePath = path.join(xiconfModule.config.zipStoragePath, zipFileName);
+
+  step(
+    function()
+    {
+      var eightHoursAgo = moment().subtract('hours', 8).toDate();
+
+      License.findById(uuid, {appId: 1})
+        .lean()
+        .exec(this.parallel());
+
+      XiconfResult.distinct('srcIp', {startedAt: {$gte: eightHoursAgo}, srcUuid: uuid})
+        .lean()
+        .exec(this.parallel());
+    },
+    function(err, license, srcIps)
+    {
+      if (err)
+      {
+        return this.done(next, err);
+      }
+
+      res.type('text/plain');
+
+      if (!license)
+      {
+        return res.send('UNKNOWN_LICENSE', 400);
+      }
+
+      if (srcIps.length > 1 || (srcIps.length === 1 && srcIps[0] !== srcIp))
+      {
+        return res.send('DUPLICATE_LICENSE', 400);
+      }
+
+      var writeStream = fs.createWriteStream(zipFilePath);
+
+      writeStream.once('finish', this.parallel());
+      req.once('end', this.parallel());
+
+      req.pipe(writeStream);
+    },
+    function(err)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      fs.rename(zipFilePath, zipFilePath + '.zip', this.next());
+    },
+    function(err)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      return res.send(204);
+    }
+  );
+};

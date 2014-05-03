@@ -88,6 +88,8 @@
     "PRIVILEGE:PROD_DATA:MANAGE": "Production data: manage",
     "PRIVILEGE:REPORTS:VIEW": "Reports: view",
     "PRIVILEGE:REPORTS:MANAGE": "Reports: manage",
+    "PRIVILEGE:XICONF:VIEW": "Xiconf: view",
+    "PRIVILEGE:XICONF:MANAGE": "Xiconf: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System"

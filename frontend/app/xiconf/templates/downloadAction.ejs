@@ -1,0 +1,9 @@
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-download"></i><span><%- t('xiconf', 'PAGE_ACTION:download') %></span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu pull-right">
+    <li class="<%- workflow ? '' : 'disabled' %>"><a href="<%- workflow %>"><%- t('xiconf', 'PAGE_ACTION:download:workflow') %></a></li>
+    <li class="<%- feature ? '' : 'disabled' %>"><a href="<%- feature %>"><%- t('xiconf', 'PAGE_ACTION:download:feature') %></a></li>
+  </ul>
+</div>
