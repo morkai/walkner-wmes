@@ -26,7 +26,8 @@ define([
     defaults: {
       name: null,
       tags: null,
-      prodDiv: false,
+      fteDiv: false,
+      inProd: true,
       clipColor: '#eeee00'
     },
 

@@ -22,6 +22,7 @@
     "PROPERTY:tags": "Tags",
     "PROPERTY:fteDiv": "Divide per Division in FTE (distribution)?",
     "PROPERTY:clipColor": "Color in CLIP",
+    "PROPERTY:inProd": "Use in Productivity?",
 
     "FORM:ACTION:add": "Add production task",
     "FORM:ACTION:edit": "Edit production task",

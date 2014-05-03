@@ -13,7 +13,7 @@ define([
 
   return ListView.extend({
 
-    columns: ['name', 'tags', 'fteDiv', 'clipColor'],
+    columns: ['name', 'tags', 'fteDiv', 'inProd', 'clipColor'],
 
     serializeRows: function()
     {
@@ -21,6 +21,7 @@ define([
       {
         row.tags = row.tags.length ? row.tags.join(', ') : null;
         row.fteDiv = t('core', 'BOOL:' + !!row.fteDiv);
+        row.inProd = t('core', 'BOOL:' + !!row.inProd);
 
         if (row.clipColor)
         {

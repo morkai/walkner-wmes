@@ -20,6 +20,10 @@ module.exports = function setupProdTaskModel(app, mongoose)
     clipColor: {
       type: String,
       default: '#eeee00'
+    },
+    inProd: {
+      type: Boolean,
+      default: true
     }
   }, {
     id: false

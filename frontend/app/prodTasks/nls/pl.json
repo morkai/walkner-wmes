@@ -21,6 +21,7 @@
   "PROPERTY:tags": "Tagi",
   "PROPERTY:fteDiv": "Podział na wydziały w FTE (magazyn)?",
   "PROPERTY:clipColor": "Kolor w raporcie CLIP",
+  "PROPERTY:inProd": "Użyj w Produktywności?",
 
   "FORM:ACTION:add": "Dodaj zadanie produkcyjne",
   "FORM:ACTION:edit": "Edytuj zadanie produkcyjne",
