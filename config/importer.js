@@ -35,7 +35,8 @@ exports.mongoose = {
   uri: require('./mongodb').uri,
   options: {
     server: {poolSize: 5}
-  }
+  },
+  models: ['event', 'order', 'emptyOrder', 'clipOrderCount']
 };
 
 exports['messenger/server'] = {

@@ -29,7 +29,8 @@ exports.mongoose = {
   uri: require('./mongodb').uri,
   options: {
     server: {poolSize: 2}
-  }
+  },
+  models: ['event']
 };
 
 exports['messenger/server'] = {
@@ -43,9 +44,9 @@ exports['messenger/server'] = {
 };
 
 exports['mail/listener'] = {
-  username: 'import@wmes.walkner.pl',
-  password: 'wmesXSQ1@3xsq',
-  host: 'poczta-611475.vipserv.org',
+  username: 'someone@the.net',
+  password: '123456',
+  host: 'smtp.server.net',
   port: 993,
   tls: true
 };

@@ -12,7 +12,8 @@ exports.DEFAULT_CONFIG = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   uri: 'mongodb://localhost/walkner-hydro',
-  options: {}
+  options: {},
+  models: null
 };
 
 exports.start = function startDbModule(app, module, done)
@@ -53,7 +54,7 @@ exports.start = function startDbModule(app, module, done)
   function loadModels()
   {
     var modelsDir = app.pathTo('models');
-    var modelsList = require(app.pathTo('models', 'index'));
+    var modelsList = module.config.models || require(app.pathTo('models', 'index'));
 
     app.loadFiles(modelsDir, modelsList, [app, module], done);
   }
