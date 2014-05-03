@@ -22,6 +22,19 @@ module.exports = function(mongoose, options, done)
   options.fromTime = +options.fromTime;
   options.toTime = +options.toTime;
 
+  var ignoredProdTasks = {};
+
+  if (options.prodTasks)
+  {
+    Object.keys(options.prodTasks).forEach(function(id)
+    {
+      if (options.prodTasks[id].inProd === false)
+      {
+        ignoredProdTasks[id] = true;
+      }
+    });
+  }
+
   var results = {
     options: options,
     grouped: {},
@@ -66,7 +79,10 @@ module.exports = function(mongoose, options, done)
     function handleFteEntriesStep()
     {
       var fteLeaderEntryStream = FteLeaderEntry
-        .find({date: {$gte: from, $lt: to}}, {date: 1, 'tasks.companies.count': 1})
+        .find(
+          {date: {$gte: from, $lt: to}},
+          {date: 1, 'tasks.companies.count': 1, 'tasks.id': 1}
+        )
         .sort({date: 1})
         .lean()
         .stream();
@@ -106,8 +122,7 @@ module.exports = function(mongoose, options, done)
         var date = dates[i];
         var fte = results.grouped[date];
 
-        fte = fte.leader
-          + (orgUnitType === null ? fte.master : (fte.masterFlows + fte.masterTasks));
+        fte = fte.leader + fte.masterFlows + fte.masterTasks;
 
         if (!fte)
         {
@@ -311,8 +326,15 @@ module.exports = function(mongoose, options, done)
 
       for (var i = 0, l = fteLeaderEntry.tasks.length; i < l; ++i)
       {
+        var task = fteLeaderEntry.tasks[i];
+
+        if (ignoredProdTasks[task.id])
+        {
+          continue;
+        }
+
         fte += countFteLeaderEntryTaskFte(
-          fteLeaderEntry.tasks[i].companies,
+          task.companies,
           options.division,
           activeDivisionsCount
         );
@@ -366,14 +388,6 @@ module.exports = function(mongoose, options, done)
 
       createDefaultGroupedResult(key);
 
-      if (!options.orgUnitType)
-      {
-        results.total.master += fteMasterEntry.total;
-        results.grouped[key].master += fteMasterEntry.total;
-
-        return;
-      }
-
       var fte = {
         flows: 0,
         tasks: 0
@@ -384,17 +398,20 @@ module.exports = function(mongoose, options, done)
         countFteMasterEntryTaskFte(options, fteMasterEntry.tasks[i], fte);
       }
 
-      var activeOrgUnits = dateToActiveOrgUnits[key];
-      var workingOrgUnitsCountForFlows = countWorkingOrgUnits(activeOrgUnits, options, 'flows');
-      var workingOrgUnitsCountForTasks = countWorkingOrgUnits(activeOrgUnits, options, 'tasks');
+      if (options.orgUnitType)
+      {
+        var activeOrgUnits = dateToActiveOrgUnits[key];
+        var workingOrgUnitsCountForFlows = countWorkingOrgUnits(activeOrgUnits, options, 'flows');
+        var workingOrgUnitsCountForTasks = countWorkingOrgUnits(activeOrgUnits, options, 'tasks');
 
-      fte.flows = workingOrgUnitsCountForFlows === 0
-        ? 0
-        : (fte.flows / workingOrgUnitsCountForFlows);
+        fte.flows = workingOrgUnitsCountForFlows === 0
+          ? 0
+          : (fte.flows / workingOrgUnitsCountForFlows);
 
-      fte.tasks = workingOrgUnitsCountForTasks === 0
-        ? 0
-        : (fte.tasks / workingOrgUnitsCountForTasks);
+        fte.tasks = workingOrgUnitsCountForTasks === 0
+          ? 0
+          : (fte.tasks / workingOrgUnitsCountForTasks);
+      }
 
       results.total.masterFlows += fte.flows;
       results.total.masterTasks += fte.tasks;
@@ -407,7 +424,9 @@ module.exports = function(mongoose, options, done)
   {
     var isProdFlow = task.type === 'prodFlow';
 
-    if (task.noPlan || (isProdFlow && !containsProdFlow(options, task)))
+    if (task.noPlan
+      || (isProdFlow && !containsProdFlow(options, task))
+      || (!isProdFlow && ignoredProdTasks[task.id]))
     {
       return;
     }

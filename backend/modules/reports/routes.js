@@ -201,6 +201,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       subdivisions: idToStr(subdivisions),
       subdivisionType: req.query.subdivisionType || null,
       prodFlows: idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
+      prodTasks: getProdTasks(),
       orgUnits: getOrgUnitsForFte(req.query.orgUnitType, orgUnit),
       ignoredDowntimeReasons: idToStr(downtimeReasonsModule.models.filter(function(downtimeReason)
       {
@@ -472,7 +473,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       {
         prodTasks[prodTask._id] = {
           label: prodTask.name,
-          color: prodTask.clipColor
+          color: prodTask.clipColor,
+          inProd: prodTask.inProd
         };
       }
     });
