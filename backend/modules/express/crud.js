@@ -31,8 +31,20 @@ var CSV_FORMATTERS = {
   }
 };
 
-exports.browseRoute = function(app, Model, req, res, next)
+exports.browseRoute = function(app, options, req, res, next)
 {
+  var Model;
+
+  if (options.model && options.model.model)
+  {
+    Model = options.model;
+  }
+  else
+  {
+    Model = options;
+    options = {};
+  }
+
   var queryOptions = mongoSerializer.fromQuery(req.rql);
 
   if (queryOptions.limit === 0)
@@ -87,17 +99,34 @@ exports.browseRoute = function(app, Model, req, res, next)
         });
       }
 
-      res.format({
-        json: function()
-        {
-          res.json({
-            totalCount: totalCount,
-            collection: models
-          });
-        }
-      });
+      if (typeof options.prepareResult === 'function')
+      {
+        options.prepareResult(totalCount, models, formatResult);
+      }
+      else
+      {
+        formatResult(null, {
+          totalCount: totalCount,
+          collection: models
+        });
+      }
     }
   );
+
+  function formatResult(err, result)
+  {
+    if (err)
+    {
+      return next(err);
+    }
+
+    res.format({
+      json: function()
+      {
+        res.json(result);
+      }
+    });
+  }
 };
 
 exports.addRoute = function(app, Model, req, res, next)
@@ -125,8 +154,20 @@ exports.addRoute = function(app, Model, req, res, next)
   });
 };
 
-exports.readRoute = function(app, Model, req, res, next)
+exports.readRoute = function(app, options, req, res, next)
 {
+  var Model;
+
+  if (options.model && options.model.model)
+  {
+    Model = options.model;
+  }
+  else
+  {
+    Model = options;
+    options = {};
+  }
+
   var query = Model.findById(req.params.id);
 
   try
@@ -150,12 +191,29 @@ exports.readRoute = function(app, Model, req, res, next)
       return res.send(404);
     }
 
+    if (typeof options.prepareResult === 'function')
+    {
+      options.prepareResult(model, formatResult);
+    }
+    else
+    {
+      formatResult(null, model);
+    }
+  });
+
+  function formatResult(err, result)
+  {
+    if (err)
+    {
+      return next(err);
+    }
+
     res.format({
       json: function()
       {
         try
         {
-          res.send(model);
+          res.send(result);
         }
         catch (err)
         {
@@ -163,7 +221,7 @@ exports.readRoute = function(app, Model, req, res, next)
         }
       }
     });
-  });
+  }
 };
 
 exports.editRoute = function(app, Model, req, res, next)
