@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["underscore","../time","../core/Collection","./XiconfResult"],function(r,s,e,t){return e.extend({model:t,rqlQuery:function(r){var e=s.getMoment().hours(0).minutes(0).seconds(0).milliseconds(0).subtract("days",7).valueOf();return r.Query.fromObject({fields:{order:1,nc12:1,programName:1,counter:1,startedAt:1,duration:1,result:1,srcId:1},sort:{startedAt:-1},limit:20,selector:{name:"and",args:[{name:"ge",args:["startedAt",e]}]}})},initialize:function(){this.srcIds=null},parse:function(s){if(Array.isArray(s.srcIds)){var t=null===this.srcIds,n=!r.isEqual(s.srcIds,this.srcIds);this.srcIds=s.srcIds,!t&&n&&this.trigger("change:srcIds")}return e.prototype.parse.call(this,s)}})});

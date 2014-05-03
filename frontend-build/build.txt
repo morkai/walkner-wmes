@@ -11,6 +11,10 @@ app/core/assets/form.css
 ----------------
 app/core/assets/form.css
 
+app/core/assets/highlight.css
+----------------
+app/core/assets/highlight.css
+
 app/core/assets/logInForm.css
 ----------------
 app/core/assets/logInForm.css
@@ -25,6 +29,7 @@ app/core/assets/./properties.css
 app/core/assets/./logInForm.css
 app/core/assets/./filter.css
 app/core/assets/./dataTables.css
+app/core/assets/./highlight.css
 app/core/assets/main.css
 
 app/core/assets/modal.css
@@ -127,6 +132,10 @@ app/vis/assets/main.css
 ----------------
 app/vis/assets/main.css
 
+app/xiconf/assets/main.css
+----------------
+app/xiconf/assets/main.css
+
 assets/main.css
 ----------------
 assets/../vendor/bootstrap/css/bootstrap.css
@@ -135,6 +144,7 @@ assets/../vendor/font-awesome/css/font-awesome.css
 assets/../vendor/select2/select2.css
 assets/../vendor/datatables/media/css/jquery.dataTables.css
 assets/../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css
+assets/../vendor/highlight/styles/monokai.css
 assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/events/assets/main.css
@@ -155,6 +165,7 @@ assets/../app/prodLogEntries/assets/main.css
 assets/../app/prodShiftOrders/assets/main.css
 assets/../app/prodShifts/assets/main.css
 assets/../app/pressWorksheets/assets/main.css
+assets/../app/xiconf/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/feedback/assets/main.css
 assets/main.css
@@ -194,6 +205,10 @@ vendor/datatables/media/css/jquery.dataTables.css
 vendor/font-awesome/css/font-awesome.css
 ----------------
 vendor/font-awesome/css/font-awesome.css
+
+vendor/highlight/styles/monokai.css
+----------------
+vendor/highlight/styles/monokai.css
 
 vendor/select2/select2.css
 ----------------
@@ -637,6 +652,10 @@ app/nls/workCenters.js
 app/nls/pl/workCenters.js
 i18n!app/nls/workCenters
 app/workCenters/routes.js
+app/nls/xiconf.js
+app/nls/pl/xiconf.js
+i18n!app/nls/xiconf
+app/xiconf/routes.js
 app/routes.js
 vendor/visibly.js
 app/visibility.js
