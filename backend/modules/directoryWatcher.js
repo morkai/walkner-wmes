@@ -21,12 +21,10 @@ exports.start = function startDirectoryWatcherModule(app, module)
   {
     fs.watch(module.config.path, function(event, fileName)
     {
-      if (event !== 'change')
+      if (fileName !== null)
       {
-        return;
+        app.broker.publish('directoryWatcher.changed', createFileInfo(fileName));
       }
-
-      app.broker.publish('directoryWatcher.changed', createFileInfo(fileName));
     });
 
     fs.readdir(module.config.path, function(err, fileNames)
