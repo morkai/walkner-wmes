@@ -64,30 +64,28 @@ define([
         return true;
       }
 
-      if (!user.isAllowedTo('HOURLY_PLANS:MANAGE'))
-      {
-        return false;
-      }
-
-      var creator = this.get('creator');
-
-      if (creator && user.data._id !== creator.id)
-      {
-        return false;
-      }
-
-      var userDivision = user.getDivision();
-
-      if (!user.isAllowedTo('HOURLY_PLANS:ALL')
-        && userDivision
-        && userDivision.id !== this.get('division'))
+      if (!user.isAllowedTo(this.getPrivilegePrefix() + ':MANAGE'))
       {
         return false;
       }
 
       var createdAt = Date.parse(this.get('createdAt'));
 
-      return Date.now() < createdAt + 8 * 3600 * 1000;
+      if (Date.now() >= createdAt + 8 * 3600 * 1000)
+      {
+        return false;
+      }
+
+      var userDivision = user.getDivision();
+
+      if (!userDivision || user.isAllowedTo(this.getPrivilegePrefix() + ':ALL'))
+      {
+        return true;
+      }
+
+      var entryDivisionId = this.get('division');
+
+      return entryDivisionId === userDivision.id;
     },
 
     handleUpdateMessage: function(message)
