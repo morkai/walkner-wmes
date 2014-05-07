@@ -397,6 +397,7 @@ app/prodLines/ProdLine.js
 app/prodLines/ProdLineCollection.js
 app/data/prodLines.js
 app/data/views/renderOrgUnitPath.js
+app/fte/util/isEditable.js
 app/fte/FteMasterEntry.js
 app/fte/FteLeaderEntry.js
 app/fte/FteMasterEntryCollection.js
@@ -414,7 +415,7 @@ app/fte/pages/FteMasterEntryAddFormPage.js
 app/users/util/setUpUserSelect2.js
 app/fte/templates/masterEntry.js
 app/fte/templates/absentUserRow.js
-app/fte/views/fractionsUtil.js
+app/fte/util/fractions.js
 vendor/jquery.stickytableheaders.js
 app/fte/views/FteMasterEntryEditFormView.js
 app/fte/pages/FteMasterEntryEditFormPage.js
