@@ -9,7 +9,8 @@ define([
   '../data/subdivisions',
   '../data/prodFunctions',
   '../data/views/renderOrgUnitPath',
-  '../core/Model'
+  '../core/Model',
+  './util/isEditable'
 ], function(
   _,
   t,
@@ -17,7 +18,8 @@ define([
   subdivisions,
   prodFunctions,
   renderOrgUnitPath,
-  Model
+  Model,
+  isEditable
 ) {
   'use strict';
 
@@ -151,38 +153,7 @@ define([
 
     isEditable: function(user)
     {
-      if (user.isAllowedTo('PROD_DATA:MANAGE'))
-      {
-        return true;
-      }
-
-      if (!user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
-      {
-        return false;
-      }
-
-      var creator = this.get('creator');
-
-      if (creator && user.data._id !== creator.id)
-      {
-        return false;
-      }
-
-      var userDivision = user.getDivision();
-
-      if (!user.isAllowedTo(this.privilegePrefix + ':ALL') && userDivision)
-      {
-        var subdivision = subdivisions.get(this.get('subdivision'));
-
-        if (!subdivision || subdivision.get('division') !== userDivision.id)
-        {
-          return false;
-        }
-      }
-
-      var createdAt = Date.parse(this.get('createdAt'));
-
-      return Date.now() < createdAt + 8 * 3600 * 1000;
+      return isEditable(this, user);
     },
 
     handleUpdateMessage: function(message, silent)
