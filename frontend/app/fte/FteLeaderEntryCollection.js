@@ -20,8 +20,9 @@ define([
     rqlQuery: function(rql)
     {
       var selector;
+      var userDivision = user.getDivision();
 
-      if (user.data.orgUnitType && user.data.orgUnitType !== 'unspecified')
+      if (userDivision && userDivision.get('type') === 'prod')
       {
         selector = {
           name: 'and',
