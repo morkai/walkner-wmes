@@ -57,6 +57,7 @@
     "log:ORDER_CREATED": "Starting a new order no <code>{orderNo}</code> (1/{quantity})...",
     "log:ORDER_CONTINUED": "Continuuing an existing order no <code>{orderNo}</code> ({counter}/{quantity})...",
     "log:PROGRAMMING_STARTED": "Starting a programming of the 12NC <code>{nc12}</code>...",
+    "log:COUNTDOWN_STARTED": "Counting down <code>{delay}</code> {delay, plural, one{second} other{seconds}}...",
     "log:READING_WORKFLOW_FILE": "Reading contents of the programmer configuration file: <code>{workflowFile}</code>",
     "log:WORKFLOW_FILE_READ": "Read <code>{length}B</code> of the programmer configuration file.",
     "log:SEARCHING_FEATURE_FILE": "Searching for a driver configuration file in path: <code>{featurePath}</code>",

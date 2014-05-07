@@ -56,6 +56,7 @@
   "log:ORDER_CREATED": "Rozpoczynanie zlecenia nr <code>{orderNo}</code> (1/{quantity})...",
   "log:ORDER_CONTINUED": "Kontynuacja zlecenia nr <code>{orderNo}</code> ({counter}/{quantity})...",
   "log:PROGRAMMING_STARTED": "Rozpoczynanie programowania 12NC <code>{nc12}</code>...",
+  "log:COUNTDOWN_STARTED": "Odliczanie <code>{delay}</code> {delay, plural, one{sekundy} other{sekund}}...",
   "log:READING_WORKFLOW_FILE": "Odczytywanie pliku konfiguracyjnego programatora: <code>{workflowFile}</code>",
   "log:WORKFLOW_FILE_READ": "Odczytano <code>{length}B</code> pliku konfiguracyjnego programatora.",
   "log:SEARCHING_FEATURE_FILE": "Wyszukiwanie pliku konfiguracyjnego drivera w ścieżce: <code>{featurePath}</code>",
