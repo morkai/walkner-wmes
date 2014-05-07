@@ -6,7 +6,7 @@ define([
   'underscore',
   'app/core/views/PrintableListView',
   'app/fte/templates/printableMasterEntryList',
-  './fractionsUtil'
+  '../util/fractions'
 ], function(
   _,
   PrintableListView,

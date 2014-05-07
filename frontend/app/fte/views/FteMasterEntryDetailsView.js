@@ -8,7 +8,7 @@ define([
   'app/core/util/onModelDeleted',
   'app/fte/templates/masterEntry',
   'app/fte/templates/absentUserRow',
-  './fractionsUtil'
+  '../util/fractions'
 ], function(
   _,
   View,

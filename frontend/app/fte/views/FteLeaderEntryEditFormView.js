@@ -10,7 +10,7 @@ define([
   'app/core/View',
   'app/core/util/onModelDeleted',
   'app/fte/templates/leaderEntry',
-  './fractionsUtil'
+  '../util/fractions'
 ], function(
   _,
   $,

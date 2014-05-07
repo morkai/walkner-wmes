@@ -7,7 +7,7 @@ define([
   'app/i18n',
   'app/core/views/PrintableListView',
   'app/fte/templates/printableLeaderEntryList',
-  './fractionsUtil'
+  '../util/fractions'
 ], function(
   _,
   t,

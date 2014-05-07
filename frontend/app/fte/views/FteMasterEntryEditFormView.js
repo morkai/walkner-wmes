@@ -11,7 +11,7 @@ define([
   'app/users/util/setUpUserSelect2',
   'app/fte/templates/masterEntry',
   'app/fte/templates/absentUserRow',
-  './fractionsUtil',
+  '../util/fractions',
   'jquery.stickytableheaders'
 ], function(
   _,
