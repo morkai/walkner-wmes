@@ -97,6 +97,7 @@
   "error:EXIT_CODE:201": "MultiOneWorkflow (201): nieprawidłowy plik konfiguracyjny drivera.",
   "error:EXIT_CODE:202": "MultiOneWorkflow (202): pusty plik konfiguracyjny drivera.",
   "error:EXIT_CODE:203": "MultiOneWorkflow (203): wykryto zduplikowane opcje drivera.",
+  "error:EXIT_CODE:300": "MultiOneWorkflow (300): urządzenie nie obsługuje wszystkich opcji z pliku konfiguracyjnego.",
   "error:EXIT_CODE:500": "MultiOneWorkflow (500): nie znaleziono urządzenia.",
   "error:EXIT_CODE:501": "MultiOneWorkflow (501): znaleziono za dużo urządzeń.",
   "error:EXIT_CODE:502": "MultiOneWorkflow (502): nie można wykonać wyszukiwania urządzeń.",

@@ -98,6 +98,7 @@
     "error:EXIT_CODE:201": "MultiOneWorkflow (201): invalid feature configuration file.",
     "error:EXIT_CODE:202": "MultiOneWorkflow (202): feature configuration file is null or empty.",
     "error:EXIT_CODE:203": "MultiOneWorkflow (203): feature configuration file contains duplicate features.",
+    "error:EXIT_CODE:300": "MultiOneWorkflow (300): the device does not support all features from the feature configuration file.",
     "error:EXIT_CODE:500": "MultiOneWorkflow (500): no device found.",
     "error:EXIT_CODE:501": "MultiOneWorkflow (501): too many devices found.",
     "error:EXIT_CODE:502": "MultiOneWorkflow (502): unable to execute discover.",
