@@ -22,7 +22,7 @@ define([
       var selector;
       var userDivision = user.getDivision();
 
-      if (userDivision)
+      if (userDivision && userDivision.get('type') === 'prod')
       {
         selector = {
           name: 'and',
