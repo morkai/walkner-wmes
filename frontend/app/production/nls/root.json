@@ -116,6 +116,8 @@
     "downtimePicker:aor:placeholder": "Choose an area of responsibility...",
     "downtimePicker:msg:emptyReason": "Downtime reason is required.",
     "downtimePicker:msg:emptyAor": "Area of responsibility is required.",
+    "downtimePicker:startedAt": "Started at",
+    "downtimePicker:startedAt:now": "Now",
 
     "prodDowntime:startedAt": "Started at",
     "prodDowntime:finishedAt": "Finished at",

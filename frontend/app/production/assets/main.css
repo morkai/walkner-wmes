@@ -211,6 +211,9 @@
 .production.is-unlocked .production-controls-unlock {
   display: none;
 }
+.production-downtimePicker-now {
+  min-width: 100px;
+}
 @media (max-width: 1680px) {
   .production {
     margin: 0;

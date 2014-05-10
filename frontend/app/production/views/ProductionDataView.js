@@ -357,13 +357,16 @@ define([
         e.target.blur();
       }
 
-      var downtimePickerView = new DowntimePickerView(_.extend({model: this.model}, options));
+      var downtimePickerView = new DowntimePickerView(_.extend({
+        model: this.model,
+        startedAt: startedAt
+      }, options));
 
       this.listenTo(downtimePickerView, 'downtimePicked', function(downtimeInfo)
       {
         viewport.closeDialog();
 
-        this.model.startDowntime(downtimeInfo, startedAt);
+        this.model.startDowntime(downtimeInfo);
       });
 
       viewport.showDialog(downtimePickerView, t('production', 'downtimePicker:title'));

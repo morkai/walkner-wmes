@@ -115,6 +115,8 @@
   "downtimePicker:aor:placeholder": "Wybierz obszar odpowiedzialności...",
   "downtimePicker:msg:emptyReason": "Powód przestoju jest wymagany.",
   "downtimePicker:msg:emptyAor": "Obszar odpowiedzialności jest wymagany.",
+  "downtimePicker:startedAt": "Czas rozpoczęcia",
+  "downtimePicker:startedAt:now": "Teraz",
 
   "prodDowntime:startedAt": "Czas zatrzymania",
   "prodDowntime:finishedAt": "Czas wznowienia",

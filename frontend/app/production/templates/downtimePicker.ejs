@@ -1,5 +1,14 @@
 <form class="production-downtimePicker">
   <div class="form-group">
+    <label for="<%- idPrefix %>-startedAt"><%- t('production', 'downtimePicker:startedAt') %></label>
+    <div class="input-group">
+      <input id="<%- idPrefix %>-startedAt" class="form-control" type="text" value="<%- time.format(startedAt, 'YYYY-MM-DD, HH:mm:ss') %>" readonly data-time="<%- startedAt.getTime() %>">
+      <span class="input-group-btn">
+        <button class="btn btn-default production-downtimePicker-now" type="button"><%- t('production', 'downtimePicker:startedAt:now') %></button>
+      </span>
+    </div>
+  </div>
+  <div class="form-group">
     <label for="<%- idPrefix %>-reason"><%- t('production', 'downtimePicker:reason:label') %></label>
     <input id="<%- idPrefix %>-reason" type="text" placeholder="<%- t('production', 'downtimePicker:reason:placeholder') %>">
   </div>

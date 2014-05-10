@@ -6,6 +6,7 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/time',
   'app/viewport',
   'app/data/aors',
   'app/data/downtimeReasons',
@@ -15,6 +16,7 @@ define([
   _,
   $,
   t,
+  time,
   viewport,
   aors,
   downtimeReasons,
@@ -62,6 +64,14 @@ define([
         submitEl.disabled = true;
 
         this.handlePick(submitEl);
+      },
+      'click .production-downtimePicker-now': function()
+      {
+        var startedAt = Date.now();
+
+        this.$id('startedAt')
+          .val(time.format(startedAt, 'YYYY-MM-DD, HH:mm:ss'))
+          .attr('data-time', startedAt);
       }
     },
 
@@ -78,7 +88,8 @@ define([
     serialize: function()
     {
       return {
-        idPrefix: this.idPrefix
+        idPrefix: this.idPrefix,
+        startedAt: this.startedAt
       };
     },
 
@@ -212,7 +223,8 @@ define([
       this.trigger('downtimePicked', {
         reason: reason,
         reasonComment: comment,
-        aor: aor
+        aor: aor,
+        startedAt: new Date(parseInt(this.$id('startedAt').attr('data-time'), 10))
       });
     }
 
