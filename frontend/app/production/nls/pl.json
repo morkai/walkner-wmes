@@ -104,8 +104,10 @@
   "newOrderPicker:quantityDone": "Ilość wykonana w kończonym zleceniu:",
   "newOrderPicker:workerCount": "Osoby pracujące przy kończonym zleceniu:",
 
-  "downtimePicker:title": "Rozpoczynanie przestoju",
-  "downtimePicker:submit": "Rozpocznij przestój",
+  "downtimePicker:title:start": "Rozpoczynanie przestoju",
+  "downtimePicker:title:edit": "Poprawianie przestoju",
+  "downtimePicker:submit:start": "Rozpocznij przestój",
+  "downtimePicker:submit:edit": "Popraw przestój",
   "downtimePicker:cancel": "Anuluj",
   "downtimePicker:reason:label": "Powód przestoju:",
   "downtimePicker:reason:placeholder": "Wybierz powód przestoju...",

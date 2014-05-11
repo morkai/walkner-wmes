@@ -117,10 +117,7 @@ define([
       this.controlsView = new ProductionControlsView({model: this.model});
       this.headerView = new ProductionHeaderView({model: this.model});
       this.dataView = new ProductionDataView({model: this.model});
-      this.downtimesView = new ProdDowntimeListView({
-        collection: this.model.prodDowntimes,
-        prodLine: this.model.prodLine.id
-      });
+      this.downtimesView = new ProdDowntimeListView({model: this.model});
       this.quantitiesView = new ProductionQuantitiesView({model: this.model});
 
       this.setView('.production-controls-container', this.controlsView);

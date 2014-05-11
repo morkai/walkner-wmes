@@ -468,6 +468,22 @@ define([
       return !!finishedProdDowntime;
     },
 
+    editDowntime: function(prodDowntime, changes)
+    {
+      prodDowntime.set(changes);
+
+      changes = prodDowntime.changedAttributes();
+
+      if (!changes)
+      {
+        return;
+      }
+
+      changes._id = prodDowntime.id;
+
+      prodLog.record(this, 'editDowntime', changes);
+    },
+
     /**
      * @returns {boolean}
      */

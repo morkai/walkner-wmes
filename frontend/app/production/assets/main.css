@@ -214,6 +214,9 @@
 .production-downtimePicker-now {
   min-width: 100px;
 }
+.production-downtimes .list-item.warning {
+  cursor: pointer;
+}
 .production-downtimes-popover {
   white-space: pre-line;
   text-align: justify;

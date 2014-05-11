@@ -54,7 +54,7 @@ define([
       {
         e.preventDefault();
 
-        var submitEl = this.$('.btn-danger')[0];
+        var submitEl = this.$('.btn[type="submit"]')[0];
 
         if (submitEl.disabled)
         {
@@ -89,20 +89,26 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        startedAt: this.startedAt
+        startedAt: this.model.startedAt,
+        mode: this.model.mode
       };
     },
 
     afterRender: function()
     {
-      if (this.reason)
+      if (this.model.reason)
       {
-        this.$id('reason').val(this.reason);
+        this.$id('reason').val(this.model.reason);
       }
 
-      if (this.aor)
+      if (this.model.aor)
       {
-        this.$id('aor').val(this.aor);
+        this.$id('aor').val(this.model.aor);
+      }
+
+      if (this.model.reasonComment)
+      {
+        this.$id('reasonComment').val(this.model.reasonComment);
       }
 
       this.setUpReasonSelect2();
@@ -117,13 +123,17 @@ define([
 
     focusControl: function()
     {
-      if (!this.reason)
+      if (!this.model.reason)
       {
         this.$id('reason').select2('focus');
       }
-      else if (!this.aor)
+      else if (!this.model.aor)
       {
         this.$id('aor').select2('focus');
+      }
+      else if (this.model.mode === 'edit')
+      {
+        this.$id('reasonComment').focus();
       }
       else
       {
@@ -139,7 +149,7 @@ define([
       $reason.select2({
         dropdownCssClass: 'production-dropdown',
         openOnEnter: null,
-        data: this.model.getDowntimeReasons()
+        data: this.model.prodShift.getDowntimeReasons()
           .map(function(downtimeReason)
           {
             return {

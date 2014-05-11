@@ -357,10 +357,21 @@ define([
         e.target.blur();
       }
 
-      var downtimePickerView = new DowntimePickerView(_.extend({
-        model: this.model,
-        startedAt: startedAt
-      }, options));
+      if (!options)
+      {
+        options = {};
+      }
+
+      options.model = _.defaults(options.model || {}, {
+        mode: 'start',
+        prodShift: this.model,
+        startedAt: startedAt,
+        reason: null,
+        aor: null,
+        reasonComment: null
+      });
+
+      var downtimePickerView = new DowntimePickerView(options);
 
       this.listenTo(downtimePickerView, 'downtimePicked', function(downtimeInfo)
       {
@@ -369,14 +380,17 @@ define([
         this.model.startDowntime(downtimeInfo);
       });
 
-      viewport.showDialog(downtimePickerView, t('production', 'downtimePicker:title'));
+      viewport.showDialog(downtimePickerView, t('production', 'downtimePicker:title:start'));
     },
 
     startBreak: function(e)
     {
       this.startDowntime(e, {
-        reason: this.model.getBreakReason(),
-        aor: this.model.getDefaultAor()
+        model: {
+          prodShift: this.model,
+          reason: this.model.getBreakReason(),
+          aor: this.model.getDefaultAor()
+        }
       });
     },
 
