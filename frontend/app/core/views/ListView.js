@@ -48,8 +48,6 @@ define([
 
     initialize: function()
     {
-      this.lastRefreshAt = 0;
-
       if (this.collection.paginationData)
       {
         this.setView('.pagination-container', new PaginationView({
@@ -65,7 +63,8 @@ define([
       return {
         columns: this.serializeColumns(),
         actions: this.serializeActions(),
-        rows: this.serializeRows()
+        rows: this.serializeRows(),
+        className: this.className
       };
     },
 
