@@ -3,10 +3,16 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/i18n',
+  'app/user',
   'app/core/View',
+  'app/core/views/LogInFormView',
   '../views/DashboardView'
 ], function(
+  t,
+  user,
   View,
+  LogInFormView,
   DashboardView
 ) {
   'use strict';
@@ -17,9 +23,28 @@ define([
 
     pageId: 'dashboard',
 
+    localTopics: {
+      'user.reloaded': function()
+      {
+        this.view.remove();
+        this.view = user.isLoggedIn() ? new DashboardView() : new LogInFormView();
+        this.view.render();
+      }
+    },
+
+    breadcrumbs: function()
+    {
+      return user.isLoggedIn() ? [] : [t.bound('dashboard', 'breadcrumbs:logIn')];
+    },
+
     initialize: function()
     {
-      this.view = new DashboardView();
+      this.view = user.isLoggedIn() ? new DashboardView() : new LogInFormView();
+    },
+
+    afterRender: function()
+    {
+      this.$('input[name="login"]').focus();
     }
 
   });

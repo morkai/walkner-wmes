@@ -247,11 +247,7 @@
       broker.subscribe('user.reloaded', function()
       {
         viewport.render();
-
-        if (viewport.currentPage.pageId === 'error')
-        {
-          router.dispatch(router.getCurrentRequest().url);
-        }
+        router.dispatch(router.getCurrentRequest().url);
       });
 
       broker.subscribe('user.loggedOut', function()
