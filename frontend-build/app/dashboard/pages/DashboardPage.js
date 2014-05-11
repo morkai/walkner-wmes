@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/core/View","../views/DashboardView"],function(e,i){return e.extend({layoutName:"page",pageId:"dashboard",initialize:function(){this.view=new i}})});
+define(["app/i18n","app/user","app/core/View","app/core/views/LogInFormView","../views/DashboardView"],function(e,i,n,o,r){return n.extend({layoutName:"page",pageId:"dashboard",localTopics:{"user.reloaded":function(){this.view.remove(),this.view=i.isLoggedIn()?new r:new o,this.view.render()}},breadcrumbs:function(){return i.isLoggedIn()?[]:[e.bound("dashboard","breadcrumbs:logIn")]},initialize:function(){this.view=i.isLoggedIn()?new r:new o},afterRender:function(){this.$('input[name="login"]').focus()}})});

@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(e){var l={locale:{}};l.locale.en=e;return{root:{},pl:!0}});
+define(["app/nls/locale/en"],function(n){var e={locale:{}};e.locale.en=n;return{root:{"breadcrumbs:logIn":function(){return"Log in form"}},pl:!0}});

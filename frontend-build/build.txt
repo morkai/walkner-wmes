@@ -48,9 +48,9 @@ app/core/assets/properties.css
 ----------------
 app/core/assets/properties.css
 
-app/dashboard/assets/dashboard.css
+app/dashboard/assets/main.css
 ----------------
-app/dashboard/assets/dashboard.css
+app/dashboard/assets/main.css
 
 app/divisions/assets/main.css
 ----------------
@@ -147,6 +147,7 @@ assets/../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.
 assets/../vendor/highlight/styles/monokai.css
 assets/./select2.css
 assets/../app/core/assets/main.css
+assets/../app/dashboard/assets/main.css
 assets/../app/events/assets/main.css
 assets/../app/orderStatuses/assets/main.css
 assets/../app/users/assets/main.css
