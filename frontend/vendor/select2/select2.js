@@ -455,8 +455,7 @@ the specific language governing permissions and limitations under the Apache Lic
                     dataType: options.dataType,
                     data: data,
                     success: function (data) {
-                        // TODO - replace query.page with query so users have access to term, page, etc.
-                        var results = options.results(data, query.page);
+                        var results = options.results(data, query);
                         query.callback(results);
                     }
                 });
@@ -3308,7 +3307,7 @@ the specific language governing permissions and limitations under the Apache Lic
                     value = select2[method].apply(select2, args.slice(1));
                 }
                 if (indexOf(args[0], valueMethods) >= 0
-                    || (indexOf(args[0], propertyMethods) && args.length == 1)) {
+                    || (indexOf(args[0], propertyMethods) >= 0 && args.length == 1)) {
                     return false; // abort the iteration, ready to return first matched value
                 }
             } else {
