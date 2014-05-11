@@ -19,6 +19,8 @@ define([
 
   return ListView.extend({
 
+    className: 'production-downtimes',
+
     localTopics: {
       'downtimeReasons.synced': 'render',
       'aors.synced': 'render'
@@ -43,6 +45,11 @@ define([
       this.listenTo(this.collection, 'add', this.render);
       this.listenTo(this.collection, 'change', this.render);
       this.listenTo(this.collection, 'remove', this.render);
+    },
+
+    destroy: function()
+    {
+      this.$el.popover('destroy');
     },
 
     serializeColumns: function()
@@ -77,6 +84,12 @@ define([
           row.reason = reason.get('label');
         }
 
+        if (row.reasonComment)
+        {
+          row.className += ' has-comment';
+          row.reason += ' <i class="fa fa-info-circle"></i>';
+        }
+
         return row;
       });
     },
@@ -84,6 +97,27 @@ define([
     serializeActions: function()
     {
       return [];
+    },
+
+    afterRender: function()
+    {
+      var view = this;
+
+      this.$el
+        .popover({
+          selector: '.has-comment',
+          trigger: 'hover',
+          placement: 'top',
+          container: this.el.ownerDocument.body,
+          content: function()
+          {
+            return view.collection.get(this.dataset.id).get('reasonComment');
+          }
+        })
+        .on('shown.bs.popover', function(e)
+        {
+          view.$(e.target).data('bs.popover').$tip.addClass('production-downtimes-popover');
+        });
     },
 
     onCorroborated: function(message)

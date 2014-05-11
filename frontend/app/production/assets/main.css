@@ -214,6 +214,11 @@
 .production-downtimePicker-now {
   min-width: 100px;
 }
+.production-downtimes-popover {
+  white-space: pre-line;
+  text-align: justify;
+  min-width: 350px;
+}
 @media (max-width: 1680px) {
   .production {
     margin: 0;
