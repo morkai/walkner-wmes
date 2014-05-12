@@ -121,7 +121,10 @@ function prepareOperations(orderData)
 
     orderData.operations.forEach(function(operation)
     {
-      operations[operation.no] = operation;
+      if (operation.workCenter !== '' && operation.laborTime !== -1)
+      {
+        operations[operation.no] = operation;
+      }
     });
 
     orderData.operations = operations;

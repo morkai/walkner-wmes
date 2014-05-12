@@ -168,7 +168,10 @@ define([
 
         orderInfo.operations.forEach(function(operation)
         {
-          operations[operation.no] = operation;
+          if (operation.workCenter !== '' && operation.laborTime !== -1)
+          {
+            operations[operation.no] = operation;
+          }
         });
 
         orderInfo.operations = operations;
