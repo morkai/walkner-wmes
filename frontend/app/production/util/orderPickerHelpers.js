@@ -67,9 +67,9 @@ define([
         }
       }, options));
 
-      function withLaborTime(operation)
+      function emptyOperation(operation)
       {
-        return operation.laborTime !== -1;
+        return operation.laborTime !== -1 && operation.workCenter !== '';
       }
 
       $order.on('change', function(e)
@@ -78,11 +78,11 @@ define([
 
         if (Array.isArray(e.operations))
         {
-          operations = e.operations.filter(withLaborTime);
+          operations = e.operations.filter(emptyOperation);
         }
         else if (e.added && Array.isArray(e.added.operations))
         {
-          operations = e.added.operations.filter(withLaborTime);
+          operations = e.added.operations.filter(emptyOperation);
         }
         else
         {

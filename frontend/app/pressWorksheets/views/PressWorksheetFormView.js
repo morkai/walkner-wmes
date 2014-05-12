@@ -514,8 +514,19 @@ define([
           return;
         }
 
-        var operations =
-          e.added && Array.isArray(e.added.data.operations) ? e.added.data.operations : [];
+        var operations = [];
+
+        if (e.added && Array.isArray(e.added.data.operations))
+        {
+          e.added.data.operations.forEach(function(operation)
+          {
+            if (operation.workCenter !== '' && operation.laborTime !== -1)
+            {
+              operations.push(operation);
+            }
+          });
+        }
+
         var $operation = $row.find('.pressWorksheets-form-operation');
 
         view.setUpOperationSelect2($operation, operations.map(function(operation)
