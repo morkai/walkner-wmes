@@ -11,6 +11,14 @@ define([
 ) {
   'use strict';
 
+  function formatNumericProperty(obj, prop)
+  {
+    if (obj[prop] && obj[prop].toLocaleString)
+    {
+      obj[prop] = obj[prop].toLocaleString();
+    }
+  }
+
   return View.extend({
 
     template: operationListTemplate,
@@ -18,10 +26,18 @@ define([
     serialize: function()
     {
       return {
-        operations: this.model.get('operations').toJSON().sort(function(a, b)
-        {
-          return a.no - b.no;
-        }),
+        operations: this.model.get('operations')
+          .toJSON()
+          .map(function(op)
+          {
+            formatNumericProperty(op, 'machineSetupTime');
+            formatNumericProperty(op, 'laborSetupTime');
+            formatNumericProperty(op, 'machineTime');
+            formatNumericProperty(op, 'laborTime');
+
+            return op;
+          })
+          .sort(function(a, b) { return a.no - b.no; }),
         highlighted: this.options.highlighted
       };
     },
