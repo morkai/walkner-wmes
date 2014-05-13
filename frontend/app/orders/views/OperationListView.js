@@ -18,7 +18,10 @@ define([
     serialize: function()
     {
       return {
-        operations: this.model.get('operations').toJSON(),
+        operations: this.model.get('operations').toJSON().sort(function(a, b)
+        {
+          return a.no - b.no;
+        }),
         highlighted: this.options.highlighted
       };
     },
