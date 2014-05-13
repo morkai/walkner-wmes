@@ -1,3 +1,5 @@
+/*globals emit:true*/
+
 'use strict';
 
 var mongodb = require('mongodb');
@@ -12,14 +14,41 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
   }
 
   var prodshiftorders = db.collection('prodshiftorders');
+  var prodlogentries = db.collection('prodlogentries');
 
   step(
     function()
     {
-      prodshiftorders.find(
-        {"orderData.operations.0030.workCenter": ""},
-        {orderId: 1, "orderData.operations.0030": 1}
-      ).toArray(this.next());
+      function map()
+      {
+        /*jshint validthis:true*/
+
+        if (!this.orderData || !this.orderData.operations)
+        {
+          return;
+        }
+
+        var ops = Object.keys(this.orderData.operations);
+
+        for (var i = 0, l = ops.length; i < l; ++i)
+        {
+          var op = this.orderData.operations[ops[i]];
+
+          if ((op.workCenter === '' && op.laborTime === -1) || op.no === '0030')
+          {
+            return emit(this._id, {orderId: this.orderId, operationNo: this.operationNo});
+          }
+        }
+      }
+
+      function reduce(key, values)
+      {
+        return values[0];
+      }
+
+      console.log('prodShiftOrders.mapReduce...');
+
+      prodshiftorders.mapReduce(map, reduce, {out: {inline: 1}}, this.next());
     },
     function(err, docs)
     {
@@ -28,14 +57,24 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
         return this.skip(err);
       }
 
-      this.prodShiftOrders = docs;
-
       var orderIds = {};
+      var prodShiftOrders = [];
+
+      console.log('prodShiftOrders.forEach %d...', docs.length);
 
       docs.forEach(function(doc)
       {
-        orderIds[doc.orderId] = true;
+        orderIds[doc.value.orderId] = true;
+        prodShiftOrders.push({
+          _id: doc._id,
+          orderId: doc.value.orderId,
+          operationNo: doc.value.operationNo
+        });
       });
+
+      this.prodShiftOrders = prodShiftOrders;
+
+      console.log('orders.find...');
 
       db.collection('orders')
         .find({_id: {$in: Object.keys(orderIds)}}, {operations: 1})
@@ -48,31 +87,43 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
         return this.skip(err);
       }
 
-      var orderToOperation = {};
+      var orderToOperations = {};
+
+      console.log('orders.forEach %d...', orders.length);
 
       orders.forEach(function(order)
       {
-        var operations = order.operations.filter(function(operation)
+        var operations = {};
+
+        order.operations.forEach(function(operation)
         {
-          return operation.no === '0030'
-            && operation.workCenter !== ''
-            && operation.laborTime !== '-1';
+          if ((operation.workCenter !== '' && operation.laborTime !== -1)
+            || !operations[operation.no])
+          {
+            operations[operation.no] = operation;
+          }
         });
 
-        if (operations.length)
-        {
-          orderToOperation[order._id] = operations[0];
-        }
+        orderToOperations[order._id] = operations;
       });
 
-      this.orderToOperation = orderToOperation;
+      this.orderToOperations = orderToOperations;
     },
     function()
     {
+      console.log('updating...');
+
       for (var i = 0, l = this.prodShiftOrders.length; i < l; ++i)
       {
         var prodShiftOrder = this.prodShiftOrders[i];
-        var operation = this.orderToOperation[prodShiftOrder.orderId];
+        var operations = this.orderToOperations[prodShiftOrder.orderId];
+
+        if (!operations)
+        {
+          continue;
+        }
+
+        var operation = operations[prodShiftOrder.operationNo];
 
         if (!operation)
         {
@@ -84,7 +135,16 @@ mongodb.MongoClient.connect(config.uri, config, function(err, db)
           {$set: {
             laborTime: operation.laborTime,
             machineTime: operation.machineTime,
-            "orderData.operations.0030": operation
+            'orderData.operations': operations
+          }},
+          this.parallel()
+        );
+        prodlogentries.update(
+          {type: 'changeOrder', prodShiftOrder: prodShiftOrder._id},
+          {$set: {
+            'data.laborTime': operation.laborTime,
+            'data.machineTime': operation.machineTime,
+            'data.orderData.operations': operations
           }},
           this.parallel()
         );
