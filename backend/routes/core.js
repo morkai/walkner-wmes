@@ -19,19 +19,22 @@ module.exports = function startCoreRoutes(app, express)
 
   reloadRequirejsConfig();
 
-  [
-    'prodFunctions',
-    'companies',
-    'divisions',
-    'subdivisions',
-    'mrpControllers',
-    'prodFlows',
-    'workCenters',
-    'prodLines',
-    'aors',
-    'orderStatuses',
-    'downtimeReasons'
-  ].forEach(setUpFrontendVersionUpdater);
+  if (app.updater)
+  {
+    [
+      'prodFunctions',
+      'companies',
+      'divisions',
+      'subdivisions',
+      'mrpControllers',
+      'prodFlows',
+      'workCenters',
+      'prodLines',
+      'aors',
+      'orderStatuses',
+      'downtimeReasons'
+    ].forEach(setUpFrontendVersionUpdater);
+  }
 
   express.get('/', showIndex);
 
