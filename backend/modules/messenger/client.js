@@ -15,7 +15,7 @@ exports.DEFAULT_CONFIG = {
   responseTimeout: 5000
 };
 
-exports.start = function startControllerModule(app, module)
+exports.start = function startMessengerClientModule(app, module)
 {
   var subSocket;
   var reqSocket;
