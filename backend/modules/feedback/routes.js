@@ -17,7 +17,9 @@ module.exports = function setUpFeedbackRoutes(app, feedbackModule)
 
   express.get('/feedback', canView, crud.browseRoute.bind(null, app, Feedback));
 
-  express.post('/feedback', applyCreatorInfo, crud.addRoute.bind(null, app, Feedback));
+  express.post(
+    '/feedback', userModule.auth(), applyCreatorInfo, crud.addRoute.bind(null, app, Feedback)
+  );
 
   express.get('/feedback/:id', canView, crud.readRoute.bind(null, app, Feedback));
 
