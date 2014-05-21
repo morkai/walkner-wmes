@@ -1,3 +1,7 @@
+.page[data-id="dashboard"] .page-breadcrumbs {
+  text-align: center;
+}
 .page[data-id="dashboard"] .logInForm {
   max-width: 600px;
+  margin: 0 auto;
 }
