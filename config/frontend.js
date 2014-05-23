@@ -4,7 +4,6 @@ exports.id = 'frontend';
 
 exports.modules = [
   'updater',
-  'diag',
   'mongoose',
   'settings',
   'events',
@@ -114,7 +113,7 @@ exports.mongoose = {
     'order', 'mechOrder', 'emptyOrder', 'clipOrderCount',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
-    'diagLogEntry', 'feedback',
+    'feedback',
     'license',
     'xiconfOrder', 'xiconfResult'
   ]
