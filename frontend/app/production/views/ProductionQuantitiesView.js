@@ -18,7 +18,7 @@ define([
   View,
   QuantityEditorView,
   quantitiesTemplate
-  ) {
+) {
   'use strict';
 
   return View.extend({
@@ -169,7 +169,7 @@ define([
 
         var hour = $td.attr('data-hour');
 
-        if (newValue !== oldValue && newValue >= 0)
+        if (newValue !== oldValue && newValue >= 0 && newValue <= maxQuantitiesDone)
         {
           $value.text(newValue);
 
