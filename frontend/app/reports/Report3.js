@@ -320,7 +320,7 @@ define([
         var workDays = (options.workDays ? options.workDays[groupKey] : 1) + weekendWorkDays;
         var totalAvailabilityH = 24 * workDays;
         var exploitationH = dataPoint.e;
-        var scheduledDuration = getDowntime(dataPoint.d, 'scheduled')[1] + workDays * 0.0625;
+        var scheduledDuration = getDowntime(dataPoint.d, 'scheduled')[1];
         var unscheduledDuration = getDowntime(dataPoint.d, 'unscheduled')[1];
         var operationalAvailabilityH = totalAvailabilityH - scheduledDuration - unscheduledDuration;
         var operationalAvailabilityP = operationalAvailabilityH / totalAvailabilityH * 100;
