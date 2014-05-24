@@ -27,11 +27,6 @@ define([
     return Math.round(num * 100) / 100;
   }
 
-  function sum(nums)
-  {
-    return nums.reduce(function(sum, num) { return sum + num; }, 0);
-  }
-
   return Model.extend({
 
     urlRoot: '/reports/3',
@@ -110,6 +105,7 @@ define([
         renovationDuration: [],
         malfunctionDuration: [],
         mttr: [],
+        mttf: [],
         mtbf: [],
         malfunctionCount: [],
         majorMalfunctionCount: []
@@ -129,7 +125,6 @@ define([
         var malfunctionDuration = 0;
         var malfunctionCount = 0;
         var majorMalfunctionCount = 0;
-        var mtbfNum = 0;
         var quantityDone = 0;
         var quantityLost = 0;
 
@@ -159,7 +154,6 @@ define([
           malfunctionDuration += dataPoint.malfunctionDuration;
           malfunctionCount += dataPoint.malfunctionCount;
           majorMalfunctionCount += dataPoint.majorMalfunctionCount;
-          mtbfNum += dataPoint.mtbfNum;
           quantityDone += dataPoint.quantityDone;
           quantityLost += dataPoint.quantityLost;
         }
@@ -184,10 +178,19 @@ define([
         chartSummary.malfunctionDuration.push([time, round(malfunctionDuration)]);
         chartSummary.malfunctionCount.push([time, malfunctionCount]);
         chartSummary.majorMalfunctionCount.push([time, majorMalfunctionCount]);
-        chartSummary.mttr.push(
-          [time, malfunctionCount ? round(malfunctionDuration / malfunctionCount) : 0]
-        );
-        chartSummary.mtbf.push([time, malfunctionCount ? round(mtbfNum / malfunctionCount) : 0]);
+
+        var mttr = 0;
+        var mttf = 0;
+
+        if (malfunctionCount > 0)
+        {
+          mttr = malfunctionDuration / malfunctionCount;
+          mttf = (operationalAvailabilityH - malfunctionDuration) / malfunctionCount;
+        }
+
+        chartSummary.mttr.push([time, round(mttr)]);
+        chartSummary.mttf.push([time, round(mttf)]);
+        chartSummary.mtbf.push([time, round(mttf + mttr)]);
       }
 
       if (!arguments.length)
@@ -218,7 +221,7 @@ define([
         majorMalfunctionCount: 0,
         malfunctions: null,
         mttr: 0,
-        mtbfNum: 0,
+        mttf: 0,
         mtbf: 0,
         quantityDone: 0,
         quantityLost: 0
@@ -288,7 +291,7 @@ define([
           malfunctionCount: 0,
           majorMalfunctionCount: 0,
           mttr: 0,
-          mtbfNum: 0,
+          mttf: 0,
           mtbf: 0,
           quantityDone: 0,
           quantityLost: 0,
@@ -329,9 +332,10 @@ define([
         var malfunctionDuration = malfunctionDowntime[1];
         var majorMalfunctionCount = getDowntime(dataPoint.d, 'majorMalfunction')[0];
         var malfunctions = dataPoint.m || null;
-        var mtbfNum = malfunctions ? sum(malfunctions.h) : 0;
         var quantityDone = dataPoint.q || 0;
         var quantityLost = dataPoint.l || 0;
+        var mttr = malfunctionDuration / malfunctionCount;
+        var mttf = (operationalAvailabilityH - malfunctionDuration) / malfunctionCount;
 
         prodLine.workDays += weekendWorkDays;
         prodLine.scheduledDuration += scheduledDuration;
@@ -363,9 +367,9 @@ define([
           malfunctionCount: malfunctionCount,
           majorMalfunctionCount: majorMalfunctionCount,
           malfunctions: malfunctions,
-          mttr: malfunctionDuration / malfunctionCount,
-          mtbfNum: mtbfNum,
-          mtbf: mtbfNum ? (mtbfNum / malfunctions.h.length) : 0,
+          mttr: mttr,
+          mttf: mttf,
+          mtbf: mttf + mttr,
           quantityDone: quantityDone,
           quantityLost: quantityLost
         };
@@ -395,49 +399,23 @@ define([
         ? round(prodLine.malfunctionDuration / prodLine.malfunctionCount)
         : 0;
 
-      this.calcProdLineOee(prodLine, true);
-
-      if (prodLine.malfunctionCount > 1)
+      if (prodLine.malfunctionCount > 0)
       {
-        this.calcProdLineMtbf(prodLine);
+        prodLine.mttr = round(prodLine.malfunctionDuration / prodLine.malfunctionCount);
+        prodLine.mttf = round(
+          (prodLine.operationalAvailabilityH - prodLine.malfunctionDuration)
+            / prodLine.malfunctionCount
+        );
+        prodLine.mtbf = prodLine.mttr + prodLine.mttf;
       }
-    },
-
-    calcProdLineMtbf: function(prodLine)
-    {
-      var hoursBetween = [];
-      var firstStartedAt = null;
-      var lastFinishedAt = null;
-
-      Object.keys(prodLine.data).forEach(function(groupKey)
+      else
       {
-        var malfunctions = prodLine.data[groupKey].malfunctions;
+        prodLine.mttr = 0;
+        prodLine.mttf = 0;
+        prodLine.mtbf = 0;
+      }
 
-        if (malfunctions === null)
-        {
-          return;
-        }
-
-        if (lastFinishedAt !== null)
-        {
-          hoursBetween.push((malfunctions.s - lastFinishedAt) / 3600000);
-        }
-
-        if (malfunctions.h.length > 0)
-        {
-          hoursBetween = hoursBetween.concat(malfunctions.h);
-        }
-
-        if (firstStartedAt === null)
-        {
-          firstStartedAt = malfunctions.s;
-        }
-
-        lastFinishedAt = malfunctions.f;
-      });
-
-      prodLine.mtbfNum = sum(hoursBetween);
-      prodLine.mtbf = round(prodLine.mtbfNum / prodLine.malfunctionCount);
+      this.calcProdLineOee(prodLine, true);
     },
 
     calcProdLineOee: function(prodLine, roundValue)
