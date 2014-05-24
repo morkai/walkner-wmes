@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpDacRoutes(app, dacServerModule)
 {
   var express = app[dacServerModule.config.expressId];

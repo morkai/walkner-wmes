@@ -3,12 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'jquery',
   'app/time',
   'app/i18n',
   'app/core/View',
   'app/highcharts'
 ], function(
+  _,
   $,
   time,
   t,

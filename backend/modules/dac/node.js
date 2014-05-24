@@ -88,7 +88,7 @@ exports.start = function startDacNodeModule(app, module)
     }
     else
     {
-      setTimeout(exportData, module.config.exportDelay)
+      setTimeout(exportData, module.config.exportDelay);
     }
   }
 
