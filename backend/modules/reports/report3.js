@@ -6,6 +6,7 @@
 
 var step = require('h5.step');
 var util = require('./util');
+var businessDays = require('./businessDays');
 
 module.exports = function(mongoose, options, done)
 {
@@ -248,15 +249,15 @@ Report3.prototype.countWorkDays = function(groupKey)
 
   if (this.options.interval === 'day')
   {
-    workDays = this.countWorkDaysInDay(date);
+    workDays = businessDays.countInDay(date);
   }
   else if (this.options.interval === 'week')
   {
-    workDays = this.countWorkDaysInWeek(date);
+    workDays = businessDays.countInWeek(date, this.currentShiftStartDate);
   }
   else if (this.options.interval === 'month')
   {
-    workDays = this.countWorkDaysInMonth(date);
+    workDays = businessDays.countInMonth(date, this.currentShiftStartDate);
   }
 
   this.workDays[groupKey] = workDays;
