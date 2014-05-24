@@ -87,6 +87,10 @@ exports.createGroupKey = function(interval, date)
 
       groupKey.date(1).hours(6);
       break;
+
+    case 'year':
+      groupKey.month(0).date(1).hours(6);
+      break;
   }
 
   return groupKey.valueOf();

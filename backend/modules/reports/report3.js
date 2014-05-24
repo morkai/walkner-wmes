@@ -259,6 +259,10 @@ Report3.prototype.countWorkDays = function(groupKey)
   {
     workDays = businessDays.countInMonth(date, this.currentShiftStartDate);
   }
+  else if (this.options.interval === 'year')
+  {
+    workDays = businessDays.countInYear(date, this.currentShiftStartDate);
+  }
 
   this.workDays[groupKey] = workDays;
 

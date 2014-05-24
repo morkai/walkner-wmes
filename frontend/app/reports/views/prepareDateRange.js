@@ -25,6 +25,18 @@ define([
 
     switch (dateRange)
     {
+      case 'currentYear':
+        fromMoment.month(0).date(1);
+        toMoment = fromMoment.clone().add('years', 1);
+        interval = 'year';
+        break;
+
+      case 'prevYear':
+        fromMoment.month(0).date(1).subtract('years', 1);
+        toMoment = fromMoment.clone().add('years', 1);
+        interval = 'year';
+        break;
+
       case 'currentMonth':
         fromMoment.date(1);
         toMoment = fromMoment.clone().add('months', 1);
