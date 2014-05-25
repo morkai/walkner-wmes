@@ -12,6 +12,9 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   settingsId: 'settings',
   orgUnitsId: 'orgUnits',
+  prodTasksId: 'prodTasks',
+  downtimeReasonsId: 'downtimeReasons',
+  prodFunctionsId: 'prodFunctions',
   javaBatik: null
 };
 
@@ -23,7 +26,10 @@ exports.start = function startReportsModule(app, module)
       module.config.userId,
       module.config.expressId,
       module.config.orgUnitsId,
-      module.config.settingsId
+      module.config.settingsId,
+      module.config.prodTasksId,
+      module.config.downtimeReasonsId,
+      module.config.prodFunctionsId
     ],
     setUpRoutes.bind(null, app, module)
   );
