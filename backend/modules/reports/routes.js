@@ -8,7 +8,9 @@ var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
 var tmpdir = require('os').tmpdir;
+var crypto = require('crypto');
 var multipart = require('express').multipart;
+var util = require('./util');
 var report1 = require('./report1');
 var report2 = require('./report2');
 var report3 = require('./report3');
@@ -30,17 +32,18 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var prodFlowsModule = app.prodFlows;
   var workCentersModule = app.workCenters;
   var prodLinesModule = app.prodLines;
+  var cachedReports = {};
 
   var canView = userModule.auth('REPORTS:VIEW');
   var canManage = userModule.auth('REPORTS:MANAGE');
 
-  express.get('/reports/1', canView, report1Route);
+  express.get('/reports/1', canView, sendCachedReport, report1Route);
 
-  express.get('/reports/2', canView, report2Route);
+  express.get('/reports/2', canView, sendCachedReport, report2Route);
 
-  express.get('/reports/3', canView, report3Route);
+  express.get('/reports/3', canView, sendCachedReport, report3Route);
 
-  express.get('/reports/4', canView, report4Route);
+  express.get('/reports/4', canView, sendCachedReport, report4Route);
 
   express.get(
     '/reports/metricRefs',
@@ -62,6 +65,57 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   if (reportsModule.config.javaBatik)
   {
     express.post('/reports;export', canView, multipart(), exportRoute);
+  }
+
+  function sendCachedReport(req, res, next)
+  {
+    req.reportHash = crypto.createHash('md5').update(req.url).digest('hex');
+
+    if (cachedReports[req.reportHash])
+    {
+      res.type('json');
+      res.send(cachedReports[req.reportHash]);
+    }
+    else
+    {
+      next();
+    }
+  }
+
+  function cacheReport(req, report)
+  {
+    var reportJson = JSON.stringify(report);
+
+    if (req.reportHash)
+    {
+      cachedReports[req.reportHash] = reportJson;
+
+      scheduleReportCacheExpiration(req.reportHash, report.options.fromTime, report.options.toTime);
+    }
+
+    return reportJson;
+  }
+
+  function scheduleReportCacheExpiration(reportHash, fromTime, toTime)
+  {
+    var delay;
+    var timeRange = toTime - fromTime;
+    var currentShiftStartTime = util.getCurrentShiftStartDate().getTime();
+    var day = 24 * 3600 * 1000;
+
+    if (toTime > currentShiftStartTime)
+    {
+      delay = timeRange > day ? 5 : 2;
+    }
+    else
+    {
+      delay = 15;
+    }
+
+    setTimeout(
+      function() { delete cachedReports[reportHash]; },
+      delay * 60 * 1000
+    );
   }
 
   function exportRoute(req, res, next)
@@ -221,7 +275,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
         return next(err);
       }
 
-      return res.send(report);
+      res.type('json');
+      res.send(cacheReport(req, report));
     });
   }
 
@@ -279,7 +334,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
         return next(err);
       }
 
-      return res.send(report);
+      res.type('json');
+      res.send(cacheReport(req, report));
     });
   }
 
@@ -306,7 +362,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
         return next(err);
       }
 
-      return res.send(report);
+      res.type('json');
+      res.send(cacheReport(req, report));
     });
   }
 
@@ -397,7 +454,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
           return next(err);
         }
 
-        return res.send(report);
+        res.type('json');
+        res.send(cacheReport(req, report));
       });
     }
   }
