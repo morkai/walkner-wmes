@@ -471,7 +471,7 @@ define([
 
         hide();
 
-        if (!isNaN(newValue))
+        if (!isNaN(newValue) && newValue >= minValue && newValue <= maxValue)
         {
           view.model[changeFunction](newValue);
         }
