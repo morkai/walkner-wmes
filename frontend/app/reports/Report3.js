@@ -185,7 +185,7 @@ define([
         if (malfunctionCount > 0)
         {
           mttr = malfunctionDuration / malfunctionCount;
-          mttf = (operationalAvailabilityH - malfunctionDuration) / malfunctionCount;
+          mttf = operationalAvailabilityH / malfunctionCount;
         }
 
         chartSummary.mttr.push([time, round(mttr)]);
@@ -335,7 +335,7 @@ define([
         var quantityDone = dataPoint.q || 0;
         var quantityLost = dataPoint.l || 0;
         var mttr = malfunctionDuration / malfunctionCount;
-        var mttf = (operationalAvailabilityH - malfunctionDuration) / malfunctionCount;
+        var mttf = operationalAvailabilityH / malfunctionCount;
 
         prodLine.workDays += weekendWorkDays;
         prodLine.scheduledDuration += scheduledDuration;
@@ -395,17 +395,11 @@ define([
       prodLine.maintenanceDuration = round(prodLine.maintenanceDuration);
       prodLine.renovationDuration = round(prodLine.renovationDuration);
       prodLine.malfunctionDuration = round(prodLine.malfunctionDuration);
-      prodLine.mttr = prodLine.malfunctionCount > 0
-        ? round(prodLine.malfunctionDuration / prodLine.malfunctionCount)
-        : 0;
 
       if (prodLine.malfunctionCount > 0)
       {
         prodLine.mttr = round(prodLine.malfunctionDuration / prodLine.malfunctionCount);
-        prodLine.mttf = round(
-          (prodLine.operationalAvailabilityH - prodLine.malfunctionDuration)
-            / prodLine.malfunctionCount
-        );
+        prodLine.mttf = round(prodLine.operationalAvailabilityH / prodLine.malfunctionCount);
         prodLine.mtbf = prodLine.mttr + prodLine.mttf;
       }
       else
