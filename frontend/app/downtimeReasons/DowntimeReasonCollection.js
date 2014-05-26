@@ -27,8 +27,6 @@ define([
 
     findFirstBreakIdBySubdivisionType: function(subdivisionType)
     {
-      return 'A';
-
       var breakReason = this.find(function(downtimeReason)
       {
         if (downtimeReason.get('type') !== 'break')

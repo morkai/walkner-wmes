@@ -13,8 +13,7 @@ define([
   t,
   bindLoadingMessage,
   View,
-  ActionFormView,
-  Aor
+  ActionFormView
 ) {
   'use strict';
 

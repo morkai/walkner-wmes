@@ -206,13 +206,6 @@ define([
         return this.serializeChartDataByProdFunction(chartData);
       }
 
-      var indirect = dirIndir.indirect;
-
-      if (!this.model.get('orgUnitType'))
-      {
-        indirect -= dirIndir.storage;
-      }
-
       chartData.productivity.push(
         dirIndir.productivity,
         dirIndir.productivity,
@@ -229,7 +222,7 @@ define([
         y: dirIndir.direct,
         color: COLOR_DIRECT
       }, {
-        y: Math.round(indirect * 10) / 10,
+        y: Math.round(dirIndir.indirect * 10) / 10,
         color: COLOR_INDIRECT
       }, {
         y: Math.round(dirIndir.storage * 100) / 100,

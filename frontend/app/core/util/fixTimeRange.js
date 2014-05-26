@@ -15,12 +15,6 @@ define([
   datetimeSupported.setAttribute('type', 'datetime-local');
   datetimeSupported = datetimeSupported.type !== 'text';
 
-  var TYPE_TO_FORMAT = {
-    'datetime-local': 'YYYY-MM-DD HH:mm',
-    'date': 'YYYY-MM-DD',
-    'time': 'HH:mm'
-  };
-
   function fixEl($el, defaultTime)
   {
     /*jshint -W015*/

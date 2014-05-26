@@ -9,6 +9,8 @@ define([
   t,
   time
 ) {
+  'use strict';
+
   return function decorateLogEntry(logEntry)
   {
     var isProgrammingFailure = logEntry.text === 'PROGRAMMING_FAILURE';
