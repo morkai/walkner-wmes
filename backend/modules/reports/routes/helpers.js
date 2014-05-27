@@ -26,7 +26,7 @@ exports.sendCachedReport = function(req, res, next)
 
 exports.cacheReport = function(req, report)
 {
-  var reportJson = JSON.stringify(report);
+  var reportJson = JSON.stringify(report, null, 2);
 
   if (req.reportHash)
   {
@@ -114,42 +114,93 @@ exports.getTime = function(date)
 
 exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit)
 {
-  /*jshint -W015*/
-
   var orgUnits = {
-    tasks: null,
-    flows: null
+    orgUnit: null,
+    subdivision: null,
+    prodFlow: null
   };
 
-  switch (orgUnitType)
+  if (orgUnitType === null || orgUnitType === 'division')
   {
-    case 'subdivision':
-      orgUnits.tasks = util.idToStr(
-        orgUnitsModule.getSubdivisionsFor('division', orgUnit.division)
-      );
-      break;
+    return orgUnits;
+  }
 
-    case 'mrpController':
-    case 'prodFlow':
-    case 'workCenter':
-    case 'prodLine':
-      orgUnits.tasks = util.idToStr(orgUnitsModule.getAllByTypeForSubdivision(
-        orgUnitType, orgUnitsModule.getSubdivisionFor(orgUnit)
-      ));
+  var parentProdFlow = null;
 
-      if (orgUnitType === 'workCenter')
-      {
-        orgUnits.flows = util.idToStr(orgUnitsModule.getWorkCentersInProdFlow(
-          orgUnitsModule.getByTypeAndId('prodFlow', orgUnit.prodFlow)
-        ));
-      }
-      else if (orgUnitType === 'prodLine')
-      {
-        orgUnits.flows = util.idToStr(orgUnitsModule.getProdLinesFor(
-          orgUnitsModule.getParent(orgUnitsModule.getParent(orgUnit))
-        ));
-      }
-      break;
+  if (orgUnitType === 'workCenter')
+  {
+    parentProdFlow = orgUnitsModule.getByTypeAndId('prodFlow', orgUnit.prodFlow);
+  }
+  else if (orgUnitType === 'prodLine')
+  {
+    parentProdFlow = orgUnitsModule.getParent(orgUnitsModule.getParent(orgUnit));
+  }
+
+  if (parentProdFlow !== null)
+  {
+    orgUnits.flows = exports.idToStr(orgUnitsModule.getProdLinesFor(parentProdFlow));
+  }
+
+  orgUnits.tasks = exports.idToStr(orgUnitsModule.getProdLinesFor(orgUnit));
+
+  var division = orgUnitsModule.getDivisionFor(orgUnit);
+
+  orgUnits.division = division
+    ? exports.idToStr(orgUnitsModule.getProdLinesFor(division))
+    : [];
+
+  return orgUnits;
+};
+
+exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit)
+{
+  var orgUnits = {
+    orgUnit: null,
+    division: null,
+    subdivision: null,
+    prodFlow: null
+  };
+
+  if (orgUnitType === null)
+  {
+    return orgUnits;
+  }
+
+  orgUnits.orgUnit = exports.idToStr(orgUnitsModule.getProdLinesFor(orgUnit));
+
+  if (orgUnitType === 'division')
+  {
+    return orgUnits;
+  }
+
+  var division = orgUnitsModule.getDivisionFor(orgUnit);
+
+  if (division)
+  {
+    orgUnits.division = exports.idToStr(orgUnitsModule.getProdLinesFor(division));
+  }
+
+  var subdivision = orgUnitsModule.getSubdivisionFor(orgUnit);
+
+  if (subdivision)
+  {
+    orgUnits.subdivision = exports.idToStr(orgUnitsModule.getProdLinesFor(subdivision));
+  }
+
+  if (orgUnitType !== 'workCenter' && orgUnitType !== 'prodLine')
+  {
+    return orgUnits;
+  }
+
+  var prodFlows = orgUnitsModule.getProdFlowsFor(orgUnit);
+
+  if (!prodFlows || !prodFlows.length)
+  {
+    orgUnits.prodFlow = [];
+  }
+  else
+  {
+    orgUnits.prodFlow = exports.idToStr(orgUnitsModule.getProdLinesFor(prodFlows[0]));
   }
 
   return orgUnits;

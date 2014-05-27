@@ -78,8 +78,6 @@ module.exports = function(mongoose, options, done)
       conditions.mechOrder = true;
     }
 
-    conditions.finishedAt = {$ne: null};
-
     return conditions;
   }
 
@@ -183,6 +181,7 @@ module.exports = function(mongoose, options, done)
     var conditions = createConditions();
 
     conditions.prodShiftOrder = {$ne: null};
+    conditions.finishedAt = {$ne: null};
 
     var fields = {
       _id: 1,
@@ -234,6 +233,12 @@ module.exports = function(mongoose, options, done)
   {
     /*jshint validthis:true*/
 
+    var conditions = createConditions();
+
+    conditions.workDuration = {$ne: 0};
+    conditions.laborTime = {$ne: 0};
+    conditions.workerCount = {$ne: 0};
+
     var fields = {
       division: 1,
       startedAt: 1,
@@ -241,13 +246,12 @@ module.exports = function(mongoose, options, done)
       subdivision: 1,
       mechOrder: 1,
       orderId: 1,
-      operationNo: 1,
-      'orderData.operations': 1,
       workerCount: 1,
-      quantityDone: 1
+      totalQuantity: 1,
+      laborTime: 1
     };
 
-    ProdShiftOrder.find(createConditions(), fields).sort({startedAt: 1}).lean().exec(this.next());
+    ProdShiftOrder.find(conditions, fields).sort({startedAt: 1}).lean().exec(this.next());
   }
 
   function groupProdShiftOrdersStep(err, prodShiftOrders)
@@ -362,7 +366,7 @@ module.exports = function(mongoose, options, done)
 
     var orderToDowntimes = this.orderToDowntimes;
     var groupedProdShiftOrders = this.groupedProdShiftOrders;
-    var fteTotals = fteResults.grouped;
+    var fteGroupedResults = fteResults.grouped;
 
     this.orderToDowntimes = null;
     this.groupedProdShiftOrders = null;
@@ -372,7 +376,7 @@ module.exports = function(mongoose, options, done)
       calcCoeffs(
         groupKey,
         groupedProdShiftOrders[groupKey],
-        fteTotals[groupKey],
+        fteGroupedResults[groupKey],
         orderToDowntimes
       );
     });
@@ -503,10 +507,9 @@ module.exports = function(mongoose, options, done)
         division: order.division,
         mechOrder: order.mechOrder,
         orderId: order.orderId,
-        operationNo: order.operationNo,
-        orderData: order.orderData,
         workerCount: order.workerCount,
-        quantityDone: order.quantityDone,
+        totalQuantity: order.totalQuantity,
+        laborTime: order.laborTime,
         percent: percent
       });
     }
@@ -607,7 +610,7 @@ module.exports = function(mongoose, options, done)
     groupedObjects[groupKey].push(obj);
   }
 
-  function calcCoeffs(groupKey, orders, fteTotal, orderToDowntimes)
+  function calcCoeffs(groupKey, orders, fteGroupResult, orderToDowntimes)
   {
     /*jshint validthis:true*/
 
@@ -622,42 +625,16 @@ module.exports = function(mongoose, options, done)
 
     orders.forEach(function(order)
     {
-      if (!order.orderData || !order.orderData.operations)
-      {
-        return;
-      }
-
-      var operation = order.orderData.operations[order.operationNo];
-
-      if (typeof operation === 'undefined'
-        || typeof operation.laborTime !== 'number'
-        || operation.laborTime <= 0)
-      {
-        return;
-      }
-
-      var duration = (order.finishedAt.getTime() - order.startedAt.getTime()) / 3600000;
-
-      if (duration <= 0)
-      {
-        return;
-      }
-
+      var workDuration = (order.finishedAt.getTime() - order.startedAt.getTime()) / 3600000;
       var percent = typeof order.percent === 'number' ? order.percent : 1;
       var workerCount = order.workerCount * percent;
-
-      if (workerCount === 0)
-      {
-        return;
-      }
-
-      var laborTime = operation.laborTime * percent;
-      var quantityDone = order.quantityDone * percent;
+      var laborTime = order.laborTime * percent;
+      var totalQuantity = order.totalQuantity * percent;
       var orderDowntime = orderToDowntimes[order._id];
 
       if (typeof orderDowntime === 'object')
       {
-        duration -= orderDowntime.breakDuration;
+        workDuration -= orderDowntime.breakDuration;
 
         dtNum += orderDowntime.duration * workerCount;
         dtDen += workerCount;
@@ -666,8 +643,8 @@ module.exports = function(mongoose, options, done)
         breakCount += orderDowntime.breakCount;
       }
 
-      effNum += laborTime / 100 * quantityDone;
-      effDen += duration * workerCount;
+      effNum += laborTime / 100 * totalQuantity;
+      effDen += workDuration * workerCount;
 
       orderCount += 1;
 
@@ -702,9 +679,9 @@ module.exports = function(mongoose, options, done)
       coeffs.downtime = util.round(dtNum / 8 / dtDen);
     }
 
-    if (effNum && fteTotal)
+    if (effNum && fteGroupResult && fteGroupResult.prodDenTotal)
     {
-      coeffs.productivity = util.round(effNum / 8 / fteTotal);
+      coeffs.productivity = util.round(effNum / 8 / fteGroupResult.prodDenTotal);
     }
 
     coeffs.orderCount = orderCount;

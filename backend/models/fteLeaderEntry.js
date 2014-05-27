@@ -39,7 +39,8 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
   var fteLeaderTaskSchema = mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
     name: String,
-    companies: [fteLeaderTaskCompanySchema]
+    companies: [fteLeaderTaskCompanySchema],
+    totals: {}
   }, {
     _id: false
   });
@@ -151,7 +152,8 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
                   };
                 })
               };
-            })
+            }),
+            totals: null
           };
         });
       },
@@ -176,19 +178,29 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   fteLeaderEntrySchema.methods.calcTotals = function()
   {
-    var totals = {
+    var overallTotals = {
       overall: 0
     };
+    var fteDiv = this.fteDiv || [];
 
-    (this.fteDiv || []).forEach(function(divisionId)
+    fteDiv.forEach(function(divisionId)
     {
-      totals[divisionId] = 0;
+      overallTotals[divisionId] = 0;
     });
 
-    var keys = Object.keys(totals);
+    var keys = Object.keys(overallTotals);
 
     this.tasks.forEach(function(task)
     {
+      task.totals = {
+        overall: 0
+      };
+
+      fteDiv.forEach(function(divisionId)
+      {
+        task.totals[divisionId] = 0;
+      });
+
       task.companies.forEach(function(fteCompany)
       {
         var count = fteCompany.count;
@@ -197,18 +209,24 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         {
           count.forEach(function(divisionCount)
           {
-            totals.overall += divisionCount.value;
-            totals[divisionCount.division] += divisionCount.value;
+            task.totals.overall += divisionCount.value;
+            task.totals[divisionCount.division] += divisionCount.value;
+            overallTotals.overall += divisionCount.value;
+            overallTotals[divisionCount.division] += divisionCount.value;
           });
         }
         else if (typeof count === 'number')
         {
-          keys.forEach(function(key) { totals[key] += count; });
+          keys.forEach(function(key)
+          {
+            task.totals[key] += count;
+            overallTotals[key] += count;
+          });
         }
       });
     });
 
-    this.totals = totals;
+    this.totals = overallTotals;
   };
 
   fteLeaderEntrySchema.methods.updateCount = function(options, updater, done)

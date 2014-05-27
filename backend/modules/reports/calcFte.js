@@ -38,12 +38,15 @@ module.exports = function(mongoose, options, done)
   var results = {
     options: options,
     grouped: {},
-    total: {
+    totals: {
       master: 0,
-      masterFlows: 0,
-      masterTasks: 0,
-      leader: 0
-    }
+      leader: 0,
+      total: 0,
+      prodDenMaster: 0,
+      prodDenLeader: 0,
+      prodDenTotal: 0
+    },
+    ratios: {}
   };
 
   var from = new Date(options.fromTime);
@@ -58,9 +61,9 @@ module.exports = function(mongoose, options, done)
         orgUnitTypes: {}
       };
 
-      if (options.orgUnitType)
+      if (options.orgUnitType !== null && options.orgUnitType !== 'division')
       {
-        activeOrgUnitOptions.orgUnitTypes[options.orgUnitType] = true;
+        activeOrgUnitOptions.orgUnitTypes.prodLine = true;
       }
 
       getActiveOrgUnits(activeOrgUnitOptions, this.next());
@@ -101,7 +104,13 @@ module.exports = function(mongoose, options, done)
       }
 
       var fteMasterEntryStream = FteMasterEntry
-        .find(conditions, {date: 1, total: 1, tasks: 1})
+        .find(conditions, {
+          date: 1,
+          'tasks.id': 1,
+          'tasks.type': 1,
+          'tasks.noPlan': 1,
+          'tasks.total': 1
+        })
         .sort({date: 1})
         .lean()
         .stream();
@@ -113,7 +122,6 @@ module.exports = function(mongoose, options, done)
     function groupResultsStep()
     {
       var interval = options.interval;
-      var orgUnitType = options.orgUnitType;
       var grouped = {};
       var dates = Object.keys(results.grouped);
 
@@ -122,9 +130,10 @@ module.exports = function(mongoose, options, done)
         var date = dates[i];
         var fte = results.grouped[date];
 
-        fte = fte.leader + fte.masterFlows + fte.masterTasks;
+        fte.total = fte.leader + fte.master;
+        fte.prodDenTotal = fte.prodDenLeader + fte.prodDenMaster;
 
-        if (!fte)
+        if (!fte.total)
         {
           continue;
         }
@@ -135,13 +144,18 @@ module.exports = function(mongoose, options, done)
         }
         else if (interval === 'hour')
         {
-          var hourFte = fte / 8;
-
           for (var h = 0; h < 8; ++h)
           {
             date = +date + 3600 * 1000 * h;
 
-            grouped[date] = hourFte;
+            grouped[date] = {
+              master: fte.master / 8,
+              leader: fte.leader / 8,
+              total: fte.total / 8,
+              prodDenMaster: fte.prodDenMaster / 8,
+              prodDenLeader: fte.prodDenLeader / 8,
+              prodDenTotal: fte.prodDenTotal / 8
+            };
           }
         }
         else
@@ -154,23 +168,19 @@ module.exports = function(mongoose, options, done)
           }
           else
           {
-            grouped[groupKey] += fte;
+            grouped[groupKey].master += fte.master;
+            grouped[groupKey].leader += fte.leader;
+            grouped[groupKey].total += fte.total;
+            grouped[groupKey].prodDenMaster += fte.prodDenMaster;
+            grouped[groupKey].prodDenLeader += fte.prodDenLeader;
+            grouped[groupKey].prodDenTotal += fte.prodDenTotal;
           }
         }
       }
 
       results.grouped = grouped;
-
-      if (orgUnitType === null)
-      {
-        results.total = results.total.master + results.total.leader;
-      }
-      else
-      {
-        results.total = results.total.masterFlows
-          + results.total.masterTasks
-          + results.total.leader;
-      }
+      results.totals.total = results.totals.master + results.totals.leader;
+      results.totals.prodDenTotal = results.totals.prodDenMaster + results.totals.prodDenLeader;
     },
     function()
     {
@@ -184,9 +194,22 @@ module.exports = function(mongoose, options, done)
     {
       results.grouped[key] = {
         master: 0,
-        masterFlows: 0,
-        masterTasks: 0,
-        leader: 0
+        leader: 0,
+        prodDenMaster: 0,
+        prodDenLeader: 0
+      };
+    }
+  }
+
+  function createDefaultRatiosResult(key)
+  {
+    if (!results.ratios[key])
+    {
+      results.ratios[key] = {
+        divided: -1,
+        undivided: -1,
+        flows: -1,
+        tasks: -1
       };
     }
   }
@@ -197,18 +220,12 @@ module.exports = function(mongoose, options, done)
       {$match: {startedAt: {$gte: options.from, $lt: options.to}}}
     ];
 
-    var $group = {
-      _id: '$date',
-      division: {$addToSet: '$division'}
-    };
-
-    if (options.orgUnitTypes.mrpControllers)
-    {
-      pipeline.push({$unwind: '$mrpControllers'});
-    }
-
     pipeline.push(
-      {$group: applyOrgUnitGroup(options.orgUnitTypes, $group)},
+      {$group: {
+        _id: '$date',
+        division: {$addToSet: '$division'},
+        prodLine: {$addToSet: '$prodLine'}
+      }},
       {$sort: {_id: 1}}
     );
 
@@ -234,68 +251,121 @@ module.exports = function(mongoose, options, done)
     });
   }
 
-  function applyOrgUnitGroup(orgUnitTypes, $group)
+  function adjustToWorkingOrgUnitsInStorage(key, activeOrgUnits, options, fte)
   {
-    if (orgUnitTypes.subdivision)
+    if (options.orgUnitType === null)
     {
-      $group.subdivision = {$addToSet: '$subdivision'};
+      return;
     }
 
-    if (orgUnitTypes.mrpController)
+    var ratios = results.ratios[key];
+
+    if (ratios && ratios.divided !== -1)
     {
-      $group.mrpController = {$addToSet: '$mrpControllers'};
+      fte.divided *= ratios.divided;
+      fte.undivided *= ratios.undivided;
+      fte.prodDenDivided *= ratios.divided;
+      fte.prodDenUndivided *= ratios.undivided;
+
+      return;
     }
 
-    if (orgUnitTypes.prodFlow)
-    {
-      $group.prodFlow = {$addToSet: '$prodFlow'};
-    }
+    createDefaultRatiosResult(key);
 
-    if (orgUnitTypes.workCenter)
-    {
-      $group.workCenter = {$addToSet: '$workCenter'};
-    }
+    var allWorkingProdLines = activeOrgUnits.prodLine;
+    var allProdLinesInOrgUnit = options.orgUnits.orgUnit;
+    var allProdLinesInDivision = options.orgUnits[
+      options.orgUnitType === 'division' ? 'orgUnit' : 'division'
+    ];
 
-    if (orgUnitTypes.prodLine)
-    {
-      $group.prodLine = {$addToSet: '$prodLine'};
-    }
+    var workingProdLinesInOrgUnit = lodash.intersection(
+      allProdLinesInOrgUnit,
+      allWorkingProdLines
+    );
+    var allWorkingProdLinesInDivision = options.orgUnitType === 'division'
+      ? workingProdLinesInOrgUnit
+      : lodash.intersection(allProdLinesInDivision, allWorkingProdLines);
 
-    return $group;
+    var dividedRatio = allWorkingProdLinesInDivision.length
+      ? (workingProdLinesInOrgUnit.length / allWorkingProdLinesInDivision.length)
+      : 0;
+    var undividedRatio = allWorkingProdLines.length
+      ? (workingProdLinesInOrgUnit.length / allWorkingProdLines.length)
+      : 0;
+
+    fte.divided *= dividedRatio;
+    fte.undivided *= undividedRatio;
+    fte.prodDenDivided *= dividedRatio;
+    fte.prodDenUndivided *= undividedRatio;
+
+    results.ratios[key].divided = dividedRatio;
+    results.ratios[key].undivided = undividedRatio;
   }
 
-  function countWorkingOrgUnits(activeOrgUnits, options, type)
+  function adjustToWorkingOrgUnitsInProduction(key, activeOrgUnits, options, fte)
   {
-    if (!options.orgUnits || typeof options.orgUnits !== 'object')
+    var ratios = results.ratios[key];
+
+    if (ratios && ratios.flows !== -1)
     {
-      return 0;
+      fte.flows *= ratios.flows;
+      fte.tasks *= ratios.tasks;
+      fte.prodDenTasks *= ratios.tasks;
+
+      return;
     }
 
-    var allOrgUnits = options.orgUnits[type];
+    createDefaultRatiosResult(key);
 
-    if (options.orgUnitType === null
-      || options.orgUnitType === 'division'
-      || !allOrgUnits
-      || !allOrgUnits.length)
-    {
-      return 1;
-    }
+    var allWorkingProdLines = activeOrgUnits.prodLine;
+    var allProdLinesInSubdivision = options.orgUnits.subdivision;
+    var allProdLinesInOrgUnit = options.orgUnits.orgUnit;
 
-    if (!activeOrgUnits)
-    {
-      return 0;
-    }
-
-    var workingOrgUnits = lodash.intersection(
-      activeOrgUnits[options.orgUnitType].map(String), allOrgUnits
+    var workingProdLinesInSubdivision = lodash.intersection(
+      allProdLinesInSubdivision,
+      allWorkingProdLines
+    );
+    var workingProdLinesInOrgUnit = lodash.intersection(
+      workingProdLinesInSubdivision,
+      allProdLinesInOrgUnit
     );
 
-    if (workingOrgUnits.indexOf(options.orgUnitId) === -1)
+    var flowsRatio = 1;
+    var tasksRatio = 1;
+
+    if (options.orgUnitType === 'mrpController' || options.orgUnitType === 'prodFlow')
     {
-      return 0;
+      tasksRatio = workingProdLinesInOrgUnit.length / workingProdLinesInSubdivision.length;
+    }
+    else
+    {
+      var allProdLinesInProdFlow = options.orgUnits.prodFlow;
+
+      var workingProdLinesInProdFlow = lodash.intersection(
+        allProdLinesInProdFlow,
+        workingProdLinesInSubdivision
+      );
+
+      flowsRatio = workingProdLinesInOrgUnit.length / workingProdLinesInProdFlow.length;
+      tasksRatio = workingProdLinesInOrgUnit.length / workingProdLinesInSubdivision.length;
     }
 
-    return workingOrgUnits.length;
+    if (isNaN(flowsRatio))
+    {
+      flowsRatio = 0;
+    }
+
+    if (isNaN(tasksRatio))
+    {
+      tasksRatio = 0;
+    }
+
+    fte.flows *= flowsRatio;
+    fte.tasks *= tasksRatio;
+    fte.prodDenTasks *= tasksRatio;
+
+    results.ratios[key].flows = flowsRatio;
+    results.ratios[key].tasks = tasksRatio;
   }
 
   function handleFteLeaderEntryStream(options, dateToActiveOrgUnits, fteLeaderEntryStream, done)
@@ -322,36 +392,31 @@ module.exports = function(mongoose, options, done)
         return;
       }
 
-      var fte = 0;
+      var fte = {
+        divided: 0,
+        undivided: 0,
+        prodDenDivided: 0,
+        prodDenUndivided: 0
+      };
 
       for (var i = 0, l = fteLeaderEntry.tasks.length; i < l; ++i)
       {
-        var task = fteLeaderEntry.tasks[i];
-
-        if (ignoredProdTasks[task.id])
-        {
-          continue;
-        }
-
-        fte += countFteLeaderEntryTaskFte(
-          task.companies,
-          options.division,
-          activeDivisionsCount
-        );
+        countFteLeaderEntryTaskFte(fteLeaderEntry.tasks[i], options.division, fte);
       }
 
-      var workingOrgUnitsCount = countWorkingOrgUnits(activeOrgUnits, options, 'tasks');
+      adjustToWorkingOrgUnitsInStorage(key, activeOrgUnits, options, fte);
 
-      fte = workingOrgUnitsCount === 0 ? 0 : (fte / workingOrgUnitsCount);
-
-      results.total.leader += fte;
-      results.grouped[key].leader += fte;
+      results.totals.leader += fte.divided + fte.undivided;
+      results.totals.prodDenLeader += fte.prodDenDivided + fte.prodDenUndivided;
+      results.grouped[key].leader += fte.divided + fte.undivided;
+      results.grouped[key].prodDenLeader += fte.prodDenDivided + fte.prodDenUndivided;
     });
   }
 
-  function countFteLeaderEntryTaskFte(taskCompanies, division, activeDivisionsCount)
+  function countFteLeaderEntryTaskFte(task, division, fte)
   {
-    var fte = 0;
+    var inProdProdTask = ignoredProdTasks[task.id] === undefined;
+    var taskCompanies = task.companies;
 
     for (var i = 0, l = taskCompanies.length; i < l; ++i)
     {
@@ -359,21 +424,34 @@ module.exports = function(mongoose, options, done)
 
       if (typeof taskCompany.count === 'number')
       {
-        fte += taskCompany.count / activeDivisionsCount;
+        fte.undivided += taskCompany.count;
+
+        if (inProdProdTask)
+        {
+          fte.prodDenUndivided += taskCompany.count;
+        }
       }
       else if (Array.isArray(taskCompany.count))
       {
-        for (var ii = 0, ll = taskCompany.count.length; ii < ll; ++ii)
+        countDividedFte(taskCompany.count, division, inProdProdTask, fte);
+      }
+    }
+  }
+
+  function countDividedFte(count, division, inProdProdTask, fte)
+  {
+    for (var i = 0, l = count.length; i < l; ++i)
+    {
+      if (division === null || count[i].division === division)
+      {
+        fte.divided += count[i].value;
+
+        if (inProdProdTask)
         {
-          if (division === null || taskCompany.count[ii].division === division)
-          {
-            fte += taskCompany.count[ii].value;
-          }
+          fte.prodDenDivided += count[i].value;
         }
       }
     }
-
-    return fte;
   }
 
   function handleFteMasterEntryStream(options, dateToActiveOrgUnits, fteMasterEntryStream, done)
@@ -390,7 +468,8 @@ module.exports = function(mongoose, options, done)
 
       var fte = {
         flows: 0,
-        tasks: 0
+        tasks: 0,
+        prodDenTasks: 0
       };
 
       for (var i = 0, l = fteMasterEntry.tasks.length; i < l; ++i)
@@ -398,25 +477,17 @@ module.exports = function(mongoose, options, done)
         countFteMasterEntryTaskFte(options, fteMasterEntry.tasks[i], fte);
       }
 
-      if (options.orgUnitType)
+      if (options.orgUnitType
+        && options.orgUnitType !== 'division'
+        && options.orgUnitType !== 'subdivision')
       {
-        var activeOrgUnits = dateToActiveOrgUnits[key];
-        var workingOrgUnitsCountForFlows = countWorkingOrgUnits(activeOrgUnits, options, 'flows');
-        var workingOrgUnitsCountForTasks = countWorkingOrgUnits(activeOrgUnits, options, 'tasks');
-
-        fte.flows = workingOrgUnitsCountForFlows === 0
-          ? 0
-          : (fte.flows / workingOrgUnitsCountForFlows);
-
-        fte.tasks = workingOrgUnitsCountForTasks === 0
-          ? 0
-          : (fte.tasks / workingOrgUnitsCountForTasks);
+        adjustToWorkingOrgUnitsInProduction(key, dateToActiveOrgUnits[key], options, fte);
       }
 
-      results.total.masterFlows += fte.flows;
-      results.total.masterTasks += fte.tasks;
-      results.grouped[key].masterFlows += fte.flows;
-      results.grouped[key].masterTasks += fte.tasks;
+      results.totals.master += fte.flows + fte.tasks;
+      results.totals.prodDenMaster += fte.flows + fte.prodDenTasks;
+      results.grouped[key].master += fte.flows + fte.tasks;
+      results.grouped[key].prodDenMaster += fte.flows + fte.prodDenTasks;
     });
   }
 
@@ -424,29 +495,22 @@ module.exports = function(mongoose, options, done)
   {
     var isProdFlow = task.type === 'prodFlow';
 
-    if (task.noPlan
-      || (isProdFlow && !containsProdFlow(options, task))
-      || (!isProdFlow && ignoredProdTasks[task.id]))
+    if (task.noPlan || (isProdFlow && !containsProdFlow(options, task)))
     {
       return;
     }
 
-    for (var i = 0, l = task.functions.length; i < l; ++i)
+    if (isProdFlow)
     {
-      var taskCompanies = task.functions[i].companies;
+      fte.flows += task.total;
+    }
+    else
+    {
+      fte.tasks += task.total;
 
-      for (var ii = 0, ll = taskCompanies.length; ii < ll; ++ii)
+      if (!ignoredProdTasks[task.id])
       {
-        var count = taskCompanies[ii].count;
-
-        if (isProdFlow)
-        {
-          fte.flows += count;
-        }
-        else
-        {
-          fte.tasks += count;
-        }
+        fte.prodDenTasks += task.total;
       }
     }
   }

@@ -45,7 +45,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     subdivisions: helpers.idToStr(subdivisions),
     mrpControllers: mrpControllers,
     prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
-    orgUnits: helpers.getOrgUnitsForFte(req.query.orgUnitType, orgUnit),
+    orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
     directProdFunctions: getDirectProdFunctions(app[reportsModule.config.prodFunctionsId].models),
     prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models)
   };

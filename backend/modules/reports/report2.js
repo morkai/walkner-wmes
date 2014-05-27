@@ -39,7 +39,6 @@ module.exports = function(mongoose, options, done)
       directByProdFunction: {},
       indirectByProdFunction: {},
       production: 0,
-      totalStorage: 0,
       storage: 0,
       storageByProdTasks: {}
     },
@@ -52,7 +51,7 @@ module.exports = function(mongoose, options, done)
   };
 
   step(
-    countOrdersStep,
+    countOrdersAndFteStep,
     groupOrderCountResultsStep,
     calcClipStep,
     findFteEntriesStep,
@@ -72,8 +71,10 @@ module.exports = function(mongoose, options, done)
     }
   );
 
-  function countOrdersStep()
+  function countOrdersAndFteStep()
   {
+    calcFte(mongoose, options, this.parallel());
+
     if (options.interval === 'shift' || !options.mrpControllers.length)
     {
       return;
@@ -94,18 +95,20 @@ module.exports = function(mongoose, options, done)
         dlv: {$sum: '$dlv'}
       }},
       {$sort: {_id: 1}},
-      this.next()
+      this.parallel()
     );
   }
 
-  function groupOrderCountResultsStep(err, results)
+  function groupOrderCountResultsStep(err, fteResults, clipResults)
   {
     if (err)
     {
       return this.done(done, err);
     }
 
-    if (!results)
+    this.fteResults = fteResults;
+
+    if (!clipResults)
     {
       return;
     }
@@ -119,9 +122,9 @@ module.exports = function(mongoose, options, done)
     var l;
     var startTime;
 
-    for (i = 0, l = results.length; i < l; ++i)
+    for (i = 0, l = clipResults.length; i < l; ++i)
     {
-      var result = results[i];
+      var result = clipResults[i];
 
       startTime = getStartTimeFromGroupKey(options.interval, result._id);
 
@@ -179,8 +182,6 @@ module.exports = function(mongoose, options, done)
     this.totalMap = null;
     this.productionMap = null;
     this.endToEndMap = null;
-
-    setImmediate(this.next());
   }
 
   function findFteEntriesStep()
@@ -207,7 +208,7 @@ module.exports = function(mongoose, options, done)
       .stream();
 
     handleFteMasterEntryStream(
-      prodFlowMap, options, results, fteMasterEntryStream, this.parallel()
+      prodFlowMap, options, this.fteResults.ratios, results, fteMasterEntryStream, this.parallel()
     );
 
     var leaderConditions = {
@@ -220,7 +221,9 @@ module.exports = function(mongoose, options, done)
       .lean()
       .stream();
 
-    handleFteLeaderEntryStream(options, results, fteLeaderEntryStream, this.parallel());
+    handleFteLeaderEntryStream(
+      options, this.fteResults.ratios, results, fteLeaderEntryStream, this.parallel()
+    );
   }
 
   function roundValuesStep(err)
@@ -258,7 +261,7 @@ module.exports = function(mongoose, options, done)
       [{$match: $match},
       {$project: {
         _id: 0,
-        num: {$multiply: [{$divide: ['$laborTime', 100]}, '$quantityDone']},
+        num: {$multiply: [{$divide: ['$laborTime', 100]}, '$totalQuantity']},
         den: {$multiply: ['$workDuration', '$workerCount']},
         quantityDone: 1,
         mechOrder: 1
@@ -277,11 +280,9 @@ module.exports = function(mongoose, options, done)
       }}],
       this.parallel()
     );
-
-    calcFte(mongoose, options, this.parallel());
   }
 
-  function calcMetricsStep(err, docs, fteTotals)
+  function calcMetricsStep(err, docs)
   {
     if (err)
     {
@@ -294,20 +295,18 @@ module.exports = function(mongoose, options, done)
       qty: 0
     };
 
+    results.dirIndir.storage = util.round(this.fteResults.totals.leader);
+
     results.effIneff.dirIndir = results.dirIndir.indirectProdFlow + results.dirIndir.storage;
     results.effIneff.efficiency = util.round(doc.eff);
     results.effIneff.value = util.round(
       (results.dirIndir.direct * doc.eff) - results.dirIndir.direct
     );
 
-    var prodNum = doc.num / 8;
-    var prodDen = fteTotals.total;
-
-    results.dirIndir.productivity = util.round(prodNum / prodDen);
+    results.dirIndir.productivity = util.round(doc.num / 8 / this.fteResults.totals.prodDenTotal);
     results.dirIndir.quantityDone = doc.qty;
 
-    results.prodNum = prodNum;
-    results.prodDen = prodDen;
+    this.fteResults = null;
   }
 };
 
@@ -326,7 +325,7 @@ function roundObjectValues(obj)
   });
 }
 
-function handleFteMasterEntryStream(prodFlowMap, options, results, stream, done)
+function handleFteMasterEntryStream(prodFlowMap, options, fteRatios, results, stream, done)
 {
   stream.on('error', done);
 
@@ -337,10 +336,21 @@ function handleFteMasterEntryStream(prodFlowMap, options, results, stream, done)
 
   stream.on('data', function(fteMasterEntry)
   {
+    var ratios = fteRatios[fteMasterEntry.date.getTime()];
+
+    if (!ratios || ratios.flows === -1)
+    {
+      ratios = {
+        flows: 1,
+        tasks: 1
+      };
+    }
+
     for (var taskI = 0, taskL = fteMasterEntry.tasks.length; taskI < taskL; ++taskI)
     {
       var task = fteMasterEntry.tasks[taskI];
       var isProdFlow = task.type === 'prodFlow';
+      var ratio = isProdFlow ? ratios.flows : ratios.tasks;
 
       for (var funcI = 0, funcL = task.functions.length; funcI < funcL; ++funcI)
       {
@@ -349,7 +359,7 @@ function handleFteMasterEntryStream(prodFlowMap, options, results, stream, done)
 
         for (var compI = 0, compL = func.companies.length; compI < compL; ++compI)
         {
-          var count = func.companies[compI].count;
+          var count = func.companies[compI].count * ratio;
 
           results.dirIndir.production += count;
 
@@ -399,7 +409,7 @@ function addToDirIndir(dirIndir, isProdFlow, isDirect, funcId, count)
   }
 }
 
-function handleFteLeaderEntryStream(options, results, stream, done)
+function handleFteLeaderEntryStream(options, fteRatios, results, stream, done)
 {
   stream.on('error', done);
 
@@ -407,33 +417,31 @@ function handleFteLeaderEntryStream(options, results, stream, done)
 
   stream.on('data', function(fteLeaderEntry)
   {
+    var ratios = fteRatios[fteLeaderEntry.date.getTime()];
+
+    if (!ratios || ratios.undivided === -1)
+    {
+      ratios = {
+        undivided: 1,
+        divided: 1
+      };
+    }
+
     for (var taskI = 0, taskL = fteLeaderEntry.tasks.length; taskI < taskL; ++taskI)
     {
       var task = fteLeaderEntry.tasks[taskI];
 
-      for (var compI = 0, compL = task.companies.length; compI < compL; ++compI)
+      for (var companyI = 0, companyL = task.companies.length; companyI < companyL; ++companyI)
       {
-        var comp = task.companies[compI];
-        var count = Array.isArray(comp.count)
-          ? getDivisionCount(options.division, comp.count)
-          : comp.count;
-        var divisionCount = count;
+        var company = task.companies[companyI];
+        var divided = Array.isArray(company.count);
+        var count = divided ? getDivisionCount(options.division, company.count) : company.count;
 
-        if (options.orgUnitType == null)
-        {
-          results.dirIndir.indirect += count;
-          results.dirIndir.storage += count;
-        }
-        else
-        {
-          divisionCount /= Array.isArray(comp.count) ? 1 : fteLeaderEntry.prodDivisionCount;
-
-          results.dirIndir.storage += divisionCount;
-        }
-
-        results.dirIndir.totalStorage += count;
-
-        addToProperty(results.dirIndir.storageByProdTasks, task.id, divisionCount);
+        addToProperty(
+          results.dirIndir.storageByProdTasks,
+          task.id,
+          count * ratios[divided ? 'divided' : 'undivided']
+        );
 
         if (options.prodTasks[task.id] === undefined)
         {

@@ -36,7 +36,11 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     id: mongoose.Schema.Types.ObjectId,
     name: String,
     noPlan: Boolean,
-    functions: [fteMasterTaskFunctionSchema]
+    functions: [fteMasterTaskFunctionSchema],
+    total: {
+      type: Number,
+      default: null
+    }
   }, {
     _id: false
   });
@@ -147,7 +151,8 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
             id: prodTask._id,
             name: prodTask.name,
             noPlan: false,
-            functions: functions
+            functions: functions,
+            total: null
           });
         });
       },
@@ -201,22 +206,26 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     this.update({_id: _id}, update, done);
   };
 
-  fteMasterEntrySchema.methods.calcTotal = function()
+  fteMasterEntrySchema.methods.calcTotals = function()
   {
-    var total = 0;
+    var overallTotal = 0;
 
     this.tasks.forEach(function(task)
     {
+      task.total = 0;
+
       task.functions.forEach(function(taskFunction)
       {
         taskFunction.companies.forEach(function(taskCompany)
         {
-          total += taskCompany.count;
+          task.total += taskCompany.count;
         });
       });
+
+      overallTotal += task.total;
     });
 
-    this.total = total;
+    this.total = overallTotal;
   };
 
   fteMasterEntrySchema.methods.updateCount = function(options, updater, done)
@@ -250,7 +259,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     company.count = options.newCount;
 
     this.markModified('tasks');
-    this.calcTotal();
+    this.calcTotals();
     this.set({
       updatedAt: new Date(),
       updater: updater
@@ -289,7 +298,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     task.noPlan = options.newValue;
 
     this.markModified('tasks');
-    this.calcTotal();
+    this.calcTotals();
     this.set({
       updatedAt: new Date(),
       updater: updater
