@@ -85,8 +85,6 @@ exports.start = function startFteModule(app, module)
 
   function recountPlannedQuantities(shiftId, prodFlowId, activeProdLineIds)
   {
-    module.debug("Recounting planned quantities for prod flow [%s]...", prodFlowId);
-
     var division = app[module.config.orgUnitsId].getDivisionFor('prodFlow', prodFlowId);
 
     if (!division)

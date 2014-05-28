@@ -148,17 +148,6 @@ module.exports = function setUpActiveProdLines(app, productionModule)
 
     shiftToProdFlows[currentShiftKey][prodFlowId][prodLineId] = true;
 
-    var activeProdLinesInProdFlow = Object.keys(shiftToProdFlows[currentShiftKey][prodFlowId]);
-    var allActiveProdLines = Object.keys(shiftToProdLines[currentShiftKey]);
-
-    productionModule.debug(
-      "Prod line [%s] of prod flow [%s] activated (prod flow=%d; total=%d)",
-      prodLineId,
-      prodFlowId,
-      activeProdLinesInProdFlow.length,
-      allActiveProdLines.length
-    );
-
     app.broker.publish('production.prodLineActivated', {
       shiftId: currentShift,
       prodLine: prodLineId,
