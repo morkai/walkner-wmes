@@ -304,9 +304,19 @@ module.exports = function(mongoose, options, done)
 
   function adjustToWorkingOrgUnitsInProduction(key, activeOrgUnits, options, fte)
   {
+    createDefaultRatiosResult(key);
+
     var ratios = results.ratios[key];
 
-    if (ratios && ratios.flows !== -1)
+    if (!activeOrgUnits
+      || !Array.isArray(activeOrgUnits.prodLine)
+      || !activeOrgUnits.prodLine.length)
+    {
+      ratios.flows = 0;
+      ratios.tasks = 0;
+    }
+
+    if (ratios.flows !== -1)
     {
       fte.flows *= ratios.flows;
       fte.tasks *= ratios.tasks;
@@ -315,9 +325,8 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    createDefaultRatiosResult(key);
-
     var allWorkingProdLines = activeOrgUnits.prodLine;
+
     var allProdLinesInSubdivision = options.orgUnits.subdivision;
     var allProdLinesInOrgUnit = options.orgUnits.orgUnit;
 
