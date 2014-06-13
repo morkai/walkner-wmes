@@ -37,6 +37,7 @@ exports.modules = [
   'reports',
   'feedback',
   'xiconf',
+  'licenses',
   {id: 'messenger/client', name: 'messenger/client:importer'},
   {id: 'messenger/client', name: 'messenger/client:xiconf'},
   'httpServer',
@@ -114,7 +115,7 @@ exports.mongoose = {
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
     'feedback',
-    'license',
+    'license', 'licensePing',
     'xiconfOrder', 'xiconfResult'
   ]
 };
@@ -188,6 +189,10 @@ exports.updater = {
 
 exports.reports = {
   javaBatik: 'java -jar c:/programs/batik/batik-rasterizer.jar'
+};
+
+exports.licenses = {
+  licenseEd: null
 };
 
 exports.xiconf = {

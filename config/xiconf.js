@@ -7,6 +7,7 @@ exports.modules = [
   'events',
   'messenger/server',
   'directoryWatcher',
+  'licenses',
   'xiconf'
 ];
 
@@ -48,7 +49,10 @@ exports.directoryWatcher = {
   path: __dirname + '/../data/xiconf'
 };
 
-exports.xiconf = {
-  featureDbPath: __dirname + '/../data/xiconf-features',
+exports.licenses = {
   licenseEd: null
+};
+
+exports.xiconf = {
+  featureDbPath: __dirname + '/../data/xiconf-features'
 };

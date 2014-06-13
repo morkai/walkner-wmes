@@ -12,12 +12,9 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   directoryWatcherId: 'directoryWatcher',
   userId: 'user',
+  licensesId: 'licenses',
   featureDbPath: './',
-  zipStoragePath: './',
-  licenseEd: {
-    pem: null,
-    password: null
-  }
+  zipStoragePath: './'
 };
 
 exports.start = function startXiconfModule(app, module)
@@ -33,30 +30,12 @@ exports.start = function startXiconfModule(app, module)
     setUpRoutes.bind(null, app, module)
   );
 
-  module.licenseEdKey = null;
-
-  if (config.licenseEd.pem)
-  {
-    var ursa = require('ursa');
-
-    if (config.licenseEd.password)
-    {
-      module.licenseEdKey = ursa.createPrivateKey(config.licenseEd.pem, config.licenseEd.password);
-    }
-    else
-    {
-      module.licenseEdKey = ursa.createPrivateKey(config.licenseEd.pem);
-    }
-  }
-
-  if (module.licenseEdKey)
-  {
-    app.onModuleReady(
-      [
-        config.mongooseId,
-        config.directoryWatcherId
-      ],
-      setUpImporter.bind(null, app, module)
-    );
-  }
+  app.onModuleReady(
+    [
+      config.mongooseId,
+      config.directoryWatcherId,
+      config.licensesId
+    ],
+    setUpImporter.bind(null, app, module)
+  );
 };

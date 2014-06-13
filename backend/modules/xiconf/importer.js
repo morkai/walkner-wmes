@@ -11,6 +11,7 @@ var JSZip = require('jszip');
 
 module.exports = function setUpXiconfImporter(app, xiconfModule)
 {
+  var licensesModule = app[xiconfModule.config.licensesId];
   var mongoose = app[xiconfModule.config.mongooseId];
   var XiconfOrder = mongoose.model('XiconfOrder');
   var XiconfResult = mongoose.model('XiconfResult');
@@ -199,7 +200,7 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
 
     try
     {
-      this.meta.uuid = xiconfModule.licenseEdKey.decrypt(encryptedUuid, 'base64', 'utf8');
+      this.meta.uuid = licensesModule.licenseEdKey.decrypt(encryptedUuid, 'base64', 'utf8');
     }
     catch (err)
     {
