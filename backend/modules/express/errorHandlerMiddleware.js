@@ -4,7 +4,7 @@
 
 'use strict';
 
-exports = module.exports = function createErrorHandlerMiddleware(appModule, options)
+module.exports = function createErrorHandlerMiddleware(appModule, options)
 {
   if (!options)
   {
@@ -26,22 +26,32 @@ exports = module.exports = function createErrorHandlerMiddleware(appModule, opti
       res.statusCode = 500;
     }
 
+    var login = req.session && req.session.user
+      ? req.session.user.login
+      : 'guest';
+
     if (req.method !== 'GET' && req.body !== null && typeof req.body === 'object')
     {
       try
       {
         appModule.warn(
-          '%s %s\n%s\nRequest body:\n%s', req.method, req.url, err.stack, JSON.stringify(req.body)
+          "%s %s\n%s\nUser: %s (%s)\nRequest body:\n%s",
+          req.method,
+          req.url,
+          err.stack,
+          login,
+          req.ip,
+          JSON.stringify(req.body)
         );
       }
       catch (err)
       {
-        appModule.warn('%s %s\n%s', req.method, req.url, err.stack);
+        appModule.warn("%s %s\n%s\nUser: %s (%s)", req.method, req.url, err.stack, login, req.ip);
       }
     }
     else
     {
-      appModule.warn('%s %s\n%s', req.method, req.url, err.stack);
+      appModule.warn("%s %s\n%s\nUser: %s (%s)", req.method, req.url, err.stack, login, req.ip);
     }
 
     var accept = req.headers.accept || '';
