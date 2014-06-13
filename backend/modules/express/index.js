@@ -45,6 +45,7 @@ exports.start = function startExpressModule(app, module, done)
   var production = app.options.env === 'production';
   var staticPath = module.config[production ? 'staticBuildPath' : 'staticPath'];
 
+  module.set('trust proxy', true);
   module.set('views', app.pathTo('templates'));
   module.set('view engine', 'ejs');
   module.set('static path', staticPath);
