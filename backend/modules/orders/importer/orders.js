@@ -227,7 +227,9 @@ exports.start = function startOrdersImporterModule(app, module)
     {
       if (err)
       {
-        return module.error("Failed to sync data: %s", err.message);
+        module.error("Failed to sync data: %s", err.message);
+
+        return unlock();
       }
 
       module.info("Synced %d new and %d existing orders", createdOrdersCount, updatedOrdersCount);
