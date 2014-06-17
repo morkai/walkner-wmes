@@ -42,6 +42,7 @@
   "PROPERTY:kdPosition": "Stanowisko (KD)",
   "PROPERTY:active": "Aktywny?",
   "PROPERTY:orgUnit": "Jednostka organizacyjna",
+  "PROPERTY:vendor": "Dostawca",
 
   "ACTIVE:true": "Tak",
   "ACTIVE:false": "Nie",
@@ -54,6 +55,7 @@
   "NO_DATA:aors": "Wszystkie",
   "NO_DATA:company": "Nieokreślona",
   "NO_DATA:prodFunction": "Nieokreślona",
+  "NO_DATA:vendor": "Wszyscy",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia użytkownika",
   "ACTION_FORM:BUTTON:delete": "Usuń użytkownika",

@@ -43,6 +43,7 @@
     "PROPERTY:kdPosition": "Position (AC)",
     "PROPERTY:active": "Active?",
     "PROPERTY:orgUnit": "Org Unit",
+    "PROPERTY:vendor": "Vendor",
 
     "ACTIVE:true": "Yes",
     "ACTIVE:false": "No",

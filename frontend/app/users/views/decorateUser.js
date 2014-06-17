@@ -79,6 +79,18 @@ define([
       }
     }
 
+    if (user.vendor)
+    {
+      if (user.vendor.name)
+      {
+        user.vendor = user.vendor.name + ' (' + user.vendor._id + ')';
+      }
+      else if (user.vendor._id)
+      {
+        user.vendor = user.vendor._id;
+      }
+    }
+
     return user;
   };
 });

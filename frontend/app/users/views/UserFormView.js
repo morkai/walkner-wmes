@@ -92,6 +92,7 @@ define([
 
       this.setUpProdFunctionSelect2();
       this.setUpCompanySelect2();
+      this.setUpVendorSelect2();
       this.setUpPrivilegesControls();
 
       this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
@@ -208,6 +209,60 @@ define([
       });
     },
 
+    setUpVendorSelect2: function()
+    {
+      var $vendor = this.$id('vendor').select2({
+        width: '100%',
+        allowClear: true,
+        minimumInputLength: 3,
+        placeholder: t('users', 'NO_DATA:vendor'),
+        ajax: {
+          cache: true,
+          quietMillis: 300,
+          url: function(term)
+          {
+            term = term.trim();
+
+            var property = /^[0-9]+$/.test(term) ? '_id' : 'name';
+
+            term = encodeURIComponent(term);
+
+            return '/vendors'
+              + '?sort(' + property + ')'
+              + '&limit(50)&regex(' + property + ',string:' + term + ',i)';
+          },
+          results: function(data)
+          {
+            return {
+              results: data.collection.map(vendorToSelect2)
+            };
+          }
+        }
+      });
+
+      var vendor = this.model.get('vendor');
+
+      if (vendor && vendor._id)
+      {
+        $vendor.select2('data', vendorToSelect2(vendor));
+      }
+
+      function vendorToSelect2(vendor)
+      {
+        var text = vendor._id;
+
+        if (vendor.name)
+        {
+          text += ': ' + vendor.name;
+        }
+
+        return {
+          id: vendor._id,
+          text: text
+        };
+      }
+    },
+
     getProdFunctionsForCompany: function()
     {
       var company = this.$id('company').val();
@@ -262,6 +317,7 @@ define([
       var formData = this.model.toJSON();
 
       formData.privileges = formData.privileges.join(',');
+      formData.vendor = null;
 
       return formData;
     },
@@ -291,6 +347,11 @@ define([
       if (!formData.prodFunction || !formData.prodFunction.length)
       {
         formData.prodFunction = null;
+      }
+
+      if (!formData.vendor || !formData.vendor.length)
+      {
+        formData.vendor = null;
       }
 
       if (formData.subdivision)

@@ -53,6 +53,11 @@ module.exports = function setupUserModel(app, mongoose)
     kdId: {
       type: Number,
       default: -1
+    },
+    vendor: {
+      type: String,
+      ref: 'Vendor',
+      default: null
     }
   }, {
     id: false,

@@ -37,7 +37,8 @@ define([
       lastName: null,
       registerDate: null,
       kdPosition: null,
-      active: true
+      active: true,
+      vendor: null
     },
 
     initialize: function()
@@ -59,6 +60,18 @@ define([
       var firstName = this.get('firstName') || '';
 
       return lastName.length && firstName.length ? (lastName + ' ' + firstName) : this.get('login');
+    },
+
+    url: function()
+    {
+      var url = Model.prototype.url.apply(this, arguments);
+
+      if (this.isNew())
+      {
+        return url;
+      }
+
+      return url + '?populate(vendor)';
     }
 
   });
