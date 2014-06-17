@@ -94,6 +94,7 @@
   "NAVBAR:PROD:DOWNTIMES": "Przestoje",
   "NAVBAR:XICONF": "Walkner Xiconf",
   "NAVBAR:XICONF:RESULTS": "Wyniki programowania",
+  "NAVBAR:VENDORS": "Dostawcy",
 
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
   "ACTION_FORM:BUTTON:delete": "Usuń",

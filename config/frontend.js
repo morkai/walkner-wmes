@@ -12,6 +12,7 @@ exports.modules = [
   'express',
   'users',
   'companies',
+  'vendors',
   'divisions',
   'subdivisions',
   'mrpControllers',
@@ -110,7 +111,8 @@ exports.mongoose = {
   models: [
     'setting', 'event', 'user',
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
-    'company', 'prodFunction', 'aor', 'orderStatus', 'downtimeReason', 'lossReason', 'prodTask',
+    'company', 'vendor', 'prodFunction', 'aor',
+    'orderStatus', 'downtimeReason', 'lossReason', 'prodTask',
     'order', 'mechOrder', 'emptyOrder', 'clipOrderCount',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
@@ -189,10 +191,6 @@ exports.updater = {
 
 exports.reports = {
   javaBatik: 'java -jar c:/programs/batik/batik-rasterizer.jar'
-};
-
-exports.licenses = {
-  licenseEd: null
 };
 
 exports.xiconf = {

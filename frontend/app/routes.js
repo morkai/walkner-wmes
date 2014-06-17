@@ -5,6 +5,7 @@
 define([
   './aors/routes',
   './companies/routes',
+  './vendors/routes',
   './dashboard/routes',
   './divisions/routes',
   './downtimeReasons/routes',

@@ -95,6 +95,7 @@
     "NAVBAR:PROD:DOWNTIMES": "Downtimes",
     "NAVBAR:XICONF": "Walkner Xiconf",
     "NAVBAR:XICONF:RESULTS": "Programming results",
+    "NAVBAR:VENDORS": "Vendors",
 
     "ACTION_FORM:BUTTON": "Perform action",
     "ACTION_FORM:BUTTON:delete": "Delete",
