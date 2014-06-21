@@ -1,4 +1,4 @@
-.prodShiftOrders-list-container .popover {
+.page[data-id="prodShiftOrderList"] .list-container .popover {
   max-width: none;
 }
 .prodShiftOrders-downtimes-container,

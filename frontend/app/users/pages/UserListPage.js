@@ -12,7 +12,7 @@ define([
   '../UserCollection',
   '../views/UserListView',
   '../views/UserFilterView',
-  'app/users/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   $,
   t,
@@ -71,7 +71,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.users-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()

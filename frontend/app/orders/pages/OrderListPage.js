@@ -10,7 +10,7 @@ define([
   '../OrderCollection',
   '../views/OrderListView',
   '../views/OrderFilterView',
-  'app/orders/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   t,
   bindLoadingMessage,
@@ -41,7 +41,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.orders-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()

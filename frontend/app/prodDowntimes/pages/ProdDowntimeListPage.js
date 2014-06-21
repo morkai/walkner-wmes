@@ -12,7 +12,7 @@ define([
   '../ProdDowntimeCollection',
   '../views/ProdDowntimeListView',
   '../views/ProdDowntimeFilterView',
-  'app/prodDowntimes/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   $,
   t,
@@ -53,7 +53,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.prodDowntimes-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()

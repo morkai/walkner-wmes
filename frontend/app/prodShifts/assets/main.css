@@ -1,4 +1,4 @@
-.prodShifts-list-container .popover {
+.page[data-id="prodShiftList"] .list-container .popover {
   max-width: none;
 }
 .prodShifts-timeline-container {

@@ -11,7 +11,7 @@ define([
   '../HourlyPlanCollection',
   '../views/HourlyPlanListView',
   'app/fte/views/FteEntryFilterView',
-  'app/hourlyPlans/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   $,
   t,
@@ -56,7 +56,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.hourlyPlans-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()

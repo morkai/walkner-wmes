@@ -12,7 +12,7 @@ define([
   '../ProdShiftOrderCollection',
   '../views/ProdShiftOrderListView',
   '../views/ProdShiftOrderFilterView',
-  'app/prodShiftOrders/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   $,
   t,
@@ -50,7 +50,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.prodShiftOrders-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()

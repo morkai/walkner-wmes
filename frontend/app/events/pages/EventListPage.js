@@ -12,7 +12,7 @@ define([
   '../EventTypeCollection',
   '../views/EventListView',
   '../views/EventFilterView',
-  'app/events/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   $,
   viewport,
@@ -45,7 +45,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.events-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()

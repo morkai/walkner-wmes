@@ -11,7 +11,7 @@ define([
   '../views/MechOrderListView',
   '../views/MechOrderFilterView',
   '../views/MechOrderImportView',
-  'app/mechOrders/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   t,
   viewport,
@@ -55,7 +55,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.mechOrders-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()

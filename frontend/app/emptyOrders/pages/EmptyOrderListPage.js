@@ -11,7 +11,7 @@ define([
   '../EmptyOrderCollection',
   '../views/EmptyOrderListView',
   '../views/EmptyOrderFilterView',
-  'app/emptyOrders/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   $,
   t,
@@ -52,8 +52,8 @@ define([
       this.defineModels();
       this.defineViews();
 
-      this.setView('.emptyOrders-list-container', this.listView);
       this.setView('.filter-container', this.filterView);
+      this.setView('.list-container', this.listView);
     },
 
     destroy: function()

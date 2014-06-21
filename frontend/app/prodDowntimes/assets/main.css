@@ -27,7 +27,7 @@ textarea.prodDowntimes-corroborate-decisionComment {
   float: left;
   width: 286px;
 }
-.prodDowntimes-list-container {
+.page[data-id="prodDowntimeList"] .list-container {
   margin-left: 300px;
 }
 .prodDowntimes-filter-form .tooltip {

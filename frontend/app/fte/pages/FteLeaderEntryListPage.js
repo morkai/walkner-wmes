@@ -10,7 +10,7 @@ define([
   '../FteLeaderEntryCollection',
   '../views/FteLeaderEntryListView',
   '../views/FteEntryFilterView',
-  'app/fte/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   t,
   bindLoadingMessage,
@@ -54,7 +54,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.fte-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()

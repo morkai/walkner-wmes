@@ -12,7 +12,7 @@ define([
   '../ProdLogEntryCollection',
   '../views/ProdLogEntryListView',
   '../views/ProdLogEntryFilterView',
-  'app/prodLogEntries/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   $,
   t,
@@ -45,7 +45,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.prodLogEntries-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()

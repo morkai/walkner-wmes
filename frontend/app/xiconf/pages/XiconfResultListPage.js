@@ -12,7 +12,7 @@ define([
   '../XiconfResultCollection',
   '../views/XiconfResultListView',
   '../views/XiconfResultFilterView',
-  'app/xiconf/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   $,
   t,

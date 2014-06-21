@@ -10,7 +10,7 @@ define([
   '../PressWorksheetCollection',
   '../views/PressWorksheetFilterView',
   '../views/PressWorksheetListView',
-  'app/pressWorksheets/templates/listPage'
+  'app/core/templates/listPage'
 ], function(
   t,
   bindLoadingMessage,
@@ -49,7 +49,7 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-      this.setView('.pressWorksheets-list-container', this.listView);
+      this.setView('.list-container', this.listView);
     },
 
     defineModels: function()
