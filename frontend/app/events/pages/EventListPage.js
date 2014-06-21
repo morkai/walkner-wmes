@@ -85,7 +85,7 @@ define([
     {
       this.eventList.rqlQuery = newRqlQuery;
 
-      this.listView.refreshCollection(null, true);
+      this.listView.refreshCollectionNow();
 
       this.broker.publish('router.navigate', {
         url: this.eventList.genClientUrl() + '?' + newRqlQuery,

@@ -26,9 +26,13 @@
         <% if (row._id) { %>data-id="<%- row._id %>"<% } %>
       >
         <% columns.forEach(function(column) { %>
-        <td data-id="<%- column.id %>">
+        <td <%- column.tdAttrs || '' %> data-id="<%- column.id %>">
           <% if (row[column.id] == null) { %>
+          <% if (column.noData == null) { %>
           <em><%- t('core', 'LIST:NO_DATA:cell') %></em>
+          <% } else { %>
+          <%- column.noData %>
+          <% } %>
           <% } else { %>
           <%- row[column.id] %>
           <% } %>
@@ -38,7 +42,7 @@
         <td class="actions">
           <% actions(row).forEach(function(action) { %>
           <% if (action.href) { %>
-          <a href="<%- action.href %>" class="btn btn-default action-<%- action.id %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i></a>
+          <a href="<%- action.href %>" class="btn btn-<%- action.type || 'default' %> action-<%- action.id %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i></a>
           <% } else { %>
           TODO
           <% } %>

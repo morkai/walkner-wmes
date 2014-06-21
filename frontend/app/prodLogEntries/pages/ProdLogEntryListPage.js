@@ -77,7 +77,7 @@ define([
     {
       this.prodLogEntryList.rqlQuery = newRqlQuery;
 
-      this.listView.refreshCollection(null, true);
+      this.listView.refreshCollectionNow();
 
       this.broker.publish('router.navigate', {
         url: this.prodLogEntryList.genClientUrl() + '?' + newRqlQuery,

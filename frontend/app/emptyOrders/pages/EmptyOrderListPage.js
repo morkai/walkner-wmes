@@ -95,7 +95,7 @@ define([
     {
       this.collection.rqlQuery = newRqlQuery;
 
-      this.listView.refreshCollection(null, true);
+      this.listView.refreshCollectionNow();
 
       var newRqlQueryStr = newRqlQuery.toString();
 

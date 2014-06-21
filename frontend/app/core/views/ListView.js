@@ -30,9 +30,12 @@ define([
       var topics = {};
       var topicPrefix = this.collection.getTopicPrefix();
 
-      topics[topicPrefix + '.added'] = 'refreshCollection';
-      topics[topicPrefix + '.edited'] = 'refreshCollection';
-      topics[topicPrefix + '.deleted'] = 'onModelDeleted';
+      if (topicPrefix)
+      {
+        topics[topicPrefix + '.added'] = 'refreshCollection';
+        topics[topicPrefix + '.edited'] = 'refreshCollection';
+        topics[topicPrefix + '.deleted'] = 'onModelDeleted';
+      }
 
       return topics;
     },
@@ -48,14 +51,28 @@ define([
 
     initialize: function()
     {
+      this.lastRefreshAt = 0;
+
+      this.listenTo(this.collection, 'sync', function()
+      {
+        this.lastRefreshAt = Date.now();
+      });
+
       if (this.collection.paginationData)
       {
-        this.setView('.pagination-container', new PaginationView({
+        this.paginationView = new PaginationView({
           model: this.collection.paginationData
-        }));
+        });
+
+        this.setView('.pagination-container', this.paginationView);
 
         this.listenTo(this.collection.paginationData, 'change:page', this.scrollTop);
       }
+    },
+
+    destroy: function()
+    {
+      this.paginationView = null;
     },
 
     serialize: function()
@@ -136,17 +153,17 @@ define([
         return;
       }
 
-      if (message)
-      {
-        this.timers.refreshCollection = setTimeout(this.refreshCollectionNow.bind(this), 2000);
-      }
-      else
+      if (Date.now() - this.lastRefreshAt > 3000)
       {
         this.refreshCollectionNow();
       }
+      else
+      {
+        this.timers.refreshCollection = setTimeout(this.refreshCollectionNow.bind(this), 3000);
+      }
     },
 
-    refreshCollectionNow: function()
+    refreshCollectionNow: function(options)
     {
       if (this.timers.refreshCollection)
       {
@@ -155,7 +172,7 @@ define([
 
       delete this.timers.refreshCollection;
 
-      this.promised(this.collection.fetch({reset: true}));
+      this.promised(this.collection.fetch(options || {reset: true}));
     },
 
     scrollTop: function()
