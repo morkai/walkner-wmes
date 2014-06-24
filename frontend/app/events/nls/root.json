@@ -73,7 +73,7 @@
     "TYPE:vendors.edited": "Vendors: edited",
     "TEXT:vendors.edited": "Edited vendor: <a href='\\#vendors/{model->_id}'>{model->_id}</a>",
     "TYPE:vendors.deleted": "Vendors: deleted",
-    "TEXT:workCenters.deleted": "Deleted vendor: <em>{model->_id}</em>",
+    "TEXT:vendors.deleted": "Deleted vendor: <em>{model->_id}</em>",
     "TYPE:workCenters.added": "WorkCenters: added",
     "TEXT:workCenters.added": "Added WorkCenter: <a href='\\#workCenters/{model->_id}'>{model->_id}</a>",
     "TYPE:workCenters.edited": "WorkCenters: edited",
