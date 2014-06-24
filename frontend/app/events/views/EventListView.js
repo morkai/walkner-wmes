@@ -99,6 +99,10 @@ define([
           data.model.date = moment(data.model.date).format('YYYY-MM-DD');
           data.model.shift = t('core', 'SHIFT:' + data.model.shift);
           break;
+
+        case 'clipOrderCount.created':
+          data.date = moment(data.date).format('YYYY-MM-DD');
+          break;
       }
 
       return data;

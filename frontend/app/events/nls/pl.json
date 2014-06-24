@@ -152,5 +152,7 @@
   "TYPE:pressWorksheets.deleted": "Karty pracy: usunięcie",
   "TEXT:pressWorksheets.deleted": "Usunięto kartę pracy: <em>{model->rid}</em>",
   "TYPE:feedback.added": "Feedback: dodanie",
-  "TEXT:feedback.added": "Dodano nowy feedback."
+  "TEXT:feedback.added": "Dodano nowy feedback.",
+  "TYPE:clipOrderCount.created": "CLIP: utworzenie",
+  "TEXT:clipOrderCount.created": "Obliczono CLIP z dnia {date} ({total} MRP)."
 }

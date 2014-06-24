@@ -153,7 +153,9 @@
     "TYPE:pressWorksheets.deleted": "Worksheets: deleted",
     "TEXT:pressWorksheets.deleted": "Deleted worksheet: <em>{model->rid}</em>",
     "TYPE:feedback.added": "Feedback: added",
-    "TEXT:feedback.added": "Added new feedback."
+    "TEXT:feedback.added": "Added new feedback.",
+    "TYPE:clipOrderCount.created": "CLIP: created",
+    "TEXT:clipOrderCount.created": "Calculated CLIP for {date} ({total, plural, one{1 MRP} other{{total} different MRPs}})."
   },
   "pl": true
 }

@@ -24,18 +24,78 @@ exports.start = function startClipOrderCountModule(app, module)
   var Order = mongoose.model('Order');
   var ClipOrderCount = mongoose.model('ClipOrderCount');
 
-  app.broker.subscribe('orders.synced')
-    .setFilter(function(message)
-    {
-      return message.moduleName === module.config.importerId
-        && new Date().getHours() === module.config.syncHour;
-    })
-    .on('message', countAllOrders);
+  app.broker.subscribe('app.started', scheduleClipOrderCountCheck).setLimit(1);
 
-  function countAllOrders()
+  app.broker.subscribe('orders.synced', countAllOrders).setFilter(function(message)
   {
-    var startDate = moment()
-      .hours(0).minutes(0).seconds(0).milliseconds(0).subtract('days', 1).toDate();
+    return message.moduleName === module.config.importerId
+      && new Date().getHours() === module.config.syncHour;
+  });
+
+  function yesterday()
+  {
+    return moment().hours(0).minutes(0).seconds(0).milliseconds(0).subtract('days', 1).toDate();
+  }
+
+  function formatDate(date)
+  {
+    return moment(date).format('YYYY-MM-DD');
+  }
+
+  function scheduleClipOrderCountCheck()
+  {
+    if (new Date().getHours() > module.config.syncHour)
+    {
+      checkClipOrderCount();
+    }
+
+    var nextCheckMoment = moment()
+      .hours(module.config.syncHour + 1)
+      .minutes(1)
+      .seconds(0)
+      .milliseconds(0)
+      .add('days', 1);
+
+    setTimeout(scheduleClipOrderCountCheck, nextCheckMoment.diff(Date.now()));
+
+    module.debug(
+      "Scheduled the next CLIP order count check to be at [%s]",
+      nextCheckMoment.format('YYYY-MM-DD HH:mm:ss')
+    );
+  }
+
+  function checkClipOrderCount()
+  {
+    var startDate = yesterday();
+
+    module.debug(
+      "Checking the CLIP order count for [%s]...", formatDate(startDate)
+    );
+
+    ClipOrderCount.count({date: startDate}, function(err, count)
+    {
+      if (err)
+      {
+        return module.error(
+          "Failed to count ClipOrderCount for [%s]: %s", formatDate(startDate), err.message
+        );
+      }
+
+      if (count === 0)
+      {
+        countAllOrders(startDate);
+      }
+    });
+  }
+
+  function countAllOrders(startDate)
+  {
+    if (!startDate)
+    {
+      startDate = yesterday();
+    }
+
+    module.debug("Preparing CLIP for [%s]...", formatDate(startDate));
 
     Order.aggregate(
       {$match: {startDate: startDate}},
@@ -114,11 +174,19 @@ exports.start = function startClipOrderCountModule(app, module)
       if (err)
       {
         return module.error(
-          "Failed to create %d ClipOrderCounts: %s", models.length, err.stack
+          "Failed to create %d ClipOrderCounts for [%s]: %s",
+          models.length,
+          formatDate(startDate),
+          err.stack
         );
       }
 
-      module.info("Created %d new ClipOrderCounts", models.length);
+      module.info("Created %d new ClipOrderCounts for [%s]", models.length, formatDate(startDate));
+
+      app.broker.publish('clipOrderCount.created', {
+        date: startDate,
+        total: models.length
+      });
     });
   }
 };
