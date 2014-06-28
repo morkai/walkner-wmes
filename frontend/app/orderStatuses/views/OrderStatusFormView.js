@@ -38,6 +38,8 @@ define([
 
     afterRender: function()
     {
+      FormView.prototype.afterRender.call(this);
+
       this.$colorPicker = this.$('.orderStatuses-form-color-picker').colorpicker();
 
       if (this.options.editMode)
