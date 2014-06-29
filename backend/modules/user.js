@@ -42,6 +42,7 @@ exports.start = function startUserModule(app, module)
 
   module.auth = createAuthMiddleware;
   module.isLocalIpAddress = isLocalIpAddress;
+  module.isAllowedTo = isAllowedTo;
 
   app.onModuleReady([module.config.expressId, module.config.sioId], setUpSio);
 
@@ -91,6 +92,42 @@ exports.start = function startUserModule(app, module)
     return user;
   }
 
+  function isAllowedTo(user, anyPrivileges)
+  {
+    if (user.super)
+    {
+      return true;
+    }
+
+    if (!user.privileges)
+    {
+      return false;
+    }
+
+    if (!anyPrivileges.length)
+    {
+      return true;
+    }
+
+    for (var i = 0, l = anyPrivileges.length; i < l; ++i)
+    {
+      var allPrivileges = anyPrivileges[i];
+      var matches = 0;
+
+      for (var ii = 0, ll = allPrivileges.length; ii < ll; ++ii)
+      {
+        matches += user.privileges.indexOf(allPrivileges[ii]) === -1 ? 0 : 1;
+      }
+
+      if (matches === ll)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   /**
    * @returns {function(object, object, function)}
    */
@@ -119,35 +156,9 @@ exports.start = function startUserModule(app, module)
         user = req.session.user = createGuestData(req.socket.remoteAddress);
       }
 
-      if (user.super)
+      if (isAllowedTo(user, anyPrivileges))
       {
         return next();
-      }
-
-      if (!user.privileges)
-      {
-        return res.send(401);
-      }
-
-      if (!anyPrivileges.length)
-      {
-        return next();
-      }
-
-      for (var i = 0, l = anyPrivileges.length; i < l; ++i)
-      {
-        var allPrivileges = anyPrivileges[i];
-        var matches = 0;
-
-        for (var ii = 0, ll = allPrivileges.length; ii < ll; ++ii)
-        {
-          matches += user.privileges.indexOf(allPrivileges[ii]) === -1 ? 0 : 1;
-        }
-
-        if (matches === ll)
-        {
-          return next();
-        }
       }
 
       module.debug(
