@@ -183,8 +183,6 @@ define([
 
     initialize: function()
     {
-      this.columnIndexToNameMap = {};
-      this.columnNameToIndexMap = {};
       this.hoveredRows = [];
       this.dataTable = null;
       this.fixedColumns = null;
@@ -368,6 +366,7 @@ define([
 
       if (this.dataTable)
       {
+        this.dataTable.clear();
         this.dataTable.rows.add(this.model.get('tableSummary'));
         this.dataTable.draw();
       }
