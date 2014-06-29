@@ -24,7 +24,8 @@ exports.events = {
     info: [
       'events.**',
       'orders.synced',
-      'emptyOrders.synced'
+      'emptyOrders.synced',
+      'clipOrderCount.created'
     ]
   }
 };
