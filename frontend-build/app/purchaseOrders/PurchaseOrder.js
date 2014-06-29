@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["../time","../core/Model","./PurchaseOrderItemCollection"],function(e,t,r){return t.extend({urlRoot:"/purchaseOrders",clientUrlRoot:"#purchaseOrders",topicPrefix:"purchaseOrders",privilegePrefix:"PURCHASE_ORDERS",nlsDomain:"purchaseOrders",labelAttribute:"_id",defaults:{},parse:function(e,n){return e=t.prototype.parse.call(this,e,n),e.items=new r(e.items),e},serialize:function(){var t=this.toJSON();t.docDate=e.getMoment(t.docDate).utc().format("YYYY-MM-DD"),t.vendor&&t.vendor._id?(t.vendorText=t.vendor._id,t.vendor.name.length&&(t.vendorText+=": "+t.vendor.name)):t.vendorText=t.vendor,t.items=t.items?t.items.invoke("serialize"):[];var r=this.get("items").getMinScheduleDate();return t.minScheduleDate=r?e.getMoment(r).utc().format("YYYY-MM-DD"):null,t.className=t.open?t.printed?"info":"":"success",t}})});

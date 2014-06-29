@@ -116,6 +116,10 @@ app/production/assets/main.css
 ----------------
 app/production/assets/main.css
 
+app/purchaseOrders/assets/main.css
+----------------
+app/purchaseOrders/assets/main.css
+
 app/reports/assets/main.css
 ----------------
 app/reports/assets/main.css
@@ -167,6 +171,7 @@ assets/../app/prodShiftOrders/assets/main.css
 assets/../app/prodShifts/assets/main.css
 assets/../app/pressWorksheets/assets/main.css
 assets/../app/xiconf/assets/main.css
+assets/../app/purchaseOrders/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/feedback/assets/main.css
 assets/main.css
@@ -316,6 +321,12 @@ app/nls/companies.js
 app/nls/pl/companies.js
 i18n!app/nls/companies
 app/companies/routes.js
+app/vendors/Vendor.js
+app/vendors/VendorCollection.js
+app/nls/vendors.js
+app/nls/pl/vendors.js
+i18n!app/nls/vendors
+app/vendors/routes.js
 app/dashboard/templates/dashboard.js
 app/dashboard/views/DashboardView.js
 app/dashboard/pages/DashboardPage.js
@@ -372,7 +383,7 @@ app/emptyOrders/EmptyOrderCollection.js
 app/emptyOrders/views/EmptyOrderListView.js
 app/emptyOrders/templates/filter.js
 app/emptyOrders/views/EmptyOrderFilterView.js
-app/emptyOrders/templates/listPage.js
+app/core/templates/listPage.js
 app/emptyOrders/pages/EmptyOrderListPage.js
 app/core/templates/printableList.js
 app/core/views/PrintableListView.js
@@ -407,7 +418,6 @@ app/fte/views/FteMasterEntryListView.js
 app/data/views/OrgUnitDropdownsView.js
 app/fte/templates/filter.js
 app/fte/views/FteEntryFilterView.js
-app/fte/templates/listPage.js
 app/fte/pages/FteMasterEntryListPage.js
 app/core/util/getShiftStartInfo.js
 app/fte/templates/addForm.js
@@ -443,7 +453,6 @@ app/fte/routes.js
 app/hourlyPlans/HourlyPlan.js
 app/hourlyPlans/HourlyPlanCollection.js
 app/hourlyPlans/views/HourlyPlanListView.js
-app/hourlyPlans/templates/listPage.js
 app/hourlyPlans/pages/HourlyPlanListPage.js
 app/hourlyPlans/templates/addForm.js
 app/hourlyPlans/views/HourlyPlanAddFormView.js
@@ -469,7 +478,6 @@ app/mechOrders/templates/filter.js
 app/mechOrders/views/MechOrderFilterView.js
 app/mechOrders/templates/import.js
 app/mechOrders/views/MechOrderImportView.js
-app/mechOrders/templates/listPage.js
 app/mechOrders/pages/MechOrderListPage.js
 app/orders/templates/operationList.js
 app/orders/views/OperationListView.js
@@ -500,7 +508,6 @@ vendor/reltime.js
 app/core/util/fixTimeRange.js
 app/orders/templates/filter.js
 app/orders/views/OrderFilterView.js
-app/orders/templates/listPage.js
 app/orders/pages/OrderListPage.js
 app/orders/templates/details.js
 app/orders/views/OrderDetailsView.js
@@ -522,7 +529,6 @@ app/pressWorksheets/templates/filter.js
 app/pressWorksheets/views/PressWorksheetFilterView.js
 app/pressWorksheets/views/decoratePressWorksheet.js
 app/pressWorksheets/views/PressWorksheetListView.js
-app/pressWorksheets/templates/listPage.js
 app/pressWorksheets/pages/PressWorksheetListPage.js
 app/pressWorksheets/templates/details.js
 app/pressWorksheets/pages/PressWorksheetDetailsPage.js
@@ -569,7 +575,6 @@ app/prodLogEntries/views/decorateProdLogEntry.js
 app/prodLogEntries/views/ProdLogEntryListView.js
 app/prodLogEntries/templates/filter.js
 app/prodLogEntries/views/ProdLogEntryFilterView.js
-app/prodLogEntries/templates/listPage.js
 app/prodLogEntries/pages/ProdLogEntryListPage.js
 app/nls/prodLogEntries.js
 app/nls/pl/prodLogEntries.js
@@ -583,7 +588,6 @@ app/prodShiftOrders/views/decorateProdShiftOrder.js
 app/prodShiftOrders/views/ProdShiftOrderListView.js
 app/prodShiftOrders/templates/filter.js
 app/prodShiftOrders/views/ProdShiftOrderFilterView.js
-app/prodShiftOrders/templates/listPage.js
 app/prodShiftOrders/pages/ProdShiftOrderListPage.js
 app/nls/prodShiftOrders.js
 app/nls/pl/prodShiftOrders.js
@@ -596,7 +600,6 @@ app/prodShifts/views/decorateProdShift.js
 app/prodShifts/views/ProdShiftListView.js
 app/prodShifts/templates/filter.js
 app/prodShifts/views/ProdShiftFilterView.js
-app/prodShifts/templates/listPage.js
 app/prodShifts/pages/ProdShiftListPage.js
 app/nls/prodShifts.js
 app/nls/pl/prodShifts.js
