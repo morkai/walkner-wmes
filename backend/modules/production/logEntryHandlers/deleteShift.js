@@ -15,7 +15,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
   step(
     function getProdDowntimeModelStep()
     {
-      productionModule.getProdData('order', logEntry.prodShift, this.parallel());
+      productionModule.getProdData('shift', logEntry.prodShift, this.parallel());
       ProdShiftOrder.find({prodShift: logEntry.prodShift}, this.parallel());
       ProdDowntime.find({prodShift: logEntry.prodShift}, this.parallel());
     },
