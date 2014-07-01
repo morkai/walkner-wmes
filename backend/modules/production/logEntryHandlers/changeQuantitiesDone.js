@@ -32,6 +32,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     }
 
     prodShift.quantitiesDone[logEntry.data.hour].actual = Math.max(logEntry.data.newValue, 0);
+    prodShift.markModified('quantitiesDone');
 
     prodShift.save(function(err)
     {
