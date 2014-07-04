@@ -225,6 +225,8 @@ define([
       {
         afterRender.apply(dialogView, arguments);
       }
+
+      dialogView.delegateEvents();
     };
 
     this.currentDialog = dialogView;
