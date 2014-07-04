@@ -36,3 +36,7 @@
   background-color: #c4e3f3;
   border-color: #a6e1ec;
 }
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  background-color: #FFFFD6;
+}
