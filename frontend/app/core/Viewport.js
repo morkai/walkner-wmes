@@ -218,15 +218,19 @@ define([
 
     dialogView.afterRender = function()
     {
-      viewport.$dialog.find('.modal-body').empty().append(dialogView.el);
+      var $modalBody = viewport.$dialog.find('.modal-body');
+
+      if ($modalBody.children()[0] !== dialogView.el)
+      {
+        $modalBody.empty().append(dialogView.el);
+      }
+
       viewport.$dialog.modal('show');
 
       if (_.isFunction(afterRender))
       {
         afterRender.apply(dialogView, arguments);
       }
-
-      dialogView.delegateEvents();
     };
 
     this.currentDialog = dialogView;
