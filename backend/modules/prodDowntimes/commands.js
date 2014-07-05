@@ -64,6 +64,13 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
         data.corroborator = corroborator;
         data.corroboratedAt = new Date();
 
+        var createdAt = data.corroboratedAt;
+
+        if (createdAt < prodDowntime.startedAt)
+        {
+          createdAt = new Date(prodDowntime.startedAt.getTime() + 1);
+        }
+
         var prodLogEntry = new ProdLogEntry({
           _id: ProdLogEntry.generateId(data.corroboratedAt, prodDowntime.prodShift),
           type: 'corroborateDowntime',
@@ -77,7 +84,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
           prodShift: prodDowntime.prodShift,
           prodShiftOrder: prodDowntime.prodShiftOrder,
           creator: data.corroborator,
-          createdAt: data.corroboratedAt,
+          createdAt: createdAt,
           savedAt: new Date(),
           todo: false
         });
