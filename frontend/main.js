@@ -378,5 +378,10 @@
 
       return $modalDialog.length === 0 ? $body : $modalDialog;
     };
+
+    $body.on('focusin', '.select2-offscreen[tabindex="-1"]', function()
+    {
+      $(this).select2('focus');
+    });
   }
 })();
