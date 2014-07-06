@@ -22,7 +22,6 @@ define([
   var STORAGE_KEY = 'PRODUCTION:LOG';
   var SYNCING_KEY = 'PRODUCTION:LOG:SYNCING';
   var LOCK_KEY = 'PRODUCTION:LOCK';
-  var storage = localStorage;
   var syncingLogEntries = null;
   var enabled = false;
 
@@ -44,20 +43,20 @@ define([
       return;
     }
 
-    var newLogEntries = storage.getItem(STORAGE_KEY);
+    var newLogEntries = localStorage.getItem(STORAGE_KEY);
 
     if (newLogEntries === null)
     {
-      storage.setItem(STORAGE_KEY, syncingLogEntries);
+      localStorage.setItem(STORAGE_KEY, syncingLogEntries);
     }
     else
     {
-      storage.setItem(STORAGE_KEY, syncingLogEntries + '\n' + newLogEntries);
+      localStorage.setItem(STORAGE_KEY, syncingLogEntries + '\n' + newLogEntries);
     }
 
     syncingLogEntries = null;
 
-    storage.removeItem(SYNCING_KEY);
+    localStorage.removeItem(SYNCING_KEY);
 
     broker.publish('production.synced', {message: 'DISCONNECT'});
   }
@@ -72,23 +71,23 @@ define([
       return;
     }
 
-    syncingLogEntries = storage.getItem(STORAGE_KEY);
+    syncingLogEntries = localStorage.getItem(STORAGE_KEY);
 
     if (syncingLogEntries === null)
     {
       return;
     }
 
-    storage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
 
-    var unsyncedLogEntries = storage.getItem(SYNCING_KEY);
+    var unsyncedLogEntries = localStorage.getItem(SYNCING_KEY);
 
     if (unsyncedLogEntries !== null)
     {
       syncingLogEntries = unsyncedLogEntries + '\n' + syncingLogEntries;
     }
 
-    storage.setItem(SYNCING_KEY, syncingLogEntries);
+    localStorage.setItem(SYNCING_KEY, syncingLogEntries);
 
     broker.publish('production.syncing');
 
@@ -96,7 +95,7 @@ define([
     {
       syncingLogEntries = null;
 
-      storage.removeItem(SYNCING_KEY);
+      localStorage.removeItem(SYNCING_KEY);
 
       broker.publish('production.synced', err);
 
@@ -220,7 +219,7 @@ define([
         newLogEntries = oldLogEntries + '\n' + JSON.stringify(prodLogEntry);
       }
 
-      storage.setItem(STORAGE_KEY, newLogEntries);
+      localStorage.setItem(STORAGE_KEY, newLogEntries);
 
       prodShift.saveLocalData();
 
