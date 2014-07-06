@@ -180,6 +180,8 @@ module.exports = function(app, productionModule, done)
     {
       productionModule.info("Recounting the planned quantities...");
 
+      productionModule.clearProdData();
+
       var next = this.next();
 
       mongoose.model('HourlyPlan')
