@@ -68,30 +68,7 @@ define([
 
     onShiftChanged: function()
     {
-      this.set({
-        _id: null,
-        prodShift: null,
-        division: null,
-        subdivision: null,
-        mrpControllers: null,
-        prodFlow: null,
-        workCenter: null,
-        prodLine: null,
-        date: null,
-        shift: null,
-        workerCount: null,
-        totalQuantity: null,
-        quantityDone: null,
-        quantityLost: null,
-        losses: null,
-        creator: null,
-        startedAt: null,
-        finishedAt: null,
-        master: null,
-        leader: null,
-        operator: null,
-        operators: null
-      });
+      this.clear();
     },
 
     onOrderChanged: function(prodShift, orderData, operationNo)
