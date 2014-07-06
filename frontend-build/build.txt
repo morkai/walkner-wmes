@@ -23,6 +23,7 @@ app/core/assets/main.css
 ----------------
 app/core/assets/./print.css
 app/core/assets/./navbar.css
+app/core/assets/./table.css
 app/core/assets/./form.css
 app/core/assets/./modal.css
 app/core/assets/./properties.css
@@ -47,6 +48,10 @@ app/core/assets/print.css
 app/core/assets/properties.css
 ----------------
 app/core/assets/properties.css
+
+app/core/assets/table.css
+----------------
+app/core/assets/table.css
 
 app/dashboard/assets/main.css
 ----------------
@@ -661,6 +666,10 @@ app/nls/xiconf.js
 app/nls/pl/xiconf.js
 i18n!app/nls/xiconf
 app/xiconf/routes.js
+app/nls/purchaseOrders.js
+app/nls/pl/purchaseOrders.js
+i18n!app/nls/purchaseOrders
+app/purchaseOrders/routes.js
 app/routes.js
 vendor/visibly.js
 app/visibility.js
