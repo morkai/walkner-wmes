@@ -224,7 +224,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
           "Failed to find active prod lines in prod flow [%s] for date [%s]: %s",
           flow.id,
           date,
-          err.stack
+          err.message
         );
 
         return done();
@@ -248,7 +248,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
               "Failed to set planned quantities for date [%s] for prod lines [%s]: %s",
               date,
               activeProdLineIds.join(', '),
-              err.stack
+              err.message
             );
 
             return done();
