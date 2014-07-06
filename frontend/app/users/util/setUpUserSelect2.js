@@ -40,19 +40,20 @@ define([
         {
           var root = user.getRootUserData();
           var results = [{
-            id: '$SYSTEM',
+            _id: '$SYSTEM',
             text: t('users', 'select2:users:system'),
             name: t('users', 'select2:users:system'),
-            login: null
+            login: null,
+            personellId: '-'
           }, {
-            id: root._id,
+            _id: root._id,
             text: root.name || root.login,
             name: root.name || root.login,
             login: root.login,
             personellId: '-'
           }].filter(function(user)
           {
-            return user.text.indexOf(query.term) !== -1;
+            return user.text.toLowerCase().indexOf(query.term.toLowerCase()) !== -1;
           });
 
           var users = results.concat(data.collection || []);
@@ -67,7 +68,7 @@ define([
             {
               var name = user.lastName && user.firstName
                 ? (user.lastName + ' ' + user.firstName)
-                : '-';
+                : (user.name || '-');
               var personellId = user.personellId ? user.personellId : '-';
 
               return {
