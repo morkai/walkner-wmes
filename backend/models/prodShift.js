@@ -115,6 +115,11 @@ module.exports = function setupProdShiftModel(app, mongoose)
     {
       var changes = {_id: doc._id};
 
+      if (!Array.isArray(this.modified))
+      {
+        return;
+      }
+
       this.modified.forEach(function(modifiedPath)
       {
         changes[modifiedPath] = doc.get(modifiedPath);
