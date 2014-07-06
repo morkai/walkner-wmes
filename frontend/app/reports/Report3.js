@@ -188,9 +188,11 @@ define([
           mttf = operationalAvailabilityH / malfunctionCount;
         }
 
+        var mtbf = round(mttf + mttr);
+
         chartSummary.mttr.push([time, round(mttr)]);
         chartSummary.mttf.push([time, round(mttf)]);
-        chartSummary.mtbf.push([time, round(mttf + mttr)]);
+        chartSummary.mtbf.push([time, mtbf === 0 ? operationalAvailabilityH : mtbf]);
       }
 
       if (!arguments.length)
@@ -406,7 +408,7 @@ define([
       {
         prodLine.mttr = 0;
         prodLine.mttf = 0;
-        prodLine.mtbf = 0;
+        prodLine.mtbf = prodLine.operationalAvailabilityH;
       }
 
       this.calcProdLineOee(prodLine, true);
