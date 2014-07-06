@@ -1,0 +1,25 @@
+{
+  "BREADCRUMBS:browse": "Zamówienia",
+
+  "MSG:LOADING_FAILURE": "Ładowanie zamówień nie powiodło się :(",
+
+  "PANEL:TITLE:details": "Szczegóły zlecenia",
+
+  "PROPERTY:vendor": "Dostawca",
+  "PROPERTY:vendorId": "Nr dostawcy",
+  "PROPERTY:vendorName": "Nazwa dostawcy",
+  "PROPERTY:_id": "Nr zamówienia",
+  "PROPERTY:pOrg": "Org. zamawiająca",
+  "PROPERTY:pGr": "Grupa zakupowa",
+  "PROPERTY:plant": "Plant",
+  "PROPERTY:docDate": "Data zamówienia",
+  "PROPERTY:minScheduleDate": "Najbliższa data dostawy",
+  "PROPERTY:nc12": "12NC",
+
+  "FILTER:from": "Dostawa od",
+  "FILTER:to": "Dostawa do",
+  "FILTER:limit": "Limit",
+  "FILTER:submit": "Filtruj zamówienia"
+
+
+}

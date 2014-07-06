@@ -33,7 +33,8 @@ define([
   './users/routes',
   './vis/routes',
   './workCenters/routes',
-  './xiconf/routes'
+  './xiconf/routes',
+  './purchaseOrders/routes'
 ], function()
 {
   'use strict';

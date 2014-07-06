@@ -39,6 +39,7 @@ exports.modules = [
   'feedback',
   'xiconf',
   'licenses',
+  'purchaseOrders',
   {id: 'messenger/client', name: 'messenger/client:importer'},
   {id: 'messenger/client', name: 'messenger/client:xiconf'},
   'httpServer',
@@ -118,7 +119,8 @@ exports.mongoose = {
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
     'feedback',
     'license', 'licensePing',
-    'xiconfOrder', 'xiconfResult'
+    'xiconfOrder', 'xiconfResult',
+    'purchaseOrder'
   ]
 };
 
@@ -150,7 +152,8 @@ exports.user = {
     'PROD_DATA:VIEW', 'PROD_DATA:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
     'REPORTS:VIEW', 'REPORTS:MANAGE',
-    'XICONF:VIEW', 'XICONF:MANAGE'
+    'XICONF:VIEW', 'XICONF:MANAGE',
+    'PURCHASE_ORDERS:VIEW', 'PURCHASE_ORDERS:MANAGE'
   ]
 };
 
