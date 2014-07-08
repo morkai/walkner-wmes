@@ -37,7 +37,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
 
   express.get('/hourlyPlans/:id', canView, crud.readRoute.bind(null, app, HourlyPlan));
 
-  express.del(
+  express.delete(
     '/hourlyPlans/:id', canDelete, crud.deleteRoute.bind(null, app, HourlyPlan)
   );
 

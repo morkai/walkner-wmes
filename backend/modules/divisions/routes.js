@@ -23,5 +23,5 @@ module.exports = function setUpDivisionsRoutes(app, divisionsModule)
 
   express.put('/divisions/:id', canManage, crud.editRoute.bind(null, app, Division));
 
-  express.del('/divisions/:id', canManage, crud.deleteRoute.bind(null, app, Division));
+  express.delete('/divisions/:id', canManage, crud.deleteRoute.bind(null, app, Division));
 };

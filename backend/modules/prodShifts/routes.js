@@ -52,7 +52,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   express.put('/prodShifts/:id', canManage, editProdShiftRoute);
 
-  express.del('/prodShifts/:id', canManage, deleteProdShiftRoute);
+  express.delete('/prodShifts/:id', canManage, deleteProdShiftRoute);
 
   function exportProdShift(doc)
   {

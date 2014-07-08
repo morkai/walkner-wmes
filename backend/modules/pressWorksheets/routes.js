@@ -40,7 +40,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
     crud.editRoute.bind(null, app, PressWorksheet)
   );
 
-  express.del('/pressWorksheets/:id', canManage, crud.deleteRoute.bind(null, app, PressWorksheet));
+  express.delete('/pressWorksheets/:id', canManage, crud.deleteRoute.bind(null, app, PressWorksheet));
 
   function findByRidRoute(req, res, next)
   {

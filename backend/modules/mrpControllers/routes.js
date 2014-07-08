@@ -23,5 +23,5 @@ module.exports = function setUpMrpControllersRoutes(app, mrpControllersModule)
 
   express.put('/mrpControllers/:id', canManage, crud.editRoute.bind(null, app, MrpController));
 
-  express.del('/mrpControllers/:id', canManage, crud.deleteRoute.bind(null, app, MrpController));
+  express.delete('/mrpControllers/:id', canManage, crud.deleteRoute.bind(null, app, MrpController));
 };

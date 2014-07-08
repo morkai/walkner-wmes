@@ -23,5 +23,5 @@ module.exports = function setUpDowntimeReasonsRoutes(app, downtimeReasonsModule)
 
   express.put('/downtimeReasons/:id', canManage, crud.editRoute.bind(null, app, DowntimeReason));
 
-  express.del('/downtimeReasons/:id', canManage, crud.deleteRoute.bind(null, app, DowntimeReason));
+  express.delete('/downtimeReasons/:id', canManage, crud.deleteRoute.bind(null, app, DowntimeReason));
 };

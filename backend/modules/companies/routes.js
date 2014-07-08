@@ -23,5 +23,5 @@ module.exports = function setUpCompaniesRoutes(app, companiesModule)
 
   express.put('/companies/:id', canManage, crud.editRoute.bind(null, app, Model));
 
-  express.del('/companies/:id', canManage, crud.deleteRoute.bind(null, app, Model));
+  express.delete('/companies/:id', canManage, crud.deleteRoute.bind(null, app, Model));
 };

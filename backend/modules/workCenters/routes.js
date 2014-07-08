@@ -23,5 +23,5 @@ module.exports = function setUpWorkCentersRoutes(app, workCentersModule)
 
   express.put('/workCenters/:id', canManage, crud.editRoute.bind(null, app, WorkCenter));
 
-  express.del('/workCenters/:id', canManage, crud.deleteRoute.bind(null, app, WorkCenter));
+  express.delete('/workCenters/:id', canManage, crud.deleteRoute.bind(null, app, WorkCenter));
 };

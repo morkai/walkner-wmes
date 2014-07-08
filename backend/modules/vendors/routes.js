@@ -23,5 +23,5 @@ module.exports = function setUpVendorsRoutes(app, vendorsModule)
 
   express.put('/vendors/:id', canManage, crud.editRoute.bind(null, app, Vendor));
 
-  express.del('/vendors/:id', canManage, crud.deleteRoute.bind(null, app, Vendor));
+  express.delete('/vendors/:id', canManage, crud.deleteRoute.bind(null, app, Vendor));
 };

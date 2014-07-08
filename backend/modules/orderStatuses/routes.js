@@ -23,5 +23,5 @@ module.exports = function setUpOrderStatusesRoutes(app, ordersModule)
 
   express.put('/orderStatuses/:id', canManage, crud.editRoute.bind(null, app, Model));
 
-  express.del('/orderStatuses/:id', canManage, crud.deleteRoute.bind(null, app, Model));
+  express.delete('/orderStatuses/:id', canManage, crud.deleteRoute.bind(null, app, Model));
 };

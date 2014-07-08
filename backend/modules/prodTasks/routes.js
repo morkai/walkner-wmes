@@ -23,7 +23,7 @@ module.exports = function setUpProdTasksRoutes(app, prodTasksModule)
 
   express.put('/prodTasks/:id', canManage, crud.editRoute.bind(null, app, ProdTask));
 
-  express.del('/prodTasks/:id', canManage, crud.deleteRoute.bind(null, app, ProdTask));
+  express.delete('/prodTasks/:id', canManage, crud.deleteRoute.bind(null, app, ProdTask));
 
   express.get('/prodTaskTags', canView, getAllTagsRoute);
 

@@ -23,5 +23,5 @@ module.exports = function setUpProdFlowsRoutes(app, prodFlowsModule)
 
   express.put('/prodFlows/:id', canManage, crud.editRoute.bind(null, app, ProdFlow));
 
-  express.del('/prodFlows/:id', canManage, crud.deleteRoute.bind(null, app, ProdFlow));
+  express.delete('/prodFlows/:id', canManage, crud.deleteRoute.bind(null, app, ProdFlow));
 };

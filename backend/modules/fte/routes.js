@@ -48,7 +48,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
   express.get('/fte/master/:id', canViewMaster, crud.readRoute.bind(null, app, FteMasterEntry));
 
-  express.del(
+  express.delete(
     '/fte/master/:id',
     canDelete.bind(null, FteMasterEntry),
     crud.deleteRoute.bind(null, app, FteMasterEntry)
@@ -80,7 +80,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
   express.get('/fte/leader/:id', canViewLeader, crud.readRoute.bind(null, app, FteLeaderEntry));
 
-  express.del(
+  express.delete(
     '/fte/leader/:id',
     canDelete.bind(null, FteLeaderEntry),
     crud.deleteRoute.bind(null, app, FteLeaderEntry)

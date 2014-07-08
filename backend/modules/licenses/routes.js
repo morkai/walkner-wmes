@@ -27,7 +27,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
 
   express.post('/licenses/:id;ping', pingRoute);
 
-  express.del('/licenses/:id', canManage, express.crud.deleteRoute.bind(null, app, License));
+  express.delete('/licenses/:id', canManage, express.crud.deleteRoute.bind(null, app, License));
 
   function pingRoute(req, res, next)
   {

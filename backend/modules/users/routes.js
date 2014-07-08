@@ -31,7 +31,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
     '/users/:id', canManage, hashPassword, crud.editRoute.bind(null, app, User)
   );
 
-  express.del('/users/:id', canManage, crud.deleteRoute.bind(null, app, User));
+  express.delete('/users/:id', canManage, crud.deleteRoute.bind(null, app, User));
 
   express.post('/login', loginRoute);
 

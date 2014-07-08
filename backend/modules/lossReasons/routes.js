@@ -23,5 +23,5 @@ module.exports = function setUpLossReasonsRoutes(app, lossReasonsModule)
 
   express.put('/lossReasons/:id', canManage, crud.editRoute.bind(null, app, LossReason));
 
-  express.del('/lossReasons/:id', canManage, crud.deleteRoute.bind(null, app, LossReason));
+  express.delete('/lossReasons/:id', canManage, crud.deleteRoute.bind(null, app, LossReason));
 };

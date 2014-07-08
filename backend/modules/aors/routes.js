@@ -23,5 +23,5 @@ module.exports = function setUpAorsRoutes(app, aorsModule)
 
   express.put('/aors/:id', canManage, crud.editRoute.bind(null, app, Aor));
 
-  express.del('/aors/:id', canManage, crud.deleteRoute.bind(null, app, Aor));
+  express.delete('/aors/:id', canManage, crud.deleteRoute.bind(null, app, Aor));
 };

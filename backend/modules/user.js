@@ -5,8 +5,8 @@
 'use strict';
 
 var os = require('os');
-var connect = require('connect');
 var cookie = require('cookie');
+var cookieParser = require('cookie-parser');
 var lodash = require('lodash');
 
 exports.DEFAULT_CONFIG = {
@@ -194,9 +194,7 @@ exports.start = function startUserModule(app, module)
         return done(null, true);
       }
 
-      var sessionId = connect.utils.parseSignedCookie(
-        sessionCookie, express.config.cookieSecret
-      );
+      var sessionId = cookieParser.signedCookie(sessionCookie, express.config.cookieSecret);
 
       express.sessionStore.get(sessionId, function(err, session)
       {

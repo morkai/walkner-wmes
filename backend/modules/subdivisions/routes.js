@@ -23,5 +23,5 @@ module.exports = function setUpSubdivisionsRoutes(app, subdivisionsModule)
 
   express.put('/subdivisions/:id', canManage, crud.editRoute.bind(null, app, Subdivision));
 
-  express.del('/subdivisions/:id', canManage, crud.deleteRoute.bind(null, app, Subdivision));
+  express.delete('/subdivisions/:id', canManage, crud.deleteRoute.bind(null, app, Subdivision));
 };

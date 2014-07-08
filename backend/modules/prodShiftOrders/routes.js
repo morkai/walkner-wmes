@@ -45,7 +45,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
   express.put('/prodShiftOrders/:id', canManage, editProdShiftOrderRoute);
 
-  express.del('/prodShiftOrders/:id', canManage, deleteProdShiftOrderRoute);
+  express.delete('/prodShiftOrders/:id', canManage, deleteProdShiftOrderRoute);
 
   function exportProdShiftOrder(doc)
   {
