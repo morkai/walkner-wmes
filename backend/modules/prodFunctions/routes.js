@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpProdFunctionsRoutes(app, prodFunctionsModule)
 {
   var express = app[prodFunctionsModule.config.expressId];
@@ -15,13 +13,13 @@ module.exports = function setUpProdFunctionsRoutes(app, prodFunctionsModule)
   var canView = auth('DICTIONARIES:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/prodFunctions', canView, crud.browseRoute.bind(null, app, ProdFunction));
+  express.get('/prodFunctions', canView, express.crud.browseRoute.bind(null, app, ProdFunction));
 
-  express.post('/prodFunctions', canManage, crud.addRoute.bind(null, app, ProdFunction));
+  express.post('/prodFunctions', canManage, express.crud.addRoute.bind(null, app, ProdFunction));
 
-  express.get('/prodFunctions/:id', canView, crud.readRoute.bind(null, app, ProdFunction));
+  express.get('/prodFunctions/:id', canView, express.crud.readRoute.bind(null, app, ProdFunction));
 
-  express.put('/prodFunctions/:id', canManage, crud.editRoute.bind(null, app, ProdFunction));
+  express.put('/prodFunctions/:id', canManage, express.crud.editRoute.bind(null, app, ProdFunction));
 
-  express.delete('/prodFunctions/:id', canManage, crud.deleteRoute.bind(null, app, ProdFunction));
+  express.delete('/prodFunctions/:id', canManage, express.crud.deleteRoute.bind(null, app, ProdFunction));
 };

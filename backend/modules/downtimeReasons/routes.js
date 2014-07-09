@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpDowntimeReasonsRoutes(app, downtimeReasonsModule)
 {
   var express = app[downtimeReasonsModule.config.expressId];
@@ -15,13 +13,13 @@ module.exports = function setUpDowntimeReasonsRoutes(app, downtimeReasonsModule)
   var canView = auth('DICTIONARIES:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/downtimeReasons', canView, crud.browseRoute.bind(null, app, DowntimeReason));
+  express.get('/downtimeReasons', canView, express.crud.browseRoute.bind(null, app, DowntimeReason));
 
-  express.post('/downtimeReasons', canManage, crud.addRoute.bind(null, app, DowntimeReason));
+  express.post('/downtimeReasons', canManage, express.crud.addRoute.bind(null, app, DowntimeReason));
 
-  express.get('/downtimeReasons/:id', canView, crud.readRoute.bind(null, app, DowntimeReason));
+  express.get('/downtimeReasons/:id', canView, express.crud.readRoute.bind(null, app, DowntimeReason));
 
-  express.put('/downtimeReasons/:id', canManage, crud.editRoute.bind(null, app, DowntimeReason));
+  express.put('/downtimeReasons/:id', canManage, express.crud.editRoute.bind(null, app, DowntimeReason));
 
-  express.delete('/downtimeReasons/:id', canManage, crud.deleteRoute.bind(null, app, DowntimeReason));
+  express.delete('/downtimeReasons/:id', canManage, express.crud.deleteRoute.bind(null, app, DowntimeReason));
 };

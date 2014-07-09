@@ -6,7 +6,6 @@
 
 var step = require('h5.step');
 var moment = require('moment');
-var crud = require('../express/crud');
 var limitOrgUnit = require('../prodLines/limitOrgUnit');
 var logEntryHandlers = require('../production/logEntryHandlers');
 
@@ -23,7 +22,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
   var canView = userModule.auth('PROD_DATA:VIEW');
   var canManage = userModule.auth('PROD_DATA:MANAGE');
 
-  express.get('/prodShifts', canView, limitOrgUnit, crud.browseRoute.bind(null, app, ProdShift));
+  express.get('/prodShifts', canView, limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdShift));
 
   express.post('/prodShifts', canManage, addProdShiftRoute);
 
@@ -40,14 +39,14 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
       next();
     },
-    crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, {
       filename: 'WMES-SHIFTS',
       serializeRow: exportProdShift,
       model: ProdShift
     })
   );
 
-  express.get('/prodShifts/:id', canView, crud.readRoute.bind(null, app, ProdShift));
+  express.get('/prodShifts/:id', canView, express.crud.readRoute.bind(null, app, ProdShift));
 
   express.put('/prodShifts/:id', canManage, editProdShiftRoute);
 

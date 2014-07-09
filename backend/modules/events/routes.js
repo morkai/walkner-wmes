@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpEventRoutes(app, eventsModule)
 {
   var express = app[eventsModule.config.expressId];
@@ -14,7 +12,7 @@ module.exports = function setUpEventRoutes(app, eventsModule)
 
   var canView = auth('EVENTS:VIEW');
 
-  express.get('/events', canView, crud.browseRoute.bind(null, app, Event));
+  express.get('/events', canView, express.crud.browseRoute.bind(null, app, Event));
 
   express.get('/events/types', canView, fetchTypesRoute);
 

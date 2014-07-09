@@ -6,7 +6,6 @@
 
 var lodash = require('lodash');
 var bcrypt = require('bcrypt');
-var crud = require('../express/crud');
 
 module.exports = function setUpUsersRoutes(app, usersModule)
 {
@@ -17,21 +16,15 @@ module.exports = function setUpUsersRoutes(app, usersModule)
   var canView = userModule.auth('USERS:VIEW');
   var canManage = userModule.auth('USERS:MANAGE');
 
-  express.get('/users', crud.browseRoute.bind(null, app, User));
+  express.get('/users', express.crud.browseRoute.bind(null, app, User));
 
-  express.post(
-    '/users', canManage, hashPassword, crud.addRoute.bind(null, app, User)
-  );
+  express.post('/users', canManage, hashPassword, express.crud.addRoute.bind(null, app, User));
 
-  express.get(
-    '/users/:id', canViewDetails, crud.readRoute.bind(null, app, User)
-  );
+  express.get('/users/:id', canViewDetails, express.crud.readRoute.bind(null, app, User));
 
-  express.put(
-    '/users/:id', canManage, hashPassword, crud.editRoute.bind(null, app, User)
-  );
+  express.put('/users/:id', canManage, hashPassword, express.crud.editRoute.bind(null, app, User));
 
-  express.delete('/users/:id', canManage, crud.deleteRoute.bind(null, app, User));
+  express.delete('/users/:id', canManage, express.crud.deleteRoute.bind(null, app, User));
 
   express.post('/login', loginRoute);
 

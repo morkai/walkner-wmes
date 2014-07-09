@@ -7,7 +7,6 @@
 var step = require('h5.step');
 var moment = require('moment');
 var lodash = require('lodash');
-var crud = require('../express/crud');
 var logEntryHandlers = require('../production/logEntryHandlers');
 
 module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
@@ -25,7 +24,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   var canView = userModule.auth('PROD_DOWNTIMES:VIEW');
   var canManage = userModule.auth('PROD_DATA:MANAGE');
 
-  express.get('/prodDowntimes', limitOrgUnit, crud.browseRoute.bind(null, app, ProdDowntime));
+  express.get('/prodDowntimes', limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdDowntime));
 
   express.post('/prodDowntimes', canManage, addProdDowntimeRoute);
 
@@ -41,14 +40,14 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
       next();
     },
-    crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, {
       filename: 'WMES-DOWNTIMES',
       serializeRow: exportProdDowntime,
       model: ProdDowntime
     })
   );
 
-  express.get('/prodDowntimes/:id', canView, crud.readRoute.bind(null, app, ProdDowntime));
+  express.get('/prodDowntimes/:id', canView, express.crud.readRoute.bind(null, app, ProdDowntime));
 
   express.put('/prodDowntimes/:id', canManage, editProdDowntimeRoute);
 

@@ -7,7 +7,6 @@
 var fs = require('fs');
 var multipart = require('express').multipart;
 var csv = require('csv');
-var crud = require('../express/crud');
 
 module.exports = function setUpMechOrdersRoutes(app, ordersModule)
 {
@@ -16,13 +15,13 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
   var MechOrder = app[ordersModule.config.mongooseId].model('MechOrder');
   var importing = null;
 
-  express.get('/mechOrders', crud.browseRoute.bind(null, app, MechOrder));
+  express.get('/mechOrders', express.crud.browseRoute.bind(null, app, MechOrder));
 
-  express.get('/mechOrders/:id', crud.readRoute.bind(null, app, MechOrder));
+  express.get('/mechOrders/:id', express.crud.readRoute.bind(null, app, MechOrder));
 
   express.post('/mechOrders;import', auth('ORDERS:MANAGE'), multipart({limit: '5mb'}), importRoute);
 
-  express.patch('/mechOrders/:id', crud.editRoute.bind(null, app, MechOrder));
+  express.patch('/mechOrders/:id', express.crud.editRoute.bind(null, app, MechOrder));
 
   function importRoute(req, res, next)
   {

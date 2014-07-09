@@ -4,14 +4,12 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpOrdersRoutes(app, ordersModule)
 {
   var express = app[ordersModule.config.expressId];
   var Order = app[ordersModule.config.mongooseId].model('Order');
 
-  express.get('/orders', crud.browseRoute.bind(null, app, Order));
+  express.get('/orders', express.crud.browseRoute.bind(null, app, Order));
 
-  express.get('/orders/:id', crud.readRoute.bind(null, app, Order));
+  express.get('/orders/:id', express.crud.readRoute.bind(null, app, Order));
 };

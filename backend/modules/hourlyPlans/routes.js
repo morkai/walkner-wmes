@@ -5,7 +5,6 @@
 'use strict';
 
 var moment = require('moment');
-var crud = require('../express/crud');
 var canManage = require('./canManage');
 
 module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
@@ -17,7 +16,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
 
   var canView = auth('HOURLY_PLANS:VIEW');
 
-  express.get('/hourlyPlans', canView, crud.browseRoute.bind(null, app, HourlyPlan));
+  express.get('/hourlyPlans', canView, express.crud.browseRoute.bind(null, app, HourlyPlan));
 
   express.get(
     '/hourlyPlans;export',
@@ -28,18 +27,16 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
 
       next();
     },
-    crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, {
       filename: 'WMES-HOURLY_PLANS',
       serializeRow: exportHourlyPlan,
       model: HourlyPlan
     })
   );
 
-  express.get('/hourlyPlans/:id', canView, crud.readRoute.bind(null, app, HourlyPlan));
+  express.get('/hourlyPlans/:id', canView, express.crud.readRoute.bind(null, app, HourlyPlan));
 
-  express.delete(
-    '/hourlyPlans/:id', canDelete, crud.deleteRoute.bind(null, app, HourlyPlan)
-  );
+  express.delete('/hourlyPlans/:id', canDelete, express.crud.deleteRoute.bind(null, app, HourlyPlan));
 
   function canDelete(req, res, next)
   {

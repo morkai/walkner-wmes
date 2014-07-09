@@ -4,7 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
 var limitOrgUnit = require('../prodLines/limitOrgUnit');
 
 module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
@@ -21,7 +20,7 @@ module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
     canView,
     limitOrgUnit,
     populate,
-    crud.browseRoute.bind(null, app, ProdLogEntry)
+    express.crud.browseRoute.bind(null, app, ProdLogEntry)
   );
 
   function populate(req, res, next)

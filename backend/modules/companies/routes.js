@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpCompaniesRoutes(app, companiesModule)
 {
   var express = app[companiesModule.config.expressId];
@@ -15,13 +13,13 @@ module.exports = function setUpCompaniesRoutes(app, companiesModule)
   var canView = auth('DICTIONARIES:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/companies', canView, crud.browseRoute.bind(null, app, Model));
+  express.get('/companies', canView, express.crud.browseRoute.bind(null, app, Model));
 
-  express.post('/companies', canManage, crud.addRoute.bind(null, app, Model));
+  express.post('/companies', canManage, express.crud.addRoute.bind(null, app, Model));
 
-  express.get('/companies/:id', canView, crud.readRoute.bind(null, app, Model));
+  express.get('/companies/:id', canView, express.crud.readRoute.bind(null, app, Model));
 
-  express.put('/companies/:id', canManage, crud.editRoute.bind(null, app, Model));
+  express.put('/companies/:id', canManage, express.crud.editRoute.bind(null, app, Model));
 
-  express.delete('/companies/:id', canManage, crud.deleteRoute.bind(null, app, Model));
+  express.delete('/companies/:id', canManage, express.crud.deleteRoute.bind(null, app, Model));
 };

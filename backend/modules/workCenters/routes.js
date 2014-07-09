@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpWorkCentersRoutes(app, workCentersModule)
 {
   var express = app[workCentersModule.config.expressId];
@@ -15,13 +13,13 @@ module.exports = function setUpWorkCentersRoutes(app, workCentersModule)
   var canView = auth('DICTIONARIES:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/workCenters', canView, crud.browseRoute.bind(null, app, WorkCenter));
+  express.get('/workCenters', canView, express.crud.browseRoute.bind(null, app, WorkCenter));
 
-  express.post('/workCenters', canManage, crud.addRoute.bind(null, app, WorkCenter));
+  express.post('/workCenters', canManage, express.crud.addRoute.bind(null, app, WorkCenter));
 
-  express.get('/workCenters/:id', canView, crud.readRoute.bind(null, app, WorkCenter));
+  express.get('/workCenters/:id', canView, express.crud.readRoute.bind(null, app, WorkCenter));
 
-  express.put('/workCenters/:id', canManage, crud.editRoute.bind(null, app, WorkCenter));
+  express.put('/workCenters/:id', canManage, express.crud.editRoute.bind(null, app, WorkCenter));
 
-  express.delete('/workCenters/:id', canManage, crud.deleteRoute.bind(null, app, WorkCenter));
+  express.delete('/workCenters/:id', canManage, express.crud.deleteRoute.bind(null, app, WorkCenter));
 };

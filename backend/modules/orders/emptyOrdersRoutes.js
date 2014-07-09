@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpEmptyOrdersRoutes(app, ordersModule)
 {
   var express = app[ordersModule.config.expressId];
@@ -14,5 +12,5 @@ module.exports = function setUpEmptyOrdersRoutes(app, ordersModule)
 
   var canView = auth('ORDERS:VIEW');
 
-  express.get('/emptyOrders', canView, crud.browseRoute.bind(null, app, EmptyOrder));
+  express.get('/emptyOrders', canView, express.crud.browseRoute.bind(null, app, EmptyOrder));
 };

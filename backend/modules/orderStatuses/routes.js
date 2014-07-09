@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpOrderStatusesRoutes(app, ordersModule)
 {
   var express = app[ordersModule.config.expressId];
@@ -15,13 +13,13 @@ module.exports = function setUpOrderStatusesRoutes(app, ordersModule)
   var canView = auth('DICTIONARIES:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/orderStatuses', canView, crud.browseRoute.bind(null, app, Model));
+  express.get('/orderStatuses', canView, express.crud.browseRoute.bind(null, app, Model));
 
-  express.post('/orderStatuses', canManage, crud.addRoute.bind(null, app, Model));
+  express.post('/orderStatuses', canManage, express.crud.addRoute.bind(null, app, Model));
 
-  express.get('/orderStatuses/:id', canView, crud.readRoute.bind(null, app, Model));
+  express.get('/orderStatuses/:id', canView, express.crud.readRoute.bind(null, app, Model));
 
-  express.put('/orderStatuses/:id', canManage, crud.editRoute.bind(null, app, Model));
+  express.put('/orderStatuses/:id', canManage, express.crud.editRoute.bind(null, app, Model));
 
-  express.delete('/orderStatuses/:id', canManage, crud.deleteRoute.bind(null, app, Model));
+  express.delete('/orderStatuses/:id', canManage, express.crud.deleteRoute.bind(null, app, Model));
 };

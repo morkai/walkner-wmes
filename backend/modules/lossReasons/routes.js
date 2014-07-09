@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpLossReasonsRoutes(app, lossReasonsModule)
 {
   var express = app[lossReasonsModule.config.expressId];
@@ -15,13 +13,13 @@ module.exports = function setUpLossReasonsRoutes(app, lossReasonsModule)
   var canView = auth('DICTIONARIES:VIEW', 'PRESS_WORKSHEETS:MANAGE');
   var canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/lossReasons', canView, crud.browseRoute.bind(null, app, LossReason));
+  express.get('/lossReasons', canView, express.crud.browseRoute.bind(null, app, LossReason));
 
-  express.post('/lossReasons', canManage, crud.addRoute.bind(null, app, LossReason));
+  express.post('/lossReasons', canManage, express.crud.addRoute.bind(null, app, LossReason));
 
-  express.get('/lossReasons/:id', canView, crud.readRoute.bind(null, app, LossReason));
+  express.get('/lossReasons/:id', canView, express.crud.readRoute.bind(null, app, LossReason));
 
-  express.put('/lossReasons/:id', canManage, crud.editRoute.bind(null, app, LossReason));
+  express.put('/lossReasons/:id', canManage, express.crud.editRoute.bind(null, app, LossReason));
 
-  express.delete('/lossReasons/:id', canManage, crud.deleteRoute.bind(null, app, LossReason));
+  express.delete('/lossReasons/:id', canManage, express.crud.deleteRoute.bind(null, app, LossReason));
 };

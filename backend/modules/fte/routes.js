@@ -5,7 +5,6 @@
 'use strict';
 
 var lodash = require('lodash');
-var crud = require('../express/crud');
 var exportFteLeaderEntries = require('./exportFteLeaderEntries');
 var exportFteMasterEntries = require('./exportFteMasterEntries');
 var canManage = require('./canManage');
@@ -26,7 +25,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
     '/fte/master',
     canViewMaster,
     limitToDivision,
-    crud.browseRoute.bind(null, app, FteMasterEntry)
+    express.crud.browseRoute.bind(null, app, FteMasterEntry)
   );
 
   express.get(
@@ -39,26 +38,26 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
       next();
     },
-    crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, {
       filename: 'WMES-FTE_PRODUCTION',
       serializeStream: exportFteMasterEntries.bind(null, subdivisionsModule),
       model: FteMasterEntry
     })
   );
 
-  express.get('/fte/master/:id', canViewMaster, crud.readRoute.bind(null, app, FteMasterEntry));
+  express.get('/fte/master/:id', canViewMaster, express.crud.readRoute.bind(null, app, FteMasterEntry));
 
   express.delete(
     '/fte/master/:id',
     canDelete.bind(null, FteMasterEntry),
-    crud.deleteRoute.bind(null, app, FteMasterEntry)
+    express.crud.deleteRoute.bind(null, app, FteMasterEntry)
   );
 
   express.get(
     '/fte/leader',
     canViewLeader,
     limitToDivision,
-    crud.browseRoute.bind(null, app, FteLeaderEntry)
+    express.crud.browseRoute.bind(null, app, FteLeaderEntry)
   );
 
   express.get(
@@ -71,19 +70,19 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
       next();
     },
-    crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, {
       filename: 'WMES-FTE_WAREHOUSE',
       serializeStream: exportFteLeaderEntries.bind(null, subdivisionsModule),
       model: FteLeaderEntry
     })
   );
 
-  express.get('/fte/leader/:id', canViewLeader, crud.readRoute.bind(null, app, FteLeaderEntry));
+  express.get('/fte/leader/:id', canViewLeader, express.crud.readRoute.bind(null, app, FteLeaderEntry));
 
   express.delete(
     '/fte/leader/:id',
     canDelete.bind(null, FteLeaderEntry),
-    crud.deleteRoute.bind(null, app, FteLeaderEntry)
+    express.crud.deleteRoute.bind(null, app, FteLeaderEntry)
   );
 
   function limitToDivision(req, res, next)

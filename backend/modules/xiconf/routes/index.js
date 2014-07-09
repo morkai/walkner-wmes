@@ -7,7 +7,6 @@
 var fs = require('fs');
 var path = require('path');
 var moment = require('moment');
-var crud = require('../../express/crud');
 var importRoute = require('./import');
 var downloadRoute = require('./download');
 
@@ -26,7 +25,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     '/xiconf/results',
     canView,
     populateOrder.bind(null, ['no', 'quantity']),
-    crud.browseRoute.bind(null, app, {
+    express.crud.browseRoute.bind(null, app, {
       model: XiconfResult,
       prepareResult: findDistinctSrcIds
     })
@@ -42,7 +41,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       next();
     },
     populateOrder.bind(null, []),
-    crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, {
       filename: 'WMES-XICONF',
       serializeRow: exportXiconfResult,
       model: XiconfResult
@@ -65,7 +64,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     '/xiconf/results/:id',
     canView,
     populateOrder.bind(null, []),
-    crud.readRoute.bind(null, app, {
+    express.crud.readRoute.bind(null, app, {
       model: XiconfResult,
       prepareResult: readFeatureFile
     })

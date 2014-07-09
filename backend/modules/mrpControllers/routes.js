@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpMrpControllersRoutes(app, mrpControllersModule)
 {
   var express = app[mrpControllersModule.config.expressId];
@@ -15,13 +13,13 @@ module.exports = function setUpMrpControllersRoutes(app, mrpControllersModule)
   var canView = auth('DICTIONARIES:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/mrpControllers', canView, crud.browseRoute.bind(null, app, MrpController));
+  express.get('/mrpControllers', canView, express.crud.browseRoute.bind(null, app, MrpController));
 
-  express.post('/mrpControllers', canManage, crud.addRoute.bind(null, app, MrpController));
+  express.post('/mrpControllers', canManage, express.crud.addRoute.bind(null, app, MrpController));
 
-  express.get('/mrpControllers/:id', canView, crud.readRoute.bind(null, app, MrpController));
+  express.get('/mrpControllers/:id', canView, express.crud.readRoute.bind(null, app, MrpController));
 
-  express.put('/mrpControllers/:id', canManage, crud.editRoute.bind(null, app, MrpController));
+  express.put('/mrpControllers/:id', canManage, express.crud.editRoute.bind(null, app, MrpController));
 
-  express.delete('/mrpControllers/:id', canManage, crud.deleteRoute.bind(null, app, MrpController));
+  express.delete('/mrpControllers/:id', canManage, express.crud.deleteRoute.bind(null, app, MrpController));
 };

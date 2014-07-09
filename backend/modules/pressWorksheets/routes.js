@@ -6,7 +6,6 @@
 
 var ObjectId = require('mongoose').Types.ObjectId;
 var lodash = require('lodash');
-var crud = require('../express/crud');
 
 module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 {
@@ -18,7 +17,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
   var canManage = userModule.auth('PRESS_WORKSHEETS:MANAGE', 'PROD_DATA:MANAGE');
 
   express.get(
-    '/pressWorksheets', canView, limitToMine, crud.browseRoute.bind(null, app, PressWorksheet)
+    '/pressWorksheets', canView, limitToMine, express.crud.browseRoute.bind(null, app, PressWorksheet)
   );
 
   express.get('/pressWorksheets;rid', canView, findByRidRoute);
@@ -27,20 +26,20 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
     '/pressWorksheets',
     canManage,
     prepareDataForAdd,
-    crud.addRoute.bind(null, app, PressWorksheet)
+    express.crud.addRoute.bind(null, app, PressWorksheet)
   );
 
-  express.get('/pressWorksheets/:id', canView, crud.readRoute.bind(null, app, PressWorksheet));
+  express.get('/pressWorksheets/:id', canView, express.crud.readRoute.bind(null, app, PressWorksheet));
 
   express.put(
     '/pressWorksheets/:id',
     canManage,
     prepareDataForEdit,
-    crud.editRoute.bind(null, app, PressWorksheet)
+    express.crud.editRoute.bind(null, app, PressWorksheet)
   );
 
   express.delete(
-    '/pressWorksheets/:id', canManage, crud.deleteRoute.bind(null, app, PressWorksheet)
+    '/pressWorksheets/:id', canManage, express.crud.deleteRoute.bind(null, app, PressWorksheet)
   );
 
   function findByRidRoute(req, res, next)

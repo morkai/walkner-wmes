@@ -4,8 +4,6 @@
 
 'use strict';
 
-var crud = require('../express/crud');
-
 module.exports = function setUpDivisionsRoutes(app, divisionsModule)
 {
   var express = app[divisionsModule.config.expressId];
@@ -15,13 +13,13 @@ module.exports = function setUpDivisionsRoutes(app, divisionsModule)
   var canView = auth('DICTIONARIES:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/divisions', canView, crud.browseRoute.bind(null, app, Division));
+  express.get('/divisions', canView, express.crud.browseRoute.bind(null, app, Division));
 
-  express.post('/divisions', canManage, crud.addRoute.bind(null, app, Division));
+  express.post('/divisions', canManage, express.crud.addRoute.bind(null, app, Division));
 
-  express.get('/divisions/:id', canView, crud.readRoute.bind(null, app, Division));
+  express.get('/divisions/:id', canView, express.crud.readRoute.bind(null, app, Division));
 
-  express.put('/divisions/:id', canManage, crud.editRoute.bind(null, app, Division));
+  express.put('/divisions/:id', canManage, express.crud.editRoute.bind(null, app, Division));
 
-  express.delete('/divisions/:id', canManage, crud.deleteRoute.bind(null, app, Division));
+  express.delete('/divisions/:id', canManage, express.crud.deleteRoute.bind(null, app, Division));
 };
