@@ -14,7 +14,7 @@ define([
   '../Order',
   '../OperationCollection',
   'app/orders/templates/changes',
-  'app/orderStatuses/templates/_orderStatus'
+  'app/orderStatuses/util/renderOrderStatusLabel'
 ], function(
   _,
   $,
@@ -27,7 +27,7 @@ define([
   Order,
   OperationCollection,
   changesTemplate,
-  renderOrderStatus
+  renderOrderStatusLabel
 ) {
   'use strict';
 
@@ -105,10 +105,7 @@ define([
             + '</a>';
 
         case 'statuses':
-          return orderStatuses
-            .findAndFill(value)
-            .map(function(orderStatus) { return renderOrderStatus(orderStatus); })
-            .join('');
+          return orderStatuses.findAndFill(value).map(renderOrderStatusLabel).join('');
 
         case 'startDate':
         case 'finishDate':

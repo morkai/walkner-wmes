@@ -137,7 +137,9 @@
     "dataTables:loadingFailed": "Loading failed :(",
 
     "feedback:button:text": "Feedback",
-    "feedback:button:tooltip": "Report bugs, notes, opinions or ideas!"
+    "feedback:button:tooltip": "Report bugs, notes, opinions or ideas!",
+
+    "colorPicker:label": "Color"
   },
   "pl": true
 }

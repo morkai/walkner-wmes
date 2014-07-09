@@ -251,3 +251,10 @@ kbd {
 .list-item.is-deleted > td.actions {
   text-decoration: none!important;
 }
+
+.colorpicker-component {
+  width: 8em;
+}
+.colorpicker-component > .form-control {
+  text-align: center;
+}

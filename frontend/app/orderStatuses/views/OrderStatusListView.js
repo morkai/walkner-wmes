@@ -6,12 +6,12 @@ define([
   'app/i18n',
   'app/user',
   'app/core/views/ListView',
-  'app/orderStatuses/templates/_orderStatus'
+  '../util/renderOrderStatusLabel'
 ], function(
   t,
   user,
   ListView,
-  renderOrderStatus
+  renderOrderStatusLabel
 ) {
   'use strict';
 
@@ -29,7 +29,7 @@ define([
     {
       return this.collection.toJSON().map(function(orderStatus)
       {
-        orderStatus.coloredId = renderOrderStatus(orderStatus);
+        orderStatus.coloredId = renderOrderStatusLabel(orderStatus);
 
         return orderStatus;
       });

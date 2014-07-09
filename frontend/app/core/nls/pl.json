@@ -136,5 +136,7 @@
   "dataTables:loadingFailed": "Ładowanie danych nie powiodło się :(",
 
   "feedback:button:text": "Feedback",
-  "feedback:button:tooltip": "Zgłoś błędy, uwagi, opinie lub pomysły!"
+  "feedback:button:tooltip": "Zgłoś błędy, uwagi, opinie lub pomysły!",
+
+  "colorPicker:label": "Kolor"
 }

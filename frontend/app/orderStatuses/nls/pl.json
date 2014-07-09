@@ -18,7 +18,6 @@
 
   "PROPERTY:_id": "Etykieta",
   "PROPERTY:label": "Opis",
-  "PROPERTY:color": "Kolor",
 
   "FORM:ACTION:add": "Dodaj status zleceń",
   "FORM:ACTION:edit": "Edytuj status zleceń",

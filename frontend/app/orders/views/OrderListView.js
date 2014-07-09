@@ -7,13 +7,13 @@ define([
   'app/user',
   'app/core/views/ListView',
   'app/data/orderStatuses',
-  'app/orderStatuses/templates/_orderStatus'
+  'app/orderStatuses/util/renderOrderStatusLabel'
 ], function(
   t,
   user,
   ListView,
   orderStatuses,
-  renderOrderStatus
+  renderOrderStatusLabel
 ) {
   'use strict';
 
@@ -58,10 +58,7 @@ define([
     {
       return this.collection.toJSON().map(function(row)
       {
-        row.statusLabels = orderStatuses
-          .findAndFill(row.statuses)
-          .map(function(orderStatus) { return renderOrderStatus(orderStatus); })
-          .join('');
+        row.statusLabels = orderStatuses.findAndFill(row.statuses).map(renderOrderStatusLabel).join('');
 
         return row;
       });

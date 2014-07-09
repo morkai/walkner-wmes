@@ -7,13 +7,13 @@ define([
   'app/core/views/DetailsView',
   'app/data/orderStatuses',
   'app/orders/templates/details',
-  'app/orderStatuses/templates/_orderStatus'
+  'app/orderStatuses/util/renderOrderStatusLabel'
 ], function(
   t,
   DetailsView,
   orderStatuses,
   detailsTemplate,
-  renderOrderStatus
+  renderOrderStatusLabel
 ) {
   'use strict';
 
@@ -29,10 +29,7 @@ define([
     {
       var order = this.model.toJSON();
 
-      order.statusLabels = orderStatuses
-        .findAndFill(order.statuses)
-        .map(function(orderStatus) { return renderOrderStatus(orderStatus); })
-        .join('');
+      order.statusLabels = orderStatuses.findAndFill(order.statuses).map(renderOrderStatusLabel).join('');
 
       return {
         model: order,

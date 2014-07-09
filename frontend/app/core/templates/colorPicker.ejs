@@ -1,0 +1,7 @@
+<div class="form-group">
+  <label for="<%- idPrefix %>-<%- property %>" class="control-label"><%- typeof label === 'string' ? label : t('core', 'colorPicker:label') %></label>
+  <div class="input-group colorpicker-component" data-color="<%- value %>" data-color-format="hex">
+    <input id="<%- idPrefix %>-<%- property %>" class="form-control" name="<%- property %>" type="text" value="<%- value %>">
+    <span class="input-group-addon"><i style="background-color: <%- value %>"></i></span>
+  </div>
+</div>
