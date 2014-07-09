@@ -5,18 +5,17 @@
 'use strict';
 
 var lodash = require('lodash');
-var userInfo = require('../../../models/userInfo');
 var canManage = require('../canManage');
 var findOrCreate = require('./findOrCreate');
 
 module.exports = function setUpFteMasterCommands(app, fteModule)
 {
   var mongoose = app[fteModule.config.mongooseId];
-  var subdivisionsModule = app[fteModule.config.subdivisionsId];
+  var userModule = app[fteModule.config.userId];
   var FteMasterEntry = mongoose.model('FteMasterEntry');
 
   return {
-    findOrCreate: findOrCreate.bind(null, app, subdivisionsModule, FteMasterEntry),
+    findOrCreate: findOrCreate.bind(null, app, fteModule, FteMasterEntry),
     updateCount: function(socket, data, reply)
     {
       if (!lodash.isFunction(reply))
@@ -58,7 +57,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
           return reply(new Error('AUTH'));
         }
 
-        fteMasterEntry.updateCount(data, userInfo.createObject(user, socket), function(err)
+        fteMasterEntry.updateCount(data, userModule.createUserInfo(user, socket), function(err)
         {
           if (err)
           {
@@ -111,7 +110,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
           return reply(new Error('AUTH'));
         }
 
-        fteMasterEntry.updatePlan(data, userInfo.createObject(user, socket), function(err)
+        fteMasterEntry.updatePlan(data, userModule.createUserInfo(user, socket), function(err)
         {
           if (err)
           {
@@ -148,7 +147,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         return reply(new Error('AUTH'));
       }
 
-      var updater = userInfo.createObject(user, socket);
+      var updater = userModule.createUserInfo(user, socket);
 
       FteMasterEntry.addAbsentUser(data._id, data.user, updater, function(err)
       {
@@ -183,7 +182,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         return reply(new Error('AUTH'));
       }
 
-      var updater = userInfo.createObject(user, socket);
+      var updater = userModule.createUserInfo(user, socket);
 
       FteMasterEntry.removeAbsentUser(data._id, data.userId, updater, function(err)
       {

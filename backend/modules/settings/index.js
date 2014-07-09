@@ -5,13 +5,13 @@
 'use strict';
 
 var step = require('h5.step');
-var userInfo = require('../../models/userInfo');
 var setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
-  sioId: 'sio'
+  sioId: 'sio',
+  userId: 'user'
 };
 
 exports.start = function startSettingsModule(app, module)
@@ -20,7 +20,7 @@ exports.start = function startSettingsModule(app, module)
 
   if (!mongoose)
   {
-    throw new Error("mongoosem module is required!");
+    throw new Error("mongoose module is required!");
   }
 
   var Setting = mongoose.model('Setting');
@@ -103,10 +103,12 @@ exports.start = function startSettingsModule(app, module)
       return next(new Error('MISSING_VALUE'));
     }
 
+    var userModule = app[module.config.userId];
+
     module.update(
       req.body._id,
       req.body.value,
-      userInfo.createObject(req.session.user, req),
+      userModule ? userModule.createUserInfo(req.session.user, req) : null,
       function(err)
       {
         if (err)

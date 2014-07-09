@@ -7,7 +7,6 @@
 var inspect = require('util').inspect;
 var crypto = require('crypto');
 var lodash = require('lodash');
-var userInfo = require('../../models/userInfo');
 var logEntryHandlers = require('./logEntryHandlers');
 
 module.exports = function setUpProductionsCommands(app, productionModule)
@@ -100,7 +99,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
       }
 
       var logEntryList = [];
-      var creator = userInfo.createObject(socket.handshake.user, socket);
+      var creator = userModule.createUserInfo(socket.handshake.user, socket);
 
       logEntryStream.split('\n').forEach(function(logEntryJson)
       {

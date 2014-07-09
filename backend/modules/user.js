@@ -8,6 +8,7 @@ var os = require('os');
 var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
 var lodash = require('lodash');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 exports.DEFAULT_CONFIG = {
   sioId: 'sio',
@@ -43,6 +44,7 @@ exports.start = function startUserModule(app, module)
   module.auth = createAuthMiddleware;
   module.isLocalIpAddress = isLocalIpAddress;
   module.isAllowedTo = isAllowedTo;
+  module.createUserInfo = createUserInfo;
 
   app.onModuleReady([module.config.expressId, module.config.sioId], setUpSio);
 
@@ -170,6 +172,63 @@ exports.start = function startUserModule(app, module)
 
       return res.send(403);
     };
+  }
+
+  function createUserInfo(userData, addressData)
+  {
+    /**
+     * @name UserInfo
+     * @type {{id: string, ip: string, label: string}}
+     */
+    var userInfo = {
+      id: null,
+      ip: '',
+      label: ''
+    };
+
+    try
+    {
+      userInfo.id = ObjectId.createFromHexString(String(userData._id || userData.id));
+    }
+    catch (err) {}
+
+    if (typeof userData.label === 'string')
+    {
+      userInfo.label = userData.label;
+    }
+    else if (userData.firstName && userData.lastName)
+    {
+      userInfo.label = userData.lastName + ' ' + userData.firstName;
+    }
+    else
+    {
+      userInfo.label = userData.login || '?';
+    }
+
+    if (addressData)
+    {
+      if (addressData.headers && typeof addressData.headers['x-real-ip'] === 'string')
+      {
+        userInfo.ip = addressData.headers['x-real-ip'];
+      }
+      else if (addressData.socket && typeof addressData.socket.remoteAddress === 'string')
+      {
+        userInfo.ip = addressData.socket.remoteAddress;
+      }
+      else if (addressData.handshake
+        && addressData.handshake.address
+        && typeof addressData.handshake.address.address === 'string')
+      {
+        userInfo.ip = addressData.handshake.address.address;
+      }
+    }
+
+    if (userInfo.ip === '')
+    {
+      userInfo.ip = userData.ip || userData.ipAddress || '0.0.0.0';
+    }
+
+    return userInfo;
   }
 
   /**

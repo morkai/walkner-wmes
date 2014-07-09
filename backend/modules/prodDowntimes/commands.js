@@ -5,11 +5,11 @@
 'use strict';
 
 var lodash = require('lodash');
-var userInfo = require('../../models/userInfo');
 
 module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 {
   var sio = app[prodDowntimesModule.config.sioId];
+  var userModule = app[prodDowntimesModule.config.userId];
   var productionModule = app[prodDowntimesModule.config.productionId];
   var ProdLogEntry = app[prodDowntimesModule.config.mongooseId].model('ProdLogEntry');
 
@@ -54,7 +54,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
           return reply(new Error('NO_AUTH'));
         }
 
-        var corroborator = userInfo.createObject(user, socket);
+        var corroborator = userModule.createUserInfo(user, socket);
 
         if (lodash.isObject(data.corroborator) && lodash.isString(data.corroborator.cname))
         {

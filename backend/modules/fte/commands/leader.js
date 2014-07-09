@@ -5,18 +5,17 @@
 'use strict';
 
 var lodash = require('lodash');
-var userInfo = require('../../../models/userInfo');
 var canManage = require('../canManage');
 var findOrCreate = require('./findOrCreate');
 
 module.exports = function setUpFteLeaderCommands(app, fteModule)
 {
   var mongoose = app[fteModule.config.mongooseId];
-  var subdivisionsModule = app[fteModule.config.subdivisionsId];
+  var userModule = app[fteModule.config.userId];
   var FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
   return {
-    findOrCreate: findOrCreate.bind(null, app, subdivisionsModule, FteLeaderEntry),
+    findOrCreate: findOrCreate.bind(null, app, fteModule, FteLeaderEntry),
     updateCount: function(socket, data, reply)
     {
       if (!lodash.isFunction(reply))
@@ -57,7 +56,7 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
           return reply(new Error('AUTH'));
         }
 
-        fteLeaderEntry.updateCount(data, userInfo.createObject(user, socket), function(err)
+        fteLeaderEntry.updateCount(data, userModule.createUserInfo(user, socket), function(err)
         {
           if (err)
           {

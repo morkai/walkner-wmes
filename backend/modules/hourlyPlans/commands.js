@@ -6,13 +6,13 @@
 
 var moment = require('moment');
 var lodash = require('lodash');
-var userInfo = require('../../models/userInfo');
 var canManage = require('./canManage');
 
 module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 {
   var mongoose = app[hourlyPlansModule.config.mongooseId];
-  var divisions = app[hourlyPlansModule.config.divisionsId];
+  var userModule = app[hourlyPlansModule.config.userId];
+  var divisionsModule = app[hourlyPlansModule.config.divisionsId];
   var HourlyPlan = mongoose.model('HourlyPlan');
   
   app[hourlyPlansModule.config.sioId].sockets.on('connection', function(socket)
@@ -45,7 +45,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
     if (!shiftMoment.isValid()
       || !lodash.isString(data.division)
-      || !divisions.modelsById[data.division]
+      || !divisionsModule.modelsById[data.division]
       || !lodash.isNumber(data.shift))
     {
       return reply(new Error('INPUT'));
@@ -93,7 +93,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         );
       }
 
-      var creator = userInfo.createObject(user, socket);
+      var creator = userModule.createUserInfo(user, socket);
 
       HourlyPlan.createForShift(condition, creator, function(err, hourlyPlan)
       {
@@ -151,7 +151,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       var update = {$set: {
         updatedAt: new Date(),
-        updater: userInfo.createObject(user, socket)
+        updater: userModule.createUserInfo(user, socket)
       }};
       var field = 'flows.' + data.flowIndex;
 
@@ -221,7 +221,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       var update = {$set: {
         updatedAt: new Date(),
-        updater: userInfo.createObject(user, socket)
+        updater: userModule.createUserInfo(user, socket)
       }};
 
       update.$set['flows.' + data.flowIndex + '.noPlan'] = data.newValue;

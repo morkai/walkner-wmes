@@ -8,7 +8,6 @@ var step = require('h5.step');
 var moment = require('moment');
 var lodash = require('lodash');
 var crud = require('../express/crud');
-var userInfo = require('../../models/userInfo');
 var logEntryHandlers = require('../production/logEntryHandlers');
 
 module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
@@ -306,7 +305,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
         });
 
         var logEntry = ProdLogEntry.addDowntime(
-          prodShiftOrder, userInfo.createObject(req.session.user, req), req.body
+          prodShiftOrder, userModule.createUserInfo(req.session.user, req), req.body
         );
 
         if (!logEntry)
@@ -388,7 +387,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
         }
 
         var logEntry = ProdLogEntry.editDowntime(
-          prodDowntime, userInfo.createObject(req.session.user, req), req.body
+          prodDowntime, userModule.createUserInfo(req.session.user, req), req.body
         );
 
         if (!logEntry)
@@ -475,7 +474,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
         }
 
         var logEntry = ProdLogEntry.deleteDowntime(
-          prodDowntime, userInfo.createObject(req.session.user, req)
+          prodDowntime, userModule.createUserInfo(req.session.user, req)
         );
 
         logEntry.save(this.next());

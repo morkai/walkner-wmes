@@ -7,16 +7,15 @@
 var ObjectId = require('mongoose').Types.ObjectId;
 var lodash = require('lodash');
 var crud = require('../express/crud');
-var userInfo = require('../../models/userInfo');
 
 module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 {
   var express = app[pressWorksheetsModule.config.expressId];
-  var user = app[pressWorksheetsModule.config.userId];
+  var userModule = app[pressWorksheetsModule.config.userId];
   var PressWorksheet = app[pressWorksheetsModule.config.mongooseId].model('PressWorksheet');
 
-  var canView = user.auth('PRESS_WORKSHEETS:VIEW');
-  var canManage = user.auth('PRESS_WORKSHEETS:MANAGE', 'PROD_DATA:MANAGE');
+  var canView = userModule.auth('PRESS_WORKSHEETS:VIEW');
+  var canManage = userModule.auth('PRESS_WORKSHEETS:MANAGE', 'PROD_DATA:MANAGE');
 
   express.get(
     '/pressWorksheets', canView, limitToMine, crud.browseRoute.bind(null, app, PressWorksheet)
@@ -40,7 +39,9 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
     crud.editRoute.bind(null, app, PressWorksheet)
   );
 
-  express.delete('/pressWorksheets/:id', canManage, crud.deleteRoute.bind(null, app, PressWorksheet));
+  express.delete(
+    '/pressWorksheets/:id', canManage, crud.deleteRoute.bind(null, app, PressWorksheet)
+  );
 
   function findByRidRoute(req, res, next)
   {
@@ -86,7 +87,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
     req.body.date = date;
     req.body.createdAt = new Date();
-    req.body.creator = userInfo.createObject(req.session.user, req);
+    req.body.creator = userModule.createUserInfo(req.session.user, req);
 
     return next();
   }
@@ -110,7 +111,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
     req.body.date = date;
     req.body.updatedAt = new Date();
-    req.body.updater = userInfo.createObject(req.session.user, req);
+    req.body.updater = userModule.createUserInfo(req.session.user, req);
 
     PressWorksheet.findById(req.params.id, function(err, pressWorksheet)
     {

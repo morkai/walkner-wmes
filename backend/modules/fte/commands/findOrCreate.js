@@ -6,11 +6,13 @@
 
 var lodash = require('lodash');
 var moment = require('moment');
-var userInfo = require('../../../models/userInfo');
 var canManage = require('../canManage');
 
-module.exports = function(app, subdivisionsModule, FteEntry, socket, data, reply)
+module.exports = function(app, fteModule, FteEntry, socket, data, reply)
 {
+  var userModule = app[fteModule.config.userId];
+  var subdivisionsModule = app[fteModule.config.subdivisionsId];
+
   if (!lodash.isFunction(reply))
   {
     reply = function() {};
@@ -84,7 +86,7 @@ module.exports = function(app, subdivisionsModule, FteEntry, socket, data, reply
       );
     }
 
-    var creator = userInfo.createObject(user, socket);
+    var creator = userModule.createUserInfo(user, socket);
 
     FteEntry.createForShift(condition, creator, function(err, fteEntry)
     {

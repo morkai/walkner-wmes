@@ -6,7 +6,6 @@
 
 var step = require('h5.step');
 var moment = require('moment');
-var userInfo = require('../../models/userInfo');
 var crud = require('../express/crud');
 var limitOrgUnit = require('../prodLines/limitOrgUnit');
 var logEntryHandlers = require('../production/logEntryHandlers');
@@ -138,7 +137,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
         }
 
         var logEntry = ProdLogEntry.addShift(
-          userInfo.createObject(req.session.user, req), req.body
+          userModule.createUserInfo(req.session.user, req), req.body
         );
 
         if (!logEntry)
@@ -220,7 +219,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
         }
 
         var logEntry = ProdLogEntry.editShift(
-          prodShift, userInfo.createObject(req.session.user, req), req.body
+          prodShift, userModule.createUserInfo(req.session.user, req), req.body
         );
 
         if (!logEntry)
@@ -307,7 +306,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
         }
 
         var logEntry = ProdLogEntry.deleteShift(
-          prodShift, userInfo.createObject(req.session.user, req)
+          prodShift, userModule.createUserInfo(req.session.user, req)
         );
 
         logEntry.save(this.next());
