@@ -27,6 +27,7 @@ define([
   var COLOR_PROD_TASK = '#eeee00';
   var COLOR_WAREHOUSE = '#eeee00';
   var COLOR_PRODUCTIVITY = '#ffaa00';
+  var COLOR_PRODUCTIVITY_NO_WH = '#ee6600';
   var COLOR_QUANTITY_DONE = '#00aaff';
 
   return View.extend({
@@ -164,6 +165,15 @@ define([
             valueSuffix: '%'
           }
         }, {
+          name: t('reports', 'coeffs:productivityNoWh'),
+          color: COLOR_PRODUCTIVITY_NO_WH,
+          type: 'line',
+          yAxis: 1,
+          data: [],
+          tooltip: {
+            valueSuffix: '%'
+          }
+        }, {
           name: t('reports', 'coeffs:quantityDone'),
           color: COLOR_QUANTITY_DONE,
           type: 'line',
@@ -183,7 +193,8 @@ define([
       this.chart.xAxis[0].setCategories(chartData.categories, false);
       this.chart.series[0].setData(chartData.data, false);
       this.chart.series[1].setData(chartData.productivity, false);
-      this.chart.series[2].setData(chartData.quantityDone, true);
+      this.chart.series[2].setData(chartData.productivityNoWh, false);
+      this.chart.series[3].setData(chartData.quantityDone, true);
     },
 
     serializeChartData: function()
@@ -192,11 +203,15 @@ define([
       var chartData = {
         quantityDone: [],
         productivity: [],
+        productivityNoWh: [],
         categories: [],
         data: []
       };
 
-      if (dirIndir.productivity === 0 && dirIndir.direct === 0 && dirIndir.indirect === 0)
+      if (dirIndir.productivity === 0
+        && dirIndir.productivityNoWh === 0
+        && dirIndir.direct === 0
+        && dirIndir.indirect === 0)
       {
         return chartData;
       }
@@ -210,6 +225,12 @@ define([
         dirIndir.productivity,
         dirIndir.productivity,
         dirIndir.productivity
+      );
+
+      chartData.productivityNoWh.push(
+        dirIndir.productivityNoWh,
+        dirIndir.productivityNoWh,
+        dirIndir.productivityNoWh
       );
 
       chartData.categories.push(

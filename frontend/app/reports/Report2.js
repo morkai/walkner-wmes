@@ -34,6 +34,7 @@ define([
         },
         dirIndir: {
           productivity: 0,
+          productivityNoWh: 0,
           direct: 0,
           indirect: 0,
           indirectProdFlow: 0,
@@ -108,6 +109,7 @@ define([
     parseDirIndir: function(dirIndir)
     {
       dirIndir.productivity = Math.round(dirIndir.productivity * 100);
+      dirIndir.productivityNoWh = Math.round(dirIndir.productivityNoWh * 100);
       dirIndir.direct = Math.round(dirIndir.direct * 10) / 10;
       dirIndir.indirect = Math.round(dirIndir.indirect * 10) / 10;
 

@@ -33,6 +33,7 @@ module.exports = function(mongoose, options, done)
     dirIndir: {
       quantityDone: 0,
       productivity: 0,
+      productivityNoWh: 0,
       direct: 0,
       indirect: 0,
       indirectProdFlow: 0,
@@ -304,6 +305,7 @@ module.exports = function(mongoose, options, done)
     );
 
     results.dirIndir.productivity = util.round(doc.num / 8 / this.fteResults.totals.prodDenTotal);
+    results.dirIndir.productivityNoWh = util.round(doc.num / 8 / this.fteResults.totals.prodDenMaster);
     results.dirIndir.quantityDone = doc.qty;
 
     this.fteResults = null;
