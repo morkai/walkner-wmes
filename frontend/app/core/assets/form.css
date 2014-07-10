@@ -21,6 +21,12 @@
 .form-control[type="date"] {
   width: 11em;
 }
+.form-control[type="number"] {
+  text-align: right;
+}
+.form-control[type="number"].small {
+  width: 8em;
+}
 .form-actions {
   padding: 1em;
   margin-top: 1em;
