@@ -19,6 +19,9 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:description": "Opis",
+  "PROPERTY:color": "Kolor wartości",
+  "PROPERTY:refValue": "Referencja [FTE]",
+  "PROPERTY:refColor": "Kolor referencji",
 
   "FORM:ACTION:add": "Dodaj obszar odpowiedzialności",
   "FORM:ACTION:edit": "Edytuj obszar odpowiedzialności",

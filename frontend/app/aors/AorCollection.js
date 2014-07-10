@@ -15,7 +15,7 @@ define([
 
     model: Aor,
 
-    rqlQuery: 'select(name,description)&sort(name)'
+    rqlQuery: 'sort(name)'
 
   });
 });

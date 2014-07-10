@@ -29,7 +29,7 @@ define([
     {
       return new ListPage({
         collection: aors,
-        columns: ['name', 'description']
+        columns: ['name', 'description', 'color', 'refColor', 'refValue']
       });
     });
   });
@@ -51,12 +51,12 @@ define([
   router.map('/aors;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/aors/templates/form'],
-      function(AddFormPage, formTemplate)
+      ['app/core/pages/AddFormPage', 'app/aors/views/AorFormView'],
+      function(AddFormPage, AorFormView)
       {
         return new AddFormPage({
-          model: new Aor(),
-          formTemplate: formTemplate
+          FormView: AorFormView,
+          model: new Aor()
         });
       }
     );
@@ -65,12 +65,12 @@ define([
   router.map('/aors/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/aors/templates/form'],
-      function(EditFormPage, formTemplate)
+      ['app/core/pages/EditFormPage', 'app/aors/views/AorFormView'],
+      function(EditFormPage, AorFormView)
       {
         return new EditFormPage({
-          model: new Aor({_id: req.params.id}),
-          formTemplate: formTemplate
+          FormView: AorFormView,
+          model: new Aor({_id: req.params.id})
         });
       }
     );
