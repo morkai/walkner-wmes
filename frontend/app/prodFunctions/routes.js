@@ -25,17 +25,13 @@ define([
 
   router.map('/prodFunctions', canView, function()
   {
-    viewport.loadPage(
-      ['app/core/pages/ListPage', 'app/prodFunctions/views/decorateProdFunction'],
-      function(ListPage, decorateProdFunction)
-      {
-        return new ListPage({
-          collection: prodFunctions,
-          columns: ['_id', 'label', 'fteMasterPosition', 'direct', 'companies'],
-          serializeRow: decorateProdFunction
-        });
-      }
-    );
+    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    {
+      return new ListPage({
+        collection: prodFunctions,
+        columns: ['_id', 'label', 'fteMasterPosition', 'direct', 'dirIndirRatio', 'companies']
+      });
+    });
   });
 
   router.map('/prodFunctions/:id', function(req)

@@ -26,6 +26,10 @@ module.exports = function setupProdFunctionModel(app, mongoose)
       type: Boolean,
       default: false
     },
+    dirIndirRatio: {
+      type: Number,
+      default: 100
+    },
     companies: [{
       type: String,
       ref: 'Company'

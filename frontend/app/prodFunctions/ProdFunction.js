@@ -3,8 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../i18n',
+  '../data/companies',
   '../core/Model'
 ], function(
+  t,
+  companies,
   Model
 ) {
   'use strict';
@@ -29,6 +33,7 @@ define([
         label: '',
         fteMasterPosition: -1,
         direct: false,
+        dirIndirRatio: 100,
         companies: []
       };
     },
@@ -43,6 +48,34 @@ define([
       }
 
       return prodFunction;
+    },
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+
+      obj.dirIndirRatio = obj.direct
+        ? (obj.dirIndirRatio.toLocaleString() + ' / ' + (100 - obj.dirIndirRatio).toLocaleString())
+        : '-';
+
+      obj.direct = t('prodFunctions', 'direct:' + obj.direct);
+
+      obj.companies = (obj.companies || [])
+        .map(function(companyId)
+        {
+          var company = companies.get(companyId);
+
+          return company ? company.getLabel() : null;
+        })
+        .filter(function(label) { return !!label; })
+        .join('; ');
+
+      if (!obj.companies.length)
+      {
+        obj.companies = '-';
+      }
+
+      return obj;
     }
 
   });

@@ -20,6 +20,7 @@
   "PROPERTY:label": "Opis",
   "PROPERTY:fteMasterPosition": "Pozycja w FTE (produkcja)",
   "PROPERTY:direct": "DIRECT/INDIRECT",
+  "PROPERTY:dirIndirRatio": "DIR/INDIR [%]",
   "PROPERTY:companies": "Firmy",
 
   "direct:true": "DIRECT",

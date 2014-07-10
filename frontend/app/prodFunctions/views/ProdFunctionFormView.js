@@ -19,6 +19,10 @@ define([
 
     template: formTemplate,
 
+    events: _.extend({}, FormView.prototype.events, {
+      'change [name=direct]': 'toggleDirIndirRatio'
+    }),
+
     destroy: function()
     {
       this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
@@ -45,6 +49,8 @@ define([
           };
         })
       });
+
+      this.toggleDirIndirRatio();
     },
 
     serializeToForm: function()
@@ -52,6 +58,7 @@ define([
       var formData = this.model.toJSON();
 
       formData.companies = formData.companies.join(',');
+      formData.direct += '';
 
       return formData;
     },
@@ -61,6 +68,11 @@ define([
       formData.companies = (formData.companies || '').split(',');
 
       return formData;
+    },
+
+    toggleDirIndirRatio: function()
+    {
+      this.$id('dirIndirRatio').prop('readonly', this.$('[name=direct]:checked').val() === 'false');
     }
 
   });

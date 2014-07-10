@@ -4,11 +4,9 @@
 
 define([
   'app/core/views/DetailsView',
-  './decorateProdFunction',
   'app/prodFunctions/templates/details'
 ], function(
   DetailsView,
-  decorateProdFunction,
   detailsTemplate
 ) {
   'use strict';
@@ -19,11 +17,6 @@ define([
 
     localTopics: {
       'companies.synced': 'render'
-    },
-
-    serialize: function()
-    {
-      return {model: decorateProdFunction(this.model)};
     }
 
   });
