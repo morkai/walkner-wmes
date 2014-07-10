@@ -130,6 +130,8 @@ define([
     afterRender: function()
     {
       this.$chartsContainer = this.$('.reports-drillingCharts-container');
+
+      this.scheduleAutoRefresh();
     },
 
     defineModels: function()
@@ -244,6 +246,18 @@ define([
     refresh: function()
     {
       this.reports.forEach(function(report) { this.promised(report.fetch()); }, this);
+
+      this.scheduleAutoRefresh();
+    },
+
+    scheduleAutoRefresh: function()
+    {
+      clearTimeout(this.timers.autoRefresh);
+
+      if (this.query.isAutoMode())
+      {
+        this.timers.autoRefresh = setTimeout(this.refresh.bind(this), 10 * 60 * 1000);
+      }
     },
 
     drill: function(refresh)

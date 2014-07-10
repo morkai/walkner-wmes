@@ -162,6 +162,11 @@ define([
       }
 
       return firstShiftMoment.hours(6).minutes(0).seconds(0).milliseconds(0);
+    },
+
+    isAutoMode: function()
+    {
+      return !this.get('from') && !this.get('to');
     }
 
   });
