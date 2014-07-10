@@ -147,6 +147,18 @@ define([
           showEmpty: false
         }],
         legend: false,
+        plotOptions: {
+          line: {
+            marker: {
+              radius: 0,
+              states: {
+                hover: {
+                  radius: 3
+                }
+              }
+            }
+          }
+        },
         series: [{
           name: t('reports', 'dirIndir:seriesName'),
           type: 'column',
