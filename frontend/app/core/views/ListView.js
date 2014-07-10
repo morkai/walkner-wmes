@@ -121,7 +121,7 @@ define([
 
     serializeRow: function(model)
     {
-      return model.toJSON();
+      return typeof model.serializeRow === 'function' ? model.serializeRow() : model.toJSON();
     },
 
     beforeRender: function()
