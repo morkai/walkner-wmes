@@ -357,7 +357,7 @@ function handleFteMasterEntryStream(prodFlowMap, options, fteRatios, results, st
       for (var funcI = 0, funcL = task.functions.length; funcI < funcL; ++funcI)
       {
         var func = task.functions[funcI];
-        var isDirect = options.directProdFunctions[func.id];
+        var dirIndirRatio = options.directProdFunctions[func.id];
 
         for (var compI = 0, compL = func.companies.length; compI < compL; ++compI)
         {
@@ -370,7 +370,7 @@ function handleFteMasterEntryStream(prodFlowMap, options, fteRatios, results, st
             continue;
           }
 
-          addToDirIndir(results.dirIndir, isProdFlow, isDirect, func.id, count);
+          addToDirIndir(results.dirIndir, isProdFlow, dirIndirRatio, func.id, count);
 
           if (!isProdFlow)
           {
@@ -390,24 +390,38 @@ function handleFteMasterEntryStream(prodFlowMap, options, fteRatios, results, st
   });
 }
 
-function addToDirIndir(dirIndir, isProdFlow, isDirect, funcId, count)
+function addToDirIndir(dirIndir, isProdFlow, dirIndirRatio, funcId, count)
 {
-  if (isProdFlow && isDirect)
+  if (isProdFlow && dirIndirRatio > 0)
   {
-    dirIndir.direct += count;
+    var dirRatio = dirIndirRatio / 100;
+    var indirRatio = 1 - dirRatio;
+    var dirCount = count * dirRatio;
 
-    addToProperty(dirIndir.directByProdFunction, funcId, count);
+    dirIndir.direct += dirCount;
+
+    addToProperty(dirIndir.directByProdFunction, funcId, dirCount);
+
+    if (indirRatio > 0)
+    {
+      addToIndir(dirIndir, true, funcId, count * indirRatio);
+    }
   }
   else
   {
-    dirIndir.indirect += count;
+    addToIndir(dirIndir, isProdFlow, funcId, count);
+  }
+}
 
-    addToProperty(dirIndir.indirectByProdFunction, funcId, count);
+function addToIndir(dirIndir, isProdFlow, funcId, count)
+{
+  dirIndir.indirect += count;
 
-    if (isProdFlow)
-    {
-      dirIndir.indirectProdFlow += count;
-    }
+  addToProperty(dirIndir.indirectByProdFunction, funcId, count);
+
+  if (isProdFlow)
+  {
+    dirIndir.indirectProdFlow += count;
   }
 }
 

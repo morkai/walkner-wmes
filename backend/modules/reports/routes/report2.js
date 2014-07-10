@@ -75,7 +75,7 @@ function getDirectProdFunctions(allProdFunctions)
   {
     if (prodFunction.direct)
     {
-      prodFunctions[prodFunction._id] = true;
+      prodFunctions[prodFunction._id] = prodFunction.dirIndirRatio;
     }
   });
 
