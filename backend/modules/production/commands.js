@@ -13,6 +13,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 {
   var sio = app[productionModule.config.sioId];
   var mongoose = app[productionModule.config.mongooseId];
+  var userModule = app[productionModule.config.userId];
   var ProdLogEntry = mongoose.model('ProdLogEntry');
   var prodLines = app[productionModule.config.prodLinesId];
   var secretKeys = {};
