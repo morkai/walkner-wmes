@@ -15,12 +15,25 @@ module.exports = function setupAorModel(app, mongoose)
     description: {
       type: String,
       trim: true
+    },
+    color: {
+      type: String,
+      default: '#f08f44'
+    },
+    refColor: {
+      type: String,
+      default: '#ffa85c'
+    },
+    refValue: {
+      type: Number,
+      default: 0
     }
   }, {
     id: false
   });
 
   aorSchema.statics.TOPIC_PREFIX = 'aors';
+  aorSchema.statics.BROWSE_LIMIT = 1000;
 
   mongoose.model('Aor', aorSchema);
 };
