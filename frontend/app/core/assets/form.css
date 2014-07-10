@@ -82,3 +82,11 @@ input.no-controls::-webkit-clear-button,
 input.no-controls::-webkit-inner-spin-button {
   display: none;
 }
+.form-group-horizontal > .form-group {
+  vertical-align: top;
+  display: inline-block;
+  margin-right: 15px;
+}
+.form-group-horizontal > .form-group:last-child {
+  margin-bottom: 15px;
+}

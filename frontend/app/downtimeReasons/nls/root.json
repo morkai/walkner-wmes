@@ -25,6 +25,9 @@
     "PROPERTY:pressPosition": "Position in Worksheet (other)",
     "PROPERTY:scheduled": "Scheduled?",
     "PROPERTY:auto": "Auto confirmation?",
+    "PROPERTY:color": "Value color",
+    "PROPERTY:refValue": "Reference [FTE]",
+    "PROPERTY:refColor": "Reference color",
 
     "type:other": "Other",
     "type:malfunction": "Malfunction",

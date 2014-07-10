@@ -11,100 +11,68 @@
         <label for="<%- idPrefix %>-label" class="control-label"><%- t('downtimeReasons', 'PROPERTY:label') %></label>
         <input id="<%- idPrefix %>-label" class="form-control" type="text" name="label" required maxlength="100">
       </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-type-maintenance" class="control-label"><%- t('downtimeReasons', 'PROPERTY:type') %></label>
-        <div class="radio">
-          <label>
-            <input id="<%- idPrefix %>-type-maintenance" type="radio" name="type" value="maintenance">
-            <%- t('downtimeReasons', 'type:maintenance') %>
-          </label>
+      <div class="row">
+        <div class="col-md-2 form-group">
+          <label for="<%- idPrefix %>-type-maintenance" class="control-label"><%- t('downtimeReasons', 'PROPERTY:type') %></label>
+          <% ['maintenance', 'renovation', 'malfunction', 'adjusting', 'break', 'otherWorks', 'other'].forEach(function(type) { %>
+          <div class="radio">
+            <label>
+              <input id="<%- idPrefix %>-type-<%- type %>" type="radio" name="type" value="<%- type %>">
+              <%- t('downtimeReasons', 'type:' + type) %>
+            </label>
+          </div>
+          <% }) %>
         </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="type" value="renovation">
-            <%- t('downtimeReasons', 'type:renovation') %>
-          </label>
+        <div class="col-md-2 form-group">
+          <label for="<%- idPrefix %>-subdivisions-assembly" class="control-label"><%- t('downtimeReasons', 'PROPERTY:subdivisionTypes') %></label>
+          <div class="checkbox">
+            <label>
+              <input id="<%- idPrefix %>-subdivisions-assembly" type="checkbox" name="subdivisionTypes[]" value="assembly">
+              <%- t('downtimeReasons', 'subdivisionType:assembly') %>
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="subdivisionTypes[]" value="press">
+              <%- t('downtimeReasons', 'subdivisionType:press') %>
+            </label>
+          </div>
         </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="type" value="malfunction">
-            <%- t('downtimeReasons', 'type:malfunction') %>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="type" value="adjusting">
-            <%- t('downtimeReasons', 'type:adjusting') %>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="type" value="break">
-            <%- t('downtimeReasons', 'type:break') %>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="type" value="otherWorks">
-            <%- t('downtimeReasons', 'type:otherWorks') %>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="type" value="other">
-            <%- t('downtimeReasons', 'type:other') %>
-          </label>
+        <div class="col-md-2 form-group">
+          <label for="<%- idPrefix %>-scheduled-true" class="control-label"><%- t('downtimeReasons', 'PROPERTY:scheduled') %></label>
+          <% ['true', 'false', 'null'].forEach(function(scheduled) { %>
+          <div class="radio">
+            <label>
+              <input id="<%- idPrefix %>-scheduled-<%- scheduled %>" type="radio" name="scheduled" value="<%- scheduled %>">
+              <%- t('core', 'BOOL:' + scheduled) %>
+            </label>
+          </div>
+          <% }) %>
         </div>
       </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-subdivisions-assembly" class="control-label"><%- t('downtimeReasons', 'PROPERTY:subdivisionTypes') %></label>
-        <div class="checkbox">
-          <label>
-            <input id="<%- idPrefix %>-subdivisions-assembly" type="checkbox" name="subdivisionTypes[]" value="assembly">
-            <%- t('downtimeReasons', 'subdivisionType:assembly') %>
-          </label>
+      <div class="row">
+        <div class="col-md-2 form-group">
+          <label for="<%- idPrefix %>-opticsPosition" class="control-label"><%- t('downtimeReasons', 'PROPERTY:opticsPosition') %></label>
+          <input id="<%- idPrefix %>-opticsPosition" class="form-control" type="number" name="opticsPosition">
         </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="subdivisionTypes[]" value="press">
-            <%- t('downtimeReasons', 'subdivisionType:press') %>
-          </label>
+        <div class="col-md-2 form-group">
+          <label for="<%- idPrefix %>-pressPosition" class="control-label"><%- t('downtimeReasons', 'PROPERTY:pressPosition') %></label>
+          <input id="<%- idPrefix %>-pressPosition" class="form-control" type="number" name="pressPosition">
         </div>
       </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-opticsPosition" class="control-label"><%- t('downtimeReasons', 'PROPERTY:opticsPosition') %></label>
-        <input id="<%- idPrefix %>-opticsPosition" class="form-control" type="number" name="opticsPosition">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-pressPosition" class="control-label"><%- t('downtimeReasons', 'PROPERTY:pressPosition') %></label>
-        <input id="<%- idPrefix %>-pressPosition" class="form-control" type="number" name="pressPosition">
+      <%- renderColorPicker({idPrefix: idPrefix, property: 'color', label: t('downtimeReasons', 'PROPERTY:color'), value: model.color}) %>
+      <div class="form-group-horizontal">
+        <%- renderColorPicker({idPrefix: idPrefix, property: 'refColor', label: t('downtimeReasons', 'PROPERTY:refColor'), value: model.refColor}) %>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-refValue" class="control-label"><%- t('downtimeReasons', 'PROPERTY:refValue') %></label>
+          <input id="<%- idPrefix %>-refValue" class="form-control small" type="number" name="refValue" step="0.1">
+        </div>
       </div>
       <div class="form-group">
         <label class="control-label checkbox">
           <input id="<%- idPrefix %>-auto" type="checkbox" name="auto" value="true">
           <%- t('downtimeReasons', 'PROPERTY:auto') %>
         </label>
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-scheduled-yes" class="control-label"><%- t('downtimeReasons', 'PROPERTY:scheduled') %></label>
-        <div class="radio">
-          <label>
-            <input id="<%- idPrefix %>-type-yes" type="radio" name="scheduled" value="true">
-            <%- t('core', 'BOOL:true') %>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="scheduled" value="false">
-            <%- t('core', 'BOOL:false') %>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="scheduled" value="null">
-            <%- t('core', 'BOOL:null') %>
-          </label>
-        </div>
       </div>
     </div>
     <div class="panel-footer">

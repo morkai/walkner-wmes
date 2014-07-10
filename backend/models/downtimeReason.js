@@ -51,6 +51,18 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
     scheduled: {
       type: Boolean,
       default: null
+    },
+    color: {
+      type: String,
+      default: '#ff0000'
+    },
+    refColor: {
+      type: String,
+      default: '#cc0000'
+    },
+    refValue: {
+      type: Number,
+      default: 0
     }
   }, {
     id: false

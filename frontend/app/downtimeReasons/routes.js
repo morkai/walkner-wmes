@@ -14,7 +14,6 @@ define([
   '../core/pages/AddFormPage',
   '../core/pages/EditFormPage',
   '../core/pages/ActionFormPage',
-  './views/decorateDowntimeReason',
   './views/DowntimeReasonFormView',
   'app/downtimeReasons/templates/details',
   'i18n!app/nls/downtimeReasons'
@@ -30,7 +29,6 @@ define([
   AddFormPage,
   EditFormPage,
   ActionFormPage,
-  decorateDowntimeReason,
   DowntimeReasonFormView,
   detailsTemplate
 ) {
@@ -51,9 +49,11 @@ define([
         'opticsPosition',
         'pressPosition',
         'auto',
-        'scheduled'
-      ],
-      serializeRow: decorateDowntimeReason
+        'scheduled',
+        'color',
+        'refColor',
+        'refValue'
+      ]
     }));
   });
 
@@ -61,8 +61,7 @@ define([
   {
     viewport.showPage(new DetailsPage({
       model: new DowntimeReason({_id: req.params.id}),
-      detailsTemplate: detailsTemplate,
-      serializeDetails: decorateDowntimeReason
+      detailsTemplate: detailsTemplate
     }));
   });
 

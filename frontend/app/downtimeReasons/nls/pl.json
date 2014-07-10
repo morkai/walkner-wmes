@@ -24,6 +24,9 @@
   "PROPERTY:pressPosition": "Pozycja na karcie pracy (inne)",
   "PROPERTY:scheduled": "Planowany?",
   "PROPERTY:auto": "Automatyczne potwierdzanie?",
+  "PROPERTY:color": "Kolor wartości",
+  "PROPERTY:refValue": "Referencja [FTE]",
+  "PROPERTY:refColor": "Kolor referencji",
 
   "type:other": "Inny",
   "type:malfunction": "Awaria",

@@ -3,9 +3,13 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  '../core/Model'
+  '../i18n',
+  '../core/Model',
+  'app/core/templates/colorLabel'
 ], function(
-  Model
+  t,
+  Model,
+  colorLabelTemplate
 ) {
   'use strict';
 
@@ -32,8 +36,46 @@ define([
         opticsPosition: -1,
         pressPosition: -1,
         auto: false,
-        scheduled: false
+        scheduled: false,
+        color: '#ff0000',
+        refColor: '#aa0000',
+        refValue: 0
       };
+    },
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+
+      obj.scheduled = t('core', 'BOOL:' + obj.scheduled);
+      obj.auto = t('core', 'BOOL:' + obj.auto);
+      obj.type = t('downtimeReasons', 'type:' + obj.type);
+      obj.color = colorLabelTemplate({color: obj.color});
+      obj.refColor = colorLabelTemplate({color: obj.refColor});
+      obj.refValue = obj.refValue && obj.refValue.toLocaleString ? obj.refValue.toLocaleString() : '0';
+
+      if (!obj.subdivisionTypes || !obj.subdivisionTypes.length)
+      {
+        obj.subdivisionTypes = t('downtimeReasons', 'subdivisionType:none');
+      }
+      else
+      {
+        obj.subdivisionTypes = obj.subdivisionTypes
+          .map(function(subdivisionType) { return t('downtimeReasons', 'subdivisionType:' + subdivisionType); })
+          .join('; ');
+      }
+
+      return obj;
+    },
+
+    serializeDetails: function()
+    {
+      return this.serialize();
+    },
+
+    serializeRow: function()
+    {
+      return this.serialize();
     }
 
   });
