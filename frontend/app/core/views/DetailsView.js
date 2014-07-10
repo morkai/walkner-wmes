@@ -3,13 +3,9 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/viewport',
-  'app/i18n',
   '../View',
   '../util/onModelDeleted'
 ], function(
-  viewport,
-  t,
   View,
   onModelDeleted
 ) {
@@ -37,7 +33,7 @@ define([
 
     serializeDetails: function(model)
     {
-      return model.toJSON();
+      return typeof model.serializeDetails === 'function' ? model.serializeDetails() : model.toJSON();
     },
 
     beforeRender: function()
