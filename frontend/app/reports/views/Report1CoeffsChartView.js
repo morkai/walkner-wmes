@@ -203,6 +203,21 @@ define([
             }
           },
           {
+            name: t('reports', 'coeffs:productivityNoWh'),
+            color: '#ee6600',
+            type: 'line',
+            yAxis: 1,
+            data: chartData.productivityNoWh,
+            tooltip: {
+              valueSuffix: '%'
+            },
+            visible: this.model.query.get('interval') !== 'hour',
+            events: {
+              show: this.updateProductivityNoWhRef.bind(this),
+              hide: this.updateProductivityNoWhRef.bind(this)
+            }
+          },
+          {
             name: t('reports', 'coeffs:downtime'),
             color: 'rgba(255, 0, 0, .75)',
             borderColor: '#AC2925',
@@ -236,12 +251,14 @@ define([
       this.chart.series[0].update({marker: markerStyles}, false);
       this.chart.series[1].update({marker: markerStyles}, false);
       this.chart.series[2].update({marker: markerStyles, visible: visible}, false);
-      this.chart.series[3].update({marker: markerStyles}, false);
+      this.chart.series[3].update({marker: markerStyles, visible: visible}, false);
+      this.chart.series[4].update({marker: markerStyles}, false);
 
       this.chart.series[0].setData(chartData.quantityDone, false);
       this.chart.series[1].setData(chartData.efficiency, false);
       this.chart.series[2].setData(chartData.productivity, false);
-      this.chart.series[3].setData(chartData.downtime, true);
+      this.chart.series[3].setData(chartData.productivityNoWh, false);
+      this.chart.series[4].setData(chartData.downtime, true);
 
       this.updatePlotLines();
     },
@@ -255,6 +272,7 @@ define([
 
       this.updateEfficiencyRef();
       this.updateProductivityRef();
+      this.updateProductivityNoWhRef();
     },
 
     updatePlotLine: function(metric, yAxis, series, color, dashStyle)
@@ -295,6 +313,16 @@ define([
       {
         this.updatePlotLine(
           'productivity', this.chart.yAxis[1], this.chart.series[2], '#ffaa00', 'dash'
+        );
+      }
+    },
+
+    updateProductivityNoWhRef: function()
+    {
+      if (this.chart)
+      {
+        this.updatePlotLine(
+          'productivityNoWh', this.chart.yAxis[1], this.chart.series[3], '#ffaa00', 'dash'
         );
       }
     },
@@ -440,7 +468,9 @@ define([
     {
       var metricInfo = this.metricRefs.parseSettingId(metricRef.id);
 
-      if (metricInfo.metric !== 'efficiency' && metricInfo.metric !== 'productivity')
+      if (metricInfo.metric !== 'efficiency'
+        && metricInfo.metric !== 'productivity'
+        && metricInfo.metric !== 'productivityNoWh')
       {
         return;
       }

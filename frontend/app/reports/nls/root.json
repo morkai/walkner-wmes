@@ -18,6 +18,7 @@
     "coeffs:downtime": "Downtime",
     "coeffs:efficiency": "Efficiency",
     "coeffs:productivity": "Productivity",
+    "coeffs:productivityNoWh": "Prod. w/o WH",
     "metrics:clip:orderCount": "Order count",
     "metrics:clip:production": "CLIP Production",
     "metrics:clip:endToEnd": "CLIP End2End",
@@ -88,6 +89,7 @@
 
     "metricRefs:efficiency": "Efficiency",
     "metricRefs:productivity": "Productivity",
+    "metricRefs:productivityNoWh": "Prod. w/o WH",
     "metricRefs:overall": "ML",
     "metricRefs:overall:prod": "Assembly",
     "metricRefs:overall:press": "Press",

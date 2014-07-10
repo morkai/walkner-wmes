@@ -30,7 +30,8 @@ define([
           quantityDone: [],
           downtime: [],
           efficiency: [],
-          productivity: []
+          productivity: [],
+          productivityNoWh: []
         },
         downtimesByAor: [],
         downtimesByReason: []
@@ -79,7 +80,8 @@ define([
         quantityDone: [],
         downtime: [],
         efficiency: [],
-        productivity: []
+        productivity: [],
+        productivityNoWh: []
       };
 
       coeffsList.forEach(function(coeffs)
@@ -90,6 +92,7 @@ define([
         series.downtime.push({x: time, y: Math.round((coeffs.downtime || 0) * 100)});
         series.efficiency.push({x: time, y: Math.round((coeffs.efficiency || 0) * 100)});
         series.productivity.push({x: time, y: Math.round((coeffs.productivity || 0) * 100)});
+        series.productivityNoWh.push({x: time, y: Math.round((coeffs.productivityNoWh || 0) * 100)});
       });
 
       return series;
@@ -99,51 +102,53 @@ define([
     {
       var downtimesByAor = [];
 
-      if (downtimes)
+      if (!downtimes)
       {
-        Object.keys(downtimes).forEach(function(aorId)
-        {
-          var longText;
-          var shortText;
+        return downtimesByAor;
+      }
 
-          if (aorId === 'null')
+      Object.keys(downtimes).forEach(function(aorId)
+      {
+        var longText;
+        var shortText;
+
+        if (aorId === 'null')
+        {
+          longText = t('reports', 'downtimesByAor:press:longText');
+          shortText = t('reports', 'downtimesByAor:press:shortText');
+        }
+        else
+        {
+          var aor = aors.get(aorId);
+
+          if (aor)
           {
-            longText = t('reports', 'downtimesByAor:press:longText');
-            shortText = t('reports', 'downtimesByAor:press:shortText');
+            longText = aor.getLabel();
           }
           else
           {
-            var aor = aors.get(aorId);
-
-            if (aor)
-            {
-              longText = aor.getLabel();
-            }
-            else
-            {
-              longText = aorId;
-            }
-
-            var dashPos = longText.indexOf('-');
-
-            if (dashPos === -1)
-            {
-              shortText = longText > 13 ? (longText.substr(0, 10).trim() + '...') : longText;
-            }
-            else
-            {
-              shortText = longText.substr(0, dashPos).trim();
-            }
+            longText = aorId;
           }
 
-          downtimesByAor.push({
-            key: aorId,
-            longText: longText,
-            shortText: shortText,
-            value: Math.round(downtimes[aorId] * 100) / 100
-          });
+          var dashPos = longText.indexOf('-');
+
+          if (dashPos === -1)
+          {
+            shortText = longText > 13 ? (longText.substr(0, 10).trim() + '...') : longText;
+          }
+          else
+          {
+            shortText = longText.substr(0, dashPos).trim();
+          }
+        }
+
+        downtimesByAor.push({
+          key: aorId,
+          longText: longText,
+          shortText: shortText,
+          value: Math.round(downtimes[aorId] * 100) / 100
         });
-      }
+      });
 
       return downtimesByAor;
     },
@@ -152,20 +157,22 @@ define([
     {
       var downtimesByReason = [];
 
-      if (downtimes)
+      if (!downtimes)
       {
-        Object.keys(downtimes).forEach(function(reasonId)
-        {
-          var downtimeReason = downtimeReasons.get(reasonId);
-
-          downtimesByReason.push({
-            key: reasonId,
-            longText: downtimeReason ? downtimeReason.getLabel() : reasonId,
-            shortText: reasonId,
-            value: Math.round(downtimes[reasonId] * 100) / 100
-          });
-        });
+        return downtimesByReason;
       }
+
+      Object.keys(downtimes).forEach(function(reasonId)
+      {
+        var downtimeReason = downtimeReasons.get(reasonId);
+
+        downtimesByReason.push({
+          key: reasonId,
+          longText: downtimeReason ? downtimeReason.getLabel() : reasonId,
+          shortText: reasonId,
+          value: Math.round(downtimes[reasonId] * 100) / 100
+        });
+      });
 
       return downtimesByReason;
     },

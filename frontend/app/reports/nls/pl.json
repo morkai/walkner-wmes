@@ -17,6 +17,7 @@
   "coeffs:downtime": "Przestoje",
   "coeffs:efficiency": "Wydajność",
   "coeffs:productivity": "Produktywność",
+  "coeffs:productivityNoWh": "Prod. bez magazynu",
   "metrics:clip:orderCount": "Ilość zleceń",
   "metrics:clip:production": "CLIP Produkcja",
   "metrics:clip:endToEnd": "CLIP End2End",
@@ -88,6 +89,7 @@
 
   "metricRefs:efficiency": "Wydajność",
   "metricRefs:productivity": "Produktywność",
+  "metricRefs:productivityNoWh": "Prod. bez magazynu",
   "metricRefs:overall": "ML",
   "metricRefs:overall:prod": "Montaż",
   "metricRefs:overall:press": "Tłocznia",
