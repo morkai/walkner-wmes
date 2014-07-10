@@ -1,1 +1,1 @@
-<span class="label <%- className %>" style="background-color: <%- color %>" title="<%= title %>"><%= label %></span>
+<span class="label <%- typeof className === 'string' ? className : '' %>" style="background-color: <%- color %>" title="<%= typeof title === 'string' ? title : '' %>"><%= typeof label === 'string' ? label : color %></span>
