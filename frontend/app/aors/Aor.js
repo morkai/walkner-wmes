@@ -42,16 +42,6 @@ define([
       obj.refValue = obj.refValue && obj.refValue.toLocaleString ? obj.refValue.toLocaleString() : '0';
 
       return obj;
-    },
-
-    serializeDetails: function()
-    {
-      return this.serialize();
-    },
-
-    serializeRow: function()
-    {
-      return this.serialize();
     }
 
   });

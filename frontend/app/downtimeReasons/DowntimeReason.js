@@ -66,16 +66,6 @@ define([
       }
 
       return obj;
-    },
-
-    serializeDetails: function()
-    {
-      return this.serialize();
-    },
-
-    serializeRow: function()
-    {
-      return this.serialize();
     }
 
   });

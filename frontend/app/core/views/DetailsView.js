@@ -33,7 +33,17 @@ define([
 
     serializeDetails: function(model)
     {
-      return typeof model.serializeDetails === 'function' ? model.serializeDetails() : model.toJSON();
+      if (typeof model.serializeDetails === 'function')
+      {
+        return model.serializeDetails();
+      }
+
+      if (typeof model.serialize === 'function')
+      {
+        return model.serialize();
+      }
+
+      return model.toJSON();
     },
 
     beforeRender: function()
