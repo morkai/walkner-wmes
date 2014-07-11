@@ -110,16 +110,7 @@ define([
         var chartsView = this.getView({el: $chartsView[0]});
         var chartView = chartsView.getView({el: $chartView[0]});
 
-        this.$chartsContainer.toggleClass('is-fullscreen');
-
-        chartView.$el.toggleClass('is-fullscreen');
-
-        if (typeof chartView.onFullscreen === 'function')
-        {
-          chartView.onFullscreen(this.isFullscreen());
-        }
-
-        chartView.chart.reflow();
+        this.startFullscreen(chartView);
       }
     },
 
@@ -200,6 +191,29 @@ define([
     isFullscreen: function()
     {
       return this.$chartsContainer.hasClass('is-fullscreen');
+    },
+
+    startFullscreen: function(chartView)
+    {
+      this.$chartsContainer.toggleClass('is-fullscreen');
+
+      var isFullscreen = this.isFullscreen();
+      var height = '';
+
+      if (isFullscreen)
+      {
+        height = window.innerHeight - this.$chartsContainer.position().top - 10 + 'px';
+      }
+
+      this.$chartsContainer.css('min-height', height);
+      chartView.$el.toggleClass('is-fullscreen').css('height', height);
+
+      if (typeof chartView.onFullscreen === 'function')
+      {
+        chartView.onFullscreen(isFullscreen);
+      }
+
+      chartView.chart.reflow();
     },
 
     stopFullscreen: function()

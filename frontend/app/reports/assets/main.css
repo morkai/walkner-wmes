@@ -89,7 +89,11 @@
   -ms-user-select: none;
   user-select: none;
 }
+.is-fullscreen .reports-chart {
+  display: none;
+}
 .reports-chart.is-fullscreen {
+  display: block;
   position: absolute;
   top: 0;
   left: 0;
