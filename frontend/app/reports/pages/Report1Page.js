@@ -195,17 +195,25 @@ define([
 
     startFullscreen: function(chartView)
     {
-      this.$chartsContainer.toggleClass('is-fullscreen');
+      var $chartsContainer = this.$chartsContainer;
+      var chartsContainerEl = $chartsContainer[0];
+
+      $chartsContainer.toggleClass('is-fullscreen');
 
       var isFullscreen = this.isFullscreen();
       var height = '';
 
       if (isFullscreen)
       {
-        height = window.innerHeight - this.$chartsContainer.position().top - 10 + 'px';
+        height = window.innerHeight - $chartsContainer.position().top - 10 + 'px';
+
+        $chartsContainer.data('scrollLeft', chartsContainerEl.scrollLeft);
+        $chartsContainer.data('scrollTop', chartsContainerEl.ownerDocument.body.scrollTop);
+
+        chartsContainerEl.scrollLeft = 0;
       }
 
-      this.$chartsContainer.css('min-height', height);
+      $chartsContainer.css('min-height', height);
       chartView.$el.toggleClass('is-fullscreen').css('height', height);
 
       if (typeof chartView.onFullscreen === 'function')
@@ -214,6 +222,12 @@ define([
       }
 
       chartView.chart.reflow();
+
+      if (!isFullscreen)
+      {
+        chartsContainerEl.scrollLeft = $chartsContainer.data('scrollLeft');
+        chartsContainerEl.ownerDocument.body.scrollTop = $chartsContainer.data('scrollTop');
+      }
     },
 
     stopFullscreen: function()
