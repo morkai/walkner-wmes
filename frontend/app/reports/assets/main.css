@@ -148,6 +148,9 @@
 .reports-metricRefs-tab[data-metric="productivity"] > a {
   color: #fa0!important;
 }
+.reports-metricRefs-tab[data-metric="productivityNoWh"] > a {
+  color: #e60!important;
+}
 .reports-metricRefs-group:last-child > .form-group {
   margin-bottom: 0;
 }

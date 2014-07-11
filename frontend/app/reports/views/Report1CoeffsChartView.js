@@ -23,6 +23,12 @@ define([
 ) {
   'use strict';
 
+  var COLOR_QUANTITY_DONE = '#0af';
+  var COLOR_EFFICIENCY = '#0e0';
+  var COLOR_PRODUCTIVITY = '#fa0';
+  var COLOR_PRODUCTIVITY_NO_WH = '#e60';
+  var COLOR_DOWNTIME = 'rgba(255,0,0,.75)';
+
   return View.extend({
 
     className: function()
@@ -165,7 +171,7 @@ define([
         series: [
           {
             name: t('reports', 'coeffs:quantityDone'),
-            color: '#00aaff',
+            color: COLOR_QUANTITY_DONE,
             type: 'area',
             yAxis: 0,
             data: chartData.quantityDone,
@@ -175,7 +181,7 @@ define([
           },
           {
             name: t('reports', 'coeffs:efficiency'),
-            color: '#00ee00',
+            color: COLOR_EFFICIENCY,
             type: 'line',
             yAxis: 1,
             data: chartData.efficiency,
@@ -189,7 +195,7 @@ define([
           },
           {
             name: t('reports', 'coeffs:productivity'),
-            color: '#ffaa00',
+            color: COLOR_PRODUCTIVITY,
             type: 'line',
             yAxis: 1,
             data: chartData.productivity,
@@ -204,7 +210,7 @@ define([
           },
           {
             name: t('reports', 'coeffs:productivityNoWh'),
-            color: '#ee6600',
+            color: COLOR_PRODUCTIVITY_NO_WH,
             type: 'line',
             yAxis: 1,
             data: chartData.productivityNoWh,
@@ -219,8 +225,7 @@ define([
           },
           {
             name: t('reports', 'coeffs:downtime'),
-            color: 'rgba(255, 0, 0, .75)',
-            borderColor: '#AC2925',
+            color: COLOR_DOWNTIME,
             borderWidth: 0,
             type: 'column',
             yAxis: 1,
@@ -247,18 +252,19 @@ define([
 
       var visible = this.model.query.get('interval') !== 'hour';
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
+      var series = this.chart.series;
 
-      this.chart.series[0].update({marker: markerStyles}, false);
-      this.chart.series[1].update({marker: markerStyles}, false);
-      this.chart.series[2].update({marker: markerStyles, visible: visible}, false);
-      this.chart.series[3].update({marker: markerStyles, visible: visible}, false);
-      this.chart.series[4].update({marker: markerStyles}, false);
+      series[0].update({marker: markerStyles}, false);
+      series[1].update({marker: markerStyles}, false);
+      series[2].update({marker: markerStyles, visible: visible}, false);
+      series[3].update({marker: markerStyles, visible: visible}, false);
+      series[4].update({marker: markerStyles}, false);
 
-      this.chart.series[0].setData(chartData.quantityDone, false);
-      this.chart.series[1].setData(chartData.efficiency, false);
-      this.chart.series[2].setData(chartData.productivity, false);
-      this.chart.series[3].setData(chartData.productivityNoWh, false);
-      this.chart.series[4].setData(chartData.downtime, true);
+      series[0].setData(chartData.quantityDone, false);
+      series[1].setData(chartData.efficiency, false);
+      series[2].setData(chartData.productivity, false);
+      series[3].setData(chartData.productivityNoWh, false);
+      series[4].setData(chartData.downtime, true);
 
       this.updatePlotLines();
     },
@@ -301,9 +307,7 @@ define([
     {
       if (this.chart)
       {
-        this.updatePlotLine(
-          'efficiency', this.chart.yAxis[1], this.chart.series[1], '#00ee00', 'dash'
-        );
+        this.updatePlotLine('efficiency', this.chart.yAxis[1], this.chart.series[1], COLOR_EFFICIENCY, 'dash');
       }
     },
 
@@ -311,9 +315,7 @@ define([
     {
       if (this.chart)
       {
-        this.updatePlotLine(
-          'productivity', this.chart.yAxis[1], this.chart.series[2], '#ffaa00', 'dash'
-        );
+        this.updatePlotLine('productivity', this.chart.yAxis[1], this.chart.series[2], COLOR_PRODUCTIVITY, 'dash');
       }
     },
 
@@ -322,7 +324,7 @@ define([
       if (this.chart)
       {
         this.updatePlotLine(
-          'productivityNoWh', this.chart.yAxis[1], this.chart.series[3], '#ffaa00', 'dash'
+          'productivityNoWh', this.chart.yAxis[1], this.chart.series[3], COLOR_PRODUCTIVITY_NO_WH, 'dash'
         );
       }
     },
@@ -395,8 +397,7 @@ define([
       if (interval === 'shift')
       {
         data = {
-          shift:
-            t('core', 'SHIFT:' + (timeMoment.hours() === 6 ? 1 : timeMoment.hours() === 14 ? 2 : 3))
+          shift: t('core', 'SHIFT:' + (timeMoment.hours() === 6 ? 1 : timeMoment.hours() === 14 ? 2 : 3))
         };
       }
 
@@ -468,13 +469,6 @@ define([
     {
       var metricInfo = this.metricRefs.parseSettingId(metricRef.id);
 
-      if (metricInfo.metric !== 'efficiency'
-        && metricInfo.metric !== 'productivity'
-        && metricInfo.metric !== 'productivityNoWh')
-      {
-        return;
-      }
-
       if (metricInfo.orgUnit !== this.getMetricRefOrgUnitId())
       {
         return;
@@ -484,9 +478,13 @@ define([
       {
         this.updateEfficiencyRef();
       }
-      else
+      else if (metricInfo.metric === 'productivity')
       {
         this.updateProductivityRef();
+      }
+      else if (metricInfo.metric === 'productivityNoWh')
+      {
+        this.updateProductivityNoWhRef();
       }
     }
 
