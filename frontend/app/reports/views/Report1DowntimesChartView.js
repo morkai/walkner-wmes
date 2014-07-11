@@ -6,13 +6,15 @@ define([
   'app/highcharts',
   'app/i18n',
   'app/core/View',
-  'app/data/colorFactory',
+  'app/data/downtimeReasons',
+  'app/data/aors',
   './wordwrapTooltip'
 ], function(
   Highcharts,
   t,
   View,
-  colorFactory,
+  downtimeReasons,
+  aors,
   wordwrapTooltip
 ) {
   'use strict';
@@ -22,6 +24,11 @@ define([
     className: function()
     {
       return 'reports-chart reports-1-' + this.options.attrName;
+    },
+
+    localTopics: {
+      'aors.synced': 'render',
+      'downtimeReasons.synced': 'render'
     },
 
     initialize: function()
@@ -90,14 +97,26 @@ define([
           title: false
         },
         legend: false,
+        tooltip: {
+          shared: true,
+          valueSuffix: ' FTE',
+          valueDecimals: 2
+        },
+        plotOptions: {
+          series: {
+            groupPadding: 0.1
+          }
+        },
         series: [{
           name: t('reports', this.options.attrName + ':seriesName'),
-          color: '#ff0000',
+          color: '#f00',
           type: 'column',
-          data: chartData.data,
-          tooltip: {
-            valueSuffix: ' FTE'
-          }
+          data: chartData.data
+        }, {
+          name: t('reports', 'referenceValue'),
+          color: '#c00',
+          type: 'column',
+          data: chartData.reference
         }]
       });
     },
@@ -107,14 +126,16 @@ define([
       var chartData = this.serializeChartData();
 
       this.chart.xAxis[0].setCategories(chartData.categories, false);
-      this.chart.series[0].setData(chartData.data, true);
+      this.chart.series[0].setData(chartData.data, false);
+      this.chart.series[1].setData(chartData.reference, true);
     },
 
     serializeChartData: function()
     {
       var chartData = {
         categories: [],
-        data: []
+        data: [],
+        reference: []
       };
       var attrName = this.options.attrName;
       var downtimes = this.model.get(attrName);
@@ -134,17 +155,49 @@ define([
         }
       });
 
+      var attrCollection = attrName === 'downtimesByAor' ? aors : downtimeReasons;
+      var limit = this.$el.hasClass('is-fullscreen') ? Infinity : 10;
+
       downtimes.forEach(function(downtime)
       {
-        if (downtime.value * 100 / max > 0.5)
+        if (downtime.value * 100 / max <= 0.5)
         {
-          chartData.categories.push(downtime.shortText);
+          return;
+        }
+
+        if (chartData.categories.length === limit)
+        {
+          chartData.categories.push('...');
           chartData.data.push({
-            name: wordwrapTooltip(downtime.longText),
-            y: downtime.value,
-            color: colorFactory.getColor(attrName, downtime.key)
+            name: t('reports', 'otherSeries'),
+            y: 0,
+            color: '#000'
+          });
+          chartData.reference.push({
+            y: null
           });
         }
+
+        if (chartData.categories.length > limit)
+        {
+          chartData.data[limit].y += downtime.value;
+
+          return;
+        }
+
+        var attrModel = attrCollection.get(downtime.key);
+
+        chartData.categories.push(downtime.shortText);
+        chartData.data.push({
+          name: wordwrapTooltip(downtime.longText),
+          y: downtime.value,
+          color: attrModel ? attrModel.get('color') : '#f00'
+        });
+        chartData.reference.push({
+          name: t('reports', 'referenceValue'),
+          y: attrModel ? (attrModel.get('refValue') || null) : null,
+          color: attrModel ? attrModel.get('refColor') : '#c00'
+        });
       });
 
       return chartData;
@@ -187,13 +240,15 @@ define([
         this.chart.setTitle(
           {text: this.model.getOrgUnitTitle()},
           {text: t('reports', this.options.attrName + ':title')},
-          true
+          false
         );
       }
       else
       {
-        this.chart.setTitle({text: t('reports', this.options.attrName + ':title')}, {text: null}, true);
+        this.chart.setTitle({text: t('reports', this.options.attrName + ':title')}, {text: null}, false);
       }
+
+      this.updateChart();
     }
 
   });

@@ -34,6 +34,8 @@
     "downtimesByReason:seriesName": "Downtime",
 
     "quantitySuffix": " items",
+    "referenceValue": "Reference value",
+    "otherSeries": "Other",
 
     "dirIndir:title": "DIR/INDIR",
     "dirIndir:seriesName": "FTE",

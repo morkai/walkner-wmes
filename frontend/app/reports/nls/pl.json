@@ -33,6 +33,8 @@
   "downtimesByReason:seriesName": "Czas przestojów",
 
   "quantitySuffix": " szt.",
+  "referenceValue": "Wartość referencyjna",
+  "otherSeries": "Inne",
 
   "dirIndir:title": "DIR/INDIR",
   "dirIndir:seriesName": "FTE",
