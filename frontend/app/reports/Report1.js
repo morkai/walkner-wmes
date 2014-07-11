@@ -29,6 +29,8 @@ define([
         coeffs: {
           quantityDone: [],
           downtime: [],
+          scheduledDowntime: [],
+          unscheduledDowntime: [],
           efficiency: [],
           productivity: [],
           productivityNoWh: []
@@ -67,10 +69,8 @@ define([
     {
       return {
         coeffs: this.parseCoeffs(report.coeffs),
-        downtimesByAor:
-          this.parseDowntimesByAor(report.downtimes.byAor).sort(this.sortByValueDesc),
-        downtimesByReason:
-          this.parseDowntimesByReason(report.downtimes.byReason).sort(this.sortByValueDesc)
+        downtimesByAor: this.parseDowntimesByAor(report.downtimes.byAor).sort(this.sortByValueDesc),
+        downtimesByReason: this.parseDowntimesByReason(report.downtimes.byReason).sort(this.sortByValueDesc)
       };
     },
 
@@ -79,6 +79,8 @@ define([
       var series = {
         quantityDone: [],
         downtime: [],
+        scheduledDowntime: [],
+        unscheduledDowntime: [],
         efficiency: [],
         productivity: [],
         productivityNoWh: []
@@ -90,6 +92,8 @@ define([
 
         series.quantityDone.push({x: time, y: coeffs.quantityDone || 0});
         series.downtime.push({x: time, y: Math.round((coeffs.downtime || 0) * 100)});
+        series.scheduledDowntime.push({x: time, y: Math.round((coeffs.scheduledDowntime || 0) * 100)});
+        series.unscheduledDowntime.push({x: time, y: Math.round((coeffs.unscheduledDowntime || 0) * 100)});
         series.efficiency.push({x: time, y: Math.round((coeffs.efficiency || 0) * 100)});
         series.productivity.push({x: time, y: Math.round((coeffs.productivity || 0) * 100)});
         series.productivityNoWh.push({x: time, y: Math.round((coeffs.productivityNoWh || 0) * 100)});

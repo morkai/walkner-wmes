@@ -38,9 +38,7 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
     prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
     prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models),
     orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
-    ignoredDowntimeReasons: getIgnoredDowntimeReasons(
-      app[reportsModule.config.downtimeReasonsId].models
-    )
+    downtimeReasons: getDowntimeReasons(app[reportsModule.config.downtimeReasonsId].models)
   };
 
   if (isNaN(options.fromTime) || isNaN(options.toTime))
@@ -60,10 +58,24 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
   });
 };
 
-function getIgnoredDowntimeReasons(allDowntimeReasons)
+function getDowntimeReasons(allDowntimeReasons)
 {
-  return helpers.idToStr(allDowntimeReasons.filter(function(downtimeReason)
+  var downtimeReasons = {
+    breaks: {},
+    schedule: {}
+  };
+
+  allDowntimeReasons.forEach(function(downtimeReason)
   {
-    return downtimeReason.type === 'break';
-  }));
+    if (downtimeReason.type === 'break')
+    {
+      downtimeReasons.breaks[downtimeReason._id] = true;
+    }
+    else
+    {
+      downtimeReasons.schedule[downtimeReason._id] = downtimeReason.scheduled;
+    }
+  });
+
+  return downtimeReasons;
 }

@@ -170,6 +170,7 @@ define([
         },
         series: [
           {
+            id: 'quantityDone',
             name: t('reports', 'coeffs:quantityDone'),
             color: COLOR_QUANTITY_DONE,
             type: 'area',
@@ -180,6 +181,7 @@ define([
             }
           },
           {
+            id: 'efficiency',
             name: t('reports', 'coeffs:efficiency'),
             color: COLOR_EFFICIENCY,
             type: 'line',
@@ -194,6 +196,7 @@ define([
             }
           },
           {
+            id: 'productivity',
             name: t('reports', 'coeffs:productivity'),
             color: COLOR_PRODUCTIVITY,
             type: 'line',
@@ -209,6 +212,7 @@ define([
             }
           },
           {
+            id: 'productivityNoWh',
             name: t('reports', 'coeffs:productivityNoWh'),
             color: COLOR_PRODUCTIVITY_NO_WH,
             type: 'line',
@@ -224,12 +228,25 @@ define([
             }
           },
           {
-            name: t('reports', 'coeffs:downtime'),
+            id: 'scheduledDowntime',
+            name: t('reports', 'coeffs:scheduledDowntime'),
             color: COLOR_DOWNTIME,
             borderWidth: 0,
             type: 'column',
             yAxis: 1,
-            data: chartData.downtime,
+            data: chartData.scheduledDowntime,
+            tooltip: {
+              valueSuffix: '%'
+            }
+          },
+          {
+            id: 'unscheduledDowntime',
+            name: t('reports', 'coeffs:unscheduledDowntime'),
+            color: COLOR_DOWNTIME,
+            borderWidth: 0,
+            type: 'column',
+            yAxis: 1,
+            data: chartData.unscheduledDowntime,
             tooltip: {
               valueSuffix: '%'
             }
@@ -259,12 +276,14 @@ define([
       series[2].update({marker: markerStyles, visible: visible}, false);
       series[3].update({marker: markerStyles, visible: visible}, false);
       series[4].update({marker: markerStyles}, false);
+      series[5].update({marker: markerStyles}, false);
 
       series[0].setData(chartData.quantityDone, false);
       series[1].setData(chartData.efficiency, false);
       series[2].setData(chartData.productivity, false);
       series[3].setData(chartData.productivityNoWh, false);
-      series[4].setData(chartData.downtime, true);
+      series[4].setData(chartData.scheduledDowntime, false);
+      series[5].setData(chartData.unscheduledDowntime, true);
 
       this.updatePlotLines();
     },
@@ -281,52 +300,57 @@ define([
       this.updateProductivityNoWhRef();
     },
 
-    updatePlotLine: function(metric, yAxis, series, color, dashStyle)
+    updatePlotLine: function(metric, dashStyle)
     {
-      yAxis.removePlotLine(metric);
-
-      if (series.visible)
+      if (!this.chart)
       {
-        var metricRef = this.getMetricRef(metric);
-
-        if (metricRef)
-        {
-          yAxis.addPlotLine({
-            id: metric,
-            color: color,
-            dashStyle: dashStyle,
-            value: metricRef,
-            width: 2,
-            zIndex: 4
-          });
-        }
+        return;
       }
+
+      var series = this.chart.get(metric);
+
+      if (!series)
+      {
+        return;
+      }
+
+      series.yAxis.removePlotLine(metric);
+
+      if (!series.visible)
+      {
+        return;
+      }
+
+      var metricRef = this.getMetricRef(metric);
+
+      if (!metricRef)
+      {
+        return;
+      }
+
+      series.yAxis.addPlotLine({
+        id: metric,
+        color: series.color,
+        dashStyle: dashStyle || 'dash',
+        value: metricRef,
+        width: 2,
+        zIndex: 4
+      });
     },
 
     updateEfficiencyRef: function()
     {
-      if (this.chart)
-      {
-        this.updatePlotLine('efficiency', this.chart.yAxis[1], this.chart.series[1], COLOR_EFFICIENCY, 'dash');
-      }
+      this.updatePlotLine('efficiency');
     },
 
     updateProductivityRef: function()
     {
-      if (this.chart)
-      {
-        this.updatePlotLine('productivity', this.chart.yAxis[1], this.chart.series[2], COLOR_PRODUCTIVITY, 'dash');
-      }
+      this.updatePlotLine('productivity');
     },
 
     updateProductivityNoWhRef: function()
     {
-      if (this.chart)
-      {
-        this.updatePlotLine(
-          'productivityNoWh', this.chart.yAxis[1], this.chart.series[3], COLOR_PRODUCTIVITY_NO_WH, 'dash'
-        );
-      }
+      this.updatePlotLine('productivityNoWh');
     },
 
     getMetricRef: function(metric)
@@ -469,22 +493,9 @@ define([
     {
       var metricInfo = this.metricRefs.parseSettingId(metricRef.id);
 
-      if (metricInfo.orgUnit !== this.getMetricRefOrgUnitId())
+      if (metricInfo.orgUnit === this.getMetricRefOrgUnitId())
       {
-        return;
-      }
-
-      if (metricInfo.metric === 'efficiency')
-      {
-        this.updateEfficiencyRef();
-      }
-      else if (metricInfo.metric === 'productivity')
-      {
-        this.updateProductivityRef();
-      }
-      else if (metricInfo.metric === 'productivityNoWh')
-      {
-        this.updateProductivityNoWhRef();
+        this.updatePlotLine(metricInfo.metric);
       }
     }
 

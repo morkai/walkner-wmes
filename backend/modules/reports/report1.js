@@ -49,11 +49,6 @@ module.exports = function(mongoose, options, done)
     }
   );
 
-  function isIgnoredDowntime(prodDowntime)
-  {
-    return options.ignoredDowntimeReasons.indexOf(prodDowntime.reason) !== -1;
-  }
-
   function createConditions()
   {
     var conditions = {
@@ -118,8 +113,7 @@ module.exports = function(mongoose, options, done)
       return this.done(done, err);
     }
 
-    var endTime =
-      Math.min(moment().minutes(59).seconds(59).milliseconds(999).valueOf(), options.toTime);
+    var endTime = Math.min(moment().minutes(59).seconds(59).milliseconds(999).valueOf(), options.toTime);
     var groupedQuantitiesDone = {};
 
     prodShifts.forEach(function(prodShift)
@@ -208,8 +202,7 @@ module.exports = function(mongoose, options, done)
 
     prodDowntimes.forEach(function(prodDowntime)
     {
-      var duration =
-        (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
+      var duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
       if (duration <= 0)
       {
@@ -264,9 +257,7 @@ module.exports = function(mongoose, options, done)
     }
 
     this.orderToWorkerCount = {};
-    this.groupedProdShiftOrders = groupProdShiftOrders(
-      prodShiftOrders, this.orderToDowntimes, this.orderToWorkerCount
-    );
+    this.groupedProdShiftOrders = groupProdShiftOrders(prodShiftOrders, this.orderToDowntimes, this.orderToWorkerCount);
 
     setImmediate(this.next());
   }
@@ -284,15 +275,18 @@ module.exports = function(mongoose, options, done)
         count: 0,
         duration: 0,
         breakCount: 0,
-        breakDuration: 0
+        breakDuration: 0,
+        scheduledCount: 0,
+        scheduledDuration: 0,
+        unscheduledCount: 0,
+        unscheduledDuration: 0
       };
 
       orderToDowntimes[key].forEach(function(prodDowntime)
       {
-        var duration =
-          (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
+        var duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
-        if (isIgnoredDowntime(prodDowntime))
+        if (options.downtimeReasons.breaks[prodDowntime.reason])
         {
           summary.breakCount += 1;
           summary.breakDuration += duration;
@@ -301,6 +295,19 @@ module.exports = function(mongoose, options, done)
         {
           summary.count += 1;
           summary.duration += duration;
+
+          var schedule = options.downtimeReasons.schedule[prodDowntime.reason];
+
+          if (schedule === true)
+          {
+            summary.scheduledCount += 1;
+            summary.scheduledDuration += duration;
+          }
+          else if (schedule === false)
+          {
+            summary.unscheduledCount += 1;
+            summary.unscheduledDuration += duration;
+          }
 
           var workerCount = orderToWorkerCount[prodDowntime.prodShiftOrder];
 
@@ -617,10 +624,14 @@ module.exports = function(mongoose, options, done)
     var orderCount = 0;
     var downtimeCount = 0;
     var breakCount = 0;
+    var scheduledCount = 0;
+    var unscheduledCount = 0;
     var effNum = 0;
     var effDen = 0;
     var dtNum = 0;
     var dtDen = 0;
+    var scheduledDtNum = 0;
+    var unscheduledDtNum = 0;
     var lastOrderFinishedAt;
 
     orders.forEach(function(order)
@@ -638,9 +649,13 @@ module.exports = function(mongoose, options, done)
 
         dtNum += orderDowntime.duration * workerCount;
         dtDen += workerCount;
+        scheduledDtNum += orderDowntime.scheduledDuration * workerCount;
+        unscheduledDtNum += orderDowntime.unscheduledDuration * workerCount;
 
         downtimeCount += orderDowntime.count;
         breakCount += orderDowntime.breakCount;
+        scheduledCount += orderDowntime.scheduledCount;
+        unscheduledCount += orderDowntime.unscheduledCount;
       }
 
       effNum += laborTime / 100 * totalQuantity;
@@ -669,14 +684,15 @@ module.exports = function(mongoose, options, done)
         var startOfHour = parseInt(groupKey, 10);
         var endOfHour = startOfHour + 3599999;
 
-        coeffs.efficiency *=
-          (lastOrderFinishedAt.getTime() - startOfHour) / (endOfHour - startOfHour);
+        coeffs.efficiency *= (lastOrderFinishedAt.getTime() - startOfHour) / (endOfHour - startOfHour);
       }
     }
 
     if (dtNum && dtDen)
     {
       coeffs.downtime = util.round(dtNum / 8 / dtDen);
+      coeffs.scheduledDowntime = util.round(scheduledDtNum / 8 / dtDen);
+      coeffs.unscheduledDowntime = util.round(unscheduledDtNum / 8 / dtDen);
     }
 
     if (effNum && fteGroupResult && fteGroupResult.prodDenTotal)
