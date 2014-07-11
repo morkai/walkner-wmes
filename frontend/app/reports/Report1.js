@@ -7,12 +7,14 @@ define([
   '../i18n',
   '../data/aors',
   '../data/downtimeReasons',
+  '../data/views/renderOrgUnitPath',
   '../core/Model'
 ], function(
   _,
   t,
   aors,
   downtimeReasons,
+  renderOrgUnitPath,
   Model
 ) {
   'use strict';
@@ -184,6 +186,25 @@ define([
     sortByValueDesc: function(a, b)
     {
       return b.value - a.value;
+    },
+
+    getOrgUnitTitle: function()
+    {
+      var orgUnitType = this.get('orgUnitType');
+
+      if (!orgUnitType)
+      {
+        return t('reports', 'charts:title:overall');
+      }
+
+      var orgUnit = this.get('orgUnit');
+
+      if (orgUnitType === 'subdivision')
+      {
+        return renderOrgUnitPath(orgUnit, false, false);
+      }
+
+      return orgUnit.getLabel();
     }
 
   });

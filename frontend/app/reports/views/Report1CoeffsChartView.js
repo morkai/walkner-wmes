@@ -3,23 +3,17 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
-  'jquery',
   'app/time',
   'app/i18n',
+  'app/highcharts',
   'app/core/View',
-  'app/data/orgUnits',
-  'app/data/views/renderOrgUnitPath',
-  'app/highcharts'
+  'app/data/orgUnits'
 ], function(
-  _,
-  $,
   time,
   t,
+  Highcharts,
   View,
-  orgUnits,
-  renderOrgUnitPath,
-  Highcharts
+  orgUnits
 ) {
   'use strict';
 
@@ -92,6 +86,7 @@ define([
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
+          zoomType: null,
           events: {
             selection: function(e)
             {
@@ -109,7 +104,7 @@ define([
         },
         title: {
           useHTML: true,
-          text: this.getTitle()
+          text: this.model.getOrgUnitTitle()
         },
         noData: {},
         xAxis: {
@@ -135,7 +130,7 @@ define([
           {
             var str = '<b>' + formatTooltipHeader(this.x) +'</b><table>';
 
-            $.each(this.points, function(i, point)
+            this.points.forEach(function(point)
             {
               str += '<tr><td style="color: ' + point.series.color + '">'
                 + point.series.name + ':</td><td>'
@@ -149,9 +144,7 @@ define([
           }
         },
         legend: {
-          layout: 'horizontal',
-          align: 'center',
-          verticalAlign: 'bottom'
+          enabled: false
         },
         plotOptions: {
           area: {
@@ -438,25 +431,6 @@ define([
           }
         }
       };
-    },
-
-    getTitle: function()
-    {
-      var orgUnitType = this.model.get('orgUnitType');
-
-      if (!orgUnitType)
-      {
-        return t('reports', 'charts:title:overall');
-      }
-
-      var orgUnit = this.model.get('orgUnit');
-
-      if (orgUnitType === 'subdivision')
-      {
-        return renderOrgUnitPath(orgUnit, false, false);
-      }
-
-      return orgUnit.getLabel();
     },
 
     onModelLoading: function()

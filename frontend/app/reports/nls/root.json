@@ -16,6 +16,8 @@
 
     "coeffs:quantityDone": "Items",
     "coeffs:downtime": "Downtime",
+    "coeffs:scheduledDowntime": "Scheduled downtime",
+    "coeffs:unscheduledDowntime": "Unscheduled downtime",
     "coeffs:efficiency": "Efficiency",
     "coeffs:productivity": "Productivity",
     "coeffs:productivityNoWh": "Prod. w/o WH",

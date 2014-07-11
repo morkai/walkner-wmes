@@ -90,8 +90,36 @@ define([
       {
         if (!e.ctrlKey && e.button === 0)
         {
-          this.changeOrgUnit(this.$(e.target).closest('.reports-drillingCharts'));
+          var $chartsView = this.$(e.target).closest('.reports-drillingCharts');
+
+          if (!this.isFullscreen())
+          {
+            this.changeOrgUnit($chartsView);
+          }
         }
+      },
+      'dblclick .highcharts-container': function(e)
+      {
+        if (e.target.classList.contains('highcharts-title'))
+        {
+          return;
+        }
+
+        var $chartView = this.$(e.target).closest('.reports-chart');
+        var $chartsView = $chartView.closest('.reports-drillingCharts');
+        var chartsView = this.getView({el: $chartsView[0]});
+        var chartView = chartsView.getView({el: $chartView[0]});
+
+        this.$chartsContainer.toggleClass('is-fullscreen');
+
+        chartView.$el.toggleClass('is-fullscreen');
+
+        if (typeof chartView.onFullscreen === 'function')
+        {
+          chartView.onFullscreen(this.isFullscreen());
+        }
+
+        chartView.chart.reflow();
       }
     },
 
@@ -169,22 +197,32 @@ define([
       return when(this.metricRefs.fetch({reset: true}));
     },
 
+    isFullscreen: function()
+    {
+      return this.$chartsContainer.hasClass('is-fullscreen');
+    },
+
+    stopFullscreen: function()
+    {
+      this.$chartsContainer.removeClass('is-fullscreen');
+
+      var $fullscreenChart = this.$('.reports-drillingChart.is-fullscreen');
+
+      if ($fullscreenChart.length)
+      {
+        $fullscreenChart.find('.highcharts-container').dblclick();
+      }
+    },
+
     insertChartsViews: function(skipChartsView, insertAt)
     {
-      this.chartsViews.forEach(
-        function(chartsView, i)
+      this.chartsViews.forEach(function(chartsView, i)
+      {
+        if (chartsView !== skipChartsView)
         {
-          if (chartsView !== skipChartsView)
-          {
-            this.insertView(
-              '.reports-drillingCharts-container',
-              chartsView,
-              insertAt ? {insertAt: i} : null
-            );
-          }
-        },
-        this
-      );
+          this.insertView('.reports-drillingCharts-container', chartsView, insertAt ? {insertAt: i} : null);
+        }
+      }, this);
     },
 
     onQueryChange: function(query, options)
@@ -262,6 +300,11 @@ define([
 
     drill: function(refresh)
     {
+      if (this.isFullscreen())
+      {
+        this.stopFullscreen();
+      }
+
       var relationType;
 
       if (this.$el.hasClass('is-changing'))
@@ -306,8 +349,9 @@ define([
     {
       var parentReport = this.getCurrentReport();
       var parentChartsView = this.getChartsViewByReport(parentReport);
-      var siblingChartsViews =
-        this.chartsViews.filter(function(chartsView) { return chartsView !== parentChartsView; });
+      var siblingChartsViews = this.chartsViews.filter(
+        function(chartsView) { return chartsView !== parentChartsView; }
+      );
       var childChartsViews = [];
       var metricRefs = this.metricRefs;
 

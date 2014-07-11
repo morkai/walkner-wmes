@@ -24,7 +24,6 @@
   "metrics:clip:production": "CLIP Produkcja",
   "metrics:clip:endToEnd": "CLIP End2End",
 
-
   "downtimesByAor:title": "Czas przestojów - obszary odp.",
   "downtimesByAor:seriesName": "Czas przestojów",
   "downtimesByAor:press:shortText": "TKP",

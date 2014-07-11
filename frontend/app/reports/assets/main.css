@@ -71,6 +71,9 @@
   overflow-y: hidden;
   overflow-x: scroll;
 }
+.reports-drillingCharts-container.is-fullscreen {
+  overflow-x: hidden;
+}
 .reports-drillingCharts {
   flex: 0 0 375px;
   border-right: 1px dotted #E7E7E7;
@@ -86,8 +89,19 @@
   -ms-user-select: none;
   user-select: none;
 }
+.reports-chart.is-fullscreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+.reports-1-coeffs,
 .reports-1-downtimesByAor,
-.reports-1-downtimesByReason,
+.reports-1-downtimesByReason {
+  height: 248px;
+}
 .reports-2-dirIndir,
 .reports-2-effIneff {
   height: 200px;
@@ -109,7 +123,7 @@
   white-space: nowrap!important;
 }
 .reports-drillingCharts[data-orgUnitType="prodFlow"] .reports-2-clip .highcharts-title,
-.reports-drillingCharts[data-orgUnitType="prodLine"] .reports-1-coeffs .highcharts-title{
+.reports-drillingCharts[data-orgUnitType="prodLine"] .reports-1-coeffs .highcharts-title {
   cursor: default;
 }
 .reports-drillingChart .highcharts-title:hover {
@@ -123,6 +137,9 @@
   cursor: zoom-out;
   cursor: -webkit-zoom-out;
   cursor: -moz-zoom-out;
+}
+.reports-drillingChart.is-fullscreen .highcharts-title {
+  cursor: default!important;
 }
 .reports-drillingChartsPage.is-drillingDown .reports-drillingCharts {
   opacity: 0.01;

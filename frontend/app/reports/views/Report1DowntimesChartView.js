@@ -178,6 +178,22 @@ define([
       {
         this.chart.hideLoading();
       }
+    },
+
+    onFullscreen: function(isFullscreen)
+    {
+      if (isFullscreen)
+      {
+        this.chart.setTitle(
+          {text: this.model.getOrgUnitTitle()},
+          {text: t('reports', this.options.attrName + ':title')},
+          true
+        );
+      }
+      else
+      {
+        this.chart.setTitle({text: t('reports', this.options.attrName + ':title')}, {text: null}, true);
+      }
     }
 
   });
