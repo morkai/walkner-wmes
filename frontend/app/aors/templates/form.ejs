@@ -16,7 +16,7 @@
         <%- renderColorPicker({idPrefix: idPrefix, property: 'refColor', label: t('aors', 'PROPERTY:refColor'), value: model.refColor}) %>
         <div class="form-group">
           <label for="<%- idPrefix %>-refValue" class="control-label"><%- t('aors', 'PROPERTY:refValue') %></label>
-          <input id="<%- idPrefix %>-refValue" class="form-control small" type="number" name="refValue" min="0" step="0.1">
+          <input id="<%- idPrefix %>-refValue" class="form-control small" type="number" name="refValue" min="0" step="0.01">
         </div>
       </div>
     </div>

@@ -65,7 +65,7 @@
         <%- renderColorPicker({idPrefix: idPrefix, property: 'refColor', label: t('downtimeReasons', 'PROPERTY:refColor'), value: model.refColor}) %>
         <div class="form-group">
           <label for="<%- idPrefix %>-refValue" class="control-label"><%- t('downtimeReasons', 'PROPERTY:refValue') %></label>
-          <input id="<%- idPrefix %>-refValue" class="form-control small" type="number" name="refValue" step="0.1">
+          <input id="<%- idPrefix %>-refValue" class="form-control small" type="number" name="refValue" step="0.01">
         </div>
       </div>
       <div class="form-group">
