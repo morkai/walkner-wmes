@@ -110,7 +110,7 @@ define([
         var chartsView = this.getView({el: $chartsView[0]});
         var chartView = chartsView.getView({el: $chartView[0]});
 
-        this.startFullscreen(chartView);
+        this.toggleFullscreen(chartView);
       }
     },
 
@@ -193,7 +193,7 @@ define([
       return this.$chartsContainer.hasClass('is-fullscreen');
     },
 
-    startFullscreen: function(chartView)
+    toggleFullscreen: function(chartView)
     {
       var $chartsContainer = this.$chartsContainer;
       var chartsContainerEl = $chartsContainer[0];
@@ -230,11 +230,11 @@ define([
       }
     },
 
-    stopFullscreen: function()
+    cleanFullscreen: function()
     {
       this.$chartsContainer.removeClass('is-fullscreen');
 
-      var $fullscreenChart = this.$('.reports-drillingChart.is-fullscreen');
+      var $fullscreenChart = this.$('.reports-chart.is-fullscreen');
 
       if ($fullscreenChart.length)
       {
@@ -330,7 +330,7 @@ define([
     {
       if (this.isFullscreen())
       {
-        this.stopFullscreen();
+        this.cleanFullscreen();
       }
 
       var relationType;
@@ -570,13 +570,21 @@ define([
         return;
       }
 
+      if (e.keyCode === 27 && this.isFullscreen())
+      {
+        this.$('.reports-chart.is-fullscreen .highcharts-container').dblclick();
+
+        return false;
+      }
+
       if (e.keyCode === 39)
       {
         this.scroll(true);
 
         return false;
       }
-      else if (e.keyCode === 37)
+
+      if (e.keyCode === 37)
       {
         this.scroll(false);
 
