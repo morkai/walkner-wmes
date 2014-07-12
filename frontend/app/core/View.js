@@ -42,6 +42,54 @@ function(
 
   util.inherits(View, Layout);
 
+  View.prototype.delegateEvents = function(events)
+  {
+    if (!events)
+    {
+      events = _.result(this, 'events');
+    }
+
+    if (!events)
+    {
+      return this;
+    }
+
+    this.undelegateEvents();
+
+    Object.keys(events).forEach(function(key)
+    {
+      var method = events[key];
+
+      if (!_.isFunction(method))
+      {
+        method = this[method];
+      }
+
+      if (!_.isFunction(method))
+      {
+        return;
+      }
+
+      var match = key.match(/^(\S+)\s*(.*)$/);
+      var eventName = match[1] + '.delegateEvents' + this.cid;
+      var selector = match[2];
+
+      if (selector === '')
+      {
+        this.$el.on(eventName, method.bind(this));
+      }
+      else
+      {
+        if (_.isString(this.idPrefix))
+        {
+          selector = selector.replace(/#-/g, '#' + this.idPrefix + '-');
+        }
+
+        this.$el.on(eventName, selector, method.bind(this));
+      }
+    }, this);
+  };
+
   View.prototype.cleanup = function()
   {
     if (_.isFunction(this.destroy))
@@ -78,20 +126,22 @@ function(
 
   View.prototype.promised = function(promise)
   {
-    if (promise && _.isFunction(promise.abort))
+    if (!promise || !_.isFunction(promise.abort))
     {
-      this.promises.push(promise);
-
-      var view = this;
-
-      promise.always(function()
-      {
-        if (Array.isArray(view.promises))
-        {
-          view.promises.splice(view.promises.indexOf(promise), 1);
-        }
-      });
+      return promise;
     }
+
+    this.promises.push(promise);
+
+    var view = this;
+
+    promise.always(function()
+    {
+      if (Array.isArray(view.promises))
+      {
+        view.promises.splice(view.promises.indexOf(promise), 1);
+      }
+    });
 
     return promise;
   };
@@ -112,7 +162,7 @@ function(
   {
     var id = '#';
 
-    if (typeof this.idPrefix === 'string')
+    if (_.isString(this.idPrefix))
     {
       id += this.idPrefix + '-';
     }
