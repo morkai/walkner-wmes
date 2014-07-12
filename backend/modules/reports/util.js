@@ -63,7 +63,7 @@ exports.createGroupKey = function(interval, date)
         groupKey.date(groupKey.date() - 1);
       }
 
-      groupKey.hours(6);
+      groupKey.hours(0);
       break;
 
     case 'week':
@@ -74,7 +74,7 @@ exports.createGroupKey = function(interval, date)
         groupKey.date(groupKey.date() - 1);
       }
 
-      groupKey.weekday(0).hours(6);
+      groupKey.weekday(0).hours(0);
       break;
 
     case 'month':
@@ -85,11 +85,11 @@ exports.createGroupKey = function(interval, date)
         groupKey.date(dayOfMonth - 1);
       }
 
-      groupKey.date(1).hours(6);
+      groupKey.date(1).hours(0);
       break;
 
     case 'year':
-      groupKey.month(0).date(1).hours(6);
+      groupKey.month(0).date(1).hours(0);
       break;
   }
 
