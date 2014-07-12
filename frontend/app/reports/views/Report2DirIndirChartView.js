@@ -9,7 +9,7 @@ define([
   'app/i18n',
   'app/data/prodFunctions',
   'app/core/View',
-  './wordwrapTooltip'
+  '../util/wordwrapTooltip'
 ], function(
   _,
   screenfull,

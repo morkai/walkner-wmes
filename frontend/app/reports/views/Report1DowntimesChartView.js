@@ -8,7 +8,7 @@ define([
   'app/core/View',
   'app/data/downtimeReasons',
   'app/data/aors',
-  './wordwrapTooltip'
+  '../util/wordwrapTooltip'
 ], function(
   Highcharts,
   t,

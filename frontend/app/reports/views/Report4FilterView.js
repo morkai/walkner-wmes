@@ -12,7 +12,7 @@ define([
   'app/core/util/fixTimeRange',
   'app/users/util/setUpUserSelect2',
   'app/reports/templates/report4Filter',
-  './prepareDateRange'
+  '../util/prepareDateRange'
 ], function(
   _,
   js2form,

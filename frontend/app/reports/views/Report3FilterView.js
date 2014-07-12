@@ -11,7 +11,7 @@ define([
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/reports/templates/report3Filter',
-  './prepareDateRange'
+  '../util/prepareDateRange'
 ], function(
   _,
   js2form,
