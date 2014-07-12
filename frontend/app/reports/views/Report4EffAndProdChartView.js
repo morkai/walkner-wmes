@@ -3,13 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'app/time',
   'app/i18n',
   'app/core/View',
   'app/highcharts'
 ], function(
-  $,
   time,
   t,
   View,
@@ -126,7 +124,7 @@ define([
           {
             var str = '<b>' + formatTooltipHeader(this.x) +'</b><table>';
 
-            $.each(this.points, function(i, point)
+            this.points.forEach(function(point)
             {
               var y = point.y.toLocaleString ? point.y.toLocaleString() : point.y;
 

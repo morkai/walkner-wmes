@@ -5,7 +5,6 @@
 define([
   'app/i18n',
   'app/core/util/bindLoadingMessage',
-  'app/core/util/pageActions',
   'app/core/View',
   '../OrderCollection',
   '../views/OrderListView',
@@ -14,7 +13,6 @@ define([
 ], function(
   t,
   bindLoadingMessage,
-  pageActions,
   View,
   OrderCollection,
   OrderListView,

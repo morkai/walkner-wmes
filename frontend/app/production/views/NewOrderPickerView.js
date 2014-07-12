@@ -4,7 +4,6 @@
 
 define([
   'underscore',
-  'jquery',
   'app/i18n',
   'app/viewport',
   'app/core/View',
@@ -12,7 +11,6 @@ define([
   'app/production/templates/newOrderPicker'
 ], function(
   _,
-  $,
   t,
   viewport,
   View,

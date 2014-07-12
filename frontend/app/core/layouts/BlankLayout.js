@@ -5,14 +5,12 @@
 define([
   'underscore',
   'jquery',
-  'moment',
   'app/user',
   '../View',
   'app/core/templates/blankLayout'
 ], function(
   _,
   $,
-  moment,
   user,
   View,
   blankLayoutTemplate
@@ -103,9 +101,7 @@ define([
   {
     if (this.isRendered())
     {
-      this.broker.publish(
-        'page.titleChanged', _.pluck(this.model.breadcrumbs, 'label')
-      );
+      this.broker.publish('page.titleChanged', _.pluck(this.model.breadcrumbs, 'label'));
     }
   };
 

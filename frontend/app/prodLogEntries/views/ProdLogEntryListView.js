@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/user',
   'app/viewport',
@@ -12,7 +11,6 @@ define([
   'app/data/views/renderOrgUnitPath',
   './decorateProdLogEntry'
 ], function(
-  _,
   t,
   user,
   viewport,

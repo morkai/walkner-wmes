@@ -3,14 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'moment',
+  'app/time',
   'app/i18n',
   'app/user',
   'app/data/divisions',
   'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView'
 ], function(
-  moment,
+  time,
   t,
   user,
   divisions,
@@ -71,7 +71,7 @@ define([
         var row = model.toJSON();
 
         row.division = division ? renderOrgUnitPath(division, false, false) : '?';
-        row.date = moment(row.date).format('LL');
+        row.date = time.format(row.date, 'LL');
         row.shift = t('core', 'SHIFT:' + row.shift);
 
         return row;

@@ -3,16 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
-  '../user',
   '../data/prodLines',
   '../core/Collection',
   '../core/util/matchesProdLine',
   '../core/util/matchesEquals',
   './ProdShift'
 ], function(
-  _,
-  user,
   prodLines,
   Collection,
   matchesProdLine,
@@ -55,8 +51,7 @@ define([
         return true;
       }
 
-      return matchesProdLine(this.rqlQuery, message.prodLine)
-        && matchesEquals(this.rqlQuery, 'shift', message.shift);
+      return matchesProdLine(this.rqlQuery, message.prodLine) && matchesEquals(this.rqlQuery, 'shift', message.shift);
     }
 
   });

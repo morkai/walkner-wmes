@@ -3,8 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
-  'jquery',
   'app/i18n',
   'app/core/View',
   '../Report4',
@@ -16,8 +14,6 @@ define([
   '../views/Report4QuantitiesChartView',
   'app/reports/templates/report4Page'
 ], function(
-  _,
-  $,
   t,
   View,
   Report4,

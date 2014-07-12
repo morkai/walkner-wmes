@@ -3,10 +3,8 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'backbone'
 ], function(
-  _,
   Backbone
 ) {
   'use strict';

@@ -3,10 +3,10 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'moment',
+  'app/time',
   '../core/Model'
 ], function(
-  moment,
+  time,
   Model
 ) {
   'use strict';
@@ -45,19 +45,17 @@ define([
 
       if (emptyOrder.startDate)
       {
-        emptyOrder.startDateText =
-          moment(emptyOrder.startDate).format(options.startFinishDateFormat || 'LL');
+        emptyOrder.startDateText = time.format(emptyOrder.startDate, options.startFinishDateFormat || 'LL');
       }
 
       if (emptyOrder.finishDate)
       {
-        emptyOrder.finishDateText =
-          moment(emptyOrder.finishDate).format(options.startFinishDateFormat || 'LL');
+        emptyOrder.finishDateText = time.format(emptyOrder.finishDate, options.startFinishDateFormat || 'LL');
       }
 
       if (emptyOrder.createdAt)
       {
-        emptyOrder.createdAtText = moment(emptyOrder.createdAt).format('LLLL');
+        emptyOrder.createdAtText = time.format(emptyOrder.createdAt, 'LLLL');
       }
 
       return emptyOrder;

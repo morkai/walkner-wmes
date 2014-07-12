@@ -3,11 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'moment',
+  '../time',
   '../core/Model',
   './OperationCollection'
 ], function(
-  moment,
+  time,
   Model,
   OperationCollection
 ) {
@@ -56,12 +56,12 @@ define([
 
       if (order.startDate)
       {
-        order.startDateText = moment(order.startDate).format('LL');
+        order.startDateText = time.format(order.startDate, 'LL');
       }
 
       if (order.finishDate)
       {
-        order.finishDateText = moment(order.finishDate).format('LL');
+        order.finishDateText = time.format(order.finishDate, 'LL');
       }
 
       if (order.qty && order.unit)
@@ -71,12 +71,12 @@ define([
 
       if (order.createdAt)
       {
-        order.createdAtText = moment(order.createdAt).format('LLLL');
+        order.createdAtText = time.format(order.createdAt, 'LLLL');
       }
 
       if (order.updatedAt)
       {
-        order.updatedAtText = moment(order.updatedAt).format('LLLL');
+        order.updatedAtText = time.format(order.updatedAt, 'LLLL');
       }
 
       order.operations = order.operations === null ? [] : order.operations.toJSON();

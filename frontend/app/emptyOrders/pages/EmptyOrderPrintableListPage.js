@@ -4,19 +4,17 @@
 
 define([
   'underscore',
-  'moment',
+  'app/time',
   'app/i18n',
   'app/core/util/bindLoadingMessage',
-  'app/core/util/pageActions',
   'app/core/View',
   '../EmptyOrderCollection',
   '../views/EmptyOrderPrintableListView'
 ], function(
   _,
-  moment,
+  time,
   t,
   bindLoadingMessage,
-  pageActions,
   View,
   EmptyOrderCollection,
   EmptyOrderPrintableListView
@@ -33,8 +31,7 @@ define([
     {
       var selector = _.find(this.collection.rqlQuery.selector.args, function(selector)
       {
-        return selector.name === 'eq'
-          && (selector.args[0] === 'startDate' || selector.args[0] === 'finishDate');
+        return selector.name === 'eq' && (selector.args[0] === 'startDate' || selector.args[0] === 'finishDate');
       });
 
       if (!selector)
@@ -43,7 +40,7 @@ define([
       }
 
       return t('emptyOrders', 'PRINT_PAGE:HD:LEFT:' + selector.args[0], {
-        date: moment(selector.args[1]).format('LL')
+        date: time.format(selector.args[1], 'LL')
       });
     },
 
@@ -53,9 +50,7 @@ define([
 
     initialize: function()
     {
-      this.collection = bindLoadingMessage(
-        new EmptyOrderCollection(null, {rqlQuery: this.options.rql}), this
-      );
+      this.collection = bindLoadingMessage(new EmptyOrderCollection(null, {rqlQuery: this.options.rql}), this);
       this.collection.rqlQuery.limit = -1;
 
       this.view = new EmptyOrderPrintableListView({collection: this.collection});

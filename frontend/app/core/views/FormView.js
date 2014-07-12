@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'underscore',
   'form2js',
   'js2form',
   'app/viewport',
   '../View'
 ], function(
-  $,
   _,
   form2js,
   js2form,

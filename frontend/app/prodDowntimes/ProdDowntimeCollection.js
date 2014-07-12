@@ -247,7 +247,11 @@ define([
       return true;
     },
 
-    matchOrgUnit: function(data)
+    /**
+     * @param {object} data
+     * @returns {boolean}
+     */
+    matchOrgUnit: function()
     {
       // TODO
       return true;

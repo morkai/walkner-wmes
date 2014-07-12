@@ -4,15 +4,15 @@
 
 define([
   'underscore',
-  'moment',
   'js2form',
+  'app/time',
   'app/i18n',
   'app/core/View',
   'app/emptyOrders/templates/filter'
 ], function(
   _,
-  moment,
   js2form,
+  time,
   t,
   View,
   filterTemplate
@@ -70,7 +70,7 @@ define([
         {
           case 'startDate':
           case 'finishDate':
-            formData.date = moment(term.args[1]).format('YYYY-MM-DD');
+            formData.date = time.format(term.args[1], 'YYYY-MM-DD');
             break;
         }
       });
@@ -82,7 +82,7 @@ define([
     {
       var rqlQuery = this.model.rqlQuery;
       var selector = [];
-      var dateMoment = moment(this.$id('date').val());
+      var dateMoment = time.getMoment(this.$id('date').val());
       var dateProperty = this.$('[name=dateType]:checked').val() + 'Date';
 
       if (dateMoment.isValid())

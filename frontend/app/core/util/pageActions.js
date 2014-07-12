@@ -4,14 +4,12 @@
 
 define([
   'underscore',
-  'jquery',
   'app/i18n',
   'app/viewport',
   '../views/ActionFormView',
   'app/core/templates/jumpAction'
 ], function(
   _,
-  $,
   t,
   viewport,
   ActionFormView,
@@ -52,10 +50,10 @@ define([
 
     var $iconEl = $form.find('.fa').removeClass('fa-search').addClass('fa-spinner fa-spin');
 
-    var req = page.promised($.ajax({
+    var req = page.ajax({
       url: _.result(collection, 'url') + ';rid',
       data: {rid: rid}
-    }));
+    });
 
     req.done(function(modelId)
     {

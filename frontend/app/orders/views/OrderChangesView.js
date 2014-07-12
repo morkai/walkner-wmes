@@ -4,8 +4,7 @@
 
 define([
   'underscore',
-  'jquery',
-  'moment',
+  'app/time',
   'app/i18n',
   'app/viewport',
   'app/data/orderStatuses',
@@ -17,8 +16,7 @@ define([
   'app/orderStatuses/util/renderOrderStatusLabel'
 ], function(
   _,
-  $,
-  moment,
+  time,
   t,
   viewport,
   orderStatuses,
@@ -60,7 +58,7 @@ define([
       return {
         changes: (this.model.get('changes') || []).reverse().map(function(change)
         {
-          change.timeText = moment(change.time).format('YYYY-MM-DD HH:mm:ss');
+          change.timeText = time.format(change.time, 'YYYY-MM-DD HH:mm:ss');
           change.values = Object.keys(change.oldValues || {}).map(function(property)
           {
             return {
@@ -109,7 +107,7 @@ define([
 
         case 'startDate':
         case 'finishDate':
-          return moment(value).format('LL');
+          return time.format(value, 'LL');
 
         default:
           return _.escape(String(value));
@@ -144,7 +142,7 @@ define([
         this.$lastToggle.click();
       }
 
-      var $lastToggle = $(e.target);
+      var $lastToggle = this.$(e.target);
 
       var i = $lastToggle.attr('data-i');
       var property = $lastToggle.attr('data-property') + 's';

@@ -3,11 +3,9 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/core/views/FormView',
   'app/divisions/templates/form'
 ], function(
-  _,
   FormView,
   formTemplate
 ) {

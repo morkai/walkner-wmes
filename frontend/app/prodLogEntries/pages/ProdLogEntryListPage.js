@@ -3,22 +3,18 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'app/i18n',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
-  'app/core/util/pageActions',
   'app/core/View',
   '../ProdLogEntryCollection',
   '../views/ProdLogEntryListView',
   '../views/ProdLogEntryFilterView',
   'app/core/templates/listPage'
 ], function(
-  $,
   t,
   viewport,
   bindLoadingMessage,
-  pageActions,
   View,
   ProdLogEntryCollection,
   ProdLogEntryListView,

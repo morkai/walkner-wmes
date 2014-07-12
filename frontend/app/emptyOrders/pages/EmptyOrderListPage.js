@@ -3,20 +3,16 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'app/i18n',
   'app/core/util/bindLoadingMessage',
-  'app/core/util/pageActions',
   'app/core/View',
   '../EmptyOrderCollection',
   '../views/EmptyOrderListView',
   '../views/EmptyOrderFilterView',
   'app/core/templates/listPage'
 ], function(
-  $,
   t,
   bindLoadingMessage,
-  pageActions,
   View,
   EmptyOrderCollection,
   EmptyOrderListView,

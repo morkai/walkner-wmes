@@ -3,13 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'h5.rql/index',
   '../time',
   '../core/Model',
   '../core/util/getShiftStartInfo'
 ], function(
-  _,
   rql,
   time,
   Model,

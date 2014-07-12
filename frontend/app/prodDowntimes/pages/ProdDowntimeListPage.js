@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'app/i18n',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
@@ -14,7 +13,6 @@ define([
   '../views/ProdDowntimeFilterView',
   'app/core/templates/listPage'
 ], function(
-  $,
   t,
   viewport,
   bindLoadingMessage,

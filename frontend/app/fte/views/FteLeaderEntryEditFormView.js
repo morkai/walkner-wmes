@@ -4,7 +4,6 @@
 
 define([
   'underscore',
-  'jquery',
   'app/i18n',
   'app/user',
   'app/core/View',
@@ -13,7 +12,6 @@ define([
   '../util/fractions'
 ], function(
   _,
-  $,
   t,
   user,
   View,
@@ -63,11 +61,11 @@ define([
           ));
         }
 
-        $(this.focused).addClass('is-focused');
+        this.$(this.focused).addClass('is-focused');
       },
       'blur .fte-leaderEntry-count': function()
       {
-        $(this.focused).removeClass('is-focused');
+        this.$(this.focused).removeClass('is-focused');
       }
     },
 

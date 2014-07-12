@@ -5,9 +5,8 @@
 define([
   'underscore',
   'js2form',
-  'moment',
-  'app/i18n',
   'app/time',
+  'app/i18n',
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/reports/templates/report1Filter',
@@ -15,9 +14,8 @@ define([
 ], function(
   _,
   js2form,
-  moment,
-  t,
   time,
+  t,
   View,
   fixTimeRange,
   filterTemplate,
@@ -166,8 +164,8 @@ define([
         query.from = timeRange.from || this.getFromMomentForSelectedInterval().valueOf();
         query.to = timeRange.to || Date.now();
 
-        fromMoment = moment(query.from);
-        toMoment = moment(query.to);
+        fromMoment = time.getMoment(query.from);
+        toMoment = time.getMoment(query.to);
       }
       else
       {
@@ -197,7 +195,7 @@ define([
     {
       /*jshint -W015*/
 
-      var fromMoment = moment().minutes(0).seconds(0).milliseconds(0);
+      var fromMoment = time.getMoment().minutes(0).seconds(0).milliseconds(0);
 
       switch (this.getSelectedInterval())
       {

@@ -4,7 +4,6 @@
 
 define([
   'underscore',
-  'moment',
   'js2form',
   'app/i18n',
   'app/user',
@@ -17,7 +16,6 @@ define([
   'select2'
 ], function(
   _,
-  moment,
   js2form,
   t,
   user,

@@ -3,12 +3,10 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'app/user',
   '../View',
   'app/core/templates/logInForm'
 ], function(
-  $,
   user,
   View,
   logInFormTemplate
@@ -60,7 +58,7 @@ define([
       this.$el.addClass('logInForm-loading');
       this.$submitEl.attr('disabled', true);
 
-      var req = $.ajax({
+      var req = this.ajax({
         type: 'POST',
         url: this.el.action,
         data: JSON.stringify(data)

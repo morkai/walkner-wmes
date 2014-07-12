@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'underscore',
   'app/i18n',
   'app/viewport',
   'app/core/View',
   'app/mechOrders/templates/import'
 ], function(
-  $,
   _,
   t,
   viewport,
@@ -54,7 +52,7 @@ define([
 
       var formData = new FormData(this.el);
 
-      var req = $.ajax({
+      var req = this.ajax({
         type: 'POST',
         url: '/mechOrders;import',
         data: formData,

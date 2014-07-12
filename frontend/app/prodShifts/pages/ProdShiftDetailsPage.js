@@ -3,8 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
-  'jquery',
   'app/i18n',
   'app/time',
   'app/viewport',
@@ -21,8 +19,6 @@ define([
   '../views/QuantitiesDoneChartView',
   'app/prodShifts/templates/detailsPage'
 ], function(
-  _,
-  $,
   t,
   time,
   viewport,

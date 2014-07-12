@@ -3,11 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'moment',
+  '../time',
   '../core/Model',
   'app/orders/OperationCollection'
 ], function(
-  moment,
+  time,
   Model,
   OperationCollection
 ) {
@@ -50,7 +50,7 @@ define([
 
       if (order.importTs)
       {
-        order.importTs = moment(order.importTs).format('YYYY-MM-DD HH:mm:ss');
+        order.importTs = time.format(order.importTs, 'YYYY-MM-DD HH:mm:ss');
       }
 
       order.operations = order.operations === null ? [] : order.operations.toJSON();

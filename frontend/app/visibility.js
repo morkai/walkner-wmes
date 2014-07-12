@@ -3,11 +3,9 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'visibly',
   'app/broker'
 ], function(
-  $,
   visibly,
   broker
 ) {

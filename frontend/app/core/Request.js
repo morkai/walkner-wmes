@@ -3,11 +3,9 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'h5.rql/index',
   './util'
 ], function(
-  _,
   rql,
   util
 ) {
@@ -104,7 +102,7 @@ define([
     for (var i = 0, l = queryParts.length; i < l; ++i)
     {
       var queryPart = queryParts[i];
-      var eqPos = _.indexOf(queryPart, '=');
+      var eqPos = queryPart.indexOf('=');
 
       if (eqPos === -1)
       {

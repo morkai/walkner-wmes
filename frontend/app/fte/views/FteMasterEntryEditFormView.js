@@ -75,11 +75,11 @@ define([
           );
         }
 
-        $(this.focused).addClass('is-focused');
+        this.$(this.focused).addClass('is-focused');
       },
       'blur .fte-masterEntry-count, .fte-masterEntry-noPlan': function()
       {
-        $(this.focused).removeClass('is-focused');
+        this.$(this.focused).removeClass('is-focused');
       }
     },
 

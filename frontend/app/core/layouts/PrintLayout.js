@@ -5,14 +5,14 @@
 define([
   'underscore',
   'jquery',
-  'moment',
+  'app/time',
   'app/user',
   '../View',
   'app/core/templates/printLayout'
 ], function(
   _,
   $,
-  moment,
+  time,
   user,
   View,
   printLayoutTemplate
@@ -219,7 +219,7 @@ define([
     $pageTpl.remove();
 
     this.$('.print-page-count').text(pages.length);
-    this.$('.print-page-date').text(moment().format('LLL'));
+    this.$('.print-page-date').text(time.format(Date.now(), 'LLL'));
     this.$('.print-page-user').text(user.data.name || user.data.login);
   };
 

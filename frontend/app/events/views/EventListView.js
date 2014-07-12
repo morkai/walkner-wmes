@@ -4,7 +4,7 @@
 
 define([
   'underscore',
-  'moment',
+  'app/time',
   'app/i18n',
   'app/data/divisions',
   'app/data/subdivisions',
@@ -13,7 +13,7 @@ define([
   'app/events/templates/list'
 ], function(
   _,
-  moment,
+  time,
   t,
   divisions,
   subdivisions,
@@ -43,7 +43,7 @@ define([
 
           return {
             severity: event.getSeverityClassName(),
-            time: moment(event.get('time')).format('lll'),
+            time: time.format(event.get('time'), 'lll'),
             user: event.get('user'),
             type: t('events', 'TYPE:' + type),
             text: t('events', 'TEXT:' + type, view.flatten(data))
@@ -86,7 +86,7 @@ define([
           var subdivision = subdivisions.get(data.model.subdivision);
 
           data.model.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
-          data.model.date = moment(data.model.date).format('YYYY-MM-DD');
+          data.model.date = time.format(data.model.date, 'YYYY-MM-DD');
           data.model.shift = t('core', 'SHIFT:' + data.model.shift);
           break;
 
@@ -96,12 +96,12 @@ define([
           var division = divisions.get(data.model.division);
 
           data.model.division = division ? renderOrgUnitPath(division, false, false) : '?';
-          data.model.date = moment(data.model.date).format('YYYY-MM-DD');
+          data.model.date = time.format(data.model.date, 'YYYY-MM-DD');
           data.model.shift = t('core', 'SHIFT:' + data.model.shift);
           break;
 
         case 'clipOrderCount.created':
-          data.date = moment(data.date).format('YYYY-MM-DD');
+          data.date = time.format(data.date, 'YYYY-MM-DD');
           break;
       }
 

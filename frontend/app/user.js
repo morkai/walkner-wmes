@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'underscore',
   'app/i18n',
   'app/broker',
@@ -14,7 +13,6 @@ define([
   'app/core/pages/ErrorPage'
 ],
 function(
-  $,
   _,
   t,
   broker,

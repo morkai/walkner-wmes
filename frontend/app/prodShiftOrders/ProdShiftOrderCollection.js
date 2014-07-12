@@ -3,16 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
-  '../user',
   '../data/prodLines',
   '../core/Collection',
   '../core/util/matchesEquals',
   '../core/util/matchesProdLine',
   './ProdShiftOrder'
 ], function(
-  _,
-  user,
   prodLines,
   Collection,
   matchesEquals,

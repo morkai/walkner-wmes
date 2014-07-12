@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   '../user',
   '../data/prodLines',
   '../core/Collection',
@@ -11,7 +10,6 @@ define([
   '../core/util/matchesProdLine',
   './ProdLogEntry'
 ], function(
-  _,
   user,
   prodLines,
   Collection,

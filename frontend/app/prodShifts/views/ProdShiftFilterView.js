@@ -4,9 +4,7 @@
 
 define([
   'underscore',
-  'moment',
   'js2form',
-  'reltime',
   'app/i18n',
   'app/user',
   'app/data/prodLines',
@@ -16,9 +14,7 @@ define([
   'select2'
 ], function(
   _,
-  moment,
   js2form,
-  reltime,
   t,
   user,
   prodLines,

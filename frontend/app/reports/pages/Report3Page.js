@@ -4,7 +4,6 @@
 
 define([
   'underscore',
-  'jquery',
   'app/i18n',
   'app/core/View',
   '../Report3',
@@ -16,7 +15,6 @@ define([
   'app/reports/templates/report3Page'
 ], function(
   _,
-  $,
   t,
   View,
   Report3,

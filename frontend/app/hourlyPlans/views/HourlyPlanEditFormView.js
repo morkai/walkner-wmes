@@ -4,7 +4,6 @@
 
 define([
   'underscore',
-  'jquery',
   'app/i18n',
   'app/user',
   'app/core/View',
@@ -12,7 +11,6 @@ define([
   'app/hourlyPlans/templates/entry'
 ], function(
   _,
-  $,
   t,
   user,
   View,
@@ -46,11 +44,11 @@ define([
           this.el.querySelector('.hourlyPlan-column-' + e.target.parentNode.dataset.column)
         ];
 
-        $(this.focused).addClass('is-focused');
+        this.$(this.focused).addClass('is-focused');
       },
       'blur .hourlyPlan-count, .hourlyPlan-noPlan': function()
       {
-        $(this.focused).removeClass('is-focused');
+        this.$(this.focused).removeClass('is-focused');
       }
     },
 

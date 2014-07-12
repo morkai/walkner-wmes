@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'app/i18n',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
@@ -14,7 +13,6 @@ define([
   '../views/ProdShiftFilterView',
   'app/core/templates/listPage'
 ], function(
-  $,
   t,
   viewport,
   bindLoadingMessage,
@@ -58,9 +56,7 @@ define([
 
     defineModels: function()
     {
-      this.prodShiftList = bindLoadingMessage(
-        new ProdShiftCollection(null, {rqlQuery: this.options.rql}), this
-      );
+      this.prodShiftList = bindLoadingMessage(new ProdShiftCollection(null, {rqlQuery: this.options.rql}), this);
     },
 
     defineViews: function()

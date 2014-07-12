@@ -4,7 +4,6 @@
 
 define([
   'underscore',
-  'jquery',
   'app/i18n',
   'app/time',
   'app/viewport',
@@ -14,7 +13,6 @@ define([
   'app/production/templates/downtimePicker'
 ], function(
   _,
-  $,
   t,
   time,
   viewport,

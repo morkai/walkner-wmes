@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'underscore',
   'app/i18n',
   'app/user',
   '../View',
   'app/core/templates/navbar'
 ], function(
-  $,
   _,
   i18n,
   user,
@@ -335,9 +333,11 @@ define([
 
   NavbarView.prototype.hideEmptyEntries = function()
   {
+    var navbarView = this;
+
     this.$('.dropdown > .dropdown-menu').each(function()
     {
-      var $dropdownMenu = $(this);
+      var $dropdownMenu = navbarView.$(this);
       var visible = false;
 
       $dropdownMenu.children().each(function()

@@ -3,7 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'moment',
+  'app/time',
   'app/i18n',
   'app/data/divisions',
   'app/data/views/renderOrgUnitPath',
@@ -12,7 +12,7 @@ define([
   '../HourlyPlan',
   '../views/HourlyPlanDetailsPrintableView'
 ], function(
-  moment,
+  time,
   t,
   divisions,
   renderOrgUnitPath,
@@ -41,7 +41,7 @@ define([
     hdRight: function()
     {
       return t('hourlyPlans', 'print:hdRight', {
-        date: moment(this.model.get('date')).format('YYYY-MM-DD'),
+        date: time.format(this.model.get('date'), 'YYYY-MM-DD'),
         shift: t('core', 'SHIFT:' + this.model.get('shift'))
       });
     },
