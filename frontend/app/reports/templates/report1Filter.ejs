@@ -43,7 +43,7 @@
       </div>
     </div><div class="form-group">
       <label><%- t('reports', 'filter:subdivisionType') %></label>
-      <div class="btn-group filter-btn-group reports-1-filter-subdivisionTypes" data-toggle="buttons">
+      <div id="<%- idPrefix %>-subdivisionTypes" class="btn-group filter-btn-group" data-toggle="buttons">
         <label class="btn btn-default">
           <input type="checkbox" name="subdivisionType" value="prod"> <%- t('reports', 'filter:subdivisionType:prod') %>
         </label>
@@ -53,7 +53,7 @@
       </div>
     </div><div class="form-group filter-actions">
       <div class="btn-group">
-        <button type="submit" class="btn btn-default"><%= t('reports', 'filter:submit') %></button>
+        <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
           <span class="caret"></span>
         </button>

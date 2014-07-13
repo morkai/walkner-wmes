@@ -46,6 +46,10 @@ define([
         this.$id('mode-date').click();
         this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
         this.$('.filter-form').submit();
+      },
+      'click #-showOptions': function()
+      {
+        console.log(this.$id('showOptions').fadeOut());
       }
     },
 
@@ -76,7 +80,7 @@ define([
 
     toggleSubdivisionType: function()
     {
-      var $subdivisionTypes = this.$('.reports-1-filter-subdivisionTypes');
+      var $subdivisionTypes = this.$id('subdivisionTypes');
 
       if (!$subdivisionTypes.find('> .active').length)
       {
