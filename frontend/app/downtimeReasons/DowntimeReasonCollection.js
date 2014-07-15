@@ -17,6 +17,8 @@ define([
 
     rqlQuery: 'sort(_id)',
 
+    comparator: '_id',
+
     findBySubdivisionType: function(subdivisionType)
     {
       return this.filter(function(downtimeReason)
