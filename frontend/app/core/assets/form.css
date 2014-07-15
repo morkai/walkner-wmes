@@ -90,3 +90,7 @@ input.no-controls::-webkit-inner-spin-button {
 .form-group-horizontal > .form-group:last-child {
   margin-bottom: 15px;
 }
+.form-control[size="1"] {
+  height: 34px;
+  padding-top: 8px;
+}

@@ -1,7 +1,8 @@
 .filter-container {
   margin-bottom: 1em;
 }
-.filter-container .well {
+.filter-container > .well,
+.options-container > .well {
   padding: 1em 1em 0 0;
 }
 .filter-form .form-group {
@@ -22,15 +23,7 @@
 }
 .filter-form .filter-actions {
   margin-left: 1em;
-  padding-left: 1em;
-  padding-right: 1em;
-  border-left: 1px solid #e3e3e3;
-  border-right: 1px solid #e3e3e3;
   vertical-align: bottom;
-}
-.filter-form .filter-actions:last-child {
-  padding-right: 0;
-  border-right: none;
 }
 .filter-form.is-vertical .filter-actions {
   padding-left: 0;
@@ -39,6 +32,21 @@
 }
 .filter-actions .dropdown-menu a {
   cursor: pointer;
+}
+.filter-actions > hr {
+  display: inline-block;
+  margin: 0 1em;
+  padding: 0;
+  width: 1px;
+  height: 35px;
+  border-left: 1px solid #e3e3e3;
+  vertical-align: bottom;
+}
+.filter-actions > hr:first-child {
+  margin-left: 0;
+}
+.filter-actions > hr:last-child {
+  margin-right: 0;
 }
 .filter-label.radio {
   margin-top: 0;
@@ -87,4 +95,12 @@ input[type=checkbox].filter-inLabel {
 }
 .filter-radioLabels > label:first-child {
   margin-left: 0;
+}
+.form-control.is-expanded {
+  height: auto;
+  position: absolute;
+  z-index: 110;
+}
+.form-control.is-expandable {
+  max-width: 300px;
 }
