@@ -33,19 +33,15 @@ define([
       this.set(_.defaults(query, this.defaults), {reset: true});
     },
 
-    createReports: function(parentReport, childReport)
+    createReports: function(parentReport, childReport, options)
     {
       var reports = [];
-      var options = {query: this};
       var parentOrgUnitType = this.get('orgUnitType');
       var parentOrgUnit = orgUnits.getByTypeAndId(parentOrgUnitType, this.get('orgUnitId'));
 
       if (!parentReport)
       {
-        parentReport = new Report1(
-          {orgUnitType: this.get('orgUnitType'), orgUnit: parentOrgUnit},
-          options
-        );
+        parentReport = new Report1({orgUnitType: this.get('orgUnitType'), orgUnit: parentOrgUnit}, options);
       }
 
       reports.push(parentReport);
@@ -78,10 +74,7 @@ define([
         }
         else
         {
-          reports.push(new Report1(
-            {orgUnitType: childOrgUnitType, orgUnit: childOrgUnit},
-            options
-          ));
+          reports.push(new Report1({orgUnitType: childOrgUnitType, orgUnit: childOrgUnit}, options));
         }
       });
 

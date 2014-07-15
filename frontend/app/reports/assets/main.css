@@ -22,7 +22,8 @@
   width: 100%!important;
   height: 100%!important;
 }
-.reports-drillingChartsPage .filter-container {
+.reports-drillingChartsPage .filter-container,
+.reports-drillingChartsPage .options-container {
   margin-top: 1em;
   margin-bottom: 0;
 }

@@ -25,21 +25,11 @@
     </div><div class="form-group">
       <label><%- t('reports', 'filter:interval') %></label>
       <div id="<%- idPrefix %>-intervals" class="btn-group filter-btn-group" data-toggle="buttons">
-        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:month') %>" data-interval="month">
-          <input type="radio" name="interval" value="month"> <%- t('reports', 'filter:interval:month') %>
+        <% ['month', 'week', 'day', 'shift', 'hour'].forEach(function(interval) { %>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
+          <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
         </label>
-        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:week') %>" data-interval="week">
-          <input type="radio" name="interval" value="week"> <%- t('reports', 'filter:interval:week') %>
-        </label>
-        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:day') %>" data-interval="day">
-          <input type="radio" name="interval" value="day"> <%- t('reports', 'filter:interval:day') %>
-        </label>
-        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:shift') %>" data-interval="shift">
-          <input type="radio" name="interval" value="shift"> <%- t('reports', 'filter:interval:shift') %>
-        </label>
-        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:hour') %>" data-interval="hour">
-          <input type="radio" name="interval" value="hour"> <%- t('reports', 'filter:interval:hour') %>
-        </label>
+        <% }) %>
       </div>
     </div><div class="form-group">
       <label><%- t('reports', 'filter:subdivisionType') %></label>
@@ -67,7 +57,7 @@
           <li><a data-range="currentMonth"><%= t('reports', 'filter:submit:currentMonth') %></a></li>
           <li><a data-range="prevMonth"><%= t('reports', 'filter:submit:prevMonth') %></a></li>
         </ul>
-      </div>
+      </div><hr><button id="<%- idPrefix %>-showOptions" type="button" class="btn btn-default"><i class="fa fa-cog"></i><span><%- t('reports', 'filter:options') %></span></button>
     </div>
   </form>
 </div>

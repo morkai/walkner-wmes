@@ -26,6 +26,7 @@ define([
     defaults: function()
     {
       return {
+        isParent: false,
         orgUnitType: null,
         orgUnit: null,
         coeffs: {
@@ -37,8 +38,19 @@ define([
           productivity: [],
           productivityNoWh: []
         },
+        maxCoeffs: {
+          quantityDone: 0,
+          downtime: 0,
+          scheduledDowntime: 0,
+          unscheduledDowntime: 0,
+          efficiency: 0,
+          productivity: 0,
+          productivityNoWh: 0
+        },
         downtimesByAor: [],
-        downtimesByReason: []
+        maxDowntimesByAor: 0,
+        downtimesByReason: [],
+        maxDowntimesByReason: 0
       };
     },
 
@@ -69,52 +81,85 @@ define([
 
     parse: function(report)
     {
-      return {
-        coeffs: this.parseCoeffs(report.coeffs),
-        downtimesByAor: this.parseDowntimesByAor(report.downtimes.byAor).sort(this.sortByValueDesc),
-        downtimesByReason: this.parseDowntimesByReason(report.downtimes.byReason).sort(this.sortByValueDesc)
+      var attributes = {
+        coeffs: {
+          quantityDone: [],
+          downtime: [],
+          scheduledDowntime: [],
+          unscheduledDowntime: [],
+          efficiency: [],
+          productivity: [],
+          productivityNoWh: []
+        },
+        maxCoeffs: {
+          quantityDone: 0,
+          downtime: 0,
+          scheduledDowntime: 0,
+          unscheduledDowntime: 0,
+          efficiency: 0,
+          productivity: 0,
+          productivityNoWh: 0
+        },
+        downtimesByAor: [],
+        maxDowntimesByAor: 0,
+        downtimesByReason: [],
+        maxDowntimesByReason: 0
       };
+
+      this.parseCoeffs(report.coeffs, attributes);
+      this.parseDowntimesByAor(report.downtimes.byAor, attributes);
+      this.parseDowntimesByReason(report.downtimes.byReason, attributes);
+
+      return attributes;
     },
 
-    parseCoeffs: function(coeffsList)
+    parseCoeffs: function(coeffsList, attributes)
     {
-      var series = {
-        quantityDone: [],
-        downtime: [],
-        scheduledDowntime: [],
-        unscheduledDowntime: [],
-        efficiency: [],
-        productivity: [],
-        productivityNoWh: []
-      };
+      var series = attributes.coeffs;
+      var extremes = attributes.maxCoeffs;
 
-      coeffsList.forEach(function(coeffs)
+      for (var i = 0, l = coeffsList.length; i < l; ++i)
       {
+        var coeffs = coeffsList[i];
         var time = Date.parse(coeffs.key);
 
-        series.quantityDone.push({x: time, y: coeffs.quantityDone || 0});
-        series.downtime.push({x: time, y: Math.round((coeffs.downtime || 0) * 100)});
-        series.scheduledDowntime.push({x: time, y: Math.round((coeffs.scheduledDowntime || 0) * 100)});
-        series.unscheduledDowntime.push({x: time, y: Math.round((coeffs.unscheduledDowntime || 0) * 100)});
-        series.efficiency.push({x: time, y: Math.round((coeffs.efficiency || 0) * 100)});
-        series.productivity.push({x: time, y: Math.round((coeffs.productivity || 0) * 100)});
-        series.productivityNoWh.push({x: time, y: Math.round((coeffs.productivityNoWh || 0) * 100)});
-      });
-
-      return series;
-    },
-
-    parseDowntimesByAor: function(downtimes)
-    {
-      var downtimesByAor = [];
-
-      if (!downtimes)
-      {
-        return downtimesByAor;
+        pushValue('quantityDone', time, coeffs.quantityDone || 0);
+        pushPercentValue('downtime', time, coeffs.downtime);
+        pushPercentValue('scheduledDowntime', time, coeffs.scheduledDowntime);
+        pushPercentValue('unscheduledDowntime', time, coeffs.unscheduledDowntime);
+        pushPercentValue('efficiency', time, coeffs.efficiency);
+        pushPercentValue('productivity', time, coeffs.productivity);
+        pushPercentValue('productivityNoWh', time, coeffs.productivityNoWh);
       }
 
-      Object.keys(downtimes).forEach(function(aorId)
+      function pushValue(coeff, time, value)
       {
+        series[coeff].push({x: time, y: value});
+
+        if (value > extremes[coeff])
+        {
+          extremes[coeff] = value;
+        }
+      }
+
+      function pushPercentValue(coeff, time, value)
+      {
+        pushValue(coeff, time, Math.round((value || 0) * 100));
+      }
+    },
+
+    parseDowntimesByAor: function(downtimes, attributes)
+    {
+      if (!downtimes)
+      {
+        return;
+      }
+
+      var aorIds = Object.keys(downtimes);
+
+      for (var i = 0, l = aorIds.length; i < l; ++i)
+      {
+        var aorId = aorIds[i];
         var longText;
         var shortText;
 
@@ -148,44 +193,53 @@ define([
           }
         }
 
-        downtimesByAor.push({
+        var value = Math.round(downtimes[aorId] * 100) / 100;
+
+        attributes.downtimesByAor.push({
           key: aorId,
           longText: longText,
           shortText: shortText,
-          value: Math.round(downtimes[aorId] * 100) / 100
+          value: value
         });
-      });
 
-      return downtimesByAor;
-    },
-
-    parseDowntimesByReason: function(downtimes)
-    {
-      var downtimesByReason = [];
-
-      if (!downtimes)
-      {
-        return downtimesByReason;
+        if (value > attributes.maxDowntimesByAor)
+        {
+          attributes.maxDowntimesByAor = value;
+        }
       }
 
-      Object.keys(downtimes).forEach(function(reasonId)
-      {
-        var downtimeReason = downtimeReasons.get(reasonId);
+      attributes.downtimesByAor.sort(function(a, b) { return b.value - a.value; });
+    },
 
-        downtimesByReason.push({
+    parseDowntimesByReason: function(downtimes, attributes)
+    {
+      if (!downtimes)
+      {
+        return;
+      }
+
+      var reasonIds = Object.keys(downtimes);
+
+      for (var i = 0, l = reasonIds.length; i < l; ++i)
+      {
+        var reasonId = reasonIds[i];
+        var downtimeReason = downtimeReasons.get(reasonId);
+        var value = Math.round(downtimes[reasonId] * 100) / 100;
+
+        attributes.downtimesByReason.push({
           key: reasonId,
           longText: downtimeReason ? downtimeReason.getLabel() : reasonId,
           shortText: reasonId,
-          value: Math.round(downtimes[reasonId] * 100) / 100
+          value: value
         });
-      });
 
-      return downtimesByReason;
-    },
+        if (value > attributes.maxDowntimesByReason)
+        {
+          attributes.maxDowntimesByReason = value;
+        }
+      }
 
-    sortByValueDesc: function(a, b)
-    {
-      return b.value - a.value;
+      attributes.downtimesByReason.sort(function(a, b) { return b.value - a.value; });
     },
 
     getOrgUnitTitle: function()
@@ -205,6 +259,50 @@ define([
       }
 
       return orgUnit.getLabel();
+    },
+
+    getMaxDowntimesByAor: function(visibleAors, visibleReferences)
+    {
+      return this.getMaxDowntimesValue(visibleAors, visibleReferences, aors, 'downtimesByAor');
+    },
+
+    getMaxDowntimesByReason: function(visibleReasons, visibleReferences)
+    {
+      return this.getMaxDowntimesValue(visibleReasons, visibleReferences, downtimeReasons, 'downtimesByReason');
+    },
+
+    getMaxDowntimesValue: function(visibleColumns, visibleReferences, refValueCollection, property)
+    {
+      var max = 0;
+
+      this.get(property).forEach(function(downtime)
+      {
+        if (!visibleColumns[downtime.key])
+        {
+          return;
+        }
+
+        if (downtime.value > max)
+        {
+          max = downtime.value;
+        }
+
+        var refValueModel = refValueCollection.get(downtime.key);
+
+        if (!refValueModel || !visibleReferences[downtime.key])
+        {
+          return;
+        }
+
+        var refValue = refValueModel.get('refValue');
+
+        if (refValue > max)
+        {
+          max = refValue;
+        }
+      });
+
+      return max;
     }
 
   });

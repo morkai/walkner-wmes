@@ -3,13 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/i18n',
   'app/core/View',
   './Report1CoeffsChartView',
   './Report1DowntimesChartView',
   'app/reports/templates/report1Charts'
 ], function(
-  t,
   View,
   Report1CoeffsChartView,
   Report1DowntimesChartView,
@@ -23,12 +21,15 @@ define([
 
     initialize: function()
     {
+      var skipRenderCharts = this.options.skipRenderCharts;
+
       this.setView(
         '.reports-1-coeffs-container',
         new Report1CoeffsChartView({
           model: this.model,
           metricRefs: this.metricRefs,
-          skipRenderChart: this.options.skipRenderCharts
+          displayOptions: this.displayOptions,
+          skipRenderChart: skipRenderCharts
         })
       );
 
@@ -37,7 +38,8 @@ define([
         new Report1DowntimesChartView({
           model: this.model,
           attrName: 'downtimesByAor',
-          skipRenderChart: this.options.skipRenderCharts
+          displayOptions: this.displayOptions,
+          skipRenderChart: skipRenderCharts
         })
       );
 
@@ -46,7 +48,8 @@ define([
         new Report1DowntimesChartView({
           model: this.model,
           attrName: 'downtimesByReason',
-          skipRenderChart: this.options.skipRenderCharts
+          displayOptions: this.displayOptions,
+          skipRenderChart: skipRenderCharts
         })
       );
     },

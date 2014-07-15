@@ -25,7 +25,10 @@ define([
 
     viewport.loadPage('app/reports/pages/Report1Page', function(Report1Page)
     {
-      return new Report1Page({query: req.query});
+      return new Report1Page({
+        query: req.query,
+        displayOptions: req.fragment
+      });
     });
   });
 

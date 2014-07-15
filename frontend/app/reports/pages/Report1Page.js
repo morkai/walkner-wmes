@@ -10,9 +10,11 @@ define([
   'app/core/View',
   '../Report1',
   '../Report1Query',
+  '../Report1Options',
   '../MetricRefCollection',
   '../views/Report1HeaderView',
   '../views/Report1FilterView',
+  '../views/Report1OptionsView',
   '../views/Report1ChartsView',
   'app/reports/templates/report1Page'
 ], function(
@@ -23,9 +25,11 @@ define([
   View,
   Report1,
   Report1Query,
+  Report1Options,
   MetricRefCollection,
   Report1HeaderView,
   Report1FilterView,
+  Report1OptionsView,
   Report1ChartsView,
   report1PageTemplate
 ) {
@@ -80,9 +84,18 @@ define([
       },
       'mouseup .reports-1-coeffs .highcharts-title': function(e)
       {
-        if (e.button === 1)
+        if (e.button === 1 || (e.ctrlKey && e.button === 0))
         {
-          // TODO: Open in a new tab
+          var orgUnit = this.getOrgUnitFromChartsElement(this.$(e.target).closest('.reports-drillingCharts'));
+
+          if (orgUnit)
+          {
+            var path = this.reports[0].url().replace(/^\//, '#');
+            var query = this.query.serializeToString(orgUnit.type, orgUnit.id);
+
+            window.open(path + '?' + query);
+          }
+
           return false;
         }
       },
@@ -116,16 +129,17 @@ define([
 
     initialize: function()
     {
+      this.$chartsContainer = null;
+
       this.onKeyDown = this.onKeyDown.bind(this);
 
       $(this.el.ownerDocument.body).on('keydown', this.onKeyDown);
-
-      this.$chartsContainer = null;
 
       this.defineModels();
       this.defineViews();
       this.setView('.reports-drillingHeader-container', this.headerView);
       this.setView('.filter-container', this.filterView);
+      this.setView('.options-container', this.optionsView);
       this.insertChartsViews();
     },
 
@@ -161,9 +175,15 @@ define([
 
       this.query = new Report1Query(this.options.query);
 
-      this.reports = this.query.createReports();
+      this.displayOptions = typeof this.options.displayOptions === 'string'
+        ? Report1Options.fromString(this.options.displayOptions)
+        : new Report1Options(this.options.displayOptions);
+
+      this.reports = this.createReports();
 
       this.listenTo(this.query, 'change', this.onQueryChange);
+      this.listenTo(this.displayOptions, 'change:series change:extremes', this.updateExtremes);
+      this.listenTo(this.displayOptions, 'change', this.onDisplayOptionsChange);
     },
 
     defineViews: function()
@@ -171,16 +191,14 @@ define([
       this.headerView = new Report1HeaderView({model: this.query});
 
       this.filterView = new Report1FilterView({model: this.query});
+      this.listenTo(this.filterView, 'showOptions', this.showOptions);
 
-      var metricRefs = this.metricRefs;
+      this.optionsView = new Report1OptionsView({model: this.displayOptions});
+      this.listenTo(this.optionsView, 'showFilter', this.showFilter);
 
-      this.chartsViews = this.reports.map(function(report)
-      {
-        return new Report1ChartsView({
-          model: report,
-          metricRefs: metricRefs
-        });
-      });
+      var page = this;
+
+      this.chartsViews = this.reports.map(function(report) { return page.createChartsView(report, false); });
     },
 
     load: function(when)
@@ -262,7 +280,9 @@ define([
       if (!options.reset)
       {
         this.broker.publish('router.navigate', {
-          url: this.reports[0].url() + '?' + this.query.serializeToString(),
+          url: this.reports[0].url()
+            + '?' + query.serializeToString()
+            + '#' + this.displayOptions.serializeToString(),
           replace: !orgUnitChanged,
           trigger: false
         });
@@ -278,18 +298,24 @@ define([
       }
     },
 
-    changeOrgUnit: function($charts)
+    onDisplayOptionsChange: function(displayOptions)
     {
-      if (this.$el.hasClass('is-changing'))
-      {
-        return;
-      }
+      this.broker.publish('router.navigate', {
+        url: this.reports[0].url()
+          + '?' + this.query.serializeToString()
+          + '#' + displayOptions.serializeToString(),
+        replace: true,
+        trigger: false
+      });
+    },
 
+    getOrgUnitFromChartsElement: function($charts)
+    {
       var orgUnitType = $charts.attr('data-orgUnitType');
 
       if (!orgUnitType || orgUnitType === 'prodLine')
       {
-        return;
+        return null;
       }
 
       var orgUnitId = $charts.attr('data-orgUnitId');
@@ -303,10 +329,28 @@ define([
         orgUnitId = parentOrgUnit ? parentOrgUnit.id : null;
       }
 
-      this.query.set({
-        orgUnitType: orgUnitType,
-        orgUnitId: orgUnitId
-      });
+      return {
+        type: orgUnitType,
+        id: orgUnitId
+      };
+    },
+
+    changeOrgUnit: function($charts)
+    {
+      if (this.$el.hasClass('is-changing'))
+      {
+        return;
+      }
+
+      var orgUnit = this.getOrgUnitFromChartsElement($charts);
+
+      if (orgUnit)
+      {
+        this.query.set({
+          orgUnitType: orgUnit.type,
+          orgUnitId: orgUnit.id
+        });
+      }
     },
 
     refresh: function()
@@ -381,9 +425,9 @@ define([
         function(chartsView) { return chartsView !== parentChartsView; }
       );
       var childChartsViews = [];
-      var metricRefs = this.metricRefs;
+      var page = this;
 
-      this.reports = this.query.createReports(parentReport);
+      this.reports = this.createReports(parentReport);
       this.chartsViews = this.reports.map(function(report, i)
       {
         if (i === 0)
@@ -391,11 +435,7 @@ define([
           return parentChartsView;
         }
 
-        var childChartsView = new Report1ChartsView({
-          model: report,
-          metricRefs: metricRefs,
-          skipRenderCharts: true
-        });
+        var childChartsView = page.createChartsView(report, true);
 
         childChartsViews.push(childChartsView);
 
@@ -419,12 +459,11 @@ define([
     {
       var workingReport = this.getCurrentReport(true);
       var workingChartsView = this.getChartsViewByReport(workingReport);
-      var oldChartsViews =
-        this.chartsViews.filter(function(chartsView) { return chartsView !== workingChartsView; });
+      var oldChartsViews = this.chartsViews.filter(function(chartsView) { return chartsView !== workingChartsView; });
       var newChartsViews = [];
-      var metricRefs = this.metricRefs;
+      var page = this;
 
-      this.reports = this.query.createReports(null, workingReport);
+      this.reports = this.createReports(null, workingReport);
       this.chartsViews = this.reports.map(function(report)
       {
         if (report === workingReport)
@@ -432,11 +471,7 @@ define([
           return workingChartsView;
         }
 
-        var siblingChartsView = new Report1ChartsView({
-          model: report,
-          metricRefs: metricRefs,
-          skipRenderCharts: true
-        });
+        var siblingChartsView = page.createChartsView(report, true);
 
         newChartsViews.push(siblingChartsView);
 
@@ -467,15 +502,8 @@ define([
 
         page.$('.reports-drillingCharts').remove();
 
-        page.reports = page.query.createReports();
-        page.chartsViews = page.reports.map(function(report)
-        {
-          return new Report1ChartsView({
-            model: report,
-            metricRefs: page.metricRefs,
-            skipRenderCharts: true
-          });
-        });
+        page.reports = page.createReports();
+        page.chartsViews = page.reports.map(function(report) { return page.createChartsView(report, true); });
 
         page.insertChartsViews();
         page.showChartsViews('replacing', page.chartsViews);
@@ -508,6 +536,16 @@ define([
           page.$chartsContainer.css('overflow-x', '');
           page.showChartsViews(operation, newChartsViews);
         });
+      });
+    },
+
+    createChartsView: function(report, skipRenderCharts)
+    {
+      return new Report1ChartsView({
+        model: report,
+        metricRefs: this.metricRefs,
+        displayOptions: this.displayOptions,
+        skipRenderCharts: !!skipRenderCharts
       });
     },
 
@@ -565,7 +603,14 @@ define([
 
     onKeyDown: function(e)
     {
-      if (e.target.tagName === 'INPUT' && !e.target.classList.contains('btn'))
+      if (e.ctrlKey && e.keyCode === 32)
+      {
+        this.toggleOptionsFilter();
+
+        return false;
+      }
+
+      if (['INPUT', 'BUTTON', 'SELECT'].indexOf(e.target.tagName) !== -1)
       {
         return;
       }
@@ -604,6 +649,79 @@ define([
       }
 
       this.$chartsContainer.finish().animate({scrollLeft: scrollLeft}, 250);
+    },
+
+    createReports: function(parentReport, childReport)
+    {
+      return this.bindReports(this.query.createReports(parentReport, childReport, {
+        query: this.query,
+        metricRefs: this.metricRefs
+      }));
+    },
+
+    bindReports: function(reports)
+    {
+      var requests = 0;
+
+      function onRequestCompleted()
+      {
+        /*jshint validthis:true*/
+
+        --requests;
+
+        if (requests === 0)
+        {
+          this.updateExtremes();
+        }
+      }
+
+      reports.forEach(function(report)
+      {
+        this.stopListening(report, 'request');
+        this.stopListening(report, 'error');
+        this.stopListening(report, 'sync');
+        this.listenTo(report, 'request', function() { ++requests; });
+        this.listenTo(report, 'error', onRequestCompleted);
+        this.listenTo(report, 'sync', onRequestCompleted);
+      }, this);
+
+      return reports;
+    },
+
+    updateExtremes: function()
+    {
+      this.reports.forEach(function(report, i)
+      {
+        report.set('isParent', i === 0);
+      });
+
+      this.displayOptions.updateExtremes(this.reports);
+    },
+
+    showFilter: function()
+    {
+      this.$('.options-container').addClass('hidden');
+      this.$('.filter-container').removeClass('hidden');
+    },
+
+    showOptions: function()
+    {
+      this.$('.filter-container').addClass('hidden');
+      this.$('.options-container').removeClass('hidden');
+
+      this.optionsView.shown();
+    },
+
+    toggleOptionsFilter: function()
+    {
+      if (this.$('.options-container').hasClass('hidden'))
+      {
+        this.showOptions();
+      }
+      else
+      {
+        this.showFilter();
+      }
     }
 
   });

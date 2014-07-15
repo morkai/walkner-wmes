@@ -29,7 +29,7 @@
   "downtimesByAor:press:shortText": "TKP",
   "downtimesByAor:press:longText": "Tłocznia (karta pracy)",
 
-  "downtimesByReason:title": "Czas przestojów - przyczyny",
+  "downtimesByReason:title": "Czas przestojów - powody",
   "downtimesByReason:seriesName": "Czas przestojów",
 
   "quantitySuffix": " szt.",
@@ -89,6 +89,20 @@
   "filter:submit:prevYear": "Poprzedni rok",
   "filter:divisions": "Wydział",
   "filter:majorMalfunction": "Poważna awaria [h]",
+  "filter:options": "Pokaż opcje wyświetlania",
+
+  "options:filter": "Pokaż opcje filtrowania",
+  "options:series": "Serie danych",
+  "options:extremes": "Synchronizacja wartości min./maks.",
+  "options:extremes:none": "brak",
+  "options:extremes:siblings": "bez nadrzędnego",
+  "options:extremes:parent": "z nadrzędnym",
+  "options:references": "Referencje",
+  "options:references:coeffs": "Wskaźniki",
+  "options:references:reasons": "Powody przestojów",
+  "options:references:aors": "Obszary odpowiedzialności",
+  "options:aors": "Obszary odpowiedzialnosci",
+  "options:reasons": "Powody przestojów",
 
   "metricRefs:efficiency": "Wydajność",
   "metricRefs:productivity": "Produktywność",

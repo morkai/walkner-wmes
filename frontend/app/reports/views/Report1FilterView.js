@@ -49,7 +49,7 @@ define([
       },
       'click #-showOptions': function()
       {
-        console.log(this.$id('showOptions').fadeOut());
+        this.trigger('showOptions');
       }
     },
 

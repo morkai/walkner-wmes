@@ -3,12 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/time',
   'app/i18n',
   'app/highcharts',
   'app/core/View',
   'app/data/orgUnits'
 ], function(
+  _,
   time,
   t,
   Highcharts,
@@ -25,13 +27,11 @@ define([
 
   return View.extend({
 
-    className: function()
-    {
-      return 'reports-chart reports-drillingChart reports-1-coeffs';
-    },
+    className: 'reports-chart reports-drillingChart reports-1-coeffs',
 
     initialize: function()
     {
+      this.idPrefix = _.uniqueId('v');
       this.shouldRenderChart = !this.options.skipRenderChart;
       this.chart = null;
       this.loading = false;
@@ -45,6 +45,16 @@ define([
       {
         this.listenTo(this.metricRefs, 'add', this.onMetricRefUpdate);
         this.listenTo(this.metricRefs, 'change', this.onMetricRefUpdate);
+      }
+
+      if (this.displayOptions)
+      {
+        this.listenTo(
+          this.displayOptions,
+          'change:series change:maxQuantityDone change:maxPercentCoeff',
+          _.debounce(this.onDisplayOptionsChange, 1)
+        );
+        this.listenTo(this.displayOptions, 'change:references', this.onDisplayReferencesChange);
       }
     },
 
@@ -76,178 +86,6 @@ define([
       this.shouldRenderChart = true;
     },
 
-    createChart: function()
-    {
-      var chartData = this.serializeChartData();
-      var formatTooltipHeader = this.formatTooltipHeader.bind(this);
-      var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
-      var view = this;
-
-      this.chart = new Highcharts.Chart({
-        chart: {
-          renderTo: this.el,
-          zoomType: null,
-          events: {
-            selection: function(e)
-            {
-              if (e.resetSelection)
-              {
-                view.timers.resetExtremes = setTimeout(
-                  this.yAxis[1].setExtremes.bind(this.yAxis[1], 0, null, true, false), 1
-                );
-              }
-            }
-          }
-        },
-        exporting: {
-          filename: t('reports', 'filenames:1:coeffs')
-        },
-        title: {
-          useHTML: true,
-          text: this.model.getOrgUnitTitle()
-        },
-        noData: {},
-        xAxis: {
-          type: 'datetime'
-        },
-        yAxis: [
-          {
-            title: false
-          },
-          {
-            title: false,
-            opposite: true,
-            gridLineWidth: 0,
-            labels: {
-              format: '{value}%'
-            }
-          }
-        ],
-        tooltip: {
-          shared: true,
-          useHTML: true,
-          formatter: function()
-          {
-            var str = '<b>' + formatTooltipHeader(this.x) +'</b><table>';
-
-            this.points.forEach(function(point)
-            {
-              str += '<tr><td style="color: ' + point.series.color + '">'
-                + point.series.name + ':</td><td>'
-                + point.y + point.series.tooltipOptions.valueSuffix
-                + '</td></tr>';
-            });
-
-            str += '</table>';
-
-            return str;
-          }
-        },
-        legend: {
-          enabled: false
-        },
-        plotOptions: {
-          area: {
-            lineWidth: 0,
-            marker: markerStyles
-          },
-          line: {
-            lineWidth: 2,
-            states: {
-              hover: {
-                lineWidth: 2
-              }
-            },
-            marker: markerStyles
-          }
-        },
-        series: [
-          {
-            id: 'quantityDone',
-            name: t('reports', 'coeffs:quantityDone'),
-            color: COLOR_QUANTITY_DONE,
-            type: 'area',
-            yAxis: 0,
-            data: chartData.quantityDone,
-            tooltip: {
-              valueSuffix: t('reports', 'quantitySuffix')
-            }
-          },
-          {
-            id: 'efficiency',
-            name: t('reports', 'coeffs:efficiency'),
-            color: COLOR_EFFICIENCY,
-            type: 'line',
-            yAxis: 1,
-            data: chartData.efficiency,
-            tooltip: {
-              valueSuffix: '%'
-            },
-            events: {
-              show: this.updateEfficiencyRef.bind(this),
-              hide: this.updateEfficiencyRef.bind(this)
-            }
-          },
-          {
-            id: 'productivity',
-            name: t('reports', 'coeffs:productivity'),
-            color: COLOR_PRODUCTIVITY,
-            type: 'line',
-            yAxis: 1,
-            data: chartData.productivity,
-            tooltip: {
-              valueSuffix: '%'
-            },
-            visible: this.model.query.get('interval') !== 'hour',
-            events: {
-              show: this.updateProductivityRef.bind(this),
-              hide: this.updateProductivityRef.bind(this)
-            }
-          },
-          {
-            id: 'productivityNoWh',
-            name: t('reports', 'coeffs:productivityNoWh'),
-            color: COLOR_PRODUCTIVITY_NO_WH,
-            type: 'line',
-            yAxis: 1,
-            data: chartData.productivityNoWh,
-            tooltip: {
-              valueSuffix: '%'
-            },
-            visible: this.model.query.get('interval') !== 'hour',
-            events: {
-              show: this.updateProductivityNoWhRef.bind(this),
-              hide: this.updateProductivityNoWhRef.bind(this)
-            }
-          },
-          {
-            id: 'scheduledDowntime',
-            name: t('reports', 'coeffs:scheduledDowntime'),
-            color: COLOR_DOWNTIME,
-            borderWidth: 0,
-            type: 'column',
-            yAxis: 1,
-            data: chartData.scheduledDowntime,
-            tooltip: {
-              valueSuffix: '%'
-            }
-          },
-          {
-            id: 'unscheduledDowntime',
-            name: t('reports', 'coeffs:unscheduledDowntime'),
-            color: COLOR_DOWNTIME,
-            borderWidth: 0,
-            type: 'column',
-            yAxis: 1,
-            data: chartData.unscheduledDowntime,
-            tooltip: {
-              valueSuffix: '%'
-            }
-          }
-        ]
-      });
-    },
-
     updateChart: function()
     {
       var chartData = this.serializeChartData();
@@ -258,16 +96,16 @@ define([
         min = null;
       }
 
-      this.chart.yAxis[1].setExtremes(min, null, false);
-
       var visible = this.model.query.get('interval') !== 'hour';
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
       var series = this.chart.series;
 
+      this.updateExtremes(false);
+
       series[0].update({marker: markerStyles}, false);
       series[1].update({marker: markerStyles}, false);
-      series[2].update({marker: markerStyles, visible: visible}, false);
-      series[3].update({marker: markerStyles, visible: visible}, false);
+      series[2].update({marker: markerStyles, visible: visible && this.isSeriesVisible('productivity')}, false);
+      series[3].update({marker: markerStyles, visible: visible && this.isSeriesVisible('productivityNoWh')}, false);
       series[4].update({marker: markerStyles}, false);
       series[5].update({marker: markerStyles}, false);
 
@@ -288,12 +126,12 @@ define([
         return;
       }
 
-      this.updateEfficiencyRef();
-      this.updateProductivityRef();
-      this.updateProductivityNoWhRef();
+      this.updatePlotLine('efficiency');
+      this.updatePlotLine('productivity');
+      this.updatePlotLine('productivityNoWh');
     },
 
-    updatePlotLine: function(metric, dashStyle)
+    updatePlotLine: function(metric)
     {
       if (!this.chart)
       {
@@ -309,7 +147,7 @@ define([
 
       series.yAxis.removePlotLine(metric);
 
-      if (!series.visible)
+      if (!series.visible || !this.isReferenceVisible(metric))
       {
         return;
       }
@@ -324,26 +162,26 @@ define([
       series.yAxis.addPlotLine({
         id: metric,
         color: series.color,
-        dashStyle: dashStyle || 'dash',
+        dashStyle: 'dash',
         value: metricRef,
         width: 2,
         zIndex: 4
       });
     },
 
-    updateEfficiencyRef: function()
+    updateExtremes: function(redraw)
     {
-      this.updatePlotLine('efficiency');
-    },
+      /*jshint eqnull:true*/
 
-    updateProductivityRef: function()
-    {
-      this.updatePlotLine('productivity');
-    },
+      if (this.displayOptions)
+      {
+        var useMax = !this.model.get('isParent') || this.model.get('extremes') === 'parent';
+        var maxQuantityDone = useMax ? this.displayOptions.get('maxQuantityDone') : null;
+        var maxPercentCoeff = useMax ? this.displayOptions.get('maxPercentCoeff') : null;
 
-    updateProductivityNoWhRef: function()
-    {
-      this.updatePlotLine('productivityNoWh');
+        this.chart.yAxis[0].setExtremes(maxQuantityDone == null ? null : 0, maxQuantityDone, false, false);
+        this.chart.yAxis[1].setExtremes(maxPercentCoeff == null ? null : 0, maxPercentCoeff, redraw, false);
+      }
     },
 
     getMetricRef: function(metric)
@@ -401,6 +239,16 @@ define([
     serializeChartData: function()
     {
       return this.model.get('coeffs');
+    },
+
+    isSeriesVisible: function(series)
+    {
+      return !this.displayOptions || this.displayOptions.isSeriesVisible(series);
+    },
+
+    isReferenceVisible: function(reference)
+    {
+      return !this.displayOptions || this.displayOptions.isReferenceVisible(reference);
     },
 
     formatTooltipHeader: function(epoch)
@@ -471,6 +319,224 @@ define([
       {
         this.updatePlotLine(metricInfo.metric);
       }
+    },
+
+    onDisplayOptionsChange: function()
+    {
+      var visibleSeries = this.displayOptions.get('series');
+
+      this.chart.series.forEach(function(series)
+      {
+        var visible = !!visibleSeries[series.options.id];
+
+        if (series.visible !== visible)
+        {
+          series.setVisible(visible, false);
+        }
+      });
+
+      this.updateExtremes(true);
+    },
+
+    onDisplayReferencesChange: function(model, changes)
+    {
+      var metrics = Object.keys(changes);
+
+      if (!metrics.length)
+      {
+        return this.updatePlotLines();
+      }
+
+      for (var i = 0, l = metrics.length; i < l; ++i)
+      {
+        if (this.chart.get(metrics[i]))
+        {
+          this.updatePlotLines();
+
+          break;
+        }
+      }
+    },
+
+    createChart: function()
+    {
+      var chartData = this.serializeChartData();
+      var formatTooltipHeader = this.formatTooltipHeader.bind(this);
+      var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
+      var view = this;
+
+      this.chart = new Highcharts.Chart({
+        chart: {
+          renderTo: this.el,
+          zoomType: null,
+          events: {
+            selection: function(e)
+            {
+              if (e.resetSelection)
+              {
+                view.timers.resetExtremes = setTimeout(
+                  this.yAxis[1].setExtremes.bind(this.yAxis[1], 0, null, true, false), 1
+                );
+              }
+            }
+          }
+        },
+        exporting: {
+          filename: t('reports', 'filenames:1:coeffs')
+        },
+        title: {
+          useHTML: true,
+          text: this.model.getOrgUnitTitle()
+        },
+        noData: {},
+        xAxis: {
+          type: 'datetime'
+        },
+        yAxis: [
+          {
+            title: false
+          },
+          {
+            title: false,
+            opposite: true,
+            labels: {
+              format: '{value}%'
+            }
+          }
+        ],
+        tooltip: {
+          shared: true,
+          useHTML: true,
+          formatter: function()
+          {
+            var str = '<b>' + formatTooltipHeader(this.x) +'</b><table>';
+
+            this.points.forEach(function(point)
+            {
+              str += '<tr><td style="color: ' + point.series.color + '">'
+                + point.series.name + ':</td><td>'
+                + point.y + point.series.tooltipOptions.valueSuffix
+                + '</td></tr>';
+            });
+
+            str += '</table>';
+
+            return str;
+          }
+        },
+        legend: {
+          enabled: false
+        },
+        plotOptions: {
+          area: {
+            lineWidth: 0,
+            marker: markerStyles
+          },
+          line: {
+            lineWidth: 2,
+            states: {
+              hover: {
+                lineWidth: 2
+              }
+            },
+            marker: markerStyles
+          }
+        },
+        series: [
+          {
+            id: 'quantityDone',
+            name: t.bound('reports', 'coeffs:quantityDone'),
+            color: COLOR_QUANTITY_DONE,
+            type: 'area',
+            yAxis: 0,
+            data: chartData.quantityDone,
+            tooltip: {
+              valueSuffix: t('reports', 'quantitySuffix')
+            },
+            visible: this.isSeriesVisible('quantityDone'),
+            zIndex: 1
+          },
+          {
+            id: 'efficiency',
+            name: t.bound('reports', 'coeffs:efficiency'),
+            color: COLOR_EFFICIENCY,
+            type: 'line',
+            yAxis: 1,
+            data: chartData.efficiency,
+            tooltip: {
+              valueSuffix: '%'
+            },
+            events: {
+              show: this.updatePlotLine.bind(this, 'efficiency'),
+              hide: this.updatePlotLine.bind(this, 'efficiency')
+            },
+            visible: this.isSeriesVisible('efficiency'),
+            zIndex: 2
+          },
+          {
+            id: 'productivity',
+            name: t.bound('reports', 'coeffs:productivity'),
+            color: COLOR_PRODUCTIVITY,
+            type: 'line',
+            yAxis: 1,
+            data: chartData.productivity,
+            tooltip: {
+              valueSuffix: '%'
+            },
+            visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivity'),
+            events: {
+              show: this.updatePlotLine.bind(this, 'productivity'),
+              hide: this.updatePlotLine.bind(this, 'productivity')
+            },
+            zIndex: 3
+          },
+          {
+            id: 'productivityNoWh',
+            name: t.bound('reports', 'coeffs:productivityNoWh'),
+            color: COLOR_PRODUCTIVITY_NO_WH,
+            type: 'line',
+            yAxis: 1,
+            data: chartData.productivityNoWh,
+            tooltip: {
+              valueSuffix: '%'
+            },
+            visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivityNoWh'),
+            events: {
+              show: this.updatePlotLine.bind(this, 'productivityNoWh'),
+              hide: this.updatePlotLine.bind(this, 'productivityNoWh')
+            },
+            zIndex: 4
+          },
+          {
+            id: 'scheduledDowntime',
+            name: t.bound('reports', 'coeffs:scheduledDowntime'),
+            color: COLOR_DOWNTIME,
+            borderWidth: 0,
+            type: 'column',
+            yAxis: 1,
+            data: chartData.scheduledDowntime,
+            tooltip: {
+              valueSuffix: '%'
+            },
+            visible: this.isSeriesVisible('scheduledDowntime'),
+            zIndex: 5
+          },
+          {
+            id: 'unscheduledDowntime',
+            name: t.bound('reports', 'coeffs:unscheduledDowntime'),
+            color: COLOR_DOWNTIME,
+            borderWidth: 0,
+            type: 'column',
+            yAxis: 1,
+            data: chartData.unscheduledDowntime,
+            tooltip: {
+              valueSuffix: '%'
+            },
+            visible: this.isSeriesVisible('unscheduledDowntime'),
+            zIndex: 6
+          }
+        ]
+      });
     }
 
   });
