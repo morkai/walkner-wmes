@@ -90,10 +90,7 @@ define([
 
           if (orgUnit)
           {
-            var path = this.reports[0].url().replace(/^\//, '#');
-            var query = this.query.serializeToString(orgUnit.type, orgUnit.id);
-
-            window.open(path + '?' + query);
+            window.open(this.genReportUrl(orgUnit.type, orgUnit.id).replace(/^\//, '#'));
           }
 
           return false;
@@ -188,7 +185,7 @@ define([
 
     defineViews: function()
     {
-      this.headerView = new Report1HeaderView({model: this.query});
+      this.headerView = new Report1HeaderView({model: this.query, displayOptions: this.displayOptions});
 
       this.filterView = new Report1FilterView({model: this.query});
       this.listenTo(this.filterView, 'showOptions', this.showOptions);
@@ -280,9 +277,7 @@ define([
       if (!options.reset)
       {
         this.broker.publish('router.navigate', {
-          url: this.reports[0].url()
-            + '?' + query.serializeToString()
-            + '#' + this.displayOptions.serializeToString(),
+          url: this.genReportUrl(),
           replace: !orgUnitChanged,
           trigger: false
         });
@@ -298,12 +293,10 @@ define([
       }
     },
 
-    onDisplayOptionsChange: function(displayOptions)
+    onDisplayOptionsChange: function()
     {
       this.broker.publish('router.navigate', {
-        url: this.reports[0].url()
-          + '?' + this.query.serializeToString()
-          + '#' + displayOptions.serializeToString(),
+        url: this.genReportUrl(),
         replace: true,
         trigger: false
       });
@@ -722,6 +715,13 @@ define([
       {
         this.showFilter();
       }
+    },
+
+    genReportUrl: function(orgUnitType, orgUnitId)
+    {
+      return this.reports[0].url()
+        + '?' + this.query.serializeToString(orgUnitType, orgUnitId)
+        + '#' + this.displayOptions.serializeToString();
     }
 
   });

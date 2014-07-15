@@ -22,6 +22,7 @@ define([
     initialize: function()
     {
       this.listenTo(this.model, 'change', this.render);
+      this.listenTo(this.displayOptions, 'change', this.render);
     },
 
     serialize: function()
@@ -55,7 +56,8 @@ define([
 
       return {
         overallQuery: orgUnitPath.length ? model.serializeToString(null, null) : null,
-        orgUnitPath: orgUnitPath
+        orgUnitPath: orgUnitPath,
+        fragment: this.displayOptions.serializeToString()
       };
     },
 

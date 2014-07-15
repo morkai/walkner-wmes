@@ -128,7 +128,7 @@ define([
         queryString += '&to=' + encodeURIComponent(attrs.to);
       }
 
-      if (arguments.length === 2)
+      if (arguments.length === 2 && orgUnitType !== undefined)
       {
         if (orgUnitType)
         {
