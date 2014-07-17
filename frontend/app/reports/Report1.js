@@ -7,6 +7,7 @@ define([
   '../i18n',
   '../data/aors',
   '../data/downtimeReasons',
+  '../data/orgUnits',
   '../data/views/renderOrgUnitPath',
   '../core/Model'
 ], function(
@@ -14,6 +15,7 @@ define([
   t,
   aors,
   downtimeReasons,
+  orgUnits,
   renderOrgUnitPath,
   Model
 ) {
@@ -303,6 +305,52 @@ define([
       });
 
       return max;
+    },
+
+    getReferenceOrgUnitId: function()
+    {
+      var orgUnitType = this.get('orgUnitType');
+      var orgUnit = this.get('orgUnit');
+      var subdivisionType = this.query.get('subdivisionType');
+
+      if (orgUnitType === null)
+      {
+        return subdivisionType || 'overall';
+      }
+
+      if (orgUnitType === 'division')
+      {
+        return this.getReferenceOrgUnitIdByDivision(subdivisionType, orgUnit);
+      }
+
+      if (orgUnitType === 'subdivision')
+      {
+        return orgUnit.id;
+      }
+
+      var subdivision = orgUnits.getSubdivisionFor(orgUnit);
+
+      return subdivision ? subdivision.id : null;
+    },
+
+    getReferenceOrgUnitIdByDivision: function(subdivisionType, orgUnit)
+    {
+      if (subdivisionType === null)
+      {
+        return orgUnit.id;
+      }
+
+      if (subdivisionType === 'prod')
+      {
+        subdivisionType = 'assembly';
+      }
+
+      var subdivisions = orgUnits.getChildren(orgUnit).filter(function(subdivision)
+      {
+        return subdivision.get('type') === subdivisionType;
+      });
+
+      return subdivisions.length ? subdivisions[0].id : null;
     }
 
   });

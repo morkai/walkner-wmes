@@ -10,7 +10,7 @@ define([
   'app/core/View',
   '../Report2',
   '../Report2Query',
-  '../MetricRefCollection',
+  '../ReportSettingCollection',
   '../views/Report2HeaderView',
   '../views/Report2FilterView',
   '../views/Report2ChartsView',
@@ -23,7 +23,7 @@ define([
   View,
   Report2,
   Report2Query,
-  MetricRefCollection,
+  ReportSettingCollection,
   Report2HeaderView,
   Report2FilterView,
   Report2ChartsView,
@@ -127,13 +127,13 @@ define([
 
     defineModels: function()
     {
-      this.metricRefs = new MetricRefCollection({
+      this.settings = new ReportSettingCollection(null, {
         pubsub: this.pubsub
       });
 
       this.query = new Report2Query(this.options.query);
 
-      this.reports = this.query.createReports();
+      this.reports = this.createReports();
 
       this.listenTo(this.query, 'change', this.onQueryChange);
     },
@@ -144,20 +144,15 @@ define([
 
       this.filterView = new Report2FilterView({model: this.query});
 
-      var metricRefs = this.metricRefs;
-
       this.chartsViews = this.reports.map(function(report)
       {
-        return new Report2ChartsView({
-          model: report,
-          metricRefs: metricRefs
-        });
-      });
+        return this.createChartsView(report, false);
+      }, this);
     },
 
     load: function(when)
     {
-      return when(this.metricRefs.fetch({reset: true}));
+      return when(this.settings.fetch({reset: true}));
     },
 
     insertChartsViews: function(skipChartsView, insertAt)
@@ -288,9 +283,9 @@ define([
       var siblingChartsViews =
         this.chartsViews.filter(function(chartsView) { return chartsView !== parentChartsView; });
       var childChartsViews = [];
-      var metricRefs = this.metricRefs;
+      var page = this;
 
-      this.reports = this.query.createReports(parentReport);
+      this.reports = this.createReports(parentReport);
       this.chartsViews = this.reports.map(function(report, i)
       {
         if (i === 0)
@@ -298,11 +293,7 @@ define([
           return parentChartsView;
         }
 
-        var childChartsView = new Report2ChartsView({
-          model: report,
-          metricRefs: metricRefs,
-          skipRenderCharts: true
-        });
+        var childChartsView = page.createChartsView(report, true);
 
         childChartsViews.push(childChartsView);
 
@@ -329,9 +320,9 @@ define([
       var oldChartsViews =
         this.chartsViews.filter(function(chartsView) { return chartsView !== workingChartsView; });
       var newChartsViews = [];
-      var metricRefs = this.metricRefs;
+      var page = this;
 
-      this.reports = this.query.createReports(null, workingReport);
+      this.reports = this.createReports(null, workingReport);
       this.chartsViews = this.reports.map(function(report)
       {
         if (report === workingReport)
@@ -339,11 +330,7 @@ define([
           return workingChartsView;
         }
 
-        var siblingChartsView = new Report2ChartsView({
-          model: report,
-          metricRefs: metricRefs,
-          skipRenderCharts: true
-        });
+        var siblingChartsView = page.createChartsView(report, true);
 
         newChartsViews.push(siblingChartsView);
 
@@ -374,14 +361,10 @@ define([
 
         page.$('.reports-drillingCharts').remove();
 
-        page.reports = page.query.createReports();
+        page.reports = page.createReports();
         page.chartsViews = page.reports.map(function(report)
         {
-          return new Report2ChartsView({
-            model: report,
-            metricRefs: page.metricRefs,
-            skipRenderCharts: true
-          });
+          return page.createChartsView(report, true);
         });
 
         page.insertChartsViews();
@@ -415,6 +398,15 @@ define([
           page.$chartsContainer.css('overflow-x', '');
           page.showChartsViews(operation, newChartsViews);
         });
+      });
+    },
+
+    createChartsView: function(report, skipRenderCharts)
+    {
+      return new Report2ChartsView({
+        model: report,
+        settings: this.settings,
+        skipRenderCharts: !!skipRenderCharts
       });
     },
 
@@ -503,6 +495,14 @@ define([
       }
 
       this.$chartsContainer.finish().animate({scrollLeft: scrollLeft}, 250);
+    },
+
+    createReports: function(parentReport, childReport)
+    {
+      return this.query.createReports(parentReport, childReport, {
+        query: this.query,
+        settings: this.settings
+      });
     }
 
   });

@@ -1,0 +1,20 @@
+<form class="reports-settings">
+  <ul class="nav nav-tabs">
+    <% [
+      'quantityDone',
+      'efficiency',
+      'productivity',
+      'productivityNoWh',
+      'scheduledDowntime',
+      'unscheduledDowntime'
+    ].forEach(function(tab) { %>
+    <li><a href="#reports;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('reports', 'settings:tab:' + tab) %></a>
+    <% }) %>
+  </ul>
+  <% include settings/quantityDone.ejs %>
+  <% include settings/efficiency.ejs %>
+  <% include settings/productivity.ejs %>
+  <% include settings/productivityNoWh.ejs %>
+  <% include settings/scheduledDowntime.ejs %>
+  <% include settings/unscheduledDowntime.ejs %>
+</form>

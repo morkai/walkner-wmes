@@ -37,10 +37,9 @@ define([
       this.set(_.defaults(query, this.defaults()), {reset: true});
     },
 
-    createReports: function(parentReport, childReport)
+    createReports: function(parentReport, childReport, options)
     {
       var reports = [];
-      var options = {query: this};
       var parentOrgUnitType = this.get('orgUnitType');
       var parentOrgUnit = orgUnits.getByTypeAndId(parentOrgUnitType, this.get('orgUnitId'));
 

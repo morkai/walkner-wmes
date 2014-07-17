@@ -19,26 +19,33 @@ define([
 
     matchSettingId: null,
 
-    initialize: function(options)
+    topicSuffix: '**',
+
+    initialize: function(models, options)
     {
       if (options.pubsub)
       {
-        var collection = this;
-
-        options.pubsub.subscribe('settings.updated.**', function(changes)
-        {
-          var setting = collection.get(changes._id);
-
-          if (setting)
-          {
-            setting.set(changes);
-          }
-          else if (collection.matchSettingId && collection.matchSettingId(changes._id))
-          {
-            collection.add(changes);
-          }
-        });
+        this.setUpPubsub(options.pubsub);
       }
+    },
+
+    setUpPubsub: function(pubsub)
+    {
+      var collection = this;
+
+      pubsub.subscribe('settings.updated.' + this.topicSuffix, function(changes)
+      {
+        var setting = collection.get(changes._id);
+
+        if (setting)
+        {
+          setting.set(changes);
+        }
+        else
+        {
+          collection.add(changes);
+        }
+      });
     }
 
   });

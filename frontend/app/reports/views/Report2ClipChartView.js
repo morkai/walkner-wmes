@@ -6,14 +6,12 @@ define([
   'app/time',
   'app/i18n',
   'app/core/View',
-  'app/data/orgUnits',
   'app/data/views/renderOrgUnitPath',
   'app/highcharts'
 ], function(
   time,
   t,
   View,
-  orgUnits,
   renderOrgUnitPath,
   Highcharts
 ) {
@@ -33,12 +31,6 @@ define([
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:clip', this.render);
-
-      if (this.metricRefs)
-      {
-        this.listenTo(this.metricRefs, 'add', this.onMetricRefUpdate);
-        this.listenTo(this.metricRefs, 'change', this.onMetricRefUpdate);
-      }
     },
 
     destroy: function()
@@ -67,6 +59,114 @@ define([
       }
 
       this.shouldRenderChart = true;
+    },
+
+    updateChart: function()
+    {
+      var chartData = this.serializeChartData();
+      var min = 0;
+
+      if (!chartData.orderCount.length)
+      {
+        min = null;
+      }
+
+      this.chart.yAxis[1].setExtremes(min, null, false);
+
+      var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
+
+      this.chart.series[0].update({marker: markerStyles}, false);
+      this.chart.series[1].update({marker: markerStyles}, false);
+      this.chart.series[2].update({marker: markerStyles}, false);
+
+      this.chart.series[0].setData(chartData.orderCount, false);
+      this.chart.series[1].setData(chartData.production, false);
+      this.chart.series[2].setData(chartData.endToEnd, true);
+    },
+
+    serializeChartData: function()
+    {
+      return this.model.get('clip');
+    },
+
+    formatTooltipHeader: function(epoch)
+    {
+      /*jshint -W015*/
+
+      var timeMoment = time.getMoment(epoch);
+      var interval = this.model.query.get('interval');
+      var data;
+
+      if (interval === 'shift')
+      {
+        data = {
+          shift:
+            t('core', 'SHIFT:' + (timeMoment.hours() === 6 ? 1 : timeMoment.hours() === 14 ? 2 : 3))
+        };
+      }
+
+      return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, data));
+    },
+
+    getMarkerStyles: function(dataLength)
+    {
+      return {
+        radius: dataLength > 1 ? 0 : 3,
+        states: {
+          hover: {
+            radius: dataLength > 1 ? 3 : 6
+          }
+        }
+      };
+    },
+
+    getTitle: function()
+    {
+      var orgUnitType = this.model.get('orgUnitType');
+
+      if (!orgUnitType)
+      {
+        return t('reports', 'charts:title:overall');
+      }
+
+      var orgUnit = this.model.get('orgUnit');
+
+      if (orgUnitType === 'subdivision')
+      {
+        return renderOrgUnitPath(orgUnit, false, false);
+      }
+
+      return orgUnit.getLabel();
+    },
+
+    onModelLoading: function()
+    {
+      this.loading = true;
+
+      if (this.chart)
+      {
+        this.chart.showLoading();
+      }
+    },
+
+    onModelLoaded: function()
+    {
+      this.loading = false;
+
+      if (this.chart)
+      {
+        this.chart.hideLoading();
+      }
+    },
+
+    onModelError: function()
+    {
+      this.loading = false;
+
+      if (this.chart)
+      {
+        this.chart.hideLoading();
+      }
     },
 
     createChart: function()
@@ -171,10 +271,6 @@ define([
             data: chartData.production,
             tooltip: {
               valueSuffix: '%'
-            },
-            events: {
-              show: this.updateProductionRef.bind(this),
-              hide: this.updateProductionRef.bind(this)
             }
           },
           {
@@ -185,253 +281,10 @@ define([
             data: chartData.endToEnd,
             tooltip: {
               valueSuffix: '%'
-            },
-            events: {
-              show: this.updateEndToEndRef.bind(this),
-              hide: this.updateEndToEndRef.bind(this)
             }
           }
         ]
       });
-    },
-
-    updateChart: function()
-    {
-      var chartData = this.serializeChartData();
-      var min = 0;
-
-      if (!chartData.orderCount.length)
-      {
-        min = null;
-      }
-
-      this.chart.yAxis[1].setExtremes(min, null, false);
-
-      var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
-
-      this.chart.series[0].update({marker: markerStyles}, false);
-      this.chart.series[1].update({marker: markerStyles}, false);
-      this.chart.series[2].update({marker: markerStyles}, false);
-
-      this.chart.series[0].setData(chartData.orderCount, false);
-      this.chart.series[1].setData(chartData.production, false);
-      this.chart.series[2].setData(chartData.endToEnd, true);
-
-      this.updatePlotLines();
-    },
-
-    updatePlotLines: function()
-    {
-      if (!this.metricRefs)
-      {
-        return;
-      }
-
-      this.updateProductionRef();
-      this.updateEndToEndRef();
-    },
-
-    updatePlotLine: function(metric, yAxis, series, color, dashStyle)
-    {
-      yAxis.removePlotLine(metric);
-
-      if (series.visible)
-      {
-        var metricRef = this.getMetricRef(metric);
-
-        if (metricRef)
-        {
-          yAxis.addPlotLine({
-            id: metric,
-            color: color,
-            dashStyle: dashStyle,
-            value: metricRef,
-            width: 2,
-            zIndex: 4
-          });
-        }
-      }
-    },
-
-    updateProductionRef: function()
-    {
-      if (this.chart)
-      {
-        this.updatePlotLine(
-          'production', this.chart.yAxis[1], this.chart.series[1], '#aa00ff', 'dash'
-        );
-      }
-    },
-
-    updateEndToEndRef: function()
-    {
-      if (this.chart)
-      {
-        this.updatePlotLine(
-          'endToEnd', this.chart.yAxis[1], this.chart.series[2], '#FF007F', 'dash'
-        );
-      }
-    },
-
-    getMetricRef: function(metric)
-    {
-      return this.metricRefs.getValue(metric, this.getMetricRefOrgUnitId());
-    },
-
-    getMetricRefOrgUnitId: function()
-    {
-      var orgUnitType = this.model.get('orgUnitType');
-      var orgUnit = this.model.get('orgUnit');
-      var subdivisionType = this.model.query.get('subdivisionType');
-
-      if (orgUnitType === null)
-      {
-        return 'overall' + (subdivisionType ? ('.' + subdivisionType) : '');
-      }
-
-      if (orgUnitType === 'division')
-      {
-        return this.getMetricRefOrgUnitIdByDivision(subdivisionType, orgUnit);
-      }
-
-      if (orgUnitType === 'subdivision')
-      {
-        return orgUnit.id;
-      }
-
-      var subdivision = orgUnits.getSubdivisionFor(orgUnit);
-
-      return subdivision ? subdivision.id : null;
-    },
-
-    getMetricRefOrgUnitIdByDivision: function(subdivisionType, orgUnit)
-    {
-      if (subdivisionType === null)
-      {
-        return orgUnit.id;
-      }
-
-      // TODO: Change prod to assembly EVERYWHERE
-      if (subdivisionType === 'prod')
-      {
-        subdivisionType = 'assembly';
-      }
-
-      var subdivisions = orgUnits.getChildren(orgUnit).filter(function(subdivision)
-      {
-        return subdivision.get('type') === subdivisionType;
-      });
-
-      return subdivisions.length ? subdivisions[0].id : null;
-    },
-
-    serializeChartData: function()
-    {
-      return this.model.get('clip');
-    },
-
-    formatTooltipHeader: function(epoch)
-    {
-      /*jshint -W015*/
-
-      var timeMoment = time.getMoment(epoch);
-      var interval = this.model.query.get('interval');
-      var data;
-
-      if (interval === 'shift')
-      {
-        data = {
-          shift:
-            t('core', 'SHIFT:' + (timeMoment.hours() === 6 ? 1 : timeMoment.hours() === 14 ? 2 : 3))
-        };
-      }
-
-      return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, data));
-    },
-
-    getMarkerStyles: function(dataLength)
-    {
-      return {
-        radius: dataLength > 1 ? 0 : 3,
-        states: {
-          hover: {
-            radius: dataLength > 1 ? 3 : 6
-          }
-        }
-      };
-    },
-
-    getTitle: function()
-    {
-      var orgUnitType = this.model.get('orgUnitType');
-
-      if (!orgUnitType)
-      {
-        return t('reports', 'charts:title:overall');
-      }
-
-      var orgUnit = this.model.get('orgUnit');
-
-      if (orgUnitType === 'subdivision')
-      {
-        return renderOrgUnitPath(orgUnit, false, false);
-      }
-
-      return orgUnit.getLabel();
-    },
-
-    onModelLoading: function()
-    {
-      this.loading = true;
-
-      if (this.chart)
-      {
-        this.chart.showLoading();
-      }
-    },
-
-    onModelLoaded: function()
-    {
-      this.loading = false;
-
-      if (this.chart)
-      {
-        this.chart.hideLoading();
-      }
-    },
-
-    onModelError: function()
-    {
-      this.loading = false;
-
-      if (this.chart)
-      {
-        this.chart.hideLoading();
-      }
-    },
-
-    onMetricRefUpdate: function(metricRef)
-    {
-      var metricInfo = this.metricRefs.parseSettingId(metricRef.id);
-
-      if (metricInfo.metric !== 'production' && metricInfo.metric !== 'endToEnd')
-      {
-        return;
-      }
-
-      if (metricInfo.orgUnit !== this.getMetricRefOrgUnitId())
-      {
-        return;
-      }
-
-      if (metricInfo.metric === 'production')
-      {
-        this.updateEfficiencyRef();
-      }
-      else
-      {
-        this.updateProductivityRef();
-      }
     }
 
   });

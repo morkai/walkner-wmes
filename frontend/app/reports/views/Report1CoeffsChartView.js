@@ -7,23 +7,15 @@ define([
   'app/time',
   'app/i18n',
   'app/highcharts',
-  'app/core/View',
-  'app/data/orgUnits'
+  'app/core/View'
 ], function(
   _,
   time,
   t,
   Highcharts,
-  View,
-  orgUnits
+  View
 ) {
   'use strict';
-
-  var COLOR_QUANTITY_DONE = '#0af';
-  var COLOR_EFFICIENCY = '#0e0';
-  var COLOR_PRODUCTIVITY = '#fa0';
-  var COLOR_PRODUCTIVITY_NO_WH = '#e60';
-  var COLOR_DOWNTIME = 'rgba(255,0,0,.75)';
 
   return View.extend({
 
@@ -41,10 +33,9 @@ define([
       this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:coeffs', this.render);
 
-      if (this.metricRefs)
+      if (this.settings)
       {
-        this.listenTo(this.metricRefs, 'add', this.onMetricRefUpdate);
-        this.listenTo(this.metricRefs, 'change', this.onMetricRefUpdate);
+        this.listenTo(this.settings, 'add change', this.onSettingsUpdate);
       }
 
       if (this.displayOptions)
@@ -116,22 +107,24 @@ define([
       series[4].setData(chartData.scheduledDowntime, false);
       series[5].setData(chartData.unscheduledDowntime, true);
 
-      this.updatePlotLines();
+      this.updateReferences();
     },
 
-    updatePlotLines: function()
+    updateReferences: function()
     {
-      if (!this.metricRefs)
+      if (!this.settings)
       {
         return;
       }
 
-      this.updatePlotLine('efficiency');
-      this.updatePlotLine('productivity');
-      this.updatePlotLine('productivityNoWh');
+      this.updateReference('efficiency');
+      this.updateReference('productivity');
+      this.updateReference('productivityNoWh');
+      this.updateReference('scheduledDowntime');
+      this.updateReference('unscheduledDowntime');
     },
 
-    updatePlotLine: function(metric)
+    updateReference: function(metric)
     {
       if (!this.chart)
       {
@@ -152,21 +145,19 @@ define([
         return;
       }
 
-      var metricRef = this.getMetricRef(metric);
+      var refValue = this.getReference(metric);
 
-      if (!metricRef)
+      if (refValue)
       {
-        return;
+        series.yAxis.addPlotLine({
+          id: metric,
+          color: series.color,
+          dashStyle: 'dash',
+          value: refValue,
+          width: 2,
+          zIndex: 4
+        });
       }
-
-      series.yAxis.addPlotLine({
-        id: metric,
-        color: series.color,
-        dashStyle: 'dash',
-        value: metricRef,
-        width: 2,
-        zIndex: 4
-      });
     },
 
     updateExtremes: function(redraw)
@@ -184,56 +175,21 @@ define([
       }
     },
 
-    getMetricRef: function(metric)
+    updateColor: function(metric, color)
     {
-      return this.metricRefs.getValue(metric, this.getMetricRefOrgUnitId());
+      var series = this.chart.get(metric);
+
+      if (series)
+      {
+        series.update({color: color}, true);
+
+        this.updateReference(metric);
+      }
     },
 
-    getMetricRefOrgUnitId: function()
+    getReference: function(metric)
     {
-      var orgUnitType = this.model.get('orgUnitType');
-      var orgUnit = this.model.get('orgUnit');
-      var subdivisionType = this.model.query.get('subdivisionType');
-
-      if (orgUnitType === null)
-      {
-        return 'overall' + (subdivisionType ? ('.' + subdivisionType) : '');
-      }
-
-      if (orgUnitType === 'division')
-      {
-        return this.getMetricRefOrgUnitIdByDivision(subdivisionType, orgUnit);
-      }
-
-      if (orgUnitType === 'subdivision')
-      {
-        return orgUnit.id;
-      }
-
-      var subdivision = orgUnits.getSubdivisionFor(orgUnit);
-
-      return subdivision ? subdivision.id : null;
-    },
-
-    getMetricRefOrgUnitIdByDivision: function(subdivisionType, orgUnit)
-    {
-      if (subdivisionType === null)
-      {
-        return orgUnit.id;
-      }
-
-      // TODO: Change prod to assembly EVERYWHERE
-      if (subdivisionType === 'prod')
-      {
-        subdivisionType = 'assembly';
-      }
-
-      var subdivisions = orgUnits.getChildren(orgUnit).filter(function(subdivision)
-      {
-        return subdivision.get('type') === subdivisionType;
-      });
-
-      return subdivisions.length ? subdivisions[0].id : null;
+      return this.settings.getReference(metric, this.model.getReferenceOrgUnitId());
     },
 
     serializeChartData: function()
@@ -281,6 +237,11 @@ define([
       };
     },
 
+    getColor: function(metric, opacity)
+    {
+      return this.settings ? this.settings.getColor(metric, opacity) : '#000000';
+    },
+
     onModelLoading: function()
     {
       this.loading = true;
@@ -311,13 +272,17 @@ define([
       }
     },
 
-    onMetricRefUpdate: function(metricRef)
+    onSettingsUpdate: function(setting)
     {
-      var metricInfo = this.metricRefs.parseSettingId(metricRef.id);
+      /*jshint -W015*/
 
-      if (metricInfo.orgUnit === this.getMetricRefOrgUnitId())
+      switch (setting.getType())
       {
-        this.updatePlotLine(metricInfo.metric);
+        case 'color':
+          return this.updateColor(setting.getMetricName(), setting.getValue());
+
+        case 'ref':
+          return this.updateReference(setting.getMetricName());
       }
     },
 
@@ -344,14 +309,14 @@ define([
 
       if (!metrics.length)
       {
-        return this.updatePlotLines();
+        return this.updateReferences();
       }
 
       for (var i = 0, l = metrics.length; i < l; ++i)
       {
         if (this.chart.get(metrics[i]))
         {
-          this.updatePlotLines();
+          this.updateReferences();
 
           break;
         }
@@ -446,7 +411,7 @@ define([
           {
             id: 'quantityDone',
             name: t.bound('reports', 'coeffs:quantityDone'),
-            color: COLOR_QUANTITY_DONE,
+            color: this.getColor('quantityDone'),
             type: 'area',
             yAxis: 0,
             data: chartData.quantityDone,
@@ -459,7 +424,7 @@ define([
           {
             id: 'efficiency',
             name: t.bound('reports', 'coeffs:efficiency'),
-            color: COLOR_EFFICIENCY,
+            color: this.getColor('efficiency'),
             type: 'line',
             yAxis: 1,
             data: chartData.efficiency,
@@ -467,8 +432,8 @@ define([
               valueSuffix: '%'
             },
             events: {
-              show: this.updatePlotLine.bind(this, 'efficiency'),
-              hide: this.updatePlotLine.bind(this, 'efficiency')
+              show: this.updateReference.bind(this, 'efficiency'),
+              hide: this.updateReference.bind(this, 'efficiency')
             },
             visible: this.isSeriesVisible('efficiency'),
             zIndex: 2
@@ -476,7 +441,7 @@ define([
           {
             id: 'productivity',
             name: t.bound('reports', 'coeffs:productivity'),
-            color: COLOR_PRODUCTIVITY,
+            color: this.getColor('productivity'),
             type: 'line',
             yAxis: 1,
             data: chartData.productivity,
@@ -485,15 +450,15 @@ define([
             },
             visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivity'),
             events: {
-              show: this.updatePlotLine.bind(this, 'productivity'),
-              hide: this.updatePlotLine.bind(this, 'productivity')
+              show: this.updateReference.bind(this, 'productivity'),
+              hide: this.updateReference.bind(this, 'productivity')
             },
             zIndex: 3
           },
           {
             id: 'productivityNoWh',
             name: t.bound('reports', 'coeffs:productivityNoWh'),
-            color: COLOR_PRODUCTIVITY_NO_WH,
+            color: this.getColor('productivityNoWh'),
             type: 'line',
             yAxis: 1,
             data: chartData.productivityNoWh,
@@ -502,15 +467,15 @@ define([
             },
             visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivityNoWh'),
             events: {
-              show: this.updatePlotLine.bind(this, 'productivityNoWh'),
-              hide: this.updatePlotLine.bind(this, 'productivityNoWh')
+              show: this.updateReference.bind(this, 'productivityNoWh'),
+              hide: this.updateReference.bind(this, 'productivityNoWh')
             },
             zIndex: 4
           },
           {
             id: 'scheduledDowntime',
             name: t.bound('reports', 'coeffs:scheduledDowntime'),
-            color: COLOR_DOWNTIME,
+            color: this.getColor('scheduledDowntime', 0.75),
             borderWidth: 0,
             type: 'column',
             yAxis: 1,
@@ -519,12 +484,16 @@ define([
               valueSuffix: '%'
             },
             visible: this.isSeriesVisible('scheduledDowntime'),
+            events: {
+              show: this.updateReference.bind(this, 'scheduledDowntime'),
+              hide: this.updateReference.bind(this, 'scheduledDowntime')
+            },
             zIndex: 5
           },
           {
             id: 'unscheduledDowntime',
             name: t.bound('reports', 'coeffs:unscheduledDowntime'),
-            color: COLOR_DOWNTIME,
+            color: this.getColor('unscheduledDowntime', 0.75),
             borderWidth: 0,
             type: 'column',
             yAxis: 1,
@@ -533,6 +502,10 @@ define([
               valueSuffix: '%'
             },
             visible: this.isSeriesVisible('unscheduledDowntime'),
+            events: {
+              show: this.updateReference.bind(this, 'unscheduledDowntime'),
+              hide: this.updateReference.bind(this, 'unscheduledDowntime')
+            },
             zIndex: 6
           }
         ]

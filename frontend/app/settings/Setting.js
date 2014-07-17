@@ -23,6 +23,11 @@ define([
 
     defaults: {
       value: null
+    },
+
+    getValue: function()
+    {
+      return this.get('value');
     }
 
   });

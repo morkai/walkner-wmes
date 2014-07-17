@@ -1,0 +1,29 @@
+<div class="reports-settings-metricRefs">
+  <div class="form-group">
+    <label for="<%- idPrefix %><%- metric %>-overall"><%- t('reports', 'settings:overall') %></label>
+    <input id="<%- idPrefix %>-<%- metric %>-overall" class="form-control" name="reports.<%- metric %>.overall" type="number" value="0" step="1" min="0" max="100">
+  </div><!--
+  //--><div class="form-group">
+    <label for="<%- idPrefix %>-<%- metric %>-prod"><%- t('reports', 'settings:prod') %></label>
+    <input id="<%- idPrefix %>-<%- metric %>-prod" class="form-control" name="reports.<%- metric %>.prod" type="number" value="0" step="1" min="0" max="100">
+  </div><!--
+  //--><div class="form-group">
+    <label for="<%- idPrefix %>-<%- metric %>-press"><%- t('reports', 'settings:press') %></label>
+    <input id="<%- idPrefix %>-<%- metric %>-press" class="form-control" name="reports.<%- metric %>.press" type="number" value="0" step="1" min="0" max="100">
+  </div>
+</div>
+<% divisions.forEach(function(division) { %>
+<div class="reports-settings-metricRefs">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-<%- metric %>-<%- division._id %>"><%= division.label %></label>
+    <input id="<%- idPrefix %>-<%- metric %>-<%- division._id %>" class="form-control" name="reports.<%- metric %>.<%- division._id %>" type="number" value="0" step="1" min="0" max="100">
+  </div><!--
+  <% division.subdivisions.forEach(function(subdivision) { %>
+  //--><div class="form-group">
+    <label for="<%- idPrefix %>-<%- metric %>-<%- subdivision._id %>"><%= subdivision.label %></label>
+    <input id="<%- idPrefix %>-<%- metric %>-<%- subdivision._id %>" class="form-control" name="reports.<%- metric %>.<%- subdivision._id %>" type="number" value="0" step="1" min="0" max="100">
+  </div><!--
+  <% }) %>
+  //-->
+</div>
+<% }) %>

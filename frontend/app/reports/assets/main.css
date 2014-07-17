@@ -158,25 +158,17 @@
 .reports-drillingChartsPage.is-changing * {
   cursor: wait!important;
 }
-.reports-metricRefs .panel {
+.reports-settings .panel {
+  display: none;
   border-top: 0;
 }
-.reports-metricRefs-tab {
-  font-weight: bold;
+.reports-settings .panel.active {
+  display: block;
 }
-.reports-metricRefs-tab[data-metric="efficiency"] > a {
-  color: #0c0!important;
-}
-.reports-metricRefs-tab[data-metric="productivity"] > a {
-  color: #fa0!important;
-}
-.reports-metricRefs-tab[data-metric="productivityNoWh"] > a {
-  color: #e60!important;
-}
-.reports-metricRefs-group:last-child > .form-group {
+.reports-settings-metricRefs:last-child > .form-group {
   margin-bottom: 0;
 }
-.reports-metricRefs-group > .form-group {
+.reports-settings-metricRefs > .form-group {
   display: inline-block;
   margin-right: 15px;
   width: 100px;

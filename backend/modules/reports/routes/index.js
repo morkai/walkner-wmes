@@ -38,13 +38,13 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   );
 
   express.get(
-    '/reports/metricRefs',
+    '/reports/settings',
     canView,
-    function limitToMetricRefs(req, res, next)
+    function limitToReportSettings(req, res, next)
     {
       req.rql.selector = {
         name: 'regex',
-        args: ['_id', '^metricRefs\\.']
+        args: ['_id', '^reports\\.']
       };
 
       return next();
@@ -52,7 +52,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     express.crud.browseRoute.bind(null, app, settings.Setting)
   );
 
-  express.put('/reports/metricRefs/:id', canManage, settings.updateRoute);
+  express.put('/reports/settings/:id', canManage, settings.updateRoute);
 
   if (reportsModule.config.javaBatik)
   {

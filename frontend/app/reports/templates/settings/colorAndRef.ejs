@@ -1,0 +1,10 @@
+<div class="panel panel-default" data-tab="<%- metric %>">
+  <div class="panel-body">
+    <%- renderColorPicker({
+      idPrefix: idPrefix, property: 'reports.' + metric + '.color',
+      label: t('reports', 'settings:color'),
+      value: colors[metric]
+    }) %>
+    <% include metricRefs.ejs %>
+  </div>
+</div>

@@ -11,7 +11,7 @@ define([
   '../Report1',
   '../Report1Query',
   '../Report1Options',
-  '../MetricRefCollection',
+  '../ReportSettingCollection',
   '../views/Report1HeaderView',
   '../views/Report1FilterView',
   '../views/Report1OptionsView',
@@ -26,7 +26,7 @@ define([
   Report1,
   Report1Query,
   Report1Options,
-  MetricRefCollection,
+  ReportSettingCollection,
   Report1HeaderView,
   Report1FilterView,
   Report1OptionsView,
@@ -68,10 +68,10 @@ define([
     },
 
     actions: [{
-      label: t.bound('reports', 'PAGE_ACTION:editMetricRefs'),
-      icon: 'crosshairs',
+      label: t.bound('reports', 'PAGE_ACTION:settings'),
+      icon: 'cogs',
       privileges: 'REPORTS:MANAGE',
-      href: '#reports;metricRefs'
+      href: '#reports;settings'
     }],
 
     events: {
@@ -166,15 +166,15 @@ define([
 
     defineModels: function()
     {
-      this.metricRefs = new MetricRefCollection({
+      this.settings = new ReportSettingCollection(null, {
         pubsub: this.pubsub
       });
 
       this.query = new Report1Query(this.options.query);
 
       this.displayOptions = typeof this.options.displayOptions === 'string'
-        ? Report1Options.fromString(this.options.displayOptions)
-        : new Report1Options(this.options.displayOptions);
+        ? Report1Options.fromString(this.options.displayOptions, {settings: this.settings})
+        : new Report1Options(this.options.displayOptions, {settings: this.settings});
 
       this.reports = this.createReports();
 
@@ -200,7 +200,7 @@ define([
 
     load: function(when)
     {
-      return when(this.metricRefs.fetch({reset: true}));
+      return when(this.settings.fetch({reset: true}));
     },
 
     isFullscreen: function()
@@ -536,7 +536,7 @@ define([
     {
       return new Report1ChartsView({
         model: report,
-        metricRefs: this.metricRefs,
+        settings: this.settings,
         displayOptions: this.displayOptions,
         skipRenderCharts: !!skipRenderCharts
       });
@@ -648,7 +648,7 @@ define([
     {
       return this.bindReports(this.query.createReports(parentReport, childReport, {
         query: this.query,
-        metricRefs: this.metricRefs
+        settings: this.settings
       }));
     },
 

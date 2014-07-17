@@ -1,13 +1,13 @@
 {
   "BREADCRUMBS:reports": "Raporty",
-  "BREADCRUMBS:metricRefs": "Wartości referencyjne",
+  "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:divisions": "Wydziały",
   "BREADCRUMBS:1": "Wskaźniki",
   "BREADCRUMBS:2": "CLIP",
   "BREADCRUMBS:3": "Wykorzystanie zasobów",
   "BREADCRUMBS:4": "Operatorzy",
 
-  "PAGE_ACTION:editMetricRefs": "Zmień wartości referencyjne",
+  "PAGE_ACTION:settings": "Zmień ustawienia",
 
   "1:pageTitle": "Wskaźniki",
   "2:pageTitle": "CLIP",
@@ -104,12 +104,16 @@
   "options:aors": "Obszary odpowiedzialnosci",
   "options:reasons": "Powody przestojów",
 
-  "metricRefs:efficiency": "Wydajność",
-  "metricRefs:productivity": "Produktywność",
-  "metricRefs:productivityNoWh": "Prod. bez magazynu",
-  "metricRefs:overall": "ML",
-  "metricRefs:overall:prod": "Montaż",
-  "metricRefs:overall:press": "Tłocznia",
+  "settings:tab:quantityDone": "Sztuki",
+  "settings:tab:efficiency": "Wydajność",
+  "settings:tab:productivity": "Produktywność",
+  "settings:tab:productivityNoWh": "Produktywność bez magazynu",
+  "settings:tab:scheduledDowntime": "Planowane przestoje",
+  "settings:tab:unscheduledDowntime": "Nieplanowane przestoje",
+  "settings:overall": "ML",
+  "settings:prod": "Montaż",
+  "settings:press": "Tłocznia",
+  "settings:color": "Kolor",
 
   "oee:table:loading": "Ładowanie...",
   "oee:table:loadingFailed": "Ładowanie nie powiodło się :(",

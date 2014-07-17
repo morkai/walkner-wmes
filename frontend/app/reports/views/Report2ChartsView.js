@@ -50,7 +50,7 @@ define([
         '.reports-2-clip-container',
         new Report2ClipChartView({
           model: this.model,
-          metricRefs: this.metricRefs,
+          settings: this.settings,
           skipRenderChart: this.options.skipRenderCharts
         })
       );

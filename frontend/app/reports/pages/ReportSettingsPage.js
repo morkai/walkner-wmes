@@ -6,14 +6,14 @@ define([
   'app/i18n',
   'app/data/orgUnits',
   'app/core/View',
-  '../MetricRefCollection',
-  '../views/MetricRefsView'
+  '../ReportSettingCollection',
+  '../views/ReportSettingsView'
 ], function(
   t,
   orgUnits,
   View,
-  MetricRefCollection,
-  MetricRefsView
+  ReportSettingCollection,
+  ReportSettingsView
 ) {
   'use strict';
 
@@ -21,13 +21,13 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'metricRefs',
+    pageId: 'reportSettings',
 
     breadcrumbs: function()
     {
       return [
         t.bound('reports', 'BREADCRUMBS:reports'),
-        t.bound('reports', 'BREADCRUMBS:metricRefs')
+        t.bound('reports', 'BREADCRUMBS:settings')
       ];
     },
 
@@ -39,22 +39,22 @@ define([
 
     defineModels: function()
     {
-      this.metricRefs = new MetricRefCollection({
+      this.settings = new ReportSettingCollection(null, {
         pubsub: this.pubsub
       });
     },
 
     defineViews: function()
     {
-      this.view = new MetricRefsView({
+      this.view = new ReportSettingsView({
         initialTab: this.options.initialTab,
-        metricRefs: this.metricRefs
+        settings: this.settings
       });
     },
 
     load: function(when)
     {
-      return when(this.metricRefs.fetch({reset: true}));
+      return when(this.settings.fetch({reset: true}));
     }
 
   });

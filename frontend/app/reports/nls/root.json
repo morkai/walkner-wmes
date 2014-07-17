@@ -1,14 +1,14 @@
 {
   "root": {
     "BREADCRUMBS:reports": "Reports",
-    "BREADCRUMBS:metricRefs": "Reference values",
+    "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:divisions": "Divisions",
     "BREADCRUMBS:1": "PROD, EFF, Downtime",
     "BREADCRUMBS:2": "CLIP",
     "BREADCRUMBS:3": "OEE",
     "BREADCRUMBS:4": "Operators",
 
-    "PAGE_ACTION:editMetricRefs": "Change the reference values",
+    "PAGE_ACTION:settings": "Change settings",
 
     "1:pageTitle": "PROD, EFF, Downtime",
     "2:pageTitle": "CLIP",
@@ -105,12 +105,16 @@
     "options:aors": "Areas of resposibility",
     "options:reasons": "Downtime reasons",
 
-    "metricRefs:efficiency": "Efficiency",
-    "metricRefs:productivity": "Productivity",
-    "metricRefs:productivityNoWh": "Prod. w/o WH",
-    "metricRefs:overall": "ML",
-    "metricRefs:overall:prod": "Assembly",
-    "metricRefs:overall:press": "Press",
+    "settings:tab:quantityDone": "Items",
+    "settings:tab:efficiency": "Efficiency",
+    "settings:tab:productivity": "Productivity",
+    "settings:tab:productivityNoWh": "Oroductivity w/o WH",
+    "settings:tab:scheduledDowntime": "Scheduled downtime",
+    "settings:tab:unscheduledDowntime": "Unscheduled downtime",
+    "settings:overall": "ML",
+    "settings:prod": "Assembly",
+    "settings:press": "Press",
+    "settings:color": "Color",
 
     "oee:table:loading": "Loading...",
     "oee:table:loadingFailed": "Loading failed :(",

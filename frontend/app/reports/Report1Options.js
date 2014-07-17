@@ -71,6 +71,16 @@ define([
       return defaults;
     },
 
+    initialize: function(data, options)
+    {
+      if (!options.settings)
+      {
+        throw new Error("settings option is required!");
+      }
+
+      this.settings = options.settings;
+    },
+
     isSeriesVisible: function(series)
     {
       return !!this.get('series')[series];
@@ -106,6 +116,7 @@ define([
       {
         var report = reports[i];
         var maxCoeffs = report.get('maxCoeffs');
+        var orgUnitId = report.getReferenceOrgUnitId();
 
         extremes.maxQuantityDone = Math.max(
           extremes.maxQuantityDone,
@@ -115,11 +126,20 @@ define([
         extremes.maxPercentCoeff = Math.max(
           extremes.maxPercentCoeff,
           visibleSeries.scheduledDowntime ? maxCoeffs.scheduledDowntime : 0,
-          visibleSeries.scheduledDowntime && visibleReferences.scheduledDowntime ? 0 : 0,
+          visibleSeries.scheduledDowntime && visibleReferences.scheduledDowntime
+            ? this.settings.getReference('scheduledDowntime', orgUnitId) : 0,
           visibleSeries.unscheduledDowntime ? maxCoeffs.unscheduledDowntime : 0,
+          visibleSeries.unscheduledDowntime && visibleReferences.unscheduledDowntime
+            ? this.settings.getReference('unscheduledDowntime', orgUnitId) : 0,
           visibleSeries.efficiency ? maxCoeffs.efficiency : 0,
+          visibleSeries.efficiency && visibleReferences.efficiency
+            ? this.settings.getReference('efficiency', orgUnitId) : 0,
           visibleSeries.productivity ? maxCoeffs.productivity : 0,
-          visibleSeries.productivityNoWh ? maxCoeffs.productivityNoWh : 0
+          visibleSeries.productivity && visibleReferences.productivity
+            ? this.settings.getReference('productivity', orgUnitId) : 0,
+          visibleSeries.productivityNoWh ? maxCoeffs.productivityNoWh : 0,
+          visibleSeries.productivityNoWh && visibleReferences.productivityNoWh
+            ? this.settings.getReference('productivityNoWh', orgUnitId) : 0
         );
 
         extremes.maxDowntimesByAor = Math.max(
@@ -168,14 +188,14 @@ define([
 
   }, {
 
-    fromString: function(str)
+    fromString: function(str, options)
     {
       var Report1Options = this;
       var parts = str.split('&');
 
       if (parts.length !== 4)
       {
-        return new Report1Options();
+        return new Report1Options(null, options);
       }
 
       var attrs = {
@@ -238,7 +258,7 @@ define([
         }
       }
 
-      return new Report1Options(attrs);
+      return new Report1Options(attrs, options);
     }
 
   });

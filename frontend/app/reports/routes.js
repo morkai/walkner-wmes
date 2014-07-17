@@ -61,12 +61,12 @@ define([
     });
   });
 
-  router.map('/reports;metricRefs', user.auth('REPORTS:MANAGE'), function(req)
+  router.map('/reports;settings', user.auth('REPORTS:MANAGE'), function(req)
   {
-    viewport.loadPage('app/reports/pages/MetricRefsPage', function(MetricRefsPage)
+    viewport.loadPage('app/reports/pages/ReportSettingsPage', function(ReportSettingsPage)
     {
-      return new MetricRefsPage({
-        initialTab: req.query.tab || 'efficiency'
+      return new ReportSettingsPage({
+        initialTab: req.query.tab
       });
     });
   });
