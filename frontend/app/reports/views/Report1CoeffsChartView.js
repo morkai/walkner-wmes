@@ -23,7 +23,6 @@ define([
 
     initialize: function()
     {
-      this.idPrefix = _.uniqueId('v');
       this.shouldRenderChart = !this.options.skipRenderChart;
       this.chart = null;
       this.loading = false;

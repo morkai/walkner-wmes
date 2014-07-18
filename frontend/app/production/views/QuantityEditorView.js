@@ -3,13 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/viewport',
   'app/core/View',
   'app/production/templates/quantityEditor'
 ], function(
-  _,
   t,
   viewport,
   View,
@@ -35,11 +33,6 @@ define([
 
         this.trigger('quantityChanged', newQuantity);
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('quantityEditor');
     },
 
     serialize: function()

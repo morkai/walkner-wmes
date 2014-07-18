@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/i18n',
   'app/time',
   'app/core/View',
   'app/xiconf/templates/filter'
 ], function(
-  _,
   js2form,
   t,
   time,
@@ -34,19 +32,10 @@ define([
 
     initialize: function()
     {
-      this.idPrefix = _.uniqueId('xiconfResultFilter');
-
       if (this.collection)
       {
         this.listenTo(this.collection, 'change:srcIds', this.setUpSrcIdSelect2);
       }
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     afterRender: function()

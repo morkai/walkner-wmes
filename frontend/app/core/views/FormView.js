@@ -23,13 +23,10 @@ define([
       'submit': 'submitForm'
     },
 
-    idPrefix: 'formView',
-
     $errorMessage: null,
 
     initialize: function()
     {
-      this.idPrefix = _.uniqueId(this.idPrefix);
       this.$errorMessage = null;
 
       this.listenTo(this.model, 'change', function()

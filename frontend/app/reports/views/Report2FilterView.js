@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/i18n',
   'app/time',
@@ -12,7 +11,6 @@ define([
   'app/reports/templates/report2Filter',
   '../util/prepareDateRange'
 ], function(
-  _,
   js2form,
   t,
   time,
@@ -45,18 +43,6 @@ define([
         this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
         this.$('.filter-form').submit();
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('report2Filter');
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     afterRender: function()

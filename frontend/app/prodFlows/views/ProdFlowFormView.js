@@ -17,8 +17,6 @@ define([
 
     template: formTemplate,
 
-    idPrefix: 'prodFlowForm',
-
     initialize: function()
     {
       FormView.prototype.initialize.call(this);

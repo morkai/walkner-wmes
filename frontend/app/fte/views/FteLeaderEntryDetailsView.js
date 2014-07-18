@@ -21,8 +21,6 @@ define([
 
     template: leaderEntryTemplate,
 
-    idPrefix: 'leaderEntryDetails',
-
     remoteTopics: function()
     {
       var topics = {};

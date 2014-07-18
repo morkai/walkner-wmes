@@ -17,8 +17,6 @@ define([
 
     template: formTemplate,
 
-    idPrefix: 'mrpControllerForm',
-
     initialize: function()
     {
       FormView.prototype.initialize.call(this);

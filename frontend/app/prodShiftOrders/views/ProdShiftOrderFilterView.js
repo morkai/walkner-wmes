@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/i18n',
   'app/user',
@@ -13,7 +12,6 @@ define([
   'app/prodShiftOrders/templates/filter',
   'select2'
 ], function(
-  _,
   js2form,
   t,
   user,
@@ -37,21 +35,9 @@ define([
       }
     },
 
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('prodShiftOrderFilter');
-    },
-
     destroy: function()
     {
       this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     afterRender: function()

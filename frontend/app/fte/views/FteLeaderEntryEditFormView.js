@@ -25,8 +25,6 @@ define([
 
     template: leaderEntryTemplate,
 
-    idPrefix: 'leaderEntryForm',
-
     events: {
       'change .fte-leaderEntry-count': 'updateCount',
       'keyup .fte-leaderEntry-count': 'updateCount',

@@ -19,8 +19,6 @@ define([
 
     template: entryTemplate,
 
-    idPrefix: 'hourlyPlanDetails',
-
     remoteTopics: function()
     {
       var topics = {};

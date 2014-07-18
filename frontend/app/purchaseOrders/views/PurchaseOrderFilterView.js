@@ -3,13 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/i18n',
   'app/core/View',
   'app/purchaseOrders/templates/filter'
 ], function(
-  _,
   js2form,
   t,
   View,
@@ -28,18 +26,6 @@ define([
 
         this.changeFilter();
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('poFilter');
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     afterRender: function()
@@ -69,11 +55,11 @@ define([
         switch (property)
         {
           case '_id':
-            formData._id = _.isString(term.args[1]) ? term.args[1].replace(/^[0-9]/g, '') : '';
+            formData._id = typeof term.args[1] === 'string' ? term.args[1].replace(/^[0-9]/g, '') : '';
             break;
 
           case 'items.nc12':
-            formData.nc12 = _.isString(term.args[1]) ? term.args[1].replace(/[^0-9]/g, '') : '-';
+            formData.nc12 = typeof term.args[1] === 'string' ? term.args[1].replace(/[^0-9]/g, '') : '-';
             break;
 
           case 'items.schedule.date':

@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/viewport',
   'app/core/View',
   'app/users/util/setUpUserSelect2',
   'app/production/templates/personelPicker'
 ], function(
-  _,
   t,
   viewport,
   View,
@@ -77,11 +75,6 @@ define([
           'userPicked', userInfo.label === null || !userInfo.label.length ? null : userInfo
         );
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('personelPicker');
     },
 
     destroy: function()

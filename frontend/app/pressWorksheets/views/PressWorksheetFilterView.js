@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/i18n',
   'app/user',
@@ -13,7 +12,6 @@ define([
   'app/users/util/setUpUserSelect2',
   'app/pressWorksheets/templates/filter'
 ], function(
-  _,
   js2form,
   t,
   user,
@@ -36,18 +34,6 @@ define([
 
         this.changeFilter();
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('pressWorksheetsFilter');
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     afterRender: function()

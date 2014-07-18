@@ -33,8 +33,6 @@ define([
 
     template: addFormTemplate,
 
-    idPrefix: 'addFteEntryForm',
-
     events: {
       'submit': 'submitForm'
     },

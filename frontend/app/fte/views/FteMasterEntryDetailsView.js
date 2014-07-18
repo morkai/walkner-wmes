@@ -23,8 +23,6 @@ define([
 
     template: masterEntryTemplate,
 
-    idPrefix: 'masterEntryDetails',
-
     remoteTopics: function()
     {
       var topics = {};

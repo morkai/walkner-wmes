@@ -30,8 +30,6 @@ define([
 
     template: masterEntryTemplate,
 
-    idPrefix: 'masterEntryForm',
-
     events: {
       'change .fte-masterEntry-count': 'updateCount',
       'keyup .fte-masterEntry-count': 'updateCount',

@@ -39,8 +39,6 @@ define([
 
     template: formTemplate,
 
-    idPrefix: 'pressWorksheetForm',
-
     events: {
       'keydown': function(e)
       {
@@ -105,8 +103,7 @@ define([
           mm = 0;
         }
 
-        e.target.value = (hh < 10 ? '0' : '') + hh.toString(10)
-          + ':' + (mm < 10 ? '0' : '') + mm.toString(10);
+        e.target.value = (hh < 10 ? '0' : '') + hh.toString(10) + ':' + (mm < 10 ? '0' : '') + mm.toString(10);
 
         this.validateTimes(e.target);
       },

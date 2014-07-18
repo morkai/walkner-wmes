@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/time',
   'app/viewport',
@@ -12,7 +11,6 @@ define([
   'app/core/View',
   'app/production/templates/downtimePicker'
 ], function(
-  _,
   t,
   time,
   viewport,
@@ -71,11 +69,6 @@ define([
           .val(time.format(startedAt, 'YYYY-MM-DD, HH:mm:ss'))
           .attr('data-time', startedAt);
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('downtimePicker');
     },
 
     destroy: function()

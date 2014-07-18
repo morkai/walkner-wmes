@@ -15,8 +15,6 @@ define([
 
     template: formTemplate,
 
-    idPrefix: 'divisionForm',
-
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);

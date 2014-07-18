@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/time',
   'app/user',
@@ -12,7 +11,6 @@ define([
   './decorateProdDowntime',
   'app/prodDowntimes/templates/corroborate'
 ], function(
-  _,
   t,
   time,
   user,
@@ -40,8 +38,6 @@ define([
 
     initialize: function()
     {
-      this.idPrefix = _.uniqueId('cpdv');
-
       this.listenTo(this.model, 'change:finishedAt', function()
       {
         this.$('.prodDowntimes-corroborate-finishedAt').text(

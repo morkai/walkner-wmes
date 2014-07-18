@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/i18n',
   'app/time',
@@ -13,7 +12,6 @@ define([
   'app/reports/templates/report3Filter',
   '../util/prepareDateRange'
 ], function(
-  _,
   js2form,
   t,
   time,
@@ -74,11 +72,6 @@ define([
           subdivisionTypes.length === $subdivisionTypes.length ? null : subdivisionTypes[0]
         );
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('report3Filter');
     },
 
     serialize: function()

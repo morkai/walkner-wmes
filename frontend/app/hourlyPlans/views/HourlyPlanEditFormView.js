@@ -23,8 +23,6 @@ define([
 
     template: entryTemplate,
 
-    idPrefix: 'hourlyPlanForm',
-
     events: {
       'change .hourlyPlan-count': 'updateCount',
       'keyup .hourlyPlan-count': 'updateCount',

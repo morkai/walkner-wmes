@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/viewport',
   'app/core/View',
   '../util/orderPickerHelpers',
   'app/production/templates/newOrderPicker'
 ], function(
-  _,
   t,
   viewport,
   View,
@@ -76,11 +74,6 @@ define([
           this.handleOfflinePick(submitEl);
         }
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('newOrderPicker');
     },
 
     destroy: function()

@@ -24,6 +24,8 @@ function(
 
   function View(options)
   {
+    this.idPrefix = _.uniqueId('v');
+
     this.options = options || {};
 
     this.timers = {};
@@ -107,6 +109,11 @@ function(
     }
 
     this.cancelRequests();
+  };
+
+  View.prototype.serialize = function()
+  {
+    return {idPrefix: this.idPrefix};
   };
 
   View.prototype.isRendered = function()

@@ -3,12 +3,10 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/core/View',
   'app/production/templates/endWorkDialog'
 ], function(
-  _,
   t,
   View,
   endWorkDialogTemplate
@@ -55,11 +53,6 @@ define([
 
         this.closeDialog();
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('endWorkDialog');
     },
 
     serialize: function()

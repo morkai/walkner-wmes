@@ -3,13 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/i18n',
   'app/core/View',
   'app/mechOrders/templates/filter'
 ], function(
-  _,
   js2form,
   t,
   View,
@@ -28,18 +26,6 @@ define([
 
         this.changeFilter();
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('mechOrderFilter');
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     afterRender: function()
@@ -68,7 +54,7 @@ define([
           case '_id':
             var value = term.args[1];
 
-            formData[property] = _.isString(value) ? value.replace(/[^0-9a-zA-Z]/g, '') : '';
+            formData[property] = typeof value === 'string' ? value.replace(/[^0-9a-zA-Z]/g, '') : '';
             break;
         }
       });

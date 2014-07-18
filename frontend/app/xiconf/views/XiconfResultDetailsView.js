@@ -43,7 +43,6 @@ define([
 
     initialize: function()
     {
-      this.idPrefix = _.uniqueId('xiconfResult');
       this.featureHighlighted = false;
 
       this.listenTo(this.model, 'change', _.after(2, this.render.bind(this)));

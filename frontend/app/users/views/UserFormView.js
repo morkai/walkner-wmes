@@ -39,8 +39,6 @@ define([
 
     template: formTemplate,
 
-    idPrefix: 'userForm',
-
     events: {
       'submit': 'submitForm',
       'input input[type="password"]': function(e)

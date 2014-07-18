@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/core/View',
   'app/data/orgUnits',
@@ -11,7 +10,6 @@ define([
   'app/reports/templates/settings',
   'bootstrap-colorpicker'
 ], function(
-  _,
   js2form,
   View,
   orgUnits,
@@ -64,7 +62,6 @@ define([
 
     initialize: function()
     {
-      this.idPrefix = _.uniqueId('v');
       this.currentTab = this.options.initialTab;
       this.inProgress = {};
 

@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/i18n',
   'app/core/View',
   'app/users/templates/filter',
   'select2'
 ], function(
-  _,
   js2form,
   t,
   View,
@@ -29,18 +27,6 @@ define([
 
         this.changeFilter();
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('userFilter');
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     afterRender: function()

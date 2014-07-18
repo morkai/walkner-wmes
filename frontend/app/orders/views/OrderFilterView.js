@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'js2form',
   'app/i18n',
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/orders/templates/filter'
 ], function(
-  _,
   js2form,
   t,
   View,
@@ -43,18 +41,6 @@ define([
       {
         e.target.setAttribute('data-changed', 'true');
       }
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('orderFilter');
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     afterRender: function()
@@ -95,7 +81,7 @@ define([
           case 'nc12':
             var value = term.args[1];
 
-            formData[property] = _.isString(value) ? value.replace(/[^0-9]/g, '') : '-';
+            formData[property] = typeof value === 'string' ? value.replace(/[^0-9]/g, '') : '-';
             break;
         }
       });

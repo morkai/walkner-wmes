@@ -33,8 +33,6 @@ define([
 
     template: addFormTemplate,
 
-    idPrefix: 'hourlyPlanAddForm',
-
     events: {
       'submit': 'submitForm'
     },

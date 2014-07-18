@@ -3,13 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/i18n',
   'app/viewport',
   'app/core/View',
   'app/mechOrders/templates/import'
 ], function(
-  _,
   t,
   viewport,
   View,
@@ -23,18 +21,6 @@ define([
 
     events: {
       'submit': 'upload'
-    },
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('mechOrderImport');
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     onDialogShown: function(viewport)

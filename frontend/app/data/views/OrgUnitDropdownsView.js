@@ -3,7 +3,6 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'jquery',
   'app/i18n',
   'app/core/View',
@@ -14,7 +13,6 @@ define([
   '../workCenters',
   '../prodLines'
 ], function(
-  _,
   $,
   t,
   View,
@@ -57,11 +55,6 @@ define([
     tagName: 'div',
 
     className: 'orgUnitDropdowns',
-
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('orgUnitDropdown');
-    },
 
     destroy: function()
     {

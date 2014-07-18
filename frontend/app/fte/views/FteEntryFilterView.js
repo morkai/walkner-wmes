@@ -46,8 +46,6 @@ define([
 
     initialize: function()
     {
-      this.idPrefix = _.uniqueId('fteFilter');
-
       this.orgUnitDropdownsView = new OrgUnitDropdownsView({
         orgUnit: this.options.divisionOnly ? ORG_UNIT.DIVISION : ORG_UNIT.SUBDIVISION,
         divisionFilter: this.options.divisionFilter || null,
@@ -56,13 +54,6 @@ define([
       });
 
       this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
     },
 
     afterRender: function()

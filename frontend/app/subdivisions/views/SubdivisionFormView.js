@@ -19,8 +19,6 @@ define([
 
     template: formTemplate,
 
-    idPrefix: 'subdivisionForm',
-
     initialize: function()
     {
       FormView.prototype.initialize.call(this);
