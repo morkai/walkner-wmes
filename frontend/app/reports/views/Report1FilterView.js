@@ -45,9 +45,9 @@ define([
         this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
         this.$('.filter-form').submit();
       },
-      'click #-showOptions': function()
+      'click #-showDisplayOptions': function()
       {
-        this.trigger('showOptions');
+        this.trigger('showDisplayOptions');
       }
     },
 

@@ -22,12 +22,15 @@
   width: 100%!important;
   height: 100%!important;
 }
-.reports-drillingChartsPage .filter-container,
-.reports-drillingChartsPage .options-container {
+.reports-drillingReportPage .filter-container,
+.reports-displayOptions-container {
   margin-top: 1em;
   margin-bottom: 0;
 }
-.reports-drillingChartsPage .form-group-datetime {
+.reports-displayOptions-container > .well {
+  padding: 1em 1em 0 0;
+}
+.reports-drillingReportPage .form-group-datetime {
   display: inline-flex;
   width: 256px;
 }
@@ -146,16 +149,16 @@
 .reports-drillingChart.is-fullscreen .highcharts-title {
   cursor: default!important;
 }
-.reports-drillingChartsPage.is-drillingDown .reports-drillingCharts {
+.reports-drillingReportPage.is-drillingDown .reports-drillingCharts {
   opacity: 0.01;
 }
-.reports-drillingChartsPage.is-drillingDown .reports-drillingCharts:first-child {
+.reports-drillingReportPage.is-drillingDown .reports-drillingCharts:first-child {
   opacity: 1;
 }
-.reports-drillingChartsPage.is-replacing .reports-drillingCharts {
+.reports-drillingReportPage.is-replacing .reports-drillingCharts {
   opacity: 0.01;
 }
-.reports-drillingChartsPage.is-changing * {
+.reports-drillingReportPage.is-changing * {
   cursor: wait!important;
 }
 .reports-settings .panel {

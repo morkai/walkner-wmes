@@ -1,8 +1,7 @@
 .filter-container {
   margin-bottom: 1em;
 }
-.filter-container > .well,
-.options-container > .well {
+.filter-container > .well {
   padding: 1em 1em 0 0;
 }
 .filter-form .form-group {

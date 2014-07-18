@@ -190,12 +190,12 @@ define([
 
     fromString: function(str, options)
     {
-      var Report1Options = this;
+      var Report1DisplayOptions = this;
       var parts = str.split('&');
 
       if (parts.length !== 4)
       {
-        return new Report1Options(null, options);
+        return new Report1DisplayOptions(null, options);
       }
 
       var attrs = {
@@ -258,7 +258,7 @@ define([
         }
       }
 
-      return new Report1Options(attrs, options);
+      return new Report1DisplayOptions(attrs, options);
     }
 
   });
