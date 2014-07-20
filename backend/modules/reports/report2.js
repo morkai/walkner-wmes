@@ -76,7 +76,7 @@ module.exports = function(mongoose, options, done)
   {
     calcFte(mongoose, options, this.parallel());
 
-    if (options.interval === 'shift' || !options.mrpControllers.length)
+    if (options.interval === 'shift' || !Array.isArray(options.mrpControllers) || !options.mrpControllers.length)
     {
       return;
     }

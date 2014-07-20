@@ -24,15 +24,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     return res.send(400);
   }
 
-  var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(
-    req.query.orgUnitType, req.query.orgUnitId
-  );
-
-  if (mrpControllers === null)
-  {
-    return next(new Error('INVALID_ORG_UNIT'));
-  }
-
+  var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(req.query.orgUnitType, req.query.orgUnitId);
   var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
 
   var options = {
