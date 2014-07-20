@@ -122,7 +122,7 @@
   "highcharts:downloadSVG": "Zapisz jako SVG",
   "highcharts:printChart": "Drukuj wykres",
   "highcharts:decimalPoint": ",",
-  "highcharts:thousandsSep": ".",
+  "highcharts:thousandsSep": " ",
   "highcharts:noData": "Brak danych :(",
   "highcharts:resetZoom": "1:1",
   "highcharts:resetZoomTitle": "Zresetuj przybliżenie",
