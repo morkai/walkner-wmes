@@ -81,7 +81,15 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       type: Number,
       default: 0
     },
+    laborSetupTime: {
+      type: Number,
+      default: 0
+    },
     machineTime: {
+      type: Number,
+      default: 0
+    },
+    machineSetupTime: {
       type: Number,
       default: 0
     },
@@ -227,13 +235,15 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
     if (!operations)
     {
-      return 0;
+      return;
     }
 
     var operation = operations[this.operationNo];
 
     this.laborTime = operation && operation.laborTime > 0 ? operation.laborTime : 0;
+    this.laborSetupTime = operation && operation.laborSetupTime > 0 ? operation.laborSetupTime : 0;
     this.machineTime = operation && operation.machineTime > 0 ? operation.machineTime : 0;
+    this.machineSetupTime = operation && operation.machineSetupTime > 0 ? operation.machineSetupTime : 0;
   };
 
   prodShiftOrderSchema.methods.recountTotals = function()

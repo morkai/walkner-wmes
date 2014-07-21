@@ -20,6 +20,7 @@ module.exports = function startFixRoutes(app, express)
   }
 
   express.get('/fix/prodShiftOrders/durations', onlySuper, fixProdShiftOrderDurations);
+  express.get('/fix/prodShiftOrders/operation-times', onlySuper, fixProdShiftOrderOperationTimes);
   express.get('/fix/prodLogEntries/corroborated-before-created', onlySuper, fixProdLogEntriesCorroboratedBeforeCreated);
   express.get('/fix/prodLogEntries/corroborate-downtimes', onlySuper, corroborateDowntimeLogEntries);
   express.get('/fix/prodLogEntries/recreate', onlySuper, recreateProdData);
@@ -57,6 +58,37 @@ module.exports = function startFixRoutes(app, express)
                 prodShiftOrder.recalcDurations(true, next);
               }
             });
+          });
+        });
+
+        steps.push(function()
+        {
+          res.type('txt');
+          res.send("ALL DONE!");
+        });
+
+        step(steps);
+      });
+  }
+
+  function fixProdShiftOrderOperationTimes(req, res, next)
+  {
+    app.mongoose.model('ProdShiftOrder')
+      .find({})
+      .exec(function(err, prodShiftOrders)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        var steps = [];
+
+        prodShiftOrders.forEach(function(prodShiftOrder)
+        {
+          steps.push(function()
+          {
+            prodShiftOrder.save(this.next());
           });
         });
 
