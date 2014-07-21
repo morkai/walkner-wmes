@@ -32,6 +32,8 @@ module.exports = function(mongoose, options, done)
     clip: [],
     dirIndir: {
       quantityDone: 0,
+      efficiencyNum: 0,
+      laborSetupTime: 0,
       productivity: 0,
       productivityNoWh: 0,
       direct: 0,
@@ -264,6 +266,7 @@ module.exports = function(mongoose, options, done)
         _id: 0,
         num: {$multiply: [{$divide: ['$laborTime', 100]}, '$totalQuantity']},
         den: {$multiply: ['$workDuration', '$workerCount']},
+        laborSetupTime: 1,
         quantityDone: 1,
         mechOrder: 1
       }},
@@ -271,13 +274,15 @@ module.exports = function(mongoose, options, done)
         _id: null,
         num: {$sum: '$num'},
         den: {$sum: '$den'},
-        qty: {$sum: {$cond: ['$mechOrder', 0, '$quantityDone']}}
+        qty: {$sum: {$cond: ['$mechOrder', 0, '$quantityDone']}},
+        lst: {$sum: '$laborSetupTime'}
       }},
       {$project: {
         num: '$num',
         den: '$den',
         eff: {$divide: ['$num', '$den']},
-        qty: '$qty'
+        qty: '$qty',
+        lst: '$lst'
       }}],
       this.parallel()
     );
@@ -300,13 +305,13 @@ module.exports = function(mongoose, options, done)
 
     results.effIneff.dirIndir = results.dirIndir.indirectProdFlow + results.dirIndir.storage;
     results.effIneff.efficiency = util.round(doc.eff);
-    results.effIneff.value = util.round(
-      (results.dirIndir.direct * doc.eff) - results.dirIndir.direct
-    );
+    results.effIneff.value = util.round((results.dirIndir.direct * doc.eff) - results.dirIndir.direct);
 
     results.dirIndir.productivity = util.round(doc.num / 8 / this.fteResults.totals.prodDenTotal);
     results.dirIndir.productivityNoWh = util.round(doc.num / 8 / this.fteResults.totals.prodDenMaster);
     results.dirIndir.quantityDone = doc.qty;
+    results.dirIndir.efficiencyNum = doc.num;
+    results.dirIndir.laborSetupTime = util.round(doc.lst);
 
     this.fteResults = null;
   }
