@@ -51,7 +51,7 @@ module.exports = function createErrorHandlerMiddleware(appModule, options)
     }
     else
     {
-      appModule.warn("%s %s\n%s\nUser: %s (%s)", req.method, req.url, err.stack, login, req.ip);
+      appModule.warn("%s %s\n%s\nUser: %s (%s)", req.method, req.url, err.stack || err.message, login, req.ip);
     }
 
     var accept = req.headers.accept || '';
