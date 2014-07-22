@@ -369,12 +369,12 @@ function handleFteMasterEntryStream(prodFlowMap, options, fteRatios, results, st
         {
           var count = func.companies[compI].count * ratio;
 
-          results.dirIndir.production += count;
-
           if (isProdFlow && options.prodFlows !== null && !prodFlowMap[task.id])
           {
             continue;
           }
+
+          results.dirIndir.production += count;
 
           addToDirIndir(results.dirIndir, isProdFlow, dirIndirRatio, func.id, count);
 
