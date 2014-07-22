@@ -20,11 +20,20 @@ define([
     events: {
       'click tr': function(e)
       {
-        this.broker.publish('router.navigate', {
-          url: this.collection.get(e.currentTarget.dataset.id).genClientUrl(),
-          trigger: true,
-          replace: false
-        });
+        var url = this.collection.get(e.currentTarget.dataset.id).genClientUrl();
+
+        if (e.ctrlKey)
+        {
+          window.open(url);
+        }
+        else if (!e.altKey)
+        {
+          this.broker.publish('router.navigate', {
+            url: url,
+            trigger: true,
+            replace: false
+          });
+        }
       }
     },
 
