@@ -49,6 +49,7 @@ module.exports = function(mongoose, options, done)
       value: 0,
       efficiency: 0,
       dirIndir: 0,
+      prodFlow: 0,
       prodTasks: {}
     }
   };
@@ -377,7 +378,11 @@ function handleFteMasterEntryStream(prodFlowMap, options, fteRatios, results, st
 
           addToDirIndir(results.dirIndir, isProdFlow, dirIndirRatio, func.id, count);
 
-          if (!isProdFlow)
+          if (isProdFlow)
+          {
+            results.effIneff.prodFlow += count;
+          }
+          else
           {
             addToProperty(results.effIneff.prodTasks, task.id, count);
           }
