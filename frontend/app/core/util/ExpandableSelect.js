@@ -23,6 +23,7 @@ define([
 
     this.$el
       .on('mousedown.' + PLUGIN_NAME, this.onMouseDown.bind(this))
+      .on('keydown.' + PLUGIN_NAME, this.onKeyDown.bind(this))
       .on('focus.' + PLUGIN_NAME, this.onFocus.bind(this))
       .on('blur.' + PLUGIN_NAME, this.onBlur.bind(this));
   }
@@ -97,6 +98,16 @@ define([
       _.defer(this.$el.focus.bind(this.$el));
 
       e.preventDefault();
+    },
+
+    onKeyDown: function(e)
+    {
+      if (e.keyCode === 27)
+      {
+        this.$el.blur();
+
+        return false;
+      }
     },
 
     onFocus: function()
