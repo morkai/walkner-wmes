@@ -59,7 +59,7 @@ define([
       });
       this.$helper.insertAfter(this.$el);
 
-      var length = this.$el.prop('length');
+      var length = this.$el.prop('length') + this.$el.find('optgroup').length;
       var size = this.options.expandedLength || parseInt(this.$el.attr('data-expanded-length'), 10) || length;
 
       this.$el.prop('size', size > length ? length : size);
