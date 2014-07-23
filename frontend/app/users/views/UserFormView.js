@@ -232,7 +232,7 @@ define([
           results: function(data)
           {
             return {
-              results: data.collection.map(vendorToSelect2)
+              results: (data.collection || []).map(vendorToSelect2)
             };
           }
         }
