@@ -208,7 +208,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
         if (!item.completed)
         {
-          var key = 'items.' + item._id + '.completed';
+          var key = 'items/' + item._id + '/completed';
 
           update.$set['items.' + i + '.completed'] = true;
           update.$push.changes.data[key] = [false, true];
@@ -284,7 +284,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
     Object.keys(newItemMap).forEach(function(newItemId)
     {
-      changes['items.' + newItemId] = [null, newItemMap[newItemId]];
+      changes['items/' + newItemId] = [null, newItemMap[newItemId]];
       oldItems[newItemId] = newItemMap[newItemId];
 
       changed = true;
@@ -295,7 +295,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
   function compareItem(oldItem, i, newItemMap, changes)
   {
-    var keyPrefix = 'items.' + oldItem._id;
+    var keyPrefix = 'items/' + oldItem._id;
     var newItem = newItemMap[oldItem._id];
 
     if (newItem)
@@ -322,7 +322,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
         if (!deepEqual(newValue, oldValue))
         {
-          changes[keyPrefix + '.' + propertyName] = [oldValue, newValue];
+          changes[keyPrefix + '/' + propertyName] = [oldValue, newValue];
           oldItem[propertyName] = newValue;
 
           changed = true;
@@ -334,7 +334,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
     if (!oldItem.completed)
     {
-      changes[keyPrefix + '.completed'] = [false, true];
+      changes[keyPrefix + '/completed'] = [false, true];
       oldItem.completed = true;
 
       return true;
