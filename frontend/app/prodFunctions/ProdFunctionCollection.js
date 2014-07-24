@@ -15,7 +15,9 @@ define([
 
     model: ProdFunction,
 
-    rqlQuery: 'sort(fteMasterPosition)'
+    rqlQuery: 'sort(fteMasterPosition)',
+
+    comparator: 'fteMasterPosition'
 
   });
 });
