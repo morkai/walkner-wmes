@@ -19,6 +19,8 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startMailListenerModule(app, module)
 {
+  var isConnected = false;
+
   app.broker
     .subscribe('app.started', setUpMailListener)
     .setLimit(1);
@@ -29,12 +31,19 @@ exports.start = function startMailListenerModule(app, module)
 
     mailListener.on('server:connected', function()
     {
+      isConnected = true;
+
       module.debug("Connected to the IMAP server");
     });
 
     mailListener.on('server:disconnected', function()
     {
-      module.warn("Disconnected from the IMAP server");
+      if (isConnected)
+      {
+        isConnected = false;
+
+        module.warn("Disconnected from the IMAP server");
+      }
 
       mailListener.removeAllListeners();
       mailListener.stop();
@@ -44,6 +53,11 @@ exports.start = function startMailListenerModule(app, module)
 
     mailListener.on('error', function(err)
     {
+      if (err.syscall === 'connect' && !isConnected)
+      {
+        return;
+      }
+
       module.error(err.message);
     });
 
