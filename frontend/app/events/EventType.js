@@ -17,11 +17,18 @@ define([
 
     nlsDomain: 'events',
 
-    labelAttribute: 'label',
+    labelAttribute: 'text',
 
     defaults: {
-      label: null,
-      value: null
+      text: null
+    },
+
+    toSelect2Option: function()
+    {
+      return {
+        id: this.id,
+        text: this.getLabel()
+      };
     }
 
   });

@@ -114,7 +114,7 @@
     "SHIFT:1": "I",
     "SHIFT:2": "II",
     "SHIFT:3": "III",
-    "SHIFT:ANY": "Any",
+    "SHIFT:0": "Any",
 
     "highcharts:contextButtonTitle": "Chart's context menu",
     "highcharts:downloadJPEG": "Save as JPEG",
@@ -141,8 +141,8 @@
 
     "colorPicker:label": "Color",
 
-    "filter:date:from": "From:",
-    "filter:date:to": "To:",
+    "filter:date:from": "From",
+    "filter:date:to": "To",
     "filter:submit": "Filter",
     "filter:limit": "Limit"
   },

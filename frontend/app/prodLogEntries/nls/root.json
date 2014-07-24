@@ -4,12 +4,9 @@
 
     "MSG:LOADING_FAILURE": "Failed to load the operation log :(",
 
-    "FILTER:DATE:FROM": "From",
-    "FILTER:DATE:TO": "To",
-    "FILTER:LIMIT": "Limit",
-    "FILTER:BUTTON": "Filter operations",
-    "FILTER:PLACEHOLDER:type": "Any type",
-    "FILTER:PLACEHOLDER:prodLine": "Any production line",
+    "filter:submit": "Filter operations",
+    "filter:placeholder:type": "Any type",
+    "filter:placeholder:prodLine": "Any production line",
 
     "PROPERTY:prodLine": "Production line",
     "PROPERTY:type": "Type",

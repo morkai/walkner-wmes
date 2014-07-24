@@ -3,48 +3,51 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'js2form',
-  'app/i18n',
   'app/user',
   'app/data/prodLines',
-  'app/core/View',
+  'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
-  'app/prodShiftOrders/templates/filter',
-  'select2'
+  'app/prodShiftOrders/templates/filter'
 ], function(
-  js2form,
-  t,
   user,
   prodLines,
-  View,
+  FilterView,
   fixTimeRange,
   filterTemplate
 ) {
   'use strict';
 
-  return View.extend({
+  return FilterView.extend({
 
     template: filterTemplate,
 
-    events: {
-      'submit .filter-form': function(e)
-      {
-        e.preventDefault();
-
-        this.changeFilter();
-      }
+    defaultFormData: {
+      createdAt: '',
+      prodLine: null,
+      type: null,
+      shift: 0,
+      orderId: '',
+      operationNo: ''
     },
 
-    destroy: function()
-    {
-      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
+    termToForm: {
+      'date': function(propertyName, term, formData)
+      {
+        fixTimeRange.toFormData(formData, term, 'date');
+      },
+      'prodLine': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.args[1];
+      },
+      'shift': 'prodLine',
+      'orderId': 'prodLine',
+      'operationNo': 'prodLine'
+
     },
 
     afterRender: function()
     {
-      var formData = this.serializeRqlQuery();
-
-      js2form(this.el.querySelector('.filter-form'), formData);
+      FilterView.prototype.afterRender.call(this);
 
       this.$id('prodLine').select2({
         width: '275px',
@@ -64,51 +67,9 @@ define([
       });
     },
 
-    serializeRqlQuery: function()
+    serializeFormToQuery: function(selector)
     {
-      var rqlQuery = this.model.rqlQuery;
-      var formData = {
-        createdAt: '',
-        prodLine: null,
-        type: null,
-        shift: 0,
-        orderId: '',
-        operationNo: '',
-        limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
-      };
-
-      rqlQuery.selector.args.forEach(function(term)
-      {
-        /*jshint -W015*/
-
-        var property = term.args[0];
-
-        switch (property)
-        {
-          case 'date':
-            fixTimeRange.toFormData(formData, term, 'date');
-            break;
-
-          case 'prodLine':
-          case 'shift':
-          case 'orderId':
-          case 'operationNo':
-            if (term.name === 'eq')
-            {
-              formData[property] = term.args[1];
-            }
-            break;
-        }
-      });
-
-      return formData;
-    },
-
-    changeFilter: function()
-    {
-      var rqlQuery = this.model.rqlQuery;
       var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
-      var selector = [];
       var prodLine = this.$id('prodLine').val();
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
       var orderId = this.$id('orderId').val();
@@ -143,12 +104,6 @@ define([
       {
         selector.push({name: 'le', args: ['date', timeRange.to]});
       }
-
-      rqlQuery.selector = {name: 'and', args: selector};
-      rqlQuery.limit = parseInt(this.$id('limit').val(), 10) || 15;
-      rqlQuery.skip = 0;
-
-      this.trigger('filterChanged', rqlQuery);
     },
 
     fixOperationNo: function()

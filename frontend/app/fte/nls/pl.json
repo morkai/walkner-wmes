@@ -17,10 +17,9 @@
   "PAGE_ACTION:delete": "Usuń wpis",
   "PAGE_ACTION:export": "Eksportuj wpisy",
 
-  "FILTER:DATE": "Data:",
-  "FILTER:LIMIT": "Limit:",
-  "FILTER:SHIFT": "Zmiana:",
-  "FILTER:BUTTON": "Filtruj wpisy",
+  "filter:date": "Data:",
+  "filter:shift": "Zmiana:",
+  "filter:submit": "Filtruj wpisy",
 
   "addForm:panel:title": "Formularz wyszukiwania/tworzenia wpisu FTE",
   "addForm:submit": "Przydzielaj zasoby",

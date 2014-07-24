@@ -8,16 +8,14 @@ define([
   'app/viewport',
   'app/core/views/ListView',
   'app/data/prodLines',
-  'app/data/views/renderOrgUnitPath',
-  './decorateProdLogEntry'
+  'app/data/views/renderOrgUnitPath'
 ], function(
   t,
   user,
   viewport,
   ListView,
   prodLines,
-  renderOrgUnitPath,
-  decorateProdLogEntry
+  renderOrgUnitPath
 ) {
   'use strict';
 
@@ -32,11 +30,6 @@ define([
     },
 
     columns: ['prodLine', 'type', 'data', 'prodShift', 'prodShiftOrder', 'createdAt', 'creator'],
-
-    serializeRows: function()
-    {
-      return this.collection.map(decorateProdLogEntry);
-    },
 
     serializeActions: function()
     {

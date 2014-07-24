@@ -13,11 +13,13 @@ define([
   '../data/downtimeReasons',
   '../data/subdivisions',
   '../data/workCenters',
+  '../data/prodFlows',
   '../data/prodLines',
   '../data/prodLog',
   '../prodDowntimes/ProdDowntime',
   '../prodDowntimes/ProdDowntimeCollection',
-  '../prodShiftOrders/ProdShiftOrder'
+  '../prodShiftOrders/ProdShiftOrder',
+  'app/core/templates/userInfo'
 ], function(
   _,
   t,
@@ -29,11 +31,13 @@ define([
   downtimeReasons,
   subdivisions,
   workCenters,
+  prodFlows,
   prodLines,
   prodLog,
   ProdDowntime,
   ProdDowntimeCollection,
-  ProdShiftOrder
+  ProdShiftOrder,
+  renderUserInfo
 ) {
   'use strict';
 
@@ -97,6 +101,38 @@ define([
           rqlQuery: 'sort(-startedAt)&limit(8)&prodLine=' + encodeURIComponent(this.prodLine.id)
         });
       }
+    },
+
+    serialize: function(options)
+    {
+      var prodShift = this.toJSON();
+
+      prodShift.createdAt = time.format(prodShift.createdAt, 'YYYY-MM-DD HH:mm:ss');
+      prodShift.creator = renderUserInfo({userInfo: prodShift.creator});
+
+      prodShift.date = time.format(prodShift.date, 'YYYY-MM-DD');
+      prodShift.shift = t('core', 'SHIFT:' + prodShift.shift);
+
+      if (options.orgUnits)
+      {
+        var subdivision = subdivisions.get(prodShift.subdivision);
+        var prodFlow = prodFlows.get(prodShift.prodFlow);
+
+        prodShift.subdivision = subdivision ? subdivision.getLabel() : '?';
+        prodShift.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
+        prodShift.mrpControllers = Array.isArray(prodShift.mrpControllers) && prodShift.mrpControllers.length
+          ? prodShift.mrpControllers.join('; ')
+          : '?';
+      }
+
+      if (options.personnel)
+      {
+        prodShift.master = renderUserInfo({userInfo: prodShift.master});
+        prodShift.leader = renderUserInfo({userInfo: prodShift.leader});
+        prodShift.operator = renderUserInfo({userInfo: prodShift.operator});
+      }
+
+      return prodShift;
     },
 
     startShiftChangeMonitor: function()

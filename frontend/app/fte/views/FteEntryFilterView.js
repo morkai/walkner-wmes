@@ -5,43 +5,68 @@
 define([
   'underscore',
   'js2form',
-  'app/i18n',
-  'app/user',
   'app/time',
   'app/data/divisions',
   'app/data/subdivisions',
   'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
-  'app/core/View',
+  'app/core/views/FilterView',
   'app/fte/templates/filter'
 ], function(
   _,
   js2form,
-  t,
-  user,
   time,
   divisions,
   subdivisions,
   OrgUnitDropdownsView,
   Model,
-  View,
+  FilterView,
   filterTemplate
 ) {
   'use strict';
 
   var ORG_UNIT = OrgUnitDropdownsView.ORG_UNIT;
 
-  return View.extend({
+  return FilterView.extend({
 
     template: filterTemplate,
 
-    events: {
-      'submit .filter-form': function(e)
-      {
-        e.preventDefault();
+    defaultFormData: {
+      division: '',
+      subdivision: '',
+      date: '',
+      shift: 0
+    },
 
-        this.changeFilter();
-      }
+    termToForm: {
+      'division': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.args[1];
+
+        if (!(propertyName === 'division' ? divisions : subdivisions).get(formData[propertyName]))
+        {
+          formData[propertyName] = '';
+        }
+      },
+      'date': function(propertyName, term, formData)
+      {
+        if (term.name === 'in')
+        {
+          formData.date = time.format(term.args[1][0], 'YYYY-MM-DD');
+        }
+        else
+        {
+          var dateMoment = time.getMoment(term.args[1]);
+
+          formData.date = dateMoment.format('YYYY-MM-DD');
+          formData.shift = this.getShiftNoFromMoment(dateMoment);
+        }
+      },
+      'shift': function(propertyName, term, formData)
+      {
+        formData.shift = term.args[1];
+      },
+      'subdivision': 'division'
     },
 
     initialize: function()
@@ -58,16 +83,13 @@ define([
 
     afterRender: function()
     {
-      var formData = this.serializeRqlQuery();
-
-      js2form(this.el.querySelector('.filter-form'), formData);
+      FilterView.prototype.afterRender.call(this);
 
       this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
       {
-        /*jshint -W015*/
-
         var model = null;
         var orgUnit = null;
+        var formData = this.formData;
 
         if (formData.subdivision !== '')
         {
@@ -84,68 +106,8 @@ define([
       });
     },
 
-    serializeRqlQuery: function()
+    serializeFormToQuery: function(selector)
     {
-      var rqlQuery = this.model.rqlQuery;
-      var formData = {
-        division: '',
-        subdivision: '',
-        date: '',
-        shift: 0,
-        limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
-      };
-      var view = this;
-
-      rqlQuery.selector.args.forEach(function(term)
-      {
-        /*jshint -W015*/
-
-        if (term.name !== 'eq' && term.name !== 'in')
-        {
-          return;
-        }
-
-        var property = term.args[0];
-
-        switch (property)
-        {
-          case 'division':
-          case 'subdivision':
-            formData[property] = term.args[1];
-
-            if (!(property === 'division' ? divisions : subdivisions).get(formData[property]))
-            {
-              formData[property] = '';
-            }
-            break;
-
-          case 'date':
-            if (term.name === 'in')
-            {
-              formData.date = time.format(term.args[1][0], 'YYYY-MM-DD');
-            }
-            else
-            {
-              var dateMoment = time.getMoment(term.args[1]);
-
-              formData.date = dateMoment.format('YYYY-MM-DD');
-              formData.shift = view.getShiftNoFromMoment(dateMoment);
-            }
-            break;
-
-          case 'shift':
-            formData.shift = term.args[1];
-            break;
-        }
-      });
-
-      return formData;
-    },
-
-    changeFilter: function()
-    {
-      var rqlQuery = this.model.rqlQuery;
-      var selector = [];
       var division = this.orgUnitDropdownsView.$id('division').val();
       var subdivision = this.orgUnitDropdownsView.$id('subdivision').val();
       var dateMoment = time.getMoment(this.$id('date').val());
@@ -189,12 +151,6 @@ define([
       {
         selector.push({name: 'eq', args: ['shift', shiftNo]});
       }
-
-      rqlQuery.selector = {name: 'and', args: selector};
-      rqlQuery.limit = parseInt(this.$id('limit').val(), 10) || 15;
-      rqlQuery.skip = 0;
-
-      this.trigger('filterChanged', rqlQuery);
     },
 
     getShiftNoFromMoment: function(moment)

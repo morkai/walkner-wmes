@@ -4,11 +4,9 @@
 
 define([
   'app/core/views/DetailsView',
-  './decorateProdShiftOrder',
   'app/prodShiftOrders/templates/details'
 ], function(
   DetailsView,
-  decorateProdShiftOrder,
   detailsTemplate
 ) {
   'use strict';
@@ -22,7 +20,7 @@ define([
     serialize: function()
     {
       return {
-        model: decorateProdShiftOrder(this.model, {
+        model: this.model.serialize({
           orgUnits: true,
           orderUrl: true
         })

@@ -17,9 +17,8 @@
 
     "OPERATIONS:NO_DATA": "Order does not have any operations.",
 
-    "FILTER:PLACEHOLDER:_id": "Any 12NC",
-    "FILTER:LIMIT": "Limit",
-    "FILTER:BUTTON": "Filter orders",
+    "filter:placeholder:_id": "Any 12NC",
+    "filter:submit": "Filter orders",
 
     "import:title": "Import orders",
     "import:file": "CSV file with the orders:",

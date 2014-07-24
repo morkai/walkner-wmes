@@ -4,12 +4,10 @@
 
 define([
   'app/i18n',
-  'app/core/views/ListView',
-  './decorateUser'
+  'app/core/views/ListView'
 ], function(
   t,
-  ListView,
-  decorateUser
+  ListView
 ) {
   'use strict';
 
@@ -19,12 +17,7 @@ define([
       'companies.synced': 'render'
     },
 
-    columns: ['personellId', 'lastName', 'firstName', 'company', 'orgUnit', 'prodFunction'],
-
-    serializeRows: function()
-    {
-      return this.collection.toJSON().map(decorateUser);
-    }
+    columns: ['personellId', 'lastName', 'firstName', 'company', 'orgUnit', 'prodFunction']
 
   });
 });

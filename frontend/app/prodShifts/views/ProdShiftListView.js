@@ -5,13 +5,11 @@
 define([
   'app/core/views/ListView',
   'app/data/prodLines',
-  'app/data/views/renderOrgUnitPath',
-  './decorateProdShift'
+  'app/data/views/renderOrgUnitPath'
 ], function(
   ListView,
   prodLines,
-  renderOrgUnitPath,
-  decorateProdShift
+  renderOrgUnitPath
 ) {
   'use strict';
 
@@ -25,12 +23,9 @@ define([
 
     columns: ['mrpControllers', 'prodFlow', 'prodLine', 'date', 'shift', 'createdAt', 'creator'],
 
-    serializeRows: function()
+    serializeRow: function(model)
     {
-      return this.collection.map(function(model)
-      {
-        return decorateProdShift(model, {orgUnits: true});
-      });
+      return model.serialize({orgUnits: true});
     },
 
     serializeActions: function()

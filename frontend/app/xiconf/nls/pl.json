@@ -40,13 +40,10 @@
   "PROPERTY:workflow": "Zawartość pliku konfiguracyjnego programatora",
   "PROPERTY:programName": "Nazwa programu",
 
-  "FILTER:from": "Od",
-  "FILTER:to": "Do",
-  "FILTER:result:success": "Sukces",
-  "FILTER:result:failure": "Porażka",
-  "FILTER:PLACEHOLDER:srcId": "Dowolne",
-  "FILTER:limit": "Limit",
-  "FILTER:submit": "Filtruj wyniki",
+  "filter:result:success": "Sukces",
+  "filter:result:failure": "Porażka",
+  "filter:placeholder:srcId": "Dowolne",
+  "filter:submit": "Filtruj wyniki",
 
   "tab:log": "Przebieg programowania",
   "tab:output": "Odpowiedź MultiOne Workflow",

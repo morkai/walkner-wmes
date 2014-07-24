@@ -8,7 +8,6 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
-  './decorateProdDowntime',
   'app/prodDowntimes/templates/corroborate'
 ], function(
   t,
@@ -16,7 +15,6 @@ define([
   user,
   viewport,
   View,
-  decorateProdDowntime,
   detailsTemplate
 ) {
   'use strict';
@@ -50,7 +48,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        model: decorateProdDowntime(this.model),
+        model: this.model.serialize(),
         cancelUrl: this.options.cancelUrl || '#'
       };
     },

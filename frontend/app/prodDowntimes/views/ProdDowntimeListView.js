@@ -7,15 +7,13 @@ define([
   'app/user',
   'app/viewport',
   'app/core/views/ListView',
-  './CorroborateProdDowntimeView',
-  './decorateProdDowntime'
+  './CorroborateProdDowntimeView'
 ], function(
   t,
   user,
   viewport,
   ListView,
-  CorroborateProdDowntimeView,
-  decorateProdDowntime
+  CorroborateProdDowntimeView
 ) {
   'use strict';
 
@@ -67,11 +65,6 @@ define([
       this.corroboratingId = null;
 
       this.listenTo(this.collection, 'change', this.render);
-    },
-
-    serializeRows: function()
-    {
-      return this.collection.map(decorateProdDowntime);
     },
 
     serializeActions: function()

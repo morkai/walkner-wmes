@@ -6,13 +6,11 @@ define([
   'app/user',
   'app/core/util/pageActions',
   'app/core/pages/DetailsPage',
-  '../views/decoratePressWorksheet',
   'app/pressWorksheets/templates/details'
 ], function(
   user,
   pageActions,
   DetailsPage,
-  decoratePressWorksheet,
   detailsTemplate
 ) {
   'use strict';
@@ -20,8 +18,6 @@ define([
   return DetailsPage.extend({
 
     detailsTemplate: detailsTemplate,
-
-    serializeDetails: decoratePressWorksheet,
 
     actions: function()
     {

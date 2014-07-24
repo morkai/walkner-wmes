@@ -40,12 +40,9 @@
     "CHANGES:oldValue": "Old value",
     "CHANGES:newValue": "New value",
 
-    "FILTER:PLACEHOLDER:_id": "Any no",
-    "FILTER:PLACEHOLDER:nc12": "Any 12NC",
-    "FILTER:DATE:FROM": "From:",
-    "FILTER:DATE:TO": "To:",
-    "FILTER:LIMIT": "Limit",
-    "FILTER:BUTTON": "Filter orders"
+    "filter:placeholder:_id": "Any order no",
+    "filter:placeholder:nc12": "Any 12NC",
+    "filter:submit": "Filter orders"
   },
   "pl": true
 }

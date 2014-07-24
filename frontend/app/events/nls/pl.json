@@ -4,12 +4,8 @@
 
   "BREADCRUMBS:browse": "Zdarzenia",
 
-  "FILTER:DATE:FROM": "Od",
-  "FILTER:DATE:TO": "Do",
-  "FILTER:PLACEHOLDER:type": "Dowolny typ",
-  "FILTER:SYSTEM_USER": "System",
-  "FILTER:LIMIT": "Limit",
-  "FILTER:BUTTON": "Filtruj zdarzenia",
+  "filter:placeholder:type": "Dowolny typ",
+  "filter:submit": "Filtruj zdarzenia",
 
   "PROPERTY:time": "Czas wystąpienia",
   "PROPERTY:user": "Użytkownik",

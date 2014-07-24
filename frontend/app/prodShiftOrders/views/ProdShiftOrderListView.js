@@ -8,16 +8,14 @@ define([
   'app/viewport',
   'app/core/views/ListView',
   'app/data/prodLines',
-  'app/data/views/renderOrgUnitPath',
-  './decorateProdShiftOrder'
+  'app/data/views/renderOrgUnitPath'
 ], function(
   t,
   user,
   viewport,
   ListView,
   prodLines,
-  renderOrgUnitPath,
-  decorateProdShiftOrder
+  renderOrgUnitPath
 ) {
   'use strict';
 
@@ -34,12 +32,9 @@ define([
       'order', 'operation', 'prodShift', 'startedAt', 'duration', 'quantityDone', 'workerCount'
     ],
 
-    serializeRows: function()
+    serializeRow: function(model)
     {
-      return this.collection.map(function(model)
-      {
-        return decorateProdShiftOrder(model, {orgUnits: true});
-      });
+      return model.serialize({orgUnits: true});
     },
 
     serializeActions: function()

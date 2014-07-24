@@ -27,11 +27,9 @@ define([
 ) {
   'use strict';
 
-  return function(model, options)
+  return function(prodShiftOrder, options)
   {
-    /*jshint -W015*/
-
-    var obj = model.toJSON();
+    var obj = prodShiftOrder.toJSON();
 
     var startedAt = Date.parse(obj.startedAt);
     var finishedAt = Date.parse(obj.finishedAt);
@@ -61,10 +59,9 @@ define([
 
       obj.subdivision = subdivision ? subdivision.getLabel() : '?';
       obj.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
-      obj.mrpControllers =
-        Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
-          ? obj.mrpControllers.join('; ')
-          : '?';
+      obj.mrpControllers = Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
+        ? obj.mrpControllers.join('; ')
+        : '?';
     }
 
     obj.prodShift = obj.prodShift
@@ -86,13 +83,12 @@ define([
 
     if (options.orderUrl && user.isAllowedTo('ORDERS:VIEW'))
     {
-      obj.orderUrl = '#' + (obj.mechOrder ? 'mechOrders' : 'orders') + '/'
-        + encodeURIComponent(obj.orderId);
+      obj.orderUrl = '#' + (obj.mechOrder ? 'mechOrders' : 'orders') + '/' + encodeURIComponent(obj.orderId);
     }
 
-    obj.taktTimeSap = model.getTaktTime();
-    obj.taktTime = model.getActualTaktTime();
-    obj.workerCountSap = model.getWorkerCountSap();
+    obj.taktTimeSap = prodShiftOrder.getTaktTime();
+    obj.taktTime = prodShiftOrder.getActualTaktTime();
+    obj.workerCountSap = prodShiftOrder.getWorkerCountSap();
 
     return obj;
   };

@@ -9,7 +9,8 @@ define([
   '../data/prodLog',
   '../data/subdivisions',
   '../core/Model',
-  '../core/util/getShiftEndDate'
+  '../core/util/getShiftEndDate',
+  './util/decorateProdShiftOrder'
 ], function(
   _,
   user,
@@ -17,7 +18,8 @@ define([
   prodLog,
   subdivisions,
   Model,
-  getShiftEndDate
+  getShiftEndDate,
+  decorateProdShiftOrder
 ) {
   'use strict';
 
@@ -64,6 +66,11 @@ define([
     getLabel: function()
     {
       return this.get('prodLine') + ': ' + this.get('orderId') + ', ' + this.get('operationNo');
+    },
+
+    serialize: function(options)
+    {
+      return decorateProdShiftOrder(this, options);
     },
 
     onShiftChanged: function()

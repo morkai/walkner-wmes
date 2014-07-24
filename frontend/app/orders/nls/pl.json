@@ -39,10 +39,7 @@
   "CHANGES:oldValue": "Stara wartość",
   "CHANGES:newValue": "Nowa wartość",
 
-  "FILTER:PLACEHOLDER:_id": "Dowolny nr",
-  "FILTER:PLACEHOLDER:nc12": "Dowolny 12NC",
-  "FILTER:DATE:FROM": "Od:",
-  "FILTER:DATE:TO": "Do:",
-  "FILTER:LIMIT": "Limit",
-  "FILTER:BUTTON": "Filtruj zlecenia"
+  "filter:placeholder:_id": "Dowolny nr",
+  "filter:placeholder:nc12": "Dowolne 12NC",
+  "filter:submit": "Filtruj zlecenia"
 }

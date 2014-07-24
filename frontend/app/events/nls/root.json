@@ -5,12 +5,8 @@
 
     "BREADCRUMBS:browse": "Events",
 
-    "FILTER:DATE:FROM": "From",
-    "FILTER:DATE:TO": "To",
-    "FILTER:PLACEHOLDER:type": "Any type",
-    "FILTER:SYSTEM_USER": "System",
-    "FILTER:LIMIT": "Limit",
-    "FILTER:BUTTON": "Filter events",
+    "filter:placeholder:type": "Any type",
+    "filter:submit": "Filter events",
 
     "PROPERTY:time": "Time of occurrence",
     "PROPERTY:user": "User",

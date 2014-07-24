@@ -4,11 +4,9 @@
 
 define([
   'app/core/views/DetailsView',
-  './decorateProdShift',
   'app/prodShifts/templates/details'
 ], function(
   DetailsView,
-  decorateProdShift,
   detailsTemplate
 ) {
   'use strict';
@@ -37,7 +35,7 @@ define([
 
       return {
         editing: this.editing,
-        model: decorateProdShift(this.model, {
+        model: this.model.serialize({
           orgUnits: true,
           personnel: true
         }),

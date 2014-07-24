@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  '../core/Model'
+  '../core/Model',
+  './util/decorateUser'
 ], function(
-  Model
+  Model,
+  decorateUser
 ) {
   'use strict';
 
@@ -72,6 +74,11 @@ define([
       }
 
       return url + '?populate(vendor)';
+    },
+
+    serialize: function()
+    {
+      return decorateUser(this);
     }
 
   });

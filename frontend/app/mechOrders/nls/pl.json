@@ -16,9 +16,8 @@
 
   "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
 
-  "FILTER:PLACEHOLDER:_id": "Dowolny 12NC",
-  "FILTER:LIMIT": "Limit",
-  "FILTER:BUTTON": "Filtruj zlecenia",
+  "filter:placeholder:_id": "Dowolny 12NC",
+  "filter:submit": "Filtruj zlecenia",
 
   "import:title": "Importowanie zleceń",
   "import:file": "Plik CSV ze zleceniami:",

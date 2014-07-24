@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  '../core/Model'
+  '../core/Model',
+  './util/decorateProdLogEntry'
 ], function(
-  Model
+  Model,
+  decorateProdLogEntry
 ) {
   'use strict';
 
@@ -23,6 +25,11 @@ define([
 
     defaults: {
       type: null
+    },
+
+    serialize: function()
+    {
+      return decorateProdLogEntry(this);
     }
 
   });

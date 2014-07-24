@@ -6,13 +6,11 @@ define([
   'underscore',
   'app/i18n',
   'app/core/View',
-  './decorateProdDowntime',
   'app/prodDowntimes/templates/details'
 ], function(
   _,
   t,
   View,
-  decorateProdDowntime,
   detailsTemplate
 ) {
   'use strict';
@@ -56,7 +54,7 @@ define([
     serialize: function()
     {
       return {
-        model: decorateProdDowntime(this.model)
+        model: this.model.serialize()
       };
     }
 

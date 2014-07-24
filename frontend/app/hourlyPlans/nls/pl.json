@@ -17,7 +17,6 @@
   "FILTER:DATE": "Data:",
   "FILTER:LIMIT": "Limit:",
   "FILTER:SHIFT": "Zmiana:",
-  "FILTER:SHIFT:ANY": "Dowolna",
   "FILTER:BUTTON": "Filtruj plany",
 
   "panel:title": "Plan godzinowy",

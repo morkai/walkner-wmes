@@ -3,31 +3,56 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'js2form',
   'app/i18n',
   'app/time',
-  'app/core/View',
+  'app/core/views/FilterView',
   'app/xiconf/templates/filter'
 ], function(
-  js2form,
   t,
   time,
-  View,
+  FilterView,
   filterTemplate
 ) {
   'use strict';
 
-  return View.extend({
+  return FilterView.extend({
 
     template: filterTemplate,
 
-    events: {
-      'submit .filter-form': function(e)
-      {
-        e.preventDefault();
+    defaultFormData: function()
+    {
+      return {
+        from: '',
+        to: '',
+        srcId: '',
+        no: '',
+        nc12: '',
+        result: ['success', 'failure']
+      };
+    },
 
-        this.changeFilter();
-      }
+    termToForm: {
+      'startedAt': function(propertyName, term, formData)
+      {
+        var datetimeFormat = this.$id('from').prop('type') === 'datetime-local'
+          ? 'YYYY-MM-DDTHH:mm:ss'
+          : 'YYYY-MM-DD HH:mm';
+
+        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], datetimeFormat);
+      },
+      'orderNo': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.args[1];
+      },
+      'result': function(propertyName, term, formData)
+      {
+        if (term.args[1] === 'success' || term.args[1] === 'failure')
+        {
+          formData.result = [term.args[1]];
+        }
+      },
+      'nc12': 'orderNo',
+      'srcId': 'orderNo'
     },
 
     initialize: function()
@@ -40,13 +65,11 @@ define([
 
     afterRender: function()
     {
-      var formData = this.serializeRqlQuery();
+      FilterView.prototype.afterRender.call(this);
 
-      js2form(this.el.querySelector('.filter-form'), formData);
-
-      if (formData.result.length === 1)
+      if (this.formData.result.length === 1)
       {
-        this.$('.xiconf-filter-' + formData.result[0]).addClass('active');
+        this.$('.xiconf-filter-' + this.formData.result[0]).addClass('active');
       }
       else
       {
@@ -68,57 +91,8 @@ define([
       });
     },
 
-    serializeRqlQuery: function()
+    serializeFormToQuery: function(selector)
     {
-      var datetimeFormat = this.$id('from').prop('type') === 'datetime-local'
-        ? 'YYYY-MM-DDTHH:mm:ss'
-        : 'YYYY-MM-DD HH:mm';
-      var rqlQuery = this.model.rqlQuery;
-      var formData = {
-        from: '',
-        to: '',
-        srcId: '',
-        no: '',
-        nc12: '',
-        result: ['success', 'failure'],
-        limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
-      };
-
-      rqlQuery.selector.args.forEach(function(term)
-      {
-        /*jshint -W015*/
-
-        var property = term.args[0];
-
-        switch (property)
-        {
-          case 'startedAt':
-            formData[term.name === 'ge' ? 'from' : 'to'] =
-              time.format(term.args[1], datetimeFormat);
-            break;
-
-          case 'orderNo':
-          case 'nc12':
-          case 'srcId':
-            formData[property] = term.args[1];
-            break;
-
-          case 'result':
-            if (term.args[1] === 'success' || term.args[1] === 'failure')
-            {
-              formData.result = [term.args[1]];
-            }
-            break;
-        }
-      });
-
-      return formData;
-    },
-
-    changeFilter: function()
-    {
-      var rqlQuery = this.model.rqlQuery;
-      var selector = [];
       var fromMoment = time.getMoment(this.$id('from').val());
       var toMoment = time.getMoment(this.$id('to').val());
       var no = this.$id('no').val().trim();
@@ -155,12 +129,6 @@ define([
       {
         selector.push({name: 'eq', args: ['result', $result.val()]});
       }
-
-      rqlQuery.selector = {name: 'and', args: selector};
-      rqlQuery.limit = parseInt(this.$id('limit').val(), 10) || 20;
-      rqlQuery.skip = 0;
-
-      this.trigger('filterChanged', rqlQuery);
     }
 
   });

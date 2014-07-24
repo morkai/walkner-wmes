@@ -56,17 +56,17 @@
   display: flex;
 }
 .form-group-datetime > input[type="date"] {
-  width: 155px;
+  width: 145px;
   margin-right: 1px;
 }
 .form-group-datetime > input[type="time"] {
   width: 110px;
 }
-.form-group-dateRange > div:first-child > label {
+.form-group-dateRange > div:first-child > .radio-inline {
   font-weight: bold;
   margin-bottom: 5px;
 }
-.form-group-dateRange > div:last-child > label {
+.form-group-dateRange > div:last-child > .radio-inline {
   font-weight: normal;
 }
 .form-group-dateRange > div:last-child > input {

@@ -1,54 +1,40 @@
-<div class="well">
-  <form id="<%- idPrefix %>-form" class="filter-form">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-from"><%- t('prodLogEntries', 'FILTER:DATE:FROM') %></label>
-      <div id="<%- idPrefix %>-from" class="form-group-datetime">
-        <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD">
-        <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
-      </div>
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-to"><%- t('prodLogEntries', 'FILTER:DATE:TO') %></label>
-      <div id="<%- idPrefix %>-to" class="form-group-datetime">
-        <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD">
-        <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
-      </div>
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-prodLine"><%- t('prodLogEntries', 'PROPERTY:prodLine') %></label>
-      <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text" data-placeholder="<%- t('prodLogEntries', 'FILTER:PLACEHOLDER:prodLine') %>">
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-type"><%- t('prodLogEntries', 'PROPERTY:type') %></label>
-      <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%- t('prodLogEntries', 'FILTER:PLACEHOLDER:type') %>">
-        <option></option>
-        <option value="changeShift"><%- t('prodLogEntries', 'type:changeShift') %></option>
-        <option value="changeMaster"><%- t('prodLogEntries', 'type:changeMaster') %></option>
-        <option value="changeLeader"><%- t('prodLogEntries', 'type:changeLeader') %></option>
-        <option value="changeOperator"><%- t('prodLogEntries', 'type:changeOperator') %></option>
-        <option value="changeQuantitiesDone"><%- t('prodLogEntries', 'type:changeQuantitiesDone') %></option>
-        <option value="changeOrder"><%- t('prodLogEntries', 'type:changeOrder') %></option>
-        <option value="correctOrder"><%- t('prodLogEntries', 'type:correctOrder') %></option>
-        <option value="changeQuantityDone"><%- t('prodLogEntries', 'type:changeQuantityDone') %></option>
-        <option value="changeWorkerCount"><%- t('prodLogEntries', 'type:changeWorkerCount') %></option>
-        <option value="finishOrder"><%- t('prodLogEntries', 'type:finishOrder') %></option>
-        <option value="startDowntime"><%- t('prodLogEntries', 'type:startDowntime') %></option>
-        <option value="finishDowntime"><%- t('prodLogEntries', 'type:finishDowntime') %></option>
-        <option value="corroborateDowntime"><%- t('prodLogEntries', 'type:corroborateDowntime') %></option>
-        <option value="endWork"><%- t('prodLogEntries', 'type:endWork') %></option>
-        <option value="editShift"><%- t('prodLogEntries', 'type:editShift') %></option>
-        <option value="editOrder"><%- t('prodLogEntries', 'type:editOrder') %></option>
-        <option value="editDowntime"><%- t('prodLogEntries', 'type:editDowntime') %></option>
-        <option value="deleteOrder"><%- t('prodLogEntries', 'type:deleteOrder') %></option>
-        <option value="deleteDowntime"><%- t('prodLogEntries', 'type:deleteDowntime') %></option>
-      </select>
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-limit"><%- t('prodLogEntries', 'FILTER:LIMIT') %></label>
-      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
-    </div><div
-      class="form-group filter-actions">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('prodLogEntries', 'FILTER:BUTTON') %></span></button>
+<form id="<%- idPrefix %>-form" class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-from-date"><%- t('core', 'filter:date:from') %></label>
+    <div id="<%- idPrefix %>-from" class="form-group-datetime">
+      <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD">
+      <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
     </div>
-  </form>
-</div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-to-date"><%- t('core', 'filter:date:to') %></label>
+    <div id="<%- idPrefix %>-to" class="form-group-datetime">
+      <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD">
+      <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-prodLine"><%- t('prodLogEntries', 'PROPERTY:prodLine') %></label>
+    <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text" data-placeholder="<%- t('prodLogEntries', 'filter:placeholder:prodLine') %>">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-type"><%- t('prodLogEntries', 'PROPERTY:type') %></label>
+    <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%- t('prodLogEntries', 'filter:placeholder:type') %>">
+      <option></option>
+      <% [
+          'changeShift', 'changeMaster', 'changeLeader', 'changeOperator',
+          'changeQuantitiesDone',
+          'changeOrder', 'correctOrder', 'changeQuantityDone', 'changeWorkerCount', 'finishOrder',
+          'startDowntime', 'finishDowntime', 'corroborateDowntime',
+          'endWork',
+          'editShift', 'editOrder', 'editDowntime', 'deleteOrder', 'deleteDowntime'
+        ].forEach(function(type) { %>
+      <option value="<%- type %>"><%- t('prodLogEntries', 'type:' + type) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('prodLogEntries', 'filter:submit') %></span></button>
+  </div>
+</form>

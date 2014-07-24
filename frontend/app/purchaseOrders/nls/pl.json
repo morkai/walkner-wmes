@@ -16,10 +16,7 @@
   "PROPERTY:minScheduleDate": "Najbliższa data dostawy",
   "PROPERTY:nc12": "12NC",
 
-  "FILTER:from": "Dostawa od",
-  "FILTER:to": "Dostawa do",
-  "FILTER:limit": "Limit",
-  "FILTER:submit": "Filtruj zamówienia"
-
-
+  "filter:from": "Dostawa od",
+  "filter:to": "Dostawa do",
+  "filter:submit": "Filtruj zamówienia"
 }

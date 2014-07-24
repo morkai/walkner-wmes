@@ -41,13 +41,10 @@
     "PROPERTY:workflow": "Programmer configuration file contents",
     "PROPERTY:programName": "Program name",
 
-    "FILTER:from": "From",
-    "FILTER:to": "To",
-    "FILTER:result:success": "Success",
-    "FILTER:result:failure": "Failure",
-    "FILTER:PLACEHOLDER:srcId": "Any",
-    "FILTER:limit": "Limit",
-    "FILTER:submit": "Filter results",
+    "filter:result:success": "Success",
+    "filter:result:failure": "Failure",
+    "filter:placeholder:srcId": "Any",
+    "filter:submit": "Filter results",
 
     "tab:log": "Programming log",
     "tab:output": "MultiOne Workflow output",

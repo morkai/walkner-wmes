@@ -3,52 +3,75 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'js2form',
-  'app/i18n',
   'app/user',
   'app/data/aors',
   'app/data/orgUnits',
-  'app/core/View',
-  'app/core/util/fixTimeRange',
   'app/data/downtimeReasons',
-  'app/prodDowntimes/templates/filter',
-  'select2'
+  'app/core/views/FilterView',
+  'app/core/util/fixTimeRange',
+  'app/prodDowntimes/templates/filter'
 ], function(
-  js2form,
-  t,
   user,
   aors,
   orgUnits,
-  View,
-  fixTimeRange,
   downtimeReasons,
+  FilterView,
+  fixTimeRange,
   filterTemplate
 ) {
   'use strict';
 
-  return View.extend({
+  return FilterView.extend({
 
     template: filterTemplate,
 
-    events: {
-      'submit .filter-form': function(e)
-      {
-        e.preventDefault();
-
-        this.changeFilter();
-      }
+    defaultFormData: function()
+    {
+      return {
+        startedAt: '',
+        aor: null,
+        aorIn: true,
+        reason: null,
+        reasonIn: true,
+        status: ['undecided', 'confirmed', 'rejected'],
+        orgUnit: null
+      };
     },
 
-    destroy: function()
-    {
-      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
+    termToForm: {
+      'startedAt': function(propertyName, term, formData)
+      {
+        fixTimeRange.toFormData(formData, term, 'date+time');
+      },
+      'aor': function(propertyName, term, formData)
+      {
+        if (term.name === 'eq' || term.name === 'ne')
+        {
+          formData[propertyName + 'In'] = term.name === 'eq';
+          formData[propertyName] = term.args[1];
+        }
+        else if (term.name === 'in' || term.name === 'nin')
+        {
+          formData[propertyName + 'In'] = term.name === 'in';
+          formData[propertyName] = term.args[1].join(',');
+        }
+      },
+      'status': function(propertyName, term, formData)
+      {
+        formData.status = [].concat(term.args[1]);
+      },
+      'division': function(propertyName, term, formData)
+      {
+        formData.orgUnit = term.args[1];
+      },
+      'reason': 'aor',
+      'subdivision': 'division',
+      'prodFlow': 'division'
     },
 
     afterRender: function()
     {
-      var formData = this.serializeRqlQuery();
-
-      js2form(this.el.querySelector('.filter-form'), formData);
+      FilterView.prototype.afterRender.call(this);
 
       this.$id('orgUnit').select2({
         width: '256px',
@@ -178,66 +201,9 @@ define([
       });
     },
 
-    serializeRqlQuery: function()
+    serializeFormToQuery: function(selector)
     {
-      var rqlQuery = this.model.rqlQuery;
-      var formData = {
-        startedAt: '',
-        aor: null,
-        aorIn: true,
-        reason: null,
-        reasonIn: true,
-        status: ['undecided', 'confirmed', 'rejected'],
-        orgUnit: null,
-        limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
-      };
-
-      rqlQuery.selector.args.forEach(function(term)
-      {
-        /*jshint -W015*/
-
-        var property = term.args[0];
-
-        switch (property)
-        {
-          case 'startedAt':
-            fixTimeRange.toFormData(formData, term, 'date+time');
-            break;
-
-          case 'aor':
-          case 'reason':
-            if (term.name === 'eq' || term.name === 'ne')
-            {
-              formData[property + 'In'] = term.name === 'eq';
-              formData[property] = term.args[1];
-            }
-            else if (term.name === 'in' || term.name === 'nin')
-            {
-              formData[property + 'In'] = term.name === 'in';
-              formData[property] = term.args[1].join(',');
-            }
-            break;
-
-          case 'status':
-            formData.status = [].concat(term.args[1]);
-            break;
-
-          case 'division':
-          case 'subdivision':
-          case 'prodFlow':
-            formData.orgUnit = term.args[1];
-            break;
-        }
-      });
-
-      return formData;
-    },
-
-    changeFilter: function()
-    {
-      var rqlQuery = this.model.rqlQuery;
       var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
-      var selector = [];
       var orgUnit = this.$id('orgUnit').select2('data');
       var aor = this.$id('aor').select2('val');
       var aorIn = this.$id('aorIn').prop('checked');
@@ -286,12 +252,6 @@ define([
       {
         selector.push({name: 'eq', args: [orgUnit.type, orgUnit.id]});
       }
-
-      rqlQuery.selector = {name: 'and', args: selector};
-      rqlQuery.limit = parseInt(this.$id('limit').val(), 10) || 15;
-      rqlQuery.skip = 0;
-
-      this.trigger('filterChanged', rqlQuery);
     },
 
     fixStatus: function()

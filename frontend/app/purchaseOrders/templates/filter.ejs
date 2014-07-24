@@ -1,21 +1,22 @@
-<div class="well">
-  <form id="<%- idPrefix %>-form" class="filter-form"><div class="form-group">
-      <label for="<%- idPrefix %>-from"><%- t('purchaseOrders', 'FILTER:from') %></label>
-      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
-    </div><div class="form-group">
-      <label for="<%- idPrefix %>-to"><%- t('purchaseOrders', 'FILTER:to') %></label>
-      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
-    </div><div class="form-group">
-      <label for="<%- idPrefix %>-_id"><%- t('purchaseOrders', 'PROPERTY:_id') %></label>
-      <input id="<%- idPrefix %>-_id" class="form-control no-controls" name="_id" type="number" min="1" max="999999">
-    </div><div class="form-group">
-      <label for="<%- idPrefix %>-nc12"><%- t('purchaseOrders', 'PROPERTY:nc12') %></label>
-      <input id="<%- idPrefix %>-nc12" class="form-control no-controls" name="nc12" type="number" min="100000000000" max="999999999999">
-    </div><div class="form-group">
-      <label for="<%- idPrefix %>-limit"><%- t('purchaseOrders', 'FILTER:limit') %></label>
-      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
-    </div><div class="form-group filter-actions">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('purchaseOrders', 'FILTER:submit') %></span></button>
-    </div>
-  </form>
-</div>
+<form class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-from"><%- t('purchaseOrders', 'filter:from') %></label>
+    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-to"><%- t('purchaseOrders', 'filter:to') %></label>
+    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-_id"><%- t('purchaseOrders', 'PROPERTY:_id') %></label>
+    <input id="<%- idPrefix %>-_id" class="form-control no-controls" name="_id" type="number" min="1" max="999999">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-items-nc12"><%- t('purchaseOrders', 'PROPERTY:nc12') %></label>
+    <input id="<%- idPrefix %>-items-nc12" class="form-control no-controls" name="nc12" type="number" min="100000000000" max="999999999999">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('purchaseOrders', 'filter:submit') %></span></button>
+  </div>
+</form>

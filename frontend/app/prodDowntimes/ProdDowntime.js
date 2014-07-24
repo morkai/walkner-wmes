@@ -5,11 +5,13 @@
 define([
   '../time',
   '../core/Model',
-  '../core/util/getShiftEndDate'
+  '../core/util/getShiftEndDate',
+  './util/decorateProdDowntime'
 ], function(
   time,
   Model,
-  getShiftEndDate
+  getShiftEndDate,
+  decorateProdDowntime
 ) {
   'use strict';
 
@@ -61,6 +63,11 @@ define([
       mechOrder: null,
       orderId: null,
       operationNo: null
+    },
+
+    serialize: function()
+    {
+      return decorateProdDowntime(this);
     },
 
     getCssClassName: function()

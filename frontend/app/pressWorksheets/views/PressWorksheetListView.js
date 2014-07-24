@@ -5,13 +5,11 @@
 define([
   'app/i18n',
   'app/user',
-  'app/core/views/ListView',
-  './decoratePressWorksheet'
+  'app/core/views/ListView'
 ], function(
   t,
   user,
-  ListView,
-  decoratePressWorksheet
+  ListView
 ) {
   'use strict';
 
@@ -55,11 +53,6 @@ define([
 
         return actions;
       };
-    },
-
-    serializeRows: function()
-    {
-      return this.collection.map(decoratePressWorksheet);
     }
 
   });

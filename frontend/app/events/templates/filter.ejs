@@ -1,48 +1,38 @@
-<div class="well">
-  <form id="<%- idPrefix %>-form" class="filter-form">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-from-date"><%- t('events', 'FILTER:DATE:FROM') %></label>
-      <div id="<%- idPrefix %>-from" class="form-group-datetime">
-        <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD">
-        <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
-      </div>
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-to-date"><%- t('events', 'FILTER:DATE:TO') %></label>
-      <div id="<%- idPrefix %>-to" class="form-group-datetime">
-        <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD">
-        <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
-      </div>
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-type"><%- t('events', 'PROPERTY:type') %></label>
-      <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%= t('events', 'FILTER:PLACEHOLDER:type') %>">
-        <option></option>
-        <% types.forEach(function(type) { %>
-        <option value="<%- type.value %>"><%= type.label %>
-        <% }) %>
-      </select>
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-user"><%- t('events', 'PROPERTY:user') %></label>
-      <input id="<%- idPrefix %>-user" name="user" type="text">
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-limit"><%- t('events', 'FILTER:LIMIT') %></label>
-      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
-    </div><div
-      class="form-group">
-      <label><%- t('events', 'PROPERTY:severity') %></label>
-      <div class="btn-group filter-btn-group" data-toggle="buttons-checkbox">
-        <button class="btn btn-default events-filter-form-severity" type="button" value="debug">&nbsp;</button>
-        <button class="btn btn-info events-filter-form-severity" type="button" value="info">&nbsp;</button>
-        <button class="btn btn-success events-filter-form-severity" type="button" value="success">&nbsp;</button>
-        <button class="btn btn-warning events-filter-form-severity" type="button" value="warning">&nbsp;</button>
-        <button class="btn btn-danger events-filter-form-severity" type="button" value="error">&nbsp;</button>
-      </div>
-    </div><div
-      class="form-group filter-actions">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('events', 'FILTER:BUTTON') %></span></button>
+<form id="<%- idPrefix %>-form" class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-from-date"><%- t('core', 'filter:date:from') %></label>
+    <div id="<%- idPrefix %>-from" class="form-group-datetime">
+      <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD">
+      <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
     </div>
-  </form>
-</div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-to-date"><%- t('core', 'filter:date:to') %></label>
+    <div id="<%- idPrefix %>-to" class="form-group-datetime">
+      <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD">
+      <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-type"><%- t('events', 'PROPERTY:type') %></label>
+    <input id="<%- idPrefix %>-type" name="type" type=text" placeholder="<%= t('events', 'filter:placeholder:type') %>">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-user"><%- t('events', 'PROPERTY:user') %></label>
+    <input id="<%- idPrefix %>-user" name="user" type="text">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group">
+    <label><%- t('events', 'PROPERTY:severity') %></label>
+    <div id="<%- idPrefix %>-severity" class="btn-group filter-btn-group" data-toggle="buttons-checkbox">
+      <button class="btn btn-default" type="button" value="debug">&nbsp;</button>
+      <button class="btn btn-info" type="button" value="info">&nbsp;</button>
+      <button class="btn btn-success" type="button" value="success">&nbsp;</button>
+      <button class="btn btn-warning" type="button" value="warning">&nbsp;</button>
+      <button class="btn btn-danger" type="button" value="error">&nbsp;</button>
+    </div>
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('events', 'filter:submit') %></span></button>
+  </div>
+</form>

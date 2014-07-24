@@ -113,7 +113,7 @@
   "SHIFT:1": "I",
   "SHIFT:2": "II",
   "SHIFT:3": "III",
-  "SHIFT:ANY": "Dowolna",
+  "SHIFT:0": "Dowolna",
 
   "highcharts:contextButtonTitle": "Menu kontekstowe wykresu",
   "highcharts:downloadJPEG": "Zapisz jako JPEG",
@@ -140,8 +140,8 @@
 
   "colorPicker:label": "Kolor",
 
-  "filter:date:from": "Od:",
-  "filter:date:to": "Do:",
+  "filter:date:from": "Od",
+  "filter:date:to": "Do",
   "filter:submit": "Filtruj",
   "filter:limit": "Limit"
 }

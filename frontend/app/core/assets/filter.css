@@ -3,6 +3,9 @@
 }
 .filter-container > .well {
   padding: 1em 1em 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
 }
 .filter-form .form-group {
   display: inline-block;
@@ -10,8 +13,9 @@
   margin-bottom: 1em;
   vertical-align: top;
 }
-.filter-form.is-vertical .form-group {
-  display: block;
+.filter-form.is-vertical {
+  flex-direction: column;
+  align-items: flex-start;
 }
 .filter-form input {
   margin-bottom: 0;
@@ -86,6 +90,7 @@ input[type=checkbox].filter-inLabel {
 }
 .filter-radio-group {
   margin-top: 5px;
+  height: 29px;
 }
 .filter-radioLabels > label {
   margin-left: 1em;

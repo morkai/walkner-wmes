@@ -21,11 +21,11 @@ define([
     {
       return response.map(function(type)
       {
-        return {value: type, label: t.bound('events', 'TYPE:' + type)};
+        return {_id: type, text: t.bound('events', 'TYPE:' + type)};
       });
     },
 
-    comparator: 'label'
+    comparator: 'text'
 
   });
 });

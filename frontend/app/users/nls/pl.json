@@ -19,10 +19,9 @@
   "PANEL:TITLE:addForm": "Formularz dodawania użytkownika",
   "PANEL:TITLE:editForm": "Formularz edycji użytkownika",
 
-  "FILTER:BUTTON": "Filtruj użytkowników",
-  "FILTER:LIMIT": "Limit",
-  "FILTER:PLACEHOLDER:personellId": "Dowolny nr",
-  "FILTER:PLACEHOLDER:lastName": "Dowolne nazwisko",
+  "filter:submit": "Filtruj użytkowników",
+  "filter:placeholder:personellId": "Dowolny nr",
+  "filter:placeholder:lastName": "Dowolne nazwisko",
 
   "PROPERTY:login": "Login",
   "PROPERTY:password": "Hasło",

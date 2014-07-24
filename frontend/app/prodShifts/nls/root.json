@@ -19,11 +19,8 @@
     "PANEL:TITLE:addForm": "Add shift form",
     "PANEL:TITLE:editForm": "Edit shift form",
 
-    "FILTER:DATE:FROM": "From",
-    "FILTER:DATE:TO": "To",
-    "FILTER:LIMIT": "Limit",
-    "FILTER:BUTTON": "Filter shifts",
-    "FILTER:PLACEHOLDER:prodLine": "Any production line",
+    "filter:submit": "Filter shifts",
+    "filter:placeholder:prodLine": "Any production line",
 
     "PROPERTY:mrpControllers": "MRP Controller",
     "PROPERTY:prodFlow": "Production flow",

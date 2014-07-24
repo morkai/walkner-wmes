@@ -20,10 +20,9 @@
     "PANEL:TITLE:addForm": "Add user form",
     "PANEL:TITLE:editForm": "Edit user form",
 
-    "FILTER:BUTTON": "Filter users",
-    "FILTER:LIMIT": "Limit",
-    "FILTER:PLACEHOLDER:personellId": "Any personell ID",
-    "FILTER:PLACEHOLDER:lastName": "Any last name",
+    "filter:submit": "Filter users",
+    "filter:placeholder:personellId": "Any personnel ID",
+    "filter:placeholder:lastName": "Any last name",
 
     "PROPERTY:login": "Login",
     "PROPERTY:password": "Password",

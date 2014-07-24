@@ -20,14 +20,11 @@
   "PANEL:TITLE:editForm": "Formularz edycji danych przestoju",
   "PANEL:TITLE:addForm": "Formularz dodawania przestoju",
 
-  "FILTER:DATE:FROM": "Od",
-  "FILTER:DATE:TO": "Do",
-  "FILTER:LIMIT": "Limit",
-  "FILTER:BUTTON": "Filtruj przestoje",
-  "FILTER:TOOLTIP:in": "Zaznaczony: wszystkie wybrane\nNiezaznaczony: wszystkie oprócz wybranych",
-  "FILTER:PLACEHOLDER:aor": "Dowolny obszar odpowiedzialności",
-  "FILTER:PLACEHOLDER:reason": "Dowolny powód przestoju",
-  "FILTER:PLACEHOLDER:orgUnit": "Dowolna jednostka organizacyjna",
+  "filter:submit": "Filtruj przestoje",
+  "filter:tooltip:in": "Zaznaczony: wszystkie wybrane\nNiezaznaczony: wszystkie oprócz wybranych",
+  "filter:placeholder:aor": "Dowolny obszar odpowiedzialności",
+  "filter:placeholder:reason": "Dowolny powód przestoju",
+  "filter:placeholder:orgUnit": "Dowolna jednostka organizacyjna",
 
   "LIST:ACTION:corroborate": "Potwierdź przestój",
 

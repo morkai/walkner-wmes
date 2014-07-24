@@ -17,10 +17,9 @@
     "PAGE_ACTION:delete": "Delete entry",
     "PAGE_ACTION:export": "Export entries",
 
-    "FILTER:DATE": "Date:",
-    "FILTER:LIMIT": "Limit:",
-    "FILTER:SHIFT": "Shift:",
-    "FILTER:BUTTON": "Filter entries",
+    "filter:date": "Date:",
+    "filter:shift": "Shift:",
+    "filter:submit": "Filter entries",
 
     "addForm:panel:title": "FTE entry find/create form",
     "addForm:submit": "Allocate resources",

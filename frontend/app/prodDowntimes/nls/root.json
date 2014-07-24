@@ -21,14 +21,11 @@
     "PANEL:TITLE:editForm": "Edit downtime form",
     "PANEL:TITLE:addForm": "Add downtime form",
 
-    "FILTER:DATE:FROM": "From",
-    "FILTER:DATE:TO": "To",
-    "FILTER:LIMIT": "Limit",
-    "FILTER:BUTTON": "Filter downtimes",
-    "FILTER:TOOLTIP:in": "Checked: all selected\nUnchecked: all but the selected",
-    "FILTER:PLACEHOLDER:aor": "Any area of responsibility",
-    "FILTER:PLACEHOLDER:reason": "Any downtime reason",
-    "FILTER:PLACEHOLDER:orgUnit": "Any Org Unit",
+    "filter:submit": "Filter downtimes",
+    "filter:tooltip:in": "Checked: all selected\nUnchecked: all but the selected",
+    "filter:placeholder:aor": "Any area of responsibility",
+    "filter:placeholder:reason": "Any downtime reason",
+    "filter:placeholder:orgUnit": "Any org unit",
 
     "LIST:ACTION:corroborate": "Corroborate downtime",
 

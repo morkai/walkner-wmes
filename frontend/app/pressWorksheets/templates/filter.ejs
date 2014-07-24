@@ -1,67 +1,49 @@
-<div class="well">
-  <form id="<%- idPrefix %>-form" class="filter-form">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-date"><%- t('pressWorksheets', 'FILTER:DATE') %></label>
-      <input id="<%- idPrefix %>-date" class="form-control" name="date" type="date">
-    </div><div
-      class="form-group">
-      <label><%- t('pressWorksheets', 'FILTER:SHIFT') %></label>
-      <div id="<%- idPrefix %>-shift" class="btn-group filter-btn-group" data-toggle="buttons">
-        <label class="btn btn-default">
-          <input type="radio" name="shift" value="0"> <%- t('core', 'SHIFT:ANY') %>
-        </label>
-        <label class="btn btn-default">
-          <input type="radio" name="shift" value="1"> <%- t('core', 'SHIFT:1') %>
-        </label>
-        <label class="btn btn-default">
-          <input type="radio" name="shift" value="2"> <%- t('core', 'SHIFT:2') %>
-        </label>
-        <label class="btn btn-default">
-          <input type="radio" name="shift" value="3"> <%- t('core', 'SHIFT:3') %>
-        </label>
-      </div>
-    </div><div
-      class="form-group">
-      <label><%- t('pressWorksheets', 'PROPERTY:type') %></label>
-      <div id="<%- idPrefix %>-type" class="btn-group filter-btn-group" data-toggle="buttons">
-        <label class="btn btn-default">
-          <input type="radio" name="type" value="any"> <%- t('pressWorksheets', 'FILTER:type:any') %>
-        </label>
-        <label class="btn btn-default" title="<%- t('pressWorksheets', 'PROPERTY:type:mech') %>">
-          <input type="radio" name="type" value="mech"> <%- t('pressWorksheets', 'FILTER:type:mech') %>
-        </label>
-        <label class="btn btn-default" title="<%- t('pressWorksheets', 'PROPERTY:type:paintShop') %>">
-          <input type="radio" name="type" value="paintShop"> <%- t('pressWorksheets', 'FILTER:type:paintShop') %>
-        </label>
-        <label class="btn btn-default" title="<%- t('pressWorksheets', 'PROPERTY:type:optics') %>">
-          <input type="radio" name="type" value="optics"> <%- t('pressWorksheets', 'FILTER:type:optics') %>
-        </label>
-      </div>
-    </div><div class="form-group">
-      <div class="filter-radioLabels"><label>
-          <input name="userType" type="radio" value="master">
-          <%- t('pressWorksheets', 'FILTER:user:master') %>
-        </label><label>
-          <input name="userType" type="radio" value="operators">
-          <%- t('pressWorksheets', 'FILTER:user:operators') %>
-        </label>
-      </div>
-      <input id="<%- idPrefix %>-user" name="user" type="hidden" data-placeholder="<%= t('pressWorksheets', 'FILTER:user:placeholder') %>">
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-limit"><%- t('pressWorksheets', 'FILTER:LIMIT') %></label>
-      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
-    </div><div
-      class="form-group">
-      <label>&nbsp;</label>
-      <div id="<%- idPrefix %>-mine" class="btn-group filter-btn-group" data-toggle="buttons">
-        <label class="btn btn-default" title="<%- t('pressWorksheets', 'FILTER:mine:title') %>">
-          <input type="checkbox" name="mine" value="1"> <%- t('pressWorksheets', 'FILTER:mine') %>
-        </label>
-      </div>
-    </div><div
-      class="form-group filter-actions">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('pressWorksheets', 'FILTER:BUTTON') %></span></button>
+<form class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-date"><%- t('pressWorksheets', 'PROPERTY:date') %></label>
+    <input id="<%- idPrefix %>-date" class="form-control" name="date" type="date">
+  </div>
+  <div class="form-group">
+    <label><%- t('pressWorksheets', 'filter:shift') %></label>
+    <div id="<%- idPrefix %>-shift" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% [0, 1, 2, 3].forEach(function(shift) { %>
+      <label class="btn btn-default">
+        <input type="radio" name="shift" value="<%- shift %>"> <%- t('core', 'SHIFT:' + shift) %>
+      </label>
+      <% }) %>
     </div>
-  </form>
-</div>
+  </div>
+  <div class="form-group">
+    <label><%- t('pressWorksheets', 'PROPERTY:type') %></label>
+    <div id="<%- idPrefix %>-type" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['any', 'mech', 'paintShop', 'optics'].forEach(function(type) { %>
+      <label class="btn btn-default">
+        <input type="radio" name="type" value="<%- type %>"> <%- t('pressWorksheets', 'filter:type:' + type) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="filter-radioLabels">
+      <label>
+        <input name="userType" type="radio" value="master">
+        <%- t('pressWorksheets', 'filter:user:master') %>
+      </label><label>
+        <input name="userType" type="radio" value="operators">
+        <%- t('pressWorksheets', 'filter:user:operators') %>
+      </label>
+    </div>
+    <input id="<%- idPrefix %>-user" name="user" type="hidden">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group">
+    <div id="<%- idPrefix %>-mine" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default" title="<%- t('pressWorksheets', 'filter:mine:title') %>">
+        <input type="checkbox" name="mine" value="1"> <%- t('pressWorksheets', 'filter:mine') %>
+      </label>
+    </div>
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('pressWorksheets', 'filter:submit') %></span></button>
+  </div>
+</form>

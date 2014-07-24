@@ -1,19 +1,14 @@
-<div class="well">
-  <form id="<%- idPrefix %>-form" class="filter-form">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-personellId"><%- t('users', 'PROPERTY:personellId') %></label>
-      <input id="<%- idPrefix %>-personellId" class="form-control" name="personellId" type="text" placeholder="<%- t('users', 'FILTER:PLACEHOLDER:personellId') %>">
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-lastName"><%- t('users', 'PROPERTY:lastName') %></label>
-      <input id="<%- idPrefix %>-lastName" class="form-control" name="lastName" type="text" placeholder="<%- t('users', 'FILTER:PLACEHOLDER:lastName') %>">
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-limit"><%- t('users', 'FILTER:LIMIT') %></label>
-      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
-    </div><div
-      class="form-group filter-actions">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('users', 'FILTER:BUTTON') %></span></button>
-    </div>
-  </form>
-</div>
+<form class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-personellId"><%- t('users', 'PROPERTY:personellId') %></label>
+    <input id="<%- idPrefix %>-personellId" class="form-control" name="personellId" type="text" placeholder="<%- t('users', 'filter:placeholder:personellId') %>">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-lastName"><%- t('users', 'PROPERTY:lastName') %></label>
+    <input id="<%- idPrefix %>-lastName" class="form-control" name="lastName" type="text" placeholder="<%- t('users', 'filter:placeholder:lastName') %>">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('users', 'filter:submit') %></span></button>
+  </div>
+</form>

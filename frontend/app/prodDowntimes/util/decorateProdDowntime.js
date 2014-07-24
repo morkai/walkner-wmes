@@ -29,13 +29,11 @@ define([
 ) {
   'use strict';
 
-  return function(model)
+  return function(prodDowntime)
   {
-    /*jshint -W015*/
+    var obj = prodDowntime.toJSON();
 
-    var obj = model.toJSON();
-
-    obj.statusClassName = model.getCssClassName();
+    obj.statusClassName = prodDowntime.getCssClassName();
 
     obj.className = obj.statusClassName;
 

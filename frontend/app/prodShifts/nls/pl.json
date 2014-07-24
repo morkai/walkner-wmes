@@ -17,12 +17,8 @@
   "PANEL:TITLE:addForm": "Formularz dodawania zmiany produkcyjnej",
   "PANEL:TITLE:editForm": "Formularz edycji danych zmiany produkcyjnej",
 
-  "FILTER:DATE:FROM": "Od",
-  "FILTER:DATE:TO": "Do",
-  "FILTER:LIMIT": "Limit",
-  "FILTER:BUTTON": "Filtruj historię",
-  "FILTER:PLACEHOLDER:type": "Dowolny typ",
-  "FILTER:PLACEHOLDER:prodLine": "Dowolna linia produkcyjna",
+  "filter:submit": "Filtruj historię",
+  "filter:placeholder:prodLine": "Dowolna linia produkcyjna",
 
   "PROPERTY:mrpControllers": "Kontroler MRP",
   "PROPERTY:prodFlow": "Przepływ",

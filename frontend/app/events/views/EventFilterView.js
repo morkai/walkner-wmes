@@ -3,60 +3,60 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'js2form',
-  'app/i18n',
-  'app/core/View',
   'app/core/util/fixTimeRange',
+  'app/core/views/FilterView',
   'app/users/util/setUpUserSelect2',
-  'app/events/templates/filter',
-  'select2'
+  'app/events/templates/filter'
 ], function(
-  js2form,
-  t,
-  View,
   fixTimeRange,
+  FilterView,
   setUpUsersSelect2,
   filterTemplate
 ) {
   'use strict';
 
-  return View.extend({
+  return FilterView.extend({
 
     template: filterTemplate,
 
-    events: {
-      'submit .filter-form': function(e)
-      {
-        e.preventDefault();
-
-        this.changeFilter();
-      }
-    },
-
-    destroy: function()
-    {
-      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
-    },
-
-    serialize: function()
+    defaultFormData: function()
     {
       return {
-        idPrefix: this.idPrefix,
-        types: this.model.eventTypes.sort().toJSON()
+        type: '',
+        user: '',
+        severity: []
       };
+    },
+
+    termToForm: {
+      'time': function(propertyName, term, formData)
+      {
+        fixTimeRange.toFormData(formData, term, 'date+time');
+      },
+      'type': function(propertyName, term, formData)
+      {
+        formData.type = term.args[1];
+      },
+      'user._id': function(propertyName, term, formData)
+      {
+        formData.user = term.args[1] === null ? '$SYSTEM' : term.args[1];
+      },
+      'severity': function(propertyName, term, formData)
+      {
+        formData.severity = term.name === 'eq' ? [term.args[1]] : term.args[1];
+      }
     },
 
     afterRender: function()
     {
-      var formData = this.serializeRqlQuery();
+      FilterView.prototype.afterRender.call(this);
 
-      js2form(this.el.querySelector('.filter-form'), formData);
-
-      this.toggleSeverity(formData.severity);
+      this.toggleSeverity(this.formData.severity);
 
       this.$id('type').select2({
-        width: 'resolve',
-        allowClear: true
+        width: 300,
+        allowClear: true,
+        data: this.model.eventTypes.map(function(eventType) { return eventType.toSelect2Option(); })
       });
 
       setUpUsersSelect2(this.$id('user'), {
@@ -64,51 +64,9 @@ define([
       });
     },
 
-    serializeRqlQuery: function()
+    serializeFormToQuery: function(selector)
     {
-      var rqlQuery = this.model.rqlQuery;
-      var formData = {
-        type: '',
-        user: '',
-        limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit),
-        severity: []
-      };
-
-      rqlQuery.selector.args.forEach(function(term)
-      {
-        /*jshint -W015*/
-
-        var property = term.args[0];
-
-        switch (property)
-        {
-          case 'time':
-            fixTimeRange.toFormData(formData, term, 'date+time');
-            break;
-
-          case 'type':
-            formData.type = term.args[1];
-            break;
-
-          case 'user._id':
-            formData.user = term.args[1] === null ? '$SYSTEM' : term.args[1];
-            break;
-
-          case 'severity':
-            formData.severity =
-              term.name === 'eq' ? [term.args[1]] : term.args[1];
-            break;
-        }
-      });
-
-      return formData;
-    },
-
-    changeFilter: function()
-    {
-      var rqlQuery = this.model.rqlQuery;
       var timeRange = fixTimeRange.fromView(this);
-      var selector = [];
       var type = this.$id('type').val().trim();
       var user = this.$id('user').select2('data');
       var severity = this.fixSeverity();
@@ -141,17 +99,11 @@ define([
       {
         selector.push({name: 'in', args: ['severity', severity]});
       }
-
-      rqlQuery.selector = {name: 'and', args: selector};
-      rqlQuery.limit = parseInt(this.$id('limit').val(), 10);
-      rqlQuery.skip = 0;
-
-      this.trigger('filterChanged', rqlQuery);
     },
 
     fixSeverity: function()
     {
-      var $allSeverity = this.$('.events-filter-form-severity');
+      var $allSeverity = this.$id('severity').find('.btn');
       var $activeSeverity = $allSeverity.filter('.active');
 
       if ($activeSeverity.length === 0)
@@ -166,7 +118,7 @@ define([
 
     toggleSeverity: function(severities)
     {
-      var $allSeverity = this.$('.events-filter-form-severity');
+      var $allSeverity = this.$id('severity').find('.btn');
 
       if (severities.length === 0)
       {
@@ -176,7 +128,7 @@ define([
       {
         severities.forEach(function(severity)
         {
-          $allSeverity.filter('[title="' + severity.toUpperCase() + '"]').addClass('active');
+          $allSeverity.filter('[value=' + severity + ']').addClass('active');
         });
       }
     }

@@ -25,13 +25,14 @@ define([
   {
     /*jshint -W015*/
 
-    var company = companies.get(user.company);
+    var obj = user.toJSON();
+    var company = companies.get(obj.company);
 
-    user.company = company ? company.getLabel() : t('users', 'NO_DATA:company');
+    obj.company = company ? company.getLabel() : t('users', 'NO_DATA:company');
 
-    if (Array.isArray(user.aors))
+    if (Array.isArray(obj.aors))
     {
-      user.aors = user.aors
+      obj.aors = obj.aors
         .map(function(aorId)
         {
           var aor = aors.get(aorId);
@@ -46,51 +47,51 @@ define([
     }
     else
     {
-      user.aors = '';
+      obj.aors = '';
     }
 
-    if (!user.aors.length)
+    if (!obj.aors.length)
     {
-      user.aors = t('users', 'NO_DATA:aors');
+      obj.aors = t('users', 'NO_DATA:aors');
     }
 
-    var prodFunction = prodFunctions.get(user.prodFunction);
+    var prodFunction = prodFunctions.get(obj.prodFunction);
 
-    user.prodFunction = prodFunction ? prodFunction.getLabel() : t('users', 'NO_DATA:prodFunction');
+    obj.prodFunction = prodFunction ? prodFunction.getLabel() : t('users', 'NO_DATA:prodFunction');
 
-    if (user.orgUnitType && user.orgUnitId)
+    if (obj.orgUnitType && obj.orgUnitId)
     {
       var orgUnitModel;
 
-      switch (user.orgUnitType)
+      switch (obj.orgUnitType)
       {
         case 'division':
-          orgUnitModel = divisions.get(user.orgUnitId);
+          orgUnitModel = divisions.get(obj.orgUnitId);
           break;
 
         case 'subdivision':
-          orgUnitModel = subdivisions.get(user.orgUnitId);
+          orgUnitModel = subdivisions.get(obj.orgUnitId);
           break;
       }
 
       if (orgUnitModel)
       {
-        user.orgUnit = renderOrgUnitPath(orgUnitModel, false, false);
+        obj.orgUnit = renderOrgUnitPath(orgUnitModel, false, false);
       }
     }
 
-    if (user.vendor)
+    if (obj.vendor)
     {
-      if (user.vendor.name)
+      if (obj.vendor.name)
       {
-        user.vendor = user.vendor.name + ' (' + user.vendor._id + ')';
+        obj.vendor = obj.vendor.name + ' (' + obj.vendor._id + ')';
       }
-      else if (user.vendor._id)
+      else if (obj.vendor._id)
       {
-        user.vendor = user.vendor._id;
+        obj.vendor = obj.vendor._id;
       }
     }
 
-    return user;
+    return obj;
   };
 });
