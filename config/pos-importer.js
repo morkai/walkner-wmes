@@ -7,6 +7,8 @@ exports.modules = [
   'events',
   'messenger/server',
   'directoryWatcher',
+  'mail/listener',
+  'mail/downloader',
   'purchaseOrders/importer'
 ];
 
@@ -47,6 +49,16 @@ exports['messenger/server'] = {
 
 exports.directoryWatcher = {
   path: __dirname + '/../data/attachments-input'
+};
+
+exports['mail/listener'] = {
+  mailParserOptions: {streamAttachments: false},
+  searchFilter: ['UNSEEN']
+};
+
+exports['mail/downloader'] = {
+  savePath: exports.directoryWatcher.path,
+  timestamp: true
 };
 
 exports['purchaseOrders/importer'] = {

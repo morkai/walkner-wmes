@@ -42,6 +42,7 @@ exports.modules = [
   'purchaseOrders',
   {id: 'messenger/client', name: 'messenger/client:importer'},
   {id: 'messenger/client', name: 'messenger/client:xiconf'},
+  {id: 'messenger/client', name: 'messenger/client:pos-importer'},
   'httpServer',
   'httpsServer',
   'sio'
@@ -178,6 +179,14 @@ exports['messenger/client:xiconf'] = {
   pubPort: 60030,
   repHost: '127.0.0.1',
   repPort: 60031,
+  responseTimeout: 5000
+};
+
+exports['messenger/client:pos-importer'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60040,
+  repHost: '127.0.0.1',
+  repPort: 60041,
   responseTimeout: 5000
 };
 
