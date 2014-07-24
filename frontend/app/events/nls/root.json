@@ -44,6 +44,8 @@
     "TEXT:emptyOrders.synced": "Added {count, plural, one{1 new empty order} other{# new empty orders}}.",
     "TYPE:orders.synced": "Production orders: synchronization",
     "TEXT:orders.synced": "Added {created} new and edited {updated, plural, one{1 existing order} other{# existing orders}}{moduleName, select, currentDayOrderImporter{&nbsp;from the current day} nextDayOrderImporter{&nbsp;from the next day} prevDayOrderImporter{&nbsp;from the previous day} other{}}.",
+    "TYPE:purchaseOrders.synced": "Purchase orders: synchronization",
+    "TEXT:purchaseOrders.synced": "Added {created, plural, one{1 new order} other{# new orders}}, edited {updated, plural, one{1 existing order} other{# existing orders}} and closed {closed, plural, one{1 order} other{# orders}} from {importedAt}.",
     "TYPE:orderStatuses.added": "Order statuses: added",
     "TEXT:orderStatuses.added": "Added order status: <a href='\\#orderStatuses/{model->_id}'>{model->_id}</a>",
     "TYPE:orderStatuses.edited": "Order statuses: edited",

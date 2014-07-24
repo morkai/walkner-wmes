@@ -36,12 +36,13 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         return this.done(done, err);
       }
 
-      var importedAt = purchaseOrders[orderIds[0]].importedAt;
-      var closedOrders = findClosedOrders(openOrders, purchaseOrders, importedAt);
+      this.importedAt = purchaseOrders[orderIds[0]].importedAt;
+
+      var closedOrders = findClosedOrders(openOrders, purchaseOrders, this.importedAt);
 
       if (closedOrders.ids.length)
       {
-        closeOpenOrders(closedOrders, importedAt, this);
+        closeOpenOrders(closedOrders, this.importedAt, this);
       }
 
       this.closedOrderIds = closedOrders.ids;
@@ -100,7 +101,6 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
       this.insertList = insertList;
       this.updateList = updateList;
-      this.closedOrderIds = null;
       this.orderModels = null;
 
       setImmediate(this.next());
@@ -144,8 +144,17 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         "Synced %d new and %d existing POs", this.insertList.length, this.updateList.length
       );
 
+      app.broker.publish('purchaseOrders.synced', {
+        created: this.insertList.length,
+        updated: this.updateList.length,
+        closed: this.closedOrderIds.length,
+        importedAt: this.importedAt,
+        moduleName: importerModule.name
+      });
+
       this.insertList = null;
       this.updateList = null;
+      this.closedOrderIds = null;
     },
     done
   );

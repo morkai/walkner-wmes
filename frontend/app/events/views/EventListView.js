@@ -103,6 +103,10 @@ define([
         case 'clipOrderCount.created':
           data.date = time.format(data.date, 'YYYY-MM-DD');
           break;
+
+        case 'purchaseOrders.synced':
+          data.importedAt = time.format(data.importedAt, 'LLL');
+          break;
       }
 
       return data;
