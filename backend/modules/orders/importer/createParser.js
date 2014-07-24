@@ -20,7 +20,6 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
   var parseDataTimers = {};
   var parseDataLock = false;
 
-  app.broker.subscribe('directoryWatcher.created', importFile).setFilter(filterFile);
   app.broker.subscribe('directoryWatcher.changed', importFile).setFilter(filterFile);
 
   function filterFile(fileInfo)

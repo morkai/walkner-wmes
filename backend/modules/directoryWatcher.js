@@ -23,7 +23,7 @@ exports.start = function startDirectoryWatcherModule(app, module)
     {
       if (fileName !== null)
       {
-        app.broker.publish('directoryWatcher.changed', createFileInfo(fileName));
+        publishChangedMessage(fileName);
       }
     });
 
@@ -34,13 +34,13 @@ exports.start = function startDirectoryWatcherModule(app, module)
         return module.error("Failed to read dir: %s", err.message);
       }
 
-      fileNames.sort().forEach(publishCreatedMessage);
+      fileNames.sort().forEach(publishChangedMessage);
     });
   }
 
-  function publishCreatedMessage(fileName)
+  function publishChangedMessage(fileName)
   {
-    app.broker.publish('directoryWatcher.created', createFileInfo(fileName));
+    app.broker.publish('directoryWatcher.changed', createFileInfo(fileName));
   }
 
   function createFileInfo(fileName)

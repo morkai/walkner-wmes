@@ -23,7 +23,6 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
   var fileQueue = [];
   var validEncryptedUuids = {};
 
-  app.broker.subscribe('directoryWatcher.created', enqueueFile).setFilter(filterFile);
   app.broker.subscribe('directoryWatcher.changed', enqueueFile).setFilter(filterFile);
 
   function filterFile(fileInfo)

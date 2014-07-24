@@ -29,7 +29,6 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   var importQueue = [];
   var importLock = false;
 
-  app.broker.subscribe('directoryWatcher.created', enqueueAndImport).setFilter(filterFile);
   app.broker.subscribe('directoryWatcher.changed', enqueueAndImport).setFilter(filterFile);
 
   function filterFile(fileInfo)

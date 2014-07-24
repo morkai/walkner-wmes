@@ -311,7 +311,7 @@ module.exports = function(mongoose, options, done)
     results.dirIndir.productivity = util.round(doc.num / 8 / this.fteResults.totals.prodDenTotal);
     results.dirIndir.productivityNoWh = util.round(doc.num / 8 / this.fteResults.totals.prodDenMaster);
     results.dirIndir.quantityDone = doc.qty;
-    results.dirIndir.efficiencyNum = doc.num;
+    results.dirIndir.efficiencyNum = util.round(doc.num);
     results.dirIndir.laborSetupTime = util.round(doc.lst);
 
     this.fteResults = null;
