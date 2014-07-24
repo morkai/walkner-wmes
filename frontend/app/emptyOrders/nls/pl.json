@@ -19,6 +19,6 @@
   "PROPERTY:finishDate": "Data ukończenia",
   "PROPERTY:statuses": "Status",
 
-  "FILTER:LIMIT": "Limit",
-  "FILTER:BUTTON": "Filtruj puste zlecenia"
+  "filter:placeholder:_id": "Dowolny nr",
+  "filter:submit": "Filtruj puste zlecenia"
 }

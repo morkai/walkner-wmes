@@ -20,8 +20,8 @@
     "PROPERTY:finishDate": "Finish date",
     "PROPERTY:statuses": "Status",
 
-    "FILTER:LIMIT": "Limit",
-    "FILTER:BUTTON": "Filter empty orders"
+    "filter:placeholder:_id": "Any order",
+    "filter:submit": "Filter empty orders"
   },
   "pl": true
 }

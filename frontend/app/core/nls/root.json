@@ -139,7 +139,12 @@
     "feedback:button:text": "Feedback",
     "feedback:button:tooltip": "Report bugs, notes, opinions or ideas!",
 
-    "colorPicker:label": "Color"
+    "colorPicker:label": "Color",
+
+    "filter:date:from": "From:",
+    "filter:date:to": "To:",
+    "filter:submit": "Filter",
+    "filter:limit": "Limit"
   },
   "pl": true
 }

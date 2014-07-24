@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../time',
   '../core/Collection',
   './EmptyOrder'
 ], function(
+  time,
   Collection,
   EmptyOrder
 ) {
@@ -17,11 +19,7 @@ define([
 
     rqlQuery: function(rql)
     {
-      var today = new Date();
-      today.setHours(0);
-      today.setMinutes(0);
-      today.setSeconds(0);
-      today.setMilliseconds(0);
+      var today = time.getMoment().hours(0).minutes(0).seconds(0).milliseconds(0);
 
       return rql.Query.fromObject({
         fields: {nc12: 1, mrp: 1, startDate: 1, finishDate: 1},
@@ -29,7 +27,10 @@ define([
         limit: 15,
         selector: {
           name: 'and',
-          args: [{name: 'eq', args: ['startDate', today.getTime()]}]
+          args: [
+            {name: 'ge', args: ['startDate', today.valueOf()]},
+            {name: 'le', args: ['startDate', today.valueOf()]}
+          ]
         }
       });
     }

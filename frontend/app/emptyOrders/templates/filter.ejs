@@ -1,25 +1,31 @@
 <div class="well">
   <form id="<%- idPrefix %>-form" class="filter-form">
-    <div class="form-group emptyOrders-filter-date-group">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-_id"><%- t('emptyOrders', 'PROPERTY:_id') %></label>
+      <input id="<%- idPrefix %>-_id" class="form-control orders-filter-_id" name="_id" type="text" minlength="4" maxlength="10" placeholder="<%- t('emptyOrders', 'filter:placeholder:_id') %>">
+    </div><div class="form-group form-group-dateRange">
       <div>
-        <label>
-          <input name="dateType" type="radio" value="start">
+        <label class="radio-inline">
+          <input name="date" type="radio" value="startDate">
           <%- t('emptyOrders', 'PROPERTY:startDate') %>
-        </label><label
-          class="emptyOrders-filter-date-finish-label">
-          <input name="dateType" type="radio" value="finish">
+        </label><label class="radio-inline">
+          <input name="date" type="radio" value="finishDate">
           <%- t('emptyOrders', 'PROPERTY:finishDate') %>
         </label>
-      </div><div class="emptyOrders-filter-date-range">
-        <input id="<%- idPrefix %>-date" class="form-control" name="date" type="date" placeholder="YYYY-MM-DD">
+      </div>
+      <div>
+        <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
+        <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+        <label for="<%- idPrefix %>-to" class="control-label"><%- t('core', 'filter:date:to') %></label>
+        <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
       </div>
     </div><div
       class="form-group">
-      <label for="<%- idPrefix %>-limit"><%- t('emptyOrders', 'FILTER:LIMIT') %></label>
+      <label for="<%- idPrefix %>-limit"><%- t('core', 'filter:limit') %></label>
       <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
     </div><div
       class="form-group filter-actions">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('emptyOrders', 'FILTER:BUTTON') %></span></button>
+      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('emptyOrders', 'filter:submit') %></span></button>
     </div>
   </form>
 </div>

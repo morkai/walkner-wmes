@@ -4,15 +4,15 @@
 
 define([
   'js2form',
-  'app/time',
   'app/i18n',
   'app/core/View',
+  'app/core/util/fixTimeRange',
   'app/emptyOrders/templates/filter'
 ], function(
   js2form,
-  time,
   t,
   View,
+  fixTimeRange,
   filterTemplate
 ) {
   'use strict';
@@ -27,6 +27,19 @@ define([
         e.preventDefault();
 
         this.changeFilter();
+      },
+      'change #-from': function(e)
+      {
+        var $to = this.$('input[name=to]');
+
+        if ($to.attr('data-changed') !== 'true')
+        {
+          $to.val(e.target.value);
+        }
+      },
+      'change #-to': function(e)
+      {
+        e.target.setAttribute('data-changed', 'true');
       }
     },
 
@@ -41,8 +54,10 @@ define([
     {
       var rqlQuery = this.model.rqlQuery;
       var formData = {
-        dateType: 'start',
-        date: '',
+        _id: '',
+        date: 'startDate',
+        from: '',
+        to: '',
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
       };
 
@@ -56,7 +71,15 @@ define([
         {
           case 'startDate':
           case 'finishDate':
-            formData.date = time.format(term.args[1], 'YYYY-MM-DD');
+            formData.date = property;
+
+            fixTimeRange.toFormData(formData, term, 'date');
+            break;
+
+          case '_id':
+            var value = term.args[1];
+
+            formData[property] = typeof value === 'string' ? value.replace(/[^0-9]/g, '') : '-';
             break;
         }
       });
@@ -67,13 +90,20 @@ define([
     changeFilter: function()
     {
       var rqlQuery = this.model.rqlQuery;
+      var timeRange = fixTimeRange.fromView(this);
       var selector = [];
-      var dateMoment = time.getMoment(this.$id('date').val());
-      var dateProperty = this.$('[name=dateType]:checked').val() + 'Date';
+      var date = this.$('[name=date]:checked').val();
 
-      if (dateMoment.isValid())
+      this.serializeRegexTerm(selector, '_id', 9);
+
+      if (timeRange.from)
       {
-        selector.push({name: 'eq', args: [dateProperty, dateMoment.valueOf()]});
+        selector.push({name: 'ge', args: [date, timeRange.from]});
+      }
+
+      if (timeRange.to)
+      {
+        selector.push({name: 'le', args: [date, timeRange.to]});
       }
 
       rqlQuery.selector = {name: 'and', args: selector};
@@ -81,6 +111,33 @@ define([
       rqlQuery.skip = 0;
 
       this.trigger('filterChanged', rqlQuery);
+    },
+
+    serializeRegexTerm: function(selector, property, maxLength)
+    {
+      var $el = this.$id(property);
+      var value = $el.val().trim();
+
+      if (value !== '-')
+      {
+        value = value.replace(/[^0-9]/g, '');
+      }
+
+      $el.val(value);
+
+      if (value === '-')
+      {
+        value = null;
+      }
+
+      if (value === null || value.length === maxLength)
+      {
+        selector.push({name: 'eq', args: [property, value]});
+      }
+      else if (value.length > 0)
+      {
+        selector.push({name: 'regex', args: [property, value]});
+      }
     }
 
   });
