@@ -28,6 +28,9 @@ module.exports = function setupEmptyOrderModel(app, mongoose)
     id: false
   });
 
+  emptyOrderSchema.index({startDate: -1});
+  emptyOrderSchema.index({finishDate: -1});
+
   emptyOrderSchema.statics.TOPIC_PREFIX = 'emptyOrders';
   emptyOrderSchema.statics.BROWSE_LIMIT = 2000;
 
