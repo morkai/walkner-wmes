@@ -66,6 +66,11 @@ exports.start = function startMailListenerModule(app, module)
       app.broker.publish('mail.received', mail);
     });
 
+    mailListener.on('attachment', function(attachment)
+    {
+      app.broker.publish('mail.attachment', attachment);
+    });
+
     mailListener.start();
   }
 };
