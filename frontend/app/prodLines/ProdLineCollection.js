@@ -17,7 +17,7 @@ define([
 
     model: ProdLine,
 
-    rqlQuery: 'select(workCenter,description)&sort(workCenter,_id)',
+    rqlQuery: 'select(workCenter,description,inventoryNo)&sort(workCenter,_id)',
 
     getForCurrentUser: function()
     {

@@ -22,6 +22,7 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:description": "Description",
     "PROPERTY:workCenter": "WorkCenter",
+    "PROPERTY:inventoryNo": "Inventory no",
 
     "FORM:ACTION:add": "Add production line",
     "FORM:ACTION:edit": "Edit production line",

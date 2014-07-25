@@ -40,6 +40,10 @@ module.exports = function setupProdLineModel(app, mongoose)
       type: String,
       ref: 'ProdDowntime',
       default: null
+    },
+    inventoryNo: {
+      type: String,
+      default: null
     }
   }, {
     id: false,

@@ -14,9 +14,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     toTime: helpers.getTime(req.query.to),
     interval: req.query.interval || 'day',
     majorMalfunction: parseFloat(req.query.majorMalfunction) || 1.5,
-    downtimeReasons: helpers.getDowntimeReasons(
-      app[reportsModule.config.downtimeReasonsId].models, false
-    ),
+    downtimeReasons: helpers.getDowntimeReasons(app[reportsModule.config.downtimeReasonsId].models, false),
     prodLines: getProdLinesWithSubDivisions(app[reportsModule.config.orgUnitsId])
   };
 
@@ -52,7 +50,8 @@ function getProdLinesWithSubDivisions(orgUnitsModule)
 
     prodLines[prodLine._id] = {
       division: subdivision.division,
-      subdivisionType: subdivision.type
+      subdivisionType: subdivision.type,
+      inventoryNo: prodLine.inventoryNo
     };
   });
 

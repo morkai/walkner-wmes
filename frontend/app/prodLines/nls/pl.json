@@ -21,6 +21,7 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:description": "Opis",
   "PROPERTY:workCenter": "WorkCenter",
+  "PROPERTY:inventoryNo": "Nr inwentarzowy",
 
   "FORM:ACTION:add": "Dodaj linię produkcyjną",
   "FORM:ACTION:edit": "Edytuj linię produkcyjną",

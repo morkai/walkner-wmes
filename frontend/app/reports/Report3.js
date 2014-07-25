@@ -268,15 +268,16 @@ define([
     parseProdLines: function(options, prodLinesData, groupKeys)
     {
       var prodLines = [];
+      var prodLinesInfo = options.prodLinesInfo;
 
-      for (var i = 0, l = options.prodLinesInfo.length; i < l; i += 3)
+      for (var i = 0, l = prodLinesInfo.length; i < l; i += 4)
       {
-        var prodLineData = prodLinesData[options.prodLinesInfo[i]];
+        var prodLineData = prodLinesData[prodLinesInfo[i]];
         var prodLine = {
-          _id: options.prodLinesInfo[i],
-          division: options.prodLinesInfo[i + 1],
-          subdivisionType: options.prodLinesInfo[i + 2],
-          inventoryNo: '?',
+          _id: prodLinesInfo[i],
+          division: prodLinesInfo[i + 1],
+          subdivisionType: prodLinesInfo[i + 2],
+          inventoryNo: prodLinesInfo[i + 3],
           workDays: options.totalWorkDays,
           scheduledDuration: 0,
           unscheduledDuration: 0,

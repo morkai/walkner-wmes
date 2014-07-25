@@ -17,7 +17,7 @@ define([
 
   return ListView.extend({
 
-    columns: ['workCenter', '_id', 'description'],
+    columns: ['workCenter', '_id', 'description', 'inventoryNo'],
 
     serializeActions: function()
     {

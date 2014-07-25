@@ -130,10 +130,13 @@ Report3.prototype.toJSON = function()
   {
     if (report.results[prodLineId] !== undefined)
     {
+      var prodLineInfo = report.options.prodLines[prodLineId];
+
       prodLinesInfo.push(
         prodLineId,
-        report.options.prodLines[prodLineId].division,
-        report.options.prodLines[prodLineId].subdivisionType
+        prodLineInfo.division,
+        prodLineInfo.subdivisionType,
+        prodLineInfo.inventoryNo || '-'
       );
     }
   });

@@ -50,6 +50,11 @@ define([
         data.workCenter = null;
       }
 
+      if (!data.inventoryNo)
+      {
+        data.inventoryNo = null;
+      }
+
       return data;
     }
 
