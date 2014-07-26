@@ -3,12 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/time',
   'app/i18n',
   'app/core/View',
   'app/data/views/renderOrgUnitPath',
   'app/highcharts'
 ], function(
+  _,
   time,
   t,
   View,
@@ -25,12 +27,14 @@ define([
     {
       this.shouldRenderChart = !this.options.skipRenderChart;
       this.chart = null;
-      this.loading = false;
+      this.isLoading = false;
 
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:clip', this.render);
+      this.listenTo(this.settings, 'add change', this.onSettingsUpdate);
+      this.listenTo(this.displayOptions, 'change', _.debounce(this.onDisplayOptionsChange, 1));
     },
 
     destroy: function()
@@ -52,7 +56,7 @@ define([
       {
         this.createChart();
 
-        if (this.loading)
+        if (this.isLoading)
         {
           this.chart.showLoading();
         }
@@ -64,14 +68,8 @@ define([
     updateChart: function()
     {
       var chartData = this.serializeChartData();
-      var min = 0;
 
-      if (!chartData.orderCount.length)
-      {
-        min = null;
-      }
-
-      this.chart.yAxis[1].setExtremes(min, null, false);
+      this.updateExtremes(false);
 
       var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
 
@@ -89,11 +87,11 @@ define([
       return this.model.get('clip');
     },
 
-    formatTooltipHeader: function(epoch)
+    formatTooltipHeader: function(ctx)
     {
       /*jshint -W015*/
 
-      var timeMoment = time.getMoment(epoch);
+      var timeMoment = time.getMoment(ctx.x);
       var interval = this.model.query.get('interval');
       var data;
 
@@ -139,9 +137,89 @@ define([
       return orgUnit.getLabel();
     },
 
+    updateExtremes: function(redraw)
+    {
+      var displayOptions = this.displayOptions;
+      var useMax = !this.isFullscreen && (!this.model.get('isParent') || this.model.get('extremes') === 'parent');
+      var maxClipOrderCount = null;
+      var maxClipPercent = null;
+
+      if (useMax)
+      {
+        var productionVisible = displayOptions.isSeriesVisible('clipProduction');
+        var endToEndVisible = displayOptions.isSeriesVisible('clipEndToEnd');
+
+        maxClipOrderCount = displayOptions.isSeriesVisible('clipOrderCount')
+          ? displayOptions.get('maxClipOrderCount')
+          : null;
+        maxClipPercent = productionVisible || endToEndVisible
+          ? displayOptions.get('maxClipPercent')
+          : null;
+      }
+
+      this.chart.yAxis[0].setExtremes(0, maxClipOrderCount, false, false);
+      this.chart.yAxis[1].setExtremes(0, maxClipPercent, redraw, false);
+    },
+
+    updateColor: function(metric, color)
+    {
+      var series = this.chart.get(metric);
+
+      if (series)
+      {
+        series.update({color: color}, true);
+      }
+    },
+
+    onSettingsUpdate: function(setting)
+    {
+      /*jshint -W015*/
+
+      switch (setting.getType())
+      {
+        case 'color':
+          return this.updateColor(setting.getMetricName(), setting.getValue());
+      }
+    },
+
+    onDisplayOptionsChange: function()
+    {
+      var changes = this.displayOptions.changedAttributes();
+      var redraw = false;
+
+      if (changes.series)
+      {
+        var visibleSeries = this.displayOptions.get('series');
+
+        this.chart.series.forEach(function(series)
+        {
+          var visible = !!visibleSeries[series.options.id];
+
+          if (series.visible !== visible)
+          {
+            series.setVisible(visible, false);
+
+            redraw = true;
+          }
+        });
+      }
+
+      if (changes.maxClipOrderCount !== undefined || changes.maxClipPercent !== undefined)
+      {
+        this.updateExtremes(false);
+
+        redraw = true;
+      }
+
+      if (redraw)
+      {
+        this.chart.redraw(false);
+      }
+    },
+
     onModelLoading: function()
     {
-      this.loading = true;
+      this.isLoading = true;
 
       if (this.chart)
       {
@@ -151,7 +229,7 @@ define([
 
     onModelLoaded: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
@@ -161,7 +239,7 @@ define([
 
     onModelError: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
@@ -172,73 +250,26 @@ define([
     createChart: function()
     {
       var chartData = this.serializeChartData();
-      var formatTooltipHeader = this.formatTooltipHeader.bind(this);
       var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
-      var view = this;
 
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
-          events: {
-            selection: function(e)
-            {
-              if (e.resetSelection)
-              {
-                view.timers.resetExtremes = setTimeout(
-                  this.yAxis[1].setExtremes.bind(this.yAxis[1], 0, null, true, false), 1
-                );
-              }
-            }
-          }
+          zoomType: null
         },
         exporting: {
           filename: t('reports', 'filenames:2:clip')
         },
         title: {
-          useHTML: true,
           text: this.getTitle()
         },
         noData: {},
-        xAxis: {
-          type: 'datetime'
-        },
-        yAxis: [
-          {
-            title: false
-          },
-          {
-            title: false,
-            opposite: true,
-            gridLineWidth: 0,
-            labels: {
-              format: '{value}%'
-            }
-          }
-        ],
         tooltip: {
           shared: true,
-          useHTML: true,
-          formatter: function()
-          {
-            var str = '<b>' + formatTooltipHeader(this.x) +'</b><table>';
-
-            this.points.forEach(function(point)
-            {
-              str += '<tr><td style="color: ' + point.series.color + '">'
-                + point.series.name + ':</td><td>'
-                + point.y + (point.series.tooltipOptions.valueSuffix || '')
-                + '</td></tr>';
-            });
-
-            str += '</table>';
-
-            return str;
-          }
+          headerFormatter: this.formatTooltipHeader.bind(this)
         },
         legend: {
-          layout: 'horizontal',
-          align: 'center',
-          verticalAlign: 'bottom'
+          enabled: false
         },
         plotOptions: {
           area: {
@@ -255,33 +286,54 @@ define([
             marker: markerStyles
           }
         },
-        series: [
+        xAxis: {
+          type: 'datetime'
+        },
+        yAxis: [
           {
-            name: t('reports', 'metrics:clip:orderCount'),
-            color: '#00aaff',
-            type: 'area',
-            yAxis: 0,
-            data: chartData.orderCount
+            title: false
           },
           {
+            title: false,
+            opposite: true,
+            labels: {
+              format: '{value}%'
+            }
+          }
+        ],
+        series: [
+          {
+            id: 'clipOrderCount',
+            name: t('reports', 'metrics:clip:orderCount'),
+            color: this.settings.getColor('clipOrderCount'),
+            type: 'area',
+            yAxis: 0,
+            data: chartData.orderCount,
+            visible: this.displayOptions.isSeriesVisible('clipOrderCount')
+          },
+          {
+            id: 'clipProduction',
             name: t('reports', 'metrics:clip:production'),
-            color: '#aa00ff',
+            color: this.settings.getColor('clipProduction'),
             type: 'line',
             yAxis: 1,
             data: chartData.production,
             tooltip: {
               valueSuffix: '%'
-            }
+            },
+            visible: this.displayOptions.isSeriesVisible('clipProduction')
           },
           {
+            id: 'clipEndToEnd',
             name: t('reports', 'metrics:clip:endToEnd'),
-            color: '#FF007F',
+            color: this.settings.getColor('clipEndToEnd'),
             type: 'line',
             yAxis: 1,
             data: chartData.endToEnd,
             tooltip: {
               valueSuffix: '%'
-            }
+            },
+            visible: this.displayOptions.isSeriesVisible('clipEndToEnd')
           }
         ]
       });

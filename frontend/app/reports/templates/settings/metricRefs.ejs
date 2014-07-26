@@ -1,6 +1,7 @@
+<label><%- t('reports', 'settings:metricRefs') %></label>
 <div class="reports-settings-metricRefs">
   <div class="form-group">
-    <label for="<%- idPrefix %><%- metric %>-overall"><%- t('reports', 'settings:overall') %></label>
+    <label for="<%- idPrefix %>-<%- metric %>-overall"><%- t('reports', 'settings:overall') %></label>
     <input id="<%- idPrefix %>-<%- metric %>-overall" class="form-control" name="reports.<%- metric %>.overall" type="number" value="0" step="1" min="0" max="100">
   </div><!--
   //--><div class="form-group">

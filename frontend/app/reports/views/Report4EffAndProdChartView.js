@@ -71,7 +71,6 @@ define([
     createChart: function()
     {
       var chartData = this.serializeChartData();
-      var formatTooltipHeader = this.formatTooltipHeader.bind(this);
       var series = [{
         name: t('reports', 'operator:productivity'),
         color: '#ffaa00',
@@ -119,25 +118,7 @@ define([
         },
         tooltip: {
           shared: true,
-          useHTML: true,
-          formatter: function()
-          {
-            var str = '<b>' + formatTooltipHeader(this.x) +'</b><table>';
-
-            this.points.forEach(function(point)
-            {
-              var y = point.y.toLocaleString ? point.y.toLocaleString() : point.y;
-
-              str += '<tr><td style="color: ' + point.series.color + '">'
-                + point.series.name + ':</td><td>'
-                + y + point.series.tooltipOptions.valueSuffix
-                + '</td></tr>';
-            });
-
-            str += '</table>';
-
-            return str;
-          },
+          headerFormatter: this.formatTooltipHeader.bind(this),
           valueSuffix: '%'
         },
         legend: {
@@ -191,9 +172,9 @@ define([
       return this.model.get('effAndProd');
     },
 
-    formatTooltipHeader: function(epoch)
+    formatTooltipHeader: function(ctx)
     {
-      var timeMoment = time.getMoment(epoch);
+      var timeMoment = time.getMoment(ctx.x);
       var interval = this.model.query.get('interval') || 'day';
 
       return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, {}));

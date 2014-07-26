@@ -25,9 +25,7 @@ exports.paths = {
   'd3': 'vendor/d3/d3.v3',
   'd3.timeline': 'vendor/d3/d3.timeline',
   'visibly': 'vendor/visibly',
-  'highcharts': 'vendor/highcharts/js/highcharts.src',
-  'highcharts-noData': 'vendor/highcharts/js/modules/no-data-to-display.src',
-  'highcharts-exporting': 'vendor/highcharts/js/modules/exporting.src',
+  'highcharts': 'vendor/highcharts-custom',
   'zeroclipboard': 'vendor/zeroclipboard/ZeroClipboard',
   'screenfull': 'vendor/screenfull',
   'datatables': 'vendor/datatables/media/js/jquery.dataTables',
@@ -62,12 +60,6 @@ exports.shim = {
   'highcharts': {
     deps: ['jquery'],
     exports: 'Highcharts'
-  },
-  'highcharts-noData': {
-    deps: ['highcharts']
-  },
-  'highcharts-exporting': {
-    deps: ['highcharts']
   },
   'screenfull': {
     exports: 'screenfull'

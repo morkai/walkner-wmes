@@ -41,7 +41,10 @@ define([
 
     viewport.loadPage('app/reports/pages/Report2Page', function(Report2Page)
     {
-      return new Report2Page({query: req.query});
+      return new Report2Page({
+        query: req.query,
+        displayOptions: req.fragment
+      });
     });
   });
 

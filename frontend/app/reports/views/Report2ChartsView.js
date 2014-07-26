@@ -51,6 +51,7 @@ define([
         new Report2ClipChartView({
           model: this.model,
           settings: this.settings,
+          displayOptions: this.displayOptions,
           skipRenderChart: this.options.skipRenderCharts
         })
       );
@@ -59,6 +60,8 @@ define([
         '.reports-2-dirIndir-container',
         new Report2DirIndirChartView({
           model: this.model,
+          settings: this.settings,
+          displayOptions: this.displayOptions,
           skipRenderChart: this.options.skipRenderCharts
         })
       );
@@ -67,6 +70,8 @@ define([
         '.reports-2-effIneff-container',
         new Report2EffIneffChartView({
           model: this.model,
+          settings: this.settings,
+          displayOptions: this.displayOptions,
           skipRenderChart: this.options.skipRenderCharts
         })
       );

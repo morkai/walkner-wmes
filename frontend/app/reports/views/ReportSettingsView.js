@@ -51,12 +51,23 @@ define([
       },
       'keyup .form-control': function(e)
       {
-        this.scheduleUpdateSetting(e.target, 600);
+        var el = e.target;
+        var lastValue = el.dataset.value;
+
+        el.dataset.value = el.value;
+
+        if (el.value !== lastValue)
+        {
+          this.scheduleUpdateSetting(el, 1200);
+        }
       },
       'change .form-control': function(e)
       {
         this.scheduleUpdateSetting(e.target, 300);
-
+      },
+      'change #-absenceRef-prodTask': function(e)
+      {
+        this.updateSetting(e.target.name, e.target.value);
       }
     },
 
@@ -108,10 +119,15 @@ define([
       [
         'quantityDone',
         'efficiency',
-        'productivity',
-        'productivityNoWh',
-        'scheduledDowntime',
-        'unscheduledDowntime'
+        'productivity', 'productivityNoWh',
+        'scheduledDowntime', 'unscheduledDowntime',
+        'clipOrderCount', 'clipProduction', 'clipEndToEnd',
+        'direct', 'directRef',
+        'indirect', 'indirectRef',
+        'warehouse', 'warehouseRef',
+        'absence', 'absenceRef',
+        'dirIndir', 'dirIndirRef',
+        'eff', 'ineff'
       ].forEach(function(metric)
       {
         colors[metric] = this.settings.getColor(metric);
@@ -133,33 +149,58 @@ define([
 
       js2form(this.el, formData);
 
+      this.$('[name]').each(function()
+      {
+        this.dataset.value = this.value;
+      });
+
+      this.$id('absenceRef-prodTask').select2({
+        width: '374px',
+        allowClear: true,
+        placeholder: ' ',
+        data: this.prodTasks.map(function(prodTask)
+        {
+          return {
+            id: prodTask.id,
+            text: prodTask.get('name')
+          };
+        })
+      });
+
       this.changeTab(this.currentTab || 'efficiency');
     },
 
     changeTab: function(tab)
     {
-      this.$('.nav-tabs > .active').removeClass('active');
-      this.$('.nav-tabs [data-tab=' + tab + ']').parent().addClass('active');
-      this.$('.panel.active').removeClass('active');
-      this.$('.panel[data-tab=' + tab + ']').addClass('active');
+      this.$('.list-group-item.active').removeClass('active');
+      this.$('.list-group-item[data-tab=' + tab + ']').addClass('active');
+      this.$('.panel-body.active').removeClass('active');
+      this.$('.panel-body[data-tab=' + tab + ']').addClass('active');
 
       this.currentTab = tab;
     },
 
     onSettingsChange: function(setting)
     {
-      if (!this.inProgress[setting.id])
+      if (!setting || this.inProgress[setting.id])
       {
-        var $el = this.$('.form-control[name="' + setting.id + '"]');
+        return;
+      }
 
-        $el.val(setting.get('value') || '');
+      if (setting.id === 'reports.absenceRef.prodTask')
+      {
+        return this.$id('absenceRef-prodTask').select2('val', setting.getValue());
+      }
 
-        var $parent = $el.parent();
+      var $el = this.$('.form-control[name="' + setting.id + '"]');
 
-        if ($parent.hasClass('colorpicker-component'))
-        {
-          $parent.colorpicker('setValue', setting.get('value'));
-        }
+      $el.val(setting.get('value') || '');
+
+      var $parent = $el.parent();
+
+      if ($parent.hasClass('colorpicker-component'))
+      {
+        $parent.colorpicker('setValue', setting.get('value'));
       }
     },
 

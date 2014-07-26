@@ -1,0 +1,20 @@
+<div class="panel-body" data-tab="clip">
+  <%- renderColorPicker({
+    idPrefix: idPrefix,
+    property: 'reports.clipOrderCount.color',
+    label: t('reports', 'settings:color:clipOrderCount'),
+    value: colors.clipOrderCount
+  }) %>
+  <%- renderColorPicker({
+    idPrefix: idPrefix,
+    property: 'reports.clipProduction.color',
+    label: t('reports', 'settings:color:clipProduction'),
+    value: colors.clipProduction
+  }) %>
+  <%- renderColorPicker({
+    idPrefix: idPrefix,
+    property: 'reports.clipEndToEnd.color',
+    label: t('reports', 'settings:color:clipEndToEnd'),
+    value: colors.clipEndToEnd
+  }) %>
+</div>

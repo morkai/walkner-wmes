@@ -19,11 +19,16 @@ define([
 
     topicPrefix: 'reports.**',
 
+    getValue: function(suffix)
+    {
+      var setting = this.get('reports.' + suffix);
+
+      return setting ? setting.getValue() : null;
+    },
+
     getColor: function(metric, opacity)
     {
-      var setting = this.get('reports.' + metric + '.color');
-      var color = setting ? setting.get('value') : null;
-      var hex = color || '#000000';
+      var hex = this.getValue(metric + '.color') || '#000000';
 
       if (!opacity)
       {
@@ -46,14 +51,19 @@ define([
 
     getReference: function(metric, orgUnitId)
     {
-      var setting = this.get('reports.' + metric + '.' + orgUnitId);
+      return this.getValue(metric + '.' + orgUnitId) || 0;
+    },
 
-      return setting ? setting.getValue() : 0;
+    getCoeff: function(metric)
+    {
+      var coeff = this.getValue(metric + '.coeff');
+
+      return coeff > 0 ? coeff : 0;
     },
 
     update: function(id, newValue)
     {
-      newValue = this.prepareValue(id, newValue);
+      newValue = this.prepareValue(id, newValue.trim());
 
       if (newValue === undefined)
       {
@@ -84,17 +94,37 @@ define([
 
     prepareValue: function(id, newValue)
     {
+      if (id === 'reports.absenceRef.prodTask')
+      {
+        return this.prepareObjectIdValue(newValue);
+      }
+
       if (/color/i.test(id))
       {
         return this.prepareColorValue(newValue);
       }
 
+      if (/coeff/i.test(id))
+      {
+        return this.prepareCoeffValue(newValue);
+      }
+
       return this.prepare100PercentValue(newValue);
+    },
+
+    prepareObjectIdValue: function(value)
+    {
+      if (value === '')
+      {
+        return null;
+      }
+
+      return (/^[a-f0-9]{24}$/).test(value) ? value : undefined;
     },
 
     prepare100PercentValue: function(value)
     {
-      if (value.trim() === '')
+      if (value === '')
       {
         return 0;
       }
@@ -119,9 +149,31 @@ define([
       return value;
     },
 
+    prepareCoeffValue: function(value)
+    {
+      if (value === '')
+      {
+        return 0;
+      }
+
+      value = parseFloat(value);
+
+      if (isNaN(value))
+      {
+        return undefined;
+      }
+
+      if (value < 0)
+      {
+        return 0;
+      }
+
+      return Math.round(value * 10000) / 10000;
+    },
+
     prepareColorValue: function(value)
     {
-      value = value.trim().toLowerCase();
+      value = value.toLowerCase();
 
       if (/^#[a-f0-9]{6}$/.test(value))
       {

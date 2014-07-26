@@ -6,9 +6,11 @@ define(function()
 {
   'use strict';
 
+  var MAX_LENGTH = 30;
+
   return function wordwrapTooltip(line)
   {
-    if (line < 45)
+    if (line < MAX_LENGTH + 5)
     {
       return line;
     }
@@ -20,7 +22,7 @@ define(function()
     {
       var lastLine = lines.length === 0 ? '' : lines[lines.length - 1];
 
-      if (lines.length === 0 || lastLine.length + word.length > 40)
+      if (lines.length === 0 || lastLine.length + word.length > MAX_LENGTH)
       {
         lines.push(word);
       }
@@ -30,6 +32,6 @@ define(function()
       }
     });
 
-    return lines.join('</span><br><span style="font-size: 10px">');
+    return lines.join('<br>');
   };
 });

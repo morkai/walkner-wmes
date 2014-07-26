@@ -3,402 +3,83 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
-  'jquery',
-  'app/i18n',
-  'app/data/orgUnits',
-  'app/core/View',
-  '../Report2',
+  './DrillingReportPage',
   '../Report2Query',
-  '../ReportSettingCollection',
+  '../Report2DisplayOptions',
   '../views/Report2HeaderView',
   '../views/Report2FilterView',
+  '../views/Report2DisplayOptionsView',
   '../views/Report2ChartsView',
-  'app/reports/templates/report2Page'
+  'app/prodTasks/ProdTaskCollection',
+  'app/core/util/bindLoadingMessage'
 ], function(
-  _,
-  $,
-  t,
-  orgUnits,
-  View,
-  Report2,
+  DrillingReportPage,
   Report2Query,
-  ReportSettingCollection,
+  Report2DisplayOptions,
   Report2HeaderView,
   Report2FilterView,
+  Report2DisplayOptionsView,
   Report2ChartsView,
-  report2PageTemplate
+  ProdTaskCollection,
+  bindLoadingMessage
 ) {
   'use strict';
 
-  return View.extend({
+  return DrillingReportPage.extend({
 
-    layoutName: 'page',
+    rootBreadcrumbKey: 'BREADCRUMBS:2',
+    initialSettingsTab: 'clip',
 
     pageId: 'report2',
 
-    template: report2PageTemplate,
-
-    title: function()
-    {
-      var title = [t.bound('reports', 'BREADCRUMBS:2')];
-      var orgUnit = orgUnits.getByTypeAndId(
-        this.query.get('orgUnitType'),
-        this.query.get('orgUnitId')
-      );
-
-      if (orgUnit)
-      {
-        var subtitle = this.query.get('orgUnitType') === 'subdivision'
-          ? (orgUnit.get('division') + ' \\ ')
-          : '';
-
-        title.push(subtitle + orgUnit.getLabel());
-      }
-      else
-      {
-        title.push(t.bound('reports', 'BREADCRUMBS:divisions'));
-      }
-
-      return title;
-    },
-
-    events: {
-      'mousedown .reports-2-clip .highcharts-title': function(e)
-      {
-        if (e.button === 1)
-        {
-          return false; // Disable scroll cursor
-        }
-      },
-      'mouseup .reports-2-clip .highcharts-title': function(e)
-      {
-        if (e.button === 1)
-        {
-          // TODO: Open in a new tab
-          return false;
-        }
-      },
-      'click .reports-2-clip .highcharts-title': function(e)
-      {
-        if (!e.ctrlKey && e.button === 0)
-        {
-          this.changeOrgUnit(this.$(e.target).closest('.reports-drillingCharts'));
-        }
-      }
-    },
-
-    initialize: function()
-    {
-      this.onKeyDown = this.onKeyDown.bind(this);
-
-      $(this.el.ownerDocument.body).on('keydown', this.onKeyDown);
-
-      this.$chartsContainer = null;
-
-      this.defineModels();
-      this.defineViews();
-      this.setView('.reports-drillingHeader-container', this.headerView);
-      this.setView('.filter-container', this.filterView);
-      this.insertChartsViews();
-    },
-
-    destroy: function()
-    {
-      $(this.el.ownerDocument.body).off('keydown', this.onKeyDown);
-
-      this.$chartsContainer = null;
-
-      this.cancelAnimations();
-    },
-
-    setUpLayout: function(pageLayout)
-    {
-      this.listenTo(this.query, 'change:orgUnitId', function()
-      {
-        pageLayout.setTitle(this.title, this);
-      });
-    },
-
-    afterRender: function()
-    {
-      this.$chartsContainer = this.$('.reports-drillingCharts-container');
-    },
-
     defineModels: function()
     {
-      this.settings = new ReportSettingCollection(null, {
-        pubsub: this.pubsub
-      });
+      this.prodTasks = bindLoadingMessage(
+        new ProdTaskCollection(null, {rqlQuery: 'select(name)&sort(name)'}),
+        this
+      );
 
-      this.query = new Report2Query(this.options.query);
-
-      this.reports = this.createReports();
-
-      this.listenTo(this.query, 'change', this.onQueryChange);
-    },
-
-    defineViews: function()
-    {
-      this.headerView = new Report2HeaderView({model: this.query});
-
-      this.filterView = new Report2FilterView({model: this.query});
-
-      this.chartsViews = this.reports.map(function(report)
-      {
-        return this.createChartsView(report, false);
-      }, this);
+      DrillingReportPage.prototype.defineModels.call(this);
     },
 
     load: function(when)
     {
-      return when(this.settings.fetch({reset: true}));
+      return when(this.settings.fetch({reset: true}), this.prodTasks.fetch({reset: true}));
     },
 
-    insertChartsViews: function(skipChartsView, insertAt)
+    createQuery: function()
     {
-      this.chartsViews.forEach(
-        function(chartsView, i)
-        {
-          if (chartsView !== skipChartsView)
-          {
-            this.insertView(
-              '.reports-drillingCharts-container',
-              chartsView,
-              insertAt ? {insertAt: i} : null
-            );
-          }
-        },
-        this
-      );
+      return new Report2Query(this.options.query);
     },
 
-    onQueryChange: function(query, options)
+    createDisplayOptions: function()
     {
-      var changes = query.changedAttributes();
-      var orgUnitChanged = typeof changes.orgUnitId !== 'undefined';
-      var refreshAfterDrill = typeof changes.orgUnitType === 'undefined' ? 1 : 2;
+      var options = {
+        settings: this.settings,
+        prodTasks: this.prodTasks
+      };
 
-      if (!options.reset)
+      if (typeof this.options.displayOptions === 'string')
       {
-        this.broker.publish('router.navigate', {
-          url: this.reports[0].url() + '?' + this.query.serializeToString(),
-          replace: !orgUnitChanged,
-          trigger: false
-        });
+        return Report2DisplayOptions.fromString(this.options.displayOptions, options);
       }
 
-      if (orgUnitChanged)
-      {
-        this.drill(Object.keys(changes).length > refreshAfterDrill);
-      }
-      else
-      {
-        this.refresh();
-      }
+      return new Report2DisplayOptions(this.options.displayOptions, options);
     },
 
-    changeOrgUnit: function($charts)
+    createHeaderView: function()
     {
-      if (this.$el.hasClass('is-changing'))
-      {
-        return;
-      }
-
-      var orgUnitType = $charts.attr('data-orgUnitType');
-
-      if (!orgUnitType || orgUnitType === 'prodFlow')
-      {
-        return;
-      }
-
-      var orgUnitId = $charts.attr('data-orgUnitId');
-
-      if (!$charts.prev().length)
-      {
-        var childOrgUnit = orgUnits.getByTypeAndId(orgUnitType, orgUnitId);
-        var parentOrgUnit = orgUnits.getParent(childOrgUnit);
-
-        orgUnitType = parentOrgUnit ? orgUnits.getType(parentOrgUnit) : null;
-        orgUnitId = parentOrgUnit ? parentOrgUnit.id : null;
-      }
-
-      this.query.set({
-        orgUnitType: orgUnitType,
-        orgUnitId: orgUnitId
-      });
+      return new Report2HeaderView({model: this.query, displayOptions: this.displayOptions});
     },
 
-    refresh: function()
+    createFilterView: function()
     {
-      this.reports.forEach(function(report) { this.promised(report.fetch()); }, this);
+      return new Report2FilterView({model: this.query});
     },
 
-    drill: function(refresh)
+    createDisplayOptionsView: function()
     {
-      var relationType;
-
-      if (this.$el.hasClass('is-changing'))
-      {
-        relationType = orgUnits.RELATION_TYPES.UNRELATED;
-
-        this.cancelRequests();
-        this.cancelAnimations();
-
-        this.chartsViews.forEach(function(chartsView) { chartsView.remove(); });
-
-        this.chartsViews = [];
-        this.reports = [];
-      }
-      else
-      {
-        relationType = orgUnits.getRelationType(
-          this.query.previous('orgUnitType'),
-          this.query.previous('orgUnitId'),
-          this.query.get('orgUnitType'),
-          this.query.get('orgUnitId')
-        );
-
-        this.$el.addClass('is-changing');
-      }
-
-      if (relationType === orgUnits.RELATION_TYPES.CHILD)
-      {
-        this.drillDown(refresh);
-      }
-      else if (relationType === orgUnits.RELATION_TYPES.PARENT)
-      {
-        this.drillUp(refresh);
-      }
-      else
-      {
-        this.replace();
-      }
-    },
-
-    drillDown: function(refresh)
-    {
-      var parentReport = this.getCurrentReport();
-      var parentChartsView = this.getChartsViewByReport(parentReport);
-      var siblingChartsViews =
-        this.chartsViews.filter(function(chartsView) { return chartsView !== parentChartsView; });
-      var childChartsViews = [];
-      var page = this;
-
-      this.reports = this.createReports(parentReport);
-      this.chartsViews = this.reports.map(function(report, i)
-      {
-        if (i === 0)
-        {
-          return parentChartsView;
-        }
-
-        var childChartsView = page.createChartsView(report, true);
-
-        childChartsViews.push(childChartsView);
-
-        return childChartsView;
-      });
-
-      if (refresh)
-      {
-        this.promised(parentReport.fetch());
-      }
-
-      this.moveChartsViews(
-        'drillingDown',
-        siblingChartsViews,
-        childChartsViews,
-        parentChartsView
-      );
-    },
-
-    drillUp: function(refresh)
-    {
-      var workingReport = this.getCurrentReport(true);
-      var workingChartsView = this.getChartsViewByReport(workingReport);
-      var oldChartsViews =
-        this.chartsViews.filter(function(chartsView) { return chartsView !== workingChartsView; });
-      var newChartsViews = [];
-      var page = this;
-
-      this.reports = this.createReports(null, workingReport);
-      this.chartsViews = this.reports.map(function(report)
-      {
-        if (report === workingReport)
-        {
-          return workingChartsView;
-        }
-
-        var siblingChartsView = page.createChartsView(report, true);
-
-        newChartsViews.push(siblingChartsView);
-
-        return siblingChartsView;
-      });
-
-      if (refresh)
-      {
-        this.promised(workingReport.fetch());
-      }
-
-      this.moveChartsViews(
-        'drillingUp',
-        oldChartsViews,
-        newChartsViews,
-        workingChartsView
-      );
-    },
-
-    replace: function()
-    {
-      var page = this;
-      var chartsViewEls = this.chartsViews.map(function(chartsView) { return chartsView.el; });
-
-      $(chartsViewEls).fadeOut(300).promise().done(function()
-      {
-        page.chartsViews.forEach(function(chartsView) { chartsView.remove(); });
-
-        page.$('.reports-drillingCharts').remove();
-
-        page.reports = page.createReports();
-        page.chartsViews = page.reports.map(function(report)
-        {
-          return page.createChartsView(report, true);
-        });
-
-        page.insertChartsViews();
-        page.showChartsViews('replacing', page.chartsViews);
-      });
-    },
-
-    moveChartsViews: function(operation, oldChartsViews, newChartsViews, workingChartsView)
-    {
-      var page = this;
-      var workingIndex = this.chartsViews.indexOf(workingChartsView);
-
-      workingChartsView.$el.siblings().fadeTo(400, 0).promise().done(function()
-      {
-        page.$chartsContainer.css('overflow-x', 'hidden');
-
-        var pos = workingChartsView.$el.position();
-
-        workingChartsView.$el.css({
-          position: 'absolute',
-          top: pos.top + 'px',
-          left: pos.left + 'px'
-        });
-
-        oldChartsViews.forEach(function(chartsView) { chartsView.remove(); });
-        page.insertChartsViews(workingChartsView, operation === 'drillingUp');
-
-        workingChartsView.$el.animate({left: workingIndex * 375}, 300).promise().done(function()
-        {
-          workingChartsView.$el.css('position', '');
-          page.$chartsContainer.css('overflow-x', '');
-          page.showChartsViews(operation, newChartsViews);
-        });
-      });
+      return new Report2DisplayOptionsView({model: this.displayOptions});
     },
 
     createChartsView: function(report, skipRenderCharts)
@@ -406,102 +87,8 @@ define([
       return new Report2ChartsView({
         model: report,
         settings: this.settings,
+        displayOptions: this.displayOptions,
         skipRenderCharts: !!skipRenderCharts
-      });
-    },
-
-    showChartsViews: function(operation, chartsViews)
-    {
-      var page = this;
-      var elsToFade = [];
-      var elsToShow = [];
-
-      this.$el.addClass('is-' + operation);
-
-      chartsViews.forEach(function(chartsView, i)
-      {
-        chartsView.render();
-        chartsView.$el.css('opacity', 0);
-
-        if (i < 5)
-        {
-          elsToFade.push(chartsView.el);
-        }
-        else
-        {
-          elsToShow.push(chartsView.el);
-        }
-      });
-
-      this.$el.removeClass('is-' + operation);
-
-      chartsViews.forEach(function(chartsView)
-      {
-        chartsView.renderCharts(true);
-      });
-
-      $(elsToFade).fadeTo(400, 1).promise().done(function()
-      {
-        $(elsToShow).css('opacity', '');
-        page.$el.removeClass('is-changing');
-      });
-    },
-
-    getCurrentReport: function(previous)
-    {
-      var orgUnit = orgUnits.getByTypeAndId(
-        this.query[previous ? 'previous' : 'get']('orgUnitType'),
-        this.query[previous ? 'previous' : 'get']('orgUnitId')
-      );
-
-      return _.find(this.reports, function(report) { return report.get('orgUnit') === orgUnit; });
-    },
-
-    getChartsViewByReport: function(report)
-    {
-      return _.find(this.chartsViews, function(chartsView) { return chartsView.model === report; });
-    },
-
-    onKeyDown: function(e)
-    {
-      if (e.target.tagName === 'INPUT' && !e.target.classList.contains('btn'))
-      {
-        return;
-      }
-
-      if (e.keyCode === 39)
-      {
-        this.scroll(true);
-
-        return false;
-      }
-      else if (e.keyCode === 37)
-      {
-        this.scroll(false);
-
-        return false;
-      }
-    },
-
-    scroll: function(right)
-    {
-      var focusedIndex = Math.round(this.$chartsContainer[0].scrollLeft / 376) + (right ? 1 : -1);
-      var $children = this.$chartsContainer.children();
-      var scrollLeft = 0;
-
-      for (var i = 0; i < focusedIndex; ++i)
-      {
-        scrollLeft += $children.eq(i).outerWidth();
-      }
-
-      this.$chartsContainer.finish().animate({scrollLeft: scrollLeft}, 250);
-    },
-
-    createReports: function(parentReport, childReport)
-    {
-      return this.query.createReports(parentReport, childReport, {
-        query: this.query,
-        settings: this.settings
       });
     }
 

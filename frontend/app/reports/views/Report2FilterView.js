@@ -42,6 +42,10 @@ define([
         this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
         this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
         this.$('.filter-form').submit();
+      },
+      'click #-showDisplayOptions': function()
+      {
+        this.trigger('showDisplayOptions');
       }
     },
 

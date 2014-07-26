@@ -1,9 +1,8 @@
-<div class="panel panel-default" data-tab="quantityDone">
-  <div class="panel-body">
-    <%- renderColorPicker({
-      idPrefix: idPrefix, property: 'reports.quantityDone.color',
-      label: t('reports', 'settings:color'),
-      value: colors.quantityDone
-    }) %>
-  </div>
+<div class="panel-body" data-tab="quantityDone">
+  <%- renderColorPicker({
+    idPrefix: idPrefix,
+    property: 'reports.quantityDone.color',
+    label: t('reports', 'settings:color'),
+    value: colors.quantityDone
+  }) %>
 </div>

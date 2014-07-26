@@ -1,20 +1,32 @@
 <form class="reports-settings">
-  <ul class="nav nav-tabs">
+  <div class="list-group">
     <% [
       'quantityDone',
       'efficiency',
       'productivity',
       'productivityNoWh',
       'scheduledDowntime',
-      'unscheduledDowntime'
+      'unscheduledDowntime',
+      'aors',
+      'reasons',
+      'clip',
+      'dirIndir',
+      'effIneff'
     ].forEach(function(tab) { %>
-    <li><a href="#reports;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('reports', 'settings:tab:' + tab) %></a>
+    <a class="list-group-item" href="#reports;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('reports', 'settings:tab:' + tab) %></a>
     <% }) %>
-  </ul>
-  <% include settings/quantityDone.ejs %>
-  <% include settings/efficiency.ejs %>
-  <% include settings/productivity.ejs %>
-  <% include settings/productivityNoWh.ejs %>
-  <% include settings/scheduledDowntime.ejs %>
-  <% include settings/unscheduledDowntime.ejs %>
+  </div>
+  <div class="panel panel-primary">
+    <% include settings/quantityDone.ejs %>
+    <% include settings/efficiency.ejs %>
+    <% include settings/productivity.ejs %>
+    <% include settings/productivityNoWh.ejs %>
+    <% include settings/scheduledDowntime.ejs %>
+    <% include settings/unscheduledDowntime.ejs %>
+    <% include settings/aors.ejs %>
+    <% include settings/reasons.ejs %>
+    <% include settings/clip.ejs %>
+    <% include settings/dirIndir.ejs %>
+    <% include settings/effIneff.ejs %>
+  </div>
 </form>

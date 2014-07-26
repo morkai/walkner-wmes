@@ -1,0 +1,64 @@
+<div class="well">
+  <form class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-series"><%- t('reports', 'options:series') %></label>
+      <select id="<%- idPrefix %>-series" name="series[]" class="form-control is-expandable" size="1" multiple>
+        <optgroup label="<%- t('reports', 'options:clip') %>">
+          <option value="clipOrderCount"><%- t('reports', 'metrics:clip:orderCount') %></option>
+          <option value="clipProduction"><%- t('reports', 'metrics:clip:production') %></option>
+          <option value="clipEndToEnd"><%- t('reports', 'metrics:clip:endToEnd') %></option>
+        </optgroup>
+        <optgroup label="<%- t('reports', 'dirIndir:title') %>">
+          <option value="direct"><%- t('reports', 'options:direct') %></option>
+          <option value="indirect"><%- t('reports', 'options:indirect') %></option>
+          <option value="warehouse"><%- t('reports', 'options:warehouse') %></option>
+          <option value="productivity"><%- t('reports', 'coeffs:productivity') %></option>
+          <option value="productivityNoWh"><%- t('reports', 'coeffs:productivityNoWh') %></option>
+          <option value="quantityDone"><%- t('reports', 'coeffs:quantityDone') %></option>
+        </optgroup>
+        <optgroup label="<%- t('reports', 'effIneff:title') %>">
+          <option value="dirIndir"><%- t('reports', 'options:dirIndir') %></option>
+          <option value="effIneff"><%- t('reports', 'options:effIneff') %></option>
+        </optgroup>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-prodTasks"><%- t('reports', 'options:prodTasks') %></label>
+      <select id="<%- idPrefix %>-prodTasks" name="prodTasks[]" class="form-control is-expandable" size="1" multiple data-expanded-length="20">
+        <% prodTasks.forEach(function(prodTask) { %>
+        <option value="<%- prodTask.id %>"><%= prodTask.label %></option>
+        <% }) %>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-prodFunctions"><%- t('reports', 'options:prodFunctions') %></label>
+      <select id="<%- idPrefix %>-prodFunctions" name="prodFunctions[]" class="form-control is-expandable" size="1" multiple data-expanded-length="20">
+        <% prodFunctions.forEach(function(prodFunction) { %>
+        <option value="<%- prodFunction.id %>"><%= prodFunction.label %></option>
+        <% }) %>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-references"><%- t('reports', 'options:references') %></label>
+      <select id="<%- idPrefix %>-references" name="references[]" class="form-control is-expandable" size="1" multiple data-expanded-length="20">
+        <optgroup label="<%- t('reports', 'dirIndir:title') %>">
+          <option value="direct"><%- t('reports', 'options:direct') %></option>
+          <option value="indirect"><%- t('reports', 'options:indirect') %></option>
+          <option value="warehouse"><%- t('reports', 'options:warehouse') %></option>
+        </optgroup>
+        <optgroup label="<%- t('reports', 'effIneff:title') %>">
+          <option value="dirIndir"><%- t('reports', 'options:dirIndir') %></option>
+          <option value="absence"><%- t('reports', 'options:absence') %></option>
+        </optgroup>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-extremes"><%- t('reports', 'options:extremes') %></label>
+      <div id="<%- idPrefix %>-extremes" class="btn-group filter-btn-group" data-toggle="buttons">
+        <% ['none', 'siblings', 'parent'].forEach(function(extremes) { %>
+        <label class="btn btn-default">
+          <input type="radio" name="extremes" value="<%- extremes %>"> <%- t('reports', 'options:extremes:' + extremes) %>
+        </label>
+        <% }) %>
+      </div>
+    </div><div class="form-group filter-actions">
+      <hr><button id="<%- idPrefix %>-showFilter" type="button" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'options:filter') %></span></button>
+    </div>
+  </form>
+</div>

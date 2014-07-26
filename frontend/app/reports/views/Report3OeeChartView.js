@@ -81,7 +81,6 @@ define([
     createChart: function()
     {
       var chartData = this.serializeChartData();
-      var formatTooltipHeader = this.formatTooltipHeader.bind(this);
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -118,25 +117,7 @@ define([
         ],
         tooltip: {
           shared: true,
-          useHTML: true,
-          formatter: function()
-          {
-            var str = '<b>' + formatTooltipHeader(this.x) +'</b><table>';
-
-            $.each(this.points, function(i, point)
-            {
-              var y = point.y.toLocaleString ? point.y.toLocaleString() : point.y;
-
-              str += '<tr><td style="color: ' + point.series.color + '">'
-                + point.series.name + ':</td><td>'
-                + y + point.series.tooltipOptions.valueSuffix
-                + '</td></tr>';
-            });
-
-            str += '</table>';
-
-            return str;
-          }
+          headerFormatter: this.formatTooltipHeader.bind(this)
         },
         legend: {
           layout: 'horizontal',
@@ -238,9 +219,9 @@ define([
       return this.model.get('chartSummary');
     },
 
-    formatTooltipHeader: function(epoch)
+    formatTooltipHeader: function(ctx)
     {
-      var timeMoment = time.getMoment(epoch);
+      var timeMoment = time.getMoment(ctx.x);
       var interval = this.model.query.get('interval') || 'day';
 
       return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, {}));

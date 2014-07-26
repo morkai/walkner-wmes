@@ -7,6 +7,7 @@ define([
   'app/i18n',
   'app/data/orgUnits',
   'app/core/View',
+  'app/core/util/bindLoadingMessage',
   '../ReportSettingCollection',
   'app/reports/templates/drillingReportPage'
 ], function(
@@ -14,6 +15,7 @@ define([
   t,
   orgUnits,
   View,
+  bindLoadingMessage,
   ReportSettingCollection,
   drillingReportPageTemplate
 ) {
@@ -24,6 +26,7 @@ define([
   return View.extend({
 
     rootBreadcrumbKey: null,
+    initialSettingsTab: 'quantityDone',
 
     settings: null,
     displayOptions: null,
@@ -61,7 +64,7 @@ define([
         label: t.bound('reports', 'PAGE_ACTION:settings'),
         icon: 'cogs',
         privileges: 'REPORTS:MANAGE',
-        href: '#reports;settings'
+        href: '#reports;settings?tab=' + this.initialSettingsTab
       }];
     },
 
@@ -81,7 +84,7 @@ define([
           return false;
         }
       },
-      'mouseup .reports-drillingChart .highcharts-title': function openReportInNewWindow(e)
+      'mouseup .reports-drillingChart .highcharts-title': function(e)
       {
         if (e.button === 1 || (e.ctrlKey && e.button === 0))
         {
@@ -94,9 +97,7 @@ define([
 
           return false;
         }
-      },
-      'click .reports-drillingChart .highcharts-title': function changeOrgUnit(e)
-      {
+
         if (!e.ctrlKey && e.button === 0)
         {
           var $chartsView = this.$(e.target).closest('.reports-drillingCharts');
@@ -109,14 +110,19 @@ define([
       },
       'dblclick .highcharts-container': function toggleFullscreen(e)
       {
-        var $target = this.$(e.target);
-
-        if ($target.hasClass('highcharts-title'))
+        if (e.button !== undefined && e.button !== 0 || this.$el.hasClass('is-changing'))
         {
           return;
         }
 
-        var $chartView = $target.closest('.reports-chart');
+        var className = e.target.getAttribute('class');
+
+        if (className && className.indexOf('highcharts-title') !== -1)
+        {
+          return;
+        }
+
+        var $chartView = this.$(e.target).closest('.reports-chart');
         var $chartsView = $chartView.closest('.reports-drillingCharts');
         var chartsView = this.getView({el: $chartsView[0]});
         var chartView = chartsView.getView({el: $chartView[0]});
@@ -141,7 +147,7 @@ define([
 
     defineModels: function()
     {
-      this.settings = new ReportSettingCollection(null, {pubsub: this.pubsub});
+      this.settings = bindLoadingMessage(new ReportSettingCollection(null, {pubsub: this.pubsub}), this);
       this.displayOptions = this.createDisplayOptions();
       this.query = this.createQuery();
       this.reports = this.createReports(null, null);
@@ -316,8 +322,10 @@ define([
       }
     },
 
-    onDisplayOptionsChange: function(displayOptions, changes)
+    onDisplayOptionsChange: function(displayOptions)
     {
+      var changes = displayOptions.changedAttributes();
+
       if (changes.series !== undefined || changes.extremes !== undefined)
       {
         this.updateExtremes();
@@ -364,7 +372,7 @@ define([
 
     toggleDisplayOptionsFilterViews: function()
     {
-      if (this.$id('options').hasClass('hidden'))
+      if (this.$id('displayOptions').hasClass('hidden'))
       {
         this.showDisplayOptionsView();
       }
@@ -494,6 +502,7 @@ define([
       }
 
       chartView.chart.reflow();
+      chartView.chart.redraw(false);
 
       if (!isFullscreen)
       {

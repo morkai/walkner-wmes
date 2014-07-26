@@ -7,17 +7,15 @@ define([
   'underscore',
   'js2form',
   'app/core/View',
-  'app/data/aors',
-  'app/data/downtimeReasons',
-  'app/reports/templates/report1DisplayOptions',
+  'app/data/prodFunctions',
+  'app/reports/templates/report2DisplayOptions',
   'app/core/util/ExpandableSelect'
 ], function(
   $,
   _,
   js2form,
   View,
-  aors,
-  downtimeReasons,
+  prodFunctions,
   displayOptionsTemplate
 ) {
   'use strict';
@@ -39,13 +37,13 @@ define([
       {
         this.updateSelection('references', e.target, true);
       },
-      'change #-aors': function(e)
+      'change #-prodTasks': function(e)
       {
-        this.updateSelection('aors', e.target);
+        this.updateSelection('prodTasks', e.target);
       },
-      'change #-reasons': function(e)
+      'change #-prodFunctions': function(e)
       {
-        this.updateSelection('reasons', e.target);
+        this.updateSelection('prodFunctions', e.target);
       },
       'change [name=extremes]': function()
       {
@@ -57,6 +55,11 @@ define([
       }
     },
 
+    initialize: function()
+    {
+      this.idPrefix = _.uniqueId('v');
+    },
+
     destroy: function()
     {
       this.$('.is-expandable').expandableSelect('destroy');
@@ -66,18 +69,18 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        aors: aors.map(function(aor)
+        prodTasks: this.model.prodTasks.map(function(prodTask)
         {
           return {
-            id: aor.id,
-            label: aor.getLabel()
+            id: prodTask.id,
+            label: prodTask.getLabel()
           };
         }),
-        reasons: downtimeReasons.map(function(reason)
+        prodFunctions: prodFunctions.map(function(prodFunction)
         {
           return {
-            id: reason.id,
-            label: reason.id + ': ' + reason.getLabel()
+            id: prodFunction.id,
+            label: prodFunction.getLabel()
           };
         })
       };
@@ -103,8 +106,8 @@ define([
         series: Object.keys(this.model.get('series')),
         extremes: this.model.get('extremes'),
         references: Object.keys(this.model.get('references')),
-        aors: Object.keys(this.model.get('aors')),
-        reasons: Object.keys(this.model.get('reasons'))
+        prodTasks: Object.keys(this.model.get('prodTasks')),
+        prodFunctions: Object.keys(this.model.get('prodFunctions'))
       };
     },
 

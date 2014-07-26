@@ -41,7 +41,7 @@ define([
     {
       this.shouldRenderChart = !this.options.skipRenderChart;
       this.chart = null;
-      this.loading = false;
+      this.isLoading = false;
 
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
@@ -78,7 +78,7 @@ define([
       {
         this.createChart();
 
-        if (this.loading)
+        if (this.isLoading)
         {
           this.chart.showLoading();
         }
@@ -87,7 +87,7 @@ define([
       this.shouldRenderChart = true;
     },
 
-    updateChart: function()
+    updateChart: function(redraw)
     {
       var chartData = this.serializeChartData();
 
@@ -95,7 +95,7 @@ define([
 
       this.chart.xAxis[0].setCategories(chartData.categories, false);
       this.chart.series[0].setData(chartData.data, false);
-      this.chart.series[1].setData(chartData.reference, true);
+      this.chart.series[1].setData(chartData.reference, redraw !== false);
     },
 
     updateExtremes: function()
@@ -207,7 +207,7 @@ define([
 
     onModelLoading: function()
     {
-      this.loading = true;
+      this.isLoading = true;
 
       if (this.chart)
       {
@@ -217,7 +217,7 @@ define([
 
     onModelLoaded: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
@@ -227,7 +227,7 @@ define([
 
     onModelError: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
@@ -250,7 +250,7 @@ define([
         this.chart.setTitle({text: t('reports', this.options.attrName + ':title')}, {text: null}, false);
       }
 
-      this.updateChart();
+      this.updateChart(false);
     },
 
     onDisplayOptionsChange: function()
@@ -289,21 +289,19 @@ define([
           renderTo: this.el
         },
         exporting: {
-          filename: t('reports', 'filenames:1:' + this.options.attrName)
+          filename: t.bound('reports', 'filenames:1:' + this.options.attrName)
         },
         title: {
-          text: t('reports', this.options.attrName + ':title'),
-          style: {
-            fontSize: '12px',
-            color: '#4D759E'
-          }
+          text: t.bound('reports', this.options.attrName + ':title')
         },
         noData: {},
         xAxis: {
-          categories: chartData.categories
+          categories: chartData.categories,
+          showEmpty: false
         },
         yAxis: {
-          title: false
+          title: false,
+          showEmpty: false
         },
         legend: false,
         tooltip: {
@@ -317,12 +315,12 @@ define([
           }
         },
         series: [{
-          name: t('reports', this.options.attrName + ':seriesName'),
+          name: t.bound('reports', this.options.attrName + ':seriesName'),
           color: '#f00',
           type: 'column',
           data: chartData.data
         }, {
-          name: t('reports', 'referenceValue'),
+          name: t.bound('reports', 'referenceValue'),
           color: '#c00',
           type: 'column',
           data: chartData.reference

@@ -21,11 +21,15 @@ define([
 ) {
   'use strict';
 
-  var COLOR_EFF = '#0e0';
-  var COLOR_INEFF = '#e00';
-  var COLOR_DIR_INDIR = '#ee0';
   var COLOR_PROD_TASK = '#ee0';
   var COLOR_OTHER = '#000';
+  var SETTING_METRICS = {
+    absenceRef: true,
+    dirIndir: true,
+    dirIndirRef: true,
+    eff: true,
+    ineff: true
+  };
 
   return View.extend({
 
@@ -34,40 +38,23 @@ define([
       return 'reports-chart reports-2-effIneff';
     },
 
-    events: {
-      'dblclick': function()
-      {
-        if (screenfull.enabled)
-        {
-          screenfull.request(this.el);
-        }
-      }
-    },
-
     initialize: function()
     {
       this.shouldRenderChart = !this.options.skipRenderChart;
       this.chart = null;
-      this.loading = false;
+      this.isFullscreen = false;
+      this.isLoading = false;
 
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:effIneff change:prodTasks', _.debounce(this.render, 1));
-
-      this.onFullscreenChange = this.onFullscreenChange.bind(this);
-
-      this.el.ownerDocument.addEventListener(
-        screenfull.raw.fullscreenchange, this.onFullscreenChange
-      );
+      this.listenTo(this.settings, 'add change', this.onSettingsUpdate);
+      this.listenTo(this.displayOptions, 'change', _.debounce(this.onDisplayOptionsChange, 1));
     },
 
     destroy: function()
     {
-      this.el.ownerDocument.removeEventListener(
-        screenfull.raw.fullscreenchange, this.onFullscreenChange
-      );
-
       if (this.chart !== null)
       {
         this.chart.destroy();
@@ -85,7 +72,7 @@ define([
       {
         this.createChart();
 
-        if (this.loading)
+        if (this.isLoading)
         {
           this.chart.showLoading();
         }
@@ -94,109 +81,188 @@ define([
       this.shouldRenderChart = true;
     },
 
-    onFullscreenChange: function(e)
+    updateChart: function(redraw, updateExtremes)
     {
-      if (e.target === this.el)
+      var chart = this.chart;
+      var chartData = this.serializeChartData();
+
+      chart.xAxis[0].setCategories(chartData.categories, false);
+
+      if (updateExtremes)
+      {
+        this.updateExtremes(false);
+      }
+
+      var referenceSeries = chart.series[1];
+      var visibleReferenceSeries = _.any(chartData.reference, function(refPoint)
+      {
+        return refPoint.y > 0;
+      });
+
+      if (referenceSeries.visible !== visibleReferenceSeries)
+      {
+        referenceSeries.setVisible(visibleReferenceSeries, false);
+      }
+
+      chart.series[0].setData(chartData.data, false, false, false);
+      referenceSeries.setData(chartData.reference, false, false, false);
+
+      if (redraw !== false)
+      {
+        chart.redraw(false);
+      }
+    },
+
+    updateExtremes: function(redraw)
+    {
+      var maxResourceFte = null;
+
+      if (!this.isFullscreen && (!this.model.get('isParent') || this.model.get('extremes') === 'parent'))
+      {
+        maxResourceFte = this.displayOptions.get('maxResourceFte');
+      }
+
+      this.chart.yAxis[0].setExtremes(0, maxResourceFte, redraw, false);
+    },
+
+    onSettingsUpdate: function(setting)
+    {
+      if (SETTING_METRICS[setting.getMetricName()])
       {
         this.updateChart();
       }
     },
 
-    createChart: function()
+    onDisplayOptionsChange: function()
     {
-      this.chart = new Highcharts.Chart({
-        chart: {
-          renderTo: this.el
-        },
-        exporting: {
-          filename: t('reports', 'filenames:2:effIneff')
-        },
-        title: {
-          text: t('reports', 'effIneff:title'),
-          style: {
-            fontSize: '12px',
-            color: '#4D759E'
-          }
-        },
-        noData: {},
-        xAxis: {
-          categories: []
-        },
-        yAxis: {
-          title: false
-        },
-        legend: false,
-        series: [{
-          name: t('reports', 'effIneff:seriesName'),
-          type: 'column',
-          data: [],
-          dataLabels: {
-            enabled: true
-          }
-        }]
-      });
-    },
+      var changes = this.displayOptions.changedAttributes();
+      var prev = this.displayOptions.previousAttributes();
+      var redraw = false;
 
-    updateChart: function()
-    {
-      var chartData = this.serializeChartData();
+      if (changes.maxResourceFte !== undefined)
+      {
+        this.updateExtremes(false);
 
-      this.chart.xAxis[0].setCategories(chartData.categories, false);
-      this.chart.series[0].setData(chartData.data, true);
+        redraw = true;
+      }
+
+      var seriesChanged = changes.series
+        && ((changes.series.dirIndir !== prev.series.dirIndir)
+          || (changes.series.effIneff !== prev.series.effIneff));
+      var referencesChanged = changes.references
+        && ((changes.references.dirIndir !== prev.references.dirIndir)
+          || (changes.references.absence !== prev.references.absence));
+
+      if (seriesChanged || referencesChanged || changes.prodTasks)
+      {
+        this.updateChart(true, false);
+
+        redraw = false;
+      }
+
+      if (redraw)
+      {
+        this.chart.redraw(false);
+      }
     },
 
     serializeChartData: function()
     {
-      var isFullscreen = screenfull.isFullscreen;
-      var prodTasks = this.model.get('prodTasks');
-      var effIneff = this.model.get('effIneff');
+      var report = this.model;
+      var prodTasks = report.get('prodTasks');
+      var effIneff = report.get('effIneff');
       var categories = [];
       var data = [];
+      var reference = [];
 
       if (effIneff.value === 0 && effIneff.dirIndir === 0)
       {
         return {
           categories: categories,
-          data: data
+          data: data,
+          reference: reference
         };
       }
 
-      data.push({
-        category: t('reports', 'effIneff:category:value'),
-        name: t('reports', 'effIneff:name:value'),
-        y: Math.abs(effIneff.value),
-        color: effIneff > 0 ? COLOR_EFF : COLOR_INEFF
-      }, {
-        category: t('reports', 'effIneff:category:dirIndir'),
-        name: t('reports', 'effIneff:name:dirIndir'),
-        y: effIneff.dirIndir,
-        color: COLOR_DIR_INDIR
-      });
+      var settings = this.settings;
+      var displayOptions = this.displayOptions;
 
-      Object.keys(effIneff.prodTasks).forEach(function(taskId)
+      if (displayOptions.isSeriesVisible('effIneff'))
       {
-        var prodTask = prodTasks[taskId];
+        data.push({
+          key: 'effIneff',
+          category: t('reports', 'effIneff:category:value'),
+          name: t('reports', 'effIneff:name:value'),
+          y: Math.abs(effIneff.value),
+          color: settings.getColor(effIneff.value > 0 ? 'eff' : 'ineff')
+        });
+      }
+
+      if (displayOptions.isSeriesVisible('dirIndir'))
+      {
+        data.push({
+          key: 'dirIndir',
+          category: t('reports', 'effIneff:category:dirIndir'),
+          name: t('reports', 'effIneff:name:dirIndir'),
+          y: effIneff.dirIndir,
+          color: settings.getColor('dirIndir')
+        });
+      }
+
+      var visibleProdTasks = displayOptions.get('prodTasks');
+
+      Object.keys(effIneff.prodTasks).forEach(function(prodTaskId)
+      {
+        if (!visibleProdTasks[prodTaskId])
+        {
+          return;
+        }
+
+        var prodTask = prodTasks[prodTaskId];
 
         data.push({
-          category: categoryFactory.getCategory('tasks', taskId),
-          name: wordwrapTooltip(prodTask ? prodTask.label : taskId),
-          y: effIneff.prodTasks[taskId],
+          key: prodTaskId,
+          category: categoryFactory.getCategory('tasks', prodTaskId),
+          name: wordwrapTooltip(prodTask ? prodTask.label : prodTaskId),
+          y: effIneff.prodTasks[prodTaskId],
           color: prodTask ? prodTask.color : COLOR_PROD_TASK
         });
       });
 
+      var absenceProdTaskId = settings.getValue('absenceRef.prodTask');
+
       data.sort(function(a, b) { return b.y - a.y; }).forEach(function(dataPoint)
       {
         categories.push(dataPoint.category);
-      });
+
+        var refValue = {
+          y: null,
+          color: null
+        };
+
+        if (dataPoint.key === 'dirIndir' && displayOptions.isReferenceVisible('dirIndir'))
+        {
+          refValue.y = Math.round(report.getDirIndirRef(settings.getCoeff('dirIndirRef')) * 10) / 10;
+          refValue.color = settings.getColor('dirIndirRef');
+        }
+        else if (dataPoint.key === absenceProdTaskId && displayOptions.isReferenceVisible('absence'))
+        {
+          refValue.y = Math.round(report.getAbsenceRef(settings.getCoeff('absenceRef')) * 10) / 10;
+          refValue.color = settings.getColor('absenceRef');
+        }
+
+        reference.push(refValue);
+      }, this);
 
       var categoryCount = categories.length;
-      var maxCategories = 7;
+      var maxCategories = 10;
 
-      if (!isFullscreen && categoryCount > maxCategories + 1)
+      if (!this.isFullscreen && categoryCount > maxCategories + 1)
       {
-        var limitedCategories = categories.slice(0, maxCategories - 1);
-        var limitedData = data.slice(0, maxCategories - 1);
+        var limit = maxCategories - 1;
+        var limitedCategories = categories.slice(0, limit);
+        var limitedData = data.slice(0, limit);
+        var limitedReference = reference.slice(0, limit);
 
         var otherCount = 0;
 
@@ -211,12 +277,14 @@ define([
           y: Math.round(otherCount * 10) / 10,
           color: COLOR_OTHER
         });
+        limitedReference.push(null);
 
         categories = limitedCategories;
         data = limitedData;
+        reference = limitedReference;
       }
 
-      if (isFullscreen)
+      if (this.isFullscreen)
       {
         for (var j = 0; j < categoryCount; ++j)
         {
@@ -226,13 +294,26 @@ define([
 
       return {
         categories: categories,
-        data: data
+        data: data,
+        reference: reference
       };
+    },
+
+    onFullscreen: function(isFullscreen)
+    {
+      this.isFullscreen = isFullscreen;
+
+      this.chart.series.forEach(function(serie)
+      {
+        serie.update({dataLabels: {enabled: isFullscreen}}, false);
+      });
+
+      this.updateChart(false);
     },
 
     onModelLoading: function()
     {
-      this.loading = true;
+      this.isLoading = true;
 
       if (this.chart)
       {
@@ -242,7 +323,7 @@ define([
 
     onModelLoaded: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
@@ -252,12 +333,52 @@ define([
 
     onModelError: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
         this.chart.hideLoading();
       }
+    },
+
+    createChart: function()
+    {
+      this.chart = new Highcharts.Chart({
+        chart: {
+          renderTo: this.el,
+          zoomType: null
+        },
+        exporting: {
+          filename: t('reports', 'filenames:2:effIneff')
+        },
+        title: {
+          text: t('reports', 'effIneff:title')
+        },
+        noData: {},
+        xAxis: {
+          categories: []
+        },
+        yAxis: {
+          title: false
+        },
+        tooltip: {
+          shared: true
+        },
+        legend: false,
+        series: [
+          {
+            name: t('reports', 'effIneff:seriesName'),
+            type: 'column',
+            data: []
+          },
+          {
+            id: 'reference',
+            name: t.bound('reports', 'referenceValue'),
+            type: 'column',
+            data: []
+          }
+        ]
+      });
     }
 
   });

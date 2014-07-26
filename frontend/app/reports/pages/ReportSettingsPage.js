@@ -7,13 +7,15 @@ define([
   'app/data/orgUnits',
   'app/core/View',
   '../ReportSettingCollection',
-  '../views/ReportSettingsView'
+  '../views/ReportSettingsView',
+  'app/prodTasks/ProdTaskCollection'
 ], function(
   t,
   orgUnits,
   View,
   ReportSettingCollection,
-  ReportSettingsView
+  ReportSettingsView,
+  ProdTaskCollection
 ) {
   'use strict';
 
@@ -42,19 +44,24 @@ define([
       this.settings = new ReportSettingCollection(null, {
         pubsub: this.pubsub
       });
+
+      this.prodTasks = new ProdTaskCollection(null, {
+        rqlQuery: 'select(name)&sort(name)'
+      });
     },
 
     defineViews: function()
     {
       this.view = new ReportSettingsView({
         initialTab: this.options.initialTab,
-        settings: this.settings
+        settings: this.settings,
+        prodTasks: this.prodTasks
       });
     },
 
     load: function(when)
     {
-      return when(this.settings.fetch({reset: true}));
+      return when(this.settings.fetch({reset: true}), this.prodTasks.fetch({reset: true}));
     }
 
   });

@@ -107,19 +107,17 @@
 }
 .reports-1-coeffs,
 .reports-1-downtimesByAor,
-.reports-1-downtimesByReason {
-  height: 248px;
-}
+.reports-1-downtimesByReason,
+.reports-2-clip,
 .reports-2-dirIndir,
 .reports-2-effIneff {
-  height: 200px;
+  height: 248px;
 }
 .reports-chart .highcharts-container {
   overflow: visible!important;
 }
-.reports-chart .highcharts-title {
+.reports-drillingChart .highcharts-title {
   font-weight: bold;
-  fill: #428BCA!important;
 }
 .reports-drillingCharts[data-orgUnitType] .reports-drillingChart .highcharts-title {
   cursor: zoom-in;
@@ -128,23 +126,22 @@
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
+  font-weight: bold;
+  fill: #428BCA!important;
   white-space: nowrap!important;
-}
-.reports-drillingCharts[data-orgUnitType="prodFlow"] .reports-2-clip .highcharts-title,
-.reports-drillingCharts[data-orgUnitType="prodLine"] .reports-1-coeffs .highcharts-title {
-  cursor: default;
-}
-.reports-drillingChart .highcharts-title:hover {
-  -webkit-transform: scale(1.4);
-  -moz-transform: scale(1.4);
-  -ms-transform: scale(1.4);
-  transform: scale(1.4);
-  fill: #2A6496!important;
 }
 .reports-drillingCharts[data-orgUnitType]:first-child .reports-drillingChart .highcharts-title {
   cursor: zoom-out;
   cursor: -webkit-zoom-out;
   cursor: -moz-zoom-out;
+}
+.reports-drillingCharts[data-orgUnitType] .reports-drillingChart .highcharts-title:hover {
+  fill: #2A6496!important;
+}
+.reports-drillingCharts[data-orgUnitType="prodLine"] .reports-drillingChart .highcharts-title,
+.reports-drillingCharts[data-orgUnitType="prodLine"] .reports-drillingChart .highcharts-title:hover {
+  cursor: default;
+  fill: #333!important;
 }
 .reports-drillingChart.is-fullscreen .highcharts-title {
   cursor: default!important;
@@ -161,11 +158,29 @@
 .reports-drillingReportPage.is-changing * {
   cursor: wait!important;
 }
-.reports-settings .panel {
-  display: none;
-  border-top: 0;
+.reports-settings {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: stretch;
 }
-.reports-settings .panel.active {
+.reports-settings .form-control[type="number"] {
+  width: 112px;
+}
+.reports-settings > .list-group {
+  margin-bottom: 0;
+}
+.reports-settings .list-group-item {
+  white-space: nowrap;
+  border-right: 0;
+}
+.reports-settings > .panel {
+  flex-grow: 1;
+  margin-bottom: 0;
+}
+.reports-settings .panel-body {
+  display: none;
+}
+.reports-settings .panel-body.active {
   display: block;
 }
 .reports-settings-metricRefs:last-child > .form-group {
@@ -174,7 +189,12 @@
 .reports-settings-metricRefs > .form-group {
   display: inline-block;
   margin-right: 15px;
-  width: 100px;
+}
+.reports-settings .panel-body[data-tab="dirIndir"] .form-group:first-child {
+  width: 140px;
+}
+.reports-settings-metricRefs label {
+  font-weight: normal;
 }
 .reports-3-container {
   display: flex;

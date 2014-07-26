@@ -102,7 +102,6 @@ define([
         }],
         tooltip: {
           valueSuffix: t('reports', 'quantitySuffix'),
-          useHTML: true,
           formatter: function(tooltip)
           {
             var series = tooltip.chart.series;
@@ -182,7 +181,7 @@ define([
 
       function tooltipRow(label, value, color)
       {
-        return '<tr><td style="color: ' + color + '">'
+        return '<tr><td><span style="color: ' + color + '">\u25cf</span> '
           + label + ':</td><td>'
           + Highcharts.numberFormat(value, 0) + ' ' + t('reports', 'quantitySuffix')
           + '</td></tr>';

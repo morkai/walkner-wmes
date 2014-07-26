@@ -25,7 +25,7 @@ define([
     {
       this.shouldRenderChart = !this.options.skipRenderChart;
       this.chart = null;
-      this.loading = false;
+      this.isLoading = false;
 
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
@@ -67,7 +67,7 @@ define([
       {
         this.createChart();
 
-        if (this.loading)
+        if (this.isLoading)
         {
           this.chart.showLoading();
         }
@@ -206,11 +206,11 @@ define([
       return !this.displayOptions || this.displayOptions.isReferenceVisible(reference);
     },
 
-    formatTooltipHeader: function(epoch)
+    formatTooltipHeader: function(ctx)
     {
       /*jshint -W015*/
 
-      var timeMoment = time.getMoment(epoch);
+      var timeMoment = time.getMoment(ctx.x);
       var interval = this.model.query.get('interval') || 'hour';
       var data;
 
@@ -243,7 +243,7 @@ define([
 
     onModelLoading: function()
     {
-      this.loading = true;
+      this.isLoading = true;
 
       if (this.chart)
       {
@@ -253,7 +253,7 @@ define([
 
     onModelLoaded: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
@@ -263,7 +263,7 @@ define([
 
     onModelError: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
@@ -325,31 +325,17 @@ define([
     createChart: function()
     {
       var chartData = this.serializeChartData();
-      var formatTooltipHeader = this.formatTooltipHeader.bind(this);
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
-      var view = this;
 
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
-          zoomType: null,
-          events: {
-            selection: function(e)
-            {
-              if (e.resetSelection)
-              {
-                view.timers.resetExtremes = setTimeout(
-                  this.yAxis[1].setExtremes.bind(this.yAxis[1], 0, null, true, false), 1
-                );
-              }
-            }
-          }
+          zoomType: null
         },
         exporting: {
           filename: t('reports', 'filenames:1:coeffs')
         },
         title: {
-          useHTML: true,
           text: this.model.getOrgUnitTitle()
         },
         noData: {},
@@ -358,10 +344,12 @@ define([
         },
         yAxis: [
           {
-            title: false
+            title: false,
+            showEmpty: false
           },
           {
             title: false,
+            showEmpty: false,
             opposite: true,
             labels: {
               format: '{value}%'
@@ -370,23 +358,7 @@ define([
         ],
         tooltip: {
           shared: true,
-          useHTML: true,
-          formatter: function()
-          {
-            var str = '<b>' + formatTooltipHeader(this.x) +'</b><table>';
-
-            this.points.forEach(function(point)
-            {
-              str += '<tr><td style="color: ' + point.series.color + '">'
-                + point.series.name + ':</td><td>'
-                + point.y + point.series.tooltipOptions.valueSuffix
-                + '</td></tr>';
-            });
-
-            str += '</table>';
-
-            return str;
-          }
+          headerFormatter: this.formatTooltipHeader.bind(this)
         },
         legend: {
           enabled: false

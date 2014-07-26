@@ -188,7 +188,7 @@ define([
 
       function tooltipRow(label, value, color)
       {
-        return '<tr><td style="color: ' + color + '">'
+        return '<tr><td><span style="color: ' + color + '">\u25cf</span> '
           + label + ':</td><td>'
           + Highcharts.numberFormat(value) + 'h'
           + '</td></tr>';
