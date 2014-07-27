@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["app/i18n","app/data/orgUnits","app/core/View","../ReportSettingCollection","../views/ReportSettingsView","app/prodTasks/ProdTaskCollection"],function(e,t,i,s,n,o){return i.extend({layoutName:"page",pageId:"reportSettings",breadcrumbs:function(){return[e.bound("reports","BREADCRUMBS:reports"),e.bound("reports","BREADCRUMBS:settings")]},initialize:function(){this.defineModels(),this.defineViews()},defineModels:function(){this.settings=new s(null,{pubsub:this.pubsub}),this.prodTasks=new o(null,{rqlQuery:"select(name)&sort(name)"})},defineViews:function(){this.view=new n({initialTab:this.options.initialTab,settings:this.settings,prodTasks:this.prodTasks})},load:function(e){return e(this.settings.fetch({reset:!0}),this.prodTasks.fetch({reset:!0}))}})});

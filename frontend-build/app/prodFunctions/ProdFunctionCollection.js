@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Collection","./ProdFunction"],function(e,o){return e.extend({model:o,rqlQuery:"sort(fteMasterPosition)"})});
+define(["../core/Collection","./ProdFunction"],function(o,e){return o.extend({model:e,rqlQuery:"sort(fteMasterPosition)",comparator:"fteMasterPosition"})});

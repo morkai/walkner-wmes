@@ -1,5 +1,0 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
-
-define(["app/time","app/i18n","app/data/subdivisions","app/data/mrpControllers","app/data/prodFlows","app/data/prodLines","app/data/views/renderOrgUnitPath","app/core/templates/userInfo"],function(r,e,t,o,a,s,n,p){return function(o,s){var n=o.toJSON();if(n.createdAt=r.format(n.createdAt,"YYYY-MM-DD HH:mm:ss"),n.creator=p({userInfo:n.creator}),n.date=r.format(n.date,"YYYY-MM-DD"),n.shift=e("core","SHIFT:"+n.shift),s.orgUnits){var i=t.get(n.subdivision),d=a.get(n.prodFlow);n.subdivision=i?i.getLabel():"?",n.prodFlow=d?d.getLabel():"?",n.mrpControllers=Array.isArray(n.mrpControllers)&&n.mrpControllers.length?n.mrpControllers.join("; "):"?"}return s.personnel&&(n.master=p({userInfo:n.master}),n.leader=p({userInfo:n.leader}),n.operator=p({userInfo:n.operator})),n}});

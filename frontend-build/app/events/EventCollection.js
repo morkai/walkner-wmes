@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["moment","../core/Collection","./Event"],function(e,t,r){return t.extend({model:r,rqlQuery:function(t){var r=e().hours(0).minutes(0).seconds(0).milliseconds(0).subtract("days",7).valueOf();return t.Query.fromObject({fields:{type:1,severity:1,user:1,time:1,data:1},sort:{time:-1},limit:20,selector:{name:"and",args:[{name:"ge",args:["time",r]}]}})}})});
+define(["app/time","../core/Collection","./Event"],function(e,t,r){return t.extend({model:r,rqlQuery:function(t){var r=e.getMoment().hours(0).minutes(0).seconds(0).milliseconds(0).subtract("days",7).valueOf();return t.Query.fromObject({fields:{type:1,severity:1,user:1,time:1,data:1},sort:{time:-1},limit:20,selector:{name:"and",args:[{name:"ge",args:["time",r]}]}})}})});

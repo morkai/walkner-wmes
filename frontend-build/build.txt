@@ -227,9 +227,9 @@ vendor/select2/select2.css
 
 main.js
 ----------------
-vendor/jquery.js
 vendor/underscore.js
 vendor/moment/moment.js
+vendor/jquery.js
 vendor/select2/select2.js
 vendor/h5.pubsub/Subscriptions.js
 vendor/h5.pubsub/Subscription.js
@@ -312,6 +312,7 @@ app/core/views/NavbarView.js
 app/core/templates/logInForm.js
 app/core/views/LogInFormView.js
 app/core/util/showDeleteFormPage.js
+app/core/templates/colorLabel.js
 app/aors/Aor.js
 app/aors/AorCollection.js
 app/data/aors.js
@@ -362,8 +363,10 @@ app/core/pages/DetailsPage.js
 app/core/pages/AddFormPage.js
 app/core/pages/EditFormPage.js
 app/core/pages/ActionFormPage.js
-app/downtimeReasons/views/decorateDowntimeReason.js
+app/core/templates/colorPicker.js
 app/downtimeReasons/templates/form.js
+vendor/bootstrap/js/bootstrap.js
+vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js
 app/downtimeReasons/views/DowntimeReasonFormView.js
 app/downtimeReasons/templates/details.js
 app/nls/downtimeReasons.js
@@ -386,6 +389,9 @@ app/events/routes.js
 app/emptyOrders/EmptyOrder.js
 app/emptyOrders/EmptyOrderCollection.js
 app/emptyOrders/views/EmptyOrderListView.js
+app/core/templates/filterLimit.js
+app/core/views/FilterView.js
+app/core/util/fixTimeRange.js
 app/emptyOrders/templates/filter.js
 app/emptyOrders/views/EmptyOrderFilterView.js
 app/core/templates/listPage.js
@@ -507,10 +513,8 @@ app/orders/OrderCollection.js
 app/orderStatuses/OrderStatus.js
 app/orderStatuses/OrderStatusCollection.js
 app/data/orderStatuses.js
-app/orderStatuses/templates/_orderStatus.js
+app/orderStatuses/util/renderOrderStatusLabel.js
 app/orders/views/OrderListView.js
-vendor/reltime.js
-app/core/util/fixTimeRange.js
 app/orders/templates/filter.js
 app/orders/views/OrderFilterView.js
 app/orders/pages/OrderListPage.js
@@ -532,7 +536,6 @@ app/pressWorksheets/PressWorksheet.js
 app/pressWorksheets/PressWorksheetCollection.js
 app/pressWorksheets/templates/filter.js
 app/pressWorksheets/views/PressWorksheetFilterView.js
-app/pressWorksheets/views/decoratePressWorksheet.js
 app/pressWorksheets/views/PressWorksheetListView.js
 app/pressWorksheets/pages/PressWorksheetListPage.js
 app/pressWorksheets/templates/details.js
@@ -548,6 +551,8 @@ app/nls/pl/pressWorksheets.js
 i18n!app/nls/pressWorksheets
 app/pressWorksheets/routes.js
 app/core/util/getShiftEndDate.js
+app/core/templates/userInfo.js
+app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
 app/nls/prodDowntimes.js
 app/nls/pl/prodDowntimes.js
@@ -573,10 +578,9 @@ i18n!app/nls/prodTasks
 app/prodTasks/routes.js
 app/core/util/matchesOperType.js
 app/core/util/matchesProdLine.js
+app/prodLogEntries/util/decorateProdLogEntry.js
 app/prodLogEntries/ProdLogEntry.js
 app/prodLogEntries/ProdLogEntryCollection.js
-app/core/templates/userInfo.js
-app/prodLogEntries/views/decorateProdLogEntry.js
 app/prodLogEntries/views/ProdLogEntryListView.js
 app/prodLogEntries/templates/filter.js
 app/prodLogEntries/views/ProdLogEntryFilterView.js
@@ -586,10 +590,10 @@ app/nls/pl/prodLogEntries.js
 i18n!app/nls/prodLogEntries
 app/prodLogEntries/routes.js
 app/data/prodLog.js
+app/prodShiftOrders/util/decorateProdShiftOrder.js
 app/prodShiftOrders/ProdShiftOrder.js
 app/core/util/matchesEquals.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
-app/prodShiftOrders/views/decorateProdShiftOrder.js
 app/prodShiftOrders/views/ProdShiftOrderListView.js
 app/prodShiftOrders/templates/filter.js
 app/prodShiftOrders/views/ProdShiftOrderFilterView.js
@@ -601,7 +605,6 @@ app/prodShiftOrders/routes.js
 app/prodDowntimes/ProdDowntimeCollection.js
 app/prodShifts/ProdShift.js
 app/prodShifts/ProdShiftCollection.js
-app/prodShifts/views/decorateProdShift.js
 app/prodShifts/views/ProdShiftListView.js
 app/prodShifts/templates/filter.js
 app/prodShifts/views/ProdShiftFilterView.js
@@ -613,6 +616,7 @@ app/prodShifts/routes.js
 app/data/orgUnits.js
 app/production/templates/controls.js
 app/production/views/ProductionControlsView.js
+app/users/util/decorateUser.js
 app/users/User.js
 app/users/UserCollection.js
 app/production/templates/personelPicker.js
@@ -673,7 +677,6 @@ app/purchaseOrders/routes.js
 app/routes.js
 vendor/visibly.js
 app/visibility.js
-vendor/bootstrap/js/bootstrap.js
 vendor/moment/lang/pl.js
 app/nls/core.js
 app/nls/pl/core.js

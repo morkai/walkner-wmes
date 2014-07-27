@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Model"],function(e){return e.extend({urlRoot:"/events/types",clientUrlRoot:"#events/types",nlsDomain:"events",labelAttribute:"label",defaults:{label:null,value:null}})});
+define(["../core/Model"],function(t){return t.extend({urlRoot:"/events/types",clientUrlRoot:"#events/types",nlsDomain:"events",labelAttribute:"text",defaults:{text:null},toSelect2Option:function(){return{id:this.id,text:this.getLabel()}}})});

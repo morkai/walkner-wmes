@@ -1,5 +1,0 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
-
-define(["app/i18n","app/data/aors","app/data/companies","app/data/prodFunctions","app/data/divisions","app/data/subdivisions","app/data/views/renderOrgUnitPath"],function(n,r,a,o,e,i,t){return function(d){var s=a.get(d.company);d.company=s?s.getLabel():n("users","NO_DATA:company"),d.aors=Array.isArray(d.aors)?d.aors.map(function(n){var a=r.get(n);return a?a.getLabel():null}).filter(function(n){return!!n}).join("; "):"",d.aors.length||(d.aors=n("users","NO_DATA:aors"));var p=o.get(d.prodFunction);if(d.prodFunction=p?p.getLabel():n("users","NO_DATA:prodFunction"),d.orgUnitType&&d.orgUnitId){var u;switch(d.orgUnitType){case"division":u=e.get(d.orgUnitId);break;case"subdivision":u=i.get(d.orgUnitId)}u&&(d.orgUnit=t(u,!1,!1))}return d.vendor&&(d.vendor.name?d.vendor=d.vendor.name+" ("+d.vendor._id+")":d.vendor._id&&(d.vendor=d.vendor._id)),d}});

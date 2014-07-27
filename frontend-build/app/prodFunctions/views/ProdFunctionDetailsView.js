@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/core/views/DetailsView","./decorateProdFunction","app/prodFunctions/templates/details"],function(e,n,t){return e.extend({template:t,localTopics:{"companies.synced":"render"},serialize:function(){return{model:n(this.model)}}})});
+define(["app/core/views/DetailsView","app/prodFunctions/templates/details"],function(e,n){return e.extend({template:n,localTopics:{"companies.synced":"render"}})});

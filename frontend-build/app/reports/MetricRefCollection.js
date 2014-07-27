@@ -1,5 +1,0 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
-
-define(["../settings/SettingCollection","../settings/Setting"],function(t,e){return t.extend({model:e.extend({urlRoot:"/reports/metricRefs"}),matchSettingId:function(t){return/^metricRefs\./.test(t)},getSettingId:function(t,e){return"metricRefs."+t+"."+e},parseSettingId:function(t){var e=t.match(/^metricRefs\.(.*?)\.(.*?)$/);return{metric:e?e[1]:null,orgUnit:e?e[2]:null}},getValue:function(t,e){var n=this.get(this.getSettingId(t,e));return n?n.get("value")||0:0},updateValue:function(t,e,n){var i=this.getSettingId(t,e);n=isNaN(n)||"number"!=typeof n?0:Math.round(n);var r=this.get(i);if(r){if(r.get("value")===n)return null;r.set("value",n)}else this.add({_id:i,value:n}),r=this.get(i);return r.save()}})});
