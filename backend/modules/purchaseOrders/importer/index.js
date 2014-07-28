@@ -79,6 +79,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
       if (parsePoList(html, importedAt, purchaseOrders) > 0)
       {
         comparePoList(app, module, purchaseOrders, function() { finishImport(filePath); });
+        createVendors(purchaseOrders);
       }
       else
       {
@@ -137,5 +138,29 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
         module.error("Failed to delete file [%s]: %s", filePath, err.message);
       }
     });
+  }
+
+  function createVendors(purchaseOrders)
+  {
+    var vendorMap = {};
+
+    Object.keys(purchaseOrders).forEach(function(key)
+    {
+      var po = purchaseOrders[key];
+
+      vendorMap[po.vendor] = po.vendorName;
+    });
+
+    var vendorList = [];
+
+    Object.keys(vendorMap).forEach(function(vendorId)
+    {
+      vendorList.push({
+        _id: vendorId,
+        name: vendorMap[vendorId]
+      });
+    });
+
+    mongoose.model('Vendor').collection.insert(vendorList, {continueOnError: true}, function() {});
   }
 };
