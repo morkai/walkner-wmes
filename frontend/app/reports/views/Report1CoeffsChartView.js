@@ -79,14 +79,6 @@ define([
     updateChart: function()
     {
       var chartData = this.serializeChartData();
-      var min = 0;
-
-      if (!chartData.quantityDone.length)
-      {
-        min = null;
-      }
-
-      var visible = this.model.query.get('interval') !== 'hour';
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
       var series = this.chart.series;
 
@@ -94,8 +86,8 @@ define([
 
       series[0].update({marker: markerStyles}, false);
       series[1].update({marker: markerStyles}, false);
-      series[2].update({marker: markerStyles, visible: visible && this.isSeriesVisible('productivity')}, false);
-      series[3].update({marker: markerStyles, visible: visible && this.isSeriesVisible('productivityNoWh')}, false);
+      series[2].update({marker: markerStyles}, false);
+      series[3].update({marker: markerStyles}, false);
       series[4].update({marker: markerStyles}, false);
       series[5].update({marker: markerStyles}, false);
 
@@ -104,7 +96,23 @@ define([
       series[2].setData(chartData.productivity, false);
       series[3].setData(chartData.productivityNoWh, false);
       series[4].setData(chartData.scheduledDowntime, false);
-      series[5].setData(chartData.unscheduledDowntime, true);
+      series[5].setData(chartData.unscheduledDowntime, false);
+
+      var hourlyInterval = this.model.query.get('interval') !== 'hour';
+      var prodVisible = hourlyInterval && this.isSeriesVisible('productivity');
+      var prodNoWhVisible = hourlyInterval && this.isSeriesVisible('productivityNoWh');
+
+      if (series[2].visible !== prodVisible)
+      {
+        series[2].setVisible(prodVisible, false);
+      }
+
+      if (series[3].visible !== prodNoWhVisible)
+      {
+        series[3].setVisible(prodNoWhVisible, false);
+      }
+
+      this.chart.redraw(false);
 
       this.updateReferences();
     },
@@ -288,10 +296,16 @@ define([
     onDisplayOptionsChange: function()
     {
       var visibleSeries = this.displayOptions.get('series');
+      var hourlyInterval = this.model.query.get('interval') === 'hour';
 
       this.chart.series.forEach(function(series)
       {
         var visible = !!visibleSeries[series.options.id];
+
+        if (/^productivity/.test(series.options.id) && hourlyInterval)
+        {
+          visible = false;
+        }
 
         if (series.visible !== visible)
         {
