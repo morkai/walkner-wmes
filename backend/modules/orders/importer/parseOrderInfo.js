@@ -5,6 +5,7 @@
 'use strict';
 
 var cheerio = require('cheerio');
+var parseSapNumber = require('./parseSapNumber');
 
 module.exports = function parseOrderInfo(html, orders, importTs)
 {
@@ -50,7 +51,7 @@ module.exports = function parseOrderInfo(html, orders, importTs)
       nc12: nc12,
       name: cells[2],
       mrp: cells[5],
-      qty: parseInt(cells[8], 10),
+      qty: parseSapNumber(cells[8]),
       unit: cells[9],
       startDate: new Date(startDateParts[2], startDateParts[1] - 1, startDateParts[0]),
       finishDate: new Date(finishDateParts[2], finishDateParts[1] - 1, finishDateParts[0]),

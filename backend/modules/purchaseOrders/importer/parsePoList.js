@@ -5,6 +5,7 @@
 'use strict';
 
 var cheerio = require('cheerio');
+var parseSapNumber = require('../../orders/importer/parseSapNumber');
 
 var ORDER_RE = /^ [0-9]+ /;
 var ITEM_RE = /^ [0-9]{5} /;
@@ -127,7 +128,7 @@ module.exports = function parsePoList(html, importedAt, purchaseOrders)
 
     lastItem = {
       _id: rowContents.substr(DATA_START.itemId, DATA_LENGTH.itemId).trim(),
-      qty: parseNumber(rowContents.substr(DATA_START.itemQty, DATA_LENGTH.itemQty)),
+      qty: parseSapNumber(rowContents.substr(DATA_START.itemQty, DATA_LENGTH.itemQty)),
       unit: rowContents.substr(DATA_START.unit, DATA_LENGTH.unit).trim(),
       nc12: rowContents.substr(DATA_START.nc12, DATA_LENGTH.nc12).trim().substr(3),
       name: rowContents.substr(DATA_START.itemName, DATA_LENGTH.itemName).trim(),
@@ -153,15 +154,8 @@ module.exports = function parsePoList(html, importedAt, purchaseOrders)
 
     lastItem.schedule.push({
       date: parseDate(rowContents.substr(DATA_START.availDate, DATA_LENGTH.availDate)),
-      qty: parseNumber(rowContents.substr(DATA_START.scheduledQty, DATA_LENGTH.scheduledQty))
+      qty: parseSapNumber(rowContents.substr(DATA_START.scheduledQty, DATA_LENGTH.scheduledQty))
     });
-  }
-
-  function parseNumber(str)
-  {
-    var num = parseFloat(str.replace(/\./g, '').replace(',', '.'));
-
-    return isNaN(num) ? -1 : num;
   }
 
   function parseDate(str)

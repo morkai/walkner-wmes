@@ -5,6 +5,7 @@
 'use strict';
 
 var cheerio = require('cheerio');
+var parseSapNumber = require('./parseSapNumber');
 
 module.exports = function parseOperInfo(html, orders, missingOrders, importTs)
 {
@@ -40,12 +41,12 @@ module.exports = function parseOperInfo(html, orders, missingOrders, importTs)
       no: cells[1],
       workCenter: cells[2],
       name: cells[3],
-      qty: parseInt(cells[4], 10),
+      qty: parseSapNumber(cells[4]),
       unit: cells[5],
-      machineSetupTime: parseStdValue(cells[6]),
-      laborSetupTime: parseStdValue(cells[7]),
-      machineTime: parseStdValue(cells[8]),
-      laborTime: parseStdValue(cells[9])
+      machineSetupTime: parseSapNumber(cells[6]),
+      laborSetupTime: parseSapNumber(cells[7]),
+      machineTime: parseSapNumber(cells[8]),
+      laborTime: parseSapNumber(cells[9])
     };
 
     var order = orders[orderNo];
@@ -74,12 +75,5 @@ module.exports = function parseOperInfo(html, orders, missingOrders, importTs)
 
       missingOrders[orderNo].operations.push(operation);
     }
-  }
-
-  function parseStdValue(value)
-  {
-    value = parseFloat(value.replace(',', '.'));
-
-    return isNaN(value) ? -1 : value;
   }
 };
