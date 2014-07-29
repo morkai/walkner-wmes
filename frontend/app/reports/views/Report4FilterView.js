@@ -30,7 +30,7 @@ define([
     template: filterTemplate,
 
     events: {
-      'submit .filter-form': function(e)
+      'submit': function(e)
       {
         e.preventDefault();
 
@@ -43,7 +43,7 @@ define([
         this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
         this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
         this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
-        this.$('.filter-form').submit();
+        this.$el.submit();
       },
       'change input[name=mode]': function()
       {
@@ -61,7 +61,7 @@ define([
     {
       var formData = this.serializeFormData();
 
-      js2form(this.el.querySelector('.filter-form'), formData);
+      js2form(this.el, formData);
 
       this.$('input[name=interval]:checked').closest('.btn').addClass('active');
       this.$('input[name=shift]:checked').closest('.btn').addClass('active');

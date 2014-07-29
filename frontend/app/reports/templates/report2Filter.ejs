@@ -1,40 +1,33 @@
-<div class="well">
-  <form id="<%- idPrefix %>-form" class="filter-form">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-from"><%- t('reports', 'filter:from') %></label>
-      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-to"><%- t('reports', 'filter:to') %></label>
-      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
-    </div><div class="form-group">
-      <label><%- t('reports', 'filter:interval') %></label>
-      <div id="<%- idPrefix %>-intervals" class="btn-group filter-btn-group" data-toggle="buttons">
-        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:month') %>" data-interval="month">
-          <input type="radio" name="interval" value="month"> <%- t('reports', 'filter:interval:month') %>
-        </label>
-        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:week') %>" data-interval="week">
-          <input type="radio" name="interval" value="week"> <%- t('reports', 'filter:interval:week') %>
-        </label>
-        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:day') %>" data-interval="day">
-          <input type="radio" name="interval" value="day"> <%- t('reports', 'filter:interval:day') %>
-        </label>
-      </div>
-    </div><div class="form-group filter-actions">
-      <div class="btn-group">
-        <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('reports', 'filter:submit') %></span></button>
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a data-range="today"><%= t('reports', 'filter:submit:today') %></a></li>
-          <li><a data-range="yesterday"><%= t('reports', 'filter:submit:yesterday') %></a></li>
-          <li><a data-range="currentWeek"><%= t('reports', 'filter:submit:currentWeek') %></a></li>
-          <li><a data-range="prevWeek"><%= t('reports', 'filter:submit:prevWeek') %></a></li>
-          <li><a data-range="currentMonth"><%= t('reports', 'filter:submit:currentMonth') %></a></li>
-          <li><a data-range="prevMonth"><%= t('reports', 'filter:submit:prevMonth') %></a></li>
-        </ul>
-      </div><hr><button id="<%- idPrefix %>-showDisplayOptions" type="button" class="btn btn-default"><i class="fa fa-cog"></i><span><%- t('reports', 'filter:options') %></span></button>
+<form class="well filter-form">
+  <% include _filterFromTo.ejs %>
+  <div class="form-group">
+    <label><%- t('reports', 'filter:interval') %></label>
+    <div id="<%- idPrefix %>-intervals" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:month') %>" data-interval="month">
+        <input type="radio" name="interval" value="month"> <%- t('reports', 'filter:interval:month') %>
+      </label>
+      <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:week') %>" data-interval="week">
+        <input type="radio" name="interval" value="week"> <%- t('reports', 'filter:interval:week') %>
+      </label>
+      <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:day') %>" data-interval="day">
+        <input type="radio" name="interval" value="day"> <%- t('reports', 'filter:interval:day') %>
+      </label>
     </div>
-  </form>
-</div>
+  </div>
+  <div class="form-group filter-actions">
+    <div class="btn-group">
+      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('reports', 'filter:submit') %></span></button>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a data-range="today"><%= t('reports', 'filter:submit:today') %></a></li>
+        <li><a data-range="yesterday"><%= t('reports', 'filter:submit:yesterday') %></a></li>
+        <li><a data-range="currentWeek"><%= t('reports', 'filter:submit:currentWeek') %></a></li>
+        <li><a data-range="prevWeek"><%= t('reports', 'filter:submit:prevWeek') %></a></li>
+        <li><a data-range="currentMonth"><%= t('reports', 'filter:submit:currentMonth') %></a></li>
+        <li><a data-range="prevMonth"><%= t('reports', 'filter:submit:prevMonth') %></a></li>
+      </ul>
+    </div><hr><button id="<%- idPrefix %>-showDisplayOptions" type="button" class="btn btn-default"><i class="fa fa-cog"></i><span><%- t('reports', 'filter:options') %></span></button>
+  </div>
+</form>
