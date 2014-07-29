@@ -125,6 +125,14 @@ define([
           || this.isReferenceVisible('indirect')
           || this.isReferenceVisible('warehouse');
 
+        if (referenceVisible)
+        {
+          referenceVisible = _.any(chartData.reference, function(dataPoint)
+          {
+            return dataPoint.y > 0;
+          });
+        }
+
         series.reference.setVisible(referenceVisible, false);
         series.productivity.setVisible(displayOptions.isSeriesVisible('productivity'), false);
         series.productivityNoWh.setVisible(displayOptions.isSeriesVisible('productivityNoWh'), false);
@@ -181,12 +189,13 @@ define([
         redraw = true;
       }
 
-      var series = ['direct', 'indirect', 'warehouse'];
+      var series = ['direct', 'indirect', 'warehouse', 'productivity', 'productivityNoWh'];
       var seriesChanged = changes.series && _.any(series, function(serie)
       {
         return changes.series[serie] !== prev.series[serie];
       });
-      var referencesChanges = changes.references && _.any(series, function(serie)
+      var references = ['direct', 'indirect', 'warehouse'];
+      var referencesChanges = changes.references && _.any(references, function(serie)
       {
         return changes.references[serie] !== prev.references[serie];
       });
