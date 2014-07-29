@@ -18,5 +18,8 @@
 
   "filter:from": "Dostawa od",
   "filter:to": "Dostawa do",
+  "filter:status": "Status",
+  "filter:status:open": "Otwarte",
+  "filter:status:closed": "Zamknięte",
   "filter:submit": "Filtruj zamówienia"
 }

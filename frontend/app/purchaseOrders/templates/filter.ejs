@@ -9,11 +9,21 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-_id"><%- t('purchaseOrders', 'PROPERTY:_id') %></label>
-    <input id="<%- idPrefix %>-_id" class="form-control no-controls" name="_id" type="number" min="1" max="999999">
+    <input id="<%- idPrefix %>-_id" class="form-control no-controls" name="_id" type="number" min="2" max="999999">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-items-nc12"><%- t('purchaseOrders', 'PROPERTY:nc12') %></label>
-    <input id="<%- idPrefix %>-items-nc12" class="form-control no-controls" name="nc12" type="number" min="100000000000" max="999999999999">
+    <input id="<%- idPrefix %>-items-nc12" class="form-control no-controls" name="items.nc12" type="number" min="1" max="999999999999">
+  </div>
+  <div class="form-group">
+    <label><%- t('purchaseOrders', 'filter:status') %></label>
+    <div id="<%- idPrefix %>-status" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['open', 'closed'].forEach(function(status) { %>
+      <label class="btn btn-default">
+        <input type="checkbox" name="status[]" value="<%- status %>"> <%- t('purchaseOrders', 'filter:status:' + status) %>
+      </label>
+      <% }) %>
+    </div>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">

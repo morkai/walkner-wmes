@@ -15,8 +15,36 @@ define([
 
   return ListView.extend({
 
+    className: 'pos-list',
+
     remoteTopics: {
       'purchaseOrders.synced': 'refreshCollection'
+    },
+
+    events: {
+      'mouseup .list-item': function(e)
+      {
+        if (e.altKey || e.which === 3)
+        {
+          return;
+        }
+
+        var model = this.collection.get(e.currentTarget.dataset.id);
+        var url = model.genClientUrl();
+
+        if (e.ctrlKey || e.which === 2)
+        {
+          window.open(url);
+        }
+        else
+        {
+          this.broker.publish('router.navigate', {
+            url: url,
+            replace: false,
+            trigger: true
+          });
+        }
+      }
     },
 
     serializeColumns: function()
@@ -38,10 +66,7 @@ define([
 
     serializeActions: function()
     {
-      return function()
-      {
-        return [];
-      };
+      return null;
     },
 
     serializeRows: function()

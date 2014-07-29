@@ -43,7 +43,7 @@ define([
         {
           var itemScheduleTime = Date.parse(schedule[ii].date);
 
-          if (itemScheduleTime >= today && itemScheduleTime < minScheduleTime)
+          if (itemScheduleTime < minScheduleTime)
           {
             minScheduleTime = itemScheduleTime;
           }
