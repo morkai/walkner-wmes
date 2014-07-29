@@ -5,7 +5,6 @@
 define([
   'underscore',
   'jquery',
-  'app/i18n',
   'app/core/View',
   'app/core/util/onModelDeleted',
   'app/users/util/setUpUserSelect2',
@@ -16,7 +15,6 @@ define([
 ], function(
   _,
   $,
-  t,
   View,
   onModelDeleted,
   setUpUserSelect2,

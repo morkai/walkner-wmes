@@ -3,12 +3,10 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/i18n',
   'app/data/views/renderOrgUnitPath',
   'app/core/views/DetailsView',
   'app/mrpControllers/templates/details'
 ], function(
-  t,
   renderOrgUnitPath,
   DetailsView,
   detailsTemplate

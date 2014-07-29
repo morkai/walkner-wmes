@@ -4,13 +4,11 @@
 
 define([
   'underscore',
-  'app/i18n',
   'app/core/views/PrintableListView',
   'app/fte/templates/printableLeaderEntryList',
   '../util/fractions'
 ], function(
   _,
-  t,
   PrintableListView,
   printableLeaderEntryListTemplate,
   fractionsUtil

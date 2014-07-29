@@ -4,14 +4,12 @@
 
 define([
   'underscore',
-  'app/i18n',
   'app/user',
   'app/core/View',
   'app/core/util/onModelDeleted',
   'app/hourlyPlans/templates/entry'
 ], function(
   _,
-  t,
   user,
   View,
   onModelDeleted,

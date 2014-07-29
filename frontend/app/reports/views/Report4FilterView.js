@@ -4,7 +4,6 @@
 
 define([
   'js2form',
-  'app/i18n',
   'app/time',
   'app/data/divisions',
   'app/core/View',
@@ -14,7 +13,6 @@ define([
   '../util/prepareDateRange'
 ], function(
   js2form,
-  t,
   time,
   divisions,
   View,

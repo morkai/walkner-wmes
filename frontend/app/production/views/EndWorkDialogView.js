@@ -3,11 +3,9 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/i18n',
   'app/core/View',
   'app/production/templates/endWorkDialog'
 ], function(
-  t,
   View,
   endWorkDialogTemplate
 ) {

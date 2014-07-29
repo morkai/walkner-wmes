@@ -4,7 +4,6 @@
 
 define([
   'underscore',
-  'app/i18n',
   'app/user',
   'app/core/View',
   'app/core/util/onModelDeleted',
@@ -12,7 +11,6 @@ define([
   '../util/fractions'
 ], function(
   _,
-  t,
   user,
   View,
   onModelDeleted,

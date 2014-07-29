@@ -4,7 +4,6 @@
 
 define([
   'screenfull',
-  'app/i18n',
   'app/core/View',
   './Report2ClipChartView',
   './Report2DirIndirChartView',
@@ -12,7 +11,6 @@ define([
   'app/reports/templates/report2Charts'
 ], function(
   screenfull,
-  t,
   View,
   Report2ClipChartView,
   Report2DirIndirChartView,

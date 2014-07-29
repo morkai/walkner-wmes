@@ -3,12 +3,10 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/i18n',
   'app/time',
   'app/core/views/FilterView',
   'app/xiconf/templates/filter'
 ], function(
-  t,
   time,
   FilterView,
   filterTemplate

@@ -5,7 +5,6 @@
 define([
   'js2form',
   'app/time',
-  'app/i18n',
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/reports/templates/report1Filter',
@@ -13,7 +12,6 @@ define([
 ], function(
   js2form,
   time,
-  t,
   View,
   fixTimeRange,
   filterTemplate,

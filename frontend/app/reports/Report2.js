@@ -4,13 +4,11 @@
 
 define([
   'underscore',
-  '../i18n',
   '../data/aors',
   '../data/downtimeReasons',
   '../core/Model'
 ], function(
   _,
-  t,
   aors,
   downtimeReasons,
   Model

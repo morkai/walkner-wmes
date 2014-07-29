@@ -88,6 +88,7 @@
     "NAVBAR:REPORTS:2": "CLIP",
     "NAVBAR:REPORTS:3": "OEE",
     "NAVBAR:REPORTS:4": "Operators",
+    "NAVBAR:REPORTS:5": "HR",
     "NAVBAR:PROD": "Production",
     "NAVBAR:PROD:LOG_ENTRIES": "Operation log",
     "NAVBAR:PROD:SHIFTS": "Shifts",

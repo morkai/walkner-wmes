@@ -5,7 +5,6 @@
 define([
   '../router',
   '../viewport',
-  '../i18n',
   '../user',
   '../core/util/showDeleteFormPage',
   '../data/subdivisions',
@@ -14,7 +13,6 @@ define([
 ], function(
   router,
   viewport,
-  t,
   user,
   showDeleteFormPage,
   subdivisions,

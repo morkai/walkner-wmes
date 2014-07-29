@@ -4,12 +4,10 @@
 
 define([
   'underscore',
-  'app/i18n',
   'app/core/View',
   'app/prodDowntimes/templates/details'
 ], function(
   _,
-  t,
   View,
   detailsTemplate
 ) {

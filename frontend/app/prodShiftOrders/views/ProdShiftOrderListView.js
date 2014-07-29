@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/i18n',
   'app/user',
   'app/viewport',
   'app/core/views/ListView',
   'app/data/prodLines',
   'app/data/views/renderOrgUnitPath'
 ], function(
-  t,
   user,
   viewport,
   ListView,
