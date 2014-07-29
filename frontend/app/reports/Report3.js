@@ -254,7 +254,7 @@ define([
       groupKeys = this.parseGroupKeys(groupKeys);
 
       var tableSummary = this.calcTableSummary(prodLines);
-      var chartSummary = this.calcChartSummary(workDays, groupKeys, prodLines);
+      var chartSummary = this.calcChartSummary(workDays, groupKeys, tableSummary);
 
       return {
         workDays: workDays,
