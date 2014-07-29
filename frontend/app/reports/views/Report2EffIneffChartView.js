@@ -4,7 +4,6 @@
 
 define([
   'underscore',
-  'screenfull',
   'app/highcharts',
   'app/i18n',
   'app/core/View',
@@ -12,7 +11,6 @@ define([
   '../util/wordwrapTooltip'
 ], function(
   _,
-  screenfull,
   Highcharts,
   t,
   View,

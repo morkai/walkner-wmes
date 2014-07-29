@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'screenfull',
   'app/core/View',
   './Report2ClipChartView',
   './Report2DirIndirChartView',
   './Report2EffIneffChartView',
   'app/reports/templates/report2Charts'
 ], function(
-  screenfull,
   View,
   Report2ClipChartView,
   Report2DirIndirChartView,
@@ -22,25 +20,6 @@ define([
   return View.extend({
 
     template: report2ChartsTemplate,
-
-    events: {
-      'click .highcharts-title': function(e)
-      {
-        if (!e.ctrlKey || !screenfull.enabled)
-        {
-          return;
-        }
-
-        if (screenfull.isFullscreen)
-        {
-          screenfull.exit();
-
-          return;
-        }
-
-        screenfull.request(this.$(e.target).closest('.reports-chart')[0]);
-      }
-    },
 
     initialize: function()
     {
