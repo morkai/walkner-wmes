@@ -10,7 +10,7 @@ var step = require('h5.step');
 var parseOrderInfo = require('./parseOrderInfo');
 var parseOperInfo = require('./parseOperInfo');
 
-module.exports = function createParser(app, module, filterRe, stepCount, callback)
+module.exports = function createParser(app, importerModule, callback)
 {
   var LATE_DATA_PARSE_DELAY = 20 * 60 * 1000;
   var timeKeyToOrderInfoStepsMap = {};
@@ -29,7 +29,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
       return false;
     }
 
-    var matches = fileInfo.fileName.match(filterRe);
+    var matches = fileInfo.fileName.match(importerModule.config.filterRe);
 
     if (matches === null)
     {
@@ -71,17 +71,17 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
     stepsMap[step] = fileInfo;
 
-    module.debug("Handling %d %s step for %s...", step, fileInfo.type, timeKey);
+    importerModule.debug("Handling %d %s step for %s...", step, fileInfo.type, timeKey);
 
-    if (timeKeyToOrderInfoStepsMap[timeKey].steps < stepCount
-      || timeKeyToOperInfoStepsMap[timeKey].steps < stepCount)
+    if (timeKeyToOrderInfoStepsMap[timeKey].steps < importerModule.config.orderStepCount
+      || timeKeyToOperInfoStepsMap[timeKey].steps < importerModule.config.operStepCount)
     {
       if (typeof parseDataTimers[timeKey] !== 'undefined' && parseDataTimers[timeKey] !== null)
       {
         clearTimeout(parseDataTimers[timeKey]);
       }
 
-      module.debug(
+      importerModule.debug(
         "Delaying %s (order steps=%d operation steps=%d)...",
         timeKey,
         timeKeyToOrderInfoStepsMap[timeKey].steps,
@@ -106,11 +106,11 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
     if (delayed)
     {
-      module.debug("Queued %s (delayed)...", timeKey);
+      importerModule.debug("Queued %s (delayed)...", timeKey);
     }
     else
     {
-      module.debug("Queued %s...", timeKey);
+      importerModule.debug("Queued %s...", timeKey);
     }
 
     parseQueue.push(timeKey);
@@ -133,7 +133,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
     var startTime = Date.now();
 
-    module.debug("Parsing %s...", timeKey);
+    importerModule.debug("Parsing %s...", timeKey);
 
     parseDataLock = true;
 
@@ -153,7 +153,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
       setTimeout(removeFilePathsFromCache, 15000, filePaths);
 
-      module.debug("Parsed %s in %d ms!", timeKey, Date.now() - startTime);
+      importerModule.debug("Parsed %s in %d ms!", timeKey, Date.now() - startTime);
 
       setImmediate(parseData);
 
@@ -166,11 +166,11 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
     var orders = {};
     var steps = [];
 
-    for (var i = 1; i <= stepCount; ++i)
+    for (var i = 1, l = importerModule.config.orderStepCount; i <= l; ++i)
     {
       if (typeof orderFileInfoSteps[i] === 'undefined')
       {
-        module.debug("Missing orders step %d :(", i);
+        importerModule.debug("Missing orders step %d :(", i);
       }
       else
       {
@@ -191,11 +191,11 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
     var missingOrders = {};
     var steps = [];
 
-    for (var i = 1; i <= stepCount; ++i)
+    for (var i = 1, l = importerModule.config.operStepCount; i <= l; ++i)
     {
       if (typeof operFileInfoSteps[i] === 'undefined')
       {
-        module.debug("Missing operations step %d :(", i);
+        importerModule.debug("Missing operations step %d :(", i);
       }
       else
       {
@@ -218,7 +218,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
       {
         if (err)
         {
-          module.error(
+          importerModule.error(
             "Failed to read order info file `%s`: %s", orderFileInfo.filePath, err.message
           );
         }
@@ -242,7 +242,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
       {
         if (err)
         {
-          module.error(
+          importerModule.error(
             "Failed to read oper info file `%s`: %s", operFileInfo.filePath, err.message
           );
         }
@@ -292,7 +292,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
   {
     filePaths.forEach(function(filePath)
     {
-      if (module.config.parsedOutputDir)
+      if (importerModule.config.parsedOutputDir)
       {
         moveFileInfoStepFile(filePath);
       }
@@ -305,13 +305,13 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
 
   function moveFileInfoStepFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    var newFilePath = path.join(importerModule.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.rename(oldFilePath, newFilePath, function(err)
     {
       if (err)
       {
-        module.error(
+        importerModule.error(
           "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
         );
       }
@@ -324,7 +324,7 @@ module.exports = function createParser(app, module, filterRe, stepCount, callbac
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        importerModule.error("Failed to delete file [%s]: %s", filePath, err.message);
       }
     });
   }

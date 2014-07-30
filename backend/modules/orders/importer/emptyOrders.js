@@ -8,7 +8,8 @@ var createParser = require('./createParser');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
-  stepCount: 1,
+  orderStepCount: 1,
+  operStepCount: 1,
   filterRe: /^Job PL02_(ORDER|OPER)_INFO_1D, Step ([0-9]+)\.html?$/
 };
 
@@ -23,7 +24,7 @@ exports.start = function startEmptyOrdersImporterModule(app, module)
 
   var EmptyOrder = mongoose.model('EmptyOrder');
 
-  createParser(app, module, module.config.filterRe, module.config.stepCount, handleParseResult);
+  createParser(app, module, handleParseResult);
 
   function handleParseResult(orders)
   {

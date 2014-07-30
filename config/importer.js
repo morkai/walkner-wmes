@@ -57,24 +57,28 @@ exports.directoryWatcher = {
 };
 
 exports.currentDayOrderImporter = {
-  stepCount: 8,
+  orderStepCount: 8,
+  operStepCount: 11,
   parsedOutputDir: __dirname + '/../data/attachments-imported'
 };
 
 exports.nextDayOrderImporter = {
-  stepCount: 8,
+  orderStepCount: 8,
+  operStepCount: 11,
   filterRe: /^Job PL02_(ORDER|OPER)_INFO_2D, Step ([0-9]+)\.html?$/,
   parsedOutputDir: __dirname + '/../data/attachments-imported'
 };
 
 exports.prevDayOrderImporter = {
-  stepCount: 8,
+  orderStepCount: 8,
+  operStepCount: 11,
   filterRe: /^Job PL02_(ORDER|OPER)_INFO_3D, Step ([0-9]+)\.html?$/,
   parsedOutputDir: __dirname + '/../data/attachments-imported'
 };
 
 exports.emptyOrderImporter = {
-  stepCount: 8,
+  orderStepCount: 8,
+  operStepCount: 11,
   parsedOutputDir: __dirname + '/../data/attachments-imported'
 };
 
