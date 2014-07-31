@@ -36,6 +36,33 @@ define([
     minPadding: 0.01
   });
 
+  Highcharts.formatTableTooltip = function(header, rows)
+  {
+    var decimalPoint = t('core', 'highcharts:decimalPoint');
+    var str = header ? ('<b class="highcharts-tooltip-header">' + header + '</b>') : '';
+
+    str += '<table class="highcharts-tooltip">';
+
+    rows.forEach(function(row)
+    {
+      var yParts = Highcharts.numberFormat(row.value, row.decimals).split(decimalPoint);
+      var integer = yParts[0];
+      var fraction = yParts.length === 2 ? (decimalPoint + yParts[1]) : '';
+      var yPrefix = row.prefix || '';
+      var ySuffix = row.suffix || '';
+
+      str += '<tr><td class="highcharts-tooltip-label">'
+        + '<span style="color: ' + row.color + '">\u25cf</span> ' + row.name + ':</td>'
+        + '<td class="highcharts-tooltip-integer">' + yPrefix + integer + '</td>'
+        + '<td class="highcharts-tooltip-fraction">' + fraction + '</td>'
+        + '<td class="highcharts-tooltip-suffix">' + ySuffix + '</td></tr>';
+    });
+
+    str += '</table>';
+
+    return str;
+  };
+
   Highcharts.setOptions({
     global: {
       timezoneOffset: time.getMoment().zone(),
@@ -74,33 +101,33 @@ define([
       shape: 'square',
       hideDelay: 250,
       useHTML: true,
+      displayHeader: true,
       formatter: function()
       {
+        var header;
+        var rows = [];
         var headerFormatter = (this.point || this.points[0]).series.chart.tooltip.options.headerFormatter;
-        var str = '<b>';
 
         if (typeof headerFormatter === 'function')
         {
-          str += headerFormatter(this);
+          header = headerFormatter(this);
         }
         else if (this.key)
         {
-          str += this.key;
+          header = this.key;
         }
         else if (this.points)
         {
-          str += this.points[0].key;
+          header = this.points[0].key;
         }
         else if (this.series)
         {
-          str += this.series.name;
+          header = this.series.name;
         }
         else
         {
-          str += this.x;
+          header = this.x;
         }
-
-        str += '</b><table>';
 
         var points = this.points || [{
           point: this.point,
@@ -111,19 +138,19 @@ define([
         {
           point = point.point;
 
-          var y = point.y.toLocaleString ? point.y.toLocaleString() : Highcharts.numberFormat(point.y);
-          var yPrefix = point.series.tooltipOptions.valuePrefix || '';
-          var ySuffix = point.series.tooltipOptions.valueSuffix || '';
+          var options = point.series.tooltipOptions;
 
-          str += '<tr><td><span style="color: ' + (point.color || point.series.color) + '">\u25cf</span> '
-            + point.series.name + ':</td><td>'
-            + yPrefix + y + ySuffix
-            + '</td></tr>';
+          rows.push({
+            color: point.color || point.series.color,
+            name: point.series.name,
+            prefix: options.valuePrefix,
+            suffix: options.valueSuffix,
+            decimals: options.valueDecimals,
+            value: point.y
+          });
         });
 
-        str += '</table>';
-
-        return str;
+        return Highcharts.formatTableTooltip(header, rows);
       }
     },
     exporting: {

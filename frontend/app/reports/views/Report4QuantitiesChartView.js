@@ -20,7 +20,7 @@ define([
     initialize: function()
     {
       this.chart = null;
-      this.loading = false;
+      this.isLoading = false;
 
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
@@ -59,7 +59,7 @@ define([
       {
         this.createChart();
 
-        if (this.loading)
+        if (this.isLoading)
         {
           this.chart.showLoading();
         }
@@ -76,10 +76,10 @@ define([
           plotBorderWidth: 1
         },
         exporting: {
-          filename: t('reports', 'filenames:4:quantities')
+          filename: t.bound('reports', 'filenames:4:quantities')
         },
         title: {
-          text: t('reports', 'operator:quantities:title')
+          text: t.bound('reports', 'operator:quantities:title')
         },
         noData: {},
         xAxis: [{
@@ -101,27 +101,47 @@ define([
           min: 0
         }],
         tooltip: {
-          valueSuffix: t('reports', 'quantitySuffix'),
           formatter: function(tooltip)
           {
+            var suffix = t('reports', 'quantitySuffix');
             var series = tooltip.chart.series;
-            var str = '<table>'
-              + tooltipRow(series[0].name, series[0].data[0].y, series[0].color)
-              + tooltipRow(series[1].name, series[1].data[0].y, series[1].color)
-              + tooltipRow(
-                  t('reports', 'operator:quantities:total'),
-                  series[0].data[0].y + series[1].data[0].y,
-                  '#333'
-                );
+
+            var rows = [
+              {
+                name: series[0].name,
+                value: series[0].data[0].y,
+                color: series[0].color,
+                decimals: 0,
+                suffix: suffix
+              },
+              {
+                name: series[1].name,
+                value: series[1].data[0].y,
+                color: series[1].color,
+                decimals: 0,
+                suffix: suffix
+              },
+              {
+                name: t('reports', 'operator:quantities:total'),
+                value: series[0].data[0].y + series[1].data[0].y,
+                color: '#333',
+                decimals: 0,
+                suffix: suffix
+              }
+            ];
 
             if (typeof this.key === 'string')
             {
-              str += tooltipRow(this.key, this.y, this.series.color);
+              rows.push({
+                name: this.key,
+                value: this.y,
+                color: this.series.color,
+                decimals: 0,
+                suffix: suffix
+              });
             }
 
-            str += '</table>';
-
-            return str;
+            return Highcharts.formatTableTooltip(null, rows);
           },
           followPointer: false,
           positioner: function(labelWidth)
@@ -147,7 +167,7 @@ define([
           }
         },
         series: [{
-          name: t('reports', 'operator:quantities:bad'),
+          name: t.bound('reports', 'operator:quantities:bad'),
           color: 'rgba(255,0,0,.75)',
           borderWidth: 0,
           type: 'column',
@@ -158,7 +178,7 @@ define([
           pointPadding: 0,
           groupPadding: 0
         }, {
-          name: t('reports', 'operator:quantities:good'),
+          name: t.bound('reports', 'operator:quantities:good'),
           color: 'rgba(102,204,0,.75)',
           borderWidth: 0,
           type: 'column',
@@ -169,7 +189,7 @@ define([
           pointPadding: 0,
           groupPadding: 0
         }, {
-          name: t('reports', 'operator:quantities:loss'),
+          name: t.bound('reports', 'operator:quantities:loss'),
           color: 'orange',
           borderWidth: 0,
           type: 'column',
@@ -178,14 +198,6 @@ define([
           yAxis: 1
         }]
       });
-
-      function tooltipRow(label, value, color)
-      {
-        return '<tr><td><span style="color: ' + color + '">\u25cf</span> '
-          + label + ':</td><td>'
-          + Highcharts.numberFormat(value, 0) + ' ' + t('reports', 'quantitySuffix')
-          + '</td></tr>';
-      }
     },
 
     updateChart: function()
@@ -207,7 +219,7 @@ define([
 
     onModelLoading: function()
     {
-      this.loading = true;
+      this.isLoading = true;
 
       if (this.chart)
       {
@@ -217,7 +229,7 @@ define([
 
     onModelLoaded: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
@@ -227,7 +239,7 @@ define([
 
     onModelError: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {

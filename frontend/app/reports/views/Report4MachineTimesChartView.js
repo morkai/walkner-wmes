@@ -20,7 +20,7 @@ define([
     initialize: function()
     {
       this.chart = null;
-      this.loading = false;
+      this.isLoading = false;
 
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
@@ -59,7 +59,7 @@ define([
       {
         this.createChart();
 
-        if (this.loading)
+        if (this.isLoading)
         {
           this.chart.showLoading();
         }
@@ -76,10 +76,10 @@ define([
           plotBorderWidth: 1
         },
         exporting: {
-          filename: t('reports', 'filenames:4:machineTimes')
+          filename: t.bound('reports', 'filenames:4:machineTimes')
         },
         title: {
-          text: t('reports', 'operator:machineTimes:title')
+          text: t.bound('reports', 'operator:machineTimes:title')
         },
         noData: {},
         xAxis: {
@@ -94,8 +94,9 @@ define([
           min: 0
         },
         tooltip: {
+          shared: true,
           valueSuffix: 'h',
-          shared: true
+          valueDecimals: 2
         },
         legend: {
           layout: 'horizontal',
@@ -108,15 +109,15 @@ define([
           }
         },
         series: [{
-          name: t('reports', 'operator:machineTimes:machineMedian'),
+          name: t.bound('reports', 'operator:machineTimes:machineMedian'),
           type: 'column',
           data: chartData.machineMedian
         }, {
-          name: t('reports', 'operator:machineTimes:work'),
+          name: t.bound('reports', 'operator:machineTimes:work'),
           type: 'column',
           data: chartData.work
         }, {
-          name: t('reports', 'operator:machineTimes:operatorMedian'),
+          name: t.bound('reports', 'operator:machineTimes:operatorMedian'),
           type: 'column',
           data: chartData.operatorMedian
         }]
@@ -142,7 +143,7 @@ define([
 
     onModelLoading: function()
     {
-      this.loading = true;
+      this.isLoading = true;
 
       if (this.chart)
       {
@@ -152,7 +153,7 @@ define([
 
     onModelLoaded: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {
@@ -162,7 +163,7 @@ define([
 
     onModelError: function()
     {
-      this.loading = false;
+      this.isLoading = false;
 
       if (this.chart)
       {

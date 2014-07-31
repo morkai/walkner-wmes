@@ -372,7 +372,8 @@ define([
         ],
         tooltip: {
           shared: true,
-          headerFormatter: this.formatTooltipHeader.bind(this)
+          headerFormatter: this.formatTooltipHeader.bind(this),
+          valueDecimals: 0
         },
         legend: {
           enabled: false

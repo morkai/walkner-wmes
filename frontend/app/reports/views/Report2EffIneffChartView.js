@@ -360,7 +360,8 @@ define([
           title: false
         },
         tooltip: {
-          shared: true
+          shared: true,
+          valueDecimals: 1
         },
         legend: false,
         series: [

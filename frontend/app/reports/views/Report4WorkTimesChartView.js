@@ -76,10 +76,10 @@ define([
           plotBorderWidth: 1
         },
         exporting: {
-          filename: t('reports', 'filenames:4:workTimes')
+          filename: t.bound('reports', 'filenames:4:workTimes')
         },
         title: {
-          text: t('reports', 'operator:workTimes:title')
+          text: t.bound('reports', 'operator:workTimes:title')
         },
         noData: {},
         xAxis: [{
@@ -107,28 +107,47 @@ define([
           min: 0
         }],
         tooltip: {
-          valueSuffix: 'h',
           useHTML: true,
           formatter: function(tooltip)
           {
             var series = tooltip.chart.series;
-            var str = '<table>'
-              + tooltipRow(series[0].name, series[0].data[0].y, series[0].color)
-              + tooltipRow(series[1].name, series[1].data[0].y, series[1].color)
-              + tooltipRow(
-                  t('reports', 'operator:workTimes:total'),
-                  series[0].data[0].y + series[1].data[0].y,
-                  '#333'
-                );
+
+            var rows = [
+              {
+                name: series[0].name,
+                value: series[0].data[0].y,
+                color: series[0].color,
+                decimals: 2,
+                suffix: 'h'
+              },
+              {
+                name: series[1].name,
+                value: series[1].data[0].y,
+                color: series[1].color,
+                decimals: 2,
+                suffix: 'h'
+              },
+              {
+                name: t('reports', 'operator:workTimes:total'),
+                value: series[0].data[0].y + series[1].data[0].y,
+                color: '#333',
+                decimals: 2,
+                suffix: 'h'
+              }
+            ];
 
             if (typeof this.key === 'string')
             {
-              str += tooltipRow(this.key, this.y, this.series.color);
+              rows.push({
+                name: this.key,
+                value: this.y,
+                color: this.series.color,
+                decimals: 2,
+                suffix: 'h'
+              });
             }
 
-            str += '</table>';
-
-            return str;
+            return Highcharts.formatTableTooltip(null, rows);
           },
           followPointer: false,
           positioner: function(labelWidth)
@@ -154,8 +173,8 @@ define([
           }
         },
         series: [{
-          name: t('reports', 'operator:workTimes:otherWorks'),
-          color: 'rgba(0,170,255,.75)', //'#00aaff',
+          name: t.bound('reports', 'operator:workTimes:otherWorks'),
+          color: 'rgba(0,170,255,.75)',
           borderWidth: 0,
           type: 'column',
           data: chartData.otherWorks,
@@ -165,7 +184,7 @@ define([
           pointPadding: 0,
           groupPadding: 0
         }, {
-          name: t('reports', 'operator:workTimes:sap'),
+          name: t.bound('reports', 'operator:workTimes:sap'),
           color: 'rgba(102,204,0,.75)',
           borderWidth: 0,
           type: 'column',
@@ -176,7 +195,7 @@ define([
           pointPadding: 0,
           groupPadding: 0
         }, {
-          name: t('reports', 'operator:workTimes:downtime'),
+          name: t.bound('reports', 'operator:workTimes:downtime'),
           color: 'rgba(255,0,0,.85)',
           borderWidth: 0,
           type: 'column',
@@ -185,26 +204,21 @@ define([
           yAxis: 1
         }]
       });
-
-      function tooltipRow(label, value, color)
-      {
-        return '<tr><td><span style="color: ' + color + '">\u25cf</span> '
-          + label + ':</td><td>'
-          + Highcharts.numberFormat(value) + 'h'
-          + '</td></tr>';
-      }
     },
 
     updateChart: function()
     {
       var chartData = this.serializeChartData();
-      var series = this.chart.series;
+      var chart = this.chart;
+      var series = chart.series;
 
       this.chart.xAxis[0].setCategories(chartData.downtimeCategories, false);
 
       series[0].setData(chartData.otherWorks, false);
       series[1].setData(chartData.sap, false);
-      series[2].setData(chartData.downtimes, true);
+      series[2].setData(chartData.downtimes, false);
+
+      chart.redraw(false);
     },
 
     serializeChartData: function()

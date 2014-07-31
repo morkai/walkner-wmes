@@ -117,7 +117,8 @@ define([
         ],
         tooltip: {
           shared: true,
-          headerFormatter: this.formatTooltipHeader.bind(this)
+          headerFormatter: this.formatTooltipHeader.bind(this),
+          valueDecimals: 2
         },
         legend: {
           layout: 'horizontal',

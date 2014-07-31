@@ -452,7 +452,8 @@ define([
         },
         noData: {},
         tooltip: {
-          shared: true
+          shared: true,
+          valueDecimals: 1
         },
         legend: false,
         plotOptions: {
@@ -522,7 +523,8 @@ define([
             yAxis: 1,
             data: [],
             tooltip: {
-              valueSuffix: '%'
+              valueSuffix: '%',
+              valueDecimals: 0
             },
             visible: displayOptions.isSeriesVisible('productivity')
           },
@@ -534,7 +536,8 @@ define([
             yAxis: 1,
             data: [],
             tooltip: {
-              valueSuffix: '%'
+              valueSuffix: '%',
+              valueDecimals: 0
             },
             visible: displayOptions.isSeriesVisible('productivityNoWh')
           },
@@ -546,7 +549,8 @@ define([
             yAxis: 2,
             data: [],
             tooltip: {
-              valueSuffix: t.bound('reports', 'quantitySuffix')
+              valueSuffix: t.bound('reports', 'quantitySuffix'),
+              valueDecimals: 0
             },
             visible: displayOptions.isSeriesVisible('quantityDone')
           }

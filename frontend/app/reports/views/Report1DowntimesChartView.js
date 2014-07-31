@@ -90,12 +90,18 @@ define([
     updateChart: function(redraw)
     {
       var chartData = this.serializeChartData();
+      var chart = this.chart;
 
       this.updateExtremes();
 
-      this.chart.xAxis[0].setCategories(chartData.categories, false);
-      this.chart.series[0].setData(chartData.data, false);
-      this.chart.series[1].setData(chartData.reference, redraw !== false);
+      chart.xAxis[0].setCategories(chartData.categories, false);
+      chart.series[0].setData(chartData.data, false);
+      chart.series[1].setData(chartData.reference, false);
+
+      if (redraw !== false)
+      {
+        chart.redraw(false);
+      }
     },
 
     updateExtremes: function()

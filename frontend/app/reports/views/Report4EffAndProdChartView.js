@@ -119,7 +119,8 @@ define([
         tooltip: {
           shared: true,
           headerFormatter: this.formatTooltipHeader.bind(this),
-          valueSuffix: '%'
+          valueSuffix: '%',
+          valueDecimals: 0
         },
         legend: {
           layout: 'horizontal',

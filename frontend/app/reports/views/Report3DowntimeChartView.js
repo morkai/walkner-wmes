@@ -115,7 +115,8 @@ define([
         ],
         tooltip: {
           shared: true,
-          headerFormatter: this.formatTooltipHeader.bind(this)
+          headerFormatter: this.formatTooltipHeader.bind(this),
+          valueDecimals: 2
         },
         legend: {
           layout: 'horizontal',
@@ -196,7 +197,8 @@ define([
             yAxis: 1,
             data: chartData.malfunctionCount,
             tooltip: {
-              valueSuffix: t('reports', 'quantitySuffix')
+              valueSuffix: t('reports', 'quantitySuffix'),
+              valueDecimals: 0
             }
           },
           {
@@ -205,7 +207,8 @@ define([
             yAxis: 1,
             data: chartData.majorMalfunctionCount,
             tooltip: {
-              valueSuffix: t('reports', 'quantitySuffix')
+              valueSuffix: t('reports', 'quantitySuffix'),
+              valueDecimals: 0
             }
           }
         ]

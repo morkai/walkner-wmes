@@ -1,0 +1,12 @@
+.highcharts-tooltip-integer {
+  font-family: Consolas, monospace;
+  padding: 0 0 0 5px;
+  text-align: right;
+}
+.highcharts-tooltip-fraction {
+  font-family: Consolas, monospace;
+  padding: 0 5px 0 0;
+}
+.highcharts-tooltip-suffix {
+  font-family: Consolas, monospace;
+}
