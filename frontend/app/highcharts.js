@@ -70,12 +70,18 @@ define([
     },
     chart: {
       zoomType: 'x',
+      animation: false,
       resetZoomButton: {
         theme: {
           style: {
             top: 'display: none'
           }
         }
+      }
+    },
+    plotOptions: {
+      series: {
+        animation: false
       }
     },
     credits: {
