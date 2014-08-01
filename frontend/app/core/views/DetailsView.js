@@ -27,6 +27,7 @@ define([
     serialize: function()
     {
       return {
+        idPrefix: this.idPrefix,
         model: this.serializeDetails(this.model)
       };
     },
