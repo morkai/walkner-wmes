@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  '../core/Model'
+  '../core/Model',
+  'app/core/templates/colorLabel'
 ], function(
-  Model
+  Model,
+  colorLabelTemplate
 ) {
   'use strict';
 
@@ -26,19 +28,22 @@ define([
     defaults: {
       name: null,
       fteMasterPosition: -1,
-      fteLeaderPosition: -1
+      fteLeaderPosition: -1,
+      color: '#000000'
     },
 
-    toJSON: function()
+    serialize: function()
     {
-      var company = Model.prototype.toJSON.call(this);
+      var obj = this.toJSON();
 
-      if (!company.name)
+      if (!obj.name)
       {
-        company.name = company._id;
+        obj.name = obj._id;
       }
 
-      return company;
+      obj.color = colorLabelTemplate({color: obj.color});
+
+      return obj;
     }
 
   });

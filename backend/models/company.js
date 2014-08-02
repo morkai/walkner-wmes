@@ -26,6 +26,10 @@ module.exports = function setupCompanyModel(app, mongoose)
       type: Number,
       min: -1,
       default: -1
+    },
+    color: {
+      type: String,
+      default: '#000000'
     }
   }, {
     id: false

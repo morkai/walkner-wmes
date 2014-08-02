@@ -21,6 +21,7 @@
     "PROPERTY:name": "Name",
     "PROPERTY:fteMasterPosition": "Position in FTE (production)",
     "PROPERTY:fteLeaderPosition": "Position in FTE (distribution)",
+    "PROPERTY:color": "Color",
 
     "FORM:ACTION:add": "Add company",
     "FORM:ACTION:edit": "Edit company",

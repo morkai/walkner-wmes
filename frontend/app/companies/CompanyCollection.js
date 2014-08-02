@@ -15,7 +15,7 @@ define([
 
     model: Company,
 
-    rqlQuery: 'select(name,fteMasterPosition,fteLeaderPosition)&sort(_id)'
+    rqlQuery: 'select(name,fteMasterPosition,fteLeaderPosition,color)&sort(_id)'
 
   });
 });
