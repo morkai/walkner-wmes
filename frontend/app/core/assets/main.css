@@ -262,5 +262,6 @@ kbd {
   width: 8em;
 }
 .colorpicker-component > .form-control {
+  font-family: Consolas, Menlo, Monaco, monospace;
   text-align: center;
 }
