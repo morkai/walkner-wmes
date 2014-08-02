@@ -62,6 +62,18 @@ define([
       this.$id(groupName).find('input:checked').parent().addClass('active');
     },
 
+    getButtonGroupValue: function(groupName)
+    {
+      var $inputs = this.$id(groupName).find('input');
+
+      if ($inputs[0].type === 'radio' || $inputs.length === 1)
+      {
+        return $inputs.filter(':checked').val();
+      }
+
+      return $inputs.filter(':checked').map(function() { return this.value; });
+    },
+
     afterRender: function()
     {
       this.formData = this.serializeQueryToForm();
