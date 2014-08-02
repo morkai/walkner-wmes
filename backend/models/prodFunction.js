@@ -33,7 +33,11 @@ module.exports = function setupProdFunctionModel(app, mongoose)
     companies: [{
       type: String,
       ref: 'Company'
-    }]
+    }],
+    color: {
+      type: String,
+      default: '#000000'
+    }
   }, {
     id: false
   });

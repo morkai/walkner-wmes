@@ -36,6 +36,7 @@
         <label for="<%- idPrefix %>-companies" class="control-label"><%- t('prodFunctions', 'PROPERTY:companies') %></label>
         <input id="<%- idPrefix %>-companies" type="text" name="companies">
       </div>
+      <%- renderColorPicker({idPrefix: idPrefix, property: 'color', label: t('prodFunctions', 'PROPERTY:color'), value: model.color}) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

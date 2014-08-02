@@ -5,11 +5,13 @@
 define([
   '../i18n',
   '../data/companies',
-  '../core/Model'
+  '../core/Model',
+  'app/core/templates/colorLabel'
 ], function(
   t,
   companies,
-  Model
+  Model,
+  colorLabelTemplate
 ) {
   'use strict';
 
@@ -34,25 +36,19 @@ define([
         fteMasterPosition: -1,
         direct: false,
         dirIndirRatio: 100,
-        companies: []
+        companies: [],
+        color: '#000000'
       };
-    },
-
-    toJSON: function()
-    {
-      var prodFunction = Model.prototype.toJSON.call(this);
-
-      if (!prodFunction.label)
-      {
-        prodFunction.label = prodFunction._id;
-      }
-
-      return prodFunction;
     },
 
     serialize: function()
     {
       var obj = this.toJSON();
+
+      if (!obj.label)
+      {
+        obj.label = obj._id;
+      }
 
       obj.dirIndirRatio = obj.direct
         ? (obj.dirIndirRatio.toLocaleString() + ' / ' + (100 - obj.dirIndirRatio).toLocaleString())
@@ -74,6 +70,8 @@ define([
       {
         obj.companies = '-';
       }
+
+      obj.color = colorLabelTemplate({color: obj.color});
 
       return obj;
     }

@@ -29,7 +29,7 @@ define([
     {
       return new ListPage({
         collection: prodFunctions,
-        columns: ['_id', 'label', 'fteMasterPosition', 'direct', 'dirIndirRatio', 'companies']
+        columns: ['_id', 'label', 'fteMasterPosition', 'direct', 'dirIndirRatio', 'companies', 'color']
       });
     });
   });

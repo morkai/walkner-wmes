@@ -23,6 +23,7 @@
     "PROPERTY:direct": "DIRECT/INDIRECT",
     "PROPERTY:dirIndirRatio": "DIR/INDIR [%]",
     "PROPERTY:companies": "Companies",
+    "PROPERTY:color": "Color",
 
     "direct:true": "DIRECT",
     "direct:false": "INDIRECT",
