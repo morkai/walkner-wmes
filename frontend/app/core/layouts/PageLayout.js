@@ -64,6 +64,13 @@ define([
     this.$actions = null;
   };
 
+  PageLayout.prototype.serialize = function()
+  {
+    return _.extend(View.prototype.serialize.call(this), {
+      version: this.options.version
+    });
+  };
+
   PageLayout.prototype.afterRender = function()
   {
     if (this.el.ownerDocument)

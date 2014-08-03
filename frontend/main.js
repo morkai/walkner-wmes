@@ -93,6 +93,7 @@
     socket,
     router,
     viewport,
+    updater,
     PageLayout,
     PrintLayout,
     BlankLayout,
@@ -127,7 +128,8 @@
       return new PageLayout({
         views: {
           '.navbar': createNavbarView()
-        }
+        },
+        version: updater.getCurrentVersionString()
       });
     });
 
@@ -290,6 +292,7 @@
       'app/socket',
       'app/router',
       'app/viewport',
+      'app/updater/index',
       'app/core/layouts/PageLayout',
       'app/core/layouts/PrintLayout',
       'app/core/layouts/BlankLayout',
@@ -298,7 +301,6 @@
       'app/time',
       'app/routes',
       'app/visibility',
-      'app/updater/index',
       'bootstrap',
       'moment-lang/pl',
       'select2-lang/' + locale,

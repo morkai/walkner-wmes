@@ -52,6 +52,8 @@ define([
 
   updater.pull = function(done) { socket.emit('updater.pull', done); };
 
+  updater.getCurrentVersionString = function() { return updater.versions.package; };
+
   saveLocalStorage();
 
   socket.on('updater.versions', function(newVersions)
