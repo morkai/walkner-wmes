@@ -1,1 +1,54 @@
-!function(e){return"function"==typeof define&&define.amd?define(["jquery","select2"],e):void e(window.jQuery)}(function(e){var n={formatNoMatches:function(){return"No matches found."},formatInputTooShort:function(e,n){var t=n-e.length;return"Please enter "+t+" more character"+(1===t?"":"s")},formatInputTooLong:function(e,n){var t=e.length-n;return"Please delete "+t+" character"+(1===t?"":"s")},formatSelectionTooBig:function(e){return"You can only select "+e+" item"+(1===e?"":"s")},formatLoadMore:function(){return"Loading more results..."},formatSearching:function(){return"Searching..."}};return e.extend(e.fn.select2.defaults,n),n});
+/**
+ * Select2 English translation.
+ */
+(function (factory)
+{
+  'use strict';
+
+  if (typeof define === 'function' && define.amd)
+  {
+    return define(['jquery', 'select2'], factory);
+  }
+  else
+  {
+    factory(window.jQuery);
+  }
+}(function ($)
+{
+  'use strict';
+
+  var lang = {
+    formatNoMatches: function()
+    {
+      return 'No matches found.';
+    },
+    formatInputTooShort: function(input, min)
+    {
+      var n = min - input.length;
+
+      return 'Please enter ' + n + ' more character' + (n === 1 ? '' : 's');
+    },
+    formatInputTooLong: function(input, max)
+    {
+      var n = input.length - max;
+
+      return 'Please delete ' + n + ' character' + (n === 1 ? '' : 's');
+    },
+    formatSelectionTooBig: function(limit)
+    {
+      return 'You can only select ' + limit + ' item' + (limit === 1 ? '' : 's');
+    },
+    formatLoadMore: function()
+    {
+      return 'Loading more results...';
+    },
+    formatSearching: function ()
+    {
+      return 'Searching...';
+    }
+  };
+  
+  $.extend($.fn.select2.defaults, lang);
+
+  return lang;
+}));
