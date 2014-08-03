@@ -9,6 +9,13 @@ define([
 ) {
   'use strict';
 
+  var STATUS_TO_CLASS = {
+    completed: 'success',
+    delivered: 'info',
+    delivering: 'warning',
+    waiting: ''
+  };
+
   return Model.extend({
 
     defaults: {
@@ -17,7 +24,19 @@ define([
 
     serialize: function()
     {
-      return this.toJSON();
+      var obj = this.toJSON();
+
+      obj.status = obj.completed
+        ? 'completed'
+        : obj.delivered
+          ? 'delivered'
+        : obj.deliveredQty > 0
+          ? 'delivering'
+        : 'waiting';
+
+      obj.rowClassName = STATUS_TO_CLASS[obj.status];
+
+      return obj;
     }
 
   });

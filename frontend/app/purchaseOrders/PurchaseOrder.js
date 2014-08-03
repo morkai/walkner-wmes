@@ -44,7 +44,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.docDate = time.getMoment(obj.docDate).utc().format('YYYY-MM-DD');
+      obj.docDate = time.getMoment(obj.docDate).utc().format('LL');
 
       if (obj.vendor && obj.vendor._id)
       {
@@ -69,6 +69,21 @@ define([
         : null;
 
       obj.className = obj.open ? (obj.printed ? 'info' : '') : 'success';
+
+      if (obj.importedAt)
+      {
+        obj.importedAtText = time.format(obj.importedAt, 'LLLL');
+      }
+
+      if (obj.createdAt)
+      {
+        obj.createdAtText = time.format(obj.createdAt, 'LLLL');
+      }
+
+      if (obj.updatedAt)
+      {
+        obj.updatedAtText = time.format(obj.updatedAt, 'LLLL');
+      }
 
       return obj;
     }

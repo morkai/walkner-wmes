@@ -1,3 +1,19 @@
 .pos-list .list-item {
   cursor: pointer;
 }
+.pos-details-changes pre {
+  max-height: 390px;
+  overflow: auto;
+}
+.pos-details-item > td {
+  width: 1%;
+  white-space: nowrap;
+}
+.pos-details-item > .pos-details-item-name {
+  width: auto;
+  white-space: normal;
+}
+.pos-details-item-qty {
+  font-family: Consolas, Menlo, Monaco, monospace;
+  text-align: right;
+}

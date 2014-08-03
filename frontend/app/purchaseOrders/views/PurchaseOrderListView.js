@@ -18,7 +18,13 @@ define([
     className: 'pos-list',
 
     remoteTopics: {
-      'purchaseOrders.synced': 'refreshCollection'
+      'purchaseOrders.synced': function(message)
+      {
+        if (message.created || message.updated || message.closed)
+        {
+          this.refreshCollection();
+        }
+      }
     },
 
     events: {

@@ -27,8 +27,6 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'poList',
-
     breadcrumbs: [
       t.bound('purchaseOrders', 'BREADCRUMBS:browse')
     ],

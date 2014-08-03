@@ -1,0 +1,98 @@
+<div class="pos-details">
+  <div class="panel panel-primary pos-details-props">
+    <div class="panel-heading">
+      <%- t('purchaseOrders', 'panel:details:props') %>
+    </div>
+    <div class="panel-details row">
+      <div class="col-md-4">
+        <div class="props first">
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:_id') %></div>
+            <div class="prop-value"><%- model._id %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:docDate') %></div>
+            <div class="prop-value"><%- model.docDate %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:vendorId') %></div>
+            <div class="prop-value"><%- model.vendor %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:vendorName') %></div>
+            <div class="prop-value"><%= model.vendorName %></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:pOrg') %></div>
+            <div class="prop-value"><%- model.pOrg %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:pGr') %></div>
+            <div class="prop-value"><%- model.pGr %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:plant') %></div>
+            <div class="prop-value"><%- model.plant %></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:importedAt') %></div>
+            <div class="prop-value"><%- model.importedAtText %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:createdAt') %></div>
+            <div class="prop-value"><%- model.createdAtText %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:updatedAt') %></div>
+            <div class="prop-value"><%- model.updatedAtText || '' %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default pos-details-items">
+    <div class="panel-heading">
+      <%- t('purchaseOrders', 'panel:details:items') %>
+    </div>
+    <table class="table table-condensed table-bordered table-hover">
+      <thead>
+        <tr>
+          <th><%- t('purchaseOrders', 'PROPERTY:item._id') %></th>
+          <th><%- t('purchaseOrders', 'PROPERTY:item.nc12') %></th>
+          <th><%- t('purchaseOrders', 'PROPERTY:item.unit') %></th>
+          <th><%- t('purchaseOrders', 'PROPERTY:item.qty') %></th>
+          <th><%- t('purchaseOrders', 'PROPERTY:item.deliveredQty') %></th>
+          <th><%- t('purchaseOrders', 'PROPERTY:item.name') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% model.items.forEach(function(item) { %>
+        <tr class="pos-details-item <%- item.rowClassName %>" tabindex="0">
+          <td><%- item._id %></td>
+          <td><%- item.nc12 %></td>
+          <td><%- item.unit %></td>
+          <td class="pos-details-item-qty"><%- item.qty.toLocaleString() %></td>
+          <td class="pos-details-item-qty"><%- item.deliveredQty.toLocaleString() %></td>
+          <td class="pos-details-item-name"><%= item.name %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel panel-default pos-details-changes">
+    <div class="panel-heading">
+      <%- t('purchaseOrders', 'panel:details:changes') %>
+    </div>
+    <div class="panel-body">
+      <pre><code><%- JSON.stringify(model.changes, null, 4) %></code></pre>
+    </div>
+  </div>
+</div>

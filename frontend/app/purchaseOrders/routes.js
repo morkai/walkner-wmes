@@ -26,4 +26,20 @@ define([
       }
     );
   });
+
+  router.map('/purchaseOrders/:id', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/purchaseOrders/PurchaseOrder',
+        'app/purchaseOrders/pages/PurchaseOrderDetailsPage'
+      ],
+      function(PurchaseOrder, PurchaseOrderDetailsPage)
+      {
+        return new PurchaseOrderDetailsPage({
+          model: new PurchaseOrder({_id: req.params.id})
+        });
+      }
+    );
+  });
 });
