@@ -17,9 +17,6 @@ body {
 body.modal-open {
   overflow-y: hidden;
 }
-body.page {
-  margin-top: 60px;
-}
 :only-child {
   margin-top: 0;
   margin-bottom: 0;
