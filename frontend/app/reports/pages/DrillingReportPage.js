@@ -22,6 +22,7 @@ define([
   'use strict';
 
   var CHART_WIDTH = 375;
+  var CHART_HEIGHT = 248;
 
   return View.extend({
 
@@ -290,16 +291,26 @@ define([
 
       if (e.keyCode === 39)
       {
-        this.scroll(true);
+        this.scrollX(true);
 
         return false;
       }
 
       if (e.keyCode === 37)
       {
-        this.scroll(false);
+        this.scrollX(false);
 
         return false;
+      }
+
+      if (e.keyCode === 38)
+      {
+        return this.scrollY(true);
+      }
+
+      if (e.keyCode === 40)
+      {
+        return this.scrollY(false);
       }
     },
 
@@ -540,7 +551,7 @@ define([
       this.displayOptions.updateExtremes(this.reports);
     },
 
-    scroll: function(right)
+    scrollX: function(right)
     {
       var focusedIndex = Math.round(this.$charts[0].scrollLeft / (CHART_WIDTH + 1)) + (right ? 1 : -1);
       var $children = this.$charts.children();
@@ -552,6 +563,34 @@ define([
       }
 
       this.$charts.finish().animate({scrollLeft: scrollLeft}, 250);
+    },
+
+    scrollY: function(up)
+    {
+      var $body = $(this.el.ownerDocument.body);
+      var chartsPosition = this.$charts.position();
+      var fixedTopOffset = $body.find('.navbar-fixed-top').outerHeight() || 0;
+      var chartsTopPosition = chartsPosition.top - fixedTopOffset;
+      var scrollTop = $body.scrollTop();
+      var focusedIndex;
+
+      if (scrollTop < chartsTopPosition)
+      {
+        if (up)
+        {
+          return;
+        }
+
+        focusedIndex = 0;
+      }
+      else
+      {
+        focusedIndex = Math.round((scrollTop - chartsTopPosition) / CHART_HEIGHT) + (up ? -1 : 1);
+      }
+
+      $body.finish().animate({scrollTop: chartsTopPosition + focusedIndex * CHART_HEIGHT}, 250);
+
+      return false;
     },
 
     insertChartsViews: function(chartsViewToSkip, doInsertAt)
