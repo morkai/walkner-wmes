@@ -27,6 +27,7 @@ define([
 
     rootBreadcrumbKey: null,
     initialSettingsTab: 'quantityDone',
+    maxOrgUnitLevel: 'prodLine',
 
     settings: null,
     displayOptions: null,
@@ -86,10 +87,15 @@ define([
       },
       'mouseup .reports-drillingChart .highcharts-title': function(e)
       {
+        var orgUnit = this.getOrgUnitFromChartsElement(this.$(e.target).closest('.reports-drillingCharts'));
+
+        if (this.maxOrgUnitLevel === orgUnit.type)
+        {
+          return;
+        }
+
         if (e.button === 1 || (e.ctrlKey && e.button === 0))
         {
-          var orgUnit = this.getOrgUnitFromChartsElement(this.$(e.target).closest('.reports-drillingCharts'));
-
           if (orgUnit)
           {
             window.open(this.getReportUrl(orgUnit.type, orgUnit.id).replace(/^\//, '#'));
