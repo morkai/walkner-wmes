@@ -11,7 +11,8 @@
       'reasons',
       'clip',
       'dirIndir',
-      'effIneff'
+      'effIneff',
+      'hr'
     ].forEach(function(tab) { %>
     <a class="list-group-item" href="#reports;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('reports', 'settings:tab:' + tab) %></a>
     <% }) %>
@@ -28,5 +29,6 @@
     <% include settings/clip.ejs %>
     <% include settings/dirIndir.ejs %>
     <% include settings/effIneff.ejs %>
+    <% include settings/hr.ejs %>
   </div>
 </form>

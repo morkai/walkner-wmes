@@ -1,0 +1,39 @@
+<div class="well">
+  <form class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-series"><%- t('reports', 'options:series') %></label>
+      <select id="<%- idPrefix %>-series" name="series[]" class="form-control is-expandable" size="1" multiple>
+        <option value="quantityDone"><%- t('reports', 'hr:quantityDone') %></option>
+        <option value="total"><%- t('reports', 'hr:total') %></option>
+        <option value="direct"><%- t('reports', 'hr:direct') %></option>
+        <option value="indirect"><%- t('reports', 'hr:indirect') %></option>
+        <option value="dirIndir"><%- t('reports', 'hr:dirIndir') %></option>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-companies"><%- t('reports', 'options:companies') %></label>
+      <select id="<%- idPrefix %>-companies" name="companies[]" class="form-control is-expandable" size="1" multiple data-expanded-length="20">
+        <% companies.forEach(function(company) { %>
+        <option value="<%- company.id %>"><%= company.label %></option>
+        <% }) %>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-prodFunctions"><%- t('reports', 'options:prodFunctions') %></label>
+      <select id="<%- idPrefix %>-prodFunctions" name="prodFunctions[]" class="form-control is-expandable" size="1" multiple data-expanded-length="20">
+        <% prodFunctions.forEach(function(prodFunction) { %>
+        <option value="<%- prodFunction.id %>"><%= prodFunction.label %></option>
+        <% }) %>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-extremes"><%- t('reports', 'options:extremes') %></label>
+      <div id="<%- idPrefix %>-extremes" class="btn-group filter-btn-group" data-toggle="buttons">
+        <% ['none', 'siblings', 'parent'].forEach(function(extremes) { %>
+        <label class="btn btn-default">
+          <input type="radio" name="extremes" value="<%- extremes %>"> <%- t('reports', 'options:extremes:' + extremes) %>
+        </label>
+        <% }) %>
+      </div>
+    </div><div class="form-group filter-actions">
+      <hr><button id="<%- idPrefix %>-showFilter" type="button" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'options:filter') %></span></button>
+    </div>
+  </form>
+</div>

@@ -86,7 +86,7 @@
   border-right: 0;
 }
 .reports-chart {
-  height: 345px;
+  height: 248px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -139,7 +139,9 @@
   fill: #2A6496!important;
 }
 .reports-drillingCharts[data-orgUnitType="prodLine"] .reports-drillingChart .highcharts-title,
-.reports-drillingCharts[data-orgUnitType="prodLine"] .reports-drillingChart .highcharts-title:hover {
+.reports-drillingCharts[data-orgUnitType="prodLine"] .reports-drillingChart .highcharts-title:hover,
+.reports-drillingCharts[data-orgUnitType="subdivision"] .reports-5-totals .highcharts-title,
+.reports-drillingCharts[data-orgUnitType="subdivision"] .reports-5-totals .highcharts-title:hover {
   cursor: default;
   fill: #333!important;
 }

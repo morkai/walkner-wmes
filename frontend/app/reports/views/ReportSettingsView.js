@@ -127,7 +127,8 @@ define([
         'warehouse', 'warehouseRef',
         'absence', 'absenceRef',
         'dirIndir', 'dirIndirRef',
-        'eff', 'ineff'
+        'eff', 'ineff',
+        'hrTotal'
       ].forEach(function(metric)
       {
         colors[metric] = this.settings.getColor(metric);

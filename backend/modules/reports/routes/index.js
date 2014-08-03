@@ -11,6 +11,7 @@ var report1Route = require('./report1');
 var report2Route = require('./report2');
 var report3Route = require('./report3');
 var report4Route = require('./report4');
+var report5Route = require('./report5');
 
 module.exports = function setUpReportsRoutes(app, reportsModule)
 {
@@ -21,21 +22,15 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var canView = userModule.auth('REPORTS:VIEW');
   var canManage = userModule.auth('REPORTS:MANAGE');
 
-  express.get(
-    '/reports/1', canView, helpers.sendCachedReport, report1Route.bind(null, app, reportsModule)
-  );
+  express.get('/reports/1', canView, helpers.sendCachedReport, report1Route.bind(null, app, reportsModule));
 
-  express.get(
-    '/reports/2', canView, helpers.sendCachedReport, report2Route.bind(null, app, reportsModule)
-  );
+  express.get('/reports/2', canView, helpers.sendCachedReport, report2Route.bind(null, app, reportsModule));
 
-  express.get(
-    '/reports/3', canView, helpers.sendCachedReport, report3Route.bind(null, app, reportsModule)
-  );
+  express.get('/reports/3', canView, helpers.sendCachedReport, report3Route.bind(null, app, reportsModule));
 
-  express.get(
-    '/reports/4', canView, helpers.sendCachedReport, report4Route.bind(null, app, reportsModule)
-  );
+  express.get('/reports/4', canView, helpers.sendCachedReport, report4Route.bind(null, app, reportsModule));
+
+  express.get('/reports/5', canView, helpers.sendCachedReport, report5Route.bind(null, app, reportsModule));
 
   express.get(
     '/reports/settings',

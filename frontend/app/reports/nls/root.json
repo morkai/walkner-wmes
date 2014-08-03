@@ -91,6 +91,8 @@
     "filter:divisions": "Division",
     "filter:majorMalfunction": "Major malfunction [h]",
     "filter:options": "Show display options",
+    "filter:weekends": "Weekends",
+    "filter:weekends:title": "Should the report should include data from Saturdays and Sundays?",
 
     "options:filter": "Show filter options",
     "options:series": "Data series",
@@ -113,6 +115,7 @@
     "options:reasons": "Downtime reasons",
     "options:prodTasks": "Prod. tasks",
     "options:prodFunctions": "Prod. functions",
+    "options:companies": "Companies",
 
     "settings:tab:quantityDone": "Items",
     "settings:tab:efficiency": "Efficiency",
@@ -125,6 +128,7 @@
     "settings:tab:clip": "CLIP",
     "settings:tab:dirIndir": "DIRECT/INDIRECT",
     "settings:tab:effIneff": "Allocation of resources",
+    "settings:tab:hr": "HR",
     "settings:overall": "ML",
     "settings:prod": "Assembly",
     "settings:press": "Press",
@@ -145,7 +149,13 @@
     "settings:color:dirIndir": "D/I color",
     "settings:color:eff": "EFF color",
     "settings:color:ineff": "INEFF color",
+    "settings:color:hrTotal": "Total FTE color",
     "settings:coeff": "Coefficient",
+    "settings:hr:quantityDone": "Production color can be set from the <a href='#reports;settings?tab=quantityDone' data-tab='quantityDone'>Quantity done</a> tab.",
+    "settings:hr:directIndirect": "DIRECT and INDIRECT colors can be set from the <a href='#reports;settings?tab=dirIndir' data-tab='dirIndir'>DIRECT/INDIRECT</a> tab.",
+    "settings:hr:dirIndir": "IND/DIR color can be set from the <a href='#reports;settings?tab=effIneff' data-tab='effIneff'>Podział zasobów</a> tab (<em>D/I color</em>).",
+    "settings:hr:companies": "Colors for the companies tasks can be set from the <a href='#companies'>Dictionaries &gt; Companies</a> page.",
+    "settings:hr:prodFunctions": "Colors for the production functions can be set from the <a href='#prodFunctions'>Dictionaries &gt; Production functions</a> page.",
 
     "oee:table:loading": "Loading...",
     "oee:table:loadingFailed": "Loading failed :(",
@@ -190,6 +200,16 @@
     "operator:quantities:total": "Total",
     "operator:quantities:loss": "Losses",
 
+    "hr:quantityDone": "Production",
+    "hr:total": "Total",
+    "hr:direct": "DIRECT",
+    "hr:indirect": "INDIRECT",
+    "hr:dirIndir": "IND/DIR",
+    "hr:title:direct": "DIRECT",
+    "hr:title:indirect": "INDIRECT",
+    "hr:title:dirIndir": "INDIRECT/DIRECT",
+    "hr:title:details": "Details",
+
     "filenames:1:coeffs": "WMES_EffProd",
     "filenames:1:downtimesByAor": "WMES_Downtimes_AOR",
     "filenames:1:downtimesByReason": "WMES_Downtimes_Reasons",
@@ -201,7 +221,12 @@
     "filenames:4:effAndProd": "WMES_Operators_EffProd",
     "filenames:4:workTimes": "WMES_Operators_WorkTimes",
     "filenames:4:machineTimes": "WMES_Operators_MachineTimes",
-    "filenames:4:quantities": "WMES_Operators_Quantities"
+    "filenames:4:quantities": "WMES_Operators_Quantities",
+    "filenames:5:total": "WMES_HR_Totals",
+    "filenames:5:direct": "WMES_HR_Direct",
+    "filenames:5:indir": "WMES_HR_Indirect",
+    "filenames:5:dirIndir": "WMES_HR_DirIndir",
+    "filenames:5:details": "WMES_HR_Details"
   },
   "pl": true
 }

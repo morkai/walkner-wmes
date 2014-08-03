@@ -1,0 +1,13 @@
+<div class="panel-body" data-tab="hr">
+  <%- renderColorPicker({
+    idPrefix: idPrefix,
+    property: 'reports.hrTotal.color',
+    label: t('reports', 'settings:color:hrTotal'),
+    value: colors.hrTotal
+  }) %>
+  <p><%- t('reports', 'settings:hr:quantityDone') %></p>
+  <p><%- t('reports', 'settings:hr:directIndirect') %></p>
+  <p><%- t('reports', 'settings:hr:dirIndir') %></p>
+  <p><%- t('reports', 'settings:hr:companies') %></p>
+  <p><%- t('reports', 'settings:hr:prodFunctions') %></p>
+</div>

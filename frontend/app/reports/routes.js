@@ -64,6 +64,22 @@ define([
     });
   });
 
+  router.map('/reports/5', canView, function(req)
+  {
+    if (viewport.currentPage && viewport.currentPage.pageId === 'report5')
+    {
+      return viewport.currentPage.query.reset(req.query);
+    }
+
+    viewport.loadPage('app/reports/pages/Report5Page', function(Report5Page)
+    {
+      return new Report5Page({
+        query: req.query,
+        displayOptions: req.fragment
+      });
+    });
+  });
+
   router.map('/reports;settings', user.auth('REPORTS:MANAGE'), function(req)
   {
     viewport.loadPage('app/reports/pages/ReportSettingsPage', function(ReportSettingsPage)

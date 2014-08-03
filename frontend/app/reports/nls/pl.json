@@ -6,11 +6,13 @@
   "BREADCRUMBS:2": "CLIP",
   "BREADCRUMBS:3": "Wykorzystanie zasobów",
   "BREADCRUMBS:4": "Operatorzy",
+  "BREADCRUMBS:5": "HR",
 
   "PAGE_ACTION:settings": "Zmień ustawienia",
 
   "1:pageTitle": "Wskaźniki",
   "2:pageTitle": "CLIP",
+  "5:pageTitle": "HR",
   "charts:title:overall": "ML",
 
   "coeffs:quantityDone": "Sztuki",
@@ -90,6 +92,8 @@
   "filter:divisions": "Wydział",
   "filter:majorMalfunction": "Poważna awaria [h]",
   "filter:options": "Pokaż opcje wyświetlania",
+  "filter:weekends": "Weekendy",
+  "filter:weekends:title": "Czy w raporcie mają być zawarte dane z sobót i niedziel?",
 
   "options:filter": "Pokaż opcje filtrowania",
   "options:series": "Serie danych",
@@ -112,6 +116,7 @@
   "options:reasons": "Powody przestojów",
   "options:prodTasks": "Zadania produkcyjne",
   "options:prodFunctions": "Funkcje na produkcji",
+  "options:companies": "Firmy",
 
   "settings:tab:quantityDone": "Sztuki",
   "settings:tab:efficiency": "Wydajność",
@@ -124,11 +129,12 @@
   "settings:tab:clip": "CLIP",
   "settings:tab:dirIndir": "DIRECT/INDIRECT",
   "settings:tab:effIneff": "Podział zasobów",
+  "settings:tab:hr": "HR",
   "settings:overall": "ML",
   "settings:prod": "Montaż",
   "settings:press": "Tłocznia",
-  "settings:aors": "Kolory i wartości referencyjne dla obszarów odpowiedzialności można ustawiać na stronie <a href='#aors'>Słowniki &gt; Obszary odpowiedzialności</a>.",
-  "settings:reasons": "Kolory i wartości referencyjne dla powodów przestojów można ustawiać na stronie <a href='#downtimeReasons'>Słowniki &gt; Powody przestojów.</a>",
+  "settings:aors": "Kolory i wartości referencyjne dla obszarów odpowiedzialności można ustawić na stronie <a href='#aors'>Słowniki &gt; Obszary odpowiedzialności</a>.",
+  "settings:reasons": "Kolory i wartości referencyjne dla powodów przestojów można ustawić na stronie <a href='#downtimeReasons'>Słowniki &gt; Powody przestojów.</a>",
   "settings:prodTasks": "Kolory wartości zadań produkcyjnych można ustawiać na stronie <a href='#prodTasks'>Słowniki &gt; Zadania produkcyjne</a>.",
   "settings:absence": "Zadanie produkcyjne absencji",
   "settings:metricRefs": "Wartości referencyjne",
@@ -144,7 +150,13 @@
   "settings:color:dirIndir": "Kolor D/I",
   "settings:color:eff": "Kolor EFF",
   "settings:color:ineff": "Kolor INEFF",
+  "settings:color:hrTotal": "Kolor sumy FTE",
   "settings:coeff": "Współczynnik",
+  "settings:hr:quantityDone": "Kolor wartości Produkcja można ustawić w zakładce <a href='#reports;settings?tab=quantityDone' data-tab='quantityDone'>Sztuki</a>.",
+  "settings:hr:directIndirect": "Kolor wartości DIRECT oraz INDIRECT można ustawić w zakładce <a href='#reports;settings?tab=dirIndir' data-tab='dirIndir'>DIRECT/INDIRECT</a>.",
+  "settings:hr:dirIndir": "Kolor wartości IND/DIR można ustawić w zakładce <a href='#reports;settings?tab=effIneff' data-tab='effIneff'>Podział zasobów</a> (<em>Kolor D/I</em>).",
+  "settings:hr:companies": "Kolory wartości firm można ustawiać na stronie <a href='#companies'>Słowniki &gt; Firmy</a>.",
+  "settings:hr:prodFunctions": "Kolory wartości funkcji na produkcji można ustawiać na stronie <a href='#prodFunctions'>Słowniki &gt; Funkcje na produkcji</a>.",
 
   "oee:table:loading": "Ładowanie...",
   "oee:table:loadingFailed": "Ładowanie nie powiodło się :(",
@@ -189,6 +201,16 @@
   "operator:quantities:total": "Suma",
   "operator:quantities:loss": "Straty",
 
+  "hr:quantityDone": "Produkcja",
+  "hr:total": "Suma",
+  "hr:direct": "DIRECT",
+  "hr:indirect": "INDIRECT",
+  "hr:dirIndir": "IND/DIR",
+  "hr:title:direct": "DIRECT",
+  "hr:title:indirect": "INDIRECT",
+  "hr:title:dirIndir": "INDIRECT/DIRECT",
+  "hr:title:details": "Szczegóły",
+
   "filenames:1:coeffs": "WMES_Wskazniki_WydProd",
   "filenames:1:downtimesByAor": "WMES_Przestoje_ObszOdp",
   "filenames:1:downtimesByReason": "WMES_Przestoje_Powody",
@@ -200,5 +222,10 @@
   "filenames:4:effAndProd": "WMES_Operatorzy_WydProd",
   "filenames:4:workTimes": "WMES_Operatorzy_CzasPracy",
   "filenames:4:machineTimes": "WMES_Operatorzy_CzasPrzezbr",
-  "filenames:4:quantities": "WMES_Operatorzy_WykIlosci"
+  "filenames:4:quantities": "WMES_Operatorzy_WykIlosci",
+  "filenames:5:total": "WMES_HR_Sumy",
+  "filenames:5:direct": "WMES_HR_Direct",
+  "filenames:5:indir": "WMES_HR_Indirect",
+  "filenames:5:dirIndir": "WMES_HR_DirIndir",
+  "filenames:5:details": "WMES_HR_Szczegoly"
 }
