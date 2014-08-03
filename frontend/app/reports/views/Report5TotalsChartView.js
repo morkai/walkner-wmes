@@ -96,7 +96,8 @@ define([
         series.push(this.createFteSeries(
           company.id,
           chartData.byCompany ? chartData.byCompany[company.id] : null,
-          company.getLabel()
+          company.getLabel(),
+          company.get('color')
         ));
       }, this);
 
