@@ -483,6 +483,7 @@ define([
     {
       var $charts = this.$charts;
       var chartsContainerEl = $charts[0];
+      var scrollTop = chartsContainerEl.ownerDocument.body.scrollTop;
 
       $charts.toggleClass('is-fullscreen');
 
@@ -494,7 +495,7 @@ define([
         height = window.innerHeight - $charts.position().top - 10 + 'px';
 
         $charts.data('scrollLeft', chartsContainerEl.scrollLeft);
-        $charts.data('scrollTop', chartsContainerEl.ownerDocument.body.scrollTop);
+        $charts.data('scrollTop', scrollTop);
 
         chartsContainerEl.scrollLeft = 0;
       }
