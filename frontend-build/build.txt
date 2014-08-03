@@ -11,6 +11,10 @@ app/core/assets/form.css
 ----------------
 app/core/assets/form.css
 
+app/core/assets/highcharts.css
+----------------
+app/core/assets/highcharts.css
+
 app/core/assets/highlight.css
 ----------------
 app/core/assets/highlight.css
@@ -31,6 +35,7 @@ app/core/assets/./logInForm.css
 app/core/assets/./filter.css
 app/core/assets/./dataTables.css
 app/core/assets/./highlight.css
+app/core/assets/./highcharts.css
 app/core/assets/main.css
 
 app/core/assets/modal.css

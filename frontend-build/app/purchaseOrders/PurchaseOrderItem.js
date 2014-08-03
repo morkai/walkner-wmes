@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Model"],function(e){return e.extend({defaults:{},serialize:function(){return this.toJSON()}})});
+define(["../core/Model"],function(e){var i={completed:"success",delivered:"info",delivering:"warning",waiting:""};return e.extend({defaults:{},serialize:function(){var e=this.toJSON();return e.status=e.completed?"completed":e.delivered?"delivered":e.deliveredQty>0?"delivering":"waiting",e.rowClassName=i[e.status],e}})});
