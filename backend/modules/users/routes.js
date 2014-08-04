@@ -108,7 +108,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         delete user.password;
 
         user.loggedIn = true;
-        user.ipAddress = req.socket.remoteAddress;
+        user.ipAddress = userModule.getRealIp({}, req);
         user.local = userModule.isLocalIpAddress(user.ipAddress);
 
         req.session.user = user;
