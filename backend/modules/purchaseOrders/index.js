@@ -9,7 +9,11 @@ var setUpRoutes = require('./routes');
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
-  userId: 'user'
+  httpServerId: 'httpServer',
+  userId: 'user',
+  zintExe: 'zint',
+  wkhtmltopdfExe: 'wkhtmltopdf',
+  pdfStoragePath: './'
 };
 
 exports.start = function startPurchaseOrdersModule(app, module)
@@ -18,7 +22,8 @@ exports.start = function startPurchaseOrdersModule(app, module)
     [
       module.config.mongooseId,
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.httpServerId
     ],
     setUpRoutes.bind(null, app, module)
   );

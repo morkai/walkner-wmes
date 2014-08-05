@@ -69,20 +69,44 @@
           <th><%- t('purchaseOrders', 'PROPERTY:item.nc12') %></th>
           <th><%- t('purchaseOrders', 'PROPERTY:item.unit') %></th>
           <th><%- t('purchaseOrders', 'PROPERTY:item.qty') %></th>
-          <th><%- t('purchaseOrders', 'PROPERTY:item.deliveredQty') %></th>
           <th><%- t('purchaseOrders', 'PROPERTY:item.name') %></th>
+          <% if (model.open) {%>
+          <th><%- t('purchaseOrders', 'PROPERTY:item.schedule.date') %></th>
+          <th><%- t('purchaseOrders', 'PROPERTY:item.schedule.qty') %></th>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          <% } %>
         </tr>
       </thead>
       <tbody>
-        <% model.items.forEach(function(item) { %>
-        <tr class="pos-details-item <%- item.rowClassName %>" tabindex="0">
-          <td><%- item._id %></td>
-          <td><%- item.nc12 %></td>
-          <td><%- item.unit %></td>
-          <td class="pos-details-item-qty"><%- item.qty.toLocaleString() %></td>
-          <td class="pos-details-item-qty"><%- item.deliveredQty.toLocaleString() %></td>
-          <td class="pos-details-item-name"><%= item.name %></td>
+        <% model.items.forEach(function(item, itemIndex) { %>
+        <tr>
+          <td colspan="999" class="pos-details-item-separator"></td>
         </tr>
+        <tr class="pos-details-item is-<%- item.status %>" data-schedule-length="<%- item.schedule.length %>">
+          <td rowspan="<%- item.rowSpan %>"><%- item._id %></td>
+          <td rowspan="<%- item.rowSpan %>"><%- item.nc12 %></td>
+          <td rowspan="<%- item.rowSpan %>"><%- item.unit %></td>
+          <td rowspan="<%- item.rowSpan %>" class="pos-details-item-qty"><%- item.qty.toLocaleString() %></td>
+          <td rowspan="<%- item.rowSpan %>" class="pos-details-item-name"><%= item.name %></td>
+          <% if (model.open) { %>
+          <td class="pos-details-item-schedule-date"><%- item.schedule.length ? time.format(item.schedule[0].date, 'YYYY-MM-DD') : '' %></td>
+          <td class="pos-details-item-schedule-qty"><%- item.schedule.length ? item.schedule[0].qty.toLocaleString() : '' %></td>
+          <td rowspan="<%- item.rowSpan %>" class="actions">
+            <% if (item.schedule.length) { %>
+            <button type="button" data-order="<%- model._id %>" data-item="<%- item._id %>" class="btn btn-lg btn-default action-print"><i class="fa fa-print"></i></button>
+            <% } %>
+          </td>
+          <% } %>
+        </tr>
+        <% if (model.open) { %>
+        <% item.schedule.forEach(function(schedule, i) { %>
+        <% if (i === 0) return %>
+        <tr class="pos-details-item-schedule is-<%- item.status %>" data-item-index="<%- itemIndex %>">
+          <td class="pos-details-item-schedule-date"><%- time.format(schedule.date, 'YYYY-MM-DD') %></td>
+          <td class="pos-details-item-schedule-qty"><%- schedule.qty.toLocaleString() %></td>
+        </tr>
+        <% }) %>
+        <% } %>
         <% }) %>
       </tbody>
     </table>
@@ -95,4 +119,25 @@
       <pre><code><%- JSON.stringify(model.changes, null, 4) %></code></pre>
     </div>
   </div>
+  <form id="<%- idPrefix %>-printDialog" class="well pos-printDialog" autocomplete="off">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-shippingNo"><%- t('purchaseOrders', 'printDialog:shippingNo') %></label>
+      <input id="<%- idPrefix %>-shippingNo" name="shippingNo" class="form-control" type="text">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-quantity"><i id="<%- idPrefix %>-quantityHelp" class="fa fa-info-circle"></i> <%- t('purchaseOrders', 'printDialog:quantity') %></label>
+      <input id="<%- idPrefix %>-quantity" name="quantity" class="form-control" type="text" required>
+    </div>
+    <div class="form-group">
+      <div id="<%- idPrefix %>-qr" class="btn-group filter-btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+          <input type="checkbox" name="qr" value="1"> <%- t('purchaseOrders', 'printDialog:qr') %>
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <button id="<%- idPrefix %>-print" class="btn btn-primary"><i class="fa fa-print"></i></button>
+    </div>
+  </form>
+  <iframe id="<%- idPrefix %>-pdfPreview"></iframe>
 </div>

@@ -1,19 +1,69 @@
 .pos-list .list-item {
   cursor: pointer;
 }
-.pos-details-changes pre {
-  max-height: 390px;
-  overflow: auto;
-}
 .pos-details-item > td {
+  font-family: Consolas, Menlo, Monaco, monospace;
   width: 1%;
   white-space: nowrap;
 }
 .pos-details-item > .pos-details-item-name {
+  font-family: inherit;
   width: auto;
   white-space: normal;
 }
-.pos-details-item-qty {
-  font-family: Consolas, Menlo, Monaco, monospace;
+.pos-details-item-qty,
+.pos-details-item-schedule-qty {
   text-align: right;
+}
+.pos-details-item.is-last > td {
+  border-bottom: 0;
+}
+.pos-details-item-separator {
+  padding: 0!important;
+  height: 5px;
+  background-color: #ddd!important;
+}
+.pos-details-item.is-completed > td {
+  background-color: #DFF0D8!important;
+}
+.pos-details-items .is-hovered {
+  background-color: #FFFFD6;
+}
+.pos-details-item > .actions {
+  position: relative;
+}
+.pos-printDialog {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  right: -1px;
+  height: 89px;
+  z-index: 1;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.pos-printDialog .form-group {
+  display: inline-block;
+  margin-bottom: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  vertical-align: bottom;
+}
+.pos-printDialog input {
+  font-family: Consolas, Menlo, Monaco, monospace;
+  width: 200px;
+}
+.pos-printDialog .fa-info-circle {
+  cursor: help;
+}
+.pos-printDialog .popover-content {
+  font-weight: normal;
+  text-align: justify;
+}
+.pos-details-changes pre {
+  max-height: 390px;
+  overflow: auto;
+}
+.pos-details > iframe {
+  position: absolute;
+  top: 0;
+  left: -1000px;
 }

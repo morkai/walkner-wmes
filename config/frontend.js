@@ -209,3 +209,7 @@ exports.xiconf = {
   zipStoragePath: __dirname + '/../data/xiconf',
   featureDbPath: __dirname + '/../data/xiconf-features'
 };
+
+exports.purchaseOrders = {
+  pdfStoragePath: __dirname + '/../data/pos-labels'
+};

@@ -36,6 +36,13 @@ define([
 
       obj.rowClassName = STATUS_TO_CLASS[obj.status];
 
+      if (obj.status === 'delivered' || obj.status === 'completed')
+      {
+        obj.schedule = [];
+      }
+
+      obj.rowSpan = obj.schedule.length;
+
       return obj;
     }
 

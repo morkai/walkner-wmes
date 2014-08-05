@@ -25,11 +25,18 @@
   "PROPERTY:item.nc12": "12NC",
   "PROPERTY:item.name": "Nazwa",
   "PROPERTY:item.deliveredQty": "Ilość odebrana",
+  "PROPERTY:item.schedule.date": "Data dostawy",
+  "PROPERTY:item.schedule.qty": "Ilość dostawy",
 
   "filter:from": "Dostawa od",
   "filter:to": "Dostawa do",
   "filter:status": "Status",
   "filter:status:open": "Otwarte",
   "filter:status:closed": "Zamknięte",
-  "filter:submit": "Filtruj zamówienia"
+  "filter:submit": "Filtruj zamówienia",
+
+  "printDialog:shippingNo": "Nr listu przewozowego",
+  "printDialog:quantity": "Ilość",
+  "printDialog:quantityHelp": "Liczba stron i ilość sztuk jaka ma występować na każdej stronie. Przykładowe, prawidłowe wartości: <code>100</code>, <code>2x50</code>, <code>1 1</code>, <code>3x15 10 2x5</code>, <code>100 200 50</code>.",
+  "printDialog:qr": "QR"
 }
