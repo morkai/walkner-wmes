@@ -6,29 +6,31 @@ define([
   'underscore',
   'app/ZeroClipboard',
   'app/i18n',
-  'app/data/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/views/FormView',
+  'app/data/views/OrgUnitDropdownsView',
   'app/data/aors',
   'app/data/companies',
   'app/data/divisions',
   'app/data/subdivisions',
   'app/data/prodFunctions',
   'app/data/privileges',
+  'app/vendors/util/setUpVendorSelect2',
   'app/users/templates/form'
 ], function(
   _,
   ZeroClipboard,
   t,
-  OrgUnitDropdownsView,
   Model,
   FormView,
+  OrgUnitDropdownsView,
   aors,
   companies,
   divisions,
   subdivisions,
   prodFunctions,
   privileges,
+  setUpVendorSelect2,
   formTemplate
 ) {
   'use strict';
@@ -209,55 +211,12 @@ define([
 
     setUpVendorSelect2: function()
     {
-      var $vendor = this.$id('vendor').select2({
-        width: '100%',
-        allowClear: true,
-        minimumInputLength: 3,
-        placeholder: t('users', 'NO_DATA:vendor'),
-        ajax: {
-          cache: true,
-          quietMillis: 300,
-          url: function(term)
-          {
-            term = term.trim();
-
-            var property = /^[0-9]+$/.test(term) ? '_id' : 'name';
-
-            term = encodeURIComponent(term);
-
-            return '/vendors'
-              + '?sort(' + property + ')'
-              + '&limit(50)&regex(' + property + ',string:' + term + ',i)';
-          },
-          results: function(data)
-          {
-            return {
-              results: (data.collection || []).map(vendorToSelect2)
-            };
-          }
-        }
-      });
-
+      var $vendor = setUpVendorSelect2(this.$id('vendor'), {placeholder: t('users', 'NO_DATA:vendor')});
       var vendor = this.model.get('vendor');
 
       if (vendor && vendor._id)
       {
-        $vendor.select2('data', vendorToSelect2(vendor));
-      }
-
-      function vendorToSelect2(vendor)
-      {
-        var text = vendor._id;
-
-        if (vendor.name)
-        {
-          text += ': ' + vendor.name;
-        }
-
-        return {
-          id: vendor._id,
-          text: text
-        };
+        $vendor.select2('data', $vendor.prepareData(vendor));
       }
     },
 

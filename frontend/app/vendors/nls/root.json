@@ -29,7 +29,9 @@
     "ACTION_FORM:BUTTON:delete": "Delete vendor",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen vendor?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> vendor?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the vendor :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the vendor :-(",
+
+    "select2:placeholder": "Any vendor"
   },
   "pl": true
 }
