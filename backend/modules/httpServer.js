@@ -34,7 +34,7 @@ exports.start = function startHttpServerModule(app, module, done)
 
   serverDomain.run(function()
   {
-    app.httpServer = http.createServer(function onRequest(req, res)
+    module.server = http.createServer(function onRequest(req, res)
     {
       var reqDomain = domain.create();
 
@@ -64,11 +64,11 @@ exports.start = function startHttpServerModule(app, module, done)
       }
     });
 
-    app.httpServer.once('error', onFirstServerError);
+    module.server.once('error', onFirstServerError);
 
-    app.httpServer.listen(module.config.port, module.config.host, function()
+    module.server.listen(module.config.port, module.config.host, function()
     {
-      app.httpServer.removeListener('error', onFirstServerError);
+      module.server.removeListener('error', onFirstServerError);
 
       module.debug("Listening on port %d...", module.config.port);
 

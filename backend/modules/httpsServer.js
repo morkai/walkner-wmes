@@ -42,7 +42,7 @@ exports.start = function startHttpServerModule(app, module, done)
       cert: fs.readFileSync(module.config.cert)
     };
 
-    app.httpsServer = https.createServer(options, function onRequest(req, res)
+    module.server = https.createServer(options, function onRequest(req, res)
     {
       var reqDomain = domain.create();
 
@@ -72,11 +72,11 @@ exports.start = function startHttpServerModule(app, module, done)
       }
     });
 
-    app.httpsServer.once('error', onFirstServerError);
+    module.server.once('error', onFirstServerError);
 
-    app.httpsServer.listen(module.config.port, module.config.host, function()
+    module.server.listen(module.config.port, module.config.host, function()
     {
-      app.httpsServer.removeListener('error', onFirstServerError);
+      module.server.removeListener('error', onFirstServerError);
 
       module.debug("Listening on port %d...", module.config.port);
 

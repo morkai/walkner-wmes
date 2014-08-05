@@ -27,12 +27,12 @@ exports.start = function startIoModule(app, module)
 
   if (httpServer)
   {
-    multiServer.addServer(httpServer);
+    multiServer.addServer(httpServer.server);
   }
 
   if (httpsServer)
   {
-    multiServer.addServer(httpsServer);
+    multiServer.addServer(httpsServer.server);
   }
 
   module = app[module.name] = lodash.merge(
