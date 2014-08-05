@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../time',
   '../core/Collection',
   './PurchaseOrder'
 ], function(
+  time,
   Collection,
   PurchaseOrder
 ) {
@@ -17,6 +19,8 @@ define([
 
     rqlQuery: function(rql)
     {
+      var tomorrow = time.getMoment().utc().hours(0).minutes(0).seconds(0).milliseconds(0).add('day', 1).valueOf();
+
       return rql.Query.fromObject({
         fields: {
           changes: 0
@@ -29,6 +33,7 @@ define([
           name: 'and',
           args: [
             {name: 'eq', args: ['open', true]},
+            {name: 'lt', args: ['items.schedule.date', tomorrow]},
             {name: 'populate', args: ['vendor']}
           ]
         }
