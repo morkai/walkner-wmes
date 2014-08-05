@@ -1,5 +1,5 @@
 <div class="pos-details">
-  <div class="panel panel-primary pos-details-props">
+  <div class="panel panel-<%- model.open ? 'primary' : 'success'%> pos-details-props">
     <div class="panel-heading">
       <%- t('purchaseOrders', 'panel:details:props') %>
     </div>
@@ -59,8 +59,20 @@
     </div>
   </div>
   <div class="panel panel-default pos-details-items">
-    <div class="panel-heading">
+    <div class="panel-heading is-with-actions">
       <%- t('purchaseOrders', 'panel:details:items') %>
+      <div class="panel-actions">
+        <% if (model.open) { %>
+        <div id="<%- idPrefix %>-itemStatus" class="btn-group filter-btn-group" data-toggle="buttons">
+          <label class="btn btn-default active">
+            <input type="checkbox" name="status[]" value="open" checked> <%- t('purchaseOrders', 'filter:status:open') %>
+          </label>
+          <label class="btn btn-default <%- model.open ? '' : 'active' %>">
+            <input type="checkbox" name="status[]" value="closed" <%- model.open ? '' : 'checked' %>> <%- t('purchaseOrders', 'filter:status:closed') %>
+          </label>
+        </div>
+        <% } %>
+      </div>
     </div>
     <table class="table table-condensed table-bordered table-hover">
       <thead>
@@ -79,7 +91,7 @@
       </thead>
       <tbody>
         <% model.items.forEach(function(item, itemIndex) { %>
-        <tr>
+        <tr class="is-<%- item.status %>">
           <td colspan="999" class="pos-details-item-separator"></td>
         </tr>
         <tr class="pos-details-item is-<%- item.status %>" data-schedule-length="<%- item.schedule.length %>">

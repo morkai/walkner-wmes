@@ -27,7 +27,8 @@ define([
       'mouseover .pos-details-item-schedule': 'highlightItemRow',
       'mouseout .pos-details-item-schedule': 'highlightItemRow',
       'click .action-print': 'onPrintActionClick',
-      'submit .pos-printDialog': 'onPrintDialogSubmit'
+      'submit .pos-printDialog': 'onPrintDialogSubmit',
+      'change input[name="status[]"]': 'onItemStatusFilterChange'
     },
 
     initialize: function()
@@ -63,6 +64,7 @@ define([
       if (this.model.get('open'))
       {
         this.fixLastItemRow();
+        this.hideCompletedItems();
       }
 
       this.$printDialog = this.$id('printDialog');
@@ -95,6 +97,11 @@ define([
       }
 
       this.$('.pos-details-item').last().addClass('is-last');
+    },
+
+    hideCompletedItems: function()
+    {
+      this.$('.is-completed').hide();
     },
 
     highlightItemScheduleRows: function(e)
@@ -307,6 +314,14 @@ define([
         pdfPreviewEl.contentWindow.focus();
         pdfPreviewEl.contentWindow.print();
       }
+    },
+
+    onItemStatusFilterChange: function(e)
+    {
+      var selector = e.currentTarget.value === 'closed' ? '.is-completed' : '.is-waiting';
+      var state = e.currentTarget.checked;
+
+      this.$(selector).toggle(state);
     }
 
   });
