@@ -28,6 +28,7 @@
   "PROPERTY:item.schedule.date": "Data dostawy",
   "PROPERTY:item.schedule.qty": "Ilość dostawy",
 
+  "filter:vendor": "Dostawca",
   "filter:from": "Dostawa od",
   "filter:to": "Dostawa do",
   "filter:status": "Status",

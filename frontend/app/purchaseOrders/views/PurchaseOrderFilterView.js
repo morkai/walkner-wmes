@@ -3,12 +3,16 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/user',
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
+  'app/vendors/util/setUpVendorSelect2',
   'app/purchaseOrders/templates/filter'
 ], function(
+  user,
   FilterView,
   fixTimeRange,
+  setUpVendorSelect2,
   filterTemplate
 ) {
   'use strict';
@@ -19,6 +23,7 @@ define([
 
     defaultFormData: {
       _id: '',
+      vendor: '',
       'items.nc12': '',
       from: '',
       to: '',
@@ -29,6 +34,10 @@ define([
       '_id': function(propertyName, term, formData)
       {
         formData[propertyName] = typeof term.args[1] === 'string' ? term.args[1].replace(/[^0-9]+/g, '') : '';
+      },
+      'vendor': function(propertyName, term, formData)
+      {
+        formData.vendor = term.args[1];
       },
       'open': function(propertyName, term, formData)
       {
@@ -45,6 +54,18 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
+      if (!user.data.vendor)
+      {
+        var vendor = this.$id('vendor').val();
+
+        if (vendor)
+        {
+          vendor = {id: vendor, text: vendor};
+        }
+
+        setUpVendorSelect2(this.$id('vendor'), {width: 250}).select2('data', vendor);
+      }
+
       this.toggleButtonGroup('status');
     },
 
@@ -52,6 +73,12 @@ define([
     {
       var timeRange = fixTimeRange.fromView(this);
       var status = this.getStatus();
+      var vendor = this.$id('vendor').val();
+
+      if (vendor)
+      {
+        selector.push({name: 'eq', args: ['vendor', vendor]});
+      }
 
       if (timeRange.from)
       {
