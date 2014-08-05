@@ -77,7 +77,7 @@ exports.start = function startUserModule(app, module)
    */
   function isLocalIpAddress(ipAddress)
   {
-    return localAddresses.indexOf(ipAddress.replace(/\.[0-9]+$/, '')) !== -1;
+    return ipAddress === '127.0.0.1' || localAddresses.indexOf(ipAddress.replace(/\.[0-9]+$/, '')) !== -1;
   }
 
   /**
@@ -98,6 +98,13 @@ exports.start = function startUserModule(app, module)
   function isAllowedTo(user, anyPrivileges)
   {
     if (user.super)
+    {
+      return true;
+    }
+
+    if (anyPrivileges.length
+      && user.local
+      && anyPrivileges[0].some(function(privilege) { return privilege === 'LOCAL'; }))
     {
       return true;
     }
