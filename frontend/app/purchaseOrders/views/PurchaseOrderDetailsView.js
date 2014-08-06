@@ -77,6 +77,8 @@ define([
         html: true,
         content: t('purchaseOrders', 'printDialog:quantityHelp')
       });
+
+      this.$('.pos-details-change').last().addClass('is-last');
     },
 
     fixLastItemRow: function()

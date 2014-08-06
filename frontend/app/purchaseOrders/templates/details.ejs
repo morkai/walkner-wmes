@@ -74,7 +74,7 @@
         <% } %>
       </div>
     </div>
-    <table class="table table-condensed table-bordered table-hover">
+    <table class="table table-bordered table-hover">
       <thead>
         <tr>
           <th><%- t('purchaseOrders', 'PROPERTY:item._id') %></th>
@@ -92,7 +92,7 @@
       <tbody>
         <% model.items.forEach(function(item, itemIndex) { %>
         <tr class="is-<%- item.status %>">
-          <td colspan="999" class="pos-details-item-separator"></td>
+          <td colspan="999" class="pos-details-rowSeparator"></td>
         </tr>
         <tr class="pos-details-item is-<%- item.status %>" data-schedule-length="<%- item.schedule.length %>">
           <td rowspan="<%- item.rowSpan %>"><%- item._id %></td>
@@ -127,9 +127,37 @@
     <div class="panel-heading">
       <%- t('purchaseOrders', 'panel:details:changes') %>
     </div>
-    <div class="panel-body">
-      <pre><code><%- JSON.stringify(model.changes, null, 4) %></code></pre>
-    </div>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th><%- t('purchaseOrders', 'PROPERTY:changes.date') %></th>
+          <th><%- t('purchaseOrders', 'PROPERTY:changes.property') %></th>
+          <th><%- t('purchaseOrders', 'PROPERTY:changes.oldValue') %></th>
+          <th><%- t('purchaseOrders', 'PROPERTY:changes.newValue') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% model.changes.forEach(function(changes) { %>
+        <tr>
+          <td colspan="999" class="pos-details-rowSeparator"></td>
+        </tr>
+        <tr class="pos-details-change">
+          <td rowspan="<%- changes.properties.length %>" class="pos-details-changes-date"><%- changes.date %></td>
+          <td><%- changes.properties[0].name %></td>
+          <td><%- changes.properties[0].oldValue %></td>
+          <td class="pos-details-change-value" data-property="<%- changes.properties[0].key %>"><%- changes.properties[0].newValue %></td>
+        </tr>
+        <% changes.properties.forEach(function(change, i) { %>
+        <% if (i === 0) return %>
+        <tr>
+          <td><%- change.name %></td>
+          <td><%- change.oldValue %></td>
+          <td class="pos-details-change-value" data-property="<%- change.key %>"><%- change.newValue %></td>
+        </tr>
+        <% }) %>
+        <% }) %>
+      </tbody>
+    </table>
   </div>
   <form id="<%- idPrefix %>-printDialog" class="well pos-printDialog" autocomplete="off">
     <div class="form-group">

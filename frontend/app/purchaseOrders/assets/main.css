@@ -15,10 +15,10 @@
 .pos-details-item-schedule-qty {
   text-align: right;
 }
-.pos-details-item.is-last > td {
+.pos-details .is-last > td {
   border-bottom: 0;
 }
-.pos-details-item-separator {
+.pos-details-rowSeparator {
   padding: 0!important;
   height: 5px;
   background-color: #ddd!important;
@@ -58,9 +58,23 @@
   font-weight: normal;
   text-align: justify;
 }
-.pos-details-changes pre {
-  max-height: 390px;
-  overflow: auto;
+.pos-details-changes .table tbody tr td {
+  vertical-align: top;
+}
+.pos-details-changes ul {
+  padding-left: 0;
+  list-style-type: square;
+  list-style-position: inside;
+}
+.pos-details-change-value[data-property="item"] {
+  padding: 0;
+}
+.pos-details-change-value[data-property="item"] > .table > tbody > tr > th {
+  border-top: 0;
+}
+.pos-details-change-value[data-property="item"] > .table > tbody > tr > td {
+  padding-top: 0;
+  border-top: 0;
 }
 .pos-details > iframe {
   position: absolute;

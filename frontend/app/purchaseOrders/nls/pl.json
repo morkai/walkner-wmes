@@ -2,6 +2,7 @@
   "BREADCRUMBS:browse": "Zamówienia",
 
   "MSG:LOADING_FAILURE": "Ładowanie zamówień nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zamówienia nie powiodło się :(",
 
   "panel:details:props": "Szczegóły zamówienia",
   "panel:details:items": "Pozycje zamówienia",
@@ -19,14 +20,24 @@
   "PROPERTY:importedAt": "Czas importu",
   "PROPERTY:createdAt": "Czas utworzenia",
   "PROPERTY:updatedAt": "Czas aktualizacji",
+  "PROPERTY:open": "Otwarte?",
+  "PROPERTY:item": "Poz. {itemNo}",
   "PROPERTY:item._id": "Nr",
   "PROPERTY:item.qty": "Ilość całkowita",
   "PROPERTY:item.unit": "J.&nbsp;m.",
   "PROPERTY:item.nc12": "12NC",
   "PROPERTY:item.name": "Nazwa",
   "PROPERTY:item.deliveredQty": "Ilość odebrana",
+  "PROPERTY:item.schedule": "Harmonogram dostaw",
   "PROPERTY:item.schedule.date": "Data dostawy",
   "PROPERTY:item.schedule.qty": "Ilość dostawy",
+  "PROPERTY:item.completed": "Zakończona?",
+  "PROPERTY:changes.date": "Czas zmiany",
+  "PROPERTY:changes.property": "Atrybut",
+  "PROPERTY:changes.oldValue": "Stara wartość",
+  "PROPERTY:changes.newValue": "Nowa wartość",
+
+  "changes:itemProp": "{item}: <em>{prop}</em>",
 
   "filter:vendor": "Dostawca",
   "filter:from": "Dostawa od",
