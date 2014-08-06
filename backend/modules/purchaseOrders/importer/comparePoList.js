@@ -294,7 +294,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
     Object.keys(newItemMap).forEach(function(newItemId)
     {
       changes['items/' + newItemId] = [null, newItemMap[newItemId]];
-      oldItems[newItemId] = newItemMap[newItemId];
+      oldItems.push(newItemMap[newItemId]);
 
       changed = true;
     });
