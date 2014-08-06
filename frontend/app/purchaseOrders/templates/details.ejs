@@ -137,11 +137,16 @@
         </tr>
       </thead>
       <tbody>
-        <% model.changes.forEach(function(changes) { %>
+        <% model.changes.forEach(function(changes, i) { %>
+        <% if (i === 1 && model.changes.length > 3) { %>
         <tr>
+          <td colspan="999" class="pos-details-changes-more"><%- t('purchaseOrders', 'changes:more') %></td>
+        </tr>
+        <% } %>
+        <tr class="<%- changes.visible ? '' : 'hidden'%>">
           <td colspan="999" class="pos-details-rowSeparator"></td>
         </tr>
-        <tr class="pos-details-change">
+        <tr class="pos-details-change <%- changes.visible ? '' : 'hidden'%>">
           <td rowspan="<%- changes.properties.length %>" class="pos-details-changes-date"><%- changes.date %></td>
           <td><%- changes.properties[0].name %></td>
           <td><%- changes.properties[0].oldValue %></td>
@@ -149,7 +154,7 @@
         </tr>
         <% changes.properties.forEach(function(change, i) { %>
         <% if (i === 0) return %>
-        <tr>
+        <tr class="<%- changes.visible ? '' : 'hidden'%>">
           <td><%- change.name %></td>
           <td><%- change.oldValue %></td>
           <td class="pos-details-change-value" data-property="<%- change.key %>"><%- change.newValue %></td>

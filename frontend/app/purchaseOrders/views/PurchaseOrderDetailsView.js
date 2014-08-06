@@ -28,7 +28,8 @@ define([
       'mouseout .pos-details-item-schedule': 'highlightItemRow',
       'click .action-print': 'onPrintActionClick',
       'submit .pos-printDialog': 'onPrintDialogSubmit',
-      'change input[name="status[]"]': 'onItemStatusFilterChange'
+      'change input[name="status[]"]': 'onItemStatusFilterChange',
+      'click .pos-details-changes-more': 'showAllChanges'
     },
 
     initialize: function()
@@ -328,6 +329,12 @@ define([
       var state = e.currentTarget.checked;
 
       this.$(selector).toggle(state);
+    },
+
+    showAllChanges: function()
+    {
+      this.$('.pos-details-changes-more').remove();
+      this.$('.pos-details-changes .hidden').removeClass('hidden');
     }
 
   });

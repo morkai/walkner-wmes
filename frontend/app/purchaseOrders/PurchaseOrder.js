@@ -106,19 +106,45 @@ define([
     {
       var result = [];
       var model = this;
+      var changeList = this.get('changes');
+      var lastChangeIndex = changeList.length - 1;
 
-      this.get('changes').forEach(function(changes)
+      changeList.forEach(function(changes, i)
       {
         var properties = [];
+        var newItems = [];
 
         Object.keys(changes.data).forEach(function(propertyName)
         {
           var values = changes.data[propertyName];
+          var change = model.serializeChange(propertyName, values[0], values[1]);
 
-          properties.push(model.serializeChange(propertyName, values[0], values[1]));
+          if (change.key === 'item')
+          {
+            newItems.push(change.newValue);
+          }
+          else if (change.key === 'importedAt')
+          {
+            properties.unshift(change);
+          }
+          else
+          {
+            properties.push(change);
+          }
         });
 
+        if (newItems.length)
+        {
+          properties.push({
+            key: 'newItems',
+            name: t('purchaseOrders', 'changes:newItems'),
+            oldValue: '-',
+            newValue: model.serializeNewItems(newItems)
+          });
+        }
+
         result.push({
+          visible: lastChangeIndex < 3 || i === 0 || i === lastChangeIndex,
           date: time.format(changes.date, 'LLLL'),
           properties: properties
         });
@@ -225,20 +251,37 @@ define([
 
     serializeItemChangeValue: function(rawItem)
     {
-      var html = '<table class="table table-condensed"><tr>';
+      return {
+        _id: rawItem._id,
+        nc12: rawItem.nc12,
+        unit: rawItem.unit,
+        qty: rawItem.qty.toLocaleString(),
+        name: _.escape(rawItem.name),
+        schedule: this.serializeScheduleChangeValue(rawItem.schedule)
+      };
+    },
+
+    serializeNewItems: function(newItems)
+    {
+      var html = '<table class="table table-bordered"><tr>';
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item._id');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.nc12');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.unit');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.qty');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.name');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.schedule');
-      html += '<tr>';
-      html += '<td>' + rawItem._id;
-      html += '<td>' + rawItem.nc12;
-      html += '<td>' + rawItem.unit;
-      html += '<td>' + rawItem.qty.toLocaleString();
-      html += '<td>' + _.escape(rawItem.name);
-      html += '<td>' + this.serializeScheduleChangeValue(rawItem.schedule);
+
+      newItems.forEach(function(item)
+      {
+        html += '<tr>';
+        html += '<td>' + item._id;
+        html += '<td>' + item.nc12;
+        html += '<td>' + item.unit;
+        html += '<td>' + item.qty;
+        html += '<td class="pos-details-changes-item-name">' + item.name;
+        html += '<td>' + item.schedule;
+      });
+
       html += '</table>';
 
       return html;

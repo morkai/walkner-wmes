@@ -38,6 +38,8 @@
   "PROPERTY:changes.newValue": "Nowa wartość",
 
   "changes:itemProp": "{item}: <em>{prop}</em>",
+  "changes:more": "pokaż wszystkie zmiany",
+  "changes:newItems": "Nowe pozycje",
 
   "filter:vendor": "Dostawca",
   "filter:from": "Dostawa od",
