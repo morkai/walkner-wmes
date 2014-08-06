@@ -35,6 +35,11 @@ define([
 
     },
 
+    getFirstScheduledQuantity: function(item)
+    {
+      return this.get('items').get(item).get('schedule')[0].qty;
+    },
+
     parse: function(data, xhr)
     {
       data = Model.prototype.parse.call(this, data, xhr);

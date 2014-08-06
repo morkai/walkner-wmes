@@ -48,7 +48,8 @@
   "filter:submit": "Filtruj zamówienia",
 
   "printDialog:shippingNo": "Nr listu przewozowego",
-  "printDialog:quantity": "Ilość",
-  "printDialog:quantityHelp": "Liczba stron i ilość sztuk jaka ma występować na każdej stronie. Przykładowe, prawidłowe wartości: <code>100</code>, <code>2x50</code>, <code>1 1</code>, <code>3x15 10 2x5</code>, <code>100 200 50</code>.",
+  "printDialog:packages": "Ilość pudełek",
+  "printDialog:components": "Ilość w pudełku",
+  "printDialog:remainder": "Reszta",
   "printDialog:qr": "QR"
 }

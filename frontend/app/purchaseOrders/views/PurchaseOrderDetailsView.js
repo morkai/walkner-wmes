@@ -209,12 +209,16 @@ define([
       this.positionPrintDialog();
       this.restorePrintButtonState();
 
+      this.$id('shippingNo').val('');
+      this.$id('packages').val('1');
+      this.$id('components').val(this.model.getFirstScheduledQuantity(printActionEl.dataset.item));
+      this.$id('remainder').val('0');
+
       this.$printDialog
         .attr('action', '/purchaseOrders/' + printActionEl.dataset.order + '/' + printActionEl.dataset.item + ';print')
         .stop()
         .fadeIn('fast')
         .find('input')
-        .val('')
         .first()
         .focus();
 

@@ -126,7 +126,7 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 
         var query = [];
         var re = /(?:([0-9]+)x)?([0-9]+)/g;
-        var quantity = String(req.query.quantity);
+        var quantity = resolvePrintQuantity(req.query);
         var matches;
 
         while ((matches = re.exec(quantity)) !== null)
@@ -211,6 +211,25 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
         res.end();
       }
     );
+  }
+
+  function resolvePrintQuantity(query)
+  {
+    if (typeof query.quantity === 'string')
+    {
+      return query.quantity;
+    }
+
+    if (typeof query.components !== 'string')
+    {
+      return '';
+    }
+
+    var packages = parseInt(query.packages, 10) || 1;
+    var components = parseInt(query.components, 10) || 0;
+    var remainder = parseInt(query.remainder, 10) || 0;
+
+    return packages + 'x' + components + ' ' + remainder;
   }
 
   function renderLabelHtmlRoute(req, res, next)

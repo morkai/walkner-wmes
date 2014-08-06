@@ -51,6 +51,9 @@
   font-family: Consolas, Menlo, Monaco, monospace;
   width: 200px;
 }
+.pos-printDialog input[type="number"] {
+  width: 135px;
+}
 .pos-printDialog .fa-info-circle {
   cursor: help;
 }

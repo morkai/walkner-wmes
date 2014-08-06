@@ -165,8 +165,16 @@
       <input id="<%- idPrefix %>-shippingNo" name="shippingNo" class="form-control" type="text">
     </div>
     <div class="form-group">
-      <label for="<%- idPrefix %>-quantity"><i id="<%- idPrefix %>-quantityHelp" class="fa fa-info-circle"></i> <%- t('purchaseOrders', 'printDialog:quantity') %></label>
-      <input id="<%- idPrefix %>-quantity" name="quantity" class="form-control" type="text" required>
+      <label for="<%- idPrefix %>-packages"><%- t('purchaseOrders', 'printDialog:packages') %></label>
+      <input id="<%- idPrefix %>-packages" name="packages" class="form-control" type="number" required value="1" min="1" max="100">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-components"><%- t('purchaseOrders', 'printDialog:components') %></label>
+      <input id="<%- idPrefix %>-components" name="components" class="form-control" type="number" required value="" min="1" max="99999">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-remainder"><%- t('purchaseOrders', 'printDialog:remainder') %></label>
+      <input id="<%- idPrefix %>-remainder" name="remainder" class="form-control" type="number" required value="0" min="0" max="99999">
     </div>
     <div class="form-group">
       <div id="<%- idPrefix %>-qr" class="btn-group filter-btn-group" data-toggle="buttons">
