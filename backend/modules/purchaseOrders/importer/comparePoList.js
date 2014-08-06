@@ -256,8 +256,16 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       }
     });
 
-    if (compareItems(orderModel.items, orderDoc.items, changes))
+    var itemChanges = compareItems(orderModel.items, orderDoc.items, changes);
+
+    if (itemChanges)
     {
+      if (!orderModel.open && itemChanges === 'add')
+      {
+        orderModel.open = true;
+        changes.open = [false, true];
+      }
+
       orderModel.markModified('items');
     }
 
@@ -278,7 +286,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
   function compareItems(oldItems, newItems, changes)
   {
-    var changed = false;
+    var changed = null;
     var newItemMap = {};
 
     newItems.forEach(function(newItem)
@@ -288,7 +296,10 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
     oldItems.forEach(function(oldItem, i)
     {
-      changed = compareItem(oldItem, i, newItemMap, changes) || changed;
+      if (compareItem(oldItem, i, newItemMap, changes))
+      {
+        changed = 'set';
+      }
     });
 
     Object.keys(newItemMap).forEach(function(newItemId)
@@ -296,7 +307,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       changes['items/' + newItemId] = [null, newItemMap[newItemId]];
       oldItems.push(newItemMap[newItemId]);
 
-      changed = true;
+      changed = 'add';
     });
 
     return changed;
