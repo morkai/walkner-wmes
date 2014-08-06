@@ -145,7 +145,7 @@ define([
     setUpOrderSelect2: function()
     {
       orderPickerHelpers.setUpOrderSelect2(
-        this.$id('order').removeClass('form-control'),
+        this.$id('order'),
         this.$id('operation'),
         this.model,
         {dropdownCssClass: 'production-dropdown'}
@@ -154,10 +154,8 @@ define([
 
     setUpOperationSelect2: function()
     {
-      var $operation = this.$id('operation').attr('placeholder', null).removeClass('form-control');
-
       orderPickerHelpers.setUpOperationSelect2(
-        $operation,
+        this.$id('operation'),
         [],
         {dropdownCssClass: 'production-dropdown'}
       );
@@ -171,7 +169,8 @@ define([
     handleOnlinePick: function(submitEl)
     {
       var orderInfo = this.$id('order').select2('data');
-      var operationNo = this.$id('operation').select2('val');
+      var $operation = this.$id('operation');
+      var operationNo = $operation.hasClass('form-control') ? $operation.val() : this.$id('operation').select2('val');
 
       if (!orderInfo)
       {
@@ -188,7 +187,7 @@ define([
 
       if (!operationNo)
       {
-        this.$id('order').select2('focus');
+        $operation.focus();
 
         submitEl.disabled = false;
 
@@ -268,16 +267,16 @@ define([
         });
       }
 
-      while (operationNo.length < 4)
-      {
-        operationNo = '0' + operationNo;
-      }
-
       this.pickOrder(orderInfo, operationNo);
     },
 
     pickOrder: function(orderInfo, operationNo)
     {
+      while (operationNo.length < 4)
+      {
+        operationNo = '0' + operationNo;
+      }
+
       if (!this.options.correctingOrder && this.model.hasOrder())
       {
         this.model.changeQuantityDone(this.parseInt('quantityDone'));

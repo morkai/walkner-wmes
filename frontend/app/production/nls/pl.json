@@ -96,6 +96,7 @@
   "newOrderPicker:msg:searchFailure": "Wyszukiwanie zlecenia nie powiodło się :(",
   "newOrderPicker:msg:emptyOrder": "Zlecenie jest wymagane.",
   "newOrderPicker:msg:emptyOperation": "Operacja jest wymagana.",
+  "newOrderPicker:msg:noOperations": "Wybrane zlecenie nie ma zdefiniowanych żadnych operacji.<br>Możesz ręcznie wpisać czterocyfrowy nr operacji.",
   "newOrderPicker:online:info:no": "Wpisz numer zlecenia i wybierz z listy operację aby rozpocząć nowe zlecenie.",
   "newOrderPicker:online:info:nc12": "Wpisz 12NC zlecenia i wybierz z listy operację aby rozpocząć nowe zlecenie.",
   "newOrderPicker:offline:warning:no": "Wpisz numer zlecenia oraz numer operacji aby rozpocząć nowe zlecenie.",

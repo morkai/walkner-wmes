@@ -31,7 +31,7 @@ define([
     {
       var helper = this;
 
-      $order.select2(_.extend({
+      $order.removeClass('form-control').select2(_.extend({
         openOnEnter: null,
         allowClear: false,
         minimumInputLength: 6,
@@ -95,7 +95,7 @@ define([
             id: operation.no,
             text: operation.no + ' - ' + operation.name
           };
-        }), options);
+        }), options, true);
 
         if (operations.length)
         {
@@ -103,13 +103,35 @@ define([
         }
         else
         {
-          _.defer(function() { $order.select2('focus'); });
+          if (e.selectedOperationNo)
+          {
+            $operation.val(e.selectedOperationNo);
+          }
+
+          _.defer(function() { $operation.focus(); });
         }
       });
     },
-    setUpOperationSelect2: function($operation, data, options)
+    setUpOperationSelect2: function($operation, data, options, orderPicked)
     {
-      $operation.select2(_.extend({
+      $operation.prev('.message-warning').remove();
+
+      if (orderPicked && !data.length)
+      {
+        $operation
+          .select2('destroy')
+          .addClass('form-control')
+          .val('')
+          .attr('title', '');
+
+        $('<p class="message message-inline message-warning"></p>')
+          .html(t('production', 'newOrderPicker:msg:noOperations'))
+          .insertBefore($operation);
+
+        return;
+      }
+
+      $operation.removeClass('form-control').select2(_.extend({
         width: '100%',
         placeholder: t('production', 'newOrderPicker:online:operation:placeholder'),
         openOnEnter: null,
