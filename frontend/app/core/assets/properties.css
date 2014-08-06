@@ -7,7 +7,7 @@
   display: table-row;
 }
 .prop:hover {
-  background-color: #f5f5f5;
+  background-color: #FFFFD6;
 }
 .prop:first-child,
 .prop + .prop {
