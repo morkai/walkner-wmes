@@ -26,7 +26,7 @@
 .pos-details-item.is-completed > td {
   background-color: #DFF0D8!important;
 }
-.pos-details-items .is-hovered {
+.pos-details .is-hovered {
   background-color: #FFFFD6;
 }
 .pos-details-item > .actions {
@@ -75,12 +75,16 @@
 .pos-details-change-value > .table {
   border: 0!important;
 }
-.pos-details-change-value > .table > tbody > tr > th {
+.pos-details-change-value > .table > thead > tr > th {
   border-top: 0;
 }
-.pos-details-change-value > .table > tbody > tr > th:first-child,
+.pos-details-change-value > .table > thead > tr > th:first-child,
 .pos-details-change-value > .table > tbody > tr > td:first-child {
   border-left: 0;
+}
+.pos-details-change-value > .table > thead > tr > th:last-child,
+.pos-details-change-value > .table > tbody > tr > td:last-child {
+  border-right: 0;
 }
 .pos-details-change-value > .table > tbody > tr > td {
   border-bottom: 0;

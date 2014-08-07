@@ -26,6 +26,8 @@ define([
       'mouseout .pos-details-item': 'highlightItemScheduleRows',
       'mouseover .pos-details-item-schedule': 'highlightItemRow',
       'mouseout .pos-details-item-schedule': 'highlightItemRow',
+      'mouseover .pos-details-change-next': 'highlightChangeDate',
+      'mouseout .pos-details-change-next': 'highlightChangeDate',
       'click .action-print': 'onPrintActionClick',
       'submit .pos-printDialog': 'onPrintDialogSubmit',
       'change input[name="status[]"]': 'onItemStatusFilterChange',
@@ -158,6 +160,15 @@ define([
 
         rowEl.classList.toggle('is-hovered');
       }
+    },
+
+    highlightChangeDate: function(e)
+    {
+      this.$(e.currentTarget)
+        .prevAll('.pos-details-change')
+        .first()
+        .find('.pos-details-changes-date')
+        .toggleClass('is-hovered');
     },
 
     onKeyDown: function(e)

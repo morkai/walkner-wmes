@@ -263,13 +263,14 @@ define([
 
     serializeNewItems: function(newItems)
     {
-      var html = '<table class="table table-bordered"><tr>';
+      var html = '<table class="table table-bordered table-hover"><thead><tr>';
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item._id');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.nc12');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.unit');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.qty');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.name');
       html += '<th>' + t('purchaseOrders', 'PROPERTY:item.schedule');
+      html += '<tbody>';
 
       newItems.forEach(function(item)
       {

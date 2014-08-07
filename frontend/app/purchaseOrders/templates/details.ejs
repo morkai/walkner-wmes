@@ -127,7 +127,7 @@
     <div class="panel-heading">
       <%- t('purchaseOrders', 'panel:details:changes') %>
     </div>
-    <table class="table table-bordered">
+    <table class="table table-bordered table-hover">
       <thead>
         <tr>
           <th><%- t('purchaseOrders', 'PROPERTY:changes.date') %></th>
@@ -154,7 +154,7 @@
         </tr>
         <% changes.properties.forEach(function(change, i) { %>
         <% if (i === 0) return %>
-        <tr class="<%- changes.visible ? '' : 'hidden'%>">
+        <tr class="pos-details-change-next <%- changes.visible ? '' : 'hidden'%>">
           <td><%- change.name %></td>
           <td><%- change.oldValue %></td>
           <td class="pos-details-change-value" data-property="<%- change.key %>"><%- change.newValue %></td>
