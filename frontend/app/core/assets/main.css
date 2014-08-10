@@ -13,6 +13,7 @@
 body {
   cursor: default;
   overflow-y: scroll;
+  -ms-overflow-style: scrollbar;
 }
 body.modal-open {
   overflow-y: hidden;
