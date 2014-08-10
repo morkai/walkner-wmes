@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Collection","./PurchaseOrder"],function(e,r){return e.extend({model:r,rqlQuery:function(e){return e.Query.fromObject({fields:{changes:0},limit:15,sort:{"items.schedule.date":1},selector:{name:"and",args:[{name:"eq",args:["open",!0]},{name:"populate",args:["vendor"]}]}})}})});
+define(["../time","../core/Collection","./PurchaseOrder"],function(e,n,r){return n.extend({model:r,rqlQuery:function(n){var r=e.getMoment().utc().hours(0).minutes(0).seconds(0).milliseconds(0).add("day",1).valueOf();return n.Query.fromObject({fields:{changes:0},limit:15,sort:{"items.schedule.date":1},selector:{name:"and",args:[{name:"eq",args:["open",!0]},{name:"lt",args:["items.schedule.date",r]},{name:"populate",args:["vendor"]}]}})}})});
