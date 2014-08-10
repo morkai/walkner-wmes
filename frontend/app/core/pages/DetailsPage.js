@@ -23,32 +23,47 @@ define([
 
     pageId: 'details',
 
+    modelProperty: 'model',
+
     breadcrumbs: function()
     {
+      var model = this[this.modelProperty];
+
       return [
         {
-          label: t.bound(this.model.nlsDomain, 'BREADCRUMBS:browse'),
-          href: this.model.genClientUrl('base')
+          label: t.bound(model.nlsDomain, 'BREADCRUMBS:browse'),
+          href: model.genClientUrl('base')
         },
-        this.model.getLabel()
+        model.getLabel()
       ];
     },
 
     actions: function()
     {
+      var model = this[this.modelProperty];
+
       return [
-        pageActions.edit(this.model, this.model.privilegePrefix + ':MANAGE'),
-        pageActions.delete(this.model, this.model.privilegePrefix + ':MANAGE')
+        pageActions.edit(model, model.privilegePrefix + ':MANAGE'),
+        pageActions.delete(model, model.privilegePrefix + ':MANAGE')
       ];
     },
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(this.options.model, this);
+      this.defineModels();
+      this.defineViews();
+    },
 
+    defineModels: function()
+    {
+      this[this.modelProperty] = bindLoadingMessage(this.options.model, this);
+    },
+
+    defineViews: function()
+    {
       var DetailsViewClass = this.DetailsView || DetailsView;
       var options = {
-        model: this.model
+        model: this[this.modelProperty]
       };
 
       if (typeof this.detailsTemplate === 'function')
@@ -66,7 +81,7 @@ define([
 
     load: function(when)
     {
-      return when(this.model.fetch(this.fetchOptions));
+      return when(this[this.modelProperty].fetch(this.fetchOptions));
     }
 
   });
