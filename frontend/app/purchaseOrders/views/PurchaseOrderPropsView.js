@@ -11,10 +11,19 @@ define([
 ) {
   'use strict';
 
-  // TODO: rerender on model change
   return View.extend({
 
     template: template,
+
+    beforeRender: function()
+    {
+      this.stopListening(this.model, 'change', this.render);
+    },
+
+    afterRender: function()
+    {
+      this.listenToOnce(this.model, 'change', this.render);
+    },
 
     serialize: function()
     {
