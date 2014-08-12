@@ -1,0 +1,64 @@
+<div class="panel panel-default pos-items">
+  <div class="panel-heading is-with-actions"><%- t('purchaseOrders', 'panel:items') %></div>
+  <% if (toolbarVisible) { %>
+  <div class="btn-toolbar">
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input type="checkbox" name="status" value="waiting"> <i class="fa fa-unlock-alt"></i><span><%- t('purchaseOrders', 'items:status:waiting') %></span>
+      </label>
+      <label class="btn btn-default <%- open ? '' : 'active' %>">
+        <input type="checkbox" name="status" value="completed"> <i class="fa fa-lock"></i><span><%- t('purchaseOrders', 'items:status:completed') %></span>
+      </label>
+    </div>
+    <div class="btn-group">
+      <button id="<%- idPrefix %>-selectAll" class="btn btn-default"><i class="fa fa-check-square"></i><span><%- t('purchaseOrders', 'items:select:all') %></span></button>
+      <button id="<%- idPrefix %>-selectNone" class="btn btn-default"><i class="fa fa-square"></i><span><%- t('purchaseOrders', 'items:select:none') %></span></button>
+    </div>
+    <button id="<%- idPrefix %>-print" class="btn btn-default"><i class="fa fa-print"></i><span><%- t('purchaseOrders', 'items:print') %></span></button>
+  </div>
+  <% } %>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th><%- t('purchaseOrders', 'PROPERTY:item._id') %></th>
+        <th><%- t('purchaseOrders', 'PROPERTY:item.nc12') %></th>
+        <th><%- t('purchaseOrders', 'PROPERTY:item.unit') %></th>
+        <th><%- t('purchaseOrders', 'PROPERTY:item.qty') %></th>
+        <th><%- t('purchaseOrders', 'PROPERTY:item.printedQty') %></th>
+        <% if (open) {%>
+        <th><%- t('purchaseOrders', 'PROPERTY:item.schedule.qty') %></th>
+        <th><%- t('purchaseOrders', 'PROPERTY:item.schedule.date') %></th>
+        <% } %>
+        <th><%- t('purchaseOrders', 'PROPERTY:item.name') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% items.forEach(function(item, itemIndex) { %>
+      <tr class="<%- item.rowClassName %>" data-item-id="<%- item._id %>">
+        <td colspan="999" class="pos-rowSeparator"></td>
+      </tr>
+      <tr class="pos-items-item <%- item.rowClassName %>" data-item-id="<%- item._id %>" data-schedule-length="<%- item.schedule.length %>">
+        <td rowspan="<%- item.rowSpan %>" class="pos-items-item-no"><%- +item._id %></td>
+        <td rowspan="<%- item.rowSpan %>"><%- item.nc12 %></td>
+        <td rowspan="<%- item.rowSpan %>"><%- item.unit %></td>
+        <td rowspan="<%- item.rowSpan %>" class="is-number"><%- item.qty.toLocaleString() %></td>
+        <td rowspan="<%- item.rowSpan %>" class="pos-items-item-printedQty is-number <%- item.prints.length ? 'is-clickable' : '' %>"><span class="pos-items-item-prints"><%- item.printedQty.toLocaleString() %></span></td>
+        <% if (open) { %>
+        <td class="is-number"><%- item.schedule.length ? item.schedule[0].qty.toLocaleString() : '' %></td>
+        <td><%- item.schedule.length ? time.format(item.schedule[0].date, 'YYYY-MM-DD') : '' %></td>
+        <% } %>
+        <td rowspan="<%- item.rowSpan %>" class="pos-items-item-name"><%= item.name %></td>
+      </tr>
+      <% if (open) { %>
+      <% item.schedule.forEach(function(schedule, i) { %>
+      <% if (i === 0) return %>
+      <tr class="pos-items-item-schedule <%- item.rowClassName %>" data-item-id="<%- item._id %>" data-item-index="<%- itemIndex %>">
+        <td class="is-number"><%- schedule.qty.toLocaleString() %></td>
+        <td><%- time.format(schedule.date, 'YYYY-MM-DD') %></td>
+      </tr>
+      <% }) %>
+      <% } %>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

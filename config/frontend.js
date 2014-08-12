@@ -101,7 +101,8 @@ exports.pubsub = {
     'prodDowntimes.**',
     'prodShiftOrders.**',
     'updater.newVersion',
-    'settings.updated.**'
+    'settings.updated.**',
+    'purchaseOrders.printed.*', 'purchaseOrders.cancelled.*'
   ]
 };
 

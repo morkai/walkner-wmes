@@ -23,7 +23,8 @@ define([
 
       return rql.Query.fromObject({
         fields: {
-          changes: 0
+          changes: 0,
+          'items.prints': 0
         },
         limit: 15,
         sort: {

@@ -15,14 +15,16 @@ var step = require('h5.step');
 module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 {
   var express = app[poModule.config.expressId];
-  var auth = app[poModule.config.userId].auth;
+  var userModule = app[poModule.config.userId];
   var mongoose = app[poModule.config.mongooseId];
   var httpServer = app[poModule.config.httpServerId];
   var PurchaseOrder = mongoose.model('PurchaseOrder');
 
-  var RE_SHIPPING_NO = /^[a-zA-Z0-9/\\.\- ]+$/;
+  var RE_INVALID_SHIPPING_NO = /[^a-zA-Z0-9\/\\.\-: ]+$/g;
+  var lockedOrders = {};
 
-  var canView = auth('PURCHASE_ORDERS:VIEW');
+  var canView = userModule.auth('PURCHASE_ORDERS:VIEW');
+  var canManage = userModule.auth('PURCHASE_ORDERS:MANAGE');
 
   express.get(
     '/purchaseOrders',
@@ -32,30 +34,39 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
   );
 
   express.get(
+    '/purchaseOrders;getLatestComponentQty',
+    canManage,
+    getLatestComponentQtyRoute
+  );
+
+  express.get(
     '/purchaseOrders/:id',
     canView,
     limitToVendor,
     express.crud.readRoute.bind(null, app, PurchaseOrder)
   );
 
+  express.post(
+    '/purchaseOrders/:orderId/prints;cancel',
+    canManage,
+    togglePrintCancelRoute
+  );
+
   express.get(
-    '/purchaseOrders/:orderId/:itemId;print',
+    '/purchaseOrders/:orderId/prints/:printId',
     canView,
-    limitToVendor,
-    renderLabelPdfRoute
+    getLabelPdfRoute
   );
 
   express.post(
-    '/purchaseOrders/:orderId/:itemId;print',
-    canView,
-    limitToVendor,
+    '/purchaseOrders/:orderId/prints',
+    canManage,
     renderLabelPdfRoute
   );
 
   express.get(
     '/purchaseOrders;renderLabelHtml',
-    auth('LOCAL', 'PURCHASE_ORDERS:VIEW'),
-    limitToVendor,
+    userModule.auth('LOCAL', 'PURCHASE_ORDERS:MANAGE'),
     renderLabelHtmlRoute
   );
 
@@ -86,89 +97,217 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
     next();
   }
 
+  function getLatestComponentQtyRoute(req, res, next)
+  {
+    var nc12 = [].concat(req.query.nc12 || req.body.nc12).filter(function(nc12)
+    {
+      return typeof nc12 === 'string' && nc12.length === 12;
+    });
+
+    if (!nc12.length)
+    {
+      return res.json({});
+    }
+
+    PurchaseOrder.aggregate(
+      {$match: {'items.nc12': {$in: nc12}}},
+      {$unwind: '$items'},
+      {$match: {'items.nc12': {$in: nc12}, 'items.prints': {$not: {$size: 0}}}},
+      {$project: {_id: 0, nc12: '$items.nc12', prints: '$items.prints'}},
+      {$unwind: '$prints'},
+      {$match: {'prints.componentQty': {$ne: 0}}},
+      {$group: {_id: '$nc12', print: {$last: '$prints'}}},
+      {$project: {_id: 0, nc12: '$_id', componentQty: '$print.componentQty'}},
+      function(err, results)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        var latestComponentQty = {};
+
+        results.forEach(function(result)
+        {
+          latestComponentQty[result.nc12] = result.componentQty;
+        });
+
+        res.json(latestComponentQty);
+      }
+    );
+  }
+
+  function createHttpError(message, statusCode)
+  {
+    var err = new Error(message);
+    err.status = statusCode || 400;
+
+    return err;
+  }
+
+  function getLabelPdfRoute(req, res, next)
+  {
+    var matches = req.params.printId.match(/^([A-Z0-9]{32})\.(html|pdf)$/);
+
+    if (matches === null)
+    {
+      return next(createHttpError('INVALID_PRINT_ID'));
+    }
+
+    var printId = matches[1];
+
+    if (matches[2] === 'pdf')
+    {
+      res.sendfile(path.join(poModule.config.pdfStoragePath, printId + '.pdf'));
+    }
+    else
+    {
+      res.render('purchaseOrders/iframe', {
+        orderId: req.params.orderId,
+        printId: printId
+      });
+    }
+  }
+
   function renderLabelPdfRoute(req, res, next)
   {
+    var orderId = req.params.orderId;
+
+    if (lockedOrders[orderId] === true)
+    {
+      return next(createHttpError('LOCKED'));
+    }
+
+    lockedOrders[orderId] = true;
+
+    var shippingNo = lodash.isString(req.body.shippingNo)
+      ? req.body.shippingNo.substr(0, 30).replace(RE_INVALID_SHIPPING_NO, '')
+      : '';
+    var paper = req.body.paper;
+    var barcode = req.body.barcode;
+    var items = !Array.isArray(req.body.items) ? [] : req.body.items;
+    var currentDate = new Date();
+    var currentUserInfo = userModule.createUserInfo(req.session.user, req);
+
     step(
+      function validateRequestStep()
+      {
+        if (!PurchaseOrder.PAPERS[paper])
+        {
+          return this.skip(createHttpError('INVALID_PAPER'));
+        }
+
+        if (!PurchaseOrder.BARCODES[barcode])
+        {
+          return this.skip(createHttpError('INVALID_BARCODE'));
+        }
+
+        items = items.filter(function(item)
+        {
+          return lodash.isObject(item)
+            && /^[0-9]{1,6}$/.test(item._id)
+            && lodash.isNumber(item.packageQty)
+            && lodash.isNumber(item.componentQty)
+            && lodash.isNumber(item.remainingQty)
+            && (item.packageQty * item.componentQty + item.remainingQty) > 0;
+        });
+
+        if (items.length === 0)
+        {
+          return this.skip(createHttpError('INVALID_ITEMS'));
+        }
+      },
       function findPoStep()
       {
-        PurchaseOrder.findById(req.params.orderId, {vendor: 1, items: 1}).lean().exec(this.next());
+        PurchaseOrder.findById(orderId).exec(this.next());
       },
       function buildQueryStep(err, po)
       {
         if (err)
         {
-          return this.done(next, err);
+          return this.skip(err);
         }
 
         if (!po)
         {
-          err = new Error('PO_NOT_FOUND');
-          err.status = 404;
-
-          return this.done(next, err);
+          return this.skip(createHttpError('PO_NOT_FOUND', 404));
         }
 
-        var item = po.items.filter(function(item) { return item._id === req.params.itemId; })[0];
+        var itemsById = {};
 
-        if (!item)
+        po.items.forEach(function(item)
         {
-          err = new Error('PO_ITEM_NOT_FOUND');
-          err.status = 404;
+          itemsById[+item._id] = item;
+        });
 
-          return this.done(next, err);
-        }
-
-        var orderNo = po._id;
-        var nc12 = item.nc12;
-        var vendorNo = po.vendor;
-        var itemNo = item._id.replace(/^0+/, '');
-        var shippingNo = RE_SHIPPING_NO.test(req.query.shippingNo) ? req.query.shippingNo : '0';
-
-        var query = [];
-        var re = /(?:([0-9]+)x)?([0-9]+)/g;
-        var quantity = resolvePrintQuantity(req.query);
-        var matches;
-
-        while ((matches = re.exec(quantity)) !== null)
+        for (var i = 0, l = items.length; i < l; ++i)
         {
-          var pageCount = parseInt(matches[1], 10) || 1;
-          var pageQuantity = parseInt(matches[2], 10);
+          var item = items[i];
 
-          if (pageCount === 0 || pageQuantity === 0)
-          {
-            continue;
-          }
+          item.model = itemsById[+item._id];
 
-          for (var i = 0; i < pageCount; ++i)
+          if (!item.model)
           {
-            query.push(
-              'orderNo[]=' + orderNo,
-              'nc12[]=' + nc12,
-              'quantity[]=' + pageQuantity,
-              'itemNo[]=' + itemNo,
-              'vendorNo[]=' + vendorNo,
-              'shippingNo[]=' + encodeURIComponent(shippingNo)
-            );
+            return this.skip(createHttpError('PO_ITEM_NOT_FOUND', 400));
           }
         }
 
-        if (query.length === 0)
+        var query = [
+          'paper=' + paper,
+          'barcode=' + barcode
+        ];
+
+        items.forEach(function(item)
         {
-          err = new Error('INVALID_QUANTITY');
-          err.status = 400;
+          if (item.packageQty && item.componentQty)
+          {
+            for (var i = 0; i < item.packageQty; ++i)
+            {
+              pushQuery(item, item.componentQty);
+            }
+          }
 
-          return this.done(next, err);
-        }
+          if (item.remainingQty)
+          {
+            pushQuery(item, item.remainingQty);
+          }
+        });
 
-        query.push('qr=' + (req.query.qr === '1' || req.query.qr === '' ? '1' : '0'));
-
+        this.po = po;
         this.query = query.join('&');
+        this.printId = createHash('md5').update(this.query).digest('hex').toUpperCase();
+
+        items.forEach(function(item)
+        {
+          item.model.prints.push({
+            _id: this.printId,
+            printedAt: currentDate,
+            printedBy: currentUserInfo,
+            paper: paper,
+            barcode: barcode,
+            shippingNo: shippingNo,
+            packageQty: item.packageQty,
+            componentQty: item.componentQty,
+            remainingQty: item.remainingQty,
+            totalQty: item.packageQty * item.componentQty + item.remainingQty
+          });
+        }, this);
+
+        function pushQuery(item, quantity)
+        {
+          query.push(
+            'orderNo[]=' + po._id,
+            'nc12[]=' + item.model.nc12,
+            'quantity[]=' + quantity,
+            'itemNo[]=' + item._id,
+            'vendorNo[]=' + po.vendor,
+            'shippingNo[]=' + encodeURIComponent(shippingNo)
+          );
+        }
       },
       function checkCacheStep()
       {
-        var cacheKey = createHash('md5').update(this.query).digest('hex');
-
-        this.outputFile = path.join(poModule.config.pdfStoragePath, cacheKey + '.pdf');
+        this.outputFile = path.join(poModule.config.pdfStoragePath, this.printId + '.pdf');
 
         fs.exists(this.outputFile, this.next());
       },
@@ -182,89 +321,114 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
       function renderPdfStep()
       {
         var url = 'http://'
-          + (httpServer.config.host === '0.0.0.0' ? '127.0.0.1' : 'httpServer.config.host')
+          + (httpServer.config.host === '0.0.0.0' ? '127.0.0.1' : httpServer.config.host)
           + ':' + httpServer.config.port
           + '/purchaseOrders;renderLabelHtml'
           + '?' + this.query;
 
+        var paperOptions = PurchaseOrder.PAPERS[paper];
+
         var cmd = format(
-          '"%s" -q -B 0 -L 20mm -R 20mm -T 20mm -O Landscape --disable-smart-shrinking --no-outline "%s" "%s"',
+          '"%s" -q --dpi 120 --disable-smart-shrinking --no-outline %s --page-width %smm --page-height %smm "%s" "%s"',
           poModule.config.wkhtmltopdfExe,
+          paperOptions.options,
+          paperOptions.width,
+          paperOptions.height,
           url,
           this.outputFile
         );
 
         exec(cmd, this.next());
       },
-      function sendResultsStep(err)
+      function sendResultsStep(err, stdout, stderr)
       {
+        delete lockedOrders[orderId];
+
         if (err)
         {
           return next(err);
         }
 
-        if (req.method === 'GET')
+        if (lodash.isString(stdout) && lodash.isString(stderr))
         {
-          return res.sendfile(this.outputFile);
+          savePoPrintChanges(this.po, currentDate, currentUserInfo, this.printId, shippingNo, paper, barcode, items);
+
+          this.po = null;
         }
 
-        res.end();
+        return res.json(this.printId);
       }
     );
   }
 
-  function resolvePrintQuantity(query)
+  function savePoPrintChanges(po, date, user, printId, shippingNo, paper, barcode, items)
   {
-    if (typeof query.quantity === 'string')
+    po.changes.push({
+      date: date,
+      user: user,
+      data: {
+        prints: [
+          null,
+          {
+            _id: printId,
+            shippingNo: shippingNo,
+            paper: paper,
+            barcode: barcode,
+            items: items.map(function(item)
+            {
+              return {
+                _id: item._id,
+                nc12: item.model.nc12,
+                packageQty: item.packageQty,
+                componentQty: item.componentQty,
+                remainingQty: item.remainingQty
+              };
+            })
+          }
+        ]
+      }
+    });
+
+    po.save(function(err)
     {
-      return query.quantity;
-    }
-
-    if (typeof query.components !== 'string')
-    {
-      return '';
-    }
-
-    var packages = parseInt(query.packages, 10) || 1;
-    var components = parseInt(query.components, 10) || 0;
-    var remainder = parseInt(query.remainder, 10) || 0;
-
-    return packages + 'x' + components + ' ' + remainder;
+      if (err)
+      {
+        poModule.warn("Failed to save the PO [%s] print [%s] changes: %s", po._id, printId, err.stack);
+      }
+      else
+      {
+        app.broker.publish('purchaseOrders.printed.' + po._id, po.toJSON());
+      }
+    });
   }
 
   function renderLabelHtmlRoute(req, res, next)
   {
-    var qr = req.query.qr === '1';
-    var barcodeType = qr ? 58 : 20;
-    var scale = qr ? 7 : 1;
-    var params =  ['orderNo', 'nc12', 'quantity', 'itemNo', 'vendorNo'];
+    var barcode = PurchaseOrder.BARCODES[req.query.barcode] ? req.query.barcode : 'code128';
+    var paper = PurchaseOrder.PAPERS[req.query.paper] ? req.query.paper : 'a4';
+    var barcodeType = PurchaseOrder.BARCODES[barcode];
+    var paperOptions = PurchaseOrder.PAPERS[paper];
+    var barcodeOptions = paperOptions[barcode];
     var query = req.query;
 
-    params.forEach(function(param)
+    ['orderNo', 'nc12', 'quantity', 'itemNo', 'vendorNo', 'shippingNo'].forEach(function(param)
     {
       if (!Array.isArray(query[param]))
       {
         query[param] = [query[param]];
       }
-
-      query[param] = query[param].map(function(value) { return parseInt(value, 10); });
     });
-
-    if (!Array.isArray(query.shippingNo))
-    {
-      query.shippingNo = [query.shippingNo];
-    }
 
     var barcodeDataToSvg = {};
     var pages = query.orderNo.map(function(orderNo, i)
     {
       var page = {
-        orderNo: orderNo || 0,
-        nc12: query.nc12[i] || 0,
-        quantity: query.quantity[i] || 0,
-        itemNo: query.itemNo[i] || 0,
-        vendorNo: query.vendorNo[i] || 0,
-        shippingNo: RE_SHIPPING_NO.test(query.shippingNo[i]) ? query.shippingNo[i] : 0,
+        orderNo: orderNo || '',
+        nc12: query.nc12[i] || '',
+        quantity: query.quantity[i] || '',
+        itemNo: query.itemNo[i] || '',
+        vendorNo: query.vendorNo[i] || '',
+        shippingNo: query.shippingNo[i] || '',
         barcodeData: null,
         svg: null
       };
@@ -289,7 +453,7 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
       {
         for (var i = 0, l = uniqueBarcodes.length; i < l; ++i)
         {
-          generateBarcode(barcodeType, scale, uniqueBarcodes[i], this.group());
+          generateBarcode(barcodeType, barcodeOptions, uniqueBarcodes[i], this.group());
         }
       },
       function(err, barcodeSvgs)
@@ -309,18 +473,22 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
           page.svg = barcodeDataToSvg[page.barcodeData];
         });
 
-        return res.render('poLabel', {pages: pages});
+        return res.render('purchaseOrders/' + paper, {
+          paper: paper,
+          barcode: barcode,
+          pages: pages
+        });
       }
     );
   }
 
-  function generateBarcode(barcodeType, scale, barcodeData, done)
+  function generateBarcode(barcodeType, barcodeOptions, barcodeData, done)
   {
     var cmd = format(
-      '"%s" --barcode=%d --vers=5 --scale=%d --height=259 --notext --directsvg --data="%s"',
+      '"%s" --barcode=%d %s --notext --directsvg --data="%s"',
       poModule.config.zintExe,
       barcodeType,
-      scale,
+      barcodeOptions,
       barcodeData
     );
 
@@ -339,6 +507,71 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
       }
 
       return done(null, stdout.substr(svgTagIndex));
+    });
+  }
+
+  function togglePrintCancelRoute(req, res, next)
+  {
+    PurchaseOrder.findById(req.params.orderId).exec(function(err, po)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (req.body.__v !== po.__v)
+      {
+        return next(createHttpError('VERSION_MISMATCH'));
+      }
+
+      var item = lodash.find(po.items, function(item) { return item._id === req.body.itemId; });
+
+      if (!item)
+      {
+        return next(createHttpError('ITEM_NOT_FOUND'));
+      }
+
+      var printIndex = lodash.findIndex(item.prints, function(print) { return print._id === req.body.printId; });
+      var print = item.prints[printIndex];
+
+      if (!print)
+      {
+        return next(createHttpError('PRINT_NOT_FOUND'));
+      }
+
+      var newCancelled = !!req.body.cancelled;
+
+      if (newCancelled === print.cancelled)
+      {
+        return res.end();
+      }
+
+      print.cancelled = newCancelled;
+      print.cancelledBy = userModule.createUserInfo(req.session.user, req);
+      print.cancelledAt = new Date();
+
+      var change = {
+        date: print.cancelledAt,
+        user: print.cancelledBy,
+        data: {}
+      };
+      var changedProperty = 'items/' + item._id + '/prints/' + printIndex + '/cancelled';
+
+      change.data[changedProperty] = [!print.cancelled, print.cancelled];
+
+      po.changes.push(change);
+
+      po.save(function(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.send();
+
+        app.broker.publish('purchaseOrders.cancelled.' + po._id, po.toJSON());
+      });
     });
   }
 };

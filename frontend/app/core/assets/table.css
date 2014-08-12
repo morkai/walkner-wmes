@@ -4,8 +4,12 @@
 .table-bordered > thead > tr > th.sortable:hover {
   border-bottom-color: #428BCA;
 }
-.table tbody tr td {
+.table > tbody > tr > td {
   vertical-align: middle;
+}
+td.is-number {
+  font-family: Consolas, Menlo, Monaco, monospace;
+  text-align: right;
 }
 .table .actions {
   white-space: nowrap;

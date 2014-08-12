@@ -4,27 +4,64 @@
 
 define([
   'app/core/pages/DetailsPage',
-  '../views/PurchaseOrderDetailsView'
+  '../views/PurchaseOrderPropsView',
+  '../views/PurchaseOrderItemsView',
+  '../views/PurchaseOrderChangesView',
+  'app/purchaseOrders/templates/detailsPage'
 ], function(
   DetailsPage,
-  PurchaseOrderDetailsView
+  PurchaseOrderPropsView,
+  PurchaseOrderItemsView,
+  PurchaseOrderChangesView,
+  template
 ) {
   'use strict';
 
   return DetailsPage.extend({
 
-    DetailsView: PurchaseOrderDetailsView,
+    template: template,
 
     actions: [],
 
-    remoteTopics: {
-      'purchaseOrders.synced': function(message)
+    remoteTopics: function()
+    {
+      var topics = {};
+
+      topics['purchaseOrders.synced'] = function(message)
       {
         if (message.created || message.updated || message.closed)
         {
-          this.promised(this.model.fetch());
+          this.promised(this.model.fetch({update: true}));
         }
-      }
+      };
+
+      topics['purchaseOrders.printed.' + this.model.id] = function(data)
+      {
+        this.model.update(data);
+      };
+
+      topics['purchaseOrders.cancelled.' + this.model.id] = function(data)
+      {
+        this.model.update(data);
+      };
+
+      return topics;
+    },
+
+    initialize: function()
+    {
+      DetailsPage.prototype.initialize.apply(this, arguments);
+
+      this.setView('.pos-detailsPage-props', this.propsView);
+      this.setView('.pos-detailsPage-items', this.itemsView);
+      this.setView('.pos-detailsPage-changes', this.changesView);
+    },
+
+    defineViews: function()
+    {
+      this.propsView = new PurchaseOrderPropsView({model: this.model});
+      this.itemsView = new PurchaseOrderItemsView({model: this.model});
+      this.changesView = new PurchaseOrderChangesView({model: this.model});
     }
 
   });

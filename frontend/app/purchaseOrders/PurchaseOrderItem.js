@@ -3,18 +3,13 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../user',
   '../core/Model'
 ], function(
+  user,
   Model
 ) {
   'use strict';
-
-  var STATUS_TO_CLASS = {
-    completed: 'success',
-    delivered: 'info',
-    delivering: 'warning',
-    waiting: ''
-  };
 
   return Model.extend({
 
@@ -26,19 +21,17 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.status = obj.completed
-        ? 'completed'
-        : obj.delivered
-          ? 'delivered'
-        : obj.deliveredQty > 0
-          ? 'delivering'
-        : 'waiting';
+      obj.status = obj.completed ? 'completed' : 'waiting';
 
-      obj.rowClassName = STATUS_TO_CLASS[obj.status];
+      obj.rowClassName = 'is-' + obj.status;
 
-      if (obj.status === 'delivered' || obj.status === 'completed')
+      if (obj.status === 'completed')
       {
         obj.schedule = [];
+      }
+      else if (user.isAllowedTo('PURCHASE_ORDERS:MANAGE'))
+      {
+        obj.rowClassName += ' is-selectable';
       }
 
       obj.rowSpan = obj.schedule.length;

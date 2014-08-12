@@ -1,0 +1,16 @@
+<table class="table table-bordered table-hover pos-changes-schedule">
+  <thead>
+    <tr>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.schedule.date') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.schedule.qty') %>
+    </tr>
+  </thead>
+  <tbody>
+    <% schedule.forEach(function(schedule) { %>
+    <tr>
+      <td><%- time.getMoment(schedule.date).utc().format('LL') %>
+      <td class="is-number"><%- schedule.qty.toLocaleString() %>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>WMES PO=<%- orderId %> PRINT=<%- printId %></title>
+  <style type="text/css">
+  body {
+    overflow: hidden;
+    margin: 0;
+  }
+  #pdf {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  </style>
+</head>
+<body>
+<iframe id="pdf" src="about:blank"></iframe>
+<script>
+
+function printPdf(iframe)
+{
+  try
+  {
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
+
+    setTimeout(function() { window.close(); }, 1);
+  }
+  catch (err)
+  {
+    alert(err.message);
+  }
+}
+
+window.onload = function()
+{
+  var iframe = document.getElementById('pdf');
+
+  iframe.src = '/purchaseOrders/<%- orderId %>/prints/<%- printId %>.pdf';
+
+  iframe.onload = function()
+  {
+    if (iframe.src.indexOf('pdf') === -1)
+    {
+      return;
+    }
+
+    printPdf(iframe);
+  };
+};
+
+window.onbeforeunload = function()
+{
+  window.opener.WMES_PO_PRINT_DONE();
+};
+
+</script>
+</body>
+</html>

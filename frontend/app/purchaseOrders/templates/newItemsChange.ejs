@@ -1,0 +1,24 @@
+<table class="table table-bordered table-hover pos-changes-newItems">
+  <thead>
+    <tr>
+      <th><%- t('purchaseOrders', 'PROPERTY:item._id') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.nc12') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.unit') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.qty') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.name') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.schedule') %>
+    </tr>
+  </thead>
+  <tbody>
+    <% items.forEach(function(item) { %>
+    <tr>
+      <td><%- item._id %>
+      <td><%- item.nc12 %>
+      <td><%- item.unit %>
+      <td class="is-number"><%- item.qty %>
+      <td class="pos-changes-item-name"><%= item.name %>
+      <td><%- item.schedule %>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

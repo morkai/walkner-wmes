@@ -1,0 +1,36 @@
+<table class="table table-bordered table-hover pos-changes-prints">
+  <thead>
+    <tr>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.shippingNo') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.paper') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.barcode') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item._id') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.nc12') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.packageQty') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.componentQty') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.remainingQty') %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="<%- change.items.length %>"><%= change.shippingNo || '-' %></td>
+      <td rowspan="<%- change.items.length %>"><%- t('purchaseOrders', 'paper:' + change.paper) %></td>
+      <td rowspan="<%- change.items.length %>"><%- t('purchaseOrders', 'barcode:' + change.barcode) %></td>
+      <td><%- change.items[0]._id %></td>
+      <td><%- change.items[0].nc12 %></td>
+      <td class="is-number"><%- change.items[0].packageQty.toLocaleString() %></td>
+      <td class="is-number"><%- change.items[0].componentQty.toLocaleString() %></td>
+      <td class="is-number"><%- change.items[0].remainingQty.toLocaleString() %></td>
+    </tr>
+    <% change.items.forEach(function(item, i) { %>
+    <% if (i === 0) return %>
+    <tr class="pos-changes-prints-item">
+      <td><%- item._id %></td>
+      <td><%- item.nc12 %></td>
+      <td class="is-number"><%- item.packageQty.toLocaleString() %></td>
+      <td class="is-number"><%- item.componentQty.toLocaleString() %></td>
+      <td class="is-number"><%- item.remainingQty.toLocaleString() %></td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

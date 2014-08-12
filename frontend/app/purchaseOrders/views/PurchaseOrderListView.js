@@ -24,6 +24,24 @@ define([
         {
           this.refreshCollection();
         }
+      },
+      'purchaseOrders.printed.*': function(data)
+      {
+        var po = this.collection.get(data._id);
+
+        if (po)
+        {
+          po.update(data);
+        }
+      },
+      'purchaseOrders.cancelled.*': function(data)
+      {
+        var po = this.collection.get(data._id);
+
+        if (po)
+        {
+          po.update(data);
+        }
       }
     },
 
@@ -53,14 +71,24 @@ define([
       }
     },
 
+    initialize: function()
+    {
+      ListView.prototype.initialize.call(this);
+
+      this.listenTo(this.collection, 'change', this.render);
+    },
+
     serializeColumns: function()
     {
-      var columns = ['_id', 'pGr', 'plant', 'minScheduleDate'].map(function(property)
+      var columns = ['_id', 'pGr', 'plant', 'minScheduleDate', 'qty', 'printedQty'].map(function(property)
       {
         return {id: property, label: t('purchaseOrders', 'PROPERTY:' + property)};
       });
 
+
       columns[3].noData = '-';
+      columns[4].tdAttrs = 'class="is-number"';
+      columns[5].tdAttrs = 'class="is-number"';
 
       if (!user.data.vendor)
       {

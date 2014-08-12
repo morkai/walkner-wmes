@@ -1,0 +1,35 @@
+<table class="table table-bordered table-condensed table-hover pos-prints">
+  <thead>
+    <tr>
+      <th><%- t('core', '#') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.printedAt') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.shippingNo') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.paper') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.barcode') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.packageQty') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.componentQty') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.remainingQty') %>
+      <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% prints.forEach(function(print, i) { %>
+    <tr class="pos-prints-print <%- print.cancelled ? 'is-cancelled' : '' %>" data-print-id="<%- print._id %>">
+      <td class="is-number"><%- i + 1 %>.</td>
+      <td><%- time.format(print.printedAt, 'LLL') %></td>
+      <td><%- print.shippingNo || '-' %></td>
+      <td><%- t('purchaseOrders', 'paper:' + print.paper) %></td>
+      <td><%- t('purchaseOrders', 'barcode:' + print.barcode) %></td>
+      <td class="is-number"><%- print.packageQty.toLocaleString() %></td>
+      <td class="is-number"><%- print.componentQty.toLocaleString() %></td>
+      <td class="is-number"><%- print.remainingQty.toLocaleString() %></td>
+      <td class="actions">
+        <button type="button" class="btn btn-default action-showPrintPdf" title="<%- t('purchaseOrders', 'prints:showPrintPdf') %>"><i class="fa fa-file-pdf-o"></i></button>
+        <% if (user.isAllowedTo('PURCHASE_ORDERS:MANAGE')) { %>
+        <button type="button" class="btn btn-<%- print.cancelled ? 'success' : 'danger' %> action-toggleCancelled" title="<%- t('purchaseOrders', 'prints:' + (print.cancelled ? 'restore' : 'cancel')) %>"><i class="fa fa-thumbs-<%- print.cancelled ? 'up' : 'down' %>"></i></button>
+        <% } %>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

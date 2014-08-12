@@ -1,0 +1,41 @@
+<div class="panel panel-default pos-changes">
+  <div class="panel-heading"><%- t('purchaseOrders', 'panel:changes') %></div>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th><%- t('purchaseOrders', 'PROPERTY:changes.date') %></th>
+        <th><%- t('purchaseOrders', 'PROPERTY:changes.user') %></th>
+        <th><%- t('purchaseOrders', 'PROPERTY:changes.property') %></th>
+        <th><%- t('purchaseOrders', 'PROPERTY:changes.oldValue') %></th>
+        <th><%- t('purchaseOrders', 'PROPERTY:changes.newValue') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% changes.forEach(function(change, i) { %>
+      <% if (hidden && i === 1 && changes.length > 3) { %>
+      <tr>
+        <td id="<%- idPrefix %>-more" colspan="999" class="pos-changes-more"><%- t('purchaseOrders', 'changes:more') %></td>
+      </tr>
+      <% } %>
+      <tr class="<%- change.visible ? '' : 'hidden'%>">
+        <td colspan="999" class="pos-rowSeparator"></td>
+      </tr>
+      <tr class="pos-changes-change <%- change.visible ? '' : 'hidden'%>">
+        <td rowspan="<%- change.properties.length %>"><%- change.date %></td>
+        <td rowspan="<%- change.properties.length %>"><%- change.user %></td>
+        <td><%- change.properties[0].name %></td>
+        <td><%- change.properties[0].oldValue %></td>
+        <td class="pos-changes-change-value" data-property="<%- change.properties[0].key %>"><%- change.properties[0].newValue %></td>
+      </tr>
+      <% change.properties.forEach(function(propertyChange, i) { %>
+      <% if (i === 0) return %>
+      <tr class="pos-changes-change-next <%- change.visible ? '' : 'hidden'%>">
+        <td><%- propertyChange.name %></td>
+        <td><%- propertyChange.oldValue %></td>
+        <td class="pos-changes-change-value" data-property="<%- propertyChange.key %>"><%- propertyChange.newValue %></td>
+      </tr>
+      <% }) %>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

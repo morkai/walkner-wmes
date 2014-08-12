@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>wmes purchase order labels</title>
+  <title>WMES PO LABELS PAPER=<%- paper %> BARCODE=<%- barcode %></title>
   <style type="text/css">
   body {
     margin: 0;
@@ -11,10 +11,10 @@
     font-size: 16px;
     text-align: center;
   }
-  #barcode-container {
-    margin: 0 0 5px 0;
+  .barcode-container {
+    margin: 0;
   }
-  #barcode-data {
+  .barcode-data {
     margin: 0;
   }
   .page + .page {
@@ -30,7 +30,7 @@
     font-size: 24px;
     font-weight: normal;
     text-transform: uppercase;
-    padding: 40px 0 0 0;
+    padding: 30mm 0 0 0;
   }
   th:first-child,
   th:last-child {
@@ -46,9 +46,9 @@
 <body>
 <% pages.forEach(function(page) { %>
 <div class="page">
-  <div id="barcode-container">
+  <div class="barcode-container">
     <%- page.svg %>
-    <p id="barcode-data"><%- page.barcodeData %></p>
+    <p class="barcode-data"><%- page.barcodeData %></p>
   </div>
   <table>
     <tr>

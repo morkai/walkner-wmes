@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>WMES PO LABELS PAPER=<%- paper %> BARCODE=<%- barcode %></title>
+  <style type="text/css">
+  body {
+    margin: 0;
+    line-height: 1;
+    font-family: Consolas, Menlo, Monaco, monospace;
+    font-size: 16px;
+    text-align: center;
+  }
+  .barcode-container {
+    margin: 0;
+  }
+  .page {
+    position: relative;
+  }
+  .page + .page {
+    page-break-before: always;
+  }
+  table {
+    border-collapse: collapse;
+    border: 0;
+    width: 100%;
+  }
+  th {
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: uppercase;
+    padding: 3mm 0 0 0;
+  }
+  th:first-child,
+  th:last-child {
+    width: 1%;
+    white-space: nowrap;
+  }
+  td {
+    font-size: 16px;
+    padding: 1mm 0 0 0;
+  }
+  .qr {
+    width: 103mm;
+    height: 41mm;
+  }
+  .qr .barcode-container {
+    margin: 0;
+    position: absolute;
+    top: 8mm;
+    left: 0;
+  }
+  .qr table {
+    position: absolute;
+    top: 5mm;
+    left: 30mm;
+    width: 1%;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .qr th {
+    padding: 0 0 0 5mm;
+  }
+  .qr td {
+    padding: 1mm 0 5mm 5mm;
+  }
+  .qr tr:last-child td {
+    padding-bottom: 0;
+  }
+  </style>
+</head>
+<body>
+<% pages.forEach(function(page) { %>
+<div class="page <%- barcode %>">
+  <div class="barcode-container">
+    <%- page.svg %>
+  </div>
+  <table>
+    <% if (barcode === 'qr') { %>
+    <tr>
+      <th>Order no</th>
+      <th>Line no</th>
+    </tr>
+    <tr>
+      <td><%- page.orderNo %></td>
+      <td><%- page.itemNo %></td>
+    </tr>
+    <tr>
+      <th>Product 12NC</th>
+      <th>Quantity</th>
+    </tr>
+    <tr>
+      <td><%- page.nc12 %></td>
+      <td><%- page.quantity %></td>
+    </tr>
+    <tr>
+      <th>Shipping no</th>
+      <th>Vendor no</th>
+    </tr>
+    <tr>
+      <td><%- page.shippingNo || '-' %></td>
+      <td><%- page.vendorNo || '-' %></td>
+    </tr>
+    <% } else { %>
+    <tr>
+      <th>Order no</th>
+      <th>Product 12NC</th>
+      <th>Quantity</th>
+    </tr>
+    <tr>
+      <td><%- page.orderNo %></td>
+      <td><%- page.nc12 %></td>
+      <td><%- page.quantity %></td>
+    </tr>
+    <tr>
+      <th>Line no</th>
+      <th>Shipping no</th>
+      <th>Vendor no</th>
+    </tr>
+    <tr>
+      <td><%- page.itemNo %></td>
+      <td><%- page.shippingNo || '-' %></td>
+      <td><%- page.vendorNo || '-' %></td>
+    </tr>
+    <% } %>
+  </table>
+</div>
+<% }) %>
+</body>
+</html>
