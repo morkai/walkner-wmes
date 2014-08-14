@@ -26,7 +26,7 @@ define([
           changes: 0,
           'items.prints': 0
         },
-        limit: 15,
+        limit: 20,
         sort: {
           'items.schedule.date': 1
         },
