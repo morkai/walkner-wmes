@@ -131,12 +131,17 @@ exports.browseRoute = function(app, options, req, res, next)
 
 exports.addRoute = function(app, Model, req, res, next)
 {
-  var model = new Model(req.body);
+  var model = req.model || new Model(req.body);
 
   model.save(function(err)
   {
     if (err)
     {
+      if (err.name === 'ValidationError')
+      {
+        res.statusCode = 400;
+      }
+
       return next(err);
     }
 
@@ -262,6 +267,11 @@ exports.editRoute = function(app, Model, req, res, next)
     {
       if (err)
       {
+        if (err.name === 'ValidationError')
+        {
+          res.statusCode = 400;
+        }
+
         return next(err);
       }
 
