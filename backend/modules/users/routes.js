@@ -151,7 +151,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
       var guestUser = lodash.merge({}, userModule.guest);
       guestUser.loggedIn = false;
-      guestUser.ipAddress = req.socket.remoteAddress;
+      guestUser.ipAddress = userModule.getRealIp({}, req);
       guestUser.local = userModule.isLocalIpAddress(guestUser.ipAddress);
 
       req.session.user = guestUser;
