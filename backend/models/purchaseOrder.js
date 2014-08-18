@@ -61,14 +61,12 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     packageQty: {
       type: Number,
       required: true,
-      min: 1,
-      max: 1000
+      min: 0
     },
     componentQty: {
       type: Number,
       required: true,
-      min: 1,
-      max: 999999
+      min: 0
     },
     remainingQty: {
       type: Number,
