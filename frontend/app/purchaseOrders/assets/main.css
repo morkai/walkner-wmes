@@ -1,6 +1,18 @@
 .pos-list .list-item {
   cursor: pointer;
 }
+.pos-items > .btn-toolbar .fa-lock {
+  color: #00af00;
+}
+.pos-items > .btn-toolbar .fa-check-square {
+  color: #0af;
+}
+.pos-items > .btn-toolbar .fa-square {
+  color: #ccc;
+}
+.pos-items > .btn-toolbar .btn:hover .fa-square {
+  color: #aaa;
+}
 .pos-items td {
   font-family: Consolas, Menlo, Monaco, monospace;
   width: 1%;
