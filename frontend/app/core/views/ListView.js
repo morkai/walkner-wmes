@@ -78,7 +78,7 @@ define([
     serialize: function()
     {
       return {
-        columns: this.serializeColumns(),
+        columns: this.decorateColumns(this.serializeColumns()),
         actions: this.serializeActions(),
         rows: this.serializeRows(),
         className: this.className
@@ -87,7 +87,6 @@ define([
 
     serializeColumns: function()
     {
-      var nlsDomain = this.collection.getNlsDomain();
       var columns;
 
       if (Array.isArray(this.options.columns))
@@ -103,9 +102,26 @@ define([
         columns = [];
       }
 
-      return columns.map(function(propertyName)
+      return columns;
+    },
+
+    decorateColumns: function(columns)
+    {
+      var nlsDomain = this.collection.getNlsDomain();
+
+      return columns.map(function(column)
       {
-        return {id: propertyName, label: t(nlsDomain, 'PROPERTY:' + propertyName)};
+        if (typeof column === 'string')
+        {
+          column = {id: column, label: t(nlsDomain, 'PROPERTY:' + column)};
+        }
+
+        if (!column.label)
+        {
+          column.label = t(nlsDomain, 'PROPERTY:' + column.id);
+        }
+
+        return column;
       });
     },
 
