@@ -26,8 +26,8 @@
         <% if (row._id) { %>data-id="<%- row._id %>"<% } %>
       >
         <% columns.forEach(function(column) { %>
-        <td <%- column.tdAttrs || '' %> data-id="<%- column.id %>">
-          <% if (row[column.id] == null) { %>
+        <td <%- typeof column.tdAttrs === 'function' ? column.tdAttrs(row) : (column.tdAttrs || '') %> data-id="<%- column.id %>">
+        <% if (row[column.id] == null) { %>
           <% if (column.noData == null) { %>
           <em><%- t('core', 'LIST:NO_DATA:cell') %></em>
           <% } else { %>
