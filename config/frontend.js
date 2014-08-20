@@ -12,7 +12,6 @@ exports.modules = [
   'express',
   'users',
   'companies',
-  'vendors',
   'divisions',
   'subdivisions',
   'mrpControllers',
@@ -39,14 +38,26 @@ exports.modules = [
   'feedback',
   'xiconf',
   'licenses',
-  'purchaseOrders',
   {id: 'messenger/client', name: 'messenger/client:importer'},
   {id: 'messenger/client', name: 'messenger/client:xiconf'},
-  {id: 'messenger/client', name: 'messenger/client:pos-importer'},
   'httpServer',
   'httpsServer',
   'sio'
 ];
+
+exports.dictionaryModules = {
+  prodFunctions: 'PROD_FUNCTIONS',
+  companies: 'COMPANIES',
+  divisions: 'DIVISIONS',
+  subdivisions: 'SUBDIVISIONS',
+  mrpControllers: 'MRP_CONTROLLERS',
+  prodFlows: 'PROD_FLOWS',
+  workCenters: 'WORK_CENTERS',
+  prodLines: 'PROD_LINES',
+  aors: 'AORS',
+  orderStatuses: 'ORDER_STATUSES',
+  downtimeReasons: 'DOWNTIME_REASONS'
+};
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },
@@ -121,8 +132,7 @@ exports.mongoose = {
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
     'feedback',
     'license', 'licensePing',
-    'xiconfOrder', 'xiconfResult',
-    'purchaseOrder'
+    'xiconfOrder', 'xiconfResult'
   ]
 };
 
@@ -154,8 +164,7 @@ exports.user = {
     'PROD_DATA:VIEW', 'PROD_DATA:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
     'REPORTS:VIEW', 'REPORTS:MANAGE',
-    'XICONF:VIEW', 'XICONF:MANAGE',
-    'PURCHASE_ORDERS:VIEW', 'PURCHASE_ORDERS:MANAGE'
+    'XICONF:VIEW', 'XICONF:MANAGE'
   ]
 };
 
@@ -209,8 +218,4 @@ exports.reports = {
 exports.xiconf = {
   zipStoragePath: __dirname + '/../data/xiconf',
   featureDbPath: __dirname + '/../data/xiconf-features'
-};
-
-exports.purchaseOrders = {
-  pdfStoragePath: __dirname + '/../data/pos-labels'
 };

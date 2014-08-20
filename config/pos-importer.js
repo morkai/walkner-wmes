@@ -29,7 +29,7 @@ exports.events = {
 exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./mongodb').uri,
+  uri: require('./pos-mongodb').uri,
   options: {
     server: {poolSize: 5}
   },

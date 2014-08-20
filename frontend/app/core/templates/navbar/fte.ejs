@@ -1,14 +1,14 @@
-<li data-online data-privilege="FTE:*" class="dropdown">
+<li data-online data-module="fte" class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown">
     <%- t('core', 'NAVBAR:FTE') %>
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <li data-privilege="FTE:MASTER:*" class="dropdown-header"><%- t('core', 'NAVBAR:FTE:MASTER') %>
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:FTE:MASTER') %>
     <li data-privilege="FTE:MASTER:VIEW"><a href="#fte/master"><%- t('core', 'NAVBAR:FTE:MASTER:LIST') %></a>
     <li data-privilege="FTE:MASTER:MANAGE"><a href="#fte/master;add"><%- t('core', 'NAVBAR:FTE:MASTER:CURRENT') %></a>
-    <li data-privilege="FTE:MASTER:* FTE:LEADER:*" class="divider">
-    <li data-privilege="FTE:LEADER:*" class="dropdown-header"><%- t('core', 'NAVBAR:FTE:LEADER') %>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:FTE:LEADER') %>
     <li data-privilege="FTE:LEADER:VIEW"><a href="#fte/leader"><%- t('core', 'NAVBAR:FTE:LEADER:LIST') %></a>
     <li data-privilege="FTE:LEADER:MANAGE"><a href="#fte/leader;add"><%- t('core', 'NAVBAR:FTE:LEADER:CURRENT') %></a>
   </ul>

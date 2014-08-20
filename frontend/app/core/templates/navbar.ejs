@@ -3,10 +3,10 @@
   <div class="collapse navbar-collapse">
     <ul class="nav navbar-nav">
       <li><a href="#"><%- t('core', 'NAVBAR:DASHBOARD') %></a>
-      <li data-online data-privilege="EVENTS:VIEW"><a href="#events"><%- t('core', 'NAVBAR:EVENTS') %></a>
+      <li data-online data-privilege="EVENTS:VIEW" data-module><a href="#events"><%- t('core', 'NAVBAR:EVENTS') %></a>
       <% include navbar/fte.ejs %>
-      <li data-online data-privilege="HOURLY_PLANS:VIEW"><a href="#hourlyPlans"><%- t('core', 'NAVBAR:HOURLY_PLANS') %></a>
-      <li data-online data-privilege="PURCHASE_ORDERS:VIEW"><a href="#purchaseOrders"><%- t('core', 'NAVBAR:PURCHASE_ORDERS') %></a>
+      <li data-online data-privilege="HOURLY_PLANS:VIEW" data-module><a href="#hourlyPlans"><%- t('core', 'NAVBAR:HOURLY_PLANS') %></a>
+      <li data-online data-privilege="PURCHASE_ORDERS:VIEW" data-module><a href="#purchaseOrders"><%- t('core', 'NAVBAR:PURCHASE_ORDERS') %></a>
       <% include navbar/prod.ejs %>
       <% include navbar/reports.ejs %>
       <% include navbar/dictionaries.ejs %>

@@ -4,12 +4,12 @@
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <li data-privilege="PRESS_WORKSHEETS:VIEW"><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a>
-    <li data-privilege="PROD_DATA:VIEW"><a href="#prodLogEntries"><%- t('core', 'NAVBAR:PROD:LOG_ENTRIES') %></a>
-    <li data-privilege="PROD_DATA:VIEW"><a href="#prodShifts"><%- t('core', 'NAVBAR:PROD:SHIFTS') %></a>
-    <li data-privilege="PROD_DATA:VIEW"><a href="#prodShiftOrders"><%- t('core', 'NAVBAR:PROD:SHIFT_ORDERS') %></a>
-    <li data-privilege="PROD_DOWNTIMES:VIEW"><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD:DOWNTIMES') %></a>
-    <li data-privilege="XICONF:VIEW" class="divider">
-    <li data-privilege="XICONF:VIEW" class="dropdown-header"><%- t('core', 'NAVBAR:XICONF') %>
-    <li data-privilege="XICONF:VIEW"><a href="#xiconf/results"><%- t('core', 'NAVBAR:XICONF:RESULTS') %></a>
+    <li data-privilege="PRESS_WORKSHEETS:VIEW" data-module><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodLogEntries"><%- t('core', 'NAVBAR:PROD:LOG_ENTRIES') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShifts"><%- t('core', 'NAVBAR:PROD:SHIFTS') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShiftOrders"><%- t('core', 'NAVBAR:PROD:SHIFT_ORDERS') %></a>
+    <li data-privilege="PROD_DOWNTIMES:VIEW" data-module><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD:DOWNTIMES') %></a>
+    <li id=bar class="divider">
+    <li id=foo class="dropdown-header"><%- t('core', 'NAVBAR:XICONF') %>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/results"><%- t('core', 'NAVBAR:XICONF:RESULTS') %></a>
   </ul>

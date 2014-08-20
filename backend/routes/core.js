@@ -9,31 +9,29 @@ var lodash = require('lodash');
 module.exports = function startCoreRoutes(app, express)
 {
   var appCache = app.options.env === 'production';
+  var updaterModule = app[app.options.updaterId || 'updater'];
+  var userModule = app[app.options.userId || 'user'];
   var requirejsPaths;
   var requirejsShim;
 
+  var ROOT_USER = JSON.stringify(lodash.omit(userModule.root, 'password'));
+  var GUEST_USER = JSON.stringify(userModule.guest);
+  var PRIVILEGES = JSON.stringify(userModule.config.privileges);
+  var MODULES = JSON.stringify(app.options.modules.map(function(module)
+  {
+    return module.id || module;
+  }));
+
   app.broker.subscribe('updater.newVersion', reloadRequirejsConfig).setFilter(function(message)
   {
-    return message.service === 'frontend';
+    return message.service === app.options.id;
   });
 
   reloadRequirejsConfig();
 
-  if (app.updater)
+  if (updaterModule && app.options.dictionaryModules)
   {
-    [
-      'prodFunctions',
-      'companies',
-      'divisions',
-      'subdivisions',
-      'mrpControllers',
-      'prodFlows',
-      'workCenters',
-      'prodLines',
-      'aors',
-      'orderStatuses',
-      'downtimeReasons'
-    ].forEach(setUpFrontendVersionUpdater);
+    Object.keys(app.options.dictionaryModules).forEach(setUpFrontendVersionUpdater);
   }
 
   express.get('/', showIndex);
@@ -55,33 +53,28 @@ module.exports = function startCoreRoutes(app, express)
   {
     var sessionUser = req.session.user;
     var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
+    var appData = {
+      VERSIONS: JSON.stringify(!updaterModule ? {} : {
+        package: updaterModule.package.version,
+        backend: updaterModule.package.backendVersion,
+        frontend: updaterModule.package.frontendVersion
+      }),
+      TIME: JSON.stringify(Date.now()),
+      LOCALE: JSON.stringify(locale),
+      ROOT_USER: ROOT_USER,
+      GUEST_USER: GUEST_USER,
+      PRIVILEGES: PRIVILEGES,
+      MODULES: MODULES
+    };
 
-    // TODO: Add caching
+    lodash.forEach(app.options.dictionaryModules, function(appDataKey, moduleName)
+    {
+      appData[appDataKey] = JSON.stringify(app[moduleName].models);
+    });
+
     res.render('index', {
       appCache: appCache,
-      appData: {
-        VERSIONS: JSON.stringify({
-          package: app.updater.package.version,
-          backend: app.updater.package.backendVersion,
-          frontend: app.updater.package.frontendVersion
-        }),
-        TIME: JSON.stringify(Date.now()),
-        LOCALE: JSON.stringify(locale),
-        ROOT_USER: JSON.stringify(lodash.omit(app.user.root, 'password')),
-        GUEST_USER: JSON.stringify(app.user.guest),
-        PRIVILEGES: JSON.stringify(app.user.config.privileges),
-        PROD_FUNCTIONS: JSON.stringify(app.prodFunctions.models),
-        COMPANIES: JSON.stringify(app.companies.models),
-        DIVISIONS: JSON.stringify(app.divisions.models),
-        SUBDIVISIONS: JSON.stringify(app.subdivisions.models),
-        MRP_CONTROLLERS: JSON.stringify(app.mrpControllers.models),
-        PROD_FLOWS: JSON.stringify(app.prodFlows.models),
-        WORK_CENTERS: JSON.stringify(app.workCenters.models),
-        PROD_LINES: JSON.stringify(app.prodLines.models),
-        AORS: JSON.stringify(app.aors.models),
-        ORDER_STATUSES: JSON.stringify(app.orderStatuses.models),
-        DOWNTIME_REASONS: JSON.stringify(app.downtimeReasons.models)
-      }
+      appData: appData
     });
   }
 

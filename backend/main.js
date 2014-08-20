@@ -8,6 +8,7 @@ var startTime = Date.now();
 
 require('./extensions');
 
+var lodash = require('lodash');
 var main = require('h5.main');
 var config = require(process.argv[2]);
 
@@ -46,13 +47,13 @@ var modules = (config.modules || []).map(function(module)
 });
 
 var app = {
-  options: {
+  options: lodash.merge({}, config, {
     id: config.id,
     startTime: startTime,
     env: process.env.NODE_ENV,
     rootPath: __dirname,
     moduleStartTimeout: 3000
-  }
+  })
 };
 
 main(app, modules);

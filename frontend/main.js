@@ -170,7 +170,8 @@
     {
       var req = router.getCurrentRequest();
       var navbarView = new NavbarView({
-        currentPath: req === null ? '/' : req.path
+        currentPath: req === null ? '/' : req.path,
+        loadedModules: window.MODULES || []
       });
 
       navbarView.on('logIn', function()
