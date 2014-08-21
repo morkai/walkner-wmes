@@ -14,16 +14,25 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     'a4': {
       width: 210,
       height: 297,
-      options: '-O Landscape -B 0 -L 30mm -R 30mm -T 30mm',
-      qr: '--scale=7 --vers=5',
-      code128: '--scale=1 --height=259'
+      wkhtmltopdf: '-O Landscape -B 0 -L 30mm -R 30mm -T 30mm',
+      qr: {
+        zint: '--scale=7 --vers=5'
+      },
+      code128: {
+        zint: '--scale=1 --height=259'
+      }
     },
     '104x42': {
       width: 42,
       height: 105,
-      options: '-O Landscape -B 0 -L 10mm -R 10mm -T 1mm',
-      qr: '--scale=3 --vers=5',
-      code128: '--scale=1 --height=95'
+      wkhtmltopdf: '-O Landscape -B 0 -L 10mm -R 10mm -T 1mm',
+      qr: {
+        zint: '--scale=3 --vers=5'
+      },
+      code128: {
+        zint: '--scale=1 --height=95',
+        maxLength: 40
+      }
     }
   };
 

@@ -331,7 +331,7 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
         var cmd = format(
           '"%s" -q --dpi 120 --disable-smart-shrinking --no-outline %s --page-width %smm --page-height %smm "%s" "%s"',
           poModule.config.wkhtmltopdfExe,
-          paperOptions.options,
+          paperOptions.wkhtmltopdf,
           paperOptions.width,
           paperOptions.height,
           url,
@@ -433,14 +433,18 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
         svg: null
       };
 
-      page.barcodeData = format(
-        'O%sP%sQ%sL%sS%s',
-        page.orderNo,
-        page.nc12,
-        page.quantity,
-        page.itemNo,
-        page.shippingNo
-      );
+      var barcodeData = format('O%sP%sQ%sL%sS', page.orderNo, page.nc12, page.quantity, page.itemNo);
+
+      if (barcodeData.length + page.shippingNo.length > barcodeOptions.maxLength)
+      {
+        barcodeData += page.shippingNo.substr(-1 * (barcodeOptions.maxLength - barcodeData.length));
+      }
+      else
+      {
+        barcodeData += page.shippingNo;
+      }
+
+      page.barcodeData = barcodeData;
 
       barcodeDataToSvg[page.barcodeData] = null;
 
@@ -453,7 +457,7 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
       {
         for (var i = 0, l = uniqueBarcodes.length; i < l; ++i)
         {
-          generateBarcode(barcodeType, barcodeOptions, uniqueBarcodes[i], this.group());
+          generateBarcode(barcodeType, barcodeOptions.zint, uniqueBarcodes[i], this.group());
         }
       },
       function(err, barcodeSvgs)
