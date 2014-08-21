@@ -59,6 +59,8 @@ exports.countInMonth = function(date, currentShiftStartDate)
   }
 
   var currentDay = currentShiftStartDate.getDate();
+  var currentMonth = currentShiftStartDate.getMonth();
+  var currentYear = currentShiftStartDate.getFullYear();
   var key = date.getTime().toString();
   var businessDays = exports.months[key];
   var weekDay;
@@ -67,8 +69,10 @@ exports.countInMonth = function(date, currentShiftStartDate)
   {
     businessDays = 0;
 
+    var year = date.getFullYear();
     var month = date.getMonth();
     var day = date.getDate();
+    var sameMonth = year === currentYear && month === currentMonth;
 
     while (date.getMonth() === month)
     {
@@ -79,7 +83,7 @@ exports.countInMonth = function(date, currentShiftStartDate)
         ++businessDays;
       }
 
-      if (day === currentDay)
+      if (sameMonth && day === currentDay)
       {
         break;
       }
@@ -277,5 +281,5 @@ function addYear(year, months)
 
 function key(year, month, day)
 {
-  return new Date(year, month, day, 6, 0, 0, 0).getTime();
+  return new Date(year, month, day, 0, 0, 0, 0).getTime();
 }

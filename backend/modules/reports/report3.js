@@ -107,8 +107,7 @@ function Report3(options)
   /**
    * @type {number}
    */
-  this.currentShiftGroupKey =
-    util.createGroupKey(this.options.interval, this.currentShiftStartDate);
+  this.currentShiftGroupKey = util.createGroupKey(this.options.interval, this.currentShiftStartDate);
 
   /**
    * @type {number}
@@ -158,8 +157,8 @@ Report3.prototype.toJSON = function()
 Report3.prototype.finalize = function()
 {
   var prodLines = Object.keys(this.results);
-  var firstGroupKey = Number.MAX_VALUE;
-  var lastGroupKey = Number.MIN_VALUE;
+  var firstGroupKey = util.createGroupKey(this.options.interval, new Date(this.options.fromTime + 6 * 3600 * 1000));
+  var lastGroupKey = util.createGroupKey(this.options.interval, new Date(this.options.toTime));
 
   for (var i = 0, l = prodLines.length; i < l; ++i)
   {
@@ -169,18 +168,6 @@ Report3.prototype.finalize = function()
     for (var ii = 0, ll = groupKeys.length; ii < ll; ++ii)
     {
       prodLine[groupKeys[ii]].roundValues();
-
-      var groupKey = +groupKeys[ii];
-
-      if (groupKey < firstGroupKey)
-      {
-        firstGroupKey = groupKey;
-      }
-
-      if (groupKey > lastGroupKey)
-      {
-        lastGroupKey = groupKey;
-      }
     }
   }
 
@@ -268,71 +255,6 @@ Report3.prototype.countWorkDays = function(groupKey)
   }
 
   this.workDays[groupKey] = workDays;
-
-  return workDays;
-};
-
-Report3.prototype.countWorkDaysInDay = function(date)
-{
-  var weekDay = date.getDay();
-
-  return weekDay === 0 || weekDay === 6 ? 0 : 1;
-};
-
-Report3.prototype.countWorkDaysInWeek = function(date)
-{
-  if (date.getTime() !== this.currentShiftGroupKey)
-  {
-    return 5;
-  }
-
-  var currentDay = this.currentShiftStartDate.getDay();
-
-  if (currentDay === 0 || currentDay === 6)
-  {
-    return 5;
-  }
-
-  return currentDay;
-};
-
-Report3.prototype.countWorkDaysInMonth = function(date)
-{
-  var workDays = 0;
-  var weekDay = 0;
-
-  if (date.getTime() === this.currentShiftGroupKey)
-  {
-    var day = this.currentShiftStartDate.getDate();
-
-    while (date.getDate() <= day)
-    {
-      weekDay = date.getDay();
-
-      if (weekDay !== 0 && weekDay !== 6)
-      {
-        ++workDays;
-      }
-
-      date.setDate(date.getDate() + 1);
-    }
-  }
-  else
-  {
-    var month = date.getMonth();
-
-    while (date.getMonth() === month)
-    {
-      weekDay = date.getDay();
-
-      if (weekDay !== 0 && weekDay !== 6)
-      {
-        ++workDays;
-      }
-
-      date.setDate(date.getDate() + 1);
-    }
-  }
 
   return workDays;
 };
