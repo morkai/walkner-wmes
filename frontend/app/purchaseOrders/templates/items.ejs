@@ -4,10 +4,10 @@
   <div class="btn-toolbar">
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
-        <input type="checkbox" name="status" value="waiting"> <i class="fa fa-unlock-alt"></i><span><%- t('purchaseOrders', 'items:status:waiting') %></span>
+        <input type="checkbox" name="status" value="waiting"> <i class="fa fa-unlock-alt"></i><span><%- t('purchaseOrders', 'items:status:waiting', {count: waitingCount}) %></span>
       </label>
       <label class="btn btn-default <%- open ? '' : 'active' %>">
-        <input type="checkbox" name="status" value="completed"> <i class="fa fa-lock"></i><span><%- t('purchaseOrders', 'items:status:completed') %></span>
+        <input type="checkbox" name="status" value="completed"> <i class="fa fa-lock"></i><span><%- t('purchaseOrders', 'items:status:completed', {count: completedCount}) %></span>
       </label>
     </div>
     <div class="btn-group">

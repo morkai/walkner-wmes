@@ -138,12 +138,29 @@ define([
     serialize: function()
     {
       var po = this.model;
+      var waitingCount = 0;
+      var completedCount = 0;
+      var items = po.get('items').map(function(item)
+      {
+        if (item.get('completed'))
+        {
+          ++completedCount;
+        }
+        else
+        {
+          ++waitingCount;
+        }
+
+        return item.serialize();
+      });
 
       return {
         idPrefix: this.idPrefix,
         toolbarVisible: po.get('open') && user.isAllowedTo('PURCHASE_ORDERS:MANAGE'),
         open: po.get('open'),
-        items: po.get('items').invoke('serialize')
+        items: items,
+        waitingCount: waitingCount.toLocaleString(),
+        completedCount: completedCount.toLocaleString()
       };
     },
 

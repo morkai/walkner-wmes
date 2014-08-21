@@ -59,8 +59,8 @@
   "filter:status:closed": "Zamknięte",
   "filter:submit": "Filtruj zamówienia",
 
-  "items:status:waiting": "Otwarte",
-  "items:status:completed": "Zakończone",
+  "items:status:waiting": "Otwarte ({count})",
+  "items:status:completed": "Zakończone ({count})",
   "items:select:all": "Zaznacz wszystkie",
   "items:select:none": "Odznacz wszystkie",
   "items:print": "Drukuj wybrane",
