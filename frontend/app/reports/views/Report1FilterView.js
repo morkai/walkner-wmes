@@ -69,6 +69,7 @@ define([
       if (!$subdivisionTypes.find('> .active').length)
       {
         $subdivisionTypes.find('> .btn').addClass('active');
+        $subdivisionTypes.find('input').prop('checked', true);
       }
 
       return $subdivisionTypes;
@@ -78,7 +79,7 @@ define([
     {
       var online = this.getSelectedMode() === 'online';
 
-      this.$('.filter-dateRange .form-control').attr('disabled', online);
+      this.$('.filter-dateRange .form-control').prop('disabled', online);
 
       var $intervals = this.$id('intervals').find('.btn');
 

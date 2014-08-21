@@ -83,7 +83,7 @@ define([
       if (!$shift.find('> .active').length)
       {
         $shift.find('> .btn').addClass('active');
-        $shift.find('input').attr('checked', true);
+        $shift.find('input').prop('checked', true);
       }
 
       return $shift;

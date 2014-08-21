@@ -36,7 +36,7 @@ define([
       },
       'click a[data-range]': function(e)
       {
-        var dateRange = prepareDateRange(e.target.getAttribute('data-range'));
+        var dateRange = prepareDateRange(e.target.dataset.range);
 
         this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
         this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
@@ -111,7 +111,7 @@ define([
       if (!$subdivisionTypes.find('> .active').length)
       {
         $subdivisionTypes.find('> .btn').addClass('active');
-        $subdivisionTypes.find('input').attr('checked', true);
+        $subdivisionTypes.find('input').prop('checked', true);
       }
 
       return $subdivisionTypes;
@@ -124,7 +124,7 @@ define([
       if (!$divisions.find('> .active').length)
       {
         $divisions.find('> .btn').addClass('active');
-        $divisions.find('input').attr('checked', true);
+        $divisions.find('input').prop('checked', true);
       }
 
       return $divisions;
