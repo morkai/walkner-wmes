@@ -32,7 +32,9 @@ define([
       'keyup .pos-printDialog-qty': 'recountTotals',
       'blur .pos-printDialog-qty': function(e)
       {
-        e.target.value = Math.min(e.target.max, this.parseQty(e.target.value)).toLocaleString();
+        var qty = this.parseQty(e.target.value, e.target.dataset.integer !== undefined);
+
+        e.target.value = Math.min(e.target.max, qty).toLocaleString();
       },
       'submit': 'submitForm'
     },
@@ -219,7 +221,7 @@ define([
       return formData;
     },
 
-    parseQty: function(value)
+    parseQty: function(value, noDecimals)
     {
       var parts = String(value).split(this.decimalSeparator);
       var integer = parseInt(parts[0].replace(/[^0-9]+/g, ''), 10);
@@ -228,7 +230,7 @@ define([
       integer = isNaN(integer) ? '0' : integer.toString();
       decimals = isNaN(decimals) ? '0' : decimals.toString();
 
-      if (decimals === '0')
+      if (noDecimals || decimals === '0')
       {
         return integer === '0' ? 0 : parseInt(integer, 10);
       }
