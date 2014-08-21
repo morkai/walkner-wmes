@@ -36,14 +36,14 @@ exports.events = {
     ],
     info: [
       'events.**',
-      'users.synced'
+      '*.synced'
     ],
     warning: [
       'users.loginFailure',
       '*.deleted'
     ],
     error: [
-      'users.syncFailed'
+      '*.syncFailed'
     ]
   }
 };

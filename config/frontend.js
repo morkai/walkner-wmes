@@ -72,8 +72,7 @@ exports.events = {
     ],
     info: [
       'events.**',
-      'users.synced',
-      'mechOrders.synced'
+      '*.synced'
     ],
     warning: [
       'users.loginFailure',
@@ -81,7 +80,7 @@ exports.events = {
       'fte.leader.deleted', 'fte.master.deleted'
     ],
     error: [
-      'users.syncFailed'
+      '*.syncFailed'
     ]
   }
 };
