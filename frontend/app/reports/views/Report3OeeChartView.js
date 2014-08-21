@@ -81,6 +81,7 @@ define([
     createChart: function()
     {
       var chartData = this.serializeChartData();
+      var query = this.model.query;
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -108,7 +109,6 @@ define([
           {
             title: false,
             opposite: true,
-            gridLineWidth: 0,
             labels: {
               format: '{value}%'
             },
@@ -128,6 +128,14 @@ define([
           margin: 14
         },
         plotOptions: {
+          series: {
+            events: {
+              legendItemClick: function(e)
+              {
+                this.trigger('seriesVisibilityChanged', e.target.options.id, !e.target.visible);
+              }.bind(this)
+            }
+          },
           line: {
             lineWidth: 2,
             states: {
@@ -140,58 +148,70 @@ define([
         },
         series: [
           {
+            id: 'totalAvailabilityH',
             name: t('reports', 'oee:totalAvailability'),
             type: 'column',
             yAxis: 0,
             data: chartData.totalAvailabilityH,
             tooltip: {
               valueSuffix: 'h'
-            }
+            },
+            visible: query.isColumnVisible('totalAvailabilityH')
           },
           {
+            id: 'operationalAvailabilityH',
             name: t('reports', 'oee:operationalAvailability:h'),
             type: 'column',
             yAxis: 0,
             data: chartData.operationalAvailabilityH,
             tooltip: {
               valueSuffix: 'h'
-            }
+            },
+            visible: query.isColumnVisible('operationalAvailabilityH')
           },
           {
+            id: 'exploitationH',
             name: t('reports', 'oee:exploitation:h'),
             type: 'column',
             yAxis: 0,
             data: chartData.exploitationH,
             tooltip: {
               valueSuffix: 'h'
-            }
+            },
+            visible: query.isColumnVisible('exploitationH')
           },
           {
+            id: 'oee',
             name: t('reports', 'oee:oee'),
             type: 'line',
             yAxis: 1,
             data: chartData.oee,
             tooltip: {
               valueSuffix: '%'
-            }
+            },
+            visible: query.isColumnVisible('oee')
           },
           {
+            id: 'operationalAvailabilityP',
             name: t('reports', 'oee:operationalAvailability:%'),
             type: 'line',
             yAxis: 1,
             data: chartData.operationalAvailabilityP,
             tooltip: {
               valueSuffix: '%'
-            }
+            },
+            visible: query.isColumnVisible('operationalAvailabilityP')
           },
           {
+            id: 'exploitationP',
             name: t('reports', 'oee:exploitation:%'),
             type: 'line',
             yAxis: 1,
             data: chartData.exploitationP,
             tooltip: {
               valueSuffix: '%'
-            }
+            },
+            visible: query.isColumnVisible('exploitationP')
           }
         ]
       });

@@ -67,6 +67,9 @@ define([
       this.tableSummaryView = new Report3TableSummaryView({model: this.report});
       this.oeeChartView = new Report3OeeChartView({model: this.report});
       this.downtimeChartView = new Report3DowntimeChartView({model: this.report});
+
+      this.listenTo(this.oeeChartView, 'seriesVisibilityChanged', this.onSeriesVisibilityChanged);
+      this.listenTo(this.downtimeChartView, 'seriesVisibilityChanged', this.onSeriesVisibilityChanged);
     },
 
     load: function(when)
@@ -86,6 +89,11 @@ define([
       {
         this.promised(this.report.fetch());
       }
+    },
+
+    onSeriesVisibilityChanged: function(series, visible)
+    {
+      this.query.changeColumnVisibility(series, visible);
     },
 
     recalcSummaries: function()

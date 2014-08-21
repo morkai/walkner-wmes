@@ -81,6 +81,7 @@ define([
     createChart: function()
     {
       var chartData = this.serializeChartData();
+      var query = this.model.query;
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -126,6 +127,14 @@ define([
           margin: 14
         },
         plotOptions: {
+          series: {
+            events: {
+              legendItemClick: function(e)
+              {
+                this.trigger('seriesVisibilityChanged', e.target.options.id, !e.target.visible);
+              }.bind(this)
+            }
+          },
           line: {
             lineWidth: 2,
             states: {
@@ -138,60 +147,73 @@ define([
         },
         series: [
           {
+            id: 'adjustingDuration',
             name: t('reports', 'oee:adjusting:duration'),
             type: 'column',
             yAxis: 0,
             data: chartData.adjustingDuration,
             tooltip: {
               valueSuffix: 'h'
-            }
+            },
+            visible: query.isColumnVisible('adjustingDuration')
           },
           {
+            id: 'maintenanceDuration',
             name: t('reports', 'oee:maintenance:duration'),
             type: 'column',
             yAxis: 0,
             data: chartData.maintenanceDuration,
             tooltip: {
               valueSuffix: 'h'
-            }
+            },
+            visible: query.isColumnVisible('maintenanceDuration')
           },
           {
+            id: 'renovationDuration',
             name: t('reports', 'oee:renovation:duration'),
             type: 'column',
             yAxis: 0,
             data: chartData.renovationDuration,
             tooltip: {
               valueSuffix: 'h'
-            }
+            },
+            visible: query.isColumnVisible('renovationDuration')
           },
           {
+            id: 'malfunctionDuration',
             name: t('reports', 'oee:malfunction:duration'),
             type: 'line',
             yAxis: 0,
             data: chartData.malfunctionDuration,
             tooltip: {
               valueSuffix: 'h'
-            }
+            },
+            visible: query.isColumnVisible('malfunctionDuration')
           },
           {
+            id: 'mttr',
             name: t('reports', 'oee:mttr'),
             type: 'line',
             yAxis: 0,
             data: chartData.mttr,
             tooltip: {
               valueSuffix: 'h'
-            }
+            },
+            visible: query.isColumnVisible('mttr')
           },
           {
+            id: 'mtbf',
             name: t('reports', 'oee:mtbf'),
             type: 'line',
             yAxis: 0,
             data: chartData.mtbf,
             tooltip: {
               valueSuffix: 'h'
-            }
+            },
+            visible: query.isColumnVisible('mtbf')
           },
           {
+            id: 'malfunctionCount',
             name: t('reports', 'oee:malfunction:count'),
             type: 'line',
             yAxis: 1,
@@ -199,9 +221,11 @@ define([
             tooltip: {
               valueSuffix: t('reports', 'quantitySuffix'),
               valueDecimals: 0
-            }
+            },
+            visible: query.isColumnVisible('malfunctionCount')
           },
           {
+            id: 'majorMalfunctionCount',
             name: t('reports', 'oee:majorMalfunction:count'),
             type: 'line',
             yAxis: 1,
@@ -209,7 +233,8 @@ define([
             tooltip: {
               valueSuffix: t('reports', 'quantitySuffix'),
               valueDecimals: 0
-            }
+            },
+            visible: query.isColumnVisible('majorMalfunctionCount')
           }
         ]
       });
@@ -224,14 +249,12 @@ define([
       series[6].update({marker: markerStyles}, false);
       series[7].update({marker: markerStyles}, false);
 
-      series[0].setData(chartData.adjustingDuration, false);
-      series[1].setData(chartData.maintenanceDuration, false);
-      series[2].setData(chartData.renovationDuration, false);
-      series[3].setData(chartData.malfunctionDuration, false);
-      series[4].setData(chartData.mttr, false);
-      series[5].setData(chartData.mtbf, false);
-      series[6].setData(chartData.malfunctionCount, false);
-      series[7].setData(chartData.majorMalfunctionCount, true);
+      series.forEach(function(series)
+      {
+        series.setData(chartData[series.options.id], false);
+      });
+
+      this.chart.redraw(false);
     },
 
     serializeChartData: function()

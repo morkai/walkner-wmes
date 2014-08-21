@@ -33,12 +33,12 @@ define([
     {
       name: 'division',
       data: 'division',
-      width: 45
+      width: '45px'
     },
     {
       name: '_id',
       data: '_id',
-      width: 100,
+      width: '100px',
       class: 'is-selectable is-prodLine',
       createdCell: function(cellEl, prodLineId)
       {
@@ -48,90 +48,90 @@ define([
     {
       name: 'inventoryNo',
       data: 'inventoryNo',
-      width: 40
+      width: '40px'
     },
     {
       name: 'totalAvailabilityH',
       data: 'totalAvailabilityH',
-      width: 40,
+      width: '40px',
       render: renderNumber
     },
     {
       name: 'operationalAvailabilityH',
       data: 'operationalAvailabilityH',
-      width: 40,
+      width: '40px',
       render: renderNumber
     },
     {
       name: 'operationalAvailabilityP',
       data: 'operationalAvailabilityP',
-      width: 40,
+      width: '40px',
       render: renderNumber
     },
     {
       name: 'exploitationH',
       data: 'exploitationH',
-      width: 40,
+      width: '40px',
       render: renderNumber
     },
     {
       name: 'exploitationP',
       data: 'exploitationP',
-      width: 40,
+      width: '40px',
       render: renderNumber
     },
     {
       name: 'oee',
       data: 'oee',
-      width: 25,
+      width: '25px',
       render: renderNumber
     },
     {
       name: 'adjustingDuration',
       data: 'adjustingDuration',
-      width: 45,
+      width: '45px',
       render: renderNumber
     },
     {
       name: 'maintenanceDuration',
       data: 'maintenanceDuration',
-      width: 50,
+      width: '50px',
       render: renderNumber
     },
     {
       name: 'renovationDuration',
       data: 'renovationDuration',
-      width: 55,
+      width: '55px',
       render: renderNumber
     },
     {
       name: 'malfunctionDuration',
       data: 'malfunctionDuration',
-      width: 55,
+      width: '55px',
       render: renderNumber
     },
     {
       name: 'malfunctionCount',
       data: 'malfunctionCount',
-      width: 55,
+      width: '55px',
       render: renderNumber
     },
     {
       name: 'majorMalfunctionCount',
       data: 'majorMalfunctionCount',
-      width: 50,
+      width: '50px',
       render: renderNumber
     },
     {
       name: 'mttr',
       data: 'mttr',
-      width: 30,
+      width: '30px',
       render: renderNumber
     },
     {
       name: 'mtbf',
       data: 'mtbf',
-      width: 30,
+      width: '30px',
       render: renderNumber
     }
   ];
@@ -193,6 +193,7 @@ define([
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:tableSummary', this.onTableSummaryChanged);
+      this.listenTo(this.model.query, 'change:columns', this.onColumnVisibilityChanged);
 
       this.onResize = _.debounce(this.onResize.bind(this), 100);
       this.onKeyDown = this.onKeyDown.bind(this);
@@ -236,7 +237,12 @@ define([
         scrollX: true,
         scrollY: this.calcScrollY(),
         scrollCollapse: false,
-        columns: COLUMNS,
+        columns: COLUMNS.map(function(column)
+        {
+          column.visible = this.model.query.isColumnVisible(column.name);
+
+          return column;
+        }, this),
         data: this.model.get('tableSummary'),
         language: {
           emptyTable: this.getEmptyTableMessage()
@@ -348,6 +354,11 @@ define([
         this.dataTable.rows.add(this.model.get('tableSummary'));
         this.dataTable.draw();
       }
+    },
+
+    onColumnVisibilityChanged: function(columnName, visible)
+    {
+      this.dataTable.column(columnName + ':name').visible(visible);
     },
 
     onModelLoading: function()

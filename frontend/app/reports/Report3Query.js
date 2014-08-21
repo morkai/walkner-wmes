@@ -15,6 +15,23 @@ define([
 ) {
   'use strict';
 
+  var COLUMNS = [
+    'totalAvailabilityH',
+    'operationalAvailabilityH',
+    'operationalAvailabilityP',
+    'exploitationH',
+    'exploitationP',
+    'oee',
+    'adjustingDuration',
+    'maintenanceDuration',
+    'renovationDuration',
+    'malfunctionDuration',
+    'malfunctionCount',
+    'majorMalfunctionCount',
+    'mttr',
+    'mtbf'
+  ];
+
   return Model.extend({
 
     defaults: function()
@@ -32,13 +49,9 @@ define([
         sort: {
           division: 1,
           _id: 1
-        }
+        },
+        columns: {}
       };
-    },
-
-    reset: function(query)
-    {
-      this.set(_.defaults(query, this.defaults()), {reset: true});
     },
 
     serializeToObject: function()
@@ -90,6 +103,18 @@ define([
           args: ['prodLines', Object.keys(attrs.prodLines)]
         });
       }
+
+      var columns = '';
+
+      COLUMNS.forEach(function(column)
+      {
+        columns += attrs.columns[column] === false ? '0' : '1';
+      });
+
+      rqlQuery.selector.args.push({
+        name: 'eq',
+        args: ['columns', columns]
+      });
 
       return rqlQuery.toString();
     },
@@ -152,6 +177,26 @@ define([
 
       return (!divisions.length || divisions.indexOf(prodLine.division) !== -1)
         && (subdivisionType == null || prodLine.subdivisionType === subdivisionType);
+    },
+
+    changeColumnVisibility: function(column, visible)
+    {
+      var columns = this.get('columns');
+
+      if (columns[column] === visible)
+      {
+        return;
+      }
+
+      columns[column] = visible;
+
+      this.trigger('change');
+      this.trigger('change:columns', column, visible);
+    },
+
+    isColumnVisible: function(column)
+    {
+      return this.get('columns')[column] !== false;
     }
 
   }, {
@@ -177,6 +222,18 @@ define([
           term.args[1].forEach(function(prodLineId)
           {
             attrs.prodLines[prodLineId] = true;
+          });
+        }
+        else if (term.name === 'eq' && term.args[0] === 'columns')
+        {
+          attrs.columns = {};
+
+          COLUMNS.forEach(function(column, i)
+          {
+            if (term.args[1][i] === '0')
+            {
+              attrs.columns[column] = false;
+            }
           });
         }
         else
