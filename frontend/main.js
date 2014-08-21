@@ -253,6 +253,23 @@
         router.dispatch(router.getCurrentRequest().url);
       });
 
+      broker.subscribe('user.loggedIn', function()
+      {
+        var req = router.getCurrentRequest();
+
+        if (!req)
+        {
+          return;
+        }
+
+        var url = req.url;
+
+        if (url === '/' && typeof window.DASHBOARD_URL_AFTER_LOG_IN === 'string')
+        {
+          router.replace(window.DASHBOARD_URL_AFTER_LOG_IN);
+        }
+      });
+
       broker.subscribe('user.loggedOut', function()
       {
         viewport.msg.show({

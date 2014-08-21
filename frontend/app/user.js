@@ -80,6 +80,10 @@ function(
     {
       broker.publish('user.loggedOut');
     }
+    else if (!wasLoggedIn && user.isLoggedIn())
+    {
+      broker.publish('user.loggedIn');
+    }
   };
 
   /**

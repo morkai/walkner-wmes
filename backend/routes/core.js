@@ -21,6 +21,7 @@ module.exports = function startCoreRoutes(app, express)
   {
     return module.id || module;
   }));
+  var DASHBOARD_URL_AFTER_LOG_IN = JSON.stringify(app.options.dashboardUrlAfterLogIn || '/');
 
   app.broker.subscribe('updater.newVersion', reloadRequirejsConfig).setFilter(function(message)
   {
@@ -64,7 +65,8 @@ module.exports = function startCoreRoutes(app, express)
       ROOT_USER: ROOT_USER,
       GUEST_USER: GUEST_USER,
       PRIVILEGES: PRIVILEGES,
-      MODULES: MODULES
+      MODULES: MODULES,
+      DASHBOARD_URL_AFTER_LOG_IN: DASHBOARD_URL_AFTER_LOG_IN
     };
 
     lodash.forEach(app.options.dictionaryModules, function(appDataKey, moduleName)

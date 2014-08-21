@@ -23,6 +23,8 @@ exports.dictionaryModules = {
 
 };
 
+exports.dashboardUrlAfterLogIn = '/purchaseOrders';
+
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },
   insertDelay: 1000,
