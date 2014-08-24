@@ -34,7 +34,8 @@ define([
   './vis/routes',
   './workCenters/routes',
   './xiconf/routes',
-  './purchaseOrders/routes'
+  './purchaseOrders/routes',
+  './factoryLayout/routes'
 ], function()
 {
   'use strict';
