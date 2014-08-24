@@ -32,7 +32,7 @@
   "PROPERTY:result": "Wynik",
   "PROPERTY:errorCode": "Błąd",
   "PROPERTY:exception": "Szczegóły błędu",
-  "PROPERTY:output": "Odpowiedź MultiOne Workflow",
+  "PROPERTY:output": "Odpowiedź programatora",
   "PROPERTY:featureFile": "Plik konfiguracyjny drivera",
   "PROPERTY:featureFileName": "Nazwa pliku konfiguracyjnego drivera",
   "PROPERTY:feature": "Zawartość pliku konfiguracyjego drivera",
@@ -46,7 +46,7 @@
   "filter:submit": "Filtruj wyniki",
 
   "tab:log": "Przebieg programowania",
-  "tab:output": "Odpowiedź MultiOne Workflow",
+  "tab:output": "Odpowiedź programatora",
   "tab:workflow": "Konfiguracja programatora",
   "tab:feature": "Konfiguracja drivera",
 
@@ -73,6 +73,14 @@
   "log:READING_FEATURE_FILE_TIMEOUT": "Upłynął limit czasu odczytywania pliku.",
   "log:FEATURE_FILE_READ": "Odczytano <code>{length}B</code> pliku konfiguracyjnego drivera.",
   "log:STARTING_PROGRAMMER": "Uruchamianie programatora przez interfejs <code>{interface, select, d{DALI} z{ZigBee} i{IP} other{?}}</code>: <code>{programmerFile}</code>",
+  "log:SOL_STARTED": "Rozpoczęcie programowania Fortimo Solar...",
+  "log:SOL_PARSE_ERROR": "Błąd parsowania pliku programu w linii <code>{i}</code>: <code>{line}</code>",
+  "log:SOL_SEARCHING_COM": "Wyszukiwanie portu szeregowego wg wzrorca <code>{pattern}</code>...",
+  "log:SOL_OPENING_COM": "Otwieranie portu szeregowego <code>{comPort}</code>...",
+  "log:SOL_EXECUTING_SET_COMMANDS": "Wykonywanie {count, plural, one{<code>1</code> komendy ustawiającej} other{<code>{count}</code> komend ustawiających}} wartości parametrów...",
+  "log:SOL_RESETTING": "Resetowanie urządzenia...",
+  "log:SOL_EXECUTING_GET_COMMANDS": "Porównywanie zaprogramowanych wartości parametrów...",
+  "log:SOL_INVALID_OPTION": "Odczytana wartość parametru <code>{option}</code> różni się od wartości zaprogramowanej (oczekiwano <code>{expected}</code>; otrzymano <code>{actual}</code>).",
 
   "error:WORKFLOW_FILE_ERROR": "Błąd podczas odczytywania pliku konfiguracyjnego programatora.",
   "error:FEATURE_FILE_ERROR": "Błąd podczas odczytywania pliku konfiguracyjnego drivera.",
@@ -102,5 +110,14 @@
   "error:EXIT_CODE:503": "MultiOneWorkflow (503): kilka urządzeń ma taki sam krótki adres.",
   "error:EXIT_CODE:600": "MultiOneWorkflow (600): brak opcji drivera do konwersji.",
   "error:EXIT_CODE:700": "MultiOneWorkflow (700): nie podłączono interfejsu.",
-  "error:EXIT_CODE:800": "MultiOneWorkflow (800): niemożliwa konwersja danych opcji drivera."
+  "error:EXIT_CODE:800": "MultiOneWorkflow (800): niemożliwa konwersja danych opcji drivera.",
+  "error:SOL_PARSE_ERROR": "SOL: Błąd podczas parsowania pliku programu.",
+  "error:SOL_NO_COMMANDS": "SOL: Brak komend ustawiających wartości parametrów.",
+  "error:SOL_SEARCHING_COM_FAILURE": "SOL: Błąd podczas wyszukiwania portu szeregowego.",
+  "error:SOL_COM_NOT_FOUND": "SOL: Nie znaleziono portu szeregowego.",
+  "error:SOL_OPENING_COM_FAILURE": "SOL: Błąd podczas otwierania portu szeregowego.",
+  "error:SOL_SERIAL_PORT_FAILURE": "SOL: Błąd portu szeregowego.",
+  "error:SOL_INVALID_OPTION": "SOL: Odczytana wartość różni się od wartości zaprogramowanej.",
+  "error:SOL_NO_CONNECTION": "SOL: Brak odpowiedzi od urządzenia. Sprawdź połączenie portu szeregowego.",
+  "error:SOL_FEATURE_DISABLED": "Ustawiona licencja nie ma opcji programowania Fortimo Solar."
 }

@@ -33,7 +33,7 @@
     "PROPERTY:result": "Result",
     "PROPERTY:errorCode": "Error",
     "PROPERTY:exception": "Exception",
-    "PROPERTY:output": "MultiOne Workflow output",
+    "PROPERTY:output": "Programmer output",
     "PROPERTY:featureFile": "Driver configuration file",
     "PROPERTY:featureFileName": "Driver configuration file name",
     "PROPERTY:feature": "Driver configuration file contents",
@@ -47,7 +47,7 @@
     "filter:submit": "Filter results",
 
     "tab:log": "Programming log",
-    "tab:output": "MultiOne Workflow output",
+    "tab:output": "Programmer output",
     "tab:workflow": "Programmer configuration",
     "tab:feature": "Driver configuration",
 
@@ -74,6 +74,14 @@
     "log:READING_FEATURE_FILE_TIMEOUT": "Reading contents of the driver configuration file timed out.",
     "log:FEATURE_FILE_READ": "Read <code>{length}B</code> of the driver configuration file.",
     "log:STARTING_PROGRAMMER": "Starting the programmer using the <code>{interface, select, d{DALI} z{ZigBee} i{IP} other{?}}</code> interface: <code>{programmerFile}</code>",
+    "log:SOL_STARTED": "Starting a Fortimo Solar programming...",
+    "log:SOL_PARSE_ERROR": "Error during a parsing of the program file in line <code>{i}</code>: <code>{line}</code>",
+    "log:SOL_SEARCHING_COM": "Searching for a serial port using matching the pattern: <code>{pattern}</code>...",
+    "log:SOL_OPENING_COM": "Opening the <code>{comPort}</code> serial port...",
+    "log:SOL_EXECUTING_SET_COMMANDS": "Executing {count, plural, one{<code>1</code> SET parameter value command} other{<code>{count}</code> SET parameter value commands}}...",
+    "log:SOL_RESETTING": "Resetting the device...",
+    "log:SOL_EXECUTING_GET_COMMANDS": "Comparing the programmed parameter values...",
+    "log:SOL_INVALID_OPTION": "Read parameter value of option <code>{option}</code> differs from the programmed value (expected <code>{expected}</code>; got <code>{actual}</code>).",
 
     "error:WORKFLOW_FILE_ERROR": "Error during reading of the contents of the programmer configuration file.",
     "error:FEATURE_FILE_ERROR": "Error during reading of the contents of the driver configuration file.",
@@ -103,7 +111,15 @@
     "error:EXIT_CODE:503": "MultiOneWorkflow (503): multiple devices share the same short address.",
     "error:EXIT_CODE:600": "MultiOneWorkflow (600): no features to convert.",
     "error:EXIT_CODE:700": "MultiOneWorkflow (700): no interface connected.",
-    "error:EXIT_CODE:800": "MultiOneWorkflow (800): convert feature data is not possible."
+    "error:EXIT_CODE:800": "MultiOneWorkflow (800): convert feature data is not possible.",
+    "error:SOL_PARSE_ERROR": "SOL: Error during parsing of the program file.",
+    "error:SOL_NO_COMMANDS": "SOL: No SET commands were found in the program file.",
+    "error:SOL_SEARCHING_COM_FAILURE": "SOL: Error while searching for a serial port.",
+    "error:SOL_COM_NOT_FOUND": "SOL: Serial port was not found.",
+    "error:SOL_OPENING_COM_FAILURE": "SOL: Error while opening the serial port.",
+    "error:SOL_SERIAL_PORT_FAILURE": "SOL: Serial port error.",
+    "error:SOL_NO_CONNECTION": "SOL: No response from the device. Check the serial port connection.",
+    "error:SOL_INVALID_OPTION": "SOL: Read value differs from the programmed one."
   },
   "pl": true
 }
