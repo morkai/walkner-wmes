@@ -269,7 +269,15 @@ define([
           zoomType: null
         },
         exporting: {
-          filename: t.bound('reports', 'filenames:5:' + this.fteType)
+          filename: t.bound('reports', 'filenames:5:' + this.fteType),
+          buttons: {
+            contextButton: {
+              menuItems: Highcharts.getDefaultMenuItems().concat({
+                text: t('core', 'highcharts:downloadCSV'),
+                onclick: this.exportChart.bind(this)
+              })
+            }
+          }
         },
         title: {
           text: this.getChartTitle()
@@ -336,6 +344,57 @@ define([
           valueDecimals: 1
         }
       };
+    },
+
+    exportChart: function()
+    {
+      var req = this.ajax({
+        type: 'POST',
+        url: '/reports;download?filename=' + this.chart.options.exporting.filename,
+        contentType: 'text/csv',
+        data: this.exportCsvLines().join('\r\n')
+      });
+
+      req.done(function(key)
+      {
+        window.location.href = '/reports;download?key=' + key;
+      });
+    },
+
+    exportCsvLines: function()
+    {
+      var view = this;
+      var lines = [t('reports', 'hr:' + this.fteType + ':columns')];
+
+      this.chart.series.forEach(function(series, i)
+      {
+        var line = view.quoteCsvString(series.name)
+          + ';' + view.quoteCsvString(series.options.tooltip.valueSuffix.trim());
+
+        series.data.forEach(function(point)
+        {
+          if (i === 0)
+          {
+            lines[0] += ';' + view.quoteCsvString(formatTooltipHeader.call(view, point));
+          }
+
+          line += ';' + point.y.toLocaleString();
+        });
+
+        lines.push(line);
+      });
+
+      return lines;
+    },
+
+    quoteCsvString: function quote(value)
+    {
+      if (value === null || value === undefined || value === '')
+      {
+        return '""';
+      }
+
+      return '"' + String(value).replace(/"/g, '""') + '"';
     }
 
   });

@@ -121,6 +121,7 @@
   "highcharts:downloadPDF": "Zapisz jako PDF",
   "highcharts:downloadPNG": "Zapisz jako PNG",
   "highcharts:downloadSVG": "Zapisz jako SVG",
+  "highcharts:downloadCSV": "Zapisz jako CSV",
   "highcharts:printChart": "Drukuj wykres",
   "highcharts:decimalPoint": ",",
   "highcharts:thousandsSep": " ",

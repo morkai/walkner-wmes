@@ -210,6 +210,11 @@
   "hr:title:indirect": "INDIRECT",
   "hr:title:dirIndir": "INDIRECT/DIRECT",
   "hr:title:details": "Szczegóły",
+  "hr:total:columns": "Wskaźnik;Jednostka",
+  "hr:direct:columns": "DIRECT;Jednostka",
+  "hr:indirect:columns": "INDIRECT;Jednostka",
+  "hr:dirIndir:columns": "Wskaźnik;Jednostka",
+  "hr:details:columns": "Stanowisko;Firma;Jednostka;Średnia",
 
   "filenames:1:coeffs": "WMES_Wskazniki_WydProd",
   "filenames:1:downtimesByAor": "WMES_Przestoje_ObszOdp",

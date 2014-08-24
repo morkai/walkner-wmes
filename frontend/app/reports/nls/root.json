@@ -209,6 +209,11 @@
     "hr:title:indirect": "INDIRECT",
     "hr:title:dirIndir": "INDIRECT/DIRECT",
     "hr:title:details": "Details",
+    "hr:total:columns": "Metric;Unit",
+    "hr:direct:columns": "DIRECT;Unit",
+    "hr:indirect:columns": "INDIRECT;Unit",
+    "hr:dirIndir:columns": "Metric;Unit",
+    "hr:details:columns": "Position;Company;Unit;Average",
 
     "filenames:1:coeffs": "WMES_EffProd",
     "filenames:1:downtimesByAor": "WMES_Downtimes_AOR",

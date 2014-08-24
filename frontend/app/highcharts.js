@@ -36,6 +36,8 @@ define([
     minPadding: 0.01
   });
 
+  Highcharts.getDefaultMenuItems = getDefaultMenuItems;
+
   Highcharts.formatTableTooltip = function(header, rows)
   {
     var decimalPoint = t('core', 'highcharts:decimalPoint');
@@ -204,17 +206,22 @@ define([
       exporting: {
         buttons: {
           contextButton: {
-            menuItems: [{
-              text: t('core', 'highcharts:downloadPDF'),
-              onclick: _.partial(exportChart, 'application/pdf')
-            }, {
-              text: t('core', 'highcharts:downloadPNG'),
-              onclick: _.partial(exportChart, 'image/png')
-            }]
+            menuItems: getDefaultMenuItems()
           }
         }
       }
     });
+  }
+
+  function getDefaultMenuItems()
+  {
+    return [{
+      text: t('core', 'highcharts:downloadPDF'),
+      onclick: _.partial(exportChart, 'application/pdf')
+    }, {
+      text: t('core', 'highcharts:downloadPNG'),
+      onclick: _.partial(exportChart, 'image/png')
+    }];
   }
 
   function exportChart(type)

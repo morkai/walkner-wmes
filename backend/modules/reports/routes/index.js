@@ -19,6 +19,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var userModule = app[reportsModule.config.userId];
   var settings = app[reportsModule.config.settingsId];
 
+  var downloads = {};
+
   var canView = userModule.auth('REPORTS:VIEW');
   var canManage = userModule.auth('REPORTS:MANAGE');
 
@@ -53,4 +55,46 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   {
     express.post('/reports;export', canView, multipart(), exportRoute.bind(null, reportsModule));
   }
+
+  express.post('/reports;download', canView, function(req, res)
+  {
+    if (!req.query.filename || !req.is('text/csv'))
+    {
+      return res.send(400);
+    }
+
+    var key = (Date.now() + Math.random()).toString();
+
+    downloads[key] = {
+      filename: req.query.filename + '.csv',
+      body: Buffer.concat([new Buffer([0xEF, 0xBB, 0xBF]), new Buffer(req.body, 'utf8')]),
+      timer: setTimeout(function() { delete downloads[key]; }, 30000)
+    };
+
+    res.send(key);
+  });
+
+  express.get('/reports;download', function(req, res)
+  {
+    var key = req.query.key;
+
+    if (!key)
+    {
+      return res.send(400);
+    }
+
+    var download = downloads[key];
+
+    if (!download)
+    {
+      return res.send(404);
+    }
+
+    clearTimeout(download.timer);
+
+    delete downloads[key];
+
+    res.attachment(download.filename);
+    res.end(download.body);
+  });
 };

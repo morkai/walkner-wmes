@@ -14,7 +14,7 @@ function(
 
   return function formatTooltipHeader(ctx)
   {
-    var timeMoment = time.getMoment(ctx.x);
+    var timeMoment = time.getMoment(typeof ctx === 'number' ? ctx : ctx.x);
     var interval = this.model.query.get('interval');
     var data;
 

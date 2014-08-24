@@ -122,6 +122,7 @@
     "highcharts:downloadPDF": "Save as PDF",
     "highcharts:downloadPNG": "Save as PNG",
     "highcharts:downloadSVG": "Save as SVG",
+    "highcharts:downloadCSV": "Save as CSV",
     "highcharts:printChart": "Print the chart",
     "highcharts:decimalPoint": ".",
     "highcharts:thousandsSep": ",",

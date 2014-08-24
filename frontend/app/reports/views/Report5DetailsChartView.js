@@ -8,14 +8,16 @@ define([
   'app/highcharts',
   'app/data/companies',
   'app/data/prodFunctions',
-  './Report5FteChartView'
+  './Report5FteChartView',
+  '../util/formatTooltipHeader'
 ], function(
   _,
   t,
   Highcharts,
   companies,
   prodFunctions,
-  Report5FteChartView
+  Report5FteChartView,
+  formatTooltipHeader
 ) {
   'use strict';
 
@@ -163,6 +165,85 @@ define([
           minPointLength: 2
         }
       ];
+    },
+
+    exportCsvLines: function()
+    {
+      var view = this;
+      var lines = [t('reports', 'hr:details:columns')];
+      var rows = {};
+
+      prodFunctions.forEach(function(prodFunction)
+      {
+        rows[prodFunction.id] = {};
+
+        companies.forEach(function(company)
+        {
+          rows[prodFunction.id][company.id] = [];
+        });
+      });
+
+      this.model.get('raw').forEach(function(dataPoint)
+      {
+        if (typeof dataPoint === 'number')
+        {
+          dataPoint = {
+            key: dataPoint,
+            qty: 0,
+            dni: {}
+          };
+        }
+
+        lines[0] += ';' + view.quoteCsvString(formatTooltipHeader.call(view, dataPoint.key));
+
+        prodFunctions.forEach(function(prodFunction)
+        {
+          var prodFunctionData = dataPoint.dni[prodFunction.id];
+
+          companies.forEach(function(company)
+          {
+            var value = 0;
+
+            if (prodFunctionData !== undefined && prodFunctionData[company.id])
+            {
+              value = prodFunctionData[company.id][0] + prodFunctionData[company.id][1];
+            }
+
+            rows[prodFunction.id][company.id].push(value);
+          });
+        });
+      });
+
+      prodFunctions.forEach(function(prodFunction)
+      {
+        companies.forEach(function(company)
+        {
+          var line = [
+            view.quoteCsvString(prodFunction.getLabel()),
+            view.quoteCsvString(company.getLabel()),
+            'FTE',
+            '0'
+          ];
+          var values = rows[prodFunction.id][company.id];
+          var total = 0;
+
+          values.forEach(function(value)
+          {
+            line.push(value.toLocaleString());
+
+            total += value;
+          });
+
+          if (values.length)
+          {
+            line[3] = (Math.round((total / values.length) * 100) / 100).toLocaleString();
+          }
+
+          lines.push(line.join(';'));
+        });
+      });
+
+      return lines;
     }
 
   });

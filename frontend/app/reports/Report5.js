@@ -75,6 +75,7 @@ define([
       /*jshint maxdepth:999*/
 
       var attributes = {
+        raw: report.data,
         totals: {
           quantityDone: [],
           total: [],
