@@ -7,6 +7,7 @@
 var path = require('path');
 var lodash = require('lodash');
 var express = require('express');
+var bodyParser = require('body-parser');
 var ejsAmd = require('ejs-amd');
 var messageFormatAmd = require('messageformat-amd');
 var MongoStore = require('./MongoStore')(express.session.Store);
@@ -69,8 +70,9 @@ exports.start = function startExpressModule(app, module, done)
     cookie: module.config.sessionCookie,
     secret: module.config.cookieSecret
   }));
-  module.use(express.json());
-  module.use(express.urlencoded());
+  module.use(bodyParser.json());
+  module.use(bodyParser.urlencoded());
+  module.use(bodyParser.text({type: 'text/*'}));
   module.use(rqlMiddleware());
   module.use(module.router);
   module.use(express.static(staticPath));
