@@ -46,6 +46,13 @@ define([
       'prodLines.synced': 'serializeAndRestart'
     },
 
+    initialize: function()
+    {
+      this.onResize = _.debounce(this.onResize.bind(this), 100);
+
+      $(window).on('resize', this.onResize);
+    },
+
     destroy: function()
     {
       $(window).off('resize', this.onResize);
@@ -75,10 +82,6 @@ define([
       this.setUpForce(size);
       this.restart();
 
-      this.onResize = _.debounce(this.onResize.bind(this), 100);
-
-      $(window).on('resize', this.onResize);
-
       this.$el.append(structureLegendTemplate());
     },
 
@@ -86,7 +89,7 @@ define([
     {
       var w = window.innerWidth - 28;
       var h = window.innerHeight
-        - 28
+        - 14
         - parseInt($('body').css('margin-top'), 10)
         - $('.page > .hd').outerHeight(true)
         - $('.page > .ft').outerHeight(true);

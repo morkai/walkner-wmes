@@ -15,6 +15,9 @@ body {
   overflow-y: scroll;
   -ms-overflow-style: scrollbar;
 }
+body.no-overflow {
+  overflow: hidden;
+}
 body.modal-open {
   overflow-y: hidden;
 }

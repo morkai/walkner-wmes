@@ -19,8 +19,6 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'structureVis',
-
     breadcrumbs: [
       t.bound('vis', 'BREADCRUMBS:structure')
     ],
@@ -28,6 +26,16 @@ define([
     initialize: function()
     {
       this.view = new StructureVisView();
+    },
+
+    destroy: function()
+    {
+      document.body.classList.remove('no-overflow');
+    },
+
+    afterRender: function()
+    {
+      document.body.classList.add('no-overflow');
     },
 
     load: function(when)
