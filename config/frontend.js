@@ -73,7 +73,8 @@ exports.events = {
     ],
     info: [
       'events.**',
-      '*.synced'
+      'mechOrders.synced',
+      'users.synced'
     ],
     warning: [
       'users.loginFailure',

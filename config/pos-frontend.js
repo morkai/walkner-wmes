@@ -36,7 +36,7 @@ exports.events = {
     ],
     info: [
       'events.**',
-      '*.synced'
+      'purchaseOrders.synced'
     ],
     warning: [
       'users.loginFailure',
