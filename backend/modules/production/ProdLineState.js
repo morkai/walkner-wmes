@@ -4,22 +4,40 @@
 
 'use strict';
 
+var lodash = require('lodash');
+var deepEqual = require('deep-equal');
+
 module.exports = ProdLineState;
 
 var EXTENDED_DELAY = 0.33;
+var HOUR_TO_INDEX = [
+  2, 3, 4, 5, 6, 7, 0, 1,
+  2, 3, 4, 5, 6, 7, 0, 1,
+  2, 3, 4, 5, 6, 7, 0, 1
+];
 
 function ProdLineState(broker, prodLine)
 {
   this.broker = broker;
   this.prodLine = prodLine;
-  this.v = 0;
+  this.v = Date.now();
   this.state = null;
-  this.stateChangedAt = Date.now();
+  this.stateChangedAt = this.v;
   this.online = false;
   this.extended = false;
   this.extendedTimer = null;
-  this.metric1 = 0;
-  this.metric2 = 0;
+  this.quantitiesDone = [
+    {planned: 0, actual: 0},
+    {planned: 0, actual: 0},
+    {planned: 0, actual: 0},
+    {planned: 0, actual: 0},
+    {planned: 0, actual: 0},
+    {planned: 0, actual: 0},
+    {planned: 0, actual: 0},
+    {planned: 0, actual: 0}
+  ];
+  this.plannedQuantityDone = 0;
+  this.actualQuantityDone = 0;
   this.prodShiftId = null;
   this.prodShiftOrderId = null;
   this.prodDowntimeId = null;
@@ -34,8 +52,9 @@ ProdLineState.prototype.toJSON = function()
     stateChangedAt: this.stateChangedAt,
     online: this.online,
     extended: this.extended,
-    metric1: this.metric1,
-    metric2: this.metric2,
+    quantitiesDone: this.quantitiesDone,
+    plannedQuantityDone: this.plannedQuantityDone,
+    actualQuantityDone: this.actualQuantityDone,
     prodShiftId: this.prodShiftId,
     prodShiftOrderId: this.prodShiftOrderId,
     prodDowntimeId: this.prodDowntimeId
@@ -47,35 +66,21 @@ ProdLineState.prototype.update = function(newStateData)
   var prodLineState = this;
   var changes = {};
 
-  checkPropertyChange('prodShiftId', 'string', true);
-  checkPropertyChange('prodShiftOrderId', 'string', true);
-  checkPropertyChange('prodDowntimeId', 'string', true);
-  checkPropertyChange('online', 'boolean', false);
-  checkPropertyChange('extended', 'boolean', false);
+  checkPropertyChange('prodShiftId', 'String', true);
+  checkPropertyChange('prodShiftOrderId', 'String', true);
+  checkPropertyChange('prodDowntimeId', 'String', true);
+  checkPropertyChange('online', 'Boolean', false);
+  checkPropertyChange('extended', 'Boolean', false);
+  checkPropertyChange('quantitiesDone', 'Array', false);
 
-  if (Object.keys(changes).length === 0)
-  {
-    return;
-  }
-
-  this.checkState(changes);
-
-  changes._id = this.prodLine._id;
-  changes.v = ++this.v;
-
-  this.broker.publish('production.stateChanged.' + this.prodLine._id, changes);
-
-  if (changes.state)
-  {
-    this.checkExtendedDowntime();
-  }
+  this.applyChanges(changes);
 
   function checkPropertyChange(propertyName, type, allowNull)
   {
     var newValue = newStateData[propertyName];
 
-    if ((typeof newValue === type || (allowNull && newValue === null))
-      && newValue !== prodLineState[propertyName])
+    if ((lodash['is' + type](newValue) || (allowNull && newValue === null))
+      && !deepEqual(newValue, prodLineState[propertyName]))
     {
       changes[propertyName] = newValue;
       prodLineState[propertyName] = newValue;
@@ -83,6 +88,60 @@ ProdLineState.prototype.update = function(newStateData)
   }
 };
 
+ProdLineState.prototype.updateMetrics = function()
+{
+  var changes = {};
+
+  this.checkQuantitiesDone(changes);
+
+  if (Object.keys(changes).length)
+  {
+    this.publishChanges(changes);
+  }
+};
+
+/**
+ * @private
+ * @param {object} changes
+ */
+ProdLineState.prototype.applyChanges = function(changes)
+{
+  if (Object.keys(changes).length === 0)
+  {
+    return;
+  }
+
+  this.checkState(changes);
+
+  if (changes.quantitiesDone)
+  {
+    this.checkQuantitiesDone(changes);
+  }
+
+  this.publishChanges(changes);
+
+  if (changes.state)
+  {
+    this.checkExtendedDowntime();
+  }
+};
+
+/**
+ * @private
+ * @param {object} changes
+ */
+ProdLineState.prototype.publishChanges = function(changes)
+{
+  changes._id = this.prodLine._id;
+  changes.v = ++this.v;
+
+  this.broker.publish('production.stateChanged.' + changes._id, changes);
+};
+
+/**
+ * @private
+ * @param {object} changes
+ */
 ProdLineState.prototype.checkState = function(changes)
 {
   var newState;
@@ -115,6 +174,38 @@ ProdLineState.prototype.checkState = function(changes)
   }
 };
 
+/**
+ * @private
+ * @param {object} changes
+ */
+ProdLineState.prototype.checkQuantitiesDone = function(changes)
+{
+  var hourIndex = HOUR_TO_INDEX[new Date().getHours()];
+  var plannedQuantityDone = 0;
+  var actualQuantityDone = 0;
+
+  for (var i = 0; i < hourIndex; ++i)
+  {
+    plannedQuantityDone += this.quantitiesDone[i].planned;
+    actualQuantityDone += this.quantitiesDone[i].actual;
+  }
+
+  if (plannedQuantityDone !== this.plannedQuantityDone)
+  {
+    changes.plannedQuantityDone = plannedQuantityDone;
+    this.plannedQuantityDone = plannedQuantityDone;
+  }
+
+  if (actualQuantityDone !== this.actualQuantityDone)
+  {
+    changes.actualQuantityDone = actualQuantityDone;
+    this.actualQuantityDone = actualQuantityDone;
+  }
+};
+
+/**
+ * @private
+ */
 ProdLineState.prototype.checkExtendedDowntime = function()
 {
   if (this.extendedTimer !== null)

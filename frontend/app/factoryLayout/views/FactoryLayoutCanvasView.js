@@ -75,7 +75,6 @@ define([
     {
       this.onKeyDown = this.onKeyDown.bind(this);
       this.onResize = _.debounce(this.onResize.bind(this), 16);
-
       this.canvas = null;
       this.zoom = null;
       this.currentAction = null;
@@ -88,6 +87,8 @@ define([
       this.listenTo(this.collection, 'change:state', this.onStateChange);
       this.listenTo(this.collection, 'change:online', this.onOnlineChange);
       this.listenTo(this.collection, 'change:extended', this.onExtendedChange);
+      this.listenTo(this.collection, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
+      this.listenTo(this.collection, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
     },
 
     destroy: function()
@@ -271,7 +272,7 @@ define([
         .attr('d', function(d) { return pathGenerator(d.points); });
 
       var view = this;
-      var padValue = d3.format(' >3d');
+      var padMetricValue = this.padMetricValue;
       var yInterval = PROD_LINE_HEIGHT + 2 + PROD_LINE_PADDING;
 
       divisionContainerEnter.each(function(d)
@@ -346,13 +347,16 @@ define([
               height: PROD_LINE_HEIGHT
             });
 
+            var plannedQuantityDone = padMetricValue(prodLineState.get('plannedQuantityDone'));
+
             prodLineInnerContainer.append('text')
               .attr({
-                class: 'factoryLayout-metric-value',
+                class: 'factoryLayout-metric-value factoryLayout-metric-plannedQuantityDone',
                 x: 1 + PROD_LINE_NAME_WIDTH + PROD_LINE_TEXT_X,
-                y: PROD_LINE_TEXT_Y
+                y: PROD_LINE_TEXT_Y,
+                'data-length': plannedQuantityDone.length
               })
-              .text(padValue(prodLineState.get('metric1')));
+              .text(plannedQuantityDone);
 
             prodLineInnerContainer.append('rect').attr({
               class: 'factoryLayout-metric-bg',
@@ -362,13 +366,16 @@ define([
               height: PROD_LINE_HEIGHT
             });
 
+            var actualQuantityDone = padMetricValue(prodLineState.get('actualQuantityDone'));
+
             prodLineInnerContainer.append('text')
               .attr({
-                class: 'factoryLayout-metric-value',
+                class: 'factoryLayout-metric-value factoryLayout-metric-actualQuantityDone',
                 x: 1 + PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH + PROD_LINE_TEXT_X,
-                y: PROD_LINE_TEXT_Y
+                y: PROD_LINE_TEXT_Y,
+                'data-length': actualQuantityDone.length
               })
-              .text(padValue(prodLineState.get('metric2')));
+              .text(actualQuantityDone);
           }
         });
       });
@@ -379,6 +386,8 @@ define([
 
       this.$('[data-action=pan]').click();
     },
+
+    padMetricValue: d3.format(' >3d'),
 
     setUpCanvas: function(size)
     {
@@ -534,6 +543,43 @@ define([
       {
         prodLineOuterContainer.classed('is-extended', prodLineState.get('extended'));
       }
+    },
+
+    onPlannedQuantityDoneChange: function(prodLineState)
+    {
+      this.updateMetricValue(prodLineState, 'plannedQuantityDone');
+    },
+
+    onActualQuantityDoneChange: function(prodLineState)
+    {
+      this.updateMetricValue(prodLineState, 'actualQuantityDone');
+    },
+
+    updateMetricValue: function(prodLineState, metricName)
+    {
+      var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
+
+      if (prodLineOuterContainer.empty())
+      {
+        return;
+      }
+
+      var metric = prodLineOuterContainer.select('.factoryLayout-metric-' + metricName);
+
+      if (metric.empty())
+      {
+        return;
+      }
+
+      var value = this.padMetricValue(prodLineState.get(metricName));
+
+      metric.style('display', 'none');
+      metric.text(value);
+      metric.attr('data-length', value.length);
+
+      _.defer(function() {
+        metric.style('display', null);
+      });
     }
 
   });

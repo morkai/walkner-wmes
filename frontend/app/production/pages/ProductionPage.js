@@ -318,6 +318,7 @@ define([
         _id: this.model.prodLine.id,
         user: user.getInfo(),
         time: Date.now(),
+        quantitiesDone: this.model.get('quantitiesDone'),
         prodShiftId: this.model.id,
         prodShiftOrderId: this.model.prodShiftOrder.id || null,
         prodDowntimeId: prodDowntime ? prodDowntime.id : null

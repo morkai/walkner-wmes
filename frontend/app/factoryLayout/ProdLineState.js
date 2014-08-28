@@ -29,8 +29,18 @@ define([
       stateChangedAt: 0,
       online: false,
       extended: false,
-      metric1: 0,
-      metric2: 0,
+      quantitiesDone: [
+        {planned: 0, actual: 0},
+        {planned: 0, actual: 0},
+        {planned: 0, actual: 0},
+        {planned: 0, actual: 0},
+        {planned: 0, actual: 0},
+        {planned: 0, actual: 0},
+        {planned: 0, actual: 0},
+        {planned: 0, actual: 0}
+      ],
+      plannedQuantityDone: 0,
+      actualQuantityDone: 0,
       prodShiftId: null,
       prodShiftOrderId: null,
       prodDowntimeId: null

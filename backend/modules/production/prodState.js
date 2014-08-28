@@ -5,6 +5,7 @@
 'use strict';
 
 var lodash = require('lodash');
+var moment = require('moment');
 var ProdLineState = require('./ProdLineState');
 
 module.exports = function setUpProdState(app, productionModule)
@@ -44,9 +45,17 @@ module.exports = function setUpProdState(app, productionModule)
 
     var newStateData = {};
 
-    if (changes.prodShift && changes.prodShift._id)
+    if (changes.prodShift)
     {
-      newStateData.prodShiftId = changes.prodShift._id;
+      if (changes.prodShift._id)
+      {
+        newStateData.prodShiftId = changes.prodShift._id;
+      }
+
+      if (changes.prodShift.quantitiesDone)
+      {
+        newStateData.quantitiesDone = changes.prodShift.quantitiesDone;
+      }
     }
 
     if (changes.prodShiftOrder !== undefined)
@@ -63,4 +72,32 @@ module.exports = function setUpProdState(app, productionModule)
 
     prodLineState.update(newStateData);
   });
+
+  app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(data)
+  {
+    var prodLineState = allProdLineState[data.prodLine];
+
+    if (prodLineState && prodLineState.prodShiftId === data.prodShift)
+    {
+      prodLineState.update({quantitiesDone: data.quantitiesDone});
+    }
+  });
+
+  function scheduleMetricsUpdate()
+  {
+    var nextHourTime = moment().minutes(0).seconds(0).milliseconds(999).add('hours', 1).valueOf();
+    var delay = nextHourTime - Date.now();
+
+    setTimeout(updateMetrics, delay);
+  }
+
+  function updateMetrics()
+  {
+    lodash.each(allProdLineState, function(prodLineState)
+    {
+      prodLineState.updateMetrics();
+    });
+
+    setImmediate(scheduleMetricsUpdate);
+  }
 };
