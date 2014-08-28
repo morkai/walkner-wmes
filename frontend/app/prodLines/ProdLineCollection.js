@@ -19,6 +19,8 @@ define([
 
     rqlQuery: 'select(workCenter,description,inventoryNo)&sort(workCenter,_id)',
 
+    comparator: '_id',
+
     getForCurrentUser: function()
     {
       var userDivision = user.getDivision();

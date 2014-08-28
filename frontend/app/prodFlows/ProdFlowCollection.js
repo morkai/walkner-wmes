@@ -15,7 +15,9 @@ define([
 
     model: ProdFlow,
 
-    rqlQuery: 'select(mrpController,name)&sort(name)'
+    rqlQuery: 'select(mrpController,name)&sort(name)',
+
+    comparator: 'name'
 
   });
 });

@@ -15,7 +15,9 @@ define([
 
     model: Subdivision,
 
-    rqlQuery: 'select(division,type,name,prodTaskTags,aor)&sort(division,name)'
+    rqlQuery: 'select(division,type,name,prodTaskTags,aor)&sort(division,name)',
+
+    comparator: 'type'
 
   });
 });
