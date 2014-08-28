@@ -206,6 +206,39 @@ module.exports = function setUpProductionsCommands(app, productionModule)
         reply(null, plannedQuantities);
       });
     });
+
+    socket.on('production.join', function(prodLineStateData)
+    {
+      if (!lodash.isObject(prodLineStateData) || !prodLines.modelsById[prodLineStateData._id])
+      {
+        return;
+      }
+
+      productionModule.updateProdLineState(lodash.extend(prodLineStateData, {online: true}));
+
+      var prodLineId = prodLineStateData._id;
+
+      socket.on('disconnect', function()
+      {
+        productionModule.updateProdLineState({
+          _id: prodLineId,
+          online: false
+        });
+      });
+    });
+
+    socket.on('production.leave', function(prodLineId)
+    {
+      productionModule.updateProdLineState({
+        _id: prodLineId,
+        online: false
+      });
+    });
+
+    socket.on('production.updateState', function(prodLineState)
+    {
+      productionModule.updateProdLineState(prodLineState);
+    });
   });
 
   function logInvalidEntry(err, logEntryJson)

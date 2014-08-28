@@ -19,7 +19,7 @@ define([
 ) {
   'use strict';
 
-  var PROD_LINE_PADDING = 5;
+  var PROD_LINE_PADDING = 10;
   var PROD_LINE_HEIGHT = 22;
   var PROD_LINE_TEXT_X = 4;
   var PROD_LINE_TEXT_Y = 17;
@@ -59,6 +59,15 @@ define([
         this.currentAction = newAction;
 
         this.$('[data-action=' + this.currentAction + ']').addClass('active');
+      },
+      'mouseover .factoryLayout-division': function(e)
+      {
+        var divisionContainerEl = e.currentTarget;
+
+        if (divisionContainerEl.parentNode.lastChild !== divisionContainerEl)
+        {
+          divisionContainerEl.parentNode.appendChild(divisionContainerEl);
+        }
       }
     },
 
@@ -70,12 +79,15 @@ define([
       this.canvas = null;
       this.zoom = null;
       this.currentAction = null;
+      this.editable = false;
 
       $('body').on('keydown', this.onKeyDown);
       $(window).on('resize', this.onResize);
       screenfull.onchange = _.debounce(this.onFullscreen.bind(this), 16);
 
-window.flv = this;
+      this.listenTo(this.collection, 'change:state', this.onStateChange);
+      this.listenTo(this.collection, 'change:online', this.onOnlineChange);
+      this.listenTo(this.collection, 'change:extended', this.onExtendedChange);
     },
 
     destroy: function()
@@ -88,13 +100,10 @@ window.flv = this;
       this.canvas = null;
     },
 
-    beforeRender: function()
-    {
-
-    },
-
     afterRender: function()
     {
+      this.el.classList.toggle('is-editable', this.editable);
+
       this.setUpCanvas(this.getSize());
 
       this.canvas.append('rect')
@@ -107,7 +116,7 @@ window.flv = this;
       var divisions = this.canvas.selectAll('.division')
         .data([
           {
-            id: 'LPd',
+            _id: 'LPd',
             position: {x: 10, y: 10},
             points: [
               [0, 0],
@@ -122,7 +131,7 @@ window.flv = this;
               {
                 x: 10,
                 y: 10,
-                h: 330
+                h: 340
               },
               {
                 x: 310,
@@ -132,7 +141,7 @@ window.flv = this;
             ]
           },
           {
-            id: 'LPa',
+            _id: 'LPa',
             position: {x: 610, y: 10},
             points: [
               [0, 0],
@@ -155,7 +164,7 @@ window.flv = this;
             ]
           },
           {
-            id: 'LPb',
+            _id: 'LPb',
             position: {x: 1040, y: 10},
             points: [
               [0, 0],
@@ -163,7 +172,7 @@ window.flv = this;
               [430, 600],
               [430, 0]
             ],
-            fillColor: '#80D780',
+            fillColor: '#99dd99',
             prodLines: [
               {
                 x: 10,
@@ -178,7 +187,7 @@ window.flv = this;
             ]
           },
           {
-            id: 'LPc',
+            _id: 'LPc',
             position: {x: 1470, y: 10},
             points: [
               [0, 0],
@@ -201,6 +210,7 @@ window.flv = this;
             ]
           },
           {
+            _id: 'LD',
             position: {x: 10, y: 360},
             points: [
               [0, 0],
@@ -235,11 +245,12 @@ window.flv = this;
           d3.event.sourceEvent.stopPropagation();
 
           this.parentNode.appendChild(this);
-          this.classList.add('is-dragging');
+
+          d3.select(this).classed('is-dragging', true);
         })
         .on('dragend', function()
         {
-          this.classList.remove('is-dragging');
+          d3.select(this).classed('is-dragging', false);
         })
         .on('drag', function(d)
         {
@@ -252,21 +263,21 @@ window.flv = this;
       var divisionContainerEnter = divisions.enter().insert('g')
         .attr('class', 'factoryLayout-division')
         .attr('transform', function(d) { return 'translate(' + d.position.x + ',' + d.position.y + ')'; })
-        .attr('fill', function(d) { return hex2rgba(d.fillColor || '#000000', 0.5); })
-        .call(drag);
+        .attr('fill', function(d) { return hex2rgba(d.fillColor || '#000000', 1); })
+        .call(this.editable ? drag : function() {});
 
       divisionContainerEnter.append('path')
         .classed('factoryLayout-division-area', true)
         .attr('d', function(d) { return pathGenerator(d.points); });
 
-      var padName = d3.format(' >6d');
+      var view = this;
       var padValue = d3.format(' >3d');
       var yInterval = PROD_LINE_HEIGHT + 2 + PROD_LINE_PADDING;
 
       divisionContainerEnter.each(function(d)
       {
         var divisionContainerEl = d3.select(this);
-        var prodLineCounter = 1;
+        var prodLineStates = view.collection.getForDivision(d._id);
 
         d.prodLines.forEach(function(prodLine)
         {
@@ -284,13 +295,34 @@ window.flv = this;
 
           for (var i = 0; i < prodLineCount; ++i)
           {
-            var prodLineContainer = prodLinesContainer.append('g').attr({
+            var prodLineState = prodLineStates.shift();
+
+            if (prodLineState === undefined)
+            {
+              break;
+            }
+
+            var prodLineOuterContainer = prodLinesContainer.append('g').attr({
               class: 'factoryLayout-prodLine',
               transform: 'translate(0,' + (yInterval * i) + ')',
               style: 'font-size: ' + PROD_LINE_TEXT_SIZE + 'px'
             });
 
-            prodLineContainer.append('rect').attr({
+            prodLineOuterContainer.attr('data-id', prodLineState.id);
+
+            if (prodLineState.get('state') !== null)
+            {
+              prodLineOuterContainer.classed('is-' + prodLineState.get('state'), true);
+            }
+
+            prodLineOuterContainer.classed('is-offline', !prodLineState.get('online'));
+            prodLineOuterContainer.classed('is-extended', prodLineState.get('extended'));
+
+            var prodLineInnerContainer = prodLineOuterContainer.append('g').attr({
+              class: 'factoryLayout-prodLine-inner'
+            });
+
+            prodLineInnerContainer.append('rect').attr({
               class: 'factoryLayout-prodLine-bg',
               x: 0,
               y: 0,
@@ -298,15 +330,15 @@ window.flv = this;
               height: PROD_LINE_HEIGHT
             });
 
-            prodLineContainer.append('text')
+            prodLineInnerContainer.append('text')
               .attr({
                 class: 'factoryLayout-prodLine-name',
                 x: PROD_LINE_TEXT_X,
                 y: PROD_LINE_TEXT_Y
               })
-              .html(d.id + ' ' + padName(prodLineCounter++));
+              .text(prodLineState.getLabel());
 
-            prodLineContainer.append('rect').attr({
+            prodLineInnerContainer.append('rect').attr({
               class: 'factoryLayout-metric-bg',
               x: PROD_LINE_NAME_WIDTH,
               y: 0,
@@ -314,15 +346,15 @@ window.flv = this;
               height: PROD_LINE_HEIGHT
             });
 
-            prodLineContainer.append('text')
+            prodLineInnerContainer.append('text')
               .attr({
                 class: 'factoryLayout-metric-value',
                 x: 1 + PROD_LINE_NAME_WIDTH + PROD_LINE_TEXT_X,
                 y: PROD_LINE_TEXT_Y
               })
-              .html(padValue(Math.round(Math.random() * 125)));
+              .text(padValue(prodLineState.get('metric1')));
 
-            prodLineContainer.append('rect').attr({
+            prodLineInnerContainer.append('rect').attr({
               class: 'factoryLayout-metric-bg',
               x: PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH,
               y: 0,
@@ -330,13 +362,13 @@ window.flv = this;
               height: PROD_LINE_HEIGHT
             });
 
-            prodLineContainer.append('text')
+            prodLineInnerContainer.append('text')
               .attr({
                 class: 'factoryLayout-metric-value',
                 x: 1 + PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH + PROD_LINE_TEXT_X,
                 y: PROD_LINE_TEXT_Y
               })
-              .html(padValue(Math.round(Math.random() * 125)));
+              .text(padValue(prodLineState.get('metric2')));
           }
         });
       });
@@ -348,6 +380,56 @@ window.flv = this;
       this.$('[data-action=pan]').click();
     },
 
+    setUpCanvas: function(size)
+    {
+      var view = this;
+
+      this.$el.css(size);
+
+      var zoom = d3.behavior.zoom()
+        .on('zoomstart', function()
+        {
+          view.$el.addClass('is-panning');
+        })
+        .on('zoomend', function()
+        {
+          view.$el.removeClass('is-panning');
+        })
+        .on('zoom', onZoom);
+
+      var outerContainer = d3.select(this.el).select('svg')
+        .attr('class', 'factoryLayout-canvas')
+        .attr('width', size.width)
+        .attr('height', size.height)
+        .attr('pointer-events', 'all')
+        .append('g')
+        .call(zoom)
+        .on('dblclick.zoom', null)
+        .on('wheel.zoom', null);
+
+      outerContainer.append('rect')
+        .attr('class', 'factoryLayout-bg')
+        .attr('width', size.width)
+        .attr('height', size.height);
+
+      this.zoom = zoom;
+      this.canvas = outerContainer.append('g');
+
+      this.translate(5, 5);
+
+      function onZoom()
+      {
+        view.canvas.attr('transform', 'translate(' + d3.event.translate + ')');
+      }
+    },
+
+    translate: function(x, y)
+    {
+      this.zoom.translate([x, y]);
+
+      this.canvas.attr('transform', 'translate(' + x + ',' + y + ')');
+    },
+
     getSize: function()
     {
       if (screenfull.element === this.el)
@@ -357,7 +439,7 @@ window.flv = this;
 
       var w = window.innerWidth - 28;
       var h = window.innerHeight
-        - 14
+        - 19
         - $('.page > .hd').outerHeight(true)
         - $('.page > .ft').outerHeight(true);
 
@@ -409,63 +491,49 @@ window.flv = this;
       this.centerView();
     },
 
-    setUpCanvas: function(size)
+    getProdLineOuterContainer: function(prodLineId)
     {
-      var view = this;
+      return d3.select('.factoryLayout-prodLine[data-id="' + prodLineId + '"]');
+    },
 
-      this.$el.css(size);
+    onStateChange: function(prodLineState)
+    {
+      var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
 
-      var zoom = d3.behavior.zoom()
-        .on('zoomstart', function()
-        {
-          view.$el.addClass('is-panning');
-        })
-        .on('zoomend', function()
-        {
-          view.$el.removeClass('is-panning');
-        })
-        .on('zoom', onZoom);
-
-      var outerContainer = d3.select(this.el).select('svg')
-        .attr('class', 'factoryLayout-canvas')
-        .attr('width', size.width)
-        .attr('height', size.height)
-        .attr('pointer-events', 'all')
-        .append('g')
-          .call(zoom)
-          .on('dblclick.zoom', null);
-
-      outerContainer.append('rect')
-        .attr('class', 'factoryLayout-bg')
-        .attr('width', size.width)
-        .attr('height', size.height);
-
-      this.zoom = zoom;
-      this.canvas = outerContainer.append('g');
-
-      this.translate(5, 5);
-
-      function onZoom()
+      if (prodLineOuterContainer.empty())
       {
-        view.canvas.attr('transform', 'translate(' + d3.event.translate + ') scale(' + d3.event.scale + ')');
+        return;
+      }
 
-        if (d3.event.scale >= 0.5)
-        {
-          view.$('text').fadeIn();
-        }
-        else
-        {
-          view.$('text').fadeOut();
-        }
+      var stateClassNames = {
+        'is-idle': false,
+        'is-working': false,
+        'is-downtime': false
+      };
+
+      stateClassNames['is-' + prodLineState.get('state')] = true;
+
+      prodLineOuterContainer.classed(stateClassNames);
+    },
+
+    onOnlineChange: function(prodLineState)
+    {
+      var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
+
+      if (!prodLineOuterContainer.empty())
+      {
+        prodLineOuterContainer.classed('is-offline', !prodLineState.get('online'));
       }
     },
 
-    translate: function(x, y)
+    onExtendedChange: function(prodLineState)
     {
-      this.zoom.scale(1);
-      this.zoom.translate([x, y]);
+      var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
 
-      this.canvas.attr('transform', 'translate(' + x + ',' + y + ') scale(1)');
+      if (!prodLineOuterContainer.empty())
+      {
+        prodLineOuterContainer.classed('is-extended', prodLineState.get('extended'));
+      }
     }
 
   });

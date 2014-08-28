@@ -14,7 +14,8 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('FACTORY_LAYOUT:VIEW');
+  // TODO: privileges
+  var canView = user.auth();
 
   router.map('/factoryLayout', canView, function()
   {

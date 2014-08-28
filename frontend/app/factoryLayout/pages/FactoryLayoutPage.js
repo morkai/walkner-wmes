@@ -6,11 +6,15 @@ define([
   'jquery',
   'app/i18n',
   'app/core/View',
+  'app/core/util/bindLoadingMessage',
+  '../currentProdLineState',
   '../views/FactoryLayoutCanvasView'
 ], function(
   $,
   t,
   View,
+  bindLoadingMessage,
+  currentProdLineState,
   FactoryLayoutCanvasView
 ) {
   'use strict';
@@ -22,7 +26,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        //t.bound('factoryLayout', 'bc:factory')
+        t.bound('factoryLayout', 'bc:layout')
       ];
     },
 
@@ -37,6 +41,8 @@ define([
     destroy: function()
     {
       document.body.classList.remove('no-overflow');
+
+      currentProdLineState.unload();
     },
 
     afterRender: function()
@@ -46,17 +52,17 @@ define([
 
     defineModels: function()
     {
-
+      this.collection = bindLoadingMessage(currentProdLineState.collection, this);
     },
 
     defineViews: function()
     {
-      this.canvasView = new FactoryLayoutCanvasView();
+      this.canvasView = new FactoryLayoutCanvasView({collection: this.collection});
     },
 
     load: function(when)
     {
-      return when();
+      return when(currentProdLineState.load());
     }
 
   });

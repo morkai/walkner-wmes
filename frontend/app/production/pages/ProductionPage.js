@@ -44,17 +44,13 @@ define([
     localTopics: {
       'socket.connected': function()
       {
-        this.setUpTimeLog();
+        this.joinProduction();
         this.refreshDowntimes();
         this.refreshPlannedQuantities();
       },
       'socket.disconnected': function()
       {
-        if (this.timers.diagTimeLog)
-        {
-          clearTimeout(this.timers.diagTimeLog);
-          this.timers.diagTimeLog = null;
-        }
+        this.productionJoined = false;
       },
       'updater.frontendReloading': function()
       {
@@ -73,6 +69,7 @@ define([
     initialize: function()
     {
       this.shiftEditedSub = null;
+      this.productionJoined = false;
 
       updater.disableViews();
       prodLog.enable();
@@ -96,6 +93,7 @@ define([
 
       updater.enableViews();
       prodLog.disable();
+      this.leaveProduction();
     },
 
     serialize: function()
@@ -132,13 +130,16 @@ define([
       this.listenTo(this.model, 'locked', function()
       {
         this.$el.removeClass('is-unlocked').addClass('is-locked');
+        this.leaveProduction();
       });
 
       this.listenTo(this.model, 'unlocked', function()
       {
+
         this.$el.removeClass('is-locked').addClass('is-unlocked');
         this.refreshDowntimes();
         this.refreshPlannedQuantities();
+        this.joinProduction();
       });
 
       this.listenTo(this.model, 'change:state', function()
@@ -189,7 +190,7 @@ define([
     {
       if (this.socket.isConnected())
       {
-        this.setUpTimeLog();
+        this.joinProduction();
         this.refreshDowntimes();
         this.refreshPlannedQuantities();
       }
@@ -293,35 +294,35 @@ define([
         : t('production', 'unload:order');
     },
 
-    setUpTimeLog: function()
+    joinProduction: function()
     {
-      if (true || this.timers.diagTimeLog != null)
+      if (this.model.isLocked() || this.productionJoined)
       {
         return;
       }
 
-      this.socket.emit('diag.log', {
-        createdAt: new Date(),
-        creator: user.getInfo(),
-        prodLine: this.model.prodLine.id,
-        type: 'connected',
-        data: {
-          versions: updater.versions
-        }
+      var prodDowntime = this.model.prodDowntimes.findFirstUnfinished();
+
+      this.socket.emit('production.join', {
+        _id: this.model.prodLine.id,
+        user: user.getInfo(),
+        time: Date.now(),
+        prodShiftId: this.model.id,
+        prodShiftOrderId: this.model.prodShiftOrder.id || null,
+        prodDowntimeId: prodDowntime ? prodDowntime.id : null
       });
 
-      this.timers.diagTimeLog = setInterval(this.logTime.bind(this), 60000);
+      this.productionJoined = true;
     },
 
-    logTime: function()
+    leaveProduction: function()
     {
-      this.socket.emit('diag.log', {
-        createdAt: new Date(),
-        creator: user.getInfo(),
-        prodLine: this.model.prodLine.id,
-        type: 'ping',
-        data: null
-      });
+      if (this.productionJoined)
+      {
+        this.socket.emit('production.leave', this.model.prodLine.id);
+
+        this.productionJoined = false;
+      }
     },
 
     subscribeForShiftChanges: function()

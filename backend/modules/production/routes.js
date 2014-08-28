@@ -28,6 +28,13 @@ module.exports = function setUpProductionRoutes(app, productionModule)
     return res.send(400);
   });
 
+  express.get('/production/state', function(req, res)
+  {
+    return res.json({
+      allProdLineState: productionModule.getAllProdLineState()
+    });
+  });
+
   function findOrdersByNo(no, res, next)
   {
     orderFinder.findOrdersByNo(Order, no, function(err, orders)

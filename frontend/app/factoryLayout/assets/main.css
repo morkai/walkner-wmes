@@ -11,9 +11,13 @@
   border: 1px solid #ddd;
 }
 .factoryLayout-toolbar {
+  display: none;
   position: absolute;
   left: 15px;
   top: 15px;
+}
+.is-editable .factoryLayout-toolbar {
+  display: block;
 }
 .factoryLayout-toolbar .btn {
   width: 50px;
@@ -39,8 +43,15 @@
   cursor: -webkit-grab;
   cursor: -moz-grab;
 }
+.is-panning .factoryLayout-canvas {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+}
 .factoryLayout-area {
   fill: none;
+}
+.is-editable .factoryLayout-area {
   stroke-width: 1px;
   stroke: #ccc;
   stroke-dasharray: 5px;
@@ -54,11 +65,14 @@
   stroke-width: 1px;
 }
 .factoryLayout-division:hover .factoryLayout-division-area {
+  stroke-width: 3px;
+}
+.is-editable .factoryLayout-division:hover .factoryLayout-division-area {
   stroke: #fa0;
   stroke-width: 3px;
   stroke-dasharray: 10px;
 }
-.factoryLayout-division.is-dragging:hover .factoryLayout-division-area {
+.is-editable .factoryLayout-division.is-dragging:hover .factoryLayout-division-area {
   cursor: move;
   stroke: #0af!important;
   stroke-width: 3px;
@@ -68,7 +82,7 @@
 .is-dragging .factoryLayout-prodLines {
   /*display: none;*/
 }
-.factoryLayout-prodLines-line {
+.is-editable .factoryLayout-prodLines-line {
   stroke: #888;
   stroke-width: 1px;
   stroke-dasharray: 5px;
@@ -76,6 +90,13 @@
 .factoryLayout-prodLine {
   font-family: Consolas, "Lucida Console", Monaco, monospace;
   stroke-width: 0;
+  cursor: pointer;
+}
+.factoryLayout-prodLine.is-offline {
+  opacity: 0.7;
+}
+.factoryLayout-prodLine.is-offline:hover {
+  opacity: 1;
 }
 .factoryLayout-prodLine-bg,
 .factoryLayout-metric-bg {
@@ -83,10 +104,33 @@
   stroke-width: 1px;
   fill: #fff;
 }
+.factoryLayout-prodLine:hover .factoryLayout-prodLine-bg,
+.factoryLayout-prodLine:hover .factoryLayout-metric-bg {
+  stroke-width: 3px;
+}
+.factoryLayout-prodLine-bg {
+  fill: url(/#factoryLayout-prodLine-bg);
+}
+.factoryLayout-metric-bg {
+  fill: url(/#factoryLayout-metric-bg);
+}
 .factoryLayout-prodLine-name,
 .factoryLayout-metric-value {
   fill: #000;
   white-space: pre;
+}
+.factoryLayout-prodLine-name {
+  text-shadow: 0 1px 2px #000;
+  fill: #fff;
+}
+.is-idle .factoryLayout-prodLine-bg {
+  fill: url(/#factoryLayout-prodLine-bg-idle);
+}
+.is-working .factoryLayout-prodLine-bg {
+  fill: url(/#factoryLayout-prodLine-bg-working);
+}
+.is-downtime .factoryLayout-prodLine-bg {
+  fill: url(/#factoryLayout-prodLine-bg-downtime);
 }
 .is-fullscreen .factoryLayout-area {
   stroke-width: 0;
@@ -96,4 +140,60 @@
 }
 .is-fullscreen .factoryLayout-toolbar {
   display: none;
+}
+.is-extended .factoryLayout-prodLine-inner {
+  -webkit-animation: wiggle 0.3s linear infinite;
+  -ms-animation: wiggle 0.3s linear infinite;
+  animation: wiggle 0.3s linear infinite;
+}
+.is-idle .factoryLayout-prodLine-name {
+  background: linear-gradient(to bottom, #FFC864, #F0AD4E);
+}
+.is-working .factoryLayout-prodLine-name {
+  background: linear-gradient(to bottom, #82DC82, #5CB85C);
+}
+.is-downtime .factoryLayout-prodLine-name {
+  background: linear-gradient(to bottom, #FF7672, #D9534F);
+}
+@keyframes wiggle {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(0, -2px);
+  }
+  75% {
+    transform: translate(0, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+@-webkit-keyframes wiggle {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(0, -2px);
+  }
+  75% {
+    transform: translate(0, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+@-ms-keyframes wiggle {
+  0% {
+    -ms-transform: translate(0, 0);
+  }
+  25% {
+    -ms-transform: translate(0, -2px);
+  }
+  75% {
+    -ms-transform: translate(0, 2px);
+  }
+  100% {
+    -ms-transform: translate(0, 0);
+  }
 }

@@ -251,7 +251,10 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
   {
     /*jshint -W015*/
 
-    changes.types.push(logEntry.type);
+    if (changes.types.indexOf(logEntry.type) === -1)
+    {
+      changes.types.push(logEntry.type);
+    }
 
     switch (logEntry.type)
     {
