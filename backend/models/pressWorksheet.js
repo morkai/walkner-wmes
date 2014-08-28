@@ -160,6 +160,11 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
   pressWorksheetSchema.statics.TOPIC_PREFIX = 'pressWorksheets';
 
+  pressWorksheetSchema.index({date: -1});
+  pressWorksheetSchema.index({type: 1, date: -1});
+  pressWorksheetSchema.index({master: 1, date: -1});
+  pressWorksheetSchema.index({operators: 1, date: -1});
+
   pressWorksheetSchema.pre('save', function(next)
   {
     if (this.type === 'paintShop')
