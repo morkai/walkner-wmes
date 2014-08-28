@@ -533,9 +533,17 @@ define([
      */
     getLabel: function()
     {
-      return this.get('prodLine')
-        + ': ' + time.format(this.get('date'), 'YYYY-MM-DD')
-        + ', ' + t('core', 'SHIFT:' + this.get('shift'));
+      var label = this.get('prodLine');
+      var date = this.get('date');
+      var shift = this.get('shift');
+
+      if (date && shift)
+      {
+        label += ': ' + time.format(this.get('date'), 'YYYY-MM-DD');
+        label += ', ' + t('core', 'SHIFT:' + this.get('shift'));
+      }
+
+      return label;
     },
 
     /**

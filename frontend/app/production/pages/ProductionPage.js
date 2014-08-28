@@ -68,6 +68,7 @@ define([
 
     initialize: function()
     {
+      this.layout = null;
       this.shiftEditedSub = null;
       this.productionJoined = false;
 
@@ -83,8 +84,14 @@ define([
       $(window).on('beforeunload', this.onBeforeUnload);
     },
 
+    setUpLayout: function(layout)
+    {
+      this.layout = layout;
+    },
+
     destroy: function()
     {
+      this.layout = null;
       this.shiftEditedSub = null;
 
       $(window).off('beforeunload', this.onBeforeUnload);
@@ -135,7 +142,6 @@ define([
 
       this.listenTo(this.model, 'unlocked', function()
       {
-
         this.$el.removeClass('is-locked').addClass('is-unlocked');
         this.refreshDowntimes();
         this.refreshPlannedQuantities();
@@ -144,6 +150,11 @@ define([
 
       this.listenTo(this.model, 'change:state', function()
       {
+        if (this.layout !== null)
+        {
+          this.layout.setBreadcrumbs(this.breadcrumbs, this);
+        }
+
         var oldState = this.model.previous('state');
 
         if (oldState !== null)
