@@ -60,7 +60,8 @@ define([
         },
         noData: {},
         tooltip: {
-          shared: true
+          shared: true,
+          valueDecimals: 0
         },
         xAxis: {
           categories: chartData.categories
@@ -70,6 +71,9 @@ define([
         },
         plotOptions: {
           column: {
+            dataLabels: {
+              enabled: true
+            },
             tooltip: {
               valueSuffix: t('prodShifts', 'charts:quantitiesDone:unit')
             }
