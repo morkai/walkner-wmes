@@ -30,7 +30,7 @@ module.exports = function setUpActiveProdLines(app, productionModule)
     aggregateActiveProdLines(prodFlowId, shiftDate, done);
   };
 
-  app.broker.subscribe('production.synced.*', function(changes)
+  app.broker.subscribe('production.synced.**', function(changes)
   {
     if (changes.types.indexOf('changeOrder') !== -1)
     {
@@ -40,6 +40,8 @@ module.exports = function setUpActiveProdLines(app, productionModule)
 
   app.broker.subscribe('shiftChanged', function()
   {
+    productionModule.debug("Removing active prod line data...");
+
     shiftToProdLines = {};
     shiftToProdFlows = {};
   });
@@ -65,6 +67,14 @@ module.exports = function setUpActiveProdLines(app, productionModule)
       conditions.prodFlow = typeof prodFlowId === 'string'
         ? new mongoose.Types.ObjectId(prodFlowId)
         : prodFlowId;
+
+      productionModule.debug(
+        "Aggregating active prod lines for shift [%s] and prod flow [%s]...", shiftDate, prodFlowId
+      );
+    }
+    else
+    {
+      productionModule.debug("Aggregating active prod lines for shift [%s]...", shiftDate);
     }
 
     mongoose.model('ProdShiftOrder').aggregate(
@@ -104,6 +114,10 @@ module.exports = function setUpActiveProdLines(app, productionModule)
             shiftToProdFlows[shiftKey][prodFlowId][prodLineId] = true;
           });
         });
+
+        productionModule.debug(
+          "%d active prod lines during the [%s] shift: %s", prodLineIds.length, shiftDate, prodLineIds.join(', ')
+        );
 
         if (done)
         {
@@ -148,12 +162,24 @@ module.exports = function setUpActiveProdLines(app, productionModule)
 
     shiftToProdFlows[currentShiftKey][prodFlowId][prodLineId] = true;
 
+    var allActiveProdLines = Object.keys(shiftToProdLines[currentShiftKey]);
+    var activeProdLinesInProdFlow = Object.keys(shiftToProdFlows[currentShiftKey][prodFlowId]);
+
+    productionModule.debug(
+      "Activated prod line [%s]; in prod flow (%d of all %d): %s (shift [%s])",
+      prodLineId,
+      activeProdLinesInProdFlow.length,
+      allActiveProdLines.length,
+      activeProdLinesInProdFlow.join(', '),
+      currentShift.date
+    );
+
     app.broker.publish('production.prodLineActivated', {
       shiftId: currentShift,
       prodLine: prodLineId,
       prodFlow: prodFlowId,
-      activeProdLinesInProdFlow: Object.keys(shiftToProdFlows[currentShiftKey][prodFlowId]),
-      allActiveProdLines: Object.keys(shiftToProdLines[currentShiftKey])
+      activeProdLinesInProdFlow: activeProdLinesInProdFlow,
+      allActiveProdLines: allActiveProdLines
     });
   }
 
