@@ -97,8 +97,15 @@ module.exports = function setUpActiveProdLines(app, productionModule)
         var prodLineIds = [];
         var shiftKey = getShiftKey(shiftDate);
 
-        shiftToProdLines[shiftKey] = {};
-        shiftToProdFlows[shiftKey] = {};
+        if (shiftToProdLines[shiftKey] === undefined)
+        {
+          shiftToProdLines[shiftKey] = {};
+        }
+
+        if (shiftToProdFlows[shiftKey] === undefined)
+        {
+          shiftToProdFlows[shiftKey] = {};
+        }
 
         results.forEach(function(result)
         {
@@ -115,9 +122,22 @@ module.exports = function setUpActiveProdLines(app, productionModule)
           });
         });
 
-        productionModule.debug(
-          "%d active prod lines during the [%s] shift: %s", prodLineIds.length, shiftDate, prodLineIds.join(', ')
-        );
+        if (prodFlowId)
+        {
+          productionModule.debug(
+            "%d active prod lines in prod flow [%s] during the [%s] shift: %s",
+            prodLineIds.length,
+            prodFlowId,
+            shiftDate,
+            prodLineIds.join(', ')
+          );
+        }
+        else
+        {
+          productionModule.debug(
+            "%d active prod lines during the [%s] shift: %s", prodLineIds.length, shiftDate, prodLineIds.join(', ')
+          );
+        }
 
         if (done)
         {
