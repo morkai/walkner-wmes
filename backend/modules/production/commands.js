@@ -207,37 +207,29 @@ module.exports = function setUpProductionsCommands(app, productionModule)
       });
     });
 
-    socket.on('production.join', function(prodLineStateData)
+    socket.on('production.join', function(message)
     {
-      if (!lodash.isObject(prodLineStateData) || !prodLines.modelsById[prodLineStateData._id])
+      if (!lodash.isObject(message))
       {
         return;
       }
 
-      productionModule.updateProdLineState(lodash.extend(prodLineStateData, {online: true}));
+      var prodLineState = productionModule.getProdLineState(message.prodLineId);
 
-      var prodLineId = prodLineStateData._id;
-
-      socket.on('disconnect', function()
+      if (prodLineState)
       {
-        productionModule.updateProdLineState({
-          _id: prodLineId,
-          online: false
-        });
-      });
+        prodLineState.onClientJoin(socket, message);
+      }
     });
 
     socket.on('production.leave', function(prodLineId)
     {
-      productionModule.updateProdLineState({
-        _id: prodLineId,
-        online: false
-      });
-    });
+      var prodLineState = productionModule.getProdLineState(prodLineId);
 
-    socket.on('production.updateState', function(prodLineState)
-    {
-      productionModule.updateProdLineState(prodLineState);
+      if (prodLineState)
+      {
+        prodLineState.onClientLeave(socket);
+      }
     });
   });
 

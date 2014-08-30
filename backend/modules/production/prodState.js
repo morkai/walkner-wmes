@@ -12,27 +12,33 @@ module.exports = function setUpProdState(app, productionModule)
 {
   var orgUnitsModule = app[productionModule.config.orgUnitsId];
 
+  var loaded = false;
   var allProdLineState = {};
 
-  productionModule.getAllProdLineState = function()
+  productionModule.getAllProdLineState = function(done)
   {
-    return lodash.values(allProdLineState);
+    if (loaded)
+    {
+      return done(null, lodash.values(allProdLineState));
+    }
+
+    app.broker.subscribe('production.stateLoaded').setLimit(1).on('message', function()
+    {
+      productionModule.getAllProdLineState(done);
+    });
   };
 
-  productionModule.updateProdLineState = function(newStateData)
+  productionModule.getProdLineState = function(prodLineId)
   {
-    var prodLineState = allProdLineState[newStateData._id];
-
-    if (prodLineState)
-    {
-      prodLineState.update(newStateData);
-    }
+    return allProdLineState[prodLineId] || null;
   };
 
   orgUnitsModule.getAllByType('prodLine').forEach(function(prodLine)
   {
-    allProdLineState[prodLine._id] = new ProdLineState(app.broker.sandbox(), prodLine);
+    allProdLineState[prodLine._id] = new ProdLineState(app, productionModule, prodLine);
   });
+
+  scheduleHourChange();
 
   app.broker.subscribe('production.synced.**', function(changes)
   {
@@ -43,61 +49,48 @@ module.exports = function setUpProdState(app, productionModule)
       return productionModule.debug("Data synced but no state for prod line [%s]...", changes.prodLine);
     }
 
-    var newStateData = {};
-
-    if (changes.prodShift)
-    {
-      if (changes.prodShift._id)
-      {
-        newStateData.prodShiftId = changes.prodShift._id;
-      }
-
-      if (changes.prodShift.quantitiesDone)
-      {
-        newStateData.quantitiesDone = changes.prodShift.quantitiesDone;
-      }
-    }
-
-    if (changes.prodShiftOrder !== undefined)
-    {
-      newStateData.prodShiftOrderId = changes.prodShiftOrder === null
-        ? null
-        : changes.prodShiftOrder._id;
-    }
-
-    if (changes.prodDowntime !== undefined)
-    {
-      newStateData.prodDowntimeId = changes.prodDowntime ? (changes.prodDowntime._id || null) : null;
-    }
-
-    prodLineState.update(newStateData);
+    prodLineState.update(changes);
   });
 
   app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(data)
   {
     var prodLineState = allProdLineState[data.prodLine];
 
-    if (prodLineState && prodLineState.prodShiftId === data.prodShift)
+    if (prodLineState && prodLineState.getCurrentShiftId() === data.prodShift)
     {
-      prodLineState.update({quantitiesDone: data.quantitiesDone});
+      prodLineState.onQuantitiesPlanned();
     }
   });
 
-  function scheduleMetricsUpdate()
+  app.broker.subscribe('app.started').setLimit(1).on('message', function()
+  {
+    loaded = true;
+
+    app.broker.publish('production.stateLoaded');
+  });
+
+  function scheduleHourChange()
   {
     var nextHourTime = moment().minutes(0).seconds(0).milliseconds(999).add('hours', 1).valueOf();
     var delay = nextHourTime - Date.now();
 
-    setTimeout(updateMetrics, delay);
+    setTimeout(onHourChanged, delay);
   }
 
-  function updateMetrics()
+  function onHourChanged()
   {
+    if (!loaded)
+    {
+      return app.broker.subscribe('production.stateLoaded', onHourChanged).setLimit(1);
+    }
+
+    var currentHour = new Date().getHours();
+
     lodash.each(allProdLineState, function(prodLineState)
     {
-      prodLineState.updateMetrics();
+      prodLineState.onHourChanged(currentHour);
     });
 
-    setImmediate(scheduleMetricsUpdate);
+    setImmediate(scheduleHourChange);
   }
 };

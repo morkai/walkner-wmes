@@ -167,12 +167,7 @@ define([
 
       try
       {
-        data = JSON.parse(localStorage.getItem(this.getDataStorageKey()));
-
-        if (data.date)
-        {
-          data.date = new Date(data.date);
-        }
+        data = this.constructor.parse(JSON.parse(localStorage.getItem(this.getDataStorageKey())));
 
         this.prodShiftOrder.clear();
 
@@ -807,6 +802,16 @@ define([
       IDLE: 'idle',
       WORKING: 'working',
       DOWNTIME: 'downtime'
+    },
+
+    parse: function(data)
+    {
+      if (typeof data.date === 'string')
+      {
+        data.date = new Date(data.date);
+      }
+
+      return data;
     }
 
   });

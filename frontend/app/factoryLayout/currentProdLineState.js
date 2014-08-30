@@ -22,7 +22,6 @@ define([
   {
     if (loading)
     {
-console.log('handleStateChangedMessage > loading', message);
       return stateChangedMessageQueue.push(message);
     }
 
@@ -30,12 +29,7 @@ console.log('handleStateChangedMessage > loading', message);
 
     if (prodLineState && message.v > prodLineState.get('v'))
     {
-console.log('handleStateChangedMessage', message);
-      prodLineState.set(message);
-    }
-    else
-    {
-console.log('handleStateChangedMessage > ignored v%d vs v%d', message.v, prodLineState.get('v'), message);
+      prodLineState.update(message);
     }
   }
 

@@ -109,6 +109,19 @@ define([
       UNDECIDED: 'undecided',
       CONFIRMED: 'confirmed',
       REJECTED: 'rejected'
+    },
+
+    parse: function(data)
+    {
+      ['date', 'startedAt', 'finishedAt', 'createdAt', 'corroboratedAt'].forEach(function(dateProperty)
+      {
+        if (typeof data[dateProperty] === 'string')
+        {
+          data[dateProperty] = new Date(data[dateProperty]);
+        }
+      });
+
+      return data;
     }
 
   });

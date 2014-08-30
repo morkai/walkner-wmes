@@ -28,10 +28,18 @@ module.exports = function setUpProductionRoutes(app, productionModule)
     return res.send(400);
   });
 
-  express.get('/production/state', function(req, res)
+  express.get('/production/state', function(req, res, next)
   {
-    return res.json({
-      allProdLineState: productionModule.getAllProdLineState()
+    productionModule.getAllProdLineState(function(err, allProdLineState)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      return res.json({
+        allProdLineState: allProdLineState
+      });
     });
   });
 

@@ -4,6 +4,8 @@
 
 'use strict';
 
+var lodash = require('lodash');
+
 module.exports = function setUpProdData(app, productionModule)
 {
   var mongoose = app[productionModule.config.mongooseId];
@@ -21,10 +23,8 @@ module.exports = function setUpProdData(app, productionModule)
   {
     var currentShiftTime = app[productionModule.config.fteId].getCurrentShift().date.getTime();
 
-    Object.keys(cachedProdData).forEach(function(_id)
+    lodash.forEach(cachedProdData, function(model, _id)
     {
-      var model = cachedProdData[_id];
-
       if (model.date.getTime() !== currentShiftTime)
       {
         delete cachedProdData[_id];
@@ -46,7 +46,7 @@ module.exports = function setUpProdData(app, productionModule)
       return done(null, null);
     }
 
-    if (typeof cachedProdData[_id] !== 'undefined')
+    if (cachedProdData[_id] !== undefined)
     {
       return done(null, cachedProdData[_id]);
     }
@@ -60,6 +60,11 @@ module.exports = function setUpProdData(app, productionModule)
 
     Model.findById(_id, function(err, model)
     {
+      if (cachedProdData[_id] !== undefined)
+      {
+        return done(null, cachedProdData[_id]);
+      }
+
       if (err)
       {
         return done(err, null);
@@ -127,7 +132,7 @@ module.exports = function setUpProdData(app, productionModule)
     {
       var prodData = [];
 
-      idList.forEach(function(id)
+      lodash.forEach(idList, function(id)
       {
         if (cachedProdData[id] !== undefined)
         {
@@ -135,7 +140,7 @@ module.exports = function setUpProdData(app, productionModule)
         }
       });
 
-      models.forEach(function(model)
+      lodash.forEach(models, function(model)
       {
         if (cachedProdData[model._id] === undefined)
         {
@@ -151,7 +156,7 @@ module.exports = function setUpProdData(app, productionModule)
 
   productionModule.swapToCachedProdData = function(models, cachedModels)
   {
-    models.forEach(function(model)
+    lodash.forEach(models, function(model)
     {
       var cachedModel = productionModule.getCachedProdData(model._id);
 
@@ -165,6 +170,48 @@ module.exports = function setUpProdData(app, productionModule)
         cachedModels.push(model);
       }
     });
+  };
+
+  productionModule.getProdShiftOrders = function(prodShiftId, done)
+  {
+    ProdShiftOrder.find({prodShift: prodShiftId}).sort({startedAt: 1}).exec(function(err, prodShiftOrders)
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      var cachedProdShiftModels = [];
+
+      productionModule.swapToCachedProdData(prodShiftOrders, cachedProdShiftModels);
+
+      return done(null, cachedProdShiftModels);
+    });
+  };
+
+  productionModule.getProdDowntimes = function(prodShiftId, done)
+  {
+    ProdDowntime.find({prodShift: prodShiftId}).sort({startedAt: 1}).exec(function(err, prodDowntimes)
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      var cachedProdDowntimes = [];
+
+      productionModule.swapToCachedProdData(prodDowntimes, cachedProdDowntimes);
+
+      return done(null, cachedProdDowntimes);
+    });
+  };
+
+  productionModule.getProdShiftQuantitiesDone = function(prodLineId, shiftDates, done)
+  {
+    ProdShift
+      .find({date: {$in: shiftDates}, prodLine: prodLineId}, {date: 1, shift: 1, quantitiesDone: 1})
+      .lean()
+      .exec(done);
   };
 
   function getModelByType(type)

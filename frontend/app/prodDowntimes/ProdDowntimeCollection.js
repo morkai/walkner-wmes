@@ -79,6 +79,8 @@ define([
       });
     },
 
+    comparator: 'startedAt',
+
     findFirstUnfinished: function()
     {
       return this.find(function(prodDowntime)

@@ -39,6 +39,8 @@ define([
       });
     },
 
+    comparator: 'startedAt',
+
     hasOrMatches: function(message)
     {
       if (this.get(message._id))

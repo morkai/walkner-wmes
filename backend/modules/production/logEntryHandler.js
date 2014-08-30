@@ -259,19 +259,13 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
     switch (logEntry.type)
     {
       case 'changeMaster':
-        changes.prodShift = {master: logEntry.data};
-
-        return true;
+        return applyPersonnelChange(changes, 'master', logEntry.data);
 
       case 'changeLeader':
-        changes.prodShift = {leader: logEntry.data};
-
-        return true;
+        return applyPersonnelChange(changes, 'leader', logEntry.data);
 
       case 'changeOperator':
-        changes.prodShift = {operator: logEntry.data};
-
-        return true;
+        return applyPersonnelChange(changes, 'operator', logEntry.data);
 
       case 'changeQuantityDone':
         changes.prodShiftOrder = {quantityDone: logEntry.data.newValue};
@@ -291,6 +285,18 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       default:
         return false;
     }
+  }
+
+  function applyPersonnelChange(changes, type, data)
+  {
+    changes.prodShift = {};
+    changes.prodShift[type] = data;
+    changes.prodShiftOrder = {};
+    changes.prodShiftOrder[type] = data;
+    changes.prodDowntime = {};
+    changes.prodDowntime[type] = data;
+
+    return true;
   }
 
   function applyChanges(changes, property, oldModelData, newModel)

@@ -459,6 +459,21 @@ define([
       return orderData;
     }
 
+  }, {
+
+    parse: function(data)
+    {
+      ['date', 'startedAt', 'finishedAt', 'createdAt'].forEach(function(dateProperty)
+      {
+        if (typeof data[dateProperty] === 'string')
+        {
+          data[dateProperty] = new Date(data[dateProperty]);
+        }
+      });
+
+      return data;
+    }
+
   });
 
 });

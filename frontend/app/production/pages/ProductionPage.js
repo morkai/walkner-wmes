@@ -70,6 +70,7 @@ define([
     {
       this.layout = null;
       this.shiftEditedSub = null;
+      this.joinProductionAfterSyncSub = null;
       this.productionJoined = false;
 
       updater.disableViews();
@@ -93,6 +94,7 @@ define([
     {
       this.layout = null;
       this.shiftEditedSub = null;
+      this.joinProductionAfterSyncSub = null;
 
       $(window).off('beforeunload', this.onBeforeUnload);
 
@@ -269,19 +271,15 @@ define([
 
       var page = this;
 
-      this.socket.emit(
-        'production.getPlannedQuantities',
-        this.model.id,
-        function(err, plannedQuantities)
+      this.socket.emit('production.getPlannedQuantities', this.model.id, function(err, plannedQuantities)
+      {
+        if (err || !page.shiftEditedSub)
         {
-          if (err || !page.shiftEditedSub)
-          {
-            return;
-          }
-
-          page.model.updatePlannedQuantities(plannedQuantities);
+          return;
         }
-      );
+
+        page.model.updatePlannedQuantities(plannedQuantities);
+      });
     },
 
     onBeforeUnload: function()
@@ -307,23 +305,33 @@ define([
 
     joinProduction: function()
     {
-      if (this.model.isLocked() || this.productionJoined)
+      if (this.productionJoined || this.model.isLocked() || !this.socket.isConnected())
       {
+        return;
+      }
+
+      if (prodLog.isSyncing())
+      {
+        if (this.joinProductionAfterSyncSub === null)
+        {
+          this.joinProductionAfterSyncSub = this.broker.subscribe('production.synced')
+            .setLimit(1)
+            .on('message', this.joinProduction.bind(this));
+        }
+
         return;
       }
 
       var prodDowntime = this.model.prodDowntimes.findFirstUnfinished();
 
       this.socket.emit('production.join', {
-        _id: this.model.prodLine.id,
-        user: user.getInfo(),
-        time: Date.now(),
-        quantitiesDone: this.model.get('quantitiesDone'),
+        prodLineId: this.model.prodLine.id,
         prodShiftId: this.model.id,
         prodShiftOrderId: this.model.prodShiftOrder.id || null,
         prodDowntimeId: prodDowntime ? prodDowntime.id : null
       });
 
+      this.joinProductionAfterSyncSub = null;
       this.productionJoined = true;
     },
 
@@ -331,7 +339,10 @@ define([
     {
       if (this.productionJoined)
       {
-        this.socket.emit('production.leave', this.model.prodLine.id);
+        if (this.socket.isConnected())
+        {
+          this.socket.emit('production.leave', this.model.prodLine.id);
+        }
 
         this.productionJoined = false;
       }

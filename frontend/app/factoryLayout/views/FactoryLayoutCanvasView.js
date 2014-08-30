@@ -272,7 +272,6 @@ define([
         .attr('d', function(d) { return pathGenerator(d.points); });
 
       var view = this;
-      var padMetricValue = this.padMetricValue;
       var yInterval = PROD_LINE_HEIGHT + 2 + PROD_LINE_PADDING;
 
       divisionContainerEnter.each(function(d)
@@ -347,7 +346,7 @@ define([
               height: PROD_LINE_HEIGHT
             });
 
-            var plannedQuantityDone = padMetricValue(prodLineState.get('plannedQuantityDone'));
+            var plannedQuantityDone = view.prepareMetricValue(prodLineState.get('plannedQuantityDone'));
 
             prodLineInnerContainer.append('text')
               .attr({
@@ -366,7 +365,7 @@ define([
               height: PROD_LINE_HEIGHT
             });
 
-            var actualQuantityDone = padMetricValue(prodLineState.get('actualQuantityDone'));
+            var actualQuantityDone = view.prepareMetricValue(prodLineState.get('actualQuantityDone'));
 
             prodLineInnerContainer.append('text')
               .attr({
@@ -542,6 +541,12 @@ define([
       if (!prodLineOuterContainer.empty())
       {
         prodLineOuterContainer.classed('is-extended', prodLineState.get('extended'));
+
+        if (!prodLineState.get('extended'))
+        {
+          prodLineOuterContainer.style('display', 'none');
+          _.defer(function() { prodLineOuterContainer.style('display', null); });
+        }
       }
     },
 
@@ -571,15 +576,17 @@ define([
         return;
       }
 
-      var value = this.padMetricValue(prodLineState.get(metricName));
+      var value = this.prepareMetricValue(prodLineState.get(metricName));
 
       metric.style('display', 'none');
       metric.text(value);
       metric.attr('data-length', value.length);
+      _.defer(function() { metric.style('display', null); });
+    },
 
-      _.defer(function() {
-        metric.style('display', null);
-      });
+    prepareMetricValue: function(value)
+    {
+      return value === -1 ? '???' : this.padMetricValue(value);
     }
 
   });
