@@ -19,7 +19,7 @@ define([
       {
         domain = modelOrCollection.nlsDomain;
       }
-      else if (modelOrCollection.model.prototype.nlsDomain)
+      else if (modelOrCollection.model && modelOrCollection.model.prototype.nlsDomain)
       {
         domain = modelOrCollection.model.prototype.nlsDomain;
       }
