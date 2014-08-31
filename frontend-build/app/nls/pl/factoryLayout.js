@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(l){var e={locale:{}};e.locale.pl=l;return{}});
+define(["app/nls/locale/pl"],function(l){var n={locale:{}};n.locale.pl=l;return{"bc:layout":function(){return"Monitoring"}}});

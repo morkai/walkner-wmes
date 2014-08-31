@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Collection","./Subdivision"],function(e,i){return e.extend({model:i,rqlQuery:"select(division,type,name,prodTaskTags,aor)&sort(division,name)"})});
+define(["../core/Collection","./Subdivision"],function(e,o){return e.extend({model:o,rqlQuery:"select(division,type,name,prodTaskTags,aor)&sort(division,name)",comparator:"type"})});
