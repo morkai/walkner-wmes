@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["underscore","jquery","d3","screenfull","app/viewport","app/core/View","app/factoryLayout/templates/list"],function(e,n,i,o,t,s,r){return s.extend({template:r,events:{},initialize:function(){this.onKeyDown=this.onKeyDown.bind(this),this.onResize=e.debounce(this.onResize.bind(this),16),n("body").on("keydown",this.onKeyDown),n(window).on("resize",this.onResize),o.onchange=e.debounce(this.onFullscreen.bind(this),16)},destroy:function(){n("body").off("keydown",this.onKeyDown),n(window).off("resize",this.onResize),o.onchange=function(){}},beforeRender:function(){this.stopListening(this.model,"sync",this.render)},afterRender:function(){this.listenToOnce(this.model,"sync",this.render)},onKeyDown:function(e){122!==e.which||o.isFullscreen||(e.preventDefault(),o.request(this.el))},onResize:function(){},onFullscreen:function(){}})});

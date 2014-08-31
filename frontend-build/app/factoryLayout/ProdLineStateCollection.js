@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["../core/Collection","../data/orgUnits","./ProdLineState"],function(e,n,r){return e.extend({model:r,parse:function(e){for(var n=[],t=0,i=e.prodLineStates.length;i>t;++t)n.push(r.parse(e.prodLineStates[t]));return n},getForDivision:function(e){var r=[],t=this;return this.forEachProdLine(n.getByTypeAndId("division",e),function(e){var n=t.get(e.id);n&&r.push(n)}),r},forEachProdLine:function(e,r){var t=n.getChildren(e),i=0,o=t.length;if("workCenter"===n.getType(e))for(;o>i;++i)r(t[i]);else for(;o>i;++i)this.forEachProdLine(t[i],r)}})});
