@@ -10,7 +10,7 @@ var step = require('h5.step');
 
 module.exports = ProdLineState;
 
-var EXTENDED_DELAY = 10 / 60;
+var EXTENDED_DELAY = 15;
 var HOUR_TO_INDEX = [
   2, 3, 4, 5, 6, 7, 0, 1,
   2, 3, 4, 5, 6, 7, 0, 1,
