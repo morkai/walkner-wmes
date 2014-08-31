@@ -43,10 +43,8 @@ function ProdLineState(app, productionModule, prodLine)
   this.prodDowntimes = [];
 
   this.currentHour = now.getHours();
-  this.plannedQuantityDone1 = -1;
-  this.plannedQuantityDone2 = -1;
-  this.actualQuantityDone1 = -1;
-  this.actualQuantityDone2 = -1;
+  this.prevPlannedQuantitiesDone = [null, -1, -1, -1];
+  this.prevActualQuantitiesDone = [null, -1, -1, -1];
 }
 
 ProdLineState.prototype.toJSON = function()
@@ -482,25 +480,61 @@ ProdLineState.prototype.calculateCurrentShiftQuantitiesDone = function()
 
 /**
  * @private
- * @param {{planned: number, actual: number}} quantitiesDone
  */
-ProdLineState.prototype.publishMetricsChanges = function(quantitiesDone)
+ProdLineState.prototype.calculatePrevDayMetrics = function()
 {
-  var changes = this.changes || {};
-
-  if (quantitiesDone.planned !== this.plannedQuantityDone)
+  if (!this.prodShift || this.prodShift.shift !== 1)
   {
-    changes.plannedQuantityDone = this.plannedQuantityDone = quantitiesDone.planned;
+    return;
   }
 
-  if (quantitiesDone.actual !== this.actualQuantityDone)
-  {
-    changes.actualQuantityDone = this.actualQuantityDone = quantitiesDone.actual;
-  }
+  var quantitiesDone = {planned: 0, actual: 0};
 
-  if (this.changes === null && !lodash.isEmpty(changes))
+  if (this.prevPlannedQuantitiesDone[3] !== -1)
   {
-    this.publishChanges(changes);
+    quantitiesDone.planned += this.prevPlannedQuantitiesDone[1]
+      + this.prevPlannedQuantitiesDone[2]
+      + this.prevPlannedQuantitiesDone[3];
+
+    quantitiesDone.actual += this.prevActualQuantitiesDone[1]
+      + this.prevActualQuantitiesDone[2]
+      + this.prevActualQuantitiesDone[3];
+
+    this.publishMetricsChanges(quantitiesDone);
+  }
+  else
+  {
+    var thirdShiftTime = this.getPrevShiftTime(this.prodShift.date.getTime());
+    var secondShiftTime = this.getPrevShiftTime(thirdShiftTime);
+    var shiftDates = [
+      new Date(this.getPrevShiftTime(secondShiftTime)),
+      new Date(secondShiftTime),
+      new Date(thirdShiftTime)
+    ];
+    var prodLineState = this;
+
+    this.productionModule.getProdShiftQuantitiesDone(this.prodLine._id, shiftDates, function(err, prodShifts)
+    {
+      if (err)
+      {
+        return prodLineState.productionModule.error("Failed to find previous prod shifts: %s", err.message);
+      }
+
+      prodLineState.prevPlannedQuantitiesDone = [null, 0, 0, 0];
+      prodLineState.prevActualQuantitiesDone = [null, 0, 0, 0];
+
+      lodash.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
+
+      quantitiesDone.planned += prodLineState.prevPlannedQuantitiesDone[1]
+        + prodLineState.prevPlannedQuantitiesDone[2]
+        + prodLineState.prevPlannedQuantitiesDone[3];
+
+      quantitiesDone.actual += prodLineState.prevActualQuantitiesDone[1]
+        + prodLineState.prevActualQuantitiesDone[2]
+        + prodLineState.prevActualQuantitiesDone[3];
+
+      prodLineState.publishMetricsChanges(quantitiesDone);
+    });
   }
 };
 
@@ -514,10 +548,8 @@ ProdLineState.prototype.updateFirstShiftMetrics = function()
     return;
   }
 
-  this.plannedQuantityDone1 = -1;
-  this.plannedQuantityDone2 = -1;
-  this.actualQuantityDone1 = -1;
-  this.actualQuantityDone2 = -1;
+  this.prevPlannedQuantitiesDone = [null, -1, -1, -1];
+  this.prevActualQuantitiesDone = [null, -1, -1, -1];
 
   this.publishMetricsChanges(this.calculateCurrentShiftQuantitiesDone());
 };
@@ -532,15 +564,17 @@ ProdLineState.prototype.updateSecondShiftMetrics = function()
     return;
   }
 
-  this.plannedQuantityDone2 = -1;
-  this.actualQuantityDone2 = -1;
+  this.prevPlannedQuantitiesDone[2] = -1;
+  this.prevPlannedQuantitiesDone[3] = -1;
+  this.prevActualQuantitiesDone[2] = -1;
+  this.prevActualQuantitiesDone[3] = -1;
 
   var quantitiesDone = this.calculateCurrentShiftQuantitiesDone();
 
-  if (this.plannedQuantityDone1 !== -1)
+  if (this.prevPlannedQuantitiesDone[1] !== -1)
   {
-    quantitiesDone.planned += this.plannedQuantityDone1;
-    quantitiesDone.actual += this.actualQuantityDone1;
+    quantitiesDone.planned += this.prevPlannedQuantitiesDone[1];
+    quantitiesDone.actual += this.prevActualQuantitiesDone[1];
 
     this.publishMetricsChanges(quantitiesDone);
   }
@@ -558,21 +592,13 @@ ProdLineState.prototype.updateSecondShiftMetrics = function()
         return prodLineState.productionModule.error("Failed to find previous prod shifts: %s", err.message);
       }
 
-      prodLineState.plannedQuantityDone1 = 0;
-      prodLineState.actualQuantityDone1 = 0;
+      prodLineState.prevPlannedQuantitiesDone[1] = 0;
+      prodLineState.prevActualQuantitiesDone[1] = 0;
 
-      if (prodShifts.length)
-      {
-        prodLineState.addQuantitiesDone(
-          prodLineState,
-          'plannedQuantityDone1',
-          'actualQuantityDone1',
-          prodShifts[0].quantitiesDone
-        );
-      }
+      lodash.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
 
-      quantitiesDone.planned += prodLineState.plannedQuantityDone1;
-      quantitiesDone.actual += prodLineState.actualQuantityDone1;
+      quantitiesDone.planned += prodLineState.prevPlannedQuantitiesDone[1];
+      quantitiesDone.actual += prodLineState.prevActualQuantitiesDone[1];
 
       prodLineState.publishMetricsChanges(quantitiesDone);
     });
@@ -589,12 +615,15 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
     return;
   }
 
+  this.prevPlannedQuantitiesDone[3] = -1;
+  this.prevActualQuantitiesDone[3] = -1;
+
   var quantitiesDone = this.calculateCurrentShiftQuantitiesDone();
 
-  if (this.plannedQuantityDone2 !== -1)
+  if (this.prevPlannedQuantitiesDone[2] !== -1)
   {
-    quantitiesDone.planned += this.plannedQuantityDone1 + this.plannedQuantityDone2;
-    quantitiesDone.actual += this.actualQuantityDone1 + this.actualQuantityDone2;
+    quantitiesDone.planned += this.prevPlannedQuantitiesDone[1] + this.prevPlannedQuantitiesDone[2];
+    quantitiesDone.actual += this.prevActualQuantitiesDone[1] + this.prevActualQuantitiesDone[2];
 
     this.publishMetricsChanges(quantitiesDone);
   }
@@ -614,33 +643,15 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
         return prodLineState.productionModule.error("Failed to find previous prod shifts: %s", err.message);
       }
 
-      prodLineState.plannedQuantityDone1 = 0;
-      prodLineState.actualQuantityDone1 = 0;
-      prodLineState.plannedQuantityDone2 = 0;
-      prodLineState.actualQuantityDone2 = 0;
+      prodLineState.prevPlannedQuantitiesDone[1] = 0;
+      prodLineState.prevPlannedQuantitiesDone[2] = 0;
+      prodLineState.prevActualQuantitiesDone[1] = 0;
+      prodLineState.prevActualQuantitiesDone[2] = 0;
 
-      if (prodShifts.length > 0)
-      {
-        prodLineState.addQuantitiesDone(
-          prodLineState,
-          'plannedQuantityDone' + prodShifts[0].shift,
-          'actualQuantityDone' + prodShifts[0].shift,
-          prodShifts[0].quantitiesDone
-        );
-      }
+      lodash.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
 
-      if (prodShifts.length > 1)
-      {
-        prodLineState.addQuantitiesDone(
-          prodLineState,
-          'plannedQuantityDone' + prodShifts[1].shift,
-          'actualQuantityDone' + prodShifts[1].shift,
-          prodShifts[1].quantitiesDone
-        );
-      }
-
-      quantitiesDone.planned += prodLineState.plannedQuantityDone1 + prodLineState.plannedQuantityDone2;
-      quantitiesDone.actual += prodLineState.actualQuantityDone1 + prodLineState.actualQuantityDone2;
+      quantitiesDone.planned += prodLineState.prevPlannedQuantitiesDone[1] + prodLineState.prevPlannedQuantitiesDone[2];
+      quantitiesDone.actual += prodLineState.prevActualQuantitiesDone[1] + prodLineState.prevActualQuantitiesDone[2];
 
       prodLineState.publishMetricsChanges(quantitiesDone);
     });
@@ -649,17 +660,17 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
 
 /**
  * @private
- * @param {object} obj
- * @param {string} plannedProperty
- * @param {string} actualProperty
- * @param {Array.<object>} quantitiesDone
+ * @param {{shift: number, quantitiesDone: object}} prodShift
  */
-ProdLineState.prototype.addQuantitiesDone = function(obj, plannedProperty, actualProperty, quantitiesDone)
+ProdLineState.prototype.addQuantitiesDone = function(prodShift)
 {
+  var shift = prodShift.shift;
+  var quantitiesDone = prodShift.quantitiesDone;
+
   for (var i = 0; i < 8; ++i)
   {
-    obj[plannedProperty] += quantitiesDone[i].planned;
-    obj[actualProperty] += quantitiesDone[i].actual;
+    this.prevPlannedQuantitiesDone[shift] += quantitiesDone[i].planned;
+    this.prevActualQuantitiesDone[shift] += quantitiesDone[i].actual;
   }
 };
 
@@ -687,6 +698,30 @@ ProdLineState.prototype.getPrevShiftTime = function(shiftTime)
   }
 
   return shiftMoment.valueOf();
+};
+
+/**
+ * @private
+ * @param {{planned: number, actual: number}} quantitiesDone
+ */
+ProdLineState.prototype.publishMetricsChanges = function(quantitiesDone)
+{
+  var changes = this.changes || {};
+
+  if (quantitiesDone.planned !== this.plannedQuantityDone)
+  {
+    changes.plannedQuantityDone = this.plannedQuantityDone = quantitiesDone.planned;
+  }
+
+  if (quantitiesDone.actual !== this.actualQuantityDone)
+  {
+    changes.actualQuantityDone = this.actualQuantityDone = quantitiesDone.actual;
+  }
+
+  if (this.changes === null && !lodash.isEmpty(changes))
+  {
+    this.publishChanges(changes);
+  }
 };
 
 /**
