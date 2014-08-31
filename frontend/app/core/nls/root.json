@@ -98,6 +98,7 @@
     "NAVBAR:XICONF:RESULTS": "Programming results",
     "NAVBAR:VENDORS": "Vendors",
     "NAVBAR:PURCHASE_ORDERS": "Purchase orders",
+    "NAVBAR:FACTORY_LAYOUT": "Monitoring",
 
     "ACTION_FORM:BUTTON": "Perform action",
     "ACTION_FORM:BUTTON:delete": "Delete",
