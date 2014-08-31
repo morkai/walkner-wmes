@@ -60,6 +60,11 @@ define([
     collection: collection,
     load: function()
     {
+      if (unloadTimer !== null)
+      {
+        clearTimeout(unloadTimer);
+      }
+
       if (loaded)
       {
         return;
