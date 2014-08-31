@@ -23,6 +23,13 @@ define([
 
     layoutName: 'page',
 
+    localTopics: {
+      'socket.connected': function()
+      {
+        currentProdLineState.load(true);
+      }
+    },
+
     breadcrumbs: function()
     {
       return [
@@ -62,7 +69,7 @@ define([
 
     load: function(when)
     {
-      return when(currentProdLineState.load());
+      return when(currentProdLineState.load(false));
     }
 
   });

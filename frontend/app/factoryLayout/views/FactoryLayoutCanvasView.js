@@ -101,8 +101,15 @@ define([
       this.canvas = null;
     },
 
+    beforeRender: function()
+    {
+      this.stopListening(this.collection, 'reset', this.render);
+    },
+
     afterRender: function()
     {
+      this.listenToOnce(this.collection, 'reset', this.render);
+
       this.el.classList.toggle('is-editable', this.editable);
 
       this.setUpCanvas(this.getSize());

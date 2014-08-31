@@ -58,14 +58,14 @@ define([
 
   return {
     collection: collection,
-    load: function()
+    load: function(force)
     {
       if (unloadTimer !== null)
       {
         clearTimeout(unloadTimer);
       }
 
-      if (loaded)
+      if (loaded && !force)
       {
         return;
       }
