@@ -6,16 +6,18 @@ define([
   'underscore',
   'jquery',
   'd3',
+  'screenfull',
   'app/core/View',
   'app/factoryLayout/templates/canvas',
-  'screenfull'
+  '../layoutDefinition'
 ], function(
   _,
   $,
   d3,
+  screenfull,
   View,
   template,
-  screenfull
+  layoutDefinition
 ) {
   'use strict';
 
@@ -26,6 +28,7 @@ define([
   var PROD_LINE_TEXT_SIZE = 18;
   var PROD_LINE_NAME_WIDTH = 110;
   var PROD_LINE_METRIC_WIDTH = 39;
+  var PROD_LINE_TOP_INTERVAL = PROD_LINE_HEIGHT + 2 + PROD_LINE_PADDING;
 
   function hex2rgba(hex, opacity)
   {
@@ -113,141 +116,33 @@ define([
       this.el.classList.toggle('is-editable', this.editable);
 
       this.setUpCanvas(this.getSize());
+      this.renderLayout();
+      this.centerView();
 
-      this.canvas.append('rect')
-        .attr('class', 'factoryLayout-area')
-        .attr('x', '0')
-        .attr('y', '0')
-        .attr('width', '1920px')
-        .attr('height', '1080px');
+      this.$('[data-action=pan]').click();
+    },
 
+    renderLayout: function()
+    {
       var divisions = this.canvas.selectAll('.division')
-        .data([
-          {
-            _id: 'LPd',
-            position: {x: 10, y: 10},
-            points: [
-              [0, 0],
-              [0, 350],
-              [300, 350],
-              [300, 600],
-              [600, 600],
-              [600, 0]
-            ],
-            fillColor: '#00aaff',
-            prodLines: [
-              {
-                x: 10,
-                y: 10,
-                h: 340
-              },
-              {
-                x: 310,
-                y: 10,
-                h: 580
-              }
-            ]
-          },
-          {
-            _id: 'LPa',
-            position: {x: 610, y: 10},
-            points: [
-              [0, 0],
-              [0, 600],
-              [430, 600],
-              [430, 0]
-            ],
-            fillColor: '#FFFF80',
-            prodLines: [
-              {
-                x: 10,
-                y: 10,
-                h: 580
-              },
-              {
-                x: 230,
-                y: 10,
-                h: 580
-              }
-            ]
-          },
-          {
-            _id: 'LPb',
-            position: {x: 1040, y: 10},
-            points: [
-              [0, 0],
-              [0, 600],
-              [430, 600],
-              [430, 0]
-            ],
-            fillColor: '#99dd99',
-            prodLines: [
-              {
-                x: 10,
-                y: 10,
-                h: 580
-              },
-              {
-                x: 230,
-                y: 10,
-                h: 580
-              }
-            ]
-          },
-          {
-            _id: 'LPc',
-            position: {x: 1470, y: 10},
-            points: [
-              [0, 0],
-              [0, 600],
-              [440, 600],
-              [440, 0]
-            ],
-            fillColor: '#C080C0',
-            prodLines: [
-              {
-                x: 10,
-                y: 10,
-                h: 580
-              },
-              {
-                x: 240,
-                y: 10,
-                h: 580
-              }
-            ]
-          },
-          {
-            _id: 'LD',
-            position: {x: 10, y: 360},
-            points: [
-              [0, 0],
-              [0, 250],
-              [75, 250],
-              [75, 500],
-              [800, 500],
-              [800, 710],
-              [1320, 710],
-              [1320, 500],
-              [1900, 500],
-              [1900, 250],
-              [300, 250],
-              [300, 0]
-            ],
-            fillColor: '#FFD580',
-            prodLines: [
-
-            ]
-          }
-        ]);
+        .data(layoutDefinition);
 
       var pathGenerator = d3.svg.line()
-        .x(function(d) { return d[0]; })
-        .y(function(d) { return d[1]; })
+        .x(function(d)
+        {
+          return d[0];
+        })
+        .y(function(d)
+        {
+          return d[1];
+        })
         .interpolate('linear-closed');
 
       var drag = d3.behavior.drag()
-        .origin(function(d) { return d.position; })
+        .origin(function(d)
+        {
+          return d.position;
+        })
         .on('dragstart', function()
         {
           d3.event.sourceEvent.stopPropagation();
@@ -270,127 +165,141 @@ define([
 
       var divisionContainerEnter = divisions.enter().insert('g')
         .attr('class', 'factoryLayout-division')
-        .attr('transform', function(d) { return 'translate(' + d.position.x + ',' + d.position.y + ')'; })
-        .attr('fill', function(d) { return hex2rgba(d.fillColor || '#000000', 1); })
-        .call(this.editable ? drag : function() {});
+        .attr('transform', function(d)
+        {
+          return 'translate(' + d.position.x + ',' + d.position.y + ')';
+        })
+        .attr('fill', function(d)
+        {
+          return hex2rgba(d.fillColor || '#000000', 1);
+        })
+        .call(this.editable ? drag : function()
+        {
+        });
 
       divisionContainerEnter.append('path')
         .classed('factoryLayout-division-area', true)
-        .attr('d', function(d) { return pathGenerator(d.points); });
+        .attr('d', function(d)
+        {
+          return pathGenerator(d.points);
+        });
 
       var view = this;
-      var yInterval = PROD_LINE_HEIGHT + 2 + PROD_LINE_PADDING;
 
       divisionContainerEnter.each(function(d)
       {
-        var divisionContainerEl = d3.select(this);
-        var prodLineStates = view.collection.getForDivision(d._id);
-
-        d.prodLines.forEach(function(prodLine)
-        {
-          var prodLinesContainer = divisionContainerEl.append('g').attr({
-            class: 'factoryLayout-prodLines',
-            transform: 'translate(' + prodLine.x + ',' + prodLine.y + ')'
-          });
-
-          prodLinesContainer.append('path').attr({
-            class: 'factoryLayout-prodLines-line',
-            d: 'M-5,0 v' + prodLine.h
-          });
-
-          var prodLineCount = Math.floor(prodLine.h / yInterval);
-
-          for (var i = 0; i < prodLineCount; ++i)
-          {
-            var prodLineState = prodLineStates.shift();
-
-            if (prodLineState === undefined)
-            {
-              break;
-            }
-
-            var prodLineOuterContainer = prodLinesContainer.append('g').attr({
-              class: 'factoryLayout-prodLine',
-              transform: 'translate(0,' + (yInterval * i) + ')',
-              style: 'font-size: ' + PROD_LINE_TEXT_SIZE + 'px'
-            });
-
-            prodLineOuterContainer.attr('data-id', prodLineState.id);
-
-            if (prodLineState.get('state') !== null)
-            {
-              prodLineOuterContainer.classed('is-' + prodLineState.get('state'), true);
-            }
-
-            prodLineOuterContainer.classed('is-offline', !prodLineState.get('online'));
-            prodLineOuterContainer.classed('is-extended', prodLineState.get('extended'));
-
-            var prodLineInnerContainer = prodLineOuterContainer.append('g').attr({
-              class: 'factoryLayout-prodLine-inner'
-            });
-
-            prodLineInnerContainer.append('rect').attr({
-              class: 'factoryLayout-prodLine-bg',
-              x: 0,
-              y: 0,
-              width: PROD_LINE_NAME_WIDTH,
-              height: PROD_LINE_HEIGHT
-            });
-
-            prodLineInnerContainer.append('text')
-              .attr({
-                class: 'factoryLayout-prodLine-name',
-                x: PROD_LINE_TEXT_X,
-                y: PROD_LINE_TEXT_Y
-              })
-              .text(prodLineState.getLabel());
-
-            prodLineInnerContainer.append('rect').attr({
-              class: 'factoryLayout-metric-bg',
-              x: PROD_LINE_NAME_WIDTH,
-              y: 0,
-              width: PROD_LINE_METRIC_WIDTH,
-              height: PROD_LINE_HEIGHT
-            });
-
-            var plannedQuantityDone = view.prepareMetricValue(prodLineState.get('plannedQuantityDone'));
-
-            prodLineInnerContainer.append('text')
-              .attr({
-                class: 'factoryLayout-metric-value factoryLayout-metric-plannedQuantityDone',
-                x: 1 + PROD_LINE_NAME_WIDTH + PROD_LINE_TEXT_X,
-                y: PROD_LINE_TEXT_Y,
-                'data-length': plannedQuantityDone.length
-              })
-              .text(plannedQuantityDone);
-
-            prodLineInnerContainer.append('rect').attr({
-              class: 'factoryLayout-metric-bg',
-              x: PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH,
-              y: 0,
-              width: PROD_LINE_METRIC_WIDTH,
-              height: PROD_LINE_HEIGHT
-            });
-
-            var actualQuantityDone = view.prepareMetricValue(prodLineState.get('actualQuantityDone'));
-
-            prodLineInnerContainer.append('text')
-              .attr({
-                class: 'factoryLayout-metric-value factoryLayout-metric-actualQuantityDone',
-                x: 1 + PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH + PROD_LINE_TEXT_X,
-                y: PROD_LINE_TEXT_Y,
-                'data-length': actualQuantityDone.length
-              })
-              .text(actualQuantityDone);
-          }
-        });
+        d.prodLines.forEach(
+          view.renderProdLinesGuide.bind(
+            view, d, d3.select(this), view.collection.getForDivision(d._id)
+          )
+        );
       });
 
       divisions.exit().remove();
+    },
 
-      this.centerView();
+    renderProdLinesGuide: function(d, divisionContainerEl, prodLineStates, prodLinesGuide)
+    {
+      var prodLinesContainer = divisionContainerEl.append('g').attr({
+        class: 'factoryLayout-prodLines',
+        transform: 'translate(' + prodLinesGuide.x + ',' + prodLinesGuide.y + ')'
+      });
 
-      this.$('[data-action=pan]').click();
+      prodLinesContainer.append('path').attr({
+        class: 'factoryLayout-prodLines-line',
+        d: 'M-5,0 v' + prodLinesGuide.h
+      });
+
+      var prodLineCount = Math.floor(prodLinesGuide.h / PROD_LINE_TOP_INTERVAL);
+
+      for (var i = 0; i < prodLineCount; ++i)
+      {
+        var prodLineState = prodLineStates.shift();
+
+        if (prodLineState === undefined)
+        {
+          break;
+        }
+
+        this.renderProdLineBox(prodLinesContainer, prodLineState, i);
+      }
+    },
+
+    renderProdLineBox: function(prodLinesContainer, prodLineState, i)
+    {
+      var prodLineOuterContainer = prodLinesContainer.append('g').attr({
+        class: 'factoryLayout-prodLine',
+        transform: 'translate(0,' + (PROD_LINE_TOP_INTERVAL * i) + ')',
+        style: 'font-size: ' + PROD_LINE_TEXT_SIZE + 'px'
+      });
+
+      prodLineOuterContainer.attr('data-id', prodLineState.id);
+
+      if (prodLineState.get('state') !== null)
+      {
+        prodLineOuterContainer.classed('is-' + prodLineState.get('state'), true);
+      }
+
+      prodLineOuterContainer.classed('is-offline', !prodLineState.get('online'));
+      prodLineOuterContainer.classed('is-extended', prodLineState.get('extended'));
+
+      var prodLineInnerContainer = prodLineOuterContainer.append('g').attr({
+        class: 'factoryLayout-prodLine-inner'
+      });
+
+      prodLineInnerContainer.append('rect').attr({
+        class: 'factoryLayout-prodLine-bg',
+        x: 0,
+        y: 0,
+        width: PROD_LINE_NAME_WIDTH,
+        height: PROD_LINE_HEIGHT
+      });
+
+      prodLineInnerContainer.append('text')
+        .attr({
+          class: 'factoryLayout-prodLine-name',
+          x: PROD_LINE_TEXT_X,
+          y: PROD_LINE_TEXT_Y
+        })
+        .text(prodLineState.getLabel());
+
+      prodLineInnerContainer.append('rect').attr({
+        class: 'factoryLayout-metric-bg',
+        x: PROD_LINE_NAME_WIDTH,
+        y: 0,
+        width: PROD_LINE_METRIC_WIDTH,
+        height: PROD_LINE_HEIGHT
+      });
+
+      var plannedQuantityDone = this.prepareMetricValue(prodLineState.get('plannedQuantityDone'));
+
+      prodLineInnerContainer.append('text')
+        .attr({
+          class: 'factoryLayout-metric-value factoryLayout-metric-plannedQuantityDone',
+          x: 1 + PROD_LINE_NAME_WIDTH + PROD_LINE_TEXT_X,
+          y: PROD_LINE_TEXT_Y,
+          'data-length': plannedQuantityDone.length
+        })
+        .text(plannedQuantityDone);
+
+      prodLineInnerContainer.append('rect').attr({
+        class: 'factoryLayout-metric-bg',
+        x: PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH,
+        y: 0,
+        width: PROD_LINE_METRIC_WIDTH,
+        height: PROD_LINE_HEIGHT
+      });
+
+      var actualQuantityDone = this.prepareMetricValue(prodLineState.get('actualQuantityDone'));
+
+      prodLineInnerContainer.append('text')
+        .attr({
+          class: 'factoryLayout-metric-value factoryLayout-metric-actualQuantityDone',
+          x: 1 + PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH + PROD_LINE_TEXT_X,
+          y: PROD_LINE_TEXT_Y,
+          'data-length': actualQuantityDone.length
+        })
+        .text(actualQuantityDone);
     },
 
     padMetricValue: d3.format(' >3d'),
@@ -430,6 +339,13 @@ define([
       this.zoom = zoom;
       this.canvas = outerContainer.append('g');
 
+      this.canvas.append('rect')
+        .attr('class', 'factoryLayout-area')
+        .attr('x', '0')
+        .attr('y', '0')
+        .attr('width', '1920px')
+        .attr('height', '1080px');
+
       this.translate(5, 5);
 
       function onZoom()
@@ -449,7 +365,10 @@ define([
     {
       if (screenfull.element === this.el)
       {
-        return {width: window.innerWidth, height: window.innerHeight};
+        return {
+          width: window.innerWidth,
+          height: window.innerHeight
+        };
       }
 
       var w = window.innerWidth - 28;
