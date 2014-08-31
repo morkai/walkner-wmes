@@ -19,14 +19,14 @@ define([
 
     parse: function(res)
     {
-      var allProdLineState = [];
+      var prodLineStates = [];
 
-      for (var i = 0, l = res.allProdLineState.length; i < l; ++i)
+      for (var i = 0, l = res.prodLineStates.length; i < l; ++i)
       {
-        allProdLineState.push(ProdLineState.parse(res.allProdLineState[i]));
+        prodLineStates.push(ProdLineState.parse(res.prodLineStates[i]));
       }
 
-      return allProdLineState;
+      return prodLineStates;
     },
 
     getForDivision: function(divisionId)

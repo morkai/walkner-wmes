@@ -4,6 +4,7 @@
 
 'use strict';
 
+var step = require('h5.step');
 var orderFinder = require('./orderFinder');
 
 module.exports = function setUpProductionRoutes(app, productionModule)
@@ -12,6 +13,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
   var mongoose = app[productionModule.config.mongooseId];
   var Order = mongoose.model('Order');
   var MechOrder = mongoose.model('MechOrder');
+  var FactoryLayout = mongoose.model('FactoryLayout');
 
   express.get('/production/orders', function(req, res, next)
   {
@@ -30,17 +32,25 @@ module.exports = function setUpProductionRoutes(app, productionModule)
 
   express.get('/production/state', function(req, res, next)
   {
-    productionModule.getAllProdLineState(function(err, allProdLineState)
-    {
-      if (err)
+    step(
+      function()
       {
-        return next(err);
-      }
+        productionModule.getProdLineStates(this.parallel());
+        FactoryLayout.findById('default', {live: 1}).lean().exec(this.parallel())
+      },
+      function(err, prodLineStates, factoryLayout)
+      {
+        if (err)
+        {
+          return next(err);
+        }
 
-      return res.json({
-        allProdLineState: allProdLineState
-      });
-    });
+        return res.json({
+          prodLineStates: prodLineStates,
+          factoryLayout: factoryLayout
+        });
+      }
+    );
   });
 
   function findOrdersByNo(no, res, next)

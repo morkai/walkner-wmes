@@ -13,36 +13,36 @@ module.exports = function setUpProdState(app, productionModule)
   var orgUnitsModule = app[productionModule.config.orgUnitsId];
 
   var loaded = false;
-  var allProdLineState = {};
+  var prodLineStateMap = {};
 
-  productionModule.getAllProdLineState = function(done)
+  productionModule.getProdLineStates = function(done)
   {
     if (loaded)
     {
-      return done(null, lodash.values(allProdLineState));
+      return done(null, lodash.values(prodLineStateMap));
     }
 
     app.broker.subscribe('production.stateLoaded').setLimit(1).on('message', function()
     {
-      productionModule.getAllProdLineState(done);
+      productionModule.getProdLineStates(done);
     });
   };
 
   productionModule.getProdLineState = function(prodLineId)
   {
-    return allProdLineState[prodLineId] || null;
+    return prodLineStateMap[prodLineId] || null;
   };
 
   orgUnitsModule.getAllByType('prodLine').forEach(function(prodLine)
   {
-    allProdLineState[prodLine._id] = new ProdLineState(app, productionModule, prodLine);
+    prodLineStateMap[prodLine._id] = new ProdLineState(app, productionModule, prodLine);
   });
 
   scheduleHourChange();
 
   app.broker.subscribe('production.synced.**', function(changes)
   {
-    var prodLineState = allProdLineState[changes.prodLine];
+    var prodLineState = prodLineStateMap[changes.prodLine];
 
     if (!prodLineState)
     {
@@ -54,7 +54,7 @@ module.exports = function setUpProdState(app, productionModule)
 
   app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(data)
   {
-    var prodLineState = allProdLineState[data.prodLine];
+    var prodLineState = prodLineStateMap[data.prodLine];
 
     if (prodLineState && prodLineState.getCurrentShiftId() === data.prodShift)
     {
@@ -86,7 +86,7 @@ module.exports = function setUpProdState(app, productionModule)
 
     var currentHour = new Date().getHours();
 
-    lodash.each(allProdLineState, function(prodLineState)
+    lodash.each(prodLineStateMap, function(prodLineState)
     {
       prodLineState.onHourChanged(currentHour);
     });

@@ -10,16 +10,36 @@ define([
 ], function(
   user,
   router,
-  viewport
+  viewport,
+  productionState
 ) {
   'use strict';
 
-  // TODO: privileges
-  var canView = user.auth();
-
-  router.map('/factoryLayout', canView, function()
+  router.map('/factoryLayout', function()
   {
-    viewport.loadPage('app/factoryLayout/pages/FactoryLayoutPage');
+    viewport.loadPage(
+      ['app/factoryLayout/productionState', 'app/factoryLayout/pages/FactoryLayoutPage'],
+      function(productionState, FactoryLayoutPage)
+      {
+        return new FactoryLayoutPage({
+          model: productionState
+        });
+      }
+    );
+  });
+
+  router.map('/factoryLayout/prodLines', function(req)
+  {
+    viewport.loadPage(
+      ['app/factoryLayout/productionState', 'app/factoryLayout/pages/ProdLineStateListPage'],
+      function(productionState, ProdLineStateListPage)
+      {
+        return new ProdLineStateListPage({
+          model: productionState,
+          rqlQuery: req.rql
+        });
+      }
+    );
   });
 
 });

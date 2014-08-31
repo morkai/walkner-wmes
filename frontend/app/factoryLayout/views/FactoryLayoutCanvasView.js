@@ -7,17 +7,17 @@ define([
   'jquery',
   'd3',
   'screenfull',
+  'app/viewport',
   'app/core/View',
-  'app/factoryLayout/templates/canvas',
-  '../layoutDefinition'
+  'app/factoryLayout/templates/canvas'
 ], function(
   _,
   $,
   d3,
   screenfull,
+  viewport,
   View,
-  template,
-  layoutDefinition
+  template
 ) {
   'use strict';
 
@@ -71,6 +71,26 @@ define([
         {
           divisionContainerEl.parentNode.appendChild(divisionContainerEl);
         }
+      },
+      'mousedown .factoryLayout-prodLine': function(e)
+      {
+        this.clickInfo = {
+          type: 'prodLine',
+          time: e.timeStamp,
+          modelId: e.currentTarget.dataset.id
+        };
+
+        return false;
+      },
+      'mousedown .factoryLayout-division': function(e)
+      {
+        this.clickInfo = {
+          type: 'division',
+          time: e.timeStamp,
+          modelId: e.currentTarget.dataset.id
+        };
+
+        return false;
       }
     },
 
@@ -82,16 +102,18 @@ define([
       this.zoom = null;
       this.currentAction = null;
       this.editable = false;
+      this.clickInfo = null;
+      this.panInfo = null;
 
       $('body').on('keydown', this.onKeyDown);
       $(window).on('resize', this.onResize);
       screenfull.onchange = _.debounce(this.onFullscreen.bind(this), 16);
 
-      this.listenTo(this.collection, 'change:state', this.onStateChange);
-      this.listenTo(this.collection, 'change:online', this.onOnlineChange);
-      this.listenTo(this.collection, 'change:extended', this.onExtendedChange);
-      this.listenTo(this.collection, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
-      this.listenTo(this.collection, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
+      this.listenTo(this.model.prodLineStates, 'change:state', this.onStateChange);
+      this.listenTo(this.model.prodLineStates, 'change:online', this.onOnlineChange);
+      this.listenTo(this.model.prodLineStates, 'change:extended', this.onExtendedChange);
+      this.listenTo(this.model.prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
+      this.listenTo(this.model.prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
     },
 
     destroy: function()
@@ -102,16 +124,18 @@ define([
 
       this.zoom = null;
       this.canvas = null;
+      this.clickInfo = null;
+      this.panInfo = null;
     },
 
     beforeRender: function()
     {
-      this.stopListening(this.collection, 'reset', this.render);
+      this.stopListening(this.model, 'sync', this.render);
     },
 
     afterRender: function()
     {
-      this.listenToOnce(this.collection, 'reset', this.render);
+      this.listenToOnce(this.model, 'sync', this.render);
 
       this.el.classList.toggle('is-editable', this.editable);
 
@@ -125,7 +149,7 @@ define([
     renderLayout: function()
     {
       var divisions = this.canvas.selectAll('.division')
-        .data(layoutDefinition);
+        .data(this.model.factoryLayout.get('live'));
 
       var pathGenerator = d3.svg.line()
         .x(function(d)
@@ -165,17 +189,10 @@ define([
 
       var divisionContainerEnter = divisions.enter().insert('g')
         .attr('class', 'factoryLayout-division')
-        .attr('transform', function(d)
-        {
-          return 'translate(' + d.position.x + ',' + d.position.y + ')';
-        })
-        .attr('fill', function(d)
-        {
-          return hex2rgba(d.fillColor || '#000000', 1);
-        })
-        .call(this.editable ? drag : function()
-        {
-        });
+        .attr('transform', function(d) { return 'translate(' + d.position.x + ',' + d.position.y + ')'; })
+        .attr('fill', function(d) { return hex2rgba(d.fillColor || '#000000', 1); })
+        .attr('data-id', function(d) { return d._id; })
+        .call(this.editable ? drag : function() {});
 
       divisionContainerEnter.append('path')
         .classed('factoryLayout-division-area', true)
@@ -185,12 +202,13 @@ define([
         });
 
       var view = this;
+      var prodLineStates = this.model.prodLineStates;
 
       divisionContainerEnter.each(function(d)
       {
         d.prodLines.forEach(
           view.renderProdLinesGuide.bind(
-            view, d, d3.select(this), view.collection.getForDivision(d._id)
+            view, d, d3.select(this), prodLineStates.getForDivision(d._id)
           )
         );
       });
@@ -313,11 +331,30 @@ define([
       var zoom = d3.behavior.zoom()
         .on('zoomstart', function()
         {
+          view.panInfo = {
+            time: d3.event.sourceEvent.timeStamp,
+            translate: d3.event.target.translate()
+          };
+
           view.$el.addClass('is-panning');
         })
         .on('zoomend', function()
         {
           view.$el.removeClass('is-panning');
+
+          var panInfo = view.panInfo;
+          var translate = d3.event.target.translate();
+
+          view.panInfo = null;
+
+          if (!view.clickInfo
+            || panInfo.translate[0] !== translate[0]
+            || panInfo.translate[1] !== translate[1])
+          {
+            return;
+          }
+
+          view.handleClick();
         })
         .on('zoom', onZoom);
 
@@ -513,6 +550,40 @@ define([
     prepareMetricValue: function(value)
     {
       return value === -1 ? '???' : this.padMetricValue(value);
+    },
+
+    handleClick: function()
+    {
+      var clickInfo = this.clickInfo;
+
+      if (!clickInfo)
+      {
+        return;
+      }
+
+      this.clickInfo = null;
+
+      if (clickInfo.type === 'division')
+      {
+        this.broker.publish('router.navigate', {
+          url: '/factoryLayout/prodLines?division=' + encodeURIComponent(clickInfo.modelId),
+          trigger: true,
+          replace: false
+        });
+      }
+      else if (clickInfo.type === 'prodLine')
+      {
+        this.showProdLinePreview(clickInfo.modelId);
+      }
+    },
+
+    showProdLinePreview: function(prodLineId)
+    {
+      viewport.msg.show({
+        type: 'warning',
+        text: 'TODO (' + prodLineId + ')',
+        time: 2000
+      });
     }
 
   });

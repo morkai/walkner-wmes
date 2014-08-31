@@ -133,7 +133,7 @@ define([
 
     parse: function(data)
     {
-      data.prodShift = data.prodShift ? new ProdShift(data.prodShift) : null;
+      data.prodShift = data.prodShift ? new ProdShift(ProdShift.parse(data.prodShift)) : null;
       data.prodShiftOrders = new ProdShiftOrderCollection(data.prodShiftOrders.map(ProdShiftOrder.parse));
       data.prodDowntimes = new ProdDowntimeCollection(data.prodDowntimes.map(ProdDowntime.parse));
 

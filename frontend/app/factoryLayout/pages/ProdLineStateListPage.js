@@ -3,17 +3,19 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
-  '../views/FactoryLayoutCanvasView'
+  '../views/ProdLineStateListView'
 ], function(
+  _,
   $,
   t,
   View,
   bindLoadingMessage,
-  FactoryLayoutCanvasView
+  ProdLineStateListView
 ) {
   'use strict';
 
@@ -30,9 +32,27 @@ define([
 
     breadcrumbs: function()
     {
-      return [
-        t.bound('factoryLayout', 'bc:layout')
+      var breadcrumbs = [
+        {
+          label: t.bound('factoryLayout', 'bc:layout'),
+          href: '#factoryLayout'
+        }
       ];
+
+      if (this.options.rqlQuery)
+      {
+        var divisionTerm = _.find(
+          this.options.rqlQuery.selector.args,
+          function(term) { return term.name === 'eq' && term.args[0] === 'division'; }
+        );
+
+        if (divisionTerm)
+        {
+          breadcrumbs.push(divisionTerm.args[1]);
+        }
+      }
+
+      return breadcrumbs;
     },
 
     initialize: function()
@@ -40,19 +60,13 @@ define([
       this.defineModels();
       this.defineViews();
 
-      this.setView(this.canvasView);
+      this.setView(this.listView);
     },
 
     destroy: function()
     {
-      document.body.classList.remove('no-overflow');
-
       this.model.unload();
-    },
-
-    afterRender: function()
-    {
-      document.body.classList.add('no-overflow');
+      this.model = null;
     },
 
     defineModels: function()
@@ -62,7 +76,9 @@ define([
 
     defineViews: function()
     {
-      this.canvasView = new FactoryLayoutCanvasView({model: this.model});
+      this.listView = new ProdLineStateListView({
+        model: this.model
+      });
     },
 
     load: function(when)
