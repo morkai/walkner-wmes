@@ -3,10 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   '../core/Collection',
   '../data/orgUnits',
   './ProdLineState'
 ], function(
+  _,
   Collection,
   orgUnits,
   ProdLineState
@@ -31,20 +33,20 @@ define([
 
     getForDivision: function(divisionId)
     {
-      var result = [];
+      var result = {};
       var prodLineStates = this;
 
       this.forEachProdLine(orgUnits.getByTypeAndId('division', divisionId), function(prodLine)
       {
         var prodLineState = prodLineStates.get(prodLine.id);
 
-        if (prodLineState)
+        if (prodLineState && !result[prodLine.id])
         {
-          result.push(prodLineState);
+          result[prodLine.id] = prodLineState;
         }
       });
 
-      return result;
+      return _.values(result);
     },
 
     forEachProdLine: function(parentOrgUnit, callback)
