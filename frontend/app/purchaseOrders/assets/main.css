@@ -44,7 +44,7 @@
 }
 .pos-items-item-printedQty .table > thead > tr > th,
 .pos-items-item-printedQty td {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   border-bottom-width: 1px;
 }
 .pos-items-item-printedQty .table > thead > tr > th:first-child,
@@ -169,7 +169,7 @@
   width: 1%;
 }
 .pos-printDialog-items .pos-printDialog-items-total {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 .pos-printDialog-items td:last-child {
   width: auto;
