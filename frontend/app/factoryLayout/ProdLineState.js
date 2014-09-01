@@ -133,15 +133,17 @@ define([
 
     parse: function(data)
     {
+      var prodShiftOrders = new ProdShiftOrderCollection();
+      prodShiftOrders.comparator = 'startedAt';
+      prodShiftOrders.reset(data.prodShiftOrders.map(ProdShiftOrder.parse));
+
+      var prodDowntimes = new ProdDowntimeCollection();
+      prodDowntimes.comparator = 'startedAt';
+      prodDowntimes.reset(data.prodDowntimes.map(ProdDowntime.parse));
+
       data.prodShift = data.prodShift ? new ProdShift(ProdShift.parse(data.prodShift)) : null;
-
-      data.prodShiftOrders = new ProdShiftOrderCollection();
-      data.prodShiftOrders.comparator = 'startedAt';
-      data.prodShiftOrders.reset(data.prodShiftOrders.map(ProdShiftOrder.parse));
-
-      data.prodDowntimes = new ProdDowntimeCollection();
-      data.prodDowntimes.comparator = 'startedAt';
-      data.prodDowntimes.reset(data.prodDowntimes.map(ProdDowntime.parse));
+      data.prodShiftOrders = prodShiftOrders;
+      data.prodDowntimes = prodDowntimes;
 
       return data;
     }
