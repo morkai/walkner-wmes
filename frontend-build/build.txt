@@ -74,8 +74,18 @@ app/events/assets/main.css
 ----------------
 app/events/assets/main.css
 
+app/factoryLayout/assets/layout.css
+----------------
+app/factoryLayout/assets/layout.css
+
+app/factoryLayout/assets/list.css
+----------------
+app/factoryLayout/assets/list.css
+
 app/factoryLayout/assets/main.css
 ----------------
+app/factoryLayout/assets/./layout.css
+app/factoryLayout/assets/./list.css
 app/factoryLayout/assets/main.css
 
 app/feedback/assets/main.css
