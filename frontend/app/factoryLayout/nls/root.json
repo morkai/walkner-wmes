@@ -1,6 +1,18 @@
 {
   "root": {
+    "bc:layout": "Monitoring",
+    "bc:list": "Production lines",
 
+    "prop:master": "Master",
+    "prop:leader": "Leader",
+    "prop:shift": "Shift",
+    "prop:order": "Order",
+    "prop:downtime": "Downtime",
+    "prop:lastOrder": "Last order",
+    "prop:lastDowntime": "Last downtime",
+    "prop:qty": "Quantities done",
+
+    "qty": "{actual} of {planned}"
   },
   "pl": true
 }
