@@ -50,6 +50,7 @@ define([
     if (unloadTimer !== null)
     {
       clearTimeout(unloadTimer);
+      unloadTimer = null;
     }
 
     if (loaded && !force)

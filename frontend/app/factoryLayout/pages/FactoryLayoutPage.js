@@ -48,11 +48,7 @@ define([
       document.body.classList.remove('no-overflow');
 
       this.model.unload();
-    },
-
-    afterRender: function()
-    {
-      document.body.classList.add('no-overflow');
+      this.model = null;
     },
 
     defineModels: function()
@@ -68,6 +64,13 @@ define([
     load: function(when)
     {
       return when(this.model.load(false));
+    },
+
+    afterRender: function()
+    {
+      document.body.classList.add('no-overflow');
+
+      this.model.load(false);
     }
 
   });

@@ -70,6 +70,11 @@ define([
     load: function(when)
     {
       return when(this.model.load(false));
+    },
+
+    afterRender: function()
+    {
+      this.model.load(false);
     }
 
   });
