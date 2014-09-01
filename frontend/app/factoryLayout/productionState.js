@@ -17,6 +17,8 @@ define([
 {
   'use strict';
 
+  var UNLOAD_DELAY = 60000;
+
   var stateChangedMessageQueue = [];
   var stateChangedSub = null;
   var loading = false;
@@ -90,7 +92,7 @@ define([
 
       unloadTimer = null;
       loaded = false;
-    }, 10000);
+    }, UNLOAD_DELAY);
   };
 
   productionState.on('request', function()
