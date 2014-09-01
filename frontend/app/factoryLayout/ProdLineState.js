@@ -72,7 +72,7 @@ define([
       if (Array.isArray(data.prodShiftOrders))
       {
         attrs.prodShiftOrders.reset(data.prodShiftOrders.map(ProdShiftOrder.parse));
-        this.trigger('change:prodShiftOrders');
+        this.trigger('change:prodShiftOrders', {reset: true});
 
         delete data.prodShiftOrders;
       }
@@ -89,7 +89,7 @@ define([
           attrs.prodShiftOrders.add(ProdShiftOrder.parse(data.prodShiftOrders));
         }
 
-        this.trigger('change:prodShiftOrders');
+        this.trigger('change:prodShiftOrders', {reset: false});
 
         delete data.prodShiftOrders;
       }
@@ -97,7 +97,7 @@ define([
       if (Array.isArray(data.prodDowntimes))
       {
         attrs.prodDowntimes.reset(data.prodDowntimes.map(ProdDowntime.parse));
-        this.trigger('change:prodDowntimes');
+        this.trigger('change:prodDowntimes', {reset: true});
 
         delete data.prodDowntimes;
       }
@@ -114,7 +114,7 @@ define([
           attrs.prodDowntimes.add(ProdDowntime.parse(data.prodDowntimes));
         }
 
-        this.trigger('change:prodDowntimes');
+        this.trigger('change:prodDowntimes', {reset: false});
 
         delete data.prodDowntimes;
       }

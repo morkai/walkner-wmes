@@ -157,11 +157,16 @@ ProdLineState.prototype.onHourChanged = function(currentHour)
   this.updateMetrics();
 };
 
-ProdLineState.prototype.update = function(newData)
+ProdLineState.prototype.update = function(newData, options)
 {
+  if (!options)
+  {
+    options = {};
+  }
+
   if (this.changes !== null)
   {
-    return this.pendingChanges.push(newData);
+    return this.pendingChanges.push(newData, options);
   }
 
   this.changes = {};
@@ -186,8 +191,8 @@ ProdLineState.prototype.update = function(newData)
         return this.skip(err);
       }
 
-      prodLineState.updateProdShiftOrders(newData.prodShiftOrder, this.parallel());
-      prodLineState.updateProdDowntimes(newData.prodDowntime, this.parallel());
+      prodLineState.updateProdShiftOrders(newData.prodShiftOrder, options, this.parallel());
+      prodLineState.updateProdDowntimes(newData.prodDowntime, options, this.parallel());
     },
     function(err)
     {
@@ -218,7 +223,7 @@ ProdLineState.prototype.update = function(newData)
         setImmediate(function()
         {
           prodLineState.changes = null;
-          prodLineState.update(prodLineState.pendingChanges.shift());
+          prodLineState.update(prodLineState.pendingChanges.shift(), prodLineState.pendingChanges.shift());
         });
       }
     }
@@ -283,13 +288,19 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
 /**
  * @private
  * @param {object} prodShiftOrderData
+ * @param {object} options
  * @param {function} done
  */
-ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, done)
+ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, options, done)
 {
   if (prodShiftOrderData === undefined || lodash.isArray(this.changes.prodShiftOrders))
   {
     return done(null);
+  }
+
+  if (options.reloadOrders)
+  {
+    return this.reloadProdShiftOrders(done);
   }
 
   var isObject = lodash.isObject(prodShiftOrderData);
@@ -345,6 +356,17 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, don
     return done(null);
   }
 
+  return this.reloadProdShiftOrders(done);
+};
+
+/**
+ * @private
+ * @param {function} done
+ */
+ProdLineState.prototype.reloadProdShiftOrders = function(done)
+{
+  var prodLineState = this;
+
   this.productionModule.getProdShiftOrders(this.prodShift._id, function(err, prodShiftOrders)
   {
     if (err)
@@ -361,13 +383,19 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, don
 /**
  * @private
  * @param {object} prodDowntimeData
+ * @param {object} options
  * @param {function} done
  */
-ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, done)
+ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options, done)
 {
   if (prodDowntimeData === undefined || lodash.isArray(this.changes.prodDowntimes))
   {
     return done(null);
+  }
+
+  if (options.reloadDowntimes)
+  {
+    return this.reloadProdDowntimes(done);
   }
 
   var isObject = lodash.isObject(prodDowntimeData);
@@ -422,6 +450,17 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, done)
 
     return done(null);
   }
+
+  return this.reloadProdDowntimes(done);
+};
+
+/**
+ * @private
+ * @param {function} done
+ */
+ProdLineState.prototype.reloadProdDowntimes = function(done)
+{
+  var prodLineState = this;
 
   this.productionModule.getProdDowntimes(this.prodShift._id, function(err, prodDowntimes)
   {

@@ -27,12 +27,10 @@ define([
 
     template: template,
 
-    events: {
-
-    },
-
     initialize: function()
     {
+      this.renderTimeline = _.debounce(this.renderTimeline.bind(this), 1);
+
       this.timelineView = null;
 
       this.listenTo(this.model, 'change:online', this.onOnlineChanged);
@@ -130,11 +128,6 @@ define([
       });
     },
 
-    beforeRender: function()
-    {
-
-    },
-
     afterRender: function()
     {
       this.timelineView = new ProdShiftTimelineView({
@@ -158,6 +151,14 @@ define([
       this.timelineView.onWindowResize();
     },
 
+    renderTimeline: function()
+    {
+      if (this.timelineView)
+      {
+        this.timelineView.render();
+      }
+    },
+
     onOnlineChanged: function()
     {
       this.$el.toggleClass('is-offline', !this.model.get('online'));
@@ -178,20 +179,30 @@ define([
       this.$('[role=shift]').html(this.serializeShift());
     },
 
-    onProdShiftOrdersChanged: function()
+    onProdShiftOrdersChanged: function(options)
     {
       var order = this.serializeOrder();
 
       this.$('[role=orderLabel]').html(order.label);
       this.$('[role=orderValue]').html(order.value);
+
+      if (options && options.reset)
+      {
+        this.renderTimeline();
+      }
     },
 
-    onProdDowntimesChanged: function()
+    onProdDowntimesChanged: function(options)
     {
       var downtime = this.serializeDowntime();
 
       this.$('[role=downtimeLabel]').html(downtime.label);
       this.$('[role=downtimeValue]').html(downtime.value);
+
+      if (options && options.reset)
+      {
+        this.renderTimeline();
+      }
     },
 
     onMetricsChanged: function()

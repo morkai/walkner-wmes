@@ -93,12 +93,10 @@ define([
         $(document.body).on('click', this.onDocumentClick);
       }
 
-      this.listenTo(this.prodShiftOrders, 'add', this.render);
-      this.listenTo(this.prodShiftOrders, 'remove', this.render);
-      this.listenTo(this.prodShiftOrders, 'change', this.render);
-      this.listenTo(this.prodDowntimes, 'add', this.render);
-      this.listenTo(this.prodDowntimes, 'remove', this.render);
-      this.listenTo(this.prodDowntimes, 'change', this.render);
+      var render = _.debounce(this.render.bind(this), 1);
+
+      this.listenTo(this.prodShiftOrders, 'reset add remove change', render);
+      this.listenTo(this.prodDowntimes, 'reset add remove change', render);
     },
 
     destroy: function()

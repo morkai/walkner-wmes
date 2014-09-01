@@ -40,7 +40,6 @@ module.exports = function setUpProdState(app, productionModule)
 
   scheduleHourChange();
 
-  // TODO: FIX ORDER NOT BEING MARKED AS FINISHED IF A NEW ONE IS STARTED IMMEDIATELY
   app.broker.subscribe('production.synced.**', function(changes)
   {
     var prodLineState = prodLineStateMap[changes.prodLine];
@@ -50,7 +49,16 @@ module.exports = function setUpProdState(app, productionModule)
       return productionModule.debug("Data synced but no state for prod line [%s]...", changes.prodLine);
     }
 
-    prodLineState.update(changes);
+    var multiChange = changes.types.length > 1;
+
+    prodLineState.update(changes, {
+      reloadOrders: multiChange
+        && lodash.contains(changes.types, 'finishOrder')
+        && lodash.contains(changes.types, 'changeOrder'),
+      reloadDowntimes: multiChange
+        && lodash.contains(changes.types, 'finishDowntime')
+        && lodash.contains(changes.types, 'startDowntime')
+    });
   });
 
   app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(data)
