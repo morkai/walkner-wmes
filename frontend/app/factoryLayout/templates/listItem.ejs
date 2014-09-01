@@ -1,0 +1,35 @@
+<tbody class="<%- classNames %>">
+  <tr class="factoryLayout-prodLineListItem-header">
+    <td><%= prodLine %></td>
+    <td>
+      <em><%- t('core', 'ORG_UNIT:workCenter') %></em>
+      <%= workCenter %>
+    </td>
+    <td>
+      <em><%- t('core', 'ORG_UNIT:prodFlow') %></em>
+      <%= prodFlow %>
+    </td>
+    <td>
+      <em><%- t('factoryLayout', 'prop:shift') %></em>
+       <span role=shift><%- shift %></span>
+    </td>
+    <td>
+      <em role=orderLabel><%- order.label %></em>
+      <span role=orderValue><%- order.value %></span>
+    </td>
+    <td>
+      <em role=downtimeLabel><%- downtime.label %></em>
+      <span role=downtimeValue><%- downtime.value %></span>
+    </td>
+    <td>
+      <em><%- t('factoryLayout', 'prop:qty') %></em>
+      <span role=quantitiesDone><%- quantitiesDone %></span>
+    </td>
+  </tr>
+  <tr>
+    <td class="factoryLayout-timeline-container" colspan="999"></td>
+  </tr>
+  <tr>
+    <td class="factoryLayout-quantitiesDone-container" colspan="999"></td>
+  </tr>
+</tbody>

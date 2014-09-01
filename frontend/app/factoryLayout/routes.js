@@ -31,12 +31,16 @@ define([
   router.map('/factoryLayout/prodLines', function(req)
   {
     viewport.loadPage(
-      ['app/factoryLayout/productionState', 'app/factoryLayout/pages/ProdLineStateListPage'],
-      function(productionState, ProdLineStateListPage)
+      [
+        'app/factoryLayout/productionState',
+        'app/factoryLayout/ProdLineStateListOptions',
+        'app/factoryLayout/pages/ProdLineStateListPage'
+      ],
+      function(productionState, ProdLineStateListOptions, ProdLineStateListPage)
       {
         return new ProdLineStateListPage({
           model: productionState,
-          rqlQuery: req.rql
+          listOptions: ProdLineStateListOptions.fromQuery(req.query)
         });
       }
     );

@@ -9,7 +9,8 @@ define([
   'screenfull',
   'app/viewport',
   'app/core/View',
-  'app/factoryLayout/templates/list'
+  'app/factoryLayout/templates/list',
+  './ProdLineStateListItemView'
 ], function(
   _,
   $,
@@ -17,7 +18,8 @@ define([
   screenfull,
   viewport,
   View,
-  template
+  template,
+  ProdLineStateListItemView
 ) {
   'use strict';
 
@@ -33,6 +35,8 @@ define([
     {
       this.onKeyDown = this.onKeyDown.bind(this);
       this.onResize = _.debounce(this.onResize.bind(this), 16);
+
+      this.lastWidth = null;
 
       $('body').on('keydown', this.onKeyDown);
       $(window).on('resize', this.onResize);
@@ -54,6 +58,39 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.model, 'sync', this.render);
+
+      this.getProdLineStates().forEach(this.renderProdLineState, this);
+    },
+
+    getProdLineStates: function()
+    {
+      if (this.listOptions.hasDivision())
+      {
+        return this.model.prodLineStates.getForDivision(this.listOptions.get('division'));
+      }
+
+      var prodLineStates = [];
+      var prodLines = this.listOptions.get('prodLines');
+
+      if (Array.isArray(prodLines))
+      {
+        for (var i = 0, l = prodLines.length; i < l; ++i)
+        {
+          var prodLineState = this.model.prodLineStates.get(prodLines[i]);
+
+          if (prodLineState)
+          {
+            prodLineStates.push(prodLineState);
+          }
+        }
+      }
+
+      return prodLineStates;
+    },
+
+    renderProdLineState: function(prodLineState)
+    {
+      this.insertView(new ProdLineStateListItemView({model: prodLineState, keep: false})).render();
     },
 
     onKeyDown: function(e)
@@ -62,13 +99,18 @@ define([
       {
         e.preventDefault();
 
-        screenfull.request(this.el);
+        screenfull.request(this.el.parentNode);
       }
     },
 
     onResize: function()
     {
+      if (window.innerWidth !== this.lastWidth)
+      {
+        this.lastWidth = window.innerWidth;
 
+        this.getViews().each(function(view) { view.resize(); });
+      }
     },
 
     onFullscreen: function()

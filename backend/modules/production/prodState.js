@@ -40,6 +40,7 @@ module.exports = function setUpProdState(app, productionModule)
 
   scheduleHourChange();
 
+  // TODO: FIX ORDER NOT BEING MARKED AS FINISHED IF A NEW ONE IS STARTED IMMEDIATELY
   app.broker.subscribe('production.synced.**', function(changes)
   {
     var prodLineState = prodLineStateMap[changes.prodLine];

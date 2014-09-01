@@ -1,3 +1,15 @@
 {
-  "bc:layout": "Monitoring"
+  "bc:layout": "Monitoring",
+  "bc:list": "Linie produkcyjne",
+
+  "prop:master": "Mistrz",
+  "prop:leader": "Lider",
+  "prop:shift": "Zmiana",
+  "prop:order": "Zlecenie",
+  "prop:downtime": "Przestój",
+  "prop:lastOrder": "Ostatnie zlecenie",
+  "prop:lastDowntime": "Ostatni przestój",
+  "prop:qty": "Wykonane ilości",
+
+  "qty": "{actual} z {planned}"
 }

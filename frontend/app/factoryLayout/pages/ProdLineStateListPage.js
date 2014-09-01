@@ -21,6 +21,8 @@ define([
 
   return View.extend({
 
+    pageId: 'prodLineStateList',
+
     layoutName: 'page',
 
     localTopics: {
@@ -30,30 +32,13 @@ define([
       }
     },
 
-    breadcrumbs: function()
-    {
-      var breadcrumbs = [
-        {
-          label: t.bound('factoryLayout', 'bc:layout'),
-          href: '#factoryLayout'
-        }
-      ];
-
-      if (this.options.rqlQuery)
+    breadcrumbs: [
       {
-        var divisionTerm = _.find(
-          this.options.rqlQuery.selector.args,
-          function(term) { return term.name === 'eq' && term.args[0] === 'division'; }
-        );
-
-        if (divisionTerm)
-        {
-          breadcrumbs.push(divisionTerm.args[1]);
-        }
-      }
-
-      return breadcrumbs;
-    },
+        label: t.bound('factoryLayout', 'bc:layout'),
+        href: '#factoryLayout'
+      },
+      t.bound('factoryLayout', 'bc:list')
+    ],
 
     initialize: function()
     {
@@ -77,7 +62,8 @@ define([
     defineViews: function()
     {
       this.listView = new ProdLineStateListView({
-        model: this.model
+        model: this.model,
+        listOptions: this.listOptions
       });
     },
 

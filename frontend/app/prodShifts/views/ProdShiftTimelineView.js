@@ -13,6 +13,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/core/util/getShiftStartInfo',
   'app/data/downtimeReasons',
   'app/data/aors',
   'app/prodShifts/templates/timelineIdlePopover',
@@ -29,6 +30,7 @@ define([
   user,
   viewport,
   View,
+  getShiftStartInfo,
   downtimeReasons,
   aors,
   renderTimelineIdlePopover,
@@ -77,11 +79,19 @@ define([
       this.lastWidth = -1;
       this.popover = null;
 
-      this.onWindowResize = _.debounce(this.onWindowResize.bind(this), 250);
-      this.onDocumentClick = this.onDocumentClick.bind(this);
+      if (this.options.resizable !== false)
+      {
+        this.onWindowResize = _.debounce(this.onWindowResize.bind(this), 16);
 
-      $(window).on('resize', this.onWindowResize);
-      $(document.body).on('click', this.onDocumentClick);
+        $(window).on('resize', this.onWindowResize);
+      }
+
+      if (this.options.editable !== false)
+      {
+        this.onDocumentClick = this.onDocumentClick.bind(this);
+
+        $(document.body).on('click', this.onDocumentClick);
+      }
 
       this.listenTo(this.prodShiftOrders, 'add', this.render);
       this.listenTo(this.prodShiftOrders, 'remove', this.render);
@@ -96,15 +106,27 @@ define([
       this.chart = null;
       this.datum = null;
 
-      $(window).off('resize', this.onWindowResize);
-      $(document.body).off('click', this.onDocumentClick);
+      if (this.options.resizable !== false)
+      {
+        $(window).off('resize', this.onWindowResize);
+      }
+
+      if (this.options.editable !== false)
+      {
+        $(document.body).off('click', this.onDocumentClick);
+      }
 
       d3.select(this.el).select('svg').remove();
     },
 
+    calcWidth: function()
+    {
+      return this.el.getBoundingClientRect().width - 28;
+    },
+
     onWindowResize: function()
     {
-      var width = this.el.getBoundingClientRect().width - 28;
+      var width = this.calcWidth();
 
       if (width !== this.lastWidth)
       {
@@ -156,7 +178,7 @@ define([
         }
       }
 
-      this.timers.extendDatum = setInterval(extendDatum, 10000, this);
+      this.timers.extendDatum = setInterval(extendDatum, 15000, this);
     },
 
     renderChart: function()
@@ -169,7 +191,7 @@ define([
         timelineEl.remove();
       }
 
-      var width = this.el.getBoundingClientRect().width - 28;
+      var width = this.calcWidth();
 
       this.hidePopover();
       this.chart.width(width);
@@ -196,11 +218,13 @@ define([
       var orders = [];
       var downtimes = [];
       var activeTimes = [];
+      var nowTime = Date.now();
 
-      this.beginning = Date.parse(this.prodShift.get('date'));
+      this.beginning = this.prodShift
+        ? Date.parse(this.prodShift.get('date'))
+        : getShiftStartInfo(nowTime).moment.valueOf();
 
       var shiftEndTime = this.beginning + 8 * 3600 * 1000;
-      var nowTime = Date.now();
       var shiftEnded = nowTime >= shiftEndTime;
       var endingTime = Math.min(nowTime, shiftEndTime);
 
@@ -334,12 +358,14 @@ define([
     createChart: function()
     {
       var view = this;
-      var canManage = user.isAllowedTo('PROD_DATA:MANAGE');
+      var canManage = this.options.editable !== false && user.isAllowedTo('PROD_DATA:MANAGE');
+      var itemHeight = this.options.itemHeight || 60;
+      var downtimeHeight = Math.round(itemHeight * 0.833);
 
       this.chart = timeline()
         .beginning(this.beginning)
         .ending(this.beginning + 8 * 3600 * 1000)
-        .itemHeight(60)
+        .itemHeight(itemHeight)
         .margin({
           left: 20,
           right: 20,
@@ -361,7 +387,7 @@ define([
         {
           if (item.type === 'downtime' && item.data.prodShiftOrder)
           {
-            this.setAttribute('height', '50');
+            this.setAttribute('height', downtimeHeight);
           }
         })
         .mouseover(function(item)
@@ -396,7 +422,7 @@ define([
         })
         .mouseout(function()
         {
-          if (!d3.event.ctrlKey)
+          if (view.options.editable === false || !d3.event.ctrlKey)
           {
             view.hidePopover();
           }

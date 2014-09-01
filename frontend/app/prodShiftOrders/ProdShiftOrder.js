@@ -63,9 +63,11 @@ define([
       operators: null
     },
 
-    getLabel: function()
+    getLabel: function(includeProdLine)
     {
-      return this.get('prodLine') + ': ' + this.get('orderId') + ', ' + this.get('operationNo');
+      var label = includeProdLine === false ? '' : (this.get('prodLine') + ': ');
+
+      return label + this.get('orderId') + ', ' + this.get('operationNo');
     },
 
     serialize: function(options)
