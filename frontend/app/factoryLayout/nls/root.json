@@ -5,6 +5,7 @@
 
     "prop:master": "Master",
     "prop:leader": "Leader",
+    "prop:operator": "Operator",
     "prop:shift": "Shift",
     "prop:order": "Order",
     "prop:downtime": "Downtime",

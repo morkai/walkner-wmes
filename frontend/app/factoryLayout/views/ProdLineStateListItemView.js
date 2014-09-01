@@ -9,6 +9,7 @@ define([
   'app/data/orgUnits',
   'app/data/downtimeReasons',
   'app/core/View',
+  'app/core/templates/userInfo',
   'app/factoryLayout/templates/listItem',
   'app/prodShifts/views/ProdShiftTimelineView'
 ], function(
@@ -18,6 +19,7 @@ define([
   orgUnits,
   downtimeReasons,
   View,
+  renderUserInfo,
   template,
   ProdShiftTimelineView
 ) {
@@ -77,7 +79,10 @@ define([
         shift: this.serializeShift(),
         order: order,
         downtime: downtime,
-        quantitiesDone: this.serializeQuantitiesDone()
+        quantitiesDone: this.serializeQuantitiesDone(),
+        master: this.serializePersonnel('master'),
+        leader: this.serializePersonnel('leader'),
+        operator: this.serializePersonnel('operator')
       };
     },
 
@@ -91,6 +96,27 @@ define([
       }
 
       return time.format(prodShift.get('date'), 'YYYY-MM-DD') + ', ' + t('core', 'SHIFT:' + prodShift.get('shift'));
+    },
+
+    serializePersonnel: function(type)
+    {
+      var prodShift = this.model.get('prodShift');
+
+      if (!prodShift)
+      {
+        return '-';
+      }
+
+      var userInfo = prodShift.get(type);
+
+      if (!userInfo)
+      {
+        return '-';
+      }
+
+      userInfo.label = userInfo.label.match(/^(.*?)(?:\(.*?\))?$/)[1].trim();
+
+      return renderUserInfo({userInfo: userInfo});
     },
 
     serializeOrder: function()
@@ -177,6 +203,11 @@ define([
     onProdShiftChanged: function()
     {
       this.$('[role=shift]').html(this.serializeShift());
+
+      ['master', 'leader', 'operator'].forEach(function(type)
+      {
+        this.$('[role=' + type + ']').html(this.serializePersonnel(type));
+      }, this);
     },
 
     onProdShiftOrdersChanged: function(options)

@@ -4,6 +4,7 @@
 
   "prop:master": "Mistrz",
   "prop:leader": "Lider",
+  "prop:operator": "Operator",
   "prop:shift": "Zmiana",
   "prop:order": "Zlecenie",
   "prop:downtime": "Przestój",

@@ -2,28 +2,52 @@
   <tr class="factoryLayout-prodLineListItem-header">
     <td><%= prodLine %></td>
     <td>
-      <em><%- t('core', 'ORG_UNIT:workCenter') %></em>
-      <%= workCenter %>
+      <div class="factoryLayout-prodLineListItem-prop">
+        <em><%- t('core', 'ORG_UNIT:prodFlow') %></em>
+        <span role=prodFlow><%= prodFlow %></span>
+      </div>
     </td>
     <td>
-      <em><%- t('core', 'ORG_UNIT:prodFlow') %></em>
-      <%= prodFlow %>
+      <div class="factoryLayout-prodLineListItem-prop">
+        <em><%- t('factoryLayout', 'prop:shift') %></em>
+        <span role=shift><%- shift %></span>
+      </div>
     </td>
     <td>
-      <em><%- t('factoryLayout', 'prop:shift') %></em>
-       <span role=shift><%- shift %></span>
+      <div class="factoryLayout-prodLineListItem-prop">
+        <em><%- t('factoryLayout', 'prop:master') %></em>
+        <span role=master><%- master %></span>
+      </div>
     </td>
     <td>
-      <em role=orderLabel><%- order.label %></em>
-      <span role=orderValue><%- order.value %></span>
+      <div class="factoryLayout-prodLineListItem-prop">
+        <em><%- t('factoryLayout', 'prop:leader') %></em>
+        <span role=leader><%- leader %></span>
+      </div>
     </td>
     <td>
-      <em role=downtimeLabel><%- downtime.label %></em>
-      <span role=downtimeValue><%- downtime.value %></span>
+      <div class="factoryLayout-prodLineListItem-prop">
+        <em><%- t('factoryLayout', 'prop:operator') %></em>
+        <span role=operator><%- operator %></span>
+      </div>
     </td>
     <td>
-      <em><%- t('factoryLayout', 'prop:qty') %></em>
-      <span role=quantitiesDone><%- quantitiesDone %></span>
+      <div class="factoryLayout-prodLineListItem-prop">
+        <em role=orderLabel><%- order.label %></em>
+        <span role=orderValue><%- order.value %></span>
+      </div>
+    </td>
+    <td>
+      <div class="factoryLayout-prodLineListItem-prop">
+        <em role=downtimeLabel><%- downtime.label %></em>
+        <span role=downtimeValue><%- downtime.value %></span>
+      </div>
+    </td>
+    <td>
+      <div class="factoryLayout-prodLineListItem-prop">
+        <em><%- t('factoryLayout', 'prop:qty') %></em>
+        <span role=quantitiesDone><%- quantitiesDone %></span>
+      </div>
     </td>
   </tr>
   <tr>
