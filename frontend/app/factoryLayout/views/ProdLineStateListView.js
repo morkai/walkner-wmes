@@ -27,10 +27,6 @@ define([
 
     template: template,
 
-    events: {
-
-    },
-
     initialize: function()
     {
       this.onKeyDown = this.onKeyDown.bind(this);
@@ -52,12 +48,12 @@ define([
 
     beforeRender: function()
     {
-      this.stopListening(this.model, 'sync', this.render);
+      this.stopListening(this.model.prodLineStates, 'reset', this.render);
     },
 
     afterRender: function()
     {
-      this.listenToOnce(this.model, 'sync', this.render);
+      this.listenToOnce(this.model.prodLineStates, 'reset', this.render);
 
       this.getProdLineStates().forEach(this.renderProdLineState, this);
     },
