@@ -15,6 +15,8 @@ define([
 ) {
   'use strict';
 
+  var win = window;
+
   return Model.extend({
 
     urlRoot: '/feedback',
@@ -30,24 +32,36 @@ define([
     defaults: function()
     {
       return {
-        creator: user.getInfo(),
-        createdAt: time.getMoment().toDate(),
+        project: null,
         savedAt: null,
+        createdAt: null,
+        creator: user.data._id,
+        reporter: user.data._id,
+        owner: null,
         page: {
-          title: document.title,
-          url: location.href
+          title: win.document.title,
+          url: win.location.href
         },
         versions: updater.versions,
         navigator: {
-          userAgent: navigator.userAgent,
-          userLanguage: navigator.userLanguage,
-          platform: navigator.platform,
-          width: screen.width,
-          height: screen.height,
-          innerWidth: window.innerWidth,
-          innerHeight: window.innerHeight
+          userAgent: win.navigator.userAgent,
+          userLanguage: win.navigator.userLanguage,
+          platform: win.navigator.platform,
+          width: win.screen.width,
+          height: win.screen.height,
+          innerWidth: win.innerWidth,
+          innerHeight: win.innerHeight
         },
-        comment: ''
+        summary: '',
+        comment: '',
+        type: 'other',
+        priority: null,
+        status: null,
+        resolution: null,
+        expectedAt: null,
+        pariticipants: [],
+        watchers: [],
+        replies: []
       };
     }
 
