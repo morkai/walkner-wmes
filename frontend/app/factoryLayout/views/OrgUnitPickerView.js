@@ -6,7 +6,7 @@ define([
   'jquery',
   'underscore',
   'js2form',
-  'sortable',
+  'Sortable',
   'app/i18n',
   'app/data/orgUnits',
   'app/core/View',
