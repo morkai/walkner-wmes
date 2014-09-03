@@ -17,6 +17,12 @@ var HOUR_TO_INDEX = [
   2, 3, 4, 5, 6, 7, 0, 1
 ];
 
+/**
+ * @constructor
+ * @param {object} app
+ * @param {object} productionModule
+ * @param {object} prodLine
+ */
 function ProdLineState(app, productionModule, prodLine)
 {
   this.app = app;
@@ -47,6 +53,9 @@ function ProdLineState(app, productionModule, prodLine)
   this.prevActualQuantitiesDone = [null, -1, -1, -1];
 }
 
+/**
+ * @returns {object}
+ */
 ProdLineState.prototype.toJSON = function()
 {
   return {
@@ -64,11 +73,17 @@ ProdLineState.prototype.toJSON = function()
   };
 };
 
+/**
+ * @returns {string|null}
+ */
 ProdLineState.prototype.getCurrentShiftId = function()
 {
   return this.prodShift === null ? null : this.prodShift._id;
 };
 
+/**
+ * @returns {string|null}
+ */
 ProdLineState.prototype.getCurrentOrderId = function()
 {
   if (this.prodShiftOrders.length === 0)
@@ -86,6 +101,9 @@ ProdLineState.prototype.getCurrentOrderId = function()
   return recentProdShiftOrder._id;
 };
 
+/**
+ * @returns {string|null}
+ */
 ProdLineState.prototype.getCurrentDowntimeId = function()
 {
   if (this.prodDowntimes.length === 0)
@@ -132,6 +150,9 @@ ProdLineState.prototype.onClientDisconnect = function()
   this.onClientLeave(this.socket);
 };
 
+/**
+ * @param {object} socket
+ */
 ProdLineState.prototype.onClientLeave = function(socket)
 {
   if (socket !== this.socket)
@@ -150,11 +171,17 @@ ProdLineState.prototype.onQuantitiesPlanned = function()
   this.update({prodShift: {quantitiesDone: this.prodShift.quantitiesDone}});
 };
 
+/**
+ * @param {number} currentHour
+ */
 ProdLineState.prototype.onHourChanged = function(currentHour)
 {
   this.currentHour = currentHour;
 
   this.updateMetrics();
+  this.checkIfClosed();
+
+  setTimeout(this.checkIfClosed.bind(this), 10 * 60 * 1000);
 };
 
 ProdLineState.prototype.update = function(newData, options)
@@ -169,14 +196,12 @@ ProdLineState.prototype.update = function(newData, options)
     return this.pendingChanges.push(newData, options);
   }
 
-  this.changes = {};
-
   var prodLineState = this;
-  var changes = this.changes;
+  var changes = this.changes = {};
 
   if (lodash.isBoolean(newData.online) && newData.online !== this.online)
   {
-    this.changes.online = this.online = newData.online;
+    changes.online = this.online = newData.online;
   }
 
   step(
@@ -206,7 +231,7 @@ ProdLineState.prototype.update = function(newData, options)
       {
         prodLineState.updateState();
 
-        if (changes.prodShift && changes.prodShift.quantitiesDone)
+        if (changes.prodShift === null || (changes.prodShift && changes.prodShift.quantitiesDone))
         {
           prodLineState.updateMetrics();
         }
@@ -237,14 +262,21 @@ ProdLineState.prototype.update = function(newData, options)
  */
 ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
 {
+  var changes = this.changes;
+
+  if (prodShiftData === null)
+  {
+    changes.prodShift = this.prodShift = null;
+    changes.prodShiftOrders = this.prodShiftOrders = [];
+    changes.prodDowntimes = this.prodDowntimes = [];
+
+    return done(null);
+  }
+
   if (!lodash.isObject(prodShiftData))
   {
     return done(null);
   }
-
-  var prodLineState = this;
-  var productionModule = this.productionModule;
-  var changes = this.changes;
 
   if (!lodash.isString(prodShiftData._id))
   {
@@ -260,6 +292,9 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
 
   if (this.prodShift === null || this.prodShift._id !== prodShiftData._id)
   {
+    var prodLineState = this;
+    var productionModule = this.productionModule;
+
     return step(
       function()
       {
@@ -293,7 +328,9 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
  */
 ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, options, done)
 {
-  if (prodShiftOrderData === undefined || lodash.isArray(this.changes.prodShiftOrders))
+  var changes = this.changes;
+
+  if (prodShiftOrderData === undefined || lodash.isArray(changes.prodShiftOrders))
   {
     return done(null);
   }
@@ -304,7 +341,6 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
   }
 
   var isObject = lodash.isObject(prodShiftOrderData);
-  var prodLineState = this;
 
   if (isObject && lodash.isString(prodShiftOrderData._id))
   {
@@ -315,10 +351,12 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
 
     if (prodShiftOrder)
     {
-      this.changes.prodShiftOrders = prodShiftOrderData;
+      changes.prodShiftOrders = prodShiftOrderData;
 
       return done(null);
     }
+
+    var prodLineState = this;
 
     return this.productionModule.getProdData('order', prodShiftOrderData._id, function(err, prodShiftOrder)
     {
@@ -333,7 +371,7 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
         return a.startedAt - b.startedAt;
       });
 
-      prodLineState.changes.prodShiftOrders = prodShiftOrder;
+      changes.prodShiftOrders = prodShiftOrder;
 
       return done(null);
     });
@@ -345,12 +383,12 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
   {
     if (prodShiftOrderData === null)
     {
-      this.changes.prodShiftOrders = lastProdShiftOrder;
+      changes.prodShiftOrders = lastProdShiftOrder;
     }
     else if (isObject)
     {
-      this.changes.prodShiftOrders = prodShiftOrderData;
-      this.changes.prodShiftOrders._id = lastProdShiftOrder._id;
+      changes.prodShiftOrders = prodShiftOrderData;
+      changes.prodShiftOrders._id = lastProdShiftOrder._id;
     }
 
     return done(null);
@@ -388,7 +426,9 @@ ProdLineState.prototype.reloadProdShiftOrders = function(done)
  */
 ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options, done)
 {
-  if (prodDowntimeData === undefined || lodash.isArray(this.changes.prodDowntimes))
+  var changes = this.changes;
+
+  if (prodDowntimeData === undefined || lodash.isArray(changes.prodDowntimes))
   {
     return done(null);
   }
@@ -399,7 +439,6 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
   }
 
   var isObject = lodash.isObject(prodDowntimeData);
-  var prodLineState = this;
 
   if (isObject && lodash.isString(prodDowntimeData._id))
   {
@@ -410,10 +449,12 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
 
     if (prodDowntime)
     {
-      this.changes.prodDowntimes = prodDowntimeData;
+      changes.prodDowntimes = prodDowntimeData;
 
       return done(null);
     }
+
+    var prodLineState = this;
 
     return this.productionModule.getProdData('downtime', prodDowntimeData._id, function(err, prodDowntime)
     {
@@ -428,7 +469,7 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
         return a.startedAt - b.startedAt;
       });
 
-      prodLineState.changes.prodDowntimes = prodDowntime;
+      changes.prodDowntimes = prodDowntime;
 
       return done(null);
     });
@@ -506,6 +547,11 @@ ProdLineState.prototype.calculateCurrentShiftQuantitiesDone = function()
 {
   var result = {planned: 0, actual: 0};
 
+  if (this.prodShift === null)
+  {
+    return result;
+  }
+
   for (var i = 0, l = HOUR_TO_INDEX[this.currentHour]; i < l; ++i)
   {
     var quantitiesDone = this.prodShift.quantitiesDone[i];
@@ -522,7 +568,7 @@ ProdLineState.prototype.calculateCurrentShiftQuantitiesDone = function()
  */
 ProdLineState.prototype.calculatePrevDayMetrics = function()
 {
-  if (!this.prodShift || this.prodShift.shift !== 1)
+  if (this.prodShift && this.prodShift.shift !== 1)
   {
     return;
   }
@@ -543,7 +589,7 @@ ProdLineState.prototype.calculatePrevDayMetrics = function()
   }
   else
   {
-    var thirdShiftTime = this.getPrevShiftTime(this.prodShift.date.getTime());
+    var thirdShiftTime = this.getPrevShiftTime(this.getCurrentShiftTime());
     var secondShiftTime = this.getPrevShiftTime(thirdShiftTime);
     var shiftDates = [
       new Date(this.getPrevShiftTime(secondShiftTime)),
@@ -582,7 +628,7 @@ ProdLineState.prototype.calculatePrevDayMetrics = function()
  */
 ProdLineState.prototype.updateFirstShiftMetrics = function()
 {
-  if (!this.prodShift || this.prodShift.shift !== 1)
+  if (this.prodShift && this.prodShift.shift !== 1)
   {
     return;
   }
@@ -598,7 +644,7 @@ ProdLineState.prototype.updateFirstShiftMetrics = function()
  */
 ProdLineState.prototype.updateSecondShiftMetrics = function()
 {
-  if (!this.prodShift || this.prodShift.shift !== 2)
+  if (this.prodShift && this.prodShift.shift !== 2)
   {
     return;
   }
@@ -620,7 +666,7 @@ ProdLineState.prototype.updateSecondShiftMetrics = function()
   else
   {
     var shiftDates = [
-      new Date(this.getPrevShiftTime(this.prodShift.date.getTime()))
+      new Date(this.getPrevShiftTime(this.getCurrentShiftTime()))
     ];
     var prodLineState = this;
 
@@ -649,7 +695,7 @@ ProdLineState.prototype.updateSecondShiftMetrics = function()
  */
 ProdLineState.prototype.updateThirdShiftMetrics = function()
 {
-  if (!this.prodShift || this.prodShift.shift !== 3)
+  if (this.prodShift && this.prodShift.shift !== 3)
   {
     return;
   }
@@ -668,7 +714,7 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
   }
   else
   {
-    var secondShiftTime = this.getPrevShiftTime(this.prodShift.date.getTime());
+    var secondShiftTime = this.getPrevShiftTime(this.getCurrentShiftTime());
     var shiftDates = [
       new Date(this.getPrevShiftTime(secondShiftTime)),
       new Date(secondShiftTime)
@@ -711,6 +757,17 @@ ProdLineState.prototype.addQuantitiesDone = function(prodShift)
     this.prevPlannedQuantitiesDone[shift] += quantitiesDone[i].planned;
     this.prevActualQuantitiesDone[shift] += quantitiesDone[i].actual;
   }
+};
+
+/**
+ * @private
+ * @returns {number}
+ */
+ProdLineState.prototype.getCurrentShiftTime = function()
+{
+  return this.prodShift === null
+    ? this.app[this.productionModule.config.fteId].getCurrentShift().date.getTime()
+    : this.prodShift.date.getTime();
 };
 
 /**
@@ -806,35 +863,6 @@ ProdLineState.prototype.updateState = function()
 
 /**
  * @private
- * @param {object} changes
- */
-ProdLineState.prototype.checkQuantitiesDone = function(changes)
-{
-  var hourIndex = HOUR_TO_INDEX[new Date().getHours()];
-  var plannedQuantityDone = 0;
-  var actualQuantityDone = 0;
-
-  for (var i = 0; i < hourIndex; ++i)
-  {
-    plannedQuantityDone += this.quantitiesDone[i].planned;
-    actualQuantityDone += this.quantitiesDone[i].actual;
-  }
-
-  if (plannedQuantityDone !== this.plannedQuantityDone)
-  {
-    changes.plannedQuantityDone = plannedQuantityDone;
-    this.plannedQuantityDone = plannedQuantityDone;
-  }
-
-  if (actualQuantityDone !== this.actualQuantityDone)
-  {
-    changes.actualQuantityDone = actualQuantityDone;
-    this.actualQuantityDone = actualQuantityDone;
-  }
-};
-
-/**
- * @private
  */
 ProdLineState.prototype.checkExtendedDowntime = function()
 {
@@ -879,4 +907,17 @@ ProdLineState.prototype.checkExtendedDowntime = function()
   }
 
   this.extendedTimer = setTimeout(this.checkExtendedDowntime.bind(this), delay);
+};
+
+/**
+ * @private
+ */
+ProdLineState.prototype.checkIfClosed = function()
+{
+  if (!this.online
+    && this.state === 'idle'
+    && (this.currentHour === 6 || this.currentHour === 14 || this.currentHour === 22))
+  {
+    this.update({prodShift: null});
+  }
 };

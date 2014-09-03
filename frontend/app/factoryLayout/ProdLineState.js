@@ -52,10 +52,17 @@ define([
     update: function(data)
     {
       var attrs = this.attributes;
+      var prodShiftChanged = false;
+      var prodShiftOrdersChanged = null;
+      var prodDowntimesChanges = null;
 
-      if (data.prodShift)
+      if (typeof data.prodShift === 'object')
       {
-        if (attrs.prodShift === null)
+        if (data.prodShift === null)
+        {
+          attrs.prodShift = null;
+        }
+        else if (attrs.prodShift === null)
         {
           attrs.prodShift = new ProdShift(ProdShift.parse(data.prodShift));
         }
@@ -64,7 +71,7 @@ define([
           attrs.prodShift.set(ProdShift.parse(data.prodShift));
         }
 
-        this.trigger('change:prodShift');
+        prodShiftChanged = true;
 
         delete data.prodShift;
       }
@@ -72,7 +79,8 @@ define([
       if (Array.isArray(data.prodShiftOrders))
       {
         attrs.prodShiftOrders.reset(data.prodShiftOrders.map(ProdShiftOrder.parse));
-        this.trigger('change:prodShiftOrders', {reset: true});
+
+        prodShiftOrdersChanged = {reset: true};
 
         delete data.prodShiftOrders;
       }
@@ -89,7 +97,7 @@ define([
           attrs.prodShiftOrders.add(ProdShiftOrder.parse(data.prodShiftOrders));
         }
 
-        this.trigger('change:prodShiftOrders', {reset: false});
+        prodShiftOrdersChanged = {reset: false};
 
         delete data.prodShiftOrders;
       }
@@ -97,7 +105,8 @@ define([
       if (Array.isArray(data.prodDowntimes))
       {
         attrs.prodDowntimes.reset(data.prodDowntimes.map(ProdDowntime.parse));
-        this.trigger('change:prodDowntimes', {reset: true});
+
+        prodDowntimesChanges = {reset: true};
 
         delete data.prodDowntimes;
       }
@@ -114,9 +123,24 @@ define([
           attrs.prodDowntimes.add(ProdDowntime.parse(data.prodDowntimes));
         }
 
-        this.trigger('change:prodDowntimes', {reset: false});
+        prodDowntimesChanges = {reset: false};
 
         delete data.prodDowntimes;
+      }
+
+      if (prodShiftChanged)
+      {
+        this.trigger('change:prodShift');
+      }
+
+      if (prodShiftOrdersChanged)
+      {
+        this.trigger('change:prodShiftOrders', prodShiftOrdersChanged);
+      }
+
+      if (prodDowntimesChanges)
+      {
+        this.trigger('change:prodDowntimes', prodDowntimesChanges);
       }
 
       if (Object.keys(data).length)
