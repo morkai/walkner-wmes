@@ -7,6 +7,7 @@ define([
   'js2form',
   'h5.rql/specialTerms',
   'app/core/View',
+  'app/core/util/buttonGroup',
   'app/core/templates/filterLimit',
   'select2'
 ], function(
@@ -14,6 +15,7 @@ define([
   js2form,
   specialTerms,
   View,
+  buttonGroup,
   filterLimitTemplate
 ) {
   'use strict';
@@ -59,19 +61,12 @@ define([
 
     toggleButtonGroup: function(groupName)
     {
-      this.$id(groupName).find('input:checked').parent().addClass('active');
+      return buttonGroup.toggle(this.$id(groupName));
     },
 
     getButtonGroupValue: function(groupName)
     {
-      var $inputs = this.$id(groupName).find('input');
-
-      if ($inputs[0].type === 'radio' || $inputs.length === 1)
-      {
-        return $inputs.filter(':checked').val();
-      }
-
-      return $inputs.filter(':checked').map(function() { return this.value; });
+      return buttonGroup.getValue(this.$id(groupName));
     },
 
     afterRender: function()

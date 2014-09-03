@@ -84,6 +84,10 @@ define([
         return prodFlow.getSubdivision() === subdivision;
       });
     },
+    getAllByType: function(orgUnitType)
+    {
+      return TYPE_TO_COLLECTION[orgUnitType].models;
+    },
     getAllDivisions: function()
     {
       return divisions.models;
@@ -167,6 +171,11 @@ define([
     },
     getType: function(orgUnit)
     {
+      if (orgUnit === null)
+      {
+        return null;
+      }
+
       if (orgUnit.constructor === prodLines.model)
       {
         return 'prodLine';
@@ -298,6 +307,33 @@ define([
       }
 
       return this.getSubdivisionFor(this.getParent(orgUnit));
+    },
+    containsProdLine: function(orgUnitType, orgUnitIds, prodLineId)
+    {
+      if (orgUnitType === 'prodLine')
+      {
+        return Array.isArray(orgUnitIds) ? orgUnitIds.indexOf(prodLineId) !== -1 : orgUnitIds === prodLineId;
+      }
+
+      var orgUnit = this.getByTypeAndId('prodLine', prodLineId);
+
+      do
+      {
+        var parent = this.getParent(orgUnit);
+
+        if (!parent)
+        {
+          return false;
+        }
+
+        if (this.getType(parent) === orgUnitType)
+        {
+          return Array.isArray(orgUnitIds) ? orgUnitIds.indexOf(parent.id) !== -1 : orgUnitIds === parent.id;
+        }
+
+        orgUnit = parent;
+      }
+      while (true);
     }
   };
 });

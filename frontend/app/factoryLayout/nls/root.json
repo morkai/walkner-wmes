@@ -13,7 +13,25 @@
     "prop:lastDowntime": "Last downtime",
     "prop:qty": "Quantities done",
 
-    "qty": "{actual} of {planned}"
+    "qty": "{actual} of {planned}",
+
+    "statuses:online": "Online",
+    "statuses:online:title": "Production lines connected to the server.",
+    "statuses:offline": "Offline",
+    "statuses:offline:title": "Production lines not connected to the server. Data may be inaccurate.",
+
+    "states:idle": "Idle",
+    "states:working": "Work",
+    "states:downtime": "Downtime",
+
+    "options:picker": "Pick production lines",
+    "options:save": "Save display options",
+    "options:saved": "Display options were saved successfully!",
+
+    "noProdLines": "No matching production lines :(",
+
+    "picker:title": "Production line picker",
+    "picker:submit": "Pick"
   },
   "pl": true
 }

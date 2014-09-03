@@ -30,17 +30,22 @@ define([
 
   router.map('/factoryLayout/prodLines', function(req)
   {
+    router.replace('/factoryLayout;list?' + req.queryString);
+  });
+
+  router.map('/factoryLayout;list', function(req)
+  {
     viewport.loadPage(
       [
         'app/factoryLayout/productionState',
-        'app/factoryLayout/ProdLineStateListOptions',
+        'app/factoryLayout/ProdLineStateDisplayOptions',
         'app/factoryLayout/pages/ProdLineStateListPage'
       ],
-      function(productionState, ProdLineStateListOptions, ProdLineStateListPage)
+      function(productionState, ProdLineStateDisplayOptions, ProdLineStateListPage)
       {
         return new ProdLineStateListPage({
           model: productionState,
-          listOptions: ProdLineStateListOptions.fromQuery(req.query)
+          displayOptions: ProdLineStateDisplayOptions.fromQuery(req.query)
         });
       }
     );

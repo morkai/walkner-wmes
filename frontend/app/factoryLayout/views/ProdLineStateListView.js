@@ -31,24 +31,27 @@ define([
     {
       this.onKeyDown = this.onKeyDown.bind(this);
       this.onResize = _.debounce(this.onResize.bind(this), 16);
+      this.toggleIsEmptyAsync = _.debounce(this.toggleIsEmpty, 1);
 
       this.lastWidth = null;
 
+      this.listenTo(this.displayOptions, 'change:orgUnitType change:orgUnitIds', _.debounce(this.render, 1));
+
       $('body').on('keydown', this.onKeyDown);
       $(window).on('resize', this.onResize);
-      screenfull.onchange = _.debounce(this.onFullscreen.bind(this), 16);
     },
 
     destroy: function()
     {
       $('body').off('keydown', this.onKeyDown);
       $(window).off('resize', this.onResize);
-      screenfull.onchange = function() {};
     },
 
     beforeRender: function()
     {
       this.stopListening(this.model.prodLineStates, 'reset', this.render);
+      this.stopListening(this.model.prodLineStates, 'change:online change:state', this.toggleIsEmptyAsync);
+      this.stopListening(this.displayOptions, 'change:statuses change:states', this.toggleIsEmptyAsync);
     },
 
     afterRender: function()
@@ -56,37 +59,30 @@ define([
       this.listenToOnce(this.model.prodLineStates, 'reset', this.render);
 
       this.getProdLineStates().forEach(this.renderProdLineState, this);
+
+      this.listenTo(this.model.prodLineStates, 'change:online change:state', this.toggleIsEmptyAsync);
+      this.listenTo(this.displayOptions, 'change:statuses change:states', this.toggleIsEmptyAsync);
+
+      this.toggleIsEmpty();
     },
 
     getProdLineStates: function()
     {
-      if (this.listOptions.hasDivision())
-      {
-        return this.model.prodLineStates.getForDivision(this.listOptions.get('division'));
-      }
-
-      var prodLineStates = [];
-      var prodLines = this.listOptions.get('prodLines');
-
-      if (Array.isArray(prodLines))
-      {
-        for (var i = 0, l = prodLines.length; i < l; ++i)
-        {
-          var prodLineState = this.model.prodLineStates.get(prodLines[i]);
-
-          if (prodLineState)
-          {
-            prodLineStates.push(prodLineState);
-          }
-        }
-      }
-
-      return prodLineStates;
+      return this.model.prodLineStates.getByOrgUnit(
+        this.displayOptions.get('orgUnitType'),
+        this.displayOptions.get('orgUnitIds')
+      );
     },
 
     renderProdLineState: function(prodLineState)
     {
-      this.insertView(new ProdLineStateListItemView({model: prodLineState, keep: false})).render();
+      var listItemView = new ProdLineStateListItemView({
+        keep: false,
+        model: prodLineState,
+        displayOptions: this.displayOptions
+      });
+
+      this.insertView(listItemView).render();
     },
 
     onKeyDown: function(e)
@@ -109,9 +105,9 @@ define([
       }
     },
 
-    onFullscreen: function()
+    toggleIsEmpty: function()
     {
-
+      this.$el.toggleClass('is-empty', this.$('tbody:visible').length === 0);
     }
 
   });

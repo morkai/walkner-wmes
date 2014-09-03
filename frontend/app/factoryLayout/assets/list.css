@@ -1,6 +1,13 @@
 .page[data-id="prodLineStateList"] > .bd {
   margin: 0;
 }
+.page[data-id="prodLineStateList"] .filter-container {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+.page[data-id="prodLineStateList"] .list-container {
+  min-height: 113px;
+}
 .page[data-id="prodLineStateList"] :-webkit-full-screen {
   overflow-y: scroll;
 }
@@ -16,6 +23,20 @@
 .factoryLayout-prodLineList {
   width: 100%;
   border-bottom: 1px solid #999;
+}
+.factoryLayout-prodLineList.is-empty {
+  border-bottom: none;
+}
+.is-empty .factoryLayout-prodLineList-noProdLines {
+  display: table-cell;
+}
+.factoryLayout-prodLineList-noProdLines {
+  position: absolute;
+  display: none;
+  margin-top: 40px;
+  width: 100%;
+  font-size: 28px;
+  text-align: center;
 }
 .factoryLayout-prodLineListItem-header > td {
   padding: 0;
@@ -82,4 +103,16 @@
 .factoryLayout-timeline-container > .prodShifts-timeline {
   margin-left: 0;
   text-align: left;
+}
+.factoryLayout-displayOptions-idle > .fa {
+  color: #f0ad4e;
+}
+.factoryLayout-displayOptions-working > .fa {
+  color: #5cb85c;
+}
+.factoryLayout-displayOptions-downtime > .fa {
+  color: #d9534f;
+}
+.factoryLayout-orgUnitPicker .radio-inline {
+  font-weight: bold;
 }

@@ -45,6 +45,7 @@ define([
         'change:plannedQuantityDone change:actualQuantityDone',
         _.debounce(this.onMetricsChanged.bind(this), 1)
       );
+      this.listenTo(this.displayOptions, 'change', this.toggleVisibility);
     },
 
     destroy: function()
@@ -170,11 +171,8 @@ define([
       });
 
       this.setView('.factoryLayout-timeline-container', this.timelineView).render();
-    },
 
-    resize: function()
-    {
-      this.timelineView.onWindowResize();
+      this.toggleVisibility();
     },
 
     renderTimeline: function()
@@ -185,9 +183,20 @@ define([
       }
     },
 
+    resize: function()
+    {
+      this.timelineView.onWindowResize();
+    },
+
+    toggleVisibility: function()
+    {
+      this.$el.toggle(this.displayOptions.isVisible(this.model));
+    },
+
     onOnlineChanged: function()
     {
       this.$el.toggleClass('is-offline', !this.model.get('online'));
+      this.toggleVisibility();
     },
 
     onStateChanged: function()
@@ -198,6 +207,8 @@ define([
       {
         this.$el.addClass('is-' + this.model.get('state'));
       }
+
+      this.toggleVisibility();
     },
 
     onProdShiftChanged: function()

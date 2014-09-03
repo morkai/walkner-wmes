@@ -208,7 +208,7 @@ define([
       {
         d.prodLines.forEach(
           view.renderProdLinesGuide.bind(
-            view, d, d3.select(this), prodLineStates.getForDivision(d._id)
+            view, d, d3.select(this), prodLineStates.getByOrgUnit('division', [d._id])
           )
         );
       });
@@ -566,7 +566,7 @@ define([
       if (clickInfo.type === 'division')
       {
         this.broker.publish('router.navigate', {
-          url: '/factoryLayout/prodLines?division=' + encodeURIComponent(clickInfo.modelId),
+          url: '/factoryLayout;list?orgUnitType=division&orgUnitIds=' + encodeURIComponent(clickInfo.modelId),
           trigger: true,
           replace: false
         });

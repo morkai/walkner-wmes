@@ -1,0 +1,12 @@
+<form class="factoryLayout-orgUnitPicker">
+  <% ['division', 'subdivision', 'mrpController', 'prodFlow', 'workCenter', 'prodLine'].forEach(function(orgUnitType) { %>
+  <div class="form-group">
+    <label class="radio-inline"><input type="radio" name="orgUnitType" value="<%- orgUnitType %>"> <%- t('core', 'ORG_UNIT:' + orgUnitType) %></label>
+    <input id="<%- idPrefix %>-<%- orgUnitType %>" name="<%- orgUnitType %>" type="text">
+  </div>
+  <% }) %>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('factoryLayout', 'picker:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

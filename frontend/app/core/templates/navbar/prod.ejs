@@ -4,7 +4,9 @@
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <li data-module><a href="#factoryLayout"><%- t('core', 'NAVBAR:FACTORY_LAYOUT') %></a>
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:MONITORING') %>
+    <li data-module><a href="#factoryLayout"><%- t('core', 'NAVBAR:MONITORING:LAYOUT') %></a>
+    <li data-module><a href="#factoryLayout;list"><%- t('core', 'NAVBAR:MONITORING:LIST') %></a>
     <li class="divider">
     <li data-privilege="PRESS_WORKSHEETS:VIEW" data-module><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a>
     <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodLogEntries"><%- t('core', 'NAVBAR:PROD:LOG_ENTRIES') %></a>

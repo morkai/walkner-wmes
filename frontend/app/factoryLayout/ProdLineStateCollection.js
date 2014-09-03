@@ -19,6 +19,10 @@ define([
 
     model: ProdLineState,
 
+    /**
+     * @param {object} res
+     * @returns {Array.<object>}
+     */
     parse: function(res)
     {
       var prodLineStates = [];
@@ -31,24 +35,52 @@ define([
       return prodLineStates;
     },
 
-    getForDivision: function(divisionId)
+    /**
+     * @param {string} orgUnitType
+     * @param {Array.<string>} orgUnitIds
+     * @returns {Array.<object>}
+     */
+    getByOrgUnit: function(orgUnitType, orgUnitIds)
     {
       var result = {};
       var prodLineStates = this;
 
-      this.forEachProdLine(orgUnits.getByTypeAndId('division', divisionId), function(prodLine)
+      if (orgUnitType === 'prodLine')
       {
-        var prodLineState = prodLineStates.get(prodLine.id);
-
-        if (prodLineState && !result[prodLine.id])
+        orgUnitIds.forEach(function(prodLineId)
         {
-          result[prodLine.id] = prodLineState;
-        }
-      });
+          var prodLineState = prodLineStates.get(prodLineId);
+
+          if (prodLineState)
+          {
+            result[prodLineId] = prodLineState;
+          }
+        });
+      }
+      else
+      {
+        orgUnitIds.forEach(function(orgUnitId)
+        {
+          prodLineStates.forEachProdLine(orgUnits.getByTypeAndId(orgUnitType, orgUnitId), function(prodLine)
+          {
+            var prodLineState = prodLineStates.get(prodLine.id);
+
+            if (prodLineState)
+            {
+              result[prodLine.id] = prodLineState;
+            }
+          });
+        });
+      }
 
       return _.values(result);
     },
 
+    /**
+     * @private
+     * @param {object} parentOrgUnit
+     * @param {function} callback
+     */
     forEachProdLine: function(parentOrgUnit, callback)
     {
       var childOrgUnits = orgUnits.getChildren(parentOrgUnit);

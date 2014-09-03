@@ -12,5 +12,23 @@
   "prop:lastDowntime": "Ostatni przestój",
   "prop:qty": "Wykonane ilości",
 
-  "qty": "{actual} z {planned}"
+  "qty": "{actual} z {planned}",
+
+  "statuses:online": "Online",
+  "statuses:online:title": "Linie produkcyjne z aktywnym połączeniem do serwera.",
+  "statuses:offline": "Offline",
+  "statuses:offline:title": "Linie produkcyjne niepołączone z serwerem. Dane mogą być nieaktualne.",
+
+  "states:idle": "Bezczynność",
+  "states:working": "Praca",
+  "states:downtime": "Przestój",
+
+  "options:prodLines": "Wybierz linie produkcyjne",
+  "options:save": "Zapisz opcje wyświetlania",
+  "options:saved": "Opcje wyświetlania zapisane!",
+
+  "noProdLines": "Brak pasujących linii produkcyjnych :(",
+
+  "picker:title": "Wybieranie linii produkcyjnych",
+  "picker:submit": "Wybierz"
 }

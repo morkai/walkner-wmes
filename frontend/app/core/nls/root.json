@@ -98,7 +98,9 @@
     "NAVBAR:XICONF:RESULTS": "Programming results",
     "NAVBAR:VENDORS": "Vendors",
     "NAVBAR:PURCHASE_ORDERS": "Purchase orders",
-    "NAVBAR:FACTORY_LAYOUT": "Monitoring",
+    "NAVBAR:MONITORING": "Monitoring",
+    "NAVBAR:MONITORING:LAYOUT": "Factory layout",
+    "NAVBAR:MONITORING:LIST": "Production line list",
 
     "ACTION_FORM:BUTTON": "Perform action",
     "ACTION_FORM:BUTTON:delete": "Delete",

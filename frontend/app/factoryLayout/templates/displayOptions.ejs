@@ -1,0 +1,31 @@
+<form class="well filter-form">
+  <div class="form-group">
+    <div id="<%- idPrefix %>-statuses" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default" title="<%- t('factoryLayout', 'statuses:online:title') %>">
+        <input type="checkbox" name="statuses[]" value="online"> <i class="fa fa-plug"></i><span><%- t('factoryLayout', 'statuses:online') %></span>
+      </label>
+      <label class="btn btn-default" title="<%- t('factoryLayout', 'statuses:offline:title') %>">
+        <input type="checkbox" name="statuses[]" value="offline"> <i class="fa fa-power-off"></i><span><%- t('factoryLayout', 'statuses:offline') %></span>
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <div id="<%- idPrefix %>-states" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default factoryLayout-displayOptions-idle">
+        <input type="checkbox" name="states[]" value="idle">
+        <i class="fa fa-cloud"></i><span><%- t('factoryLayout', 'states:idle') %></span> </label>
+      <label class="btn btn-default factoryLayout-displayOptions-working">
+        <input type="checkbox" name="states[]" value="working">
+        <i class="fa fa-cog"></i><span><%- t('factoryLayout', 'states:working') %></span> </label>
+      <label class="btn btn-default factoryLayout-displayOptions-downtime">
+        <input type="checkbox" name="states[]" value="downtime">
+        <i class="fa fa-bell"></i><span><%- t('factoryLayout', 'states:downtime') %></span> </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <button id="<%- idPrefix %>-showPicker" type="button" class="btn btn-default"><i class="fa fa-list-ol"></i><span><%- t('factoryLayout', 'options:picker') %></span></button>
+  </div>
+  <div class="form-group">
+    <button id="<%- idPrefix %>-save" type="button" class="btn btn-primary"><i class="fa fa-save"></i><span><%- t('factoryLayout', 'options:save') %></span></button>
+  </div>
+</form>

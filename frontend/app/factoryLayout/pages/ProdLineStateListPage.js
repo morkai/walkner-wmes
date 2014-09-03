@@ -8,6 +8,8 @@ define([
   'app/i18n',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/core/templates/listPage',
+  '../views/ProdLineStateDisplayOptionsView',
   '../views/ProdLineStateListView'
 ], function(
   _,
@@ -15,6 +17,8 @@ define([
   t,
   View,
   bindLoadingMessage,
+  listPageTemplate,
+  ProdLineStateDisplayOptionsView,
   ProdLineStateListView
 ) {
   'use strict';
@@ -22,6 +26,8 @@ define([
   return View.extend({
 
     pageId: 'prodLineStateList',
+
+    template: listPageTemplate,
 
     layoutName: 'page',
 
@@ -44,8 +50,10 @@ define([
     {
       this.defineModels();
       this.defineViews();
+      this.defineBindings();
 
-      this.setView(this.listView);
+      this.setView('.filter-container', this.displayOptionsView);
+      this.setView('.list-container', this.listView);
     },
 
     destroy: function()
@@ -63,8 +71,17 @@ define([
     {
       this.listView = new ProdLineStateListView({
         model: this.model,
-        listOptions: this.listOptions
+        displayOptions: this.displayOptions
       });
+
+      this.displayOptionsView = new ProdLineStateDisplayOptionsView({
+        model: this.displayOptions
+      });
+    },
+
+    defineBindings: function()
+    {
+      this.listenTo(this.displayOptions, 'change', this.onDisplayOptionsChange);
     },
 
     load: function(when)
@@ -75,7 +92,15 @@ define([
     afterRender: function()
     {
       this.model.load(false);
+    },
+
+    onDisplayOptionsChange: function()
+    {
+      this.broker.publish('router.navigate', {
+        url: '/factoryLayout;list?' + this.displayOptions.serializeToString()
+      });
     }
+
 
   });
 });
