@@ -761,11 +761,12 @@ ProdLineState.prototype.addQuantitiesDone = function(prodShift)
 
 /**
  * @private
+ * @param {boolean} [real]
  * @returns {number}
  */
-ProdLineState.prototype.getCurrentShiftTime = function()
+ProdLineState.prototype.getCurrentShiftTime = function(real)
 {
-  return this.prodShift === null
+  return real || this.prodShift === null
     ? this.app[this.productionModule.config.fteId].getCurrentShift().date.getTime()
     : this.prodShift.date.getTime();
 };
@@ -916,7 +917,9 @@ ProdLineState.prototype.checkIfClosed = function()
 {
   if (!this.online
     && this.state === 'idle'
-    && (this.currentHour === 6 || this.currentHour === 14 || this.currentHour === 22))
+    && this.prodShift !== null
+    && (this.currentHour === 6 || this.currentHour === 14 || this.currentHour === 22)
+    && this.prodShift.date.getTime() !== this.getCurrentShiftTime(true))
   {
     this.update({prodShift: null});
   }
