@@ -34,7 +34,8 @@ exports.paths = {
   'datatables-scroller': 'vendor/datatables/extensions/Scroller/js/dataTables.scroller',
   'datatables-tabletools': 'vendor/datatables/extensions/TableTools/js/dataTables.tableTools',
   'jquery.stickytableheaders': 'vendor/jquery.stickytableheaders',
-  'highlight': 'vendor/highlight/highlight.pack'
+  'highlight': 'vendor/highlight/highlight.pack',
+  'sortable': 'vendor/sortable'
 };
 
 exports.shim = {

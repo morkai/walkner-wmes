@@ -280,3 +280,7 @@ kbd {
   font-family: Consolas, Menlo, Monaco, monospace;
   text-align: center;
 }
+
+.select2-choices > .select2-search-choice.sortable-ghost {
+  border-color: #0af;
+}
