@@ -23,7 +23,7 @@
   "states:working": "Praca",
   "states:downtime": "Przestój",
 
-  "options:prodLines": "Wybierz linie produkcyjne",
+  "options:picker": "Wybierz linie produkcyjne",
   "options:save": "Zapisz opcje wyświetlania",
   "options:saved": "Opcje wyświetlania zapisane!",
 
