@@ -153,7 +153,7 @@ exports.start = function startEventsModule(app, module)
     }
     else
     {
-      data = lodash.cloneDeep(data);
+      data = JSON.parse(JSON.stringify(data));
     }
 
     var type = topic.replace(/^events\./, '');
