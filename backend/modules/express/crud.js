@@ -135,6 +135,8 @@ exports.addRoute = function(app, Model, req, res, next)
 
   model.save(function(err)
   {
+    req.model = null;
+
     if (err)
     {
       if (err.name === 'ValidationError')
@@ -153,7 +155,7 @@ exports.addRoute = function(app, Model, req, res, next)
     });
 
     app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.added', {
-      model: model.toJSON(),
+      model: model,
       user: req.session.user
     });
   });
@@ -246,6 +248,8 @@ exports.editRoute = function(app, Model, req, res, next)
 
   function edit(err, model)
   {
+    req.model = null;
+
     if (err)
     {
       return next(err);
@@ -278,7 +282,7 @@ exports.editRoute = function(app, Model, req, res, next)
       sendResponse(res, model);
 
       app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.edited', {
-        model: model.toJSON(),
+        model: model,
         user: req.session.user
       });
     });
@@ -312,6 +316,8 @@ exports.deleteRoute = function(app, Model, req, res, next)
 
   function del(err, model)
   {
+    req.model = null;
+
     if (err)
     {
       return next(err);
@@ -337,7 +343,7 @@ exports.deleteRoute = function(app, Model, req, res, next)
       });
 
       app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.deleted', {
-        model: model.toJSON(),
+        model: model,
         user: req.session.user
       });
     });
