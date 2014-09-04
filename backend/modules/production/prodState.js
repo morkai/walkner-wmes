@@ -33,12 +33,52 @@ module.exports = function setUpProdState(app, productionModule)
     return prodLineStateMap[prodLineId] || null;
   };
 
-  orgUnitsModule.getAllByType('prodLine').forEach(function(prodLine)
-  {
-    prodLineStateMap[prodLine._id] = new ProdLineState(app, productionModule, prodLine);
-  });
+  orgUnitsModule.getAllByType('prodLine').forEach(function(prodLine) { createProdLineState(prodLine, false); });
 
   scheduleHourChange();
+
+  app.broker.subscribe('prodLines.added', function(message)
+  {
+    var prodLineId = message.model._id;
+    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+
+    if (prodLine)
+    {
+      createProdLineState(prodLine, true);
+    }
+    else
+    {
+      var startTime = Date.now();
+      var sub = app.broker.subscribe('prodLines.synced', function()
+      {
+        var prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+
+        if (prodLine)
+        {
+          createProdLineState(prodLine, true);
+        }
+
+        if (prodLine || (Date.now() - startTime) > 10000)
+        {
+          sub.cancel();
+        }
+      });
+    }
+  });
+
+  app.broker.subscribe('prodLines.deleted', function(message)
+  {
+    var prodLineId = message.model._id;
+    var prodLineState = prodLineStateMap[prodLineId];
+
+    if (prodLineState)
+    {
+      delete prodLineStateMap[prodLineId];
+
+      prodLineState.destroy();
+      prodLineState = null;
+    }
+  });
 
   app.broker.subscribe('production.synced.**', function(changes)
   {
@@ -77,6 +117,18 @@ module.exports = function setUpProdState(app, productionModule)
 
     app.broker.publish('production.stateLoaded');
   });
+
+  function createProdLineState(prodLine, notify)
+  {
+    var prodLineState = new ProdLineState(app, productionModule, prodLine);
+
+    prodLineStateMap[prodLine._id] = prodLineState;
+
+    if (notify)
+    {
+      app.broker.publish('production.stateCreated', prodLineState.toJSON());
+    }
+  }
 
   function scheduleHourChange()
   {

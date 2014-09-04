@@ -3,12 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../broker',
   '../pubsub',
   '../core/Model',
   './ProdLineState',
   './ProdLineStateCollection',
   './FactoryLayout'
 ], function(
+  broker,
   pubsub,
   Model,
   ProdLineState,
@@ -116,6 +118,21 @@ define([
     stateChangedMessageQueue = [];
 
     productionState.prodLineStates.reset([]);
+  });
+
+  [
+    'divisions',
+    'subdivisions',
+    'mrpControllers',
+    'prodFlows',
+    'workCenters',
+    'prodLines'
+  ].forEach(function(orgUnitsType)
+  {
+    broker.subscribe(orgUnitsType + '.synced', function()
+    {
+      productionState.load(true);
+    });
   });
 
   function handleStateChangedMessage(message)

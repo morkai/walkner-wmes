@@ -53,6 +53,24 @@ function ProdLineState(app, productionModule, prodLine)
   this.prevActualQuantitiesDone = [null, -1, -1, -1];
 }
 
+ProdLineState.prototype.destroy = function()
+{
+  this.broker.destroy();
+
+  clearTimeout(this.extendedTimer);
+
+  this.app = null;
+  this.productionModule = null;
+  this.broker = null;
+  this.prodLine = null;
+  this.socket = null;
+  this.changes = null;
+  this.pendingChanges = null;
+  this.prodShift = null;
+  this.prodShiftOrders = null;
+  this.prodDowntimes = null;
+};
+
 /**
  * @returns {object}
  */
