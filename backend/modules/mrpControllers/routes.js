@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpMrpControllersRoutes(app, mrpControllersModule)
+module.exports = function setUpMrpControllersRoutes(app, mrpControllersModule, useDictionaryModel)
 {
   var express = app[mrpControllersModule.config.expressId];
   var auth = app[mrpControllersModule.config.userId].auth;
@@ -19,7 +19,17 @@ module.exports = function setUpMrpControllersRoutes(app, mrpControllersModule)
 
   express.get('/mrpControllers/:id', canView, express.crud.readRoute.bind(null, app, MrpController));
 
-  express.put('/mrpControllers/:id', canManage, express.crud.editRoute.bind(null, app, MrpController));
+  express.put(
+    '/mrpControllers/:id',
+    canManage,
+    useDictionaryModel,
+    express.crud.editRoute.bind(null, app, MrpController)
+  );
 
-  express.delete('/mrpControllers/:id', canManage, express.crud.deleteRoute.bind(null, app, MrpController));
+  express.delete(
+    '/mrpControllers/:id',
+    canManage,
+    useDictionaryModel,
+    express.crud.deleteRoute.bind(null, app, MrpController)
+  );
 };

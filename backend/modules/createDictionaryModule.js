@@ -4,6 +4,8 @@
 
 'use strict';
 
+var lodash = require('lodash');
+
 module.exports = function createDictionaryModule(modelName, setUpRoutes)
 {
   return {
@@ -34,28 +36,31 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes)
             module.config.userId,
             module.config.expressId
           ],
-          setUpRoutes.bind(null, app, module)
+          setUpRoutes.bind(null, app, module, useDictionaryModel)
         );
       }
 
-      app.broker.subscribe(Model.TOPIC_PREFIX + '.*', function()
+      app.broker.subscribe(Model.TOPIC_PREFIX + '.added', function(message)
       {
-        fetchData(function(err)
+        module.models.push(message.model);
+        module.modelsById[message.model._id] = message.model;
+      });
+
+      app.broker.subscribe(Model.TOPIC_PREFIX + '.deleted', function(message)
+      {
+        module.models = lodash.filter(module.models, function(model)
         {
-          if (err)
-          {
-            module.error("Failed to fetch data: %s", err.message);
-          }
+          return model._id !== message.model._id;
         });
+
+        delete module.modelsById[message.model._id];
       });
 
       fetchData(done);
 
       function fetchData(done)
       {
-        var query = Model.findForDictionary
-          ? Model.findForDictionary()
-          : Model.find();
+        var query = Model.findForDictionary ? Model.findForDictionary() : Model.find();
 
         query.exec(function(err, models)
         {
@@ -67,13 +72,20 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes)
           module.models = models;
           module.modelsById = {};
 
-          models.forEach(function(model)
+          lodash.forEach(models, function(model)
           {
-            module.modelsById[model.get('_id')] = model;
+            module.modelsById[model._id] = model;
           });
 
           done();
         });
+      }
+
+      function useDictionaryModel(req, res, next)
+      {
+        req.model = module.modelsById[req.params.id] || null;
+
+        next();
       }
     }
   };

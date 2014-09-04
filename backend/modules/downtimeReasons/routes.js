@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpDowntimeReasonsRoutes(app, downtimeReasonsModule)
+module.exports = function setUpDowntimeReasonsRoutes(app, downtimeReasonsModule, useDictionaryModel)
 {
   var express = app[downtimeReasonsModule.config.expressId];
   var auth = app[downtimeReasonsModule.config.userId].auth;
@@ -19,7 +19,17 @@ module.exports = function setUpDowntimeReasonsRoutes(app, downtimeReasonsModule)
 
   express.get('/downtimeReasons/:id', canView, express.crud.readRoute.bind(null, app, DowntimeReason));
 
-  express.put('/downtimeReasons/:id', canManage, express.crud.editRoute.bind(null, app, DowntimeReason));
+  express.put(
+    '/downtimeReasons/:id',
+    canManage,
+    useDictionaryModel,
+    express.crud.editRoute.bind(null, app, DowntimeReason)
+  );
 
-  express.delete('/downtimeReasons/:id', canManage, express.crud.deleteRoute.bind(null, app, DowntimeReason));
+  express.delete(
+    '/downtimeReasons/:id',
+    canManage,
+    useDictionaryModel,
+    express.crud.deleteRoute.bind(null, app, DowntimeReason)
+  );
 };

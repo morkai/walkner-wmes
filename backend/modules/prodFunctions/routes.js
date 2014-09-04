@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpProdFunctionsRoutes(app, prodFunctionsModule)
+module.exports = function setUpProdFunctionsRoutes(app, prodFunctionsModule, useDictionaryModel)
 {
   var express = app[prodFunctionsModule.config.expressId];
   var auth = app[prodFunctionsModule.config.userId].auth;
@@ -19,7 +19,17 @@ module.exports = function setUpProdFunctionsRoutes(app, prodFunctionsModule)
 
   express.get('/prodFunctions/:id', canView, express.crud.readRoute.bind(null, app, ProdFunction));
 
-  express.put('/prodFunctions/:id', canManage, express.crud.editRoute.bind(null, app, ProdFunction));
+  express.put(
+    '/prodFunctions/:id',
+    canManage,
+    useDictionaryModel,
+    express.crud.editRoute.bind(null, app, ProdFunction)
+  );
 
-  express.delete('/prodFunctions/:id', canManage, express.crud.deleteRoute.bind(null, app, ProdFunction));
+  express.delete(
+    '/prodFunctions/:id',
+    canManage,
+    useDictionaryModel,
+    express.crud.deleteRoute.bind(null, app, ProdFunction)
+  );
 };

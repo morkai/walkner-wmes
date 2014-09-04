@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpLossReasonsRoutes(app, lossReasonsModule)
+module.exports = function setUpLossReasonsRoutes(app, lossReasonsModule, useDictionaryModel)
 {
   var express = app[lossReasonsModule.config.expressId];
   var auth = app[lossReasonsModule.config.userId].auth;
@@ -19,7 +19,12 @@ module.exports = function setUpLossReasonsRoutes(app, lossReasonsModule)
 
   express.get('/lossReasons/:id', canView, express.crud.readRoute.bind(null, app, LossReason));
 
-  express.put('/lossReasons/:id', canManage, express.crud.editRoute.bind(null, app, LossReason));
+  express.put('/lossReasons/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, LossReason));
 
-  express.delete('/lossReasons/:id', canManage, express.crud.deleteRoute.bind(null, app, LossReason));
+  express.delete(
+    '/lossReasons/:id',
+    canManage,
+    useDictionaryModel,
+    express.crud.deleteRoute.bind(null, app, LossReason)
+  );
 };

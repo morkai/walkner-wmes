@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpProdTasksRoutes(app, prodTasksModule)
+module.exports = function setUpProdTasksRoutes(app, prodTasksModule, useDictionaryModel)
 {
   var express = app[prodTasksModule.config.expressId];
   var auth = app[prodTasksModule.config.userId].auth;
@@ -19,9 +19,9 @@ module.exports = function setUpProdTasksRoutes(app, prodTasksModule)
 
   express.get('/prodTasks/:id', canView, express.crud.readRoute.bind(null, app, ProdTask));
 
-  express.put('/prodTasks/:id', canManage, express.crud.editRoute.bind(null, app, ProdTask));
+  express.put('/prodTasks/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, ProdTask));
 
-  express.delete('/prodTasks/:id', canManage, express.crud.deleteRoute.bind(null, app, ProdTask));
+  express.delete('/prodTasks/:id', canManage, useDictionaryModel, express.crud.deleteRoute.bind(null, app, ProdTask));
 
   express.get('/prodTaskTags', canView, getAllTagsRoute);
 

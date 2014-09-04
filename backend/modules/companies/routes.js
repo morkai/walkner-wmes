@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpCompaniesRoutes(app, companiesModule)
+module.exports = function setUpCompaniesRoutes(app, companiesModule, useDictionaryModel)
 {
   var express = app[companiesModule.config.expressId];
   var auth = app[companiesModule.config.userId].auth;
@@ -19,7 +19,7 @@ module.exports = function setUpCompaniesRoutes(app, companiesModule)
 
   express.get('/companies/:id', canView, express.crud.readRoute.bind(null, app, Model));
 
-  express.put('/companies/:id', canManage, express.crud.editRoute.bind(null, app, Model));
+  express.put('/companies/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, Model));
 
-  express.delete('/companies/:id', canManage, express.crud.deleteRoute.bind(null, app, Model));
+  express.delete('/companies/:id', canManage, useDictionaryModel, express.crud.deleteRoute.bind(null, app, Model));
 };

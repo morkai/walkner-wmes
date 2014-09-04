@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpAorsRoutes(app, aorsModule)
+module.exports = function setUpAorsRoutes(app, aorsModule, useDictionaryModel)
 {
   var express = app[aorsModule.config.expressId];
   var auth = app[aorsModule.config.userId].auth;
@@ -19,7 +19,7 @@ module.exports = function setUpAorsRoutes(app, aorsModule)
 
   express.get('/aors/:id', canView, express.crud.readRoute.bind(null, app, Aor));
 
-  express.put('/aors/:id', canManage, express.crud.editRoute.bind(null, app, Aor));
+  express.put('/aors/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, Aor));
 
-  express.delete('/aors/:id', canManage, express.crud.deleteRoute.bind(null, app, Aor));
+  express.delete('/aors/:id', canManage, useDictionaryModel, express.crud.deleteRoute.bind(null, app, Aor));
 };

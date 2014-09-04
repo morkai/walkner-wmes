@@ -4,11 +4,11 @@
 
 'use strict';
 
-module.exports = function setUpOrderStatusesRoutes(app, ordersModule)
+module.exports = function setUpOrderStatusesRoutes(app, orderStatusesModule, useDictionaryModel)
 {
-  var express = app[ordersModule.config.expressId];
-  var auth = app[ordersModule.config.userId].auth;
-  var Model = app[ordersModule.config.mongooseId].model('OrderStatus');
+  var express = app[orderStatusesModule.config.expressId];
+  var auth = app[orderStatusesModule.config.userId].auth;
+  var Model = app[orderStatusesModule.config.mongooseId].model('OrderStatus');
 
   var canView = auth('DICTIONARIES:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
@@ -19,7 +19,7 @@ module.exports = function setUpOrderStatusesRoutes(app, ordersModule)
 
   express.get('/orderStatuses/:id', canView, express.crud.readRoute.bind(null, app, Model));
 
-  express.put('/orderStatuses/:id', canManage, express.crud.editRoute.bind(null, app, Model));
+  express.put('/orderStatuses/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, Model));
 
-  express.delete('/orderStatuses/:id', canManage, express.crud.deleteRoute.bind(null, app, Model));
+  express.delete('/orderStatuses/:id', canManage, useDictionaryModel, express.crud.deleteRoute.bind(null, app, Model));
 };

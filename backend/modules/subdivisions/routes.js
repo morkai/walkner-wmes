@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpSubdivisionsRoutes(app, subdivisionsModule)
+module.exports = function setUpSubdivisionsRoutes(app, subdivisionsModule, useDictionaryModel)
 {
   var express = app[subdivisionsModule.config.expressId];
   var auth = app[subdivisionsModule.config.userId].auth;
@@ -19,7 +19,12 @@ module.exports = function setUpSubdivisionsRoutes(app, subdivisionsModule)
 
   express.get('/subdivisions/:id', canView, express.crud.readRoute.bind(null, app, Subdivision));
 
-  express.put('/subdivisions/:id', canManage, express.crud.editRoute.bind(null, app, Subdivision));
+  express.put('/subdivisions/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, Subdivision));
 
-  express.delete('/subdivisions/:id', canManage, express.crud.deleteRoute.bind(null, app, Subdivision));
+  express.delete(
+    '/subdivisions/:id',
+    canManage,
+    useDictionaryModel,
+    express.crud.deleteRoute.bind(null, app, Subdivision)
+  );
 };

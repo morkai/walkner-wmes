@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpWorkCentersRoutes(app, workCentersModule)
+module.exports = function setUpWorkCentersRoutes(app, workCentersModule, useDictionaryModel)
 {
   var express = app[workCentersModule.config.expressId];
   var auth = app[workCentersModule.config.userId].auth;
@@ -19,7 +19,12 @@ module.exports = function setUpWorkCentersRoutes(app, workCentersModule)
 
   express.get('/workCenters/:id', canView, express.crud.readRoute.bind(null, app, WorkCenter));
 
-  express.put('/workCenters/:id', canManage, express.crud.editRoute.bind(null, app, WorkCenter));
+  express.put('/workCenters/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, WorkCenter));
 
-  express.delete('/workCenters/:id', canManage, express.crud.deleteRoute.bind(null, app, WorkCenter));
+  express.delete(
+    '/workCenters/:id',
+    canManage,
+    useDictionaryModel,
+    express.crud.deleteRoute.bind(null, app, WorkCenter)
+  );
 };

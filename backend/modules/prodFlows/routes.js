@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpProdFlowsRoutes(app, prodFlowsModule)
+module.exports = function setUpProdFlowsRoutes(app, prodFlowsModule, useDictionaryModel)
 {
   var express = app[prodFlowsModule.config.expressId];
   var auth = app[prodFlowsModule.config.userId].auth;
@@ -19,7 +19,7 @@ module.exports = function setUpProdFlowsRoutes(app, prodFlowsModule)
 
   express.get('/prodFlows/:id', canView, express.crud.readRoute.bind(null, app, ProdFlow));
 
-  express.put('/prodFlows/:id', canManage, express.crud.editRoute.bind(null, app, ProdFlow));
+  express.put('/prodFlows/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, ProdFlow));
 
-  express.delete('/prodFlows/:id', canManage, express.crud.deleteRoute.bind(null, app, ProdFlow));
+  express.delete('/prodFlows/:id', canManage, useDictionaryModel, express.crud.deleteRoute.bind(null, app, ProdFlow));
 };

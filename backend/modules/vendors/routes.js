@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpVendorsRoutes(app, vendorsModule)
+module.exports = function setUpVendorsRoutes(app, vendorsModule, useDictionaryModel)
 {
   var express = app[vendorsModule.config.expressId];
   var auth = app[vendorsModule.config.userId].auth;
@@ -19,7 +19,7 @@ module.exports = function setUpVendorsRoutes(app, vendorsModule)
 
   express.get('/vendors/:id', canView, express.crud.readRoute.bind(null, app, Vendor));
 
-  express.put('/vendors/:id', canManage, express.crud.editRoute.bind(null, app, Vendor));
+  express.put('/vendors/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, Vendor));
 
-  express.delete('/vendors/:id', canManage, express.crud.deleteRoute.bind(null, app, Vendor));
+  express.delete('/vendors/:id', canManage, useDictionaryModel, express.crud.deleteRoute.bind(null, app, Vendor));
 };

@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function setUpDivisionsRoutes(app, divisionsModule)
+module.exports = function setUpDivisionsRoutes(app, divisionsModule, useDictionaryModel)
 {
   var express = app[divisionsModule.config.expressId];
   var auth = app[divisionsModule.config.userId].auth;
@@ -19,7 +19,7 @@ module.exports = function setUpDivisionsRoutes(app, divisionsModule)
 
   express.get('/divisions/:id', canView, express.crud.readRoute.bind(null, app, Division));
 
-  express.put('/divisions/:id', canManage, express.crud.editRoute.bind(null, app, Division));
+  express.put('/divisions/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, Division));
 
-  express.delete('/divisions/:id', canManage, express.crud.deleteRoute.bind(null, app, Division));
+  express.delete('/divisions/:id', canManage, useDictionaryModel, express.crud.deleteRoute.bind(null, app, Division));
 };
