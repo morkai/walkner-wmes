@@ -10,7 +10,6 @@ var step = require('h5.step');
 
 module.exports = ProdLineState;
 
-var EXTENDED_DELAY = 15;
 var HOUR_TO_INDEX = [
   2, 3, 4, 5, 6, 7, 0, 1,
   2, 3, 4, 5, 6, 7, 0, 1,
@@ -271,6 +270,61 @@ ProdLineState.prototype.update = function(newData, options)
       }
     }
   );
+};
+
+ProdLineState.prototype.checkExtendedDowntime = function()
+{
+  if (this.extendedTimer !== null)
+  {
+    clearTimeout(this.extendedTimer);
+    this.extendedTimer = null;
+  }
+
+  if (this.state !== 'downtime')
+  {
+    if (this.extended)
+    {
+      this.publishExtendedChange(false);
+    }
+
+    return;
+  }
+
+  var delay = (this.stateChangedAt + this.productionModule.getExtendedDowntimeDelay() * 60 * 1000) - Date.now();
+
+  if (delay < 0)
+  {
+    if (!this.extended)
+    {
+      this.publishExtendedChange(true);
+    }
+
+    return;
+  }
+  else if (this.extended)
+  {
+    this.publishExtendedChange(false);
+  }
+
+  this.extendedTimer = setTimeout(this.checkExtendedDowntime.bind(this), delay);
+};
+
+/**
+ * @private
+ * @param {boolean} newValue
+ */
+ProdLineState.prototype.publishExtendedChange = function(newValue)
+{
+  this.extended = newValue;
+
+  if (this.changes === null)
+  {
+    this.publishChanges({extended: this.extended});
+  }
+  else
+  {
+    this.changes.extended = this.extended;
+  }
 };
 
 /**
@@ -878,54 +932,6 @@ ProdLineState.prototype.updateState = function()
 
     this.checkExtendedDowntime();
   }
-};
-
-/**
- * @private
- */
-ProdLineState.prototype.checkExtendedDowntime = function()
-{
-  if (this.extendedTimer !== null)
-  {
-    clearTimeout(this.extendedTimer);
-    this.extendedTimer = null;
-  }
-
-  if (this.state !== 'downtime')
-  {
-    this.extended = false;
-
-    if (this.changes === null)
-    {
-      this.publishChanges({extended: this.extended});
-    }
-    else
-    {
-      this.changes.extended = this.extended;
-    }
-
-    return;
-  }
-
-  var delay = (this.stateChangedAt + EXTENDED_DELAY * 60 * 1000) - Date.now();
-
-  if (delay < 0)
-  {
-    this.extended = true;
-
-    if (this.changes === null)
-    {
-      this.publishChanges({extended: this.extended});
-    }
-    else
-    {
-      this.changes.extended = this.extended;
-    }
-
-    return;
-  }
-
-  this.extendedTimer = setTimeout(this.checkExtendedDowntime.bind(this), delay);
 };
 
 /**

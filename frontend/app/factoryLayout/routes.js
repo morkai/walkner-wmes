@@ -10,8 +10,7 @@ define([
 ], function(
   user,
   router,
-  viewport,
-  productionState
+  viewport
 ) {
   'use strict';
 
@@ -46,6 +45,23 @@ define([
         return new ProdLineStateListPage({
           model: productionState,
           displayOptions: ProdLineStateDisplayOptions.fromQuery(req.query)
+        });
+      }
+    );
+  });
+
+  router.map('/factoryLayout;settings', user.auth('FACTORY_LAYOUT:MANAGE'), function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/factoryLayout/productionState',
+        'app/factoryLayout/pages/FactoryLayoutSettingsPage'
+      ],
+      function(productionState, FactoryLayoutSettingsPage)
+      {
+        return new FactoryLayoutSettingsPage({
+          initialTab: req.query.tab,
+          model: productionState
         });
       }
     );

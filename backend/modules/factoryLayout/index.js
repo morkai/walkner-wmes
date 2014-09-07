@@ -6,14 +6,13 @@
 
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
-var ProdLineState = require('./../production/ProdLineState');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
   userId: 'user',
   sioId: 'sio',
-  orgUnitsId: 'orgUnits'
+  settingsId: 'settings'
 };
 
 exports.start = function startFactoryLayoutModule(app, module)
@@ -28,7 +27,8 @@ exports.start = function startFactoryLayoutModule(app, module)
   app.onModuleReady(
     [
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );

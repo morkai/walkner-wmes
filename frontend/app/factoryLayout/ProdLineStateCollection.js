@@ -38,10 +38,16 @@ define([
     /**
      * @param {string} orgUnitType
      * @param {Array.<string>} orgUnitIds
+     * @param {function(string, string): boolean} [isBlacklisted]
      * @returns {Array.<object>}
      */
-    getByOrgUnit: function(orgUnitType, orgUnitIds)
+    getByOrgUnit: function(orgUnitType, orgUnitIds, isBlacklisted)
     {
+      if (orgUnitType === 'prodLine' || typeof isBlacklisted !== 'function')
+      {
+        isBlacklisted = function() { return false; };
+      }
+
       var result = {};
       var prodLineStates = this;
 
@@ -51,7 +57,7 @@ define([
         {
           var prodLineState = prodLineStates.get(prodLineId);
 
-          if (prodLineState)
+          if (prodLineState && !isBlacklisted('prodLine', prodLineId))
           {
             result[prodLineId] = prodLineState;
           }
@@ -61,11 +67,13 @@ define([
       {
         orgUnitIds.forEach(function(orgUnitId)
         {
-          prodLineStates.forEachProdLine(orgUnits.getByTypeAndId(orgUnitType, orgUnitId), function(prodLine)
+          var orgUnit = orgUnits.getByTypeAndId(orgUnitType, orgUnitId);
+
+          prodLineStates.forEachProdLine(orgUnit, isBlacklisted, false, function(prodLine)
           {
             var prodLineState = prodLineStates.get(prodLine.id);
 
-            if (prodLineState)
+            if (prodLineState && !isBlacklisted('prodLine', prodLine.id))
             {
               result[prodLine.id] = prodLineState;
             }
@@ -79,15 +87,24 @@ define([
     /**
      * @private
      * @param {object} parentOrgUnit
+     * @param {function} isBlacklisted
+     * @param {boolean} useBlacklist
      * @param {function} callback
      */
-    forEachProdLine: function(parentOrgUnit, callback)
+    forEachProdLine: function(parentOrgUnit, isBlacklisted, useBlacklist, callback)
     {
+      var parentOrgUnitType = orgUnits.getType(parentOrgUnit);
+
+      if (useBlacklist && isBlacklisted(parentOrgUnitType, parentOrgUnit.id))
+      {
+        return;
+      }
+
       var childOrgUnits = orgUnits.getChildren(parentOrgUnit);
       var i = 0;
       var l = childOrgUnits.length;
 
-      if (orgUnits.getType(parentOrgUnit) === 'workCenter')
+      if (parentOrgUnitType === 'workCenter')
       {
         for (; i < l; ++i)
         {
@@ -98,7 +115,7 @@ define([
       {
         for (; i < l; ++i)
         {
-          this.forEachProdLine(childOrgUnits[i], callback);
+          this.forEachProdLine(childOrgUnits[i], isBlacklisted, true, callback);
         }
       }
     }

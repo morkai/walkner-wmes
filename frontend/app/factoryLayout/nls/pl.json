@@ -1,6 +1,9 @@
 {
   "bc:layout": "Monitoring",
   "bc:list": "Linie produkcyjne",
+  "bc:settings": "Ustawienia",
+
+  "pa:settings": "Zmień ustawienia",
 
   "prop:master": "Mistrz",
   "prop:leader": "Lider",
@@ -30,5 +33,9 @@
   "noProdLines": "Brak pasujących linii produkcyjnych :(",
 
   "picker:title": "Wybieranie linii produkcyjnych",
-  "picker:submit": "Wybierz"
+  "picker:submit": "Wybierz",
+
+  "settings:tab:blacklist": "Ignorowane jednostki org.",
+  "settings:tab:other": "Inne",
+  "settings:extendedDowntimeDelay": "Długi przestój [min]"
 }

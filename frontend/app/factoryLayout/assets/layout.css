@@ -90,7 +90,7 @@
 .factoryLayout-prodLine {
   font-family: Consolas, "Lucida Console", Monaco, monospace;
   stroke-width: 0;
-  cursor: pointer;
+  cursor: default;
 }
 .factoryLayout-prodLine.is-offline {
   opacity: 0.7;

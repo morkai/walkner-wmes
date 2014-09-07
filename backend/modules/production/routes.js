@@ -11,6 +11,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
 {
   var express = app[productionModule.config.expressId];
   var mongoose = app[productionModule.config.mongooseId];
+  var Setting = mongoose.model('Setting');
   var Order = mongoose.model('Order');
   var MechOrder = mongoose.model('MechOrder');
   var FactoryLayout = mongoose.model('FactoryLayout');
@@ -35,10 +36,11 @@ module.exports = function setUpProductionRoutes(app, productionModule)
     step(
       function()
       {
+        Setting.find({_id: /^factoryLayout/}, {value: 1}).lean().exec(this.parallel());
         productionModule.getProdLineStates(this.parallel());
-        FactoryLayout.findById('default', {live: 1}).lean().exec(this.parallel())
+        FactoryLayout.findById('default', {live: 1}).lean().exec(this.parallel());
       },
-      function(err, prodLineStates, factoryLayout)
+      function(err, settings, prodLineStates, factoryLayout)
       {
         if (err)
         {
@@ -46,6 +48,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
         }
 
         return res.json({
+          settings: settings,
           prodLineStates: prodLineStates,
           factoryLayout: factoryLayout
         });

@@ -92,6 +92,7 @@
   "PRIVILEGE:XICONF:MANAGE": "Xiconf: zarządzanie",
   "PRIVILEGE:PURCHASE_ORDERS:VIEW": "Zamówienia: przeglądanie",
   "PRIVILEGE:PURCHASE_ORDERS:MANAGE": "Zamówienia: zarządzanie",
+  "PRIVILEGE:FACTORY_LAYOUT:MANAGE": "Monitoring: zarządzanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System"

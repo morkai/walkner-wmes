@@ -1,0 +1,14 @@
+<form class="reports-settings">
+  <div class="list-group">
+    <% [
+      'blacklist',
+      'other'
+    ].forEach(function(tab) { %>
+    <a class="list-group-item" href="#reports;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('factoryLayout', 'settings:tab:' + tab) %></a>
+    <% }) %>
+  </div>
+  <div class="panel panel-primary">
+    <% include settings/blacklist.ejs %>
+    <% include settings/other.ejs %>
+  </div>
+</form>

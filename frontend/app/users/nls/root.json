@@ -92,6 +92,7 @@
     "PRIVILEGE:XICONF:MANAGE": "Xiconf: manage",
     "PRIVILEGE:PURCHASE_ORDERS:VIEW": "Purchase orders: view",
     "PRIVILEGE:PURCHASE_ORDERS:MANAGE": "Purchase orders: manage",
+    "PRIVILEGE:FACTORY_LAYOUT:MANAGE": "Monitoring: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System"

@@ -6,6 +6,7 @@ define([
   '../broker',
   '../pubsub',
   '../core/Model',
+  './FactoryLayoutSettingCollection',
   './ProdLineState',
   './ProdLineStateCollection',
   './FactoryLayout'
@@ -13,6 +14,7 @@ define([
   broker,
   pubsub,
   Model,
+  FactoryLayoutSettingCollection,
   ProdLineState,
   ProdLineStateCollection,
   FactoryLayout)
@@ -22,7 +24,6 @@ define([
   var UNLOAD_DELAY = 60000;
 
   var stateChangedMessageQueue = [];
-  var stateChangedSub = null;
   var loading = false;
   var loaded = false;
   var unloadTimer = null;
@@ -30,12 +31,19 @@ define([
 
   window.productionState = productionState;
 
+  productionState.pubsub = null;
   productionState.url = '/production/state';
+  productionState.settings = new FactoryLayoutSettingCollection();
   productionState.factoryLayout = new FactoryLayout();
   productionState.prodLineStates = new ProdLineStateCollection();
 
   productionState.parse = function(data)
   {
+    if (data.settings)
+    {
+      this.settings.reset(data.settings);
+    }
+
     if (Array.isArray(data.prodLineStates))
     {
       this.prodLineStates.reset(data.prodLineStates.map(ProdLineState.parse));
@@ -62,9 +70,11 @@ define([
       return;
     }
 
-    if (stateChangedSub === null)
+    if (productionState.pubsub === null)
     {
-      stateChangedSub = pubsub.subscribe('production.stateChanged.**', handleStateChangedMessage);
+      productionState.pubsub = pubsub.sandbox();
+      productionState.pubsub.subscribe('production.stateChanged.**', handleStateChangedMessage);
+      productionState.settings.setUpPubsub(productionState.pubsub);
     }
 
     return productionState.fetch();
@@ -84,13 +94,14 @@ define([
 
     unloadTimer = setTimeout(function()
     {
-      if (stateChangedSub !== null)
+      if (productionState.pubsub !== null)
       {
-        stateChangedSub.cancel();
-        stateChangedSub = null;
+        productionState.pubsub.destroy();
+        productionState.pubsub = null;
       }
 
       productionState.prodLineStates.reset([]);
+      productionState.settings.reset([]);
 
       unloadTimer = null;
       loaded = false;

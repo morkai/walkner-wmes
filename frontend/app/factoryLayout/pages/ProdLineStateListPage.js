@@ -46,6 +46,16 @@ define([
       t.bound('factoryLayout', 'bc:list')
     ],
 
+    actions: function()
+    {
+      return [{
+        label: t.bound('factoryLayout', 'pa:settings'),
+        icon: 'cogs',
+        privileges: 'FACTORY_LAYOUT:MANAGE',
+        href: '#factoryLayout;settings?tab=blacklist'
+      }];
+    },
+
     initialize: function()
     {
       this.defineModels();

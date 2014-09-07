@@ -109,11 +109,14 @@ define([
       $(window).on('resize', this.onResize);
       screenfull.onchange = _.debounce(this.onFullscreen.bind(this), 16);
 
-      this.listenTo(this.model.prodLineStates, 'change:state', this.onStateChange);
-      this.listenTo(this.model.prodLineStates, 'change:online', this.onOnlineChange);
-      this.listenTo(this.model.prodLineStates, 'change:extended', this.onExtendedChange);
-      this.listenTo(this.model.prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
-      this.listenTo(this.model.prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
+      var model = this.model;
+
+      this.listenTo(model.prodLineStates, 'change:state', this.onStateChange);
+      this.listenTo(model.prodLineStates, 'change:online', this.onOnlineChange);
+      this.listenTo(model.prodLineStates, 'change:extended', this.onExtendedChange);
+      this.listenTo(model.prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
+      this.listenTo(model.prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
+      this.listenTo(model.settings, 'change', this.onSettingsChange);
     },
 
     destroy: function()
@@ -148,8 +151,9 @@ define([
 
     renderLayout: function()
     {
+      var model = this.model;
       var divisions = this.canvas.selectAll('.division')
-        .data(this.model.factoryLayout.get('live'));
+        .data(model.factoryLayout.get('live'));
 
       var pathGenerator = d3.svg.line()
         .x(function(d)
@@ -202,13 +206,15 @@ define([
         });
 
       var view = this;
-      var prodLineStates = this.model.prodLineStates;
+      var prodLineStates = model.prodLineStates;
+      var isBlacklisted = model.settings.isBlacklisted.bind(model.settings);
 
       divisionContainerEnter.each(function(d)
       {
         d.prodLines.forEach(
           view.renderProdLinesGuide.bind(
-            view, d, d3.select(this), prodLineStates.getByOrgUnit('division', [d._id])
+            view, d, d3.select(this),
+            prodLineStates.getByOrgUnit('division', [d._id], isBlacklisted)
           )
         );
       });
@@ -523,6 +529,17 @@ define([
       this.updateMetricValue(prodLineState, 'actualQuantityDone');
     },
 
+    onSettingsChange: function(setting)
+    {
+      if (!/blacklist/.test(setting.id))
+      {
+        return;
+      }
+
+      this.canvas.selectAll('.division').remove();
+      this.renderLayout();
+    },
+
     updateMetricValue: function(prodLineState, metricName)
     {
       var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
@@ -579,11 +596,7 @@ define([
 
     showProdLinePreview: function(prodLineId)
     {
-      viewport.msg.show({
-        type: 'warning',
-        text: 'TODO (' + prodLineId + ')',
-        time: 2000
-      });
+
     }
 
   });

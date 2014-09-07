@@ -3,17 +3,13 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   'app/i18n',
   'app/core/View',
-  'app/core/util/bindLoadingMessage',
-  '../views/FactoryLayoutCanvasView'
+  '../views/FactoryLayoutSettingsView'
 ], function(
-  $,
   t,
   View,
-  bindLoadingMessage,
-  FactoryLayoutCanvasView
+  FactoryLayoutSettingsView
 ) {
   'use strict';
 
@@ -31,44 +27,31 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('factoryLayout', 'bc:layout')
+        {
+          label: t.bound('factoryLayout', 'bc:layout'),
+          href: '#factoryLayout'
+        },
+        t.bound('factoryLayout', 'bc:settings')
       ];
-    },
-
-    actions: function()
-    {
-      return [{
-        label: t.bound('factoryLayout', 'pa:settings'),
-        icon: 'cogs',
-        privileges: 'FACTORY_LAYOUT:MANAGE',
-        href: '#factoryLayout;settings?tab=blacklist'
-      }];
     },
 
     initialize: function()
     {
-      this.defineModels();
       this.defineViews();
-
-      this.setView(this.canvasView);
     },
 
     destroy: function()
     {
-      document.body.classList.remove('no-overflow');
-
       this.model.unload();
       this.model = null;
     },
 
-    defineModels: function()
-    {
-      this.model = bindLoadingMessage(this.model, this);
-    },
-
     defineViews: function()
     {
-      this.canvasView = new FactoryLayoutCanvasView({model: this.model});
+      this.view = new FactoryLayoutSettingsView({
+        initialTab: this.options.initialTab,
+        settings: this.model.settings
+      });
     },
 
     load: function(when)
@@ -78,8 +61,6 @@ define([
 
     afterRender: function()
     {
-      document.body.classList.add('no-overflow');
-
       this.model.load(false);
     }
 

@@ -36,6 +36,7 @@ define([
       this.lastWidth = null;
 
       this.listenTo(this.displayOptions, 'change:orgUnitType change:orgUnitIds', _.debounce(this.render, 1));
+      this.listenTo(this.model.settings, 'change', this.onSettingsChange);
 
       $('body').on('keydown', this.onKeyDown);
       $(window).on('resize', this.onResize);
@@ -70,7 +71,8 @@ define([
     {
       return this.model.prodLineStates.getByOrgUnit(
         this.displayOptions.get('orgUnitType'),
-        this.displayOptions.get('orgUnitIds')
+        this.displayOptions.get('orgUnitIds'),
+        this.model.settings.isBlacklisted.bind(this.model.settings)
       );
     },
 
@@ -102,6 +104,14 @@ define([
         this.lastWidth = window.innerWidth;
 
         this.getViews().each(function(view) { view.resize(); });
+      }
+    },
+
+    onSettingsChange: function(setting)
+    {
+      if (/blacklist/.test(setting.id))
+      {
+        this.render();
       }
     },
 

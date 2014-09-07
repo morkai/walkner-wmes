@@ -2,6 +2,9 @@
   "root": {
     "bc:layout": "Monitoring",
     "bc:list": "Production lines",
+    "bc:settings": "Settings",
+
+    "pa:settings": "Change settings",
 
     "prop:master": "Master",
     "prop:leader": "Leader",
@@ -31,7 +34,11 @@
     "noProdLines": "No matching production lines :(",
 
     "picker:title": "Production line picker",
-    "picker:submit": "Pick"
+    "picker:submit": "Pick",
+
+    "settings:tab:blacklist": "Ignored org units",
+    "settings:tab:other": "Other",
+    "settings:extendedDowntimeDelay": "Extended downtime [min]"
   },
   "pl": true
 }

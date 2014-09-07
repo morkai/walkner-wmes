@@ -14,6 +14,9 @@ module.exports = function setUpProdState(app, productionModule)
 
   var loaded = false;
   var prodLineStateMap = {};
+  var extendedDowntimeDelay = 15;
+
+  productionModule.getExtendedDowntimeDelay = function() { return extendedDowntimeDelay; };
 
   productionModule.getProdLineStates = function(done)
   {
@@ -111,11 +114,33 @@ module.exports = function setUpProdState(app, productionModule)
     }
   });
 
+  app.broker.subscribe('settings.updated.factoryLayout.extendedDowntimeDelay', function(message)
+  {
+    extendedDowntimeDelay = message.value;
+
+    lodash.forEach(prodLineStateMap, function(prodLineState)
+    {
+      prodLineState.checkExtendedDowntime();
+    });
+  });
+
   app.broker.subscribe('app.started').setLimit(1).on('message', function()
   {
-    loaded = true;
+    app[productionModule.config.mongooseId]
+      .model('Setting')
+      .findById('factoryLayout.extendedDowntimeDelay')
+      .lean()
+      .exec(function(err, setting)
+      {
+        if (setting && setting.value > 0 && setting.value < 1440)
+        {
+          extendedDowntimeDelay = setting.value;
+        }
 
-    app.broker.publish('production.stateLoaded');
+        loaded = true;
+
+        app.broker.publish('production.stateLoaded');
+      });
   });
 
   function createProdLineState(prodLine, notify)
