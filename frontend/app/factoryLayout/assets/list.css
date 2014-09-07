@@ -52,6 +52,11 @@
 .factoryLayout-prodLineListItem-header > td:last-child {
   width: auto;
 }
+.factoryLayout-quantitiesDone-container {
+  display: none;
+  background: #fff;
+  border-top: 1px solid #999;
+}
 .factoryLayout-prodLineListItem-prop {
   margin-top: 2px;
   padding: 0 10px;
@@ -70,6 +75,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: bold;
+}
+.factoryLayout-prodLineListItem-prop.is-clickable {
+  cursor: pointer;
+}
+.factoryLayout-prodLineListItem-prop.is-clickable > em {
+  color: #428bca;
+}
+.factoryLayout-prodLineListItem-prop.is-clickable:hover > em {
+  color: #2a6496;
 }
 .factoryLayout-prodLineList > .is-offline {
   opacity: .5;

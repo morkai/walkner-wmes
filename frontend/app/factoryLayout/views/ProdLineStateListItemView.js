@@ -11,7 +11,8 @@ define([
   'app/core/View',
   'app/core/templates/userInfo',
   'app/factoryLayout/templates/listItem',
-  'app/prodShifts/views/ProdShiftTimelineView'
+  'app/prodShifts/views/ProdShiftTimelineView',
+  'app/prodShifts/views/QuantitiesDoneChartView'
 ], function(
   _,
   t,
@@ -21,7 +22,8 @@ define([
   View,
   renderUserInfo,
   template,
-  ProdShiftTimelineView
+  ProdShiftTimelineView,
+  QuantitiesDoneChartView
 ) {
   'use strict';
 
@@ -29,11 +31,22 @@ define([
 
     template: template,
 
+    events: {
+      'click .factoryLayout-quantitiesDone-prop': function(e)
+      {
+        if (e.currentTarget.classList.contains('is-clickable'))
+        {
+          this.toggleQuantitiesDoneChart();
+        }
+      }
+    },
+
     initialize: function()
     {
       this.renderTimeline = _.debounce(this.renderTimeline.bind(this), 1);
 
       this.timelineView = null;
+      this.quantitiesDoneChartView = null;
 
       this.listenTo(this.model, 'change:online', this.onOnlineChanged);
       this.listenTo(this.model, 'change:state', this.onStateChanged);
@@ -51,6 +64,7 @@ define([
     destroy: function()
     {
       this.timelineView = null;
+      this.quantitiesDoneChartView = null;
     },
 
     serialize: function()
@@ -164,15 +178,28 @@ define([
         editable: false,
         resizable: false,
         itemHeight: 40,
-        calcWidth: function()
-        {
-          return window.innerWidth - 20;
-        }
+        calcWidth: this.calcWidth
       });
 
       this.setView('.factoryLayout-timeline-container', this.timelineView).render();
 
+      if (this.model.get('prodShift'))
+      {
+        this.$('.factoryLayout-quantitiesDone-prop').addClass('is-clickable');
+      }
+
+      if (this.quantitiesDoneChartView)
+      {
+        this.quantitiesDoneChartView = null;
+        this.toggleQuantitiesDoneChart();
+      }
+
       this.toggleVisibility();
+    },
+
+    calcWidth: function()
+    {
+      return window.innerWidth - 20;
     },
 
     renderTimeline: function()
@@ -186,6 +213,55 @@ define([
     resize: function()
     {
       this.timelineView.onWindowResize();
+
+      if (this.quantitiesDoneChartView)
+      {
+        this.quantitiesDoneChartView.$el.css('width', this.calcWidth() + 'px');
+        this.quantitiesDoneChartView.chart.reflow();
+      }
+    },
+
+    toggleQuantitiesDoneChart: function()
+    {
+      if (this.quantitiesDoneChartView === null)
+      {
+        this.renderQuantitiesDoneChart();
+      }
+      else
+      {
+        this.destroyQuantitiesDoneChart();
+      }
+    },
+
+    renderQuantitiesDoneChart: function()
+    {
+      var prodShift = this.model.get('prodShift');
+
+      if (!prodShift)
+      {
+        return;
+      }
+
+      this.quantitiesDoneChartView = new QuantitiesDoneChartView({
+        model: this.model.get('prodShift'),
+        height: 220,
+        reflow: false,
+        showTitle: false,
+        showLegend: false
+      });
+
+      this.setView('.factoryLayout-quantitiesDone-container', this.quantitiesDoneChartView).render();
+      this.quantitiesDoneChartView.$el.parent().show();
+    },
+
+    destroyQuantitiesDoneChart: function()
+    {
+      if (this.quantitiesDoneChartView !== null)
+      {
+        this.quantitiesDoneChartView.$el.parent().hide();
+        this.quantitiesDoneChartView.remove();
+        this.quantitiesDoneChartView = null;
+      }
     },
 
     toggleVisibility: function()
@@ -219,6 +295,15 @@ define([
       {
         this.$('[role=' + type + ']').html(this.serializePersonnel(type));
       }, this);
+
+      var hasProdShift = !!this.model.get('prodShift');
+
+      if (!hasProdShift)
+      {
+        this.destroyQuantitiesDoneChart();
+      }
+
+      this.$('.factoryLayout-quantitiesDone-prop').toggleClass('is-clickable', hasProdShift);
     },
 
     onProdShiftOrdersChanged: function(options)

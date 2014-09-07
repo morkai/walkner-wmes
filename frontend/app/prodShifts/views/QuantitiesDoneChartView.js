@@ -49,9 +49,12 @@ define([
 
       this.chart = new Highcharts.Chart({
         chart: {
-          renderTo: this.el
+          renderTo: this.el,
+          height: this.options.height || 350,
+          reflow: this.options.reflow !== false,
+          spacingBottom: 0
         },
-        title: {
+        title: this.options.showTitle === false ? null : {
           text: t('prodShifts', 'charts:quantitiesDone:title'),
           style: {
             fontSize: '18px',
@@ -59,6 +62,9 @@ define([
           }
         },
         noData: {},
+        legend: {
+          enabled: this.options.showLegend !== false
+        },
         tooltip: {
           shared: true,
           valueDecimals: 0
