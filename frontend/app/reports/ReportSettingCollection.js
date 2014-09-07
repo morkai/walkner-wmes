@@ -17,7 +17,7 @@ define([
 
     model: ReportSetting,
 
-    topicPrefix: 'reports.**',
+    topicSuffix: 'reports.**',
 
     getValue: function(suffix)
     {
