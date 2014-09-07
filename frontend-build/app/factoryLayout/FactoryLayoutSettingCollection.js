@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["jquery","../settings/SettingCollection","./FactoryLayoutSetting"],function(e,t,r){return t.extend({model:r,topicSuffix:"factoryLayout.**",isBlacklisted:function(e,t){var r=this.getValue("blacklist."+e);return Array.isArray(r)&&-1!==r.indexOf(t)},getValue:function(e){var t=this.get("factoryLayout."+e);return t?t.getValue():null},update:function(t,r){if(r=this.prepareValue(t,r.trim()),void 0===r)return e.Deferred().reject().promise();var i=this.get(t);if(i){if(i.getValue()===r)return e.Deferred().resolve().promise()}else this.add({_id:t,value:null}),i=this.get(t);return i.save({value:r})},prepareValue:function(e,t){return/blacklist/.test(e)?this.prepareBlacklistValue(t):(t=parseInt(t,10),isNaN(t)?void 0:t)},prepareBlacklistValue:function(e){return"string"==typeof e?e=e.split(","):Array.isArray(e)||(e=[]),e.filter(function(e){return"string"==typeof e&&e.length})}})});

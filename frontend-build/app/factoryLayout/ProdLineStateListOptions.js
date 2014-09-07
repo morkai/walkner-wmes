@@ -1,5 +1,0 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
-
-define(["underscore","../core/Model","../data/orgUnits"],function(i,n){return n.extend({defaults:{division:null,prodLines:null},serializeToString:function(){var i="",n=this.attributes;return n.division&&(i+="&division="+encodeURIComponent(n.division)),Array.isArray(n.prodLines)&&n.prodLines.length&&(i+="&prodLines="+n.prodLines.map(encodeURIComponent)),i.substr(1)},hasDivision:function(){return null!==this.get("division")}},{fromQuery:function(i){return new this({division:i.division||null,prodLines:i.prodLines?i.prodLines.split(","):null})}})});
