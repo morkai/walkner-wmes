@@ -92,6 +92,11 @@
   stroke-width: 0;
   cursor: default;
 }
+.factoryLayout-prodLine.is-idle,
+.factoryLayout-prodLine.is-working,
+.factoryLayout-prodLine.is-downtime {
+  cursor: pointer;
+}
 .factoryLayout-prodLine.is-offline {
   opacity: 0.7;
 }

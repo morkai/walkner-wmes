@@ -77,7 +77,8 @@ define([
         this.clickInfo = {
           type: 'prodLine',
           time: e.timeStamp,
-          modelId: e.currentTarget.dataset.id
+          modelId: e.currentTarget.dataset.id,
+          button: e.button
         };
 
         return false;
@@ -87,7 +88,8 @@ define([
         this.clickInfo = {
           type: 'division',
           time: e.timeStamp,
-          modelId: e.currentTarget.dataset.id
+          modelId: e.currentTarget.dataset.id,
+          button: e.button
         };
 
         return false;
@@ -580,23 +582,66 @@ define([
 
       this.clickInfo = null;
 
+      if (clickInfo.button === 2)
+      {
+        return;
+      }
+
+      var newWindow = clickInfo.button === 1;
+
       if (clickInfo.type === 'division')
       {
+        var url = '#factoryLayout;list?orgUnitType=division&orgUnitIds=' + encodeURIComponent(clickInfo.modelId);
+
+        if (newWindow)
+        {
+          window.open(url);
+        }
+        else
+        {
+          this.broker.publish('router.navigate', {
+            url: url,
+            trigger: true,
+            replace: false
+          });
+        }
+      }
+      else if (clickInfo.type === 'prodLine')
+      {
+        this.showProdLinePreview(clickInfo.modelId, newWindow);
+      }
+    },
+
+    showProdLinePreview: function(prodLineId, newWindow)
+    {
+      var prodLineState = this.model.prodLineStates.get(prodLineId);
+
+      if (!prodLineState)
+      {
+        return;
+      }
+
+      var prodShift = prodLineState.get('prodShift');
+
+      if (!prodShift)
+      {
+        return;
+      }
+
+      var url = '#prodShifts/' + prodShift.id;
+
+      if (newWindow)
+      {
+        window.open(url);
+      }
+      else
+      {
         this.broker.publish('router.navigate', {
-          url: '/factoryLayout;list?orgUnitType=division&orgUnitIds=' + encodeURIComponent(clickInfo.modelId),
+          url: url,
           trigger: true,
           replace: false
         });
       }
-      else if (clickInfo.type === 'prodLine')
-      {
-        this.showProdLinePreview(clickInfo.modelId);
-      }
-    },
-
-    showProdLinePreview: function(prodLineId)
-    {
-
     }
 
   });
