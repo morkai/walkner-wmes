@@ -66,11 +66,9 @@ define([
       'mouseover .factoryLayout-division': function(e)
       {
         var divisionContainerEl = e.currentTarget;
+        var firstDivisionNameEl = this.el.querySelector('.factoryLayout-divisionName');
 
-        if (divisionContainerEl.parentNode.lastChild !== divisionContainerEl)
-        {
-          divisionContainerEl.parentNode.appendChild(divisionContainerEl);
-        }
+        divisionContainerEl.parentNode.insertBefore(divisionContainerEl, firstDivisionNameEl);
       },
       'mousedown .factoryLayout-prodLine': function(e)
       {
@@ -153,8 +151,14 @@ define([
 
     renderLayout: function()
     {
+      this.renderDivisionAreas();
+      this.renderDivisionNames();
+    },
+
+    renderDivisionAreas: function()
+    {
       var model = this.model;
-      var divisions = this.canvas.selectAll('.division')
+      var selection = this.canvas.selectAll('.factoryLayout-division')
         .data(model.factoryLayout.get('live'));
 
       var pathGenerator = d3.svg.line()
@@ -193,14 +197,26 @@ define([
           d3.select(this).attr('transform', 'translate(' + d.position.x + ',' + d.position.y + ')');
         });
 
-      var divisionContainerEnter = divisions.enter().insert('g')
+      var g = selection.enter().insert('g')
         .attr('class', 'factoryLayout-division')
-        .attr('transform', function(d) { return 'translate(' + d.position.x + ',' + d.position.y + ')'; })
-        .attr('fill', function(d) { return hex2rgba(d.fillColor || '#000000', 1); })
-        .attr('data-id', function(d) { return d._id; })
-        .call(this.editable ? drag : function() {});
+        .attr('transform', function(d)
+        {
+          return 'translate(' + d.position.x + ',' + d.position.y + ')';
+        })
+        .attr('fill', function(d)
+        {
+          return hex2rgba(d.fillColor || '#000000', 1);
+        })
+        .attr('data-id', function(d)
+        {
+          return d._id;
+        })
+        .call(this.editable ? drag : function()
+        {
 
-      divisionContainerEnter.append('path')
+        });
+
+      g.append('path')
         .classed('factoryLayout-division-area', true)
         .attr('d', function(d)
         {
@@ -211,7 +227,7 @@ define([
       var prodLineStates = model.prodLineStates;
       var isBlacklisted = model.settings.isBlacklisted.bind(model.settings);
 
-      divisionContainerEnter.each(function(d)
+      g.each(function(d)
       {
         d.prodLines.forEach(
           view.renderProdLinesGuide.bind(
@@ -221,7 +237,62 @@ define([
         );
       });
 
-      divisions.exit().remove();
+      selection.exit().remove();
+    },
+
+    renderDivisionNames: function()
+    {
+      var model = this.model;
+      var selection = this.canvas.selectAll('.factoryLayout-divisionName')
+        .data(model.factoryLayout.get('live'));
+
+      var g = selection.enter().insert('g')
+        .classed('factoryLayout-divisionName', true)
+        .attr('transform', function(d)
+        {
+          var x = d.position.x - (4 + d._id.length * 8);
+          var y = d.position.y - 16;
+
+          for (var i = 1, l = d.points.length - 1; i < l; ++i)
+          {
+            var prevPoint = d.points[i - 1];
+            var currentPoint = d.points[i];
+            var nextPoint = d.points[i + 1];
+
+            if (currentPoint[1] === prevPoint[1]
+              && currentPoint[1] > nextPoint[1]
+              && currentPoint[0] === nextPoint[0])
+            {
+              x += currentPoint[0];
+              y += currentPoint[1];
+
+              break;
+            }
+          }
+
+          return 'translate(' + x + ',' + y + ')';
+        });
+
+      g.append('rect')
+        .attr({
+          x: 0,
+          y: 0,
+          width: function(d)
+          {
+            return 3 + d._id.length * 8;
+          },
+          height: 14
+        });
+
+      g.append('text')
+        .attr({
+          x: 2,
+          y: 12
+        })
+        .text(function(d)
+        {
+          return d._id;
+        });
     },
 
     renderProdLinesGuide: function(d, divisionContainerEl, prodLineStates, prodLinesGuide)

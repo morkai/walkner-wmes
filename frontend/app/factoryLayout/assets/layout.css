@@ -78,6 +78,16 @@
   stroke-width: 3px;
   stroke-dasharray: 10px;
 }
+.factoryLayout-divisionName > rect {
+  fill: #000;
+  stroke: #000;
+  stroke-width: 3px;
+}
+.factoryLayout-divisionName > text {
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-weight: bold;
+  fill: #fff;
+}
 .is-panning .factoryLayout-prodLines,
 .is-dragging .factoryLayout-prodLines {
   /*display: none;*/
