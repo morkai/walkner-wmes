@@ -105,11 +105,32 @@ define([
         multiple: true,
         data: orgUnits.getAllByType(type).map(function(orgUnit)
         {
+          if (type === 'division' && orgUnit.get('type') !== 'prod')
+          {
+            return null;
+          }
+
+          var text;
+
+          if (type === 'subdivision')
+          {
+            if (orgUnit.get('type') === 'storage')
+            {
+              return null;
+            }
+
+            text = orgUnit.get('division') + ' > ' + orgUnit.getLabel();
+          }
+          else
+          {
+            text = orgUnit.getLabel();
+          }
+
           return {
             id: orgUnit.id,
-            text: (type === 'subdivision' ? (orgUnit.get('division') + ' > ') : '') + orgUnit.getLabel()
+            text: text
           };
-        })
+        }).filter(function(item) { return item !== null; })
       });
 
       var choicesEl = $input.select2('container').find('.select2-choices')[0];
