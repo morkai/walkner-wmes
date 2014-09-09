@@ -45,12 +45,23 @@
   white-space: nowrap;
 }
 .factoryLayout-prodLineListItem-header > td:first-child {
-  padding: 3px 0 0 20px;
+  padding: 3px 10px 0 20px;
   font-size: 32px;
   line-height: 1;
 }
 .factoryLayout-prodLineListItem-header > td:last-child {
   width: auto;
+}
+.is-idle .factoryLayout-prodLineListItem-prodLine,
+.is-working .factoryLayout-prodLineListItem-prodLine,
+.is-downtime .factoryLayout-prodLineListItem-prodLine {
+  cursor: pointer;
+  color: #428bca;
+}
+.is-idle .factoryLayout-prodLineListItem-prodLine:hover,
+.is-working .factoryLayout-prodLineListItem-prodLine:hover,
+.is-downtime .factoryLayout-prodLineListItem-prodLine:hover {
+  color: #2a6496;
 }
 .factoryLayout-quantitiesDone-container {
   display: none;

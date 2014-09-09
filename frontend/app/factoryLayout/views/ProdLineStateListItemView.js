@@ -38,6 +38,35 @@ define([
         {
           this.toggleQuantitiesDoneChart();
         }
+      },
+      'mouseup .factoryLayout-prodLineListItem-prodLine': function(e)
+      {
+        if (e.button === 2)
+        {
+          return;
+        }
+
+        var shift = this.serializeShift();
+
+        if (!shift.href)
+        {
+          return;
+        }
+
+        if (e.button === 1)
+        {
+          window.open(shift.href);
+        }
+        else
+        {
+          this.broker.publish('router.navigate', {
+            url: shift.href,
+            trigger: true,
+            replace: false
+          });
+        }
+
+        return false;
       }
     },
 
@@ -107,10 +136,16 @@ define([
 
       if (!prodShift)
       {
-        return '?';
+        return {
+          text: '?',
+          href: null
+        };
       }
 
-      return time.format(prodShift.get('date'), 'YYYY-MM-DD') + ', ' + t('core', 'SHIFT:' + prodShift.get('shift'));
+      return {
+        text: time.format(prodShift.get('date'), 'YYYY-MM-DD') + ', ' + t('core', 'SHIFT:' + prodShift.get('shift')),
+        href: '#prodShifts/' + prodShift.id
+      };
     },
 
     serializePersonnel: function(type)

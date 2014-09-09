@@ -1,6 +1,6 @@
 <tbody class="<%- classNames %>">
   <tr class="factoryLayout-prodLineListItem-header">
-    <td><%= prodLine %></td>
+    <td class="factoryLayout-prodLineListItem-prodLine"><%= prodLine %></td>
     <td>
       <div class="factoryLayout-prodLineListItem-prop">
         <em><%- t('core', 'ORG_UNIT:prodFlow') %></em>
@@ -10,7 +10,7 @@
     <td>
       <div class="factoryLayout-prodLineListItem-prop">
         <em><%- t('factoryLayout', 'prop:shift') %></em>
-        <span role=shift><%- shift %></span>
+        <span role=shift><%- shift.text %></span>
       </div>
     </td>
     <td>
