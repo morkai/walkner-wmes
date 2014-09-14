@@ -30,6 +30,7 @@
     "options:picker": "Pick production lines",
     "options:save": "Save display options",
     "options:saved": "Display options were saved successfully!",
+    "options:blacklisted": "Ignored",
 
     "noProdLines": "No matching production lines :(",
 

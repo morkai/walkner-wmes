@@ -15,6 +15,8 @@ define([
 ) {
   'use strict';
 
+  var STORAGE_KEY = 'ProdLineStateDisplayOptions';
+
   return Model.extend({
 
     defaults: function()
@@ -23,7 +25,8 @@ define([
         orgUnitType: null,
         orgUnitIds: null,
         statuses: ['online', 'offline'],
-        states: ['idle', 'working', 'downtime']
+        states: ['idle', 'working', 'downtime'],
+        blacklisted: false
       };
     },
 
@@ -33,6 +36,7 @@ define([
 
       return 'statuses=' + attrs.statuses
         + '&states=' + attrs.states
+        + '&blacklisted=' + (attrs.blacklisted ? '1' : '0')
         + '&orgUnitType=' + attrs.orgUnitType
         + '&orgUnitIds=' + attrs.orgUnitIds.map(encodeURIComponent);
     },
@@ -48,15 +52,10 @@ define([
 
     save: function()
     {
-      localStorage.setItem('ProdLineStateDisplayOptions', JSON.stringify(this.attributes));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.attributes));
     }
 
   }, {
-
-    readLocalStorage: function()
-    {
-
-    },
 
     fromQuery: function(query)
     {
@@ -64,10 +63,11 @@ define([
         orgUnitType: query.orgUnitType,
         orgUnitIds: query.orgUnitIds ? query.orgUnitIds.split(',') : undefined,
         statuses: query.statuses ? query.statuses.split(',') : undefined,
-        states: query.states ? query.states.split(',') : undefined
+        states: query.states ? query.states.split(',') : undefined,
+        blacklisted: query.blacklisted === undefined ? undefined : query.blacklisted === '1'
       };
 
-      var savedOptions = localStorage.getItem('ProdLineStateDisplayOptions');
+      var savedOptions = localStorage.getItem(STORAGE_KEY);
 
       if (savedOptions)
       {

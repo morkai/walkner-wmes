@@ -42,6 +42,10 @@ define([
       {
         this.model.set('states', buttonGroup.getValue(this.$id('states')));
       },
+      'change [name="blacklisted"]': function()
+      {
+        this.model.set('blacklisted', buttonGroup.getValue(this.$id('blacklisted')) === '1');
+      },
       'click #-showPicker': function()
       {
         var orgUnitPickerView = new OrgUnitPickerView({
@@ -75,29 +79,21 @@ define([
       }
     },
 
-    destroy: function()
-    {
-
-    },
-
-    beforeRender: function()
-    {
-
-    },
-
     afterRender: function()
     {
       js2form(this.el, this.serializeFormData());
 
       buttonGroup.toggle(this.$id('statuses'));
       buttonGroup.toggle(this.$id('states'));
+      buttonGroup.toggle(this.$id('blacklisted'));
     },
 
     serializeFormData: function()
     {
       return {
         statuses: this.model.get('statuses'),
-        states: this.model.get('states')
+        states: this.model.get('states'),
+        blacklisted: this.model.get('blacklisted') ? '1': '0'
       };
     }
 

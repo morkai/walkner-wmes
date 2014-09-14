@@ -13,13 +13,24 @@
     <div id="<%- idPrefix %>-states" class="btn-group filter-btn-group" data-toggle="buttons">
       <label class="btn btn-default factoryLayout-displayOptions-idle">
         <input type="checkbox" name="states[]" value="idle">
-        <i class="fa fa-cloud"></i><span><%- t('factoryLayout', 'states:idle') %></span> </label>
+        <i class="fa fa-cloud"></i><span><%- t('factoryLayout', 'states:idle') %></span>
+      </label>
       <label class="btn btn-default factoryLayout-displayOptions-working">
         <input type="checkbox" name="states[]" value="working">
-        <i class="fa fa-cog"></i><span><%- t('factoryLayout', 'states:working') %></span> </label>
+        <i class="fa fa-cog"></i><span><%- t('factoryLayout', 'states:working') %></span>
+      </label>
       <label class="btn btn-default factoryLayout-displayOptions-downtime">
         <input type="checkbox" name="states[]" value="downtime">
-        <i class="fa fa-bell"></i><span><%- t('factoryLayout', 'states:downtime') %></span> </label>
+        <i class="fa fa-bell"></i><span><%- t('factoryLayout', 'states:downtime') %></span>
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <div id="<%- idPrefix %>-blacklisted" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input type="checkbox" name="blacklisted" value="1">
+        <i class="fa fa-ban"></i><span><%- t('factoryLayout', 'options:blacklisted') %></span>
+      </label>
     </div>
   </div>
   <div class="form-group">

@@ -32,6 +32,7 @@
   "options:picker": "Wybierz linie produkcyjne",
   "options:save": "Zapisz opcje wyświetlania",
   "options:saved": "Opcje wyświetlania zapisane!",
+  "options:blacklisted": "Ignorowane",
 
   "noProdLines": "Brak pasujących linii produkcyjnych :(",
 

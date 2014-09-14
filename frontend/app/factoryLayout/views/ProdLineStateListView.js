@@ -35,7 +35,11 @@ define([
 
       this.lastWidth = null;
 
-      this.listenTo(this.displayOptions, 'change:orgUnitType change:orgUnitIds', _.debounce(this.render, 1));
+      this.listenTo(
+        this.displayOptions,
+        'change:orgUnitType change:orgUnitIds change:blacklisted',
+        _.debounce(this.render, 1)
+      );
       this.listenTo(this.model.settings, 'change', this.onSettingsChange);
 
       $('body').on('keydown', this.onKeyDown);
@@ -72,7 +76,9 @@ define([
       return this.model.prodLineStates.getByOrgUnit(
         this.displayOptions.get('orgUnitType'),
         this.displayOptions.get('orgUnitIds'),
-        this.model.settings.isBlacklisted.bind(this.model.settings)
+        this.displayOptions.get('blacklisted')
+          ? function() { return false; }
+          : this.model.settings.isBlacklisted.bind(this.model.settings)
       );
     },
 
