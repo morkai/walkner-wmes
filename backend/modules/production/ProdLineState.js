@@ -196,9 +196,9 @@ ProdLineState.prototype.onHourChanged = function(currentHour)
   this.currentHour = currentHour;
 
   this.updateMetrics();
-  this.checkIfClosed();
+  this.checkIfClosed(false);
 
-  setTimeout(this.checkIfClosed.bind(this), 10 * 60 * 1000);
+  setTimeout(this.checkIfClosed.bind(this, true), 5 * 60 * 1000);
 };
 
 ProdLineState.prototype.update = function(newData, options)
@@ -936,14 +936,25 @@ ProdLineState.prototype.updateState = function()
 
 /**
  * @private
+ * @param {boolean} ignoreState
  */
-ProdLineState.prototype.checkIfClosed = function()
+ProdLineState.prototype.checkIfClosed = function(ignoreState)
 {
-  if (!this.online
-    && this.state === 'idle'
-    && this.prodShift !== null
-    && (this.currentHour === 6 || this.currentHour === 14 || this.currentHour === 22)
-    && this.prodShift.date.getTime() !== this.getCurrentShiftTime(true))
+  if (this.online
+    || this.prodShift === null
+    || (this.currentHour !== 6 && this.currentHour !== 14 && this.currentHour !== 22))
+  {
+    return;
+  }
+
+  var oldShift = this.prodShift.date.getTime() !== this.getCurrentShiftTime(true);
+
+  if (!oldShift)
+  {
+    return;
+  }
+
+  if (ignoreState || this.state === 'idle')
   {
     this.update({prodShift: null});
   }
