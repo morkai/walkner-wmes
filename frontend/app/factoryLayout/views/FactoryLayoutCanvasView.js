@@ -65,10 +65,7 @@ define([
       },
       'mouseover .factoryLayout-division': function(e)
       {
-        var divisionContainerEl = e.currentTarget;
-        var firstDivisionNameEl = this.el.querySelector('.factoryLayout-divisionName');
-
-        divisionContainerEl.parentNode.insertBefore(divisionContainerEl, firstDivisionNameEl);
+        this.bringDivisionToTop(e.currentTarget);
       },
       'mousedown .factoryLayout-prodLine': function(e)
       {
@@ -98,10 +95,12 @@ define([
     {
       this.onKeyDown = this.onKeyDown.bind(this);
       this.onResize = _.debounce(this.onResize.bind(this), 16);
+
+      this.editable = !!this.options.editable;
+
       this.canvas = null;
       this.zoom = null;
       this.currentAction = null;
-      this.editable = false;
       this.clickInfo = null;
       this.panInfo = null;
 
@@ -109,14 +108,17 @@ define([
       $(window).on('resize', this.onResize);
       screenfull.onchange = _.debounce(this.onFullscreen.bind(this), 16);
 
-      var model = this.model;
+      if (!this.editable)
+      {
+        var model = this.model;
 
-      this.listenTo(model.prodLineStates, 'change:state', this.onStateChange);
-      this.listenTo(model.prodLineStates, 'change:online', this.onOnlineChange);
-      this.listenTo(model.prodLineStates, 'change:extended', this.onExtendedChange);
-      this.listenTo(model.prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
-      this.listenTo(model.prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
-      this.listenTo(model.settings, 'change', this.onSettingsChange);
+        this.listenTo(model.prodLineStates, 'change:state', this.onStateChange);
+        this.listenTo(model.prodLineStates, 'change:online', this.onOnlineChange);
+        this.listenTo(model.prodLineStates, 'change:extended', this.onExtendedChange);
+        this.listenTo(model.prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
+        this.listenTo(model.prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
+        this.listenTo(model.settings, 'change', this.onSettingsChange);
+      }
     },
 
     destroy: function()
@@ -133,12 +135,18 @@ define([
 
     beforeRender: function()
     {
-      this.stopListening(this.model, 'sync', this.render);
+      if (!this.editable)
+      {
+        this.stopListening(this.model, 'sync', this.render);
+      }
     },
 
     afterRender: function()
     {
-      this.listenToOnce(this.model, 'sync', this.render);
+      if (!this.editable)
+      {
+        this.listenToOnce(this.model, 'sync', this.render);
+      }
 
       this.el.classList.toggle('is-editable', this.editable);
 
@@ -152,11 +160,11 @@ define([
     renderLayout: function()
     {
       this.renderDivisionAreas();
-      this.renderDivisionNames();
     },
 
     renderDivisionAreas: function()
     {
+      var view = this;
       var model = this.model;
       var selection = this.canvas.selectAll('.factoryLayout-division')
         .data(model.factoryLayout.get('live'));
@@ -181,7 +189,7 @@ define([
         {
           d3.event.sourceEvent.stopPropagation();
 
-          this.parentNode.appendChild(this);
+          view.bringDivisionToTop(this);
 
           d3.select(this).classed('is-dragging', true);
         })
@@ -223,64 +231,57 @@ define([
           return pathGenerator(d.points);
         });
 
-      var view = this;
       var prodLineStates = model.prodLineStates;
-      var isBlacklisted = model.settings.isBlacklisted.bind(model.settings);
+      var isBlacklisted = model.settings ? model.settings.isBlacklisted.bind(model.settings) : null;
 
       g.each(function(d)
       {
+        var divisionEl = d3.select(this);
+
         d.prodLines.forEach(
           view.renderProdLinesGuide.bind(
-            view, d, d3.select(this),
-            prodLineStates.getByOrgUnit('division', [d._id], isBlacklisted)
+            view, d, divisionEl,
+            prodLineStates ? prodLineStates.getByOrgUnit('division', [d._id], isBlacklisted) : null
           )
         );
+
+        view.renderDivisionName(divisionEl, d);
       });
 
       selection.exit().remove();
     },
 
-    renderDivisionNames: function()
+    renderDivisionName: function(divisionEl, d)
     {
-      var model = this.model;
-      var selection = this.canvas.selectAll('.factoryLayout-divisionName')
-        .data(model.factoryLayout.get('live'));
+      var x = 0;
+      var y = 0;
 
-      var g = selection.enter().insert('g')
-        .classed('factoryLayout-divisionName', true)
-        .attr('transform', function(d)
+      for (var i = 1, l = d.points.length - 1; i < l; ++i)
+      {
+        var prevPoint = d.points[i - 1];
+        var currentPoint = d.points[i];
+        var nextPoint = d.points[i + 1];
+
+        if (currentPoint[1] === prevPoint[1]
+          && currentPoint[1] > nextPoint[1]
+          && currentPoint[0] === nextPoint[0])
         {
-          var x = d.position.x - (4 + d._id.length * 8);
-          var y = d.position.y - 16;
+          x = currentPoint[0] - (4 + d._id.length * 8);
+          y = currentPoint[1] - 16;
 
-          for (var i = 1, l = d.points.length - 1; i < l; ++i)
-          {
-            var prevPoint = d.points[i - 1];
-            var currentPoint = d.points[i];
-            var nextPoint = d.points[i + 1];
+          break;
+        }
+      }
 
-            if (currentPoint[1] === prevPoint[1]
-              && currentPoint[1] > nextPoint[1]
-              && currentPoint[0] === nextPoint[0])
-            {
-              x += currentPoint[0];
-              y += currentPoint[1];
-
-              break;
-            }
-          }
-
-          return 'translate(' + x + ',' + y + ')';
-        });
+      var g = divisionEl.append('g')
+        .classed('factoryLayout-divisionName', true)
+        .attr('transform', 'translate(' + x + ',' + y + ')');
 
       g.append('rect')
         .attr({
           x: 0,
           y: 0,
-          width: function(d)
-          {
-            return 3 + d._id.length * 8;
-          },
+          width: 3 + d._id.length * 8,
           height: 14
         });
 
@@ -289,10 +290,7 @@ define([
           x: 2,
           y: 12
         })
-        .text(function(d)
-        {
-          return d._id;
-        });
+        .text(d._id);
     },
 
     renderProdLinesGuide: function(d, divisionContainerEl, prodLineStates, prodLinesGuide)
@@ -302,16 +300,11 @@ define([
         transform: 'translate(' + prodLinesGuide.x + ',' + prodLinesGuide.y + ')'
       });
 
-      prodLinesContainer.append('path').attr({
-        class: 'factoryLayout-prodLines-line',
-        d: 'M-5,0 v' + prodLinesGuide.h
-      });
-
       var prodLineCount = Math.floor(prodLinesGuide.h / PROD_LINE_TOP_INTERVAL);
 
       for (var i = 0; i < prodLineCount; ++i)
       {
-        var prodLineState = prodLineStates.shift();
+        var prodLineState = prodLineStates ? prodLineStates.shift() : null;
 
         if (prodLineState === undefined)
         {
@@ -330,15 +323,18 @@ define([
         style: 'font-size: ' + PROD_LINE_TEXT_SIZE + 'px'
       });
 
-      prodLineOuterContainer.attr('data-id', prodLineState.id);
-
-      if (prodLineState.get('state') !== null)
+      if (prodLineState)
       {
-        prodLineOuterContainer.classed('is-' + prodLineState.get('state'), true);
+        prodLineOuterContainer.attr('data-id', prodLineState.id);
+
+        if (prodLineState.get('state') !== null)
+        {
+          prodLineOuterContainer.classed('is-' + prodLineState.get('state'), true);
+        }
       }
 
-      prodLineOuterContainer.classed('is-offline', !prodLineState.get('online'));
-      prodLineOuterContainer.classed('is-extended', prodLineState.get('extended'));
+      prodLineOuterContainer.classed('is-offline', prodLineState && !prodLineState.get('online'));
+      prodLineOuterContainer.classed('is-extended', prodLineState && prodLineState.get('extended'));
 
       var prodLineInnerContainer = prodLineOuterContainer.append('g').attr({
         class: 'factoryLayout-prodLine-inner'
@@ -358,7 +354,7 @@ define([
           x: PROD_LINE_TEXT_X,
           y: PROD_LINE_TEXT_Y
         })
-        .text(prodLineState.getLabel());
+        .text(prodLineState ? prodLineState.getLabel() : ('LPx ' + (i + 1)));
 
       prodLineInnerContainer.append('rect').attr({
         class: 'factoryLayout-metric-bg',
@@ -368,7 +364,9 @@ define([
         height: PROD_LINE_HEIGHT
       });
 
-      var plannedQuantityDone = this.prepareMetricValue(prodLineState.get('plannedQuantityDone'));
+      var plannedQuantityDone = this.prepareMetricValue(
+        prodLineState ? prodLineState.get('plannedQuantityDone') : 0
+      );
 
       prodLineInnerContainer.append('text')
         .attr({
@@ -387,7 +385,9 @@ define([
         height: PROD_LINE_HEIGHT
       });
 
-      var actualQuantityDone = this.prepareMetricValue(prodLineState.get('actualQuantityDone'));
+      var actualQuantityDone = this.prepareMetricValue(
+        prodLineState ? prodLineState.get('actualQuantityDone') : 0
+      );
 
       prodLineInnerContainer.append('text')
         .attr({
@@ -713,6 +713,11 @@ define([
           replace: false
         });
       }
+    },
+
+    bringDivisionToTop: function(divisionEl)
+    {
+      divisionEl.parentNode.appendChild(divisionEl);
     }
 
   });

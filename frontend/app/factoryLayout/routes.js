@@ -16,6 +16,11 @@ define([
 
   router.map('/factoryLayout', function()
   {
+    router.replace('/factoryLayout/default');
+  });
+
+  router.map('/factoryLayout/:id', function()
+  {
     viewport.loadPage(
       ['app/factoryLayout/productionState', 'app/factoryLayout/pages/FactoryLayoutPage'],
       function(productionState, FactoryLayoutPage)
@@ -27,9 +32,15 @@ define([
     );
   });
 
-  router.map('/factoryLayout/prodLines', function(req)
+  router.map('/factoryLayout/:id;edit', function(req)
   {
-    router.replace('/factoryLayout;list?' + req.queryString);
+    viewport.loadPage(
+      ['app/factoryLayout/FactoryLayout', 'app/factoryLayout/pages/FactoryLayoutEditPage'],
+      function(FactoryLayout, FactoryLayoutEditPage)
+      {
+        return new FactoryLayoutEditPage({model: new FactoryLayout({_id: req.params.id})});
+      }
+    );
   });
 
   router.map('/factoryLayout;list', function(req)

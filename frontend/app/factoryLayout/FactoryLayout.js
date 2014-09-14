@@ -11,11 +11,11 @@ define([
 
   return Model.extend({
 
-    urlRoot: '/factoryLayouts',
+    urlRoot: '/factoryLayout',
 
-    clientUrlRoot: '#factoryLayouts',
+    clientUrlRoot: '#factoryLayout',
 
-    topicPrefix: 'factoryLayouts',
+    topicPrefix: 'factoryLayout',
 
     privilegePrefix: 'FACTORY_LAYOUT',
 

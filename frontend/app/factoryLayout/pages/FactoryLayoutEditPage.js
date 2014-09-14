@@ -7,13 +7,13 @@ define([
   'app/i18n',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
-  '../views/FactoryLayoutCanvasView'
+  '../views/FactoryLayoutView'
 ], function(
   $,
   t,
   View,
   bindLoadingMessage,
-  FactoryLayoutCanvasView
+  FactoryLayoutView
 ) {
   'use strict';
 
@@ -24,29 +24,30 @@ define([
     localTopics: {
       'socket.connected': function()
       {
-        this.model.load(true);
+        this.promised(this.model.fetch({reset: true}));
       }
     },
 
     breadcrumbs: function()
     {
       return [
-        t.bound('factoryLayout', 'bc:layout')
+        {
+          label: t.bound('factoryLayout', 'bc:layout'),
+          href: this.model.genClientUrl()
+        },
+        t.bound('factoryLayout', 'bc:layout:edit')
       ];
     },
 
     actions: function()
     {
       return [{
-        label: t.bound('factoryLayout', 'pa:layout:edit'),
-        icon: 'edit',
-        privileges: 'FACTORY_LAYOUT:MANAGE',
-        href: this.model.factoryLayout.genClientUrl('edit')
-      }, {
-        label: t.bound('factoryLayout', 'pa:settings'),
-        icon: 'cogs',
-        privileges: 'FACTORY_LAYOUT:MANAGE',
-        href: '#factoryLayout;settings?tab=blacklist'
+        label: t.bound('factoryLayout', 'pa:layout:live'),
+        icon: 'save',
+        callback: function()
+        {
+          console.log(arguments, this);
+        }
       }];
     },
 
@@ -54,15 +55,12 @@ define([
     {
       this.defineModels();
       this.defineViews();
-
-      this.setView(this.canvasView);
     },
 
     destroy: function()
     {
       document.body.classList.remove('no-overflow');
 
-      this.model.unload();
       this.model = null;
     },
 
@@ -73,19 +71,19 @@ define([
 
     defineViews: function()
     {
-      this.canvasView = new FactoryLayoutCanvasView({model: this.model});
+      this.view = new FactoryLayoutView({
+
+      });
     },
 
     load: function(when)
     {
-      return when(this.model.load(false));
+      return when(this.model.fetch({reset: true}));
     },
 
     afterRender: function()
     {
       document.body.classList.add('no-overflow');
-
-      this.model.load(false);
     }
 
   });

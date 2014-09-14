@@ -1,9 +1,12 @@
 {
   "bc:layout": "Monitoring",
+  "bc:layout:edit": "Edycja układu fabryki",
   "bc:list": "Linie produkcyjne",
   "bc:settings": "Ustawienia",
 
   "pa:settings": "Zmień ustawienia",
+  "pa:layout:edit": "Edytuj układ fabryki",
+  "pa:layout:live": "Publikuj",
 
   "prop:master": "Mistrz",
   "prop:leader": "Lider",

@@ -68,13 +68,10 @@
   stroke-width: 3px;
 }
 .is-editable .factoryLayout-division:hover .factoryLayout-division-area {
-  stroke: #fa0;
-  stroke-width: 3px;
-  stroke-dasharray: 10px;
+
 }
 .is-editable .factoryLayout-division.is-dragging:hover .factoryLayout-division-area {
   cursor: move;
-  stroke: #0af!important;
   stroke-width: 3px;
   stroke-dasharray: 10px;
 }
@@ -91,11 +88,6 @@
 .is-panning .factoryLayout-prodLines,
 .is-dragging .factoryLayout-prodLines {
   /*display: none;*/
-}
-.is-editable .factoryLayout-prodLines-line {
-  stroke: #888;
-  stroke-width: 1px;
-  stroke-dasharray: 5px;
 }
 .factoryLayout-prodLine {
   font-family: Consolas, "Lucida Console", Monaco, monospace;
@@ -122,6 +114,10 @@
 .factoryLayout-prodLine:hover .factoryLayout-prodLine-bg,
 .factoryLayout-prodLine:hover .factoryLayout-metric-bg {
   stroke-width: 3px;
+}
+.is-editable .factoryLayout-prodLine:hover .factoryLayout-prodLine-bg,
+.is-editable .factoryLayout-prodLine:hover .factoryLayout-metric-bg {
+  stroke-width: 1px;
 }
 .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg);
