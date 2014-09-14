@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["jquery","app/i18n","app/core/View","app/core/util/bindLoadingMessage","../views/FactoryLayoutView"],function(e,o,t,n,i){return t.extend({layoutName:"page",localTopics:{"socket.connected":function(){this.promised(this.model.fetch({reset:!0}))}},breadcrumbs:function(){return[{label:o.bound("factoryLayout","bc:layout"),href:this.model.genClientUrl()},o.bound("factoryLayout","bc:layout:edit")]},actions:function(){return[{label:o.bound("factoryLayout","pa:layout:live"),icon:"save",callback:function(){}}]},initialize:function(){this.defineModels(),this.defineViews()},destroy:function(){document.body.classList.remove("no-overflow"),this.model=null},defineModels:function(){this.model=n(this.model,this)},defineViews:function(){this.view=new i({})},load:function(e){return e(this.model.fetch({reset:!0}))},afterRender:function(){document.body.classList.add("no-overflow")}})});
