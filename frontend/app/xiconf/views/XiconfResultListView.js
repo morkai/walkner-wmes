@@ -18,7 +18,7 @@ define([
     },
 
     events: {
-      'click tr': function(e)
+      'click tr[data-id]': function(e)
       {
         var url = this.collection.get(e.currentTarget.dataset.id).genClientUrl();
 
