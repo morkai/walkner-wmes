@@ -46,7 +46,12 @@ define([
 
     getLabel: function()
     {
-      return this.id.substr(0, 10).toUpperCase().replace(/_$/, '').replace(/_/g, ' ');
+      return this.getProdLineId().substr(0, 10).toUpperCase().replace(/_$/, '').replace(/_/g, ' ');
+    },
+
+    getProdLineId: function()
+    {
+      return this.attributes.prodShift === null ? this.id : this.attributes.prodShift.get('prodLine');
     },
 
     update: function(data)

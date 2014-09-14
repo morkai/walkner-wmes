@@ -58,6 +58,8 @@ define([
 
     initialize: function()
     {
+      this.historyDataReq = null;
+
       this.defineModels();
       this.defineViews();
       this.defineBindings();
@@ -68,6 +70,8 @@ define([
 
     destroy: function()
     {
+      this.historyDataReq = null;
+
       this.model.unload();
       this.model = null;
     },
@@ -96,6 +100,13 @@ define([
 
     load: function(when)
     {
+      if (this.displayOptions.isHistoryData())
+      {
+        this.model.historyData.url = '/production/history?' + this.displayOptions.serializeToString();
+
+        return when(this.model.load(false), this.model.historyData.fetch({reset: true}));
+      }
+
       return when(this.model.load(false));
     },
 
@@ -107,10 +118,40 @@ define([
     onDisplayOptionsChange: function()
     {
       this.broker.publish('router.navigate', {
-        url: '/factoryLayout;list?' + this.displayOptions.serializeToString()
+        url: '/factoryLayout;list?' + this.displayOptions.serializeToString(),
+        trigger: false,
+        replace: true
       });
-    }
 
+      if (this.displayOptions.haveHistoryOptionsChanged())
+      {
+        this.toggleHistoryData();
+      }
+    },
+
+    toggleHistoryData: function()
+    {
+      this.model.historyData.reset([]);
+
+      this.displayOptionsView.toggleHistoryData();
+      this.listView.render();
+
+      if (this.historyDataReq !== null)
+      {
+        this.historyDataReq.abort();
+        this.historyDataReq = null;
+      }
+
+      if (this.displayOptions.isHistoryData())
+      {
+        this.model.historyData.url = '/production/history?' + this.displayOptions.serializeToString();
+
+        var page = this;
+
+        this.historyDataReq = this.promised(this.model.historyData.fetch({reset: true}));
+        this.historyDataReq.always(function() { page.historyDataReq = null; });
+      }
+    }
 
   });
 });

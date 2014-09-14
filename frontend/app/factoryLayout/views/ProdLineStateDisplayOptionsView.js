@@ -7,6 +7,7 @@ define([
   'underscore',
   'js2form',
   'app/i18n',
+  'app/time',
   'app/viewport',
   'app/core/View',
   'app/core/util/buttonGroup',
@@ -17,6 +18,7 @@ define([
   _,
   js2form,
   t,
+  time,
   viewport,
   View,
   buttonGroup,
@@ -33,6 +35,8 @@ define([
       'submit': function(e)
       {
         e.preventDefault();
+
+        this.loadHistory();
       },
       'change [name="statuses[]"]': function()
       {
@@ -76,6 +80,20 @@ define([
           time: 1000,
           text: t('factoryLayout', 'options:saved')
         });
+      },
+      'click #-resetHistory': function()
+      {
+        this.$id('from').val('');
+        this.$id('to').val('');
+        this.$id('shifts').find('input').prop('checked', true);
+
+        buttonGroup.toggle(this.$id('shifts'));
+
+        this.model.set({
+          from: null,
+          to: null,
+          shifts: ['1', '2', '3']
+        });
       }
     },
 
@@ -86,15 +104,89 @@ define([
       buttonGroup.toggle(this.$id('statuses'));
       buttonGroup.toggle(this.$id('states'));
       buttonGroup.toggle(this.$id('blacklisted'));
+      buttonGroup.toggle(this.$id('shifts'));
+
+      this.toggleHistoryData();
     },
 
     serializeFormData: function()
     {
+      var from = this.model.get('from');
+      var to = this.model.get('to');
+
       return {
         statuses: this.model.get('statuses'),
         states: this.model.get('states'),
-        blacklisted: this.model.get('blacklisted') ? '1': '0'
+        blacklisted: this.model.get('blacklisted') ? '1': '0',
+        from: _.isNumber(from) ? time.format(from, 'YYYY-MM-DD') : '',
+        to: _.isNumber(to) ? time.format(to, 'YYYY-MM-DD') : '',
+        shifts: this.model.get('shifts')
       };
+    },
+
+    loadHistory: function()
+    {
+      var $from = this.$id('from');
+      var $to = this.$id('to');
+      var $shifts = this.$id('shifts');
+
+      var fromMoment = time.getMoment($from.val());
+      var toMoment = time.getMoment($to.val());
+
+      if (!fromMoment.isValid() || !toMoment.isValid())
+      {
+        return;
+      }
+
+      if (fromMoment.valueOf() > toMoment.valueOf())
+      {
+        var moment = fromMoment;
+
+        fromMoment = toMoment;
+        toMoment = moment;
+      }
+
+      if (toMoment.valueOf() === fromMoment.valueOf())
+      {
+        toMoment.add('days', 1);
+      }
+      else if (toMoment.valueOf() - fromMoment.valueOf() > (7 * 24 * 3600 * 1000))
+      {
+        return viewport.msg.show({
+          type: 'warning',
+          time: 2500,
+          text: t('factoryLayout', 'msg:historyDataRange')
+        });
+      }
+
+      $from.val(fromMoment.format('YYYY-MM-DD'));
+      $to.val(toMoment.format('YYYY-MM-DD'));
+
+      var shifts = buttonGroup.getValue($shifts);
+
+      if (shifts.length === 0)
+      {
+        shifts = ['1', '2' , '3'];
+
+        $shifts.find('input').prop('checked', true);
+        buttonGroup.toggle($shifts);
+      }
+
+      this.model.set({
+        from: fromMoment.valueOf(),
+        to: toMoment.valueOf(),
+        shifts: shifts
+      });
+    },
+
+    toggleHistoryData: function()
+    {
+      var disabled = this.model.isHistoryData();
+
+      this.$id('statuses').find('.btn').toggleClass('disabled', disabled);
+      this.$id('states').find('.btn').toggleClass('disabled', disabled);
+      this.$id('blacklisted').find('.btn').toggleClass('disabled', disabled);
+      this.$id('save').toggleClass('disabled', disabled);
     }
 
   });

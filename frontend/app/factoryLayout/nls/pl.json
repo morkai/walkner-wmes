@@ -33,8 +33,13 @@
   "options:save": "Zapisz opcje wyświetlania",
   "options:saved": "Opcje wyświetlania zapisane!",
   "options:blacklisted": "Ignorowane",
+  "options:loadHistory": "Pokaż historię",
+  "options:resetHistory": "Pokaż aktualne dane",
 
   "noProdLines": "Brak pasujących linii produkcyjnych :(",
+  "loadingHistoryData": "Ładowanie danych...",
+
+  "msg:historyDataRange": "Nie można pobrać danych z więcej niż siedmiu dni na raz :(",
 
   "picker:title": "Wybieranie linii produkcyjnych",
   "picker:submit": "Wybierz",

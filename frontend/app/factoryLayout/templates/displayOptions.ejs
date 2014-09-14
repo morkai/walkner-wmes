@@ -39,4 +39,24 @@
   <div class="form-group">
     <button id="<%- idPrefix %>-save" type="button" class="btn btn-primary"><i class="fa fa-save"></i><span><%- t('factoryLayout', 'options:save') %></span></button>
   </div>
+  <hr>
+  <div class="form-group factoryLayout-displayOptions-history">
+    <label><input id="<%- idPrefix %>-from" class="form-control" type="date" name="from" required placeholder="YYYY-MM-DD"></label>
+    <label>- <input id="<%- idPrefix %>-to" class="form-control" type="date" name="to" required placeholder="YYYY-MM-DD"></label>
+    <div id="<%- idPrefix %>-shifts" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input type="checkbox" name="shifts[]" value="1"> <%- t('core', 'SHIFT:1') %>
+      </label>
+      <label class="btn btn-default factoryLayout-displayOptions-working">
+        <input type="checkbox" name="shifts[]" value="2"> <%- t('core', 'SHIFT:2') %>
+      </label>
+      <label class="btn btn-default factoryLayout-displayOptions-downtime">
+        <input type="checkbox" name="shifts[]" value="3"> <%- t('core', 'SHIFT:3') %>
+      </label>
+    </div>
+    <div class="btn-group">
+      <button id="<%- idPrefix %>-loadHistory" type="submit" class="btn btn-primary"><i class="fa fa-calendar"></i><span><%- t('factoryLayout', 'options:loadHistory') %></span></button>
+      <button id="<%- idPrefix %>-resetHistory" type="button" class="btn btn-danger" title="<%- t('factoryLayout', 'options:resetHistory') %>"><i class="fa fa-times"></i></button>
+    </div>
+  </div>
 </form>

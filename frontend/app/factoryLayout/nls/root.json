@@ -31,8 +31,13 @@
     "options:save": "Save display options",
     "options:saved": "Display options were saved successfully!",
     "options:blacklisted": "Ignored",
+    "options:loadHistory": "Show history",
+    "options:resetHistory": "Show current data",
 
     "noProdLines": "No matching production lines :(",
+    "loadingHistoryData": "Loading data...",
+
+    "msg:historyDataRange": "Cannot load more than seven days of data at once :(",
 
     "picker:title": "Production line picker",
     "picker:submit": "Pick",

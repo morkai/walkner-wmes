@@ -41,6 +41,9 @@ define([
         _.debounce(this.render, 1)
       );
       this.listenTo(this.model.settings, 'change', this.onSettingsChange);
+      this.listenTo(this.model.historyData, 'request', this.onHistoryDataRequest);
+      this.listenTo(this.model.historyData, 'sync', this.onHistoryDataSync);
+      this.listenTo(this.model.historyData, 'error', this.onHistoryDataError);
 
       $('body').on('keydown', this.onKeyDown);
       $(window).on('resize', this.onResize);
@@ -54,19 +57,37 @@ define([
 
     beforeRender: function()
     {
-      this.stopListening(this.model.prodLineStates, 'reset', this.render);
-      this.stopListening(this.model.prodLineStates, 'change:online change:state', this.toggleIsEmptyAsync);
-      this.stopListening(this.displayOptions, 'change:statuses change:states', this.toggleIsEmptyAsync);
+      if (this.displayOptions.isHistoryData())
+      {
+        this.stopListening(this.model.historyData, 'reset', this.render);
+      }
+      else
+      {
+        this.stopListening(this.model.prodLineStates, 'reset', this.render);
+        this.stopListening(this.model.prodLineStates, 'change:online change:state', this.toggleIsEmptyAsync);
+        this.stopListening(this.displayOptions, 'change:statuses change:states', this.toggleIsEmptyAsync);
+      }
     },
 
     afterRender: function()
     {
-      this.listenToOnce(this.model.prodLineStates, 'reset', this.render);
+      var isHistoryData = this.displayOptions.isHistoryData();
 
-      this.getProdLineStates().forEach(this.renderProdLineState, this);
+      if (isHistoryData)
+      {
+        this.listenToOnce(this.model.historyData, 'reset', this.render);
 
-      this.listenTo(this.model.prodLineStates, 'change:online change:state', this.toggleIsEmptyAsync);
-      this.listenTo(this.displayOptions, 'change:statuses change:states', this.toggleIsEmptyAsync);
+        this.model.historyData.forEach(this.renderProdLineState, this);
+      }
+      else
+      {
+        this.listenToOnce(this.model.prodLineStates, 'reset', this.render);
+
+        this.getProdLineStates().forEach(this.renderProdLineState, this);
+
+        this.listenTo(this.model.prodLineStates, 'change:online change:state', this.toggleIsEmptyAsync);
+        this.listenTo(this.displayOptions, 'change:statuses change:states', this.toggleIsEmptyAsync);
+      }
 
       this.toggleIsEmpty();
     },
@@ -119,6 +140,21 @@ define([
       {
         this.render();
       }
+    },
+
+    onHistoryDataRequest: function()
+    {
+      this.$el.addClass('is-loading');
+    },
+
+    onHistoryDataSync: function()
+    {
+      this.$el.removeClass('is-loading');
+    },
+
+    onHistoryDataError: function()
+    {
+      this.$el.removeClass('is-loading');
     },
 
     toggleIsEmpty: function()

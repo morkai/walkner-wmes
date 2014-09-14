@@ -36,6 +36,7 @@ define([
   productionState.settings = new FactoryLayoutSettingCollection();
   productionState.factoryLayout = new FactoryLayout();
   productionState.prodLineStates = new ProdLineStateCollection();
+  productionState.historyData = new ProdLineStateCollection();
 
   productionState.parse = function(data)
   {

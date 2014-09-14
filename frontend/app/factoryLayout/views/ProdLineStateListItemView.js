@@ -110,7 +110,7 @@ define([
         classNames.push('is-' + this.model.get('state'));
       }
 
-      var workCenter = orgUnits.getParent(orgUnits.getByTypeAndId('prodLine', this.model.id));
+      var workCenter = orgUnits.getParent(orgUnits.getByTypeAndId('prodLine', this.model.getProdLineId()));
       var prodFlow = workCenter ? orgUnits.getParent(workCenter) : null;
       var order = this.serializeOrder();
       var downtime = this.serializeDowntime();
@@ -218,10 +218,14 @@ define([
 
       this.setView('.factoryLayout-timeline-container', this.timelineView).render();
 
-      if (this.model.get('prodShift'))
+      var hasProdShift = !!this.model.get('prodShift');
+
+      if (hasProdShift)
       {
         this.$('.factoryLayout-quantitiesDone-prop').addClass('is-clickable');
       }
+
+      this.$el.toggleClass('has-prodShift', hasProdShift);
 
       if (this.quantitiesDoneChartView)
       {

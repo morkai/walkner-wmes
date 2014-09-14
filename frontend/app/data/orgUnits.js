@@ -233,6 +233,11 @@ define([
     },
     getParent: function(childOrgUnit)
     {
+      if (!childOrgUnit)
+      {
+        return null;
+      }
+
       var childOrgUnitType = this.getType(childOrgUnit);
       var parentOrgUnitType = CHILD_TO_PARENT_MAP[childOrgUnitType];
       var parentOrgUnitId = childOrgUnit.get(parentOrgUnitType);
