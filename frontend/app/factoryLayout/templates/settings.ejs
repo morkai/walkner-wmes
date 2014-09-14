@@ -2,6 +2,7 @@
   <div class="list-group">
     <% [
       'blacklist',
+      'divisionColors',
       'other'
     ].forEach(function(tab) { %>
     <a class="list-group-item" href="#reports;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('factoryLayout', 'settings:tab:' + tab) %></a>
@@ -9,6 +10,7 @@
   </div>
   <div class="panel panel-primary">
     <% include settings/blacklist.ejs %>
+    <% include settings/divisionColors.ejs %>
     <% include settings/other.ejs %>
   </div>
 </form>

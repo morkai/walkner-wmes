@@ -37,6 +37,7 @@
     "picker:submit": "Pick",
 
     "settings:tab:blacklist": "Ignored org units",
+    "settings:tab:divisionColors": "Division colors",
     "settings:tab:other": "Other",
     "settings:extendedDowntimeDelay": "Extended downtime [min]"
   },

@@ -1,0 +1,10 @@
+<div class="panel-body" data-tab="divisionColors">
+  <% divisions.forEach(function(division) { %>
+  <%- renderColorPicker({
+    idPrefix: idPrefix,
+    property: division.property,
+    label: division.label,
+    value: division.color
+  }) %>
+  <% }) %>
+</div>

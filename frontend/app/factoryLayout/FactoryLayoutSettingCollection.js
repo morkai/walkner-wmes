@@ -33,6 +33,29 @@ define([
       return setting ? setting.getValue() : null;
     },
 
+    getColor: function(divisionId, opacity)
+    {
+      var hex = this.getValue(divisionId + '.color') || '#FFFFFF';
+
+      if (!opacity)
+      {
+        return hex;
+      }
+
+      var matches = hex.match(/^#(.{2})(.{2})(.{2})$/);
+
+      if (!matches)
+      {
+        return hex;
+      }
+
+      return 'rgba('
+        + parseInt(matches[1], 16) + ','
+        + parseInt(matches[2], 16) + ','
+        + parseInt(matches[3], 16) + ','
+        + opacity + ')';
+    },
+
     update: function(id, newValue)
     {
       newValue = this.prepareValue(id, newValue.trim());
@@ -71,6 +94,11 @@ define([
         return this.prepareBlacklistValue(newValue);
       }
 
+      if (/color/i.test(id))
+      {
+        return this.prepareColorValue(newValue);
+      }
+
       newValue = parseInt(newValue, 10);
 
       return isNaN(newValue) ? undefined : newValue;
@@ -91,6 +119,18 @@ define([
       {
         return typeof item === 'string' && item.length;
       });
+    },
+
+    prepareColorValue: function(value)
+    {
+      value = value.toLowerCase();
+
+      if (/^#[a-f0-9]{6}$/.test(value))
+      {
+        return value;
+      }
+
+      return undefined;
     }
 
   });

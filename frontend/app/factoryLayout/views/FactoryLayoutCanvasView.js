@@ -213,6 +213,11 @@ define([
         })
         .attr('fill', function(d)
         {
+          if (model.settings)
+          {
+            return model.settings.getColor(d._id);
+          }
+
           return hex2rgba(d.fillColor || '#000000', 1);
         })
         .attr('data-id', function(d)
@@ -604,13 +609,17 @@ define([
 
     onSettingsChange: function(setting)
     {
-      if (!/blacklist/.test(setting.id))
+      if (/blacklist/.test(setting.id))
       {
-        return;
+        this.canvas.selectAll('.factoryLayout-division').remove();
+        this.renderLayout();
       }
+      else if (/color/.test(setting.id))
+      {
+        var divisionId = setting.id.split('.')[1];
 
-      this.canvas.selectAll('.division').remove();
-      this.renderLayout();
+        this.canvas.select('.factoryLayout-division[data-id="' + divisionId + '"]').attr('fill', setting.getValue());
+      }
     },
 
     updateMetricValue: function(prodLineState, metricName)

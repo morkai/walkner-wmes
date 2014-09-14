@@ -6,11 +6,14 @@ define([
   'js2form',
   'app/core/View',
   'app/data/orgUnits',
-  'app/factoryLayout/templates/settings'
+  'app/core/templates/colorPicker',
+  'app/factoryLayout/templates/settings',
+  'bootstrap-colorpicker'
 ], function(
   js2form,
   View,
   orgUnits,
+  colorPickerTemplate,
   template
 ) {
   'use strict';
@@ -38,6 +41,13 @@ define([
         this.changeTab(tab);
 
         return false;
+      },
+      'change .colorpicker-component > .form-control': function(e)
+      {
+        if (e.originalEvent)
+        {
+          this.$(e.target).closest('.colorpicker-component').colorpicker('setValue', e.target.value);
+        }
       },
       'keyup .form-control': function(e)
       {
@@ -72,17 +82,34 @@ define([
     destroy: function()
     {
       this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
+      this.$('.colorpicker-component').colorpicker('destroy');
     },
 
     serialize: function()
     {
+      var settings = this.settings;
+
       return {
-        idPrefix: this.idPrefix
+        idPrefix: this.idPrefix,
+        renderColorPicker: colorPickerTemplate,
+        divisions: orgUnits.getAllByType('division').map(function(division)
+        {
+          var property = 'factoryLayout.' + division.id + '.color';
+          var setting = settings.get(property);
+
+          return {
+            property: property,
+            label: division.getLabel(),
+            color: setting ? setting.get('value') : '#FFFFFF'
+          };
+        })
       };
     },
 
     afterRender: function()
     {
+      this.$('.colorpicker-component').colorpicker();
+
       var formData = {};
 
       this.settings.forEach(function(setting)
@@ -148,6 +175,13 @@ define([
       var $el = this.$('.form-control[name="' + setting.id + '"]');
 
       $el.val(setting.get('value') || '');
+
+      var $parent = $el.parent();
+
+      if ($parent.hasClass('colorpicker-component'))
+      {
+        $parent.colorpicker('setValue', setting.get('value'));
+      }
     },
 
     scheduleUpdateSetting: function(el, delay)
