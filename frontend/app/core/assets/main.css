@@ -146,7 +146,7 @@ kbd {
   display: inline-block;
   line-height: 1;
   font-weight: bold;
-  font-size: 38.5px;
+  font-size: 34px;
 }
 .page-breadcrumbs li:after {
   content: "\0000a0\\\0000a0";
@@ -158,7 +158,7 @@ kbd {
   display: inline-block;
   float: right;
   list-style: none;
-  margin: 4.5px 0 0 0;
+  margin: 0 0 0 0;
 }
 .page-actions > li {
   display: inline-block;

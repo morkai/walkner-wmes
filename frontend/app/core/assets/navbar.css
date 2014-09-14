@@ -53,3 +53,27 @@
 .navbar-feedback:active {
   text-shadow: 1px 1px 3px #333;
 }
+@media (min-width: 728px) {
+  .navbar {
+    min-height: initial;
+  }
+  .navbar-default {
+    background: linear-gradient(to bottom, #f8f8f8 70%, #f0f0f0);
+  }
+  .navbar-brand {
+    padding: 9px 14px 7px 14px;
+  }
+  .navbar-nav > li > a {
+    padding: 7px 10px;
+  }
+  .navbar-default .navbar-nav > li > a {
+    color: #333;
+  }
+  .navbar-default .navbar-nav > li > a:hover,
+  .navbar-default .navbar-nav > li > a:focus,
+  .navbar-default .navbar-nav > .open > a,
+  .navbar-default .navbar-nav > .open > a:hover,
+  .navbar-default .navbar-nav > .open > a:focus {
+    background: linear-gradient(to bottom, #e8e8e8 70%, #e0e0e0);
+  }
+}
