@@ -27,7 +27,8 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
 
   function filterFile(fileInfo)
   {
-    if (filePathCache[fileInfo.fileName])
+    if (fileInfo.moduleId !== xiconfModule.config.directoryWatcherId
+      || filePathCache[fileInfo.fileName])
     {
       return false;
     }
