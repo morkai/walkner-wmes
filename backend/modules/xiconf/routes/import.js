@@ -16,16 +16,14 @@ module.exports = function importRoute(app, xiconfModule, req, res, next)
   {
     res.statusCode = 400;
 
-    return next(new Error('INVALID_CONTENT_TYPE'));
+    return res.send(400, 'INVALID_CONTENT_TYPE');
   }
 
   var uuid = req.query.uuid;
 
   if (!/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/.test(uuid))
   {
-    res.statusCode = 400;
-
-    return next(new Error('INVALID_UUID'));
+    return res.send(400, 'INVALID_UUID');
   }
 
   var mongoose = app[xiconfModule.config.mongooseId];
@@ -64,12 +62,12 @@ module.exports = function importRoute(app, xiconfModule, req, res, next)
 
       if (!license)
       {
-        return res.send('UNKNOWN_LICENSE', 400);
+        return this.skip('UNKNOWN_LICENSE', 400);
       }
 
       if (srcIps.length > 1 || (srcIps.length === 1 && srcIps[0] !== srcIp))
       {
-        return res.send('DUPLICATE_LICENSE', 400);
+        return this.skip('DUPLICATE_LICENSE', 400);
       }
 
       var writeStream = fs.createWriteStream(zipFilePath);
@@ -88,10 +86,15 @@ module.exports = function importRoute(app, xiconfModule, req, res, next)
 
       fs.rename(zipFilePath, zipFilePath + '.zip', this.next());
     },
-    function(err)
+    function(err, statusCode)
     {
       if (err)
       {
+        if (typeof statusCode === 'number')
+        {
+          return res.send(statusCode, err);
+        }
+
         return next(err);
       }
 
