@@ -6,9 +6,11 @@ exports.modules = [
   'mongoose',
   'events',
   'messenger/server',
-  'directoryWatcher',
+  {id: 'directoryWatcher', name: 'directoryWatcher:xiconf'},
+  {id: 'directoryWatcher', name: 'directoryWatcher:icpo'},
   'licenses',
-  'xiconf'
+  'xiconf',
+  'icpo'
 ];
 
 exports.events = {
@@ -31,7 +33,7 @@ exports.mongoose = {
   options: {
     server: {poolSize: 3}
   },
-  models: ['event', 'xiconfOrder', 'xiconfResult', 'license']
+  models: ['event', 'xiconfOrder', 'xiconfResult', 'icpoResult', 'license']
 };
 
 exports['messenger/server'] = {
@@ -41,12 +43,17 @@ exports['messenger/server'] = {
   repPort: 60031,
   broadcastTopics: [
     'events.saved',
-    'xiconf.synced'
+    'xiconf.synced',
+    'icpo.synced'
   ]
 };
 
-exports.directoryWatcher = {
-  path: __dirname + '/../data/xiconf'
+exports['directoryWatcher:xiconf'] = {
+  path: __dirname + '/../data/xiconf-input'
+};
+
+exports['directoryWatcher:icpo'] = {
+  path: __dirname + '/../data/icpo-input'
 };
 
 exports.licenses = {
@@ -54,5 +61,11 @@ exports.licenses = {
 };
 
 exports.xiconf = {
+  directoryWatcherId: 'directoryWatcher:xiconf',
   featureDbPath: __dirname + '/../data/xiconf-features'
+};
+
+exports.icpo = {
+  directoryWatcherId: 'directoryWatcher:icpo',
+  fileStoragePath: __dirname + '/../data/icpo-files'
 };

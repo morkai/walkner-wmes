@@ -1,9 +1,9 @@
 {
-  "BREADCRUMBS:browse": "Wyniki programowania",
+  "BREADCRUMBS:browse": "Wyniki Xiconf",
   "BREADCRUMBS:details": "Wynik",
 
   "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wpisu wyniku programowania nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wyniku programowania nie powiodło się :(",
 
   "PANEL:TITLE:details:order": "Szczegóły zlecenia",
   "PANEL:TITLE:details:entry": "Szczegóły programowania",

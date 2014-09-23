@@ -37,6 +37,7 @@ exports.modules = [
   'reports',
   'feedback',
   'xiconf',
+  'icpo',
   'licenses',
   'factoryLayout',
   {id: 'messenger/client', name: 'messenger/client:importer'},
@@ -133,7 +134,7 @@ exports.mongoose = {
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
     'feedback',
     'license', 'licensePing',
-    'xiconfOrder', 'xiconfResult',
+    'xiconfOrder', 'xiconfResult', 'icpoResult',
     'factoryLayout'
   ]
 };
@@ -166,7 +167,7 @@ exports.user = {
     'PROD_DATA:VIEW', 'PROD_DATA:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
     'REPORTS:VIEW', 'REPORTS:MANAGE',
-    'XICONF:VIEW', 'XICONF:MANAGE',
+    'XICONF:VIEW', 'XICONF:MANAGE', 'ICPO:VIEW', 'ICPO:MANAGE',
     'FACTORY_LAYOUT:MANAGE'
   ]
 };
@@ -219,6 +220,11 @@ exports.reports = {
 };
 
 exports.xiconf = {
-  zipStoragePath: __dirname + '/../data/xiconf',
+  zipStoragePath: __dirname + '/../data/xiconf-input',
   featureDbPath: __dirname + '/../data/xiconf-features'
+};
+
+exports.icpo = {
+  zipStoragePath: __dirname + '/../data/icpo-input',
+  fileStoragePath: __dirname + '/../data/icpo-files'
 };

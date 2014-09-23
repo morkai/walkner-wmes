@@ -1,0 +1,45 @@
+<form class="well filter-form icpo-filter">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
+    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="datetime-local" placeholder="YYYY-MM-DD HH:mm">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
+    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="datetime-local" placeholder="YYYY-MM-DD HH:mm">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-srcId"><%- t('icpo', 'PROPERTY:srcId') %></label>
+    <input id="<%- idPrefix %>-srcId" name="srcId" type="text" placeholder="<%- t('icpo', 'filter:placeholder:srcId') %>">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-serviceTag"><%- t('icpo', 'PROPERTY:serviceTag') %></label>
+    <input id="<%- idPrefix %>-serviceTag" class="form-control" name="serviceTag" type="text" maxlength="16" pattern="^P000[0-9]{12}$">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-driver"><%- t('icpo', 'PROPERTY:driver') %></label>
+    <input id="<%- idPrefix %>-driver" class="form-control" name="driver" type="text" maxlength="12" pattern="^[0-9]{12}$">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-gprs"><%- t('icpo', 'PROPERTY:gprs') %></label>
+    <input id="<%- idPrefix %>-gprs" class="form-control" name="gprs" type="text" maxlength="12" pattern="^[0-9]{12}$">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-led"><%- t('icpo', 'PROPERTY:led') %></label>
+    <input id="<%- idPrefix %>-led" class="form-control" name="led" type="text" maxlength="30">
+  </div>
+  <div class="form-group">
+    <label><%- t('icpo', 'PROPERTY:result') %></label>
+    <div class="btn-group filter-btn-group icpo-filter-result" data-toggle="buttons">
+      <label class="btn btn-default icpo-filter-success">
+        <input type="checkbox" name="result[]" value="success"> <%- t('icpo', 'filter:result:success') %>
+      </label>
+      <label class="btn btn-default icpo-filter-failure">
+        <input type="checkbox" name="result[]" value="failure"> <%- t('icpo', 'filter:result:failure') %>
+      </label>
+    </div>
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('icpo', 'filter:submit') %></span></button>
+  </div>
+</form>

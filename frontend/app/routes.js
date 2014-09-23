@@ -34,6 +34,7 @@ define([
   './vis/routes',
   './workCenters/routes',
   './xiconf/routes',
+  './icpo/routes',
   './purchaseOrders/routes',
   './factoryLayout/routes'
 ], function()

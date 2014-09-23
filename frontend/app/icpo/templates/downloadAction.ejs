@@ -1,0 +1,10 @@
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-download"></i><span><%- t('icpo', 'PAGE_ACTION:download') %></span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu pull-right">
+    <% Object.keys(files).forEach(function(type) { %>
+    <li class="<%- files[type] ? '' : 'disabled' %>"><a <%- files[type] ? ('href="' + files[type] + '"') : '' %>><%- t('icpo', 'PAGE_ACTION:download:' + type) %></a></li>
+    <% }) %>
+  </ul>
+</div>
