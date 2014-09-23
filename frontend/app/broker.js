@@ -17,11 +17,6 @@ function(
 
   broker.on('message', function(topic, message)
   {
-    if (topic === 'controller.tagValuesChanged')
-    {
-      return;
-    }
-
     if (typeof message === 'undefined')
     {
       console.log('[%s]', topic);
