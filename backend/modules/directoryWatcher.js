@@ -94,6 +94,7 @@ exports.start = function startDirectoryWatcherModule(app, module)
   function createFileInfo(fileName)
   {
     var fileInfo = {
+      moduleId: module.id,
       timestamp: -1,
       fileName: fileName,
       filePath: path.resolve(module.config.path, fileName)
