@@ -1,6 +1,6 @@
 'use strict';
 
-exports.id = 'xiconf';
+exports.id = 'importer-results';
 
 exports.modules = [
   'mongoose',
