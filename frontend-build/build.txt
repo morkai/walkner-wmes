@@ -100,6 +100,10 @@ app/hourlyPlans/assets/main.css
 ----------------
 app/hourlyPlans/assets/main.css
 
+app/icpo/assets/main.css
+----------------
+app/icpo/assets/main.css
+
 app/mechOrders/assets/main.css
 ----------------
 app/mechOrders/assets/main.css
@@ -195,6 +199,7 @@ assets/../app/prodShiftOrders/assets/main.css
 assets/../app/prodShifts/assets/main.css
 assets/../app/pressWorksheets/assets/main.css
 assets/../app/xiconf/assets/main.css
+assets/../app/icpo/assets/main.css
 assets/../app/purchaseOrders/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/feedback/assets/main.css
@@ -691,6 +696,10 @@ app/nls/xiconf.js
 app/nls/pl/xiconf.js
 i18n!app/nls/xiconf
 app/xiconf/routes.js
+app/nls/icpo.js
+app/nls/pl/icpo.js
+i18n!app/nls/icpo
+app/icpo/routes.js
 app/nls/purchaseOrders.js
 app/nls/pl/purchaseOrders.js
 i18n!app/nls/purchaseOrders

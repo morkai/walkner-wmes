@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["app/time","app/core/views/ListView"],function(e,t){return t.extend({remoteTopics:{"icpo.synced":"refreshCollection"},events:{"click tr[data-id]":function(e){var t=this.collection.get(e.currentTarget.dataset.id).genClientUrl();e.ctrlKey?window.open(t):e.altKey||this.broker.publish("router.navigate",{url:t,trigger:!0,replace:!1})}},columns:["srcId","serviceTag","driver","gprs","led","startedAt","duration"],serializeActions:function(){return null},serializeRow:function(t){var r=e.getMoment(t.get("startedAt")),i=e.getMoment(t.get("finishedAt"));return{_id:t.id,className:"icpo-entry "+("success"===t.get("result")?"success":"danger"),srcId:t.get("srcId"),serviceTag:t.get("serviceTag"),driver:t.get("driver"),gprs:t.get("gprs"),led:t.get("led"),startedAt:r.format("YYYY-MM-DD, HH:mm:ss.SSS"),duration:e.toString((i.valueOf()-r.valueOf())/1e3,!1,!0)}}})});
