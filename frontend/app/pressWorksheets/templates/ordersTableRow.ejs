@@ -12,4 +12,5 @@
   <% downtimeReasons.forEach(function(downtimeReason, i) { %>
   <td class="pressWorksheets-form-downtimeCell <%- i ? '' : 'pressWorksheets-form-separator' %>" data-type="<%- downtimeReason.type %>"><input class="form-control no-controls pressWorksheets-form-count is-downtime" type="number" name="orders[<%- no %>].downtimes.<%- downtimeReason._id %>" data-column="downtime.<%- i %>" data-reason="<%- downtimeReason._id %>"></td>
   <% }) %>
+  <td class="actions"><button type="button" class="btn btn-default pressWorksheets-form-comment"><i class="fa fa-comment"></i></button></td>
 </tr>

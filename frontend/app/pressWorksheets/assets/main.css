@@ -94,7 +94,7 @@
   display: none;
   margin-bottom: 15px;
 }
-.pressWorksheets-form-order:nth-child(even) {
+.pressWorksheets-form-orders .is-even {
   background: rgba(0, 0, 0, .075);
 }
 .pressWorksheets-form-orders .is-focused {
@@ -131,22 +131,32 @@
 .pressWorksheets-form .btn-danger {
   display: none;
 }
-.prodWorksheets-details-tableContainer {
+.prodWorksheets-orders-lossesTable {
   padding: 0!important;
   vertical-align: top!important;
 }
-.prodWorksheets-details-tableContainer .table {
+.prodWorksheets-orders-lossesTable > .table {
   border: 0!important;
   font-size: 0.8em;
   margin-bottom: 0;
+  background: transparent!important;
 }
-.prodWorksheets-details-tableContainer th,
-.prodWorksheets-details-tableContainer td {
+.prodWorksheets-orders-lossesTable th,
+.prodWorksheets-orders-lossesTable td {
   border-right: 0!important;
   border-bottom: 0!important;
   text-align: center;
 }
-.prodWorksheets-details-tableContainer th:first-child,
-.prodWorksheets-details-tableContainer td:first-child {
+.prodWorksheets-orders-lossesTable th:first-child,
+.prodWorksheets-orders-lossesTable td:first-child {
  border-left: 0!important;
+}
+.pressWorksheets-orders-table > tbody > tr > td[rowspan="2"] {
+  border-bottom: 0;
+}
+.pressWorksheets-orders-table > tbody > tr.is-odd {
+  background-color: #fafafa;
+}
+.pressWorksheets-orders-notes > td {
+  white-space: pre-line;
 }

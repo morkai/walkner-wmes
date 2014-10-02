@@ -82,7 +82,12 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       default: null
     },
     losses: [createOrderLossSchema(mongoose)],
-    downtimes: [pressWorksheetDowntimeSchema]
+    downtimes: [pressWorksheetDowntimeSchema],
+    notes: {
+      type: String,
+      default: '',
+      trim: true
+    }
   }, {
     _id: false
   });
@@ -277,7 +282,8 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         master: pressWorksheet.master,
         leader: null,
         operator: operator,
-        operators: operators
+        operators: operators,
+        notes: typeof order.notes === 'string' ? order.notes : ''
       };
 
       if (needsId)

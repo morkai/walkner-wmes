@@ -3,17 +3,51 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/core/views/DetailsView',
-  'app/pressWorksheets/templates/details'
+  'app/pressWorksheets/templates/details',
+  'app/pressWorksheets/templates/ordersList'
 ], function(
+  _,
   DetailsView,
-  detailsTemplate
+  detailsTemplate,
+  renderOrdersList
 ) {
   'use strict';
 
   return DetailsView.extend({
 
-    template: detailsTemplate
+    template: detailsTemplate,
+
+    events: {
+      'mouseover tbody > tr': function(e)
+      {
+        this.toggleHovered(e.currentTarget, true);
+      },
+      'mouseout tbody > tr': function(e)
+      {
+        this.toggleHovered(e.currentTarget, false);
+      }
+    },
+
+    serialize: function()
+    {
+      return _.extend(DetailsView.prototype.serialize.call(this), {
+        renderOrdersList: renderOrdersList,
+        extended: false
+      });
+    },
+
+    toggleHovered: function(rowEl, hovered)
+    {
+      var $row = this.$(rowEl);
+      var $relatedRow = $row.hasClass('pressWorksheets-orders-notes')
+        ? $row.prev()
+        : $row.next('.pressWorksheets-orders-notes');
+
+      $row.toggleClass('is-hovered', hovered);
+      $relatedRow.toggleClass('is-hovered', hovered);
+    }
 
   });
 });

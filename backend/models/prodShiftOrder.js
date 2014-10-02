@@ -145,7 +145,11 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     master: {},
     leader: {},
     operator: {},
-    operators: [{}]
+    operators: [{}],
+    notes: {
+      type: String,
+      default: ''
+    }
   }, {
     id: false
   });

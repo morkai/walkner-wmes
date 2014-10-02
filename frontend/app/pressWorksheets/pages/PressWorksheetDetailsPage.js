@@ -6,18 +6,18 @@ define([
   'app/user',
   'app/core/util/pageActions',
   'app/core/pages/DetailsPage',
-  'app/pressWorksheets/templates/details'
+  '../views/PressWorksheetDetailsView'
 ], function(
   user,
   pageActions,
   DetailsPage,
-  detailsTemplate
+  PressWorksheetDetailsView
 ) {
   'use strict';
 
   return DetailsPage.extend({
 
-    detailsTemplate: detailsTemplate,
+    DetailsView: PressWorksheetDetailsView,
 
     actions: function()
     {

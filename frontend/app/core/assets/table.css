@@ -41,6 +41,7 @@ td.is-number {
   border-color: #a6e1ec;
 }
 .table-hover > tbody > tr:hover > td,
-.table-hover > tbody > tr:hover > th {
+.table-hover > tbody > tr:hover > th,
+.table-hover > tbody > tr.is-hovered > td {
   background-color: #FFFFD6;
 }

@@ -16,7 +16,8 @@ define([
   '../PressWorksheetCollection',
   'app/pressWorksheets/templates/form',
   'app/pressWorksheets/templates/ordersTable',
-  'app/pressWorksheets/templates/ordersTableRow'
+  'app/pressWorksheets/templates/ordersTableRow',
+  'app/pressWorksheets/templates/ordersTableNotesRow'
 ], function(
   _,
   $,
@@ -31,7 +32,8 @@ define([
   PressWorksheetCollection,
   formTemplate,
   renderOrdersTable,
-  renderOrdersTableRow
+  renderOrdersTableRow,
+  renderOrdersTableNotesRow
 ) {
   'use strict';
 
@@ -42,7 +44,7 @@ define([
     events: {
       'keydown': function(e)
       {
-        if (e.keyCode === 13)
+        if (e.keyCode === 13 && e.target.tagName !== 'TEXTAREA')
         {
           e.preventDefault();
         }
@@ -182,6 +184,17 @@ define([
           this.renderOrdersTable();
           this.addOrderRow();
         }
+      },
+      'click .pressWorksheets-form-comment': function(e)
+      {
+        var $notesRow = this.$(e.currentTarget)
+          .closest('.pressWorksheets-form-order')
+          .next('.pressWorksheets-form-notes');
+
+        $notesRow[$notesRow.is(':visible') ? 'fadeOut' : 'fadeIn']('fast', function()
+        {
+          $notesRow.find('textarea').focus();
+        });
       }
     },
 
@@ -386,7 +399,8 @@ define([
         startedAt: order.startedAt || null,
         finishedAt: order.finishedAt || null,
         losses: losses,
-        downtimes: downtimes
+        downtimes: downtimes,
+        notes: order.notes || ''
       };
     },
 
@@ -490,11 +504,28 @@ define([
       $order.on('change', function(e)
       {
         var $row = $order.closest('.pressWorksheets-form-order');
+        var $notesRow = $row.next();
         var last = view.isLastOrderRow($row);
 
         if (!e.added && !last)
         {
-          ($row.next() || $row.prev()).find('.pressWorksheets-form-part').select2('focus');
+          var $siblingRow = $row.next().next();
+
+          if (!$siblingRow.length)
+          {
+            $siblingRow = $row.prev().prev();
+          }
+
+          $siblingRow.find('.pressWorksheets-form-part').select2('focus');
+
+          if ($notesRow.is(':visible'))
+          {
+            $notesRow.fadeOut(function() { $notesRow.remove(); });
+          }
+          else
+          {
+            $notesRow.remove();
+          }
 
           $row.fadeOut(function()
           {
@@ -583,7 +614,7 @@ define([
 
     isLastOrderRow: function($row)
     {
-      return this.$('.pressWorksheets-form-order:last-child')[0] === $row[0];
+      return this.$('tbody > tr:last-child').prev()[0] === $row[0];
     },
 
     addOrderRow: function($lastRow, single)
@@ -597,6 +628,12 @@ define([
         lossReasons: this.lossReasons,
         downtimeReasons: this.downtimeReasons
       }));
+      var $notesRow = $(renderOrdersTableNotesRow({
+        no: this.lastOrderNo,
+        colspan: $orderRow.find('td').length
+      }));
+
+      $notesRow.hide();
 
       if (this.lastOrderNo > 0 && single)
       {
@@ -612,7 +649,7 @@ define([
         this.$('.pressWorksheets-form-finishedAt:last-child').attr('required', true);
       }
 
-      this.$('.pressWorksheets-form-orders > tbody').append($orderRow);
+      this.$('.pressWorksheets-form-orders > tbody').append($orderRow).append($notesRow);
 
       if (this.lastOrderNo > 0 && single)
       {
@@ -682,9 +719,17 @@ define([
 
     recalcOrderNoColumn: function()
     {
-      this.$('.pressWorksheets-form-order > td:first-child').each(function(i)
+      this.$('.pressWorksheets-form-order').each(function(i)
       {
-        this.innerHTML = (i + 1) + '.';
+        var $orderRow = $(this);
+        var $notesRow = $orderRow.next();
+
+        $orderRow.find('.pressWorksheets-form-no').text((i + 1) + '.');
+
+        var isEven = i % 2 !== 0;
+
+        $orderRow.toggleClass('is-even', isEven);
+        $notesRow.toggleClass('is-even', isEven);
       });
     },
 
@@ -1045,6 +1090,11 @@ define([
       {
         $orderRow.find('.pressWorksheets-form-startedAt').val(order.startedAt);
         $orderRow.find('.pressWorksheets-form-finishedAt').val(order.finishedAt);
+      }
+
+      if (order.notes)
+      {
+        $orderRow.next().show().find('textarea').val(order.notes);
       }
     },
 

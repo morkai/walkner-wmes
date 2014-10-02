@@ -60,87 +60,9 @@
     <div class="panel-heading">
       <%- t('pressWorksheets', 'PANEL:TITLE:details:orders') %>
     </div>
-    <table class="table table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.nc12') %></th>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.name') %></th>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.operationName') %></th>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.operationNo') %></th>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
-          <th><%- t('pressWorksheets', 'PROPERTY:order.downtimes') %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% model.orders.forEach(function(order) { %>
-        <tr>
-          <td>
-            <% if (order.prodShiftOrder && user.isAllowedTo('PROD_DATA:VIEW')) { %>
-            <a href="#prodShiftOrders/<%- order.prodShiftOrder %>"><%= order.nc12 %></a>
-            <% } else { %>
-            <%= order.nc12 %>
-            <% } %>
-          </td>
-          <td><%= order.name %></td>
-          <td><%= order.operationName || '-' %></td>
-          <td><%= order.operationNo %></td>
-          <td><%= order.prodLine %></td>
-          <td><%= order.quantityDone %></td>
-          <td><%= order.startedAt %></td>
-          <td><%= order.finishedAt %></td>
-          <td class="prodWorksheets-details-tableContainer">
-            <% if (order.losses.length) { %>
-            <table class="table table-bordered table-condensed">
-              <thead>
-                <tr>
-                  <% order.losses.forEach(function(loss) { %>
-                  <th><%= loss.label %></th>
-                  <% }) %>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <% order.losses.forEach(function(loss) { %>
-                  <td><%= loss.count %></td>
-                  <% }) %>
-                </tr>
-              </tbody>
-            </table>
-            <% } %>
-          </td>
-          <td class="prodWorksheets-details-tableContainer">
-            <% if (order.downtimes.length) { %>
-            <table class="table table-bordered table-condensed">
-              <thead>
-                <tr>
-                  <% order.downtimes.forEach(function(downtime) { %>
-                  <th>
-                    <% if (downtime.prodDowntime && user.isAllowedTo('PROD_DOWNTIMES:VIEW')) { %>
-                    <a href="#prodDowntimes/<%- downtime.prodDowntime %>"><%= downtime.label %></a>
-                    <% } else { %>
-                    <%= downtime.label %>
-                    <% } %>
-                  </th>
-                  <% }) %>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <% order.downtimes.forEach(function(downtime) { %>
-                  <td><%= downtime.duration %></td>
-                  <% }) %>
-                </tr>
-              </tbody>
-            </table>
-            <% } %>
-          </td>
-        </tr>
-        <% }) %>
-      </tbody>
-    </table>
+    <%- renderOrdersList({
+      orders: model.orders,
+      extended: extended
+    }) %>
   </div>
 </div>
