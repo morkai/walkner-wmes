@@ -1,0 +1,20 @@
+<div class="panel panel-default">
+  <div class="panel-heading is-with-actions">
+    <%- t('reports', 'operator:notes:title') %>
+    <% if (!orders.length) { %>
+    <div class="panel-actions">
+      <button id="<%- idPrefix %>-load" type="button" class="btn btn-default" <%- notes ? '' : 'disabled' %>>
+        <i class="fa fa-refresh"></i><span><%- t('reports', 'operator:notes:load' + (notes ? '' : ':noData'), {notes: notes, worksheets: worksheets}) %></span>
+      </button>
+    </div>
+    <% } %>
+  </div>
+  <% if (!notes) { %>
+  <div class="panel-body">
+    <p><%- t('reports', 'operator:notes:noData') %></p>
+  </div>
+  <% } %>
+  <% if (orders.length) { %>
+  <%- renderOrderList({extended: true, orders: orders}) %>
+  <% } %>
+</div>

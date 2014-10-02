@@ -199,6 +199,10 @@
     "operator:quantities:bad": "Bad",
     "operator:quantities:total": "Total",
     "operator:quantities:loss": "Losses",
+    "operator:notes:title": "Parts with comments",
+    "operator:notes:load": "Load {notes} {notes, plural, one{comment} other{comments}} from {worksheets} {worksheets, plural, one{worksheet} other{worksheets}}",
+    "operator:notes:load:noData": "Load comments",
+    "operator:notes:noData": "No comments.",
 
     "hr:quantityDone": "Production",
     "hr:total": "Total",

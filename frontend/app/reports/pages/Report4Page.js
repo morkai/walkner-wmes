@@ -12,6 +12,7 @@ define([
   '../views/Report4WorkTimesChartView',
   '../views/Report4MachineTimesChartView',
   '../views/Report4QuantitiesChartView',
+  '../views/Report4NotesListView',
   'app/reports/templates/report4Page'
 ], function(
   t,
@@ -23,6 +24,7 @@ define([
   Report4WorkTimesChartView,
   Report4MachineTimesChartView,
   Report4QuantitiesChartView,
+  Report4NotesListView,
   report4PageTemplate
 ) {
   'use strict';
@@ -46,6 +48,7 @@ define([
       this.setView('.reports-4-workTimes-container', this.workTimesChartView);
       this.setView('.reports-4-machineTimes-container', this.machineTimesChartView);
       this.setView('.reports-4-quantities-container', this.quantitiesChartView);
+      this.setView('.reports-4-notes-container', this.notesListView);
     },
 
     defineModels: function()
@@ -63,6 +66,9 @@ define([
       this.workTimesChartView = new Report4WorkTimesChartView({model: this.report});
       this.machineTimesChartView = new Report4MachineTimesChartView({model: this.report});
       this.quantitiesChartView = new Report4QuantitiesChartView({model: this.report});
+      this.notesListView = new Report4NotesListView({
+        model: this.report
+      });
     },
 
     load: function(when)

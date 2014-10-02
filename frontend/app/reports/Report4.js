@@ -55,6 +55,10 @@ define([
           good: 0,
           bad: 0,
           losses: {}
+        },
+        notes: {
+          count: 0,
+          worksheets: []
         }
       };
     },
@@ -93,7 +97,8 @@ define([
         effAndProd: this.parseEffAndProd(report.results.effAndProd),
         workTimes: this.parseWorkTimes(report.results.workTimes),
         machineTimes: this.parseMachineTimes(report.results.machineTimes),
-        quantities: this.parseQuantities(report.options.lossReasons, report.results.quantities)
+        quantities: this.parseQuantities(report.options.lossReasons, report.results.quantities),
+        notes: report.results.notes
       };
     },
 

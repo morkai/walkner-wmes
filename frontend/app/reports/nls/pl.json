@@ -200,6 +200,10 @@
   "operator:quantities:bad": "Wadliwe",
   "operator:quantities:total": "Suma",
   "operator:quantities:loss": "Straty",
+  "operator:notes:title": "Lista wykonanych części z komentarzami",
+  "operator:notes:load": "Wczytaj {notes} {notes, plural, one{komentarz} few{komentarze} other{komentarzy}} z {worksheets} {worksheets, plural, one{karty} other{kart}}",
+  "operator:notes:load:noData": "Wczytaj komentarze",
+  "operator:notes:noData": "Brak komentarzy.",
 
   "hr:quantityDone": "Produkcja",
   "hr:total": "Suma",
