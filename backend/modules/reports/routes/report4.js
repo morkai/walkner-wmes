@@ -7,7 +7,7 @@
 var helpers = require('./helpers');
 var report4 = require('../report4');
 
-module.exports = function report2Route(app, reportsModule, req, res, next)
+module.exports = function report4Route(app, reportsModule, req, res, next)
 {
   var mongoose = app[reportsModule.config.mongooseId];
 

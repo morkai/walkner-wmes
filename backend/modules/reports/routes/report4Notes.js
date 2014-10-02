@@ -5,106 +5,89 @@
 'use strict';
 
 var helpers = require('./helpers');
-var report4 = require('../report4');
 
-module.exports = function report2Route(app, reportsModule, req, res, next)
+module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
 {
   var mongoose = app[reportsModule.config.mongooseId];
 
-  var options = {
-    fromTime: helpers.getTime(req.query.from),
-    toTime: helpers.getTime(req.query.to),
-    interval: req.query.interval || 'day',
-    mode: req.query.mode,
-    downtimeReasons: helpers.getDowntimeReasons(
-      app[reportsModule.config.downtimeReasonsId].models, true
-    ),
-    subdivisions: getPressSubdivisions(app[reportsModule.config.orgUnitsId])
+  var conditions = {
+    date: {
+      $gte: new Date(helpers.getTime(req.query.from)),
+      $lt: new Date(helpers.getTime(req.query.to))
+    },
+    orders: {
+      $elemMatch: {
+        notes: {$ne: ''}
+      }
+    }
   };
 
-  if (isNaN(options.fromTime) || isNaN(options.toTime))
+  if (req.query.mode === 'shift')
   {
-    return next(new Error('INVALID_TIME'));
+    conditions.shift = parseInt(req.query.shift, 10);
   }
-
-  if (options.mode === 'shift')
+  else
   {
-    options.shift = parseInt(req.query.shift, 10);
-
-    if (options.shift !== 1 && options.shift !== 2 && options.shift !== 3)
-    {
-      return next(new Error('INVALID_SHIFT'));
-    }
-  }
-  else if (options.mode === 'masters' || options.mode === 'operators')
-  {
-    options[options.mode] = (req.query[options.mode] || '')
+    var userIds = (req.query[req.query.mode] || '')
       .split(',')
       .filter(function(userId) { return (/^[a-zA-Z0-9]{24}$/).test(userId); });
 
-    if (options[options.mode].length === 0)
+    conditions[req.query.mode === 'masters' ? 'master.id': 'operators.id'] = {$in: userIds};
+  }
+
+  var fields = {
+    rid: 1,
+    date: 1,
+    shift: 1,
+    'orders.prodLine': 1,
+    'orders.nc12': 1,
+    'orders.name': 1,
+    'orders.operationNo': 1,
+    'orders.operationName': 1,
+    'orders.downtimes': 1,
+    'orders.losses': 1,
+    'orders.notes': 1,
+    'orders.startedAt': 1,
+    'orders.finishedAt': 1,
+    'orders.quantityDone': 1,
+    'orders.prodShiftOrder': 1
+  };
+
+  mongoose.model('PressWorksheet').find(conditions, fields).sort({date: -1}).lean().exec(function(err, pressWorksheets)
+  {
+    if (err)
     {
-      return next(new Error('INVALID_USER_IDS'));
+      return next(err);
     }
-  }
-  else
-  {
-    options.mode = null;
-  }
 
-  if (options.mode === 'masters' || options.mode === 'operators')
-  {
-    findUsers();
-  }
-  else
-  {
-    report();
-  }
+    var collection = [];
 
-  function findUsers()
-  {
-    mongoose.model('User')
-      .find(
-        {_id: {$in: options[options.mode]}},
-        {_id: 1, personellId: 1, firstName: 1, lastName: 1}
-      )
-      .lean()
-      .exec(function(err, users)
-      {
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (users.length !== options[options.mode].length)
-        {
-          return next(new Error('NONEXISTENT_USERS'));
-        }
-
-        options[options.mode] = users;
-
-        report();
-      });
-  }
-
-  function report()
-  {
-    report4(mongoose, options, function(err, report)
+    for (var i = 0, l = pressWorksheets.length; i < l; ++i)
     {
-      if (err)
+      var pressWorksheet = pressWorksheets[i];
+      var orders = pressWorksheet.orders;
+
+      for (var ii = 0, ll = orders.length; ii < ll; ++ii)
       {
-        return next(err);
+        var order = orders[ii];
+
+        if (!order.notes)
+        {
+          continue;
+        }
+
+        order.pressWorksheet = {
+          _id: pressWorksheet._id,
+          rid: pressWorksheet.rid
+        };
+
+        collection.push(order);
       }
+    }
 
-      res.type('json');
-      res.send(helpers.cacheReport(req, report));
+    res.json({
+      totalCount: collection.length,
+      collection: collection
     });
-  }
+  });
 };
-
-function getPressSubdivisions(orgUnitsModule)
-{
-  return orgUnitsModule.getAllByType('subdivision')
-    .filter(function(subdivision) { return subdivision.type === 'press'; })
-    .map(helpers.idToStr);
-}

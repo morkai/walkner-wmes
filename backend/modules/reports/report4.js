@@ -63,7 +63,9 @@ module.exports = function(mongoose, options, done)
       date: 1,
       shift: 1,
       division: 1,
-      prodLine: 1
+      prodLine: 1,
+      pressWorksheet: 1,
+      notes: 1
     };
     var orderStream = ProdShiftOrder
       .find(conditions, orderFields)
@@ -122,6 +124,10 @@ function Report4(options)
       good: 0,
       bad: 0,
       losses: {}
+    },
+    notes: {
+      count: 0,
+      worksheets: []
     }
   };
 
@@ -201,8 +207,8 @@ Report4.prototype.finalize = function(done)
   var machineTimes = report.results.machineTimes;
   var machines = Object.keys(machineTimes);
 
-  report.results.workTimes.sap =
-    report.results.workTimes.total - report.results.workTimes.otherWorks;
+  report.results.notes.worksheets = Object.keys(report.results.notes.worksheets);
+  report.results.workTimes.sap = report.results.workTimes.total - report.results.workTimes.otherWorks;
 
   step(
     function calcOperatorAdjustingMedian()
@@ -211,8 +217,7 @@ Report4.prototype.finalize = function(done)
       {
         var machine = machines[i];
 
-        machineTimes[machine].operatorAdjustingMedian =
-          report.calcMedian(report.operatorAdjustingDurations[machine]);
+        machineTimes[machine].operatorAdjustingMedian = report.calcMedian(report.operatorAdjustingDurations[machine]);
       }
 
       setImmediate(this.next());
@@ -223,8 +228,7 @@ Report4.prototype.finalize = function(done)
       {
         var machine = machines[i];
 
-        machineTimes[machine].machineAdjustingMedian =
-          report.calcMedian(report.machineAdjustingDurations[machine]);
+        machineTimes[machine].machineAdjustingMedian = report.calcMedian(report.machineAdjustingDurations[machine]);
       }
 
       setImmediate(this.next());
@@ -330,6 +334,12 @@ Report4.prototype.handleProdShiftOrder = function(prodShiftOrder)
   if (workerCount === null)
   {
     return;
+  }
+
+  if (prodShiftOrder.notes)
+  {
+    this.results.notes.count += 1;
+    this.results.notes.worksheets[prodShiftOrder.pressWorksheet] = true;
   }
 
   this.handleEffAndProd(prodShiftOrder, workerCount);
