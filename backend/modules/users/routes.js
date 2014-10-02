@@ -169,7 +169,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
       if (user !== null)
       {
-        user.ipAddress = req.socket.remoteAddress;
+        user.ipAddress = guestUser.ipAddress;
 
         app.broker.publish('users.logout', {
           user: user,
