@@ -233,7 +233,7 @@ define([
         losses.push({
           shortText: lossReasonId,
           longText: lossReasons[lossReasonId] || lossReasonId,
-          value: quantitiesData.losses[lossReasonId]
+          value: round(quantitiesData.losses[lossReasonId])
         });
       });
 
@@ -242,7 +242,7 @@ define([
         quantities.lossCategories.push(loss.shortText);
         quantities.losses.push({
           name: loss.longText,
-          y: loss.value
+          y: round(loss.value)
         });
       });
 
