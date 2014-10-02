@@ -32,6 +32,7 @@
   "filter:user:master": "Mistrz",
   "filter:user:operators": "Operator",
 
+  "PROPERTY:pressWorksheet": "Karta pracy",
   "PROPERTY:rid": "ID",
   "PROPERTY:operators": "Nastawiacze/operatorzy",
   "PROPERTY:operator": "Podpisany nastawiacz/operator",
