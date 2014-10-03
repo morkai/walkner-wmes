@@ -52,9 +52,9 @@ define([
 
       ListView.prototype.initialize.apply(this, arguments);
 
-      this.listenTo(this.model.prodDowntimes, 'add', this.render);
-      this.listenTo(this.model.prodDowntimes, 'change', this.render);
-      this.listenTo(this.model.prodDowntimes, 'remove', this.render);
+      this.listenTo(this.collection, 'add', this.render);
+      this.listenTo(this.collection, 'change', this.render);
+      this.listenTo(this.collection, 'remove', this.render);
     },
 
     destroy: function()
@@ -112,6 +112,8 @@ define([
 
     afterRender: function()
     {
+      ListView.prototype.afterRender.call(this);
+
       var view = this;
 
       this.$el
