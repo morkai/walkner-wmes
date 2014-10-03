@@ -59,6 +59,7 @@ define([
           view.render();
         });
       },
+      'click .panel-heading': 'togglePanel',
       'mouseover tbody > tr': function(e)
       {
         this.toggleHovered(e.currentTarget, true);
@@ -111,6 +112,26 @@ define([
 
       $row.toggleClass('is-hovered', hovered);
       $relatedRow.toggleClass('is-hovered', hovered);
+    },
+
+    togglePanel: function()
+    {
+      var $toggle = this.$id('toggle');
+      var $icon = $toggle.find('.fa');
+      var $table = this.$id('table');
+
+      $table.stop(true);
+
+      if ($icon.hasClass('fa-chevron-up'))
+      {
+        $icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+        $table.slideUp('fast');
+      }
+      else
+      {
+        $icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+        $table.slideDown('fast');
+      }
     }
 
   });

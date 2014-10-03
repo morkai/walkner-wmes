@@ -256,3 +256,17 @@
 .reports-4-quantities {
   height: 355px;
 }
+.reports-4-notes .table {
+  border: 0;
+}
+.reports-4-notes th:first-child,
+.reports-4-notes td:first-child {
+  border-left: 0!important;
+}
+.reports-4-notes th:last-child,
+.reports-4-notes td:last-child {
+  border-right: 0!important;
+}
+.reports-4-notes tr:last-child > td {
+  border-bottom: 0;
+}
