@@ -33,6 +33,7 @@
   "filter:user:operators": "Operator",
 
   "PROPERTY:pressWorksheet": "Karta pracy",
+  "PROPERTY:user": "Użytkownik",
   "PROPERTY:rid": "ID",
   "PROPERTY:operators": "Nastawiacze/operatorzy",
   "PROPERTY:operator": "Podpisany nastawiacz/operator",

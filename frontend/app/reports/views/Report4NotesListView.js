@@ -94,12 +94,12 @@ define([
 
     beforeRender: function()
     {
-      this.stopListening(this.model, 'error change:notes', this.render);
+      this.stopListening(this.model, 'request error change:notes', this.render);
     },
 
     afterRender: function()
     {
-      this.listenToOnce(this.model, 'error change:notes', this.render);
+      this.listenToOnce(this.model, 'request error change:notes', this.render);
     },
 
     toggleHovered: function(rowEl, hovered)

@@ -4,6 +4,8 @@
       <th><%- t('core', '#') %></th>
       <% if (extended) { %>
       <th><%- t('pressWorksheets', 'PROPERTY:pressWorksheet') %></th>
+      <th><%- t('pressWorksheets', 'PROPERTY:user') %></th>
+      <th><%- t('pressWorksheets', 'PROPERTY:shift') %></th>
       <% } %>
       <th><%- t('pressWorksheets', 'PROPERTY:order.nc12') %></th>
       <th><%- t('pressWorksheets', 'PROPERTY:order.name') %></th>
@@ -23,6 +25,8 @@
       <td rowspan="<%- order.notes ? 2 : 1 %>"><%- i + 1 %>.</td>
       <% if (extended) { %>
       <td><a href="#pressWorksheets/<%- order.pressWorksheet._id %>"><%= order.pressWorksheet.rid %></a></td>
+      <td><%= order.pressWorksheet.user %></td>
+      <td><%- t('core', 'SHIFT', {date: time.format(order.pressWorksheet.date, 'YYYY-MM-DD'), shift: t('core', 'SHIFT:' + order.pressWorksheet.shift)}) %></td>
       <% } %>
       <td>
         <% if (order.prodShiftOrder && user.isAllowedTo('PROD_DATA:VIEW')) { %>
@@ -87,7 +91,7 @@
     </tr>
     <% if (order.notes) { %>
     <tr class="pressWorksheets-orders-notes <%- i % 2 !== 0 ? '' : 'is-odd' %>">
-      <td colspan="<%- extended ? 11 : 10 %>"><%= order.notes %></td>
+      <td colspan="<%- extended ? 13 : 10 %>"><%= order.notes %></td>
     </tr>
     <% } %>
     <% }) %>

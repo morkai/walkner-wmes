@@ -35,6 +35,7 @@
     "filter:user:operators": "Operator",
 
     "PROPERTY:pressWorksheet": "Worksheet",
+    "PROPERTY:user": "User",
     "PROPERTY:rid": "ID",
     "PROPERTY:operators": "Operators",
     "PROPERTY:operator": "Signed operator",

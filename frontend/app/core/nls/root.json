@@ -116,6 +116,7 @@
     "ORG_UNIT:workCenter": "WorkCenter",
     "ORG_UNIT:prodLine": "Production line",
 
+    "SHIFT": "{date}, {shift}",
     "SHIFT:1": "I",
     "SHIFT:2": "II",
     "SHIFT:3": "III",
