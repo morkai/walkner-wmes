@@ -2,6 +2,10 @@
   "root": {
     "breadcrumbs:productionPage": "Production",
 
+    "duplicate:title": "Duplicate operator form",
+    "duplicate:message": "Detected another operator form already running.<br>Close all other operator forms and click the button below to reload the form in the current window.",
+    "duplicate:button": "Reload operator form",
+
     "msg:shiftChange": "New shift!",
 
     "controls:dashboard": "Go to dashboard",
@@ -145,7 +149,6 @@
     "endWorkDialog:yes": "End work",
     "endWorkDialog:no": "Do not end work",
 
-    "locked": "Check whether the operator's screen is not running in another window!\n\nIf it's running in another window, then press Cancel and close this window.\n\nIf you want to continue working in this window, then press OK.",
     "unload:downtime": "Are you sure you want to close the browser leaving the production line in a state of downtime?\n\nIf you close the browser without Ending work, then the current downtime will be finished at the end of the current shift!",
     "unload:order": "Are you sure you want to close the browser leaving the production line in a state of working?\n\nIf you close the browser without Ending work, then the current order will be finished at the end of the current shift!"
   },

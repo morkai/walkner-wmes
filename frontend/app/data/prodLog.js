@@ -19,11 +19,14 @@ define([
 ) {
   'use strict';
 
+  var instanceId = (Date.now() + Math.random()).toString();
   var STORAGE_KEY = 'PRODUCTION:LOG';
   var SYNCING_KEY = 'PRODUCTION:LOG:SYNCING';
   var LOCK_KEY = 'PRODUCTION:LOCK';
   var syncingLogEntries = null;
   var enabled = false;
+  var enableTimer = null;
+  var lockTimer = null;
 
   broker.subscribe('socket.connected', setTimeout.bind(null, sync, 1337));
 
@@ -123,44 +126,67 @@ define([
       + Math.round(Math.random() * 10000000000000000).toString(36);
   }
 
-  function getLock()
-  {
-    return parseInt(localStorage.getItem(LOCK_KEY) || '0', 10);
-  }
-
-  function setLock(value)
-  {
-    localStorage.setItem(LOCK_KEY, value);
-  }
-
   return {
     generateId: generateId,
-    isEnabled: function()
-    {
-      return enabled;
-    },
-    enable: function()
+    isEnabled: function() { return enabled; },
+    enable: function(deferred)
     {
       if (enabled)
       {
+        if (deferred)
+        {
+          enableTimer = setTimeout(function()
+          {
+            enableTimer = null;
+            deferred.resolve();
+          });
+        }
+
         return;
       }
 
-      var lock = getLock();
-
-      if (lock !== 0)
+      if (!deferred)
       {
-        var answer = window.confirm(t('production', 'locked'));
+        enabled = true;
 
-        if (!answer)
+        return;
+      }
+
+      function onStorage(e)
+      {
+        if (e.key !== LOCK_KEY)
         {
           return;
         }
+
+        var lock = JSON.parse(e.newValue);
+
+        if (lock.instanceId !== instanceId)
+        {
+          deferred.reject();
+        }
       }
 
-      setLock(1);
+      window.addEventListener('storage', onStorage);
 
-      enabled = true;
+      lockTimer = setInterval(function()
+      {
+        localStorage.setItem(LOCK_KEY, JSON.stringify({instanceId: instanceId, time: Date.now()}));
+      }, 333);
+
+      enableTimer = setTimeout(function()
+      {
+        enableTimer = null;
+
+        window.removeEventListener('storage', onStorage);
+
+        if (deferred.state() === 'pending')
+        {
+          enabled = true;
+
+          deferred.resolve();
+        }
+      }, 2000);
     },
     disable: function()
     {
@@ -169,7 +195,17 @@ define([
         return;
       }
 
-      setLock(0);
+      if (enableTimer !== null)
+      {
+        clearTimeout(enableTimer);
+        enableTimer = null;
+      }
+
+      if (lockTimer !== null)
+      {
+        clearInterval(lockTimer);
+        lockTimer = null;
+      }
 
       enabled = false;
     },

@@ -16,7 +16,8 @@ define([
   '../views/ProductionDataView',
   '../views/ProdDowntimeListView',
   '../views/ProductionQuantitiesView',
-  'app/production/templates/productionPage'
+  'app/production/templates/productionPage',
+  'app/production/templates/duplicateWarning'
 ], function(
   $,
   user,
@@ -31,7 +32,8 @@ define([
   ProductionDataView,
   ProdDowntimeListView,
   ProductionQuantitiesView,
-  productionPageTemplate
+  productionPageTemplate,
+  duplicateWarningTemplate
 ) {
   'use strict';
 
@@ -72,11 +74,10 @@ define([
       this.shiftEditedSub = null;
       this.joinProductionAfterSyncSub = null;
       this.productionJoined = false;
+      this.enableProdLog = false;
 
       updater.disableViews();
-      prodLog.enable();
 
-      this.defineModels();
       this.defineViews();
       this.defineBindings();
 
@@ -114,9 +115,49 @@ define([
       };
     },
 
-    defineModels: function()
+    load: function(when)
     {
-      this.model.readLocalData();
+      viewport.msg.loading();
+
+      var page = this;
+      var enableDeferred = $.Deferred();
+      var loadDeferred = $.Deferred();
+
+      enableDeferred.done(function()
+      {
+        page.timers.readLocalData = setTimeout(function()
+        {
+          page.timers.readLocalData = null;
+          page.model.readLocalData(true);
+        }, 1);
+      });
+
+      enableDeferred.fail(function()
+      {
+        document.body.innerHTML = duplicateWarningTemplate();
+      });
+
+      enableDeferred.always(function()
+      {
+        viewport.msg.loaded();
+
+        if (enableDeferred.state() === 'rejected')
+        {
+          page.enableProdLog = false;
+
+          loadDeferred.reject();
+        }
+        else
+        {
+          page.enableProdLog = true;
+
+          loadDeferred.resolve();
+        }
+      });
+
+      prodLog.enable(enableDeferred);
+
+      return when(loadDeferred.promise());
     },
 
     defineViews: function()
@@ -171,6 +212,13 @@ define([
       {
         viewport.closeAllDialogs();
 
+        if (this.$el.hasClass('hidden'))
+        {
+          this.$el.removeClass('hidden');
+
+          return;
+        }
+
         if (this.model.get('shift'))
         {
           viewport.msg.show({
@@ -197,6 +245,16 @@ define([
       {
         this.model.saveLocalData();
       });
+    },
+
+    beforeRender: function()
+    {
+      if (this.enableProdLog)
+      {
+        prodLog.enable();
+
+        this.enableProdLog = false;
+      }
     },
 
     afterRender: function()

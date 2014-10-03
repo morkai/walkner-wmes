@@ -4,6 +4,15 @@
 .production * {
   line-height: 1!important;
 }
+.production-duplicate {
+  margin: 1em;
+}
+.production-duplicate h1 {
+  color: #e00;
+}
+.production-duplicate p {
+  font-size: 1.2em;
+}
 .production-modal .modal-body {
   padding: 0;
 }
