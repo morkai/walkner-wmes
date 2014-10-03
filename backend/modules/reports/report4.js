@@ -336,7 +336,7 @@ Report4.prototype.handleProdShiftOrder = function(prodShiftOrder)
     return;
   }
 
-  if (prodShiftOrder.notes)
+  if (workerCount.match > 0 && prodShiftOrder.notes)
   {
     this.results.notes.count += 1;
     this.results.notes.worksheets[prodShiftOrder.pressWorksheet] = true;
