@@ -150,7 +150,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
             "Finished bugged %s [%s] in shift [%s] of prod line [%s] (LOG=[%s])",
             type,
             _id,
-            logEntry.prodShift,
+            buggedProdModel.prodShift,
             prodLine._id,
             logEntry._id
           );
