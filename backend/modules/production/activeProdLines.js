@@ -68,11 +68,14 @@ module.exports = function setUpActiveProdLines(app, productionModule)
         ? new mongoose.Types.ObjectId(prodFlowId)
         : prodFlowId;
 
-      productionModule.debug(
-        "Aggregating active prod lines for shift [%s] and prod flow [%s]...", shiftDate, prodFlowId
-      );
+      if (!productionModule.recreating)
+      {
+        productionModule.debug(
+          "Aggregating active prod lines for shift [%s] and prod flow [%s]...", shiftDate, prodFlowId
+        );
+      }
     }
-    else
+    else if (!productionModule.recreating)
     {
       productionModule.debug("Aggregating active prod lines for shift [%s]...", shiftDate);
     }
@@ -122,21 +125,24 @@ module.exports = function setUpActiveProdLines(app, productionModule)
           });
         });
 
-        if (prodFlowId)
+        if (!productionModule.recreating)
         {
-          productionModule.debug(
-            "%d active prod lines in prod flow [%s] during the [%s] shift: %s",
-            prodLineIds.length,
-            prodFlowId,
-            shiftDate,
-            prodLineIds.join(', ')
-          );
-        }
-        else
-        {
-          productionModule.debug(
-            "%d active prod lines during the [%s] shift: %s", prodLineIds.length, shiftDate, prodLineIds.join(', ')
-          );
+          if (prodFlowId)
+          {
+            productionModule.debug(
+              "%d active prod lines in prod flow [%s] during the [%s] shift: %s",
+              prodLineIds.length,
+              prodFlowId,
+              shiftDate,
+              prodLineIds.join(', ')
+            );
+          }
+          else
+          {
+            productionModule.debug(
+              "%d active prod lines during the [%s] shift: %s", prodLineIds.length, shiftDate, prodLineIds.join(', ')
+            );
+          }
         }
 
         if (done)
