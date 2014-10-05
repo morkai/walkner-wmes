@@ -128,7 +128,7 @@ define([
         page.timers.readLocalData = setTimeout(function()
         {
           page.timers.readLocalData = null;
-          page.model.readLocalData(true);
+          page.model.readLocalData();
         }, 1);
       });
 
@@ -271,14 +271,17 @@ define([
     {
       if (prodLog.isSyncing())
       {
-        return this.broker
-          .subscribe('production.synced', this.delayDowntimesRefresh.bind(this))
-          .setLimit(1);
+        return this.broker.subscribe('production.synced', this.delayDowntimesRefresh.bind(this)).setLimit(1);
       }
 
       if (this.model.isLocked())
       {
-        return this.listenToOnce(this.model, 'unlocked', this.delayDowntimesRefresh.bind(this));
+        return this.listenToOnce(this.model, 'unlocked', this.delayDowntimesRefresh);
+      }
+
+      if (!this.model.id)
+      {
+        return this.listenToOnce(this.model, 'change:_id', this.delayDowntimesRefresh);
       }
 
       if (this.timers.refreshingDowntimes)
@@ -299,10 +302,7 @@ define([
 
         var req = page.model.prodDowntimes.fetch({reset: true});
 
-        page.promised(req).done(function()
-        {
-          page.model.saveLocalData();
-        });
+        page.promised(req).done(function() { page.model.saveLocalData(); });
       }, 3000);
     },
 
@@ -322,18 +322,33 @@ define([
 
     refreshPlannedQuantities: function()
     {
+      if (prodLog.isSyncing())
+      {
+        return this.broker.subscribe('production.synced', this.refreshPlannedQuantities.bind(this)).setLimit(1);
+      }
+
       if (this.model.isLocked())
       {
-        return this.listenToOnce(this.model, 'unlocked', this.refreshPlannedQuantities.bind(this));
+        return this.listenToOnce(this.model, 'unlocked', this.refreshPlannedQuantities);
+      }
+
+      if (!this.model.id)
+      {
+        return this.listenToOnce(this.model, 'change:_id', this.refreshPlannedQuantities);
       }
 
       var page = this;
 
       this.socket.emit('production.getPlannedQuantities', this.model.id, function(err, plannedQuantities)
       {
-        if (err || !page.shiftEditedSub)
+        if (!page.shiftEditedSub)
         {
           return;
+        }
+
+        if (err)
+        {
+          return console.error(err);
         }
 
         page.model.updatePlannedQuantities(plannedQuantities);
@@ -378,6 +393,11 @@ define([
         }
 
         return;
+      }
+
+      if (!this.model.id)
+      {
+        return this.listenToOnce(this.model, 'change:_id', this.joinProduction);
       }
 
       var prodDowntime = this.model.prodDowntimes.findFirstUnfinished();
