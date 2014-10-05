@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/core/views/DetailsView","app/pressWorksheets/templates/details"],function(e,t){return e.extend({template:t})});
+define(["underscore","app/core/views/DetailsView","app/pressWorksheets/templates/details","app/pressWorksheets/templates/ordersList"],function(e,s,t,r){return s.extend({template:t,events:{"mouseover tbody > tr":function(e){this.toggleHovered(e.currentTarget,!0)},"mouseout tbody > tr":function(e){this.toggleHovered(e.currentTarget,!1)}},serialize:function(){return e.extend(s.prototype.serialize.call(this),{renderOrdersList:r,extended:!1})},toggleHovered:function(e,s){var t=this.$(e),r=t.hasClass("pressWorksheets-orders-notes")?t.prev():t.next(".pressWorksheets-orders-notes");t.toggleClass("is-hovered",s),r.toggleClass("is-hovered",s)}})});

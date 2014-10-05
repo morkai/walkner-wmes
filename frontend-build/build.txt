@@ -565,10 +565,13 @@ app/pressWorksheets/views/PressWorksheetFilterView.js
 app/pressWorksheets/views/PressWorksheetListView.js
 app/pressWorksheets/pages/PressWorksheetListPage.js
 app/pressWorksheets/templates/details.js
+app/pressWorksheets/templates/ordersList.js
+app/pressWorksheets/views/PressWorksheetDetailsView.js
 app/pressWorksheets/pages/PressWorksheetDetailsPage.js
 app/pressWorksheets/templates/form.js
 app/pressWorksheets/templates/ordersTable.js
 app/pressWorksheets/templates/ordersTableRow.js
+app/pressWorksheets/templates/ordersTableNotesRow.js
 app/pressWorksheets/views/PressWorksheetFormView.js
 app/pressWorksheets/pages/PressWorksheetAddFormPage.js
 app/pressWorksheets/pages/PressWorksheetEditFormPage.js
@@ -667,6 +670,7 @@ app/production/views/QuantityEditorView.js
 app/production/templates/quantities.js
 app/production/views/ProductionQuantitiesView.js
 app/production/templates/productionPage.js
+app/production/templates/duplicateWarning.js
 app/production/pages/ProductionPage.js
 app/nls/production.js
 app/nls/pl/production.js
