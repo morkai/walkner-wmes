@@ -248,7 +248,7 @@ exports.start = function startUserModule(app, module)
     {
       if (hasRealIpFromProxyServer(addressData))
       {
-        ip = addressData.headers['x-real-ip'];
+        ip = (addressData.headers || addressData.handshake.headers)['x-real-ip'];
       }
       else if (addressData.socket && typeof addressData.socket.remoteAddress === 'string')
       {
@@ -275,7 +275,10 @@ exports.start = function startUserModule(app, module)
 
   function hasRealIpFromProxyServer(addressData)
   {
-    if (!addressData.headers || typeof addressData.headers['x-real-ip'] !== 'string')
+    var handshake = addressData.handshake;
+    var headers = handshake ? handshake.headers : addressData.headers;
+
+    if (!headers || typeof headers['x-real-ip'] !== 'string')
     {
       return false;
     }
@@ -284,8 +287,6 @@ exports.start = function startUserModule(app, module)
     {
       return true;
     }
-
-    var handshake = addressData.handshake;
 
     if (handshake && handshake.address && handshake.address.address === '127.0.0.1')
     {
