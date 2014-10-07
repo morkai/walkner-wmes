@@ -13,7 +13,7 @@ module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
   var mongoose = app[prodLogEntriesModule.config.mongooseId];
   var ProdLogEntry = mongoose.model('ProdLogEntry');
 
-  var canView = userModule.auth('PROD_DATA:VIEW');
+  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
 
   express.get(
     '/prodLogEntries',

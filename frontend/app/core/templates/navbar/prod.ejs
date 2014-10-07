@@ -5,14 +5,14 @@
   </a>
   <ul class="dropdown-menu">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:MONITORING') %>
-    <li data-loggedIn data-module><a href="#factoryLayout/default"><%- t('core', 'NAVBAR:MONITORING:LAYOUT') %></a>
-    <li data-loggedIn data-module><a href="#factoryLayout;list"><%- t('core', 'NAVBAR:MONITORING:LIST') %></a>
+    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#factoryLayout/default"><%- t('core', 'NAVBAR:MONITORING:LAYOUT') %></a>
+    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#factoryLayout;list"><%- t('core', 'NAVBAR:MONITORING:LIST') %></a>
     <li class="divider">
-    <li data-privilege="PRESS_WORKSHEETS:VIEW" data-module><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a>
-    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodLogEntries"><%- t('core', 'NAVBAR:PROD:LOG_ENTRIES') %></a>
-    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShifts"><%- t('core', 'NAVBAR:PROD:SHIFTS') %></a>
-    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShiftOrders"><%- t('core', 'NAVBAR:PROD:SHIFT_ORDERS') %></a>
-    <li data-privilege="PROD_DOWNTIMES:VIEW" data-module><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD:DOWNTIMES') %></a>
+    <li data-privilege="LOCAL PRESS_WORKSHEETS:VIEW" data-module><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a>
+    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodLogEntries"><%- t('core', 'NAVBAR:PROD:LOG_ENTRIES') %></a>
+    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodShifts"><%- t('core', 'NAVBAR:PROD:SHIFTS') %></a>
+    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodShiftOrders"><%- t('core', 'NAVBAR:PROD:SHIFT_ORDERS') %></a>
+    <li data-privilege="LOCAL PROD_DOWNTIMES:VIEW" data-module><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD:DOWNTIMES') %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:PROGRAMMING') %>
     <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/results"><%- t('core', 'NAVBAR:XICONF') %></a>

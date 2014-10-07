@@ -19,7 +19,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
   var ProdLogEntry = mongoose.model('ProdLogEntry');
 
-  var canView = userModule.auth('PROD_DATA:VIEW');
+  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
   var canManage = userModule.auth('PROD_DATA:MANAGE');
 
   express.get('/prodShiftOrders', canView, limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdShiftOrder));

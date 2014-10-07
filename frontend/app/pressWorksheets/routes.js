@@ -26,7 +26,7 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('PRESS_WORKSHEETS:VIEW');
+  var canView = user.auth('LOCAL', 'PRESS_WORKSHEETS:VIEW');
   var canManage = user.auth('PRESS_WORKSHEETS:MANAGE');
 
   router.map('/pressWorksheets', canView, function(req)

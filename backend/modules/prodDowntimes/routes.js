@@ -21,7 +21,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   var ProdDowntime = mongoose.model('ProdDowntime');
   var ProdLogEntry = mongoose.model('ProdLogEntry');
 
-  var canView = userModule.auth('PROD_DOWNTIMES:VIEW');
+  var canView = userModule.auth('LOCAL', 'PROD_DOWNTIMES:VIEW');
   var canManage = userModule.auth('PROD_DATA:MANAGE');
 
   express.get('/prodDowntimes', limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdDowntime));

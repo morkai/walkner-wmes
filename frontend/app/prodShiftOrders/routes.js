@@ -20,7 +20,7 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('PROD_DATA:VIEW');
+  var canView = user.auth('LOCAL', 'PROD_DATA:VIEW');
   var canManage = user.auth('PROD_DATA:VIEW');
 
   router.map('/prodShiftOrders', canView, function(req)
