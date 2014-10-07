@@ -449,7 +449,7 @@ define([
 
       var privilege = $li.attr('data-privilege');
 
-      return privilege === undefined || user.isAllowedTo(privilege.split(' '));
+      return privilege === undefined || user.isAllowedTo.apply(user, privilege.split(' '));
     }
   };
 
