@@ -155,6 +155,7 @@ exports.express = {
 };
 
 exports.user = {
+  localAddresses: [/^192\.168\./],
   privileges: [
     'USERS:VIEW', 'USERS:MANAGE',
     'ORDERS:VIEW', 'ORDERS:MANAGE',
