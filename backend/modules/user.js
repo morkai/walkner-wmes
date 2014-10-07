@@ -77,7 +77,29 @@ exports.start = function startUserModule(app, module)
    */
   function isLocalIpAddress(ipAddress)
   {
-    return ipAddress === '127.0.0.1' || localAddresses.indexOf(ipAddress.replace(/\.[0-9]+$/, '')) !== -1;
+    if (ipAddress === '127.0.0.1')
+    {
+      return true;
+    }
+
+    for (var i = 0, l = localAddresses.length; i < l; ++i)
+    {
+      var pattern = localAddresses[i];
+
+      if (typeof pattern === 'string')
+      {
+        if (ipAddress.indexOf(pattern) === 0)
+        {
+          return true;
+        }
+      }
+      else if (pattern.test(ipAddress))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
