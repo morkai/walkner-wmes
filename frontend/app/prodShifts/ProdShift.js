@@ -111,7 +111,7 @@ define([
       prodShift.creator = renderUserInfo({userInfo: prodShift.creator});
 
       prodShift.date = time.format(prodShift.date, 'YYYY-MM-DD');
-      prodShift.shift = t('core', 'SHIFT:' + prodShift.shift);
+      prodShift.shift = prodShift.shift ? t('core', 'SHIFT:' + prodShift.shift) : '?';
 
       if (options.orgUnits)
       {

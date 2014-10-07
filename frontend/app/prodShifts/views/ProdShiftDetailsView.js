@@ -15,9 +15,11 @@ define([
 
     template: detailsTemplate,
 
+    remoteTopics: {},
+
     initialize: function()
     {
-      this.editing = false;
+      this.panelType = this.options.panelType || 'primary';
     },
 
     serialize: function()
@@ -34,7 +36,7 @@ define([
       });
 
       return {
-        editing: this.editing,
+        panelType: this.panelType,
         model: this.model.serialize({
           orgUnits: true,
           personnel: true
@@ -43,19 +45,11 @@ define([
       };
     },
 
-    afterRender: function()
+    setPanelType: function(panelType)
     {
-      DetailsView.prototype.afterRender.call(this);
+      this.$el.removeClass('panel-' + this.panelType).addClass('panel-' + panelType);
 
-      if (this.editing)
-      {
-        this.setUpEditing();
-      }
-    },
-
-    setUpEditing: function()
-    {
-
+      this.panelType = panelType;
     }
 
   });

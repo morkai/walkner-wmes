@@ -3,6 +3,7 @@
 }
 .prodShifts-timeline-container {
   margin-bottom: 20px;
+  min-height: 88px;
 }
 .prodShifts-timeline {
   text-align: center;

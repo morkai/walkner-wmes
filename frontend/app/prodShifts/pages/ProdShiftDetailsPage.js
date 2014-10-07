@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/i18n',
   'app/time',
   'app/viewport',
@@ -19,6 +20,7 @@ define([
   '../views/QuantitiesDoneChartView',
   'app/prodShifts/templates/detailsPage'
 ], function(
+  _,
   t,
   time,
   viewport,
@@ -37,6 +39,12 @@ define([
 ) {
   'use strict';
 
+  var STATE_TO_PANEL_TYPE = {
+    'idle': 'warning',
+    'working': 'success',
+    'downtime': 'danger'
+  };
+
   return View.extend({
 
     template: detailsPageTemplate,
@@ -44,6 +52,15 @@ define([
     layoutName: 'page',
 
     pageId: 'details',
+
+    localTopics: {
+      'socket.connected': function()
+      {
+        this.promised(this.prodShift.fetch());
+        this.promised(this.prodShiftOrders.fetch({reset: true}));
+        this.promised(this.prodDowntimes.fetch({reset: true}));
+      }
+    },
 
     breadcrumbs: function()
     {
@@ -58,12 +75,17 @@ define([
 
     actions: function()
     {
-      var actions = [{
-        label: t.bound('prodShifts', 'PAGE_ACTION:prodLogEntries'),
-        icon: 'list-ol',
-        href: '#prodLogEntries?sort(createdAt)&limit(20)'
+      var actions = [];
+
+      if (this.prodShift.id)
+      {
+        actions.push({
+          label: t.bound('prodShifts', 'PAGE_ACTION:prodLogEntries'),
+          icon: 'list-ol',
+          href: '#prodLogEntries?sort(createdAt)&limit(20)'
           + '&prodShift=' + encodeURIComponent(this.prodShift.id)
-      }];
+        });
+      }
 
       if (this.prodShift.hasEnded())
       {
@@ -78,14 +100,29 @@ define([
 
     initialize: function()
     {
+      this.layout = null;
+      this.shiftPubsub = this.pubsub.sandbox();
+
       this.defineModels();
       this.defineViews();
-
-      this.listenToOnce(this.prodShift, 'sync', this.setUpRemoteTopics);
+      this.defineBindings();
 
       this.setView('.prodShifts-details-container', this.detailsView);
       this.setView('.prodShifts-timeline-container', this.timelineView);
       this.setView('.prodShifts-quantitiesDone-container', this.quantitiesDoneChartView);
+    },
+
+    setUpLayout: function(layout)
+    {
+      this.layout = layout;
+    },
+
+    destroy: function()
+    {
+      this.layout = null;
+
+      this.shiftPubsub.destroy();
+      this.shiftPubsub = null;
     },
 
     defineModels: function()
@@ -140,7 +177,9 @@ define([
 
     defineViews: function()
     {
-      this.detailsView = new ProdShiftDetailsView({model: this.prodShift});
+      this.detailsView = new ProdShiftDetailsView({
+        model: this.prodShift
+      });
 
       this.timelineView = new ProdShiftTimelineView({
         prodShift: this.prodShift,
@@ -151,8 +190,51 @@ define([
       this.quantitiesDoneChartView = new QuantitiesDoneChartView({model: this.prodShift});
     },
 
+    defineBindings: function()
+    {
+      this.listenToOnce(this.prodShift, 'sync', function()
+      {
+        this.setUpRemoteTopics();
+
+        if (!this.options.latest)
+        {
+          this.setUpShiftRemoteTopics();
+        }
+      });
+
+      this.listenTo(this.prodShift, 'change:_id', function()
+      {
+        this.setUpShiftRemoteTopics();
+
+        this.prodShiftOrders.reset([]);
+        this.prodDowntimes.reset([]);
+
+        this.prodShiftOrders.rqlQuery.selector.args[0].args[1] = this.prodShift.id;
+        this.prodDowntimes.rqlQuery.selector.args[0].args[1] = this.prodShift.id;
+
+        this.promised(this.prodShiftOrders.fetch({reset: true}));
+        this.promised(this.prodDowntimes.fetch({reset: true}));
+
+        if (this.options.latest && this.layout)
+        {
+          this.layout.setBreadcrumbs(this.breadcrumbs, this);
+          this.layout.setActions(this.actions, this);
+        }
+      });
+
+      if (this.options.latest)
+      {
+        this.setUpDetailsPanelType();
+      }
+    },
+
     load: function(when)
     {
+      if (this.options.latest)
+      {
+        return when(this.prodShift.fetch());
+      }
+
       return when(
         this.prodShift.fetch(),
         this.prodShiftOrders.fetch({reset: true}),
@@ -160,18 +242,36 @@ define([
       );
     },
 
-    setUpRemoteTopics: function()
+    setUpDetailsPanelType: function()
     {
-      this.pubsub.subscribe(
+      var page = this;
+      var updatePanelType = _.debounce(function()
+      {
+        page.detailsView.setPanelType(STATE_TO_PANEL_TYPE[page.timelineView.getLastState()]);
+      }, 1);
+
+      this.listenTo(this.prodShiftOrders, 'reset add remove change', updatePanelType);
+      this.listenTo(this.prodDowntimes, 'reset add remove change', updatePanelType);
+    },
+
+    setUpShiftRemoteTopics: function()
+    {
+      this.shiftPubsub.destroy();
+      this.shiftPubsub = this.pubsub.sandbox();
+
+      this.shiftPubsub.subscribe(
         'prodShifts.updated.' + this.prodShift.id,
         this.onProdShiftUpdated.bind(this)
       );
 
-      this.pubsub.subscribe(
+      this.shiftPubsub.subscribe(
         'prodShifts.deleted.' + this.prodShift.id,
         this.onProdShiftDeleted.bind(this)
       );
+    },
 
+    setUpRemoteTopics: function()
+    {
       this.pubsub.subscribe(
         'prodShiftOrders.created.' + this.prodShift.get('prodLine'),
         this.onProdShiftOrderCreated.bind(this)
@@ -201,6 +301,19 @@ define([
         'prodDowntimes.deleted.*',
         this.onProdDowntimeDeleted.bind(this)
       );
+
+      if (this.options.latest)
+      {
+        this.pubsub.subscribe(
+          'prodShifts.created.' + this.prodShift.get('prodLine'),
+          this.onProdShiftCreated.bind(this)
+        );
+      }
+    },
+
+    onProdShiftCreated: function()
+    {
+      this.promised(this.prodShift.set('_id', this.prodShift.get('prodLine'), {silent: true}).fetch());
     },
 
     onProdShiftUpdated: function(message)

@@ -6,6 +6,7 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../data/orgUnits',
   './ProdShift',
   './pages/ProdShiftListPage',
   'i18n!app/nls/prodShifts'
@@ -13,6 +14,7 @@ define([
   router,
   viewport,
   user,
+  orgUnits,
   ProdShift,
   ProdShiftListPage
 ) {
@@ -40,7 +42,10 @@ define([
   {
     viewport.loadPage('app/prodShifts/pages/ProdShiftDetailsPage', function(ProdShiftDetailsPage)
     {
-      return new ProdShiftDetailsPage({modelId: req.params.id});
+      return new ProdShiftDetailsPage({
+        latest: orgUnits.getByTypeAndId('prodLine', req.params.id) !== null,
+        modelId: req.params.id
+      });
     });
   });
 

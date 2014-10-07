@@ -94,13 +94,18 @@ define([
       }
 
       var render = _.debounce(this.render.bind(this), 1);
+      var reset = _.debounce(this.reset.bind(this), 1);
 
-      this.listenTo(this.prodShiftOrders, 'reset add remove change', render);
-      this.listenTo(this.prodDowntimes, 'reset add remove change', render);
+      this.listenTo(this.prodShiftOrders, 'add remove change', render);
+      this.listenTo(this.prodShiftOrders, 'reset', reset);
+      this.listenTo(this.prodDowntimes, 'add remove change', render);
+      this.listenTo(this.prodDowntimes, 'reset', reset);
     },
 
     destroy: function()
     {
+      this.removeChart();
+
       this.chart = null;
       this.datum = null;
 
@@ -115,6 +120,31 @@ define([
       }
 
       d3.select(this.el).select('svg').remove();
+    },
+
+    getLastState: function()
+    {
+      var state = 'idle';
+      var endingTime = 0;
+
+      for (var i = 0, l = this.datum.length; i < l; ++i)
+      {
+        var datum = this.datum[i];
+        var last = datum.times[datum.times.length - 1];
+
+        if (!last)
+        {
+          continue;
+        }
+
+        if (last.ending_time >= endingTime)
+        {
+          endingTime = last.ending_time;
+          state = datum.type;
+        }
+      }
+
+      return state;
     },
 
     calcWidth: function()
@@ -145,6 +175,11 @@ define([
     afterRender: function()
     {
       this.serializeDatum();
+
+      if (!this.beginning)
+      {
+        return;
+      }
 
       if (this.chart === null)
       {
@@ -179,7 +214,15 @@ define([
       this.timers.extendDatum = setInterval(extendDatum, 15000, this);
     },
 
-    renderChart: function()
+    reset: function()
+    {
+      this.chart = null;
+
+      this.removeChart();
+      this.render();
+    },
+
+    removeChart: function()
     {
       var parentEl = d3.select(this.el);
       var timelineEl = parentEl.select('svg');
@@ -188,13 +231,18 @@ define([
       {
         timelineEl.remove();
       }
+    },
+
+    renderChart: function()
+    {
+      this.removeChart();
 
       var width = this.calcWidth();
 
       this.hidePopover();
       this.chart.width(width);
 
-      parentEl
+      d3.select(this.el)
         .append('svg')
         .attr('width', width)
         .datum(this.datum)

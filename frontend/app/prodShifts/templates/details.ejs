@@ -1,4 +1,4 @@
-<div class="panel panel-primary">
+<div class="panel panel-<%- panelType %>">
   <div class="panel-heading">
     <%- t('prodShifts', 'PANEL:TITLE:details') %>
   </div>
@@ -11,19 +11,19 @@
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('prodShifts', 'PROPERTY:date') %></div>
-          <div class="prop-value"><%= model.date %></div>
+          <div class="prop-value"><%= model.date || '?' %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('prodShifts', 'PROPERTY:shift') %></div>
-          <div class="prop-value"><%= model.shift %></div>
+          <div class="prop-value"><%= model.shift || '?' %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('prodShifts', 'PROPERTY:createdAt') %></div>
-          <div class="prop-value"><%= model.createdAt %></div>
+          <div class="prop-value"><%= model.createdAt || '-' %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('prodShifts', 'PROPERTY:creator') %></div>
-          <div class="prop-value"><%- model.creator %></div>
+          <div class="prop-value"><%- model.creator || '?' %></div>
         </div>
       </div>
     </div>
@@ -31,7 +31,7 @@
       <div class="props">
         <div class="prop">
           <div class="prop-name"><%- t('core', 'ORG_UNIT:division') %></div>
-          <div class="prop-value"><%= model.division %></div>
+          <div class="prop-value"><%= model.division || '?' %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('core', 'ORG_UNIT:subdivision') %></div>
@@ -47,7 +47,7 @@
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('core', 'ORG_UNIT:workCenter') %></div>
-          <div class="prop-value"><%= model.workCenter %></div>
+          <div class="prop-value"><%= model.workCenter || '?' %></div>
         </div>
       </div>
     </div>

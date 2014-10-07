@@ -46,7 +46,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
     })
   );
 
-  express.get('/prodShifts/:id', canView, express.crud.readRoute.bind(null, app, ProdShift));
+  express.get('/prodShifts/:id', canView, findLatestProdLineShift, express.crud.readRoute.bind(null, app, ProdShift));
 
   express.put('/prodShifts/:id', canManage, editProdShiftRoute);
 
@@ -79,6 +79,34 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
       '"prodLine': doc.prodLine,
       '"shiftId': doc._id
     };
+  }
+
+  function findLatestProdLineShift(req, res, next)
+  {
+    if (/^[0-9a-z-]{15,}$/.test(req.params.id))
+    {
+      return next();
+    }
+
+    var conditions = {
+      date: {
+        $gt: moment().subtract(2, 'days')
+      },
+      prodLine: req.params.id
+    };
+
+    ProdShift.find(conditions).sort({date: -1}).limit(1).lean().exec(function(err, prodShifts)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      return res.json(prodShifts.length ? prodShifts[0] : {
+        _id: '?',
+        prodLine: req.params.id
+      });
+    });
   }
 
   function addProdShiftRoute(req, res, next)
