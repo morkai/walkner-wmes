@@ -125,10 +125,6 @@ function(
     };
   };
 
-  /**
-   * @param {string|Array.<string>} [privilege]
-   * @returns {boolean}
-   */
   user.isAllowedTo = function(privilege)
   {
     if (user.data.super)
@@ -137,43 +133,46 @@ function(
     }
 
     var userPrivileges = user.data.privileges;
+    var anyPrivileges = (arguments.length === 1 ? [privilege] : Array.prototype.slice.call(arguments)).map(function(p)
+    {
+      return Array.isArray(p) ? p : [p];
+    });
+
+    if (anyPrivileges.length
+      && user.data.local
+      && anyPrivileges[0].some(function(privilege) { return privilege === 'LOCAL'; }))
+    {
+      return true;
+    }
 
     if (!userPrivileges)
     {
       return false;
     }
 
-    if (!privilege || privilege.length === 0)
+    if (!anyPrivileges.length)
     {
       return user.isLoggedIn();
     }
 
-    var privileges = [].concat(privilege);
-    var matches = 0;
-
-    for (var i = 0, l = privileges.length; i < l; ++i)
+    for (var i = 0, l = anyPrivileges.length; i < l; ++i)
     {
-      privilege = privileges[i];
+      var allPrivileges = anyPrivileges[i];
+      var actualMatches = 0;
+      var requiredMatches = allPrivileges.length;
 
-      if (typeof privilege !== 'string')
+      for (var ii = 0; ii < requiredMatches; ++ii)
       {
-        continue;
+        actualMatches += userPrivileges.indexOf(allPrivileges[ii]) === -1 ? 0 : 1;
       }
 
-      var privilegeRe = new RegExp('^' + privilege.replace('*', '.*?') + '$');
-
-      for (var ii = 0, ll = userPrivileges.length; ii < ll; ++ii)
+      if (actualMatches === requiredMatches)
       {
-        if (privilegeRe.test(userPrivileges[ii]))
-        {
-          ++matches;
-
-          break;
-        }
+        return true;
       }
     }
 
-    return matches === privileges.length;
+    return false;
   };
 
   user.hasAccessToAor = function(aorId)
@@ -185,15 +184,13 @@ function(
       || user.data.aors.indexOf(aorId) !== -1;
   };
 
-  /**
-   * @param {string|Array.<string>} privilege
-   * @returns {function(app.core.Router, string, function)}
-   */
-  user.auth = function(privilege)
+  user.auth = function()
   {
+    var anyPrivileges = Array.prototype.slice.call(arguments);
+
     return function(req, referer, next)
     {
-      if (user.isAllowedTo(privilege))
+      if (user.isAllowedTo.apply(user, anyPrivileges))
       {
         next();
       }
