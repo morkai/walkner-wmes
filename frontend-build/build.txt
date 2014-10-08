@@ -631,6 +631,7 @@ app/nls/prodShiftOrders.js
 app/nls/pl/prodShiftOrders.js
 i18n!app/nls/prodShiftOrders
 app/prodShiftOrders/routes.js
+app/data/orgUnits.js
 app/prodDowntimes/ProdDowntimeCollection.js
 app/prodShifts/ProdShift.js
 app/prodShifts/ProdShiftCollection.js
@@ -642,7 +643,6 @@ app/nls/prodShifts.js
 app/nls/pl/prodShifts.js
 i18n!app/nls/prodShifts
 app/prodShifts/routes.js
-app/data/orgUnits.js
 app/production/templates/controls.js
 app/production/views/ProductionControlsView.js
 app/users/util/decorateUser.js
