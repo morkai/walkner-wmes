@@ -384,7 +384,7 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
 
         if (!prodShift)
         {
-          prodLineState.warn(
+          prodLineState.productionModule.warn(
             "Can't update shift because it doesn't exist (prodLine=[%s] prodShift=[%s]): %s",
             prodLineState.prodLine._id,
             prodLineState.prodShift ? prodLineState.prodShift._id : null,
