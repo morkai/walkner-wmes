@@ -41,9 +41,9 @@ define([
   'use strict';
 
   var canViewMaster = user.auth('FTE:MASTER:VIEW');
-  var canManageMaster = user.auth('FTE:MASTER:MANAGE|PROD_DATA:MANAGE');
+  var canManageMaster = user.auth('FTE:MASTER:MANAGE', 'PROD_DATA:MANAGE');
   var canViewLeader = user.auth('FTE:LEADER:VIEW');
-  var canManageLeader = user.auth('FTE:LEADER:MANAGE|PROD_DATA:MANAGE');
+  var canManageLeader = user.auth('FTE:LEADER:MANAGE', 'PROD_DATA:MANAGE');
 
   router.map('/fte/master', canViewMaster, function(req)
   {

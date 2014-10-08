@@ -4,6 +4,7 @@
 
 define([
   'app/i18n',
+  'app/user',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/View',
@@ -13,6 +14,7 @@ define([
   'app/core/templates/listPage'
 ], function(
   t,
+  user,
   bindLoadingMessage,
   pageActions,
   View,
@@ -42,7 +44,10 @@ define([
           label: t.bound('fte', 'PAGE_ACTION:add'),
           href: '#fte/leader;add',
           icon: 'plus',
-          privileges: 'FTE:LEADER:MANAGE|PROD_DATA:MANAGE'
+          privileges: function()
+          {
+            return user.isAllowedTo('FTE:LEADER:MANAGE', 'PROD_DATA:MANAGE');
+          }
         },
         pageActions.export(layout, this, this.collection)
       ];

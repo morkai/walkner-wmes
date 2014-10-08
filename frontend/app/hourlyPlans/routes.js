@@ -29,7 +29,7 @@ define([
   'use strict';
 
   var canView = user.auth('HOURLY_PLANS:VIEW');
-  var canManage = user.auth('HOURLY_PLANS:MANAGE|PROD_DATA:MANAGE');
+  var canManage = user.auth('HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE');
 
   router.map('/hourlyPlans', canView, function(req)
   {
