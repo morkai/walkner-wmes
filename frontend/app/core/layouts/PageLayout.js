@@ -371,11 +371,19 @@ define([
     {
       var action = actions[i];
 
-      if (action.privileges
-        && ((_.isFunction(action.privileges) && !action.privileges())
-          || !user.isAllowedTo(action.privileges)))
+      if (action.privileges)
       {
-        continue;
+        if (_.isFunction(action.privileges))
+        {
+          if (!action.privileges())
+          {
+            continue;
+          }
+        }
+        else if (!user.isAllowedTo(action.privileges))
+        {
+          continue;
+        }
       }
 
       if (typeof action.callback === 'function')
