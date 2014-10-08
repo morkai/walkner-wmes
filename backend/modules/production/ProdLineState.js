@@ -4,6 +4,7 @@
 
 'use strict';
 
+var inspect = require('util').inspect;
 var lodash = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
@@ -381,6 +382,16 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
           return this.skip(err);
         }
 
+        if (!prodShift)
+        {
+          prodLineState.warn(
+            "Can't update shift because it doesn't exist (prodLine=[%s] prodShift=[%s]): %s",
+            prodLineState.prodLine._id,
+            prodLineState.prodShift ? prodLineState.prodShift._id : null,
+            inspect(prodShiftData, {depth: null, colors: false})
+          );
+        }
+
         changes.prodShift = prodLineState.prodShift = prodShift;
         changes.prodShiftOrders = prodLineState.prodShiftOrders = prodShiftOrders;
         changes.prodDowntimes = prodLineState.prodDowntimes = prodDowntimes;
@@ -437,13 +448,25 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
         return done(err);
       }
 
-      prodLineState.prodShiftOrders.push(prodShiftOrder);
-      prodLineState.prodShiftOrders.sort(function(a, b)
+      if (prodShiftOrder)
       {
-        return a.startedAt - b.startedAt;
-      });
+        prodLineState.prodShiftOrders.push(prodShiftOrder);
+        prodLineState.prodShiftOrders.sort(function(a, b)
+        {
+          return a.startedAt - b.startedAt;
+        });
 
-      changes.prodShiftOrders = prodShiftOrder;
+        changes.prodShiftOrders = prodShiftOrder;
+      }
+      else
+      {
+        prodLineState.productionModule.warn(
+          "Can't update order because it doesn't exist (prodLine=[%s] prodShift=[%s]): %s",
+          prodLineState.prodLine._id,
+          prodLineState.prodShift ? prodLineState.prodShift._id : null,
+          inspect(prodShiftOrderData, {depth: null, colors: false})
+        );
+      }
 
       return done(null);
     });
@@ -535,13 +558,25 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
         return done(err);
       }
 
-      prodLineState.prodDowntimes.push(prodDowntime);
-      prodLineState.prodDowntimes.sort(function(a, b)
+      if (prodDowntime)
       {
-        return a.startedAt - b.startedAt;
-      });
+        prodLineState.prodDowntimes.push(prodDowntime);
+        prodLineState.prodDowntimes.sort(function(a, b)
+        {
+          return a.startedAt - b.startedAt;
+        });
 
-      changes.prodDowntimes = prodDowntime;
+        changes.prodDowntimes = prodDowntime;
+      }
+      else
+      {
+        prodLineState.productionModule.warn(
+          "Can't update downtime of because it doesn't exist (prodLine=[%s] prodShift=[%s]): %s",
+          prodLineState.prodLine._id,
+          prodLineState.prodShift ? prodLineState.prodShift._id : null,
+          inspect(prodDowntimeData, {depth: null, colors: false})
+        );
+      }
 
       return done(null);
     });
