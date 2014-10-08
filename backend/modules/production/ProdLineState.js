@@ -25,11 +25,14 @@ var HOUR_TO_INDEX = [
  */
 function ProdLineState(app, productionModule, prodLine)
 {
+  this.onClientDisconnect = this.onClientDisconnect.bind(this);
+
   this.app = app;
   this.productionModule = productionModule;
   this.broker = app.broker.sandbox();
   this.prodLine = prodLine;
 
+  this.onlineAt = 0;
   this.socket = null;
   this.extendedTimer = null;
   this.changes = null;
@@ -143,16 +146,33 @@ ProdLineState.prototype.onClientJoin = function(socket, data)
 {
   if (socket === this.socket)
   {
-    return this.productionModule.warn("The same client tried again to join the prod line: %s", this.prodLine._id);
+    this.productionModule.warn(
+      "The same client tried again to join the prod line: %s %s",
+      this.prodLine._id,
+      this.inspectSocketInfo(socket)
+    );
   }
-
-  if (this.socket !== null)
+  else if (this.socket !== null)
   {
-    return this.productionModule.warn("A different client tried to join the prod line: %s", this.prodLine._id);
+    this.productionModule.warn(
+      "A different client tried to join the prod line: %s %s",
+      this.prodLine._id,
+      this.inspectSocketInfo(socket)
+    );
+  }
+  else
+  {
+    this.productionModule.debug(
+      "Client joined the prod line: %s %s",
+      this.prodLine._id,
+      this.inspectSocketInfo(socket)
+    );
   }
 
-  socket.on('disconnect', this.onClientDisconnect.bind(this));
+  socket.removeListener('disconnect', this.onClientDisconnect);
+  socket.on('disconnect', this.onClientDisconnect);
 
+  this.onlineAt = Date.now();
   this.socket = socket;
 
   this.update({
@@ -165,19 +185,38 @@ ProdLineState.prototype.onClientJoin = function(socket, data)
 
 ProdLineState.prototype.onClientDisconnect = function()
 {
-  this.onClientLeave(this.socket);
+  this.onClientLeave(this.socket, true);
 };
 
 /**
  * @param {object} socket
+ * @param {boolean} [disconnected]
  */
-ProdLineState.prototype.onClientLeave = function(socket)
+ProdLineState.prototype.onClientLeave = function(socket, disconnected)
 {
+  var onlineDuration = Math.round((Date.now() - this.onlineAt) / 1000);
+
   if (socket !== this.socket)
   {
-    return this.productionModule.warn("A different client tried to leave the prod line: %s", this.prodLine._id);
+    this.productionModule.warn("A different client tried to leave the prod line%s (online for %ds): %s %s",
+      disconnected ? ' after disconnecting' : '',
+      onlineDuration,
+      this.prodLine._id,
+      this.inspectSocketInfo(socket)
+    );
+  }
+  else
+  {
+    this.productionModule.debug(
+      "Client left the prod line%s (online for %ds): %s %s",
+      disconnected ? ' after disconnecting' : '',
+      onlineDuration,
+      this.prodLine._id,
+      this.inspectSocketInfo(socket)
+    );
   }
 
+  this.onlineAt = 0;
   this.socket = null;
   this.online = false;
 
@@ -993,4 +1032,41 @@ ProdLineState.prototype.checkIfClosed = function(ignoreState)
   {
     this.update({prodShift: null});
   }
+};
+
+/**
+ * @private
+ * @param {object|null} thatSocket
+ * @returns {string}
+ */
+ProdLineState.prototype.inspectSocketInfo = function(thatSocket)
+{
+  var socketInfo = {
+    thisSocketId: null,
+    thisSocketIp: null,
+    thisSessionId: null,
+    thatSocketId: null,
+    thatSocketIp: null,
+    thatSessionId: null
+  };
+
+  if (this.socket)
+  {
+    socketInfo.thisSocketId = this.socket.id;
+    socketInfo.thisSocketIp = this.socket.handshake.user
+      ? this.socket.handshake.user.ipAddress
+      : this.socket.handshake.address.address;
+    socketInfo.thisSessionId = this.socket.handshake.sessionId;
+  }
+
+  if (thatSocket)
+  {
+    socketInfo.thisSocketId = thatSocket.id;
+    socketInfo.thisSocketIp = thatSocket.handshake.user
+      ? thatSocket.handshake.user.ipAddress
+      : thatSocket.handshake.address.address;
+    socketInfo.thisSessionId = thatSocket.handshake.sessionId;
+  }
+
+  return inspect(socketInfo, {depth: null, colors: false});
 };
