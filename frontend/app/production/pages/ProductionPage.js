@@ -70,9 +70,11 @@ define([
 
     initialize: function()
     {
+      this.delayProductionJoin = this.delayProductionJoin.bind(this);
+      this.onBeforeUnload = this.onBeforeUnload.bind(this);
+
       this.layout = null;
       this.shiftEditedSub = null;
-      this.joinProductionAfterSyncSub = null;
       this.productionJoined = false;
       this.enableProdLog = false;
 
@@ -80,8 +82,6 @@ define([
 
       this.defineViews();
       this.defineBindings();
-
-      this.onBeforeUnload = this.onBeforeUnload.bind(this);
 
       $(window).on('beforeunload', this.onBeforeUnload);
     },
@@ -95,7 +95,6 @@ define([
     {
       this.layout = null;
       this.shiftEditedSub = null;
-      this.joinProductionAfterSyncSub = null;
 
       $(window).off('beforeunload', this.onBeforeUnload);
 
@@ -272,6 +271,27 @@ define([
       }
     },
 
+    onBeforeUnload: function()
+    {
+      if (this.model.isLocked())
+      {
+        return;
+      }
+
+      prodLog.disable();
+
+      if (this.model.isIdle() || updater.isFrontendReloading())
+      {
+        return;
+      }
+
+      this.timers.enableProdLog = setTimeout(prodLog.enable.bind(prodLog), 1000);
+
+      return this.model.isDowntime()
+        ? t('production', 'unload:downtime')
+        : t('production', 'unload:order');
+    },
+
     refreshDowntimes: function()
     {
       if (prodLog.isSyncing())
@@ -308,7 +328,7 @@ define([
         var req = page.model.prodDowntimes.fetch({reset: true});
 
         page.promised(req).done(function() { page.model.saveLocalData(); });
-      }, 3000);
+      }, 2500);
     },
 
     delayDowntimesRefresh: function()
@@ -329,17 +349,17 @@ define([
     {
       if (prodLog.isSyncing())
       {
-        return this.broker.subscribe('production.synced', this.refreshPlannedQuantities.bind(this)).setLimit(1);
+        return this.broker.subscribe('production.synced', this.delayPlannedQuantitiesRefresh.bind(this)).setLimit(1);
       }
 
       if (this.model.isLocked())
       {
-        return this.listenToOnce(this.model, 'unlocked', this.refreshPlannedQuantities);
+        return this.listenToOnce(this.model, 'unlocked', this.delayPlannedQuantitiesRefresh);
       }
 
       if (!this.model.id)
       {
-        return this.listenToOnce(this.model, 'change:_id', this.refreshPlannedQuantities);
+        return this.listenToOnce(this.model, 'change:_id', this.delayPlannedQuantitiesRefresh);
       }
 
       var page = this;
@@ -360,25 +380,18 @@ define([
       });
     },
 
-    onBeforeUnload: function()
+    delayPlannedQuantitiesRefresh: function()
     {
-      if (this.model.isLocked())
+      if (this.timers.refreshPlannedQuantities)
       {
-        return;
+        clearTimeout(this.timers.refreshPlannedQuantities);
       }
 
-      prodLog.disable();
-
-      if (this.model.isIdle() || updater.isFrontendReloading())
+      this.timers.refreshPlannedQuantities = setTimeout(function(view)
       {
-        return;
-      }
-
-      this.timers.enableProdLog = setTimeout(prodLog.enable.bind(prodLog), 1000);
-
-      return this.model.isDowntime()
-        ? t('production', 'unload:downtime')
-        : t('production', 'unload:order');
+        view.timers.refreshPlannedQuantities = null;
+        view.refreshPlannedQuantities();
+      }, 5000, this);
     },
 
     joinProduction: function()
@@ -390,21 +403,12 @@ define([
 
       if (prodLog.isSyncing())
       {
-        if (this.joinProductionAfterSyncSub === null)
-        {
-          this.joinProductionAfterSyncSub = this.broker.subscribe('production.synced')
-            .setLimit(1)
-            .on('message', this.joinProduction.bind(this));
-        }
-
-        return;
+        return this.broker.subscribe('production.synced', this.delayProductionJoin).setLimit(1);
       }
-
-      this.joinProductionAfterSyncSub = null;
 
       if (!this.model.id)
       {
-        return this.listenToOnce(this.model, 'change:_id', this.joinProduction);
+        return this.listenToOnce(this.model, 'change:_id', this.delayProductionJoin);
       }
 
       var prodDowntime = this.model.prodDowntimes.findFirstUnfinished();
@@ -417,6 +421,20 @@ define([
       });
 
       this.productionJoined = true;
+    },
+
+    delayProductionJoin: function()
+    {
+      if (this.timers.joinProduction)
+      {
+        clearTimeout(this.timers.joinProduction);
+      }
+
+      this.timers.joinProduction = setTimeout(function(view)
+      {
+        view.timers.joinProduction = null;
+        view.joinProduction();
+      }, 2000, this);
     },
 
     leaveProduction: function()
