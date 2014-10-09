@@ -265,6 +265,11 @@ define([
         this.refreshDowntimes();
         this.refreshPlannedQuantities();
       }
+
+      if (this.model.isLocked())
+      {
+        this.$el.removeClass('hidden');
+      }
     },
 
     refreshDowntimes: function()
@@ -395,6 +400,8 @@ define([
         return;
       }
 
+      this.joinProductionAfterSyncSub = null;
+
       if (!this.model.id)
       {
         return this.listenToOnce(this.model, 'change:_id', this.joinProduction);
@@ -409,7 +416,6 @@ define([
         prodDowntimeId: prodDowntime ? prodDowntime.id : null
       });
 
-      this.joinProductionAfterSyncSub = null;
       this.productionJoined = true;
     },
 
