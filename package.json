@@ -1,8 +1,8 @@
 {
   "private": true,
   "name": "walkner-wmes",
-  "version": "0.43.3",
-  "backendVersion": 69,
+  "version": "0.43.4",
+  "backendVersion": 70,
   "frontendVersion": 78,
   "description": "Wannabe MES application in Node.js.",
   "license": "CC BY-NC-SA 4.0",
