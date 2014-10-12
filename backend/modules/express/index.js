@@ -78,6 +78,12 @@ exports.start = function startExpressModule(app, module, done)
   module.use(bodyParser.urlencoded({extended: false}));
   module.use(bodyParser.text({type: 'text/*'}));
   module.use(rqlMiddleware());
+
+  app.broker.publish('express.beforeRouter', {
+    module: module,
+    express: express
+  });
+
   module.use(module.router);
   module.use(express.static(staticPath));
 
