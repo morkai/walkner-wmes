@@ -49,6 +49,11 @@ exports.start = function startUserModule(app, module)
 
   app.onModuleReady([module.config.expressId, module.config.sioId], setUpSio);
 
+  app.broker.subscribe('express.beforeRouter').setLimit(1).on('message', function(message)
+  {
+    message.module.use(ensureUserMiddleware);
+  });
+
   /**
    * @private
    * @returns {Array.<string>}
@@ -160,6 +165,18 @@ exports.start = function startUserModule(app, module)
     return false;
   }
 
+  function ensureUserMiddleware(req, res, next)
+  {
+    var user = req.session.user;
+
+    if (!user)
+    {
+      user = req.session.user = createGuestData(getRealIp({}, req));
+    }
+
+    return next();
+  }
+
   /**
    * @returns {function(object, object, function)}
    */
@@ -179,7 +196,7 @@ exports.start = function startUserModule(app, module)
       anyPrivileges.push(allPrivileges);
     }
 
-    return function(req, res, next)
+    return function authMiddleware(req, res, next)
     {
       var user = req.session.user;
 
