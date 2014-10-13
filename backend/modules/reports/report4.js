@@ -305,7 +305,7 @@ Report4.prototype.finalizeEffAndProd = function()
       var shifts = Object.keys(groupData.shifts).length;
 
       effAndProd.eff = groupData.effDen ? (groupData.effNum / groupData.effDen) : 0;
-      effAndProd.prod = prodDen ? (groupData.effNum / (8 * shifts) / prodDen) : 0;
+      effAndProd.prod = prodDen ? (groupData.effNum / (this.options.prodNumConstant * shifts) / prodDen) : 0;
 
       var divisionIds = Object.keys(groupData.byDivision);
 

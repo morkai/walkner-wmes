@@ -25,17 +25,42 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   var canView = userModule.auth('REPORTS:VIEW');
   var canManage = userModule.auth('REPORTS:MANAGE');
 
-  express.get('/reports/1', canView, helpers.sendCachedReport, report1Route.bind(null, app, reportsModule));
+  express.get(
+    '/reports/1',
+    canView,
+    helpers.sendCachedReport.bind(null, '1'),
+    report1Route.bind(null, app, reportsModule)
+  );
 
-  express.get('/reports/2', canView, helpers.sendCachedReport, report2Route.bind(null, app, reportsModule));
+  express.get(
+    '/reports/2',
+    canView,
+    helpers.sendCachedReport.bind(null, '2'),
+    report2Route.bind(null, app, reportsModule)
+  );
 
-  express.get('/reports/3', canView, helpers.sendCachedReport, report3Route.bind(null, app, reportsModule));
+  express.get(
+    '/reports/3',
+    canView,
+    helpers.sendCachedReport.bind(null, '3'),
+    report3Route.bind(null, app, reportsModule)
+  );
 
-  express.get('/reports/4', canView, helpers.sendCachedReport, report4Route.bind(null, app, reportsModule));
+  express.get(
+    '/reports/4',
+    canView,
+    helpers.sendCachedReport.bind(null, '4'),
+    report4Route.bind(null, app, reportsModule)
+  );
 
   express.get('/reports/4;notes', canView, report4NotesRoute.bind(null, app, reportsModule));
 
-  express.get('/reports/5', canView, helpers.sendCachedReport, report5Route.bind(null, app, reportsModule));
+  express.get(
+    '/reports/5',
+    canView,
+    helpers.sendCachedReport.bind(null, '5'),
+    report5Route.bind(null, app, reportsModule)
+  );
 
   express.get(
     '/reports/settings',

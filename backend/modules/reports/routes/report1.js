@@ -38,7 +38,8 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
     prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
     prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models),
     orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
-    downtimeReasons: getDowntimeReasons(app[reportsModule.config.downtimeReasonsId].models)
+    downtimeReasons: getDowntimeReasons(app[reportsModule.config.downtimeReasonsId].models),
+    prodNumConstant: reportsModule.prodNumConstant
   };
 
   if (isNaN(options.fromTime) || isNaN(options.toTime))
@@ -54,7 +55,7 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
     }
 
     res.type('json');
-    res.send(helpers.cacheReport(req, report));
+    res.send(helpers.cacheReport('1', req, report));
   });
 };
 

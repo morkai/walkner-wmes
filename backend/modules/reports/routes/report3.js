@@ -31,7 +31,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     }
 
     res.type('json');
-    res.send(helpers.cacheReport(req, report));
+    res.send(helpers.cacheReport('3', req, report));
   });
 };
 

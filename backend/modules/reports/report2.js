@@ -308,8 +308,10 @@ module.exports = function(mongoose, options, done)
     results.effIneff.efficiency = util.round(doc.eff);
     results.effIneff.value = util.round((results.dirIndir.direct * doc.eff) - results.dirIndir.direct);
 
-    results.dirIndir.productivity = util.round(doc.num / 8 / this.fteResults.totals.prodDenTotal);
-    results.dirIndir.productivityNoWh = util.round(doc.num / 8 / this.fteResults.totals.prodDenMaster);
+    results.dirIndir.productivity =
+      util.round(doc.num / options.prodNumConstant / this.fteResults.totals.prodDenTotal);
+    results.dirIndir.productivityNoWh =
+      util.round(doc.num / options.prodNumConstant / this.fteResults.totals.prodDenMaster);
     results.dirIndir.quantityDone = doc.qty;
     results.dirIndir.efficiencyNum = util.round(doc.num);
     results.dirIndir.laborSetupTime = util.round(doc.lst);

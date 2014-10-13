@@ -19,7 +19,8 @@ module.exports = function report4Route(app, reportsModule, req, res, next)
     downtimeReasons: helpers.getDowntimeReasons(
       app[reportsModule.config.downtimeReasonsId].models, true
     ),
-    subdivisions: getPressSubdivisions(app[reportsModule.config.orgUnitsId])
+    subdivisions: getPressSubdivisions(app[reportsModule.config.orgUnitsId]),
+    prodNumConstant: reportsModule.prodNumConstant
   };
 
   if (isNaN(options.fromTime) || isNaN(options.toTime))
@@ -97,7 +98,7 @@ module.exports = function report4Route(app, reportsModule, req, res, next)
       }
 
       res.type('json');
-      res.send(helpers.cacheReport(req, report));
+      res.send(helpers.cacheReport('4', req, report));
     });
   }
 };

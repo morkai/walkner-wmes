@@ -51,7 +51,7 @@ module.exports = function report5Route(app, reportsModule, req, res, next)
     }
 
     res.type('json');
-    res.send(helpers.cacheReport(req, report));
+    res.send(helpers.cacheReport('5', req, report));
   });
 };
 

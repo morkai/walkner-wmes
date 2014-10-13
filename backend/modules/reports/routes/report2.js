@@ -39,7 +39,8 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
     orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
     directProdFunctions: getDirectProdFunctions(app[reportsModule.config.prodFunctionsId].models),
-    prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models)
+    prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models),
+    prodNumConstant: reportsModule.prodNumConstant
   };
 
   if (isNaN(options.fromTime) || isNaN(options.toTime))
@@ -55,7 +56,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     }
 
     res.type('json');
-    res.send(helpers.cacheReport(req, report));
+    res.send(helpers.cacheReport('2', req, report));
   });
 };
 

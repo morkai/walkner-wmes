@@ -1,2 +1,13 @@
 <% var metric = 'productivity' %>
-<% include colorAndRef.ejs %>
+<div class="panel-body" data-tab="<%- metric %>">
+  <%- renderColorPicker({
+    idPrefix: idPrefix, property: 'reports.' + metric + '.color',
+    label: t('reports', 'settings:color'),
+    value: colors[metric]
+  }) %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-prodNumConstant-coeff"><%- t('reports', 'settings:coeff') %></label>
+    <input id="<%- idPrefix %>-prodNumConstant-coeff" class="form-control" name="reports.prodNumConstant.coeff" type="number" min="0" step="0.0001">
+  </div>
+  <% include metricRefs.ejs %>
+</div>

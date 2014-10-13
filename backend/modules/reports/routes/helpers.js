@@ -9,14 +9,30 @@ var util = require('../util');
 
 var cachedReports = {};
 
-exports.sendCachedReport = function(req, res, next)
+exports.clearCachedReports = function(ids)
+{
+  if (ids === undefined)
+  {
+    cachedReports = {};
+  }
+  else if (Array.isArray(ids))
+  {
+    ids.forEach(function(id) { cachedReports[id] = {}; });
+  }
+  else
+  {
+    cachedReports[ids] = {};
+  }
+};
+
+exports.sendCachedReport = function(id, req, res, next)
 {
   req.reportHash = crypto.createHash('md5').update(req.url).digest('hex');
 
-  if (cachedReports[req.reportHash])
+  if (cachedReports[id] && cachedReports[id][req.reportHash])
   {
     res.type('json');
-    res.send(cachedReports[req.reportHash]);
+    res.send(cachedReports[id][req.reportHash]);
   }
   else
   {
@@ -24,21 +40,26 @@ exports.sendCachedReport = function(req, res, next)
   }
 };
 
-exports.cacheReport = function(req, report)
+exports.cacheReport = function(id, req, report)
 {
   var reportJson = JSON.stringify(report, null, 2);
 
   if (req.reportHash)
   {
-    cachedReports[req.reportHash] = reportJson;
+    if (cachedReports[id] === undefined)
+    {
+      cachedReports[id] = {};
+    }
 
-    scheduleReportCacheExpiration(req.reportHash, report.options.fromTime, report.options.toTime);
+    cachedReports[id][req.reportHash] = reportJson;
+
+    scheduleReportCacheExpiration(id, req.reportHash, report.options.fromTime, report.options.toTime);
   }
 
   return reportJson;
 };
 
-function scheduleReportCacheExpiration(reportHash, fromTime, toTime)
+function scheduleReportCacheExpiration(id, reportHash, fromTime, toTime)
 {
   var timeRange = toTime - fromTime;
   var currentShiftStartTime = util.getCurrentShiftStartDate().getTime();
@@ -46,7 +67,13 @@ function scheduleReportCacheExpiration(reportHash, fromTime, toTime)
   var delay = toTime > currentShiftStartTime ? (timeRange > day ? 5 : 2) : 15;
 
   setTimeout(
-    function() { delete cachedReports[reportHash]; },
+    function()
+    {
+      if (cachedReports[id] && cachedReports[id][reportHash])
+      {
+        delete cachedReports[id][reportHash];
+      }
+    },
     delay * 60 * 1000
   );
 }
