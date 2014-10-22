@@ -4,12 +4,14 @@
 
 define([
   'jquery',
+  'screenfull',
   'app/i18n',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   '../views/FactoryLayoutCanvasView'
 ], function(
   $,
+  screenfull,
   t,
   View,
   bindLoadingMessage,
@@ -37,7 +39,22 @@ define([
 
     actions: function()
     {
-      return [{
+      var page = this;
+      var actions = [];
+
+      if (document.msExitFullscreen)
+      {
+        actions.push({
+          label: t.bound('factoryLayout', 'pa:layout:fullscreen'),
+          icon: 'arrows-alt',
+          callback: function()
+          {
+            screenfull.request(page.canvasView.el);
+          }
+        });
+      }
+
+      actions.push({
         label: t.bound('factoryLayout', 'pa:layout:edit'),
         icon: 'edit',
         privileges: 'FACTORY_LAYOUT:MANAGE',
@@ -47,7 +64,9 @@ define([
         icon: 'cogs',
         privileges: 'FACTORY_LAYOUT:MANAGE',
         href: '#factoryLayout;settings?tab=blacklist'
-      }];
+      });
+
+      return actions;
     },
 
     initialize: function()

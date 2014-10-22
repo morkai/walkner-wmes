@@ -5,6 +5,9 @@
     "bc:settings": "Settings",
 
     "pa:settings": "Change settings",
+    "pa:layout:fullscreen": "Fullscreen mode",
+    "pa:layout:edit": "Edit layout",
+    "pa:layout:live": "Publish",
 
     "prop:master": "Master",
     "prop:leader": "Leader",

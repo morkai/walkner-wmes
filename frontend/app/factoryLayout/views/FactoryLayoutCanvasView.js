@@ -72,7 +72,7 @@ define([
         this.clickInfo = {
           type: 'prodLine',
           time: e.timeStamp,
-          modelId: e.currentTarget.dataset.id,
+          modelId: e.currentTarget.getAttribute('data-id'),
           button: e.button
         };
 
@@ -83,7 +83,7 @@ define([
         this.clickInfo = {
           type: 'division',
           time: e.timeStamp,
-          modelId: e.currentTarget.dataset.id,
+          modelId: e.currentTarget.getAttribute('data-id'),
           button: e.button
         };
 
@@ -148,7 +148,7 @@ define([
         this.listenToOnce(this.model, 'sync', this.render);
       }
 
-      this.el.classList.toggle('is-editable', this.editable);
+      this.$el.toggleClass('is-editable', this.editable);
 
       this.setUpCanvas(this.getSize());
       this.renderLayout();
@@ -525,7 +525,7 @@ define([
 
     onKeyDown: function(e)
     {
-      if (e.which === 122 && !screenfull.isFullscreen)
+      if (!document.msExitFullscreen && e.which === 122 && !screenfull.isFullscreen)
       {
         e.preventDefault();
 
@@ -726,7 +726,10 @@ define([
 
     bringDivisionToTop: function(divisionEl)
     {
-      divisionEl.parentNode.appendChild(divisionEl);
+      if (divisionEl.parentNode.lastElementChild !== divisionEl)
+      {
+        divisionEl.parentNode.appendChild(divisionEl);
+      }
     }
 
   });
