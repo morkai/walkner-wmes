@@ -55,7 +55,7 @@
 }
 @media (min-width: 728px) {
   .navbar {
-    min-height: initial;
+    min-height: 0;
   }
   .navbar-default {
     background: linear-gradient(to bottom, #f8f8f8 70%, #f0f0f0);
