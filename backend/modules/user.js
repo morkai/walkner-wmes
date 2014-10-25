@@ -8,17 +8,21 @@ var os = require('os');
 var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
 var lodash = require('lodash');
+var bcrypt = require('bcrypt');
+var step = require('h5.step');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 exports.DEFAULT_CONFIG = {
   sioId: 'sio',
   expressId: 'express',
+  mongooseId: 'mongoose',
   privileges: [],
   root: {
     password: '$2a$10$qSJWcm1LtN0OzlSHkSRl..ZezbqHAjW2ZuHzBd.F0CTQoWBvf0uQi'
   },
   guest: {},
-  localAddresses: null
+  localAddresses: null,
+  loginFailureDelay: 1000
 };
 
 exports.start = function startUserModule(app, module)
@@ -42,6 +46,7 @@ exports.start = function startUserModule(app, module)
   });
 
   module.auth = createAuthMiddleware;
+  module.authenticate = authenticate;
   module.getRealIp = getRealIp;
   module.isLocalIpAddress = isLocalIpAddress;
   module.isAllowedTo = isAllowedTo;
@@ -219,6 +224,77 @@ exports.start = function startUserModule(app, module)
 
       return res.send(403);
     };
+  }
+
+  function authenticate(credentials, done)
+  {
+    if (!lodash.isString(credentials.login)
+      || lodash.isEmpty(credentials.login)
+      || !lodash.isString(credentials.password)
+      || lodash.isEmpty(credentials.password))
+    {
+      return delayAuthFailure(new Error('INVALID_CREDENTIALS'), 400, done);
+    }
+
+    step(
+      function findUserDataStep()
+      {
+        var next = this.next();
+
+        if (credentials.login === module.root.login)
+        {
+          next(null, lodash.merge({}, module.root));
+        }
+        else
+        {
+          app[module.config.mongooseId].model('User').findOne({login: credentials.login}, next);
+        }
+      },
+      function checkUserDataStep(err, userData)
+      {
+        if (err)
+        {
+          return this.done(delayAuthFailure.bind(null, err, 500, done));
+        }
+
+        if (!userData)
+        {
+          return this.done(delayAuthFailure.bind(null, new Error('INVALID_LOGIN'), 401, done));
+        }
+
+        if (lodash.isFunction(userData.toObject))
+        {
+          userData = userData.toObject();
+        }
+
+        this.userData = userData;
+      },
+      function comparePasswordStep()
+      {
+        bcrypt.compare(credentials.password, this.userData.password, this.next());
+      },
+      function handleComparePasswordResultStep(err, result)
+      {
+        if (err)
+        {
+          return this.done(delayAuthFailure.bind(null, err, 500, done));
+        }
+
+        if (!result)
+        {
+          return this.done(delayAuthFailure.bind(null, new Error('INVALID_PASSWORD'), 401, done));
+        }
+
+        return this.done(done, null, this.userData);
+      }
+    );
+  }
+
+  function delayAuthFailure(err, statusCode, done)
+  {
+    err.status = statusCode;
+
+    setTimeout(done, module.config.loginFailureDelay, err);
   }
 
   function createUserInfo(userData, addressData)

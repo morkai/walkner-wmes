@@ -44,7 +44,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
   function loginRoute(req, res, next)
   {
-    usersModule.authenticate(req.body, function(err, user)
+    userModule.authenticate(req.body, function(err, user)
     {
       if (err)
       {
