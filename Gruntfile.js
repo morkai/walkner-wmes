@@ -4,12 +4,13 @@
 
 /*global module:false*/
 
+'use strict';
+
 var requirejsConfig = require('./config/require');
+var scriptsHelpers = require('./scripts/installer-windows/helpers');
 
 module.exports = function(grunt)
 {
-  'use strict';
-
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: {
@@ -21,6 +22,15 @@ module.exports = function(grunt)
         './build/frontend',
         './frontend-build/**/*.ejs',
         './frontend-build/**/nls/*.json'
+      ],
+      scripts: [
+        './build/scripts'
+      ],
+      installer: [
+        './build/installer'
+      ],
+      build: [
+        './build'
       ]
     },
     jshint: {
@@ -47,7 +57,17 @@ module.exports = function(grunt)
         cwd: './frontend',
         src: '**',
         dest: './build/frontend'
-      }
+      },
+      scripts: scriptsHelpers.copy.scripts,
+      installer: scriptsHelpers.copy.installer
+    },
+    run: {
+      compileRunScript: scriptsHelpers.run.run,
+      compileUninstallScript: scriptsHelpers.run.uninstall,
+      compileInstallScript: scriptsHelpers.run.install
+    },
+    replace: {
+      scripts: scriptsHelpers.replace.scripts
     },
     ejsAmd: {
       frontend: {
@@ -122,6 +142,8 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-ejs-amd');
   grunt.loadNpmTasks('grunt-messageformat-amd');
+  grunt.loadNpmTasks('grunt-run');
+  grunt.loadNpmTasks('grunt-text-replace');
 
   grunt.registerTask('default', [
     'clean',
@@ -137,5 +159,28 @@ module.exports = function(grunt)
     'messageformatAmd:frontend',
     'requirejs:frontend',
     'clean:frontendBuilt'
+  ]);
+
+  grunt.registerTask('build-scripts', [
+    'clean:scripts',
+    'copy:scripts',
+    'replace:scripts',
+    'run:compileRunScript',
+    'run:compileUninstallScript'
+  ]);
+
+  grunt.registerTask('build-installer', [
+    'clean:installer',
+    'copy:installer',
+    'run:compileInstallScript',
+    'clean:installer',
+    'clean:scripts'
+  ]);
+
+  grunt.registerTask('build-all', [
+    'clean:build',
+    'build-frontend',
+    'build-scripts',
+    'build-installer'
   ]);
 };
