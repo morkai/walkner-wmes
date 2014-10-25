@@ -52,6 +52,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         {
           app.broker.publish('users.loginFailure', {
             severity: 'warning',
+            user: req.session.user,
             login: String(req.body.login)
           });
         }
