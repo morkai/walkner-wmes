@@ -95,7 +95,10 @@ define([
 
     updateCurrentTime: function()
     {
-      this.$currentTime.text(this.model.getCurrentTime());
+      if (this.$currentTime)
+      {
+        this.$currentTime.text(this.model.getCurrentTime());
+      }
 
       this.scheduleCurrentTimeUpdate();
     },
