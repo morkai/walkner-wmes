@@ -644,6 +644,9 @@ app/nls/pl/prodShifts.js
 i18n!app/nls/prodShifts
 app/prodShifts/routes.js
 app/production/templates/controls.js
+app/production/templates/unlockDialog.js
+app/production/views/UnlockDialogView.js
+app/production/views/LockDialogView.js
 app/production/views/ProductionControlsView.js
 app/users/util/decorateUser.js
 app/users/User.js

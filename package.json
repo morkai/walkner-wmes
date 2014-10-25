@@ -1,9 +1,10 @@
 {
   "private": true,
+  "guid": "A0974235-9E21-49BB-8D01-CA7A932A6EEB",
   "name": "walkner-wmes",
-  "version": "0.44.0",
-  "backendVersion": 71,
-  "frontendVersion": 79,
+  "version": "0.45.0",
+  "backendVersion": 72,
+  "frontendVersion": 80,
   "description": "Wannabe MES application in Node.js.",
   "license": "CC BY-NC-SA 4.0",
   "homepage": "https://github.com/morkai/walkner-wmes",
@@ -59,6 +60,8 @@
     "grunt-contrib-requirejs": "~0.4.3",
     "grunt-ejs-amd": "git+http://github.com/morkai/grunt-ejs-amd.git#a09723eabe",
     "grunt-messageformat-amd": "git+http://github.com/morkai/grunt-messageformat-amd.git#925ad3d218",
+    "grunt-run": "~0.2.2",
+    "grunt-text-replace": "~0.3.11",
     "d3": "~3.4.3",
     "uglify-js": "~2.4.13",
     "smash": "~0.0.12"
