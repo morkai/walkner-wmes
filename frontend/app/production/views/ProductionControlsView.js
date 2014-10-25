@@ -85,7 +85,7 @@ define([
       );
     },
 
-    unlock: function ()
+    unlock: function()
     {
       if (!this.socket.isConnected())
       {
@@ -96,10 +96,15 @@ define([
         });
       }
 
+      if (!this.model.isLocked())
+      {
+        return;
+      }
+
       viewport.showDialog(new UnlockDialogView({model: this.model}), t('production', 'unlockDialog:title:unlock'));
     },
 
-    lock: function ()
+    lock: function()
     {
       if (!this.socket.isConnected())
       {
@@ -108,6 +113,11 @@ define([
           time: 2000,
           text: t('production', 'controls:msg:sync:noConnection')
         });
+      }
+
+      if (this.model.isLocked())
+      {
+        return;
       }
 
       viewport.showDialog(new LockDialogView({model: this.model}), t('production', 'unlockDialog:title:lock'));
