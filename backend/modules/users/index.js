@@ -6,6 +6,7 @@
 
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
+var authenticate = require('./authenticate');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -13,11 +14,14 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   sioId: 'sio',
   companiesId: 'companies',
-  sqlConnStr: null
+  sqlConnStr: null,
+  loginFailureDelay: 1000
 };
 
 exports.start = function startUsersModule(app, module)
 {
+  module.authenticate = authenticate.bind(null, app, module);
+
   app.onModuleReady(
     [
       module.config.mongooseId,

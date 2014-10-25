@@ -44,61 +44,24 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
   function loginRoute(req, res, next)
   {
-    var credentials = req.body;
-
-    if (credentials.login === userModule.root.login)
-    {
-      return authUser(
-        credentials, lodash.merge({}, userModule.root), req, res, next
-      );
-    }
-
-    User.findOne({login: credentials.login}, function(err, user)
+    usersModule.authenticate(req.body, function(err, user)
     {
       if (err)
       {
+        if (err.status < 500)
+        {
+          app.broker.publish('users.loginFailure', {
+            severity: 'warning',
+            login: String(req.body.login)
+          });
+        }
+
         return next(err);
-      }
-
-      if (!user)
-      {
-        app.broker.publish('users.loginFailure', {
-          severity: 'warning',
-          login: credentials.login
-        });
-
-        return setTimeout(res.send.bind(res, 401), 1000);
-      }
-
-      authUser(credentials, user.toObject(), req, res, next);
-    });
-  }
-
-  function authUser(credentials, user, req, res, next)
-  {
-    var password = String(credentials.password);
-    var hash = user.password;
-
-    bcrypt.compare(password, hash, function(err, result)
-    {
-      if (err)
-      {
-        return next(err);
-      }
-
-      if (!result)
-      {
-        app.broker.publish('users.loginFailure', {
-          severity: 'warning',
-          login: credentials.login
-        });
-
-        return setTimeout(res.send.bind(res, 401), 1000);
       }
 
       var oldSessionId = req.sessionID;
 
-      req.session.regenerate(function(err)
+      req.session.regenerate(function (err)
       {
         if (err)
         {
@@ -114,11 +77,11 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         req.session.user = user;
 
         res.format({
-          json: function()
+          json: function ()
           {
             res.send(req.session.user);
           },
-          default: function()
+          default: function ()
           {
             res.redirect('/');
           }
