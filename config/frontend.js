@@ -75,12 +75,16 @@ exports.events = {
     info: [
       'events.**',
       'mechOrders.synced',
-      'users.synced'
+      'users.synced',
+      'production.unlocked',
+      'production.locked'
     ],
     warning: [
       'users.loginFailure',
       '*.deleted',
-      'fte.leader.deleted', 'fte.master.deleted'
+      'fte.leader.deleted', 'fte.master.deleted',
+      'production.unlockFailure',
+      'production.lockFailure'
     ],
     error: [
       '*.syncFailed'

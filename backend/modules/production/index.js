@@ -57,8 +57,8 @@ exports.start = function startProductionModule(app, module)
     [
       module.config.userId,
       module.config.sioId,
-      module.config.downtimeReasonsId,
-      module.config.prodLinesId
+      module.config.orgUnitsId,
+      module.config.fteId
     ],
     setUpCommands.bind(null, app, module)
   );

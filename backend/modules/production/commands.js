@@ -7,6 +7,7 @@
 var inspect = require('util').inspect;
 var crypto = require('crypto');
 var lodash = require('lodash');
+var step = require('h5.step');
 var logEntryHandlers = require('./logEntryHandlers');
 
 module.exports = function setUpProductionsCommands(app, productionModule)
@@ -15,7 +16,8 @@ module.exports = function setUpProductionsCommands(app, productionModule)
   var mongoose = app[productionModule.config.mongooseId];
   var userModule = app[productionModule.config.userId];
   var ProdLogEntry = mongoose.model('ProdLogEntry');
-  var prodLines = app[productionModule.config.prodLinesId];
+  var orgUnits = app[productionModule.config.orgUnitsId];
+  var fteModule = app[productionModule.config.fteId];
   var secretKeys = {};
 
   cacheSecretKeys();
@@ -24,67 +26,236 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 
   sio.sockets.on('connection', function(socket)
   {
-    socket.on('production.getSecretKey', function(prodLineId, reply)
+    socket.on('production.unlock', function(req, reply)
     {
       if (!lodash.isFunction(reply))
       {
         return;
       }
 
-      var user = socket.handshake.user;
-
-      if (!user || (!user.super && (user.privileges || []).indexOf('DICTIONARIES:MANAGE') === -1))
+      if (!lodash.isObject(req))
       {
-        return reply(new Error('AUTH'));
+        return reply(new Error('INVALID_INPUT'));
       }
 
-      var prodLine = lodash.find(prodLines.models, function(prodLine)
-      {
-        return prodLine.get('_id') === prodLineId;
-      });
-
-      if (!prodLine)
-      {
-        return reply(new Error('UNKNOWN'));
-      }
-
-      var secretKey = prodLine.get('secretKey');
-
-      if (typeof secretKey === 'string' && secretKey.length === 32)
-      {
-        return reply(null, secretKey);
-      }
-
-      crypto.pseudoRandomBytes(64, function(err, bytes)
-      {
-        if (err)
+      step(
+        function checkProdLineStep()
         {
-          productionModule.error(
-            "Failed to generate a secret key for %s: %s", prodLineId, err.stack
-          );
+          var prodLine = orgUnits.getByTypeAndId('prodLine', req.prodLine);
 
-          return reply(err);
-        }
+          if (!prodLine)
+          {
+            return this.done(reply, new Error('INVALID_PROD_LINE'));
+          }
 
-        secretKey = crypto.createHash('md5').update(bytes).digest('hex');
+          this.prodLine = prodLine;
 
-        secretKeys[prodLineId] = secretKey;
+          var prodLineState = productionModule.getProdLineState(prodLine._id);
 
-        prodLine.set('secretKey', secretKey);
-        prodLine.save(function(err)
+          if (prodLineState && prodLineState.online)
+          {
+            return this.done(reply, new Error('ALREADY_UNLOCKED'));
+          }
+        },
+        function authenticateStep()
+        {
+          userModule.authenticate({login: req.login, password: req.password}, this.next());
+        },
+        function authorizeStep(err, user)
         {
           if (err)
           {
-            productionModule.error(
-              "Failed to save a secret key for %s: %s", prodLineId, err.stack
-            );
-
-            return reply(err);
+            return this.done(reply, err);
           }
 
-          reply(null, secretKey);
-        });
-      });
+          user.ipAddress = userModule.getRealIp({}, socket);
+
+          if (!user.super && (user.privileges || []).indexOf('DICTIONARIES:MANAGE') === -1)
+          {
+            app.broker.publish('production.unlockFailure', {
+              user: user,
+              prodLine: this.prodLine._id
+            });
+
+            return this.done(reply, new Error('NO_PRIVILEGES'));
+          }
+
+          this.user = user;
+        },
+        function generateSecretKeyStep()
+        {
+          crypto.pseudoRandomBytes(64, this.next());
+        },
+        function updateSecretKeyStep(err, secretBytes)
+        {
+          if (err)
+          {
+            productionModule.error("Failed to generate a secret key for %s: %s", this.prodLine._id, err.message);
+
+            return this.done(reply, err);
+          }
+
+          var secretKey = crypto.createHash('md5').update(secretBytes).digest('hex');
+
+          secretKeys[this.prodLine._id] = secretKey;
+
+          this.prodLine.secretKey = secretKey;
+          this.prodLine.save(this.next());
+        },
+        function fetchProdShiftStep(err)
+        {
+          if (err)
+          {
+            productionModule.error("Failed to save a secret key for %s: %s", this.prodLine._id, err.message);
+
+            return this.done(reply, err);
+          }
+
+          if (this.prodLine.prodShift)
+          {
+            mongoose.model('ProdShift')
+              .findById(this.prodLine.prodShift)
+              .lean()
+              .exec(this.parallel());
+
+            var doneProdShiftOrder = this.parallel();
+
+            if (this.prodLine.prodShiftOrder)
+            {
+              mongoose.model('ProdShiftOrder')
+                .findById(this.prodLine.prodShiftOrder)
+                .lean()
+                .exec(doneProdShiftOrder);
+            }
+            else
+            {
+              doneProdShiftOrder(null, null);
+            }
+
+            mongoose.model('ProdDowntime')
+              .find({prodLine: this.prodLine._id})
+              .sort({startedAt: -1})
+              .limit(8)
+              .lean()
+              .exec(this.parallel());
+          }
+        },
+        function replyStep(err, prodShift, prodShiftOrder, prodDowntimes)
+        {
+          if (err)
+          {
+            productionModule.error("Failed to fetch prod data after unlock for %s: %s", this.prodLine._id, err.message);
+
+            return this.done(reply, err);
+          }
+
+          app.broker.publish('production.unlocked', {
+            user: this.user,
+            prodLine: this.prodLine._id,
+            secretKey: this.prodLine.secretKey
+          });
+
+          if (!prodShift || prodShift.date.getTime() !== fteModule.getCurrentShift().date.getTime())
+          {
+            prodShift = null;
+          }
+
+          return this.done(reply, null, {
+            secretKey: this.prodLine.secretKey,
+            prodShift: prodShift,
+            prodShiftOrder: prodShift && prodShiftOrder && !prodShiftOrder.finishedAt ? prodShiftOrder : null,
+            prodDowntimes: prodShift && !lodash.isEmpty(prodDowntimes) ? prodDowntimes : []
+          });
+        }
+      );
+    });
+
+    socket.on('production.lock', function(req, reply)
+    {
+      if (!lodash.isFunction(reply))
+      {
+        return;
+      }
+
+      if (!lodash.isObject(req))
+      {
+        return reply(new Error('INVALID_INPUT'));
+      }
+
+      step(
+        function checkProdLineStep()
+        {
+          var prodLine = orgUnits.getByTypeAndId('prodLine', req.prodLine);
+
+          if (!prodLine)
+          {
+            return this.done(reply, new Error('INVALID_PROD_LINE'));
+          }
+
+          this.prodLine = prodLine;
+        },
+        function authenticateStep()
+        {
+          userModule.authenticate({login: req.login, password: req.password}, this.next());
+        },
+        function authorizeStep(err, user)
+        {
+          if (err)
+          {
+            return this.done(reply, err);
+          }
+
+          user.ipAddress = userModule.getRealIp({}, socket);
+
+          if (!user.super && (user.privileges || []).indexOf('DICTIONARIES:MANAGE') === -1)
+          {
+            app.broker.publish('production.lockFailure', {
+              user: user,
+              prodLine: this.prodLine._id
+            });
+
+            return this.done(reply, new Error('NO_PRIVILEGES'));
+          }
+
+          this.user = user;
+        },
+        function updateSecretKeyStep()
+        {
+          if (secretKeys[this.prodLine._id] !== req.secretKey)
+          {
+            productionModule.debug(
+              "Tried to lock prod line [%s] with a different secret key: %s vs %s",
+              this.prodLine._id,
+              req.secretKey,
+              secretKeys[this.prodLine._id]
+            );
+
+            return this.done(reply, null);
+          }
+          else
+          {
+            this.prodLine.secretKey = null;
+            this.prodLine.save(this.next());
+          }
+        },
+        function replyStep(err)
+        {
+          if (err)
+          {
+            productionModule.error("Failed to reset a secret key for %s: %s", this.prodLine._id, err.message);
+
+            return this.done(reply, err);
+          }
+
+          app.broker.publish('production.locked', {
+            user: this.user,
+            prodLine: this.prodLine._id,
+            secretKey: req.secretKey
+          });
+
+          return this.done(reply, null);
+        }
+      );
     });
 
     socket.on('production.sync', function(logEntryStream, reply)
@@ -99,10 +270,14 @@ module.exports = function setUpProductionsCommands(app, productionModule)
         return reply();
       }
 
+      logEntryStream = logEntryStream.split('\n');
+
+      var lastLogEntryIndex = logEntryStream.length - 1;
       var logEntryList = [];
       var creator = userModule.createUserInfo(socket.handshake.user, socket);
+      var lastLogEntryWithInvalidSecretKey = null;
 
-      logEntryStream.split('\n').forEach(function(logEntryJson)
+      logEntryStream.forEach(function(logEntryJson, i)
       {
         try
         {
@@ -120,6 +295,11 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 
           if (!validateSecretKey(logEntry))
           {
+            if (i === lastLogEntryIndex)
+            {
+              lastLogEntryWithInvalidSecretKey = logEntry;
+            }
+
             return logInvalidEntry(new Error('SECRET_KEY'), logEntryJson);
           }
 
@@ -142,6 +322,14 @@ module.exports = function setUpProductionsCommands(app, productionModule)
           logInvalidEntry(err, logEntryJson);
         }
       });
+
+      if (lastLogEntryWithInvalidSecretKey)
+      {
+        socket.emit('production.locked', {
+          secretKey: lastLogEntryWithInvalidSecretKey.secretKey,
+          prodLine: lastLogEntryWithInvalidSecretKey.prodLine
+        });
+      }
 
       if (logEntryList.length === 0)
       {
@@ -242,24 +430,19 @@ module.exports = function setUpProductionsCommands(app, productionModule)
   {
     secretKeys = {};
 
-    prodLines.models.forEach(function(prodLine)
+    orgUnits.getAllByType('prodLine').forEach(function(prodLine)
     {
-      var secretKey = prodLine.get('secretKey');
+      var secretKey = prodLine.secretKey;
 
       if (secretKey)
       {
-        secretKeys[prodLine.get('_id')] = secretKey;
+        secretKeys[prodLine._id] = secretKey;
       }
     });
   }
 
   function validateSecretKey(logEntry)
   {
-    if (typeof logEntry.secretKey !== 'string')
-    {
-      return false;
-    }
-
-    return logEntry.secretKey === secretKeys[logEntry.prodLine];
+    return typeof logEntry.secretKey === 'string' && logEntry.secretKey === secretKeys[logEntry.prodLine];
   }
 };

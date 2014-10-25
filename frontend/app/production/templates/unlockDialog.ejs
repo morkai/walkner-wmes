@@ -1,0 +1,15 @@
+<form class="production-<%- type %>Dialog">
+  <p class="message message-inline message-info"><%- t('production', 'unlockDialog:message:' + type, {prodLine: prodLine}) %></p>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-login"><%- t('production', 'unlockDialog:login') %></label>
+    <input id="<%- idPrefix %>-login" class="form-control" type="text" autofocus required>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-password"><%- t('production', 'unlockDialog:password') %></label>
+    <input id="<%- idPrefix %>-password" class="form-control" type="password" required>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" class="btn btn-primary" type="submit"><%- t('production', 'unlockDialog:' + type) %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

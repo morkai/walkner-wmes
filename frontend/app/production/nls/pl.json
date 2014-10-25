@@ -6,6 +6,7 @@
   "duplicate:button": "Przeładuj formatkę",
 
   "msg:shiftChange": "Nowa zmiana!",
+  "msg:locked": "Linia produkcyjna została dezaktywowana!",
 
   "controls:dashboard": "Przejdź do dashboardu",
   "controls:lock": "Zablokuj edycję",
@@ -16,6 +17,22 @@
   "controls:msg:sync:noConnection": "Nie można aktywować edycji: brak połączenia z serwerem :(",
   "controls:msg:sync:remoteError": "Nie można aktywować edycji: nieudane pobranie klucza :(",
   "controls:msg:sync:success": "Pomyślnie aktywowano edycję :)",
+
+  "unlockDialog:title:unlock": "Aktywacja linii produkcyjnej",
+  "unlockDialog:title:lock": "Dezaktywacja linii produkcyjnej",
+  "unlockDialog:message:unlock": "Aby aktywować linię produkcyjną <em>{prodLine}</em> na tym komputerze, podaj login i hasło użytkownika z uprawnieniem <em>Słowniki: zarządzanie</em>. Linii nie będzie można aktywować, jeżeli jest w tym momencie podłączona do serwera na innym komputerze.",
+  "unlockDialog:message:lock": "Aby dezaktywować linię produkcyjną <em>{prodLine}</em> na tym komputerze, podaj login i hasło użytkownika z uprawnieniem <em>Słowniki: zarządzanie</em>.",
+  "unlockDialog:login": "Login",
+  "unlockDialog:password": "Hasło",
+  "unlockDialog:unlock": "Aktywuj linię produkcyjną",
+  "unlockDialog:lock": "Dezaktywuj linię produkcyjną",
+  "unlockDialog:error:UNLOCK_FAILURE": "Nie udało się aktywować linii produkcyjnej :(",
+  "unlockDialog:error:LOCK_FAILURE": "Nie udało się dezaktywować linii produkcyjnej :(",
+  "unlockDialog:error:INVALID_PROD_LINE": "Nieprawidłowa linia produkcyjna!",
+  "unlockDialog:error:INVALID_LOGIN": "Nieprawidłowy login!",
+  "unlockDialog:error:INVALID_PASSWORD": "Nieprawidłowe hasło!",
+  "unlockDialog:error:NO_PRIVILEGES": "Brak wymaganych uprawnień!",
+  "unlockDialog:error:ALREADY_UNLOCKED": "Linia produkcyjna jest aktualnie uruchomiona na innym komputerze!",
 
   "section:data": "Dane produkcyjne",
   "section:history": "Historia",

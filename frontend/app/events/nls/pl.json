@@ -152,5 +152,9 @@
   "TYPE:feedback.added": "Feedback: dodanie",
   "TEXT:feedback.added": "Dodano nowy feedback.",
   "TYPE:clipOrderCount.created": "CLIP: utworzenie",
-  "TEXT:clipOrderCount.created": "Obliczono CLIP z dnia {date} ({total} MRP)."
+  "TEXT:clipOrderCount.created": "Obliczono CLIP z dnia {date} ({total} MRP).",
+  "TYPE:production.unlocked": "Produkcja: aktywacja linii",
+  "TEXT:production.unlocked": "Aktywowano linię produkcyjną: <em>{prodLine}</em>",
+  "TYPE:production.locked": "Produkcja: dezaktywacja linii",
+  "TEXT:production.locked": "Dezaktywowano linię produkcyjną: <em>{prodLine}</em>"
 }

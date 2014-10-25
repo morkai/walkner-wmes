@@ -198,13 +198,17 @@ define([
         }
 
         var oldState = this.model.previous('state');
+        var newState = this.model.get('state');
 
-        if (oldState !== null)
+        if (oldState)
         {
           this.$el.removeClass('is-' + oldState);
         }
 
-        this.$el.addClass('is-' + this.model.get('state'));
+        if (newState)
+        {
+          this.$el.addClass('is-' + newState);
+        }
       });
 
       this.listenTo(this.model, 'change:shift', function()
@@ -244,6 +248,8 @@ define([
       {
         this.model.saveLocalData();
       });
+
+      this.socket.on('production.locked', this.onProductionLocked.bind(this));
     },
 
     beforeRender: function()
@@ -290,6 +296,19 @@ define([
       return this.model.isDowntime()
         ? t('production', 'unload:downtime')
         : t('production', 'unload:order');
+    },
+
+    onProductionLocked: function(data)
+    {
+      if (data.prodLine === this.model.prodLine.id && data.secretKey === this.model.getSecretKey())
+      {
+        this.model.setSecretKey(null);
+
+        viewport.msg.show({
+          type: 'warning',
+          text: t('production', 'msg:locked')
+        });
+      }
     },
 
     refreshDowntimes: function()

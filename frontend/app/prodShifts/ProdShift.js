@@ -41,8 +41,6 @@ define([
 ) {
   'use strict';
 
-  // TODO: Sync with the latest entry on unlock
-
   return Model.extend({
 
     urlRoot: '/prodShifts',
@@ -156,7 +154,7 @@ define([
       }
     },
 
-    readLocalData: function()
+    readLocalData: function(remoteData)
     {
       if (this.isLocked())
       {
@@ -167,7 +165,9 @@ define([
 
       try
       {
-        data = this.constructor.parse(JSON.parse(localStorage.getItem(this.getDataStorageKey())));
+        data = this.constructor.parse(
+          remoteData ? remoteData : JSON.parse(localStorage.getItem(this.getDataStorageKey()))
+        );
 
         this.prodShiftOrder.clear();
 
@@ -185,6 +185,19 @@ define([
 
       if (!_.isEmpty(data))
       {
+        if (this.prodDowntimes.findFirstUnfinished())
+        {
+          data.state = 'downtime';
+        }
+        else if (this.prodShiftOrder.id)
+        {
+          data.state = 'working';
+        }
+        else
+        {
+          data.state = 'idle';
+        }
+
         this.set(data);
       }
 
@@ -744,8 +757,9 @@ define([
 
     /**
      * @param {string|null} secretKey
+     * @param {object} [remoteData]
      */
-    setSecretKey: function(secretKey)
+    setSecretKey: function(secretKey, remoteData)
     {
       if (secretKey === null)
       {
@@ -774,7 +788,7 @@ define([
         localStorage.setItem(this.getSecretKeyStorageKey(), secretKey);
 
         this.trigger('unlocked');
-        this.readLocalData();
+        this.readLocalData(remoteData);
       }
     },
 

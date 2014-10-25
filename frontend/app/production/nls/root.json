@@ -7,6 +7,7 @@
     "duplicate:button": "Reload operator form",
 
     "msg:shiftChange": "New shift!",
+    "msg:locked": "Production line was deactivated!",
 
     "controls:dashboard": "Go to dashboard",
     "controls:lock": "Lock the editing",
@@ -17,6 +18,22 @@
     "controls:msg:sync:noConnection": "Cannot unlock: no connection to the server :(",
     "controls:msg:sync:remoteError": "Cannot unlock: failed to get the key :(",
     "controls:msg:sync:success": "Editing unlocked successfully :)",
+
+    "unlockDialog:title:unlock": "Production line activation",
+    "unlockDialog:title:lock": "Production line deactivation",
+    "unlockDialog:message:unlock": "To activate the <em>{prodLine}</em> production line, enter login and password of a user with the <em>Dictionaries: manage</em> privilege. Production line cannot be activated, if it is currently connected to the server from another computer.",
+    "unlockDialog:message:lock": "To deactivate the <em>{prodLine}</em> production line, enter login and password of a user with the <em>Dictionaries: manage</em> privilege.",
+    "unlockDialog:login": "Login",
+    "unlockDialog:password": "Password",
+    "unlockDialog:unlock": "Activate production line",
+    "unlockDialog:lock": "Deactivate production line",
+    "unlockDialog:error:UNLOCK_FAILURE": "Production line activation failed :(",
+    "unlockDialog:error:LOCK_FAILURE": "Production line deactivation failed :(",
+    "unlockDialog:error:INVALID_PROD_LINE": "Invalid production line!",
+    "unlockDialog:error:INVALID_LOGIN": "Invalid login!",
+    "unlockDialog:error:INVALID_PASSWORD": "Invalid password!",
+    "unlockDialog:error:NO_PRIVILEGES": "Insufficient privileges!",
+    "unlockDialog:error:ALREADY_UNLOCKED": "Production line is currently running on a different computer!",
 
     "section:data": "Production data",
     "section:history": "History",

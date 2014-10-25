@@ -153,7 +153,11 @@
     "TYPE:feedback.added": "Feedback: added",
     "TEXT:feedback.added": "Added new feedback.",
     "TYPE:clipOrderCount.created": "CLIP: created",
-    "TEXT:clipOrderCount.created": "Calculated CLIP for {date} ({total, plural, one{1 MRP} other{{total} different MRPs}})."
+    "TEXT:clipOrderCount.created": "Calculated CLIP for {date} ({total, plural, one{1 MRP} other{{total} different MRPs}}).",
+    "TYPE:production.unlocked": "Production: line activation",
+    "TEXT:production.unlocked": "Activated production line: <em>{prodLine}</em>",
+    "TYPE:production.locked": "Production: line deactivation",
+    "TEXT:production.locked": "Deactivated production line: <em>{prodLine}</em>"
   },
   "pl": true
 }

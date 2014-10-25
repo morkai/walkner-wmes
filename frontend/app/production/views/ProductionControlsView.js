@@ -7,13 +7,17 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
-  'app/production/templates/controls'
+  'app/production/templates/controls',
+  './UnlockDialogView',
+  './LockDialogView'
 ], function(
   t,
   user,
   viewport,
   View,
-  controlsTemplate
+  template,
+  UnlockDialogView,
+  LockDialogView
 ) {
   'use strict';
 
@@ -26,7 +30,7 @@ define([
 
   return View.extend({
 
-    template: controlsTemplate,
+    template: template,
 
     localTopics: {
       'socket.*': function(message, topic)
@@ -49,10 +53,7 @@ define([
     },
 
     events: {
-      'click a.production-controls-lock': function()
-      {
-        this.model.setSecretKey(null);
-      },
+      'click a.production-controls-lock': 'lock',
       'click a.production-controls-unlock': 'unlock',
       'mouseover a.production-controls-lock': function(e)
       {
@@ -72,23 +73,6 @@ define([
       }
     },
 
-    initialize: function()
-    {
-
-    },
-
-    destroy: function()
-    {
-
-    },
-
-    serialize: function()
-    {
-      return {
-
-      };
-    },
-
     afterRender: function()
     {
       this.$syncControl = this.$('.production-controls-sync');
@@ -101,7 +85,7 @@ define([
       );
     },
 
-    unlock: function()
+    unlock: function ()
     {
       if (!this.socket.isConnected())
       {
@@ -112,29 +96,21 @@ define([
         });
       }
 
-      var model = this.model;
+      viewport.showDialog(new UnlockDialogView({model: this.model}), t('production', 'unlockDialog:title:unlock'));
+    },
 
-      this.socket.emit('production.getSecretKey', this.model.prodLine.id, function(err, secretKey)
+    lock: function ()
+    {
+      if (!this.socket.isConnected())
       {
-        if (err)
-        {
-          console.error(err);
-
-          return viewport.msg.show({
-            type: 'error',
-            time: 2000,
-            text: t('production', 'controls:msg:sync:remoteError')
-          });
-        }
-
-        model.setSecretKey(secretKey);
-
-        viewport.msg.show({
-          type: 'success',
+        return viewport.msg.show({
+          type: 'warning',
           time: 2000,
-          text: t('production', 'controls:msg:sync:success')
+          text: t('production', 'controls:msg:sync:noConnection')
         });
-      });
+      }
+
+      viewport.showDialog(new LockDialogView({model: this.model}), t('production', 'unlockDialog:title:lock'));
     }
 
   });

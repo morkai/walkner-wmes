@@ -1,4 +1,4 @@
-<div class="production is-<%- locked ? 'locked' : 'unlocked' %> is-<%- state %> <%- mechOrder ? 'is-mechOrder' : '' %> hidden">
+<div class="production is-<%- locked ? 'locked' : 'unlocked' %> <%- state ? ('is-' + state) : '' %> <%- mechOrder ? 'is-mechOrder' : '' %> hidden">
   <div class="production-controls-container"></div>
   <div class="production-header-container"></div>
   <div class="production-data-container"></div>
