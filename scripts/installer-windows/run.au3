@@ -1,5 +1,3 @@
-#RequireAdmin
-
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=.\run.ico
 #AutoIt3Wrapper_Outfile=.\Operator WMES.exe
