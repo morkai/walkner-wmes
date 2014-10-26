@@ -7,7 +7,7 @@
 var deepEqual = require('deep-equal');
 var step = require('h5.step');
 
-module.exports = function comparePoList(app, importerModule, purchaseOrders, done)
+module.exports = function comparePoList(app, importerModule, pGrs, purchaseOrders, done)
 {
   var PurchaseOrder = app[importerModule.config.mongooseId].model('PurchaseOrder');
   var orderIds = Object.keys(purchaseOrders);
@@ -17,6 +17,10 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
   step(
     function findPosStep()
     {
+      var conditions = {
+        pGr: pGrs.length ? pGrs[0] : {$in: pGrs},
+        open: true
+      };
       var fields = {
         _id: 1,
         'importedAt': 1,
@@ -24,7 +28,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         'items.completed': 1
       };
 
-      PurchaseOrder.find({open: true}, fields).lean().exec(this.parallel());
+      PurchaseOrder.find(conditions, fields).lean().exec(this.parallel());
       PurchaseOrder.find({_id: {$in: orderIds}}).exec(this.parallel());
     },
     function closeOpenPosStep(err, openOrders, orderModels)
@@ -96,7 +100,18 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
       Object.keys(purchaseOrders).forEach(function(orderId)
       {
-        insertList.push(new PurchaseOrder(purchaseOrders[orderId]));
+        var orderDoc = purchaseOrders[orderId];
+
+        if (importerModule.config.requireMatchingPGr && pGrs.indexOf(orderDoc.pGr) === -1)
+        {
+          return importerModule.debug(
+            "Ignoring insertion of PO [%s] because of not matching PGr [%s]...",
+            orderDoc._id,
+            orderDoc.pGr
+          );
+        }
+
+        insertList.push(new PurchaseOrder(orderDoc));
       });
 
       this.insertList = insertList;
@@ -233,6 +248,15 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
     if (orderModel.importedAt >= orderDoc.importedAt)
     {
       return;
+    }
+
+    if (importerModule.config.requireMatchingPGr && pGrs.indexOf(orderDoc.pGr) === -1)
+    {
+      return importerModule.debug(
+        "Ignoring comparison of PO [%s] because of not matching PGr [%s]...",
+        orderDoc._id,
+        orderDoc.pGr
+      );
     }
 
     var changes = {};

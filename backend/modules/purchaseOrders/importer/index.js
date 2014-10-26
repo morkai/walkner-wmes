@@ -12,7 +12,9 @@ var comparePoList = require('./comparePoList');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
-  filterRe: /^Job PL[0-9]{2}_PL[0-9]{2}_OPEN_PO_D, Step [0-9]+\.html?$/,
+  filterRe: /^Job .*?_OPEN_PO_D, Step ([0-9]+)\.html?$/,
+  stepToPGr: {},
+  requireMatchingPGr: false,
   parsedOutputDir: null
 };
 
@@ -33,7 +35,21 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function filterFile(fileInfo)
   {
-    return !filePathCache[fileInfo.filePath] && module.config.filterRe.test(fileInfo.fileName);
+    if (filePathCache[fileInfo.filePath])
+    {
+      return;
+    }
+
+    var matches = fileInfo.fileName.match(module.config.filterRe);
+
+    if (matches === null)
+    {
+      return false;
+    }
+
+    fileInfo.step = parseInt(matches[1], 10);
+
+    return true;
   }
 
   function enqueueAndImport(fileInfo)
@@ -56,6 +72,18 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
     var fileInfo = importQueue.shift();
     var filePath = fileInfo.filePath;
+    var pGrs = module.config.stepToPGr[fileInfo.step];
+
+    if (!Array.isArray(pGrs) || !pGrs.length)
+    {
+      module.info(
+        "Ignoring step [%d] of [%s] because it doesn't have any purchase groups...",
+        fileInfo.step,
+        fileInfo.fileName
+      );
+
+      return finishImport(filePath);
+    }
 
     fs.readFile(filePath, {encoding: 'utf8'}, function(err, html)
     {
@@ -78,7 +106,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
       if (parsePoList(html, importedAt, purchaseOrders) > 0)
       {
-        comparePoList(app, module, purchaseOrders, function() { finishImport(filePath); });
+        comparePoList(app, module, pGrs, purchaseOrders, function() { finishImport(filePath); });
         createVendors(purchaseOrders);
       }
       else

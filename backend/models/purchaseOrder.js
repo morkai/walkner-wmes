@@ -209,6 +209,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
   purchaseOrderSchema.index({vendor: 1, 'items.nc12': 1, 'items.schedule.date': -1});
   purchaseOrderSchema.index({open: 1, 'items.schedule.date': -1});
   purchaseOrderSchema.index({open: 1, vendor: 1, 'items.schedule.date': -1});
+  purchaseOrderSchema.index({pGr: 1, open: 1});
 
   purchaseOrderSchema.pre('save', function(next)
   {
