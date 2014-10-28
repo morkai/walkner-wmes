@@ -49,31 +49,31 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
   );
 
   express.get(
-    '/icpo/results/:id;order',
+    '/icpo/results/:id;orderData',
     canView,
     downloadRoute.bind(null, 'order', icpoModule, IcpoResult)
   );
 
   express.get(
-    '/icpo/results/:id;driver',
+    '/icpo/results/:id;driverData',
     canView,
     downloadRoute.bind(null, 'driver', icpoModule, IcpoResult)
   );
 
   express.get(
-    '/icpo/results/:id;gprs',
+    '/icpo/results/:id;gprsData',
     canView,
     downloadRoute.bind(null, 'gprs', icpoModule, IcpoResult)
   );
 
   express.get(
-    '/icpo/results/:id;input',
+    '/icpo/results/:id;inputData',
     canView,
     downloadRoute.bind(null, 'input', icpoModule, IcpoResult)
   );
 
   express.get(
-    '/icpo/results/:id;output',
+    '/icpo/results/:id;outputData',
     canView,
     downloadRoute.bind(null, 'output', icpoModule, IcpoResult)
   );

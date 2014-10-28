@@ -9,11 +9,11 @@
 
   "PAGE_ACTION:export": "Eksportuj wyniki",
   "PAGE_ACTION:download": "Pobierz konfigurację",
-  "PAGE_ACTION:download:order": "Konfiguracja zlecenia",
-  "PAGE_ACTION:download:driver": "Konfiguracja drivera",
-  "PAGE_ACTION:download:gprs": "Konfiguracja GPRS",
-  "PAGE_ACTION:download:input": "Konfiguracja programatora",
-  "PAGE_ACTION:download:output": "Wynik programatora",
+  "PAGE_ACTION:download:orderData": "Konfiguracja zlecenia",
+  "PAGE_ACTION:download:driverData": "Konfiguracja drivera",
+  "PAGE_ACTION:download:gprsData": "Konfiguracja GPRS",
+  "PAGE_ACTION:download:inputData": "Konfiguracja programatora",
+  "PAGE_ACTION:download:outputData": "Wynik programatora",
 
   "PROPERTY:srcId": "ID instalacji",
   "PROPERTY:srcTitle": "Tytuł instalacji",

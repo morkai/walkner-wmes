@@ -44,7 +44,7 @@ define([
         {
           var files = {};
 
-          ['order', 'driver', 'gprs', 'input', 'output'].forEach(function(type)
+          ['orderData', 'driverData', 'gprsData', 'inputData', 'outputData'].forEach(function(type)
           {
             var data = model.get(type);
 
