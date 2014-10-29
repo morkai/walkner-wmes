@@ -18,7 +18,7 @@ module.exports = function comparePoList(app, importerModule, pGrs, purchaseOrder
     function findPosStep()
     {
       var conditions = {
-        pGr: pGrs.length ? pGrs[0] : {$in: pGrs},
+        pGr: pGrs.length === 1 ? pGrs[0] : {$in: pGrs},
         open: true
       };
       var fields = {
