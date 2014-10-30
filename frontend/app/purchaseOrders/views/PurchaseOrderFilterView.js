@@ -43,7 +43,7 @@ define([
       {
         formData.status = [term.args[1] ? 'open' : 'closed'];
       },
-      'items.schedule.date': function(propertyName, term, formData)
+      'scheduledAt': function(propertyName, term, formData)
       {
         fixTimeRange.toFormData(formData, term, 'date', {utc: true});
       },

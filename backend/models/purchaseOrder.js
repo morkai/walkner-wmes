@@ -126,7 +126,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
   {
     var totalPrintedQty = 0;
 
-    this.prints.forEach(function(print)
+    this.prints.forEach(function (print)
     {
       if (!print.cancelled)
       {
@@ -135,6 +135,23 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     });
 
     this.printedQty = totalPrintedQty;
+  };
+
+  purchaseOrderItemSchema.methods.getScheduledAt = function()
+  {
+    if (this.completed)
+    {
+      return -1;
+    }
+
+    var scheduledAt = Number.MAX_VALUE;
+
+    this.schedule.forEach(function(schedule)
+    {
+      scheduledAt = Math.min(scheduledAt, schedule.date.getTime());
+    });
+
+    return scheduledAt;
   };
 
   var changeSchema = mongoose.Schema({
@@ -148,8 +165,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
   var purchaseOrderSchema = mongoose.Schema({
     _id: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     importedAt: {
       type: Date,
@@ -157,6 +173,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     },
     createdAt: Date,
     updatedAt: Date,
+    scheduledAt: Date,
     pOrg: {
       type: String,
       required: true
@@ -204,11 +221,11 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
   purchaseOrderSchema.statics.BARCODES = BARCODES;
   purchaseOrderSchema.statics.PAPERS = PAPERS;
 
-  purchaseOrderSchema.index({'items.nc12': 1, 'items.schedule.date': -1});
-  purchaseOrderSchema.index({vendor: 1, 'items.schedule.date': -1});
-  purchaseOrderSchema.index({vendor: 1, 'items.nc12': 1, 'items.schedule.date': -1});
-  purchaseOrderSchema.index({open: 1, 'items.schedule.date': -1});
-  purchaseOrderSchema.index({open: 1, vendor: 1, 'items.schedule.date': -1});
+  purchaseOrderSchema.index({'items.nc12': 1, scheduledAt: -1});
+  purchaseOrderSchema.index({vendor: 1, scheduledAt: -1});
+  purchaseOrderSchema.index({vendor: 1, 'items.nc12': 1, scheduledAt: -1});
+  purchaseOrderSchema.index({open: 1, scheduledAt: -1});
+  purchaseOrderSchema.index({open: 1, vendor: 1, scheduledAt: -1});
   purchaseOrderSchema.index({pGr: 1, open: 1});
 
   purchaseOrderSchema.pre('save', function(next)
@@ -226,14 +243,15 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
 
     if (this.isNew || this.isModified('items'))
     {
-      this.recountQty();
+      this.recountItems();
     }
 
     next();
   });
 
-  purchaseOrderSchema.methods.recountQty = function()
+  purchaseOrderSchema.methods.recountItems = function()
   {
+    var scheduledAt = Number.MAX_VALUE;
     var totalQty = 0;
     var totalPrintedQty = 0;
 
@@ -243,8 +261,16 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
 
       totalQty += item.qty;
       totalPrintedQty += item.printedQty;
+
+      var itemScheduledAt = item.getScheduledAt();
+
+      if (itemScheduledAt !== -1 && itemScheduledAt < scheduledAt)
+      {
+        scheduledAt = itemScheduledAt;
+      }
     });
 
+    this.scheduledAt = scheduledAt === Number.MAX_VALUE ? null : scheduledAt;
     this.qty = totalQty;
     this.printedQty = totalPrintedQty;
   };

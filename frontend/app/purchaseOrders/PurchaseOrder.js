@@ -4,12 +4,14 @@
 
 define([
   'underscore',
+  'moment',
   '../i18n',
   '../time',
   '../core/Model',
   './PurchaseOrderItemCollection'
 ], function(
   _,
+  moment,
   t,
   time,
   Model,
@@ -76,7 +78,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.docDate = time.getMoment(obj.docDate).utc().format('LL');
+      obj.docDate = moment.utc(obj.docDate).format('LL');
 
       if (obj.vendor && obj.vendor._id)
       {
@@ -94,11 +96,7 @@ define([
 
       obj.items = obj.items ? obj.items.invoke('serialize') : [];
 
-      var minScheduleDate = this.get('items').getMinScheduleDate();
-
-      obj.minScheduleDate = minScheduleDate
-        ? time.getMoment(minScheduleDate).utc().format('YYYY-MM-DD')
-        : null;
+      obj.minScheduleDate = obj.scheduledAt ? moment.utc(obj.scheduledAt).format('YYYY-MM-DD') : null;
 
       obj.className = obj.open ? '' : 'success';
 

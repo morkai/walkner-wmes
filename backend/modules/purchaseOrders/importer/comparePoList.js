@@ -210,7 +210,8 @@ module.exports = function comparePoList(app, importerModule, pGrs, purchaseOrder
         $set: {
           open: false,
           updatedAt: updatedAt,
-          importedAt: importedAt
+          importedAt: importedAt,
+          scheduledAt: null
         },
         $push: {
           changes: {

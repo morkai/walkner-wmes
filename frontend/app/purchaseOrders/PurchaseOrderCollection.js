@@ -28,13 +28,13 @@ define([
         },
         limit: 20,
         sort: {
-          'items.schedule.date': 1
+          'scheduledAt': 1
         },
         selector: {
           name: 'and',
           args: [
             {name: 'eq', args: ['open', true]},
-            {name: 'lt', args: ['items.schedule.date', tomorrow]},
+            {name: 'lt', args: ['scheduledAt', tomorrow]},
             {name: 'populate', args: ['vendor']}
           ]
         }
