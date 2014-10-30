@@ -45,7 +45,7 @@ define([
       },
       'items.schedule.date': function(propertyName, term, formData)
       {
-        fixTimeRange.toFormData(formData, term, 'date');
+        fixTimeRange.toFormData(formData, term, 'date', {utc: true});
       },
       'items.nc12': '_id'
     },
@@ -71,7 +71,7 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var timeRange = fixTimeRange.fromView(this);
+      var timeRange = fixTimeRange.fromView(this, {utc: true});
       var status = this.getStatus();
       var vendor = this.$id('vendor').val();
 
@@ -87,7 +87,7 @@ define([
 
       if (timeRange.to)
       {
-        selector.push({name: 'le', args: ['items.schedule.date', timeRange.to]});
+        selector.push({name: 'lt', args: ['items.schedule.date', timeRange.to]});
       }
 
       if (status !== null)
