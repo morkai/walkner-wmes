@@ -63,12 +63,7 @@ exports['mail/downloader'] = {
 
 exports['purchaseOrders/importer'] = {
   parsedOutputDir: __dirname + '/../data/attachments-imported',
-  stepToPGr: {
-    1: ['PL1'],
-    2: ['PL2'],
-    3: ['PL3'],
-    4: ['PL4', 'PL5', 'PL6', 'PL7', 'PL8'],
-    5: ['PLI', 'PLO', 'PLS', 'PLY']
-  },
-  requireMatchingPGr: true
+  stepCount: 40,
+  lateDataDelay: 10 * 60 * 1000,
+  hourlyInterval: 3
 };

@@ -7,18 +7,22 @@
 var deepEqual = require('deep-equal');
 var step = require('h5.step');
 
-module.exports = function comparePoList(app, importerModule, pGrs, purchaseOrders, done)
+module.exports = function comparePoList(app, importerModule, purchaseOrders, done)
 {
   var PurchaseOrder = app[importerModule.config.mongooseId].model('PurchaseOrder');
   var orderIds = Object.keys(purchaseOrders);
 
   importerModule.debug("Comparing %d POs...", orderIds.length);
 
+  if (orderIds.length === 0)
+  {
+    return done();
+  }
+
   step(
     function findPosStep()
     {
       var conditions = {
-        pGr: pGrs.length === 1 ? pGrs[0] : {$in: pGrs},
         open: true
       };
       var fields = {
@@ -100,18 +104,7 @@ module.exports = function comparePoList(app, importerModule, pGrs, purchaseOrder
 
       Object.keys(purchaseOrders).forEach(function(orderId)
       {
-        var orderDoc = purchaseOrders[orderId];
-
-        if (importerModule.config.requireMatchingPGr && pGrs.indexOf(orderDoc.pGr) === -1)
-        {
-          return importerModule.debug(
-            "Ignoring insertion of PO [%s] because of not matching PGr [%s]...",
-            orderDoc._id,
-            orderDoc.pGr
-          );
-        }
-
-        insertList.push(new PurchaseOrder(orderDoc));
+        insertList.push(new PurchaseOrder(purchaseOrders[orderId]));
       });
 
       this.insertList = insertList;
@@ -249,15 +242,6 @@ module.exports = function comparePoList(app, importerModule, pGrs, purchaseOrder
     if (orderModel.importedAt >= orderDoc.importedAt)
     {
       return;
-    }
-
-    if (importerModule.config.requireMatchingPGr && pGrs.indexOf(orderDoc.pGr) === -1)
-    {
-      return importerModule.debug(
-        "Ignoring comparison of PO [%s] because of not matching PGr [%s]...",
-        orderDoc._id,
-        orderDoc.pGr
-      );
     }
 
     var changes = {};

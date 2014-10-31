@@ -7,14 +7,16 @@
 var fs = require('fs');
 var path = require('path');
 var moment = require('moment');
+var step = require('h5.step');
 var parsePoList = require('./parsePoList');
 var comparePoList = require('./comparePoList');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   filterRe: /^Job .*?_OPEN_PO_D, Step ([0-9]+)\.html?$/,
-  stepToPGr: {},
-  requireMatchingPGr: false,
+  stepCount: 1,
+  lateDataDelay: 10 * 60 * 1000,
+  hourlyInterval: 3,
   parsedOutputDir: null
 };
 
@@ -28,10 +30,12 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   }
 
   var filePathCache = {};
+  var timeKeyToStepsMap = {};
   var importQueue = [];
+  var importTimers = {};
   var importLock = false;
 
-  app.broker.subscribe('directoryWatcher.changed', enqueueAndImport).setFilter(filterFile);
+  app.broker.subscribe('directoryWatcher.changed', importFile).setFilter(filterFile);
 
   function filterFile(fileInfo)
   {
@@ -48,15 +52,83 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
     }
 
     fileInfo.step = parseInt(matches[1], 10);
+    fileInfo.timeKey = createTimeKey(fileInfo.timestamp);
 
     return true;
   }
 
-  function enqueueAndImport(fileInfo)
+  function createTimeKey(timestamp)
+  {
+    var date = new Date(timestamp);
+    var hours = Math.floor(date.getHours() / module.config.hourlyInterval) * module.config.hourlyInterval;
+    var timeKey = '';
+
+    timeKey += date.getFullYear();
+    timeKey += (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1);
+    timeKey += (date.getDate() < 10 ? '0' : '') + date.getDate();
+    timeKey += (hours < 10 ? '0' : '') + hours;
+
+    return timeKey;
+  }
+
+  function importFile(fileInfo)
   {
     filePathCache[fileInfo.filePath] = true;
 
-    importQueue.push(fileInfo);
+    var timeKey = fileInfo.timeKey;
+    var step = fileInfo.step;
+
+    var stepsMap = timeKeyToStepsMap[timeKey];
+
+    if (stepsMap === undefined)
+    {
+      stepsMap = timeKeyToStepsMap[timeKey] = {steps: 0};
+    }
+
+    if (stepsMap[step] === undefined)
+    {
+      stepsMap.steps += 1;
+    }
+
+    stepsMap[step] = fileInfo;
+
+    module.debug("Handling %d step for %s...", step, timeKey);
+
+    if (stepsMap.steps < module.config.stepCount)
+    {
+      if (typeof importTimers[timeKey] !== 'undefined' && importTimers[timeKey] !== null)
+      {
+        clearTimeout(importTimers[timeKey]);
+      }
+
+      module.debug("Delaying %s (steps=%d)...", timeKey, stepsMap.steps);
+
+      importTimers[timeKey] = setTimeout(enqueueAndImport, module.config.lateDataDelay, timeKey, true);
+
+      return;
+    }
+
+    enqueueAndImport(timeKey, false);
+  }
+
+  function enqueueAndImport(timeKey, delayed)
+  {
+    if (importTimers[timeKey] !== null)
+    {
+      clearTimeout(importTimers[timeKey]);
+      delete importTimers[timeKey];
+    }
+
+    if (delayed)
+    {
+      module.debug("Queued %s (delayed)...", timeKey);
+    }
+    else
+    {
+      module.debug("Queued %s...", timeKey);
+    }
+
+    importQueue.push(timeKey);
 
     importNext();
   }
@@ -70,79 +142,121 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
     importLock = true;
 
-    var fileInfo = importQueue.shift();
-    var filePath = fileInfo.filePath;
-    var pGrs = module.config.stepToPGr[fileInfo.step];
+    var startTime = Date.now();
+    var timeKey = importQueue.shift();
+    var stepsMap = timeKeyToStepsMap[timeKey];
 
-    if (!Array.isArray(pGrs) || !pGrs.length)
+    delete timeKeyToStepsMap[timeKey];
+
+    importSteps(stepsMap, function(purchaseOrders)
     {
-      module.info(
-        "Ignoring step [%d] of [%s] because it doesn't have any purchase groups...",
-        fileInfo.step,
-        fileInfo.fileName
-      );
+      var filePaths = collectFileInfoPaths(stepsMap);
 
-      return finishImport(filePath);
-    }
+      deleteFileInfoStepFiles(filePaths);
 
-    fs.readFile(filePath, {encoding: 'utf8'}, function(err, html)
+      setTimeout(removeFilePathsFromCache, 15000, filePaths);
+
+      module.debug("Imported %s in %d ms!", timeKey, Date.now() - startTime);
+
+      importLock = false;
+
+      setImmediate(importNext);
+
+      createVendors(purchaseOrders);
+    });
+  }
+
+  function importSteps(stepsMap, done)
+  {
+    var purchaseOrders = {};
+    var steps = [];
+
+    for (var i = 1, l = module.config.stepCount; i <= l; ++i)
     {
-      if (err)
+      if (stepsMap[i] === undefined)
       {
-        module.error("Failed to read the contents of [%s]: %s", filePath, err.message);
-
-        return finishImport(filePath);
-      }
-
-      var importedAt = new Date(fileInfo.timestamp);
-
-      module.debug(
-        "Parsing [%s] received at [%s]...",
-        fileInfo.fileName,
-        moment(importedAt).format('YYYY-MM-DD HH:mm:ss')
-      );
-
-      var purchaseOrders = {};
-
-      if (parsePoList(html, importedAt, purchaseOrders) > 0)
-      {
-        comparePoList(app, module, pGrs, purchaseOrders, function() { finishImport(filePath); });
-        createVendors(purchaseOrders);
+        module.debug("Missing step %d :(", i);
       }
       else
       {
-        finishImport(filePath);
+        steps.push(createParseStep(purchaseOrders, stepsMap[i]));
+      }
+    }
+
+    steps.push(function comparePoListStep()
+    {
+      comparePoList(app, module, purchaseOrders, this.next());
+    });
+
+    steps.push(function finalizeStep()
+    {
+      done(purchaseOrders);
+    });
+
+    step(steps);
+  }
+
+  function createParseStep(purchaseOrders, fileInfo)
+  {
+    return function parseStep()
+    {
+      var importedAt = new Date(fileInfo.timestamp);
+
+      module.debug(
+        "Parsing step [%d] received at [%s]...",
+        fileInfo.step,
+        moment(importedAt).format('YYYY-MM-DD HH:mm:ss')
+      );
+
+      var next = this.next();
+
+      fs.readFile(fileInfo.filePath, 'utf8', function(err, html)
+      {
+        if (err)
+        {
+          module.error("Failed to read step file [%s]: %s", fileInfo.filePath, err.message);
+        }
+        else
+        {
+          parsePoList(html, importedAt, purchaseOrders);
+        }
+
+        next();
+      });
+    };
+  }
+
+  function collectFileInfoPaths(fileInfoMap)
+  {
+    var filePaths = [];
+
+    Object.keys(fileInfoMap).forEach(function(key)
+    {
+      if (key !== 'steps')
+      {
+        filePaths.push(fileInfoMap[key].filePath);
+      }
+    });
+
+    return filePaths;
+  }
+
+  function deleteFileInfoStepFiles(filePaths)
+  {
+    filePaths.forEach(function(filePath)
+    {
+      if (module.config.parsedOutputDir)
+      {
+        moveFileInfoStepFile(filePath);
+      }
+      else
+      {
+        deleteFileInfoStepFile(filePath);
       }
     });
   }
 
-  function finishImport(filePath)
-  {
-    setTimeout(function() { delete filePathCache[filePath]; }, 15000);
-    cleanUpFile(filePath);
-    unlockImport();
-  }
-
-  function unlockImport()
-  {
-    importLock = false;
-
-    setImmediate(importNext);
-  }
-
-  function cleanUpFile(filePath)
-  {
-    if (module.config.parsedOutputDir)
-    {
-      moveFile(filePath);
-    }
-    else
-    {
-      deleteFile(filePath);
-    }
-  }
-
-  function moveFile(oldFilePath)
+  function moveFileInfoStepFile(oldFilePath)
   {
     var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
@@ -157,7 +271,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
     });
   }
 
-  function deleteFile(filePath)
+  function deleteFileInfoStepFile(filePath)
   {
     fs.unlink(filePath, function(err)
     {
@@ -165,6 +279,14 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
       {
         module.error("Failed to delete file [%s]: %s", filePath, err.message);
       }
+    });
+  }
+
+  function removeFilePathsFromCache(filePaths)
+  {
+    filePaths.forEach(function(filePath)
+    {
+      delete filePathCache[filePath];
     });
   }
 
