@@ -12,7 +12,6 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     _id: {
       type: String,
       required: true,
-      unique: true,
       trim: true
     },
     division: {

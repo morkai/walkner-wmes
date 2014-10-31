@@ -9,8 +9,7 @@ module.exports = function setupDacLogEntryModel(app, mongoose)
   var dacLogEntrySchema = mongoose.Schema({
     _id: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     nodeId: {
       type: String,

@@ -27,7 +27,6 @@ module.exports = function setupProdShiftModel(app, mongoose)
     _id: {
       type: String,
       required: true,
-      unique: true,
       trim: true
     },
     division: {

@@ -9,8 +9,7 @@ module.exports = function setupVendorModel(app, mongoose)
   var vendorSchema = mongoose.Schema({
     _id: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     name: {
       type: String,

@@ -10,7 +10,6 @@ module.exports = function setupIcpoResultModel(app, mongoose)
     _id: {
       type: String,
       required: true,
-      unique: true,
       trim: true
     },
     serviceTag: String,

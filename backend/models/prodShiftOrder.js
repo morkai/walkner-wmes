@@ -12,7 +12,6 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     _id: {
       type: String,
       required: true,
-      unique: true,
       trim: true
     },
     prodShift: {

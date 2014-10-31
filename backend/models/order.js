@@ -55,7 +55,6 @@ module.exports = function setupOrderModel(app, mongoose)
     _id: {
       type: String,
       required: true,
-      unique: true,
       trim: true
     },
     createdAt: Date,

@@ -10,7 +10,6 @@ module.exports = function setupProdLineModel(app, mongoose)
     _id: {
       type: String,
       required: true,
-      unique: true,
       trim: true
     },
     workCenter: {

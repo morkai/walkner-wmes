@@ -39,7 +39,6 @@ module.exports = function setupMechOrderModel(app, mongoose)
     _id: {
       type: String,
       required: true,
-      unique: true,
       trim: true
     },
     name: {

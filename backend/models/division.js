@@ -10,7 +10,6 @@ module.exports = function setupDivisionModel(app, mongoose)
     _id: {
       type: String,
       required: true,
-      unique: true,
       trim: true
     },
     type: {
