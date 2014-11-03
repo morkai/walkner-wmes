@@ -122,7 +122,14 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       {
         for (i = 0; i < l; ++i)
         {
-          this.insertList[i].save(this.parallel());
+          if (validateOrder(this.insertList[i]))
+          {
+            this.insertList[i].save(this.parallel());
+          }
+          else
+          {
+            importerModule.warn("Invalid order for insert: %s", JSON.stringify(this.insertList[i]));
+          }
         }
       }
 
@@ -132,7 +139,14 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       {
         for (i = 0; i < l; ++i)
         {
-          this.updateList[i].save(this.parallel());
+          if (validateOrder(this.updateList[i]))
+          {
+            this.updateList[i].save(this.parallel());
+          }
+          else
+          {
+            importerModule.warn("Invalid order for update: %s", JSON.stringify(this.updateList[i]));
+          }
         }
       }
     },
@@ -370,5 +384,28 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
     }
 
     return false;
+  }
+
+  function validateOrder(order)
+  {
+    if (!order.docDate)
+    {
+      return false;
+    }
+
+    if (!order.items.length)
+    {
+      return false;
+    }
+
+    for (var i = 0, l = order.items.length; i < l; ++i)
+    {
+      if (!order.items[i].schedule.length)
+      {
+        return false;
+      }
+    }
+
+    return true;
   }
 };
