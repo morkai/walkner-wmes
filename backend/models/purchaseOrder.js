@@ -16,21 +16,21 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
       height: 297,
       wkhtmltopdf: '-O Landscape -B 0 -L 30mm -R 30mm -T 30mm',
       qr: {
-        zint: '--scale=7 --vers=5'
+        zint: '--scale=3.5 --vers=5'
       },
       code128: {
-        zint: '--scale=1 --height=259'
+        zint: '--scale=0.5 --height=259'
       }
     },
     '104x42': {
       width: 42,
       height: 105,
-      wkhtmltopdf: '-O Landscape -B 0 -L 10mm -R 10mm -T 1mm',
+      wkhtmltopdf: '-O Landscape -B 0 -L 10mm -R 10mm -T 3mm',
       qr: {
-        zint: '--scale=3 --vers=5'
+        zint: '--scale=1.5 --vers=5'
       },
       code128: {
-        zint: '--scale=1 --height=95',
+        zint: '--scale=0.5 --height=95',
         maxLength: 40
       }
     }

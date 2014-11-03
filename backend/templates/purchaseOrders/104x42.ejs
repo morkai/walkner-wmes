@@ -7,7 +7,7 @@
   body {
     margin: 0;
     line-height: 1;
-    font-family: Consolas, Menlo, Monaco, monospace;
+    font-family: sans-serif;
     font-size: 16px;
     text-align: center;
   }
@@ -73,7 +73,7 @@
 <% pages.forEach(function(page) { %>
 <div class="page <%- barcode %>">
   <div class="barcode-container">
-    <%- page.svg %>
+    <img src="data:image/png;base64,<%- page.png %>">
   </div>
   <table>
     <% if (barcode === 'qr') { %>

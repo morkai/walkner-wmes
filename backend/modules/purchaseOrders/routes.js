@@ -11,6 +11,7 @@ var createHash = require('crypto').createHash;
 var format = require('util').format;
 var lodash = require('lodash');
 var step = require('h5.step');
+var exec12 = require('./exec12').exec;
 
 module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 {
@@ -325,20 +326,33 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
           + ':' + httpServer.config.port
           + '/purchaseOrders;renderLabelHtml'
           + '?' + this.query;
-
         var paperOptions = PurchaseOrder.PAPERS[paper];
-
-        var cmd = format(
-          '"%s" -q --dpi 120 --disable-smart-shrinking --no-outline %s --page-width %smm --page-height %smm "%s" "%s"',
-          poModule.config.wkhtmltopdfExe,
+        var args = format(
+          '-q --dpi 120 --disable-smart-shrinking --no-outline %s --page-width %smm --page-height %smm "%s" "%s"',
           paperOptions.wkhtmltopdf,
           paperOptions.width,
           paperOptions.height,
           url,
-          this.outputFile
+          this.outputFile.replace(/\\/g, '/')
         );
+        var renderCmdFile = path.join(poModule.config.renderCmdPath, Date.now() + Math.random() + '.txt');
+        var next = this.next();
 
-        exec(cmd, this.next());
+        fs.writeFile(renderCmdFile, args, function(err)
+        {
+          if (err)
+          {
+            return next(err);
+          }
+
+          var cmd = format('"%s" --read-args-from-stdin < "%s"', poModule.config.wkhtmltopdfExe, renderCmdFile);
+
+          exec(cmd, function(err, stdout, stderr)
+          {
+            //fs.unlink(renderCmdFile, function() {});
+            next(err, stdout, stderr);
+          });
+        });
       },
       function sendResultsStep(err, stdout, stderr)
       {
@@ -419,7 +433,7 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
       }
     });
 
-    var barcodeDataToSvg = {};
+    var barcodeDataToPng = {};
     var pages = query.orderNo.map(function(orderNo, i)
     {
       var page = {
@@ -446,11 +460,11 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 
       page.barcodeData = barcodeData;
 
-      barcodeDataToSvg[page.barcodeData] = null;
+      barcodeDataToPng[page.barcodeData] = null;
 
       return page;
     });
-    var uniqueBarcodes = Object.keys(barcodeDataToSvg);
+    var uniqueBarcodes = Object.keys(barcodeDataToPng);
 
     step(
       function()
@@ -460,7 +474,7 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
           generateBarcode(barcodeType, barcodeOptions.zint, uniqueBarcodes[i], this.group());
         }
       },
-      function(err, barcodeSvgs)
+      function(err, barcodePngs)
       {
         if (err)
         {
@@ -469,12 +483,12 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 
         for (var i = 0, l = uniqueBarcodes.length; i < l; ++i)
         {
-          barcodeDataToSvg[uniqueBarcodes[i]] = barcodeSvgs[i];
+          barcodeDataToPng[uniqueBarcodes[i]] = barcodePngs[i];
         }
 
         pages.forEach(function(page)
         {
-          page.svg = barcodeDataToSvg[page.barcodeData];
+          page.png = barcodeDataToPng[page.barcodeData];
         });
 
         return res.render('purchaseOrders/' + paper, {
@@ -489,28 +503,21 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
   function generateBarcode(barcodeType, barcodeOptions, barcodeData, done)
   {
     var cmd = format(
-      '"%s" --barcode=%d %s --notext --directsvg --data="%s"',
+      '"%s" --barcode=%d %s --notext --directpng --data="%s"',
       poModule.config.zintExe,
       barcodeType,
       barcodeOptions,
       barcodeData
     );
 
-    exec(cmd, function(err, stdout)
+    exec12(cmd, {encoding: 'buffer'}, function(err, stdout)
     {
       if (err)
       {
         return done(err);
       }
 
-      var svgTagIndex = typeof stdout === 'string' ? stdout.indexOf('<svg') : -1;
-
-      if (svgTagIndex === -1)
-      {
-        return done(new Error('NO_BARCODE'));
-      }
-
-      return done(null, stdout.substr(svgTagIndex));
+      return done(null, stdout.toString('base64'));
     });
   }
 

@@ -13,7 +13,8 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   zintExe: 'zint',
   wkhtmltopdfExe: 'wkhtmltopdf',
-  pdfStoragePath: './'
+  pdfStoragePath: './',
+  renderCmdPath: './'
 };
 
 exports.start = function startPurchaseOrdersModule(app, module)
