@@ -14,20 +14,27 @@ exports.DEFAULT_CONFIG = {
   mailbox: 'INBOX',
   markSeen: true,
   fetchUnreadOnStart: true,
-  mailParserOptions: {streamAttachments: true}
+  mailParserOptions: {streamAttachments: true},
+  restartMinutes: []
 };
 
 exports.start = function startMailListenerModule(app, module)
 {
   var isConnected = false;
+  var mailListener = null;
 
   app.broker
     .subscribe('app.started', setUpMailListener)
     .setLimit(1);
 
+  if (module.config.restartMinutes.length)
+  {
+    setTimeout(checkRestart, 30 * 60 * 1000);
+  }
+
   function setUpMailListener()
   {
-    var mailListener = new MailListener(module.config);
+    mailListener = new MailListener(module.config);
 
     mailListener.on('server:connected', function()
     {
@@ -72,5 +79,28 @@ exports.start = function startMailListenerModule(app, module)
     });
 
     mailListener.start();
+  }
+
+  function checkRestart()
+  {
+    var nextCheckDelay = 20 * 1000;
+    var now = new Date();
+
+    if (mailListener && module.config.restartMinutes.indexOf(now.getMinutes()) !== -1)
+    {
+      module.debug("Restarting...");
+
+      mailListener.stop();
+
+      now = now.getTime();
+
+      var then = new Date(now + 60000);
+      then.setSeconds(1);
+      then.setMilliseconds(0);
+
+      nextCheckDelay = Math.max(nextCheckDelay, then.getTime() - now);
+    }
+
+    setTimeout(checkRestart, nextCheckDelay);
   }
 };
