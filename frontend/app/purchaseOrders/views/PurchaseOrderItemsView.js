@@ -299,6 +299,20 @@ define([
         if (selected.indexOf(this.parentNode.dataset.itemId) !== -1)
         {
           this.classList.add('is-selected');
+
+          var tr = this.parentNode;
+
+          while (tr.nextElementSibling)
+          {
+            tr = tr.nextElementSibling;
+
+            if (!tr.classList.contains('pos-items-item') && !tr.classList.contains('pos-items-item-schedule'))
+            {
+              break;
+            }
+
+            tr.classList.add('is-selected');
+          }
         }
       });
     },

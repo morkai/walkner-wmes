@@ -98,6 +98,15 @@
 .pos-items-item > .actions {
   position: relative;
 }
+.pos-items-item.is-selected > td,
+.pos-items-item-schedule.is-selected > td {
+  background-color: #c0eaff;
+}
+.pos-items-item.is-selected:hover > td,
+.pos-items-item-schedule.is-selected:hover > td,
+.pos-items .is-hovered.is-selected > td {
+  background-color: #ABE3FF;
+}
 .pos-changes > .table > tbody > tr > td {
   vertical-align: top;
 }
