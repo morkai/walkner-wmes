@@ -39,7 +39,7 @@
     "lodash": "~2.4.1",
     "messageformat": "~0.1.8",
     "messageformat-amd": "git+http://github.com/morkai/messageformat-amd.git#8013b6e045",
-    "mail-listener2": "~0.1.1",
+    "mail-listener2": "~0.1.7",
     "deep-equal": "~0.2.1",
     "cheerio": "~0.17.0",
     "csv": "~0.3.7",
