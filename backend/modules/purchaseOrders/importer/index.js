@@ -103,7 +103,12 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
       module.debug("Delaying %s (steps=%d)...", timeKey, stepsMap.steps);
 
-      importTimers[timeKey] = setTimeout(enqueueAndImport, module.config.lateDataDelay, timeKey, true);
+      importTimers[timeKey] = setTimeout(
+        enqueueAndImport,
+        createTimeKey(Date.now()) === timeKey ? module.config.lateDataDelay : 1337,
+        timeKey,
+        true
+      );
 
       return;
     }
