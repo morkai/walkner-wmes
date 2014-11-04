@@ -82,12 +82,12 @@ define([
 
       if (timeRange.from)
       {
-        selector.push({name: 'ge', args: ['items.schedule.date', timeRange.from]});
+        selector.push({name: 'ge', args: ['scheduledAt', timeRange.from]});
       }
 
       if (timeRange.to)
       {
-        selector.push({name: 'lt', args: ['items.schedule.date', timeRange.to]});
+        selector.push({name: 'lt', args: ['scheduledAt', timeRange.to]});
       }
 
       if (status !== null)
