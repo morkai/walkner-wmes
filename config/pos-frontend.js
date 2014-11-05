@@ -121,5 +121,6 @@ exports.updater = {
 };
 
 exports.purchaseOrders = {
-  pdfStoragePath: __dirname + '/../data/pos-labels'
+  pdfStoragePath: __dirname + '/../data/pos-labels',
+  renderCmdPath: __dirname + '/../data/pos-render'
 };

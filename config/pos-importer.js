@@ -53,7 +53,8 @@ exports.directoryWatcher = {
 
 exports['mail/listener'] = {
   mailParserOptions: {streamAttachments: false},
-  searchFilter: ['UNSEEN']
+  searchFilter: ['UNSEEN'],
+  restartMinutes: [20]
 };
 
 exports['mail/downloader'] = {
@@ -63,7 +64,7 @@ exports['mail/downloader'] = {
 
 exports['purchaseOrders/importer'] = {
   parsedOutputDir: __dirname + '/../data/attachments-imported',
-  stepCount: 40,
-  lateDataDelay: 10 * 60 * 1000,
+  stepCount: 10,
+  lateDataDelay: 30 * 60 * 1000,
   hourlyInterval: 3
 };
