@@ -127,17 +127,14 @@ Report3.prototype.toJSON = function()
 
   Object.keys(this.options.prodLines).forEach(function(prodLineId)
   {
-    if (report.results[prodLineId] !== undefined)
-    {
-      var prodLineInfo = report.options.prodLines[prodLineId];
+    var prodLineInfo = report.options.prodLines[prodLineId];
 
-      prodLinesInfo.push(
-        prodLineId,
-        prodLineInfo.division,
-        prodLineInfo.subdivisionType,
-        prodLineInfo.inventoryNo || '-'
-      );
-    }
+    prodLinesInfo.push(
+      prodLineId,
+      prodLineInfo.division,
+      prodLineInfo.subdivisionType,
+      prodLineInfo.inventoryNo || '-'
+    );
   });
 
   return {
