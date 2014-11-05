@@ -80,7 +80,6 @@ function filterSubdivisionByType(orgUnitsModule, subdivisions, subdivisionType)
 
   subdivisions = subdivisions.filter(function(subdivision)
   {
-    console.log(subdivision._id, subdivision.type, subdivisionType, subdivision.name);
     return subdivision.type === subdivisionType;
   });
 
