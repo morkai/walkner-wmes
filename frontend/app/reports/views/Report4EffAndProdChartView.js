@@ -5,13 +5,15 @@
 define([
   'app/time',
   'app/i18n',
+  'app/highcharts',
   'app/core/View',
-  'app/highcharts'
+  '../util/formatTooltipHeader'
 ], function(
   time,
   t,
+  Highcharts,
   View,
-  Highcharts
+  formatTooltipHeader
 ) {
   'use strict';
 
@@ -173,13 +175,7 @@ define([
       return this.model.get('effAndProd');
     },
 
-    formatTooltipHeader: function(ctx)
-    {
-      var timeMoment = time.getMoment(ctx.x);
-      var interval = this.model.query.get('interval') || 'day';
-
-      return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, {}));
-    },
+    formatTooltipHeader: formatTooltipHeader,
 
     getMarkerStyles: function(dataLength)
     {

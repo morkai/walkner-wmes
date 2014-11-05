@@ -122,6 +122,13 @@
     "SHIFT:3": "III",
     "SHIFT:0": "Any",
 
+    "QUARTER": "{quarter} quarter {year}",
+    "QUARTER:1": "I",
+    "QUARTER:2": "II",
+    "QUARTER:3": "III",
+    "QUARTER:4": "IV",
+    "QUARTER:0": "Any",
+
     "highcharts:contextButtonTitle": "Chart's context menu",
     "highcharts:downloadJPEG": "Save as JPEG",
     "highcharts:downloadPDF": "Save as PDF",

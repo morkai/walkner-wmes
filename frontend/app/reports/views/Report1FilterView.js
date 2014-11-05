@@ -33,7 +33,7 @@ define([
       'change input[name=mode]': 'onModeChange',
       'click a[data-range]': function(e)
       {
-        var dateRange = prepareDateRange(e.target.getAttribute('data-range'), true);
+        var dateRange = prepareDateRange(e.target, true);
 
         this.$id('from-date').val(dateRange.fromMoment.format('YYYY-MM-DD'));
         this.$id('from-time').val(dateRange.fromMoment.format('HH:mm'));

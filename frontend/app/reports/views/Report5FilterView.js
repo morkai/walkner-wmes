@@ -26,7 +26,7 @@ define([
     events: _.extend({}, FilterView.prototype.events, {
       'click a[data-range]': function(e)
       {
-        var dateRange = prepareDateRange(e.target.getAttribute('data-range'));
+        var dateRange = prepareDateRange(e.target);
 
         this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
         this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));

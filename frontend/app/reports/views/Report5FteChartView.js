@@ -307,10 +307,7 @@ define([
       };
     },
 
-    formatTooltipHeader: function(ctx)
-    {
-      return formatTooltipHeader.call(this, ctx);
-    },
+    formatTooltipHeader: formatTooltipHeader,
 
     createXAxis: function()
     {

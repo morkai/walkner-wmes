@@ -34,7 +34,7 @@ define([
       {
         /*jshint -W015*/
 
-        var dateRange = prepareDateRange(e.target.getAttribute('data-range'));
+        var dateRange = prepareDateRange(e.target);
 
         this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
         this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));

@@ -22,7 +22,7 @@ exports.createCreateNextGroupKey = function(interval)
 
   return function createNextGroupKey(groupKey)
   {
-    return moment(groupKey).add(interval, multiple).valueOf();
+    return moment(groupKey).add(multiple, interval).valueOf();
   };
 };
 
@@ -30,8 +30,9 @@ exports.createGroupKey = function(interval, date)
 {
   /*jshint -W015*/
 
-  var groupKey = moment(date).lang('pl');
+  var groupKey = moment(date);
   var hours = groupKey.hours();
+  var dayOfMonth;
 
   groupKey.minutes(0).seconds(0).milliseconds(0);
 
@@ -78,7 +79,7 @@ exports.createGroupKey = function(interval, date)
       break;
 
     case 'month':
-      var dayOfMonth = groupKey.date();
+      dayOfMonth = groupKey.date();
 
       if (dayOfMonth === 1 && hours < 6)
       {
@@ -86,6 +87,18 @@ exports.createGroupKey = function(interval, date)
       }
 
       groupKey.date(1).hours(0);
+      break;
+
+    case 'quarter':
+      dayOfMonth = groupKey.date();
+      var month = groupKey.month();
+
+      groupKey.startOf('quarter').hours(0);
+
+      if (dayOfMonth === 1 && hours < 6 && groupKey.month() === month)
+      {
+        groupKey.subtract(3, 'months');
+      }
       break;
 
     case 'year':

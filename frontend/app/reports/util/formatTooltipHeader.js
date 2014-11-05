@@ -24,6 +24,12 @@ function(
         shift: t('core', 'SHIFT:' + (timeMoment.hours() === 6 ? 1 : timeMoment.hours() === 14 ? 2 : 3))
       };
     }
+    else if (interval === 'quarter')
+    {
+      data = {
+        quarter: t('core', 'QUARTER:' + timeMoment.quarter())
+      };
+    }
 
     return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, data));
   };

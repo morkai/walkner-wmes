@@ -6,16 +6,18 @@ define([
   'underscore',
   'app/time',
   'app/i18n',
+  'app/highcharts',
   'app/core/View',
   'app/data/views/renderOrgUnitPath',
-  'app/highcharts'
+  '../util/formatTooltipHeader'
 ], function(
   _,
   time,
   t,
+  Highcharts,
   View,
   renderOrgUnitPath,
-  Highcharts
+  formatTooltipHeader
 ) {
   'use strict';
 
@@ -87,24 +89,7 @@ define([
       return this.model.get('clip');
     },
 
-    formatTooltipHeader: function(ctx)
-    {
-      /*jshint -W015*/
-
-      var timeMoment = time.getMoment(ctx.x);
-      var interval = this.model.query.get('interval');
-      var data;
-
-      if (interval === 'shift')
-      {
-        data = {
-          shift:
-            t('core', 'SHIFT:' + (timeMoment.hours() === 6 ? 1 : timeMoment.hours() === 14 ? 2 : 3))
-        };
-      }
-
-      return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, data));
-    },
+    formatTooltipHeader: formatTooltipHeader,
 
     getMarkerStyles: function(dataLength)
     {

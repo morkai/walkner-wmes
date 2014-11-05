@@ -121,6 +121,13 @@
   "SHIFT:3": "III",
   "SHIFT:0": "Dowolna",
 
+  "QUARTER": "{quarter} kwartał {year}",
+  "QUARTER:1": "I",
+  "QUARTER:2": "II",
+  "QUARTER:3": "III",
+  "QUARTER:4": "IV",
+  "QUARTER:0": "Dowolny",
+
   "highcharts:contextButtonTitle": "Menu kontekstowe wykresu",
   "highcharts:downloadJPEG": "Zapisz jako JPEG",
   "highcharts:downloadPDF": "Zapisz jako PDF",

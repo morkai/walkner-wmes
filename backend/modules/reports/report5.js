@@ -338,22 +338,9 @@ module.exports = function report5(mongoose, options, done)
     {
       var dayTime = dayMoment.valueOf();
 
-      if (options.interval === 'week')
-      {
-        time = dayMoment.day(1).valueOf();
+      time = dayMoment.startOf(options.interval).valueOf();
 
-        increaseDayCount(time, dayTime);
-      }
-      else if (options.interval === 'month')
-      {
-        time = dayMoment.date(1).valueOf();
-
-        increaseDayCount(time, dayTime);
-      }
-      else
-      {
-        time = dayTime;
-      }
+      increaseDayCount(time, dayTime);
     }
 
     var key = time + '';

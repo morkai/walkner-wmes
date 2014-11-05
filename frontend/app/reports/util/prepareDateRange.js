@@ -9,10 +9,11 @@ define([
 ) {
   'use strict';
 
-  return function prepareDateRange(dateRange, setTime)
+  return function prepareDateRange(elOrDateRange, setTime)
   {
     /*jshint -W015*/
 
+    var dateRange = typeof elOrDateRange === 'string' ? elOrDateRange : elOrDateRange.getAttribute('data-range');
     var fromMoment = time.getMoment().minutes(0).seconds(0).milliseconds(0);
     var toMoment;
     var interval = 'day';
@@ -35,6 +36,15 @@ define([
         fromMoment.month(0).date(1).subtract(1, 'years');
         toMoment = fromMoment.clone().add(1, 'years');
         interval = 'year';
+        break;
+
+      case 'q1':
+      case 'q2':
+      case 'q3':
+      case 'q4':
+        fromMoment.quarter(+dateRange.substr(1)).startOf('quarter');
+        toMoment = fromMoment.clone().add(3, 'months');
+        interval = 'month';
         break;
 
       case 'currentMonth':
@@ -105,6 +115,16 @@ define([
           toMoment.subtract(8, 'hours');
         }
         break;
+    }
+
+    if (elOrDateRange.getAttribute)
+    {
+      var customInterval = elOrDateRange.getAttribute('data-interval');
+
+      if (customInterval)
+      {
+        interval = customInterval;
+      }
     }
 
     return {
