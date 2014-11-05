@@ -9,8 +9,11 @@ var startTime = Date.now();
 require('./extensions');
 
 var lodash = require('lodash');
+var moment = require('moment');
 var main = require('h5.main');
 var config = require(process.argv[2]);
+
+moment.locale('pl');
 
 var modules = (config.modules || []).map(function(module)
 {
