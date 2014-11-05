@@ -45,7 +45,7 @@
     "csv": "~0.3.7",
     "ursa": "~0.8.0",
     "jszip": "~2.2.1",
-    "moment": "~2.7.0",
+    "moment": "~2.8.3",
     "h5.step": "~0.1.0",
     "h5.pubsub": "git+http://github.com/morkai/h5.pubsub.git#c1a899cb7e",
     "h5.rql": "git+http://github.com/morkai/h5.rql.git#fbb379fe6c",

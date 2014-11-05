@@ -106,7 +106,7 @@
 
     socket.connect();
 
-    moment.lang(locale);
+    moment.locale(locale);
 
     $.ajaxSetup({
       dataType: 'json',

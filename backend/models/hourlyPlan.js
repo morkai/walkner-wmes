@@ -202,7 +202,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
             divisionId, new Date(shiftMoment.valueOf()), i, flow, this.parallel()
           );
 
-          shiftMoment.add('hours', 8);
+          shiftMoment.add(8, 'hours');
         }
       },
       done || function() {}

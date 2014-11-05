@@ -130,7 +130,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
         dateMoment.hours(req.body.shift === 1 ? 6 : req.body.shift === 2 ? 14 : 22);
 
-        if (Date.now() <= dateMoment.clone().add('hours', 8).valueOf())
+        if (Date.now() <= dateMoment.clone().add(8, 'hours').valueOf())
         {
           return this.skip(new Error('SHIFT_NOT_ENDED'), 400);
         }

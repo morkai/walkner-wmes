@@ -94,7 +94,7 @@ define([
 
     require(modules, function()
     {
-      moment.lang(newLocale);
+      moment.locale(newLocale);
       select2.lang(newLocale);
 
       broker.publish('i18n.reloaded', {

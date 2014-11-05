@@ -202,9 +202,12 @@ function setMechOrderData(MechOrder, orders, done)
     orderMap[order._id] = order;
   });
 
-  var query = MechOrder.find({_id: {$in: Object.keys(orderMap)}}, {mrp: 1, materialNorm: 1}).lean();
+  var query = MechOrder.find(
+    {_id: {$in: Object.keys(orderMap)}},
+    {mrp: 1, materialNorm: 1, operations: 1}
+  );
 
-  query.exec(function(err, mechOrders)
+  query.lean().exec(function(err, mechOrders)
   {
     if (err)
     {
@@ -215,12 +218,10 @@ function setMechOrderData(MechOrder, orders, done)
     {
       var order = orderMap[mechOrder._id];
 
-      if (order)
-      {
-        order.mrp = mechOrder.mrp;
-      }
-
+      order.mrp = mechOrder.mrp;
       order.materialNorm = mechOrder.materialNorm;
+
+      mergeMechOperations(order, mechOrder);
     });
 
     return done(null, orders);
@@ -230,4 +231,24 @@ function setMechOrderData(MechOrder, orders, done)
 function getTwoWeeksAgo()
 {
   return moment().subtract(2, 'weeks').hours(0).minutes(0).seconds(0).milliseconds(0).toDate();
+}
+
+function mergeMechOperations(order, mechOrder)
+{
+  var orderOperations = {};
+
+  order.operations.forEach(function(orderOperation)
+  {
+    orderOperations[orderOperation.no] = true;
+  });
+
+  mechOrder.operations.forEach(function(mechOperation)
+  {
+    if (orderOperations[mechOperation.no])
+    {
+      return;
+    }
+
+    order.operations.push(mechOperation);
+  });
 }

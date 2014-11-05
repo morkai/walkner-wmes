@@ -125,7 +125,7 @@ exports.getCurrentShiftStartDate = function()
   {
     if (currentHour < 6)
     {
-      currentShiftStartMoment.subtract('days', 1);
+      currentShiftStartMoment.subtract(1, 'days');
     }
 
     currentShiftStartMoment.hours(22);

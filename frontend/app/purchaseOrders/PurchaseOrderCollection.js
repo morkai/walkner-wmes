@@ -19,7 +19,7 @@ define([
 
     rqlQuery: function(rql)
     {
-      var tomorrow = time.getMoment().utc().hours(0).minutes(0).seconds(0).milliseconds(0).add('day', 1).valueOf();
+      var tomorrow = time.getMoment().utc().hours(0).minutes(0).seconds(0).milliseconds(0).add(1, 'days').valueOf();
 
       return rql.Query.fromObject({
         fields: {

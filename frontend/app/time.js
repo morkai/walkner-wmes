@@ -4,8 +4,7 @@
 
 define([
   'moment-timezone',
-  'app/socket',
-  'moment-timezone-data'
+  'app/socket'
 ], function(
   moment,
   socket

@@ -27,38 +27,38 @@ define([
     {
       case 'currentYear':
         fromMoment.month(0).date(1);
-        toMoment = fromMoment.clone().add('years', 1);
+        toMoment = fromMoment.clone().add(1, 'years');
         interval = 'year';
         break;
 
       case 'prevYear':
-        fromMoment.month(0).date(1).subtract('years', 1);
-        toMoment = fromMoment.clone().add('years', 1);
+        fromMoment.month(0).date(1).subtract(1, 'years');
+        toMoment = fromMoment.clone().add(1, 'years');
         interval = 'year';
         break;
 
       case 'currentMonth':
         fromMoment.date(1);
-        toMoment = fromMoment.clone().add('months', 1);
+        toMoment = fromMoment.clone().add(1, 'months');
         break;
 
       case 'prevMonth':
-        fromMoment.date(1).subtract('months', 1);
-        toMoment = fromMoment.clone().add('months', 1);
+        fromMoment.date(1).subtract(1, 'months');
+        toMoment = fromMoment.clone().add(1, 'months');
         break;
 
       case 'currentWeek':
         fromMoment.weekday(0);
-        toMoment = fromMoment.clone().add('days', 7);
+        toMoment = fromMoment.clone().add(7, 'days');
         break;
 
       case 'prevWeek':
-        fromMoment.weekday(0).subtract('days', 7);
-        toMoment = fromMoment.clone().add('days', 7);
+        fromMoment.weekday(0).subtract(7, 'days');
+        toMoment = fromMoment.clone().add(7, 'days');
         break;
 
       case 'today':
-        toMoment = fromMoment.clone().add('days', 1);
+        toMoment = fromMoment.clone().add(1, 'days');
 
         if (setTime)
         {
@@ -68,7 +68,7 @@ define([
 
       case 'yesterday':
         toMoment = fromMoment.clone();
-        fromMoment.subtract('days', 1);
+        fromMoment.subtract(1, 'days');
 
         if (setTime)
         {
@@ -92,17 +92,17 @@ define([
 
           if (hours < 6)
           {
-            fromMoment.subtract('days', 1);
+            fromMoment.subtract(1, 'days');
           }
         }
 
-        toMoment = fromMoment.clone().add('hours', 8);
+        toMoment = fromMoment.clone().add(8, 'hours');
         interval = 'hour';
 
         if (dateRange === 'prevShift')
         {
-          fromMoment.subtract('hours', 8);
-          toMoment.subtract('hours', 8);
+          fromMoment.subtract(8, 'hours');
+          toMoment.subtract(8, 'hours');
         }
         break;
     }

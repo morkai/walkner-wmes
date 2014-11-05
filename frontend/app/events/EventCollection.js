@@ -19,7 +19,7 @@ define([
 
     rqlQuery: function(rql)
     {
-      var sevenDaysAgo = time.getMoment().hours(0).minutes(0).seconds(0).milliseconds(0).subtract('days', 7).valueOf();
+      var sevenDaysAgo = time.getMoment().hours(0).minutes(0).seconds(0).milliseconds(0).subtract(7, 'days').valueOf();
 
       return rql.Query.fromObject({
         fields: {type: 1, severity: 1, user: 1, time: 1, data: 1},

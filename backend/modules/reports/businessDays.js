@@ -45,7 +45,7 @@ exports.countInWeek = function(date, currentShiftStartDate)
       businessDays += 1;
     }
 
-    dateMoment.add('days', 1);
+    dateMoment.add(1, 'days');
   }
 
   return businessDays;

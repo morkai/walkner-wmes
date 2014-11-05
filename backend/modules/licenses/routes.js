@@ -68,7 +68,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
 
       var conditions = {
         uuid: license._id,
-        pingedAt: {$gte: moment().subtract('hours', 8).toDate()},
+        pingedAt: {$gte: moment().subtract(8, 'hours').toDate()},
         granted: true,
         ip: {$ne: ip}
       };

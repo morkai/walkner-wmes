@@ -41,7 +41,7 @@ module.exports = function importRoute(app, xiconfModule, req, res, next)
   step(
     function()
     {
-      var eightHoursAgo = moment().subtract('hours', 8).toDate();
+      var eightHoursAgo = moment().subtract(8, 'hours').toDate();
 
       License.findById(uuid, {appId: 1})
         .lean()

@@ -512,7 +512,7 @@ function validateTimes(startedAt, finishedAt, min, max)
 
   if (!max)
   {
-    max = moment(min).add('hours', 8).valueOf();
+    max = moment(min).add(8, 'hours').valueOf();
   }
 
   return !isNaN(startedAt)

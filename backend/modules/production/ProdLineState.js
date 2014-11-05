@@ -929,7 +929,7 @@ ProdLineState.prototype.getPrevShiftTime = function(shiftTime)
 
   if (shiftHour === 6)
   {
-    shiftMoment.subtract('days', 1).hours(22);
+    shiftMoment.subtract(1, 'days').hours(22);
   }
   else if (shiftHour === 14)
   {

@@ -595,7 +595,7 @@ define([
      */
     getTimeToNextShift: function()
     {
-      return this.getCurrentShiftMoment().add('hours', 8).diff(time.getMoment());
+      return this.getCurrentShiftMoment().add(8, 'hours').diff(time.getMoment());
     },
 
     /**

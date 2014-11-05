@@ -24,7 +24,7 @@ define([
 
       return {
         from: from.valueOf(),
-        to: from.add('days', 7).valueOf(),
+        to: from.add(7, 'days').valueOf(),
         interval: 'day',
         mode: 'shift',
         shift: shiftStartInfo.shift,

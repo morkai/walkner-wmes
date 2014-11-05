@@ -33,7 +33,7 @@ define([
 
       if (hour < 6)
       {
-        moment.subtract('days', 1);
+        moment.subtract(1, 'days');
       }
 
       shift = 3;

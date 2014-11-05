@@ -159,7 +159,7 @@ define([
       else
       {
         fromMoment = this.model.getFirstShiftMoment();
-        toMoment = fromMoment.clone().add('days', 1);
+        toMoment = fromMoment.clone().add(1, 'days');
       }
 
       this.$id('from-date').val(fromMoment.format('YYYY-MM-DD'));

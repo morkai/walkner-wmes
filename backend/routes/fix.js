@@ -386,7 +386,7 @@ module.exports = function startFixRoutes(app, express)
     var conditions = {
       date: {
         $gte: new Date(fromMoment.valueOf()),
-        $lt: new Date(fromMoment.add('days', 7).valueOf())
+        $lt: new Date(fromMoment.add(7, 'days').valueOf())
       }
     };
 

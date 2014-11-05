@@ -27,7 +27,7 @@ define([
         orgUnitType: null,
         orgUnitId: null,
         to: today.valueOf(),
-        from: today.subtract('days', 1).valueOf(),
+        from: today.subtract(1, 'days').valueOf(),
         interval: 'day'
       };
     },

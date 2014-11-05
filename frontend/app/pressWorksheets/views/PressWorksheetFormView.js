@@ -426,7 +426,7 @@ define([
         if (!this.paintShopTimeFocused)
         {
           $startedAt.val(shiftMoment.format('HH:mm'));
-          $finishedAt.val(shiftMoment.add('hours', 8).format('HH:mm'));
+          $finishedAt.val(shiftMoment.add(8, 'hours').format('HH:mm'));
         }
       }
     },
@@ -436,7 +436,7 @@ define([
       var $date = this.$id('date');
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
 
-      return time.getMoment($date.val() + ' 06:00:00').add('h', (shift - 1) * 8);
+      return time.getMoment($date.val() + ' 06:00:00').add((shift - 1) * 8, 'hours');
     },
 
     getType: function()
@@ -976,7 +976,7 @@ define([
 
       if (timeMoment.hours() < 6)
       {
-        timeMoment.add('days', 1);
+        timeMoment.add(1, 'days');
       }
 
       return timeMoment.valueOf();

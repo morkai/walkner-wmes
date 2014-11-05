@@ -144,7 +144,7 @@ module.exports = function(app, productionModule, done)
           }
 
           var fromMoment = moment(results[0].min).weekday(0);
-          var maxTime = moment(results[0].max).weekday(0).add('weeks', 1).valueOf();
+          var maxTime = moment(results[0].max).weekday(0).add(1, 'weeks').valueOf();
 
           productionModule.info(
             "Recreating the prod log entries from %s to %s...",
@@ -157,7 +157,7 @@ module.exports = function(app, productionModule, done)
           while (fromMoment.valueOf() < maxTime)
           {
             var from = new Date(fromMoment.valueOf());
-            var to = new Date(fromMoment.add('weeks', 1).valueOf());
+            var to = new Date(fromMoment.add(1, 'weeks').valueOf());
 
             steps.push(createHandleWeekOfLogEntriesStep(from, to));
           }

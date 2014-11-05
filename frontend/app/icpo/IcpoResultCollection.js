@@ -26,7 +26,7 @@ define([
         .minutes(0)
         .seconds(0)
         .milliseconds(0)
-        .subtract('days', 7).valueOf();
+        .subtract(7, 'days').valueOf();
 
       return rql.Query.fromObject({
         fields: {

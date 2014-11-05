@@ -26,7 +26,7 @@ define([
       shiftEndMoment.hours(22);
     }
 
-    shiftEndMoment.add('hours', 8).subtract('seconds', 1);
+    shiftEndMoment.add(8, 'hours').subtract(1, 'seconds');
 
     return shiftEndMoment.toDate();
   };

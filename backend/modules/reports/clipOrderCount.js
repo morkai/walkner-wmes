@@ -34,7 +34,7 @@ exports.start = function startClipOrderCountModule(app, module)
 
   function yesterday()
   {
-    return moment().hours(0).minutes(0).seconds(0).milliseconds(0).subtract('days', 1).toDate();
+    return moment().hours(0).minutes(0).seconds(0).milliseconds(0).subtract(1, 'days').toDate();
   }
 
   function formatDate(date)
@@ -54,7 +54,7 @@ exports.start = function startClipOrderCountModule(app, module)
       .minutes(1)
       .seconds(0)
       .milliseconds(0)
-      .add('days', 1);
+      .add(1, 'days');
 
     setTimeout(scheduleClipOrderCountCheck, nextCheckMoment.diff(Date.now()));
 

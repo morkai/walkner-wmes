@@ -46,7 +46,7 @@ define([
           var editable = unlocked;
           var time = currentShiftMoment.format('HH:mm:ss');
 
-          currentShiftMoment.add('minutes', 59).add('seconds', 59);
+          currentShiftMoment.add(59, 'minutes').add(59, 'seconds');
 
           if (i === 7)
           {
@@ -59,7 +59,7 @@ define([
 
           time += '-' + currentShiftMoment.format('HH:mm:ss');
 
-          currentShiftMoment.add('seconds', 1);
+          currentShiftMoment.add(1, 'seconds');
 
           return {
             time: time,
@@ -86,7 +86,7 @@ define([
 
     scheduleNextRender: function()
     {
-      var lastShiftHour = this.model.getCurrentShiftMoment().add('hours', 7).hours();
+      var lastShiftHour = this.model.getCurrentShiftMoment().add(7, 'hours').hours();
       var currentMoment = time.getMoment();
       var currentTime = currentMoment.valueOf();
       var currentHour = currentMoment.hours();
@@ -95,7 +95,7 @@ define([
         .minutes(0)
         .seconds(0)
         .milliseconds(0)
-        .add('hours', 1)
+        .add(1, 'hours')
         .valueOf();
 
       var nextRenderTime = currentHour === lastShiftHour

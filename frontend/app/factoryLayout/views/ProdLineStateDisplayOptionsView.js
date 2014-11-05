@@ -148,7 +148,7 @@ define([
 
       if (toMoment.valueOf() === fromMoment.valueOf())
       {
-        toMoment.add('days', 1);
+        toMoment.add(1, 'days');
       }
       else if (toMoment.valueOf() - fromMoment.valueOf() > (7 * 24 * 3600 * 1000))
       {

@@ -95,7 +95,7 @@ define([
         var firstShiftMoment = this.getFirstShiftMoment();
 
         query.from = firstShiftMoment.toISOString();
-        query.to = firstShiftMoment.add('days', 1).toISOString();
+        query.to = firstShiftMoment.add(1, 'days').toISOString();
       }
 
       if (orgUnitType && orgUnit)
@@ -151,7 +151,7 @@ define([
 
       if (firstShiftMoment.hours() >= 0 && firstShiftMoment.hours() < 6)
       {
-        firstShiftMoment.subtract('days', 1);
+        firstShiftMoment.subtract(1, 'days');
       }
 
       return firstShiftMoment.hours(6).minutes(0).seconds(0).milliseconds(0);

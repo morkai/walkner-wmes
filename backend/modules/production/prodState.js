@@ -157,7 +157,7 @@ module.exports = function setUpProdState(app, productionModule)
 
   function scheduleHourChange()
   {
-    var nextHourTime = moment().minutes(0).seconds(0).milliseconds(999).add('hours', 1).valueOf();
+    var nextHourTime = moment().minutes(0).seconds(0).milliseconds(999).add(1, 'hours').valueOf();
     var delay = nextHourTime - Date.now();
 
     setTimeout(onHourChanged, delay);
