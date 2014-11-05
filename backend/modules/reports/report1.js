@@ -677,6 +677,8 @@ module.exports = function(mongoose, options, done)
 
     if (effNum && effDen)
     {
+      coeffs.effNum = util.round(effNum);
+      coeffs.effDen = util.round(effDen);
       coeffs.efficiency = util.round(effNum / effDen);
 
       if (options.interval === 'hour')
@@ -699,6 +701,9 @@ module.exports = function(mongoose, options, done)
     {
       coeffs.productivity = util.round(effNum / options.prodNumConstant / fteGroupResult.prodDenTotal);
       coeffs.productivityNoWh = util.round(effNum / options.prodNumConstant / fteGroupResult.prodDenMaster);
+      coeffs.prodNum = util.round(effNum / options.prodNumConstant);
+      coeffs.prodDenTotal = fteGroupResult.prodDenTotal;
+      coeffs.prodDenMaster = fteGroupResult.prodDenMaster;
     }
 
     coeffs.orderCount = orderCount;
