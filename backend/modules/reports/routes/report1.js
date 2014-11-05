@@ -25,6 +25,18 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
   }
 
   var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
+  var subdivisionType = req.query.subdivisionType;
+
+  if (subdivisionType === 'prod' || subdivisionType === 'press')
+  {
+    subdivisions = filterSubdivisionByType(
+      orgUnitsModule, subdivisions, subdivisionType === 'press' ? 'press': 'assembly'
+    );
+  }
+  else
+  {
+    subdivisionType = null;
+  }
 
   var options = {
     fromTime: helpers.getTime(req.query.from),
@@ -34,7 +46,7 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
     orgUnitId: orgUnit ? req.query.orgUnitId : null,
     division: helpers.idToStr(division),
     subdivisions: helpers.idToStr(subdivisions),
-    subdivisionType: req.query.subdivisionType || null,
+    subdivisionType: subdivisionType,
     prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
     prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models),
     orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
@@ -58,6 +70,22 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
     res.send(helpers.cacheReport('1', req, report));
   });
 };
+
+function filterSubdivisionByType(orgUnitsModule, subdivisions, subdivisionType)
+{
+  if (subdivisions === null)
+  {
+    subdivisions = orgUnitsModule.getAllByType('subdivision');
+  }
+
+  subdivisions = subdivisions.filter(function(subdivision)
+  {
+    console.log(subdivision._id, subdivision.type, subdivisionType, subdivision.name);
+    return subdivision.type === subdivisionType;
+  });
+
+  return subdivisions;
+}
 
 function getDowntimeReasons(allDowntimeReasons)
 {
