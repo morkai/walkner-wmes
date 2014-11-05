@@ -6,11 +6,13 @@ define([
   'underscore',
   '../data/aors',
   '../data/downtimeReasons',
+  '../data/orgUnits',
   '../core/Model'
 ], function(
   _,
   aors,
   downtimeReasons,
+  orgUnits,
   Model
 ) {
   'use strict';
@@ -299,7 +301,11 @@ define([
           data: {}
         };
 
-        this.parseProdLineData(options, prodLine, prodLineData, groupKeys);
+        if (prodLineData)
+        {
+          this.parseProdLineData(options, prodLine, prodLineData, groupKeys);
+        }
+
         this.summarizeProdLine(prodLine);
 
         prodLines.push(prodLine);
@@ -335,8 +341,8 @@ define([
         var malfunctions = dataPoint.m || null;
         var quantityDone = dataPoint.q || 0;
         var quantityLost = dataPoint.l || 0;
-        var mttr = malfunctionDuration / malfunctionCount;
-        var mttf = operationalAvailabilityH / malfunctionCount;
+        var mttr = malfunctionCount ? malfunctionDuration / malfunctionCount : 0;
+        var mttf = malfunctionCount ? operationalAvailabilityH / malfunctionCount : 0;
 
         prodLine.workDays += weekendWorkDays;
         prodLine.scheduledDuration += scheduledDuration;
