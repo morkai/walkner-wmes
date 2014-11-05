@@ -77,15 +77,20 @@ define([
 
     onModeChange: function()
     {
+      var view = this;
       var online = this.getSelectedMode() === 'online';
 
       this.$('.filter-dateRange .form-control').prop('disabled', online);
 
       var $intervals = this.$id('intervals').find('.btn');
 
-      $intervals
-        .filter('[data-interval=month], [data-interval=week], [data-interval=day]')
-        [online ? 'addClass' : 'removeClass']('disabled');
+      $intervals.each(function()
+      {
+        var interval = this.getAttribute('data-interval');
+        var disabled = online && interval !== 'shift' && interval !== 'hour';
+
+        view.$(this).toggleClass('disabled', disabled);
+      });
 
       if (online)
       {
