@@ -9,6 +9,7 @@
     "BREADCRUMBS:4": "Operators",
 
     "PAGE_ACTION:settings": "Change settings",
+    "PAGE_ACTION:3:exportTable": "Export table",
 
     "1:pageTitle": "PROD, EFF, Downtime",
     "2:pageTitle": "CLIP",
@@ -232,6 +233,7 @@
     "filenames:2:clip": "WMES_CLIP",
     "filenames:2:dirIndir": "WMES_DirIndir",
     "filenames:2:effIneff": "WMES_EffIneff",
+    "filenames:3:table": "WMES_OEE_Machines",
     "filenames:3:oee": "WMES_OEE",
     "filenames:3:downtime": "WMES_OEE_Downtime",
     "filenames:4:effAndProd": "WMES_Operators_EffProd",

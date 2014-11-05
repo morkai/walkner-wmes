@@ -37,6 +37,39 @@ define([
 
     breadcrumbs: [t.bound('reports', 'BREADCRUMBS:3')],
 
+    actions: function()
+    {
+      var page = this;
+
+      return [{
+        label: t.bound('reports', 'PAGE_ACTION:3:exportTable'),
+        icon: 'download',
+        callback: function()
+        {
+          var btnEl = this.querySelector('.btn');
+
+          btnEl.disabled = true;
+
+          var req = page.ajax({
+            type: 'POST',
+            url: '/reports;download?filename=' + t('reports', 'filenames:3:table'),
+            contentType: 'text/csv',
+            data: page.tableSummaryView.serializeToCsv()
+          });
+
+          req.done(function(key)
+          {
+            window.location.href = '/reports;download?key=' + key;
+          });
+
+          req.always(function()
+          {
+            btnEl.disabled = false;
+          });
+        }
+      }];
+    },
+
     initialize: function()
     {
       this.defineModels();

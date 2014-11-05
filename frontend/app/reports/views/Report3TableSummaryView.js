@@ -186,7 +186,6 @@ define([
       this.hoveredRows = [];
       this.dataTable = null;
       this.fixedColumns = null;
-      this.tableTools = null;
       this.loading = 0;
 
       this.listenTo(this.model, 'request', this.onModelLoading);
@@ -218,7 +217,6 @@ define([
       }
 
       this.fixedColumns = null;
-      this.tableTools = null;
     },
 
     afterRender: function()
@@ -409,6 +407,47 @@ define([
       {
         this.el.classList.remove('unselectable');
       }
+    },
+
+    serializeToCsv: function()
+    {
+      if (!this.dataTable)
+      {
+        return '';
+      }
+
+      var columnNames = [];
+
+      this.dataTable.columns().header().each(function(th)
+      {
+        if (th.parentNode !== null)
+        {
+          columnNames.push('"' + th.innerText + '"');
+        }
+      });
+
+      var csv = columnNames.join(';') + '\r\n';
+
+      this.dataTable.rows().nodes().each(function(tr)
+      {
+        var row = [];
+
+        for (var i = 0, l = tr.childElementCount; i < l; ++i)
+        {
+          var value = tr.children[i].innerText;
+
+          if (i < 3)
+          {
+            value = '"' + value + '"';
+          }
+
+          row.push(value);
+        }
+
+        csv += row.join(';') + '\r\n';
+      });
+
+      return csv;
     }
 
   });

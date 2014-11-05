@@ -9,6 +9,7 @@
   "BREADCRUMBS:5": "HR",
 
   "PAGE_ACTION:settings": "Zmień ustawienia",
+  "PAGE_ACTION:3:exportTable": "Eksportuj tabelę",
 
   "1:pageTitle": "Wskaźniki",
   "2:pageTitle": "CLIP",
@@ -233,6 +234,7 @@
   "filenames:2:clip": "WMES_CLIP",
   "filenames:2:dirIndir": "WMES_DirIndir",
   "filenames:2:effIneff": "WMES_PodzialZasobow",
+  "filenames:3:table": "WMES_WykZas_Maszyny",
   "filenames:3:oee": "WMES_WykZas_OEE",
   "filenames:3:downtime": "WMES_WykZas_Przestoje",
   "filenames:4:effAndProd": "WMES_Operatorzy_WydProd",
