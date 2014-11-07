@@ -82,6 +82,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       '"operator': exportUserInfo(doc.operator),
       '"operators': Array.isArray(doc.operators) ? doc.operators.map(exportUserInfo).join(';') : '',
       '"orderMrp': orderData.mrp || '',
+      '"orderName': (orderData.name || '').trim(),
+      '"operationName': (operation.name || '').trim(),
       '"operationWorkCenter': operation.workCenter || '',
       '"division': doc.division,
       '"subdivision': subdivision ? subdivision.name : doc.subdivision,
