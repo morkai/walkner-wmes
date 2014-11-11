@@ -127,7 +127,10 @@ module.exports = function(grunt)
             }
           },
           optimizeCss: 'standard',
-          modules: [{name: 'main'}],
+          modules: [
+            {name: 'wmes-main'},
+            {name: 'pos-main'}
+          ],
           paths: requirejsConfig.buildPaths,
           shim: requirejsConfig.buildShim,
           locale: 'pl'

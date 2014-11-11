@@ -19,6 +19,9 @@ exports.modules = [
   'sio'
 ];
 
+exports.mainJsFile = 'pos-main.js';
+exports.mainCssFile = 'assets/pos-main.css';
+
 exports.dictionaryModules = {
 
 };
@@ -73,7 +76,7 @@ exports.mongoose = {
     'setting', 'event', 'user',
     'vendor',
     'feedback',
-    'purchaseOrder'
+    'purchaseOrder', 'purchaseOrderPrint'
   ]
 };
 
@@ -110,7 +113,7 @@ exports['messenger/client:pos-importer'] = {
 };
 
 exports.updater = {
-  manifestPath: __dirname + '/manifest.appcache',
+  manifestPath: __dirname + '/pos-manifest.appcache',
   packageJsonPath: __dirname + '/../package.json',
   restartDelay: 10000,
   pull: {

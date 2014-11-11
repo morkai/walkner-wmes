@@ -5,7 +5,6 @@
 define([
   './aors/routes',
   './companies/routes',
-  './vendors/routes',
   './dashboard/routes',
   './divisions/routes',
   './downtimeReasons/routes',
@@ -35,7 +34,6 @@ define([
   './workCenters/routes',
   './xiconf/routes',
   './icpo/routes',
-  './purchaseOrders/routes',
   './factoryLayout/routes'
 ], function()
 {

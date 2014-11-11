@@ -6,10 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <base href="/">
   <title>walkner-wmes</title>
-  <link rel="stylesheet" href="assets/main.css">
-  <script src="config.js"></script>
-  <script src="vendor/require/require.js"></script>
-  <script src="main.js"></script>
+  <link rel="stylesheet" href="<%- mainCssFile %>">
 </head>
 <body>
 <div id="app-loading"><i class="fa fa-spinner fa-spin"></i></div>
@@ -19,5 +16,9 @@
 window.<%- key %> = <%- appData[key] %>;
 <% }) %>
 </script>
+<script src="config.js"></script>
+<script src="vendor/require/require.js"></script>
+<script src="<%- mainJsFile %>"></script>
+<script src="main.js"></script>
 </body>
 </html>

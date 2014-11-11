@@ -33,7 +33,7 @@ exports.mongoose = {
   options: {
     server: {poolSize: 5}
   },
-  models: ['event', 'purchaseOrder', 'vendor']
+  models: ['event', 'purchaseOrder', 'purchaseOrderPrint', 'vendor']
 };
 
 exports['messenger/server'] = {

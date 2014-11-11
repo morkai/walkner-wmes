@@ -76,7 +76,9 @@ module.exports = function startCoreRoutes(app, express)
 
     res.render('index', {
       appCache: appCache,
-      appData: appData
+      appData: appData,
+      mainJsFile: app.options.mainJsFile || 'main.js',
+      mainCssFile: app.options.mainCssFile || 'assets/main.css'
     });
   }
 

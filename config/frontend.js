@@ -47,6 +47,9 @@ exports.modules = [
   'sio'
 ];
 
+exports.mainJsFile = 'wmes-main.js';
+exports.mainCssFile = 'assets/wmes-main.css';
+
 exports.dictionaryModules = {
   prodFunctions: 'PROD_FUNCTIONS',
   companies: 'COMPANIES',
@@ -118,8 +121,7 @@ exports.pubsub = {
     'prodDowntimes.**',
     'prodShiftOrders.**',
     'updater.newVersion',
-    'settings.updated.**',
-    'purchaseOrders.printed.*', 'purchaseOrders.cancelled.*'
+    'settings.updated.**'
   ]
 };
 
@@ -210,7 +212,7 @@ exports['messenger/client:pos-importer'] = {
 };
 
 exports.updater = {
-  manifestPath: __dirname + '/manifest.appcache',
+  manifestPath: __dirname + '/wmes-manifest.appcache',
   packageJsonPath: __dirname + '/../package.json',
   restartDelay: 10000,
   pull: {

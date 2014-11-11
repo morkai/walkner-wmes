@@ -1,10 +1,11 @@
+appLocale = localStorage.getItem('LOCALE') || navigator.language || window.LOCALE || 'pl';
 require = {
   baseUrl: '/',
   paths: <%- paths %>,
   shim: <%- shim %>,
   config: {
     i18n: {
-      locale: localStorage.getItem('LOCALE') || navigator.language || 'pl'
+      locale: appLocale
     }
   }
 };
