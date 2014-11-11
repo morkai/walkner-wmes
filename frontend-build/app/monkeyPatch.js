@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["jquery","backbone","bootstrap","select2"],function(o,n){var t=n.sync;n.sync=function(o,n,e){return e.syncMethod=o,t.call(this,o,n,e)},o.fn.modal.Constructor.prototype.enforceFocus=function(){},o.fn.modal.Constructor.prototype.escape=function(){this.isShown&&this.options.keyboard?this.$element.on("keydown.dismiss.bs.modal",o.proxy(function(o){27===o.which&&this.hide()},this)):this.isShown||this.$element.off("keydown.dismiss.bs.modal")};var e=o(document.body);return o.fn.select2.defaults.dropdownContainer=function(o){var n=o.container.closest(".modal-body");if(0===n.length)return e;var t=n.closest(".modal-dialog");return 0===t.length?e:t},e.on("focusin",'.select2-offscreen[tabindex="-1"]',function(){o(this).select2("focus")}),{}});
