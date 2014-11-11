@@ -105,7 +105,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
       importTimers[timeKey] = setTimeout(
         enqueueAndImport,
-        createTimeKey(Date.now()) === timeKey ? module.config.lateDataDelay : 1337,
+        createTimeKey(Date.now()) === timeKey ? module.config.lateDataDelay : 60000,
         timeKey,
         true
       );
@@ -143,6 +143,13 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
     if (importLock || !importQueue.length)
     {
       return;
+    }
+
+    importQueue.sort(function(a, b) { return a - b; });
+
+    if (isWaitingForEarlierData(importQueue[0], Object.keys(importTimers)))
+    {
+      return module.debug("Delayed %s: waiting for earlier data...", importQueue[0]);
     }
 
     importLock = true;
@@ -317,5 +324,18 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
     });
 
     mongoose.model('Vendor').collection.insert(vendorList, {continueOnError: true}, function() {});
+  }
+
+  function isWaitingForEarlierData(timeKey, waitingTimeKeys)
+  {
+    for (var i = 0, l = waitingTimeKeys.length; i < l; ++i)
+    {
+      if (waitingTimeKeys[i] < timeKey)
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 };
