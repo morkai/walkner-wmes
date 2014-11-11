@@ -17,15 +17,17 @@ exports.DEFAULT_CONFIG = {
   renderCmdPath: './'
 };
 
-exports.start = function startPurchaseOrdersModule(app, module)
+exports.start = function startPurchaseOrdersModule(app, poModule)
 {
+  poModule.lockedOrders = {};
+
   app.onModuleReady(
     [
-      module.config.mongooseId,
-      module.config.userId,
-      module.config.expressId,
-      module.config.httpServerId
+      poModule.config.mongooseId,
+      poModule.config.userId,
+      poModule.config.expressId,
+      poModule.config.httpServerId
     ],
-    setUpRoutes.bind(null, app, module)
+    setUpRoutes.bind(null, app, poModule)
   );
 };
