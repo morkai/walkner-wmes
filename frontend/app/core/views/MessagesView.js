@@ -28,7 +28,7 @@ define([
     events: {
       'click .message': function(e)
       {
-        if (e.currentTarget.parentNode === this.el)
+        if (e.currentTarget.parentNode === this.el && e.currentTarget.getAttribute('data-view') === this.idPrefix)
         {
           this.hide($(e.currentTarget));
         }
@@ -97,7 +97,7 @@ define([
       this.hideTimers = null;
     }
 
-    this.$('.message').remove();
+    this.$('.message[data-view="' + this.idPrefix + '"]').remove();
   };
 
   /**
@@ -111,7 +111,7 @@ define([
       text: options.text
     }));
 
-    this.$el.append($message);
+    this.$el.append($message.attr('data-view', this.idPrefix));
 
     this.moveDown($message);
 
@@ -141,7 +141,7 @@ define([
   {
     if (!$message)
     {
-      $message = this.$('.message');
+      $message = this.$('.message[data-view="' + this.idPrefix + '"]');
 
       this.$loadingMessage = null;
     }
@@ -258,7 +258,7 @@ define([
   MessagesView.prototype.moveDown = function($newMessage)
   {
     this.moveTopBy(
-      this.$('.message'),
+      this.$('.message[data-view="' + this.idPrefix + '"]'),
       $newMessage,
       this.getMoveOffset($newMessage)
     );
