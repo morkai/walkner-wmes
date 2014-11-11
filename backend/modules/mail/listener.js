@@ -22,6 +22,7 @@ exports.start = function startMailListenerModule(app, module)
 {
   var isConnected = false;
   var mailListener = null;
+  var disconnectedAt = -1;
 
   app.broker
     .subscribe('app.started', setUpMailListener)
@@ -48,6 +49,7 @@ exports.start = function startMailListenerModule(app, module)
       if (isConnected)
       {
         isConnected = false;
+        disconnectedAt = Date.now();
 
         module.warn("Disconnected from the IMAP server");
       }
@@ -99,8 +101,29 @@ exports.start = function startMailListenerModule(app, module)
       then.setMilliseconds(0);
 
       nextCheckDelay = Math.max(nextCheckDelay, then.getTime() - now);
+
+      setTimeout(checkDisconnect, 5000);
     }
 
     setTimeout(checkRestart, nextCheckDelay);
+  }
+
+  function checkDisconnect()
+  {
+    if (Date.now() - disconnectedAt < 10000)
+    {
+      return;
+    }
+
+    module.debug("Destroying...");
+
+    mailListener.removeAllListeners();
+    mailListener.destroy();
+
+    isConnected = false;
+    mailListener = null;
+    disconnectedAt = Date.now();
+
+    setImmediate(setUpMailListener);
   }
 };
