@@ -118,7 +118,7 @@ exports.start = function startMailListenerModule(app, module)
     module.debug("Destroying...");
 
     mailListener.removeAllListeners();
-    mailListener.destroy();
+    mailListener.imap.destroy();
 
     isConnected = false;
     mailListener = null;
