@@ -37,6 +37,14 @@ exports.start = function startExpressModule(app, module, done)
 
   module = app[module.name] = lodash.merge(express(), module);
 
+  module.createHttpError = function(message, statusCode)
+  {
+    var httpError = new Error(message);
+    httpError.status = statusCode || 400;
+
+    return httpError;
+  };
+
   module.crud = crud;
 
   var production = app.options.env === 'production';
