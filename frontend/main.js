@@ -6,13 +6,6 @@
 {
   'use strict';
 
-  var locale = localStorage.getItem('LOCALE') || navigator.language || 'pl';
-
-  if (locale !== 'pl')
-  {
-    locale = 'en';
-  }
-
   var domains = [];
   var i18n = null;
   var select2 = null;
