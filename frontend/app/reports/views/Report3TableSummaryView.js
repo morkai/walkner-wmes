@@ -29,6 +29,22 @@ define([
     return data;
   }
 
+  var DECIMAL_SEPARATOR = typeof Number.prototype.toLocaleString === 'function'
+    ? (1.2).toLocaleString().substr(1, 1)
+    : '.';
+
+  function exportNumber(localeNumber)
+  {
+    var parts = localeNumber.split(DECIMAL_SEPARATOR);
+
+    if (parts.length === 2)
+    {
+      return parts[0].replace(/[^0-9]+/g, '') + DECIMAL_SEPARATOR + parts[1].replace(/[^0-9]+/g, '');
+    }
+
+    return parts[0].replace(/[^0-9]+/g, '');
+  }
+
   var COLUMNS = [
     {
       name: 'division',
@@ -439,6 +455,10 @@ define([
           if (i < 3)
           {
             value = '"' + value + '"';
+          }
+          else
+          {
+            value = exportNumber(value);
           }
 
           row.push(value);
