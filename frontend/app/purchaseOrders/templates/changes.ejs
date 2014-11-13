@@ -4,7 +4,6 @@
     <thead>
       <tr>
         <th><%- t('purchaseOrders', 'PROPERTY:changes.date') %></th>
-        <th><%- t('purchaseOrders', 'PROPERTY:changes.user') %></th>
         <th><%- t('purchaseOrders', 'PROPERTY:changes.property') %></th>
         <th><%- t('purchaseOrders', 'PROPERTY:changes.oldValue') %></th>
         <th><%- t('purchaseOrders', 'PROPERTY:changes.newValue') %></th>
@@ -22,7 +21,6 @@
       </tr>
       <tr class="pos-changes-change <%- change.visible ? '' : 'hidden'%>">
         <td rowspan="<%- change.properties.length %>"><%- change.date %></td>
-        <td rowspan="<%- change.properties.length %>"><%- change.user %></td>
         <td><%- change.properties[0].name %></td>
         <td><%- change.properties[0].oldValue %></td>
         <td class="pos-changes-change-value" data-property="<%- change.properties[0].key %>"><%- change.properties[0].newValue %></td>
