@@ -388,24 +388,6 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
   function validateOrder(order)
   {
-    if (!order.docDate)
-    {
-      return false;
-    }
-
-    if (!order.items.length)
-    {
-      return false;
-    }
-
-    for (var i = 0, l = order.items.length; i < l; ++i)
-    {
-      if (!order.items[i].schedule.length)
-      {
-        return false;
-      }
-    }
-
-    return true;
+    return !!order.docDate;
   }
 };

@@ -405,13 +405,14 @@ define([
       var selectedItems = this.state.get('selected').map(function(itemId)
       {
         var item = allItems.get(itemId);
+        var schedule = item.get('schedule');
 
         return {
           _id: +item.id,
           nc12: item.get('nc12'),
           packageQty: 0,
           componentQty: 0,
-          remainingQty: item.get('schedule')[0].qty
+          remainingQty: schedule.length ? schedule[0].qty : 0
         };
       }).sort(function(a, b) { return a._id - b._id; });
 
