@@ -333,6 +333,11 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       changed = 'add';
     });
 
+    if (changed === 'set' && oldItems.some(function(oldItem) { return !oldItem.completed; }))
+    {
+      changed = 'add';
+    }
+
     return changed;
   }
 
@@ -371,6 +376,14 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
           changed = true;
         }
       });
+
+      if (oldItem.completed)
+      {
+        changes[keyPrefix + '/completed'] = [true, false];
+        oldItem.completed = false;
+
+        changed = true;
+      }
 
       return changed;
     }
