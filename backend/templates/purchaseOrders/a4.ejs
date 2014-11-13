@@ -56,9 +56,9 @@
       <th>Quantity</th>
     </tr>
     <tr>
-      <td><%- page.orderNo %></td>
-      <td><%- page.nc12 %></td>
-      <td><%- page.quantity %></td>
+      <td><%- page.orderNo || '-' %></td>
+      <td><%- page.nc12 || '-' %></td>
+      <td><%- page.quantity || '-' %></td>
     </tr>
     <tr>
       <th>Line no</th>
@@ -66,7 +66,7 @@
       <th>Vendor no</th>
     </tr>
     <tr>
-      <td><%- page.itemNo %></td>
+      <td><%- page.itemNo || '-' %></td>
       <td><%- page.shippingNo || '-' %></td>
       <td><%- page.vendorNo || '-' %></td>
     </tr>

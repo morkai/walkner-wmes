@@ -34,7 +34,8 @@ exports.paths = {
   'datatables-tabletools': 'vendor/datatables/extensions/TableTools/js/dataTables.tableTools',
   'jquery.stickytableheaders': 'vendor/jquery.stickytableheaders',
   'highlight': 'vendor/highlight/highlight.pack',
-  'Sortable': 'vendor/Sortable'
+  'Sortable': 'vendor/Sortable',
+  'deployJava': 'vendor/deployJava'
 };
 
 exports.shim = {
@@ -67,6 +68,9 @@ exports.shim = {
   'jquery.stickytableheaders': ['jquery'],
   'highlight': {
     exports: 'hljs'
+  },
+  'deployJava': {
+    exports: 'deployJava'
   }
 };
 

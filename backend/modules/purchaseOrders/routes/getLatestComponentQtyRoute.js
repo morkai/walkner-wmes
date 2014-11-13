@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function getLatestComponentQtyRoute(PurchaseOrder, req, res, next)
+module.exports = function getLatestComponentQtyRoute(app, poModule, req, res, next)
 {
   var nc12 = [].concat(req.query.nc12 || req.body.nc12).filter(function(nc12)
   {
@@ -16,15 +16,13 @@ module.exports = function getLatestComponentQtyRoute(PurchaseOrder, req, res, ne
     return res.json({});
   }
 
-  PurchaseOrder.aggregate(
-    {$match: {'items.nc12': {$in: nc12}}},
-    {$unwind: '$items'},
-    {$match: {'items.nc12': {$in: nc12}, 'items.prints': {$not: {$size: 0}}}},
-    {$project: {_id: 0, nc12: '$items.nc12', prints: '$items.prints'}},
-    {$unwind: '$prints'},
-    {$match: {'prints.componentQty': {$ne: 0}}},
-    {$group: {_id: '$nc12', print: {$last: '$prints'}}},
-    {$project: {_id: 0, nc12: '$_id', componentQty: '$print.componentQty'}},
+  var mongoose = app[poModule.config.mongooseId];
+  var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
+
+  PurchaseOrderPrint.aggregate(
+    {$match: {nc12: {$in: nc12}, componentQty: {$ne: 0}}},
+    {$sort: {nc12: 1, printedAt: 1}},
+    {$group: {_id: '$nc12', componentQty: {$last: '$componentQty'}}},
     function(err, results)
     {
       if (err)
@@ -36,7 +34,7 @@ module.exports = function getLatestComponentQtyRoute(PurchaseOrder, req, res, ne
 
       results.forEach(function(result)
       {
-        latestComponentQty[result.nc12] = result.componentQty;
+        latestComponentQty[result._id] = result.componentQty;
       });
 
       res.json(latestComponentQty);

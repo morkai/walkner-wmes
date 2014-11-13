@@ -5,91 +5,166 @@
 'use strict';
 
 var format = require('util').format;
+var lodash = require('lodash');
 var step = require('h5.step');
-var exec12 = require('./exec12').exec;
+var exec12 = require('../util/exec12').exec;
 
 module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
 {
+  var express = app[poModule.config.expressId];
   var mongoose = app[poModule.config.mongooseId];
   var PurchaseOrder = mongoose.model('PurchaseOrder');
-
-  var barcode = PurchaseOrder.BARCODES[req.query.barcode] ? req.query.barcode : 'code128';
-  var paper = PurchaseOrder.PAPERS[req.query.paper] ? req.query.paper : 'a4';
-  var barcodeType = PurchaseOrder.BARCODES[barcode];
-  var paperOptions = PurchaseOrder.PAPERS[paper];
-  var barcodeOptions = paperOptions[barcode];
-  var query = req.query;
-
-  ['orderNo', 'nc12', 'quantity', 'itemNo', 'vendorNo', 'shippingNo'].forEach(function(param)
-  {
-    if (!Array.isArray(query[param]))
-    {
-      query[param] = [query[param]];
-    }
-  });
-
-  var barcodeDataToPng = {};
-  var pages = query.orderNo.map(function(orderNo, i)
-  {
-    var page = {
-      orderNo: orderNo || '',
-      nc12: query.nc12[i] || '',
-      quantity: query.quantity[i] || '',
-      itemNo: query.itemNo[i] || '',
-      vendorNo: query.vendorNo[i] || '',
-      shippingNo: query.shippingNo[i] || '',
-      barcodeData: null,
-      svg: null
-    };
-
-    var barcodeData = format('O%sP%sQ%sL%sS', page.orderNo, page.nc12, page.quantity, page.itemNo);
-
-    if (barcodeData.length + page.shippingNo.length > barcodeOptions.maxLength)
-    {
-      barcodeData += page.shippingNo.substr(-1 * (barcodeOptions.maxLength - barcodeData.length));
-    }
-    else
-    {
-      barcodeData += page.shippingNo;
-    }
-
-    page.barcodeData = barcodeData;
-
-    barcodeDataToPng[page.barcodeData] = null;
-
-    return page;
-  });
-  var uniqueBarcodes = Object.keys(barcodeDataToPng);
+  var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
 
   step(
-    function()
+    function findPoPrintsStep()
     {
-      for (var i = 0, l = uniqueBarcodes.length; i < l; ++i)
+      if (req.query.key)
       {
-        generateBarcode(poModule.config.zintExe, barcodeType, barcodeOptions.zint, uniqueBarcodes[i], this.group());
+        PurchaseOrderPrint.find({key: req.query.key}).sort({item: 1}).lean().exec(this.next());
+      }
+      else if (req.query.id)
+      {
+        PurchaseOrderPrint.find({_id: req.query.id}).lean().exec(this.next());
       }
     },
-    function(err, barcodePngs)
+    function prepareQueryStep(err, poPrints)
+    {
+      if (!req.query.key && !req.query.id)
+      {
+        return;
+      }
+
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      if (!poPrints.length)
+      {
+        return this.skip(express.createHttpError('NO_PO_PRINTS', 400));
+      }
+
+      req.query = {
+        barcode: poPrints[0].barcode,
+        paper: poPrints[0].paper,
+        orderNo: [],
+        nc12: [],
+        quantity: [],
+        itemNo: [],
+        vendorNo: [],
+        shippingNo: []
+      };
+
+      lodash.forEach(poPrints, function(poPrint)
+      {
+        var itemNo = String(+poPrint.item);
+
+        for (var i = 0; i < poPrint.packageQty; ++i)
+        {
+          req.query.orderNo.push(poPrint.purchaseOrder);
+          req.query.nc12.push(poPrint.nc12);
+          req.query.quantity.push(poPrint.componentQty);
+          req.query.itemNo.push(itemNo);
+          req.query.vendorNo.push(poPrint.vendor);
+          req.query.shippingNo.push(poPrint.shippingNo);
+        }
+
+        if (poPrint.remainingQty > 0)
+        {
+          req.query.orderNo.push(poPrint.purchaseOrder);
+          req.query.nc12.push(poPrint.nc12);
+          req.query.quantity.push(poPrint.remainingQty);
+          req.query.itemNo.push(itemNo);
+          req.query.vendorNo.push(poPrint.vendor);
+          req.query.shippingNo.push(poPrint.shippingNo);
+        }
+      });
+    },
+    function prepareBarcodesStep()
+    {
+      this.barcode = PurchaseOrder.BARCODES[req.query.barcode] ? req.query.barcode : 'code128';
+      this.paper = PurchaseOrder.PAPERS[req.query.paper] ? req.query.paper : 'a4';
+      this.barcodeType = PurchaseOrder.BARCODES[this.barcode];
+      this.barcodeOptions = PurchaseOrder.PAPERS[this.paper][this.barcode];
+
+      var query = req.query;
+
+      lodash.forEach(['orderNo', 'nc12', 'quantity', 'itemNo', 'vendorNo', 'shippingNo'], function(param)
+      {
+        if (!Array.isArray(query[param]))
+        {
+          query[param] = [query[param]];
+        }
+      });
+
+      this.barcodeDataToPng = {};
+      this.pages = lodash.map(query.orderNo, function(orderNo, i)
+      {
+        var page = {
+          orderNo: orderNo || '',
+          nc12: query.nc12[i] || '',
+          quantity: query.quantity[i] || '',
+          itemNo: query.itemNo[i] || '',
+          vendorNo: query.vendorNo[i] || '',
+          shippingNo: query.shippingNo[i] || '',
+          barcodeData: null,
+          png: null
+        };
+
+        var barcodeData = format('O%sP%sQ%sL%sS', page.orderNo, page.nc12, page.quantity, page.itemNo);
+
+        if (barcodeData.length + page.shippingNo.length > this.barcodeOptions.maxLength)
+        {
+          barcodeData += page.shippingNo.substr(-1 * (this.barcodeOptions.maxLength - barcodeData.length));
+        }
+        else
+        {
+          barcodeData += page.shippingNo;
+        }
+
+        page.barcodeData = barcodeData;
+
+        this.barcodeDataToPng[barcodeData] = null;
+
+        return page;
+      }, this);
+      this.uniqueBarcodes = Object.keys(this.barcodeDataToPng);
+    },
+    function generateBarcodesStep()
+    {
+      for (var i = 0, l = this.uniqueBarcodes.length; i < l; ++i)
+      {
+        generateBarcode(
+          poModule.config.zintExe,
+          this.barcodeType,
+          this.barcodeOptions.zint,
+          this.uniqueBarcodes[i],
+          this.group()
+        );
+      }
+    },
+    function renderLabelHtmlStep(err, barcodePngs)
     {
       if (err)
       {
         return this.done(next, err);
       }
 
-      for (var i = 0, l = uniqueBarcodes.length; i < l; ++i)
+      lodash.forEach(this.uniqueBarcodes, function(uniqueBarcode, i)
       {
-        barcodeDataToPng[uniqueBarcodes[i]] = barcodePngs[i];
-      }
+        this.barcodeDataToPng[uniqueBarcode] = barcodePngs[i];
+      }, this);
 
-      pages.forEach(function(page)
+      lodash.forEach(this.pages, function(page)
       {
-        page.png = barcodeDataToPng[page.barcodeData];
-      });
+        page.png = this.barcodeDataToPng[page.barcodeData];
+      }, this);
 
-      return res.render('purchaseOrders/' + paper, {
-        paper: paper,
-        barcode: barcode,
-        pages: pages
+      return res.render('purchaseOrders/' + this.paper, {
+        paper: this.paper,
+        barcode: this.barcode,
+        pages: this.pages
       });
     }
   );

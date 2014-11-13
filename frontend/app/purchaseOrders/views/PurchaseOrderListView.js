@@ -25,24 +25,8 @@ define([
           this.refreshCollection();
         }
       },
-      'purchaseOrders.printed.*': function(data)
-      {
-        var po = this.collection.get(data._id);
-
-        if (po)
-        {
-          po.update(data);
-        }
-      },
-      'purchaseOrders.cancelled.*': function(data)
-      {
-        var po = this.collection.get(data._id);
-
-        if (po)
-        {
-          po.update(data);
-        }
-      }
+      'purchaseOrders.printed.*': 'setPrintedQty',
+      'purchaseOrders.cancelled.*': 'setPrintedQty'
     },
 
     events: {
@@ -106,6 +90,16 @@ define([
     serializeRows: function()
     {
       return this.collection.invoke('serialize');
+    },
+
+    setPrintedQty: function(message)
+    {
+      var po = this.collection.get(message._id);
+
+      if (po)
+      {
+        po.set('printedQty', message.printedQty);
+      }
     }
 
   });

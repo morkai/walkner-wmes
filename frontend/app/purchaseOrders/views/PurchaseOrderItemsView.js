@@ -88,16 +88,14 @@ define([
       },
       'click .action-toggleCancelled': function(e)
       {
-        this.toggleCancelledPrint(
-          this.$popover.data('itemId'),
-          this.$(e.currentTarget).closest('tr').attr('data-print-id')
-        );
+        this.toggleCancelledPrint(this.$(e.currentTarget).closest('tr').attr('data-print-id'));
       }
     },
 
     initialize: function()
     {
       this.onBodyClick = this.onBodyClick.bind(this);
+      this.deferRender = _.debounce(this.render.bind(this), 1);
 
       this.state = new Model({
         printing: false,
@@ -159,6 +157,7 @@ define([
         toolbarVisible: po.get('open') && user.isAllowedTo('PURCHASE_ORDERS:MANAGE'),
         open: po.get('open'),
         items: items,
+        itemToPrints: this.model.prints.byItem,
         waitingCount: waitingCount.toLocaleString(),
         completedCount: completedCount.toLocaleString()
       };
@@ -166,25 +165,27 @@ define([
 
     beforeRender: function()
     {
-      this.stopListening(this.model, 'change:open', this.render);
-      this.stopListening(this.model.get('items'), 'change', this.render);
+      this.stopListening(this.model, 'change:open', this.deferRender);
+      this.stopListening(this.model.get('items'), 'change', this.deferRender);
 
       if (this.$popover !== null)
       {
         this.lastPopoverId = this.$popover.data('itemId');
+        this.lastPopoverScrollTop = this.$('.popover-content').prop('scrollTop');
         this.hidePopover(true);
       }
     },
 
     afterRender: function()
     {
-      this.listenToOnce(this.model, 'change:open', this.render);
-      this.listenToOnce(this.model.get('items'), 'change', this.render);
+      this.listenToOnce(this.model, 'change:open', this.deferRender);
+      this.listenToOnce(this.model.get('items'), 'change', this.deferRender);
 
       if (this.model.get('open'))
       {
         this.fixLastItemRow();
         this.fixToolbarState();
+        this.togglePrintingStatus();
         this.toggleItemVisibility();
         this.toggleItemSelection();
       }
@@ -192,7 +193,9 @@ define([
       if (this.lastPopoverId !== null)
       {
         this.$('.pos-items-item[data-item-id="' + this.lastPopoverId + '"]').find('.is-clickable').click();
+        this.$('.popover-content').prop('scrollTop', this.lastPopoverScrollTop);
         this.lastPopoverId = null;
+        this.lastPopoverScrollTop = 0;
       }
     },
 
@@ -277,8 +280,10 @@ define([
         this.state.set('selected', []);
       }
 
-      this.$id('selectAll').attr('disabled', notWaiting);
-      this.$id('selectNone').attr('disabled', notWaiting);
+      var printing = this.state.get('printing');
+
+      this.$id('selectAll').prop('disabled', printing || notWaiting);
+      this.$id('selectNone').prop('disabled', printing || notWaiting);
     },
 
     toggleItemSelection: function()
@@ -286,8 +291,9 @@ define([
       this.$('.is-selected').removeClass('is-selected');
 
       var selected = this.state.get('selected');
+      var printing = this.state.get('printing');
 
-      this.$id('print').attr('disabled', !selected.length);
+      this.$id('print').prop('disabled', printing || !selected.length);
 
       if (!selected.length)
       {
@@ -321,22 +327,16 @@ define([
     {
       var printing = this.state.get('printing');
 
-      this.$id('selectAll').attr('disabled', printing);
-      this.$id('selectNone').attr('disabled', printing);
-      this.$id('print').attr('disabled', true);
+      this.$id('statuses').find('.btn').toggleClass('disabled', printing);
+      this.$id('selectAll').prop('disabled', printing);
+      this.$id('selectNone').prop('disabled', printing);
+      this.$id('print').prop('disabled', true);
       this.$el.toggleClass('is-printing', printing);
 
-      if (this.printWindow)
+      if (!printing)
       {
-        if (!this.printWindow.closed)
-        {
-          this.printWindow.close();
-        }
-
-        this.printWindow = null;
+        this.state.set('selected', []);
       }
-
-      this.state.set('selected', []);
     },
 
     highlightItemScheduleRows: function(e)
@@ -466,7 +466,7 @@ define([
 
     openPrintPopup: function(printId)
     {
-      var url = '/purchaseOrders/' + this.model.id + '/prints/' + printId + '.html';
+      var url = '/purchaseOrders/' + this.model.id + '/prints/' + printId + '.pdf+html';
       var windowName = 'WMES_PO_LABEL_PRINTING';
       var screen = window.screen;
       var width = screen.availWidth * 0.6;
@@ -485,8 +485,11 @@ define([
       {
         var view = this;
 
-        window.WMES_PO_PRINT_DONE = function()
+        this.printWindow.onbeforeunload = window.WMES_PO_PRINT_DONE = function()
         {
+          view.printWindow.onbeforeunload = null;
+          view.printWindow = null;
+
           delete window.WMES_PO_PRINT_DONE;
 
           view.state.set('printing', false);
@@ -531,7 +534,7 @@ define([
         title: t('purchaseOrders', 'prints:title'),
         content: renderPrintsPopover({
           orderId: this.model.id,
-          prints: this.model.get('items').get(itemId).get('prints')
+          prints: this.model.prints.byItem[itemId].map(function(print) { return print.toJSON(); })
         })
       });
 
@@ -548,30 +551,26 @@ define([
       window.open('/purchaseOrders/' + this.model.id + '/prints/' + printId + '.pdf');
     },
 
-    toggleCancelledPrint: function(itemId, printId)
+    toggleCancelledPrint: function(printId)
     {
       var $print = this.$('.pos-prints-print[data-print-id="' + printId + '"]');
       var $action = $print.find('.action-toggleCancelled');
 
-      $action.attr('disabled', true);
+      $action.prop('disabled', true);
 
-      var item = this.model.get('items').get(itemId);
-      var print = _.find(item.get('prints'), function(print) { return print._id === printId; });
+      var print = this.model.prints.get(printId);
 
       var req = this.ajax({
         type: 'POST',
-        url: '/purchaseOrders/' + this.model.id + '/prints;cancel',
+        url: '/purchaseOrders/' + this.model.id + '/prints/' + printId + ';cancel',
         data: JSON.stringify({
-          __v: this.model.get('__v'),
-          itemId: itemId,
-          printId: printId,
-          cancelled: !print.cancelled
+          cancelled: !print.get('cancelled')
         })
       });
 
       req.always(function()
       {
-        $action.attr('disabled', false);
+        $action.prop('disabled', false);
       });
     }
 

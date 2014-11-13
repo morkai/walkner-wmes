@@ -1,7 +1,6 @@
 <table class="table table-bordered table-condensed table-hover pos-prints">
   <thead>
     <tr>
-      <th><%- t('core', '#') %>
       <th><%- t('purchaseOrders', 'PROPERTY:item.prints.printedAt') %>
       <th><%- t('purchaseOrders', 'PROPERTY:item.prints.shippingNo') %>
       <th><%- t('purchaseOrders', 'PROPERTY:item.prints.paper') %>
@@ -15,7 +14,6 @@
   <tbody>
     <% prints.forEach(function(print, i) { %>
     <tr class="pos-prints-print <%- print.cancelled ? 'is-cancelled' : '' %>" data-print-id="<%- print._id %>">
-      <td class="is-number"><%- i + 1 %>.</td>
       <td><%- time.format(print.printedAt, 'LLL') %></td>
       <td><%- print.shippingNo || '-' %></td>
       <td><%- t('purchaseOrders', 'paper:' + print.paper) %></td>

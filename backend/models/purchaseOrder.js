@@ -4,6 +4,8 @@
 
 'use strict';
 
+var lodash = require('lodash');
+
 module.exports = function setupPurchaseOrderModel(app, mongoose)
 {
   var BARCODES = {
@@ -43,61 +45,6 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     _id: false
   });
 
-  var purchaseOrderItemPrintSchema = mongoose.Schema({
-    _id: {
-      type: String,
-      required: true
-    },
-    printedAt: {
-      type: Date,
-      required: true
-    },
-    printedBy: {},
-    paper: {
-      type: String,
-      required: true,
-      enum: Object.keys(PAPERS)
-    },
-    barcode: {
-      type: String,
-      required: true,
-      enum: Object.keys(BARCODES)
-    },
-    shippingNo: {
-      type: String,
-      default: ''
-    },
-    packageQty: {
-      type: Number,
-      required: true,
-      min: 0
-    },
-    componentQty: {
-      type: Number,
-      required: true,
-      min: 0
-    },
-    remainingQty: {
-      type: Number,
-      required: true,
-      min: 0
-    },
-    totalQty: {
-      type: Number,
-      required: true,
-      min: 1
-    },
-    cancelledAt: {
-      type: Date,
-      default: null
-    },
-    cancelledBy: {},
-    cancelled: {
-      type: Boolean,
-      default: false
-    }
-  });
-
   var purchaseOrderItemSchema = mongoose.Schema({
     _id: {
       type: String,
@@ -108,7 +55,6 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     nc12: String,
     name: String,
     schedule: [purchaseOrderItemScheduleSchema],
-    prints: [purchaseOrderItemPrintSchema],
     printedQty: {
       type: Number,
       default: 0,
@@ -122,21 +68,6 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     _id: false
   });
 
-  purchaseOrderItemSchema.methods.recountQty = function()
-  {
-    var totalPrintedQty = 0;
-
-    this.prints.forEach(function (print)
-    {
-      if (!print.cancelled)
-      {
-        totalPrintedQty += print.totalQty;
-      }
-    });
-
-    this.printedQty = totalPrintedQty;
-  };
-
   purchaseOrderItemSchema.methods.getScheduledAt = function()
   {
     if (this.completed)
@@ -146,7 +77,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
 
     var scheduledAt = Number.MAX_VALUE;
 
-    this.schedule.forEach(function(schedule)
+    lodash.forEach(this.schedule, function(schedule)
     {
       scheduledAt = Math.min(scheduledAt, schedule.date.getTime());
     });
@@ -241,12 +172,30 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
       this.updatedAt = new Date();
     }
 
-    if (this.isNew || this.isModified('items'))
+    if (this.isNew)
     {
       this.recountItems();
+      next();
     }
+    else if (this.isModified('items'))
+    {
+      var purchaseOrder = this;
 
-    next();
+      this.recountPrints(function(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        purchaseOrder.recountItems();
+        next();
+      });
+    }
+    else
+    {
+      next();
+    }
   });
 
   purchaseOrderSchema.methods.recountItems = function()
@@ -255,10 +204,8 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     var totalQty = 0;
     var totalPrintedQty = 0;
 
-    this.items.forEach(function(item)
+    lodash.forEach(this.items, function(item)
     {
-      item.recountQty();
-
       totalQty += item.qty;
       totalPrintedQty += item.printedQty;
 
@@ -273,6 +220,47 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     this.scheduledAt = scheduledAt === Number.MAX_VALUE ? null : scheduledAt;
     this.qty = totalQty;
     this.printedQty = totalPrintedQty;
+  };
+
+  purchaseOrderSchema.methods.recountPrints = function(done)
+  {
+    var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
+    var itemMap = {};
+
+    lodash.forEach(this.items, function(item)
+    {
+      item.printedQty = 0;
+      itemMap[item._id] = item;
+    });
+
+    var conditions = {
+      purchaseOrder: this._id,
+      cancelled: false
+    };
+    var fields = {
+      item: 1,
+      totalQty: 1
+    };
+
+    PurchaseOrderPrint.find(conditions, fields).sort({printedAt: 1}).lean().exec(function(err, prints)
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      lodash.forEach(prints, function(print)
+      {
+        var item = itemMap[print.item];
+
+        if (item)
+        {
+          item.printedQty += print.totalQty;
+        }
+      });
+
+      done();
+    });
   };
 
   mongoose.model('PurchaseOrder', purchaseOrderSchema);

@@ -8,14 +8,16 @@ define([
   '../i18n',
   '../time',
   '../core/Model',
-  './PurchaseOrderItemCollection'
+  './PurchaseOrderItemCollection',
+  './PurchaseOrderPrintCollection'
 ], function(
   _,
   moment,
   t,
   time,
   Model,
-  PurchaseOrderItemCollection
+  PurchaseOrderItemCollection,
+  PurchaseOrderPrintCollection
 ) {
   'use strict';
 
@@ -35,6 +37,19 @@ define([
 
     defaults: {
 
+    },
+
+    initialize: function(attributes, options)
+    {
+      if (options.prints)
+      {
+        this.prints = new PurchaseOrderPrintCollection(null, {paginate: false});
+        this.prints.url = this.url() + '/prints';
+      }
+      else
+      {
+        this.prints = null;
+      }
     },
 
     getFirstScheduledQuantity: function(item)

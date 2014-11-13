@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>WMES PO=<%- orderId %> PRINT=<%- printId %></title>
+  <link rel="stylesheet" href="<%- mainCssFile %>">
   <style type="text/css">
   body {
     overflow: hidden;
@@ -16,11 +17,13 @@
     left: 0;
     width: 100%;
     height: 100%;
+    border: 0;
   }
   </style>
 </head>
 <body>
 <iframe id="pdf" src="about:blank"></iframe>
+<i id="app-loading" class="fa fa-spinner fa-spin"></i>
 <script>
 
 function printPdf(iframe)
@@ -46,12 +49,24 @@ window.onload = function()
 
   iframe.onload = function()
   {
+    var loading = document.getElementById('app-loading');
+
     if (iframe.src.indexOf('pdf') === -1)
     {
+      loading.classList.remove('fa-spin');
+      loading.classList.add('error');
+
       return;
     }
 
-    setTimeout(function() { printPdf(iframe) }, 333);
+    loading.style.color = '#00af00';
+
+    setTimeout(function()
+    {
+      loading.parentNode.removeChild(loading);
+      iframe.style.visibility = 'visible';
+      printPdf(iframe);
+    }, 333);
   };
 };
 

@@ -33,7 +33,7 @@
   "PROPERTY:item.schedule.date": "Data dostawy",
   "PROPERTY:item.schedule.qty": "Ilość dostawy",
   "PROPERTY:item.completed": "Zakończona?",
-  "PROPERTY:item.printedQty": "Wydana ilość",
+  "PROPERTY:item.printedQty": "Ilość wydana",
   "PROPERTY:item.prints.packageQty": "Ilość pudełek",
   "PROPERTY:item.prints.componentQty": "Ilość w pudełku",
   "PROPERTY:item.prints.remainingQty": "Reszta",
@@ -87,5 +87,8 @@
   "prints:title": "Historia wydruków etykiet",
   "prints:showPrintPdf": "Pokaż wydruk w formacie PDF",
   "prints:cancel": "Anuluj wydanie etykiet",
-  "prints:restore": "Przywróć wydanie etykiet"
+  "prints:restore": "Przywróć wydanie etykiet",
+
+  "qzPrint:initWarning": "Nie udało się uruchomić wtyczki wspomagającej drukowanie etykiet. Kliknij tutaj, aby uzyskać więcej informacji.",
+  "qzPrint:bc:help": "Wtyczka do drukowania etykiet"
 }

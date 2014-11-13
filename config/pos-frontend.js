@@ -19,8 +19,8 @@ exports.modules = [
   'sio'
 ];
 
-exports.mainJsFile = 'pos-main.js';
-exports.mainCssFile = 'assets/pos-main.css';
+exports.mainJsFile = '/pos-main.js';
+exports.mainCssFile = '/assets/pos-main.css';
 
 exports.dictionaryModules = {
 

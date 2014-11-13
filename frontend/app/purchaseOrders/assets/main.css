@@ -1,3 +1,5 @@
+@import "./qzPrint.css";
+
 .pos-list .list-item {
   cursor: pointer;
 }
@@ -101,6 +103,7 @@
 .pos-items-item.is-selected > td,
 .pos-items-item-schedule.is-selected > td {
   background-color: #c0eaff;
+  border-color: #fff;
 }
 .pos-items-item.is-selected:hover > td,
 .pos-items-item-schedule.is-selected:hover > td,

@@ -2,7 +2,7 @@
   <div class="panel-heading is-with-actions"><%- t('purchaseOrders', 'panel:items') %></div>
   <% if (toolbarVisible) { %>
   <div class="btn-toolbar">
-    <div class="btn-group" data-toggle="buttons">
+    <div id="<%- idPrefix %>-statuses" class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
         <input type="checkbox" name="status" value="waiting"> <i class="fa fa-unlock-alt"></i><span><%- t('purchaseOrders', 'items:status:waiting', {count: waitingCount}) %></span>
       </label>
@@ -42,7 +42,7 @@
         <td rowspan="<%- item.rowSpan %>"><%- item.nc12 %></td>
         <td rowspan="<%- item.rowSpan %>"><%- item.unit %></td>
         <td rowspan="<%- item.rowSpan %>" class="is-number"><%- item.qty.toLocaleString() %></td>
-        <td rowspan="<%- item.rowSpan %>" class="pos-items-item-printedQty is-number <%- item.prints.length ? 'is-clickable' : '' %>"><span class="pos-items-item-prints"><%- item.printedQty.toLocaleString() %></span></td>
+        <td rowspan="<%- item.rowSpan %>" class="pos-items-item-printedQty is-number <%- itemToPrints[item._id] ? 'is-clickable' : '' %>"><span class="pos-items-item-prints"><%- item.printedQty.toLocaleString() %></span></td>
         <% if (open) { %>
         <td class="is-number"><%- item.schedule.length ? item.schedule[0].qty.toLocaleString() : '' %></td>
         <td><%- item.schedule.length ? time.format(item.schedule[0].date, 'YYYY-MM-DD') : '' %></td>

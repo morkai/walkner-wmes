@@ -4,11 +4,12 @@
 
 'use strict';
 
+var lodash = require('lodash');
 var limitToVendor = require('./limitToVendor');
 var getLatestComponentQtyRoute = require('./getLatestComponentQtyRoute');
-var togglePrintCancelRoute = require('./togglePrintCancelRoute');
-var getLabelPdfRoute = require('./getLabelPdfRoute');
-var renderLabelPdfRoute = require('./renderLabelPdfRoute');
+var addPrintsRoute = require('./addPrintsRoute');
+var cancelPrintRoute = require('./cancelPrintRoute');
+var renderLabelRoute = require('./renderLabelRoute');
 var renderLabelHtmlRoute = require('./renderLabelHtmlRoute');
 
 module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
@@ -17,6 +18,7 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
   var userModule = app[poModule.config.userId];
   var mongoose = app[poModule.config.mongooseId];
   var PurchaseOrder = mongoose.model('PurchaseOrder');
+  var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
 
   var canView = userModule.auth('PURCHASE_ORDERS:VIEW');
   var canManage = userModule.auth('PURCHASE_ORDERS:MANAGE');
@@ -31,7 +33,13 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
   express.get(
     '/purchaseOrders;getLatestComponentQty',
     canManage,
-    getLatestComponentQtyRoute.bind(null, PurchaseOrder)
+    getLatestComponentQtyRoute.bind(null, app, poModule)
+  );
+
+  express.get(
+    '/purchaseOrders;renderLabelHtml',
+    userModule.auth('LOCAL', 'PURCHASE_ORDERS:MANAGE'),
+    renderLabelHtmlRoute.bind(null, app, poModule)
   );
 
   express.get(
@@ -41,27 +49,57 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
     express.crud.readRoute.bind(null, app, PurchaseOrder)
   );
 
-  express.post(
-    '/purchaseOrders/:orderId/prints;cancel',
-    canManage,
-    togglePrintCancelRoute.bind(null, app, poModule)
-  );
-
   express.get(
-    '/purchaseOrders/:orderId/prints/:printId',
+    '/purchaseOrders/:orderId/prints',
     canView,
-    getLabelPdfRoute.bind(null, app, poModule)
+    limitToVendor,
+    function limitToOrder(req, res, next)
+    {
+      var orderTerm = lodash.find(req.rql.selector.args, function(term)
+      {
+        return term.name === 'eq' && term.args[0] === 'purchaseOrder';
+      });
+
+      if (orderTerm)
+      {
+        orderTerm.args[1] = req.params.orderId;
+      }
+      else
+      {
+        req.rql.selector.args.push({
+          name: 'eq',
+          args: ['purchaseOrder', req.params.orderId]
+        });
+      }
+
+      next();
+    },
+    express.crud.browseRoute.bind(null, app, PurchaseOrderPrint)
   );
 
   express.post(
     '/purchaseOrders/:orderId/prints',
     canManage,
-    renderLabelPdfRoute.bind(null, app, poModule)
+    addPrintsRoute.bind(null, app, poModule)
+  );
+
+  express.post(
+    '/purchaseOrders/:orderId/prints/:printId;cancel',
+    canManage,
+    cancelPrintRoute.bind(null, app, poModule)
   );
 
   express.get(
-    '/purchaseOrders;renderLabelHtml',
-    userModule.auth('LOCAL', 'PURCHASE_ORDERS:MANAGE'),
-    renderLabelHtmlRoute.bind(null, app, poModule)
+    /^\/purchaseOrders\/([0-9]+)\/prints\/([A-F0-9]{32}|[a-f0-9]{24})\.(pdf\+html|pdf|html)$/,
+    canView,
+    function prepareParams(req, res, next)
+    {
+      req.params.orderId = req.params[0];
+      req.params.printId = req.params[1];
+      req.params.format = req.params[2];
+
+      next();
+    },
+    renderLabelRoute.bind(null, app, poModule)
   );
 };

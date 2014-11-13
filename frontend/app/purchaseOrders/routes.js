@@ -6,11 +6,19 @@ define([
   '../router',
   '../viewport',
   '../user',
+  './PurchaseOrder',
+  './pages/PurchaseOrderListPage',
+  './pages/PurchaseOrderDetailsPage',
+  './pages/QzPrintHelpPage',
   'i18n!app/nls/purchaseOrders'
 ], function(
   router,
   viewport,
-  user
+  user,
+  PurchaseOrder,
+  PurchaseOrderListPage,
+  PurchaseOrderDetailsPage,
+  QzPrintHelpPage
 ) {
   'use strict';
 
@@ -18,28 +26,20 @@ define([
 
   router.map('/purchaseOrders', canView, function(req)
   {
-    viewport.loadPage(
-      ['app/purchaseOrders/pages/PurchaseOrderListPage'],
-      function(PurchaseOrderListPage)
-      {
-        return new PurchaseOrderListPage({rql: req.rql});
-      }
-    );
+    viewport.showPage(new PurchaseOrderListPage({
+      rql: req.rql
+    }));
   });
 
   router.map('/purchaseOrders/:id', canView, function(req)
   {
-    viewport.loadPage(
-      [
-        'app/purchaseOrders/PurchaseOrder',
-        'app/purchaseOrders/pages/PurchaseOrderDetailsPage'
-      ],
-      function(PurchaseOrder, PurchaseOrderDetailsPage)
-      {
-        return new PurchaseOrderDetailsPage({
-          model: new PurchaseOrder({_id: req.params.id})
-        });
-      }
-    );
+    viewport.showPage(new PurchaseOrderDetailsPage({
+      model: new PurchaseOrder({_id: req.params.id}, {prints: true})
+    }));
+  });
+
+  router.map('/purchaseOrders;qzPrintHelp', function()
+  {
+    viewport.showPage(new QzPrintHelpPage());
   });
 });
