@@ -266,6 +266,8 @@ define([
     afterRender: function()
     {
       this.$charts = this.$id('charts');
+
+      this.toggleDeactivatedProdLines();
     },
 
     onKeyDown: function(e)
@@ -336,6 +338,11 @@ define([
       else
       {
         this.refresh();
+
+        if (changes.from)
+        {
+          this.toggleDeactivatedProdLines();
+        }
       }
     },
 
@@ -797,7 +804,27 @@ define([
       {
         $(elsToShow).css('opacity', '');
         page.$el.removeClass('is-changing');
+        page.toggleDeactivatedProdLines();
       });
+    },
+
+    toggleDeactivatedProdLines: function()
+    {
+      if (this.query.get('orgUnitType') !== 'workCenter')
+      {
+        return;
+      }
+
+      var from = this.query.get('from');
+
+      for (var i = 1, l = this.reports.length; i < l; ++i)
+      {
+        var report = this.reports[i];
+        var prodLine = report.get('orgUnit');
+        var deactivatedAt = Date.parse(prodLine.get('deactivatedAt')) || Number.MAX_VALUE;
+
+        this.chartsViews[i].$el[from >= deactivatedAt ? 'fadeOut' : 'fadeIn']();
+      }
     }
 
   });
