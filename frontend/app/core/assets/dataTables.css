@@ -11,9 +11,6 @@ table.dataTable thead th:focus,
 table.dataTable thead td:focus {
   outline: none;
 }
-.DTFC_LeftHeadWrapper {
-  border-bottom: 2px solid #ddd;
-}
 table.DTFC_Cloned thead th:last-child,
 table.DTFC_Cloned thead td:last-child {
   border-right: 1px solid #ddd;
@@ -25,6 +22,9 @@ table.dataTable thead td.sorting_disabled {
 table.dataTable tbody th,
 table.dataTable tbody td {
   padding: 3px;
+}
+.DTFC_LeftBodyLiner {
+  border-top: 2px solid #ddd;
 }
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
   border-bottom: none;
