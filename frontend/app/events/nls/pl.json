@@ -17,7 +17,7 @@
   "TEXT:app.started": "<em>{id, select, frontend{Serwer aplikacji} controller{Serwer sterownika} alarms{Serwer alarmów} other{Serwer {id}}}</em> wystartował w środowisku <em>{env, select, development{rozwojowym} production{produkcyjnym} other{nieokreślonym}}</em> w ciągu <em>{time}</em> ms.",
   "TYPE:users.login": "Użytkownicy: zalogowanie",
   "TEXT:users.login": "-",
-  "TYPE:users.loginFailure": "Użytkownicy: Nieudane logowanie",
+  "TYPE:users.loginFailure": "Użytkownicy: nieudane logowanie",
   "TEXT:users.loginFailure": "Nieudane logowanie na konto: <em>{login}</em>",
   "TYPE:users.logout": "Użytkownicy: wylogowanie",
   "TEXT:users.logout": "-",
