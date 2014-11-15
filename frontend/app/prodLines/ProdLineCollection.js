@@ -17,7 +17,7 @@ define([
 
     model: ProdLine,
 
-    rqlQuery: 'select(workCenter,description,inventoryNo)&sort(workCenter,_id)',
+    rqlQuery: 'select(workCenter,description,inventoryNo,deactivatedAt)&sort(workCenter,_id)',
 
     comparator: '_id',
 

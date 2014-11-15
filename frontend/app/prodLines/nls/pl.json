@@ -22,6 +22,7 @@
   "PROPERTY:description": "Opis",
   "PROPERTY:workCenter": "WorkCenter",
   "PROPERTY:inventoryNo": "Nr inwentarzowy",
+  "PROPERTY:deactivatedAt": "Data dezaktywacji",
 
   "FORM:ACTION:add": "Dodaj linię produkcyjną",
   "FORM:ACTION:edit": "Edytuj linię produkcyjną",

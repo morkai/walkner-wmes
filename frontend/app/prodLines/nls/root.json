@@ -23,6 +23,7 @@
     "PROPERTY:description": "Description",
     "PROPERTY:workCenter": "WorkCenter",
     "PROPERTY:inventoryNo": "Inventory no",
+    "PROPERTY:deactivatedAt": "Deactivated at",
 
     "FORM:ACTION:add": "Add production line",
     "FORM:ACTION:edit": "Edit production line",

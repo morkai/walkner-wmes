@@ -24,10 +24,17 @@ module.exports = function setUpProdLinesRoutes(app, prodLinesModule, useDictiona
     canManage,
     useDictionaryModel,
     prepareModelForEdit,
+    denyIfDeactivated,
     express.crud.editRoute.bind(null, app, ProdLine)
   );
 
-  express.delete('/prodLines/:id', canManage, useDictionaryModel, express.crud.deleteRoute.bind(null, app, ProdLine));
+  express.delete(
+    '/prodLines/:id',
+    canManage,
+    useDictionaryModel,
+    denyIfDeactivated,
+    express.crud.deleteRoute.bind(null, app, ProdLine)
+  );
 
   function prepareModelForEdit(req, res, next)
   {
@@ -35,6 +42,16 @@ module.exports = function setUpProdLinesRoutes(app, prodLinesModule, useDictiona
     delete req.body.prodShiftOrder;
     delete req.body.prodDowntime;
     delete req.body.secretKey;
+
+    next();
+  }
+
+  function denyIfDeactivated(req, res, next)
+  {
+    if (req.model && req.model.deactivatedAt && !req.session.user.super)
+    {
+      return next(express.createHttpError('NO_ACCESS', 403));
+    }
 
     next();
   }

@@ -43,6 +43,10 @@ module.exports = function setupProdLineModel(app, mongoose)
     inventoryNo: {
       type: String,
       default: null
+    },
+    deactivatedAt: {
+      type: Date,
+      default: null
     }
   }, {
     id: false,
@@ -64,6 +68,17 @@ module.exports = function setupProdLineModel(app, mongoose)
     delete leanModel.secretKey;
 
     return leanModel;
+  };
+
+  prodLineSchema.methods.toDictionaryObject = function()
+  {
+    return {
+      _id: this._id,
+      workCenter: this.workCenter,
+      description: this.description,
+      inventoryNo: this.inventoryNo,
+      deactivatedAt: this.deactivatedAt
+    };
   };
 
   mongoose.model('ProdLine', prodLineSchema);

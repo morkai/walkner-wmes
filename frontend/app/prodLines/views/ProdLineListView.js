@@ -5,11 +5,13 @@
 define([
   'app/i18n',
   'app/user',
+  'app/time',
   'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView'
 ], function(
   t,
   user,
+  time,
   renderOrgUnitPath,
   ListView
 ) {
@@ -17,7 +19,7 @@ define([
 
   return ListView.extend({
 
-    columns: ['workCenter', '_id', 'description', 'inventoryNo'],
+    columns: ['workCenter', '_id', 'description', 'inventoryNo', 'deactivatedAt'],
 
     serializeActions: function()
     {
@@ -27,17 +29,22 @@ define([
       return function(row)
       {
         var model = collection.get(row._id);
-        var actions = [
-          {
+        var active = !model.get('deactivatedAt') || user.data.super;
+        var actions = [];
+
+        if (active)
+        {
+          actions.push({
             id: 'production',
             icon: 'desktop',
             label: t(nlsDomain, 'LIST:ACTION:production'),
             href: '#production/' + model.id
-          },
-          ListView.actions.viewDetails(model, nlsDomain)
-        ];
+          });
+        }
 
-        if (user.isAllowedTo(model.getPrivilegePrefix() + ':MANAGE'))
+        actions.push(ListView.actions.viewDetails(model, nlsDomain));
+
+        if (user.isAllowedTo(model.getPrivilegePrefix() + ':MANAGE') && active)
         {
           actions.push(
             ListView.actions.edit(model, nlsDomain),
@@ -56,6 +63,7 @@ define([
         var row = prodLineModel.toJSON();
 
         row.workCenter = renderOrgUnitPath(prodLineModel, true);
+        row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
 
         return row;
       });

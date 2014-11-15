@@ -71,7 +71,24 @@ module.exports = function startCoreRoutes(app, express)
 
     lodash.forEach(app.options.dictionaryModules, function(appDataKey, moduleName)
     {
-      appData[appDataKey] = JSON.stringify(app[moduleName].models);
+      var models = app[moduleName].models;
+      var dictionaryModels = [];
+
+      if (models.length === 0)
+      {
+        appData[appDataKey] = '[]';
+
+        return;
+      }
+
+      if (typeof models[0].toDictionaryObject !== 'function')
+      {
+        appData[appDataKey] = JSON.stringify(models);
+
+        return;
+      }
+
+      appData[appDataKey] = JSON.stringify(lodash.invoke(models, 'toDictionaryObject'));
     });
 
     res.render('index', {

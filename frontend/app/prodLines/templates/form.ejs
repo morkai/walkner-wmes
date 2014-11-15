@@ -16,6 +16,10 @@
         <label for="<%- idPrefix %>-inventoryNo" class="control-label"><%- t('prodLines', 'PROPERTY:inventoryNo') %></label>
         <input id="<%- idPrefix %>-inventoryNo" class="form-control" type="text" name="inventoryNo" maxlength="50">
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- t('prodLines', 'PROPERTY:deactivatedAt') %></label>
+        <input id="<%- idPrefix %>-deactivatedAt" class="form-control" type="date" name="deactivatedAt" maxlength="10">
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

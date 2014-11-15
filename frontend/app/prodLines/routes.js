@@ -40,11 +40,10 @@ define([
   router.map('/prodLines/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/prodLines/views/ProdLineDetailsView'],
-      function(DetailsPage, ProdLineDetailsView)
+      ['app/prodLines/pages/ProdLineDetailsPage'],
+      function(ProdLineDetailsPage)
       {
-        return new DetailsPage({
-          DetailsView: ProdLineDetailsView,
+        return new ProdLineDetailsPage({
           model: new ProdLine({_id: req.params.id})
         });
       }
