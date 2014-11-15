@@ -114,6 +114,7 @@ define([
       for (var i = 0, l = groupKeys.length; i < l; ++i)
       {
         var groupKey = groupKeys[i];
+        var time = +groupKey;
 
         var totalAvailabilityH = 0;
         var scheduledDuration = 0;
@@ -141,7 +142,9 @@ define([
 
           if (dataPoint === undefined)
           {
-            dataPoint = this.createDefaultDataPoint(workDays ? workDays[groupKey] : 1);
+            dataPoint = this.createDefaultDataPoint(
+              time >= prodLine.deactivatedAt ? 0 : workDays ? workDays[groupKey] : 1
+            );
           }
 
           totalAvailabilityH += dataPoint.totalAvailabilityH;
@@ -164,7 +167,6 @@ define([
         var oee = this.calcOee(
           operationalAvailabilityH, totalAvailabilityH, exploitationH, quantityDone, quantityLost
         );
-        var time = +groupKey;
 
         chartSummary.totalAvailabilityH.push([time, totalAvailabilityH]);
         chartSummary.operationalAvailabilityH.push([time, round(operationalAvailabilityH)]);
@@ -248,10 +250,8 @@ define([
     parse: function(report)
     {
       var workDays = report.options.workDays;
-      var groupKeys = {};
+      var groupKeys = this.parseGroupKeys(workDays);
       var prodLines = this.parseProdLines(report.options, report.results, groupKeys);
-
-      groupKeys = this.parseGroupKeys(groupKeys);
 
       var tableSummary = this.calcTableSummary(prodLines);
       var chartSummary = this.calcChartSummary(workDays, groupKeys, tableSummary);
@@ -270,15 +270,18 @@ define([
       var prodLines = [];
       var prodLinesInfo = options.prodLinesInfo;
 
-      for (var i = 0, l = prodLinesInfo.length; i < l; i += 4)
+      for (var i = 0, l = prodLinesInfo.length; i < l; i += 5)
       {
-        var prodLineData = prodLinesData[prodLinesInfo[i]];
+        var prodLineId = prodLinesInfo[i];
+        var prodLineData = prodLinesData[prodLineId];
+        var deactivatedAt = prodLinesInfo[i + 4];
         var prodLine = {
-          _id: prodLinesInfo[i],
+          _id: prodLineId,
           division: prodLinesInfo[i + 1],
           subdivisionType: prodLinesInfo[i + 2],
           inventoryNo: prodLinesInfo[i + 3],
-          workDays: options.totalWorkDays,
+          deactivatedAt: deactivatedAt,
+          workDays: 0,
           scheduledDuration: 0,
           unscheduledDuration: 0,
           totalAvailabilityH: 0,
@@ -301,10 +304,7 @@ define([
           data: {}
         };
 
-        if (prodLineData)
-        {
-          this.parseProdLineData(options, prodLine, prodLineData, groupKeys);
-        }
+        this.parseProdLineData(options, prodLine, prodLineData || {}, groupKeys);
 
         this.summarizeProdLine(prodLine);
 
@@ -318,33 +318,30 @@ define([
     {
       var report = this;
 
-      Object.keys(prodLineData).forEach(function(groupKey)
+      groupKeys.forEach(function(groupKey)
       {
-        groupKeys[groupKey] = true;
-
-        var dataPoint = prodLineData[groupKey];
-        var weekendWorkDays = dataPoint.w || 0;
-        var workDays = (options.workDays ? options.workDays[groupKey] : 1) + weekendWorkDays;
+        var dataPoint = prodLineData[groupKey] || {};
+        var workDays = dataPoint.w === undefined ? options.workDays[groupKey] : dataPoint.w;
         var totalAvailabilityH = 24 * workDays;
-        var exploitationH = dataPoint.e;
-        var scheduledDuration = getDowntime(dataPoint.d, 'scheduled')[1];
-        var unscheduledDuration = getDowntime(dataPoint.d, 'unscheduled')[1];
+        var exploitationH = workDays ? (dataPoint.e || 0) : 0;
+        var scheduledDuration = workDays ? getDowntime(dataPoint.d, 'scheduled')[1] : 0;
+        var unscheduledDuration = workDays ? getDowntime(dataPoint.d, 'unscheduled')[1] : 0;
         var operationalAvailabilityH = totalAvailabilityH - scheduledDuration - unscheduledDuration;
-        var operationalAvailabilityP = operationalAvailabilityH / totalAvailabilityH * 100;
-        var adjustingDuration = getDowntime(dataPoint.d, 'adjusting')[1];
-        var maintenanceDuration = getDowntime(dataPoint.d, 'maintenance')[1];
-        var renovationDuration = getDowntime(dataPoint.d, 'renovation')[1];
-        var malfunctionDowntime = getDowntime(dataPoint.d, 'malfunction');
+        var operationalAvailabilityP = workDays ? (operationalAvailabilityH / totalAvailabilityH * 100) : 0;
+        var adjustingDuration = workDays ? getDowntime(dataPoint.d, 'adjusting')[1] : 0;
+        var maintenanceDuration = workDays ? getDowntime(dataPoint.d, 'maintenance')[1] : 0;
+        var renovationDuration = workDays ? getDowntime(dataPoint.d, 'renovation')[1] : 0;
+        var malfunctionDowntime = workDays ? getDowntime(dataPoint.d, 'malfunction') : [0, 0];
         var malfunctionCount = malfunctionDowntime[0];
         var malfunctionDuration = malfunctionDowntime[1];
-        var majorMalfunctionCount = getDowntime(dataPoint.d, 'majorMalfunction')[0];
-        var malfunctions = dataPoint.m || null;
-        var quantityDone = dataPoint.q || 0;
-        var quantityLost = dataPoint.l || 0;
+        var majorMalfunctionCount = workDays ? getDowntime(dataPoint.d, 'majorMalfunction')[0] : 0;
+        var malfunctions = workDays ? (dataPoint.m || null) : null;
+        var quantityDone = workDays ? (dataPoint.q || 0) : 0;
+        var quantityLost = workDays ? (dataPoint.l || 0) : 0;
         var mttr = malfunctionCount ? malfunctionDuration / malfunctionCount : 0;
         var mttf = malfunctionCount ? operationalAvailabilityH / malfunctionCount : 0;
 
-        prodLine.workDays += weekendWorkDays;
+        prodLine.workDays += workDays;
         prodLine.scheduledDuration += scheduledDuration;
         prodLine.unscheduledDuration += unscheduledDuration;
         prodLine.exploitationH += exploitationH;

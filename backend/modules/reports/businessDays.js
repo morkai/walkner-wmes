@@ -6,7 +6,30 @@ exports.holidays = {};
 
 exports.years = {};
 
+exports.quarters = {};
+
 exports.months = {};
+
+exports.countBetweenDates = function(fromTime, toTime)
+{
+  var businessDays = 0;
+
+  if (fromTime >= toTime)
+  {
+    return businessDays;
+  }
+
+  var fromMoment = moment(fromTime);
+
+  while (fromMoment.valueOf() < toTime)
+  {
+    businessDays += exports.countInDay(fromMoment.toDate());
+
+    fromMoment.add(1, 'days');
+  }
+
+  return businessDays;
+};
 
 exports.countInDay = function(date)
 {
@@ -110,6 +133,35 @@ exports.countInMonth = function(date, currentShiftStartDate)
 
       date.setDate(date.getDate() + 1);
     }
+  }
+
+  return businessDays;
+};
+
+exports.countInQuarter = function(date, currentShiftStartDate)
+{
+  if (date > currentShiftStartDate)
+  {
+    return -1;
+  }
+
+  var businessDays = exports.quarters[date.getTime()];
+  var quarterMoment = moment(date);
+
+  if (businessDays !== undefined
+    && quarterMoment.year() !== currentShiftStartDate.getFullYear()
+    && quarterMoment.quarter() !== moment(currentShiftStartDate).quarter())
+  {
+    return businessDays;
+  }
+
+  businessDays = 0;
+
+  for (var i = 0; i < 3; ++i)
+  {
+    businessDays += exports.countInMonth(quarterMoment.toDate(), currentShiftStartDate);
+
+    quarterMoment.add(1, 'months');
   }
 
   return businessDays;
@@ -252,6 +304,7 @@ addYear(
 function addYear(year, months)
 {
   var businessDaysInYear = 0;
+  var quarterKey;
 
   months.forEach(function(days, month)
   {
@@ -271,7 +324,18 @@ function addYear(year, months)
       });
     }
 
-    exports.months[key(year, month, 1)] = businessDaysInMonth;
+    var monthKey = key(year, month, 1);
+
+    exports.months[monthKey] = businessDaysInMonth;
+
+    if (month === 0 || month === 3 || month === 6 || month === 9)
+    {
+      quarterKey = monthKey;
+
+      exports.quarters[monthKey] = 0;
+    }
+
+    exports.quarters[monthKey] += businessDaysInMonth;
 
     businessDaysInYear += businessDaysInMonth;
   });

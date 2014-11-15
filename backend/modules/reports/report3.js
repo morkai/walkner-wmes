@@ -5,6 +5,7 @@
 'use strict';
 
 var step = require('h5.step');
+var moment = require('moment');
 var util = require('./util');
 var businessDays = require('./businessDays');
 
@@ -95,6 +96,11 @@ function Report3(options)
   this.options = options;
 
   /**
+   * @type {Array.<string>}
+   */
+  this.prodLineIds = Object.keys(this.options.prodLines);
+
+  /**
    * @type {object.<string, object.<number, Report3ProdLineSummary>>}
    */
   this.results = {};
@@ -118,6 +124,8 @@ function Report3(options)
    * @type {object.<number, number>}
    */
   this.workDays = {};
+
+  this.countWorkDays = this.countWorkDays.bind(this);
 }
 
 Report3.prototype.toJSON = function()
@@ -125,15 +133,22 @@ Report3.prototype.toJSON = function()
   var prodLinesInfo = [];
   var report = this;
 
-  Object.keys(this.options.prodLines).forEach(function(prodLineId)
+  this.prodLineIds.forEach(function(prodLineId)
   {
     var prodLineInfo = report.options.prodLines[prodLineId];
+    var deactivatedAt = prodLineInfo.deactivatedAt ? prodLineInfo.deactivatedAt.getTime() : 0;
+
+    if (deactivatedAt !== 0 && report.options.fromTime >= deactivatedAt)
+    {
+      return;
+    }
 
     prodLinesInfo.push(
       prodLineId,
       prodLineInfo.division,
       prodLineInfo.subdivisionType,
-      prodLineInfo.inventoryNo || '-'
+      prodLineInfo.inventoryNo || '-',
+      prodLineInfo.deactivatedAt ? prodLineInfo.deactivatedAt.getTime() : 0
     );
   });
 
@@ -144,7 +159,7 @@ Report3.prototype.toJSON = function()
       interval: this.options.interval,
       majorMalfunction: this.options.majorMalfunction,
       totalWorkDays: this.totalWorkDays,
-      workDays: this.options.interval === 'day' ? undefined : this.workDays,
+      workDays: this.workDays,
       prodLinesInfo: prodLinesInfo
     },
     results: this.results
@@ -153,22 +168,54 @@ Report3.prototype.toJSON = function()
 
 Report3.prototype.finalize = function()
 {
-  var prodLines = Object.keys(this.results);
-  var firstGroupKey = util.createGroupKey(this.options.interval, new Date(this.options.fromTime + 6 * 3600 * 1000));
-  var lastGroupKey = util.createGroupKey(this.options.interval, new Date(this.options.toTime));
+  var interval = this.options.interval;
+  var firstGroupKey = util.createGroupKey(interval, new Date(this.options.fromTime + 6 * 3600 * 1000));
+  var lastGroupKey = util.createGroupKey(interval, new Date(this.options.toTime - 18 * 3600 * 1000));
 
-  for (var i = 0, l = prodLines.length; i < l; ++i)
+  this.calcWorkDays(firstGroupKey, lastGroupKey);
+
+  var allGroupKeys = Object.keys(this.workDays);
+
+  for (var i = 0, l = this.prodLineIds.length; i < l; ++i)
   {
-    var prodLine = this.results[prodLines[i]];
-    var groupKeys = Object.keys(prodLine);
+    var prodLineId = this.prodLineIds[i];
+    var prodLineInfo = this.options.prodLines[prodLineId];
+    var deactivatedAt = prodLineInfo && prodLineInfo.deactivatedAt ? prodLineInfo.deactivatedAt : null;
+    var deactivated = deactivatedAt !== null;
+    var prodLineData = this.results[prodLineId];
+
+    if (!prodLineData)
+    {
+      if (deactivated)
+      {
+        prodLineData = {};
+      }
+      else
+      {
+        continue;
+      }
+    }
+
+    var groupKeys = deactivated ? allGroupKeys : Object.keys(prodLineData);
 
     for (var ii = 0, ll = groupKeys.length; ii < ll; ++ii)
     {
-      prodLine[groupKeys[ii]].roundValues();
+      var groupKey = groupKeys[ii];
+      var prodLineSummary = prodLineData[groupKey];
+
+      if (!prodLineSummary)
+      {
+        prodLineSummary = prodLineData[groupKey] = new Report3ProdLineSummary(this.countWorkDays(groupKey));
+      }
+
+      prodLineSummary.roundValues();
+
+      if (deactivatedAt !== null)
+      {
+        prodLineSummary.adjustWorkDays(this.countWorkDays, interval, +groupKey, deactivatedAt);
+      }
     }
   }
-
-  this.calcWorkDays(firstGroupKey, lastGroupKey);
 };
 
 Report3.prototype.calcWorkDays = function(firstGroupKey, lastGroupKey)
@@ -218,7 +265,7 @@ Report3.prototype.getProdLineSummary = function(orderOrDowntime)
 
   if (!this.results[orderOrDowntime.prodLine][groupKey])
   {
-    this.results[orderOrDowntime.prodLine][groupKey] = new Report3ProdLineSummary();
+    this.results[orderOrDowntime.prodLine][groupKey] = new Report3ProdLineSummary(this.countWorkDays(groupKey));
   }
 
   return this.results[orderOrDowntime.prodLine][groupKey];
@@ -246,6 +293,10 @@ Report3.prototype.countWorkDays = function(groupKey)
   {
     workDays = businessDays.countInMonth(date, this.currentShiftStartDate);
   }
+  else if (this.options.interval === 'quarter')
+  {
+    workDays = businessDays.countInQuarter(date, this.currentShiftStartDate);
+  }
   else if (this.options.interval === 'year')
   {
     workDays = businessDays.countInYear(date, this.currentShiftStartDate);
@@ -256,9 +307,9 @@ Report3.prototype.countWorkDays = function(groupKey)
   return workDays;
 };
 
-function Report3ProdLineSummary()
+function Report3ProdLineSummary(workDayCount)
 {
-  this.weekendWorkDayCount = 0;
+  this.workDayCount = workDayCount;
   this.specialWorkDays = {};
   this.exploitation = 0;
   this.quantityDone = 0;
@@ -273,7 +324,7 @@ function Report3ProdLineSummary()
 Report3ProdLineSummary.prototype.toJSON = function()
 {
   return {
-    w: this.weekendWorkDayCount === 0 ? undefined : this.weekendWorkDayCount,
+    w: this.workDayCount,
     e: this.exploitation,
     d: this.downtimeCount === 0 ? undefined : this.downtimes,
     q: this.quantityDone === 0 ? undefined : this.quantityDone,
@@ -301,6 +352,36 @@ Report3ProdLineSummary.prototype.roundValues = function()
   {
     this.downtimes[downtimeTypes[i]][1] = util.round(this.downtimes[downtimeTypes[i]][1]);
   }
+};
+
+Report3ProdLineSummary.prototype.adjustWorkDays = function(countWorkDays, interval, fromTime, deactivatedAt)
+{
+  if (interval === 'day' && fromTime >= deactivatedAt)
+  {
+    this.workDayCount = 0;
+
+    return;
+  }
+
+  var toTime = moment(fromTime).add(1, interval).valueOf();
+
+  if (toTime < deactivatedAt)
+  {
+    return;
+  }
+
+  var totalWorkDays = countWorkDays(fromTime);
+
+  if (fromTime >= deactivatedAt)
+  {
+    this.workDayCount -= totalWorkDays;
+
+    return;
+  }
+
+  var activeWorkDays = businessDays.countBetweenDates(fromTime, deactivatedAt);
+
+  this.workDayCount -= totalWorkDays - activeWorkDays;
 };
 
 Report3ProdLineSummary.prototype.handleProdShiftOrder = function(prodShiftOrder)
@@ -396,6 +477,6 @@ Report3ProdLineSummary.prototype.increaseWeekendWorkDays = function(date)
     return;
   }
 
-  this.weekendWorkDayCount += 1;
+  this.workDayCount += 1;
   this.specialWorkDays[key] = true;
 };

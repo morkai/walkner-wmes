@@ -15,7 +15,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     interval: req.query.interval || 'day',
     majorMalfunction: parseFloat(req.query.majorMalfunction) || 1.5,
     downtimeReasons: helpers.getDowntimeReasons(app[reportsModule.config.downtimeReasonsId].models, false),
-    prodLines: getProdLinesWithSubDivisions(app[reportsModule.config.orgUnitsId])
+    prodLines: getProdLinesInfo(app[reportsModule.config.orgUnitsId])
   };
 
   if (isNaN(options.fromTime) || isNaN(options.toTime))
@@ -35,7 +35,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
   });
 };
 
-function getProdLinesWithSubDivisions(orgUnitsModule)
+function getProdLinesInfo(orgUnitsModule)
 {
   var prodLines = {};
 
@@ -51,7 +51,8 @@ function getProdLinesWithSubDivisions(orgUnitsModule)
     prodLines[prodLine._id] = {
       division: subdivision.division,
       subdivisionType: subdivision.type,
-      inventoryNo: prodLine.inventoryNo
+      inventoryNo: prodLine.inventoryNo,
+      deactivatedAt: prodLine.deactivatedAt
     };
   });
 
