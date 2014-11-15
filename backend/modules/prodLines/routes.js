@@ -19,7 +19,23 @@ module.exports = function setUpProdLinesRoutes(app, prodLinesModule, useDictiona
 
   express.get('/prodLines/:id', canView, express.crud.readRoute.bind(null, app, ProdLine));
 
-  express.put('/prodLines/:id', canManage, useDictionaryModel, express.crud.editRoute.bind(null, app, ProdLine));
+  express.put(
+    '/prodLines/:id',
+    canManage,
+    useDictionaryModel,
+    prepareModelForEdit,
+    express.crud.editRoute.bind(null, app, ProdLine)
+  );
 
   express.delete('/prodLines/:id', canManage, useDictionaryModel, express.crud.deleteRoute.bind(null, app, ProdLine));
+
+  function prepareModelForEdit(req, res, next)
+  {
+    delete req.body.prodShift;
+    delete req.body.prodShiftOrder;
+    delete req.body.prodDowntime;
+    delete req.body.secretKey;
+
+    next();
+  }
 };
