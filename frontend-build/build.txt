@@ -815,6 +815,8 @@ i18n!app/nls/events
 app/events/routes.js
 app/purchaseOrders/PurchaseOrderItem.js
 app/purchaseOrders/PurchaseOrderItemCollection.js
+app/purchaseOrders/PurchaseOrderPrint.js
+app/purchaseOrders/PurchaseOrderPrintCollection.js
 app/purchaseOrders/PurchaseOrder.js
 app/core/util/bindLoadingMessage.js
 app/purchaseOrders/PurchaseOrderCollection.js
