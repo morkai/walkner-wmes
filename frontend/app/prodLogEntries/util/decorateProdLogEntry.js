@@ -75,6 +75,7 @@ define([
 
       case 'changeOrder':
       case 'correctOrder':
+      case 'addOrder':
         var operation = prodLogEntry.data.orderData && prodLogEntry.data.orderData.operations
             ? prodLogEntry.data.orderData.operations[prodLogEntry.data.operationNo]
             : null;
@@ -91,6 +92,7 @@ define([
         break;
 
       case 'startDowntime':
+      case 'addDowntime':
         var reason = downtimeReasons.get(prodLogEntry.data.reason);
         var aor = aors.get(prodLogEntry.data.aor);
 
