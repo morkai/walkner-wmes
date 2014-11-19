@@ -6,6 +6,8 @@ define(['d3'], function(d3) {
     var hover = function () {},
         mouseover = function () {},
         mouseout = function () {},
+        mousedown = function () {},
+        mouseup = function () {},
         click = function () {},
         scroll = function () {},
         afterRender = function () {},
@@ -125,6 +127,12 @@ define(['d3'], function(d3) {
             })
             .on("mouseout", function (d, i) {
               mouseout.call(this, d, i, datum);
+            })
+            .on("mousedown", function (d, i) {
+              mousedown.call(this, d, i, datum);
+            })
+            .on("mouseup", function (d, i) {
+              mouseup.call(this, d, i, datum);
             })
             .on("click", function (d, i) {
               click.call(this, d, index, datum);
@@ -297,6 +305,18 @@ define(['d3'], function(d3) {
     timeline.mouseout = function (mouseoverFunc) {
       if (!arguments.length) return mouseoverFunc;
       mouseout = mouseoverFunc;
+      return timeline;
+    };
+
+    timeline.mousedown = function (mousedownFunc) {
+      if (!arguments.length) return mousedownFunc;
+      mousedown = mousedownFunc;
+      return timeline;
+    };
+
+    timeline.mouseup = function (mouseupFunc) {
+      if (!arguments.length) return mouseupFunc;
+      mouseup = mouseupFunc;
       return timeline;
     };
 

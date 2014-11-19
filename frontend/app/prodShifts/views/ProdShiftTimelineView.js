@@ -473,24 +473,36 @@ define([
             view.hidePopover();
           }
         })
+        .mousedown(function()
+        {
+          d3.event.preventDefault();
+        })
         .click(function(item)
         {
-          if (canManage && d3.event.ctrlKey)
+          var url = null;
+
+          if (item.type === 'downtime' && user.isAllowedTo('PROD_DOWNTIMES:VIEW'))
+          {
+            url = 'prodDowntimes/' + item.data._id;
+          }
+          else if (item.type === 'working')
+          {
+            url = 'prodShiftOrders/' + item.data._id;
+          }
+
+          if (!url)
           {
             return;
           }
 
-          if (item.type === 'downtime' && user.isAllowedTo('PROD_DOWNTIMES:VIEW'))
+          if (d3.event.ctrlKey || d3.event.button === 1)
           {
-            view.broker.publish('router.navigate', {
-              url: '/prodDowntimes/' + item.data._id,
-              trigger: true
-            });
+            window.open('#' + url);
           }
-          else if (item.type === 'working')
+          else
           {
             view.broker.publish('router.navigate', {
-              url: '/prodShiftOrders/' + item.data._id,
+              url: '/' + url,
               trigger: true
             });
           }
