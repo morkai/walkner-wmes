@@ -8,33 +8,33 @@ var step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdDowntime = mongoose.model('ProdDowntime');
-
   var changes = logEntry.data;
-  var changeDowntimes = changes.orderId !== undefined
-    || changes.operationNo !== undefined
-    || changes.master !== undefined
-    || changes.leader !== undefined
-    || changes.operator !== undefined
-    || changes.operators !== undefined;
 
   step(
     function getModelsStep()
     {
       productionModule.getProdData('order', logEntry.prodShiftOrder, this.parallel());
 
-      if (changeDowntimes)
+      if (changes.startedAt || changes.finishedAt)
       {
-        ProdDowntime.find({prodShiftOrder: logEntry.prodShiftOrder}, this.parallel());
+        productionModule.getProdDowntimes(logEntry.prodShift, this.parallel());
+      }
+      else if (changes.orderId !== undefined
+        || changes.operationNo !== undefined
+        || changes.master !== undefined
+        || changes.leader !== undefined
+        || changes.operator !== undefined
+        || changes.operators !== undefined)
+      {
+        productionModule.getOrderDowntimes(logEntry.prodShiftOrder, this.parallel());
       }
     },
-    function swapToCachedModelsStep(err, prodShiftOrder, prodDowntimes)
+    function updateModelsStep(err, prodShiftOrder, prodDowntimes)
     {
       if (err)
       {
         productionModule.error(
-          "Failed to find models while editing order [%s] (LOG=[%s]): %s",
+          "Failed to find order [%s] for edit (LOG=[%s]): %s",
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
@@ -43,50 +43,156 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.done(done, err);
       }
 
-      var cachedProdDowntimes = [];
-
-      if (Array.isArray(prodDowntimes))
+      if (!prodShiftOrder)
       {
-        productionModule.swapToCachedProdData(prodDowntimes, cachedProdDowntimes);
+        productionModule.warn(
+          "Order [%s] not found for edit (LOG=[%s])",
+          logEntry.prodShiftOrder,
+          logEntry._id
+        );
+
+        return this.done(done, null);
       }
 
-      setImmediate(this.next().bind(null, prodShiftOrder, cachedProdDowntimes));
-    },
-    function updateModelsStep(prodShiftOrder, prodDowntimes)
-    {
+      this.prodShiftOrder = prodShiftOrder;
+      this.prodDowntimes = Array.isArray(prodDowntimes) ? prodDowntimes : [];
+
       prodShiftOrder.set(changes);
-      prodShiftOrder.save(this.parallel());
-
-      if (changeDowntimes)
+      prodShiftOrder.save(this.next());
+    },
+    function changeDowntimesStep(err)
+    {
+      if (err)
       {
-        var downtimeChanges = {};
+        productionModule.error(
+          "Failed to save order [%s] after editing (LOG=[%s]): %s",
+          logEntry.prodShiftOrder,
+          logEntry._id,
+          err.stack
+        );
 
-        ['master', 'leader', 'operator', 'operators'].forEach(function(personnelProperty)
+        return this.done(done, err);
+      }
+
+      if (!this.prodDowntimes.length)
+      {
+        return this.done(done, null);
+      }
+
+      var l = this.prodDowntimes.length;
+      var i;
+      var prodDowntime;
+      var downtimeChanges;
+
+      if (!changes.startedAt && !changes.finishedAt)
+      {
+        if (l === 0)
         {
-          if (changes[personnelProperty] !== undefined)
+          return;
+        }
+
+        [
+          'master',
+          'leader',
+          'operator',
+          'operators',
+          'orderId',
+          'mechOrder',
+          'operationNo'
+        ].forEach(function(property)
+        {
+          if (changes[property] !== undefined)
           {
-            downtimeChanges[personnelProperty] = changes[personnelProperty];
+            downtimeChanges[property] = changes[property];
           }
         });
 
-        if (changes.orderId !== undefined)
+        for (i = 0; i < l; ++i)
         {
-          downtimeChanges.mechOrder = changes.mechOrder;
-          downtimeChanges.orderId = changes.orderId;
-        }
+          prodDowntime = this.prodDowntimes[i];
 
-        if (changes.operationNo !== undefined)
-        {
-          downtimeChanges.operationNo = changes.operationNo;
-        }
-
-        var step = this;
-
-        prodDowntimes.forEach(function(prodDowntime)
-        {
           prodDowntime.set(downtimeChanges);
-          prodDowntime.save(step.parallel());
-        });
+          prodDowntime.save(this.parallel());
+        }
+
+        return;
+      }
+
+      var prodShiftOrder = this.prodShiftOrder;
+      var orderStartedAt = prodShiftOrder.startedAt;
+      var orderFinishedAt = prodShiftOrder.finishedAt;
+      var orderDowntimes = [];
+      var idleDowntimes = [];
+
+      for (i = 0; i < l; ++i)
+      {
+        prodDowntime = this.prodDowntimes[i];
+
+        var duringOrder = prodDowntime.startedAt >= orderStartedAt && prodDowntime.startedAt <= orderFinishedAt;
+        var sameOrder = prodDowntime.prodShiftOrder === prodShiftOrder._id;
+        var noOrder = prodDowntime.prodShiftOrder === null;
+
+        if (duringOrder && (sameOrder || noOrder))
+        {
+          orderDowntimes.push(prodDowntime);
+        }
+        else if (sameOrder)
+        {
+          idleDowntimes.push(prodDowntime);
+        }
+      }
+
+      downtimeChanges = {
+        master: prodShiftOrder.master,
+        leader: prodShiftOrder.leader,
+        operator: prodShiftOrder.operator,
+        operators: prodShiftOrder.operators,
+        orderId: prodShiftOrder.orderId,
+        mechOrder: prodShiftOrder.mechOrder,
+        operationNo: prodShiftOrder.operationNo,
+        prodShiftOrder: prodShiftOrder._id
+      };
+
+      for (i = 0, l = orderDowntimes.length; i < l; ++i)
+      {
+        prodDowntime = orderDowntimes[i];
+
+        prodDowntime.set(downtimeChanges);
+        prodDowntime.save(this.parallel());
+      }
+
+      downtimeChanges = {
+        orderId: null,
+        mechOrder: null,
+        operationNo: null,
+        prodShiftOrder: null
+      };
+
+      for (i = 0, l = idleDowntimes.length; i < l; ++i)
+      {
+        prodDowntime = idleDowntimes[i];
+
+        prodDowntime.set(downtimeChanges);
+        prodDowntime.save(this.parallel());
+      }
+    },
+    function recalcOrderDurationsStep(err)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to save downtimes after editing order [%s] (LOG=[%s]): %s",
+          logEntry.prodShiftOrder,
+          logEntry._id,
+          err.stack
+        );
+
+        return this.done(done, err);
+      }
+
+      if (changes.startedAt || changes.finishedAt)
+      {
+        this.prodShiftOrder.recalcDurations(true, this.next());
       }
     },
     done

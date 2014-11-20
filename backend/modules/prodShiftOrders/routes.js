@@ -152,7 +152,17 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
           return this.skip(new Error('INPUT'), 400);
         }
 
-        logEntry.save(this.next());
+        var next = this.next();
+
+        validateOverlappingOrders({_id: null, prodShift: logEntry.prodShift}, logEntry.data, function(err)
+        {
+          if (err)
+          {
+            return next(err, null);
+          }
+
+          return next(null, logEntry);
+        });
       },
       function handleLogEntryStep(err, logEntry)
       {
@@ -234,7 +244,17 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
           return this.skip(new Error('INVALID_CHANGES'), 400);
         }
 
-        logEntry.save(this.next());
+        var next = this.next();
+
+        validateOverlappingOrders(prodShiftOrder, logEntry.data, function(err)
+        {
+          if (err)
+          {
+            return next(err, null);
+          }
+
+          return next(null, logEntry);
+        });
       },
       function handleLogEntryStep(err, logEntry)
       {
@@ -363,5 +383,39 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
         res.send(logEntry.data);
       }
     );
+  }
+
+  function validateOverlappingOrders(prodShiftOrder, changes, done)
+  {
+    if (!changes.startedAt && !changes.finishedAt)
+    {
+      return done(null);
+    }
+
+    var conditions = {prodShift: prodShiftOrder.prodShift};
+    var fields = {startedAt: 1, finishedAt: 1};
+
+    ProdShiftOrder.find(conditions, fields).lean().exec(function(err, prodShiftOrders)
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      var startedAt = changes.startedAt || prodShiftOrder.startedAt;
+      var finishedAt = changes.finishedAt || prodShiftOrder.finishedAt;
+
+      for (var i = 0, l = prodShiftOrders.length; i < l; ++i)
+      {
+        var pso = prodShiftOrders[i];
+
+        if (pso._id !== prodShiftOrder._id && startedAt < pso.finishedAt && finishedAt > pso.startedAt)
+        {
+          return done(express.createHttpError('OVERLAPPING_ORDERS', 400));
+        }
+      }
+
+      return done(null);
+    });
   }
 };

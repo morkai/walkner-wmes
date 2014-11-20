@@ -8,16 +8,13 @@ var step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdDowntime = mongoose.model('ProdDowntime');
-
   step(
     function getProdDowntimeModelStep()
     {
       productionModule.getProdData('order', logEntry.data._id, this.parallel());
-      ProdDowntime.find({prodShiftOrder: logEntry.data._id}, this.parallel());
+      productionModule.getOrderDowntimes(logEntry.data._id, this.parallel());
     },
-    function swapToCachedModelsStep(err, prodShiftOrder, prodDowntimes)
+    function deleteModelsStep(err, prodShiftOrder, prodDowntimes)
     {
       if (err)
       {
@@ -28,20 +25,21 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           err.stack
         );
 
-        return this.skip(err);
+        return this.done(done, err);
       }
 
-      var cachedProdDowntimes = [];
-
-      if (Array.isArray(prodDowntimes))
+      if (!prodShiftOrder)
       {
-        productionModule.swapToCachedProdData(prodDowntimes, cachedProdDowntimes);
+        productionModule.warn(
+          "Order [%s] not found for deletion (LOG=[%s]): %s",
+          logEntry.data._id,
+          logEntry._id,
+          err.stack
+        );
+
+        return this.done(done, null);
       }
 
-      setImmediate(this.next().bind(null, prodShiftOrder, cachedProdDowntimes));
-    },
-    function deleteModelsStep(prodShiftOrder, prodDowntimes)
-    {
       this.prodShiftOrder = prodShiftOrder;
       this.prodDowntimes = prodDowntimes;
 
@@ -49,7 +47,13 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       for (var i = 0, l = prodDowntimes.length; i < l; ++i)
       {
-        prodDowntimes[i].remove(this.parallel());
+        prodDowntimes[i].set({
+          orderId: null,
+          mechOrder: null,
+          operationNo: null,
+          prodShiftOrder: null
+        });
+        prodDowntimes[i].save(this.parallel());
       }
     },
     function broadcastStep(err)
@@ -76,19 +80,6 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           operationNo: this.prodShiftOrder.operationNo,
           shift: this.prodShiftOrder.shift
         });
-
-        for (var i = 0, l = this.prodDowntimes.length; i < l; ++i)
-        {
-          var prodDowntime = this.prodDowntimes[i];
-
-          app.broker.publish('prodDowntimes.deleted.' + prodDowntime._id, {
-            _id: prodDowntime._id,
-            rid: prodDowntime.rid,
-            prodLine: prodDowntime.prodLine,
-            prodShift: prodDowntime.prodShift,
-            prodShiftOrder: prodDowntime.prodShiftOrder
-          });
-        }
       }
     },
     done

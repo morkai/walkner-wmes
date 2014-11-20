@@ -206,6 +206,23 @@ module.exports = function setUpProdData(app, productionModule)
     });
   };
 
+  productionModule.getOrderDowntimes = function(prodShiftOrderId, done)
+  {
+    ProdDowntime.find({prodShiftOrder: prodShiftOrderId}).sort({startedAt: 1}).exec(function(err, prodDowntimes)
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      var cachedProdDowntimes = [];
+
+      productionModule.swapToCachedProdData(prodDowntimes, cachedProdDowntimes);
+
+      return done(null, cachedProdDowntimes);
+    });
+  };
+
   productionModule.getProdShiftQuantitiesDone = function(prodLineId, shiftDates, done)
   {
     ProdShift

@@ -312,7 +312,17 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
           return this.skip(new Error('INPUT'), 400);
         }
 
-        logEntry.save(this.next());
+        var next = this.next();
+
+        validateOverlappingDowntimes({_id: null, prodShift: logEntry.prodShift}, logEntry.data, function(err)
+        {
+          if (err)
+          {
+            return next(err, null);
+          }
+
+          return next(null, logEntry);
+        });
       },
       function handleLogEntryStep(err, logEntry)
       {
@@ -394,7 +404,17 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
           return this.skip(new Error('INVALID_CHANGES'), 400);
         }
 
-        logEntry.save(this.next());
+        var next = this.next();
+
+        validateOverlappingDowntimes(prodDowntime, logEntry.data, function(err)
+        {
+          if (err)
+          {
+            return next(err, null);
+          }
+
+          return next(null, logEntry);
+        });
       },
       function handleLogEntryStep(err, logEntry)
       {
@@ -523,5 +543,39 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
         res.send(logEntry.data);
       }
     );
+  }
+
+  function validateOverlappingDowntimes(prodDowntime, changes, done)
+  {
+    if (!changes.startedAt && !changes.finishedAt)
+    {
+      return done(null);
+    }
+
+    var conditions = {prodShift: prodDowntime.prodShift};
+    var fields = {startedAt: 1, finishedAt: 1};
+
+    ProdDowntime.find(conditions, fields).lean().exec(function(err, prodDowntimes)
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      var startedAt = changes.startedAt || prodDowntime.startedAt;
+      var finishedAt = changes.finishedAt || prodDowntime.finishedAt;
+
+      for (var i = 0, l = prodDowntimes.length; i < l; ++i)
+      {
+        var pd = prodDowntimes[i];
+
+        if (pd._id !== prodDowntime._id && startedAt < pd.finishedAt && finishedAt > pd.startedAt)
+        {
+          return done(express.createHttpError('OVERLAPPING_DOWNTIMES', 400));
+        }
+      }
+
+      return done(null);
+    });
   }
 };

@@ -10,6 +10,113 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
   var changes = logEntry.data;
 
+  function changeOrderIfNecessary(prodDowntime, done)
+  {
+    step(
+      function findOldOrderStep()
+      {
+        if (prodDowntime.prodShiftOrder)
+        {
+          productionModule.getProdData('order', prodDowntime.prodShiftOrder, this.next());
+        }
+      },
+      function checkTimesStep(err, oldProdShiftOrder)
+      {
+        if (err)
+        {
+          productionModule.error(
+            "Failed to find old order [%s] while editing downtime [%s] (LOG=[%s]): %s",
+            changes.prodShiftOrder,
+            logEntry.data._id,
+            logEntry._id,
+            err.stack
+          );
+
+          return this.done(done, err, null, null, null);
+        }
+
+        if (prodDowntime.prodShiftOrder && !oldProdShiftOrder)
+        {
+          productionModule.warn(
+            "Old order [%s] not found while editing downtime [%s] (LOG=[%s])",
+            changes.prodShiftOrder,
+            logEntry.data._id,
+            logEntry._id
+          );
+
+          return this.done(done, null, prodDowntime, null, null);
+        }
+
+        var downtimeStartedAt = changes.startedAt ? new Date(changes.startedAt) : null;
+
+        if (downtimeStartedAt === null)
+        {
+          return this.done(done, null, oldProdShiftOrder, null);
+        }
+
+        this.downtimeStartedAt = downtimeStartedAt;
+        this.oldProdShiftOrder = oldProdShiftOrder;
+        this.newProdShiftOrder = null;
+
+        productionModule.getProdShiftOrders(prodDowntime.prodShift, this.next());
+      },
+      function findNewOrderStep(err, allProdShiftOrders)
+      {
+        if (err)
+        {
+          productionModule.error(
+            "Failed to find all orders while editing downtime [%s] (LOG=[%s]): %s",
+            logEntry.data._id,
+            logEntry._id,
+            err.stack
+          );
+
+          return this.done(done, err, null, null, null);
+        }
+
+        allProdShiftOrders.sort(function(a, b) { return a.startedAt - b.startedAt; });
+
+        for (var i = 0, l = allProdShiftOrders.length; i < l; ++i)
+        {
+          var newProdShiftOrder = allProdShiftOrders[i];
+
+          if (this.downtimeStartedAt >= newProdShiftOrder.startedAt
+            && this.downtimeStartedAt <= newProdShiftOrder.finishedAt)
+          {
+            this.newProdShiftOrder = newProdShiftOrder;
+          }
+        }
+      },
+      function changeOrdersStep()
+      {
+        if (this.newProdShiftOrder === null)
+        {
+          changes.prodShiftOrder = null;
+          changes.mechOrder = null;
+          changes.orderId = null;
+          changes.operationNo = null;
+        }
+        else
+        {
+          changes.prodShiftOrder = this.newProdShiftOrder._id;
+          changes.mechOrder = this.newProdShiftOrder.mechOrder;
+          changes.orderId = this.newProdShiftOrder.orderId;
+          changes.operationNo = this.newProdShiftOrder.operationNo;
+        }
+
+        done(
+          null,
+          prodDowntime,
+          this.oldProdShiftOrder,
+          this.oldProdShiftOrder === this.newProdShiftOrder ? null : this.newProdShiftOrder
+        );
+
+        this.oldProdShiftOrder = null;
+        this.newProdShiftOrder = null;
+      }
+    );
+  }
+
   step(
     function getProdDowntimeModelStep()
     {
@@ -30,32 +137,17 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       }
 
       var next = this.next();
-      var orderId = prodDowntime.prodShiftOrder;
 
-      if (orderId && (changes.startedAt || changes.finishedAt))
+      if (changes.startedAt || changes.finishedAt)
       {
-        productionModule.getProdData('order', orderId, function(err, prodShiftOrder)
-        {
-          if (err)
-          {
-            productionModule.error(
-              "Failed to find order [%s] while editing downtime [%s] (LOG=[%s]): %s",
-              orderId,
-              logEntry.data._id,
-              logEntry._id,
-              err.stack
-            );
-          }
-
-          next(err, prodDowntime, prodShiftOrder);
-        });
+        changeOrderIfNecessary(prodDowntime, next);
       }
       else
       {
         next(null, prodDowntime, null);
       }
     },
-    function updateProdDowntimeStep(err, prodDowntime, prodShiftOrder)
+    function updateProdDowntimeStep(err, prodDowntime, oldProdShiftOrder, newProdShiftOrder)
     {
       if (err)
       {
@@ -69,12 +161,13 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.skip(err);
       }
 
+      this.oldProdShiftOrder = oldProdShiftOrder;
+      this.newProdShiftOrder = newProdShiftOrder;
+
       delete changes._id;
 
       prodDowntime.set(changes);
       prodDowntime.save(this.next());
-
-      this.prodShiftOrder = prodShiftOrder;
     },
     function recalcOrderDurationsStep(err)
     {
@@ -90,9 +183,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.skip(err);
       }
 
-      if (this.prodShiftOrder)
+      if (this.oldProdShiftOrder)
       {
-        this.prodShiftOrder.recalcDurations(true, this.next());
+        this.oldProdShiftOrder.recalcDurations(true, this.parallel());
+      }
+
+      if (this.newProdShiftOrder)
+      {
+        this.newProdShiftOrder.recalcDurations(true, this.parallel());
       }
     },
     function handleRecalcDurationsResultStep(err)
@@ -100,8 +198,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to recalc order [%s] durations after editing downtime [%s] (LOG=[%s]): %s",
-          this.prodShiftOrder._id,
+          "Failed to recalc order [%s/%s] durations after editing downtime [%s] (LOG=[%s]): %s",
+          this.oldProdShiftOrder ? this.oldProdShiftOrder._id : '-',
+          this.newProdShiftOrder ? this.newProdShiftOrder._id : '-',
           logEntry.data._id,
           logEntry._id,
           err.stack

@@ -4,25 +4,98 @@
 
 'use strict';
 
+var step = require('h5.step');
+
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
   var mongoose = app[productionModule.config.mongooseId];
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
 
-  var prodShiftOrder = new ProdShiftOrder(logEntry.data);
-
-  prodShiftOrder.save(function(err)
-  {
-    if (err)
+  step(
+    function addOrderStep()
     {
-      productionModule.error(
-        "Failed to save a new order [%s] (LOG=[%s]): %s",
-        logEntry.data._id,
-        logEntry._id,
-        err.stack
-      );
-    }
+      var prodShiftOrder = new ProdShiftOrder(logEntry.data);
+      prodShiftOrder.save(this.parallel());
 
-    return done(err);
-  });
+      productionModule.getProdDowntimes(prodShiftOrder.prodShift, this.parallel());
+    },
+    function updateDowntimesStep(err, prodShiftOrder, prodDowntimes)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to save a new order [%s] (LOG=[%s]): %s",
+          logEntry.data._id,
+          logEntry._id,
+          err.stack
+        );
+
+        return this.done(done, err);
+      }
+console.log('prodDowntimes.length', prodDowntimes.length);
+      if (!prodDowntimes.length)
+      {
+        return this.done(done, null);
+      }
+
+      this.prodShiftOrder = prodShiftOrder;
+
+      var orderStartedAt = prodShiftOrder.startedAt;
+      var orderFinishedAt = prodShiftOrder.finishedAt;
+      var downtimeChanges = {
+        master: prodShiftOrder.master,
+        leader: prodShiftOrder.leader,
+        operator: prodShiftOrder.operator,
+        operators: prodShiftOrder.operators,
+        orderId: prodShiftOrder.orderId,
+        mechOrder: prodShiftOrder.mechOrder,
+        operationNo: prodShiftOrder.operationNo,
+        prodShiftOrder: prodShiftOrder._id
+      };
+
+      for (var i = 0, l = prodDowntimes.length; i < l; ++i)
+      {
+        var prodDowntime = prodDowntimes[i];
+        if (prodDowntime.prodShiftOrder === null)
+console.log(prodDowntime._id, prodDowntime.startedAt, orderStartedAt, orderFinishedAt);
+        if (prodDowntime.prodShiftOrder === null
+          && prodDowntime.startedAt >= orderStartedAt
+          && prodDowntime.startedAt < orderFinishedAt)
+        {
+          prodDowntime.set(downtimeChanges);
+          prodDowntime.save(this.parallel());
+        }
+      }
+    },
+    function recalcOrderDurationsStep(err)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to update downtimes after adding order [%s] (LOG=[%s]): %s",
+          logEntry.data._id,
+          logEntry._id,
+          err.stack
+        );
+
+        return this.done(done, err);
+      }
+
+      this.prodShiftOrder.recalcDurations(true, this.next());
+    },
+    function handleRecalcDurationsResultStep(err)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to recalc durations after adding order [%s] (LOG=[%s]): %s",
+          this.prodShiftOrder._id,
+          logEntry.data._id,
+          logEntry._id,
+          err.stack
+        );
+      }
+    },
+    done
+  );
 };

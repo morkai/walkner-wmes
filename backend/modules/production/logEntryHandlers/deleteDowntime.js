@@ -24,7 +24,19 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           err.stack
         );
 
-        return this.skip(err);
+        return this.done(done, err);
+      }
+
+      if (!prodDowntime)
+      {
+        productionModule.warn(
+          "Downtime [%s] not found for deletion (LOG=[%s]): %s",
+          logEntry.data._id,
+          logEntry._id,
+          err.stack
+        );
+
+        return this.done(done, null);
       }
 
       var next = this.next();
@@ -58,13 +70,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find downtime [%s] to delete (LOG=[%s]): %s",
+          "Failed to find order [%s] while deleting downtime [%s] (LOG=[%s]): %s",
+          prodDowntime.prodShiftOrder,
           logEntry.data._id,
           logEntry._id,
           err.stack
         );
 
-        return this.skip(err);
+        return this.done(done, err);
       }
 
       this.prodDowntime = prodDowntime;
