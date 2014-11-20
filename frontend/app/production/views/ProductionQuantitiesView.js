@@ -31,7 +31,19 @@ define([
 
     initialize: function()
     {
+      this.onKeyDown = this.onKeyDown.bind(this);
+      this.editorHiders = [];
+
       this.listenTo(this.model, 'change:quantitiesDone change:shift locked unlocked', this.render);
+
+      $('body').on('keydown', this.onKeyDown);
+    },
+
+    destroy: function()
+    {
+      $('body').off('keydown', this.onKeyDown);
+
+      this.editorHiders = null;
     },
 
     serialize: function()
@@ -84,6 +96,14 @@ define([
       }
     },
 
+    onKeyDown: function(e)
+    {
+      if (e.keyCode === 27)
+      {
+        this.hideEditors();
+      }
+    },
+
     scheduleNextRender: function()
     {
       var lastShiftHour = this.model.getCurrentShiftMoment().add(7, 'hours').hours();
@@ -131,6 +151,8 @@ define([
         return;
       }
 
+      this.hideEditors();
+
       var view = this;
       var maxQuantitiesDone = this.model.getMaxQuantitiesDone();
       var $change = $td.find('.btn-link').hide();
@@ -141,7 +163,6 @@ define([
         .attr('placeholder', t('production', 'quantities:newValuePlaceholder'))
         .attr('max', maxQuantitiesDone)
         .val(oldValue)
-        .on('blur', hideAndSave)
         .on('keydown', function(e)
         {
           if (e.which === 27)
@@ -154,8 +175,11 @@ define([
       $form.appendTo($td);
       $input.select();
 
+      this.editorHiders.push(hide);
+
       function hide()
       {
+        view.editorHiders.splice(view.editorHiders.indexOf(hide), 1);
         $form.remove();
         $change.show();
         $value.show();
@@ -180,6 +204,12 @@ define([
 
         return false;
       }
+    },
+
+    hideEditors: function()
+    {
+      this.editorHiders.forEach(function(hide) { hide(); });
+      this.editorHiders = [];
     },
 
     showEditorDialog: function($td)

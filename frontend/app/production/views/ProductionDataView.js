@@ -58,6 +58,10 @@ define([
 
     initialize: function()
     {
+      this.onKeyDown = this.onKeyDown.bind(this);
+      this.editorHiders = [];
+      this.$actions = null;
+
       this.listenTo(this.model, 'locked unlocked', function()
       {
         this.updateWorkerCount();
@@ -81,6 +85,16 @@ define([
         this.updateWorkerCount();
         this.updateTaktTime();
       }, 1));
+
+      $('body').on('keydown', this.onKeyDown);
+    },
+
+    destroy: function()
+    {
+      $('body').off('keydown', this.onKeyDown);
+
+      this.editorHiders = null;
+      this.$actions = null;
     },
 
     afterRender: function()
@@ -95,6 +109,14 @@ define([
       if (this.socket.isConnected())
       {
         this.fillOrderData();
+      }
+    },
+
+    onKeyDown: function(e)
+    {
+      if (e.keyCode === 27)
+      {
+        this.hideEditors();
       }
     },
 
@@ -435,6 +457,8 @@ define([
 
     showEditor: function($property, oldValue, minValue, maxValue, changeFunction)
     {
+      this.hideEditors();
+
       var $value = $property.find('.production-property-value');
 
       var view = this;
@@ -443,7 +467,6 @@ define([
         .val(oldValue)
         .attr('min', minValue)
         .attr('max', maxValue)
-        .on('blur', hideAndSave)
         .on('keydown', function(e)
         {
           if (e.which === 27)
@@ -460,8 +483,11 @@ define([
       $form.appendTo($value);
       $input.select();
 
+      this.editorHiders.push(hide);
+
       function hide()
       {
+        view.editorHiders.splice(view.editorHiders.indexOf(hide), 1);
         $input.remove();
       }
 
@@ -478,6 +504,12 @@ define([
 
         _.defer(function() { $property.find('.btn-link').focus(); });
       }
+    },
+
+    hideEditors: function()
+    {
+      this.editorHiders.forEach(function(hide) { hide(); });
+      this.editorHiders = [];
     },
 
     showQuantityDoneEditor: function()
