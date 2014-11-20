@@ -58,6 +58,7 @@ define([
     switch (prodLogEntry.type)
     {
       case 'changeShift':
+      case 'addShift':
         data.date = time.format(prodLogEntry.data.startedProdShift.date, 'YYYY-MM-DD');
         data.shift = t('core', 'SHIFT:' + prodLogEntry.data.startedProdShift.shift);
         break;

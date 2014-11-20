@@ -35,10 +35,12 @@
     "type:editDowntime": "Downtime edit",
     "type:deleteDowntime": "Downtime deletion",
     "type:deleteOrder": "Order deletion",
+    "type:addShift": "Shift addition",
     "type:addOrder": "Order addition",
     "type:addDowntime": "Downtime addition",
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
+    "data:addShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:changeMaster": "New master: <em>{name}</em>",
     "data:changeLeader": "New leader: <em>{name}</em>",
     "data:changeOperator": "New operator: <em>{name}</em>",

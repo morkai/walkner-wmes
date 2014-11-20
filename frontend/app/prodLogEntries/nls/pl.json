@@ -34,10 +34,12 @@
   "type:editDowntime": "Edycja przestoju",
   "type:deleteDowntime": "Usunięcie przestoju",
   "type:deleteOrder": "Usunięcie zlecenia",
+  "type:addShift": "Dodanie zmiany",
   "type:addOrder": "Dodanie zlecenia",
   "type:addDowntime": "Dodanie przestoju",
 
   "data:changeShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
+  "data:addShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
   "data:changeMaster": "Nowy mistrz: <em>{name}</em>",
   "data:changeLeader": "Nowy lider: <em>{name}</em>",
   "data:changeOperator": "Nowy operator: <em>{name}</em>",
