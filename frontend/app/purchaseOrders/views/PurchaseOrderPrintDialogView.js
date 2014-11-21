@@ -55,7 +55,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         action: '/purchaseOrders/' + this.model.get('orderId') + '/prints',
-        barcodes: ['code128', 'qr'],
+        barcodes: ['code128'/*, 'qr'*/],
         papers: ['a4', '104x42'],
         items: this.model.get('items').map(function(item)
         {
