@@ -330,7 +330,7 @@ define([
       this.changeQuantitiesDone(this.getCurrentQuantityDoneHourIndex(), newValue);
     },
 
-    changeQuantitiesDone: function(hour, newValue)
+    changeQuantitiesDone: function(hour, newValue, options)
     {
       if (typeof newValue !== 'number' || isNaN(newValue))
       {
@@ -351,7 +351,7 @@ define([
 
       quantitiesDone[hour].actual = newValue;
 
-      this.trigger('change:quantitiesDone', this, {});
+      this.trigger('change:quantitiesDone', this, quantitiesDone, options || {});
 
       prodLog.record(this, 'changeQuantitiesDone', {
         hour: hour,
@@ -734,7 +734,7 @@ define([
       }
 
       this.saveLocalData();
-      this.trigger('change:quantitiesDone', this, {});
+      this.trigger('change:quantitiesDone', this, this.attributes.quantitiesDone, {});
     },
 
     /**

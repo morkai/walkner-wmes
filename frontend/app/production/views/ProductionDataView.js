@@ -58,10 +58,6 @@ define([
 
     initialize: function()
     {
-      this.onKeyDown = this.onKeyDown.bind(this);
-      this.editorHiders = [];
-      this.$actions = null;
-
       this.listenTo(this.model, 'locked unlocked', function()
       {
         this.updateWorkerCount();
@@ -85,16 +81,6 @@ define([
         this.updateWorkerCount();
         this.updateTaktTime();
       }, 1));
-
-      $('body').on('keydown', this.onKeyDown);
-    },
-
-    destroy: function()
-    {
-      $('body').off('keydown', this.onKeyDown);
-
-      this.editorHiders = null;
-      this.$actions = null;
     },
 
     afterRender: function()
@@ -109,14 +95,6 @@ define([
       if (this.socket.isConnected())
       {
         this.fillOrderData();
-      }
-    },
-
-    onKeyDown: function(e)
-    {
-      if (e.keyCode === 27)
-      {
-        this.hideEditors();
       }
     },
 
@@ -457,10 +435,7 @@ define([
 
     showEditor: function($property, oldValue, minValue, maxValue, changeFunction)
     {
-      this.hideEditors();
-
       var $value = $property.find('.production-property-value');
-
       var view = this;
       var $form = $('<form></form>').submit(function() { hideAndSave(); return false; });
       var $input = $('<input class="form-control input-lg" type="number">')
@@ -471,7 +446,7 @@ define([
         {
           if (e.which === 27)
           {
-            setTimeout(hide, 1);
+            _.defer(hide);
           }
         }).
         css({
@@ -481,13 +456,14 @@ define([
         .appendTo($form);
 
       $form.appendTo($value);
-      $input.select();
 
-      this.editorHiders.push(hide);
+      _.defer(function()
+      {
+        $input.select().on('blur', function() { _.defer(hideAndSave); });
+      });
 
       function hide()
       {
-        view.editorHiders.splice(view.editorHiders.indexOf(hide), 1);
         $input.remove();
       }
 
@@ -501,15 +477,7 @@ define([
         {
           view.model[changeFunction](newValue);
         }
-
-        _.defer(function() { $property.find('.btn-link').focus(); });
       }
-    },
-
-    hideEditors: function()
-    {
-      this.editorHiders.forEach(function(hide) { hide(); });
-      this.editorHiders = [];
     },
 
     showQuantityDoneEditor: function()

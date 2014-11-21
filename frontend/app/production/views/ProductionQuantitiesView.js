@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'jquery',
   'app/time',
   'app/i18n',
@@ -11,6 +12,7 @@ define([
   './QuantityEditorView',
   'app/production/templates/quantities'
 ], function(
+  _,
   $,
   time,
   t,
@@ -26,24 +28,15 @@ define([
     template: quantitiesTemplate,
 
     events: {
-      'click .production-quantities-actual .btn-link': 'showQuantityEditor'
+      'click .production-quantities-actual .btn-link': 'showQuantityEditor',
+      'mousedown .production-quantities-actual .btn-link': 'showQuantityEditor'
     },
 
     initialize: function()
     {
-      this.onKeyDown = this.onKeyDown.bind(this);
-      this.editorHiders = [];
+      this.onQuantitiesDoneChanged = this.onQuantitiesDoneChanged.bind(this);
 
-      this.listenTo(this.model, 'change:quantitiesDone change:shift locked unlocked', this.render);
-
-      $('body').on('keydown', this.onKeyDown);
-    },
-
-    destroy: function()
-    {
-      $('body').off('keydown', this.onKeyDown);
-
-      this.editorHiders = null;
+      this.listenTo(this.model, 'change:shift locked unlocked', this.render);
     },
 
     serialize: function()
@@ -83,8 +76,15 @@ define([
       };
     },
 
+    beforeRender: function()
+    {
+      this.stopListening(this.model, 'change:quantitiesDone', this.onQuantitiesDoneChanged);
+    },
+
     afterRender: function()
     {
+      this.listenTo(this.model, 'change:quantitiesDone', this.onQuantitiesDoneChanged);
+
       if (this.timers.nextRender)
       {
         clearTimeout(this.timers.nextRender);
@@ -93,14 +93,6 @@ define([
       if (!this.model.isLocked())
       {
         this.scheduleNextRender();
-      }
-    },
-
-    onKeyDown: function(e)
-    {
-      if (e.keyCode === 27)
-      {
-        this.hideEditors();
       }
     },
 
@@ -151,14 +143,12 @@ define([
         return;
       }
 
-      this.hideEditors();
-
       var view = this;
       var maxQuantitiesDone = this.model.getMaxQuantitiesDone();
       var $change = $td.find('.btn-link').hide();
       var $value = $td.find('span').hide();
       var oldValue = parseInt($value.text(), 10);
-      var $form = $('<form></form>').submit(hideAndSave);
+      var $form = $('<form></form>').submit(function() { hideAndSave(); return false; });
       var $input = $('<input class="form-control" type="number" min="0">')
         .attr('placeholder', t('production', 'quantities:newValuePlaceholder'))
         .attr('max', maxQuantitiesDone)
@@ -167,19 +157,20 @@ define([
         {
           if (e.which === 27)
           {
-            setTimeout(hide, 1);
+            _.defer(hide);
           }
         })
         .appendTo($form);
 
       $form.appendTo($td);
-      $input.select();
 
-      this.editorHiders.push(hide);
+      _.defer(function()
+      {
+        $input.select().on('blur', function() { _.defer(hideAndSave); });
+      });
 
       function hide()
       {
-        view.editorHiders.splice(view.editorHiders.indexOf(hide), 1);
         $form.remove();
         $change.show();
         $value.show();
@@ -197,19 +188,9 @@ define([
         {
           $value.text(newValue);
 
-          view.model.changeQuantitiesDone(parseInt(hour, 0), newValue);
+          view.model.changeQuantitiesDone(parseInt(hour, 0), newValue, {render: false});
         }
-
-        view.$('td[data-hour=' + hour + '] .btn-link').focus();
-
-        return false;
       }
-    },
-
-    hideEditors: function()
-    {
-      this.editorHiders.forEach(function(hide) { hide(); });
-      this.editorHiders = [];
     },
 
     showEditorDialog: function($td)
@@ -236,11 +217,19 @@ define([
 
         if (newQuantity !== null)
         {
-          this.model.changeQuantitiesDone(hour, newQuantity);
+          this.model.changeQuantitiesDone(hour, newQuantity, {render: true});
         }
       });
 
       viewport.showDialog(quantityEditorView, t('production', 'quantityEditor:title'));
+    },
+
+    onQuantitiesDoneChanged: function(model, quantitiesDone, options)
+    {
+      if (options.render !== false)
+      {
+        this.render();
+      }
     }
 
   });
