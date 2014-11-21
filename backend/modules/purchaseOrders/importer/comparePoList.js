@@ -118,6 +118,9 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       var i;
       var l = this.insertList.length;
 
+      this.invalidInsert = 0;
+      this.invalidUpdate = 0;
+
       if (l)
       {
         for (i = 0; i < l; ++i)
@@ -128,6 +131,8 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
           }
           else
           {
+            ++this.invalidInsert;
+
             importerModule.warn("Invalid order for insert: %s", JSON.stringify(this.insertList[i]));
           }
         }
@@ -145,6 +150,8 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
           }
           else
           {
+            ++this.invalidUpdate;
+
             importerModule.warn("Invalid order for update: %s", JSON.stringify(this.updateList[i]));
           }
         }
@@ -162,13 +169,14 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         );
       }
 
-      importerModule.info(
-        "Synced %d new and %d existing POs", this.insertList.length, this.updateList.length
-      );
+      var created = this.insertList.length - this.invalidInsert;
+      var updated = this.updateList.length - this.invalidUpdate;
+
+      importerModule.info("Synced %d new and %d existing POs", created, updated);
 
       app.broker.publish('purchaseOrders.synced', {
-        created: this.insertList.length,
-        updated: this.updateList.length,
+        created: created,
+        updated: updated,
         closed: this.closedOrderIds.length,
         importedAt: this.importedAt,
         moduleName: importerModule.name
@@ -401,6 +409,6 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
   function validateOrder(order)
   {
-    return !!order.docDate;
+    return order.docDate && order.items.length;
   }
 };

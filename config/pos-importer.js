@@ -64,7 +64,25 @@ exports['mail/downloader'] = {
 
 exports['purchaseOrders/importer'] = {
   parsedOutputDir: __dirname + '/../data/attachments-imported',
-  stepCount: 10,
   lateDataDelay: 30 * 60 * 1000,
-  hourlyInterval: 3
+  parsers: [
+    {
+      type: 'html',
+      filterRe: /^Job .*?_OPEN_PO_D, Step ([0-9]+)\.html?$/,
+      stepCount: 10,
+      hourlyInterval: 3
+    },
+    {
+      type: 'text',
+      filterRe: /^OPEN_PO_([0-9]+)\.txt$/,
+      stepCount: 1,
+      hourlyInterval: 3
+    },
+    {
+      type: 'json',
+      filterRe: /^OPEN_PO_([0-9]+)\.json$/,
+      stepCount: 1,
+      hourlyInterval: 3
+    }
+  ]
 };

@@ -8,16 +8,37 @@ var fs = require('fs');
 var path = require('path');
 var moment = require('moment');
 var step = require('h5.step');
-var parsePoList = require('./parsePoList');
 var comparePoList = require('./comparePoList');
+var parsers = {
+  html: require('./parseHtmlPoList'),
+  text: require('./parseTextPoList'),
+  json: require('./parseJsonPoList')
+};
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
-  filterRe: /^Job .*?_OPEN_PO_D, Step ([0-9]+)\.html?$/,
-  stepCount: 1,
   lateDataDelay: 10 * 60 * 1000,
-  hourlyInterval: 3,
-  parsedOutputDir: null
+  parsedOutputDir: null,
+  parsers: [
+    {
+      type: 'html',
+      filterRe: /^Job .*?_OPEN_PO_D, Step ([0-9]+)\.html?$/,
+      stepCount: 1,
+      hourlyInterval: 3
+    },
+    {
+      type: 'text',
+      filterRe: /^OPEN_PO_([0-9]+)\.txt$/,
+      stepCount: 1,
+      hourlyInterval: 3
+    },
+    {
+      type: 'json',
+      filterRe: /^OPEN_PO_([0-9]+)\.json$/,
+      stepCount: 1,
+      hourlyInterval: 3
+    }
+  ]
 };
 
 exports.start = function startPurchaseOrdersImporterModule(app, module)
@@ -44,23 +65,38 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
       return;
     }
 
-    var matches = fileInfo.fileName.match(module.config.filterRe);
-
-    if (matches === null)
+    for (var i = 0, l = module.config.parsers.length; i < l; ++i)
     {
-      return false;
+      var parserInfo = module.config.parsers[i];
+      var parser = parsers[parserInfo.type];
+
+      if (!parser)
+      {
+        module.warn("Unknown parser: %s", parserInfo.type);
+
+        continue;
+      }
+
+      var matches = fileInfo.fileName.match(parserInfo.filterRe);
+
+      if (matches !== null)
+      {
+        fileInfo.parser = parserInfo.parser || parser;
+        fileInfo.stepCount = parserInfo.stepCount;
+        fileInfo.step = parseInt(matches[1], 10) || 1;
+        fileInfo.timeKey = createTimeKey(fileInfo.timestamp, parserInfo.hourlyInterval);
+
+        return true;
+      }
     }
 
-    fileInfo.step = parseInt(matches[1], 10);
-    fileInfo.timeKey = createTimeKey(fileInfo.timestamp);
-
-    return true;
+    return false;
   }
 
-  function createTimeKey(timestamp)
+  function createTimeKey(timestamp, hourlyInterval)
   {
     var date = new Date(timestamp);
-    var hours = Math.floor(date.getHours() / module.config.hourlyInterval) * module.config.hourlyInterval;
+    var hours = Math.floor(date.getHours() / hourlyInterval) * hourlyInterval;
     var timeKey = '';
 
     timeKey += date.getFullYear();
@@ -94,7 +130,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
     module.debug("Handling %d step for %s...", step, timeKey);
 
-    if (stepsMap.steps < module.config.stepCount)
+    if (stepsMap.steps < fileInfo.stepCount)
     {
       if (typeof importTimers[timeKey] !== 'undefined' && importTimers[timeKey] !== null)
       {
@@ -182,8 +218,9 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   {
     var purchaseOrders = {};
     var steps = [];
+    var stepCount = stepsMap[Object.keys(stepsMap)[0]].stepCount;
 
-    for (var i = 1, l = module.config.stepCount; i <= l; ++i)
+    for (var i = 1; i <= stepCount; ++i)
     {
       if (stepsMap[i] === undefined)
       {
@@ -222,7 +259,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
       var next = this.next();
 
-      fs.readFile(fileInfo.filePath, 'utf8', function(err, html)
+      fs.readFile(fileInfo.filePath, 'utf8', function(err, contents)
       {
         if (err)
         {
@@ -230,7 +267,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
         }
         else
         {
-          parsePoList(html, importedAt, purchaseOrders);
+          fileInfo.parser(contents, importedAt, purchaseOrders);
         }
 
         next();
