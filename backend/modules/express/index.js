@@ -28,7 +28,10 @@ exports.DEFAULT_CONFIG = {
   },
   cookieSecret: null,
   ejsAmdHelpers: {},
-  title: 'express'
+  title: 'express',
+  jsonBody: {},
+  textBody: {},
+  urlencodedBody: {}
 };
 
 exports.start = function startExpressModule(app, module, done)
@@ -82,9 +85,9 @@ exports.start = function startExpressModule(app, module, done)
     }));
   }
 
-  module.use(bodyParser.json());
-  module.use(bodyParser.urlencoded({extended: false}));
-  module.use(bodyParser.text({type: 'text/*'}));
+  module.use(bodyParser.json(module.config.jsonBody));
+  module.use(bodyParser.urlencoded(lodash.extend({extended: false}, module.config.urlencodedBody)));
+  module.use(bodyParser.text(lodash.defaults({type: 'text/*'}, module.config.textBody)));
   module.use(rqlMiddleware());
 
   app.broker.publish('express.beforeRouter', {
