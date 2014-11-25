@@ -14,7 +14,9 @@ exports.DEFAULT_CONFIG = {
   zintExe: 'zint',
   wkhtmltopdfExe: 'wkhtmltopdf',
   pdfStoragePath: './',
-  renderCmdPath: './'
+  renderCmdPath: './',
+  importPath: './',
+  importFile: '{timestamp}@OPEN_PO_{step}.json'
 };
 
 exports.start = function startPurchaseOrdersModule(app, poModule)

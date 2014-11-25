@@ -4,7 +4,7 @@
 
 'use strict';
 
-var parseSapNumber = require('../../sapUtil/parseSapNumber');
+var parseSapNumber = require('../../sap/util/parseSapNumber');
 
 var ORDER_RE = /^ [0-9]+ /;
 var ITEM_RE = /^ [0-9]{5} /;

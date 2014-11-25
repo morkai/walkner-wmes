@@ -5,7 +5,7 @@
 'use strict';
 
 var cheerio = require('cheerio');
-var parseSapNumber = require('../../sapUtil/parseSapNumber');
+var parseSapNumber = require('../../sap/util/parseSapNumber');
 
 module.exports = function parseOrderInfo(html, orders, importTs)
 {

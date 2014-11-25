@@ -6,6 +6,7 @@
 
 var lodash = require('lodash');
 var limitToVendor = require('./limitToVendor');
+var importRoute = require('./importRoute');
 var getLatestComponentQtyRoute = require('./getLatestComponentQtyRoute');
 var addPrintsRoute = require('./addPrintsRoute');
 var cancelPrintRoute = require('./cancelPrintRoute');
@@ -28,6 +29,11 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
     canView,
     limitToVendor,
     express.crud.browseRoute.bind(null, app, PurchaseOrder)
+  );
+
+  express.post(
+    '/purchaseOrders;import',
+    importRoute.bind(null, app, poModule)
   );
 
   express.get(

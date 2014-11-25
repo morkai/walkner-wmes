@@ -92,6 +92,9 @@ exports.express = {
   cookieSecret: '1ee7\\/\\/mes+pos',
   ejsAmdHelpers: {
     t: 'app/i18n'
+  },
+  textBody: {
+    limit: '1mb'
   }
 };
 
@@ -125,5 +128,6 @@ exports.updater = {
 
 exports.purchaseOrders = {
   pdfStoragePath: __dirname + '/../data/pos-labels',
-  renderCmdPath: __dirname + '/../data/pos-render'
+  renderCmdPath: __dirname + '/../data/pos-render',
+  importPath: __dirname + '/../data/attachments-input'
 };

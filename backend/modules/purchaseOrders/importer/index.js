@@ -62,7 +62,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   {
     if (filePathCache[fileInfo.filePath])
     {
-      return;
+      return false;
     }
 
     for (var i = 0, l = module.config.parsers.length; i < l; ++i)
@@ -188,13 +188,18 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
       return module.debug("Delayed %s: waiting for earlier data...", importQueue[0]);
     }
 
-    importLock = true;
-
     var startTime = Date.now();
     var timeKey = importQueue.shift();
     var stepsMap = timeKeyToStepsMap[timeKey];
 
+    if (!stepsMap)
+    {
+      return setImmediate(importNext);
+    }
+
     delete timeKeyToStepsMap[timeKey];
+
+    importLock = true;
 
     importSteps(stepsMap, function(purchaseOrders)
     {

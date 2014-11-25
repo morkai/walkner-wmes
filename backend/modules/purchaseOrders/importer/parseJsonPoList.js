@@ -36,7 +36,7 @@ module.exports = function parseJsonPoList(json, importedAt, purchaseOrders)
       vendor: po.vendor,
       vendorName: po.vendorName,
       docDate: new Date(po.docDate),
-      items: po.items,
+      items: po.items.map(prepareSchedule),
       importedAt: importedAt
     };
 
@@ -65,4 +65,16 @@ function tryJsonParse(json)
   {
     return [];
   }
+}
+
+function prepareSchedule(poItem)
+{
+  poItem.schedule = !Array.isArray(poItem.schedule) ? [] : poItem.schedule.map(function(schedule)
+  {
+    schedule.date = new Date(schedule.date);
+
+    return schedule;
+  });
+
+  return poItem;
 }
