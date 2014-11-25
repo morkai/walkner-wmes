@@ -26,7 +26,7 @@ module.exports = function setupPurchaseOrderPrintModel(app, mongoose)
     },
     nc12: {
       type: String,
-      required: true
+      default: ''
     },
     printedAt: {
       type: Date,
