@@ -33,7 +33,7 @@
   }
   td {
     border: 1px solid #000;
-    padding: 4px 8px;
+    padding: <%- barcode === 'qr' ? '3px 8px' : '4px 8px' %>;
     font-size: 14px;
     white-space: nowrap;
     line-height: 1.2;
@@ -48,7 +48,21 @@
   .barcode {
     vertical-align: middle;
     text-align: center;
+    padding: '4px 8px';
   }
+  <% if (barcode === 'qr') { %>
+  .barcode {
+    height: 21mm;
+  }
+  .barcode-qr {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #fff;
+    padding: 5mm;
+    border: 1px solid #000;
+  }
+  <% } %>
   </style>
 </head>
 <body>
@@ -96,8 +110,12 @@
       </tr>
       <tr>
         <td class="barcode" colspan="2">
+          <% if (barcode === 'qr') { %>
+          <div class="barcode-qr"><img src="data:image/png;base64,<%- page.png %>"></div>
+          <% } else { %>
           <img src="data:image/png;base64,<%- page.png %>">
           <p class="barcode-data"><%- page.barcodeData %></p>
+          <% } %>
         </td>
       </tr>
     </tbody>

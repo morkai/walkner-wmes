@@ -64,7 +64,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
       height: 105,
       wkhtmltopdf: '-O Landscape -B 0 -L 5mm -R 5mm -T 5mm',
       qr: {
-        zint: '--scale=1 --vers=5'
+        zint: '--scale=2 --vers=5'
       },
       code128: {
         zint: '--scale=0.5 --height=40',
