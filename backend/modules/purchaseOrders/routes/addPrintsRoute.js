@@ -53,7 +53,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
   }
 
   var shippingNo = lodash.isString(req.body.shippingNo)
-    ? req.body.shippingNo.substr(0, 30).replace(/[^a-zA-Z0-9\/\\.\-: ]+$/g, '')
+    ? req.body.shippingNo.substr(0, 30).replace(/[^a-zA-Z0-9\/\\\.\-_: ]+$/g, '')
     : '';
   var currentDate = new Date();
   var currentUserInfo = userModule.createUserInfo(req.session.user, req);

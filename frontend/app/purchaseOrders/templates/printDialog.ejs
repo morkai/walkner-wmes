@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-4 form-group">
       <label for="<%- idPrefix %>-shippingNo"><%- t('purchaseOrders', 'PROPERTY:item.prints.shippingNo') %></label>
-      <input id="<%- idPrefix %>-shippingNo" name="shippingNo" class="form-control pos-printDialog-input" type="text" maxlength="20" autofocus>
+      <input id="<%- idPrefix %>-shippingNo" name="shippingNo" class="form-control pos-printDialog-input" type="text" maxlength="20" autofocus pattern="[a-zA-Z0-9\/\\\.\-_: ]{0,20}">
     </div>
     <div class="col-md-4 form-group">
       <label for="<%- idPrefix %>-paper" class="control-label"><%- t('purchaseOrders', 'PROPERTY:item.prints.paper') %></label>
