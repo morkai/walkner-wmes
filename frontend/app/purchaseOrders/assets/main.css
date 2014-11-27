@@ -103,7 +103,7 @@
 .pos-items-item.is-selected > td,
 .pos-items-item-schedule.is-selected > td {
   background-color: #c0eaff;
-  border-color: #fff;
+  border-color: #0af;
 }
 .pos-items-item.is-selected:hover > td,
 .pos-items-item-schedule.is-selected:hover > td,
