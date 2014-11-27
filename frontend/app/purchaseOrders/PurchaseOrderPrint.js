@@ -17,11 +17,21 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.paperText = /^vendor\//.test(obj.paper)
-        ? t('purchaseOrders', 'paper:vendor', {vendorNo: obj.paper.split('/')[1]})
-        : t('purchaseOrders', 'paper:' + obj.paper);
-
       obj.barcodeText = t('purchaseOrders', 'barcode:' + obj.barcode);
+
+      var matches = obj.paper.match(/^vendor\/(.*?)\/(.*?)$/);
+
+      if (matches === null)
+      {
+        obj.paperText = t('purchaseOrders', 'paper:' + obj.paper);
+      }
+      else
+      {
+        obj.paperText = t('purchaseOrders', 'paper:vendor', {
+          vendorNo: matches[1],
+          paper: matches[2]
+        });
+      }
 
       return obj;
     }

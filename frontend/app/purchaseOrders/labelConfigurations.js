@@ -11,9 +11,23 @@ define([
 ) {
   'use strict';
 
-  var vendorPapers = {
-    '48003321': true
+  var vendorsToPapers = {
+    '48003321': ['A5', 'A6', 'A7']
   };
+
+  function addVendorPapers(papers, vendorNo)
+  {
+    vendorsToPapers[vendorNo].forEach(function(paper)
+    {
+      papers.push({
+        id: 'vendor/' + vendorNo + '/' + paper,
+        text: t('purchaseOrders', 'paper:vendor', {
+          vendorNo: vendorNo,
+          paper: paper
+        })
+      });
+    });
+  }
 
   return {
     getBarcodes: function()
@@ -44,20 +58,14 @@ define([
 
       if (user.data.super || !user.data.vendor)
       {
-        Object.keys(vendorPapers).forEach(function(vendor)
+        Object.keys(vendorsToPapers).forEach(function(vendorNo)
         {
-          papers.push({
-            id: 'vendor/' + vendor,
-            text: t('purchaseOrders', 'paper:vendor', {vendorNo: vendor})
-          });
+          addVendorPapers(papers, vendorNo);
         });
       }
-      else if (vendorPapers[user.data.vendor])
+      else if (vendorsToPapers[user.data.vendor])
       {
-        papers.push({
-          id: 'vendor/' + user.data.vendor,
-          text: t('purchaseOrders', 'paper:vendor', {vendorNo: user.data.vendor})
-        });
+        addVendorPapers(papers, user.data.vendor);
       }
 
       return papers;

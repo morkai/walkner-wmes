@@ -75,7 +75,7 @@
 
   "paper:a4": "A4",
   "paper:104x42": "104×42 mm",
-  "paper:vendor": "Specjalny dla {vendorNo}",
+  "paper:vendor": "{vendorNo}: {paper}",
 
   "printDialog:title": "Drukowanie etykiet",
   "printDialog:items": "Wybrane pozycje",

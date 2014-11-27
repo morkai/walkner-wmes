@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>WMES PO LABELS VENDOR=48003321</title>
+  <title>WMES PO LABELS VENDOR=48003321 PAPER=A5</title>
   <style type="text/css">
   * {
     box-sizing: border-box;
@@ -33,6 +33,9 @@
     font-size: 18px;
     white-space: nowrap;
     line-height: 1.4;
+  }
+  td:first-child {
+    width: 1%;
   }
   .prop-name {
     text-align: right;
@@ -95,27 +98,27 @@
         </td>
       </tr>
       <tr>
-        <td class="prop-name">SHIPPING NO:</td>
+        <td class="prop-name">NR PRZEWOZOWY:</td>
         <td class="prop-value"><%- page.shippingNo || '-' %></td>
       </tr>
       <tr>
-        <td class="prop-name">VENDOR NO:</td>
+        <td class="prop-name">NR DOSTAWCY:</td>
         <td class="prop-value"><%- page.vendorNo || '-' %></td>
       </tr>
       <tr>
-        <td class="prop-name">ORDER NO:</td>
+        <td class="prop-name">NR ZAMÓWIENIA:</td>
         <td class="prop-value"><%- page.orderNo || '-' %></td>
       </tr>
       <tr>
-        <td class="prop-name">LINE NO:</td>
+        <td class="prop-name">NR POZYCJI:</td>
         <td class="prop-value"><%- page.itemNo || '-' %></td>
       </tr>
       <tr>
-        <td class="prop-name">PRODUCT 12NC:</td>
+        <td class="prop-name">12NC PRODUKTU:</td>
         <td class="prop-value"><%- page.nc12 || '-' %></td>
       </tr>
       <tr>
-        <td class="prop-name">QUANTITY:</td>
+        <td class="prop-name">ILOŚĆ:</td>
         <td class="prop-value"><%- page.quantity || '-' %></td>
       </tr>
       <tr class="barcode">

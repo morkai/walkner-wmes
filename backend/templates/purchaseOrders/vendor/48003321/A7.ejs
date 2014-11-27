@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>WMES PO LABELS VENDOR=48003321 PAPER=A6</title>
+  <style type="text/css">
+  * {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    line-height: 1;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    text-align: left;
+  }
+  .page + .page {
+    page-break-before: always;
+  }
+  .barcode {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .barcode-data {
+    margin: 0;
+  }
+  table {
+    margin: 0;
+    border-collapse: collapse;
+    border: 1px solid #000;
+    width: 100%;
+  }
+  td {
+    border: 1px solid #000;
+    padding: 4px 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+  td:first-child {
+    width: 1%;
+  }
+  .prop-name {
+    text-align: right;
+    vertical-align: top;
+  }
+  .barcode {
+    vertical-align: middle;
+    text-align: center;
+  }
+  </style>
+</head>
+<body>
+<% pages.forEach(function(page) { %>
+<div class="page">
+  <table>
+    <tbody>
+      <tr>
+        <td class="prop-name">DOSTAWCA:</td>
+        <td class="prop-value">
+          BART-DRUK Sp. z o. o.<br>
+          11-200 Bartoszyce, ul. Kętrzyńska 41
+        </td>
+      </tr>
+      <tr>
+        <td class="prop-name">ODBIORCA:</td>
+        <td class="prop-value">
+          PHILIPS LIGHTING POLAND S.A.<br>
+          11-400 Kętrzyn, ul. Chrobrego 8
+        </td>
+      </tr>
+      <tr>
+        <td class="prop-name">NR PRZEWOZOWY:</td>
+        <td class="prop-value"><%- page.shippingNo || '-' %></td>
+      </tr>
+      <tr>
+        <td class="prop-name">NR DOSTAWCY:</td>
+        <td class="prop-value"><%- page.vendorNo || '-' %></td>
+      </tr>
+      <tr>
+        <td class="prop-name">NR ZAMÓWIENIA:</td>
+        <td class="prop-value"><%- page.orderNo || '-' %></td>
+      </tr>
+      <tr>
+        <td class="prop-name">NR POZYCJI:</td>
+        <td class="prop-value"><%- page.itemNo || '-' %></td>
+      </tr>
+      <tr>
+        <td class="prop-name">12NC PRODUKTU:</td>
+        <td class="prop-value"><%- page.nc12 || '-' %></td>
+      </tr>
+      <tr>
+        <td class="prop-name">ILOŚĆ:</td>
+        <td class="prop-value"><%- page.quantity || '-' %></td>
+      </tr>
+      <tr>
+        <td class="barcode" colspan="2">
+          <img src="data:image/png;base64,<%- page.png %>">
+          <p class="barcode-data"><%- page.barcodeData %></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<% }) %>
+</body>
+</html>

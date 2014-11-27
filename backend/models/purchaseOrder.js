@@ -36,7 +36,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
         maxLength: 40
       }
     },
-    'vendor/48003321': {
+    'vendor/48003321/A5': {
       width: 148,
       height: 210,
       wkhtmltopdf: '-O Portrait -B 0 -L 10mm -R 0 -T 40mm',
@@ -45,6 +45,30 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
       },
       code128: {
         zint: '--scale=0.5 --height=100'
+      }
+    },
+    'vendor/48003321/A6': {
+      width: 105,
+      height: 148,
+      wkhtmltopdf: '-O Portrait -B 0 -L 5mm -R 5mm -T 17mm',
+      qr: {
+        zint: '--scale=1 --vers=5'
+      },
+      code128: {
+        zint: '--scale=0.5 --height=80',
+        maxLength: 40
+      }
+    },
+    'vendor/48003321/A7': {
+      width: 74,
+      height: 105,
+      wkhtmltopdf: '-O Landscape -B 0 -L 5mm -R 5mm -T 5mm',
+      qr: {
+        zint: '--scale=1 --vers=5'
+      },
+      code128: {
+        zint: '--scale=0.5 --height=40',
+        maxLength: 40
       }
     }
   };
