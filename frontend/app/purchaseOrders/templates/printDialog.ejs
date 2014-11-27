@@ -8,7 +8,7 @@
       <label for="<%- idPrefix %>-paper" class="control-label"><%- t('purchaseOrders', 'PROPERTY:item.prints.paper') %></label>
       <select id="<%- idPrefix %>-paper" class="form-control" name="paper">
         <% papers.forEach(function(paper) { %>
-        <option value="<%- paper %>"><%- t('purchaseOrders', 'paper:' + paper) %></option>
+        <option value="<%- paper.id %>"><%- paper.text %></option>
         <% }) %>
       </select>
     </div>
@@ -16,7 +16,7 @@
       <label for="<%- idPrefix %>-barcode" class="control-label"><%- t('purchaseOrders', 'PROPERTY:item.prints.barcode') %></label>
       <select id="<%- idPrefix %>-barcode" class="form-control" name="barcode">
         <% barcodes.forEach(function(barcode) { %>
-        <option value="<%- barcode %>"><%- t('purchaseOrders', 'barcode:' + barcode) %></option>
+        <option value="<%- barcode.id %>"><%- barcode.text %></option>
         <% }) %>
       </select>
     </div>

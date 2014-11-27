@@ -35,6 +35,17 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
         zint: '--scale=0.5 --height=95',
         maxLength: 40
       }
+    },
+    'vendor/48003321': {
+      width: 148,
+      height: 210,
+      wkhtmltopdf: '-O Portrait -B 0 -L 10mm -R 0 -T 40mm',
+      qr: {
+        zint: '--scale=1 --vers=5'
+      },
+      code128: {
+        zint: '--scale=0.5 --height=100'
+      }
     }
   };
 

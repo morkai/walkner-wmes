@@ -3,21 +3,25 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../i18n',
   '../core/Model'
 ], function(
+  t,
   Model
 ) {
   'use strict';
 
   return Model.extend({
 
-    defaults: {
-
-    },
-
     serialize: function()
     {
       var obj = this.toJSON();
+
+      obj.paperText = /^vendor\//.test(obj.paper)
+        ? t('purchaseOrders', 'paper:vendor', {vendorNo: obj.paper.split('/')[1]})
+        : t('purchaseOrders', 'paper:' + obj.paper);
+
+      obj.barcodeText = t('purchaseOrders', 'barcode:' + obj.barcode);
 
       return obj;
     }

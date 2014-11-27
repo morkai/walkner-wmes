@@ -535,7 +535,7 @@ define([
         title: t('purchaseOrders', 'prints:title'),
         content: renderPrintsPopover({
           orderId: this.model.id,
-          prints: this.model.prints.byItem[itemId].map(function(print) { return print.toJSON(); })
+          prints: this.model.prints.byItem[itemId].map(function(print) { return print.serialize(); })
         })
       });
 

@@ -8,14 +8,16 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
-  'app/purchaseOrders/templates/printDialog'
+  'app/purchaseOrders/templates/printDialog',
+  '../labelConfigurations'
 ], function(
   js2form,
   form2js,
   t,
   viewport,
   View,
-  template
+  template,
+  labelConfigurations
 ) {
   'use strict';
 
@@ -55,8 +57,8 @@ define([
       return {
         idPrefix: this.idPrefix,
         action: '/purchaseOrders/' + this.model.get('orderId') + '/prints',
-        barcodes: ['code128'/*, 'qr'*/],
-        papers: ['a4', '104x42'],
+        barcodes: labelConfigurations.getBarcodes(),
+        papers: labelConfigurations.getPapers(),
         items: this.model.get('items').map(function(item)
         {
           return {
