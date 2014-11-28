@@ -219,6 +219,7 @@ kbd {
   right: 3px;
 }
 .panel > .btn-toolbar {
+  margin: 0;
   padding: 5px;
   border-bottom: 1px solid #ddd;
   background: linear-gradient(to bottom, #F5F5F5, #EEE);

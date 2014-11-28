@@ -7,6 +7,7 @@
 .navbar-brand {
   padding: 16px;
   font-size: 18px;
+  height: auto;
 }
 .navbar-default .navbar-brand,
 .navbar-default .navbar-brand:hover,
@@ -53,7 +54,7 @@
 .navbar-feedback:active {
   text-shadow: 1px 1px 3px #333;
 }
-@media (min-width: 728px) {
+@media (min-width: 768px) {
   .navbar {
     min-height: 0;
   }
