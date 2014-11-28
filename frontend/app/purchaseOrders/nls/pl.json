@@ -61,6 +61,8 @@
   "filter:submit": "Filtruj zamówienia",
 
   "items:status:waiting": "Otwarte ({count})",
+  "items:status:inProgress": "Niewydane ({count})",
+  "items:status:inProgress:title": "Gdzie ilość wydana < ilości całkowitej",
   "items:status:completed": "Zakończone ({count})",
   "items:select:all": "Zaznacz wszystkie",
   "items:select:none": "Odznacz wszystkie",

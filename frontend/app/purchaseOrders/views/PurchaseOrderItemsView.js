@@ -44,9 +44,9 @@ define([
       {
         return e.target.classList.contains('popover-title');
       },
-      'change [name=status]': function()
+      'change [name=status]': function(e)
       {
-        this.state.set('statuses', this.$('[name=status]:checked').map(function() { return this.value; }).get());
+        this.state.set('status', this.$('[name=status]:checked').val());
       },
       'click .is-clickable': function(e)
       {
@@ -75,9 +75,9 @@ define([
       },
       'click #-selectAll': function()
       {
-        var selected = this.model.get('items')
-          .where({completed: false})
-          .map(function(item) { return item.id; });
+        var selected = this.$('.pos-items-item:visible')
+          .map(function() { return this.dataset.itemId; })
+          .get();
 
         this.state.set('selected', selected);
       },
@@ -103,7 +103,7 @@ define([
 
       this.state = new Model({
         printing: false,
-        statuses: null,
+        status: null,
         selected: []
       });
       this.print = new Model({
@@ -122,7 +122,7 @@ define([
 
       this.listenTo(this.state, 'change:printing', this.togglePrintingStatus);
       this.listenTo(this.state, 'change:selected', this.toggleItemSelection);
-      this.listenTo(this.state, 'change:statuses', this.toggleItemVisibility);
+      this.listenTo(this.state, 'change:status', this.toggleItemVisibility);
 
       $('body').on('click', this.onBodyClick);
     },
@@ -143,6 +143,7 @@ define([
     {
       var po = this.model;
       var waitingCount = 0;
+      var inProgressCount = 0;
       var completedCount = 0;
       var items = po.get('items').map(function(item)
       {
@@ -153,6 +154,11 @@ define([
         else
         {
           ++waitingCount;
+
+          if (item.get('printedQty') < item.get('qty'))
+          {
+            ++inProgressCount;
+          }
         }
 
         return item.serialize();
@@ -165,6 +171,7 @@ define([
         items: items,
         itemToPrints: this.model.prints.byItem,
         waitingCount: waitingCount.toLocaleString(),
+        inProgressCount: inProgressCount.toLocaleString(),
         completedCount: completedCount.toLocaleString()
       };
     },
@@ -245,12 +252,11 @@ define([
 
     fixToolbarState: function()
     {
-      var $toolbar = this.$('.btn-toolbar');
-
-      (this.state.get('statuses') || []).forEach(function(status)
-      {
-        $toolbar.find('input[value=' + status + ']').attr('checked', true).parent().addClass('active');
-      });
+      this.$('.btn-toolbar')
+        .find('input[value=' + this.state.get('status') + ']')
+        .attr('checked', true)
+        .parent()
+        .addClass('active');
     },
 
     toggleItemVisibility: function()
@@ -260,36 +266,37 @@ define([
         return this.$('.hidden').removeClass('hidden');
       }
 
-      var statuses = this.state.get('statuses');
+      var status = this.state.get('status');
       var $statuses = this.$('input[name=status]');
 
-      if (statuses === null)
+      if (status === null)
       {
-        $statuses.filter('[value=waiting]').attr('checked', true).parent().addClass('active');
+        status = 'waiting';
 
-        statuses = ['waiting'];
+        $statuses.filter('[value=' + status + ']').attr('checked', true).parent().addClass('active');
 
-        this.state.set('statuses', ['waiting'], {silent: true});
+        this.state.set('status', status, {silent: true});
       }
 
       var view = this;
 
       $statuses.each(function()
       {
-        view.$('.is-' + this.value).toggleClass('hidden', !this.checked);
+        if (this.value !== status)
+        {
+          view.$('.is-' + this.value).addClass('hidden');
+        }
       });
 
-      var notWaiting = statuses.indexOf('waiting') === -1;
+      view.$('.is-' + status).removeClass('hidden');
 
-      if (notWaiting)
-      {
-        this.state.set('selected', []);
-      }
+      this.state.set('selected', []);
 
       var printing = this.state.get('printing');
+      var completed = status === 'completed';
 
-      this.$id('selectAll').prop('disabled', printing || notWaiting);
-      this.$id('selectNone').prop('disabled', printing || notWaiting);
+      this.$id('selectAll').prop('disabled', printing || completed);
+      this.$id('selectNone').prop('disabled', printing || completed);
     },
 
     toggleItemSelection: function()

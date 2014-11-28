@@ -34,6 +34,11 @@ define([
         obj.rowClassName += ' is-selectable';
       }
 
+      if (obj.printedQty < obj.qty)
+      {
+        obj.rowClassName += ' is-inProgress';
+      }
+
       obj.rowSpan = obj.schedule.length;
 
       return obj;

@@ -4,10 +4,14 @@
   <div class="btn-toolbar">
     <div id="<%- idPrefix %>-statuses" class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
-        <input type="checkbox" name="status" value="waiting"> <i class="fa fa-unlock-alt"></i><span><%- t('purchaseOrders', 'items:status:waiting', {count: waitingCount}) %></span>
+        <input type="radio" name="status" value="waiting"> <i class="fa fa-unlock-alt"></i><span><%- t('purchaseOrders', 'items:status:waiting', {count: waitingCount}) %></span>
       </label>
-      <label class="btn btn-default <%- open ? '' : 'active' %>">
-        <input type="checkbox" name="status" value="completed"> <i class="fa fa-lock"></i><span><%- t('purchaseOrders', 'items:status:completed', {count: completedCount}) %></span>
+      <label class="btn btn-default" title="<%- t('purchaseOrders', 'items:status:inProgress:title') %>">
+        <input type="radio" name="status" value="inProgress">
+        <i class="fa fa-star-half-o"></i><span><%- t('purchaseOrders', 'items:status:inProgress', {count: inProgressCount}) %></span>
+      </label>
+      <label class="btn btn-default">
+        <input type="radio" name="status" value="completed"> <i class="fa fa-lock"></i><span><%- t('purchaseOrders', 'items:status:completed', {count: completedCount}) %></span>
       </label>
     </div>
     <div class="btn-group">
