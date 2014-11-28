@@ -35,12 +35,13 @@ module.exports = function createErrorHandlerMiddleware(appModule, options)
       try
       {
         appModule.warn(
-          "%s %s\n%s\nUser: %s (%s)\nRequest body:\n%s",
+          "%s %s\n%s\nUser: %s (%s)\nHeaders:\n%s\nRequest body:\n%s",
           req.method,
           req.url,
           err.stack,
           login,
           req.ip,
+          JSON.stringify(req.headers),
           JSON.stringify(req.body)
         );
       }
@@ -51,7 +52,15 @@ module.exports = function createErrorHandlerMiddleware(appModule, options)
     }
     else
     {
-      appModule.warn("%s %s\n%s\nUser: %s (%s)", req.method, req.url, err.stack || err.message, login, req.ip);
+      appModule.warn(
+        "%s %s\n%s\nUser: %s (%s)\nHeaders:\n%s",
+        req.method,
+        req.url,
+        err.stack || err.message,
+        login,
+        req.ip,
+        req.headers
+      );
     }
 
     var accept = req.headers.accept || '';
