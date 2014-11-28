@@ -17,6 +17,11 @@ define([
     {
       var obj = this.toJSON();
 
+      if (obj.printer === 'browser')
+      {
+        obj.printer = t('purchaseOrders', 'printer:browser');
+      }
+
       obj.barcodeText = t('purchaseOrders', 'barcode:' + obj.barcode);
 
       var matches = obj.paper.match(/^vendor\/(.*?)\/(.*?)$/);

@@ -19,6 +19,7 @@ define([
 
   var qz = null;
   var printQueue = [];
+  var printJob = null;
   var qzPrint = {};
 
   qzPrint.isLoaded = function()
@@ -43,6 +44,11 @@ define([
     }
 
     return true;
+  };
+
+  qzPrint.isPrinting = function()
+  {
+    return printJob !== null;
   };
 
   qzPrint.load = function()
@@ -75,14 +81,14 @@ define([
   {
     if (!this.isLoaded())
     {
-      return done(new Error('NOT_LOADED'));
+      return done(new Error('PLUGIN_NOT_LOADED'));
     }
 
     var timeout = setTimeout(function()
     {
       window.qzDoneFinding = null;
 
-      return done(new Error('TIMEOUT'));
+      return done(new Error('FIND_PRINT_TIMEOUT'));
     }, TIMEOUT);
 
     window.qzDoneFinding = function()
@@ -95,7 +101,7 @@ define([
 
       if (foundPrinterName === null)
       {
-        return done(new Error('NOT_FOUND'));
+        return done(new Error('PRINTER_NOT_FOUND'));
       }
 
       return done(null, foundPrinterName);
@@ -108,14 +114,14 @@ define([
   {
     if (!this.isLoaded())
     {
-      return done(new Error('NOT_LOADED'));
+      return done(new Error('PLUGIN_NOT_LOADED'));
     }
 
     var timeout = setTimeout(function()
     {
       window.qzDoneFinding = null;
 
-      return done(new Error('TIMEOUT'));
+      return done(new Error('FIND_PRINTERS_TIMEOUT'));
     }, TIMEOUT);
 
     window.qzDoneFinding = function()
@@ -124,23 +130,77 @@ define([
 
       window.qzDoneFinding = null;
 
-      return done(null, qz.getPrinters().split(',').filter(function(printerName) { return !!printerName; }));
+      return done(null, qz.getPrinters().split(',').filter(function(printerName) { return printerName.length; }));
     };
 
-    qz.findPrinter('\\{bogus_printer\\}');
+    qz.findPrinter('\\{dummy_printer\\}');
   };
 
-  qzPrint.rawPrint = function(printerName, data, done)
+  qzPrint.printRaw = function(printerName, data, done)
   {
     if (!this.isLoaded())
     {
-      return done(new Error('NOT_LOADED'));
+      return done(new Error('PLUGIN_NOT_LOADED'));
     }
 
     printQueue.push({
+      type: 'raw',
       printerName: printerName,
-      data: data,
-      done: done
+      done: function(err)
+      {
+        printJob = null;
+
+        done(err);
+      },
+      append: function(done)
+      {
+        qz.append(data);
+
+        done();
+      },
+      print: function()
+      {
+        qz.print();
+      }
+    });
+
+    printNext();
+  };
+
+  qzPrint.printPdf = function(printerName, pdfFile, paperOptions, done)
+  {
+    if (!this.isLoaded())
+    {
+      return done(new Error('PLUGIN_NOT_LOADED'));
+    }
+
+    printQueue.push({
+      type: 'pdf',
+      printerName: printerName,
+      done: function(err)
+      {
+        printJob = null;
+
+        done(err);
+      },
+      append: function(done)
+      {
+        qz.setPaperSize(paperOptions.width, paperOptions.height, 'mm');
+        qz.setOrientation(paperOptions.orientation);
+        qz.setAutoSize(true);
+        qz.appendPDF(pdfFile);
+
+        window.qzDoneAppending = function()
+        {
+          window.qzDoneAppending = null;
+
+          done();
+        };
+      },
+      print: function()
+      {
+        qz.printPS();
+      }
     });
 
     printNext();
@@ -148,12 +208,32 @@ define([
 
   function printNext()
   {
+    if (printJob !== null || !printQueue.length)
+    {
+      return;
+    }
 
+    printJob = printQueue.shift();
+
+    qzPrint.findPrinter(printJob.printerName, function(err)
+    {
+      if (err)
+      {
+        return printJob.done(err);
+      }
+
+      printJob.append(printJob.print);
+    });
   }
 
   function showInitWarning()
   {
     $('body').prepend(qzPrintInitWarningTemplate());
+  }
+
+  function hideInitWarning()
+  {
+    $('#qzPrintInitWarning').remove();
   }
 
   window.qzReady = function()
@@ -163,6 +243,8 @@ define([
     try
     {
       qz.getVersion();
+
+      hideInitWarning();
     }
     catch (err)
     {
@@ -178,13 +260,17 @@ define([
 
     if (err)
     {
-      console.error(err.getLocalizedMessage());
+      err = new Error(err.getLocalizedMessage());
 
       qz.clearException();
+
+      printJob.done(err);
     }
-    else
+    else if (printJob !== null)
     {
-      console.log("Printing done!");
+      console.log("Printing done!", printJob);
+
+      printJob.done();
     }
   };
 

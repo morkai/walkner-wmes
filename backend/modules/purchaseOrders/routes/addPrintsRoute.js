@@ -55,6 +55,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
   var shippingNo = lodash.isString(req.body.shippingNo)
     ? req.body.shippingNo.substr(0, 30).replace(/[^a-zA-Z0-9\/\\\.\-_: ]+$/g, '')
     : '';
+  var printer = lodash.isString(req.body.printer) && req.body.printer.length ? req.body.printer : 'browser';
   var currentDate = new Date();
   var currentUserInfo = userModule.createUserInfo(req.session.user, req);
 
@@ -109,6 +110,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
           nc12: item.model.nc12,
           printedAt: currentDate,
           printedBy: currentUserInfo,
+          printer: printer,
           paper: paper,
           barcode: barcode,
           shippingNo: shippingNo,
@@ -153,7 +155,14 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
         return this.skip(err);
       }
 
-      res.json(this.key);
+      var addedPrints = lodash.map(items, function(item) { return item.print.toJSON(); });
+
+      res.json({
+        printKey: this.key,
+        prints: addedPrints
+      });
+
+      this.addedPrints = addedPrints;
 
       setImmediate(this.next());
     },
@@ -170,7 +179,6 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
       }
 
       var changedItems = [];
-      var addedPrints = [];
 
       lodash.forEach(items, function(item)
       {
@@ -178,14 +186,13 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
           _id: item.model._id,
           printedQty: item.model.printedQty
         });
-        addedPrints.push(item.print.toJSON());
       });
 
       app.broker.publish('purchaseOrders.printed.' + po._id, {
         _id: po._id,
         printedQty: po.printedQty,
         changedItems: changedItems,
-        addedPrints: addedPrints
+        addedPrints: this.addedPrints
       });
     }
   );

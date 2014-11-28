@@ -1,13 +1,14 @@
 <table class="table table-bordered table-condensed table-hover pos-prints">
   <thead>
     <tr>
-      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.printedAt') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.shippingNo') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.paper') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.barcode') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.packageQty') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.componentQty') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:item.prints.remainingQty') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:print.printedAt') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:print.shippingNo') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:print.printer') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:print.paper') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:print.barcode') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:print.packageQty') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:print.componentQty') %>
+      <th><%- t('purchaseOrders', 'PROPERTY:print.remainingQty') %>
       <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
     </tr>
   </thead>
@@ -16,13 +17,14 @@
     <tr class="pos-prints-print <%- print.cancelled ? 'is-cancelled' : '' %>" data-print-id="<%- print._id %>">
       <td><%- time.format(print.printedAt, 'LLL') %></td>
       <td><%- print.shippingNo || '-' %></td>
+      <td><%- print.printer %></td>
       <td><%- print.paperText %></td>
       <td><%- print.barcodeText %></td>
       <td class="is-number"><%- print.packageQty.toLocaleString() %></td>
       <td class="is-number"><%- print.componentQty.toLocaleString() %></td>
       <td class="is-number"><%- print.remainingQty.toLocaleString() %></td>
       <td class="actions">
-        <button type="button" class="btn btn-default action-showPrintPdf" title="<%- t('purchaseOrders', 'prints:showPrintPdf') %>"><i class="fa fa-file-pdf-o"></i></button>
+        <a class="btn btn-default action-showPrintPdf" href="/purchaseOrders/<%- orderId %>/prints/<%- print._id %>.pdf" title="<%- t('purchaseOrders', 'prints:showPrintPdf') %>"><i class="fa fa-file-pdf-o"></i></a>
         <% if (user.isAllowedTo('PURCHASE_ORDERS:MANAGE')) { %>
         <button type="button" class="btn btn-<%- print.cancelled ? 'success' : 'danger' %> action-toggleCancelled" title="<%- t('purchaseOrders', 'prints:' + (print.cancelled ? 'restore' : 'cancel')) %>"><i class="fa fa-thumbs-<%- print.cancelled ? 'up' : 'down' %>"></i></button>
         <% } %>

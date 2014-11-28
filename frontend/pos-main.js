@@ -26,7 +26,7 @@
       'app/core/layouts/PageLayout',
       'app/core/views/NavbarView',
       'app/core/views/LogInFormView',
-      //'app/purchaseOrders/qzPrint',
+      'app/purchaseOrders/qzPrint',
       'app/time',
       'app/pos-routes',
       'bootstrap',
@@ -51,12 +51,12 @@
     updater,
     PageLayout,
     NavbarView,
-    LogInFormView/*,
-    qzPrint*/)
+    LogInFormView,
+    qzPrint)
   {
     var startBroker = null;
 
-    //qzPrint.load();
+    qzPrint.load();
     socket.connect();
 
     moment.locale(window.appLocale);

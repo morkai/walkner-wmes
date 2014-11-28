@@ -1,19 +1,32 @@
 <form id="<%- idPrefix %>-printDialog" autocomplete="off" action="<%= action %>">
   <div class="row">
-    <div class="col-md-4 form-group">
-      <label for="<%- idPrefix %>-shippingNo"><%- t('purchaseOrders', 'PROPERTY:item.prints.shippingNo') %></label>
+    <div class="col-md-3 form-group">
+      <label for="<%- idPrefix %>-shippingNo"><%- t('purchaseOrders', 'PROPERTY:print.shippingNo') %></label>
       <input id="<%- idPrefix %>-shippingNo" name="shippingNo" class="form-control pos-printDialog-input" type="text" maxlength="20" autofocus pattern="[a-zA-Z0-9\/\\\.\-_: ]{0,20}">
     </div>
-    <div class="col-md-4 form-group">
-      <label for="<%- idPrefix %>-paper" class="control-label"><%- t('purchaseOrders', 'PROPERTY:item.prints.paper') %></label>
-      <select id="<%- idPrefix %>-paper" class="form-control" name="paper">
-        <% papers.forEach(function(paper) { %>
-        <option value="<%- paper.id %>"><%- paper.text %></option>
+    <div class="col-md-3 form-group">
+      <label for="<%- idPrefix %>-printer" class="control-label"><%- t('purchaseOrders', 'PROPERTY:print.printer') %></label>
+      <select id="<%- idPrefix %>-printer" class="form-control" name="printer">
+        <option value="browser"><%- t('purchaseOrders', 'printer:browser') %></option>
+        <% printers.forEach(function(printerName) { %>
+        <option value="<%= printerName %>"><%= printerName %></option>
         <% }) %>
       </select>
     </div>
-    <div class="col-md-4 form-group">
-      <label for="<%- idPrefix %>-barcode" class="control-label"><%- t('purchaseOrders', 'PROPERTY:item.prints.barcode') %></label>
+    <div class="col-md-3 form-group">
+      <label for="<%- idPrefix %>-paper" class="control-label"><%- t('purchaseOrders', 'PROPERTY:print.paper') %></label>
+      <select id="<%- idPrefix %>-paper" class="form-control" name="paper">
+        <% paperGroups.forEach(function(paperGroup) { %>
+        <optgroup label="<%= paperGroup.label %>">
+          <% paperGroup.papers.forEach(function(paper) { %>
+          <option value="<%- paper.id %>"><%= paper.text %></option>
+          <% }) %>
+        </optgroup>
+        <% }) %>
+      </select>
+    </div>
+    <div class="col-md-3 form-group">
+      <label for="<%- idPrefix %>-barcode" class="control-label"><%- t('purchaseOrders', 'PROPERTY:print.barcode') %></label>
       <select id="<%- idPrefix %>-barcode" class="form-control" name="barcode">
         <% barcodes.forEach(function(barcode) { %>
         <option value="<%- barcode.id %>"><%- barcode.text %></option>
@@ -28,11 +41,11 @@
           <tr>
             <th><%- t('purchaseOrders', 'PROPERTY:item._id') %></th>
             <th><%- t('purchaseOrders', 'PROPERTY:item.nc12') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:item.prints.packageQty') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:item.prints.componentQty') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:item.prints.remainingQty') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:item.prints.totalPackageQty') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:item.prints.totalQty') %></th>
+            <th><%- t('purchaseOrders', 'PROPERTY:print.packageQty') %></th>
+            <th><%- t('purchaseOrders', 'PROPERTY:print.componentQty') %></th>
+            <th><%- t('purchaseOrders', 'PROPERTY:print.remainingQty') %></th>
+            <th><%- t('purchaseOrders', 'PROPERTY:print.totalPackageQty') %></th>
+            <th><%- t('purchaseOrders', 'PROPERTY:print.totalQty') %></th>
             <th></th>
           </tr>
         </thead>

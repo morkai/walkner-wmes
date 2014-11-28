@@ -97,7 +97,6 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 
   express.get(
     /^\/purchaseOrders\/([0-9]+)\/prints\/([A-F0-9]{32}|[a-f0-9]{24})\.(pdf\+html|pdf|html)$/,
-    canView,
     function prepareParams(req, res, next)
     {
       req.params.orderId = req.params[0];

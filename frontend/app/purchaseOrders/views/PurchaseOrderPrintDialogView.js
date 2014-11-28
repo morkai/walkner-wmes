@@ -57,8 +57,9 @@ define([
       return {
         idPrefix: this.idPrefix,
         action: '/purchaseOrders/' + this.model.get('orderId') + '/prints',
+        printers: this.options.printers,
         barcodes: labelConfigurations.getBarcodes(),
-        papers: labelConfigurations.getPapers(),
+        paperGroups: labelConfigurations.getPaperGroups(),
         items: this.model.get('items').map(function(item)
         {
           return {
@@ -175,10 +176,12 @@ define([
         });
       });
 
-      req.done(function(printId)
+      req.done(function(res)
       {
         view.model.set({
+          _id: res.printKey,
           shippingNo: formData.shippingNo,
+          printer: formData.printer,
           paper: formData.paper,
           barcode: formData.barcode
         });
@@ -186,7 +189,7 @@ define([
         localStorage.setItem('POS:PAPER', formData.paper);
         localStorage.setItem('POS:BARCODE', formData.barcode);
 
-        view.trigger('print', printId);
+        view.trigger('print', res.prints);
       });
 
       req.always(function()

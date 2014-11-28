@@ -33,6 +33,10 @@ module.exports = function setupPurchaseOrderPrintModel(app, mongoose)
       required: true
     },
     printedBy: {},
+    printer: {
+      type: String,
+      required: true
+    },
     paper: {
       type: String,
       required: true

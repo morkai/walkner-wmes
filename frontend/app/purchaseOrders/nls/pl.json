@@ -34,16 +34,17 @@
   "PROPERTY:item.schedule.qty": "Ilość dostawy",
   "PROPERTY:item.completed": "Zakończona?",
   "PROPERTY:item.printedQty": "Ilość wydana",
-  "PROPERTY:item.prints.packageQty": "Ilość pudełek",
-  "PROPERTY:item.prints.componentQty": "Ilość w pudełku",
-  "PROPERTY:item.prints.remainingQty": "Reszta",
-  "PROPERTY:item.prints.totalPackageQty": "Ilość etykiet",
-  "PROPERTY:item.prints.totalQty": "Ilość komponentów",
-  "PROPERTY:item.prints.shippingNo": "Nr listu przewozowego",
-  "PROPERTY:item.prints.barcode": "Typ kodu kreskowego",
-  "PROPERTY:item.prints.paper": "Rozmiar etykiety",
-  "PROPERTY:item.prints.printedAt": "Czas wydruku",
-  "PROPERTY:item.prints.cancelled": "Wydane etykiety: Anulowane?",
+  "PROPERTY:print.packageQty": "Ilość pudełek",
+  "PROPERTY:print.componentQty": "Ilość w pudełku",
+  "PROPERTY:print.remainingQty": "Reszta",
+  "PROPERTY:print.totalPackageQty": "Ilość etykiet",
+  "PROPERTY:print.totalQty": "Ilość komponentów",
+  "PROPERTY:print.shippingNo": "Nr listu przewozowego",
+  "PROPERTY:print.printer": "Drukarka",
+  "PROPERTY:print.barcode": "Typ kodu kreskowego",
+  "PROPERTY:print.paper": "Rozmiar etykiety",
+  "PROPERTY:print.printedAt": "Czas wydruku",
+  "PROPERTY:print.cancelled": "Wydane etykiety: Anulowane?",
   "PROPERTY:changes.date": "Czas zmiany",
   "PROPERTY:changes.user": "Użytkownik",
   "PROPERTY:changes.property": "Atrybut",
@@ -70,11 +71,14 @@
   "changes:newItems": "Nowe pozycje",
   "changes:printCancelled": "Wydane etykiety #{printIndex} anulowane?",
 
+  "printer:browser": "Przeglądarka WWW",
+
   "barcode:qr": "QR",
   "barcode:code128": "Kod 128",
 
   "paper:a4": "A4",
   "paper:104x42": "104×42 mm",
+  "paper:generic": "Podstawowe",
   "paper:vendor": "{vendorNo}: {paper}",
 
   "printDialog:title": "Drukowanie etykiet",
@@ -91,5 +95,7 @@
   "prints:restore": "Przywróć wydanie etykiet",
 
   "qzPrint:initWarning": "Nie udało się uruchomić wtyczki wspomagającej drukowanie etykiet. Kliknij tutaj, aby uzyskać więcej informacji.",
-  "qzPrint:bc:help": "Wtyczka do drukowania etykiet"
+  "qzPrint:bc:help": "Wtyczka do drukowania etykiet",
+  "qzPrint:msg:rawPrintError": "Nie udało się rozpocząć drukowania bezpośredniego :(",
+  "qzPrint:msg:pdfPrintError": "Nie udało się rozpocząć drukowania PDF :("
 }

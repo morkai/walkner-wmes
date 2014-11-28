@@ -10,6 +10,8 @@ define([
   'app/viewport',
   'app/core/Model',
   'app/core/View',
+  '../qzPrint',
+  '../labelConfigurations',
   './PurchaseOrderPrintDialogView',
   'app/purchaseOrders/templates/items',
   'app/purchaseOrders/templates/printsPopover'
@@ -21,6 +23,8 @@ define([
   viewport,
   Model,
   View,
+  qzPrint,
+  labelConfigurations,
   PurchaseOrderPrintDialogView,
   template,
   renderPrintsPopover
@@ -84,7 +88,7 @@ define([
       'click #-print': 'showPrintDialog',
       'click .action-showPrintPdf': function(e)
       {
-        this.showPrintPdf(this.$(e.currentTarget).closest('tr').attr('data-print-id'));
+        window.open(e.currentTarget.getAttribute('href'));
       },
       'click .action-toggleCancelled': function(e)
       {
@@ -105,10 +109,12 @@ define([
       this.print = new Model({
         orderId: null,
         shippingNo: '',
+        printer: 'browser',
         paper: localStorage.getItem('POS:PAPER') || 'a4',
         barcode: localStorage.getItem('POS:BARCODE') || 'code128',
         items: []
       });
+      this.printers = [];
       this.printWindow = null;
       this.$msg = null;
       this.$popover = null;
@@ -416,6 +422,29 @@ define([
         };
       }).sort(function(a, b) { return a._id - b._id; });
 
+      var printersDeferred = $.Deferred();
+      var componentQtyDeferred = $.Deferred();
+
+      $.when(printersDeferred, componentQtyDeferred).done(function()
+      {
+        var dialogView = new PurchaseOrderPrintDialogView({
+          model: view.print,
+          printers: view.printers
+        });
+
+        view.listenToOnce(dialogView, 'print', view.onPrintRequest.bind(view));
+
+        viewport.msg.loaded();
+        viewport.showDialog(dialogView, t('purchaseOrders', 'printDialog:title'));
+      });
+
+      qzPrint.findPrinters(function(err, printers)
+      {
+        view.printers = printers || [];
+
+        printersDeferred.resolve();
+      });
+
       var req = this.ajax({
         type: 'GET',
         url: '/purchaseOrders;getLatestComponentQty',
@@ -447,12 +476,7 @@ define([
           items: selectedItems
         });
 
-        var dialogView = new PurchaseOrderPrintDialogView({model: view.print});
-
-        view.listenToOnce(dialogView, 'print', view.onPrintRequest.bind(view));
-
-        viewport.msg.loaded();
-        viewport.showDialog(dialogView, t('purchaseOrders', 'printDialog:title'));
+        componentQtyDeferred.resolve();
       });
     },
 
@@ -460,14 +484,148 @@ define([
     {
       this.state.set('printing', true);
 
-      this.broker.subscribe('viewport.dialog.hidden', this.openPrintPopup.bind(this, printId)).setLimit(1);
+      this.broker.subscribe('viewport.dialog.hidden', this.doPrint.bind(this, printId)).setLimit(1);
 
       viewport.closeDialog();
     },
 
-    openPrintPopup: function(printId)
+    doPrint: function(prints)
     {
-      var url = '/purchaseOrders/' + this.model.id + '/prints/' + printId + '.pdf+html';
+      if (this.print.get('paper') === '104x42' && /zpl.*203/i.test(this.print.get('printer')))
+      {
+        this.printZebra203Dpi104x42(prints);
+      }
+      else if (this.print.get('printer') !== 'browser')
+      {
+        this.printPdfDirectly();
+      }
+      else
+      {
+        this.printPdfIndirectly();
+      }
+    },
+
+    printZebra203Dpi104x42: function(prints)
+    {
+      var zpl = [];
+
+      for (var i = 0, l = prints.length; i < l; ++i)
+      {
+        var print = prints[i];
+
+        if (print.packageQty > 0)
+        {
+          this.buildZpl203Dpi104x42(zpl, print, print.packageQty, print.componentQty);
+        }
+
+        if (print.remainingQty > 0)
+        {
+          this.buildZpl203Dpi104x42(zpl, print, 1, print.remainingQty);
+        }
+      }
+
+      var view = this;
+
+      qzPrint.printRaw(this.print.get('printer'), zpl.join(''), function(err)
+      {
+        if (err)
+        {
+          console.error(err);
+
+          viewport.msg.show({
+            type: 'error',
+            time: 6000,
+            text: t('purchaseOrders', 'qzPrint:msg:rawPrintError')
+          });
+        }
+
+        if (view.state)
+        {
+          view.state.set('printing', false);
+        }
+      });
+    },
+
+    buildZpl203Dpi104x42: function(zpl, print, labelCount, quantity)
+    {
+      quantity = quantity.toFixed(2).replace(/\.00$/, '');
+
+      var orderNo = +print.purchaseOrder;
+      var itemNo = +print.item;
+      var nc12 = print.nc12;
+      var vendorNo = print.vendor;
+      var shippingNo = print.shippingNo;
+      var barcodeData = 'O' + orderNo + 'P' + nc12 + 'Q' + quantity + 'L' + itemNo + 'S';
+
+      if (barcodeData.length + shippingNo.length > 64)
+      {
+        barcodeData += shippingNo.substr(-1 * (64 - barcodeData.length));
+      }
+      else
+      {
+        var zeroes = 64 - barcodeData.length - shippingNo.length;
+
+        for (var i = 0; i < zeroes; ++i)
+        {
+          barcodeData += '0';
+        }
+
+        barcodeData += shippingNo;
+      }
+
+      zpl.push(
+        '^XA',
+        '^PW831',
+        '^LL0336',
+        '^LS0',
+        '^BY1,3,160^FT785,156^BCI,,N',
+        '^FD>:' + barcodeData + '^FS',
+        '^FT622,51^AAI,27,15^FH$^FDSHIPPING NO^FS',
+        '^FT622,24^AAI,27,15^FH$^FD' + (shippingNo || '-') + '^FS',
+        '^FT241,53^AAI,27,15^FH$^FDVENDOR NO^FS',
+        '^FT241,26^AAI,27,15^FH$^FD' + vendorNo + '^FS',
+        '^FT240,115^AAI,27,15^FH$^FDQUANTITY^FS',
+        '^FT240,88^AAI,27,15^FH$^FD' + quantity + '^FS',
+        '^FT622,114^AAI,27,15^FH$^FDPRODUCT 12NC^FS',
+        '^FT622,87^AAI,27,15^FH$^FD' + (nc12 || '-') + '^FS',
+        '^FT785,114^AAI,27,15^FH$^FDORDER NO^FS',
+        '^FT785,87^AAI,27,15^FH$^FD' + orderNo + '^FS',
+        '^FT785,51^AAI,27,15^FH$^FDITEM NO^FS',
+        '^FT785,24^AAI,27,15^FH$^FD' + itemNo + '^FS',
+        '^PQ' + labelCount + '',
+        '^XZ'
+      );
+    },
+
+    printPdfDirectly: function()
+    {
+      var view = this;
+      var pdfFile = window.location.origin + '/purchaseOrders/' + this.model.id + '/prints/' + this.print.id + '.pdf';
+      var paperOptions = labelConfigurations.getPaperOptions(this.print.get('paper'));
+
+      qzPrint.printPdf(this.print.get('printer'), pdfFile, paperOptions, function(err)
+      {
+        if (err)
+        {
+          console.error(err);
+
+          viewport.msg.show({
+            type: 'error',
+            time: 6000,
+            text: t('purchaseOrders', 'qzPrint:msg:pdfPrintError')
+          });
+        }
+
+        if (view.state)
+        {
+          view.state.set('printing', false);
+        }
+      });
+    },
+
+    printPdfIndirectly: function()
+    {
+      var url = '/purchaseOrders/' + this.model.id + '/prints/' + this.print.id + '.pdf+html';
       var windowName = 'WMES_PO_LABEL_PRINTING';
       var screen = window.screen;
       var width = screen.availWidth * 0.6;
@@ -542,14 +700,16 @@ define([
       this.$popover.popover('show');
     },
 
-    onBodyClick: function()
+    onBodyClick: function(e)
     {
-      this.hidePopover(false);
-    },
+      var $el = this.$(e.target);
 
-    showPrintPdf: function(printId)
-    {
-      window.open('/purchaseOrders/' + this.model.id + '/prints/' + printId + '.pdf');
+      if ($el.length && $el.closest('.popover').length)
+      {
+        return;
+      }
+
+      this.hidePopover(false);
     },
 
     toggleCancelledPrint: function(printId)

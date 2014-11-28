@@ -2,6 +2,12 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
+if (!window.location.origin)
+{
+  window.location.origin = window.location.protocol + '//'
+    + window.location.hostname
+    + (window.location.port ? (':' + window.location.port) : '');
+}
 (function()
 {
   'use strict';
