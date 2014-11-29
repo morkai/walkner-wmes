@@ -34,6 +34,7 @@ define([
       return {
         label: '',
         fteMasterPosition: -1,
+        fteLeaderPosition: -1,
         direct: false,
         dirIndirRatio: 100,
         companies: [],
@@ -72,6 +73,16 @@ define([
       }
 
       obj.color = colorLabelTemplate({color: obj.color});
+
+      if (obj.fteMasterPosition === -1)
+      {
+        obj.fteMasterPosition = '-';
+      }
+
+      if (obj.fteLeaderPosition === -1)
+      {
+        obj.fteLeaderPosition = '-';
+      }
 
       return obj;
     }

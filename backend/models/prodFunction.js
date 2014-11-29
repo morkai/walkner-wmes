@@ -21,6 +21,11 @@ module.exports = function setupProdFunctionModel(app, mongoose)
       min: -1,
       default: -1
     },
+    fteLeaderPosition: {
+      type: Number,
+      min: -1,
+      default: -1
+    },
     direct: {
       type: Boolean,
       default: false
