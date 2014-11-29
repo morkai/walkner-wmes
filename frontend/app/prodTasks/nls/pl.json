@@ -17,11 +17,12 @@
   "PANEL:TITLE:editForm": "Formularz edycji zadania produkcyjnego",
 
   "PROPERTY:_id": "ID",
+  "PROPERTY:parent": "Nadrzędne zadanie",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:tags": "Tagi",
   "PROPERTY:fteDiv": "Podział na wydziały w FTE (magazyn)?",
   "PROPERTY:clipColor": "Kolor w raporcie CLIP",
-  "PROPERTY:inProd": "Użyj w Produktywności?",
+  "PROPERTY:inProd": "Użycie w Produktywności?",
 
   "FORM:ACTION:add": "Dodaj zadanie produkcyjne",
   "FORM:ACTION:edit": "Edytuj zadanie produkcyjne",

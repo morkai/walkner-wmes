@@ -9,6 +9,10 @@
         <div class="prop-value"><%= model.name %></div>
       </div>
       <div class="prop">
+        <div class="prop-name"><%- t('prodTasks', 'PROPERTY:parent') %></div>
+        <div class="prop-value"><%= model.parent ? model.parent.name : '-' %></div>
+      </div>
+      <div class="prop">
         <div class="prop-name"><%- t('prodTasks', 'PROPERTY:tags') %></div>
         <div class="prop-value"><%= model.tags.length ? model.tags.join(', ') : '-' %></div>
       </div>

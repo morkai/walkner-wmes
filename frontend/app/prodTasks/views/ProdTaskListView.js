@@ -13,25 +13,62 @@ define([
 
   return ListView.extend({
 
-    columns: ['name', 'tags', 'fteDiv', 'inProd', 'clipColor'],
+    columns: ['name', 'parent', 'tags', 'fteDiv', 'inProd', 'clipColor'],
 
     serializeRows: function()
     {
-      return this.collection.toJSON().map(function(row)
+      var prodTasks = this.collection;
+      var topLevel = {};
+
+      prodTasks.forEach(function(prodTask)
       {
-        row.tags = row.tags.length ? row.tags.join(', ') : null;
+        var row = prodTask.toJSON();
+
+        row.tags = row.tags.length ? row.tags.join(', ') : '-';
         row.fteDiv = t('core', 'BOOL:' + !!row.fteDiv);
         row.inProd = t('core', 'BOOL:' + !!row.inProd);
 
         if (row.clipColor)
         {
-          row.clipColor = '<span class="label" style="background: ' + row.clipColor + '">'
-            + row.clipColor
-            + '</span>';
+          row.clipColor = '<span class="label" style="background: ' + row.clipColor + '">' + row.clipColor + '</span>';
         }
 
-        return row;
+        if (row.parent)
+        {
+          if (!topLevel[row.parent])
+          {
+            topLevel[row.parent] = {
+              parent: null,
+              children: []
+            };
+          }
+
+          topLevel[row.parent].children.push(row);
+        }
+        else if (!topLevel[row._id])
+        {
+          topLevel[row._id] = {
+            parent: row,
+            children: []
+          };
+        }
+
+        var parentTask = prodTasks.get(row.parent);
+
+        row.parent = parentTask ? parentTask.getLabel() : '-';
       });
+
+      var rows = [];
+
+      Object.keys(topLevel).forEach(function(k)
+      {
+        var item = topLevel[k];
+
+        rows.push(item.parent);
+        rows.push.apply(rows, item.children);
+      });
+
+      return rows;
     }
 
   });

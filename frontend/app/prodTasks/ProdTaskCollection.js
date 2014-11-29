@@ -15,7 +15,7 @@ define([
 
     model: ProdTask,
 
-    rqlQuery: 'select(name,tags,fteDiv,inProd,clipColor)&sort(name)'
+    rqlQuery: 'sort(parent,name)'
 
   });
 });

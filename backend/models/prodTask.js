@@ -24,6 +24,11 @@ module.exports = function setupProdTaskModel(app, mongoose)
     inProd: {
       type: Boolean,
       default: true
+    },
+    parent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ProdTask',
+      default: null
     }
   }, {
     id: false

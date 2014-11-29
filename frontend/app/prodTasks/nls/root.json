@@ -18,6 +18,7 @@
     "PANEL:TITLE:editForm": "Edit production task form",
 
     "PROPERTY:_id": "ID",
+    "PROPERTY:parent": "Parent task",
     "PROPERTY:name": "Name",
     "PROPERTY:tags": "Tags",
     "PROPERTY:fteDiv": "Divide per Division in FTE (distribution)?",

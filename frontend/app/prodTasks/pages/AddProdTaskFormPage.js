@@ -5,10 +5,12 @@
 define([
   'jquery',
   'app/core/pages/AddFormPage',
+  '../ProdTaskCollection',
   '../views/ProdTaskFormView'
 ], function(
   $,
   AddFormPage,
+  ProdTaskCollection,
   ProdTaskFormView
 ) {
   'use strict';
@@ -21,13 +23,20 @@ define([
     {
       var model = this.model;
 
-      return when($.ajax({
+      model.allTags = [];
+      model.topLevelTasks = new ProdTaskCollection(null, {rqlQuery: 'parent=null&sort(name)'});
+
+      var topLevelTasksReq = model.topLevelTasks.fetch({reset: true});
+
+      var allTagsReq = $.ajax({
         url: '/prodTaskTags',
         success: function(allTags)
         {
           model.allTags = allTags;
         }
-      }));
+      });
+
+      return when(topLevelTasksReq, allTagsReq);
     }
 
   });

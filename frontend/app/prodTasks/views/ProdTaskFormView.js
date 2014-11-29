@@ -7,7 +7,8 @@ define([
   'app/core/views/FormView',
   'app/core/templates/colorPicker',
   'app/prodTasks/templates/form',
-  'bootstrap-colorpicker'
+  'bootstrap-colorpicker',
+  'select2'
 ], function(
   _,
   FormView,
@@ -21,13 +22,14 @@ define([
     template: formTemplate,
 
     events: _.extend({}, FormView.prototype.events, {
-      'change [name=color]': function(e)
+      'change #-clipColor': function(e)
       {
         if (e.originalEvent)
         {
           this.$colorPicker.colorpicker('setValue', e.target.value);
         }
-      }
+      },
+      'change #-parent': 'toggleParentFields'
     }),
 
     $colorPicker: null,
@@ -62,6 +64,21 @@ define([
         tags: this.model.allTags || [],
         tokenSeparators: [',']
       });
+
+      this.$id('parent').select2({
+        allowClear: true,
+        placeholder: ' ',
+        data: this.model.topLevelTasks.map(function(prodTask)
+        {
+          return {
+            id: prodTask.id,
+            text: prodTask.getLabel(),
+            prodTask: prodTask
+          };
+        })
+      });
+
+      this.toggleParentFields();
     },
 
     serializeToForm: function()
@@ -69,15 +86,55 @@ define([
       var data = this.model.toJSON();
 
       data.tags = data.tags ? data.tags.join(',') : '';
+      data.parent = data.parent ? data.parent._id : '';
 
       return data;
     },
 
     serializeForm: function(data)
     {
-      data.tags = typeof data.tags === 'string' ? data.tags.split(',') : [];
+      var parent = this.$id('parent').select2('data');
+
+      if (parent)
+      {
+        var parentTask = parent.prodTask;
+
+        data.tags = parentTask.get('tags');
+        data.clipColor = parentTask.get('clipColor');
+        data.fteDiv = parentTask.get('fteDiv');
+        data.inProd = parentTask.get('inProd');
+      }
+      else
+      {
+        data.tags = typeof data.tags === 'string' ? data.tags.split(',') : [];
+        data.parent = null;
+      }
 
       return data;
+    },
+
+    toggleParentFields: function()
+    {
+      var parent = this.$id('parent').select2('data');
+
+      if (!parent)
+      {
+        this.$id('tags').select2('enable', true);
+        this.$id('clipColor').prop('disabled', false);
+        this.$id('fteDiv').prop('disabled', false);
+        this.$id('inProd').prop('disabled', false);
+
+        return;
+      }
+
+      var parentTask = parent.prodTask;
+
+      this.$id('tags').select2('enable', false).select2('val', parentTask.get('tags'));
+      this.$id('clipColor').prop('disabled', true);
+      this.$id('fteDiv').prop('disabled', true).prop('checked', parentTask.get('fteDiv'));
+      this.$id('inProd').prop('disabled', true).prop('checked', parentTask.get('inProd'));
+
+      this.$colorPicker.colorpicker('setValue', parentTask.get('clipColor'));
     }
 
   });

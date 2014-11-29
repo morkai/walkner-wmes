@@ -28,7 +28,20 @@ define([
       tags: null,
       fteDiv: false,
       inProd: true,
-      clipColor: '#eeee00'
+      clipColor: '#eeee00',
+      parent: null
+    },
+
+    url: function()
+    {
+      var url = Model.prototype.url.apply(this, arguments);
+
+      if (this.isNew())
+      {
+        return url;
+      }
+
+      return url + '?populate(parent)';
     },
 
     parse: function(data)
