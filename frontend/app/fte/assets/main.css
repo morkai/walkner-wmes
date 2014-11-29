@@ -86,7 +86,7 @@ th.fte-masterEntry-column-task,
 }
 th.fte-masterEntry-column-task,
 th.fte-masterEntry-column-noPlan {
-  border-bottom-width: 2px!important;
+  border-bottom: 2px solid #ddd !important;
 }
 .fte-masterEntry-noPlan-container,
 .fte-masterEntry-noPlan {
