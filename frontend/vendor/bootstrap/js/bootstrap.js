@@ -1435,6 +1435,12 @@ if (typeof jQuery === 'undefined') {
       var options  = typeof option == 'object' && option
       var selector = options && options.selector
 
+      if (data && option === 'destroy') {
+        Object.keys(data).forEach(function(selector) {
+          data[selector].destroy();
+        });
+        return;
+      }
       if (!data && option == 'destroy') return
       if (selector) {
         if (!data) $this.data('bs.popover', (data = {}))
