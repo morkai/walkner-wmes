@@ -4,11 +4,14 @@
 
 'use strict';
 
+var lodash = require('lodash');
 var moment = require('moment');
 
 module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream, emitter)
 {
   var docs = [];
+  var functionMap = {};
+  var functionList = [];
   var companyMap = {};
   var companyList = [];
   var divisionMap = {};
@@ -18,6 +21,8 @@ module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream
 
   queryStream.on('close', function()
   {
+    functionList = Object.keys(functionMap);
+    functionMap = null;
     companyList = Object.keys(companyMap);
     companyMap = null;
     divisionList = Object.keys(divisionMap);
@@ -28,41 +33,11 @@ module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream
 
   queryStream.on('data', function(doc)
   {
-    doc.tasks.forEach(function(task)
+    lodash.forEach(doc.tasks, handleTask);
+
+    if (Array.isArray(doc.fteDiv) && doc.fteDiv.length)
     {
-      var taskCompanyMap = {};
-
-      task.companies.forEach(function(company)
-      {
-        companyMap[company.id] = true;
-        taskCompanyMap[company.id] = company;
-
-        if (typeof company.count === 'number')
-        {
-          company.total = company.count;
-        }
-        else
-        {
-          company.total = 0;
-
-          var taskDivisionMap = {};
-
-          company.count.forEach(function(taskDivision)
-          {
-            company.total += taskDivision.value;
-            taskDivisionMap[taskDivision.division] = taskDivision.value;
-          });
-
-          company.count = taskDivisionMap;
-        }
-      });
-
-      task.companies = taskCompanyMap;
-    });
-
-    if (Array.isArray(doc.fteDiv))
-    {
-      doc.fteDiv.forEach(function(division)
+      lodash.forEach(doc.fteDiv, function(division)
       {
         divisionMap[division] = true;
       });
@@ -70,6 +45,65 @@ module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream
 
     docs.push(doc);
   });
+
+  function handleTask(task)
+  {
+    var taskFunctionMap = {};
+
+    if (Array.isArray(task.companies) && task.companies.length)
+    {
+      task.functions = [{
+        id: 'wh',
+        companies: task.companies
+      }];
+    }
+
+    lodash.forEach(task.functions, function(taskFunction)
+    {
+      handleTaskFunction(taskFunctionMap, taskFunction);
+    });
+
+    task.functions = taskFunctionMap;
+  }
+
+  function handleTaskFunction(taskFunctionMap, taskFunction)
+  {
+    functionMap[taskFunction.id] = true;
+    taskFunctionMap[taskFunction.id] = taskFunction;
+
+    var taskCompanyMap = {};
+
+    taskFunction.total = 0;
+
+    lodash.forEach(taskFunction.companies, function(taskCompany)
+    {
+      companyMap[taskCompany.id] = true;
+      taskCompanyMap[taskCompany.id] = taskCompany;
+
+      if (typeof taskCompany.count === 'number')
+      {
+        taskCompany.total = taskCompany.count;
+      }
+      else
+      {
+        taskCompany.total = 0;
+
+        var taskDivisionMap = {};
+
+        lodash.forEach(taskCompany.count, function(taskDivision)
+        {
+          taskCompany.total += taskDivision.value;
+          taskDivisionMap[taskDivision.division] = taskDivision.value;
+        });
+
+        taskCompany.count = taskDivisionMap;
+      }
+
+      taskFunction.total += taskCompany.total;
+    });
+
+    taskFunction.companies = taskCompanyMap;
+  }
 
   function tryExportNext()
   {
@@ -106,10 +140,11 @@ module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream
         '"subdivision': subdivision,
         'date': date,
         'shiftNo': doc.shift,
-        '"task': task.name
+        '"task': task.name,
+        'parent': task.parent ? 0 : 1
       };
 
-      exportCountColumns(row, task, companyList, divisionList);
+      exportCountColumns(row, task, functionList, companyList, divisionList);
 
       row['"fteId'] = doc._id;
 
@@ -118,57 +153,65 @@ module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream
   }
 };
 
-function exportCountColumns(row, task, companyList, divisionList)
+function exportCountColumns(row, task, functionList, companyList, divisionList)
 {
-  var companyHd;
-  var divisionHd;
-  var ii;
-  var ll;
+  var functionCount = functionList.length;
+  var companyCount = companyList.length;
+  var divisionCount = divisionList.length;
+  var taskFunction;
+  var functionId;
+  var companyId;
+  var divisionId;
 
-  if (divisionList.length === 0)
+  for (var i = 0; i < functionCount; ++i)
   {
-    for (ii = 0, ll = companyList.length; ii < ll; ++ii)
+    functionId = functionList[i];
+    taskFunction = task.functions[functionId];
+
+    var functionColumn = '#' + functionId;
+
+    row[functionColumn] = taskFunction === undefined ? 0 : taskFunction.total;
+
+    for (var ii = 0; ii < companyCount; ++ii)
     {
-      companyHd = companyList[ii];
+      companyId = companyList[ii];
 
-      row['#' + companyHd] = task.companies[companyHd] === undefined
-        ? 0
-        : task.companies[companyHd].count;
-    }
+      var companyColumn = functionColumn + '[' + companyId + ']';
 
-    return;
-  }
+      row[companyColumn] =
+        taskFunction === undefined || taskFunction.companies[companyId] === undefined
+          ? 0
+          : taskFunction.companies[companyId].total;
 
-  for (ii = 0, ll = companyList.length; ii < ll; ++ii)
-  {
-    companyHd = companyList[ii];
+      for (var iii = 0; iii < divisionCount; ++iii)
+      {
+        divisionId = divisionList[iii];
 
-    row['#' + companyHd] = task.companies[companyHd] === undefined
-      ? 0
-      : task.companies[companyHd].total;
+        var divisionColumn = companyColumn + '[' + divisionId + ']';
 
-    for (var iii = 0, lll = divisionList.length; iii < lll; ++iii)
-    {
-      divisionHd = divisionList[iii];
-
-      row['#' + companyHd + '[' + divisionHd + ']'] =
-        getCompanyDivisionCount(task, companyHd, divisionHd);
+        row[divisionColumn] = getDivisionCount(taskFunction, companyId, divisionId);
+      }
     }
   }
 }
 
-function getCompanyDivisionCount(task, companyHd, divisionHd)
+function getDivisionCount(taskFunction, companyId, divisionId)
 {
-  if (task.companies[companyHd] === undefined)
+  if (taskFunction === undefined)
   {
     return 0;
   }
 
-  var taskCompany = task.companies[companyHd];
+  var taskCompany = taskFunction.companies[companyId];
 
-  if (typeof taskCompany.count[divisionHd] === 'number')
+  if (taskCompany === undefined)
   {
-    return taskCompany.count[divisionHd];
+    return 0;
+  }
+
+  if (typeof taskCompany.count[divisionId] === 'number')
+  {
+    return taskCompany.count[divisionId];
   }
 
   return 0;
