@@ -52,6 +52,10 @@ define([
             children: []
           };
         }
+        else if (!topLevel[row._id].parent)
+        {
+          topLevel[row._id].parent = row;
+        }
 
         var parentTask = prodTasks.get(row.parent);
 
