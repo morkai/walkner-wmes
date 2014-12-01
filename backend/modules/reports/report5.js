@@ -159,6 +159,10 @@ module.exports = function report5(mongoose, options, done)
     var fields = {
       _id: 0,
       date: 1,
+      'tasks.childCount': 1,
+      'tasks.functions.id': 1,
+      'tasks.functions.companies.id': 1,
+      'tasks.functions.companies.count': 1,
       'tasks.companies.id': 1,
       'tasks.companies.count': 1
     };
@@ -296,29 +300,47 @@ module.exports = function report5(mongoose, options, done)
 
     for (var i = 0, l = tasks.length; i < l; ++i)
     {
-      var companies = tasks[i].companies;
+      var task = tasks[i];
 
-      for (var ii = 0, ll = companies.length; ii < ll; ++ii)
+      if (task.childCount > 0)
       {
-        var company = companies[ii];
-        var count = company.count;
+        continue;
+      }
 
-        if (Array.isArray(count))
+      if (Array.isArray(task.functions) && task.functions.length)
+      {
+        for (var ii = 0, ll = task.functions.length; ii < ll; ++ii)
         {
-          count = 0;
-
-          for (var iii = 0, lll = company.count.length; iii < lll; ++iii)
-          {
-            count += company.count[iii].value;
-          }
+          countCompanyDirIndir(dataEntry, task.functions[ii].companies, task.functions[ii].id);
         }
+      }
+      else
+      {
+        countCompanyDirIndir(dataEntry, task.companies, 'wh');
+      }
+    }
+  }
 
-        if (count === 0)
+  function countCompanyDirIndir(dataEntry, companies, prodFunctionId)
+  {
+    for (var i = 0, l = companies.length; i < l; ++i)
+    {
+      var company = companies[i];
+      var count = company.count;
+
+      if (Array.isArray(count))
+      {
+        count = 0;
+
+        for (var ii = 0, ll = company.count.length; ii < ll; ++ii)
         {
-          continue;
+          count += company.count[ii].value;
         }
+      }
 
-        addToDirIndir(dataEntry, false, 0, 'wh', company.id, count);
+      if (count !== 0)
+      {
+        addToDirIndir(dataEntry, false, 0, prodFunctionId, company.id, count);
       }
     }
   }

@@ -6,7 +6,7 @@
 
 var lodash = require('lodash');
 
-module.exports = function createDictionaryModule(modelName, setUpRoutes)
+module.exports = function createDictionaryModule(modelName, setUpRoutes, customSetUp)
 {
   return {
     DEFAULT_CONFIG: {
@@ -55,6 +55,11 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes)
 
         delete module.modelsById[message.model._id];
       });
+
+      if (typeof customSetUp === 'function')
+      {
+        customSetUp(app, module);
+      }
 
       fetchData(done);
 

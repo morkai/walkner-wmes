@@ -55,7 +55,7 @@ module.exports = function setupProdTaskModel(app, mongoose)
       return done(null, []);
     }
 
-    this.find({tags: {$in: subdivisionTags}}, {name: 1, fteDiv: 1}).lean().exec(done);
+    this.find({tags: {$in: subdivisionTags}}, {name: 1, fteDiv: 1, parent: 1}).lean().exec(done);
   };
 
   mongoose.model('ProdTask', prodTaskSchema);

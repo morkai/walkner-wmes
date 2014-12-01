@@ -31,7 +31,7 @@
 
   "label": "{subdivision}, {date}, {shift} zmiana",
 
-  "panel:info": "Wszystkie zmiany w formularzu zapisywane są na bieżąco!",
+  "panel:info": "Wszystkie zmiany w formularzu zapisywane są na bieżąco.",
 
   "leaderEntry:panel:title": "Podział zasobów",
   "leaderEntry:panel:title:editable": "Formularz przydzielania zasobów",

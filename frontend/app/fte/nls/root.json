@@ -31,7 +31,7 @@
 
     "label": "{subdivision}, {date}, {shift} shift",
 
-    "panel:info": "All changes are saved on-the-fly!",
+    "panel:info": "All changes are saved on-the-fly.",
 
     "leaderEntry:panel:title": "Resource allocation",
     "leaderEntry:panel:title:editable": "Resource allocation form",

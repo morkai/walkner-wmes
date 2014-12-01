@@ -4,6 +4,7 @@
 
 'use strict';
 
+var lodash = require('lodash');
 var step = require('h5.step');
 
 module.exports = function setupFteLeaderEntryModel(app, mongoose)
@@ -36,11 +37,28 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     'INVALID_COUNT'
   );
 
+  var fteLeaderTaskFunctionSchema = mongoose.Schema({
+    id: String,
+    companies: [fteLeaderTaskCompanySchema]
+  }, {
+    _id: false
+  });
+
   var fteLeaderTaskSchema = mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
+    parent: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null
+    },
+    childCount: {
+      type: Number,
+      default: 0
+    },
     name: String,
     companies: [fteLeaderTaskCompanySchema],
-    totals: {}
+    functions: [fteLeaderTaskFunctionSchema],
+    totals: {},
+    comment: String
   }, {
     _id: false
   });
@@ -95,29 +113,28 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       .sort();
 
     step(
-      function queryCompaniesStep()
+      function prepareProdFunctionsStep()
       {
-        mongoose.model('Company')
-          .find({fteLeaderPosition: {$ne: -1}}, {name: 1})
-          .sort({fteLeaderPosition: 1})
-          .lean()
-          .exec(this.next());
-      },
-      function handleCompaniesQueryResultStep(err, companies)
-      {
-        if (err)
-        {
-          return this.done(done, err);
-        }
-
-        this.companies = companies.map(function(company)
-        {
-          return {
-            id: company._id,
-            name: company.name,
-            count: 0
-          };
-        });
+        this.functions = app.prodFunctions.models
+          .filter(function(prodFunction)
+          {
+            return prodFunction.fteLeaderPosition > -1;
+          })
+          .sort(function(a, b)
+          {
+            return a.fteLeaderPosition - b.fteLeaderPosition;
+          })
+          .map(function(prodFunction)
+          {
+            return {
+              id: prodFunction._id,
+              companies: getProdFunctionCompanyEntries(prodFunction)
+            };
+          })
+          .filter(function(functionEntry)
+          {
+            return functionEntry.companies.length > 0;
+          });
       },
       function queryProdTasksStep()
       {
@@ -131,30 +148,70 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         }
 
         var ctx = this;
+        var functions = this.functions;
 
-        this.prodTasks = prodTasks.map(function(prodTask)
+        this.tasks = lodash.map(prodTasks, function(prodTask)
         {
           ctx.fteDiv = ctx.fteDiv || prodTask.fteDiv;
 
           return {
             id: prodTask._id,
+            parent: prodTask.parent,
+            childCount: 0,
             name: prodTask.name,
-            companies: !prodTask.fteDiv ? ctx.companies : ctx.companies.map(function(company)
+            companies: [],
+            functions: lodash.map(functions, function(functionEntry)
             {
               return {
-                id: company.id,
-                name: company.name,
-                count: prodDivisions.map(function(prodDivision)
+                id: functionEntry.id,
+                companies: lodash.map(functionEntry.companies, function(companyEntry)
                 {
                   return {
-                    division: prodDivision,
-                    value: 0
+                    id: companyEntry.id,
+                    name: companyEntry.name,
+                    count: !prodTask.fteDiv ? 0 : lodash.map(prodDivisions, function(prodDivision)
+                    {
+                      return {
+                        division: prodDivision,
+                        value: 0
+                      };
+                    })
                   };
                 })
               };
             }),
             totals: null
           };
+        }).sort(function(a, b)
+        {
+          return a.name.localeCompare(b.name);
+        });
+
+        var parentTasks = {};
+        var parentToChildCount = {};
+
+        lodash.forEach(this.tasks, function(task)
+        {
+          if (!task.parent)
+          {
+            parentTasks[task.id] = task;
+
+            return;
+          }
+
+          if (parentToChildCount[task.parent] === undefined)
+          {
+            parentToChildCount[task.parent] = 1;
+          }
+          else
+          {
+            parentToChildCount[task.parent] += 1;
+          }
+        });
+
+        lodash.forEach(parentToChildCount, function(childCount, parentTaskId)
+        {
+          parentTasks[parentTaskId].childCount = childCount;
         });
       },
       function createFteLeaderEntryStep()
@@ -166,7 +223,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
           prodDivisionCount: prodDivisions.length,
           fteDiv: this.fteDiv ? prodDivisions : null,
           totals: null,
-          tasks: this.prodTasks,
+          tasks: this.tasks,
           createdAt: new Date(),
           creator: creator
         };
@@ -192,16 +249,31 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
     this.tasks.forEach(function(task)
     {
-      task.totals = {
-        overall: 0
-      };
+      task.totals = {};
 
-      fteDiv.forEach(function(divisionId)
+      keys.forEach(function(key)
       {
-        task.totals[divisionId] = 0;
+        task.totals[key] = 0;
       });
 
-      task.companies.forEach(function(fteCompany)
+      if (Array.isArray(task.functions) && task.functions.length)
+      {
+        task.functions.forEach(function(taskFunction)
+        {
+          calcCompaniesTotals(taskFunction.companies, task.totals, overallTotals);
+        });
+      }
+      else
+      {
+        calcCompaniesTotals(task.companies, task.totals, overallTotals);
+      }
+    });
+
+    this.totals = overallTotals;
+
+    function calcCompaniesTotals(taskCompanies, taskTotals, overallTotals)
+    {
+      taskCompanies.forEach(function(fteCompany)
       {
         var count = fteCompany.count;
 
@@ -209,8 +281,8 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         {
           count.forEach(function(divisionCount)
           {
-            task.totals.overall += divisionCount.value;
-            task.totals[divisionCount.division] += divisionCount.value;
+            taskTotals.overall += divisionCount.value;
+            taskTotals[divisionCount.division] += divisionCount.value;
             overallTotals.overall += divisionCount.value;
             overallTotals[divisionCount.division] += divisionCount.value;
           });
@@ -219,14 +291,12 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         {
           keys.forEach(function(key)
           {
-            task.totals[key] += count;
+            taskTotals[key] += count;
             overallTotals[key] += count;
           });
         }
       });
-    });
-
-    this.totals = overallTotals;
+    }
   };
 
   fteLeaderEntrySchema.methods.updateCount = function(options, updater, done)
@@ -238,7 +308,26 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       return done(new Error('INPUT'));
     }
 
-    var company = task.companies[options.companyIndex];
+    var company;
+    var companyIndex = typeof options.companyIndexServer === 'number'
+      ? options.companyIndexServer
+      : options.companyIndex;
+
+    if (Array.isArray(task.functions) && task.functions.length)
+    {
+      var taskFunction = task.functions[options.functionIndex];
+
+      if (!taskFunction)
+      {
+        return done(new Error('INPUT'));
+      }
+
+      company = taskFunction.companies[companyIndex];
+    }
+    else
+    {
+      company = task.companies[companyIndex];
+    }
 
     if (!company)
     {
@@ -261,6 +350,11 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       company.count = options.newCount;
     }
 
+    if (task.parent)
+    {
+      this.updateParentCount(task.parent.toString());
+    }
+
     this.markModified('tasks');
     this.calcTotals();
     this.set({
@@ -269,6 +363,86 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     });
     this.save(done);
   };
+
+  fteLeaderEntrySchema.methods.updateParentCount = function(parentId)
+  {
+    var parentTask = null;
+    var childTasks = [];
+
+    lodash.forEach(this.tasks, function(task)
+    {
+      if (task.parent && task.parent.toString() === parentId)
+      {
+        childTasks.push(task);
+      }
+      else if (task.id.toString() === parentId)
+      {
+        parentTask = task;
+      }
+    });
+
+    if (parentTask === null)
+    {
+      return;
+    }
+
+    lodash.forEach(childTasks, function(childTask, taskIndex)
+    {
+      lodash.forEach(childTask.functions, function(taskFunction, functionIndex)
+      {
+        lodash.forEach(taskFunction.companies, function(taskCompany, companyIndex)
+        {
+          var parentCompany = parentTask.functions[functionIndex].companies[companyIndex];
+          var count = taskCompany.count;
+
+          if (taskIndex === 0)
+          {
+            parentCompany.count = lodash.cloneDeep(count);
+          }
+          else if (Array.isArray(count))
+          {
+            lodash.forEach(count, function(divisionCount, divisionIndex)
+            {
+              parentCompany.count[divisionIndex].value += divisionCount.value;
+            });
+          }
+          else
+          {
+            parentCompany.count += count;
+          }
+        });
+      });
+    });
+  };
+
+  function getProdFunctionCompanyEntries(prodFunction)
+  {
+    var companies = [];
+
+    prodFunction.companies.forEach(function(companyId)
+    {
+      var company = app.companies.modelsById[companyId];
+
+      if (company && company.fteLeaderPosition > -1)
+      {
+        companies.push(company);
+      }
+    });
+
+    return companies
+      .sort(function(a, b)
+      {
+        return a.fteLeaderPosition - b.fteLeaderPosition;
+      })
+      .map(function(company)
+      {
+        return {
+          id: company._id,
+          name: company.name,
+          count: 0
+        };
+      });
+  }
 
   mongoose.model('FteLeaderEntry', fteLeaderEntrySchema);
 };

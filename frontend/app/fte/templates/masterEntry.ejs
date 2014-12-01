@@ -23,7 +23,7 @@
       <tr>
         <th class="fte-masterEntry-column-task" rowspan="4"><%- t('fte', 'masterEntry:column:task') %>
         <th class="fte-masterEntry-column-noPlan even" rowspan="4"><%- t('fte', 'masterEntry:column:noPlan') %>
-        <th colspan="2"><%- t('fte', 'masterEntry:column:total') %></th>
+        <th colspan="<%- companyCount %>"><%- t('fte', 'masterEntry:column:total') %></th>
         <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
         <th class="fte-masterEntry-column-prodFunction <%- functionIndex % 2 ? '' : 'even' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>" data-column="<%- functionIndex %>"><%- totalByProdFunction[prodFunctionId].prodFunction %></th>
         <% }) %>

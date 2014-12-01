@@ -216,12 +216,11 @@ module.exports = function(mongoose, options, done)
     );
 
     var leaderConditions = {
-      date: {$gte: this.from, $lt: this.to},
-      'totals.overall': {$gt: 0}
+      date: {$gte: this.from, $lt: this.to}
     };
 
     var fteLeaderEntryStream = FteLeaderEntry
-      .find(leaderConditions, {_id: 0, date: 1, prodDivisionCount: 1, totals: 1, tasks: 1})
+      .find(leaderConditions, {_id: 0, date: 1, tasks: 1})
       .lean()
       .stream();
 
@@ -459,28 +458,48 @@ function handleFteLeaderEntryStream(options, fteRatios, results, stream, done)
     {
       var task = fteLeaderEntry.tasks[taskI];
 
-      for (var companyI = 0, companyL = task.companies.length; companyI < companyL; ++companyI)
+      if (options.prodTasks[task.id] === undefined)
       {
-        var company = task.companies[companyI];
-        var divided = Array.isArray(company.count);
-        var count = divided ? getDivisionCount(options.division, company.count) : company.count;
+        options.prodTasks[task.id] = {
+          label: task.name,
+          color: '#eeee00'
+        };
+      }
 
-        addToProperty(
-          results.dirIndir.storageByProdTasks,
-          task.id,
-          count * ratios[divided ? 'divided' : 'undivided']
-        );
+      if (task.childCount > 0)
+      {
+        continue;
+      }
 
-        if (options.prodTasks[task.id] === undefined)
+      if (Array.isArray(task.functions) && task.functions.length)
+      {
+        for (var functionI = 0, functionL = task.functions.length; functionI < functionL; ++functionI)
         {
-          options.prodTasks[task.id] = {
-            label: task.name,
-            color: '#eeee00'
-          };
+          countStorageByProdTasks(options.division, task, task.functions[functionI].companies, ratios, results);
         }
+      }
+      else
+      {
+        countStorageByProdTasks(options.division, task, task.companies, ratios, results);
       }
     }
   });
+}
+
+function countStorageByProdTasks(division, task, taskCompanies, ratios, results)
+{
+  for (var i = 0, l = taskCompanies.length; i < l; ++i)
+  {
+    var company = taskCompanies[i];
+    var divided = Array.isArray(company.count);
+    var count = divided ? getDivisionCount(division, company.count) : company.count;
+
+    addToProperty(
+      results.dirIndir.storageByProdTasks,
+      task.id,
+      count * ratios[divided ? 'divided' : 'undivided']
+    );
+  }
 }
 
 function getDivisionCount(division, divisionsCount)

@@ -84,7 +84,13 @@ module.exports = function(mongoose, options, done)
       var fteLeaderEntryStream = FteLeaderEntry
         .find(
           {date: {$gte: from, $lt: to}},
-          {date: 1, 'tasks.companies.count': 1, 'tasks.id': 1}
+          {
+            date: 1,
+            'tasks.id': 1,
+            'tasks.childCount': 1,
+            'tasks.companies.count': 1,
+            'tasks.functions.companies.count': 1
+          }
         )
         .sort({date: 1})
         .lean()
@@ -424,9 +430,34 @@ module.exports = function(mongoose, options, done)
 
   function countFteLeaderEntryTaskFte(task, division, fte)
   {
-    var inProdProdTask = ignoredProdTasks[task.id] === undefined;
-    var taskCompanies = task.companies;
+    if (task.childCount > 0)
+    {
+      return;
+    }
 
+    if (Array.isArray(task.functions) && task.functions.length > 0)
+    {
+      countFteLeaderEntryTaskFunctionFte(task, division, fte);
+    }
+    else
+    {
+      countFteLeaderEntryTaskCompanyFte(task.companies, ignoredProdTasks[task.id] === undefined, division, fte);
+    }
+  }
+
+  function countFteLeaderEntryTaskFunctionFte(task, division, fte)
+  {
+    var inProdProdTask = ignoredProdTasks[task.id] === undefined;
+    var taskFunctions = task.functions;
+
+    for (var i = 0, l = taskFunctions.length; i < l; ++i)
+    {
+      countFteLeaderEntryTaskCompanyFte(taskFunctions[i].companies, inProdProdTask, division, fte);
+    }
+  }
+
+  function countFteLeaderEntryTaskCompanyFte(taskCompanies, inProdProdTask, division, fte)
+  {
     for (var i = 0, l = taskCompanies.length; i < l; ++i)
     {
       var taskCompany = taskCompanies[i];
@@ -526,7 +557,6 @@ module.exports = function(mongoose, options, done)
 
   function containsProdFlow(options, task)
   {
-    return !Array.isArray(options.prodFlows)
-      || options.prodFlows.indexOf(task.id.toString()) !== -1;
+    return !Array.isArray(options.prodFlows) || options.prodFlows.indexOf(task.id.toString()) !== -1;
   }
 };

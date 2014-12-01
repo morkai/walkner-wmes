@@ -1,0 +1,133 @@
+<div class="table-responsive">
+<table class="table table-bordered table-condensed table-hover fte-leaderEntry">
+  <thead>
+    <tr>
+      <th class="fte-leaderEntry-column-task" rowspan="<%- divisions.length ? 6 : 4 %>"><%- t('fte', 'leaderEntry:column:task') %>
+      <th class="fte-leaderEntry-column-total even" colspan="<%- companyCount * (divisions.length || 1) %>"><%- t('fte', 'leaderEntry:column:taskTotal') %></th>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+      <th class="fte-leaderEntry-column-prodFunction <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>" data-column="<%- functionIndex %>"><%- totalByProdFunction[prodFunctionId].prodFunction %></th>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="fte-leaderEntry-total even" colspan="<%- companyCount * (divisions.length || 1) %>"><%- round(total) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+      <th class="fte-leaderEntry-total-prodFunction <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>" class="fte-leaderEntry-total-prodFunction" data-column="<%- functionIndex %>"><%- round(totalByProdFunction[prodFunctionId].total) %>
+      <% }) %>
+    </tr>
+    <tr>
+      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+      <th class="fte-leaderEntry-column-company even" colspan="<%- divisions.length %>"><%- totalByCompany[companyId].name %>
+      <% }) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+      <th class="fte-leaderEntry-column-company <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-column="<%- functionIndex %>:<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>"><%= totalByCompany[companyId].name %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <tr>
+      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+      <th class="fte-leaderEntry-total-company even" colspan="<%- divisions.length %>" data-company="<%- totalByCompany[companyId].index %>"><%- round(totalByCompany[companyId].total) %>
+      <% }) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+      <th class="fte-leaderEntry-total-prodFunction-company <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>" data-column="<%- functionIndex %>:<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>"><%- round(totalByProdFunction[prodFunctionId].companies[companyId].total) %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <% if (divisions.length) { %>
+    <tr>
+      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+      <% divisions.forEach(function(division) { %>
+      <th class="fte-leaderEntry-column-division even"><%- division %>
+      <% }) %>
+      <% }) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+      <% divisions.forEach(function(division, divisionIndex) { %>
+      <th class="fte-leaderEntry-column-division <%- functionIndex % 2 ? 'even' : '' %>" data-column="<%- functionIndex %>:<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>:<%- divisionIndex %>"><%- division %>
+      <% }) %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <tr>
+      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+      <% divisions.forEach(function(division, divisionIndex) { %>
+      <th class="fte-leaderEntry-total-division even" data-column="<%- totalByCompany[companyId].index %>:<%- divisionIndex %>" data-company="<%- totalByCompany[companyId].index %>" data-division="<%- divisionIndex %>"><%- round(totalByCompany[companyId].divisions[division]) %>
+      <% }) %>
+      <% }) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+      <% divisions.forEach(function(division, divisionIndex) { %>
+      <th class="fte-leaderEntry-total-prodFunction-division <%- functionIndex % 2 ? 'even' : '' %>" data-column="<%- functionIndex %>:<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>:<%- divisionIndex %>" data-company="<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>" data-division="<%- divisionIndex %>"><%- round(totalByProdFunction[prodFunctionId].companies[companyId].divisions[division]) %>
+      <% }) %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <% } %>
+  </thead>
+  <tbody>
+    <% tasks.forEach(function(task) { %>
+    <tr class="<%- task.parent ? 'is-child' : task.hasChildren ? 'is-parent' : 'is-single' %> <%- task.lastChild ? 'is-last-child' : '' %>">
+      <td class="fte-leaderEntry-cell-task">
+        <% if (task.parent) { %>
+        <%- task.lastChild ? '┗' : '┣' %>
+        <% } %>
+        <%= task.name %>
+      <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
+      <% if (task.fteDiv) { %>
+      <% divisions.forEach(function(divisionId, divisionIndex) { %>
+      <td class="fte-leaderEntry-total-company-task even" data-companyId="<%- task.totalByCompany[companyId].index %>" data-company="<%- task.totalByCompany[companyId].index %>" data-divisionId="<%- divisionId %>" data-division="<%- divisionIndex %>"><%- round(task.totalByCompany[companyId].divisions[divisionId]) %></td>
+      <% }) %>
+      <% } else { %>
+      <td class="fte-leaderEntry-total-company-task even" colspan="<%- divisions.length %>" data-company="<%- task.totalByCompany[companyId].index %>"><%- round(task.totalByCompany[companyId].total) %></td>
+      <% } %>
+      <% }) %>
+      <% task.functions.forEach(function(prodFunction, functionIndex) { %>
+      <% prodFunction.companies.forEach(function(company, companyIndex) { %>
+      <% if (task.fteDiv) { %>
+      <% company.count.forEach(function(companyCount, divisionIndex) { %>
+      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : '' %> <%- functionIndex % 2 ? 'even' : '' %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-division="<%- divisionIndex %>">
+        <% if (editable && !task.hasChildren) { %>
+        <input
+          class="form-control no-controls fte-leaderEntry-count"
+          type="number"
+          min="0"
+          max="9999"
+          value="<%- companyCount.value %>"
+          data-value="<%- companyCount.value %>"
+          data-task="<%- task.index %>"
+          data-function="<%- functionIndex %>"
+          data-company="<%- company.index %>"
+          data-company-server="<%- companyIndex %>"
+          data-division="<%- divisionIndex %>">
+        <% } else { %>
+        <%- round(companyCount.value) %>
+        <% } %>
+      </td>
+      <% }) %>
+      <% } else { %>
+      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : '' %> <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>">
+        <% if (editable && !task.hasChildren) { %>
+        <input
+          class="form-control no-controls fte-leaderEntry-count"
+          type="number"
+          min="0"
+          max="9999"
+          value="<%- company.count %>"
+          data-value="<%- company.count %>"
+          data-task="<%- task.index %>"
+          data-function="<%- functionIndex %>"
+          data-company="<%- company.index %>"
+          data-company-server="<%- companyIndex %>">
+        <% } else { %>
+        <%- round(company.count) %>
+        <% } %>
+      </td>
+      <% } %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+</div>
