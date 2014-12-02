@@ -29,6 +29,8 @@ define([
 
     pageId: 'fteLeaderEntryDetailsPrintable',
 
+    landscape: true,
+
     hdLeft: function()
     {
       var subdivision = subdivisions.get(this.model.get('subdivision'));

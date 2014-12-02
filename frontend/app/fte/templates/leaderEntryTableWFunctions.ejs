@@ -1,5 +1,5 @@
 <div class="table-responsive">
-<table class="table table-bordered table-condensed table-hover fte-leaderEntry">
+<table class="table table-bordered table-condensed table-hover fte-leaderEntry <%- editable ? 'is-editable' : '' %>">
   <thead>
     <tr>
       <th class="fte-leaderEntry-column-task" rowspan="<%- divisions.length ? 6 : 4 %>"><%- t('fte', 'leaderEntry:column:task') %>
@@ -11,7 +11,7 @@
     <tr>
       <th class="fte-leaderEntry-total even" colspan="<%- companyCount * (divisions.length || 1) %>"><%- round(total) %>
       <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-      <th class="fte-leaderEntry-total-prodFunction <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>" class="fte-leaderEntry-total-prodFunction" data-column="<%- functionIndex %>"><%- round(totalByProdFunction[prodFunctionId].total) %>
+      <th class="fte-leaderEntry-total-prodFunction <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>" data-column="<%- functionIndex %>"><%- round(totalByProdFunction[prodFunctionId].total) %>
       <% }) %>
     </tr>
     <tr>

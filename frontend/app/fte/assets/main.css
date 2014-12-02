@@ -56,12 +56,14 @@ th.fte-leaderEntry-column-task {
 }
 .fte-leaderEntry-cell-task {
   text-align: left;
+}
+.fte-leaderEntry .fte-leaderEntry-cell-task {
   min-width: 400px;
 }
 .fte-leaderEntry .is-parent {
   font-style: oblique;
 }
-.fte-leaderEntry .is-parent > td {
+.fte-leaderEntry.is-editable .is-parent > td {
   height: 45px;
 }
 .fte-leaderEntry tbody > tr > td {
@@ -74,7 +76,7 @@ th.fte-leaderEntry-column-task {
 .fte-leaderEntry tbody > tr.is-last-child > td {
   border-bottom-width: 3px;
 }
-.fte-leaderEntry-total-division {
+.is-editable .fte-leaderEntry-total-division {
   min-width: 60px;
 }
 .fte-leaderEntry-print th {
@@ -88,7 +90,7 @@ th.fte-leaderEntry-column-task {
   text-align: center;
 }
 .fte-leaderEntry-print td:first-child,
-.fte-leaderEntry-print th:first-child{
+.fte-leaderEntry-print thead > tr:first-child > th:first-child{
   text-align: left;
 }
 .fte-leaderEntry-print-total {

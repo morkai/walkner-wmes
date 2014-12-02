@@ -5,19 +5,24 @@
 define([
   'underscore',
   'app/core/views/PrintableListView',
-  'app/fte/templates/printableLeaderEntryList',
+  'app/fte/templates/printableLeaderEntryListWoFunctions',
+  'app/fte/templates/printableLeaderEntryListWFunctions',
   '../util/fractions'
 ], function(
   _,
   PrintableListView,
-  printableLeaderEntryListTemplate,
+  templateWoFunctions,
+  templateWFunctions,
   fractionsUtil
 ) {
   'use strict';
 
   return PrintableListView.extend({
 
-    template: printableLeaderEntryListTemplate,
+    template: function(data)
+    {
+      return data.totalByProdFunction === null ? templateWoFunctions(data) : templateWFunctions(data);
+    },
 
     serialize: function()
     {

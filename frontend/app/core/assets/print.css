@@ -19,6 +19,12 @@ body.print {
 .print-page.print-page-fit {
   height: 1122px;
 }
+.print-page.is-landscape {
+  width: 1122px;
+}
+.print-page.print-page-fit.is-landscape {
+  height: 792px;
+}
 .print-page-hd {
   margin-bottom: 5mm;
   padding-bottom: 5mm;
@@ -51,6 +57,9 @@ body.print {
 .print-page-bd-container {
   width: 715px;
   overflow: hidden;
+}
+.is-landscape > .print-page-bd-container {
+  width: 1044px;
 }
 .print-page-bd .table-bordered,
 .print-page-bd .table-bordered th,

@@ -1,0 +1,99 @@
+<table class="table table-bordered table-condensed table-hover fte-leaderEntry-print">
+  <thead>
+    <tr>
+      <th class="fte-leaderEntry-column-task" rowspan="<%- divisions.length ? 6 : 4 %>"><%- t('fte', 'leaderEntry:column:task') %>
+      <th class="fte-leaderEntry-column-total even" colspan="<%- companyCount * (divisions.length || 1) %>"><%- t('fte', 'leaderEntry:column:taskTotal') %></th>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+      <th class="fte-leaderEntry-column-prodFunction" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>"><%- totalByProdFunction[prodFunctionId].prodFunction %></th>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="fte-leaderEntry-total even" colspan="<%- companyCount * (divisions.length || 1) %>"><%- round(total) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+      <th class="fte-leaderEntry-total-prodFunction" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>"><%- round(totalByProdFunction[prodFunctionId].total) %>
+      <% }) %>
+    </tr>
+    <tr>
+      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+      <th class="fte-leaderEntry-column-company even" colspan="<%- divisions.length %>"><%- totalByCompany[companyId].name %>
+      <% }) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+      <th class="fte-leaderEntry-column-company" colspan="<%- divisions.length %>"><%= totalByCompany[companyId].name %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <tr>
+      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+      <th class="fte-leaderEntry-total-company" colspan="<%- divisions.length %>"><%- round(totalByCompany[companyId].total) %>
+      <% }) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+      <th class="fte-leaderEntry-total-prodFunction-company" colspan="<%- divisions.length %>"><%- round(totalByProdFunction[prodFunctionId].companies[companyId].total) %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <% if (divisions.length) { %>
+    <tr>
+      <% Object.keys(totalByCompany).forEach(function() { %>
+      <% divisions.forEach(function(division) { %>
+      <th class="fte-leaderEntry-column-division"><%- division %>
+      <% }) %>
+      <% }) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+      <% divisions.forEach(function(division) { %>
+      <th class="fte-leaderEntry-column-division"><%- division %>
+      <% }) %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <tr>
+      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
+      <% divisions.forEach(function(division) { %>
+      <th class="fte-leaderEntry-total-division"><%- round(totalByCompany[companyId].divisions[division]) %>
+      <% }) %>
+      <% }) %>
+      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
+      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+      <% divisions.forEach(function(division) { %>
+      <th class="fte-leaderEntry-total-prodFunction-division"><%- round(totalByProdFunction[prodFunctionId].companies[companyId].divisions[division]) %>
+      <% }) %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <% } %>
+  </thead>
+  <tbody>
+    <% tasks.forEach(function(task) { %>
+    <tr class="<%- task.parent ? 'is-child' : task.hasChildren ? 'is-parent' : 'is-single' %> <%- task.lastChild ? 'is-last-child' : '' %>">
+      <td class="fte-leaderEntry-cell-task">
+        <% if (task.parent) { %>
+        <%- task.lastChild ? '┗' : '┣' %>
+        <% } %>
+        <%= task.name %>
+      </td>
+      <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
+      <% if (task.fteDiv) { %>
+      <% divisions.forEach(function(divisionId, divisionIndex) { %>
+      <td><%- round(task.totalByCompany[companyId].divisions[divisionId]) %></td>
+      <% }) %>
+      <% } else { %>
+      <td colspan="<%- divisions.length %>"><%- round(task.totalByCompany[companyId].total) %></td>
+      <% } %>
+      <% }) %>
+      <% task.functions.forEach(function(prodFunction, functionIndex) { %>
+      <% prodFunction.companies.forEach(function(company, companyIndex) { %>
+      <% if (task.fteDiv) { %>
+      <% company.count.forEach(function(companyCount) { %>
+      <td><%- round(companyCount.value) %></td>
+      <% }) %>
+      <% } else { %>
+      <td colspan="<%- divisions.length %>"><%- round(company.count) %></td>
+      <% } %>
+      <% }) %>
+      <% }) %>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
