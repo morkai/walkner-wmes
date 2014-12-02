@@ -12,11 +12,7 @@ module.exports = function setUpUpdaterCommands(app, updaterModule)
 
   sio.sockets.on('connection', function(socket)
   {
-    socket.emit('updater.versions', {
-      package: updaterModule.package.version,
-      backend: updaterModule.package.backendVersion,
-      frontend: updaterModule.package.frontendVersion
-    });
+    socket.emit('updater.versions', updaterModule.getVersions());
 
     socket.on('updater.pull', function(reply)
     {

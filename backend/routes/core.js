@@ -55,11 +55,7 @@ module.exports = function startCoreRoutes(app, express)
     var sessionUser = req.session.user;
     var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
     var appData = {
-      VERSIONS: JSON.stringify(!updaterModule ? {} : {
-        package: updaterModule.package.version,
-        backend: updaterModule.package.backendVersion,
-        frontend: updaterModule.package.frontendVersion
-      }),
+      VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
       TIME: JSON.stringify(Date.now()),
       LOCALE: JSON.stringify(locale),
       ROOT_USER: ROOT_USER,
@@ -72,7 +68,6 @@ module.exports = function startCoreRoutes(app, express)
     lodash.forEach(app.options.dictionaryModules, function(appDataKey, moduleName)
     {
       var models = app[moduleName].models;
-      var dictionaryModels = [];
 
       if (models.length === 0)
       {
@@ -122,8 +117,8 @@ module.exports = function startCoreRoutes(app, express)
 
   function setUpFrontendVersionUpdater(topicPrefix)
   {
-    app.broker.subscribe(topicPrefix + '.added', app.updater.updateFrontendVersion);
-    app.broker.subscribe(topicPrefix + '.edited', app.updater.updateFrontendVersion);
-    app.broker.subscribe(topicPrefix + '.deleted', app.updater.updateFrontendVersion);
+    app.broker.subscribe(topicPrefix + '.added', updaterModule.updateFrontendVersion);
+    app.broker.subscribe(topicPrefix + '.edited', updaterModule.updateFrontendVersion);
+    app.broker.subscribe(topicPrefix + '.deleted', updaterModule.updateFrontendVersion);
   }
 };

@@ -6,7 +6,6 @@
 
 module.exports = function setUpUpdaterRoutes(app, updaterModule)
 {
-
   var express = app[updaterModule.config.expressId];
 
   express.get('/manifest.appcache', function(req, res)
@@ -17,8 +16,6 @@ module.exports = function setUpUpdaterRoutes(app, updaterModule)
     }
 
     res.type('text/cache-manifest');
-    res.send(updaterModule.manifest.replace(
-      '{version}', 'v' + updaterModule.package.frontendVersion
-    ));
+    res.send(updaterModule.manifest.replace('{version}', 'v' + updaterModule.getFrontendVersion()));
   });
 };

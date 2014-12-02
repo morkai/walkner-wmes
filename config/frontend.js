@@ -219,7 +219,8 @@ exports.updater = {
     exe: 'git.exe',
     cwd: __dirname + '/../',
     timeout: 30000
-  }
+  },
+  versionsKey: 'wmes'
 };
 
 exports.reports = {

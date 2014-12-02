@@ -5,6 +5,7 @@
 'use strict';
 
 var fs = require('fs');
+var lodash = require('lodash');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var expressMiddleware = require('./expressMiddleware');
@@ -13,6 +14,9 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   sioId: 'sio',
   packageJsonPath: 'package.json',
+  versionsKey: 'wmes',
+  backendVersionKey: 'backend',
+  frontendVersionKey: 'frontend',
   manifestPath: null,
   restartDelay: 15000,
   errorTemplate: 'error503',
@@ -34,13 +38,43 @@ exports.start = function startUpdaterModule(app, module)
 
   module.restarting = 0;
 
-  module.manifest = module.config.manifestPath
-    ? fs.readFileSync(module.config.manifestPath, 'utf8')
-    : null;
+  module.manifest = module.config.manifestPath ? fs.readFileSync(module.config.manifestPath, 'utf8') : null;
+
+  module.getVersions = function(clone)
+  {
+    if (!module.package.updater)
+    {
+      module.package.updater = {};
+    }
+
+    var updater = module.package.updater;
+    var versionsKey = module.config.versionsKey;
+
+    if (!updater[versionsKey])
+    {
+      updater[versionsKey] = {};
+      updater[versionsKey][module.config.backendVersionKey] = -1;
+      updater[versionsKey][module.config.frontendVersionKey] = -1;
+    }
+
+    updater[versionsKey].package = module.package.version;
+
+    return clone === false ? updater[versionsKey] : lodash.cloneDeep(updater[versionsKey]);
+  };
+
+  module.getBackendVersion = function()
+  {
+    return module.getVersions(false)[module.config.backendVersionKey];
+  };
+
+  module.getFrontendVersion = function()
+  {
+    return module.getVersions(false)[module.config.frontendVersionKey];
+  };
 
   module.updateFrontendVersion = function()
   {
-    module.package.frontendVersion = Date.now();
+    module.getVersions(false)[module.config.frontendVersionKey] = Date.now();
   };
 
   app.broker
@@ -78,41 +112,44 @@ exports.start = function startUpdaterModule(app, module)
   {
     reloadTimer = null;
 
-    var oldBackendVersion = module.package.backendVersion;
-    var oldFrontendVersion = module.package.frontendVersion;
+    var oldBackendVersion = module.getBackendVersion();
+    var oldFrontendVersion = module.getFrontendVersion();
 
     reloadPackageJson();
 
-    if (module.package.backendVersion !== oldBackendVersion)
+    var newBackendVersion = module.getBackendVersion();
+    var newFrontendVersion = module.getFrontendVersion();
+
+    if (newBackendVersion !== oldBackendVersion)
     {
       module.info(
         "Backend version changed from [%s] to [%s]...",
         oldBackendVersion,
-        module.package.backendVersion
+        newBackendVersion
       );
 
-      handleBackendUpdate(oldBackendVersion);
+      handleBackendUpdate(oldBackendVersion, newBackendVersion);
     }
-    else if (module.package.frontendVersion !== oldFrontendVersion)
+    else if (newFrontendVersion !== oldFrontendVersion)
     {
       module.info(
         "Frontend version changed from [%s] to [%s]...",
         oldFrontendVersion,
-        module.package.frontendVersion
+        newFrontendVersion
       );
 
-      handleFrontendUpdate(oldFrontendVersion);
+      handleFrontendUpdate(oldFrontendVersion, newFrontendVersion);
     }
   }
 
-  function handleBackendUpdate(oldBackendVersion)
+  function handleBackendUpdate(oldBackendVersion, newBackendVersion)
   {
-    module.restarting = Date.now();
-
     if (restartTimer !== null)
     {
       return;
     }
+
+    module.restarting = Date.now();
 
     module.info("Restarting in %d seconds...", module.config.restartDelay / 1000);
 
@@ -121,17 +158,17 @@ exports.start = function startUpdaterModule(app, module)
     app.broker.publish('updater.newVersion', {
       service: 'backend',
       oldVersion: oldBackendVersion,
-      newVersion: module.package.backendVersion,
+      newVersion: newBackendVersion,
       delay: module.config.restartDelay
     });
   }
 
-  function handleFrontendUpdate(oldFrontendVersion)
+  function handleFrontendUpdate(oldFrontendVersion, newFrontendVersion)
   {
     app.broker.publish('updater.newVersion', {
       service: 'frontend',
       oldVersion: oldFrontendVersion,
-      newVersion: module.package.frontendVersion
+      newVersion: newFrontendVersion
     });
   }
 
@@ -139,6 +176,6 @@ exports.start = function startUpdaterModule(app, module)
   {
     module.info("Exiting the process...");
 
-    process.nextTick(process.exit.bind(process));
+    setImmediate(process.exit.bind(process));
   }
 };
