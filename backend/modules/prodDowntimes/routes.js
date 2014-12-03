@@ -571,7 +571,28 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
         if (pd._id !== prodDowntime._id && startedAt < pd.finishedAt && finishedAt > pd.startedAt)
         {
-          return done(express.createHttpError('OVERLAPPING_DOWNTIMES', 400));
+          var pdStartedAt = moment(pd.startedAt).milliseconds(0).valueOf();
+          var pdFinishedAt = moment(pd.finishedAt).milliseconds(0).valueOf();
+          var newStartedAt = moment(startedAt).milliseconds(0).valueOf();
+          var newFinishedAt = moment(startedAt).milliseconds(0).valueOf();
+
+          if (newStartedAt === pdFinishedAt)
+          {
+            startedAt = new Date(pd.finishedAt.getTime() + 1);
+          }
+
+          if (newFinishedAt === pdStartedAt)
+          {
+            finishedAt = new Date(pd.startedAt.getTime() - 1);
+          }
+
+          if (startedAt < pd.finishedAt && finishedAt > pd.startedAt)
+          {
+            return done(express.createHttpError('OVERLAPPING_DOWNTIMES', 400));
+          }
+
+          changes.startedAt = startedAt;
+          changes.finishedAt = finishedAt;
         }
       }
 
