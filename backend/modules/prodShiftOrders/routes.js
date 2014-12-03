@@ -411,7 +411,28 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
         if (pso._id !== prodShiftOrder._id && startedAt < pso.finishedAt && finishedAt > pso.startedAt)
         {
-          return done(express.createHttpError('OVERLAPPING_ORDERS', 400));
+          var psoStartedAt = moment(pso.startedAt).milliseconds(0).valueOf();
+          var psoFinishedAt = moment(pso.finishedAt).milliseconds(0).valueOf();
+          var newStartedAt = moment(startedAt).milliseconds(0).valueOf();
+          var newFinishedAt = moment(startedAt).milliseconds(0).valueOf();
+
+          if (newStartedAt === psoFinishedAt)
+          {
+            startedAt = new Date(pso.finishedAt.getTime() + 1);
+          }
+
+          if (newFinishedAt === psoStartedAt)
+          {
+            finishedAt = new Date(pso.startedAt.getTime() - 1);
+          }
+
+          if (startedAt < pso.finishedAt && finishedAt > pso.startedAt)
+          {
+            return done(express.createHttpError('OVERLAPPING_ORDERS', 400));
+          }
+
+          changes.startedAt = startedAt;
+          changes.finishedAt = finishedAt;
         }
       }
 
