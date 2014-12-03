@@ -71,9 +71,7 @@ exports.events = {
     debug: [
       'app.started',
       'users.login', 'users.logout',
-      '*.added', '*.edited',
-      'fte.leader.created', 'fte.master.created',
-      'hourlyPlans.created'
+      '*.added', '*.edited'
     ],
     info: [
       'events.**',
@@ -92,7 +90,10 @@ exports.events = {
     error: [
       '*.syncFailed'
     ]
-  }
+  },
+  blacklist: [
+    'pressWorksheets.added'
+  ]
 };
 
 exports.httpServer = {

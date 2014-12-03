@@ -14,6 +14,7 @@ exports.DEFAULT_CONFIG = {
   collection: function(app) { return app.mongodb.db.collection('events'); },
   insertDelay: 1000,
   topics: ['events.**'],
+  blacklist: [],
   print: []
 };
 
@@ -131,6 +132,11 @@ exports.start = function startEventsModule(app, module)
     if (topic === 'events.saved')
     {
       return fetchAllTypes();
+    }
+
+    if (module.config.blacklist.indexOf(topic) !== -1)
+    {
+      return;
     }
 
     var user = null;
