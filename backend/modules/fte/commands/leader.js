@@ -67,9 +67,16 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
           return this.skip(new Error('AUTH'));
         }
       },
-      function updateCountStep()
+      function updateStep()
       {
-        fteEntry.updateCount(update.data, update.userInfo, this.next());
+        if (update.type === 'comment')
+        {
+          fteEntry.updateComment(update.data, update.userInfo, this.next());
+        }
+        else
+        {
+          fteEntry.updateCount(update.data, update.userInfo, this.next());
+        }
       },
       function sendResponseStep(err)
       {
@@ -119,6 +126,46 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
       }
 
       fteEntryToUpdateQueue[data._id].push({
+        type: 'count',
+        user: user,
+        userInfo: userModule.createUserInfo(user, socket),
+        data: data,
+        reply: reply
+      });
+
+      updateNext(data._id, null);
+    },
+    updateComment: function(socket, data, reply)
+    {
+      if (!lodash.isFunction(reply))
+      {
+        reply = function()
+        {
+        };
+      }
+
+      if (!lodash.isObject(data)
+        || !lodash.isString(data._id)
+        || !lodash.isNumber(data.taskIndex)
+        || !lodash.isString(data.comment))
+      {
+        return reply(new Error('INPUT'));
+      }
+
+      var user = socket.handshake.user;
+
+      if (!canManage(user, FteLeaderEntry))
+      {
+        return reply(new Error('AUTH'));
+      }
+
+      if (!fteEntryToUpdateQueue[data._id])
+      {
+        fteEntryToUpdateQueue[data._id] = [];
+      }
+
+      fteEntryToUpdateQueue[data._id].push({
+        type: 'comment',
         user: user,
         userInfo: userModule.createUserInfo(user, socket),
         data: data,

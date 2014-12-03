@@ -18,5 +18,6 @@ module.exports = function setUpFteCommands(app, fteModule)
     socket.on('fte.master.removeAbsentUser', masterCommands.removeAbsentUser.bind(null, socket));
     socket.on('fte.leader.findOrCreate', leaderCommands.findOrCreate.bind(null, socket));
     socket.on('fte.leader.updateCount', leaderCommands.updateCount.bind(null, socket));
+    socket.on('fte.leader.updateComment', leaderCommands.updateComment.bind(null, socket));
   });
 };

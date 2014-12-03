@@ -384,43 +384,50 @@ define([
         return;
       }
 
-      var company;
-
-      if (this.isWithFunctions())
+      if (message.comment === undefined)
       {
-        var taskFunction = task.functions[message.functionIndex];
+        var company;
 
-        if (!taskFunction)
+        if (this.isWithFunctions())
+        {
+          var taskFunction = task.functions[message.functionIndex];
+
+          if (!taskFunction)
+          {
+            return;
+          }
+
+          company = taskFunction.companies[message.companyIndex];
+        }
+        else
+        {
+          company = task.companies[message.companyIndex];
+        }
+
+        if (!company)
         {
           return;
         }
 
-        company = taskFunction.companies[message.companyIndex];
-      }
-      else
-      {
-        company = task.companies[message.companyIndex];
-      }
-
-      if (!company)
-      {
-        return;
-      }
-
-      if (typeof message.divisionIndex === 'number')
-      {
-        var division = company.count[message.divisionIndex];
-
-        if (!division)
+        if (typeof message.divisionIndex === 'number')
         {
-          return;
-        }
+          var division = company.count[message.divisionIndex];
 
-        division.value = message.newCount;
+          if (!division)
+          {
+            return;
+          }
+
+          division.value = message.newCount;
+        }
+        else
+        {
+          company.count = message.newCount;
+        }
       }
       else
       {
-        company.count = message.newCount;
+        task.comment = message.comment;
       }
 
       if (!silent)

@@ -61,23 +61,50 @@ th.fte-leaderEntry-column-task {
   min-width: 400px;
 }
 .fte-leaderEntry .is-parent {
-  font-style: oblique;
+  font-weight: bold;
 }
-.fte-leaderEntry.is-editable .is-parent > td {
-  height: 45px;
-}
-.fte-leaderEntry tbody > tr > td {
+.fte-leaderEntry > tbody > tr > td,
+.panel > .fte-leaderEntry > tbody > tr:first-child > td {
+  border-top-width: 3px;
   border-bottom-width: 3px;
 }
 .fte-leaderEntry tbody > tr.is-child > td,
 .fte-leaderEntry tbody > tr.is-parent > td {
+  border-top-width: 1px;
   border-bottom-width: 1px;
 }
 .fte-leaderEntry tbody > tr.is-last-child > td {
+  border-top-width: 1px;
   border-bottom-width: 3px;
+}
+.fte-leaderEntry tbody > tr.is-last-child:last-child > td {
+  border-bottom-width: 0;
 }
 .is-editable .fte-leaderEntry-total-division {
   min-width: 60px;
+}
+.fte-leaderEntry > tbody > tr.fte-leaderEntry-comment > td {
+  border-top-width: 1px!important;
+  border-bottom-width: 1px!important;
+  padding: 0;
+}
+.is-editable > tbody > tr.fte-leaderEntry-comment > td {
+  padding: 5px;
+}
+tr.fte-leaderEntry-comment + .is-parent > td {
+  border-top-width: 3px!important;
+}
+.fte-leaderEntry > tbody > tr.has-visible-comment > td {
+  border-bottom: 1px;
+}
+span.fte-leaderEntry-comment {
+  display: block;
+  padding: 5px;
+  white-space: pre-wrap;
+  font-family: Consolas, monospace;
+  text-align: left;
+  overflow: auto;
+  max-height: 7em;
 }
 .fte-leaderEntry-print th {
   width: 1%;

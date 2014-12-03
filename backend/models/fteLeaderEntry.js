@@ -299,6 +299,25 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     }
   };
 
+  fteLeaderEntrySchema.methods.updateComment = function(options, updater, done)
+  {
+    var task = this.tasks[options.taskIndex];
+
+    if (!task)
+    {
+      return done(new Error('INPUT'));
+    }
+
+    task.comment = typeof options.comment === 'string' ? options.comment.trim() : '';
+
+    this.markModified('tasks');
+    this.set({
+      updatedAt: new Date(),
+      updater: updater
+    });
+    this.save(done);
+  };
+
   fteLeaderEntrySchema.methods.updateCount = function(options, updater, done)
   {
     var task = this.tasks[options.taskIndex];

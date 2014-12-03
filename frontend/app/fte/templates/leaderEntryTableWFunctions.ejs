@@ -7,6 +7,9 @@
       <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
       <th class="fte-leaderEntry-column-prodFunction <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>" data-column="<%- functionIndex %>"><%- totalByProdFunction[prodFunctionId].prodFunction %></th>
       <% }) %>
+      <% if (editable) { %>
+      <th rowspan="<%- divisions.length ? 6 : 4 %>"></th>
+      <% } %>
     </tr>
     <tr>
       <th class="fte-leaderEntry-total even" colspan="<%- companyCount * (divisions.length || 1) %>"><%- round(total) %>
@@ -67,12 +70,13 @@
   </thead>
   <tbody>
     <% tasks.forEach(function(task) { %>
-    <tr class="<%- task.parent ? 'is-child' : task.hasChildren ? 'is-parent' : 'is-single' %> <%- task.lastChild ? 'is-last-child' : '' %>">
+    <tr class="<%- task.parent ? 'is-child' : task.hasChildren ? 'is-parent' : 'is-single' %> <%- task.lastChild ? 'is-last-child' : '' %> <%- task.comment ? 'has-visible-comment' : '' %>">
       <td class="fte-leaderEntry-cell-task">
         <% if (task.parent) { %>
         <%- task.lastChild ? '┗' : '┣' %>
         <% } %>
         <%= task.name %>
+      </td>
       <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
       <% if (task.fteDiv) { %>
       <% divisions.forEach(function(divisionId, divisionIndex) { %>
@@ -126,6 +130,18 @@
       <% } %>
       <% }) %>
       <% }) %>
+      <% if (editable) { %>
+      <td class="fte-leaderEntry-actions"><button class="btn btn-default fte-leaderEntry-toggleComment" tabindex="-1"><i class="fa fa-comment"></i></button></td>
+      <% } %>
+    </tr>
+    <tr class="fte-leaderEntry-comment <%- task.comment ? '' : 'hidden' %>">
+      <td colspan="999">
+        <% if (editable) { %>
+        <textarea class="form-control fte-leaderEntry-comment" rows="2" data-task="<%- task.index %>"><%= task.comment || '' %></textarea>
+        <% } else { %>
+        <span class="fte-leaderEntry-comment"><i class="fa fa-comment"></i> <%= task.comment || '' %></span>
+        <% } %>
+      </td>
     </tr>
     <% }) %>
   </tbody>

@@ -99,7 +99,7 @@ define([
               rowEl.querySelector(
                 '.fte-leaderEntry-total-company-task'
                 + '[data-company="' + dataset.company + '"]'
-                + '[data-divisionindex="' + dataset.division + '"]'
+                + '[data-division="' + dataset.division + '"]'
               ),
               theadEl.querySelector(
                 '.fte-leaderEntry-column-division[data-column="' + funcComp + ':' + dataset.division + '"]'
@@ -126,6 +126,33 @@ define([
         this.$(this.focused).removeClass('is-focused');
 
         this.hideFocusInfoBar();
+      },
+      'click .fte-leaderEntry-toggleComment': function(e)
+      {
+        var $commentBtn = this.$(e.currentTarget);
+        var $taskTr = $commentBtn.closest('tr');
+        var $commentTr = $taskTr.next();
+
+        $commentTr.toggleClass('hidden');
+        $taskTr.toggleClass('has-visible-comment');
+
+        if ($commentTr.hasClass('hidden'))
+        {
+          $commentBtn.find('.fa').removeClass('fa-comment-o').addClass('fa-comment');
+        }
+        else
+        {
+          $commentBtn.find('.fa').removeClass('fa-comment').addClass('fa-comment-o');
+          $commentTr.find('textarea').focus();
+        }
+      },
+      'keyup textarea.fte-leaderEntry-comment': function(e)
+      {
+        this.updateComment(e.target);
+      },
+      'change textarea.fte-leaderEntry-comment': function(e)
+      {
+        this.doUpdateComment(e.target);
       }
     },
 
@@ -186,7 +213,7 @@ define([
     {
       var $nextCell = $current.closest('td').next('td');
 
-      if ($nextCell.length)
+      if ($nextCell.length && !$nextCell.hasClass('fte-leaderEntry-actions'))
       {
         return this.scrollIntoView($nextCell.find('input').select()[0]);
       }
@@ -195,7 +222,7 @@ define([
 
       while ($nextRow.length)
       {
-        if ($nextRow.hasClass('is-parent'))
+        if ($nextRow.hasClass('is-parent') || $nextRow.hasClass('fte-leaderEntry-comment'))
         {
           $nextRow = $nextRow.next();
         }
@@ -350,20 +377,20 @@ define([
 
       if (isChild)
       {
-        $parentTr = $taskTr.prev();
+        $parentTr = $taskTr.prev().prev();
 
         while ($parentTr.length && $parentTr.hasClass('is-child'))
         {
-          $parentTr = $parentTr.prev();
+          $parentTr = $parentTr.prev().prev();
         }
 
-        var $childTr = $parentTr.next();
+        var $childTr = $parentTr.next().next();
 
         while ($childTr.length && $childTr.hasClass('is-child'))
         {
           $childTrs.push($childTr);
 
-          $childTr = $childTr.next();
+          $childTr = $childTr.next().next();
         }
       }
 
@@ -586,6 +613,11 @@ define([
         return;
       }
 
+      if (message.comment !== undefined)
+      {
+        return this.onRemoteCommentEdit(message);
+      }
+
       var selector = '.fte-leaderEntry-count'
         + '[data-company=' + message.companyIndex + ']'
         + '[data-task=' + message.taskIndex + ']';
@@ -618,6 +650,37 @@ define([
       this.model.handleUpdateMessage(message, true);
     },
 
+    onRemoteCommentEdit: function(message)
+    {
+      var $textarea = this.$('textarea.fte-leaderEntry-comment[data-task="' + message.taskIndex + '"]');
+
+      if (!$textarea.length)
+      {
+        return;
+      }
+
+      $textarea.val(message.comment);
+
+      var $commentTr = $textarea.closest('tr');
+      var $taskTr = $commentTr.prev();
+      var $commentBtnIcon = $taskTr.find('.fte-leaderEntry-toggleComment > .fa');
+
+      if ($textarea.comment)
+      {
+        $commentTr.addClass('hidden');
+        $taskTr.removeClass('has-visible-comment');
+        $commentBtnIcon.removeClass('fa-comment-o').addClass('fa-comment');
+      }
+      else
+      {
+        $commentTr.removeClass('hidden');
+        $taskTr.addClass('has-visible-comment');
+        $commentBtnIcon.removeClass('fa-comment').addClass('fa-comment-o');
+      }
+
+      this.model.handleUpdateMessage(message, true);
+    },
+
     onModelDeleted: function(message)
     {
       onModelDeleted(this.broker, this.model, message);
@@ -636,11 +699,11 @@ define([
 
       if (rowEl.classList.contains('is-child'))
       {
-        var parentEl = rowEl.previousElementSibling;
+        var parentEl = rowEl.previousElementSibling.previousElementSibling;
 
         while (parentEl && parentEl.classList.contains('is-child'))
         {
-          parentEl = parentEl.previousElementSibling;
+          parentEl = parentEl.previousElementSibling.previousElementSibling;
         }
 
         task = parentEl.children[0].innerText + ' \\ ' + task.substr(1);
@@ -686,6 +749,38 @@ define([
           $('body').removeClass('is-with-fte-focusInfoBar');
         });
       }, 1);
+    },
+
+    updateComment: function(commentEl)
+    {
+      var taskIndex = parseInt(commentEl.dataset.task, 10);
+      var timerKey = 'updateComment' + taskIndex;
+
+      if (this.timers[timerKey])
+      {
+        clearTimeout(this.timers[timerKey]);
+      }
+
+      this.timers[timerKey] = setTimeout(this.doUpdateComment.bind(this), 5000, commentEl);
+    },
+
+    doUpdateComment: function(commentEl)
+    {
+      var taskIndex = parseInt(commentEl.dataset.task, 10);
+      var timerKey = 'updateComment' + taskIndex;
+
+      if (this.timers[timerKey])
+      {
+        clearTimeout(this.timers[timerKey]);
+        delete this.timers[timerKey];
+      }
+
+      this.socket.emit('fte.leader.updateComment', {
+        socketId: this.socket.getId(),
+        _id: this.model.id,
+        taskIndex: taskIndex,
+        comment: commentEl.value
+      });
     }
 
   });
