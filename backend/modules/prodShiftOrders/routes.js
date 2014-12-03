@@ -161,7 +161,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
             return next(err, null);
           }
 
-          return next(null, logEntry);
+          logEntry.save(next);
         });
       },
       function handleLogEntryStep(err, logEntry)
@@ -253,7 +253,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
             return next(err, null);
           }
 
-          return next(null, logEntry);
+          logEntry.save(next);
         });
       },
       function handleLogEntryStep(err, logEntry)
