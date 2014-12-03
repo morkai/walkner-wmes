@@ -32,7 +32,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
         return this.done(done, err);
       }
-console.log('prodDowntimes.length', prodDowntimes.length);
+
       if (!prodDowntimes.length)
       {
         return this.done(done, null);
@@ -56,8 +56,7 @@ console.log('prodDowntimes.length', prodDowntimes.length);
       for (var i = 0, l = prodDowntimes.length; i < l; ++i)
       {
         var prodDowntime = prodDowntimes[i];
-        if (prodDowntime.prodShiftOrder === null)
-console.log(prodDowntime._id, prodDowntime.startedAt, orderStartedAt, orderFinishedAt);
+
         if (prodDowntime.prodShiftOrder === null
           && prodDowntime.startedAt >= orderStartedAt
           && prodDowntime.startedAt < orderFinishedAt)
