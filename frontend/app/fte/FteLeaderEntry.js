@@ -182,6 +182,8 @@ define([
         task.fteDiv = false;
         task.totalByCompany = {};
 
+        var notParent = task.childCount === 0;
+
         _.forEach(task.functions, function(prodFunction)
         {
           _.forEach(prodFunction.companies, function(company)
@@ -207,8 +209,12 @@ define([
               {
                 totalCount += count.value;
                 task.totalByCompany[company.id].divisions[count.division] = count.value;
-                totalByCompany[company.id].divisions[count.division] += count.value;
-                totalByProdFunction[prodFunction.id].companies[company.id].divisions[count.division] += count.value;
+
+                if (notParent)
+                {
+                  totalByCompany[company.id].divisions[count.division] += count.value;
+                  totalByProdFunction[prodFunction.id].companies[company.id].divisions[count.division] += count.value;
+                }
               });
             }
             else
@@ -220,17 +226,24 @@ define([
               _.forEach(fteDiv, function(divisionId)
               {
                 task.totalByCompany[company.id].divisions[divisionId] = divisionCount;
-                totalByCompany[company.id].divisions[divisionId] += divisionCount;
-                totalByProdFunction[prodFunction.id].companies[company.id].divisions[divisionId] += divisionCount;
+
+                if (notParent)
+                {
+                  totalByCompany[company.id].divisions[divisionId] += divisionCount;
+                  totalByProdFunction[prodFunction.id].companies[company.id].divisions[divisionId] += divisionCount;
+                }
               });
             }
 
             task.totalByCompany[company.id].total += totalCount;
 
-            totalByCompany[company.id].total += totalCount;
+            if (notParent)
+            {
+              totalByCompany[company.id].total += totalCount;
 
-            totalByProdFunction[prodFunction.id].total += totalCount;
-            totalByProdFunction[prodFunction.id].companies[company.id].total += totalCount;
+              totalByProdFunction[prodFunction.id].total += totalCount;
+              totalByProdFunction[prodFunction.id].companies[company.id].total += totalCount;
+            }
           });
         });
 
