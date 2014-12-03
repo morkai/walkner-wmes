@@ -58,6 +58,7 @@
 }
 .prodShifts-timeline .popover {
   max-width: 500px;
+  z-index: 1020;
 }
 .prodShifts-timeline .popover-title {
   padding: 5px;

@@ -1436,6 +1436,10 @@ if (typeof jQuery === 'undefined') {
       var selector = options && options.selector
 
       if (data && option === 'destroy') {
+        if (data.destroy) {
+          data.destroy();
+          return;
+        }
         Object.keys(data).forEach(function(selector) {
           data[selector].destroy();
         });
