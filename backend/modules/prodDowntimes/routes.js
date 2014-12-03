@@ -321,7 +321,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
             return next(err, null);
           }
 
-          return next(null, logEntry);
+          logEntry.save(next);
         });
       },
       function handleLogEntryStep(err, logEntry)
@@ -413,7 +413,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
             return next(err, null);
           }
 
-          return next(null, logEntry);
+          logEntry.save(next);
         });
       },
       function handleLogEntryStep(err, logEntry)
