@@ -55,6 +55,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   express.get('/reports/4;notes', canView, report4NotesRoute.bind(null, app, reportsModule));
 
+  express.post('/reports/4;notes', canView, report4NotesRoute.bind(null, app, reportsModule));
+
   express.get(
     '/reports/5',
     canView,

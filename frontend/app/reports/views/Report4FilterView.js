@@ -8,6 +8,7 @@ define([
   'app/data/divisions',
   'app/core/View',
   'app/core/util/fixTimeRange',
+  'app/core/util/buttonGroup',
   'app/users/util/setUpUserSelect2',
   'app/reports/templates/report4Filter',
   '../util/prepareDateRange'
@@ -17,6 +18,7 @@ define([
   divisions,
   View,
   fixTimeRange,
+  buttonGroup,
   setUpUsersSelect2,
   filterTemplate,
   prepareDateRange
@@ -32,6 +34,7 @@ define([
       {
         e.preventDefault();
 
+        this.toggleDivisions();
         this.changeFilter();
       },
       'click a[data-range]': function(e)
@@ -47,12 +50,48 @@ define([
       {
         this.toggleMode();
         this.toggleSubmit();
+      },
+      'change input[name="divisions[]"]': function()
+      {
+        var divisions = [];
+        var $divisions = this.$('input[name="divisions[]"]');
+
+        $divisions.filter(':checked').each(function()
+        {
+          divisions.push(this.value);
+        });
+
+        this.model.set('divisions', divisions.length === $divisions.length ? [] : divisions);
       }
     },
 
     destroy: function()
     {
       this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
+    },
+
+    serialize: function()
+    {
+      return {
+        idPrefix: this.idPrefix,
+        divisions: divisions
+          .filter(function(division)
+          {
+            return division.get('type') === 'prod';
+          })
+          .sort(function(a, b)
+          {
+            return a.getLabel().localeCompare(b.getLabel());
+          })
+          .map(function(division)
+          {
+            return {
+              id: division.id,
+              label: division.id,
+              title: division.get('description')
+            };
+          })
+      };
     },
 
     afterRender: function()
@@ -73,6 +112,7 @@ define([
 
       this.toggleShift();
       this.toggleMode();
+      this.toggleDivisions();
       this.toggleSubmit();
     },
 
@@ -105,6 +145,19 @@ define([
       }
     },
 
+    toggleDivisions: function()
+    {
+      var $divisions = this.$id('divisions');
+
+      buttonGroup.toggle($divisions);
+
+      if (!$divisions.find('> .active').length)
+      {
+        $divisions.find('> .btn').addClass('active');
+        $divisions.find('input').prop('checked', true);
+      }
+    },
+
     toggleSubmit: function()
     {
       this.$('.filter-actions button').prop(
@@ -120,7 +173,8 @@ define([
         from: time.format(+this.model.get('from'), 'YYYY-MM-DD'),
         to: time.format(+this.model.get('to'), 'YYYY-MM-DD'),
         mode: this.model.get('mode'),
-        shift: this.model.get('shift')
+        shift: this.model.get('shift'),
+        divisions: this.model.get('divisions')
       };
     },
 

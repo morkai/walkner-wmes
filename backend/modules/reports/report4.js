@@ -51,7 +51,6 @@ module.exports = function(mongoose, options, done)
     };
 
     var orderFields = {
-      _id: 0,
       laborTime: 1,
       quantityDone: 1,
       quantityLost: 1,
@@ -127,7 +126,8 @@ function Report4(options)
     },
     notes: {
       count: 0,
-      worksheets: []
+      worksheets: [],
+      orders: []
     }
   };
 
@@ -340,6 +340,7 @@ Report4.prototype.handleProdShiftOrder = function(prodShiftOrder)
   {
     this.results.notes.count += 1;
     this.results.notes.worksheets[prodShiftOrder.pressWorksheet] = true;
+    this.results.notes.orders.push(prodShiftOrder._id);
   }
 
   this.handleEffAndProd(prodShiftOrder, workerCount);

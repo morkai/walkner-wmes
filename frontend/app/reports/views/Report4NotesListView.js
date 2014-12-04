@@ -32,9 +32,15 @@ define([
 
         $icon.addClass('fa-spin');
 
+        var notes = this.model.get('notes');
+
         var req = this.ajax({
-          type: 'GET',
-          url: '/reports/4;notes?' + this.model.query.serializeToString()
+          type: 'POST',
+          url: '/reports/4;notes?' + this.model.query.serializeToString(),
+          data: JSON.stringify({
+            worksheets: notes.worksheets,
+            orders: notes.orders
+          })
         });
 
         req.fail(function()

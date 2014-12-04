@@ -11,8 +11,10 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
 {
   var mongoose = app[reportsModule.config.mongooseId];
 
+  var worksheetIds = Array.isArray(req.body.worksheets) ? req.body.worksheets : [];
+  var orderIds = Array.isArray(req.body.orders) ? req.body.orders : [];
   var userIds = [];
-  var conditions = {
+  var conditions = worksheetIds.length ? {_id: {$in: worksheetIds}} : {
     date: {
       $gte: new Date(helpers.getTime(req.query.from)),
       $lt: new Date(helpers.getTime(req.query.to))
@@ -45,7 +47,11 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
 
   if (mode === 'shift')
   {
-    conditions.shift = parseInt(req.query.shift, 10);
+    if (!worksheetIds.length)
+    {
+      conditions.shift = parseInt(req.query.shift, 10);
+    }
+
     fields.operator = 1;
   }
   else
@@ -56,12 +62,20 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
 
     if (mode === 'masters')
     {
-      conditions['master.id'] = {$in: userIds};
+      if (!worksheetIds.length)
+      {
+        conditions['master.id'] = {$in: userIds};
+      }
+
       fields.master = 1;
     }
     else
     {
-      conditions['operators.id'] = {$in: userIds};
+      if (!worksheetIds.length)
+      {
+        conditions['operators.id'] = {$in: userIds};
+      }
+
       fields.operators = 1;
     }
   }
@@ -99,6 +113,11 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
         var order = orders[ii];
 
         if (!order.notes)
+        {
+          continue;
+        }
+
+        if (orderIds.length && orderIds.indexOf(order.prodShiftOrder) === -1)
         {
           continue;
         }

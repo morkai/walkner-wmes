@@ -11,15 +11,17 @@ module.exports = function report4Route(app, reportsModule, req, res, next)
 {
   var mongoose = app[reportsModule.config.mongooseId];
 
+  var divisions = (typeof req.query.divisions === 'string' ? req.query.divisions : '')
+    .split(',')
+    .filter(function(divisionId) { return divisionId.length; });
+
   var options = {
     fromTime: helpers.getTime(req.query.from),
     toTime: helpers.getTime(req.query.to),
     interval: req.query.interval || 'day',
     mode: req.query.mode,
-    downtimeReasons: helpers.getDowntimeReasons(
-      app[reportsModule.config.downtimeReasonsId].models, true
-    ),
-    subdivisions: getPressSubdivisions(app[reportsModule.config.orgUnitsId]),
+    downtimeReasons: helpers.getDowntimeReasons(app[reportsModule.config.downtimeReasonsId].models, true),
+    subdivisions: getPressSubdivisions(app[reportsModule.config.orgUnitsId], divisions),
     prodNumConstant: reportsModule.prodNumConstant
   };
 
@@ -103,9 +105,13 @@ module.exports = function report4Route(app, reportsModule, req, res, next)
   }
 };
 
-function getPressSubdivisions(orgUnitsModule)
+function getPressSubdivisions(orgUnitsModule, divisions)
 {
   return orgUnitsModule.getAllByType('subdivision')
-    .filter(function(subdivision) { return subdivision.type === 'press'; })
+    .filter(function(subdivision)
+    {
+      return subdivision.type === 'press'
+        && (divisions.length === 0 || divisions.indexOf(subdivision.division) !== -1);
+    })
     .map(helpers.idToStr);
 }
