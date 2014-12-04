@@ -106,15 +106,14 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
     );
   };
 
-  hourlyPlanSchema.statics.recountPlannedQuantities = function(
-    divisionId, shiftId, prodFlowId, activeProdLineIds, done)
+  hourlyPlanSchema.statics.recountPlannedQuantities = function(divisionId, shiftId, prodFlowId, activeProdLineIds, done)
   {
     step(
       function findHourlyPlanStep()
       {
         var firstShiftDate = new Date(shiftId.date.getTime());
 
-        if (shiftId !== 1)
+        if (shiftId.no !== 1)
         {
           firstShiftDate.setHours(6);
         }
@@ -150,8 +149,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
         var l = i + 8;
         var plannedQuantities = flow.hours.slice(i, l);
 
-        mongoose.model('ProdShift')
-          .setPlannedQuantities(activeProdLineIds, shiftId.date, plannedQuantities, done);
+        mongoose.model('ProdShift').setPlannedQuantities(activeProdLineIds, shiftId.date, plannedQuantities, done);
       }
     );
   };
