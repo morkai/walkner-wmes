@@ -32,18 +32,36 @@ module.exports = function setUpActiveProdLines(app, productionModule)
 
   app.broker.subscribe('production.synced.**', function(changes)
   {
-    if (changes.types.indexOf('changeOrder') !== -1)
+    if (changes.types.indexOf('changeOrder') === -1)
     {
-      activateProdLine(changes.prodLine);
+      return;
     }
+
+    var prodShiftOrder = changes.prodShiftOrder;
+
+    if (!prodShiftOrder)
+    {
+      return;
+    }
+
+    activateProdLine(prodShiftOrder.date, prodShiftOrder.prodLine, prodShiftOrder.prodFlow, false);
   });
 
   app.broker.subscribe('shiftChanged', function()
   {
     productionModule.debug("Removing active prod line data...");
 
+    var currentShift = fteModule.getCurrentShift();
+    var currentShiftKey = getShiftKey(currentShift.date);
+    var earlyProdLines = Object.keys(shiftToProdLines[currentShiftKey] || {});
+
     shiftToProdLines = {};
     shiftToProdFlows = {};
+
+    earlyProdLines.forEach(function(prodLineId)
+    {
+      activateProdLine(currentShift.date, prodLineId, null, true);
+    });
   });
 
   app.broker.subscribe('app.started')
@@ -153,8 +171,16 @@ module.exports = function setUpActiveProdLines(app, productionModule)
     );
   }
 
-  function activateProdLine(prodLineId, prodFlowId)
+  function activateProdLine(shiftDate, prodLineId, prodFlowId, reactivation)
   {
+    var currentShift = fteModule.getCurrentShift();
+    var shiftsDiff = shiftDate.getTime() - currentShift.date.getTime();
+
+    if (shiftsDiff < 0)
+    {
+      return productionModule.info("Tried to activate prod line [%s] on shift [%s].", prodLineId, shiftDate);
+    }
+
     if (!prodFlowId)
     {
       prodFlowId = getProdFlowIdByProdLineId(prodLineId);
@@ -165,43 +191,46 @@ module.exports = function setUpActiveProdLines(app, productionModule)
       return;
     }
 
-    var currentShift = fteModule.getCurrentShift();
-    var currentShiftKey = getShiftKey(currentShift.date);
+    var shiftKey = getShiftKey(shiftDate);
 
-    if (!shiftToProdLines[currentShiftKey])
+    if (!shiftToProdLines[shiftKey])
     {
-      shiftToProdLines[currentShiftKey] = {};
-      shiftToProdFlows[currentShiftKey] = {};
+      shiftToProdLines[shiftKey] = {};
+      shiftToProdFlows[shiftKey] = {};
     }
 
-    if (shiftToProdLines[currentShiftKey][prodLineId])
+    if (shiftToProdLines[shiftKey][prodLineId])
     {
       return;
     }
 
-    shiftToProdLines[currentShiftKey][prodLineId] = true;
+    shiftToProdLines[shiftKey][prodLineId] = true;
 
-    if (!shiftToProdFlows[currentShiftKey][prodFlowId])
+    if (!shiftToProdFlows[shiftKey][prodFlowId])
     {
-      shiftToProdFlows[currentShiftKey][prodFlowId] = {};
+      shiftToProdFlows[shiftKey][prodFlowId] = {};
     }
 
-    shiftToProdFlows[currentShiftKey][prodFlowId][prodLineId] = true;
+    shiftToProdFlows[shiftKey][prodFlowId][prodLineId] = true;
 
-    var allActiveProdLines = Object.keys(shiftToProdLines[currentShiftKey]);
-    var activeProdLinesInProdFlow = Object.keys(shiftToProdFlows[currentShiftKey][prodFlowId]);
+    var allActiveProdLines = Object.keys(shiftToProdLines[shiftKey]);
+    var activeProdLinesInProdFlow = Object.keys(shiftToProdFlows[shiftKey][prodFlowId]);
 
     productionModule.debug(
-      "Activated prod line [%s]; in prod flow (%d of all %d): %s (shift [%s])",
+      "%s prod line [%s]; in prod flow (%d of all %d): %s (shift [%s])",
+      reactivation ? 'Reactivated early' : 'Activated',
       prodLineId,
       activeProdLinesInProdFlow.length,
       allActiveProdLines.length,
       activeProdLinesInProdFlow.join(', '),
-      currentShift.date
+      shiftDate
     );
 
     app.broker.publish('production.prodLineActivated', {
-      shiftId: currentShift,
+      shiftId: {
+        date: shiftDate,
+        no: shiftDate.getHours() === 6 ? 1 : shiftDate.getHours() === 14 ? 2 : 3
+      },
       prodLine: prodLineId,
       prodFlow: prodFlowId,
       activeProdLinesInProdFlow: activeProdLinesInProdFlow,
