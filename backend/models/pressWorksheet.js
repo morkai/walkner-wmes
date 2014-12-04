@@ -105,9 +105,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
   {
     this.startedAt = startedAtMoment.toISOString();
 
-    startedAtMoment.add(
-      'ms', Math.floor(unitDuration * this.quantityDone + this.getDowntimeDuration())
-    );
+    startedAtMoment.add(Math.floor(unitDuration * this.quantityDone + this.getDowntimeDuration()), 'ms');
 
     this.finishedAt = lastOrder ? lastOrderFinishedAt : startedAtMoment.toISOString();
   };
