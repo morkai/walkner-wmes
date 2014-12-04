@@ -85,6 +85,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
         fileInfo.stepCount = parserInfo.stepCount;
         fileInfo.step = parseInt(matches[1], 10) || 1;
         fileInfo.timeKey = createTimeKey(fileInfo.timestamp, parserInfo.hourlyInterval);
+        fileInfo.hourlyInterval = parserInfo.hourlyInterval;
 
         return true;
       }
@@ -137,14 +138,13 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
         clearTimeout(importTimers[timeKey]);
       }
 
-      module.debug("Delaying %s (steps=%d)...", timeKey, stepsMap.steps);
+      var delay = createTimeKey(Date.now(), fileInfo.hourlyInterval) === timeKey
+        ? module.config.lateDataDelay
+        : 60000;
 
-      importTimers[timeKey] = setTimeout(
-        enqueueAndImport,
-        createTimeKey(Date.now()) === timeKey ? module.config.lateDataDelay : 60000,
-        timeKey,
-        true
-      );
+      module.debug("Delaying %s by %d ms (steps=%d)...", timeKey, delay, stepsMap.steps);
+
+      importTimers[timeKey] = setTimeout(enqueueAndImport, delay, timeKey, true);
 
       return;
     }
