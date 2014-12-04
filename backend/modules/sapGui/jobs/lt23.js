@@ -11,5 +11,21 @@ module.exports = function runLt23Job(app, sapGuiModule, jobId, done)
     Math.floor(Date.now() / 1000) + '@T_LT23_1.txt'
   ];
 
-  sapGuiModule.runScript(jobId, 'T_LT23.exe', args, done);
+  sapGuiModule.runScript(jobId, 'T_LT23.exe', args, function(err, exitCode)
+  {
+    if (err)
+    {
+      return done(err);
+    }
+
+    if (exitCode === 0)
+    {
+      return done();
+    }
+
+    setTimeout(
+      function() { sapGuiModule.runScript(jobId, 'T_LT23.exe', args, done); },
+      Math.floor(Math.random() * 60001 + 60000)
+    );
+  });
 };
