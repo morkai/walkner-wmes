@@ -3,7 +3,7 @@
 var later = require('later');
 later.date.localTime();
 
-exports.id = 'sapgui';
+exports.id = 'wmes-sapgui';
 
 exports.modules = [
   'directoryWatcher',
