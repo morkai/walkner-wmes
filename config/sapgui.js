@@ -28,15 +28,18 @@ exports.sapGui = {
     },
     {
       name: 'zopp',
-      schedule: later.parse.cron('45 */3 * * 1-5')
+      schedule: later.parse.cron('45 */3 * * 1-5'),
+      repeatOnFailure: 1
     },
     {
       name: 'lt23',
-      schedule: later.parse.cron('10 6 * * 1-5')
+      schedule: later.parse.cron('10 6 * * *'),
+      repeatOnFailure: 1
     },
     {
       name: 'ls41',
-      schedule: later.parse.cron('0 5 * * 1')
+      schedule: later.parse.cron('0 5 * * 1'),
+      repeatOnFailure: 1
     }
   ]
 };
