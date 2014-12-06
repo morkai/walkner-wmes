@@ -4,9 +4,6 @@
 
 'use strict';
 
-var nodemailer = require('nodemailer');
-var request = require('request');
-
 exports.DEFAULT_CONFIG = {
   smtp: null,
   from: 'someone@the.net',
@@ -19,6 +16,9 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startMailSenderModule(app, module)
 {
+  var nodemailer;
+  var request;
+
   if (module.config.smtp && module.config.remoteSenderUrl)
   {
     throw new Error("`smtp` and `remoteSenderUrl` cannot be used at the same time!");
@@ -26,6 +26,14 @@ exports.start = function startMailSenderModule(app, module)
   else if (!module.config.smtp && !module.config.remoteSenderUrl)
   {
     throw new Error("`smtp` or `remoteSenderUrl` must be set!");
+  }
+  else if (module.config.smtp)
+  {
+    nodemailer = require('nodemailer');
+  }
+  else if (module.config.remoteSenderUrl)
+  {
+    request = require('request');
   }
 
   var transport = module.config.smtp ? nodemailer.createTransport(module.config.smtp) : null;
