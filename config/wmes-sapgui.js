@@ -1,8 +1,5 @@
 'use strict';
 
-var later = require('later');
-later.date.localTime();
-
 exports.id = 'wmes-sapgui';
 
 exports.modules = [
@@ -20,26 +17,6 @@ exports['purchaseOrders/exporter'] = {
 };
 
 exports.sapGui = {
-  scriptsPath: 'C:/SAP/Scripts',
-  jobs: [
-    {
-      name: 'keepAlive',
-      schedule: later.parse.text('every 10 min')
-    },
-    {
-      name: 'zopp',
-      schedule: later.parse.cron('45 */3 * * 1-5'),
-      repeatOnFailure: 1
-    },
-    {
-      name: 'lt23',
-      schedule: later.parse.cron('10 6 * * *'),
-      repeatOnFailure: 1
-    },
-    {
-      name: 'ls41',
-      schedule: later.parse.cron('0 5 * * 1'),
-      repeatOnFailure: 1
-    }
-  ]
+  scriptsPath: exports.directoryWatcher.path,
+  jobs: []
 };

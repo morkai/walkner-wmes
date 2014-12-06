@@ -11,21 +11,5 @@ module.exports = function runZoppJob(app, sapGuiModule, jobId, done)
     Math.floor(Date.now() / 1000) + '@T_ZOPP_1.txt'
   ];
 
-  sapGuiModule.runScript(jobId, 'T_ZOPP.exe', args, function(err, exitCode)
-  {
-    if (err)
-    {
-      return done(err);
-    }
-
-    if (exitCode === 0)
-    {
-      return done();
-    }
-
-    setTimeout(
-      function() { sapGuiModule.runScript(jobId, 'T_ZOPP.exe', args, done); },
-      Math.floor(Math.random() * 60001 + 60000)
-    );
-  });
+  sapGuiModule.runScript(jobId, 'T_ZOPP.exe', args, done);
 };
