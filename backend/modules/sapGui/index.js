@@ -18,6 +18,8 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startSapGuiModule(app, sapGuiModule)
 {
+  var lastJobRunTimes = {};
+
   sapGuiModule.jobCount = 0;
 
   sapGuiModule.runJob = function(job, done)
@@ -66,6 +68,20 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   function runJob(job, repeatCounter, done)
   {
+    var startedAt = Date.now();
+    var lastJobRunTime = lastJobRunTimes[job.key] || 0;
+
+    if (startedAt - lastJobRunTime < 1000)
+    {
+      return sapGuiModule.warn(
+        "Stopped a possible duplicate run of job [%s]. Previously run at %s.",
+        job.key,
+        new Date(lastJobRunTime)
+      );
+    }
+
+    lastJobRunTimes[job.key] = startedAt;
+
     ++sapGuiModule.jobCount;
 
     if (typeof done !== 'function')
@@ -73,7 +89,6 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       done = function() {};
     }
 
-    var startedAt = Date.now();
     var jobId = job.name + '#' + sapGuiModule.jobCount;
     var jobDone = false;
 
@@ -135,8 +150,13 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   app.broker.subscribe('app.started').setLimit(1).on('message', function()
   {
-    sapGuiModule.config.jobs.forEach(function(job)
+    sapGuiModule.config.jobs.forEach(function(job, i)
     {
+      if (!job.key)
+      {
+        job.key = job.name + '#' + i;
+      }
+
       later.setInterval(sapGuiModule.runJob.bind(null, job), job.schedule);
     });
   });
