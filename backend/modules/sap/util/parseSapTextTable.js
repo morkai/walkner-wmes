@@ -30,6 +30,7 @@ module.exports = function parseSapTextTable(input, options)
 
   var columnMatchers = options.columnMatchers || {};
   var propertyToColumnIndex = {};
+  var usedColumnIndexes = {};
 
   lodash.forEach(line.split('|'), function(columnName, columnIndex)
   {
@@ -37,9 +38,14 @@ module.exports = function parseSapTextTable(input, options)
 
     lodash.forEach(columnMatchers, function(columnRe, propertyName)
     {
-      if (propertyToColumnIndex[propertyName] === undefined && columnRe.test(columnName))
+      if (!usedColumnIndexes[columnIndex] &&
+        propertyToColumnIndex[propertyName] === undefined
+        && columnRe.test(columnName))
       {
         propertyToColumnIndex[propertyName] = columnIndex;
+        usedColumnIndexes[columnIndex] = true;
+
+        delete columnMatchers[propertyName];
       }
     });
   });
@@ -47,7 +53,7 @@ module.exports = function parseSapTextTable(input, options)
   var propertyList = Object.keys(propertyToColumnIndex);
   var propertyCount = propertyList.length;
 
-  if (propertyCount !== Object.keys(columnMatchers).length)
+  if (Object.keys(columnMatchers).length !== 0)
   {
     return result;
   }
