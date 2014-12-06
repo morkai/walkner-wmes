@@ -4,6 +4,8 @@
 
 'use strict';
 
+var checkOutputFile = require('./checkOutputFile');
+
 module.exports = function runLs41Job(app, sapGuiModule, jobId, done)
 {
   var args = [
@@ -11,5 +13,5 @@ module.exports = function runLs41Job(app, sapGuiModule, jobId, done)
     Math.floor(Date.now() / 1000) + '@T_LS41_1.txt'
   ];
 
-  sapGuiModule.runScript(jobId, 'T_LS41.exe', args, done);
+  sapGuiModule.runScript(jobId, 'T_LS41.exe', args, checkOutputFile.bind(null, done));
 };
