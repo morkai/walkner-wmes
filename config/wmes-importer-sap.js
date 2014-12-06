@@ -92,9 +92,11 @@ exports['reports/clipOrderCount'] = {
 };
 
 exports['warehouse/importer/controlCycles'] = {
+  filterRe: /^T_LS41_[0-9]+\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports['warehouse/importer/transferOrders'] = {
+  filterRe: /^T_LT23_[0-9]+\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
