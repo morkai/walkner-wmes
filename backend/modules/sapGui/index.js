@@ -163,6 +163,11 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   app.broker.subscribe('sapGui.jobDone', function(message)
   {
+    if (message.result === 'success')
+    {
+      return;
+    }
+
     var mailSender = app[sapGuiModule.config.mailSenderId];
     var job = message.job;
 
