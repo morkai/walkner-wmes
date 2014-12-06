@@ -1,6 +1,6 @@
 'use strict';
 
-exports.id = 'attachments';
+exports.id = 'wmes-attachments';
 
 exports.modules = [
   'mongoose',
@@ -26,7 +26,7 @@ exports.events = {
 exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./mongodb').uri,
+  uri: require('./wmes-mongodb').uri,
   options: {
     server: {poolSize: 2}
   },
@@ -52,6 +52,6 @@ exports['mail/listener'] = {
 };
 
 exports['mail/downloader'] = {
-  savePath: __dirname + '/../data/attachments',
+  savePath: __dirname + '/../data/attachments-input',
   timestamp: true
 };

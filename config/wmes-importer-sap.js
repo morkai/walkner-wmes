@@ -1,6 +1,9 @@
 'use strict';
 
-exports.id = 'importer';
+var IMPORT_INPUT_DIR = __dirname + '/../data/attachments-input';
+var IMPORT_OUTPUT_DIR = __dirname + '/../data/attachments-imported';
+
+exports.id = 'wmes-importer-sap';
 
 exports.modules = [
   'mongoose',
@@ -11,6 +14,8 @@ exports.modules = [
   {id: 'orders/importer/orders', name: 'nextDayOrderImporter'},
   {id: 'orders/importer/orders', name: 'prevDayOrderImporter'},
   {id: 'orders/importer/emptyOrders', name: 'emptyOrderImporter'},
+  'warehouse/importer/controlCycles',
+  'warehouse/importer/transferOrders',
   'reports/clipOrderCount'
 ];
 
@@ -33,11 +38,11 @@ exports.events = {
 exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./mongodb').uri,
+  uri: require('./wmes-mongodb').uri,
   options: {
     server: {poolSize: 5}
   },
-  models: ['event', 'order', 'emptyOrder', 'clipOrderCount']
+  models: ['event', 'order', 'emptyOrder', 'clipOrderCount', 'whControlCycleArchive', 'whTransferOrderArchive']
 };
 
 exports['messenger/server'] = {
@@ -53,35 +58,43 @@ exports['messenger/server'] = {
 };
 
 exports.directoryWatcher = {
-  path: __dirname + '/../data/attachments'
+  path: IMPORT_INPUT_DIR
 };
 
 exports.currentDayOrderImporter = {
   orderStepCount: 8,
   operStepCount: 11,
-  parsedOutputDir: __dirname + '/../data/attachments-imported'
+  parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports.nextDayOrderImporter = {
   orderStepCount: 8,
   operStepCount: 11,
   filterRe: /^Job PL02_(ORDER|OPER)_INFO_2D, Step ([0-9]+)\.html?$/,
-  parsedOutputDir: __dirname + '/../data/attachments-imported'
+  parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports.prevDayOrderImporter = {
   orderStepCount: 8,
   operStepCount: 11,
   filterRe: /^Job PL02_(ORDER|OPER)_INFO_3D, Step ([0-9]+)\.html?$/,
-  parsedOutputDir: __dirname + '/../data/attachments-imported'
+  parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports.emptyOrderImporter = {
   orderStepCount: 8,
   operStepCount: 11,
-  parsedOutputDir: __dirname + '/../data/attachments-imported'
+  parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports['reports/clipOrderCount'] = {
   importerId: 'currentDayOrderImporter'
+};
+
+exports['warehouse/importer/controlCycles'] = {
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['warehouse/importer/transferOrders'] = {
+  parsedOutputDir: IMPORT_OUTPUT_DIR
 };

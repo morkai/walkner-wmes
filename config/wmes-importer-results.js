@@ -1,6 +1,6 @@
 'use strict';
 
-exports.id = 'importer-results';
+exports.id = 'wmes-importer-results';
 
 exports.modules = [
   'mongoose',
@@ -29,7 +29,7 @@ exports.events = {
 exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./mongodb').uri,
+  uri: require('./wmes-mongodb').uri,
   options: {
     server: {poolSize: 3}
   },

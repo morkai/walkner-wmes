@@ -1,6 +1,6 @@
 'use strict';
 
-exports.id = 'frontend';
+exports.id = 'wmes-frontend';
 
 exports.modules = [
   'updater',
@@ -40,8 +40,8 @@ exports.modules = [
   'icpo',
   'licenses',
   'factoryLayout',
-  {id: 'messenger/client', name: 'messenger/client:importer'},
-  {id: 'messenger/client', name: 'messenger/client:xiconf'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-importer-results'},
   'httpServer',
   'httpsServer',
   'sio'
@@ -129,7 +129,7 @@ exports.pubsub = {
 exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./mongodb').uri,
+  uri: require('./wmes-mongodb').uri,
   options: {},
   models: [
     'setting', 'event', 'user',
@@ -180,7 +180,7 @@ exports.user = {
   ]
 };
 
-exports['messenger/client:attachments'] = {
+exports['messenger/client:wmes-attachments'] = {
   pubHost: '127.0.0.1',
   pubPort: 60010,
   repHost: '127.0.0.1',
@@ -188,7 +188,7 @@ exports['messenger/client:attachments'] = {
   responseTimeout: 5000
 };
 
-exports['messenger/client:importer'] = {
+exports['messenger/client:wmes-importer-sap'] = {
   pubHost: '127.0.0.1',
   pubPort: 60020,
   repHost: '127.0.0.1',
@@ -196,19 +196,11 @@ exports['messenger/client:importer'] = {
   responseTimeout: 5000
 };
 
-exports['messenger/client:xiconf'] = {
+exports['messenger/client:wmes-importer-results'] = {
   pubHost: '127.0.0.1',
   pubPort: 60030,
   repHost: '127.0.0.1',
   repPort: 60031,
-  responseTimeout: 5000
-};
-
-exports['messenger/client:pos-importer'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60040,
-  repHost: '127.0.0.1',
-  repPort: 60041,
   responseTimeout: 5000
 };
 
