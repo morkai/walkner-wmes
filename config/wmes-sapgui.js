@@ -17,6 +17,6 @@ exports['purchaseOrders/exporter'] = {
 };
 
 exports.sapGui = {
-  scriptsPath: exports.directoryWatcher.path,
+  scriptsPath: 'C:/SAP/Scripts',
   jobs: []
 };
