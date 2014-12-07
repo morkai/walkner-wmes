@@ -28,6 +28,13 @@ exports.start = function startMailListenerModule(app, module)
     .subscribe('app.started', setUpMailListener)
     .setLimit(1);
 
+  app.broker.subscribe('updater.restarting', function()
+  {
+    mailListener.removeAllEventListeners();
+    mailListener.stop();
+    mailListener = null;
+  });
+
   if (module.config.restartMinutes.length)
   {
     setTimeout(checkRestart, 30 * 60 * 1000);
