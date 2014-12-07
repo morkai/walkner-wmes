@@ -42,6 +42,8 @@ exports.modules = [
   'factoryLayout',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-results'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-reports-1'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-reports-2'},
   'httpServer',
   'httpsServer',
   'sio'
@@ -204,6 +206,24 @@ exports['messenger/client:wmes-importer-results'] = {
   responseTimeout: 5000
 };
 
+exports['messenger/client:wmes-reports-1'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60050,
+  repHost: '127.0.0.1',
+  repPort: 60051,
+  pushHost: '127.0.0.1',
+  pushPort: 60052,
+  responseTimeout: 30000
+};
+
+exports['messenger/client:wmes-reports-2'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60060,
+  repHost: '127.0.0.1',
+  repPort: 60061,
+  responseTimeout: 30000
+};
+
 exports.updater = {
   manifestPath: __dirname + '/wmes-manifest.appcache',
   packageJsonPath: __dirname + '/../package.json',
@@ -217,6 +237,8 @@ exports.updater = {
 };
 
 exports.reports = {
+  messengerClientId: 'messenger/client:wmes-reports-1',
+  messengerType: 'push',
   javaBatik: 'java -jar c:/programs/batik/batik-rasterizer.jar'
 };
 
