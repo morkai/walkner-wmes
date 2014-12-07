@@ -71,7 +71,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
     var startedAt = Date.now();
     var lastJobRunTime = lastJobRunTimes[job.key] || 0;
 
-    if (startedAt - lastJobRunTime < 1000)
+    if (startedAt - lastJobRunTime < 5000)
     {
       return sapGuiModule.warn(
         "Stopped a possible duplicate run of job [%s]. Previously run at %s.",
