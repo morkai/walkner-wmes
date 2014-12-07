@@ -16,6 +16,7 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
   var XiconfOrder = mongoose.model('XiconfOrder');
   var XiconfResult = mongoose.model('XiconfResult');
 
+  var RESULTS_BATCH_SIZE = 1000;
   var FILTER_RE = /^(.*?)@[a-z0-9]{32}\.zip$/;
 
   var importing = false;
@@ -271,16 +272,23 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
 
     xiconfModule.debug("Updating the models...");
 
-    for (var i = 0, l = this.orders.length; i < l; ++i)
+    var i;
+    var l;
+
+    for (i = 0, l = this.orders.length; i < l; ++i)
     {
       XiconfOrder.collection.update(
         {_id: this.orders[i]._id}, this.orders[i], {upsert: true}, this.parallel()
       );
     }
 
-    if (this.results.length)
+    for (i = 0, l = Math.ceil(this.results.length / RESULTS_BATCH_SIZE); i < l; ++i)
     {
-      XiconfResult.collection.insert(this.results, {continueOnError: true}, this.parallel());
+      XiconfResult.collection.insert(
+        this.results.slice(i * RESULTS_BATCH_SIZE, i * RESULTS_BATCH_SIZE + RESULTS_BATCH_SIZE),
+        {continueOnError: true},
+        this.parallel()
+      );
     }
   }
 
