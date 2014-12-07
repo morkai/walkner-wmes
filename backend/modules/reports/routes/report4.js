@@ -92,7 +92,7 @@ module.exports = function report4Route(app, reportsModule, req, res, next)
 
   function report()
   {
-    report4(mongoose, options, function(err, report)
+    helpers.generateReport(app, reportsModule, report4, '4', req.reportHash, options, function(err, reportJson)
     {
       if (err)
       {
@@ -100,7 +100,7 @@ module.exports = function report4Route(app, reportsModule, req, res, next)
       }
 
       res.type('json');
-      res.send(helpers.cacheReport('4', req, report));
+      res.send(reportJson);
     });
   }
 };

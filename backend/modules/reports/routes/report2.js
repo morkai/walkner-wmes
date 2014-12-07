@@ -48,7 +48,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     return next(new Error('INVALID_TIME'));
   }
 
-  report2(app[reportsModule.config.mongooseId], options, function(err, report)
+  helpers.generateReport(app, reportsModule, report2, '2', req.reportHash, options, function(err, reportJson)
   {
     if (err)
     {
@@ -56,7 +56,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     }
 
     res.type('json');
-    res.send(helpers.cacheReport('2', req, report));
+    res.send(reportJson);
   });
 };
 

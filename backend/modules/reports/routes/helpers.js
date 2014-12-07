@@ -5,9 +5,11 @@
 'use strict';
 
 var crypto = require('crypto');
+var lodash = require('lodash');
 var util = require('../util');
 
 var cachedReports = {};
+var inProgress = {};
 
 exports.clearCachedReports = function(ids)
 {
@@ -40,24 +42,60 @@ exports.sendCachedReport = function(id, req, res, next)
   }
 };
 
-exports.cacheReport = function(id, req, report)
+exports.generateReport = function(app, reportsModule, report, reportId, reportHash, options, done)
 {
-  var reportJson = JSON.stringify(report, null, 2);
-
-  if (req.reportHash)
+  if (inProgress[reportHash] !== undefined)
   {
-    if (cachedReports[id] === undefined)
-    {
-      cachedReports[id] = {};
-    }
-
-    cachedReports[id][req.reportHash] = reportJson;
-
-    scheduleReportCacheExpiration(id, req.reportHash, report.options.fromTime, report.options.toTime);
+    return inProgress[reportHash].push(done);
   }
 
-  return reportJson;
+  inProgress[reportHash] = [done];
+
+  var messengerClient = app[reportsModule.config.messengerClientId];
+
+  if (messengerClient === undefined)
+  {
+    return report(app[reportsModule.config.mongooseId], options, broadcastReport.bind(null, reportId, reportHash));
+  }
+
+  var req = {
+    _id: reportId,
+    hash: reportHash,
+    options: options
+  };
+
+  messengerClient[reportsModule.config.messengerType === 'push' ? 'push' : 'request'](
+    'reports.report', req, broadcastReport.bind(null, reportId, reportHash)
+  );
 };
+
+function broadcastReport(reportId, reportHash, err, report)
+{
+  var reportJson = err ? null : cacheReport(reportId, reportHash, report);
+
+  lodash.forEach(inProgress[reportHash], function(done)
+  {
+    done(err, reportJson);
+  });
+
+  delete inProgress[reportHash];
+}
+
+function cacheReport(reportId, reportHash, report)
+{
+  var reportJson = JSON.stringify(report, null, process.env.NODE_ENV === 'production' ? 0 : 2);
+
+  if (cachedReports[reportId] === undefined)
+  {
+    cachedReports[reportId] = {};
+  }
+
+  cachedReports[reportId][reportHash] = reportJson;
+
+  scheduleReportCacheExpiration(reportId, reportHash, report.options.fromTime, report.options.toTime);
+
+  return reportJson;
+}
 
 function scheduleReportCacheExpiration(id, reportHash, fromTime, toTime)
 {

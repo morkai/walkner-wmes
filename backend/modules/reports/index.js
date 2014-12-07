@@ -16,6 +16,8 @@ exports.DEFAULT_CONFIG = {
   prodTasksId: 'prodTasks',
   downtimeReasonsId: 'downtimeReasons',
   prodFunctionsId: 'prodFunctions',
+  messengerClientId: null,
+  messengerType: 'request',
   javaBatik: null
 };
 
