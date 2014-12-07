@@ -55,6 +55,12 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   var importQueue = [];
   var importTimers = {};
   var importLock = false;
+  var restarting = false;
+
+  app.broker.subscribe('updater.restarting', function()
+  {
+    restarting = true;
+  });
 
   app.broker.subscribe('directoryWatcher.changed', importFile).setFilter(filterFile);
 
@@ -176,7 +182,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function importNext()
   {
-    if (importLock || !importQueue.length)
+    if (importLock || !importQueue.length || restarting)
     {
       return;
     }
