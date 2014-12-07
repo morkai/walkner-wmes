@@ -161,6 +161,8 @@ exports.start = function startUpdaterModule(app, module)
       newVersion: newBackendVersion,
       delay: module.config.restartDelay
     });
+
+    app.broker.publish('updater.restarting');
   }
 
   function handleFrontendUpdate(oldFrontendVersion, newFrontendVersion)
