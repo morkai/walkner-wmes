@@ -15,6 +15,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
   var mongoose = app[icpoModule.config.mongooseId];
   var IcpoResult = mongoose.model('IcpoResult');
 
+  var RESULTS_BATCH_SIZE = 1000;
   var FILTER_RE = /^(.*?)@[a-z0-9]{32}\.zip$/;
 
   var importing = false;
@@ -236,9 +237,13 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
     icpoModule.debug("Updating the models...");
 
-    if (this.results.length)
+    for (var i = 0, l = Math.ceil(this.results.length / RESULTS_BATCH_SIZE); i < l; ++i)
     {
-      IcpoResult.collection.insert(this.results, {continueOnError: true}, this.parallel());
+      IcpoResult.collection.insert(
+        this.results.slice(i * RESULTS_BATCH_SIZE, i * RESULTS_BATCH_SIZE + RESULTS_BATCH_SIZE),
+        {continueOnError: true},
+        this.parallel()
+      );
     }
   }
 
