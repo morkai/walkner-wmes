@@ -56,11 +56,6 @@ module.exports = function parseControlCycles(input, timestamp)
     },
     itemDecorator: function(obj)
     {
-      if (obj.no === '3398000')
-      {
-        console.log(obj);
-      }
-
       if (obj.item === 0 || obj.confDate === null)
       {
         return null;
