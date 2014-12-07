@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(e){var l={locale:{}};l.locale.pl=e;return{"breadcrumbs:logIn":function(){return"Logowanie do systemu"}}});
+define(["app/nls/locale/pl"],function(n){return{"breadcrumbs:logIn":function(){return"Logowanie do systemu"}}});

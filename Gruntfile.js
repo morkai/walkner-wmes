@@ -77,7 +77,7 @@ module.exports = function(grunt)
         dest: './build/frontend',
         ext: '.js',
         options: {
-          helpers: require('./config/frontend').express.ejsAmdHelpers
+          helpers: require('./config/wmes-frontend').express.ejsAmdHelpers
         }
       }
     },

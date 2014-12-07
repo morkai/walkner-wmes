@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Collection","./ProdTask"],function(e,o){return e.extend({model:o,rqlQuery:"select(name,tags,fteDiv,inProd,clipColor)&sort(name)"})});
+define(["../core/Collection","./ProdTask"],function(e,n){return e.extend({model:n,rqlQuery:"sort(parent,name)"})});

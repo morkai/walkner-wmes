@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(e){var r={locale:{}};r.locale.en=e;return{root:{"BREADCRUMBS:browse":function(){return"Purchase orders"},"MSG:LOADING_FAILURE":function(){return"Failed to load the purchase orders :("}},pl:!0}});
+define(["app/nls/locale/en"],function(e){return{root:{"BREADCRUMBS:browse":function(){return"Purchase orders"},"MSG:LOADING_FAILURE":function(){return"Failed to load the purchase orders :("}},pl:!0}});
