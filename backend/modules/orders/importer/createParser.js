@@ -19,6 +19,12 @@ module.exports = function createParser(app, importerModule, callback)
   var parseQueue = [];
   var parseDataTimers = {};
   var parseDataLock = false;
+  var restarting = false;
+
+  app.broker.subscribe('updater.restarting', function()
+  {
+    restarting = true;
+  });
 
   app.broker.subscribe('directoryWatcher.changed', importFile).setFilter(filterFile);
 
@@ -119,7 +125,7 @@ module.exports = function createParser(app, importerModule, callback)
 
   function parseData()
   {
-    if (parseDataLock)
+    if (parseDataLock || restarting)
     {
       return;
     }
