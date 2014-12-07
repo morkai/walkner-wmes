@@ -59,7 +59,7 @@ module.exports = function createErrorHandlerMiddleware(appModule, options)
         err.stack || err.message,
         login,
         req.ip,
-        req.headers
+        JSON.stringify(req.headers)
       );
     }
 
