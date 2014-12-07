@@ -4,10 +4,7 @@
 
 'use strict';
 
-module.exports = {
-  unlock: require('./unlock'),
-  keepAlive: require('./keepAlive'),
-  zopp: require('./zopp'),
-  lt23: require('./lt23'),
-  ls41: require('./ls41')
+module.exports = function runUnlockJob(app, sapGuiModule, jobId, done)
+{
+  sapGuiModule.runScript(jobId, 'Unlock.exe', [], done);
 };
