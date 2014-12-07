@@ -491,7 +491,7 @@ define([
         }
       });
 
-      this.$('is-single .fte-leaderEntry-count' + funcCompSuffix).each(function()
+      this.$('.is-single .fte-leaderEntry-count' + funcCompSuffix).each(function()
       {
         var count = fractionsUtil.parse(this.value);
 
