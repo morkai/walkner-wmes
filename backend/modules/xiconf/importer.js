@@ -22,6 +22,12 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
   var filePathCache = {};
   var fileQueue = [];
   var validEncryptedUuids = {};
+  var restarting = false;
+
+  app.broker.subscribe('updater.restarting', function()
+  {
+    restarting = true;
+  });
 
   app.broker.subscribe('directoryWatcher.changed', enqueueFile).setFilter(filterFile);
 
@@ -58,7 +64,7 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
 
   function importNextFile()
   {
-    if (importing)
+    if (importing || restarting)
     {
       return;
     }
