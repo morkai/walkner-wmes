@@ -35,7 +35,6 @@ exports.modules = [
   'prodShiftOrders',
   'pressWorksheets',
   'reports',
-  'feedback',
   'xiconf',
   'icpo',
   'licenses',
@@ -45,7 +44,6 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-1'},
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-2'},
   'httpServer',
-  'httpsServer',
   'sio'
 ];
 
