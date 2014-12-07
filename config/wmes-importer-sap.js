@@ -8,6 +8,7 @@ exports.id = 'wmes-importer-sap';
 exports.modules = [
   'mongoose',
   'events',
+  'updater',
   'messenger/server',
   'directoryWatcher',
   {id: 'orders/importer/orders', name: 'currentDayOrderImporter'},
@@ -18,6 +19,16 @@ exports.modules = [
   'warehouse/importer/transferOrders',
   'reports/clipOrderCount'
 ];
+
+exports.mongoose = {
+  maxConnectTries: 10,
+  connectAttemptDelay: 500,
+  uri: require('./wmes-mongodb').uri,
+  options: {
+    server: {poolSize: 5}
+  },
+  models: ['event', 'order', 'emptyOrder', 'clipOrderCount', 'whControlCycleArchive', 'whTransferOrderArchive']
+};
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },
@@ -35,14 +46,14 @@ exports.events = {
   }
 };
 
-exports.mongoose = {
-  maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  uri: require('./wmes-mongodb').uri,
-  options: {
-    server: {poolSize: 5}
-  },
-  models: ['event', 'order', 'emptyOrder', 'clipOrderCount', 'whControlCycleArchive', 'whTransferOrderArchive']
+exports.updater = {
+  expressId: null,
+  sioId: null,
+  packageJsonPath: __dirname + '/../package.json',
+  restartDelay: 10000,
+  versionsKey: 'wmes',
+  backendVersionKey: 'importer-sap',
+  frontendVersionKey: null
 };
 
 exports['messenger/server'] = {

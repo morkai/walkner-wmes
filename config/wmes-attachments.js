@@ -5,10 +5,21 @@ exports.id = 'wmes-attachments';
 exports.modules = [
   'mongoose',
   'events',
+  'updater',
   'messenger/server',
   'mail/listener',
   'mail/downloader'
 ];
+
+exports.mongoose = {
+  maxConnectTries: 10,
+  connectAttemptDelay: 500,
+  uri: require('./wmes-mongodb').uri,
+  options: {
+    server: {poolSize: 2}
+  },
+  models: ['event']
+};
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },
@@ -23,14 +34,14 @@ exports.events = {
   }
 };
 
-exports.mongoose = {
-  maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  uri: require('./wmes-mongodb').uri,
-  options: {
-    server: {poolSize: 2}
-  },
-  models: ['event']
+exports.updater = {
+  expressId: null,
+  sioId: null,
+  packageJsonPath: __dirname + '/../package.json',
+  restartDelay: 1337,
+  versionsKey: 'wmes',
+  backendVersionKey: 'attachments',
+  frontendVersionKey: null
 };
 
 exports['messenger/server'] = {

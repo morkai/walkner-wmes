@@ -1,6 +1,6 @@
 'use strict';
 
-exports.id = 'wmes-reports';
+exports.id = 'wmes-reports-1';
 
 exports.modules = [
   'mongoose',
@@ -28,7 +28,7 @@ exports.mongoose = {
   connectAttemptDelay: 500,
   uri: require('./wmes-mongodb').uri,
   options: {
-    server: {poolSize: 5}
+    server: {poolSize: 10}
   },
   models: [
     'event',
@@ -43,11 +43,6 @@ exports.updater = {
   sioId: null,
   packageJsonPath: __dirname + '/../package.json',
   restartDelay: 1337,
-  pull: {
-    exe: 'git.exe',
-    cwd: __dirname + '/../',
-    timeout: 30000
-  },
   versionsKey: 'wmes',
   backendVersionKey: 'reports',
   frontendVersionKey: null

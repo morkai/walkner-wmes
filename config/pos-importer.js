@@ -5,12 +5,23 @@ exports.id = 'pos-importer';
 exports.modules = [
   'mongoose',
   'events',
+  'updater',
   'messenger/server',
   'directoryWatcher',
   'mail/listener',
   'mail/downloader',
   'purchaseOrders/importer'
 ];
+
+exports.mongoose = {
+  maxConnectTries: 10,
+  connectAttemptDelay: 500,
+  uri: require('./pos-mongodb').uri,
+  options: {
+    server: {poolSize: 5}
+  },
+  models: ['event', 'purchaseOrder', 'purchaseOrderPrint', 'vendor']
+};
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },
@@ -26,14 +37,14 @@ exports.events = {
   }
 };
 
-exports.mongoose = {
-  maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  uri: require('./pos-mongodb').uri,
-  options: {
-    server: {poolSize: 5}
-  },
-  models: ['event', 'purchaseOrder', 'purchaseOrderPrint', 'vendor']
+exports.updater = {
+  expressId: null,
+  sioId: null,
+  packageJsonPath: __dirname + '/../package.json',
+  restartDelay: 10000,
+  versionsKey: 'pos',
+  backendVersionKey: 'importer',
+  frontendVersionKey: null
 };
 
 exports['messenger/server'] = {

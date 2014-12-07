@@ -5,6 +5,7 @@ exports.id = 'wmes-importer-results';
 exports.modules = [
   'mongoose',
   'events',
+  'updater',
   'messenger/server',
   {id: 'directoryWatcher', name: 'directoryWatcher:xiconf'},
   {id: 'directoryWatcher', name: 'directoryWatcher:icpo'},
@@ -12,6 +13,16 @@ exports.modules = [
   'xiconf',
   'icpo'
 ];
+
+exports.mongoose = {
+  maxConnectTries: 10,
+  connectAttemptDelay: 500,
+  uri: require('./wmes-mongodb').uri,
+  options: {
+    server: {poolSize: 3}
+  },
+  models: ['event', 'xiconfOrder', 'xiconfResult', 'icpoResult', 'license']
+};
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },
@@ -26,14 +37,14 @@ exports.events = {
   }
 };
 
-exports.mongoose = {
-  maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  uri: require('./wmes-mongodb').uri,
-  options: {
-    server: {poolSize: 3}
-  },
-  models: ['event', 'xiconfOrder', 'xiconfResult', 'icpoResult', 'license']
+exports.updater = {
+  expressId: null,
+  sioId: null,
+  packageJsonPath: __dirname + '/../package.json',
+  restartDelay: 10000,
+  versionsKey: 'wmes',
+  backendVersionKey: 'importer-results',
+  frontendVersionKey: null
 };
 
 exports['messenger/server'] = {
