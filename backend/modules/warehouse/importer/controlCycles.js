@@ -30,6 +30,12 @@ exports.start = function startControlCyclesImporterModule(app, module)
   var filePathCache = {};
   var importQueue = [];
   var importLock = false;
+  var restarting = false;
+
+  app.broker.subscribe('updater.restarting', function()
+  {
+    restarting = true;
+  });
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -63,7 +69,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
 
   function importNext()
   {
-    if (importLock || !importQueue.length)
+    if (importLock || !importQueue.length || restarting)
     {
       return;
     }
