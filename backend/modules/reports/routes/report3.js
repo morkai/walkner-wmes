@@ -52,7 +52,7 @@ function getProdLinesInfo(orgUnitsModule)
       division: subdivision.division,
       subdivisionType: subdivision.type,
       inventoryNo: prodLine.inventoryNo,
-      deactivatedAt: prodLine.deactivatedAt
+      deactivatedAt: prodLine.deactivatedAt ? prodLine.deactivatedAt.getTime() : 0
     };
   });
 

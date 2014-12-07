@@ -136,7 +136,7 @@ Report3.prototype.toJSON = function()
   this.prodLineIds.forEach(function(prodLineId)
   {
     var prodLineInfo = report.options.prodLines[prodLineId];
-    var deactivatedAt = prodLineInfo.deactivatedAt ? prodLineInfo.deactivatedAt.getTime() : 0;
+    var deactivatedAt = prodLineInfo.deactivatedAt;
 
     if (deactivatedAt !== 0 && report.options.fromTime >= deactivatedAt)
     {
@@ -148,7 +148,7 @@ Report3.prototype.toJSON = function()
       prodLineInfo.division,
       prodLineInfo.subdivisionType,
       prodLineInfo.inventoryNo || '-',
-      prodLineInfo.deactivatedAt ? prodLineInfo.deactivatedAt.getTime() : 0
+      deactivatedAt
     );
   });
 
