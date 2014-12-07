@@ -33,6 +33,7 @@
     "type:editShift": "Shift edit",
     "type:editOrder": "Order edit",
     "type:editDowntime": "Downtime edit",
+    "type:deleteShift": "Shift deletion",
     "type:deleteDowntime": "Downtime deletion",
     "type:deleteOrder": "Order deletion",
     "type:addShift": "Shift addition",
@@ -59,6 +60,7 @@
     "data:editShift": "Changed attributes: <em>{changedProperties}</em>",
     "data:editOrder": "Changed attributes: <em>{changedProperties}</em>",
     "data:editDowntime": "Changed attributes of <a href='\\#prodDowntimes/{_id}'>downtime</a>: <em>{changedProperties}</em>",
+    "data:deleteShift": "-",
     "data:deleteDowntime": "Deleted downtime <em>{rid}</em>",
     "data:deleteOrder": "Deleted order <em>{orderId}; {operationNo}</em>",
 

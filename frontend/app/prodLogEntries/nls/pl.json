@@ -32,6 +32,7 @@
   "type:editShift": "Edycja zmiany",
   "type:editOrder": "Edycja zlecenia",
   "type:editDowntime": "Edycja przestoju",
+  "type:deleteShift": "Usunięcie zmiany",
   "type:deleteDowntime": "Usunięcie przestoju",
   "type:deleteOrder": "Usunięcie zlecenia",
   "type:addShift": "Dodanie zmiany",
@@ -58,6 +59,7 @@
   "data:editShift": "Zmienione atrybuty: <em>{changedProperties}</em>",
   "data:editOrder": "Zmienione atrybuty: <em>{changedProperties}</em>",
   "data:editDowntime": "Zmienione atrybuty <a href='\\#prodDowntimes/{_id}'>przestoju</a>: <em>{changedProperties}</em>",
+  "data:deleteShift": "-",
   "data:deleteDowntime": "Usunięto przestój <em>{rid}</em>.",
   "data:deleteOrder": "Usunięto zlecenie {orderId}; {operationNo}</em>.",
 

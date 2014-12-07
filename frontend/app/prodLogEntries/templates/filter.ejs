@@ -27,7 +27,9 @@
           'changeOrder', 'correctOrder', 'changeQuantityDone', 'changeWorkerCount', 'finishOrder',
           'startDowntime', 'finishDowntime', 'corroborateDowntime',
           'endWork',
-          'addShift', 'addOrder', 'addDowntime', 'editShift', 'editOrder', 'editDowntime', 'deleteOrder', 'deleteDowntime'
+          'addShift', 'addOrder', 'addDowntime',
+          'editShift', 'editOrder', 'editDowntime',
+          'deleteShift', 'deleteOrder', 'deleteDowntime'
         ].forEach(function(type) { %>
       <option value="<%- type %>"><%- t('prodLogEntries', 'type:' + type) %></option>
       <% }) %>
