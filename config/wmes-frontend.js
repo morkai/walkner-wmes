@@ -130,7 +130,9 @@ exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   uri: require('./wmes-mongodb').uri,
-  options: {},
+  options: {
+    server: {poolSize: 15}
+  },
   models: [
     'setting', 'event', 'user',
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
