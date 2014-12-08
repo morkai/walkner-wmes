@@ -4,6 +4,9 @@
 
 'use strict';
 
+var lodash = require('lodash');
+var step = require('h5.step');
+
 exports.DEFAULT_CONFIG = {
   divisionsId: 'divisions',
   subdivisionsId: 'subdivisions',
@@ -48,6 +51,18 @@ exports.start = function startOrgUnitsModule(app, module)
     'workCenter': workCentersModule,
     'prodLine': prodLinesModule
   };
+
+  var cache = null;
+  var rebuildingCache = 0;
+
+  app.broker.subscribe('app.started', rebuildCache).setLimit(1);
+
+  lodash.forEach(Object.keys(TYPE_TO_MODULE_MAP), function(topicPrefix)
+  {
+    app.broker.subscribe(topicPrefix + 's.added', rebuildCache);
+    app.broker.subscribe(topicPrefix + 's.edited', rebuildCache);
+    app.broker.subscribe(topicPrefix + 's.deleted', rebuildCache);
+  });
 
   module.getType = function(orgUnit)
   {
@@ -117,12 +132,7 @@ exports.start = function startOrgUnitsModule(app, module)
   {
     var orgUnitsModule = TYPE_TO_MODULE_MAP[type];
 
-    if (!orgUnitsModule)
-    {
-      return [];
-    }
-
-    return orgUnitsModule.models;
+    return orgUnitsModule ? orgUnitsModule.models : [];
   };
 
   module.getDivisionFor = function(orgUnitType, orgUnitId)
@@ -141,6 +151,13 @@ exports.start = function startOrgUnitsModule(app, module)
       return orgUnit;
     }
 
+    var orgUnitCache = cache && cache[orgUnit._id];
+
+    if (orgUnitCache)
+    {
+      return orgUnitCache.division;
+    }
+
     return this.getDivisionFor(this.getParent(orgUnit));
   };
 
@@ -153,6 +170,23 @@ exports.start = function startOrgUnitsModule(app, module)
     if (!orgUnit)
     {
       return [];
+    }
+
+    var orgUnitCache = cache && cache[orgUnit._id];
+
+    if (orgUnitCache)
+    {
+      if (!orgUnitCache.subdivision)
+      {
+        return [];
+      }
+
+      if (orgUnitCache.subdivision._id)
+      {
+        return [orgUnitCache.subdivision];
+      }
+
+      return orgUnitCache.subdivision.list.slice();
     }
 
     if (orgUnit.constructor === divisionsModule.Model)
@@ -187,15 +221,14 @@ exports.start = function startOrgUnitsModule(app, module)
       return orgUnit;
     }
 
-    return this.getSubdivisionFor(this.getParent(orgUnit));
-  };
+    var orgUnitCache = cache && cache[orgUnit._id];
 
-  module.getAllByTypeForSubdivision = function(requestedType, subdivision)
-  {
-    return this.getAllByType(requestedType).filter(function(orgUnit)
+    if (orgUnitCache)
     {
-      return module.getSubdivisionFor(orgUnit) === subdivision;
-    });
+      return orgUnitCache.subdivision;
+    }
+
+    return this.getSubdivisionFor(this.getParent(orgUnit));
   };
 
   module.getProdFlowsFor = function(orgUnitType, orgUnitId)
@@ -212,6 +245,13 @@ exports.start = function startOrgUnitsModule(app, module)
     if (orgUnit.constructor === prodFlowsModule.Model)
     {
       return [orgUnit];
+    }
+
+    var orgUnitCache = cache && cache[orgUnit._id];
+
+    if (orgUnitCache)
+    {
+      return orgUnitCache.prodFlow.list.slice();
     }
 
     if (orgUnit.constructor === prodLinesModule.Model)
@@ -259,39 +299,6 @@ exports.start = function startOrgUnitsModule(app, module)
     return [];
   };
 
-  module.getWorkCentersInProdFlow = function(prodFlow)
-  {
-    if (!prodFlow)
-    {
-      return [];
-    }
-
-    var prodFlowId = prodFlow._id.toString();
-
-    return workCentersModule.models.filter(function(workCenter)
-    {
-      return workCenter.prodFlow && workCenter.prodFlow.toString() === prodFlowId;
-    });
-  };
-
-  module.getProdLinesInProdFlow = function(prodFlow)
-  {
-    if (!prodFlow)
-    {
-      return [];
-    }
-
-    var workCenterIds = this.getChildren(prodFlow).map(function(workCenter)
-    {
-      return workCenter._id;
-    });
-
-    return prodLinesModule.models.filter(function(prodLine)
-    {
-      return workCenterIds.indexOf(prodLine.workCenter) !== -1;
-    });
-  };
-
   module.getChildType = function(orgUnitType)
   {
     return PARENT_TO_CHILD_MAP[orgUnitType] || 'division';
@@ -301,6 +308,16 @@ exports.start = function startOrgUnitsModule(app, module)
   {
     var parentOrgUnitType = this.getType(parentOrgUnit);
     var childOrgUnitType = this.getChildType(parentOrgUnitType);
+
+    var parentOrgUnitCache = cache && cache[parentOrgUnitType] && cache[parentOrgUnitType][parentOrgUnit._id];
+
+    if (parentOrgUnitCache)
+    {
+      var childOrgUnitCache = parentOrgUnitCache[childOrgUnitType];
+
+      return childOrgUnitCache ? childOrgUnitCache.list.slice() : [];
+    }
+
     var childOrgUnitsModule = TYPE_TO_MODULE_MAP[childOrgUnitType];
 
     return childOrgUnitsModule
@@ -310,8 +327,6 @@ exports.start = function startOrgUnitsModule(app, module)
 
   module.getAssemblyMrpControllersFor = function(orgUnitType, orgUnitId)
   {
-    /*jshint -W015*/
-
     if (!orgUnitType || !orgUnitId)
     {
       return mrpControllersModule.models
@@ -327,15 +342,12 @@ exports.start = function startOrgUnitsModule(app, module)
           {
             return subdivision.division === orgUnitId && subdivision.type === 'assembly';
           })
-          .reduce(
-          function(mrpControllers, subdivision)
+          .reduce(function(mrpControllers, subdivision)
           {
             return mrpControllers.concat(
               module.getAssemblyMrpControllersFor('subdivision', subdivision._id.toString())
             );
-          },
-          []
-        );
+          }, []);
 
       case 'subdivision':
         var subdivision = subdivisionsModule.modelsById[orgUnitId];
@@ -399,6 +411,13 @@ exports.start = function startOrgUnitsModule(app, module)
       return [orgUnit];
     }
 
+    var orgUnitCache = cache && cache[orgUnitType] && cache[orgUnitType][orgUnitId];
+
+    if (orgUnitCache)
+    {
+      return orgUnitCache.prodLine.list.slice();
+    }
+
     if (orgUnit.constructor === workCentersModule.Model)
     {
       return filterByParent(prodLinesModule.models, 'workCenter', orgUnit);
@@ -408,7 +427,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
     if (orgUnit.constructor === prodFlowsModule.Model)
     {
-      this.getWorkCentersInProdFlow(orgUnit).forEach(function(workCenter)
+      this.getChildren(orgUnit).forEach(function(workCenter)
       {
         workCenterIds[workCenter._id] = true;
       });
@@ -421,7 +440,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
       for (var i = 0, l = prodFlows.length; i < l; ++i)
       {
-        var workCenters = this.getWorkCentersInProdFlow(prodFlows[i]);
+        var workCenters = this.getChildren(prodFlows[i]);
 
         for (var ii = 0, ll = workCenters.length; ii < ll; ++ii)
         {
@@ -466,6 +485,41 @@ exports.start = function startOrgUnitsModule(app, module)
     }
 
     orgUnits.prodLine = prodLine._id;
+
+    var prodLineCache = cache && cache.prodLine[orgUnits.prodLine];
+
+    if (prodLineCache)
+    {
+      if (prodLineCache.division !== null)
+      {
+        orgUnits.division = prodLineCache.division._id;
+      }
+
+      if (prodLineCache.subdivision !== null)
+      {
+        orgUnits.subdivision = prodLineCache.subdivision._id;
+      }
+
+      if (prodLineCache.mrpController !== null)
+      {
+        orgUnits.mrpControllers = prodLineCache.mrpController.map(function(mrpController)
+        {
+          return mrpController._id;
+        });
+      }
+
+      if (prodLineCache.prodFlow !== null)
+      {
+        orgUnits.prodFlow = prodLineCache.prodFlow._id;
+      }
+
+      if (prodLineCache.workCenter !== null)
+      {
+        orgUnits.workCenter = prodLineCache.workCenter._id;
+      }
+
+      return orgUnits;
+    }
 
     var workCenter = workCentersModule.modelsById[prodLine.workCenter];
 
@@ -559,5 +613,320 @@ exports.start = function startOrgUnitsModule(app, module)
     var subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
 
     return subdivision && subdivision.type === 'assembly';
+  }
+
+  function rebuildCache()
+  {
+    cache = null;
+    rebuildingCache += 1;
+
+    if (rebuildingCache !== 1)
+    {
+      return;
+    }
+
+    var t = Date.now();
+
+    var workingCache = {
+      division: {},
+      subdivision: {},
+      mrpController: {},
+      prodFlow: {},
+      workCenter: {},
+      prodLine: {}
+    };
+
+    var prodLines = prodLinesModule.models;
+    var batchSize = 5;
+    var batchCount = Math.ceil(prodLines.length / batchSize);
+    var steps = [];
+
+    for (var i = 0; i < batchCount; ++i)
+    {
+      steps.push(createRebuildCacheStep(workingCache, prodLines.slice(i * batchSize, i * batchSize + batchSize)));
+    }
+
+    steps.push(function()
+    {
+      if (rebuildingCache === 1)
+      {
+        cache = workingCache;
+        rebuildingCache = 0;
+
+        t = Date.now() - t;
+
+        module.debug("Rebuilt cache in %d ms.", t);
+      }
+      else
+      {
+        rebuildingCache = 0;
+
+        setImmediate(rebuildCache);
+      }
+    });
+
+    step(steps);
+  }
+
+  function createRebuildCacheStep(workingCache, prodLines)
+  {
+    return function rebuildCacheStep()
+    {
+      if (rebuildingCache !== 1)
+      {
+        return this.skip();
+      }
+
+      for (var i = 0, l = prodLines.length; i < l; ++i)
+      {
+        rebuildCacheFromOrgUnits(workingCache, module.getAllForProdLine(prodLines[i]));
+      }
+
+      setImmediate(this.next());
+    };
+  }
+
+  function rebuildCacheFromOrgUnits(workingCache, orgUnits)
+  {
+    rebuildDivisionCache(workingCache, orgUnits);
+    rebuildSubdivisionCache(workingCache, orgUnits);
+    rebuildMrpControllerCache(workingCache, orgUnits);
+    rebuildProdFlowCache(workingCache, orgUnits);
+    rebuildWorkCenterCache(workingCache, orgUnits);
+    rebuildProdLineCache(workingCache, orgUnits);
+  }
+
+  function rebuildDivisionCache(workingCache, orgUnits)
+  {
+    if (orgUnits.division === null)
+    {
+      return;
+    }
+
+    if (workingCache.division[orgUnits.division] === undefined)
+    {
+      workingCache.division[orgUnits.division] = {
+        division: divisionsModule.modelsById[orgUnits.division],
+        subdivision: mapAndList(),
+        mrpController: mapAndList(),
+        prodFlow: mapAndList(),
+        workCenter: mapAndList(),
+        prodLine: mapAndList()
+      };
+    }
+
+    var divisionCache = workingCache.division[orgUnits.division];
+
+    addToMapAndList(divisionCache, orgUnits, 'subdivision');
+    addMrpControllersToMapAndList(divisionCache, orgUnits);
+    addToMapAndList(divisionCache, orgUnits, 'prodFlow');
+    addToMapAndList(divisionCache, orgUnits, 'workCenter');
+    addToMapAndList(divisionCache, orgUnits, 'prodLine');
+  }
+
+  function rebuildSubdivisionCache(workingCache, orgUnits)
+  {
+    if (orgUnits.subdivision === null)
+    {
+      return;
+    }
+
+    if (workingCache.subdivision[orgUnits.subdivision] === undefined)
+    {
+      workingCache.subdivision[orgUnits.subdivision] = {
+        division: null,
+        subdivision: subdivisionsModule.modelsById[orgUnits.subdivision],
+        mrpController: mapAndList(),
+        prodFlow: mapAndList(),
+        workCenter: mapAndList(),
+        prodLine: mapAndList()
+      };
+    }
+
+    var subdivisionCache = workingCache.subdivision[orgUnits.subdivision];
+
+    subdivisionCache.division = divisionsModule.modelsById[orgUnits.division] || null;
+
+    addMrpControllersToMapAndList(subdivisionCache, orgUnits);
+    addToMapAndList(subdivisionCache, orgUnits, 'prodFlow');
+    addToMapAndList(subdivisionCache, orgUnits, 'workCenter');
+    addToMapAndList(subdivisionCache, orgUnits, 'prodLine');
+  }
+
+  function rebuildMrpControllerCache(workingCache, orgUnits)
+  {
+    var mrpControllers = orgUnits.mrpControllers;
+
+    if (mrpControllers === null)
+    {
+      return;
+    }
+
+    var mrpControllerCount = mrpControllers.length;
+
+    for (var i = 0; i < mrpControllerCount; ++i)
+    {
+      var mrpControllerId = mrpControllers[i];
+
+      if (workingCache.mrpController[mrpControllerId] === undefined)
+      {
+        workingCache.mrpController[mrpControllerId] = {
+          division: null,
+          subdivision: null,
+          mrpController: mrpControllersModule.modelsById[mrpControllerId],
+          prodFlow: mapAndList(),
+          workCenter: mapAndList(),
+          prodLine: mapAndList()
+        };
+      }
+
+      var mrpControllerCache = workingCache.mrpController[mrpControllerId];
+
+      mrpControllerCache.division = divisionsModule.modelsById[orgUnits.division] || null;
+      mrpControllerCache.subdivision = subdivisionsModule.modelsById[orgUnits.subdivision] || null;
+
+      addToMapAndList(mrpControllerCache, orgUnits, 'prodFlow');
+      addToMapAndList(mrpControllerCache, orgUnits, 'workCenter');
+      addToMapAndList(mrpControllerCache, orgUnits, 'prodLine');
+    }
+  }
+
+  function rebuildProdFlowCache(workingCache, orgUnits)
+  {
+    if (orgUnits.prodFlow === null)
+    {
+      return;
+    }
+
+    if (workingCache.prodFlow[orgUnits.prodFlow] === undefined)
+    {
+      workingCache.prodFlow[orgUnits.prodFlow] = {
+        division: null,
+        subdivision: null,
+        mrpController: null,
+        prodFlow: prodFlowsModule.modelsById[orgUnits.prodFlow],
+        workCenter: mapAndList(),
+        prodLine: mapAndList()
+      };
+    }
+
+    var prodFlowCache = workingCache.prodFlow[orgUnits.prodFlow];
+
+    prodFlowCache.division = divisionsModule.modelsById[orgUnits.division] || null;
+    prodFlowCache.subdivision = subdivisionsModule.modelsById[orgUnits.subdivision] || null;
+    prodFlowCache.mrpController = getParentMrpControllers(orgUnits.mrpControllers);
+
+    addToMapAndList(prodFlowCache, orgUnits, 'workCenter');
+    addToMapAndList(prodFlowCache, orgUnits, 'prodLine');
+  }
+
+  function rebuildWorkCenterCache(workingCache, orgUnits)
+  {
+    if (orgUnits.workCenter === null)
+    {
+      return;
+    }
+
+    if (workingCache.workCenter[orgUnits.workCenter] === undefined)
+    {
+      workingCache.workCenter[orgUnits.workCenter] = {
+        division: null,
+        subdivision: null,
+        mrpController: null,
+        prodFlow: null,
+        workCenter: workCentersModule.modelsById[orgUnits.workCenter],
+        prodLine: mapAndList()
+      };
+    }
+
+    var workCenterCache = workingCache.workCenter[orgUnits.workCenter];
+
+    workCenterCache.division = divisionsModule.modelsById[orgUnits.division] || null;
+    workCenterCache.subdivision = subdivisionsModule.modelsById[orgUnits.subdivision] || null;
+    workCenterCache.mrpController = getParentMrpControllers(orgUnits.mrpControllers);
+    workCenterCache.prodFlow = prodFlowsModule.modelsById[orgUnits.prodFlow] || null;
+
+    addToMapAndList(workCenterCache, orgUnits, 'prodLine');
+  }
+
+  function rebuildProdLineCache(workingCache, orgUnits)
+  {
+    if (orgUnits.prodLine === null)
+    {
+      return;
+    }
+
+    workingCache.prodLine[orgUnits.prodLine] = {
+      division: divisionsModule.modelsById[orgUnits.division] || null,
+      subdivision: subdivisionsModule.modelsById[orgUnits.subdivision] || null,
+      mrpController: getParentMrpControllers(orgUnits.mrpControllers),
+      prodFlow: prodFlowsModule.modelsById[orgUnits.prodFlow] || null,
+      workCenter: workCentersModule.modelsById[orgUnits.workCenter] || null,
+      prodLine: prodLinesModule.modelsById[orgUnits.prodLine]
+    };
+  }
+
+  function mapAndList()
+  {
+    return {
+      map: {},
+      list: []
+    };
+  }
+
+  function addToMapAndList(parentCache, orgUnits, childOrgUnitType)
+  {
+    var childOrgUnitId = orgUnits[childOrgUnitType];
+    var childOrgUnit = TYPE_TO_MODULE_MAP[childOrgUnitType].modelsById[childOrgUnitId];
+
+    if (childOrgUnit !== null && parentCache[childOrgUnitType].map[childOrgUnitId] === undefined)
+    {
+      parentCache[childOrgUnitType].map[childOrgUnitId] = childOrgUnit;
+      parentCache[childOrgUnitType].list.push(childOrgUnit);
+    }
+  }
+
+  function addMrpControllersToMapAndList(parentCache, orgUnits)
+  {
+    if (!Array.isArray(orgUnits.mrpControllers))
+    {
+      return;
+    }
+
+    var mrpControllerCount = orgUnits.mrpControllers.length;
+
+    for (var i = 0; i < mrpControllerCount; ++i)
+    {
+      var mrpControllerId = orgUnits.mrpControllers[i];
+      var mrpController = mrpControllersModule.modelsById[mrpControllerId];
+
+      if (mrpController !== undefined && parentCache.mrpController[mrpControllerId] === undefined)
+      {
+        parentCache.mrpController.map[mrpControllerId] = mrpController;
+        parentCache.mrpController.list.push(mrpControllerId);
+      }
+    }
+  }
+
+  function getParentMrpControllers(mrpControllerIds)
+  {
+    var mrpControllers = [];
+
+    if (!Array.isArray(mrpControllerIds))
+    {
+      return mrpControllers;
+    }
+
+    for (var i = 0, l = mrpControllerIds.length; i < l; ++i)
+    {
+      var mrpController = mrpControllersModule.modelsById[mrpControllerIds[i]];
+
+      if (mrpController !== undefined)
+      {
+        mrpControllers.push(mrpController);
+      }
+    }
+
+    return mrpControllers;
   }
 };

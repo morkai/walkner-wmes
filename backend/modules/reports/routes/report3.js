@@ -41,7 +41,7 @@ function getProdLinesInfo(orgUnitsModule)
 
   orgUnitsModule.getAllByType('prodLine').forEach(function(prodLine)
   {
-    var subdivision = orgUnitsModule.getSubdivisionsFor(prodLine)[0];
+    var subdivision = orgUnitsModule.getSubdivisionFor(prodLine);
 
     if (!subdivision)
     {
