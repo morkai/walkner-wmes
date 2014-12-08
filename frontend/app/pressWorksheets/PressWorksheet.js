@@ -5,11 +5,13 @@
 define([
   '../i18n',
   '../time',
-  '../core/Model'
+  '../core/Model',
+  '../core/util/getShiftStartInfo'
 ], function(
   t,
   time,
-  Model
+  Model,
+  getShiftStartInfo
 ) {
   'use strict';
 
@@ -34,10 +36,12 @@ define([
 
     defaults: function()
     {
+      var shiftStartInfo = getShiftStartInfo(Date.now());
+
       return {
         rid: null,
-        date: time.format('YYYY-MM-DD'),
-        shift: 1,
+        date: time.format(shiftStartInfo.moment.valueOf(), 'YYYY-MM-DD'),
+        shift: shiftStartInfo.shift,
         type: 'mech',
         startedAt: null,
         finishedAt: null,
