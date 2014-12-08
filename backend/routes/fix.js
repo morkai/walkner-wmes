@@ -3,6 +3,7 @@
 'use strict';
 
 var moment = require('moment');
+var lodash = require('lodash');
 var step = require('h5.step');
 
 module.exports = function startFixRoutes(app, express)
@@ -27,6 +28,7 @@ module.exports = function startFixRoutes(app, express)
   express.get('/fix/hourlyPlans/recount-planned-quantities', onlySuper, recountPlannedQuantities);
   express.get('/fix/fteMasterEntries/recount-totals', onlySuper, recountFteMasterTotals);
   express.get('/fix/fteLeaderEntries/recount-totals', onlySuper, recountFteLeaderTotals);
+  express.get('/fix/pressWorksheets/org-units', onlySuper, setPressWorksheetOrgUnits);
 
   function fixProdShiftOrderDurations(req, res, next)
   {
@@ -435,6 +437,64 @@ module.exports = function startFixRoutes(app, express)
           }
         );
       }
+    });
+  }
+
+  function setPressWorksheetOrgUnits(req, res, next)
+  {
+    res.setTimeout(30 * 60 * 1000);
+
+    var PressWorksheet = app.mongoose.model('PressWorksheet');
+    var stream = PressWorksheet.find({division: null}, {'orders.prodLine': 1}).stream();
+    var todo = 0;
+    var ended = false;
+
+    stream.on('error', next);
+
+    stream.on('end', function()
+    {
+      ended = true;
+
+      if (todo === 0)
+      {
+        res.end();
+      }
+    });
+
+    stream.on('data', function(pressWorksheet)
+    {
+      ++todo;
+
+      var divisions = {};
+      var prodLines = {};
+      var $set = {};
+
+      lodash.forEach(pressWorksheet.orders, function(order, i)
+      {
+        var division = app.orgUnits.getDivisionFor('prodLine', order.prodLine);
+
+        prodLines[order.prodLine] = true;
+
+        if (division)
+        {
+          divisions[division._id] = true;
+        }
+
+        $set['orders.' + i + '.division'] = division ? division._id : null;
+      });
+
+      $set.divisions = Object.keys(divisions);
+      $set.prodLines = Object.keys(prodLines);
+
+      PressWorksheet.collection.update({_id: pressWorksheet._id}, {$set: $set}, function(err)
+      {
+        --todo;
+
+        if (ended && todo === 0)
+        {
+          res.end();
+        }
+      });
     });
   }
 };

@@ -29,6 +29,7 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
     rid: 1,
     date: 1,
     shift: 1,
+    'orders.division': 1,
     'orders.prodLine': 1,
     'orders.nc12': 1,
     'orders.name': 1,

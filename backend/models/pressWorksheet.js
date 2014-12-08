@@ -61,6 +61,11 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       default: null
     },
     orderData: {},
+    division: {
+      type: String,
+      ref: 'Division',
+      required: true
+    },
     prodLine: {
       type: String,
       ref: 'ProdLine',
@@ -126,6 +131,8 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       required: true,
       enum: ['mech', 'paintShop', 'optics']
     },
+    divisions: [String],
+    prodLines: [String],
     startedAt: {
       type: String,
       match: TIME_RE,
@@ -164,6 +171,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
   pressWorksheetSchema.statics.TOPIC_PREFIX = 'pressWorksheets';
 
   pressWorksheetSchema.index({date: -1});
+  pressWorksheetSchema.index({divisions: 1, date: -1});
   pressWorksheetSchema.index({type: 1, date: -1});
   pressWorksheetSchema.index({'master.id': 1, date: -1});
   pressWorksheetSchema.index({'operators.id': 1, date: -1});
@@ -230,6 +238,8 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     var prodShiftOrders = [];
     var prodDowntimes = [];
     var updatedIds = 0;
+    var divisions = {};
+    var prodLines = {};
 
     this.orders.forEach(function(order)
     {
@@ -296,6 +306,12 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       {
         return;
       }
+
+      order.division = prodShiftOrder.division;
+      order.prodLine = prodShiftOrder.prodLine;
+
+      divisions[order.division] = true;
+      prodLines[order.prodLine] = true;
 
       var downtimeStartTime = startedAt.getTime();
       var orderDowntimes = [];
@@ -385,6 +401,9 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
         {
           return done();
         }
+
+        pressWorksheet.divisions = Object.keys(divisions);
+        pressWorksheet.prodLines = Object.keys(prodLines);
 
         pressWorksheet.markModified('orders');
         pressWorksheet.save(done);

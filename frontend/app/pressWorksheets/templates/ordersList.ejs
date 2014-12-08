@@ -11,6 +11,7 @@
       <th><%- t('pressWorksheets', 'PROPERTY:order.name') %></th>
       <th><%- t('pressWorksheets', 'PROPERTY:order.operationName') %></th>
       <th><%- t('pressWorksheets', 'PROPERTY:order.operationNo') %></th>
+      <th><%- t('pressWorksheets', 'PROPERTY:order.division') %></th>
       <th><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
       <th><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
       <th><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
@@ -38,6 +39,7 @@
       <td><%= order.name %></td>
       <td><%= order.operationName || '-' %></td>
       <td><%= order.operationNo %></td>
+      <td><%= order.division %></td>
       <td><%= order.prodLine %></td>
       <td><%= order.quantityDone %></td>
       <td><%= order.startedAt %></td>
@@ -91,7 +93,7 @@
     </tr>
     <% if (order.notes) { %>
     <tr class="pressWorksheets-orders-notes <%- i % 2 !== 0 ? '' : 'is-odd' %>">
-      <td colspan="<%- extended ? 13 : 10 %>"><%= order.notes %></td>
+      <td colspan="<%- extended ? 14 : 11 %>"><%= order.notes %></td>
     </tr>
     <% } %>
     <% }) %>

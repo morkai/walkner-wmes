@@ -17,7 +17,7 @@ define([
       'companies.synced': 'render'
     },
 
-    columns: ['rid', 'type', 'date', 'shift', 'master', 'operator'],
+    columns: ['rid', 'type', 'divisions', 'date', 'shift', 'master', 'operator'],
 
     serializeActions: function()
     {

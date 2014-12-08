@@ -4,10 +4,12 @@
 
 define([
   'underscore',
+  '../user',
   '../core/Collection',
   './PressWorksheet'
 ], function(
   _,
+  user,
   Collection,
   PressWorksheet
 ) {
@@ -17,7 +19,28 @@ define([
 
     model: PressWorksheet,
 
-    rqlQuery: 'select(rid,type,date,shift,master,operator,createdAt,creator)&sort(-date)&limit(15)',
+    rqlQuery: function(rql)
+    {
+      var selector = [];
+      var userDivision = user.getDivision();
+
+      if (userDivision)
+      {
+        selector.push({name: 'eq', args: ['divisions', userDivision.id]});
+      }
+
+      return rql.Query.fromObject({
+        fields: {
+          orders: 0,
+          operators: 0
+        },
+        sort: {
+          date: -1
+        },
+        limit: 15,
+        selector: {name: 'and', args: selector}
+      });
+    },
 
     sync: function(type, model, options)
     {

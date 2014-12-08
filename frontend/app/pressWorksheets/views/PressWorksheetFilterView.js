@@ -4,11 +4,13 @@
 
 define([
   'app/time',
+  'app/data/divisions',
   'app/core/views/FilterView',
   'app/users/util/setUpUserSelect2',
   'app/pressWorksheets/templates/filter'
 ], function(
   time,
+  divisions,
   FilterView,
   setUpUserSelect2,
   filterTemplate
@@ -25,6 +27,9 @@ define([
         date: '',
         shift: 0,
         type: 'any',
+        divisions: divisions
+          .filter(function(division) { return division.get('type') === 'prod'; })
+          .map(function(division) { return division.id; }),
         mine: false,
         userType: 'operators',
         user: {
@@ -53,6 +58,10 @@ define([
       {
         formData[propertyName] = term.args[1];
       },
+      'divisions': function(propertyName, term, formData)
+      {
+        formData.divisions = term.name === 'in' ? term.args[1] : [term.args[1]];
+      },
       'master.id': function(propertyName, term, formData)
       {
         formData.userType = propertyName.split('.')[0];
@@ -73,12 +82,38 @@ define([
       'operators.id': 'master.id'
     },
 
+    serialize: function()
+    {
+      var data = FilterView.prototype.serialize.call(this);
+
+      data.divisions = divisions
+        .filter(function(division)
+        {
+          return division.get('type') === 'prod';
+        })
+        .sort(function(a, b)
+        {
+          return a.getLabel().localeCompare(b.getLabel());
+        })
+        .map(function(division)
+        {
+          return {
+            id: division.id,
+            label: division.id,
+            title: division.get('description')
+          };
+        });
+
+      return data;
+    },
+
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
 
       this.toggleButtonGroup('shift');
       this.toggleButtonGroup('type');
+      this.toggleButtonGroup('divisions');
       this.toggleButtonGroup('mine');
 
       setUpUserSelect2(this.$id('user')).select2(
@@ -91,6 +126,7 @@ define([
       var dateMoment = time.getMoment(this.$id('date').val());
       var shiftNo = parseInt(this.$('input[name=shift]:checked').val(), 10);
       var type = this.$('input[name=type]:checked').val();
+      var divisions = this.getButtonGroupValue('divisions');
       var mine = this.$('input[name=mine]:checked').val();
       var userType = this.$('input[name=userType]:checked').val();
       var user = this.$id('user').select2('data');
@@ -128,6 +164,15 @@ define([
       if (type !== 'any')
       {
         selector.push({name: 'eq', args: ['type', type]});
+      }
+
+      if (divisions.length === 1)
+      {
+        selector.push({name: 'eq', args: ['divisions', divisions[0]]});
+      }
+      else if (divisions.length > 1)
+      {
+        selector.push({name: 'in', args: ['divisions', divisions]});
       }
 
       if (user)

@@ -315,6 +315,18 @@ define([
       formData.master = userDataToInfo(this.$id('master').select2('data'));
       formData.shift = parseInt(formData.shift, 10);
 
+      var divisions = {};
+      var prodLines = {};
+
+      formData.orders.forEach(function(order)
+      {
+        divisions[order.division] = 1;
+        prodLines[order.prodLine] = 1;
+      });
+
+      formData.divisions = Object.keys(divisions);
+      formData.prodLines = Object.keys(prodLines);
+
       function userDataToInfo(userData)
       {
         return {
@@ -387,8 +399,11 @@ define([
         });
       }
 
+      var subdivision = prodLines.get(order.prodLine).getSubdivision();
+
       return {
         prodShiftOrder: $part.attr('data-prodShiftOrder') || null,
+        division: subdivision ? subdivision.get('division') : null,
         prodLine: order.prodLine,
         nc12: orderData.nc12,
         name: orderData.name,
@@ -436,7 +451,7 @@ define([
       var $date = this.$id('date');
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
 
-      return time.getMoment($date.val() + ' 06:00:00').add((shift - 1) * 8, 'hours');
+      return time.getMoment($date.val() + ' 06:00:00', 'YYYY-MM-DD HH:mm:ss').add((shift - 1) * 8, 'hours');
     },
 
     getType: function()
@@ -967,7 +982,7 @@ define([
 
     getTimeFromString: function(date, timeString, finish)
     {
-      var timeMoment = time.getMoment(date + ' ' + timeString + ':00');
+      var timeMoment = time.getMoment(date + ' ' + timeString + ':00', 'YYYY-MM-DD HH:mm:ss');
 
       if (finish && timeMoment.hours() === 6 && timeMoment.minutes() === 0)
       {

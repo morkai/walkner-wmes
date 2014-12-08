@@ -43,6 +43,8 @@ define([
         date: time.format(shiftStartInfo.moment.valueOf(), 'YYYY-MM-DD'),
         shift: shiftStartInfo.shift,
         type: 'mech',
+        divisions: [],
+        prodLines: [],
         startedAt: null,
         finishedAt: null,
         master: null,
@@ -77,6 +79,16 @@ define([
 
           return order;
         });
+      }
+
+      if (Array.isArray(data.divisions))
+      {
+        data.divisions = data.divisions.join('; ');
+      }
+
+      if (Array.isArray(data.prodLines))
+      {
+        data.prodLines = data.prodLines.join('; ');
       }
 
       data.type = t('pressWorksheets', 'PROPERTY:type:' + data.type);
