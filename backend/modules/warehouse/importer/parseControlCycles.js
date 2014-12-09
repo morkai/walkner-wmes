@@ -26,6 +26,11 @@ module.exports = function parseControlCycles(input, timestamp)
     },
     itemDecorator: function(obj)
     {
+      if (obj.nc12 === '')
+      {
+        return null;
+      }
+
       var uniqueObj = unique[obj.nc12];
 
       if (uniqueObj === undefined)
