@@ -28,7 +28,5 @@ module.exports = function setupWhControlCycleArchiveModel(app, mongoose)
     versionKey: false
   });
 
-  whControlCycleArchiveSchema.index({'_id.nc12': 1});
-
   mongoose.model('WhControlCycleArchive', whControlCycleArchiveSchema);
 };
