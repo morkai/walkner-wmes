@@ -7,7 +7,6 @@
 var fs = require('fs');
 var path = require('path');
 var moment = require('moment');
-var lodash = require('lodash');
 var step = require('h5.step');
 var importRoute = require('./import');
 var downloadRoute = require('./download');

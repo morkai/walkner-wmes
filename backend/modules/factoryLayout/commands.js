@@ -4,11 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
-
 module.exports = function setUpFactoryLayoutCommands(app, factoryLayoutModule)
 {
-  var sio = app[factoryLayoutModule.config.sioId];
-  var mongoose = app[factoryLayoutModule.config.mongooseId];
-  var userModule = app[factoryLayoutModule.config.userId];
+  /*jshint unused:false*/
 };

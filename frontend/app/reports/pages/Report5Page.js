@@ -9,8 +9,7 @@ define([
   '../views/Report5HeaderView',
   '../views/Report5FilterView',
   '../views/Report5DisplayOptionsView',
-  '../views/Report5ChartsView',
-  'app/core/util/bindLoadingMessage'
+  '../views/Report5ChartsView'
 ], function(
   DrillingReportPage,
   Report5Query,
@@ -18,8 +17,7 @@ define([
   Report5HeaderView,
   Report5FilterView,
   Report5DisplayOptionsView,
-  Report5ChartsView,
-  bindLoadingMessage
+  Report5ChartsView
 ) {
   'use strict';
 

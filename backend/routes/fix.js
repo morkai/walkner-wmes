@@ -486,7 +486,7 @@ module.exports = function startFixRoutes(app, express)
       $set.divisions = Object.keys(divisions);
       $set.prodLines = Object.keys(prodLines);
 
-      PressWorksheet.collection.update({_id: pressWorksheet._id}, {$set: $set}, function(err)
+      PressWorksheet.collection.update({_id: pressWorksheet._id}, {$set: $set}, function()
       {
         --todo;
 

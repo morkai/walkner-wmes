@@ -4,8 +4,6 @@
 
 'use strict';
 
-var lodash = require('lodash');
-
 module.exports = function setUpFactoryLayoutRoutes(app, factoryLayoutModule)
 {
   var express = app[factoryLayoutModule.config.expressId];

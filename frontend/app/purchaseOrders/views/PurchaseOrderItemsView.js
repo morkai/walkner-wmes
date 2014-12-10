@@ -44,7 +44,7 @@ define([
       {
         return e.target.classList.contains('popover-title');
       },
-      'change [name=status]': function(e)
+      'change [name=status]': function()
       {
         this.state.set('status', this.$('[name=status]:checked').val());
       },
