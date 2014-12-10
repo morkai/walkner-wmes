@@ -30,16 +30,10 @@ exports.start = function startControlCyclesImporterModule(app, module)
   var WhControlCycleArchive = mongoose.model('WhControlCycleArchive');
 
   var filePathCache = {};
-  var importQueue = [];
-  var importLock = false;
-  var restarting = false;
-
-  app.broker.subscribe('updater.restarting', function()
-  {
-    restarting = true;
-  });
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
+
+  app.broker.subscribe('warehouse.importQueue.controlCycles', importNext);
 
   function filterFile(fileInfo)
   {
@@ -55,36 +49,25 @@ exports.start = function startControlCyclesImporterModule(app, module)
 
   function createTimeKey(timestamp)
   {
-    return moment(timestamp).subtract(1, 'days').format('YYYYMMDD');
+    return moment(timestamp).format('YYYYMMDD');
   }
 
   function queueFile(fileInfo)
   {
     filePathCache[fileInfo.filePath] = true;
 
-    importQueue.push(fileInfo);
-
-    module.debug("Queued %s...", fileInfo.timeKey);
-
-    importNext();
-  }
-
-  function importNext()
-  {
-    if (importLock || !importQueue.length || restarting)
-    {
-      return;
-    }
-
-    importQueue.sort(function(a, b)
-    {
-      return a.timestamp - b.timestamp;
+    app.broker.publish('warehouse.importQueue.push', {
+      timestamp: fileInfo.timestamp,
+      type: 'controlCycles',
+      data: fileInfo
     });
 
-    var startTime = Date.now();
-    var fileInfo = importQueue.shift();
+    module.debug("Queued %s...", fileInfo.timeKey);
+  }
 
-    importLock = true;
+  function importNext(fileInfo)
+  {
+    var startTime = Date.now();
 
     module.debug("Importing %s...", fileInfo.timeKey);
 
@@ -95,15 +78,21 @@ exports.start = function startControlCyclesImporterModule(app, module)
       if (err)
       {
         module.error("Failed to import %s: %s", fileInfo.timeKey, err.message);
+
+        app.broker.publish('warehouse.controlCycles.syncFailed', {
+          timestamp: fileInfo.timestamp,
+          error: err.message
+        });
       }
       else
       {
         module.debug("Imported %d of %s in %d ms!", controlCycles.length, fileInfo.timeKey, Date.now() - startTime);
+
+        app.broker.publish('warehouse.controlCycles.synced', {
+          timestamp: fileInfo.timestamp,
+          count: controlCycles.length
+        });
       }
-
-      importLock = false;
-
-      setImmediate(importNext);
     });
   }
 

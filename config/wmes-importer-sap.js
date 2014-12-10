@@ -15,6 +15,7 @@ exports.modules = [
   {id: 'orders/importer/orders', name: 'nextDayOrderImporter'},
   {id: 'orders/importer/orders', name: 'prevDayOrderImporter'},
   {id: 'orders/importer/emptyOrders', name: 'emptyOrderImporter'},
+  'warehouse/importer/importQueue',
   'warehouse/importer/controlCycles',
   'warehouse/importer/transferOrders',
   'reports/clipOrderCount'
@@ -45,7 +46,8 @@ exports.events = {
       'events.**',
       'orders.synced',
       'emptyOrders.synced',
-      'clipOrderCount.created'
+      'clipOrderCount.created',
+      'warehouse.*.synced', 'warehouse.*.syncFailed'
     ]
   }
 };
