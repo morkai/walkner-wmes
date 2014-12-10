@@ -4,11 +4,10 @@
 
 'use strict';
 
-module.exports = function setupWhTransferOrderArchiveModel(app, mongoose)
+module.exports = function setupWhTransferOrderModel(app, mongoose)
 {
-  var whTransferOrderArchiveSchema = mongoose.Schema({
+  var whTransferOrderSchema = mongoose.Schema({
     _id: {
-      ts: Date,
       no: String,
       item: Number
     },
@@ -24,11 +23,15 @@ module.exports = function setupWhTransferOrderArchiveModel(app, mongoose)
     srcTgtQty: Number,
     unit: String,
     mvmtWm: Number,
-    mvmtIm: Number
+    mvmtIm: Number,
+    shiftDate: Date,
+    s: Number
   }, {
     id: false,
     versionKey: false
   });
 
-  mongoose.model('WhTransferOrderArchive', whTransferOrderArchiveSchema);
+  whTransferOrderSchema.index({nc12: 1});
+
+  mongoose.model('WhTransferOrder', whTransferOrderSchema);
 };

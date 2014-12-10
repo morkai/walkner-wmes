@@ -27,7 +27,11 @@ exports.mongoose = {
   options: {
     server: {poolSize: 5}
   },
-  models: ['event', 'order', 'emptyOrder', 'clipOrderCount', 'whControlCycleArchive', 'whTransferOrderArchive']
+  models: [
+    'event',
+    'order', 'emptyOrder', 'clipOrderCount',
+    'whControlCycleArchive', 'whControlCycle', 'whTransferOrderArchive', 'whTransferOrder'
+  ]
 };
 
 exports.events = {

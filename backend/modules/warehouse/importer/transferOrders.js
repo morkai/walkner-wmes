@@ -25,7 +25,9 @@ exports.start = function startTransferOrdersImporterModule(app, module)
     throw new Error("mongoose module is required!");
   }
 
+  var WhTransferOrder = mongoose.model('WhTransferOrder');
   var WhTransferOrderArchive = mongoose.model('WhTransferOrderArchive');
+  var WhControlCycle = mongoose.model('WhControlCycle');
 
   var filePathCache = {};
   var importQueue = [];
@@ -108,8 +110,27 @@ exports.start = function startTransferOrdersImporterModule(app, module)
   function importFile(fileInfo, done)
   {
     step(
-      function readFileStep()
+      function fetchControlCyclesStep()
       {
+        var next = this.next();
+        var nc12ToS = this.nc12ToS = {};
+
+        var stream = WhControlCycle.find({}, {s: 1}).lean().stream();
+
+        stream.on('error', next);
+        stream.on('end', next);
+        stream.on('data', function(doc)
+        {
+          nc12ToS[doc._id] = doc.s;
+        });
+      },
+      function readFileStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
         fs.readFile(fileInfo.filePath, {encoding: 'utf8'}, this.next());
       },
       function parseFileStep(err, fileContents)
@@ -129,31 +150,111 @@ exports.start = function startTransferOrdersImporterModule(app, module)
 
         setImmediate(this.next());
       },
+      function createBatchesStep()
+      {
+        var batchSize = 1000;
+        var batchCount = Math.ceil(this.transferOrders.length / batchSize);
+
+        this.batches = [];
+
+        for (var i = 0; i < batchCount; ++i)
+        {
+          this.batches.push(this.transferOrders.slice(i * batchSize, i * batchSize + batchSize));
+        }
+
+        setImmediate(this.next());
+      },
       function archiveControlCyclesStep()
       {
-        WhTransferOrderArchive.collection.insert(this.transferOrders, {continueOnError: true}, this.next());
+        for (var i = 0, l = this.batches.length; i < l; ++i)
+        {
+          WhTransferOrderArchive.collection.insert(this.batches[i], {continueOnError: true}, this.parallel());
+        }
       },
-      function handleError(err)
+      function handleArchiveError(err)
       {
-        if (err)
+        if (!err || err.code === 11000)
+        {
+          return;
+        }
+
+        if (err.err && !err.message)
         {
           var code = err.code;
 
-          if (err.code === 11000)
-          {
-            err = null;
-          }
-          else if (err.errmsg)
-          {
-            err = new Error(err.errmsg);
-            err.name = 'MongoError';
-            err.code = code;
-          }
+          err = new Error(err.err);
+          err.name = 'MongoError';
+          err.code = code;
         }
 
+        return this.skip(err, this.transferOrders);
+      },
+      function updateCurrentTransferOrdersStep()
+      {
+        var steps = [];
+
+        for (var i = 0, l = this.batches.length; i < l; ++i)
+        {
+          steps.push(createUpdateCurrentTransferOrdersBatchStep(this.batches[i], this.nc12ToS));
+        }
+
+        steps.push(this.next());
+
+        step(steps);
+      },
+      function(err)
+      {
         done(err, this.transferOrders);
       }
     );
+  }
+
+  function createUpdateCurrentTransferOrdersBatchStep(transferOrdersArchive, nc12ToS)
+  {
+    return function updateCurrentTransferOrdersBatchStep()
+    {
+      var options = {upsert: true};
+
+      for (var i = 0, l = transferOrdersArchive.length; i < l; ++i)
+      {
+        var transferOrder = transferOrdersArchive[i];
+
+        transferOrder._id = {
+          no: transferOrder._id.no,
+          item: transferOrder._id.item
+        };
+        transferOrder.shiftDate = getShiftDate(transferOrder.confirmedAt);
+        transferOrder.s = nc12ToS[transferOrder.nc12] || 0;
+
+        WhTransferOrder.collection.update({_id: transferOrder._id}, transferOrder, options, this.parallel());
+      }
+    };
+  }
+
+  function getShiftDate(confirmedAt)
+  {
+    var shiftDate = moment(confirmedAt).minutes(0).seconds(0).milliseconds(0);
+    var h = shiftDate.hours();
+
+    if (h >= 6 && h < 14)
+    {
+      shiftDate.hours(6);
+    }
+    else if (h >= 14 && h < 22)
+    {
+      shiftDate.hours(14);
+    }
+    else
+    {
+      if (h < 6)
+      {
+        shiftDate.subtract(1, 'days');
+      }
+
+      shiftDate.hours(22);
+    }
+
+    return shiftDate.toDate();
   }
 
   function cleanUpFileInfoFile(fileInfo)

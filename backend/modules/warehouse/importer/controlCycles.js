@@ -25,6 +25,8 @@ exports.start = function startControlCyclesImporterModule(app, module)
     throw new Error("mongoose module is required!");
   }
 
+  var WhTransferOrder = mongoose.model('WhTransferOrder');
+  var WhControlCycle = mongoose.model('WhControlCycle');
   var WhControlCycleArchive = mongoose.model('WhControlCycleArchive');
 
   var filePathCache = {};
@@ -129,31 +131,86 @@ exports.start = function startControlCyclesImporterModule(app, module)
 
         setImmediate(this.next());
       },
+      function createBatchesStep()
+      {
+        var batchSize = 1000;
+        var batchCount = Math.ceil(this.controlCycles.length / batchSize);
+
+        this.batches = [];
+
+        for (var i = 0; i < batchCount; ++i)
+        {
+          this.batches.push(this.controlCycles.slice(i * batchSize, i * batchSize + batchSize));
+        }
+
+        setImmediate(this.next());
+      },
       function archiveControlCyclesStep()
       {
-        WhControlCycleArchive.collection.insert(this.controlCycles, {continueOnError: true}, this.next());
+        for (var i = 0, l = this.batches.length; i < l; ++i)
+        {
+          WhControlCycleArchive.collection.insert(this.batches[i], {continueOnError: true}, this.parallel());
+        }
       },
-      function handleError(err)
+      function handleArchiveError(err)
       {
-        if (err)
+        if (!err || err.code === 11000)
+        {
+          return;
+        }
+
+        if (err.err && !err.message)
         {
           var code = err.code;
 
-          if (err.code === 11000)
-          {
-            err = null;
-          }
-          else if (err.errmsg)
-          {
-            err = new Error(err.errmsg);
-            err.name = 'MongoError';
-            err.code = code;
-          }
+          err = new Error(err.err);
+          err.name = 'MongoError';
+          err.code = code;
         }
 
+        return this.skip(err);
+      },
+      function updateCurrentControlCyclesStep()
+      {
+        var steps = [];
+
+        for (var i = 0, l = this.batches.length; i < l; ++i)
+        {
+          steps.push(createUpdateCurrentControlCyclesBatchStep(this.batches[i]));
+        }
+
+        steps.push(this.next());
+
+        step(steps);
+      },
+      function(err)
+      {
         done(err, this.controlCycles);
       }
     );
+  }
+
+  function createUpdateCurrentControlCyclesBatchStep(controlCyclesArchive)
+  {
+    return function updateCurrentControlCyclesBatchStep()
+    {
+      var ccOptions = {upsert: true};
+      var toOptions = {multi: true};
+
+      for (var i = 0, l = controlCyclesArchive.length; i < l; ++i)
+      {
+        var controlCycle = controlCyclesArchive[i];
+
+        controlCycle._id = controlCycle._id.nc12;
+
+        WhControlCycle.collection.update(
+          {_id: controlCycle._id}, controlCycle, ccOptions, this.parallel()
+        );
+        WhTransferOrder.collection.update(
+          {nc12: controlCycle._id}, {$set: {s: controlCycle.s}}, toOptions, this.parallel()
+        );
+      }
+    };
   }
 
   function cleanUpFileInfoFile(fileInfo)
