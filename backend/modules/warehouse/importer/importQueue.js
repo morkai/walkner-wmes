@@ -48,7 +48,7 @@ exports.start = function startWarehouseImportQueueModule(app, module)
       clearTimeout(nextTimer);
     }
 
-    nextTimer = setTimeout(doNext, 1337);
+    nextTimer = setTimeout(doNext, 100);
   }
 
   function doNext()
@@ -59,9 +59,9 @@ exports.start = function startWarehouseImportQueueModule(app, module)
     var item = queue.shift();
     var itemBroker = app.broker.sandbox();
 
-    itemBroker.publish('warehouse.importQueue.' + item.type, item.data);
     itemBroker.subscribe('warehouse.' + item.type + '.synced', done.bind(null, itemBroker));
     itemBroker.subscribe('warehouse.' + item.type + '.syncFailed', done.bind(null, itemBroker));
+    itemBroker.publish('warehouse.importQueue.' + item.type, item.data);
   }
 
   function done(itemBroker)

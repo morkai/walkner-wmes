@@ -39,6 +39,7 @@ exports.modules = [
   'icpo',
   'licenses',
   'factoryLayout',
+  'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-results'},
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-1'},
@@ -144,7 +145,8 @@ exports.mongoose = {
     'feedback',
     'license', 'licensePing',
     'xiconfOrder', 'xiconfResult', 'icpoResult',
-    'factoryLayout'
+    'factoryLayout',
+    'whControlCycle'
   ]
 };
 
@@ -179,6 +181,17 @@ exports.user = {
     'REPORTS:VIEW', 'REPORTS:MANAGE',
     'XICONF:VIEW', 'XICONF:MANAGE', 'ICPO:VIEW', 'ICPO:MANAGE',
     'FACTORY_LAYOUT:MANAGE'
+  ]
+};
+
+exports['messenger/server'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60000,
+  repHost: '127.0.0.1',
+  repPort: 60001,
+  responseTimeout: 5000,
+  broadcastTopics: [
+    'fte.leader.updated.*'
   ]
 };
 

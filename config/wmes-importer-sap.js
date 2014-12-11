@@ -10,6 +10,7 @@ exports.modules = [
   'events',
   'updater',
   'messenger/server',
+  'messenger/client',
   'directoryWatcher',
   {id: 'orders/importer/orders', name: 'currentDayOrderImporter'},
   {id: 'orders/importer/orders', name: 'nextDayOrderImporter'},
@@ -18,6 +19,7 @@ exports.modules = [
   'warehouse/importer/importQueue',
   'warehouse/importer/controlCycles',
   'warehouse/importer/transferOrders',
+  'warehouse/importer/shiftMetrics',
   'reports/clipOrderCount'
 ];
 
@@ -31,7 +33,8 @@ exports.mongoose = {
   models: [
     'event',
     'order', 'emptyOrder', 'clipOrderCount',
-    'whControlCycleArchive', 'whControlCycle', 'whTransferOrderArchive', 'whTransferOrder'
+    'fteLeaderEntry',
+    'whControlCycleArchive', 'whControlCycle', 'whTransferOrderArchive', 'whTransferOrder', 'whShiftMetrics'
   ]
 };
 
@@ -70,8 +73,17 @@ exports['messenger/server'] = {
   broadcastTopics: [
     'events.saved',
     'orders.synced',
-    'emptyOrders.synced'
+    'emptyOrders.synced',
+    'warehouse.*.synced', 'warehouse.*.syncFailed'
   ]
+};
+
+exports['messenger/client'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60000,
+  repHost: '127.0.0.1',
+  repPort: 60001,
+  responseTimeout: 5000
 };
 
 exports.directoryWatcher = {
