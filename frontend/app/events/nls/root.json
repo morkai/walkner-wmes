@@ -157,7 +157,19 @@
     "TYPE:production.unlocked": "Production: line activation",
     "TEXT:production.unlocked": "Activated production line: <em>{prodLine}</em>",
     "TYPE:production.locked": "Production: line deactivation",
-    "TEXT:production.locked": "Deactivated production line: <em>{prodLine}</em>"
+    "TEXT:production.locked": "Deactivated production line: <em>{prodLine}</em>",
+    "TYPE:warehouse.controlCycles.synced": "Warehouse: control cycles sync",
+    "TEXT:warehouse.controlCycles.synced": "Imported <em>{count}</em> {count, plural, one{control cycle} other{control cycles}} from data downloaded at <em>{timestamp}</em>.",
+    "TYPE:warehouse.controlCycles.syncFailed": "Warehouse: control cycles sync failure",
+    "TEXT:warehouse.controlCycles.syncFailed": "Failed to import control cycles from data downloaded at <em>{timestamp}</em>: <em>{error}</em>",
+    "TYPE:warehouse.transferOrders.synced": "Warehouse: transfer orders sync",
+    "TEXT:warehouse.transferOrders.synced": "Imported <em>{count}</em> {count, plural, one{transfer order} other{transfer orders}} from data downloaded at <em>{timestamp}</em>.",
+    "TYPE:warehouse.transferOrders.syncFailed": "Warehouse: transfer orders sync failure",
+    "TEXT:warehouse.transferOrders.syncFailed": "Failed to import transfer orders from data downloaded at <em>{timestamp}</em>: <em>{error}</em>",
+    "TYPE:warehouse.shiftMetrics.synced": "Warehouse: metrics calc",
+    "TEXT:warehouse.shiftMetrics.synced": "Calculated warehouse shift metrics for <em>{date}</em>.",
+    "TYPE:warehouse.shiftMetrics.syncFailed": "Warehouse: metrics calc failure",
+    "TEXT:warehouse.shiftMetrics.syncFailed": "Failed to calculate warehouse shift metrics for <em>{date}</em>: <em>{error}</em>"
   },
   "pl": true
 }

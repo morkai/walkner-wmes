@@ -101,7 +101,16 @@ define([
           break;
 
         case 'clipOrderCount.created':
+        case 'warehouse.shiftMetrics.synced':
+        case 'warehouse.shiftMetrics.syncFailed':
           data.date = time.format(data.date, 'YYYY-MM-DD');
+          break;
+
+        case 'warehouse.controlCycles.synced':
+        case 'warehouse.controlCycles.syncFailed':
+        case 'warehouse.transferOrders.synced':
+        case 'warehouse.transferOrders.syncFailed':
+          data.timestamp = time.format(data.timestamp, 'YYYY-MM-DD, HH:mm:ss');
           break;
 
         case 'purchaseOrders.synced':
