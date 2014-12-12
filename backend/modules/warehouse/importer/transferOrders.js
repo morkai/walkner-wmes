@@ -26,7 +26,6 @@ exports.start = function startTransferOrdersImporterModule(app, module)
   }
 
   var WhTransferOrder = mongoose.model('WhTransferOrder');
-  var WhTransferOrderArchive = mongoose.model('WhTransferOrderArchive');
   var WhControlCycle = mongoose.model('WhControlCycle');
 
   var filePathCache = {};
@@ -133,7 +132,8 @@ exports.start = function startTransferOrdersImporterModule(app, module)
 
         var t = Date.now();
 
-        this.transferOrders = parseTransferOrders(fileContents, new Date(fileInfo.timestamp));
+        this.transferOrders = parseTransferOrders(fileContents, new Date(fileInfo.timestamp), this.nc12ToS);
+        this.nc12ToS = null;
 
         module.debug("Parsed %s in %d ms!", fileInfo.timeKey, Date.now() - t);
 
@@ -153,18 +153,18 @@ exports.start = function startTransferOrdersImporterModule(app, module)
 
         setImmediate(this.next());
       },
-      function archiveControlCyclesStep()
+      function insertTransferOrdersStep()
       {
         for (var i = 0, l = this.batches.length; i < l; ++i)
         {
-          WhTransferOrderArchive.collection.insert(this.batches[i], {continueOnError: true}, this.parallel());
+          WhTransferOrder.collection.insert(this.batches[i], {continueOnError: true}, this.parallel());
         }
       },
       function handleArchiveError(err)
       {
         if (!err || err.code === 11000)
         {
-          return;
+          return done(null, this.transferOrders);
         }
 
         if (err.err && !err.message)
@@ -176,74 +176,9 @@ exports.start = function startTransferOrdersImporterModule(app, module)
           err.code = code;
         }
 
-        return this.skip(err, this.transferOrders);
-      },
-      function updateCurrentTransferOrdersStep()
-      {
-        var steps = [];
-
-        for (var i = 0, l = this.batches.length; i < l; ++i)
-        {
-          steps.push(createUpdateCurrentTransferOrdersBatchStep(this.batches[i], this.nc12ToS));
-        }
-
-        steps.push(this.next());
-
-        step(steps);
-      },
-      function(err)
-      {
         done(err, this.transferOrders);
       }
     );
-  }
-
-  function createUpdateCurrentTransferOrdersBatchStep(transferOrdersArchive, nc12ToS)
-  {
-    return function updateCurrentTransferOrdersBatchStep()
-    {
-      var options = {upsert: true};
-
-      for (var i = 0, l = transferOrdersArchive.length; i < l; ++i)
-      {
-        var transferOrder = transferOrdersArchive[i];
-
-        transferOrder._id = {
-          no: transferOrder._id.no,
-          item: transferOrder._id.item
-        };
-        transferOrder.shiftDate = getShiftDate(transferOrder.confirmedAt);
-        transferOrder.s = nc12ToS[transferOrder.nc12] || 0;
-
-        WhTransferOrder.collection.update({_id: transferOrder._id}, transferOrder, options, this.parallel());
-      }
-    };
-  }
-
-  function getShiftDate(confirmedAt)
-  {
-    var shiftDate = moment(confirmedAt).minutes(0).seconds(0).milliseconds(0);
-    var h = shiftDate.hours();
-
-    if (h >= 6 && h < 14)
-    {
-      shiftDate.hours(6);
-    }
-    else if (h >= 14 && h < 22)
-    {
-      shiftDate.hours(14);
-    }
-    else
-    {
-      if (h < 6)
-      {
-        shiftDate.subtract(1, 'days');
-      }
-
-      shiftDate.hours(22);
-    }
-
-    return shiftDate.toDate();
   }
 
   function cleanUpFileInfoFile(fileInfo)

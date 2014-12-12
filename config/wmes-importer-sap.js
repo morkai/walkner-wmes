@@ -34,7 +34,7 @@ exports.mongoose = {
     'event',
     'order', 'emptyOrder', 'clipOrderCount',
     'fteLeaderEntry',
-    'whControlCycleArchive', 'whControlCycle', 'whTransferOrderArchive', 'whTransferOrder', 'whShiftMetrics'
+    'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics'
   ]
 };
 

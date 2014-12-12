@@ -10,15 +10,10 @@ var parseSapDate = require('../../sap/util/parseSapDate');
 var parseSapTime = require('../../sap/util/parseSapTime');
 var parseSapNumber = require('../../sap/util/parseSapNumber');
 
-module.exports = function parseControlCycles(input, timestamp)
+module.exports = function parseTransferOrders(input, timestamp, nc12ToS)
 {
   var validTo = moment(timestamp).hours(6).minutes(0).seconds(0).milliseconds(0).valueOf();
   var validFrom = moment(validTo).subtract(1, 'days').valueOf();
-
-  function stripLeadingZeros(input)
-  {
-    return input.replace(/^0+/, '');
-  }
 
   return parseSapTextTable(input, {
     columnMatchers: {
@@ -61,17 +56,23 @@ module.exports = function parseControlCycles(input, timestamp)
         return null;
       }
 
-      var to = {
+      var confirmedAt = new Date(
+        obj.confDate.y, obj.confDate.m - 1, obj.confDate.d,
+        obj.confTime.h, obj.confTime.m, obj.confTime.s
+      );
+
+      if (confirmedAt < validFrom || confirmedAt >= validTo)
+      {
+        return null;
+      }
+
+      return {
         _id: {
-          ts: timestamp,
           no: obj.no,
           item: obj.item
         },
         plant: obj.plant,
-        confirmedAt: new Date(
-          obj.confDate.y, obj.confDate.m - 1, obj.confDate.d,
-          obj.confTime.h, obj.confTime.m, obj.confTime.s
-        ),
+        confirmedAt: confirmedAt,
         nc12: obj.nc12,
         name: obj.name,
         srcType: obj.srcType,
@@ -82,17 +83,41 @@ module.exports = function parseControlCycles(input, timestamp)
         srcTgtQty: obj.srcTgtQty,
         unit: obj.unit,
         mvmtWm: obj.mvmtWm,
-        mvmtIm: obj.mvmtIm
+        mvmtIm: obj.mvmtIm,
+        shiftDate: getShiftDate(confirmedAt),
+        s: nc12ToS[obj.nc12] || 0
       };
-
-      var confirmedAt = to.confirmedAt.getTime();
-
-      if (confirmedAt < validFrom || confirmedAt >= validTo)
-      {
-        return null;
-      }
-
-      return to;
     }
   });
 };
+
+function stripLeadingZeros(input)
+{
+  return input.replace(/^0+/, '');
+}
+
+function getShiftDate(confirmedAt)
+{
+  var shiftDate = moment(confirmedAt).minutes(0).seconds(0).milliseconds(0);
+  var h = shiftDate.hours();
+
+  if (h >= 6 && h < 14)
+  {
+    shiftDate.hours(6);
+  }
+  else if (h >= 14 && h < 22)
+  {
+    shiftDate.hours(14);
+  }
+  else
+  {
+    if (h < 6)
+    {
+      shiftDate.subtract(1, 'days');
+    }
+
+    shiftDate.hours(22);
+  }
+
+  return shiftDate.toDate();
+}
