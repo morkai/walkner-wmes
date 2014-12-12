@@ -227,6 +227,14 @@ exports.start = function startMessengerClientModule(app, module, done)
       responseHandler.apply(null, arguments);
     });
 
+    if ((socket.type === 'client' && !socket.connected) || (socket.type === 'server' && socket.socks.length === 0))
+    {
+      return reply({
+        code: 'NO_CONNECTION',
+        message: socket.type === 'client' ? "Not connected to the server." : "No clients connected."
+      });
+    }
+
     socket.send(type, data, reply);
 
     timer = app.timeout(module.config.responseTimeout, function()
