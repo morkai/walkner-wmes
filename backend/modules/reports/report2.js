@@ -142,9 +142,9 @@ module.exports = function(mongoose, options, done)
         to = startTime;
       }
 
-      totalMap[startTime] = result.all;
-      productionMap[startTime] = result.cnf;
-      endToEndMap[startTime] = result.dlv;
+      totalMap[startTime] = (totalMap[startTime] === undefined ? 0 : totalMap[startTime]) + result.all;
+      productionMap[startTime] = (productionMap[startTime] === undefined ? 0 : productionMap[startTime]) + result.cnf;
+      endToEndMap[startTime] = (endToEndMap[startTime] === undefined ? 0 : endToEndMap[startTime]) + result.dlv;
     }
 
     this.fromGroupKey = from;
@@ -554,11 +554,17 @@ function getStartTimeFromGroupKey(interval, groupKey)
   }
   else
   {
-    startTimeStr += util.pad0(groupKey.m) + '-'
-      + (interval === 'day' ? util.pad0(groupKey.d) : '01');
+    startTimeStr += util.pad0(groupKey.m) + '-' + (interval === 'day' ? util.pad0(groupKey.d) : '01');
   }
 
-  return moment(startTimeStr).valueOf();
+  var groupKeyMoment = moment(startTimeStr);
+
+  if (interval === 'quarter')
+  {
+    groupKeyMoment.startOf('quarter');
+  }
+
+  return groupKeyMoment.valueOf();
 }
 
 function addToProperty(obj, prop, num)
@@ -580,7 +586,5 @@ function addToProperty(obj, prop, num)
 
 function prepareOrgUnitId(orgUnitType, orgUnitId)
 {
-  return orgUnitType !== 'subdivision' && orgUnitType !== 'prodFlow'
-    ? orgUnitId
-    : new ObjectId(orgUnitId);
+  return orgUnitType !== 'subdivision' && orgUnitType !== 'prodFlow' ? orgUnitId : new ObjectId(orgUnitId);
 }
