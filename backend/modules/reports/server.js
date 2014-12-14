@@ -11,7 +11,8 @@ var REPORTS = {
   2: require('./report2'),
   3: require('./report3'),
   4: require('./report4'),
-  5: require('./report5')
+  5: require('./report5'),
+  6: require('./report6')
 };
 
 exports.DEFAULT_CONFIG = {

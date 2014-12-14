@@ -32,9 +32,10 @@ exports.mongoose = {
   },
   models: [
     'event',
-    'ProdShift', 'ProdShiftOrder', 'ProdDowntime',
-    'FteMasterEntry', 'FteLeaderEntry',
-    'ClipOrderCount'
+    'prodShift', 'prodShiftOrder', 'prodDowntime',
+    'fteMasterEntry', 'fteLeaderEntry',
+    'clipOrderCount',
+    'whShiftMetrics'
   ]
 };
 
