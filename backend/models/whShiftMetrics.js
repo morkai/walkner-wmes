@@ -41,6 +41,10 @@ module.exports = function setupWhShiftMetricsModel(app, mongoose)
     finGoodsInFte: metric,
     finGoodsOutCount: metric,
     finGoodsOutFte: metric,
+    compAbsenceFte: metric,
+    finGoodsAbsenceFte: metric,
+    compTotalFte: metric,
+    finGoodsTotalFte: metric,
     compTasks: {
       type: {},
       default: {}
