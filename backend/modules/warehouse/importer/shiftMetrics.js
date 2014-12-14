@@ -20,7 +20,7 @@ exports.start = function startWarehouseImportQueueModule(app, module)
     throw new Error("mongoose module is required!");
   }
 
-  var FTE_UPDATE_DELAY = 5000;
+  var FTE_UPDATE_DELAY = 30000;
   var COMPONENT_STORAGE_ID = new mongoose.Types.ObjectId('529f2629cd8eea982400000c');
   var FINISHED_GOODS_STORAGE_ID = new mongoose.Types.ObjectId('529f263ccd8eea982400000e');
   var COMPONENT_STORAGE_TASKS = {
@@ -243,33 +243,22 @@ exports.start = function startWarehouseImportQueueModule(app, module)
 
         if (results.length === 0)
         {
-          return this.whShiftMetrics.set({
+          this.whShiftMetrics.set({
             inCompCount: 0,
-            inComp: 0,
             coopCompCount: 0,
-            coopComp: 0,
             exStorageOutCount: 0,
-            exStorageOut: 0,
             exStorageInCount: 0,
-            exStorageIn: 0,
             fifoCount: 0,
-            fifo: 0,
             stagingCount: 0,
-            staging: 0,
             smCount: 0,
-            sm: 0,
             paintCount: 0,
-            paint: 0,
             fixBinCount: 0,
-            fixBin: 0,
             finGoodsInCount: 0,
-            finGoodsIn: 0,
-            finGoodsOutCount: 0,
-            finGoodsOut: 0
+            finGoodsOutCount: 0
           });
         }
 
-        var counts = results[0];
+        var counts = results.length ? results[0] : {};
         var metrics = Object.keys(counts);
 
         for (var i = 0, l = metrics.length; i < l; ++i)
@@ -283,14 +272,8 @@ exports.start = function startWarehouseImportQueueModule(app, module)
           }
 
           this.whShiftMetrics[metric + 'Count'] = count;
-
-          calcMetricValue(this.whShiftMetrics, metric);
         }
-        
-        setImmediate(this.next());
-      },
-      function()
-      {
+
         this.whShiftMetrics.save(this.next());
       },
       done
@@ -302,7 +285,7 @@ exports.start = function startWarehouseImportQueueModule(app, module)
     return {$sum: {$cond: {if: cond, then: 1, else: 0}}};
   }
 
-  function countStorageFte(whShiftMetrics, tasks, tasksProperty, taskToMetric, updateMetric)
+  function countStorageFte(whShiftMetrics, tasks, tasksProperty, taskToMetric)
   {
     for (var i = 0, l = tasks.length; i < l; ++i)
     {
@@ -317,41 +300,7 @@ exports.start = function startWarehouseImportQueueModule(app, module)
       else
       {
         whShiftMetrics[fteProperty] = task.totals.overall;
-
-        if (updateMetric)
-        {
-          calcMetricValue(whShiftMetrics, metric);
-        }
       }
-    }
-  }
-
-  function calcMetricValue(whShiftMetrics, metric)
-  {
-    /*jshint -W116*/
-
-    var countProperty = metric + 'Count';
-    var fteProperty = (metric === 'exStorageOut' ? 'exStorage' : metric) + 'Fte';
-    var count = whShiftMetrics[countProperty];
-
-    if (count === undefined || whShiftMetrics[metric] === undefined)
-    {
-      return;
-    }
-
-    var fte = whShiftMetrics[fteProperty];
-
-    if (fte === undefined)
-    {
-      whShiftMetrics[metric] = count;
-    }
-    else if (count === 0 || fte === 0)
-    {
-      whShiftMetrics[metric] = 0;
-    }
-    else
-    {
-      whShiftMetrics[metric] = count / fte;
     }
   }
 
@@ -415,15 +364,11 @@ exports.start = function startWarehouseImportQueueModule(app, module)
 
         if (this.fteLeaderEntry.subdivision.equals(COMPONENT_STORAGE_ID))
         {
-          countStorageFte(
-            whShiftMetrics, this.fteLeaderEntry.tasks, 'compTasks', COMPONENT_STORAGE_TASKS, true
-          );
+          countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'compTasks', COMPONENT_STORAGE_TASKS);
         }
         else
         {
-          countStorageFte(
-            whShiftMetrics, this.fteLeaderEntry.tasks, 'finGoodsTasks', FINISHED_GOODS_STORAGE_TASKS, true
-          );
+          countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'finGoodsTasks', FINISHED_GOODS_STORAGE_TASKS);
         }
 
         whShiftMetrics.save(this);
