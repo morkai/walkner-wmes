@@ -91,6 +91,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           return;
         }
 
+        downtimeChanges = {};
+
         [
           'master',
           'leader',
