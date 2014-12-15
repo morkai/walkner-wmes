@@ -18,9 +18,8 @@ define([
     serializeRows: function()
     {
       var prodTasks = this.collection;
-      var topLevel = {};
 
-      prodTasks.forEach(function(prodTask)
+      return prodTasks.sort().map(function(prodTask)
       {
         var row = prodTask.toJSON();
 
@@ -33,46 +32,12 @@ define([
           row.clipColor = '<span class="label" style="background: ' + row.clipColor + '">' + row.clipColor + '</span>';
         }
 
-        if (row.parent)
-        {
-          if (!topLevel[row.parent])
-          {
-            topLevel[row.parent] = {
-              parent: null,
-              children: []
-            };
-          }
-
-          topLevel[row.parent].children.push(row);
-        }
-        else if (!topLevel[row._id])
-        {
-          topLevel[row._id] = {
-            parent: row,
-            children: []
-          };
-        }
-        else if (!topLevel[row._id].parent)
-        {
-          topLevel[row._id].parent = row;
-        }
-
         var parentTask = prodTasks.get(row.parent);
 
         row.parent = parentTask ? parentTask.getLabel() : '-';
+
+        return row;
       });
-
-      var rows = [];
-
-      Object.keys(topLevel).forEach(function(k)
-      {
-        var item = topLevel[k];
-
-        rows.push(item.parent);
-        rows.push.apply(rows, item.children);
-      });
-
-      return rows;
     }
 
   });

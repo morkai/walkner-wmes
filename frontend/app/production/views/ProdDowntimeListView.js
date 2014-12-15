@@ -60,7 +60,6 @@ define([
     destroy: function()
     {
       this.$el.popover('destroy');
-      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
     },
 
     serializeColumns: function()

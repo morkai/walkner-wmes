@@ -94,10 +94,8 @@ function(
 
   View.prototype.cleanup = function()
   {
-    if (_.isFunction(this.destroy))
-    {
-      this.destroy();
-    }
+    this.destroy();
+    this.cleanupSelect2();
 
     util.cleanupSandboxedProperties(this);
 
@@ -109,6 +107,18 @@ function(
     }
 
     this.cancelRequests();
+  };
+
+  View.prototype.destroy = function() {};
+
+  View.prototype.cleanupSelect2 = function()
+  {
+    var view = this;
+
+    this.$('.select2-container').each(function()
+    {
+      view.$('#' + this.id.replace('s2id_', '')).select2('destroy');
+    });
   };
 
   View.prototype.serialize = function()

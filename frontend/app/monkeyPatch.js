@@ -62,9 +62,14 @@ function(
     return $modalDialog.length === 0 ? $body : $modalDialog;
   };
 
-  $body.on('focusin', '.select2-offscreen[tabindex="-1"]', function()
+  $body.on('click', 'label[for]', function(e)
   {
-    $(this).select2('focus');
+    var $el = $('#' + e.target.htmlFor);
+
+    if ($el.data('select2'))
+    {
+      $el.select2('focus');
+    }
   });
 
   return {};

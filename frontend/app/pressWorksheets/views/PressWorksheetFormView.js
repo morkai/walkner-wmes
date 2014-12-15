@@ -224,8 +224,6 @@ define([
     destroy: function()
     {
       $('body').off('keydown', this.onKeyDown);
-
-      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
     },
 
     afterRender: function()

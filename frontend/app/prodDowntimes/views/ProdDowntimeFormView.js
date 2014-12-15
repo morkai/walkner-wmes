@@ -27,11 +27,6 @@ define([
 
     template: formTemplate,
 
-    destroy: function()
-    {
-      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
-    },
-
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);

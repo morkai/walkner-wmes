@@ -36,7 +36,7 @@ define([
             + '&sort(' + property + ')'
             + '&limit(20)&regex(' + property + ',' + term + ',i)';
         },
-        results: function(data, query)
+        results: function(data, page, query)
         {
           var root = user.getRootUserData();
           var results = [{
