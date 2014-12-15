@@ -231,7 +231,7 @@ define([
       var newDate = this.getCurrentShiftMoment().toDate();
       var oldDate = this.get('date');
 
-      if (oldDate && newDate.getTime() === oldDate.getTime())
+      if (oldDate && newDate.getTime() <= oldDate.getTime())
       {
         return this.startShiftChangeMonitor();
       }
