@@ -526,8 +526,10 @@ define([
         chartView.onFullscreen(isFullscreen);
       }
 
-      chartView.chart.reflow();
-      chartView.chart.redraw(false);
+      chartView.chart.destroy();
+      chartView.chart = null;
+      chartView.afterRender();
+      chartView.updateChart();
 
       if (!isFullscreen)
       {
