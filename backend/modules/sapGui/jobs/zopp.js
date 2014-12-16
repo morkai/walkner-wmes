@@ -6,12 +6,12 @@
 
 var checkOutputFile = require('./checkOutputFile');
 
-module.exports = function runZoppJob(app, sapGuiModule, jobId, done)
+module.exports = function runZoppJob(app, sapGuiModule, job, done)
 {
   var args = [
     '--output-file',
     Math.floor(Date.now() / 1000) + '@T_ZOPP_1.txt'
   ];
 
-  sapGuiModule.runScript(jobId, 'T_ZOPP.exe', args, checkOutputFile.bind(null, done));
+  sapGuiModule.runScript(job, 'T_ZOPP.exe', args, checkOutputFile.bind(null, done));
 };

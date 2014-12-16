@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function runKeepAliveJob(app, sapGuiModule, jobId, done)
+module.exports = function runKeepAliveJob(app, sapGuiModule, job, done)
 {
-  sapGuiModule.runScript(jobId, 'KeepAlive.exe', [], done);
+  sapGuiModule.runScript(job, 'KeepAlive.exe', [], done);
 };

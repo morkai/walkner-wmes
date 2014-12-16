@@ -7,6 +7,7 @@
 var spawn = require('child_process').spawn;
 var path = require('path');
 var later = require('later');
+var lodash = require('lodash');
 var jobs = require('./jobs/index');
 
 exports.DEFAULT_CONFIG = {
@@ -24,23 +25,27 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   sapGuiModule.runJob = function(job, done)
   {
-    runJob(job, 0, done);
+    runJob(lodash.cloneDeep(job), 0, done);
   };
 
-  sapGuiModule.runScript = function(jobId, scriptFile, args, done)
+  sapGuiModule.runScript = function(job, scriptFile, args, done)
   {
     var file = path.join(sapGuiModule.config.scriptsPath, scriptFile);
     var cp = spawn(file, args);
     var output = '';
+    var timeoutTimer = !job.scriptTimeout ? null : setTimeout(
+      function() { bail(new Error('SCRIPT_TIMEOUT'), null); },
+      job.scriptTimeout
+    );
 
     cp.on('error', function(err)
     {
-      done(err, null, output);
+      bail(err, null);
     });
 
     cp.on('exit', function(exitCode)
     {
-      done(null, exitCode, output);
+      bail(null, exitCode);
     });
 
     cp.stderr.setEncoding('utf8');
@@ -50,7 +55,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       {
         output += line + '\r\n';
 
-        sapGuiModule.error("[%s] %s", jobId, line);
+        sapGuiModule.error("[%s] %s", job.id, line);
       });
     });
 
@@ -61,9 +66,27 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       {
         output += line + '\r\n';
 
-        sapGuiModule.debug("[%s] %s", jobId, line);
+        sapGuiModule.debug("[%s] %s", job.id, line);
       });
     });
+
+    function bail(err, exitCode)
+    {
+      done(err, exitCode, output);
+
+      if (cp !== null)
+      {
+        cp.removeAllListeners();
+        cp.kill();
+        cp = null;
+      }
+
+      if (timeoutTimer !== null)
+      {
+        clearTimeout(timeoutTimer);
+        timeoutTimer = null;
+      }
+    }
   };
 
   function runJob(job, repeatCounter, done)
@@ -89,16 +112,17 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       done = function() {};
     }
 
-    var jobId = job.name + '#' + sapGuiModule.jobCount;
+    job.id = job.name + '#' + sapGuiModule.jobCount;
+
     var jobDone = false;
 
     sapGuiModule.debug(
       "[%s] %s...",
-      jobId,
-      repeatCounter === 0 ? "Starting..." : ("Repeating #" + repeatCounter + "...")
+      job.id,
+      repeatCounter === 0 ? "Starting" : ("Repeating #" + repeatCounter)
     );
 
-    jobs[job.name](app, sapGuiModule, jobId, function(err, exitCode, output)
+    jobs[job.name](app, sapGuiModule, job, function(err, exitCode, output)
     {
       if (jobDone)
       {
@@ -111,19 +135,19 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
       if (err)
       {
-        sapGuiModule.error("[%s] %s", jobId, err.message);
+        sapGuiModule.error("[%s] %s", job.id, err.message);
       }
       else
       {
-        sapGuiModule.debug("[%s] Finished with code %s in %ds", jobId, exitCode, (Date.now() - startedAt) / 1000);
+        sapGuiModule.debug("[%s] Finished with code %s in %ds", job.id, exitCode, (Date.now() - startedAt) / 1000);
       }
 
       if (!job.repeatOnFailure || !failure || job.repeatOnFailure === repeatCounter)
       {
-        return handleJobResult(done, job, jobId, startedAt, err, exitCode, output);
+        return handleJobResult(done, job, startedAt, err, exitCode, output);
       }
 
-      sapGuiModule.debug("Failed... will retry soon...");
+      sapGuiModule.debug("[%s] Failed... will retry soon...", job.id);
 
       setTimeout(
         function() { runJob(job, ++repeatCounter, done); },
@@ -132,10 +156,9 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
     });
   }
 
-  function handleJobResult(done, job, jobId, startedAt, err, exitCode, output)
+  function handleJobResult(done, job, startedAt, err, exitCode, output)
   {
     app.broker.publish('sapGui.jobDone', {
-      id: jobId,
       job: job,
       result: err || exitCode ? 'failure' : 'success',
       startedAt: startedAt,
@@ -176,7 +199,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       return;
     }
 
-    var subject = '[' + app.options.id + ':sapGui:jobFailed] ' + message.id;
+    var subject = '[' + app.options.id + ':sapGui:jobFailed] ' + job.id;
     var text = [
       'Job name: ' + job.name,
       'Started at: ' + new Date(message.startedAt),

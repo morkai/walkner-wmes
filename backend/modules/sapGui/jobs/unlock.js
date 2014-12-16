@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function runUnlockJob(app, sapGuiModule, jobId, done)
+module.exports = function runUnlockJob(app, sapGuiModule, job, done)
 {
-  sapGuiModule.runScript(jobId, 'Unlock.exe', [], done);
+  sapGuiModule.runScript(job, 'Unlock.exe', [], done);
 };
