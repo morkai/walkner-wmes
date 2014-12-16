@@ -9,6 +9,7 @@ exports.modules = [
   'mongoose',
   'events',
   'updater',
+  'settings',
   'messenger/server',
   'messenger/client',
   'directoryWatcher',
@@ -32,6 +33,7 @@ exports.mongoose = {
   },
   models: [
     'event',
+    'setting',
     'order', 'emptyOrder', 'clipOrderCount',
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics'

@@ -12,7 +12,8 @@
       'clip',
       'dirIndir',
       'effIneff',
-      'hr'
+      'hr',
+      'wh'
     ].forEach(function(tab) { %>
     <a class="list-group-item" href="#reports;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('reports', 'settings:tab:' + tab) %></a>
     <% }) %>
@@ -30,5 +31,6 @@
     <% include settings/dirIndir.ejs %>
     <% include settings/effIneff.ejs %>
     <% include settings/hr.ejs %>
+    <% include settings/wh.ejs %>
   </div>
 </form>

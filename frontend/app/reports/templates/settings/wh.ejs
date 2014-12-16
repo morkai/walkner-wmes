@@ -1,0 +1,24 @@
+<div class="panel-body" data-tab="wh">
+  <h3><%- t('reports', 'settings:wh:comp') %></h3>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-wh-comp-id"><%- t('reports', 'settings:wh:subdivision') %></label>
+    <input id="<%- idPrefix %>-wh-comp-id" name="reports.wh.comp.id" type="text">
+  </div>
+  <% ['inComp', 'coopComp', 'exStorage', 'fifo', 'staging', 'sm', 'paint', 'fixBin', 'compAbsence'].forEach(function(metric) { %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-wh-<%- metric %>-prodTask"><%- t('reports', 'settings:wh:' + metric) %></label>
+    <input id="<%- idPrefix %>-wh-<%- metric %>-prodTask" name="reports.wh.<%- metric %>.prodTask" type="text">
+  </div>
+  <% }) %>
+  <h3><%- t('reports', 'settings:wh:finGoods') %></h3>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-wh-finGoods-id"><%- t('reports', 'settings:wh:subdivision') %></label>
+    <input id="<%- idPrefix %>-wh-finGoods-id" name="reports.wh.finGoods.id" type="text">
+  </div>
+  <% ['finGoodsIn', 'finGoodsOut', 'finGoodsAbsence'].forEach(function(metric) { %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-wh-<%- metric %>-prodTask"><%- t('reports', 'settings:wh:' + metric) %></label>
+    <input id="<%- idPrefix %>-wh-<%- metric %>-prodTask" name="reports.wh.<%- metric %>.prodTask" type="text">
+  </div>
+  <% }) %>
+</div>

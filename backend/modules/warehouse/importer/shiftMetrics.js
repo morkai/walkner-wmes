@@ -4,11 +4,13 @@
 
 'use strict';
 
+var lodash = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
 
 exports.DEFAULT_CONFIG = {
-  mongooseId: 'mongoose'
+  mongooseId: 'mongoose',
+  settingsId: 'settings'
 };
 
 exports.start = function startWarehouseImportQueueModule(app, module)
@@ -21,24 +23,12 @@ exports.start = function startWarehouseImportQueueModule(app, module)
   }
 
   var FTE_UPDATE_DELAY = 30000;
-  var COMPONENT_STORAGE_ID = new mongoose.Types.ObjectId('529f2629cd8eea982400000c');
-  var FINISHED_GOODS_STORAGE_ID = new mongoose.Types.ObjectId('529f263ccd8eea982400000e');
-  var COMPONENT_STORAGE_TASKS = {
-    '54889cf90e63afb0d415bf1a': 'inComp',
-    '54889d0f0e63afb0d415bf1c': 'coopComp',
-    '54889d3c0e63afb0d415bf1e': 'exStorage',
-    '52a96335486d8e600b000045': 'fifo',
-    '5488d7ef0e63afb0d415bf31': 'staging',
-    '5488d81a0e63afb0d415bf33': 'sm',
-    '53f48d2dda670df4041e24ac': 'paint',
-    '52a986b2486d8e600b00008a': 'fixBin',
-    '52a5b2b6019f7e2823000024': 'compAbsence'
-  };
-  var FINISHED_GOODS_STORAGE_TASKS = {
-    '52a964db486d8e600b00004e': 'finGoodsIn',
-    '52a96516486d8e600b000052': 'finGoodsOut',
-    '52a5b2b6019f7e2823000024': 'finGoodsAbsence'
-  };
+  var COMPONENT_STORAGE_METRICS = [
+    'inComp', 'coopComp', 'exStorage', 'fifo', 'staging', 'sm', 'paint', 'fixBin', 'compAbsence'
+  ];
+  var FINISHED_GOODS_STORAGE_METRICS = [
+    'finGoodsIn', 'finGoodsOut', 'finGoodsAbsence'
+  ];
 
   var WhShiftMetrics = mongoose.model('WhShiftMetrics');
   var WhTransferOrder = mongoose.model('WhTransferOrder');
@@ -65,6 +55,9 @@ exports.start = function startWarehouseImportQueueModule(app, module)
   {
     var t = Date.now();
     var steps = [];
+
+    steps.push(findSettingsStep);
+    steps.push(prepareSettingsStep);
 
     [6, 14, 22].forEach(function(h, i)
     {
@@ -97,15 +90,73 @@ exports.start = function startWarehouseImportQueueModule(app, module)
     step(steps);
   }
 
+  function findSettingsStep()
+  {
+    /*jshint validthis:true*/
+
+    var settingsModule = app[module.config.settingsId];
+    var next = this.next();
+
+    if (settingsModule)
+    {
+      settingsModule.findValues({_id: /^reports\.wh\./}, 'reports.wh.', next);
+    }
+    else
+    {
+      next(null, {});
+    }
+  }
+
+  function prepareSettingsStep(err, settings)
+  {
+    /*jshint validthis:true*/
+
+    if (err)
+    {
+      return this.skip(err);
+    }
+
+    this.settings = {
+      componentStorage: {
+        _id: settings['comp.id'] ? new mongoose.Types.ObjectId(settings['comp.id']) : null,
+        tasks: {}
+      },
+      finishedGoodsStorage: {
+        _id: settings['finGoods.id'] ? new mongoose.Types.ObjectId(settings['finGoods.id']) : null,
+        tasks: {}
+      }
+    };
+
+    lodash.forEach(COMPONENT_STORAGE_METRICS, function(metric)
+    {
+      var prodTaskId = settings[metric] || null;
+
+      if (prodTaskId !== null)
+      {
+        this.settings.componentStorage.tasks[prodTaskId] = metric;
+      }
+    }, this);
+
+    lodash.forEach(FINISHED_GOODS_STORAGE_METRICS, function(metric)
+    {
+      var prodTaskId = settings[metric] || null;
+
+      if (prodTaskId !== null)
+      {
+        this.settings.finishedGoodsStorage.tasks[prodTaskId] = metric;
+      }
+    }, this);
+  }
+
   function createCalcShiftMetricsStep(shiftNo, shiftMoment)
   {
     return function calcShiftMetricsStep()
     {
-      calcShiftMetrics(shiftNo, shiftMoment, this.next());
+      calcShiftMetrics(this.settings, shiftNo, shiftMoment, this.next());
     };
   }
 
-  function calcShiftMetrics(shiftNo, shiftMoment, done)
+  function calcShiftMetrics(settings, shiftNo, shiftMoment, done)
   {
     module.debug("Calculating metrics for shift [%s, %d]...", shiftMoment.format('YYYY-MM-DD'), shiftNo);
 
@@ -118,14 +169,15 @@ exports.start = function startWarehouseImportQueueModule(app, module)
           date: shiftDate,
           subdivision: {
             $in: [
-              COMPONENT_STORAGE_ID,
-              FINISHED_GOODS_STORAGE_ID
+              settings.componentStorage._id,
+              settings.finishedGoodsStorage._id
             ]
           }
         };
         var fields = {
           subdivision: 1,
           'tasks.id': 1,
+          'tasks.childCount': 1,
           'tasks.totals.overall': 1
         };
 
@@ -147,17 +199,19 @@ exports.start = function startWarehouseImportQueueModule(app, module)
           finGoodsTasks: {}
         });
 
+        this.whShiftMetrics.resetFte();
+
         for (var i = 0, l = fteLeaderEntries.length; i < l; ++i)
         {
           var fteLeaderEntry = fteLeaderEntries[i];
 
-          if (fteLeaderEntry.subdivision.equals(COMPONENT_STORAGE_ID))
+          if (fteLeaderEntry.subdivision.equals(settings.componentStorage._id))
           {
-            countStorageFte(this.whShiftMetrics, fteLeaderEntry.tasks, 'comp', COMPONENT_STORAGE_TASKS);
+            countStorageFte(this.whShiftMetrics, fteLeaderEntry.tasks, 'comp', settings.componentStorage.tasks);
           }
-          else if (fteLeaderEntry.subdivision.equals(FINISHED_GOODS_STORAGE_ID))
+          else if (fteLeaderEntry.subdivision.equals(settings.finishedGoodsStorage._id))
           {
-            countStorageFte(this.whShiftMetrics, fteLeaderEntry.tasks, 'finGoods', FINISHED_GOODS_STORAGE_TASKS);
+            countStorageFte(this.whShiftMetrics, fteLeaderEntry.tasks, 'finGoods', settings.finishedGoodsStorage.tasks);
           }
         }
 
@@ -241,19 +295,7 @@ exports.start = function startWarehouseImportQueueModule(app, module)
 
         if (results.length === 0)
         {
-          this.whShiftMetrics.set({
-            inCompCount: 0,
-            coopCompCount: 0,
-            exStorageOutCount: 0,
-            exStorageInCount: 0,
-            fifoCount: 0,
-            stagingCount: 0,
-            smCount: 0,
-            paintCount: 0,
-            fixBinCount: 0,
-            finGoodsInCount: 0,
-            finGoodsOutCount: 0
-          });
+          this.whShiftMetrics.resetCounts();
         }
 
         var counts = results.length ? results[0] : {};
@@ -303,7 +345,10 @@ exports.start = function startWarehouseImportQueueModule(app, module)
         whShiftMetrics[fteProperty] = task.totals.overall;
       }
 
-      whShiftMetrics[totalFteProperty] += task.totals.overall;
+      if (!task.childCount)
+      {
+        whShiftMetrics[totalFteProperty] += task.totals.overall;
+      }
     }
   }
 
@@ -320,12 +365,15 @@ exports.start = function startWarehouseImportQueueModule(app, module)
   function doUpdateShiftFteMetrics(fteLeaderEntryId)
   {
     step(
+      findSettingsStep,
+      prepareSettingsStep,
       function findFteLeaderEntryStep()
       {
         var fields = {
           subdivision: 1,
           date: 1,
           'tasks.id': 1,
+          'tasks.childCount': 1,
           'tasks.totals.overall': 1
         };
 
@@ -343,8 +391,8 @@ exports.start = function startWarehouseImportQueueModule(app, module)
           return this.skip(new Error('FTE_ENTRY_NOT_FOUND'));
         }
 
-        if (!fteLeaderEntry.subdivision.equals(COMPONENT_STORAGE_ID)
-          && !fteLeaderEntry.subdivision.equals(FINISHED_GOODS_STORAGE_ID))
+        if (!fteLeaderEntry.subdivision.equals(this.settings.componentStorage._id)
+          && !fteLeaderEntry.subdivision.equals(this.settings.finishedGoodsStorage._id))
         {
           return this.skip(new Error('INVALID_STORAGE_TYPE'));
         }
@@ -365,13 +413,17 @@ exports.start = function startWarehouseImportQueueModule(app, module)
           return this.skip();
         }
 
-        if (this.fteLeaderEntry.subdivision.equals(COMPONENT_STORAGE_ID))
+        whShiftMetrics.resetFte();
+
+        var settings = this.settings;
+
+        if (this.fteLeaderEntry.subdivision.equals(settings.componentStorage._id))
         {
-          countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'comp', COMPONENT_STORAGE_TASKS);
+          countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'comp', settings.componentStorage.tasks);
         }
         else
         {
-          countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'finGoods', FINISHED_GOODS_STORAGE_TASKS);
+          countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'finGoods', settings.finishedGoodsStorage.tasks);
         }
 
         whShiftMetrics.save(this);

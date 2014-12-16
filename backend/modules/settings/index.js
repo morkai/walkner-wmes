@@ -42,6 +42,28 @@ exports.start = function startSettingsModule(app, module)
     Setting.find(conditions, {value: 1}).lean().exec(done);
   };
 
+  module.findValues = function(conditions, ns, done)
+  {
+    module.find(conditions, function(err, settings)
+    {
+      if (err)
+      {
+        return done(err, null);
+      }
+
+      var result = {};
+
+      for (var i = 0, l = settings.length; i < l; ++i)
+      {
+        var setting = settings[i];
+
+        result[setting._id.replace(ns, '')] = setting.value;
+      }
+
+      done(null, result);
+    });
+  };
+
   module.update = function(_id, newValue, updater, done)
   {
     var updatedAt = new Date();

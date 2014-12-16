@@ -65,7 +65,11 @@ define([
       {
         this.scheduleUpdateSetting(e.target, 300);
       },
-      'change #-absenceRef-prodTask': function(e)
+      'change [name$="prodTask"]': function(e)
+      {
+        this.updateSetting(e.target.name, e.target.value);
+      },
+      'change [name$="id"]': function(e)
       {
         this.updateSetting(e.target.name, e.target.value);
       }
@@ -81,7 +85,6 @@ define([
 
     destroy: function()
     {
-      this.$('.select2-offscreen[tabindex="-1"]').select2('destroy');
       this.$('.colorpicker-component').colorpicker('destroy');
     },
 
@@ -90,27 +93,61 @@ define([
       return {
         idPrefix: this.idPrefix,
         renderColorPicker: colorPickerTemplate,
-        divisions: orgUnits.getAllDivisions()
-          .filter(function(division) { return division.get('type') === 'prod'; })
-          .map(function(division)
-          {
-            return {
-              _id: division.id,
-              label: division.getLabel(),
-              subdivisions: orgUnits.getChildren(division)
-                .map(function(subdivision)
-                {
-                  return {
-                    _id: subdivision.id,
-                    label: subdivision.getLabel()
-                  };
-                })
-                .sort(function(a, b) { return a.label.localeCompare(b.label); })
-            };
-          })
-          .sort(function(a, b) { return a.label.localeCompare(b.label); }),
+        divisions: this.serializeProdDivisions(),
         colors: this.serializeColors()
       };
+    },
+
+    serializeProdDivisions: function()
+    {
+      return orgUnits.getAllDivisions()
+        .filter(function(division)
+        {
+          return division.get('type') === 'prod';
+        })
+        .map(function(division)
+        {
+          return {
+            _id: division.id,
+            label: division.getLabel(),
+            subdivisions: orgUnits.getChildren(division)
+              .map(function(subdivision)
+              {
+                return {
+                  _id: subdivision.id,
+                  label: subdivision.getLabel()
+                };
+              })
+              .sort(function(a, b)
+              {
+                return a.label.localeCompare(b.label);
+              })
+          };
+        })
+        .sort(function(a, b)
+        {
+          return a.label.localeCompare(b.label);
+        });
+    },
+
+    serializeStorageSubdivisions: function()
+    {
+      return orgUnits.getAllByType('subdivision')
+        .filter(function(subdivision)
+        {
+          return subdivision.get('type') === 'storage';
+        })
+        .map(function(subdivision)
+        {
+          return {
+            id: subdivision.id,
+            text: subdivision.get('division') + ' \\ ' + subdivision.get('name')
+          };
+        })
+        .sort(function(a, b)
+        {
+          return a.text.localeCompare(b.text);
+        });
     },
 
     serializeColors: function()
@@ -156,17 +193,27 @@ define([
         this.dataset.value = this.value;
       });
 
-      this.$id('absenceRef-prodTask').select2({
+      var storageSubdivisions = this.serializeStorageSubdivisions();
+
+      this.$id('wh-comp-id').select2({
         width: '374px',
         allowClear: true,
         placeholder: ' ',
-        data: this.prodTasks.map(function(prodTask)
-        {
-          return {
-            id: prodTask.id,
-            text: prodTask.get('name')
-          };
-        })
+        data: storageSubdivisions
+      });
+
+      this.$id('wh-finGoods-id').select2({
+        width: '374px',
+        allowClear: true,
+        placeholder: ' ',
+        data: storageSubdivisions
+      });
+
+      this.$('input[name$="prodTask"]').select2({
+        width: '374px',
+        allowClear: true,
+        placeholder: ' ',
+        data: this.prodTasks.serializeToSelect2()
       });
 
       this.changeTab(this.currentTab || 'efficiency');
@@ -189,12 +236,17 @@ define([
         return;
       }
 
-      if (setting.id === 'reports.absenceRef.prodTask')
+      var $el = this.$('[name="' + setting.id + '"]');
+
+      if (!$el.length)
       {
-        return this.$id('absenceRef-prodTask').select2('val', setting.getValue());
+        return;
       }
 
-      var $el = this.$('.form-control[name="' + setting.id + '"]');
+      if ($el.hasClass('select2-offscreen'))
+      {
+        return $el.select2('val', setting.getValue());
+      }
 
       $el.val(setting.get('value') || '');
 

@@ -45,9 +45,7 @@ define([
         pubsub: this.pubsub
       });
 
-      this.prodTasks = new ProdTaskCollection(null, {
-        rqlQuery: 'select(name)&sort(name)'
-      });
+      this.prodTasks = new ProdTaskCollection(null);
     },
 
     defineViews: function()

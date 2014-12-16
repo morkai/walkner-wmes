@@ -25,6 +25,11 @@ define([
         return 'coeff';
       }
 
+      if (/(id|prodTask)$/.test(this.id))
+      {
+        return 'id';
+      }
+
       return 'ref';
     },
 

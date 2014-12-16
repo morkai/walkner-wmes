@@ -94,11 +94,6 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (id === 'reports.absenceRef.prodTask')
-      {
-        return this.prepareObjectIdValue(newValue);
-      }
-
       if (/color/i.test(id))
       {
         return this.prepareColorValue(newValue);
@@ -107,6 +102,11 @@ define([
       if (/coeff/i.test(id))
       {
         return this.prepareCoeffValue(newValue);
+      }
+
+      if (/(id|prodTask)$/.test(id))
+      {
+        return this.prepareObjectIdValue(newValue);
       }
 
       return this.prepare100PercentValue(newValue);
