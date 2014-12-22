@@ -8219,14 +8219,14 @@ Pointer.prototype = {
 		e = this.normalize(e);
 
 		// issue #295, dragging not always working in Firefox
-		if (e.preventDefault) {
+		if (e.preventDefault && e.button !== 1) {
 			e.preventDefault();
 		}
-		
-		this.dragStart(e);
-	},
 
-	
+		if (e.button !== 1) {
+			this.dragStart(e);
+		}
+	},
 
 	onDocumentMouseUp: function (e) {
 		if (charts[hoverChartIndex]) {
