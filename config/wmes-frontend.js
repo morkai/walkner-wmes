@@ -162,7 +162,9 @@ exports.express = {
   cookieSecret: '1ee7\\/\\/mes',
   ejsAmdHelpers: {
     t: 'app/i18n'
-  }
+  },
+  textBody: {limit: '3mb'},
+  jsonBody: {limit: '1mb'}
 };
 
 exports.user = {
