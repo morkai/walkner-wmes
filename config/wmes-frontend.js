@@ -252,7 +252,7 @@ exports.updater = {
 exports.reports = {
   messengerClientId: 'messenger/client:wmes-reports-1',
   messengerType: 'push',
-  javaBatik: 'java -jar c:/programs/batik/batik-rasterizer.jar'
+  javaBatik: 'java -jar c:/tools/batik/batik-rasterizer.jar'
 };
 
 exports.xiconf = {
