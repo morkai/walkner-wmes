@@ -6,8 +6,6 @@
 
 var step = require('h5.step');
 var lodash = require('lodash');
-var moment = require('moment');
-var ObjectId = require('mongoose').Types.ObjectId;
 var util = require('./util');
 
 module.exports = function(mongoose, options, done)

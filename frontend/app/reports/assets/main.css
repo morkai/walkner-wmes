@@ -1,9 +1,11 @@
 .page[data-id="report1"] > .ft,
-.page[data-id="report2"] > .ft {
+.page[data-id="report2"] > .ft,
+.page[data-id="report6"] > .ft {
   display: none;
 }
 .page[data-id="report1"] > .bd,
-.page[data-id="report2"] > .bd {
+.page[data-id="report2"] > .bd,
+.page[data-id="report6"] > .bd {
   margin-bottom: 0;
 }
 .reports-chart:fullscreen {
@@ -75,7 +77,8 @@
   overflow-y: hidden;
   overflow-x: scroll;
 }
-.reports-drillingCharts-container.is-fullscreen {
+.reports-drillingCharts-container.is-fullscreen,
+.reports-6-container.is-fullscreen {
   overflow-x: hidden;
 }
 .reports-drillingCharts {
@@ -96,7 +99,8 @@
 .is-fullscreen .reports-chart {
   display: none;
 }
-.reports-chart.is-fullscreen {
+.reports-chart.is-fullscreen,
+.reports-6-container .is-fullscreen {
   display: block;
   position: absolute;
   top: 0;
@@ -119,7 +123,8 @@
 .reports-drillingChart .highcharts-title {
   font-weight: bold;
 }
-.reports-drillingCharts[data-orgUnitType] .reports-drillingChart .highcharts-title {
+.reports-drillingCharts[data-orgUnitType] .reports-drillingChart .highcharts-title,
+.reports-6-column[data-parent] > .reports-6-effAndFte-container .highcharts-title {
   cursor: zoom-in;
   cursor: -webkit-zoom-in;
   cursor: -moz-zoom-in;
@@ -130,12 +135,14 @@
   fill: #428BCA!important;
   white-space: nowrap!important;
 }
-.reports-drillingCharts[data-orgUnitType]:first-child .reports-drillingChart .highcharts-title {
+.reports-drillingCharts[data-orgUnitType]:first-child .reports-drillingChart .highcharts-title,
+.reports-6-column[data-parent].is-focused > .reports-6-effAndFte-container .highcharts-title {
   cursor: zoom-out;
   cursor: -webkit-zoom-out;
   cursor: -moz-zoom-out;
 }
-.reports-drillingCharts[data-orgUnitType] .reports-drillingChart .highcharts-title:hover {
+.reports-drillingCharts[data-orgUnitType] .reports-drillingChart .highcharts-title:hover,
+.reports-6-column[data-parent] > .reports-6-effAndFte-container .highcharts-title:hover {
   fill: #2A6496!important;
 }
 .reports-drillingCharts[data-orgUnitType="prodLine"] .reports-drillingChart .highcharts-title,
@@ -145,7 +152,8 @@
   cursor: default;
   fill: #333!important;
 }
-.reports-drillingChart.is-fullscreen .highcharts-title {
+.reports-drillingChart.is-fullscreen .highcharts-title,
+.reports-6-container.is-fullscreen .highcharts-title {
   cursor: default!important;
 }
 .reports-drillingReportPage.is-drillingDown .reports-drillingCharts {
@@ -157,7 +165,8 @@
 .reports-drillingReportPage.is-replacing .reports-drillingCharts {
   opacity: 0.01;
 }
-.reports-drillingReportPage.is-changing * {
+.reports-drillingReportPage.is-changing *,
+.reports-6-page.is-changing * {
   cursor: wait!important;
 }
 .reports-settings {
@@ -200,6 +209,15 @@
 }
 .reports-settings-metricRefs label {
   font-weight: normal;
+}
+.reports-settings h3 {
+  margin-top: 15px;
+}
+.reports-settings .pull-left {
+  margin-right: 20px;
+}
+.reports-settings .form-group + .clearfix {
+  margin-top: -15px;
 }
 .reports-3-container {
   display: flex;
@@ -272,4 +290,34 @@
 }
 .reports-4-notes tr:last-child > td {
   border-bottom: 0;
+}
+.reports-6-page .filter-container {
+  margin-bottom: 0;
+}
+.reports-6-container {
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  display: flex;
+}
+.reports-6-column {
+  flex: 0 0 auto;
+  width: 470px;
+  border-right: 1px dotted #e7e7e7;
+}
+.reports-6-column:last-child {
+  border-right: 0;
+}
+.reports-6-column[data-child] {
+  display: none;
+}
+.reports-6-effAndFte,
+.reports-6-category,
+.reports-6-totalAndAbsence {
+  border-top: 1px solid #fff;
+  width: 469px;
+  height: 372px;
+}
+.reports-6-effAndFte-container + .reports-6-effAndFte-container {
+  border-top: 1px dotted #e7e7e7;
 }
