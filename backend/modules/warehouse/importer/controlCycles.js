@@ -162,10 +162,11 @@ exports.start = function startControlCyclesImporterModule(app, module)
       function updateCurrentControlCyclesStep()
       {
         var steps = [];
+        var minShiftDate = new Date(fileInfo.timestamp);
 
         for (var i = 0, l = this.batches.length; i < l; ++i)
         {
-          steps.push(createUpdateCurrentControlCyclesBatchStep(this.batches[i]));
+          steps.push(createUpdateCurrentControlCyclesBatchStep(this.batches[i], minShiftDate));
         }
 
         steps.push(this.next());
@@ -179,7 +180,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
     );
   }
 
-  function createUpdateCurrentControlCyclesBatchStep(controlCyclesArchive)
+  function createUpdateCurrentControlCyclesBatchStep(controlCyclesArchive, minShiftDate)
   {
     return function updateCurrentControlCyclesBatchStep()
     {
@@ -193,10 +194,16 @@ exports.start = function startControlCyclesImporterModule(app, module)
         controlCycle._id = controlCycle._id.nc12;
 
         WhControlCycle.collection.update(
-          {_id: controlCycle._id}, controlCycle, ccOptions, this.parallel()
+          {_id: controlCycle._id},
+          controlCycle,
+          ccOptions,
+          this.parallel()
         );
         WhTransferOrder.collection.update(
-          {nc12: controlCycle._id}, {$set: {s: controlCycle.s}}, toOptions, this.parallel()
+          {nc12: controlCycle._id, shiftDate: {$gt: minShiftDate}},
+          {$set: {s: controlCycle.s}},
+          toOptions,
+          this.parallel()
         );
       }
     };
