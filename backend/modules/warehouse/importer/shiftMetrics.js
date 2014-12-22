@@ -129,7 +129,7 @@ exports.start = function startWarehouseImportQueueModule(app, module)
 
     lodash.forEach(COMPONENT_STORAGE_METRICS, function(metric)
     {
-      var prodTaskId = settings[metric] || null;
+      var prodTaskId = settings[metric + '.prodTask'] || null;
 
       if (prodTaskId !== null)
       {
@@ -139,7 +139,7 @@ exports.start = function startWarehouseImportQueueModule(app, module)
 
     lodash.forEach(FINISHED_GOODS_STORAGE_METRICS, function(metric)
     {
-      var prodTaskId = settings[metric] || null;
+      var prodTaskId = settings[metric + '.prodTask'] || null;
 
       if (prodTaskId !== null)
       {
@@ -227,21 +227,19 @@ exports.start = function startWarehouseImportQueueModule(app, module)
               {$eq: ['$plant', 'PL04']},
               {$eq: ['$mvmtWm', 101]}
             ]}),
-            coopComp: createCondSumOp({$or: [
-              {$and: [
-                {$eq: ['$plant', 'PL04']},
-                {$eq: ['$mvmtIm', 541]}
-              ]},
-              {$and: [
-                {$eq: ['$plant', 'PL04']},
-                {$eq: ['$dstType', 48]},
-                {$eq: ['$mvmtIm', 344]}
-              ]},
-              {$and: [
-                {$eq: ['$plant', 'PL04']},
-                {$eq: ['$srcType', 48]},
-                {$eq: ['$mvmtIm', 343]}
-              ]}
+            coopComp541: createCondSumOp({$and: [
+              {$eq: ['$plant', 'PL04']},
+              {$eq: ['$mvmtIm', 541]}
+            ]}),
+            coopComp344: createCondSumOp({$and: [
+              {$eq: ['$plant', 'PL04']},
+              {$eq: ['$dstType', 48]},
+              {$eq: ['$mvmtIm', 344]}
+            ]}),
+            coopComp343: createCondSumOp({$and: [
+              {$eq: ['$plant', 'PL04']},
+              {$eq: ['$srcType', 48]},
+              {$eq: ['$mvmtIm', 343]}
             ]}),
             exStorageOut: createCondSumOp({$and: [
               {$eq: ['$plant', 'PL04']},

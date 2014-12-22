@@ -22,7 +22,9 @@ module.exports = function setupWhShiftMetricsModel(app, mongoose)
     },
     inCompCount: metric,
     inCompFte: metric,
-    coopCompCount: metric,
+    coopComp541Count: metric,
+    coopComp344Count: metric,
+    coopComp343Count: metric,
     coopCompFte: metric,
     exStorageFte: metric,
     exStorageOutCount: metric,
@@ -63,7 +65,9 @@ module.exports = function setupWhShiftMetricsModel(app, mongoose)
   {
     this.set({
       inCompCount: 0,
-      coopCompCount: 0,
+      coopComp541Count: 0,
+      coopComp344Count: 0,
+      coopComp343Count: 0,
       exStorageOutCount: 0,
       exStorageInCount: 0,
       fifoCount: 0,
