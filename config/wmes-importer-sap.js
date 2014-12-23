@@ -52,7 +52,10 @@ exports.events = {
       'orders.synced',
       'emptyOrders.synced',
       'clipOrderCount.created',
-      'warehouse.*.synced', 'warehouse.*.syncFailed'
+      'warehouse.*.synced'
+    ],
+    error: [
+      'warehouse.*.syncFailed'
     ]
   }
 };
