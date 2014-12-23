@@ -51,7 +51,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
         if (downtimeStartedAt === null)
         {
-          return this.done(done, null, oldProdShiftOrder, null);
+          return this.done(done, null, prodDowntime, oldProdShiftOrder, null);
         }
 
         this.downtimeStartedAt = downtimeStartedAt;
@@ -144,7 +144,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       }
       else
       {
-        next(null, prodDowntime, null);
+        next(null, prodDowntime, null, null);
       }
     },
     function updateProdDowntimeStep(err, prodDowntime, oldProdShiftOrder, newProdShiftOrder)
