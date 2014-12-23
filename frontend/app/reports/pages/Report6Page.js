@@ -277,14 +277,11 @@ define([
       var changes = query.changedAttributes();
       var parentChanged = changes.parent !== undefined;
 
-      if (!options.reset)
-      {
-        this.broker.publish('router.navigate', {
-          url: this.getReportUrl(),
-          replace: !parentChanged,
-          trigger: false
-        });
-      }
+      this.broker.publish('router.navigate', {
+        url: this.getReportUrl(),
+        replace: !parentChanged,
+        trigger: false
+      });
 
       if (options && options.reset && !(parentChanged && Object.keys(changes).length === 1))
       {
