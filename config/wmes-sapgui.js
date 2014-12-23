@@ -5,6 +5,7 @@ exports.id = 'wmes-sapgui';
 exports.modules = [
   'directoryWatcher',
   'purchaseOrders/exporter',
+  'warehouse/exporter',
   'sapGui'
 ];
 
@@ -14,6 +15,11 @@ exports.directoryWatcher = {
 
 exports['purchaseOrders/exporter'] = {
   uploadUrl: 'http://127.0.0.1/purchaseOrders;import'
+};
+
+exports['warehouse/exporter'] = {
+  maxConcurrentUploads: 1,
+  uploadUrl: 'http://127.0.0.1/warehouse;import'
 };
 
 exports.sapGui = {
