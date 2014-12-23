@@ -1,5 +1,7 @@
 'use strict';
 
+var DATA_PATH = __dirname + '/../data';
+
 exports.id = 'wmes-frontend';
 
 exports.modules = [
@@ -37,6 +39,7 @@ exports.modules = [
   'reports',
   'xiconf',
   'icpo',
+  'warehouse',
   'licenses',
   'factoryLayout',
   'messenger/server',
@@ -258,11 +261,15 @@ exports.reports = {
 };
 
 exports.xiconf = {
-  zipStoragePath: __dirname + '/../data/xiconf-input',
-  featureDbPath: __dirname + '/../data/xiconf-features'
+  zipStoragePath: DATA_PATH + '/xiconf-input',
+  featureDbPath: DATA_PATH + '/xiconf-features'
 };
 
 exports.icpo = {
-  zipStoragePath: __dirname + '/../data/icpo-input',
-  fileStoragePath: __dirname + '/../data/icpo-files'
+  zipStoragePath: DATA_PATH + '/icpo-input',
+  fileStoragePath: DATA_PATH + '/icpo-files'
+};
+
+exports.warehouse = {
+  importPath: DATA_PATH + '/attachments-input'
 };
