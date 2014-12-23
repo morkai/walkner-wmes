@@ -147,10 +147,10 @@ define([
 
         if ($input.hasClass('select2-focusser'))
         {
-          $input = $input.parent().next('.select2-offscreen');
+          $input = $input.parent().next('input');
         }
 
-        if ($input[0].dataset.column)
+        if ($input.length && $input[0].dataset.column)
         {
           this.$('th[data-column="' + $input[0].dataset.column + '"]').addClass('is-focused');
         }
