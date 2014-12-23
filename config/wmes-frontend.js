@@ -148,8 +148,7 @@ exports.mongoose = {
     'feedback',
     'license', 'licensePing',
     'xiconfOrder', 'xiconfResult', 'icpoResult',
-    'factoryLayout',
-    'whControlCycle'
+    'factoryLayout'
   ]
 };
 
