@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Collection","./ProdTask"],function(e,n){return e.extend({model:n,rqlQuery:"sort(parent,name)"})});
+define(["../core/Collection","./ProdTask"],function(e,t){return e.extend({model:t,rqlQuery:"sort(parent,name)",sort:function(e){for(var t={},r=0;r<this.length;++r){var n=this.models[r],i=n.attributes;i.parent?(t[i.parent]||(t[i.parent]={parent:null,children:[]}),t[i.parent].children.push(n)):t[i._id]?t[i._id].parent||(t[i._id].parent=n):t[i._id]={parent:n,children:[]}}var l=[];return Object.keys(t).forEach(function(e){var r=t[e];l.push(r.parent),l.push.apply(l,r.children)}),this.models=l,e&&!e.silent&&this.trigger("sort",this,e||{}),this},serializeToSelect2:function(){var e=[],t={id:null,text:null,children:[]};return this.sort().forEach(function(r){var n=r.get("parent");n?t.children.push({id:r.id,text:r.getLabel(),lastChild:!1}):(t.children.length&&(t.children[t.children.length-1].lastChild=!0),t={id:r.id,text:r.getLabel(),children:[]},e.push(t))}),e}})});
