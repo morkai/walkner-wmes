@@ -7,7 +7,7 @@
 var parseSapNumber = require('../../sap/util/parseSapNumber');
 
 var ORDER_RE = /^ [0-9]+ /;
-var ITEM_RE = /^ [0-9]{5} /;
+var ITEM_RE = /^ [0-9]{5} + [0-9]{2}\.[0-9]{2}\.[0-9]{4} /;
 var ARRIVAL_RE = /^ [0-9]{2}\.[0-9]{2}\.[0-9]{4} /;
 var DATA_LENGTH = {
   orderId: 'Purch.doc     '.length,
