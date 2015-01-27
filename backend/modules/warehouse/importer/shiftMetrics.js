@@ -13,7 +13,7 @@ exports.DEFAULT_CONFIG = {
   settingsId: 'settings'
 };
 
-exports.start = function startWarehouseImportQueueModule(app, module)
+exports.start = function startWarehouseShiftMetricsModule(app, module)
 {
   var mongoose = app[module.config.mongooseId];
 
@@ -333,6 +333,11 @@ exports.start = function startWarehouseImportQueueModule(app, module)
       var task = tasks[i];
       var metric = taskToMetric[task.id];
       var fteProperty = metric + 'Fte';
+
+      if (!task.totals)
+      {
+        continue;
+      }
 
       if (metric === undefined)
       {
