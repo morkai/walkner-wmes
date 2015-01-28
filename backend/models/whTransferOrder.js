@@ -31,7 +31,8 @@ module.exports = function setupWhTransferOrderModel(app, mongoose)
     versionKey: false
   });
 
-  whTransferOrderSchema.index({nc12: 1, shiftDate: 1});
+  whTransferOrderSchema.index({nc12: 1});
+  whTransferOrderSchema.index({shiftDate: 1});
 
   mongoose.model('WhTransferOrder', whTransferOrderSchema);
 };
