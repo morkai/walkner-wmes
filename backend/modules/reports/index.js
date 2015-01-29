@@ -69,4 +69,14 @@ exports.start = function startReportsModule(app, module)
       helpers.clearCachedReports(['1', '2', '4']);
     }
   });
+
+  app.broker.subscribe('warehouse.shiftMetrics.updated', function()
+  {
+    helpers.clearCachedReports('6');
+  });
+
+  app.broker.subscribe('clipOrderCount.created', function()
+  {
+    helpers.clearCachedReports('2');
+  });
 };

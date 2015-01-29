@@ -367,6 +367,8 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   function doUpdateShiftFteMetrics(fteLeaderEntryId)
   {
+    delete timers[fteLeaderEntryId];
+
     step(
       findSettingsStep,
       prepareSettingsStep,
@@ -435,12 +437,14 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       {
         if (err)
         {
-          module.error(
+          return module.error(
             "Failed to update shift FTE metrics after updating FTE leader entry [%s]: %s",
             fteLeaderEntryId,
             err.message
           );
         }
+console.log('updated shiftMetrics', this.fteLeaderEntry.date);
+        app.broker.publish('warehouse.shiftMetrics.updated', {date: this.fteLeaderEntry.date});
       }
     );
   }

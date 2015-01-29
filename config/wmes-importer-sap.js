@@ -79,7 +79,7 @@ exports['messenger/server'] = {
     'events.saved',
     'orders.synced',
     'emptyOrders.synced',
-    'warehouse.*.synced', 'warehouse.*.syncFailed'
+    'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated'
   ]
 };
 
