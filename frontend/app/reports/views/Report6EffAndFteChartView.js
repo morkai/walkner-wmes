@@ -103,9 +103,6 @@ define([
             id: 'effAxis',
             title: false,
             opposite: true,
-            labels: {
-              format: '{value}%'
-            },
             showEmpty: true,
             min: 0,
             gridLineWidth: 0
@@ -146,7 +143,7 @@ define([
             data: chartData.eff,
             yAxis: 1,
             tooltip: {
-              valueSuffix: '%'
+              valueSuffix: 'TO/FTE'
             }
           }
         ]
