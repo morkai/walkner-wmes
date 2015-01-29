@@ -144,7 +144,8 @@ define([
             yAxis: 1,
             tooltip: {
               valueSuffix: 'TO/FTE'
-            }
+            },
+            visible: this.options.type !== 'sm'
           }
         ]
       });
