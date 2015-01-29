@@ -443,7 +443,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
             err.message
           );
         }
-console.log('updated shiftMetrics', this.fteLeaderEntry.date);
+
         app.broker.publish('warehouse.shiftMetrics.updated', {date: this.fteLeaderEntry.date});
       }
     );
