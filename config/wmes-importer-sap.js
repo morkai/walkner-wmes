@@ -122,7 +122,8 @@ exports.emptyOrderImporter = {
 };
 
 exports['reports/clipOrderCount'] = {
-  importerId: 'currentDayOrderImporter'
+  importerId: 'currentDayOrderImporter',
+  syncHour: 7
 };
 
 exports['warehouse/importer/controlCycles'] = {
