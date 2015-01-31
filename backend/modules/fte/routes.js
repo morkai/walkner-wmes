@@ -62,7 +62,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
   express.get(
     '/fte/leader;export',
-    canViewLeader,
+    auth('FTE:LEADER:VIEW', 'REPORTS:VIEW'),
     limitToDivision,
     function(req, res, next)
     {

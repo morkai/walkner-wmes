@@ -4,14 +4,54 @@
 
 'use strict';
 
+var moment = require('moment');
 var importRoute = require('./importRoute');
 
-module.exports = function setUpWarehouseRoutes(app, poModule)
+module.exports = function setUpWarehouseRoutes(app, whModule)
 {
-  var express = app[poModule.config.expressId];
+  var express = app[whModule.config.expressId];
+  var userModule = app[whModule.config.userId];
+  var mongoose = app[whModule.config.mongooseId];
+  var WhTransferOrder = mongoose.model('WhTransferOrder');
 
   express.post(
     '/warehouse;import',
-    importRoute.bind(null, app, poModule)
+    importRoute.bind(null, app, whModule)
   );
+
+  express.get(
+    '/warehouse/transferOrders;export',
+    userModule.auth('REPORTS:VIEW'),
+    express.crud.exportRoute.bind(null, {
+      filename: 'WMES-TO_WAREHOUSE',
+      serializeRow: exportWhTransferOrder,
+      model: WhTransferOrder
+    })
+  );
+
+  function exportWhTransferOrder(doc)
+  {
+    var shiftHour = doc.shiftDate.getHours();
+
+    return {
+      '"orderNo': doc._id.no,
+      '"itemNo': doc._id.item,
+      'date': moment(doc.shiftDate).format('YYYY-MM-DD'),
+      'shiftNo': shiftHour === 6 ? 1 : shiftHour === 14 ? 2 : 3,
+      '"plant': doc.plant,
+      confirmedAt: moment(doc.confirmedAt).format('YYYY-MM-DD HH:mm:ss'),
+      '"nc12': doc.nc12,
+      '"name': doc.name,
+      '#srcType': doc.srcType,
+      '"srcBin': doc.srcBin,
+      '"reqNo': doc.reqNo,
+      '#dstType': doc.dstType,
+      '"dstBin': doc.dstBin,
+      '#srcTgtQty': doc.srcTgtQty,
+      '"unit': doc.unit,
+      '#mvmtWm': doc.mvmtWm,
+      '#mvmtIm': doc.mvmtIm,
+      '#s': doc.s
+    };
+  }
 };

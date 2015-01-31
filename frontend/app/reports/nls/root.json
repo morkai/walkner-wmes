@@ -14,6 +14,9 @@
 
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:3:exportTable": "Export table",
+    "PAGE_ACTION:6:export": "Export data",
+    "PAGE_ACTION:6:export:to": "Export TO",
+    "PAGE_ACTION:6:export:fte": "Export FTE",
 
     "1:pageTitle": "PROD, EFF, Downtime",
     "2:pageTitle": "CLIP",

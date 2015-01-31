@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/time',
   'app/i18n',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
@@ -13,8 +14,10 @@ define([
   '../views/Report6EffAndFteChartView',
   '../views/Report6CategoryChartView',
   '../views/Report6TotalAndAbsenceChartView',
-  'app/reports/templates/report6Page'
+  'app/reports/templates/report6Page',
+  'app/reports/templates/report6ExportPageAction'
 ], function(
+  time,
   t,
   View,
   bindLoadingMessage,
@@ -25,7 +28,8 @@ define([
   Report6EffAndFteChartView,
   Report6CategoryChartView,
   Report6TotalAndAbsenceChartView,
-  report6PageTemplate
+  pageTemplate,
+  exportPageActionTemplate
 ) {
   'use strict';
 
@@ -35,7 +39,7 @@ define([
 
     pageId: 'report6',
 
-    template: report6PageTemplate,
+    template: pageTemplate,
 
     breadcrumbs: function()
     {
@@ -62,7 +66,18 @@ define([
 
     actions: function()
     {
+      var page = this;
+
       return [{
+        template: exportPageActionTemplate.bind(null, {
+          urls: this.getExportUrls()
+        }),
+        afterRender: function($exportAction)
+        {
+          page.$exportAction = $exportAction;
+        },
+        privileges: 'REPORTS:VIEW'
+      }, {
         label: t.bound('reports', 'PAGE_ACTION:settings'),
         icon: 'cogs',
         privileges: 'REPORTS:MANAGE',
@@ -137,6 +152,7 @@ define([
     effAndFteChartViews: null,
     categoryChartViews: null,
     totalAndAbsenceChartViews: null,
+    $exportAction: null,
 
     initialize: function()
     {
@@ -173,6 +189,7 @@ define([
       this.effAndFteChartViews = null;
       this.categoryChartViews = null;
       this.totalAndAbsenceChartViews = null;
+      this.$exportAction = null;
     },
 
     defineModels: function()
@@ -267,6 +284,20 @@ define([
       }
     },
 
+    getExportUrls: function()
+    {
+      var fromTime = time.getMoment(this.query.get('from')).hours(6).valueOf();
+      var toTime = time.getMoment(this.query.get('to')).hours(6).valueOf();
+      var subdivisions = [this.settings.getValue('wh.comp.id'), this.settings.getValue('wh.finGoods.id')];
+
+      return {
+        to: '/warehouse/transferOrders;export?sort(shiftDate)&shiftDate>=' + fromTime + '&shiftDate<' + toTime,
+        fte: '/fte/leader;export?sort(date)&date>=' + fromTime
+          + '&date<' + toTime
+          + '&subdivision=in=(' + subdivisions + ')'
+      };
+    },
+
     getReportUrl: function(parent)
     {
       return this.report.url() + '?' + this.query.serializeToString(parent);
@@ -287,6 +318,8 @@ define([
       {
         this.promised(this.report.fetch());
       }
+
+      this.updateExportUrls();
     },
 
     onParentChange: function()
@@ -383,6 +416,19 @@ define([
       }
 
       chartView.chart.reflow();
+    },
+
+    updateExportUrls: function()
+    {
+      if (!this.$exportAction)
+      {
+        return;
+      }
+
+      var urls = this.getExportUrls();
+
+      this.$exportAction.find('a[data-export="to"]').attr('href', urls.to);
+      this.$exportAction.find('a[data-export="fte"]').attr('href', urls.fte);
     }
 
   });

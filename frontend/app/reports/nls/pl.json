@@ -13,6 +13,9 @@
 
   "PAGE_ACTION:settings": "Zmień ustawienia",
   "PAGE_ACTION:3:exportTable": "Eksportuj tabelę",
+  "PAGE_ACTION:6:export": "Eksportuj dane",
+  "PAGE_ACTION:6:export:to": "Eksportuj TO",
+  "PAGE_ACTION:6:export:fte": "Eksportuj FTE",
 
   "1:pageTitle": "Wskaźniki",
   "2:pageTitle": "CLIP",

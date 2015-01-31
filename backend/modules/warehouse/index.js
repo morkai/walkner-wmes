@@ -8,17 +8,21 @@ var setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express',
+  userId: 'user',
+  mongooseId: 'mongoose',
   importPath: './',
   ccImportFile: '{timestamp}@T_LS41_{step}.txt',
   toImportFile: '{timestamp}@T_LT23_{step}.txt'
 };
 
-exports.start = function startWarehouseModule(app, poModule)
+exports.start = function startWarehouseModule(app, whModule)
 {
   app.onModuleReady(
     [
-      poModule.config.expressId
+      whModule.config.expressId,
+      whModule.config.userId,
+      whModule.config.mongooseId
     ],
-    setUpRoutes.bind(null, app, poModule)
+    setUpRoutes.bind(null, app, whModule)
   );
 };
