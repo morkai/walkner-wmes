@@ -24,17 +24,7 @@ define([
 
     reset: function(query)
     {
-      if (query.from)
-      {
-        query.from = +query.from;
-      }
-
-      if (query.to)
-      {
-        query.to = +query.to;
-      }
-
-      this.set(_.defaults(query, this.defaults), {reset: true});
+      this.set(_.defaults(this.constructor.prepareAttrsFromQuery(query), this.defaults), {reset: true});
     },
 
     serializeToObject: function()
@@ -77,20 +67,19 @@ define([
 
   }, {
 
-    fromQuery: function(query)
+    prepareAttrsFromQuery: function(query)
     {
-      var Report6Query = this;
       var attrs = {};
 
       if (query.from && query.to)
       {
-        attrs.from = parseInt(query.from, 10);
-        attrs.to = parseInt(query.to, 10);
+        attrs.from = +query.from;
+        attrs.to = +query.to;
       }
       else
       {
-        attrs.from = time.getMoment().subtract(1, 'days').hours(6).startOf('hour').valueOf();
-        attrs.to = time.getMoment().hours(6).startOf('hour').valueOf();
+        attrs.from = time.getMoment().subtract(1, 'days').hours(0).startOf('hour').valueOf();
+        attrs.to = time.getMoment().hours(0).startOf('hour').valueOf();
       }
 
       if (query.interval)
@@ -103,7 +92,12 @@ define([
         attrs.parent = query.parent;
       }
 
-      return new Report6Query(attrs);
+      return attrs;
+    },
+
+    fromQuery: function(query)
+    {
+      return new this(this.prepareAttrsFromQuery(query));
     }
 
   });

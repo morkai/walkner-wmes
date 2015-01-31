@@ -4,6 +4,7 @@
 
 'use strict';
 
+var moment = require('moment');
 var step = require('h5.step');
 var lodash = require('lodash');
 var util = require('./util');
@@ -19,13 +20,16 @@ module.exports = function(mongoose, options, done)
     data: {}
   };
 
+  var fromDate = moment(options.fromTime).hours(6).toDate();
+  var toDate = moment(options.toTime).hours(6).toDate();
+
   step(
     function handleWhShiftMetricsStep()
     {
       var conditions = {
         _id: {
-          $gte: new Date(options.fromTime),
-          $lt: new Date(options.toTime)
+          $gte: fromDate,
+          $lt: toDate
         }
       };
       var fields = {
