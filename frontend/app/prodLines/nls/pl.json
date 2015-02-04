@@ -6,7 +6,7 @@
 
   "MSG:LOADING_FAILURE": "Ładowanie linii produkcyjnych nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie linii produkcyjnej nie powiodło się :(",
-  "MSG:DELETED": "Linii produkcyjna <em>{label}</em> została usunięte.",
+  "MSG:DELETED": "Linia produkcyjna <em>{label}</em> została usunięte.",
 
   "PAGE_ACTION:add": "Dodaj linii produkcyjną",
   "PAGE_ACTION:edit": "Edytuj linii produkcyjną",
