@@ -64,7 +64,7 @@
     "request": "~2.49.0",
     "h5.step": "~0.1.0",
     "h5.pubsub": "git+http://github.com/morkai/h5.pubsub.git#c1a899cb7e",
-    "h5.rql": "git+http://github.com/morkai/h5.rql.git#a6f3dee8ab",
+    "h5.rql": "git+http://github.com/morkai/h5.rql.git#5622189665",
     "h5.main": "git+http://github.com/morkai/h5.main.git#7fb51e2571"
   },
   "devDependencies": {
