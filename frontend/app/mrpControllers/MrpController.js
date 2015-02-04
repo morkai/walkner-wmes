@@ -27,7 +27,8 @@ define([
 
     defaults: {
       subdivision: null,
-      description: null
+      description: null,
+      deactivatedAt: null
     },
 
     getSubdivision: function()

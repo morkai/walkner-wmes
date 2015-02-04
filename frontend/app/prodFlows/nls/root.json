@@ -21,6 +21,7 @@
     "PROPERTY:name": "Name",
     "PROPERTY:subdivision": "Subdivision",
     "PROPERTY:mrpControllers": "MRP Controller",
+    "PROPERTY:deactivatedAt": "Deactivated at",
 
     "FORM:ACTION:add": "Add production flow",
     "FORM:ACTION:edit": "Edit production flow",

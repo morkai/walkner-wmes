@@ -20,6 +20,7 @@
   "PROPERTY:description": "Opis",
   "PROPERTY:division": "Wydział",
   "PROPERTY:subdivision": "Dział",
+  "PROPERTY:deactivatedAt": "Data dezaktywacji",
 
   "FORM:ACTION:add": "Dodaj kontroler MRP",
   "FORM:ACTION:edit": "Edytuj kontroler MRP",

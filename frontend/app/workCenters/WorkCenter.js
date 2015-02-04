@@ -30,7 +30,8 @@ define([
     defaults: {
       mrpController: null,
       prodFlow: null,
-      description: null
+      description: null,
+      deactivatedAt: null
     },
 
     getSubdivision: function()

@@ -15,7 +15,7 @@ define([
 
     model: ProdFlow,
 
-    rqlQuery: 'select(mrpController,name)&sort(name)',
+    rqlQuery: 'select(mrpController,name,deactivatedAt)&sort(name)',
 
     comparator: 'name'
 

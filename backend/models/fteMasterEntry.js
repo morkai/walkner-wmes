@@ -345,10 +345,15 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
       prodFlows.forEach(function(prodFlow)
       {
+        if (prodFlow.deactivatedAt)
+        {
+          return;
+        }
+
         result.push({
           type: 'prodFlow',
-          id: prodFlow.get('_id').toString(),
-          name: prodFlow.get('name'),
+          id: prodFlow._id.toString(),
+          name: prodFlow.name,
           functions: functions
         });
       });

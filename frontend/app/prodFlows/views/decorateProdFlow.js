@@ -4,10 +4,12 @@
 
 define([
   'underscore',
+  'app/time',
   'app/data/mrpControllers',
   'app/data/views/renderOrgUnitPath'
 ], function(
   _,
+  time,
   mrpControllers,
   renderOrgUnitPath
 ) {
@@ -16,6 +18,8 @@ define([
   return function decorateProdFlow(prodFlow, linkMrpControllers)
   {
     var data = prodFlow.toJSON();
+
+    data.deactivatedAt = data.deactivatedAt ? time.format(data.deactivatedAt, 'LL') : '-';
 
     data.subdivision = renderOrgUnitPath(prodFlow.getSubdivision(), true, false);
 

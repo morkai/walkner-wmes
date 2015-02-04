@@ -3,10 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/user',
+  'app/time',
   'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView',
   './decorateProdFlow'
 ], function(
+  user,
+  time,
   renderOrgUnitPath,
   ListView,
   decorateProdFlow
@@ -15,7 +19,32 @@ define([
 
   return ListView.extend({
 
-    columns: ['subdivision', 'mrpControllers', 'name'],
+    columns: ['subdivision', 'mrpControllers', 'name', 'deactivatedAt'],
+
+    serializeActions: function()
+    {
+      var collection = this.collection;
+      var nlsDomain = collection.getNlsDomain();
+
+      return function(row)
+      {
+        var model = collection.get(row._id);
+        var active = !model.get('deactivatedAt') || user.data.super;
+        var actions = [];
+
+        actions.push(ListView.actions.viewDetails(model, nlsDomain));
+
+        if (active && user.isAllowedTo(model.getPrivilegePrefix() + ':MANAGE'))
+        {
+          actions.push(
+            ListView.actions.edit(model, nlsDomain),
+            ListView.actions.delete(model, nlsDomain)
+          );
+        }
+
+        return actions;
+      };
+    },
 
     serializeRows: function()
     {

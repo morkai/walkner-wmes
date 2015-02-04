@@ -40,11 +40,10 @@ define([
   router.map('/workCenters/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/workCenters/views/WorkCenterDetailsView'],
-      function(DetailsPage, WorkCenterDetailsView)
+      ['app/workCenters/pages/WorkCenterDetailsPage'],
+      function(WorkCenterDetailsPage)
       {
-        return new DetailsPage({
-          DetailsView: WorkCenterDetailsView,
+        return new WorkCenterDetailsPage({
           model: new WorkCenter({_id: req.params.id})
         });
       }

@@ -19,6 +19,7 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:description": "Opis",
   "PROPERTY:orgUnitPath": "Kontroler MRP/Przepływ",
+  "PROPERTY:deactivatedAt": "Data dezaktywacji",
 
   "FORM:ACTION:add": "Dodaj WorkCenter",
   "FORM:ACTION:edit": "Edytuj WorkCenter",

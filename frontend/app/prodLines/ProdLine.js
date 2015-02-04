@@ -28,7 +28,8 @@ define([
     defaults: {
       workCenter: null,
       description: null,
-      inventoryNo: null
+      inventoryNo: null,
+      deactivatedAt: null
     },
 
     getSubdivision: function()

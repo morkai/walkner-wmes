@@ -17,6 +17,10 @@ module.exports = function setupProdFlowModel(app, mongoose)
       type: String,
       trim: true,
       required: true
+    },
+    deactivatedAt: {
+      type: Date,
+      default: null
     }
   }, {
     id: false

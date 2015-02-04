@@ -20,6 +20,14 @@ module.exports = function setupMrpControllerModel(app, mongoose)
     description: {
       type: String,
       trim: true
+    },
+    deactivatedAt: {
+      type: Date,
+      default: null
+    },
+    replacedBy: {
+      type: String,
+      default: null
     }
   }, {
     id: false

@@ -27,7 +27,8 @@ define([
 
     defaults: {
       mrpController: null,
-      name: null
+      name: null,
+      deactivatedAt: null
     },
 
     parse: function(data)

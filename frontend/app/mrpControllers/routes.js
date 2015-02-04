@@ -6,27 +6,17 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   '../data/mrpControllers',
   './MrpController',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/MrpControllerDetailsView',
-  './views/MrpControllerFormView',
   'i18n!app/nls/mrpControllers'
 ], function(
   router,
   viewport,
   user,
+  showDeleteFormPage,
   mrpControllers,
-  MrpController,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  MrpControllerDetailsView,
-  MrpControllerFormView
+  MrpController
 ) {
   'use strict';
 
@@ -49,41 +39,45 @@ define([
 
   router.map('/mrpControllers/:id', function(req)
   {
-    viewport.showPage(new DetailsPage({
-      DetailsView: MrpControllerDetailsView,
-      model: new MrpController({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      ['app/mrpControllers/pages/MrpControllerDetailsPage'],
+      function(MrpControllerDetailsPage)
+      {
+        return new MrpControllerDetailsPage({
+          model: new MrpController({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/mrpControllers;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      FormView: MrpControllerFormView,
-      model: new MrpController()
-    }));
+    viewport.loadPage(
+      ['app/core/pages/AddFormPage', 'app/mrpControllers/views/MrpControllerFormView'],
+      function(AddFormPage, MrpControllerFormView)
+      {
+        return new AddFormPage({
+          FormView: MrpControllerFormView,
+          model: new MrpController()
+        });
+      }
+    );
   });
 
   router.map('/mrpControllers/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      FormView: MrpControllerFormView,
-      model: new MrpController({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      ['app/core/pages/EditFormPage', 'app/mrpControllers/views/MrpControllerFormView'],
+      function(EditFormPage, MrpControllerFormView)
+      {
+        return new EditFormPage({
+          FormView: MrpControllerFormView,
+          model: new MrpController({_id: req.params.id})
+        });
+      }
+    );
   });
 
-  router.map('/mrpControllers/:id;delete', canManage, function(req, referer)
-  {
-    var model = new MrpController({_id: req.params.id});
-
-    viewport.showPage(new ActionFormPage({
-      model: model,
-      actionKey: 'delete',
-      successUrl: model.genClientUrl('base'),
-      cancelUrl: referer || model.genClientUrl('base'),
-      formMethod: 'DELETE',
-      formAction: model.url(),
-      formActionSeverity: 'danger'
-    }));
-  });
+  router.map('/mrpControllers/:id;delete', canManage, showDeleteFormPage.bind(null, MrpController));
 
 });

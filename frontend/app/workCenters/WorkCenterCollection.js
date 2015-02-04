@@ -15,7 +15,7 @@ define([
 
     model: WorkCenter,
 
-    rqlQuery: 'select(mrpController,prodFlow,description)&sort(_id)',
+    rqlQuery: 'select(mrpController,prodFlow,description,deactivatedAt)&sort(_id)',
 
     comparator: '_id'
 

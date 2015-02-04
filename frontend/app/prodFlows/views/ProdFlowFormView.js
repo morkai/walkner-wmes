@@ -3,10 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/time',
   'app/data/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
   'app/prodFlows/templates/form'
 ], function(
+  time,
   OrgUnitDropdownsView,
   FormView,
   formTemplate
@@ -39,10 +41,25 @@ define([
       });
     },
 
+    serializeToForm: function()
+    {
+      var data = FormView.prototype.serializeToForm.call(this);
+
+      if (data.deactivatedAt)
+      {
+        data.deactivatedAt = time.format(data.deactivatedAt, 'YYYY-MM-DD');
+      }
+
+      return data;
+    },
+
     serializeForm: function(formData)
     {
-      formData.mrpController =
-        typeof formData.mrpController === 'string' ? formData.mrpController.split(',') : [];
+      var deactivatedAt = time.getMoment(formData.deactivatedAt || null);
+
+      formData.deactivatedAt = deactivatedAt.isValid() ? deactivatedAt.toISOString() : null;
+
+      formData.mrpController = typeof formData.mrpController === 'string' ? formData.mrpController.split(',') : [];
 
       return formData;
     }

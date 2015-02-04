@@ -21,6 +21,7 @@
     "PROPERTY:description": "Label",
     "PROPERTY:division": "Division",
     "PROPERTY:subdivision": "Subdivision",
+    "PROPERTY:deactivatedAt": "Deactivated at",
 
     "FORM:ACTION:add": "Add MRP Controller",
     "FORM:ACTION:edit": "Edit MRP Controller",

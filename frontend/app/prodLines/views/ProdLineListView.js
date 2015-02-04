@@ -44,7 +44,7 @@ define([
 
         actions.push(ListView.actions.viewDetails(model, nlsDomain));
 
-        if (user.isAllowedTo(model.getPrivilegePrefix() + ':MANAGE') && active)
+        if (active && user.isAllowedTo(model.getPrivilegePrefix() + ':MANAGE'))
         {
           actions.push(
             ListView.actions.edit(model, nlsDomain),

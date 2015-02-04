@@ -20,6 +20,7 @@
   "PROPERTY:name": "Nazwa",
   "PROPERTY:subdivision": "Dział",
   "PROPERTY:mrpControllers": "Kontrolery MRP",
+  "PROPERTY:deactivatedAt": "Data dezaktywacji",
 
   "FORM:ACTION:add": "Dodaj przepływ",
   "FORM:ACTION:edit": "Edytuj przepływ",

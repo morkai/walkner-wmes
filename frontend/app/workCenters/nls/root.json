@@ -20,6 +20,7 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:description": "Label",
     "PROPERTY:orgUnitPath": "MRP Controller/Production flow",
+    "PROPERTY:deactivatedAt": "Deactivated at",
 
     "FORM:ACTION:add": "Add WorkCenter",
     "FORM:ACTION:edit": "Edit WorkCenter",
