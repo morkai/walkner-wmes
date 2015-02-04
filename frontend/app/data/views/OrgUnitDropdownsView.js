@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/core/View',
@@ -13,6 +14,7 @@ define([
   '../workCenters',
   '../prodLines'
 ], function(
+  _,
   $,
   t,
   View,
@@ -205,13 +207,7 @@ define([
       }
 
       var parentId = model.get(parentProperty);
-
-      if (Array.isArray(parentId))
-      {
-        parentId = parentId[0];
-      }
-
-      var parentModel = parentCollection.get(parentId);
+      var parentModel = parentCollection.get(Array.isArray(parentId) ? parentId[0] : parentId);
 
       if (parentSelect !== null)
       {
@@ -264,10 +260,12 @@ define([
 
             if (Array.isArray(parentValue))
             {
-              return parentValue.indexOf(e.val) !== -1;
+              return Array.isArray(e.val)
+                ? _.intersection(parentValue, e.val).length > 0
+                : parentValue.indexOf(e.val) !== -1;
             }
 
-            return parentValue === e.val;
+            return Array.isArray(e.val) ? e.val.indexOf(parentValue) !== -1 : parentValue === e.val;
           })
           .map(idAndLabel);
       }
@@ -277,8 +275,7 @@ define([
         placeholder: ' ',
         allowClear: !!this.options.allowClear
           || (parentProperty === 'mrpController' && this.options.orgUnit === ORG_UNIT.PROD_FLOW),
-        multiple: this.options.multiple
-          && $dropdown.attr('name') === ORG_UNIT_NO_TO_NAME[this.options.orgUnit]
+        multiple: this.options.multiple && $dropdown.attr('name') === ORG_UNIT_NO_TO_NAME[this.options.orgUnit]
       };
 
       $dropdown.select2('val', null);
