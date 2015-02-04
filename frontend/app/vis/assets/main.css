@@ -46,6 +46,9 @@
   stroke: #333;
   stroke-width: 1px;
 }
+.vis-structure .link.is-deactivated {
+  stroke-dasharray: 5 10;
+}
 .vis-structure .node.root path {
   fill: #0B5ED7;
 }

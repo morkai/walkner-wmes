@@ -123,7 +123,12 @@ define([
 
       function createNodeAndLink(type, parentProperty, model)
       {
-        nodes.push({type: type, id: model.id, label: model.getLabel()});
+        nodes.push({
+          type: type,
+          id: model.id,
+          label: model.getLabel(),
+          deactivated: !!model.get('deactivatedAt')
+        });
 
         var index = nodes.length - 1;
 
@@ -188,9 +193,7 @@ define([
 
       function zoom()
       {
-        view.vis.attr(
-          'transform', 'translate(' + d3.event.translate + ') scale(' + d3.event.scale + ')'
-        );
+        view.vis.attr('transform', 'translate(' + d3.event.translate + ') scale(' + d3.event.scale + ')');
 
         if (d3.event.scale >= 0.5)
         {
@@ -223,8 +226,7 @@ define([
           .attr('x2', function(d) { return d.target.x; })
           .attr('y2', function(d) { return d.target.y; });
 
-        view.vis.selectAll('.node')
-          .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
+        view.vis.selectAll('.node').attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
       });
 
       this.force = force;
@@ -277,15 +279,19 @@ define([
 
     restartLinks: function(restartForce)
     {
+      var nodes = this.force.nodes();
       var links = this.vis.selectAll('.link')
         .data(this.links, function(d) { return d.source + '-' + d.target; });
 
       links.enter().insert('line', 'g.node')
-        .attr('class', 'link')
-        .attr('x1', function(d) { return d.source.x; })
-        .attr('y1', function(d) { return d.source.y; })
-        .attr('x2', function(d) { return d.target.x; })
-        .attr('y2', function(d) { return d.target.y; });
+        .attr('class', function(d)
+        {
+          var source = nodes[d.source];
+          var target = nodes[d.target];
+          var deactivated = (source && source.deactivated) || (target && target.deactivated);
+
+          return 'link' + (deactivated ? ' is-deactivated' : '');
+        });
 
       links.exit().remove();
 
