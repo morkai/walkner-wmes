@@ -34,9 +34,12 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
+      var oudv = this.orgUnitDropdownsView;
+
+      this.listenToOnce(oudv, 'afterRender', function()
       {
-        this.orgUnitDropdownsView.selectValue(this.model).focus();
+        oudv.selectValue(this.model).focus();
+        oudv.$id('division').select2('enable', !this.options.editMode);
       });
 
       this.$id('prodTaskTags').select2({

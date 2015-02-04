@@ -35,9 +35,14 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
+      var addMode = !this.options.editMode;
+      var oudv = this.orgUnitDropdownsView;
+
+      this.listenToOnce(oudv, 'afterRender', function()
       {
-        this.orgUnitDropdownsView.selectValue(this.model).focus();
+        oudv.selectValue(this.model).focus();
+        oudv.$id('division').select2('enable', addMode);
+        oudv.$id('subdivision').select2('enable', addMode);
       });
     },
 

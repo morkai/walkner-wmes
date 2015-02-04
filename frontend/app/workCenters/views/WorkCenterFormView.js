@@ -34,14 +34,20 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      if (this.options.editMode)
+      var editMode = this.options.editMode;
+
+      if (editMode)
       {
-        this.$('.form-control[name=_id]').attr('readonly', true);
+        this.$id('_id').attr('readonly', true);
       }
 
-      this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
+      var oudv = this.orgUnitDropdownsView;
+
+      this.listenToOnce(oudv, 'afterRender', function()
       {
-        this.orgUnitDropdownsView.selectValue(this.model).focus();
+        oudv.selectValue(this.model).focus();
+        oudv.$id('division').select2('enable', !editMode);
+        oudv.$id('subdivision').select2('enable', !editMode);
       });
     },
 
