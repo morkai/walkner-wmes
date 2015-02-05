@@ -57,7 +57,9 @@ define([
         {
           var prodLineState = prodLineStates.get(prodLineId);
 
-          if (prodLineState && !isBlacklisted('prodLine', prodLineId))
+          if (prodLineState
+            && !isBlacklisted('prodLine', prodLineId)
+            && !orgUnits.getByTypeAndId('prodLine', prodLineId).get('deactivatedAt'))
           {
             result[prodLineId] = prodLineState;
           }
@@ -73,7 +75,9 @@ define([
           {
             var prodLineState = prodLineStates.get(prodLine.id);
 
-            if (prodLineState && !isBlacklisted('prodLine', prodLine.id))
+            if (prodLineState
+              && !isBlacklisted('prodLine', prodLine.id)
+              && !orgUnits.getByTypeAndId('prodLine', prodLine.id).get('deactivatedAt'))
             {
               result[prodLine.id] = prodLineState;
             }
@@ -95,7 +99,7 @@ define([
     {
       var parentOrgUnitType = orgUnits.getType(parentOrgUnit);
 
-      if (useBlacklist && isBlacklisted(parentOrgUnitType, parentOrgUnit.id))
+      if ((useBlacklist && isBlacklisted(parentOrgUnitType, parentOrgUnit.id)) || parentOrgUnit.get('deactivatedAt'))
       {
         return;
       }
