@@ -54,12 +54,12 @@ define([
         });
       }
 
-      actions.push({
+      actions.push(/*{
         label: t.bound('factoryLayout', 'pa:layout:edit'),
         icon: 'edit',
         privileges: 'FACTORY_LAYOUT:MANAGE',
         href: this.model.factoryLayout.genClientUrl('edit')
-      }, {
+      },*/ {
         label: t.bound('factoryLayout', 'pa:settings'),
         icon: 'cogs',
         privileges: 'FACTORY_LAYOUT:MANAGE',
