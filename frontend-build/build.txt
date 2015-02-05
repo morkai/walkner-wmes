@@ -538,10 +538,6 @@ app/nls/mechOrders.js
 app/nls/pl/mechOrders.js
 i18n!app/nls/mechOrders
 app/mechOrders/routes.js
-app/mrpControllers/templates/details.js
-app/mrpControllers/views/MrpControllerDetailsView.js
-app/mrpControllers/templates/form.js
-app/mrpControllers/views/MrpControllerFormView.js
 app/nls/mrpControllers.js
 app/nls/pl/mrpControllers.js
 i18n!app/nls/mrpControllers

@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/data/views/renderOrgUnitPath","app/core/views/ListView"],function(t,i){return i.extend({columns:["orgUnitPath","_id","description"],serializeRows:function(){return this.collection.map(function(i){var n=i.toJSON();return n.orgUnitPath=t(i,!0),n})}})});
+define(["app/user","app/time","app/data/views/renderOrgUnitPath","app/core/views/ListView"],function(t,e,i,a){return a.extend({columns:["orgUnitPath","_id","description","deactivatedAt"],serializeActions:function(){var e=this.collection,i=e.getNlsDomain();return function(n){var r=e.get(n._id),o=!r.get("deactivatedAt")||t.data.super,c=[];return c.push(a.actions.viewDetails(r,i)),o&&t.isAllowedTo(r.getPrivilegePrefix()+":MANAGE")&&c.push(a.actions.edit(r,i),a.actions.delete(r,i)),c}},serializeRows:function(){return this.collection.map(function(t){var a=t.toJSON();return a.orgUnitPath=i(t,!0),a.deactivatedAt=a.deactivatedAt?e.format(a.deactivatedAt,"LL"):"-",a})}})});

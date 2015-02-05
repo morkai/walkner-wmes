@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/data/views/renderOrgUnitPath","app/core/views/ListView","./decorateProdFlow"],function(e,n,i){return n.extend({columns:["subdivision","mrpControllers","name"],serializeRows:function(){return this.collection.map(function(e){return i(e,!0)})}})});
+define(["app/user","app/time","app/data/views/renderOrgUnitPath","app/core/views/ListView","./decorateProdFlow"],function(e,t,i,n,r){return n.extend({columns:["subdivision","mrpControllers","name","deactivatedAt"],serializeActions:function(){var t=this.collection,i=t.getNlsDomain();return function(r){var a=t.get(r._id),o=!a.get("deactivatedAt")||e.data.super,s=[];return s.push(n.actions.viewDetails(a,i)),o&&e.isAllowedTo(a.getPrivilegePrefix()+":MANAGE")&&s.push(n.actions.edit(a,i),n.actions.delete(a,i)),s}},serializeRows:function(){return this.collection.map(function(e){return r(e,!0)})}})});

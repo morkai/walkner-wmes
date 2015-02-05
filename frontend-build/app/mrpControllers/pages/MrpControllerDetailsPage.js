@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Collection","./ProdFlow"],function(e,o){return e.extend({model:o,rqlQuery:"select(mrpController,name,deactivatedAt)&sort(name)",comparator:"name"})});
+define(["app/user","app/core/pages/DetailsPage","../views/MrpControllerDetailsView"],function(e,t,a){return t.extend({DetailsView:a,actions:function(){return this.model.get("deactivatedAt")&&!e.data.super?[]:t.prototype.actions.call(this)}})});
