@@ -46,7 +46,7 @@ define([
 
     getLabel: function()
     {
-      return this.getProdLineId().substr(0, 10).toUpperCase().replace(/_$/, '').replace(/_/g, ' ');
+      return this.getProdLineId().substr(0, 10).toUpperCase().replace(/(_+|~.*?)$/, '').replace(/_/g, ' ');
     },
 
     getProdLineId: function()
