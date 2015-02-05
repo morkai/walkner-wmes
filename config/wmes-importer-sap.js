@@ -34,7 +34,8 @@ exports.mongoose = {
   models: [
     'event',
     'setting',
-    'order', 'emptyOrder', 'clipOrderCount',
+    'order', 'emptyOrder',
+    'mrpController', 'clipOrderCount',
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics'
   ]

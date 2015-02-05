@@ -5,6 +5,7 @@
 'use strict';
 
 var moment = require('moment');
+var step = require('h5.step');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -22,6 +23,7 @@ exports.start = function startClipOrderCountModule(app, module)
   }
 
   var Order = mongoose.model('Order');
+  var MrpController = mongoose.model('MrpController');
   var ClipOrderCount = mongoose.model('ClipOrderCount');
 
   app.broker.subscribe('app.started', scheduleClipOrderCountCheck).setLimit(1);
@@ -97,33 +99,48 @@ exports.start = function startClipOrderCountModule(app, module)
 
     module.debug("Preparing CLIP for [%s]...", formatDate(startDate));
 
-    Order.aggregate(
-      {$match: {startDate: startDate}},
-      {$group: {_id: '$mrp', count: {$sum: 1}}},
-      function(err, results)
+    step(
+      function()
+      {
+        MrpController.find({replacedBy: {$ne: null}}, {replacedBy: 1}).lean().exec(this.parallel());
+
+        Order.aggregate(
+          {$match: {startDate: startDate}},
+          {$group: {_id: '$mrp', count: {$sum: 1}}},
+          this.parallel()
+        );
+      },
+      function(err, mrpControllers, results)
       {
         if (err)
         {
           return module.error("Failed to count all orders: %s", err.stack);
         }
 
+        var replacedMrpMap = {};
+
+        mrpControllers.forEach(function(mrpController)
+        {
+          replacedMrpMap[mrpController._id] = mrpController.replacedBy;
+        });
+
         var mrpToCountMap = {};
 
         results.forEach(function(result)
         {
-          mrpToCountMap[result._id] = {
+          mrpToCountMap[replacedMrpMap[result._id] || result._id] = {
             all: result.count,
             cnf: 0,
             dlv: 0
           };
         });
 
-        countOrdersByStatuses(startDate, mrpToCountMap);
+        countOrdersByStatuses(startDate, replacedMrpMap, mrpToCountMap);
       }
     );
   }
 
-  function countOrdersByStatuses(startDate, mrpToCountMap)
+  function countOrdersByStatuses(startDate, replacedMrpMap,mrpToCountMap)
   {
     Order.aggregate(
       {$match: {startDate: startDate}},
@@ -143,7 +160,10 @@ exports.start = function startClipOrderCountModule(app, module)
 
         results.forEach(function(result)
         {
-          mrpToCountMap[result._id.mrp][result._id.status.toLowerCase()] = result.count;
+          var mrp = replacedMrpMap[result._id.mrp] || result._id.mrp;
+          var status = result._id.status.toLowerCase();
+
+          mrpToCountMap[mrp][status] = result.count;
         });
 
         createClipOrderCounts(startDate, mrpToCountMap);

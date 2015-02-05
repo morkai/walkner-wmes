@@ -22,6 +22,7 @@
     "PROPERTY:division": "Division",
     "PROPERTY:subdivision": "Subdivision",
     "PROPERTY:deactivatedAt": "Deactivated at",
+    "PROPERTY:replacedBy": "Replaced by",
 
     "FORM:ACTION:add": "Add MRP Controller",
     "FORM:ACTION:edit": "Edit MRP Controller",

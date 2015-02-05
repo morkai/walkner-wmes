@@ -21,6 +21,7 @@
   "PROPERTY:division": "Wydział",
   "PROPERTY:subdivision": "Dział",
   "PROPERTY:deactivatedAt": "Data dezaktywacji",
+  "PROPERTY:replacedBy": "Zastąpiony przez",
 
   "FORM:ACTION:add": "Dodaj kontroler MRP",
   "FORM:ACTION:edit": "Edytuj kontroler MRP",

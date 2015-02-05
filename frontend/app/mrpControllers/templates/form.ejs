@@ -16,6 +16,10 @@
         <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- t('mrpControllers', 'PROPERTY:deactivatedAt') %></label>
         <input id="<%- idPrefix %>-deactivatedAt" class="form-control" type="date" name="deactivatedAt" maxlength="10">
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-replacedBy" class="control-label"><%- t('mrpControllers', 'PROPERTY:replacedBy') %></label>
+        <input id="<%- idPrefix %>-replacedBy" type="text" name="replacedBy">
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

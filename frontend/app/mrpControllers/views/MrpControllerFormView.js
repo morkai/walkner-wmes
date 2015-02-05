@@ -4,11 +4,13 @@
 
 define([
   'app/time',
+  'app/data/mrpControllers',
   'app/data/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
   'app/mrpControllers/templates/form'
 ], function(
   time,
+  mrpControllers,
   OrgUnitDropdownsView,
   FormView,
   formTemplate
@@ -40,6 +42,24 @@ define([
       {
         this.$id('_id').attr('disabled', true);
       }
+
+      var replacedByData = mrpControllers.map(function(model)
+      {
+        return {id: model.id, text: model.getLabel()};
+      });
+
+      if (editMode)
+      {
+        var thisId = this.model.id;
+
+        replacedByData = replacedByData.filter(function(model) { return model.id !== thisId; });
+      }
+
+      this.$id('replacedBy').select2({
+        allowClear: true,
+        placeholder: ' ',
+        data: replacedByData
+      });
 
       var oudv = this.orgUnitDropdownsView;
 
