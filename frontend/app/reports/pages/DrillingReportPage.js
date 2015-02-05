@@ -267,7 +267,7 @@ define([
     {
       this.$charts = this.$id('charts');
 
-      this.toggleDeactivatedProdLines();
+      this.toggleDeactivatedOrgUnits();
     },
 
     onKeyDown: function(e)
@@ -341,7 +341,7 @@ define([
 
         if (changes.from)
         {
-          this.toggleDeactivatedProdLines();
+          this.toggleDeactivatedOrgUnits();
         }
       }
     },
@@ -806,13 +806,15 @@ define([
       {
         $(elsToShow).css('opacity', '');
         page.$el.removeClass('is-changing');
-        page.toggleDeactivatedProdLines();
+        page.toggleDeactivatedOrgUnits();
       });
     },
 
-    toggleDeactivatedProdLines: function()
+    toggleDeactivatedOrgUnits: function()
     {
-      if (this.query.get('orgUnitType') !== 'workCenter')
+      var orgUnitType = this.query.get('orgUnitType');
+
+      if (orgUnitType === null || orgUnitType === 'division')
       {
         return;
       }
@@ -822,8 +824,8 @@ define([
       for (var i = 1, l = this.reports.length; i < l; ++i)
       {
         var report = this.reports[i];
-        var prodLine = report.get('orgUnit');
-        var deactivatedAt = Date.parse(prodLine.get('deactivatedAt')) || Number.MAX_VALUE;
+        var orgUnit = report.get('orgUnit');
+        var deactivatedAt = Date.parse(orgUnit.get('deactivatedAt')) || Number.MAX_VALUE;
 
         this.chartsViews[i].$el[from >= deactivatedAt ? 'fadeOut' : 'fadeIn']();
       }
