@@ -80,26 +80,35 @@ module.exports = function setupWhShiftMetricsModel(app, mongoose)
     });
   };
 
-  whShiftMetricsSchema.methods.resetFte = function()
+  whShiftMetricsSchema.methods.resetFte = function(resetComp, resetFinGoods)
   {
-    this.set({
-      inCompFte: 0,
-      coopCompFte: 0,
-      exStorageFte: 0,
-      fifoFte: 0,
-      stagingFte: 0,
-      smFte: 0,
-      paintFte: 0,
-      fixBinFte: 0,
-      finGoodsInFte: 0,
-      finGoodsOutFte: 0,
-      compAbsenceFte: 0,
-      finGoodsAbsenceFte: 0,
-      compTotalFte: 0,
-      finGoodsTotalFte: 0,
-      compTasks: {},
-      finGoodsTasks: {}
-    });
+    if (resetComp !== false)
+    {
+      this.set({
+        inCompFte: 0,
+        coopCompFte: 0,
+        exStorageFte: 0,
+        fifoFte: 0,
+        stagingFte: 0,
+        smFte: 0,
+        paintFte: 0,
+        fixBinFte: 0,
+        compAbsenceFte: 0,
+        compTotalFte: 0,
+        compTasks: {}
+      });
+    }
+
+    if (resetFinGoods !== false)
+    {
+      this.set({
+        finGoodsInFte: 0,
+        finGoodsOutFte: 0,
+        finGoodsAbsenceFte: 0,
+        finGoodsTotalFte: 0,
+        finGoodsTasks: {}
+      });
+    }
   };
 
   mongoose.model('WhShiftMetrics', whShiftMetricsSchema);
