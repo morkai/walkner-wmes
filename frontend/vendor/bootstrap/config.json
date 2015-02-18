@@ -392,6 +392,7 @@
     "pagination.less",
     "labels.less",
     "badges.less",
+    "progress-bars.less",
     "list-group.less",
     "panels.less",
     "wells.less",
@@ -404,15 +405,13 @@
   ],
   "js": [
     "button.js",
-    "carousel.js",
     "dropdown.js",
     "modal.js",
     "tooltip.js",
     "popover.js",
     "tab.js",
-    "affix.js",
     "collapse.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=9b6bba459ec96fa08ddd"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=3fc4d804a53dbaac22c8"
 }
