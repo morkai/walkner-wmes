@@ -36,7 +36,19 @@ module.exports = function setupXiconfResultModel(app, mongoose)
     srcIp: String,
     srcId: String,
     srcTitle: String,
-    srcUuid: String
+    srcUuid: String,
+    program: {
+      type: Object,
+      default: null
+    },
+    steps: {
+      type: Object,
+      default: null
+    },
+    metrics: {
+      type: Object,
+      default: null
+    }
   }, {
     id: false
   });

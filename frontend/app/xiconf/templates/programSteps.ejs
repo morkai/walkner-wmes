@@ -1,0 +1,46 @@
+<div class="xiconf-programs-steps">
+  <% steps.forEach(function(step) { %>
+  <div class="xiconf-programs-step <%- step.stepClassName %>" data-type="<%- step.type %>" data-index="<%- step.index %>">
+    <div class="xiconf-programs-step-status">
+      <% if (step.unit !== null) { %>
+      <div class="xiconf-programs-step-unit xiconf-programs-step-cornerBox"><%- step.unit %></div>
+      <% } %>
+      <% if (step.minValue !== null) { %>
+      <div class="xiconf-programs-step-minValue xiconf-programs-step-cornerBox"><%- step.minValue %></div>
+      <% } %>
+      <% if (step.maxValue !== null) { %>
+      <div class="xiconf-programs-step-maxValue xiconf-programs-step-cornerBox"><%- step.maxValue %></div>
+      <% } %>
+      <% if (step.value !== null) { %>
+      <div class="xiconf-programs-step-value"><%- step.value %></div>
+      <% } %>
+    </div>
+    <div class="xiconf-programs-step-nameAndProgress">
+      <h3 class="xiconf-programs-step-name"><%- t('xiconf', 'step:' + step.type) %></h3>
+      <div class="xiconf-programs-step-details">
+        <% if (step.totalTime) { %>
+        <span class="xiconf-programs-step-details-prop">T=<%- step.totalTime %></span>
+        <% } %>
+        <% if (step.voltage) { %>
+        <span class="xiconf-programs-step-details-prop">U=<%- step.voltage %>V</span>
+        <% } %>
+        <% if (step.resistanceMax) { %>
+        <span class="xiconf-programs-step-details-prop">R<sub>max</sub>=<%- step.resistanceMax %>Ω</span>
+        <% } %>
+        <% if (step.powerReq) { %>
+        <span class="xiconf-programs-step-details-prop">P<sub>req</sub>=<%- step.powerReq %>W</span>
+        <% } %>
+        <% if (step.powerMin) { %>
+        <span class="xiconf-programs-step-details-prop">P<sub>min</sub>=<%- step.powerMin %>W</span>
+        <% } %>
+        <% if (step.powerMax) { %>
+        <span class="xiconf-programs-step-details-prop">P<sub>max</sub>=<%- step.powerMax %>W</span>
+        <% } %>
+      </div>
+      <div class="progress">
+        <div class="progress-bar <%- step.progressBarClassName %>" style="width: <%- step.progressBarWidth %>"></div>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>

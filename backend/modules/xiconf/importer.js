@@ -34,8 +34,7 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
 
   function filterFile(fileInfo)
   {
-    if (fileInfo.moduleId !== xiconfModule.config.directoryWatcherId
-      || filePathCache[fileInfo.fileName])
+    if (fileInfo.moduleId !== xiconfModule.config.directoryWatcherId || filePathCache[fileInfo.fileName])
     {
       return false;
     }
@@ -312,14 +311,6 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
 
   function prepareResult(fileInfo, meta, orderIdToNo, result)
   {
-    var log = null;
-
-    try
-    {
-      log = JSON.parse(result.log);
-    }
-    catch (err) {}
-
     return {
       _id: result._id,
       order: result._order || null,
@@ -329,7 +320,7 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
       startedAt: new Date(result.startedAt),
       finishedAt: new Date(result.finishedAt),
       duration: result.duration,
-      log: log,
+      log: tryJsonParse(result.log),
       result: result.result,
       errorCode: result.errorCode ? result.errorCode : null,
       exception: result.exception,
@@ -343,8 +334,28 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
       srcIp: fileInfo.srcIp,
       srcId: meta.id,
       srcTitle: meta.title,
-      srcUuid: meta.uuid
+      srcUuid: meta.uuid,
+      program: tryJsonParse(result.program),
+      steps: tryJsonParse(result.steps),
+      metrics: tryJsonParse(result.metrics)
     };
+  }
+
+  function tryJsonParse(jsonString)
+  {
+    if (typeof jsonString !== 'string')
+    {
+      return null;
+    }
+
+    try
+    {
+      return JSON.parse(jsonString);
+    }
+    catch (err)
+    {
+      return null;
+    }
   }
 
   function extractProgramName(featureFileName, nc12)
@@ -381,13 +392,6 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
       steps.push(function()
       {
         var contents = featureFile.asText();
-        var intro = contents.substr(0, 100);
-
-        if (!/<\?xml.*?\?>/.test(intro))
-        {
-          return;
-        }
-
         var fileHash = featureFile.name.substr('features/'.length);
         var filePath = path.join(xiconfModule.config.featureDbPath, fileHash + '.xml');
 

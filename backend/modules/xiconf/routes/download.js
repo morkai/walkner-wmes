@@ -52,12 +52,14 @@ module.exports = function downloadRoute(file, xiconfModule, XiconfResult, req, r
       suffix += '_III';
     }
 
-    suffix += '.xml';
-
     var filename;
+    var type;
 
     if (file === 'feature')
     {
+      type = 'xml';
+      suffix += '.xml';
+
       if (typeof xiconfResult.featureName === 'string')
       {
         filename = 'FEATURE_' + xiconfResult.featureName
@@ -71,10 +73,12 @@ module.exports = function downloadRoute(file, xiconfModule, XiconfResult, req, r
     }
     else
     {
+      type = 'txt';
+      suffix += 'txt';
       filename = 'WORKFLOW_' + suffix;
     }
 
-    res.type('xml');
+    res.type(type);
     res.attachment(filename);
 
     if (file === 'workflow')
