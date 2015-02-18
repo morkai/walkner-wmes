@@ -35,11 +35,11 @@ define([
         elTime = defaultTime;
       }
 
-      elMoment = (utc ? moment.utc : time.getMoment)(elDate + ' ' + elTime);
+      elMoment = (utc ? moment.utc : time.getMoment)(elDate + ' ' + elTime, 'YYYY-MM-DD HH:mm:ss');
     }
     else
     {
-      elMoment = (utc ? moment.utc : time.getMoment)($el.val());
+      elMoment = (utc ? moment.utc : time.getMoment)($el.val(), 'YYYY-MM-DD HH:mm:ss');
     }
 
     var valid = elMoment.isValid();
