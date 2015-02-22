@@ -20,6 +20,8 @@ exports.start = function startFteModule(app, module)
 {
   module.getCurrentShift = getCurrentShift;
 
+  module.currentShift = getCurrentShift();
+
   app.onModuleReady(
     [
       module.config.mongooseId,
@@ -45,20 +47,28 @@ exports.start = function startFteModule(app, module)
 
   function setUpShiftChangeBroadcast()
   {
-    // TODO: Handle DST changes
-    var currentShift = getCurrentShift();
-    var nextShiftTime = currentShift.date.getTime() + 8 * 3600 * 1000;
+    var actualCurrentShift = module.getCurrentShift();
+    var currentShiftTime = module.currentShift.date.getTime();
 
-    setTimeout(broadcastShiftChange, nextShiftTime - Date.now());
+    if (actualCurrentShift.date.getTime() > currentShiftTime)
+    {
+      return broadcastShiftChange();
+    }
+
+    var nextShiftTime = currentShiftTime + 8 * 3600 * 1000;
+    var currentTime = Date.now();
+    var timeDiff = nextShiftTime - currentTime;
+
+    setTimeout(setUpShiftChangeBroadcast, timeDiff > 300000 ? 300000 : timeDiff);
   }
 
   function broadcastShiftChange()
   {
-    var newShift = getCurrentShift();
+    module.currentShift = getCurrentShift();
 
-    module.debug("Broadcasting a shift change (%d)...", newShift.no);
+    module.debug("Broadcasting a shift change (%d)...", module.currentShift.no);
 
-    app.broker.publish('shiftChanged', newShift);
+    app.broker.publish('shiftChanged', module.currentShift);
 
     setUpShiftChangeBroadcast();
   }
