@@ -158,6 +158,7 @@
     "error:SOL_INVALID_OPTION": "SOL: Read value differs from the programmed one.",
     "error:LPT_FILE_ERROR": "Error during LPT communication.",
     "error:LPT_START_TIMEOUT": "Waiting for a signal to start the programmer timed out.",
+    "error:T24VDC_FEATURE_DISABLED": "The current license doesn't have the Tester 24V DC option.",
     "error:TESTING_DISABLED": "TEST: Testing option is disabled.",
     "error:TESTING_NOT_SOL": "TEST: The found driver configuration has an invalid type.",
     "error:TESTING_SEARCHING_COM_FAILURE": "TEST: Error while searching for a serial port.",

@@ -158,6 +158,7 @@
   "error:SOL_FEATURE_DISABLED": "Ustawiona licencja nie ma opcji programowania Fortimo Solar.",
   "error:LPT_FILE_ERROR": "Błąd podczas komunikacji LPT.",
   "error:LPT_START_TIMEOUT": "Upłynięcie limitu czasu oczekiwania na sygnał uruchomienia programatora.",
+  "error:T24VDC_FEATURE_DISABLED": "Ustawiona licencja nie ma opcji testera 24V DC.",
   "error:TESTING_DISABLED": "TEST: Opcja testowania jest wyłączona.",
   "error:TESTING_NOT_SOL": "TEST: Znaleziono konfigurację drivera nieprawidłowego typu.",
   "error:TESTING_SEARCHING_COM_FAILURE": "TEST: Błąd podczas wyszukiwania portu szeregowego.",
