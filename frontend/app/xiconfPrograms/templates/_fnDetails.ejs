@@ -1,0 +1,30 @@
+<div class="panel panel-default xiconfPrograms-details-fn">
+  <div class="panel-heading">
+    <%- t('xiconfPrograms', 'step:fn') %>
+  </div>
+  <div class="panel-details">
+    <div class="props first">
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></div>
+        <div class="prop-value"><%= time.toString(step.startTime) %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:duration') %></div>
+        <div class="prop-value"><%= time.toString(step.duration) %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></div>
+        <div class="prop-value"><%= step.voltage.toLocaleString() %></div>
+      </div>
+      <div class="prop">
+        <% if (step.powerMin === step.powerMax && step.powerReq === step.powerMin) { %>
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:power:req') %></div>
+        <div class="prop-value"><%= step.powerReq %></div>
+        <% } else { %>
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:power') %></div>
+        <div class="prop-value"><%= step.powerMin %> &lt;= <%= step.powerReq %> &lt;= <%= step.powerMax %></div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

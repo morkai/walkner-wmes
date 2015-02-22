@@ -21,6 +21,8 @@ exports.start = function startXiconfModule(app, module)
 {
   var config = module.config;
 
+  module.programSyncQueue = [];
+
   app.onModuleReady(
     [
       config.mongooseId,

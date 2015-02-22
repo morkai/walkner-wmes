@@ -1,0 +1,25 @@
+<div class="panel panel-default xiconfPrograms-details-pe">
+  <div class="panel-heading">
+    <%- t('xiconfPrograms', 'step:pe') %>
+  </div>
+  <div class="panel-details">
+    <div class="props first">
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></div>
+        <div class="prop-value"><%= time.toString(step.startTime) %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:duration') %></div>
+        <div class="prop-value"><%= time.toString(step.duration) %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></div>
+        <div class="prop-value"><%= step.voltage.toLocaleString() %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:resistance:max') %></div>
+        <div class="prop-value"><%= step.resistanceMax.toLocaleString() %></div>
+      </div>
+    </div>
+  </div>
+</div>

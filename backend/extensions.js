@@ -4,6 +4,8 @@
 
 'use strict';
 
+var util = require('util');
+
 Object.defineProperty(Error.prototype, 'toJSON', {
   configurable: false,
   enumerable: false,
@@ -24,3 +26,8 @@ Object.defineProperty(Error.prototype, 'toJSON', {
     return result;
   }
 });
+
+console.inspect = function(value, depth, colors)
+{
+  console.log(util.inspect(value, {depth: depth || null, colors: colors !== false}));
+};

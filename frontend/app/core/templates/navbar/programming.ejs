@@ -1,0 +1,13 @@
+<li data-online class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('core', 'NAVBAR:PROGRAMMING') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:XICONF') %>
+    <li data-privilege="XICONF:VIEW" data-module="xiconf"><a href="#xiconfPrograms"><%- t('core', 'NAVBAR:XICONF:PROGRAMS') %></a>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/results"><%- t('core', 'NAVBAR:XICONF:RESULTS') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:ICPO') %>
+    <li data-privilege="ICPO:VIEW" data-module><a href="#icpo/results"><%- t('core', 'NAVBAR:ICPO:RESULTS') %></a>
+  </ul>

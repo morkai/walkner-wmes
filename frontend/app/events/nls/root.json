@@ -169,7 +169,13 @@
     "TYPE:warehouse.shiftMetrics.synced": "Warehouse: metrics calc",
     "TEXT:warehouse.shiftMetrics.synced": "Calculated warehouse shift metrics for <em>{date}</em>.",
     "TYPE:warehouse.shiftMetrics.syncFailed": "Warehouse: metrics calc failure",
-    "TEXT:warehouse.shiftMetrics.syncFailed": "Failed to calculate warehouse shift metrics for <em>{date}</em>: <em>{error}</em>"
+    "TEXT:warehouse.shiftMetrics.syncFailed": "Failed to calculate warehouse shift metrics for <em>{date}</em>: <em>{error}</em>",
+    "TYPE:xiconfPrograms.added": "Xiconf programs: added",
+    "TEXT:xiconfPrograms.added": "Added program: <a href='\\#xiconf/programs/{model->_id}'>{model->name}</a>",
+    "TYPE:xiconfPrograms.edited": "Xiconf programs: edited",
+    "TEXT:xiconfPrograms.edited": "Edited program: <a href='\\#xiconf/programs/{model->_id}'>{model->name}</a>",
+    "TYPE:xiconfPrograms.deleted": "Xiconf programs: deleted",
+    "TEXT:xiconfPrograms.deleted": "Deleted program: <em>{model->name}</em>"
   },
   "pl": true
 }

@@ -6,9 +6,11 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var moment = require('moment');
 var importRoute = require('./import');
 var downloadRoute = require('./download');
+var syncProgramsRoute = require('./syncPrograms');
 
 module.exports = function setUpXiconfRoutes(app, xiconfModule)
 {
@@ -16,8 +18,10 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   var mongoose = app[xiconfModule.config.mongooseId];
   var userModule = app[xiconfModule.config.userId];
   var XiconfResult = mongoose.model('XiconfResult');
+  var XiconfProgram = mongoose.model('XiconfProgram');
 
   var canView = userModule.auth('XICONF:VIEW');
+  var canManage = userModule.auth('XICONF:MANAGE');
 
   express.post('/xiconf;import', importRoute.bind(null, app, xiconfModule));
 
@@ -69,6 +73,38 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       prepareResult: readFeatureFile
     })
   );
+
+  express.get(
+    '/xiconfPrograms',
+    canView,
+    function(req, res, next)
+    {
+      req.rql.selector.args.push({name: 'eq', args: ['deleted', false]});
+
+      next();
+    },
+    express.crud.browseRoute.bind(null, app, XiconfProgram)
+  );
+
+  express.post(
+    '/xiconfPrograms',
+    canManage,
+    prepareNewProgram,
+    express.crud.addRoute.bind(null, app, XiconfProgram)
+  );
+
+  express.post('/xiconfPrograms;sync', syncProgramsRoute.bind(null, app, xiconfModule));
+
+  express.get('/xiconfPrograms/:id', canView, express.crud.readRoute.bind(null, app, XiconfProgram));
+
+  express.put(
+    '/xiconfPrograms/:id',
+    canManage,
+    prepareExistingProgram,
+    express.crud.editRoute.bind(null, app, XiconfProgram)
+  );
+
+  express.delete('/xiconfPrograms/:id', canManage, deleteProgramRoute);
 
   function populateOrder(fields, req, res, next)
   {
@@ -156,6 +192,55 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       result.srcIds = srcIds;
 
       return done(null, result);
+    });
+  }
+
+  function prepareNewProgram(req, res, next)
+  {
+    req.body = _.pick(req.body, ['type', 'name', 'steps']);
+    req.body.deleted = false;
+    req.body.createdAt = new Date();
+    req.body.updatedAt = req.body.createdAt;
+    req.body._id = req.body.createdAt.toString(36).toUpperCase()
+      + Math.round(1000 + Math.random() * 8999).toString(36).toUpperCase();
+
+    next();
+  }
+
+  function prepareExistingProgram(req, res, next)
+  {
+    req.body = _.pick(req.body, ['type', 'name', 'steps']);
+    req.body.updatedAt = new Date();
+
+    next();
+  }
+
+  function deleteProgramRoute(req, res, next)
+  {
+    XiconfProgram.findById(req.params.id).exec(function(err, program)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      program.deleted = true;
+      program.updatedAt = new Date();
+
+      program.save(function(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.send(204);
+
+        app.broker.publish(XiconfProgram.TOPIC_PREFIX + '.deleted', {
+          model: program,
+          user: req.session.user
+        });
+      });
     });
   }
 };

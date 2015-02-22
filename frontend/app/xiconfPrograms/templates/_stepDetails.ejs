@@ -1,0 +1,9 @@
+<% if (step.enabled) { %>
+<% if (step.type === 'pe') { %>
+<% include _peDetails.ejs %>
+<% } else if (step.type === 'sol') { %>
+<% include _solDetails.ejs %>
+<% } else if (step.type === 'fn') { %>
+<% include _fnDetails.ejs %>
+<% } %>
+<% } %>

@@ -168,5 +168,11 @@
   "TYPE:warehouse.shiftMetrics.synced": "Magazyn: obliczenie wskaźników",
   "TEXT:warehouse.shiftMetrics.synced": "Obliczono wskaźniki magazynu dla dnia <em>{date}</em>.",
   "TYPE:warehouse.shiftMetrics.syncFailed": "Magazyn: nieudane obliczenie wskaźników",
-  "TEXT:warehouse.shiftMetrics.syncFailed": "Nie udało się obliczyć wskaźników magazynu dla dnia <em>{date}</em>: <em>{error}</em>"
+  "TEXT:warehouse.shiftMetrics.syncFailed": "Nie udało się obliczyć wskaźników magazynu dla dnia <em>{date}</em>: <em>{error}</em>",
+  "TYPE:xiconfPrograms.added": "Programy Xiconf: dodanie",
+  "TEXT:xiconfPrograms.added": "Dodano program: <a href='\\#xiconf/programs/{model->_id}'>{model->name}</a>",
+  "TYPE:xiconfPrograms.edited": "Programy Xiconf: edycja",
+  "TEXT:xiconfPrograms.edited": "Zmodyfikowano program: <a href='\\#xiconf/programs/{model->_id}'>{model->name}</a>",
+  "TYPE:xiconfPrograms.deleted": "Programy Xiconf: usunięcie",
+  "TEXT:xiconfPrograms.deleted": "Usunięto program: <em>{model->name}</em>"
 }
