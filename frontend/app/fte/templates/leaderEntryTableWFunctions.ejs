@@ -70,12 +70,12 @@
   </thead>
   <tbody>
     <% tasks.forEach(function(task) { %>
-    <tr class="<%- task.parent ? 'is-child' : task.hasChildren ? 'is-parent' : 'is-single' %> <%- task.lastChild ? 'is-last-child' : '' %> <%- task.comment ? 'has-visible-comment' : '' %>">
-      <td class="fte-leaderEntry-cell-task">
-        <% if (task.parent) { %>
-        <%- task.lastChild ? '┗' : '┣' %>
-        <% } %>
+    <tr class="<%- task.parent ? 'is-child' : task.hasChildren ? 'is-parent' : 'is-single' %> <%- task.last ? 'is-last' : '' %> <%- task.lastChild ? 'is-last-child' : '' %> <%- task.comment ? 'has-visible-comment' : 'has-invisible-comment' %>">
+      <td class="fte-leaderEntry-cell-task" <% if (task.parent) { %>style="padding-left: 30px;"<% } %>>
         <%= task.name %>
+        <% if (!editable && task.comment) { %>
+        <span class="fte-leaderEntry-comment"><i class="fa fa-comment"></i> <%= task.comment %></span>
+        <% } %>
       </td>
       <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
       <% if (task.fteDiv) { %>
@@ -134,15 +134,13 @@
       <td class="fte-leaderEntry-actions"><button class="btn btn-default fte-leaderEntry-toggleComment" tabindex="-1"><i class="fa fa-comment"></i></button></td>
       <% } %>
     </tr>
+    <% if (editable) { %>
     <tr class="fte-leaderEntry-comment <%- task.comment ? '' : 'hidden' %>">
       <td colspan="999">
-        <% if (editable) { %>
         <textarea class="form-control fte-leaderEntry-comment" rows="2" data-task="<%- task.index %>"><%= task.comment || '' %></textarea>
-        <% } else { %>
-        <span class="fte-leaderEntry-comment"><i class="fa fa-comment"></i> <%= task.comment || '' %></span>
-        <% } %>
       </td>
     </tr>
+    <% } %>
     <% }) %>
   </tbody>
 </table>

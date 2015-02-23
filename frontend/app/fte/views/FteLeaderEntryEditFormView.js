@@ -134,7 +134,7 @@ define([
         var $commentTr = $taskTr.next();
 
         $commentTr.toggleClass('hidden');
-        $taskTr.toggleClass('has-visible-comment');
+        $taskTr.toggleClass('has-visible-comment').toggleClass('has-invisible-comment');
 
         if ($commentTr.hasClass('hidden'))
         {
@@ -668,13 +668,13 @@ define([
       if ($textarea.comment)
       {
         $commentTr.addClass('hidden');
-        $taskTr.removeClass('has-visible-comment');
+        $taskTr.removeClass('has-visible-comment').addClass('has-invisible-comment');
         $commentBtnIcon.removeClass('fa-comment-o').addClass('fa-comment');
       }
       else
       {
         $commentTr.removeClass('hidden');
-        $taskTr.addClass('has-visible-comment');
+        $taskTr.removeClass('has-invisible-comment').addClass('has-visible-comment');
         $commentBtnIcon.removeClass('fa-comment').addClass('fa-comment-o');
       }
 
@@ -706,7 +706,7 @@ define([
           parentEl = parentEl.previousElementSibling.previousElementSibling;
         }
 
-        task = parentEl.children[0].innerText + ' \\ ' + task.substr(1);
+        task = parentEl.children[0].innerText + ' \\ ' + task;
       }
 
       var functionIndex = countEl.dataset.function;

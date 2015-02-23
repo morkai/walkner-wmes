@@ -181,6 +181,7 @@ define([
         task.index = taskIndex;
         task.fteDiv = false;
         task.totalByCompany = {};
+        task.last = false;
 
         var notParent = task.childCount === 0;
 
@@ -288,6 +289,11 @@ define([
           item.children[item.children.length - 1].lastChild = true;
         }
       });
+
+      if (tasks.length)
+      {
+        tasks[tasks.length - 1].last = true;
+      }
 
       return tasks;
     },

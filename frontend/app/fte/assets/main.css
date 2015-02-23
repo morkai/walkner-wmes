@@ -60,51 +60,29 @@ th.fte-leaderEntry-column-task {
 .fte-leaderEntry .fte-leaderEntry-cell-task {
   min-width: 400px;
 }
-.fte-leaderEntry .is-parent {
-  font-weight: bold;
+.panel > .table-responsive > .table-bordered > tbody > tr:first-child > td {
+  border-bottom: 1px solid #ddd;
 }
-.fte-leaderEntry > tbody > tr > td,
-.panel > .fte-leaderEntry > tbody > tr:first-child > td {
-  border-top-width: 3px;
-  border-bottom-width: 3px;
+.has-visible-comment > .fte-leaderEntry-cell-task {
+  border-bottom-style: dotted!important;
 }
-.fte-leaderEntry tbody > tr.is-child > td,
-.fte-leaderEntry tbody > tr.is-parent > td {
-  border-top-width: 1px;
-  border-bottom-width: 1px;
+tr.fte-leaderEntry-comment > td {
+  border-top: 0!important;
 }
-.fte-leaderEntry tbody > tr.is-last-child > td {
-  border-top-width: 1px;
-  border-bottom-width: 3px;
-}
-.fte-leaderEntry tbody > tr.is-last-child:last-child > td {
+.is-last.has-invisible-comment > td {
   border-bottom-width: 0;
-}
-.is-editable .fte-leaderEntry-total-division {
-  min-width: 60px;
-}
-.fte-leaderEntry > tbody > tr.fte-leaderEntry-comment > td {
-  border-top-width: 1px!important;
-  border-bottom-width: 1px!important;
-  padding: 0;
-}
-.is-editable > tbody > tr.fte-leaderEntry-comment > td {
-  padding: 5px;
-}
-tr.fte-leaderEntry-comment + .is-parent > td {
-  border-top-width: 3px!important;
-}
-.fte-leaderEntry > tbody > tr.has-visible-comment > td {
-  border-bottom: 1px;
 }
 span.fte-leaderEntry-comment {
   display: block;
-  padding: 5px;
+  padding: 5px 0 0 0;
   white-space: pre-wrap;
   font-family: Consolas, monospace;
   text-align: left;
   overflow: auto;
   max-height: 7em;
+}
+.is-editable .fte-leaderEntry-total-division {
+  min-width: 60px;
 }
 .fte-leaderEntry-actions {
   width: 1px;
@@ -197,10 +175,10 @@ th.fte-masterEntry-column-noPlan {
 }
 .fte-leaderEntry .is-focused,
 .fte-masterEntry .is-focused {
-  background: #FFFFD6;
+  background: #FFFFA6;
 }
-.fte-leaderEntry > tbody > tr:hover > td.is-focused,
-.fte-masterEntry > tbody > tr:hover > td.is-focused {
+.fte-leaderEntry > tbody > tr > td.is-focused,
+.fte-masterEntry > tbody > tr > td.is-focused {
   background: #FFFFA6!important;
 }
 .is-with-fte-focusInfoBar {
