@@ -106,6 +106,9 @@ span.fte-leaderEntry-comment {
   overflow: auto;
   max-height: 7em;
 }
+.fte-leaderEntry-actions {
+  width: 1px;
+}
 .fte-leaderEntry-print th {
   width: 1%;
 }
