@@ -58,7 +58,7 @@ th.fte-leaderEntry-column-task {
   text-align: left;
 }
 .fte-leaderEntry .fte-leaderEntry-cell-task {
-  min-width: 400px;
+  min-width: 300px;
 }
 .panel > .table-responsive > .table-bordered > tbody > tr:first-child > td {
   border-bottom: 1px solid #ddd;
