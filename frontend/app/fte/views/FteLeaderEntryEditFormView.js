@@ -119,9 +119,21 @@ define([
 
         this.$(this.focused).addClass('is-focused');
 
-        this.showFocusInfoBar(e.target);
+        this.showFocusInfoBar(inputEl);
       },
-      'blur .fte-leaderEntry-count': function()
+      'focus textarea.fte-leaderEntry-comment': function(e)
+      {
+        var inputEl = e.target;
+        var commentCellEl = inputEl.parentNode;
+        var taskNameCellEl = commentCellEl.parentNode.previousElementSibling.firstElementChild;
+
+        this.focused = [commentCellEl, taskNameCellEl];
+
+        this.$(this.focused).addClass('is-focused');
+
+        this.showFocusInfoBar(inputEl);
+      },
+      'blur .fte-leaderEntry-count, textarea.fte-leaderEntry-comment': function()
       {
         this.$(this.focused).removeClass('is-focused');
 
@@ -686,7 +698,7 @@ define([
       onModelDeleted(this.broker, this.model, message);
     },
 
-    showFocusInfoBar: function(countEl)
+    showFocusInfoBar: function(inputEl)
     {
       if (this.timers.hideFocusInfoBar !== null)
       {
@@ -694,7 +706,13 @@ define([
         this.timers.hideFocusInfoBar = null;
       }
 
-      var rowEl = countEl.parentNode.parentNode;
+      var rowEl = inputEl.parentNode.parentNode;
+
+      if (inputEl.classList.contains('fte-leaderEntry-comment'))
+      {
+        rowEl = rowEl.previousElementSibling;
+      }
+
       var task = rowEl.children[0].innerText;
 
       if (rowEl.classList.contains('is-child'))
@@ -709,20 +727,24 @@ define([
         task = parentEl.children[0].innerText + ' \\ ' + task;
       }
 
-      var functionIndex = countEl.dataset.function;
-      var companyIndex = countEl.dataset.company;
-      var divisionIndex = countEl.dataset.division;
+      var functionIndex = inputEl.dataset.function;
+      var companyIndex = inputEl.dataset.company;
+      var divisionIndex = inputEl.dataset.division;
       var funcCompColumn = functionIndex + ':' + companyIndex;
-      var prodFunctionSelector = '.fte-leaderEntry-column-prodFunction[data-column="' + functionIndex + '"]';
-      var companySelector = '.fte-leaderEntry-column-company[data-column="' + funcCompColumn + '"]';
+      var prodFunctionSelector = functionIndex === undefined
+        ? null
+        : '.fte-leaderEntry-column-prodFunction[data-column="' + functionIndex + '"]';
+      var companySelector = companyIndex === undefined
+        ? null
+        : '.fte-leaderEntry-column-company[data-column="' + funcCompColumn + '"]';
       var divisionSelector = divisionIndex === undefined
         ? null
         : '.fte-leaderEntry-column-division[data-column="' + funcCompColumn + ':' + divisionIndex + '"]';
 
       this.$focusInfoBar.html(focusInfoBarTemplate({
         prodTask: task,
-        prodFunction: this.theadEl.querySelector(prodFunctionSelector).innerText,
-        company: this.theadEl.querySelector(companySelector).innerText,
+        prodFunction: prodFunctionSelector ? this.theadEl.querySelector(prodFunctionSelector).innerText : null,
+        company: companySelector ? this.theadEl.querySelector(companySelector).innerText : null,
         division: divisionSelector ? this.theadEl.querySelector(divisionSelector).innerText : null
       }));
 
