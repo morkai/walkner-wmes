@@ -7,6 +7,13 @@
 var lodash = require('lodash');
 var sio = require('socket.io');
 var SocketIoMultiServer = require('./SocketIoMultiServer');
+var pmx = null;
+
+try
+{
+  pmx = require('pmx');
+}
+catch (err) {}
 
 exports.DEFAULT_CONFIG = {
   httpServerId: 'httpServer',
@@ -21,6 +28,21 @@ exports.start = function startIoModule(app, module)
   if (!httpServer && !httpsServer)
   {
     throw new Error("sio module requires the httpServer(s) module");
+  }
+
+  var probes = {
+    currentUsersCounter: null,
+    totalConnectionTime: null,
+    totalConnectionCount: null
+  };
+
+  if (pmx)
+  {
+    var pmxProbe = pmx.probe();
+
+    probes.currentUsersCounter = pmxProbe.counter({name: 'sio:currentUsers'});
+    probes.totalConnectionTime = pmxProbe.histogram({name: 'sio:totalConnectionTime', measurement: 'sum'});
+    probes.totalConnectionCount = pmxProbe.histogram({name: 'sio:totalConnectionCount', measurement: 'sum'});
   }
 
   var multiServer = new SocketIoMultiServer();
@@ -51,11 +73,23 @@ exports.start = function startIoModule(app, module)
 
   module.sockets.on('connection', function(socket)
   {
+    socket.handshake.connectedAt = Date.now();
+
+    if (pmx)
+    {
+      probes.currentUsersCounter.inc();
+
+      socket.on('disconnect', function()
+      {
+        probes.totalConnectionCount.update(1);
+        probes.totalConnectionTime.update((Date.now() - socket.handshake.connectedAt) / 1000);
+        probes.currentUsersCounter.dec();
+      });
+    }
+
     socket.on('echo', function()
     {
-      socket.emit.apply(
-        socket, ['echo'].concat(Array.prototype.slice.call(arguments))
-      );
+      socket.emit.apply(socket, ['echo'].concat(Array.prototype.slice.call(arguments)));
     });
 
     socket.on('time', function(reply)

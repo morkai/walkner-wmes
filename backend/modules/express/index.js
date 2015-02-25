@@ -15,6 +15,13 @@ var wrapAmd = require('./wrapAmd');
 var rqlMiddleware = require('./rqlMiddleware');
 var errorHandlerMiddleware = require('./errorHandlerMiddleware');
 var crud = require('./crud');
+var pmx = null;
+
+try
+{
+  pmx = require('pmx');
+}
+catch (err) {}
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -103,7 +110,14 @@ exports.start = function startExpressModule(app, module, done)
     basePath: path.resolve(__dirname, '../../../')
   };
 
-  module.use(errorHandlerMiddleware(module, errorHandlerOptions));
+  if (pmx === null)
+  {
+    module.use(errorHandlerMiddleware(module, errorHandlerOptions));
+  }
+  else
+  {
+    module.use(pmx.expressErrorHandler());
+  }
 
   app.broker.publish('express.beforeRoutes', {
     module: module,

@@ -1,5 +1,13 @@
 'use strict';
 
+try
+{
+  require('pmx').init({
+    ignore_routes: [/socket\.io/]
+  });
+}
+catch (err) {}
+
 var DATA_PATH = __dirname + '/../data';
 
 exports.id = 'wmes-frontend';
