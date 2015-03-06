@@ -66,14 +66,7 @@ define([
       this.$id('parent').select2({
         allowClear: true,
         placeholder: ' ',
-        data: this.model.topLevelTasks.map(function(prodTask)
-        {
-          return {
-            id: prodTask.id,
-            text: prodTask.getLabel(),
-            prodTask: prodTask
-          };
-        })
+        data: this.model.allTasks.serializeToSelect2(this.model.id)
       });
 
       this.toggleParentFields();
@@ -95,12 +88,7 @@ define([
 
       if (parent)
       {
-        var parentTask = parent.prodTask;
-
-        data.tags = parentTask.get('tags');
-        data.clipColor = parentTask.get('clipColor');
-        data.fteDiv = parentTask.get('fteDiv');
-        data.inProd = parentTask.get('inProd');
+        data.tags = parent.prodTask.get('tags');
       }
       else
       {
@@ -115,24 +103,15 @@ define([
     {
       var parent = this.$id('parent').select2('data');
 
-      if (!parent)
+      if (parent)
+      {
+        this.$id('tags').select2('enable', false).select2('val', parent.prodTask.get('tags'));
+      }
+      else
       {
         this.$id('tags').select2('enable', true);
-        this.$id('clipColor').prop('disabled', false);
-        this.$id('fteDiv').prop('disabled', false);
-        this.$id('inProd').prop('disabled', false);
-
-        return;
       }
 
-      var parentTask = parent.prodTask;
-
-      this.$id('tags').select2('enable', false).select2('val', parentTask.get('tags'));
-      this.$id('clipColor').prop('disabled', true);
-      this.$id('fteDiv').prop('disabled', true).prop('checked', parentTask.get('fteDiv'));
-      this.$id('inProd').prop('disabled', true).prop('checked', parentTask.get('inProd'));
-
-      this.$colorPicker.colorpicker('setValue', parentTask.get('clipColor'));
     }
 
   });

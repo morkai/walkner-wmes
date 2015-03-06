@@ -124,7 +124,7 @@
   font-weight: bold;
 }
 .reports-drillingCharts[data-orgUnitType] .reports-drillingChart .highcharts-title,
-.reports-6-column[data-parent] > .reports-6-effAndFte-container .highcharts-title {
+.reports-6-column[data-parent] > .is-clickable .highcharts-title {
   cursor: zoom-in;
   cursor: -webkit-zoom-in;
   cursor: -moz-zoom-in;
@@ -136,13 +136,13 @@
   white-space: nowrap!important;
 }
 .reports-drillingCharts[data-orgUnitType]:first-child .reports-drillingChart .highcharts-title,
-.reports-6-column[data-parent].is-focused > .reports-6-effAndFte-container .highcharts-title {
+.reports-6-column[data-parent].is-focused > .is-clickable .highcharts-title {
   cursor: zoom-out;
   cursor: -webkit-zoom-out;
   cursor: -moz-zoom-out;
 }
 .reports-drillingCharts[data-orgUnitType] .reports-drillingChart .highcharts-title:hover,
-.reports-6-column[data-parent] > .reports-6-effAndFte-container .highcharts-title:hover {
+.reports-6-column[data-parent] > .is-clickable .highcharts-title:hover {
   fill: #2A6496!important;
 }
 .reports-drillingCharts[data-orgUnitType="prodLine"] .reports-drillingChart .highcharts-title,
@@ -299,6 +299,7 @@
   overflow-x: scroll;
   overflow-y: hidden;
   display: flex;
+  min-height: 761px;
 }
 .reports-6-column {
   flex: 0 0 auto;
@@ -307,9 +308,6 @@
 }
 .reports-6-column:last-child {
   border-right: 0;
-}
-.reports-6-column[data-child] {
-  display: none;
 }
 .reports-6-effAndFte,
 .reports-6-category,

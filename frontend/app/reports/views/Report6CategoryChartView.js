@@ -6,74 +6,21 @@ define([
   'app/time',
   'app/i18n',
   'app/highcharts',
-  'app/core/View',
+  './Report6ChartView',
   '../util/formatTooltipHeader'
 ], function(
   time,
   t,
   Highcharts,
-  View,
+  Report6ChartView,
   formatTooltipHeader
 ) {
   'use strict';
 
-  return View.extend({
+  return Report6ChartView.extend({
 
     className: 'reports-6-category',
-
-    initialize: function()
-    {
-      this.chart = null;
-      this.loading = false;
-
-      this.listenTo(this.model, 'request', this.onModelLoading);
-      this.listenTo(this.model, 'sync', this.onModelLoaded);
-      this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:category', this.render);
-
-      if (this.settings)
-      {
-        this.listenTo(this.settings, 'add change', this.onSettingsUpdate);
-      }
-    },
-
-    destroy: function()
-    {
-      if (this.chart !== null)
-      {
-        this.chart.destroy();
-        this.chart = null;
-      }
-    },
-
-    afterRender: function()
-    {
-      if (this.timers.createOrUpdateChart)
-      {
-        clearTimeout(this.timers.createOrUpdateChart);
-      }
-
-      this.timers.createOrUpdateChart = setTimeout(this.createOrUpdateChart.bind(this), 1);
-    },
-
-    createOrUpdateChart: function()
-    {
-      this.timers.createOrUpdateChart = null;
-
-      if (this.chart)
-      {
-        this.updateChart();
-      }
-      else
-      {
-        this.createChart();
-
-        if (this.loading)
-        {
-          this.chart.showLoading();
-        }
-      }
-    },
+    kind: 'category',
 
     createChart: function()
     {
@@ -86,10 +33,10 @@ define([
           renderTo: this.el
         },
         exporting: {
-          filename: t('reports', 'filenames:6:category:' + this.options.type)
+          filename: this.getExportFilename()
         },
         title: {
-          text: t('reports', 'wh:category:' + this.options.type)
+          text: this.getChartTitle()
         },
         noData: {},
         xAxis: {
@@ -118,7 +65,7 @@ define([
         series: [
           {
             id: this.options.unit,
-            name: t('reports', 'wh:' + this.options.unit),
+            name: this.getSeriesName(),
             color: color,
             borderWidth: 0,
             type: 'column',
@@ -142,85 +89,35 @@ define([
 
     serializeChartData: function()
     {
-      return this.model.get('category')[this.options.type] || [];
+      return this.model.getCategoryData(this.options.type);
     },
 
-    formatTooltipHeader: formatTooltipHeader,
-
-    getMarkerStyles: function(dataLength)
+    getSeriesName: function()
     {
-      return {
-        radius: dataLength > 1 ? 0 : 3,
-        states: {
-          hover: {
-            radius: dataLength > 1 ? 3 : 6
-          }
+      var key = 'wh:';
+
+      if (this.options.unit === 'qty')
+      {
+        key += 'qty';
+      }
+      else
+      {
+        key += 'fte';
+
+        if (this.model.query.get('interval') === 'week')
+        {
+          key += ':avg';
         }
-      };
+      }
+
+      return t('reports', key);
     },
 
-    onModelLoading: function()
+    onIntervalChange: function()
     {
-      this.loading = true;
-
       if (this.chart)
       {
-        this.chart.showLoading();
-      }
-    },
-
-    onModelLoaded: function()
-    {
-      this.loading = false;
-
-      if (this.chart)
-      {
-        this.chart.hideLoading();
-      }
-    },
-
-    onModelError: function()
-    {
-      this.loading = false;
-
-      if (this.chart)
-      {
-        this.chart.hideLoading();
-      }
-    },
-
-    onSettingsUpdate: function(setting)
-    {
-      /*jshint -W015*/
-
-      if (!this.chart)
-      {
-        return;
-      }
-
-      switch (setting.getType())
-      {
-        case 'color':
-          return this.updateColor(setting.getMetricName(), setting.getValue());
-      }
-    },
-
-    updateColor: function(metric, color)
-    {
-      if (metric === 'quantityDone' && this.options.unit === 'qty')
-      {
-        metric = 'qty';
-      }
-      else if (metric === 'warehouse' && this.options.unit === 'fte')
-      {
-        metric = 'fte';
-      }
-
-      var series = this.chart.get(metric);
-
-      if (series)
-      {
-        series.update({color: color}, true);
+        this.chart.series[0].update({name: this.getSeriesName()}, false);
       }
     }
 

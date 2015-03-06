@@ -5,14 +5,10 @@
 define([
   'underscore',
   '../i18n',
-  '../data/orgUnits',
-  '../data/views/renderOrgUnitPath',
   '../core/Model'
 ], function(
   _,
   t,
-  orgUnits,
-  renderOrgUnitPath,
   Model
 ) {
   'use strict';
@@ -26,11 +22,6 @@ define([
 
     urlRoot: '/reports/6',
 
-    defaults: function()
-    {
-      return {};
-    },
-
     initialize: function(data, options)
     {
       if (!options.query)
@@ -39,6 +30,35 @@ define([
       }
 
       this.query = options.query;
+    },
+
+    getCategoryData: function(type)
+    {
+      return this.attributes.category && this.attributes.category[type] ? this.attributes.category[type] : [];
+    },
+
+    getEffAndFteData: function(type)
+    {
+      var effAndFte = this.attributes.effAndFte && this.attributes.effAndFte[type]
+        ? this.attributes.effAndFte[type]
+        : null;
+
+      return {
+        fte: effAndFte ? effAndFte.fte : [],
+        eff: effAndFte ? effAndFte.eff : []
+      };
+    },
+
+    getTotalAndAbsenceData: function(type)
+    {
+      var totalAndAbsence = this.attributes.totalAndAbsence && this.attributes.totalAndAbsence[type]
+        ? this.attributes.totalAndAbsence[type]
+        : null;
+
+      return {
+        fte: totalAndAbsence ? totalAndAbsence.fte : [],
+        absence: totalAndAbsence ? totalAndAbsence.absence : []
+      };
     },
 
     fetch: function(options)
@@ -65,12 +85,14 @@ define([
           inComp: {fte: [], eff: []},
           coopComp: {fte: [], eff: []},
           exStorage: {fte: [], eff: []},
-          exTransactions: {fte: [], eff: []}
+          exTransactions: {fte: [], eff: []},
+          inTransactions: {fte: [], eff: []}
         },
         category: {
           coopComp: [],
           exStorage: [],
           exTransactions: [],
+          inTransactions: [],
           fifo: [],
           totalAbsence: [],
           compAbsence: [],
@@ -128,24 +150,29 @@ define([
         }
       });
 
+      var weekly = this.query.get('interval') === 'week';
+
       for (var i = 0, l = report.data.length; i < l; ++i)
       {
         var groupData = report.data[i];
+        var fteDivisor = weekly && groupData.shiftCount ? groupData.shiftCount : 1;
 
         if (groupData.compTasks === undefined)
         {
           this.prepareEmptyGroupData(groupData);
         }
 
-        this.calcExTransactions(attrs, groupData);
-        this.calcFifo(attrs, groupData, fifoTasks);
-        this.calcEffAndFte(attrs, groupData, 'staging');
-        this.calcEffAndFte(attrs, groupData, 'sm');
-        this.calcEffAndFte(attrs, groupData, 'paint');
-        this.calcEffAndFte(attrs, groupData, 'fixBin');
-        this.calcEffAndFte(attrs, groupData, 'finGoodsIn');
-        this.calcEffAndFte(attrs, groupData, 'finGoodsOut');
-        this.calcAbsence(attrs, groupData, compAbsenceTasks, finGoodsAbsenceTasks);
+        this.calcNormalTaskFte(attrs, groupData, fteDivisor);
+        this.calcExTransactions(attrs, groupData, fteDivisor);
+        this.calcInTransactions(attrs, groupData, fteDivisor);
+        this.calcFifo(attrs, groupData, fifoTasks, fteDivisor);
+        this.calcEffAndFte(attrs, groupData, 'staging', fteDivisor);
+        this.calcEffAndFte(attrs, groupData, 'sm', fteDivisor, true);
+        this.calcEffAndFte(attrs, groupData, 'paint', fteDivisor);
+        this.calcEffAndFte(attrs, groupData, 'fixBin', fteDivisor);
+        this.calcEffAndFte(attrs, groupData, 'finGoodsIn', fteDivisor);
+        this.calcEffAndFte(attrs, groupData, 'finGoodsOut', fteDivisor);
+        this.calcAbsence(attrs, groupData, compAbsenceTasks, finGoodsAbsenceTasks, fteDivisor);
       }
 
       attrs.category.coopComp.push(
@@ -162,6 +189,13 @@ define([
         this.createCategoryPoint('inComp', attrs.count.inComp),
         this.createCategoryPoint('coopComp', attrs.count.coopComp541 + attrs.count.coopCompProcessing),
         this.createCategoryPoint('exStorage', attrs.count.exStorageIn + attrs.count.exStorageOut)
+      );
+
+      attrs.category.inTransactions.push(
+        this.createCategoryPoint('staging', attrs.count.staging),
+        this.createCategoryPoint('fifo', attrs.count.fifo),
+        this.createCategoryPoint('paint', attrs.count.paint),
+        this.createCategoryPoint('fixBin', attrs.count.fixBin)
       );
 
       this.createFteCategoryPoints(attrs, 'fifo');
@@ -229,26 +263,61 @@ define([
       });
     },
 
-    calcExTransactions: function(attrs, groupData)
+    calcNormalTaskFte: function(attrs, groupData, fteDivisor)
+    {
+      _.forEach(groupData.compTasks, function(fte, taskId)
+      {
+        fte /= fteDivisor;
+        taskId = 'comp-' + taskId;
+
+        if (attrs.fte[taskId] === undefined)
+        {
+          attrs.fte[taskId] = 0;
+          attrs.effAndFte[taskId] = {eff: [], fte: []};
+        }
+
+        attrs.fte[taskId] += fte;
+
+        attrs.effAndFte[taskId].fte.push({x: groupData.key, y: round(fte)});
+      });
+
+      _.forEach(groupData.finGoodsTasks, function(fte, taskId)
+      {
+        fte /= fteDivisor;
+        taskId = 'finGoods-' + taskId;
+
+        if (attrs.fte[taskId] === undefined)
+        {
+          attrs.fte[taskId] = 0;
+          attrs.effAndFte[taskId] = {eff: [], fte: []};
+        }
+
+        attrs.fte[taskId] += fte;
+
+        attrs.effAndFte[taskId].fte.push({x: groupData.key, y: round(fte)});
+      });
+    },
+
+    calcExTransactions: function(attrs, groupData, fteDivisor)
     {
       var key = groupData.key;
 
       attrs.effAndFte.inComp.eff.push({x: key, y: round(groupData.inCompCount / groupData.inCompFte)});
-      attrs.effAndFte.inComp.fte.push({x: key, y: groupData.inCompFte});
+      attrs.effAndFte.inComp.fte.push({x: key, y: groupData.inCompFte / fteDivisor});
       attrs.count.inComp += groupData.inCompCount;
 
       var coopCompProcessingCount = groupData.coopComp344Count + groupData.coopComp343Count;
       var coopCompCount = groupData.coopComp541Count + coopCompProcessingCount;
 
       attrs.effAndFte.coopComp.eff.push({x: key, y: round(coopCompCount / groupData.coopCompFte)});
-      attrs.effAndFte.coopComp.fte.push({x: key, y: groupData.coopCompFte});
+      attrs.effAndFte.coopComp.fte.push({x: key, y: groupData.coopCompFte / fteDivisor});
       attrs.count.coopComp541 += groupData.coopComp541Count;
       attrs.count.coopCompProcessing += coopCompProcessingCount;
 
       var exStorageCount = groupData.exStorageInCount + groupData.exStorageOutCount;
 
       attrs.effAndFte.exStorage.eff.push({x: key, y: round(exStorageCount / groupData.exStorageFte)});
-      attrs.effAndFte.exStorage.fte.push({x: key, y: groupData.exStorageFte});
+      attrs.effAndFte.exStorage.fte.push({x: key, y: groupData.exStorageFte / fteDivisor});
       attrs.count.exStorageIn += groupData.exStorageInCount;
       attrs.count.exStorageOut += groupData.exStorageOutCount;
 
@@ -256,10 +325,26 @@ define([
       var exTransactionsFte = groupData.inCompFte + groupData.coopCompFte + groupData.exStorageFte;
 
       attrs.effAndFte.exTransactions.eff.push({x: key, y: round(exTransactionsCount / exTransactionsFte)});
-      attrs.effAndFte.exTransactions.fte.push({x: key, y: exTransactionsFte});
+      attrs.effAndFte.exTransactions.fte.push({x: key, y: exTransactionsFte / fteDivisor});
     },
 
-    calcEffAndFte: function(attrs, groupData, metric)
+    calcInTransactions: function(attrs, groupData, fteDivisor)
+    {
+      attrs.count.staging += groupData.stagingCount;
+      attrs.count.fifo += groupData.fifoCount;
+      attrs.count.paint += groupData.paintCount;
+      attrs.count.fixBin += groupData.fixBinCount;
+
+      // TODO
+      var toCount = groupData.stagingCount + groupData.fifoCount + groupData.paintCount + groupData.fixBinCount;
+      var toFte = groupData.stagingFte + groupData.fifoFte + groupData.paintFte + groupData.fixBinFte;
+      var totalFte = toFte;
+
+      attrs.effAndFte.inTransactions.eff.push({x: groupData.key, y: round(toCount / toFte)});
+      attrs.effAndFte.inTransactions.fte.push({x: groupData.key, y: totalFte / fteDivisor});
+    },
+
+    calcEffAndFte: function(attrs, groupData, metric, fteDivisor, noEff)
     {
       if (attrs.effAndFte[metric] === undefined)
       {
@@ -269,13 +354,17 @@ define([
       var count = groupData[metric + 'Count'];
       var fte = groupData[metric + 'Fte'];
 
-      attrs.effAndFte[metric].eff.push({x: groupData.key, y: round(count / fte)});
-      attrs.effAndFte[metric].fte.push({x: groupData.key, y: fte});
+      if (!noEff)
+      {
+        attrs.effAndFte[metric].eff.push({x: groupData.key, y: round(count / fte)});
+      }
+
+      attrs.effAndFte[metric].fte.push({x: groupData.key, y: fte / fteDivisor});
     },
 
-    calcFifo: function(attrs, groupData, fifoTasks)
+    calcFifo: function(attrs, groupData, fifoTasks, fteDivisor)
     {
-      this.calcEffAndFte(attrs, groupData, 'fifo');
+      this.calcEffAndFte(attrs, groupData, 'fifo', fteDivisor);
 
       _.forEach(fifoTasks, function(fifoTaskId)
       {
@@ -290,23 +379,23 @@ define([
 
         if (attrs.fte.fifo[fifoTaskId] === undefined)
         {
-          attrs.fte.fifo[fifoTaskId] = fte;
+          attrs.fte.fifo[fifoTaskId] = fte / fteDivisor;
         }
         else
         {
-          attrs.fte.fifo[fifoTaskId] += fte;
+          attrs.fte.fifo[fifoTaskId] += fte / fteDivisor;
         }
       });
     },
 
-    calcAbsence: function(attrs, groupData, compAbsenceTasks, finGoodsAbsenceTasks)
+    calcAbsence: function(attrs, groupData, compAbsenceTasks, finGoodsAbsenceTasks, fteDivisor)
     {
       var totalFte = groupData.compTotalFte + groupData.finGoodsTotalFte;
       var totalAbsenceFte = groupData.compAbsenceFte + groupData.finGoodsAbsenceFte;
 
       attrs.totalAndAbsence.total.fte.push({
         x: groupData.key,
-        y: totalFte
+        y: totalFte / fteDivisor
       });
       attrs.totalAndAbsence.total.absence.push({
         x: groupData.key,
@@ -314,7 +403,7 @@ define([
       });
       attrs.totalAndAbsence.comp.fte.push({
         x: groupData.key,
-        y: groupData.compTotalFte
+        y: groupData.compTotalFte / fteDivisor
       });
       attrs.totalAndAbsence.comp.absence.push({
         x: groupData.key,
@@ -322,7 +411,7 @@ define([
       });
       attrs.totalAndAbsence.finGoods.fte.push({
         x: groupData.key,
-        y: groupData.finGoodsTotalFte
+        y: groupData.finGoodsTotalFte / fteDivisor
       });
       attrs.totalAndAbsence.finGoods.absence.push({
         x: groupData.key,
@@ -345,8 +434,8 @@ define([
 
         var compFte = groupData.compTasks[absenceTaskId] || 0;
 
-        attrs.fte.totalAbsence[absenceTaskId] += compFte;
-        attrs.fte.compAbsence[absenceTaskId] += compFte;
+        attrs.fte.totalAbsence[absenceTaskId] += compFte / fteDivisor;
+        attrs.fte.compAbsence[absenceTaskId] += compFte / fteDivisor;
       });
 
       _.forEach(finGoodsAbsenceTasks, function(absenceTaskId)
@@ -365,8 +454,8 @@ define([
 
         var finGoodsFte = groupData.finGoodsTasks[absenceTaskId] || 0;
 
-        attrs.fte.totalAbsence[absenceTaskId] += finGoodsFte;
-        attrs.fte.finGoodsAbsence[absenceTaskId] += finGoodsFte;
+        attrs.fte.totalAbsence[absenceTaskId] += finGoodsFte / fteDivisor;
+        attrs.fte.finGoodsAbsence[absenceTaskId] += finGoodsFte / fteDivisor;
       });
     }
 

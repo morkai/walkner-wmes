@@ -23,24 +23,14 @@ module.exports = require('../createDictionaryModule')(
           return;
         }
 
-        if (prodTask.parent === null)
-        {
-          childProdTask.tags = prodTask.tags;
-          childProdTask.fteDiv = prodTask.fteDiv;
-          childProdTask.inProd = prodTask.inProd;
-          childProdTask.clipColor = prodTask.clipColor;
-        }
-        else
-        {
-          childProdTask.parent = null;
-        }
+        childProdTask.tags = prodTask.tags;
 
         childProdTask.save(function(err)
         {
           if (err)
           {
             return module.error(
-              "Failed to updated child task [%s] of [%s]: %s",
+              "Failed to update child task [%s] of [%s]: %s",
               childProdTask._id,
               prodTaskId,
               err.message

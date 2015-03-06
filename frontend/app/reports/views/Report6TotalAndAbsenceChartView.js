@@ -6,74 +6,21 @@ define([
   'app/time',
   'app/i18n',
   'app/highcharts',
-  'app/core/View',
+  './Report6ChartView',
   '../util/formatTooltipHeader'
 ], function(
   time,
   t,
   Highcharts,
-  View,
+  Report6ChartView,
   formatTooltipHeader
 ) {
   'use strict';
 
-  return View.extend({
+  return Report6ChartView.extend({
 
     className: 'reports-6-totalAndAbsence',
-
-    initialize: function()
-    {
-      this.chart = null;
-      this.loading = false;
-
-      this.listenTo(this.model, 'request', this.onModelLoading);
-      this.listenTo(this.model, 'sync', this.onModelLoaded);
-      this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:totalAndAbsence', this.render);
-
-      if (this.settings)
-      {
-        this.listenTo(this.settings, 'add change', this.onSettingsUpdate);
-      }
-    },
-
-    destroy: function()
-    {
-      if (this.chart !== null)
-      {
-        this.chart.destroy();
-        this.chart = null;
-      }
-    },
-
-    afterRender: function()
-    {
-      if (this.timers.createOrUpdateChart)
-      {
-        clearTimeout(this.timers.createOrUpdateChart);
-      }
-
-      this.timers.createOrUpdateChart = setTimeout(this.createOrUpdateChart.bind(this), 1);
-    },
-
-    createOrUpdateChart: function()
-    {
-      this.timers.createOrUpdateChart = null;
-
-      if (this.chart)
-      {
-        this.updateChart();
-      }
-      else
-      {
-        this.createChart();
-
-        if (this.loading)
-        {
-          this.chart.showLoading();
-        }
-      }
-    },
+    kind: 'totalAndAbsence',
 
     createChart: function()
     {
@@ -84,10 +31,10 @@ define([
           renderTo: this.el
         },
         exporting: {
-          filename: t('reports', 'filenames:6:totalAndAbsence:' + this.options.type)
+          filename: this.getExportFilename()
         },
         title: {
-          text: t('reports', 'wh:totalAndAbsence:' + this.options.type)
+          text: this.getChartTitle()
         },
         noData: {},
         xAxis: {
@@ -131,7 +78,7 @@ define([
         series: [
           {
             id: 'fte',
-            name: t('reports', 'wh:fte'),
+            name: this.getFteSeriesName(),
             color: (this.settings && this.settings.getColor('warehouse')) || '#eeee00',
             borderWidth: 0,
             type: 'column',
@@ -171,86 +118,19 @@ define([
 
     serializeChartData: function()
     {
-      var totalAndAbsence = this.model.get('totalAndAbsence')[this.options.type];
-
-      return {
-        fte: totalAndAbsence ? totalAndAbsence.fte : [],
-        absence: totalAndAbsence ? totalAndAbsence.absence : []
-      };
+      return this.model.getTotalAndAbsenceData(this.options.type);
     },
 
-    formatTooltipHeader: formatTooltipHeader,
-
-    getMarkerStyles: function(dataLength)
+    getFteSeriesName: function()
     {
-      return {
-        radius: dataLength > 1 ? 0 : 3,
-        states: {
-          hover: {
-            radius: dataLength > 1 ? 3 : 6
-          }
-        }
-      };
+      return t('reports', 'wh:fte' + (this.model.query.get('interval') === 'week' ? ':avg' : ''));
     },
 
-    onModelLoading: function()
+    onIntervalChange: function()
     {
-      this.loading = true;
-
       if (this.chart)
       {
-        this.chart.showLoading();
-      }
-    },
-
-    onModelLoaded: function()
-    {
-      this.loading = false;
-
-      if (this.chart)
-      {
-        this.chart.hideLoading();
-      }
-    },
-
-    onModelError: function()
-    {
-      this.loading = false;
-
-      if (this.chart)
-      {
-        this.chart.hideLoading();
-      }
-    },
-
-    onSettingsUpdate: function(setting)
-    {
-      /*jshint -W015*/
-
-      if (!this.chart)
-      {
-        return;
-      }
-
-      switch (setting.getType())
-      {
-        case 'color':
-          return this.updateColor(setting.getMetricName(), setting.getValue());
-      }
-    },
-
-    updateColor: function(metric, color)
-    {
-      if (metric === 'warehouse')
-      {
-        metric = 'fte';
-      }
-
-      var series = this.chart.get(metric);
-
-      if (series)
-      {
-        series.update({color: color}, true);
+        this.chart.series[0].update({name: this.getFteSeriesName()}, false);
       }
     }
 

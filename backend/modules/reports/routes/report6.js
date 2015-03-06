@@ -4,18 +4,21 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 var helpers = require('./helpers');
 var report6 = require('../report6');
 
 module.exports = function report6Route(app, reportsModule, req, res, next)
 {
+  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  var prodTasksModule = app[reportsModule.config.prodTasksId];
+
   var options = {
     fromTime: helpers.getTime(req.query.from),
     toTime: helpers.getTime(req.query.to),
     interval: req.query.interval || 'shift',
-    prodTasks: prepareProdTasks(app[reportsModule.config.prodTasksId].models),
+    prodTasks: null,
     settings: {}
   };
 
@@ -36,6 +39,14 @@ module.exports = function report6Route(app, reportsModule, req, res, next)
         return this.skip(err);
       }
 
+      var compSubdivision = orgUnitsModule.getByTypeAndId('subdivision', settings['comp.id']);
+      var finGoodsSubdivision = orgUnitsModule.getByTypeAndId('subdivision', settings['finGoods.id']);
+
+      options.prodTasks = prepareProdTasks(
+        prodTasksModule.models,
+        (compSubdivision ? compSubdivision.prodTaskTags : null) || [],
+        (finGoodsSubdivision ? finGoodsSubdivision.prodTaskTags : null) || []
+      );
       options.settings = settings;
 
       helpers.generateReport(app, reportsModule, report6, '6', req.reportHash, options, this.next());
@@ -53,16 +64,26 @@ module.exports = function report6Route(app, reportsModule, req, res, next)
   );
 };
 
-function prepareProdTasks(prodTasksList)
+function prepareProdTasks(prodTasksList, compTags, finGoodsTags)
 {
   var prodTasksMap = {};
 
-  lodash.forEach(prodTasksList, function(prodTask)
+  _.forEach(prodTasksList, function(prodTask)
   {
+    var inComp = _.intersection(prodTask.tags, compTags).length > 0;
+    var inFinGoods = _.intersection(prodTask.tags, finGoodsTags).length > 0;
+
+    if (!inComp && !inFinGoods)
+    {
+      return;
+    }
+
     prodTasksMap[prodTask._id] = {
       name: prodTask.name,
       color: prodTask.clipColor,
-      parent: prodTask.parent
+      parent: prodTask.parent,
+      inComp: inComp,
+      inFinGoods: inFinGoods
     };
   });
 

@@ -70,8 +70,12 @@
   </thead>
   <tbody>
     <% tasks.forEach(function(task) { %>
-    <tr class="<%- task.parent ? 'is-child' : task.hasChildren ? 'is-parent' : 'is-single' %> <%- task.last ? 'is-last' : '' %> <%- task.lastChild ? 'is-last-child' : '' %> <%- task.comment ? 'has-visible-comment' : 'has-invisible-comment' %>">
-      <td class="fte-leaderEntry-cell-task" <% if (task.parent) { %>style="padding-left: 30px;"<% } %>>
+    <tr class="<%- task.parent ? 'is-child' : '' %> <%- task.hasChildren ? 'is-parent' : '' %> <%- !task.parent && !task.hasChildren ? 'is-single' : '' %> <%- task.last ? 'is-last' : '' %> <%- task.lastChild ? 'is-last-child' : '' %> <%- task.comment ? 'has-visible-comment' : 'has-invisible-comment' %>"
+        data-id="<%- task.id %>"
+        data-parent="<%- task.parent %>"
+        data-level="<%- task.level %>"
+        <% if (task.backgroundColor) { %>style="background-color: <%- task.backgroundColor %>"<% } %>>
+      <td class="fte-leaderEntry-cell-task" <% if (task.level) { %>style="padding-left: <%- task.level * 30 %>px;"<% } %>>
         <%= task.name %>
         <% if (!editable && task.comment) { %>
         <span class="fte-leaderEntry-comment"><i class="fa fa-comment"></i> <%= task.comment %></span>
@@ -90,7 +94,7 @@
       <% prodFunction.companies.forEach(function(company, companyIndex) { %>
       <% if (task.fteDiv) { %>
       <% company.count.forEach(function(companyCount, divisionIndex) { %>
-      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : '' %> <%- functionIndex % 2 ? 'even' : '' %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-division="<%- divisionIndex %>">
+      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-division="<%- divisionIndex %>" data-level="<%- task.level %>">
         <% if (editable && !task.hasChildren) { %>
         <input
           class="form-control no-controls fte-leaderEntry-count"
@@ -110,7 +114,7 @@
       </td>
       <% }) %>
       <% } else { %>
-      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : '' %> <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>">
+      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>">
         <% if (editable && !task.hasChildren) { %>
         <input
           class="form-control no-controls fte-leaderEntry-count"

@@ -93,10 +93,15 @@ module.exports = function(mongoose, options, done)
 
     if (results.data[groupKey] === undefined)
     {
-      results.data[groupKey] = {key: groupKey};
+      results.data[groupKey] = {
+        key: groupKey,
+        shiftCount: 0
+      };
     }
 
     var groupData = results.data[groupKey];
+
+    groupData.shiftCount += 1;
 
     lodash.forEach(whShiftMetrics, function(value, key)
     {

@@ -24,9 +24,9 @@ define([
       var model = this.model;
 
       model.allTags = [];
-      model.topLevelTasks = new ProdTaskCollection(null, {rqlQuery: 'parent=null&sort(name)'});
+      model.allTasks = new ProdTaskCollection();
 
-      var topLevelTasksReq = model.topLevelTasks.fetch({reset: true});
+      var allTasksReq = model.allTasks.fetch({reset: true});
 
       var allTagsReq = $.ajax({
         url: '/prodTaskTags',
@@ -36,7 +36,7 @@ define([
         }
       });
 
-      return when(model.fetch(this.options.fetchOptions), topLevelTasksReq, allTagsReq);
+      return when(model.fetch(this.options.fetchOptions), allTasksReq, allTagsReq);
     }
 
   });

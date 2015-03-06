@@ -165,6 +165,13 @@ define([
       'change textarea.fte-leaderEntry-comment': function(e)
       {
         this.doUpdateComment(e.target);
+      },
+      'click .fte-leaderEntry-count-container': function(e)
+      {
+        if (e.target.tagName === 'TD')
+        {
+          e.target.querySelector('input').select();
+        }
       }
     },
 
@@ -389,21 +396,10 @@ define([
 
       if (isChild)
       {
-        $parentTr = $taskTr.prev().prev();
+        var parentId = $taskTr.attr('data-parent');
 
-        while ($parentTr.length && $parentTr.hasClass('is-child'))
-        {
-          $parentTr = $parentTr.prev().prev();
-        }
-
-        var $childTr = $parentTr.next().next();
-
-        while ($childTr.length && $childTr.hasClass('is-child'))
-        {
-          $childTrs.push($childTr);
-
-          $childTr = $childTr.next().next();
-        }
+        $parentTr = this.$('.is-parent[data-id="' + parentId + '"]');
+        $childTrs = this.$('.is-child[data-parent="' + parentId + '"]');
       }
 
       var taskCompanyTotalSuffix = this.recalcTaskCompanyTotals(companyIndex, divisionIndex, $taskTr);
@@ -446,30 +442,79 @@ define([
 
     recalcParentTotals: function(taskCompanyTotalSuffix, functionIndex, $parentTr, $childTrs)
     {
-      var parentFunctionCompanyTotal = 0;
-      var childSuffix = taskCompanyTotalSuffix + '[data-function="' + functionIndex + '"]';
+      taskCompanyTotalSuffix = taskCompanyTotalSuffix.replace(/\[data-division="[0-9]+"\]/, '');
 
-      $childTrs.forEach(function($childTr)
+      var countElSuffix = taskCompanyTotalSuffix + '[data-function="' + functionIndex + '"]';
+      var countElsSelector = '.fte-leaderEntry-count' + countElSuffix + ', '
+        + '.fte-leaderEntry-parent-count' + countElSuffix;
+      var $parentTotalCounts = $parentTr.find('.fte-leaderEntry-parent-count' + countElSuffix);
+      var divisionCount = $parentTotalCounts.length;
+      var totals = [];
+
+      $parentTotalCounts.each(function() { totals.push(0); });
+
+      $childTrs.find(countElsSelector).each(function()
       {
-        parentFunctionCompanyTotal += fractionsUtil.parse(
-          $childTr.find('.fte-leaderEntry-count' + childSuffix).val()
-        );
+        var count = fractionsUtil.parse(this.tagName === 'TD' ? this.innerText : this.value);
+
+        if (this.dataset.division === undefined)
+        {
+          count /= divisionCount;
+
+          for (var i = 0; i < divisionCount; ++i)
+          {
+            totals[i] += count;
+          }
+        }
+        else
+        {
+          totals[this.dataset.division] += count;
+        }
       });
 
-      $parentTr
-        .find('.fte-leaderEntry-parent-count' + childSuffix)
-        .text(fractionsUtil.round(parentFunctionCompanyTotal));
-
-      var parentCompanyTotal = 0;
+      totals.forEach(function(totalCount, i)
+      {
+        $parentTotalCounts[i].innerText = fractionsUtil.round(totalCount);
+        totals[i] = 0;
+      });
 
       $parentTr.find('.fte-leaderEntry-parent-count' + taskCompanyTotalSuffix).each(function()
       {
-        parentCompanyTotal += fractionsUtil.parse(this.innerText);
+        var count = fractionsUtil.parse(this.innerText);
+
+        if (this.dataset.division === undefined)
+        {
+          count /= divisionCount;
+
+          for (var i = 0; i < divisionCount; ++i)
+          {
+            totals[i] += count;
+          }
+        }
+        else
+        {
+          totals[this.dataset.division] += count;
+        }
       });
 
-      $parentTr
-        .find('.fte-leaderEntry-total-company-task' + taskCompanyTotalSuffix)
-        .text(fractionsUtil.round(parentCompanyTotal));
+      $parentTotalCounts = $parentTr.find('.fte-leaderEntry-total-company-task' + taskCompanyTotalSuffix);
+
+      totals.forEach(function(totalCount, i)
+      {
+        $parentTotalCounts[i].innerText = fractionsUtil.round(totalCount);
+      });
+
+      if ($parentTr.attr('data-level') === '0')
+      {
+        return;
+      }
+
+      var parentId = $parentTr.attr('data-parent');
+
+      $parentTr = this.$('.is-parent[data-id="' + parentId + '"]');
+      $childTrs = this.$('.is-child[data-parent="' + parentId + '"]');
+
+      this.recalcParentTotals(taskCompanyTotalSuffix, functionIndex, $parentTr, $childTrs);
     },
 
     recalcDivisionTotals: function(functionIndex, companyIndex)
@@ -484,7 +529,7 @@ define([
         funcCompDivTotals[divisionId] = 0;
       });
 
-      this.$('.fte-leaderEntry-parent-count' + funcCompSuffix).each(function()
+      this.$('.fte-leaderEntry-parent-count[data-level="0"]' + funcCompSuffix).each(function()
       {
         var count = fractionsUtil.parse(this.innerText);
 
@@ -717,14 +762,21 @@ define([
 
       if (rowEl.classList.contains('is-child'))
       {
-        var parentEl = rowEl.previousElementSibling.previousElementSibling;
+        var parentEl = rowEl;
+        var level = +parentEl.dataset.level;
 
-        while (parentEl && parentEl.classList.contains('is-child'))
+        while (parentEl && level)
         {
           parentEl = parentEl.previousElementSibling.previousElementSibling;
-        }
 
-        task = parentEl.children[0].innerText + ' \\ ' + task;
+          var newLevel = +parentEl.dataset.level;
+
+          if (newLevel < level)
+          {
+            level = newLevel;
+            task = parentEl.children[0].innerText + ' \\ ' + task;
+          }
+        }
       }
 
       var functionIndex = inputEl.dataset.function;

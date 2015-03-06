@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'jquery',
   'app/time',
   'app/i18n',
   'app/core/View',
@@ -10,6 +11,7 @@ define([
   '../ReportSettingCollection',
   '../Report6',
   '../Report6Query',
+  '../Report6ProdTasks',
   '../views/Report6FilterView',
   '../views/Report6EffAndFteChartView',
   '../views/Report6CategoryChartView',
@@ -17,6 +19,7 @@ define([
   'app/reports/templates/report6Page',
   'app/reports/templates/report6ExportPageAction'
 ], function(
+  $,
   time,
   t,
   View,
@@ -24,6 +27,7 @@ define([
   ReportSettingCollection,
   Report6,
   Report6Query,
+  Report6ProdTasks,
   Report6FilterView,
   Report6EffAndFteChartView,
   Report6CategoryChartView,
@@ -32,6 +36,12 @@ define([
   exportPageActionTemplate
 ) {
   'use strict';
+
+  var KIND_TO_CHART_VIEW = {
+    totalAndAbsence: Report6TotalAndAbsenceChartView,
+    effAndFte: Report6EffAndFteChartView,
+    category: Report6CategoryChartView
+  };
 
   return View.extend({
 
@@ -48,12 +58,25 @@ define([
 
       if (parent)
       {
+        var title;
+
+        if (t.has('reports', 'BREADCRUMBS:6:' + parent))
+        {
+          title = t.bound('reports', 'BREADCRUMBS:6:' + parent);
+        }
+        else
+        {
+          var prodTask = this.prodTasks.get(parent);
+
+          title = prodTask ? prodTask.getLabel() : '?';
+        }
+
         breadcrumbs.push(
           {
             label: t.bound('reports', 'BREADCRUMBS:6'),
             href: this.getReportUrl(null).replace('/', '#')
           },
-          t.bound('reports', 'BREADCRUMBS:6:' + parent)
+          title
         );
       }
       else
@@ -107,11 +130,12 @@ define([
           return;
         }
 
-        var parent = $clickable.closest('.reports-6-column').attr('data-parent');
+        var $column = $clickable.closest('.reports-6-column');
+        var parent = $column.attr('data-parent');
 
         if (this.query.get('parent') === parent)
         {
-          parent = null;
+          parent = $column.attr('data-child') || null;
         }
 
         if (e.button === 1 || (e.ctrlKey && e.button === 0))
@@ -147,11 +171,9 @@ define([
     layout: null,
     settings: null,
     query: null,
+    prodTasks: null,
     report: null,
     filterView: null,
-    effAndFteChartViews: null,
-    categoryChartViews: null,
-    totalAndAbsenceChartViews: null,
     $exportAction: null,
 
     initialize: function()
@@ -160,21 +182,6 @@ define([
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
-
-      Object.keys(this.effAndFteChartViews).forEach(function(type)
-      {
-        this.setView('.reports-6-effAndFte-' + type, this.effAndFteChartViews[type]);
-      }, this);
-
-      Object.keys(this.categoryChartViews).forEach(function(type)
-      {
-        this.setView('.reports-6-category-' + type, this.categoryChartViews[type]);
-      }, this);
-
-      Object.keys(this.totalAndAbsenceChartViews).forEach(function(type)
-      {
-        this.setView('.reports-6-totalAndAbsence-' + type, this.totalAndAbsenceChartViews[type]);
-      }, this);
     },
 
     setUpLayout: function(layout)
@@ -186,9 +193,6 @@ define([
     {
       this.layout = null;
       this.filterView = null;
-      this.effAndFteChartViews = null;
-      this.categoryChartViews = null;
-      this.totalAndAbsenceChartViews = null;
       this.$exportAction = null;
     },
 
@@ -196,6 +200,7 @@ define([
     {
       this.settings = bindLoadingMessage(new ReportSettingCollection(null, {pubsub: this.pubsub}), this);
       this.query = Report6Query.fromQuery(this.options.query);
+      this.prodTasks = bindLoadingMessage(new Report6ProdTasks(null, {settings: this.settings, paginate: false}), this);
       this.report = bindLoadingMessage(new Report6(null, {query: this.query}), this);
 
       this.listenTo(this.query, 'change', this.onQueryChange);
@@ -205,83 +210,88 @@ define([
     defineViews: function()
     {
       this.filterView = new Report6FilterView({model: this.query});
-      this.effAndFteChartViews = {};
-      this.categoryChartViews = {};
-      this.totalAndAbsenceChartViews = {};
-
-      [
-        'exTransactions',
-        'inComp',
-        'coopComp',
-        'exStorage',
-        'fifo',
-        'staging',
-        'sm',
-        'paint',
-        'fixBin',
-        'finGoodsIn',
-        'finGoodsOut'
-      ].forEach(this.defineEffAndFteChartView, this);
-
-      [
-        'coopComp',
-        'exStorage',
-        'exTransactions'
-      ].forEach(this.defineCategoryChartView.bind(this, 'qty'));
-
-      [
-        'fifo',
-        'totalAbsence',
-        'compAbsence',
-        'finGoodsAbsence'
-      ].forEach(this.defineCategoryChartView.bind(this, 'fte'));
-
-      [
-        'total',
-        'comp',
-        'finGoods'
-      ].forEach(this.defineTotalAndAbsenceChartView, this);
     },
 
-    defineEffAndFteChartView: function(type)
+    createChartView: function(options)
     {
-      this.effAndFteChartViews[type] = new Report6EffAndFteChartView({
-        type: type,
+      return new KIND_TO_CHART_VIEW[options.kind]({
+        type: options.type,
+        unit: options.unit,
         model: this.report,
-        settings: this.settings
-      });
-    },
-
-    defineCategoryChartView: function(unit, type)
-    {
-      this.categoryChartViews[type] = new Report6CategoryChartView({
-        type: type,
-        unit: unit,
-        model: this.report,
-        settings: this.settings
-      });
-    },
-
-    defineTotalAndAbsenceChartView: function(type)
-    {
-      this.totalAndAbsenceChartViews[type] = new Report6TotalAndAbsenceChartView({
-        type: type,
-        model: this.report,
-        settings: this.settings
+        settings: this.settings,
+        prodTasks: this.prodTasks
       });
     },
 
     load: function(when)
     {
-      return when(this.report.fetch(), this.settings.fetch());
+      return when(this.settings.fetch(), this.prodTasks.fetch());
     },
 
     afterRender: function()
     {
-      if (this.query.get('parent'))
+      this.chartsConfiguration = this.prodTasks.createChartsConfiguration();
+
+      this.renderChartsColumns();
+      this.renderChartsViews();
+      this.changeParent(false);
+
+      this.report.fetch().always(this.updateBreadcrumbs.bind(this));
+    },
+
+    renderChartsColumns: function()
+    {
+      var $container = this.$id('container');
+
+      this.chartsConfiguration.forEach(function(chartRows)
       {
-        this.changeParent(false);
+        var $column = $('<div class="reports-6-column"></div>');
+        var firstChartRow = chartRows[0];
+
+        if (firstChartRow.parent)
+        {
+          $column.attr('data-parent', firstChartRow.parent);
+        }
+
+        if (firstChartRow.child)
+        {
+          $column.attr('data-child', firstChartRow.child);
+        }
+
+        chartRows.forEach(function(chartRow)
+        {
+          var $chartRow = $('<div></div>')
+            .addClass('reports-6-' + chartRow.kind + '-container')
+            .addClass('reports-6-' + chartRow.kind + '-' + chartRow.type);
+
+          if (chartRow.parent)
+          {
+            $chartRow.addClass('is-clickable');
+          }
+
+          $column.append($chartRow);
+        });
+
+        $container.append($column);
+      });
+    },
+
+    renderChartsViews: function()
+    {
+      if (!this.chartsConfiguration)
+      {
+        return;
       }
+
+      var page = this;
+
+      this.chartsConfiguration.forEach(function(chartRows)
+      {
+        chartRows.forEach(function(options)
+        {
+          page.setView('.reports-6-' + options.kind + '-' + options.type, page.createChartView(options));
+        });
+      });
     },
 
     getExportUrls: function()
@@ -327,6 +337,14 @@ define([
       this.changeParent(true);
     },
 
+    updateBreadcrumbs: function()
+    {
+      if (this.layout)
+      {
+        this.layout.setBreadcrumbs(this.breadcrumbs, this);
+      }
+    },
+
     changeParent: function(animate)
     {
       if (this.$el.hasClass('is-changing'))
@@ -361,7 +379,7 @@ define([
         {
           return this.dataset.parent !== newParent && this.dataset.child !== newParent;
         });
-        $columnsToShow = $columns.filter('[data-child="' + newParent + '"]');
+        $columnsToShow = $columns.filter('[data-parent="' + newParent + '"], [data-child="' + newParent + '"]');
 
         this.$('[data-parent="' + newParent + '"]').addClass('is-focused');
       }
@@ -382,10 +400,7 @@ define([
         $columnsToShow.show();
       }
 
-      if (this.layout)
-      {
-        this.layout.setBreadcrumbs(this.breadcrumbs, this);
-      }
+      this.updateBreadcrumbs();
     },
 
     toggleFullscreen: function($chartContainer)

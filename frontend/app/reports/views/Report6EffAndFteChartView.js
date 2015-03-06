@@ -6,74 +6,21 @@ define([
   'app/time',
   'app/i18n',
   'app/highcharts',
-  'app/core/View',
+  './Report6ChartView',
   '../util/formatTooltipHeader'
 ], function(
   time,
   t,
   Highcharts,
-  View,
+  Report6ChartView,
   formatTooltipHeader
 ) {
   'use strict';
 
-  return View.extend({
+  return Report6ChartView.extend({
 
     className: 'reports-6-effAndFte',
-
-    initialize: function()
-    {
-      this.chart = null;
-      this.loading = false;
-
-      this.listenTo(this.model, 'request', this.onModelLoading);
-      this.listenTo(this.model, 'sync', this.onModelLoaded);
-      this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:effAndFte', this.render);
-
-      if (this.settings)
-      {
-        this.listenTo(this.settings, 'add change', this.onSettingsUpdate);
-      }
-    },
-
-    destroy: function()
-    {
-      if (this.chart !== null)
-      {
-        this.chart.destroy();
-        this.chart = null;
-      }
-    },
-
-    afterRender: function()
-    {
-      if (this.timers.createOrUpdateChart)
-      {
-        clearTimeout(this.timers.createOrUpdateChart);
-      }
-
-      this.timers.createOrUpdateChart = setTimeout(this.createOrUpdateChart.bind(this), 1);
-    },
-
-    createOrUpdateChart: function()
-    {
-      this.timers.createOrUpdateChart = null;
-
-      if (this.chart)
-      {
-        this.updateChart();
-      }
-      else
-      {
-        this.createChart();
-
-        if (this.loading)
-        {
-          this.chart.showLoading();
-        }
-      }
-    },
+    kind: 'effAndFte',
 
     createChart: function()
     {
@@ -84,10 +31,10 @@ define([
           renderTo: this.el
         },
         exporting: {
-          filename: t('reports', 'filenames:6:effAndFte:' + this.options.type)
+          filename: this.getExportFilename()
         },
         title: {
-          text: t('reports', 'wh:effAndFte:' + this.options.type)
+          text: this.getChartTitle()
         },
         noData: {},
         xAxis: {
@@ -128,7 +75,7 @@ define([
         series: [
           {
             id: 'fte',
-            name: t('reports', 'wh:fte'),
+            name: this.getFteSeriesName(),
             color: (this.settings && this.settings.getColor('warehouse')) || '#eeee00',
             borderWidth: 0,
             type: 'column',
@@ -144,8 +91,7 @@ define([
             yAxis: 1,
             tooltip: {
               valueSuffix: 'TO/FTE'
-            },
-            visible: this.options.type !== 'sm'
+            }
           }
         ]
       });
@@ -160,8 +106,14 @@ define([
 
       series.forEach(function(series)
       {
-        series.update({marker: markerStyles}, false);
-        series.setData(chartData[series.options.id], false);
+        var data = chartData[series.options.id];
+        var options = {
+          marker: markerStyles,
+          visible: data && data.length
+        };
+
+        series.update(options, false);
+        series.setData(data, false);
       });
 
       this.chart.redraw(false);
@@ -169,86 +121,19 @@ define([
 
     serializeChartData: function()
     {
-      var effAndFte = this.model.get('effAndFte')[this.options.type];
-
-      return {
-        fte: effAndFte ? effAndFte.fte : [],
-        eff: effAndFte ? effAndFte.eff : []
-      };
+      return this.model.getEffAndFteData(this.options.type);
     },
 
-    formatTooltipHeader: formatTooltipHeader,
-
-    getMarkerStyles: function(dataLength)
+    getFteSeriesName: function()
     {
-      return {
-        radius: dataLength > 1 ? 0 : 3,
-        states: {
-          hover: {
-            radius: dataLength > 1 ? 3 : 6
-          }
-        }
-      };
+      return t('reports', 'wh:fte' + (this.model.query.get('interval') === 'week' ? ':avg' : ''));
     },
 
-    onModelLoading: function()
+    onIntervalChange: function()
     {
-      this.loading = true;
-
       if (this.chart)
       {
-        this.chart.showLoading();
-      }
-    },
-
-    onModelLoaded: function()
-    {
-      this.loading = false;
-
-      if (this.chart)
-      {
-        this.chart.hideLoading();
-      }
-    },
-
-    onModelError: function()
-    {
-      this.loading = false;
-
-      if (this.chart)
-      {
-        this.chart.hideLoading();
-      }
-    },
-
-    onSettingsUpdate: function(setting)
-    {
-      /*jshint -W015*/
-
-      if (!this.chart)
-      {
-        return;
-      }
-
-      switch (setting.getType())
-      {
-        case 'color':
-          return this.updateColor(setting.getMetricName(), setting.getValue());
-      }
-    },
-
-    updateColor: function(metric, color)
-    {
-      if (metric === 'efficiency')
-      {
-        metric = 'eff';
-      }
-
-      var series = this.chart.get(metric);
-
-      if (series)
-      {
-        series.update({color: color}, true);
+        this.chart.series[0].update({name: this.getFteSeriesName()}, false);
       }
     }
 

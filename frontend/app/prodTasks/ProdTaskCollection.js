@@ -15,51 +15,43 @@ define([
 
     model: ProdTask,
 
-    rqlQuery: 'sort(parent,name)',
+    rqlQuery: 'sort(name)',
 
     sort: function(options)
     {
-      var topLevel = {};
+      var topLevelTasks = [];
+      var parentToChildren = {};
+      var i;
 
-      for (var i = 0; i < this.length; ++i)
+      for (i = 0; i < this.length; ++i)
       {
         var model = this.models[i];
         var attrs = model.attributes;
 
-        if (attrs.parent)
+        if (!attrs.parent)
         {
-          if (!topLevel[attrs.parent])
-          {
-            topLevel[attrs.parent] = {
-              parent: null,
-              children: []
-            };
-          }
-
-          topLevel[attrs.parent].children.push(model);
+          topLevelTasks.push(model);
         }
-        else if (!topLevel[attrs._id])
+        else if (parentToChildren[attrs.parent])
         {
-          topLevel[attrs._id] = {
-            parent: model,
-            children: []
-          };
+          parentToChildren[attrs.parent].push(model);
         }
-        else if (!topLevel[attrs._id].parent)
+        else
         {
-          topLevel[attrs._id].parent = model;
+          parentToChildren[attrs.parent] = [model];
         }
       }
 
       var models = [];
 
-      Object.keys(topLevel).forEach(function(k)
+      for (i = 0; i < topLevelTasks.length; ++i)
       {
-        var item = topLevel[k];
+        var topLevelTask = topLevelTasks[i];
 
-        models.push(item.parent);
-        models.push.apply(models, item.children);
-      });
+        models.push(topLevelTask);
+
+        pushChildTasks(topLevelTask);
+      }
 
       this.models = models;
 
@@ -69,47 +61,70 @@ define([
       }
 
       return this;
+
+      function pushChildTasks(parentTask)
+      {
+        parentTask.children = parentToChildren[parentTask.id] || [];
+
+        if (!parentTask.children.length)
+        {
+          return;
+        }
+
+        for (var i = 0; i < parentTask.children.length; ++i)
+        {
+          var childTask = parentTask.children[i];
+
+          models.push(childTask);
+
+          pushChildTasks(childTask);
+        }
+      }
     },
 
-    serializeToSelect2: function()
+    serializeToSelect2: function(skipTaskId)
     {
       var data = [];
-      var lastParent = {
-        id: null,
-        text: null,
-        children: []
-      };
 
       this.sort().forEach(function(prodTask)
       {
-        var parent = prodTask.get('parent');
-
-        if (parent)
+        if (prodTask.id !== skipTaskId && !prodTask.attributes.parent)
         {
-          lastParent.children.push({
+          data.push({
             id: prodTask.id,
             text: prodTask.getLabel(),
-            lastChild: false
+            children: getChildren(prodTask),
+            prodTask: prodTask
           });
-        }
-        else
-        {
-          if (lastParent.children.length)
-          {
-            lastParent.children[lastParent.children.length - 1].lastChild = true;
-          }
-
-          lastParent = {
-            id: prodTask.id,
-            text: prodTask.getLabel(),
-            children: []
-          };
-
-          data.push(lastParent);
         }
       });
 
       return data;
+
+      function getChildren(prodTask)
+      {
+        var children = [];
+
+        if (Array.isArray(prodTask.children))
+        {
+          for (var i = 0; i < prodTask.children.length; ++i)
+          {
+            var childProdTask = prodTask.children[i];
+
+            if (childProdTask.id !== skipTaskId)
+            {
+              children.push({
+                id: childProdTask.id,
+                text: childProdTask.getLabel(),
+                children: getChildren(childProdTask),
+                prodTask: childProdTask
+              });
+            }
+          }
+        }
+
+        return children;
+      }
     }
 
   });

@@ -9,6 +9,26 @@ var fs = require('fs');
 var tmpdir = require('os').tmpdir;
 var exec = require('child_process').exec;
 
+var DIACRITICS = {
+  ę: 'e',
+  ą: 'a',
+  ś: 's',
+  ł: 'l',
+  ż: 'z',
+  ź: 'z',
+  ć: 'c',
+  ń: 'n',
+  Ę: 'E',
+  Ą: 'A',
+  Ś: 'S',
+  Ł: 'L',
+  Ż: 'Z',
+  Ź: 'Z',
+  Ć: 'C',
+  Ń: 'N'
+};
+
+
 module.exports = function exportRoute(reportsModule, req, res, next)
 {
   /*jshint -W015*/
@@ -24,13 +44,7 @@ module.exports = function exportRoute(reportsModule, req, res, next)
     return res.send(400);
   }
 
-  var filename = input.filename;
-
-  if (typeof filename !== 'string' || !/^[A-Za-z0-9-_ ]+$/.test(filename))
-  {
-    filename = 'chart';
-  }
-
+  var filename = typeof input.filename === 'string' ? cleanFilename(input.filename) : 'chart';
   var typeArg = null;
   var ext = null;
 
@@ -117,3 +131,11 @@ module.exports = function exportRoute(reportsModule, req, res, next)
     fs.unlink(outFile);
   }
 };
+
+function cleanFilename(filename)
+{
+  return filename
+    .replace(/[^a-zA-Z0-9_\-]/g, function(c) { return DIACRITICS[c] || ' '; })
+    .replace(/\s+/g, '_')
+    .replace(/_{2,}/g, '_');
+}

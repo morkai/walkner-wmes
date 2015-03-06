@@ -23,6 +23,31 @@ define([
 ) {
   'use strict';
 
+  var ROW_COLORS = [
+    [242, 222, 222],
+    [217, 237, 247],
+    [223, 240, 216],
+    [252, 248, 227],
+    [238, 238, 238],
+    [254, 229, 254]
+  ];
+
+  function darken(color, intensity)
+  {
+    var percent = 1 - intensity;
+
+    return [
+      Math.round(color[0] * percent),
+      Math.round(color[1] * percent),
+      Math.round(color[2] * percent)
+    ];
+  }
+
+  function rgb(color)
+  {
+    return 'rgb(' + color + ')';
+  }
+
   return Model.extend({
 
     urlRoot: '/fte/leader',
@@ -174,13 +199,17 @@ define([
     {
       var companies = Object.keys(totalByCompany);
       var fteDiv = this.get('fteDiv') || [];
-      var topLevel = {};
+      var topLevelTasks = [];
+      var idToTask = {};
+      var idToChildren = {};
 
       _.forEach(this.get('tasks'), function(task, taskIndex)
       {
         task.index = taskIndex;
         task.fteDiv = false;
         task.totalByCompany = {};
+        task.backgroundColor = null;
+        task.level = 0;
         task.last = false;
 
         var notParent = task.childCount === 0;
@@ -201,6 +230,7 @@ define([
             }
 
             var totalCount = 0;
+            var companyDivisionTotals = task.totalByCompany[company.id].divisions;
 
             if (Array.isArray(company.count))
             {
@@ -209,7 +239,13 @@ define([
               _.forEach(company.count, function(count)
               {
                 totalCount += count.value;
-                task.totalByCompany[company.id].divisions[count.division] = count.value;
+
+                if (companyDivisionTotals[count.division] === undefined)
+                {
+                  companyDivisionTotals[count.division] = 0;
+                }
+
+                companyDivisionTotals[count.division] += count.value;
 
                 if (notParent)
                 {
@@ -226,7 +262,12 @@ define([
 
               _.forEach(fteDiv, function(divisionId)
               {
-                task.totalByCompany[company.id].divisions[divisionId] = divisionCount;
+                if (companyDivisionTotals[divisionId] === undefined)
+                {
+                  companyDivisionTotals[divisionId] = 0;
+                }
+
+                companyDivisionTotals[divisionId] += divisionCount;
 
                 if (notParent)
                 {
@@ -248,47 +289,29 @@ define([
           });
         });
 
-        if (task.parent)
-        {
-          if (!topLevel[task.parent])
-          {
-            topLevel[task.parent] = {
-              parent: null,
-              children: []
-            };
-          }
+        idToTask[task.id] = task;
 
-          topLevel[task.parent].children.push(task);
-        }
-        else if (!topLevel[task.id])
+        if (!task.parent)
         {
-          topLevel[task.id] = {
-            parent: task,
-            children: []
-          };
+          topLevelTasks.push(task);
+
+          return;
         }
-        else if (!topLevel[task.id].parent)
+
+        if (idToChildren[task.parent])
         {
-          topLevel[task.id].parent = task;
+          idToChildren[task.parent].push(task);
+        }
+        else
+        {
+          idToChildren[task.parent] = [task];
         }
       });
 
       var tasks = [];
+      var rowColorIndex = -1;
 
-      Object.keys(topLevel).forEach(function(k)
-      {
-        var item = topLevel[k];
-
-        item.parent.hasChildren = item.children.length > 0;
-
-        tasks.push(item.parent);
-        tasks.push.apply(tasks, item.children);
-
-        if (item.parent.hasChildren)
-        {
-          item.children[item.children.length - 1].lastChild = true;
-        }
-      });
+      topLevelTasks.forEach(function(task) { pushTask(task, 0); });
 
       if (tasks.length)
       {
@@ -296,6 +319,33 @@ define([
       }
 
       return tasks;
+
+      function pushTask(task, level)
+      {
+        tasks.push(task);
+
+        task.level = level;
+        task.children = idToChildren[task.id] || [];
+        task.hasChildren = task.children.length > 0;
+
+        if (level === 0)
+        {
+          ++rowColorIndex;
+        }
+
+        if (rowColorIndex === ROW_COLORS.length)
+        {
+          rowColorIndex = 0;
+        }
+
+        task.backgroundColor = rgb(darken(ROW_COLORS[rowColorIndex], level * 0.1));
+
+        if (task.hasChildren)
+        {
+          task.children[task.children.length - 1].lastChild = true;
+          task.children.forEach(function(childTask) { pushTask(childTask, level + 1); });
+        }
+      }
     },
 
     serializeWithoutFunctions: function()
