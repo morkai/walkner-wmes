@@ -235,11 +235,24 @@ define([
       }
     };
 
+    var originalEvents = this.options.chart.events;
+
     this.exportChart({type: type}, {
-      plotOptions: {
-        line: plotOptions,
-        column: plotOptions,
-        area: plotOptions
+      chart: {
+        events: {
+          load: function()
+          {
+            if (originalEvents && originalEvents.load)
+            {
+              originalEvents.load.apply(this, arguments);
+            }
+
+            _.forEach(this.series, function(series)
+            {
+              series.update(plotOptions);
+            });
+          }
+        }
       }
     });
   }
@@ -255,12 +268,12 @@ define([
 
     if (this.series.type !== 'column' && this.series.points.length > 10)
     {
-      if (this.seriesIndex % 2 === 0 && this.pointIndex % 2 !== 0)
+      if (this.series.index % 2 === 0 && this.point.index % 2 !== 0)
       {
         return '';
       }
 
-      if (this.seriesIndex % 2 !== 0 && this.pointIndex % 2 === 0)
+      if (this.series.index % 2 !== 0 && this.point.index % 2 === 0)
       {
         return '';
       }
