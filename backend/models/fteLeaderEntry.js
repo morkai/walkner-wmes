@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function setupFteLeaderEntryModel(app, mongoose)
@@ -107,6 +107,8 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   fteLeaderEntrySchema.statics.createForShift = function(options, creator, done)
   {
+    var ProdTask = mongoose.model('ProdTask');
+    var FteLeaderEntry = mongoose.model('FteLeaderEntry');
     var prodDivisions = app.divisions.models
       .filter(function(division) { return division.type === 'prod'; })
       .map(function(division) { return division._id; })
@@ -136,11 +138,26 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
             return functionEntry.companies.length > 0;
           });
       },
-      function queryProdTasksStep()
+      function findModelsStep()
       {
-        mongoose.model('ProdTask').getForSubdivision(options.subdivision, this.next());
+        ProdTask.getForSubdivision(options.subdivision, this.parallel());
+
+        if (options.copy)
+        {
+          var conditions = {
+            subdivision: options.subdivision,
+            date: {$lt: options.date},
+            shift: options.shift
+          };
+
+          FteLeaderEntry
+            .findOne(conditions, {tasks: 1})
+            .sort({date: -1})
+            .lean()
+            .exec(this.parallel());
+        }
       },
-      function handleProdTasksQueryResultStep(err, prodTasks)
+      function prepareEntryTasksStep(err, prodTasks, prevFteEntry)
       {
         if (err)
         {
@@ -151,8 +168,9 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         var functions = this.functions;
 
         var prodTaskMaps = mapProdTasks(prodTasks);
+        var prevEntryValues = mapPrevEntryValues(prevFteEntry);
 
-        this.tasks = lodash.map(prodTasks, function(prodTask)
+        this.tasks = _.map(prodTasks, function(prodTask)
         {
           ctx.fteDiv = ctx.fteDiv || prodTask.fteDiv;
 
@@ -162,24 +180,38 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
             childCount: 0,
             name: prodTask.name,
             companies: [],
-            functions: lodash.map(functions, function(functionEntry)
+            functions: _.map(functions, function(functionEntry)
             {
               return {
                 id: functionEntry.id,
-                companies: lodash.map(functionEntry.companies, function(companyEntry)
+                companies: _.map(functionEntry.companies, function(companyEntry)
                 {
+                  var key = prodTask._id + ':' + functionEntry.id + ':' + companyEntry.id;
+                  var count;
+
+                  if (!prodTask.fteDiv && !isAnyChildFteDivided(prodTask, prodTaskMaps))
+                  {
+                    count = prevEntryValues[key] || 0;
+                  }
+                  else
+                  {
+                    var prevCountPerDivision = (prevEntryValues[key] || 0) / prodDivisions.length;
+
+                    count = _.map(prodDivisions, function(prodDivision)
+                    {
+                      var value = prevEntryValues[key + ':' + prodDivision];
+
+                      return {
+                        division: prodDivision,
+                        value: value === undefined ? prevCountPerDivision : value
+                      };
+                    });
+                  }
+
                   return {
                     id: companyEntry.id,
                     name: companyEntry.name,
-                    count: !prodTask.fteDiv && !isAnyChildFteDivided(prodTask, prodTaskMaps)
-                      ? 0
-                      : lodash.map(prodDivisions, function(prodDivision)
-                        {
-                          return {
-                            division: prodDivision,
-                            value: 0
-                          };
-                        })
+                    count: count
                   };
                 })
               };
@@ -194,7 +226,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         var idToTask = {};
         var idToChildCount = {};
 
-        lodash.forEach(this.tasks, function(task)
+        _.forEach(this.tasks, function(task)
         {
           idToTask[task.id] = task;
 
@@ -211,14 +243,14 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
           }
         });
 
-        lodash.forEach(idToChildCount, function(childCount, taskId)
+        _.forEach(idToChildCount, function(childCount, taskId)
         {
           idToTask[taskId].childCount = childCount;
         });
       },
       function createFteLeaderEntryStep()
       {
-        var fteLeaderEntryData = {
+        var fteLeaderEntry = new FteLeaderEntry({
           subdivision: options.subdivision,
           date: options.date,
           shift: options.shift,
@@ -228,9 +260,14 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
           tasks: this.tasks,
           createdAt: new Date(),
           creator: creator
-        };
+        });
 
-        mongoose.model('FteLeaderEntry').create(fteLeaderEntryData, done);
+        if (options.copy)
+        {
+          fteLeaderEntry.calcTotals();
+        }
+
+        fteLeaderEntry.save(done);
       }
     );
   };
@@ -404,20 +441,20 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       var childTasks = prodTaskMaps.idToChildren[parentId];
       var parentTaskFunctions = parentTask.functions;
 
-      lodash.forEach(childTasks, function(childTask, taskIndex)
+      _.forEach(childTasks, function(childTask, taskIndex)
       {
         var firstTask = taskIndex === 0;
 
-        lodash.forEach(childTask.functions, function(taskFunction, functionIndex)
+        _.forEach(childTask.functions, function(taskFunction, functionIndex)
         {
-          lodash.forEach(taskFunction.companies, function(taskCompany, companyIndex)
+          _.forEach(taskFunction.companies, function(taskCompany, companyIndex)
           {
             var parentCompany = parentTaskFunctions[functionIndex].companies[companyIndex];
             var count = taskCompany.count;
 
             if (Array.isArray(count))
             {
-              lodash.forEach(count, function(divisionCount, divisionIndex)
+              _.forEach(count, function(divisionCount, divisionIndex)
               {
                 if (firstTask)
                 {
@@ -444,7 +481,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
             {
               count = Math.round(count / fteDivCount * 1000) / 1000;
 
-              lodash.forEach(parentCompany.count, function(divisionCount)
+              _.forEach(parentCompany.count, function(divisionCount)
               {
                 if (firstTask)
                 {
@@ -501,7 +538,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     var idToTask = {};
     var idToChildren = {};
 
-    lodash.forEach(prodTaskList, function(task)
+    _.forEach(prodTaskList, function(task)
     {
       idToTask[task._id || task.id] = task;
 
@@ -526,6 +563,45 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       idToTask: idToTask,
       idToChildren: idToChildren
     };
+  }
+
+  function mapPrevEntryValues(prevFteEntry)
+  {
+    var prevEntryValues = {};
+
+    if (!prevFteEntry)
+    {
+      return prevEntryValues;
+    }
+
+    _.forEach(prevFteEntry.tasks, function(task)
+    {
+      _.forEach(task.functions, function(taskFunction)
+      {
+        _.forEach(taskFunction.companies, function(taskCompany)
+        {
+          var count = taskCompany.count;
+          var key = task.id + ':' + taskFunction.id + ':' + taskCompany.id;
+
+          if (Array.isArray(count))
+          {
+            prevEntryValues[key] = 0;
+
+            _.forEach(count, function(divisionCount)
+            {
+              prevEntryValues[key] += divisionCount.value;
+              prevEntryValues[key + ':' + divisionCount.division] = divisionCount.value;
+            });
+          }
+          else
+          {
+            prevEntryValues[key] = count;
+          }
+        });
+      });
+    });
+
+    return prevEntryValues;
   }
 
   function isAnyChildFteDivided(prodTask, prodTaskMaps)

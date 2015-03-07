@@ -67,8 +67,7 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
 
   var condition = {
     subdivision: data.subdivision,
-    date: shiftMoment.toDate(),
-    shift: data.shift
+    date: shiftMoment.toDate()
   };
 
   FteEntry.findOne(condition).lean().exec(function(err, fteEntry)
@@ -87,8 +86,14 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
     }
 
     var creator = userModule.createUserInfo(user, socket);
+    var options = {
+      subdivision: condition.subdivision,
+      date: condition.date,
+      shift: data.shift,
+      copy: !!data.copy
+    };
 
-    FteEntry.createForShift(condition, creator, function(err, fteEntry)
+    FteEntry.createForShift(options, creator, function(err, fteEntry)
     {
       if (fteEntry)
       {

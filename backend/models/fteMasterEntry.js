@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function setupFteMasterEntryModel(app, mongoose)
@@ -96,6 +96,9 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   fteMasterEntrySchema.statics.createForShift = function(options, creator, done)
   {
+    var ProdTask = mongoose.model('ProdTask');
+    var FteMasterEntry = mongoose.model('FteMasterEntry');
+
     step(
       function prepareProdFunctionsStep()
       {
@@ -117,34 +120,39 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
             return functionEntry.companies.length > 0;
           });
       },
-      function queryProdFlowsStep()
+      function findModelsStep()
       {
-        getProdFlowTasks(options.subdivision, this.functions, this.next());
+        getProdFlowTasks(options.subdivision, this.functions, this.parallel());
+
+        ProdTask.getForSubdivision(options.subdivision, this.parallel());
+
+        if (options.copy)
+        {
+          var conditions = {
+            subdivision: options.subdivision,
+            date: {$lt: options.date},
+            shift: options.shift
+          };
+
+          FteMasterEntry
+            .findOne(conditions, {tasks: 1})
+            .sort({date: -1})
+            .lean()
+            .exec(this.parallel());
+        }
       },
-      function handleProdFlowsQueryResultStep(err, prodFlows)
+      function prepareEntryTasksStep(err, prodFlows, prodTasks, prevFteEntry)
       {
         if (err)
         {
           return this.done(done, err);
         }
 
-        this.tasks = prodFlows;
-      },
-      function queryProdTasksStep()
-      {
-        mongoose.model('ProdTask').getForSubdivision(options.subdivision, this.next());
-      },
-      function handleProdTasksQueryResultStep(err, prodTasks)
-      {
-        if (err)
-        {
-          return this.done(done, err);
-        }
-
-        var tasks = this.tasks;
+        var tasks = prodFlows;
         var functions = this.functions;
+        var prevEntryValues = mapPrevEntryValues(prevFteEntry);
 
-        prodTasks.forEach(function(prodTask)
+        _.forEach(prodTasks, function(prodTask)
         {
           tasks.push({
             type: 'prodTask',
@@ -155,10 +163,31 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
             total: null
           });
         });
+
+        this.tasks = _.map(tasks, function(task)
+        {
+          task.noPlan = prevEntryValues[task.id] === true;
+          task.functions = _.map(task.functions, function(taskFunction)
+          {
+            return {
+              id: taskFunction.id,
+              companies: _.map(taskFunction.companies, function(taskCompany)
+              {
+                return {
+                  id: taskCompany.id,
+                  name: taskCompany.name,
+                  count: prevEntryValues[task.id + ':' + taskFunction.id + ':' + taskCompany.id] || 0
+                };
+              })
+            };
+          });
+
+          return task;
+        });
       },
       function createFteMasterEntryStep()
       {
-        var fteMasterEntryData = {
+        var fteMasterEntry = new FteMasterEntry({
           subdivision: options.subdivision,
           date: options.date,
           shift: options.shift,
@@ -169,9 +198,14 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           creator: creator,
           updatedAt: null,
           updater: null
-        };
+        });
+        
+        if (options.copy)
+        {
+          fteMasterEntry.calcTotals();
+        }
 
-        mongoose.model('FteMasterEntry').create(fteMasterEntryData, done);
+        fteMasterEntry.save(done);
       }
     );
   };
@@ -269,7 +303,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   fteMasterEntrySchema.methods.updatePlan = function(options, updater, done)
   {
-    var task = lodash.find(this.tasks, function(task)
+    var task = _.find(this.tasks, function(task)
     {
       return String(task.id) === options.taskId;
     });
@@ -360,6 +394,31 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
       done(null, result);
     });
+  }
+
+  function mapPrevEntryValues(prevFteEntry)
+  {
+    var prevEntryValues = {};
+
+    if (!prevFteEntry)
+    {
+      return prevEntryValues;
+    }
+
+    _.forEach(prevFteEntry.tasks, function(task)
+    {
+      prevEntryValues[task.id] = task.noPlan;
+
+      _.forEach(task.functions, function(taskFunction)
+      {
+        _.forEach(taskFunction.companies, function(taskCompany)
+        {
+          prevEntryValues[task.id + ':' + taskFunction.id + ':' + taskCompany.id] = taskCompany.count;
+        });
+      });
+    });
+
+    return prevEntryValues;
   }
 
   mongoose.model('FteMasterEntry', fteMasterEntrySchema);

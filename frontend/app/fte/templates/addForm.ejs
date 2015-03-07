@@ -1,4 +1,4 @@
-<form class="panel panel-primary">
+<form class="panel panel-primary fte-addForm">
   <div class="panel-heading">
     <%- t('fte', 'addForm:panel:title') %>
   </div>
@@ -17,6 +17,12 @@
         </label>
         <% }) %>
       </div>
+    </div>
+    <div class="checkbox">
+      <label class="control-label">
+        <input id="<%- idPrefix %>-copy" type="checkbox" name="copy" value="1" checked>
+        <%- t('fte', 'addForm:copy') %>
+      </label>
     </div>
   </div>
   <div class="panel-footer">

@@ -22,6 +22,7 @@
     "filter:submit": "Filter entries",
 
     "addForm:panel:title": "FTE entry find/create form",
+    "addForm:copy": "Copy the values from the previous entry for the specified shift.",
     "addForm:submit": "Allocate resources",
     "addForm:msg:offline": "Cannot allocate FTE: no connection with the server :(",
     "addForm:msg:failure": "Failed to find/create the FTE entry for editing: {error, select, AUTH{no privileges!} INPUT{invalid input data!} other{{error}}}",

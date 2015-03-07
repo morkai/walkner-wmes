@@ -143,7 +143,8 @@ define([
       var options = {
         subdivision: $subdivision.select2('val'),
         date: new Date(this.$id('date').val() + ' 00:00:00'),
-        shift: parseInt(this.$('input[name=shift]:checked').val(), 10)
+        shift: parseInt(this.$('input[name=shift]:checked').val(), 10),
+        copy: this.$id('copy').prop('checked')
       };
 
       this.socket.emit(messageType, options, function(err, fteEntryId)

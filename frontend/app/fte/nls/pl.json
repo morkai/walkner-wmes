@@ -22,6 +22,7 @@
   "filter:submit": "Filtruj wpisy",
 
   "addForm:panel:title": "Formularz wyszukiwania/tworzenia wpisu FTE",
+  "addForm:copy": "Kopiuj wartości z poprzedniego wpisu wybranej zmiany",
   "addForm:submit": "Przydzielaj zasoby",
   "addForm:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem :(",
   "addForm:msg:failure": "Nie udało się znaleźć/utworzyć wpisu do edycji: {error, select, AUTH{brak uprawnień!} INPUT{nieprawidłowe dane wejściowe!} other{{error}}}",

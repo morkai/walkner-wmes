@@ -239,3 +239,6 @@ th.fte-masterEntry-column-noPlan {
 textarea.fte-leaderEntry-comment:focus {
   background-color: #ffffa6;
 }
+.fte-addForm .filter-radio-group {
+  height: auto;
+}
