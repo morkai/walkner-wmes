@@ -201,7 +201,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     req.body.deleted = false;
     req.body.createdAt = new Date();
     req.body.updatedAt = req.body.createdAt;
-    req.body._id = req.body.createdAt.toString(36).toUpperCase()
+    req.body._id = req.body.createdAt.getTime().toString(36).toUpperCase()
       + Math.round(1000 + Math.random() * 8999).toString(36).toUpperCase();
 
     next();
