@@ -79,6 +79,7 @@ define([
 
       this.listenTo(this.model, 'change:online', this.onOnlineChanged);
       this.listenTo(this.model, 'change:state', this.onStateChanged);
+      this.listenTo(this.model, 'change:extended', this.onExtendedChanged);
       this.listenTo(this.model, 'change:prodShift', this.onProdShiftChanged);
       this.listenTo(this.model, 'change:prodShiftOrders', this.onProdShiftOrdersChanged);
       this.listenTo(this.model, 'change:prodDowntimes', this.onProdDowntimesChanged);
@@ -108,6 +109,11 @@ define([
       if (this.model.get('state'))
       {
         classNames.push('is-' + this.model.get('state'));
+      }
+
+      if (this.model.get('extended'))
+      {
+        classNames.push('is-extended');
       }
 
       var workCenter = orgUnits.getParent(orgUnits.getByTypeAndId('prodLine', this.model.getProdLineId()));
@@ -336,6 +342,11 @@ define([
       }
 
       this.toggleVisibility();
+    },
+
+    onExtendedChanged: function()
+    {
+      this.$el.toggleClass('is-extended', this.model.get('extended'));
     },
 
     onProdShiftChanged: function()

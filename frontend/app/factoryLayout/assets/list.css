@@ -132,6 +132,32 @@
 .factoryLayout-prodLineList > .is-downtime:hover {
   background: #ebcccc;
 }
+.factoryLayout-prodLineList > .is-extended {
+  -webkit-animation: factoryLayout-extendedDowntime 2s infinite;
+  animation: factoryLayout-extendedDowntime 2s infinite;
+}
+@-webkit-keyframes factoryLayout-extendedDowntime {
+  0% {
+    background: #f2dede;
+  }
+  50% {
+    background: #f99;
+  }
+  100% {
+    background: #f2dede;
+  }
+}
+@keyframes factoryLayout-extendedDowntime {
+  0% {
+    background: #f2dede;
+  }
+  50% {
+    background: #ff9999;
+  }
+  100% {
+    background: #f2dede;
+  }
+}
 .factoryLayout-timeline-container > .prodShifts-timeline {
   margin-left: 0;
   text-align: left;
