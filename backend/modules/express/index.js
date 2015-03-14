@@ -110,14 +110,12 @@ exports.start = function startExpressModule(app, module, done)
     basePath: path.resolve(__dirname, '../../../')
   };
 
-  if (pmx === null)
-  {
-    module.use(errorHandlerMiddleware(module, errorHandlerOptions));
-  }
-  else
+  if (pmx !== null)
   {
     module.use(pmx.expressErrorHandler());
   }
+
+  module.use(errorHandlerMiddleware(module, errorHandlerOptions));
 
   app.broker.publish('express.beforeRoutes', {
     module: module,

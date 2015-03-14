@@ -3,6 +3,7 @@
     "BREADCRUMBS:browse": "Production orders",
 
     "MSG:LOADING_FAILURE": "Failed to load the orders :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order details :(",
 
     "PANEL:TITLE:details": "Order's details",
     "PANEL:TITLE:operations": "Order's operations",
@@ -42,7 +43,9 @@
 
     "filter:placeholder:_id": "Any order no",
     "filter:placeholder:nc12": "Any 12NC",
-    "filter:submit": "Filter orders"
+    "filter:submit": "Filter orders",
+
+    "details:showMoreLink": "Show more order details"
   },
   "pl": true
 }

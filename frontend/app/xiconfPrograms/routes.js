@@ -23,7 +23,7 @@ define([
   var canView = user.auth('XICONF:VIEW');
   var canManage = user.auth('XICONF:MANAGE');
 
-  router.map('/xiconfPrograms', canView, function(req)
+  router.map('/xiconf/programs', canView, function(req)
   {
     viewport.loadPage(['app/xiconfPrograms/pages/XiconfProgramListPage'], function(XiconfProgramListPage)
     {
@@ -35,7 +35,7 @@ define([
     });
   });
 
-  router.map('/xiconfPrograms/:id', canView, function(req)
+  router.map('/xiconf/programs/:id', canView, function(req)
   {
     viewport.loadPage(
       ['app/core/pages/DetailsPage', 'app/xiconfPrograms/views/XiconfProgramDetailsView'],
@@ -49,7 +49,7 @@ define([
     );
   });
 
-  router.map('/xiconfPrograms;add', canManage, function()
+  router.map('/xiconf/programs;add', canManage, function()
   {
     viewport.loadPage(
       ['app/core/pages/AddFormPage', 'app/xiconfPrograms/views/XiconfProgramFormView'],
@@ -63,7 +63,7 @@ define([
     );
   });
 
-  router.map('/xiconfPrograms/:id;edit', canManage, function(req)
+  router.map('/xiconf/programs/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
       ['app/core/pages/EditFormPage', 'app/xiconfPrograms/views/XiconfProgramFormView'],
@@ -77,5 +77,5 @@ define([
     );
   });
 
-  router.map('/xiconfPrograms/:id;delete', canManage, showDeleteFormPage.bind(null, XiconfProgram));
+  router.map('/xiconf/programs/:id;delete', canManage, showDeleteFormPage.bind(null, XiconfProgram));
 });

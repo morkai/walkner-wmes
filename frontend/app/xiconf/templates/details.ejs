@@ -67,12 +67,16 @@
     <div class="panel-details">
       <div class="props first">
         <div class="prop">
+          <div class="prop-name"><%- t('xiconf', 'PROPERTY:serviceTag') %></div>
+          <div class="prop-value"><%- model.serviceTag || '-' %></div>
+        </div>
+        <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:nc12') %></div>
           <div class="prop-value"><%- model.nc12 %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:programName') %></div>
-          <div class="prop-value"><%= model.programName || '?' %></div>
+          <div class="prop-value"><%= model.programName || '-' %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:counter') %></div>

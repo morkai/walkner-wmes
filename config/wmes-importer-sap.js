@@ -21,6 +21,7 @@ exports.modules = [
   'warehouse/importer/controlCycles',
   'warehouse/importer/transferOrders',
   'warehouse/importer/shiftMetrics',
+  'xiconf/importer/orders',
   'reports/clipOrderCount'
 ];
 
@@ -37,7 +38,8 @@ exports.mongoose = {
     'order', 'emptyOrder',
     'mrpController', 'clipOrderCount',
     'fteLeaderEntry',
-    'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics'
+    'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
+    'xiconfProgramOrder', 'xiconfLedOrder'
   ]
 };
 
@@ -53,10 +55,12 @@ exports.events = {
       'orders.synced',
       'emptyOrders.synced',
       'clipOrderCount.created',
-      'warehouse.*.synced'
+      'warehouse.*.synced',
+      'xiconf.orders.synced'
     ],
     error: [
-      'warehouse.*.syncFailed'
+      'warehouse.*.syncFailed',
+      'xiconf.orders.syncFailed'
     ]
   }
 };
@@ -80,7 +84,8 @@ exports['messenger/server'] = {
     'events.saved',
     'orders.synced',
     'emptyOrders.synced',
-    'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated'
+    'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
+    'xiconf.orders.synced'
   ]
 };
 
@@ -134,5 +139,10 @@ exports['warehouse/importer/controlCycles'] = {
 
 exports['warehouse/importer/transferOrders'] = {
   filterRe: /^T_LT23_[0-9]+\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['xiconf/importer/orders'] = {
+  filterRe: /^T_COOIS_XICONF_[0-9]+\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };

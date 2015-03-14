@@ -13,9 +13,11 @@ define([
 
   return Model.extend({
 
-    urlRoot: '/xiconfPrograms',
+    urlRoot: '/xiconf/programs',
 
-    clientUrlRoot: '#xiconfPrograms',
+    clientUrlRoot: '#xiconf/programs',
+
+    privilegePrefix: 'XICONF',
 
     topicPrefix: 'xiconfPrograms',
 

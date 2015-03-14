@@ -3,6 +3,9 @@
 .xiconf-entry {
   cursor: pointer;
 }
+.xiconf-filter .form-control[name="serviceTag"] {
+  width: 160px;
+}
 .xiconf-filter .form-control[name="no"] {
   width: 100px;
 }

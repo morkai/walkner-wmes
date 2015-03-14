@@ -34,7 +34,8 @@ define([
       return {
         model: order,
         panelType: this.options.panelType || 'primary',
-        panelTitle: this.options.panelTitle || t('orders', 'PANEL:TITLE:details')
+        panelTitle: this.options.panelTitle || t('orders', 'PANEL:TITLE:details'),
+        linkOrderNo: !!this.options.linkOrderNo
       };
     }
 

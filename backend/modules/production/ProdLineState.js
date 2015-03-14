@@ -107,6 +107,16 @@ ProdLineState.prototype.getCurrentShiftId = function()
  */
 ProdLineState.prototype.getCurrentOrderId = function()
 {
+  var currentProdShiftOrder = this.getCurrentOrder();
+
+  return currentProdShiftOrder === null ? null : currentProdShiftOrder._id;
+};
+
+/**
+ * @returns {object|null}
+ */
+ProdLineState.prototype.getCurrentOrder = function()
+{
   if (this.prodShiftOrders.length === 0)
   {
     return null;
@@ -119,7 +129,7 @@ ProdLineState.prototype.getCurrentOrderId = function()
     return null;
   }
 
-  return recentProdShiftOrder._id;
+  return recentProdShiftOrder;
 };
 
 /**

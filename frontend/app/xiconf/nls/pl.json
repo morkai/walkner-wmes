@@ -39,6 +39,7 @@
   "PROPERTY:workflowFile": "Plik konfiguracyjny programatora",
   "PROPERTY:workflow": "Zawartość pliku konfiguracyjnego programatora",
   "PROPERTY:programName": "Nazwa programu",
+  "PROPERTY:serviceTag": "Service Tag",
 
   "filter:result:success": "Sukces",
   "filter:result:failure": "Porażka",

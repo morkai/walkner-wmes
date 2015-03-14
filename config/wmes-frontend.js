@@ -134,7 +134,8 @@ exports.pubsub = {
     'prodDowntimes.**',
     'prodShiftOrders.**',
     'updater.newVersion',
-    'settings.updated.**'
+    'settings.updated.**',
+    'xiconf.orders.**'
   ]
 };
 
@@ -155,7 +156,8 @@ exports.mongoose = {
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
     'feedback',
     'license', 'licensePing',
-    'xiconfOrder', 'xiconfResult', 'xiconfProgram', 'icpoResult',
+    'xiconfOrder', 'xiconfResult', 'xiconfProgram', 'xiconfProgramOrder', 'xiconfLedOrder',
+    'icpoResult',
     'factoryLayout',
     'whTransferOrder'
   ]

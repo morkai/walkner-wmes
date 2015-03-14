@@ -23,7 +23,8 @@ define([
         from: '',
         to: '',
         srcId: '',
-        no: '',
+        serviceTag: '',
+        orderNo: '',
         nc12: '',
         result: ['success', 'failure']
       };
@@ -50,7 +51,8 @@ define([
         }
       },
       'nc12': 'orderNo',
-      'srcId': 'orderNo'
+      'srcId': 'orderNo',
+      'serviceTag': 'orderNo'
     },
 
     initialize: function()
@@ -93,8 +95,9 @@ define([
     {
       var fromMoment = time.getMoment(this.$id('from').val());
       var toMoment = time.getMoment(this.$id('to').val());
-      var no = this.$id('no').val().trim();
+      var orderNo = this.$id('orderNo').val().trim();
       var nc12 = this.$id('nc12').val().trim();
+      var serviceTag = this.$id('serviceTag').val().trim();
       var srcId = this.$id('srcId').val();
       var $result = this.$('input[name="result[]"]:checked');
 
@@ -103,14 +106,19 @@ define([
         selector.push({name: 'eq', args: ['srcId', srcId]});
       }
 
-      if (/^[0-9]{9}$/.test(no))
+      if (/^[0-9]{9}$/.test(orderNo))
       {
-        selector.push({name: 'eq', args: ['orderNo', no]});
+        selector.push({name: 'eq', args: ['orderNo', orderNo]});
       }
 
       if (/^[0-9]{12}$/.test(nc12))
       {
         selector.push({name: 'eq', args: ['nc12', nc12]});
+      }
+
+      if (/^P[0-9]+$/.test(serviceTag))
+      {
+        selector.push({name: 'eq', args: ['serviceTag', serviceTag]});
       }
 
       if (fromMoment.isValid())

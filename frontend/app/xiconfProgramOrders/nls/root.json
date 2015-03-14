@@ -1,0 +1,32 @@
+{
+  "root": {
+    "BREADCRUMBS:browse": "Xiconf orders",
+
+    "MSG:LOADING_FAILURE": "Failed to load the orders :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order :(",
+
+    "PANEL:TITLE:details:parentOrder": "Product order details",
+    "PANEL:TITLE:details:programOrder": "Program order details",
+
+    "PAGE_ACTION:export": "Export orders",
+
+    "PROPERTY:reqDate": "Date",
+    "PROPERTY:createdAt": "Started at",
+    "PROPERTY:finishedAt": "Finished at",
+    "PROPERTY:duration": "Duration",
+    "PROPERTY:status": "Status",
+    "PROPERTY:quantityParent": "Order quantity",
+    "PROPERTY:quantityTodo": "Program quantity",
+    "PROPERTY:quantityDone": "Programmed quantity",
+    "PROPERTY:serviceTagCounter": "Number of issued Service Tags",
+
+    "status:-1": "Unfinished",
+    "status:0": "Finished",
+    "status:1": "Excess",
+
+    "filter:submit": "Filter orders",
+
+    "details:showResultsLink": "Show results history"
+  },
+  "pl": true
+}

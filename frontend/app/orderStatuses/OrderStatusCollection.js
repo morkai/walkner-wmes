@@ -21,7 +21,7 @@ define([
     {
       var collection = this;
 
-      return idList.map(function(id)
+      return !Array.isArray(idList) ? [] : idList.map(function(id)
       {
         var orderStatus = collection.get(id);
 

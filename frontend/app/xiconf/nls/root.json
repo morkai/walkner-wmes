@@ -40,6 +40,7 @@
     "PROPERTY:workflowFile": "Programmer configuration file",
     "PROPERTY:workflow": "Programmer configuration file contents",
     "PROPERTY:programName": "Program name",
+    "PROPERTY:serviceTag": "Service Tag",
 
     "filter:result:success": "Success",
     "filter:result:failure": "Failure",

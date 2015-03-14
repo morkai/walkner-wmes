@@ -5,7 +5,13 @@
       <div class="props first">
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:_id') %></div>
-          <div class="prop-value"><%= model._id %></div>
+          <div class="prop-value">
+            <% if (linkOrderNo && model._id) { %>
+            <a href="#orders/<%= model._id %>" title="<%- t('orders', 'details:showMoreLink') %>"><%= model._id %></a>
+            <% } else { %>
+            <%= model._id || '-' %>
+            <% } %>
+          </div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:nc12') %></div>

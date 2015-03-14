@@ -1,0 +1,32 @@
+<form class="well filter-form xiconf-filter">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
+    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
+    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-no"><%- t('xiconf', 'PROPERTY:no') %></label>
+    <input id="<%- idPrefix %>-no" class="form-control" name="no" type="text" maxlength="9" pattern="^[0-9]{9}$">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-nc12"><%- t('xiconf', 'PROPERTY:nc12') %></label>
+    <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" maxlength="12" pattern="^[0-9]{12}$">
+  </div>
+  <div class="form-group">
+    <label><%- t('xiconfProgramOrders', 'PROPERTY:status') %></label>
+    <div id="<%- idPrefix %>-status" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% [[-1, 'danger'], [0, 'success'], [1, 'warning']].forEach(function(status) { %>
+      <label class="btn btn-<%- status[1] %>">
+        <input type="checkbox" name="status[]" value="<%- status[0] %>"> <%- t('xiconfProgramOrders', 'status:' + status[0]) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('xiconfProgramOrders', 'filter:submit') %></span></button>
+  </div>
+</form>

@@ -174,5 +174,9 @@
   "TYPE:xiconfPrograms.edited": "Programy Xiconf: edycja",
   "TEXT:xiconfPrograms.edited": "Zmodyfikowano program: <a href='\\#xiconf/programs/{model->_id}'>{model->name}</a>",
   "TYPE:xiconfPrograms.deleted": "Programy Xiconf: usunięcie",
-  "TEXT:xiconfPrograms.deleted": "Usunięto program: <em>{model->name}</em>"
+  "TEXT:xiconfPrograms.deleted": "Usunięto program: <em>{model->name}</em>",
+  "TYPE:xiconf.orders.synced": "Xiconf: synchronizacja zleceń",
+  "TEXT:xiconf.orders.synced": "Dodano <em>{programInsertCount}</em> i zmodyfikowano <em>{programUpdateCount}</em> {programUpdateCount, plural, one{zlecenie programowe} few{zlecenia programowych} other{zleceń programowych}} oraz dodano <em>{ledInsertCount}</em> i zmodyfikowano <em>{ledUpdateCount}</em> {ledUpdateCount, plural, one{zlecenie LED} few{zlecenia LED} other{zleceń LED}} z danych pobranych <em>{timestamp}</em>.",
+  "TYPE:xiconf.orders.syncFailed": "Xiconf: nieudana synchronizacja zleceń",
+  "TEXT:xiconf.orders.syncFailed": "Nie udało się zaimportować danych z <em>{timestamp}</em>: {error}"
 }

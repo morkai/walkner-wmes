@@ -12,20 +12,24 @@
     <input id="<%- idPrefix %>-srcId" name="srcId" type="text" placeholder="<%- t('xiconf', 'filter:placeholder:srcId') %>">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-no"><%- t('xiconf', 'PROPERTY:no') %></label>
-    <input id="<%- idPrefix %>-no" class="form-control" name="no" type="text" maxlength="9" pattern="^[0-9]{9}$">
+    <label for="<%- idPrefix %>-serviceTag"><%- t('xiconf', 'PROPERTY:serviceTag') %></label>
+    <input id="<%- idPrefix %>-serviceTag" class="form-control" name="serviceTag" type="text" pattern="^(P|p)[0-9]+$">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-orderNo"><%- t('xiconf', 'PROPERTY:no') %></label>
+    <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" maxlength="9">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-nc12"><%- t('xiconf', 'PROPERTY:nc12') %></label>
-    <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" maxlength="12" pattern="^[0-9]{12}$">
+    <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" maxlength="12">
   </div>
   <div class="form-group">
     <label><%- t('xiconf', 'PROPERTY:result') %></label>
     <div class="btn-group filter-btn-group xiconf-filter-result" data-toggle="buttons">
-      <label class="btn btn-default xiconf-filter-success">
+      <label class="btn btn-success xiconf-filter-success">
         <input type="checkbox" name="result[]" value="success"> <%- t('xiconf', 'filter:result:success') %>
       </label>
-      <label class="btn btn-default xiconf-filter-failure">
+      <label class="btn btn-danger xiconf-filter-failure">
         <input type="checkbox" name="result[]" value="failure"> <%- t('xiconf', 'filter:result:failure') %>
       </label>
     </div>

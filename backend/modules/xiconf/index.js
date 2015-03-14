@@ -5,12 +5,15 @@
 'use strict';
 
 var setUpRoutes = require('./routes');
+var setUpCommands = require('./commands');
 var setUpImporter = require('./importer');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
+  sioId: 'sio',
   expressId: 'express',
   directoryWatcherId: 'directoryWatcher',
+  productionId: 'production',
   userId: 'user',
   licensesId: 'licenses',
   featureDbPath: './',
@@ -39,5 +42,14 @@ exports.start = function startXiconfModule(app, module)
       config.licensesId
     ],
     setUpImporter.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      config.mongooseId,
+      config.sioId,
+      config.productionId
+    ],
+    setUpCommands.bind(null, app, module)
   );
 };

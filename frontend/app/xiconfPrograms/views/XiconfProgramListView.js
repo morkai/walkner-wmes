@@ -11,7 +11,24 @@ define([
 
   return ListView.extend({
 
-    columns: ['name', 'updatedAt']
+    className: 'xiconfPrograms-list',
+
+    columns: ['name', 'updatedAt'],
+
+    serializeRow: function(model)
+    {
+      var obj = model.serialize();
+
+      obj.name += ' ' + obj.steps
+        .filter(function(step) { return step.enabled; })
+        .map(function(step)
+        {
+          return '<span class="label label-info label-' + step.type + '">' + step.type + '</span>';
+        })
+        .join(' ');
+
+      return obj;
+    }
 
   });
 });

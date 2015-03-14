@@ -1,0 +1,29 @@
+{
+  "BREADCRUMBS:browse": "Zlecenia Xiconf",
+
+  "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się :(",
+
+  "PANEL:TITLE:details:parentOrder": "Szczegóły zlecenia wyrobu",
+  "PANEL:TITLE:details:programOrder": "Szczegóły zlecenia programowego",
+
+  "PAGE_ACTION:export": "Eksportuj zlecenia",
+
+  "PROPERTY:reqDate": "Data",
+  "PROPERTY:createdAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas ukończenia",
+  "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:status": "Status",
+  "PROPERTY:quantityParent": "Ilość w zleceniu",
+  "PROPERTY:quantityTodo": "Ilość do zaprogramowania",
+  "PROPERTY:quantityDone": "Ilość pomyślnych programowań",
+  "PROPERTY:serviceTagCounter": "Ilość wydanych Service Tagów",
+
+  "status:-1": "Nieukończone",
+  "status:0": "Ukończone",
+  "status:1": "Nadwyżka",
+
+  "filter:submit": "Filtruj zlecenia",
+
+  "details:showResultsLink": "Pokaż historię wyników"
+}

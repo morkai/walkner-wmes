@@ -2,6 +2,7 @@
   "BREADCRUMBS:browse": "Zlecenia reszty działów",
 
   "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się :(",
 
   "PANEL:TITLE:details": "Szczegóły zlecenia",
   "PANEL:TITLE:operations": "Lista operacji zlecenia",
@@ -41,5 +42,7 @@
 
   "filter:placeholder:_id": "Dowolny nr",
   "filter:placeholder:nc12": "Dowolne 12NC",
-  "filter:submit": "Filtruj zlecenia"
+  "filter:submit": "Filtruj zlecenia",
+
+  "details:showMoreLink": "Pokaż więcej szczegołów zlecenia"
 }

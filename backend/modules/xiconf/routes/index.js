@@ -8,6 +8,7 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var moment = require('moment');
+var step = require('h5.step');
 var importRoute = require('./import');
 var downloadRoute = require('./download');
 var syncProgramsRoute = require('./syncPrograms');
@@ -17,13 +18,33 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   var express = app[xiconfModule.config.expressId];
   var mongoose = app[xiconfModule.config.mongooseId];
   var userModule = app[xiconfModule.config.userId];
+  var Order = mongoose.model('Order');
   var XiconfResult = mongoose.model('XiconfResult');
   var XiconfProgram = mongoose.model('XiconfProgram');
+  var XiconfProgramOrder = mongoose.model('XiconfProgramOrder');
+  var XiconfLedOrder = mongoose.model('XiconfLedOrder');
 
   var canView = userModule.auth('XICONF:VIEW');
   var canManage = userModule.auth('XICONF:MANAGE');
 
   express.post('/xiconf;import', importRoute.bind(null, app, xiconfModule));
+
+  express.get('/xiconf/programOrders', canView, express.crud.browseRoute.bind(null, app, XiconfProgramOrder));
+
+  express.get('/xiconf/programOrders;export', canView, express.crud.exportRoute.bind(null, {
+    filename: 'WMES-XICONF-ORDERS',
+    serializeRow: exportXiconfProgramOrder,
+    model: XiconfProgramOrder
+  }));
+
+  express.get(
+    '/xiconf/programOrders/:id',
+    canView,
+    express.crud.readRoute.bind(null, app, {
+      model: XiconfProgramOrder,
+      prepareResult: prepareProgramOrderDetails
+    })
+  );
 
   express.get(
     '/xiconf/results',
@@ -46,7 +67,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     },
     populateOrder.bind(null, []),
     express.crud.exportRoute.bind(null, {
-      filename: 'WMES-XICONF',
+      filename: 'WMES-XICONF-RESULTS',
       serializeRow: exportXiconfResult,
       model: XiconfResult
     })
@@ -75,7 +96,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   );
 
   express.get(
-    '/xiconfPrograms',
+    '/xiconf/programs',
     canView,
     function(req, res, next)
     {
@@ -87,24 +108,24 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   );
 
   express.post(
-    '/xiconfPrograms',
+    '/xiconf/programs',
     canManage,
     prepareNewProgram,
     express.crud.addRoute.bind(null, app, XiconfProgram)
   );
 
-  express.post('/xiconfPrograms;sync', syncProgramsRoute.bind(null, app, xiconfModule));
+  express.post('/xiconf/programs;sync', syncProgramsRoute.bind(null, app, xiconfModule));
 
-  express.get('/xiconfPrograms/:id', canView, express.crud.readRoute.bind(null, app, XiconfProgram));
+  express.get('/xiconf/programs/:id', canView, express.crud.readRoute.bind(null, app, XiconfProgram));
 
   express.put(
-    '/xiconfPrograms/:id',
+    '/xiconf/programs/:id',
     canManage,
     prepareExistingProgram,
     express.crud.editRoute.bind(null, app, XiconfProgram)
   );
 
-  express.delete('/xiconfPrograms/:id', canManage, deleteProgramRoute);
+  express.delete('/xiconf/programs/:id', canManage, deleteProgramRoute);
 
   function populateOrder(fields, req, res, next)
   {
@@ -143,9 +164,37 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     };
   }
 
+  function exportXiconfProgramOrder(doc)
+  {
+    var nc12s = [];
+    var names = [];
+
+    for (var i = 0; i < doc.nc12.length; ++i)
+    {
+      var nc12 = doc.nc12[i];
+
+      nc12s.push(nc12._id);
+      names.push(nc12.name);
+    }
+
+    return {
+      '"orderNo': doc._id,
+      '"12nc': nc12s.join(';'),
+      '"name': names.join(';'),
+      '#quantityParent': doc.quantityParent,
+      '#quantityTodo': doc.quantityTodo,
+      '#quantityDone': doc.quantityDone,
+      '"status': doc.status,
+      'reqDate': moment(doc.reqDate).format('YYYY-MM-DD'),
+      'startedAt': formatTime(doc.createdAt),
+      'finishedAt': formatTime(doc.finishedAt),
+      '#duration': doc.finishedAt ? ((doc.finishedAt - doc.startedAt) / 1000) : 0
+    };
+  }
+
   function formatTime(date)
   {
-    return moment(date).format('YYYY-MM-DD HH:mm:ss');
+    return date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
   }
 
   function readFeatureFile(xiconfResult, done)
@@ -242,5 +291,30 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
         });
       });
     });
+  }
+
+  function prepareProgramOrderDetails(programOrder, done)
+  {
+    programOrder = programOrder.toJSON();
+
+    step(
+      function findRelatedOrders()
+      {
+        Order.findById(programOrder._id, {changes: 0, operations: 0}).lean().exec(this.parallel());
+        XiconfLedOrder.findById(programOrder._id).lean().exec(this.parallel());
+      },
+      function sendResultsStep(err, parentOrder, ledOrder)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        programOrder.parentOrder = parentOrder;
+        programOrder.ledOrder = ledOrder;
+
+        return done(null, programOrder);
+      }
+    );
   }
 };

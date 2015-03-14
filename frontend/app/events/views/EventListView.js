@@ -110,6 +110,7 @@ define([
         case 'warehouse.controlCycles.syncFailed':
         case 'warehouse.transferOrders.synced':
         case 'warehouse.transferOrders.syncFailed':
+        case 'xiconf.orders.synced':
           data.timestamp = time.format(data.timestamp, 'YYYY-MM-DD, HH:mm:ss');
           break;
 

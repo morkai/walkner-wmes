@@ -20,6 +20,11 @@ define([
     events: {
       'click tr[data-id]': function(e)
       {
+        if (window.getSelection().toString() !== '')
+        {
+          return;
+        }
+
         var url = this.collection.get(e.currentTarget.dataset.id).genClientUrl();
 
         if (e.ctrlKey)
@@ -38,7 +43,7 @@ define([
     },
 
     columns: [
-      'srcId', 'order', 'nc12', 'programName', 'counter', 'quantity', 'startedAt', 'duration'
+      'srcId', 'serviceTag', 'order', 'nc12', 'programName', 'counter', 'quantity', 'startedAt', 'duration'
     ],
 
     serializeActions: function()
@@ -54,6 +59,7 @@ define([
         _id: model.id,
         className: 'xiconf-entry ' + (model.get('result') === 'success' ? 'success' : 'danger'),
         srcId: model.get('srcId'),
+        serviceTag: model.get('serviceTag'),
         order: order ? order.no : null,
         programName: model.get('programName'),
         nc12: model.get('nc12'),
