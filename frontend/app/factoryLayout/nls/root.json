@@ -14,8 +14,10 @@
     "prop:operator": "Operator",
     "prop:shift": "Shift",
     "prop:order": "Order",
+    "prop:nc12": "12NC",
     "prop:downtime": "Downtime",
     "prop:lastOrder": "Last order",
+    "prop:lastNc12": "Last 12NC",
     "prop:lastDowntime": "Last downtime",
     "prop:qty": "Quantities done",
 

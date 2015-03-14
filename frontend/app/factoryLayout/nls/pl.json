@@ -14,8 +14,10 @@
   "prop:operator": "Operator",
   "prop:shift": "Zmiana",
   "prop:order": "Zlecenie",
+  "prop:nc12": "12NC",
   "prop:downtime": "Przestój",
   "prop:lastOrder": "Ostatnie zlecenie",
+  "prop:lastNc12": "Ostatnie 12NC",
   "prop:lastDowntime": "Ostatni przestój",
   "prop:qty": "Wykonane ilości",
 

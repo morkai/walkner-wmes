@@ -113,6 +113,7 @@ define([
       var workCenter = orgUnits.getParent(orgUnits.getByTypeAndId('prodLine', this.model.getProdLineId()));
       var prodFlow = workCenter ? orgUnits.getParent(workCenter) : null;
       var order = this.serializeOrder();
+      var nc12 = this.serializeNc12();
       var downtime = this.serializeDowntime();
 
       return {
@@ -122,6 +123,7 @@ define([
         workCenter: workCenter ? workCenter.getLabel() : '?',
         shift: this.serializeShift(),
         order: order,
+        nc12: nc12,
         downtime: downtime,
         quantitiesDone: this.serializeQuantitiesDone(),
         master: this.serializePersonnel('master'),
@@ -176,6 +178,16 @@ define([
       return {
         label: t('factoryLayout', !lastOrder || lastOrder.get('finishedAt') ? 'prop:lastOrder' : 'prop:order'),
         value: lastOrder ? lastOrder.getLabel(false) : '-'
+      };
+    },
+
+    serializeNc12: function()
+    {
+      var lastOrder = this.model.get('prodShiftOrders').last();
+
+      return {
+        label: t('factoryLayout', !lastOrder || lastOrder.get('finishedAt') ? 'prop:lastNc12' : 'prop:nc12'),
+        value: lastOrder ? lastOrder.getNc12() : '-'
       };
     },
 
@@ -348,9 +360,12 @@ define([
     onProdShiftOrdersChanged: function(options)
     {
       var order = this.serializeOrder();
+      var nc12 = this.serializeNc12();
 
       this.$('[role=orderLabel]').html(order.label);
       this.$('[role=orderValue]').html(order.value);
+      this.$('[role=nc12Label]').html(nc12.label);
+      this.$('[role=nc12Value]').html(nc12.value);
 
       if (options && options.reset)
       {
