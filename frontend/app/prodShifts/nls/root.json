@@ -71,6 +71,7 @@
     "timeline:popover:aor": "AOR",
     "timeline:popover:workerCount": "Worker count",
     "timeline:popover:quantityDone": "Quantiy done",
+    "timeline:popover:efficiency": "Efficiency",
 
     "charts:quantitiesDone:title": "Quantities done in specific hours",
     "charts:quantitiesDone:unit": " items",

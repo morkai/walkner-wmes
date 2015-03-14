@@ -65,6 +65,7 @@
     "PROPERTY:operation": "Operation",
     "PROPERTY:operationNo": "Operation",
     "PROPERTY:pressWorksheet": "Worksheet",
+    "PROPERTY:efficiency": "Efficiency",
 
     "unit:workerCount": "persons",
     "unit:taktTime": "s",

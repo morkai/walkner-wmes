@@ -69,6 +69,7 @@
   "timeline:popover:aor": "Obszar",
   "timeline:popover:workerCount": "Ilość osób",
   "timeline:popover:quantityDone": "Ilość wykonana",
+  "timeline:popover:efficiency": "Wydajność",
 
   "charts:quantitiesDone:title": "Wykonane ilości w przedziałach godzinowych",
   "charts:quantitiesDone:unit": " szt.",

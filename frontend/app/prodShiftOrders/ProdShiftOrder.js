@@ -10,7 +10,8 @@ define([
   '../data/subdivisions',
   '../core/Model',
   '../core/util/getShiftEndDate',
-  './util/decorateProdShiftOrder'
+  './util/decorateProdShiftOrder',
+  './util/calcOrderEfficiency'
 ], function(
   _,
   user,
@@ -19,7 +20,8 @@ define([
   subdivisions,
   Model,
   getShiftEndDate,
-  decorateProdShiftOrder
+  decorateProdShiftOrder,
+  calcOrderEfficiency
 ) {
   'use strict';
 
@@ -248,6 +250,11 @@ define([
       }
 
       return orderData.operations[operationNo].name || operationNo;
+    },
+
+    getEfficiency: function()
+    {
+      return calcOrderEfficiency(this.attributes);
     },
 
     getTaktTime: function()

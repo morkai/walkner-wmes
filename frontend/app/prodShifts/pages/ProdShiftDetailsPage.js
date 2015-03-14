@@ -137,7 +137,10 @@ define([
             quantityDone: 1,
             workerCount: 1,
             orderId: 1,
-            operationNo: 1
+            operationNo: 1,
+            workDuration: 1,
+            totalQuantity: 1,
+            laborTime: 1
           },
           sort: {startedAt: 1},
           limit: 9999,

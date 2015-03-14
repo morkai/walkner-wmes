@@ -7,10 +7,6 @@
       <div class="col-md-4">
         <div class="props first">
           <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:prodLine') %></div>
-            <div class="prop-value"><%= model.prodLine %></div>
-          </div>
-          <div class="prop">
             <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:order') %></div>
             <div class="prop-value">
               <% if (model.orderUrl) { %>
@@ -35,6 +31,10 @@
           <div class="prop">
             <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:taktTime') %></div>
             <div class="prop-value"><%- model.taktTime %> / <%- model.taktTimeSap %> [<%- t('prodShiftOrders', 'unit:taktTime') %>]</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:efficiency') %></div>
+            <div class="prop-value"><%- model.efficiency %></div>
           </div>
         </div>
       </div>
@@ -97,6 +97,10 @@
           <div class="prop">
             <div class="prop-name"><%- t('core', 'ORG_UNIT:workCenter') %></div>
             <div class="prop-value"><%= model.workCenter %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:prodLine') %></div>
+            <div class="prop-value"><%= model.prodLine %></div>
           </div>
         </div>
       </div>

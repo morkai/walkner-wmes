@@ -27,7 +27,8 @@ define([
 
     columns: [
       'mrpControllers', 'prodFlow', 'prodLine',
-      'order', 'operation', 'prodShift', 'startedAt', 'duration', 'quantityDone', 'workerCount'
+      'order', 'operation', 'prodShift',
+      'startedAt', 'duration', 'quantityDone', 'workerCount', 'efficiency'
     ],
 
     serializeRow: function(model)

@@ -16,6 +16,7 @@ define([
   'app/core/util/getShiftStartInfo',
   'app/data/downtimeReasons',
   'app/data/aors',
+  'app/prodShiftOrders/util/calcOrderEfficiency',
   'app/prodShifts/templates/timelineIdlePopover',
   'app/prodShifts/templates/timelineWorkingPopover',
   'app/prodShifts/templates/timelineDowntimePopover'
@@ -33,6 +34,7 @@ define([
   getShiftStartInfo,
   downtimeReasons,
   aors,
+  calcOrderEfficiency,
   renderTimelineIdlePopover,
   renderTimelineWorkingPopover,
   renderTimelineDowntimePopover
@@ -530,6 +532,7 @@ define([
         templateData.operation = item.data.operationNo;
         templateData.workerCount = item.data.workerCount;
         templateData.quantityDone = item.data.quantityDone;
+        templateData.efficiency = calcOrderEfficiency(item.data, true);
 
         return renderTimelineWorkingPopover(templateData);
       }

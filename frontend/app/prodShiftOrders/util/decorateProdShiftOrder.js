@@ -89,6 +89,7 @@ define([
     obj.taktTimeSap = prodShiftOrder.getTaktTime();
     obj.taktTime = prodShiftOrder.getActualTaktTime();
     obj.workerCountSap = prodShiftOrder.getWorkerCountSap();
+    obj.efficiency = Math.round(prodShiftOrder.getEfficiency() * 100) + '%';
 
     return obj;
   };
