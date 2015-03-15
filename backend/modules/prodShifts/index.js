@@ -11,7 +11,8 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   orgUnitsId: 'orgUnits',
-  productionId: 'production'
+  productionId: 'production',
+  settingsId: 'settings'
 };
 
 exports.start = function startProdShiftsModule(app, module)
@@ -22,7 +23,8 @@ exports.start = function startProdShiftsModule(app, module)
       module.config.userId,
       module.config.expressId,
       module.config.orgUnitsId,
-      module.config.productionId
+      module.config.productionId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );

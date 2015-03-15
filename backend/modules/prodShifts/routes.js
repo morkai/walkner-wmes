@@ -12,6 +12,7 @@ var logEntryHandlers = require('../production/logEntryHandlers');
 module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 {
   var express = app[prodShiftsModule.config.expressId];
+  var settings = app[prodShiftsModule.config.settingsId];
   var userModule = app[prodShiftsModule.config.userId];
   var mongoose = app[prodShiftsModule.config.mongooseId];
   var orgUnitsModule = app[prodShiftsModule.config.orgUnitsId];
@@ -88,25 +89,37 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
       return next();
     }
 
-    var conditions = {
-      date: {
-        $gt: moment().subtract(2, 'days')
-      },
-      prodLine: req.params.id
-    };
-
-    ProdShift.find(conditions).sort({date: -1}).limit(1).lean().exec(function(err, prodShifts)
-    {
-      if (err)
+    step(
+      function findDataStep()
       {
-        return next(err);
-      }
+        settings.findById('factoryLayout.extendedDowntimeDelay', this.parallel());
 
-      return res.json(prodShifts.length ? prodShifts[0] : {
-        _id: '?',
-        prodLine: req.params.id
-      });
-    });
+        var conditions = {
+          date: {
+            $gt: moment().subtract(2, 'days')
+          },
+          prodLine: req.params.id
+        };
+
+        ProdShift.find(conditions).sort({date: -1}).limit(1).lean().exec(this.parallel());
+      },
+      function sendResultStep(err, extendedDowntimeDelay, prodShifts)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        var result = prodShifts.length ? prodShifts[0] : {
+          _id: '?',
+          prodLine: req.params.id
+        };
+
+        result.extendedDowntimeDelay = extendedDowntimeDelay ? extendedDowntimeDelay.value : 10;
+
+        return res.json(result);
+      }
+    );
   }
 
   function addProdShiftRoute(req, res, next)

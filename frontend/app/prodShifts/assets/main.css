@@ -96,3 +96,30 @@
 .prodShifts-form-quantitiesDone td:first-child {
   text-align: right;
 }
+
+.prodShifts-extendedDowntime {
+  -webkit-animation: prodShifts-extendedDowntime 2s infinite;
+  animation: prodShifts-extendedDowntime 2s infinite;
+}
+@-webkit-keyframes prodShifts-extendedDowntime {
+  0% {
+    background: #fff;
+  }
+  50% {
+    background: #f99;
+  }
+  100% {
+    background: #fff;
+  }
+}
+@keyframes prodShifts-extendedDowntime {
+  0% {
+    background: #fff;
+  }
+  50% {
+    background: #f99;
+  }
+  100% {
+    background: #fff;
+  }
+}

@@ -121,6 +121,8 @@ define([
         $(document.body).off('click', this.onDocumentClick);
       }
 
+      $(document.body).removeClass('prodShifts-extendedDowntime');
+
       d3.select(this.el).select('svg').remove();
     },
 
@@ -189,6 +191,7 @@ define([
       }
 
       this.renderChart();
+      this.toggleExtendedDowntime();
       this.setUpDatumExtension();
     },
 
@@ -210,10 +213,34 @@ define([
         {
           view.extendDatum();
           view.renderChart();
+          view.toggleExtendedDowntime();
         }
       }
 
       this.timers.extendDatum = setInterval(extendDatum, 15000, this);
+    },
+
+    toggleExtendedDowntime: function()
+    {
+      var extendedDowntimeDelay = this.prodShift.get('extendedDowntimeDelay');
+
+      if (typeof extendedDowntimeDelay !== 'number')
+      {
+        return;
+      }
+
+      var prodDowntime = this.prodDowntimes.last();
+      var extendedDowntime = false;
+
+      if (prodDowntime && !prodDowntime.get('finishedAt'))
+      {
+        var startedAt = Date.parse(prodDowntime.get('startedAt'));
+        var duration = Date.now() - startedAt;
+
+        extendedDowntime = duration >= (extendedDowntimeDelay * 60 * 1000);
+      }
+
+      $('body').toggleClass('prodShifts-extendedDowntime', extendedDowntime);
     },
 
     reset: function()
