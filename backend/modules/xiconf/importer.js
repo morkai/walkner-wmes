@@ -337,7 +337,8 @@ module.exports = function setUpXiconfImporter(app, xiconfModule)
       srcUuid: meta.uuid,
       program: tryJsonParse(result.program),
       steps: tryJsonParse(result.steps),
-      metrics: tryJsonParse(result.metrics)
+      metrics: tryJsonParse(result.metrics),
+      serviceTag: typeof result.serviceTag === 'string' ? result.serviceTag : null
     };
   }
 

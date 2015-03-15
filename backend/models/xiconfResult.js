@@ -48,6 +48,10 @@ module.exports = function setupXiconfResultModel(app, mongoose)
     metrics: {
       type: Object,
       default: null
+    },
+    serviceTag: {
+      type: String,
+      default: null
     }
   }, {
     id: false
