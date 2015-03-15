@@ -6,7 +6,7 @@
 
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
-var setUpImporter = require('./importer');
+var setUpResultsImporter = require('./importer/results');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -17,7 +17,9 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   licensesId: 'licenses',
   featureDbPath: './',
-  zipStoragePath: './'
+  zipStoragePath: './',
+  ordersImportPath: './',
+  ordersImportFile: '{timestamp}@T_COOIS_XICONF_{step}.txt'
 };
 
 exports.start = function startXiconfModule(app, module)
@@ -41,7 +43,7 @@ exports.start = function startXiconfModule(app, module)
       config.directoryWatcherId,
       config.licensesId
     ],
-    setUpImporter.bind(null, app, module)
+    setUpResultsImporter.bind(null, app, module)
   );
 
   app.onModuleReady(
