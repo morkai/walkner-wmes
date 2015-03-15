@@ -271,8 +271,10 @@ exports.reports = {
 };
 
 exports.xiconf = {
+  directoryWatcherId: null,
   zipStoragePath: DATA_PATH + '/xiconf-input',
-  featureDbPath: DATA_PATH + '/xiconf-features'
+  featureDbPath: DATA_PATH + '/xiconf-features',
+  ordersImportPath: DATA_PATH + '/attachments-input'
 };
 
 exports.icpo = {

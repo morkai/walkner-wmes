@@ -10,6 +10,7 @@ var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
 var importResultsRoute = require('./importResults');
+var importOrdersRoute = require('./importOrders');
 var downloadRoute = require('./download');
 var syncProgramsRoute = require('./syncPrograms');
 
@@ -36,6 +37,8 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     serializeRow: exportXiconfProgramOrder,
     model: XiconfProgramOrder
   }));
+
+  express.post('/xiconf/programOrders;import', importOrdersRoute.bind(null, app, xiconfModule));
 
   express.get(
     '/xiconf/programOrders/:id',

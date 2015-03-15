@@ -9,7 +9,7 @@ var path = require('path');
 var step = require('h5.step');
 var JSZip = require('jszip');
 
-module.exports = function setUpXiconfImporter(app, xiconfModule)
+module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 {
   var licensesModule = app[xiconfModule.config.licensesId];
   var mongoose = app[xiconfModule.config.mongooseId];
