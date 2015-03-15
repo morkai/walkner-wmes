@@ -708,7 +708,7 @@ define([
         return;
       }
 
-      var url = '#prodShifts/' + prodShift.id;
+      var url = '#prodShifts/' + prodLineId;
 
       if (newWindow)
       {

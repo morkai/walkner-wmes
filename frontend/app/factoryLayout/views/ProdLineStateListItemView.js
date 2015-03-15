@@ -152,7 +152,7 @@ define([
 
       return {
         text: time.format(prodShift.get('date'), 'YYYY-MM-DD') + ', ' + t('core', 'SHIFT:' + prodShift.get('shift')),
-        href: '#prodShifts/' + prodShift.id
+        href: '#prodShifts/' + (this.displayOptions.isHistoryData() ? prodShift.id : this.model.id)
       };
     },
 
