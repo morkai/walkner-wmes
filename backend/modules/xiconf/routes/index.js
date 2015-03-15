@@ -9,7 +9,7 @@ var path = require('path');
 var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
-var importRoute = require('./import');
+var importResultsRoute = require('./importResults');
 var downloadRoute = require('./download');
 var syncProgramsRoute = require('./syncPrograms');
 
@@ -27,7 +27,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   var canView = userModule.auth('XICONF:VIEW');
   var canManage = userModule.auth('XICONF:MANAGE');
 
-  express.post('/xiconf;import', importRoute.bind(null, app, xiconfModule));
+  express.post('/xiconf;import', importResultsRoute.bind(null, app, xiconfModule));
 
   express.get('/xiconf/programOrders', canView, express.crud.browseRoute.bind(null, app, XiconfProgramOrder));
 

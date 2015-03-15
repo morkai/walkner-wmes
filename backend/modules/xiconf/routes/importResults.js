@@ -10,7 +10,7 @@ var crypto = require('crypto');
 var moment = require('moment');
 var step = require('h5.step');
 
-module.exports = function importRoute(app, xiconfModule, req, res, next)
+module.exports = function importResultsRoute(app, xiconfModule, req, res, next)
 {
   if (!req.is('application/zip'))
   {
