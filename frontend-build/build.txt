@@ -178,6 +178,10 @@ app/xiconf/assets/programs.css
 ----------------
 app/xiconf/assets/programs.css
 
+app/xiconfProgramOrders/assets/main.css
+----------------
+app/xiconfProgramOrders/assets/main.css
+
 app/xiconfPrograms/assets/main.css
 ----------------
 app/xiconfPrograms/assets/main.css
@@ -231,6 +235,7 @@ assets/../app/prodShiftOrders/assets/main.css
 assets/../app/prodShifts/assets/main.css
 assets/../app/pressWorksheets/assets/main.css
 assets/../app/xiconf/assets/main.css
+assets/../app/xiconfProgramOrders/assets/main.css
 assets/../app/xiconfPrograms/assets/main.css
 assets/../app/icpo/assets/main.css
 assets/../app/updater/assets/main.css
@@ -638,6 +643,7 @@ i18n!app/nls/prodLogEntries
 app/prodLogEntries/routes.js
 app/data/prodLog.js
 app/prodShiftOrders/util/decorateProdShiftOrder.js
+app/prodShiftOrders/util/calcOrderEfficiency.js
 app/prodShiftOrders/ProdShiftOrder.js
 app/core/util/matchesEquals.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
@@ -721,6 +727,10 @@ app/nls/xiconf.js
 app/nls/pl/xiconf.js
 i18n!app/nls/xiconf
 app/xiconf/routes.js
+app/nls/xiconfProgramOrders.js
+app/nls/pl/xiconfProgramOrders.js
+i18n!app/nls/xiconfProgramOrders
+app/xiconfProgramOrders/routes.js
 app/xiconfPrograms/XiconfProgram.js
 app/xiconfPrograms/XiconfProgramCollection.js
 app/nls/xiconfPrograms.js
