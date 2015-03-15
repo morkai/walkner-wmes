@@ -6,10 +6,10 @@
 
 var _ = require('lodash');
 var step = require('h5.step');
+var moment = require('moment');
 
 module.exports = function setUpXiconfCommands(app, xiconfModule)
 {
-  var WORKING_ORDER_CHANGE_CHECK_DELAY = 20 * 60 * 1000;
   var EMPTY_REMOTE_DATA = {
     orderNo: null,
     nc12: [],
@@ -614,9 +614,23 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       clearTimeout(workingOrderChangeCheckTimers[orderNo]);
     }
 
+    var now = moment();
+    var delay = moment();
+    var hours = now.hours();
+    var minutes = now.minutes();
+
+    if ([5, 13, 21].indexOf(hours) !== -1 && minutes > 45)
+    {
+      delay.add(1, 'hours').startOf('hour').add(15, 'minutes');
+    }
+    else if ([6, 14, 22].indexOf(hours) !== -1 && minutes < 15)
+    {
+      delay.startOf('hour').add(15, 'minutes');
+    }
+
     workingOrderChangeCheckTimers[orderNo] = setTimeout(
       checkWorkingOrderChange,
-      WORKING_ORDER_CHANGE_CHECK_DELAY, orderNo
+      Math.max(1337, delay.diff(now)), orderNo
     );
   }
 

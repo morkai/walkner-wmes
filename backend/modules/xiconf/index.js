@@ -7,6 +7,7 @@
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var setUpResultsImporter = require('./importer/results');
+var setUpNotifier = require('./notifier');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -16,10 +17,12 @@ exports.DEFAULT_CONFIG = {
   productionId: 'production',
   userId: 'user',
   licensesId: 'licenses',
+  mailSenderId: 'mail/sender',
   featureDbPath: './',
   zipStoragePath: './',
   ordersImportPath: './',
-  ordersImportFile: '{timestamp}@T_COOIS_XICONF_{step}.txt'
+  ordersImportFile: '{timestamp}@T_COOIS_XICONF_{step}.txt',
+  emailUrlPrefix: 'http://127.0.0.1/'
 };
 
 exports.start = function startXiconfModule(app, module)
@@ -53,5 +56,13 @@ exports.start = function startXiconfModule(app, module)
       config.productionId
     ],
     setUpCommands.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      config.mongooseId,
+      config.mailSenderId
+    ],
+    setUpNotifier.bind(null, app, module)
   );
 };

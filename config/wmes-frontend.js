@@ -50,6 +50,7 @@ exports.modules = [
   'warehouse',
   'licenses',
   'factoryLayout',
+  'mail/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-results'},
@@ -284,4 +285,8 @@ exports.icpo = {
 
 exports.warehouse = {
   importPath: DATA_PATH + '/attachments-input'
+};
+
+exports['mail/sender'] = {
+  from: 'WMES Bot <wmes@localhost>'
 };
