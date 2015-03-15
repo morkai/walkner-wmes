@@ -4,6 +4,8 @@
 
 'use strict';
 
+var _ = require('lodash');
+
 exports.DEFAULT_CONFIG = {
   smtp: null,
   from: 'someone@the.net',
@@ -46,28 +48,43 @@ exports.start = function startMailSenderModule(app, module)
    */
   module.send = function(to, subject, text, done)
   {
-    if (transport === null)
+    var options;
+
+    if (arguments.length > 2)
     {
-      sendThroughRemote(to, subject, text, done);
+      options = {
+        to: to,
+        subject: subject,
+        text: text
+      };
     }
     else
     {
-      sendThroughSmtp(to, subject, text, done);
+      options = to;
+      done = subject;
+    }
+
+    if (transport === null)
+    {
+      sendThroughRemote(options, done);
+    }
+    else
+    {
+      sendThroughSmtp(options, done);
     }
   };
 
-  function sendThroughRemote(to, subject, text, done)
+  function sendThroughRemote(body, done)
   {
     var options = {
       url: module.config.remoteSenderUrl,
       method: 'POST',
       json: true,
-      body: {
-        to: to,
-        subject: subject,
-        text: text,
-        secretKey: module.config.secretKey
-      }
+      body: _.defaults(_.merge(body, {secretKey: module.config.secretKey}), {
+        from: module.config.from || undefined,
+        bcc: module.config.bcc || undefined,
+        replyTo: module.config.replyTo || undefined
+      })
     };
 
     request(options, function(err, res)
@@ -86,16 +103,13 @@ exports.start = function startMailSenderModule(app, module)
     });
   }
 
-  function sendThroughSmtp(to, subject, text, done)
+  function sendThroughSmtp(mailOptions, done)
   {
-    var mailOptions = {
+    _.defaults(mailOptions, {
       from: String(module.config.from),
-      to: Array.isArray(to) ? to.join(', ') : to,
       bcc: String(module.config.bcc),
-      replyTo: String(module.config.replyTo),
-      subject: subject,
-      text: String(text)
-    };
+      replyTo: String(module.config.replyTo)
+    });
 
     transport.sendMail(mailOptions, done);
   }
@@ -126,7 +140,7 @@ exports.start = function startMailSenderModule(app, module)
         return next(express.createHttpError('INVALID_SECRET_KEY', 401));
       }
 
-      module.send(req.body.to, req.body.subject, req.body.text, function(err)
+      module.send(req.body, function(err)
       {
         if (err)
         {
