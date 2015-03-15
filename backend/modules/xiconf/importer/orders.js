@@ -262,7 +262,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         if (programOrderIds.length)
         {
           XiconfProgramOrder
-            .find({_id: {$in: programOrderIds}}, {name: 1, nc12: 1, quantityTodo: 1})
+            .find({_id: {$in: programOrderIds}})
             .lean()
             .exec(this.parallel());
         }
@@ -270,7 +270,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         if (ledOrderIds.length)
         {
           XiconfLedOrder
-            .find({_id: {$in: ledOrderIds}}, {name: 1, nc12: 1, quantityTodo: 1})
+            .find({_id: {$in: ledOrderIds}}, {serialNos: 0})
             .lean()
             .exec(this.parallel());
         }
@@ -299,12 +299,12 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
         for (i = 0; i < programOrders.length; ++i)
         {
-          compareOrders(this.programOrderUpdates, this.programOrdersMap, programOrders[i]);
+          compareOrders(this.programOrderUpdates, false, this.programOrdersMap, programOrders[i]);
         }
 
         for (i = 0; i < ledOrders.length; ++i)
         {
-          compareOrders(this.ledOrderUpdates, this.ledOrdersMap, ledOrders[i]);
+          compareOrders(this.ledOrderUpdates, true, this.ledOrdersMap, ledOrders[i]);
         }
 
         this.programOrderInserts = _.values(this.programOrdersMap);
@@ -439,7 +439,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     delete filePathCache[filePath];
   }
 
-  function compareOrders(updates, newOrdersMap, oldOrder)
+  function compareOrders(updates, isLedOrder, newOrdersMap, oldOrder)
   {
     var newOrder = newOrdersMap[oldOrder._id];
 
@@ -450,29 +450,78 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     delete newOrdersMap[oldOrder._id];
 
-    if (newOrder.importedAt < oldOrder.importedAt)
+    if (newOrder.importedAt.getTime() <= oldOrder.importedAt.getTime())
     {
       return;
     }
 
-    if (newOrder.quantityParent === oldOrder.quantityParent
-      && newOrder.name === oldOrder.name
-      && newOrder.nc12 === oldOrder.nc12
+    if (isLedOrder
+      && newOrder.quantityParent === oldOrder.quantityParent
       && newOrder.quantityTodo === oldOrder.quantityTodo
+      && newOrder.nc12 === oldOrder.nc12
+      && newOrder.name === oldOrder.name
       && newOrder.reqDate.getTime() === oldOrder.reqDate.getTime())
     {
       return;
     }
 
+    if (!isLedOrder
+      && newOrder.quantityParent === oldOrder.quantityParent
+      && newOrder.quantityTodo === oldOrder.quantityTodo
+      && newOrder.reqDate.getTime() === oldOrder.reqDate.getTime()
+      && compareNc12s(newOrder.nc12, oldOrder.nc12))
+    {
+      return;
+    }
+
+    var update = {
+      nc12: newOrder.nc12,
+      quantityParent: newOrder.quantityParent,
+      quantityTodo: newOrder.quantityTodo,
+      reqDate: newOrder.reqDate,
+      importedAt: newOrder.importedAt
+    };
+
+    if (isLedOrder)
+    {
+      update.name = newOrder.name;
+    }
+
     updates.push({
       condition: {_id: newOrder._id},
-      update: {$set: {
-        name: newOrder.name,
-        nc12: newOrder.nc12,
-        quantityParent: newOrder.quantityParent,
-        quantityTodo: newOrder.quantityTodo,
-        importedAt: newOrder.importedAt
-      }}
+      update: {
+        $set: update
+      }
     });
+  }
+
+  function compareNc12s(newNc12s, oldNc12s)
+  {
+    var oldNc12Map = {};
+
+    _.forEach(oldNc12s, function(oldNc12)
+    {
+      oldNc12Map[oldNc12._id] = oldNc12;
+    });
+
+    var same = true;
+
+    for (var i = 0; i < newNc12s.length; ++i)
+    {
+      var newNc12 = newNc12s[i];
+      var oldNc12 = oldNc12Map[newNc12._id];
+
+      if (!oldNc12)
+      {
+        same = false;
+      }
+      else if (newNc12.name !== oldNc12.name || newNc12.quantityTodo !== oldNc12.quantityTodo)
+      {
+        newNc12.quantityDone = oldNc12.quantityDone;
+        same = false;
+      }
+    }
+
+    return same;
   }
 };
