@@ -222,7 +222,7 @@ define([
 
     toggleExtendedDowntime: function()
     {
-      var extendedDowntimeDelay = this.prodShift.get('extendedDowntimeDelay');
+      var extendedDowntimeDelay = this.prodShift ? this.prodShift.get('extendedDowntimeDelay') : null;
 
       if (typeof extendedDowntimeDelay !== 'number')
       {
