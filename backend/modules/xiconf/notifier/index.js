@@ -110,7 +110,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         var to = users.map(function(user) { return user.email; });
         var subject = '[WMES] Nieukończone zlecenie programowe ' + orderNo;
         var text = [
-          'Zakończono wykonywanie nieukończonego zlecenia!',
+          'Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich driverów!',
           '',
           'Nr zlecenia: ' + orderNo,
           '12NC wyrobu: ' + productNc12,
