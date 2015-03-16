@@ -424,7 +424,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   fteLeaderEntrySchema.methods.updateParentCount = function(parentId)
   {
-    var fteDivCount = this.fteDiv.length;
+    var fteDivCount = Array.isArray(this.fteDiv) ? this.fteDiv.length : 0;
     var prodTaskMaps = mapProdTasks(this.tasks);
 
     updateParentCount(parentId);
@@ -477,7 +477,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
                 parentCompany.count += count;
               }
             }
-            else
+            else if (fteDivCount > 0)
             {
               count = Math.round(count / fteDivCount * 1000) / 1000;
 
