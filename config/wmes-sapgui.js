@@ -1,5 +1,8 @@
 'use strict';
 
+var later = require('later');
+later.date.localTime();
+
 exports.id = 'wmes-sapgui';
 
 exports.modules = [

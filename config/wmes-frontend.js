@@ -56,6 +56,7 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-results'},
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-1'},
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-2'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-watchdog'},
   'httpServer',
   'sio'
 ];
@@ -251,6 +252,14 @@ exports['messenger/client:wmes-reports-2'] = {
   repHost: '127.0.0.1',
   repPort: 60061,
   responseTimeout: 30000
+};
+
+exports['messenger/client:wmes-watchdog'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60070,
+  repHost: '127.0.0.1',
+  repPort: 60071,
+  responseTimeout: 5000
 };
 
 exports.updater = {
