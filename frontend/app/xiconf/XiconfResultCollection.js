@@ -37,7 +37,8 @@ define([
           startedAt: 1,
           duration: 1,
           result: 1,
-          srcId: 1
+          srcId: 1,
+          serviceTag: 1
         },
         sort: {
           startedAt: -1
