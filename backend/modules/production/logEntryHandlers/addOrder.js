@@ -33,12 +33,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.done(done, err);
       }
 
+      this.prodShiftOrder = prodShiftOrder;
+
       if (!prodDowntimes.length)
       {
-        return this.done(done, null);
+        return;
       }
-
-      this.prodShiftOrder = prodShiftOrder;
 
       var orderStartedAt = prodShiftOrder.startedAt;
       var orderFinishedAt = prodShiftOrder.finishedAt;
