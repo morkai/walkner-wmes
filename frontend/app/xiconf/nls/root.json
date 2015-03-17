@@ -108,6 +108,10 @@
     "log:TESTING_PLC_SETUP": "Setting up the PLC...",
     "log:TESTING_PLC_TEARDOWN": "Tearing down the PLC...",
     "log:TESTING_EXECUTING_STEP": "{type, select, pe{Executing the protective earth test} sol{Executing the Fortimo Solar programming} fn{Executing the functional test} other{Executing the <em>{type}</em> program step}}...",
+    "log:ACQUIRING_SERVICE_TAG": "Acquiring a new Service Tag...",
+    "log:SERVICE_TAG_ACQUIRED": "Acquired Service Tag: <code>{serviceTag}</code>",
+    "log:PRINTING_SERVICE_TAG": "Printing a Service Tag label on the <code>{printerName}</code> printer...",
+    "log:PRINTING_SERVICE_TAG_FAILURE": "Failed to print a Service Tag label: <code>{error}</code>",
 
     "error:WORKFLOW_FILE_ERROR": "Error during the reading of the programmer configuration file contents.",
     "error:WORKFLOW_FILE_WRITE_ERROR": "Error during the writing of the programmer configuration file contents.",
@@ -172,7 +176,8 @@
     "error:TESTING_SDP_INVALID_RESPONSE": "TEST: Received an invalid response from the SDP.",
     "error:TESTING_MAX_RESISTANCE": "TEST: Exceeded the maximum resistance value.",
     "error:TESTING_MIN_POWER": "TEST: Exceeded the minimum power value.",
-    "error:TESTING_MAX_POWER": "TEST: Exceeded the maximum power value."
+    "error:TESTING_MAX_POWER": "TEST: Exceeded the maximum power value.",
+    "error:REMOTE_SERVICE_TAG_FAILURE": "Error during acquisition of a new Service Tag."
   },
   "pl": true
 }
