@@ -150,12 +150,13 @@ define([
         }
       });
 
-      var weekly = this.query.get('interval') === 'week';
+      var interval = this.query.get('interval');
+      var divideFte = interval !== 'day' && interval !== 'shift';
 
       for (var i = 0, l = report.data.length; i < l; ++i)
       {
         var groupData = report.data[i];
-        var fteDivisor = weekly && groupData.shiftCount ? groupData.shiftCount : 1;
+        var fteDivisor = divideFte && groupData.dayCount ? groupData.dayCount : 1;
 
         if (groupData.compTasks === undefined)
         {

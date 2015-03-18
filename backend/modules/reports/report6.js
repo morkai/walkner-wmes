@@ -67,7 +67,11 @@ module.exports = function(mongoose, options, done)
 
       while (fromGroupKey <= toGroupKey)
       {
-        dataList.push(dataMap[fromGroupKey] || {key: fromGroupKey});
+        var dataItem = dataMap[fromGroupKey] || {key: fromGroupKey, dayCount: {}};
+
+        dataItem.dayCount = Object.keys(dataItem.dayCount).length;
+
+        dataList.push(dataItem);
 
         fromGroupKey = createNextGroupKey(fromGroupKey);
       }
@@ -95,13 +99,16 @@ module.exports = function(mongoose, options, done)
     {
       results.data[groupKey] = {
         key: groupKey,
-        shiftCount: 0
+        dayCount: {}
       };
     }
 
     var groupData = results.data[groupKey];
 
-    groupData.shiftCount += 1;
+    if ((whShiftMetrics.compTotalFte + whShiftMetrics.finGoodsTotalFte) > 0)
+    {
+      groupData.dayCount[moment(whShiftMetrics._id).format('YYMMDD')] = true;
+    }
 
     lodash.forEach(whShiftMetrics, function(value, key)
     {

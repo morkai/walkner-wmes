@@ -126,7 +126,15 @@ define([
 
     getFteSeriesName: function()
     {
-      return t('reports', 'wh:fte' + (this.model.query.get('interval') === 'week' ? ':avg' : ''));
+      var suffix = '';
+      var interval = this.model.query.get('interval');
+
+      if (interval !== 'day' && interval !== 'shift')
+      {
+        suffix = ':avg';
+      }
+
+      return t('reports', 'wh:fte' + suffix);
     },
 
     onIntervalChange: function()
