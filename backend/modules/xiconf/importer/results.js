@@ -13,7 +13,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 {
   var licensesModule = app[xiconfModule.config.licensesId];
   var mongoose = app[xiconfModule.config.mongooseId];
-  var XiconfOrder = mongoose.model('XiconfOrder');
+  var XiconfOrderResult = mongoose.model('XiconfOrderResult');
   var XiconfResult = mongoose.model('XiconfResult');
 
   var RESULTS_BATCH_SIZE = 1000;
@@ -276,7 +276,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
     for (i = 0, l = this.orders.length; i < l; ++i)
     {
-      XiconfOrder.collection.update(
+      XiconfOrderResult.collection.update(
         {_id: this.orders[i]._id}, this.orders[i], {upsert: true}, this.parallel()
       );
     }

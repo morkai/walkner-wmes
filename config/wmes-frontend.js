@@ -158,7 +158,7 @@ exports.mongoose = {
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
     'feedback',
     'license', 'licensePing',
-    'xiconfOrder', 'xiconfResult', 'xiconfProgram', 'xiconfProgramOrder', 'xiconfLedOrder',
+    'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfProgramOrder', 'xiconfLedOrder',
     'icpoResult',
     'factoryLayout',
     'whTransferOrder'

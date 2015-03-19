@@ -14,7 +14,7 @@ module.exports = function setupXiconfResultModel(app, mongoose)
     },
     order: {
       type: String,
-      ref: 'XiconfOrder'
+      ref: 'XiconfOrderResult'
     },
     orderNo: String,
     nc12: String,

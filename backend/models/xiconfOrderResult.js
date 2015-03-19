@@ -4,9 +4,9 @@
 
 'use strict';
 
-module.exports = function setupXiconfOrderModel(app, mongoose)
+module.exports = function setupXiconfOrderResultModel(app, mongoose)
 {
-  var xiconfOrderSchema = mongoose.Schema({
+  var xiconfOrderResultSchema = mongoose.Schema({
     _id: {
       type: String,
       required: true,
@@ -27,8 +27,8 @@ module.exports = function setupXiconfOrderModel(app, mongoose)
     id: false
   });
 
-  xiconfOrderSchema.index({no: 1, startedAt: -1});
-  xiconfOrderSchema.index({startedAt: -1});
+  xiconfOrderResultSchema.index({no: 1});
+  xiconfOrderResultSchema.index({startedAt: -1});
 
-  mongoose.model('XiconfOrder', xiconfOrderSchema);
+  mongoose.model('XiconfOrderResult', xiconfOrderResultSchema);
 };

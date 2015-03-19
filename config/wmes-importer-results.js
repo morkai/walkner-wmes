@@ -21,7 +21,7 @@ exports.mongoose = {
   options: {
     server: {poolSize: 3}
   },
-  models: ['event', 'xiconfOrder', 'xiconfResult', 'icpoResult', 'license']
+  models: ['event', 'xiconfOrderResult', 'xiconfResult', 'icpoResult', 'license']
 };
 
 exports.events = {
