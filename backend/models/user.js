@@ -72,6 +72,8 @@ module.exports = function setupUserModel(app, mongoose)
 
   userSchema.index({personellId: 1});
   userSchema.index({lastName: 1});
+  userSchema.index({prodFunction: 1});
+  userSchema.index({privileges: 1});
 
   userSchema.statics.TOPIC_PREFIX = 'users';
 
