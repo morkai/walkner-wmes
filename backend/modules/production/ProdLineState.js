@@ -1071,11 +1071,11 @@ ProdLineState.prototype.inspectSocketInfo = function(thatSocket)
 
   if (thatSocket)
   {
-    socketInfo.thisSocketId = thatSocket.id;
-    socketInfo.thisSocketIp = thatSocket.handshake.user
+    socketInfo.thatSocketId = thatSocket.id;
+    socketInfo.thatSocketIp = thatSocket.handshake.user
       ? thatSocket.handshake.user.ipAddress
       : thatSocket.handshake.address.address;
-    socketInfo.thisSessionId = thatSocket.handshake.sessionId;
+    socketInfo.thatSessionId = thatSocket.handshake.sessionId;
   }
 
   return inspect(socketInfo, {depth: null, colors: false});
