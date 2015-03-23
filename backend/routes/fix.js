@@ -8,6 +8,8 @@ var step = require('h5.step');
 
 module.exports = function startFixRoutes(app, express)
 {
+  var inProgress = {};
+
   function onlySuper(req, res, next)
   {
     var user = req.session.user;
@@ -32,45 +34,66 @@ module.exports = function startFixRoutes(app, express)
 
   function fixProdShiftOrderDurations(req, res, next)
   {
+    if (inProgress.fixProdShiftOrderDurations)
+    {
+      return next(new Error('IN_PROGRESS'));
+    }
+
+    inProgress.fixProdShiftOrderDurations = true;
+
+    res.setTimeout(30 * 60 * 1000);
+
+    app.debug("[fix] Recounting ProdShiftOrders' durations...");
+
     app.mongoose.model('ProdShiftOrder')
       .find({finishedAt: {$ne: null}}, {startedAt: 1, finishedAt: 1})
       .exec(function(err, prodShiftOrders)
       {
         if (err)
         {
+          inProgress.fixProdShiftOrderDurations = false;
+
           return next(err);
         }
 
-        var steps = [];
+        app.debug("[fix] Found %d ProdShiftOrders...", prodShiftOrders.length);
 
-        prodShiftOrders.forEach(function(prodShiftOrder)
-        {
-          steps.push(function()
-          {
-            var next = this.next();
-
-            app.production.getProdData(null, prodShiftOrder._id, function(err, cachedProdShiftOrder)
-            {
-              if (cachedProdShiftOrder)
-              {
-                cachedProdShiftOrder.recalcDurations(true, next);
-              }
-              else
-              {
-                prodShiftOrder.recalcDurations(true, next);
-              }
-            });
-          });
-        });
-
-        steps.push(function()
-        {
-          res.type('txt');
-          res.send("ALL DONE!");
-        });
-
-        step(steps);
+        recountNext(prodShiftOrders, 0);
       });
+
+    function recountNext(prodShiftOrders, i)
+    {
+      if (i > 0 && i % 10000 === 0)
+      {
+        app.debug("[fix] Recounted %d ProdShiftOrders... %d remaining...", i, prodShiftOrders.length);
+      }
+
+      var prodShiftOrder = prodShiftOrders.shift();
+
+      if (!prodShiftOrder)
+      {
+        inProgress.fixProdShiftOrderDurations = false;
+
+        res.type('txt');
+        res.send("ALL DONE!");
+
+        return;
+      }
+
+      var next = recountNext.bind(null, prodShiftOrders, i + 1);
+
+      app.production.getProdData(null, prodShiftOrder._id, function(err, cachedProdShiftOrder)
+      {
+        if (cachedProdShiftOrder)
+        {
+          cachedProdShiftOrder.recalcDurations(true, next);
+        }
+        else
+        {
+          prodShiftOrder.recalcDurations(true, next);
+        }
+      });
+    }
   }
 
   function fixProdShiftOrderOperationTimes(req, res, next)
