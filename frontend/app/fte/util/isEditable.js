@@ -2,8 +2,13 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(['app/data/subdivisions'], function(subdivisions)
-{
+define([
+  'app/core/util/getShiftEndDate',
+  'app/data/subdivisions'
+], function(
+  getShiftEndDate,
+  subdivisions
+) {
   'use strict';
 
   return function isEditable(fteEntry, user)
@@ -19,8 +24,9 @@ define(['app/data/subdivisions'], function(subdivisions)
     }
 
     var createdAt = Date.parse(fteEntry.get('createdAt'));
+    var now = Date.now();
 
-    if (Date.now() >= createdAt + 8 * 3600 * 1000)
+    if (now >= createdAt + 8 * 3600 * 1000 && now >= getShiftEndDate(fteEntry.get('date')).getTime())
     {
       return false;
     }

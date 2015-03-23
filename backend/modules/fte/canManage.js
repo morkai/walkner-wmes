@@ -41,5 +41,8 @@ module.exports = function canManage(user, fteEntry)
     return true;
   }
 
-  return Date.now() < (fteEntry.createdAt.getTime() + 8 * 3600 * 1000);
+  var now = Date.now();
+
+  return now < (fteEntry.createdAt.getTime() + 8 * 3600 * 1000)
+    || now < (fteEntry.date.getTime() + 8 * 3600 * 1000);
 };
