@@ -114,7 +114,7 @@
       </td>
       <% }) %>
       <% } else { %>
-      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>">
+      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-level="<%- task.level %>">
         <% if (editable && !task.hasChildren) { %>
         <input
           class="form-control no-controls fte-leaderEntry-count"
