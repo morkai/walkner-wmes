@@ -19,6 +19,8 @@ define([
 
   return ListView.extend({
 
+    className: 'is-clickable',
+
     localTopics: {
       'orderStatuses.synced': 'render'
     },

@@ -11,7 +11,7 @@ define([
 
   return ListView.extend({
 
-    className: 'xiconfPrograms-list',
+    className: 'xiconfPrograms-list is-shrinked is-clickable',
 
     columns: ['name', 'updatedAt'],
 

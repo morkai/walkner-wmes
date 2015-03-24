@@ -15,7 +15,7 @@ define([
 
   return ListView.extend({
 
-    className: 'pos-list',
+    className: 'pos-list is-clickable',
 
     remoteTopics: {
       'purchaseOrders.synced': function(message)
@@ -27,32 +27,6 @@ define([
       },
       'purchaseOrders.printed.*': 'setPrintedQty',
       'purchaseOrders.cancelled.*': 'setPrintedQty'
-    },
-
-    events: {
-      'mouseup .list-item': function(e)
-      {
-        if (e.altKey || e.which === 3)
-        {
-          return;
-        }
-
-        var model = this.collection.get(e.currentTarget.dataset.id);
-        var url = model.genClientUrl();
-
-        if (e.ctrlKey || e.which === 2)
-        {
-          window.open(url);
-        }
-        else
-        {
-          this.broker.publish('router.navigate', {
-            url: url,
-            replace: false,
-            trigger: true
-          });
-        }
-      }
     },
 
     initialize: function()

@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/user',
@@ -10,6 +11,7 @@ define([
   'app/data/mrpControllers',
   'app/core/views/ListView'
 ], function(
+  _,
   $,
   t,
   user,
@@ -20,6 +22,8 @@ define([
   'use strict';
 
   return ListView.extend({
+
+    className: 'is-clickable',
 
     localTopics: {
       'mrpControllers.synced': 'render'
@@ -43,9 +47,9 @@ define([
       }
     },
 
-    events: {
+    events: _.extend(ListView.prototype.events, {
       'click .mechOrders-editMrp': 'showMrpEditor'
-    },
+    }),
 
     columns: ['_id', 'name', 'mrp', 'materialNorm'],
 

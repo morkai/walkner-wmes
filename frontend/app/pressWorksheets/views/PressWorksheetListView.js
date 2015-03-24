@@ -13,6 +13,8 @@ define([
 
   return ListView.extend({
 
+    className: 'is-clickable',
+
     localTopics: {
       'companies.synced': 'render'
     },

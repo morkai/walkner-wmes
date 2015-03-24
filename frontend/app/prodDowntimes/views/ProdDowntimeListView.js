@@ -3,12 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/i18n',
   'app/user',
   'app/viewport',
   'app/core/views/ListView',
   './CorroborateProdDowntimeView'
 ], function(
+  _,
   t,
   user,
   viewport,
@@ -18,6 +20,8 @@ define([
   'use strict';
 
   return ListView.extend({
+
+    className: 'is-clickable',
 
     remoteTopics: {
       'prodDowntimes.created.*': 'refreshIfMatches',
@@ -32,7 +36,7 @@ define([
       }
     },
 
-    events: {
+    events: _.extend(ListView.prototype.events, {
       'click .action-corroborate': function(e)
       {
         e.preventDefault();
@@ -51,7 +55,7 @@ define([
           t('prodDowntimes', 'corroborate:title')
         );
       }
-    },
+    }),
 
     columns: [
       'rid', 'mrpControllers', 'prodFlow', 'aor', 'prodLine', 'reason',

@@ -46,7 +46,8 @@ define([
       this.view = new ListViewClass({
         collection: this.collection,
         columns: this.options.columns || ListViewClass.prototype.columns,
-        serializeRow: this.options.serializeRow || ListViewClass.prototype.serializeRow
+        serializeRow: this.options.serializeRow || ListViewClass.prototype.serializeRow,
+        className: this.options.listClassName || ListViewClass.prototype.className || 'is-clickable'
       });
     },
 

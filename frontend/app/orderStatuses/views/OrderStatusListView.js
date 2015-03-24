@@ -17,6 +17,8 @@ define([
 
   return ListView.extend({
 
+    className: 'is-shrinked is-clickable',
+
     serializeColumns: function()
     {
       return [

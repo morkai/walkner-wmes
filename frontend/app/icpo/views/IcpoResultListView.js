@@ -13,28 +13,10 @@ define([
 
   return ListView.extend({
 
+    className: 'is-clickable',
+
     remoteTopics: {
       'icpo.synced': 'refreshCollection'
-    },
-
-    events: {
-      'click tr[data-id]': function(e)
-      {
-        var url = this.collection.get(e.currentTarget.dataset.id).genClientUrl();
-
-        if (e.ctrlKey)
-        {
-          window.open(url);
-        }
-        else if (!e.altKey)
-        {
-          this.broker.publish('router.navigate', {
-            url: url,
-            trigger: true,
-            replace: false
-          });
-        }
-      }
     },
 
     columns: [
