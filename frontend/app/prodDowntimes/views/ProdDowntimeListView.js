@@ -21,7 +21,7 @@ define([
 
   return ListView.extend({
 
-    className: 'is-clickable',
+    className: 'is-colored is-clickable',
 
     remoteTopics: {
       'prodDowntimes.created.*': 'refreshIfMatches',

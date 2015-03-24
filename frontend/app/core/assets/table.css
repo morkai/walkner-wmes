@@ -52,3 +52,15 @@ td.is-number {
 .is-shrinked > .table > tbody > tr > td:nth-last-child(2) {
   width: auto;
 }
+th.is-min,
+td.is-min {
+  width: 1px;
+  white-space: nowrap;
+}
+.is-colored .table,
+.is-colored .table tr th,
+.is-colored .table tr td,
+.is-colored > .table-responsive,
+.is-colored .actions .btn {
+  border-color: #bbb;
+}
