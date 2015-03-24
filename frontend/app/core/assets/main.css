@@ -273,6 +273,12 @@ kbd {
 .list-item.is-deleted > td.actions {
   text-decoration: none!important;
 }
+.is-clickable .list-item > td {
+  cursor: pointer;
+}
+.is-clickable .list-item > .actions {
+  cursor: default;
+}
 
 .colorpicker-component {
   width: 8em;

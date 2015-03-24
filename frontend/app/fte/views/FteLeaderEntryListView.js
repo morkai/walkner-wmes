@@ -21,6 +21,8 @@ define([
 
   return ListView.extend({
 
+    className: 'is-shrinked is-clickable',
+
     remoteTopics: {
       'fte.leader.created': 'refreshCollection',
       'fte.leader.deleted': 'onModelDeleted'

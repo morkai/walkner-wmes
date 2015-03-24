@@ -21,6 +21,8 @@ define([
 
   return ListView.extend({
 
+    className: 'is-shrinked is-clickable',
+
     remoteTopics: {
       'hourlyPlans.created': 'refreshCollection',
       'hourlyPlans.deleted': 'onModelDeleted'

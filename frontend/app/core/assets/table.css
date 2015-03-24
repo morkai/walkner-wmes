@@ -45,3 +45,10 @@ td.is-number {
 .table-hover > tbody > tr.is-hovered > td {
   background-color: #FFFFD6;
 }
+.is-shrinked > .table > tbody > tr > td {
+  white-space: nowrap;
+  width: 1px;
+}
+.is-shrinked > .table > tbody > tr > td:nth-last-child(2) {
+  width: auto;
+}

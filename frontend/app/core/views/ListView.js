@@ -41,6 +41,33 @@ define([
     },
 
     events: {
+      'click .list-item[data-id]': function(e)
+      {
+        if (!this.el.classList.contains('is-clickable')
+          || e.target.tagName === 'A'
+          || e.target.tagName === 'INPUT'
+          || e.target.tagName === 'BUTTON'
+          || e.target.classList.contains('actions')
+          || window.getSelection().toString() !== '')
+        {
+          return;
+        }
+
+        var url = this.collection.get(e.currentTarget.dataset.id).genClientUrl();
+
+        if (e.ctrlKey)
+        {
+          window.open(url);
+        }
+        else if (!e.altKey)
+        {
+          this.broker.publish('router.navigate', {
+            url: url,
+            trigger: true,
+            replace: false
+          });
+        }
+      },
       'click .action-delete': function(e)
       {
         e.preventDefault();
