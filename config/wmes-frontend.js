@@ -208,7 +208,7 @@ exports['messenger/server'] = {
   repPort: 60001,
   responseTimeout: 5000,
   broadcastTopics: [
-    'fte.leader.updated.*'
+    'fte.leader.**'
   ]
 };
 

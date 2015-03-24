@@ -38,7 +38,9 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   app.broker.subscribe('warehouse.transferOrders.synced', queueShiftMetricsCalc);
   app.broker.subscribe('warehouse.importQueue.shiftMetrics', calcShiftsMetrics);
-  app.broker.subscribe('fte.leader.updated.*', updateShiftFteMetrics);
+  app.broker.subscribe('fte.leader.created', onFteLeaderEntryCreated);
+  app.broker.subscribe('fte.leader.deleted', onFteLeaderEntryDeleted);
+  app.broker.subscribe('fte.leader.updated.*', onFteLeaderEntryUpdated);
 
   function queueShiftMetricsCalc(message)
   {
@@ -325,6 +327,11 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   function countStorageFte(whShiftMetrics, tasks, subdivisionProperty, taskToMetric)
   {
+    if (!Array.isArray(tasks))
+    {
+      return;
+    }
+
     var tasksProperty = subdivisionProperty + 'Tasks';
     var totalFteProperty = subdivisionProperty + 'TotalFte';
 
@@ -355,17 +362,34 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
     }
   }
 
-  function updateShiftFteMetrics(message)
+  function onFteLeaderEntryCreated(message)
   {
-    if (timers[message._id] !== undefined)
-    {
-      clearTimeout(timers[message._id]);
-    }
-
-    timers[message._id] = setTimeout(doUpdateShiftFteMetrics, FTE_UPDATE_DELAY, message._id);
+    updateShiftFteMetrics(message.model._id);
   }
 
-  function doUpdateShiftFteMetrics(fteLeaderEntryId)
+  function onFteLeaderEntryDeleted(message)
+  {
+    updateShiftFteMetrics(message.model._id, message.model);
+  }
+
+  function onFteLeaderEntryUpdated(message)
+  {
+    updateShiftFteMetrics(message._id);
+  }
+
+  function updateShiftFteMetrics(fteLeaderEntryId, deletedFteLeaderEntry)
+  {
+    if (timers[fteLeaderEntryId] !== undefined)
+    {
+      clearTimeout(timers[fteLeaderEntryId]);
+    }
+
+    timers[fteLeaderEntryId] = setTimeout(
+      doUpdateShiftFteMetrics, FTE_UPDATE_DELAY, fteLeaderEntryId, deletedFteLeaderEntry
+    );
+  }
+
+  function doUpdateShiftFteMetrics(fteLeaderEntryId, deletedFteLeaderEntry)
   {
     delete timers[fteLeaderEntryId];
 
@@ -374,6 +398,11 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       prepareSettingsStep,
       function findFteLeaderEntryStep()
       {
+        if (deletedFteLeaderEntry)
+        {
+          return;
+        }
+
         var fields = {
           subdivision: 1,
           date: 1,
@@ -393,11 +422,18 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
         if (!fteLeaderEntry)
         {
-          return this.skip(new Error('FTE_ENTRY_NOT_FOUND'));
+          if (!deletedFteLeaderEntry)
+          {
+            return this.skip(new Error('FTE_ENTRY_NOT_FOUND'));
+          }
+
+          fteLeaderEntry = deletedFteLeaderEntry;
         }
 
-        this.isComponentStorage = fteLeaderEntry.subdivision.equals(this.settings.componentStorage._id);
-        this.isFinishedGoodsStorage = fteLeaderEntry.subdivision.equals(this.settings.finishedGoodsStorage._id);
+        var subdivisionId = String(fteLeaderEntry.subdivision);
+
+        this.isComponentStorage = subdivisionId === String(this.settings.componentStorage._id);
+        this.isFinishedGoodsStorage = subdivisionId === String(this.settings.finishedGoodsStorage._id);
 
         if (!this.isComponentStorage && !this.isFinishedGoodsStorage)
         {
@@ -424,16 +460,19 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
         var settings = this.settings;
 
-        if (this.isComponentStorage)
+        if (!deletedFteLeaderEntry)
         {
-          countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'comp', settings.componentStorage.tasks);
-        }
-        else
-        {
-          countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'finGoods', settings.finishedGoodsStorage.tasks);
+          if (this.isComponentStorage)
+          {
+            countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'comp', settings.componentStorage.tasks);
+          }
+          else
+          {
+            countStorageFte(whShiftMetrics, this.fteLeaderEntry.tasks, 'finGoods', settings.finishedGoodsStorage.tasks);
+          }
         }
 
-        whShiftMetrics.save(this);
+        whShiftMetrics.save(this.next());
       },
       function finalizeStep(err, whShiftMetrics)
       {
