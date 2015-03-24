@@ -90,11 +90,11 @@ module.exports = function setUpProductionRoutes(app, productionModule)
           date: {$gt: new Date(from), $lt: new Date(to)}
         };
 
-        if (orgUnitIds.length === 1)
+        if (orgUnitIds.length === 1 && orgUnitIds[0].length)
         {
           conditions[orgUnitField] = orgUnitIds[0];
         }
-        else
+        else if (orgUnitIds.length > 1)
         {
           conditions[orgUnitField] = {$in: orgUnitIds};
         }
@@ -117,7 +117,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
           leader: 1,
           operator: 1
         };
-
+console.log(conditions);
         mongoose.model('ProdShift').find(conditions, fields).lean().exec(this.next());
       },
       function(err, prodShifts)
@@ -182,7 +182,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
           startedAt: 1,
           finishedAt: 1
         };
-
+console.log(conditions);
         mongoose.model('ProdShiftOrder').find(conditions, orderFields).lean().exec(this.parallel());
         mongoose.model('ProdDowntime').find(conditions, downtimeFields).lean().exec(this.parallel());
       },
