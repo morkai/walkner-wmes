@@ -48,7 +48,8 @@ define([
           || e.target.tagName === 'INPUT'
           || e.target.tagName === 'BUTTON'
           || e.target.classList.contains('actions')
-          || window.getSelection().toString() !== '')
+          || window.getSelection().toString() !== ''
+          || (e.target.tagName !== 'TD' && this.$(e.target).closest('a, input, button').length))
         {
           return;
         }
