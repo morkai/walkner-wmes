@@ -15,11 +15,6 @@
     "PAGE_ACTION:delete": "Delete hourly plan",
     "PAGE_ACTION:export": "Export hourly plans",
 
-    "FILTER:DATE": "Date:",
-    "FILTER:LIMIT": "Limit:",
-    "FILTER:SHIFT": "Shift:",
-    "FILTER:BUTTON": "Filter hourly plans",
-
     "panel:title": "Hourly plan",
     "panel:title:editable": "Hourly plan edit form",
     "panel:info": "All changes are saved on-the-fly. Planned quantities will be divided among the working Production lines one minute after the last change!",

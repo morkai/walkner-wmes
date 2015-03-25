@@ -14,19 +14,14 @@
   "PAGE_ACTION:delete": "Usuń plan",
   "PAGE_ACTION:export": "Eksportuj plany godzinowe",
 
-  "FILTER:DATE": "Data:",
-  "FILTER:LIMIT": "Limit:",
-  "FILTER:SHIFT": "Zmiana:",
-  "FILTER:BUTTON": "Filtruj plany",
-
   "panel:title": "Plan godzinowy",
   "panel:title:editable": "Formularz edycji planu godzinowego",
   "panel:info": "Wszystkie zmiany w formularzu zapisywane są na bieżąco. Planowane ilości rozdzielone zostaną dla pracujących Linii produkcyjnych minutę po ostatniej zmianie!",
   "column:flow": "Przepływ",
   "column:noPlan": "Brak<br>planu?",
   "column:level": "Poziom",
-  "property:shift": "Zmiana:",
-  "property:date": "Data:",
+  "property:shift": "Zmiana",
+  "property:date": "Data",
 
   "print:hdLeft": "Plan godzinowy dla {division}",
   "print:hdRight": "{date}, {shift} zmiana",

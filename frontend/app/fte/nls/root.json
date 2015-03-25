@@ -17,8 +17,8 @@
     "PAGE_ACTION:delete": "Delete entry",
     "PAGE_ACTION:export": "Export entries",
 
-    "filter:date": "Date:",
-    "filter:shift": "Shift:",
+    "filter:date": "Date",
+    "filter:shift": "Shift",
     "filter:submit": "Filter entries",
 
     "addForm:panel:title": "FTE entry find/create form",

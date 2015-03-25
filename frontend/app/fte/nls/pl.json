@@ -17,8 +17,8 @@
   "PAGE_ACTION:delete": "Usuń wpis",
   "PAGE_ACTION:export": "Eksportuj wpisy",
 
-  "filter:date": "Data:",
-  "filter:shift": "Zmiana:",
+  "filter:date": "Data",
+  "filter:shift": "Zmiana",
   "filter:submit": "Filtruj wpisy",
 
   "addForm:panel:title": "Formularz wyszukiwania/tworzenia wpisu FTE",
