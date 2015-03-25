@@ -58,8 +58,15 @@ define([
     }),
 
     columns: [
-      'rid', 'mrpControllers', 'prodFlow', 'aor', 'prodLine', 'reason',
-      'startedAt', 'finishedAt', 'duration'
+      {id: 'rid', className: 'is-min'},
+      {id: 'mrpControllers', tdClassName: 'is-min'},
+      'prodFlow',
+      'aor',
+      {id: 'prodLine', tdClassName: 'is-min'},
+      'reason',
+      'startedAt',
+      'finishedAt',
+      {id: 'duration', tdClassName: 'is-min'}
     ],
 
     initialize: function()

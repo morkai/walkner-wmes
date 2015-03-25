@@ -31,7 +31,11 @@ define([
     {
       return new ListPage({
         collection: divisions,
-        columns: ['_id', 'type', 'description'],
+        columns: [
+          {id: '_id', className: 'is-min'},
+          {id: 'type', className: 'is-min'},
+          'description'
+        ],
         serializeRow: function(model)
         {
           var row = model.toJSON();

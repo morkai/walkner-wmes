@@ -33,7 +33,7 @@
   "PROPERTY:prodFlow": "Przepływ",
   "PROPERTY:orgUnit": "Jednostka organizacyjna",
   "PROPERTY:aor": "Obszar odpowiedzialności",
-  "PROPERTY:prodLine": "Linia produkcyjna/Maszyna",
+  "PROPERTY:prodLine": "Linia\u200b/\u200bMaszyna",
   "PROPERTY:reason": "Powód przestoju",
   "PROPERTY:reasonComment": "Komentarz powodu",
   "PROPERTY:decisionComment": "Komentarz potwierdzenia",

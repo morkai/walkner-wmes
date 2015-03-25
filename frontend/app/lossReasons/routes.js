@@ -39,7 +39,11 @@ define([
   {
     viewport.showPage(new ListPage({
       collection: new LossReasonCollection(null, {rqlQuery: req.rql}),
-      columns: ['_id', 'label', 'position']
+      columns: [
+        {id: '_id', className: 'is-min'},
+        'label',
+        {id: 'position', className: 'is-min'}
+      ]
     }));
   });
 

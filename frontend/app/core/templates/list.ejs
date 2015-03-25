@@ -3,7 +3,7 @@
     <thead>
     <tr>
       <% columns.forEach(function(column) { %>
-      <th><%- column.label %></th>
+      <th <%- typeof column.thAttrs === 'function' ? column.thAttrs(column) : (column.thAttrs || '') %>><%- column.label %></th>
       <% }) %>
       <% if (typeof actions === 'function') { %>
       <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>

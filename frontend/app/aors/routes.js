@@ -29,7 +29,13 @@ define([
     {
       return new ListPage({
         collection: aors,
-        columns: ['name', 'description', 'color', 'refColor', 'refValue']
+        columns: [
+          {id: 'name', className: 'is-min'},
+          'description',
+          {id: 'color', className: 'is-min'},
+          {id: 'refColor', className: 'is-min'},
+          {id: 'refValue', className: 'is-min'}
+        ]
       });
     });
   });

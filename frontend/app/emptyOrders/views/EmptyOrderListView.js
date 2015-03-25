@@ -17,16 +17,13 @@ define([
       'emptyOrders.synced': 'refreshCollection'
     },
 
-    serializeColumns: function()
-    {
-      return [
-        {id: '_id', label: t('emptyOrders', 'PROPERTY:_id')},
-        {id: 'nc12', label: t('emptyOrders', 'PROPERTY:nc12')},
-        {id: 'mrp', label: t('emptyOrders', 'PROPERTY:mrp')},
-        {id: 'startDateText', label: t('emptyOrders', 'PROPERTY:startDate')},
-        {id: 'finishDateText', label: t('emptyOrders', 'PROPERTY:finishDate')}
-      ];
-    },
+    columns: [
+      {id: '_id', className: 'is-min'},
+      {id: 'nc12', className: 'is-min'},
+      {id: 'mrp', className: 'is-min'},
+      {id: 'startDateText', label: t.bound('emptyOrders', 'PROPERTY:startDate'), className: 'is-min'},
+      {id: 'finishDateText', label: t.bound('emptyOrders', 'PROPERTY:finishDate')}
+    ],
 
     serializeActions: function()
     {

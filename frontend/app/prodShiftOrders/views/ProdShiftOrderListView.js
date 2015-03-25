@@ -28,9 +28,17 @@ define([
     },
 
     columns: [
-      'mrpControllers', 'prodFlow', 'prodLine',
-      'order', 'operation', 'prodShift',
-      'startedAt', 'duration', 'quantityDone', 'workerCount', 'efficiency'
+      {id: 'mrpControllers', className: 'is-min'},
+      'prodFlow',
+      {id: 'prodLine', className: 'is-min'},
+      'order',
+      'operation',
+      {id: 'prodShift', className: 'is-min'},
+      {id: 'startedAt', className: 'is-min'},
+      {id: 'duration', className: 'is-min'},
+      {id: 'quantityDone', className: 'is-min'},
+      {id: 'workerCount', className: 'is-min'},
+      {id: 'efficiency', className: 'is-min'}
     ],
 
     serializeRow: function(model)

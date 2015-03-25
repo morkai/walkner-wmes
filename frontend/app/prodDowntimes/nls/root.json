@@ -34,7 +34,7 @@
     "PROPERTY:prodFlow": "Production flow",
     "PROPERTY:orgUnit": "Org Unit",
     "PROPERTY:aor": "Area of responsibility",
-    "PROPERTY:prodLine": "Production line",
+    "PROPERTY:prodLine": "Line\u200b/\u200bMachine",
     "PROPERTY:reason": "Downtime reason",
     "PROPERTY:reasonComment": "Reason comment",
     "PROPERTY:decisionComment": "Decision comment",

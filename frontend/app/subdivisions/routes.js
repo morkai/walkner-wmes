@@ -31,7 +31,13 @@ define([
       {
         return new ListPage({
           collection: subdivisions,
-          columns: ['division', 'type', 'name', 'prodTaskTags', 'aor'],
+          columns: [
+            {id: 'division', className: 'is-min'},
+            {id: 'type', className: 'is-min'},
+            {id: 'name', className: 'is-min'},
+            'prodTaskTags',
+            {id: 'aor', className: 'is-min'}
+          ],
           serializeRow: decorateSubdivision
         });
       }

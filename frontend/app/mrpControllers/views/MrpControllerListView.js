@@ -17,7 +17,12 @@ define([
 
   return ListView.extend({
 
-    columns: ['subdivision', '_id', 'description', 'deactivatedAt'],
+    columns: [
+      {id: 'subdivision', className: 'is-min'},
+      {id: '_id', className: 'is-min'},
+      'description',
+      {id: 'deactivatedAt', className: 'is-min'}
+    ],
 
     serializeActions: function()
     {

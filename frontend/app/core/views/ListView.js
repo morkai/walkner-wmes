@@ -149,6 +149,22 @@ define([
           column.label = t(nlsDomain, 'PROPERTY:' + column.id);
         }
 
+        if (!column.thAttrs)
+        {
+          column.thAttrs = '';
+        }
+
+        if (!column.tdAttrs)
+        {
+          column.tdAttrs = '';
+        }
+
+        if (column.className || column.thClassName || column.tdClassName)
+        {
+          column.thAttrs += ' class="' + (column.className || '') + ' ' + (column.thClassName || '') + '"';
+          column.tdAttrs += ' class="' + (column.className || '') + ' ' + (column.tdClassName || '') + '"';
+        }
+
         return column;
       });
     },

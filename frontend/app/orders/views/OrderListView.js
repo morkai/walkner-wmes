@@ -32,19 +32,16 @@ define([
       'orders.deleted': 'onModelDeleted'
     },
 
-    serializeColumns: function()
-    {
-      return [
-        {id: '_id', label: t('orders', 'PROPERTY:_id')},
-        {id: 'nc12', label: t('orders', 'PROPERTY:nc12')},
-        {id: 'name', label: t('orders', 'PROPERTY:name')},
-        {id: 'mrp', label: t('orders', 'PROPERTY:mrp')},
-        {id: 'qtyUnit', label: t('orders', 'PROPERTY:qty')},
-        {id: 'startDateText', label: t('orders', 'PROPERTY:startDate')},
-        {id: 'finishDateText', label: t('orders', 'PROPERTY:finishDate')},
-        {id: 'statusLabels', label: t('orders', 'PROPERTY:statuses')}
-      ];
-    },
+    columns: [
+      {id: '_id', className: 'is-min'},
+      {id: 'nc12', className: 'is-min'},
+      'name',
+      {id: 'mrp', className: 'is-min'},
+      {id: 'qtyUnit', label: t('orders', 'PROPERTY:qty'), className: 'is-min'},
+      {id: 'startDateText', label: t('orders', 'PROPERTY:startDate'), className: 'is-min'},
+      {id: 'finishDateText', label: t('orders', 'PROPERTY:finishDate'), className: 'is-min'},
+      {id: 'statusLabels', label: t('orders', 'PROPERTY:statuses')}
+    ],
 
     serializeActions: function()
     {

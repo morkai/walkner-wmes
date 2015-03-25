@@ -17,7 +17,14 @@ define([
       'companies.synced': 'render'
     },
 
-    columns: ['personellId', 'lastName', 'firstName', 'company', 'orgUnit', 'prodFunction']
+    columns: [
+      {id: 'personellId', className: 'is-min'},
+      {id: 'lastName', className: 'is-min'},
+      {id: 'firstName', className: 'is-min'},
+      {id: 'company', className: 'is-min'},
+      {id: 'orgUnit', className: 'is-min'},
+      'prodFunction'
+    ]
 
   });
 });

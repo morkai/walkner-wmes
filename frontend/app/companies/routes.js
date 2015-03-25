@@ -27,7 +27,13 @@ define([
     {
       return new ListPage({
         collection: companies,
-        columns: ['_id', 'name', 'fteMasterPosition', 'fteLeaderPosition', 'color']
+        columns: [
+          {id: '_id', className: 'is-min'},
+          {id: 'name', className: 'is-min'},
+          {id: 'fteMasterPosition', className: 'is-min'},
+          {id: 'fteLeaderPosition', className: 'is-min'},
+          'color'
+        ]
       });
     });
   });

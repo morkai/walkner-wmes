@@ -19,7 +19,15 @@ define([
       'companies.synced': 'render'
     },
 
-    columns: ['rid', 'type', 'divisions', 'date', 'shift', 'master', 'operator'],
+    columns: [
+      {id: 'rid', className: 'is-min'},
+      {id: 'type', className: 'is-min'},
+      {id: 'divisions', className: 'is-min'},
+      {id: 'date', className: 'is-min'},
+      {id: 'shift', className: 'is-min'},
+      {id: 'master', className: 'is-min'},
+      'operator'
+    ],
 
     serializeActions: function()
     {

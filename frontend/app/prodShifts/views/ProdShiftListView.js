@@ -23,7 +23,15 @@ define([
       'prodShifts.deleted.*': 'refreshIfMatches'
     },
 
-    columns: ['mrpControllers', 'prodFlow', 'prodLine', 'date', 'shift', 'createdAt', 'creator'],
+    columns: [
+      {id: 'mrpControllers', className: 'is-min'},
+      {id: 'prodFlow', className: 'is-min'},
+      {id: 'prodLine', className: 'is-min'},
+      {id: 'date', className: 'is-min'},
+      {id: 'shift', className: 'is-min'},
+      {id: 'createdAt', className: 'is-min'},
+      'creator'
+    ],
 
     serializeRow: function(model)
     {

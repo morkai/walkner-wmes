@@ -30,14 +30,14 @@ define([
       return new ListPage({
         collection: prodFunctions,
         columns: [
-          '_id',
+          {id: '_id', className: 'is-min'},
           'label',
-          'fteMasterPosition',
-          'fteLeaderPosition',
-          'direct',
-          'dirIndirRatio',
-          'companies',
-          'color'
+          {id: 'fteMasterPosition', className: 'is-min'},
+          {id: 'fteLeaderPosition', className: 'is-min'},
+          {id: 'direct', className: 'is-min'},
+          {id: 'dirIndirRatio', className: 'is-min'},
+          {id: 'companies', className: 'is-min'},
+          {id: 'color', className: 'is-min'}
         ]
       });
     });

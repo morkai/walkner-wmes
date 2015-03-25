@@ -27,7 +27,15 @@ define([
       }
     },
 
-    columns: ['prodLine', 'type', 'data', 'prodShift', 'prodShiftOrder', 'createdAt', 'creator'],
+    columns: [
+      {id: 'prodLine', className: 'is-min'},
+      {id: 'type', className: 'is-min'},
+      'data',
+      {id: 'prodShift', className: 'is-min'},
+      {id: 'prodShiftOrder', className: 'is-min'},
+      {id: 'createdAt', className: 'is-min'},
+      {id: 'creator', className: 'is-min'}
+    ],
 
     serializeActions: function()
     {
