@@ -50,7 +50,7 @@
     "ejs": "~1.0.0",
     "ejs-amd": "~0.0.4",
     "socket.io": "~0.9.17",
-    "lodash": "~2.4.1",
+    "lodash": "~3.5.0",
     "messageformat": "~0.2.1",
     "messageformat-amd": "git+http://github.com/morkai/messageformat-amd.git#d41fd5caba",
     "mail-listener2": "~0.1.7",
