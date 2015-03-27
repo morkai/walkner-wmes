@@ -10,201 +10,741 @@ var moment = require('moment');
 
 module.exports = function setUpXiconfCommands(app, xiconfModule)
 {
-  var EMPTY_REMOTE_DATA = {
-    orderNo: null,
-    nc12: [],
-    quantityTodo: null,
-    quantityDone: null,
-    startedAt: null,
-    finishedAt: null,
-    ledOrder: null
-  };
+  var WORKING_ORDER_CHANGE_CHECK_DELAY = 15 * 60 * 1000;
+  var WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES = 15;
 
   var sio = app[xiconfModule.config.sioId];
   var productionModule = app[xiconfModule.config.productionId];
   var mongoose = app[xiconfModule.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var XiconfProgramOrder = mongoose.model('XiconfProgramOrder');
-  var XiconfLedOrder = mongoose.model('XiconfLedOrder');
+  var XiconfClient = mongoose.model('XiconfClient');
+  var XiconfResult = mongoose.model('XiconfResult');
+  var XiconfOrder = mongoose.model('XiconfOrder');
 
-  var prodLineDataMap = {};
-  var orderDataMap = {};
+  var prodLinesToDataMap = {};
+  var ordersToDataMap = {};
   var ordersToProdLinesMap = {};
-  var getOrderDataQueue = {};
-  var updateOrderQueues = {};
+  var ordersToGetOrderDataQueueMap = {};
+  var ordersToOperationsQueueMap = {};
   var workingOrderChangeCheckTimers = {};
 
-  app.broker.subscribe('production.stateChanged.**', function(changes)
+// TODO: remove
+setInterval(function()
+{
+  console.log();
+  console.log('---------------------------------------------------------');
+  console.log('prodLinesToDataMap');
+  _.forEach(prodLinesToDataMap, function(prodLineData)
   {
-    if (changes.prodShiftOrders !== undefined)
-    {
-      updateProdLinesRemoteData(changes._id, null);
-    }
+    console.log('  %s', prodLineData.prodLineId);
+    console.log('    orders=%s', prodLineData.orders.join(', '));
+    console.log('    sockets=%s', Object.keys(prodLineData.sockets).join(', '));
   });
+  console.log('---');
+  console.log('ordersToDataMap');
+  console.log(Object.keys(ordersToDataMap).join(', '));
+  console.log('---');
+  console.log('ordersToProdLinesMap');
+  console.inspect(ordersToProdLinesMap);
+  console.log('---');
+}, 30000);
+
+  app.broker.subscribe('shiftChanged', onShiftChanged);
+  app.broker.subscribe('xiconf.orders.synced', onXiconfOrdersSynced);
+  app.broker.subscribe('production.stateChanged.**', onProductionStateChanged);
 
   sio.sockets.on('connection', function(socket)
   {
-    var socketSrcId = null;
-    var socketProdLineId = null;
-
-    socket.on('disconnect', function()
-    {
-      var prodLineInfo = prodLineDataMap[socketProdLineId];
-
-      if (!prodLineInfo)
-      {
-        return;
-      }
-
-      if (!prodLineInfo.sockets[socket.id])
-      {
-        return;
-      }
-
-      delete prodLineInfo.sockets[socket.id];
-
-      xiconfModule.debug("[%s] disconnected from [%s] (socket=[%s])", socketSrcId, socketProdLineId, socket.id);
-    });
-
-    socket.on('xiconf.connect', function(srcId, prodLineId)
-    {
-      if (!_.isString(srcId) || _.isEmpty(srcId) || !_.isString(prodLineId) || _.isEmpty(prodLineId))
-      {
-        return;
-      }
-
-      socketSrcId = srcId;
-      socketProdLineId = prodLineId;
-
-      getProdLineData(prodLineId).sockets[socket.id] = socket;
-
-      xiconfModule.info("[%s] connected to [%s] (socket=[%s])", srcId, prodLineId, socket.id);
-
-      updateProdLinesRemoteData(prodLineId, socket);
-    });
-
-    socket.on('xiconf.acquireServiceTag', function(input, reply)
-    {
-      if (!_.isFunction(reply))
-      {
-        reply = function() {};
-      }
-
-      if (socketProdLineId === null)
-      {
-        return reply(new Error('NOT_CONNECTED'));
-      }
-
-      if (!_.isObject(input)
-        || !_.isString(input.resultId)
-        || !_.isString(input.orderNo)
-        || !_.isString(input.nc12))
-      {
-        return reply(new Error('INPUT'));
-      }
-
-      acquireServiceTag(input.resultId, input.orderNo, input.nc12, reply);
-    });
-
-    socket.on('xiconf.releaseServiceTag', function(input, reply)
-    {
-      if (!_.isFunction(reply))
-      {
-        reply = function() {};
-      }
-
-      if (socketProdLineId === null)
-      {
-        return reply(new Error('NOT_CONNECTED'));
-      }
-
-      if (!_.isObject(input)
-        || !_.isString(input.resultId)
-        || !_.isString(input.orderNo)
-        || !_.isString(input.nc12))
-      {
-        return reply(new Error('INPUT'));
-      }
-
-      releaseServiceTag(input.resultId, input.orderNo, input.nc12, reply);
-    });
+    socket.on('disconnect', handleClientDisconnect);
+    socket.on('xiconf.connect', handleClientConnect);
+    socket.on('xiconf.checkSerialNumber', handleCheckSerialNumberRequest);
+    socket.on('xiconf.acquireServiceTag', handleAcquireServiceTagRequest);
+    socket.on('xiconf.releaseServiceTag', handleReleaseServiceTagRequest);
+    socket.on('xiconf.selectedOrderNoChanged', onClientsSelectedOrderNoChanged);
   });
 
-  function acquireServiceTag(resultId, orderNo, nc12, replyWithServiceTag)
+  function onProductionStateChanged(changes)
   {
-    var updateOrderQueue = updateOrderQueues[orderNo];
-    var queueItem = {
-      operation: acquireNextServiceTag,
-      reply: replyWithServiceTag,
-      resultId: resultId,
-      orderNo: orderNo,
-      nc12: nc12
-    };
+    var ps = changes.prodShift;
 
-    if (Array.isArray(updateOrderQueue))
+    if (ps !== undefined && ps.leader !== undefined)
     {
-      return updateOrderQueue.push(queueItem);
+      updateProdLinesLeader(changes._id, null);
     }
 
-    updateOrderQueues[orderNo] = [queueItem];
+    var pso = changes.prodShiftOrders;
 
-    execNextOrderUpdate(orderNo);
-  }
-
-  function releaseServiceTag(resultId, orderNo, nc12, reply)
-  {
-    var updateOrderQueue = updateOrderQueues[orderNo];
-    var queueItem = {
-      operation: releaseNextServiceTag,
-      reply: reply,
-      resultId: resultId,
-      orderNo: orderNo,
-      nc12: nc12
-    };
-
-    if (Array.isArray(updateOrderQueue))
-    {
-      return updateOrderQueue.push(queueItem);
-    }
-
-    updateOrderQueue[orderNo] = [queueItem];
-
-    execNextOrderUpdate(orderNo);
-  }
-
-  function execNextOrderUpdate(orderNo)
-  {
-    var updateOrderQueue = updateOrderQueues[orderNo];
-
-    if (!Array.isArray(updateOrderQueue))
+    if (pso === undefined || (_.isPlainObject(pso) && pso.orderId === undefined))
     {
       return;
     }
 
-    if (updateOrderQueue.length === 0)
-    {
-      delete updateOrderQueues[orderNo];
+    updateProdLinesRemoteData(changes._id, null);
+  }
 
+  function onShiftChanged()
+  {
+    cleanUpOrders();
+  }
+
+  function onXiconfOrdersSynced(message)
+  {
+    step(
+      function findUpdatedXiconfOrdersStep()
+      {
+        var condition = {
+          _id: {$in: Object.keys(ordersToDataMap)},
+          importedAt: new Date(message.timestamp)
+        };
+
+        XiconfOrder.find(condition, {'items.serialNumbers': 1}).lean().exec(this.next());
+      },
+      function removeUpdatedXiconfOrdersStep(err, updatedXiconfOrders)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        this.orderNos = [];
+
+        for (var i = 0; i < updatedXiconfOrders.length; ++i)
+        {
+          var orderNo = updatedXiconfOrders[i]._id;
+
+          delete ordersToDataMap[orderNo];
+
+          this.orderNos.push(orderNo);
+        }
+
+        setImmediate(this.next());
+      },
+      function recountOrdersStep()
+      {
+        for (var i = 0; i < this.orderNos.length; ++i)
+        {
+          recountOrder({orderNo: this.orderNos[i]});
+        }
+      },
+      function finalizeStep(err)
+      {
+        if (err)
+        {
+          return xiconfModule.error("Failed to remove cached order data after orders were synced: %s", err.message);
+        }
+      }
+    );
+  }
+
+  function onClientsSelectedOrderNoChanged(newSelectedOrderNo)
+  {
+    /*jshint validthis:true*/
+
+    var socket = this;
+
+    if (!socket.xiconf)
+    {
       return;
     }
 
-    var queueItem = updateOrderQueue.shift();
+    XiconfClient.collection.update({_id: socket.xiconf.srcId}, {$set: {order: newSelectedOrderNo}}, function(err)
+    {
+      if (err)
+      {
+        return xiconfModule.error(
+          "Failed to update client [%s] after changing order to [%s]: %s",
+          socket.xiconf.srcId,
+          newSelectedOrderNo,
+          err.message
+        );
+      }
 
-    queueItem.operation(queueItem);
+      app.broker.publish('xiconf.clients.orderChanged', {
+        _id: socket.xiconf.srcId,
+        order: newSelectedOrderNo
+      });
+    });
   }
 
-  function acquireNextServiceTag(data)
+  function handleClientDisconnect()
   {
-    var orderNo = data.orderNo;
-    var nc12 = data.nc12;
-    var replyWithServiceTag = data.reply;
+    /*jshint validthis:true*/
+
+    var socket = this;
+
+    if (!socket.xiconf)
+    {
+      return;
+    }
+
+    var prodLineData = prodLinesToDataMap[socket.xiconf.prodLineId];
+
+    if (!prodLineData)
+    {
+      return;
+    }
+
+    if (!prodLineData.sockets[socket.id])
+    {
+      return;
+    }
+
+    var clientId = socket.xiconf.srcId;
+
+    xiconfModule.debug("[%s] disconnected from [%s] (socket=[%s])", clientId, socket.xiconf.prodLineId, socket.id);
+
+    delete socket.xiconf;
+    delete prodLineData.sockets[socket.id];
+
+    var clientChanges = {
+      _id: clientId,
+      connectedAt: null,
+      disconnectedAt: new Date(),
+      socket: null
+    };
+
+    XiconfClient.collection.update({_id: clientId, socket: socket.id}, {$set: clientChanges}, function(err)
+    {
+      if (err)
+      {
+        xiconfModule.error("Failed to update client [%s] after disconnection: %s", clientId, err.message);
+      }
+      else
+      {
+        app.broker.publish('xiconf.clients.disconnected', clientChanges);
+      }
+    });
+  }
+
+  function handleClientConnect(data)
+  {
+    /*jshint validthis:true*/
+
+    var socket = this;
+
+    if (!_.isObject(data)
+      || !_.isString(data.srcId) || _.isEmpty(data.srcId)
+      || !_.isString(data.prodLineId) || _.isEmpty(data.prodLineId))
+    {
+      return;
+    }
+
+    if (!socket.xiconf)
+    {
+      socket.xiconf = {
+        srcId: null,
+        prodLineId: null
+      };
+    }
+
+    if (socket.xiconf.prodLineId !== null)
+    {
+      if (data.prodLineId !== socket.xiconf.prodLineId)
+      {
+        delete getProdLineData(socket.xiconf.prodLineId).sockets[socket.id];
+
+        xiconfModule.warn(
+          "[%s] changed prod line from [%s] to [%s] (socket=[%s])",
+          data.srcId,
+          socket.xiconf.prodLineId,
+          data.prodLineId,
+          socket.id
+        );
+      }
+      else
+      {
+        xiconfModule.info("[%s] reconnected to [%s] (socket=[%s])", data.srcId, data.prodLineId, socket.id);
+      }
+    }
+    else
+    {
+      xiconfModule.info("[%s] connected to [%s] (socket=[%s])", data.srcId, data.prodLineId, socket.id);
+    }
+
+    socket.xiconf.srcId = data.srcId;
+    socket.xiconf.prodLineId = data.prodLineId;
+
+    var prodLineData = getProdLineData(data.prodLineId);
+
+    prodLineData.sockets[socket.id] = socket;
+
+    updateProdLinesRemoteData(data.prodLineId, socket);
+    updateProdLinesLeader(data.prodLineId, socket);
+
+    var xiconfClient = {
+      _id: data.srcId,
+      connectedAt: new Date(),
+      disconnectedAt: null,
+      socket: socket.id,
+      prodLine: data.prodLineId,
+      license: data.licenseId || null,
+      order: data.selectedOrderNo || null,
+      appVersion: data.appVersion || '0.0.0',
+      mowVersion: data.mowVersion || '0.0.0.0'
+    };
+
+    XiconfClient.collection.update({_id: xiconfClient._id}, xiconfClient, {upsert: true}, function(err)
+    {
+      if (err)
+      {
+        xiconfModule.error("Failed to update client [%s] after connection: %s", xiconfClient._id, err.message);
+      }
+      else
+      {
+        app.broker.publish('xiconf.clients.connected', xiconfClient);
+      }
+    });
+  }
+
+  function handleCheckSerialNumberRequest(input, reply)
+  {
+    /*jshint validthis:true*/
+
+    var socket = this;
+
+console.log('xiconf.checkSerialNumber', input);
+
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (!socket.xiconf)
+    {
+      return reply(new Error('NOT_CONNECTED'));
+    }
+
+    if (!_.isObject(input)
+      || !_.isString(input.orderNo)
+      || !_.isString(input.nc12)
+      || !_.isString(input.serialNumber))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    checkSerialNumber(input, reply);
+  }
+
+  function handleAcquireServiceTagRequest(input, reply)
+  {
+    /*jshint validthis:true*/
+
+    var socket = this;
+
+console.log('xiconf.acquireServiceTag', input);
+
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (!socket.xiconf)
+    {
+      return reply(new Error('NOT_CONNECTED'));
+    }
+
+    if (!_.isObject(input)
+      || !_.isString(input.orderNo)
+      || !_.isString(input.nc12)
+      || !_.isBoolean(input.multi)
+      || !validateInputLeds(input))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    acquireServiceTag(input, reply);
+  }
+
+  function handleReleaseServiceTagRequest(input, reply)
+  {
+    /*jshint validthis:true*/
+
+    var socket = this;
+
+console.log('xiconf.releaseServiceTag', input);
+
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (!socket.xiconf)
+    {
+      return reply(new Error('NOT_CONNECTED'));
+    }
+
+    if (!_.isObject(input)
+      || !_.isString(input.serviceTag)
+      || !_.isString(input.orderNo)
+      || !_.isString(input.nc12)
+      || !_.isBoolean(input.multi)
+      || !validateInputLeds(input))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    releaseServiceTag(input, reply);
+  }
+
+  function validateInputLeds(input)
+  {
+    if (!_.isArray(input.leds))
+    {
+      input.leds = [];
+    }
+
+    return _.every(input.leds, function(led)
+    {
+      if (!_.isObject(led) || !_.isString(led.nc12) || !_.isArray(led.serialNumbers) || !led.serialNumbers.length)
+      {
+        return false;
+      }
+
+      return _.every(led.serialNumbers, function(serialNumber)
+      {
+        return _.isString(serialNumber) && !_.isEmpty(serialNumber);
+      });
+    });
+  }
+
+  function checkSerialNumber(input, reply)
+  {
+console.log('checkSerialNumber', input);
+    step(
+      function findXiconfOrdersStep()
+      {
+        XiconfOrder.findOne({'items.serialNumber': input.serialNumber}).lean().exec(this.parallel());
+        XiconfOrder.findById(input.orderNo).lean().exec(this.parallel());
+      },
+      function checkStep(err, snOrder, idOrder)
+      {
+        if (err)
+        {
+          xiconfModule.error(
+            "Failed to check serial number [%s] for order [%s] and 12NC [%s]: %s",
+            err.message,
+            input.serialNumber,
+            input.orderNo,
+            input.nc12
+          );
+
+          return reply(new Error('DB_FAILURE'), null);
+        }
+
+        if (!idOrder)
+        {
+          return reply(new Error('UNKNOWN_ORDER_NO'), null);
+        }
+
+        var item = _.find(idOrder.items, function(item) { return item.nc12 === input.nc12; });
+
+        if (!item)
+        {
+          return reply(new Error('UNKNOWN_ITEM_NC12'), null);
+        }
+
+        if (snOrder)
+        {
+          return reply(new Error('SERIAL_NUMBER_USED'), snOrder);
+        }
+
+        return reply(null, null);
+      }
+    );
+  }
+
+  function recountOrder(input, reply)
+  {
+console.log('recountOrder', input);
+    queueOrderOperation(input.orderNo, recountNextOrder, reply, {
+      orderNo: input.orderNo
+    });
+  }
+
+  function acquireServiceTag(input, reply)
+  {
+console.log('acquireServiceTag', input);
+    queueOrderOperation(input.orderNo, acquireNextServiceTag, reply, {
+      orderNo: input.orderNo,
+      nc12: input.nc12,
+      multi: input.multi,
+      leds: input.leds
+    });
+  }
+
+  function releaseServiceTag(input, reply)
+  {
+console.log('releaseServiceTag', input);
+    queueOrderOperation(input.orderNo, releaseNextServiceTag, reply, {
+      serviceTag: input.serviceTag,
+      orderNo: input.orderNo,
+      nc12: input.nc12,
+      multi: input.multi,
+      leds: input.leds
+    });
+  }
+
+  function queueOrderOperation(orderNo, operation, reply, data)
+  {
+console.log('queueOrderOperation', orderNo, operation.name);
+    var orderQueue = ordersToOperationsQueueMap[orderNo];
+    var queueItem = {
+      operation: operation,
+      reply: reply || function() {},
+      data: data
+    };
+
+    if (Array.isArray(orderQueue))
+    {
+console.log('queueOrderOperation %s %s queued', orderNo, operation.name);
+      return orderQueue.push(queueItem);
+    }
+
+    ordersToOperationsQueueMap[orderNo] = [queueItem];
+console.log('queueOrderOperation %s %s single', orderNo, operation.name);
+    execNextOrderOperation(orderNo);
+  }
+
+  function execNextOrderOperation(orderNo)
+  {
+console.log('execNextOrderOperation', orderNo);
+
+    var orderQueue = ordersToOperationsQueueMap[orderNo];
+
+    if (!Array.isArray(orderQueue))
+    {
+console.log('execNextOrderOperation %s undefined', orderNo);
+      return;
+    }
+
+    var queueItem = orderQueue.shift();
+
+    if (orderQueue.length === 0)
+    {
+      delete ordersToOperationsQueueMap[orderNo];
+console.log('execNextOrderOperation %s last', orderNo);
+    }
+
+    if (!queueItem)
+    {
+console.log('execNextOrderOperation %s empty', orderNo);
+      return;
+    }
+
+console.log('execNextOrderOperation', orderNo, queueItem.operation.name);
+    queueItem.operation(queueItem.data, queueItem.reply);
+  }
+
+  function recountNextOrder(data, done)
+  {
+    step(
+      function getDataStep()
+      {
+        getOrderData(data.orderNo, this.parallel());
+
+        XiconfResult
+          .find({orderNo: data.orderNo, serviceTag: null, result: 'success'}, {nc12: 1, workflow: 1})
+          .lean()
+          .exec(this.parallel());
+      },
+      function recountStep(err, orderData, xiconfResults)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!orderData)
+        {
+          return this.skip(new Error('ORDER_NOT_FOUND'));
+        }
+
+        var i;
+        var nc12ToResults = {};
+
+        for (i = 0; i < xiconfResults.length; ++i)
+        {
+          var xiconfResult = xiconfResults[i];
+          var nc12Results = nc12ToResults[xiconfResult.nc12];
+
+          if (!nc12Results)
+          {
+            nc12Results = nc12ToResults[xiconfResult.nc12] = {
+              single: 0,
+              multi: 0
+            };
+          }
+
+          if (_.isString(xiconfResult.workflow) && /multidevice\s*=\s*true/i.test(xiconfResult.workflow))
+          {
+            nc12Results.multi += 1;
+          }
+          else
+          {
+            nc12Results.single += 1;
+          }
+        }
+
+        var quantityPerResult = 0;
+        var quantityDone = 0;
+        var programItems = [];
+        var ledItems = [];
+        var itemChanges = [];
+
+        for (i = 0; i < orderData.items.length; ++i)
+        {
+          var item = orderData.items[i];
+
+          if (item.kind === 'led')
+          {
+            ledItems.push(item);
+          }
+          else
+          {
+            programItems.push({item: item, index: i});
+          }
+        }
+
+        var anyLeditems = ledItems.length > 0;
+
+        if (anyLeditems)
+        {
+          quantityPerResult = ledItems[0].quantityTodo / orderData.quantityTodo;
+          quantityDone = ledItems[0].quantityDone / quantityPerResult;
+        }
+
+        for (i = 0; i < programItems.length; ++i)
+        {
+          var programItem = programItems[i].item;
+          var programItemIndex = programItems[i].index;
+          var programItemQuantityDone = programItem.quantityDone;
+          var results = nc12ToResults[programItem.nc12];
+
+          quantityPerResult = programItem.quantityTodo / orderData.quantityTodo;
+
+          if (results)
+          {
+            var extraQuantityDone = results.single + results.multi * quantityPerResult;
+
+            programItemQuantityDone += extraQuantityDone;
+
+            itemChanges.push({
+              index: programItemIndex,
+              extraQuantityDone: extraQuantityDone
+            });
+          }
+
+          if (!anyLeditems)
+          {
+            quantityDone += programItemQuantityDone / quantityPerResult;
+          }
+        }
+
+        if (isNaN(quantityDone))
+        {
+          quantityDone = 0;
+        }
+        else
+        {
+          quantityDone = Math.round(quantityDone * 100) / 100;
+        }
+
+        var changes = {
+          quantityDone: quantityDone,
+          status: quantityDone < orderData.quantityTodo ? -1 : quantityDone > orderData.quantityTodo ? 1 : 0
+        };
+
+        if (orderData.startedAt === null && changes.quantityDone > 0)
+        {
+          changes.startedAt = new Date();
+        }
+
+        if (orderData.finishedAt === null && changes.status !== -1)
+        {
+          changes.finishedAt = new Date();
+        }
+        else if (orderData.finishedAt !== null && changes.status === -1)
+        {
+          changes.finishedAt = null;
+        }
+
+        var condition = {_id: data.orderNo};
+        var updates = {
+          $set: _.clone(changes)
+        };
+
+        for (i = 0; i < itemChanges.length; ++i)
+        {
+          var itemChange = itemChanges[i];
+
+          updates.$set['items.' + itemChange.index + '.extraQuantityDone'] = itemChange.extraQuantityDone;
+        }
+
+// TODO: remove
+console.log('--- recountNextOrder');
+console.inspect(condition);
+console.inspect(updates);
+
+        XiconfOrder.collection.update(condition, updates, this.next());
+
+        this.orderData = orderData;
+        this.changes = changes;
+        this.itemChanges = itemChanges;
+      },
+      function applyChangesStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        _.merge(this.orderData, this.changes);
+
+        for (var i = 0; i < this.itemChanges.length; ++i)
+        {
+          var itemChange = this.itemChanges[i];
+
+          this.orderData.items[itemChange.index].extraQuantityDone = itemChange.extraQuantityDone;
+        }
+      },
+      function(err)
+      {
+        if (err)
+        {
+          xiconfModule.error("Failed to recount order [%s]: %s", data.orderNo, err.message);
+        }
+        else
+        {
+          this.changes._id = data.orderNo;
+
+          app.broker.publish('xiconf.orders.' + data.orderNo + '.recounted', {
+            orderNo: data.orderNo,
+            quantityDone: this.orderData.quantityDone
+          });
+
+          setImmediate(emitRemoteDataToOrderWorkers.bind(null, data.orderNo));
+        }
+
+        setImmediate(execNextOrderOperation.bind(null, data.orderNo));
+
+        this.orderData = null;
+        this.changes = null;
+        this.itemChanges = null;
+
+        done(err);
+      }
+    );
+  }
+
+  function acquireNextServiceTag(data, done)
+  {
+console.log('acquireNextServiceTag', data);
 
     step(
       function getOrderDataStep()
       {
-        getOrderData(orderNo, this.next());
+        getOrderData(data.orderNo, this.next());
       },
-      function updateProgramOrderStep(err, orderData)
+      function updateXiconfOrderStep(err, orderData)
       {
         if (err)
         {
@@ -221,83 +761,141 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(new Error('NO_FREE_SERVICE_TAGS'));
         }
 
-        var nc12Copy = _.cloneDeep(orderData.nc12);
-        var changedNc12 = _.find(nc12Copy, {_id: nc12});
+        var programItem;
+        var programItemIndex = -1;
+        var ledItems = {};
 
-        if (!changedNc12)
+        for (var i = 0; i < orderData.items.length; ++i)
         {
-          return this.skip(new Error('INVALID_NC12'));
+          var item = orderData.items[i];
+
+          if (item.kind === 'led')
+          {
+            ledItems[item.nc12] = {
+              item: item,
+              index: i
+            };
+          }
+          else if (item.nc12 === data.nc12)
+          {
+            programItem = item;
+            programItemIndex = i;
+          }
         }
 
-        changedNc12.quantityDone += 1;
+        var $push = {};
+        var $set = {
+          serviceTagCounter: orderData.serviceTagCounter + 1
+        };
+        var changes = [
+          function(orderData) { orderData.serviceTagCounter = $set.serviceTagCounter; }
+        ];
+        var anyLeds = false;
+
+        if (programItemIndex !== -1)
+        {
+          var quantityPerResult = data.multi ? (programItem.quantityTodo / orderData.quantityTodo) : 1;
+          var newProgramItemQuantityDone = programItem.quantityDone + quantityPerResult;
+
+          $set['items.' + programItemIndex + '.quantityDone'] = newProgramItemQuantityDone;
+
+          changes.push(applyItemQuantityDoneChange.bind(null, programItem, newProgramItemQuantityDone));
+        }
+
+        _.forEach(data.leds, function(led)
+        {
+          var ledItem = ledItems[led.nc12];
+
+          if (!ledItem)
+          {
+            return;
+          }
+
+          delete ledItems[led.nc12];
+
+          var index = ledItem.index;
+          var item = ledItem.item;
+
+          var newLedItemQuantityDone = item.quantityDone + led.serialNumbers.length;
+
+          $set['items.' + index + '.quantityDone'] = newLedItemQuantityDone;
+          $push['items.' + index + '.serialNumbers'] = {$each: led.serialNumbers};
+
+          changes.push(applyItemQuantityDoneChange.bind(null, item, newLedItemQuantityDone));
+
+          anyLeds = true;
+        });
+
+        if (programItemIndex === -1 && !anyLeds)
+        {
+          return this.skip(new Error('12NC_NOT_FOUND'));
+        }
+
+        var condition = {_id: data.orderNo};
+        var updates = {$set: $set};
+
+        if (anyLeds)
+        {
+          updates.$addToSet = $push;
+        }
+
+// TODO: remove
+console.log('--- acquireNextServiceTag');
+console.inspect(condition);
+console.inspect(updates);
+
+        XiconfOrder.collection.update(condition, updates, this.next());
 
         this.orderData = orderData;
-        this.changes = {
-          nc12: nc12Copy,
-          quantityDone: orderData.quantityDone + 1,
-          serviceTagCounter: orderData.serviceTagCounter + 1,
-          status: getOrderStatus(nc12Copy)
-        };
-
-        if (this.orderData.createdAt === null)
-        {
-          this.changes.createdAt = new Date();
-        }
-
-        if (this.orderData.finishedAt === null && this.changes.status !== -1)
-        {
-          this.changes.finishedAt = new Date();
-        }
-
-        XiconfProgramOrder.collection.update({_id: orderNo}, {$set: this.changes}, this.next());
+        this.changes = changes;
       },
-      function updateOrderDataStep(err)
+      function applyChangesStep(err)
       {
         if (err)
         {
           return this.skip(err);
         }
 
-        _.merge(this.orderData, this.changes, {
-          lastActionAt: new Date()
-        });
+        applyOrderDataChanges(this.orderData, this.changes);
 
-        var serviceTag = pad0(this.orderData._id.toString() + pad0(this.orderData.serviceTagCounter.toString(), 4), 17);
+        var serviceTag = _.padLeft(this.orderData.serviceTagCounter.toString(), 4, '0');
+        serviceTag = _.padLeft(this.orderData._id.toString() + serviceTag, 17, '0');
+        serviceTag = 'P' + serviceTag;
 
-        return this.skip(null, 'P' + serviceTag);
+        return this.skip(null, serviceTag);
       },
-      function replyWithServiceTagStep(err, serviceTag)
+      function replyStep(err, serviceTag)
       {
-        replyWithServiceTag(err, _.isString(serviceTag) ? serviceTag : null);
-
-        if (!err)
+        if (err)
         {
-          this.changes._id = orderNo;
+          xiconfModule.error("Failed to acquire a new Service Tag for order [%s]: %s", data.orderNo, err.message);
+        }
+        else
+        {
+          app.broker.publish('xiconf.orders.' + data.orderNo + '.serviceTagAcquired', {
+            orderNo: data.orderNo,
+            serviceTag: serviceTag
+          });
 
-          app.broker.publish('xiconf.orders.' + orderNo + '.serviceTagAcquired', this.changes);
+          setImmediate(recountOrder.bind(null, data));
         }
 
         this.orderData = null;
         this.changes = null;
 
-        setImmediate(emitRemoteDataToOrderWorkers.bind(null, orderNo));
-        setImmediate(execNextOrderUpdate.bind(null, orderNo));
+        done(err, _.isString(serviceTag) ? serviceTag : null);
       }
     );
   }
 
-  function releaseNextServiceTag(data)
+  function releaseNextServiceTag(data, done)
   {
-    var orderNo = data.orderNo;
-    var nc12 = data.nc12;
-    var reply = data.reply;
-
     step(
       function getOrderDataStep()
       {
-        getOrderData(orderNo, this.next());
+        getOrderData(data.orderNo, this.next());
       },
-      function updateProgramOrderStep(err, orderData)
+      function updateXiconfOrderStep(err, orderData)
       {
         if (err)
         {
@@ -309,74 +907,158 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(new Error('ORDER_NOT_FOUND'));
         }
 
-        var nc12Copy = _.cloneDeep(orderData.nc12);
-        var changedNc12 = _.find(nc12Copy, {_id: nc12});
+        var serviceTagCounter = +data.serviceTag.substr(-4);
 
-        if (!changedNc12)
+        if (orderData.serviceTagCounter < serviceTagCounter)
         {
-          return this.skip(new Error('INVALID_NC12'));
+          return this.skip(new Error('SERVICE_TAG_NOT_ACQUIRED'));
         }
 
-        changedNc12.quantityDone -= 1;
+        var programItem;
+        var programItemIndex = -1;
+        var ledItems = {};
+
+        for (var i = 0; i < orderData.items.length; ++i)
+        {
+          var item = orderData.items[i];
+
+          if (item.kind === 'led')
+          {
+            ledItems[item.nc12] = {
+              item: item,
+              index: i
+            };
+          }
+          else if (item.nc12 === data.nc12)
+          {
+            programItem = item;
+            programItemIndex = i;
+          }
+        }
+
+        var $pull = {};
+        var $set = {};
+        var changes = [];
+        var anyLeds = false;
+
+        if (programItemIndex !== -1)
+        {
+          var quantityPerResult = data.multi ? (programItem.quantityTodo / orderData.quantityTodo) : 1;
+          var newProgramItemQuantityDone = programItem.quantityDone - quantityPerResult;
+
+          $set['items.' + programItemIndex + '.quantityDone'] = newProgramItemQuantityDone;
+
+          changes.push(applyItemQuantityDoneChange.bind(null, programItem, newProgramItemQuantityDone));
+        }
+
+        _.forEach(data.leds, function(led)
+        {
+          var ledItem = ledItems[led.nc12];
+
+          if (!ledItem)
+          {
+            return;
+          }
+
+          delete ledItems[led.nc12];
+
+          var index = ledItem.index;
+          var item = ledItem.item;
+
+          var newLedItemQuantityDone = item.quantityDone - led.serialNumbers.length;
+
+          $set['items.' + index + '.quantityDone'] = newLedItemQuantityDone;
+          $pull['items.' + index + '.serialNumbers'] = led.serialNumbers;
+
+          changes.push(applyItemQuantityDoneChange.bind(null, item, newLedItemQuantityDone));
+
+          anyLeds = true;
+        });
+
+        if (programItemIndex === -1 && !anyLeds)
+        {
+          return this.skip(new Error('12NC_NOT_FOUND'));
+        }
+
+        var condition = {_id: data.orderNo};
+        var updates = {$set: $set};
+
+        if (anyLeds)
+        {
+          updates.$pullAll = $pull;
+        }
+
+// TODO: remove
+console.log('--- releaseNextServiceTag');
+console.inspect(condition);
+console.inspect(updates);
+
+        XiconfOrder.collection.update(condition, updates, this.next());
 
         this.orderData = orderData;
-        this.changes = {
-          nc12: nc12Copy,
-          quantityDone: orderData.quantityDone - 1,
-          status: getOrderStatus(nc12Copy)
-        };
-
-        if (this.changes.status === -1)
-        {
-          this.changes.finishedAt = null;
-        }
-
-        XiconfProgramOrder.collection.update({_id: orderNo}, {$set: this.changes}, this.next());
+        this.changes = changes;
       },
-      function updateOrderDataStep(err)
+      function applyChangesStep(err)
       {
         if (err)
         {
           return this.skip(err);
         }
 
-        _.merge(this.orderData, this.changes, {
-          lastActionAt: new Date()
-        });
-
-        return this.skip(null);
+        applyOrderDataChanges(this.orderData, this.changes);
       },
       function replyStep(err)
       {
-        reply(err);
-
-        if (!err)
+        if (err)
         {
-          this.changes._id = orderNo;
-
-          app.broker.publish('xiconf.orders.' + orderNo + '.serviceTagReleased', this.changes);
+          xiconfModule.error(
+            "Failed to release Service Tag [%s] for order [%s]: %s", data.serviceTag, data.orderNo, err.message
+          );
         }
+        else
+        {
+          app.broker.publish('xiconf.orders.' + data.orderNo + '.serviceTagReleased', {
+            orderNo: data.orderNo,
+            serviceTag: data.serviceTag
+          });
+        }
+
+        setImmediate(recountOrder.bind(null, data));
 
         this.orderData = null;
         this.changes = null;
 
-        setImmediate(emitRemoteDataToOrderWorkers.bind(null, orderNo));
-        setImmediate(execNextOrderUpdate.bind(null, orderNo));
+        done(err);
       }
     );
   }
 
+  function applyOrderDataChanges(orderData, changes)
+  {
+    for (var i = 0; i < changes.length; ++i)
+    {
+      changes[i](orderData);
+    }
+  }
+
+  function applyItemQuantityDoneChange(item, newQuantityDone)
+  {
+    item.quantityDone = newQuantityDone;
+  }
+
   function getProdLineData(prodLineId)
   {
-    if (!prodLineDataMap[prodLineId])
+    if (!prodLinesToDataMap[prodLineId])
     {
-      prodLineDataMap[prodLineId] = {
-        orderNo: null,
+      prodLinesToDataMap[prodLineId] = {
+        prodLineId: prodLineId,
+        leader: null,
+        orders: [],
         sockets: {}
       };
     }
 
-    return prodLineDataMap[prodLineId];
+    return prodLinesToDataMap[prodLineId];
   }
 
   function getOrderData(orderNo, done)
@@ -386,26 +1068,24 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return done(null, null);
     }
 
-    if (orderDataMap[orderNo])
+    if (ordersToDataMap[orderNo])
     {
-      return done(null, orderDataMap[orderNo]);
+      return done(null, ordersToDataMap[orderNo]);
     }
 
-    if (getOrderDataQueue[orderNo])
+    if (ordersToGetOrderDataQueueMap[orderNo])
     {
-      return getOrderDataQueue[orderNo].push(done);
+      return ordersToGetOrderDataQueueMap[orderNo].push(done);
     }
 
-    getOrderDataQueue[orderNo] = [done];
+    ordersToGetOrderDataQueueMap[orderNo] = [done];
 
     step(
-      function findOrderDataStep()
+      function findXiconfOrderStep()
       {
-        Order.findById(orderNo, {_id: 0, qty: 1}).lean().exec(this.parallel());
-        XiconfProgramOrder.findById(orderNo).lean().exec(this.parallel());
-        XiconfLedOrder.findById(orderNo).lean().exec(this.parallel());
+        XiconfOrder.findById(orderNo, {'items.serialNumbers': 0}).lean().exec(this.parallel());
       },
-      function sendResultsStep(err, parentOrder, programOrder, ledOrder)
+      function sendResultsStep(err, xiconfOrder)
       {
         if (err)
         {
@@ -414,155 +1094,235 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return sendGetOrderDataResults(orderNo, err, null);
         }
 
-        if (!programOrder)
+        if (xiconfOrder !== null)
         {
-          if (!ledOrder)
-          {
-            xiconfModule.warn("No data for order [%s]...", orderNo);
-
-            return sendGetOrderDataResults(orderNo, null, null);
-          }
-
-          var quantityParent = parentOrder ? parentOrder.qty : 0;
-
-          programOrder = {
-            _id: orderNo,
-            reqDate: ledOrder.reqDate,
-            nc12: [],
-            quantityParent: quantityParent,
-            quantityTodo: quantityParent,
-            quantityDone: 0,
-            serviceTagCounter: 0,
-            status: -1,
-            importedAt: ledOrder.importedAt,
-            createdAt: null,
-            finishedAt: null
-          };
-
-          XiconfProgramOrder.collection.insert(_.cloneDeep(programOrder), function(err)
-          {
-            if (err)
-            {
-              xiconfModule.error("Failed to create program order from LED order [%s]: %s", orderNo, err.message);
-            }
-          });
+          ordersToDataMap[orderNo] = xiconfOrder;
         }
 
-        programOrder.lastActionAt = new Date();
-        programOrder.ledOrder = ledOrder;
-
-        orderDataMap[orderNo] = programOrder;
-
-        return sendGetOrderDataResults(orderNo, null, programOrder);
+        return sendGetOrderDataResults(orderNo, null, xiconfOrder);
       }
     );
   }
 
   function sendGetOrderDataResults(orderNo, err, orderData)
   {
-    var queue = getOrderDataQueue[orderNo];
+    var queue = ordersToGetOrderDataQueueMap[orderNo];
 
     if (!queue)
     {
       return;
     }
 
-    delete getOrderDataQueue[orderNo];
+    delete ordersToGetOrderDataQueueMap[orderNo];
 
-    _.forEach(queue, function(done) { done(err, orderData); });
-  }
-
-  function updateProdLinesRemoteData(prodLineId, socket)
-  {
-    var prodLineState = productionModule.getProdLineState(prodLineId);
-    var prodShiftOrder = null;
-
-    if (prodLineState !== null)
+    for (var i = 0; i < queue.length; ++i)
     {
-      prodShiftOrder = prodLineState.getCurrentOrder();
+      queue[i](err, orderData);
     }
-
-    if (prodShiftOrder === null)
-    {
-      return emitRemoteDataForProdLineUpdate(prodLineId, socket, EMPTY_REMOTE_DATA);
-    }
-
-    getOrderData(prodShiftOrder.orderData.no, function(err, orderData)
-    {
-      emitRemoteDataForProdLineUpdate(prodLineId, socket, orderToRemoteData(orderData));
-    });
   }
 
-  function orderToRemoteData(orderData)
+  function updateProdLinesLeader(prodLineId, optSocket)
   {
-    return !orderData ? EMPTY_REMOTE_DATA : {
-      orderNo: orderData._id,
-      nc12: orderData.nc12,
-      quantityTodo: orderData.quantityTodo,
-      quantityDone: orderData.quantityDone,
-      startedAt: orderData.createdAt ? orderData.createdAt.getTime() : null,
-      finishedAt: orderData.finishedAt ? orderData.finishedAt.getTime() : null,
-      ledOrder: !orderData.ledOrder ? null : {
-        nc12: orderData.ledOrder.nc12,
-        name: orderData.ledOrder.name,
-        quantityParent: orderData.ledOrder.quantityParent,
-        quantityTodo: orderData.ledOrder.quantityTodo,
-        quantityDone: orderData.ledOrder.quantityDone,
-        startedAt: orderData.ledOrder.createdAt ? orderData.ledOrder.createdAt.getTime() : null,
-        finishedAt: orderData.ledOrder.finishedAt ? orderData.ledOrder.finishedAt.getTime() : null
-      }
-    };
-  }
-
-  function emitRemoteDataForProdLineUpdate(prodLineId, socket, remoteData)
-  {
-    var prodLineData = prodLineDataMap[prodLineId];
+    var prodLineData = prodLinesToDataMap[prodLineId];
 
     if (!prodLineData)
     {
       return;
     }
 
-    var oldOrderNo = prodLineData.orderNo;
-    var newOrderNo = remoteData.orderNo;
+    var prodLineState = productionModule.getProdLineState(prodLineId);
+    var newLeader = prodLineState ? prodLineState.getCurrentLeader() : null;
 
-    if (oldOrderNo !== newOrderNo)
+    if (newLeader !== null)
     {
-      if (oldOrderNo !== null)
-      {
-        var orderToProdLinesMap = ordersToProdLinesMap[oldOrderNo];
-
-        if (orderToProdLinesMap)
-        {
-          delete orderToProdLinesMap[prodLineId];
-        }
-
-        scheduleWorkingOrderChangeCheck(oldOrderNo);
-      }
-
-      prodLineData.orderNo = newOrderNo;
-
-      if (newOrderNo !== null)
-      {
-        if (!ordersToProdLinesMap[newOrderNo])
-        {
-          ordersToProdLinesMap[newOrderNo] = {};
-        }
-
-        ordersToProdLinesMap[newOrderNo][prodLineId] = true;
-      }
-
+      newLeader = newLeader.label;
     }
 
-    if (socket)
+    if (optSocket)
     {
-      return socket.emit('xiconf.remoteDataUpdated', remoteData);
+      optSocket.emit('xiconf.leaderUpdated', newLeader);
+    }
+
+    if (newLeader === prodLineData.leader)
+    {
+      return;
+    }
+
+    prodLineData.leader = newLeader;
+
+    _.forEach(prodLineData.sockets, function(socket)
+    {
+      socket.emit('xiconf.leaderUpdated', newLeader);
+    });
+  }
+
+  function updateProdLinesRemoteData(prodLineId, optSocket)
+  {
+    if (!prodLinesToDataMap[prodLineId])
+    {
+      return;
+    }
+
+    var prodLineState = productionModule.getProdLineState(prodLineId);
+
+    if (prodLineState === null)
+    {
+      return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
+    }
+
+    var prodShiftOrders = prodLineState.getOrders();
+    var prodShiftOrdersCount = prodShiftOrders.length;
+
+    if (!prodShiftOrdersCount)
+    {
+      return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
+    }
+
+    var currentOrder = prodShiftOrders[prodShiftOrdersCount - 1];
+
+    if (currentOrder.finishedAt !== null || !_.isString(currentOrder.orderData.no))
+    {
+      return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
+    }
+
+    var currentOrderNo = currentOrder.orderData.no;
+    var newOrdersNos = [currentOrderNo];
+    var now = Date.now();
+
+    for (var i = prodShiftOrdersCount - 2; i >= 0; --i)
+    {
+      var previousOrder = prodShiftOrders[i];
+
+      if ((now - previousOrder.finishedAt) > 3600000)
+      {
+        break;
+      }
+
+      if (previousOrder.orderData.no !== currentOrderNo)
+      {
+        newOrdersNos.push(previousOrder.orderData.no);
+      }
+    }
+
+    step(
+      function getOrderDataStep()
+      {
+        for (var i = 0; i < newOrdersNos.length; ++i)
+        {
+          getOrderData(newOrdersNos[i], this.group());
+        }
+      },
+      function emitRemoteDataStep(err, newOrdersData)
+      {
+        if (err)
+        {
+          return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
+        }
+
+        return emitRemoteDataForProdLineUpdate(prodLineId, optSocket, newOrdersNos, newOrdersData);
+      }
+    );
+  }
+
+  function emitEmptyRemoteDataForProdLineUpdate(prodLineId, socket)
+  {
+    emitRemoteDataForProdLineUpdate(prodLineId, socket, [], []);
+  }
+
+  function emitRemoteDataForProdLineUpdate(prodLineId, optSocket, newOrdersNos, remoteData)
+  {
+    var prodLineData = prodLinesToDataMap[prodLineId];
+
+    if (!prodLineData)
+    {
+      return;
+    }
+
+    manageProdLinesOrders(prodLineData, newOrdersNos);
+
+    if (optSocket)
+    {
+      return optSocket.emit('xiconf.remoteDataUpdated', remoteData);
     }
 
     _.forEach(prodLineData.sockets, function(socket)
     {
       socket.emit('xiconf.remoteDataUpdated', remoteData);
     });
+  }
+
+  function manageProdLinesOrders(prodLineData, newOrdersNos)
+  {
+    var oldOrdersNos = prodLineData.orders;
+    var oldCurrentOrderNo = oldOrdersNos[0];
+    var newCurrentOrderNo = newOrdersNos[0];
+
+    if (oldCurrentOrderNo === newCurrentOrderNo)
+    {
+      return;
+    }
+
+    prodLineData.orders = newOrdersNos;
+
+    manageProdLinesCurrentOrder(prodLineData, oldCurrentOrderNo, newCurrentOrderNo);
+
+    for (var i = 1; i < newOrdersNos.length; ++i)
+    {
+      var oldPreviousOrderNo = oldOrdersNos[i];
+      var newPreviousOrderNo = newOrdersNos[i];
+
+      if (oldPreviousOrderNo !== newPreviousOrderNo)
+      {
+        manageProdLinesPreviousOrder(prodLineData, oldPreviousOrderNo, newPreviousOrderNo);
+      }
+    }
+  }
+
+  function manageProdLinesCurrentOrder(prodLineData, oldCurrentOrderNo, newCurrentOrderNo)
+  {
+    if (oldCurrentOrderNo !== null)
+    {
+      var orderToProdLinesMap = ordersToProdLinesMap[oldCurrentOrderNo];
+
+      if (orderToProdLinesMap)
+      {
+        delete orderToProdLinesMap[prodLineData.prodLineId];
+      }
+
+      scheduleWorkingOrderChangeCheck(oldCurrentOrderNo);
+    }
+
+    if (newCurrentOrderNo === null)
+    {
+      return;
+    }
+
+    if (!ordersToProdLinesMap[newCurrentOrderNo])
+    {
+      ordersToProdLinesMap[newCurrentOrderNo] = {};
+    }
+
+    ordersToProdLinesMap[newCurrentOrderNo][prodLineData.prodLineId] = 1;
+  }
+
+  function manageProdLinesPreviousOrder(prodLineData, oldPreviousOrderNo, newPreviousOrderNo)
+  {
+    if (ordersToProdLinesMap[oldPreviousOrderNo])
+    {
+      delete ordersToProdLinesMap[oldPreviousOrderNo][prodLineData.prodLineId];
+    }
+
+    if (newPreviousOrderNo === null)
+    {
+      return;
+    }
+
+    if (!ordersToProdLinesMap[newPreviousOrderNo])
+    {
+      ordersToProdLinesMap[newPreviousOrderNo] = {};
+    }
+
+    ordersToProdLinesMap[newPreviousOrderNo][prodLineData.prodLineId] = -1;
   }
 
   function emitRemoteDataToOrderWorkers(orderNo)
@@ -588,11 +1348,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         return;
       }
 
-      var remoteData = orderToRemoteData(orderData);
-
       _.forEach(prodLineIds, function(prodLineId)
       {
-        var prodLineData = prodLineDataMap[prodLineId];
+        var prodLineData = prodLinesToDataMap[prodLineId];
 
         if (!prodLineData)
         {
@@ -601,7 +1359,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         _.forEach(prodLineData.sockets, function(socket)
         {
-          socket.emit('xiconf.remoteDataUpdated', remoteData);
+          socket.emit('xiconf.remoteDataUpdated', orderData);
         });
       });
     });
@@ -621,16 +1379,16 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     if ([5, 13, 21].indexOf(hours) !== -1 && minutes > 45)
     {
-      delay.add(1, 'hours').startOf('hour').add(15, 'minutes');
+      delay.add(1, 'hours').startOf('hour').add(WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES, 'minutes');
     }
     else if ([6, 14, 22].indexOf(hours) !== -1 && minutes < 15)
     {
-      delay.startOf('hour').add(15, 'minutes');
+      delay.startOf('hour').add(WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES, 'minutes');
     }
 
     workingOrderChangeCheckTimers[orderNo] = setTimeout(
       checkWorkingOrderChange,
-      Math.max(1337, delay.diff(now)), orderNo
+      Math.max(WORKING_ORDER_CHANGE_CHECK_DELAY, delay.diff(now)), orderNo
     );
   }
 
@@ -640,54 +1398,78 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     var orderToProdLines = ordersToProdLinesMap[orderNo];
 
-    if (orderToProdLines === undefined || Object.keys(orderToProdLines).length)
+    if (!orderToProdLines)
     {
       return;
     }
 
-    delete ordersToProdLinesMap[orderNo];
-    delete orderDataMap[orderNo];
+    var prodLineIds = Object.keys(orderToProdLines);
+    var anyCurrent = false;
 
-    app.broker.publish('xiconf.orders.' + orderNo + '.changed', {
-      orderNo: orderNo
-    });
-  }
-
-  function getOrderStatus(nc12)
-  {
-    var over = 0;
-    var exact = 0;
-
-    for (var i = 0; i < nc12.length; ++i)
+    for (var i = 0; i < prodLineIds.length; ++i)
     {
-      var done = nc12[i].quantityDone;
-      var todo = nc12[i].quantityTodo;
+      if (orderToProdLines[prodLineIds[i]] === 1)
+      {
+        anyCurrent = true;
 
-      if (done < todo)
-      {
-        return -1;
-      }
-
-      if (done > todo)
-      {
-        ++over;
-      }
-      else
-      {
-        ++exact;
+        break;
       }
     }
 
-    return exact === nc12.length ? 0 : 1;
-  }
-
-  function pad0(str, length)
-  {
-    while (str.length < length)
+    if (prodLineIds.length === 0)
     {
-      str = '0' + str;
+      delete ordersToProdLinesMap[orderNo];
+      delete ordersToDataMap[orderNo];
     }
 
-    return str;
+    if (!anyCurrent)
+    {
+      app.broker.publish('xiconf.orders.' + orderNo + '.changed', {
+        orderNo: orderNo
+      });
+    }
+  }
+
+  function cleanUpOrders()
+  {
+    var orderIds = Object.keys(ordersToProdLinesMap);
+
+    for (var i = 0; i < orderIds.length; ++i)
+    {
+      var orderNo = orderIds[i];
+      var ordersProdLineCount = Object.keys(ordersToProdLinesMap[orderNo]).length;
+
+      if (ordersProdLineCount === 0)
+      {
+        delete ordersToDataMap[orderNo];
+        delete ordersToProdLinesMap[orderNo];
+      }
+    }
+  }
+
+  function removeSerialNumbers(from, what)
+  {
+    for (var i = from.length - 1; i >= 0; --i)
+    {
+      var ll = what.length;
+
+      if (ll === 0)
+      {
+        break;
+      }
+
+      var fromSn = from[i];
+
+      for (var ii = 0; ii < ll; ++ii)
+      {
+        if (fromSn === what[ii])
+        {
+          from.splice(i, 1);
+          what.splice(ii, 1);
+
+          break;
+        }
+      }
+    }
   }
 };

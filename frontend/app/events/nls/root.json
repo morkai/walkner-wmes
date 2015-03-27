@@ -177,7 +177,7 @@
     "TYPE:xiconfPrograms.deleted": "Xiconf programs: deleted",
     "TEXT:xiconfPrograms.deleted": "Deleted program: <em>{model->name}</em>",
     "TYPE:xiconf.orders.synced": "Xiconf: order sync",
-    "TEXT:xiconf.orders.synced": "Added <em>{programInsertCount}</em> and modified <em>{programUpdateCount}</em> {programUpdateCount, plural, one{program order} other{program orders}} and added <em>{ledInsertCount}</em> and edited <em>{ledUpdateCount}</em> {ledUpdateCount, plural, one{LED order} other{LED orders}} from data downloaded at <em>{timestamp}</em>.",
+    "TEXT:xiconf.orders.synced": "Added <em>{insertCount}</em> and modified <em>{updateCount}</em> {updateCount, plural, one{order} other{orders}} from data downloaded at <em>{timestamp}</em>.",
     "TYPE:xiconf.orders.syncFailed": "Xiconf: order sync failure",
     "TEXT:xiconf.orders.syncFailed": "Failed to import orders from data downloaded at <em>{timestamp}</em>: {error}"
   },

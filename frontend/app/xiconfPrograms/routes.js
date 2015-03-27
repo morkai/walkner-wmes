@@ -3,6 +3,8 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
+  '../i18n',
   '../router',
   '../viewport',
   '../user',
@@ -11,6 +13,8 @@ define([
   './XiconfProgramCollection',
   'i18n!app/nls/xiconfPrograms'
 ], function(
+  _,
+  t,
   router,
   viewport,
   user,
@@ -43,7 +47,8 @@ define([
       {
         return new DetailsPage({
           DetailsView: XiconfProgramDetailsView,
-          model: new XiconfProgram({_id: req.params.id})
+          model: new XiconfProgram({_id: req.params.id}),
+          breadcrumbs: createBreadcrumbsProvider(DetailsPage)
         });
       }
     );
@@ -57,7 +62,8 @@ define([
       {
         return new AddFormPage({
           FormView: XiconfProgramFormView,
-          model: new XiconfProgram()
+          model: new XiconfProgram(),
+          breadcrumbs: createBreadcrumbsProvider(AddFormPage)
         });
       }
     );
@@ -71,11 +77,30 @@ define([
       {
         return new EditFormPage({
           FormView: XiconfProgramFormView,
-          model: new XiconfProgram({_id: req.params.id})
+          model: new XiconfProgram({_id: req.params.id}),
+          breadcrumbs: createBreadcrumbsProvider(EditFormPage)
         });
       }
     );
   });
 
-  router.map('/xiconf/programs/:id;delete', canManage, showDeleteFormPage.bind(null, XiconfProgram));
+  router.map(
+    '/xiconf/programs/:id;delete',
+    canManage,
+    _.partial(showDeleteFormPage, XiconfProgram, _, _, {
+      breadcrumbs: createBreadcrumbsProvider()
+    })
+  );
+
+  function createBreadcrumbsProvider(Page)
+  {
+    return function()
+    {
+      var breadcrumbs = this.constructor.prototype.breadcrumbs.call(this);
+
+      breadcrumbs.unshift(t.bound('xiconfPrograms', 'BREADCRUMBS:base'));
+
+      return breadcrumbs;
+    };
+  }
 });

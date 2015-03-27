@@ -5,22 +5,24 @@
 define([
   '../time',
   '../core/Collection',
-  './XiconfProgramOrder'
+  './XiconfOrder'
 ], function(
   time,
   Collection,
-  XiconfProgramOrder
+  XiconfOrder
 ) {
   'use strict';
 
   return Collection.extend({
 
-    model: XiconfProgramOrder,
+    model: XiconfOrder,
 
     rqlQuery: function(rql)
     {
       return rql.Query.fromObject({
-        fields: {},
+        fields: {
+          items: 0
+        },
         sort: {
           reqDate: -1
         },
@@ -28,8 +30,8 @@ define([
         selector: {
           name: 'and',
           args: [
-            {name: 'ge', args: ['reqDate', time.getMoment().startOf('day').subtract(7, 'days').valueOf()]},
-            {name: 'lt', args: ['reqDate', time.getMoment().startOf('day').add(1, 'days').valueOf()]}
+            {name: 'lt', args: ['reqDate', time.getMoment().startOf('day').add(1, 'days').valueOf()]},
+            {name: 'eq', args: ['status', -1]}
           ]
         }
       });

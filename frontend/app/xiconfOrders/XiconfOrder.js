@@ -13,13 +13,13 @@ define([
 
   return Model.extend({
 
-    urlRoot: '/xiconf/programOrders',
+    urlRoot: '/xiconf/orders',
 
-    clientUrlRoot: '#xiconf/programOrders',
+    clientUrlRoot: '#xiconf/orders',
 
     privilegePrefix: 'XICONF',
 
-    nlsDomain: 'xiconfProgramOrders',
+    nlsDomain: 'xiconfOrders',
 
     getStatusClassName: function()
     {

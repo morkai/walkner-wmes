@@ -14,7 +14,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
   var User = mongoose.model('User');
   var Order = mongoose.model('Order');
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var XiconfProgramOrder = mongoose.model('XiconfProgramOrder');
+  var XiconfOrder = mongoose.model('XiconfOrder');
 
   app.broker.subscribe('xiconf.orders.*.changed', onOrderChanged);
 
@@ -28,34 +28,47 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
     step(
       function findOrdersStep()
       {
+        var prodShiftOrderFields = {
+          prodLine: 1,
+          division: 1,
+          master: 1,
+          leader: 1,
+          quantityDone: 1
+        };
+
         Order.findById(orderNo, {name: 1, nc12: 1, qty: 1}).lean().exec(this.parallel());
-        ProdShiftOrder.find({orderId: orderNo}, {master: 1, leader: 1, quantityDone: 1}).lean().exec(this.parallel());
-        XiconfProgramOrder.findById(orderNo).lean().exec(this.parallel());
+        ProdShiftOrder.find({orderId: orderNo}, prodShiftOrderFields).lean().exec(this.parallel());
+        XiconfOrder.findById(orderNo).lean().exec(this.parallel());
       },
-      function checkStatusStep(err, order, prodShiftOrders, programOrder)
+      function checkStatusStep(err, order, prodShiftOrders, xiconfOrder)
       {
         if (err)
         {
           return this.skip(err);
         }
 
-        if (!programOrder || programOrder.status !== -1)
+        if (!xiconfOrder || xiconfOrder.status !== -1)
         {
           return this.done();
         }
 
         this.order = order;
         this.prodShiftOrders = prodShiftOrders;
-        this.programOrder = programOrder;
+        this.xiconfOrder = xiconfOrder;
 
         setImmediate(this.next());
       },
       function findConcernedUsersStep()
       {
         var userIds = {};
+        var divisionIds = {};
+        var prodLineIds = {};
 
         _.forEach(this.prodShiftOrders, function(prodShiftOrder)
         {
+          divisionIds[prodShiftOrder.division] = true;
+          prodLineIds[prodShiftOrder.prodLine] = prodShiftOrder.division;
+
           if (prodShiftOrder.master)
           {
             userIds[prodShiftOrder.master.id] = true;
@@ -76,17 +89,33 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           return this.done();
         }
 
-        User.find({_id: {$in: userIds}}, {email: 1}).lean().exec(this.next());
+        var conditions = {
+          $or: [
+            {
+              _id: {$in: userIds}
+            },
+            {
+              prodFunction: 'manager',
+              orgUnitId: {$in: Object.keys(divisionIds)}
+            },
+            {
+              privileges: 'XICONF:NOTIFY'
+            }
+          ]
+        };
+
+        User.find(conditions, {email: 1}).lean().exec(this.next());
+
+        this.prodLineIds = prodLineIds;
       },
       function sendEmailStep(err, users)
       {
-        /*jshint multistr:true*/
         if (err)
         {
           return this.skip(err);
         }
 
-        users = users.filter(function(user) { return _.isString(user.email) && user.email.indexOf('@') !== -1; });
+        users = users.filter(function(user) { return _.isString(user.email) && user.email.indexOf('@') > 0; });
 
         if (!users.length)
         {
@@ -99,7 +128,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         }
 
         var orderUrl = this.order ? xiconfModule.config.emailUrlPrefix + '#orders/' + orderNo : '-';
-        var programOrderUrl = xiconfModule.config.emailUrlPrefix + '#xiconf/programOrders/' + orderNo;
+        var xiconfOrderUrl = xiconfModule.config.emailUrlPrefix + '#xiconf/orders/' + orderNo;
         var productNc12 = (this.order ? this.order.nc12 : null) || '?';
         var productName = (this.order ? this.order.name : null) || '?';
         var quantityTodo = this.order ? this.order.qty.toLocaleString() : '?';
@@ -110,33 +139,40 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         var to = users.map(function(user) { return user.email; });
         var subject = '[WMES] Nieukończone zlecenie programowe ' + orderNo;
         var text = [
-          'Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich driverów!',
+          'Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!',
           '',
           'Nr zlecenia: ' + orderNo,
           '12NC wyrobu: ' + productNc12,
           'Nazwa wyrobu: ' + productName,
-          'Ilość: ' + quantityDone + '/' + quantityTodo
+          'Ilość ze zleceń: ' + quantityDone + '/' + quantityTodo,
+          'Ilość zaprogramowana: '
+            + this.xiconfOrder.quantityDone.toLocaleString() + '/'
+            + this.xiconfOrder.quantityTodo.toLocaleString()
         ];
 
-        _.forEach(this.programOrder.nc12, function(nc12, i)
+        _.forEach(this.xiconfOrder.items, function(item, i)
         {
-          var quantityTodo = nc12.quantityTodo.toLocaleString();
-          var quantityDone = nc12.quantityDone.toLocaleString();
-
           text.push(
             '',
-            '12NC #' + (i + 1) + ': ' + nc12._id,
-            'Nazwa programu: ' + nc12.name,
-            'Ilość: ' + quantityDone + '/' + quantityTodo
+            '12NC #' + (i + 1) + ': ' + item.nc12,
+            'Nazwa: ' + item.name,
+            'Ilość: ' + item.quantityTodo.toLocaleString() + '/' + item.quantityDone.toLocaleString()
           );
+        });
+
+        text.push('', 'Zlecenie wykonywane było na następujących liniach produkcyjnych:');
+
+        _.forEach(this.prodLineIds, function(prodLineId)
+        {
+          text.push('  - ' + prodLineId);
         });
 
         text.push(
           '',
           'Zlecenie produkcyjne: ' + orderUrl,
-          'Zlecenie programowe: ' + programOrderUrl,
+          'Zlecenie programowe: ' + xiconfOrderUrl,
           '',
-          'Ta wiadomość została wygenerowana automatycznie.'
+          'Ta wiadomość została wygenerowana automatycznie przez system WMES.'
         );
 
         var mailOptions = {

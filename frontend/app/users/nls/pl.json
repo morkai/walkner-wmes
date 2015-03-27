@@ -90,6 +90,7 @@
   "PRIVILEGE:REPORTS:MANAGE": "Raporty: zarządzanie",
   "PRIVILEGE:XICONF:VIEW": "Xiconf: przeglądanie",
   "PRIVILEGE:XICONF:MANAGE": "Xiconf: zarządzanie",
+  "PRIVILEGE:XICONF:NOTIFY": "Xiconf: powiadamianie",
   "PRIVILEGE:ICPO:VIEW": "ICPO: przeglądanie",
   "PRIVILEGE:ICPO:MANAGE": "ICPO: zarządzanie",
   "PRIVILEGE:PURCHASE_ORDERS:VIEW": "Zamówienia: przeglądanie",

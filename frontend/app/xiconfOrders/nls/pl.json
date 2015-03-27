@@ -1,20 +1,21 @@
 {
-  "BREADCRUMBS:browse": "Zlecenia Xiconf",
+  "BREADCRUMBS:base": "Xiconf",
+  "BREADCRUMBS:browse": "Zlecenia",
 
   "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się :(",
 
   "PANEL:TITLE:details:parentOrder": "Szczegóły zlecenia wyrobu",
-  "PANEL:TITLE:details:programOrder": "Szczegóły zlecenia programowego",
+  "PANEL:TITLE:details:order": "Szczegóły zlecenia programowego",
 
   "PAGE_ACTION:export": "Eksportuj zlecenia",
 
   "PROPERTY:reqDate": "Data",
-  "PROPERTY:createdAt": "Czas rozpoczęcia",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas ukończenia",
   "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:name": "Nazwa",
   "PROPERTY:status": "Status",
-  "PROPERTY:quantityParent": "Ilość w zleceniu",
   "PROPERTY:quantityTodo": "Ilość do zaprogramowania",
   "PROPERTY:quantityDone": "Ilość pomyślnych programowań",
   "PROPERTY:serviceTagCounter": "Ilość wydanych Service Tagów",
@@ -22,6 +23,9 @@
   "status:-1": "Nieukończone",
   "status:0": "Ukończone",
   "status:1": "Nadwyżka",
+
+  "kindUnit:led": "płytki LED",
+  "kindUnit:program": "drivery",
 
   "filter:submit": "Filtruj zlecenia",
 

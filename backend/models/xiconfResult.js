@@ -52,16 +52,22 @@ module.exports = function setupXiconfResultModel(app, mongoose)
     serviceTag: {
       type: String,
       default: null
-    }
+    },
+    prodLine: {
+      type: String,
+      default: null
+    },
+    leds: []
   }, {
     id: false
   });
 
+  xiconfResultSchema.index({orderNo: 1, serviceTag: 1, result: 1});
   xiconfResultSchema.index({nc12: 1});
-  xiconfResultSchema.index({orderNo: 1});
   xiconfResultSchema.index({srcId: 1});
   xiconfResultSchema.index({serviceTag: 1});
   xiconfResultSchema.index({startedAt: -1});
+  xiconfResultSchema.index({result: 1});
 
   mongoose.model('XiconfResult', xiconfResultSchema);
 };

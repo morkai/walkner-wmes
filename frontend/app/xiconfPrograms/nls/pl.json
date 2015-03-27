@@ -1,5 +1,6 @@
 {
-  "BREADCRUMBS:browse": "Programy Xiconf",
+  "BREADCRUMBS:base": "Xiconf",
+  "BREADCRUMBS:browse": "Programy",
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",

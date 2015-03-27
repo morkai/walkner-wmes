@@ -9,7 +9,7 @@ var path = require('path');
 var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
-var parseXiconfOrders = require('./parseXiconfOrders');
+var parseOrders = require('./parseOrders');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -27,8 +27,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
   }
 
   var Order = mongoose.model('Order');
-  var XiconfProgramOrder = mongoose.model('XiconfProgramOrder');
-  var XiconfLedOrder = mongoose.model('XiconfLedOrder');
+  var XiconfOrder = mongoose.model('XiconfOrder');
 
   var filePathCache = {};
   var locked = false;
@@ -103,10 +102,8 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
         app.broker.publish('xiconf.orders.synced', {
           timestamp: fileInfo.timestamp,
-          programUpdateCount: summary.programUpdateCount,
-          programInsertCount: summary.programInsertCount,
-          ledUpdateCount: summary.ledUpdateCount,
-          ledInsertCount: summary.ledInsertCount
+          updateCount: summary.updateCount,
+          insertCount: summary.insertCount
         });
       }
 
@@ -134,204 +131,109 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
         var t = Date.now();
 
-        this.orderNoMap = {};
-        this.allOrders = parseXiconfOrders(fileContents, this.orderNoMap);
+        this.parsedOrdersList = parseOrders(fileContents);
 
-        module.debug("[%s] Parsed %d orders in %d ms!", fileInfo.timeKey, this.allOrders.length, Date.now() - t);
-
-        setImmediate(this.next());
-      },
-      function findOrderQuantityStep()
-      {
-        Order.find({_id: {$in: Object.keys(this.orderNoMap)}}, {qty: 1}).lean().exec(this.next());
-      },
-      function prepareOrderQuantityMapStep(err, orders)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        for (var i = 0; i < orders.length; ++i)
-        {
-          this.orderNoMap[orders[i]._id] = orders[i].qty;
-        }
+        module.debug("[%s] Parsed %d orders in %d ms!", fileInfo.timeKey, this.parsedOrdersList.length, Date.now() - t);
 
         setImmediate(this.next());
       },
-      function prepareOrdersByKindStep()
+      function mapParsedOrdersStep()
       {
-        var programOrdersMap = {};
-        var ledOrdersMap = {};
-        var importedAt = new Date(fileInfo.timestamp);
+        var parsedOrdersMap = {};
 
-        for (var i = 0; i < this.allOrders.length; ++i)
+        for (var i = 0; i < this.parsedOrdersList.length; ++i)
         {
-          var orderData = this.allOrders[i];
-          var quantityParent = this.orderNoMap[orderData.no] || 0;
+          var parsedOrder = this.parsedOrdersList[i];
 
-          if (orderData.kind === 'PROGRAM')
+          if (parsedOrdersMap[parsedOrder.no] === undefined)
           {
-            var nc12 = [{
-              _id: orderData.nc12,
-              name: orderData.name,
-              quantityTodo: orderData.quantity,
-              quantityDone: 0
-            }];
-            var quantityTodo = orderData.quantity;
-
-            for (var ii = 0; ii < orderData.more.length; ++ii)
-            {
-              var orderData2 = orderData.more[ii];
-
-              nc12.push({
-                _id: orderData2.nc12,
-                name: orderData2.name,
-                quantityTodo: orderData2.quantity,
-                quantityDone: 0
-              });
-
-              quantityTodo += orderData2.quantity;
-            }
-
-            programOrdersMap[orderData.no] = {
-              _id: orderData.no,
-              reqDate: orderData.reqDate,
-              nc12: nc12,
-              quantityParent: quantityParent,
-              quantityTodo: quantityTodo,
-              quantityDone: 0,
-              serviceTagCounter: 0,
-              status: -1,
-              importedAt: importedAt,
-              createdAt: null,
-              finishedAt: null
-            };
+            parsedOrdersMap[parsedOrder.no] = [parsedOrder];
           }
           else
           {
-            ledOrdersMap[orderData.no] = {
-              _id: orderData.no,
-              reqDate: orderData.reqDate,
-              name: orderData.name,
-              nc12: orderData.nc12,
-              quantityParent: quantityParent,
-              quantityTodo: orderData.quantity,
-              quantityDone: 0,
-              serialNos: [],
-              importedAt: importedAt,
-              createdAt: null,
-              finishedAt: null
-            };
+            parsedOrdersMap[parsedOrder.no].push(parsedOrder);
           }
         }
 
-        this.programOrdersMap = programOrdersMap;
-        this.ledOrdersMap = ledOrdersMap;
-
-        setImmediate(this.next());
+        this.parsedOrdersList = null;
+        this.parsedOrdersMap = parsedOrdersMap;
       },
       function findExistingOrdersStep()
       {
-        var programOrderIds = Object.keys(this.programOrdersMap);
-        var ledOrderIds = Object.keys(this.ledOrdersMap);
-        var missingProgramOrderIds = _.difference(ledOrderIds, programOrderIds);
+        var orderIds = Object.keys(this.parsedOrdersMap);
 
-        for (var i = 0; i < missingProgramOrderIds.length; ++i)
-        {
-          var missingProgramOrderId = missingProgramOrderIds[i];
-          var ledOrder = this.ledOrdersMap[missingProgramOrderId];
-
-          this.programOrdersMap[missingProgramOrderId] = {
-            _id: missingProgramOrderId,
-            reqDate: ledOrder.reqDate,
-            nc12: [],
-            quantityParent: ledOrder.quantityParent,
-            quantityTodo: ledOrder.quantityParent,
-            quantityDone: 0,
-            serviceTagCounter: 0,
-            status: -1,
-            importedAt: ledOrder.importedAt,
-            createdAt: null,
-            finishedAt: null
-          };
-
-          programOrderIds.push(missingProgramOrderId);
-        }
-
-        if (programOrderIds.length)
-        {
-          XiconfProgramOrder
-            .find({_id: {$in: programOrderIds}})
-            .lean()
-            .exec(this.parallel());
-        }
-
-        if (ledOrderIds.length)
-        {
-          XiconfLedOrder
-            .find({_id: {$in: ledOrderIds}}, {serialNos: 0})
-            .lean()
-            .exec(this.parallel());
-        }
+        Order.find({_id: {$in: orderIds}}, {operations: 0, changes: 0, statuses: 0}).lean().exec(this.parallel());
+        XiconfOrder.find({_id: {$in: orderIds}}).lean().exec(this.parallel());
       },
-      function compareOrdersStep(err, programOrders, ledOrders)
+      function mapExistingOrdersStep(err, ordersList, xiconfOrdersList)
       {
         if (err)
         {
           return this.skip(err);
         }
 
-        if (!Array.isArray(programOrders))
+        var xiconfOrdersMap = {};
+
+        for (var j = 0; j < xiconfOrdersList.length; ++j)
         {
-          programOrders = [];
+          var xiconfOrder = xiconfOrdersList[j];
+
+          xiconfOrdersMap[xiconfOrder._id] = xiconfOrder;
         }
 
-        if (!Array.isArray(ledOrders))
+        this.ordersList = ordersList;
+        this.xiconfOrdersMap = xiconfOrdersMap;
+
+        setImmediate(this.next());
+      },
+      function compareOrdersStep()
+      {
+        var insertsMap = {};
+        var updatesList = [];
+        var updateCount = 0;
+        var importedAt = new Date(fileInfo.timestamp);
+
+        for (var i = 0; i < this.ordersList.length; ++i)
         {
-          ledOrders = [];
+          var order = this.ordersList[i];
+          var xiconfOrder = this.xiconfOrdersMap[order._id];
+          var parsedOrders = this.parsedOrdersMap[order._id];
+
+          if (xiconfOrder === undefined)
+          {
+            xiconfOrder = insertsMap[order._id];
+
+            if (xiconfOrder === undefined)
+            {
+              xiconfOrder = insertsMap[order._id] = createEmptyXiconfOrder(order);
+            }
+
+            addParsedOrdersToXiconfOrder(parsedOrders, xiconfOrder);
+          }
+          else
+          {
+            updateCount += compareOrders(updatesList, importedAt, order, xiconfOrder, parsedOrders);
+          }
         }
 
-        this.programOrderUpdates = [];
-        this.ledOrderUpdates = [];
-
-        var i;
-
-        for (i = 0; i < programOrders.length; ++i)
-        {
-          compareOrders(this.programOrderUpdates, false, this.programOrdersMap, programOrders[i]);
-        }
-
-        for (i = 0; i < ledOrders.length; ++i)
-        {
-          compareOrders(this.ledOrderUpdates, true, this.ledOrdersMap, ledOrders[i]);
-        }
-
-        this.programOrderInserts = _.values(this.programOrdersMap);
-        this.ledOrderInserts = _.values(this.ledOrdersMap);
-        this.programOrdersMap = null;
-        this.ledOrdersMap = null;
+        this.insertsList = _.values(insertsMap);
+        this.updatesList = updatesList;
+        this.insertCount = this.insertsList.length;
+        this.updateCount = updateCount;
 
         setImmediate(this.next());
       },
       function createBatchesStep()
       {
-        var batchSize = 1000;
-        var programBatchCount = Math.ceil(this.programOrderInserts.length / batchSize);
-        var ledBatchCount = Math.ceil(this.ledOrderInserts.length / batchSize);
+        var batchSize = 250;
+        var batchCount = Math.ceil(this.insertsList.length / batchSize);
         var i;
 
-        this.programBatches = [];
-        this.ledBatches = [];
+        this.batches = [];
 
-        for (i = 0; i < programBatchCount; ++i)
+        for (i = 0; i < batchCount; ++i)
         {
-          this.programBatches.push(this.programOrderInserts.slice(i * batchSize, i * batchSize + batchSize));
-        }
-
-        for (i = 0; i < ledBatchCount; ++i)
-        {
-          this.ledBatches.push(this.ledOrderInserts.slice(i * batchSize, i * batchSize + batchSize));
+          this.batches.push(this.insertsList.slice(i * batchSize, i * batchSize + batchSize));
         }
 
         setImmediate(this.next());
@@ -340,30 +242,16 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       {
         var i;
 
-        for (i = 0; i < this.programBatches.length; ++i)
+        for (i = 0; i < this.batches.length; ++i)
         {
-          XiconfProgramOrder.collection.insert(this.programBatches[i], {continueOnError: true}, this.group());
+          XiconfOrder.collection.insert(this.batches[i], {continueOnError: true}, this.group());
         }
 
-        for (i = 0; i < this.programOrderUpdates.length; ++i)
+        for (i = 0; i < this.updatesList.length; ++i)
         {
-          XiconfProgramOrder.collection.update(
-            this.programOrderUpdates[i].condition,
-            this.programOrderUpdates[i].update,
-            this.group()
-          );
-        }
-
-        for (i = 0; i < this.ledBatches.length; ++i)
-        {
-          XiconfLedOrder.collection.insert(this.ledBatches[i], {continueOnError: true}, this.group());
-        }
-
-        for (i = 0; i < this.ledOrderUpdates.length; ++i)
-        {
-          XiconfLedOrder.collection.update(
-            this.ledOrderUpdates[i].condition,
-            this.ledOrderUpdates[i].update,
+          XiconfOrder.collection.update(
+            this.updatesList[i].condition,
+            this.updatesList[i].update,
             this.group()
           );
         }
@@ -373,10 +261,8 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         if (!err || err.code === 11000)
         {
           return done(null, {
-            programUpdateCount: this.programOrderUpdates.length,
-            programInsertCount: this.programOrderInserts.length,
-            ledUpdateCount: this.ledOrderUpdates.length,
-            ledInsertCount: this.ledOrderInserts.length
+            insertCount: this.insertCount,
+            updateCount: this.updateCount
           });
         }
 
@@ -439,89 +325,187 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     delete filePathCache[filePath];
   }
 
-  function compareOrders(updates, isLedOrder, newOrdersMap, oldOrder)
+  function createEmptyXiconfOrder(order)
   {
-    var newOrder = newOrdersMap[oldOrder._id];
-
-    if (!newOrder)
-    {
-      return;
-    }
-
-    delete newOrdersMap[oldOrder._id];
-
-    if (newOrder.importedAt.getTime() <= oldOrder.importedAt.getTime())
-    {
-      return;
-    }
-
-    if (isLedOrder
-      && newOrder.quantityParent === oldOrder.quantityParent
-      && newOrder.quantityTodo === oldOrder.quantityTodo
-      && newOrder.nc12 === oldOrder.nc12
-      && newOrder.name === oldOrder.name
-      && newOrder.reqDate.getTime() === oldOrder.reqDate.getTime())
-    {
-      return;
-    }
-
-    if (!isLedOrder
-      && newOrder.quantityParent === oldOrder.quantityParent
-      && newOrder.quantityTodo === oldOrder.quantityTodo
-      && newOrder.reqDate.getTime() === oldOrder.reqDate.getTime()
-      && compareNc12s(newOrder.nc12, oldOrder.nc12))
-    {
-      return;
-    }
-
-    var update = {
-      nc12: newOrder.nc12,
-      quantityParent: newOrder.quantityParent,
-      quantityTodo: newOrder.quantityTodo,
-      reqDate: newOrder.reqDate,
-      importedAt: newOrder.importedAt
+    return {
+      _id: order._id,
+      startDate: order.startDate,
+      finishDate: order.finishDate,
+      reqDate: null,
+      name: order.name,
+      nc12: [order.nc12],
+      quantityTodo: order.qty,
+      quantityDone: 0,
+      status: -1,
+      serviceTagCounter: 0,
+      items: [],
+      startedAt: null,
+      finishedAt: null,
+      importedAt: new Date()
     };
+  }
 
-    if (isLedOrder)
+  function addParsedOrdersToXiconfOrder(parsedOrders, xiconfOrder)
+  {
+    var maxReqDate = 0;
+
+    _.forEach(parsedOrders, function(parsedOrder)
     {
-      update.name = newOrder.name;
+      xiconfOrder.nc12.push(parsedOrder.nc12);
+      xiconfOrder.items.push(createXiconfOrderItem(parsedOrder));
+
+      if (parsedOrder.reqDate > maxReqDate)
+      {
+        maxReqDate = parsedOrder.reqDate;
+      }
+    });
+
+    xiconfOrder.reqDate = maxReqDate;
+  }
+
+  function createXiconfOrderItem(parsedOrder)
+  {
+    return {
+      kind: parsedOrder.kind,
+      nc12: parsedOrder.nc12,
+      name: parsedOrder.name,
+      quantityTodo: parsedOrder.quantity,
+      quantityDone: 0,
+      extraQuantityDone: 0,
+      serialNumbers: []
+    };
+  }
+
+  function compareOrders(updatesList, importedAt, order, xiconfOrder, parsedOrders)
+  {
+    if (importedAt <= xiconfOrder.importedAt)
+    {
+      return 0;
     }
 
-    updates.push({
-      condition: {_id: newOrder._id},
-      update: {
-        $set: update
+    var $set = {};
+    var $push = {};
+
+    compareOrderToXiconfOrder($set, order, xiconfOrder);
+    compareParsedOrdersToXiconfOrder($set, $push, xiconfOrder, parsedOrders);
+
+    var emptySet = _.isEmpty($set);
+    var emptyPush = _.isEmpty($push);
+
+    if (emptySet && emptyPush)
+    {
+      return 0;
+    }
+
+    if ($set.nc12)
+    {
+      collectXiconfOrdersNc12($set, order, xiconfOrder);
+    }
+
+    if (emptySet)
+    {
+      $set.importedAt = importedAt;
+    }
+
+    var condition = {_id: xiconfOrder._id};
+
+    updatesList.push({
+      condition: condition,
+      update: {$set: $set}
+    });
+
+    if (!emptyPush)
+    {
+      updatesList.push({
+        condition: condition,
+        update: {$push: $push}
+      });
+    }
+
+    return 1;
+  }
+
+  function compareOrderToXiconfOrder($set, order, xiconfOrder)
+  {
+    if (order.name !== xiconfOrder.name)
+    {
+      $set.name = order.name;
+    }
+
+    if (order.nc12 !== xiconfOrder.nc12[0])
+    {
+      $set.nc12 = true;
+    }
+
+    if (!_.isEqual(order.startDate, xiconfOrder.startDate))
+    {
+      $set.startDate = order.startDate;
+    }
+
+    if (!_.isEqual(order.finishDate, xiconfOrder.finishDate))
+    {
+      $set.finishDate = order.finishDate;
+    }
+
+    if (order.qty !== xiconfOrder.quantityTodo)
+    {
+      $set.quantityTodo = order.qty;
+    }
+  }
+
+  function compareParsedOrdersToXiconfOrder($set, $push, parsedOrdersList, xiconfOrder)
+  {
+    var parsedOrdersMap = {};
+
+    _.forEach(parsedOrdersList, function(parsedOrder)
+    {
+      parsedOrdersMap[parsedOrder.nc12] = parsedOrder;
+    });
+
+    _.forEach(xiconfOrder.items, compareParsedOrderToXiconfOrderItem.bind(null, $set, parsedOrdersMap));
+
+    _.forEach(parsedOrdersMap, function(parsedOrder)
+    {
+      if (!$push.items)
+      {
+        $push.items = {$each: []};
+        $push.nc12 = {$each: []};
       }
+
+      $push.items.$each.push(createXiconfOrderItem(parsedOrder));
+      $push.nc12.$each.push(parsedOrder.nc12);
     });
   }
 
-  function compareNc12s(newNc12s, oldNc12s)
+  function compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i)
   {
-    var oldNc12Map = {};
+    var parsedOrder = parsedOrdersMap[xiconfOrderItem.nc12];
 
-    _.forEach(oldNc12s, function(oldNc12)
+    if (!parsedOrder)
     {
-      oldNc12Map[oldNc12._id] = oldNc12;
-    });
-
-    var same = true;
-
-    for (var i = 0; i < newNc12s.length; ++i)
-    {
-      var newNc12 = newNc12s[i];
-      var oldNc12 = oldNc12Map[newNc12._id];
-
-      if (!oldNc12)
-      {
-        same = false;
-      }
-      else if (newNc12.name !== oldNc12.name || newNc12.quantityTodo !== oldNc12.quantityTodo)
-      {
-        newNc12.quantityDone = oldNc12.quantityDone;
-        same = false;
-      }
+      return;
     }
 
-    return same;
+    delete parsedOrdersMap[xiconfOrderItem.nc12];
+
+    if (parsedOrder.name !== xiconfOrderItem.name)
+    {
+      $set['items.' + i + '.name'] = parsedOrder.name;
+    }
+
+    if (parsedOrder.quantity !== xiconfOrderItem.quantityTodo)
+    {
+      $set['items.' + i + '.quantityTodo'] = parsedOrder.quantity;
+    }
+  }
+
+  function collectXiconfOrdersNc12($set, order, xiconfOrder)
+  {
+    $set.nc12 = [order.nc12];
+
+    _.forEach(xiconfOrder.items, function(item)
+    {
+      $set.nc12.push(item.nc12);
+    });
   }
 };

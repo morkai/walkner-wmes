@@ -7,7 +7,7 @@ define([
   'app/i18n',
   'app/core/View',
   'app/xiconf/XiconfResultCollection',
-  'app/xiconfProgramOrders/templates/details'
+  'app/xiconfOrders/templates/details'
 ], function(
   _,
   t,
@@ -32,8 +32,27 @@ define([
         idPrefix: this.idPrefix,
         programPanelClassName: 'panel-' + this.model.getStatusClassName(),
         linkToResults: this.linkToResults.bind(this),
-        model: this.model.toJSON()
+        model: this.serializeModel()
       };
+    },
+
+    serializeModel: function()
+    {
+      var model = this.model.toJSON();
+
+      model.items = model.items.map(function(item)
+      {
+        var totalQuantityDone = item.quantityDone + item.extraQuantityDone;
+
+        item.totalQuantityDone = totalQuantityDone;
+        item.panelType = totalQuantityDone < item.quantityTodo
+          ? 'danger'
+          : totalQuantityDone > item.quantityTodo ? 'warning' : 'success';
+
+        return item;
+      });
+
+      return model;
     },
 
     beforeRender: function()
@@ -51,9 +70,12 @@ define([
       var rqlQuery = this.xiconfResultCollection.rqlQuery;
 
       rqlQuery.sort = {startedAt: 1};
-      rqlQuery.selector.args = [
-        {name: 'eq', args: ['orderNo', orderNo]}
-      ];
+      rqlQuery.selector.args = [];
+
+      if (orderNo)
+      {
+        rqlQuery.selector.args.push({name: 'eq', args: ['orderNo', orderNo]});
+      }
 
       if (nc12)
       {

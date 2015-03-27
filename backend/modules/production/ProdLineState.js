@@ -95,11 +95,27 @@ ProdLineState.prototype.toJSON = function()
 };
 
 /**
+ * @returns {object|null}
+ */
+ProdLineState.prototype.getCurrentLeader = function()
+{
+  return this.prodShift && this.prodShift.leader ? this.prodShift.leader : null;
+};
+
+/**
  * @returns {string|null}
  */
 ProdLineState.prototype.getCurrentShiftId = function()
 {
   return this.prodShift === null ? null : this.prodShift._id;
+};
+
+/**
+ * @returns {Array.<object>}
+ */
+ProdLineState.prototype.getOrders = function()
+{
+  return this.prodShiftOrders || [];
 };
 
 /**

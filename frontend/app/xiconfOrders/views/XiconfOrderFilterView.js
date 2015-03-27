@@ -5,7 +5,7 @@
 define([
   'app/time',
   'app/core/views/FilterView',
-  'app/xiconfProgramOrders/templates/filter'
+  'app/xiconfOrders/templates/filter'
 ], function(
   time,
   FilterView,
@@ -22,7 +22,7 @@ define([
       return {
         from: '',
         to: '',
-        no: '',
+        orderNo: '',
         nc12: '',
         status: [-1, 0, 1]
       };
@@ -35,13 +35,13 @@ define([
       },
       '_id': function(propertyName, term, formData)
       {
-        formData.no = term.args[1];
+        formData.orderNo = term.args[1];
       },
       'status': function(propertyName, term, formData)
       {
         formData.status = (term.name === 'eq' ? [term.args[1]] : term.args[1]);
       },
-      'nc12._id': function(propertyName, term, formData)
+      'nc12': function(propertyName, term, formData)
       {
         formData.nc12 = term.args[1];
       }
@@ -58,18 +58,18 @@ define([
     {
       var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
-      var no = this.$id('no').val().trim();
+      var orderNo = this.$id('orderNo').val().trim();
       var nc12 = this.$id('nc12').val().trim();
       var status = this.getButtonGroupValue('status').map(Number);
 
-      if (/^[0-9]{9}$/.test(no))
+      if (/^[0-9]+$/.test(orderNo))
       {
-        selector.push({name: 'eq', args: ['_id', no]});
+        selector.push({name: 'eq', args: ['_id', orderNo]});
       }
 
-      if (/^[0-9]{12}$/.test(nc12))
+      if (/^[a-zA-Z0-9]{1,12}$/.test(nc12))
       {
-        selector.push({name: 'eq', args: ['nc12._id', nc12]});
+        selector.push({name: 'eq', args: ['nc12', nc12]});
       }
 
       if (fromMoment.isValid())

@@ -269,7 +269,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       return this.skip(new Error('NO_ORDERS_AND_RESULTS'));
     }
 
-    xiconfModule.debug("Updating the models...");
+    xiconfModule.debug("Updating the models (%d orders, %d results)...", this.orders.length, this.results.length);
 
     var i;
     var l;
@@ -277,7 +277,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
     for (i = 0, l = this.orders.length; i < l; ++i)
     {
       XiconfOrderResult.collection.update(
-        {_id: this.orders[i]._id}, this.orders[i], {upsert: true}, this.parallel()
+        {_id: this.orders[i]._id}, this.orders[i], {upsert: true}, this.group()
       );
     }
 
@@ -286,7 +286,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       XiconfResult.collection.insert(
         this.results.slice(i * RESULTS_BATCH_SIZE, i * RESULTS_BATCH_SIZE + RESULTS_BATCH_SIZE),
         {continueOnError: true},
-        this.parallel()
+        this.group()
       );
     }
   }
@@ -338,7 +338,9 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       program: tryJsonParse(result.program),
       steps: tryJsonParse(result.steps),
       metrics: tryJsonParse(result.metrics),
-      serviceTag: typeof result.serviceTag === 'string' ? result.serviceTag : null
+      serviceTag: typeof result.serviceTag === 'string' ? result.serviceTag : null,
+      prodLine: typeof result.prodLine === 'string' ? result.prodLine : null,
+      leds: tryJsonParse(result.leds)
     };
   }
 

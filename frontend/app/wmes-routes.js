@@ -33,7 +33,7 @@ define([
   './vis/routes',
   './workCenters/routes',
   './xiconf/routes',
-  './xiconfProgramOrders/routes',
+  './xiconfOrders/routes',
   './xiconfPrograms/routes',
   './icpo/routes',
   './factoryLayout/routes'

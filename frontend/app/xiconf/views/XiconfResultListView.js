@@ -13,14 +13,23 @@ define([
 
   return ListView.extend({
 
-    className: 'is-clickable',
+    className: 'is-colored is-clickable',
 
     remoteTopics: {
       'xiconf.synced': 'refreshCollection'
     },
 
     columns: [
-      'srcId', 'serviceTag', 'order', 'nc12', 'programName', 'counter', 'quantity', 'startedAt', 'duration'
+      {id: 'srcId', className: 'is-min'},
+      {id: 'serviceTag', className: 'is-min'},
+      {id: 'order', className: 'is-min'},
+      {id: 'nc12', className: 'is-min'},
+      {id: 'counter', className: 'is-min'},
+      {id: 'quantity', className: 'is-min'},
+      {id: 'startedAt', className: 'is-min'},
+      {id: 'duration', className: 'is-min'},
+      {id: 'prodLine', className: 'is-min'},
+      'programName'
     ],
 
     serializeActions: function()

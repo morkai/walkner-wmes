@@ -34,6 +34,7 @@ define([
     pageId: 'xiconfResultList',
 
     breadcrumbs: [
+      t.bound('xiconf', 'BREADCRUMBS:base'),
       t.bound('xiconf', 'BREADCRUMBS:browse')
     ],
 

@@ -3,19 +3,21 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/viewport'
 ], function(
+  _,
   viewport
 ) {
   'use strict';
 
-  return function(Model, req, referer)
+  return function(Model, req, referer, options)
   {
     var model = new Model({_id: req.params.id});
 
     viewport.loadPage('app/core/pages/ActionFormPage', function(ActionFormPage)
     {
-      return new ActionFormPage({
+      return new ActionFormPage(_.extend({
         model: model,
         actionKey: 'delete',
         successUrl: model.genClientUrl('base'),
@@ -23,7 +25,7 @@ define([
         formMethod: 'DELETE',
         formAction: model.url(),
         formActionSeverity: 'danger'
-      });
+      }, options));
     });
   };
 });

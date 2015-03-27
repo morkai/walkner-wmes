@@ -3,22 +3,32 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/i18n',
   'app/core/util/pageActions',
   'app/core/pages/FilteredListPage',
-  '../views/XiconfProgramOrderListView',
-  '../views/XiconfProgramOrderFilterView'
+  '../views/XiconfOrderListView',
+  '../views/XiconfOrderFilterView'
 ], function(
+  t,
   pageActions,
   FilteredListPage,
-  XiconfProgramOrderListView,
-  XiconfProgramOrderFilterView
+  XiconfOrderListView,
+  XiconfOrderFilterView
 ) {
   'use strict';
 
   return FilteredListPage.extend({
 
-    FilterView: XiconfProgramOrderFilterView,
-    ListView: XiconfProgramOrderListView,
+    FilterView: XiconfOrderFilterView,
+    ListView: XiconfOrderListView,
+
+    breadcrumbs: function()
+    {
+      return [
+        t.bound('xiconfOrders', 'BREADCRUMBS:base'),
+        t.bound('xiconfOrders', 'BREADCRUMBS:browse')
+      ];
+    },
 
     actions: function(layout)
     {

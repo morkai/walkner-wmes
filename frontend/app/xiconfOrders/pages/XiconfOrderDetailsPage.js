@@ -9,8 +9,8 @@ define([
   'app/core/View',
   'app/orders/Order',
   'app/orders/views/OrderDetailsView',
-  '../views/XiconfProgramOrderDetailsView',
-  'app/xiconfProgramOrders/templates/detailsPage'
+  '../views/XiconfOrderDetailsView',
+  'app/xiconfOrders/templates/detailsPage'
 ], function(
   t,
   user,
@@ -18,7 +18,7 @@ define([
   View,
   Order,
   OrderDetailsView,
-  XiconfProgramOrderDetailsView,
+  XiconfOrderDetailsView,
   template
 ) {
   'use strict';
@@ -49,8 +49,9 @@ define([
     breadcrumbs: function()
     {
       return [
+        t.bound('xiconfOrders', 'BREADCRUMBS:base'),
         {
-          label: t.bound('xiconfProgramOrders', 'BREADCRUMBS:browse'),
+          label: t.bound('xiconfOrders', 'BREADCRUMBS:browse'),
           href: this.model.genClientUrl('base')
         },
         this.model.id
@@ -60,29 +61,29 @@ define([
     initialize: function()
     {
       this.parentOrder = new Order(this.model.id);
-      this.programOrder = bindLoadingMessage(this.model, this);
+      this.order = bindLoadingMessage(this.model, this);
 
       this.parentOrderDetailsView = new OrderDetailsView({
-        panelTitle: t('xiconfProgramOrders', 'PANEL:TITLE:details:parentOrder'),
+        panelTitle: t('xiconfOrders', 'PANEL:TITLE:details:parentOrder'),
         linkOrderNo: user.isAllowedTo('ORDERS:VIEW'),
         model: this.parentOrder
       });
-      this.programOrderDetailsView = new XiconfProgramOrderDetailsView({
+      this.orderDetailsView = new XiconfOrderDetailsView({
         model: this.model
       });
 
-      this.setView('.xiconfProgramOrders-parentOrderDetailsContainer', this.parentOrderDetailsView);
-      this.setView('.xiconfProgramOrders-programOrderDetailsContainer', this.programOrderDetailsView);
+      this.setView('.xiconfOrders-parentOrderDetailsContainer', this.parentOrderDetailsView);
+      this.setView('.xiconfOrders-orderDetailsContainer', this.orderDetailsView);
     },
 
     load: function(when)
     {
       var page = this;
-      var req = this.programOrder.fetch();
+      var req = this.order.fetch();
 
       req.done(function()
       {
-        page.parentOrder.set(page.programOrder.get('parentOrder'));
+        page.parentOrder.set(page.order.get('parentOrder'));
       });
 
       return when(req);

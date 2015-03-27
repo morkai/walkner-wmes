@@ -1,5 +1,6 @@
 {
-  "BREADCRUMBS:browse": "Wyniki Xiconf",
+  "BREADCRUMBS:base": "Xiconf",
+  "BREADCRUMBS:browse": "Wyniki",
   "BREADCRUMBS:details": "Wynik",
 
   "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się :(",
@@ -40,6 +41,7 @@
   "PROPERTY:workflow": "Zawartość pliku konfiguracyjnego programatora",
   "PROPERTY:programName": "Nazwa programu",
   "PROPERTY:serviceTag": "Service Tag",
+  "PROPERTY:prodLine": "Linia produkcyjna",
 
   "filter:result:success": "Sukces",
   "filter:result:failure": "Porażka",
@@ -72,6 +74,7 @@
   "log:WORKFLOW_FILE_READ": "Odczytano <code>{length}B</code> pliku konfiguracyjnego programatora.",
   "log:WRITING_WORKFLOW_FILE": "Zapisywanie pliku konfiguracyjnego programatora: <code>{workflowFile}</code> (<code>{workflowOptions}</code>)",
   "log:WORKFLOW_FILE_WRITTEN": "Zapisano <code>{length}B</code> pliku konfiguracyjnego programatora.",
+  "log:USING_LAST_FEATURE_FILE": "Pomijanie wyszukiwania pliku konfiguracyjnego drivera: wykorzystany zostanie ostatni plik.",
   "log:SEARCHING_FEATURE_FILE": "Wyszukiwanie pliku konfiguracyjnego drivera w ścieżce: <code>{featurePath}</code>",
   "log:SEARCHING_FEATURE_FILE_FAILURE": "Nieudane wyszukiwanie pliku: <code>{error}</code>",
   "log:SEARCHING_FEATURE_FILE_TIMEOUT": "Upłynął limit czasu wyszukiwania pliku konfiguracyjnego drivera.",
@@ -108,6 +111,7 @@
   "log:TESTING_PLC_TEARDOWN": "Wyłączanie sterownika...",
   "log:TESTING_EXECUTING_STEP": "{type, select, pe{Wykonywanie testu obwodu ochronnego} sol{Programowanie Fortimo Solar} fn{Wykonywanie testu funkcjonalnego} other{Wykonywanie kroku programu <em>{type}</em>}}...",
   "log:SERVICE_TAG_ACQUIRED": "Otrzymano Service Tag: <code>{serviceTag}</code>",
+  "log:SKIPPING_SERVICE_TAG_ACQUIRING": "Pomijanie pobierania nowego Service Taga...",
   "log:PRINTING_SERVICE_TAG": "Drukowanie etykiety Service Tag na drukarce <code>{printerName}</code>...",
   "log:PRINTING_SERVICE_TAG_FAILURE": "Nie udało się wydrukować etykiety Service Tag: <code>{error}</code>",
 

@@ -1,6 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Xiconf results",
+    "BREADCRUMBS:base": "Xiconf",
+    "BREADCRUMBS:browse": "Results",
     "BREADCRUMBS:details": "Result",
 
     "MSG:LOADING_FAILURE": "Failed to load the programming results :(",
@@ -41,6 +42,7 @@
     "PROPERTY:workflow": "Programmer configuration file contents",
     "PROPERTY:programName": "Program name",
     "PROPERTY:serviceTag": "Service Tag",
+    "PROPERTY:prodLine": "Production line",
 
     "filter:result:success": "Success",
     "filter:result:failure": "Failure",
@@ -73,6 +75,7 @@
     "log:WORKFLOW_FILE_READ": "Read <code>{length}B</code> of the programmer configuration file.",
     "log:WRITING_WORKFLOW_FILE": "Writing contents of the programmer configuratino file: <code>{workflowFile}</code> (<code>{workflowOptions}</code>)",
     "log:WORKFLOW_FILE_WRITTEN": "Written <code>{length}B</code> of the programmer configuration file.",
+    "log:USING_LAST_FEATURE_FILE": "Skipping searching for a driver configuration file: the last file will be used.",
     "log:SEARCHING_FEATURE_FILE": "Searching for a driver configuration file in path: <code>{featurePath}</code>",
     "log:SEARCHING_FEATURE_FILE_FAILURE": "Driver configuration file searching failed: <code>{error}</code>",
     "log:SEARCHING_FEATURE_FILE_TIMEOUT": "Driver configuration file searching timed out.",
@@ -110,6 +113,7 @@
     "log:TESTING_EXECUTING_STEP": "{type, select, pe{Executing the protective earth test} sol{Executing the Fortimo Solar programming} fn{Executing the functional test} other{Executing the <em>{type}</em> program step}}...",
     "log:ACQUIRING_SERVICE_TAG": "Acquiring a new Service Tag...",
     "log:SERVICE_TAG_ACQUIRED": "Acquired Service Tag: <code>{serviceTag}</code>",
+    "log:SKIPPING_SERVICE_TAG_ACQUIRING": "Skipping acquiring a new Service Tag...",
     "log:PRINTING_SERVICE_TAG": "Printing a Service Tag label on the <code>{printerName}</code> printer...",
     "log:PRINTING_SERVICE_TAG_FAILURE": "Failed to print a Service Tag label: <code>{error}</code>",
 

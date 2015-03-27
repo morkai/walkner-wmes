@@ -1,0 +1,86 @@
+<div>
+  <div class="panel <%- programPanelClassName %> xiconfOrders-orderDetails">
+    <div class="panel-heading">
+      <%- t('xiconfOrders', 'PANEL:TITLE:details:order') %>
+    </div>
+    <div class="panel-details row">
+      <div class="col-md-4">
+        <div class="props first">
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconf', 'PROPERTY:no') %></div>
+            <div class="prop-value">
+              <a href="<%- linkToResults(model._id) %>" title="<%- t('xiconfOrders', 'details:showResultsLink') %>"><%- model._id %></a>
+            </div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconf', 'PROPERTY:nc12') %></div>
+            <div class="prop-value">
+              <a href="<%- linkToResults(null, model.nc12[0]) %>" title="<%- t('xiconfOrders', 'details:showResultsLink') %>"><%- model.nc12[0] %></a>
+            </div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:name') %></div>
+            <div class="prop-value"><%= model.name %></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:quantityTodo') %></div>
+            <div class="prop-value"><%- model.quantityTodo.toLocaleString() %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:quantityDone') %></div>
+            <div class="prop-value"><%- model.quantityDone.toLocaleString() %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:serviceTagCounter') %></div>
+            <div class="prop-value"><%- model.serviceTagCounter.toLocaleString() %></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:startedAt') %></div>
+            <div class="prop-value"><%- model.startedAt ? time.format(model.startedAt, 'LLLL') : '-' %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:finishedAt') %></div>
+            <div class="prop-value"><%- model.finishedAt ? time.format(model.finishedAt, 'LLLL') : '-' %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:duration') %></div>
+            <div class="prop-value"><%- model.startedAt ? time.toString(((Date.parse(model.finishedAt) || Date.now()) - Date.parse(model.startedAt)) / 1000) : '-' %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="xiconfOrders-itemDetailsContainer">
+    <% model.items.forEach(function(item) { %>
+    <div class="panel panel-<%- item.panelType %> xiconfOrders-itemDetails">
+      <div class="panel-heading"></div>
+      <div class="panel-details">
+        <div class="props first">
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconf', 'PROPERTY:nc12') %></div>
+            <div class="prop-value">
+              <a href="<%- linkToResults(model._id, item.nc12) %>" title="<%- t('xiconfOrders', 'details:showResultsLink') %>"><%- item.nc12 %></a>
+            </div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:name') %></div>
+            <div class="prop-value"><%= item.name %></div>
+          </div>
+          <div class="prop">
+            <div class="prop-name"><%- t('xiconf', 'PROPERTY:quantity') %></div>
+            <div class="prop-value"><%- item.totalQuantityDone.toLocaleString() %>/<%- item.quantityTodo.toLocaleString() %> <%- t('xiconfOrders', 'kindUnit:' + item.kind) %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>

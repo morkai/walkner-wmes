@@ -137,7 +137,7 @@ exports.pubsub = {
     'prodShiftOrders.**',
     'updater.newVersion',
     'settings.updated.**',
-    'xiconf.orders.**'
+    'xiconf.orders.**', 'xiconf.clients.**'
   ]
 };
 
@@ -158,7 +158,7 @@ exports.mongoose = {
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
     'feedback',
     'license', 'licensePing',
-    'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfProgramOrder', 'xiconfLedOrder',
+    'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfOrder', 'xiconfClient',
     'icpoResult',
     'factoryLayout',
     'whTransferOrder'
@@ -196,7 +196,7 @@ exports.user = {
     'PROD_DATA:VIEW', 'PROD_DATA:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
     'REPORTS:VIEW', 'REPORTS:MANAGE',
-    'XICONF:VIEW', 'XICONF:MANAGE', 'ICPO:VIEW', 'ICPO:MANAGE',
+    'XICONF:VIEW', 'XICONF:MANAGE', 'XICONF:NOTIFY', 'ICPO:VIEW', 'ICPO:MANAGE',
     'FACTORY_LAYOUT:MANAGE'
   ]
 };

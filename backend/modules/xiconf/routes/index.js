@@ -20,32 +20,32 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   var mongoose = app[xiconfModule.config.mongooseId];
   var userModule = app[xiconfModule.config.userId];
   var Order = mongoose.model('Order');
+  var XiconfClient = mongoose.model('XiconfClient');
   var XiconfResult = mongoose.model('XiconfResult');
   var XiconfProgram = mongoose.model('XiconfProgram');
-  var XiconfProgramOrder = mongoose.model('XiconfProgramOrder');
-  var XiconfLedOrder = mongoose.model('XiconfLedOrder');
+  var XiconfOrder = mongoose.model('XiconfOrder');
 
   var canView = userModule.auth('XICONF:VIEW');
   var canManage = userModule.auth('XICONF:MANAGE');
 
   express.post('/xiconf;import', importResultsRoute.bind(null, app, xiconfModule));
 
-  express.get('/xiconf/programOrders', canView, express.crud.browseRoute.bind(null, app, XiconfProgramOrder));
+  express.get('/xiconf/orders', canView, express.crud.browseRoute.bind(null, app, XiconfOrder));
 
-  express.get('/xiconf/programOrders;export', canView, express.crud.exportRoute.bind(null, {
+  express.get('/xiconf/orders;export', canView, express.crud.exportRoute.bind(null, {
     filename: 'WMES-XICONF-ORDERS',
-    serializeRow: exportXiconfProgramOrder,
-    model: XiconfProgramOrder
+    serializeRow: exportXiconfOrder,
+    model: XiconfOrder
   }));
 
-  express.post('/xiconf/programOrders;import', importOrdersRoute.bind(null, app, xiconfModule));
+  express.post('/xiconf/orders;import', importOrdersRoute.bind(null, app, xiconfModule));
 
   express.get(
-    '/xiconf/programOrders/:id',
+    '/xiconf/orders/:id',
     canView,
     express.crud.readRoute.bind(null, app, {
-      model: XiconfProgramOrder,
-      prepareResult: prepareProgramOrderDetails
+      model: XiconfOrder,
+      prepareResult: prepareOrderDetails
     })
   );
 
@@ -130,6 +130,8 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   express.delete('/xiconf/programs/:id', canManage, deleteProgramRoute);
 
+  express.get('/xiconf/clients', canView, express.crud.browseRoute.bind(null, app, XiconfClient));
+
   function populateOrder(fields, req, res, next)
   {
     req.rql.selector.args.push(
@@ -167,29 +169,19 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     };
   }
 
-  function exportXiconfProgramOrder(doc)
+  function exportXiconfOrder(doc)
   {
-    var nc12s = [];
-    var names = [];
-
-    for (var i = 0; i < doc.nc12.length; ++i)
-    {
-      var nc12 = doc.nc12[i];
-
-      nc12s.push(nc12._id);
-      names.push(nc12.name);
-    }
-
     return {
       '"orderNo': doc._id,
-      '"12nc': nc12s.join(';'),
-      '"name': names.join(';'),
-      '#quantityParent': doc.quantityParent,
+      '"12nc': doc.nc12[0],
+      '"name': doc.name,
       '#quantityTodo': doc.quantityTodo,
       '#quantityDone': doc.quantityDone,
       '"status': doc.status,
+      'startDate': moment(doc.startDate).format('YYYY-MM-DD'),
+      'finishDate': moment(doc.finishDate).format('YYYY-MM-DD'),
       'reqDate': moment(doc.reqDate).format('YYYY-MM-DD'),
-      'startedAt': formatTime(doc.createdAt),
+      'startedAt': formatTime(doc.startedAt),
       'finishedAt': formatTime(doc.finishedAt),
       '#duration': doc.finishedAt ? ((doc.finishedAt - doc.startedAt) / 1000) : 0
     };
@@ -207,9 +199,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       return done(null, xiconfResult);
     }
 
-    var featurePath = path.join(
-      xiconfModule.config.featureDbPath, xiconfResult.featureHash + '.xml'
-    );
+    var featurePath = path.join(xiconfModule.config.featureDbPath, xiconfResult.featureHash + '.xml');
 
     fs.readFile(featurePath, 'utf8', function(err, contents)
     {
@@ -296,27 +286,25 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     });
   }
 
-  function prepareProgramOrderDetails(programOrder, done)
+  function prepareOrderDetails(xiconfOrder, done)
   {
-    programOrder = programOrder.toJSON();
+    xiconfOrder = xiconfOrder.toJSON();
 
     step(
       function findRelatedOrders()
       {
-        Order.findById(programOrder._id, {changes: 0, operations: 0}).lean().exec(this.parallel());
-        XiconfLedOrder.findById(programOrder._id).lean().exec(this.parallel());
+        Order.findById(xiconfOrder._id, {changes: 0, operations: 0}).lean().exec(this.parallel());
       },
-      function sendResultsStep(err, parentOrder, ledOrder)
+      function sendResultsStep(err, parentOrder)
       {
         if (err)
         {
           return done(err);
         }
 
-        programOrder.parentOrder = parentOrder;
-        programOrder.ledOrder = ledOrder;
+        xiconfOrder.parentOrder = parentOrder;
 
-        return done(null, programOrder);
+        return done(null, xiconfOrder);
       }
     );
   }

@@ -39,7 +39,7 @@ exports.mongoose = {
     'mrpController', 'clipOrderCount',
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
-    'xiconfProgramOrder', 'xiconfLedOrder'
+    'xiconfOrder'
   ]
 };
 

@@ -9,12 +9,11 @@ var parseSapTextTable = require('../../sap/util/parseSapTextTable');
 var parseSapNumber = require('../../sap/util/parseSapNumber');
 var parseSapDate = require('../../sap/util/parseSapDate');
 
-module.exports = function parseXiconfOrders(input, orderNoMap)
+module.exports = function parseXiconfOrders(input)
 {
   var PROGRAM_RE = /^LABEL.*?Program\s*(.*?)(?:'|"|”)?$/i;
+  var GPRS_RE = /^LC/i;
   var LED_RE = /LED.*?line/i;
-  var GPRS_RE = /^LC /i;
-  var programOrdersMap = {};
 
   return parseSapTextTable(input, {
     columnMatchers: {
@@ -37,43 +36,27 @@ module.exports = function parseXiconfOrders(input, orderNoMap)
         return null;
       }
 
+      var programMatches = obj.name.match(PROGRAM_RE);
+      var isProgramOrder = programMatches !== null;
+      var isGprsOrder = isProgramOrder && GPRS_RE.test(programMatches[1]);
+      var isLedOrder = !isProgramOrder && LED_RE.test(obj.name);
+
+      if (isGprsOrder || (!isProgramOrder && !isLedOrder) || obj.nc12.length !== 12)
+      {
+        return null;
+      }
+
       obj.reqDate = new Date(obj.reqDate.y, obj.reqDate.m - 1, obj.reqDate.d);
 
-      var matches = obj.name.match(PROGRAM_RE);
-
-      if (matches === null)
+      if (isLedOrder)
       {
-        if (!LED_RE.test(obj.name))
-        {
-          return null;
-        }
-
-        obj.kind = 'LED';
+        obj.kind = 'led';
       }
-      else
+      else if (isProgramOrder)
       {
-        if (GPRS_RE.test(matches[1]))
-        {
-          return null;
-        }
-
-        obj.kind = 'PROGRAM';
-        obj.name = 'Program ' + matches[1].trim();
-
-        if (programOrdersMap[obj.no] === undefined)
-        {
-          obj.more = [];
-          programOrdersMap[obj.no] = obj;
-        }
-        else
-        {
-          programOrdersMap[obj.no].more.push(obj);
-
-          return null;
-        }
+        obj.kind = 'program';
+        obj.name = programMatches[1].trim();
       }
-
-      orderNoMap[obj.no] = 0;
 
       return obj;
     }

@@ -6,7 +6,7 @@
 .xiconf-filter .form-control[name="serviceTag"] {
   width: 160px;
 }
-.xiconf-filter .form-control[name="no"] {
+.xiconf-filter .form-control[name="orderNo"] {
   width: 100px;
 }
 .xiconf-filter .form-control[name="nc12"] {
