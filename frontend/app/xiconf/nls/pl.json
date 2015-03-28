@@ -6,7 +6,7 @@
   "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wyniku programowania nie powiodło się :(",
 
-  "PANEL:TITLE:details:order": "Szczegóły zlecenia",
+  "PANEL:TITLE:details:order": "Szczegóły lokalnego zlecenia",
   "PANEL:TITLE:details:entry": "Szczegóły programowania",
 
   "PAGE_ACTION:export": "Eksportuj wyniki",
@@ -43,6 +43,8 @@
   "PROPERTY:serviceTag": "Service Tag",
   "PROPERTY:prodLine": "Linia produkcyjna",
 
+  "details:showOrderSummaryLink": "Pokaż podsumowanie zlecenia",
+
   "filter:result:success": "Sukces",
   "filter:result:failure": "Porażka",
   "filter:placeholder:srcId": "Dowolne",
@@ -56,6 +58,7 @@
   "tab:output": "Przebieg komunikacji",
   "tab:workflow": "Konfiguracja programatora",
   "tab:feature": "Konfiguracja drivera",
+  "tab:leds": "Płytki LED",
   "tab:program": "Program",
 
   "metrics:title": "Zmierzone wartości",
@@ -65,6 +68,14 @@
   "metrics:i": "Natężenie",
   "metrics:r": "Rezystancja",
   "metrics:p": "Moc",
+
+  "leds:error:INVALID_NC12": "Nieprawidłowe 12NC:<br>{nc12}!",
+  "leds:error:NO_CONNECTION": "Brak połączenia z<br>serwerem zewnętrznym!",
+  "leds:error:TIMEOUT": "Upłynął limit czasu<br>oczekiwania na odpowiedź!",
+  "ledS:error:DB_FAILURE": "Błąd bazy danych!",
+  "leds:error:UNKNOWN_ORDER_NO": "Nieznane zlecenie!",
+  "leds:error:UNKNOWN_ITEM_NC12": "Nieznana pozycja zlecenia!",
+  "leds:error:SERIAL_NUMBER_USED": "SN użyty w zleceniu {orderNo}:<br>{name}",
 
   "log:ORDER_CREATED": "Rozpoczynanie zlecenia nr <code>{orderNo}</code> (1/{quantity})...",
   "log:ORDER_CONTINUED": "Kontynuacja zlecenia nr <code>{orderNo}</code> ({counter}/{quantity})...",
@@ -114,6 +125,8 @@
   "log:SKIPPING_SERVICE_TAG_ACQUIRING": "Pomijanie pobierania nowego Service Taga...",
   "log:PRINTING_SERVICE_TAG": "Drukowanie etykiety Service Tag na drukarce <code>{printerName}</code>...",
   "log:PRINTING_SERVICE_TAG_FAILURE": "Nie udało się wydrukować etykiety Service Tag: <code>{error}</code>",
+  "log:LED_CHECKING_STARTED": "Rozpoczynanie sprawdzania płytek LED...",
+  "log:WAITING_FOR_LEDS": "Oczekiwanie na {ledCount} {ledCount, plural, one{płytkę} few{płytki} other{płytek}} LED...",
 
   "error:WORKFLOW_FILE_ERROR": "Błąd podczas odczytywania pliku konfiguracyjnego programatora.",
   "error:WORKFLOW_FILE_WRITE_ERROR": "Błąd podczas zapisywania pliku konfiguracyjnego programatora.",

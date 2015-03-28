@@ -7,7 +7,7 @@
     "MSG:LOADING_FAILURE": "Failed to load the programming results :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the programming result :(",
 
-    "PANEL:TITLE:details:order": "Order details",
+    "PANEL:TITLE:details:order": "Local order details",
     "PANEL:TITLE:details:entry": "Programming details",
 
     "PAGE_ACTION:export": "Export results",
@@ -44,6 +44,8 @@
     "PROPERTY:serviceTag": "Service Tag",
     "PROPERTY:prodLine": "Production line",
 
+    "details:showOrderSummaryLink": "Show the order summary",
+
     "filter:result:success": "Success",
     "filter:result:failure": "Failure",
     "filter:placeholder:srcId": "Any",
@@ -57,6 +59,7 @@
     "tab:output": "Communication log",
     "tab:workflow": "Programmer configuration",
     "tab:feature": "Driver configuration",
+    "tab:leds": "LED boards",
     "tab:program": "Program",
 
     "metrics:title": "Measured values",
@@ -66,6 +69,14 @@
     "metrics:i": "Current",
     "metrics:r": "Resistance",
     "metrics:p": "Power",
+
+    "leds:error:INVALID_NC12": "Invalid 12NC:<br>{nc12}!",
+    "leds:error:NO_CONNECTION": "No connection to<br>the remote server!",
+    "leds:error:TIMEOUT": "Response timeout!",
+    "ledS:error:DB_FAILURE": "Database failure!",
+    "leds:error:UNKNOWN_ORDER_NO": "Unknown order!",
+    "leds:error:UNKNOWN_ITEM_NC12": "Unknown order item!",
+    "leds:error:SERIAL_NUMBER_USED": "SN already used in order {orderNo}:<br>{name}",
 
     "log:ORDER_CREATED": "Starting a new order no <code>{orderNo}</code> (1/{quantity})...",
     "log:ORDER_CONTINUED": "Continuing an existing order no <code>{orderNo}</code> ({counter}/{quantity})...",
@@ -116,6 +127,8 @@
     "log:SKIPPING_SERVICE_TAG_ACQUIRING": "Skipping acquiring a new Service Tag...",
     "log:PRINTING_SERVICE_TAG": "Printing a Service Tag label on the <code>{printerName}</code> printer...",
     "log:PRINTING_SERVICE_TAG_FAILURE": "Failed to print a Service Tag label: <code>{error}</code>",
+    "log:LED_CHECKING_STARTED": "Starting the LED boards check...",
+    "log:WAITING_FOR_LEDS": "Waiting for {ledCount} LED {ledCount, plural, one{board} other{boards}}...",
 
     "error:WORKFLOW_FILE_ERROR": "Error during the reading of the programmer configuration file contents.",
     "error:WORKFLOW_FILE_WRITE_ERROR": "Error during the writing of the programmer configuration file contents.",

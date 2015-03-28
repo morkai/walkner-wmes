@@ -53,7 +53,7 @@ define([
       {
         var startedAt = Date.parse(model.get('startedAt')) || 0;
         var finishedAt = Date.parse(model.get('finishedAt')) || Date.now();
-        var duration = startedAt ? (finishedAt - startedAt) / 1000 : 0;
+        var duration = startedAt ? (finishedAt - startedAt) / 1000 : null;
 
         return {
           _id: model.id,
@@ -64,7 +64,7 @@ define([
           quantity: model.get('quantityDone').toLocaleString() + '/' + model.get('quantityTodo').toLocaleString(),
           reqDate: time.format(model.get('reqDate'), 'YYYY-MM-DD'),
           startedAt: startedAt ? time.format(startedAt, 'YYYY-MM-DD HH:mm:ss') : null,
-          duration: duration ? time.toString(duration) : null
+          duration: duration !== null ? time.toString(duration) : null
         };
       });
     }

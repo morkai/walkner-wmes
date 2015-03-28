@@ -27,27 +27,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var ordersToOperationsQueueMap = {};
   var workingOrderChangeCheckTimers = {};
 
-// TODO: remove
-setInterval(function()
-{
-  console.log();
-  console.log('---------------------------------------------------------');
-  console.log('prodLinesToDataMap');
-  _.forEach(prodLinesToDataMap, function(prodLineData)
-  {
-    console.log('  %s', prodLineData.prodLineId);
-    console.log('    orders=%s', prodLineData.orders.join(', '));
-    console.log('    sockets=%s', Object.keys(prodLineData.sockets).join(', '));
-  });
-  console.log('---');
-  console.log('ordersToDataMap');
-  console.log(Object.keys(ordersToDataMap).join(', '));
-  console.log('---');
-  console.log('ordersToProdLinesMap');
-  console.inspect(ordersToProdLinesMap);
-  console.log('---');
-}, 30000);
-
   app.broker.subscribe('shiftChanged', onShiftChanged);
   app.broker.subscribe('xiconf.orders.synced', onXiconfOrdersSynced);
   app.broker.subscribe('production.stateChanged.**', onProductionStateChanged);
@@ -301,8 +280,6 @@ setInterval(function()
 
     var socket = this;
 
-console.log('xiconf.checkSerialNumber', input);
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -329,8 +306,6 @@ console.log('xiconf.checkSerialNumber', input);
     /*jshint validthis:true*/
 
     var socket = this;
-
-console.log('xiconf.acquireServiceTag', input);
 
     if (!_.isFunction(reply))
     {
@@ -359,8 +334,6 @@ console.log('xiconf.acquireServiceTag', input);
     /*jshint validthis:true*/
 
     var socket = this;
-
-console.log('xiconf.releaseServiceTag', input);
 
     if (!_.isFunction(reply))
     {
@@ -408,11 +381,10 @@ console.log('xiconf.releaseServiceTag', input);
 
   function checkSerialNumber(input, reply)
   {
-console.log('checkSerialNumber', input);
     step(
       function findXiconfOrdersStep()
       {
-        XiconfOrder.findOne({'items.serialNumber': input.serialNumber}).lean().exec(this.parallel());
+        XiconfOrder.findOne({'items.serialNumbers': input.serialNumber}).lean().exec(this.parallel());
         XiconfOrder.findById(input.orderNo).lean().exec(this.parallel());
       },
       function checkStep(err, snOrder, idOrder)
@@ -454,7 +426,6 @@ console.log('checkSerialNumber', input);
 
   function recountOrder(input, reply)
   {
-console.log('recountOrder', input);
     queueOrderOperation(input.orderNo, recountNextOrder, reply, {
       orderNo: input.orderNo
     });
@@ -462,7 +433,6 @@ console.log('recountOrder', input);
 
   function acquireServiceTag(input, reply)
   {
-console.log('acquireServiceTag', input);
     queueOrderOperation(input.orderNo, acquireNextServiceTag, reply, {
       orderNo: input.orderNo,
       nc12: input.nc12,
@@ -473,7 +443,6 @@ console.log('acquireServiceTag', input);
 
   function releaseServiceTag(input, reply)
   {
-console.log('releaseServiceTag', input);
     queueOrderOperation(input.orderNo, releaseNextServiceTag, reply, {
       serviceTag: input.serviceTag,
       orderNo: input.orderNo,
@@ -485,7 +454,6 @@ console.log('releaseServiceTag', input);
 
   function queueOrderOperation(orderNo, operation, reply, data)
   {
-console.log('queueOrderOperation', orderNo, operation.name);
     var orderQueue = ordersToOperationsQueueMap[orderNo];
     var queueItem = {
       operation: operation,
@@ -495,24 +463,20 @@ console.log('queueOrderOperation', orderNo, operation.name);
 
     if (Array.isArray(orderQueue))
     {
-console.log('queueOrderOperation %s %s queued', orderNo, operation.name);
       return orderQueue.push(queueItem);
     }
 
     ordersToOperationsQueueMap[orderNo] = [queueItem];
-console.log('queueOrderOperation %s %s single', orderNo, operation.name);
+
     execNextOrderOperation(orderNo);
   }
 
   function execNextOrderOperation(orderNo)
   {
-console.log('execNextOrderOperation', orderNo);
-
     var orderQueue = ordersToOperationsQueueMap[orderNo];
 
     if (!Array.isArray(orderQueue))
     {
-console.log('execNextOrderOperation %s undefined', orderNo);
       return;
     }
 
@@ -521,16 +485,13 @@ console.log('execNextOrderOperation %s undefined', orderNo);
     if (orderQueue.length === 0)
     {
       delete ordersToOperationsQueueMap[orderNo];
-console.log('execNextOrderOperation %s last', orderNo);
     }
 
     if (!queueItem)
     {
-console.log('execNextOrderOperation %s empty', orderNo);
       return;
     }
 
-console.log('execNextOrderOperation', orderNo, queueItem.operation.name);
     queueItem.operation(queueItem.data, queueItem.reply);
   }
 
@@ -585,7 +546,8 @@ console.log('execNextOrderOperation', orderNo, queueItem.operation.name);
         }
 
         var quantityPerResult = 0;
-        var quantityDone = 0;
+        var programQuantityDone = 0;
+        var ledQuantityDone = 0;
         var programItems = [];
         var ledItems = [];
         var itemChanges = [];
@@ -609,7 +571,7 @@ console.log('execNextOrderOperation', orderNo, queueItem.operation.name);
         if (anyLeditems)
         {
           quantityPerResult = ledItems[0].quantityTodo / orderData.quantityTodo;
-          quantityDone = ledItems[0].quantityDone / quantityPerResult;
+          ledQuantityDone = ledItems[0].quantityDone / quantityPerResult;
         }
 
         for (i = 0; i < programItems.length; ++i)
@@ -633,20 +595,10 @@ console.log('execNextOrderOperation', orderNo, queueItem.operation.name);
             });
           }
 
-          if (!anyLeditems)
-          {
-            quantityDone += programItemQuantityDone / quantityPerResult;
-          }
+          programQuantityDone += programItemQuantityDone / quantityPerResult;
         }
 
-        if (isNaN(quantityDone))
-        {
-          quantityDone = 0;
-        }
-        else
-        {
-          quantityDone = Math.round(quantityDone * 100) / 100;
-        }
+        var quantityDone = Math.round(Math.max(0, ledQuantityDone, programQuantityDone) * 100) / 100;
 
         var changes = {
           quantityDone: quantityDone,
@@ -678,11 +630,6 @@ console.log('execNextOrderOperation', orderNo, queueItem.operation.name);
 
           updates.$set['items.' + itemChange.index + '.extraQuantityDone'] = itemChange.extraQuantityDone;
         }
-
-// TODO: remove
-console.log('--- recountNextOrder');
-console.inspect(condition);
-console.inspect(updates);
 
         XiconfOrder.collection.update(condition, updates, this.next());
 
@@ -737,8 +684,6 @@ console.inspect(updates);
 
   function acquireNextServiceTag(data, done)
   {
-console.log('acquireNextServiceTag', data);
-
     step(
       function getOrderDataStep()
       {
@@ -838,11 +783,6 @@ console.log('acquireNextServiceTag', data);
         {
           updates.$addToSet = $push;
         }
-
-// TODO: remove
-console.log('--- acquireNextServiceTag');
-console.inspect(condition);
-console.inspect(updates);
 
         XiconfOrder.collection.update(condition, updates, this.next());
 
@@ -987,11 +927,6 @@ console.inspect(updates);
         {
           updates.$pullAll = $pull;
         }
-
-// TODO: remove
-console.log('--- releaseNextServiceTag');
-console.inspect(condition);
-console.inspect(updates);
 
         XiconfOrder.collection.update(condition, updates, this.next());
 
@@ -1150,6 +1085,11 @@ console.inspect(updates);
 
     prodLineData.leader = newLeader;
 
+    if (optSocket)
+    {
+      return;
+    }
+
     _.forEach(prodLineData.sockets, function(socket)
     {
       socket.emit('xiconf.leaderUpdated', newLeader);
@@ -1219,6 +1159,8 @@ console.inspect(updates);
           return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
         }
 
+        newOrdersNos = newOrdersData.map(function(orderData) { return orderData._id; });
+
         return emitRemoteDataForProdLineUpdate(prodLineId, optSocket, newOrdersNos, newOrdersData);
       }
     );
@@ -1254,8 +1196,8 @@ console.inspect(updates);
   function manageProdLinesOrders(prodLineData, newOrdersNos)
   {
     var oldOrdersNos = prodLineData.orders;
-    var oldCurrentOrderNo = oldOrdersNos[0];
-    var newCurrentOrderNo = newOrdersNos[0];
+    var oldCurrentOrderNo = oldOrdersNos.length ? oldOrdersNos[0] : null;
+    var newCurrentOrderNo = newOrdersNos.length ? newOrdersNos[0] : null;
 
     if (oldCurrentOrderNo === newCurrentOrderNo)
     {
@@ -1443,32 +1385,6 @@ console.inspect(updates);
       {
         delete ordersToDataMap[orderNo];
         delete ordersToProdLinesMap[orderNo];
-      }
-    }
-  }
-
-  function removeSerialNumbers(from, what)
-  {
-    for (var i = from.length - 1; i >= 0; --i)
-    {
-      var ll = what.length;
-
-      if (ll === 0)
-      {
-        break;
-      }
-
-      var fromSn = from[i];
-
-      for (var ii = 0; ii < ll; ++ii)
-      {
-        if (fromSn === what[ii])
-        {
-          from.splice(i, 1);
-          what.splice(ii, 1);
-
-          break;
-        }
       }
     }
   }

@@ -48,6 +48,7 @@ define([
         serviceTag: model.get('serviceTag'),
         order: order ? order.no : null,
         programName: model.get('programName'),
+        prodLine: model.get('prodLine'),
         nc12: model.get('nc12'),
         counter: model.get('counter'),
         quantity: order ? order.quantity : null,
