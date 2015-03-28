@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["../router","../viewport","../user","i18n!app/nls/xiconf","i18n!app/nls/xiconfOrders"],function(n,r,e){var i=e.auth("XICONF:VIEW");n.map("/xiconf/orders",i,function(n){r.loadPage(["app/xiconfOrders/XiconfOrderCollection","app/xiconfOrders/pages/XiconfOrderListPage"],function(r,e){return new e({collection:new r(null,{rqlQuery:n.rql})})})}),n.map("/xiconf/orders/:id",i,function(n){r.loadPage(["app/xiconfOrders/XiconfOrder","app/xiconfOrders/pages/XiconfOrderDetailsPage"],function(r,e){return new e({model:new r({_id:n.params.id})})})})});

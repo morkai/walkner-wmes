@@ -169,18 +169,23 @@ app/vis/assets/main.css
 ----------------
 app/vis/assets/main.css
 
+app/xiconf/assets/leds.css
+----------------
+app/xiconf/assets/leds.css
+
 app/xiconf/assets/main.css
 ----------------
 app/xiconf/assets/./programs.css
+app/xiconf/assets/./leds.css
 app/xiconf/assets/main.css
 
 app/xiconf/assets/programs.css
 ----------------
 app/xiconf/assets/programs.css
 
-app/xiconfProgramOrders/assets/main.css
+app/xiconfOrders/assets/main.css
 ----------------
-app/xiconfProgramOrders/assets/main.css
+app/xiconfOrders/assets/main.css
 
 app/xiconfPrograms/assets/main.css
 ----------------
@@ -235,7 +240,7 @@ assets/../app/prodShiftOrders/assets/main.css
 assets/../app/prodShifts/assets/main.css
 assets/../app/pressWorksheets/assets/main.css
 assets/../app/xiconf/assets/main.css
-assets/../app/xiconfProgramOrders/assets/main.css
+assets/../app/xiconfOrders/assets/main.css
 assets/../app/xiconfPrograms/assets/main.css
 assets/../app/icpo/assets/main.css
 assets/../app/updater/assets/main.css
@@ -471,6 +476,7 @@ app/prodLines/ProdLine.js
 app/prodLines/ProdLineCollection.js
 app/data/prodLines.js
 app/data/views/renderOrgUnitPath.js
+app/core/util/getShiftEndDate.js
 app/fte/util/isEditable.js
 app/fte/FteMasterEntry.js
 app/fte/FteLeaderEntry.js
@@ -602,7 +608,6 @@ app/nls/pressWorksheets.js
 app/nls/pl/pressWorksheets.js
 i18n!app/nls/pressWorksheets
 app/pressWorksheets/routes.js
-app/core/util/getShiftEndDate.js
 app/core/templates/userInfo.js
 app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
@@ -727,10 +732,10 @@ app/nls/xiconf.js
 app/nls/pl/xiconf.js
 i18n!app/nls/xiconf
 app/xiconf/routes.js
-app/nls/xiconfProgramOrders.js
-app/nls/pl/xiconfProgramOrders.js
-i18n!app/nls/xiconfProgramOrders
-app/xiconfProgramOrders/routes.js
+app/nls/xiconfOrders.js
+app/nls/pl/xiconfOrders.js
+i18n!app/nls/xiconfOrders
+app/xiconfOrders/routes.js
 app/xiconfPrograms/XiconfProgram.js
 app/xiconfPrograms/XiconfProgramCollection.js
 app/nls/xiconfPrograms.js
