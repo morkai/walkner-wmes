@@ -1146,6 +1146,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       }
     }
 
+    newOrdersNos = _.unique(newOrdersNos);
+
     step(
       function getOrderDataStep()
       {
