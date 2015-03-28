@@ -45,7 +45,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   {
     var ps = changes.prodShift;
 
-    if (ps !== undefined && ps.leader !== undefined)
+    if (ps !== undefined && (ps === null || ps.leader !== undefined))
     {
       updateProdLinesLeader(changes._id, null);
     }
