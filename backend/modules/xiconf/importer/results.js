@@ -369,7 +369,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
     }
 
     return featureFileName
-      .replace('.xml', '')
+      .replace(/\.([a-zA-Z]+)$/, '')
       .replace(nc12, '')
       .trim()
       .replace(/^[-_ ]+/g, '')
