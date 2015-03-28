@@ -387,7 +387,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     var $push = {};
 
     compareOrderToXiconfOrder($set, order, xiconfOrder);
-    compareParsedOrdersToXiconfOrder($set, $push, xiconfOrder, parsedOrders);
+    compareParsedOrdersToXiconfOrder($set, $push, parsedOrders, xiconfOrder);
 
     var emptySet = _.isEmpty($set);
     var emptyPush = _.isEmpty($push);
