@@ -365,18 +365,20 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       input.leds = [];
     }
 
-    return _.every(input.leds, function(led)
+    input.leds = input.leds.filter(function(led)
     {
       if (!_.isObject(led) || !_.isString(led.nc12) || !_.isArray(led.serialNumbers) || !led.serialNumbers.length)
       {
         return false;
       }
 
-      return _.every(led.serialNumbers, function(serialNumber)
+      led.serialNumbers = led.serialNumbers.filter(function(serialNumber)
       {
         return _.isString(serialNumber) && !_.isEmpty(serialNumber);
       });
     });
+
+    return true;
   }
 
   function checkSerialNumber(input, reply)
