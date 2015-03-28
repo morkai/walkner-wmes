@@ -194,7 +194,8 @@
     "error:TESTING_MAX_RESISTANCE": "TEST: Exceeded the maximum resistance value.",
     "error:TESTING_MIN_POWER": "TEST: Exceeded the minimum power value.",
     "error:TESTING_MAX_POWER": "TEST: Exceeded the maximum power value.",
-    "error:REMOTE_SERVICE_TAG_FAILURE": "Error during acquisition of a new Service Tag."
+    "error:REMOTE_SERVICE_TAG_FAILURE": "Error during acquisition of a new Service Tag.",
+    "error:INVALID_ITEM_QUANTITY": "Detected invalid component quantities in the current order."
   },
   "pl": true
 }

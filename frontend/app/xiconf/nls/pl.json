@@ -121,6 +121,7 @@
   "log:TESTING_PLC_SETUP": "Przygotowywanie sterownika...",
   "log:TESTING_PLC_TEARDOWN": "Wyłączanie sterownika...",
   "log:TESTING_EXECUTING_STEP": "{type, select, pe{Wykonywanie testu obwodu ochronnego} sol{Programowanie Fortimo Solar} fn{Wykonywanie testu funkcjonalnego} other{Wykonywanie kroku programu <em>{type}</em>}}...",
+  "log:ACQUIRING_SERVICE_TAG": "Pobieranie nowego Service Taga...",
   "log:SERVICE_TAG_ACQUIRED": "Otrzymano Service Tag: <code>{serviceTag}</code>",
   "log:SKIPPING_SERVICE_TAG_ACQUIRING": "Pomijanie pobierania nowego Service Taga...",
   "log:PRINTING_SERVICE_TAG": "Drukowanie etykiety Service Tag na drukarce <code>{printerName}</code>...",
@@ -193,5 +194,6 @@
   "error:TESTING_MAX_RESISTANCE": "TEST: Przekroczono maksymalną wartość rezystancji.",
   "error:TESTING_MIN_POWER": "TEST: Przekroczono minimalną wartość mocy.",
   "error:TESTING_MAX_POWER": "TEST: Przekroczono maksymalną wartość mocy.",
-  "error:REMOTE_SERVICE_TAG_FAILURE": "Błąd podczas pobierania nowego Service Taga."
+  "error:REMOTE_SERVICE_TAG_FAILURE": "Błąd podczas pobierania nowego Service Taga.",
+  "error:INVALID_ITEM_QUANTITY": "Wykryto nieprawidłowe ilości komponentów w aktualnym zleceniu."
 }
