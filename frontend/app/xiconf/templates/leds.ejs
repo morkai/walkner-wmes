@@ -1,8 +1,5 @@
-<div class="dashboard-leds">
-  <h3 class="dashboard-header"><%- t('dashboard', 'leds') %></h3>
-  <ul id="<%- idPrefix %>-list" class="dashboard-leds-list list-group form-control is-scrollable">
-    <% leds.forEach(function(led) { %>
-    <%- renderLed(led) %>
-    <% }) %>
-  </ul>
-</div>
+<ul class="xiconf-leds-list list-group">
+  <% leds.forEach(function(led) { %>
+  <%- renderLed(led) %>
+  <% }) %>
+</ul>

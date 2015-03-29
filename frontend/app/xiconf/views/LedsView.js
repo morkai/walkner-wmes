@@ -3,14 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'jquery',
   'app/i18n',
   'app/core/View',
-  'app/dashboard/templates/leds',
-  'app/dashboard/templates/led'
+  'app/xiconf/templates/leds',
+  'app/xiconf/templates/led'
 ], function(
-  _,
   $,
   t,
   View,
@@ -25,8 +23,6 @@ define([
 
     initialize: function()
     {
-      this.offsetTop = 0;
-
       this.listenTo(this.model, 'change:leds', this.render);
       this.listenTo(this.model, 'change:led', this.renderLed);
     },
@@ -66,9 +62,9 @@ define([
         className = 'danger';
         statusIcon = 'fa-thumbs-down';
 
-        if (t.has('dashboard', 'leds:error:' + led.status.message))
+        if (t.has('xiconf', 'leds:error:' + led.status.message))
         {
-          error = t('dashboard', 'leds:error:' + led.status.message, led.status);
+          error = t('xiconf', 'leds:error:' + led.status.message, led.status);
         }
         else
         {
@@ -88,37 +84,7 @@ define([
 
     renderLed: function(index, led)
     {
-      var timers = this.timers;
-      var $led = $(ledTemplate(this.serializeLed(led)));
-
-      this.$id('list').children().eq(index).replaceWith($led);
-
-      $led.addClass('blink');
-
-      if (timers['blink' + index])
-      {
-        clearTimeout(timers['blink' + index]);
-      }
-
-      timers['blink' + index] = setTimeout(function()
-      {
-        if (timers && timers['blink' + index])
-        {
-          delete timers['blink' + index];
-        }
-
-        $led.removeClass('blink');
-      }, 200);
-    },
-
-    afterRender: function()
-    {
-      this.offsetTop = this.$id('list').offset().top;
-    },
-
-    resize: function()
-    {
-      this.$id('list')[0].style.maxHeight = (window.innerHeight - this.offsetTop - 14) + 'px';
+      this.$id('list').children().eq(index).replaceWith($(ledTemplate(this.serializeLed(led))));
     }
 
   });
