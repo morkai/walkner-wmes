@@ -13,6 +13,8 @@ exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   mailSenderId: 'mail/sender',
   recipients: [],
+  appStartedRecipients: [],
+  noEventRecipients: [],
   events: []
 };
 
@@ -21,6 +23,7 @@ exports.start = function startWatchdogModule(app, watchdogModule)
   var mailSender = app[watchdogModule.config.mailSenderId];
   var mongoose = app[watchdogModule.config.mongooseId];
   var Event = mongoose.model('Event');
+  var lastAppStartedCheckAt = Date.now();
 
   app.broker.subscribe('app.started').setLimit(1).on('message', function()
   {
@@ -41,6 +44,8 @@ exports.start = function startWatchdogModule(app, watchdogModule)
 
       later.setInterval(scheduleEventCheck.bind(null, event), event.schedule);
     });
+
+    checkAppStartedEvents();
   });
 
   function scheduleEventCheck(event)
@@ -79,7 +84,11 @@ exports.start = function startWatchdogModule(app, watchdogModule)
 
   function notifyNoEvent(event, lastOccurrenceAt)
   {
-    var to = _.unique([].concat(event.recipients || [], watchdogModule.config.recipients));
+    var to = _.unique([].concat(
+      event.recipients || [],
+      watchdogModule.config.recipients,
+      watchdogModule.config.noEventRecipients
+    ));
 
     if (to.length === 0)
     {
@@ -108,6 +117,97 @@ exports.start = function startWatchdogModule(app, watchdogModule)
       else
       {
         watchdogModule.debug("[%s] Notified: %s", event.id, to);
+      }
+    });
+  }
+
+  function checkAppStartedEvents()
+  {
+    var now = Date.now();
+
+    Event.find({type: 'app.started', time: {$gte: lastAppStartedCheckAt}}).lean().exec(function(err, events)
+    {
+      if (err)
+      {
+        watchdogModule.error("Failed to find app.started events: %s", err.message);
+
+        return setTimeout(checkAppStartedEvents, 60 * 1000);
+      }
+
+      lastAppStartedCheckAt = now;
+
+      if (!events.length)
+      {
+        return setTimeout(checkAppStartedEvents, 60 * 1000);
+      }
+
+      notifyAppStartedEvent(events);
+
+      setTimeout(checkAppStartedEvents, 15 * 60 * 1000);
+    });
+  }
+
+  function notifyAppStartedEvent(events)
+  {
+    var to = _.unique([].concat(
+      watchdogModule.config.recipients,
+      watchdogModule.config.appStartedRecipients
+    ));
+
+    if (to.length === 0)
+    {
+      return watchdogModule.warn("[%s] Nobody to notify about the app.started events :(");
+    }
+
+    var restarts = {};
+
+    _.forEach(events, function(event)
+    {
+      var appId = event.data.id;
+
+      if (!restarts[appId])
+      {
+        restarts[appId] = {
+          count: 0,
+          time: event.time
+        };
+      }
+
+      ++restarts[appId].count;
+    });
+
+    var subject = format(
+      "[%s:%s:appStarted] %s", app.options.id, watchdogModule.name, Object.keys(restarts).join(', ')
+    );
+    var text = [
+      "Detected server restarts:"
+    ];
+
+    _.forEach(restarts, function(appRestart, appId)
+    {
+      text.push(format(
+        "  - %dx %s @ %s",
+        appRestart.count,
+        appId,
+        moment(appRestart.time).format('YYYY-MM-DD, HH:mm:ss')
+      ));
+    });
+
+    text.push(
+      "",
+      "This message was generated automatically.",
+      "Sincerely, WMES Bot"
+    );
+
+    mailSender.send(to, subject, text.join('\r\n'), function(err)
+    {
+      if (err)
+      {
+        watchdogModule.error("[app.started] Failed to notify [%s]: %s", to, err.message);
+      }
+      else
+      {
+        watchdogModule.debug("[app.started] Notified: %s", to);
       }
     });
   }
