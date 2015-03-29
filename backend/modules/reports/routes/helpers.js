@@ -38,6 +38,7 @@ exports.sendCachedReport = function(id, req, res, next)
   }
   else
   {
+    req.setTimeout(4 * 60 * 1000);
     next();
   }
 };
