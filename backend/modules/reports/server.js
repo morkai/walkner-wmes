@@ -6,6 +6,8 @@
 
 var crypto = require('crypto');
 var _ = require('lodash');
+var moment = require('moment');
+
 var REPORTS = {
   1: require('./report1'),
   2: require('./report2'),
@@ -52,12 +54,10 @@ exports.start = function startReportsServerModule(app, module)
     }
 
     var startedAt = Date.now();
-    var optionsJson = null;
 
     if (!req.hash)
     {
-      optionsJson = JSON.stringify(req.options);
-      req.hash = crypto.createHash('md5').update(optionsJson).digest('hex');
+      req.hash = crypto.createHash('md5').update(JSON.stringify(req.options)).digest('hex');
     }
 
     if (inProgress[req.hash] !== undefined)
@@ -86,8 +86,17 @@ exports.start = function startReportsServerModule(app, module)
       }
       else if (duration > 60000)
       {
+        var options = _.pick(req.options, function(value, key)
+        {
+          return !_.isObject(value);
+        });
+
         module.debug(
-          "Generated report [%s] in %d ms: %s", req._id, duration, optionsJson || JSON.stringify(req.options)
+          "Generated report [%s] using data from %d days in %ss: %s",
+          req._id,
+          moment.duration(options.toTime - options.fromTime).as('days'),
+          (duration / 1000).toFixed(3),
+          JSON.stringify(options)
         );
       }
 
