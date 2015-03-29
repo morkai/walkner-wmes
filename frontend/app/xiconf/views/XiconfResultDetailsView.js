@@ -26,7 +26,7 @@ define([
     template: detailsTemplate,
 
     events: {
-      'click .history-tabs a': function(e)
+      'click .xiconf-tabs a': function(e)
       {
         e.preventDefault();
 

@@ -30,7 +30,10 @@ define([
       ['app/xiconf/pages/XiconfResultDetailsPage'],
       function(XiconfResultDetailsPage)
       {
-        return new XiconfResultDetailsPage({modelId: req.params.id});
+        return new XiconfResultDetailsPage({
+          modelId: req.params.id,
+          tab: req.query.tab
+        });
       }
     );
   });

@@ -70,7 +70,10 @@ define([
     {
       this.model = bindLoadingMessage(new XiconfResult({_id: this.options.modelId}), this);
 
-      this.view = new XiconfResultDetailsView({model: this.model});
+      this.view = new XiconfResultDetailsView({
+        model: this.model,
+        tab: this.options.tab
+      });
     },
 
     load: function(when)
