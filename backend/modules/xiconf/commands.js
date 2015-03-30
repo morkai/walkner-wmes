@@ -1163,7 +1163,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
         }
 
-        newOrdersNos = newOrdersData.map(function(orderData) { return orderData._id; });
+        newOrdersNos = newOrdersData
+          .filter(function(orderData) { return orderData !== null; })
+          .map(function(orderData) { return orderData._id; });
 
         return emitRemoteDataForProdLineUpdate(prodLineId, optSocket, newOrdersNos, newOrdersData);
       }
