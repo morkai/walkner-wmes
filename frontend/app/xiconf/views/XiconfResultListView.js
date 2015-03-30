@@ -16,7 +16,7 @@ define([
     className: 'is-colored is-clickable',
 
     remoteTopics: {
-      'xiconf.synced': 'refreshCollection'
+      'xiconf.results.synced': 'refreshCollection'
     },
 
     columns: [

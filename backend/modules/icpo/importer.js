@@ -109,7 +109,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
             this.meta.uuid
           );
 
-          app.broker.publish('icpo.synced');
+          app.broker.publish('icpo.results.synced');
         }
 
         this.fileInfo = null;

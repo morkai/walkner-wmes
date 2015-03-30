@@ -54,8 +54,8 @@ exports['messenger/server'] = {
   repPort: 60031,
   broadcastTopics: [
     'events.saved',
-    'xiconf.synced',
-    'icpo.synced'
+    'xiconf.results.synced',
+    'icpo.results.synced'
   ]
 };
 

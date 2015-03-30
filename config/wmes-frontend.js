@@ -137,7 +137,8 @@ exports.pubsub = {
     'prodShiftOrders.**',
     'updater.newVersion',
     'settings.updated.**',
-    'xiconf.orders.**', 'xiconf.clients.**'
+    'xiconf.results.synced', 'xiconf.orders.**', 'xiconf.clients.**',
+    'icpo.results.synced'
   ]
 };
 

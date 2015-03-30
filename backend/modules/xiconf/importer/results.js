@@ -109,7 +109,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
             this.meta.uuid
           );
 
-          app.broker.publish('xiconf.synced', {
+          app.broker.publish('xiconf.results.synced', {
             orders: this.orderIds || []
           });
         }

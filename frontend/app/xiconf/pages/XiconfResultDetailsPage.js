@@ -26,7 +26,7 @@ define([
     pageId: 'xiconfResultDetails',
 
     remoteTopics: {
-      'xiconf.synced': function(message)
+      'xiconf.results.synced': function(message)
       {
         var order = this.model.get('order');
 

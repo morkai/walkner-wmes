@@ -16,7 +16,7 @@ define([
     className: 'is-clickable',
 
     remoteTopics: {
-      'icpo.synced': 'refreshCollection'
+      'icpo.results.synced': 'refreshCollection'
     },
 
     columns: [
