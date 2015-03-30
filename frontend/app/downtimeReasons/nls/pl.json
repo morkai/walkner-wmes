@@ -27,6 +27,9 @@
   "PROPERTY:color": "Kolor wartości",
   "PROPERTY:refValue": "Referencja [FTE]",
   "PROPERTY:refColor": "Kolor referencji",
+  "PROPERTY:aors": "Obszary odpowiedzialności",
+
+  "aors:all": "Wszystkie",
 
   "type:other": "Inny",
   "type:malfunction": "Awaria",

@@ -5,10 +5,12 @@
 define([
   '../i18n',
   '../core/Model',
+  '../data/aors',
   'app/core/templates/colorLabel'
 ], function(
   t,
   Model,
+  aors,
   colorLabelTemplate
 ) {
   'use strict';
@@ -39,7 +41,8 @@ define([
         scheduled: false,
         color: '#ff0000',
         refColor: '#aa0000',
-        refValue: 0
+        refValue: 0,
+        aors: []
       };
     },
 
@@ -64,6 +67,13 @@ define([
           .map(function(subdivisionType) { return t('downtimeReasons', 'subdivisionType:' + subdivisionType); })
           .join('; ');
       }
+
+      obj.aors = obj.aors.map(function(aorId)
+      {
+        var aor = aors.get(aorId);
+
+        return aor ? aor.getLabel() : aorId;
+      });
 
       return obj;
     }

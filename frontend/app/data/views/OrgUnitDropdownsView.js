@@ -7,6 +7,7 @@ define([
   'jquery',
   'app/i18n',
   'app/core/View',
+  'app/core/util/idAndLabel',
   '../divisions',
   '../subdivisions',
   '../mrpControllers',
@@ -18,6 +19,7 @@ define([
   $,
   t,
   View,
+  idAndLabel,
   divisions,
   subdivisions,
   mrpControllers,
@@ -46,11 +48,6 @@ define([
   };
 
   var DEFAULT_DIVISION_FILTER = function() { return true; };
-
-  function idAndLabel(model)
-  {
-    return {id: model.id, text: model.getLabel()};
-  }
 
   return View.extend({
 

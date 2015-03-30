@@ -28,6 +28,9 @@
     "PROPERTY:color": "Value color",
     "PROPERTY:refValue": "Reference [FTE]",
     "PROPERTY:refColor": "Reference color",
+    "PROPERTY:aors": "Areas of responsibility",
+
+    "aors:all": "All",
 
     "type:other": "Other",
     "type:malfunction": "Malfunction",

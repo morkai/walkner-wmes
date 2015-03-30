@@ -62,7 +62,11 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
     refValue: {
       type: Number,
       default: 0
-    }
+    },
+    aors: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Aor'
+    }]
   }, {
     id: false
   });

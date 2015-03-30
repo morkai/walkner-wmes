@@ -19,6 +19,22 @@
         <div class="prop-value"><%= model.subdivisionTypes %></div>
       </div>
       <div class="prop">
+        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:aors') %></div>
+        <div class="prop-value">
+          <% if (!model.aors.length) { %>
+          <%- t('downtimeReasons', 'aors:all') %>
+          <% } else if (model.aors.length === 1) { %>
+          <%= model.aors[0] %>
+          <% } else { %>
+          <ul>
+            <% model.aors.forEach(function(aor) { %>
+            <li><%= aor %></li>
+            <% }) %>
+          </ul>
+          <% } %>
+        </div>
+      </div>
+      <div class="prop">
         <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:opticsPosition') %></div>
         <div class="prop-value"><%- model.opticsPosition %></div>
       </div>

@@ -4,13 +4,19 @@
 
 define([
   'underscore',
+  'app/i18n',
+  'app/data/aors',
   'app/core/views/FormView',
+  'app/core/util/idAndLabel',
   'app/core/templates/colorPicker',
   'app/downtimeReasons/templates/form',
   'bootstrap-colorpicker'
 ], function(
   _,
+  t,
+  aors,
   FormView,
+  idAndLabel,
   colorPickerTemplate,
   formTemplate
 ) {
@@ -21,8 +27,8 @@ define([
     template: formTemplate,
 
     events: _.extend({}, FormView.prototype.events, {
-      'change [name=color]': 'updateColorPicker',
-      'change [name=refColor]': 'updateColorPicker'
+      'change #-color': 'updateColorPicker',
+      'change #-refColor': 'updateColorPicker'
     }),
 
     destroy: function()
@@ -51,6 +57,12 @@ define([
         this.$('.form-control[name=_id]').attr('readonly', true);
         this.$('.form-control[name=label]').focus();
       }
+
+      this.$id('aors').select2({
+        placeholder: t('downtimeReasons', 'aors:all'),
+        multiple: true,
+        data: aors.map(idAndLabel)
+      });
     },
 
     serializeToForm: function()
@@ -58,6 +70,7 @@ define([
       var formData = this.model.toJSON();
 
       formData.scheduled = String(formData.scheduled);
+      formData.aors = formData.aors.join(',');
 
       return formData;
     },
@@ -72,6 +85,8 @@ define([
       {
         formData.scheduled = null;
       }
+
+      formData.aors = formData.aors ? formData.aors.split(',') : [];
 
       return formData;
     },
