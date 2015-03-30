@@ -143,7 +143,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           '',
           'Nr zlecenia: ' + orderNo,
           '12NC wyrobu: ' + productNc12,
-          'Nazwa wyrobu: ' + productName,
+          'Nazwa wyrobu: ' + productName.trim(),
           'Ilość ze zleceń: ' + quantityDone + '/' + quantityTodo,
           'Ilość zaprogramowana: '
             + this.xiconfOrder.quantityDone.toLocaleString() + '/'
@@ -156,13 +156,13 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
             '',
             '12NC #' + (i + 1) + ': ' + item.nc12,
             'Nazwa: ' + item.name,
-            'Ilość: ' + item.quantityTodo.toLocaleString() + '/' + item.quantityDone.toLocaleString()
+            'Ilość: ' + item.quantityDone.toLocaleString() + '/' + item.quantityTodo.toLocaleString()
           );
         });
 
         text.push('', 'Zlecenie wykonywane było na następujących liniach produkcyjnych:');
 
-        _.forEach(this.prodLineIds, function(prodLineId)
+        _.forEach(this.prodLineIds, function(division, prodLineId)
         {
           text.push('  - ' + prodLineId);
         });
