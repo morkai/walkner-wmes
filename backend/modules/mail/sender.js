@@ -27,7 +27,7 @@ exports.start = function startMailSenderModule(app, module)
   }
   else if (!module.config.smtp && !module.config.remoteSenderUrl)
   {
-    throw new Error("`smtp` or `remoteSenderUrl` must be set!");
+    module.warn("No `smtp` or `remoteSenderUrl` specified.");
   }
   else if (module.config.smtp)
   {
@@ -48,11 +48,11 @@ exports.start = function startMailSenderModule(app, module)
    */
   module.send = function(to, subject, text, done)
   {
-    var options;
+    var mailOptions;
 
     if (arguments.length > 2)
     {
-      options = {
+      mailOptions = {
         to: to,
         subject: subject,
         text: text
@@ -60,17 +60,21 @@ exports.start = function startMailSenderModule(app, module)
     }
     else
     {
-      options = to;
+      mailOptions = to;
       done = subject;
     }
 
-    if (transport === null)
+    if (module.config.remoteSenderUrl !== null)
     {
-      sendThroughRemote(options, done);
+      sendThroughRemote(mailOptions, done);
+    }
+    else if (transport !== null)
+    {
+      sendThroughSmtp(mailOptions, done);
     }
     else
     {
-      sendThroughSmtp(options, done);
+      module.debug("Not sending e-mail: %s", JSON.stringify(mailOptions));
     }
   };
 
