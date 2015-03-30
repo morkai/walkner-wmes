@@ -27,8 +27,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var ordersToOperationsQueueMap = {};
   var workingOrderChangeCheckTimers = {};
 
+  var orderResultsToRecount = {};
+  var orderResultsRecountTimer = null;
+
   app.broker.subscribe('shiftChanged', onShiftChanged);
   app.broker.subscribe('xiconf.orders.synced', onXiconfOrdersSynced);
+  app.broker.subscribe('xiconf.results.synced', onXiconfResultsSynced);
   app.broker.subscribe('production.stateChanged.**', onProductionStateChanged);
 
   sio.sockets.on('connection', function(socket)
@@ -112,6 +116,53 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         }
       }
     );
+  }
+
+  function onXiconfResultsSynced(message)
+  {
+    var orderResultIds = message.orders;
+
+    if (!orderResultIds.length)
+    {
+      return;
+    }
+
+    for (var i = 0; i < orderResultIds.length; ++i)
+    {
+      orderResultsToRecount[orderResultIds[i]] = true;
+    }
+
+    if (orderResultsToRecount)
+    {
+      return;
+    }
+
+    if (orderResultsRecountTimer !== null)
+    {
+      clearTimeout(orderResultsRecountTimer);
+    }
+
+    orderResultsRecountTimer = setTimeout(recountOrderResults, 1337);
+  }
+
+  function recountOrderResults()
+  {
+    if (orderResultsRecountTimer !== null)
+    {
+      clearTimeout(orderResultsRecountTimer);
+      orderResultsRecountTimer = null;
+    }
+
+    var orderResultIds = Object.keys(orderResultsToRecount);
+
+    if (!orderResultIds.length)
+    {
+      return;
+    }
+
+    orderResultsToRecount = {};
+
+    //todo
   }
 
   function onClientsSelectedOrderNoChanged(newSelectedOrderNo)
@@ -1163,9 +1214,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
         }
 
-        newOrdersNos = newOrdersData
-          .filter(function(orderData) { return orderData !== null; })
-          .map(function(orderData) { return orderData._id; });
+        newOrdersData = newOrdersData.filter(function(orderData) { return orderData !== null; });
+        newOrdersNos = newOrdersData.map(function(orderData) { return orderData._id; });
 
         return emitRemoteDataForProdLineUpdate(prodLineId, optSocket, newOrdersNos, newOrdersData);
       }
