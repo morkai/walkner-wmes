@@ -20,6 +20,7 @@ exports.modules = [
   'express',
   'users',
   'vendors',
+  'vendorNc12s',
   'feedback',
   'purchaseOrders',
   {id: 'messenger/client', name: 'messenger/client:pos-importer'},
@@ -83,6 +84,7 @@ exports.mongoose = {
   models: [
     'setting', 'event', 'user',
     'vendor',
+    'vendorNc12',
     'feedback',
     'purchaseOrder', 'purchaseOrderPrint'
   ]
@@ -111,7 +113,8 @@ exports.user = {
     'USERS:VIEW', 'USERS:MANAGE',
     'EVENTS:VIEW', 'EVENTS:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
-    'PURCHASE_ORDERS:VIEW', 'PURCHASE_ORDERS:MANAGE'
+    'PURCHASE_ORDERS:VIEW', 'PURCHASE_ORDERS:MANAGE',
+    'VENDOR_NC12S:VIEW', 'VENDOR_NC12S:MANAGE'
   ]
 };
 

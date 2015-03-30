@@ -107,6 +107,7 @@
   "NAVBAR:MONITORING": "Monitoring",
   "NAVBAR:MONITORING:LAYOUT": "Układ fabryki",
   "NAVBAR:MONITORING:LIST": "Lista linii produkcyjnych",
+  "NAVBAR:VENDOR_NC12S": "Baza 12NC",
 
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
   "ACTION_FORM:BUTTON:delete": "Usuń",

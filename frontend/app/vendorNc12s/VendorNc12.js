@@ -3,15 +3,27 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  './dashboard/routes',
-  './events/routes',
-  './purchaseOrders/routes',
-  './users/routes',
-  './vendors/routes',
-  './vendorNc12s/routes'
-], function()
-{
+  '../core/Model'
+], function(
+  Model
+) {
   'use strict';
 
+  return Model.extend({
 
+    urlRoot: '/vendorNc12s',
+
+    clientUrlRoot: '#vendorNc12s',
+
+    topicPrefix: 'vendorNc12s',
+
+    privilegePrefix: 'VENDOR_NC12S',
+
+    nlsDomain: 'vendorNc12s',
+
+    labelAttribute: 'nc12',
+
+    defaults: {}
+
+  });
 });

@@ -96,6 +96,8 @@
   "PRIVILEGE:PURCHASE_ORDERS:VIEW": "Zamówienia: przeglądanie",
   "PRIVILEGE:PURCHASE_ORDERS:MANAGE": "Zamówienia: zarządzanie",
   "PRIVILEGE:FACTORY_LAYOUT:MANAGE": "Monitoring: zarządzanie",
+  "PRIVILEGE:VENDOR_NC12S:VIEW": "Baza 12NC: przeglądanie",
+  "PRIVILEGE:VENDOR_NC12S:MANAGE": "Baza 12NC: zarządzanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System"

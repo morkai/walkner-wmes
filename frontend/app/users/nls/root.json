@@ -96,6 +96,8 @@
     "PRIVILEGE:PURCHASE_ORDERS:VIEW": "Purchase orders: view",
     "PRIVILEGE:PURCHASE_ORDERS:MANAGE": "Purchase orders: manage",
     "PRIVILEGE:FACTORY_LAYOUT:MANAGE": "Monitoring: manage",
+    "PRIVILEGE:VENDOR_NC12S:VIEW": "12NC database: view",
+    "PRIVILEGE:VENDOR_NC12S:MANAGE": "12NC database: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System"

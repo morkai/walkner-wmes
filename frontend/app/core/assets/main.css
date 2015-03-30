@@ -185,7 +185,9 @@ kbd {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
-
+.panel-body.has-lastElementRow {
+  padding-bottom: 0;
+}
 .panel-warning {
   border-color: #f0ad4e;
 }

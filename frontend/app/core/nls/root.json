@@ -108,6 +108,7 @@
     "NAVBAR:MONITORING": "Monitoring",
     "NAVBAR:MONITORING:LAYOUT": "Factory layout",
     "NAVBAR:MONITORING:LIST": "Production line list",
+    "NAVBAR:VENDOR_NC12S": "12NC database",
 
     "ACTION_FORM:BUTTON": "Perform action",
     "ACTION_FORM:BUTTON:delete": "Delete",

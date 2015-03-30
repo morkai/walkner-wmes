@@ -3,15 +3,19 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  './dashboard/routes',
-  './events/routes',
-  './purchaseOrders/routes',
-  './users/routes',
-  './vendors/routes',
-  './vendorNc12s/routes'
-], function()
-{
+  '../core/Collection',
+  './VendorNc12'
+], function(
+  Collection,
+  VendorNc12
+) {
   'use strict';
 
+  return Collection.extend({
 
+    model: VendorNc12,
+
+    rqlQuery: 'limit(15)&sort(vendor,nc12)'
+
+  });
 });
