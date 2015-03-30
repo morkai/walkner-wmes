@@ -80,19 +80,10 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           }
         });
 
-        userIds = Object.keys(userIds);
-
-        if (!userIds.length)
-        {
-          xiconfModule.info("No users to notify about a status of the [%s] order :(", orderNo);
-
-          return this.done();
-        }
-
         var conditions = {
           $or: [
             {
-              _id: {$in: userIds}
+              _id: {$in: Object.keys(userIds)}
             },
             {
               prodFunction: 'manager',
