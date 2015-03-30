@@ -38,15 +38,14 @@ define([
 
     serializeColumns: function()
     {
-      var columns = ['_id', 'pGr', 'plant', 'minScheduleDate', 'qty', 'printedQty'].map(function(property)
-      {
-        return {id: property, label: t('purchaseOrders', 'PROPERTY:' + property)};
-      });
-
-
-      columns[3].noData = '-';
-      columns[4].tdAttrs = 'class="is-number"';
-      columns[5].tdAttrs = 'class="is-number"';
+      var columns = [
+        {id: '_id', className: 'is-min'},
+        {id: 'pGr', className: 'is-min'},
+        {id: 'plant', className: 'is-min'},
+        {id: 'qty', className: 'is-min is-number'},
+        {id: 'printedQty', className: 'is-min is-number'},
+        {id: 'minScheduleDate', noData: '-'}
+      ];
 
       if (!user.data.vendor)
       {
