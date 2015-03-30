@@ -18,6 +18,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var mongoose = app[xiconfModule.config.mongooseId];
   var XiconfClient = mongoose.model('XiconfClient');
   var XiconfResult = mongoose.model('XiconfResult');
+  var XiconfOrderResult = mongoose.model('XiconfOrderResult');
   var XiconfOrder = mongoose.model('XiconfOrder');
 
   var prodLinesToDataMap = {};
@@ -25,8 +26,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var ordersToProdLinesMap = {};
   var ordersToGetOrderDataQueueMap = {};
   var ordersToOperationsQueueMap = {};
+  var ordersLocks = {};
   var workingOrderChangeCheckTimers = {};
 
+  var orderResultsRecountLock = false;
   var orderResultsToRecount = {};
   var orderResultsRecountTimer = null;
 
@@ -132,7 +135,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       orderResultsToRecount[orderResultIds[i]] = true;
     }
 
-    if (orderResultsToRecount)
+    if (orderResultsRecountLock)
     {
       return;
     }
@@ -153,6 +156,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       orderResultsRecountTimer = null;
     }
 
+    if (orderResultsRecountLock)
+    {
+      return;
+    }
+
     var orderResultIds = Object.keys(orderResultsToRecount);
 
     if (!orderResultIds.length)
@@ -161,8 +169,113 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     }
 
     orderResultsToRecount = {};
+    orderResultsRecountLock = true;
 
-    //todo
+    step(
+      function findXiconfOrderResultsStep()
+      {
+        XiconfOrderResult.find({_id: {$in: orderResultIds}}, {_id: 0, no: 1}).lean().exec(this.next());
+      },
+      function mapOrderNosStep(err, xiconfOrderResults)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var orderNos = {};
+
+        for (var i = 0; i < xiconfOrderResults.length; ++i)
+        {
+          orderNos[xiconfOrderResults[i].no] = true;
+        }
+
+        this.orderNos = Object.keys(orderNos);
+
+        setImmediate(this.next());
+      },
+      function findXiconfResultsStep()
+      {
+        var conditions = {
+          orderNo: {$in: this.orderNos},
+          serviceTag: null,
+          result: 'success'
+        };
+
+        XiconfResult.find(conditions, {orderNo: 1, nc12: 1, workflow: 1, leds: 1}).lean().exec(this.next());
+      },
+      function acquireServiceTagsStep(err, xiconfResults)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (xiconfResults.length === 0)
+        {
+          return this.skip();
+        }
+
+        for (var i = 0; i < xiconfResults.length; ++i)
+        {
+          var xiconfResult = xiconfResults[i];
+          var input = {
+            orderNo: xiconfResult.orderNo,
+            nc12: xiconfResult.nc12,
+            multi: isMultiDeviceResult(xiconfResult),
+            leds: createLedsFromXiconfResult(xiconfResult.leds),
+            recount: false
+          };
+
+          acquireServiceTag(input, this.group());
+        }
+
+        this.xiconfResults = xiconfResults;
+      },
+      function updateServiceTagsStep(err, serviceTags)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        for (var i = 0; i < this.xiconfResults.length; ++i)
+        {
+          var xiconfResult = this.xiconfResults[i];
+          var serviceTag = serviceTags[i];
+
+          if (!serviceTag)
+          {
+            continue;
+          }
+
+          XiconfResult.collection.update({_id: xiconfResult._id}, {$set: {serviceTag: serviceTag}}, this.group());
+        }
+      },
+      function recountOrdersStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        for (var i = 0; i < this.orderNos.length; ++i)
+        {
+          recountOrder({orderNo: this.orderNos[i]}, this.group());
+        }
+      },
+      function finalizeStep(err)
+      {
+        if (err)
+        {
+          xiconfModule.error("Failed to recount orders after results sync: %s", err.message);
+        }
+
+        orderResultsRecountLock = false;
+
+        setImmediate(recountOrderResults);
+      }
+    );
   }
 
   function onClientsSelectedOrderNoChanged(newSelectedOrderNo)
@@ -490,7 +603,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       orderNo: input.orderNo,
       nc12: input.nc12,
       multi: input.multi,
-      leds: input.leds
+      leds: input.leds,
+      recount: input.recount !== false
     });
   }
 
@@ -514,7 +628,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       data: data
     };
 
-    if (Array.isArray(orderQueue))
+    if (ordersLocks[orderNo])
     {
       return orderQueue.push(queueItem);
     }
@@ -526,6 +640,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function execNextOrderOperation(orderNo)
   {
+    if (ordersLocks[orderNo])
+    {
+      return;
+    }
+
     var orderQueue = ordersToOperationsQueueMap[orderNo];
 
     if (!Array.isArray(orderQueue))
@@ -535,17 +654,22 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     var queueItem = orderQueue.shift();
 
-    if (orderQueue.length === 0)
-    {
-      delete ordersToOperationsQueueMap[orderNo];
-    }
-
     if (!queueItem)
     {
+      delete ordersToOperationsQueueMap[orderNo];
+      delete ordersLocks[orderNo];
+
       return;
     }
 
-    queueItem.operation(queueItem.data, queueItem.reply);
+    ordersLocks[orderNo] = true;
+
+    queueItem.operation(queueItem.data, function(err, result)
+    {
+      delete ordersLocks[orderNo];
+
+      queueItem.reply(err, result);
+    });
   }
 
   function recountNextOrder(data, done)
@@ -588,7 +712,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             };
           }
 
-          if (_.isString(xiconfResult.workflow) && /multidevice\s*=\s*true/i.test(xiconfResult.workflow))
+          if (isMultiDeviceResult(xiconfResult))
           {
             nc12Results.multi += 1;
           }
@@ -721,10 +845,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             quantityDone: this.orderData.quantityDone
           });
 
-          setImmediate(emitRemoteDataToOrderWorkers.bind(null, data.orderNo));
+          setImmediate(emitRemoteDataToOrderWorkers, data.orderNo);
         }
 
-        setImmediate(execNextOrderOperation.bind(null, data.orderNo));
+        setImmediate(execNextOrderOperation, data.orderNo);
 
         this.orderData = null;
         this.changes = null;
@@ -862,6 +986,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         if (err)
         {
           xiconfModule.error("Failed to acquire a new Service Tag for order [%s]: %s", data.orderNo, err.message);
+
+          setImmediate(execNextOrderOperation, data.orderNo);
         }
         else
         {
@@ -870,7 +996,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             serviceTag: serviceTag
           });
 
-          setImmediate(recountOrder.bind(null, data));
+          if (data.recount)
+          {
+            setImmediate(recountOrder, data);
+          }
+          else
+          {
+            setImmediate(execNextOrderOperation, data.orderNo);
+          }
         }
 
         this.orderData = null;
@@ -1002,6 +1135,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           xiconfModule.error(
             "Failed to release Service Tag [%s] for order [%s]: %s", data.serviceTag, data.orderNo, err.message
           );
+
+          setImmediate(execNextOrderOperation, data.orderNo);
         }
         else
         {
@@ -1009,9 +1144,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             orderNo: data.orderNo,
             serviceTag: data.serviceTag
           });
-        }
 
-        setImmediate(recountOrder.bind(null, data));
+          setImmediate(recountOrder, data);
+        }
 
         this.orderData = null;
         this.changes = null;
@@ -1426,6 +1561,45 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         orderNo: orderNo
       });
     }
+  }
+
+  function isMultiDeviceResult(xiconfResult)
+  {
+    return _.isString(xiconfResult.workflow) && /multidevice\s*=\s*true/i.test(xiconfResult.workflow);
+  }
+
+  function createLedsFromXiconfResult(xiconfResultLeds)
+  {
+    var ledList = [];
+
+    if (!Array.isArray(xiconfResultLeds) || !xiconfResultLeds.length)
+    {
+      return ledList;
+    }
+
+    var ledMap = {};
+
+    for (var i = 0; i < xiconfResultLeds.length; ++i)
+    {
+      var xiconfResultLed = xiconfResultLeds[i];
+
+      if (!ledMap[xiconfResultLed.nc12])
+      {
+        ledMap[xiconfResultLed.nc12] = {
+          nc12: xiconfResultLed.nc12,
+          serialNumbers: []
+        };
+
+        ledList.push(ledMap[xiconfResultLed.nc12]);
+      }
+
+      if (typeof xiconfResultLed.serialNumber === 'string')
+      {
+        ledMap[xiconfResultLed.nc12].serialNumbers.push(xiconfResultLed.serialNumber);
+      }
+    }
+
+    return ledList;
   }
 
   function cleanUpOrders()
