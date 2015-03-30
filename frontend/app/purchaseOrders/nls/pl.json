@@ -66,7 +66,8 @@
   "items:status:completed": "Zakończone ({count})",
   "items:select:all": "Zaznacz wszystkie",
   "items:select:none": "Odznacz wszystkie",
-  "items:print": "Drukuj wybrane",
+  "items:print": "Drukuj etykiety przewozowe",
+  "items:printVendor": "Drukuj inne etykiety",
 
   "changes:itemProp": "{item}: <em>{prop}</em>",
   "changes:more": "pokaż wszystkie zmiany",
@@ -83,13 +84,19 @@
   "paper:generic": "Podstawowe",
   "paper:vendor": "{vendorNo}: {paper}",
 
-  "printDialog:title": "Drukowanie etykiet",
+  "vendorLabelType:cordLength": "Długość przewodu (70x40 mm)",
+
+  "printDialog:title": "Drukowanie etykiet przewozowych",
   "printDialog:items": "Wybrane pozycje",
   "printDialog:total": "Suma:",
   "printDialog:print": "Drukuj etykiety",
   "printDialog:msg:failure": "Nie udało się wygenerować etykiet do druku :(",
   "printDialog:msg:blocked": "<p>Nie udało się otworzyć nowego okna z etykietami do drukowania :(</p><p>Sprawdź, czy wyskakujące okienka nie są blokowane?</p>",
   "printDialog:msg:LOCKED": "<p>Etykiety do tego zamówienia są w tym momencie generowane przez innego użytkownika.</p><p>Sprawdź aktualną wydaną ilość lub spróbuj ponownie za chwilę.</p>",
+
+  "vendorPrintDialog:title": "Drukowanie innych etykiet",
+  "vendorPrintDialog:labelType": "Rodzaj etykiety",
+  "vendorPrintDialog:labelCount": "Ilość etykiet",
 
   "prints:title": "Historia wydruków etykiet",
   "prints:showPrintPdf": "Pokaż wydruk w formacie PDF",

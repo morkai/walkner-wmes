@@ -34,7 +34,7 @@ define([
         obj.rowClassName += ' is-selectable';
       }
 
-      if (obj.printedQty < obj.qty)
+      if (obj.status !== 'completed' && obj.printedQty < obj.qty)
       {
         obj.rowClassName += ' is-inProgress';
       }

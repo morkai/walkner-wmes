@@ -65,6 +65,12 @@ define([
 
       return barcodes;
     },
+    getVendorLabelTypes: function()
+    {
+      return [
+        {id: 'cordLength', text: t('purchaseOrders', 'vendorLabelType:cordLength')}
+      ];
+    },
     getPaperGroups: function()
     {
       var paperGroups = [

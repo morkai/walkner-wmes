@@ -18,7 +18,8 @@
       <button id="<%- idPrefix %>-selectAll" class="btn btn-default"><i class="fa fa-check-square"></i><span><%- t('purchaseOrders', 'items:select:all') %></span></button>
       <button id="<%- idPrefix %>-selectNone" class="btn btn-default"><i class="fa fa-square"></i><span><%- t('purchaseOrders', 'items:select:none') %></span></button>
     </div>
-    <button id="<%- idPrefix %>-print" class="btn btn-default"><i class="fa fa-print"></i><span><%- t('purchaseOrders', 'items:print') %></span></button>
+    <button id="<%- idPrefix %>-print" class="btn btn-primary"><i class="fa fa-print"></i><span><%- t('purchaseOrders', 'items:print') %></span></button><!--
+    //--><button id="<%- idPrefix %>-printVendor" class="btn btn-default"><i class="fa fa-print"></i><span><%- t('purchaseOrders', 'items:printVendor') %></span></button>
   </div>
   <% } %>
   <table class="table table-bordered table-hover">
@@ -34,6 +35,9 @@
         <th><%- t('purchaseOrders', 'PROPERTY:item.schedule.date') %></th>
         <% } %>
         <th><%- t('purchaseOrders', 'PROPERTY:item.name') %></th>
+        <% if (vendorNc12Visible) { %>
+        <th class="is-min"><%- t('vendorNc12s', 'PROPERTY:value') %></th>
+        <% } %>
       </tr>
     </thead>
     <tbody>
@@ -52,6 +56,13 @@
         <td><%- item.schedule.length ? time.format(item.schedule[0].date, 'YYYY-MM-DD') : '' %></td>
         <% } %>
         <td rowspan="<%- item.rowSpan %>" class="pos-items-item-name"><%= item.name %></td>
+        <% if (vendorNc12Visible) { %>
+        <td rowspan="<%- item.rowSpan %>" class="is-min">
+          <% if (item.vendorNc12) { %>
+          <%= item.vendorNc12.value %> <%= item.vendorNc12.unit %>
+          <% } %>
+        </td>
+        <% } %>
       </tr>
       <% if (open) { %>
       <% item.schedule.forEach(function(schedule, i) { %>

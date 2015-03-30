@@ -13,6 +13,7 @@ define([
   '../qzPrint',
   '../labelConfigurations',
   './PurchaseOrderPrintDialogView',
+  './PurchaseOrderVendorPrintDialogView',
   'app/purchaseOrders/templates/items',
   'app/purchaseOrders/templates/printsPopover'
 ], function(
@@ -26,6 +27,7 @@ define([
   qzPrint,
   labelConfigurations,
   PurchaseOrderPrintDialogView,
+  PurchaseOrderVendorPrintDialogView,
   template,
   renderPrintsPopover
 ) {
@@ -86,6 +88,7 @@ define([
         this.state.set('selected', []);
       },
       'click #-print': 'showPrintDialog',
+      'click #-printVendor': 'showVendorPrintDialog',
       'click .action-showPrintPdf': function(e)
       {
         window.open(e.currentTarget.getAttribute('href'));
@@ -172,7 +175,8 @@ define([
         itemToPrints: this.model.prints.byItem,
         waitingCount: waitingCount.toLocaleString(),
         inProgressCount: inProgressCount.toLocaleString(),
-        completedCount: completedCount.toLocaleString()
+        completedCount: completedCount.toLocaleString(),
+        vendorNc12Visible: po.get('anyVendorNc12') === true
       };
     },
 
@@ -307,6 +311,7 @@ define([
       var printing = this.state.get('printing');
 
       this.$id('print').prop('disabled', printing || !selected.length);
+      this.$id('printVendor').prop('disabled', printing || !selected.length);
 
       if (!selected.length)
       {
@@ -487,11 +492,60 @@ define([
       });
     },
 
+    showVendorPrintDialog: function()
+    {
+      this.$id('printVendor').blur();
+
+      viewport.msg.loading();
+
+      var view = this;
+      var allItems = this.model.get('items');
+      var selectedItems = this.state.get('selected').map(function(itemId)
+      {
+        var item = allItems.get(itemId);
+        var schedule = item.get('schedule');
+        var vendorNc12 = item.get('vendorNc12');
+
+        return {
+          _id: +item.id,
+          nc12: item.get('nc12'),
+          value: vendorNc12 ? vendorNc12.value : '',
+          unit: vendorNc12 ? vendorNc12.unit : '',
+          labelCount: schedule.length ? schedule[0].qty : 0
+        };
+      }).sort(function(a, b) { return a._id - b._id; });
+
+      qzPrint.findPrinters(function(err, printers)
+      {
+        var dialogView = new PurchaseOrderVendorPrintDialogView({
+          model: selectedItems,
+          printers: (printers || []).filter(function(printer)
+          {
+            return printer.indexOf('ZPL203') !== -1;
+          })
+        });
+
+        view.listenToOnce(dialogView, 'print', view.onVendorPrintRequest.bind(view));
+
+        viewport.msg.loaded();
+        viewport.showDialog(dialogView, t('purchaseOrders', 'vendorPrintDialog:title'));
+      });
+    },
+
     onPrintRequest: function(printId)
     {
       this.state.set('printing', true);
 
       this.broker.subscribe('viewport.dialog.hidden', this.doPrint.bind(this, printId)).setLimit(1);
+
+      viewport.closeDialog();
+    },
+
+    onVendorPrintRequest: function(print)
+    {
+      this.state.set('printing', true);
+
+      this.broker.subscribe('viewport.dialog.hidden', this.doVendorPrint.bind(this, print)).setLimit(1);
 
       viewport.closeDialog();
     },
@@ -510,6 +564,50 @@ define([
       {
         this.printPdfIndirectly();
       }
+    },
+
+    doVendorPrint: function(print)
+    {
+      if (!print.items.length || !print.printer)
+      {
+        return;
+      }
+
+      if (print.labelType === 'cordLength')
+      {
+        this.printZebra203DpiCordLengthLabels(print.printer, print.items);
+      }
+    },
+
+    printZebra203DpiCordLengthLabels: function(printer, items)
+    {
+      var zpl = [];
+
+      for (var i = 0; i < items.length; ++i)
+      {
+        this.buildZebra203DpiCordLengthLabel(zpl, items[i]);
+      }
+
+      var view = this;
+
+      qzPrint.printRaw(printer, zpl.join(''), function(err)
+      {
+        if (err)
+        {
+          console.error(err);
+
+          viewport.msg.show({
+            type: 'error',
+            time: 6000,
+            text: t('purchaseOrders', 'qzPrint:msg:rawPrintError')
+          });
+        }
+
+        if (view.state)
+        {
+          view.state.set('printing', false);
+        }
+      });
     },
 
     printZebra203Dpi104x42: function(prints)
@@ -551,6 +649,27 @@ define([
           view.state.set('printing', false);
         }
       });
+    },
+
+    buildZebra203DpiCordLengthLabel: function(zpl, item)
+    {
+      var cordLength = item.value;
+
+      if (!_.isEmpty(item.unit))
+      {
+        cordLength += ' ' + item.unit;
+      }
+
+      zpl.push(
+       '^XA',
+       '^PW559',
+       '^LL0320',
+       '^LS0',
+       '^FT89,28^A0R,45,45^FH\\^FD' + item.nc12 + '^FS',
+       '^FT39,42^A0R,39,38^FH\\^FD' + cordLength + '^FS',
+       '^PQ' + item.labelCount,
+        '^XZ'
+      );
     },
 
     buildZpl203Dpi104x42: function(zpl, print, labelCount, quantity)

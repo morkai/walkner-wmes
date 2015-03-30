@@ -160,10 +160,14 @@
 .pos-detailsPage-items {
   margin: 1em 0;
 }
+.pos-vendorPrintDialog > .modal-dialog {
+  width: 600px;
+}
 .pos-printDialog > .modal-dialog {
   width: 900px;
 }
 @media screen and (max-width: 940px) {
+  .pos-vendorPrintDialog > .modal-dialog,
   .pos-printDialog > .modal-dialog {
     width: auto;
   }
@@ -178,7 +182,10 @@
 .pos-printDialog-items td {
   font-family: Consolas, Menlo, Monaco, monospace;
   text-align: right;
-  width: 1%;
+  width: 1px;
+}
+.pos-vendorPrintDialog .pos-printDialog-items td {
+  width: auto;
 }
 .pos-printDialog-items .pos-printDialog-items-total {
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
