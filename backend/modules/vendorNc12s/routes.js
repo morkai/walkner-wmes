@@ -4,11 +4,11 @@
 
 'use strict';
 
-module.exports = function setUpVendorNc12sRoutes(app, aorsModule)
+module.exports = function setUpVendorNc12sRoutes(app, module)
 {
-  var express = app[aorsModule.config.expressId];
-  var auth = app[aorsModule.config.userId].auth;
-  var VendorNc12 = app[aorsModule.config.mongooseId].model('VendorNc12');
+  var express = app[module.config.expressId];
+  var auth = app[module.config.userId].auth;
+  var VendorNc12 = app[module.config.mongooseId].model('VendorNc12');
 
   var canView = auth('VENDOR_NC12S:VIEW');
   var canManage = auth('VENDOR_NC12S:MANAGE');
