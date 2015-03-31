@@ -6,6 +6,7 @@
 
 var _ = require('lodash');
 var step = require('h5.step');
+var moment = require('moment');
 
 module.exports = function setUpXiconfNotifier(app, xiconfModule)
 {
@@ -15,6 +16,13 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
   var Order = mongoose.model('Order');
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
   var XiconfOrder = mongoose.model('XiconfOrder');
+
+  var emailUrlPrefix = xiconfModule.config.emailUrlPrefix;
+
+  if (emailUrlPrefix.substr(-1) !== '/')
+  {
+    emailUrlPrefix += '/';
+  }
 
   app.broker.subscribe('xiconf.orders.*.changed', onOrderChanged);
 
@@ -33,12 +41,15 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           division: 1,
           master: 1,
           leader: 1,
-          quantityDone: 1
+          quantityDone: 1,
+          startedAt: 1,
+          finishedAt: 1,
+          'orderData.unit': 1
         };
 
         Order.findById(orderNo, {name: 1, nc12: 1, qty: 1}).lean().exec(this.parallel());
         ProdShiftOrder.find({orderId: orderNo}, prodShiftOrderFields).lean().exec(this.parallel());
-        XiconfOrder.findById(orderNo).lean().exec(this.parallel());
+        XiconfOrder.findById(orderNo, {'items.serialNumbers': 0}).lean().exec(this.parallel());
       },
       function checkStatusStep(err, order, prodShiftOrders, xiconfOrder)
       {
@@ -62,21 +73,41 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
       {
         var userIds = {};
         var divisionIds = {};
-        var prodLineIds = {};
+        var prodLineMap = {};
 
-        _.forEach(this.prodShiftOrders, function(prodShiftOrder)
+        _.forEach(this.prodShiftOrders, function(pso)
         {
-          divisionIds[prodShiftOrder.division] = true;
-          prodLineIds[prodShiftOrder.prodLine] = prodShiftOrder.division;
+          divisionIds[pso.division] = true;
 
-          if (prodShiftOrder.master)
+          if (!prodLineMap[pso.prodLine])
           {
-            userIds[prodShiftOrder.master.id] = true;
+            prodLineMap[pso.prodLine] = {
+              division: pso.division,
+              times: []
+            };
           }
 
-          if (prodShiftOrder.leader)
+          var qty = pso.quantityDone.toLocaleString();
+
+          if (pso.orderData && pso.orderData.unit)
           {
-            userIds[prodShiftOrder.leader.id] = true;
+            qty += ' ' + pso.orderData.unit;
+          }
+
+          prodLineMap[pso.prodLine].times.push({
+            from: moment(pso.startedAt).format('YYYY-MM-DD, HH:mm:ss'),
+            to: moment(pso.finishedAt).format('HH:mm:ss'),
+            qty: qty
+          });
+
+          if (pso.master)
+          {
+            userIds[pso.master.id] = true;
+          }
+
+          if (pso.leader)
+          {
+            userIds[pso.leader.id] = true;
           }
         });
 
@@ -97,7 +128,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
         User.find(conditions, {email: 1}).lean().exec(this.next());
 
-        this.prodLineIds = prodLineIds;
+        this.prodLineMap = prodLineMap;
       },
       function sendEmailStep(err, users)
       {
@@ -118,14 +149,42 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           return this.done();
         }
 
-        var orderUrl = this.order ? xiconfModule.config.emailUrlPrefix + '#orders/' + orderNo : '-';
-        var xiconfOrderUrl = xiconfModule.config.emailUrlPrefix + '#xiconf/orders/' + orderNo;
-        var productNc12 = (this.order ? this.order.nc12 : null) || '?';
-        var productName = (this.order ? this.order.name : null) || '?';
-        var quantityTodo = this.order ? this.order.qty.toLocaleString() : '?';
-        var quantityDone = this.prodShiftOrders
-          .reduce(function(total, pso) { return total + pso.quantityDone; }, 0)
-          .toLocaleString();
+        var orderUrl = this.order ? (emailUrlPrefix + 'r/productionOrder/' + orderNo) : '-';
+        var xiconfOrderUrl = emailUrlPrefix + 'r/xiconfOrder/' + orderNo;
+        var prodShiftOrdersUrl = emailUrlPrefix + 'r/prodShiftOrders/' + orderNo;
+        var productNc12 = this.xiconfOrder.nc12[0];
+        var productName = this.xiconfOrder.name;
+        var quantityTodo = this.xiconfOrder.quantityTodo.toLocaleString();
+        var quantityDone = 0;
+        var firstStartedAt = Number.MAX_VALUE;
+        var lastFinishedAt = Number.MIN_VALUE;
+        var ordersTimes = [];
+
+        _.forEach(this.prodShiftOrders, function(pso)
+        {
+          quantityDone += pso.quantityDone;
+
+          var startedAt = pso.startedAt.getTime();
+          var finishedAt = pso.finishedAt.getTime();
+
+          if (startedAt < firstStartedAt)
+          {
+            firstStartedAt = startedAt;
+          }
+
+          if (finishedAt > lastFinishedAt)
+          {
+            lastFinishedAt = finishedAt;
+          }
+
+          ordersTimes.push({
+            startedAt: startedAt,
+            finishedAt: finishedAt
+          });
+        });
+
+        var totalDuration = lastFinishedAt - firstStartedAt;
+        var workDuration = calculateNonOverlappingWorkDuration(ordersTimes);
 
         var to = users.map(function(user) { return user.email; });
         var subject = '[WMES] Nieukończone zlecenie programowe ' + orderNo;
@@ -151,19 +210,36 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           );
         });
 
-        text.push('', 'Zlecenie wykonywane było na następujących liniach produkcyjnych:');
+        text.push(
+          '',
+          'Zlecenie wykonywane było na następujących liniach produkcyjnych:'
+        );
 
-        _.forEach(this.prodLineIds, function(division, prodLineId)
+        _.forEach(this.prodLineMap, function(prodLineInfo, prodLineId)
         {
-          text.push('  - ' + prodLineId);
+          text.push('  - ' + prodLineInfo.division + ' \\ ' + prodLineId + ':');
+
+          _.forEach(prodLineInfo.times, function(time)
+          {
+            text.push('    - ' + time.qty + ' od ' + time.from + ' do ' + time.to);
+          });
         });
 
         text.push(
           '',
-          'Zlecenie produkcyjne: ' + orderUrl,
-          'Zlecenie programowe: ' + xiconfOrderUrl,
+          'Czas rozpoczęcia zlecenia: ' + moment(firstStartedAt).format('LLLL'),
+          'Czas zakończenia zlecenia: ' + moment(lastFinishedAt).format('LLLL'),
+          'Całkowity czas trwania: ' + formatDuration(totalDuration),
+          'Całkowity czas pracy: ' + formatDuration(workDuration)
+        );
+
+        text.push(
           '',
-          'Ta wiadomość została wygenerowana automatycznie przez system WMES.'
+          'Zlecenie produkcyjne: ' + orderUrl,
+          'Zlecenie Xiconf: ' + xiconfOrderUrl,
+          'Zlecenia z linii: ' + prodShiftOrdersUrl,
+          '',
+          'Ta wiadomość została wygenerowana automatycznie przez WMES.'
         );
 
         var mailOptions = {
@@ -183,5 +259,91 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         }
       }
     );
+  }
+
+  function calculateNonOverlappingWorkDuration(times)
+  {
+    var totalWorkDuration = 0;
+
+    if (times.length === 0)
+    {
+      return totalWorkDuration;
+    }
+
+    if (times.length === 1)
+    {
+      return times[0].finishedAt - times[0].startedAt;
+    }
+
+    times.sort(function(a, b) { return a.startedAt - b.startedAt; });
+
+    var current = {
+      startedAt: 0,
+      finishedAt: 0
+    };
+
+    for (var i = 0; i < times.length; ++i)
+    {
+      var time = times[i];
+
+      if (time.startedAt > current.finishedAt)
+      {
+        totalWorkDuration += current.finishedAt - current.startedAt;
+
+        current.startedAt = time.startedAt;
+        current.finishedAt = time.finishedAt;
+
+        continue;
+      }
+
+      if (time.finishedAt > current.finishedAt)
+      {
+        current.finishedAt = time.finishedAt;
+      }
+    }
+
+    totalWorkDuration += current.finishedAt - current.startedAt;
+
+    return totalWorkDuration;
+  }
+
+  function formatDuration(time)
+  {
+    if (typeof time !== 'number' || time <= 0)
+    {
+      return '0s';
+    }
+
+    time /= 1000;
+
+    var str = '';
+    var hours = Math.floor(time / 3600);
+
+    if (hours > 0)
+    {
+      str += ' ' + hours + 'h';
+      time = time % 3600;
+    }
+
+    var minutes = Math.floor(time / 60);
+
+    if (minutes > 0)
+    {
+      str += ' ' + minutes + 'min';
+      time = time % 60;
+    }
+
+    var seconds = time;
+
+    if (seconds >= 1)
+    {
+      str += ' ' + Math.round(seconds) + 's';
+    }
+    else if (seconds > 0 && str === '')
+    {
+      str += ' ' + (seconds * 1000) + 'ms';
+    }
+
+    return str.substr(1);
   }
 };
