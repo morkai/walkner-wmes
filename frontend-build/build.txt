@@ -419,6 +419,7 @@ app/core/views/FormView.js
 app/core/pages/AddFormPage.js
 app/core/pages/EditFormPage.js
 app/core/pages/ActionFormPage.js
+app/core/util/idAndLabel.js
 app/core/templates/colorPicker.js
 app/downtimeReasons/templates/form.js
 vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js
@@ -881,6 +882,8 @@ app/purchaseOrders/labelConfigurations.js
 vendor/form2js.js
 app/purchaseOrders/templates/printDialog.js
 app/purchaseOrders/views/PurchaseOrderPrintDialogView.js
+app/purchaseOrders/templates/vendorPrintDialog.js
+app/purchaseOrders/views/PurchaseOrderVendorPrintDialogView.js
 app/purchaseOrders/templates/items.js
 app/purchaseOrders/templates/printsPopover.js
 app/purchaseOrders/views/PurchaseOrderItemsView.js
@@ -935,6 +938,12 @@ app/nls/vendors.js
 app/nls/pl/vendors.js
 i18n!app/nls/vendors
 app/vendors/routes.js
+app/vendorNc12s/VendorNc12.js
+app/vendorNc12s/VendorNc12Collection.js
+app/nls/vendorNc12s.js
+app/nls/pl/vendorNc12s.js
+i18n!app/nls/vendorNc12s
+app/vendorNc12s/routes.js
 app/pos-routes.js
 app/nls/core.js
 app/nls/pl/core.js
