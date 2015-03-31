@@ -50,6 +50,7 @@ exports.modules = [
   'warehouse',
   'licenses',
   'factoryLayout',
+  'permalinks',
   'mail/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
