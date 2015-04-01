@@ -194,18 +194,30 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         var workDuration = calculateNonOverlappingWorkDuration(ordersTimes);
 
         var to = users.map(function(user) { return user.email; });
-        var subject = '[WMES] Nieukończone zlecenie programowe ' + orderNo;
-        var text = [
-          'Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!',
+        var text = [];
+        var subject;
+
+        if (quantityDone < quantityTodo)
+        {
+          subject = '[WMES] Przerwane zlecenie programowe ' + orderNo;
+          text.push('Przerwano wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
+        }
+        else
+        {
+          subject = '[WMES] Nieukończone zlecenie programowe ' + orderNo;
+          text.push('Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
+        }
+
+        text.push(
           '',
           'Nr zlecenia: ' + orderNo,
           '12NC wyrobu: ' + productNc12,
-          'Nazwa wyrobu: ' + productName.trim(),
+          'Nazwa wyrobu: ' + productName.replace(/[^a-zA-Z0-9-_%\/\\\(\) ]/g, ''),
           'Ilość ze zleceń: ' + quantityDone + '/' + quantityTodo,
           'Ilość zaprogramowana: '
             + this.xiconfOrder.quantityDone.toLocaleString() + '/'
             + this.xiconfOrder.quantityTodo.toLocaleString()
-        ];
+        );
 
         _.forEach(this.xiconfOrder.items, function(item, i)
         {
