@@ -63,6 +63,13 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           return this.done();
         }
 
+        var hasAnyProgramItems = _.some(this.xiconfOrder.items, 'kind', 'program');
+
+        if (!hasAnyProgramItems && this.xiconfOrder.quantityDone === 0)
+        {
+          return this.done();
+        }
+
         this.order = order;
         this.prodShiftOrders = prodShiftOrders;
         this.xiconfOrder = xiconfOrder;
