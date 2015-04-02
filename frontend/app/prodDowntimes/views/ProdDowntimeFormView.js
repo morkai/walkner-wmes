@@ -198,10 +198,10 @@ define([
       formData.leader = this.serializeUserInfo('leader');
       formData.operator = this.serializeUserInfo('operator');
       formData.operators = formData.operator ? [formData.operator] : [];
-      formData.startedAt =
-        time.getMoment(formData.startedAtDate + ' ' + formData.startedAtTime).toDate();
-      formData.finishedAt =
-        time.getMoment(formData.finishedAtDate + ' ' + formData.finishedAtTime).toDate();
+      formData.startedAt = time.getMoment(formData.startedAtDate + ' ' + formData.startedAtTime).toDate();
+      formData.finishedAt = time.getMoment(formData.finishedAtDate + ' ' + formData.finishedAtTime).toDate();
+      formData.reasonComment = _.isEmpty(formData.reasonComment) ? '' : formData.reasonComment;
+      formData.decisionComment = _.isEmpty(formData.decisionComment) ? '' : formData.decisionComment;
 
       delete formData.startedAtDate;
       delete formData.startedAtTime;
