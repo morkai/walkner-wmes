@@ -26,6 +26,8 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
   app.broker.subscribe('xiconf.orders.*.changed', onOrderChanged);
 
+  setTimeout(checkOrderStatus, 1337, '116060969');
+
   function onOrderChanged(message)
   {
     checkOrderStatus(message.orderNo);
@@ -265,7 +267,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           to: to,
           replyTo: to,
           subject: subject,
-          text: text.join('\r\n')
+          text: text.join('\t\r\n')
         };
 
         mailSender.send(mailOptions, this.next());
