@@ -26,8 +26,6 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
   app.broker.subscribe('xiconf.orders.*.changed', onOrderChanged);
 
-  setTimeout(checkOrderStatus, 1337, '116060969');
-
   function onOrderChanged(message)
   {
     checkOrderStatus(message.orderNo);
