@@ -529,18 +529,25 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       input.leds = [];
     }
 
-    input.leds = input.leds.filter(function(led)
+    for (var i = 0; i < input.leds.length; ++i)
     {
+      var led = input.leds[i];
+
       if (!_.isObject(led) || !_.isString(led.nc12) || !_.isArray(led.serialNumbers) || !led.serialNumbers.length)
       {
         return false;
       }
 
-      led.serialNumbers = led.serialNumbers.filter(function(serialNumber)
+      for (var ii = 0; ii < led.serialNumbers.length; ++ii)
       {
-        return _.isString(serialNumber) && !_.isEmpty(serialNumber);
-      });
-    });
+        var serialNumber = led.serialNumbers[ii];
+
+        if (!_.isString(serialNumber) || _.isEmpty(serialNumber))
+        {
+          return false;
+        }
+      }
+    }
 
     return true;
   }
