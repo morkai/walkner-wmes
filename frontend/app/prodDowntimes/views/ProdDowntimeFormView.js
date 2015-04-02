@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/i18n',
   'app/time',
   'app/viewport',
@@ -12,6 +13,7 @@ define([
   'app/users/util/setUpUserSelect2',
   'app/prodDowntimes/templates/form'
 ], function(
+  _,
   t,
   time,
   viewport,
@@ -27,10 +29,53 @@ define([
 
     template: formTemplate,
 
+    events: _.extend({}, FormView.prototype.events, {
+      'select2-removed #-reason, #-aor': function()
+      {
+        this.$id('reason').val('');
+        this.$id('aor').val('');
+
+        this.timers.clearSelect2 = setTimeout(function(view)
+        {
+          view.setUpReasonSelect2();
+          view.setUpAorSelect2();
+          view.$id('reason').select2('focus');
+        }, 1, this);
+      },
+      'change #-reason': function()
+      {
+        this.setUpAorSelect2();
+      },
+      'change #-aor': function()
+      {
+        this.setUpReasonSelect2();
+      }
+    }),
+
+    initialize: function()
+    {
+      FormView.prototype.initialize.apply(this, arguments);
+
+      this.reasonsToAorsMap = {};
+      this.reasonsList = [];
+      this.aorsList = {};
+    },
+
+    destroy: function()
+    {
+      FormView.prototype.destroy.call(this);
+
+      this.reasonsToAorsMap = null;
+      this.reasonsList = null;
+      this.aorsList = null;
+    },
+
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);
 
+      this.setUpReasons();
+      this.setUpAors();
       this.setUpUserSelect2('master');
       this.setUpUserSelect2('leader');
       this.setUpUserSelect2('operator');
@@ -63,28 +108,36 @@ define([
 
     setUpReasonSelect2: function()
     {
-      this.$id('reason').select2({
-        data: downtimeReasons.map(function(downtimeReason)
-        {
-          return {
-            id: downtimeReason.id,
-            text: downtimeReason.id + ' - ' + downtimeReason.getLabel()
-          };
-        })
+      var $reason = this.$id('reason');
+      var data = this.getReasonsForAor(this.$id('aor').val());
+
+      $reason.select2({
+        allowClear: true,
+        placeholder: ' ',
+        data: data
       });
+
+      if ($reason.select2('data') === null)
+      {
+        $reason.select2('val', data.length === 1 ? data[0].id : '');
+      }
     },
 
     setUpAorSelect2: function()
     {
-      this.$id('aor').select2({
-        data: aors.map(function(aor)
-        {
-          return {
-            id: aor.id,
-            text: aor.getLabel()
-          };
-        })
+      var $aor = this.$id('aor');
+      var data = this.getAorsForReason(this.$id('reason').val());
+
+      $aor.select2({
+        allowClear: true,
+        placeholder: ' ',
+        data: data
       });
+
+      if ($aor.select2('data') === null)
+      {
+        $aor.select2('val', data.length === 1 ? data[0].id : '');
+      }
     },
 
     showErrorMessage: function(message)
@@ -185,6 +238,108 @@ define([
       {
         FormView.prototype.handleFailure.apply(this, arguments);
       }
+    },
+
+    getReasonsForAor: function(aor)
+    {
+      if (!aor)
+      {
+        return this.reasonsList;
+      }
+
+      var reasonsForAor = [];
+
+      for (var i = 0; i < this.reasonsList.length; ++i)
+      {
+        var reason = this.reasonsList[i];
+
+        if (!reason.aors || reason.aors[aor])
+        {
+          reasonsForAor.push(reason);
+        }
+      }
+
+      return reasonsForAor;
+    },
+
+    getAorsForReason: function(reason)
+    {
+      if (!reason)
+      {
+        return this.aorsList;
+      }
+
+      var aorsMap = this.reasonsToAorsMap[reason];
+
+      if (aorsMap === undefined)
+      {
+        return [];
+      }
+
+      if (aorsMap === null)
+      {
+        return this.aorsList;
+      }
+
+      var reasonAors = [];
+
+      _.forEach(Object.keys(aorsMap), function(aorId)
+      {
+        reasonAors.push({
+          id: aorId,
+          text: aors.get(aorId).get('name')
+        });
+      });
+
+      return reasonAors;
+    },
+
+    setUpReasons: function()
+    {
+      var reasonsToAorsMap = {};
+      var reasonsList = [];
+
+     downtimeReasons.forEach(function(reason)
+      {
+        var reasonAors = {};
+        var hasAnyAors = false;
+
+        _.forEach(reason.get('aors'), function(aor)
+        {
+          reasonAors[aor] = true;
+          hasAnyAors = true;
+        });
+
+        if (!hasAnyAors)
+        {
+          reasonAors = null;
+        }
+
+        reasonsToAorsMap[reason.id] = reasonAors;
+        reasonsList.push({
+          id: reason.id,
+          text: reason.id + ' - ' + reason.get('label'),
+          aors: reasonAors
+        });
+      });
+
+      this.reasonsToAorsMap = reasonsToAorsMap;
+      this.reasonsList = reasonsList;
+    },
+
+    setUpAors: function()
+    {
+      var aorsList = [];
+
+      aors.forEach(function(aor)
+      {
+        aorsList.push({
+          id: aor.id,
+          text: aor.get('name')
+        });
+      });
+
+      this.aorsList = aorsList;
     }
 
   });
