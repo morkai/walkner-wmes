@@ -76,7 +76,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       if (!this.prodDowntimes.length)
       {
-        return this.done(done, null);
+        return;
       }
 
       var l = this.prodDowntimes.length;
