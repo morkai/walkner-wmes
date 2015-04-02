@@ -37,10 +37,10 @@ define([
       {id: 'nc12', className: 'is-min'},
       'name',
       {id: 'mrp', className: 'is-min'},
-      {id: 'qtyUnit', label: t('orders', 'PROPERTY:qty'), className: 'is-min'},
-      {id: 'startDateText', label: t('orders', 'PROPERTY:startDate'), className: 'is-min'},
-      {id: 'finishDateText', label: t('orders', 'PROPERTY:finishDate'), className: 'is-min'},
-      {id: 'statusLabels', label: t('orders', 'PROPERTY:statuses')}
+      {id: 'qtyUnit', label: t.bound('orders', 'PROPERTY:qty'), className: 'is-min'},
+      {id: 'startDateText', label: t.bound('orders', 'PROPERTY:startDate'), className: 'is-min'},
+      {id: 'finishDateText', label: t.bound('orders', 'PROPERTY:finishDate'), className: 'is-min'},
+      {id: 'statusLabels', label: t.bound('orders', 'PROPERTY:statuses')}
     ],
 
     serializeActions: function()
