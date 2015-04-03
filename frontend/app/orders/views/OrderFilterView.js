@@ -60,7 +60,7 @@ define([
       'finishDate': 'startDate'
     },
 
-    serializeFormToQuery: function(selector)
+    serializeFormToQuery: function(selector, rqlQuery)
     {
       var timeRange = fixTimeRange.fromView(this);
       var date = this.$('input[name=date]:checked').val();
@@ -77,6 +77,8 @@ define([
       {
         selector.push({name: 'le', args: [date, timeRange.to]});
       }
+
+      rqlQuery.sort = date === 'finishDate' ? {finishDate: 1} : {startDate: 1};
     }
 
   });

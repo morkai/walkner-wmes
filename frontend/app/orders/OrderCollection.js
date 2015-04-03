@@ -36,8 +36,7 @@ define([
         },
         limit: 15,
         sort: {
-          startDate: -1,
-          finishDate: -1
+          finishDate: 1
         },
         selector: {
           name: 'and',
