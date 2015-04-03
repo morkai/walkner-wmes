@@ -173,7 +173,7 @@ ProdLineState.prototype.onClientJoin = function(socket, data)
   if (socket === this.socket)
   {
     this.productionModule.warn(
-      "The same client tried again to join the prod line: %s %s",
+      "The same client joined the prod line: %s %s",
       this.prodLine._id,
       this.inspectSocketInfo(socket)
     );
@@ -181,7 +181,7 @@ ProdLineState.prototype.onClientJoin = function(socket, data)
   else if (this.socket !== null)
   {
     this.productionModule.warn(
-      "A different client tried to join the prod line: %s %s",
+      "A different client joined the prod line: %s %s",
       this.prodLine._id,
       this.inspectSocketInfo(socket)
     );
@@ -195,7 +195,11 @@ ProdLineState.prototype.onClientJoin = function(socket, data)
     );
   }
 
-  socket.removeListener('disconnect', this.onClientDisconnect);
+  if (this.socket)
+  {
+    this.socket.removeListener('disconnect', this.onClientDisconnect);
+  }
+
   socket.on('disconnect', this.onClientDisconnect);
 
   this.onlineAt = Date.now();

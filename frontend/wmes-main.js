@@ -170,8 +170,14 @@
 
       broker.subscribe('user.reloaded', function()
       {
+        var currentRequest = router.getCurrentRequest();
+
         viewport.render();
-        router.dispatch(router.getCurrentRequest().url);
+
+        if (!/^\/production\//.test(currentRequest.path))
+        {
+          router.dispatch(currentRequest.url);
+        }
       });
 
       broker.subscribe('user.loggedIn', function()

@@ -57,6 +57,13 @@ define([
       'updater.frontendReloading': function()
       {
         this.model.saveLocalData();
+      },
+      'router.dispatching': function(message)
+      {
+        if (message.path !== '/production/' + this.model.prodLine.id)
+        {
+          this.leaveProduction();
+        }
       }
     },
 
@@ -102,7 +109,6 @@ define([
 
       updater.enableViews();
       prodLog.disable();
-      this.leaveProduction();
     },
 
     serialize: function()
@@ -271,7 +277,7 @@ define([
         this.refreshPlannedQuantities();
       }
 
-      if (this.model.isLocked())
+      if (this.model.isLocked() || this.model.id)
       {
         this.$el.removeClass('hidden');
       }
@@ -415,6 +421,12 @@ define([
 
     joinProduction: function()
     {
+      if (this.timers.joinProduction)
+      {
+        clearTimeout(this.timers.joinProduction);
+        delete this.timers.joinProduction;
+      }
+
       if (this.productionJoined || this.model.isLocked() || !this.socket.isConnected())
       {
         return;
@@ -442,20 +454,6 @@ define([
       this.productionJoined = true;
     },
 
-    delayProductionJoin: function()
-    {
-      if (this.timers.joinProduction)
-      {
-        clearTimeout(this.timers.joinProduction);
-      }
-
-      this.timers.joinProduction = setTimeout(function(view)
-      {
-        view.timers.joinProduction = null;
-        view.joinProduction();
-      }, 2000, this);
-    },
-
     leaveProduction: function()
     {
       if (this.productionJoined)
@@ -467,6 +465,20 @@ define([
 
         this.productionJoined = false;
       }
+    },
+
+    delayProductionJoin: function()
+    {
+      if (this.timers.joinProduction)
+      {
+        clearTimeout(this.timers.joinProduction);
+      }
+
+      this.timers.joinProduction = setTimeout(function(view)
+      {
+        view.timers.joinProduction = null;
+        view.joinProduction();
+      }, 1337, this);
     },
 
     subscribeForShiftChanges: function()
