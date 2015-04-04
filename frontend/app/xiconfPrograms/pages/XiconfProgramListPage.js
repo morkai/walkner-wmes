@@ -3,10 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/i18n',
   'app/core/pages/FilteredListPage',
   '../views/XiconfProgramListView',
   '../views/XiconfProgramFilterView'
 ], function(
+  t,
   FilteredListPage,
   XiconfProgramListView,
   XiconfProgramFilterView
@@ -17,7 +19,12 @@ define([
 
     FilterView: XiconfProgramFilterView,
 
-    ListView: XiconfProgramListView
+    ListView: XiconfProgramListView,
+
+    breadcrumbs: [
+      t.bound('xiconfPrograms', 'BREADCRUMBS:base'),
+      t.bound('xiconfPrograms', 'BREADCRUMBS:browse')
+    ]
 
   });
 });
