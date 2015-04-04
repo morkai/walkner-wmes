@@ -13,7 +13,7 @@ module.exports = function importOrdersRoute(app, xiconfModule, req, res, next)
 
   if (!req.is('text/plain'))
   {
-    return res.send(400, 'INVALID_CONTENT_TYPE');
+    return res.status(400).send('INVALID_CONTENT_TYPE');
   }
 
   var timestamp = parseInt(req.query.timestamp, 10);
@@ -21,7 +21,7 @@ module.exports = function importOrdersRoute(app, xiconfModule, req, res, next)
 
   if (isNaN(timestamp) || isNaN(step) || req.body.length < 256)
   {
-    return res.send(400, 'INPUT');
+    return res.status(400).send('INPUT');
   }
 
   var importFile = xiconfModule.config.ordersImportFile
@@ -35,6 +35,6 @@ module.exports = function importOrdersRoute(app, xiconfModule, req, res, next)
       return next(err);
     }
 
-    return res.send(204);
+    return res.sendStatus(204);
   });
 };

@@ -59,7 +59,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
     if (isNaN(rid) || rid <= 0)
     {
-      return res.send(400);
+      return res.sendStatus(400);
     }
 
     ProdDowntime.findOne({rid: rid}, {_id: 1}).lean().exec(function(err, prodDowntime)
@@ -74,7 +74,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
         return res.json(prodDowntime._id);
       }
 
-      return res.send(404);
+      return res.sendStatus(404);
     });
   }
 
@@ -363,7 +363,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
         if (statusCode)
         {
-          return res.send(statusCode);
+          return res.sendStatus(statusCode);
         }
 
         res.send(logEntry.data);
@@ -455,7 +455,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
         if (statusCode)
         {
-          return res.send(statusCode);
+          return res.sendStatus(statusCode);
         }
 
         res.send(logEntry.data);
@@ -537,7 +537,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
         if (statusCode)
         {
-          return res.send(statusCode);
+          return res.sendStatus(statusCode);
         }
 
         res.send(logEntry.data);

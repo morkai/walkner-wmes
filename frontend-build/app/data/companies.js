@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/companies/CompanyCollection","./createStorage"],function(e,n){return n("COMPANIES","companies",e)});
+define(["app/companies/CompanyCollection","./createStorage"],function(e,n){"use strict";return n("COMPANIES","companies",e)});

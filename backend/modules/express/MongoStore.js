@@ -5,327 +5,264 @@
 'use strict';
 
 var util = require('util');
+var Store = require('express-session').Store;
+
+module.exports = MongoStore;
 
 /**
- * @param {Store} Store
- * @returns {function(new:MongoStore, Db, MongoStore.Options)}
+ * @constructor
+ * @param {Db} db
+ * @param {MongoStore.Options} [options]
  */
-module.exports = function(Store)
+function MongoStore(db, options)
 {
-  if (typeof Store === 'undefined')
-  {
-    Store = require('connect').session.Store;
-  }
+  options = options || {};
 
-  /**
-   * @constructor
-   * @param {Db} db
-   * @param {MongoStore.Options} [options]
-   */
-  function MongoStore(db, options)
-  {
-    options = options || {};
-
-    Store.call(this, options);
-
-    /**
-     * @private
-     * @type {string}
-     */
-    this.collectionName = options.collectionName || MongoStore.Options.collectionName;
-
-    /**
-     * @private
-     * @type {boolean}
-     */
-    this.safe = options.safe === true;
-
-    /**
-     * @private
-     * @type {number}
-     */
-    this.gcInterval = (options.gcInterval || MongoStore.Options.gcInterval) * 1000;
-
-    /**
-     * @private
-     * @type {number}
-     */
-    this.defaultExpirationTime =
-      (options.defaultExpirationTime || MongoStore.Options.defaultExpirationTime) * 1000;
-
-    /**
-     * @private
-     * @type {number|null}
-     */
-    this.gcTimer = null;
-
-    /**
-     * @private
-     * @type {Db}
-     */
-    this.db = db;
-
-    /**
-     * @private
-     * @type {function}
-     */
-    this.onOpen = this.onOpen.bind(this);
-
-    /**
-     * @private
-     * @type {function}
-     */
-    this.onClose = this.onClose.bind(this);
-
-    this.db.on('open', this.onOpen);
-    this.db.on('close', this.onClose);
-
-    if (this.db.state === 'connected')
-    {
-      this.scheduleGc();
-    }
-  }
-
-  /**
-   * @type {object}
-   */
-  MongoStore.Options = {
-    /**
-     * @type {string}
-     */
-    collectionName: 'sessions',
-
-    /**
-     * @type {boolean}
-     */
-    safe: false,
-
-    /**
-     * @type {number}
-     */
-    gcInterval: 600,
-
-    /**
-     * @type {number}
-     */
-    defaultExpirationTime: 3600 * 24 * 14
-  };
-
-  util.inherits(MongoStore, Store);
-
-  /**
-   * @param {string} sid
-   * @param {function} done
-   */
-  MongoStore.prototype.get = function(sid, done)
-  {
-    var store = this;
-
-    this.collection(function(err, sessions)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      sessions.findOne({_id: sid}, {data: 1}, function(err, doc)
-      {
-        if (err)
-        {
-          return done(err);
-        }
-
-        if (doc !== null)
-        {
-          var session = JSON.parse(doc.data);
-          var expires = typeof session.cookie.expires === 'string'
-            ? new Date(session.cookie.expires)
-            : session.cookie.expires;
-
-          if (!expires || new Date() < expires)
-          {
-            return done(null, session);
-          }
-
-          return store.destroy(sid, done);
-        }
-
-        return done();
-      });
-    });
-  };
-
-  /**
-   * @param {string} sid
-   * @param {Session} session
-   * @param {function} [done]
-   */
-  MongoStore.prototype.set = function(sid, session, done)
-  {
-    var store = this;
-
-    this.collection(function(err, sessions)
-    {
-      if (err)
-      {
-        return done && done(err);
-      }
-
-      var doc = {
-        _id: sid,
-        expires: Date.parse(session.cookie.expires),
-        data: JSON.stringify(session)
-      };
-
-      if (isNaN(doc.expires))
-      {
-        doc.expires = Date.now() + store.defaultExpirationTime;
-      }
-
-      var opts = {
-        upsert: true,
-        safe: store.safe
-      };
-
-      sessions.update({_id: sid}, doc, opts, function(err)
-      {
-        return done && done(err);
-      });
-    });
-  };
-
-  /**
-   * @param {string} sid
-   * @param {function} [done]
-   */
-  MongoStore.prototype.destroy = function(sid, done)
-  {
-    var store = this;
-
-    this.collection(function(err, sessions)
-    {
-      if (err)
-      {
-        return done && done(err);
-      }
-
-      sessions.remove({_id: sid}, {safe: store.safe}, function(err)
-      {
-        return done && done(err);
-      });
-    });
-  };
-
-  /**
-   * @param {function} [done]
-   */
-  MongoStore.prototype.clear = function(done)
-  {
-    this.collection(function(err, sessions)
-    {
-      if (err)
-      {
-        return done && done(err);
-      }
-
-      sessions.drop(done);
-    });
-  };
-
-  /**
-   * @param {function} done
-   */
-  MongoStore.prototype.length = function(done)
-  {
-    this.collection(function(err, sessions)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      sessions.count(done);
-    });
-  };
-
-  /**
-   * @param {function} [done]
-   */
-  MongoStore.prototype.gc = function(done)
-  {
-    this.collection(function(err, sessions)
-    {
-      if (err)
-      {
-        return done && done(err);
-      }
-
-      sessions.remove({expires: {$lte: Date.now()}}, done);
-    });
-  };
-
-  MongoStore.prototype.destruct = function()
-  {
-    this.clearGcTimer();
-
-    this.db.removeListener('open', this.onOpen);
-    this.db.removeListener('close', this.onClose);
-    this.db = null;
-  };
+  Store.call(this, options);
 
   /**
    * @private
-   * @param {function} done
+   * @type {string}
    */
-  MongoStore.prototype.collection = function(done)
-  {
-    this.db.collection(this.collectionName, done);
-  };
+  this.collectionName = options.collectionName || MongoStore.Options.collectionName;
 
   /**
    * @private
+   * @type {boolean}
    */
-  MongoStore.prototype.onOpen = function()
+  this.safe = options.safe === true;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  this.gcInterval = (options.gcInterval || MongoStore.Options.gcInterval) * 1000;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  this.defaultExpirationTime =
+    (options.defaultExpirationTime || MongoStore.Options.defaultExpirationTime) * 1000;
+
+  /**
+   * @private
+   * @type {number|null}
+   */
+  this.gcTimer = null;
+
+  /**
+   * @private
+   * @type {Db}
+   */
+  this.db = db;
+
+  /**
+   * @private
+   * @type {function}
+   */
+  this.onOpen = this.onOpen.bind(this);
+
+  /**
+   * @private
+   * @type {function}
+   */
+  this.onClose = this.onClose.bind(this);
+
+  this.db.on('open', this.onOpen);
+  this.db.on('close', this.onClose);
+
+  if (this.db.state === 'connected')
   {
     this.scheduleGc();
-  };
+  }
+}
+
+/**
+ * @type {object}
+ */
+MongoStore.Options = {
+  /**
+   * @type {string}
+   */
+  collectionName: 'sessions',
 
   /**
-   * @private
+   * @type {boolean}
    */
-  MongoStore.prototype.onClose = function()
-  {
-    this.clearGcTimer();
-  };
+  safe: false,
 
   /**
-   * @private
+   * @type {number}
    */
-  MongoStore.prototype.clearGcTimer = function()
+  gcInterval: 600,
+
+  /**
+   * @type {number}
+   */
+  defaultExpirationTime: 3600 * 24 * 14
+};
+
+util.inherits(MongoStore, Store);
+
+/**
+ * @param {string} sid
+ * @param {function} done
+ */
+MongoStore.prototype.get = function(sid, done)
+{
+  var store = this;
+
+  this.collection().findOne({_id: sid}, {_id: 0, data: 1}, function(err, doc)
   {
-    if (this.gcTimer !== null)
+    if (err)
     {
-      clearTimeout(this.gcTimer);
-      this.gcTimer = null;
+      return done(err);
     }
-  };
 
-  /**
-   * @private
-   */
-  MongoStore.prototype.scheduleGc = function()
-  {
-    var store = this;
+    if (doc !== null)
+    {
+      var session = JSON.parse(doc.data);
+      var expires = typeof session.cookie.expires === 'string'
+        ? new Date(session.cookie.expires)
+        : session.cookie.expires;
 
-    this.gcTimer = setTimeout(
-      function()
+      if (!expires || new Date() < expires)
       {
-        store.gcTimer = null;
-        store.gc(function() { store.scheduleGc(); });
-      },
-      this.gcInterval
-    );
+        return done(null, session);
+      }
+
+      return store.destroy(sid, done);
+    }
+
+    return done();
+  });
+};
+
+/**
+ * @param {string} sid
+ * @param {Session} session
+ * @param {function} [done]
+ */
+MongoStore.prototype.set = function(sid, session, done)
+{
+  var sessions = this.collection();
+
+  var doc = {
+    _id: sid,
+    expires: Date.parse(session.cookie.expires),
+    data: JSON.stringify(session)
   };
 
-  return MongoStore;
+  if (isNaN(doc.expires))
+  {
+    doc.expires = Date.now() + this.defaultExpirationTime;
+  }
+
+  var opts = {
+    upsert: true,
+    safe: this.safe
+  };
+
+  sessions.update({_id: sid}, doc, opts, function(err)
+  {
+    return done && done(err);
+  });
+};
+
+/**
+ * @param {string} sid
+ * @param {function} [done]
+ */
+MongoStore.prototype.destroy = function(sid, done)
+{
+  this.collection().remove({_id: sid}, {safe: this.safe}, function(err)
+  {
+    return done && done(err);
+  });
+};
+
+/**
+ * @param {function} [done]
+ */
+MongoStore.prototype.clear = function(done)
+{
+  this.collection().drop(done);
+};
+
+/**
+ * @param {function} done
+ */
+MongoStore.prototype.length = function(done)
+{
+  this.collection().count(done);
+};
+
+/**
+ * @param {function} [done]
+ */
+MongoStore.prototype.gc = function(done)
+{
+  this.collection().remove({expires: {$lte: Date.now()}}, done);
+};
+
+MongoStore.prototype.destruct = function()
+{
+  this.clearGcTimer();
+
+  this.db.removeListener('open', this.onOpen);
+  this.db.removeListener('close', this.onClose);
+  this.db = null;
+};
+
+/**
+ * @private
+ */
+MongoStore.prototype.collection = function()
+{
+  return this.db.collection(this.collectionName);
+};
+
+/**
+ * @private
+ */
+MongoStore.prototype.onOpen = function()
+{
+  this.scheduleGc();
+};
+
+/**
+ * @private
+ */
+MongoStore.prototype.onClose = function()
+{
+  this.clearGcTimer();
+};
+
+/**
+ * @private
+ */
+MongoStore.prototype.clearGcTimer = function()
+{
+  if (this.gcTimer !== null)
+  {
+    clearTimeout(this.gcTimer);
+    this.gcTimer = null;
+  }
+};
+
+/**
+ * @private
+ */
+MongoStore.prototype.scheduleGc = function()
+{
+  this.gcTimer = setTimeout(
+    function(store)
+    {
+      store.gcTimer = null;
+      store.gc(function() { store.scheduleGc(); });
+    },
+    this.gcInterval,
+    this
+  );
 };

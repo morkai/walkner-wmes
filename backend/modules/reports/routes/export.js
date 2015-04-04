@@ -41,7 +41,7 @@ module.exports = function exportRoute(reportsModule, req, res, next)
     || svg.indexOf('<!ENTITY') !== -1
     || svg.indexOf('<!DOCTYPE') !== -1)
   {
-    return res.send(400);
+    return res.sendStatus(400);
   }
 
   var filename = typeof input.filename === 'string' ? cleanFilename(input.filename) : 'chart';
@@ -114,13 +114,13 @@ module.exports = function exportRoute(reportsModule, req, res, next)
       {
         cleanup();
 
-        return res.send(stderr, 500);
+        return res.status(500).send(stderr);
       }
 
       if (!res.headersSent)
       {
         res.attachment(filename + '.' + ext);
-        res.sendfile(outFile, cleanup);
+        res.sendFile(outFile, cleanup);
       }
     });
   });

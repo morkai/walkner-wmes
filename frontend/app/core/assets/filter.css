@@ -108,3 +108,95 @@ input[type=checkbox].filter-inLabel {
 .form-control.is-expandable {
   max-width: 300px;
 }
+.filter-form .filter-toggle {
+  display: none;
+}
+.filter-inlineInputLabels > .control-label {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+}
+.filter-inlineInputLabels > .btn-group {
+  vertical-align: top;
+}
+.filter-inlineInputLabels > .control-label + .control-label {
+  margin-left: 10px;
+}
+.filter-inlineInputLabels .form-control {
+  display: inline;
+}
+@media (max-width: 767px) {
+  .filter-container > .well {
+    align-items: flex-start;
+    padding: 1em;
+  }
+  .filter-form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .filter-form .filter-actions,
+  .filter-form.is-vertical .filter-actions {
+    padding-left: 0;
+    margin-left: 0;
+    border-left: 0;
+  }
+  .filter-form .form-group {
+    display: block;
+    width: 100%;
+    margin-left: 0;
+  }
+  .filter-form .no-label {
+    padding-top: 0;
+  }
+  .filter-actions .btn {
+    display: block;
+    width: 100%;
+  }
+  .filter-form.is-collapsed {
+    padding: 0;
+    border: 0;
+  }
+  .filter-form.is-collapsed > .form-group {
+    display: none;
+  }
+  .filter-form .filter-toggle {
+    display: block;
+  }
+  .filter-radioLabels > label {
+    margin-left: 0;
+    display: block;
+  }
+  .filter-inlineInputLabels > .control-label {
+    display: block;
+  }
+  .filter-inlineInputLabels > .control-label + .control-label,
+  .filter-inlineInputLabels > .control-label + .btn-group {
+    margin-top: 5px;
+    margin-left: 0;
+  }
+  .filter-inlineInputLabels span {
+    display: block;
+  }
+  .filter-inlineInputLabels .form-control {
+    width: 100%;
+  }
+  .filter-form input[name="limit"] {
+    width: 100%;
+  }
+  .filter-form .btn[type="submit"] {
+    font-size: 21px;
+  }
+  .filter-actions > .btn-group {
+    display: block;
+    width: 100%;
+  }
+  .filter-actions > .btn-group > .btn[type="submit"] {
+    width: 90%;
+  }
+  .btn[type="submit"] + .dropdown-toggle {
+    width: 10%;
+    font-size: 21px;
+    margin-left: 0;
+    border-left: none;
+  }
+}

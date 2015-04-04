@@ -82,7 +82,10 @@ exports.start = function startUpdaterModule(app, module)
     .setLimit(1)
     .on('message', function(message)
     {
-      message.module.use(expressMiddleware.bind(null, app, module));
+      var expressModule = message.module;
+      var expressApp = expressModule.app;
+
+      expressApp.use(expressMiddleware.bind(null, app, module));
     });
 
   app.onModuleReady(module.config.expressId, setUpRoutes.bind(null, app, module));

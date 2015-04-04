@@ -94,9 +94,13 @@ define([
     refreshCollection: function()
     {
       this.listView.refreshCollectionNow();
+      this.updateClientUrl();
+    },
 
+    updateClientUrl: function()
+    {
       this.broker.publish('router.navigate', {
-        url: (this.collection || this.model).genClientUrl() + '?' + (this.collection || this.model).rqlQuery,
+        url: this.collection.genClientUrl() + '?' + this.collection.rqlQuery,
         trigger: false,
         replace: true
       });

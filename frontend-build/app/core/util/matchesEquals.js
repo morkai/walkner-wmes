@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["underscore"],function(n){return function(r,e,t){var u=n.find(r.selector.args,function(n){return"eq"===n.name&&n.args[0]===e});return!u||u.args[1]===t}});
+define(["underscore"],function(r){"use strict";return function(n,e,t){var u=r.find(n.selector.args,function(r){return"eq"===r.name&&r.args[0]===e});return!u||u.args[1]===t}});

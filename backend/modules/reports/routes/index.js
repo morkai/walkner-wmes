@@ -4,7 +4,7 @@
 
 'use strict';
 
-var multipart = require('express').multipart;
+var multer = require('multer');
 var helpers = require('./helpers');
 var exportRoute = require('./export');
 var report1Route = require('./report1');
@@ -91,14 +91,25 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   if (reportsModule.config.javaBatik)
   {
-    express.post('/reports;export', canView, multipart(), exportRoute.bind(null, reportsModule));
+    express.post(
+      '/reports;export',
+      canView,
+      multer({
+        putSingleFilesInArray: true,
+        limits: {
+          files: 1,
+          fileSize: '1mb'
+        }
+      }),
+      exportRoute.bind(null, reportsModule)
+    );
   }
 
   express.post('/reports;download', canView, function(req, res)
   {
     if (!req.query.filename || !req.is('text/csv'))
     {
-      return res.send(400);
+      return res.sendStatus(400);
     }
 
     var key = (Date.now() + Math.random()).toString();
@@ -118,14 +129,14 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
     if (!key)
     {
-      return res.send(400);
+      return res.sendStatus(400);
     }
 
     var download = downloads[key];
 
     if (!download)
     {
-      return res.send(404);
+      return res.sendStatus(404);
     }
 
     clearTimeout(download.timer);

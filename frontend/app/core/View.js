@@ -121,10 +121,14 @@ function(
     });
   };
 
+  View.prototype.beforeRender = function() {};
+
   View.prototype.serialize = function()
   {
     return {idPrefix: this.idPrefix};
   };
+
+  View.prototype.afterRender = function() {};
 
   View.prototype.isRendered = function()
   {

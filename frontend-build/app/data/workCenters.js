@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/workCenters/WorkCenterCollection","./createStorage"],function(e,r){return r("WORK_CENTERS","workCenters",e)});
+define(["app/workCenters/WorkCenterCollection","./createStorage"],function(e,r){"use strict";return r("WORK_CENTERS","workCenters",e)});

@@ -14,14 +14,14 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
 
   if (orgUnit === null && (req.query.orgUnitType || req.query.orgUnitId))
   {
-    return res.send(400);
+    return res.sendStatus(400);
   }
 
   var division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
 
   if (orgUnit !== null && !division)
   {
-    return res.send(400);
+    return res.sendStatus(400);
   }
 
   var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;

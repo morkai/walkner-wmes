@@ -24,7 +24,7 @@ module.exports = function downloadRoute(file, icpoModule, IcpoResult, req, res, 
 
     if (!icpoResult)
     {
-      return res.send(404);
+      return res.sendStatus(404);
     }
 
     var mimeType;
@@ -56,6 +56,6 @@ module.exports = function downloadRoute(file, icpoModule, IcpoResult, req, res, 
 
     res.type(mimeType);
     res.attachment(fileName);
-    res.sendfile(path.join(icpoModule.config.fileStoragePath, icpoResult[file + 'FileHash'] || ''));
+    res.sendFile(path.join(icpoModule.config.fileStoragePath, icpoResult[file + 'FileHash'] || ''));
   });
 };

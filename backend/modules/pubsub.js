@@ -73,7 +73,7 @@ exports.start = function startPubsubModule(app, module)
       meta.messageId = getNextMessageId();
     }
 
-    idToMessageMap[meta.messageId] = [topic, message];
+    idToMessageMap[meta.messageId] = [topic, message, meta];
   });
 
   module.on('subscribe', function()
@@ -270,7 +270,7 @@ exports.start = function startPubsubModule(app, module)
   {
     /*jshint forin:false*/
 
-    var sockets =  app[module.config.sioId].sockets.sockets;
+    var sockets =  app[module.config.sioId].sockets.connected;
     var socketIds = Object.keys(socketIdToMessagesMap);
 
     for (var i = 0, l = socketIds.length; i < l; ++i)
@@ -284,7 +284,7 @@ exports.start = function startPubsubModule(app, module)
       {
         var message = idToMessageMap[messageIds[j]];
 
-        socket.emit('pubsub.message', message[0], message[1]);
+        socket.emit('pubsub.message', message[0], message[1], message[2]);
 
         ++stats.sentMessages;
       }

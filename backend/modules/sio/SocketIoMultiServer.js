@@ -18,6 +18,8 @@ function SocketIoMultiServer()
 
 util.inherits(SocketIoMultiServer, EventEmitter);
 
+SocketIoMultiServer.prototype.listen = function() {};
+
 SocketIoMultiServer.prototype.addServer = function(eventEmitter)
 {
   this.servers.push(eventEmitter);

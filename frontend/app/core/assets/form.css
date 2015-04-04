@@ -13,6 +13,7 @@
   content: "*";
   font-family: Consolas, "Lucida Console", Monaco, monospace;
   color: #f00;
+  vertical-align: top;
 }
 .control-label + .form-control-static {
   padding: 0;
@@ -98,9 +99,15 @@ input:enabled:read-write::-webkit-inner-spin-button,
 input:enabled:read-write::-webkit-clear-button {
   opacity: 1;
 }
+input[type="number"]::-webkit-inner-spin-button {
+  margin-left: 6px;
+}
 input.no-controls::-webkit-clear-button,
 input.no-controls::-webkit-inner-spin-button {
   display: none;
+}
+input.no-controls[type="number"] {
+  -moz-appearance: textfield;
 }
 .form-group-horizontal > .form-group {
   vertical-align: top;
@@ -116,4 +123,20 @@ input.no-controls::-webkit-inner-spin-button {
 .form-control[size="1"] {
   height: 34px;
   padding-top: 8px;
+}
+
+.btn-group > .btn:focus,
+.btn-group-vertical > .btn:focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.btn-default,
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
+.btn-danger {
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }

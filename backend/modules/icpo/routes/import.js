@@ -14,14 +14,14 @@ module.exports = function importRoute(app, icpoModule, req, res, next)
 {
   if (!req.is('application/zip'))
   {
-    return res.send(400, 'INVALID_CONTENT_TYPE');
+    return res.status(400).send('INVALID_CONTENT_TYPE');
   }
 
   var uuid = req.query.uuid;
 
   if (!/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/.test(uuid))
   {
-    return res.send(400, 'INVALID_UUID');
+    return res.status(400).send('INVALID_UUID');
   }
 
   var mongoose = app[icpoModule.config.mongooseId];
@@ -90,13 +90,13 @@ module.exports = function importRoute(app, icpoModule, req, res, next)
       {
         if (typeof statusCode === 'number')
         {
-          return res.send(statusCode, err);
+          return res.status(statusCode).send(err);
         }
 
         return next(err);
       }
 
-      return res.send(204);
+      return res.sendStatus(204);
     }
   );
 };

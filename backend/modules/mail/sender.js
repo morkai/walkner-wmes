@@ -155,7 +155,7 @@ exports.start = function startMailSenderModule(app, module)
 
         module.debug("Sent e-mail to [%s]: %s", req.body.to, req.body.subject);
 
-        res.send(204);
+        res.sendStatus(204);
       });
     });
   });

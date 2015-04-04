@@ -97,7 +97,7 @@ module.exports = function renderLabelRoute(app, poModule, req, res, next)
         return next(err);
       }
 
-      res.sendfile(pdfPath);
+      res.sendFile(pdfPath);
     }
   );
 };

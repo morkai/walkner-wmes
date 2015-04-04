@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/user',
@@ -11,6 +12,7 @@ define([
   './PaginationView',
   'app/core/templates/list'
 ], function(
+  _,
   $,
   t,
   user,
@@ -206,14 +208,21 @@ define([
 
     onModelDeleted: function(message)
     {
-      if (!message || !message.model || !message.model._id)
+      if (!message)
       {
         return;
       }
 
-      this.$('.list-item[data-id="' + message.model._id + '"]').addClass('is-deleted');
+      var model = message.model || message;
 
-      this.refreshCollection(message);
+      if (!model._id)
+      {
+        return;
+      }
+
+      this.$('.list-item[data-id="' + model._id + '"]').addClass('is-deleted');
+
+      this.refreshCollection(model);
     },
 
     refreshCollection: function(message)
@@ -235,6 +244,11 @@ define([
 
     refreshCollectionNow: function(options)
     {
+      if (!this.timers)
+      {
+        return;
+      }
+
       if (this.timers.refreshCollection)
       {
         clearTimeout(this.timers.refreshCollection);
@@ -242,7 +256,7 @@ define([
 
       delete this.timers.refreshCollection;
 
-      this.promised(this.collection.fetch(options || {reset: true}));
+      this.promised(this.collection.fetch(_.isObject(options) ? options : {reset: true}));
     },
 
     scrollTop: function()

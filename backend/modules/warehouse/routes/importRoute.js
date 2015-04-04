@@ -13,7 +13,7 @@ module.exports = function importRoute(app, whModule, req, res, next)
 
   if (!req.is('text/plain'))
   {
-    return res.send(400, 'INVALID_CONTENT_TYPE');
+    return res.status(400).send('INVALID_CONTENT_TYPE');
   }
 
   var type = req.query.type;
@@ -22,7 +22,7 @@ module.exports = function importRoute(app, whModule, req, res, next)
 
   if (isNaN(timestamp) || isNaN(step) || req.body.length < 512 || (type !== 'cc' && type !== 'to'))
   {
-    return res.send(400, 'INPUT');
+    return res.status(400).send('INPUT');
   }
 
   var importFile = whModule.config[type === 'cc' ? 'ccImportFile' : 'toImportFile']
@@ -36,6 +36,6 @@ module.exports = function importRoute(app, whModule, req, res, next)
       return next(err);
     }
 
-    return res.send(204);
+    return res.sendStatus(204);
   });
 };

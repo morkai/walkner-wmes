@@ -276,7 +276,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
           return next(err);
         }
 
-        res.send(204);
+        res.sendStatus(204);
 
         app.broker.publish(XiconfProgram.TOPIC_PREFIX + '.deleted', {
           model: program,

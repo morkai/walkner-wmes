@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Collection","./LossReason"],function(e,o){return e.extend({model:o,rqlQuery:"select(label,position)&sort(position)"})});
+define(["../core/Collection","./LossReason"],function(e,o){"use strict";return e.extend({model:o,rqlQuery:"select(label,position)&sort(position)"})});

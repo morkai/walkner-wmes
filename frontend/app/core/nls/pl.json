@@ -166,5 +166,10 @@
   "filter:date:to": "Do",
   "filter:date:to:info": "Dane do godziny 06:00 wybranego dnia",
   "filter:submit": "Filtruj",
-  "filter:limit": "Limit"
+  "filter:limit": "Limit",
+  "filter:show": "Pokaż filtr",
+  "filter:hide": "Ukryj filtr",
+
+  "placeholder:date": "rrrr-mm-dd",
+  "placeholder:time": "--:--"
 }

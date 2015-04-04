@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/prodFunctions/ProdFunctionCollection","./createStorage"],function(n,o){return o("PROD_FUNCTIONS","prodFunctions",n)});
+define(["app/prodFunctions/ProdFunctionCollection","./createStorage"],function(n,o){"use strict";return o("PROD_FUNCTIONS","prodFunctions",n)});

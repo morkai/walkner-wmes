@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["underscore","app/core/views/PrintableListView","app/fte/templates/printableMasterEntryList","../util/fractions"],function(e,t,n,i){return t.extend({template:n,serialize:function(){return e.extend(this.model.serializeWithTotals(),{round:i.round})},afterRender:function(){}})});
+define(["underscore","app/core/views/PrintableListView","app/fte/templates/printableMasterEntryList","../util/fractions"],function(e,t,i,n){"use strict";return t.extend({template:i,serialize:function(){return e.extend(this.model.serializeWithTotals(),{round:n.round})},afterRender:function(){}})});

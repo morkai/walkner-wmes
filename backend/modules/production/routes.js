@@ -38,7 +38,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
       return findOrdersByNc12(req.query.nc12, res, next);
     }
 
-    return res.send(400);
+    return res.sendStatus(400);
   });
 
   express.get('/production/state', function(req, res, next)
@@ -78,7 +78,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
 
     if (isNaN(from) || isNaN(to) || !orgUnitField || !orgUnitIds.length || from >= to || (to - from) > week)
     {
-      return res.send(400);
+      return res.sendStatus(400);
     }
 
     var prodLineStateMap = {};

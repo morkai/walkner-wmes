@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/mrpControllers/MrpControllerCollection","./createStorage"],function(r,e){return e("MRP_CONTROLLERS","mrpControllers",r)});
+define(["app/mrpControllers/MrpControllerCollection","./createStorage"],function(r,e){"use strict";return e("MRP_CONTROLLERS","mrpControllers",r)});

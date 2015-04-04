@@ -166,7 +166,10 @@ define([
 
   NavbarView.prototype.serialize = function()
   {
-    return {user: user};
+    return {
+      idPrefix: this.idPrefix,
+      user: user
+    };
   };
 
   /**
@@ -442,7 +445,7 @@ define([
 
       var moduleName = navbarView.getModuleNameFromLi($li[0], false);
 
-      if (moduleName !== null && !navbarView.loadedModules[moduleName])
+      if (moduleName !== null && $li.attr('data-no-module') === undefined && !navbarView.loadedModules[moduleName])
       {
         return false;
       }

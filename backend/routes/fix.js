@@ -19,7 +19,7 @@ module.exports = function startFixRoutes(app, express)
       return next();
     }
 
-    return res.send(403);
+    return res.sendStatus(403);
   }
 
   express.get('/fix/prodShiftOrders/durations', onlySuper, fixProdShiftOrderDurations);

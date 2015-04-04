@@ -5,7 +5,7 @@
 'use strict';
 
 var fs = require('fs');
-var multipart = require('express').multipart;
+var multer = require('multer');
 var csv = require('csv');
 
 module.exports = function setUpMechOrdersRoutes(app, ordersModule)
@@ -19,7 +19,18 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
 
   express.get('/mechOrders/:id', express.crud.readRoute.bind(null, app, MechOrder));
 
-  express.post('/mechOrders;import', auth('ORDERS:MANAGE'), multipart({limit: '5mb'}), importRoute);
+  express.post(
+    '/mechOrders;import',
+    auth('ORDERS:MANAGE'),
+    multer({
+      putSingleFilesInArray: true,
+      limits: {
+        files: 1,
+        fileSize: '5mb'
+      }
+    }),
+    importRoute
+  );
 
   express.patch('/mechOrders/:id', express.crud.editRoute.bind(null, app, MechOrder));
 
@@ -27,19 +38,22 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
   {
     if (importing !== null)
     {
-      return res.send(400);
+      removeFiles(req.files);
+
+      return res.sendStatus(400);
     }
 
-    var mechOrdersFile = req.files.mechOrders;
+    var mechOrdersFiles = req.files.mechOrders;
 
-    if (!mechOrdersFile
-      || Array.isArray(mechOrdersFile)
-      || !/\.csv$/i.test(mechOrdersFile.originalFilename))
+    if (!Array.isArray(mechOrdersFiles)
+      || !/\.csv$/i.test(mechOrdersFiles[0].originalname))
     {
       removeFiles(req.files);
 
-      return res.send(400);
+      return res.sendStatus(400);
     }
+
+    var mechOrdersFile = mechOrdersFiles[0];
 
     importing = 0;
 
@@ -115,7 +129,7 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
 
         importing = null;
 
-        return res.send(204);
+        return res.sendStatus(204);
       }
 
       var mechOrder = mechOrders[nc12Queue.shift()];
@@ -127,7 +141,7 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
       {
         if (err)
         {
-          module.warn("Failed to upsert mech order %s: %s", _id, err.message);
+          ordersModule.warn("Failed to upsert mech order %s: %s", _id, err.message);
         }
         else
         {
@@ -154,12 +168,12 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
       {
         files[key].forEach(function(file)
         {
-          fs.unlink(file.path);
+          fs.unlink(file.path, function() {});
         });
       }
       else
       {
-        fs.unlink(files[key].path);
+        fs.unlink(files[key].path, function() {});
       }
     });
   }

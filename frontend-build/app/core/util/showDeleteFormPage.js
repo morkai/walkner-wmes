@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["underscore","app/viewport"],function(e,n){return function(r,o,t,a){var i=new r({_id:o.params.id});n.loadPage("app/core/pages/ActionFormPage",function(n){return new n(e.extend({model:i,actionKey:"delete",successUrl:i.genClientUrl("base"),cancelUrl:t||i.genClientUrl("base"),formMethod:"DELETE",formAction:i.url(),formActionSeverity:"danger"},a))})}});
+define(["underscore","app/viewport"],function(e,n){"use strict";return function(r,t,o,i){var a=new r({_id:t.params.id});n.loadPage("app/core/pages/ActionFormPage",function(n){return new n(e.extend({model:a,actionKey:"delete",successUrl:a.genClientUrl("base"),cancelUrl:o||a.genClientUrl("base"),formMethod:"DELETE",formAction:a.url(),formActionSeverity:"danger"},i))})}});

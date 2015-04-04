@@ -63,7 +63,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
       {
         saveLicensePing(uuid, ip, false, req.body);
 
-        return res.send('UNKNOWN_LICENSE', 404);
+        return res.status(404).send('UNKNOWN_LICENSE');
       }
 
       var conditions = {
@@ -82,7 +82,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
 
         if (licensePing)
         {
-          res.send('DUPLICATE_LICENSE', 400);
+          res.status(400).send('DUPLICATE_LICENSE');
         }
         else
         {

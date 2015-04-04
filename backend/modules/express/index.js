@@ -5,29 +5,33 @@
 'use strict';
 
 var path = require('path');
-var lodash = require('lodash');
+var _ = require('lodash');
+var step = require('h5.step');
 var express = require('express');
-var bodyParser = require('body-parser');
+var methods = require('methods');
 var ejsAmd = require('ejs-amd');
 var messageFormatAmd = require('messageformat-amd');
-var MongoStore = require('./MongoStore')(express.session.Store);
 var wrapAmd = require('./wrapAmd');
 var rqlMiddleware = require('./rqlMiddleware');
 var errorHandlerMiddleware = require('./errorHandlerMiddleware');
 var crud = require('./crud');
+var cookieParser = null;
+var bodyParser = null;
+var session = null;
 var pmx = null;
+var MongoStore = null;
 
-try
-{
-  pmx = require('pmx');
-}
-catch (err) {}
+try { cookieParser = require('cookie-parser'); }  catch (err) {}
+try { bodyParser = require('body-parser'); }  catch (err) {}
+try { session = require('express-session'); }  catch (err) {}
+try { pmx = require('pmx'); }  catch (err) {}
+try { MongoStore = require('./MongoStore'); }  catch (err) {}
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   staticPath: 'public',
   staticBuildPath: 'public-build',
-  sessionCookieKey: 'walkner.sid',
+  sessionCookieKey: 'express.sid',
   sessionCookie: {
     maxAge: null,
     path: '/',
@@ -41,13 +45,23 @@ exports.DEFAULT_CONFIG = {
   urlencodedBody: {}
 };
 
-exports.start = function startExpressModule(app, module, done)
+exports.start = function startExpressModule(app, expressModule, done)
 {
-  var mongoose = app[module.config.mongooseId];
+  var config = expressModule.config;
+  var mongoose = app[config.mongooseId];
+  var expressApp = express();
 
-  module = app[module.name] = lodash.merge(express(), module);
+  expressModule.app = expressApp;
 
-  module.createHttpError = function(message, statusCode)
+  expressModule.crud = crud;
+
+  expressModule.sessionStore = mongoose
+    ? new MongoStore(mongoose.connection.db)
+    : session ? new session.MemoryStore() : null;
+
+  expressModule.router = express.Router();
+
+  expressModule.createHttpError = function(message, statusCode)
   {
     var httpError = new Error(message);
     httpError.status = statusCode || 400;
@@ -55,19 +69,28 @@ exports.start = function startExpressModule(app, module, done)
     return httpError;
   };
 
-  module.crud = crud;
+  methods.forEach(function(method)
+  {
+    expressModule[method] = function()
+    {
+      return expressModule.router[method].apply(expressModule.router, arguments);
+    };
+  });
 
   var production = app.options.env === 'production';
-  var staticPath = module.config[production ? 'staticBuildPath' : 'staticPath'];
+  var staticPath = config[production ? 'staticBuildPath' : 'staticPath'];
 
-  module.set('trust proxy', true);
-  module.set('views', app.pathTo('templates'));
-  module.set('view engine', 'ejs');
-  module.set('static path', staticPath);
+  expressApp.set('trust proxy', true);
+  expressApp.set('view engine', 'ejs');
+  expressApp.set('views', app.pathTo('templates'));
+
+  if (!production)
+  {
+    expressApp.set('json spaces', 2);
+  }
 
   app.broker.publish('express.beforeMiddleware', {
-    module: module,
-    express: express
+    module: expressModule
   });
 
   if (!production)
@@ -75,54 +98,79 @@ exports.start = function startExpressModule(app, module, done)
     setUpDevMiddleware(staticPath);
   }
 
-  if (module.config.cookieSecret)
+  if (config.cookieSecret && cookieParser)
   {
-    module.use(express.cookieParser(module.config.cookieSecret));
+    expressApp.use(cookieParser(config.cookieSecret));
   }
 
-  if (mongoose)
+  if (bodyParser)
   {
-    module.sessionStore = new MongoStore(mongoose.connection.db);
-
-    module.use(express.session({
-      store: module.sessionStore,
-      key: module.config.sessionCookieKey,
-      cookie: module.config.sessionCookie,
-      secret: module.config.cookieSecret
-    }));
+    expressApp.use(bodyParser.json(config.jsonBody));
+    expressApp.use(bodyParser.urlencoded(_.extend({extended: false}, config.urlencodedBody)));
+    expressApp.use(bodyParser.text(_.defaults({type: 'text/*'}, config.textBody)));
   }
 
-  module.use(bodyParser.json(module.config.jsonBody));
-  module.use(bodyParser.urlencoded(lodash.extend({extended: false}, module.config.urlencodedBody)));
-  module.use(bodyParser.text(lodash.defaults({type: 'text/*'}, module.config.textBody)));
-  module.use(rqlMiddleware());
+  expressApp.use(rqlMiddleware());
+
+  if (expressModule.sessionStore)
+  {
+    var sessionMiddleware = session({
+      store: expressModule.sessionStore,
+      key: config.sessionCookieKey,
+      cookie: config.sessionCookie,
+      secret: config.cookieSecret,
+      saveUninitialized: true,
+      resave: false,
+      rolling: true
+    });
+
+    expressApp.use(function checkSessionMiddleware(req, res, next)
+    {
+      if (/^\/(app|assets|vendor)\//.test(req.url))
+      {
+        next();
+      }
+      else
+      {
+        sessionMiddleware(req, res, next);
+      }
+    });
+  }
+
+  expressApp.use('/', expressModule.router);
 
   app.broker.publish('express.beforeRouter', {
-    module: module,
-    express: express
+    module: expressModule
   });
 
-  module.use(module.router);
-  module.use(express.static(staticPath));
+  step(
+    function()
+    {
+      app.loadDir(app.pathTo('routes'), [app, expressModule], this.next());
+    },
+    function(err)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
 
-  var errorHandlerOptions = {
-    title: module.config.title,
-    basePath: path.resolve(__dirname, '../../../')
-  };
+      expressApp.use(express.static(staticPath));
 
-  if (pmx !== null)
-  {
-    module.use(pmx.expressErrorHandler());
-  }
+      if (pmx !== null)
+      {
+        expressApp.use(pmx.expressErrorHandler());
+      }
 
-  module.use(errorHandlerMiddleware(module, errorHandlerOptions));
+      var errorHandlerOptions = {
+        title: config.title,
+        basePath: path.resolve(__dirname, '../../../')
+      };
 
-  app.broker.publish('express.beforeRoutes', {
-    module: module,
-    express: express
-  });
-
-  app.loadDir(app.pathTo('routes'), [app, module], done);
+      expressApp.use(errorHandlerMiddleware(expressModule, errorHandlerOptions));
+    },
+    done
+  );
 
   /**
    * @private
@@ -130,14 +178,14 @@ exports.start = function startExpressModule(app, module, done)
    */
   function setUpDevMiddleware(staticPath)
   {
-    ejsAmd.wrapAmd = wrapEjsAmd.bind(null, module.config.ejsAmdHelpers);
+    ejsAmd.wrapAmd = wrapEjsAmd.bind(null, config.ejsAmdHelpers);
 
     var templateUrlRe = /^\/app\/([a-zA-Z0-9\-]+)\/templates\/(.*?)\.js$/;
     var ejsAmdMiddleware = ejsAmd.middleware({
       views: staticPath
     });
 
-    module.use(function(req, res, next)
+    expressApp.use(function runEjsAmdMiddleware(req, res, next)
     {
       var matches = req.url.match(templateUrlRe);
 
@@ -149,9 +197,9 @@ exports.start = function startExpressModule(app, module, done)
       ejsAmdMiddleware(req, res, next);
     });
 
-    module.use('/app/nls/locale/', messageFormatAmd.localeMiddleware());
+    expressApp.use('/app/nls/locale/', messageFormatAmd.localeMiddleware());
 
-    module.use('/app/nls/', messageFormatAmd.nlsMiddleware({
+    expressApp.use('/app/nls/', messageFormatAmd.nlsMiddleware({
       localeModulePrefix: 'app/nls/locale/',
       jsonPath: function(locale, nlsName)
       {

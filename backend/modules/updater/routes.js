@@ -12,7 +12,7 @@ module.exports = function setUpUpdaterRoutes(app, updaterModule)
   {
     if (app.options.env !== 'production' || typeof updaterModule.manifest !== 'string')
     {
-      return res.send(404);
+      return res.sendStatus(404);
     }
 
     res.type('text/cache-manifest');

@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/user","../core/Collection","./FteMasterEntry"],function(e,t,r){return t.extend({model:r,rqlQuery:function(t){var r,n=e.getDivision();return n&&"prod"===n.get("type")&&(r={name:"and",args:[{name:"eq",args:[e.data.orgUnitType,e.data.orgUnitId]}]}),t.Query.fromObject({fields:{subdivision:1,date:1,shift:1,createdAt:1,creator:1},sort:{date:-1},limit:15,selector:r})}})});
+define(["app/user","../core/Collection","./FteMasterEntry"],function(e,t,r){"use strict";return t.extend({model:r,rqlQuery:function(t){var r,i=e.getDivision();return i&&"prod"===i.get("type")&&(r={name:"and",args:[{name:"eq",args:[e.data.orgUnitType,e.data.orgUnitId]}]}),t.Query.fromObject({fields:{subdivision:1,date:1,shift:1,createdAt:1,creator:1},sort:{date:-1},limit:15,selector:r})}})});

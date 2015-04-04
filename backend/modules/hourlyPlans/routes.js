@@ -51,7 +51,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
 
       if (hourlyPlan && !canManage(req.session.user, hourlyPlan))
       {
-        return res.send(403);
+        return res.sendStatus(403);
       }
 
       return next();

@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["./dashboard/routes","./events/routes","./purchaseOrders/routes","./users/routes","./vendors/routes","./vendorNc12s/routes"],function(){});
+define(["./dashboard/routes","./events/routes","./purchaseOrders/routes","./users/routes","./vendors/routes","./vendorNc12s/routes"],function(){"use strict"});

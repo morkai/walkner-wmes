@@ -167,7 +167,12 @@
     "filter:date:to": "To",
     "filter:date:to:info": "Data to 06:00 of the selected day",
     "filter:submit": "Filter",
-    "filter:limit": "Limit"
+    "filter:limit": "Limit",
+    "filter:show": "Show filter",
+    "filter:hide": "Hide filter",
+
+    "placeholder:date": "yyyy-mm-dd",
+    "placeholder:time": "--:--"
   },
   "pl": true
 }

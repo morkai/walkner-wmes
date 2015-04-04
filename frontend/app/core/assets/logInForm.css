@@ -11,3 +11,12 @@
 .logInForm-loading .logInForm-submit-label {
   display: none;
 }
+.logInForm > .message {
+  font-size: 1.2em;
+  line-height: 1.4;
+}
+.logInForm-links {
+  margin: 0;
+  text-align: right;
+}
+

@@ -142,8 +142,8 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
 
   prodDowntimeSchema.pre('save', function(next)
   {
-    this.wasNew = this.isNew;
-    this.modified = this.modifiedPaths();
+    this._wasNew = this.isNew;
+    this._changes = this.modifiedPaths();
 
     next();
   });
@@ -155,19 +155,19 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       return;
     }
 
-    if (this.wasNew)
+    if (this._wasNew)
     {
       app.broker.publish('prodDowntimes.created.' + doc.prodLine, doc.toJSON());
     }
-    else
+    else if (Array.isArray(doc._changes) && doc._changes.length)
     {
       var changes = {_id: doc._id};
 
-      this.modified.forEach(function(modifiedPath)
+      doc._changes.forEach(function(modifiedPath)
       {
         changes[modifiedPath] = doc.get(modifiedPath);
       });
-      this.modified = null;
+      doc._changes = null;
 
       app.broker.publish('prodDowntimes.updated.' + doc._id, changes);
     }

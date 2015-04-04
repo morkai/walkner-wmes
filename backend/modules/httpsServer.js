@@ -53,17 +53,27 @@ exports.start = function startHttpServerModule(app, module, done)
       {
         if (err.code !== 'ECONNRESET')
         {
-          module.error(err.stack);
+          module.error(err.stack || err.message || err);
         }
 
         reqDomain.dispose();
+
+        try
+        {
+          res.statusCode = 500;
+          res.end();
+        }
+        catch (err)
+        {
+          module.error(err.stack);
+        }
       });
 
-      var express = app[module.config.expressId];
+      var expressApp = app[module.config.expressId].app;
 
-      if (express)
+      if (expressApp)
       {
-        express(req, res);
+        expressApp(req, res);
       }
       else
       {

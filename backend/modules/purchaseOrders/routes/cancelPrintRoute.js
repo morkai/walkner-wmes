@@ -78,7 +78,7 @@ module.exports = function cancelPrintRoute(app, poModule, req, res, next)
         return this.skip(err);
       }
 
-      res.send(204);
+      res.sendStatus(204);
 
       setImmediate(this.next());
     },

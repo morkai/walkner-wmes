@@ -13,7 +13,7 @@ module.exports = function importRoute(app, poModule, req, res, next)
 
   if (!req.is('text/plain'))
   {
-    return res.send(400, 'INVALID_CONTENT_TYPE');
+    return res.status(400).send('INVALID_CONTENT_TYPE');
   }
 
   var timestamp = parseInt(req.query.timestamp, 10);
@@ -21,7 +21,7 @@ module.exports = function importRoute(app, poModule, req, res, next)
 
   if (isNaN(timestamp) || isNaN(step) || req.body.length < 10 || req.body.substr(0, 2) !== '[{')
   {
-    return res.send(400, 'INPUT');
+    return res.status(400).send('INPUT');
   }
 
   var importFile = poModule.config.importFile.replace('{timestamp}', timestamp).replace('{step}', step);
@@ -33,6 +33,6 @@ module.exports = function importRoute(app, poModule, req, res, next)
       return next(err);
     }
 
-    return res.send(204);
+    return res.sendStatus(204);
   });
 };

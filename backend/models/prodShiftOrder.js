@@ -167,11 +167,10 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
   prodShiftOrderSchema.pre('save', function(next)
   {
-    this.wasNew = this.isNew;
-    this.modified = this.modifiedPaths();
+    this._wasNew = this.isNew;
+    this._changes = this.modifiedPaths();
 
-    if (this.modified.indexOf('quantityDone') !== -1
-      || this.modified.indexOf('losses') !== -1)
+    if (this._changes.indexOf('quantityDone') !== -1 || this._changes.indexOf('losses') !== -1)
     {
       this.recountTotals();
     }
@@ -188,19 +187,19 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       return;
     }
 
-    if (this.wasNew)
+    if (doc._wasNew)
     {
       app.broker.publish('prodShiftOrders.created.' + doc.prodLine, doc.toJSON());
     }
-    else
+    else if (Array.isArray(doc._changes) && doc._changes.length)
     {
       var changes = {_id: doc._id};
 
-      this.modified.forEach(function(modifiedPath)
+      doc._changes.forEach(function(modifiedPath)
       {
         changes[modifiedPath] = doc.get(modifiedPath);
       });
-      this.modified = null;
+      doc._changes = null;
 
       app.broker.publish('prodShiftOrders.updated.' + doc._id, changes);
     }

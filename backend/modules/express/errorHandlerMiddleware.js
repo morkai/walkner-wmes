@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function createErrorHandlerMiddleware(appModule, options)
+module.exports = function createErrorHandlerMiddleware(expressModule, options)
 {
   if (!options)
   {
@@ -26,6 +26,11 @@ module.exports = function createErrorHandlerMiddleware(appModule, options)
       res.statusCode = 500;
     }
 
+    if (typeof err === 'string')
+    {
+      err = {message: err, stack: null};
+    }
+
     var login = req.session && req.session.user
       ? req.session.user.login
       : 'guest';
@@ -34,11 +39,11 @@ module.exports = function createErrorHandlerMiddleware(appModule, options)
     {
       try
       {
-        appModule.warn(
+        expressModule.warn(
           "%s %s\n%s\nUser: %s (%s)\nHeaders:\n%s\nRequest body:\n%s",
           req.method,
           req.url,
-          err.stack,
+          err.stack || err.message,
           login,
           req.ip,
           JSON.stringify(req.headers),
@@ -47,12 +52,12 @@ module.exports = function createErrorHandlerMiddleware(appModule, options)
       }
       catch (err)
       {
-        appModule.warn("%s %s\n%s\nUser: %s (%s)", req.method, req.url, err.stack, login, req.ip);
+        expressModule.warn("%s %s\n%s\nUser: %s (%s)", req.method, req.url, err.stack, login, req.ip);
       }
     }
     else
     {
-      appModule.warn(
+      expressModule.warn(
         "%s %s\n%s\nUser: %s (%s)\nHeaders:\n%s",
         req.method,
         req.url,
@@ -71,7 +76,7 @@ module.exports = function createErrorHandlerMiddleware(appModule, options)
         title: options.title || 'express',
         statusCode: res.statusCode,
         stack: prepareStack(options.basePath, err).reverse(),
-        error: err.toString().replace(/\n/g, '<br>').replace(/^Error: /, '')
+        error: err.message.replace(/\n/g, '<br>').replace(/^Error: /, '')
       });
 
       return;
@@ -93,7 +98,7 @@ module.exports = function createErrorHandlerMiddleware(appModule, options)
     }
 
     res.setHeader('Content-Type', 'text/plain');
-    res.end(err.stack);
+    res.end(err.stack || err.message);
   };
 };
 

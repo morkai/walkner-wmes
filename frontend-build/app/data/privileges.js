@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define([],function(){var e="PRIVILEGES",n=window[e]||[];return delete window[e],n});
+define([],function(){"use strict";var e="PRIVILEGES",n=window[e]||[];return delete window[e],n});

@@ -203,7 +203,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
         if (statusCode)
         {
-          return res.send(statusCode);
+          return res.sendStatus(statusCode);
         }
 
         res.send(logEntry.data);
@@ -295,7 +295,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
         if (statusCode)
         {
-          return res.send(statusCode);
+          return res.sendStatus(statusCode);
         }
 
         res.send(logEntry.data);
@@ -377,7 +377,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
         if (statusCode)
         {
-          return res.send(statusCode);
+          return res.sendStatus(statusCode);
         }
 
         res.send(logEntry.data);

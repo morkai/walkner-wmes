@@ -5,7 +5,7 @@
 'use strict';
 
 var lodash = require('lodash');
-var sio = require('socket.io');
+var socketIo = require('socket.io');
 var SocketIoMultiServer = require('./SocketIoMultiServer');
 var pmx = null;
 
@@ -20,10 +20,10 @@ exports.DEFAULT_CONFIG = {
   httpsServerId: 'httpsServer'
 };
 
-exports.start = function startIoModule(app, module)
+exports.start = function startIoModule(app, sioModule)
 {
-  var httpServer = app[module.config.httpServerId];
-  var httpsServer = app[module.config.httpsServerId];
+  var httpServer = app[sioModule.config.httpServerId];
+  var httpsServer = app[sioModule.config.httpsServerId];
 
   if (!httpServer && !httpsServer)
   {
@@ -57,21 +57,14 @@ exports.start = function startIoModule(app, module)
     multiServer.addServer(httpsServer.server);
   }
 
-  module = app[module.name] = lodash.merge(
-    sio.listen(multiServer, {log: false}), module
-  );
+  var sio = socketIo(multiServer, {
+    transports: ['websocket', 'xhr-polling'],
+    serveClient: true
+  });
 
-  module.set('transports', ['websocket', 'xhr-polling']);
-  module.disable('browser client');
+  sioModule = app[sioModule.name] = lodash.merge(sio, sioModule);
 
-  if (app.options.env === 'production')
-  {
-    module.enable('browser client minification');
-    module.enable('browser client etag');
-    module.enable('browser client gzip');
-  }
-
-  module.sockets.on('connection', function(socket)
+  sioModule.on('connection', function(socket)
   {
     socket.handshake.connectedAt = Date.now();
 

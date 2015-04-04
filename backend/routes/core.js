@@ -55,6 +55,7 @@ module.exports = function startCoreRoutes(app, express)
     var sessionUser = req.session.user;
     var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
     var appData = {
+      ENV: JSON.stringify(app.options.env),
       VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
       TIME: JSON.stringify(Date.now()),
       LOCALE: JSON.stringify(locale),

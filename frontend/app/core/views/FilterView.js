@@ -4,16 +4,20 @@
 
 define([
   'underscore',
+  'jquery',
   'js2form',
   'h5.rql/specialTerms',
+  'app/i18n',
   'app/core/View',
   'app/core/util/buttonGroup',
   'app/core/templates/filterLimit',
   'select2'
 ], function(
   _,
+  $,
   js2form,
   specialTerms,
+  t,
   View,
   buttonGroup,
   filterLimitTemplate
@@ -34,8 +38,11 @@ define([
         this.changeFilter();
 
         return false;
-      }
+      },
+      'click .filter-toggle': 'toggle'
     },
+
+    collapsed: false,
 
     serialize: function()
     {
@@ -69,6 +76,29 @@ define([
       this.formData = this.serializeQueryToForm();
 
       js2form(this.el, this.formData);
+
+      this.$toggleFilter = $('<button class="btn btn-default btn-block filter-toggle" type="button"></button>')
+        .append('<i class="fa"></i>')
+        .append('<span></span>');
+
+      this.$el.append(this.$toggleFilter);
+
+      this.toggle();
+    },
+
+    toggle: function()
+    {
+      if (window.innerWidth < 768)
+      {
+        this.collapsed = !this.collapsed;
+
+        this.$el.toggleClass('is-collapsed', this.collapsed);
+      }
+
+      this.$toggleFilter.find('span').text(t('core', 'filter:' + (this.collapsed ? 'show' : 'hide')));
+      this.$toggleFilter.find('.fa')
+        .removeClass('fa-caret-up fa-caret-down')
+        .addClass('fa-caret-' + (this.collapsed ? 'down' : 'up'));
     },
 
     serializeQueryToForm: function()

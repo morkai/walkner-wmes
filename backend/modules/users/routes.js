@@ -22,9 +22,9 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
   express.get('/users/:id', canViewDetails, express.crud.readRoute.bind(null, app, User));
 
-  express.put('/users/:id', canManage, hashPassword, express.crud.editRoute.bind(null, app, User));
+  express.put('/users/:id', canEdit, restrictSpecial, hashPassword, express.crud.editRoute.bind(null, app, User));
 
-  express.delete('/users/:id', canManage, express.crud.deleteRoute.bind(null, app, User));
+  express.delete('/users/:id', canManage, restrictSpecial, express.crud.deleteRoute.bind(null, app, User));
 
   express.post('/login', loginRoute);
 
@@ -40,6 +40,35 @@ module.exports = function setUpUsersRoutes(app, usersModule)
     {
       canView(req, res, next);
     }
+  }
+
+  function canEdit(req, res, next)
+  {
+    var user = req.session.user;
+
+    if (user && req.params.id === user._id)
+    {
+      if (req.body.privileges && user.privileges.indexOf('USERS:MANAGE') === -1)
+      {
+        delete req.body.privileges;
+      }
+
+      next();
+    }
+    else
+    {
+      canManage(req, res, next);
+    }
+  }
+
+  function restrictSpecial(req, res, next)
+  {
+    if (req.params.id === userModule.root._id || req.params.id === userModule.guest._id)
+    {
+      return res.sendStatus(400);
+    }
+
+    return next();
   }
 
   function loginRoute(req, res, next)
@@ -123,7 +152,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
       res.format({
         json: function()
         {
-          res.send(204);
+          res.sendStatus(204);
         },
         default: function()
         {

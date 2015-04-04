@@ -38,17 +38,38 @@ define([
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(this.options.model, this);
+      this.defineModels();
+      this.defineViews();
+    },
 
+    load: function(when)
+    {
+      return when(this.model.fetch(this.options.fetchOptions));
+    },
+
+    defineModels: function()
+    {
+      this.model = bindLoadingMessage(this.options.model, this);
+    },
+
+    defineViews: function()
+    {
       var FormViewClass = this.options.FormView || this.FormView || FormView;
+
+      this.view = new FormViewClass(this.getFormViewOptions());
+    },
+
+    getFormViewOptions: function()
+    {
+      var model = this.model;
       var options = {
         editMode: true,
-        model: this.model,
+        model: model,
         formMethod: 'PUT',
-        formAction: this.model.url(),
-        formActionText: t(this.model.getNlsDomain(), 'FORM:ACTION:edit'),
-        failureText: t(this.model.getNlsDomain(), 'FORM:ERROR:editFailure'),
-        panelTitleText: t(this.model.getNlsDomain(), 'PANEL:TITLE:editForm')
+        formAction: model.url(),
+        formActionText: t(model.getNlsDomain(), 'FORM:ACTION:edit'),
+        failureText: t(model.getNlsDomain(), 'FORM:ERROR:editFailure'),
+        panelTitleText: t(model.getNlsDomain(), 'PANEL:TITLE:editForm')
       };
 
       if (typeof this.options.formTemplate === 'function')
@@ -56,12 +77,7 @@ define([
         options.template = this.options.formTemplate;
       }
 
-      this.view = new FormViewClass(options);
-    },
-
-    load: function(when)
-    {
-      return when(this.model.fetch(this.options.fetchOptions));
+      return options;
     }
 
   });

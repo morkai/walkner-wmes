@@ -48,7 +48,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
     if (isNaN(rid) || rid <= 0)
     {
-      return res.send(400);
+      return res.sendStatus(400);
     }
 
     PressWorksheet.findOne({rid: rid}, {_id: 1}).lean().exec(function(err, pressWorksheet)
@@ -63,7 +63,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
         return res.json(pressWorksheet._id);
       }
 
-      return res.send(404);
+      return res.sendStatus(404);
     });
   }
 

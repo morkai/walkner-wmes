@@ -93,8 +93,8 @@ module.exports = function setupProdShiftModel(app, mongoose)
 
   prodShiftSchema.pre('save', function(next)
   {
-    this.wasNew = this.isNew;
-    this.modified = this.modifiedPaths();
+    this._wasNew = this.isNew;
+    this._changes = this.modifiedPaths();
 
     next();
   });
@@ -106,24 +106,19 @@ module.exports = function setupProdShiftModel(app, mongoose)
       return;
     }
 
-    if (this.wasNew)
+    if (doc._wasNew)
     {
       app.broker.publish('prodShifts.created.' + doc.prodLine, doc.toJSON());
     }
-    else
+    else if (Array.isArray(doc._changes) && doc._changes.length)
     {
       var changes = {_id: doc._id};
 
-      if (!Array.isArray(this.modified))
-      {
-        return;
-      }
-
-      this.modified.forEach(function(modifiedPath)
+      doc._changes.forEach(function(modifiedPath)
       {
         changes[modifiedPath] = doc.get(modifiedPath);
       });
-      this.modified = null;
+      doc._changes = null;
 
       app.broker.publish('prodShifts.updated.' + doc._id, changes);
     }

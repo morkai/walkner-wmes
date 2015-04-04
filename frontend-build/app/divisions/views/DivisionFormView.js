@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/core/views/FormView","app/divisions/templates/form"],function(e,t){return e.extend({template:t,afterRender:function(){e.prototype.afterRender.call(this),this.options.editMode&&this.$id("_id").attr("disabled",!0)}})});
+define(["app/core/views/FormView","app/divisions/templates/form"],function(e,t){"use strict";return e.extend({template:t,afterRender:function(){e.prototype.afterRender.call(this),this.options.editMode&&this.$id("_id").attr("disabled",!0)}})});

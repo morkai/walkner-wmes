@@ -1,1 +1,1 @@
-define(["require","exports","module"],function(e,n,i){function t(e,n){this.name=e||null,this.args=n||[]}i.exports=t});
+define(["require","exports","module"],function(e,t,i){"use strict";function n(e,t){this.name=e||null,this.args=t||[]}i.exports=n});

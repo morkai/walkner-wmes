@@ -133,7 +133,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
       if (fteEntry && !canManage(req.session.user, fteEntry))
       {
-        return res.send(403);
+        return res.sendStatus(403);
       }
 
       return next();

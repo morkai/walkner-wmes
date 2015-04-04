@@ -32,7 +32,7 @@ module.exports = function downloadRoute(file, xiconfModule, XiconfResult, req, r
 
     if (!xiconfResult)
     {
-      return res.send(404);
+      return res.sendStatus(404);
     }
 
     var startedAtMoment = moment(xiconfResult.startedAt);
@@ -88,7 +88,7 @@ module.exports = function downloadRoute(file, xiconfModule, XiconfResult, req, r
 
     if (xiconfResult.featureHash)
     {
-      return res.sendfile(
+      return res.sendFile(
         path.join(xiconfModule.config.featureDbPath, xiconfResult.featureHash + '.xml')
       );
     }

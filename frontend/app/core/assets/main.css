@@ -46,6 +46,7 @@ kbd {
   border: 2px outset #ccc;
   border-radius: 3px;
   background: #eee;
+  color: #333;
 }
 .unselectable {
   -webkit-touch-callout: none;
@@ -292,4 +293,52 @@ kbd {
 
 .select2-choices > .select2-search-choice.sortable-ghost {
   border-color: #0af;
+}
+
+.text-mono {
+  font-family: Consolas, Menlo, Monaco, monospace;
+  white-space: pre-wrap;
+}
+.is-changed {
+  color: #e00;
+}
+
+@media (max-width: 767px) {
+  .page-actions {
+    float: none;
+    display: block;
+    padding: 0;
+  }
+  .page-actions > li {
+    display: block;
+    margin-left: 0;
+    margin-bottom: 1em;
+  }
+  .page-actions > li > .btn {
+    width: 100%;
+  }
+  .page-actions-jump {
+    width: 100%;
+  }
+  .page-breadcrumbs {
+    position: absolute;
+    top: 8px;
+    left: 53px;
+    right: 73px;
+    text-align: center;
+    line-height: 1.4;
+    max-height: 36px;
+    overflow: hidden;
+  }
+  .page-breadcrumbs > li {
+    font-size: 16px;
+  }
+  .pagination > .pagination-page,
+  .pagination > .pagination-leftDots,
+  .pagination > .pagination-rightDots {
+    display: none;
+  }
+  .pagination > .pagination-page.active {
+    display: inline;
+  }
 }
