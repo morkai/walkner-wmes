@@ -34,7 +34,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         return reply(new Error('INPUT'));
       }
 
-      data.newCount = Math.round(Math.max(0, data.newCount));
+      data.newCount = Math.max(0, data.newCount);
 
       step(
         function acquireLockStep()
