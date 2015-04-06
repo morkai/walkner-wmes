@@ -156,6 +156,9 @@ th.fte-masterEntry-column-noPlan {
 .fte-masterEntry-count {
   text-align: center;
 }
+.fte-masterEntry-absence {
+  display: none;
+}
 .fte-masterEntry-absence-userFinder-container {
   padding: 10px;
   background-color: #f5f5f5;
