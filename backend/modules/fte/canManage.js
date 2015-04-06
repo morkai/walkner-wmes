@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function canManage(user, fteEntry)
+module.exports = function canManage(user, fteEntry, modelName)
 {
   if (!user)
   {
@@ -26,7 +26,11 @@ module.exports = function canManage(user, fteEntry)
     return true;
   }
 
-  var modelName = fteEntry.modelName || fteEntry.constructor.modelName;
+  if (!modelName)
+  {
+    modelName = fteEntry.modelName || fteEntry.constructor.modelName;
+  }
+
   var privilegePrefix = modelName === 'FteMasterEntry'
     ? 'FTE:MASTER'
     : 'FTE:LEADER';

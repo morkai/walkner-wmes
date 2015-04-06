@@ -4,7 +4,8 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
+var step = require('h5.step');
 var canManage = require('../canManage');
 var findOrCreate = require('./findOrCreate');
 
@@ -18,124 +19,299 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
     findOrCreate: findOrCreate.bind(null, app, fteModule, FteMasterEntry),
     updateCount: function(socket, data, reply)
     {
-      if (!lodash.isFunction(reply))
+      if (!_.isFunction(reply))
       {
         reply = function() {};
       }
 
-      if (!lodash.isObject(data)
-        || !lodash.isString(data._id)
-        || !lodash.isNumber(data.taskIndex)
-        || !lodash.isNumber(data.functionIndex)
-        || !lodash.isNumber(data.companyIndex)
-        || !lodash.isNumber(data.newCount))
+      if (!_.isObject(data)
+        || !_.isString(data._id)
+        || !_.isNumber(data.taskIndex)
+        || !_.isNumber(data.functionIndex)
+        || !_.isNumber(data.companyIndex)
+        || !_.isNumber(data.newCount))
       {
         return reply(new Error('INPUT'));
       }
 
-      var user = socket.handshake.user;
+      data.newCount = Math.round(Math.max(0, data.newCount));
 
-      if (!canManage(user, FteMasterEntry))
-      {
-        return reply(new Error('AUTH'));
-      }
-
-      FteMasterEntry.findById(data._id).exec(function(err, fteMasterEntry)
-      {
-        if (err)
+      step(
+        function acquireLockStep()
         {
-          return reply(err);
-        }
-
-        if (fteMasterEntry === null)
+          this.releaseLock = fteModule.acquireLock(data._id, this.next());
+        },
+        function getCachedEntryStep()
         {
-          return reply(new Error('UNKNOWN'));
-        }
-
-        if (!canManage(user, fteMasterEntry))
-        {
-          return reply(new Error('AUTH'));
-        }
-
-        fteMasterEntry.updateCount(data, userModule.createUserInfo(user, socket), function(err)
+          fteModule.getCachedEntry('master', data._id, this.next());
+        },
+        function updateCountStep(err, fteMasterEntry)
         {
           if (err)
           {
-            return reply(err);
+            return this.skip(err);
           }
 
-          reply();
+          if (!fteMasterEntry)
+          {
+            return this.skip(new Error('UNKNOWN'));
+          }
 
-          app.broker.publish('fte.master.updated.' + data._id, data);
-        });
-      });
+          var user = socket.handshake.user;
+
+          if (!canManage(user, fteMasterEntry, FteMasterEntry.modelName))
+          {
+            return this.skip(new Error('AUTH'));
+          }
+
+          var task = fteMasterEntry.tasks[data.taskIndex];
+
+          if (!task || !task.functions[data.functionIndex])
+          {
+            return this.skip(new Error('INPUT'));
+          }
+
+          var taskCompany = task.functions[data.functionIndex].companies[data.companyIndex];
+
+          if (!taskCompany)
+          {
+            return this.skip(new Error('INPUT'));
+          }
+
+          var newTaskTotal = 0;
+
+          for (var functionI = 0; functionI < task.functions.length; ++functionI)
+          {
+            var taskFunctionCompanies = task.functions[functionI].companies;
+
+            for (var companyI = 0; companyI < taskFunctionCompanies.length; ++companyI)
+            {
+              if (functionI === data.functionIndex && companyI === data.companyIndex)
+              {
+                newTaskTotal += data.newCount;
+              }
+              else
+              {
+                newTaskTotal += taskFunctionCompanies[companyI].count;
+              }
+            }
+          }
+
+          var newOverallTotal = fteMasterEntry.total - task.total + newTaskTotal;
+          var update = {
+            $set: {
+              updatedAt: new Date(),
+              updater: userModule.createUserInfo(user, socket),
+              total: newOverallTotal
+            }
+          };
+          var taskTotalProperty = 'tasks.' + data.taskIndex + '.total';
+          var taskCountProperty = 'tasks.' + data.taskIndex
+            + '.functions.' + data.functionIndex
+            + '.companies.' + data.companyIndex
+            + '.count';
+
+          update.$set[taskTotalProperty] = newTaskTotal;
+          update.$set[taskCountProperty] = data.newCount;
+
+          FteMasterEntry.collection.update({_id: fteMasterEntry._id}, update, this.next());
+
+          this.changes = {
+            entry: fteMasterEntry,
+            updatedAt: update.$set.updatedAt,
+            updater: update.$set.updater,
+            total: newOverallTotal,
+            task: task,
+            taskTotal: newTaskTotal,
+            taskCompany: taskCompany,
+            taskCompanyCount: data.newCount
+          };
+        },
+        function applyChangesStep(err)
+        {
+          if (err)
+          {
+            return this.skip(err);
+          }
+
+          var changes = this.changes;
+
+          changes.entry.updatedAt = changes.updatedAt;
+          changes.entry.updater = changes.updater;
+          changes.entry.total = changes.total;
+          changes.task.total = changes.taskTotal;
+          changes.taskCompany.count = changes.taskCompanyCount;
+        },
+        function sendResultStep(err)
+        {
+          if (err)
+          {
+            reply(err);
+          }
+          else
+          {
+            reply();
+
+            app.broker.publish('fte.master.updated.' + data._id, data);
+          }
+
+          setImmediate(this.releaseLock);
+
+          this.releaseLock = null;
+          this.changes = null;
+        }
+      );
     },
     updatePlan: function(socket, data, reply)
     {
-      if (!lodash.isFunction(reply))
+      if (!_.isFunction(reply))
       {
         reply = function() {};
       }
 
-      if (!lodash.isObject(data)
-        || !lodash.isString(data._id)
-        || !lodash.isString(data.taskId)
-        || !lodash.isBoolean(data.newValue)
-        || !lodash.isNumber(data.taskIndex))
+      if (!_.isObject(data)
+        || !_.isString(data._id)
+        || !_.isString(data.taskId)
+        || !_.isBoolean(data.newValue)
+        || !_.isNumber(data.taskIndex))
       {
         return reply(new Error('INPUT'));
       }
 
-      var user = socket.handshake.user;
-
-      if (!canManage(user, FteMasterEntry))
-      {
-        return reply(new Error('AUTH'));
-      }
-
-      FteMasterEntry.findById(data._id).exec(function(err, fteMasterEntry)
-      {
-        if (err)
+      step(
+        function acquireLockStep()
         {
-          return reply(err);
-        }
-
-        if (fteMasterEntry === null)
+          this.releaseLock = fteModule.acquireLock(data._id, this.next());
+        },
+        function getCachedEntryStep()
         {
-          return reply(new Error('UNKNOWN'));
-        }
-
-        if (!canManage(user, fteMasterEntry))
-        {
-          return reply(new Error('AUTH'));
-        }
-
-        fteMasterEntry.updatePlan(data, userModule.createUserInfo(user, socket), function(err)
+          fteModule.getCachedEntry('master', data._id, this.next());
+        },
+        function updateCountStep(err, fteMasterEntry)
         {
           if (err)
           {
-            return reply(err);
+            return this.skip(err);
           }
 
-          reply();
+          if (!fteMasterEntry)
+          {
+            return this.skip(new Error('UNKNOWN'));
+          }
 
-          app.broker.publish('fte.master.updated.' + data._id, data);
-        });
-      });
+          var user = socket.handshake.user;
+
+          if (!canManage(user, fteMasterEntry, FteMasterEntry.modelName))
+          {
+            return this.skip(new Error('AUTH'));
+          }
+
+          var oldTask = fteMasterEntry.tasks[data.taskIndex];
+
+          if (!oldTask)
+          {
+            return this.skip(new Error('INPUT'));
+          }
+
+          var newTask = {
+            type: oldTask.type,
+            id: oldTask.id,
+            name: oldTask.name,
+            noPlan: data.newValue,
+            functions: [],
+            total: 0
+          };
+
+          for (var functionI = 0; functionI < oldTask.functions.length; ++functionI)
+          {
+            var oldTaskFunction = oldTask.functions[functionI];
+            var newTaskFunction = {
+              id: oldTaskFunction.id,
+              companies: []
+            };
+            var oldTaskFunctionCompanies = oldTaskFunction.companies;
+
+            newTask.functions.push(newTaskFunction);
+
+            for (var companyI = 0; companyI < oldTaskFunctionCompanies.length; ++companyI)
+            {
+              var oldTaskFunctionCompany = oldTaskFunctionCompanies[companyI];
+
+              newTaskFunction.companies.push({
+                id: oldTaskFunctionCompany.id,
+                name: oldTaskFunctionCompany.name,
+                count: 0
+              });
+            }
+          }
+
+          var newOverallTotal = fteMasterEntry.total - oldTask.total;
+          var update = {
+            $set: {
+              updatedAt: new Date(),
+              updater: userModule.createUserInfo(user, socket),
+              total: newOverallTotal
+            }
+          };
+          update.$set['tasks.' + data.taskIndex] = newTask;
+
+          FteMasterEntry.collection.update({_id: fteMasterEntry._id}, update, this.next());
+
+          this.changes = {
+            entry: fteMasterEntry,
+            updatedAt: update.$set.updatedAt,
+            updater: update.$set.updater,
+            total: newOverallTotal,
+            task: newTask
+          };
+        },
+        function applyChangesStep(err)
+        {
+          if (err)
+          {
+            return this.skip(err);
+          }
+
+          var changes = this.changes;
+
+          changes.entry.updatedAt = changes.updatedAt;
+          changes.entry.updater = changes.updater;
+          changes.entry.total = changes.total;
+          changes.entry.tasks[data.taskIndex] = changes.task;
+        },
+        function sendResultStep(err)
+        {
+          if (err)
+          {
+            reply(err);
+          }
+          else
+          {
+            reply();
+
+            app.broker.publish('fte.master.updated.' + data._id, data);
+          }
+
+          setImmediate(this.releaseLock);
+
+          this.releaseLock = null;
+          this.changes = null;
+        }
+      );
     },
     addAbsentUser: function(socket, data, reply)
     {
-      if (!lodash.isFunction(reply))
+      if (!_.isFunction(reply))
       {
         reply = function() {};
       }
 
-      if (!lodash.isObject(data)
-        || !lodash.isString(data._id)
-        || !lodash.isObject(data.user)
-        || !lodash.isString(data.user.id)
-        || !lodash.isString(data.user.name)
-        || !lodash.isString(data.user.personellId))
+      if (!_.isObject(data)
+        || !_.isString(data._id)
+        || !_.isObject(data.user)
+        || !_.isString(data.user.id)
+        || !_.isString(data.user.name)
+        || !_.isString(data.user.personellId))
       {
         return reply(new Error('INPUT'));
       }
@@ -163,14 +339,14 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
     },
     removeAbsentUser: function(socket, data, reply)
     {
-      if (!lodash.isFunction(reply))
+      if (!_.isFunction(reply))
       {
         reply = function() {};
       }
 
-      if (!lodash.isObject(data)
-        || !lodash.isString(data._id)
-        || !lodash.isString(data.userId))
+      if (!_.isObject(data)
+        || !_.isString(data._id)
+        || !_.isString(data.userId))
       {
         return reply(new Error('INPUT'));
       }

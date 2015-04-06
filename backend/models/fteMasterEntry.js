@@ -244,100 +244,26 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
   {
     var overallTotal = 0;
 
-    this.tasks.forEach(function(task)
+    for (var i = 0, l = this.tasks.length; i < l; ++i)
     {
+      var task = this.tasks[i];
+
       task.total = 0;
 
-      task.functions.forEach(function(taskFunction)
+      for (var ii = 0, ll = task.functions.length; ii < ll; ++ii)
       {
-        taskFunction.companies.forEach(function(taskCompany)
+        var taskFunction = task.functions[ii];
+
+        for (var iii = 0, lll = taskFunction.companies.length; iii < lll; ++iii)
         {
-          task.total += taskCompany.count;
-        });
-      });
+          task.total += taskFunction.companies[iii].count;
+        }
+      }
 
       overallTotal += task.total;
-    });
+    }
 
     this.total = overallTotal;
-  };
-
-  fteMasterEntrySchema.methods.updateCount = function(options, updater, done)
-  {
-    var task = this.tasks[options.taskIndex];
-
-    if (!task)
-    {
-      return done(new Error('INPUT'));
-    }
-
-    var prodFunction = task.functions[options.functionIndex];
-
-    if (!prodFunction)
-    {
-      return done(new Error('INPUT'));
-    }
-
-    var company = prodFunction.companies[options.companyIndex];
-
-    if (!company)
-    {
-      return done(new Error('INPUT'));
-    }
-
-    if (company.count === options.newCount)
-    {
-      return done();
-    }
-
-    company.count = options.newCount;
-
-    this.markModified('tasks');
-    this.calcTotals();
-    this.set({
-      updatedAt: new Date(),
-      updater: updater
-    });
-    this.save(done);
-  };
-
-  fteMasterEntrySchema.methods.updatePlan = function(options, updater, done)
-  {
-    var task = _.find(this.tasks, function(task)
-    {
-      return String(task.id) === options.taskId;
-    });
-
-    if (!task)
-    {
-      return done(new Error('INPUT'));
-    }
-
-    if (task.noPlan === options.newValue)
-    {
-      return done();
-    }
-
-    if (options.newValue)
-    {
-      task.functions.forEach(function(prodFunction)
-      {
-        prodFunction.companies.forEach(function(company)
-        {
-          company.count = 0;
-        });
-      });
-    }
-
-    task.noPlan = options.newValue;
-
-    this.markModified('tasks');
-    this.calcTotals();
-    this.set({
-      updatedAt: new Date(),
-      updater: updater
-    });
-    this.save(done);
   };
 
   function getProdFunctionCompanyEntries(prodFunction)

@@ -45,7 +45,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
     })
   );
 
-  express.get('/fte/master/:id', canViewMaster, express.crud.readRoute.bind(null, app, FteMasterEntry));
+  express.get('/fte/master/:id', canViewMaster, readFteEntryRoute.bind(null, 'master'));
 
   express.delete(
     '/fte/master/:id',
@@ -77,7 +77,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
     })
   );
 
-  express.get('/fte/leader/:id', canViewLeader, express.crud.readRoute.bind(null, app, FteLeaderEntry));
+  express.get('/fte/leader/:id', canViewLeader, readFteEntryRoute.bind(null, 'leader'));
 
   express.delete(
     '/fte/leader/:id',
@@ -137,6 +137,24 @@ module.exports = function setUpFteRoutes(app, fteModule)
       }
 
       return next();
+    });
+  }
+
+  function readFteEntryRoute(type, req, res, next)
+  {
+    fteModule.getCachedEntry(type, req.params.id, function(err, fteEntry)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (!fteEntry)
+      {
+        return res.sendStatus(404);
+      }
+
+      return res.json(fteEntry);
     });
   }
 };

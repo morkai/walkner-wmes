@@ -4,6 +4,7 @@
 
 'use strict';
 
+var setUpCache = require('./cache');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 
@@ -21,6 +22,13 @@ exports.start = function startFteModule(app, module)
   module.getCurrentShift = getCurrentShift;
 
   module.currentShift = getCurrentShift();
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId
+    ],
+    setUpCache.bind(null, app, module)
+  );
 
   app.onModuleReady(
     [
