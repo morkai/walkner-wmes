@@ -11,6 +11,7 @@ require('./extensions');
 var lodash = require('lodash');
 var moment = require('moment');
 var main = require('h5.main');
+var blocked = process.env.NODE_ENV === 'production' ? function() {} : require('blocked');
 var config = require(process.argv[2]);
 
 moment.locale('pl');
@@ -58,5 +59,10 @@ var app = {
     moduleStartTimeout: 3000
   })
 };
+
+blocked(function(ms)
+{
+  app.debug("Event loop blocked for %sms :(", ms);
+});
 
 main(app, modules);

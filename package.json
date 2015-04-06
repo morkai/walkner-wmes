@@ -65,6 +65,7 @@
     "moment": "~2.9.0",
     "later": "~1.1.6",
     "request": "~2.54.0",
+    "blocked": "~1.1.0",
     "h5.step": "~0.1.0",
     "h5.pubsub": "git+http://github.com/morkai/h5.pubsub.git#c1a899cb7e",
     "h5.rql": "git+http://github.com/morkai/h5.rql.git#5622189665",
