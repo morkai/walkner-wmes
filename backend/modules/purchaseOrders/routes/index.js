@@ -115,7 +115,11 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 
   function populateVendorNc12s(po, done)
   {
-    po = po.toJSON();
+    if (po.toJSON)
+    {
+      po = po.toJSON();
+    }
+
     po.anyVendorNc12 = false;
 
     var nc12Map = {};

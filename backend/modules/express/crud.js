@@ -181,7 +181,7 @@ exports.readRoute = function(app, options, req, res, next)
     options = {};
   }
 
-  var query = Model.findById(req.params.id);
+  var query = Model.findById(req.params.id).lean();
 
   try
   {
@@ -202,6 +202,11 @@ exports.readRoute = function(app, options, req, res, next)
     if (model === null)
     {
       return res.sendStatus(404);
+    }
+
+    if (typeof Model.customizeLeanObject === 'function')
+    {
+      model = Model.customizeLeanObject(model);
     }
 
     if (typeof options.prepareResult === 'function')
