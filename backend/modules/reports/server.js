@@ -86,7 +86,7 @@ exports.start = function startReportsServerModule(app, module)
       }
       else if (duration > 60000)
       {
-        var options = _.pick(req.options, function(value, key)
+        var options = _.pick(req.options, function(value)
         {
           return !_.isObject(value);
         });

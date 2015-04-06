@@ -3,11 +3,9 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  '../core/Model',
-  '../orders/Order'
+  '../core/Model'
 ], function(
-  Model,
-  Order
+  Model
 ) {
   'use strict';
 

@@ -3,17 +3,13 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/time',
   'app/i18n',
   'app/highcharts',
-  './Report6ChartView',
-  '../util/formatTooltipHeader'
+  './Report6ChartView'
 ], function(
-  time,
   t,
   Highcharts,
-  Report6ChartView,
-  formatTooltipHeader
+  Report6ChartView
 ) {
   'use strict';
 

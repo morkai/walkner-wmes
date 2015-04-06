@@ -96,7 +96,7 @@ define([
   {
     return function()
     {
-      var breadcrumbs = this.constructor.prototype.breadcrumbs.call(this);
+      var breadcrumbs = Page.prototype.breadcrumbs.call(this);
 
       breadcrumbs.unshift(t.bound('xiconfPrograms', 'BREADCRUMBS:base'));
 

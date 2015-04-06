@@ -63,6 +63,8 @@ define([
 
     serializeToForm: function(partial)
     {
+      /*jshint unused:false*/
+
       return this.model.toJSON();
     },
 
