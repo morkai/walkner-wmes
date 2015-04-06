@@ -21,6 +21,11 @@ define([
 
     template: leaderEntryTemplate,
 
+    initialize: function()
+    {
+      this.scheduleModelReload = _.throttle(this.model.fetch.bind(this.model), 3000, true);
+    },
+
     remoteTopics: function()
     {
       var topics = {};
@@ -51,7 +56,7 @@ define([
 
     onModelUpdated: function(message)
     {
-      this.model.handleUpdateMessage(message);
+      this.scheduleModelReload(message);
     },
 
     onModelDeleted: function(message)

@@ -10,8 +10,7 @@ define([
   'app/core/util/onModelDeleted',
   'app/fte/templates/leaderEntry',
   'app/fte/templates/focusInfoBar',
-  '../util/fractions',
-  'jquery.stickytableheaders'
+  '../util/fractions'
 ], function(
   _,
   $,
@@ -194,8 +193,6 @@ define([
 
     destroy: function()
     {
-      this.$('.fte-leaderEntry').stickyTableHeaders('destroy');
-
       $('body').removeClass('is-with-fte-focusInfoBar');
 
       this.focused = null;

@@ -12,6 +12,7 @@ module.exports = function setUpFteCache(app, fteModule)
   var FteMasterEntry = mongoose.model('FteMasterEntry');
   var FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
+  var idToFteLeaderEntryMapsMap = {};
   var idToFteEntryMap = {};
   var idToQueueMap = {};
 
@@ -47,6 +48,32 @@ module.exports = function setUpFteCache(app, fteModule)
     });
   };
 
+  fteModule.cleanCachedEntry = cleanCachedEntry;
+
+  fteModule.getCachedLeaderProdTaskMaps = function(_id, fteLeaderEntry)
+  {
+    var cachedProdTaskMaps = idToFteLeaderEntryMapsMap[_id];
+
+    if (cachedProdTaskMaps)
+    {
+      return cachedProdTaskMaps;
+    }
+
+    if (!fteLeaderEntry)
+    {
+      fteLeaderEntry = idToFteEntryMap[_id];
+    }
+
+    if (!fteLeaderEntry)
+    {
+      return null;
+    }
+
+    idToFteLeaderEntryMapsMap[_id] = FteLeaderEntry.mapProdTasks(fteLeaderEntry.tasks);
+
+    return idToFteLeaderEntryMapsMap[_id];
+  };
+
   fteModule.acquireLock = function(_id, done)
   {
     var queue = idToQueueMap[_id];
@@ -77,7 +104,7 @@ module.exports = function setUpFteCache(app, fteModule)
 
   function onFteEntryDeleted(message)
   {
-    delete idToFteEntryMap[message.model._id];
+    cleanCachedEntry(message.model._id.toString());
   }
 
   function onShiftChanged()
@@ -90,8 +117,14 @@ module.exports = function setUpFteCache(app, fteModule)
 
       if (updatedAt < oneHourAgo)
       {
-        delete idToFteEntryMap[_id];
+        cleanCachedEntry(_id);
       }
     });
+  }
+
+  function cleanCachedEntry(_id)
+  {
+    delete idToFteEntryMap[_id];
+    delete idToFteLeaderEntryMapsMap[_id];
   }
 };

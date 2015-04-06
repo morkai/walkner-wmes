@@ -101,9 +101,11 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     id: false
   });
 
+  fteLeaderEntrySchema.index({date: -1});
+
   fteLeaderEntrySchema.statics.TOPIC_PREFIX = 'fte.leader';
 
-  fteLeaderEntrySchema.index({date: -1});
+  fteLeaderEntrySchema.statics.mapProdTasks = mapProdTasks;
 
   fteLeaderEntrySchema.statics.createForShift = function(options, creator, done)
   {
@@ -338,177 +340,11 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     }
   };
 
-  fteLeaderEntrySchema.methods.updateComment = function(options, updater, done)
-  {
-    var task = this.tasks[options.taskIndex];
-
-    if (!task)
-    {
-      return done(new Error('INPUT'));
-    }
-
-    task.comment = typeof options.comment === 'string' ? options.comment.trim() : '';
-
-    this.markModified('tasks');
-    this.set({
-      updatedAt: new Date(),
-      updater: updater
-    });
-    this.save(done);
-  };
-
-  fteLeaderEntrySchema.methods.updateCount = function(options, updater, done)
-  {
-    var task = this.tasks[options.taskIndex];
-
-    if (!task)
-    {
-      return done(new Error('INPUT'));
-    }
-
-    var company;
-    var companyIndex = typeof options.companyIndexServer === 'number'
-      ? options.companyIndexServer
-      : options.companyIndex;
-
-    if (Array.isArray(task.functions) && task.functions.length)
-    {
-      var taskFunction = task.functions[options.functionIndex];
-
-      if (!taskFunction)
-      {
-        return done(new Error('INPUT'));
-      }
-
-      company = taskFunction.companies[companyIndex];
-    }
-    else
-    {
-      company = task.companies[companyIndex];
-    }
-
-    if (!company)
-    {
-      return done(new Error('INPUT'));
-    }
-
-    if (typeof options.divisionIndex === 'number')
-    {
-      var division = company.count[options.divisionIndex];
-
-      if (!division)
-      {
-        return done(new Error('INPUT'));
-      }
-
-      division.value = options.newCount;
-    }
-    else
-    {
-      company.count = options.newCount;
-    }
-
-    if (task.parent)
-    {
-      this.updateParentCount(task.parent.toString());
-    }
-
-    this.markModified('tasks');
-    this.calcTotals();
-    this.set({
-      updatedAt: new Date(),
-      updater: updater
-    });
-    this.save(done);
-  };
-
-  fteLeaderEntrySchema.methods.updateParentCount = function(parentId)
-  {
-    var fteDivCount = Array.isArray(this.fteDiv) ? this.fteDiv.length : 0;
-    var prodTaskMaps = mapProdTasks(this.tasks);
-
-    updateParentCount(parentId);
-
-    function updateParentCount(parentId)
-    {
-      var parentTask = prodTaskMaps.idToTask[parentId];
-
-      if (!parentTask)
-      {
-        return;
-      }
-
-      var childTasks = prodTaskMaps.idToChildren[parentId];
-      var parentTaskFunctions = parentTask.functions;
-
-      _.forEach(childTasks, function(childTask, taskIndex)
-      {
-        var firstTask = taskIndex === 0;
-
-        _.forEach(childTask.functions, function(taskFunction, functionIndex)
-        {
-          _.forEach(taskFunction.companies, function(taskCompany, companyIndex)
-          {
-            var parentCompany = parentTaskFunctions[functionIndex].companies[companyIndex];
-            var count = taskCompany.count;
-
-            if (Array.isArray(count))
-            {
-              _.forEach(count, function(divisionCount, divisionIndex)
-              {
-                if (firstTask)
-                {
-                  parentCompany.count[divisionIndex].value = divisionCount.value;
-                }
-                else
-                {
-                  parentCompany.count[divisionIndex].value += divisionCount.value;
-                }
-              });
-            }
-            else if (typeof parentCompany.count === 'number')
-            {
-              if (firstTask)
-              {
-                parentCompany.count = count;
-              }
-              else
-              {
-                parentCompany.count += count;
-              }
-            }
-            else if (fteDivCount > 0)
-            {
-              count = Math.round(count / fteDivCount * 1000) / 1000;
-
-              _.forEach(parentCompany.count, function(divisionCount)
-              {
-                if (firstTask)
-                {
-                  divisionCount.value = count;
-                }
-                else
-                {
-                  divisionCount.value += count;
-                }
-              });
-            }
-          });
-        });
-      });
-
-      if (parentTask.parent)
-      {
-        updateParentCount(parentTask.parent);
-      }
-    }
-  };
-
   function getProdFunctionCompanyEntries(prodFunction)
   {
     var companies = [];
 
-    prodFunction.companies.forEach(function(companyId)
+    _.forEach(prodFunction.companies, function(companyId)
     {
       var company = app.companies.modelsById[companyId];
 
@@ -533,18 +369,22 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       });
   }
 
-  function mapProdTasks(prodTaskList)
+  function mapProdTasks(tasks)
   {
     var idToTask = {};
     var idToChildren = {};
+    var idToIndex = {};
 
-    _.forEach(prodTaskList, function(task)
+    for (var i = 0; i < tasks.length; ++i)
     {
-      idToTask[task._id || task.id] = task;
+      var task = tasks[i];
+
+      idToTask[task.id] = task;
+      idToIndex[task.id] = i;
 
       if (!task.parent)
       {
-        return;
+        continue;
       }
 
       var parentId = task.parent.toString();
@@ -557,11 +397,12 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       {
         idToChildren[parentId] = [task];
       }
-    });
+    }
 
     return {
       idToTask: idToTask,
-      idToChildren: idToChildren
+      idToChildren: idToChildren,
+      idToIndex: idToIndex
     };
   }
 
