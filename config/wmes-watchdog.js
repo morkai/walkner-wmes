@@ -1,5 +1,6 @@
 'use strict';
 
+var mongodb = require('./wmes-mongodb');
 var later = require('later');
 later.date.localTime();
 
@@ -50,16 +51,15 @@ exports.pubsub = {
 };
 
 exports.mongoose = {
+  uri: mongodb.uri,
+  options: mongodb,
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./wmes-mongodb').uri,
-  options: {
-    server: {poolSize: 15}
-  },
   models: [
     'setting', 'event', 'user'
   ]
 };
+exports.mongoose.options.server.poolSize = 2;
 
 exports['messenger/server'] = {
   pubHost: '127.0.0.1',

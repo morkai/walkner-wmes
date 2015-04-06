@@ -1,5 +1,7 @@
 'use strict';
 
+var mongodb = require('./wmes-mongodb');
+
 try
 {
   require('pmx').init({
@@ -144,12 +146,10 @@ exports.pubsub = {
 };
 
 exports.mongoose = {
+  uri: mongodb.uri,
+  options: mongodb,
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./wmes-mongodb').uri,
-  options: {
-    server: {poolSize: 15}
-  },
   models: [
     'setting', 'event', 'user',
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
@@ -166,6 +166,7 @@ exports.mongoose = {
     'whTransferOrder'
   ]
 };
+exports.mongoose.options.server.poolSize = 15;
 
 exports.express = {
   staticPath: __dirname + '/../frontend',
@@ -286,7 +287,8 @@ exports.xiconf = {
   directoryWatcherId: null,
   zipStoragePath: DATA_PATH + '/xiconf-input',
   featureDbPath: DATA_PATH + '/xiconf-features',
-  ordersImportPath: DATA_PATH + '/attachments-input'
+  ordersImportPath: DATA_PATH + '/attachments-input',
+  updatesPath: DATA_PATH + '/xiconf-updates'
 };
 
 exports.icpo = {

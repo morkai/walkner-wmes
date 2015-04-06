@@ -1,5 +1,7 @@
 'use strict';
 
+var mongodb = require('./wmes-mongodb');
+
 exports.id = 'wmes-importer-results';
 
 exports.modules = [
@@ -15,14 +17,13 @@ exports.modules = [
 ];
 
 exports.mongoose = {
+  uri: mongodb.uri,
+  options: mongodb,
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./wmes-mongodb').uri,
-  options: {
-    server: {poolSize: 3}
-  },
   models: ['event', 'xiconfOrderResult', 'xiconfResult', 'icpoResult', 'license']
 };
+exports.mongoose.options.server.poolSize = 5;
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },

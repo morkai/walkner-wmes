@@ -1,5 +1,7 @@
 'use strict';
 
+var mongodb = require('./wmes-mongodb');
+
 var IMPORT_INPUT_DIR = __dirname + '/../data/attachments-input';
 var IMPORT_OUTPUT_DIR = __dirname + '/../data/attachments-imported';
 
@@ -26,12 +28,10 @@ exports.modules = [
 ];
 
 exports.mongoose = {
+  uri: mongodb.uri,
+  options: mongodb,
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./wmes-mongodb').uri,
-  options: {
-    server: {poolSize: 5}
-  },
   models: [
     'event',
     'setting',
@@ -42,6 +42,7 @@ exports.mongoose = {
     'xiconfOrder'
   ]
 };
+exports.mongoose.options.server.poolSize = 5;
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },

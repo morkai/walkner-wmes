@@ -1,5 +1,7 @@
 'use strict';
 
+var mongodb = require('./pos-mongodb');
+
 try
 {
   require('pmx').init({
@@ -77,10 +79,10 @@ exports.pubsub = {
 };
 
 exports.mongoose = {
+  uri: mongodb.uri,
+  options: mongodb,
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./pos-mongodb').uri,
-  options: {},
   models: [
     'setting', 'event', 'user',
     'vendor',
@@ -89,6 +91,7 @@ exports.mongoose = {
     'purchaseOrder', 'purchaseOrderPrint'
   ]
 };
+exports.mongoose.options.server.poolSize = 10;
 
 exports.express = {
   staticPath: __dirname + '/../frontend',

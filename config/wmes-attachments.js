@@ -1,5 +1,7 @@
 'use strict';
 
+var mongodb = require('./wmes-mongodb');
+
 exports.id = 'wmes-attachments';
 
 exports.modules = [
@@ -12,14 +14,13 @@ exports.modules = [
 ];
 
 exports.mongoose = {
+  uri: mongodb.uri,
+  options: mongodb,
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./wmes-mongodb').uri,
-  options: {
-    server: {poolSize: 2}
-  },
   models: ['event']
 };
+exports.mongoose.options.server.poolSize = 2;
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },

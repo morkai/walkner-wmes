@@ -1,5 +1,7 @@
 'use strict';
 
+var mongodb = require('./wmes-mongodb');
+
 exports.id = 'wmes-reports-1';
 
 exports.modules = [
@@ -24,12 +26,10 @@ exports.events = {
 };
 
 exports.mongoose = {
+  uri: mongodb.uri,
+  options: mongodb,
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: require('./wmes-mongodb').uri,
-  options: {
-    server: {poolSize: 10}
-  },
   models: [
     'event',
     'prodShift', 'prodShiftOrder', 'prodDowntime',
@@ -38,6 +38,7 @@ exports.mongoose = {
     'whShiftMetrics'
   ]
 };
+exports.mongoose.options.server.poolSize = 10;
 
 exports.updater = {
   expressId: null,
