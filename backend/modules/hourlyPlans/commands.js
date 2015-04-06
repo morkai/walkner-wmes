@@ -5,7 +5,7 @@
 'use strict';
 
 var moment = require('moment');
-var lodash = require('lodash');
+var _ = require('lodash');
 var canManage = require('./canManage');
 
 module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
@@ -24,7 +24,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
   function findOrCreate(socket, data, reply)
   {
-    if (!lodash.isFunction(reply))
+    if (!_.isFunction(reply))
     {
       reply = function() {};
     }
@@ -36,7 +36,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('AUTH'));
     }
 
-    if (!lodash.isObject(data))
+    if (!_.isObject(data))
     {
       return reply(new Error('INPUT'));
     }
@@ -44,9 +44,9 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
     var shiftMoment = moment(data.date);
 
     if (!shiftMoment.isValid()
-      || !lodash.isString(data.division)
+      || !_.isString(data.division)
       || !divisionsModule.modelsById[data.division]
-      || !lodash.isNumber(data.shift))
+      || !_.isNumber(data.shift))
     {
       return reply(new Error('INPUT'));
     }
@@ -88,9 +88,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       if (hourlyPlan)
       {
-        return reply(
-          canManage(user, hourlyPlan) ? null : new Error('AUTH'), hourlyPlan._id.toString()
-        );
+        return reply(canManage(user, hourlyPlan) ? null : new Error('AUTH'), hourlyPlan._id.toString());
       }
 
       var creator = userModule.createUserInfo(user, socket);
@@ -117,22 +115,22 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
   function updateCount(socket, data, reply)
   {
-    if (!lodash.isFunction(reply))
+    if (!_.isFunction(reply))
     {
       reply = function() {};
     }
 
-    if (!lodash.isObject(data)
-      || !lodash.isString(data._id)
-      || !lodash.isNumber(data.flowIndex)
-      || !lodash.isNumber(data.newValue))
+    if (!_.isObject(data)
+      || !_.isString(data._id)
+      || !_.isNumber(data.flowIndex)
+      || !_.isNumber(data.newValue))
     {
       return reply(new Error('INPUT'));
     }
 
     var user = socket.handshake.user;
 
-    HourlyPlan.findById(data._id, {createdAt: 1}).exec(function(err, hourlyPlan)
+    HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec(function(err, hourlyPlan)
     {
       if (err)
       {
@@ -155,7 +153,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       }};
       var field = 'flows.' + data.flowIndex;
 
-      if (lodash.isNumber(data.hourIndex))
+      if (_.isNumber(data.hourIndex))
       {
         field += '.hours.' + data.hourIndex;
       }
@@ -166,7 +164,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
       update.$set[field] = data.newValue;
 
-      HourlyPlan.update({_id: hourlyPlan._id}, update, function(err)
+      HourlyPlan.collection.update({_id: hourlyPlan._id}, update, function(err)
       {
         if (err)
         {
@@ -182,15 +180,15 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
   function updatePlan(socket, data, reply)
   {
-    if (!lodash.isFunction(reply))
+    if (!_.isFunction(reply))
     {
       reply = function() {};
     }
 
-    if (!lodash.isObject(data)
-      || !lodash.isString(data._id)
-      || !lodash.isBoolean(data.newValue)
-      || !lodash.isNumber(data.flowIndex))
+    if (!_.isObject(data)
+      || !_.isString(data._id)
+      || !_.isBoolean(data.newValue)
+      || !_.isNumber(data.flowIndex))
     {
       return reply(new Error('INPUT'));
     }
@@ -202,7 +200,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('AUTH'));
     }
 
-    HourlyPlan.findById(data._id, {createdAt: 1}).exec(function(err, hourlyPlan)
+    HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec(function(err, hourlyPlan)
     {
       if (err)
       {
@@ -236,7 +234,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         ];
       }
 
-      HourlyPlan.update({_id: hourlyPlan._id}, update, function(err)
+      HourlyPlan.collection.update({_id: hourlyPlan._id}, update, function(err)
       {
         if (err)
         {
