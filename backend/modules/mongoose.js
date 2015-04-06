@@ -11,7 +11,7 @@ var autoIncrement = require('mongoose-auto-increment');
 exports.DEFAULT_CONFIG = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
-  uri: 'mongodb://localhost/walkner-hydro',
+  uri: 'mongodb://localhost/test',
   options: {},
   models: null
 };
