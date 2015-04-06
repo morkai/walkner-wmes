@@ -178,18 +178,14 @@ th.fte-masterEntry-column-noPlan {
 .fte-masterEntry-print-absence-row td {
   text-align: left;
 }
-.fte-leaderEntry .is-focused {
-  background: #ffffd6;
-}
+.fte-leaderEntry .is-focused,
 .fte-masterEntry .is-focused {
   background: #ffffa6;
-}
-.fte-leaderEntry > tbody > tr > td.is-focused {
-  background: #ffffd6!important;
 }
 .fte-leaderEntry > tbody > tr > td.fte-leaderEntry-count-container.is-focused {
   background: #ffffa6!important;
 }
+.fte-leaderEntry > tbody > tr > td.is-focused,
 .fte-masterEntry > tbody > tr > td.is-focused {
   background: #ffffa6!important;
 }
