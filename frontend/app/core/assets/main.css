@@ -186,6 +186,14 @@ kbd {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
+.panel-heading {
+  font-family: Verdana, sans-serif;
+  text-shadow: 1px 1px 1px #333;
+  font-weight: bold;
+}
+.panel-default > .panel-heading {
+  text-shadow: none;
+}
 .panel-body.has-lastElementRow {
   padding-bottom: 0;
 }
