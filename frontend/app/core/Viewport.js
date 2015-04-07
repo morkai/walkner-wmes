@@ -332,7 +332,7 @@ define([
     {
       this.currentDialog.remove();
 
-      this.broker.publish('viewport.dialog.hidden');
+      this.broker.publish('viewport.dialog.hidden', this.currentDialog);
     }
 
     this.currentDialog = null;
