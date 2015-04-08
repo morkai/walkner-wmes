@@ -567,6 +567,11 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
  */
 ProdLineState.prototype.reloadProdShiftOrders = function(done)
 {
+  if (!this.prodShift)
+  {
+    return done(null);
+  }
+
   var prodLineState = this;
 
   this.productionModule.getProdShiftOrders(this.prodShift._id, function(err, prodShiftOrders)
@@ -677,6 +682,11 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
  */
 ProdLineState.prototype.reloadProdDowntimes = function(done)
 {
+  if (!this.prodShift)
+  {
+    return done(null);
+  }
+
   var prodLineState = this;
 
   this.productionModule.getProdDowntimes(this.prodShift._id, function(err, prodDowntimes)
