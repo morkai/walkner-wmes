@@ -557,8 +557,18 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     step(
       function findXiconfOrdersStep()
       {
-        XiconfOrder.findOne({'items.serialNumbers': input.serialNumber}).lean().exec(this.parallel());
-        XiconfOrder.findById(input.orderNo).lean().exec(this.parallel());
+        XiconfOrder
+          .findOne(
+            {'items.serialNumbers': input.serialNumber, nc12: input.nc12},
+            {'items.serialNumbers': 0}
+          )
+          .lean()
+          .exec(this.parallel());
+
+        XiconfOrder
+          .findById(input.orderNo, {_id: 0, 'items.nc12': 1})
+          .lean()
+          .exec(this.parallel());
       },
       function checkStep(err, snOrder, idOrder)
       {
