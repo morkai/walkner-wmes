@@ -1,27 +1,20 @@
 # Wannabe MES
 
-TODO
-
 ## Requirements
 
 ### node.js
 
-Node.js is a server side software system designed for writing scalable
-Internet applications in JavaScript.
-
-  * __Version__: 0.10.x
-  * __Website__: http://nodejs.org/
-  * __Download__: http://nodejs.org/download/
+  * __Version__: 0.12
+  * __Website__: https://nodejs.org/
+  * __Download__: https://nodejs.org/download/
   * __Installation guide__: https://github.com/joyent/node/wiki/Installation
 
 ### MongoDB
 
-MongoDB is a scalable, high-performance, open source NoSQL database.
-
-  * __Version__: 2.4.x
-  * __Website__: http://mongodb.org/
-  * __Download__: http://www.mongodb.org/downloads
-  * __Installation guide__: http://www.mongodb.org/display/DOCS/Quickstart
+  * __Version__: 3
+  * __Website__: https://www.mongodb.org/
+  * __Download__: https://www.mongodb.org/downloads
+  * __Installation guide__: https://docs.mongodb.org/manual/installation/
 
 ## Installation
 
@@ -44,13 +37,27 @@ npm install
 
 ## Configuration
 
-TODO
+1. Create your own config directory (e.g. `walkner-wmes/config/development/`).
+2. Create a JS file for each server process (`wmes-*.js` files) you want to run.
+3. In each `walkner-wmes/config/development/wmes-*.js` file require and export the corresponding file from
+   the `walkner-wmes/config/` directory.
+4. Override whatever you want in your custom config files.
 
 ## Starting
 
-TODO
+```
+node backend/main.js <path to the server process config>
+```
+
+For example:
+
+```
+cd walkner-wmes
+node backend/main.js ../config/wmes-frontend.js
+```
 
 ## License
 
-This project is released under the
-[CC BY-NC-SA 4.0](https://raw.github.com/morkai/walkner-wmes/master/license.md).
+This project is released under the [CC BY-NC-SA 4.0](https://raw.github.com/morkai/walkner-wmes/master/license.md).
+
+Copyright (c) 2015, Łukasz Walukiewicz (lukasz@miracle.systems)
