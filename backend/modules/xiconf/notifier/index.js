@@ -58,7 +58,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           return this.skip(err);
         }
 
-        if (!xiconfOrder || xiconfOrder.status !== -1)
+        if (!xiconfOrder || xiconfOrder.status !== -1 || !prodShiftOrders.length)
         {
           return this.done();
         }
