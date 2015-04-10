@@ -143,12 +143,12 @@ define([
       {
         if (typeof column === 'string')
         {
-          column = {id: column, label: t(nlsDomain, 'PROPERTY:' + column)};
+          column = {id: column, label: t.bound(nlsDomain, 'PROPERTY:' + column)};
         }
 
         if (!column.label)
         {
-          column.label = t(nlsDomain, 'PROPERTY:' + column.id);
+          column.label = t.bound(nlsDomain, 'PROPERTY:' + column.id);
         }
 
         if (!column.thAttrs)
