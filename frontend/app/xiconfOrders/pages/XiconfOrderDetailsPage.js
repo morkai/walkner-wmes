@@ -79,7 +79,9 @@ define([
     load: function(when)
     {
       var page = this;
-      var req = this.order.fetch();
+      var req = this.order.fetch({
+        url: this.order.url() + '?exclude(items.serialNumbers)'
+      });
 
       req.done(function()
       {
