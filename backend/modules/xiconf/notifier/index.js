@@ -193,19 +193,50 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         var totalDuration = lastFinishedAt - firstStartedAt;
         var workDuration = calculateNonOverlappingWorkDuration(ordersTimes);
 
+        var programItemCount = 0;
+        var ledItemCount = 0;
+
+        _.forEach(this.xiconfOrder.items, function(item)
+        {
+          if (item.kind === 'program')
+          {
+            programItemCount += 1;
+          }
+          else
+          {
+            ledItemCount += 1;
+          }
+        });
+
         var to = users.map(function(user) { return user.email; });
         var text = [];
         var subject;
 
         if (quantityDone < quantityTodo)
         {
-          subject = '[WMES] Przerwane zlecenie programowe ' + orderNo;
-          text.push('Przerwano wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
+          subject = '[WMES] Przerwane zlecenie ' + orderNo;
+
+          if (programItemCount > 0)
+          {
+            text.push('Przerwano wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
+          }
+          else
+          {
+            text.push('Przerwano wykonywanie zlecenia, w którym nie zeskanowano wszystkich płytek LED!');
+          }
         }
         else
         {
-          subject = '[WMES] Nieukończone zlecenie programowe ' + orderNo;
-          text.push('Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
+          subject = '[WMES] Nieukończone zlecenie ' + orderNo;
+
+          if (programItemCount > 0)
+          {
+            text.push('Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
+          }
+          else
+          {
+            text.push('Zakończono wykonywanie zlecenia, w którym nie zeskanowano wszystkich płytek LED!');
+          }
         }
 
         text.push(
@@ -213,8 +244,8 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           'Nr zlecenia: ' + orderNo,
           '12NC wyrobu: ' + productNc12,
           'Nazwa wyrobu: ' + productName.replace(/[^a-zA-Z0-9-_%\/\\\(\) ]/g, ''),
-          'Ilość ze zleceń: ' + quantityDone + '/' + quantityTodo,
-          'Ilość zaprogramowana: '
+          'Ilość ze zleceń z linii: ' + quantityDone + '/' + quantityTodo,
+          'Ilość ze zlecenia Xiconf: '
             + this.xiconfOrder.quantityDone.toLocaleString() + '/'
             + this.xiconfOrder.quantityTodo.toLocaleString()
         );

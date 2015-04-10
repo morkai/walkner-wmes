@@ -6,7 +6,7 @@
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się :(",
 
   "PANEL:TITLE:details:parentOrder": "Szczegóły zlecenia wyrobu",
-  "PANEL:TITLE:details:order": "Szczegóły zlecenia programowego",
+  "PANEL:TITLE:details:order": "Szczegóły zlecenia Xiconf",
 
   "PAGE_ACTION:export": "Eksportuj zlecenia",
 
@@ -16,8 +16,8 @@
   "PROPERTY:duration": "Czas trwania",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:status": "Status",
-  "PROPERTY:quantityTodo": "Ilość do zaprogramowania",
-  "PROPERTY:quantityDone": "Ilość pomyślnych programowań",
+  "PROPERTY:quantityTodo": "Ilość do zrobienia",
+  "PROPERTY:quantityDone": "Ilość zrobiona",
   "PROPERTY:serviceTagCounter": "Ilość wydanych Service Tagów",
 
   "status:-1": "Nieukończone",
