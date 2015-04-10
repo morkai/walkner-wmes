@@ -181,7 +181,8 @@ exports.readRoute = function(app, options, req, res, next)
     options = {};
   }
 
-  var query = Model.findById(req.params.id).lean();
+  var queryOptions = mongoSerializer.fromQuery(req.rql);
+  var query = Model.findById(req.params.id, queryOptions.fields).lean();
 
   try
   {
