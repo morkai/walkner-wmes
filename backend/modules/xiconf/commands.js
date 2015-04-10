@@ -555,22 +555,17 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   function checkSerialNumber(input, reply)
   {
     step(
-      function findXiconfOrdersStep()
+      function findXiconfOrderStep()
       {
         XiconfOrder
           .findOne(
-            {'items.serialNumbers': input.serialNumber, nc12: input.nc12},
+            {'items.serialNumbers': input.serialNumber, _id: input.orderNo},
             {'items.serialNumbers': 0}
           )
           .lean()
-          .exec(this.parallel());
-
-        XiconfOrder
-          .findById(input.orderNo, {_id: 0, 'items.nc12': 1})
-          .lean()
-          .exec(this.parallel());
+          .exec(this.next());
       },
-      function checkStep(err, snOrder, idOrder)
+      function checkStep(err, snOrder)
       {
         if (err)
         {
@@ -583,18 +578,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           );
 
           return reply(new Error('DB_FAILURE'), null);
-        }
-
-        if (!idOrder)
-        {
-          return reply(new Error('UNKNOWN_ORDER_NO'), null);
-        }
-
-        var item = _.find(idOrder.items, function(item) { return item.nc12 === input.nc12; });
-
-        if (!item)
-        {
-          return reply(new Error('UNKNOWN_ITEM_NC12'), null);
         }
 
         if (snOrder)
