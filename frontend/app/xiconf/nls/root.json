@@ -51,6 +51,7 @@
     "filter:placeholder:srcId": "Any",
     "filter:submit": "Filter results",
 
+    "step:wait": "Wait",
     "step:pe": "Protective earth test",
     "step:sol": "Fortimo Solar programming",
     "step:fn": "Functional test",
@@ -121,7 +122,7 @@
     "log:TESTING_SDP_TEARDOWN": "Tearing down the SDP...",
     "log:TESTING_PLC_SETUP": "Setting up the PLC...",
     "log:TESTING_PLC_TEARDOWN": "Tearing down the PLC...",
-    "log:TESTING_EXECUTING_STEP": "{type, select, pe{Executing the protective earth test} sol{Executing the Fortimo Solar programming} fn{Executing the functional test} other{Executing the <em>{type}</em> program step}}...",
+    "log:TESTING_EXECUTING_STEP": "{type, select, wait{Waiting} pe{Executing the protective earth test} sol{Executing the Fortimo Solar programming} fn{Executing the functional test} other{Executing the <em>{type}</em> program step}}...",
     "log:ACQUIRING_SERVICE_TAG": "Acquiring a new Service Tag...",
     "log:SERVICE_TAG_ACQUIRED": "Acquired Service Tag: <code>{serviceTag}</code>",
     "log:SKIPPING_SERVICE_TAG_ACQUIRING": "Skipping acquiring a new Service Tag...",
@@ -129,6 +130,7 @@
     "log:PRINTING_SERVICE_TAG_FAILURE": "Failed to print a Service Tag label: <code>{error}</code>",
     "log:LED_CHECKING_STARTED": "Starting the LED boards check...",
     "log:WAITING_FOR_LEDS": "Waiting for {ledCount} LED {ledCount, plural, one{board} other{boards}}...",
+    "log:WAITING_FOR_CONTINUE": "Waiting for the Continue button to be pressed...",
 
     "error:WORKFLOW_FILE_ERROR": "Error during the reading of the programmer configuration file contents.",
     "error:WORKFLOW_FILE_WRITE_ERROR": "Error during the writing of the programmer configuration file contents.",

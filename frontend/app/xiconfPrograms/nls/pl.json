@@ -17,6 +17,7 @@
   "PANEL:TITLE:addForm": "Formularz dodawania programu",
   "PANEL:TITLE:editForm": "Formularz edycji programu",
 
+  "step:wait": "Przerwa",
   "step:pe": "Test obwodu ochronnego",
   "step:sol": "Programowanie Fortimo Solar",
   "step:fn": "Test funkcjonalny",
@@ -36,6 +37,10 @@
   "PROPERTY:power:rel": "Tolerancja [%]",
   "PROPERTY:power:min": "Minimalna moc [W]",
   "PROPERTY:power:max": "Maksymalna moc [W]",
+  "PROPERTY:steps": "Kroki",
+  "PROPERTY:waitKind": "Kontynuacja",
+  "PROPERTY:waitKind:manual": "po akcji użytkownika",
+  "PROPERTY:waitKind:auto": "po upływie czasu:",
 
   "FORM:ACTION:add": "Dodaj program",
   "FORM:ACTION:edit": "Edytuj program",
@@ -43,6 +48,9 @@
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować programu :-(",
   "FORM:ERROR:minDuration": "Wartość nie może być mniejsza niż 1s.",
   "FORM:ERROR:requiredStep": "Wybierz przynajmniej jeden krok.",
+
+  "form:steps:add": "Dodaj krok",
+  "form:steps:placeholder": "Wybierz typ kroku...",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia programu",
   "ACTION_FORM:BUTTON:delete": "Usuń program",

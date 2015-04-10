@@ -1,27 +1,44 @@
 // Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of the walkner-xiconf project <http://lukasz.walukiewicz.eu/p/walkner-xiconf>
 
 define([
+  'jquery',
   'underscore',
   'app/i18n',
   'app/time',
   'app/core/views/FormView',
-  'app/xiconfPrograms/templates/form'
+  'app/xiconfPrograms/templates/form',
+  'app/xiconfPrograms/templates/_waitForm',
+  'app/xiconfPrograms/templates/_peForm',
+  'app/xiconfPrograms/templates/_solForm',
+  'app/xiconfPrograms/templates/_fnForm'
 ], function(
+  $,
   _,
   t,
   time,
   FormView,
-  formTemplate
+  formTemplate,
+  waitFormTemplate,
+  peFormTemplate,
+  solFormTemplate,
+  fnFormTemplate
 ) {
   'use strict';
+
+  var STEP_TYPE_TO_TEMPLATE = {
+    wait: waitFormTemplate,
+    pe: peFormTemplate,
+    sol: solFormTemplate,
+    fn: fnFormTemplate
+  };
 
   return FormView.extend({
 
     template: formTemplate,
 
-    events: _.extend({}, FormView.prototype.events, {
+    events: _.extend({
 
       'blur .xiconfPrograms-form-duration': function(e)
       {
@@ -30,23 +47,54 @@ define([
         this.recalcTotalTime(this.$(e.target).closest('.panel-body'));
       },
 
-      'change [name$="enabled"]': function(e)
+      'click #-addStep': function()
       {
-        var $enabled = this.$(e.target);
-        var $panel = $enabled.closest('.checkbox').next();
-        var enabled = $enabled.prop('checked');
+        var stepTypeEl = this.$id('stepType')[0];
+        var stepType = stepTypeEl.value;
 
-        $panel.stop(true, false)[enabled ? 'fadeIn' : 'fadeOut']('fast');
-        $panel.find('input').attr('required', enabled);
+        if (stepType === '')
+        {
+          stepTypeEl.focus();
 
-        var $steps = this.$('input[name$="enabled"]');
-        var $enabledSteps = $steps.filter(':checked');
+          return;
+        }
 
-        $steps[0].setCustomValidity(
-          $enabledSteps.length ? '' : t('xiconfPrograms', 'FORM:ERROR:requiredStep')
-        );
+        stepTypeEl.selectedIndex = 0;
 
-        this.validateDuration($panel.find('[name$="duration"]'));
+        this.addStep(stepType).find('input').first().focus();
+        this.validateSteps();
+        this.recalcStepNo();
+      },
+
+      'click .btn[role="moveStepUp"]': function(e)
+      {
+        var $step = this.$(e.currentTarget).closest('.panel');
+        var $prev = $step.prev();
+
+        if ($prev.length)
+        {
+          $step.insertBefore($prev);
+          this.recalcStepNo();
+          e.currentTarget.focus();
+        }
+      },
+
+      'click .btn[role="moveStepDown"]': function(e)
+      {
+        var $step = this.$(e.currentTarget).closest('.panel');
+        var $next = $step.next();
+
+        if ($next.length)
+        {
+          $step.insertAfter($next);
+          this.recalcStepNo();
+          e.currentTarget.focus();
+        }
+      },
+
+      'click .btn[role="removeStep"]': function(e)
+      {
+        this.$(e.currentTarget).closest('.panel').fadeOut('fast', function() { $(this).remove(); });
       },
 
       'change [name$="duration"]': function(e)
@@ -54,47 +102,82 @@ define([
         this.validateDuration(this.$(e.target));
       },
 
-      'change #-fn-powerReq': function()
+      'change [name$="powerReq"], [name$="powerRel"]': function(e)
       {
-        this.recalcPowerRelExtremes();
-        this.recalcPowerMinMaxExtremes();
+        var power = this.getPowerData(e.target);
+
+        if (power.rel !== '')
+        {
+          var rel = power.rel / 100;
+
+          power.min = Math.round(power.req * (1 - rel));
+          power.max = Math.round(power.req * (1 + rel));
+        }
+
+        this.setPowerData(power);
       },
 
-      'change #-fn-powerRel': function(e)
+      'change [name$="powerMin"], [name$="powerMax"]': function(e)
       {
-        e.target.value = Math.min(Math.max(parseInt(e.target.value, 10) || 0, 0), 100) || '';
+        var power = this.getPowerData(e.target);
 
-        this.recalcPowerRelExtremes();
-      },
+        var minPercent = Math.abs(Math.round(100 - (power.min / power.req) * 100));
+        var maxPercent = Math.abs(Math.round(100 - (power.max / power.req) * 100));
 
-      'change #-fn-powerMin, #-fn-powerMax': 'recalcPowerMinMaxExtremes'
+        power.rel = minPercent === maxPercent ? minPercent : '';
 
-    }),
+        this.setPowerData(power);
+      }
+
+    }, FormView.prototype.events),
+
+    initialize: function()
+    {
+      FormView.prototype.initialize.apply(this, arguments);
+
+      this.nextStepIndex = 0;
+    },
 
     afterRender: function()
     {
+      this.nextStepIndex = 0;
+
+      this.model.get('steps').forEach(function(step)
+      {
+        if (step.enabled)
+        {
+          this.addStep(step.type);
+        }
+      }, this);
+
       FormView.prototype.afterRender.call(this);
+
+      this.recalcStepNo();
+      this.validateSteps();
 
       var view = this;
 
-      _.forEach(this.model.get('steps'), function(step)
+      this.$('.xiconfPrograms-stepPanel').each(function()
       {
-        if (!step.enabled)
-        {
-          view.$id('panel-' + step.type).hide();
-        }
-      });
+        var $stepPanel = $(this);
 
-      this.recalcTotalTime(this.$id('panel-pe'));
-      this.recalcTotalTime(this.$id('panel-fn'));
-      this.recalcPowerRelExtremes();
+        view.recalcTotalTime($stepPanel);
+        view.recalcPower($stepPanel);
+      });
+    },
+
+    serialize: function()
+    {
+      return _.extend(FormView.prototype.serialize.call(this), {
+        stepTypes: this.model.constructor.STEP_TYPES
+      });
     },
 
     serializeToForm: function()
     {
       var formData = this.model.toJSON();
 
-      formData.steps = formData.steps.map(function(step)
+      formData.steps = _.map(_.where(formData.steps, {enabled: true}), function(step)
       {
         if (step.startTime !== undefined)
         {
@@ -116,9 +199,9 @@ define([
     {
       var numericProperties = ['voltage', 'powerReq', 'powerRel', 'powerMin', 'powerMax', 'resistanceMax'];
 
-      formData.steps = formData.steps.map(function(step)
+      formData.steps = _.map(formData.steps, function(step)
       {
-        step.enabled = step.enabled === '1';
+        step.enabled = true;
 
         if (step.startTime !== undefined)
         {
@@ -130,7 +213,7 @@ define([
           step.duration = time.toSeconds(step.duration);
         }
 
-        numericProperties.forEach(function(property)
+        _.forEach(numericProperties, function(property)
         {
           if (step[property] !== undefined)
           {
@@ -144,6 +227,66 @@ define([
       return formData;
     },
 
+    addStep: function(stepType)
+    {
+      var stepTemplate = STEP_TYPE_TO_TEMPLATE[stepType];
+
+      if (!stepTemplate)
+      {
+        throw new Error("Invalid step type: " + stepType);
+      }
+
+      var $stepPanel = $(stepTemplate({
+        idPrefix: this.idPrefix + '-' + this.nextStepIndex,
+        stepIndex: this.nextStepIndex
+      }));
+
+      this.$id('steps').append($stepPanel);
+
+      ++this.nextStepIndex;
+
+      this.recalcTotalTime($stepPanel);
+
+      return $stepPanel;
+    },
+
+    getPowerData: function(el)
+    {
+      var $row = this.$(el).closest('.row');
+      var $powerReq = $row.find('input[name$="powerReq"]');
+      var $powerRel = $row.find('input[name$="powerRel"]');
+      var $powerMin = $row.find('input[name$="powerMin"]');
+      var $powerMax = $row.find('input[name$="powerMax"]');
+
+      return {
+        $req: $powerReq,
+        $rel: $powerRel,
+        $min: $powerMin,
+        $max: $powerMax,
+        req: parseInt($powerReq.val(), 10) || 0,
+        rel: parseInt($powerRel.val(), 10) || '',
+        min: parseInt($powerMin.val(), 10) || 0,
+        max: parseInt($powerMax.val(), 10) || 0
+      };
+    },
+
+    setPowerData: function(power)
+    {
+      if (power.req < power.min)
+      {
+        power.min = power.req;
+      }
+
+      if (power.req > power.max)
+      {
+        power.max = power.req;
+      }
+      power.$req.val(power.req);
+      power.$rel.val(power.rel || '');
+      power.$min.val(power.min);
+      power.$max.val(power.max);
+    },
+
     validateDuration: function($duration)
     {
       if (!$duration.length)
@@ -151,72 +294,55 @@ define([
         return;
       }
 
-      var enabled = $duration.closest('.panel').prev().find('input').prop('checked');
-
       $duration[0].setCustomValidity(
-        enabled && time.toSeconds($duration.val()) < 1 ? t('xiconfPrograms', 'FORM:ERROR:minDuration') : ''
+        time.toSeconds($duration.val()) < 1 ? t('xiconfPrograms', 'FORM:ERROR:minDuration') : ''
       );
     },
 
-    recalcTotalTime: function($panel)
+    validateSteps: function()
     {
+      this.$id('stepType')[0].setCustomValidity(
+        this.$id('steps').children().length ? '' : t('xiconfPrograms', 'FORM:ERROR:requiredStep')
+      );
+    },
+
+    recalcStepNo: function()
+    {
+      this.$('.xiconfPrograms-form-stepNo').each(function(stepIndex)
+      {
+        this.innerText = (stepIndex + 1) + '.';
+      });
+    },
+
+    recalcTotalTime: function($stepPanel)
+    {
+      var $totalTime = $stepPanel.find('.xiconfPrograms-form-totalTime');
+
+      if (!$totalTime.length)
+      {
+        return;
+      }
+
       var totalTime = 0;
 
-      $panel.find('.xiconfPrograms-form-duration').each(function()
+      $stepPanel.find('.xiconfPrograms-form-duration').each(function()
       {
         totalTime += time.toSeconds(this.value);
       });
 
-      $panel.find('.xiconfPrograms-form-totalTime').text(time.toString(totalTime));
+      $totalTime.text(time.toString(totalTime));
     },
 
-    recalcPowerMinMaxExtremes: function()
+    recalcPower: function($stepPanel)
     {
-      var powerReq = parseInt(this.$id('fn-powerReq').val(), 10);
-      var powerMin = parseInt(this.$id('fn-powerMin').val(), 10);
-      var powerMax = parseInt(this.$id('fn-powerMax').val(), 10);
+      var $powerMin = $stepPanel.find('input[name$="powerMin"]');
 
-      if (!powerMin || powerMin > powerReq)
+      if ($powerMin.length)
       {
-        powerMin = powerReq;
+        return;
       }
 
-      if (!powerMax || powerMax < powerReq)
-      {
-        powerMax = powerReq;
-      }
-
-      if (powerMin > powerMax)
-      {
-        var minPower = powerMin;
-        powerMin = powerMax;
-        powerMax = minPower;
-      }
-
-      this.$id('fn-powerMin').val(powerMin);
-      this.$id('fn-powerMax').val(powerMax);
-
-      var relMin = Math.round((1 - (powerMin / powerReq)) * 100);
-      var relMax = Math.round(((powerMax / powerReq) - 1) * 100);
-
-      this.$id('fn-powerRel').val(relMin === relMax && relMin !== 0 ? relMin : '');
-    },
-
-    recalcPowerRelExtremes: function()
-    {
-      var powerRel = parseInt(this.$id('fn-powerRel').val(), 10);
-
-      if (!powerRel)
-      {
-        return this.$id('fn-powerRel').val('');
-      }
-
-      var powerReq = parseInt(this.$id('fn-powerReq').val(), 10);
-      var powerMin = Math.round(powerReq * (1 - powerRel / 100));
-      var powerMax = Math.round(powerReq * (1 + powerRel / 100));
-
-      this.$id('fn-powerMin').val(powerMin).attr('max', powerReq);
-      this.$id('fn-powerMax').val(powerMax).attr('min', powerReq);
+      $powerMin.change();
     }
 
   });

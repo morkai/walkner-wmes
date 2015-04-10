@@ -7,9 +7,16 @@
         <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" maxlength="100" required autofocus>
       </div>
-      <%- include _peForm.ejs %>
-      <%- include _solForm.ejs %>
-      <%- include _fnForm.ejs %>
+      <div id="<%- idPrefix %>-steps" class="xiconfPrograms-form-steps"></div>
+      <div class="form-group">
+        <select id="<%- idPrefix %>-stepType" class="form-control xiconfPrograms-form-stepType">
+          <option value="" disabled selected><%- t('xiconfPrograms', 'form:steps:placeholder') %></option>
+          <% stepTypes.forEach(function(stepType) { %>
+          <option value="<%- stepType %>"><%- t('xiconfPrograms', 'step:' + stepType) %></option>
+          <% }) %>
+        </select>
+        <button id="<%- idPrefix %>-addStep" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- t('xiconfPrograms', 'form:steps:add') %></span></button>
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

@@ -1,49 +1,47 @@
-<input type="hidden" name="steps[2].type" value="fn">
-<div class="checkbox">
-  <label class="control-label">
-    <input type="checkbox" name="steps[2].enabled" value="1">
-    <%- t('xiconfPrograms', 'step:fn') %>
-  </label>
-</div>
-<div id="<%- idPrefix %>-panel-fn" class="panel panel-default xiconfPrograms-form-fn">
+<div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-fn">
+  <div class="panel-heading is-with-actions">
+    <span class="xiconfPrograms-form-stepNo">0.</span> <%- t('xiconfPrograms', 'step:fn') %>
+    <% include _stepPanelActions.ejs %>
+  </div>
   <div class="panel-body">
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-fn-startTime" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></label>
-        <input id="<%- idPrefix %>-fn-startTime" class="form-control xiconfPrograms-form-duration" type="text" name="steps[2].startTime" required>
+        <label for="<%- idPrefix %>-startTime" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></label>
+        <input id="<%- idPrefix %>-startTime" class="form-control xiconfPrograms-form-duration" type="text" name="steps[<%- stepIndex %>].startTime" value="2s" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-fn-duration" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:duration') %></label>
-        <input id="<%- idPrefix %>-fn-duration" class="form-control xiconfPrograms-form-duration" type="text" name="steps[2].duration" required>
+        <label for="<%- idPrefix %>-duration" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:duration') %></label>
+        <input id="<%- idPrefix %>-duration" class="form-control xiconfPrograms-form-duration" type="text" name="steps[<%- stepIndex %>].duration" value="28s" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-fn-totalTime" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:totalTime') %></label>
-        <p class="form-control-static xiconfPrograms-form-totalTime">0s</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-fn-voltage" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></label>
-        <input id="<%- idPrefix %>-fn-voltage" class="form-control" type="number" name="steps[2].voltage" min="0.1" max="99.9" step="0.1" required>
+        <label for="<%- idPrefix %>-totalTime" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:totalTime') %></label>
+        <p class="form-control-static xiconfPrograms-form-totalTime">30s</p>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-fn-powerReq" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:power:req') %></label>
-        <input id="<%- idPrefix %>-fn-powerReq" class="form-control" type="number" name="steps[2].powerReq" min="1" step="1" required>
+        <label for="<%- idPrefix %>-voltage" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></label>
+        <input id="<%- idPrefix %>-voltage" class="form-control" type="number" name="steps[<%- stepIndex %>].voltage" min="0.1" max="99.9" step="0.1" value="12" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-powerReq" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:power:req') %></label>
+        <input id="<%- idPrefix %>-powerReq" class="form-control" type="number" name="steps[<%- stepIndex %>].powerReq" min="1" step="1" value="100" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-fn-powerRel" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:power:rel') %></label>
-        <input id="<%- idPrefix %>-fn-powerRel" class="form-control" type="number" name="steps[2].powerRel" min="0" max="100" step="1">
+        <label for="<%- idPrefix %>-powerRel" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:power:rel') %></label>
+        <input id="<%- idPrefix %>-powerRel" class="form-control" type="number" name="steps[<%- stepIndex %>].powerRel" min="0" max="100" value="5" step="1">
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-fn-powerMin" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:power:min') %></label>
-        <input id="<%- idPrefix %>-fn-powerMin" class="form-control" type="number" name="steps[2].powerMin" min="0" step="1" required>
+        <label for="<%- idPrefix %>-powerMin" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:power:min') %></label>
+        <input id="<%- idPrefix %>-powerMin" class="form-control" type="number" name="steps[<%- stepIndex %>].powerMin" min="0" step="1" value="95" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-fn-powerMax" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:power:max') %></label>
-        <input id="<%- idPrefix %>-fn-powerMax" class="form-control" type="number" name="steps[2].powerMax" min="0" step="1" required>
+        <label for="<%- idPrefix %>-powerMax" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:power:max') %></label>
+        <input id="<%- idPrefix %>-powerMax" class="form-control" type="number" name="steps[<%- stepIndex %>].powerMax" min="0" step="1" value="105" required>
       </div>
     </div>
   </div>
+  <input type="hidden" name="steps[<%- stepIndex %>].type" value="fn">
 </div>

@@ -1,7 +1,5 @@
-<div class="panel panel-default xiconfPrograms-details-fn">
-  <div class="panel-heading">
-    <%- t('xiconfPrograms', 'step:fn') %>
-  </div>
+<div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-fn">
+  <div class="panel-heading"><%- stepIndex + 1 %>. <%- t('xiconfPrograms', 'step:fn') %></div>
   <div class="panel-details">
     <div class="props first">
       <div class="prop">
@@ -22,7 +20,7 @@
         <div class="prop-value"><%= step.powerReq %></div>
         <% } else { %>
         <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:power') %></div>
-        <div class="prop-value"><%= step.powerMin %> &lt;= <%= step.powerReq %> &lt;= <%= step.powerMax %></div>
+        <div class="prop-value"><%= step.powerMin %> ≤ <%= step.powerReq %> ≤ <%= step.powerMax %></div>
         <% } %>
       </div>
     </div>

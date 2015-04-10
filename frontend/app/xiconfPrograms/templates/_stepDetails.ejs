@@ -5,5 +5,7 @@
 <% include _solDetails.ejs %>
 <% } else if (step.type === 'fn') { %>
 <% include _fnDetails.ejs %>
+<% } else if (step.type === 'wait') { %>
+<% include _waitDetails.ejs %>
 <% } %>
 <% } %>

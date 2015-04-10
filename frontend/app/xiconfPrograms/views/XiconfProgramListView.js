@@ -11,19 +11,30 @@ define([
 
   return ListView.extend({
 
-    className: 'xiconfPrograms-list is-shrinked is-clickable',
+    className: 'xiconfPrograms-list is-clickable',
 
-    columns: ['name', 'updatedAt'],
+    columns: [
+      {id: 'name', className: 'is-min'},
+      'steps',
+      {id: 'updatedAt', className: 'is-min'}
+    ],
 
     serializeRow: function(model)
     {
       var obj = model.serialize();
 
-      obj.name += ' ' + obj.steps
+      obj.steps = obj.steps
         .filter(function(step) { return step.enabled; })
         .map(function(step)
         {
-          return '<span class="label label-info label-' + step.type + '">' + step.type + '</span>';
+          var label = step.type;
+
+          if (step.type === 'wait')
+          {
+            label = step.kind === 'auto' ? time.toString(step.duration) : 'W8';
+          }
+
+          return '<span class="label label-info label-' + step.type + '">' + label + '</span>';
         })
         .join(' ');
 

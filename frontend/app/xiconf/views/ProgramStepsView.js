@@ -3,10 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/time',
   'app/core/View',
   'app/xiconf/templates/programSteps'
 ], function(
+  _,
   time,
   View,
   template
@@ -89,6 +91,16 @@ define([
           viewData.powerReq = step.powerReq.toLocaleString();
           viewData.powerMin = viewData.minValue;
           viewData.powerMax = viewData.maxValue;
+          break;
+
+        case 'wait':
+          viewData.value = '';
+          viewData.voltage = step.voltage.toLocaleString();
+
+          if (step.kind === 'auto')
+          {
+            viewData.totalTime = time.toString(step.duration);
+          }
           break;
       }
 

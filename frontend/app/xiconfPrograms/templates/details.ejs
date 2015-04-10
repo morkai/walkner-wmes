@@ -20,7 +20,7 @@
       </div>
     </div>
   </div>
-  <% model.steps.forEach(function(step) { %>
+  <% model.steps.forEach(function(step, stepIndex) { %>
   <% include _stepDetails.ejs %>
   <% }) %>
 </div>

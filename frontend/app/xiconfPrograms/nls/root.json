@@ -19,6 +19,7 @@
     "PANEL:TITLE:addForm": "Program add form",
     "PANEL:TITLE:editForm": "Program edit form",
 
+    "step:wait": "Wait",
     "step:pe": "Protective earth test",
     "step:sol": "Fortimo Solar programming",
     "step:fn": "Functional test",
@@ -38,6 +39,10 @@
     "PROPERTY:power:rel": "Tolerance [%]",
     "PROPERTY:power:min": "Minimum power [W]",
     "PROPERTY:power:max": "Maximum power [W]",
+    "PROPERTY:steps": "Steps",
+    "PROPERTY:waitKind": "Continuation",
+    "PROPERTY:waitKind:manual": "after a user action",
+    "PROPERTY:waitKind:auto": "after a delay:",
 
     "FORM:ACTION:add": "Add program",
     "FORM:ACTION:edit": "Edit program",
@@ -45,6 +50,9 @@
     "FORM:ERROR:editFailure": "Failed to edit the program :-(",
     "FORM:ERROR:minDuration": "Value cannot be lower than 1s.",
     "FORM:ERROR:requiredStep": "Select at least one step.",
+
+    "form:steps:add": "Add a new step",
+    "form:steps:placeholder": "Select a step type...",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Program deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete program",
