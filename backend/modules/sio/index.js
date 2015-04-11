@@ -17,7 +17,8 @@ catch (err) {}
 
 exports.DEFAULT_CONFIG = {
   httpServerId: 'httpServer',
-  httpsServerId: 'httpsServer'
+  httpsServerId: 'httpsServer',
+  path: '/sio'
 };
 
 exports.start = function startIoModule(app, sioModule)
@@ -58,6 +59,7 @@ exports.start = function startIoModule(app, sioModule)
   }
 
   var sio = socketIo(multiServer, {
+    path: sioModule.config.path,
     transports: ['websocket', 'xhr-polling'],
     serveClient: true
   });

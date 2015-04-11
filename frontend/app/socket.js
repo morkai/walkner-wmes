@@ -17,6 +17,7 @@ function(
   'use strict';
 
   var socket = new Socket(sio({
+    path: '/sio',
     transports: ['websocket'],
     timeout: 10000,
     reconnectionDelay: 500,
