@@ -55,6 +55,18 @@ define([
     return dateMoment.isValid() ? dateMoment.format(format) : null;
   };
 
+  time.toTagData = function(date)
+  {
+    var timeMoment = time.getMoment(date);
+
+    return {
+      iso: timeMoment.toISOString(),
+      long: timeMoment.format('LLLL'),
+      human: timeMoment.fromNow(),
+      daysAgo: -timeMoment.diff(Date.now(), 'days')
+    };
+  };
+
   /**
    * @param {string} str
    * @returns {number}
