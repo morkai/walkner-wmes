@@ -2046,7 +2046,7 @@ the specific language governing permissions and limitations under the Apache Lic
         focus: function () {
             if (this.opened()) {
                 this.close();
-            } else {
+            } else /* morkai fix */ if (this.focusser) /* eof */ {
                 this.focusser.prop("disabled", false);
                 if (this.opts.shouldFocusInput(this)) {
                     this.focusser.focus();

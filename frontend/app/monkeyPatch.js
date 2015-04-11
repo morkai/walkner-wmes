@@ -66,7 +66,7 @@ function(
   {
     var $el = $('#' + e.target.htmlFor);
 
-    if ($el.data('select2'))
+    if ($el.data('select2') && !$el.parent().hasClass('has-required-select2'))
     {
       $el.select2('focus');
     }
