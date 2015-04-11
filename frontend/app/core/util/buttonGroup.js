@@ -20,6 +20,11 @@ define([
     {
       var $inputs = $group.find('input');
 
+      if (!$inputs.length)
+      {
+        return null;
+      }
+
       if ($inputs[0].type === 'radio' || $inputs.length === 1)
       {
         return $inputs.filter(':checked').val();
