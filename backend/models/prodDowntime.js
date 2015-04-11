@@ -123,7 +123,8 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       type: String,
       default: null
     },
-    changes: [prodDowntimeChangeSchema]
+    changes: [prodDowntimeChangeSchema],
+    updatedAt: Date
   }, {
     id: false
   });
@@ -147,11 +148,14 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
   prodDowntimeSchema.index({prodFlow: 1, startedAt: -1});
   prodDowntimeSchema.index({workCenter: 1, startedAt: -1});
   prodDowntimeSchema.index({prodLine: 1, startedAt: -1});
+  prodDowntimeSchema.index({updatedAt: 1, status: 1});
 
   prodDowntimeSchema.statics.TOPIC_PREFIX = 'prodDowntimes';
 
   prodDowntimeSchema.pre('save', function(next)
   {
+    this.updatedAt = new Date();
+
     this._wasNew = this.isNew;
     this._changes = this.modifiedPaths();
 

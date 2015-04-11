@@ -41,7 +41,13 @@ define([
     {
       return [
         pageActions.jump(this, this.prodDowntimeList),
-        pageActions.export(layout, this, this.prodDowntimeList)
+        pageActions.export(layout, this, this.prodDowntimeList),
+        {
+          label: t.bound('prodDowntimes', 'PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'PROD_DATA:MANAGE',
+          href: '#prodDowntimes;settings'
+        }
       ];
     },
 

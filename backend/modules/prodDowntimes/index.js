@@ -6,6 +6,7 @@
 
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
+var setUpAutoConfirmation = require('./autoConfirmation');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -15,7 +16,8 @@ exports.DEFAULT_CONFIG = {
   productionId: 'production',
   aorsId: 'aors',
   downtimeReasonsId: 'downtimeReasons',
-  orgUnitsId: 'orgUnits'
+  orgUnitsId: 'orgUnits',
+  settingsId: 'settings'
 };
 
 exports.start = function startProdDowntimesModule(app, module)
@@ -28,7 +30,8 @@ exports.start = function startProdDowntimesModule(app, module)
       module.config.aorsId,
       module.config.downtimeReasonsId,
       module.config.orgUnitsId,
-      module.config.productionId
+      module.config.productionId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );
@@ -39,5 +42,13 @@ exports.start = function startProdDowntimesModule(app, module)
       module.config.productionId
     ],
     setUpCommands.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId,
+      module.config.settingsId
+    ],
+    setUpAutoConfirmation.bind(null, app, module)
   );
 };

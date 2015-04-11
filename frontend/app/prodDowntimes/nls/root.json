@@ -1,6 +1,7 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Downtimes",
+    "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:corroborate": "Corroboration",
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
@@ -11,6 +12,7 @@
     "MSG:jump:404": "Couldn't find a downtime with ID <em>{rid}</em> :(",
 
     "PAGE_ACTION:export": "Export downtimes",
+    "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:edit": "Edit downtime",
     "PAGE_ACTION:delete": "Delete downtime",
     "PAGE_ACTION:comment": "Comment downtime",
@@ -83,12 +85,16 @@
     "corroborate:submit:undecided": "Comment",
     "corroborate:submit:confirmed": "Confirm",
     "corroborate:submit:rejected": "Reject",
+    "corroborate:failure": "Failed to corroborate the downtime :(",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Downtime deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete downtime",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen downtime?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> downtime?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the downtime :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the downtime :-(",
+
+    "settings:tab:default": "General",
+    "settings:autoConfirmHours": "Time to automatic confirmation [h]"
   },
   "pl": true
 }

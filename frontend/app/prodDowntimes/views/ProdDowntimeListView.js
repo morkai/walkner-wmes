@@ -79,7 +79,7 @@ define([
     {
       if (this.collection.hasOrMatches(message))
       {
-        this.refreshCollection();
+        this.refreshCollection(message);
       }
     }
 

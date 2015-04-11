@@ -232,8 +232,11 @@ define([
         return;
       }
 
-      if (Date.now() - this.lastRefreshAt > 3000)
+      var now = Date.now();
+
+      if (now - this.lastRefreshAt > 3000)
       {
+        this.lastRefreshAt = now;
         this.refreshCollectionNow();
       }
       else

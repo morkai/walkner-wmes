@@ -50,4 +50,14 @@ define([
   });
 
   router.map('/prodDowntimes/:id;delete', canManage, showDeleteFormPage.bind(null, ProdDowntime));
+
+  router.map('/prodDowntimes;settings', canManage, function(req)
+  {
+    viewport.loadPage('app/prodDowntimes/pages/ProdDowntimeSettingsPage', function(ProdDowntimeSettingsPage)
+    {
+      return new ProdDowntimeSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
+  });
 });

@@ -3,11 +3,9 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
   '../settings/SettingCollection',
   './ReportSetting'
 ], function(
-  $,
   SettingCollection,
   ReportSetting
 ) {
@@ -59,37 +57,6 @@ define([
       var coeff = this.getValue(metric + '.coeff');
 
       return coeff > 0 ? coeff : 0;
-    },
-
-    update: function(id, newValue)
-    {
-      newValue = this.prepareValue(id, newValue.trim());
-
-      if (newValue === undefined)
-      {
-        return $.Deferred().reject().promise();
-      }
-
-      var setting = this.get(id);
-
-      if (setting)
-      {
-        if (setting.getValue() === newValue)
-        {
-          return $.Deferred().resolve().promise();
-        }
-      }
-      else
-      {
-        this.add({
-          _id: id,
-          value: null
-        });
-
-        setting = this.get(id);
-      }
-
-      return setting.save({value: newValue});
     },
 
     prepareValue: function(id, newValue)

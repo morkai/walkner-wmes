@@ -18,11 +18,28 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   var orgUnitsModule = app[prodDowntimesModule.config.orgUnitsId];
   var productionModule = app[prodDowntimesModule.config.productionId];
   var mongoose = app[prodDowntimesModule.config.mongooseId];
+  var settings = app[prodDowntimesModule.config.settingsId];
   var ProdDowntime = mongoose.model('ProdDowntime');
   var ProdLogEntry = mongoose.model('ProdLogEntry');
 
   var canView = userModule.auth('LOCAL', 'PROD_DOWNTIMES:VIEW');
   var canManage = userModule.auth('PROD_DATA:MANAGE');
+
+  express.get(
+    '/prodDowntimes/settings',
+    function limitToReportSettings(req, res, next)
+    {
+      req.rql.selector = {
+        name: 'regex',
+        args: ['_id', '^prodDowntimes\\.']
+      };
+
+      return next();
+    },
+    express.crud.browseRoute.bind(null, app, settings.Setting)
+  );
+
+  express.put('/prodDowntimes/settings/:id', canManage, settings.updateRoute);
 
   express.get('/prodDowntimes', limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdDowntime));
 

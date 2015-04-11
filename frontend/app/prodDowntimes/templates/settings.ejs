@@ -1,0 +1,13 @@
+<form class="reports-settings">
+  <div class="list-group">
+    <a class="list-group-item" href="#prodDowntimes;settings?tab=default" data-tab="default"><%- t('prodDowntimes', 'settings:tab:default') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="default">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-autoConfirmHours"><%- t('prodDowntimes', 'settings:autoConfirmHours') %></label>
+        <input id="<%- idPrefix %>-autoConfirmHours" class="form-control" name="prodDowntimes.autoConfirmHours" type="number" value="168" step="1" min="24">
+      </div>
+    </div>
+  </div>
+</form>
