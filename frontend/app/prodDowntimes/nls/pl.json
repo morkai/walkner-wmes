@@ -1,6 +1,5 @@
 {
   "BREADCRUMBS:browse": "Przestoje",
-  "BREADCRUMBS:corroborate": "Potwierdzanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
@@ -12,11 +11,16 @@
   "PAGE_ACTION:export": "Eksportuj przestoje",
   "PAGE_ACTION:edit": "Edytuj przestój",
   "PAGE_ACTION:delete": "Usuń przestój",
+  "PAGE_ACTION:comment": "Komentuj przestój",
+  "PAGE_ACTION:corroborate": "Potwierdź przestój",
   "PAGE_ACTION:jump:title": "Skocz do przestoju po ID",
   "PAGE_ACTION:jump:placeholder": "ID przestoju",
 
+  "LIST:ACTION:comment": "Komentuj przestój",
+  "LIST:ACTION:corroborate": "Potwierdź przestój",
+
   "PANEL:TITLE:details": "Szczegóły przestoju",
-  "PANEL:TITLE:details:corroboration": "Potwierdzenie przestoju",
+  "PANEL:TITLE:history": "Historia przestoju",
   "PANEL:TITLE:editForm": "Formularz edycji danych przestoju",
   "PANEL:TITLE:addForm": "Formularz dodawania przestoju",
 
@@ -26,10 +30,8 @@
   "filter:placeholder:reason": "Dowolny powód przestoju",
   "filter:placeholder:orgUnit": "Dowolna jednostka organizacyjna",
 
-  "LIST:ACTION:corroborate": "Potwierdź przestój",
-
   "PROPERTY:rid": "ID",
-  "PROPERTY:mrpControllers": "Kontroler MRP",
+  "PROPERTY:mrpControllers": "MRP",
   "PROPERTY:prodFlow": "Przepływ",
   "PROPERTY:orgUnit": "Jednostka organizacyjna",
   "PROPERTY:aor": "Obszar odpowiedzialności",
@@ -37,7 +39,7 @@
   "PROPERTY:reason": "Powód przestoju",
   "PROPERTY:reasonComment": "Komentarz powodu",
   "PROPERTY:decisionComment": "Komentarz potwierdzenia",
-  "PROPERTY:order": "Wykonywane zlecenie",
+  "PROPERTY:order": "Zlecenie",
   "PROPERTY:orderId": "Zlecenie",
   "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas zakończenia",
@@ -70,20 +72,18 @@
 
   "NO_DATA:order": "<em>brak zlecenia</em>",
   "NO_DATA:finishedAt": "<em>nie ukończony</em>",
-  "NO_DATA:corroboration": "Przestój nie został jeszcze potwierdzony.",
 
-  "corroborate:title": "Potwierdzenie przestoju",
-  "corroborate:decisionComment": "Opcjonalny komentarz do potwierdzenia...",
-  "corroborate:cancel": "Anuluj potwierdzenie",
-  "corroborate:confirm": "Zatwierdź przestój",
-  "corroborate:reject": "Odrzuć przestój",
-  "corroborate:msg:failure": "Nie udało się potwierdzić przestoju: {error}",
+  "corroborate:status": "Nowy status",
+  "corroborate:reason": "Nowy powód przestoju",
+  "corroborate:aor": "Nowy obszar odpowiedzialności",
+  "corroborate:comment": "Komentarz",
+  "corroborate:submit:undecided": "Komentuj",
+  "corroborate:submit:confirmed": "Potwierdź",
+  "corroborate:submit:rejected": "Odrzuć",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia przestoju",
   "ACTION_FORM:BUTTON:delete": "Usuń przestój",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany przestój?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć przestój <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć przestoju :-(",
-
-  "filter:message": "Jeżeli po przejściu do ekranu szczegołów wybranego przestoju chcesz wrócić do ekranu listy przestojów zachowując wcześniej zdefiniowane filtry, to skorzystaj z przycisku <em><i class='fa fa-arrow-left'></i> Wstecz</em> przeglądarki lub wciśnij klawisz <kbd><i class='fa fa-long-arrow-left'></i> Backspace</kbd> na klawiaturze."
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć przestoju :-("
 }

@@ -8,6 +8,15 @@ var autoIncrement = require('mongoose-auto-increment');
 
 module.exports = function setupProdDowntimeModel(app, mongoose)
 {
+  var prodDowntimeChangeSchema = mongoose.Schema({
+    date: Date,
+    user: {},
+    data: {},
+    comment: String
+  }, {
+    _id: false
+  });
+
   var prodDowntimeSchema = mongoose.Schema({
     _id: {
       type: String,
@@ -113,7 +122,8 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     operationNo: {
       type: String,
       default: null
-    }
+    },
+    changes: [prodDowntimeChangeSchema]
   }, {
     id: false
   });
@@ -145,6 +155,11 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     this._wasNew = this.isNew;
     this._changes = this.modifiedPaths();
 
+    if (this._wasNew)
+    {
+      this.resetChanges();
+    }
+
     next();
   });
 
@@ -155,7 +170,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       return;
     }
 
-    if (this._wasNew)
+    if (doc._wasNew)
     {
       app.broker.publish('prodDowntimes.created.' + doc.prodLine, doc.toJSON());
     }
@@ -176,6 +191,31 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
   prodDowntimeSchema.methods.isEditable = function()
   {
     return this.finishedAt !== null && this.pressWorksheet === null;
+  };
+
+  prodDowntimeSchema.methods.resetChanges = function()
+  {
+    this.changes = [{
+      date: this.startedAt,
+      user: this.operator || this.creator,
+      data: {
+        reason: [null, this.reason],
+        aor: [null, this.aor]
+      },
+      comment: this.reasonComment
+    }];
+
+    if (this.pressWorksheet)
+    {
+      this.changes.push({
+        date: this.finishedAt,
+        user: this.master,
+        data: {
+          status: ['undecided', 'confirmed']
+        },
+        comment: ''
+      });
+    }
   };
 
   mongoose.model('ProdDowntime', prodDowntimeSchema);

@@ -36,7 +36,7 @@ define([
 
       if (this.model.prodLine)
       {
-        topics['prodDowntimes.corroborated.' + this.model.prodLine.id] = 'onCorroborated';
+        topics['prodDowntimes.corroborated.' + this.model.prodLine.id + '.*'] = 'onCorroborated';
       }
 
       return topics;
@@ -138,6 +138,8 @@ define([
 
       if (prodDowntime)
       {
+        delete message.changes;
+
         prodDowntime.set(message);
 
         this.trigger('corroborated', message._id);

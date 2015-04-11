@@ -9,6 +9,7 @@ define([
   'app/viewport',
   'app/data/aors',
   'app/core/View',
+  'app/prodDowntimes/util/reasonAndAor',
   'app/production/templates/downtimePicker'
 ], function(
   _,
@@ -17,6 +18,7 @@ define([
   viewport,
   aors,
   View,
+  reasonAndAor,
   downtimePickerTemplate
 ) {
   'use strict';
@@ -110,16 +112,12 @@ define([
 
     initialize: function()
     {
-      this.reasonsToAorsMap = {};
-      this.reasonsList = [];
-      this.aorsList = {};
+      reasonAndAor.initialize(this);
     },
 
     destroy: function()
     {
-      this.reasonsToAorsMap = null;
-      this.reasonsList = null;
-      this.aorsList = null;
+      reasonAndAor.destroy(this);
     },
 
     serialize: function()
@@ -148,8 +146,11 @@ define([
         this.$id('reasonComment').val(this.model.reasonComment);
       }
 
-      this.setUpReasons();
-      this.setUpAors();
+      reasonAndAor.setUpReasons(this, this.model.prodShift.getDowntimeReasons().sort(function(a, b)
+      {
+        return a.id.localeCompare(b.id);
+      }));
+      reasonAndAor.setUpAors(this);
       this.setUpReasonSelect2();
       this.setUpAorSelect2();
       this.focusControl();
@@ -180,146 +181,20 @@ define([
       }
     },
 
-    getReasonsForAor: function(aor)
-    {
-      if (!aor)
-      {
-        return this.reasonsList;
-      }
-
-      var reasonsForAor = [];
-
-      for (var i = 0; i < this.reasonsList.length; ++i)
-      {
-        var reason = this.reasonsList[i];
-
-        if (!reason.aors || reason.aors[aor])
-        {
-          reasonsForAor.push(reason);
-        }
-      }
-
-      return reasonsForAor;
-    },
-
-    getAorsForReason: function(reason)
-    {
-      if (!reason)
-      {
-        return this.aorsList;
-      }
-
-      var aorsMap = this.reasonsToAorsMap[reason];
-
-      if (aorsMap === undefined)
-      {
-        return [];
-      }
-
-      if (aorsMap === null)
-      {
-        return this.aorsList;
-      }
-
-      var reasonAors = [];
-
-      _.forEach(Object.keys(aorsMap), function(aorId)
-      {
-        reasonAors.push({
-          id: aorId,
-          text: aors.get(aorId).get('name')
-        });
-      });
-
-      return reasonAors;
-    },
-
-    setUpReasons: function()
-    {
-      var reasonsToAorsMap = {};
-      var reasonsList = [];
-      var allReasons = this.model.prodShift.getDowntimeReasons().sort(function(a, b)
-      {
-        return a.id.localeCompare(b.id);
-      });
-
-      _.forEach(allReasons, function(reason)
-      {
-        var reasonAors = {};
-        var hasAnyAors = false;
-
-        _.forEach(reason.get('aors'), function(aor)
-        {
-          reasonAors[aor] = true;
-          hasAnyAors = true;
-        });
-
-        if (!hasAnyAors)
-        {
-          reasonAors = null;
-        }
-
-        reasonsToAorsMap[reason.id] = reasonAors;
-        reasonsList.push({
-          id: reason.id,
-          text: reason.id + ' - ' + reason.get('label'),
-          aors: reasonAors
-        });
-      });
-
-      this.reasonsToAorsMap = reasonsToAorsMap;
-      this.reasonsList = reasonsList;
-    },
-
-    setUpAors: function()
-    {
-      var aorsList = [];
-
-      aors.forEach(function(aor)
-      {
-        aorsList.push({
-          id: aor.id,
-          text: aor.get('name')
-        });
-      });
-
-      this.aorsList = aorsList;
-    },
-
     setUpReasonSelect2: function()
     {
-      var $reason = this.$id('reason');
-      var data = this.getReasonsForAor(this.model.aor);
-
-      $reason.select2({
+      reasonAndAor.setUpReasonSelect2(this, this.model.aor, {
         allowClear: true,
-        dropdownCssClass: 'production-dropdown',
-        openOnEnter: null,
-        data: data
+        dropdownCssClass: 'production-dropdown'
       });
-
-      if ($reason.select2('data') === null)
-      {
-        $reason.select2('val', data.length === 1 ? data[0].id : '');
-      }
     },
 
     setUpAorSelect2: function()
     {
-      var $aor = this.$id('aor');
-      var data = this.getAorsForReason(this.model.reason);
-
-      $aor.select2({
+      reasonAndAor.setUpAorSelect2(this, this.model.reason, {
         allowClear: true,
-        dropdownCssClass: 'production-dropdown',
-        openOnEnter: null,
-        data: data
+        dropdownCssClass: 'production-dropdown'
       });
-
-      if ($aor.select2('data') === null)
-      {
-        $aor.select2('val', data.length === 1 ? data[0].id : '');
-      }
     },
 
     handlePick: function(submitEl)

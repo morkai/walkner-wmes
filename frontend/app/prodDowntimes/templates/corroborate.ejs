@@ -1,50 +1,7 @@
-<div class="prodDowntimes-corroborate">
-  <div class="props first">
-    <div class="prop">
-      <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:prodLine') %></div>
-      <div class="prop-value"><%- model.prodLine %></div>
-    </div>
-    <div class="prop">
-      <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:shift') %></div>
-      <div class="prop-value"><%- t('prodDowntimes', 'shift+date', {date: model.date, shift: model.shift}) %></div>
-    </div>
-    <div class="prop">
-      <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:startedAt') %></div>
-      <div class="prop-value"><%- model.startedAt %></div>
-    </div>
-    <div class="prop">
-      <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:finishedAt') %></div>
-      <div class="prop-value prodDowntimes-corroborate-finishedAt"><%- model.finishedAt %></div>
-    </div>
-    <div class="prop">
-      <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:aor') %></div>
-      <div class="prop-value"><%= model.aor %></div>
-    </div>
-    <div class="prop">
-      <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:reason') %></div>
-      <div class="prop-value"><%= model.reason %></div>
-    </div>
-    <div class="prop">
-      <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:reasonComment') %></div>
-      <div class="prop-value">
-        <% if (model.reasonComment && model.reasonComment.length) { %>
-        <p class="prodDowntimes-corroborate-reasonComment"><%= model.reasonComment %></p>
-        <% } else { %>
-        -
-        <% } %>
-      </div>
-    </div>
-  </div>
+<form id="<%- idPrefix %>-corroborate" class="prodDowntimes-corroborate" method="post">
   <div class="form-group">
-    <textarea id="<%- idPrefix %>-decisionComment" class="form-control prodDowntimes-corroborate-decisionComment" placeholder="<%- t('prodDowntimes', 'corroborate:decisionComment') %>" autofocus></textarea>
+    <label for="<%- idPrefix %>-comment" class="control-label"><%- t('prodDowntimes', 'corroborate:comment') %></label>
+    <textarea id="<%- idPrefix %>-comment" class="form-control prodDowntimes-corroborate-comment" name="comment" rows="3"></textarea>
   </div>
-  <div class="form-actions">
-    <button type="button" class="btn btn-success"><%- t('prodDowntimes', 'corroborate:confirm') %></button>
-    <button type="button" class="btn btn-danger"><%- t('prodDowntimes', 'corroborate:reject') %></button>
-    <% if (cancelUrl === '#') { %>
-    <button type="button" class="cancel btn btn-link"><%- t('prodDowntimes', 'corroborate:cancel') %></button>
-    <% } else { %>
-    <a class="cancel" href="<%- cancelUrl %>"><%- t('prodDowntimes', 'corroborate:cancel') %></a>
-    <% } %>
-  </div>
-</div>
+  <button type="submit" class="btn btn-primary"></button>
+</form>

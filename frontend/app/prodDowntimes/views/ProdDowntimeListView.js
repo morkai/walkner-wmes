@@ -6,16 +6,12 @@ define([
   'underscore',
   'app/i18n',
   'app/user',
-  'app/viewport',
-  'app/core/views/ListView',
-  './CorroborateProdDowntimeView'
+  'app/core/views/ListView'
 ], function(
   _,
   t,
   user,
-  viewport,
-  ListView,
-  CorroborateProdDowntimeView
+  ListView
 ) {
   'use strict';
 
@@ -26,36 +22,8 @@ define([
     remoteTopics: {
       'prodDowntimes.created.*': 'refreshIfMatches',
       'prodDowntimes.updated.*': 'refreshIfMatches',
-      'prodDowntimes.deleted.*': 'refreshIfMatches',
-      'prodDowntimes.corroborated.*': function(message)
-      {
-        if (message._id === this.corroboratingId)
-        {
-          viewport.closeDialog();
-        }
-      }
+      'prodDowntimes.deleted.*': 'refreshIfMatches'
     },
-
-    events: _.extend(ListView.prototype.events, {
-      'click .action-corroborate': function(e)
-      {
-        e.preventDefault();
-
-        var view = this;
-
-        this.broker.subscribe('viewport.dialog.hidden', function()
-        {
-          view.corroboratingId = null;
-        });
-
-        this.corroboratingId = this.$(e.target).closest('tr').attr('data-id');
-
-        viewport.showDialog(
-          new CorroborateProdDowntimeView({model: this.collection.get(this.corroboratingId)}),
-          t('prodDowntimes', 'corroborate:title')
-        );
-      }
-    }),
 
     columns: [
       {id: 'rid', className: 'is-min'},
@@ -69,17 +37,13 @@ define([
       {id: 'duration', tdClassName: 'is-min'}
     ],
 
-    initialize: function()
-    {
-      ListView.prototype.initialize.apply(this, arguments);
-
-      this.corroboratingId = null;
-
-      this.listenTo(this.collection, 'change', this.render);
-    },
-
     serializeActions: function()
     {
+      if (this.options.simple)
+      {
+        return null;
+      }
+
       var collection = this.collection;
 
       return function(row)
@@ -87,45 +51,28 @@ define([
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];
 
-        if (row.status === 'undecided'
-          && user.isAllowedTo('PROD_DOWNTIMES:MANAGE')
-          && user.hasAccessToAor(model.get('aor')))
+        if (model.canCorroborate())
         {
-          actions.push({
+          var canChangeStatus = model.canChangeStatus();
+
+          actions.unshift({
             id: 'corroborate',
-            icon: 'gavel',
-            label: t('prodDowntimes', 'LIST:ACTION:corroborate'),
-            href: model.genClientUrl('corroborate')
+            icon: canChangeStatus ? 'gavel' : 'comment',
+            label: t('prodDowntimes', 'LIST:ACTION:' + (canChangeStatus ? 'corroborate' : 'comment')),
+            href: model.genClientUrl() + '?corroborate=1'
           });
+        }
+
+        if (model.isEditable() && user.isAllowedTo('PROD_DATA:MANAGE'))
+        {
+          actions.push(
+            ListView.actions.edit(model),
+            ListView.actions.delete(model)
+          );
         }
 
         return actions;
       };
-    },
-
-    afterRender: function()
-    {
-      ListView.prototype.afterRender.call(this);
-
-      var view = this;
-
-      this.$('.is-withReasonComment > td[data-id="reason"]')
-        .popover({
-          container: this.el,
-          trigger: 'hover',
-          placement: 'auto right',
-          content: function()
-          {
-            var modelId = view.$(this).closest('tr').attr('data-id');
-
-            return view.collection.get(modelId).get('reasonComment');
-          }
-        })
-        .append('<i class="fa fa-info-circle"></i>')
-        .on('shown.bs.popover', function()
-        {
-          view.$(this).data('bs.popover').$tip.addClass('prodDowntimes-comment');
-        });
     },
 
     refreshIfMatches: function(message)

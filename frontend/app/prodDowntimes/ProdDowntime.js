@@ -4,11 +4,13 @@
 
 define([
   '../time',
+  '../user',
   '../core/Model',
   '../core/util/getShiftEndDate',
   './util/decorateProdDowntime'
 ], function(
   time,
+  user,
   Model,
   getShiftEndDate,
   decorateProdDowntime
@@ -65,9 +67,14 @@ define([
       operationNo: null
     },
 
-    serialize: function()
+    serializeRow: function()
     {
       return decorateProdDowntime(this);
+    },
+
+    serializeDetails: function()
+    {
+      return decorateProdDowntime(this, {longDate: true});
     },
 
     getCssClassName: function()
@@ -101,6 +108,17 @@ define([
     isEditable: function()
     {
       return this.get('finishedAt') != null && this.get('pressWorksheet') === null;
+    },
+
+    canCorroborate: function()
+    {
+      return this.get('pressWorksheet') === null;
+    },
+
+    canChangeStatus: function()
+    {
+      return this.get('finishedAt') !== null
+        && (user.isAllowedTo('PROD_DATA:MANAGE') || user.isAllowedTo('PROD_DOWNTIMES:MANAGE'));
     }
 
   }, {

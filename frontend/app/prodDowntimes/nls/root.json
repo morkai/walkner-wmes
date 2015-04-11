@@ -13,11 +13,13 @@
     "PAGE_ACTION:export": "Export downtimes",
     "PAGE_ACTION:edit": "Edit downtime",
     "PAGE_ACTION:delete": "Delete downtime",
+    "PAGE_ACTION:comment": "Comment downtime",
+    "PAGE_ACTION:corroborate": "Corroborate downtime",
     "PAGE_ACTION:jump:title": "Jump to downtime by ID",
     "PAGE_ACTION:jump:placeholder": "Downtime ID",
 
     "PANEL:TITLE:details": "Downtime's details",
-    "PANEL:TITLE:details:corroboration": "Downtime corroboration",
+    "PANEL:TITLE:history": "Downtime's history",
     "PANEL:TITLE:editForm": "Edit downtime form",
     "PANEL:TITLE:addForm": "Add downtime form",
 
@@ -27,10 +29,11 @@
     "filter:placeholder:reason": "Any downtime reason",
     "filter:placeholder:orgUnit": "Any org unit",
 
+    "LIST:ACTION:comment": "Comment downtime",
     "LIST:ACTION:corroborate": "Corroborate downtime",
 
     "PROPERTY:rid": "ID",
-    "PROPERTY:mrpControllers": "MRP Controller",
+    "PROPERTY:mrpControllers": "MRP",
     "PROPERTY:prodFlow": "Production flow",
     "PROPERTY:orgUnit": "Org Unit",
     "PROPERTY:aor": "Area of responsibility",
@@ -73,20 +76,19 @@
     "NO_DATA:finishedAt": "<em>unfinished</em>",
     "NO_DATA:corroboration": "Downtime wasn't corroborated yet.",
 
-    "corroborate:title": "Downtime corroboration",
-    "corroborate:decisionComment": "Optional decision comment...",
-    "corroborate:cancel": "Cancel corroboration",
-    "corroborate:confirm": "Confirm downtime",
-    "corroborate:reject": "Reject downtime",
-    "corroborate:msg:failure": "Failed to corroborate the downtime: {error}",
+    "corroborate:status": "New status",
+    "corroborate:reason": "New reason",
+    "corroborate:aor": "New area of responsibility",
+    "corroborate:comment": "Comment",
+    "corroborate:submit:undecided": "Comment",
+    "corroborate:submit:confirmed": "Confirm",
+    "corroborate:submit:rejected": "Reject",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Downtime deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete downtime",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen downtime?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> downtime?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the downtime :-(",
-
-    "filter:message": "If after going to the downtime details page you want to go back to the downtimes list page with the previously set filters, then you should use the browser's <em><i class='fa fa-arrow-left'></i> Back</em> button or press the <kbd><i class='fa fa-long-arrow-left'></i> Backspace</kbd> key on your keyboard."
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the downtime :-("
   },
   "pl": true
 }

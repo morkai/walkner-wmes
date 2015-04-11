@@ -25,9 +25,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
     if (!prodDowntime)
     {
-      productionModule.warn(
-        "Couldn't find prod downtime [%s] to finish (LOG=[%s])", logEntry.data._id, logEntry._id
-      );
+      productionModule.warn("Couldn't find prod downtime [%s] to finish (LOG=[%s])", logEntry.data._id, logEntry._id);
 
       return done();
     }
@@ -39,8 +37,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   function finishDowntime(prodDowntime)
   {
-    if (prodDowntime.finishedAt
-      && prodDowntime.finishedAt <= Date.parse(logEntry.data.finishedAt))
+    if (prodDowntime.finishedAt && prodDowntime.finishedAt <= Date.parse(logEntry.data.finishedAt))
     {
       productionModule.warn(
         "Tried to finish an already finished prod downtime [%s] (LOG=[%s])",
@@ -53,9 +50,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
     prodDowntime.finishedAt = logEntry.data.finishedAt;
 
-    var downtimeReason =
-      app[productionModule.config.downtimeReasonsId].modelsById[prodDowntime.reason];
+    var downtimeReason = app[productionModule.config.downtimeReasonsId].modelsById[prodDowntime.reason];
     var corroborated = null;
+    var changes = {};
 
     if (!productionModule.recreating
       && prodDowntime.status === 'undecided'
@@ -73,6 +70,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         corroboratedAt: new Date(logEntry.savedAt.getTime() + 1)
       };
 
+      changes.date = corroborated.corroboratedAt;
+      changes.user = corroborated.corroborator;
+      changes.data = {status: [prodDowntime.status, corroborated.status]};
+      changes.comment = '';
+
+      prodDowntime.changes.push(changes);
       prodDowntime.set(corroborated);
 
       corroborated._id = prodDowntime._id;
@@ -100,8 +103,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to create a ProdLogEntry during an auto corroboration of the prod downtime [%s]"
-              + " (LOG=[%s]): %s",
+            "Failed to create a ProdLogEntry during an auto corroboration of the prod downtime [%s] (LOG=[%s]): %s",
             prodDowntime._id,
             logEntry._id,
             err.stack
@@ -123,12 +125,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       }
       else
       {
-        app.broker.publish('prodDowntimes.finished.' + prodLine._id, logEntry.data);
+        app.broker.publish('prodDowntimes.finished.' + prodLine._id + '.' + prodDowntime._id, logEntry.data);
       }
 
       if (corroborated)
       {
-        app.broker.publish('prodDowntimes.corroborated.' + prodLine._id, corroborated);
+        corroborated.changes = changes;
+
+        app.broker.publish('prodDowntimes.corroborated.' + prodLine._id + '.' + prodDowntime._id, corroborated);
       }
 
       return done(err);

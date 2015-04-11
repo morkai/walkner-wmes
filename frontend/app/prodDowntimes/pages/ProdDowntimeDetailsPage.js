@@ -11,8 +11,7 @@ define([
   'app/core/util/onModelDeleted',
   'app/core/View',
   '../ProdDowntime',
-  '../views/ProdDowntimeDetailsView',
-  '../views/CorroborateProdDowntimeView'
+  '../views/ProdDowntimeDetailsView'
 ], function(
   t,
   user,
@@ -22,16 +21,13 @@ define([
   onModelDeleted,
   View,
   ProdDowntime,
-  ProdDowntimeDetailsView,
-  CorroborateProdDowntimeView
+  ProdDowntimeDetailsView
 ) {
   'use strict';
 
   return View.extend({
 
     layoutName: 'page',
-
-    pageId: 'prodDowntimeDetails',
 
     breadcrumbs: function()
     {
@@ -48,32 +44,17 @@ define([
     {
       var actions = [];
 
-      if (this.model.get('status') === 'undecided'
-        && user.isAllowedTo('PROD_DOWNTIMES:MANAGE')
-        && user.hasAccessToAor(this.model.get('aor')))
+      if (this.model.canCorroborate())
       {
-        var view = this;
+        var page = this;
+        var canChangeStatus = this.model.canChangeStatus();
 
         actions.push({
-          id: 'corroborate',
-          icon: 'gavel',
-          label: t('prodDowntimes', 'LIST:ACTION:corroborate'),
-          href: this.model.genClientUrl('corroborate'),
-          callback: function(e)
+          icon: canChangeStatus ? 'gavel' : 'comment',
+          label: t('prodDowntimes', 'LIST:ACTION:' + (canChangeStatus ? 'corroborate' : 'comment')),
+          callback: function()
           {
-            e.preventDefault();
-
-            view.broker.subscribe('viewport.dialog.hidden', function()
-            {
-              view.corroborating = false;
-            });
-
-            view.corroborating = true;
-
-            viewport.showDialog(
-              new CorroborateProdDowntimeView({model: view.model}),
-              t('prodDowntimes', 'corroborate:title')
-            );
+            page.view.focusComment();
           }
         });
       }
@@ -91,18 +72,17 @@ define([
 
     initialize: function()
     {
-      this.corroborating = false;
-
-      this.model = bindLoadingMessage(new ProdDowntime({_id: this.options.modelId}), this);
+      this.model = bindLoadingMessage(this.model, this);
 
       this.view = new ProdDowntimeDetailsView({model: this.model});
 
-      this.listenToOnce(this.model, 'sync', this.setUpRemoteTopics);
+      this.listenToOnce(this.model, 'sync', this.onFirstModelSync);
+      this.listenTo(this.model, 'change', this.onModelChange);
     },
 
     setUpLayout: function(pageLayout)
     {
-      this.listenTo(this.model, 'change:status', function()
+      this.listenTo(this.model, 'change', function()
       {
         pageLayout.setActions(this.actions());
       });
@@ -113,27 +93,29 @@ define([
       return when(this.model.fetch(this.options.fetchOptions));
     },
 
+    afterRender: function()
+    {
+      if (this.options.corroborate)
+      {
+        this.view.focusComment();
+      }
+    },
+
     setUpRemoteTopics: function()
     {
-      if (this.model.get('status') === 'undecided')
-      {
-        this.pubsub.subscribe('prodDowntimes.corroborated.*', this.onCorroborated.bind(this));
-      }
-
-      this.pubsub.subscribe(
-        'prodDowntimes.deleted.' + this.model.id, this.onModelDeleted.bind(this)
-      );
+      this.pubsub.subscribe('prodDowntimes.updated.' + this.model.id, this.onProdDowntimeUpdated.bind(this));
+      this.pubsub.subscribe('prodDowntimes.deleted.' + this.model.id, this.onProdDowntimeDeleted.bind(this));
 
       var pressWorksheetId = this.model.get('pressWorksheet');
 
       if (pressWorksheetId)
       {
         this.pubsub
-          .subscribe('pressWorksheets.edited', this.onWorksheetEdited.bind(this))
+          .subscribe('pressWorksheets.edited', this.onPressWorksheetEdited.bind(this))
           .setFilter(filterWorksheet);
 
         this.pubsub
-          .subscribe('pressWorksheets.deleted', onModelDeleted)
+          .subscribe('pressWorksheets.deleted', this.onPressWorksheetDeleted.bind(this))
           .setFilter(filterWorksheet);
       }
 
@@ -143,35 +125,58 @@ define([
       }
     },
 
-    onCorroborated: function(message)
+    refreshModel: function()
     {
-      if (this.corroborating && message._id === this.model.id)
+      if (this.timers.refreshModel)
       {
-        viewport.closeDialog();
+        clearTimeout(this.timers.refreshModel);
+        this.timers.refreshModel = null;
       }
-    },
 
-    onWorksheetEdited: function()
-    {
-      this.timers.refreshData = setTimeout(
-        function(page)
+      var page = this;
+
+      this.promised(this.model.fetch()).fail(function(xhr)
+      {
+        if (xhr.status === 404)
         {
-          page.promised(page.model.fetch()).fail(function(xhr)
-          {
-            if (xhr.status === 404)
-            {
-              page.onWorksheetDeleted();
-            }
-          });
-        },
-        2500,
-        this
-      );
+          page.onProdDowntimeDeleted();
+        }
+      });
     },
 
-    onModelDeleted: function()
+    onFirstModelSync: function()
+    {
+      this.setUpRemoteTopics();
+    },
+
+    onModelChange: function()
+    {
+
+    },
+
+    onPressWorksheetEdited: function()
+    {
+      if (this.timers.refreshModel)
+      {
+        clearTimeout(this.timers.refreshModel);
+      }
+
+      this.timers.refreshModel = setTimeout(this.refreshModel.bind(this), 3000, this);
+    },
+
+    onPressWorksheetDeleted: function()
+    {
+      this.onProdDowntimeDeleted();
+    },
+
+    onProdDowntimeDeleted: function()
     {
       onModelDeleted(this.broker, this.model, null, true);
+    },
+
+    onProdDowntimeUpdated: function(message)
+    {
+      this.model.set(message);
     }
 
   });

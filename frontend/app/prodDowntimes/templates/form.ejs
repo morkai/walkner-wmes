@@ -17,6 +17,7 @@
           <input id="<%- idPrefix %>-operator" type="text" name="operator">
         </div>
       </div>
+      <% if (!editMode) { %>
       <div class="row">
         <div class="form-group col-md-4 has-required-select2">
           <label for="<%- idPrefix %>-reason" class="control-label"><%- t('prodDowntimes', 'PROPERTY:reason') %></label>
@@ -31,6 +32,7 @@
         <label for="<%- idPrefix %>-reasonComment" class="control-label"><%- t('prodDowntimes', 'PROPERTY:reasonComment') %></label>
         <textarea id="<%- idPrefix %>-reasonComment" class="form-control" name="reasonComment" rows="3"></textarea>
       </div>
+      <% } %>
       <div class="form-group">
         <label for="<%- idPrefix %>-startedAtDate" class="control-label"><%- t('prodDowntimes', 'PROPERTY:startedAt') %></label>
         <div class=" form-group-datetime">
@@ -45,6 +47,7 @@
           <input id="<%- idPrefix %>-finishedAtTime" class="form-control" name="finishedAtTime" type="time" required step="1">
         </div>
       </div>
+      <% if (!editMode) { %>
       <div class="form-group">
         <label for="<%- idPrefix %>-status" class="control-label"><%- t('prodDowntimes', 'PROPERTY:status') %></label>
         <div class="radio">
@@ -61,6 +64,7 @@
         <label for="<%- idPrefix %>-decisionComment" class="control-label"><%- t('prodDowntimes', 'PROPERTY:decisionComment') %></label>
         <textarea id="<%- idPrefix %>-decisionComment" class="form-control" name="decisionComment" rows="3"></textarea>
       </div>
+      <% } %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

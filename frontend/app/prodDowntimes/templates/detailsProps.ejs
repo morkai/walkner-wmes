@@ -1,0 +1,101 @@
+<div id="<%- idPrefix %>-props" class="panel panel-<%- model.statusClassName %> prodDowntimes-details">
+  <div class="panel-heading">
+    <%- t('prodDowntimes', 'PANEL:TITLE:details') %>
+  </div>
+  <div class="panel-details row">
+    <div class="col-md-4">
+      <div class="props first">
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:pressWorksheet') %></div>
+          <div class="prop-value">
+            <% if (model.pressWorksheet) { %>
+            <% if (user.isAllowedTo('PRESS_WORKSHEETS:VIEW')) { %>
+            <a href="#pressWorksheets/<%- model.pressWorksheet %>"><%- t('core', 'BOOL:true') %></a>
+            <% } else { %>
+            <%- t('core', 'BOOL:true') %>
+            <% } %>
+            <% } else { %>
+            -
+            <% } %>
+          </div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:shift') %></div>
+          <div class="prop-value"><%- model.prodShiftText %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:order') %></div>
+          <div class="prop-value"><%- model.order %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:master') %></div>
+          <div class="prop-value"><%- model.masterInfo %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:leader') %></div>
+          <div class="prop-value"><%- model.leaderInfo %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:operator') %></div>
+          <div class="prop-value"><%- model.operatorInfo %></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:status') %></div>
+          <div class="prop-value"><%= model.statusText %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:reason') %></div>
+          <div class="prop-value"><%= model.reason %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:aor') %></div>
+          <div class="prop-value"><%= model.aor || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:startedAt') %></div>
+          <div class="prop-value"><%- model.startedAt %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:finishedAt') %></div>
+          <div class="prop-value"><%- model.finishedAt %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:duration') %></div>
+          <div class="prop-value"><%- model.duration %></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('core', 'ORG_UNIT:division') %></div>
+          <div class="prop-value"><%= model.division %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('core', 'ORG_UNIT:subdivision') %></div>
+          <div class="prop-value"><%= model.subdivision %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('core', 'ORG_UNIT:mrpController') %></div>
+          <div class="prop-value"><%= model.mrpControllers %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('core', 'ORG_UNIT:prodFlow') %></div>
+          <div class="prop-value"><%= model.prodFlow %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('core', 'ORG_UNIT:workCenter') %></div>
+          <div class="prop-value"><%= model.workCenter %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('core', 'ORG_UNIT:prodLine') %></div>
+          <div class="prop-value"><%= model.prodLine %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

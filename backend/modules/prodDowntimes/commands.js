@@ -4,7 +4,8 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
+var step = require('h5.step');
 
 module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 {
@@ -15,48 +16,54 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 
   sio.sockets.on('connection', function(socket)
   {
-    socket.on('prodDowntimes.corroborate', function(data, reply)
+    socket.on('prodDowntimes.corroborate', handleCorroborate.bind(null, socket));
+  });
+
+  function handleCorroborate(socket, data, reply)
+  {
+    if (!_.isFunction(reply))
     {
-      if (!lodash.isFunction(reply))
+      reply = function() {};
+    }
+
+    var user = socket.handshake.user;
+
+    if (!user.loggedIn)
+    {
+      return reply(new Error('AUTH'));
+    }
+
+    if (!_.isObject(data)
+      || !_.isString(data._id)
+      || !_.isString(data.decisionComment))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    data = _.pick(data, ['_id', 'status', 'decisionComment', 'reason', 'aor']);
+
+    step(
+      function getProdDowntimeStep()
       {
-        reply = function() {};
-      }
-
-      var user = socket.handshake.user;
-
-      if (!user.super && user.privileges.indexOf('PROD_DOWNTIMES:MANAGE') === -1)
-      {
-        return reply(new Error('NO_AUTH'));
-      }
-
-      if (!lodash.isObject(data)
-        || !lodash.isString(data._id)
-        || (data.status !== 'confirmed' && data.status !== 'rejected')
-        || !lodash.isString(data.decisionComment))
-      {
-        return reply(new Error('INVALID_INPUT'));
-      }
-
-      productionModule.getProdData('downtime', data._id, function(err, prodDowntime)
+        productionModule.getProdData('downtime', data._id, this.next());
+      },
+      function createProdLogEntryStep(err, prodDowntime)
       {
         if (err)
         {
-          return reply(err);
+          return this.skip(err);
         }
 
         if (!prodDowntime)
         {
-          return reply(new Error('UNKNOWN_PROD_DOWNTIME'));
+          return this.skip(new Error('INPUT'));
         }
 
-        if (!canCorroborate(user, prodDowntime))
-        {
-          return reply(new Error('NO_AUTH'));
-        }
+        this.prodDowntime = prodDowntime;
 
         var corroborator = userModule.createUserInfo(user, socket);
 
-        if (lodash.isObject(data.corroborator) && lodash.isString(data.corroborator.cname))
+        if (_.isObject(data.corroborator) && _.isString(data.corroborator.cname))
         {
           corroborator.cname = data.corroborator.cname;
         }
@@ -85,42 +92,63 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
           prodShiftOrder: prodDowntime.prodShiftOrder,
           creator: data.corroborator,
           createdAt: createdAt,
-          savedAt: new Date(),
+          savedAt: data.corroboratedAt,
           todo: false
         });
-        prodLogEntry.save(function(err)
+        prodLogEntry.save(this.next());
+      },
+      function updateProdDowntimeStep(err)
+      {
+        if (err)
         {
-          if (err)
+          prodDowntimesModule.error(
+            "Failed to create a ProdLogEntry during corroboration of the [%s] ProdDowntime: %s",
+            this.prodDowntime._id,
+            err.stack
+          );
+        }
+
+        var prodDowntime = this.prodDowntime;
+        var changeData = {};
+
+        _.forEach(['status', 'reason', 'aor'], function(property)
+        {
+          if (data[property] && String(data[property]) !== String(prodDowntime[property]))
           {
-            prodDowntimesModule.error(
-              "Failed to create a ProdLogEntry during corroboration of the [%s] ProdDowntime: %s",
-              prodDowntime._id,
-              err.stack
-            );
+            changeData[property] = [prodDowntime[property], data[property]];
           }
         });
 
+        this.changes = {
+          date: data.corroboratedAt,
+          user: data.corroborator,
+          data: changeData,
+          comment: data.decisionComment
+        };
+
+        prodDowntime.changes.push(this.changes);
         prodDowntime.set(data);
-        prodDowntime.save(function(err)
+        prodDowntime.save(this.next());
+      },
+      function finalizeStep(err)
+      {
+        var changes = this.changes;
+        var prodDowntime = this.prodDowntime;
+
+        this.changes = null;
+        this.prodDowntime = null;
+
+        if (err)
         {
-          if (err)
-          {
-            return reply(err);
-          }
+          return reply(err);
+        }
 
-          reply();
+        reply();
 
-          app.broker.publish('prodDowntimes.corroborated.' + prodDowntime.get('prodLine'), data);
-        });
-      });
-    });
-  });
+        data.changes = changes;
 
-  function canCorroborate(user, prodDowntime)
-  {
-    return !prodDowntime.aor
-      || !user.aors
-      || !user.aors.length
-      || user.aors.map(String).indexOf(String(prodDowntime.aor)) !== -1;
+        app.broker.publish('prodDowntimes.corroborated.' + prodDowntime.prodLine + '.' + prodDowntime._id, data);
+      }
+    );
   }
 };

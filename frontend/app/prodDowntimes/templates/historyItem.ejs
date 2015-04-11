@@ -1,0 +1,24 @@
+<div class="prodDowntimes-history-item">
+  <span class="prodDowntimes-history-user"><%- item.user %></span>,
+  <time class="prodDowntimes-history-time" datetime="<%- item.time.iso %>" title="<%- item.time.long %>"><%- item.time.daysAgo > 5 ? item.time.long : item.time.human %></time>:
+  <% if (item.changes.length) { %>
+  <table class="table table-condensed prodDowntimes-history-changes">
+    <tbody>
+      <% item.changes.forEach(function(change) { %>
+      <tr>
+        <td class="is-min"><%- change.label %><%- itemIndex ? ':' : '' %></td>
+        <% if (itemIndex) { %>
+        <td class="is-min"><%- change.oldValue %></td>
+        <% } %>
+        <td class="is-min"><i class="fa fa-arrow-right"></i></td>
+        <td class="is-min"><%- change.newValue %></td>
+        <td></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } %>
+  <% if (item.comment !== '') { %>
+  <p class="prodDowntimes-history-comment"><%= item.comment %></p>
+  <% } %>
+</div>

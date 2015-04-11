@@ -32,7 +32,7 @@ define([
 
     rqlQuery: function(rql)
     {
-      var selector = [{name: 'eq', args: ['status', 'undecided']}];
+      var selector = [{name: 'in', args: ['status', ['undecided', 'rejected']]}];
 
       if (!user.isAllowedTo('PROD_DOWNTIMES:ALL'))
       {
@@ -53,12 +53,23 @@ define([
         }
       }
 
+      if (Array.isArray(user.data.aors))
+      {
+        if (user.data.aors.length === 1)
+        {
+          selector.push({name: 'eq', args: ['aor', user.data.aors[0]]});
+        }
+        else if (user.data.aors.length > 1)
+        {
+          selector.push({name: 'in', args: ['aor', user.data.aors]});
+        }
+      }
+
       return rql.Query.fromObject({
         fields: {
           rid: 1,
           aor: 1,
           reason: 1,
-          reasonComment: 1,
           mrpControllers: 1,
           prodFlow: 1,
           prodLine: 1,
@@ -66,7 +77,8 @@ define([
           startedAt: 1,
           finishedAt: 1,
           date: 1,
-          shift: 1
+          shift: 1,
+          pressWorksheet: 1
         },
         sort: {
           startedAt: -1
@@ -251,8 +263,10 @@ define([
      * @param {object} data
      * @returns {boolean}
      */
-    matchOrgUnit: function()
+    matchOrgUnit: function(data)
     {
+      /*jshint unused:false*/
+
       // TODO
       return true;
     }

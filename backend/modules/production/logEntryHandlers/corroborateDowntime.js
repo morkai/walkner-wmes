@@ -4,6 +4,8 @@
 
 'use strict';
 
+var _ = require('lodash');
+
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
   productionModule.getProdData('downtime', logEntry.data._id, function(err, prodDowntime)
@@ -31,7 +33,26 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       return done();
     }
 
-    prodDowntime.set(logEntry.data);
+    var logEntryData = logEntry.data;
+    var changeData = {};
+
+    _.forEach(['status', 'reason', 'aor'], function(property)
+    {
+      if (logEntryData[property] && String(logEntryData[property]) !== String(prodDowntime[property]))
+      {
+        changeData[property] = [prodDowntime[property], logEntryData[property]];
+      }
+    });
+
+    var changes = {
+      date: logEntryData.corroboratedAt,
+      user: logEntryData.corroborator,
+      data: changeData,
+      comment: logEntryData.decisionComment || ''
+    };
+
+    prodDowntime.changes.push(changes);
+    prodDowntime.set(logEntryData);
     prodDowntime.save(function(err)
     {
       if (err)
@@ -42,6 +63,13 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           logEntry._id,
           err.stack
         );
+      }
+      else
+      {
+        var corroborated = _.clone(logEntryData);
+        corroborated.changes = changes;
+
+        app.broker.publish('prodDowntimes.corroborated.' + prodLine._id + '.' + prodDowntime._id, corroborated);
       }
 
       return done(err);

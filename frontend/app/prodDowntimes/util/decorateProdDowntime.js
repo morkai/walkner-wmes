@@ -13,7 +13,8 @@ define([
   'app/data/prodLines',
   'app/data/downtimeReasons',
   'app/data/views/renderOrgUnitPath',
-  'app/core/templates/userInfo'
+  'app/core/templates/userInfo',
+  './decorateProdDowntimeChange'
 ], function(
   time,
   t,
@@ -25,15 +26,18 @@ define([
   prodLines,
   downtimeReasons,
   renderOrgUnitPath,
-  renderUserInfo
+  renderUserInfo,
+  decorateProdDowntimeChange
 ) {
   'use strict';
 
-  return function(prodDowntime)
+  return function decorateProdDowntime(prodDowntime, options)
   {
+    var longDateFormat = options && options.longDate ? 'LLLL' : 'YYYY-MM-DD, HH:mm:ss';
     var obj = prodDowntime.toJSON();
 
     obj.statusClassName = prodDowntime.getCssClassName();
+    obj.statusText = t('prodDowntimes', 'PROPERTY:status:' + obj.status);
 
     obj.className = obj.statusClassName;
 
@@ -71,14 +75,13 @@ define([
       obj.duration = '-';
     }
 
-    obj.startedAt = time.format(obj.startedAt, 'YYYY-MM-DD HH:mm:ss');
+    obj.startedAt = time.format(obj.startedAt, longDateFormat);
 
     obj.finishedAt = obj.finishedAt
-      ? time.format(obj.finishedAt, 'YYYY-MM-DD HH:mm:ss')
+      ? time.format(obj.finishedAt, longDateFormat)
       : t('prodDowntimes', 'NO_DATA:finishedAt');
 
-    obj.corroboratedAt =
-      time.format(obj.corroboratedAt, 'YYYY-MM-DD HH:mm:ss') || '-';
+    obj.corroboratedAt = time.format(obj.corroboratedAt, longDateFormat) || '-';
 
     obj.order = obj.prodShiftOrder
       ? (obj.orderId + '; ' + obj.operationNo)
@@ -86,8 +89,7 @@ define([
 
     if (user.isAllowedTo('PROD_DATA:VIEW') && obj.prodShiftOrder)
     {
-      obj.order = '<a href="#prodShiftOrders/' + obj.prodShiftOrder + '">'
-        + obj.order + '</a>';
+      obj.order = '<a href="#prodShiftOrders/' + obj.prodShiftOrder + '">' + obj.order + '</a>';
     }
 
     obj.date = obj.date ? time.format(obj.date, 'YYYY-MM-DD') : '?';
@@ -115,6 +117,10 @@ define([
       Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
         ? obj.mrpControllers.join('; ')
         : '?';
+
+    obj.history = Array.isArray(obj.changes) && (!options || options.noHistory !== true)
+      ? obj.changes.map(decorateProdDowntimeChange)
+      : [];
 
     return obj;
   };

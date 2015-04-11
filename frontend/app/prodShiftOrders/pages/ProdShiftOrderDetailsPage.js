@@ -119,7 +119,10 @@ define([
     {
       this.detailsView = new ProdShiftOrderDetailsView({model: this.prodShiftOrder});
 
-      this.downtimesView = new ProdDowntimeListView({collection: this.prodDowntimes});
+      this.downtimesView = new ProdDowntimeListView({
+        collection: this.prodDowntimes,
+        simple: true
+      });
     },
 
     load: function(when)
