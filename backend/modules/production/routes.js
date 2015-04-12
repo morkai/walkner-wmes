@@ -117,7 +117,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
           leader: 1,
           operator: 1
         };
-console.log(conditions);
+
         mongoose.model('ProdShift').find(conditions, fields).lean().exec(this.next());
       },
       function(err, prodShifts)
@@ -182,7 +182,7 @@ console.log(conditions);
           startedAt: 1,
           finishedAt: 1
         };
-console.log(conditions);
+
         mongoose.model('ProdShiftOrder').find(conditions, orderFields).lean().exec(this.parallel());
         mongoose.model('ProdDowntime').find(conditions, downtimeFields).lean().exec(this.parallel());
       },
