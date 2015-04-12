@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["app/i18n","app/data/orgUnits","app/core/View","../ProdDowntimeSettingCollection","../views/ProdDowntimeSettingsView","app/prodTasks/ProdTaskCollection"],function(i,e,t,n,s){"use strict";return t.extend({layoutName:"page",breadcrumbs:function(){return[{label:i.bound("prodDowntimes","BREADCRUMBS:browse"),href:"#prodDowntimes"},i.bound("prodDowntimes","BREADCRUMBS:settings")]},initialize:function(){this.defineModels(),this.defineViews()},defineModels:function(){this.settings=new n(null,{pubsub:this.pubsub})},defineViews:function(){this.view=new s({initialTab:this.options.initialTab,settings:this.settings})},load:function(i){return i(this.settings.fetch({reset:!0}))}})});

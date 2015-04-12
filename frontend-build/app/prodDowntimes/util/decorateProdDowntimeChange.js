@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["underscore","app/time","app/i18n","app/data/aors","app/data/downtimeReasons","app/core/templates/userInfo"],function(e,t,a,r,s,n){"use strict";function o(e,o){switch(e){case"startedAt":case"finishedAt":return t.format(o,"YYYY-MM-DD, HH:mm:ss");case"master":case"leader":case"operator":return n({userInfo:o});case"status":return a("prodDowntimes","PROPERTY:status:"+o);case"reason":var u=s.get(o);return u?u.getLabel():o;case"aor":var c=r.get(o);return c?c.getLabel():o;default:return o||""}}return function(r){return{time:t.toTagData(r.date),user:n({userInfo:r.user}),changes:e.map(r.data,function(e,t){return{label:a("prodDowntimes","PROPERTY:"+t),oldValue:o(t,e[0]),newValue:o(t,e[1])}}),comment:r.comment.trim()}}});
