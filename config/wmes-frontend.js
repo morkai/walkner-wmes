@@ -61,7 +61,8 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-2'},
   {id: 'messenger/client', name: 'messenger/client:wmes-watchdog'},
   'httpServer',
-  'sio'
+  'sio',
+  'sioLegacyBridge'
 ];
 
 exports.mainJsFile = 'wmes-main.js';
@@ -302,4 +303,8 @@ exports.warehouse = {
 
 exports['mail/sender'] = {
   from: 'WMES Bot <wmes@localhost>'
+};
+
+exports.sioLegacyBridge = {
+  newSioServerUrl: 'http://127.0.0.1/'
 };
