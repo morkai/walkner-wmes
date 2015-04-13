@@ -23,7 +23,9 @@ define([
         limit: 50,
         selector: {
           name: 'and',
-          args: []
+          args: [
+            {name: 'populate', args: ['license', ['features']]}
+          ]
         }
       });
     }
