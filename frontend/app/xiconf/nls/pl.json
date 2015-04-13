@@ -129,6 +129,7 @@
   "log:PRINTING_SERVICE_TAG_FAILURE": "Nie udało się wydrukować etykiety Service Tag: <code>{error}</code>",
   "log:LED_CHECKING_STARTED": "Rozpoczynanie sprawdzania płytek LED...",
   "log:WAITING_FOR_LEDS": "Oczekiwanie na {ledCount} {ledCount, plural, one{płytkę} few{płytki} other{płytek}} LED...",
+  "log:ADDING_LAST_LEDS": "Dodawanie {ledCount} {ledCount, plural, one{płytki} other{płytek}} LED z ostatniego nieudanego programowania...",
   "log:WAITING_FOR_CONTINUE": "Oczekiwanie na kontynuację...",
 
   "error:WORKFLOW_FILE_ERROR": "Błąd podczas odczytywania pliku konfiguracyjnego programatora.",

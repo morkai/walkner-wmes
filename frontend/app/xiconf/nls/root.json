@@ -130,6 +130,7 @@
     "log:PRINTING_SERVICE_TAG_FAILURE": "Failed to print a Service Tag label: <code>{error}</code>",
     "log:LED_CHECKING_STARTED": "Starting the LED boards check...",
     "log:WAITING_FOR_LEDS": "Waiting for {ledCount} LED {ledCount, plural, one{board} other{boards}}...",
+    "log:ADDING_LAST_LEDS": "Adding {ledCount} LED {ledCount, plural, one{board} other{boards}} from the last failed programming...",
     "log:WAITING_FOR_CONTINUE": "Waiting for the Continue button to be pressed...",
 
     "error:WORKFLOW_FILE_ERROR": "Error during the reading of the programmer configuration file contents.",
