@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["../time","../core/Model"],function(e,n){"use strict";return n.extend({urlRoot:"/xiconf/clients",clientUrlRoot:"#xiconf/clients",privilegePrefix:"XICONF",nlsDomain:"xiconfClients",serialize:function(){var n=this.toJSON();return n.className=n.connectedAt?"success":"danger",n.lastSeenAt=e.format(n.connectedAt||n.disconnectedAt,"LLLL"),n.order&&(n.orderLink='<a href="#xiconf/orders/'+n.order+'">'+n.order+"</a>"),n.shortLicense=!n.license||/^0000+.+0000$/.test(n.license)?null:'<span title="'+n.license+'">'+n.license.substr(0,4)+"..."+n.license.substr(-4)+"</span>",n}})});

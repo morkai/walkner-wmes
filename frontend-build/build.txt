@@ -183,6 +183,10 @@ app/xiconf/assets/programs.css
 ----------------
 app/xiconf/assets/programs.css
 
+app/xiconfClients/assets/main.css
+----------------
+app/xiconfClients/assets/main.css
+
 app/xiconfOrders/assets/main.css
 ----------------
 app/xiconfOrders/assets/main.css
@@ -242,6 +246,7 @@ assets/../app/pressWorksheets/assets/main.css
 assets/../app/xiconf/assets/main.css
 assets/../app/xiconfOrders/assets/main.css
 assets/../app/xiconfPrograms/assets/main.css
+assets/../app/xiconfClients/assets/main.css
 assets/../app/icpo/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/feedback/assets/main.css
@@ -758,6 +763,10 @@ app/nls/xiconfPrograms.js
 app/nls/pl/xiconfPrograms.js
 i18n!app/nls/xiconfPrograms
 app/xiconfPrograms/routes.js
+app/nls/xiconfClients.js
+app/nls/pl/xiconfClients.js
+i18n!app/nls/xiconfClients
+app/xiconfClients/routes.js
 app/nls/icpo.js
 app/nls/pl/icpo.js
 i18n!app/nls/icpo
