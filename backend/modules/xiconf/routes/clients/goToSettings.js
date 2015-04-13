@@ -24,7 +24,16 @@ module.exports = function goToSettingsRoute(app, xiconfModule, req, res, next)
     }
 
     var socket = sio.sockets.connected[xiconfClient.socket];
-    var remoteAddress = socket ? socket.conn.remoteAddress : xiconfClient._id.split('-')[0];
+    var remoteAddress;
+
+    if (socket && socket.conn.remoteAddress !== '127.0.0.1')
+    {
+      remoteAddress = socket.conn.remoteAddress;
+    }
+    else
+    {
+      remoteAddress = xiconfClient._id.split('-')[0];
+    }
 
     res.redirect('http://' + remoteAddress + ':1337/#settings');
   });
