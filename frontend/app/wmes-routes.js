@@ -35,6 +35,7 @@ define([
   './xiconf/routes',
   './xiconfOrders/routes',
   './xiconfPrograms/routes',
+  './xiconfClients/routes',
   './icpo/routes',
   './factoryLayout/routes'
 ], function()

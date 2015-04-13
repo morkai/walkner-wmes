@@ -46,7 +46,25 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     socket.on('xiconf.acquireServiceTag', handleAcquireServiceTagRequest);
     socket.on('xiconf.releaseServiceTag', handleReleaseServiceTagRequest);
     socket.on('xiconf.selectedOrderNoChanged', onClientsSelectedOrderNoChanged);
+    socket.on('xiconf.restart', handleRestartRequest);
+    socket.on('xiconf.update', handleUpdateRequest);
   });
+
+  function handleRestartRequest(data)
+  {
+    if (_.isObject(data) && _.isString(data.socket) && sio.sockets.connected[data.socket])
+    {
+      sio.sockets.connected[data.socket].emit('xiconf.restart');
+    }
+  }
+
+  function handleUpdateRequest(data)
+  {
+    if (_.isObject(data) && _.isString(data.socket) && sio.sockets.connected[data.socket])
+    {
+      sio.sockets.connected[data.socket].emit('xiconf.update');
+    }
+  }
 
   function onProductionStateChanged(changes)
   {
@@ -379,6 +397,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       };
     }
 
+    var reconnected = false;
+
     if (socket.xiconf.prodLineId !== null)
     {
       if (data.prodLineId !== socket.xiconf.prodLineId)
@@ -395,7 +415,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       }
       else
       {
-        xiconfModule.info("[%s] reconnected to [%s] (socket=[%s])", data.srcId, data.prodLineId, socket.id);
+        reconnected = true;
       }
     }
     else
@@ -412,6 +432,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     updateProdLinesRemoteData(data.prodLineId, socket);
     updateProdLinesLeader(data.prodLineId, socket);
+
+    if (reconnected)
+    {
+      return;
+    }
 
     var xiconfClient = {
       _id: data.srcId,

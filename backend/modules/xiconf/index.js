@@ -22,7 +22,9 @@ exports.DEFAULT_CONFIG = {
   zipStoragePath: './',
   ordersImportPath: './',
   ordersImportFile: '{timestamp}@T_COOIS_XICONF_{step}.txt',
-  emailUrlPrefix: 'http://127.0.0.1/'
+  emailUrlPrefix: 'http://127.0.0.1/',
+  vncTemplatePath: __dirname + '/template.vnc',
+  updatesPath: './'
 };
 
 exports.start = function startXiconfModule(app, module)
@@ -35,7 +37,8 @@ exports.start = function startXiconfModule(app, module)
     [
       config.mongooseId,
       config.userId,
-      config.expressId
+      config.expressId,
+      config.sioId
     ],
     setUpRoutes.bind(null, app, module)
   );

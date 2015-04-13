@@ -1,0 +1,45 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Xiconf",
+    "BREADCRUMBS:browse": "Clients",
+
+    "MSG:LOADING_FAILURE": "Failed to load the clients :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the client :(",
+
+    "PROPERTY:_id": "ID",
+    "PROPERTY:prodLine": "Line",
+    "PROPERTY:license": "License",
+    "PROPERTY:appVersion": "App version",
+    "PROPERTY:mowVersion": "MultiOne version",
+    "PROPERTY:order": "Order",
+    "PROPERTY:lastSeenAt": "Last seen at",
+    "PROPERTY:status": "Status",
+
+    "status:online": "Online",
+    "status:offline": "Offline",
+
+    "list:goToSettings": "Go to settings",
+    "list:downloadVNC": "Download TightVNC config",
+    "list:restart": "Restart application",
+    "list:update": "Update application",
+
+    "filter:submit": "Filter clients",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "Client deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete client",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen client?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> client?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the client :-(",
+
+    "restartDialog:title": "Application restart",
+    "restartDialog:message": "Are you sure you want to restart the <em>{client}</em> application?<br><br>The application will be restarted right after the current programming finishes.",
+    "restartDialog:yes": "Restart application",
+    "restartDialog:no": "Cancel",
+
+    "updateDialog:title": "Application update",
+    "updateDialog:message": "Are you sure you want to update the <em>{client}</em> application?<br><br>The application will be updated right after the current programming finishes.",
+    "updateDialog:yes": "Update application",
+    "updateDialog:no": "Cancel"
+  },
+  "pl": true
+}

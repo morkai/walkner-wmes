@@ -12,7 +12,11 @@ var step = require('h5.step');
 var importResultsRoute = require('./importResults');
 var importOrdersRoute = require('./importOrders');
 var downloadRoute = require('./download');
-var syncProgramsRoute = require('./syncPrograms');
+var syncProgramsRoute = require('./programs/sync');
+var deleteProgramRoute = require('./programs/delete');
+var goToClientsSettingsRoute = require('./clients/goToSettings');
+var downloadClientsVNCRoute = require('./clients/downloadVNC');
+var sendUpdateRoute = require('./sendUpdate');
 
 module.exports = function setUpXiconfRoutes(app, xiconfModule)
 {
@@ -128,9 +132,17 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     express.crud.editRoute.bind(null, app, XiconfProgram)
   );
 
-  express.delete('/xiconf/programs/:id', canManage, deleteProgramRoute);
+  express.delete('/xiconf/programs/:id', canManage, deleteProgramRoute.bind(null, app, XiconfClient));
 
   express.get('/xiconf/clients', canView, express.crud.browseRoute.bind(null, app, XiconfClient));
+
+  express.get('/xiconf/clients/:id;goToSettings', canView, goToClientsSettingsRoute.bind(null, app, xiconfModule));
+
+  express.get('/xiconf/clients/:id;downloadVNC', canView, downloadClientsVNCRoute.bind(null, app, xiconfModule));
+
+  express.delete('/xiconf/clients/:id', canManage, express.crud.deleteRoute.bind(null, app, XiconfClient));
+
+  express.get('/xiconf/updates/:version', sendUpdateRoute.bind(null, app, xiconfModule));
 
   function populateOrder(fields, req, res, next)
   {
@@ -255,35 +267,6 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     req.body.updatedAt = new Date();
 
     next();
-  }
-
-  function deleteProgramRoute(req, res, next)
-  {
-    XiconfProgram.findById(req.params.id).exec(function(err, program)
-    {
-      if (err)
-      {
-        return next(err);
-      }
-
-      program.deleted = true;
-      program.updatedAt = new Date();
-
-      program.save(function(err)
-      {
-        if (err)
-        {
-          return next(err);
-        }
-
-        res.sendStatus(204);
-
-        app.broker.publish(XiconfProgram.TOPIC_PREFIX + '.deleted', {
-          model: program,
-          user: req.session.user
-        });
-      });
-    });
   }
 
   function prepareOrderDetails(xiconfOrder, done)

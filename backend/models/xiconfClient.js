@@ -50,5 +50,7 @@ module.exports = function setupXiconfClientModel(app, mongoose)
     id: false
   });
 
+  xiconfClientSchema.statics.TOPIC_PREFIX = 'xiconf.clients';
+
   mongoose.model('XiconfClient', xiconfClientSchema);
 };
