@@ -9,6 +9,7 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:prodLine": "Line",
     "PROPERTY:license": "License",
+    "PROPERTY:features": "Features",
     "PROPERTY:appVersion": "App version",
     "PROPERTY:mowVersion": "MultiOne version",
     "PROPERTY:order": "Order",

@@ -4,10 +4,12 @@
 
 define([
   '../time',
-  '../core/Model'
+  '../core/Model',
+  '../xiconf/util/serializeXiconfLicenseFeatures'
 ], function(
   time,
-  Model
+  Model,
+  serializeXiconfLicenseFeatures
 ) {
   'use strict';
 
@@ -31,6 +33,16 @@ define([
       if (obj.order)
       {
         obj.orderLink = '<a href="#xiconf/orders/' + obj.order + '">' + obj.order + '</a>';
+      }
+
+      if (_.isObject(obj.license))
+      {
+        obj.features = serializeXiconfLicenseFeatures(obj.license.features);
+        obj.license = obj.license._id;
+      }
+      else
+      {
+        obj.features = null;
       }
 
       if (!obj.license || /^0000+.+0000$/.test(obj.license))

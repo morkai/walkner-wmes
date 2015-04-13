@@ -8,6 +8,7 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:prodLine": "Linia",
   "PROPERTY:license": "Licencja",
+  "PROPERTY:features": "Opcje",
   "PROPERTY:appVersion": "Wersja aplikacji",
   "PROPERTY:mowVersion": "Wersja MultiOne",
   "PROPERTY:order": "Zlecenie",

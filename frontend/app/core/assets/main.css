@@ -129,7 +129,11 @@ kbd {
 }
 
 .label {
-  text-shadow: 1px 1px 3px #333;
+  text-shadow: 1px 1px 1px #333;
+}
+.label.license-feature {
+  font-size: 1em;
+  text-transform: uppercase;
 }
 
 .page-header {

@@ -91,7 +91,8 @@ define([
     columns: [
       {id: '_id', className: 'is-min'},
       {id: 'prodLine', className: 'is-min'},
-      {id: 'shortLicense',  className: 'is-min', label: t.bound('xiconfClients', 'PROPERTY:license')},
+      {id: 'shortLicense', className: 'is-min', label: t.bound('xiconfClients', 'PROPERTY:license')},
+      {id: 'features', className: 'is-min'},
       {id: 'appVersion', className: 'is-min'},
       {id: 'mowVersion', className: 'is-min'},
       {id: 'orderLink', className: 'is-min', label: t.bound('xiconfClients', 'PROPERTY:order')},
