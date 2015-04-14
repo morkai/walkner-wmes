@@ -465,6 +465,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       socket: socket.id,
       prodLine: data.prodLineId,
       license: data.licenseId || null,
+      licenseError: data.licenseError || null,
       order: data.selectedOrderNo || null,
       appVersion: data.appVersion || '0.0.0',
       mowVersion: data.mowVersion || '0.0.0.0'

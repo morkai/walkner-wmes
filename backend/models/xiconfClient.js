@@ -33,6 +33,10 @@ module.exports = function setupXiconfClientModel(app, mongoose)
       ref: 'License',
       default: null
     },
+    licenseError: {
+      type: String,
+      default: null
+    },
     order: {
       type: String,
       ref: 'XiconfOrder',

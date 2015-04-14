@@ -11,7 +11,8 @@ define([
   'app/core/views/ListView',
   'app/core/views/DialogView',
   'app/xiconfClients/templates/restartDialog',
-  'app/xiconfClients/templates/updateDialog'
+  'app/xiconfClients/templates/updateDialog',
+  'i18n!app/nls/licenses'
 ], function(
   _,
   t,

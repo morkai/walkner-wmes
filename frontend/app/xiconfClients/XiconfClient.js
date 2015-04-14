@@ -3,11 +3,15 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   '../time',
+  '../i18n',
   '../core/Model',
   '../xiconf/util/serializeXiconfLicenseFeatures'
 ], function(
+  _,
   time,
+  t,
   Model,
   serializeXiconfLicenseFeatures
 ) {
@@ -45,16 +49,28 @@ define([
         obj.features = null;
       }
 
-      if (!obj.license || /^0000+.+0000$/.test(obj.license))
+      if (!obj.license)
       {
-        obj.shortLicense = null;
+        obj.license = '00000000-0000-0000-0000-000000000000';
       }
-      else
+
+      if (!obj.licenseError && /^0000.+0000$/.test(obj.license))
       {
-        obj.shortLicense = '<span title="' + obj.license + '">'
-          + obj.license.substr(0, 4) + '...' + obj.license.substr(-4)
-          + '</span>';
+        obj.licenseError = 'NO_KEY';
       }
+
+      var licenseClass = 'licenses-id';
+      var licenseTitle = obj.license;
+
+      if (obj.licenseError)
+      {
+        licenseClass += ' licenses-invalid';
+        licenseTitle += '\r\n' + t('licenses', 'error:' + obj.licenseError);
+      }
+
+      obj.shortLicense = '<span class="' + licenseClass + '" title="' + licenseTitle + '">'
+        + obj.license.substr(0, 4) + '...' + obj.license.substr(-4)
+        + '</span>';
 
       return obj;
     }

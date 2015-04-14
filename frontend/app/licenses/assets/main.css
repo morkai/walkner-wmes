@@ -1,0 +1,10 @@
+.licenses-id {
+  font-family: Consolas, monospace;
+}
+.licenses-id[title] {
+  cursor: help;
+}
+.licenses-invalid {
+  font-weight: bold;
+  color: #e00;
+}

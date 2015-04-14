@@ -1,0 +1,26 @@
+{
+  "root": {
+    "BREADCRUMBS:browse": "Licenses",
+
+    "MSG:LOADING_FAILURE": "Failed to load the licenses :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the licenses :(",
+
+    "PROPERTY:": "",
+
+    "filter:submit": "Filter licenses",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "License deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete License",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen License?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> License?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the License :-(",
+
+    "error:NO_KEY": "No license key.",
+    "error:INVALID_ED_PEM": "Invalid license decryption key.",
+    "error:APP_ID": "Current license was not issued to the running application.",
+    "error:APP_VERSION": "Current license does not support the currently running version of the application.",
+    "error:UNKNOWN_LICENSE": "Current license was not recognized by the remote server.",
+    "error:DUPLICATE_LICENSE": "The remote server detected duplicate licenses in use."
+  },
+  "pl": true
+}
