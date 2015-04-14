@@ -41,13 +41,13 @@ module.exports = function importResultsRoute(app, xiconfModule, req, res, next)
   step(
     function()
     {
-      var eightHoursAgo = moment().subtract(8, 'hours').toDate();
+      var fifteenMinutesAgo = moment().subtract(15, 'minutes').toDate();
 
       License.findById(uuid, {appId: 1})
         .lean()
         .exec(this.parallel());
 
-      XiconfResult.distinct('srcIp', {startedAt: {$gte: eightHoursAgo}, srcUuid: uuid})
+      XiconfResult.distinct('srcIp', {startedAt: {$gte: fifteenMinutesAgo}, srcUuid: uuid})
         .lean()
         .exec(this.parallel());
     },
