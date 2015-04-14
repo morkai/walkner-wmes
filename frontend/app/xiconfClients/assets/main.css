@@ -7,3 +7,6 @@
 .xiconfClients-filter .fa-power-off {
   color: #d9534f;
 }
+.xiconfClients-list .action-goToSettings {
+  margin-left: -5px;
+}

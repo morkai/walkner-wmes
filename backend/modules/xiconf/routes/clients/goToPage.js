@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function goToSettingsRoute(app, xiconfModule, req, res, next)
+module.exports = function goToPageRoute(app, xiconfModule, req, res, next)
 {
   var express = app[xiconfModule.config.expressId];
   var sio = app[xiconfModule.config.sioId];
@@ -35,6 +35,6 @@ module.exports = function goToSettingsRoute(app, xiconfModule, req, res, next)
       remoteAddress = xiconfClient._id.split('-')[0];
     }
 
-    res.redirect('http://' + remoteAddress + ':1337/#settings');
+    res.redirect('http://' + remoteAddress + ':1337/#' + (req.query.page || ''));
   });
 };

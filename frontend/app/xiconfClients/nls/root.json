@@ -19,6 +19,7 @@
     "status:online": "Online",
     "status:offline": "Offline",
 
+    "list:goToDashboard": "Go to dashboard",
     "list:goToSettings": "Go to settings",
     "list:downloadVNC": "Download TightVNC config",
     "list:restart": "Restart application",

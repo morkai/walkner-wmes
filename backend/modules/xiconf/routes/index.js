@@ -14,7 +14,7 @@ var importOrdersRoute = require('./importOrders');
 var downloadRoute = require('./download');
 var syncProgramsRoute = require('./programs/sync');
 var deleteProgramRoute = require('./programs/delete');
-var goToClientsSettingsRoute = require('./clients/goToSettings');
+var goToClientsPageRoute = require('./clients/goToPage');
 var downloadClientsVNCRoute = require('./clients/downloadVNC');
 var sendUpdateRoute = require('./sendUpdate');
 
@@ -136,7 +136,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   express.get('/xiconf/clients', canView, express.crud.browseRoute.bind(null, app, XiconfClient));
 
-  express.get('/xiconf/clients/:id;goToSettings', canView, goToClientsSettingsRoute.bind(null, app, xiconfModule));
+  express.get('/xiconf/clients/:id;goTo', canView, goToClientsPageRoute.bind(null, app, xiconfModule));
 
   express.get('/xiconf/clients/:id;downloadVNC', canView, downloadClientsVNCRoute.bind(null, app, xiconfModule));
 

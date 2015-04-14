@@ -18,7 +18,8 @@
   "status:online": "Online",
   "status:offline": "Offline",
 
-  "list:goToSettings": "Przejdź do ustawień instalacji",
+  "list:goToDashboard": "Przejdź do ekranu głównego",
+  "list:goToSettings": "Przejdź do ustawień",
   "list:downloadVNC": "Pobierz konfigurację TightVNC",
   "list:restart": "Restartuj aplikację",
   "list:update": "Aktualizuj aplikację",

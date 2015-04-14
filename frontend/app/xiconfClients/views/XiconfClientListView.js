@@ -28,7 +28,7 @@ define([
 
   return ListView.extend({
 
-    className: 'is-colored',
+    className: 'xiconfClients-list is-colored',
 
     remoteTopics: {
       'xiconf.clients.**': 'refreshCollection'
@@ -115,7 +115,12 @@ define([
           icon: 'desktop',
           label: t.bound('xiconfClients', 'list:downloadVNC')
         }, {
-          href: url + ';goToSettings',
+          href: url + ';goTo?page=',
+          icon: 'external-link',
+          label: t.bound('xiconfClients', 'list:goToDashboard')
+        }, {
+          id: 'goToSettings',
+          href: url + ';goTo?page=settings',
           icon: 'cog',
           label: t.bound('xiconfClients', 'list:goToSettings')
         }, {
