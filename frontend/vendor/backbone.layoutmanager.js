@@ -416,7 +416,7 @@ var LayoutManager = Backbone.View.extend({
     // If we're inserting, we need to insert into the views array. If one
     // already exists, we may want to insert at a particular index.
     if (insertOptions && _.isNumber(insertOptions.insertAt) && existing) {
-      // If an index is specified & existing views are presesnt, 
+      // If an index is specified & existing views are presesnt,
       // splice there.
       existing.splice(insertOptions.insertAt, 0, view);
       root.views[selector] = existing;
@@ -983,31 +983,35 @@ var defaultOptions = {
   // Called by `insert` if an `insertAt` is provided. Inserts a view
   // at a particular position.
   insertAtIndex: function($root, $el, insertAt, selector) {
+    var $children = $root.children();
     var $baseEl;
 
-    // If insertAt is < 0, it behaves like the index in Array#splice.
     if(insertAt < 0) {
-      $baseEl = $root.children()
-        .eq(Math.max(0, $root.children().length + insertAt));
+      $baseEl = $children.eq(Math.max(0, $children.length + insertAt));
     } else {
-      $baseEl = $root.children().eq(insertAt);
+      $baseEl = $children.eq(insertAt);
     }
 
     var views = this.views[selector];
 
     if (insertAt < 0) {
-      insertAt = Math.max(0, (views.length - 1) + insertAt);
+      insertAt = Math.max(0, views.length - 1 + insertAt);
     } else {
       insertAt += 1;
     }
 
-    if(views[insertAt]) {
-      // If a reference point is found for insertion, put this view behind it.
-      $el.insertBefore(views[insertAt].$el);
+    var nextView = views[insertAt];
+
+    if(nextView) {
+      if (nextView.el.parentNode) {
+        $el.insertBefore(nextView.$el);
+      } else if ($baseEl.length) {
+        $baseEl.before($el);
+      } else {
+        $root.append($el);
+      }
     } else {
-      // If no reference point is found (index is greater than the length of
-      // of the array of elements), append it.
-      this.insert($root, $el);
+      $root.append($el);
     }
   },
 
