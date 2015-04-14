@@ -74,7 +74,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
           prodLine: 1,
           prodShift: 1,
           prodShiftOrder: 1,
-          'changes.0': 1
+          changes: {$slice: [0, 1]}
         };
 
         ProdDowntime.find(conditions, fields).limit(MAX_BATCH_SIZE).lean().exec(this.next());
