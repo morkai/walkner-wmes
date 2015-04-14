@@ -48,6 +48,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     socket.on('xiconf.selectedOrderNoChanged', onClientsSelectedOrderNoChanged);
     socket.on('xiconf.restart', handleRestartRequest);
     socket.on('xiconf.update', handleUpdateRequest);
+    socket.on('xiconf.configure', handleConfigureRequest);
   });
 
   function handleRestartRequest(data)
@@ -63,6 +64,25 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     if (_.isObject(data) && _.isString(data.socket) && sio.sockets.connected[data.socket])
     {
       sio.sockets.connected[data.socket].emit('xiconf.update');
+    }
+  }
+
+  function handleConfigureRequest(data, reply)
+  {
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (_.isObject(data)
+      && _.isString(data.socket) && sio.sockets.connected[data.socket]
+      && _.isObject(data.settings) && !_.isEmpty(data.settings))
+    {
+      sio.sockets.connected[data.socket].emit('xiconf.configure', data.settings, reply);
+    }
+    else
+    {
+      reply(new Error('INPUT'));
     }
   }
 
