@@ -4,6 +4,7 @@
 
   "MSG:LOADING_FAILURE": "Ładowanie klientów nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie klienta nie powiodło się :(",
+  "MSG:NO_APPS_TO_UPDATE": "Nie ma żadnych aplikacji do zaktualizowania :(",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:prodLine": "Linia",
@@ -17,6 +18,8 @@
 
   "status:online": "Online",
   "status:offline": "Offline",
+
+  "page:update": "Aktualizuj aplikacje",
 
   "list:goToDashboard": "Przejdź do ekranu głównego",
   "list:goToSettings": "Przejdź do ustawień",
@@ -40,5 +43,10 @@
   "updateDialog:title": "Aktualizacja aplikacji",
   "updateDialog:message": "Czy na pewno chcesz zaktualizować aplikację <em>{client}</em>?<br><br>Aplikacja zostanie zaktualizowana zaraz po zakończeniu aktualnego programowania.",
   "updateDialog:yes": "Aktualizuj aplikację",
-  "updateDialog:no": "Anuluj"
+  "updateDialog:no": "Anuluj",
+
+  "updateAllDialog:title": "Aktualizacja wszystkich aplikacji",
+  "updateAllDialog:message": "Czy na pewno chcesz zaktualizować wszystkie aplikację?<br><br>Aplikacja zostaną zaktualizowana zaraz po zakończeniu aktualnego programowania.",
+  "updateAllDialog:yes": "Aktualizuj aplikacje",
+  "updateAllDialog:no": "Anuluj"
 }

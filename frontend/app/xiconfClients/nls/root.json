@@ -5,6 +5,7 @@
 
     "MSG:LOADING_FAILURE": "Failed to load the clients :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the client :(",
+    "MSG:NO_APPS_TO_UPDATE": "No apps to update :(",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:prodLine": "Line",
@@ -18,6 +19,8 @@
 
     "status:online": "Online",
     "status:offline": "Offline",
+
+    "page:update": "Update apps",
 
     "list:goToDashboard": "Go to dashboard",
     "list:goToSettings": "Go to settings",
@@ -41,7 +44,12 @@
     "updateDialog:title": "Application update",
     "updateDialog:message": "Are you sure you want to update the <em>{client}</em> application?<br><br>The application will be updated right after the current programming finishes.",
     "updateDialog:yes": "Update application",
-    "updateDialog:no": "Cancel"
+    "updateDialog:no": "Cancel",
+
+    "updateAllDialog:title": "Applications update",
+    "updateAllDialog:message": "Are you sure you want to update all applications?<br><br>The applications will be updated right after the current programming finishes.",
+    "updateAllDialog:yes": "Update applications",
+    "updateAllDialog:no": "Cancel"
   },
   "pl": true
 }

@@ -62,9 +62,19 @@ define([
       },
       'click .action-update': function(e)
       {
+        var model = this.getModelFromEvent(e);
+
+        if (!e.originalEvent)
+        {
+          e.currentTarget.classList.add('disabled');
+
+          this.socket.emit('xiconf.update', {socket: model.get('socket')});
+
+          return false;
+        }
+
         e.currentTarget.blur();
 
-        var model = this.getModelFromEvent(e);
         var dialogView = new DialogView({
           template: updateDialogTemplate,
           model: {
