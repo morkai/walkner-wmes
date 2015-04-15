@@ -377,6 +377,10 @@ exports.start = function startUserModule(app, module)
       {
         ip = addressData.conn.remoteAddress;
       }
+      else if (typeof addressData.address === 'string')
+      {
+        ip = addressData.address;
+      }
     }
 
     if (ip === '')
