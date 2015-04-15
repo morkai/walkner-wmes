@@ -117,8 +117,22 @@ define([
 
     canChangeStatus: function()
     {
-      return this.get('finishedAt') !== null
-        && (user.isAllowedTo('PROD_DATA:MANAGE') || user.isAllowedTo('PROD_DOWNTIMES:MANAGE'));
+      if (!this.get('finishedAt'))
+      {
+        return false;
+      }
+
+      if (user.isAllowedTo('PROD_DATA:MANAGE'))
+      {
+        return true;
+      }
+
+      if (!user.isAllowedTo('PROD_DOWNTIMES:MANAGE'))
+      {
+        return false;
+      }
+
+      return this.get('status') !== 'confirmed';
     }
 
   }, {
