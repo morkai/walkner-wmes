@@ -7,13 +7,15 @@ define([
   '../time',
   '../i18n',
   '../core/Model',
-  '../xiconf/util/serializeXiconfLicenseFeatures'
+  '../xiconf/util/serializeXiconfLicenseFeatures',
+  '../licenses/util/compareVersions'
 ], function(
   _,
   time,
   t,
   Model,
-  serializeXiconfLicenseFeatures
+  serializeXiconfLicenseFeatures,
+  compareVersions
 ) {
   'use strict';
 
@@ -27,7 +29,7 @@ define([
 
     nlsDomain: 'xiconfClients',
 
-    serialize: function()
+    serialize: function(options)
     {
       var obj = this.toJSON();
 
@@ -71,6 +73,15 @@ define([
       obj.shortLicense = '<span class="' + licenseClass + '" title="' + licenseTitle + '">'
         + obj.license.substr(0, 4) + '...' + obj.license.substr(-4)
         + '</span>';
+
+      obj.appVersionCmp = compareVersions(obj.appVersion, options.appVersion);
+
+      if (options && options.appVersion && obj.appVersion && obj.appVersionCmp === -1)
+      {
+        obj.appVersion = '<span class="licenses-version licenses-invalid" title="&lt; ' + options.appVersion + '">'
+          + obj.appVersion
+          + '</span>';
+      }
 
       return obj;
     }

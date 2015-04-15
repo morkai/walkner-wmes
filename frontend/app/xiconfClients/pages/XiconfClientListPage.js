@@ -4,12 +4,16 @@
 
 define([
   'app/i18n',
+  'app/core/util/bindLoadingMessage',
   'app/core/pages/FilteredListPage',
+  'app/xiconf/XiconfSettingCollection',
   '../views/XiconfClientListView',
   '../views/XiconfClientFilterView'
 ], function(
   t,
+  bindLoadingMessage,
   FilteredListPage,
+  XiconfSettingCollection,
   XiconfClientListView,
   XiconfClientFilterView
 ) {
@@ -31,6 +35,28 @@ define([
     actions: function()
     {
       return [];
+    },
+
+    defineModels: function()
+    {
+      this.collection = bindLoadingMessage(this.collection, this);
+      this.settings = bindLoadingMessage(new XiconfSettingCollection(null, {pubsub: this.pubsub}), this);
+    },
+
+    createListView: function()
+    {
+      return new XiconfClientListView({
+        collection: this.collection,
+        settings: this.settings
+      });
+    },
+
+    load: function(when)
+    {
+      return when(
+        this.collection.fetch({reset: true}),
+        this.settings.fetch({reset: true})
+      );
     }
 
   });

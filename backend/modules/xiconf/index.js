@@ -18,6 +18,7 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   licensesId: 'licenses',
   mailSenderId: 'mail/sender',
+  settingsId: 'settings',
   featureDbPath: './',
   zipStoragePath: './',
   ordersImportPath: './',
@@ -38,7 +39,8 @@ exports.start = function startXiconfModule(app, module)
       config.mongooseId,
       config.userId,
       config.expressId,
-      config.sioId
+      config.sioId,
+      config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );

@@ -7,7 +7,8 @@ define([
   '../viewport',
   '../user',
   'i18n!app/nls/xiconf',
-  'i18n!app/nls/xiconfClients'
+  'i18n!app/nls/xiconfClients',
+  'i18n!app/nls/licenses'
 ], function(
   router,
   viewport,

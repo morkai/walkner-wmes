@@ -23,6 +23,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   var express = app[xiconfModule.config.expressId];
   var mongoose = app[xiconfModule.config.mongooseId];
   var userModule = app[xiconfModule.config.userId];
+  var settings = app[xiconfModule.config.settingsId];
   var Order = mongoose.model('Order');
   var XiconfClient = mongoose.model('XiconfClient');
   var XiconfResult = mongoose.model('XiconfResult');
@@ -31,6 +32,23 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   var canView = userModule.auth('XICONF:VIEW');
   var canManage = userModule.auth('XICONF:MANAGE');
+
+  express.get(
+    '/xiconf/settings',
+    canView,
+    function limitToXiconfSettings(req, res, next)
+    {
+      req.rql.selector = {
+        name: 'regex',
+        args: ['_id', '^xiconf\\.']
+      };
+
+      return next();
+    },
+    express.crud.browseRoute.bind(null, app, settings.Setting)
+  );
+
+  express.put('/xiconf/settings/:id', canManage, settings.updateRoute);
 
   express.post('/xiconf;import', importResultsRoute.bind(null, app, xiconfModule));
 

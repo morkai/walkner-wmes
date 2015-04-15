@@ -1,7 +1,8 @@
 .licenses-id {
   font-family: Consolas, monospace;
 }
-.licenses-id[title] {
+.licenses-id[title],
+.licenses-version[title] {
   cursor: help;
 }
 .licenses-invalid {

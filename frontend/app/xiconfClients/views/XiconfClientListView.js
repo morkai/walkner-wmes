@@ -11,8 +11,7 @@ define([
   'app/core/views/ListView',
   'app/core/views/DialogView',
   'app/xiconfClients/templates/restartDialog',
-  'app/xiconfClients/templates/updateDialog',
-  'i18n!app/nls/licenses'
+  'app/xiconfClients/templates/updateDialog'
 ], function(
   _,
   t,
@@ -148,6 +147,13 @@ define([
 
         return actions;
       };
+    },
+
+    serializeRows: function()
+    {
+      return this.collection.invoke('serialize', {
+        appVersion: this.settings.getValue('appVersion')
+      });
     }
 
   });
