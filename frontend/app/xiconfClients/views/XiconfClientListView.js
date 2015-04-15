@@ -126,7 +126,7 @@ define([
           id: 'update',
           icon: 'forward',
           label: t.bound('xiconfClients', 'list:update'),
-          className: connected ? '' : 'disabled'
+          className: !connected || row.appVersionCmp !== -1 ? 'disabled' : ''
         }];
 
         if (canManage)
