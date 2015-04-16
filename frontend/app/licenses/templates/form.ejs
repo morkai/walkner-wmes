@@ -1,0 +1,39 @@
+<form class="licenses-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-_id" class="control-label"><%- t('licenses', 'PROPERTY:_id') %></label>
+        <% if (editMode) { %>
+        <p class="form-control-static"><%= model._id %></p>
+        <% } else { %>
+        <input id="<%- idPrefix %>-_id" class="form-control" type="text" name="_id">
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-appId" class="control-label is-required"><%- t('licenses', 'PROPERTY:appId') %></label>
+        <input id="<%- idPrefix %>-appId" class="form-control" type="text" name="appId" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-appVersion" class="control-label"><%- t('licenses', 'PROPERTY:appVersion') %></label>
+        <input id="<%- idPrefix %>-appVersion" class="form-control" type="text" name="appVersion">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-date" class="control-label"><%- t('licenses', 'PROPERTY:date') %></label>
+        <input id="<%- idPrefix %>-date" class="form-control" type="text" name="date" placeholder="YYYY-MM-DD">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-licensee" class="control-label is-required"><%- t('licenses', 'PROPERTY:licensee') %></label>
+        <input id="<%- idPrefix %>-licensee" class="form-control" type="text" name="licensee" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-features" class="control-label is-required"><%- t('licenses', 'PROPERTY:features') %></label>
+        <input id="<%- idPrefix %>-features" class="form-control" type="number" name="features" required min="0">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

@@ -184,5 +184,11 @@
   "TYPE:xiconf.orders.synced": "Xiconf: synchronizacja zleceń",
   "TEXT:xiconf.orders.synced": "Dodano <em>{insertCount}</em> i zmodyfikowano <em>{updateCount}</em> {updateCount, plural, one{zlecenie} few{zlecenia} other{zleceń}} z danych pobranych <em>{timestamp}</em>.",
   "TYPE:xiconf.orders.syncFailed": "Xiconf: nieudana synchronizacja zleceń",
-  "TEXT:xiconf.orders.syncFailed": "Nie udało się zaimportować danych z <em>{timestamp}</em>: {error}"
+  "TEXT:xiconf.orders.syncFailed": "Nie udało się zaimportować danych z <em>{timestamp}</em>: {error}",
+  "TYPE:licenses.added": "Licencje: dodanie",
+  "TEXT:licenses.added": "Dodano licencję: <a href='\\#licenses/{model->_id}'>{model->_id}</a>",
+  "TYPE:licenses.edited": "Licencje: edycja",
+  "TEXT:licenses.edited": "Zmodyfikowano licencję: <a href='\\#licenses/{model->_id}'>{model->_id}</a>",
+  "TYPE:licenses.deleted": "Licencje: usunięcie",
+  "TEXT:licenses.deleted": "Usunięto licencję: <em>{model->_id}</em>"
 }

@@ -4,8 +4,24 @@
 
     "MSG:LOADING_FAILURE": "Failed to load the licenses :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the licenses :(",
+    "MSG:DELETED": "License <em>{label}</em> was deleted.",
 
-    "PROPERTY:": "",
+    "PAGE_ACTION:add": "Add license",
+    "PAGE_ACTION:edit": "Edit license",
+    "PAGE_ACTION:delete": "Delete license",
+
+    "PANEL:TITLE:details": "License details",
+    "PANEL:TITLE:addForm": "License add form",
+    "PANEL:TITLE:editForm": "License edit form",
+
+    "PROPERTY:_id": "License ID",
+    "PROPERTY:appId": "App ID",
+    "PROPERTY:appName": "App name",
+    "PROPERTY:appVersion": "App version",
+    "PROPERTY:date": "Issue date",
+    "PROPERTY:features": "Features",
+    "PROPERTY:licensee": "Licensee",
+    "PROPERTY:key": "License key",
 
     "filter:submit": "Filter licenses",
 
@@ -20,7 +36,11 @@
     "error:APP_ID": "Current license was not issued to the running application.",
     "error:APP_VERSION": "Current license does not support the currently running version of the application.",
     "error:UNKNOWN_LICENSE": "Current license was not recognized by the remote server.",
-    "error:DUPLICATE_LICENSE": "The remote server detected duplicate licenses in use."
+    "error:DUPLICATE_LICENSE": "The remote server detected duplicate licenses in use.",
+
+    "app:msys-xiconf-lp": "Xiconf Label Printer",
+    "app:walkner-xiconf": "Walkner Xiconf",
+    "app:walkner-icpo": "Walkner ICPO"
   },
   "pl": true
 }

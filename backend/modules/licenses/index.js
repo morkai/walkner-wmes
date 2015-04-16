@@ -5,6 +5,7 @@
 'use strict';
 
 var setUpRoutes = require('./routes');
+var generateLicenseKey = require('./generateLicenseKey');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -35,6 +36,8 @@ exports.start = function startLicensesModule(app, module)
       module.licenseEdKey = ursa.createPrivateKey(config.licenseEd.pem);
     }
   }
+
+  module.generateLicenseKey = generateLicenseKey.bind(null, module.licenseEdKey);
 
   app.onModuleReady(
     [

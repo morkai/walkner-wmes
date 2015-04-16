@@ -3,11 +3,19 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/licenses/util/createLicenseFeaturesSerializer'
+  '../core/Collection',
+  './License'
 ], function(
-  createLicenseFeaturesSerializer
+  Collection,
+  License
 ) {
   'use strict';
 
-  return createLicenseFeaturesSerializer(['wmes', 'sol', 't24vdc', 'led']);
+  return Collection.extend({
+
+    model: License,
+
+    rqlQuery: 'limit(15)&sort(appId,date)'
+
+  });
 });

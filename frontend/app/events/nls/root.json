@@ -185,7 +185,13 @@
     "TYPE:xiconf.orders.synced": "Xiconf: order sync",
     "TEXT:xiconf.orders.synced": "Added <em>{insertCount}</em> and modified <em>{updateCount}</em> {updateCount, plural, one{order} other{orders}} from data downloaded at <em>{timestamp}</em>.",
     "TYPE:xiconf.orders.syncFailed": "Xiconf: order sync failure",
-    "TEXT:xiconf.orders.syncFailed": "Failed to import orders from data downloaded at <em>{timestamp}</em>: {error}"
+    "TEXT:xiconf.orders.syncFailed": "Failed to import orders from data downloaded at <em>{timestamp}</em>: {error}",
+    "TYPE:licenses.added": "Licenses: added",
+    "TEXT:licenses.added": "Added license: <a href='\\#licenses/{model->_id}'>{model->_id}</a>.",
+    "TYPE:licenses.edited": "Licenses: edycja",
+    "TEXT:licenses.edited": "Edited license: <a href='\\#licenses/{model->_id}'>{model->_id}</a>",
+    "TYPE:licenses.deleted": "Licenses: deleted",
+    "TEXT:licenses.deleted": "Deleted license: <em>{model->_id}</em>"
   },
   "pl": true
 }

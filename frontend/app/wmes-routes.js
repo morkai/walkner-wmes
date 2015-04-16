@@ -37,7 +37,8 @@ define([
   './xiconfPrograms/routes',
   './xiconfClients/routes',
   './icpo/routes',
-  './factoryLayout/routes'
+  './factoryLayout/routes',
+  './licenses/routes'
 ], function()
 {
   'use strict';

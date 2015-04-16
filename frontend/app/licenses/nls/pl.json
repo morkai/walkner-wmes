@@ -1,12 +1,34 @@
 {
   "BREADCRUMBS:browse": "Licencje",
+  "BREADCRUMBS:addForm": "Dodawanie",
+  "BREADCRUMBS:editForm": "Edycja",
+  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
   "MSG:LOADING_FAILURE": "Ładowanie licencji nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie licencji nie powiodło się :(",
+  "MSG:DELETED": "Licencja <em>{label}</em> została usunięta.",
 
-  "PROPERTY:": "",
+  "PAGE_ACTION:add": "Dodaj licencję",
+  "PAGE_ACTION:edit": "Edytuj licencję",
+  "PAGE_ACTION:delete": "Usuń licencję",
+
+  "PANEL:TITLE:details": "Szczegóły licencji",
+  "PANEL:TITLE:addForm": "Formularz dodawania licencji",
+  "PANEL:TITLE:editForm": "Formularz modyfikacji licencji",
+
+  "PROPERTY:_id": "ID licencji",
+  "PROPERTY:appId": "ID aplikacji",
+  "PROPERTY:appName": "Aplikacja",
+  "PROPERTY:appVersion": "Wersja aplikacji",
+  "PROPERTY:date": "Data wydania",
+  "PROPERTY:features": "Opcje",
+  "PROPERTY:licensee": "Licencjobiorca",
+  "PROPERTY:key": "Klucz licencyjny",
 
   "filter:submit": "Filtruj licencje",
+
+  "FORM:ACTION:add": "Dodaj licencję",
+  "FORM:ACTION:edit": "Edytuj licencję",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia licencji",
   "ACTION_FORM:BUTTON:delete": "Usuń licencję",
@@ -19,5 +41,9 @@
   "error:APP_ID": "Ustawiona licencja nie została przydzielona do uruchomionej aplikacji.",
   "error:APP_VERSION": "Ustawiona licencja nie obejmuje aktualnie uruchomionej wersji aplikacji.",
   "error:UNKNOWN_LICENSE": "Licencja nie została rozpoznana przez zewnętrzy serwer.",
-  "error:DUPLICATE_LICENSE": "Zewnętrzny serwer wykrył zduplikowane licencje."
+  "error:DUPLICATE_LICENSE": "Zewnętrzny serwer wykrył zduplikowane licencje.",
+
+  "app:msys-xiconf-lp": "Xiconf Label Printer",
+  "app:walkner-xiconf": "Walkner Xiconf",
+  "app:walkner-icpo": "Walkner ICPO"
 }

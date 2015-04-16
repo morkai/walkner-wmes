@@ -4,6 +4,8 @@
 
 'use strict';
 
+var _ = require('lodash');
+var uuid = require('node-uuid');
 var moment = require('moment');
 
 module.exports = function setUpLicensesRoutes(app, licensesModule)
@@ -14,16 +16,27 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
   var License = mongoose.model('License');
   var LicensePing = mongoose.model('LicensePing');
 
-  var canView = userModule.auth('LICENSES:VIEW');
+  var canView = userModule.auth('DICTIONARIES:VIEW');
   var canManage = userModule.auth('LICENSES:MANAGE');
 
   express.get('/licenses', canView, express.crud.browseRoute.bind(null, app, License));
 
-  express.post('/licenses', canManage, express.crud.addRoute.bind(null, app, License));
+  express.post('/licenses',
+    canManage,
+    prepareLicenseForAdd,
+    generateLicenseKey,
+    express.crud.addRoute.bind(null, app, License)
+  );
 
   express.get('/licenses/:id', canView, express.crud.readRoute.bind(null, app, License));
 
-  express.put('/licenses/:id', canManage, express.crud.editRoute.bind(null, app, License));
+  express.put(
+    '/licenses/:id',
+    canManage,
+    prepareLicenseForEdit,
+    generateLicenseKey,
+    express.crud.editRoute.bind(null, app, License)
+  );
 
   express.post('/licenses/:id;ping', pingRoute);
 
@@ -124,5 +137,50 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
         );
       }
     });
+  }
+
+  function prepareLicenseForAdd(req, res, next)
+  {
+    if (_.isEmpty(req.body._id))
+    {
+      req.body._id = uuid.v4().toUpperCase();
+    }
+
+    prepareLicenseDate(req.body);
+
+    return next();
+  }
+
+  function prepareLicenseForEdit(req, res, next)
+  {
+    delete req.body._id;
+
+    prepareLicenseDate(req.body);
+
+    return next();
+  }
+
+  function prepareLicenseDate(license)
+  {
+    if (_.isString(license.date) && /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(license.date))
+    {
+      license.date = moment(license.date, 'YYYY-MM-DD').toDate();
+    }
+  }
+
+  function generateLicenseKey(req, res, next)
+  {
+    try
+    {
+      req.body.key = licensesModule.generateLicenseKey(req.body);
+    }
+    catch (err)
+    {
+      res.status(400);
+
+      return next(err);
+    }
+
+    return next();
   }
 };
