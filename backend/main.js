@@ -60,6 +60,8 @@ var app = {
   })
 };
 
+_.merge(app, require('./helpers'));
+
 blocked(function(ms)
 {
   app.debug("Event loop blocked for %sms :(", ms);

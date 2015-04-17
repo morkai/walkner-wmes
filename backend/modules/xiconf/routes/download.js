@@ -5,9 +5,8 @@
 'use strict';
 
 var path = require('path');
-var moment = require('moment');
 
-module.exports = function downloadRoute(file, xiconfModule, XiconfResult, req, res, next)
+module.exports = function downloadRoute(file, app, xiconfModule, XiconfResult, req, res, next)
 {
   var fields = {
     startedAt: 1
@@ -35,9 +34,8 @@ module.exports = function downloadRoute(file, xiconfModule, XiconfResult, req, r
       return res.sendStatus(404);
     }
 
-    var startedAtMoment = moment(xiconfResult.startedAt);
-    var suffix = '_' + startedAtMoment.format('YYYY-MM-DD');
-    var startedAtHour = startedAtMoment.hour();
+    var suffix = '_' + app.formatDate(xiconfResult.startedAt);
+    var startedAtHour = xiconfResult.startedAt.getHours();
 
     if (startedAtHour >= 6 && startedAtHour < 14)
     {

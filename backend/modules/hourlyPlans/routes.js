@@ -5,7 +5,6 @@
 'use strict';
 
 var _ = require('lodash');
-var moment = require('moment');
 var canManage = require('./canManage');
 
 module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
@@ -62,7 +61,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   function exportHourlyPlan(doc)
   {
     var rows = [];
-    var date = moment(doc.date).format('YYYY-MM-DD');
+    var date = app.formatDate(doc.date);
 
     _.forEach(doc.flows, function(flow)
     {

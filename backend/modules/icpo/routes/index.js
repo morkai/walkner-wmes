@@ -6,7 +6,6 @@
 
 var fs = require('fs');
 var path = require('path');
-var moment = require('moment');
 var step = require('h5.step');
 var importRoute = require('./import');
 var downloadRoute = require('./download');
@@ -98,17 +97,12 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
       '"result': doc.result,
       '"errorCode': doc.errorCode,
       '"exception': doc.exception,
-      'startedAt': formatTime(doc.startedAt),
-      'finishedAt': formatTime(doc.finishedAt),
+      'startedAt': app.formatDateTime(doc.startedAt),
+      'finishedAt': app.formatDateTime(doc.finishedAt),
       '#duration': (doc.finishedAt - doc.startedAt) / 1000,
       '"srcIp': doc.srcIp,
       '"srcUuid': doc.srcUuid
     };
-  }
-
-  function formatTime(date)
-  {
-    return moment(date).format('YYYY-MM-DD HH:mm:ss');
   }
 
   function readFiles(icpoResult, done)

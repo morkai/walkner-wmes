@@ -5,9 +5,8 @@
 'use strict';
 
 var _ = require('lodash');
-var moment = require('moment');
 
-module.exports = function exportFteMasterEntries(subdivisionsModule, queryStream, emitter)
+module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryStream, emitter)
 {
   var docs = [];
   var prodFunctionMap = {};
@@ -83,7 +82,7 @@ module.exports = function exportFteMasterEntries(subdivisionsModule, queryStream
 
   function exportNext(doc)
   {
-    var date = moment(doc.date).format('YYYY-MM-DD');
+    var date = app.formatDate(doc.date);
     var subdivision = subdivisionsModule.modelsById[doc.subdivision];
     var division = subdivision ? subdivision.division : '?';
 

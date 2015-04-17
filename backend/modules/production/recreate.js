@@ -148,8 +148,8 @@ module.exports = function(app, productionModule, done)
 
           productionModule.info(
             "Recreating the prod log entries from %s to %s...",
-            fromMoment.format('YYYY-MM-DD'),
-            moment(maxTime).format('YYYY-MM-DD')
+            app.formatDate(fromMoment.toDate()),
+            app.formatDate(maxTime)
           );
 
           var steps = [];
@@ -234,7 +234,7 @@ module.exports = function(app, productionModule, done)
   {
     return function handleWeekOfLogEntriesStep()
     {
-      var week = moment(from).format('YYYY-MM-DD');
+      var week = app.formatDate(from);
 
       productionModule.info("Recreating week %s...", week);
 

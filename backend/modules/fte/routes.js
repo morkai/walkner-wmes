@@ -40,7 +40,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
     },
     express.crud.exportRoute.bind(null, {
       filename: 'WMES-FTE_PRODUCTION',
-      serializeStream: exportFteMasterEntries.bind(null, subdivisionsModule),
+      serializeStream: exportFteMasterEntries.bind(null, app, subdivisionsModule),
       model: FteMasterEntry
     })
   );
@@ -72,7 +72,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
     },
     express.crud.exportRoute.bind(null, {
       filename: 'WMES-FTE_WAREHOUSE',
-      serializeStream: exportFteLeaderEntries.bind(null, subdivisionsModule),
+      serializeStream: exportFteLeaderEntries.bind(null, app, subdivisionsModule),
       model: FteLeaderEntry
     })
   );

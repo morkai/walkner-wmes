@@ -135,8 +135,8 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           }
 
           prodLineMap[pso.prodLine].times.push({
-            from: moment(pso.startedAt).format('YYYY-MM-DD, HH:mm:ss'),
-            to: moment(pso.finishedAt).format('HH:mm:ss'),
+            from: app.formatDateTime(pso.startedAt),
+            to: app.formatTime(pso.finishedAt),
             qty: qty
           });
 

@@ -160,9 +160,9 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   function calcShiftMetrics(settings, shiftNo, shiftMoment, done)
   {
-    module.debug("Calculating metrics for shift [%s, %d]...", shiftMoment.format('YYYY-MM-DD'), shiftNo);
-
     var shiftDate = shiftMoment.toDate();
+
+    module.debug("Calculating metrics for shift [%s, %d]...", app.formatDate(shiftDate), shiftNo);
 
     step(
       function findModelsStep()

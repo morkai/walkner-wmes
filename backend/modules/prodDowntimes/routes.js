@@ -218,8 +218,6 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
     var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
     var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
 
-    var corroboratedAt = doc.corroboratedAt ? moment(doc.corroboratedAt) : null;
-
     return {
       '#rid': doc.rid,
       '"reasonId': doc.reason,
@@ -229,16 +227,16 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
       '"orderNo': doc.mechOrder ? '' : doc.orderId,
       '"12nc': doc.mechOrder ? doc.orderId : '',
       '"operationNo': doc.operationNo,
-      'date': moment(doc.date).format('YYYY-MM-DD'),
+      'date': app.formatDate(doc.date),
       '#shift': doc.shift,
-      'startedAt': startedAt.format('YYYY-MM-DD HH:mm:ss'),
-      'finishedAt': finishedAt.format('YYYY-MM-DD HH:mm:ss'),
+      'startedAt': app.formatDateTime(startedAt.toDate()),
+      'finishedAt': app.formatDateTime(finishedAt.toDate()),
       '#duration': duration,
       '"master': exportUserInfo(doc.master),
       '"leader': exportUserInfo(doc.leader),
       '"operator': exportUserInfo(doc.operator),
       '"corroborator': exportUserInfo(doc.corroborator),
-      'corroboratedAt': corroboratedAt ? corroboratedAt.format('YYYY-MM-DD HH:mm:ss') : '',
+      'corroboratedAt': doc.corroboratedAt ? app.formatDateTime(doc.corroboratedAt) : '',
       '"status': doc.status,
       '"decisionComment': doc.decisionComment,
       '"division': doc.division,

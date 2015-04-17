@@ -40,30 +40,28 @@ exports.start = function startClipOrderCountModule(app, module)
     return moment().hours(0).minutes(0).seconds(0).milliseconds(0).subtract(1, 'days').toDate();
   }
 
-  function formatDate(date)
-  {
-    return moment(date).format('YYYY-MM-DD');
-  }
-
   function scheduleClipOrderCountCheck()
   {
-    if (new Date().getHours() > module.config.syncHour)
+    var now = new Date();
+
+    if (now.getHours() > module.config.syncHour)
     {
       checkClipOrderCount();
     }
 
-    var nextCheckMoment = moment()
+    var nowTime = now.getTime();
+    var nextCheckMoment = moment(now)
       .hours(module.config.syncHour + 1)
       .minutes(1)
       .seconds(0)
       .milliseconds(0)
       .add(1, 'days');
 
-    setTimeout(scheduleClipOrderCountCheck, nextCheckMoment.diff(Date.now()));
+    setTimeout(scheduleClipOrderCountCheck, nextCheckMoment.diff(nowTime));
 
     module.debug(
       "Scheduled the next CLIP order count check to be at [%s]",
-      nextCheckMoment.format('YYYY-MM-DD HH:mm:ss')
+      app.formatDateTime(nextCheckMoment.toDate())
     );
   }
 
@@ -72,7 +70,7 @@ exports.start = function startClipOrderCountModule(app, module)
     var startDate = yesterday();
 
     module.debug(
-      "Checking the CLIP order count for [%s]...", formatDate(startDate)
+      "Checking the CLIP order count for [%s]...", app.formatDate(startDate)
     );
 
     ClipOrderCount.count({date: startDate}, function(err, count)
@@ -80,7 +78,7 @@ exports.start = function startClipOrderCountModule(app, module)
       if (err)
       {
         return module.error(
-          "Failed to count ClipOrderCount for [%s]: %s", formatDate(startDate), err.message
+          "Failed to count ClipOrderCount for [%s]: %s", app.formatDate(startDate), err.message
         );
       }
 
@@ -98,7 +96,7 @@ exports.start = function startClipOrderCountModule(app, module)
       startDate = yesterday();
     }
 
-    module.debug("Preparing CLIP for [%s]...", formatDate(startDate));
+    module.debug("Preparing CLIP for [%s]...", app.formatDate(startDate));
 
     step(
       function()
@@ -195,12 +193,12 @@ exports.start = function startClipOrderCountModule(app, module)
         return module.error(
           "Failed to create %d ClipOrderCounts for [%s]: %s",
           models.length,
-          formatDate(startDate),
+          app.formatDate(startDate),
           err.stack
         );
       }
 
-      module.info("Created %d new ClipOrderCounts for [%s]", models.length, formatDate(startDate));
+      module.info("Created %d new ClipOrderCounts for [%s]", models.length, app.formatDate(startDate));
 
       app.broker.publish('clipOrderCount.created', {
         date: startDate,

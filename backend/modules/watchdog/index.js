@@ -34,12 +34,10 @@ exports.start = function startWatchdogModule(app, watchdogModule)
         checkWindow: Math.round((event.checkDelay || 30) * 1.5)
       });
 
-      var nextOccurenceAt = moment(later.schedule(event.schedule).next(1));
-
       watchdogModule.debug(
         "[%s] Setting up... next occurrence at %s!",
         event.id,
-        nextOccurenceAt.format('YY-MM-DD, HH:mm:ss')
+        app.formatDateTime(later.schedule(event.schedule).next(1))
       );
 
       later.setInterval(scheduleEventCheck.bind(null, event), event.schedule);
@@ -102,7 +100,7 @@ exports.start = function startWatchdogModule(app, watchdogModule)
         event.type,
         event.checkWindow
       ),
-      format("The last occurrence was at %s.", moment(lastOccurrenceAt).format('YYYY-MM-DD, HH:mm:ss')),
+      format("The last occurrence was at %s.", app.formatDateTime(lastOccurrenceAt)),
       "",
       "This message was generated automatically.",
       "Sincerely, WMES Bot"
@@ -189,7 +187,7 @@ exports.start = function startWatchdogModule(app, watchdogModule)
         "  - %dx %s @ %s",
         appRestart.count,
         appId,
-        moment(appRestart.time).format('YYYY-MM-DD, HH:mm:ss')
+        app.formatDateTime(appRestart.time)
       ));
     });
 

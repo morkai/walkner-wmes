@@ -4,7 +4,6 @@
 
 'use strict';
 
-var moment = require('moment');
 var importRoute = require('./importRoute');
 
 module.exports = function setUpWarehouseRoutes(app, whModule)
@@ -36,10 +35,10 @@ module.exports = function setUpWarehouseRoutes(app, whModule)
     return {
       '"orderNo': doc._id.no,
       '"itemNo': doc._id.item,
-      'date': moment(doc.shiftDate).format('YYYY-MM-DD'),
+      'date': app.formatDate(doc.shiftDate),
       'shiftNo': shiftHour === 6 ? 1 : shiftHour === 14 ? 2 : 3,
       '"plant': doc.plant,
-      confirmedAt: moment(doc.confirmedAt).format('YYYY-MM-DD HH:mm:ss'),
+      confirmedAt: app.formatDateTime(doc.confirmedAt),
       '"nc12': doc.nc12,
       '"name': doc.name,
       '#srcType': doc.srcType,

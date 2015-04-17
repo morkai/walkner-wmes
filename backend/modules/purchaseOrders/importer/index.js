@@ -7,7 +7,6 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
-var moment = require('moment');
 var step = require('h5.step');
 var comparePoList = require('./comparePoList');
 var parsers = {
@@ -266,7 +265,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
       module.debug(
         "Parsing step [%d] received at [%s]...",
         fileInfo.step,
-        moment(importedAt).format('YYYY-MM-DD HH:mm:ss')
+        app.formatDateTime(importedAt)
       );
 
       var next = this.next();

@@ -7,7 +7,6 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
-var moment = require('moment');
 var step = require('h5.step');
 var importResultsRoute = require('./importResults');
 var importOrdersRoute = require('./importOrders');
@@ -101,13 +100,13 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   express.get(
     '/xiconf/results/:id;workflow',
     canView,
-    downloadRoute.bind(null, 'workflow', xiconfModule, XiconfResult)
+    downloadRoute.bind(null, 'workflow', app, xiconfModule, XiconfResult)
   );
 
   express.get(
     '/xiconf/results/:id;feature',
     canView,
-    downloadRoute.bind(null, 'feature', xiconfModule, XiconfResult)
+    downloadRoute.bind(null, 'feature', app, xiconfModule, XiconfResult)
   );
 
   express.get(
@@ -184,11 +183,11 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       '"result': doc.result,
       '"errorCode': doc.errorCode,
       '"exception': doc.exception,
-      'startedAt': formatTime(doc.startedAt),
-      'finishedAt': formatTime(doc.finishedAt),
+      'startedAt': app.formatDateTime(doc.startedAt),
+      'finishedAt': app.formatDateTime(doc.finishedAt),
       '#duration': (doc.finishedAt - doc.startedAt) / 1000,
-      'orderStartedAt': doc.order ? formatTime(doc.order.startedAt) : null,
-      'orderFinishedAt': doc.order ? formatTime(doc.order.finishedAt) : null,
+      'orderStartedAt': doc.order ? app.formatDateTime(doc.order.startedAt) : null,
+      'orderFinishedAt': doc.order ? app.formatDateTime(doc.order.finishedAt) : null,
       '#orderDuration': doc.order ? ((doc.order.finishedAt - doc.order.startedAt) / 1000) : null,
       '#successCounter': doc.order ? doc.order.successCounter : null,
       '#failureCounter': doc.order ? doc.order.failureCounter : null,
@@ -208,18 +207,13 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       '#quantityTodo': doc.quantityTodo,
       '#quantityDone': doc.quantityDone,
       '"status': doc.status,
-      'startDate': moment(doc.startDate).format('YYYY-MM-DD'),
-      'finishDate': moment(doc.finishDate).format('YYYY-MM-DD'),
-      'reqDate': moment(doc.reqDate).format('YYYY-MM-DD'),
-      'startedAt': formatTime(doc.startedAt),
-      'finishedAt': formatTime(doc.finishedAt),
+      'startDate': app.formatDate(doc.startDate),
+      'finishDate': app.formatDate(doc.finishDate),
+      'reqDate': app.formatDate(doc.reqDate),
+      'startedAt': app.formatDateTime(doc.startedAt),
+      'finishedAt': app.formatDateTime(doc.finishedAt),
       '#duration': doc.finishedAt ? ((doc.finishedAt - doc.startedAt) / 1000) : 0
     };
-  }
-
-  function formatTime(date)
-  {
-    return date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
   }
 
   function readFeatureFile(xiconfResult, done)
