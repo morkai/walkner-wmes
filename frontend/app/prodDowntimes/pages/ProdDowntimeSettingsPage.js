@@ -7,15 +7,13 @@ define([
   'app/data/orgUnits',
   'app/core/View',
   '../ProdDowntimeSettingCollection',
-  '../views/ProdDowntimeSettingsView',
-  'app/prodTasks/ProdTaskCollection'
+  '../views/ProdDowntimeSettingsView'
 ], function(
   t,
   orgUnits,
   View,
   ProdDowntimeSettingCollection,
-  ProdDowntimeSettingsView,
-  ProdTaskCollection
+  ProdDowntimeSettingsView
 ) {
   'use strict';
 

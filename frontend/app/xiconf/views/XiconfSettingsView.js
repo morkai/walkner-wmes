@@ -3,11 +3,9 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'underscore',
   'app/settings/views/SettingsView',
   'app/xiconf/templates/settings'
 ], function(
-  _,
   SettingsView,
   template
 ) {
@@ -17,21 +15,7 @@ define([
 
     clientUrl: '#xiconf;settings',
 
-    template: template,
-
-    events: _.extend({
-
-    }, SettingsView.prototype.events),
-
-    afterRender: function()
-    {
-      SettingsView.prototype.afterRender.call(this);
-    },
-
-    updateSettingField: function(setting)
-    {
-
-    }
+    template: template
 
   });
 });

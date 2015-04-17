@@ -3,8 +3,10 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/time',
   'app/core/views/ListView'
 ], function(
+  time,
   ListView
 ) {
   'use strict';
