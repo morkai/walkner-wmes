@@ -45,6 +45,11 @@ define([
         icon: 'forward',
         privileges: 'XICONF:MANAGE',
         callback: this.updateAll.bind(this)
+      }, {
+        label: t.bound('xiconfClients', 'page:settings'),
+        icon: 'cogs',
+        privileges: 'XICONF:MANAGE',
+        href: '#xiconf;settings?tab=clients'
       }];
     },
 

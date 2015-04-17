@@ -15,6 +15,7 @@ define([
   'use strict';
 
   var canView = user.auth('XICONF:VIEW');
+  var canManage = user.auth('XICONF:MANAGE');
 
   router.map('/xiconf/results', canView, function(req)
   {
@@ -36,5 +37,15 @@ define([
         });
       }
     );
+  });
+
+  router.map('/xiconf;settings', canManage, function(req)
+  {
+    viewport.loadPage('app/xiconf/pages/XiconfSettingsPage', function(XiconfSettingsPage)
+    {
+      return new XiconfSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
   });
 });

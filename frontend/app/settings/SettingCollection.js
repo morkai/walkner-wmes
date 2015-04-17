@@ -52,7 +52,7 @@ define([
 
     update: function(id, newValue)
     {
-      newValue = this.prepareValue(id, newValue.trim());
+      newValue = this.prepareValue(id, typeof newValue === 'string' ? newValue.trim() : newValue);
 
       if (newValue === undefined)
       {

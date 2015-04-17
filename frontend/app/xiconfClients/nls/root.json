@@ -21,6 +21,7 @@
     "status:offline": "Offline",
 
     "page:update": "Update apps",
+    "page:settings": "Change settings",
 
     "list:goToDashboard": "Go to dashboard",
     "list:goToSettings": "Go to settings",

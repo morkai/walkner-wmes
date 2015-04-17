@@ -10,6 +10,7 @@
     "PANEL:TITLE:details:order": "Xiconf order details",
 
     "PAGE_ACTION:export": "Export orders",
+    "PAGE_ACTION:settings": "Change settings",
 
     "PROPERTY:reqDate": "Date",
     "PROPERTY:startedAt": "Started at",

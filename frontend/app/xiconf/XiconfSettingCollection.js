@@ -28,9 +28,32 @@ define([
 
     prepareValue: function(id, newValue)
     {
+      if (typeof newValue === 'boolean')
+      {
+        return newValue;
+      }
+
       if (/appVersion$/.test(id))
       {
         return this.prepareVersionValue(newValue);
+      }
+
+      if (/delay$/.test(id))
+      {
+        newValue = parseInt(newValue, 10);
+
+        return isNaN(newValue)
+          ? 15
+          : newValue < 1
+            ? 1
+            : newValue > 30
+              ? 30
+              : newValue;
+      }
+
+      if (/Filter$/.test(id))
+      {
+        return newValue;
       }
     },
 

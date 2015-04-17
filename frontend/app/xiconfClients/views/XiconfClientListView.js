@@ -98,6 +98,19 @@ define([
       }
     }, ListView.prototype.events),
 
+    initialize: function()
+    {
+      ListView.prototype.initialize.apply(this, arguments);
+
+      this.listenTo(this.settings, 'change', function(setting)
+      {
+        if (setting.id === 'xiconf.appVersion')
+        {
+          this.render();
+        }
+      });
+    },
+
     columns: [
       {id: '_id', className: 'is-min'},
       {id: 'prodLine', className: 'is-min'},

@@ -12,6 +12,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 {
   var mailSender = app[xiconfModule.config.mailSenderId];
   var mongoose = app[xiconfModule.config.mongooseId];
+  var settingsModule = app[xiconfModule.config.settingsId];
   var User = mongoose.model('User');
   var Order = mongoose.model('Order');
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
@@ -34,8 +35,24 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
   function checkOrderStatus(orderNo)
   {
     step(
-      function findOrdersStep()
+      function findSettingsStep()
       {
+        settingsModule.findValues({_id: /^xiconf\.notifier\./}, 'xiconf.notifier.', this.next());
+      },
+      function findOrdersStep(err, settings)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!settings.enabled)
+        {
+          return this.done();
+        }
+
+        this.settings = settings;
+
         var prodShiftOrderFields = {
           prodLine: 1,
           division: 1,
@@ -65,7 +82,12 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
         var hasAnyProgramItems = _.some(xiconfOrder.items, 'kind', 'program');
 
-        if (!hasAnyProgramItems && xiconfOrder.quantityDone === 0)
+        if (!this.settings.emptyLeds && !hasAnyProgramItems && xiconfOrder.quantityDone === 0)
+        {
+          return this.done();
+        }
+
+        if (filterOrderName(this.settings.nameFilter || '', order.name))
         {
           return this.done();
         }
@@ -395,5 +417,51 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
     }
 
     return str.substr(1);
+  }
+
+  function filterOrderName(nameFilter, name)
+  {
+    var nameFilters = nameFilter.split(/\n|;/);
+
+    for (var i = 0; i < nameFilters.length; ++i)
+    {
+      var pattern = nameFilters[i].trim();
+
+      if (!pattern.length)
+      {
+        continue;
+      }
+
+      if (pattern[0] === '/' && pattern.charAt(pattern.length - 1) === '/')
+      {
+        pattern = createPattern(pattern);
+
+        if (pattern && pattern.test(name))
+        {
+          return true;
+        }
+
+        continue;
+      }
+
+      if (name.indexOf(pattern) !== -1)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function createPattern(pattern)
+  {
+    try
+    {
+      return new RegExp(pattern.substr(1, pattern.length - 1), 'i');
+    }
+    catch (err)
+    {
+      return null;
+    }
   }
 };

@@ -18,6 +18,10 @@ define([
 
     clientUrl: '#settings',
     defaultTab: 'default',
+    updateSettingField: function(setting)
+    {
+      /*jshint unused:false*/
+    },
 
     events: {
       'click a[data-tab]': function(e)
@@ -53,7 +57,7 @@ define([
           this.scheduleUpdateSetting(el, 1200);
         }
       },
-      'change .form-control': function(e)
+      'change .form-control, input[type="checkbox"], input[type="radio"]': function(e)
       {
         this.scheduleUpdateSetting(e.target, 300);
       }
@@ -89,11 +93,28 @@ define([
     {
       this.$('.colorpicker-component').colorpicker();
 
+      var view = this;
       var formData = {};
 
       this.settings.forEach(function(setting)
       {
-        formData[setting.id] = String(setting.get('value'));
+        var value = setting.get('value');
+
+        if (Array.isArray(value))
+        {
+          var el = view.el.querySelector('input[name="' + setting.id + '"]');
+
+          if (el.tagName !== 'SELECT' && el.type !== 'checkbox')
+          {
+            value = String(value);
+          }
+        }
+        else
+        {
+          value = String(value);
+        }
+
+        formData[setting.id] = value;
       });
 
       js2form(this.el, formData);
@@ -123,35 +144,143 @@ define([
         return;
       }
 
-      var $el = this.$('.form-control[name="' + setting.id + '"]');
+      var $formControl = this.$('.form-control[name="' + setting.id + '"]');
 
-      if ($el.length)
+      if ($formControl.length)
       {
-        $el.val(setting.get('value') || '');
+        $formControl.val(setting.get('value') || '');
       }
 
-      var $parent = $el.parent();
+      var $parent = $formControl.parent();
 
       if ($parent.hasClass('colorpicker-component'))
       {
         $parent.colorpicker('setValue', setting.get('value'));
       }
 
-      if (!$el.length)
+      if ($formControl.length)
       {
-        this.updateSettingField(setting);
+        return;
+      }
+
+      var $inputs = this.$('input[name="' + setting.id + '"]');
+
+      if ($inputs.length)
+      {
+        if ($inputs[0].type === 'checkbox')
+        {
+          this.updateCheckboxSetting(setting, $inputs);
+
+          return;
+        }
+        else if ($inputs[0].type === 'radio')
+        {
+          this.updateRadioSetting(setting, $inputs);
+
+          return;
+        }
+      }
+
+      this.updateSettingField(setting);
+    },
+
+    updateCheckboxSetting: function(setting, $checkboxes)
+    {
+      var value = setting.get('value');
+
+      if ($checkboxes.length === 1)
+      {
+        $checkboxes[0].checked = !!value;
+      }
+      else
+      {
+        if (!Array.isArray(value))
+        {
+          value = value ? [value] : [];
+        }
+
+        for (var i = 0; i < $checkboxes.length; ++i)
+        {
+          var checkboxEl = $checkboxes[0];
+
+          checkboxEl.checked = value.indexOf(checkboxEl.value) !== -1;
+        }
       }
     },
 
-    updateSettingField: function(setting)
+    updateRadioSetting: function(setting, $radios)
     {
-      /*jshint unused:false*/
+      $radios.val(setting.get('value'));
+    },
+
+    getValueFromSettingField: function(el)
+    {
+      if (el.type === 'checkbox')
+      {
+        return this.getValueFromCheckboxSetting(el);
+      }
+
+      if (el.type === 'radio')
+      {
+        return this.getValueFromRadioSetting(el);
+      }
+
+      return el.value;
+    },
+
+    getValueFromCheckboxSetting: function(el)
+    {
+      var $checkboxes = this.$('input[name="' + el.name + '"]');
+
+      if ($checkboxes.length === 0)
+      {
+        return null;
+      }
+
+      if ($checkboxes.length === 1)
+      {
+        return this.getCheckboxValue($checkboxes[0]);
+      }
+
+      var values = [];
+
+      for (var i = 0; i < $checkboxes.length; ++i)
+      {
+        var value = this.getCheckboxValue($checkboxes[i]);
+
+        if (value)
+        {
+          values.push(value);
+        }
+      }
+
+      return values;
+    },
+
+    getCheckboxValue: function(checkboxEl)
+    {
+      if (checkboxEl.value === 'true')
+      {
+        return checkboxEl.checked;
+      }
+
+      if (checkboxEl.value === '1')
+      {
+        return checkboxEl.checked ? 1 : 0;
+      }
+
+      return checkboxEl.checked ? checkboxEl.value : null;
+    },
+
+    getValueFromRadioSetting: function(el)
+    {
+      return this.$('input[name="' + el.name + '"]:checked').val();
     },
 
     scheduleUpdateSetting: function(el, delay)
     {
       var settingId = el.name;
-      var settingValue = el.value;
+      var settingValue = this.getValueFromSettingField(el);
 
       if (this.timers[settingId])
       {

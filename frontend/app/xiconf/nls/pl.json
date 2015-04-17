@@ -2,6 +2,7 @@
   "BREADCRUMBS:base": "Xiconf",
   "BREADCRUMBS:browse": "Wyniki",
   "BREADCRUMBS:details": "Wynik",
+  "BREADCRUMBS:settings": "Ustawienia",
 
   "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wyniku programowania nie powiodło się :(",
@@ -198,5 +199,13 @@
   "error:TESTING_MIN_POWER": "TEST: Przekroczono minimalną wartość mocy.",
   "error:TESTING_MAX_POWER": "TEST: Przekroczono maksymalną wartość mocy.",
   "error:REMOTE_SERVICE_TAG_FAILURE": "Błąd podczas pobierania nowego Service Taga.",
-  "error:INVALID_ITEM_QUANTITY": "Wykryto nieprawidłowe ilości komponentów w aktualnym zleceniu."
+  "error:INVALID_ITEM_QUANTITY": "Wykryto nieprawidłowe ilości komponentów w aktualnym zleceniu.",
+
+  "settings:tab:clients": "Klienci",
+  "settings:tab:notifier": "Powiadomienia",
+  "settings:appVersion": "Aktualna wersja aplikacji Walkner Xiconf",
+  "settings:notifier:enabled": "Powiadamianie włączone",
+  "settings:notifier:emptyLeds": "Powiadamianie o zleceniach bez driverów z zerową ilością zeskanowanych płytek LED",
+  "settings:notifier:delay": "Opóźnienie powiadomienia [min]",
+  "settings:notifier:nameFilter": "Ignorowanie powiadomień po nazwie wyrobu"
 }

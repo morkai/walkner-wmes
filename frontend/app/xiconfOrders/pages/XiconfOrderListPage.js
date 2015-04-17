@@ -33,7 +33,12 @@ define([
     actions: function(layout)
     {
       return [
-        pageActions.export(layout, this, this.collection)
+        pageActions.export(layout, this, this.collection), {
+          label: t.bound('xiconfOrders', 'PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'XICONF:MANAGE',
+          href: '#xiconf;settings?tab=notifier'
+        }
       ];
     }
 

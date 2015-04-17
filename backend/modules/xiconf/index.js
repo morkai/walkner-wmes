@@ -58,7 +58,8 @@ exports.start = function startXiconfModule(app, module)
     [
       config.mongooseId,
       config.sioId,
-      config.productionId
+      config.productionId,
+      config.settingsId
     ],
     setUpCommands.bind(null, app, module)
   );
@@ -66,7 +67,8 @@ exports.start = function startXiconfModule(app, module)
   app.onModuleReady(
     [
       config.mongooseId,
-      config.mailSenderId
+      config.mailSenderId,
+      config.settingsId
     ],
     setUpNotifier.bind(null, app, module)
   );

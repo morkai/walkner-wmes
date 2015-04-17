@@ -3,6 +3,7 @@
     "BREADCRUMBS:base": "Xiconf",
     "BREADCRUMBS:browse": "Results",
     "BREADCRUMBS:details": "Result",
+    "BREADCRUMBS:settings": "Settings",
 
     "MSG:LOADING_FAILURE": "Failed to load the programming results :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the programming result :(",
@@ -198,7 +199,15 @@
     "error:TESTING_MIN_POWER": "TEST: Exceeded the minimum power value.",
     "error:TESTING_MAX_POWER": "TEST: Exceeded the maximum power value.",
     "error:REMOTE_SERVICE_TAG_FAILURE": "Error during acquisition of a new Service Tag.",
-    "error:INVALID_ITEM_QUANTITY": "Detected invalid component quantities in the current order."
+    "error:INVALID_ITEM_QUANTITY": "Detected invalid component quantities in the current order.",
+
+    "settings:tab:clients": "Clients",
+    "settings:tab:notifier": "Notifications",
+    "settings:appVersion": "Current version of the Walkner Xiconf app",
+    "settings:notifier:enabled": "Notifications enabled",
+    "settings:notifier:emptyLeds": "Notify about orders without drivers and with no LED boards scanned",
+    "settings:notifier:delay": "Notification delay [min]",
+    "settings:notifier:nameFilter": "Ignore notifications by product name"
   },
   "pl": true
 }

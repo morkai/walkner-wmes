@@ -15,6 +15,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   var sio = app[xiconfModule.config.sioId];
   var productionModule = app[xiconfModule.config.productionId];
+  var settingsModule = app[xiconfModule.config.settingsId];
   var mongoose = app[xiconfModule.config.mongooseId];
   var XiconfClient = mongoose.model('XiconfClient');
   var XiconfResult = mongoose.model('XiconfResult');
@@ -33,6 +34,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var orderResultsToRecount = {};
   var orderResultsRecountTimer = null;
 
+  app.broker.subscribe('app.started', onAppStarted);
+  app.broker.subscribe('settings.updated.xiconf.notifier.delay', onDelaySettingChanged);
   app.broker.subscribe('shiftChanged', onShiftChanged);
   app.broker.subscribe('xiconf.orders.synced', onXiconfOrdersSynced);
   app.broker.subscribe('xiconf.results.synced', onXiconfResultsSynced);
@@ -50,6 +53,39 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     socket.on('xiconf.update', handleUpdateRequest);
     socket.on('xiconf.configure', handleConfigureRequest);
   });
+
+  function onAppStarted()
+  {
+    settingsModule.findById('xiconf.notifier.delay', function(err, setting)
+    {
+      if (err)
+      {
+        return xiconfModule.error("Failed to read the delay setting: %s", err.message);
+      }
+
+      onDelaySettingChanged(setting);
+    });
+  }
+
+  function onDelaySettingChanged(message)
+  {
+    var delay = +message.value;
+
+    if (isNaN(delay))
+    {
+      delay = 15;
+    }
+    else if (delay < 1)
+    {
+      delay = 1;
+    }
+    else if (delay > 30)
+    {
+      delay = 30;
+    }
+
+    WORKING_ORDER_CHANGE_CHECK_DELAY = delay * 60 * 1000;
+  }
 
   function handleRestartRequest(data)
   {
@@ -1564,7 +1600,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     {
       delay.startOf('hour').add(WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES, 'minutes');
     }
-
     workingOrderChangeCheckTimers[orderNo] = setTimeout(
       checkWorkingOrderChange,
       Math.max(WORKING_ORDER_CHANGE_CHECK_DELAY, delay.diff(now)), orderNo
