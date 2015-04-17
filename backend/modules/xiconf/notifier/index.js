@@ -64,9 +64,20 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           'orderData.unit': 1
         };
 
-        Order.findById(orderNo, {name: 1, nc12: 1, qty: 1}).lean().exec(this.parallel());
-        ProdShiftOrder.find({orderId: orderNo}, prodShiftOrderFields).lean().exec(this.parallel());
-        XiconfOrder.findById(orderNo, {'items.serialNumbers': 0}).lean().exec(this.parallel());
+        Order
+          .findById(orderNo, {name: 1, nc12: 1, qty: 1})
+          .lean()
+          .exec(this.parallel());
+
+        ProdShiftOrder
+          .find({orderId: orderNo, finishedAt: {$ne: null}}, prodShiftOrderFields)
+          .lean()
+          .exec(this.parallel());
+
+        XiconfOrder
+          .findById(orderNo, {'items.serialNumbers': 0})
+          .lean()
+          .exec(this.parallel());
       },
       function checkStatusStep(err, order, prodShiftOrders, xiconfOrder)
       {
