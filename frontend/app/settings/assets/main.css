@@ -1,0 +1,44 @@
+.settings {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: stretch;
+}
+.settings .form-control[type="number"] {
+  width: 112px;
+}
+.settings > .list-group {
+  margin-bottom: 0;
+}
+.settings .list-group-item {
+  white-space: nowrap;
+  border-right: 0;
+}
+.settings > .panel {
+  flex-grow: 1;
+  margin-bottom: 0;
+}
+.settings .panel-body {
+  display: none;
+}
+.settings .panel-body.active {
+  display: block;
+}
+.settings .panel-body > :first-child {
+  margin-top: 0;
+}
+.settings h3 {
+  margin-top: 15px;
+}
+.settings .pull-left {
+  margin-right: 20px;
+}
+.settings .form-group + .clearfix {
+  margin-top: -15px;
+}
+.settings .checkbox + .form-group,
+.settings .checkbox + .row {
+  margin-top: 15px;
+}
+.settings .checkbox + .checkbox {
+  margin-top: 15px;
+}
