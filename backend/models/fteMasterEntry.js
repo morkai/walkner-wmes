@@ -199,7 +199,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           updatedAt: null,
           updater: null
         });
-        
+
         if (options.copy)
         {
           fteMasterEntry.calcTotals();
@@ -316,6 +316,11 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           name: prodFlow.name,
           functions: functions
         });
+      });
+
+      result.sort(function(a, b)
+      {
+        return a.name.localeCompare(b.name);
       });
 
       done(null, result);
