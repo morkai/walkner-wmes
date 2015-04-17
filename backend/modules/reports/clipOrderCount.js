@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
 
@@ -119,14 +120,14 @@ exports.start = function startClipOrderCountModule(app, module)
 
         var replacedMrpMap = {};
 
-        mrpControllers.forEach(function(mrpController)
+        _.forEach(mrpControllers, function(mrpController)
         {
           replacedMrpMap[mrpController._id] = mrpController.replacedBy;
         });
 
         var mrpToCountMap = {};
 
-        results.forEach(function(result)
+        _.forEach(results, function(result)
         {
           mrpToCountMap[replacedMrpMap[result._id] || result._id] = {
             all: result.count,
@@ -158,7 +159,7 @@ exports.start = function startClipOrderCountModule(app, module)
           return module.error("Failed to count orders by statuses: %s", err.stack);
         }
 
-        results.forEach(function(result)
+        _.forEach(results, function(result)
         {
           var mrp = replacedMrpMap[result._id.mrp] || result._id.mrp;
           var status = result._id.status.toLowerCase();
@@ -175,10 +176,8 @@ exports.start = function startClipOrderCountModule(app, module)
   {
     var models = [];
 
-    Object.keys(mrpToCountMap).forEach(function(mrp)
+    _.forEach(mrpToCountMap, function(count, mrp)
     {
-      var count = mrpToCountMap[mrp];
-
       models.push({
         date: startDate,
         tzOffsetMs: startDate.getTimezoneOffset() * 60 * 1000 * -1,

@@ -6,7 +6,7 @@
 
 var fs = require('fs');
 var zlib = require('zlib');
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 var request = require('request');
 var parseTextPoList = require('../importer/parseTextPoList');
@@ -85,7 +85,7 @@ exports.start = function startPurchaseOrdersExporterModule(app, module)
         var poMap = this.poMap;
         this.poMap = null;
 
-        zlib.deflate(JSON.stringify(lodash.values(poMap)), this.next());
+        zlib.deflate(JSON.stringify(_.values(poMap)), this.next());
       },
       function uploadStep(err, body)
       {

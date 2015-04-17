@@ -4,8 +4,8 @@
 
 'use strict';
 
+var _ = require('lodash');
 var moment = require('moment');
-var lodash = require('lodash');
 var logEntryHandlers = require('../modules/production/logEntryHandlers');
 
 module.exports = function setupProdLogEntryModel(app, mongoose)
@@ -93,7 +93,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 
     data.quantitiesDone = data.quantitiesDone.map(function(quantityDone)
     {
-      return lodash.pick(quantityDone, ['actual', 'planned']);
+      return _.pick(quantityDone, ['actual', 'planned']);
     });
 
     editPersonnel(data, data);
@@ -112,7 +112,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 
   prodLogEntrySchema.statics.editShift = function(prodShift, creator, changes)
   {
-    if (lodash.isEmpty(changes))
+    if (_.isEmpty(changes))
     {
       return null;
     }
@@ -124,7 +124,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     {
       data.quantitiesDone = changes.quantitiesDone.map(function(quantityDone)
       {
-        return lodash.pick(quantityDone, ['actual', 'planned']);
+        return _.pick(quantityDone, ['actual', 'planned']);
       });
 
       compareProperty(data, modelData, 'quantitiesDone');
@@ -132,7 +132,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 
     editPersonnel(data, changes, modelData);
 
-    if (lodash.isEmpty(data))
+    if (_.isEmpty(data))
     {
       return null;
     }
@@ -170,7 +170,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 
   prodLogEntrySchema.statics.editOrder = function(prodShiftOrder, creator, changes)
   {
-    if (lodash.isEmpty(changes))
+    if (_.isEmpty(changes))
     {
       return null;
     }
@@ -191,7 +191,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editNumericValue(data, changes, modelData, 'workerCount', 1);
     editOrder(data, changes, modelData);
 
-    if (lodash.isEmpty(data))
+    if (_.isEmpty(data))
     {
       return null;
     }
@@ -244,7 +244,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 
   prodLogEntrySchema.statics.editDowntime = function(prodDowntime, creator, changes)
   {
-    if (lodash.isEmpty(changes))
+    if (_.isEmpty(changes))
     {
       return null;
     }
@@ -279,7 +279,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       }
     }
 
-    if (lodash.isEmpty(data))
+    if (_.isEmpty(data))
     {
       return null;
     }
@@ -382,7 +382,7 @@ function generateId(date, str)
 
 function editPersonnel(logEntryData, changes, modelData)
 {
-  ['master', 'leader', 'operator'].forEach(function(personnelProperty)
+  _.forEach(['master', 'leader', 'operator'], function(personnelProperty)
   {
     var userInfo = changes[personnelProperty];
 
@@ -390,7 +390,7 @@ function editPersonnel(logEntryData, changes, modelData)
     {
       logEntryData[personnelProperty] = userInfo === null
         ? null
-        : lodash.pick(userInfo, ['id', 'label']);
+        : _.pick(userInfo, ['id', 'label']);
 
       if (modelData)
       {
@@ -403,7 +403,7 @@ function editPersonnel(logEntryData, changes, modelData)
   {
     logEntryData.operators = changes.operators.filter(validateUserInfo).map(function(userInfo)
     {
-      return lodash.pick(userInfo, ['id', 'label']);
+      return _.pick(userInfo, ['id', 'label']);
     });
 
     if (modelData)
@@ -472,7 +472,7 @@ function editDateValue(data, changes, modelData, dateProperty)
 function editOrder(data, changes, modelData)
 {
   if (changes.orderId
-    && (!modelData || !lodash.isEqual(changes.orderId, modelData.orderId)))
+    && (!modelData || !_.isEqual(changes.orderId, modelData.orderId)))
   {
     data.mechOrder = !!changes.mechOrder;
     data.orderId = changes.orderId;
@@ -480,7 +480,7 @@ function editOrder(data, changes, modelData)
   }
 
   if (changes.operationNo
-    && (!modelData || !lodash.isEqual(changes.operationNo, modelData.operationNo)))
+    && (!modelData || !_.isEqual(changes.operationNo, modelData.operationNo)))
   {
     data.operationNo = changes.operationNo;
   }
@@ -525,7 +525,7 @@ function validateTimes(startedAt, finishedAt, min, max)
 
 function compareProperty(logEntryData, modelData, property)
 {
-  if (lodash.isEqual(logEntryData[property], modelData[property]))
+  if (_.isEqual(logEntryData[property], modelData[property]))
   {
     delete logEntryData[property];
   }

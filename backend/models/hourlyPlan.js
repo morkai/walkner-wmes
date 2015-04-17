@@ -5,7 +5,7 @@
 'use strict';
 
 var moment = require('moment');
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function setupHourlyPlanModel(app, mongoose)
@@ -135,7 +135,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
           return done(null, []);
         }
 
-        var flow = lodash.find(hourlyPlan.flows, function(flow)
+        var flow = _.find(hourlyPlan.flows, function(flow)
         {
           return flow.id.toString() === prodFlowId.toString();
         });
@@ -196,9 +196,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
       {
         for (var i = 1; i <= 3; ++i)
         {
-          recountPlannedQuantitiesInShift(
-            divisionId, new Date(shiftMoment.valueOf()), i, flow, this.parallel()
-          );
+          recountPlannedQuantitiesInShift(divisionId, new Date(shiftMoment.valueOf()), i, flow, this.parallel());
 
           shiftMoment.add(8, 'hours');
         }
@@ -252,7 +250,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
             return done();
           }
 
-          prodShifts.forEach(function(prodShift)
+          _.forEach(prodShifts, function(prodShift)
           {
             app.broker.publish('hourlyPlans.quantitiesPlanned', {
               prodLine: prodShift.prodLine,

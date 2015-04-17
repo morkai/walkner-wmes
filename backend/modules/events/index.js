@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var setUpEventsRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
@@ -81,7 +81,7 @@ exports.start = function startEventsModule(app, module)
       }
       else
       {
-        types.forEach(function(type)
+        _.forEach(types, function(type)
         {
           module.types[type] = 1;
         });
@@ -98,25 +98,25 @@ exports.start = function startEventsModule(app, module)
     {
       var queueInfoEvent = queueEvent.bind(null, 'info');
 
-      module.config.topics.forEach(function(topic)
+      _.forEach(module.config.topics, function(topic)
       {
         app.broker.subscribe(topic, queueInfoEvent);
       });
     }
     else
     {
-      lodash.each(module.config.topics, function(topics, severity)
+      _.forEach(module.config.topics, function(topics, severity)
       {
         var queueCustomSeverityEvent = queueEvent.bind(null, severity);
 
-        topics.forEach(function(topic)
+        _.forEach(topics, function(topic)
         {
           app.broker.subscribe(topic, queueCustomSeverityEvent);
         });
       });
     }
 
-    module.config.print.forEach(function(topic)
+    _.forEach(module.config.print, function(topic)
     {
       app.broker.subscribe(topic, printMessage);
     });
@@ -141,7 +141,7 @@ exports.start = function startEventsModule(app, module)
 
     var user = null;
 
-    if (lodash.isObject(data.user))
+    if (_.isObject(data.user))
     {
       user = {
         _id: String(data.user._id),
@@ -153,7 +153,7 @@ exports.start = function startEventsModule(app, module)
       };
     }
 
-    if (!lodash.isObject(data))
+    if (!_.isObject(data))
     {
       data = {};
     }
@@ -164,7 +164,7 @@ exports.start = function startEventsModule(app, module)
 
     var type = topic.replace(/^events\./, '');
 
-    if (lodash.isString(data.severity))
+    if (_.isString(data.severity))
     {
       severity = data.severity;
 

@@ -5,6 +5,7 @@
 'use strict';
 
 var fs = require('fs');
+var _ = require('lodash');
 var multer = require('multer');
 var csv = require('csv');
 
@@ -162,18 +163,18 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
 
   function removeFiles(files)
   {
-    Object.keys(files).forEach(function(key)
+    _.forEach(files, function(fileOrFiles)
     {
-      if (Array.isArray(files[key]))
+      if (Array.isArray(fileOrFiles))
       {
-        files[key].forEach(function(file)
+        _.forEach(fileOrFiles, function(file)
         {
           fs.unlink(file.path, function() {});
         });
       }
       else
       {
-        fs.unlink(files[key].path, function() {});
+        fs.unlink(fileOrFiles.path, function() {});
       }
     });
   }

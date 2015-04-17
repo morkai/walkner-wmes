@@ -4,16 +4,18 @@
 
 'use strict';
 
+var _ = require('lodash');
+
 module.exports = function mergeOrders(fromOrder, toOrder)
 {
   var toItems = {};
 
-  toOrder.items.forEach(function(toItem)
+  _.forEach(toOrder.items, function(toItem)
   {
     toItems[toItem._id] = toItem;
   });
 
-  fromOrder.items.forEach(function(fromItem)
+  _.forEach(fromOrder.items, function(fromItem)
   {
     var toItem = toItems[fromItem._id];
 
@@ -24,23 +26,23 @@ module.exports = function mergeOrders(fromOrder, toOrder)
 
     var schedule = {};
 
-    fromItem.schedule.forEach(function(fromSchedule)
+    _.forEach(fromItem.schedule, function(fromSchedule)
     {
       schedule[fromSchedule.date.getTime()] = fromSchedule.qty;
     });
 
-    toItem.schedule.forEach(function(toSchedule)
+    _.forEach(toItem.schedule, function(toSchedule)
     {
       schedule[toSchedule.date.getTime()] = toSchedule.qty;
     });
 
     toItem.schedule = [];
 
-    Object.keys(schedule).forEach(function(time)
+    _.forEach(schedule, function(qty, time)
     {
       toItem.schedule.push({
         date: new Date(+time),
-        qty: schedule[time]
+        qty: qty
       });
     });
 

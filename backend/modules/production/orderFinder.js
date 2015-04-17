@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var moment = require('moment');
 
 var MECH_ORDER_FIELDS = {
@@ -137,7 +138,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
     {
       var latestOrder = null;
 
-      orders.forEach(function(order)
+      _.forEach(orders, function(order)
       {
         if (latestOrder === null || order.finishDate > latestOrder.finishDate)
         {
@@ -197,7 +198,7 @@ function setMechOrderData(MechOrder, orders, done)
 {
   var orderMap = {};
 
-  orders.forEach(function(order)
+  _.forEach(orders, function(order)
   {
     orderMap[order._id] = order;
   });
@@ -214,7 +215,7 @@ function setMechOrderData(MechOrder, orders, done)
       return done(err);
     }
 
-    mechOrders.forEach(function(mechOrder)
+    _.forEach(mechOrders, function(mechOrder)
     {
       var order = orderMap[mechOrder._id];
 
@@ -237,12 +238,12 @@ function mergeMechOperations(order, mechOrder)
 {
   var orderOperations = {};
 
-  order.operations.forEach(function(orderOperation)
+  _.forEach(order.operations, function(orderOperation)
   {
     orderOperations[orderOperation.no] = true;
   });
 
-  mechOrder.operations.forEach(function(mechOperation)
+  _.forEach(mechOrder.operations, function(mechOperation)
   {
     if (orderOperations[mechOperation.no])
     {

@@ -5,7 +5,7 @@
 'use strict';
 
 var createHash = require('crypto').createHash;
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function addPrintsRoute(app, poModule, req, res, next)
@@ -39,11 +39,11 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
 
   items = items.filter(function(item)
   {
-    return lodash.isObject(item)
+    return _.isObject(item)
       && /^[0-9]{1,6}$/.test(item._id)
-      && lodash.isNumber(item.packageQty)
-      && lodash.isNumber(item.componentQty)
-      && lodash.isNumber(item.remainingQty)
+      && _.isNumber(item.packageQty)
+      && _.isNumber(item.componentQty)
+      && _.isNumber(item.remainingQty)
       && (item.packageQty * item.componentQty + item.remainingQty) > 0;
   });
 
@@ -52,10 +52,10 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
     return next(express.createHttpError('INVALID_ITEMS'));
   }
 
-  var shippingNo = lodash.isString(req.body.shippingNo)
+  var shippingNo = _.isString(req.body.shippingNo)
     ? req.body.shippingNo.substr(0, 30).replace(/[^a-zA-Z0-9\/\\\.\-_: ]+$/g, '')
     : '';
-  var printer = lodash.isString(req.body.printer) && req.body.printer.length ? req.body.printer : 'browser';
+  var printer = _.isString(req.body.printer) && req.body.printer.length ? req.body.printer : 'browser';
   var currentDate = new Date();
   var currentUserInfo = userModule.createUserInfo(req.session.user, req);
 
@@ -80,7 +80,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
 
       var itemMap = {};
 
-      lodash.forEach(po.items, function(item) { itemMap[+item._id] = item; }, this);
+      _.forEach(po.items, function(item) { itemMap[+item._id] = item; }, this);
 
       for (var i = 0, l = items.length; i < l; ++i)
       {
@@ -100,7 +100,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
     {
       this.key = createHash('md5').update(Date.now() + Math.random().toString()).digest('hex').toUpperCase();
 
-      lodash.forEach(items, function(item)
+      _.forEach(items, function(item)
       {
         item.print = new PurchaseOrderPrint({
           key: this.key,
@@ -155,7 +155,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
         return this.skip(err);
       }
 
-      var addedPrints = lodash.map(items, function(item) { return item.print.toJSON(); });
+      var addedPrints = _.map(items, function(item) { return item.print.toJSON(); });
 
       res.json({
         printKey: this.key,
@@ -180,7 +180,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
 
       var changedItems = [];
 
-      lodash.forEach(items, function(item)
+      _.forEach(items, function(item)
       {
         changedItems.push({
           _id: item.model._id,

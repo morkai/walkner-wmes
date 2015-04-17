@@ -270,7 +270,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
   {
     var companies = [];
 
-    prodFunction.companies.forEach(function(companyId)
+    _.forEach(prodFunction.companies, function(companyId)
     {
       var company = app.companies.modelsById[companyId];
 
@@ -303,7 +303,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
       var result = [];
 
-      prodFlows.forEach(function(prodFlow)
+      _.forEach(prodFlows, function(prodFlow)
       {
         if (prodFlow.deactivatedAt)
         {

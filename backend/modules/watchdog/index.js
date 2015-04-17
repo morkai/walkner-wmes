@@ -27,7 +27,7 @@ exports.start = function startWatchdogModule(app, watchdogModule)
 
   app.broker.subscribe('app.started').setLimit(1).on('message', function()
   {
-    watchdogModule.config.events.forEach(function(event)
+    _.forEach(watchdogModule.config.events, function(event)
     {
       _.defaults(event, {
         checkDelay: 30,

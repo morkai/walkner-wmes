@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 
 exports.DEFAULT_CONFIG = {
@@ -57,7 +57,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   app.broker.subscribe('app.started', rebuildCache).setLimit(1);
 
-  lodash.forEach(Object.keys(TYPE_TO_MODULE_MAP), function(topicPrefix)
+  _.forEach(Object.keys(TYPE_TO_MODULE_MAP), function(topicPrefix)
   {
     app.broker.subscribe(topicPrefix + 's.added', rebuildCache);
     app.broker.subscribe(topicPrefix + 's.edited', rebuildCache);
@@ -427,7 +427,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
     if (orgUnit.constructor === prodFlowsModule.Model)
     {
-      this.getChildren(orgUnit).forEach(function(workCenter)
+      _.forEach(this.getChildren(orgUnit), function(workCenter)
       {
         workCenterIds[workCenter._id] = true;
       });

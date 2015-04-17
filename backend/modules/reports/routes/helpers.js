@@ -5,7 +5,7 @@
 'use strict';
 
 var crypto = require('crypto');
-var lodash = require('lodash');
+var _ = require('lodash');
 var util = require('../util');
 
 var cachedReports = {};
@@ -19,7 +19,7 @@ exports.clearCachedReports = function(ids)
   }
   else if (Array.isArray(ids))
   {
-    ids.forEach(function(id) { cachedReports[id] = {}; });
+    _.forEach(ids, function(id) { cachedReports[id] = {}; });
   }
   else
   {
@@ -74,7 +74,7 @@ function broadcastReport(reportId, reportHash, err, report)
 {
   var reportJson = err ? null : cacheReport(reportId, reportHash, report);
 
-  lodash.forEach(inProgress[reportHash], function(done)
+  _.forEach(inProgress[reportHash], function(done)
   {
     done(err, reportJson);
   });
@@ -121,7 +121,7 @@ exports.getProdTasksWithTags = function(allProdTasks)
 {
   var prodTasks = {};
 
-  allProdTasks.forEach(function(prodTask)
+  _.forEach(allProdTasks, function(prodTask)
   {
     if (Array.isArray(prodTask.tags) && prodTask.tags.length)
     {
@@ -140,7 +140,7 @@ exports.getDowntimeReasons = function(allDowntimeReasons, typesOnly)
 {
   var downtimeReasons = {};
 
-  allDowntimeReasons.forEach(function(downtimeReason)
+  _.forEach(allDowntimeReasons, function(downtimeReason)
   {
     if (typesOnly)
     {

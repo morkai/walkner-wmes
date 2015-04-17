@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var axon = require('axon');
 
 exports.DEFAULT_CONFIG = {
@@ -200,9 +200,9 @@ exports.start = function startMessengerClientModule(app, module, done)
    */
   function sendMessage(socket, type, data, responseHandler)
   {
-    if (lodash.isFunction(responseHandler))
+    if (_.isFunction(responseHandler))
     {
-      responseHandler = lodash.once(responseHandler);
+      responseHandler = _.once(responseHandler);
     }
     else
     {
@@ -212,14 +212,14 @@ exports.start = function startMessengerClientModule(app, module, done)
     var timer = null;
     var reply = null;
 
-    reply = lodash.once(function(err)
+    reply = _.once(function(err)
     {
       if (timer !== null)
       {
         clearTimeout(timer);
       }
 
-      if (lodash.isString(err))
+      if (_.isString(err))
       {
         arguments[0] = {message: err};
       }

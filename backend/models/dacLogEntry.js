@@ -4,6 +4,8 @@
 
 'use strict';
 
+var _ = require('lodash');
+
 module.exports = function setupDacLogEntryModel(app, mongoose)
 {
   var dacLogEntrySchema = mongoose.Schema({
@@ -50,7 +52,7 @@ module.exports = function setupDacLogEntryModel(app, mongoose)
     var receivedAt = new Date();
     var dacLogEntries = [];
 
-    req.data.trim().split('\n').forEach(function(line)
+    _.forEach(req.data.trim().split('\n'), function(line)
     {
       var columns = line.split(';');
 

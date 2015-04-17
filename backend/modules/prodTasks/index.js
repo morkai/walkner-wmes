@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = require('../createDictionaryModule')(
   'ProdTask',
@@ -16,7 +16,7 @@ module.exports = require('../createDictionaryModule')(
       var prodTask = message.model;
       var prodTaskId = prodTask._id.toString();
 
-      lodash.forEach(module.models, function(childProdTask)
+      _.forEach(module.models, function(childProdTask)
       {
         if (childProdTask.parent === null || childProdTask.parent.toString() !== prodTaskId)
         {

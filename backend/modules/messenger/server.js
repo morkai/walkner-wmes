@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var axon = require('axon');
 
 exports.DEFAULT_CONFIG = {
@@ -24,7 +24,7 @@ exports.start = function startMessengerServerModule(app, module, done)
   var repSocket = null;
   var pullSocket = null;
 
-  module.config.broadcastTopics.forEach(function(broadcastTopic)
+  _.forEach(module.config.broadcastTopics, function(broadcastTopic)
   {
     app.broker.subscribe(broadcastTopic, function(message, topic)
     {
@@ -182,19 +182,19 @@ exports.start = function startMessengerServerModule(app, module, done)
    */
   function handleRequest(type, req, reply)
   {
-    if (!lodash.isString(type) || !lodash.isFunction(reply))
+    if (!_.isString(type) || !_.isFunction(reply))
     {
       return;
     }
 
     var requestHandler = requestHandlers[type];
 
-    if (!lodash.isFunction(requestHandler))
+    if (!_.isFunction(requestHandler))
     {
       return;
     }
 
-    requestHandler(lodash.isObject(req) ? req : {}, function(err)
+    requestHandler(_.isObject(req) ? req : {}, function(err)
     {
       if (err instanceof Error)
       {

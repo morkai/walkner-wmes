@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var deepEqual = require('deep-equal');
 var step = require('h5.step');
 
@@ -81,12 +82,12 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       var insertList = [];
       var updateList = [];
 
-      this.orderModels.forEach(function(orderModel)
+      _.forEach(this.orderModels, function(orderModel)
       {
         if (closedOrderIds.indexOf(orderModel._id) !== -1)
         {
           orderModel.open = false;
-          orderModel.items.forEach(function(item)
+          _.forEach(orderModel.items, function(item)
           {
             item.completed = true;
           });
@@ -102,9 +103,9 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         }
       });
 
-      Object.keys(purchaseOrders).forEach(function(orderId)
+      _.forEach(purchaseOrders, function(purchaseOrder)
       {
-        insertList.push(new PurchaseOrder(purchaseOrders[orderId]));
+        insertList.push(new PurchaseOrder(purchaseOrder));
       });
 
       this.insertList = insertList;
@@ -219,7 +220,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
   {
     var updatedAt = new Date();
 
-    closedOrders.ids.forEach(function(id, orderIndex)
+    _.forEach(closedOrders.ids, function(id, orderIndex)
     {
       var update = {
         $set: {
@@ -268,14 +269,14 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
     var changes = {};
 
-    [
+    _.forEach([
       'pOrg',
       'pGr',
       'plant',
       'vendor',
       'vendorName',
       'docDate'
-    ].forEach(function(propertyName)
+    ], function(propertyName)
     {
       var oldValue = orderModel[propertyName];
       var newValue = orderDoc[propertyName];
@@ -320,12 +321,12 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
     var changed = null;
     var newItemMap = {};
 
-    newItems.forEach(function(newItem)
+    _.forEach(newItems, function(newItem)
     {
       newItemMap[newItem._id] = newItem;
     });
 
-    oldItems.forEach(function(oldItem, i)
+    _.forEach(oldItems, function(oldItem, i)
     {
       if (compareItem(oldItem, i, newItemMap, changes))
       {
@@ -333,10 +334,10 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       }
     });
 
-    Object.keys(newItemMap).forEach(function(newItemId)
+    _.forEach(newItemMap, function(newItem, newItemId)
     {
-      changes['items/' + newItemId] = [null, newItemMap[newItemId]];
-      oldItems.push(newItemMap[newItemId]);
+      changes['items/' + newItemId] = [null, newItem];
+      oldItems.push(newItem);
 
       changed = 'add';
     });
@@ -360,13 +361,13 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
       var changed = false;
 
-      [
+      _.forEach([
         'qty',
         'unit',
         'nc12',
         'name',
         'schedule'
-      ].forEach(function(propertyName)
+      ], function(propertyName)
       {
         var oldValue = oldItem[propertyName];
         var newValue = newItem[propertyName];

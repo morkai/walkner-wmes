@@ -6,7 +6,7 @@
 
 var inspect = require('util').inspect;
 var crypto = require('crypto');
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 var logEntryHandlers = require('./logEntryHandlers');
 
@@ -28,12 +28,12 @@ module.exports = function setUpProductionsCommands(app, productionModule)
   {
     socket.on('production.unlock', function(req, reply)
     {
-      if (!lodash.isFunction(reply))
+      if (!_.isFunction(reply))
       {
         return;
       }
 
-      if (!lodash.isObject(req))
+      if (!_.isObject(req))
       {
         return reply(new Error('INVALID_INPUT'));
       }
@@ -164,7 +164,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
             secretKey: this.prodLine.secretKey,
             prodShift: prodShift,
             prodShiftOrder: prodShift && prodShiftOrder && !prodShiftOrder.finishedAt ? prodShiftOrder : null,
-            prodDowntimes: prodShift && !lodash.isEmpty(prodDowntimes) ? prodDowntimes : []
+            prodDowntimes: prodShift && !_.isEmpty(prodDowntimes) ? prodDowntimes : []
           });
         }
       );
@@ -172,12 +172,12 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 
     socket.on('production.lock', function(req, reply)
     {
-      if (!lodash.isFunction(reply))
+      if (!_.isFunction(reply))
       {
         return;
       }
 
-      if (!lodash.isObject(req))
+      if (!_.isObject(req))
       {
         return reply(new Error('INVALID_INPUT'));
       }
@@ -260,12 +260,12 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 
     socket.on('production.sync', function(logEntryStream, reply)
     {
-      if (!lodash.isFunction(reply))
+      if (!_.isFunction(reply))
       {
         reply = function() {};
       }
 
-      if (!lodash.isString(logEntryStream))
+      if (!_.isString(logEntryStream))
       {
         return reply();
       }
@@ -277,18 +277,18 @@ module.exports = function setUpProductionsCommands(app, productionModule)
       var creator = userModule.createUserInfo(socket.handshake.user, socket);
       var lastLogEntryWithInvalidSecretKey = null;
 
-      logEntryStream.forEach(function(logEntryJson, i)
+      _.forEach(logEntryStream, function(logEntryJson, i)
       {
         try
         {
           var logEntry = JSON.parse(logEntryJson);
 
-          if (!lodash.isObject(logEntry))
+          if (!_.isObject(logEntry))
           {
             return logInvalidEntry(new Error('TYPE'), logEntryJson);
           }
 
-          if (!lodash.isFunction(logEntryHandlers[logEntry.type]))
+          if (!_.isFunction(logEntryHandlers[logEntry.type]))
           {
             return logInvalidEntry(new Error('UNKNOWN_HANDLER'), logEntryJson);
           }
@@ -343,7 +343,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
           if (err.code === 11000)
           {
             var dupEntryId = (err.message || err.errmsg || err.err).match(/"(.*?)"/)[1];
-            var dupEntry = lodash.find(logEntryList, function(logEntry)
+            var dupEntry = _.find(logEntryList, function(logEntry)
             {
               return logEntry._id === dupEntryId;
             });
@@ -369,7 +369,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 
     socket.on('production.getPlannedQuantities', function(prodShiftId, reply)
     {
-      if (!lodash.isFunction(reply))
+      if (!_.isFunction(reply))
       {
         return;
       }
@@ -397,7 +397,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
 
     socket.on('production.join', function(message)
     {
-      if (!lodash.isObject(message))
+      if (!_.isObject(message))
       {
         return;
       }
@@ -430,7 +430,7 @@ module.exports = function setUpProductionsCommands(app, productionModule)
   {
     secretKeys = {};
 
-    orgUnits.getAllByType('prodLine').forEach(function(prodLine)
+    _.forEach(orgUnits.getAllByType('prodLine'), function(prodLine)
     {
       var secretKey = prodLine.secretKey;
 

@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var orderFinder = require('../orderFinder');
 
 exports.isOfflineEntry = function(logEntry)
@@ -15,7 +15,7 @@ exports.isOfflineEntry = function(logEntry)
     || !orderData.operations
     || typeof orderData.operations !== 'object'
     || Array.isArray(orderData.operations)
-    || lodash.isEmpty(orderData.operations);
+    || _.isEmpty(orderData.operations);
 };
 
 exports.fillOrderData = function(app, productionModule, logEntry, done)
@@ -119,7 +119,7 @@ function prepareOperations(orderData)
   {
     var operations = {};
 
-    orderData.operations.forEach(function(operation)
+    _.forEach(orderData.operations, function(operation)
     {
       if (operation.workCenter !== '' && operation.laborTime !== -1)
       {
@@ -129,7 +129,7 @@ function prepareOperations(orderData)
 
     orderData.operations = operations;
   }
-  else if (!lodash.isObject(orderData.operations))
+  else if (!_.isObject(orderData.operations))
   {
     orderData.operations = {};
   }

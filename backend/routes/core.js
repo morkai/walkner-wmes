@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = function startCoreRoutes(app, express)
 {
@@ -14,7 +14,7 @@ module.exports = function startCoreRoutes(app, express)
   var requirejsPaths;
   var requirejsShim;
 
-  var ROOT_USER = JSON.stringify(lodash.omit(userModule.root, 'password'));
+  var ROOT_USER = JSON.stringify(_.omit(userModule.root, 'password'));
   var GUEST_USER = JSON.stringify(userModule.guest);
   var PRIVILEGES = JSON.stringify(userModule.config.privileges);
   var MODULES = JSON.stringify(app.options.modules.map(function(module)
@@ -32,7 +32,7 @@ module.exports = function startCoreRoutes(app, express)
 
   if (updaterModule && app.options.dictionaryModules)
   {
-    Object.keys(app.options.dictionaryModules).forEach(setUpFrontendVersionUpdater);
+    _.forEach(Object.keys(app.options.dictionaryModules), setUpFrontendVersionUpdater);
   }
 
   express.get('/', showIndex);
@@ -66,7 +66,7 @@ module.exports = function startCoreRoutes(app, express)
       DASHBOARD_URL_AFTER_LOG_IN: DASHBOARD_URL_AFTER_LOG_IN
     };
 
-    lodash.forEach(app.options.dictionaryModules, function(appDataKey, moduleName)
+    _.forEach(app.options.dictionaryModules, function(appDataKey, moduleName)
     {
       var models = app[moduleName].models;
 
@@ -84,7 +84,7 @@ module.exports = function startCoreRoutes(app, express)
         return;
       }
 
-      appData[appDataKey] = JSON.stringify(lodash.invoke(models, 'toDictionaryObject'));
+      appData[appDataKey] = JSON.stringify(_.invoke(models, 'toDictionaryObject'));
     });
 
     res.render('index', {

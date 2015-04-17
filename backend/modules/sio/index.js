@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var socketIo = require('socket.io');
 var SocketIoMultiServer = require('./SocketIoMultiServer');
 var pmx = null;
@@ -64,7 +64,7 @@ exports.start = function startIoModule(app, sioModule)
     serveClient: true
   });
 
-  sioModule = app[sioModule.name] = lodash.merge(sio, sioModule);
+  sioModule = app[sioModule.name] = _.merge(sio, sioModule);
 
   sioModule.on('connection', function(socket)
   {

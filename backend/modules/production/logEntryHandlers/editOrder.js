@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
@@ -93,7 +94,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
         downtimeChanges = {};
 
-        [
+        _.forEach([
           'master',
           'leader',
           'operator',
@@ -101,7 +102,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           'orderId',
           'mechOrder',
           'operationNo'
-        ].forEach(function(property)
+        ], function(property)
         {
           if (changes[property] !== undefined)
           {

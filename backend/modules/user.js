@@ -7,7 +7,7 @@
 var os = require('os');
 var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
-var lodash = require('lodash');
+var _ = require('lodash');
 var bcrypt = require('bcrypt');
 var step = require('h5.step');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -29,7 +29,7 @@ exports.start = function startUserModule(app, module)
 {
   var localAddresses = module.config.localAddresses || getLocalAddresses();
 
-  module.root = lodash.merge(module.config.root, {
+  module.root = _.merge(module.config.root, {
     loggedIn: true,
     super: true,
     _id: '52a33b8bfb955dac8a92261b',
@@ -37,7 +37,7 @@ exports.start = function startUserModule(app, module)
     privileges: []
   });
 
-  module.guest = lodash.merge({privileges: []}, module.config.guest, {
+  module.guest = _.merge({privileges: []}, module.config.guest, {
     loggedIn: false,
     super: false,
     _id: '52a33b9cfb955dac8a92261c',
@@ -70,9 +70,9 @@ exports.start = function startUserModule(app, module)
   {
     var localAddresses = [];
 
-    lodash.each(os.networkInterfaces(), function(addresses)
+    _.each(os.networkInterfaces(), function(addresses)
     {
-      addresses.forEach(function(address)
+      _.forEach(addresses, function(address)
       {
         if (address.family === 'IPv4')
         {
@@ -122,7 +122,7 @@ exports.start = function startUserModule(app, module)
    */
   function createGuestData(ipAddress)
   {
-    var user = lodash.cloneDeep(module.guest);
+    var user = _.cloneDeep(module.guest);
 
     user.ipAddress = ipAddress;
     user.local = isLocalIpAddress(ipAddress);
@@ -236,10 +236,10 @@ exports.start = function startUserModule(app, module)
 
   function authenticate(credentials, done)
   {
-    if (!lodash.isString(credentials.login)
-      || lodash.isEmpty(credentials.login)
-      || !lodash.isString(credentials.password)
-      || lodash.isEmpty(credentials.password))
+    if (!_.isString(credentials.login)
+      || _.isEmpty(credentials.login)
+      || !_.isString(credentials.password)
+      || _.isEmpty(credentials.password))
     {
       return delayAuthFailure(new Error('INVALID_CREDENTIALS'), 400, done);
     }
@@ -251,7 +251,7 @@ exports.start = function startUserModule(app, module)
 
         if (credentials.login === module.root.login)
         {
-          next(null, lodash.merge({}, module.root));
+          next(null, _.merge({}, module.root));
         }
         else
         {
@@ -281,7 +281,7 @@ exports.start = function startUserModule(app, module)
           return this.done(delayAuthFailure.bind(null, new Error('INVALID_LOGIN'), 401, done));
         }
 
-        if (lodash.isFunction(userData.toObject))
+        if (_.isFunction(userData.toObject))
         {
           userData = userData.toObject();
         }
@@ -493,7 +493,7 @@ exports.start = function startUserModule(app, module)
     {
       var sockets = moveSos(message.oldSessionId, message.newSessionId);
 
-      sockets.forEach(function(socket)
+      _.forEach(sockets, function(socket)
       {
         socket.handshake.sessionId = message.newSessionId;
         socket.handshake.user = message.user;
@@ -509,7 +509,7 @@ exports.start = function startUserModule(app, module)
     {
       var sockets = moveSos(message.oldSessionId, message.newSessionId);
 
-      sockets.forEach(function(socket)
+      _.forEach(sockets, function(socket)
       {
         socket.handshake.sessionId = message.newSessionId;
         socket.handshake.user = createGuestData(getRealIp({}, socket));
@@ -530,7 +530,7 @@ exports.start = function startUserModule(app, module)
         return sockets;
       }
 
-      Object.keys(sosMap[oldSessionId]).forEach(function(socketId)
+      _.forEach(Object.keys(sosMap[oldSessionId]), function(socketId)
       {
         var socket = sio.sockets.connected[socketId];
 

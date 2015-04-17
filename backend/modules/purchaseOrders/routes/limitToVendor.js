@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = function limitToVendor(req, res, next)
 {
@@ -16,7 +16,7 @@ module.exports = function limitToVendor(req, res, next)
   }
 
   var selectors = req.rql.selector.args;
-  var vendorTerm = lodash.find(selectors, function(term)
+  var vendorTerm = _.find(selectors, function(term)
   {
     return term.name === 'eq' && term.args[0] === 'vendor';
   });

@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
 var util = require('./util');
@@ -133,7 +134,7 @@ Report3.prototype.toJSON = function()
   var prodLinesInfo = [];
   var report = this;
 
-  this.prodLineIds.forEach(function(prodLineId)
+  _.forEach(this.prodLineIds, function(prodLineId)
   {
     var prodLineInfo = report.options.prodLines[prodLineId];
     var deactivatedAt = prodLineInfo.deactivatedAt;

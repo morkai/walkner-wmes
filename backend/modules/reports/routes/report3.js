@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var helpers = require('./helpers');
 var report3 = require('../report3');
 
@@ -39,7 +40,7 @@ function getProdLinesInfo(orgUnitsModule)
 {
   var prodLines = {};
 
-  orgUnitsModule.getAllByType('prodLine').forEach(function(prodLine)
+  _.forEach(orgUnitsModule.getAllByType('prodLine'), function(prodLine)
   {
     var subdivision = orgUnitsModule.getSubdivisionFor(prodLine);
 

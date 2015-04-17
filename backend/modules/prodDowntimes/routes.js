@@ -4,9 +4,9 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
-var lodash = require('lodash');
 var logEntryHandlers = require('../production/logEntryHandlers');
 
 module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
@@ -99,7 +99,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   {
     var user = req.session.user || {};
     var selectors = req.rql.selector.args;
-    var orgUnitTerm = lodash.find(selectors, function(term)
+    var orgUnitTerm = _.find(selectors, function(term)
     {
       return term.name === 'eq'
         && ['division', 'subdivision', 'prodFlow'].indexOf(term.args[0]) !== -1;
@@ -157,7 +157,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
       var prodFlowIds = {};
 
-      prodFlows.forEach(function(prodFlow) { prodFlowIds[prodFlow.get('_id')] = true; });
+      _.forEach(prodFlows, function(prodFlow) { prodFlowIds[prodFlow._id] = true; });
 
       orgUnitTerm.args[1] = getProdLineIds(prodFlowIds);
 
@@ -170,7 +170,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
     var prodLineIds = [];
     var workCenterIds = {};
 
-    orgUnitsModule.getAllByType('workCenter').forEach(function(workCenter)
+    _.forEach(orgUnitsModule.getAllByType('workCenter'), function(workCenter)
     {
       var wcProdFlow = workCenter.get('prodFlow');
 
@@ -180,7 +180,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
       }
     });
 
-    orgUnitsModule.getAllByType('prodLine').forEach(function(prodLine)
+    _.forEach(orgUnitsModule.getAllByType('prodLine'), function(prodLine)
     {
       if (workCenterIds[prodLine.get('workCenter')])
       {
@@ -294,8 +294,8 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
         }
 
         if (!prodShift
-          || lodash.isEmpty(req.body.aor)
-          || lodash.isEmpty(req.body.reason))
+          || _.isEmpty(req.body.aor)
+          || _.isEmpty(req.body.reason))
         {
           return this.skip(new Error('INPUT'), 400);
         }
@@ -312,10 +312,10 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
           req.body.operationNo = prodShiftOrder.operationNo;
         }
 
-        [
+        _.forEach([
           'date', 'shift',
           'division', 'subdivision', 'mrpControllers', 'prodFlow', 'workCenter', 'prodLine'
-        ].forEach(function(property)
+        ], function(property)
         {
           req.body[property] = prodShift[property];
         });

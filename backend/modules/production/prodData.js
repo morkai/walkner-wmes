@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = function setUpProdData(app, productionModule)
 {
@@ -23,7 +23,7 @@ module.exports = function setUpProdData(app, productionModule)
   {
     var currentShiftTime = app[productionModule.config.fteId].getCurrentShift().date.getTime();
 
-    lodash.forEach(cachedProdData, function(model, _id)
+    _.forEach(cachedProdData, function(model, _id)
     {
       if (model.date.getTime() !== currentShiftTime)
       {
@@ -132,7 +132,7 @@ module.exports = function setUpProdData(app, productionModule)
     {
       var prodData = [];
 
-      lodash.forEach(idList, function(id)
+      _.forEach(idList, function(id)
       {
         if (cachedProdData[id] !== undefined)
         {
@@ -140,7 +140,7 @@ module.exports = function setUpProdData(app, productionModule)
         }
       });
 
-      lodash.forEach(models, function(model)
+      _.forEach(models, function(model)
       {
         if (cachedProdData[model._id] === undefined)
         {
@@ -156,7 +156,7 @@ module.exports = function setUpProdData(app, productionModule)
 
   productionModule.swapToCachedProdData = function(models, cachedModels)
   {
-    lodash.forEach(models, function(model)
+    _.forEach(models, function(model)
     {
       var cachedModel = productionModule.getCachedProdData(model._id);
 

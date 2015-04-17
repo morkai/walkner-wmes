@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 var orderFinder = require('./orderFinder');
 
@@ -134,7 +134,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
 
         var now = Date.now();
 
-        lodash.forEach(prodShifts, function(prodShift)
+        _.forEach(prodShifts, function(prodShift)
         {
           var plannedQuantityDone = 0;
           var actualQuantityDone = 0;
@@ -193,12 +193,12 @@ module.exports = function setUpProductionRoutes(app, productionModule)
           return this.skip(err);
         }
 
-        lodash.forEach(prodShiftOrders, function(prodShiftOrder)
+        _.forEach(prodShiftOrders, function(prodShiftOrder)
         {
           prodLineStateMap[prodShiftOrder.prodShift].prodShiftOrders.push(prodShiftOrder);
         });
 
-        lodash.forEach(prodDowntimes, function(prodDowntime)
+        _.forEach(prodDowntimes, function(prodDowntime)
         {
           prodLineStateMap[prodDowntime.prodShift].prodDowntimes.push(prodDowntime);
         });
@@ -211,7 +211,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
         }
 
         return res.json({
-          prodLineStates: lodash.values(prodLineStateMap).sort(function(a, b)
+          prodLineStates: _.values(prodLineStateMap).sort(function(a, b)
           {
             return a.prodShift.date - b.prodShift.date;
           })

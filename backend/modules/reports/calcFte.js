@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 var util = require('./util');
 
@@ -26,7 +26,7 @@ module.exports = function(mongoose, options, done)
 
   if (options.prodTasks)
   {
-    Object.keys(options.prodTasks).forEach(function(id)
+    _.forEach(Object.keys(options.prodTasks), function(id)
     {
       if (options.prodTasks[id].inProd === false)
       {
@@ -284,13 +284,13 @@ module.exports = function(mongoose, options, done)
       options.orgUnitType === 'division' ? 'orgUnit' : 'division'
     ];
 
-    var workingProdLinesInOrgUnit = lodash.intersection(
+    var workingProdLinesInOrgUnit = _.intersection(
       allProdLinesInOrgUnit,
       allWorkingProdLines
     );
     var allWorkingProdLinesInDivision = options.orgUnitType === 'division'
       ? workingProdLinesInOrgUnit
-      : lodash.intersection(allProdLinesInDivision, allWorkingProdLines);
+      : _.intersection(allProdLinesInDivision, allWorkingProdLines);
 
     var dividedRatio = allWorkingProdLinesInDivision.length
       ? (workingProdLinesInOrgUnit.length / allWorkingProdLinesInDivision.length)
@@ -336,11 +336,11 @@ module.exports = function(mongoose, options, done)
     var allProdLinesInSubdivision = options.orgUnits.subdivision;
     var allProdLinesInOrgUnit = options.orgUnits.orgUnit;
 
-    var workingProdLinesInSubdivision = lodash.intersection(
+    var workingProdLinesInSubdivision = _.intersection(
       allProdLinesInSubdivision,
       allWorkingProdLines
     );
-    var workingProdLinesInOrgUnit = lodash.intersection(
+    var workingProdLinesInOrgUnit = _.intersection(
       workingProdLinesInSubdivision,
       allProdLinesInOrgUnit
     );
@@ -356,7 +356,7 @@ module.exports = function(mongoose, options, done)
     {
       var allProdLinesInProdFlow = options.orgUnits.prodFlow;
 
-      var workingProdLinesInProdFlow = lodash.intersection(
+      var workingProdLinesInProdFlow = _.intersection(
         allProdLinesInProdFlow,
         workingProdLinesInSubdivision
       );

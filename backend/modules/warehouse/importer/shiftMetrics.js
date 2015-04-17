@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
 
@@ -61,7 +61,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
     steps.push(findSettingsStep);
     steps.push(prepareSettingsStep);
 
-    [6, 14, 22].forEach(function(h, i)
+    _.forEach([6, 14, 22], function(h, i)
     {
       steps.push(createCalcShiftMetricsStep(i + 1, moment(message.date.getTime()).hours(h)));
     });
@@ -129,7 +129,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       }
     };
 
-    lodash.forEach(COMPONENT_STORAGE_METRICS, function(metric)
+    _.forEach(COMPONENT_STORAGE_METRICS, function(metric)
     {
       var prodTaskId = settings[metric + '.prodTask'] || null;
 
@@ -139,7 +139,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       }
     }, this);
 
-    lodash.forEach(FINISHED_GOODS_STORAGE_METRICS, function(metric)
+    _.forEach(FINISHED_GOODS_STORAGE_METRICS, function(metric)
     {
       var prodTaskId = settings[metric + '.prodTask'] || null;
 

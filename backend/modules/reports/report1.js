@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
 var util = require('./util');
@@ -116,11 +117,11 @@ module.exports = function(mongoose, options, done)
     var endTime = Math.min(moment().minutes(59).seconds(59).milliseconds(999).valueOf(), options.toTime);
     var groupedQuantitiesDone = {};
 
-    prodShifts.forEach(function(prodShift)
+    _.forEach(prodShifts, function(prodShift)
     {
       var shiftStartTime = prodShift.date.getTime();
 
-      prodShift.quantitiesDone.forEach(function(quantityDone, i)
+      _.forEach(prodShift.quantitiesDone, function(quantityDone, i)
       {
         var startedAt = shiftStartTime + 3600 * 1000 * i;
 
@@ -145,14 +146,14 @@ module.exports = function(mongoose, options, done)
 
     var groupedQuantitiesDone = this.groupedQuantitiesDone;
 
-    Object.keys(groupedQuantitiesDone).forEach(function(groupKey)
+    _.forEach(groupedQuantitiesDone, function(quantitiesDone, groupKey)
     {
       if (typeof results.coeffs[groupKey] === 'undefined')
       {
         results.coeffs[groupKey] = {quantityDone: 0};
       }
 
-      groupedQuantitiesDone[groupKey].forEach(function(quantityDone)
+      _.forEach(quantitiesDone, function(quantityDone)
       {
         results.coeffs[groupKey].quantityDone += quantityDone.count;
       });
@@ -200,7 +201,7 @@ module.exports = function(mongoose, options, done)
 
     var orderToDowntimes = {};
 
-    prodDowntimes.forEach(function(prodDowntime)
+    _.forEach(prodDowntimes, function(prodDowntime)
     {
       var duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
@@ -269,7 +270,7 @@ module.exports = function(mongoose, options, done)
     var orderToDowntimes = this.orderToDowntimes;
     var orderToWorkerCount = this.orderToWorkerCount;
 
-    Object.keys(orderToDowntimes).forEach(function(key)
+    _.forEach(orderToDowntimes, function(prodDowntimes, key)
     {
       var summary = {
         count: 0,
@@ -282,7 +283,7 @@ module.exports = function(mongoose, options, done)
         unscheduledDuration: 0
       };
 
-      orderToDowntimes[key].forEach(function(prodDowntime)
+      _.forEach(prodDowntimes, function(prodDowntime)
       {
         var duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
@@ -344,14 +345,16 @@ module.exports = function(mongoose, options, done)
 
   function divDowntimeFte()
   {
-    Object.keys(results.downtimes.byAor).forEach(function(aor)
+    var downtimes = results.downtimes;
+
+    _.forEach(downtimes.byAor, function(fte, aor)
     {
-      results.downtimes.byAor[aor] = util.round(results.downtimes.byAor[aor] / 8);
+      downtimes.byAor[aor] = util.round(fte / 8);
     });
 
-    Object.keys(results.downtimes.byReason).forEach(function(reason)
+    _.forEach(downtimes.byReason, function(fte, reason)
     {
-      results.downtimes.byReason[reason] = util.round(results.downtimes.byReason[reason] / 8);
+      downtimes.byReason[reason] = util.round(fte / 8);
     });
   }
 
@@ -378,11 +381,11 @@ module.exports = function(mongoose, options, done)
     this.orderToDowntimes = null;
     this.groupedProdShiftOrders = null;
 
-    Object.keys(groupedProdShiftOrders).forEach(function(groupKey)
+    _.forEach(groupedProdShiftOrders, function(prodShiftOrders, groupKey)
     {
       calcCoeffs(
         groupKey,
-        groupedProdShiftOrders[groupKey],
+        prodShiftOrders,
         fteGroupedResults[groupKey],
         orderToDowntimes
       );
@@ -421,7 +424,7 @@ module.exports = function(mongoose, options, done)
       pushEmptyCoeffs(lastGroupKey);
     }
 
-    groupKeys.forEach(function(groupKey)
+    _.forEach(groupKeys, function(groupKey)
     {
       while (lastGroupKey < groupKey)
       {
@@ -451,7 +454,7 @@ module.exports = function(mongoose, options, done)
   {
     var groupedProdShiftOrders = {};
 
-    prodShiftOrders.forEach(function(prodShiftOrder)
+    _.forEach(prodShiftOrders, function(prodShiftOrder)
     {
       orderToWorkerCount[prodShiftOrder._id] = prodShiftOrder.workerCount;
 
@@ -533,7 +536,7 @@ module.exports = function(mongoose, options, done)
 
     delete orderToDowntimes[orderId];
 
-    orderDowntimes.forEach(function(downtime)
+    _.forEach(orderDowntimes, function(downtime)
     {
       var startedAtHours = downtime.startedAt.getHours();
       var finishedAtHours = downtime.finishedAt.getHours();
@@ -634,7 +637,7 @@ module.exports = function(mongoose, options, done)
     var unscheduledDtNum = 0;
     var lastOrderFinishedAt;
 
-    orders.forEach(function(order)
+    _.forEach(orders, function(order)
     {
       var workDuration = (order.finishedAt.getTime() - order.startedAt.getTime()) / 3600000;
       var percent = typeof order.percent === 'number' ? order.percent : 1;

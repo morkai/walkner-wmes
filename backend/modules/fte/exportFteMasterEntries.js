@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var moment = require('moment');
 
 module.exports = function exportFteMasterEntries(subdivisionsModule, queryStream, emitter)
@@ -18,7 +19,7 @@ module.exports = function exportFteMasterEntries(subdivisionsModule, queryStream
   {
     prodFunctionList = Object.keys(prodFunctionMap);
 
-    prodFunctionList.forEach(function(prodFunctionId)
+    _.forEach(prodFunctionList, function(prodFunctionId)
     {
       prodFunctionMap[prodFunctionId] = Object.keys(prodFunctionMap[prodFunctionId]);
     });
@@ -28,14 +29,14 @@ module.exports = function exportFteMasterEntries(subdivisionsModule, queryStream
 
   queryStream.on('data', function(doc)
   {
-    doc.tasks.forEach(function(task)
+    _.forEach(doc.tasks, function(task)
     {
       task.companyTotals = {};
       task.prodFunctionTotals = {};
 
       var taskFunctionMap = {};
 
-      task.functions.forEach(function(prodFunction)
+      _.forEach(task.functions, function(prodFunction)
       {
         if (prodFunctionMap[prodFunction.id] === undefined)
         {
@@ -46,7 +47,7 @@ module.exports = function exportFteMasterEntries(subdivisionsModule, queryStream
 
         var taskCompanyMap = {};
 
-        prodFunction.companies.forEach(function(company)
+        _.forEach(prodFunction.companies, function(company)
         {
           prodFunctionMap[prodFunction.id][company.id] = true;
           taskCompanyMap[company.id] = company.count;

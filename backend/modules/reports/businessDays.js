@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('lodash');
 var moment = require('moment');
 
 exports.holidays = {};
@@ -306,7 +307,7 @@ function addYear(year, months)
   var businessDaysInYear = 0;
   var quarterKey;
 
-  months.forEach(function(days, month)
+  _.forEach(months, function(days, month)
   {
     var businessDaysInMonth;
 
@@ -318,7 +319,7 @@ function addYear(year, months)
     {
       businessDaysInMonth = days.shift();
 
-      days.forEach(function(day)
+      _.forEach(days, function(day)
       {
         exports.holidays[key(year, month, day)] = true;
       });

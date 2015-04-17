@@ -8,7 +8,7 @@ var startTime = Date.now();
 
 require('./extensions');
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var moment = require('moment');
 var main = require('h5.main');
 var blocked = process.env.NODE_ENV === 'production' ? function() {} : require('blocked');
@@ -51,7 +51,7 @@ var modules = (config.modules || []).map(function(module)
 });
 
 var app = {
-  options: lodash.merge({}, config, {
+  options: _.merge({}, config, {
     id: config.id,
     startTime: startTime,
     env: process.env.NODE_ENV,

@@ -6,6 +6,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
 var comparePoList = require('./comparePoList');
@@ -290,11 +291,11 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   {
     var filePaths = [];
 
-    Object.keys(fileInfoMap).forEach(function(key)
+    _.forEach(fileInfoMap, function(fileInfo, key)
     {
       if (key !== 'steps')
       {
-        filePaths.push(fileInfoMap[key].filePath);
+        filePaths.push(fileInfo.filePath);
       }
     });
 
@@ -303,7 +304,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function deleteFileInfoStepFiles(filePaths)
   {
-    filePaths.forEach(function(filePath)
+    _.forEach(filePaths, function(filePath)
     {
       if (module.config.parsedOutputDir)
       {
@@ -344,7 +345,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function removeFilePathsFromCache(filePaths)
   {
-    filePaths.forEach(function(filePath)
+    _.forEach(filePaths, function(filePath)
     {
       delete filePathCache[filePath];
     });
@@ -354,20 +355,18 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   {
     var vendorMap = {};
 
-    Object.keys(purchaseOrders).forEach(function(key)
+    _.forEach(purchaseOrders, function(po)
     {
-      var po = purchaseOrders[key];
-
       vendorMap[po.vendor] = po.vendorName;
     });
 
     var vendorList = [];
 
-    Object.keys(vendorMap).forEach(function(vendorId)
+    _.forEach(vendorMap, function(vendorName, vendorId)
     {
       vendorList.push({
         _id: vendorId,
-        name: vendorMap[vendorId]
+        name: vendorName
       });
     });
 

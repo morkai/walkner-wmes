@@ -5,6 +5,7 @@
 'use strict';
 
 var EventEmitter = require('events').EventEmitter;
+var _ = require('lodash');
 var step = require('h5.step');
 var mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
 
@@ -430,7 +431,7 @@ exports.exportRoute = function(options, req, res, next)
 
       if (multiple)
       {
-        row.forEach(writeRow);
+        _.forEach(row, writeRow);
       }
       else
       {
@@ -483,7 +484,7 @@ exports.exportRoute = function(options, req, res, next)
 
 function populateQuery(query, rql)
 {
-  rql.selector.args.forEach(function(term)
+  _.forEach(rql.selector.args, function(term)
   {
     if (term.name === 'populate' && term.args.length > 0)
     {

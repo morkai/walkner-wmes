@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 var setUpRoutes = require('./routes');
 
@@ -104,7 +105,7 @@ exports.start = function startSettingsModule(app, module)
       {
         var step = this;
 
-        settings.forEach(function(_id)
+        _.forEach(settings, function(_id)
         {
           module.update(_id, settings[_id], updater, step.parallel());
         });

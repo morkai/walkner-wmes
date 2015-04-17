@@ -27,11 +27,14 @@ Object.defineProperty(Error.prototype, 'toJSON', {
       message: error.message,
       stack: error.stack
     };
+    var keys = Object.keys(error);
 
-    Object.keys(error).forEach(function(property)
+    for (var i = 0; i < keys.length; ++i)
     {
-      result[property] = error[property];
-    });
+      var key = keys[i];
+
+      result[key] = error[key];
+    }
 
     return result;
   }

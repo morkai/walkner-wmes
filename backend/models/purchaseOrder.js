@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = function setupPurchaseOrderModel(app, mongoose)
 {
@@ -112,7 +112,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
 
     var scheduledAt = Number.MAX_VALUE;
 
-    lodash.forEach(this.schedule, function(schedule)
+    _.forEach(this.schedule, function(schedule)
     {
       scheduledAt = Math.min(scheduledAt, schedule.date.getTime());
     });
@@ -239,7 +239,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     var totalQty = 0;
     var totalPrintedQty = 0;
 
-    lodash.forEach(this.items, function(item)
+    _.forEach(this.items, function(item)
     {
       totalQty += item.qty;
       totalPrintedQty += item.printedQty;
@@ -262,7 +262,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
     var itemMap = {};
 
-    lodash.forEach(this.items, function(item)
+    _.forEach(this.items, function(item)
     {
       item.printedQty = 0;
       itemMap[item._id] = item;
@@ -284,7 +284,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
         return done(err);
       }
 
-      lodash.forEach(prints, function(print)
+      _.forEach(prints, function(print)
       {
         var item = itemMap[print.item];
 

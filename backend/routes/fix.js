@@ -3,7 +3,7 @@
 'use strict';
 
 var moment = require('moment');
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function startFixRoutes(app, express)
@@ -109,7 +109,7 @@ module.exports = function startFixRoutes(app, express)
 
         var steps = [];
 
-        prodShiftOrders.forEach(function(prodShiftOrder)
+        _.forEach(prodShiftOrders, function(prodShiftOrder)
         {
           steps.push(function()
           {
@@ -172,7 +172,7 @@ module.exports = function startFixRoutes(app, express)
           {
             var step = this;
 
-            prodDowntimes.forEach(function(prodDowntime)
+            _.forEach(prodDowntimes, function(prodDowntime)
             {
               if (prodDowntime.date < buggedDowntimeDate)
               {
@@ -278,7 +278,7 @@ module.exports = function startFixRoutes(app, express)
         return next(err);
       }
 
-      corroborateDowntimeEntries.forEach(function(corroborateDowntimeEntry)
+      _.forEach(corroborateDowntimeEntries, function(corroborateDowntimeEntry)
       {
         prodDowntimeIds.push(corroborateDowntimeEntry.data._id);
 
@@ -294,7 +294,7 @@ module.exports = function startFixRoutes(app, express)
 
         var updates = [];
 
-        finishDowntimeEntries.forEach(function(finishDowntimeEntry)
+        _.forEach(finishDowntimeEntries, function(finishDowntimeEntry)
         {
           var corroborateDowntimeEntry = corroborateDowntimeMap[finishDowntimeEntry.data._id];
 
@@ -492,7 +492,7 @@ module.exports = function startFixRoutes(app, express)
       var prodLines = {};
       var $set = {};
 
-      lodash.forEach(pressWorksheet.orders, function(order, i)
+      _.forEach(pressWorksheet.orders, function(order, i)
       {
         var division = app.orgUnits.getDivisionFor('prodLine', order.prodLine);
 

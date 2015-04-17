@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var moment = require('moment');
 var canManage = require('../canManage');
 
@@ -13,7 +13,7 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
   var userModule = app[fteModule.config.userId];
   var subdivisionsModule = app[fteModule.config.subdivisionsId];
 
-  if (!lodash.isFunction(reply))
+  if (!_.isFunction(reply))
   {
     reply = function() {};
   }
@@ -25,7 +25,7 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
     return reply(new Error('AUTH'));
   }
 
-  if (!lodash.isObject(data))
+  if (!_.isObject(data))
   {
     return reply(new Error('INPUT'));
   }
@@ -38,7 +38,7 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
 
   if (!shiftMoment.isValid()
     || !validSubdivision
-    || !lodash.isNumber(data.shift))
+    || !_.isNumber(data.shift))
   {
     return reply(new Error('INPUT'));
   }

@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var autoIncrement = require('mongoose-auto-increment');
 
 module.exports = function setupProdDowntimeModel(app, mongoose)
@@ -182,7 +183,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     {
       var changes = {_id: doc._id};
 
-      doc._changes.forEach(function(modifiedPath)
+      _.forEach(doc._changes, function(modifiedPath)
       {
         changes[modifiedPath] = doc.get(modifiedPath);
       });

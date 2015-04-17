@@ -6,6 +6,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var step = require('h5.step');
 var parseOrderInfo = require('./parseOrderInfo');
 var parseOperInfo = require('./parseOperInfo');
@@ -280,13 +281,13 @@ module.exports = function createParser(app, importerModule, callback)
   {
     var filePaths = [];
 
-    fileInfoMaps.forEach(function(fileInfoMap)
+    _.forEach(fileInfoMaps, function(fileInfoMap)
     {
-      Object.keys(fileInfoMap).forEach(function(key)
+      _.forEach(fileInfoMap, function(fileInfo, key)
       {
         if (key !== 'steps')
         {
-          filePaths.push(fileInfoMap[key].filePath);
+          filePaths.push(fileInfo.filePath);
         }
       });
     });
@@ -296,7 +297,7 @@ module.exports = function createParser(app, importerModule, callback)
 
   function deleteFileInfoStepFiles(filePaths)
   {
-    filePaths.forEach(function(filePath)
+    _.forEach(filePaths, function(filePath)
     {
       if (importerModule.config.parsedOutputDir)
       {
@@ -337,7 +338,7 @@ module.exports = function createParser(app, importerModule, callback)
 
   function removeFilePathsFromCache(filePaths)
   {
-    filePaths.forEach(function(filePath)
+    _.forEach(filePaths, function(filePath)
     {
       delete filePathCache[filePath];
     });

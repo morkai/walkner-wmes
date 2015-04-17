@@ -5,7 +5,7 @@
 'use strict';
 
 var format = require('util').format;
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 var exec12 = require('../util/exec12').exec;
 
@@ -56,7 +56,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
         shippingNo: []
       };
 
-      lodash.forEach(poPrints, function(poPrint)
+      _.forEach(poPrints, function(poPrint)
       {
         var itemNo = String(+poPrint.item);
 
@@ -90,7 +90,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
 
       var query = req.query;
 
-      lodash.forEach(['orderNo', 'nc12', 'quantity', 'itemNo', 'vendorNo', 'shippingNo'], function(param)
+      _.forEach(['orderNo', 'nc12', 'quantity', 'itemNo', 'vendorNo', 'shippingNo'], function(param)
       {
         if (!Array.isArray(query[param]))
         {
@@ -99,7 +99,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
       });
 
       this.barcodeDataToPng = {};
-      this.pages = lodash.map(query.orderNo, function(orderNo, i)
+      this.pages = _.map(query.orderNo, function(orderNo, i)
       {
         var page = {
           orderNo: orderNo || '',
@@ -151,12 +151,12 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
         return this.done(next, err);
       }
 
-      lodash.forEach(this.uniqueBarcodes, function(uniqueBarcode, i)
+      _.forEach(this.uniqueBarcodes, function(uniqueBarcode, i)
       {
         this.barcodeDataToPng[uniqueBarcode] = barcodePngs[i];
       }, this);
 
-      lodash.forEach(this.pages, function(page)
+      _.forEach(this.pages, function(page)
       {
         page.png = this.barcodeDataToPng[page.barcodeData];
       }, this);

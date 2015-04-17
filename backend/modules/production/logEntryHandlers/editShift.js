@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
@@ -67,7 +68,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       {
         var personnelChanges = {};
 
-        ['master', 'leader', 'operator', 'operators'].forEach(function(personnelProperty)
+        _.forEach(['master', 'leader', 'operator', 'operators'], function(personnelProperty)
         {
           if (changes[personnelProperty] !== undefined)
           {
@@ -77,13 +78,13 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
         var step = this;
 
-        prodShiftOrders.forEach(function(prodShiftOrder)
+        _.forEach(prodShiftOrders, function(prodShiftOrder)
         {
           prodShiftOrder.set(personnelChanges);
           prodShiftOrder.save(step.parallel());
         });
 
-        prodDowntimes.forEach(function(prodDowntime)
+        _.forEach(prodDowntimes, function(prodDowntime)
         {
           prodDowntime.set(personnelChanges);
           prodDowntime.save(step.parallel());

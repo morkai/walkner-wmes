@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var createParser = require('./createParser');
 
 exports.DEFAULT_CONFIG = {
@@ -30,10 +31,8 @@ exports.start = function startEmptyOrdersImporterModule(app, module)
   {
     var emptyOrders = [];
 
-    Object.keys(orders).forEach(function(orderId)
+    _.forEach(orders, function(order)
     {
-      var order = orders[orderId];
-
       if (order.operations === null)
       {
         emptyOrders.push(new EmptyOrder(order).toObject({depopulate: true}));

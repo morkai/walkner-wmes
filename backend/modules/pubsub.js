@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var pubsub = require('h5.pubsub');
 
 exports.DEFAULT_CONFIG = {
@@ -54,9 +54,9 @@ exports.start = function startPubsubModule(app, module)
   /**
    * @type {MessageBroker}
    */
-  module = app[module.name] = lodash.merge(new pubsub.MessageBroker(), module);
+  module = app[module.name] = _.merge(new pubsub.MessageBroker(), module);
 
-  module.config.republishTopics.forEach(function(topic)
+  _.forEach(module.config.republishTopics, function(topic)
   {
     app.broker.subscribe(topic, function(message, topic)
     {

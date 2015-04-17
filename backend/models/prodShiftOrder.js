@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var createOrderLossSchema = require('./createOrderLossSchema');
 
 module.exports = function setupProdShiftOrderModel(app, mongoose)
@@ -195,7 +196,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     {
       var changes = {_id: doc._id};
 
-      doc._changes.forEach(function(modifiedPath)
+      _.forEach(doc._changes, function(modifiedPath)
       {
         changes[modifiedPath] = doc.get(modifiedPath);
       });
@@ -211,7 +212,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     prodShiftOrder.breakDuration = 0;
     prodShiftOrder.downtimeDuration = 0;
 
-    prodDowntimes.forEach(function(prodDowntime)
+    _.forEach(prodDowntimes, function(prodDowntime)
     {
       var reason = app.downtimeReasons.modelsById[prodDowntime.reason];
       var property = reason && reason.type === 'break' ? 'breakDuration' : 'downtimeDuration';

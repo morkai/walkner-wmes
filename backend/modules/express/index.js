@@ -69,7 +69,7 @@ exports.start = function startExpressModule(app, expressModule, done)
     return httpError;
   };
 
-  methods.forEach(function(method)
+  _.forEach(methods, function(method)
   {
     expressModule[method] = function()
     {

@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function setupProdFlowModel(app, mongoose)
@@ -41,7 +42,7 @@ module.exports = function setupProdFlowModel(app, mongoose)
     var divisionProdFlows = [];
     var steps = [];
 
-    app.subdivisions.models.forEach(function(subdivision)
+    _.forEach(app.subdivisions.models, function(subdivision)
     {
       if (subdivision.get('division') !== divisionId)
       {
@@ -91,7 +92,7 @@ module.exports = function setupProdFlowModel(app, mongoose)
     var prodFlows = [];
     var idMap = {};
 
-    app.mrpControllers.models.forEach(function(mrpController)
+    _.forEach(app.mrpControllers.models, function(mrpController)
     {
       if (String(mrpController.subdivision) !== subdivisionId)
       {
@@ -100,7 +101,7 @@ module.exports = function setupProdFlowModel(app, mongoose)
 
       var mrpControllerId = mrpController._id;
 
-      app.prodFlows.models.forEach(function(prodFlow)
+      _.forEach(app.prodFlows.models, function(prodFlow)
       {
         var mrpControllers = prodFlow.mrpController;
 

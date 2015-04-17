@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var moment = require('moment');
 var ProdLineState = require('./ProdLineState');
 
@@ -22,7 +22,7 @@ module.exports = function setUpProdState(app, productionModule)
   {
     if (loaded)
     {
-      return done(null, lodash.values(prodLineStateMap));
+      return done(null, _.values(prodLineStateMap));
     }
 
     app.broker.subscribe('production.stateLoaded').setLimit(1).on('message', function()
@@ -36,7 +36,7 @@ module.exports = function setUpProdState(app, productionModule)
     return prodLineStateMap[prodLineId] || null;
   };
 
-  orgUnitsModule.getAllByType('prodLine').forEach(function(prodLine) { createProdLineState(prodLine, false); });
+  _.forEach(orgUnitsModule.getAllByType('prodLine'), function(prodLine) { createProdLineState(prodLine, false); });
 
   scheduleHourChange();
 
@@ -96,11 +96,11 @@ module.exports = function setUpProdState(app, productionModule)
 
     prodLineState.update(changes, {
       reloadOrders: multiChange
-        && lodash.contains(changes.types, 'finishOrder')
-        && lodash.contains(changes.types, 'changeOrder'),
+        && _.contains(changes.types, 'finishOrder')
+        && _.contains(changes.types, 'changeOrder'),
       reloadDowntimes: multiChange
-        && lodash.contains(changes.types, 'finishDowntime')
-        && lodash.contains(changes.types, 'startDowntime')
+        && _.contains(changes.types, 'finishDowntime')
+        && _.contains(changes.types, 'startDowntime')
     });
   });
 
@@ -118,7 +118,7 @@ module.exports = function setUpProdState(app, productionModule)
   {
     extendedDowntimeDelay = message.value;
 
-    lodash.forEach(prodLineStateMap, function(prodLineState)
+    _.forEach(prodLineStateMap, function(prodLineState)
     {
       prodLineState.checkExtendedDowntime();
     });
@@ -172,7 +172,7 @@ module.exports = function setUpProdState(app, productionModule)
 
     var currentHour = new Date().getHours();
 
-    lodash.each(prodLineStateMap, function(prodLineState)
+    _.each(prodLineStateMap, function(prodLineState)
     {
       prodLineState.onHourChanged(currentHour);
     });

@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function setupProdShiftModel(app, mongoose)
@@ -114,7 +115,7 @@ module.exports = function setupProdShiftModel(app, mongoose)
     {
       var changes = {_id: doc._id};
 
-      doc._changes.forEach(function(modifiedPath)
+      _.forEach(doc._changes, function(modifiedPath)
       {
         changes[modifiedPath] = doc.get(modifiedPath);
       });
@@ -154,11 +155,11 @@ module.exports = function setupProdShiftModel(app, mongoose)
         var prodLineCount = prodLineIds.length;
         var dividedQuantities = prodLineIds.map(function() { return [0, 0, 0, 0, 0, 0, 0, 0]; });
 
-        plannedQuantities.forEach(function(plannedQuantity, hour)
+        _.forEach(plannedQuantities, function(plannedQuantity, hour)
         {
           var quantityForProdLine = Math.floor(plannedQuantity / prodLineCount);
 
-          dividedQuantities.forEach(function(quantitiesForProdLine)
+          _.forEach(dividedQuantities, function(quantitiesForProdLine)
           {
             quantitiesForProdLine[hour] = quantityForProdLine;
           });

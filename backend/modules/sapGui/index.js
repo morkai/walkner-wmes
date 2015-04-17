@@ -7,7 +7,7 @@
 var spawn = require('child_process').spawn;
 var path = require('path');
 var later = require('later');
-var lodash = require('lodash');
+var _ = require('lodash');
 var jobs = require('./jobs/index');
 
 exports.DEFAULT_CONFIG = {
@@ -25,7 +25,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   sapGuiModule.runJob = function(job, done)
   {
-    runJob(lodash.cloneDeep(job), 0, done);
+    runJob(_.cloneDeep(job), 0, done);
   };
 
   sapGuiModule.runScript = function(job, scriptFile, args, done)
@@ -51,7 +51,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
     cp.stderr.setEncoding('utf8');
     cp.stderr.on('data', function(data)
     {
-      data.trim().split(/\r\n|\n/).forEach(function(line)
+      _.forEach(data.trim().split(/\r\n|\n/), function(line)
       {
         output += line + '\r\n';
 
@@ -62,7 +62,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
     cp.stdout.setEncoding('utf8');
     cp.stdout.on('data', function(data)
     {
-      data.trim().split(/\r\n|\n/).forEach(function(line)
+      _.forEach(data.trim().split(/\r\n|\n/), function(line)
       {
         output += line + '\r\n';
 
@@ -173,7 +173,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   app.broker.subscribe('app.started').setLimit(1).on('message', function()
   {
-    sapGuiModule.config.jobs.forEach(function(job, i)
+    _.forEach(sapGuiModule.config.jobs, function(job, i)
     {
       if (!job.key)
       {

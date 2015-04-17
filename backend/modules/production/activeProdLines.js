@@ -4,6 +4,8 @@
 
 'use strict';
 
+var _ = require('lodash');
+
 module.exports = function setUpActiveProdLines(app, productionModule)
 {
   var fteModule = app[productionModule.config.fteId];
@@ -58,7 +60,7 @@ module.exports = function setUpActiveProdLines(app, productionModule)
     shiftToProdLines = {};
     shiftToProdFlows = {};
 
-    earlyProdLines.forEach(function(prodLineId)
+    _.forEach(earlyProdLines, function(prodLineId)
     {
       activateProdLine(currentShift.date, prodLineId, null, true);
     });
@@ -117,13 +119,13 @@ module.exports = function setUpActiveProdLines(app, productionModule)
           shiftToProdFlows[shiftKey] = {};
         }
 
-        results.forEach(function(result)
+        _.forEach(results, function(result)
         {
           var prodFlowId = result._id.toString();
 
           shiftToProdFlows[shiftKey][prodFlowId] = {};
 
-          result.prodLines.forEach(function(prodLineId)
+          _.forEach(result.prodLines, function(prodLineId)
           {
             prodLineIds.push(prodLineId);
 

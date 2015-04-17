@@ -6,7 +6,7 @@
 
 var moment = require('moment');
 var step = require('h5.step');
-var lodash = require('lodash');
+var _ = require('lodash');
 var util = require('./util');
 
 module.exports = function(mongoose, options, done)
@@ -110,7 +110,7 @@ module.exports = function(mongoose, options, done)
       groupData.dayCount[moment(whShiftMetrics._id).format('YYMMDD')] = true;
     }
 
-    lodash.forEach(whShiftMetrics, function(value, key)
+    _.forEach(whShiftMetrics, function(value, key)
     {
       if (key === '_id')
       {
@@ -129,7 +129,7 @@ module.exports = function(mongoose, options, done)
       {
         var tasks = groupData[key];
 
-        lodash.forEach(value, function(count, taskId)
+        _.forEach(value, function(count, taskId)
         {
           if (tasks[taskId] === undefined)
           {

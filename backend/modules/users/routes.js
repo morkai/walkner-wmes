@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var bcrypt = require('bcrypt');
 
 module.exports = function setUpUsersRoutes(app, usersModule)
@@ -129,7 +129,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
   function logoutRoute(req, res, next)
   {
-    var user = lodash.isObject(req.session.user)
+    var user = _.isObject(req.session.user)
       ? req.session.user
       : null;
 
@@ -142,7 +142,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         return next(err);
       }
 
-      var guestUser = lodash.merge({}, userModule.guest);
+      var guestUser = _.merge({}, userModule.guest);
       guestUser.loggedIn = false;
       guestUser.ipAddress = userModule.getRealIp({}, req);
       guestUser.local = userModule.isLocalIpAddress(guestUser.ipAddress);
@@ -178,14 +178,14 @@ module.exports = function setUpUsersRoutes(app, usersModule)
    */
   function hashPassword(req, res, next)
   {
-    if (!lodash.isObject(req.body))
+    if (!_.isObject(req.body))
     {
       return next();
     }
 
     var password = req.body.password;
 
-    if (!lodash.isString(password) || password.length === 0)
+    if (!_.isString(password) || password.length === 0)
     {
       return next();
     }

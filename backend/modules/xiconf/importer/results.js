@@ -6,6 +6,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var step = require('h5.step');
 var JSZip = require('jszip');
 
@@ -239,7 +240,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
     var orderIdToNo = {};
 
-    this.orders.forEach(function(order)
+    _.forEach(this.orders, function(order)
     {
       orderIdToNo[order._id] = order.no;
     });
@@ -390,7 +391,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
     var steps = [];
 
-    this.featureFiles.forEach(function(featureFile)
+    _.forEach(this.featureFiles, function(featureFile)
     {
       steps.push(function()
       {

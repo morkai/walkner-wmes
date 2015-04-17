@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 var util = require('./util');
 
@@ -103,7 +104,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         {
           var step = this;
 
-          prodDowntimes.forEach(function(prodDowntime)
+          _.forEach(prodDowntimes, function(prodDowntime)
           {
             correctProdDowntime(prodDowntime._id, step.parallel());
           });

@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -36,7 +37,7 @@ module.exports = function report5(mongoose, options, done)
         return this.skip(err);
       }
 
-      qtyResults.forEach(function(qtyResult)
+      _.forEach(qtyResults, function(qtyResult)
       {
         if (qtyResult.qty > 0)
         {
@@ -46,9 +47,9 @@ module.exports = function report5(mongoose, options, done)
 
       var daysInGroups = {};
 
-      Object.keys(results.days).forEach(function(groupKey)
+      _.forEach(results.days, function(days, groupKey)
       {
-        daysInGroups[groupKey] = Object.keys(results.days[groupKey]).length;
+        daysInGroups[groupKey] = Object.keys(days).length;
       });
 
       results.days = daysInGroups;
@@ -63,7 +64,7 @@ module.exports = function report5(mongoose, options, done)
       var groupKeys = Object.keys(results.data).sort(function(a, b) { return a - b; });
       var lastGroupIndex = groupKeys.length - 1;
 
-      groupKeys.forEach(function(key, i)
+      _.forEach(groupKeys, function(key, i)
       {
         var data = results.data[key];
 

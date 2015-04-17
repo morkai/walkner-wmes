@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var exportFteLeaderEntries = require('./exportFteLeaderEntries');
 var exportFteMasterEntries = require('./exportFteMasterEntries');
 var canManage = require('./canManage');
@@ -94,7 +94,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
       return next();
     }
 
-    var divisionTerm = lodash.find(selector.args, function(term)
+    var divisionTerm = _.find(selector.args, function(term)
     {
       return term.name === 'eq' && term.args[0] === 'division';
     });
@@ -106,7 +106,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
     var subdivisions = [];
 
-    subdivisionsModule.models.forEach(function(subdivisionModel)
+    _.forEach(subdivisionsModule.models, function(subdivisionModel)
     {
       if (subdivisionModel.division === divisionTerm.args[1])
       {

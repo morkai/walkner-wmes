@@ -5,7 +5,7 @@
 'use strict';
 
 var fs = require('fs');
-var lodash = require('lodash');
+var _ = require('lodash');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var expressMiddleware = require('./expressMiddleware');
@@ -59,7 +59,7 @@ exports.start = function startUpdaterModule(app, module)
 
     updater[versionsKey].package = module.package.version;
 
-    return clone === false ? updater[versionsKey] : lodash.cloneDeep(updater[versionsKey]);
+    return clone === false ? updater[versionsKey] : _.cloneDeep(updater[versionsKey]);
   };
 
   module.getBackendVersion = function()

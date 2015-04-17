@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var deepEqual = require('deep-equal');
 var step = require('h5.step');
 var createParser = require('./createParser');
@@ -70,7 +70,7 @@ exports.start = function startOrdersImporterModule(app, module)
       var insertList = [];
       var updateList = [];
 
-      orderModels.forEach(compareOrder.bind(null, updateList, orders, missingOrders));
+      _.forEach(orderModels, compareOrder.bind(null, updateList, orders, missingOrders));
 
       createOrdersForInsertion(insertList, orders, missingOrders);
 
@@ -123,7 +123,7 @@ exports.start = function startOrdersImporterModule(app, module)
       newValues: {}
     };
 
-    Object.keys(order).forEach(function(key)
+    _.forEach(order, function(newValue, key)
     {
       if (key === 'createdAt' || key === 'updatedAt' || key === 'importTs')
       {
@@ -131,7 +131,6 @@ exports.start = function startOrdersImporterModule(app, module)
       }
 
       var oldValue = orderModel.get(key);
-      var newValue = order[key];
 
       if (oldValue != null && typeof oldValue.toObject === 'function')
       {
@@ -140,7 +139,7 @@ exports.start = function startOrdersImporterModule(app, module)
 
       if (!deepEqual(oldValue, newValue, {strict: true}))
       {
-        if (key === 'operations' && lodash.isEmpty(newValue))
+        if (key === 'operations' && _.isEmpty(newValue))
         {
           return;
         }
@@ -196,14 +195,14 @@ exports.start = function startOrdersImporterModule(app, module)
 
   function createOrdersForInsertion(insertList, orders, missingOrders)
   {
-    Object.keys(orders).forEach(function(orderNo)
+    _.forEach(orders, function(order)
     {
-      insertList.push(new Order(orders[orderNo]));
+      insertList.push(new Order(order));
     });
 
-    Object.keys(missingOrders).forEach(function(orderNo)
+    _.forEach(missingOrders, function(missingOrder)
     {
-      insertList.push(new Order(missingOrders[orderNo]));
+      insertList.push(new Order(missingOrder));
     });
   }
 
@@ -216,12 +215,12 @@ exports.start = function startOrdersImporterModule(app, module)
 
     for (var i = 0; i < insertBatchCount; ++i)
     {
-      steps.push(lodash.partial(createOrdersStep, insertList.splice(0, 100)));
+      steps.push(_.partial(createOrdersStep, insertList.splice(0, 100)));
     }
 
-    updateList.forEach(function(orderModel)
+    _.forEach(updateList, function(orderModel)
     {
-      steps.push(lodash.partial(updateOrderStep, orderModel));
+      steps.push(_.partial(updateOrderStep, orderModel));
     });
 
     steps.push(function unlockStep(err)

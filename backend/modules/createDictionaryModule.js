@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = function createDictionaryModule(modelName, setUpRoutes, customSetUp)
 {
@@ -48,7 +48,7 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes, customS
 
       app.broker.subscribe(Model.TOPIC_PREFIX + '.deleted', function(message)
       {
-        module.models = lodash.filter(module.models, function(model)
+        module.models = _.filter(module.models, function(model)
         {
           return model._id !== message.model._id;
         });
@@ -77,7 +77,7 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes, customS
           module.models = models;
           module.modelsById = {};
 
-          lodash.forEach(models, function(model)
+          _.forEach(models, function(model)
           {
             module.modelsById[model._id] = model;
           });

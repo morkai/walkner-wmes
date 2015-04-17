@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var moment = require('moment');
 var autoIncrement = require('mongoose-auto-increment');
 var createOrderLossSchema = require('./createOrderLossSchema');
@@ -214,7 +215,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     var lastIndex = this.orders.length - 1;
     var finishedAt = ordersFinishedAt.toISOString();
 
-    this.orders.forEach(function(order, i)
+    _.forEach(this.orders, function(order, i)
     {
       order.calcTimes(startedAtMoment, unitDuration, i === lastIndex, finishedAt);
     });
@@ -241,7 +242,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     var divisions = {};
     var prodLines = {};
 
-    this.orders.forEach(function(order)
+    _.forEach(this.orders, function(order)
     {
       var startedAt = getDateFromTimeString(pressWorksheet.date, order.startedAt, false);
       var finishedAt = getDateFromTimeString(pressWorksheet.date, order.finishedAt, true);
@@ -256,7 +257,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
       if (Array.isArray(orderData.operations))
       {
-        orderData.operations.forEach(function(operation)
+        _.forEach(orderData.operations, function(operation)
         {
           operations[operation.no] = operation;
         });
@@ -316,7 +317,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       var downtimeStartTime = startedAt.getTime();
       var orderDowntimes = [];
 
-      (order.downtimes || []).forEach(function(downtime)
+      _.forEach(order.downtimes || [], function(downtime)
       {
         var startedAt = new Date(downtimeStartTime);
 

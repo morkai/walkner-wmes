@@ -5,7 +5,7 @@
 'use strict';
 
 var ObjectId = require('mongoose').Types.ObjectId;
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 {
@@ -134,7 +134,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
       return next();
     }
 
-    var mineTerm = lodash.find(selector.args, function(term)
+    var mineTerm = _.find(selector.args, function(term)
     {
       return term.name === 'eq' && term.args[0] === 'mine';
     });

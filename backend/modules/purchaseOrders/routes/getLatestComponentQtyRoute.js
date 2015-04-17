@@ -4,6 +4,8 @@
 
 'use strict';
 
+var _ = require('lodash');
+
 module.exports = function getLatestComponentQtyRoute(app, poModule, req, res, next)
 {
   var nc12 = [].concat(req.query.nc12 || req.body.nc12).filter(function(nc12)
@@ -32,7 +34,7 @@ module.exports = function getLatestComponentQtyRoute(app, poModule, req, res, ne
 
       var latestComponentQty = {};
 
-      results.forEach(function(result)
+      _.forEach(results, function(result)
       {
         latestComponentQty[result._id] = result.componentQty;
       });

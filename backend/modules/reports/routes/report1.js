@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var helpers = require('./helpers');
 var report1 = require('../report1');
 
@@ -93,7 +94,7 @@ function getDowntimeReasons(allDowntimeReasons)
     schedule: {}
   };
 
-  allDowntimeReasons.forEach(function(downtimeReason)
+  _.forEach(allDowntimeReasons, function(downtimeReason)
   {
     if (downtimeReason.type === 'break')
     {

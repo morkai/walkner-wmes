@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = wrapAmd;
 
@@ -18,10 +18,10 @@ function wrapAmd(js, modules)
   var moduleArgs;
   var modulePaths;
 
-  if (lodash.isObject(modules))
+  if (_.isObject(modules))
   {
-    moduleArgs = lodash.keys(modules).join(', ');
-    modulePaths = JSON.stringify(lodash.values(modules));
+    moduleArgs = _.keys(modules).join(', ');
+    modulePaths = JSON.stringify(_.values(modules));
   }
   else
   {

@@ -5,7 +5,7 @@
 'use strict';
 
 var inspect = require('util').inspect;
-var lodash = require('lodash');
+var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
 
@@ -286,7 +286,7 @@ ProdLineState.prototype.update = function(newData, options)
   var prodLineState = this;
   var changes = this.changes = {};
 
-  if (lodash.isBoolean(newData.online) && newData.online !== this.online)
+  if (_.isBoolean(newData.online) && newData.online !== this.online)
   {
     changes.online = this.online = newData.online;
   }
@@ -415,12 +415,12 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
     return done(null);
   }
 
-  if (!lodash.isObject(prodShiftData))
+  if (!_.isObject(prodShiftData))
   {
     return done(null);
   }
 
-  if (!lodash.isString(prodShiftData._id))
+  if (!_.isString(prodShiftData._id))
   {
     if (this.prodShift === null)
     {
@@ -482,7 +482,7 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
 {
   var changes = this.changes;
 
-  if (prodShiftOrderData === undefined || lodash.isArray(changes.prodShiftOrders))
+  if (prodShiftOrderData === undefined || _.isArray(changes.prodShiftOrders))
   {
     return done(null);
   }
@@ -492,11 +492,11 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
     return this.reloadProdShiftOrders(done);
   }
 
-  var isObject = lodash.isObject(prodShiftOrderData);
+  var isObject = _.isObject(prodShiftOrderData);
 
-  if (isObject && lodash.isString(prodShiftOrderData._id))
+  if (isObject && _.isString(prodShiftOrderData._id))
   {
-    var prodShiftOrder = lodash.find(this.prodShiftOrders, function(prodShiftOrder)
+    var prodShiftOrder = _.find(this.prodShiftOrders, function(prodShiftOrder)
     {
       return prodShiftOrder._id === prodShiftOrderData._id;
     });
@@ -597,7 +597,7 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
 {
   var changes = this.changes;
 
-  if (prodDowntimeData === undefined || lodash.isArray(changes.prodDowntimes))
+  if (prodDowntimeData === undefined || _.isArray(changes.prodDowntimes))
   {
     return done(null);
   }
@@ -607,11 +607,11 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
     return this.reloadProdDowntimes(done);
   }
 
-  var isObject = lodash.isObject(prodDowntimeData);
+  var isObject = _.isObject(prodDowntimeData);
 
-  if (isObject && lodash.isString(prodDowntimeData._id))
+  if (isObject && _.isString(prodDowntimeData._id))
   {
-    var prodDowntime = lodash.find(this.prodDowntimes, function(prodDowntime)
+    var prodDowntime = _.find(this.prodDowntimes, function(prodDowntime)
     {
       return prodDowntime._id === prodDowntimeData._id;
     });
@@ -794,7 +794,7 @@ ProdLineState.prototype.calculatePrevDayMetrics = function()
       prodLineState.prevPlannedQuantitiesDone = [null, 0, 0, 0];
       prodLineState.prevActualQuantitiesDone = [null, 0, 0, 0];
 
-      lodash.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
+      _.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
 
       quantitiesDone.planned += prodLineState.prevPlannedQuantitiesDone[1]
         + prodLineState.prevPlannedQuantitiesDone[2]
@@ -866,7 +866,7 @@ ProdLineState.prototype.updateSecondShiftMetrics = function()
       prodLineState.prevPlannedQuantitiesDone[1] = 0;
       prodLineState.prevActualQuantitiesDone[1] = 0;
 
-      lodash.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
+      _.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
 
       quantitiesDone.planned += prodLineState.prevPlannedQuantitiesDone[1];
       quantitiesDone.actual += prodLineState.prevActualQuantitiesDone[1];
@@ -919,7 +919,7 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
       prodLineState.prevActualQuantitiesDone[1] = 0;
       prodLineState.prevActualQuantitiesDone[2] = 0;
 
-      lodash.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
+      _.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
 
       quantitiesDone.planned += prodLineState.prevPlannedQuantitiesDone[1] + prodLineState.prevPlannedQuantitiesDone[2];
       quantitiesDone.actual += prodLineState.prevActualQuantitiesDone[1] + prodLineState.prevActualQuantitiesDone[2];
@@ -1001,7 +1001,7 @@ ProdLineState.prototype.publishMetricsChanges = function(quantitiesDone)
     changes.actualQuantityDone = this.actualQuantityDone = quantitiesDone.actual;
   }
 
-  if (this.changes === null && !lodash.isEmpty(changes))
+  if (this.changes === null && !_.isEmpty(changes))
   {
     this.publishChanges(changes);
   }

@@ -6,6 +6,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var step = require('h5.step');
 var JSZip = require('jszip');
 
@@ -298,7 +299,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
     var steps = [];
 
-    this.files.forEach(function(file)
+    _.forEach(this.files, function(file)
     {
       steps.push(function()
       {

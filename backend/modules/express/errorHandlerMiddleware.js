@@ -4,6 +4,8 @@
 
 'use strict';
 
+var _ = require('lodash');
+
 module.exports = function createErrorHandlerMiddleware(expressModule, options)
 {
   if (!options)
@@ -89,7 +91,7 @@ module.exports = function createErrorHandlerMiddleware(expressModule, options)
         stack: err.stack
       };
 
-      Object.keys(err).forEach(function(prop) { error[prop] = err[prop]; });
+      _.forEach(err, function(value, key) { error[key] = value; });
 
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify({error: error}));

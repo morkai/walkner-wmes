@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 exports.DEFAULT_CONFIG = {
   messengerClientId: 'messenger/client',
@@ -16,7 +16,7 @@ exports.start = function startHealthEndpointModule(app, module)
   var messengerClient;
   var tagPrefix = 'health.' + app.options.id;
   var websockets = 0;
-  var scheduleSendSioData = lodash.throttle(sendSioData, 5000);
+  var scheduleSendSioData = _.throttle(sendSioData, 5000);
 
   app.onModuleReady(module.config.messengerClientId, function()
   {

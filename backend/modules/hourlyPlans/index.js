@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 
@@ -111,7 +112,7 @@ exports.start = function startFteModule(app, module)
           return;
         }
 
-        prodShifts.forEach(function(prodShift)
+        _.forEach(prodShifts, function(prodShift)
         {
           app.broker.publish('hourlyPlans.quantitiesPlanned', {
             prodLine: prodShift.prodLine,

@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = function setUpFeedbackRoutes(app, feedbackModule)
@@ -24,7 +24,7 @@ module.exports = function setUpFeedbackRoutes(app, feedbackModule)
   function prepareBodyForAdd(req, res, next)
   {
     var watch = !!req.body.watch;
-    var body = lodash.pick(req.body, ['type', 'summary', 'comment', 'page', 'navigator', 'versions']);
+    var body = _.pick(req.body, ['type', 'summary', 'comment', 'page', 'navigator', 'versions']);
 
     body.creator = new ObjectId(req.session.user._id);
     body.savedAt = new Date();

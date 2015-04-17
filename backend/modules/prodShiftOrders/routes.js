@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
 var limitOrgUnit = require('../prodLines/limitOrgUnit');
@@ -135,10 +136,10 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
           return this.skip(new Error('INPUT'), 400);
         }
 
-        [
+        _.forEach([
           'date', 'shift',
           'division', 'subdivision', 'mrpControllers', 'prodFlow', 'workCenter', 'prodLine'
-        ].forEach(function(property)
+        ], function(property)
         {
           req.body[property] = prodShift[property];
         });

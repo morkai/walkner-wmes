@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = function parseSapTextTable(input, options)
 {
@@ -32,11 +32,11 @@ module.exports = function parseSapTextTable(input, options)
   var propertyToColumnIndex = {};
   var usedColumnIndexes = {};
 
-  lodash.forEach(line.split('|'), function(columnName, columnIndex)
+  _.forEach(line.split('|'), function(columnName, columnIndex)
   {
     columnName = columnName.trim();
 
-    lodash.forEach(columnMatchers, function(columnRe, propertyName)
+    _.forEach(columnMatchers, function(columnRe, propertyName)
     {
       if (!usedColumnIndexes[columnIndex] &&
         propertyToColumnIndex[propertyName] === undefined

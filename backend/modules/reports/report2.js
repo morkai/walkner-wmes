@@ -4,8 +4,8 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
-var lodash = require('lodash');
 var moment = require('moment');
 var ObjectId = require('mongoose').Types.ObjectId;
 var util = require('./util');
@@ -22,7 +22,7 @@ module.exports = function(mongoose, options, done)
 
   var prodFlowMap = {};
 
-  (options.prodFlows || []).forEach(function(prodFlowId)
+  _.forEach(options.prodFlows || [], function(prodFlowId)
   {
     prodFlowMap[prodFlowId] = true;
   });
@@ -321,15 +321,15 @@ module.exports = function(mongoose, options, done)
 
 function roundObjectValues(obj)
 {
-  Object.keys(obj).forEach(function(key)
+  _.forEach(obj, function(value, key)
   {
-    if (typeof obj[key] === 'object')
+    if (typeof value === 'object')
     {
-      roundObjectValues(obj[key]);
+      roundObjectValues(value);
     }
     else
     {
-      obj[key] = util.round(obj[key]);
+      obj[key] = util.round(value);
     }
   });
 }
@@ -512,7 +512,7 @@ function getDivisionCount(division, divisionsCount)
     );
   }
 
-  var divisionCount = lodash.find(divisionsCount, function(divisionCount)
+  var divisionCount = _.find(divisionsCount, function(divisionCount)
   {
     return divisionCount.division === division;
   });

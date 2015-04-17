@@ -6,6 +6,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 
 exports.DEFAULT_CONFIG = {
   savePath: '/var/tmp',
@@ -41,7 +42,7 @@ exports.start = function startMailDownloaderModule(app, module)
 
     module.debug("Saving %d attachment(s) from e-mail: %s", mail.attachments.length, mail.subject);
 
-    mail.attachments.forEach(function(attachment)
+    _.forEach(mail.attachments, function(attachment)
     {
       var savePath = createSavePath(timestamp, attachment.fileName);
 

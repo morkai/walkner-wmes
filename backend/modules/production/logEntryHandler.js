@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var deepEqual = require('deep-equal');
 var step = require('h5.step');
 var logEntryHandlers = require('./logEntryHandlers');
@@ -57,7 +58,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
         {
           var step = this;
 
-          Object.keys(groupedLogEntries).forEach(function(prodLineId)
+          _.forEach(groupedLogEntries, function(logEntries, prodLineId)
           {
             var prodLine = prodLines.modelsById[prodLineId];
 
@@ -66,7 +67,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
               prodLine = new ProdLine({_id: prodLineId});
             }
 
-            handleProdLineLogEntries(prodLine, groupedLogEntries[prodLineId], step.parallel());
+            handleProdLineLogEntries(prodLine, logEntries, step.parallel());
           });
         },
         function finalizeLogEntryHandling(err)
@@ -91,7 +92,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
   {
     var groupedLogEntries = {};
 
-    logEntries.forEach(function(logEntry)
+    _.forEach(logEntries, function(logEntry)
     {
       if (!groupedLogEntries[logEntry.prodLine])
       {
@@ -132,7 +133,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       );
     }
 
-    logEntries.forEach(function(logEntry)
+    _.forEach(logEntries, function(logEntry)
     {
       steps.push(function handleNextLogEntryStep()
       {
@@ -194,7 +195,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
   {
     var types = {};
 
-    logEntries.forEach(function(logEntry)
+    _.forEach(logEntries, function(logEntry)
     {
       types[logEntry.type] = true;
     });
@@ -320,7 +321,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
     var changes = {};
     var changed = false;
 
-    Object.keys(newModelData).forEach(function(property)
+    _.forEach(Object.keys(newModelData), function(property)
     {
       if (property.charAt(0) === '_' || property === 'orderData')
       {

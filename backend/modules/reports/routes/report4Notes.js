@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var helpers = require('./helpers');
 
 module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
@@ -159,5 +159,5 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
 
 function getOperatorLabel(operatorIds, operators)
 {
-  return lodash.find(operators, function(operator) { return operatorIds.indexOf(operator.id) !== -1; }).label;
+  return _.find(operators, function(operator) { return operatorIds.indexOf(operator.id) !== -1; }).label;
 }

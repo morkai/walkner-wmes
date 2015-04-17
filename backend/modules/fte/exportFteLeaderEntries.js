@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var moment = require('moment');
 
 module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream, emitter)
@@ -33,11 +33,11 @@ module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream
 
   queryStream.on('data', function(doc)
   {
-    lodash.forEach(doc.tasks, handleTask);
+    _.forEach(doc.tasks, handleTask);
 
     if (Array.isArray(doc.fteDiv) && doc.fteDiv.length)
     {
-      lodash.forEach(doc.fteDiv, function(division)
+      _.forEach(doc.fteDiv, function(division)
       {
         divisionMap[division] = true;
       });
@@ -58,7 +58,7 @@ module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream
       }];
     }
 
-    lodash.forEach(task.functions, function(taskFunction)
+    _.forEach(task.functions, function(taskFunction)
     {
       handleTaskFunction(taskFunctionMap, taskFunction);
     });
@@ -75,7 +75,7 @@ module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream
 
     taskFunction.total = 0;
 
-    lodash.forEach(taskFunction.companies, function(taskCompany)
+    _.forEach(taskFunction.companies, function(taskCompany)
     {
       companyMap[taskCompany.id] = true;
       taskCompanyMap[taskCompany.id] = taskCompany;
@@ -90,7 +90,7 @@ module.exports = function exportFteLeaderEntries(subdivisionsModule, queryStream
 
         var taskDivisionMap = {};
 
-        lodash.forEach(taskCompany.count, function(taskDivision)
+        _.forEach(taskCompany.count, function(taskDivision)
         {
           taskCompany.total += taskDivision.value;
           taskDivisionMap[taskDivision.division] = taskDivision.value;

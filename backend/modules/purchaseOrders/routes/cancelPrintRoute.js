@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function cancelPrintRoute(app, poModule, req, res, next)
@@ -53,7 +53,7 @@ module.exports = function cancelPrintRoute(app, poModule, req, res, next)
       var cancelledBy = userModule.createUserInfo(req.session.user, req);
       var cancelledAt = new Date();
 
-      lodash.forEach(this.poPrints, function(poPrint)
+      _.forEach(this.poPrints, function(poPrint)
       {
         poPrint.cancelled = cancelled;
         poPrint.cancelledBy = cancelledBy;
@@ -97,12 +97,12 @@ module.exports = function cancelPrintRoute(app, poModule, req, res, next)
 
       var itemMap = {};
 
-      lodash.forEach(po.items, function(item) { itemMap[item._id] = item.printedQty; });
+      _.forEach(po.items, function(item) { itemMap[item._id] = item.printedQty; });
 
       var changedItems = [];
       var changedPrints = [];
 
-      lodash.forEach(poPrints, function(poPrint)
+      _.forEach(poPrints, function(poPrint)
       {
         changedItems.push({
           _id: poPrint.item,

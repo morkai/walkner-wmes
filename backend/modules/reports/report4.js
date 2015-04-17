@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var step = require('h5.step');
 var util = require('./util');
 
@@ -193,7 +194,7 @@ Report4.prototype.prepareUsers = function(options)
 
   var userMap = {};
 
-  userList.forEach(function(user)
+  _.forEach(userList, function(user)
   {
     userMap[user._id] = true;
   });

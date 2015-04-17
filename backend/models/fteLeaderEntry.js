@@ -281,25 +281,25 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     };
     var fteDiv = this.fteDiv || [];
 
-    fteDiv.forEach(function(divisionId)
+    _.forEach(fteDiv, function(divisionId)
     {
       overallTotals[divisionId] = 0;
     });
 
     var keys = Object.keys(overallTotals);
 
-    this.tasks.forEach(function(task)
+    _.forEach(this.tasks, function(task)
     {
       task.totals = {};
 
-      keys.forEach(function(key)
+      _.forEach(keys, function(key)
       {
         task.totals[key] = 0;
       });
 
       if (Array.isArray(task.functions) && task.functions.length)
       {
-        task.functions.forEach(function(taskFunction)
+        _.forEach(task.functions, function(taskFunction)
         {
           calcCompaniesTotals(taskFunction.companies, task.totals, overallTotals);
         });
@@ -314,13 +314,13 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
     function calcCompaniesTotals(taskCompanies, taskTotals, overallTotals)
     {
-      taskCompanies.forEach(function(fteCompany)
+      _.forEach(taskCompanies, function(fteCompany)
       {
         var count = fteCompany.count;
 
         if (Array.isArray(count))
         {
-          count.forEach(function(divisionCount)
+          _.forEach(count, function(divisionCount)
           {
             taskTotals.overall += divisionCount.value;
             taskTotals[divisionCount.division] += divisionCount.value;
@@ -330,7 +330,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         }
         else if (typeof count === 'number')
         {
-          keys.forEach(function(key)
+          _.forEach(keys, function(key)
           {
             taskTotals[key] += count;
             overallTotals[key] += count;

@@ -4,7 +4,7 @@
 
 'use strict';
 
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = function setUpUsersCommands(app, usersModule)
 {
@@ -19,7 +19,7 @@ module.exports = function setUpUsersCommands(app, usersModule)
   {
     socket.on('users.sync', function(reply)
     {
-      if (!lodash.isFunction(reply))
+      if (!_.isFunction(reply))
       {
         reply = function() {};
       }
@@ -150,7 +150,7 @@ module.exports = function setUpUsersCommands(app, usersModule)
     ";
     var where = [];
 
-    companies.models.forEach(function(companyModel)
+    _.forEach(companies.models, function(companyModel)
     {
       var companyId = companyModel.get('_id').replace(/'/g, "\\'");
 

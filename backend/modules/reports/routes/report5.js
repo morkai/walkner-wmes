@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var helpers = require('./helpers');
 var report5 = require('../report5');
 
@@ -59,7 +60,7 @@ function getDirectProdFunctions(allProdFunctions)
 {
   var prodFunctions = {};
 
-  allProdFunctions.forEach(function(prodFunction)
+  _.forEach(allProdFunctions, function(prodFunction)
   {
     if (prodFunction.direct)
     {
