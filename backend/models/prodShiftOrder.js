@@ -157,6 +157,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
   prodShiftOrderSchema.statics.TOPIC_PREFIX = 'prodShiftOrders';
 
   prodShiftOrderSchema.index({prodShift: 1});
+  prodShiftOrderSchema.index({pressWorksheet: 1});
   prodShiftOrderSchema.index({orderId: 1});
   prodShiftOrderSchema.index({startedAt: -1});
   prodShiftOrderSchema.index({division: 1, startedAt: -1});
