@@ -88,6 +88,9 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
               0, 0, 0, 0, 0, 0, 0, 0
             ]
           };
+        }).sort(function(a, b)
+        {
+          return a.name.localeCompare(b.name);
         });
       },
       function createHourlyPlanStep()
