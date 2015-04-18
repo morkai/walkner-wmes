@@ -34,7 +34,8 @@ define([
     defaultFormData: {
       division: '',
       subdivision: '',
-      date: '',
+      from: '',
+      to: '',
       shift: 0
     },
 
@@ -50,17 +51,7 @@ define([
       },
       'date': function(propertyName, term, formData)
       {
-        if (term.name === 'in')
-        {
-          formData.date = time.format(term.args[1][0], 'YYYY-MM-DD');
-        }
-        else
-        {
-          var dateMoment = time.getMoment(term.args[1]);
-
-          formData.date = dateMoment.format('YYYY-MM-DD');
-          formData.shift = this.getShiftNoFromMoment(dateMoment);
-        }
+        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
       },
       'shift': function(propertyName, term, formData)
       {
@@ -110,10 +101,9 @@ define([
     {
       var division = this.orgUnitDropdownsView.$id('division').val();
       var subdivision = this.orgUnitDropdownsView.$id('subdivision').val();
-      var dateMoment = time.getMoment(this.$id('date').val());
+      var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
+      var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var shiftNo = parseInt(this.$('input[name=shift]:checked').val(), 10);
-
-      this.setHoursByShiftNo(dateMoment, shiftNo);
 
       if (!_.isEmpty(subdivision))
       {
@@ -124,30 +114,24 @@ define([
         selector.push({name: 'eq', args: ['division', division]});
       }
 
-      if (dateMoment.isValid())
+      if (fromMoment.isValid())
       {
-        if (shiftNo === 0)
-        {
-          var startTime = dateMoment.valueOf();
-
-          selector.push({
-            name: 'in',
-            args: [
-              'date',
-              [
-                startTime + 6 * 3600 * 1000,
-                startTime + 14 * 3600 * 1000,
-                startTime + 22 * 3600 * 1000
-              ]
-            ]
-          });
-        }
-        else
-        {
-          selector.push({name: 'eq', args: ['date', dateMoment.valueOf()]});
-        }
+        selector.push({name: 'ge', args: ['date', fromMoment.hours(6).valueOf()]});
       }
-      else if (shiftNo !== 0)
+
+      if (toMoment.isValid())
+      {
+        toMoment.hours(6);
+
+        if (toMoment.valueOf() === fromMoment.valueOf())
+        {
+          this.$id('to').val(toMoment.add(1, 'days').format('YYYY-MM-DD'));
+        }
+
+        selector.push({name: 'lt', args: ['date', toMoment.valueOf()]});
+      }
+
+      if (shiftNo !== 0)
       {
         selector.push({name: 'eq', args: ['shift', shiftNo]});
       }
