@@ -13,27 +13,29 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   sioId: 'sio',
   companiesId: 'companies',
-  sqlConnStr: null
+  tediousConnection: null
 };
 
-exports.start = function startUsersModule(app, module)
+exports.start = function startUsersModule(app, usersModule)
 {
+  usersModule.syncing = false;
+
   app.onModuleReady(
     [
-      module.config.mongooseId,
-      module.config.userId,
-      module.config.expressId
+      usersModule.config.mongooseId,
+      usersModule.config.userId,
+      usersModule.config.expressId
     ],
-    setUpRoutes.bind(null, app, module)
+    setUpRoutes.bind(null, app, usersModule)
   );
 
   app.onModuleReady(
     [
-      module.config.mongooseId,
-      module.config.userId,
-      module.config.sioId,
-      module.config.companiesId
+      usersModule.config.mongooseId,
+      usersModule.config.userId,
+      usersModule.config.sioId,
+      usersModule.config.companiesId
     ],
-    setUpCommands.bind(null, app, module)
+    setUpCommands.bind(null, app, usersModule)
   );
 };
