@@ -158,7 +158,10 @@ exports.start = function startFteModule(app, module)
         );
       }
 
-      hourlyPlan.recountPlannedQuantities();
+      if (hourlyPlan)
+      {
+        hourlyPlan.recountPlannedQuantities();
+      }
     });
   }
 };
