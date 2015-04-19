@@ -67,6 +67,7 @@
     "request": "~2.54.0",
     "blocked": "~1.1.0",
     "semver": "~4.3.3",
+    "node-uuid": "~1.4.3",
     "tedious": "~1.11.0",
     "h5.step": "~0.1.0",
     "h5.pubsub": "git+http://github.com/morkai/h5.pubsub.git#c1a899cb7e",
