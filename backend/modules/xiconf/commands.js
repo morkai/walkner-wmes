@@ -63,7 +63,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         return xiconfModule.error("Failed to read the delay setting: %s", err.message);
       }
 
-      onDelaySettingChanged(setting);
+      if (setting)
+      {
+        onDelaySettingChanged(setting);
+      }
     });
   }
 
