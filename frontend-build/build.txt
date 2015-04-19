@@ -161,6 +161,10 @@ app/reports/assets/main.css
 ----------------
 app/reports/assets/main.css
 
+app/settings/assets/main.css
+----------------
+app/settings/assets/main.css
+
 app/updater/assets/main.css
 ----------------
 app/updater/assets/main.css
@@ -228,6 +232,7 @@ assets/../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.
 assets/../vendor/highlight/styles/monokai.css
 assets/./select2.css
 assets/../app/core/assets/main.css
+assets/../app/settings/assets/main.css
 assets/../app/dashboard/assets/main.css
 assets/../app/events/assets/main.css
 assets/../app/orderStatuses/assets/main.css
@@ -783,6 +788,13 @@ app/nls/factoryLayout.js
 app/nls/pl/factoryLayout.js
 i18n!app/nls/factoryLayout
 app/factoryLayout/routes.js
+app/data/colorFactory.js
+app/licenses/util/createLicenseFeaturesSerializer.js
+app/xiconf/util/serializeXiconfLicenseFeatures.js
+app/icpo/util/serializeIcpoLicenseFeatures.js
+app/licenses/License.js
+app/licenses/LicenseCollection.js
+app/licenses/routes.js
 app/wmes-routes.js
 vendor/visibly.js
 app/visibility.js
