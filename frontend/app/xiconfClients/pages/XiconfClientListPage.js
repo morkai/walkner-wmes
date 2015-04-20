@@ -8,7 +8,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/views/DialogView',
   'app/core/pages/FilteredListPage',
-  'app/xiconf/XiconfSettingCollection',
+  'app/xiconf/settings',
   '../views/XiconfClientListView',
   '../views/XiconfClientFilterView',
   'app/xiconfClients/templates/updateAllDialog'
@@ -18,7 +18,7 @@ define([
   bindLoadingMessage,
   DialogView,
   FilteredListPage,
-  XiconfSettingCollection,
+  settings,
   XiconfClientListView,
   XiconfClientFilterView,
   updateAllDialogTemplate
@@ -53,10 +53,17 @@ define([
       }];
     },
 
+    destroy: function()
+    {
+      FilteredListPage.prototype.destroy.call(this);
+
+      settings.release();
+    },
+
     defineModels: function()
     {
       this.collection = bindLoadingMessage(this.collection, this);
-      this.settings = bindLoadingMessage(new XiconfSettingCollection(null, {pubsub: this.pubsub}), this);
+      this.settings = bindLoadingMessage(settings.acquire(), this);
     },
 
     createListView: function()
@@ -69,10 +76,22 @@ define([
 
     load: function(when)
     {
-      return when(
-        this.collection.fetch({reset: true}),
-        this.settings.fetch({reset: true})
-      );
+      if (this.settings.isEmpty())
+      {
+        return when(
+          this.collection.fetch({reset: true}),
+          this.settings.fetch({reset: true})
+        );
+      }
+
+      return when(this.collection.fetch({reset: true}));
+    },
+
+    afterRender: function()
+    {
+      FilteredListPage.prototype.afterRender.call(this);
+
+      settings.acquire();
     },
 
     updateAll: function(e)
