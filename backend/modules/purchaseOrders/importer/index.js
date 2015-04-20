@@ -369,6 +369,11 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
       });
     });
 
+    if (!vendorList.length)
+    {
+      return;
+    }
+
     mongoose.model('Vendor').collection.insert(vendorList, {continueOnError: true}, function() {});
   }
 
