@@ -8,7 +8,7 @@ define([
   'app/i18n',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
-  '../ReportSettingCollection',
+  '../settings',
   '../Report6',
   '../Report6Query',
   '../Report6ProdTasks',
@@ -24,7 +24,7 @@ define([
   t,
   View,
   bindLoadingMessage,
-  ReportSettingCollection,
+  settings,
   Report6,
   Report6Query,
   Report6ProdTasks,
@@ -191,6 +191,8 @@ define([
 
     destroy: function()
     {
+      settings.release();
+
       this.layout = null;
       this.filterView = null;
       this.$exportAction = null;
@@ -198,7 +200,7 @@ define([
 
     defineModels: function()
     {
-      this.settings = bindLoadingMessage(new ReportSettingCollection(null, {pubsub: this.pubsub}), this);
+      this.settings = bindLoadingMessage(settings.acquire(), this);
       this.query = Report6Query.fromQuery(this.options.query);
       this.prodTasks = bindLoadingMessage(new Report6ProdTasks(null, {settings: this.settings, paginate: false}), this);
       this.report = bindLoadingMessage(new Report6(null, {query: this.query}), this);
@@ -225,11 +227,18 @@ define([
 
     load: function(when)
     {
-      return when(this.settings.fetch(), this.prodTasks.fetch());
+      if (this.settings.isEmpty())
+      {
+        return when(this.prodTasks.fetch({reset: true}), this.settings.fetch({reset: true}));
+      }
+
+      return when(this.prodTasks.fetch({reset: true}));
     },
 
     afterRender: function()
     {
+      settings.acquire();
+
       this.chartsConfiguration = this.prodTasks.createChartsConfiguration();
 
       this.renderChartsColumns();

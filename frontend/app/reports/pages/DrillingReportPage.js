@@ -8,7 +8,7 @@ define([
   'app/data/orgUnits',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
-  '../ReportSettingCollection',
+  '../settings',
   'app/reports/templates/drillingReportPage'
 ], function(
   $,
@@ -16,7 +16,7 @@ define([
   orgUnits,
   View,
   bindLoadingMessage,
-  ReportSettingCollection,
+  settings,
   drillingReportPageTemplate
 ) {
   'use strict';
@@ -154,7 +154,7 @@ define([
 
     defineModels: function()
     {
-      this.settings = bindLoadingMessage(new ReportSettingCollection(null, {pubsub: this.pubsub}), this);
+      this.settings = bindLoadingMessage(settings.acquire(), this);
       this.displayOptions = this.createDisplayOptions();
       this.query = this.createQuery();
       this.reports = this.createReports(null, null);
@@ -251,6 +251,8 @@ define([
 
     destroy: function()
     {
+      settings.release();
+
       $('body').off('keydown', this.onKeyDown);
 
       this.$charts = null;
@@ -260,11 +262,18 @@ define([
 
     load: function(when)
     {
-      return when(this.settings.fetch({reset: true}));
+      if (this.settings.isEmpty())
+      {
+        return when(this.settings.fetch({reset: true}));
+      }
+
+      return when();
     },
 
     afterRender: function()
     {
+      settings.acquire();
+
       this.$charts = this.$id('charts');
 
       this.toggleDeactivatedOrgUnits();
@@ -463,17 +472,17 @@ define([
         this.query[previous ? 'previous' : 'get']('orgUnitType'),
         this.query[previous ? 'previous' : 'get']('orgUnitId')
       );
-      
+
       for (var i = 0, l = this.reports.length; i < l; ++i)
       {
         var report = this.reports[i];
-        
+
         if (report.get('orgUnit') === orgUnit)
         {
           return report;
         }
       }
-      
+
       return null;
     },
 

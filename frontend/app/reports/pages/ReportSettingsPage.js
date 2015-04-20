@@ -4,16 +4,16 @@
 
 define([
   'app/i18n',
-  'app/data/orgUnits',
+  'app/core/util/bindLoadingMessage',
   'app/core/View',
-  '../ReportSettingCollection',
+  '../settings',
   '../views/ReportSettingsView',
   'app/prodTasks/ProdTaskCollection'
 ], function(
   t,
-  orgUnits,
+  bindLoadingMessage,
   View,
-  ReportSettingCollection,
+  settings,
   ReportSettingsView,
   ProdTaskCollection
 ) {
@@ -39,13 +39,15 @@ define([
       this.defineViews();
     },
 
+    destroy: function()
+    {
+      settings.release();
+    },
+
     defineModels: function()
     {
-      this.settings = new ReportSettingCollection(null, {
-        pubsub: this.pubsub
-      });
-
-      this.prodTasks = new ProdTaskCollection(null);
+      this.settings = bindLoadingMessage(settings.acquire(), this);
+      this.prodTasks = bindLoadingMessage(new ProdTaskCollection(), this);
     },
 
     defineViews: function()
@@ -59,7 +61,17 @@ define([
 
     load: function(when)
     {
-      return when(this.settings.fetch({reset: true}), this.prodTasks.fetch({reset: true}));
+      if (this.settings.isEmpty())
+      {
+        return when(this.prodTasks.fetch({reset: true}), this.settings.fetch({reset: true}));
+      }
+
+      return when(this.prodTasks.fetch({reset: true}));
+    },
+
+    afterRender: function()
+    {
+      settings.acquire();
     }
 
   });
