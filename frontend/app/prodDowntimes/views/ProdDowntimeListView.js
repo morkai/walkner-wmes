@@ -45,6 +45,9 @@ define([
       }
 
       var collection = this.collection;
+      var canManageProdData = user.isAllowedTo('PROD_DATA:MANAGE');
+      var canManageProdDowntimes = user.isAllowedTo('PROD_DOWNTIMES:MANAGE');
+      var maxAorChanges = this.settings.getValue('maxAorChanges') || -1;
 
       return function(row)
       {
@@ -53,7 +56,7 @@ define([
 
         if (model.canCorroborate())
         {
-          var canChangeStatus = model.canChangeStatus();
+          var canChangeStatus = model.canChangeStatus(maxAorChanges, canManageProdData, canManageProdDowntimes);
 
           actions.unshift({
             id: 'corroborate',
@@ -63,7 +66,7 @@ define([
           });
         }
 
-        if (model.isEditable() && user.isAllowedTo('PROD_DATA:MANAGE'))
+        if (model.isEditable() && canManageProdData)
         {
           actions.push(
             ListView.actions.edit(model),

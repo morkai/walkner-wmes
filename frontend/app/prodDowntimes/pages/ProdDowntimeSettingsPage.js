@@ -4,15 +4,15 @@
 
 define([
   'app/i18n',
-  'app/data/orgUnits',
+  'app/core/util/bindLoadingMessage',
   'app/core/View',
-  '../ProdDowntimeSettingCollection',
+  '../settings',
   '../views/ProdDowntimeSettingsView'
 ], function(
   t,
-  orgUnits,
+  bindLoadingMessage,
   View,
-  ProdDowntimeSettingCollection,
+  settings,
   ProdDowntimeSettingsView
 ) {
   'use strict';
@@ -38,24 +38,37 @@ define([
       this.defineViews();
     },
 
+    destroy: function()
+    {
+      settings.release();
+    },
+
     defineModels: function()
     {
-      this.settings = new ProdDowntimeSettingCollection(null, {
-        pubsub: this.pubsub
-      });
+      this.model = bindLoadingMessage(settings.acquire(), this);
     },
 
     defineViews: function()
     {
       this.view = new ProdDowntimeSettingsView({
         initialTab: this.options.initialTab,
-        settings: this.settings
+        settings: this.model
       });
     },
 
     load: function(when)
     {
-      return when(this.settings.fetch({reset: true}));
+      if (this.model.isEmpty())
+      {
+        return when(this.model.fetch({reset: true}));
+      }
+
+      return when();
+    },
+
+    afterRender: function()
+    {
+      settings.acquire();
     }
 
   });

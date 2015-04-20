@@ -91,5 +91,6 @@
   "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć przestoju :-(",
 
   "settings:tab:default": "Podstawowe",
-  "settings:autoConfirmHours": "Czas do automatycznego potwierdzenia [h]"
+  "settings:autoConfirmHours": "Czas do automatycznego potwierdzenia [h]",
+  "settings:maxAorChanges": "Maksymalna ilość zmian obszaru odpowiedzialności"
 }

@@ -8,6 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   './ProdDowntime',
+  './ProdDowntimeCollection',
   './pages/ProdDowntimeListPage',
   './pages/ProdDowntimeDetailsPage',
   './pages/ProdDowntimeEditFormPage',
@@ -18,6 +19,7 @@ define([
   user,
   showDeleteFormPage,
   ProdDowntime,
+  ProdDowntimeCollection,
   ProdDowntimeListPage,
   ProdDowntimeDetailsPage,
   ProdDowntimeEditFormPage
@@ -29,7 +31,11 @@ define([
 
   router.map('/prodDowntimes', canView, function(req)
   {
-    viewport.showPage(new ProdDowntimeListPage({rql: req.rql}));
+    viewport.showPage(new ProdDowntimeListPage({
+      collection: new ProdDowntimeCollection(null, {
+        rqlQuery: req.rql
+      })
+    }));
   });
 
   router.map('/prodDowntimes/:id', function(req)

@@ -115,24 +115,67 @@ define([
       return this.get('pressWorksheet') === null;
     },
 
-    canChangeStatus: function()
+    canChangeStatus: function(maxAorChanges, canManageProdData, canManageProdDowntimes)
     {
       if (!this.get('finishedAt'))
       {
         return false;
       }
 
-      if (user.isAllowedTo('PROD_DATA:MANAGE'))
+      if (canManageProdData === undefined)
+      {
+        canManageProdData = user.isAllowedTo('PROD_DATA:MANAGE');
+      }
+
+      if (canManageProdData)
       {
         return true;
       }
 
-      if (!user.isAllowedTo('PROD_DOWNTIMES:MANAGE'))
+      if (canManageProdDowntimes === undefined)
+      {
+        canManageProdDowntimes = user.isAllowedTo('PROD_DOWNTIMES:MANAGE');
+      }
+
+      if (!canManageProdDowntimes || this.get('status') === 'confirmed')
       {
         return false;
       }
 
-      return this.get('status') !== 'confirmed';
+      var changes = this.get('changes');
+
+      if (!Array.isArray(changes) || !changes.length)
+      {
+        return false;
+      }
+
+      var aorChangeCount = 0;
+
+      for (var i = 1, l = changes.length; i < l; ++i)
+      {
+        var change = changes[i];
+
+        if (change.data && change.data.aor)
+        {
+          aorChangeCount += 1;
+
+          if (aorChangeCount === maxAorChanges)
+          {
+            return false;
+          }
+        }
+      }
+
+      var currentAorId = this.get('aor');
+
+      if (user.hasAccessToAor(currentAorId))
+      {
+        return true;
+      }
+
+      var initialAor = changes[0].data.aor;
+
+      return initialAor && user.hasAccessToAor(initialAor[1]);
     }
 
   }, {

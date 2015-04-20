@@ -94,7 +94,8 @@
     "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the downtime :-(",
 
     "settings:tab:default": "General",
-    "settings:autoConfirmHours": "Time to automatic confirmation [h]"
+    "settings:autoConfirmHours": "Time to automatic confirmation [h]",
+    "settings:maxAorChanges": "Maximum number of Area of Responsibility changes"
   },
   "pl": true
 }

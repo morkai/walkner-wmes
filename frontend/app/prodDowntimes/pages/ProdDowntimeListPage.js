@@ -8,6 +8,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/View',
+  '../settings',
   '../ProdDowntimeCollection',
   '../views/ProdDowntimeListView',
   '../views/ProdDowntimeFilterView',
@@ -18,6 +19,7 @@ define([
   bindLoadingMessage,
   pageActions,
   View,
+  settings,
   ProdDowntimeCollection,
   ProdDowntimeListView,
   ProdDowntimeFilterView,
@@ -40,8 +42,8 @@ define([
     actions: function(layout)
     {
       return [
-        pageActions.jump(this, this.prodDowntimeList),
-        pageActions.export(layout, this, this.prodDowntimeList),
+        pageActions.jump(this, this.collection),
+        pageActions.export(layout, this, this.collection),
         {
           label: t.bound('prodDowntimes', 'PAGE_ACTION:settings'),
           icon: 'cogs',
@@ -60,20 +62,27 @@ define([
       this.setView('.list-container', this.listView);
     },
 
+    destroy: function()
+    {
+      settings.release();
+    },
+
     defineModels: function()
     {
-      this.prodDowntimeList = bindLoadingMessage(
-        new ProdDowntimeCollection(null, {rqlQuery: this.options.rql}), this
-      );
+      this.collection = bindLoadingMessage(this.collection, this);
+      this.settings = bindLoadingMessage(settings.acquire(), this);
     },
 
     defineViews: function()
     {
-      this.listView = new ProdDowntimeListView({collection: this.prodDowntimeList});
+      this.listView = new ProdDowntimeListView({
+        collection: this.collection,
+        settings: this.settings
+      });
 
       this.filterView = new ProdDowntimeFilterView({
         model: {
-          rqlQuery: this.prodDowntimeList.rqlQuery
+          rqlQuery: this.collection.rqlQuery
         }
       });
 
@@ -82,17 +91,27 @@ define([
 
     load: function(when)
     {
-      return when(this.prodDowntimeList.fetch({reset: true}));
+      if (this.settings.isEmpty())
+      {
+        return when(this.collection.fetch({reset: true}), this.settings.fetch({reset: true}));
+      }
+
+      return when(this.collection.fetch({reset: true}));
+    },
+
+    afterRender: function()
+    {
+      settings.acquire();
     },
 
     refreshList: function(newRqlQuery)
     {
-      this.prodDowntimeList.rqlQuery = newRqlQuery;
+      this.collection.rqlQuery = newRqlQuery;
 
       this.listView.refreshCollectionNow();
 
       this.broker.publish('router.navigate', {
-        url: this.prodDowntimeList.genClientUrl() + '?' + newRqlQuery,
+        url: this.collection.genClientUrl() + '?' + newRqlQuery,
         trigger: false,
         replace: true
       });

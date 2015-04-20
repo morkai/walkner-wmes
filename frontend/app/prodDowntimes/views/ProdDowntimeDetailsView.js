@@ -166,18 +166,18 @@ define([
     {
       var $extra = this.$id('corroborateExtra');
 
-      if ($extra.length)
-      {
-        return;
-      }
-
-      if (!this.model.canChangeStatus())
+      if (!this.model.canChangeStatus(this.settings.getValue('maxAorChanges') || -1))
       {
         this.$id('reason').select2('destroy');
         this.$id('aor').select2('destroy');
         $extra.remove();
         this.updateCorroborateSubmit();
 
+        return;
+      }
+
+      if ($extra.length)
+      {
         return;
       }
 

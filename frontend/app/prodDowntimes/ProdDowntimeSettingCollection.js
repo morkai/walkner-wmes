@@ -28,13 +28,25 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/autoConfirmHours/.test(id))
+      if (/autoConfirmHours$/.test(id))
       {
         newValue = Math.round(parseInt(newValue, 10));
 
         if (isNaN(newValue) || newValue < 24)
         {
           return 24;
+        }
+
+        return newValue;
+      }
+
+      if (/maxAorChanges$/.test(id))
+      {
+        newValue = Math.round(parseInt(newValue, 10));
+
+        if (isNaN(newValue) || newValue < 0)
+        {
+          return 0;
         }
 
         return newValue;

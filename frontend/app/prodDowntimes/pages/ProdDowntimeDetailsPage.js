@@ -10,6 +10,7 @@ define([
   'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
   'app/core/View',
+  '../settings',
   '../ProdDowntime',
   '../views/ProdDowntimeDetailsView'
 ], function(
@@ -20,6 +21,7 @@ define([
   pageActions,
   onModelDeleted,
   View,
+  settings,
   ProdDowntime,
   ProdDowntimeDetailsView
 ) {
@@ -47,7 +49,7 @@ define([
       if (this.model.canCorroborate())
       {
         var page = this;
-        var canChangeStatus = this.model.canChangeStatus();
+        var canChangeStatus = this.model.canChangeStatus(this.settings.getValue('maxAorChanges') || -1);
 
         actions.push({
           icon: canChangeStatus ? 'gavel' : 'comment',
@@ -73,11 +75,20 @@ define([
     initialize: function()
     {
       this.model = bindLoadingMessage(this.model, this);
+      this.settings = bindLoadingMessage(settings.acquire(), this);
 
-      this.view = new ProdDowntimeDetailsView({model: this.model});
+      this.view = new ProdDowntimeDetailsView({
+        model: this.model,
+        settings: this.settings
+      });
 
       this.listenToOnce(this.model, 'sync', this.onFirstModelSync);
       this.listenTo(this.model, 'change', this.onModelChange);
+    },
+
+    destroy: function()
+    {
+      settings.release();
     },
 
     setUpLayout: function(pageLayout)
@@ -90,11 +101,18 @@ define([
 
     load: function(when)
     {
+      if (this.settings.isEmpty())
+      {
+        return when(this.model.fetch(this.options.fetchOptions), this.settings.fetch({reset: true}));
+      }
+
       return when(this.model.fetch(this.options.fetchOptions));
     },
 
     afterRender: function()
     {
+      settings.acquire();
+
       if (this.options.corroborate)
       {
         this.view.focusComment();
