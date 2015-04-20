@@ -4,6 +4,7 @@
 
     "MSG:LOADING": "Loading...",
     "MSG:LOADING_FAILURE": "Loading failed :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Loading failed :(",
     "MSG:LOG_OUT:FAILURE": "Logging out failed :(",
     "MSG:LOG_OUT:SUCCESS": "You are now logged out!",
 
