@@ -58,6 +58,7 @@ kbd {
 }
 .well {
   padding: 1em;
+  background-image: none;
 }
 .messages {
   position: fixed;

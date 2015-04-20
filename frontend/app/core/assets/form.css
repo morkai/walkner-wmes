@@ -94,6 +94,7 @@
   left: 50%!important;
   z-index: 0;
   outline: none!important;
+  width: 1px;
 }
 .form-group.has-required-select2 > .select2-container {
   z-index: 1;
