@@ -4,7 +4,10 @@
 
 'use strict';
 
+var path = require('path');
+var fs = require('fs');
 var _ = require('lodash');
+var step = require('h5.step');
 
 exports.DEFAULT_CONFIG = {
   smtp: null,
@@ -13,7 +16,8 @@ exports.DEFAULT_CONFIG = {
   replyTo: 'someone@the.net',
   expressId: 'express',
   secretKey: null,
-  remoteSenderUrl: null
+  remoteSenderUrl: null,
+  emailsPath: null
 };
 
 exports.start = function startMailSenderModule(app, module)
@@ -25,9 +29,9 @@ exports.start = function startMailSenderModule(app, module)
   {
     throw new Error("`smtp` and `remoteSenderUrl` cannot be used at the same time!");
   }
-  else if (!module.config.smtp && !module.config.remoteSenderUrl)
+  else if (!module.config.smtp && !module.config.remoteSenderUrl && !module.config.emailsPath)
   {
-    module.warn("No `smtp` or `remoteSenderUrl` specified.");
+    module.warn("No `smtp`, `remoteSenderUrl` or `emailsPath` specified.");
   }
   else if (module.config.smtp)
   {
@@ -72,9 +76,15 @@ exports.start = function startMailSenderModule(app, module)
     {
       sendThroughSmtp(mailOptions, done);
     }
+    else if (module.config.emailsPath !== null)
+    {
+      sendThroughFile(mailOptions, done);
+    }
     else
     {
       module.debug("Not sending e-mail: %s", JSON.stringify(mailOptions));
+
+      setImmediate(done);
     }
   };
 
@@ -116,6 +126,61 @@ exports.start = function startMailSenderModule(app, module)
     });
 
     transport.sendMail(mailOptions, done);
+  }
+
+  function sendThroughFile(mailOptions, done)
+  {
+    _.defaults(mailOptions, {
+      from: String(module.config.from),
+      bcc: String(module.config.bcc),
+      replyTo: String(module.config.replyTo)
+    });
+
+    var email = [];
+
+    _.forEach(['subject', 'to', 'cc', 'bcc', 'from', 'replyTo'], function(header)
+    {
+      if (!_.isEmpty(mailOptions[header]))
+      {
+        email.push(header + ': ' + mailOptions[header]);
+      }
+    });
+
+    email.push('Body:', mailOptions.text);
+
+    step(
+      function openFileStep()
+      {
+        var emailFileName = (Date.now() + Math.random() * 99999999).toString(36).toUpperCase() + '.email';
+
+        fs.open(path.join(module.config.emailsPath, emailFileName), 'wx+', this.next());
+      },
+      function writeFileStep(err, fd)
+      {
+        if (err)
+        {
+          return this.done(done, err);
+        }
+
+        this.fd = fd;
+
+        fs.write(fd, email.join('\r\n'), 0, 'utf8', this.next());
+      },
+      function closeFileStep(err)
+      {
+        var fd = this.fd;
+        this.fd = null;
+
+        if (err)
+        {
+          fs.close(fd, function() {});
+
+          return done(err);
+        }
+
+        fs.close(fd, done);
+      }
+    );
   }
 
   app.onModuleReady(module.config.expressId, function()
