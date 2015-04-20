@@ -99,8 +99,10 @@ define([
 
     updateClientUrl: function()
     {
+      var model = this.collection || this.model;
+
       this.broker.publish('router.navigate', {
-        url: this.collection.genClientUrl() + '?' + this.collection.rqlQuery,
+        url: model.genClientUrl() + '?' + model.rqlQuery,
         trigger: false,
         replace: true
       });
