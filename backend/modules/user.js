@@ -137,6 +137,11 @@ exports.start = function startUserModule(app, module)
       return true;
     }
 
+    if (typeof anyPrivileges === 'string')
+    {
+      anyPrivileges = [[anyPrivileges]];
+    }
+
     if (anyPrivileges.length
       && user.local
       && anyPrivileges[0].some(function(privilege) { return privilege === 'LOCAL'; }))
