@@ -204,6 +204,9 @@
   border-top: 1px dotted #ddd;
   padding-top: 2px;
 }
+.pos-printDialog-items-group > .table-responsive {
+  border: 0;
+}
 .message > br {
   padding-top: 5px;
 }
