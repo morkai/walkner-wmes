@@ -8,6 +8,11 @@ var crypto = require('crypto');
 var _ = require('lodash');
 var util = require('../util');
 
+var GENERATE_REQUEST_TIMEOUT = 4 * 60 * 1000;
+var LESS_THAN_DAY_IN_FUTURE_EXPIRATION = 2;
+var MORE_THAN_DAY_IN_FUTURE_EXPIRATION = 5;
+var IN_PAST_EXPIRATION = 15;
+
 var cachedReports = {};
 var inProgress = {};
 
@@ -38,7 +43,7 @@ exports.sendCachedReport = function(id, req, res, next)
   }
   else
   {
-    req.setTimeout(4 * 60 * 1000);
+    req.setTimeout(GENERATE_REQUEST_TIMEOUT);
     next();
   }
 };
@@ -103,7 +108,11 @@ function scheduleReportCacheExpiration(id, reportHash, fromTime, toTime)
   var timeRange = toTime - fromTime;
   var currentShiftStartTime = util.getCurrentShiftStartDate().getTime();
   var day = 24 * 3600 * 1000;
-  var delay = toTime > currentShiftStartTime ? (timeRange > day ? 5 : 2) : 15;
+  var inFuture = toTime > currentShiftStartTime;
+  var moreThanDay = timeRange > day;
+  var delay = inFuture
+    ? (moreThanDay ? MORE_THAN_DAY_IN_FUTURE_EXPIRATION : LESS_THAN_DAY_IN_FUTURE_EXPIRATION)
+    : IN_PAST_EXPIRATION;
 
   setTimeout(
     function()
