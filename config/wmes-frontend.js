@@ -61,8 +61,7 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-2'},
   {id: 'messenger/client', name: 'messenger/client:wmes-watchdog'},
   'httpServer',
-  'sio',
-  'sioLegacyBridge'
+  'sio'
 ];
 
 exports.mainJsFile = 'wmes-main.js';
