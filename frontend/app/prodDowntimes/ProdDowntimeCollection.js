@@ -78,7 +78,8 @@ define([
           finishedAt: 1,
           date: 1,
           shift: 1,
-          pressWorksheet: 1
+          pressWorksheet: 1,
+          changes: 1
         },
         sort: {
           startedAt: -1
