@@ -396,16 +396,21 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return;
     }
 
-    var prodLineData = prodLinesToDataMap[socket.xiconf.prodLineId];
-
-    if (!prodLineData)
+    if (socket.xiconf.prodLineId !== null)
     {
-      return;
-    }
+      var prodLineData = prodLinesToDataMap[socket.xiconf.prodLineId];
 
-    if (!prodLineData.sockets[socket.id])
-    {
-      return;
+      if (!prodLineData)
+      {
+        return;
+      }
+
+      if (!prodLineData.sockets[socket.id])
+      {
+        return;
+      }
+
+      delete prodLineData.sockets[socket.id];
     }
 
     var clientId = socket.xiconf.srcId;
@@ -413,7 +418,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     xiconfModule.debug("[%s] disconnected from [%s] (socket=[%s])", clientId, socket.xiconf.prodLineId, socket.id);
 
     delete socket.xiconf;
-    delete prodLineData.sockets[socket.id];
 
     var clientChanges = {
       _id: clientId,
@@ -442,10 +446,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     var socket = this;
 
     if (!_.isObject(data)
-      || !_.isString(data.srcId) || _.isEmpty(data.srcId)
-      || !_.isString(data.prodLineId) || _.isEmpty(data.prodLineId))
+      || !_.isString(data.srcId) || _.isEmpty(data.srcId))
     {
       return;
+    }
+
+    if (!_.isString(data.prodLineId) || _.isEmpty(data.prodLineId))
+    {
+      data.prodLineId = null;
     }
 
     if (!socket.xiconf)
@@ -485,12 +493,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     socket.xiconf.srcId = data.srcId;
     socket.xiconf.prodLineId = data.prodLineId;
 
-    var prodLineData = getProdLineData(data.prodLineId);
+    if (data.prodLineId !== null)
+    {
+      var prodLineData = getProdLineData(data.prodLineId);
 
-    prodLineData.sockets[socket.id] = socket;
+      prodLineData.sockets[socket.id] = socket;
 
-    updateProdLinesRemoteData(data.prodLineId, socket);
-    updateProdLinesLeader(data.prodLineId, socket);
+      updateProdLinesRemoteData(data.prodLineId, socket);
+      updateProdLinesLeader(data.prodLineId, socket);
+    }
 
     if (reconnected)
     {
