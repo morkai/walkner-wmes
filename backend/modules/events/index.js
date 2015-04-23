@@ -140,16 +140,17 @@ exports.start = function startEventsModule(app, module)
     }
 
     var user = null;
+    var userData = data.user;
 
-    if (_.isObject(data.user))
+    if (_.isObject(userData))
     {
       user = {
-        _id: String(data.user._id),
-        name: data.user.lastName && data.user.firstName
-          ? (data.user.lastName + ' ' + data.user.firstName)
-          : data.user.login,
-        login: data.user.login,
-        ipAddress: data.user.ipAddress
+        _id: String(userData._id || userData.id),
+        name: userData.lastName && userData.firstName
+          ? (userData.lastName + ' ' + userData.firstName)
+          : (userData.login || userData.label),
+        login: userData.login || userData.label,
+        ipAddress: userData.ipAddress || userData.ip
       };
     }
 
