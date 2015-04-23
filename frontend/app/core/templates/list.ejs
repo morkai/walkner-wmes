@@ -42,9 +42,9 @@
         <td class="actions">
           <% actions(row).forEach(function(action) { %>
           <% if (action.href) { %>
-          <a href="<%- action.href %>" class="btn btn-<%- action.type || 'default' %> <%- action.id ? ('action-' + action.id) : '' %> <%- action.className || '' %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i></a>
+          <a href="<%- action.href %>" class="btn btn-<%- action.type || 'default' %> <%- action.id ? ('action-' + action.id) : '' %> <%- action.className || '' %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i><%- action.text || '' %></a>
           <% } else { %>
-          <button type="button" class="btn btn-<%- action.type || 'default' %> <%- action.id ? ('action-' + action.id) : '' %> <%- action.className || '' %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i></button>
+          <button type="button" class="btn btn-<%- action.type || 'default' %> <%- action.id ? ('action-' + action.id) : '' %> <%- action.className || '' %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i><%- action.text || '' %></button>
           <% } %>
           <% }) %>
         </td>

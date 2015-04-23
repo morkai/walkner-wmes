@@ -126,7 +126,8 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       default: null
     },
     changes: [prodDowntimeChangeSchema],
-    updatedAt: Date
+    updatedAt: Date,
+    changesCount: {}
   }, {
     id: false
   });
@@ -160,12 +161,17 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     this.updatedAt = new Date();
 
     this._wasNew = this.isNew;
-    this._changes = this.modifiedPaths();
 
     if (this._wasNew)
     {
       this.resetChanges();
     }
+    else if (this.isModified('changes'))
+    {
+      this.increaseChangesCount(this.changes[this.changes.length - 1]);
+    }
+
+    this._changes = this.modifiedPaths();
 
     next();
   });
@@ -211,6 +217,11 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       },
       comment: this.reasonComment
     }];
+    this.changesCount = {
+      rejected: 0,
+      reason: 0,
+      aor: 0
+    };
 
     if (this.pressWorksheet)
     {
@@ -222,6 +233,48 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
         },
         comment: ''
       });
+    }
+  };
+
+  prodDowntimeSchema.methods.increaseChangesCount = function(changes)
+  {
+    var changed = false;
+
+    if (!this.changesCount)
+    {
+      this.changesCount = {
+        rejected: 0,
+        reason: 0,
+        aor: 0
+      };
+
+      changed = true;
+    }
+
+    if (changes.data.status && changes.data.status[1] === 'rejected')
+    {
+      this.changesCount.rejected = (this.changesCount.rejected || 0) + 1;
+
+      changed = true;
+    }
+
+    if (changes.data.reason)
+    {
+      this.changesCount.reason = (this.changesCount.reason || 0) + 1;
+
+      changed = true;
+    }
+
+    if (changes.data.aor)
+    {
+      this.changesCount.aor = (this.changesCount.aor || 0) + 1;
+
+      changed = true;
+    }
+
+    if (changed)
+    {
+      this.markModified('changesCount');
     }
   };
 

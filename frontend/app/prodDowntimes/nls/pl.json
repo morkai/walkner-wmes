@@ -92,5 +92,11 @@
 
   "settings:tab:default": "Podstawowe",
   "settings:autoConfirmHours": "Czas do automatycznego potwierdzenia [h]",
-  "settings:maxAorChanges": "Maksymalna ilość zmian obszaru odpowiedzialności"
+  "settings:maxAorChanges": "Maksymalna ilość zmian obszaru odpowiedzialności",
+  "settings:maxReasonChanges": "Maksymalna ilość zmian powodu przestoju",
+  "settings:maxRejectedChanges": "Maksymalna ilość odrzuceń przestoju",
+
+  "changesCount:reason": "Ilość zmian powodu przestoju",
+  "changesCount:aor": "Ilość zmian obszaru odpowiedzialnego",
+  "changesCount:rejected": "Ilość odrzuceń przestoju"
 }

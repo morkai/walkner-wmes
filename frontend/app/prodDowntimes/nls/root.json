@@ -95,7 +95,13 @@
 
     "settings:tab:default": "General",
     "settings:autoConfirmHours": "Time to automatic confirmation [h]",
-    "settings:maxAorChanges": "Maximum number of Area of Responsibility changes"
+    "settings:maxAorChanges": "Maximum number of Area of Responsibility changes",
+    "settings:maxReasonChanges": "Maximum number of Downtime reason changes",
+    "settings:maxRejectedChanges": "Maximum number of downtime rejections",
+
+    "changesCount:reason": "Number of Downtime reason changes",
+    "changesCount:aor": "Number of Area of Responsibility changes",
+    "changesCount:rejected": "Number of rejections"
   },
   "pl": true
 }

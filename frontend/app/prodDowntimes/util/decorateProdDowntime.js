@@ -98,8 +98,7 @@ define([
 
     if (user.isAllowedTo('PROD_DATA:VIEW') && obj.prodShift)
     {
-      obj.prodShiftText = '<a href="#prodShifts/' + obj.prodShift + '">'
-        + obj.prodShiftText + '</a>';
+      obj.prodShiftText = '<a href="#prodShifts/' + obj.prodShift + '">' + obj.prodShiftText + '</a>';
     }
 
     obj.masterInfo = renderUserInfo({userInfo: obj.master});
@@ -121,6 +120,25 @@ define([
     obj.history = Array.isArray(obj.changes) && (!options || options.noHistory !== true)
       ? obj.changes.map(decorateProdDowntimeChange)
       : [];
+
+    var changesCount = obj.changesCount;
+
+    if (changesCount && options && options.changesCount)
+    {
+      if (changesCount.reason)
+      {
+        obj.reason += ' <span title="' + t('prodDowntimes', 'changesCount:reason') + '" class="label label-'
+          + (changesCount.reason >= options.maxReasonChanges ? 'danger' : 'warning')
+          + '">' + changesCount.reason + '</span>';
+      }
+
+      if (changesCount.aor)
+      {
+        obj.aor += ' <span title="' + t('prodDowntimes', 'changesCount:aor') + '" class="label label-'
+          + (changesCount.aor >= options.maxAorChanges ? 'danger' : 'warning')
+          + '">' + changesCount.aor + '</span>';
+      }
+    }
 
     return obj;
   };

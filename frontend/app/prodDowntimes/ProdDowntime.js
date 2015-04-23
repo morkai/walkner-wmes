@@ -69,7 +69,7 @@ define([
 
     serializeRow: function()
     {
-      return decorateProdDowntime(this);
+      return decorateProdDowntime(this, {changesCount: true});
     },
 
     serializeDetails: function()

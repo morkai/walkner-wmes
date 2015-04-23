@@ -40,7 +40,7 @@ define([
         return newValue;
       }
 
-      if (/maxAorChanges$/.test(id))
+      if (/max.+Changes$/.test(id))
       {
         newValue = Math.round(parseInt(newValue, 10));
 

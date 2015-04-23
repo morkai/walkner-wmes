@@ -24,6 +24,19 @@
   font-size: 60px;
   line-height: 1;
 }
+.prodDowntimes-list .action-corroborate {
+  position: relative;
+}
+.prodDowntimes-list .action-corroborate > .label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 2px 4px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
 .prodDowntimes-history-item {
   padding: .5em;
   border-bottom: 1px solid #d4d4d4;

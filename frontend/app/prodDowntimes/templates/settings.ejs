@@ -9,6 +9,14 @@
         <input id="<%- idPrefix %>-autoConfirmHours" class="form-control" name="prodDowntimes.autoConfirmHours" type="number" value="168" step="1" min="24">
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-maxRejectedChanges"><%- t('prodDowntimes', 'settings:maxRejectedChanges') %></label>
+        <input id="<%- idPrefix %>-maxRejectedChanges" class="form-control" name="prodDowntimes.maxRejectedChanges" type="number" value="2" step="1" min="0" max="10">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-maxReasonChanges"><%- t('prodDowntimes', 'settings:maxReasonChanges') %></label>
+        <input id="<%- idPrefix %>-maxReasonChanges" class="form-control" name="prodDowntimes.maxReasonChanges" type="number" value="2" step="1" min="0" max="10">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-maxAorChanges"><%- t('prodDowntimes', 'settings:maxAorChanges') %></label>
         <input id="<%- idPrefix %>-maxAorChanges" class="form-control" name="prodDowntimes.maxAorChanges" type="number" value="2" step="1" min="0" max="10">
       </div>
