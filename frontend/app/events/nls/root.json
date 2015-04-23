@@ -191,7 +191,9 @@
     "TYPE:licenses.edited": "Licenses: edycja",
     "TEXT:licenses.edited": "Edited license: <a href='\\#licenses/{model->_id}'>{model->_id}</a>",
     "TYPE:licenses.deleted": "Licenses: deleted",
-    "TEXT:licenses.deleted": "Deleted license: <em>{model->_id}</em>"
+    "TEXT:licenses.deleted": "Deleted license: <em>{model->_id}</em>",
+    "TYPE:prodDowntimes.confirmedEdited": "Downtimes: confirmed edited",
+    "TEXT:prodDowntimes.confirmedEdited": "Edited a confirmed downtime: <a href='\\#prodDowntimes/{_id}'>{rid}</a>"
   },
   "pl": true
 }

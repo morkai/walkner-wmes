@@ -190,5 +190,7 @@
   "TYPE:licenses.edited": "Licencje: edycja",
   "TEXT:licenses.edited": "Zmodyfikowano licencję: <a href='\\#licenses/{model->_id}'>{model->_id}</a>",
   "TYPE:licenses.deleted": "Licencje: usunięcie",
-  "TEXT:licenses.deleted": "Usunięto licencję: <em>{model->_id}</em>"
+  "TEXT:licenses.deleted": "Usunięto licencję: <em>{model->_id}</em>",
+  "TYPE:prodDowntimes.confirmedEdited": "Przestoje: edycja potwierdzonego",
+  "TEXT:prodDowntimes.confirmedEdited": "Zmodyfikowano potwierdzony przestój: <a href='\\#prodDowntimes/{_id}'>{rid}</a>"
 }

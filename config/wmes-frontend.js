@@ -102,7 +102,8 @@ exports.events = {
       '*.deleted',
       'fte.leader.deleted', 'fte.master.deleted',
       'production.unlockFailure',
-      'production.lockFailure'
+      'production.lockFailure',
+      'prodDowntimes.confirmedEdited'
     ],
     error: [
       '*.syncFailed'

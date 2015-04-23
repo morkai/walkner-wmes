@@ -52,4 +52,52 @@ exports.start = function startProdDowntimesModule(app, module)
     ],
     setUpAutoConfirmation.bind(null, app, module)
   );
+
+  app.onModuleReady(
+    [
+      module.config.productionId
+    ],
+    setUpConfirmedDowntimeEditWarning
+  );
+
+  function setUpConfirmedDowntimeEditWarning()
+  {
+    app.broker.subscribe('prodDowntimes.updated.*', checkConfirmedDowntimeEdit);
+  }
+
+  function checkConfirmedDowntimeEdit(partialProdDowntime)
+  {
+    if (!Array.isArray(partialProdDowntime.changes))
+    {
+      return;
+    }
+
+    var lastChange = partialProdDowntime.changes[partialProdDowntime.changes.length - 1];
+
+    if (!lastChange || !lastChange.data)
+    {
+      return;
+    }
+
+    var data = lastChange.data;
+
+    if (data.status && data.status[1] === 'confirmed')
+    {
+      return;
+    }
+
+    app[module.config.productionId].getProdData('downtime', partialProdDowntime._id, function(err, prodDowntime)
+    {
+      if (!prodDowntime || prodDowntime.status !== 'confirmed')
+      {
+        return;
+      }
+
+      app.broker.publish('prodDowntimes.confirmedEdited', {
+        _id: prodDowntime._id,
+        rid: prodDowntime.rid,
+        user: lastChange.user
+      });
+    });
+  }
 };
