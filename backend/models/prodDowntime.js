@@ -15,7 +15,8 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     data: {},
     comment: String
   }, {
-    _id: false
+    _id: false,
+    minimize: false
   });
 
   var prodDowntimeSchema = mongoose.Schema({
