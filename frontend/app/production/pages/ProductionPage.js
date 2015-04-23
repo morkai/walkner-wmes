@@ -311,6 +311,7 @@ define([
         this.model.setSecretKey(null);
 
         viewport.msg.show({
+          time: 5000,
           type: 'warning',
           text: t('production', 'msg:locked')
         });
