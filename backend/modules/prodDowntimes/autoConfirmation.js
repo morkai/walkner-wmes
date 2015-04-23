@@ -12,6 +12,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
 {
   var settingsModule = app[prodDowntimesModule.config.settingsId];
   var mongoose = app[prodDowntimesModule.config.mongooseId];
+  var orgUnits = app[prodDowntimesModule.config.orgUnitsId];
   var ProdLogEntry = mongoose.model('ProdLogEntry');
   var ProdDowntime = mongoose.model('ProdDowntime');
 
@@ -114,16 +115,16 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
           {
             var initialData = changes[0].data;
             var originalReason = Array.isArray(initialData.reason) ? initialData.reason[1] : null;
-            var originalAor = Array.isArray(initialData.aor) ? initialData.aor[1] : null;
+            var initiatorsAor = getDefaultAorIdForSubdivisionId(prodDowntime.subdivision);
 
             if (originalReason && prodDowntime.reason !== originalReason)
             {
               data.reason = originalReason;
             }
 
-            if (originalAor && String(prodDowntime.aor) !== String(originalAor))
+            if (initiatorsAor && String(prodDowntime.aor) !== String(initiatorsAor))
             {
-              data.aor = originalAor;
+              data.aor = initiatorsAor;
             }
           }
 
@@ -171,5 +172,12 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
         }
       }
     );
+  }
+
+  function getDefaultAorIdForSubdivisionId(subdivisionId)
+  {
+    var subdivision = orgUnits.getByTypeAndId('subdivision', subdivisionId);
+
+    return subdivision && subdivision.aor ? subdivision.aor : null;
   }
 };
