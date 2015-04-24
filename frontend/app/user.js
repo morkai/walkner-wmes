@@ -184,6 +184,28 @@ function(
       || user.data.aors.indexOf(aorId) !== -1;
   };
 
+  user.hasAccessToSubdivision = function(subdivisionId)
+  {
+    if (!subdivisionId)
+    {
+      return true;
+    }
+
+    if (user.data.orgUnitType === 'division')
+    {
+      var subdivision = subdivisions.get(subdivisionId);
+
+      return subdivision && user.data.orgUnitId === subdivision.get('division');
+    }
+
+    if (user.data.orgUnitType === 'subdivision')
+    {
+      return user.data.orgUnitId === subdivisionId;
+    }
+
+    return true;
+  };
+
   user.auth = function()
   {
     var anyPrivileges = Array.prototype.slice.call(arguments);
