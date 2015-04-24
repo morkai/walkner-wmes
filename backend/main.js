@@ -6,12 +6,17 @@
 
 var startTime = Date.now();
 
+if (!process.env.NODE_ENV)
+{
+  process.env.NODE_ENV = 'development';
+}
+
 require('./extensions');
 
 var _ = require('lodash');
 var moment = require('moment');
 var main = require('h5.main');
-var blocked = process.env.NODE_ENV === 'production' ? function() {} : require('blocked');
+var blocked = process.env.NODE_ENV === 'development' ? require('blocked') : function() {};
 var config = require(process.argv[2]);
 
 moment.locale('pl');

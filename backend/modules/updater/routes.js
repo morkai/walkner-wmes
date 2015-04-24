@@ -10,7 +10,7 @@ module.exports = function setUpUpdaterRoutes(app, updaterModule)
 
   express.get('/manifest.appcache', function(req, res)
   {
-    if (app.options.env !== 'production' || typeof updaterModule.manifest !== 'string')
+    if (app.options.env === 'development' || typeof updaterModule.manifest !== 'string')
     {
       return res.sendStatus(404);
     }

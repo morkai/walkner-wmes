@@ -89,7 +89,7 @@ function broadcastReport(reportId, reportHash, err, report)
 
 function cacheReport(reportId, reportHash, report)
 {
-  var reportJson = JSON.stringify(report, null, process.env.NODE_ENV === 'production' ? 0 : 2);
+  var reportJson = JSON.stringify(report, null, process.env.NODE_ENV === 'development' ? 2 : 0);
 
   if (cachedReports[reportId] === undefined)
   {

@@ -77,14 +77,14 @@ exports.start = function startExpressModule(app, expressModule, done)
     };
   });
 
-  var production = app.options.env === 'production';
-  var staticPath = config[production ? 'staticBuildPath' : 'staticPath'];
+  var development = app.options.env === 'development';
+  var staticPath = config[development ? 'staticPath' : 'staticBuildPath'];
 
   expressApp.set('trust proxy', true);
   expressApp.set('view engine', 'ejs');
   expressApp.set('views', app.pathTo('templates'));
 
-  if (!production)
+  if (development)
   {
     expressApp.set('json spaces', 2);
   }
@@ -93,7 +93,7 @@ exports.start = function startExpressModule(app, expressModule, done)
     module: expressModule
   });
 
-  if (!production)
+  if (development)
   {
     setUpDevMiddleware(staticPath);
   }

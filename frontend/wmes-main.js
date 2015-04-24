@@ -215,6 +215,11 @@
       {
         $('#app-loading').fadeOut(function() { $(this).remove(); });
 
+        if (window.ENV)
+        {
+          document.body.classList.add('is-' + window.ENV + '-env');
+        }
+
         Backbone.history.start({
           root: '/',
           hashChange: true,
