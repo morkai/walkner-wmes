@@ -44,6 +44,7 @@ define([
         'label',
         'type',
         'subdivisionTypes',
+        'aors',
         'opticsPosition',
         'pressPosition',
         'auto',

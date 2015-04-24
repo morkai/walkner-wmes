@@ -28,7 +28,7 @@ define([
     nlsDomain: 'downtimeReasons',
 
     labelAttribute: 'label',
-    
+
     defaults: function()
     {
       return {
@@ -74,6 +74,15 @@ define([
 
         return aor ? aor.getLabel() : aorId;
       });
+
+      return obj;
+    },
+
+    serializeRow: function()
+    {
+      var obj = this.serialize();
+
+      obj.aors = obj.aors.length ? obj.aors.join('; ') : t('downtimeReasons', 'aors:all');
 
       return obj;
     }
