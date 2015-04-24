@@ -146,10 +146,12 @@ define([
         this.$id('reasonComment').val(this.model.reasonComment);
       }
 
-      reasonAndAor.setUpReasons(this, this.model.prodShift.getDowntimeReasons().sort(function(a, b)
+      var customReasons = this.model.prodShift.getDowntimeReasons().sort(function(a, b)
       {
         return a.id.localeCompare(b.id);
-      }));
+      });
+
+      reasonAndAor.setUpReasons(this, customReasons, this.model.prodShift.get('subdivision'));
       reasonAndAor.setUpAors(this);
       this.setUpReasonSelect2();
       this.setUpAorSelect2();

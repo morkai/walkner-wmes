@@ -5,11 +5,13 @@
 define([
   'underscore',
   'app/data/downtimeReasons',
-  'app/data/aors'
+  'app/data/aors',
+  'app/data/subdivisions'
 ], function(
   _,
   downtimeReasons,
-  aors
+  aors,
+  subdivisions
 ) {
   'use strict';
 
@@ -26,21 +28,31 @@ define([
       view.reasonsList = null;
       view.aorsList = null;
     },
-    setUpReasons: function(view, customReasons)
+    setUpReasons: function(view, customReasons, subdivisionId)
     {
       var reasonsToAorsMap = {};
       var reasonsList = [];
+      var subdivision = subdivisions.get(subdivisionId);
+      var defaultAor = subdivision ? subdivision.get('aor') : null;
 
       (customReasons || downtimeReasons).forEach(function(reason)
       {
         var reasonAors = {};
         var hasAnyAors = false;
 
-        _.forEach(reason.get('aors'), function(aor)
+        if (reason.get('defaultAor') && defaultAor)
         {
-          reasonAors[aor] = true;
+          reasonAors[defaultAor] = true;
           hasAnyAors = true;
-        });
+        }
+        else
+        {
+          _.forEach(reason.get('aors'), function(aor)
+          {
+            reasonAors[aor] = true;
+            hasAnyAors = true;
+          });
+        }
 
         if (!hasAnyAors)
         {
