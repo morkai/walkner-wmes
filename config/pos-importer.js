@@ -10,8 +10,6 @@ exports.modules = [
   'updater',
   'messenger/server',
   'directoryWatcher',
-  'mail/listener',
-  'mail/downloader',
   'purchaseOrders/importer'
 ];
 
