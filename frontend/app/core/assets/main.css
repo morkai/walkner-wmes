@@ -11,10 +11,10 @@
 @import url(./highcharts.css);
 
 body.is-development-env .navbar {
-  outline: 4px solid #e00;
+  border-bottom: 4px solid #e00;
 }
 body.is-testing-env .navbar {
-  outline: 4px solid #fa0;
+  border-bottom: 4px solid #fa0;
 }
 body {
   font-family: Arial, "Helvetic Neue", Helvetica, sans-serif;
