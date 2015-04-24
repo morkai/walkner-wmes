@@ -32,7 +32,16 @@ define([
 
     rqlQuery: function(rql)
     {
-      var selector = [{name: 'in', args: ['status', ['undecided', 'rejected']]}];
+      var selector = [
+        {
+          name: 'in',
+          args: ['status', ['undecided', 'rejected']]
+        },
+        {
+          name: 'ge',
+          args: ['startedAt', time.getMoment().subtract(1, 'month').startOf('day').hours(6).valueOf()]
+        }
+      ];
 
       if (!user.isAllowedTo('PROD_DOWNTIMES:ALL'))
       {
