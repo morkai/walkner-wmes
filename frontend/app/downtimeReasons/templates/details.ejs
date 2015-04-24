@@ -19,6 +19,10 @@
         <div class="prop-value"><%= model.subdivisionTypes %></div>
       </div>
       <div class="prop">
+        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:defaultAor') %></div>
+        <div class="prop-value"><%- model.defaultAor %></div>
+      </div>
+      <div class="prop">
         <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:aors') %></div>
         <div class="prop-value">
           <% if (!model.aors.length) { %>

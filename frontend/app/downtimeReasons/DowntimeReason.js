@@ -42,7 +42,8 @@ define([
         color: '#ff0000',
         refColor: '#aa0000',
         refValue: 0,
-        aors: []
+        aors: [],
+        defaultAor: false
       };
     },
 
@@ -74,6 +75,8 @@ define([
 
         return aor ? aor.getLabel() : aorId;
       });
+
+      obj.defaultAor = t('core', 'BOOL:' + obj.defaultAor);
 
       return obj;
     },

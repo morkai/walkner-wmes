@@ -43,6 +43,7 @@ define([
         '_id',
         'label',
         'type',
+        'defaultAor',
         'subdivisionTypes',
         'aors',
         'opticsPosition',

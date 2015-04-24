@@ -28,6 +28,7 @@
   "PROPERTY:refValue": "Referencja [FTE]",
   "PROPERTY:refColor": "Kolor referencji",
   "PROPERTY:aors": "Obszary odpowiedzialności",
+  "PROPERTY:defaultAor": "Tylko domyślny obszar działu",
 
   "aors:all": "Wszystkie",
 

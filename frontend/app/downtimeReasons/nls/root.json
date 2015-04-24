@@ -29,6 +29,7 @@
     "PROPERTY:refValue": "Reference [FTE]",
     "PROPERTY:refColor": "Reference color",
     "PROPERTY:aors": "Areas of responsibility",
+    "PROPERTY:defaultAor": "Default subdivision AOR only",
 
     "aors:all": "All",
 

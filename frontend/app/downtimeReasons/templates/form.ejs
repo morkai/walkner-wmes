@@ -51,6 +51,14 @@
         </div>
       </div>
       <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input id="<%- idPrefix %>-defaultAor" type="checkbox" name="defaultAor" value="true">
+            <%- t('downtimeReasons', 'PROPERTY:defaultAor') %>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-aors" class="control-label"><%- t('downtimeReasons', 'PROPERTY:aors') %></label>
         <input id="<%- idPrefix %>-aors" type="text" name="aors">
       </div>
@@ -72,11 +80,13 @@
           <input id="<%- idPrefix %>-refValue" class="form-control small" type="number" name="refValue" step="0.01">
         </div>
       </div>
-      <div class="checkbox">
-        <label>
-          <input id="<%- idPrefix %>-auto" type="checkbox" name="auto" value="true">
-          <%- t('downtimeReasons', 'PROPERTY:auto') %>
-        </label>
+      <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input id="<%- idPrefix %>-auto" type="checkbox" name="auto" value="true">
+            <%- t('downtimeReasons', 'PROPERTY:auto') %>
+          </label>
+        </div>
       </div>
     </div>
     <div class="panel-footer">
