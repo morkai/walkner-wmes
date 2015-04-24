@@ -79,9 +79,11 @@
   "corroborate:reason": "Nowy powód przestoju",
   "corroborate:aor": "Nowy obszar odpowiedzialności",
   "corroborate:comment": "Komentarz",
-  "corroborate:submit:undecided": "Komentuj",
+  "corroborate:submit:null": "Komentuj",
+  "corroborate:submit:undecided": "Przypisz nowy obszar",
   "corroborate:submit:confirmed": "Potwierdź",
   "corroborate:submit:rejected": "Odrzuć",
+  "corroborate:noChanges": "Nie wykryto żadnych zmian :(",
   "corroborate:failure": "Nie udało się potwierdzić przestoju :(",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia przestoju",
@@ -92,11 +94,11 @@
 
   "settings:tab:default": "Podstawowe",
   "settings:autoConfirmHours": "Czas do automatycznego potwierdzenia [h]",
-  "settings:maxAorChanges": "Maksymalna ilość zmian obszaru odpowiedzialności",
-  "settings:maxReasonChanges": "Maksymalna ilość zmian powodu przestoju",
-  "settings:maxRejectedChanges": "Maksymalna ilość odrzuceń przestoju",
+  "settings:maxAorChanges": "Maksymalna liczba zmian obszaru odpowiedzialności",
+  "settings:maxReasonChanges": "Maksymalna liczba zmian powodu przestoju",
+  "settings:maxRejectedChanges": "Maksymalna liczba odrzuceń przestoju",
 
-  "changesCount:reason": "Ilość zmian powodu przestoju",
-  "changesCount:aor": "Ilość zmian obszaru odpowiedzialnego",
-  "changesCount:rejected": "Ilość odrzuceń przestoju"
+  "changesCount:reason": "Liczba zmian powodu przestoju",
+  "changesCount:aor": "Liczba zmian obszaru odpowiedzialnego",
+  "changesCount:rejected": "Liczba odrzuceń przestoju"
 }

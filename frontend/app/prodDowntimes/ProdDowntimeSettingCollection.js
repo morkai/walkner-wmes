@@ -4,10 +4,12 @@
 
 define([
   'jquery',
+  '../user',
   '../settings/SettingCollection',
   './ProdDowntimeSetting'
 ], function(
   $,
+  user,
   SettingCollection,
   ProdDowntimeSetting
 ) {
@@ -51,6 +53,18 @@ define([
 
         return newValue;
       }
+    },
+
+    getCanChangeStatusOptions: function()
+    {
+      return {
+        hasAccessToAor: user.hasAccessToAor.bind(user),
+        canManageProdData: user.isAllowedTo('PROD_DATA:MANAGE'),
+        canManageProdDowntimes: user.isAllowedTo('PROD_DOWNTIMES:MANAGE'),
+        maxRejectedChanges: this.getValue('maxRejectedChanges') || Number.MAX_VALUE,
+        maxReasonChanges: this.getValue('maxReasonChanges') || Number.MAX_VALUE,
+        maxAorChanges: this.getValue('maxAorChanges') || Number.MAX_VALUE
+      };
     }
 
   });

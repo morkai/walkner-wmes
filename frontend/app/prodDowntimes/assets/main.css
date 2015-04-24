@@ -24,15 +24,23 @@
   font-size: 60px;
   line-height: 1;
 }
+.prodDowntimes-list .label {
+  font-size: 1em;
+}
 .prodDowntimes-list .action-corroborate {
   position: relative;
 }
+.prodDowntimes-list .action-corroborate > .fa {
+  position: relative;
+  z-index: 2;
+}
 .prodDowntimes-list .action-corroborate > .label {
   position: absolute;
+  z-index: 1;
   top: 0;
   right: 0;
   margin: 0;
-  padding: 2px 4px;
+  padding: 2px 3px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;

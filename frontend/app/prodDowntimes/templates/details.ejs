@@ -5,7 +5,7 @@
     <% model.history.forEach(function(item, itemIndex) { %>
     <% include historyItem.ejs %>
     <% }) %>
-    <% if (!model.pressWorksheet) { %>
+    <% if (!model.pressWorksheet && user.isLoggedIn()) { %>
     <% include corroborate.ejs %>
     <% } %>
   </div>

@@ -49,7 +49,7 @@ define([
       if (this.model.canCorroborate())
       {
         var page = this;
-        var canChangeStatus = this.model.canChangeStatus(this.settings.getValue('maxAorChanges') || -1);
+        var canChangeStatus = this.model.canChangeStatus(this.settings.getCanChangeStatusOptions());
 
         actions.push({
           icon: canChangeStatus ? 'gavel' : 'comment',

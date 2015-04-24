@@ -61,11 +61,7 @@ define([
       }
 
       var collection = this.collection;
-      var canManageProdData = user.isAllowedTo('PROD_DATA:MANAGE');
-      var canManageProdDowntimes = user.isAllowedTo('PROD_DOWNTIMES:MANAGE');
-      var maxReasonChanges = this.settings.getValue('maxReasonChanges') || Number.MAX_VALUE;
-      var maxAorChanges = this.settings.getValue('maxAorChanges') || Number.MAX_VALUE;
-      var maxRejectedChanges = this.settings.getValue('maxRejectedChanges') || Number.MAX_VALUE;
+      var canChangeStatusOptions = this.settings.getCanChangeStatusOptions();
       var rejectedChangesCountTitle = t('prodDowntimes', 'changesCount:rejected');
 
       return function(row)
@@ -75,7 +71,7 @@ define([
 
         if (model.canCorroborate())
         {
-          var canChangeStatus = model.canChangeStatus(maxAorChanges, canManageProdData, canManageProdDowntimes);
+          var canChangeStatus = model.canChangeStatus(canChangeStatusOptions);
           var label = t('prodDowntimes', 'LIST:ACTION:' + (canChangeStatus ? 'corroborate' : 'comment'));
           var text = null;
           var changesCount = row.changesCount;
@@ -83,7 +79,7 @@ define([
           if (changesCount.rejected)
           {
             text = '<span title="' + rejectedChangesCountTitle + '" class="label label-'
-              + (changesCount.rejected >= maxRejectedChanges ? 'danger' : 'warning')
+              + (changesCount.rejected >= canChangeStatusOptions.maxRejectedChanges ? 'danger' : 'warning')
               + '">' + changesCount.rejected + '</span>';
           }
 
@@ -96,7 +92,7 @@ define([
           });
         }
 
-        if (model.isEditable() && canManageProdData)
+        if (model.isEditable() && canChangeStatusOptions.canManageProdData)
         {
           actions.push(
             ListView.actions.edit(model),

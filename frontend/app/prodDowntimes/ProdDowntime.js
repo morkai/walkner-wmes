@@ -20,7 +20,8 @@ define([
   var STATUS_TO_CSS_CLASS_NAME = {
     undecided: 'warning',
     confirmed: 'success',
-    rejected: 'danger'
+    rejected: 'danger',
+    null: 'primary'
   };
 
   return Model.extend({
@@ -77,9 +78,9 @@ define([
       return decorateProdDowntime(this, {longDate: true});
     },
 
-    getCssClassName: function()
+    getCssClassName: function(status)
     {
-      return STATUS_TO_CSS_CLASS_NAME[this.get('status')];
+      return STATUS_TO_CSS_CLASS_NAME[status === undefined ? this.get('status') : status];
     },
 
     finish: function()
@@ -112,70 +113,49 @@ define([
 
     canCorroborate: function()
     {
-      return this.get('pressWorksheet') === null;
+      return user.isLoggedIn() && this.get('pressWorksheet') === null;
     },
 
-    canChangeStatus: function(maxAorChanges, canManageProdData, canManageProdDowntimes)
+    /**
+     * @param {object} options
+     * @param {function(string): boolean} options.hasAccessToAor
+     * @param {boolean} options.canManageProdData
+     * @param {boolean} options.canManageProdDowntimes
+     * @param {number} options.maxRejectedChanges
+     * @param {number} options.maxReasonChanges
+     * @param {number} options.maxAorChanges
+     * @returns {number}
+     */
+    canChangeStatus: function(options)
     {
       if (!this.get('finishedAt'))
       {
-        return false;
+        return 0;
       }
 
-      if (canManageProdData === undefined)
+      if (options.canManageProdData)
       {
-        canManageProdData = user.isAllowedTo('PROD_DATA:MANAGE');
+        return 2;
       }
 
-      if (canManageProdData)
+      var status = this.get('status');
+
+      if (!options.canManageProdDowntimes || status === 'confirmed')
       {
-        return true;
+        return 0;
       }
 
-      if (canManageProdDowntimes === undefined)
+      var changesCount = this.get('changesCount');
+
+      if (!changesCount
+        || changesCount.rejected >= options.maxRejectedChanges
+        || changesCount.reason >= options.maxReasonChanges
+        || changesCount.aor >= options.maxAorChanges)
       {
-        canManageProdDowntimes = user.isAllowedTo('PROD_DOWNTIMES:MANAGE');
+        return 0;
       }
 
-      if (!canManageProdDowntimes || this.get('status') === 'confirmed')
-      {
-        return false;
-      }
-
-      var changes = this.get('changes');
-
-      if (!Array.isArray(changes) || !changes.length)
-      {
-        return false;
-      }
-
-      var aorChangeCount = 0;
-
-      for (var i = 1, l = changes.length; i < l; ++i)
-      {
-        var change = changes[i];
-
-        if (change.data && change.data.aor)
-        {
-          aorChangeCount += 1;
-
-          if (aorChangeCount === maxAorChanges)
-          {
-            return false;
-          }
-        }
-      }
-
-      var currentAorId = this.get('aor');
-
-      if (user.hasAccessToAor(currentAorId))
-      {
-        return true;
-      }
-
-      var initialAor = changes[0].data.aor;
-
-      return initialAor && user.hasAccessToAor(initialAor[1]);
+      return options.hasAccessToAor(this.get('aor')) ? 1 : 0;
     }
 
   }, {

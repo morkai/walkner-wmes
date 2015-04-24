@@ -10,6 +10,8 @@ define([
   'app/viewport',
   'app/core/views/DetailsView',
   'app/core/util/buttonGroup',
+  'app/data/orgUnits',
+  'app/data/aors',
   '../util/decorateProdDowntime',
   '../util/decorateProdDowntimeChange',
   '../util/reasonAndAor',
@@ -25,6 +27,8 @@ define([
   viewport,
   DetailsView,
   buttonGroup,
+  orgUnits,
+  aors,
   decorateProdDowntime,
   decorateProdDowntimeChange,
   reasonAndAor,
@@ -165,26 +169,27 @@ define([
     updateCorroborateExtra: function()
     {
       var $extra = this.$id('corroborateExtra');
+      var canChangeStatus = this.model.canChangeStatus(this.settings.getCanChangeStatusOptions());
 
-      if (!this.model.canChangeStatus(this.settings.getValue('maxAorChanges') || -1))
-      {
-        this.$id('reason').select2('destroy');
-        this.$id('aor').select2('destroy');
-        $extra.remove();
-        this.updateCorroborateSubmit();
+      this.$id('reason').select2('destroy');
+      this.$id('aor').select2('destroy');
+      $extra.remove();
+      this.updateCorroborateSubmit();
 
-        return;
-      }
-
-      if ($extra.length)
+      if (!canChangeStatus)
       {
         return;
       }
+
+      var defaultAor = this.getDefaultAor();
+      var status = this.model.get('status');
 
       this.$id('corroborate').prepend(corroborateExtraTemplate({
         idPrefix: this.idPrefix,
-        showRejectedStatus: true,
-        showConfirmedStatus: true
+        defaultAor: defaultAor ? defaultAor.getLabel() : null,
+        showUndecidedStatus: canChangeStatus === 2 || (status === 'rejected' && canChangeStatus === 1),
+        showRejectedStatus: canChangeStatus === 2 || (status === 'undecided' && canChangeStatus === 1),
+        showConfirmedStatus: canChangeStatus === 2 || (status === 'undecided' && canChangeStatus === 1)
       }));
 
       this.$id('reason').val(this.model.get('reason'));
@@ -192,17 +197,22 @@ define([
 
       this.setUpReasonSelect2();
       this.setUpAorSelect2();
-      this.updateCorroborateSubmit();
+      this.updateCorroborateSubmit(null, canChangeStatus);
     },
 
-    updateCorroborateSubmit: function(e)
+    updateCorroborateSubmit: function(e, canChangeStatus)
     {
+      if (canChangeStatus === undefined)
+      {
+        canChangeStatus = this.model.canChangeStatus(this.settings.getCanChangeStatusOptions());
+      }
+
       var $status = this.$id('status');
       var status = buttonGroup.getValue($status);
 
       if (!status || status.length === 0)
       {
-        status = 'undecided';
+        status = null;
       }
       else if (status.length === 1)
       {
@@ -220,25 +230,54 @@ define([
         status = e.target.value;
       }
 
-      var undecided = status === 'undecided';
-      var icon = undecided ? 'comment' : 'gavel';
-      var className = undecided ? 'primary' : status === 'rejected' ? 'danger' : 'success';
+      var comment = status === null;
+      var icon = status ? 'gavel' : 'comment';
       var label = '<i class="fa fa-' + icon + '"></i><span>'
         + t('prodDowntimes', 'corroborate:submit:' + status)
         + '</span>';
 
       this.$('button[type="submit"]')
-        .removeClass('btn-primary btn-success btn-danger')
-        .addClass('btn-' + className)
+        .removeClass('btn-primary btn-success btn-danger btn-warning')
+        .addClass('btn-' + this.model.getCssClassName(status))
         .html(label);
 
-      this.$id('reason').closest('.form-group').toggleClass('hidden', undecided);
-      this.$id('aor').closest('.form-group').toggleClass('hidden', undecided);
+      var reasonVisible = false;
+      var aorVisible = false;
+      var defaultAorVisible = false;
+
+      if (canChangeStatus === 2)
+      {
+        reasonVisible = status !== null;
+        aorVisible = status !== null;
+      }
+      else if (canChangeStatus === 1)
+      {
+        reasonVisible = status === 'undecided';
+        aorVisible = status === 'undecided';
+        defaultAorVisible = status === 'rejected';
+      }
+
+      this.$id('reason').closest('.form-group').toggleClass('hidden', !reasonVisible);
+      this.$id('aor').closest('.form-group').toggleClass('hidden', !aorVisible);
+      this.$id('defaultAor').toggleClass('hidden', !defaultAorVisible);
+
       this.$id('comment')
-        .prop('required', undecided)
+        .prop('required', comment)
         .closest('.form-group')
         .find('label')
-        .toggleClass('is-required', undecided);
+        .toggleClass('is-required', comment);
+
+      if (e)
+      {
+        if (reasonVisible)
+        {
+          this.$id('reason').select2('focus');
+        }
+        else
+        {
+          this.$id('comment').focus();
+        }
+      }
     },
 
     setUpReasonSelect2: function()
@@ -279,30 +318,47 @@ define([
 
     corroborate: function()
     {
+      var $reason = this.$id('reason');
+      var $aor = this.$id('aor');
       var $comment = this.$id('comment');
       var newStatus = buttonGroup.getValue(this.$id('status'));
-      var newReason =  this.$id('reason').val();
-      var newAor = this.$id('aor').val();
+      var newReason =  !$reason.length || $reason.closest('.form-group').hasClass('hidden') ? null : $reason.val();
+      var newAor = !$aor.length || $aor.closest('.form-group').hasClass('hidden') ? null : $aor.val();
       var comment = $comment.val().trim();
       var data = {};
 
       if (Array.isArray(newStatus) && newStatus.length)
       {
         newStatus = newStatus[0];
+      }
 
+      if (_.isString(newStatus))
+      {
         if (newStatus !== this.model.get('status'))
         {
           data.status = newStatus;
         }
 
-        if (newReason !== this.model.get('reason'))
+        if (newReason && newAor)
         {
-          data.reason = newReason;
-        }
+          if (newReason !== this.model.get('reason'))
+          {
+            data.reason = newReason;
+          }
 
-        if (newAor !== this.model.get('aor'))
+          if (newAor !== this.model.get('aor'))
+          {
+            data.aor = newAor;
+          }
+        }
+        else if (newStatus === 'rejected')
         {
-          data.aor = newAor;
+          newAor = this.getDefaultAor();
+
+          if (newAor && newAor.id !== this.model.get('aor'))
+          {
+            data.aor = newAor.id;
+          }
         }
       }
 
@@ -320,7 +376,7 @@ define([
           return;
         }
 
-        $comment[0].setCustomValidity('Nie wykryto żadnych zmian :(');
+        $comment[0].setCustomValidity(t('prodDowntimes', 'corroborate:noChanges'));
 
         this.timers.submit = setTimeout(function() { $submit.click(); }, 1);
 
@@ -356,6 +412,18 @@ define([
 
         $submit.prop('disabled', false);
       });
+    },
+
+    getDefaultAor: function()
+    {
+      var subdivision = orgUnits.getByTypeAndId('subdivision', this.model.get('subdivision'));
+
+      if (!subdivision)
+      {
+        return null;
+      }
+
+      return aors.get(subdivision.get('aor')) || null;
     },
 
     onModelChange: function()

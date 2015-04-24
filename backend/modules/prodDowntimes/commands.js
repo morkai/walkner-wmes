@@ -42,6 +42,11 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 
     data = _.pick(data, ['_id', 'status', 'decisionComment', 'reason', 'aor']);
 
+    if (data.status && data.status !== 'undecided' && data.status !== 'rejected' && data.status !== 'confirmed')
+    {
+      delete data.status;
+    }
+
     step(
       function getProdDowntimeStep()
       {

@@ -82,9 +82,11 @@
     "corroborate:reason": "New reason",
     "corroborate:aor": "New area of responsibility",
     "corroborate:comment": "Comment",
-    "corroborate:submit:undecided": "Comment",
+    "corroborate:submit:null": "Comment",
+    "corroborate:submit:undecided": "Assign a new AOR",
     "corroborate:submit:confirmed": "Confirm",
     "corroborate:submit:rejected": "Reject",
+    "corroborate:noChanges": "No changes detected :(",
     "corroborate:failure": "Failed to corroborate the downtime :(",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Downtime deletion confirmation",
