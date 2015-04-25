@@ -452,7 +452,7 @@ define([
 
       $childTrs.find(countElsSelector).each(function()
       {
-        var count = fractionsUtil.parse(this.tagName === 'TD' ? this.innerText : this.value);
+        var count = fractionsUtil.parse(this.tagName === 'TD' ? this.textContent : this.value);
 
         if (this.dataset.division === undefined)
         {
@@ -471,13 +471,13 @@ define([
 
       totals.forEach(function(totalCount, i)
       {
-        $parentTotalCounts[i].innerText = fractionsUtil.round(totalCount);
+        $parentTotalCounts[i].textContent = fractionsUtil.round(totalCount);
         totals[i] = 0;
       });
 
       $parentTr.find('.fte-leaderEntry-parent-count' + taskCompanyTotalSuffix).each(function()
       {
-        var count = fractionsUtil.parse(this.innerText);
+        var count = fractionsUtil.parse(this.textContent);
 
         if (this.dataset.division === undefined)
         {
@@ -498,7 +498,7 @@ define([
 
       totals.forEach(function(totalCount, i)
       {
-        $parentTotalCounts[i].innerText = fractionsUtil.round(totalCount);
+        $parentTotalCounts[i].textContent = fractionsUtil.round(totalCount);
       });
 
       if ($parentTr.attr('data-level') === '0')
@@ -528,7 +528,7 @@ define([
 
       this.$('.fte-leaderEntry-parent-count[data-level="0"]' + funcCompSuffix).each(function()
       {
-        var count = fractionsUtil.parse(this.innerText);
+        var count = fractionsUtil.parse(this.textContent);
 
         if (this.dataset.division === undefined)
         {
@@ -583,7 +583,7 @@ define([
           compDivTotals[column] = 0;
         }
 
-        compDivTotals[column] += fractionsUtil.parse(this.innerText);
+        compDivTotals[column] += fractionsUtil.parse(this.textContent);
       });
 
       Object.keys(compDivTotals).forEach(function(column)
@@ -607,7 +607,7 @@ define([
 
         $thead.find('.fte-leaderEntry-total-prodFunction-division' + suffix).each(function()
         {
-          funcCompTotal += fractionsUtil.parse(this.innerText);
+          funcCompTotal += fractionsUtil.parse(this.textContent);
         });
       }
       else
@@ -628,7 +628,7 @@ define([
 
       $thead.find('.fte-leaderEntry-total-prodFunction-company[data-company="' + companyIndex + '"]').each(function()
       {
-        compTotal += fractionsUtil.parse(this.innerText);
+        compTotal += fractionsUtil.parse(this.textContent);
       });
 
       this.$('.fte-leaderEntry-total-company[data-company="' + companyIndex + '"]').text(
@@ -643,7 +643,7 @@ define([
 
       $thead.find('.fte-leaderEntry-total-prodFunction-company[data-function="' + functionIndex + '"]').each(function()
       {
-        funcTotal += fractionsUtil.parse(this.innerText);
+        funcTotal += fractionsUtil.parse(this.textContent);
       });
 
       this.$('.fte-leaderEntry-total-prodFunction[data-column="' + functionIndex + '"]').text(
@@ -654,7 +654,7 @@ define([
 
       $thead.find('.fte-leaderEntry-total-prodFunction').each(function()
       {
-        total += fractionsUtil.parse(this.innerText);
+        total += fractionsUtil.parse(this.textContent);
       });
 
       this.$('.fte-leaderEntry-total').text(fractionsUtil.round(total));
@@ -755,7 +755,7 @@ define([
         rowEl = rowEl.previousElementSibling;
       }
 
-      var task = rowEl.children[0].innerText;
+      var task = rowEl.children[0].textContent;
 
       if (rowEl.classList.contains('is-child'))
       {
@@ -771,7 +771,7 @@ define([
           if (newLevel < level)
           {
             level = newLevel;
-            task = parentEl.children[0].innerText + ' \\ ' + task;
+            task = parentEl.children[0].textContent + ' \\ ' + task;
           }
         }
       }
@@ -792,9 +792,9 @@ define([
 
       this.$focusInfoBar.html(focusInfoBarTemplate({
         prodTask: task,
-        prodFunction: prodFunctionSelector ? this.theadEl.querySelector(prodFunctionSelector).innerText : null,
-        company: companySelector ? this.theadEl.querySelector(companySelector).innerText : null,
-        division: divisionSelector ? this.theadEl.querySelector(divisionSelector).innerText : null
+        prodFunction: prodFunctionSelector ? this.theadEl.querySelector(prodFunctionSelector).textContent : null,
+        company: companySelector ? this.theadEl.querySelector(companySelector).textContent : null,
+        division: divisionSelector ? this.theadEl.querySelector(divisionSelector).textContent : null
       }));
 
       $('body').addClass('is-with-fte-focusInfoBar');

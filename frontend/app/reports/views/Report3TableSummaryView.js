@@ -438,7 +438,7 @@ define([
       {
         if (th.parentNode !== null)
         {
-          columnNames.push('"' + th.innerText + '"');
+          columnNames.push('"' + th.textContent + '"');
         }
       });
 
@@ -450,7 +450,7 @@ define([
 
         for (var i = 0, l = tr.childElementCount; i < l; ++i)
         {
-          var value = tr.children[i].innerText;
+          var value = tr.children[i].textContent;
 
           if (i < 3)
           {

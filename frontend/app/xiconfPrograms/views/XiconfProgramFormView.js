@@ -310,7 +310,7 @@ define([
     {
       this.$('.xiconfPrograms-form-stepNo').each(function(stepIndex)
       {
-        this.innerText = (stepIndex + 1) + '.';
+        this.textContent = (stepIndex + 1) + '.';
       });
     },
 

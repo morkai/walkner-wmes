@@ -127,8 +127,8 @@ define([
         overallTotalPackageQty += totalPackageQty;
         overallTotalQty += totalQty;
 
-        rowEl.querySelector('.pos-printDialog-items-totalPackageQty').innerText = totalPackageQty.toLocaleString();
-        rowEl.querySelector('.pos-printDialog-items-totalQty').innerText = totalQty.toLocaleString();
+        rowEl.querySelector('.pos-printDialog-items-totalPackageQty').textContent = totalPackageQty.toLocaleString();
+        rowEl.querySelector('.pos-printDialog-items-totalQty').textContent = totalQty.toLocaleString();
       });
 
       this.$id('overallPackageQty').text(overallPackageQty.toLocaleString());

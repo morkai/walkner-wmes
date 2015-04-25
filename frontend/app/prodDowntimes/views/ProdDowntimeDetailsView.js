@@ -302,7 +302,7 @@ define([
       {
         var tagData = time.toTagData(this.getAttribute('datetime'));
 
-        this.innerText = tagData.daysAgo > 5 ? tagData.long : tagData.human;
+        this.textContent = tagData.daysAgo > 5 ? tagData.long : tagData.human;
       });
     },
 
