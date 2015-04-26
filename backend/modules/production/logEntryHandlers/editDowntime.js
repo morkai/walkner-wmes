@@ -49,14 +49,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           return this.done(done, null, prodDowntime, null, null);
         }
 
-        var downtimeStartedAt = changes.startedAt ? new Date(changes.startedAt) : null;
-
-        if (downtimeStartedAt === null && !changes.finishedAt)
-        {
-          return this.done(done, null, prodDowntime, oldProdShiftOrder, null);
-        }
-
-        this.downtimeStartedAt = downtimeStartedAt;
+        this.downtimeStartedAt = changes.startedAt ? new Date(changes.startedAt) : prodDowntime.startedAt;
         this.oldProdShiftOrder = oldProdShiftOrder;
         this.newProdShiftOrder = null;
 
@@ -78,15 +71,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
         allProdShiftOrders.sort(function(a, b) { return a.startedAt - b.startedAt; });
 
-        var now = Date.now();
+        var now = new Date();
 
         for (var i = 0, l = allProdShiftOrders.length; i < l; ++i)
         {
           var newProdShiftOrder = allProdShiftOrders[i];
-          var orderFinishedAt = newProdShiftOrder.finishedAt || new Date(now);
+          var orderFinishedAt = newProdShiftOrder.finishedAt || now;
 
-          if (this.downtimeStartedAt >= newProdShiftOrder.startedAt
-            && this.downtimeStartedAt <= orderFinishedAt)
+          if (this.downtimeStartedAt >= newProdShiftOrder.startedAt && this.downtimeStartedAt <= orderFinishedAt)
           {
             this.newProdShiftOrder = newProdShiftOrder;
           }
