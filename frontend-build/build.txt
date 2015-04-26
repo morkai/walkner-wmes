@@ -630,6 +630,12 @@ app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
 app/data/prodLog.js
 app/prodDowntimes/ProdDowntimeCollection.js
+app/data/createSettings.js
+app/settings/Setting.js
+app/settings/SettingCollection.js
+app/prodDowntimes/ProdDowntimeSetting.js
+app/prodDowntimes/ProdDowntimeSettingCollection.js
+app/prodDowntimes/settings.js
 app/prodDowntimes/views/ProdDowntimeListView.js
 app/data/orgUnits.js
 app/prodDowntimes/templates/filter.js
