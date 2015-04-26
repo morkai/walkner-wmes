@@ -269,7 +269,7 @@ exports['messenger/client:wmes-watchdog'] = {
 exports.updater = {
   manifestPath: __dirname + '/wmes-manifest.appcache',
   packageJsonPath: __dirname + '/../package.json',
-  restartDelay: 2500,
+  restartDelay: 5000,
   pull: {
     exe: 'git.exe',
     cwd: __dirname + '/../',
