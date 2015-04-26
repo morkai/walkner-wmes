@@ -41,7 +41,7 @@ define([
 
     serializeRows: function()
     {
-      var options = {
+      var options = this.options.simple ? null : {
         changesCount: true,
         maxReasonChanges: this.settings.getValue('maxReasonChanges') || Number.MAX_VALUE,
         maxAorChanges: this.settings.getValue('maxAorChanges') || Number.MAX_VALUE
