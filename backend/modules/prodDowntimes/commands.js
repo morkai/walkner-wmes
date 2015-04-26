@@ -33,18 +33,14 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
       return reply(new Error('AUTH'));
     }
 
-    if (!_.isObject(data)
-      || !_.isString(data._id)
-      || !_.isString(data.decisionComment))
-    {
-      return reply(new Error('INPUT'));
-    }
-
     data = _.pick(data, ['_id', 'status', 'decisionComment', 'reason', 'aor']);
 
-    if (data.status && data.status !== 'undecided' && data.status !== 'rejected' && data.status !== 'confirmed')
+    if (!_.isString(data._id) || _.isEmpty(data._id)
+      || (data.status !== undefined && !_.includes(['undecided', 'rejected', 'confirmed'], data.status))
+      || (data.reason !== undefined && (!_.isString(data.reason) || _.isEmpty(data.reason)))
+      || (data.aor !== undefined && (!_.isString(data.aor) || !/^[0-9a-f]{24}$/.test(data.aor))))
     {
-      delete data.status;
+      return reply(new Error('INPUT'));
     }
 
     step(
@@ -102,7 +98,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
         });
         prodLogEntry.save(this.next());
       },
-      function updateProdDowntimeStep(err)
+      function updateProdDowntimeStep(err, prodLogEntry)
       {
         if (err)
         {
@@ -124,6 +120,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
           }
         });
 
+        this.prodLogEntryId = prodLogEntry._id;
         this.changes = {
           date: data.corroboratedAt,
           user: data.corroborator,
@@ -145,6 +142,15 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 
         if (err)
         {
+          if (this.prodLogEntryId)
+          {
+            ProdLogEntry.collection.remove({_id: this.prodLogEntryId}, function() {});
+          }
+
+          prodDowntimesModule.error("Failed to corroborate downtime [%s]: %s", prodDowntime._id, err.message);
+          console.inspect(changes);
+          console.inspect(err.errors);
+
           return reply(err);
         }
 
