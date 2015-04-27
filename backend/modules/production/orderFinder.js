@@ -138,7 +138,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
     {
       var latestOrder = null;
 
-      _.forEach(orders, function(order)
+      orders.forEach(function(order)
       {
         if (latestOrder === null || order.finishDate > latestOrder.finishDate)
         {
