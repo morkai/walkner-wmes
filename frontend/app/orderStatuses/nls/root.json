@@ -19,6 +19,7 @@
 
     "PROPERTY:_id": "Label",
     "PROPERTY:label": "Description",
+    "PROPERTY:color": "Color",
 
     "FORM:ACTION:add": "Add order status",
     "FORM:ACTION:edit": "Edit order status",
