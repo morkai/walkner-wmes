@@ -43,6 +43,14 @@ define([
       {
         this.updateSelection('prodFunctions', e.target);
       },
+      'change #-prodTasks': function(e)
+      {
+        this.updateSelection('prodTasks', e.target);
+      },
+      'change #-references': function(e)
+      {
+        this.updateSelection('references', e.target, true);
+      },
       'change [name=extremes]': function()
       {
         this.model.set('extremes', this.$('[name=extremes]:checked').val());
@@ -75,6 +83,13 @@ define([
             id: prodFunction.id,
             label: prodFunction.getLabel()
           };
+        }),
+        prodTasks: this.model.prodTasks.map(function(prodTask)
+        {
+          return {
+            id: prodTask.id,
+            label: prodTask.getLabel()
+          };
         })
       };
     },
@@ -97,9 +112,11 @@ define([
     {
       return {
         series: Object.keys(this.model.get('series')),
+        extremes: this.model.get('extremes'),
+        references: Object.keys(this.model.get('references')),
         companies: Object.keys(this.model.get('companies')),
-        prodFunctions: Object.keys(this.model.get('prodFunctions')),
-        extremes: this.model.get('extremes')
+        prodTasks: Object.keys(this.model.get('prodTasks')),
+        prodFunctions: Object.keys(this.model.get('prodFunctions'))
       };
     },
 

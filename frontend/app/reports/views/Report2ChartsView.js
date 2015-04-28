@@ -5,14 +5,10 @@
 define([
   'app/core/View',
   './Report2ClipChartView',
-  './Report2DirIndirChartView',
-  './Report2EffIneffChartView',
   'app/reports/templates/report2Charts'
 ], function(
   View,
   Report2ClipChartView,
-  Report2DirIndirChartView,
-  Report2EffIneffChartView,
   report2ChartsTemplate
 ) {
   'use strict';
@@ -26,26 +22,6 @@ define([
       this.setView(
         '.reports-2-clip-container',
         new Report2ClipChartView({
-          model: this.model,
-          settings: this.settings,
-          displayOptions: this.displayOptions,
-          skipRenderChart: this.options.skipRenderCharts
-        })
-      );
-
-      this.setView(
-        '.reports-2-dirIndir-container',
-        new Report2DirIndirChartView({
-          model: this.model,
-          settings: this.settings,
-          displayOptions: this.displayOptions,
-          skipRenderChart: this.options.skipRenderCharts
-        })
-      );
-
-      this.setView(
-        '.reports-2-effIneff-container',
-        new Report2EffIneffChartView({
           model: this.model,
           settings: this.settings,
           displayOptions: this.displayOptions,

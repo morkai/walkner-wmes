@@ -7,16 +7,20 @@ define([
   './Report5TotalsChartView',
   './Report5DirectChartView',
   './Report5IndirectChartView',
-  './Report5DirIndirChartView',
+  './Report5IndirDirChartView',
   './Report5DetailsChartView',
+  './Report5DirIndirChartView',
+  './Report5EffIneffChartView',
   'app/reports/templates/report5Charts'
 ], function(
   View,
   Report5TotalsChartView,
   Report5DirectChartView,
   Report5IndirectChartView,
-  Report5DirIndirChartView,
+  Report5IndirDirChartView,
   Report5DetailsChartView,
+  Report5DirIndirChartView,
+  Report5EffIneffChartView,
   report5ChartsTemplate
 ) {
   'use strict';
@@ -37,8 +41,10 @@ define([
       this.setView('.reports-5-totals-container', new Report5TotalsChartView(options));
       this.setView('.reports-5-direct-container', new Report5DirectChartView(options));
       this.setView('.reports-5-indirect-container', new Report5IndirectChartView(options));
-      this.setView('.reports-5-dirIndir-container', new Report5DirIndirChartView(options));
+      this.setView('.reports-5-indirDir-container', new Report5IndirDirChartView(options));
       this.setView('.reports-5-details-container', new Report5DetailsChartView(options));
+      this.setView('.reports-5-dirIndir-container', new Report5DirIndirChartView(options));
+      this.setView('.reports-5-effIneff-container', new Report5EffIneffChartView(options));
     },
 
     afterRender: function()

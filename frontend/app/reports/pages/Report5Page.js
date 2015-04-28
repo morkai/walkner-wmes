@@ -9,7 +9,9 @@ define([
   '../views/Report5HeaderView',
   '../views/Report5FilterView',
   '../views/Report5DisplayOptionsView',
-  '../views/Report5ChartsView'
+  '../views/Report5ChartsView',
+  'app/prodTasks/ProdTaskCollection',
+  'app/core/util/bindLoadingMessage'
 ], function(
   DrillingReportPage,
   Report5Query,
@@ -17,7 +19,9 @@ define([
   Report5HeaderView,
   Report5FilterView,
   Report5DisplayOptionsView,
-  Report5ChartsView
+  Report5ChartsView,
+  ProdTaskCollection,
+  bindLoadingMessage
 ) {
   'use strict';
 
@@ -29,9 +33,19 @@ define([
 
     pageId: 'report5',
 
+    defineModels: function()
+    {
+      this.prodTasks = bindLoadingMessage(
+        new ProdTaskCollection(null, {rqlQuery: 'select(name)&sort(name)'}),
+        this
+      );
+
+      DrillingReportPage.prototype.defineModels.call(this);
+    },
+
     load: function(when)
     {
-      return when(this.settings.fetch({reset: true}));
+      return when(this.settings.fetch({reset: true}), this.prodTasks.fetch({reset: true}));
     },
 
     createQuery: function()
@@ -42,7 +56,8 @@ define([
     createDisplayOptions: function()
     {
       var options = {
-        settings: this.settings
+        settings: this.settings,
+        prodTasks: this.prodTasks
       };
 
       if (typeof this.options.displayOptions === 'string')

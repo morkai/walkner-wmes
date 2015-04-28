@@ -59,6 +59,14 @@ define([
       if (parentOrgUnit)
       {
         childOrgUnits = orgUnits.getChildren(parentOrgUnit);
+
+        if (childOrgUnitType === 'subdivision')
+        {
+          childOrgUnits = childOrgUnits.filter(function(subdivision)
+          {
+            return subdivision.get('type') === 'assembly';
+          });
+        }
       }
       else
       {

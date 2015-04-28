@@ -7,7 +7,13 @@
         <option value="total"><%- t('reports', 'hr:total') %></option>
         <option value="direct"><%- t('reports', 'hr:direct') %></option>
         <option value="indirect"><%- t('reports', 'hr:indirect') %></option>
-        <option value="dirIndir"><%- t('reports', 'hr:dirIndir') %></option>
+        <option value="indirDir"><%- t('reports', 'hr:indirDir') %></option>
+        <option value="warehouse"><%- t('reports', 'options:warehouse') %></option>
+        <option value="productivity"><%- t('reports', 'coeffs:productivity') %></option>
+        <option value="productivityNoWh"><%- t('reports', 'coeffs:productivityNoWh') %></option>
+        <option value="dirIndir"><%- t('reports', 'options:dirIndir') %></option>
+        <option value="effIneff"><%- t('reports', 'options:effIneff') %></option>
+        <option value="absence"><%- t('reports', 'options:absence') %></option>
       </select>
     </div><div class="form-group">
       <label for="<%- idPrefix %>-companies"><%- t('reports', 'options:companies') %></label>
@@ -22,6 +28,26 @@
         <% prodFunctions.forEach(function(prodFunction) { %>
         <option value="<%- prodFunction.id %>"><%= prodFunction.label %></option>
         <% }) %>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-prodTasks"><%- t('reports', 'options:prodTasks') %></label>
+      <select id="<%- idPrefix %>-prodTasks" name="prodTasks[]" class="form-control is-expandable" size="1" multiple data-expanded-length="20">
+        <% prodTasks.forEach(function(prodTask) { %>
+        <option value="<%- prodTask.id %>"><%= prodTask.label %></option>
+        <% }) %>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-references"><%- t('reports', 'options:references') %></label>
+      <select id="<%- idPrefix %>-references" name="references[]" class="form-control is-expandable" size="1" multiple data-expanded-length="20">
+        <optgroup label="<%- t('reports', 'dirIndir:title') %>">
+          <option value="direct"><%- t('reports', 'options:direct') %></option>
+          <option value="indirect"><%- t('reports', 'options:indirect') %></option>
+          <option value="warehouse"><%- t('reports', 'options:warehouse') %></option>
+        </optgroup>
+        <optgroup label="<%- t('reports', 'effIneff:title') %>">
+          <option value="dirIndir"><%- t('reports', 'options:dirIndir') %></option>
+          <option value="absence"><%- t('reports', 'options:absence') %></option>
+        </optgroup>
       </select>
     </div><div class="form-group">
       <label for="<%- idPrefix %>-extremes"><%- t('reports', 'options:extremes') %></label>

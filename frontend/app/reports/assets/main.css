@@ -77,6 +77,9 @@
   overflow-y: hidden;
   overflow-x: scroll;
 }
+.page[data-id="report2"] .reports-drillingCharts-container {
+  min-height: 248px;
+}
 .reports-drillingCharts-container.is-fullscreen,
 .reports-6-container.is-fullscreen {
   overflow-x: hidden;

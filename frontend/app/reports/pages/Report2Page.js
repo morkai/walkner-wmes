@@ -9,9 +9,7 @@ define([
   '../views/Report2HeaderView',
   '../views/Report2FilterView',
   '../views/Report2DisplayOptionsView',
-  '../views/Report2ChartsView',
-  'app/prodTasks/ProdTaskCollection',
-  'app/core/util/bindLoadingMessage'
+  '../views/Report2ChartsView'
 ], function(
   DrillingReportPage,
   Report2Query,
@@ -19,9 +17,7 @@ define([
   Report2HeaderView,
   Report2FilterView,
   Report2DisplayOptionsView,
-  Report2ChartsView,
-  ProdTaskCollection,
-  bindLoadingMessage
+  Report2ChartsView
 ) {
   'use strict';
 
@@ -32,19 +28,9 @@ define([
 
     pageId: 'report2',
 
-    defineModels: function()
-    {
-      this.prodTasks = bindLoadingMessage(
-        new ProdTaskCollection(null, {rqlQuery: 'select(name)&sort(name)'}),
-        this
-      );
-
-      DrillingReportPage.prototype.defineModels.call(this);
-    },
-
     load: function(when)
     {
-      return when(this.settings.fetch({reset: true}), this.prodTasks.fetch({reset: true}));
+      return when(this.settings.fetch({reset: true}));
     },
 
     createQuery: function()
@@ -55,8 +41,7 @@ define([
     createDisplayOptions: function()
     {
       var options = {
-        settings: this.settings,
-        prodTasks: this.prodTasks
+        settings: this.settings
       };
 
       if (typeof this.options.displayOptions === 'string')

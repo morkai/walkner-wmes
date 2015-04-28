@@ -7,7 +7,6 @@ define([
   'underscore',
   'js2form',
   'app/core/View',
-  'app/data/prodFunctions',
   'app/reports/templates/report2DisplayOptions',
   'app/core/util/ExpandableSelect'
 ], function(
@@ -15,7 +14,6 @@ define([
   _,
   js2form,
   View,
-  prodFunctions,
   displayOptionsTemplate
 ) {
   'use strict';
@@ -33,18 +31,6 @@ define([
       {
         this.updateSelection('series', e.target);
       },
-      'change #-references': function(e)
-      {
-        this.updateSelection('references', e.target, true);
-      },
-      'change #-prodTasks': function(e)
-      {
-        this.updateSelection('prodTasks', e.target);
-      },
-      'change #-prodFunctions': function(e)
-      {
-        this.updateSelection('prodFunctions', e.target);
-      },
       'change [name=extremes]': function()
       {
         this.model.set('extremes', this.$('[name=extremes]:checked').val());
@@ -55,35 +41,9 @@ define([
       }
     },
 
-    initialize: function()
-    {
-      this.idPrefix = _.uniqueId('v');
-    },
-
     destroy: function()
     {
       this.$('.is-expandable').expandableSelect('destroy');
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix,
-        prodTasks: this.model.prodTasks.map(function(prodTask)
-        {
-          return {
-            id: prodTask.id,
-            label: prodTask.getLabel()
-          };
-        }),
-        prodFunctions: prodFunctions.map(function(prodFunction)
-        {
-          return {
-            id: prodFunction.id,
-            label: prodFunction.getLabel()
-          };
-        })
-      };
     },
 
     beforeRender: function()
@@ -104,10 +64,7 @@ define([
     {
       return {
         series: Object.keys(this.model.get('series')),
-        extremes: this.model.get('extremes'),
-        references: Object.keys(this.model.get('references')),
-        prodTasks: Object.keys(this.model.get('prodTasks')),
-        prodFunctions: Object.keys(this.model.get('prodFunctions'))
+        extremes: this.model.get('extremes')
       };
     },
 

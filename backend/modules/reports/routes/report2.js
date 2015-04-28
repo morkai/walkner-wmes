@@ -4,7 +4,6 @@
 
 'use strict';
 
-var _ = require('lodash');
 var helpers = require('./helpers');
 var report2 = require('../report2');
 
@@ -36,12 +35,7 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     orgUnitId: orgUnit ? req.query.orgUnitId : null,
     division: helpers.idToStr(division),
     subdivisions: helpers.idToStr(subdivisions),
-    mrpControllers: mrpControllers,
-    prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
-    orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
-    directProdFunctions: getDirectProdFunctions(app[reportsModule.config.prodFunctionsId].models),
-    prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models),
-    prodNumConstant: reportsModule.prodNumConstant
+    mrpControllers: mrpControllers
   };
 
   if (isNaN(options.fromTime) || isNaN(options.toTime))
@@ -60,18 +54,3 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
     res.send(reportJson);
   });
 };
-
-function getDirectProdFunctions(allProdFunctions)
-{
-  var prodFunctions = {};
-
-  _.forEach(allProdFunctions, function(prodFunction)
-  {
-    if (prodFunction.direct)
-    {
-      prodFunctions[prodFunction._id] = prodFunction.dirIndirRatio;
-    }
-  });
-
-  return prodFunctions;
-}

@@ -35,7 +35,11 @@ module.exports = function report5Route(app, reportsModule, req, res, next)
     orgUnitId: orgUnit ? req.query.orgUnitId : null,
     division: helpers.idToStr(division),
     subdivisions: helpers.idToStr(subdivisions),
+    prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
+    orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
     directProdFunctions: getDirectProdFunctions(app[reportsModule.config.prodFunctionsId].models),
+    prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models),
+    prodNumConstant: reportsModule.prodNumConstant,
     weekends: req.query.weekends === '1'
   };
 
