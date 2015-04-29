@@ -32,7 +32,7 @@ define([
 
     afterRender: function()
     {
-      if (this.options.renderCharts !== false)
+      if (!this.options.skipRenderCharts)
       {
         this.promised(this.model.fetch());
       }
