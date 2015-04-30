@@ -29,7 +29,11 @@ define([
     /**
      * @type {boolean}
      */
-    dotsVisible: true
+    dotsVisible: true,
+    /**
+     * @type {boolean}
+     */
+    replaceUrl: false
   };
 
   var PaginationView = View.extend({
@@ -88,7 +92,8 @@ define([
     if (href)
     {
       this.broker.publish('router.navigate', {
-        url: href
+        url: href,
+        replace: this.options.replaceUrl
       });
     }
   };

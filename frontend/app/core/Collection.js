@@ -47,12 +47,7 @@ define([
   {
     if (this.paginationData)
     {
-      this.paginationData.set({
-        totalCount: res.totalCount,
-        urlTemplate: this.genPaginationUrlTemplate(),
-        skip: this.rqlQuery.skip,
-        limit: this.rqlQuery.limit
-      });
+      this.paginationData.set(this.getPaginationData(res));
     }
 
     return res.collection;
@@ -136,6 +131,16 @@ define([
     }
 
     return new rql.Query();
+  };
+
+  Collection.prototype.getPaginationData = function(res)
+  {
+    return {
+      totalCount: res.totalCount,
+      urlTemplate: this.genPaginationUrlTemplate(),
+      skip: this.rqlQuery.skip,
+      limit: this.rqlQuery.limit
+    };
   };
 
   Collection.prototype.genPaginationUrlTemplate = function()

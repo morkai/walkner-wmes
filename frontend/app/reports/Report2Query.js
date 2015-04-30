@@ -28,7 +28,11 @@ define([
         orgUnitId: null,
         to: today.valueOf(),
         from: today.subtract(1, 'days').valueOf(),
-        interval: 'day'
+        interval: 'day',
+        limit: 12,
+        skip: 0,
+        filter: 'nin',
+        statuses: ''
       };
     },
 
@@ -144,6 +148,15 @@ define([
       {
         queryString += '&orgUnitType=' + attrs.orgUnitType;
         queryString += '&orgUnitId=' + encodeURIComponent(attrs.orgUnitId);
+      }
+
+      queryString += '&limit=' + attrs.limit;
+      queryString += '&skip=' + attrs.skip;
+
+      if (attrs.statuses.length)
+      {
+        queryString += '&filter=' + attrs.filter;
+        queryString += '&statuses=' + attrs.statuses;
       }
 
       return queryString.substr(1);

@@ -77,6 +77,9 @@
   overflow-y: hidden;
   overflow-x: scroll;
 }
+.is-moving.reports-drillingCharts-container {
+  overflow-x: hidden;
+}
 .page[data-id="report2"] .reports-drillingCharts-container {
   min-height: 248px;
 }
@@ -116,8 +119,8 @@
 .reports-1-downtimesByAor,
 .reports-1-downtimesByReason,
 .reports-2-clip,
-.reports-2-dirIndir,
-.reports-2-effIneff {
+.reports-5-dirIndir,
+.reports-5-effIneff {
   height: 248px;
 }
 .reports-chart .highcharts-container {
@@ -150,6 +153,8 @@
 }
 .reports-drillingCharts[data-orgUnitType="prodLine"] .reports-drillingChart .highcharts-title,
 .reports-drillingCharts[data-orgUnitType="prodLine"] .reports-drillingChart .highcharts-title:hover,
+.reports-drillingCharts[data-orgUnitType="prodFlow"] .reports-2-clip .highcharts-title,
+.reports-drillingCharts[data-orgUnitType="prodFlow"] .reports-2-clip .highcharts-title:hover,
 .reports-drillingCharts[data-orgUnitType="subdivision"] .reports-5-totals .highcharts-title,
 .reports-drillingCharts[data-orgUnitType="subdivision"] .reports-5-totals .highcharts-title:hover {
   cursor: default;
@@ -284,4 +289,44 @@
 }
 .reports-6-effAndFte-container + .reports-6-effAndFte-container {
   border-top: 1px dotted #e7e7e7;
+}
+.is-moving + .reports-2-orders-container {
+  margin-top: 32px;
+}
+.reports-2-orders-container {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.reports-2-orders {
+  display: flex;
+}
+.reports-2-orders-filter {
+  flex: 0 0 auto;
+  width: 275px;
+  margin-right: 15px;
+}
+.reports-2-orders-filter .radio + .checkbox {
+  margin-top: 5px;
+}
+.reports-2-orders > .reports-2-orders-filter {
+  margin-top: 0;
+}
+.reports-2-orders-list {
+  flex: 1 1 auto;
+}
+.reports-2-orders-name {
+  min-width: 350px;
+}
+.reports-2-confirm {
+  font-weight: bold;
+  color: #fff;
+}
+.reports-2-confirm-none {
+  background-color: #d9534f!important;
+}
+.reports-2-confirm-partial {
+  background-color: #f0ad4e!important;
+}
+.reports-2-confirm-full {
+  background-color: #5cb85c!important;
 }

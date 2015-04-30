@@ -340,6 +340,11 @@ define([
         });
       }
 
+      if (options.refreshCharts === false)
+      {
+        return;
+      }
+
       if (orgUnitChanged)
       {
         this.drill(Object.keys(changes).length > refreshAfterDrillLength);
@@ -426,11 +431,16 @@ define([
 
       if (orgUnit)
       {
-        this.query.set({
-          orgUnitType: orgUnit.type,
-          orgUnitId: orgUnit.id
-        });
+        this.query.set(this.getQueryDataForOrgUnitChange(orgUnit));
       }
+    },
+
+    getQueryDataForOrgUnitChange: function(orgUnit)
+    {
+      return {
+        orgUnitType: orgUnit.type,
+        orgUnitId: orgUnit.id
+      };
     },
 
     getOrgUnitFromChartsElement: function($charts)
@@ -759,7 +769,7 @@ define([
 
       workingChartsView.$el.siblings().fadeTo(400, 0).promise().done(function()
       {
-        this.$charts.css('overflow-x', 'hidden');
+        this.$charts.addClass('is-moving');
 
         var pos = workingChartsView.$el.position();
 
@@ -775,7 +785,7 @@ define([
         workingChartsView.$el.animate({left: workingIndex * CHART_WIDTH}, 300).promise().done(function()
         {
           workingChartsView.$el.css('position', '');
-          this.$charts.css('overflow-x', '');
+          this.$charts.removeClass('is-moving');
           this.showChartsViews(operation, newChartsViews);
         }.bind(this));
       }.bind(this));

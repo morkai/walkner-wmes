@@ -332,5 +332,19 @@
   "filenames:6:category:finGoodsAbsence": "WMES_Magazyn_Absencja_MagWyrGot",
   "filenames:6:totalAndAbsence:total": "WMES_Magazyn_Zatr_Calkowite",
   "filenames:6:totalAndAbsence:comp": "WMES_Magazyn_Zatr_MagKomp",
-  "filenames:6:totalAndAbsence:finGoods": "WMES_Magazyn_Zatr_MagWyrGot"
+  "filenames:6:totalAndAbsence:finGoods": "WMES_Magazyn_Zatr_MagWyrGot",
+
+  "orders:empty": "Nie znaleziono żadnych pasujących zleceń.",
+  "orders:cnf:status": "Potwierdzenie<br>(produkcja)",
+  "orders:cnf:date": "Czas potwierdzenia<br>(produkcja)",
+  "orders:dlv:status": "Potwierdzenie<br>(magazyn)",
+  "orders:dlv:date": "Czas potwierdzenia<br>(magazyn)",
+  "orders:filter:submit": "Filtruj zlecenia",
+  "orders:filter:status:all": "Wszystkie wybrane statusy",
+  "orders:filter:status:in": "Dowolny wybrany status",
+  "orders:filter:status:nin": "Żadne z wybranych statusów",
+  "orders:filter:status:CNF": "Potwierdzone (CNF)",
+  "orders:filter:status:PCNF": "Częściowo potwierdzone (PCNF)",
+  "orders:filter:status:DLV": "Dostarczone (DLV)",
+  "orders:filter:status:PDLV": "Częściowo dostarczone (PDLV)"
 }

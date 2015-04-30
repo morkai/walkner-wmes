@@ -327,7 +327,21 @@
     "filenames:6:category:finGoodsAbsence": "WMES_WH_Absence_FinGoods",
     "filenames:6:totalAndAbsence:total": "WMES_WH_FTE_Total",
     "filenames:6:totalAndAbsence:comp": "WMES_WH_FTE_Comp",
-    "filenames:6:totalAndAbsence:finGoods": "WMES_WH_FTE_FinGoods"
+    "filenames:6:totalAndAbsence:finGoods": "WMES_WH_FTE_FinGoods",
+
+    "orders:empty": "No matching orders found.",
+    "orders:cnf:status": "Confirmation<br>(production)",
+    "orders:cnf:date": "Confirmation time<br>(production)",
+    "orders:dlv:status": "Confirmation<br>(warehouse)",
+    "orders:dlv:date": "Confirmation time<br>(warehouse)",
+    "orders:filter:submit": "Filter orders",
+    "orders:filter:status:all": "All selected statuses",
+    "orders:filter:status:in": "Any selected status",
+    "orders:filter:status:nin": "None of the selected statuses",
+    "orders:filter:status:CNF": "Confirmed (CNF)",
+    "orders:filter:status:PCNF": "Partially confirmed (PCNF)",
+    "orders:filter:status:DLV": "Delivered (DLV)",
+    "orders:filter:status:PDLV": "Partially delivered (PDLV)"
   },
   "pl": true
 }

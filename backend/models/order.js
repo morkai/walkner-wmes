@@ -46,7 +46,11 @@ module.exports = function setupOrderModel(app, mongoose)
     time: Date,
     user: {},
     oldValues: {},
-    newValues: {}
+    newValues: {},
+    comment: {
+      type: String,
+      default: ''
+    }
   }, {
     _id: false
   });
@@ -80,6 +84,7 @@ module.exports = function setupOrderModel(app, mongoose)
     finishDate: Date,
     tzOffsetMs: Number,
     statuses: [String],
+    statusesSetAt: {},
     operations: [operationSchema],
     changes: [changeSchema],
     importTs: Date
@@ -93,26 +98,88 @@ module.exports = function setupOrderModel(app, mongoose)
   orderSchema.index({finishDate: -1});
   orderSchema.index({startDate: -1, mrp: 1});
 
-  orderSchema.pre('save', function(next)
+  orderSchema.statics.prepareForInsert = function(order, createdAt)
   {
-    /*jshint validthis:true*/
+    order.createdAt = createdAt;
+    order.tzOffsetMs = (order.startDate ? order.startDate.getTimezoneOffset() : 0) * 60 * 1000 * -1;
+    order.changes = [];
 
-    if (this.isNew)
+    orderSchema.statics.resetStatusesSetAt(order);
+
+    return order;
+  };
+
+  orderSchema.statics.prepareMissingForInsert = function(missingOrder, createdAt)
+  {
+    return {
+      _id: missingOrder._id,
+      createdAt: createdAt,
+      updatedAt: null,
+      nc12: null,
+      name: null,
+      mrp: null,
+      qty: null,
+      unit: null,
+      startDate: null,
+      finishDate: null,
+      tzOffsetMs: 0,
+      statuses: [],
+      statusesSetAt: {},
+      operations: missingOrder.operations,
+      changes: [],
+      importTs: missingOrder.importTs
+    };
+  };
+
+  orderSchema.statics.prepareForUpdate = function(orderModel, newOrderData, updatedAt, change, $set)
+  {
+    $set.updatedAt = updatedAt;
+    $set.importTs = newOrderData.importTs;
+
+    if ($set.startDate)
     {
-      this.createdAt = new Date();
-    }
-    else
-    {
-      this.updatedAt = new Date();
+      $set.tzOffsetMs = $set.startDate.getTimezoneOffset() * 60 * 1000 * -1;
     }
 
-    if (this.startDate)
+    if ($set.statuses)
     {
-      this.tzOffsetMs = this.startDate.getTimezoneOffset() * 60 * 1000 * -1;
+      $set.statusesSetAt = orderSchema.statics.prepareStatusesSetAt(
+        orderModel.statusesSetAt,
+        change.time,
+        change.newValues.statuses
+      );
     }
 
-    next();
-  });
+    return $set;
+  };
+
+  orderSchema.statics.resetStatusesSetAt = function(order)
+  {
+    var statusSetAt = order.importTs;
+    var statusesSetAt = {};
+
+    for (var i = 0; i < order.statuses.length; ++i)
+    {
+      statusesSetAt[order.statuses[i]] = statusSetAt;
+    }
+
+    order.statusesSetAt = statusesSetAt;
+  };
+
+  orderSchema.statics.prepareStatusesSetAt = function(oldStatusesSetAt, newStatusSetAt, newStatuses)
+  {
+    var newStatusesSetAt = {};
+
+    for (var i = 0; i < newStatuses.length; ++i)
+    {
+      var status = newStatuses[i];
+      var oldStatusSetAt = oldStatusesSetAt[status];
+
+      newStatusesSetAt[status] = oldStatusSetAt || newStatusSetAt;
+    }
+
+    return newStatusesSetAt;
+  };
 
   mongoose.model('Order', orderSchema);
 };

@@ -46,7 +46,7 @@ module.exports = function parseOrderInfo(html, orders, importTs)
 
     var order = {
       _id: cells[0],
-      createdAt: new Date(),
+      createdAt: null,
       updatedAt: null,
       nc12: nc12,
       name: cells[2],
@@ -55,8 +55,11 @@ module.exports = function parseOrderInfo(html, orders, importTs)
       unit: cells[9],
       startDate: new Date(startDateParts[2], startDateParts[1] - 1, startDateParts[0]),
       finishDate: new Date(finishDateParts[2], finishDateParts[1] - 1, finishDateParts[0]),
+      tzOffsetMs: 0,
       statuses: statuses,
+      statusesSetAt: {},
       operations: null,
+      changes: null,
       importTs: importTs
     };
 

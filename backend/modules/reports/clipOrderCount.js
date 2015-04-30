@@ -139,7 +139,7 @@ exports.start = function startClipOrderCountModule(app, module)
     );
   }
 
-  function countOrdersByStatuses(startDate, replacedMrpMap,mrpToCountMap)
+  function countOrdersByStatuses(startDate, replacedMrpMap, mrpToCountMap)
   {
     Order.aggregate(
       {$match: {startDate: startDate}},

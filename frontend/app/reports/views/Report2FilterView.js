@@ -71,7 +71,8 @@ define([
         rnd: Math.random(),
         from: null,
         to: null,
-        interval: this.$id('intervals').find('.active > input').val()
+        interval: this.$id('intervals').find('.active > input').val(),
+        skip: 0
       };
 
       var timeRange = fixTimeRange.fromView(this);

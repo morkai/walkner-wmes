@@ -19,6 +19,15 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrdersImporterModule(app, module)
 {
+  var IGNORED_PROPERTIES = {
+    createdAt: true,
+    updatedAt: true,
+    tzOffsetMs: true,
+    statusesSetAt: true,
+    changes: true,
+    importTs: true
+  };
+
   var mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
@@ -54,11 +63,9 @@ exports.start = function startOrdersImporterModule(app, module)
     var missingOrderIds = Object.keys(missingOrders);
     var allOrderIds = orderIds.concat(missingOrderIds);
 
-    module.debug(
-      "Comparing %d orders and %d missing orders...", orderIds.length, missingOrderIds.length
-    );
+    module.debug("Comparing %d orders and %d missing orders...", orderIds.length, missingOrderIds.length);
 
-    Order.find({_id: {$in: allOrderIds}}).exec(function(err, orderModels)
+    Order.find({_id: {$in: allOrderIds}}).lean().exec(function(err, orderModels)
     {
       if (err)
       {
@@ -67,12 +74,13 @@ exports.start = function startOrdersImporterModule(app, module)
         return unlock();
       }
 
+      var ts = new Date();
       var insertList = [];
       var updateList = [];
 
-      _.forEach(orderModels, compareOrder.bind(null, updateList, orders, missingOrders));
+      _.forEach(orderModels, compareOrder.bind(null, ts, updateList, orders, missingOrders));
 
-      createOrdersForInsertion(insertList, orders, missingOrders);
+      createOrdersForInsertion(ts, insertList, orders, missingOrders);
 
       saveOrders(insertList, updateList);
     });
@@ -88,49 +96,52 @@ exports.start = function startOrdersImporterModule(app, module)
     }
   }
 
-  function compareOrder(updateList, orders, missingOrders, orderModel)
+  function compareOrder(ts, updateList, orders, missingOrders, orderModel)
   {
     var orderNo = orderModel._id;
 
     if (typeof orders[orderNo] === 'object')
     {
-      compareOrderWithDoc(updateList, orderModel, orders[orderNo]);
+      compareOrderWithDoc(ts, updateList, orderModel, orders[orderNo]);
 
       delete orders[orderNo];
     }
     else if (typeof missingOrders[orderNo] === 'object')
     {
-      compareMissingOrderWithDoc(
-        updateList, orderModel, missingOrders[orderNo]
-      );
+      compareMissingOrderWithDoc(ts, updateList, orderModel, missingOrders[orderNo]);
 
       delete missingOrders[orderNo];
     }
   }
 
-  function compareOrderWithDoc(updateList, orderModel, order)
+  function compareOrderWithDoc(ts, updateList, orderModel, newOrderData)
   {
-    if (orderModel.get('importTs') > order.importTs)
+    if (orderModel.importTs > newOrderData.importTs)
     {
       return;
     }
 
     var different = false;
     var changes = {
-      time: new Date(),
+      time: newOrderData.importTs,
       user: null,
       oldValues: {},
-      newValues: {}
+      newValues: {},
+      comment: ''
+    };
+    var $set = {
+      updatedAt: ts,
+      importTs: newOrderData.importTs
     };
 
-    _.forEach(order, function(newValue, key)
+    _.forEach(newOrderData, function(newValue, key)
     {
-      if (key === 'createdAt' || key === 'updatedAt' || key === 'importTs')
+      if (IGNORED_PROPERTIES[key])
       {
         return;
       }
 
-      var oldValue = orderModel.get(key);
+      var oldValue = orderModel[key];
 
       if (oldValue != null && typeof oldValue.toObject === 'function')
       {
@@ -145,9 +156,7 @@ exports.start = function startOrdersImporterModule(app, module)
         }
 
         different = true;
-
-        orderModel.set(key, newValue);
-
+        $set[key] = newValue;
         changes.oldValues[key] = oldValue;
         changes.newValues[key] = newValue;
       }
@@ -155,20 +164,24 @@ exports.start = function startOrdersImporterModule(app, module)
 
     if (different)
     {
-      orderModel.changes.push(changes);
-
-      updateList.push(orderModel);
+      updateList.push({
+        conditions: {_id: orderModel._id},
+        update: {
+          $set: Order.prepareForUpdate(orderModel, newOrderData, ts, changes, $set),
+          $push: {changes: changes}
+        }
+      });
     }
   }
 
-  function compareMissingOrderWithDoc(updateList, orderModel, missingOrder)
+  function compareMissingOrderWithDoc(ts, updateList, orderModel, missingOrder)
   {
-    if (orderModel.get('importTs') > missingOrder.importTs)
+    if (orderModel.importTs > missingOrder.importTs)
     {
       return;
     }
 
-    var oldOperations = orderModel.get('operations');
+    var oldOperations = orderModel.operations;
 
     if (oldOperations === null)
     {
@@ -181,28 +194,38 @@ exports.start = function startOrdersImporterModule(app, module)
 
     if (!deepEqual(oldOperations, missingOrder.operations, {strict: true}))
     {
-      orderModel.set('operations', missingOrder.operations);
-      orderModel.changes.push({
-        time: new Date(),
-        user: null,
-        oldValues: {operations: oldOperations},
-        newValues: {operations: missingOrder.operations}
+      updateList.push({
+        conditions: {_id: orderModel._id},
+        update: {
+          $set: {
+            updatedAt: ts,
+            operations: missingOrder.operators,
+            importTs: missingOrder.importTs
+          },
+          $push: {
+            changes: {
+              time: ts,
+              user: null,
+              oldValues: {operations: oldOperations},
+              newValues: {operations: missingOrder.operations},
+              comment: ''
+            }
+          }
+        }
       });
-
-      updateList.push(orderModel);
     }
   }
 
-  function createOrdersForInsertion(insertList, orders, missingOrders)
+  function createOrdersForInsertion(ts, insertList, orders, missingOrders)
   {
     _.forEach(orders, function(order)
     {
-      insertList.push(new Order(order));
+      insertList.push(Order.prepareForInsert(order, ts));
     });
 
     _.forEach(missingOrders, function(missingOrder)
     {
-      insertList.push(new Order(missingOrder));
+      insertList.push(Order.prepareMissingForInsert(missingOrder, ts));
     });
   }
 
@@ -256,10 +279,10 @@ exports.start = function startOrdersImporterModule(app, module)
       return this.skip(err);
     }
 
-    Order.create(orders, this.next());
+    Order.collection.insert(orders, this.next());
   }
 
-  function updateOrderStep(orderModel, err)
+  function updateOrderStep(update, err)
   {
     /*jshint validthis:true*/
 
@@ -268,6 +291,6 @@ exports.start = function startOrdersImporterModule(app, module)
       return this.skip(err);
     }
 
-    orderModel.save(this.next());
+    Order.collection.update(update.conditions, update.update, this.next());
   }
 };

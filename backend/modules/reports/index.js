@@ -23,7 +23,19 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startReportsModule(app, module)
 {
+  var totalCountCache = {};
+
   module.prodNumConstant = 8;
+
+  module.getCachedTotalCount = function(key)
+  {
+    return totalCountCache[key];
+  };
+
+  module.setCachedTotalCount = function(key, totalCount)
+  {
+    totalCountCache[key] = totalCount;
+  };
 
   app.onModuleReady(
     [
@@ -78,5 +90,10 @@ exports.start = function startReportsModule(app, module)
   app.broker.subscribe('clipOrderCount.created', function()
   {
     helpers.clearCachedReports('2');
+  });
+
+  app.broker.subscribe('orders.synced', function()
+  {
+    totalCountCache = {};
   });
 };

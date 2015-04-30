@@ -1,0 +1,64 @@
+<div class="reports-2-orders">
+  <div class="reports-2-orders-filter filter-container">
+    <form id="<%- idPrefix %>-filter" class="well filter-form is-vertical">
+      <div class="form-group">
+        <% ['all', 'in', 'nin'].forEach(function(filter) { %>
+        <div class="radio">
+          <label class="control-label">
+            <input type="radio" name="filter" value="<%- filter %>">
+            <%- t('reports', 'orders:filter:status:' + filter) %>
+          </label>
+        </div>
+        <% }) %>
+        <% ['CNF', 'PCNF', 'DLV', 'PDLV'].forEach(function(status) { %>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="statuses[]" value="<%- status %>">
+            <%- t('reports', 'orders:filter:status:' + status) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-limit"><%- t('core', 'filter:limit') %></label>
+        <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" min="5" max="100" step="1" required>
+      </div>
+      <div class="form-group filter-actions">
+        <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('reports', 'orders:filter:submit') %></span></button>
+      </div>
+    </form>
+  </div>
+  <div class="reports-2-orders-list is-colored">
+    <div class="table-responsive">
+      <table class="table table-bordered table-condensed table-hover">
+        <thead>
+        <tr>
+          <th class="is-min"><%- t('orders', 'PROPERTY:_id') %></th>
+          <th class="is-min"><%- t('orders', 'PROPERTY:name') %></th>
+          <th class="is-min"><%- t('orders', 'PROPERTY:mrp') %></th>
+          <th class="is-min"><%- t('orders', 'PROPERTY:qty') %></th>
+          <th class="is-min"><%- t('reports', 'orders:cnf:status') %></th>
+          <th class="is-min"><%- t('reports', 'orders:dlv:status') %></th>
+          <th class="is-min"><%- t('orders', 'PROPERTY:finishDate') %></th>
+          <th class="is-min"><%- t('reports', 'orders:cnf:date') %></th>
+          <th><%- t('reports', 'orders:dlv:date') %></th>
+        </tr>
+        </thead>
+        <tbody id="<%- idPrefix %>-empty" class="<%- orders.length ? 'hidden' : '' %>">
+        <tr>
+          <td colspan="9"><%- t('reports', 'orders:empty') %></td>
+        </tr>
+        </tbody>
+        <tbody id="<%- idPrefix %>-orders" class="<%- orders.length ? '' : 'hidden' %>">
+        <% orders.forEach(function(order) { %>
+        <%- renderOrderRow({
+          canViewOrders: canViewOrders,
+          order: order
+        }) %>
+        <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination-container"></div>
+  </div>
+</div>
