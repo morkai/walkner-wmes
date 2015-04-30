@@ -13,6 +13,7 @@ if (!process.env.NODE_ENV)
 
 require('./extensions');
 
+var requireCache = require('./requireCache');
 var _ = require('lodash');
 var moment = require('moment');
 var main = require('h5.main');
@@ -73,3 +74,11 @@ blocked(function(ms)
 });
 
 main(app, modules);
+
+app.broker.subscribe('app.started').setLimit(1).on('message', function()
+{
+  if (requireCache.built)
+  {
+    requireCache.save();
+  }
+});
