@@ -56,6 +56,11 @@ exports.browseRoute = function(app, options, req, res, next)
   step(
     function countStep()
     {
+      if (_.isNumber(options.totalCount))
+      {
+        return this.next()(null, options.totalCount);
+      }
+
       Model.count(queryOptions.selector, this.next());
     },
     function findStep(err, totalCount)
