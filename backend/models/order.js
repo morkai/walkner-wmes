@@ -96,7 +96,7 @@ module.exports = function setupOrderModel(app, mongoose)
 
   orderSchema.index({nc12: 1, finishDate: -1});
   orderSchema.index({finishDate: -1});
-  orderSchema.index({startDate: -1, mrp: 1});
+  orderSchema.index({startDate: -1, mrp: 1, statuses: 1});
 
   orderSchema.statics.prepareForInsert = function(order, createdAt)
   {
