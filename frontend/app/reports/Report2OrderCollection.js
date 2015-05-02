@@ -24,7 +24,8 @@ define([
           qty: 1,
           statusesSetAt: 1,
           finishDate: 1,
-          delayReason: 1
+          delayReason: 1,
+          changes: 1
         }
       });
     },

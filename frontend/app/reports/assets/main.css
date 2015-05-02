@@ -330,3 +330,6 @@
 .reports-2-confirm-full {
   background-color: #5cb85c!important;
 }
+.table > tbody > .reports-2-changes > td {
+  padding: 0;
+}

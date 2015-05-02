@@ -10,6 +10,7 @@ define([
   'app/time',
   'app/core/View',
   'app/core/views/PaginationView',
+  'app/orders/views/OrderChangesView',
   'app/reports/templates/report2Orders',
   'app/reports/templates/report2OrderRow'
 ], function(
@@ -20,6 +21,7 @@ define([
   time,
   View,
   PaginationView,
+  OrderChangesView,
   template,
   renderOrderRow
 ) {
@@ -35,11 +37,19 @@ define([
         this.filter();
 
         return false;
+      },
+      'click tr[data-id]': function(e)
+      {
+        if (e.target.tagName !== 'A')
+        {
+          this.showOrderChanges(e.currentTarget.dataset.id);
+        }
       }
     },
 
     initialize: function()
     {
+      this.orderChangesView = null;
       this.paginationView = new PaginationView({
         replaceUrl: true,
         model: this.collection.paginationData
@@ -49,6 +59,11 @@ define([
 
       this.listenTo(this.collection.paginationData, 'change:page', this.scrollTop);
       this.listenTo(this.collection.query, 'change', this.setFilterFieldValues);
+    },
+
+    destroy: function()
+    {
+      this.hideOrderChanges();
     },
 
     serialize: function()
@@ -156,6 +171,7 @@ define([
         });
       }
 
+      this.hideOrderChanges();
       this.$id('orders').html(html);
     },
 
@@ -194,6 +210,44 @@ define([
       filterData.skip = 0;
 
       this.collection.query.set(filterData, {refreshCharts: false});
+    },
+
+    showOrderChanges: function(orderNo)
+    {
+      var $orderTr = this.$('tr[data-id="' + orderNo + '"]');
+      var sameOrder = $orderTr.next('.reports-2-changes').length;
+
+      this.hideOrderChanges();
+
+      if (sameOrder)
+      {
+        return;
+      }
+
+      var $changesTr = $('<tr class="reports-2-changes hidden"><td colspan="10"></td></tr>');
+      var $changesTd = $changesTr.find('td');
+
+      this.orderChangesView = new OrderChangesView({
+        model: this.collection.get(orderNo),
+        showPanel: false
+      });
+      this.orderChangesView.render();
+
+      $changesTd.append(this.orderChangesView.el);
+      $changesTr.insertAfter($orderTr).removeClass('hidden');
+    },
+
+    hideOrderChanges: function()
+    {
+      if (this.orderChangesView !== null)
+      {
+        var $changesTr = this.orderChangesView.$el.closest('.reports-2-changes');
+
+        this.orderChangesView.remove();
+        $changesTr.remove();
+
+        this.orderChangesView = null;
+      }
     },
 
     onCollectionRequest: function()
