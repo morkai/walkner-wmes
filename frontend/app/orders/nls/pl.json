@@ -18,6 +18,7 @@
   "PROPERTY:unit": "Jednostka",
   "PROPERTY:startDate": "Data startu",
   "PROPERTY:finishDate": "Data ukończenia",
+  "PROPERTY:delayReason": "Powód opóźnienia",
   "PROPERTY:statuses": "Status",
   "PROPERTY:operations": "Operacje",
   "PROPERTY:operations.no": "Nr operacji",

@@ -5,6 +5,7 @@
 define([
   'app/core/util/bindLoadingMessage',
   'app/core/pages/DetailsPage',
+  'app/delayReasons/storage',
   '../Order',
   '../views/OrderDetailsView',
   '../views/OperationListView',
@@ -13,6 +14,7 @@ define([
 ], function(
   bindLoadingMessage,
   DetailsPage,
+  delayReasonsStorage,
   Order,
   OrderDetailsView,
   OperationListView,
@@ -32,19 +34,39 @@ define([
     initialize: function()
     {
       this.model = bindLoadingMessage(new Order({_id: this.options.modelId}), this);
+      this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
 
-      this.detailsView = new OrderDetailsView({model: this.model});
+      this.detailsView = new OrderDetailsView({
+        model: this.model,
+        delayReasons: this.delayReasons
+      });
       this.operationsView = new OperationListView({model: this.model});
-      this.changesView = new OrderChangesView({model: this.model});
+      this.changesView = new OrderChangesView({
+        model: this.model,
+        delayReasons: this.delayReasons
+      });
 
       this.setView('.orders-details-container', this.detailsView);
       this.setView('.orders-operations-container', this.operationsView);
       this.setView('.orders-changes-container', this.changesView);
     },
 
+    destroy: function()
+    {
+      delayReasonsStorage.release();
+    },
+
     load: function(when)
     {
-      return when(this.model.fetch());
+      return when(
+        this.model.fetch(),
+        this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
+      );
+    },
+
+    afterRender: function()
+    {
+      delayReasonsStorage.acquire();
     }
 
   });

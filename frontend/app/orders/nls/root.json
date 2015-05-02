@@ -19,6 +19,7 @@
     "PROPERTY:unit": "Unit",
     "PROPERTY:startDate": "Start date",
     "PROPERTY:finishDate": "Finish date",
+    "PROPERTY:delayReason": "Delay reason",
     "PROPERTY:statuses": "Status",
     "PROPERTY:operations": "Operations",
     "PROPERTY:operations.no": "Operation no",

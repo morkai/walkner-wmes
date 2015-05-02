@@ -37,6 +37,10 @@
           <div class="prop-name"><%- t('orders', 'PROPERTY:statuses') %></div>
           <div class="prop-value"><%- model.statusLabels %></div>
         </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:delayReason') %></div>
+          <div class="prop-value"><%- model.delayReason %></div>
+        </div>
       </div>
     </div>
     <div class="col-md-4">
@@ -53,12 +57,10 @@
           <div class="prop-name"><%- t('orders', 'PROPERTY:createdAt') %></div>
           <div class="prop-value"><%= model.createdAtText || '-' %></div>
         </div>
-        <% if (model.updatedAtText) { %>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:updatedAt') %></div>
-          <div class="prop-value"><%= model.updatedAtText %></div>
+          <div class="prop-value"><%= model.updatedAtText || '-' %></div>
         </div>
-        <% } %>
       </div>
     </div>
   </div>

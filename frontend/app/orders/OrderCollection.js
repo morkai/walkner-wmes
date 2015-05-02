@@ -32,7 +32,8 @@ define([
           unit: 1,
           startDate: 1,
           finishDate: 1,
-          statuses: 1
+          statuses: 1,
+          delayReason: 1
         },
         limit: 15,
         sort: {

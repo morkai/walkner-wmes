@@ -40,6 +40,7 @@ define([
       {id: 'qtyUnit', label: t.bound('orders', 'PROPERTY:qty'), className: 'is-min'},
       {id: 'startDateText', label: t.bound('orders', 'PROPERTY:startDate'), className: 'is-min'},
       {id: 'finishDateText', label: t.bound('orders', 'PROPERTY:finishDate'), className: 'is-min'},
+      {id: 'delayReason', className: 'is-min'},
       {id: 'statusLabels', label: t.bound('orders', 'PROPERTY:statuses')}
     ],
 
@@ -55,9 +56,15 @@ define([
 
     serializeRows: function()
     {
-      return this.collection.toJSON().map(function(row)
+      var delayReasons = this.delayReasons;
+
+      return this.collection.map(function(model)
       {
+        var row = model.toJSON();
+        var delayReason = delayReasons.get(row.delayReason);
+
         row.statusLabels = orderStatuses.findAndFill(row.statuses).map(renderOrderStatusLabel).join('');
+        row.delayReason = delayReason ? delayReason.getLabel() : '-';
 
         return row;
       });

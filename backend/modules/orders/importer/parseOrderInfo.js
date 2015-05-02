@@ -58,6 +58,7 @@ module.exports = function parseOrderInfo(html, orders, importTs)
       tzOffsetMs: 0,
       statuses: statuses,
       statusesSetAt: {},
+      delayReason: null,
       operations: null,
       changes: null,
       importTs: importTs

@@ -85,6 +85,11 @@ module.exports = function setupOrderModel(app, mongoose)
     tzOffsetMs: Number,
     statuses: [String],
     statusesSetAt: {},
+    delayReason: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'DelayReason',
+      default: null
+    },
     operations: [operationSchema],
     changes: [changeSchema],
     importTs: Date
@@ -125,6 +130,7 @@ module.exports = function setupOrderModel(app, mongoose)
       tzOffsetMs: 0,
       statuses: [],
       statusesSetAt: {},
+      delayReason: null,
       operations: missingOrder.operations,
       changes: [],
       importTs: missingOrder.importTs

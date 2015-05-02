@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
+  'app/delayReasons/storage',
   '../OrderCollection',
   '../views/OrderListView',
   '../views/OrderFilterView',
@@ -14,6 +15,7 @@ define([
   t,
   bindLoadingMessage,
   View,
+  delayReasonsStorage,
   OrderCollection,
   OrderListView,
   OrderFilterView,
@@ -42,11 +44,18 @@ define([
       this.setView('.list-container', this.listView);
     },
 
+    destroy: function()
+    {
+      delayReasonsStorage.release();
+    },
+
     defineModels: function()
     {
       this.collection = bindLoadingMessage(
         new OrderCollection(null, {rqlQuery: this.options.rql}), this
       );
+
+      this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
     },
 
     defineViews: function()
@@ -57,14 +66,25 @@ define([
         }
       });
 
-      this.listView = new OrderListView({collection: this.collection});
+      this.listView = new OrderListView({
+        collection: this.collection,
+        delayReasons: this.delayReasons
+      });
 
       this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },
 
     load: function(when)
     {
-      return when(this.collection.fetch({reset: true}));
+      return when(
+        this.collection.fetch({reset: true}),
+        this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
+      );
+    },
+
+    afterRender: function()
+    {
+      delayReasonsStorage.acquire();
     },
 
     refreshList: function(newRqlQuery)
