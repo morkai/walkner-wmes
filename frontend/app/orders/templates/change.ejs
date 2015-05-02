@@ -1,0 +1,28 @@
+<tbody class="<%- change.user ? 'is-user-change' : 'is-system-change' %>">
+  <% if (change.values.length) { %>
+  <tr>
+    <td class="is-min orders-changes-time" rowspan="<%- change.rowSpan %>"><%- change.timeText %></td>
+    <td class="is-min orders-changes-user" rowspan="<%- change.rowSpan %>"><%- change.userText %></td>
+    <td class="is-min orders-changes-property"><%= t('orders', 'PROPERTY:' + change.values[0].property) %></td>
+    <td class="is-min"><%- renderValueChange(change.values[0], i, 'oldValue') %></td>
+    <td><%- renderValueChange(change.values[0], i, 'newValue') %></td>
+  </tr>
+  <% } %>
+  <% change.values.forEach(function(valueChange, j) { %>
+  <% if (j === 0) return %>
+  <tr class="orders-changes-noTimeAndUser">
+    <td class="is-min orders-changes-property"><%= t('orders', 'PROPERTY:' + valueChange.property) %></td>
+    <td class="is-min"><%- renderValueChange(valueChange, i, 'oldValue') %></td>
+    <td><%- renderValueChange(valueChange, i, 'newValue') %></td>
+  </tr>
+  <% }) %>
+  <% if (change.comment !== '') { %>
+  <tr class="<%- change.values.length ? 'orders-changes-noTimeAndUser' : '' %>">
+    <% if (!change.values.length) { %>
+    <td class="is-min orders-changes-time"><%- change.timeText %></td>
+    <td class="is-min orders-changes-user"><%- change.userText %></td>
+    <% } %>
+    <td class="orders-changes-comment" colspan="3"><%= change.comment %></td>
+  </tr>
+  <% } %>
+</tbody>

@@ -27,9 +27,13 @@ define([
 
     remoteTopics: {
       'orders.synced': 'refreshCollection',
-      'orders.added': 'refreshCollection',
-      'orders.edited': 'refreshCollection',
-      'orders.deleted': 'onModelDeleted'
+      'orders.updated.*': function(message)
+      {
+        if (this.collection.get(message._id))
+        {
+          this.refreshCollection();
+        }
+      }
     },
 
     columns: [

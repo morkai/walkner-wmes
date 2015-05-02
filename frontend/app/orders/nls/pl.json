@@ -45,5 +45,10 @@
   "filter:placeholder:nc12": "Dowolne 12NC",
   "filter:submit": "Filtruj zlecenia",
 
-  "details:showMoreLink": "Pokaż więcej szczegołów zlecenia"
+  "details:showMoreLink": "Pokaż więcej szczegołów zlecenia",
+
+  "commentForm:delayReason": "Nowy powód opóźnienia",
+  "commentForm:comment": "Komentarz",
+  "commentForm:submit:comment": "Komentuj",
+  "commentForm:submit:edit": "Zmień powód opóźnienia"
 }

@@ -46,7 +46,12 @@
     "filter:placeholder:nc12": "Any 12NC",
     "filter:submit": "Filter orders",
 
-    "details:showMoreLink": "Show more order details"
+    "details:showMoreLink": "Show more order details",
+
+    "commentForm:delayReason": "New delay reason",
+    "commentForm:comment": "Comment",
+    "commentForm:submit:comment": "Comment",
+    "commentForm:submit:edit": "Change delay reason"
   },
   "pl": true
 }

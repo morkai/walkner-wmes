@@ -59,6 +59,8 @@ define([
 
       this.listenTo(this.collection.paginationData, 'change:page', this.scrollTop);
       this.listenTo(this.collection.query, 'change', this.setFilterFieldValues);
+      this.listenTo(this.collection, 'change:delayReason', this.onDelayReasonChange);
+      this.listenTo(this.collection, 'push:change', this.onChangePush);
     },
 
     destroy: function()
@@ -147,7 +149,8 @@ define([
 
     beforeRender: function()
     {
-      this.stopListening(this.collection);
+      this.stopListening(this.collection, 'request');
+      this.stopListening(this.collection, 'sync');
     },
 
     afterRender: function()
@@ -229,6 +232,7 @@ define([
 
       this.orderChangesView = new OrderChangesView({
         model: this.collection.get(orderNo),
+        delayReasons: this.delayReasons,
         showPanel: false
       });
       this.orderChangesView.render();
@@ -262,7 +266,18 @@ define([
 
       this.renderOrderRows();
       this.paginationView.render();
+    },
+
+    onDelayReasonChange: function(order)
+    {
+      var delayReason = this.delayReasons.get(order.get('delayReason'));
+
+      this.$id('orders')
+        .find('tr[data-id="' + order.id + '"]')
+        .find('.reports-2-orders-delayReason')
+        .text(delayReason ? delayReason.getLabel() : '-');
     }
+
 
   });
 });

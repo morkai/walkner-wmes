@@ -41,6 +41,10 @@ define([
     maxOrgUnitLevel: 'prodFlow',
     pageId: 'report2',
 
+    remoteTopics: {
+      'orders.updated.*': 'onOrderUpdated'
+    },
+
     initialize: function()
     {
       DrillingReportPage.prototype.initialize.call(this);
@@ -182,6 +186,22 @@ define([
         displayOptions: this.displayOptions,
         skipRenderCharts: !!skipRenderCharts
       });
+    },
+
+    onOrderUpdated: function(message)
+    {
+      var order = this.orders.get(message._id);
+
+      if (order)
+      {
+        order.set({
+          _id: order.id,
+          delayReason: message.delayReason
+        });
+        order.get('changes').push(message.change);
+        order.trigger('push:change', message.change);
+        this.orders.trigger('push:change', message.change);
+      }
     }
 
   });

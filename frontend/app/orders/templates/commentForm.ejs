@@ -1,0 +1,12 @@
+<form class="orders-commentForm">
+  <div class="form-group has-required-select2">
+    <label for="<%- idPrefix %>-delayReason" class="control-label"><%- t('orders', 'commentForm:delayReason') %></label>
+    <input id="<%- idPrefix %>-delayReason" type="text" name="delayReason">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-comment" class="control-label is-required"><%- t('orders', 'commentForm:comment') %></label>
+    <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3" required></textarea>
+  </div>
+  <button id="<%- idPrefix %>-submit-comment" type="submit" class="btn btn-primary"><i class="fa fa-comment"></i><span><%- t('orders', 'commentForm:submit:comment') %></span></button>
+  <button id="<%- idPrefix %>-submit-edit" type="submit" class="btn btn-primary hidden"><i class="fa fa-edit"></i><span><%- t('orders', 'commentForm:submit:edit') %></span></button>
+</form>

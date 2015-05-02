@@ -31,6 +31,10 @@ define([
 
     actions: [],
 
+    remoteTopics: {
+      'orders.updated.*': 'onOrderUpdated'
+    },
+
     initialize: function()
     {
       this.model = bindLoadingMessage(new Order({_id: this.options.modelId}), this);
@@ -67,6 +71,16 @@ define([
     afterRender: function()
     {
       delayReasonsStorage.acquire();
+    },
+
+    onOrderUpdated: function(message)
+    {
+      if (this.model.id === message._id)
+      {
+        this.model.set('delayReason', message.delayReason);
+        this.model.get('changes').push(message.change);
+        this.model.trigger('push:change', message.change);
+      }
     }
 
   });

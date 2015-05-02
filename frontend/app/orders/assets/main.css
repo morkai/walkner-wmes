@@ -61,3 +61,6 @@
 .orders-changes .userInfo-cname {
   display: block;
 }
+.table > tfoot > tr > td.orders-commentForm-container {
+  padding: 1em;
+}

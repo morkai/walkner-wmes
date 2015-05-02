@@ -4,28 +4,34 @@
 
 define([
   'underscore',
+  'jquery',
   'app/time',
   'app/i18n',
   'app/viewport',
   'app/data/orderStatuses',
   'app/core/View',
+  './OrderCommentFormView',
   './OperationListView',
   '../Order',
   '../OperationCollection',
+  'app/orders/templates/change',
   'app/orders/templates/changes',
   'app/orderStatuses/util/renderOrderStatusLabel',
   'app/core/templates/userInfo'
 ], function(
   _,
+  $,
   time,
   t,
   viewport,
   orderStatuses,
   View,
+  OrderCommentFormView,
   OperationListView,
   Order,
   OperationCollection,
-  changesTemplate,
+  renderChange,
+  template,
   renderOrderStatusLabel,
   renderUserInfo
 ) {
@@ -33,7 +39,7 @@ define([
 
   return View.extend({
 
-    template: changesTemplate,
+    template: template,
 
     events: {
       'click .orders-changes-operations': 'toggleOperations',
@@ -54,6 +60,14 @@ define([
     {
       this.$lastToggle = null;
       this.operationListView = null;
+      this.renderValueChange = this.renderValueChange.bind(this);
+
+      this.setView('.orders-commentForm-container', new OrderCommentFormView({
+        model: this.model,
+        delayReasons: this.delayReasons
+      }));
+
+      this.listenTo(this.model, 'push:change', this.onChangePush);
     },
 
     destroy: function()
@@ -71,30 +85,32 @@ define([
         idPrefix: this.idPrefix,
         showPanel: this.options.showPanel !== false,
         changes: this.serializeChanges(),
-        renderValueChange: this.renderValueChange.bind(this)
+        renderChange: renderChange,
+        renderValueChange: this.renderValueChange
       };
     },
 
     serializeChanges: function()
     {
-      return (this.model.get('changes') || [])
-        .map(function(change)
-        {
-          change.timeText = time.format(change.time, 'YYYY-MM-DD<br>HH:mm:ss');
-          change.userText = renderUserInfo({userInfo: change.user});
-          change.values = Object.keys(change.oldValues || {}).map(function(property)
-          {
-            return {
-              property: property,
-              oldValue: change.oldValues[property],
-              newValue: change.newValues[property]
-            };
-          });
-          change.comment = _.isEmpty(change.comment) ? '' : change.comment.trim();
-          change.rowSpan = change.values.length + (change.comment === '' ? 0 : 1);
+      return (this.model.get('changes') || []).map(this.serializeChange, this);
+    },
 
-          return change;
-        });
+    serializeChange: function(change)
+    {
+      change.timeText = time.format(change.time, 'YYYY-MM-DD<br>HH:mm:ss');
+      change.userText = renderUserInfo({userInfo: change.user});
+      change.values = Object.keys(change.oldValues || {}).map(function(property)
+      {
+        return {
+          property: property,
+          oldValue: change.oldValues[property],
+          newValue: change.newValues[property]
+        };
+      });
+      change.comment = _.isEmpty(change.comment) ? '' : change.comment.trim();
+      change.rowSpan = change.values.length + (change.comment === '' ? 0 : 1);
+
+      return change;
     },
 
     beforeRender: function()
@@ -154,6 +170,7 @@ define([
           this.$lastToggle = null;
 
           this.operationListView.remove();
+          this.operationListView = null;
 
           return;
         }
@@ -179,6 +196,20 @@ define([
 
       this.$lastToggle = $lastToggle;
       this.operationListView = operationListView;
+    },
+
+    onChangePush: function(change)
+    {
+      var $change = $(renderChange({
+        renderValueChange: this.renderValueChange,
+        change: this.serializeChange(change),
+        i: this.model.get('changes').length
+      }));
+
+      this.$id('empty').remove();
+      this.$id('table').append($change);
+
+      $change.find('td').addClass('highlight');
     }
 
   });

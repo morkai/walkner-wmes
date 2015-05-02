@@ -90,39 +90,38 @@ define([
       }
 
       var $submitEl = this.$('[type="submit"]').attr('disabled', true);
+      var req = this.request(formData);
 
-      var req = this.promised(this.model.save(formData, this.getSaveOptions()));
-
-      var view = this;
-
-      req.done(function()
-      {
-        if (typeof view.options.done === 'function')
-        {
-          view.options.done(true);
-        }
-        else
-        {
-          view.broker.publish('router.navigate', {
-            url: view.model.genClientUrl(),
-            trigger: true
-          });
-        }
-      });
-
+      req.done(this.handleSuccess.bind(this));
       req.fail(this.handleFailure.bind(this));
-
-      req.always(function()
-      {
-        $submitEl.attr('disabled', false);
-      });
+      req.always(function() { $submitEl.attr('disabled', false); });
 
       return false;
+    },
+
+    request: function(formData)
+    {
+      return this.promised(this.model.save(formData, this.getSaveOptions()));
     },
 
     checkValidity: function(formData)
     {
       return !!formData;
+    },
+
+    handleSuccess: function()
+    {
+      if (typeof this.options.done === 'function')
+      {
+        this.options.done(true);
+      }
+      else
+      {
+        this.broker.publish('router.navigate', {
+          url: this.model.genClientUrl(),
+          trigger: true
+        });
+      }
     },
 
     handleFailure: function()

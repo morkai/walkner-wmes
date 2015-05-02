@@ -143,7 +143,8 @@ exports.pubsub = {
     'updater.newVersion',
     'settings.updated.**',
     'xiconf.results.synced', 'xiconf.orders.**', 'xiconf.clients.**',
-    'icpo.results.synced'
+    'icpo.results.synced',
+    'orders.updated.*'
   ]
 };
 
