@@ -1,47 +1,55 @@
-<div class="panel panel-default orders-changes">
+<div class="<%- showPanel ? 'panel panel-default' : '' %> orders-changes">
+  <% if (showPanel) { %>
   <div class="panel-heading">
     <%- t('orders', 'PANEL:TITLE:changes') %>
   </div>
-  <% if (changes.length) { %>
-  <table class="table table-condensed">
+  <% } %>
+  <table class="table table-condensed table-bordered table-hover">
     <thead>
       <tr>
-        <th><%- t('orders', 'CHANGES:time') %>
-        <th><%- t('orders', 'CHANGES:property') %>
-        <th><%- t('orders', 'CHANGES:oldValue') %>
+        <th class="is-min"><%- t('orders', 'CHANGES:time') %>
+        <th class="is-min"><%- t('orders', 'CHANGES:user') %>
+        <th class="is-min"><%- t('orders', 'CHANGES:property') %>
+        <th class="is-min"><%- t('orders', 'CHANGES:oldValue') %>
         <th><%- t('orders', 'CHANGES:newValue') %>
       </tr>
     </thead>
-    <% if (changes.length > 5) { %>
-    <tfoot>
+    <% if (!changes.length) { %>
+    <tbody>
       <tr>
-        <td class="orders-changes-more" colspan="4">Pokaż starsze zmiany...</td>
+        <td colspan="5"><%- t('orders', 'CHANGES:NO_DATA') %></td>
       </tr>
-    </tfoot>
+    </tbody>
     <% } %>
     <% changes.forEach(function(change, i) { %>
-    <% if (i % 5 === 0) { %>
-    <tbody class="orders-changes-page <%- i ? 'hidden' : '' %>">
-    <% } %>
+    <tbody class="<%- change.user ? 'is-user-change' : 'is-system-change' %>">
+      <% if (change.values.length) { %>
       <tr>
-        <td rowspan="<%- change.values.length %>"><%- change.timeText %></td>
-        <td class="orders-changes-property"><%= t('orders', 'PROPERTY:' + change.values[0].property) %></td>
-        <td><%- renderValueChange(change.values[0], i, 'oldValue') %></td>
+        <td class="is-min orders-changes-time" rowspan="<%- change.rowSpan %>"><%- change.timeText %></td>
+        <td class="is-min orders-changes-user" rowspan="<%- change.rowSpan %>"><%- change.userText %></td>
+        <td class="is-min orders-changes-property"><%= t('orders', 'PROPERTY:' + change.values[0].property) %></td>
+        <td class="is-min"><%- renderValueChange(change.values[0], i, 'oldValue') %></td>
         <td><%- renderValueChange(change.values[0], i, 'newValue') %></td>
       </tr>
+      <% } %>
       <% change.values.forEach(function(valueChange, j) { %>
       <% if (j === 0) return %>
-      <tr>
-        <td class="orders-changes-property"><%= t('orders', 'PROPERTY:' + valueChange.property) %></td>
-        <td><%- renderValueChange(valueChange, i, 'oldValue') %></td>
+      <tr class="orders-changes-noTimeAndUser">
+        <td class="is-min orders-changes-property"><%= t('orders', 'PROPERTY:' + valueChange.property) %></td>
+        <td class="is-min"><%- renderValueChange(valueChange, i, 'oldValue') %></td>
         <td><%- renderValueChange(valueChange, i, 'newValue') %></td>
       </tr>
       <% }) %>
+      <% if (change.comment !== '') { %>
+      <tr class="<%- change.values.length ? 'orders-changes-noTimeAndUser' : '' %>">
+        <% if (!change.values.length) { %>
+        <td class="is-min orders-changes-time"><%- change.timeText %></td>
+        <td class="is-min orders-changes-user"><%- change.userText %></td>
+        <% } %>
+        <td class="orders-changes-comment" colspan="3"><%= change.comment %></td>
+      </tr>
+      <% } %>
+    </tbody>
     <% }) %>
   </table>
-  <% } else { %>
-  <div class="panel-body">
-    <%- t('orders', 'CHANGES:NO_DATA') %>
-  </div>
-  <% } %>
 </div>

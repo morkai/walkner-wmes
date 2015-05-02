@@ -13,7 +13,8 @@ define([
   '../Order',
   '../OperationCollection',
   'app/orders/templates/changes',
-  'app/orderStatuses/util/renderOrderStatusLabel'
+  'app/orderStatuses/util/renderOrderStatusLabel',
+  'app/core/templates/userInfo'
 ], function(
   _,
   time,
@@ -25,7 +26,8 @@ define([
   Order,
   OperationCollection,
   changesTemplate,
-  renderOrderStatusLabel
+  renderOrderStatusLabel,
+  renderUserInfo
 ) {
   'use strict';
 
@@ -34,14 +36,23 @@ define([
     template: changesTemplate,
 
     events: {
-      'click .orders-changes-more': 'showMoreChanges',
-      'click .orders-changes-operations': 'toggleOperations'
+      'click .orders-changes-operations': 'toggleOperations',
+      'mouseover .orders-changes-noTimeAndUser': function(e)
+      {
+        var $tr = this.$(e.target).closest('tbody').children().first();
+
+        $tr.find('.orders-changes-time').addClass('is-hovered');
+        $tr.find('.orders-changes-user').addClass('is-hovered');
+      },
+      'mouseout .orders-changes-noTimeAndUser': function()
+      {
+        this.$('.is-hovered').removeClass('is-hovered');
+      }
     },
 
     initialize: function()
     {
       this.$lastToggle = null;
-
       this.operationListView = null;
     },
 
@@ -50,15 +61,27 @@ define([
       if (this.$lastToggle !== null)
       {
         this.$lastToggle.click();
+        this.$lastToggle = null;
       }
     },
 
     serialize: function()
     {
       return {
-        changes: (this.model.get('changes') || []).reverse().map(function(change)
+        idPrefix: this.idPrefix,
+        showPanel: this.options.showPanel !== false,
+        changes: this.serializeChanges(),
+        renderValueChange: this.renderValueChange.bind(this)
+      };
+    },
+
+    serializeChanges: function()
+    {
+      return (this.model.get('changes') || [])
+        .map(function(change)
         {
-          change.timeText = time.format(change.time, 'YYYY-MM-DD HH:mm:ss');
+          change.timeText = time.format(change.time, 'YYYY-MM-DD<br>HH:mm:ss');
+          change.userText = renderUserInfo({userInfo: change.user});
           change.values = Object.keys(change.oldValues || {}).map(function(property)
           {
             return {
@@ -67,15 +90,16 @@ define([
               newValue: change.newValues[property]
             };
           });
+          change.comment = _.isEmpty(change.comment) ? '' : change.comment.trim();
+          change.rowSpan = change.values.length + (change.comment === '' ? 0 : 1);
 
           return change;
-        })
-        .filter(function(change)
-        {
-          return change.values.length;
-        }),
-        renderValueChange: this.renderValueChange
-      };
+        });
+    },
+
+    beforeRender: function()
+    {
+      this.stopListening(this.model, 'change:changes', this.render);
     },
 
     afterRender: function()
@@ -105,24 +129,19 @@ define([
         case 'statuses':
           return orderStatuses.findAndFill(value).map(renderOrderStatusLabel).join('');
 
+        case 'delayReason':
+        {
+          var delayReason = this.delayReasons.get(value);
+
+          return delayReason ? _.escape(delayReason.getLabel()) : value;
+        }
+
         case 'startDate':
         case 'finishDate':
           return time.format(value, 'LL');
 
         default:
           return _.escape(String(value));
-      }
-    },
-
-    showMoreChanges: function()
-    {
-      var $hiddenPages = this.$('.orders-changes-page.hidden');
-
-      $hiddenPages.first().removeClass('hidden');
-
-      if ($hiddenPages.length === 1)
-      {
-        this.$('.orders-changes-more').hide();
       }
     },
 
@@ -149,7 +168,9 @@ define([
       var operations = new OperationCollection(this.model.get('changes')[i][property].operations);
       var operationListView = new OperationListView({model: new Order({operations: operations})});
 
-      var top = $lastToggle.closest('tr')[0].offsetTop + 41 + 31;
+      var top = $lastToggle.closest('tr')[0].offsetTop
+        + $lastToggle.closest('td').outerHeight()
+        + (this.options.showPanel !== false ? this.$('.panel-heading').first().outerHeight() : 0);
 
       operationListView.render();
       operationListView.$el.css('top', top);

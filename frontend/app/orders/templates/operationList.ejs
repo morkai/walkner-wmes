@@ -1,30 +1,30 @@
 <div class="panel panel-default orders-operations">
   <div class="panel-heading"><%- t('orders', 'PANEL:TITLE:operations') %></div>
   <% if (operations.length) { %>
-  <table class="table table-condensed table-hover">
+  <table class="table table-condensed table-hover table-bordered">
     <thead>
       <tr>
-        <th><%- t('orders', 'PROPERTY:operations.no') %>
-        <th><%- t('orders', 'PROPERTY:operations.workCenter') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:operations.no') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:operations.workCenter') %>
         <th><%- t('orders', 'PROPERTY:operations.name') %>
-        <th><%- t('orders', 'PROPERTY:operations.qty') %>
-        <th><%- t('orders', 'PROPERTY:operations.machineSetupTime') %>
-        <th><%- t('orders', 'PROPERTY:operations.laborSetupTime') %>
-        <th><%- t('orders', 'PROPERTY:operations.machineTime') %>
-        <th><%- t('orders', 'PROPERTY:operations.laborTime') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:operations.qty') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:operations.machineSetupTime') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:operations.laborSetupTime') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:operations.machineTime') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:operations.laborTime') %>
       </tr>
     </thead>
     <tbody>
       <% operations.forEach(function(operation) { %>
       <tr class="<%- operation.no === highlighted ? 'info' : '' %>">
-        <td><%= operation.no || '-' %>
-        <td><%= operation.workCenter || '-' %>
+        <td class="is-min is-number"><%= operation.no || '-' %>
+        <td class="is-min"><%= operation.workCenter || '-' %>
         <td><%= operation.name || '-' %>
-        <td><%= operation.qtyUnit || '-' %>
-        <td><%= operation.machineSetupTime || '-' %>
-        <td><%= operation.laborSetupTime || '-' %>
-        <td><%= operation.machineTime || '-' %>
-        <td><%= operation.laborTime || '-' %>
+        <td class="is-min is-number"><%= operation.qtyUnit || '-' %>
+        <td class="is-min is-number"><%= operation.machineSetupTime || '-' %>
+        <td class="is-min is-number"><%= operation.laborSetupTime || '-' %>
+        <td class="is-min is-number"><%= operation.machineTime || '-' %>
+        <td class="is-min is-number"><%= operation.laborTime || '-' %>
       </tr>
       <% }) %>
     </tbody>

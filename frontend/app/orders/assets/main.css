@@ -29,29 +29,35 @@
   padding-top: 15px;
   border-top: 1px dotted #ddd;
 }
-.orders-changes-more {
-  cursor: pointer;
-  text-align: center;
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #428bca;
-}
-.orders-changes-more:hover {
-  color: #2a6496;
-}
-.orders-changes-property {
-  border-left: 1px solid #ddd;
-}
-.orders-changes-page + .orders-changes-page {
-  border-top-width: 1px;
-}
-.orders-changes-operations {
-  cursor: pointer;
-}
 .orders-changes {
   position: relative;
 }
 .orders-changes .orders-operations {
   position: absolute;
   width: 100%;
+}
+.orders-changes > .table > tbody + tbody {
+  border-top-width: 1px;
+}
+.orders-changes > .table > tbody:nth-child(even) > tr > td {
+  background-color: #f9f9f9;
+}
+.orders-changes > .table-hover > tbody:nth-child(even) > tr:hover > td,
+.orders-changes > .table > tbody > tr > td.is-hovered {
+  background-color: #ffffd6;
+}
+.orders-changes-operations {
+  cursor: pointer;
+}
+.orders-changes-comment {
+  white-space: pre-line;
+  font-style: oblique;
+}
+.orders-changes-comment,
+.orders-changes-time,
+.orders-changes-user {
+  vertical-align: top!important;
+}
+.orders-changes .userInfo-cname {
+  display: block;
 }

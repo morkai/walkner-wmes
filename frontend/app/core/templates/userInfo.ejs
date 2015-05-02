@@ -1,1 +1,1 @@
-<span class="userInfo"><% if (userInfo) { %><%= userInfo.label %><% if (userInfo.cname || userInfo.ip) { %> (<%= userInfo.cname || userInfo.ip %>)<% } %><% } else { %>-<% } %></span>
+<span class="userInfo"><% if (userInfo) { %><span class="userInfo-label"><%= userInfo.label %></span><% if (userInfo.cname || userInfo.ip) { %> <span class="userInfo-cname">(<%= userInfo.cname || userInfo.ip %>)</span><% } %><% } else { %>-<% } %></span>
