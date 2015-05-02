@@ -107,6 +107,8 @@ define([
         dlvClassName = 'none';
       }
 
+      var delayReason = this.delayReasons.get(order.get('delayReason'));
+
       return {
         className: cnfClassName === 'none' || dlvClassName === 'none'
           ? 'danger'
@@ -123,7 +125,8 @@ define([
         cnfTime: cnfTime ? time.format(cnfTime, 'LLL') : '-',
         dlvStatus: dlvStatus,
         dlvClassName: dlvClassName,
-        dlvTime: dlvTime ? time.format(dlvTime, 'LLL') : '-'
+        dlvTime: dlvTime ? time.format(dlvTime, 'LLL') : '-',
+        delayReason: delayReason ? delayReason.getLabel() : '-'
       };
     },
 

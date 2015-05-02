@@ -32,30 +32,31 @@
     <div class="table-responsive">
       <table class="table table-bordered table-condensed table-hover">
         <thead>
-        <tr>
-          <th class="is-min"><%- t('orders', 'PROPERTY:_id') %></th>
-          <th class="is-min"><%- t('orders', 'PROPERTY:name') %></th>
-          <th class="is-min"><%- t('orders', 'PROPERTY:mrp') %></th>
-          <th class="is-min"><%- t('orders', 'PROPERTY:qty') %></th>
-          <th class="is-min"><%- t('reports', 'orders:cnf:status') %></th>
-          <th class="is-min"><%- t('reports', 'orders:dlv:status') %></th>
-          <th class="is-min"><%- t('orders', 'PROPERTY:finishDate') %></th>
-          <th class="is-min"><%- t('reports', 'orders:cnf:date') %></th>
-          <th><%- t('reports', 'orders:dlv:date') %></th>
-        </tr>
+          <tr>
+            <th class="is-min"><%- t('orders', 'PROPERTY:_id') %></th>
+            <th class="is-min"><%- t('orders', 'PROPERTY:name') %></th>
+            <th class="is-min"><%- t('orders', 'PROPERTY:mrp') %></th>
+            <th class="is-min"><%- t('orders', 'PROPERTY:qty') %></th>
+            <th class="is-min"><%- t('reports', 'orders:cnf:status') %></th>
+            <th class="is-min"><%- t('reports', 'orders:dlv:status') %></th>
+            <th class="is-min"><%- t('orders', 'PROPERTY:finishDate') %></th>
+            <th class="is-min"><%- t('reports', 'orders:cnf:date') %></th>
+            <th class="is-min"><%- t('reports', 'orders:dlv:date') %></th>
+            <th><%- t('orders', 'PROPERTY:delayReason') %></th>
+          </tr>
         </thead>
         <tbody id="<%- idPrefix %>-empty" class="<%- orders.length ? 'hidden' : '' %>">
-        <tr>
-          <td colspan="9"><%- t('reports', 'orders:empty') %></td>
-        </tr>
+          <tr>
+            <td colspan="10"><%- t('reports', 'orders:empty') %></td>
+          </tr>
         </tbody>
         <tbody id="<%- idPrefix %>-orders" class="<%- orders.length ? '' : 'hidden' %>">
-        <% orders.forEach(function(order) { %>
-        <%- renderOrderRow({
-          canViewOrders: canViewOrders,
-          order: order
-        }) %>
-        <% }) %>
+          <% orders.forEach(function(order) { %>
+          <%- renderOrderRow({
+            canViewOrders: canViewOrders,
+            order: order
+          }) %>
+          <% }) %>
         </tbody>
       </table>
     </div>

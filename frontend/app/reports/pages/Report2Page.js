@@ -5,6 +5,7 @@
 define([
   'underscore',
   'app/core/util/bindLoadingMessage',
+  'app/delayReasons/storage',
   './DrillingReportPage',
   '../Report2OrderCollection',
   '../Report2Query',
@@ -18,6 +19,7 @@ define([
 ], function(
   _,
   bindLoadingMessage,
+  delayReasonsStorage,
   DrillingReportPage,
   Report2OrderCollection,
   Report2Query,
@@ -46,9 +48,18 @@ define([
       this.setView('.reports-2-orders-container', this.ordersView);
     },
 
+    destroy: function()
+    {
+      DrillingReportPage.prototype.destroy.call(this);
+
+      delayReasonsStorage.release();
+    },
+
     defineModels: function()
     {
       DrillingReportPage.prototype.defineModels.call(this);
+
+      this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
 
       this.orders = bindLoadingMessage(new Report2OrderCollection(null, {
         query: this.query,
@@ -61,7 +72,10 @@ define([
     {
       DrillingReportPage.prototype.defineViews.call(this);
 
-      this.ordersView = new Report2OrdersView({collection: this.orders});
+      this.ordersView = new Report2OrdersView({
+        collection: this.orders,
+        delayReasons: this.delayReasons
+      });
     },
 
     defineBindings: function()
@@ -112,12 +126,18 @@ define([
 
     load: function(when)
     {
-      if (this.settings.isEmpty())
-      {
-        return when(this.settings.fetch({reset: true}), this.orders.fetch({reset: true}));
-      }
+      return when(
+        this.orders.fetch({reset: true}),
+        this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null,
+        this.settings.isEmpty() ? this.settings.fetch({reset: true}) : null
+      );
+    },
 
-      return when(this.orders.fetch({reset: true}));
+    afterRender: function()
+    {
+      DrillingReportPage.prototype.afterRender.call(this);
+
+      delayReasonsStorage.acquire();
     },
 
     createQuery: function()
