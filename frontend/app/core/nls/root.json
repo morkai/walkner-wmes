@@ -61,6 +61,7 @@
     "NAVBAR:LOG_OUT": "Log out",
     "NAVBAR:DICTIONARIES": "Dictionaries",
     "NAVBAR:ORDER_STATUSES": "Order statuses",
+    "NAVBAR:DELAY_REASONS": "Delay reasons",
     "NAVBAR:DOWNTIME_REASONS": "Downtime reasons",
     "NAVBAR:LOSS_REASONS": "Loss reasons",
     "NAVBAR:AORS": "Areas of responsibility",

@@ -60,6 +60,7 @@
   "NAVBAR:LOG_OUT": "Wyloguj się",
   "NAVBAR:DICTIONARIES": "Słowniki",
   "NAVBAR:ORDER_STATUSES": "Statusy zleceń",
+  "NAVBAR:DELAY_REASONS": "Powody opóźnień",
   "NAVBAR:DOWNTIME_REASONS": "Powody przestojów",
   "NAVBAR:LOSS_REASONS": "Powody strat materiałowych",
   "NAVBAR:AORS": "Obszary odpowiedzialności",
