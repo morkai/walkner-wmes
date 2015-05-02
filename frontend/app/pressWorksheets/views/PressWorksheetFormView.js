@@ -490,7 +490,7 @@ define([
 
       $order.select2({
         allowClear: true,
-        minimumInputLength: 6,
+        minimumInputLength: 10,
         ajax: {
           cache: true,
           quietMillis: 300,
