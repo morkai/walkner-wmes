@@ -412,6 +412,12 @@ app/nls/divisions.js
 app/nls/pl/divisions.js
 i18n!app/nls/divisions
 app/divisions/routes.js
+app/delayReasons/DelayReason.js
+app/delayReasons/DelayReasonCollection.js
+app/nls/delayReasons.js
+app/nls/pl/delayReasons.js
+i18n!app/nls/delayReasons
+app/delayReasons/routes.js
 app/downtimeReasons/DowntimeReason.js
 app/downtimeReasons/DowntimeReasonCollection.js
 app/data/downtimeReasons.js
@@ -579,6 +585,8 @@ app/nls/mrpControllers.js
 app/nls/pl/mrpControllers.js
 i18n!app/nls/mrpControllers
 app/mrpControllers/routes.js
+app/data/createOnDemandStorage.js
+app/delayReasons/storage.js
 app/orders/Order.js
 app/orders/OrderCollection.js
 app/orderStatuses/OrderStatus.js
@@ -591,7 +599,11 @@ app/orders/views/OrderFilterView.js
 app/orders/pages/OrderListPage.js
 app/orders/templates/details.js
 app/orders/views/OrderDetailsView.js
+app/orders/templates/commentForm.js
+app/orders/views/OrderCommentFormView.js
+app/orders/templates/change.js
 app/orders/templates/changes.js
+app/core/templates/userInfo.js
 app/orders/views/OrderChangesView.js
 app/orders/templates/detailsPage.js
 app/orders/pages/OrderDetailsPage.js
@@ -624,7 +636,6 @@ app/nls/pressWorksheets.js
 app/nls/pl/pressWorksheets.js
 i18n!app/nls/pressWorksheets
 app/pressWorksheets/routes.js
-app/core/templates/userInfo.js
 app/prodDowntimes/util/decorateProdDowntimeChange.js
 app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
