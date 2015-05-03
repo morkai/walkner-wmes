@@ -7,13 +7,15 @@ define([
   '../util/bindLoadingMessage',
   '../util/pageActions',
   '../View',
-  '../views/DetailsView'
+  '../views/DetailsView',
+  './createPageBreadcrumbs'
 ], function(
   t,
   bindLoadingMessage,
   pageActions,
   View,
-  DetailsView
+  DetailsView,
+  createPageBreadcrumbs
 ) {
   'use strict';
 
@@ -25,17 +27,11 @@ define([
 
     modelProperty: 'model',
 
+    baseBreadcrumb: false,
+
     breadcrumbs: function()
     {
-      var model = this[this.modelProperty];
-
-      return [
-        {
-          label: t.bound(model.nlsDomain, 'BREADCRUMBS:browse'),
-          href: model.genClientUrl('base')
-        },
-        model.getLabel()
-      ];
+      return createPageBreadcrumbs(this, [this[this.modelProperty].getLabel()]);
     },
 
     actions: function()

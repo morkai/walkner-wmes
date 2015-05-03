@@ -8,6 +8,7 @@ define([
   '../util/pageActions',
   '../View',
   '../views/ListView',
+  './createPageBreadcrumbs',
   'app/core/templates/listPage'
 ], function(
   t,
@@ -15,6 +16,7 @@ define([
   pageActions,
   View,
   ListView,
+  createPageBreadcrumbs,
   template
 ) {
   'use strict';
@@ -25,9 +27,11 @@ define([
 
     layoutName: 'page',
 
+    baseBreadcrumb: false,
+
     breadcrumbs: function()
     {
-      return [t.bound((this.collection || this.model).getNlsDomain(), 'BREADCRUMBS:browse')];
+      return createPageBreadcrumbs(this);
     },
 
     actions: function()

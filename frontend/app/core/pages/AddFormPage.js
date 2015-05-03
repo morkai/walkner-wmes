@@ -5,11 +5,13 @@
 define([
   'app/i18n',
   '../View',
-  '../views/FormView'
+  '../views/FormView',
+  './createPageBreadcrumbs'
 ], function(
   t,
   View,
-  FormView
+  FormView,
+  createPageBreadcrumbs
 ) {
   'use strict';
 
@@ -19,15 +21,11 @@ define([
 
     pageId: 'addForm',
 
+    baseBreadcrumb: false,
+
     breadcrumbs: function()
     {
-      return [
-        {
-          label: t.bound(this.model.getNlsDomain(), 'BREADCRUMBS:browse'),
-          href: this.model.genClientUrl('base')
-        },
-        t.bound(this.model.getNlsDomain(), 'BREADCRUMBS:addForm')
-      ];
+      return createPageBreadcrumbs(this, [':addForm']);
     },
 
     initialize: function()

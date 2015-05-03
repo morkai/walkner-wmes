@@ -7,13 +7,15 @@ define([
   '../util/bindLoadingMessage',
   '../util/pageActions',
   '../View',
-  '../views/ListView'
+  '../views/ListView',
+  './createPageBreadcrumbs'
 ], function(
   t,
   bindLoadingMessage,
   pageActions,
   View,
-  ListView
+  ListView,
+  createPageBreadcrumbs
 ) {
   'use strict';
 
@@ -23,11 +25,11 @@ define([
 
     pageId: 'list',
 
+    baseBreadcrumb: false,
+
     breadcrumbs: function()
     {
-      return [
-        t.bound(this.collection.getNlsDomain(), 'BREADCRUMBS:browse')
-      ];
+      return createPageBreadcrumbs(this);
     },
 
     actions: function()

@@ -6,12 +6,14 @@ define([
   'app/i18n',
   '../util/bindLoadingMessage',
   '../View',
-  '../views/FormView'
+  '../views/FormView',
+  './createPageBreadcrumbs'
 ], function(
   t,
   bindLoadingMessage,
   View,
-  FormView
+  FormView,
+  createPageBreadcrumbs
 ) {
   'use strict';
 
@@ -21,19 +23,17 @@ define([
 
     pageId: 'editForm',
 
+    baseBreadcrumb: false,
+
     breadcrumbs: function()
     {
-      return [
-        {
-          label: t.bound(this.model.getNlsDomain(), 'BREADCRUMBS:browse'),
-          href: this.model.genClientUrl('base')
-        },
+      return createPageBreadcrumbs(this, [
         {
           label: this.model.getLabel(),
           href: this.model.genClientUrl()
         },
-        t.bound(this.model.getNlsDomain(), 'BREADCRUMBS:editForm')
-      ];
+        ':editForm'
+      ]);
     },
 
     initialize: function()
