@@ -13,7 +13,7 @@ module.exports = function setUpDelayReasonsRoutes(app, delayReasonsModule, useDi
   var canView = auth('DICTIONARIES:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/delayReasons', canView, express.crud.browseRoute.bind(null, app, DelayReason));
+  express.get('/delayReasons', express.crud.browseRoute.bind(null, app, DelayReason));
 
   express.post('/delayReasons', canManage, express.crud.addRoute.bind(null, app, DelayReason));
 
