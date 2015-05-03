@@ -184,13 +184,9 @@ exports.start = function startOrdersImporterModule(app, module)
 
     var oldOperations = orderModel.operations;
 
-    if (oldOperations === null)
+    if (!Array.isArray(oldOperations))
     {
       oldOperations = [];
-    }
-    else
-    {
-      oldOperations = oldOperations.toObject();
     }
 
     if (!deepEqual(oldOperations, missingOrder.operations, {strict: true}))
