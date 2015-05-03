@@ -99,9 +99,10 @@ module.exports = function setupOrderModel(app, mongoose)
 
   orderSchema.statics.TOPIC_PREFIX = 'orders';
 
-  orderSchema.index({nc12: 1, finishDate: -1});
+  orderSchema.index({startDate: -1});
   orderSchema.index({finishDate: -1});
-  orderSchema.index({startDate: -1, mrp: 1, statuses: 1});
+  orderSchema.index({nc12: -1, finishDate: -1});
+  orderSchema.index({mrp: 1, startDate: -1});
 
   orderSchema.statics.prepareForInsert = function(order, createdAt)
   {
