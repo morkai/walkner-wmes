@@ -1,31 +1,27 @@
-<div class="well">
-  <form id="<%- idPrefix %>-form" class="filter-form">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-_id"><%- t('emptyOrders', 'PROPERTY:_id') %></label>
-      <input id="<%- idPrefix %>-_id" class="form-control orders-filter-_id" name="_id" type="text" minlength="4" maxlength="10" placeholder="<%- t('emptyOrders', 'filter:placeholder:_id') %>">
-    </div><div class="form-group form-group-dateRange">
-      <div>
-        <label class="radio-inline">
-          <input name="date" type="radio" value="startDate">
-          <%- t('emptyOrders', 'PROPERTY:startDate') %>
-        </label><label class="radio-inline">
-          <input name="date" type="radio" value="finishDate">
-          <%- t('emptyOrders', 'PROPERTY:finishDate') %>
-        </label>
-      </div>
-      <div>
-        <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
-        <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
-        <label for="<%- idPrefix %>-to" class="control-label"><%- t('core', 'filter:date:to') %></label>
-        <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
-      </div>
-    </div><div
-      class="form-group">
-      <label for="<%- idPrefix %>-limit"><%- t('core', 'filter:limit') %></label>
-      <input id="<%- idPrefix %>-limit" class="form-control" name="limit" type="number" value="25" min="5" max="100" step="1">
-    </div><div
-      class="form-group filter-actions">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('emptyOrders', 'filter:submit') %></span></button>
+<form id="<%- idPrefix %>-form" class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-_id"><%- t('emptyOrders', 'PROPERTY:_id') %></label>
+    <input id="<%- idPrefix %>-_id" class="form-control orders-filter-_id" name="_id" type="text" minlength="4" maxlength="10" placeholder="<%- t('emptyOrders', 'filter:placeholder:_id') %>">
+  </div>
+  <div class="form-group form-group-dateRange">
+    <div>
+      <label class="radio-inline">
+        <input name="date" type="radio" value="startDate">
+        <%- t('emptyOrders', 'PROPERTY:startDate') %>
+      </label><label class="radio-inline">
+        <input name="date" type="radio" value="finishDate">
+        <%- t('emptyOrders', 'PROPERTY:finishDate') %>
+      </label>
     </div>
-  </form>
-</div>
+    <div>
+      <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
+      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+      <label for="<%- idPrefix %>-to" class="control-label"><%- t('core', 'filter:date:to') %></label>
+      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
+    </div>
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('emptyOrders', 'filter:submit') %></span></button>
+  </div>
+</form>
