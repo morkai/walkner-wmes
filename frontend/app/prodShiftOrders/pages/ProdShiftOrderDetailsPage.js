@@ -12,6 +12,7 @@ define([
   'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
   'app/core/View',
+  'app/delayReasons/storage',
   'app/mechOrders/MechOrder',
   'app/mechOrders/views/MechOrderDetailsView',
   'app/orders/Order',
@@ -33,6 +34,7 @@ define([
   pageActions,
   onModelDeleted,
   View,
+  delayReasonsStorage,
   MechOrder,
   MechOrderDetailsView,
   Order,
@@ -97,8 +99,15 @@ define([
       this.insertView('.prodShiftOrders-downtimes-container', this.downtimesView);
     },
 
+    destroy: function()
+    {
+      delayReasonsStorage.release();
+    },
+
     defineModels: function()
     {
+      this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
+
       this.prodShiftOrder = bindLoadingMessage(
         new ProdShiftOrder({_id: this.options.modelId}), this
       );
@@ -127,7 +136,16 @@ define([
 
     load: function(when)
     {
-      return when(this.prodShiftOrder.fetch(), this.prodDowntimes.fetch({reset: true}));
+      return when(
+        this.prodShiftOrder.fetch(),
+        this.prodDowntimes.fetch({reset: true}),
+        this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
+      );
+    },
+
+    afterRender: function()
+    {
+      delayReasonsStorage.acquire();
     },
 
     onSync: function()
@@ -143,7 +161,8 @@ define([
       var orderDetailsViewOptions = {
         model: this.order,
         panelType: 'default',
-        panelTitle: t('prodShiftOrders', 'PANEL:TITLE:orderDetails')
+        panelTitle: t('prodShiftOrders', 'PANEL:TITLE:orderDetails'),
+        delayReasons: this.delayReasons
       };
 
       this.orderDetailsView = this.prodShiftOrder.get('mechOrder')
