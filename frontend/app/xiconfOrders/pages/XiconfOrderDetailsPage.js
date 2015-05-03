@@ -9,6 +9,7 @@ define([
   'app/core/View',
   'app/orders/Order',
   'app/orders/views/OrderDetailsView',
+  'app/delayReasons/storage',
   '../views/XiconfOrderDetailsView',
   'app/xiconfOrders/templates/detailsPage'
 ], function(
@@ -18,6 +19,7 @@ define([
   View,
   Order,
   OrderDetailsView,
+  delayReasonsStorage,
   XiconfOrderDetailsView,
   template
 ) {
@@ -62,11 +64,13 @@ define([
     {
       this.parentOrder = new Order(this.model.id);
       this.order = bindLoadingMessage(this.model, this);
+      this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
 
       this.parentOrderDetailsView = new OrderDetailsView({
         panelTitle: t('xiconfOrders', 'PANEL:TITLE:details:parentOrder'),
         linkOrderNo: user.isAllowedTo('ORDERS:VIEW'),
-        model: this.parentOrder
+        model: this.parentOrder,
+        delayReasons: this.delayReasons
       });
       this.orderDetailsView = new XiconfOrderDetailsView({
         model: this.model
@@ -74,6 +78,11 @@ define([
 
       this.setView('.xiconfOrders-parentOrderDetailsContainer', this.parentOrderDetailsView);
       this.setView('.xiconfOrders-orderDetailsContainer', this.orderDetailsView);
+    },
+
+    destroy: function()
+    {
+      delayReasonsStorage.release();
     },
 
     load: function(when)
@@ -88,7 +97,12 @@ define([
         page.parentOrder.set(page.order.get('parentOrder'));
       });
 
-      return when(req);
+      return when(req, this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null);
+    },
+
+    afterRender: function()
+    {
+      delayReasonsStorage.acquire();
     }
 
   });
