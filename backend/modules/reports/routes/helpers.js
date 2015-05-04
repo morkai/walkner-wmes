@@ -36,7 +36,7 @@ exports.sendCachedReport = function(id, req, res, next)
 {
   req.reportHash = crypto.createHash('md5').update(req.url).digest('hex');
 
-  if (cachedReports[id] && cachedReports[id][req.reportHash] && process.env.NODE_ENV !== 'development')
+  if (cachedReports[id] && cachedReports[id][req.reportHash] && process.env.NODE_ENV === 'production')
   {
     res.type('json');
     res.send(cachedReports[id][req.reportHash]);
