@@ -23,7 +23,7 @@ define([
           mrp: 1,
           qty: 1,
           statusesSetAt: 1,
-          finishDate: 1,
+          startDate: 1,
           delayReason: 1,
           changes: 1
         }

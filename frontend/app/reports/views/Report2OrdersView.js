@@ -136,7 +136,7 @@ define([
         name: order.get('name'),
         mrp: order.get('mrp'),
         qty: order.get('qty').toLocaleString(),
-        finishDate: time.format(order.get('finishDate'), 'LL'),
+        finishDate: time.format(order.get('startDate'), 'LL'),
         cnfStatus: cnfStatus,
         cnfClassName: cnfClassName,
         cnfTime: cnfTime ? time.format(cnfTime, 'LLL') : '-',
