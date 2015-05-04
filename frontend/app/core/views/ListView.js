@@ -81,6 +81,7 @@ define([
 
     initialize: function()
     {
+      this.refreshReq = null;
       this.lastRefreshAt = 0;
 
       this.listenTo(this.collection, 'sync', function()
@@ -259,7 +260,24 @@ define([
 
       delete this.timers.refreshCollection;
 
-      this.promised(this.collection.fetch(_.isObject(options) ? options : {reset: true}));
+      if (this.refreshReq)
+      {
+        this.refreshReq.abort();
+      }
+
+      var view = this;
+      var req = this.promised(this.collection.fetch(_.isObject(options) ? options : {reset: true}));
+
+      req.always(function()
+      {
+        if (view.refreshReq === req)
+        {
+          view.refreshReq.abort();
+          view.refreshReq = null;
+        }
+      });
+
+      this.refreshReq = req;
     },
 
     scrollTop: function()
