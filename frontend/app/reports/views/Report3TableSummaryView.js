@@ -403,9 +403,8 @@ define([
 
       if (this.dataTable)
       {
-        this.$('dataTables_scrollBody. .dataTables_empty').text(
-          t('core', 'dataTables:loadingFailed')
-        );
+        this.dataTable.clear();
+        this.dataTable.draw();
       }
     },
 

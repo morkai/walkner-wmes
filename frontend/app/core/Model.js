@@ -81,6 +81,47 @@ define([
     getLabel: function()
     {
       return String(this.get(this.getLabelAttribute()));
+    },
+
+    sync: function(method, model, options)
+    {
+      var read = method === 'read';
+
+      if (read)
+      {
+        this.cancelCurrentReadRequest(model);
+      }
+
+      var req = Backbone.Model.prototype.sync.call(this, method, model, options);
+
+      if (read)
+      {
+        this.setUpCurrentReadRequest(model, req);
+      }
+
+      return req;
+    },
+
+    cancelCurrentReadRequest: function(model)
+    {
+      if (model.currentReadRequest)
+      {
+        model.currentReadRequest.abort();
+        model.currentReadRequest = null;
+      }
+    },
+
+    setUpCurrentReadRequest: function(model, req)
+    {
+      req.always(function()
+      {
+        if (model.currentReadRequest === req)
+        {
+          model.currentReadRequest = null;
+        }
+      });
+
+      model.currentReadRequest = req;
     }
 
   });
