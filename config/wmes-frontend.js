@@ -249,7 +249,7 @@ exports['messenger/client:wmes-reports-1'] = {
   repPort: 60051,
   pushHost: '127.0.0.1',
   pushPort: 60052,
-  responseTimeout: 30000
+  responseTimeout: 4 * 60 * 1000 - 1000
 };
 
 exports['messenger/client:wmes-reports-2'] = {
@@ -257,7 +257,7 @@ exports['messenger/client:wmes-reports-2'] = {
   pubPort: 60060,
   repHost: '127.0.0.1',
   repPort: 60061,
-  responseTimeout: 30000
+  responseTimeout: 4 * 60 * 1000 - 1000
 };
 
 exports['messenger/client:wmes-watchdog'] = {
