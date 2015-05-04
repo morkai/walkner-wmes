@@ -227,12 +227,10 @@ define([
 
     load: function(when)
     {
-      if (this.settings.isEmpty())
+      return when(this.settings.fetchIfEmpty(function()
       {
-        return when(this.prodTasks.fetch({reset: true}), this.settings.fetch({reset: true}));
-      }
-
-      return when(this.prodTasks.fetch({reset: true}));
+        return this.prodTasks.fetch({reset: true});
+      }, this));
     },
 
     afterRender: function()

@@ -142,7 +142,23 @@ define([
 
     function when()
     {
-      return $.when.apply($, _.map(arguments, page.promised, page));
+      var requests = [];
+
+      for (var i = 0; i < arguments.length; ++i)
+      {
+        var request = arguments[i];
+
+        if (Array.isArray(request))
+        {
+          requests.push.apply(requests, request);
+        }
+        else
+        {
+          requests.push(request);
+        }
+      }
+
+      return $.when.apply($, _.map(requests, page.promised, page));
     }
 
     function onPageLoadSuccess()

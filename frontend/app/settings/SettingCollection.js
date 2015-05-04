@@ -50,6 +50,34 @@ define([
       });
     },
 
+    fetchIfEmpty: function(next, context)
+    {
+      if (!this.isEmpty())
+      {
+        return next ? next.call(context) : null;
+      }
+
+      var deferred = $.Deferred();
+      var req = this.fetch({reset: true});
+
+      if (!next)
+      {
+        return req;
+      }
+
+      req.done(function()
+      {
+        var nextReqs = [].concat(next.call(context));
+
+        $.when.apply($, nextReqs).then(
+          function() { deferred.resolve(); },
+          function() { deferred.reject(); }
+        );
+      });
+
+      return deferred.promise();
+    },
+
     update: function(id, newValue)
     {
       newValue = this.prepareValue(id, typeof newValue === 'string' ? newValue.trim() : newValue);

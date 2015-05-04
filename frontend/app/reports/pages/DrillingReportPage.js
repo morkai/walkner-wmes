@@ -262,12 +262,7 @@ define([
 
     load: function(when)
     {
-      if (this.settings.isEmpty())
-      {
-        return when(this.settings.fetch({reset: true}));
-      }
-
-      return when();
+      return when(this.settings.fetchIfEmpty());
     },
 
     afterRender: function()
