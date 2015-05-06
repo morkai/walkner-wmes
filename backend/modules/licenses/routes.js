@@ -153,7 +153,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
 
   function prepareLicenseForEdit(req, res, next)
   {
-    delete req.body._id;
+    req.body._id = req.params.id;
 
     prepareLicenseDate(req.body);
 
