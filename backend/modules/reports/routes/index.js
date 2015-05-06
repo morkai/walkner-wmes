@@ -10,6 +10,7 @@ var exportRoute = require('./export');
 var report1Route = require('./report1');
 var report2Route = require('./report2');
 var report2OrdersRoute = require('./report2Orders');
+var report2ExportRoute = require('./report2Export');
 var report3Route = require('./report3');
 var report4Route = require('./report4');
 var report4NotesRoute = require('./report4Notes');
@@ -42,6 +43,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   );
 
   express.get('/reports/2;orders', canView, report2OrdersRoute.bind(null, app, reportsModule));
+
+  express.get('/reports/2;export', canView, report2ExportRoute.bind(null, app, reportsModule));
 
   express.get(
     '/reports/3',

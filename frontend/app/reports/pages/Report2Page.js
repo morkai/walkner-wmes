@@ -4,6 +4,7 @@
 
 define([
   'underscore',
+  'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/delayReasons/storage',
   './DrillingReportPage',
@@ -18,6 +19,7 @@ define([
   'app/reports/templates/report2Page'
 ], function(
   _,
+  t,
   bindLoadingMessage,
   delayReasonsStorage,
   DrillingReportPage,
@@ -45,6 +47,25 @@ define([
       'orders.updated.*': 'onOrderUpdated'
     },
 
+    actions: function()
+    {
+      var actions = DrillingReportPage.prototype.actions.call(this);
+
+      actions.unshift({
+        id: 'export',
+        label: t.bound('reports', 'PAGE_ACTION:2:export'),
+        icon: 'download',
+        href: '/reports/2;export?' + this.orders.rqlQuery
+      });
+
+      return actions;
+    },
+
+    setUpLayout: function(layout)
+    {
+      this.layout = layout;
+    },
+
     initialize: function()
     {
       DrillingReportPage.prototype.initialize.call(this);
@@ -57,6 +78,8 @@ define([
       DrillingReportPage.prototype.destroy.call(this);
 
       delayReasonsStorage.release();
+
+      this.layout = null;
     },
 
     defineModels: function()
@@ -94,6 +117,11 @@ define([
         };
 
         this.query.set(attrs, {silent: true});
+      });
+
+      this.listenTo(this.query, 'change', function()
+      {
+        this.layout.setActions(this.actions, this);
       });
 
       this.listenTo(this.query, 'change:skip', function()

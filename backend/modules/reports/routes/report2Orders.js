@@ -8,7 +8,7 @@ var createHash = require('crypto').createHash;
 var _ = require('lodash');
 var helpers = require('./helpers');
 
-module.exports = function report4OrdersRoute(app, reportsModule, req, res, next)
+module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 {
   var query = req.query;
   var fromTime = helpers.getTime(query.from);
