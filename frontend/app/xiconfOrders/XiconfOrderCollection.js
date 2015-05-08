@@ -31,7 +31,7 @@ define([
           name: 'and',
           args: [
             {name: 'lt', args: ['reqDate', time.getMoment().startOf('day').add(1, 'days').valueOf()]},
-            {name: 'eq', args: ['status', -1]}
+            {name: 'in', args: ['status', [0, 1]]}
           ]
         }
       });
