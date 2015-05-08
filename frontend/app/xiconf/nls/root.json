@@ -50,6 +50,8 @@
     "filter:result:success": "Success",
     "filter:result:failure": "Failure",
     "filter:placeholder:srcId": "Any",
+    "filter:nc12Type:program": "Program 12NC",
+    "filter:nc12Type:led": "LED board 12NC",
     "filter:submit": "Filter results",
 
     "step:wait": "Wait",

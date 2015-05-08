@@ -10,9 +10,6 @@
 .xiconf-filter .form-control[name="orderNo"] {
   width: 100px;
 }
-.xiconf-filter .form-control[name="nc12"] {
-  width: 120px;
-}
 .xiconf-tabs .tab-pane > pre {
   border-top: none;
   border-color: #DDD;

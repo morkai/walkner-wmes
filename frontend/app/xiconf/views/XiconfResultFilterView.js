@@ -25,6 +25,7 @@ define([
         srcId: '',
         serviceTag: '',
         orderNo: '',
+        nc12Type: 'program',
         nc12: '',
         result: ['success', 'failure']
       };
@@ -50,7 +51,16 @@ define([
           formData.result = [term.args[1]];
         }
       },
-      'nc12': 'orderNo',
+      'nc12': function(propertyName, term, formData)
+      {
+        formData.nc12Type = 'program';
+        formData.nc12 = term.args[1];
+      },
+      'leds.nc12': function(propertyName, term, formData)
+      {
+        formData.nc12Type = 'led';
+        formData.nc12 = term.args[1];
+      },
       'srcId': 'orderNo',
       'serviceTag': 'orderNo'
     },
@@ -96,6 +106,7 @@ define([
       var fromMoment = time.getMoment(this.$id('from').val());
       var toMoment = time.getMoment(this.$id('to').val());
       var orderNo = this.$id('orderNo').val().trim();
+      var nc12Type = this.$('input[name="nc12Type"]:checked').val();
       var nc12 = this.$id('nc12').val().trim();
       var serviceTag = this.$id('serviceTag').val().trim();
       var srcId = this.$id('srcId').val();
@@ -113,7 +124,7 @@ define([
 
       if (/^[0-9]{12}$/.test(nc12))
       {
-        selector.push({name: 'eq', args: ['nc12', nc12]});
+        selector.push({name: 'eq', args: [nc12Type === 'led' ? 'leds.nc12' : 'nc12', nc12]});
       }
 
       if (/^P[0-9]+$/.test(serviceTag))

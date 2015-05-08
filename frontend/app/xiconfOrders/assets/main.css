@@ -1,3 +1,9 @@
+.xiconfOrders-filter .form-control[name="orderNo"] {
+  width: 100px;
+}
+.xiconfOrders-filter .form-control[name="nc12"] {
+  width: 120px;
+}
 .xiconfOrders-list-item {
   cursor: pointer;
 }

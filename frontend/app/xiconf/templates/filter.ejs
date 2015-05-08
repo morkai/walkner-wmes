@@ -20,7 +20,15 @@
     <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" maxlength="9" pattern="^[0-9]+$">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-nc12"><%- t('xiconf', 'PROPERTY:nc12') %></label>
+    <div class="filter-radioLabels">
+      <label>
+        <input name="nc12Type" type="radio" value="program">
+        <%- t('xiconf', 'filter:nc12Type:program') %>
+      </label><label>
+        <input name="nc12Type" type="radio" value="led">
+        <%- t('xiconf', 'filter:nc12Type:led') %>
+      </label>
+    </div>
     <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" maxlength="12">
   </div>
   <div class="form-group">

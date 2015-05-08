@@ -65,7 +65,7 @@ define([
       this.listenTo(this.model, 'change', this.render);
     },
 
-    linkToResults: function(orderNo, nc12)
+    linkToResults: function(orderNo, nc12, itemKind)
     {
       var rqlQuery = this.xiconfResultCollection.rqlQuery;
 
@@ -79,7 +79,7 @@ define([
 
       if (nc12)
       {
-        rqlQuery.selector.args.push({name: 'eq', args: ['nc12', nc12]});
+        rqlQuery.selector.args.push({name: 'eq', args: [itemKind === 'led' ? 'leds.nc12' : 'nc12', nc12]});
       }
 
       return this.xiconfResultCollection.genClientUrl() + '?' + rqlQuery;

@@ -49,6 +49,8 @@
   "filter:result:success": "Sukces",
   "filter:result:failure": "Porażka",
   "filter:placeholder:srcId": "Dowolne",
+  "filter:nc12Type:program": "12NC programu",
+  "filter:nc12Type:led": "12NC płytki LED",
   "filter:submit": "Filtruj wyniki",
 
   "step:wait": "Przerwa",
