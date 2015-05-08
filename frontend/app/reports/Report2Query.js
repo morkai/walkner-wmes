@@ -31,6 +31,7 @@ define([
         interval: 'day',
         limit: 12,
         skip: 0,
+        orderNo: '',
         filter: 'nin',
         statuses: ''
       };
@@ -157,6 +158,11 @@ define([
       {
         queryString += '&filter=' + attrs.filter;
         queryString += '&statuses=' + attrs.statuses;
+      }
+
+      if (attrs.orderNo.length >= 6)
+      {
+        queryString += '&orderNo=' + attrs.orderNo;
       }
 
       return queryString.substr(1);

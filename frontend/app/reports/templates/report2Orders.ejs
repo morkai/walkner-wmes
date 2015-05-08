@@ -2,6 +2,10 @@
   <div class="reports-2-orders-filter filter-container">
     <form id="<%- idPrefix %>-filter" class="well filter-form is-vertical">
       <div class="form-group">
+        <label for="<%- idPrefix %>-orderNo"><%- t('reports', 'orders:filter:orderNo') %></label>
+        <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" pattern="^[0-9]{6,}$">
+      </div>
+      <div class="form-group">
         <% ['all', 'in', 'nin'].forEach(function(filter) { %>
         <div class="radio">
           <label class="control-label">

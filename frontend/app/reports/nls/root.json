@@ -336,6 +336,7 @@
     "orders:dlv:status": "Confirmation<br>(warehouse)",
     "orders:dlv:date": "Confirmation time<br>(warehouse)",
     "orders:filter:submit": "Filter orders",
+    "orders:filter:orderNo": "Order no",
     "orders:filter:status:all": "All selected statuses",
     "orders:filter:status:in": "Any selected status",
     "orders:filter:status:nin": "None of the selected statuses",

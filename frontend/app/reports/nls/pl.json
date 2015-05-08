@@ -341,6 +341,7 @@
   "orders:dlv:status": "Potwierdzenie<br>(magazyn)",
   "orders:dlv:date": "Czas potwierdzenia<br>(magazyn)",
   "orders:filter:submit": "Filtruj zlecenia",
+  "orders:filter:orderNo": "Nr zlecenia",
   "orders:filter:status:all": "Wszystkie wybrane statusy",
   "orders:filter:status:in": "Dowolny wybrany status",
   "orders:filter:status:nin": "Żadne z wybranych statusów",

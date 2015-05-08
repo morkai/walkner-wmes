@@ -199,6 +199,7 @@ define([
       var query = this.collection.query;
 
       js2form(this.$id('filter')[0], {
+        orderNo: query.get('orderNo'),
         filter: query.get('filter'),
         statuses: query.get('statuses').split(','),
         limit: query.get('limit')
@@ -209,6 +210,7 @@ define([
     {
       var filterData = form2js(this.$id('filter')[0]);
 
+      filterData.orderNo = (filterData.orderNo || '').length < 6 ? '' : filterData.orderNo;
       filterData.statuses = Array.isArray(filterData.statuses) ? filterData.statuses.join(',') : '';
       filterData.skip = 0;
 

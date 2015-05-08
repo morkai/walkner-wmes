@@ -47,14 +47,23 @@ define([
     sync: function()
     {
       var selector = this.rqlQuery.selector;
+      var query = this.query;
+      var orderNo = query.get('orderNo');
+
+      if (orderNo.length >= 6)
+      {
+        selector.args = [eq('orderNo', orderNo)];
+
+        return OrderCollection.prototype.sync.apply(this, arguments);
+      }
 
       selector.args = [
-        eq('from', +this.query.get('from')),
-        eq('to', +this.query.get('to'))
+        eq('from', +query.get('from')),
+        eq('to', +query.get('to'))
       ];
 
-      var orgUnitType = this.query.get('orgUnitType');
-      var orgUnitId = this.query.get('orgUnitId');
+      var orgUnitType = query.get('orgUnitType');
+      var orgUnitId = query.get('orgUnitId');
 
       if (orgUnitType && orgUnitId)
       {
@@ -64,12 +73,12 @@ define([
         );
       }
 
-      var statuses = this.query.get('statuses');
+      var statuses = query.get('statuses');
 
       if (statuses.length)
       {
         selector.args.push(
-          eq('filter', this.query.get('filter')),
+          eq('filter', query.get('filter')),
           eq('statuses', statuses)
         );
       }
