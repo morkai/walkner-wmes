@@ -11,7 +11,7 @@ var parseSapDate = require('../../sap/util/parseSapDate');
 
 module.exports = function parseXiconfOrders(input)
 {
-  var PROGRAM_RE = /^LABEL.*?Program\s*(.*?)(?:'|"|”)?$/i;
+  var PROGRAM_RE = /^.*?Program\s*(.*?)(?:'|"|”)?$/i;
   var GPRS_RE = /^LC/i;
   var LED_RE = /LED.*?line/i;
 
@@ -56,6 +56,10 @@ module.exports = function parseXiconfOrders(input)
       {
         obj.kind = 'program';
         obj.name = programMatches[1].trim();
+      }
+      else
+      {
+        return null;
       }
 
       return obj;
