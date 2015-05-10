@@ -104,6 +104,15 @@ app/icpo/assets/main.css
 ----------------
 app/icpo/assets/main.css
 
+app/kaizenOrders/assets/form.css
+----------------
+app/kaizenOrders/assets/form.css
+
+app/kaizenOrders/assets/main.css
+----------------
+app/kaizenOrders/assets/./form.css
+app/kaizenOrders/assets/main.css
+
 app/licenses/assets/main.css
 ----------------
 app/licenses/assets/main.css
@@ -261,6 +270,7 @@ assets/../app/updater/assets/main.css
 assets/../app/feedback/assets/main.css
 assets/../app/factoryLayout/assets/main.css
 assets/../app/licenses/assets/main.css
+assets/../app/kaizenOrders/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -813,8 +823,36 @@ app/icpo/util/serializeIcpoLicenseFeatures.js
 app/licenses/License.js
 app/licenses/LicenseCollection.js
 app/licenses/routes.js
+app/kaizenOrders/KaizenOrder.js
+app/kaizenOrders/KaizenOrderCollection.js
+app/core/pages/FilteredListPage.js
 app/kaizenSections/KaizenSection.js
 app/kaizenSections/KaizenSectionCollection.js
+app/kaizenAreas/KaizenArea.js
+app/kaizenAreas/KaizenAreaCollection.js
+app/kaizenCategories/KaizenCategory.js
+app/kaizenCategories/KaizenCategoryCollection.js
+app/kaizenCauses/KaizenCause.js
+app/kaizenCauses/KaizenCauseCollection.js
+app/kaizenRisks/KaizenRisk.js
+app/kaizenRisks/KaizenRiskCollection.js
+app/kaizenOrders/dictionaries.js
+app/kaizenOrders/templates/filter.js
+app/kaizenOrders/views/KaizenOrderFilterView.js
+app/kaizenOrders/views/KaizenOrderListView.js
+app/kaizenOrders/pages/KaizenOrderListPage.js
+app/kaizenOrders/templates/details.js
+app/kaizenOrders/views/KaizenOrderDetailsView.js
+app/kaizenOrders/templates/detailsPage.js
+app/kaizenOrders/pages/KaizenOrderDetailsPage.js
+app/kaizenOrders/templates/form.js
+app/kaizenOrders/views/KaizenOrderFormView.js
+app/kaizenOrders/pages/KaizenOrderAddFormPage.js
+app/kaizenOrders/pages/KaizenOrderEditFormPage.js
+app/nls/kaizenOrders.js
+app/nls/pl/kaizenOrders.js
+i18n!app/nls/kaizenOrders
+app/kaizenOrders/routes.js
 app/kaizenSections/templates/form.js
 app/kaizenSections/views/KaizenSectionFormView.js
 app/kaizenSections/templates/details.js
@@ -822,8 +860,6 @@ app/nls/kaizenSections.js
 app/nls/pl/kaizenSections.js
 i18n!app/nls/kaizenSections
 app/kaizenSections/routes.js
-app/kaizenAreas/KaizenArea.js
-app/kaizenAreas/KaizenAreaCollection.js
 app/kaizenAreas/templates/form.js
 app/kaizenAreas/views/KaizenAreaFormView.js
 app/kaizenAreas/templates/details.js
@@ -831,8 +867,6 @@ app/nls/kaizenAreas.js
 app/nls/pl/kaizenAreas.js
 i18n!app/nls/kaizenAreas
 app/kaizenAreas/routes.js
-app/kaizenCategories/KaizenCategory.js
-app/kaizenCategories/KaizenCategoryCollection.js
 app/kaizenCategories/templates/form.js
 app/kaizenCategories/views/KaizenCategoryFormView.js
 app/kaizenCategories/templates/details.js
@@ -840,8 +874,6 @@ app/nls/kaizenCategories.js
 app/nls/pl/kaizenCategories.js
 i18n!app/nls/kaizenCategories
 app/kaizenCategories/routes.js
-app/kaizenCauses/KaizenCause.js
-app/kaizenCauses/KaizenCauseCollection.js
 app/kaizenCauses/templates/form.js
 app/kaizenCauses/views/KaizenCauseFormView.js
 app/kaizenCauses/templates/details.js
@@ -849,8 +881,6 @@ app/nls/kaizenCauses.js
 app/nls/pl/kaizenCauses.js
 i18n!app/nls/kaizenCauses
 app/kaizenCauses/routes.js
-app/kaizenRisks/KaizenRisk.js
-app/kaizenRisks/KaizenRiskCollection.js
 app/kaizenRisks/templates/form.js
 app/kaizenRisks/views/KaizenRiskFormView.js
 app/kaizenRisks/templates/details.js

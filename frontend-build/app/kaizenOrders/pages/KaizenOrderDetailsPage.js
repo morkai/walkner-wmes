@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["app/core/pages/DetailsPage","../dictionaries","../views/KaizenOrderDetailsView","app/kaizenOrders/templates/detailsPage"],function(e,i,t,a){"use strict";return e.extend({template:a,baseBreadcrumb:!0,remoteTopics:function(){var e={};return e},initialize:function(){e.prototype.initialize.apply(this,arguments),this.setView(".kaizenOrders-detailsPage-properties",this.detailsView)},destroy:function(){e.prototype.destroy.call(this),i.unload()},defineViews:function(){this.detailsView=new t({model:this.model})},load:function(e){return e(this.model.fetch(),i.load())}})});

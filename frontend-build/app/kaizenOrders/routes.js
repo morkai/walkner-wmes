@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["underscore","../router","../viewport","../user","../core/util/showDeleteFormPage","./KaizenOrderCollection","./KaizenOrder","./pages/KaizenOrderListPage","./pages/KaizenOrderDetailsPage","./pages/KaizenOrderAddFormPage","./pages/KaizenOrderEditFormPage","i18n!app/nls/kaizenOrders"],function(e,r,a,n,i,d,o,s,t,l,p){"use strict";var m=n.auth();r.map("/kaizen/orders",m,function(e){a.showPage(new s({collection:new d(null,{rqlQuery:e.rql})}))}),r.map("/kaizen/orders/:id",m,function(e){a.showPage(new t({model:new o({_id:e.params.id})}))}),r.map("/kaizen/orders;add",m,function(){a.showPage(new l({model:new o}))}),r.map("/kaizen/orders/:id;edit",m,function(e){a.showPage(new p({model:new o({_id:e.params.id})}))}),r.map("/kaizen/orders/:id;delete",m,e.partial(i,o,e,e,{baseBreadcrumb:!0}))});
