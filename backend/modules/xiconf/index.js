@@ -4,6 +4,7 @@
 
 'use strict';
 
+var step = require('h5.step');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var setUpResultsImporter = require('./importer/results');
@@ -72,4 +73,48 @@ exports.start = function startXiconfModule(app, module)
     ],
     setUpNotifier.bind(null, app, module)
   );
+
+  app.onModuleReady(
+    [
+      config.mongooseId
+    ],
+    resetClientsLastSeenAt
+  );
+
+  function resetClientsLastSeenAt()
+  {
+    var XiconfClient = app[config.mongooseId].model('XiconfClient');
+
+    step(
+      function findConnectedClientsStep()
+      {
+        XiconfClient.find({connectedAt: {$ne: null}}, {connectedAt: 1}).lean().exec(this.next());
+      },
+      function updateDisconnectedAtStep(err, xiconfClients)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        for (var i = 0; i < xiconfClients.length; ++i)
+        {
+          var xiconfClient = xiconfClients[i];
+          var update = {
+            connectedAt: null,
+            disconnectedAt: xiconfClient.connectedAt
+          };
+
+          XiconfClient.collection.update({_id: xiconfClient._id}, {$set: update}, this.group());
+        }
+      },
+      function(err)
+      {
+        if (err)
+        {
+          module.error("Failed to reset clients' last seen at time: %s", err.message);
+        }
+      }
+    );
+  }
 };
