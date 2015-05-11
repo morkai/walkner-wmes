@@ -12,12 +12,16 @@
   "PROPERTY:features": "Opcje",
   "PROPERTY:appVersion": "Wersja aplikacji",
   "PROPERTY:mowVersion": "Wersja MultiOne",
+  "PROPERTY:coreScannerDriver": "CoreScanner",
   "PROPERTY:order": "Zlecenie",
   "PROPERTY:lastSeenAt": "Ostatnio widziany",
   "PROPERTY:status": "Status",
 
   "status:online": "Online",
   "status:offline": "Offline",
+
+  "coreScannerDriver:true": "Istnieje",
+  "coreScannerDriver:false": "Nie istnieje",
 
   "page:update": "Aktualizuj aplikacje",
   "page:settings": "Zmień ustawienia",

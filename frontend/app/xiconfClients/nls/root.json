@@ -13,12 +13,16 @@
     "PROPERTY:features": "Features",
     "PROPERTY:appVersion": "App version",
     "PROPERTY:mowVersion": "MultiOne version",
+    "PROPERTY:coreScannerDriver": "CoreScanner",
     "PROPERTY:order": "Order",
     "PROPERTY:lastSeenAt": "Last seen at",
     "PROPERTY:status": "Status",
 
     "status:online": "Online",
     "status:offline": "Offline",
+
+    "coreScannerDriver:true": "Exists",
+    "coreScannerDriver:false": "Doesn't exist",
 
     "page:update": "Update apps",
     "page:settings": "Change settings",

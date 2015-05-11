@@ -445,8 +445,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     var socket = this;
 
-    if (!_.isObject(data)
-      || !_.isString(data.srcId) || _.isEmpty(data.srcId))
+    if (!_.isObject(data) || !_.isString(data.srcId) || _.isEmpty(data.srcId))
     {
       return;
     }
@@ -518,7 +517,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       licenseError: data.licenseError || null,
       order: data.selectedOrderNo || null,
       appVersion: data.appVersion || '0.0.0',
-      mowVersion: data.mowVersion || '0.0.0.0'
+      mowVersion: data.mowVersion || '0.0.0.0',
+      coreScannerDriver: data.coreScannerDriver === true
     };
 
     XiconfClient.collection.update({_id: xiconfClient._id}, xiconfClient, {upsert: true}, function(err)

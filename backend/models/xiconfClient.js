@@ -49,6 +49,10 @@ module.exports = function setupXiconfClientModel(app, mongoose)
     mowVersion: {
       type: String,
       default: '0.0.0.0'
+    },
+    coreScannerDriver: {
+      type: Boolean,
+      default: false
     }
   }, {
     id: false

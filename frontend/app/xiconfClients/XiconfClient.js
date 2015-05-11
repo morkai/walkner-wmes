@@ -34,12 +34,8 @@ define([
       var obj = this.toJSON();
 
       obj.className = obj.connectedAt ? 'success' : 'danger';
-      obj.lastSeenAt = time.format(obj.connectedAt || obj.disconnectedAt, 'LLLL');
-
-      if (obj.order)
-      {
-        obj.orderLink = '<a href="#xiconf/orders/' + obj.order + '">' + obj.order + '</a>';
-      }
+      obj.lastSeenAt = time.format(obj.connectedAt || obj.disconnectedAt, 'YY-MM-DD, HH:mm:ss');
+      obj.orderLink = obj.order ? ('<a href="#xiconf/orders/' + obj.order + '">' + obj.order + '</a>') : '-';
 
       if (_.isObject(obj.license))
       {
@@ -82,6 +78,9 @@ define([
           + obj.appVersion
           + '</span>';
       }
+
+      obj.coreScannerDriver = '<i class="fa ' + (obj.coreScannerDriver ? 'fa-thumbs-o-up' : 'fa-thumbs-down')
+        + '" title="' + t('xiconfClients', 'coreScannerDriver:' + !!obj.coreScannerDriver) + '"></i>';
 
       return obj;
     }
