@@ -23,6 +23,7 @@
       'app/router',
       'app/viewport',
       'app/updater/index',
+      'app/data/loadedModules',
       'app/core/layouts/PageLayout',
       'app/core/layouts/PrintLayout',
       'app/core/layouts/BlankLayout',
@@ -51,6 +52,7 @@
     router,
     viewport,
     updater,
+    loadedModules,
     PageLayout,
     PrintLayout,
     BlankLayout,
@@ -126,7 +128,7 @@
       var req = router.getCurrentRequest();
       var navbarView = new NavbarView({
         currentPath: req === null ? '/' : req.path,
-        loadedModules: window.MODULES || []
+        loadedModules: loadedModules.map
       });
 
       navbarView.on('logIn', function()

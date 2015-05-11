@@ -109,9 +109,9 @@ define([
      */
     connectingStatusClassName: 'navbar-status-connecting',
     /**
-     * @type {Array.<string>}
+     * @type {object.<string, boolean>}
      */
-    loadedModules: []
+    loadedModules: {}
   };
 
   NavbarView.prototype.initialize = function()
@@ -135,17 +135,6 @@ define([
      * @type {jQuery|null}
      */
     this.$activeNavItem = null;
-
-    /**
-     * @private
-     * @type {object.<string, boolean>}
-     */
-    this.loadedModules = {};
-
-    this.options.loadedModules.forEach(function(moduleName)
-    {
-      this.loadedModules[moduleName] = true;
-    }, this);
 
     this.activateNavItem(this.getModuleNameFromPath(this.options.currentPath));
   };
@@ -445,7 +434,9 @@ define([
 
       var moduleName = navbarView.getModuleNameFromLi($li[0], false);
 
-      if (moduleName !== null && $li.attr('data-no-module') === undefined && !navbarView.loadedModules[moduleName])
+      if (moduleName !== null
+        && $li.attr('data-no-module') === undefined
+        && !navbarView.options.loadedModules[moduleName])
       {
         return false;
       }

@@ -23,6 +23,7 @@
       'app/router',
       'app/viewport',
       'app/updater/index',
+      'app/data/loadedModules',
       'app/core/layouts/PageLayout',
       'app/core/views/NavbarView',
       'app/core/views/LogInFormView',
@@ -49,6 +50,7 @@
     router,
     viewport,
     updater,
+    loadedModules,
     PageLayout,
     NavbarView,
     LogInFormView,
@@ -114,7 +116,7 @@
       var req = router.getCurrentRequest();
       var navbarView = new NavbarView({
         currentPath: req === null ? '/' : req.path,
-        loadedModules: window.MODULES || []
+        loadedModules: loadedModules.map
       });
 
       navbarView.on('logIn', function()
