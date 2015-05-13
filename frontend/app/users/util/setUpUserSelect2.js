@@ -68,15 +68,20 @@ define([
             {
               var name = user.lastName && user.firstName
                 ? (user.lastName + ' ' + user.firstName)
-                : (user.name || '-');
-              var personellId = user.personellId ? user.personellId : '-';
+                : (user.name || user.login || user._id);
+              var text = name;
+
+              if (user.personellId)
+              {
+                text += ' (' + user.personellId + ')';
+              }
 
               return {
                 id: user._id,
-                text: name + ' (' + personellId + ')',
+                text: text,
                 name: name,
                 login: user.login,
-                personellId: personellId
+                personellId: user.personellId || '-'
               };
             })
             .sort(function(a, b)
