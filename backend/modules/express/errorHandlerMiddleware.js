@@ -32,6 +32,13 @@ module.exports = function createErrorHandlerMiddleware(expressModule, options)
     {
       err = {message: err, stack: null};
     }
+    else if (err && err.name === 'ValidationError')
+    {
+      _.forEach(err.errors, function(validationError)
+      {
+        err.message += '\n  - ' + validationError;
+      });
+    }
 
     var login = req.session && req.session.user
       ? req.session.user.login
