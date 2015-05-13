@@ -839,9 +839,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           }
         }
 
-        var anyLeditems = ledItems.length > 0;
+        var anyLedItems = ledItems.length > 0;
 
-        if (anyLeditems)
+        if (anyLedItems)
         {
           quantityPerResult = ledItems[0].quantityTodo / orderData.quantityTodo;
           ledQuantityDone = ledItems[0].quantityDone / quantityPerResult;
@@ -871,7 +871,22 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           programQuantityDone += programItemQuantityDone / quantityPerResult;
         }
 
-        var quantityDone = Math.round(Math.max(0, ledQuantityDone, programQuantityDone) * 100) / 100;
+        var quantityDone;
+
+        if (ledQuantityDone && programQuantityDone)
+        {
+          quantityDone = (ledQuantityDone + programQuantityDone) / 2;
+        }
+        else if (programQuantityDone)
+        {
+          quantityDone = programQuantityDone;
+        }
+        else
+        {
+          quantityDone = ledQuantityDone;
+        }
+
+        quantityDone = Math.round(quantityDone * 100) / 100;
 
         var changes = {
           quantityDone: quantityDone,
@@ -1614,6 +1629,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     {
       delay.startOf('hour').add(WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES, 'minutes');
     }
+
     workingOrderChangeCheckTimers[orderNo] = setTimeout(
       checkWorkingOrderChange,
       Math.max(WORKING_ORDER_CHANGE_CHECK_DELAY, delay.diff(now)), orderNo
