@@ -6,6 +6,7 @@
 
   "PANEL:TITLE:details": "Szczegóły zlecenia",
   "PANEL:TITLE:operations": "Lista operacji zlecenia",
+  "PANEL:TITLE:documents": "Lista dokumentów zlecenia",
   "PANEL:TITLE:changes": "Historia zmian zlecenia",
 
   "PROPERTY:_id": "Nr zlecenia",
@@ -30,11 +31,16 @@
   "PROPERTY:operations.laborSetupTime": "Czas <em>Labor Setup</em>",
   "PROPERTY:operations.machineTime": "Czas <em>Machine</em>",
   "PROPERTY:operations.laborTime": "Czas <em>Labor</em>",
+  "PROPERTY:documents": "Dokumenty",
+  "PROPERTY:documents.nc15": "15NC",
+  "PROPERTY:documents.name": "Nazwa dokumentu",
 
   "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
+  "DOCUMENTS:NO_DATA": "Zlecenie nie ma dołączonych żadnych dokumentów.",
 
   "CHANGES:NO_DATA": "Zlecenie nie było modyfikowane.",
   "CHANGES:operations": "{count, plural, one{1 operacja} few{# operacje} other{# operacji}}",
+  "CHANGES:documents": "{count, plural, one{1 dokument} few{# dokumenty} other{# dokumentów}}",
   "CHANGES:time": "Czas",
   "CHANGES:user": "Użytkownik",
   "CHANGES:property": "Atrybut",

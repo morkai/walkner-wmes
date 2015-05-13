@@ -5,11 +5,13 @@
 define([
   '../time',
   '../core/Model',
-  './OperationCollection'
+  './OperationCollection',
+  './DocumentCollection'
 ], function(
   time,
   Model,
-  OperationCollection
+  OperationCollection,
+  DocumentCollection
 ) {
   'use strict';
 
@@ -46,6 +48,7 @@ define([
       data = Model.prototype.parse.call(this, data, xhr);
 
       data.operations = new OperationCollection(data.operations);
+      data.documents = new DocumentCollection(data.documents);
 
       return data;
     },
@@ -79,7 +82,8 @@ define([
         order.updatedAtText = time.format(order.updatedAt, 'LLLL');
       }
 
-      order.operations = order.operations === null ? [] : order.operations.toJSON();
+      order.operations = order.operations ? order.operations.toJSON() : [];
+      order.documents = order.documents ? order.documents.toJSON() : [];
 
       return order;
     }

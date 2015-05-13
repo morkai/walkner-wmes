@@ -9,6 +9,7 @@ define([
   '../Order',
   '../views/OrderDetailsView',
   '../views/OperationListView',
+  '../views/DocumentListView',
   '../views/OrderChangesView',
   'app/orders/templates/detailsPage'
 ], function(
@@ -18,6 +19,7 @@ define([
   Order,
   OrderDetailsView,
   OperationListView,
+  DocumentListView,
   OrderChangesView,
   detailsPageTemplate
 ) {
@@ -45,6 +47,7 @@ define([
         delayReasons: this.delayReasons
       });
       this.operationsView = new OperationListView({model: this.model});
+      this.documentsView = new DocumentListView({model: this.model});
       this.changesView = new OrderChangesView({
         model: this.model,
         delayReasons: this.delayReasons
@@ -52,6 +55,7 @@ define([
 
       this.setView('.orders-details-container', this.detailsView);
       this.setView('.orders-operations-container', this.operationsView);
+      this.setView('.orders-documents-container', this.documentsView);
       this.setView('.orders-changes-container', this.changesView);
     },
 

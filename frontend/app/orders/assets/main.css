@@ -21,7 +21,8 @@
   vertical-align: top;
   font-weight: normal;
 }
-.orders-operations-container {
+.orders-operations-container,
+.orders-documents-container {
   margin: 15px 0;
 }
 .orders-change + .orders-change {
@@ -32,9 +33,11 @@
 .orders-changes {
   position: relative;
 }
-.orders-changes .orders-operations {
+.orders-changes .orders-operations,
+.orders-changes .orders-documents {
   position: absolute;
   width: 100%;
+  z-index: 10002;
 }
 .orders-changes > .table > tbody + tbody {
   border-top-width: 1px;
@@ -46,7 +49,8 @@
 .orders-changes > .table > tbody > tr > td.is-hovered {
   background-color: #ffffd6;
 }
-.orders-changes-operations {
+.orders-changes-operations,
+.orders-changes-documents {
   cursor: pointer;
 }
 .orders-changes-comment {

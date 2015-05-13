@@ -24,6 +24,7 @@ exports.modules = [
   'warehouse/importer/transferOrders',
   'warehouse/importer/shiftMetrics',
   'xiconf/importer/orders',
+  'orderDocuments/importer',
   'reports/clipOrderCount'
 ];
 
@@ -54,6 +55,7 @@ exports.events = {
     info: [
       'events.**',
       'orders.synced',
+      'orders.documents.synced',
       'emptyOrders.synced',
       'clipOrderCount.created',
       'warehouse.*.synced',
@@ -61,7 +63,8 @@ exports.events = {
     ],
     error: [
       'warehouse.*.syncFailed',
-      'xiconf.orders.syncFailed'
+      'xiconf.orders.syncFailed',
+      'orders.documents.syncFailed'
     ]
   }
 };
@@ -86,7 +89,8 @@ exports['messenger/server'] = {
     'orders.synced',
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
-    'xiconf.orders.synced'
+    'xiconf.orders.synced',
+    'orders.documents.synced'
   ]
 };
 
@@ -145,5 +149,10 @@ exports['warehouse/importer/transferOrders'] = {
 
 exports['xiconf/importer/orders'] = {
   filterRe: /^T_COOIS_XICONF_[0-9]+\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orderDocuments/importer'] = {
+  filterRe: /^T_COOIS_DOCS_[0-9]+\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };

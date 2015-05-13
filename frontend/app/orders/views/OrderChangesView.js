@@ -12,8 +12,10 @@ define([
   'app/core/View',
   './OrderCommentFormView',
   './OperationListView',
+  './DocumentListView',
   '../Order',
   '../OperationCollection',
+  '../DocumentCollection',
   'app/orders/templates/change',
   'app/orders/templates/changes',
   'app/orderStatuses/util/renderOrderStatusLabel',
@@ -28,8 +30,10 @@ define([
   View,
   OrderCommentFormView,
   OperationListView,
+  DocumentListView,
   Order,
   OperationCollection,
+  DocumentCollection,
   renderChange,
   template,
   renderOrderStatusLabel,
@@ -43,6 +47,7 @@ define([
 
     events: {
       'click .orders-changes-operations': 'toggleOperations',
+      'click .orders-changes-documents': 'toggleDocuments',
       'mouseover .orders-changes-noTimeAndUser': function(e)
       {
         var $tr = this.$(e.target).closest('tbody').children().first();
@@ -60,6 +65,7 @@ define([
     {
       this.$lastToggle = null;
       this.operationListView = null;
+      this.documentListView = null;
       this.renderValueChange = this.renderValueChange.bind(this);
 
       this.setView('.orders-commentForm-container', new OrderCommentFormView({
@@ -142,6 +148,12 @@ define([
             + t('orders', 'CHANGES:operations', {count: value.length})
             + '</a>';
 
+        case 'documents':
+          return '<a class="orders-changes-documents" '
+            + 'data-i="' + i + '" data-property="' + valueProperty + '">'
+            + t('orders', 'CHANGES:documents', {count: value.length})
+            + '</a>';
+
         case 'statuses':
           return orderStatuses.findAndFill(value).map(renderOrderStatusLabel).join('');
 
@@ -161,41 +173,74 @@ define([
       }
     },
 
-    toggleOperations: function(e)
+    hideLastToggle: function(e)
     {
-      if (this.$lastToggle !== null)
+      if (this.$lastToggle === null)
       {
-        if (this.$lastToggle[0] === e.target)
-        {
-          this.$lastToggle = null;
-
-          this.operationListView.remove();
-          this.operationListView = null;
-
-          return;
-        }
-
-        this.$lastToggle.click();
+        return true;
       }
 
-      var $lastToggle = this.$(e.target);
+      if (this.$lastToggle[0] !== e.target)
+      {
+        this.$lastToggle.click();
 
+        return true;
+      }
+
+      if (this.operationListView !== null)
+      {
+        this.operationListView.remove();
+        this.operationListView = null;
+      }
+
+      if (this.documentListView !== null)
+      {
+        this.documentListView.remove();
+        this.documentListView = null;
+      }
+
+      this.$lastToggle = null;
+
+      return false;
+    },
+
+    toggleOperations: function(e)
+    {
+      if (this.hideLastToggle(e))
+      {
+        this.showLastToggle(e, OperationCollection, OperationListView, 'operations', 'operationListView');
+      }
+    },
+
+    toggleDocuments: function(e)
+    {
+      if (this.hideLastToggle(e))
+      {
+        this.showLastToggle(e, DocumentCollection, DocumentListView, 'documents', 'documentListView');
+      }
+    },
+
+    showLastToggle: function(e, Collection, ListView, collectionProperty, listViewProperty)
+    {
+      var $lastToggle = this.$(e.target);
       var i = $lastToggle.attr('data-i');
       var property = $lastToggle.attr('data-property') + 's';
-      var operations = new OperationCollection(this.model.get('changes')[i][property].operations);
-      var operationListView = new OperationListView({model: new Order({operations: operations})});
+      var collection = new Collection(this.model.get('changes')[i][property][collectionProperty]);
+      var orderData = {};
+      orderData[collectionProperty] = collection;
+      var listView = new ListView({model: new Order(orderData)});
 
       var top = $lastToggle.closest('tr')[0].offsetTop
         + $lastToggle.closest('td').outerHeight()
         + (this.options.showPanel !== false ? this.$('.panel-heading').first().outerHeight() : 0);
 
-      operationListView.render();
-      operationListView.$el.css('top', top);
+      listView.render();
+      listView.$el.css('top', top);
 
-      this.$el.append(operationListView.$el);
+      this.$el.append(listView.$el);
 
       this.$lastToggle = $lastToggle;
-      this.operationListView = operationListView;
+      this[listViewProperty] = listView;
     },
 
     onChangePush: function(change)

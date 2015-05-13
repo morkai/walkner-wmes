@@ -42,6 +42,13 @@ module.exports = function setupOrderModel(app, mongoose)
     _id: false
   });
 
+  var documentSchema = mongoose.Schema({
+    name: String,
+    nc15: String
+  }, {
+    _id: false
+  });
+
   var changeSchema = mongoose.Schema({
     time: Date,
     user: {},
@@ -91,6 +98,7 @@ module.exports = function setupOrderModel(app, mongoose)
       default: null
     },
     operations: [operationSchema],
+    documents: [documentSchema],
     changes: [changeSchema],
     importTs: Date
   }, {
@@ -133,6 +141,7 @@ module.exports = function setupOrderModel(app, mongoose)
       statusesSetAt: {},
       delayReason: null,
       operations: missingOrder.operations,
+      documents: [],
       changes: [],
       importTs: missingOrder.importTs
     };
