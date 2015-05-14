@@ -43,9 +43,13 @@
     "PROPERTY:active": "Active?",
     "PROPERTY:orgUnit": "Org Unit",
     "PROPERTY:vendor": "Vendor",
+    "PROPERTY:gender": "Gender",
 
     "ACTIVE:true": "Yes",
     "ACTIVE:false": "No",
+
+    "gender:female": "Female",
+    "gender:male": "Male",
 
     "FORM:ACTION:add": "Add user",
     "FORM:ACTION:edit": "Edit user",

@@ -40,7 +40,8 @@ define([
       registerDate: null,
       kdPosition: null,
       active: true,
-      vendor: null
+      vendor: null,
+      gender: null
     },
 
     initialize: function()

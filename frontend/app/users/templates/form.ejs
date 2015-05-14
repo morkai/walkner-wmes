@@ -4,33 +4,42 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('users', 'PROPERTY:firstName') %></label>
-          <input id="<%- idPrefix %>-firstName" class="form-control" type="text" name="firstName" autofocus maxlength="50">
-        </div>
-        <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-lastName" class="control-label"><%- t('users', 'PROPERTY:lastName') %></label>
-          <input id="<%- idPrefix %>-lastName" class="form-control" type="text" name="lastName" maxlength="50">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-login" class="control-label"><%- t('users', 'PROPERTY:login') %></label>
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('users', 'PROPERTY:login') %></label>
           <input id="<%- idPrefix %>-login" class="form-control" type="text" name="login" required maxlength="50">
         </div>
-        <div class="col-md-6 form-group">
+        <div class="col-md-3 form-group">
           <label for="<%- idPrefix %>-email" class="control-label"><%- t('users', 'PROPERTY:email') %></label>
           <input id="<%- idPrefix %>-email" class="form-control" type="email" name="email" maxlength="100">
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 form-group">
+        <div class="col-md-3 form-group">
           <label for="<%- idPrefix %>-password" class="control-label"><%- t('users', 'PROPERTY:password') %></label>
           <input id="<%- idPrefix %>-password" class="form-control" type="password" name="password">
         </div>
-        <div class="col-md-6 form-group">
+        <div class="col-md-3 form-group">
           <label for="<%- idPrefix %>-password2" class="control-label"><%- t('users', 'PROPERTY:password2') %></label>
           <input id="<%- idPrefix %>-password2" class="form-control" type="password">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('users', 'PROPERTY:firstName') %></label>
+          <input id="<%- idPrefix %>-firstName" class="form-control" type="text" name="firstName" autofocus maxlength="50">
+        </div>
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-lastName" class="control-label"><%- t('users', 'PROPERTY:lastName') %></label>
+          <input id="<%- idPrefix %>-lastName" class="form-control" type="text" name="lastName" maxlength="50">
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-gender" class="control-label"><%- t('users', 'PROPERTY:gender') %></label>
+          <div>
+            <label class="radio-inline">
+              <input type="radio" name="gender" value="female"> <%- t('users', 'gender:female') %>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="gender" value="male"> <%- t('users', 'gender:male') %>
+            </label>
+          </div>
         </div>
       </div>
       <div class="row">

@@ -160,6 +160,11 @@ module.exports = function syncUsers(app, usersModule, done)
           userModel = new User(kdUser);
         }
 
+        if (!userModel.gender)
+        {
+          userModel.gender = /a$/i.test(userModel.firstName) ? 'female' : 'male';
+        }
+
         this.userModel = userModel;
       },
       function saveUserModelStep()

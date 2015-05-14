@@ -57,6 +57,11 @@ module.exports = function setupUserModel(app, mongoose)
       type: String,
       ref: 'Vendor',
       default: null
+    },
+    gender: {
+      type: String,
+      enum: ['female', 'male'],
+      default: 'male'
     }
   }, {
     id: false,

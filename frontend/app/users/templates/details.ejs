@@ -10,6 +10,10 @@
           <div class="prop-value"><%= model.lastName || '' %> <%= model.firstName || '' %></div>
         </div>
         <div class="prop">
+          <div class="prop-name"><%- t('users', 'PROPERTY:gender') %></div>
+          <div class="prop-value"><%= model.gender ? t('users', 'gender:' + model.gender) : '-' %></div>
+        </div>
+        <div class="prop">
           <div class="prop-name"><%- t('users', 'PROPERTY:personellId') %></div>
           <div class="prop-value"><%= model.personellId || '-' %></div>
         </div>

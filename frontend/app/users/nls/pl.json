@@ -42,9 +42,13 @@
   "PROPERTY:active": "Aktywny?",
   "PROPERTY:orgUnit": "Jednostka organizacyjna",
   "PROPERTY:vendor": "Dostawca",
+  "PROPERTY:gender": "Płeć",
 
   "ACTIVE:true": "Tak",
   "ACTIVE:false": "Nie",
+
+  "gender:female": "Żeńska",
+  "gender:male": "Męska",
 
   "FORM:ACTION:add": "Dodaj użytkownika",
   "FORM:ACTION:edit": "Edytuj użytkownika",
