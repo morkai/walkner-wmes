@@ -19,6 +19,7 @@ define([
 
     columns: [
       {id: 'personellId', className: 'is-min'},
+      {id: 'login', className: 'is-min'},
       {id: 'lastName', className: 'is-min'},
       {id: 'firstName', className: 'is-min'},
       {id: 'company', className: 'is-min'},
