@@ -21,6 +21,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var XiconfResult = mongoose.model('XiconfResult');
   var XiconfOrderResult = mongoose.model('XiconfOrderResult');
   var XiconfOrder = mongoose.model('XiconfOrder');
+  var License = mongoose.model('License');
 
   var prodLinesToDataMap = {};
   var ordersToDataMap = {};
@@ -40,6 +41,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   app.broker.subscribe('xiconf.orders.synced', onXiconfOrdersSynced);
   app.broker.subscribe('xiconf.results.synced', onXiconfResultsSynced);
   app.broker.subscribe('production.stateChanged.**', onProductionStateChanged);
+  app.broker.subscribe('licenses.edited', onLicenseEdited);
 
   sio.sockets.on('connection', function(socket)
   {
@@ -147,6 +149,36 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   function onShiftChanged()
   {
     cleanUpOrders();
+  }
+
+  function onLicenseEdited(message)
+  {
+    var licenseId = message.model._id;
+    var licenseKey = message.model.key;
+
+    XiconfClient.find({license: licenseId, socket: {$ne: null}}, {socket: 1}).lean().exec(function(err, xiconfClients)
+    {
+      if (err)
+      {
+        return xiconfModule.error("Failed find a client on license edit: %s", err.message);
+      }
+
+      if (!xiconfClients.length)
+      {
+        return;
+      }
+
+      _.forEach(xiconfClients, function(xiconfClient)
+      {
+        handleConfigureRequest({socket: xiconfClient.socket, settings: {licenseKey: licenseKey}}, function(err)
+        {
+          if (err)
+          {
+            return xiconfModule.error("Failed to update the client's license key on license edit: %s", err.message);
+          }
+        });
+      });
+    });
   }
 
   function onXiconfOrdersSynced(message)
@@ -532,6 +564,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         app.broker.publish('xiconf.clients.connected', xiconfClient);
       }
     });
+
+    checkClientsLicenseKey(xiconfClient.socket, xiconfClient.license, data.licenseKey);
   }
 
   function handleCheckSerialNumberRequest(input, reply)
@@ -1728,5 +1762,34 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         delete ordersToProdLinesMap[orderNo];
       }
     }
+  }
+
+  function checkClientsLicenseKey(socket, licenseId, clientsLicenseKey)
+  {
+    if (!_.isString(licenseId) || !_.isString(clientsLicenseKey))
+    {
+      return;
+    }
+
+    License.findById(licenseId, function(err, license)
+    {
+      if (err)
+      {
+        return xiconfModule.error("Failed to find license [%s]: %s", licenseId, err.message);
+      }
+
+      if (!license || clientsLicenseKey === license.key)
+      {
+        return;
+      }
+
+      handleConfigureRequest({socket: socket, settings: {licenseKey: license.key}}, function(err)
+      {
+        if (err)
+        {
+          xiconfModule.warn("Failed to update the client's license key on client connect: %s", err.message);
+        }
+      });
+    });
   }
 };
