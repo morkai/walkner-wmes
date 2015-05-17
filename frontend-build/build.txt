@@ -104,13 +104,23 @@ app/icpo/assets/main.css
 ----------------
 app/icpo/assets/main.css
 
+app/kaizenOrders/assets/details.css
+----------------
+app/kaizenOrders/assets/details.css
+
 app/kaizenOrders/assets/form.css
 ----------------
 app/kaizenOrders/assets/form.css
 
+app/kaizenOrders/assets/list.css
+----------------
+app/kaizenOrders/assets/list.css
+
 app/kaizenOrders/assets/main.css
 ----------------
+app/kaizenOrders/assets/./list.css
 app/kaizenOrders/assets/./form.css
+app/kaizenOrders/assets/./details.css
 app/kaizenOrders/assets/main.css
 
 app/licenses/assets/main.css
@@ -374,6 +384,7 @@ app/nls/locale/pl.js
 app/nls/pl/updater.js
 i18n!app/nls/updater
 app/updater/index.js
+app/data/loadedModules.js
 app/core/PaginationData.js
 app/core/Collection.js
 app/core/Model.js
@@ -598,6 +609,8 @@ i18n!app/nls/mrpControllers
 app/mrpControllers/routes.js
 app/data/createOnDemandStorage.js
 app/delayReasons/storage.js
+app/orders/Document.js
+app/orders/DocumentCollection.js
 app/orders/Order.js
 app/orders/OrderCollection.js
 app/orderStatuses/OrderStatus.js
@@ -610,6 +623,8 @@ app/orders/views/OrderFilterView.js
 app/orders/pages/OrderListPage.js
 app/orders/templates/details.js
 app/orders/views/OrderDetailsView.js
+app/orders/templates/documentList.js
+app/orders/views/DocumentListView.js
 app/orders/templates/commentForm.js
 app/orders/views/OrderCommentFormView.js
 app/orders/templates/change.js
@@ -823,9 +838,6 @@ app/icpo/util/serializeIcpoLicenseFeatures.js
 app/licenses/License.js
 app/licenses/LicenseCollection.js
 app/licenses/routes.js
-app/kaizenOrders/KaizenOrder.js
-app/kaizenOrders/KaizenOrderCollection.js
-app/core/pages/FilteredListPage.js
 app/kaizenSections/KaizenSection.js
 app/kaizenSections/KaizenSectionCollection.js
 app/kaizenAreas/KaizenArea.js
@@ -837,6 +849,9 @@ app/kaizenCauses/KaizenCauseCollection.js
 app/kaizenRisks/KaizenRisk.js
 app/kaizenRisks/KaizenRiskCollection.js
 app/kaizenOrders/dictionaries.js
+app/kaizenOrders/KaizenOrder.js
+app/kaizenOrders/KaizenOrderCollection.js
+app/core/pages/FilteredListPage.js
 app/kaizenOrders/templates/filter.js
 app/kaizenOrders/views/KaizenOrderFilterView.js
 app/kaizenOrders/views/KaizenOrderListView.js
@@ -953,6 +968,7 @@ app/nls/locale/pl.js
 app/nls/pl/updater.js
 i18n!app/nls/updater
 app/updater/index.js
+app/data/loadedModules.js
 app/core/PaginationData.js
 app/core/Collection.js
 app/core/Model.js
