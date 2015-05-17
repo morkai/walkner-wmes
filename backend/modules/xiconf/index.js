@@ -6,7 +6,7 @@
 
 var step = require('h5.step');
 var setUpRoutes = require('./routes');
-var setUpCommands = require('./commands');
+var setUpRemoteCoordinator = require('./remoteCoordinator');
 var setUpResultsImporter = require('./importer/results');
 var setUpNotifier = require('./notifier');
 
@@ -62,7 +62,7 @@ exports.start = function startXiconfModule(app, module)
       config.productionId,
       config.settingsId
     ],
-    setUpCommands.bind(null, app, module)
+    setUpRemoteCoordinator.bind(null, app, module)
   );
 
   app.onModuleReady(
