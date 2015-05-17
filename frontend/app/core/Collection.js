@@ -95,6 +95,13 @@ define([
     return this.nlsDomain || this.model.prototype.nlsDomain;
   };
 
+  Collection.prototype.getLabel = function(id)
+  {
+    var model = this.get(id);
+
+    return model ? model.getLabel() : null;
+  };
+
   Collection.prototype.createRqlQuery = function(rqlQuery)
   {
     if (_.isString(rqlQuery))
