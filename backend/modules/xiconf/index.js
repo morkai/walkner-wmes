@@ -76,7 +76,8 @@ exports.start = function startXiconfModule(app, module)
 
   app.onModuleReady(
     [
-      config.mongooseId
+      config.mongooseId,
+      config.sioId
     ],
     resetClientsLastSeenAt
   );
