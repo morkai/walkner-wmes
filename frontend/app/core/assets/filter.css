@@ -5,7 +5,7 @@
   padding: 1em 1em 0 0;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 .filter-form .form-group {
   display: inline-block;
@@ -27,11 +27,13 @@
 .filter-form .filter-actions {
   margin-left: 1em;
   vertical-align: bottom;
+  align-self: flex-end;
 }
 .filter-form.is-vertical .filter-actions {
   padding-left: 0;
   margin-left: 1em;
   border-left: 0;
+  align-self: flex-start;
 }
 .filter-actions .dropdown-menu a {
   cursor: pointer;
@@ -124,6 +126,9 @@ input[type=checkbox].filter-inLabel {
 }
 .filter-inlineInputLabels .form-control {
   display: inline;
+}
+.filter-form .no-label {
+  align-self: flex-end;
 }
 @media (max-width: 767px) {
   .filter-container > .well {
