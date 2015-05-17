@@ -24,6 +24,10 @@
         <input id="<%- idPrefix %>-date" class="form-control" type="text" name="date" placeholder="YYYY-MM-DD">
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-expireDate" class="control-label"><%- t('licenses', 'PROPERTY:expireDate') %></label>
+        <input id="<%- idPrefix %>-expireDate" class="form-control" type="date" name="expireDate" placeholder="YYYY-MM-DD">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-licensee" class="control-label is-required"><%- t('licenses', 'PROPERTY:licensee') %></label>
         <input id="<%- idPrefix %>-licensee" class="form-control" type="text" name="licensee" required>
       </div>

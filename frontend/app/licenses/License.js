@@ -40,6 +40,7 @@ define([
 
       obj.appName = t('licenses', 'app:' + obj.appId);
       obj.date = time.format(obj.date, 'YYYY-MM-DD');
+      obj.expireDate = obj.expireDate ? time.format(obj.expireDate, 'YYYY-MM-DD') : '-';
       obj.features = this.serializeFeatures();
 
       return obj;

@@ -15,7 +15,7 @@ define([
 
     model: License,
 
-    rqlQuery: 'limit(15)&sort(appId,date)'
+    rqlQuery: 'limit(15)&sort(expireDate)'
 
   });
 });

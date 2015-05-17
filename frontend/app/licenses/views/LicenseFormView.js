@@ -24,6 +24,7 @@ define([
       var formData = this.model.toJSON();
 
       formData.date = time.format(formData.date, 'YYYY-MM-DD');
+      formData.expireDate = _.isEmpty(formData.expireDate) ? '' : time.format(formData.expireDate, 'YYYY-MM-DD');
 
       return formData;
     },
@@ -33,6 +34,10 @@ define([
       formData._id = !formData._id || _.isEmpty(formData._id.trim()) ? null : formData._id;
       formData.appVersion = _.isEmpty(formData.appVersion) ? '*' : formData.appVersion;
       formData.date = _.isEmpty(formData.date) ? null : formData.date;
+
+      var expireDate = time.getMoment(formData.expireDate, 'YYYY-MM-DD');
+
+      formData.expireDate = expireDate.isValid() ? expireDate.toISOString() : null;
 
       return formData;
     }

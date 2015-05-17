@@ -41,6 +41,10 @@ module.exports = function setupLicenseModel(app, mongoose)
       type: String,
       required: true,
       trim: true
+    },
+    expireDate: {
+      type: Date,
+      default: null
     }
   }, {
     id: false

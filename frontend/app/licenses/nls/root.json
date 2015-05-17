@@ -19,6 +19,7 @@
     "PROPERTY:appName": "App name",
     "PROPERTY:appVersion": "App version",
     "PROPERTY:date": "Issue date",
+    "PROPERTY:expireDate": "Expiration date",
     "PROPERTY:features": "Features",
     "PROPERTY:licensee": "Licensee",
     "PROPERTY:key": "License key",
