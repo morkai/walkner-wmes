@@ -226,18 +226,28 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         var totalDuration = lastFinishedAt - firstStartedAt;
         var workDuration = calculateNonOverlappingWorkDuration(ordersTimes);
 
-        var programItemCount = 0;
-        var ledItemCount = 0;
+        var incompleteProgramItemCount = 0;
+        var incompleteLedItemCount = 0;
 
         _.forEach(this.xiconfOrder.items, function(item)
         {
+          if (item.quantityDone >= item.quantityTodo)
+          {
+            return;
+          }
+
           if (item.kind === 'program')
           {
-            programItemCount += 1;
+            if (incompleteProgramItemCount > 0 && item.quantityDone === 0)
+            {
+              return;
+            }
+
+            incompleteProgramItemCount += 1;
           }
           else
           {
-            ledItemCount += 1;
+            incompleteLedItemCount += 1;
           }
         });
 
@@ -249,11 +259,16 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         {
           subject = '[WMES] Przerwane zlecenie ' + orderNo;
 
-          if (programItemCount > 0)
+          if (incompleteProgramItemCount && incompleteLedItemCount)
+          {
+            text.push('Przerwano wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw');
+            text.push('i nie zeskanowano wszystkich płytek LED!');
+          }
+          else if (incompleteProgramItemCount)
           {
             text.push('Przerwano wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
           }
-          else
+          else if (incompleteLedItemCount)
           {
             text.push('Przerwano wykonywanie zlecenia, w którym nie zeskanowano wszystkich płytek LED!');
           }
@@ -262,11 +277,16 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         {
           subject = '[WMES] Nieukończone zlecenie ' + orderNo;
 
-          if (programItemCount > 0)
+          if (incompleteProgramItemCount && incompleteLedItemCount)
+          {
+            text.push('Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw');
+            text.push('i nie zeskanowano wszystkich płytek LED!');
+          }
+          else if (incompleteProgramItemCount)
           {
             text.push('Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
           }
-          else
+          else if (incompleteLedItemCount)
           {
             text.push('Zakończono wykonywanie zlecenia, w którym nie zeskanowano wszystkich płytek LED!');
           }
