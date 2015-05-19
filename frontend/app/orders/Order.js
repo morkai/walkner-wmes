@@ -83,7 +83,18 @@ define([
       }
 
       order.operations = order.operations ? order.operations.toJSON() : [];
-      order.documents = order.documents ? order.documents.toJSON() : [];
+
+      if (!Array.isArray(order.documents))
+      {
+        if (order.documents && order.documents.toJSON)
+        {
+          order.documents = order.documents.toJSON();
+        }
+        else
+        {
+          order.documents = [];
+        }
+      }
 
       return order;
     }
