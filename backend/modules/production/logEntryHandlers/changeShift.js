@@ -51,18 +51,23 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         logEntry._id
       );
 
-      var i;
-      var l;
-
-      for (i = 0, l = prodShiftOrders.length; i < l; ++i)
-      {
-        finishBugged('prod shift order', prodShiftOrders[i], this.parallel());
-      }
-
-      for (i = 0, l = prodDowntimes.length; i < l; ++i)
-      {
-        finishBugged('prod downtime', prodDowntimes[i], this.parallel());
-      }
+      step(
+        function()
+        {
+          for (var i = 0, l = prodDowntimes.length; i < l; ++i)
+          {
+            finishBugged('prod downtime', prodDowntimes[i], this.parallel());
+          }
+        },
+        function()
+        {
+          for (var i = 0, l = prodShiftOrders.length; i < l; ++i)
+          {
+            finishBugged('prod shift order', prodShiftOrders[i], this.parallel());
+          }
+        },
+        this.next()
+      );
     },
     function createProdShiftStep()
     {
@@ -131,7 +136,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       buggedProdModel.finishedAt = new Date(buggedProdModel.date.getTime() + (8 * 3600 * 1000) - 1);
 
-      buggedProdModel.save(function(err)
+      buggedProdModel.recalcDurations(true, function(err)
       {
         if (err)
         {
