@@ -30,8 +30,7 @@ define([
         selector: {
           name: 'and',
           args: [
-            {name: 'lt', args: ['reqDate', time.getMoment().startOf('day').add(1, 'days').valueOf()]},
-            {name: 'in', args: ['status', [0, 1]]}
+            {name: 'lt', args: ['reqDate', time.getMoment().startOf('day').add(1, 'days').valueOf()]}
           ]
         }
       });
