@@ -37,6 +37,8 @@ module.exports = function startCoreRoutes(app, express)
 
   express.get('/', showIndex);
 
+  express.get('/redirect', redirectRoute);
+
   express.get('/time', function(req, res)
   {
     res.send(Date.now().toString());
@@ -93,6 +95,11 @@ module.exports = function startCoreRoutes(app, express)
       mainJsFile: app.options.mainJsFile || 'main.js',
       mainCssFile: app.options.mainCssFile || 'assets/main.css'
     });
+  }
+
+  function redirectRoute(req, res)
+  {
+    res.redirect(req.query.referrer || '/');
   }
 
   function sendRequireJsConfig(req, res)

@@ -6,11 +6,29 @@
 {
   'use strict';
 
-  if (!window.location.origin)
+  var location = window.location;
+
+  if (!location.origin)
   {
-    window.location.origin = window.location.protocol + '//'
-      + window.location.hostname
-      + (window.location.port ? (':' + window.location.port) : '');
+    location.origin = location.protocol + '//' + location.hostname + (location.port ? (':' + location.port) : '');
+  }
+
+  if (window.ENV === 'testing')
+  {
+    var matches = location.hash.match(/^(?:#proxy=([0-9]+))?(#.*?)?$/);
+
+    if (!matches || matches[1] === undefined || matches[1] === localStorage.getItem('PROXY'))
+    {
+      location.href = '/redirect?referrer=' + encodeURIComponent(
+        location.origin + '/#proxy=' + Date.now() + (matches && matches[2] ? matches[2] : '#')
+      );
+
+      return;
+    }
+
+    window.location.hash = matches && matches[2] ? matches[2] : '#';
+
+    localStorage.setItem('PROXY', matches[1]);
   }
 
   var domains = [];
