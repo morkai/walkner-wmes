@@ -88,7 +88,7 @@ module.exports = function startCoreRoutes(app, express)
     });
 
     res.render('index', {
-      appCache: appCache,
+      appCacheManifest: appCache ? 'manifest.appcache' : '',
       appData: appData,
       mainJsFile: app.options.mainJsFile || 'main.js',
       mainCssFile: app.options.mainCssFile || 'assets/main.css'

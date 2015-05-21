@@ -65,8 +65,8 @@ exports.modules = [
   'sio'
 ];
 
-exports.mainJsFile = 'wmes-main.js';
-exports.mainCssFile = 'assets/wmes-main.css';
+exports.mainJsFile = '/wmes-main.js';
+exports.mainCssFile = '/assets/wmes-main.css';
 
 exports.dictionaryModules = {
   prodFunctions: 'PROD_FUNCTIONS',
@@ -277,7 +277,14 @@ exports.updater = {
     cwd: __dirname + '/../',
     timeout: 30000
   },
-  versionsKey: 'wmes'
+  versionsKey: 'wmes',
+  manifests: [
+    {
+      path: '/manifest.appcache',
+      mainJsFile: exports.mainJsFile,
+      mainCssFile: exports.mainCssFile
+    }
+  ]
 };
 
 exports.reports = {

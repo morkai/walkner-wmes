@@ -4,18 +4,30 @@
 
 'use strict';
 
+var _ = require('lodash');
+
 module.exports = function setUpUpdaterRoutes(app, updaterModule)
 {
   var express = app[updaterModule.config.expressId];
 
-  express.get('/manifest.appcache', function(req, res)
+  _.forEach(updaterModule.config.manifests, function(manifestOptions)
   {
-    if (app.options.env === 'development' || typeof updaterModule.manifest !== 'string')
+    express.get(manifestOptions.path, function(req, res)
     {
-      return res.sendStatus(404);
-    }
+      var template = manifestOptions.template || updaterModule.manifest;
 
-    res.type('text/cache-manifest');
-    res.send(updaterModule.manifest.replace('{version}', 'v' + updaterModule.getFrontendVersion()));
+      if (app.options.env === 'development' || typeof template !== 'string')
+      {
+        return res.sendStatus(404);
+      }
+
+      var cacheManifest = template
+        .replace('{version}', 'v' + updaterModule.getFrontendVersion())
+        .replace('{mainJsFile}', manifestOptions.mainJsFile)
+        .replace('{mainCssFile}', manifestOptions.mainCssFile);
+
+      res.type('text/cache-manifest');
+      res.send(cacheManifest);
+    });
   });
 };

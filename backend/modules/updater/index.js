@@ -24,7 +24,8 @@ exports.DEFAULT_CONFIG = {
     exe: 'git',
     cwd: process.cwd(),
     timeout: 60000
-  }
+  },
+  manifests: []
 };
 
 exports.start = function startUpdaterModule(app, module)
