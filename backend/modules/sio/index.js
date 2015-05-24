@@ -66,6 +66,8 @@ exports.start = function startIoModule(app, sioModule)
 
   sioModule = app[sioModule.name] = _.merge(sio, sioModule);
 
+  sio.sockets.setMaxListeners(25);
+
   sioModule.on('connection', function(socket)
   {
     socket.handshake.connectedAt = Date.now();
