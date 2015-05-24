@@ -23,6 +23,7 @@
 
     "TYPE:prod": "Production",
     "TYPE:dist": "Distribution",
+    "TYPE:other": "Other",
 
     "FORM:ACTION:add": "Add division",
     "FORM:ACTION:edit": "Edit division",

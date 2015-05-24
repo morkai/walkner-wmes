@@ -14,7 +14,7 @@ module.exports = function setupDivisionModel(app, mongoose)
     },
     type: {
       type: String,
-      enum: ['prod', 'dist'],
+      enum: ['prod', 'dist', 'other'],
       default: 'prod'
     },
     description: {

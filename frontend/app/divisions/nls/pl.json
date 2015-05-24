@@ -22,6 +22,7 @@
 
   "TYPE:prod": "Produkcja",
   "TYPE:dist": "Dystrybucja",
+  "TYPE:other": "Inny",
 
   "FORM:ACTION:add": "Dodaj wydział",
   "FORM:ACTION:edit": "Edytuj wydział",
