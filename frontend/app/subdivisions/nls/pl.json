@@ -26,6 +26,7 @@
   "TYPE:assembly": "Montaż",
   "TYPE:press": "Tłocznia",
   "TYPE:storage": "Magazyn",
+  "TYPE:other": "Inny",
 
   "FORM:ACTION:add": "Dodaj dział",
   "FORM:ACTION:edit": "Edytuj dział",

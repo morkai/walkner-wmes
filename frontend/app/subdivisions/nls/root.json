@@ -27,6 +27,7 @@
     "TYPE:assembly": "Assembly",
     "TYPE:press": "Press",
     "TYPE:storage": "Warehouse",
+    "TYPE:other": "Other",
 
     "FORM:ACTION:add": "Add subdivision",
     "FORM:ACTION:edit": "Edit subdivision",
