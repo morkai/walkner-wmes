@@ -89,10 +89,48 @@ exports.start = function startIoModule(app, sioModule)
 
     socket.on('time', function(reply)
     {
-      if (typeof reply === 'function')
+      if (_.isFunction(reply))
       {
         reply(Date.now(), 'Europe/Warsaw');
       }
+    });
+
+    socket.on('sio.getConnections', function(reply)
+    {
+      if (!_.isFunction(reply) || !socket.handshake.user || !socket.handshake.user.super)
+      {
+        return;
+      }
+
+      var res = {
+        socketCount: 0,
+        userCount: 0,
+        users: {}
+      };
+
+      _.forEach(sioModule.sockets.connected, function(socket)
+      {
+        ++res.socketCount;
+
+        var user = socket.handshake.user || {};
+
+        if (res.users[user._id] === undefined)
+        {
+          res.users[user._id] = {
+            _id: user._id,
+            login: user.login,
+            name: ((user.lastName || '') + ' ' + (user.firstName || '')).trim(),
+            ipAddress: user.ipAddress,
+            sockets: []
+          };
+
+          ++res.userCount;
+        }
+
+        res.users[user._id].sockets.push(socket.id);
+      });
+
+      reply(res);
     });
   });
 };
