@@ -25,6 +25,7 @@ exports.start = function startOrdersImporterModule(app, module)
     tzOffsetMs: true,
     statusesSetAt: true,
     delayReason: true,
+    documents: true,
     changes: true,
     importTs: true
   };
