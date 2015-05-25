@@ -543,6 +543,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       _id: data.srcId,
       connectedAt: new Date(),
       disconnectedAt: null,
+      httpPort: data.httpPort || 1337,
       socket: socket.id,
       prodLine: data.prodLineId,
       license: data.licenseId || null,

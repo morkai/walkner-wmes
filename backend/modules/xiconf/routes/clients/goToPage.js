@@ -11,7 +11,7 @@ module.exports = function goToPageRoute(app, xiconfModule, req, res, next)
   var mongoose = app[xiconfModule.config.mongooseId];
   var XiconfClient = mongoose.model('XiconfClient');
 
-  XiconfClient.findById(req.params.id, {socket: 1}).lean().exec(function(err, xiconfClient)
+  XiconfClient.findById(req.params.id, {socket: 1, httpPort: 1}).lean().exec(function(err, xiconfClient)
   {
     if (err)
     {
@@ -25,6 +25,7 @@ module.exports = function goToPageRoute(app, xiconfModule, req, res, next)
 
     var socket = sio.sockets.connected[xiconfClient.socket];
     var remoteAddress;
+    var httpPort = xiconfClient.httpPort || 1337;
 
     if (socket && socket.conn.remoteAddress !== '127.0.0.1')
     {
@@ -35,6 +36,6 @@ module.exports = function goToPageRoute(app, xiconfModule, req, res, next)
       remoteAddress = xiconfClient._id.split('-')[0];
     }
 
-    res.redirect('http://' + remoteAddress + ':1337/#' + (req.query.page || ''));
+    res.redirect('http://' + remoteAddress + ':' + httpPort + '/#' + (req.query.page || ''));
   });
 };

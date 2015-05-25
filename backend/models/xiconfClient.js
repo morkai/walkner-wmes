@@ -19,6 +19,10 @@ module.exports = function setupXiconfClientModel(app, mongoose)
       type: Date,
       default: null
     },
+    httpPort: {
+      type: Number,
+      default: 1337
+    },
     socket: {
       type: String,
       default: null
