@@ -4,18 +4,91 @@
 
 define([
   'underscore',
+  'h5.rql/index',
   'app/i18n',
   'app/user'
 ], function(
   _,
+  rql,
   t,
   user
 ) {
   'use strict';
 
-  return function setUpUserSelect2($input, options)
+  function userToData(user)
   {
-    return $input.select2(_.extend({
+    if (user.id && user.text)
+    {
+      return user;
+    }
+
+    var name = user.lastName && user.firstName
+      ? (user.lastName + ' ' + user.firstName)
+      : (user.name || user.login || user._id);
+    var text = name;
+
+    if (user.personellId)
+    {
+      text += ' (' + user.personellId + ')';
+    }
+
+    return {
+      id: user._id,
+      text: text,
+      user: user
+    };
+  }
+
+  function getSystemData()
+  {
+    return {
+      id: '$SYSTEM',
+      text: t('users', 'select2:users:system'),
+      user: null
+    };
+  }
+
+  function getRootData()
+  {
+    var root = user.getRootUserData();
+
+    return {
+      id: root._id,
+      text: root.name || root.login,
+      user: root
+    };
+  }
+
+  function createDefaultRqlQuery(rql, term)
+  {
+    term = term.trim();
+
+    var property = /^[0-9]+$/.test(term) ? 'personellId' : 'lastName';
+
+    var options = {
+      fields: {},
+      sort: {},
+      limit: 20,
+      skip: 0,
+      selector: {
+        name: 'and',
+        args: [
+          {name: 'regex', args: [property, '^' + term, 'i']}
+        ]
+      }
+    };
+
+    options.sort[property] = 1;
+
+    return rql.Query.fromObject(options);
+  }
+
+  function setUpUserSelect2($input, options)
+  {
+    var rqlQueryProvider = options && options.rqlQueryProvider ? options.rqlQueryProvider : createDefaultRqlQuery;
+    var userFilter = options && options.userFilter ? options.userFilter : null;
+
+    $input.select2(_.extend({
       openOnEnter: null,
       allowClear: true,
       minimumInputLength: 3,
@@ -25,72 +98,65 @@ define([
         quietMillis: 300,
         url: function(term)
         {
-          term = term.trim();
-
-          var property = /^[0-9]+$/.test(term) ? 'personellId' : 'lastName';
-
-          term = encodeURIComponent('^' + term);
-
-          return '/users'
-            + '?select(personellId,lastName,firstName,login)'
-            + '&sort(' + property + ')'
-            + '&limit(20)&regex(' + property + ',' + term + ',i)';
+          return '/users' + '?' + rqlQueryProvider(rql, term);
         },
         results: function(data, page, query)
         {
-          var root = user.getRootUserData();
-          var results = [{
-            _id: '$SYSTEM',
-            text: t('users', 'select2:users:system'),
-            name: t('users', 'select2:users:system'),
-            login: null,
-            personellId: '-'
-          }, {
-            _id: root._id,
-            text: root.name || root.login,
-            name: root.name || root.login,
-            login: root.login,
-            personellId: '-'
-          }].filter(function(user)
+          var results = [getSystemData(), getRootData()].filter(function(user)
           {
             return user.text.toLowerCase().indexOf(query.term.toLowerCase()) !== -1;
           });
 
           var users = results.concat(data.collection || []);
 
-          if (options && options.userFilter)
+          if (userFilter)
           {
-            users = users.filter(options.userFilter);
+            users = users.filter(userFilter);
           }
 
           return {
-            results: users.map(function(user)
-            {
-              var name = user.lastName && user.firstName
-                ? (user.lastName + ' ' + user.firstName)
-                : (user.name || user.login || user._id);
-              var text = name;
-
-              if (user.personellId)
-              {
-                text += ' (' + user.personellId + ')';
-              }
-
-              return {
-                id: user._id,
-                text: text,
-                name: name,
-                login: user.login,
-                personellId: user.personellId || '-'
-              };
-            })
-            .sort(function(a, b)
-            {
-              return a.text.localeCompare(b.text);
-            })
+            results: users.map(userToData).sort(function(a, b) { return a.text.localeCompare(b.text); })
           };
         }
       }
     }, options));
-  };
+
+    var userId = $input.val();
+    var rootData = getRootData();
+
+    if (userId === rootData.id)
+    {
+      $input.select2('data', rootData);
+    }
+    else if (userId === '$SYSTEM')
+    {
+      $input.select2('data', getSystemData());
+    }
+    else if (userId && options.view)
+    {
+      var req = options.view.ajax({
+        type: 'GET',
+        url: '/users?_id=' + userId
+      });
+
+      req.done(function(res)
+      {
+        if (res.collection && res.collection.length)
+        {
+          $input.select2('data', userToData(res.collection[0]));
+
+          if (options.onDataLoaded)
+          {
+            options.onDataLoaded();
+          }
+        }
+      });
+    }
+
+    return $input;
+  }
+
+  setUpUserSelect2.defaultRqlQueryProvider = createDefaultRqlQuery;
+
+  return setUpUserSelect2;
 });
