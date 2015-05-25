@@ -13,7 +13,6 @@ module.exports = function parseXiconfOrders(input)
 {
   var PROGRAM_RE = /^.*?Program\s*(.*?)(?:'|"|”)?$/i;
   var GPRS_RE = /^LC/i;
-  var LED_RE = /LED.*?line/i;
 
   return parseSapTextTable(input, {
     columnMatchers: {
@@ -39,7 +38,7 @@ module.exports = function parseXiconfOrders(input)
       var programMatches = obj.name.match(PROGRAM_RE);
       var isProgramOrder = programMatches !== null;
       var isGprsOrder = isProgramOrder && GPRS_RE.test(programMatches[1]);
-      var isLedOrder = !isProgramOrder && LED_RE.test(obj.name);
+      var isLedOrder = !isProgramOrder;
 
       if (isGprsOrder || (!isProgramOrder && !isLedOrder) || obj.nc12.length !== 12)
       {
