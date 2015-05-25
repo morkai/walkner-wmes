@@ -60,6 +60,7 @@ define([
       });
 
       setUpUsersSelect2(this.$id('user'), {
+        view: this,
         width: 300
       });
     },
