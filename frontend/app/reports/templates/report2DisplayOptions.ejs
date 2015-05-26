@@ -4,6 +4,8 @@
       <label for="<%- idPrefix %>-series"><%- t('reports', 'options:series') %></label>
       <select id="<%- idPrefix %>-series" name="series[]" class="form-control is-expandable" size="1" multiple>
         <option value="clipOrderCount"><%- t('reports', 'metrics:clip:orderCount') %></option>
+        <option value="clipProductionCount"><%- t('reports', 'metrics:clip:productionCount') %></option>
+        <option value="clipEndToEndCount"><%- t('reports', 'metrics:clip:endToEndCount') %></option>
         <option value="clipProduction"><%- t('reports', 'metrics:clip:production') %></option>
         <option value="clipEndToEnd"><%- t('reports', 'metrics:clip:endToEnd') %></option>
       </select>

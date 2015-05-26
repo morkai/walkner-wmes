@@ -74,14 +74,18 @@ define([
       this.updateExtremes(false);
 
       var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
+      var series = this.chart.series;
 
-      this.chart.series[0].update({marker: markerStyles}, false);
-      this.chart.series[1].update({marker: markerStyles}, false);
-      this.chart.series[2].update({marker: markerStyles}, false);
+      for (var i = 0; i < series.length; ++i)
+      {
+        series[i].update({marker: markerStyles}, false);
+      }
 
       this.chart.series[0].setData(chartData.orderCount, false);
-      this.chart.series[1].setData(chartData.production, false);
-      this.chart.series[2].setData(chartData.endToEnd, true);
+      this.chart.series[1].setData(chartData.productionCount, false);
+      this.chart.series[2].setData(chartData.endToEndCount, false);
+      this.chart.series[3].setData(chartData.production, false);
+      this.chart.series[4].setData(chartData.endToEnd, true);
     },
 
     serializeChartData: function()
@@ -295,6 +299,26 @@ define([
             type: 'area',
             yAxis: 0,
             data: chartData.orderCount,
+            visible: this.displayOptions.isSeriesVisible('clipOrderCount')
+          },
+          {
+            id: 'clipProductionCount',
+            name: t('reports', 'metrics:clip:productionCount'),
+            color: this.settings.getColor('clipProduction'),
+            type: 'line',
+            dashStyle: 'LongDash',
+            yAxis: 0,
+            data: chartData.productionCount,
+            visible: this.displayOptions.isSeriesVisible('clipOrderCount')
+          },
+          {
+            id: 'clipEndToEndCount',
+            name: t('reports', 'metrics:clip:endToEndCount'),
+            color: this.settings.getColor('clipEndToEnd'),
+            type: 'line',
+            dashStyle: 'LongDash',
+            yAxis: 0,
+            data: chartData.endToEndCount,
             visible: this.displayOptions.isSeriesVisible('clipOrderCount')
           },
           {

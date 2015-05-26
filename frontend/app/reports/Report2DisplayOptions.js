@@ -13,6 +13,8 @@ define([
 
   var SERIES = [
     'clipOrderCount',
+    'clipProductionCount',
+    'clipEndToEndCount',
     'clipProduction',
     'clipEndToEnd'
   ];
@@ -84,7 +86,9 @@ define([
 
         extremes.maxClipOrderCount = Math.max(
           extremes.maxClipOrderCount,
-          visibleSeries.clipOrderCount ? maxClip.orderCount : 0
+          visibleSeries.clipOrderCount ? maxClip.orderCount : 0,
+          visibleSeries.clipProductionCount ? maxClip.productionCount : 0,
+          visibleSeries.clipEndToEndCount ? maxClip.endToEndCount : 0
         );
 
         extremes.maxClipPercent = Math.max(

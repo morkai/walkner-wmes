@@ -33,7 +33,9 @@
     "coeffs:efficiency": "Efficiency",
     "coeffs:productivity": "Productivity",
     "coeffs:productivityNoWh": "Prod. w/o WH",
-    "metrics:clip:orderCount": "Order count",
+    "metrics:clip:orderCount": "All order count",
+    "metrics:clip:productionCount": "Production order count",
+    "metrics:clip:endToEndCount": "End2End order count",
     "metrics:clip:production": "CLIP Production",
     "metrics:clip:endToEnd": "CLIP End2End",
 

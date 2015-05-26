@@ -27,7 +27,9 @@ define([
         clip: {
           orderCount: [],
           production: [],
-          endToEnd: []
+          productionCount: [],
+          endToEnd: [],
+          endToEndCount: []
         },
         maxClip: {
           orderCount: 0,
@@ -80,26 +82,36 @@ define([
     {
       var clip = {
         orderCount: [],
+        productionCount: [],
+        endToEndCount: [],
         production: [],
         endToEnd: []
       };
       var maxClip = {
         orderCount: 0,
+        productionCount: 0,
+        endToEndCount: 0,
         production: 0,
         endToEnd: 0
       };
 
-      clipList.forEach(function(metrics)
+      _.forEach(clipList, function(metrics)
       {
         var orderCount = metrics.orderCount || 0;
+        var productionCount = (orderCount * metrics.production) || 0;
+        var endToEndCount = (orderCount * metrics.endToEnd) || 0;
         var production = Math.round((metrics.production || 0) * 100);
         var endToEnd = Math.round((metrics.endToEnd || 0) * 100);
 
         clip.orderCount.push({x: metrics.key, y: orderCount});
         clip.production.push({x: metrics.key, y: production});
+        clip.productionCount.push({x: metrics.key, y: productionCount});
         clip.endToEnd.push({x: metrics.key, y: endToEnd});
+        clip.endToEndCount.push({x: metrics.key, y: endToEndCount});
 
         maxClip.orderCount = Math.max(maxClip.orderCount, orderCount);
+        maxClip.productionCount = Math.max(maxClip.productionCount, productionCount);
+        maxClip.endToEndCount = Math.max(maxClip.endToEndCount, endToEndCount);
         maxClip.production = Math.max(maxClip.production, production);
         maxClip.endToEnd = Math.max(maxClip.endToEnd, endToEnd);
       });

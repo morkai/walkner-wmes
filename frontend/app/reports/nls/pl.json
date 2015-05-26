@@ -32,7 +32,9 @@
   "coeffs:efficiency": "Wydajność",
   "coeffs:productivity": "Produktywność",
   "coeffs:productivityNoWh": "Prod. bez magazynu",
-  "metrics:clip:orderCount": "Ilość zleceń",
+  "metrics:clip:orderCount": "Ilość wszystkich zleceń",
+  "metrics:clip:productionCount": "Ilość zleceń Produkcja",
+  "metrics:clip:endToEndCount": "Ilość zleceń End2End",
   "metrics:clip:production": "CLIP Produkcja",
   "metrics:clip:endToEnd": "CLIP End2End",
 
