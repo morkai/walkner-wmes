@@ -1,0 +1,174 @@
+<form class="kaizenOrders-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group clearfix">
+        <label for="<%- idPrefix %>-status" class="control-label"><%- t('kaizenOrders', 'PROPERTY:status') %></label>
+        <div id="<%- idPrefix %>-status" class="btn-group kaizenOrders-form-statusBtnGroup" data-toggle="buttons">
+          <% statuses.forEach(function(status) { %>
+          <label class="btn btn-default">
+            <input type="radio" name="status" value="<%- status %>"><%- t('kaizenOrders', 'status:' + status) %>
+          </label>
+          <% }) %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:subject') %></label>
+        <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-4 has-required-select2">
+          <label for="<%- idPrefix %>-section" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:section') %></label>
+          <input id="<%- idPrefix %>-section" type="text" name="section" required>
+        </div>
+        <div class="form-group col-lg-8 has-required-select2">
+          <label for="<%- idPrefix %>-confirmer" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:confirmer') %></label>
+          <input id="<%- idPrefix %>-confirmer" type="text" name="confirmer" required>
+        </div>
+      </div>
+      <div id="<%- idPrefix %>-panel-nearMiss" class="panel panel-default kaizenOrders-form-typePanel is-collapsed" data-type="nearMiss" data-expanded-class="panel-danger">
+        <div class="panel-heading" role="togglePanel" tabindex="0">
+          <i class="fa fa-times kaizenOrders-form-collapsedIcon"></i><i class="fa fa-check kaizenOrders-form-expandedIcon"></i><span><%- t('kaizenOrders', 'type:nearMiss') %></span>
+        </div>
+        <div class="panel-body">
+          <div id="<%- idPrefix %>-nearMissOwnersFormGroup" class="form-group has-required-select2">
+            <label for="<%- idPrefix %>-nearMissOwners" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:nearMissOwners') %></label>
+            <input id="<%- idPrefix %>-nearMissOwners" type="text" name="nearMissOwners">
+          </div>
+          <div id="<%- idPrefix %>-eventDateAreaRow" class="row">
+            <div class="form-group col-lg-2">
+              <label for="<%- idPrefix %>-eventDate" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:eventDate') %></label>
+              <input id="<%- idPrefix %>-eventDate" class="form-control" type="date" name="eventDate" max="<%- today %>">
+            </div>
+            <div class="form-group col-lg-10 has-required-select2">
+              <label for="<%- idPrefix %>-area" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:area') %></label>
+              <input id="<%- idPrefix %>-area" type="text" name="area">
+            </div>
+          </div>
+          <div id="<%- idPrefix %>-descriptionFormGroup" class="form-group">
+            <label for="<%- idPrefix %>-description" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:description') %></label>
+            <textarea id="<%- idPrefix %>-description" class="form-control" name="description" rows="3"></textarea>
+          </div>
+          <div id="<%- idPrefix %>-nearMissOptional" class="message message-inline message-info">
+            <p><%- t('kaizenOrders', 'FORM:MSG:optional', {gender: user.data.gender}) %></p>
+          </div>
+          <div id="<%- idPrefix %>-causeTextFormGroup" class="form-group">
+            <label for="<%- idPrefix %>-causeText" class="control-label"><%- t('kaizenOrders', 'PROPERTY:causeText') %></label>
+            <textarea id="<%- idPrefix %>-causeText" class="form-control" name="causeText" rows="3"></textarea>
+          </div>
+          <div id="<%- idPrefix %>-causeCategoryRiskRow" class="row">
+            <div class="form-group col-md-4">
+              <label for="<%- idPrefix %>-cause" class="control-label"><%- t('kaizenOrders', 'PROPERTY:cause') %></label>
+              <input id="<%- idPrefix %>-cause" type="text" name="cause">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="<%- idPrefix %>-risk" class="control-label"><%- t('kaizenOrders', 'PROPERTY:risk') %></label>
+              <input id="<%- idPrefix %>-risk" type="text" name="risk">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="<%- idPrefix %>-nearMissCategory" class="control-label"><%- t('kaizenOrders', 'PROPERTY:nearMissCategory') %></label>
+              <input id="<%- idPrefix %>-nearMissCategory" type="text" name="nearMissCategory">
+            </div>
+          </div>
+          <div id="<%- idPrefix %>-correctiveMeasuresFormGroup" class="form-group">
+            <label for="<%- idPrefix %>-correctiveMeasures" class="control-label"><%- t('kaizenOrders', 'PROPERTY:correctiveMeasures') %></label>
+            <textarea id="<%- idPrefix %>-correctiveMeasures" class="form-control" name="correctiveMeasures" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+      <div id="<%- idPrefix %>-panel-suggestion" class="panel panel-default kaizenOrders-form-typePanel is-collapsed" data-type="suggestion" data-expanded-class="panel-warning">
+        <div class="panel-heading" role="togglePanel" tabindex="0">
+          <i class="fa fa-times kaizenOrders-form-collapsedIcon"></i><i class="fa fa-check kaizenOrders-form-expandedIcon"></i><span><%- t('kaizenOrders', 'type:suggestion') %></span>
+        </div>
+        <div id="<%- idPrefix %>-suggestionPanelBody" class="panel-body">
+          <div id="<%- idPrefix %>-suggestionOwnersFormGroup" class="form-group has-required-select2">
+            <label for="<%- idPrefix %>-suggestionOwners" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:suggestionOwners') %></label>
+            <input id="<%- idPrefix %>-suggestionOwners" type="text" name="suggestionOwners">
+          </div>
+          <div id="<%- idPrefix %>-suggestionFormGroup" class="form-group">
+            <label for="<%- idPrefix %>-suggestion" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:suggestion') %></label>
+            <textarea id="<%- idPrefix %>-suggestion" class="form-control" name="suggestion" rows="3"></textarea>
+          </div>
+          <div id="<%- idPrefix %>-suggestionOptional" class="message message-inline message-info">
+            <p><%- t('kaizenOrders', 'FORM:MSG:optional', {gender: user.data.gender}) %></p>
+          </div>
+          <div id="<%- idPrefix %>-suggestionCategoryFormGroup" class="form-group">
+            <label for="<%- idPrefix %>-suggestionCategory" class="control-label"><%- t('kaizenOrders', 'PROPERTY:suggestionCategory') %></label>
+            <input id="<%- idPrefix %>-suggestionCategory" type="text" name="suggestionCategory">
+          </div>
+        </div>
+      </div>
+      <div id="<%- idPrefix %>-panel-kaizen" class="panel panel-default kaizenOrders-form-typePanel is-collapsed" data-type="kaizen" data-expanded-class="panel-success">
+        <div class="panel-heading" role="togglePanel" tabindex="0">
+          <i class="fa fa-times kaizenOrders-form-collapsedIcon"></i><i class="fa fa-check kaizenOrders-form-expandedIcon"></i><span><%- t('kaizenOrders', 'type:kaizen') %></span>
+        </div>
+        <div class="panel-body">
+          <div id="<%- idPrefix %>-kaizenOwnersFormGroup" class="form-group has-required-select2">
+            <label for="<%- idPrefix %>-kaizenOwners" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:kaizenOwners') %></label>
+            <input id="<%- idPrefix %>-kaizenOwners" type="text" name="kaizenOwners">
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-2">
+              <label for="<%- idPrefix %>-kaizenStartDate" class="control-label"><%- t('kaizenOrders', 'PROPERTY:kaizenStartDate') %></label>
+              <input id="<%- idPrefix %>-kaizenStartDate" class="form-control" type="date" name="kaizenStartDate" max="<%- today %>">
+            </div>
+            <div class="form-group col-lg-2">
+              <label for="<%- idPrefix %>-kaizenFinishDate" class="control-label"><%- t('kaizenOrders', 'PROPERTY:kaizenFinishDate') %></label>
+              <input id="<%- idPrefix %>-kaizenFinishDate" class="form-control" type="date" name="kaizenFinishDate" max="<%- today %>">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="<%- idPrefix %>-kaizenImprovements" class="control-label"><%- t('kaizenOrders', 'PROPERTY:kaizenImprovements') %></label>
+              <textarea id="<%- idPrefix %>-kaizenImprovements" class="form-control" name="kaizenImprovements" rows="3"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="<%- idPrefix %>-kaizenEffect" class="control-label"><%- t('kaizenOrders', 'PROPERTY:kaizenEffect') %></label>
+              <textarea id="<%- idPrefix %>-kaizenEffect" class="form-control" name="kaizenEffect" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% if (editMode) { %>
+      <div class="message message-inline message-warning">
+        <p><%- t('kaizenOrders', 'FORM:MSG:attachmentEdit') %></p>
+      </div>
+      <div class="row kaizenOrders-form-attachments">
+        <% ['scan', 'before', 'after'].forEach(function(attachment) { %>
+        <div class="col-md-4 form-group">
+          <label class="control-label"><%- t('kaizenOrders', 'attachments:' + attachment + ':current') %></label>
+          <p class="form-control-static">
+            <% if (attachments[attachment]) { %>
+            <a href="/kaizen/orders/<%- model._id %>/attachments/<%- attachments[attachment]._id %>"><%= attachments[attachment].name %></a>
+            <% } else { %>
+            -
+            <% }%>
+          </p>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+      <div class="row">
+        <% ['scan', 'before', 'after'].forEach(function(attachment) { %>
+        <div class="col-md-4 form-group">
+          <label for="<%- idPrefix %>-attachments-<%- attachment %>" class="control-label"><%- t('kaizenOrders', 'attachments:' + attachment + (editMode ? ':new' : '')) %></label>
+          <input id="<%- idPrefix %>-attachments-<%- attachment %>" class="form-control" type="file" data-name="<%- attachment %>">
+        </div>
+        <% }) %>
+      </div>
+      <% if (editMode) { %>
+      <div class="form-group kaizenOrders-form-comment">
+        <label for="<%- idPrefix %>-comment" class="control-label"><%- t('kaizenOrders', 'PROPERTY:comment') %></label>
+        <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3"></textarea>
+      </div>
+      <% } %>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+        <i class="fa fa-spinner fa-spin"></i>
+        <span><%- formActionText %></span>
+      </button>
+    </div>
+  </div>
+</form>

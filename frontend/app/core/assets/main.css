@@ -322,10 +322,16 @@ kbd {
 .select2-choices > .select2-search-choice.sortable-ghost {
   border-color: #0af;
 }
+.is-bigdrop > .select2-results {
+  max-height: 300px;
+}
 
 .text-mono {
   font-family: Consolas, Menlo, Monaco, monospace;
   white-space: pre-wrap;
+}
+.text-lines {
+  white-space: pre-line;
 }
 .is-changed {
   color: #e00;

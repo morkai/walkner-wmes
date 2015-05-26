@@ -258,6 +258,18 @@ function(
     return subdivisions.get(user.data.orgUnitId) || null;
   };
 
+  user.getGuestUserData = function()
+  {
+    return window.GUEST_USER || {
+        id: null,
+        login: 'guest',
+        name: t.bound('core', 'GUEST_USER_NAME'),
+        loggedIn: false,
+        super: false,
+        privileges: []
+      };
+  };
+
   user.getRootUserData = function()
   {
     return window.ROOT_USER || {

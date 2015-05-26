@@ -39,7 +39,13 @@ define([
   './xiconfClients/routes',
   './icpo/routes',
   './factoryLayout/routes',
-  './licenses/routes'
+  './licenses/routes',
+  './kaizenOrders/routes',
+  './kaizenSections/routes',
+  './kaizenAreas/routes',
+  './kaizenCategories/routes',
+  './kaizenCauses/routes',
+  './kaizenRisks/routes'
 ], function()
 {
   'use strict';

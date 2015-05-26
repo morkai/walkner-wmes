@@ -90,13 +90,19 @@ define([
       }
 
       var $submitEl = this.$('[type="submit"]').attr('disabled', true);
+
+      this.submitRequest($submitEl, formData);
+
+      return false;
+    },
+
+    submitRequest: function($submitEl, formData)
+    {
       var req = this.request(formData);
 
       req.done(this.handleSuccess.bind(this));
       req.fail(this.handleFailure.bind(this));
       req.always(function() { $submitEl.attr('disabled', false); });
-
-      return false;
     },
 
     request: function(formData)

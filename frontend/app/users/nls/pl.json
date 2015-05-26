@@ -102,6 +102,9 @@
   "PRIVILEGE:FACTORY_LAYOUT:MANAGE": "Monitoring: zarządzanie",
   "PRIVILEGE:VENDOR_NC12S:VIEW": "Baza 12NC: przeglądanie",
   "PRIVILEGE:VENDOR_NC12S:MANAGE": "Baza 12NC: zarządzanie",
+  "PRIVILEGE:KAIZEN:MANAGE": "Usprawnienia: zarządzanie zgłoszeniami",
+  "PRIVILEGE:KAIZEN:DICTIONARIES:VIEW": "Usprawnienia: przeglądanie słowników",
+  "PRIVILEGE:KAIZEN:DICTIONARIES:MANAGE": "Usprawnienia: zarządzanie słownikami",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System"

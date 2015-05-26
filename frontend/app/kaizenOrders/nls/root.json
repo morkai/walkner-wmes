@@ -1,0 +1,35 @@
+{
+  "root": {
+    "BREADCRUMBS:browse": "Kaizen",
+    "BREADCRUMBS:browse": "Orders",
+    "BREADCRUMBS:addForm": "Adding",
+    "BREADCRUMBS:editForm": "Editing",
+    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+
+    "MSG:LOADING_FAILURE": "Failed to load the orders :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order :(",
+    "MSG:DELETED": "Order <em>{label}</em> was deleted.",
+
+    "PAGE_ACTION:add": "Add order",
+    "PAGE_ACTION:edit": "Edit order",
+    "PAGE_ACTION:delete": "Delete order",
+
+    "PANEL:TITLE:details": "Order's details",
+    "PANEL:TITLE:addForm": "Add order form",
+    "PANEL:TITLE:editForm": "Edit order form",
+
+    "PROPERTY:": "",
+
+    "FORM:ACTION:add": "Add order",
+    "FORM:ACTION:edit": "Edit order",
+    "FORM:ERROR:addFailure": "Failed to add the new order :(",
+    "FORM:ERROR:editFailure": "Failed to edit the order :(",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "Order deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete order",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen order?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> order?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the order :-("
+  },
+  "pl": true
+}

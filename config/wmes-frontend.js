@@ -54,6 +54,7 @@ exports.modules = [
   'licenses',
   'factoryLayout',
   'permalinks',
+  'kaizen',
   'mail/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
@@ -89,7 +90,12 @@ exports.events = {
     debug: [
       'app.started',
       'users.login', 'users.logout',
-      '*.added', '*.edited'
+      '*.added', '*.edited',
+      'kaizen.sections.added', 'kaizen.sections.edited',
+      'kaizen.areas.added', 'kaizen.areas.edited',
+      'kaizen.categories.added', 'kaizen.categories.edited',
+      'kaizen.causes.added', 'kaizen.causes.edited',
+      'kaizen.risks.added', 'kaizen.risks.edited'
     ],
     info: [
       'events.**',
@@ -104,7 +110,8 @@ exports.events = {
       'fte.leader.deleted', 'fte.master.deleted',
       'production.unlockFailure',
       'production.lockFailure',
-      'prodDowntimes.confirmedEdited'
+      'prodDowntimes.confirmedEdited',
+      'kaizen.*.deleted'
     ],
     error: [
       '*.syncFailed'
@@ -144,7 +151,8 @@ exports.pubsub = {
     'settings.updated.**',
     'xiconf.results.synced', 'xiconf.orders.**', 'xiconf.clients.**',
     'icpo.results.synced',
-    'orders.updated.*'
+    'orders.updated.*',
+    'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*'
   ]
 };
 
@@ -166,7 +174,8 @@ exports.mongoose = {
     'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfOrder', 'xiconfClient',
     'icpoResult',
     'factoryLayout',
-    'whTransferOrder'
+    'whTransferOrder',
+    'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenOrder'
   ]
 };
 exports.mongoose.options.server.poolSize = 15;
@@ -203,7 +212,8 @@ exports.user = {
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
     'REPORTS:VIEW', 'REPORTS:MANAGE',
     'XICONF:VIEW', 'XICONF:MANAGE', 'XICONF:NOTIFY', 'ICPO:VIEW', 'ICPO:MANAGE',
-    'FACTORY_LAYOUT:MANAGE'
+    'FACTORY_LAYOUT:MANAGE',
+    'KAIZEN:MANAGE', 'KAIZEN:DICTIONARIES:VIEW', 'KAIZEN:DICTIONARIES:MANAGE'
   ]
 };
 
@@ -316,4 +326,8 @@ exports['mail/sender'] = {
 
 exports.sioLegacyBridge = {
   newSioServerUrl: 'http://127.0.0.1/'
+};
+
+exports.kaizen = {
+  attachmentsDest: DATA_PATH + '/kaizen-attachments'
 };

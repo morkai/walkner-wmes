@@ -1,0 +1,30 @@
+<div class="panel panel-default kaizenOrders-details-attachments">
+  <div class="panel-heading"><%- t('kaizenOrders', 'PANEL:TITLE:attachments') %></div>
+  <% if (!model.attachments.length) { %>
+  <div class="panel-body">
+    <p><%- t('kaizenOrders', 'attachments:noData') %></p>
+  </div>
+  <% } else { %>
+  <table class="table table-bordered table-condensed table-hover">
+    <thead>
+      <tr>
+        <th class="is-min"><%- t('kaizenOrders', 'PROPERTY:attachments:description') %></th>
+        <th><%- t('kaizenOrders', 'PROPERTY:attachments:file') %></th>
+        <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% model.attachments.forEach(function(attachment) { %>
+      <tr>
+        <td class="is-min"><%= t.has('kaizenOrders', 'attachments:' + attachment.description) ? t('kaizenOrders', 'attachments:' + attachment.description) : attachment.description %></td>
+        <td><%= attachment.name %></td>
+        <td class="actions">
+          <a class="btn btn-default" href="/kaizen/orders/<%- model._id %>/attachments/<%- attachment._id %>" title="<%- t('kaizenOrders', 'attachments:actions:view') %>"><i class="fa fa-file-text-o"></i></a>
+          <a class="btn btn-default" href="/kaizen/orders/<%- model._id %>/attachments/<%- attachment._id %>?download=1" title="<%- t('kaizenOrders', 'attachments:actions:download') %>"><i class="fa fa-download"></i></a>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } %>
+</div>

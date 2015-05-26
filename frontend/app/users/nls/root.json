@@ -102,6 +102,9 @@
     "PRIVILEGE:FACTORY_LAYOUT:MANAGE": "Monitoring: manage",
     "PRIVILEGE:VENDOR_NC12S:VIEW": "12NC database: view",
     "PRIVILEGE:VENDOR_NC12S:MANAGE": "12NC database: manage",
+    "PRIVILEGE:KAIZEN:MANAGE": "Kaizen: manage orders",
+    "PRIVILEGE:KAIZEN:DICTIONARIES:VIEW": "Kaizen: view dictionaries",
+    "PRIVILEGE:KAIZEN:DICTIONARIES:MANAGE": "Kaizen: manage dictionaries",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System"
