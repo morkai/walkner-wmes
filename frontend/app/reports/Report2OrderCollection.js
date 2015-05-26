@@ -75,13 +75,10 @@ define([
 
       var statuses = query.get('statuses');
 
-      if (statuses.length)
-      {
-        selector.args.push(
-          eq('filter', query.get('filter')),
-          eq('statuses', statuses)
-        );
-      }
+      selector.args.push(
+        eq('filter', query.get('filter')),
+        eq('statuses', statuses)
+      );
 
       return OrderCollection.prototype.sync.apply(this, arguments);
 

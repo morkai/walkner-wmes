@@ -40,17 +40,45 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
       });
     }
 
-    req.rql.selector.args = [
+    var selector = req.rql.selector.args = [
       {name: 'ge', args: ['startDate', fromTime]},
       {name: 'lt', args: ['startDate', toTime]},
       {name: 'in', args: ['mrp', mrpControllers]}
     ];
 
-    if (_.contains(['all', 'in', 'nin'], query.filter) && _.isString(query.statuses) && /^[A-Z,]+$/.test(query.statuses))
+    if (_.contains(['all', 'in', 'nin'], query.filter)
+      && _.isString(query.statuses)
+      && /^[A-Z,]+$/.test(query.statuses))
     {
-      req.rql.selector.args.push({
+      selector.push({
         name: query.filter,
         args: ['statuses', query.statuses.split(',')]
+      });
+    }
+    else if (query.filter === 'wo'
+      && _.isString(query.statuses)
+      && /^[A-Z,]+$/.test(query.statuses))
+    {
+      var ors = [];
+
+      _.forEach(query.statuses.split(','), function(status)
+      {
+        ors.push({name: 'ne', args: ['statuses', status]});
+      });
+
+      selector.push({
+        name: 'or',
+        args: ors
+      });
+    }
+    else if (query.filter === 'red')
+    {
+      selector.push({
+        name: 'or',
+        args: [
+          {name: 'nin', args: ['statuses', ['CNF', 'PCNF']]},
+          {name: 'nin', args: ['statuses', ['DLV', 'PDLV']]}
+        ]
       });
     }
   }

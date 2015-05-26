@@ -32,7 +32,7 @@ define([
         limit: 12,
         skip: 0,
         orderNo: '',
-        filter: 'nin',
+        filter: 'red',
         statuses: ''
       };
     },
@@ -153,12 +153,8 @@ define([
 
       queryString += '&limit=' + attrs.limit;
       queryString += '&skip=' + attrs.skip;
-
-      if (attrs.statuses.length)
-      {
-        queryString += '&filter=' + attrs.filter;
-        queryString += '&statuses=' + attrs.statuses;
-      }
+      queryString += '&filter=' + attrs.filter;
+      queryString += '&statuses=' + attrs.statuses;
 
       if (attrs.orderNo.length >= 6)
       {

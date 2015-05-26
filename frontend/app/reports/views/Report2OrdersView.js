@@ -44,6 +44,10 @@ define([
         {
           this.showOrderChanges(e.currentTarget.dataset.id);
         }
+      },
+      'change input[name="filter"]': function()
+      {
+        this.$('input[name="statuses[]"]').prop('disabled', this.$('input[name="filter"]:checked').val() === 'red');
       }
     },
 
