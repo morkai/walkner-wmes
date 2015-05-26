@@ -138,7 +138,14 @@ exports.updater = {
     cwd: __dirname + '/../',
     timeout: 30000
   },
-  versionsKey: 'pos'
+  versionsKey: 'pos',
+  manifests: [
+    {
+      path: 'manifest.appcache',
+      mainJsFile: exports.mainJsFile,
+      mainCssFile: exports.mainCssFile
+    }
+  ]
 };
 
 exports.purchaseOrders = {
