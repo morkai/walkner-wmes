@@ -69,6 +69,14 @@ define([
       'click .prodShifts-timeline-deleteDowntime': function()
       {
         this.showDeleteDialog(this.prodDowntimes);
+      },
+      'mouseover .popover': function()
+      {
+        if (this.timers.hidePopover)
+        {
+          clearTimeout(this.timers.hidePopover);
+          this.timers.hidePopover = null;
+        }
       }
     },
 
@@ -278,9 +286,24 @@ define([
         .call(this.chart);
     },
 
-    hidePopover: function()
+    hidePopover: function(delay)
     {
-      if (this.popover !== null)
+      if (this.timers.hidePopover)
+      {
+        clearTimeout(this.timers.hidePopover);
+        this.timers.hidePopover = null;
+      }
+
+      if (this.popover === null)
+      {
+        return;
+      }
+
+      if (delay)
+      {
+        this.timers.hidePopover = setTimeout(this.hidePopover.bind(this), 200, false);
+      }
+      else
       {
         $(this.popover.el).popover('destroy');
         this.popover = null;
@@ -476,7 +499,7 @@ define([
 
           view.hidePopover();
 
-          var managing = canManage && d3.event.ctrlKey && item.ended;
+          var managing = canManage && item.ended;
           var $item = $(itemEl);
 
           $item.popover({
@@ -497,9 +520,13 @@ define([
         })
         .mouseout(function()
         {
-          if (view.options.editable === false || !d3.event.ctrlKey)
+          if (view.options.editable === false)
           {
             view.hidePopover();
+          }
+          else if (!d3.event.ctrlKey)
+          {
+            view.hidePopover(true);
           }
         })
         .mousedown(function()
