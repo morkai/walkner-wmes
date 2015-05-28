@@ -29,11 +29,16 @@ exports.start = function startClipOrderCountModule(app, module)
 
   app.broker.subscribe('app.started', scheduleClipOrderCountCheck).setLimit(1);
 
-  app.broker.subscribe('orders.synced', countAllOrders).setFilter(function(message)
-  {
-    return message.moduleName === module.config.importerId
-      && new Date().getHours() === module.config.syncHour;
-  });
+  app.broker.subscribe('orders.synced')
+    .setFilter(function(message)
+    {
+      return message.moduleName === module.config.importerId
+        && new Date().getHours() === module.config.syncHour;
+    })
+    .on('message', function()
+    {
+      countAllOrders();
+    });
 
   function yesterday()
   {
