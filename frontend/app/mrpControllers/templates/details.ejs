@@ -1,7 +1,5 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <%- t('mrpControllers', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- t('mrpControllers', 'PANEL:TITLE:details') %></div>
   <div class="panel-details">
     <div class="props first">
       <div class="prop">
@@ -12,6 +10,10 @@
       <div class="prop">
         <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:_id') %></div>
         <div class="prop-value"><%= model._id %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:inout') %></div>
+        <div class="prop-value"><%- t('mrpControllers', 'inout:' + model.inout) %></div>
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:description') %></div>

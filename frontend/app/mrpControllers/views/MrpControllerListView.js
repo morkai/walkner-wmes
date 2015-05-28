@@ -3,11 +3,13 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/i18n',
   'app/user',
   'app/time',
   'app/data/views/renderOrgUnitPath',
   'app/core/views/ListView'
 ], function(
+  t,
   user,
   time,
   renderOrgUnitPath,
@@ -20,8 +22,9 @@ define([
     columns: [
       {id: 'subdivision', className: 'is-min'},
       {id: '_id', className: 'is-min'},
-      'description',
-      {id: 'deactivatedAt', className: 'is-min'}
+      {id: 'inout', className: 'is-min'},
+      {id: 'deactivatedAt', className: 'is-min'},
+      'description'
     ],
 
     serializeActions: function()
@@ -57,6 +60,7 @@ define([
 
         row.subdivision = renderOrgUnitPath(mrpControllerModel, true);
         row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
+        row.inout = t('mrpControllers', 'inout:' + row.inout);
 
         return row;
       });

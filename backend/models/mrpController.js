@@ -28,6 +28,10 @@ module.exports = function setupMrpControllerModel(app, mongoose)
     replacedBy: {
       type: String,
       default: null
+    },
+    inout: {
+      type: Number,
+      default: 0
     }
   }, {
     id: false

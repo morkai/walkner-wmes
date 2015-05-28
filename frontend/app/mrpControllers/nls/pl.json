@@ -22,6 +22,11 @@
   "PROPERTY:subdivision": "Dział",
   "PROPERTY:deactivatedAt": "Data dezaktywacji",
   "PROPERTY:replacedBy": "Zastąpiony przez",
+  "PROPERTY:inout": "Obszar",
+
+  "inout:-1": "Outdoor",
+  "inout:0": "Nie dotyczy",
+  "inout:1": "Indoor",
 
   "FORM:ACTION:add": "Dodaj kontroler MRP",
   "FORM:ACTION:edit": "Edytuj kontroler MRP",

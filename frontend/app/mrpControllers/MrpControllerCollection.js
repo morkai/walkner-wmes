@@ -15,7 +15,7 @@ define([
 
     model: MrpController,
 
-    rqlQuery: 'select(subdivision,description,deactivatedAt)&sort(_id)',
+    rqlQuery: 'sort(_id)',
 
     comparator: '_id'
 

@@ -23,6 +23,11 @@
     "PROPERTY:subdivision": "Subdivision",
     "PROPERTY:deactivatedAt": "Deactivated at",
     "PROPERTY:replacedBy": "Replaced by",
+    "PROPERTY:inout": "Area",
+
+    "inout:-1": "Outdoor",
+    "inout:0": "Not applicable",
+    "inout:1": "Indoor",
 
     "FORM:ACTION:add": "Add MRP Controller",
     "FORM:ACTION:edit": "Edit MRP Controller",
