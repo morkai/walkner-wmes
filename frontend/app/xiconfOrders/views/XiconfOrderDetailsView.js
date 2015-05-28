@@ -45,9 +45,11 @@ define([
         var totalQuantityDone = item.quantityDone + item.extraQuantityDone;
 
         item.totalQuantityDone = totalQuantityDone;
-        item.panelType = totalQuantityDone < item.quantityTodo
-          ? 'danger'
-          : totalQuantityDone > item.quantityTodo ? 'warning' : 'success';
+        item.panelType = item.kind === 'gprs'
+          ? 'default'
+          : totalQuantityDone < item.quantityTodo
+            ? 'danger'
+            : totalQuantityDone > item.quantityTodo ? 'warning' : 'success';
 
         return item;
       });

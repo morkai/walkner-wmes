@@ -11,8 +11,9 @@ var parseSapDate = require('../../sap/util/parseSapDate');
 
 module.exports = function parseXiconfOrders(input)
 {
-  var PROGRAM_RE = /^.*?Program\s*(.*?)(?:'|"|”)?$/i;
-  var GPRS_RE = /^LC/i;
+  var PROGRAM_RE = /Program\s*(.*?)(?:'|"|”)?$/i;
+  var GPRS_PROGRAM_RE = /^LC/;
+  var GPRS_CONFIG_RE = /\s+(F|T)(P|A)(_|A|B|C|D)/;
 
   return parseSapTextTable(input, {
     columnMatchers: {
@@ -30,31 +31,40 @@ module.exports = function parseXiconfOrders(input)
     },
     itemDecorator: function(obj)
     {
-      if (_.isString(obj.deleted) && !_.isEmpty(obj.deleted))
+      if (_.isString(obj.deleted) && !_.isEmpty(obj.deleted) || obj.nc12.length !== 12)
       {
         return null;
       }
 
       var programMatches = obj.name.match(PROGRAM_RE);
-      var isProgramOrder = programMatches !== null;
-      var isGprsOrder = isProgramOrder && GPRS_RE.test(programMatches[1]);
-      var isLedOrder = !isProgramOrder;
+      var isProgramItem = programMatches !== null;
 
-      if (isGprsOrder || (!isProgramOrder && !isLedOrder) || obj.nc12.length !== 12)
+      if (isProgramItem)
       {
-        return null;
+        obj.name = programMatches[1].trim();
       }
+
+      var isGprsItem = isProgramItem && GPRS_PROGRAM_RE.test(obj.name);
+      var isLedItem = !isProgramItem && !isGprsItem;
 
       obj.reqDate = new Date(obj.reqDate.y, obj.reqDate.m - 1, obj.reqDate.d);
 
-      if (isLedOrder)
+      if (isLedItem)
       {
         obj.kind = 'led';
       }
-      else if (isProgramOrder)
+      else if (isGprsItem)
+      {
+        if (!GPRS_CONFIG_RE.test(obj.name))
+        {
+          return null;
+        }
+
+        obj.kind = 'gprs';
+      }
+      else if (isProgramItem)
       {
         obj.kind = 'program';
-        obj.name = programMatches[1].trim();
       }
       else
       {

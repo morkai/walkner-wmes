@@ -341,7 +341,11 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       metrics: tryJsonParse(result.metrics),
       serviceTag: typeof result.serviceTag === 'string' ? result.serviceTag : null,
       prodLine: typeof result.prodLine === 'string' ? result.prodLine : null,
-      leds: tryJsonParse(result.leds)
+      leds: tryJsonParse(result.leds),
+      gprsNc12: result.gprsNc12 || null,
+      gprsOrderFileHash: result.gprsOrderFileHash || null,
+      gprsInputFileHash: result.gprsInputFileHash || null,
+      gprsOutputFileHash: result.gprsOutputFileHash || null
     };
   }
 

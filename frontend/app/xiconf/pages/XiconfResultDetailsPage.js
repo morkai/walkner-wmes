@@ -51,16 +51,25 @@ define([
 
     actions: function()
     {
-      var workflow = this.model.get('workflow');
-      var feature = this.model.get('feature');
-      var url = this.model.url() + ';';
+      var model = this.model;
+      var workflow = model.get('workflow');
+      var feature = model.get('feature');
+      var gprsOrderFile = model.get('gprsOrderFile');
+      var gprsInputFile = model.get('gprsInputFile');
+      var gprsOutputFile = model.get('gprsOutputFile');
+      var url = model.url() + ';';
 
       return [{
         template: function()
         {
           return downloadActionTemplate({
-            workflow: typeof workflow === 'string' && workflow.length ? (url + 'workflow') : null,
-            feature: typeof feature === 'string' && feature.length ? (url + 'feature') : null
+            files: {
+              gprsOrderFile: gprsOrderFile && gprsOrderFile.length ? (url + 'gprsOrder') : null,
+              workflow: workflow && workflow.length ? (url + 'workflow') : null,
+              feature: feature && feature.length ? (url + 'feature') : null,
+              gprsInputFile: gprsInputFile && gprsInputFile.length ? (url + 'gprsInput') : null,
+              gprsOutputFile: gprsOutputFile && gprsOutputFile.length ? (url + 'gprsOutput') : null
+            }
           });
         }
       }];

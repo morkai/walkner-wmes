@@ -57,7 +57,14 @@ module.exports = function setupXiconfResultModel(app, mongoose)
       type: String,
       default: null
     },
-    leds: []
+    leds: [],
+    gprsNc12: {
+      type: String,
+      default: null
+    },
+    gprsOrderFileHash: String,
+    gprsInputFileHash: String,
+    gprsOutputFileHash: String
   }, {
     id: false
   });

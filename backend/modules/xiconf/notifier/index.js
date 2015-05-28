@@ -245,7 +245,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
             incompleteProgramItemCount += 1;
           }
-          else
+          else if (item.kind === 'led')
           {
             incompleteLedItemCount += 1;
           }
@@ -305,11 +305,15 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
         _.forEach(this.xiconfOrder.items, function(item, i)
         {
+          var quantity = item.kind === 'gprs'
+            ? item.quantityTodo.toLocaleString()
+            : (item.quantityDone.toLocaleString() + '/' + item.quantityTodo.toLocaleString());
+
           text.push(
             '',
             '12NC #' + (i + 1) + ': ' + item.nc12,
             'Nazwa: ' + item.name,
-            'Ilość: ' + item.quantityDone.toLocaleString() + '/' + item.quantityTodo.toLocaleString()
+            'Ilość: ' + quantity
           );
         });
 

@@ -79,6 +79,10 @@
           <div class="prop-value"><%- model.nc12 || '-' %></div>
         </div>
         <div class="prop">
+          <div class="prop-name"><%- t('xiconf', 'PROPERTY:gprsNc12') %></div>
+          <div class="prop-value"><%- model.gprsNc12 || '-' %></div>
+        </div>
+        <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:programName') %></div>
           <div class="prop-value"><%= model.programName || '-' %></div>
         </div>
@@ -123,14 +127,23 @@
       <% if (model.output) { %>
       <li data-tab="output"><a href="#<%- idPrefix %>-output" data-toggle="tab"><%- t('xiconf', 'tab:output') %></a></li>
       <% } %>
+      <% if (model.gprsOrderFile) { %>
+      <li data-tab="gprsOrderFile"><a href="#<%- idPrefix %>-gprsOrderFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsOrderFile') %></a></li>
+      <% } %>
       <% if (model.workflow) { %>
       <li data-tab="workflow"><a href="#<%- idPrefix %>-workflow" data-toggle="tab"><%- t('xiconf', 'tab:workflow') %></a></li>
       <% } %>
       <% if (model.feature) { %>
-      <li data-tab="feature"><a href="#<%- idPrefix %>-feature" data-toggle="tab"><%- t('xiconf', 'tab:feature') %></a></li>
+      <li data-tab="feature" data-highlight><a href="#<%- idPrefix %>-feature" data-toggle="tab"><%- t('xiconf', 'tab:feature') %></a></li>
       <% } %>
       <% if (model.leds) { %>
       <li data-tab="leds"><a href="#<%- idPrefix %>-leds" data-toggle="tab"><%- t('xiconf', 'tab:leds') %></a></li>
+      <% } %>
+      <% if (model.gprsInputFile) { %>
+      <li data-tab="gprsInputFile" data-highlight><a href="#<%- idPrefix %>-gprsInputFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsInputFile') %></a></li>
+      <% } %>
+      <% if (model.gprsOutputFile) { %>
+      <li data-tab="gprsOutputFile" data-highlight><a href="#<%- idPrefix %>-gprsOutputFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsOutputFile') %></a></li>
       <% } %>
       <% if (model.program) { %>
       <li data-tab="program"><a href="#<%- idPrefix %>-program" data-toggle="tab"><%- t('xiconf', 'tab:program') %></a></li>
@@ -152,6 +165,9 @@
       <% if (model.output) { %>
       <div class="tab-pane" id="<%- idPrefix %>-output"><pre><code><%= model.output || '-' %></code></pre></div>
       <% } %>
+      <% if (model.gprsOrderFile) { %>
+      <div class="tab-pane" id="<%- idPrefix %>-gprsOrderFile"><pre><code><%= model.gprsOrderFile || '-' %></code></pre></div>
+      <% } %>
       <% if (model.workflow) { %>
       <div class="tab-pane" id="<%- idPrefix %>-workflow"><pre><code><%= model.workflow || '-' %></code></pre></div>
       <% } %>
@@ -160,6 +176,12 @@
       <% } %>
       <% if (model.leds) { %>
       <div class="tab-pane xiconf-details-leds" id="<%- idPrefix %>-leds"></div>
+      <% } %>
+      <% if (model.gprsInputFile) { %>
+      <div class="tab-pane" id="<%- idPrefix %>-gprsInputFile"><pre><code class="json"><%= model.gprsInputFile || '-' %></code></pre></div>
+      <% } %>
+      <% if (model.gprsOutputFile) { %>
+      <div class="tab-pane" id="<%- idPrefix %>-gprsOutputFile"><pre><code class="xml"><%= model.gprsOutputFile || '-' %></code></pre></div>
       <% } %>
       <% if (model.program) { %>
       <div class="tab-pane" id="<%- idPrefix %>-program">

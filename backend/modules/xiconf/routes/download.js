@@ -8,21 +8,7 @@ var path = require('path');
 
 module.exports = function downloadRoute(file, app, xiconfModule, XiconfResult, req, res, next)
 {
-  var fields = {
-    startedAt: 1
-  };
-
-  if (file === 'feature')
-  {
-    fields.featureName = 1;
-    fields.featureHash = 1;
-  }
-  else
-  {
-    fields.workflow = 1;
-  }
-
-  XiconfResult.findById(req.params.id, function(err, xiconfResult)
+  XiconfResult.findById(req.params.id).lean().exec(function(err, xiconfResult)
   {
     if (err)
     {
@@ -50,8 +36,9 @@ module.exports = function downloadRoute(file, app, xiconfModule, XiconfResult, r
       suffix += '_III';
     }
 
-    var filename;
     var type;
+    var filename;
+    var fileHash;
 
     if (file === 'feature')
     {
@@ -66,8 +53,31 @@ module.exports = function downloadRoute(file, app, xiconfModule, XiconfResult, r
       }
       else
       {
-        filename = 'FEATURE_' + suffix;
+        filename = 'FEATURE' + suffix;
       }
+
+      fileHash = xiconfResult.featureHash;
+    }
+    else if (file === 'gprsOrder')
+    {
+      type = 'txt';
+      suffix += '.dat';
+      filename = xiconfResult.orderNo + suffix;
+      fileHash = xiconfResult.gprsOrderFileHash;
+    }
+    else if (file === 'gprsInput')
+    {
+      type = 'json';
+      suffix += '.json';
+      filename = (xiconfResult.serviceTag || '').replace(/^P0+/, '') + suffix;
+      fileHash = xiconfResult.gprsInputFileHash;
+    }
+    else if (file === 'gprsOutput')
+    {
+      type = 'xml';
+      suffix += '.xml';
+      filename = (xiconfResult.serviceTag || '').replace(/^P0+/, '') + suffix;
+      fileHash = xiconfResult.gprsOutputFileHash;
     }
     else
     {
@@ -84,11 +94,9 @@ module.exports = function downloadRoute(file, app, xiconfModule, XiconfResult, r
       return res.send(xiconfResult.workflow);
     }
 
-    if (xiconfResult.featureHash)
+    if (fileHash)
     {
-      return res.sendFile(
-        path.join(xiconfModule.config.featureDbPath, xiconfResult.featureHash + '.xml')
-      );
+      return res.sendFile(path.join(xiconfModule.config.featureDbPath, fileHash + '.xml'));
     }
 
     res.send('?');

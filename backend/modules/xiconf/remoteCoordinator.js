@@ -48,6 +48,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     socket.on('disconnect', handleClientDisconnect);
     socket.on('xiconf.connect', handleClientConnect);
     socket.on('xiconf.checkSerialNumber', handleCheckSerialNumberRequest);
+    socket.on('xiconf.generateServiceTag', handleGenerateServiceTagRequest);
     socket.on('xiconf.acquireServiceTag', handleAcquireServiceTagRequest);
     socket.on('xiconf.releaseServiceTag', handleReleaseServiceTagRequest);
     socket.on('xiconf.selectedOrderNoChanged', onClientsSelectedOrderNoChanged);
@@ -596,6 +597,33 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     checkSerialNumber(input, reply);
   }
 
+  function handleGenerateServiceTagRequest(input, reply)
+  {
+    /*jshint validthis:true*/
+
+    var socket = this;
+
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (!socket.xiconf)
+    {
+      return reply(new Error('NOT_CONNECTED'));
+    }
+
+    if (!_.isObject(input)
+      || !_.isString(input.orderNo)
+      || !_.isString(input.nc12)
+      || !validateInputLeds(input))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    generateServiceTag(input, reply);
+  }
+
   function handleAcquireServiceTagRequest(input, reply)
   {
     /*jshint validthis:true*/
@@ -617,6 +645,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       || !_.isString(input.nc12)
       || !_.isBoolean(input.multi)
       || !validateInputLeds(input))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    if (!_.isString(input.serviceTag))
+    {
+      input.serviceTag = null;
+    }
+    else if (!/^P[0-9]{17}$/.test(input.serviceTag))
     {
       return reply(new Error('INPUT'));
     }
@@ -728,9 +765,19 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     });
   }
 
+  function generateServiceTag(input, reply)
+  {
+    queueOrderOperation(input.orderNo, generateNextServiceTag, reply, {
+      orderNo: input.orderNo,
+      nc12: input.nc12,
+      leds: input.leds
+    });
+  }
+
   function acquireServiceTag(input, reply)
   {
     queueOrderOperation(input.orderNo, acquireNextServiceTag, reply, {
+      serviceTag: input.serviceTag,
       orderNo: input.orderNo,
       nc12: input.nc12,
       multi: input.multi,
@@ -868,7 +915,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           {
             ledItems.push(item);
           }
-          else
+          else if (item.kind === 'program')
           {
             programItems.push({item: item, index: i});
           }
@@ -1005,6 +1052,122 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     );
   }
 
+  function generateNextServiceTag(data, done)
+  {
+    step(
+      function getOrderDataStep()
+      {
+        getOrderData(data.orderNo, this.next());
+      },
+      function generateServiceTagStep(err, orderData)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!orderData)
+        {
+          return this.skip(new Error('ORDER_NOT_FOUND'));
+        }
+
+        if (orderData.serviceTagCounter === 9999)
+        {
+          return this.skip(new Error('NO_FREE_SERVICE_TAGS'));
+        }
+
+        var programItem;
+        var programItemIndex = -1;
+        var ledItems = {};
+
+        for (var i = 0; i < orderData.items.length; ++i)
+        {
+          var item = orderData.items[i];
+
+          if (item.kind === 'led')
+          {
+            ledItems[item.nc12] = {
+              item: item,
+              index: i
+            };
+          }
+          else if (item.kind === 'program' && item.nc12 === data.nc12)
+          {
+            programItem = item;
+            programItemIndex = i;
+          }
+        }
+
+        var $set = {
+          serviceTagCounter: orderData.serviceTagCounter + 1
+        };
+        var changes = [
+          function(orderData) { orderData.serviceTagCounter = $set.serviceTagCounter; }
+        ];
+        var anyLeds = false;
+
+        _.forEach(data.leds, function(led)
+        {
+          var ledItem = ledItems[led.nc12];
+
+          if (ledItem)
+          {
+            delete ledItems[led.nc12];
+
+            anyLeds = true;
+          }
+        });
+
+        if (programItemIndex === -1 && !anyLeds)
+        {
+          return this.skip(new Error('12NC_NOT_FOUND'));
+        }
+
+        var condition = {_id: data.orderNo};
+        var updates = {$set: $set};
+
+        XiconfOrder.collection.update(condition, updates, this.next());
+
+        this.orderData = orderData;
+        this.changes = changes;
+      },
+      function applyChangesStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        applyOrderDataChanges(this.orderData, this.changes);
+
+        return this.skip(null, buildServiceTag(this.orderData._id, this.orderData.serviceTagCounter));
+      },
+      function replyStep(err, serviceTag)
+      {
+        if (err)
+        {
+          xiconfModule.error("Failed to generate a new Service Tag for order [%s]: %s", data.orderNo, err.message);
+
+          setImmediate(execNextOrderOperation, data.orderNo);
+        }
+        else
+        {
+          app.broker.publish('xiconf.orders.' + data.orderNo + '.serviceTagGenerated', {
+            orderNo: data.orderNo,
+            serviceTag: serviceTag
+          });
+
+          setImmediate(execNextOrderOperation, data.orderNo);
+        }
+
+        this.orderData = null;
+        this.changes = null;
+
+        done(err, _.isString(serviceTag) ? serviceTag : null);
+      }
+    );
+  }
+
   function acquireNextServiceTag(data, done)
   {
     step(
@@ -1044,7 +1207,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
               index: i
             };
           }
-          else if (item.nc12 === data.nc12)
+          else if (item.kind === 'program' && item.nc12 === data.nc12)
           {
             programItem = item;
             programItemIndex = i;
@@ -1053,7 +1216,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         var $push = {};
         var $set = {
-          serviceTagCounter: orderData.serviceTagCounter + 1
+          serviceTagCounter: orderData.serviceTagCounter + (data.serviceTag === null ? 1 : 0)
         };
         var changes = [
           function(orderData) { orderData.serviceTagCounter = $set.serviceTagCounter; }
@@ -1121,9 +1284,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         applyOrderDataChanges(this.orderData, this.changes);
 
-        var serviceTag = _.padLeft(this.orderData.serviceTagCounter.toString(), 4, '0');
-        serviceTag = _.padLeft(this.orderData._id.toString() + serviceTag, 17, '0');
-        serviceTag = 'P' + serviceTag;
+        var serviceTag = data.serviceTag === null
+          ? buildServiceTag(this.orderData._id, this.orderData.serviceTagCounter)
+          : data.serviceTag;
 
         return this.skip(null, serviceTag);
       },
@@ -1201,7 +1364,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
               index: i
             };
           }
-          else if (item.nc12 === data.nc12)
+          else if (item.kind === 'program' && item.nc12 === data.nc12)
           {
             programItem = item;
             programItemIndex = i;
@@ -1792,5 +1955,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         }
       });
     });
+  }
+
+  function buildServiceTag(orderNo, counter)
+  {
+    var serviceTag = _.padLeft(counter.toString(), 4, '0');
+    serviceTag = _.padLeft(orderNo.toString() + serviceTag, 17, '0');
+    serviceTag = 'P' + serviceTag;
+
+    return serviceTag;
   }
 };

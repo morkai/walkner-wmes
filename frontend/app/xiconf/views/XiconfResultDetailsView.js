@@ -42,22 +42,30 @@ define([
       },
       'shown.bs.tab': function(e)
       {
-        var tab = e.target.parentNode.dataset.tab;
+        var tabEl = e.target.parentNode;
+        var tab = tabEl.dataset.tab;
 
-        if (tab === 'feature')
-        {
-          this.highlightFeature();
-        }
-        else if (tab === 'program')
+        if (tab === 'program')
         {
           this.renderMetrics();
+
+          return;
+        }
+
+        if (tabEl.dataset.highlight !== undefined)
+        {
+          this.highlight(tab);
         }
       }
     },
 
     initialize: function()
     {
-      this.featureHighlighted = false;
+      this.highlighted = {
+        feature: false,
+        gprsInputFile: false,
+        gprsOutputFile: false
+      };
       this.metricsChart = null;
 
       this.setView('.xiconf-details-leds', new LedsView({model: this.model}));
@@ -84,7 +92,11 @@ define([
 
     beforeRender: function()
     {
-      this.featureHighlighted = false;
+      this.highlighted = {
+        feature: false,
+        gprsInputFile: false,
+        gprsOutputFile: false
+      };
 
       if (this.metricsChart !== null)
       {
@@ -107,19 +119,19 @@ define([
       this.$('.nav-tabs > li[data-tab="' + tab + '"] > a').tab('show');
     },
 
-    highlightFeature: function()
+    highlight: function(what)
     {
-      if (this.featureHighlighted)
+      if (this.highlighted[what])
       {
         return;
       }
 
-      if (this.model.hasFeatureData())
+      if (this.model.get(what))
       {
-        hljs.highlightBlock(this.$id('feature').find('code')[0]);
+        hljs.highlightBlock(this.$id(what).find('code')[0]);
       }
 
-      this.featureHighlighted = true;
+      this.highlighted[what] = true;
     },
 
     renderMetrics: function()

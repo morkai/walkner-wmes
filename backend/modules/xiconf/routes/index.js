@@ -66,7 +66,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     canView,
     express.crud.readRoute.bind(null, app, {
       model: XiconfOrder,
-      prepareResult: prepareOrderDetails
+      prepareResult: prepareXiconfOrder
     })
   );
 
@@ -110,12 +110,30 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   );
 
   express.get(
+    '/xiconf/results/:id;gprsOrder',
+    canView,
+    downloadRoute.bind(null, 'gprsOrder', app, xiconfModule, XiconfResult)
+  );
+
+  express.get(
+    '/xiconf/results/:id;gprsInput',
+    canView,
+    downloadRoute.bind(null, 'gprsInput', app, xiconfModule, XiconfResult)
+  );
+
+  express.get(
+    '/xiconf/results/:id;gprsOutput',
+    canView,
+    downloadRoute.bind(null, 'gprsOutput', app, xiconfModule, XiconfResult)
+  );
+
+  express.get(
     '/xiconf/results/:id',
     canView,
     populateOrder.bind(null, []),
     express.crud.readRoute.bind(null, app, {
       model: XiconfResult,
-      prepareResult: readFeatureFile
+      prepareResult: prepareXiconfResult
     })
   );
 
@@ -177,6 +195,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       '"srcTitle': doc.srcTitle,
       '"orderNo': doc.orderNo,
       '"12nc': doc.nc12,
+      '"gprs12nc': doc.gprsNc12,
       '"programName': doc.programName,
       '#counter': doc.counter,
       '#quantity': doc.order ? doc.order.quantity : null,
@@ -216,27 +235,44 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     };
   }
 
-  function readFeatureFile(xiconfResult, done)
+  function prepareXiconfResult(xiconfResult, done)
   {
-    if (xiconfResult.featureHash === null)
+    xiconfResult = xiconfResult.toJSON();
+
+    step(
+      function()
+      {
+        readFileContents(xiconfResult, 'feature', xiconfResult.featureHash, this.group());
+        readFileContents(xiconfResult, 'gprsOrderFile', xiconfResult.gprsOrderFileHash, this.group());
+        readFileContents(xiconfResult, 'gprsInputFile', xiconfResult.gprsInputFileHash, this.group());
+        readFileContents(xiconfResult, 'gprsOutputFile', xiconfResult.gprsOutputFileHash, this.group());
+      },
+      function(err)
+      {
+        return done(err, xiconfResult);
+      }
+    );
+  }
+
+  function readFileContents(xiconfResult, property, fileHash, done)
+  {
+    if (!fileHash)
     {
-      return done(null, xiconfResult);
+      return done();
     }
 
-    var featurePath = path.join(xiconfModule.config.featureDbPath, xiconfResult.featureHash + '.xml');
+    var filePath = path.join(xiconfModule.config.featureDbPath, fileHash + '.xml');
 
-    fs.readFile(featurePath, 'utf8', function(err, contents)
+    fs.readFile(filePath, 'utf8', function(err, contents)
     {
       if (err && err.code !== 'ENOENT')
       {
         return done(err);
       }
 
-      var result = xiconfResult.toJSON();
+      xiconfResult[property] = contents || null;
 
-      result.feature = contents || null;
-
-      return done(null, result);
+      return done();
     });
   }
 
@@ -281,7 +317,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     next();
   }
 
-  function prepareOrderDetails(xiconfOrder, done)
+  function prepareXiconfOrder(xiconfOrder, done)
   {
     xiconfOrder = xiconfOrder.toJSON();
 

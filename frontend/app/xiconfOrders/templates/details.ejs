@@ -76,7 +76,13 @@
           </div>
           <div class="prop">
             <div class="prop-name"><%- t('xiconf', 'PROPERTY:quantity') %></div>
-            <div class="prop-value"><%- item.totalQuantityDone.toLocaleString() %>/<%- item.quantityTodo.toLocaleString() %> <%- t('xiconfOrders', 'kindUnit:' + item.kind) %></div>
+            <div class="prop-value">
+              <% if (item.kind === 'gprs') { %>
+              <%- item.quantityTodo.toLocaleString() %>
+              <% } else { %>
+              <%- item.totalQuantityDone.toLocaleString() %>/<%- item.quantityTodo.toLocaleString() %> <%- t('xiconfOrders', 'kindUnit:' + item.kind) %>
+              <% } %>
+            </div>
           </div>
         </div>
       </div>

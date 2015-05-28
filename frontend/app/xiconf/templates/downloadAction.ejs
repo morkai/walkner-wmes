@@ -3,7 +3,8 @@
     <i class="fa fa-download"></i><span><%- t('xiconf', 'PAGE_ACTION:download') %></span> <span class="caret"></span>
   </button>
   <ul class="dropdown-menu pull-right">
-    <li class="<%- workflow ? '' : 'disabled' %>"><a <% if (workflow) { %>href="<%- workflow %>"<% } %>><%- t('xiconf', 'PAGE_ACTION:download:workflow') %></a></li>
-    <li class="<%- feature ? '' : 'disabled' %>"><a <% if (feature) { %>href="<%- feature %>"<% } %>><%- t('xiconf', 'PAGE_ACTION:download:feature') %></a></li>
+    <% Object.keys(files).forEach(function(type) { %>
+    <li class="<%- files[type] ? '' : 'disabled' %>"><a <%- files[type] ? ('href="' + files[type] + '"') : '' %>><%- t('xiconf', 'PAGE_ACTION:download:' + type) %></a></li>
+    <% }) %>
   </ul>
 </div>
