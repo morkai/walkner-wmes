@@ -162,6 +162,8 @@ define([
       switch (property)
       {
         case 'eventDate':
+          return time.format(value, 'YYYY-MM-DD, HH:mm');
+
         case 'kaizenStartDate':
         case 'kaizenFinishDate':
           return time.format(value, 'YYYY-MM-DD');

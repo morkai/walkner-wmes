@@ -172,6 +172,18 @@ define([
     serializeToForm: function()
     {
       var formData = this.model.toJSON();
+      var eventDate = formData.eventDate ? time.getMoment(formData.eventDate) : null;
+
+      if (eventDate)
+      {
+        formData.eventDate = eventDate.format('YYYY-MM-DD');
+        formData.eventTime = eventDate.format('HH:mm');
+      }
+      else
+      {
+        formData.eventDate = '';
+        formData.eventTime = '';
+      }
 
       KaizenOrder.DATE_PROPERTIES.forEach(function(property)
       {
@@ -209,6 +221,21 @@ define([
 
         formData[property] = dateMoment.isValid() ? dateMoment.toISOString() : null;
       });
+
+      var eventTimeMatches = (formData.eventTime || '').match(/([0-9]{1,2}):([0-9]{1,2})/);
+      var eventTime = '00:00';
+
+      delete formData.eventTime;
+
+      if (eventTimeMatches)
+      {
+        eventTime = (eventTimeMatches[1].length === 1 ? '0' : '') + eventTimeMatches[1]
+          + ':' + (eventTimeMatches[2].length === 1 ? '0' : '') + eventTimeMatches[2];
+      }
+
+      var eventDate = time.getMoment(formData.eventDate + ' ' + eventTime, 'YYYY-MM-DD HH:mm');
+
+      formData.eventDate = eventDate.isValid() ? eventDate.toISOString() : null;
 
       return formData;
 

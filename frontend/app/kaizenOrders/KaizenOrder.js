@@ -21,7 +21,7 @@ define([
 ) {
   'use strict';
 
-  var DATE_PROPERTIES = ['eventDate', 'kaizenStartDate', 'kaizenFinishDate'];
+  var DATE_PROPERTIES = ['kaizenStartDate', 'kaizenFinishDate'];
   var TIME_PROPERTIES = ['createdAt', 'updatedAt', 'confirmedAt'];
   var USER_INFO_PROPERTIES = ['creator', 'updater', 'confirmer'];
   var OWNER_PROPERTIES = ['nearMissOwners', 'suggestionOwners', 'kaizenOwners'];
@@ -69,6 +69,7 @@ define([
       }).join(' ');
 
       obj.status = t('kaizenOrders', 'status:' + obj.status);
+      obj.eventDate = !obj.eventDate ? null : time.format(obj.eventDate, longDateTime ? 'LLLL' : 'YY-MM-DD, HH:mm');
 
       DATE_PROPERTIES.forEach(function(dateProperty)
       {
