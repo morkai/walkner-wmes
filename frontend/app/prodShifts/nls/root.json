@@ -52,7 +52,6 @@
     "totalQuantityDone": "{actual} of {planned}",
 
     "timeline:title": "Timeline",
-    "timeline:title:manage": "(hold Ctrl while hovering over an area, to enable additional actions)",
     "timeline:action:addOrder": "Add order",
     "timeline:action:addDowntime": "Add downtime",
     "timeline:action:editOrder": "Edit order",
