@@ -31,13 +31,13 @@
           <input id="<%- idPrefix %>-lastName" class="form-control" type="text" name="lastName" maxlength="50">
         </div>
         <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-gender" class="control-label"><%- t('users', 'PROPERTY:gender') %></label>
+          <label for="<%- idPrefix %>-gender" class="control-label is-required"><%- t('users', 'PROPERTY:gender') %></label>
           <div>
             <label class="radio-inline">
-              <input type="radio" name="gender" value="female"> <%- t('users', 'gender:female') %>
+              <input type="radio" name="gender" value="female" required> <%- t('users', 'gender:female') %>
             </label>
             <label class="radio-inline">
-              <input type="radio" name="gender" value="male"> <%- t('users', 'gender:male') %>
+              <input type="radio" name="gender" value="male" required> <%- t('users', 'gender:male') %>
             </label>
           </div>
         </div>
