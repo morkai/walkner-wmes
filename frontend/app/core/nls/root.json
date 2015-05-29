@@ -92,6 +92,7 @@
     "NAVBAR:REPORTS:4": "Operators",
     "NAVBAR:REPORTS:5": "HR",
     "NAVBAR:REPORTS:6": "Warehouse",
+    "NAVBAR:REPORTS:7": "Downtimes in AORs",
     "NAVBAR:PROD": "Production",
     "NAVBAR:PROD:DATA": "Production data",
     "NAVBAR:PROD:LOG_ENTRIES": "Operation log",

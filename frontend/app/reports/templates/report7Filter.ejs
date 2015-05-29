@@ -1,0 +1,19 @@
+<form class="well filter-form">
+  <div class="form-group">
+    <label><%- t('reports', '7:filter:statuses') %></label>
+    <div id="<%- idPrefix %>-statuses" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['undecided', 'rejected', 'confirmed'].forEach(function(status) { %>
+      <label class="btn btn-default">
+        <input type="checkbox" name="statuses[]" value="<%- status %>"> <%- t('prodDowntimes', 'PROPERTY:status:' + status) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group reports-7-filter-aors">
+    <label for="<%- idPrefix %>-aors"><%- t('reports', '7:filter:aors') %></label>
+    <input id="<%- idPrefix %>-aors" name="aors" type="text" placeholder="<%- t('reports', '7:filter:aors:ph') %>">
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('reports', 'filter:submit') %></span></button>
+  </div>
+</form>

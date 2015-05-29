@@ -96,6 +96,14 @@ define([
     });
   });
 
+  router.map('/reports/7', canView, function(req)
+  {
+    viewport.loadPage('app/reports/pages/Report7Page', function(Report7Page)
+    {
+      return new Report7Page({query: req.query});
+    });
+  });
+
   router.map('/reports;settings', user.auth('REPORTS:MANAGE'), function(req)
   {
     viewport.loadPage('app/reports/pages/ReportSettingsPage', function(ReportSettingsPage)

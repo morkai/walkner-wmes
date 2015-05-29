@@ -125,6 +125,8 @@ module.exports = function(mongoose, options, done)
         results.clip.push({
           key: this.fromGroupKey,
           orderCount: orderCount,
+          productionCount: this.productionMap[groupKey] || 0,
+          endToEndCount: this.endToEndMap[groupKey] || 0,
           production: isNaN(production) ? undefined : util.round(production),
           endToEnd: isNaN(endToEnd) ? undefined : util.round(endToEnd)
         });

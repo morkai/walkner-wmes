@@ -16,6 +16,7 @@ var report4Route = require('./report4');
 var report4NotesRoute = require('./report4Notes');
 var report5Route = require('./report5');
 var report6Route = require('./report6');
+var report7Route = require('./report7');
 
 module.exports = function setUpReportsRoutes(app, reportsModule)
 {
@@ -76,6 +77,13 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     canView,
     helpers.sendCachedReport.bind(null, '6'),
     report6Route.bind(null, app, reportsModule)
+  );
+
+  express.get(
+    '/reports/7',
+    canView,
+    helpers.sendCachedReport.bind(null, '7'),
+    report7Route.bind(null, app, reportsModule)
   );
 
   express.get(

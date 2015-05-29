@@ -14,6 +14,7 @@
     "BREADCRUMBS:6:exTransactions": "External transactions",
     "BREADCRUMBS:6:inTransactions": "Internal transactions",
     "BREADCRUMBS:6:fifo": "'FIFO' component delivery",
+    "BREADCRUMBS:7": "Downtimes in AORs",
 
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:2:export": "Export orders",
@@ -331,6 +332,8 @@
     "filenames:6:totalAndAbsence:total": "WMES_WH_FTE_Total",
     "filenames:6:totalAndAbsence:comp": "WMES_WH_FTE_Comp",
     "filenames:6:totalAndAbsence:finGoods": "WMES_WH_FTE_FinGoods",
+    "filenames:7:inout:downtimeTimes": "WMES_AORDowntimes_Times",
+    "filenames:7:inout:downtimeCounts": "WMES_AORDowntimes_Counts",
 
     "orders:empty": "No matching orders found.",
     "orders:cnf:status": "Confirmation<br>(production)",
@@ -352,7 +355,15 @@
     "orders:filter:status:CNF": "Confirmed (CNF)",
     "orders:filter:status:PCNF": "Partially confirmed (PCNF)",
     "orders:filter:status:DLV": "Delivered (DLV)",
-    "orders:filter:status:PDLV": "Partially delivered (PDLV)"
+    "orders:filter:status:PDLV": "Partially delivered (PDLV)",
+
+    "7:filter:statuses": "Downtime statuses on the list",
+    "7:filter:aors": "Areas of responsibility",
+    "7:filter:aors:ph": "All AORs",
+    "7:title:downtimeTimes": "Total downtime duration",
+    "7:title:downtimeCounts": "Total downtime count",
+    "7:series:indoor": "Indoor",
+    "7:series:outdoor": "Outdoor"
   },
   "pl": true
 }

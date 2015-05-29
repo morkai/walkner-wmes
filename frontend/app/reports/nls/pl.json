@@ -12,6 +12,7 @@
   "BREADCRUMBS:6:finGoods": "Magazyn wyrobów gotowych",
   "BREADCRUMBS:6:exTransactions": "Obsługa transakcji zewnętrznych",
   "BREADCRUMBS:6:fifo": "Dostarczanie komponentów FIFO",
+  "BREADCRUMBS:7": "Przestoje w obszarach",
 
   "PAGE_ACTION:settings": "Zmień ustawienia",
   "PAGE_ACTION:2:export": "Eksportuj zlecenia",
@@ -336,6 +337,8 @@
   "filenames:6:totalAndAbsence:total": "WMES_Magazyn_Zatr_Calkowite",
   "filenames:6:totalAndAbsence:comp": "WMES_Magazyn_Zatr_MagKomp",
   "filenames:6:totalAndAbsence:finGoods": "WMES_Magazyn_Zatr_MagWyrGot",
+  "filenames:7:inout:downtimeTimes": "WMES_PrzestojeObszary_Czasy",
+  "filenames:7:inout:downtimeCounts": "WMES_PrzestojeObszary_Ilosci",
 
   "orders:empty": "Nie znaleziono żadnych pasujących zleceń.",
   "orders:cnf:status": "Potwierdzenie<br>(produkcja)",
@@ -357,5 +360,13 @@
   "orders:filter:status:CNF": "Potwierdzone (CNF)",
   "orders:filter:status:PCNF": "Częściowo potwierdzone (PCNF)",
   "orders:filter:status:DLV": "Dostarczone (DLV)",
-  "orders:filter:status:PDLV": "Częściowo dostarczone (PDLV)"
+  "orders:filter:status:PDLV": "Częściowo dostarczone (PDLV)",
+
+  "7:filter:statuses": "Status przestojów na liście",
+  "7:filter:aors": "Obszary odpowiedzialności",
+  "7:filter:aors:ph": "Wszystkie obszary",
+  "7:title:downtimeTimes": "Czas przestojów",
+  "7:title:downtimeCounts": "Ilość przestojów",
+  "7:series:indoor": "Indoor",
+  "7:series:outdoor": "Outdoor"
 }

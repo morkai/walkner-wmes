@@ -333,3 +333,21 @@
 .table > tbody > .reports-2-changes > td {
   padding: 0;
 }
+.reports-7-container {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.reports-7-container .reports-2-clip {
+  height: 360px;
+}
+.reports-7-container .reports-2-clip .highcharts-title {
+  fill: #428BCA!important;
+  cursor: pointer;
+}
+.reports-7-container .reports-2-clip .highcharts-title:hover {
+  fill: #2A6496!important;
+}
+.reports-7-filter-aors {
+  min-width: 400px;
+  max-height: 700px;
+}

@@ -89,7 +89,7 @@ exports.start = function startReportsModule(app, module)
 
   app.broker.subscribe('clipOrderCount.created', function()
   {
-    helpers.clearCachedReports('2');
+    helpers.clearCachedReports(['2', '7']);
   });
 
   app.broker.subscribe('orders.synced', function()

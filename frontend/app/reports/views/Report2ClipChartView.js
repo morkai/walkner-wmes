@@ -36,7 +36,11 @@ define([
       this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:clip', this.render);
       this.listenTo(this.settings, 'add change', this.onSettingsUpdate);
-      this.listenTo(this.displayOptions, 'change', _.debounce(this.onDisplayOptionsChange, 1));
+
+      if (this.displayOptions)
+      {
+        this.listenTo(this.displayOptions, 'change', _.debounce(this.onDisplayOptionsChange, 1));
+      }
     },
 
     destroy: function()
@@ -61,6 +65,10 @@ define([
         if (this.isLoading)
         {
           this.chart.showLoading();
+        }
+        else if (!this.displayOptions)
+        {
+          this.updateExtremes();
         }
       }
 
@@ -129,6 +137,15 @@ define([
     updateExtremes: function(redraw)
     {
       var displayOptions = this.displayOptions;
+
+      if (!displayOptions)
+      {
+        this.chart.yAxis[0].setExtremes(0, null, false, false);
+        this.chart.yAxis[1].setExtremes(0, null, redraw, false);
+
+        return;
+      }
+
       var useMax = !this.isFullscreen && (!this.model.get('isParent') || this.model.get('extremes') === 'parent');
       var maxClipOrderCount = null;
       var maxClipPercent = null;
@@ -240,6 +257,7 @@ define([
     {
       var chartData = this.serializeChartData();
       var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
+      var displayOptions = this.displayOptions;
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -299,7 +317,7 @@ define([
             type: 'area',
             yAxis: 0,
             data: chartData.orderCount,
-            visible: this.displayOptions.isSeriesVisible('clipOrderCount')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipOrderCount')
           },
           {
             id: 'clipProductionCount',
@@ -309,7 +327,7 @@ define([
             dashStyle: 'LongDash',
             yAxis: 0,
             data: chartData.productionCount,
-            visible: this.displayOptions.isSeriesVisible('clipOrderCount')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipOrderCount')
           },
           {
             id: 'clipEndToEndCount',
@@ -319,7 +337,7 @@ define([
             dashStyle: 'LongDash',
             yAxis: 0,
             data: chartData.endToEndCount,
-            visible: this.displayOptions.isSeriesVisible('clipOrderCount')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipOrderCount')
           },
           {
             id: 'clipProduction',
@@ -331,7 +349,7 @@ define([
             tooltip: {
               valueSuffix: '%'
             },
-            visible: this.displayOptions.isSeriesVisible('clipProduction')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipProduction')
           },
           {
             id: 'clipEndToEnd',
@@ -343,7 +361,7 @@ define([
             tooltip: {
               valueSuffix: '%'
             },
-            visible: this.displayOptions.isSeriesVisible('clipEndToEnd')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipEndToEnd')
           }
         ]
       });
