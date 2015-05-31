@@ -228,9 +228,9 @@
     "log:GPRS:VERIFICATION_STARTED": "Starting the verification process...",
     "log:GPRS:VERIFICATION_SKIPPED": "Skipping the verification process...",
 
-    "error:GPRS:READING_ORDER_FILE_FAILURE": "Reading contents of the order file failed: <code>{error}</code>",
+    "error:GPRS:READING_ORDER_FILE_FAILURE": "Reading contents of the order file failed.",
     "error:GPRS:READING_ORDER_FILE_TIMEOUT": "Reading the contents of the order file timed out.",
-    "error:GPRS:READING_INPUT_TEMPLATE_FILE_FAILURE": "Reading contents of the programmer input template file failed: <code>{error}</code>",
+    "error:GPRS:READING_INPUT_TEMPLATE_FILE_FAILURE": "Reading contents of the programmer input template file failed.",
     "error:GPRS:READING_INPUT_TEMPLATE_FILE_TIMEOUT": "Reading the contents of the programmer input template file timed out.",
     "error:GPRS:PARSING_INPUT_TEMPLATE_FAILURE": "Error during parsing of the programmer input template file.",
     "error:GPRS:PREPARING_INPUT_FILE_FAILURE": "Error during saving of the programmer input configuration file.",

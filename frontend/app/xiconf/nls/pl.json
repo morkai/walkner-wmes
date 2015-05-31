@@ -228,9 +228,9 @@
   "log:GPRS:VERIFICATION_STARTED": "Rozpoczynanie weryfikacji...",
   "log:GPRS:VERIFICATION_SKIPPED": "Pomijanie weryfikacji...",
 
-  "error:GPRS:READING_ORDER_FILE_FAILURE": "Błąd podczas odczytywania pliku zlecenia: <code>{error}</code>",
+  "error:GPRS:READING_ORDER_FILE_FAILURE": "Błąd podczas odczytywania pliku zlecenia.",
   "error:GPRS:READING_ORDER_FILE_TIMEOUT": "Upłynął limit czasu odczytywania pliku zlecenia.",
-  "error:GPRS:READING_INPUT_TEMPLATE_FILE_FAILURE": "Błąd podczas odczytywania pliku szablonu konfiguracji programatora: <code>{error}</code>",
+  "error:GPRS:READING_INPUT_TEMPLATE_FILE_FAILURE": "Błąd podczas odczytywania pliku szablonu konfiguracji programatora.",
   "error:GPRS:READING_INPUT_TEMPLATE_FILE_TIMEOUT": "Upłynął limit czasu odczytywania pliku szablonu konfiguracji programatora.",
   "error:GPRS:PARSING_INPUT_TEMPLATE_FAILURE": "Błąd podczas przetwarzania szablonu konfiguracji programatora.",
   "error:GPRS:PREPARING_INPUT_FILE_FAILURE": "Błąd podczas przygotowywania pliku konfiguracji programatora.",
