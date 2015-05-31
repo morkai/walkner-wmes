@@ -101,7 +101,8 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     id: false
   });
 
-  fteLeaderEntrySchema.index({date: -1});
+  fteLeaderEntrySchema.index({subdivision: 1});
+  fteLeaderEntrySchema.index({date: -1, subdivision: 1});
 
   fteLeaderEntrySchema.statics.TOPIC_PREFIX = 'fte.leader';
 

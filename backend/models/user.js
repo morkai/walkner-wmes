@@ -76,6 +76,7 @@ module.exports = function setupUserModel(app, mongoose)
   });
 
   userSchema.index({kdId: 1});
+  userSchema.index({login: 1});
   userSchema.index({personellId: 1});
   userSchema.index({lastName: 1});
   userSchema.index({prodFunction: 1});
