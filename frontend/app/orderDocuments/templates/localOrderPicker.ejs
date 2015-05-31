@@ -1,0 +1,9 @@
+<form class="orderDocuments-localOrderPicker" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- t('orderDocuments', 'localOrderPicker:orderNo') %></label>
+    <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control" type="text" required maxlength="9" pattern="^[0-9]{9}$" autofocus>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" class="btn btn-primary" type="submit"><i class="fa fa-search"></i><span><%- t('orderDocuments', 'localOrderPicker:submit') %></span></button>
+  </div>
+</form>

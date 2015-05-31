@@ -55,6 +55,7 @@ exports.modules = [
   'factoryLayout',
   'permalinks',
   'kaizen',
+  'orderDocuments',
   'mail/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
@@ -91,11 +92,7 @@ exports.events = {
       'app.started',
       'users.login', 'users.logout',
       '*.added', '*.edited',
-      'kaizen.sections.added', 'kaizen.sections.edited',
-      'kaizen.areas.added', 'kaizen.areas.edited',
-      'kaizen.categories.added', 'kaizen.categories.edited',
-      'kaizen.causes.added', 'kaizen.causes.edited',
-      'kaizen.risks.added', 'kaizen.risks.edited'
+      'kaizen.*.added', 'kaizen.*.edited'
     ],
     info: [
       'events.**',
@@ -118,7 +115,8 @@ exports.events = {
     ]
   },
   blacklist: [
-    'pressWorksheets.added'
+    'pressWorksheets.added',
+    'kaizen.orders.added', 'kaizen.orders.edited'
   ]
 };
 
@@ -293,6 +291,11 @@ exports.updater = {
       path: '/manifest.appcache',
       mainJsFile: exports.mainJsFile,
       mainCssFile: exports.mainCssFile
+    },
+    {
+      path: '/orderDocuments/manifest.appcache',
+      mainJsFile: '/wmes-docs.js',
+      mainCssFile: '/assets/wmes-docs.css'
     }
   ]
 };

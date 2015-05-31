@@ -35,6 +35,16 @@ define([
       t.bound('orders', 'BREADCRUMBS:browse')
     ],
 
+    actions: function()
+    {
+      return [{
+        label: t.bound('orders', 'PAGE_ACTION:settings'),
+        icon: 'cogs',
+        privileges: 'ORDERS:MANAGE',
+        href: '#orders;settings'
+      }];
+    },
+
     initialize: function()
     {
       this.defineModels();

@@ -68,3 +68,6 @@
 .table > tfoot > tr > td.orders-commentForm-container {
   padding: 1em;
 }
+.orders-settings .form-control[name="orders.documents.extra"] {
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+}

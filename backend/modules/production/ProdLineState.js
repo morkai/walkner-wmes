@@ -149,6 +149,14 @@ ProdLineState.prototype.getCurrentOrder = function()
 };
 
 /**
+ * @returns {object|null}
+ */
+ProdLineState.prototype.getLastOrder = function()
+{
+  return this.prodShiftOrders.length ? this.prodShiftOrders[this.prodShiftOrders.length - 1] : null;
+};
+
+/**
  * @returns {string|null}
  */
 ProdLineState.prototype.getCurrentDowntimeId = function()

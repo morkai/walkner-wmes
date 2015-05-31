@@ -12,9 +12,28 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 {
   var express = app[ordersModule.config.expressId];
   var userModule = app[ordersModule.config.userId];
+  var settings = app[ordersModule.config.settingsId];
   var Order = app[ordersModule.config.mongooseId].model('Order');
 
+  var canView = userModule.auth('ORDERS:VIEW');
   var canManage = userModule.auth('ORDERS:MANAGE');
+
+  express.get(
+    '/orders/settings',
+    canView,
+    function limitToOrdersSettings(req, res, next)
+    {
+      req.rql.selector = {
+        name: 'regex',
+        args: ['_id', '^orders\\.']
+      };
+
+      return next();
+    },
+    express.crud.browseRoute.bind(null, app, settings.Setting)
+  );
+
+  express.put('/orders/settings/:id', canManage, settings.updateRoute);
 
   express.get('/orders', express.crud.browseRoute.bind(null, app, Order));
 

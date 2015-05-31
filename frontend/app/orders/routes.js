@@ -19,6 +19,7 @@ define([
   'use strict';
 
   var canView = user.auth('ORDERS:VIEW');
+  var canManage = user.auth('ORDERS:MANAGE');
 
   router.map('/orders', canView, function(req)
   {
@@ -28,5 +29,15 @@ define([
   router.map('/orders/:id', function(req)
   {
     viewport.showPage(new OrderDetailsPage({modelId: req.params.id}));
+  });
+
+  router.map('/orders;settings', canManage, function(req)
+  {
+    viewport.loadPage('app/orders/pages/OrderSettingsPage', function(OrderSettingsPage)
+    {
+      return new OrderSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
   });
 });

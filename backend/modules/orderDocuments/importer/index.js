@@ -90,7 +90,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       {
         module.error("[%s] Failed to import: %s", fileInfo.timeKey, err.message);
 
-        app.broker.publish('order.documents.syncFailed', {
+        app.broker.publish('orderDocuments.syncFailed', {
           timestamp: fileInfo.timestamp,
           error: err.message
         });
@@ -99,7 +99,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       {
         module.debug("[%s] Imported in %d ms: %s", fileInfo.timeKey, Date.now() - startTime, JSON.stringify(summary));
 
-        app.broker.publish('order.documents.synced', {
+        app.broker.publish('orderDocuments.synced', {
           timestamp: fileInfo.timestamp,
           updateCount: summary.updateCount
         });

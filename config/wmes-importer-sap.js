@@ -55,16 +55,16 @@ exports.events = {
     info: [
       'events.**',
       'orders.synced',
-      'orders.documents.synced',
       'emptyOrders.synced',
       'clipOrderCount.created',
       'warehouse.*.synced',
-      'xiconf.orders.synced'
+      'xiconf.orders.synced',
+      'orderDocuments.synced'
     ],
     error: [
       'warehouse.*.syncFailed',
       'xiconf.orders.syncFailed',
-      'orders.documents.syncFailed'
+      'orderDocuments.syncFailed'
     ]
   }
 };

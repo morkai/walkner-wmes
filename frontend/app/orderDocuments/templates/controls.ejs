@@ -1,0 +1,24 @@
+<div class="orderDocuments-controls">
+  <input id="<%- idPrefix %>-localFile" class="orderDocuments-localFile" type="file" tabindex="-1" accept="application/pdf">
+  <div class="orderDocuments-controls-components">
+    <div id="<%- idPrefix %>-prodLine" class="orderDocuments-prodLine"></div>
+    <div>
+      <div class="orderDocuments-buttons">
+        <button id="<%- idPrefix %>-openLocalFileDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openLocalFileDialog') %>"><i class="fa fa-folder-open"></i></button>
+        <button id="<%- idPrefix %>-openLocalOrderDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openLocalOrderDialog') %>"><i class="fa fa-search"></i></button>
+        <button id="<%- idPrefix %>-reloadDocument" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:reloadDocument') %>"><i class="fa fa-refresh"></i></button>
+        <button id="<%- idPrefix %>-openSettingsDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openSettingsDialog') %>"><i class="fa fa-wrench"></i></button>
+      </div>
+    </div>
+    <div id="<%- idPrefix %>-order" class="orderDocuments-order">
+      <span class="orderDocuments-order-no" data-property="orderNo"></span>
+      <span class="orderDocuments-order-name" data-property="orderName"></span>
+      <span class="orderDocuments-order-no" data-property="documentNc15"></span>
+      <span class="orderDocuments-order-name" data-property="documentName"></span>
+    </div>
+    <form id="<%- idPrefix %>-filterForm" class="orderDocuments-filter">
+      <input id="<%- idPrefix %>-filterPhrase" type="text" placeholder="&#61616; <%- t('orderDocuments', 'controls:filter:ph') %>" name="filterPhrase" autocomplete="off">
+    </form>
+    <div id="<%- idPrefix %>-documents" class="orderDocuments-documents" tabindex="-1"></div>
+  </div>
+</div>

@@ -75,6 +75,16 @@ define([
 
       data.$prepared = true;
 
+      if (data.date)
+      {
+        data.date = time.format(data.date, 'YYYY-MM-DD');
+      }
+
+      if (data.timestamp)
+      {
+        data.timestamp = time.format(data.timestamp, 'YYYY-MM-DD, HH:mm:ss');
+      }
+
       switch (type)
       {
         case 'fte.leader.created':
@@ -98,20 +108,6 @@ define([
           data.model.division = division ? renderOrgUnitPath(division, false, false) : '?';
           data.model.date = time.format(data.model.date, 'YYYY-MM-DD');
           data.model.shift = t('core', 'SHIFT:' + data.model.shift);
-          break;
-
-        case 'clipOrderCount.created':
-        case 'warehouse.shiftMetrics.synced':
-        case 'warehouse.shiftMetrics.syncFailed':
-          data.date = time.format(data.date, 'YYYY-MM-DD');
-          break;
-
-        case 'warehouse.controlCycles.synced':
-        case 'warehouse.controlCycles.syncFailed':
-        case 'warehouse.transferOrders.synced':
-        case 'warehouse.transferOrders.syncFailed':
-        case 'xiconf.orders.synced':
-          data.timestamp = time.format(data.timestamp, 'YYYY-MM-DD, HH:mm:ss');
           break;
 
         case 'purchaseOrders.synced':

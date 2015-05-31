@@ -1,9 +1,12 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Production orders",
+    "BREADCRUMBS:settings": "Settings",
 
     "MSG:LOADING_FAILURE": "Failed to load the orders :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order details :(",
+
+    "PAGE_ACTION:settings": "Change settings",
 
     "PANEL:TITLE:details": "Order's details",
     "PANEL:TITLE:operations": "Order's operations",
@@ -57,7 +60,11 @@
     "commentForm:delayReason": "New delay reason",
     "commentForm:comment": "Comment",
     "commentForm:submit:comment": "Comment",
-    "commentForm:submit:edit": "Change delay reason"
+    "commentForm:submit:edit": "Change delay reason",
+
+    "settings:tab:documents": "Documents",
+    "settings:documents:path": "Path to a directory with the document files",
+    "settings:documents:extra": "Extra documents"
   },
   "pl": true
 }

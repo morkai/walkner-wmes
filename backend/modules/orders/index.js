@@ -11,7 +11,8 @@ var setUpEmptyOrdersRoutes = require('./emptyOrdersRoutes');
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
-  userId: 'user'
+  userId: 'user',
+  settingsId: 'settings'
 };
 
 exports.start = function startOrdersModule(app, module)
@@ -20,7 +21,8 @@ exports.start = function startOrdersModule(app, module)
     [
       module.config.mongooseId,
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.settingsId
     ],
     function()
     {

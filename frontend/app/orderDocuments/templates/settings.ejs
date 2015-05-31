@@ -1,0 +1,49 @@
+<form class="orderDocuments-settings" autocomplete="off">
+  <div class="message message-inline message-warning"><%- t('orderDocuments', 'settings:msg:localServer:checking') %></div>
+  <div class="message message-inline message-success hidden"><%- t('orderDocuments', 'settings:msg:localServer:success') %></div>
+  <div class="message message-inline message-error hidden"><%- t('orderDocuments', 'settings:msg:localServer:failure') %></div>
+  <input name="fake-login" type="text" style="display: none">
+  <input name="fake-password" type="password" style="display: none">
+  <div class="form-group" title="<%- t('orderDocuments', 'settings:prodLineId:help') %>">
+    <label for="<%- idPrefix %>-prodLineId" class="control-label is-required"><%- t('orderDocuments', 'settings:prodLineId') %></label>
+    <input id="<%- idPrefix %>-prodLineId" name="prodLineId" class="form-control" type="text" required autofocus>
+  </div>
+  <div class="form-group" title="<%- t('orderDocuments', 'settings:prodLineName:help') %>">
+    <label for="<%- idPrefix %>-prodLineName" class="control-label is-required"><%- t('orderDocuments', 'settings:prodLineName') %></label>
+    <input id="<%- idPrefix %>-prodLineName" name="prodLineName" class="form-control" type="text" required>
+  </div>
+  <div class="form-group">
+    <div class="radio">
+      <label class="control-label">
+        <input name="prefixFilterMode" type="radio" value="inclusive">
+        <%- t('orderDocuments', 'settings:prefixFilter:inclusive') %>
+      </label>
+    </div>
+    <div class="radio">
+      <label class="control-label">
+        <input name="prefixFilterMode" type="radio" value="exclusive">
+        <%- t('orderDocuments', 'settings:prefixFilter:exclusive') %>
+      </label>
+    </div>
+    <input id="<%- idPrefix %>-prefixFilter" name="prefixFilter" class="form-control" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-localServerUrl" class="control-label"><%- t('orderDocuments', 'settings:localServerUrl') %></label>
+    <input id="<%- idPrefix %>-localServerUrl" name="localServerUrl" class="form-control" type="url">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-localServerPath" class="control-label"><%- t('orderDocuments', 'settings:localServerPath') %></label>
+    <input id="<%- idPrefix %>-localServerPath" name="localServerPath" class="form-control" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('orderDocuments', 'settings:login') %></label>
+    <input id="<%- idPrefix %>-login" name="login" class="form-control" type="text" required>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-password" class="control-label is-required"><%- t('orderDocuments', 'settings:password') %></label>
+    <input id="<%- idPrefix %>-password" name="password" class="form-control" type="password" required>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" class="btn btn-primary" type="submit"><i class="fa fa-save"></i><span><%- t('orderDocuments', 'settings:submit') %></span></button>
+  </div>
+</form>

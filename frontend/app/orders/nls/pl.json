@@ -1,8 +1,11 @@
 {
   "BREADCRUMBS:browse": "Zlecenia reszty działów",
+  "BREADCRUMBS:settings": "Ustawienia",
 
   "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się :(",
+
+  "PAGE_ACTION:settings": "Zmień ustawienia",
 
   "PANEL:TITLE:details": "Szczegóły zlecenia",
   "PANEL:TITLE:operations": "Lista operacji zlecenia",
@@ -56,5 +59,9 @@
   "commentForm:delayReason": "Nowy powód opóźnienia",
   "commentForm:comment": "Komentarz",
   "commentForm:submit:comment": "Komentuj",
-  "commentForm:submit:edit": "Zmień powód opóźnienia"
+  "commentForm:submit:edit": "Zmień powód opóźnienia",
+
+  "settings:tab:documents": "Dokumenty",
+  "settings:documents:path": "Ścieżka do katalogu z plikami dokumentów",
+  "settings:documents:extra": "Dodatkowe dokumenty"
 }
