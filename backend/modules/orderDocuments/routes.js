@@ -13,10 +13,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 {
   var express = app[module.config.expressId];
   var userModule = app[module.config.userId];
-  var mongoose = app[module.config.mongooseId];
   var updaterModule = app[module.config.updaterId];
   var orgUnits = app[module.config.orgUnitsId];
-  var Order = mongoose.model('Order');
 
   express.get('/docs/:clientId', function(req, res)
   {
@@ -24,7 +22,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       'text/html': function()
       {
         res.render('index', {
-          appCacheManifest: app.options.env !== 'development' ? 'orderDocuments/manifest.appcache' : '',
+          appCacheManifest: app.options.env !== 'development' ? '/orderDocuments/manifest.appcache' : '',
           appData: {
             ENV: JSON.stringify(app.options.env),
             VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
@@ -105,7 +103,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     });
   });
 
-  express.head('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res, next)
+  express.head('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res)
   {
     findDocumentFilePath(req.params.nc15, function(err)
     {
