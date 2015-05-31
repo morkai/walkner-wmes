@@ -17,7 +17,7 @@ define([
   return View.extend({
 
     clientUrl: '#settings',
-    defaultTab: 'default',
+    defaultTab: null,
     updateSettingField: function(setting)
     {
       /*jshint unused:false*/
@@ -124,7 +124,7 @@ define([
         this.dataset.value = this.value;
       });
 
-      this.changeTab(this.currentTab || this.defaultTab);
+      this.changeTab(this.currentTab || this.defaultTab || this.$('.list-group-item[data-tab]').attr('data-tab'));
     },
 
     changeTab: function(tab)
