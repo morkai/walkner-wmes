@@ -54,12 +54,19 @@ define([
 
         if (el.value !== lastValue)
         {
-          this.scheduleUpdateSetting(el, 1200);
+          this.scheduleUpdateSetting(el, parseInt(el.dataset.keyupDelay, 10) || 1200);
         }
       },
       'change .form-control, input[type="checkbox"], input[type="radio"]': function(e)
       {
-        this.scheduleUpdateSetting(e.target, 300);
+        var delay = parseInt(e.target.dataset.changeDelay, 10);
+
+        if (isNaN(delay) || delay < 0)
+        {
+          delay = 300;
+        }
+
+        this.scheduleUpdateSetting(e.target, delay);
       }
     },
 
@@ -285,6 +292,15 @@ define([
       if (this.timers[settingId])
       {
         clearTimeout(this.timers[settingId]);
+      }
+
+      if (delay === 0)
+      {
+        delete this.timers[settingId];
+
+        this.updateSetting(settingId, settingValue);
+
+        return;
       }
 
       this.timers[settingId] = setTimeout(this.updateSetting.bind(this, settingId, settingValue), delay);
