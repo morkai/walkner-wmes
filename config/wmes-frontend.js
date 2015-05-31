@@ -49,7 +49,6 @@ exports.modules = [
   'pressWorksheets',
   'reports',
   'xiconf',
-  'icpo',
   'warehouse',
   'licenses',
   'factoryLayout',
@@ -170,7 +169,6 @@ exports.mongoose = {
     'feedback',
     'license', 'licensePing',
     'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfOrder', 'xiconfClient',
-    'icpoResult',
     'factoryLayout',
     'whTransferOrder',
     'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenOrder'

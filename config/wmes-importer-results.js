@@ -12,8 +12,7 @@ exports.modules = [
   {id: 'directoryWatcher', name: 'directoryWatcher:xiconf'},
   {id: 'directoryWatcher', name: 'directoryWatcher:icpo'},
   'licenses',
-  'xiconf',
-  'icpo'
+  'xiconf'
 ];
 
 exports.mongoose = {
