@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["underscore","jquery","../settings/SettingCollection","./OrderSetting"],function(t,e,r,n){"use strict";return r.extend({model:n,topicSuffix:"orders.**",getValue:function(t){var e=this.get("orders."+t);return e?e.getValue():null},prepareValue:function(t,e){return/documents.path$/.test(t)?e:/documents.extra$/.test(t)?this.prepareExtraDocumentsValue(e):void 0},prepareExtraDocumentsValue:function(e){var r={},n="";e.split("\n").forEach(function(t){var e=t.match(/([0-9]{12}).*?([0-9]{15})(.*?)?$/),u="",a="",o="";e?(u=e[1],a=e[2],o=e[3]||""):(e=t.match(/([0-9]{15})(.*?)$/),e?(a=e[1],o=e[2]):(e=t.match(/([0-9]{12})/),e&&(u=e[1]))),u&&(n=u,r[u]||(r[u]={})),a&&(o=o.trim(),(!r[n][a]||o)&&(r[n][a]=o))});var u=[];return t.forEach(r,function(t,e){var r=Object.keys(t);r.length&&(u.push(e),r.forEach(function(e){var r=t[e];u.push(r?e+" "+r:e)}))}),u.join("\n")}})});

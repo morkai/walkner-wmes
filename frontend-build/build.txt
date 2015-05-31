@@ -112,6 +112,10 @@ app/kaizenOrders/assets/form.css
 ----------------
 app/kaizenOrders/assets/form.css
 
+app/kaizenOrders/assets/history.css
+----------------
+app/kaizenOrders/assets/history.css
+
 app/kaizenOrders/assets/list.css
 ----------------
 app/kaizenOrders/assets/list.css
@@ -121,6 +125,7 @@ app/kaizenOrders/assets/main.css
 app/kaizenOrders/assets/./list.css
 app/kaizenOrders/assets/./form.css
 app/kaizenOrders/assets/./details.css
+app/kaizenOrders/assets/./history.css
 app/kaizenOrders/assets/main.css
 
 app/licenses/assets/main.css
@@ -130,6 +135,10 @@ app/licenses/assets/main.css
 app/mechOrders/assets/main.css
 ----------------
 app/mechOrders/assets/main.css
+
+app/orderDocuments/assets/main.css
+----------------
+app/orderDocuments/assets/main.css
 
 app/orders/assets/main.css
 ----------------
@@ -239,6 +248,15 @@ assets/pos-main.css
 assets/select2.css
 ----------------
 assets/select2.css
+
+assets/wmes-docs.css
+----------------
+assets/../vendor/bootstrap/css/bootstrap.css
+assets/../vendor/font-awesome/css/font-awesome.css
+assets/../app/core/assets/main.css
+assets/../app/orderDocuments/assets/main.css
+assets/../app/updater/assets/main.css
+assets/wmes-docs.css
 
 assets/wmes-main.css
 ----------------
@@ -858,6 +876,9 @@ app/kaizenOrders/views/KaizenOrderListView.js
 app/kaizenOrders/pages/KaizenOrderListPage.js
 app/kaizenOrders/templates/details.js
 app/kaizenOrders/views/KaizenOrderDetailsView.js
+app/kaizenOrders/templates/historyItem.js
+app/kaizenOrders/templates/history.js
+app/kaizenOrders/views/KaizenOrderHistoryView.js
 app/kaizenOrders/templates/detailsPage.js
 app/kaizenOrders/pages/KaizenOrderDetailsPage.js
 app/kaizenOrders/templates/form.js

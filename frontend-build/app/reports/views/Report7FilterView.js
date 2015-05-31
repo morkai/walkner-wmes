@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["underscore","app/data/aors","app/core/views/FilterView","app/core/util/idAndLabel","app/reports/templates/report7Filter"],function(t,e,s,r,i){"use strict";return s.extend({template:i,termToForm:{aors:function(t,e,s){s[t]=e.args[1].split(",")},statuses:"aors"},serialize:function(){return t.extend(s.prototype.serialize.call(this),{aors:[]})},afterRender:function(){s.prototype.afterRender.call(this),this.toggleButtonGroup("statuses"),this.$id("aors").select2({multiple:!0,data:e.map(r)})},serializeQueryToForm:function(){return{aors:this.model.get("aors").join(","),statuses:this.model.get("statuses")}},changeFilter:function(){var t={statuses:this.getButtonGroupValue("statuses"),aors:this.$id("aors").val().split(",").filter(function(t){return t.length>0})};t.statuses.length||this.$id("statuses").find(".btn").click(),this.model.set(t,{reset:!0})}})});
