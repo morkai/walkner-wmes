@@ -129,7 +129,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     });
   });
 
-  express.get('/orderDocuments;import', function(req, res, next)
+  express.post('/orderDocuments;import', function(req, res, next)
   {
     res.type('text/plain');
 
