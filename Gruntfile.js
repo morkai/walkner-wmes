@@ -129,6 +129,7 @@ module.exports = function(grunt)
           optimizeCss: 'standard',
           modules: [
             {name: 'wmes-main'},
+            {name: 'wmes-docs'},
             {name: 'pos-main'}
           ],
           paths: requirejsConfig.buildPaths,
