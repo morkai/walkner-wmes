@@ -332,3 +332,7 @@ exports.sioLegacyBridge = {
 exports.kaizen = {
   attachmentsDest: DATA_PATH + '/kaizen-attachments'
 };
+
+exports.orderDocuments = {
+  importPath: DATA_PATH + '/attachments-input'
+};
