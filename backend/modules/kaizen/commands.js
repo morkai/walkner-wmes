@@ -5,7 +5,6 @@
 'use strict';
 
 var _ = require('lodash');
-var step = require('h5.step');
 
 module.exports = function setUpKaizenCommands(app, kaizenModule)
 {

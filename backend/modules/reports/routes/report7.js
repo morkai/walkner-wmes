@@ -5,7 +5,6 @@
 'use strict';
 
 var _ = require('lodash');
-var moment = require('moment');
 var helpers = require('./helpers');
 var report7 = require('../report7');
 
