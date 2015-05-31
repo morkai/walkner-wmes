@@ -1,5 +1,0 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
-
-!function(){"use strict";function n(){require(["domReady","jquery","app/broker","app/socket","app/user"],e)}function e(n,e,o,t){function c(){null!==i&&(i.destroy(),i=null),n(function(){e("#app-loading").fadeOut(function(){e(this).remove()})})}var i=null;t.connect(),e.ajaxSetup({dataType:"json",accepts:{json:"application/json",text:"text/plain"},contentType:"application/json"}),navigator.onLine?(i=o.sandbox(),i.subscribe("socket.connected",function(){i.subscribe("user.reloaded",c)}),i.subscribe("socket.connectFailed",c)):c()}window.requireApp=n}();
