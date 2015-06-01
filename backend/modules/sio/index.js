@@ -122,14 +122,16 @@ exports.start = function startIoModule(app, sioModule)
             _id: user._id,
             login: user.login,
             name: ((user.lastName || '') + ' ' + (user.firstName || '')).trim(),
-            ipAddress: user.ipAddress,
             sockets: []
           };
 
           ++res.userCount;
         }
 
-        res.users[user._id].sockets.push(socket.id);
+        res.users[user._id].sockets.push({
+          _id: socket.id,
+          ipAddress: user.ipAddress
+        });
       });
 
       reply(res);
