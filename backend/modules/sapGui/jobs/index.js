@@ -9,5 +9,7 @@ module.exports = {
   keepAlive: require('./keepAlive'),
   zopp: require('./zopp'),
   lt23: require('./lt23'),
-  ls41: require('./ls41')
+  ls41: require('./ls41'),
+  xiconf: require('./xiconf'),
+  docs: require('./docs')
 };
