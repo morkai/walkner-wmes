@@ -150,7 +150,7 @@ module.exports = function createParser(app, importerModule, callback)
     delete timeKeyToOrderInfoStepsMap[timeKey];
     delete timeKeyToOperInfoStepsMap[timeKey];
 
-    parseOrderInfoSteps(orderFileInfoStepsMap, operFileInfoStepsMap, function(orders, missingOrders)
+    parseOrderInfoSteps(orderFileInfoStepsMap || {}, operFileInfoStepsMap || {}, function(orders, missingOrders)
     {
       parseDataLock = false;
 
