@@ -44,7 +44,20 @@ exports.start = function startEventsModule(app, module)
    */
   var nextFetchAllTypesTimer = null;
 
+  /**
+   * @private
+   * @type {number}
+   */
+  var lastInsertDelayTime = 0;
+
   module.types = {};
+
+  module.getPendingEvents = function()
+  {
+    return pendingEvents || [];
+  };
+
+  module.insertEvents = insertEvents;
 
   app.onModuleReady(
     [
@@ -55,8 +68,13 @@ exports.start = function startEventsModule(app, module)
     setUpEventsRoutes.bind(null, app, module)
   );
 
-  fetchAllTypes();
   subscribe();
+
+  app.broker.subscribe('app.started').setLimit(1).on('message', function()
+  {
+    fetchAllTypes();
+    setInterval(checkBlockedInsert, 5000);
+  });
 
   function fetchAllTypes()
   {
@@ -190,6 +208,8 @@ exports.start = function startEventsModule(app, module)
       pendingEvents = [];
 
       setTimeout(insertEvents, module.config.insertDelay);
+
+      lastInsertDelayTime = event.time;
     }
 
     pendingEvents.push(event);
@@ -199,6 +219,11 @@ exports.start = function startEventsModule(app, module)
 
   function insertEvents()
   {
+    if (pendingEvents === null)
+    {
+      return;
+    }
+
     var eventsToSave = pendingEvents;
 
     pendingEvents = null;
@@ -216,5 +241,20 @@ exports.start = function startEventsModule(app, module)
         app.broker.publish('events.saved', eventsToSave);
       }
     });
+  }
+
+  function checkBlockedInsert()
+  {
+    if (pendingEvents === null)
+    {
+      return;
+    }
+
+    if (Date.now() - lastInsertDelayTime > 3333)
+    {
+      module.warn("Blocked! Forcing insert of %d pending events!", pendingEvents.length);
+
+      insertEvents();
+    }
   }
 };

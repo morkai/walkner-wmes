@@ -14,19 +14,52 @@ module.exports = function setUpEventRoutes(app, eventsModule)
 
   express.get('/events', canView, express.crud.browseRoute.bind(null, app, Event));
 
-  express.get('/events/types', canView, fetchTypesRoute);
+  express.get('/events/types', canView, getTypesRoute);
+
+  express.get('/events/pending', canView, getPendingRoute);
+
+  express.post('/events/pending', auth('SUPER'), insertPendingRoute);
 
   /**
    * @private
    * @param {object} req
    * @param {object} res
    */
-  function fetchTypesRoute(req, res)
+  function getTypesRoute(req, res)
   {
     var types = Object.keys(eventsModule.types);
 
     types.sort();
 
     res.send(types);
+  }
+
+  /**
+   * @private
+   * @param {object} req
+   * @param {object} res
+   */
+  function getPendingRoute(req, res)
+  {
+    res.send(eventsModule.getPendingEvents());
+  }
+
+  /**
+   * @private
+   * @param {object} req
+   * @param {object} res
+   */
+  function insertPendingRoute(req, res)
+  {
+    var beforeCount = eventsModule.getPendingEvents().length;
+
+    eventsModule.insertEvents();
+
+    var afterCount = eventsModule.getPendingEvents().length;
+
+    res.send({
+      beforeCount: beforeCount,
+      afterCount: afterCount
+    });
   }
 };
