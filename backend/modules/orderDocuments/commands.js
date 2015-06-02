@@ -54,7 +54,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
   function onExtraDocumentsUpdated(extra)
   {
-    var nc12ToProdLines = {};
+    var nameToProdLines = {};
 
     _.forEach(prodLineToClients, function(clientsMap, prodLineId)
     {
@@ -72,35 +72,46 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
         return;
       }
 
-      var nc12 = lastOrder.orderData.nc12;
+      var name = lastOrder.orderData.name;
 
-      if (!nc12)
+      if (!name)
       {
         return;
       }
 
-      if (nc12ToProdLines[nc12] === undefined)
+      if (nameToProdLines[name] === undefined)
       {
-        nc12ToProdLines[nc12] = [];
+        nameToProdLines[name] = [];
       }
 
-      nc12ToProdLines[nc12].push(prodLineId);
+      nameToProdLines[name].push(prodLineId);
     });
 
-    _.forEach(extra, function(nc15s, nc12)
+    var productNames = Object.keys(nameToProdLines);
+
+    for (var i = 0; i < extra.length; ++i)
     {
-      var prodLines = nc12ToProdLines[nc12];
+      var pattern = extra[i].pattern;
 
-      if (!prodLines)
+      for (var ii = 0; ii < productNames.length; ++ii)
       {
-        return;
+        var productName = productNames[ii];
+
+        if (productName.indexOf(pattern) === -1)
+        {
+          continue;
+        }
+
+        var prodLineIds = nameToProdLines[productName];
+
+        for (var iii = 0; iii < prodLineIds.length; ++iii)
+        {
+          updateProdLinesRemoteOrder(prodLineIds[iii], null);
+        }
+
+        break;
       }
-
-      _.forEach(prodLines, function(prodLineId)
-      {
-        updateProdLinesRemoteOrder(prodLineId, null);
-      });
-    });
+    }
   }
 
   function handleJoinMessage(socket, message)
@@ -275,12 +286,12 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
         no: order._id,
         nc12: order.nc12,
         name: order.name,
-        documents: prepareDocumentsMap(order.nc12, order.documents)
+        documents: prepareDocumentsMap(order.name, order.documents)
       });
     });
   }
 
-  function prepareDocumentsMap(nc12, documentsList)
+  function prepareDocumentsMap(productName, documentsList)
   {
     var documentsMap = {};
 
@@ -289,6 +300,14 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       documentsMap[document.nc15] = document.name;
     });
 
-    return _.assign(documentsMap, module.settings.extra[nc12]);
+    _.forEach(module.settings.extra, function(extra)
+    {
+      if (productName.indexOf(extra.pattern) !== -1)
+      {
+        _.assign(documentsMap, extra.documents);
+      }
+    });
+
+    return documentsMap;
   }
 };

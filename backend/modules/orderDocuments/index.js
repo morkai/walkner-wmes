@@ -25,7 +25,7 @@ exports.start = function startOrderDocumentsModule(app, module)
 {
   module.settings = {
     path: '',
-    extra: {}
+    extra: []
   };
 
   app.onModuleReady(
@@ -90,35 +90,56 @@ exports.start = function startOrderDocumentsModule(app, module)
 
   function parseExtraDocumentsSetting(rawValue)
   {
-    var extra = {};
+    var extra = [];
 
     if (!_.isString(rawValue) || _.isEmpty(rawValue))
     {
       return extra;
     }
 
-    var lastNc12 = '';
+    var lastName = '';
+    var namesToDocuments = {};
 
     _.forEach(rawValue.split('\n'), function(line)
     {
-      if (/^[0-9]{12}$/.test(line))
-      {
-        lastNc12 = line;
-
-        if (!extra[lastNc12])
-        {
-          extra[lastNc12] = {};
-        }
-
-        return;
-      }
-
-      var matches = line.match(/([0-9]{15})(.*?)$/);
+      var matches = line.match(/([0-9]{15})\s+(.*?)$/);
 
       if (matches)
       {
-        extra[lastNc12][matches[1]] = matches[2].trim();
+        if (lastName === '')
+        {
+          return;
+        }
+
+        namesToDocuments[lastName][matches[1]] = matches[2];
       }
+      else
+      {
+        lastName = line;
+
+        namesToDocuments[lastName] = {};
+      }
+    });
+
+    _.forEach(namesToDocuments, function(documents, names)
+    {
+      names = names
+        .split(';')
+        .map(function(name) { return name.trim(); })
+        .filter(function(name) { return !!name.length; });
+
+      if (!names.length)
+      {
+        return;
+      }
+
+      _.forEach(names, function(name)
+      {
+        extra.push({
+          pattern: name,
+          documents: documents
+        });
+      });
     });
 
     return extra;

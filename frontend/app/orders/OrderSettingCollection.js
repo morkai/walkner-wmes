@@ -43,88 +43,52 @@ define([
 
     prepareExtraDocumentsValue: function(rawValue)
     {
-      var nc12Map = {};
-      var lastNc12 = '';
+      var nameMap = {};
+      var lastName = '';
 
       rawValue.split('\n').forEach(function(line)
       {
-        var matches = line.match(/([0-9]{12}).*?([0-9]{15})(.*?)?$/);
-        var nc12 = '';
-        var nc15 = '';
-        var name = '';
+        line = line.trim();
+
+        if (!line.length)
+        {
+          return;
+        }
+
+        var matches = line.match(/^([0-9]{15})\s+(.*?)$/);
 
         if (matches)
         {
-          nc12 = matches[1];
-          nc15 = matches[2];
-          name = matches[3] || '';
+          if (!nameMap[lastName])
+          {
+            return;
+          }
+
+          nameMap[lastName][matches[1]] = matches[2];
         }
         else
         {
-          matches = line.match(/([0-9]{15})(.*?)$/);
-
-          if (matches)
-          {
-            nc15 = matches[1];
-            name = matches[2];
-          }
-          else
-          {
-            matches = line.match(/([0-9]{12})/);
-
-            if (matches)
-            {
-              nc12 = matches[1];
-            }
-          }
-        }
-
-        if (nc12)
-        {
-          lastNc12 = nc12;
-
-          if (!nc12Map[nc12])
-          {
-            nc12Map[nc12] = {};
-          }
-        }
-
-        if (nc15)
-        {
-          name = name.trim();
-
-          if (!nc12Map[lastNc12][nc15] || name)
-          {
-            nc12Map[lastNc12][nc15] = name;
-          }
+          lastName = line;
+          nameMap[lastName] = {};
         }
       });
 
       var result = [];
 
-      _.forEach(nc12Map, function(nc15Map, nc12)
+      _.forEach(nameMap, function(documentMap, productName)
       {
-        var nc15s = Object.keys(nc15Map);
+        var nc15s = Object.keys(documentMap);
 
         if (!nc15s.length)
         {
           return;
         }
 
-        result.push(nc12);
+        result.push(productName);
 
         nc15s.forEach(function(nc15)
         {
-          var name = nc15Map[nc15];
-
-          if (name)
-          {
-            result.push(nc15 + ' ' + name);
-          }
-          else
-          {
-            result.push(nc15);
-          }
+          result.push(nc15 + ' ' + documentMap[nc15]);
         });
       });
 
