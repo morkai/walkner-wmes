@@ -6,6 +6,17 @@
         <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" pattern="^[0-9]{6,}$">
       </div>
       <div class="form-group">
+        <% ['inclusive', 'exclusive', 'finish'].forEach(function(filter) { %>
+        <div class="radio" title="<%- t('reports', 'orders:filter:hour:' + filter + ':title') %>">
+          <label class="control-label">
+            <input type="radio" name="hourMode" value="<%- filter %>">
+            <%- t('reports', 'orders:filter:hour:' + filter) %>
+          </label>
+        </div>
+        <% }) %>
+        <input id="<%- idPrefix %>-hour" class="form-control" name="hour" type="number" min="0" max="24">
+      </div>
+      <div id="<%- idPrefix %>-statusFormGroup" class="form-group">
         <% ['red', 'all', 'in', 'nin', 'wo'].forEach(function(filter) { %>
         <div class="radio" title="<%- t('reports', 'orders:filter:status:' + filter + ':title') %>">
           <label class="control-label">

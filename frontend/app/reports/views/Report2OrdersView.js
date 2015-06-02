@@ -129,6 +129,7 @@ define([
       }
 
       var delayReason = this.delayReasons.get(order.get('delayReason'));
+      var startDate = order.get('startDate');
 
       return {
         className: cnfClassName === 'none' || dlvClassName === 'none'
@@ -139,8 +140,8 @@ define([
         no: order.id,
         name: order.get('name'),
         mrp: order.get('mrp'),
-        qty: order.get('qty').toLocaleString(),
-        finishDate: time.format(order.get('startDate'), 'LL'),
+        qty: (order.get('qty') || 0).toLocaleString(),
+        finishDate: startDate ? time.format(startDate, 'LL') : '-',
         cnfStatus: cnfStatus,
         cnfClassName: cnfClassName,
         cnfTime: cnfTime ? time.format(cnfTime, 'LLL') : '-',
@@ -204,6 +205,8 @@ define([
 
       js2form(this.$id('filter')[0], {
         orderNo: query.get('orderNo'),
+        hourMode: query.get('hourMode'),
+        hour: query.get('hour'),
         filter: query.get('filter'),
         statuses: query.get('statuses').split(','),
         limit: query.get('limit')
@@ -215,6 +218,7 @@ define([
       var filterData = form2js(this.$id('filter')[0]);
 
       filterData.orderNo = (filterData.orderNo || '').length < 6 ? '' : filterData.orderNo;
+      filterData.hour = filterData.hour || '';
       filterData.statuses = Array.isArray(filterData.statuses) ? filterData.statuses.join(',') : '';
       filterData.skip = 0;
 
@@ -283,7 +287,6 @@ define([
         .find('.reports-2-orders-delayReason')
         .text(delayReason ? delayReason.getLabel() : '-');
     }
-
 
   });
 });

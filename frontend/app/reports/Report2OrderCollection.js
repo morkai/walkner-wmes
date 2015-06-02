@@ -75,10 +75,20 @@ define([
 
       var statuses = query.get('statuses');
 
-      selector.args.push(
-        eq('filter', query.get('filter')),
-        eq('statuses', statuses)
-      );
+      selector.args.push(eq('filter', query.get('filter')));
+
+      if (statuses.length)
+      {
+        selector.args.push(eq('statuses', statuses));
+      }
+
+      var hour = query.get('hour');
+
+      if (hour)
+      {
+        selector.args.push(eq('hourMode', query.get('hourMode')));
+        selector.args.push(eq('hour', +hour));
+      }
 
       return OrderCollection.prototype.sync.apply(this, arguments);
 

@@ -29,9 +29,11 @@ define([
         to: today.valueOf(),
         from: today.subtract(1, 'days').valueOf(),
         interval: 'day',
-        limit: 12,
+        limit: 15,
         skip: 0,
         orderNo: '',
+        hourMode: 'inclusive',
+        hour: '',
         filter: 'red',
         statuses: ''
       };
@@ -159,6 +161,11 @@ define([
       if (attrs.orderNo.length >= 6)
       {
         queryString += '&orderNo=' + attrs.orderNo;
+      }
+
+      if (attrs.hour.length)
+      {
+        queryString += '&hourMode=' + attrs.hourMode + '&hour=' + attrs.hour;
       }
 
       return queryString.substr(1);

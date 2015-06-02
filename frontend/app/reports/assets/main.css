@@ -300,6 +300,13 @@
 .reports-2-orders {
   display: flex;
 }
+.reports-2-orders input[name="orderNo"],
+.reports-2-orders input[name="hour"] {
+  width: 100px;
+}
+.reports-2-orders input[name="hour"] {
+  margin-top: 5px;
+}
 .reports-2-orders-filter {
   flex: 0 0 auto;
   width: 275px;

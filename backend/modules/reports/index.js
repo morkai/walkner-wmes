@@ -26,6 +26,7 @@ exports.start = function startReportsModule(app, module)
   var totalCountCache = {};
 
   module.prodNumConstant = 8;
+  module.mapReduceResults = {};
 
   module.getCachedTotalCount = function(key)
   {
