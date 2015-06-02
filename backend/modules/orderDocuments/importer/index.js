@@ -187,6 +187,8 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
           var oldDocuments = order.documents || [];
           var newDocuments = this.orderNoToDocumentsMap[order._id];
 
+          newDocuments.sort(ascByNc15);
+
           if (deepEqual(oldDocuments, newDocuments))
           {
             continue;
@@ -294,5 +296,10 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
   function removeFilePathFromCache(filePath)
   {
     delete filePathCache[filePath];
+  }
+
+  function ascByNc15(a, b)
+  {
+    return a.nc15.localeCompare(b.nc15);
   }
 };
