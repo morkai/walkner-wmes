@@ -166,7 +166,7 @@ exports.start = function startUserModule(app, module)
 
       for (var ii = 0, ll = allPrivileges.length; ii < ll; ++ii)
       {
-        matches += user.privileges.indexOf(allPrivileges[ii]) === -1 ? 0 : 1;
+        matches += hasPrivilege(user, allPrivileges[ii]) ? 1 : 0;
       }
 
       if (matches === ll)
@@ -176,6 +176,29 @@ exports.start = function startUserModule(app, module)
     }
 
     return false;
+  }
+
+  function hasPrivilege(user, privilege)
+  {
+    if (_.isEmpty(user.privilegesString))
+    {
+      if (!Array.isArray(user.privileges))
+      {
+        user.privileges = [];
+      }
+
+      user.privilegesString = '|' + user.privileges.join('|');
+      user.privilegesMap = {};
+
+      _.forEach(user.privileges, function(privilege) { user.privilegesMap[privilege] = true; });
+    }
+
+    if (privilege.charAt(privilege.length - 1) === '*')
+    {
+      return user.privilegesString.indexOf('|' + privilege.substr(0, privilege.length - 1)) !== -1;
+    }
+
+    return user.privilegesMap[privilege] === true;
   }
 
   function ensureUserMiddleware(req, res, next)

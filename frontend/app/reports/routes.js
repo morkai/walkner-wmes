@@ -14,9 +14,7 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('REPORTS:VIEW');
-
-  router.map('/reports/1', canView, function(req)
+  router.map('/reports/1', user.auth('REPORTS:VIEW', 'REPORTS:1:VIEW'), function(req)
   {
     if (viewport.currentPage && viewport.currentPage.pageId === 'report1')
     {
@@ -32,7 +30,7 @@ define([
     });
   });
 
-  router.map('/reports/2', canView, function(req)
+  router.map('/reports/2', user.auth('REPORTS:VIEW', 'REPORTS:2:VIEW'), function(req)
   {
     if (viewport.currentPage && viewport.currentPage.pageId === 'report2')
     {
@@ -48,7 +46,7 @@ define([
     });
   });
 
-  router.map('/reports/3', canView, function(req)
+  router.map('/reports/3', user.auth('REPORTS:VIEW', 'REPORTS:3:VIEW'), function(req)
   {
     viewport.loadPage('app/reports/pages/Report3Page', function(Report3Page)
     {
@@ -56,7 +54,7 @@ define([
     });
   });
 
-  router.map('/reports/4', canView, function(req)
+  router.map('/reports/4', user.auth('REPORTS:VIEW', 'REPORTS:4:VIEW'), function(req)
   {
     viewport.loadPage('app/reports/pages/Report4Page', function(Report4Page)
     {
@@ -64,7 +62,7 @@ define([
     });
   });
 
-  router.map('/reports/5', canView, function(req)
+  router.map('/reports/5', user.auth('REPORTS:VIEW', 'REPORTS:5:VIEW'), function(req)
   {
     if (viewport.currentPage && viewport.currentPage.pageId === 'report5')
     {
@@ -80,7 +78,7 @@ define([
     });
   });
 
-  router.map('/reports/6', canView, function(req)
+  router.map('/reports/6', user.auth('REPORTS:VIEW', 'REPORTS:6:VIEW'), function(req)
   {
     if (viewport.currentPage && viewport.currentPage.pageId === 'report6')
     {
@@ -96,7 +94,7 @@ define([
     });
   });
 
-  router.map('/reports/7', canView, function(req)
+  router.map('/reports/7', user.auth('REPORTS:VIEW', 'REPORTS:7:VIEW'), function(req)
   {
     viewport.loadPage('app/reports/pages/Report7Page', function(Report7Page)
     {
