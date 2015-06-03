@@ -4,6 +4,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var setUpLogEntryHandler = require('./logEntryHandler');
@@ -33,6 +34,7 @@ exports.start = function startProductionModule(app, module)
     throw new Error("mongoose module is required!");
   }
 
+  module.secretKeys = {};
   module.recreating = false;
   module.recreate = recreate.bind(null, app, module);
 
@@ -42,7 +44,11 @@ exports.start = function startProductionModule(app, module)
     [
       module.config.orgUnitsId
     ],
-    setUpProdState.bind(null, app, module)
+    function()
+    {
+      cacheSecretKeys();
+      setUpProdState(app, module);
+    }
   );
 
   app.onModuleReady(
@@ -94,4 +100,21 @@ exports.start = function startProductionModule(app, module)
       });
     }
   });
+
+  app.broker.subscribe('prodLines.*', cacheSecretKeys);
+
+  function cacheSecretKeys()
+  {
+    module.secretKeys = {};
+
+    _.forEach(app[module.config.orgUnitsId].getAllByType('prodLine'), function(prodLine)
+    {
+      var secretKey = prodLine.secretKey;
+
+      if (secretKey)
+      {
+        module.secretKeys[prodLine._id] = secretKey;
+      }
+    });
+  }
 };
