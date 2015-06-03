@@ -70,6 +70,10 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     todo: {
       type: Boolean,
       default: true
+    },
+    instanceId: {
+      type: String,
+      default: null
     }
   }, {
     id: false

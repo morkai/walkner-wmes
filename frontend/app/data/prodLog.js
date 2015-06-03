@@ -19,7 +19,7 @@ define([
 ) {
   'use strict';
 
-  var instanceId = (Date.now() + Math.random()).toString();
+  var instanceId = Math.round(Date.now() + Math.random() * 9999999).toString(36).toUpperCase();
   var STORAGE_KEY = 'PRODUCTION:LOG';
   var SYNCING_KEY = 'PRODUCTION:LOG:SYNCING';
   var LOCK_KEY = 'PRODUCTION:LOCK';
@@ -226,6 +226,7 @@ define([
       }
 
       var prodLogEntry = {
+        instanceId: instanceId,
         secretKey: prodShift.getSecretKey(),
         type: type,
         data: data || {},
