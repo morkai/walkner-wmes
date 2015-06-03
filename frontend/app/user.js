@@ -71,6 +71,12 @@ function(
         userData.name = t.bound('core', 'GUEST_USER_NAME');
       }
 
+      if (userData.orgUnitType === 'unspecified')
+      {
+        userData.orgUnitType = null;
+        userData.orgUnitId = null;
+      }
+
       user.data = userData;
     }
 
@@ -163,7 +169,7 @@ function(
 
       for (var ii = 0; ii < requiredMatches; ++ii)
       {
-        actualMatches += userPrivileges.indexOf(allPrivileges[ii]) === -1 ? 0 : 1;
+        actualMatches += user.hasPrivilege(allPrivileges[ii]) ? 1 : 0;
       }
 
       if (actualMatches === requiredMatches)
@@ -256,6 +262,29 @@ function(
     }
 
     return subdivisions.get(user.data.orgUnitId) || null;
+  };
+
+  user.hasPrivilege = function(privilege)
+  {
+    if (!user.data.privilegesMap)
+    {
+      if (!Array.isArray(user.data.privileges))
+      {
+        user.data.privileges = [];
+      }
+
+      user.data.privilegesString = '|' + user.data.privileges.join('|');
+      user.data.privilegesMap = {};
+
+      _.forEach(user.data.privileges, function(privilege) { user.data.privilegesMap[privilege] = true; });
+    }
+
+    if (privilege.charAt(privilege.length - 1) === '*')
+    {
+      return user.data.privilegesString.indexOf('|' + privilege.substr(0, privilege.length - 1)) !== -1;
+    }
+
+    return user.data.privilegesMap[privilege] === true;
   };
 
   user.getGuestUserData = function()
