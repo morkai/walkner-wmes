@@ -114,6 +114,7 @@ define([
 
     destroy: function()
     {
+      this.hidePopover();
       this.removeChart();
 
       this.chart = null;
@@ -288,7 +289,7 @@ define([
 
     hidePopover: function(delay)
     {
-      if (this.timers.hidePopover)
+      if (this.timers && this.timers.hidePopover)
       {
         clearTimeout(this.timers.hidePopover);
         this.timers.hidePopover = null;
