@@ -16,6 +16,9 @@
     "BREADCRUMBS:6:fifo": "'FIFO' component delivery",
     "BREADCRUMBS:7": "Downtimes in AORs",
 
+    "MSG:LOADING_FAILURE": "Failed to load the report :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the report :(",
+
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:2:export": "Export orders",
     "PAGE_ACTION:3:exportTable": "Export table",

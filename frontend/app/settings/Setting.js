@@ -19,7 +19,7 @@ define([
 
     privilegePrefix: 'SETTINGS',
 
-    nlsDomain: 'settings',
+    nlsDomain: 'core',
 
     defaults: {
       value: null

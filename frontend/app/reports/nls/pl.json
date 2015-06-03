@@ -14,6 +14,9 @@
   "BREADCRUMBS:6:fifo": "Dostarczanie komponentów FIFO",
   "BREADCRUMBS:7": "Przestoje w obszarach",
 
+  "MSG:LOADING_FAILURE": "Ładowanie raportu nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie raportu nie powiodło się :(",
+
   "PAGE_ACTION:settings": "Zmień ustawienia",
   "PAGE_ACTION:2:export": "Eksportuj zlecenia",
   "PAGE_ACTION:3:exportTable": "Eksportuj tabelę",
