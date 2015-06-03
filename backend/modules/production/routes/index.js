@@ -7,6 +7,7 @@
 var findOrdersRoute = require('./findOrdersRoute');
 var getProductionStateRoute = require('./getProductionStateRoute');
 var getProductionHistoryRoute = require('./getProductionHistoryRoute');
+var syncRoute = require('./syncRoute');
 
 module.exports = function setUpProductionRoutes(app, productionModule)
 {
@@ -15,4 +16,5 @@ module.exports = function setUpProductionRoutes(app, productionModule)
   express.get('/production/orders', findOrdersRoute.bind(null, app, productionModule));
   express.get('/production/state', getProductionStateRoute.bind(null, app, productionModule));
   express.get('/production/history', getProductionHistoryRoute.bind(null, app, productionModule));
+  express.post('/prodLogEntries', syncRoute.bind(null, app, productionModule));
 };

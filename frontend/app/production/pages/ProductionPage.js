@@ -64,7 +64,8 @@ define([
         {
           this.leaveProduction();
         }
-      }
+      },
+      'production.locked': 'onProductionLocked'
     },
 
     breadcrumbs: function()
@@ -255,7 +256,7 @@ define([
         this.model.saveLocalData();
       });
 
-      this.socket.on('production.locked', this.onProductionLocked.bind(this));
+      this.socket.on('production.locked', this.broker.publish.bind(this.broker, 'production.locked'));
     },
 
     beforeRender: function()

@@ -12,6 +12,7 @@ var setUpActiveProdLines = require('./activeProdLines');
 var setUpProdData = require('./prodData');
 var setUpProdState = require('./prodState');
 var recreate = require('./recreate');
+var syncLogEntryStream = require('./syncLogEntryStream');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -37,6 +38,7 @@ exports.start = function startProductionModule(app, module)
   module.secretKeys = {};
   module.recreating = false;
   module.recreate = recreate.bind(null, app, module);
+  module.syncLogEntryStream = syncLogEntryStream.bind(null, app, module);
 
   setUpProdData(app, module);
 

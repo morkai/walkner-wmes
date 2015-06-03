@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'jquery',
   'app/i18n',
   'app/user',
   'app/time',
@@ -10,6 +11,7 @@ define([
   'app/socket',
   'app/updater/index'
 ], function(
+  $,
   t,
   user,
   time,
@@ -30,14 +32,7 @@ define([
 
   broker.subscribe('socket.connected', setTimeout.bind(null, sync, 1337));
 
-  broker.subscribe('socket.disconnected', restoreSyncingEntries);
-
   window.addEventListener('unload', restoreSyncingEntries);
-
-  if (socket.isConnected())
-  {
-    sync();
-  }
 
   function restoreSyncingEntries()
   {
@@ -64,10 +59,9 @@ define([
     broker.publish('production.synced', {message: 'DISCONNECT'});
   }
 
-  function sync()
+  function sync(failCount)
   {
     if (!enabled
-      || !socket.isConnected()
       || syncingLogEntries !== null
       || updater.isRestarting())
     {
@@ -81,8 +75,6 @@ define([
       return;
     }
 
-    localStorage.removeItem(STORAGE_KEY);
-
     var unsyncedLogEntries = localStorage.getItem(SYNCING_KEY);
 
     if (unsyncedLogEntries !== null)
@@ -91,18 +83,57 @@ define([
     }
 
     localStorage.setItem(SYNCING_KEY, syncingLogEntries);
+    localStorage.removeItem(STORAGE_KEY);
 
     broker.publish('production.syncing');
 
-    socket.emit('production.sync', syncingLogEntries, function(err)
-    {
-      syncingLogEntries = null;
+    var req = $.ajax({
+      method: 'POST',
+      url: '/prodLogEntries',
+      contentType: 'text/plain; charset=UTF-8',
+      data: syncingLogEntries,
+      timeout: 10000
+    });
 
+    req.fail(function(jqXhr)
+    {
+      var currentLogEntries = localStorage.getItem(STORAGE_KEY);
+
+      if (currentLogEntries === null)
+      {
+        currentLogEntries = syncingLogEntries;
+      }
+      else
+      {
+        currentLogEntries = syncingLogEntries + '\n' + currentLogEntries;
+      }
+
+      localStorage.setItem(STORAGE_KEY, currentLogEntries);
       localStorage.removeItem(SYNCING_KEY);
 
-      broker.publish('production.synced', err);
+      syncingLogEntries = null;
 
-      setTimeout(sync, 1);
+      broker.publish('production.synced', {message: jqXhr.responseText});
+
+      failCount = !failCount ? 1 : (failCount + 1);
+
+      setTimeout(sync, Math.min(failCount * 1000, 20000), failCount);
+    });
+
+    req.done(function(data)
+    {
+      localStorage.removeItem(SYNCING_KEY);
+
+      syncingLogEntries = null;
+
+      broker.publish('production.synced', null);
+
+      if (data && data.lock)
+      {
+        broker.publish('production.locked', data.lock);
+      }
+
+      setTimeout(sync, 100);
     });
   }
 
@@ -139,7 +170,7 @@ define([
           {
             enableTimer = null;
             deferred.resolve();
-          });
+          }, 1);
         }
 
         return;
@@ -183,6 +214,8 @@ define([
         if (deferred.state() === 'pending')
         {
           enabled = true;
+
+          setTimeout(sync, 1000);
 
           deferred.resolve();
         }
@@ -260,7 +293,7 @@ define([
 
       prodShift.saveLocalData();
 
-      setTimeout(sync, 1);
+      sync();
     }
   };
 });
