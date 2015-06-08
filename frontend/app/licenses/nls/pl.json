@@ -46,5 +46,6 @@
 
   "app:msys-xiconf-lp": "Xiconf Label Printer",
   "app:walkner-xiconf": "Walkner Xiconf",
-  "app:walkner-icpo": "Walkner ICPO"
+  "app:walkner-icpo": "Walkner ICPO",
+  "app:wmes-docs": "Dokumenty WMES"
 }

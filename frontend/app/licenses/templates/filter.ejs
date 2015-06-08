@@ -7,7 +7,7 @@
     <label for="<%- idPrefix %>-appId"><%- t('licenses', 'PROPERTY:appName') %></label>
     <select id="<%- idPrefix %>-appId" class="form-control" name="appId">
       <option value=""></option>
-      <% ['msys-xiconf-lp', 'walkner-xiconf', 'walkner-icpo'].forEach(function(appId) { %>
+      <% ['msys-xiconf-lp', 'walkner-xiconf', 'walkner-icpo', 'wmes-docs'].forEach(function(appId) { %>
       <option value="<%- appId %>"><%- t('licenses', 'app:' + appId) %></option>
       <% }) %>
     </select>
