@@ -36,7 +36,7 @@ define([
     {
       return {
         aors: this.get('aors').join(','),
-        statuses: this.get('statuses').join(',')
+        statuses: 'confirmed'
       };
     },
 
@@ -50,7 +50,7 @@ define([
         queryString += '&aors=' + attrs.aors;
       }
 
-      queryString += '&statuses=confirmed';
+      queryString += '&statuses=' + attrs.statuses;
       queryString += '&limit=' + attrs.limit;
       queryString += '&skip=' + attrs.skip;
 
