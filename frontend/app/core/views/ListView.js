@@ -45,13 +45,7 @@ define([
     events: {
       'click .list-item[data-id]': function(e)
       {
-        if (!this.el.classList.contains('is-clickable')
-          || e.target.tagName === 'A'
-          || e.target.tagName === 'INPUT'
-          || e.target.tagName === 'BUTTON'
-          || e.target.classList.contains('actions')
-          || window.getSelection().toString() !== ''
-          || (e.target.tagName !== 'TD' && this.$(e.target).closest('a, input, button').length))
+        if (this.isNotClickable(e))
         {
           return;
         }
@@ -70,6 +64,24 @@ define([
             replace: false
           });
         }
+      },
+      'mousedown .list-item[data-id]':  function(e)
+      {
+        if (!this.isNotClickable(e))
+        {
+          e.preventDefault();
+        }
+      },
+      'mouseup .list-item[data-id]':  function(e)
+      {
+        if (this.isNotClickable(e) || e.button !== 1)
+        {
+          return;
+        }
+
+        window.open(this.collection.get(e.currentTarget.dataset.id).genClientUrl());
+
+        return false;
       },
       'click .action-delete': function(e)
       {
@@ -299,6 +311,17 @@ define([
     getModelFromEvent: function(e)
     {
       return this.collection.get(this.$(e.target).closest('.list-item').attr('data-id'));
+    },
+
+    isNotClickable: function(e)
+    {
+      return !this.el.classList.contains('is-clickable')
+        || e.target.tagName === 'A'
+        || e.target.tagName === 'INPUT'
+        || e.target.tagName === 'BUTTON'
+        || e.target.classList.contains('actions')
+        || window.getSelection().toString() !== ''
+        || (e.target.tagName !== 'TD' && this.$(e.target).closest('a, input, button').length);
     }
 
   });
