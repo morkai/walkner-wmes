@@ -49,13 +49,14 @@ define([
     serializeFeatures: function()
     {
       var featureSerializer = FEATURE_SERIALIZERS[this.get('appId')];
+      var features = this.get('features');
 
       if (featureSerializer)
       {
-        return featureSerializer(this.get('features'));
+        return featureSerializer(features);
       }
 
-      return '';
+      return features ? features.toString() : '-';
     }
 
   });
