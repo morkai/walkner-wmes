@@ -22,9 +22,20 @@ define([
     template: template,
 
     events: _.extend({
+      'change input[name="userType"]': 'toggleUserSelect2',
+      'keyup select': function(e)
+      {
+        if (e.keyCode === 27)
+        {
+          e.target.selectedIndex = -1;
 
-      'change input[name="userType"]': 'toggleUserSelect2'
-
+          return false;
+        }
+      },
+      'dblclick select': function(e)
+      {
+        e.target.selectedIndex = -1;
+      }
     }, FilterView.prototype.events),
 
     defaultFormData: function()
