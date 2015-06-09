@@ -4,12 +4,14 @@
 
 define([
   'underscore',
+  'app/time',
   'app/core/views/FilterView',
   'app/users/util/setUpUserSelect2',
   '../dictionaries',
   'app/kaizenOrders/templates/filter'
 ], function(
   _,
+  time,
   FilterView,
   setUpUserSelect2,
   kaizenDictionaries,
@@ -49,7 +51,9 @@ define([
         risk: null,
         cause: null,
         userType: 'others',
-        user: null
+        user: null,
+        from: '',
+        to: ''
       };
     },
 
@@ -65,6 +69,11 @@ define([
       'suggestionCategory': function(propertyName, term, formData)
       {
         formData.category = 'suggestion.' + term.args[1];
+      },
+      'creator.id': function(propertyName, term, formData)
+      {
+        formData.userType = 'creator';
+        formData.user = term.args[1];
       },
       'observers.user.id': function(propertyName, term, formData)
       {
@@ -83,6 +92,10 @@ define([
           formData.userType = 'others';
           formData.user = term.args[1];
         }
+      },
+      'createdAt': function(propertyName, term, formData)
+      {
+        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
       },
       'status': 'types',
       'section': 'types',
@@ -107,9 +120,26 @@ define([
 
     serializeFormToQuery: function(selector)
     {
+      var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
+      var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var category = this.$id('category').val().split('.');
       var userType = this.$('input[name="userType"]:checked').val();
       var user = this.$id('user').val();
+
+      if (fromMoment.isValid())
+      {
+        selector.push({name: 'ge', args: ['createdAt', fromMoment.valueOf()]});
+      }
+
+      if (toMoment.isValid())
+      {
+        if (toMoment.valueOf() === fromMoment.valueOf())
+        {
+          this.$id('to').val(toMoment.add(1, 'days').format('YYYY-MM-DD'));
+        }
+
+        selector.push({name: 'lt', args: ['createdAt', toMoment.valueOf()]});
+      }
 
       if (category.length === 2)
       {
@@ -122,7 +152,10 @@ define([
       }
       else if (user)
       {
-        selector.push({name: 'eq', args: ['observers.user.id', user]});
+        selector.push({name: 'eq', args: [
+          userType === 'creator' ? 'creator.id' : 'observers.user.id',
+          user
+        ]});
       }
 
       ['types', 'status', 'section', 'area', 'risk', 'cause'].forEach(function(property)
@@ -149,7 +182,9 @@ define([
 
     toggleUserSelect2: function()
     {
-      this.$id('user').select2('enable', this.$('input[name="userType"]:checked').val() === 'others');
+      var userType = this.$('input[name="userType"]:checked').val();
+
+      this.$id('user').select2('enable', userType === 'others' || userType === 'creator');
     }
 
   });

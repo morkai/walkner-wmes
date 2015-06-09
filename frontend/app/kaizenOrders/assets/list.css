@@ -1,3 +1,6 @@
 .kaizenOrders-filter select {
-  max-width: 175px;
+  max-width: 125px;
+}
+.kaizenOrders-filter .form-control[type="date"] {
+  width: 10em;
 }

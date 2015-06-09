@@ -115,8 +115,9 @@
   "filter:cause": "Przyczyna",
   "filter:user:mine": "Moje",
   "filter:user:unseen": "Nieprzeczytane",
-  "filter:user:others": "Inny użytkownik",
-  "filter:submit": "Filtruj zgłoszenia",
+  "filter:user:creator": "Zgłaszający",
+  "filter:user:others": "Inny",
+  "filter:submit": "Filtruj",
 
   "history:added": "utworzenie zgłoszenia.",
   "history:observer:0": "rozpoczęcie obserwacji zgłoszenia.",
