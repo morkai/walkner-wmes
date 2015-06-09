@@ -4,11 +4,8 @@
 
 'use strict';
 
-module.exports = function deleteProgramRoute(app, xiconfModule, req, res, next)
+module.exports = function deleteProgramRoute(app, XiconfProgram, req, res, next)
 {
-  var mongoose = app[xiconfModule.config.mongooseId];
-  var XiconfProgram = mongoose.model('XiconfProgram');
-
   XiconfProgram.findById(req.params.id).exec(function(err, program)
   {
     if (err)

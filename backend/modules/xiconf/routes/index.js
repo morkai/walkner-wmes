@@ -167,7 +167,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     express.crud.editRoute.bind(null, app, XiconfProgram)
   );
 
-  express.delete('/xiconf/programs/:id', canManage, deleteProgramRoute.bind(null, app, XiconfClient));
+  express.delete('/xiconf/programs/:id', canManage, deleteProgramRoute.bind(null, app, XiconfProgram));
 
   express.get('/xiconf/clients', canView, express.crud.browseRoute.bind(null, app, XiconfClient));
 
