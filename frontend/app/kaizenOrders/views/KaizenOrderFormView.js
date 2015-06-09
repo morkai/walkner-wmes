@@ -433,7 +433,7 @@ define([
 
         $panel.find('.is-required').each(function()
         {
-          this.control.required = required;
+          $panel.find('#-' + this.htmlFor).prop('required', required);
         });
       });
     },
