@@ -67,7 +67,7 @@ define([
       },
       'mousedown .list-item[data-id]':  function(e)
       {
-        if (!this.isNotClickable(e))
+        if (!this.isNotClickable(e) && e.button === 1)
         {
           e.preventDefault();
         }
