@@ -171,6 +171,8 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   express.get('/xiconf/clients', canView, express.crud.browseRoute.bind(null, app, XiconfClient));
 
+  express.get('/xiconf/clients;debug', canManage, getClientsDebugInfoRoute);
+
   express.get('/xiconf/clients/:id;goTo', canView, goToClientsPageRoute.bind(null, app, xiconfModule));
 
   express.get('/xiconf/clients/:id;downloadVNC', canView, downloadClientsVNCRoute.bind(null, app, xiconfModule));
@@ -178,6 +180,18 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   express.delete('/xiconf/clients/:id', canManage, express.crud.deleteRoute.bind(null, app, XiconfClient));
 
   express.get('/xiconf/updates/:version', sendUpdateRoute.bind(null, app, xiconfModule));
+
+  function getClientsDebugInfoRoute(req, res)
+  {
+    if (_.isFunction(xiconfModule.getRemoteCoordinatorDebugInfo))
+    {
+      res.json(xiconfModule.getRemoteCoordinatorDebugInfo());
+    }
+    else
+    {
+      res.sendStatus(500);
+    }
+  }
 
   function populateOrder(fields, req, res, next)
   {

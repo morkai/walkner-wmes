@@ -35,6 +35,31 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var orderResultsToRecount = {};
   var orderResultsRecountTimer = null;
 
+  xiconfModule.getRemoteCoordinatorDebugInfo = function()
+  {
+    var cleanProdLinesToDataMap = {};
+
+    _.forEach(prodLinesToDataMap, function(prodLineData, prodLineId)
+    {
+      cleanProdLinesToDataMap[prodLineId] = {
+        leader: prodLineData.leader,
+        orders: prodLineData.orders,
+        sockets: Object.keys(prodLineData.sockets)
+      };
+    });
+
+    return {
+      prodLinesToDataMap: cleanProdLinesToDataMap,
+      ordersToDataMap: ordersToDataMap,
+      ordersToProdLinesMap: ordersToProdLinesMap,
+      ordersToGetOrderDataQueueMap: ordersToGetOrderDataQueueMap,
+      ordersToOperationsQueueMap: ordersToOperationsQueueMap,
+      ordersLocks: ordersLocks,
+      orderResultsRecountLock: orderResultsRecountLock,
+      orderResultsToRecount: orderResultsToRecount
+    };
+  };
+
   app.broker.subscribe('app.started', onAppStarted);
   app.broker.subscribe('settings.updated.xiconf.notifier.delay', onDelaySettingChanged);
   app.broker.subscribe('shiftChanged', onShiftChanged);
