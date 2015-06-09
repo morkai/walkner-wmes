@@ -63,7 +63,7 @@
   "PROPERTY:attachments:description": "Opis",
   "PROPERTY:attachments:file": "Nazwa pliku",
   "PROPERTY:attachments:type": "Typ pliku",
-  "PROPERTY:comment": "Komentarz",
+  "PROPERTY:comment": "Komentarz/opinia",
 
   "type:nearMiss": "Zdarzenie Potencjalnie Wypadkowe",
   "type:suggestion": "Sugestia",
