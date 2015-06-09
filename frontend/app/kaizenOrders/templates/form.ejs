@@ -57,25 +57,25 @@
             <p><%- t('kaizenOrders', 'FORM:MSG:optional', {gender: user.data.gender}) %></p>
           </div>
           <div id="<%- idPrefix %>-causeTextFormGroup" class="form-group">
-            <label for="<%- idPrefix %>-causeText" class="control-label"><%- t('kaizenOrders', 'PROPERTY:causeText') %></label>
+            <label for="<%- idPrefix %>-causeText" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:causeText') %></label>
             <textarea id="<%- idPrefix %>-causeText" class="form-control" name="causeText" rows="3"></textarea>
           </div>
           <div id="<%- idPrefix %>-causeCategoryRiskRow" class="row">
             <div class="form-group col-md-4">
-              <label for="<%- idPrefix %>-cause" class="control-label"><%- t('kaizenOrders', 'PROPERTY:cause') %></label>
+              <label for="<%- idPrefix %>-cause" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:cause') %></label>
               <input id="<%- idPrefix %>-cause" type="text" name="cause">
             </div>
             <div class="form-group col-md-4">
-              <label for="<%- idPrefix %>-risk" class="control-label"><%- t('kaizenOrders', 'PROPERTY:risk') %></label>
+              <label for="<%- idPrefix %>-risk" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:risk') %></label>
               <input id="<%- idPrefix %>-risk" type="text" name="risk">
             </div>
             <div class="form-group col-md-4">
-              <label for="<%- idPrefix %>-nearMissCategory" class="control-label"><%- t('kaizenOrders', 'PROPERTY:nearMissCategory') %></label>
+              <label for="<%- idPrefix %>-nearMissCategory" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:nearMissCategory') %></label>
               <input id="<%- idPrefix %>-nearMissCategory" type="text" name="nearMissCategory">
             </div>
           </div>
           <div id="<%- idPrefix %>-correctiveMeasuresFormGroup" class="form-group">
-            <label for="<%- idPrefix %>-correctiveMeasures" class="control-label"><%- t('kaizenOrders', 'PROPERTY:correctiveMeasures') %></label>
+            <label for="<%- idPrefix %>-correctiveMeasures" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:correctiveMeasures') %></label>
             <textarea id="<%- idPrefix %>-correctiveMeasures" class="form-control" name="correctiveMeasures" rows="3"></textarea>
           </div>
         </div>
@@ -97,7 +97,7 @@
             <p><%- t('kaizenOrders', 'FORM:MSG:optional', {gender: user.data.gender}) %></p>
           </div>
           <div id="<%- idPrefix %>-suggestionCategoryFormGroup" class="form-group">
-            <label for="<%- idPrefix %>-suggestionCategory" class="control-label"><%- t('kaizenOrders', 'PROPERTY:suggestionCategory') %></label>
+            <label for="<%- idPrefix %>-suggestionCategory" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:suggestionCategory') %></label>
             <input id="<%- idPrefix %>-suggestionCategory" type="text" name="suggestionCategory">
           </div>
         </div>
@@ -113,21 +113,21 @@
           </div>
           <div class="row">
             <div class="form-group col-lg-2">
-              <label for="<%- idPrefix %>-kaizenStartDate" class="control-label"><%- t('kaizenOrders', 'PROPERTY:kaizenStartDate') %></label>
+              <label for="<%- idPrefix %>-kaizenStartDate" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:kaizenStartDate') %></label>
               <input id="<%- idPrefix %>-kaizenStartDate" class="form-control" type="date" name="kaizenStartDate" max="<%- today %>" placeholder="<%- t('core', 'placeholder:date') %>">
             </div>
             <div class="form-group col-lg-2">
-              <label for="<%- idPrefix %>-kaizenFinishDate" class="control-label"><%- t('kaizenOrders', 'PROPERTY:kaizenFinishDate') %></label>
+              <label for="<%- idPrefix %>-kaizenFinishDate" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:kaizenFinishDate') %></label>
               <input id="<%- idPrefix %>-kaizenFinishDate" class="form-control" type="date" name="kaizenFinishDate" max="<%- today %>" placeholder="<%- t('core', 'placeholder:date') %>">
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              <label for="<%- idPrefix %>-kaizenImprovements" class="control-label"><%- t('kaizenOrders', 'PROPERTY:kaizenImprovements') %></label>
+              <label for="<%- idPrefix %>-kaizenImprovements" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:kaizenImprovements') %></label>
               <textarea id="<%- idPrefix %>-kaizenImprovements" class="form-control" name="kaizenImprovements" rows="3"></textarea>
             </div>
             <div class="form-group col-md-6">
-              <label for="<%- idPrefix %>-kaizenEffect" class="control-label"><%- t('kaizenOrders', 'PROPERTY:kaizenEffect') %></label>
+              <label for="<%- idPrefix %>-kaizenEffect" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:kaizenEffect') %></label>
               <textarea id="<%- idPrefix %>-kaizenEffect" class="form-control" name="kaizenEffect" rows="3"></textarea>
             </div>
           </div>

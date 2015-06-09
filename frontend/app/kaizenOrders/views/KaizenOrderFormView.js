@@ -84,7 +84,9 @@ define([
         {
           this.collapsePanel(type);
         }
-      }
+      },
+
+      'change [name="status"]': 'toggleRequiredToFinishFlags'
 
     }, FormView.prototype.events),
 
@@ -305,6 +307,7 @@ define([
       this.setUpOwnerSelect2();
       this.toggleStatuses();
       this.toggleSubmit();
+      this.toggleRequiredToFinishFlags();
       this.togglePanels();
 
       this.$('input[autofocus]').focus();
@@ -424,6 +427,22 @@ define([
       return $panel;
     },
 
+    toggleRequiredToFinishFlags: function()
+    {
+      var selectedStatus = this.$('input[name="status"]:checked').val();
+      var required = selectedStatus === 'finished';
+
+      this.$('.is-requiredToFinish').toggleClass('is-required', required).each(function()
+      {
+        if (this.nextElementSibling.classList.contains('select2-container'))
+        {
+          this.parentNode.classList.toggle('has-required-select2', required);
+        }
+      });
+
+      this.$('.message-info').toggleClass('hidden', required);
+    },
+
     toggleRequiredFlags: function()
     {
       this.$('.kaizenOrders-form-typePanel').each(function()
@@ -433,7 +452,7 @@ define([
 
         $panel.find('.is-required').each(function()
         {
-          $panel.find('#-' + this.htmlFor).prop('required', required);
+          $panel.find('#' + this.htmlFor).prop('required', required);
         });
       });
     },
