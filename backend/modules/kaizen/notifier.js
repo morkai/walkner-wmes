@@ -185,7 +185,7 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
         {
           kaizenModule.error("Failed to notify users about an order change [%d]: %s", kaizenOrder.rid, err.message);
         }
-        else
+        else if (this.mailOptions)
         {
           kaizenModule.info("Notified %d users about an order change: %d", this.mailOptions.to.length, kaizenOrder.rid);
         }
