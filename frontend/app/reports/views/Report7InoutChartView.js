@@ -116,11 +116,13 @@ define([
         series: [{
           name: t.bound('reports', '7:series:indoor'),
           type: 'column',
-          data: chartData.indoor
+          data: chartData.indoor,
+          color: '#00aaff'
         }, {
           name: t.bound('reports', '7:series:outdoor'),
           type: 'column',
-          data: chartData.outdoor
+          data: chartData.outdoor,
+          color: '#00ee00'
         }]
       });
     },
