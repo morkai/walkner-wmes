@@ -20,22 +20,34 @@ define([
     defaults: function()
     {
       return {
-        aors: user.data.aors || [],
-        statuses: ['confirmed'],
+        aors: null,
+        statuses: null,
         limit: 8,
         skip: 0
       };
     },
 
-    reset: function(query)
+    setDefaults: function(aors, statuses)
     {
-      this.set(_.defaults(this.constructor.prepareAttrsFromQuery(query), this.defaults), {reset: true});
+      var changes = {};
+
+      if (this.get('aors') === null)
+      {
+        changes.aors = aors;
+      }
+
+      if (this.get('statuses') === null)
+      {
+        changes.statuses = statuses;
+      }
+
+      this.set(changes, {silent: true});
     },
 
     serializeToObject: function()
     {
       return {
-        aors: this.get('aors').join(','),
+        aors: (this.get('aors') || []).join(','),
         statuses: 'confirmed'
       };
     },
@@ -60,8 +72,8 @@ define([
     createProdDowntimesSelector: function()
     {
       var startedAt = time.getMoment().startOf('month').hours(6);
-      var statuses = this.get('statuses');
-      var aors = this.get('aors');
+      var statuses = this.get('statuses') || [];
+      var aors = this.get('aors') || [];
       var selector = {
         name: 'and',
         args: []
@@ -101,10 +113,10 @@ define([
     prepareAttrsFromQuery: function(query)
     {
       return {
-        aors: query.aors ? query.aors.split(',') : user.data.aors || [],
-        statuses: query.statuses ? query.statuses.split(',') : ['confirmed'],
-        limit: parseInt(query.limit, 10) || 8,
-        skip: parseInt(query.skip, 10) || 0
+        aors: query.aors ? query.aors.split(',') : null,
+        statuses: query.statuses ? query.statuses.split(',') : null,
+        limit: parseInt(query.limit, 10) || undefined,
+        skip: parseInt(query.skip, 10) || undefined
       };
     },
 

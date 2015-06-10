@@ -1,0 +1,28 @@
+<div class="panel-body" data-tab="downtimesInAors">
+  <div class="form-group">
+    <label class="control-label"><%- t('reports', 'settings:downtimesInAors:statuses') %></label>
+    <% ['undecided', 'rejected', 'confirmed'].forEach(function(status) { %>
+    <div class="checkbox">
+      <label>
+        <input name="reports.downtimesInAors.statuses" type="checkbox" value="<%- status %>">
+        <%- t('prodDowntimes', 'PROPERTY:status:' + status) %>
+      </label>
+    </div>
+    <% }) %>
+  </div>
+  <div class="form-group">
+    <div class="radio">
+      <label class="control-label">
+        <input type="radio" name="downtimesInAorsType" value="own" data-change-delay="0">
+        <%- t('reports', 'settings:downtimesInAors:aors:own') %>
+      </label>
+    </div>
+    <div class="radio">
+      <label class="control-label">
+        <input type="radio" name="downtimesInAorsType" value="specific" data-change-delay="0">
+        <%- t('reports', 'settings:downtimesInAors:aors:specific') %>
+      </label>
+    </div>
+    <input id="<%- idPrefix %>-downtimesInAors-aors" name="reports.downtimesInAors.aors" type="text">
+  </div>
+</div>

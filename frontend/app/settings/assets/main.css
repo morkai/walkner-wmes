@@ -42,3 +42,9 @@
 .settings .checkbox + .checkbox {
   margin-top: 15px;
 }
+.settings .form-group > .checkbox + .checkbox {
+  margin-top: 0;
+}
+.settings .radio + .select2-container {
+  margin-top: 5px;
+}

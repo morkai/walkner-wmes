@@ -62,6 +62,16 @@ define([
       }
     },
 
+    actions: function()
+    {
+      return [{
+        label: t.bound('reports', 'PAGE_ACTION:settings'),
+        icon: 'cogs',
+        privileges: 'REPORTS:MANAGE',
+        href: '#reports;settings?tab=downtimesInAors'
+      }];
+    },
+
     initialize: function()
     {
       this.defineModels();
@@ -166,6 +176,11 @@ define([
     {
       return when(this.settings.fetchIfEmpty(function()
       {
+        this.query.setDefaults(
+          this.settings.getDefaultDowntimeAors(),
+          this.settings.getDefaultDowntimeStatuses()
+        );
+
         return [
           this.report.fetch(),
           this.prodDowntimes.fetch({reset: true})

@@ -4,12 +4,16 @@
 
 define([
   'underscore',
+  'app/core/util/idAndLabel',
   'app/data/orgUnits',
+  'app/data/aors',
   'app/settings/views/SettingsView',
   'app/reports/templates/settings'
 ], function(
   _,
+  idAndLabel,
   orgUnits,
+  aors,
   SettingsView,
   template
 ) {
@@ -24,7 +28,8 @@ define([
 
     localTopics: {
       'divisions.synced': 'render',
-      'subdivisions.synced': 'render'
+      'subdivisions.synced': 'render',
+      'aors.synced': 'render'
     },
 
     events: _.extend({
@@ -33,6 +38,17 @@ define([
         this.updateSetting(e.target.name, e.target.value);
       },
       'change [name$="id"]': function(e)
+      {
+        this.updateSetting(e.target.name, e.target.value);
+      },
+      'change [name="downtimesInAorsType"]': function(e)
+      {
+        var aors = e.target.value === 'own' ? 'own' : '';
+
+        this.updateSetting('reports.downtimesInAors.aors', aors);
+        this.toggleDowntimesInAors(aors);
+      },
+      'change [name$="aors"]': function(e)
       {
         this.updateSetting(e.target.name, e.target.value);
       }
@@ -149,6 +165,16 @@ define([
         placeholder: ' ',
         data: this.prodTasks.serializeToSelect2()
       });
+
+      this.$('input[name$="aors"]').select2({
+        allowClear: true,
+        multiple: true,
+        placeholder: ' ',
+        data: aors.map(idAndLabel)
+      });
+
+      this.onSettingsChange(this.settings.get('reports.downtimesInAors.statuses'));
+      this.toggleDowntimesInAors(this.settings.getValue('downtimesInAors.aors'));
     },
 
     updateSettingField: function(setting)
@@ -158,6 +184,20 @@ define([
       if ($el.hasClass('select2-offscreen'))
       {
         return $el.select2('val', setting.getValue());
+      }
+    },
+
+    toggleDowntimesInAors: function(aors)
+    {
+      if (aors === null || aors === 'own')
+      {
+        this.$('input[name="downtimesInAorsType"][value="own"]').prop('checked', true);
+        this.$id('downtimesInAors-aors').select2('enable', false).select2('data', null);
+      }
+      else
+      {
+        this.$('input[name="downtimesInAorsType"][value="specific"]').prop('checked', true);
+        this.$id('downtimesInAors-aors').select2('enable', true);
       }
     }
 

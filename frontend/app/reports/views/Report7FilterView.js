@@ -51,7 +51,7 @@ define([
     serializeQueryToForm: function()
     {
       return {
-        aors: this.model.get('aors').join(','),
+        aors: (this.model.get('aors') || []).join(','),
         statuses: this.model.get('statuses')
       };
     },

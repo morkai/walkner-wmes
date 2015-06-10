@@ -154,6 +154,7 @@
   "settings:tab:effIneff": "Podział zasobów",
   "settings:tab:hr": "HR",
   "settings:tab:wh": "Magazyn",
+  "settings:tab:downtimesInAors": "Przestoje w obszarach",
   "settings:overall": "ML",
   "settings:prod": "Montaż",
   "settings:press": "Tłocznia",
@@ -196,6 +197,9 @@
   "settings:wh:finGoodsIn": "Przyjęcia wyrobów gotowych",
   "settings:wh:finGoodsOut": "Przygotowanie wysyłek i załadunek",
   "settings:wh:finGoodsAbsence": "Absencja",
+  "settings:downtimesInAors:statuses": "Domyślnie statusy przestojów na liście",
+  "settings:downtimesInAors:aors:own": "Domyślnie obszary odpowiedzialności użytkownika.",
+  "settings:downtimesInAors:aors:specific": "Domyślnie wybrane obszary odpowiedzialności:",
 
   "oee:table:loading": "Ładowanie...",
   "oee:table:loadingFailed": "Ładowanie nie powiodło się :(",

@@ -100,8 +100,20 @@ define([
     {
       this.$('.colorpicker-component').colorpicker();
 
-      var view = this;
+      js2form(this.el, this.serializeFormData());
+
+      this.$('[name]').each(function()
+      {
+        this.dataset.value = this.value;
+      });
+
+      this.changeTab(this.currentTab || this.defaultTab || this.$('.list-group-item[data-tab]').attr('data-tab'));
+    },
+
+    serializeFormData: function()
+    {
       var formData = {};
+      var view = this;
 
       this.settings.forEach(function(setting)
       {
@@ -124,14 +136,7 @@ define([
         formData[setting.id] = value;
       });
 
-      js2form(this.el, formData);
-
-      this.$('[name]').each(function()
-      {
-        this.dataset.value = this.value;
-      });
-
-      this.changeTab(this.currentTab || this.defaultTab || this.$('.list-group-item[data-tab]').attr('data-tab'));
+      return formData;
     },
 
     changeTab: function(tab)
@@ -211,12 +216,23 @@ define([
       {
         if (!Array.isArray(value))
         {
-          value = value ? [value] : [];
+          if (!value)
+          {
+            value = [];
+          }
+          else if (typeof value === 'string')
+          {
+            value = value.split(',');
+          }
+          else
+          {
+            value = [value];
+          }
         }
 
         for (var i = 0; i < $checkboxes.length; ++i)
         {
-          var checkboxEl = $checkboxes[0];
+          var checkboxEl = $checkboxes[i];
 
           checkboxEl.checked = value.indexOf(checkboxEl.value) !== -1;
         }

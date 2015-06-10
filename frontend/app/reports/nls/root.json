@@ -154,6 +154,8 @@
     "settings:tab:dirIndir": "DIRECT/INDIRECT",
     "settings:tab:effIneff": "Allocation of resources",
     "settings:tab:hr": "HR",
+    "settings:tab:wh": "Warehouse",
+    "settings:tab:downtimesInAors": "Downtimes in AORs",
     "settings:overall": "ML",
     "settings:prod": "Assembly",
     "settings:press": "Press",
@@ -196,6 +198,9 @@
     "settings:wh:finGoodsIn": "Finished goods input",
     "settings:wh:finGoodsOut": "Finished goods output",
     "settings:wh:finGoodsAbsence": "Absence",
+    "settings:downtimesInAors:statuses": "Default downtime statuses on the list",
+    "settings:downtimesInAors:aors:own": "Default to the user's AORs.",
+    "settings:downtimesInAors:aors:specific": "Default to the following AORs:",
 
     "oee:table:loading": "Loading...",
     "oee:table:loadingFailed": "Loading failed :(",

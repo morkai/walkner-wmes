@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../user',
   '../settings/SettingCollection',
   './ReportSetting'
 ], function(
+  user,
   SettingCollection,
   ReportSetting
 ) {
@@ -59,6 +61,23 @@ define([
       return coeff > 0 ? coeff : 0;
     },
 
+    getDefaultDowntimeAors: function()
+    {
+      var aors = this.getValue('downtimesInAors.aors') || 'own';
+
+      if (aors === 'own')
+      {
+        return user.data.aors || [];
+      }
+
+      return aors.split(',').filter(function(aorId) { return aorId.length > 0; });
+    },
+
+    getDefaultDowntimeStatuses: function()
+    {
+      return (this.getValue('downtimesInAors.statuses') || 'confirmed').split(',');
+    },
+
     prepareValue: function(id, newValue)
     {
       if (/color/i.test(id))
@@ -71,9 +90,19 @@ define([
         return this.prepareCoeffValue(newValue);
       }
 
-      if (/(id|prodTask)$/.test(id))
+      if (/(id|prodTask)$/i.test(id))
       {
         return this.prepareObjectIdValue(newValue);
+      }
+
+      if (/downtimesInAors.aors$/.test(id))
+      {
+        return this.prepareDowntimeAorsValue(newValue);
+      }
+
+      if (/downtimesInAors.statuses$/.test(id))
+      {
+        return this.prepareDowntimeStatusesValue(newValue);
       }
 
       return this.prepare100PercentValue(newValue);
@@ -148,6 +177,23 @@ define([
       }
 
       return undefined;
+    },
+
+    prepareDowntimeAorsValue: function(value)
+    {
+      return value === 'own'
+        ? value
+        : value.split(',').filter(function(aorId) { return /^[a-f0-9]{24}$/.test(aorId); }).join(',');
+    },
+
+    prepareDowntimeStatusesValue: function(value)
+    {
+      var statuses = (Array.isArray(value) ? value : value.split(',')).filter(function(status)
+      {
+        return status === 'undecided' || status === 'rejected' || status === 'confirmed';
+      });
+
+      return statuses.length ? statuses.join(',') : 'confirmed';
     }
 
   });
