@@ -53,7 +53,6 @@ exports.modules = [
   'licenses',
   'factoryLayout',
   'permalinks',
-  'kaizen',
   'orderDocuments',
   'mail/sender',
   'messenger/server',
