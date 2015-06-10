@@ -102,7 +102,7 @@ module.exports = function(mongoose, options, done)
 
   function countDowntimes(options, done)
   {
-    /*globals mrpControllers,emit*/
+    /*globals mrpControllers,specificAor,emit*/
 
     var query = {
       startedAt: {
@@ -154,17 +154,34 @@ module.exports = function(mongoose, options, done)
           m: this.date.getMonth(),
           io: inout
         };
+        var duration = (this.finishedAt.getTime() - this.startedAt.getTime()) / 60000;
 
-        emit(key, {
-          count: 1,
-          duration: (this.finishedAt.getTime() - this.startedAt.getTime()) / 60000
-        });
+        if (specificAor === this.aor.valueOf())
+        {
+          emit(key, {
+            count: 0,
+            duration: 0,
+            specificCount: 1,
+            specificDuration: duration
+          });
+        }
+        else
+        {
+          emit(key, {
+            count: 1,
+            duration: duration,
+            specificCount: 0,
+            specificDuration: 0
+          });
+        }
       },
       reduce: function(key, values)
       {
         var result = {
           count: 0,
-          duration: 0
+          duration: 0,
+          specificCount: 0,
+          specificDuration: 0
         };
 
         for (var i = 0, l = values.length; i < l; ++i)
@@ -173,13 +190,18 @@ module.exports = function(mongoose, options, done)
 
           result.count += value.count;
           result.duration += value.duration;
+          result.specificCount += value.specificCount;
+          result.specificDuration += value.specificDuration;
         }
 
         return result;
       },
       out: {inline: 1},
       query: query,
-      scope: {mrpControllers: options.inoutMrpControllers || {}}
+      scope: {
+        specificAor: options.specificAor,
+        mrpControllers: options.inoutMrpControllers || {}
+      }
     }, function(err, results)
     {
       if (err)
@@ -196,24 +218,22 @@ module.exports = function(mongoose, options, done)
 
         if (groups[key] === undefined)
         {
-          groups[key] = {
-            key: key,
-            indoorCount: 0,
-            outdoorCount: 0,
-            indoorDuration: 0,
-            outdoorDuration: 0
-          };
+          groups[key] = createDataGroupEntry(key);
         }
 
         if (result._id.io === 1)
         {
           groups[key].indoorCount += result.value.count;
           groups[key].indoorDuration += result.value.duration;
+          groups[key].specificIndoorCount += result.value.specificCount;
+          groups[key].specificIndoorDuration += result.value.specificDuration;
         }
         else
         {
           groups[key].outdoorCount += result.value.count;
           groups[key].outdoorDuration += result.value.duration;
+          groups[key].specificOutdoorCount += result.value.specificCount;
+          groups[key].specificOutdoorDuration += result.value.specificDuration;
         }
       }
 
@@ -226,13 +246,7 @@ module.exports = function(mongoose, options, done)
 
         if (!groups[groupKey])
         {
-          groups[groupKey] = {
-            key: groupKey,
-            indoorCount: 0,
-            outdoorCount: 0,
-            indoorDuration: 0,
-            outdoorDuration: 0
-          };
+          groups[groupKey] = createDataGroupEntry(groupKey);
         }
 
         currentGroupKey.add(1, 'months');
@@ -247,9 +261,26 @@ module.exports = function(mongoose, options, done)
       {
         downtime.indoorDuration = util.round(downtime.indoorDuration);
         downtime.outdoorDuration = util.round(downtime.outdoorDuration);
+        downtime.specificIndoorDuration = util.round(downtime.specificIndoorDuration);
+        downtime.specificOutdoorDuration = util.round(downtime.specificOutdoorDuration);
       });
 
       return done(null, downtimes);
     });
+  }
+
+  function createDataGroupEntry(key)
+  {
+    return {
+      key: key,
+      indoorCount: 0,
+      outdoorCount: 0,
+      indoorDuration: 0,
+      outdoorDuration: 0,
+      specificIndoorCount: 0,
+      specificOutdoorCount: 0,
+      specificIndoorDuration: 0,
+      specificOutdoorDuration: 0
+    };
   }
 };

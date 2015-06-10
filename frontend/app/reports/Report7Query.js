@@ -20,6 +20,7 @@ define([
     defaults: function()
     {
       return {
+        specificAor: null,
         aors: null,
         statuses: null,
         limit: 8,
@@ -27,19 +28,18 @@ define([
       };
     },
 
-    setDefaults: function(aors, statuses)
+    setDefaults: function(defaults)
     {
       var changes = {};
+      var attrs = this.attributes;
 
-      if (this.get('aors') === null)
+      ['specificAor', 'aors', 'statuses'].forEach(function(property)
       {
-        changes.aors = aors;
-      }
-
-      if (this.get('statuses') === null)
-      {
-        changes.statuses = statuses;
-      }
+        if (attrs[property] === null)
+        {
+          attrs[property] = defaults[property];
+        }
+      });
 
       this.set(changes, {silent: true});
     },
@@ -47,6 +47,7 @@ define([
     serializeToObject: function()
     {
       return {
+        specificAor: this.get('specificAor') || '',
         aors: (this.get('aors') || []).join(','),
         statuses: 'confirmed'
       };
@@ -62,6 +63,7 @@ define([
         queryString += '&aors=' + attrs.aors;
       }
 
+      queryString += '&specificAor=' + attrs.specificAor;
       queryString += '&statuses=' + attrs.statuses;
       queryString += '&limit=' + attrs.limit;
       queryString += '&skip=' + attrs.skip;
@@ -73,7 +75,8 @@ define([
     {
       var startedAt = time.getMoment().startOf('month').hours(6);
       var statuses = this.get('statuses') || [];
-      var aors = this.get('aors') || [];
+      var aors = _.unique((this.get('aors') || []).concat(this.get('specificAor')))
+        .filter(function(aor) { return !!aor; });
       var selector = {
         name: 'and',
         args: []
@@ -113,6 +116,7 @@ define([
     prepareAttrsFromQuery: function(query)
     {
       return {
+        specificAor: query.specificAor === undefined ? null : query.specificAor,
         aors: query.aors ? query.aors.split(',') : null,
         statuses: query.statuses ? query.statuses.split(',') : null,
         limit: parseInt(query.limit, 10) || undefined,

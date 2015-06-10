@@ -22,18 +22,15 @@ define([
     template: template,
 
     termToForm: {
+      'specificAor': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.args[1];
+      },
       'aors': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1].split(',');
       },
       'statuses': 'aors'
-    },
-
-    serialize: function()
-    {
-      return _.extend(FilterView.prototype.serialize.call(this), {
-        aors: []
-      });
     },
 
     afterRender: function()
@@ -42,15 +39,25 @@ define([
 
       this.toggleButtonGroup('statuses');
 
+      var aorsData = aors.map(idAndLabel);
+
+      this.$id('specificAor').select2({
+        width: '275px',
+        allowClear: true,
+        placeholder: ' ',
+        data: aorsData
+      });
+
       this.$id('aors').select2({
         multiple: true,
-        data: aors.map(idAndLabel)
+        data: aorsData
       });
     },
 
     serializeQueryToForm: function()
     {
       return {
+        specificAor: this.model.get('specificAor'),
         aors: (this.model.get('aors') || []).join(','),
         statuses: this.model.get('statuses')
       };
@@ -60,7 +67,8 @@ define([
     {
       var query = {
         statuses: this.getButtonGroupValue('statuses'),
-        aors: this.$id('aors').val().split(',').filter(function(aor) { return aor.length > 0; })
+        aors: this.$id('aors').val().split(',').filter(function(aor) { return aor.length > 0; }),
+        specificAor: this.$id('specificAor').val()
       };
 
       if (!query.statuses.length)

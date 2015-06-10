@@ -12,12 +12,20 @@ module.exports = function report7Route(app, reportsModule, req, res, next)
 {
   var orgUnitsModule = app[reportsModule.config.orgUnitsId];
 
+  var query = req.query;
   var options = {
     assemblyMrpControllers: orgUnitsModule.getAssemblyMrpControllersFor(),
     inoutMrpControllers: {},
-    statuses: _.isString(req.query.statuses) && !_.isEmpty(req.query.statuses) ? req.query.statuses.split(',') : [],
-    aors: _.isString(req.query.aors) && !_.isEmpty(req.query.aors) ? req.query.aors.split(',') : []
+    statuses: _.isString(query.statuses) && !_.isEmpty(query.statuses) ? query.statuses.split(',') : [],
+    aors: _.isString(query.aors) && !_.isEmpty(query.aors) ? query.aors.split(',') : [],
+    specificAor: _.isString(query.specificAor) && !_.isEmpty(query.specificAor) ? query.specificAor : null
   };
+
+  if (options.specificAor)
+  {
+    options.aors.push(options.specificAor);
+    options.aors = _.unique(options.aors);
+  }
 
   _.forEach(orgUnitsModule.getAllByType('mrpController'), function(mrpController)
   {

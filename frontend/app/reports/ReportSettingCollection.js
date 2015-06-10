@@ -90,7 +90,7 @@ define([
         return this.prepareCoeffValue(newValue);
       }
 
-      if (/(id|prodTask)$/i.test(id))
+      if (/(id|prodTask|specificAor)$/i.test(id))
       {
         return this.prepareObjectIdValue(newValue);
       }

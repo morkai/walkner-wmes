@@ -5,10 +5,12 @@
 define([
   'underscore',
   '../time',
+  '../data/aors',
   '../core/Model'
 ], function(
   _,
   time,
+  aors,
   Model
 ) {
   'use strict';
@@ -30,12 +32,16 @@ define([
         downtimeTimes: {
           categories: [],
           indoor: [],
-          outdoor: []
+          outdoor: [],
+          specificIndoor: [],
+          specificOutdoor: []
         },
         downtimeCounts: {
           categories: [],
           indoor: [],
-          outdoor: []
+          outdoor: [],
+          specificIndoor: [],
+          specificOutdoor: []
         }
       };
     },
@@ -48,6 +54,18 @@ define([
       }
 
       this.query = options.query;
+    },
+
+    getSingleAor: function()
+    {
+      var otherAors = _.without(this.query.get('aors'), this.query.get('specificAor'));
+
+      return otherAors.length === 1 ? aors.get(otherAors[0]) : null;
+    },
+
+    getSpecificAor: function()
+    {
+      return aors.get(this.query.get('specificAor'));
     },
 
     fetch: function(options)
@@ -69,8 +87,8 @@ define([
     {
       var attrs = {
         clip: null,
-        downtimeCount: null,
-        downtimeDuration: null
+        downtimeCounts: null,
+        downtimeTimes: null
       };
 
       this.parseClip(report.clip, attrs);
@@ -106,12 +124,16 @@ define([
       var downtimeTimes = {
         categories: [],
         indoor: [],
-        outdoor: []
+        outdoor: [],
+        specificIndoor: [],
+        specificOutdoor: []
       };
       var downtimeCounts = {
         categories: [],
         indoor: [],
-        outdoor: []
+        outdoor: [],
+        specificIndoor: [],
+        specificOutdoor: []
       };
 
       for (var i = 0; i < downtimes.length; ++i)
@@ -123,10 +145,14 @@ define([
         downtimeTimes.categories.push(category);
         downtimeTimes.indoor.push(Math.round(downtime.indoorDuration / 60 * 100) / 100);
         downtimeTimes.outdoor.push(Math.round(downtime.outdoorDuration / 60 * 100) / 100);
+        downtimeTimes.specificIndoor.push(Math.round(downtime.specificIndoorDuration / 60 * 100) / 100);
+        downtimeTimes.specificOutdoor.push(Math.round(downtime.specificOutdoorDuration / 60 * 100) / 100);
 
         downtimeCounts.categories.push(category);
         downtimeCounts.indoor.push(downtime.indoorCount);
         downtimeCounts.outdoor.push(downtime.outdoorCount);
+        downtimeCounts.specificIndoor.push(downtime.specificIndoorCount);
+        downtimeCounts.specificOutdoor.push(downtime.specificOutdoorCount);
       }
 
       attrs.downtimeTimes = downtimeTimes;

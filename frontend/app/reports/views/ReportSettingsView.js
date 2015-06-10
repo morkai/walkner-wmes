@@ -33,24 +33,16 @@ define([
     },
 
     events: _.extend({
-      'change [name$="prodTask"]': function(e)
-      {
-        this.updateSetting(e.target.name, e.target.value);
-      },
-      'change [name$="id"]': function(e)
-      {
-        this.updateSetting(e.target.name, e.target.value);
-      },
+      'change [name$="prodTask"]': 'updateSettingOnInputChange',
+      'change [name$="id"]': 'updateSettingOnInputChange',
+      'change [name$="aors"]': 'updateSettingOnInputChange',
+      'change #-downtimesInAors-specificAor': 'updateSettingOnInputChange',
       'change [name="downtimesInAorsType"]': function(e)
       {
         var aors = e.target.value === 'own' ? 'own' : '';
 
         this.updateSetting('reports.downtimesInAors.aors', aors);
         this.toggleDowntimesInAors(aors);
-      },
-      'change [name$="aors"]': function(e)
-      {
-        this.updateSetting(e.target.name, e.target.value);
       }
     }, SettingsView.prototype.events),
 
@@ -166,11 +158,19 @@ define([
         data: this.prodTasks.serializeToSelect2()
       });
 
+      var aorsData = aors.map(idAndLabel);
+
       this.$('input[name$="aors"]').select2({
         allowClear: true,
         multiple: true,
         placeholder: ' ',
-        data: aors.map(idAndLabel)
+        data: aorsData
+      });
+
+      this.$id('downtimesInAors-specificAor').select2({
+        allowClear: true,
+        placeholder: ' ',
+        data: aorsData
       });
 
       this.onSettingsChange(this.settings.get('reports.downtimesInAors.statuses'));
@@ -199,6 +199,11 @@ define([
         this.$('input[name="downtimesInAorsType"][value="specific"]').prop('checked', true);
         this.$id('downtimesInAors-aors').select2('enable', true);
       }
+    },
+
+    updateSettingOnInputChange: function(e)
+    {
+      this.updateSetting(e.target.name, e.target.value);
     }
 
   });

@@ -198,6 +198,7 @@
   "settings:wh:finGoodsOut": "Przygotowanie wysyłek i załadunek",
   "settings:wh:finGoodsAbsence": "Absencja",
   "settings:downtimesInAors:statuses": "Domyślnie statusy przestojów na liście",
+  "settings:downtimesInAors:specificAor": "Domyślny wyszczególniony obszar odpowiedzialności",
   "settings:downtimesInAors:aors:own": "Domyślnie obszary odpowiedzialności użytkownika.",
   "settings:downtimesInAors:aors:specific": "Domyślnie wybrane obszary odpowiedzialności:",
 
@@ -376,10 +377,18 @@
   "orders:filter:status:PDLV": "Częściowo dostarczone (PDLV)",
 
   "7:filter:statuses": "Status przestojów na liście",
-  "7:filter:aors": "Obszary odpowiedzialności",
+  "7:filter:specificAor": "Wyszczególniony obszar odp.",
+  "7:filter:aors": "Inne obszary odpowiedzialności",
   "7:filter:aors:ph": "Wszystkie obszary",
   "7:title:downtimeTimes": "Czas przestojów",
   "7:title:downtimeCounts": "Ilość przestojów",
-  "7:series:indoor": "Indoor",
-  "7:series:outdoor": "Outdoor"
+  "7:series:indoor": "Inne (Indoor)",
+  "7:series:outdoor": "Inne (Outdoor)",
+  "7:series:indoor:specific": "Wyszczególniony (Indoor)",
+  "7:series:outdoor:specific": "Wyszczególniony (Outdoor)",
+  "7:series:indoor:aor": "{aor} (Indoor)",
+  "7:series:outdoor:aor": "{aor} (Outdoor)",
+  "7:series:indoor:total": "Suma (Indoor)",
+  "7:series:outdoor:total": "Suma (Outdoor)",
+  "7:series:total": "Suma"
 }

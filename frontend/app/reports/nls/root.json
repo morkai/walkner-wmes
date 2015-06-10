@@ -199,6 +199,7 @@
     "settings:wh:finGoodsOut": "Finished goods output",
     "settings:wh:finGoodsAbsence": "Absence",
     "settings:downtimesInAors:statuses": "Default downtime statuses on the list",
+    "settings:downtimesInAors:specificAor": "Default specific AOR",
     "settings:downtimesInAors:aors:own": "Default to the user's AORs.",
     "settings:downtimesInAors:aors:specific": "Default to the following AORs:",
 
@@ -372,12 +373,20 @@
     "orders:filter:status:PDLV": "Partially delivered (PDLV)",
 
     "7:filter:statuses": "Downtime statuses on the list",
+    "7:filter:specificAor": "Specific AOR",
     "7:filter:aors": "Areas of responsibility",
     "7:filter:aors:ph": "All AORs",
     "7:title:downtimeTimes": "Total downtime duration",
     "7:title:downtimeCounts": "Total downtime count",
     "7:series:indoor": "Indoor",
-    "7:series:outdoor": "Outdoor"
+    "7:series:outdoor": "Outdoor",
+    "7:series:indoor:specific": "Specific (Indoor)",
+    "7:series:outdoor:specific": "Specific (Outdoor)",
+    "7:series:indoor:aor": "{aor} (Indoor)",
+    "7:series:outdoor:aor": "{aor} (Outdoor)",
+    "7:series:indoor:total": "Total (Indoor)",
+    "7:series:outdoor:total": "Total (Outdoor)",
+    "7:series:total": "Total"
   },
   "pl": true
 }

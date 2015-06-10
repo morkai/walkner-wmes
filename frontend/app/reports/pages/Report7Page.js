@@ -143,6 +143,7 @@ define([
 
       this.downtimeCountsChartView = new Report7InoutChartView({
         type: 'downtimeCounts',
+        valueDecimals: 0,
         model: this.report
       });
     },
@@ -176,10 +177,13 @@ define([
     {
       return when(this.settings.fetchIfEmpty(function()
       {
-        this.query.setDefaults(
-          this.settings.getDefaultDowntimeAors(),
-          this.settings.getDefaultDowntimeStatuses()
-        );
+        this.query.setDefaults({
+          specificAor: this.settings.getValue('downtimesInAors.specificAor'),
+          aors: this.settings.getDefaultDowntimeAors(),
+          statuses: this.settings.getDefaultDowntimeStatuses()
+        });
+
+        this.prodDowntimes.rqlQuery.selector = this.query.createProdDowntimesSelector();
 
         return [
           this.report.fetch(),
@@ -191,8 +195,10 @@ define([
     onQueryChange: function(query, options)
     {
       var changed = this.query.changedAttributes();
+      var aorsChanged = changed.aors !== undefined;
+      var specificAorChanged = changed.specificAor !== undefined;
 
-      if (changed.statuses || changed.aors)
+      if (changed.statuses !== undefined || aorsChanged || specificAorChanged)
       {
         this.query.set({skip: 0}, {silent: true});
 
@@ -202,7 +208,7 @@ define([
         this.promised(this.prodDowntimes.fetch({reset: true}));
       }
 
-      if (changed.aors)
+      if (aorsChanged || specificAorChanged)
       {
         this.promised(this.report.fetch());
       }

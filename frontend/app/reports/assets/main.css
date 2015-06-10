@@ -356,7 +356,7 @@
 }
 .reports-7-filter-aors {
   min-width: 400px;
-  max-height: 700px;
+  max-width: 800px;
 }
 .reports-7-downtimes-container .table-responsive {
   overflow-x: scroll;

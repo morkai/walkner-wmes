@@ -97,7 +97,9 @@ define([
         tooltip: {
           shared: true,
           valueSuffix: valueSuffix,
-          valueDecimals: this.options.valueDecimals || 0
+          valueDecimals: this.options.valueDecimals || 0,
+          rowNameFormatter: this.formatTooltipRowName.bind(this),
+          extraRowsProvider: this.provideExtraTooltipRows.bind(this)
         },
         legend: {
           layout: 'horizontal',
@@ -114,15 +116,33 @@ define([
           }
         },
         series: [{
+          id: 'indoor',
           name: t.bound('reports', '7:series:indoor'),
           type: 'column',
           data: chartData.indoor,
-          color: '#00aaff'
+          color: '#00aaff',
+          group: 'indoor'
         }, {
+          id: 'specificIndoor',
+          name: t.bound('reports', '7:series:indoor:specific'),
+          type: 'column',
+          data: chartData.specificIndoor,
+          color: '#0066bb',
+          group: 'indoor'
+        }, {
+          id: 'outdoor',
           name: t.bound('reports', '7:series:outdoor'),
           type: 'column',
           data: chartData.outdoor,
-          color: '#00ee00'
+          color: '#00ee00',
+          group: 'outdoor'
+        }, {
+          id: 'specificOutdoor',
+          name: t.bound('reports', '7:series:outdoor:specific'),
+          type: 'column',
+          data: chartData.specificOutdoor,
+          color: '#00aa00',
+          group: 'outdoor'
         }]
       });
     },
@@ -135,7 +155,9 @@ define([
       this.chart.xAxis[0].setCategories(chartData.categories, false);
 
       series[0].setData(chartData.indoor, false);
-      series[1].setData(chartData.outdoor, true);
+      series[1].setData(chartData.specificIndoor, false);
+      series[2].setData(chartData.outdoor, false);
+      series[3].setData(chartData.specificOutdoor, true);
     },
 
     serializeChartData: function()
@@ -171,6 +193,54 @@ define([
       {
         this.chart.hideLoading();
       }
+    },
+
+    formatTooltipRowName: function(point)
+    {
+      var series = point.series;
+      var aor = /^specific/.test(series.options.id) ? this.model.getSpecificAor() : this.model.getSingleAor();
+
+      return aor
+        ? t('reports', '7:series:' + series.options.group + ':aor', {aor: aor.getLabel()})
+        : series.name;
+    },
+
+    provideExtraTooltipRows: function(points, rows)
+    {
+      var totalIndoor = 0;
+      var totalOutdoor = 0;
+
+      points.forEach(function(point)
+      {
+        if (/indoor$/i.test(point.series.options.id))
+        {
+          totalIndoor += point.y;
+        }
+        else
+        {
+          totalOutdoor += point.y;
+        }
+      });
+
+      rows.push({
+        color: '#000',
+        name: t('reports', '7:series:indoor:total'),
+        suffix: this.options.valueSuffix,
+        decimals: this.options.valueDecimals,
+        value: totalIndoor
+      }, {
+        color: '#000',
+        name: t('reports', '7:series:outdoor:total'),
+        suffix: this.options.valueSuffix,
+        decimals: this.options.valueDecimals,
+        value: totalOutdoor
+      }, {
+        color: '#000',
+        name: t('reports', '7:series:total'),
+        suffix: this.options.valueSuffix,
+        decimals: this.options.valueDecimals,
+        value: totalIndoor + totalOutdoor
+      });
     }
 
   });
