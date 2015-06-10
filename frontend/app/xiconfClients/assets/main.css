@@ -10,7 +10,7 @@
 .xiconfClients-list .action-goToSettings {
   margin-left: -5px;
 }
-.xiconfClients-list > table > tbody > tr > td[data-id="coreScannerDriver"] {
+.xiconfClients-list table > tbody > tr > td[data-id="coreScannerDriver"] {
   font-size: 1.6em;
   text-align: center;
 }
