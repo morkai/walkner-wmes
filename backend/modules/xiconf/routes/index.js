@@ -185,7 +185,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   {
     if (_.isFunction(xiconfModule.getRemoteCoordinatorDebugInfo))
     {
-      res.json(xiconfModule.getRemoteCoordinatorDebugInfo());
+      res.json(xiconfModule.getRemoteCoordinatorDebugInfo(req.query.enable !== undefined));
     }
     else
     {

@@ -31,12 +31,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var ordersLocks = {};
   var workingOrderChangeCheckTimers = {};
 
+  var debugMode = false;
   var orderResultsRecountLock = false;
   var orderResultsToRecount = {};
   var orderResultsRecountTimer = null;
 
-  xiconfModule.getRemoteCoordinatorDebugInfo = function()
+  xiconfModule.getRemoteCoordinatorDebugInfo = function(enableDebugMode)
   {
+    debugMode = enableDebugMode === true;
+
     var cleanProdLinesToDataMap = {};
 
     _.forEach(prodLinesToDataMap, function(prodLineData, prodLineId)
@@ -49,14 +52,16 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     });
 
     return {
+      debugMode: debugMode,
       prodLinesToDataMap: cleanProdLinesToDataMap,
-      ordersToDataMap: ordersToDataMap,
       ordersToProdLinesMap: ordersToProdLinesMap,
       ordersToGetOrderDataQueueMap: ordersToGetOrderDataQueueMap,
       ordersToOperationsQueueMap: ordersToOperationsQueueMap,
       ordersLocks: ordersLocks,
       orderResultsRecountLock: orderResultsRecountLock,
-      orderResultsToRecount: orderResultsToRecount
+      orderResultsToRecount: orderResultsToRecount,
+      workingOrderChangeCheckTimers: Object.keys(workingOrderChangeCheckTimers),
+      ordersToDataMap: ordersToDataMap
     };
   };
 
@@ -1063,6 +1068,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             quantityDone: this.orderData.quantityDone
           });
 
+          debug('[recountNextOrder] orderNo=%s quantityDone=%d', data.orderNo, this.orderData.quantityDone);
+
           setImmediate(emitRemoteDataToOrderWorkers, data.orderNo);
         }
 
@@ -1329,6 +1336,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             orderNo: data.orderNo,
             serviceTag: serviceTag
           });
+
+          debug('[acquireNextServiceTag] orderNo=%s recount=%s', data.orderNo, data.recount);
 
           if (data.recount)
           {
@@ -1620,6 +1629,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function updateProdLinesRemoteData(prodLineId, optSocket)
   {
+    debug('[updateProdLinesRemoteData] prodLine=%s socket=%s', prodLineId, optSocket ? optSocket.id : null);
+
     if (!prodLinesToDataMap[prodLineId])
     {
       return;
@@ -1709,8 +1720,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     if (optSocket)
     {
+      debug('[emitRemoteDataForProdLineUpdate] prodLine=%s socket=%s', prodLineId, optSocket.id, newOrdersNos);
+
       return optSocket.emit('xiconf.remoteDataUpdated', remoteData);
     }
+
+    debug('[emitRemoteDataForProdLineUpdate] prodLine=%s', prodLineId, newOrdersNos, Object.keys(prodLineData.sockets));
 
     _.forEach(prodLineData.sockets, function(socket)
     {
@@ -1723,6 +1738,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     var oldOrdersNos = prodLineData.orders;
     var oldCurrentOrderNo = oldOrdersNos.length ? oldOrdersNos[0] : null;
     var newCurrentOrderNo = newOrdersNos.length ? newOrdersNos[0] : null;
+
+    debug('[manageProdLinesOrders]', oldOrdersNos, newOrdersNos);
 
     if (oldCurrentOrderNo === newCurrentOrderNo)
     {
@@ -1747,6 +1764,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function manageProdLinesCurrentOrder(prodLineData, oldCurrentOrderNo, newCurrentOrderNo)
   {
+    debug('[manageProdLinesCurrentOrder] old=%s new=%s', oldCurrentOrderNo, newCurrentOrderNo);
+
     if (oldCurrentOrderNo !== null)
     {
       var orderToProdLinesMap = ordersToProdLinesMap[oldCurrentOrderNo];
@@ -1774,6 +1793,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function manageProdLinesPreviousOrder(prodLineData, oldPreviousOrderNo, newPreviousOrderNo)
   {
+    debug('[manageProdLinesPreviousOrder] old=%s new=%s', oldPreviousOrderNo, newPreviousOrderNo);
+
     if (ordersToProdLinesMap[oldPreviousOrderNo])
     {
       delete ordersToProdLinesMap[oldPreviousOrderNo][prodLineData.prodLineId];
@@ -1805,14 +1826,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
       if (!orderToProdLinesMap)
       {
-        return;
+        return debug('[emitRemoteDataToOrderWorkers] NO_PROD_LINES_FOR_ORDER orderNo=%s', orderNo);
       }
 
       var prodLineIds = Object.keys(orderToProdLinesMap);
 
       if (!prodLineIds.length)
       {
-        return;
+        return debug('[emitRemoteDataToOrderWorkers] NO_PROD_LINES_IN_ORDER orderNo=%s', orderNo);
       }
 
       _.forEach(prodLineIds, function(prodLineId)
@@ -1821,8 +1842,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         if (!prodLineData)
         {
-          return;
+          return debug('[emitRemoteDataToOrderWorkers] NO_PROD_LINE orderNo=%s prodLine=%s', orderNo, prodLineId);
         }
+
+        debug(
+          '[emitRemoteDataToOrderWorkers] orderNo=%s prodLine=%s',
+          orderNo,
+          prodLineId,
+          Object.keys(prodLineData.sockets)
+        );
 
         _.forEach(prodLineData.sockets, function(socket)
         {
@@ -1853,10 +1881,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       delay.startOf('hour').add(WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES, 'minutes');
     }
 
-    workingOrderChangeCheckTimers[orderNo] = setTimeout(
-      checkWorkingOrderChange,
-      Math.max(WORKING_ORDER_CHANGE_CHECK_DELAY, delay.diff(now)), orderNo
-    );
+    delay = Math.max(WORKING_ORDER_CHANGE_CHECK_DELAY, delay.diff(now));
+
+    debug('[scheduleWorkingOrderChangeCheck] orderNo=%s delay=%d', orderNo, delay);
+
+    workingOrderChangeCheckTimers[orderNo] = setTimeout(checkWorkingOrderChange, delay, orderNo);
   }
 
   function checkWorkingOrderChange(orderNo)
@@ -1867,7 +1896,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     if (!orderToProdLines)
     {
-      return;
+      return debug('[checkWorkingOrderChange] EMPTY orderNo=%s', orderNo);
     }
 
     var prodLineIds = Object.keys(orderToProdLines);
@@ -1885,6 +1914,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     if (prodLineIds.length === 0)
     {
+      debug('[checkWorkingOrderChange] NO_PROD_LINES orderNo=%s', orderNo);
+
       delete ordersToProdLinesMap[orderNo];
       delete ordersToDataMap[orderNo];
     }
@@ -1895,6 +1926,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         orderNo: orderNo
       });
     }
+
+    debug('[checkWorkingOrderChange] orderNo=%s changed=%s', orderNo, !anyCurrent);
   }
 
   function isMultiDeviceResult(xiconfResult)
@@ -1951,6 +1984,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         delete ordersToProdLinesMap[orderNo];
       }
     }
+
+    debug('[cleanUpOrders]');
   }
 
   function checkClientsLicenseKey(socket, licenseId, clientsLicenseKey)
@@ -1989,5 +2024,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     serviceTag = 'P' + serviceTag;
 
     return serviceTag;
+  }
+
+  function debug()
+  {
+    if (debugMode)
+    {
+      xiconfModule.debug.apply(xiconfModule, arguments);
+    }
   }
 };
