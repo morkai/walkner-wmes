@@ -121,8 +121,8 @@ define([
         var category = moment.format('MMMM');
 
         downtimeTimes.categories.push(category);
-        downtimeTimes.indoor.push(Math.round(downtime.indoorDuration / 3600 * 100) / 100);
-        downtimeTimes.outdoor.push(Math.round(downtime.outdoorDuration / 3600 * 100) / 100);
+        downtimeTimes.indoor.push(Math.round(downtime.indoorDuration / 60 * 100) / 100);
+        downtimeTimes.outdoor.push(Math.round(downtime.outdoorDuration / 60 * 100) / 100);
 
         downtimeCounts.categories.push(category);
         downtimeCounts.indoor.push(downtime.indoorCount);
