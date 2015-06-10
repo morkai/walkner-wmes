@@ -152,17 +152,18 @@ define([
       }
 
       var $formControl = this.$('.form-control[name="' + setting.id + '"]');
+      var value = setting.get('value') || '';
 
       if ($formControl.length)
       {
-        $formControl.val(setting.get('value') || '');
+        $formControl.val(value);
       }
 
       var $parent = $formControl.parent();
 
       if ($parent.hasClass('colorpicker-component'))
       {
-        $parent.colorpicker('setValue', setting.get('value'));
+        $parent.colorpicker('setValue', value);
       }
 
       if ($formControl.length)
@@ -185,6 +186,13 @@ define([
           this.updateRadioSetting(setting, $inputs);
 
           return;
+        }
+
+        var $prev = $inputs.first().prev();
+
+        if ($prev.hasClass('select2-container'))
+        {
+          $prev.select2('val', $prev.hasClass('select2-container-multi') ? value.split(',') : value);
         }
       }
 
@@ -322,8 +330,6 @@ define([
       this.promised(this.settings.update(settingId, settingValue)).always(function()
       {
         --view.inProgress[settingId];
-
-        view.onSettingsChange(view.settings.get(settingId));
       });
     }
 
