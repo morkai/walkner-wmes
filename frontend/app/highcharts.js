@@ -160,6 +160,11 @@ define([
           });
         });
 
+        if (tooltipOptions.extraRowsProvider)
+        {
+          tooltipOptions.extraRowsProvider(points, rows);
+        }
+
         return Highcharts.formatTableTooltip(header, rows);
       }
     },
