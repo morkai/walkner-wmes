@@ -1,57 +1,57 @@
 <div class="list <%- typeof className === 'undefined' ? '' : className %>">
-  <table class="table table-bordered table-hover table-condensed">
-    <thead>
-    <tr>
-      <% columns.forEach(function(column) { %>
-      <th <%- typeof column.thAttrs === 'function' ? column.thAttrs(column) : (column.thAttrs || '') %>><%- column.label %></th>
-      <% }) %>
-      <% if (typeof actions === 'function') { %>
-      <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
-      <% } %>
-    </tr>
-    </thead>
-    <tbody>
-      <% if (!rows.length) { %>
+  <div class="table-responsive"><table class="table table-bordered table-hover table-condensed">
+      <thead>
       <tr>
-        <td colspan="<%- columns.length + 1 %>"><%- t('core', 'LIST:NO_DATA') %></td>
-      </tr>
-      <% } %>
-      <% rows.forEach(function(row) { %>
-      <tr class="list-item <%- row.className ? row.className : '' %>"
-        <% if (row.dataAttrs) { %>
-        <% Object.keys(row.dataAttrs).forEach(function(property) { %>
-        data-<%- property %>="<%= row.dataAttrs[property] %>"
-        <% }) %>
-        <% } %>
-        <% if (row._id) { %>data-id="<%- row._id %>"<% } %>
-      >
         <% columns.forEach(function(column) { %>
-        <td <%- typeof column.tdAttrs === 'function' ? column.tdAttrs(row) : (column.tdAttrs || '') %> data-id="<%- column.id %>">
-        <% if (row[column.id] == null) { %>
-          <% if (column.noData == null) { %>
-          <em><%- t('core', 'LIST:NO_DATA:cell') %></em>
-          <% } else { %>
-          <%- column.noData %>
-          <% } %>
-          <% } else { %>
-          <%- row[column.id] %>
-          <% } %>
-        </td>
+        <th <%- typeof column.thAttrs === 'function' ? column.thAttrs(column) : (column.thAttrs || '') %>><%- column.label %></th>
         <% }) %>
         <% if (typeof actions === 'function') { %>
-        <td class="actions">
-          <% actions(row).forEach(function(action) { %>
-          <% if (action.href) { %>
-          <a href="<%- action.href %>" class="btn btn-<%- action.type || 'default' %> <%- action.id ? ('action-' + action.id) : '' %> <%- action.className || '' %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i><%- action.text || '' %></a>
-          <% } else { %>
-          <button type="button" class="btn btn-<%- action.type || 'default' %> <%- action.id ? ('action-' + action.id) : '' %> <%- action.className || '' %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i><%- action.text || '' %></button>
-          <% } %>
-          <% }) %>
-        </td>
+        <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
         <% } %>
       </tr>
-      <% }) %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% if (!rows.length) { %>
+        <tr>
+          <td colspan="<%- columns.length + 1 %>"><%- t('core', 'LIST:NO_DATA') %></td>
+        </tr>
+        <% } %>
+        <% rows.forEach(function(row) { %>
+        <tr class="list-item <%- row.className ? row.className : '' %>"
+          <% if (row.dataAttrs) { %>
+          <% Object.keys(row.dataAttrs).forEach(function(property) { %>
+          data-<%- property %>="<%= row.dataAttrs[property] %>"
+          <% }) %>
+          <% } %>
+          <% if (row._id) { %>data-id="<%- row._id %>"<% } %>
+        >
+          <% columns.forEach(function(column) { %>
+          <td <%- typeof column.tdAttrs === 'function' ? column.tdAttrs(row) : (column.tdAttrs || '') %> data-id="<%- column.id %>">
+          <% if (row[column.id] == null) { %>
+            <% if (column.noData == null) { %>
+            <em><%- t('core', 'LIST:NO_DATA:cell') %></em>
+            <% } else { %>
+            <%- column.noData %>
+            <% } %>
+            <% } else { %>
+            <%- row[column.id] %>
+            <% } %>
+          </td>
+          <% }) %>
+          <% if (typeof actions === 'function') { %>
+          <td class="actions">
+            <% actions(row).forEach(function(action) { %>
+            <% if (action.href) { %>
+            <a href="<%- action.href %>" class="btn btn-<%- action.type || 'default' %> <%- action.id ? ('action-' + action.id) : '' %> <%- action.className || '' %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i><%- action.text || '' %></a>
+            <% } else { %>
+            <button type="button" class="btn btn-<%- action.type || 'default' %> <%- action.id ? ('action-' + action.id) : '' %> <%- action.className || '' %>" title="<%= action.label %>"><i class="fa fa-<%- action.icon %>"></i><%- action.text || '' %></button>
+            <% } %>
+            <% }) %>
+          </td>
+          <% } %>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table></div>
   <div class="pagination-container"></div>
 </div>
