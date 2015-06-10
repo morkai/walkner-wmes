@@ -114,7 +114,9 @@ define([
       {
         var header;
         var rows = [];
-        var headerFormatter = (this.point || this.points[0]).series.chart.tooltip.options.headerFormatter;
+        var tooltipOptions = (this.point || this.points[0]).series.chart.tooltip.options;
+        var headerFormatter = tooltipOptions.headerFormatter;
+        var rowNameFormatter = tooltipOptions.rowNameFormatter || formatTooltipRowName;
 
         if (typeof headerFormatter === 'function')
         {
@@ -150,7 +152,7 @@ define([
 
           rows.push({
             color: point.color || point.series.color,
-            name: point.series.name,
+            name: rowNameFormatter(point),
             prefix: options.valuePrefix,
             suffix: options.valueSuffix,
             decimals: options.valueDecimals,
@@ -287,6 +289,11 @@ define([
     }
 
     return y;
+  }
+
+  function formatTooltipRowName(point)
+  {
+    return point.series.name;
   }
 
   return Highcharts;
