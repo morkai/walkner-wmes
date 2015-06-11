@@ -28,13 +28,16 @@ define([
       {
         var tab = e.target.dataset.tab;
 
-        this.broker.publish('router.navigate', {
-          url: this.clientUrl + '?tab=' + tab,
-          trigger: false,
-          replace: true
-        });
+        if (!e.target.classList.contains('disabled'))
+        {
+          this.broker.publish('router.navigate', {
+            url: this.clientUrl + '?tab=' + tab,
+            trigger: false,
+            replace: true
+          });
 
-        this.changeTab(tab);
+          this.changeTab(tab);
+        }
 
         return false;
       },
@@ -98,6 +101,8 @@ define([
 
     afterRender: function()
     {
+      this.toggleTabPrivileges();
+
       this.$('.colorpicker-component').colorpicker();
 
       js2form(this.el, this.serializeFormData());
@@ -109,6 +114,8 @@ define([
 
       this.changeTab(this.currentTab || this.defaultTab || this.$('.list-group-item[data-tab]').attr('data-tab'));
     },
+
+    toggleTabPrivileges: function() {},
 
     serializeFormData: function()
     {
@@ -141,10 +148,25 @@ define([
 
     changeTab: function(tab)
     {
-      this.$('.list-group-item.active').removeClass('active');
-      this.$('.list-group-item[data-tab=' + tab + ']').addClass('active');
+      var $oldTab = this.$('.list-group-item.active');
+      var $newTab = this.$('.list-group-item[data-tab="' + tab + '"]');
+
+      if ($newTab.hasClass('disabled'))
+      {
+        if ($oldTab.length)
+        {
+          return;
+        }
+
+        this.$('.list-group-item').filter(':not(.disabled)').first().click();
+
+        return;
+      }
+
+      $oldTab.removeClass('active');
+      $newTab.addClass('active');
       this.$('.panel-body.active').removeClass('active');
-      this.$('.panel-body[data-tab=' + tab + ']').addClass('active');
+      this.$('.panel-body[data-tab="' + tab + '"]').addClass('active');
 
       this.currentTab = tab;
     },

@@ -334,8 +334,7 @@ define([
       action.className = '';
     }
 
-    action.className = 'btn btn-' + (action.type || 'default')
-      + ' ' + action.className;
+    action.className = 'btn btn-' + (action.type || 'default') + ' ' + action.className;
 
     action.prepared = true;
 
@@ -362,8 +361,7 @@ define([
       }
       else
       {
-        html += '<a href="' + breadcrumb.href + '">'
-          + breadcrumb.label + '</a>';
+        html += '<a href="' + breadcrumb.href + '">' + breadcrumb.label + '</a>';
       }
     }
 
@@ -399,17 +397,18 @@ define([
     for (var i = 0, l = actions.length; i < l; ++i)
     {
       var action = actions[i];
+      var privileges = action.privileges;
 
-      if (action.privileges)
+      if (privileges)
       {
-        if (_.isFunction(action.privileges))
+        if (_.isFunction(privileges))
         {
-          if (!action.privileges())
+          if (!privileges())
           {
             continue;
           }
         }
-        else if (!user.isAllowedTo(action.privileges))
+        else if (!user.isAllowedTo(privileges))
         {
           continue;
         }

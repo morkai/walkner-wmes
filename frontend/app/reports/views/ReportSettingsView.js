@@ -4,6 +4,7 @@
 
 define([
   'underscore',
+  'app/user',
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
   'app/data/aors',
@@ -11,6 +12,7 @@ define([
   'app/reports/templates/settings'
 ], function(
   _,
+  user,
   idAndLabel,
   orgUnits,
   aors,
@@ -45,6 +47,13 @@ define([
         this.toggleDowntimesInAors(aors);
       }
     }, SettingsView.prototype.events),
+
+    initialize: function()
+    {
+      SettingsView.prototype.initialize.apply(this, arguments);
+
+      this.userPrivileges = {};
+    },
 
     serialize: function()
     {
@@ -199,6 +208,40 @@ define([
         this.$('input[name="downtimesInAorsType"][value="specific"]').prop('checked', true);
         this.$id('downtimesInAors-aors').select2('enable', true);
       }
+    },
+
+    toggleTabPrivileges: function()
+    {
+      var userPrivileges = this.userPrivileges = {
+        all: false
+      };
+
+      if (user.isAllowedTo('REPORTS:VIEW'))
+      {
+        userPrivileges.all = true;
+
+        return;
+      }
+
+      this.$('.list-group-item[data-privileges]').each(function()
+      {
+        var requiredPrivileges = this.dataset.privileges.split(',');
+
+        for (var i = 0; i < requiredPrivileges.length; ++i)
+        {
+          var requiredPrivilege = 'REPORTS:' + requiredPrivileges[i] + ':VIEW';
+
+          if (userPrivileges[requiredPrivilege] === undefined)
+          {
+            userPrivileges[requiredPrivilege] = user.isAllowedTo(requiredPrivilege);
+          }
+
+          if (!userPrivileges[requiredPrivilege])
+          {
+            this.classList.add('disabled');
+          }
+        }
+      });
     },
 
     updateSettingOnInputChange: function(e)
