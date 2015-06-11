@@ -64,11 +64,11 @@ define([
     {
       DetailsView.prototype.afterRender.call(this);
 
-      var model = this.model;
+      var view = this;
 
       this.$('.prop[data-dictionary]').each(function()
       {
-        var descriptionHolder = kaizenDictionaries[this.dataset.dictionary].get(model.get(this.dataset.property));
+        var descriptionHolder = kaizenDictionaries[this.dataset.dictionary].get(view.model.get(this.dataset.property));
 
         if (!descriptionHolder)
         {
@@ -89,9 +89,21 @@ define([
       this.$el.popover({
         container: this.el,
         selector: '.has-description',
-        placement: function()
+        placement: function(popoverEl, propEl)
         {
-          return window.innerWidth <= 992 ? 'top' : 'right';
+          if (window.innerWidth <= 992)
+          {
+            return 'top';
+          }
+
+          var $column = view.$(propEl).closest('.panel').parent();
+
+          if ($column[0] === $column.parent().children().last()[0])
+          {
+            return 'top';
+          }
+
+          return 'right';
         },
         trigger: 'hover',
         content: function()
