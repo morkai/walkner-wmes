@@ -21,7 +21,7 @@ define([
 
   return ListView.extend({
 
-    className: 'is-shrinked is-clickable',
+    className: 'is-clickable',
 
     remoteTopics: {
       'hourlyPlans.created': 'refreshCollection',
@@ -31,8 +31,8 @@ define([
     serializeColumns: function()
     {
       return [
-        {id: 'division', label: t('core', 'ORG_UNIT:division')},
-        {id: 'date', label: t('hourlyPlans', 'property:date')},
+        {id: 'division', className: 'is-min', label: t('core', 'ORG_UNIT:division')},
+        {id: 'date', className: 'is-min', label: t('hourlyPlans', 'property:date')},
         {id: 'shift', label: t('hourlyPlans', 'property:shift')}
       ];
     },

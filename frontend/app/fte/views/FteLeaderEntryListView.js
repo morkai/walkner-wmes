@@ -21,7 +21,7 @@ define([
 
   return ListView.extend({
 
-    className: 'is-shrinked is-clickable',
+    className: 'is-clickable',
 
     remoteTopics: {
       'fte.leader.created': 'refreshCollection',
@@ -31,8 +31,8 @@ define([
     serializeColumns: function()
     {
       return [
-        {id: 'subdivision', label: t('core', 'ORG_UNIT:subdivision')},
-        {id: 'date', label: t(this.collection.getNlsDomain(), 'property:date')},
+        {id: 'subdivision', className: 'is-min', label: t('core', 'ORG_UNIT:subdivision')},
+        {id: 'date', className: 'is-min', label: t(this.collection.getNlsDomain(), 'property:date')},
         {id: 'shift', label: t(this.collection.getNlsDomain(), 'property:shift')}
       ];
     },
