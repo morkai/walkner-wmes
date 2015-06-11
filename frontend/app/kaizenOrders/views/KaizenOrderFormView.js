@@ -431,6 +431,7 @@ define([
     {
       var selectedStatus = this.$('input[name="status"]:checked').val();
       var required = selectedStatus === 'finished';
+      var view = this;
 
       this.$('.is-requiredToFinish').toggleClass('is-required', required).each(function()
       {
@@ -438,6 +439,8 @@ define([
         {
           this.parentNode.classList.toggle('has-required-select2', required);
         }
+
+        view.$('#' + this.htmlFor).prop('required', required);
       });
 
       this.$('.message-info').toggleClass('hidden', required);
@@ -445,6 +448,7 @@ define([
 
     toggleRequiredFlags: function()
     {
+      console.log('toggleRequiredFlags');
       this.$('.kaizenOrders-form-typePanel').each(function()
       {
         var $panel = $(this);
