@@ -378,6 +378,7 @@
     "7:filter:aors:ph": "All AORs",
     "7:title:downtimeTimes": "Total downtime duration",
     "7:title:downtimeCounts": "Total downtime count",
+    "7:valueSuffix:h": "man-hr",
     "7:series:indoor": "Indoor",
     "7:series:outdoor": "Outdoor",
     "7:series:indoor:specific": "Specific (Indoor)",

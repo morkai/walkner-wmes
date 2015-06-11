@@ -96,7 +96,7 @@ define([
         },
         tooltip: {
           shared: true,
-          valueSuffix: valueSuffix,
+          valueSuffix: valueSuffix ? t('reports', '7:valueSuffix:' + valueSuffix) : '',
           valueDecimals: this.options.valueDecimals || 0,
           rowNameFormatter: this.formatTooltipRowName.bind(this),
           extraRowsProvider: this.provideExtraTooltipRows.bind(this)
@@ -222,22 +222,24 @@ define([
         }
       });
 
+      var valueSuffix = this.options.valueSuffix ? t('reports', '7:valueSuffix:' + this.options.valueSuffix) : '';
+
       rows.push({
         color: '#000',
         name: t('reports', '7:series:indoor:total'),
-        suffix: this.options.valueSuffix,
+        suffix: valueSuffix,
         decimals: this.options.valueDecimals,
         value: totalIndoor
       }, {
         color: '#000',
         name: t('reports', '7:series:outdoor:total'),
-        suffix: this.options.valueSuffix,
+        suffix: valueSuffix,
         decimals: this.options.valueDecimals,
         value: totalOutdoor
       }, {
         color: '#000',
         name: t('reports', '7:series:total'),
-        suffix: this.options.valueSuffix,
+        suffix: valueSuffix,
         decimals: this.options.valueDecimals,
         value: totalIndoor + totalOutdoor
       });

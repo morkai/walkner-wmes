@@ -382,6 +382,7 @@
   "7:filter:aors:ph": "Wszystkie obszary",
   "7:title:downtimeTimes": "Czas przestojów",
   "7:title:downtimeCounts": "Ilość przestojów",
+  "7:valueSuffix:h": "rbh",
   "7:series:indoor": "Inne (Indoor)",
   "7:series:outdoor": "Inne (Outdoor)",
   "7:series:indoor:specific": "Wyszczególniony (Indoor)",
