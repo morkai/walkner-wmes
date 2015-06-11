@@ -107,6 +107,7 @@
     "filter:submit:prevWeek": "Previous week",
     "filter:submit:currentMonth": "Current month",
     "filter:submit:prevMonth": "Previous month",
+    "filter:submit:currentQuarter": "Current quarter",
     "filter:submit:q1": "I quarter",
     "filter:submit:q2": "II quarter",
     "filter:submit:q3": "III quarter",
@@ -202,6 +203,11 @@
     "settings:downtimesInAors:specificAor": "Default specific AOR",
     "settings:downtimesInAors:aors:own": "Default to the user's AORs.",
     "settings:downtimesInAors:aors:specific": "Default to the following AORs:",
+    "settings:downtimesInAors:clipInterval": "Default time interval of the CLIP chart",
+    "settings:downtimesInAors:clipDateRange": "Default time range of the CLIP chart",
+    "settings:downtimesInAors:dtlDateRange": "Default time range of the downtimes list",
+    "settings:downtimesInAors:dtcInterval": "Default time interval of the downtimes charts",
+    "settings:downtimesInAors:dtcDateRange": "Default time range of the downtimes charts",
 
     "oee:table:loading": "Loading...",
     "oee:table:loadingFailed": "Loading failed :(",
@@ -376,6 +382,7 @@
     "7:filter:specificAor": "Specific AOR",
     "7:filter:aors": "Areas of responsibility",
     "7:filter:aors:ph": "All AORs",
+    "7:filter:customTimes": "Custom time range",
     "7:title:downtimeTimes": "Total downtime duration",
     "7:title:downtimeCounts": "Total downtime count",
     "7:valueSuffix:h": "man-hr",
@@ -387,7 +394,15 @@
     "7:series:outdoor:aor": "{aor} (Outdoor)",
     "7:series:indoor:total": "Total (Indoor)",
     "7:series:outdoor:total": "Total (Outdoor)",
-    "7:series:total": "Total"
+    "7:series:total": "Total",
+    "7:customTimes:title": "Custom report time range",
+    "7:customTimes:submit": "Filter using custom times",
+    "7:customTimes:reset": "Filter using default times",
+    "7:customTimes:clip:date": "Time range of the CLIP chart",
+    "7:customTimes:clip:interval": "Time interval of the CLIP chart",
+    "7:customTimes:dtl:date": "Time range of the downtimes list",
+    "7:customTimes:dtc:date": "Time range of the downtimes charts",
+    "7:customTimes:dtc:interval": "Time interval of the downtimes charts"
   },
   "pl": true
 }

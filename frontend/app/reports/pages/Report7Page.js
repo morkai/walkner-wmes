@@ -94,7 +94,7 @@ define([
     defineModels: function()
     {
       this.settings = bindLoadingMessage(settings.acquire(), this);
-      this.query = Report7Query.fromQuery(this.options.query);
+      this.query = Report7Query.fromQuery(this.options.query, {settings: this.settings});
       this.report = bindLoadingMessage(new Report7(null, {query: this.query}), this);
 
       this.prodDowntimes = bindLoadingMessage(new ProdDowntimeCollection(null, {
@@ -130,6 +130,7 @@ define([
       this.prodDowntimeListView = new ProdDowntimeListView({
         simple: true,
         collection: this.prodDowntimes,
+        replaceUrl: true,
         columns: ProdDowntimeListView.prototype.columns.filter(function(column)
         {
           return column !== 'aor' && column.id !== 'aor';
@@ -179,12 +180,6 @@ define([
     {
       return when(this.settings.fetchIfEmpty(function()
       {
-        this.query.setDefaults({
-          specificAor: this.settings.getValue('downtimesInAors.specificAor'),
-          aors: this.settings.getDefaultDowntimeAors(),
-          statuses: this.settings.getDefaultDowntimeStatuses()
-        });
-
         this.prodDowntimes.rqlQuery.selector = this.query.createProdDowntimesSelector();
 
         return [
@@ -196,24 +191,13 @@ define([
 
     onQueryChange: function(query, options)
     {
-      var changed = this.query.changedAttributes();
-      var aorsChanged = changed.aors !== undefined;
-      var specificAorChanged = changed.specificAor !== undefined;
+      this.query.set({skip: 0}, {silent: true});
 
-      if (changed.statuses !== undefined || aorsChanged || specificAorChanged)
-      {
-        this.query.set({skip: 0}, {silent: true});
+      this.prodDowntimes.rqlQuery.skip = 0;
+      this.prodDowntimes.rqlQuery.selector = this.query.createProdDowntimesSelector();
 
-        this.prodDowntimes.rqlQuery.skip = 0;
-        this.prodDowntimes.rqlQuery.selector = this.query.createProdDowntimesSelector();
-
-        this.promised(this.prodDowntimes.fetch({reset: true}));
-      }
-
-      if (aorsChanged || specificAorChanged)
-      {
-        this.promised(this.report.fetch());
-      }
+      this.promised(this.prodDowntimes.fetch({reset: true}));
+      this.promised(this.report.fetch());
 
       if (options && options.reset)
       {

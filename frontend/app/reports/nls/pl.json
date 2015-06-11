@@ -106,6 +106,7 @@
   "filter:submit:prevWeek": "Poprzedni tydzień",
   "filter:submit:currentMonth": "Aktualny miesiąc",
   "filter:submit:prevMonth": "Poprzedni miesiąc",
+  "filter:submit:currentQuarter": "Aktualny kwartał",
   "filter:submit:q1": "I kwartał",
   "filter:submit:q2": "II kwartał",
   "filter:submit:q3": "III kwartał",
@@ -201,6 +202,11 @@
   "settings:downtimesInAors:specificAor": "Domyślny wyszczególniony obszar odpowiedzialności",
   "settings:downtimesInAors:aors:own": "Domyślnie obszary odpowiedzialności użytkownika.",
   "settings:downtimesInAors:aors:specific": "Domyślnie wybrane obszary odpowiedzialności:",
+  "settings:downtimesInAors:clipInterval": "Domyślny podział czasu dla wykresu CLIP",
+  "settings:downtimesInAors:clipDateRange": "Domyślny zakres czasu dla wykresu CLIP",
+  "settings:downtimesInAors:dtlDateRange": "Domyślny zakres czasu dla listy przestojów",
+  "settings:downtimesInAors:dtcInterval": "Domyślny podział czasu dla wykresów przestojów",
+  "settings:downtimesInAors:dtcDateRange": "Domyślny zakres czasu dla wykresów przestojów",
 
   "oee:table:loading": "Ładowanie...",
   "oee:table:loadingFailed": "Ładowanie nie powiodło się :(",
@@ -380,6 +386,7 @@
   "7:filter:specificAor": "Wyszczególniony obszar odp.",
   "7:filter:aors": "Inne obszary odpowiedzialności",
   "7:filter:aors:ph": "Wszystkie obszary",
+  "7:filter:customTimes": "Niestandardowy zakres czasu",
   "7:title:downtimeTimes": "Czas przestojów",
   "7:title:downtimeCounts": "Ilość przestojów",
   "7:valueSuffix:h": "rbh",
@@ -391,5 +398,13 @@
   "7:series:outdoor:aor": "{aor} (Outdoor)",
   "7:series:indoor:total": "Suma (Indoor)",
   "7:series:outdoor:total": "Suma (Outdoor)",
-  "7:series:total": "Suma"
+  "7:series:total": "Suma",
+  "7:customTimes:title": "Niestandardowy zakres czasu raportu",
+  "7:customTimes:submit": "Filtruj z niestandardowymi czasami",
+  "7:customTimes:reset": "Filtruj z domyślnymi czasami",
+  "7:customTimes:clip:date": "Zakres czasu dla wykresu CLIP",
+  "7:customTimes:clip:interval": "Podział czasu dla wykresu CLIP",
+  "7:customTimes:dtl:date": "Zakres czasu dla listy przestojów",
+  "7:customTimes:dtc:date": "Zakres czasu dla wykresów przestojów",
+  "7:customTimes:dtc:interval": "Podział czasy dla wykresów przestojów"
 }

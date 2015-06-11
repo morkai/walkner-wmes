@@ -4,15 +4,21 @@
 
 define([
   'underscore',
+  'app/i18n',
+  'app/viewport',
   'app/data/aors',
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
+  './Report7CustomTimesView',
   'app/reports/templates/report7Filter'
 ], function(
   _,
+  t,
+  viewport,
   aors,
   FilterView,
   idAndLabel,
+  Report7CustomTimesView,
   template
 ) {
   'use strict';
@@ -20,6 +26,14 @@ define([
   return FilterView.extend({
 
     template: template,
+
+    events: _.extend({
+      'click #-customTimes': function()
+      {
+        this.$id('customTimes').blur();
+        this.showCustomTimesDialog();
+      }
+    }, FilterView.prototype.events),
 
     termToForm: {
       'specificAor': function(propertyName, term, formData)
@@ -31,6 +45,13 @@ define([
         formData[propertyName] = term.args[1].split(',');
       },
       'statuses': 'aors'
+    },
+
+    initialize: function()
+    {
+      FilterView.prototype.initialize.apply(this, arguments);
+
+      this.listenTo(this.model, 'change:customTimes', this.toggleCustomTimes);
     },
 
     afterRender: function()
@@ -52,6 +73,8 @@ define([
         multiple: true,
         data: aorsData
       });
+
+      this.toggleCustomTimes();
     },
 
     serializeQueryToForm: function()
@@ -77,6 +100,34 @@ define([
       }
 
       this.model.set(query, {reset: true});
+    },
+
+    toggleCustomTimes: function()
+    {
+      this.$id('customTimes').toggleClass('active', !!this.model.get('customTimes'));
+    },
+
+    showCustomTimesDialog: function()
+    {
+      var customTimesView = new Report7CustomTimesView({
+        model: this.model
+      });
+
+      this.listenToOnce(customTimesView, 'submit', function(data)
+      {
+        viewport.closeDialog();
+
+        this.model.setCustomTimes(data);
+      });
+
+      this.listenToOnce(customTimesView, 'reset', function()
+      {
+        viewport.closeDialog();
+
+        this.model.resetCustomTimes();
+      });
+
+      viewport.showDialog(customTimesView, t('reports', '7:customTimes:title'));
     }
 
   });

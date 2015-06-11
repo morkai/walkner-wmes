@@ -1,8 +1,9 @@
 <div class="panel-body" data-tab="downtimesInAors">
   <div class="form-group">
     <label class="control-label"><%- t('reports', 'settings:downtimesInAors:statuses') %></label>
+    <br>
     <% ['undecided', 'rejected', 'confirmed'].forEach(function(status) { %>
-    <div class="checkbox">
+    <div class="checkbox-inline">
       <label>
         <input name="reports.downtimesInAors.statuses" type="checkbox" value="<%- status %>">
         <%- t('prodDowntimes', 'PROPERTY:status:' + status) %>
@@ -11,7 +12,7 @@
     <% }) %>
   </div>
   <div class="form-group">
-    <label class="control-label"><%- t('reports', 'settings:downtimesInAors:specificAor') %></label>
+    <label for="<%- idPrefix %>-downtimesInAors-specificAor" class="control-label"><%- t('reports', 'settings:downtimesInAors:specificAor') %></label>
     <input id="<%- idPrefix %>-downtimesInAors-specificAor" name="reports.downtimesInAors.specificAor" type="text">
   </div>
   <div class="form-group">
@@ -28,5 +29,53 @@
       </label>
     </div>
     <input id="<%- idPrefix %>-downtimesInAors-aors" name="reports.downtimesInAors.aors" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-clipDateRange" class="control-label"><%- t('reports', 'settings:downtimesInAors:clipDateRange') %></label>
+    <select id="<%- idPrefix %>-clipDateRange" name="reports.downtimesInAors.clipDateRange" class="form-control">
+      <% ['today', 'yesterday', 'currentWeek', 'prevWeek', 'currentMonth', 'prevMonth', 'currentQuarter', 'currentYear', 'prevYear'].forEach(function(dateRange) { %>
+      <option value="<%- dateRange %>"><%- t('reports', 'filter:submit:' + dateRange) %>
+        <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('reports', 'settings:downtimesInAors:clipInterval') %></label>
+    <br>
+    <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
+    <div class="radio-inline">
+      <label>
+        <input name="reports.downtimesInAors.clipInterval" type="radio" value="<%- interval %>">
+        <%- t('reports', 'filter:interval:title:' + interval) %>
+      </label>
+    </div>
+    <% }) %>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-dtlDateRange" class="control-label"><%- t('reports', 'settings:downtimesInAors:dtlDateRange') %></label>
+    <select id="<%- idPrefix %>-dtlDateRange" name="reports.downtimesInAors.dtlDateRange" class="form-control">
+      <% ['today', 'yesterday', 'currentWeek', 'prevWeek', 'currentMonth', 'prevMonth', 'currentQuarter', 'currentYear', 'prevYear'].forEach(function(dateRange) { %>
+      <option value="<%- dateRange %>"><%- t('reports', 'filter:submit:' + dateRange) %>
+        <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-dtcDateRange" class="control-label"><%- t('reports', 'settings:downtimesInAors:dtcDateRange') %></label>
+    <select id="<%- idPrefix %>-dtcDateRange" name="reports.downtimesInAors.dtcDateRange" class="form-control">
+      <% ['today', 'yesterday', 'currentWeek', 'prevWeek', 'currentMonth', 'prevMonth', 'currentQuarter', 'currentYear', 'prevYear'].forEach(function(dateRange) { %>
+      <option value="<%- dateRange %>"><%- t('reports', 'filter:submit:' + dateRange) %>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('reports', 'settings:downtimesInAors:dtcInterval') %></label>
+    <br>
+    <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
+    <div class="radio-inline">
+      <label>
+        <input name="reports.downtimesInAors.dtcInterval" type="radio" value="<%- interval %>">
+        <%- t('reports', 'filter:interval:title:' + interval) %>
+      </label>
+    </div>
+    <% }) %>
   </div>
 </div>

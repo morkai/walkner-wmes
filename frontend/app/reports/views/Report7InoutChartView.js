@@ -4,10 +4,12 @@
 
 define([
   'app/i18n',
+  'app/time',
   'app/core/View',
   'app/highcharts'
 ], function(
   t,
+  time,
   View,
   Highcharts
 ) {
@@ -70,6 +72,7 @@ define([
     {
       var chartData = this.serializeChartData();
       var valueSuffix = this.options.valueSuffix || '';
+      var dataLabelsEnabled = chartData.indoor.length <= 12;
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -84,8 +87,7 @@ define([
         },
         noData: {},
         xAxis: {
-          type: 'category',
-          categories: chartData.categories
+          type: 'datetime'
         },
         yAxis: {
           title: false,
@@ -98,6 +100,7 @@ define([
           shared: true,
           valueSuffix: valueSuffix ? t('reports', '7:valueSuffix:' + valueSuffix) : '',
           valueDecimals: this.options.valueDecimals || 0,
+          headerFormatter: this.formatTooltipHeader.bind(this),
           rowNameFormatter: this.formatTooltipRowName.bind(this),
           extraRowsProvider: this.provideExtraTooltipRows.bind(this)
         },
@@ -121,28 +124,32 @@ define([
           type: 'column',
           data: chartData.indoor,
           color: '#00aaff',
-          group: 'indoor'
+          group: 'indoor',
+          dataLabels: {enabled: dataLabelsEnabled}
         }, {
           id: 'specificIndoor',
           name: t.bound('reports', '7:series:indoor:specific'),
           type: 'column',
           data: chartData.specificIndoor,
           color: '#0066bb',
-          group: 'indoor'
+          group: 'indoor',
+          dataLabels: {enabled: dataLabelsEnabled}
         }, {
           id: 'outdoor',
           name: t.bound('reports', '7:series:outdoor'),
           type: 'column',
           data: chartData.outdoor,
           color: '#00ee00',
-          group: 'outdoor'
+          group: 'outdoor',
+          dataLabels: {enabled: dataLabelsEnabled}
         }, {
           id: 'specificOutdoor',
           name: t.bound('reports', '7:series:outdoor:specific'),
           type: 'column',
           data: chartData.specificOutdoor,
           color: '#00aa00',
-          group: 'outdoor'
+          group: 'outdoor',
+          dataLabels: {enabled: dataLabelsEnabled}
         }]
       });
     },
@@ -150,14 +157,21 @@ define([
     updateChart: function()
     {
       var chartData = this.serializeChartData();
-      var series = this.chart.series;
+      var allSeries = this.chart.series;
 
-      this.chart.xAxis[0].setCategories(chartData.categories, false);
+      for (var i = 0; i < allSeries.length; ++i)
+      {
+        var series = allSeries[i];
+        var options = series.options;
+        var data = chartData[options.id];
 
-      series[0].setData(chartData.indoor, false);
-      series[1].setData(chartData.specificIndoor, false);
-      series[2].setData(chartData.outdoor, false);
-      series[3].setData(chartData.specificOutdoor, true);
+        options.dataLabels.enabled = data.length <= 12;
+
+        series.setData(data, false);
+        series.update(options, false);
+      }
+
+      this.chart.redraw(false);
     },
 
     serializeChartData: function()
@@ -177,6 +191,7 @@ define([
 
     onModelLoaded: function()
     {
+      this.interval = null;
       this.isLoading = false;
 
       if (this.chart)
@@ -193,6 +208,26 @@ define([
       {
         this.chart.hideLoading();
       }
+    },
+
+    formatTooltipHeader: function(ctx)
+    {
+      var timeMoment = time.getMoment(ctx.x);
+      var data;
+
+      if (!this.interval)
+      {
+        this.interval = this.model.query.getDowntimesChartInterval();
+      }
+
+      if (this.interval === 'quarter')
+      {
+        data = {
+          quarter: t('core', 'QUARTER:' + timeMoment.quarter())
+        };
+      }
+
+      return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + this.interval, data));
     },
 
     formatTooltipRowName: function(point)

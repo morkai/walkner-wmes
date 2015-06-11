@@ -48,3 +48,8 @@
 .settings .radio + .select2-container {
   margin-top: 5px;
 }
+.settings .form-group > .checkbox-inline > label,
+.settings .form-group > .radio-inline > label {
+  font-weight: normal;
+  cursor: pointer;
+}

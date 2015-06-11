@@ -104,7 +104,8 @@ define([
       if (this.collection.paginationData)
       {
         this.paginationView = new PaginationView({
-          model: this.collection.paginationData
+          model: this.collection.paginationData,
+          replaceUrl: !!this.options.replaceUrl
         });
 
         this.setView('.pagination-container', this.paginationView);

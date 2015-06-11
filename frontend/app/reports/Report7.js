@@ -4,11 +4,13 @@
 
 define([
   'underscore',
+  '../i18n',
   '../time',
   '../data/aors',
   '../core/Model'
 ], function(
   _,
+  t,
   time,
   aors,
   Model
@@ -30,14 +32,12 @@ define([
           endToEndCount: []
         },
         downtimeTimes: {
-          categories: [],
           indoor: [],
           outdoor: [],
           specificIndoor: [],
           specificOutdoor: []
         },
         downtimeCounts: {
-          categories: [],
           indoor: [],
           outdoor: [],
           specificIndoor: [],
@@ -94,6 +94,10 @@ define([
       this.parseClip(report.clip, attrs);
       this.parseDowntimes(report.downtimes, attrs);
 
+      this.attributes.clip = null;
+      this.attributes.downtimeTimes = null;
+      this.attributes.downtimeCounts = null;
+
       return attrs;
     },
 
@@ -109,11 +113,13 @@ define([
 
       _.forEach(clipList, function(metrics)
       {
-        clip.orderCount.push({x: metrics.key, y: metrics.orderCount || 0});
-        clip.productionCount.push({x: metrics.key, y: metrics.productionCount || 0});
-        clip.endToEndCount.push({x: metrics.key, y: metrics.endToEndCount || 0});
-        clip.production.push({x: metrics.key, y: Math.round((metrics.production || 0) * 100)});
-        clip.endToEnd.push({x: metrics.key, y: Math.round((metrics.endToEnd || 0) * 100)});
+        var x = metrics.key;
+
+        clip.orderCount.push({x: x, y: metrics.orderCount || 0});
+        clip.productionCount.push({x: x, y: metrics.productionCount || 0});
+        clip.endToEndCount.push({x: x, y: metrics.endToEndCount || 0});
+        clip.production.push({x: x, y: Math.round((metrics.production || 0) * 100)});
+        clip.endToEnd.push({x: x, y: Math.round((metrics.endToEnd || 0) * 100)});
       });
 
       attrs.clip = clip;
@@ -122,14 +128,12 @@ define([
     parseDowntimes: function(downtimes, attrs)
     {
       var downtimeTimes = {
-        categories: [],
         indoor: [],
         outdoor: [],
         specificIndoor: [],
         specificOutdoor: []
       };
       var downtimeCounts = {
-        categories: [],
         indoor: [],
         outdoor: [],
         specificIndoor: [],
@@ -139,20 +143,17 @@ define([
       for (var i = 0; i < downtimes.length; ++i)
       {
         var downtime = downtimes[i];
-        var moment = time.getMoment(downtime.key);
-        var category = moment.format('MMMM');
+        var x = downtime.key;
 
-        downtimeTimes.categories.push(category);
-        downtimeTimes.indoor.push(Math.round(downtime.indoorDuration / 60 * 100) / 100);
-        downtimeTimes.outdoor.push(Math.round(downtime.outdoorDuration / 60 * 100) / 100);
-        downtimeTimes.specificIndoor.push(Math.round(downtime.specificIndoorDuration / 60 * 100) / 100);
-        downtimeTimes.specificOutdoor.push(Math.round(downtime.specificOutdoorDuration / 60 * 100) / 100);
+        downtimeTimes.indoor.push({x: x, y: Math.round(downtime.indoorDuration / 60 * 100) / 100});
+        downtimeTimes.outdoor.push({x: x, y: Math.round(downtime.outdoorDuration / 60 * 100) / 100});
+        downtimeTimes.specificIndoor.push({x: x, y: Math.round(downtime.specificIndoorDuration / 60 * 100) / 100});
+        downtimeTimes.specificOutdoor.push({x: x, y: Math.round(downtime.specificOutdoorDuration / 60 * 100) / 100});
 
-        downtimeCounts.categories.push(category);
-        downtimeCounts.indoor.push(downtime.indoorCount);
-        downtimeCounts.outdoor.push(downtime.outdoorCount);
-        downtimeCounts.specificIndoor.push(downtime.specificIndoorCount);
-        downtimeCounts.specificOutdoor.push(downtime.specificOutdoorCount);
+        downtimeCounts.indoor.push({x: x, y: downtime.indoorCount});
+        downtimeCounts.outdoor.push({x: x, y: downtime.outdoorCount});
+        downtimeCounts.specificIndoor.push({x: x, y: downtime.specificIndoorCount});
+        downtimeCounts.specificOutdoor.push({x: x, y: downtime.specificOutdoorCount});
       }
 
       attrs.downtimeTimes = downtimeTimes;

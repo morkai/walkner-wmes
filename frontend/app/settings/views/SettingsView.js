@@ -263,7 +263,7 @@ define([
 
     updateRadioSetting: function(setting, $radios)
     {
-      $radios.val(setting.get('value'));
+      $radios.filter('[value="' + setting.get('value') + '"]').prop('checked', true);
     },
 
     getValueFromSettingField: function(el)

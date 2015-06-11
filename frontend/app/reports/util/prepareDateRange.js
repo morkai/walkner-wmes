@@ -38,6 +38,12 @@ define([
         interval = 'year';
         break;
 
+      case 'currentQuarter':
+        fromMoment.startOf('quarter');
+        toMoment = fromMoment.clone().add(1, 'quarter');
+        interval = 'month';
+        break;
+
       case 'q1':
       case 'q2':
       case 'q3':

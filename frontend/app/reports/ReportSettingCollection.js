@@ -5,10 +5,12 @@
 define([
   '../user',
   '../settings/SettingCollection',
+  './util/prepareDateRange',
   './ReportSetting'
 ], function(
   user,
   SettingCollection,
+  prepareDateRange,
   ReportSetting
 ) {
   'use strict';
@@ -78,6 +80,17 @@ define([
       return (this.getValue('downtimesInAors.statuses') || 'confirmed').split(',');
     },
 
+    getDateRange: function(id)
+    {
+      var dateRange = prepareDateRange(this.getValue(id) || 'currentWeek');
+
+      return {
+        from: dateRange.fromMoment.format('YYYY-MM-DD'),
+        to: dateRange.toMoment.format('YYYY-MM-DD'),
+        interval: dateRange.interval
+      };
+    },
+
     prepareValue: function(id, newValue)
     {
       if (/color/i.test(id))
@@ -103,6 +116,11 @@ define([
       if (/downtimesInAors.statuses$/.test(id))
       {
         return this.prepareDowntimeStatusesValue(newValue);
+      }
+
+      if (/(interval|dateRange)$/i.test(id))
+      {
+        return newValue;
       }
 
       return this.prepare100PercentValue(newValue);
