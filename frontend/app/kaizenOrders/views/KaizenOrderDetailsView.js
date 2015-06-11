@@ -29,6 +29,15 @@ define([
 
     template: template,
 
+    currentTab: null,
+
+    events: _.extend({
+      'click a[data-toggle="tab"]': function(e)
+      {
+        this.currentTab = e.currentTarget.dataset.tab;
+      }
+    }, DetailsView.prototype.events),
+
     serialize: function()
     {
       var types = this.model.get('types');
@@ -90,6 +99,8 @@ define([
           return this.dataset.description;
         }
       });
+
+      this.$('a[data-tab="' + (this.currentTab || this.options.initialTab) + '"]').click();
     }
 
   });

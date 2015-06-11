@@ -65,7 +65,14 @@
     <% include detailsKaizenPanel.ejs %>
     <% } %>
   </div>
-  <% if (model.attachments) { %>
-  <% include attachments.ejs %>
-  <% } %>
+  <div class="kaizenOrders-details-tabs">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#<%- idPrefix %>-attachments" data-toggle="tab" data-tab="attachments"><%- t('kaizenOrders', 'tab:attachments') %></a></li>
+      <li><a href="#<%- idPrefix %>-observers" data-toggle="tab" data-tab="observers"><%- t('kaizenOrders', 'tab:observers') %></a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="<%- idPrefix %>-attachments"><% include attachments.ejs %></div>
+      <div class="tab-pane" id="<%- idPrefix %>-observers"><% include observers.ejs %></div>
+    </div>
+  </div>
 </div>

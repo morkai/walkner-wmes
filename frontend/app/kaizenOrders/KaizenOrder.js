@@ -102,6 +102,11 @@ define([
         });
       });
 
+      if (!Array.isArray(obj.attachments))
+      {
+        obj.attachments = [];
+      }
+
       return obj;
     },
 

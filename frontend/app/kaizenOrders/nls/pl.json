@@ -25,7 +25,6 @@
 
   "PANEL:TITLE:details": "Szczegóły zgłoszenia",
   "PANEL:TITLE:changes": "Historia zmian zgłoszenia",
-  "PANEL:TITLE:attachments": "Załączniki zgłoszenia",
   "PANEL:TITLE:addForm": "Formularz dodawania zgłoszenia",
   "PANEL:TITLE:editForm": "Formularz edycji zgłoszenia",
 
@@ -64,6 +63,9 @@
   "PROPERTY:attachments:file": "Nazwa pliku",
   "PROPERTY:attachments:type": "Typ pliku",
   "PROPERTY:comment": "Komentarz/opinia",
+  "PROPERTY:observers:name": "Imię i nazwisko",
+  "PROPERTY:observers:role": "Rola",
+  "PROPERTY:observers:lastSeenAt": "Ostatnio widziany",
 
   "type:nearMiss": "Zdarzenie Potencjalnie Wypadkowe",
   "type:suggestion": "Sugestia",
@@ -83,6 +85,14 @@
   "status:cancelled": "Anulowane",
   "status:finished": "Zakończone",
   "status:paused": "Wstrzymane",
+
+  "role:creator": "Zgłaszający",
+  "role:confirmer": "Zatwierdzający",
+  "role:owner": "Właściciel",
+  "role:observer": "Obserwator",
+
+  "tab:attachments": "Załączniki zgłoszenia",
+  "tab:observers": "Uczestnicy zgłoszenia",
 
   "attachments:noData": "Zgłoszenie nie ma żadnych załączników.",
   "attachments:actions:view": "Otwórz plik",

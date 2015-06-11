@@ -19,8 +19,8 @@
 .kaizenOrders-details-types .prop-value {
   padding-top: 0;
 }
-.kaizenOrders-details-changes,
-.kaizenOrders-details-attachments {
+.kaizenOrders-detailsPage-history,
+.kaizenOrders-details-tabs {
   margin-top: 20px;
 }
 .kaizenOrders-details .has-description {
@@ -43,4 +43,12 @@
 }
 .kaizenOrders-details .panel-details.is-changed .prop-name {
   color: #e00;
+}
+.kaizenOrders-details-tabs .nav-tabs,
+.kaizenOrders-details-tabs .nav-tabs > li > a,
+.kaizenOrders-details-tabs .nav-tabs > li.active > a {
+  border-bottom: 0;
+}
+.kaizenOrders-details-tabs .nav-tabs > li {
+  margin-bottom: 0;
 }
