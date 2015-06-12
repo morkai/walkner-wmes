@@ -61,7 +61,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     },
     prodShiftOrder: {
       type: String,
-      ref: 'ProdShift',
+      ref: 'ProdShiftOrder',
       default: null
     },
     pressWorksheet: {
