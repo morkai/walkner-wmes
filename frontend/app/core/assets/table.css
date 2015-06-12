@@ -6,6 +6,9 @@
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
 }
+.panel > .list > .table-responsive {
+  margin-bottom: 0;
+}
 .table-responsive > .table-bordered {
   border-left: 0;
   border-right: 0;
