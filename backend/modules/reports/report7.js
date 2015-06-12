@@ -126,6 +126,11 @@ module.exports = function(mongoose, options, done)
 
         switch (interval)
         {
+          case 'year':
+            key.m = 0;
+            key.d = 1;
+            break;
+
           case 'quarter':
             if (key.m < 3)
             {
