@@ -415,7 +415,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
           var psoStartedAt = moment(pso.startedAt).milliseconds(0).valueOf();
           var psoFinishedAt = moment(pso.finishedAt).milliseconds(0).valueOf();
           var newStartedAt = moment(startedAt).milliseconds(0).valueOf();
-          var newFinishedAt = moment(startedAt).milliseconds(0).valueOf();
+          var newFinishedAt = moment(finishedAt).milliseconds(0).valueOf();
 
           if (newStartedAt === psoFinishedAt)
           {
