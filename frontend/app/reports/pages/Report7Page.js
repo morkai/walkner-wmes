@@ -139,14 +139,11 @@ define([
 
       this.downtimeTimesChartView = new Report7InoutChartView({
         type: 'downtimeTimes',
-        valueSuffix: 'h',
-        valueDecimals: 2,
         model: this.report
       });
 
       this.downtimeCountsChartView = new Report7InoutChartView({
         type: 'downtimeCounts',
-        valueDecimals: 0,
         model: this.report
       });
     },

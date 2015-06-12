@@ -19,6 +19,10 @@ define([
 
     className: 'reports-7-inout',
 
+    localTopics: {
+      'i18n.reloaded': 'cacheI18n'
+    },
+
     initialize: function()
     {
       this.chart = null;
@@ -28,6 +32,8 @@ define([
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:' + this.options.type, this.render);
+
+      this.cacheI18n();
     },
 
     destroy: function()
@@ -47,6 +53,15 @@ define([
       }
 
       this.timers.createOrUpdateChart = setTimeout(this.createOrUpdateChart.bind(this), 1);
+    },
+
+    cacheI18n: function()
+    {
+      this.i18n = {
+        hourSuffix: t('reports', '7:valueSuffix:hour'),
+        manHourSuffix: t('reports', '7:valueSuffix:manHour'),
+        decimalPoint: t('core', 'highcharts:decimalPoint')
+      };
     },
 
     createOrUpdateChart: function()
@@ -71,7 +86,9 @@ define([
     createChart: function()
     {
       var chartData = this.serializeChartData();
-      var valueSuffix = this.options.valueSuffix || '';
+      var options = this.options;
+      var valueSuffix = options.type === 'downtimeTimes' ? this.i18n.hourSuffix : '';
+      var valueDecimals = options.type === 'downtimeTimes' ? 2 : 0;
       var dataLabelsEnabled = chartData.indoor.length <= 12;
 
       this.chart = new Highcharts.Chart({
@@ -80,10 +97,10 @@ define([
           plotBorderWidth: 1
         },
         exporting: {
-          filename: t.bound('reports', 'filenames:7:inout:' + this.options.type)
+          filename: t.bound('reports', 'filenames:7:inout:' + options.type)
         },
         title: {
-          text: t.bound('reports', '7:title:' + this.options.type)
+          text: t.bound('reports', '7:title:' + options.type)
         },
         noData: {},
         xAxis: {
@@ -98,8 +115,8 @@ define([
         },
         tooltip: {
           shared: true,
-          valueSuffix: valueSuffix ? t('reports', '7:valueSuffix:' + valueSuffix) : '',
-          valueDecimals: this.options.valueDecimals || 0,
+          valueSuffix: valueSuffix,
+          valueDecimals: valueDecimals,
           headerFormatter: this.formatTooltipHeader.bind(this),
           rowNameFormatter: this.formatTooltipRowName.bind(this),
           extraRowsProvider: this.provideExtraTooltipRows.bind(this)
@@ -222,9 +239,7 @@ define([
 
       if (this.interval === 'quarter')
       {
-        data = {
-          quarter: t('core', 'QUARTER:' + timeMoment.quarter())
-        };
+        data = {quarter: t('core', 'QUARTER:' + timeMoment.quarter())};
       }
 
       return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + this.interval, data));
@@ -242,42 +257,73 @@ define([
 
     provideExtraTooltipRows: function(points, rows)
     {
+      var view = this;
+      var downtimeTimes = this.options.type === 'downtimeTimes';
       var totalIndoor = 0;
+      var totalIndoorWorkerCount = 0;
       var totalOutdoor = 0;
+      var totalOutdoorWorkerCount = 0;
 
-      points.forEach(function(point)
+      for (var i = 0; i < points.length; ++i)
       {
+        var point = points[i];
+        var workerCount = point.point.workerCount || 0;
+
         if (/indoor$/i.test(point.series.options.id))
         {
           totalIndoor += point.y;
+          totalIndoorWorkerCount += workerCount;
         }
         else
         {
           totalOutdoor += point.y;
+          totalOutdoorWorkerCount += workerCount;
         }
-      });
 
-      var valueSuffix = this.options.valueSuffix ? t('reports', '7:valueSuffix:' + this.options.valueSuffix) : '';
+        rows[i].extraColumns = downtimeTimes ? view.createManHourTooltipColumns(point.y, workerCount) : '';
+      }
+
+      var valueSuffix = downtimeTimes ? this.i18n.hourSuffix : '';
+      var valueDecimals = downtimeTimes ? 2 : 0;
+      var total = totalIndoor + totalOutdoor;
+      var totalWorkerCount = totalIndoorWorkerCount + totalOutdoorWorkerCount;
 
       rows.push({
         color: '#000',
         name: t('reports', '7:series:indoor:total'),
         suffix: valueSuffix,
-        decimals: this.options.valueDecimals,
-        value: totalIndoor
+        decimals: valueDecimals,
+        value: totalIndoor,
+        extraColumns: downtimeTimes ? this.createManHourTooltipColumns(totalIndoor, totalIndoorWorkerCount) : ''
       }, {
         color: '#000',
         name: t('reports', '7:series:outdoor:total'),
         suffix: valueSuffix,
-        decimals: this.options.valueDecimals,
-        value: totalOutdoor
+        decimals: valueDecimals,
+        value: totalOutdoor,
+        extraColumns: downtimeTimes ? this.createManHourTooltipColumns(totalOutdoor, totalOutdoorWorkerCount) : ''
       }, {
         color: '#000',
         name: t('reports', '7:series:total'),
         suffix: valueSuffix,
-        decimals: this.options.valueDecimals,
-        value: totalIndoor + totalOutdoor
+        decimals: valueDecimals,
+        value: total,
+        extraColumns: downtimeTimes ? this.createManHourTooltipColumns(total, totalWorkerCount) : ''
       });
+    },
+
+    createManHourTooltipColumns: function(hours, workerCount)
+    {
+      var value = hours * workerCount;
+      var decimalPoint = this.i18n.decimalPoint;
+      var yParts = Highcharts.numberFormat(value, 2).split(decimalPoint);
+      var integer = yParts[0];
+      var fraction = yParts.length === 2 ? (decimalPoint + yParts[1]) : '';
+      var ySuffix = this.i18n.manHourSuffix;
+
+      return '<td class="highcharts-tooltip-integer">' + integer + '</td>'
+        + '<td class="highcharts-tooltip-fraction">' + fraction + '</td>'
+        + '<td class="highcharts-tooltip-suffix">' + ySuffix + '</td>';
     }
 
   });

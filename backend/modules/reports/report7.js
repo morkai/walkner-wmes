@@ -171,8 +171,10 @@ module.exports = function(mongoose, options, done)
           emit(key, {
             count: 0,
             duration: 0,
+            workerCount: 0,
             specificCount: 1,
-            specificDuration: duration
+            specificDuration: duration,
+            specificWorkerCount: this.workerCount
           });
         }
         else
@@ -180,8 +182,10 @@ module.exports = function(mongoose, options, done)
           emit(key, {
             count: 1,
             duration: duration,
+            workerCount: this.workerCount,
             specificCount: 0,
-            specificDuration: 0
+            specificDuration: 0,
+            specificWorkerCount: 0
           });
         }
       },
@@ -190,8 +194,10 @@ module.exports = function(mongoose, options, done)
         var result = {
           count: 0,
           duration: 0,
+          workerCount: 0,
           specificCount: 0,
-          specificDuration: 0
+          specificDuration: 0,
+          specificWorkerCount: 0
         };
 
         for (var i = 0, l = values.length; i < l; ++i)
@@ -200,8 +206,10 @@ module.exports = function(mongoose, options, done)
 
           result.count += value.count;
           result.duration += value.duration;
+          result.workerCount += value.workerCount;
           result.specificCount += value.specificCount;
           result.specificDuration += value.specificDuration;
+          result.specificWorkerCount += value.specificWorkerCount;
         }
 
         return result;
@@ -236,15 +244,19 @@ module.exports = function(mongoose, options, done)
         {
           groups[key].indoorCount += result.value.count;
           groups[key].indoorDuration += result.value.duration;
+          groups[key].indoorWorkerCount += result.value.workerCount;
           groups[key].specificIndoorCount += result.value.specificCount;
           groups[key].specificIndoorDuration += result.value.specificDuration;
+          groups[key].specificIndoorWorkerCount += result.value.specificWorkerCount;
         }
         else
         {
           groups[key].outdoorCount += result.value.count;
           groups[key].outdoorDuration += result.value.duration;
+          groups[key].outdoorWorkerCount += result.value.workerCount;
           groups[key].specificOutdoorCount += result.value.specificCount;
           groups[key].specificOutdoorDuration += result.value.specificDuration;
+          groups[key].specificOutdoorWorkerCount += result.value.specificWorkerCount;
         }
       }
 
@@ -290,10 +302,14 @@ module.exports = function(mongoose, options, done)
       outdoorCount: 0,
       indoorDuration: 0,
       outdoorDuration: 0,
+      indoorWorkerCount: 0,
+      outdoorWorkerCount: 0,
       specificIndoorCount: 0,
       specificOutdoorCount: 0,
       specificIndoorDuration: 0,
-      specificOutdoorDuration: 0
+      specificOutdoorDuration: 0,
+      specificIndoorWorkerCount: 0,
+      specificOutdoorWorkerCount: 0
     };
   }
 };

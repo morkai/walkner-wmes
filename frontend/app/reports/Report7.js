@@ -145,10 +145,26 @@ define([
         var downtime = downtimes[i];
         var x = downtime.key;
 
-        downtimeTimes.indoor.push({x: x, y: Math.round(downtime.indoorDuration / 60 * 100) / 100});
-        downtimeTimes.outdoor.push({x: x, y: Math.round(downtime.outdoorDuration / 60 * 100) / 100});
-        downtimeTimes.specificIndoor.push({x: x, y: Math.round(downtime.specificIndoorDuration / 60 * 100) / 100});
-        downtimeTimes.specificOutdoor.push({x: x, y: Math.round(downtime.specificOutdoorDuration / 60 * 100) / 100});
+        downtimeTimes.indoor.push({
+          x: x,
+          y: Math.round(downtime.indoorDuration / 60 * 100) / 100,
+          workerCount: downtime.indoorWorkerCount
+        });
+        downtimeTimes.outdoor.push({
+          x: x,
+          y: Math.round(downtime.outdoorDuration / 60 * 100) / 100,
+          workerCount: downtime.outdoorWorkerCount
+        });
+        downtimeTimes.specificIndoor.push({
+          x: x,
+          y: Math.round(downtime.specificIndoorDuration / 60 * 100) / 100,
+          workerCount: downtime.specificIndoorWorkerCount
+        });
+        downtimeTimes.specificOutdoor.push({
+          x: x,
+          y: Math.round(downtime.specificOutdoorDuration / 60 * 100) / 100,
+          workerCount: downtime.specificOutdoorWorkerCount
+        });
 
         downtimeCounts.indoor.push({x: x, y: downtime.indoorCount});
         downtimeCounts.outdoor.push({x: x, y: downtime.outdoorCount});
