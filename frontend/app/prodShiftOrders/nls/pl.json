@@ -39,6 +39,7 @@
   "FORM:ERROR:times": "Czas zakończenia musi być po Czasie rozpoczęcia!",
   "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zlecenia: nie wykryto żadnych poprawnych zmian :(",
   "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
+  "FORM:ERROR:OVERLAPPING_ORDERS": "Zlecenie pokrywa się z innymi zleceniami!",
 
   "PROPERTY:mrpControllers": "Kontroler MRP",
   "PROPERTY:prodFlow": "Przepływ",

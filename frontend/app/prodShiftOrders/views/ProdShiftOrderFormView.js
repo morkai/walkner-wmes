@@ -59,7 +59,9 @@ define([
     {
       this.$errorMessage = viewport.msg.show({
         type: 'error',
-        text: t('prodShiftOrders', 'FORM:ERROR:' + message)
+        text: t.has('prodShiftOrders', 'FORM:ERROR:' + message)
+          ? t('prodShiftOrders', 'FORM:ERROR:' + message)
+          :  message
       });
 
       return false;

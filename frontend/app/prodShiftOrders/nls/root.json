@@ -32,6 +32,7 @@
     "FORM:ERROR:times": "Finished at must be after Started at!",
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the order: no valid changes were detected :(",
     "FORM:ERROR:INPUT": "Invalid input data!",
+    "FORM:ERROR:OVERLAPPING_ORDERS": "Order overlaps with other orders!",
 
     "filter:orderId": "Order no/12NC",
     "filter:operationNo": "Oper. no",
