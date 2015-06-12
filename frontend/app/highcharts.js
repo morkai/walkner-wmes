@@ -57,7 +57,7 @@ define([
         + '<span style="color: ' + row.color + '">\u25cf</span> ' + row.name + ':</td>'
         + '<td class="highcharts-tooltip-integer">' + yPrefix + integer + '</td>'
         + '<td class="highcharts-tooltip-fraction">' + fraction + '</td>'
-        + '<td class="highcharts-tooltip-suffix">' + ySuffix + '</td></tr>';
+        + '<td class="highcharts-tooltip-suffix">' + ySuffix + '</td>' + (row.extraColumns || '') + '</tr>';
     });
 
     str += '</table>';
@@ -151,6 +151,7 @@ define([
           var options = point.series.tooltipOptions;
 
           rows.push({
+            point: point,
             color: point.color || point.series.color,
             name: rowNameFormatter(point),
             prefix: options.valuePrefix,
