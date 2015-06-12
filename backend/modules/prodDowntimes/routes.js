@@ -589,7 +589,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
           var pdStartedAt = moment(pd.startedAt).milliseconds(0).valueOf();
           var pdFinishedAt = moment(pd.finishedAt).milliseconds(0).valueOf();
           var newStartedAt = moment(startedAt).milliseconds(0).valueOf();
-          var newFinishedAt = moment(startedAt).milliseconds(0).valueOf();
+          var newFinishedAt = moment(finishedAt).milliseconds(0).valueOf();
 
           if (newStartedAt === pdFinishedAt)
           {
