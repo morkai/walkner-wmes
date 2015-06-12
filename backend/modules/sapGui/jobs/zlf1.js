@@ -4,13 +4,7 @@
 
 'use strict';
 
-module.exports = {
-  unlock: require('./unlock'),
-  keepAlive: require('./keepAlive'),
-  zopp: require('./zopp'),
-  lt23: require('./lt23'),
-  ls41: require('./ls41'),
-  xiconf: require('./xiconf'),
-  docs: require('./docs'),
-  zlf1: require('./zlf1')
+module.exports = function runDocsJob(app, sapGuiModule, job, done)
+{
+  sapGuiModule.runScript(job, 'T_ZLF1.exe', [], done);
 };
