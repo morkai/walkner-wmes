@@ -14,7 +14,7 @@
   "PROPERTY:severity": "Poziom ważności",
 
   "TYPE:app.started": "Start systemu",
-  "TEXT:app.started": "<em>{id, select, frontend{Serwer aplikacji} controller{Serwer sterownika} alarms{Serwer alarmów} other{Serwer {id}}}</em> wystartował w środowisku <em>{env, select, development{rozwojowym} production{produkcyjnym} other{nieokreślonym}}</em> w ciągu <em>{time}</em> ms.",
+  "TEXT:app.started": "Serwer <em>{id}</em> wystartował w środowisku <em>{env, select, development{rozwojowym} testing{testowym} production{produkcyjnym} other{{env}}}</em> w ciągu <em>{time}</em> ms.",
   "TYPE:users.login": "Użytkownicy: zalogowanie",
   "TEXT:users.login": "-",
   "TYPE:users.loginFailure": "Użytkownicy: nieudane logowanie",

@@ -15,7 +15,7 @@
     "PROPERTY:severity": "Severity",
 
     "TYPE:app.started": "System start",
-    "TEXT:app.started": "<em>{id, select, frontend{Application server} importer{Importer server} other{Server {id}}}</em> started in the <em>{env, select, development{development} production{production} other{unspecified}}</em> environment in <em>{time}</em> ms.",
+    "TEXT:app.started": "Server <em>{id}</em> started in the <em>{env}</em> environment in <em>{time}</em> ms.",
     "TYPE:users.login": "Users: log in",
     "TEXT:users.login": "-",
     "TYPE:users.loginFailure": "Users: log in failure",
