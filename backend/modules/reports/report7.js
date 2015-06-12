@@ -169,7 +169,7 @@ module.exports = function(mongoose, options, done)
             break;
         }
 
-        var duration = (this.finishedAt.getTime() - this.startedAt.getTime()) / 60000;
+        var duration = Math.max(0, (this.finishedAt.getTime() - this.startedAt.getTime()) / 60000);
 
         if (specificAor === this.aor.valueOf())
         {
