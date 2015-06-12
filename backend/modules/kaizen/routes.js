@@ -145,6 +145,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     body.creator = userModule.createUserInfo(req.session.user, req);
     body.creator.id = body.creator.id.toString();
     body.attachments = prepareAttachments(body.attachments);
+    body.observers = prepareSubscribers(body.subscribers);
 
     return next();
   }
@@ -240,6 +241,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
         }
 
         body.attachments = mergeAttachments(kaizenOrder, newAttachmentMap);
+        body.subscribers = prepareSubscribers(body.subscribers);
 
         this.usersToNotify = kaizenOrder.applyChanges(body, updater);
 
@@ -429,5 +431,27 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
         kaizenModule.debug("Removed an unused attachment: %s", filePath);
       }
     });
+  }
+
+  function prepareSubscribers(subscribers)
+  {
+    return (Array.isArray(subscribers) ? subscribers : [])
+      .filter(function(subscriber)
+      {
+        return _.isString(subscriber.id)
+          && !_.isEmpty(subscriber.id)
+          && _.isString(subscriber.label)
+          && !_.isEmpty(subscriber.label);
+      })
+      .map(function(subscriber)
+      {
+        return {
+          user: subscriber,
+          role: 'subscriber',
+          lastSeenAt: null,
+          notify: true,
+          changes: {}
+        };
+      });
   }
 };

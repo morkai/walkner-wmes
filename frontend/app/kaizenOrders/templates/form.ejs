@@ -160,6 +160,11 @@
         </div>
         <% }) %>
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-subscribers" class="control-label"><%- t('kaizenOrders', 'PROPERTY:subscribers') %></label>
+        <input id="<%- idPrefix %>-subscribers" type="text" name="subscribers">
+        <p class="help-block"><%- t('kaizenOrders', 'FORM:MSG:subscribers') %></p>
+      </div>
       <% if (editMode) { %>
       <div class="form-group kaizenOrders-form-comment">
         <label for="<%- idPrefix %>-comment" class="control-label"><%- t('kaizenOrders', 'PROPERTY:comment') %></label>

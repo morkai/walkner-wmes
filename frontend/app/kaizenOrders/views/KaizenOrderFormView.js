@@ -195,6 +195,8 @@ define([
         }
       });
 
+      formData.subscribers = '';
+
       return formData;
     },
 
@@ -216,6 +218,13 @@ define([
       formData.nearMissOwners = serializeOwners('nearMiss');
       formData.suggestionOwners = serializeOwners('suggestion');
       formData.kaizenOwners = serializeOwners('kaizen');
+      formData.subscribers = this.$id('subscribers').select2('data').map(function(subscriber)
+      {
+        return {
+          id: subscriber.id,
+          label: subscriber.text
+        };
+      });
 
       KaizenOrder.DATE_PROPERTIES.forEach(function(property)
       {
@@ -302,6 +311,10 @@ define([
       });
 
       buttonGroup.toggle(this.$id('status'));
+
+      setUpUserSelect2(this.$id('subscribers'), {
+        multiple: true
+      });
 
       this.setUpConfirmerSelect2();
       this.setUpOwnerSelect2();

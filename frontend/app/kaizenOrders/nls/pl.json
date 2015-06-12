@@ -63,6 +63,7 @@
   "PROPERTY:attachments:file": "Nazwa pliku",
   "PROPERTY:attachments:type": "Typ pliku",
   "PROPERTY:comment": "Komentarz/opinia",
+  "PROPERTY:subscribers": "Obserwatorzy zgłoszenia",
   "PROPERTY:observers:name": "Imię i nazwisko",
   "PROPERTY:observers:role": "Rola",
   "PROPERTY:observers:lastSeenAt": "Ostatnio widziany",
@@ -89,7 +90,7 @@
   "role:creator": "Zgłaszający",
   "role:confirmer": "Zatwierdzający",
   "role:owner": "Właściciel",
-  "role:observer": "Obserwator",
+  "role:subscriber": "Obserwator",
 
   "tab:attachments": "Załączniki zgłoszenia",
   "tab:observers": "Uczestnicy zgłoszenia",
@@ -115,6 +116,7 @@
   "FORM:ERROR:upload": "Nie udało się załadować załączników :(",
   "FORM:MSG:optional": "Poniższe pola są opcjonalne. Pozostaw je puste, jeżeli nie jesteś {gender, select, female{pewna} other{pewien}} co w nich wpisać.",
   "FORM:MSG:attachmentEdit": "Wybierz nowe pliki tylko wtedy, gdy chcesz nadpisać już istniejące.",
+  "FORM:MSG:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zgłoszenia",
   "ACTION_FORM:BUTTON:delete": "Usuń zgłoszenie",

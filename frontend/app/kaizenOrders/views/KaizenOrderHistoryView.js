@@ -221,6 +221,9 @@ define([
               + t('kaizenOrders', 'attachments:' + attachment.description) + '</a>';
           }, this).join('; ');
 
+        case 'subscribers':
+          return value.join('; ');
+
         default:
           return value || '';
       }

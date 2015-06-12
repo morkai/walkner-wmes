@@ -427,6 +427,14 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       _.forEach(this.kaizenOwners, addOwner);
     }
 
+    _.forEach(this.observers, function(subscriber)
+    {
+      if (!observers[subscriber.user.id])
+      {
+        observers[subscriber.user.id] = subscriber;
+      }
+    });
+
     this.observers = _.values(observers);
 
     function addOwner(owner)
@@ -444,24 +452,24 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     }
   };
 
-  kaizenOrderSchema.methods.updateObservers = function(changedProperties)
+  kaizenOrderSchema.methods.updateObservers = function(changedPropertyList, changes, newSubscribers)
   {
-    var changes = {};
+    var changedPropertyMap = {};
 
-    _.forEach(changedProperties, function(property) { changes[property] = true; });
+    _.forEach(changedPropertyList, function(property) { changedPropertyMap[property] = true; });
 
     var usersToNotify = {};
     var oldObserverMap = {};
     var newObserverMap = {};
 
-    // Observers
+    // Old observers
     _.forEach(this.observers, function(observer)
     {
       oldObserverMap[observer.user.id] = observer;
 
-      if (observer.role === 'observer')
+      if (observer.role === 'subscriber')
       {
-        _.extend(observer.changes, changes);
+        _.extend(observer.changes, changedPropertyMap);
 
         if (!observer.notify)
         {
@@ -476,7 +484,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     // Creator
     var creator = newObserverMap[this.creator.id] = oldObserverMap[this.creator.id];
 
-    _.extend(creator.changes, changes);
+    _.extend(creator.changes, changedPropertyMap);
 
     if (!creator.notify)
     {
@@ -500,7 +508,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
         };
       }
 
-      _.extend(confirmer.changes, changes);
+      _.extend(confirmer.changes, changedPropertyMap);
 
       if (!confirmer.notify)
       {
@@ -549,7 +557,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
         };
       }
 
-      _.extend(observer.changes, changes);
+      _.extend(observer.changes, changedPropertyMap);
 
       if (!observer.notify)
       {
@@ -559,6 +567,24 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
 
       newObserverMap[observer.user.id] = observer;
     });
+
+    // New subscribers specified in the form
+    var subscribers = [];
+
+    _.forEach(newSubscribers, function(newSubscribers)
+    {
+      if (!newObserverMap[newSubscribers.user.id])
+      {
+        newObserverMap[newSubscribers.user.id] = newSubscribers;
+        usersToNotify[newSubscribers.user.id] = {};
+        subscribers.push(newSubscribers.user.label);
+      }
+    });
+
+    if (subscribers.length)
+    {
+      changes.subscribers = [null, subscribers];
+    }
 
     // Updater
     var updater = newObserverMap[this.updater.id];
@@ -617,9 +643,29 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       changedProperties.push('comment');
     }
 
+    if (!_.isEmpty(input.subscribers))
+    {
+      changedProperties.push('subscribers');
+    }
+
     if (!changedProperties.length)
     {
       return null;
+    }
+
+    var usersToNotify = this.updateObservers(changedProperties, changes, input.subscribers);
+
+    if (!_.isEmpty(input.subscribers))
+    {
+      if (_.isEmpty(changes.subscribers))
+      {
+        changedProperties.pop();
+      }
+
+      if (!changedProperties.length)
+      {
+        return null;
+      }
     }
 
     this.changes.push({
@@ -629,7 +675,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       comment: comment
     });
 
-    return this.updateObservers(changedProperties);
+    return usersToNotify;
   };
 
   kaizenOrderSchema.methods.compareProperties = function(input)
