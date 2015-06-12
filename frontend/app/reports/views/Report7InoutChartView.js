@@ -15,6 +15,11 @@ define([
 ) {
   'use strict';
 
+  function exportNumber(number)
+  {
+    return number.toLocaleString().replace(/\s+/g, '');
+  }
+
   return View.extend({
 
     className: 'reports-7-inout',
@@ -229,7 +234,7 @@ define([
 
     formatTooltipHeader: function(ctx)
     {
-      var timeMoment = time.getMoment(ctx.x);
+      var timeMoment = time.getMoment(typeof ctx === 'number' ? ctx : ctx.x);
       var data;
 
       if (!this.interval)
@@ -324,6 +329,41 @@ define([
       return '<td class="highcharts-tooltip-integer">' + integer + '</td>'
         + '<td class="highcharts-tooltip-fraction">' + fraction + '</td>'
         + '<td class="highcharts-tooltip-suffix">' + ySuffix + '</td>';
+    },
+
+    serializeToCsv: function()
+    {
+      var lines = ['date;readableDate;indoor;specificIndoor;outdoor;specificOutdoor'];
+      var series = this.chart.series;
+      var points = series[0].data;
+      var downtimeTimes = this.options.type === 'downtimeTimes';
+
+      if (downtimeTimes)
+      {
+        lines[0] += ';indoorWorkers;specificIndoorWorkers;outdoorWorkers;specificOutdoorWorkers';
+      }
+
+      for (var i = 0; i < points.length; ++i)
+      {
+        var line = time.format(points[i].x, 'YYYY-MM-DD')
+          + ';"' + this.formatTooltipHeader(points[i].x) + '"'
+          + ';' + exportNumber(series[0].data[i].y)
+          + ';' + exportNumber(series[1].data[i].y)
+          + ';' + exportNumber(series[2].data[i].y)
+          + ';' + exportNumber(series[3].data[i].y);
+
+        if (downtimeTimes)
+        {
+          line += ';' + series[0].data[i].workerCount
+            + ';' + series[1].data[i].workerCount
+            + ';' + series[2].data[i].workerCount
+            + ';' + series[3].data[i].workerCount;
+        }
+
+        lines.push(line);
+      }
+
+      return lines.join('\r\n');
     }
 
   });

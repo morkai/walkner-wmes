@@ -23,6 +23,11 @@
   "PAGE_ACTION:6:export": "Eksportuj dane",
   "PAGE_ACTION:6:export:to": "Eksportuj TO",
   "PAGE_ACTION:6:export:fte": "Eksportuj FTE",
+  "PAGE_ACTION:7:export": "Eksportuj dane",
+  "PAGE_ACTION:7:export:clip": "Eksportuj CLIP",
+  "PAGE_ACTION:7:export:downtimes": "Eksportuj listę przestojów",
+  "PAGE_ACTION:7:export:downtimeTimes": "Eksportuj czasy przestojów",
+  "PAGE_ACTION:7:export:downtimeCounts": "Eksportuj ilości przestojów",
 
   "1:pageTitle": "Wskaźniki",
   "2:pageTitle": "CLIP",
@@ -353,6 +358,9 @@
   "filenames:6:totalAndAbsence:finGoods": "WMES_Magazyn_Zatr_MagWyrGot",
   "filenames:7:inout:downtimeTimes": "WMES_PrzestojeObszary_Czasy",
   "filenames:7:inout:downtimeCounts": "WMES_PrzestojeObszary_Ilosci",
+  "filenames:7:clip": "WMES_CLIP",
+  "filenames:7:downtimeTimes": "WMES_PrzestojeObszary_Czasy",
+  "filenames:7:downtimeCounts": "WMES_PrzestojeObszary_Ilosci",
 
   "orders:empty": "Nie znaleziono żadnych pasujących zleceń.",
   "orders:cnf:status": "Potwierdzenie<br>(produkcja)",

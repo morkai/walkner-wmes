@@ -25,6 +25,11 @@
     "PAGE_ACTION:6:export": "Export data",
     "PAGE_ACTION:6:export:to": "Export TO",
     "PAGE_ACTION:6:export:fte": "Export FTE",
+    "PAGE_ACTION:7:export": "Export data",
+    "PAGE_ACTION:7:export:clip": "Export CLIP",
+    "PAGE_ACTION:7:export:downtimes": "Export downtime list",
+    "PAGE_ACTION:7:export:downtimeTimes": "Export downtime times",
+    "PAGE_ACTION:7:export:downtimeCounts": "Export downtime counts",
 
     "1:pageTitle": "PROD, EFF, Downtime",
     "2:pageTitle": "CLIP",
@@ -349,6 +354,9 @@
     "filenames:6:totalAndAbsence:finGoods": "WMES_WH_FTE_FinGoods",
     "filenames:7:inout:downtimeTimes": "WMES_AORDowntimes_Times",
     "filenames:7:inout:downtimeCounts": "WMES_AORDowntimes_Counts",
+    "filenames:7:clip": "WMES_CLIP",
+    "filenames:7:downtimeTimes": "WMES_AORDowntimes_Times",
+    "filenames:7:downtimeCounts": "WMES_AORDowntimes_Counts",
 
     "orders:empty": "No matching orders found.",
     "orders:cnf:status": "Confirmation<br>(production)",

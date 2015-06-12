@@ -365,6 +365,26 @@ define([
           }
         ]
       });
+    },
+
+    serializeToCsv: function()
+    {
+      var lines = ['date;readableDate;total;production;end2end'];
+      var series = this.chart.series;
+      var points = series[0].data;
+
+      for (var i = 0; i < points.length; ++i)
+      {
+        lines.push(
+          time.format(points[i].x, 'YYYY-MM-DD')
+          + ';"' + this.formatTooltipHeader(points[i].x) + '"'
+          + ';' + series[0].data[i].y
+          + ';' + series[1].data[i].y
+          + ';' + series[2].data[i].y
+        );
+      }
+
+      return lines.join('\r\n');
     }
 
   });

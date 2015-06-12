@@ -17,6 +17,11 @@ define([
 ) {
   'use strict';
 
+  function roundHours(minutes)
+  {
+    return Math.round(minutes / 60 * 100) / 100;
+  }
+
   return Model.extend({
 
     urlRoot: '/reports/7',
@@ -147,22 +152,22 @@ define([
 
         downtimeTimes.indoor.push({
           x: x,
-          y: Math.round(downtime.indoorDuration / 60 * 100) / 100,
+          y: roundHours(downtime.indoorDuration),
           workerCount: downtime.indoorWorkerCount
         });
         downtimeTimes.outdoor.push({
           x: x,
-          y: Math.round(downtime.outdoorDuration / 60 * 100) / 100,
+          y: roundHours(downtime.outdoorDuration),
           workerCount: downtime.outdoorWorkerCount
         });
         downtimeTimes.specificIndoor.push({
           x: x,
-          y: Math.round(downtime.specificIndoorDuration / 60 * 100) / 100,
+          y: roundHours(downtime.specificIndoorDuration),
           workerCount: downtime.specificIndoorWorkerCount
         });
         downtimeTimes.specificOutdoor.push({
           x: x,
-          y: Math.round(downtime.specificOutdoorDuration / 60 * 100) / 100,
+          y: roundHours(downtime.specificOutdoorDuration),
           workerCount: downtime.specificOutdoorWorkerCount
         });
 

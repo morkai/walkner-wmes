@@ -3,7 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'h5.rql/index',
+  'jquery',
   'app/time',
   'app/i18n',
   'app/user',
@@ -17,9 +17,10 @@ define([
   '../views/Report2ClipChartView',
   'app/prodDowntimes/ProdDowntimeCollection',
   'app/prodDowntimes/views/ProdDowntimeListView',
-  'app/reports/templates/report7Page'
+  'app/reports/templates/report7Page',
+  'app/reports/templates/report7ExportPageAction'
 ], function(
-  rql,
+  $,
   time,
   t,
   user,
@@ -33,7 +34,8 @@ define([
   Report2ClipChartView,
   ProdDowntimeCollection,
   ProdDowntimeListView,
-  report7PageTemplate
+  report7PageTemplate,
+  exportPageActionTemplate
 ) {
   'use strict';
 
@@ -66,7 +68,17 @@ define([
 
     actions: function()
     {
+      var onExportMenuItemClick = this.onExportMenuItemClick.bind(this);
+
       return [{
+        template: exportPageActionTemplate.bind(null, {
+          urls: this.getExportUrls()
+        }),
+        afterRender: function($exportAction)
+        {
+          $exportAction.on('click', 'a[data-export]', onExportMenuItemClick);
+        }
+      }, {
         label: t.bound('reports', 'PAGE_ACTION:settings'),
         icon: 'cogs',
         privileges: 'REPORTS:MANAGE',
@@ -204,6 +216,8 @@ define([
           trigger: false
         });
       }
+
+      this.updateExportUrls();
     },
 
     afterRender: function()
@@ -218,6 +232,79 @@ define([
         .replace(/skip=[0-9]+/, 'skip=${skip}');
 
       return '#reports/7?' + query;
+    },
+
+    getExportUrls: function()
+    {
+      return {
+        clip: '#',
+        downtimes: '/prodDowntimes;export?' + this.prodDowntimes.rqlQuery,
+        downtimeTimes: '#',
+        downtimeCounts: '#'
+      };
+    },
+
+    updateExportUrls: function()
+    {
+      if (!this.$exportAction)
+      {
+        return;
+      }
+
+      var urls = this.getExportUrls();
+
+      this.$exportAction.find('a[data-export]').each(function()
+      {
+        this.href = urls[this.dataset.export];
+      });
+    },
+
+    onExportMenuItemClick: function(e)
+    {
+      var type = e.target.dataset.export;
+
+      if (type === 'downtimes')
+      {
+        return;
+      }
+
+      e.preventDefault();
+
+      var view;
+
+      if (type === 'clip')
+      {
+        view = this.clipChartView;
+      }
+      else if (type === 'downtimeTimes')
+      {
+        view = this.downtimeTimesChartView;
+      }
+      else
+      {
+        view = this.downtimeCountsChartView;
+      }
+
+      var filename = t('reports', 'filenames:7:' + type);
+      var data = view.serializeToCsv();
+      var $exportAction = $(e.target).closest('.btn-group').find('.btn').prop('disabled', true);
+
+      var req = this.ajax({
+        type: 'POST',
+        url: '/reports;download?filename=' + encodeURIComponent(filename),
+        contentType: 'text/csv',
+        data: data
+      });
+
+      req.done(function(key)
+      {
+        window.location.href = '/reports;download?key=' + key;
+      });
+
+      req.always(function()
+      {
+        $exportAction[0].disabled = false;
+      });
     }
 
   });
