@@ -71,6 +71,7 @@
     "FORM:ERROR:times": "Finished at must be after Started at!",
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the downtime: no valid changes were detected :(",
     "FORM:ERROR:INPUT": "Invalid input data!",
+    "FORM:ERROR:OVERLAPPING_DOWNTIMES": "Downtime overlaps with other downtimes!",
 
     "shift+date": "{date}, {shift} shift",
 

@@ -69,6 +69,7 @@
   "FORM:ERROR:times": "Czas zakończenia musi być po Czasie rozpoczęcia!",
   "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować przestoju: nie wykryto żadnych poprawnych zmian :(",
   "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
+  "FORM:ERROR:OVERLAPPING_DOWNTIMES": "Przestój pokrywa się z innymi przestojami!",
 
   "shift+date": "{date}, {shift} zmiana",
 

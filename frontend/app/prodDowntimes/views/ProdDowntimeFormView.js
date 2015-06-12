@@ -126,7 +126,9 @@ define([
     {
       this.$errorMessage = viewport.msg.show({
         type: 'error',
-        text: t('prodDowntimes', 'FORM:ERROR:' + message)
+        text: t.has('prodDowntimes', 'FORM:ERROR:' + message)
+          ? t('prodDowntimes', 'FORM:ERROR:' + message)
+          :  message
       });
 
       return false;
