@@ -25,7 +25,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         || changes.master !== undefined
         || changes.leader !== undefined
         || changes.operator !== undefined
-        || changes.operators !== undefined)
+        || changes.operators !== undefined
+        || changes.workerCount !== undefined)
       {
         productionModule.getOrderDowntimes(logEntry.prodShiftOrder, this.parallel());
       }
@@ -101,7 +102,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           'operators',
           'orderId',
           'mechOrder',
-          'operationNo'
+          'operationNo',
+          'workerCount'
         ], function(property)
         {
           if (changes[property] !== undefined)
@@ -153,7 +155,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         orderId: prodShiftOrder.orderId,
         mechOrder: prodShiftOrder.mechOrder,
         operationNo: prodShiftOrder.operationNo,
-        prodShiftOrder: prodShiftOrder._id
+        prodShiftOrder: prodShiftOrder._id,
+        workerCount: prodShiftOrder.workerCount
       };
 
       for (i = 0, l = orderDowntimes.length; i < l; ++i)
@@ -168,7 +171,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         orderId: null,
         mechOrder: null,
         operationNo: null,
-        prodShiftOrder: null
+        prodShiftOrder: null,
+        workerCount: 1
       };
 
       for (i = 0, l = idleDowntimes.length; i < l; ++i)

@@ -92,6 +92,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           changes.mechOrder = null;
           changes.orderId = null;
           changes.operationNo = null;
+          changes.workerCount = 1;
         }
         else
         {
@@ -99,6 +100,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           changes.mechOrder = this.newProdShiftOrder.mechOrder;
           changes.orderId = this.newProdShiftOrder.orderId;
           changes.operationNo = this.newProdShiftOrder.operationNo;
+          changes.workerCount = this.newProdShiftOrder.workerCount;
         }
 
         done(
@@ -231,10 +233,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           logEntry._id,
           err.stack
         );
-
-        this.oldProdShiftOrder = null;
-        this.newProdShiftOrder = null;
       }
+
+      this.oldProdShiftOrder = null;
+      this.newProdShiftOrder = null;
     },
     done
   );

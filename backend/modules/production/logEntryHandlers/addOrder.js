@@ -50,7 +50,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         orderId: prodShiftOrder.orderId,
         mechOrder: prodShiftOrder.mechOrder,
         operationNo: prodShiftOrder.operationNo,
-        prodShiftOrder: prodShiftOrder._id
+        prodShiftOrder: prodShiftOrder._id,
+        workerCount: prodShiftOrder.workerCount
       };
 
       for (var i = 0, l = prodDowntimes.length; i < l; ++i)

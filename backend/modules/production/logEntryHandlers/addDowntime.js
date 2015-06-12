@@ -14,16 +14,32 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
   var prodDowntime = new ProdDowntime(logEntry.data);
 
   step(
-    function()
+    function findProdShiftOrderStep()
     {
-      prodDowntime.save(this.parallel());
-
       if (prodDowntime.prodShiftOrder)
       {
         productionModule.getProdData('order', prodDowntime.prodShiftOrder, this.parallel());
       }
     },
-    function(err, prodDowntime, prodShiftOrder)
+    function saveProdDowntimeStep(err, prodShiftOrder)
+    {
+      if (err)
+      {
+        productionModule.error("Failed to find order for a new downtime [%s] (LOG=[%s]): %s",
+          logEntry.data._id,
+          logEntry._id,
+          err.stack
+        );
+
+        return this.done(done, err);
+      }
+
+      this.prodShiftOrder = prodShiftOrder;
+
+      prodDowntime.workerCount = prodShiftOrder ? prodShiftOrder.workerCount : 1;
+      prodDowntime.save(this.next());
+    },
+    function recalcOrderDurationsStep(err)
     {
       if (err)
       {
@@ -37,12 +53,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.done(done, err);
       }
 
-      if (prodShiftOrder)
+      if (this.prodShiftOrder)
       {
-        prodShiftOrder.recalcDurations(true, this.next());
+        this.prodShiftOrder.recalcDurations(true, this.next());
       }
     },
-    function(err)
+    function finalizeStep(err)
     {
       if (err)
       {
@@ -54,7 +70,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           err.stack
         );
       }
-    },
-    done
+
+      this.prodShiftOrder = null;
+
+      return done(err);
+    }
   );
 };

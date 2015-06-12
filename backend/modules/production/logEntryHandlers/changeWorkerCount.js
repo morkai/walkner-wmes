@@ -4,48 +4,87 @@
 
 'use strict';
 
+var step = require('h5.step');
+
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  productionModule.getProdData('order', logEntry.prodShiftOrder, function(err, prodShiftOrder)
-  {
-    if (err)
+  step(
+    function findProdShiftOrderStep()
     {
-      productionModule.error(
-        "Failed to get prod shift order [%s] to change the worker count (LOG=[%s]): %s",
-        logEntry.prodShiftOrder,
-        logEntry._id,
-        err.stack
-      );
-
-      return done(err);
-    }
-
-    if (!prodShiftOrder)
-    {
-      productionModule.warn(
-        "Couldn't find prod shift order [%s] to change the worker count (LOG=[%s])",
-        logEntry.prodShiftOrder,
-        logEntry._id
-      );
-
-      return done();
-    }
-
-    prodShiftOrder.workerCount = Math.max(logEntry.data.newValue, 0);
-
-    prodShiftOrder.save(function(err)
+      productionModule.getProdData('order', logEntry.prodShiftOrder, this.next());
+    },
+    function setWorkerCountStep(err, prodShiftOrder)
     {
       if (err)
       {
         productionModule.error(
-          "Failed to save prod shift order [%s] after changing the worker count (LOG=[%s]): %s",
+          "Failed to get prod shift order [%s] to change the worker count (LOG=[%s]): %s",
+          logEntry.prodShiftOrder,
+          logEntry._id,
+          err.stack
+        );
+
+        return this.done(done, err);
+      }
+
+      if (!prodShiftOrder)
+      {
+        productionModule.warn(
+          "Couldn't find prod shift order [%s] to change the worker count (LOG=[%s])",
+          logEntry.prodShiftOrder,
+          logEntry._id
+        );
+
+        return this.done(done);
+      }
+
+      prodShiftOrder.workerCount = Math.max(logEntry.data.newValue, 0);
+
+      this.prodShiftOrder = prodShiftOrder;
+    },
+    function findProdDowntimesStep()
+    {
+      productionModule.getOrderDowntimes(this.prodShiftOrder._id, this.next());
+    },
+    function saveModelsStep(err, prodDowntimes)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to get downtimes for order [%s] to change the worker count (LOG=[%s]): %s",
+          logEntry.prodShiftOrder,
+          logEntry._id,
+          err.stack
+        );
+
+        return this.done(done, err);
+      }
+
+      this.prodShiftOrder.save(this.group());
+
+      for (var i = 0; i < prodDowntimes.length; ++i)
+      {
+        var prodDowntime = prodDowntimes[i];
+
+        prodDowntime.workerCount = this.prodShiftOrder.workerCount;
+        prodDowntime.save(this.group());
+      }
+    },
+    function finalizeStep(err)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to save models after changing the worker count of order [%s] (LOG=[%s]): %s",
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
         );
       }
 
+      this.prodShiftOrder = null;
+
       return done(err);
-    });
-  });
+    }
+  );
 };

@@ -127,7 +127,11 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     },
     changes: [prodDowntimeChangeSchema],
     updatedAt: Date,
-    changesCount: {}
+    changesCount: {},
+    workerCount: {
+      type: Number,
+      default: 1
+    }
   }, {
     id: false
   });
