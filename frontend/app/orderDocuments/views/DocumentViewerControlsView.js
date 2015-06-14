@@ -212,7 +212,7 @@ define([
       this.listenTo(
         this.model,
         'change:localFile change:localOrder change:remoteOrder',
-        _.debounce(this.onOrderChange.bind(this), 1, true)
+        _.debounce(this.onOrderChange.bind(this), 1)
       );
 
       this.updateButtons();
