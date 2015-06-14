@@ -32,6 +32,10 @@ define([
       'socket.disconnected': 'onConnectionStatusChange'
     },
 
+    remoteTopics: {
+      'orderDocuments.remoteChecked.*': 'onRemoteDocumentChecked'
+    },
+
     initialize: function()
     {
       this.$els = {
@@ -142,6 +146,21 @@ define([
     {
       this.model.setRemoteOrder(remoteOrderData);
       this.model.save();
+    },
+
+    onRemoteDocumentChecked: function(message)
+    {
+      if (this.model.get('localFile') !== null)
+      {
+        return;
+      }
+
+      var currentOrder = this.model.getCurrentOrder();
+
+      if (currentOrder.nc15 === message.nc15)
+      {
+        this.previewView.loadDocument();
+      }
     }
 
   });

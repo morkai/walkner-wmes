@@ -147,7 +147,7 @@ exports.pubsub = {
     'settings.updated.**',
     'xiconf.results.synced', 'xiconf.orders.**', 'xiconf.clients.**',
     'icpo.results.synced',
-    'orders.updated.*',
+    'orders.updated.*', 'orderDocuments.remoteChecked.*',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*'
   ]
 };
@@ -162,7 +162,7 @@ exports.mongoose = {
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',
-    'order', 'mechOrder', 'emptyOrder', 'clipOrderCount',
+    'order', 'orderDocumentStatus', 'mechOrder', 'emptyOrder', 'clipOrderCount',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet',
     'feedback',
@@ -334,5 +334,7 @@ exports.kaizen = {
 };
 
 exports.orderDocuments = {
-  importPath: DATA_PATH + '/attachments-input'
+  importPath: DATA_PATH + '/attachments-input',
+  cachedPath: DATA_PATH + '/documents-cache',
+  sejdaConsolePath: 'sejda-console'
 };

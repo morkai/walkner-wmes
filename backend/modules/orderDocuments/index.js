@@ -7,6 +7,7 @@
 var _ = require('lodash');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
+var checkRemoteServer = require('./checkRemoteServer');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -18,15 +19,20 @@ exports.DEFAULT_CONFIG = {
   settingsId: 'settings',
   productionId: 'production',
   importPath: './',
-  importFile: '{timestamp}@T_COOIS_DOCS_{step}.txt'
+  importFile: '{timestamp}@T_COOIS_DOCS_{step}.txt',
+  cachedPath: './',
+  sejdaConsolePath: 'sejda-console'
 };
 
 exports.start = function startOrderDocumentsModule(app, module)
 {
   module.settings = {
     path: '',
-    extra: []
+    extra: [],
+    remoteServer: ''
   };
+
+  module.checkRemoteServer = checkRemoteServer.bind(null, app, module);
 
   app.onModuleReady(
     [
@@ -70,21 +76,34 @@ exports.start = function startOrderDocumentsModule(app, module)
         {
           module.settings.extra = parseExtraDocumentsSetting(settings.extra);
         }
+
+        if (_.isString(settings.remoteServer))
+        {
+          module.settings.remoteServer = settings.remoteServer;
+        }
       });
     }
   );
 
   app.broker.subscribe('settings.updated.orders.documents.**', function(message)
   {
-    if (message._id === 'orders.documents.path')
-    {
-      module.settings.path = message.value;
-    }
-    else if (message._id === 'orders.documents.extra')
-    {
-      module.settings.extra = parseExtraDocumentsSetting(message.value);
+    var settings = module.settings;
+    var settingId = message._id;
+    var settingValue = message.value;
 
-      app.broker.publish('orderDocuments.extraUpdated', module.settings.extra);
+    if (settingId === 'orders.documents.path')
+    {
+      settings.path = settingValue;
+    }
+    else if (settingId === 'orders.documents.extra')
+    {
+      settings.extra = parseExtraDocumentsSetting(settingValue);
+
+      app.broker.publish('orderDocuments.extraUpdated', settings.extra);
+    }
+    else if (settingId === 'orders.documents.remoteServer')
+    {
+      settings.remoteServer = settingValue;
     }
   });
 

@@ -5,6 +5,10 @@
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="documents">
       <div class="form-group">
+        <label for="<%- idPrefix %>-documents-remoteServer"><%- t('orders', 'settings:documents:remoteServer') %></label>
+        <input id="<%- idPrefix %>-documents-remoteServer" class="form-control" name="orders.documents.remoteServer" type="text" data-change-delay="0">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-documents-path"><%- t('orders', 'settings:documents:path') %></label>
         <input id="<%- idPrefix %>-documents-path" class="form-control" name="orders.documents.path" type="text" data-change-delay="0">
       </div>

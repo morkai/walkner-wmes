@@ -109,11 +109,13 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     {
       if (err)
       {
-        return res.sendStatus(err.status);
+        return res.sendStatus(404);
       }
 
       return res.sendStatus(204);
     });
+
+    module.checkRemoteServer(req.params.nc15);
   });
 
   express.get('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res, next)
@@ -173,16 +175,29 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return done(express.createHttpError('NO_PATH_SETTING'));
     }
 
-    var filePath = path.join(module.settings.path, nc15 + '.pdf');
+    var cachedFilePath = path.join(module.config.cachedPath, nc15 + '.pdf');
+    var localFilePath = path.join(module.settings.path, nc15 + '.pdf');
 
-    fs.stat(filePath, function(err)
-    {
-      if (err)
+    step(
+      function()
       {
-        return done(express.createHttpError(err.code, err.code === 'ENOENT' ? 404 : 500));
-      }
+        fs.stat(cachedFilePath, this.parallel());
+        fs.stat(localFilePath, this.parallel());
+      },
+      function(err, cachedStats, localStats)
+      {
+        if (cachedStats)
+        {
+          return done(null, cachedFilePath);
+        }
 
-      return done(null, filePath);
-    });
+        if (localStats)
+        {
+          return done(null, localFilePath);
+        }
+
+        return done(err);
+      }
+    );
   }
 };

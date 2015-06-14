@@ -63,5 +63,6 @@
 
   "settings:tab:documents": "Dokumenty",
   "settings:documents:path": "Ścieżka do katalogu z plikami dokumentów",
-  "settings:documents:extra": "Dodatkowe dokumenty"
+  "settings:documents:extra": "Dodatkowe dokumenty",
+  "settings:documents:remoteServer": "Serwer wyszukiwarki dokumentów"
 }

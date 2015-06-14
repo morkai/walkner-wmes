@@ -64,7 +64,8 @@
 
     "settings:tab:documents": "Documents",
     "settings:documents:path": "Path to a directory with the document files",
-    "settings:documents:extra": "Extra documents"
+    "settings:documents:extra": "Extra documents",
+    "settings:documents:remoteServer": "Document search engine server"
   },
   "pl": true
 }

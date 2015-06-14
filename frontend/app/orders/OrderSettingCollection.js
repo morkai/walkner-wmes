@@ -30,7 +30,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/documents.path$/.test(id))
+      if (/documents.(path|remoteServer)$/.test(id))
       {
         return newValue;
       }
