@@ -10,6 +10,8 @@ define([
   'app/viewport',
   'app/core/views/ListView',
   'app/core/views/DialogView',
+  'app/licenses/views/LicensePickerView',
+  '../XiconfClientCollection',
   'app/xiconfClients/templates/restartDialog',
   'app/xiconfClients/templates/updateDialog'
 ], function(
@@ -20,6 +22,8 @@ define([
   viewport,
   ListView,
   DialogView,
+  LicensePickerView,
+  XiconfClientCollection,
   restartDialogTemplate,
   updateDialogTemplate
 ) {
@@ -34,6 +38,45 @@ define([
     },
 
     events: _.extend({
+      'click a.licenses-id': function(e)
+      {
+        e.currentTarget.blur();
+
+        var xiconfClient = this.getModelFromEvent(e);
+        var license = xiconfClient.get('license');
+
+        if (license && license._id)
+        {
+          license = license._id;
+        }
+
+        var licensePickerView = new LicensePickerView({
+          model: {
+            appId: 'walkner-xiconf',
+            unused: true,
+            currentLicenseId: license,
+            usedLicenses: new XiconfClientCollection(null, {
+              rqlQuery: 'select(license)&limit(999)'
+            })
+          }
+        });
+
+        this.listenToOnce(licensePickerView, 'licensePicked', function(license)
+        {
+          viewport.closeDialog();
+
+          this.socket.emit('xiconf.configure', {
+            socket: xiconfClient.get('socket'),
+            settings: {
+              licenseKey: license.get('key')
+            }
+          });
+        });
+
+        viewport.showDialog(licensePickerView, t('xiconfClients', 'licensePicker:title'));
+
+        return false;
+      },
       'click .action-restart': function(e)
       {
         e.currentTarget.blur();

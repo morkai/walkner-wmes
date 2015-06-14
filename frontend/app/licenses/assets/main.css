@@ -9,3 +9,19 @@
   font-weight: bold;
   color: #e00;
 }
+.licensePicker-dialog .modal-header {
+  border-bottom: 0;
+}
+.licensePicker-dialog .modal-body {
+  padding: 0;
+}
+.licensePicker-list {
+  overflow: auto;
+  max-height: 500px;
+}
+.licensePicker-list > .table {
+  border-top: 0;
+}
+.licensePicker-list tr {
+  cursor: pointer;
+}

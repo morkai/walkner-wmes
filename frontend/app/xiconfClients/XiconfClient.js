@@ -59,6 +59,8 @@ define([
 
       var licenseClass = 'licenses-id';
       var licenseTitle = obj.license;
+      var licenseHref = '#licenses/' + obj.license;
+      var licenseTag = obj.connectedAt ? 'a' : 'span';
 
       if (obj.licenseError)
       {
@@ -66,9 +68,10 @@ define([
         licenseTitle += '\r\n' + t('licenses', 'error:' + obj.licenseError);
       }
 
-      obj.shortLicense = '<span class="' + licenseClass + '" title="' + licenseTitle + '">'
+      obj.shortLicense = '<' + licenseTag + ' class="' + licenseClass + '" title="' + licenseTitle
+        + '" href="' + licenseHref + '">'
         + obj.license.substr(0, 4) + '...' + obj.license.substr(-4)
-        + '</span>';
+        + '</' + licenseTag + '>';
 
       obj.appVersionCmp = compareVersions(obj.appVersion, options.appVersion);
 

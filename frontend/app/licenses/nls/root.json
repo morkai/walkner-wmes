@@ -42,7 +42,11 @@
     "app:msys-xiconf-lp": "Xiconf Label Printer",
     "app:walkner-xiconf": "Walkner Xiconf",
     "app:walkner-icpo": "Walkner ICPO",
-    "app:wmes-docs": "WMES Documents"
+    "app:wmes-docs": "WMES Documents",
+
+    "picker:unused": "Show only unused licenses",
+    "picker:noData": "No matching licenses.",
+    "picker:loading": "Loading license list..."
   },
   "pl": true
 }

@@ -54,7 +54,9 @@
     "updateAllDialog:title": "Applications update",
     "updateAllDialog:message": "Are you sure you want to update all applications?<br><br>The applications will be updated right after the current programming finishes.",
     "updateAllDialog:yes": "Update applications",
-    "updateAllDialog:no": "Cancel"
+    "updateAllDialog:no": "Cancel",
+
+    "licensePicker:title": "Client license selection"
   },
   "pl": true
 }

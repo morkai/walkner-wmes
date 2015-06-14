@@ -1,0 +1,33 @@
+<div class="licensePicker">
+  <div class="licensePicker-filter">
+    <button id="<%- idPrefix %>-unused" class="btn btn-default btn-block <%- unused ? 'active' : ''%>"><%- t('licenses', 'picker:unused') %></button>
+  </div>
+  <div class="licensePicker-list">
+    <table class="table table-bordered table-condensed table-hover">
+      <thead>
+        <tr>
+          <th class="is-min"><%- t('licenses', 'PROPERTY:_id') %></th>
+          <th class="is-min"><%- t('licenses', 'PROPERTY:expireDate') %></th>
+          <th><%- t('licenses', 'PROPERTY:features') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (loading) { %>
+        <tr>
+          <td colspan="4"><%- t('licenses', 'picker:loading') %></td>
+        </tr>
+        <% } else if (!licenses.length) { %>
+        <tr>
+          <td colspan="4"><%- t('licenses', 'picker:noData') %></td>
+        </tr>
+        <% } else licenses.forEach(function(license) { %>
+        <tr data-id="<%- license._id %>">
+          <td class="is-min" title="<%- license._id %>"><span class="licenses-id"><%- license.shortId %></span></td>
+          <td class="is-min"><%- license.expireDate %></td>
+          <td><%- license.features %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

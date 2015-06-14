@@ -28,6 +28,27 @@ define([
           ]
         }
       });
+    },
+
+    getUsedLicenseIds: function()
+    {
+      var licenseIds = {};
+
+      this.forEach(function(xiconfClient)
+      {
+        var license = xiconfClient.get('license');
+
+        if (license && license._id)
+        {
+          licenseIds[license._id] = true;
+        }
+        else if (typeof license === 'string')
+        {
+          licenseIds[license] = true;
+        }
+      });
+
+      return licenseIds;
     }
 
   });
