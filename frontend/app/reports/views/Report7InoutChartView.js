@@ -123,7 +123,6 @@ define([
           valueSuffix: valueSuffix,
           valueDecimals: valueDecimals,
           headerFormatter: this.formatTooltipHeader.bind(this),
-          rowNameFormatter: this.formatTooltipRowName.bind(this),
           extraRowsProvider: this.provideExtraTooltipRows.bind(this)
         },
         legend: {
@@ -142,7 +141,7 @@ define([
         },
         series: [{
           id: 'indoor',
-          name: t.bound('reports', '7:series:indoor'),
+          name: this.getSeriesName({id: 'indoor', group: 'indoor'}),
           type: 'column',
           data: chartData.indoor,
           color: '#00aaff',
@@ -150,7 +149,7 @@ define([
           dataLabels: {enabled: dataLabelsEnabled}
         }, {
           id: 'specificIndoor',
-          name: t.bound('reports', '7:series:indoor:specific'),
+          name: this.getSeriesName({id: 'specificIndoor', group: 'indoor'}),
           type: 'column',
           data: chartData.specificIndoor,
           color: '#0066bb',
@@ -158,7 +157,7 @@ define([
           dataLabels: {enabled: dataLabelsEnabled}
         }, {
           id: 'outdoor',
-          name: t.bound('reports', '7:series:outdoor'),
+          name: this.getSeriesName({id: 'outdoor', group: 'outdoor'}),
           type: 'column',
           data: chartData.outdoor,
           color: '#00ee00',
@@ -166,7 +165,7 @@ define([
           dataLabels: {enabled: dataLabelsEnabled}
         }, {
           id: 'specificOutdoor',
-          name: t.bound('reports', '7:series:outdoor:specific'),
+          name: this.getSeriesName({id: 'specificOutdoor', group: 'outdoor'}),
           type: 'column',
           data: chartData.specificOutdoor,
           color: '#00aa00',
@@ -187,6 +186,7 @@ define([
         var options = series.options;
         var data = chartData[options.id];
 
+        options.name = this.getSeriesName(series.options);
         options.dataLabels.enabled = data.length <= 12;
 
         series.setData(data, false);
@@ -250,14 +250,14 @@ define([
       return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + this.interval, data));
     },
 
-    formatTooltipRowName: function(point)
+    getSeriesName: function(options)
     {
-      var series = point.series;
-      var aor = /^specific/.test(series.options.id) ? this.model.getSpecificAor() : this.model.getSingleAor();
+      var specific = /^specific/.test(options.id);
+      var aor = specific ? this.model.getSpecificAor() : this.model.getSingleAor();
 
       return aor
-        ? t('reports', '7:series:' + series.options.group + ':aor', {aor: aor.getLabel()})
-        : series.name;
+        ? t('reports', '7:series:' + options.group + ':aor', {aor: aor.getLabel()})
+        : t('reports', '7:series:' + options.group + (specific ? ':specific' : ''));
     },
 
     provideExtraTooltipRows: function(points, rows)
