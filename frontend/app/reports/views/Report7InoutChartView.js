@@ -264,10 +264,10 @@ define([
     {
       var view = this;
       var downtimeTimes = this.options.type === 'downtimeTimes';
-      var totalIndoor = 0;
-      var totalIndoorWorkerCount = 0;
-      var totalOutdoor = 0;
-      var totalOutdoorWorkerCount = 0;
+      var totalIndoorH = 0;
+      var totalIndoorManH = 0;
+      var totalOutdoorH = 0;
+      var totalOutdoorManH = 0;
 
       for (var i = 0; i < points.length; ++i)
       {
@@ -276,13 +276,13 @@ define([
 
         if (/indoor$/i.test(point.series.options.id))
         {
-          totalIndoor += point.y;
-          totalIndoorWorkerCount += workerCount;
+          totalIndoorH += point.y;
+          totalIndoorManH += point.y * workerCount;
         }
         else
         {
-          totalOutdoor += point.y;
-          totalOutdoorWorkerCount += workerCount;
+          totalOutdoorH += point.y;
+          totalOutdoorManH += point.y * workerCount;
         }
 
         rows[i].extraColumns = downtimeTimes ? view.createManHourTooltipColumns(point.y, workerCount) : '';
@@ -290,36 +290,36 @@ define([
 
       var valueSuffix = downtimeTimes ? this.i18n.hourSuffix : '';
       var valueDecimals = downtimeTimes ? 2 : 0;
-      var total = totalIndoor + totalOutdoor;
-      var totalWorkerCount = totalIndoorWorkerCount + totalOutdoorWorkerCount;
+      var totalH = totalIndoorH + totalOutdoorH;
+      var totalManH = totalIndoorManH + totalOutdoorManH;
 
       rows.push({
         color: '#000',
         name: t('reports', '7:series:indoor:total'),
         suffix: valueSuffix,
         decimals: valueDecimals,
-        value: totalIndoor,
-        extraColumns: downtimeTimes ? this.createManHourTooltipColumns(totalIndoor, totalIndoorWorkerCount) : ''
+        value: totalIndoorH,
+        extraColumns: downtimeTimes ? this.createManHourTooltipColumns(totalIndoorManH) : ''
       }, {
         color: '#000',
         name: t('reports', '7:series:outdoor:total'),
         suffix: valueSuffix,
         decimals: valueDecimals,
-        value: totalOutdoor,
-        extraColumns: downtimeTimes ? this.createManHourTooltipColumns(totalOutdoor, totalOutdoorWorkerCount) : ''
+        value: totalOutdoorH,
+        extraColumns: downtimeTimes ? this.createManHourTooltipColumns(totalOutdoorManH) : ''
       }, {
         color: '#000',
         name: t('reports', '7:series:total'),
         suffix: valueSuffix,
         decimals: valueDecimals,
-        value: total,
-        extraColumns: downtimeTimes ? this.createManHourTooltipColumns(total, totalWorkerCount) : ''
+        value: totalH,
+        extraColumns: downtimeTimes ? this.createManHourTooltipColumns(totalManH) : ''
       });
     },
 
     createManHourTooltipColumns: function(hours, workerCount)
     {
-      var value = hours * workerCount;
+      var value = hours * (workerCount || 1);
       var decimalPoint = this.i18n.decimalPoint;
       var yParts = Highcharts.numberFormat(value, 2).split(decimalPoint);
       var integer = yParts[0];
