@@ -88,6 +88,11 @@ define([
 
     changeFilter: function()
     {
+      this.model.set(this.serializeFormToQuery(), {reset: true});
+    },
+
+    serializeFormToQuery: function()
+    {
       var query = {
         statuses: this.getButtonGroupValue('statuses'),
         aors: this.$id('aors').val().split(',').filter(function(aor) { return aor.length > 0; }),
@@ -99,7 +104,7 @@ define([
         this.$id('statuses').find('.btn').click();
       }
 
-      this.model.set(query, {reset: true});
+      return query;
     },
 
     toggleCustomTimes: function()
@@ -117,14 +122,14 @@ define([
       {
         viewport.closeDialog();
 
-        this.model.setCustomTimes(data);
+        this.model.setCustomTimes(_.extend(this.serializeFormToQuery(), data));
       });
 
       this.listenToOnce(customTimesView, 'reset', function()
       {
         viewport.closeDialog();
 
-        this.model.resetCustomTimes();
+        this.model.resetCustomTimes(this.serializeFormToQuery());
       });
 
       viewport.showDialog(customTimesView, t('reports', '7:customTimes:title'));

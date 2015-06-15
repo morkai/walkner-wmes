@@ -200,9 +200,9 @@ define([
       this.set(data, {reset: true});
     },
 
-    resetCustomTimes: function()
+    resetCustomTimes: function(data)
     {
-      this.set({customTimes: false}, {reset: true});
+      this.set(_.extend(data, {customTimes: false}), {reset: true});
     },
 
     applyCustomClipTimes: function(data)
