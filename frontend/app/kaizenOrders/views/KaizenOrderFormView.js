@@ -453,15 +453,22 @@ define([
           this.parentNode.classList.toggle('has-required-select2', required);
         }
 
-        view.$('#' + this.htmlFor).prop('required', required);
+        if (!required)
+        {
+          view.$('#' + this.htmlFor).prop('required', false);
+        }
       });
 
       this.$('.message-info').toggleClass('hidden', required);
+
+      if (required)
+      {
+        this.toggleRequiredFlags();
+      }
     },
 
     toggleRequiredFlags: function()
     {
-      console.log('toggleRequiredFlags');
       this.$('.kaizenOrders-form-typePanel').each(function()
       {
         var $panel = $(this);
