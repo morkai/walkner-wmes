@@ -133,16 +133,16 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
       var failure = !!err || exitCode !== 0;
 
+      if (failure && isIgnoredResult(job, err, output))
+      {
+        failure = false;
+        err = null;
+        exitCode = 0;
+      }
+
       if (err)
       {
         sapGuiModule.error("[%s] %s", job.id, err.message);
-
-        if (isIgnoredResult(job, err.message, output))
-        {
-          failure = false;
-          err = null;
-          exitCode = null;
-        }
       }
       else
       {
@@ -178,17 +178,14 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
     done(err, exitCode, output);
   }
 
-  function isIgnoredResult(job, error, output)
+  function isIgnoredResult(job, err, output)
   {
-    if (!Array.isArray(job.ignoredErrors))
+    if (!Array.isArray(job.ignoredResults))
     {
       return false;
     }
 
-    if (!_.isString(error))
-    {
-      error = '';
-    }
+    var error = err && err.message ? err.message : '';
 
     if (!_.isString(output))
     {
