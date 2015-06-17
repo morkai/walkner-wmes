@@ -300,6 +300,11 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       documentsMap[document.nc15] = document.name;
     });
 
+    if (!_.isString(productName) || productName === '')
+    {
+      return documentsMap;
+    }
+
     _.forEach(module.settings.extra, function(extra)
     {
       if (productName.indexOf(extra.pattern) !== -1)
