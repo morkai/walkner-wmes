@@ -33,6 +33,7 @@
   "unlockDialog:error:INVALID_PASSWORD": "Nieprawidłowe hasło!",
   "unlockDialog:error:NO_PRIVILEGES": "Brak wymaganych uprawnień!",
   "unlockDialog:error:ALREADY_UNLOCKED": "Linia produkcyjna jest aktualnie uruchomiona na innym komputerze!",
+  "unlockDialog:error:DEACTIVATED": "Linia produkcyjna jest dezaktywowana!",
 
   "section:data": "Dane produkcyjne",
   "section:history": "Historia",

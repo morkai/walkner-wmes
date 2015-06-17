@@ -34,6 +34,7 @@
     "unlockDialog:error:INVALID_PASSWORD": "Invalid password!",
     "unlockDialog:error:NO_PRIVILEGES": "Insufficient privileges!",
     "unlockDialog:error:ALREADY_UNLOCKED": "Production line is currently running on a different computer!",
+    "unlockDialog:error:DEACTIVATED": "Production line is deactivated!",
 
     "section:data": "Production data",
     "section:history": "History",

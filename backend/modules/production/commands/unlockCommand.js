@@ -35,6 +35,11 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
         return this.done(reply, new Error('INVALID_PROD_LINE'));
       }
 
+      if (prodLine.deactivatedAt)
+      {
+        return this.done(reply, new Error('DEACTIVATED'));
+      }
+
       this.prodLine = prodLine;
 
       var prodLineState = productionModule.getProdLineState(prodLine._id);
