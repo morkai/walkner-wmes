@@ -136,6 +136,13 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       if (err)
       {
         sapGuiModule.error("[%s] %s", job.id, err.message);
+
+        if (isIgnoredResult(job, err.message, output))
+        {
+          failure = false;
+          err = null;
+          exitCode = null;
+        }
       }
       else
       {
@@ -169,6 +176,40 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
     });
 
     done(err, exitCode, output);
+  }
+
+  function isIgnoredResult(job, error, output)
+  {
+    if (!Array.isArray(job.ignoredErrors))
+    {
+      return false;
+    }
+
+    if (!_.isString(error))
+    {
+      error = '';
+    }
+
+    if (!_.isString(output))
+    {
+      output = '';
+    }
+
+    for (var i = 0; i < job.ignoredResults.length; ++i)
+    {
+      var ignoredResult = job.ignoredResults[i];
+
+      if (_.isString(ignoredResult) && (_.includes(error, ignoredResult) || _.includes(output, ignoredResult)))
+      {
+        return true;
+      }
+      else if (_.isRegExp(ignoredResult) && (ignoredResult.test(error) || ignoredResult.test(output)))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   app.broker.subscribe('app.started').setLimit(1).on('message', function()
