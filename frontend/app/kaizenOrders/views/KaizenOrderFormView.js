@@ -329,6 +329,11 @@ define([
         {
           var rqlQuery = setUpUserSelect2.defaultRqlQueryProvider(rql, term);
 
+          if (user.data.super || (_.isString(user.data.prodFunction) && /director/.test(user.data.prodFunction)))
+          {
+            return rqlQuery;
+          }
+
           rqlQuery.selector.args.push({
             name: 'in',
             args: ['prodFunction', ['master', 'manager']]
