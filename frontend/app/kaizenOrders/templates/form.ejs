@@ -15,17 +15,20 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:subject') %></label>
-        <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required>
+        <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required placeholder="<%- t('kaizenOrders', 'FORM:help:subject') %>">
       </div>
       <div class="row">
         <div class="form-group col-lg-4 has-required-select2">
           <label for="<%- idPrefix %>-section" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:section') %></label>
-          <input id="<%- idPrefix %>-section" type="text" name="section" required>
+          <input id="<%- idPrefix %>-section" type="text" name="section" required placeholder="<%- t('kaizenOrders', 'FORM:help:section') %>">
         </div>
         <div class="form-group col-lg-8 has-required-select2">
           <label for="<%- idPrefix %>-confirmer" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:confirmer') %></label>
-          <input id="<%- idPrefix %>-confirmer" type="text" name="confirmer" required>
+          <input id="<%- idPrefix %>-confirmer" type="text" name="confirmer" required placeholder="<%- t('kaizenOrders', 'FORM:help:confirmer') %>">
         </div>
+      </div>
+      <div id="<%- idPrefix %>-chooseTypes" class="message message-inline message-info">
+        <p><%- t('kaizenOrders', 'FORM:MSG:chooseTypes', {gender: user.data.gender}) %></p>
       </div>
       <div id="<%- idPrefix %>-panel-nearMiss" class="panel panel-default kaizenOrders-form-typePanel is-collapsed" data-type="nearMiss" data-expanded-class="panel-danger">
         <div class="panel-heading" role="togglePanel" tabindex="0">
@@ -39,10 +42,7 @@
           <div id="<%- idPrefix %>-eventDateAreaRow" class="row">
             <div class="form-group col-lg-2">
               <label for="<%- idPrefix %>-eventDate" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:eventDate') %></label>
-              <div class=" form-group-datetime">
-                <input id="<%- idPrefix %>-eventDate" class="form-control" name="eventDate" type="date" placeholder="<%- t('core', 'placeholder:date') %>">
-                <input id="<%- idPrefix %>-eventTime" class="form-control" name="eventTime" type="time" step="60" placeholder="<%- t('core', 'placeholder:time') %>">
-              </div>
+              <input id="<%- idPrefix %>-eventDate" class="form-control" name="eventDate" type="date" placeholder="<%- t('core', 'placeholder:date') %>">
             </div>
             <div class="form-group col-lg-10 has-required-select2">
               <label for="<%- idPrefix %>-area" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:area') %></label>
@@ -53,7 +53,7 @@
             <label for="<%- idPrefix %>-description" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:description') %></label>
             <textarea id="<%- idPrefix %>-description" class="form-control" name="description" rows="3"></textarea>
           </div>
-          <div id="<%- idPrefix %>-nearMissOptional" class="message message-inline message-info">
+          <div id="<%- idPrefix %>-nearMissOptional" class="message message-inline message-info kaizenOrders-form-msg-optional">
             <p><%- t('kaizenOrders', 'FORM:MSG:optional', {gender: user.data.gender}) %></p>
           </div>
           <div id="<%- idPrefix %>-causeTextFormGroup" class="form-group">
@@ -93,7 +93,7 @@
             <label for="<%- idPrefix %>-suggestion" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:suggestion') %></label>
             <textarea id="<%- idPrefix %>-suggestion" class="form-control" name="suggestion" rows="3"></textarea>
           </div>
-          <div id="<%- idPrefix %>-suggestionOptional" class="message message-inline message-info">
+          <div id="<%- idPrefix %>-suggestionOptional" class="message message-inline message-info kaizenOrders-form-msg-optional">
             <p><%- t('kaizenOrders', 'FORM:MSG:optional', {gender: user.data.gender}) %></p>
           </div>
           <div id="<%- idPrefix %>-suggestionCategoryFormGroup" class="form-group">
@@ -163,7 +163,7 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-subscribers" class="control-label"><%- t('kaizenOrders', 'PROPERTY:subscribers') %></label>
         <input id="<%- idPrefix %>-subscribers" type="text" name="subscribers">
-        <p class="help-block"><%- t('kaizenOrders', 'FORM:MSG:subscribers') %></p>
+        <p class="help-block"><%- t('kaizenOrders', 'FORM:help:subscribers') %></p>
       </div>
       <% if (editMode) { %>
       <div class="form-group kaizenOrders-form-comment">

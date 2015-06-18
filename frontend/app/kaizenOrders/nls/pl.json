@@ -15,7 +15,7 @@
   "MSG:comment:failure": "Nie udało się skomentować zgłoszenia :(",
 
   "PAGE_ACTION:add": "Dodaj zgłoszenie",
-  "PAGE_ACTION:edit": "Edytuj zgłoszenie",
+  "PAGE_ACTION:edit": "Zapisz",
   "PAGE_ACTION:delete": "Usuń zgłoszenie",
   "PAGE_ACTION:markAsSeen": "Oznacz jako przeczytane",
   "PAGE_ACTION:observe": "Obserwuj zgłoszenie",
@@ -115,8 +115,12 @@
   "FORM:ERROR:onlyKaizen": "Kaizen wymaga ZPW lub Sugestii!",
   "FORM:ERROR:upload": "Nie udało się załadować załączników :(",
   "FORM:MSG:optional": "Poniższe pola są opcjonalne. Pozostaw je puste, jeżeli nie jesteś {gender, select, female{pewna} other{pewien}} co w nich wpisać.",
+  "FORM:MSG:chooseTypes": "Wybierz typy zgłoszenia (ZPW, Sugestia, Kaizen) klikając na poniższe belki. Zgłoszenie może mieć w tym samym czasie dowolną kombinację typów.",
   "FORM:MSG:attachmentEdit": "Wybierz nowe pliki tylko wtedy, gdy chcesz nadpisać już istniejące.",
-  "FORM:MSG:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
+  "FORM:help:subject": "Wpisz krótki opis podsumowujący...",
+  "FORM:help:section": "Wybierz swój dział...",
+  "FORM:help:confirmer": "Wyszukaj swojego przełożonego po nazwisku lub nr kadrowym...",
+  "FORM:help:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zgłoszenia",
   "ACTION_FORM:BUTTON:delete": "Usuń zgłoszenie",

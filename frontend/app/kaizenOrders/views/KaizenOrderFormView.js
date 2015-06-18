@@ -405,6 +405,7 @@ define([
       this.toggleSubmit();
       this.moveFields();
       this.toggleRequiredFlags();
+      this.toggleChooseTypesMsg();
 
       $panel.find('.panel-body').stop(false, false).slideUp('fast');
 
@@ -422,6 +423,7 @@ define([
       this.toggleSubmit();
       this.moveFields();
       this.toggleRequiredFlags();
+      this.toggleChooseTypesMsg();
 
       var $panelBody = $panel.find('.panel-body').stop(false, false);
 
@@ -459,7 +461,7 @@ define([
         }
       });
 
-      this.$('.message-info').toggleClass('hidden', required);
+      this.$('.kaizenOrders-form-msg-optional').toggleClass('hidden', required);
 
       if (required)
       {
@@ -479,6 +481,11 @@ define([
           $panel.find('#' + this.htmlFor).prop('required', required);
         });
       });
+    },
+
+    toggleChooseTypesMsg: function()
+    {
+      this.$id('chooseTypes').toggleClass('hidden', this.$('.kaizenOrders-form-typePanel.is-expanded').length > 0);
     },
 
     toggleStatuses: function()
