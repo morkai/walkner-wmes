@@ -112,11 +112,6 @@ define([
 
     checkValidity: function(formData)
     {
-      if (formData.types.length === 1 && _.contains(formData.types, 'kaizen'))
-      {
-        return this.showErrorMessage(t('kaizenOrders', 'FORM:ERROR:onlyKaizen'));
-      }
-
       return true;
     },
 
