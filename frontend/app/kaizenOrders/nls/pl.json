@@ -31,7 +31,7 @@
   "PROPERTY:rid": "ID",
   "PROPERTY:types": "Rodzaj",
   "PROPERTY:subject": "Temat zgłoszenia",
-  "PROPERTY:eventDate": "Czas zdarzenia",
+  "PROPERTY:eventDate": "Data zdarzenia",
   "PROPERTY:area": "Miejsce zdarzenia",
   "PROPERTY:cause": "Kategoria przyczyny",
   "PROPERTY:causeText": "Przyczyna wystąpienia zdarzenia",
