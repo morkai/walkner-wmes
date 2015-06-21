@@ -207,11 +207,14 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
 
         document.localFilePath = path.join(docsModule.config.cachedPath, fileName);
 
+        var writeStream = fs.createWriteStream(document.localFilePath);
+        writeStream.on('error', onWriteStreamError);
+
         request
           .get(document.url)
           .on('error', next)
           .on('end', next)
-          .pipe(fs.createWriteStream(document.localFilePath));
+          .pipe(writeStream);
       }
     },
     function combineDocumentFilesStep(err)
@@ -286,4 +289,9 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
       this.orderDocumentStatus = null;
     }
   );
+
+  function onWriteStreamError(err)
+  {
+    docsModule.error("Write stream error: %s", err.message);
+  }
 };
