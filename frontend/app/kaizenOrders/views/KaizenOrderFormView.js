@@ -174,7 +174,7 @@ define([
       if (eventDate)
       {
         formData.eventDate = eventDate.format('YYYY-MM-DD');
-        formData.eventTime = eventDate.format('HH:mm');
+        formData.eventTime = eventDate.format('H');
       }
       else
       {
@@ -228,18 +228,34 @@ define([
         formData[property] = dateMoment.isValid() ? dateMoment.toISOString() : null;
       });
 
-      var eventTimeMatches = (formData.eventTime || '').match(/([0-9]{1,2}):([0-9]{1,2})/);
+      var eventTimeMatches = (formData.eventTime || '').match(/([0-9]{1,2})[^0-9]*([0-9]{1,2})?/);
       var eventTime = '00:00';
 
       delete formData.eventTime;
 
       if (eventTimeMatches)
       {
-        eventTime = (eventTimeMatches[1].length === 1 ? '0' : '') + eventTimeMatches[1]
-          + ':' + (eventTimeMatches[2].length === 1 ? '0' : '') + eventTimeMatches[2];
+        var hours = eventTimeMatches[1];
+        var minutes = eventTimeMatches[2];
+
+        eventTime = (hours.length === 1 ? '0' : '') + hours + ':';
+
+        if (minutes)
+        {
+          eventTime += (minutes.length === 1 ? '0' : '') + minutes;
+        }
+        else
+        {
+          eventTime += '00';
+        }
       }
 
       var eventDate = time.getMoment(formData.eventDate + ' ' + eventTime, 'YYYY-MM-DD HH:mm');
+
+      if (!eventDate.isValid())
+      {
+        eventDate = time.getMoment(formData.eventDate, 'YYYY-MM-DD');
+      }
 
       formData.eventDate = eventDate.isValid() ? eventDate.toISOString() : null;
 

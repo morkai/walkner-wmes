@@ -69,7 +69,9 @@ define([
       }).join(' ');
 
       obj.status = t('kaizenOrders', 'status:' + obj.status);
-      obj.eventDate = !obj.eventDate ? null : time.format(obj.eventDate, longDateTime ? 'LL' : 'YY-MM-DD');
+      obj.eventDate = !obj.eventDate
+        ? null
+        : time.format(obj.eventDate, t('kaizenOrders', 'PROPERTY:eventDate:' + (longDateTime ? 'long' : 'short')));
 
       DATE_PROPERTIES.forEach(function(dateProperty)
       {

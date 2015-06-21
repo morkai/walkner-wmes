@@ -42,7 +42,10 @@
           <div id="<%- idPrefix %>-eventDateAreaRow" class="row">
             <div class="form-group col-lg-2">
               <label for="<%- idPrefix %>-eventDate" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:eventDate') %></label>
-              <input id="<%- idPrefix %>-eventDate" class="form-control" name="eventDate" type="date" placeholder="<%- t('core', 'placeholder:date') %>">
+              <div class=" form-group-datetime">
+                <input id="<%- idPrefix %>-eventDate" class="form-control" name="eventDate" type="date">
+                <input id="<%- idPrefix %>-eventTime" class="form-control" name="eventTime" type="text" placeholder="<%- t('kaizenOrders', 'FORM:MSG:eventTime') %>">
+              </div>
             </div>
             <div class="form-group col-lg-10 has-required-select2">
               <label for="<%- idPrefix %>-area" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:area') %></label>
