@@ -3,10 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/core/views/FilterView',
   '../XiconfProgram',
   'app/xiconfPrograms/templates/filter'
 ], function(
+  _,
   FilterView,
   XiconfProgram,
   filterTemplate

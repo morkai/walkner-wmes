@@ -110,7 +110,7 @@ define([
       });
     },
 
-    checkValidity: function(formData)
+    checkValidity: function()
     {
       return true;
     },
