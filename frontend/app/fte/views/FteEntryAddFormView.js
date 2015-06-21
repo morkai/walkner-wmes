@@ -47,7 +47,8 @@ define([
         orgUnit: ORG_UNIT.SUBDIVISION,
         divisionFilter: this.options.divisionFilter,
         allowClear: true,
-        noGrid: true
+        noGrid: true,
+        required: true
       });
 
       this.setView('.orgUnitDropdowns-container', this.oudView);

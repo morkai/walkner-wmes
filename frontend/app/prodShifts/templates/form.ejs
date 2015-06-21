@@ -5,15 +5,15 @@
     <div class="panel-body">
       <div class="row">
         <div class="form-group col-md-4 has-required-select2">
-          <label for="<%- idPrefix %>-prodLine" class="control-label"><%- t('prodShifts', 'PROPERTY:prodLine') %></label>
+          <label for="<%- idPrefix %>-prodLine" class="control-label is-required"><%- t('prodShifts', 'PROPERTY:prodLine') %></label>
           <input id="<%- idPrefix %>-prodLine" type="text" name="prodLine" required>
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-date" class="control-label"><%- t('prodShifts', 'PROPERTY:date') %></label>
+          <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('prodShifts', 'PROPERTY:date') %></label>
           <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2013-12-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-shift-1" class="control-label"><%- t('prodShifts', 'PROPERTY:shift') %></label>
+          <label for="<%- idPrefix %>-shift-1" class="control-label is-required"><%- t('prodShifts', 'PROPERTY:shift') %></label>
           <div>
             <label class="radio-inline"><input id="<%- idPrefix %>-shift-1" name="shift" type="radio" value="1" checked required> <%- t('core', 'SHIFT:1') %></label>
             <label class="radio-inline"><input name="shift" type="radio" value="2" required> <%- t('core', 'SHIFT:2') %></label>

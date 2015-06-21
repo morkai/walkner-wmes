@@ -47,7 +47,8 @@ define([
         orgUnit: ORG_UNIT.DIVISION,
         divisionFilter: function(division) { return division.get('type') === 'prod'; },
         allowClear: true,
-        noGrid: true
+        noGrid: true,
+        required: true
       });
 
       this.setView('.orgUnitDropdowns-container', this.oudView);

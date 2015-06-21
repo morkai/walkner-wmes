@@ -20,11 +20,11 @@
       <% if (!editMode) { %>
       <div class="row">
         <div class="form-group col-md-4 has-required-select2">
-          <label for="<%- idPrefix %>-reason" class="control-label"><%- t('prodDowntimes', 'PROPERTY:reason') %></label>
+          <label for="<%- idPrefix %>-reason" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:reason') %></label>
           <input id="<%- idPrefix %>-reason" type="text" name="reason" required>
         </div>
         <div class="form-group col-md-4 has-required-select2">
-          <label for="<%- idPrefix %>-aor" class="control-label"><%- t('prodDowntimes', 'PROPERTY:aor') %></label>
+          <label for="<%- idPrefix %>-aor" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:aor') %></label>
           <input id="<%- idPrefix %>-aor" type="text" name="aor" required>
         </div>
       </div>
@@ -34,14 +34,14 @@
       </div>
       <% } %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-startedAtDate" class="control-label"><%- t('prodDowntimes', 'PROPERTY:startedAt') %></label>
+        <label for="<%- idPrefix %>-startedAtDate" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:startedAt') %></label>
         <div class=" form-group-datetime">
           <input id="<%- idPrefix %>-startedAtDate" class="form-control" name="startedAtDate" type="date" required>
           <input id="<%- idPrefix %>-startedAtTime" class="form-control" name="startedAtTime" type="time" required step="1">
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-finishedAtDate" class="control-label"><%- t('prodDowntimes', 'PROPERTY:finishedAt') %></label>
+        <label for="<%- idPrefix %>-finishedAtDate" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:finishedAt') %></label>
         <div class=" form-group-datetime">
           <input id="<%- idPrefix %>-finishedAtDate" class="form-control" name="finishedAtDate" type="date" required>
           <input id="<%- idPrefix %>-finishedAtTime" class="form-control" name="finishedAtTime" type="time" required step="1">
@@ -49,7 +49,7 @@
       </div>
       <% if (!editMode) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-status" class="control-label"><%- t('prodDowntimes', 'PROPERTY:status') %></label>
+        <label for="<%- idPrefix %>-status" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:status') %></label>
         <div class="radio">
           <label><input type="radio" name="status" value="undecided" required> <%- t('prodDowntimes', 'PROPERTY:status:undecided') %></label>
         </div>

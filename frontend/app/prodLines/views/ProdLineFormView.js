@@ -24,7 +24,8 @@ define([
       FormView.prototype.initialize.call(this);
 
       this.orgUnitDropdownsView = new OrgUnitDropdownsView({
-        orgUnit: OrgUnitDropdownsView.ORG_UNIT.WORK_CENTER
+        orgUnit: OrgUnitDropdownsView.ORG_UNIT.WORK_CENTER,
+        required: true
       });
 
       this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);

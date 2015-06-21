@@ -4,20 +4,20 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-id" class="control-label"><%- t('downtimeReasons', 'PROPERTY:_id') %></label>
+        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- t('downtimeReasons', 'PROPERTY:_id') %></label>
         <input id="<%- idPrefix %>-id" class="form-control" type="text" name="_id" autofocus required maxlength="50" pattern="^[a-zA-Z][a-zA-Z_-]*$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-label" class="control-label"><%- t('downtimeReasons', 'PROPERTY:label') %></label>
+        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('downtimeReasons', 'PROPERTY:label') %></label>
         <input id="<%- idPrefix %>-label" class="form-control" type="text" name="label" required maxlength="100">
       </div>
       <div class="row">
         <div class="col-md-2 form-group">
-          <label for="<%- idPrefix %>-type-maintenance" class="control-label"><%- t('downtimeReasons', 'PROPERTY:type') %></label>
+          <label for="<%- idPrefix %>-type-maintenance" class="control-label is-required"><%- t('downtimeReasons', 'PROPERTY:type') %></label>
           <% ['maintenance', 'renovation', 'malfunction', 'adjusting', 'break', 'otherWorks', 'other'].forEach(function(type) { %>
           <div class="radio">
             <label>
-              <input id="<%- idPrefix %>-type-<%- type %>" type="radio" name="type" value="<%- type %>">
+              <input id="<%- idPrefix %>-type-<%- type %>" type="radio" name="type" value="<%- type %>" required>
               <%- t('downtimeReasons', 'type:' + type) %>
             </label>
           </div>
@@ -39,11 +39,11 @@
           </div>
         </div>
         <div class="col-md-2 form-group">
-          <label for="<%- idPrefix %>-scheduled-true" class="control-label"><%- t('downtimeReasons', 'PROPERTY:scheduled') %></label>
+          <label for="<%- idPrefix %>-scheduled-true" class="control-label is-required"><%- t('downtimeReasons', 'PROPERTY:scheduled') %></label>
           <% ['true', 'false', 'null'].forEach(function(scheduled) { %>
           <div class="radio">
             <label>
-              <input id="<%- idPrefix %>-scheduled-<%- scheduled %>" type="radio" name="scheduled" value="<%- scheduled %>">
+              <input id="<%- idPrefix %>-scheduled-<%- scheduled %>" type="radio" name="scheduled" value="<%- scheduled %>" required>
               <%- t('core', 'BOOL:' + scheduled) %>
             </label>
           </div>

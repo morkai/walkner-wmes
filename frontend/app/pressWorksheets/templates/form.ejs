@@ -19,18 +19,18 @@
         </label>
       </div>
       <div class="row">
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-operators" class="control-label"><%- t('pressWorksheets', 'PROPERTY:operators') %></label>
+        <div class="col-md-3 form-group has-required-select2">
+          <label for="<%- idPrefix %>-operators" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:operators') %></label>
           <input id="<%- idPrefix %>-operators" type="text" name="operators" required>
         </div>
         <div class="col-md-3 pressWorksheets-form-dateAndShift">
           <div class="row">
             <div class="col-md-6 form-group">
-              <label for="<%- idPrefix %>-date" class="control-label"><%- t('pressWorksheets', 'PROPERTY:date') %></label>
+              <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:date') %></label>
               <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required>
             </div>
             <div class="col-md-6 form-group pressWorksheets-form-group-shift">
-              <label for="<%- idPrefix %>-shift-1"><%- t('pressWorksheets', 'PROPERTY:shift') %></label>
+              <label for="<%- idPrefix %>-shift-1" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:shift') %></label>
               <div class="pressWorksheets-form-group-shift-checkboxes">
                 <label class="radio-inline"><input id="<%- idPrefix %>-shift-1" name="shift" type="radio" value="1" checked> <%- t('core', 'SHIFT:1') %></label>
                 <label class="radio-inline"><input name="shift" type="radio" value="2"> <%- t('core', 'SHIFT:2') %></label>
@@ -39,12 +39,12 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-operator" class="control-label"><%- t('pressWorksheets', 'PROPERTY:operator') %></label>
+        <div class="col-md-3 form-group has-required-select2">
+          <label for="<%- idPrefix %>-operator" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:operator') %></label>
           <input id="<%- idPrefix %>-operator" type="text" name="operator" required>
         </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-master" class="control-label"><%- t('pressWorksheets', 'PROPERTY:master') %></label>
+        <div class="col-md-3 form-group has-required-select2">
+          <label for="<%- idPrefix %>-master" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:master') %></label>
           <input id="<%- idPrefix %>-master" type="text" name="master" required>
         </div>
       </div>

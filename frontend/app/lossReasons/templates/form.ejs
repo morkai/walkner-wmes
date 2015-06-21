@@ -4,16 +4,16 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-id" class="control-label"><%- t('lossReasons', 'PROPERTY:_id') %></label>
+        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- t('lossReasons', 'PROPERTY:_id') %></label>
         <input id="<%- idPrefix %>-id" class="form-control" type="text" name="_id" autofocus required maxlength="50">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-label" class="control-label"><%- t('lossReasons', 'PROPERTY:label') %></label>
+        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('lossReasons', 'PROPERTY:label') %></label>
         <input id="<%- idPrefix %>-label" class="form-control" type="text" name="label" required maxlength="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-position" class="control-label"><%- t('lossReasons', 'PROPERTY:position') %></label>
-        <input id="<%- idPrefix %>-position" class="form-control small" type="number" name="position" min="0">
+        <label for="<%- idPrefix %>-position" class="control-label is-required"><%- t('lossReasons', 'PROPERTY:position') %></label>
+        <input id="<%- idPrefix %>-position" class="form-control small" type="number" name="position" min="0" required>
       </div>
     </div>
     <div class="panel-footer">

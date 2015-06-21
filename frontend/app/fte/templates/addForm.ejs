@@ -5,11 +5,11 @@
   <div class="panel-body">
     <div class="form-group orgUnitDropdowns-container"></div>
     <div class="form-group">
-      <label for="<%- idPrefix %>-date" class="control-label"><%- t('fte', 'property:date') %></label>
+      <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('fte', 'property:date') %></label>
       <input id="<%- idPrefix %>-date" class="form-control" type="date" value="<%- date %>" max="<%- date %>" min="2013-12-01" required>
     </div>
     <div class="form-group">
-      <label for="<%- idPrefix %>-shift-any"><%- t('fte', 'property:shift') %></label>
+      <label for="<%- idPrefix %>-shift-any" class="control-label is-required"><%- t('fte', 'property:shift') %></label>
       <div class="filter-radio-group">
         <% [1, 2, 3].forEach(function(shiftNo) { %>
         <label class="radio-inline">

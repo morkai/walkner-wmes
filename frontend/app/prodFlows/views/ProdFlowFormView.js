@@ -25,7 +25,8 @@ define([
 
       this.orgUnitDropdownsView = new OrgUnitDropdownsView({
         orgUnit: OrgUnitDropdownsView.ORG_UNIT.MRP_CONTROLLER,
-        multiple: true
+        multiple: true,
+        required: true
       });
 
       this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);

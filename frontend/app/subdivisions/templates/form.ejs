@@ -5,7 +5,7 @@
     <div class="panel-body">
       <div class="orgUnitDropdowns-container"></div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-type" class="control-label"><%- t('subdivisions', 'PROPERTY:type') %></label>
+        <label for="<%- idPrefix %>-type" class="control-label is-required"><%- t('subdivisions', 'PROPERTY:type') %></label>
         <div class="radio">
           <label><input type="radio" name="type" value="assembly" checked> <%- t('subdivisions', 'TYPE:assembly') %></label>
         </div>
@@ -27,7 +27,7 @@
         <label for="<%- idPrefix %>-prodTaskTags" class="control-label"><%- t('subdivisions', 'PROPERTY:prodTaskTags') %></label>
         <input id="<%- idPrefix %>-prodTaskTags" type="text" name="prodTaskTags" value="">
       </div>
-      <div class="form-group has-required-select2">
+      <div class="form-group">
         <label for="<%- idPrefix %>-aor" class="control-label"><%- t('subdivisions', 'PROPERTY:aor') %></label>
         <input id="<%- idPrefix %>-aor" type="text" name="aor" value="" placeholder="<%- t('subdivisions', 'FORM:PLACEHOLDER:aor') %>">
       </div>

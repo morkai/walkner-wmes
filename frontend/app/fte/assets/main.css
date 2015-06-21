@@ -240,4 +240,5 @@ textarea.fte-leaderEntry-comment:focus {
 }
 .fte-addForm .filter-radio-group {
   height: auto;
+  margin-top: 0;
 }
