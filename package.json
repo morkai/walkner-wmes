@@ -17,6 +17,10 @@
       "backend": 79,
       "frontend": 89,
       "importer": 2
+    },
+    "kaizen": {
+      "backend": 1,
+      "frontend": 1
     }
   },
   "description": "Wannabe MES application in Node.js.",

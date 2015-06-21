@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label"><%- t('subdivisions', 'PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('subdivisions', 'PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required maxlength="150">
       </div>
       <div class="form-group">
@@ -28,8 +28,8 @@
         <input id="<%- idPrefix %>-prodTaskTags" type="text" name="prodTaskTags" value="">
       </div>
       <div class="form-group has-required-select2">
-        <label for="<%- idPrefix %>-aor" class="control-label is-required"><%- t('subdivisions', 'PROPERTY:aor') %></label>
-        <input id="<%- idPrefix %>-aor" type="text" name="aor" value="" placeholder="<%- t('subdivisions', 'FORM:PLACEHOLDER:aor') %>" required>
+        <label for="<%- idPrefix %>-aor" class="control-label"><%- t('subdivisions', 'PROPERTY:aor') %></label>
+        <input id="<%- idPrefix %>-aor" type="text" name="aor" value="" placeholder="<%- t('subdivisions', 'FORM:PLACEHOLDER:aor') %>">
       </div>
     </div>
     <div class="panel-footer">

@@ -1,20 +1,20 @@
 {
-  "BREADCRUMBS:browse": "Funkcje na produkcji",
+  "BREADCRUMBS:browse": "Funkcje",
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie funkcji na produkcji nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie funkcji na produkcji nie powiodło się :(",
-  "MSG:DELETED": "Funkcja na produkcji <em>{label}</em> została usunięta.",
+  "MSG:LOADING_FAILURE": "Ładowanie funkcji nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie funkcji nie powiodło się :(",
+  "MSG:DELETED": "Funkcja <em>{label}</em> została usunięta.",
 
-  "PAGE_ACTION:add": "Dodaj funkcję na produkcji",
-  "PAGE_ACTION:edit": "Edytuj funkcję na produkcji",
-  "PAGE_ACTION:delete": "Usuń funkcję na produkcji",
+  "PAGE_ACTION:add": "Dodaj funkcję",
+  "PAGE_ACTION:edit": "Edytuj funkcję",
+  "PAGE_ACTION:delete": "Usuń funkcję",
 
-  "PANEL:TITLE:details": "Szczegóły funkcji na produkcji",
-  "PANEL:TITLE:addForm": "Formularz dodawania funkcji na produkcji",
-  "PANEL:TITLE:editForm": "Formularz edycji funkcji na produkcji",
+  "PANEL:TITLE:details": "Szczegóły funkcji",
+  "PANEL:TITLE:addForm": "Formularz dodawania funkcji",
+  "PANEL:TITLE:editForm": "Formularz edycji funkcji",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:label": "Opis",
@@ -28,14 +28,14 @@
   "direct:true": "DIRECT",
   "direct:false": "INDIRECT",
 
-  "FORM:ACTION:add": "Dodaj funkcję na produkcji",
-  "FORM:ACTION:edit": "Edytuj funkcję na produkcji",
-  "FORM:ERROR:addFailure": "Nie udało się dodać funkcji na produkcji :-(",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować funkcji na produkcji :-(",
+  "FORM:ACTION:add": "Dodaj funkcję",
+  "FORM:ACTION:edit": "Edytuj funkcję",
+  "FORM:ERROR:addFailure": "Nie udało się dodać funkcji :-(",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować funkcji :-(",
 
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia funkcji na produkcji",
-  "ACTION_FORM:BUTTON:delete": "Usuń funkcję na produkcji",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną funkcję na produkcji?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć funkcję na produkcji <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć funkcji na produkcji :-("
+  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia funkcji",
+  "ACTION_FORM:BUTTON:delete": "Usuń funkcję",
+  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną funkcję?",
+  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć funkcję <em>{label}</em>?",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć funkcji :-("
 }

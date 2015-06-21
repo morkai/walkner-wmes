@@ -1,0 +1,41 @@
+<div class="navbar-inner">
+  <% include ../../core/templates/navbar/left.ejs %>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+      <li><a href="#"><%- t('core', 'NAVBAR:DASHBOARD') %></a>
+      <li data-online data-privilege="EVENTS:VIEW" data-module><a href="#events"><%- t('core', 'NAVBAR:EVENTS') %></a>
+      <li data-online data-loggedin class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown">
+          <%- t('core', 'NAVBAR:KAIZEN') %>
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:ORDERS') %>
+          <li data-module><a href="#kaizen/orders"><%- t('core', 'NAVBAR:KAIZEN:ALL') %></a>
+          <li data-module><a href="#kaizen/orders?observers.user.id=mine&sort(-createdAt)&limit(15)"><%- t('core', 'NAVBAR:KAIZEN:MINE') %></a>
+          <li data-module><a href="#kaizen/orders?observers.user.id=unseen&sort(-createdAt)&limit(15)"><%- t('core', 'NAVBAR:KAIZEN:UNSEEN') %></a>
+          <li class="divider">
+          <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:DICTIONARIES') %>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module><a href="#kaizen/sections"><%- t('core', 'NAVBAR:KAIZEN:SECTIONS') %></a>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module><a href="#kaizen/areas"><%- t('core', 'NAVBAR:KAIZEN:AREAS') %></a>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module><a href="#kaizen/categories"><%- t('core', 'NAVBAR:KAIZEN:CATEGORIES') %></a>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module><a href="#kaizen/causes"><%- t('core', 'NAVBAR:KAIZEN:CAUSES') %></a>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module><a href="#kaizen/risks"><%- t('core', 'NAVBAR:KAIZEN:RISKS') %></a>
+        </ul>
+      <li data-online class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown">
+          <%- t('core', 'NAVBAR:DICTIONARIES') %>
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li data-privilege="USERS:VIEW" data-module><a href="#users"><%- t('core', 'NAVBAR:USERS') %></a>
+          <li class="divider">
+          <li data-privilege="DICTIONARIES:VIEW" data-module><a href="#companies"><%- t('core', 'NAVBAR:COMPANIES') %></a>
+          <li data-privilege="DICTIONARIES:VIEW" data-module><a href="#prodFunctions"><%- t('core', 'NAVBAR:PROD_FUNCTIONS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW" data-module><a href="#divisions"><%- t('core', 'NAVBAR:DIVISIONS') %></a>
+          <li data-privilege="DICTIONARIES:VIEW" data-module><a href="#subdivisions"><%- t('core', 'NAVBAR:SUBDIVISIONS') %></a>
+        </ul>
+    </ul>
+    <% include ../../core/templates/navbar/right.ejs %>
+  </div>
+</div>

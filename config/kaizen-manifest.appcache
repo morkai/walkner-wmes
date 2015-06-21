@@ -1,0 +1,16 @@
+CACHE MANIFEST
+# {version}
+
+CACHE:
+/vendor/require/require.js
+/vendor/font-awesome/fonts/fontawesome-webfont.woff?v=4.2.0
+/vendor/moment/lang/pl.js
+/vendor/select2-lang/pl.js
+/vendor/socket.io.js
+/config.js
+{mainJsFile}
+/main.js
+{mainCssFile}
+
+NETWORK:
+*
