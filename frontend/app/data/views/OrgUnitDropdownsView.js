@@ -226,21 +226,29 @@ define([
     createDropdownElement: function(orgUnit, data)
     {
       var id = this.idPrefix + '-' + orgUnit;
+      var options = this.options;
       var $formGroup = $('<div class="form-group">'
-        + '<label for="' + id + '">' + t('core', 'ORG_UNIT:' + orgUnit) + '</label>'
-        + '<input id="' + id + '" name="' + orgUnit + '">'
+        + '<label for="' + id + '" class="control-label">' + t('core', 'ORG_UNIT:' + orgUnit) + '</label>'
+        + '<input id="' + id + '" name="' + orgUnit + '" type="text">'
         + '</div>');
 
-      if (this.options.noGrid !== true)
+      if (options.noGrid !== true)
       {
-        $formGroup.addClass('col-lg-' + Math.floor(12 / this.options.orgUnit));
+        $formGroup.addClass('col-lg-' + Math.floor(12 / options.orgUnit));
+      }
+
+      if (options.required === true || (options.required && options.required[orgUnit]))
+      {
+        $formGroup.addClass('has-required-select2');
+        $formGroup.find('label').addClass('is-required');
+        $formGroup.find('input').addClass('is-required').prop('required', true);
       }
 
       return $formGroup.appendTo(this.el).find('input').select2({
         data: data || [],
         placeholder: ' ',
-        allowClear: this.options.allowClear || this.options.orgUnit === ORG_UNIT.PROD_FLOW,
-        multiple: this.options.multiple && orgUnit === ORG_UNIT_NO_TO_NAME[this.options.orgUnit]
+        allowClear: options.allowClear || options.orgUnit === ORG_UNIT.PROD_FLOW,
+        multiple: options.multiple && orgUnit === ORG_UNIT_NO_TO_NAME[options.orgUnit]
       });
     },
 
