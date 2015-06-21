@@ -143,11 +143,13 @@ define([
         return;
       }
 
-      var metrics = this.model.get('metrics') || {
-          uSet: [],
-          uGet: [],
-          i: []
-        };
+      var metrics = this.model.get('metrics');
+
+      if (!metrics)
+      {
+        return;
+      }
+
       var chartData = {
         uSet: metrics.uSet,
         uGet: metrics.uGet,

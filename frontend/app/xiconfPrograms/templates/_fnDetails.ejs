@@ -2,13 +2,14 @@
   <div class="panel-heading"><%- stepIndex + 1 %>. <%- t('xiconfPrograms', 'step:fn') %></div>
   <div class="panel-details">
     <div class="props first">
+      <% if (model.type === 't24vdc') { %>
       <div class="prop">
         <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></div>
-        <div class="prop-value"><%= time.toString(step.startTime) %></div>
+        <div class="prop-value"><%= time.toString(step.startTime, false, true) %></div>
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:duration') %></div>
-        <div class="prop-value"><%= time.toString(step.duration) %></div>
+        <div class="prop-value"><%= time.toString(step.duration, false, true) %></div>
       </div>
       <div class="prop">
         <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></div>
@@ -20,9 +21,50 @@
         <div class="prop-value"><%= step.powerReq %></div>
         <% } else { %>
         <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:power') %></div>
-        <div class="prop-value"><%= step.powerMin %> ≤ <%= step.powerReq %> ≤ <%= step.powerMax %></div>
+        <div class="prop-value"><%= step.powerMin %> ≤ <strong><%= step.powerReq %></strong> ≤ <%= step.powerMax %></div>
         <% } %>
       </div>
+      <% } %>
+      <% if (model.type === 'glp2') { %>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:label') %></div>
+        <div class="prop-value"><%= step.label %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></div>
+        <div class="prop-value"><%= time.toString(step.startTime, false, true) %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:duration') %></div>
+        <div class="prop-value"><%= time.toString(step.duration, false, true) %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:mode') %></div>
+        <div class="prop-value"><%- t('xiconfPrograms', 'glp2:fn:mode:' + step.mode) %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'glp2:fn:mode:' + step.mode + ':label') %></div>
+        <div class="prop-value">
+          <% if (step.mode === 5) { %>
+          -
+          <% } else { %>
+          <% if (step.lowerToleranceRel !== 0 && step.upperToleranceRel !== 0) { %>
+          <%- (Math.round(step.setValue * ((100 - step.lowerToleranceRel) / 100) * 100) / 100).toLocaleString() %>
+          ≤ <strong><%- step.setValue.toLocaleString() %></strong>
+          ≤ <%- (Math.round(step.setValue * ((100 + step.upperToleranceRel) / 100) * 100) / 100).toLocaleString() %>
+          <% } else { %>
+          <%- step.lowerToleranceAbs.toLocaleString() %>
+          ≤ <strong><%- step.setValue.toLocaleString() %></strong>
+          ≤ <%- step.upperToleranceAbs.toLocaleString() %>
+          <% } %>
+          <% } %>
+        </div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:trigger') %></div>
+        <div class="prop-value"><%- t('xiconfPrograms', 'PROPERTY:trigger:' + step.trigger) %></div>
+      </div>
+      <% } %>
     </div>
   </div>
 </div>

@@ -1,9 +1,10 @@
-<div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-fn">
+<div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-fn xiconfPrograms-stepPanel-<%- programType %>">
   <div class="panel-heading is-with-actions">
     <span class="xiconfPrograms-form-stepNo">0.</span> <%- t('xiconfPrograms', 'step:fn') %>
     <% include _stepPanelActions.ejs %>
   </div>
-  <div class="panel-body">
+  <% if (programType === 't24vdc') { %>
+  <div class="panel-body has-lastElementRow">
     <div class="row">
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-startTime" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></label>
@@ -43,5 +44,90 @@
       </div>
     </div>
   </div>
+  <% } %>
+  <% if (programType === 'glp2') { %>
+  <div class="panel-body">
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:label') %></label>
+        <input id="<%- idPrefix %>-label" class="form-control" type="text" name="steps[<%- stepIndex %>].label" value="<%- t('xiconfPrograms', 'step:fn') %>" required maxlength="32">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-startTime" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></label>
+        <input id="<%- idPrefix %>-startTime" class="form-control xiconfPrograms-form-duration" type="text" name="steps[<%- stepIndex %>].startTime" value="5s" required>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-duration" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:duration') %></label>
+        <input id="<%- idPrefix %>-duration" class="form-control xiconfPrograms-form-duration" type="text" name="steps[<%- stepIndex %>].duration" value="5s" required>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-totalTime" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:totalTime') %></label>
+        <p class="form-control-static xiconfPrograms-form-totalTime">10s</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-mode" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:mode') %></label>
+        <select id="<%- idPrefix %>-mode" class="form-control xiconfPrograms-form-glp2-mode" name="steps[<%- stepIndex %>].mode">
+          <option value="0" data-label="glp2:fn:mode:0:label" data-min="0.01" data-max="64" data-step="0.01"><%- t('xiconfPrograms', 'glp2:fn:mode:0') %></option>
+          <option value="1" data-label="glp2:fn:mode:1:label" data-min="1" data-max="15000" data-step="1"><%- t('xiconfPrograms', 'glp2:fn:mode:1') %></option>
+          <option value="2" data-label="glp2:fn:mode:2:label" data-min="1" data-max="15000" data-step="1" selected><%- t('xiconfPrograms', 'glp2:fn:mode:2') %></option>
+          <option value="3" data-label="glp2:fn:mode:3:label" data-min="0.01" data-max="1" data-step="0.01"><%- t('xiconfPrograms', 'glp2:fn:mode:3') %></option>
+          <option value="5" data-label="glp2:fn:mode:5:label"><%- t('xiconfPrograms', 'glp2:fn:mode:5') %></option>
+          <option value="6" data-label="glp2:fn:mode:6:label" data-min="20" data-max="300" data-step="1"><%- t('xiconfPrograms', 'glp2:fn:mode:6') %></option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-setValue" class="control-label is-required"><%- t('xiconfPrograms', 'glp2:fn:mode:5:label') %></label>
+        <input id="<%- idPrefix %>-setValue" class="form-control xiconfPrograms-form-glp2-setValue" type="number" name="steps[<%- stepIndex %>].setValue" min="1" max="15000" step="1" value="40" required readonly>
+      </div>
+    </div>
+    <div class="row xiconfPrograms-form-glp2-tolerances">
+      <div class="form-group col-md-3">
+        <label class="control-label is-required"><input class="xiconfPrograms-form-glp2-tolerance" type="radio" name="<%- idPrefix %>-tolerance" value="rel" checked> <%- t('xiconfPrograms', 'PROPERTY:lowerTolerance') %> [%]</label>
+        <input class="form-control" type="number" name="steps[<%- stepIndex %>].lowerToleranceRel" min="0" max="100" value="11" step="1" required readonly>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-upperToleranceRel" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:upperTolerance') %> [%]</label>
+        <input id="<%- idPrefix %>-upperToleranceRel" class="form-control" type="number" name="steps[<%- stepIndex %>].upperToleranceRel" min="0" max="100" value="11" step="1" required readonly>
+      </div>
+      <div class="form-group col-md-3">
+        <label class="control-label is-required"><input class="xiconfPrograms-form-glp2-tolerance" type="radio" name="<%- idPrefix %>-tolerance" value="abs"> <%- t('xiconfPrograms', 'PROPERTY:lowerTolerance') %><span></span></label>
+        <input class="form-control" type="number" name="steps[<%- stepIndex %>].lowerToleranceAbs" min="0" step="1" value="0" required readonly>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-upperToleranceAbs" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:upperTolerance') %><span></span></label>
+        <input id="<%- idPrefix %>-upperToleranceAbs" class="form-control" type="number" name="steps[<%- stepIndex %>].upperToleranceAbs" min="0" step="1" value="0" required readonly>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-trigger" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:trigger') %></label>
+      <div class="radio-inline-group">
+        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="0" checked> <%- t('xiconfPrograms', 'PROPERTY:trigger:0') %></label>
+        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="1"> <%- t('xiconfPrograms', 'PROPERTY:trigger:1') %></label>
+        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="2"> <%- t('xiconfPrograms', 'PROPERTY:trigger:2') %></label>
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="steps[<%- stepIndex %>].execution" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].range" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].voltage" value="230">
+  <input type="hidden" name="steps[<%- stepIndex %>].correction" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].leaveOn" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].uTolerance" value="10">
+  <input type="hidden" name="steps[<%- stepIndex %>].retries" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].cancelOnFailure" value="1">
+  <input type="hidden" name="steps[<%- stepIndex %>].visMode" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].goInput" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].noGoInput" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].enabled" value="1">
+  <input type="hidden" name="steps[<%- stepIndex %>].rsvChannel" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].rsvNumber" value="1">
+  <input type="hidden" name="steps[<%- stepIndex %>].multi" value="0">
+  <% } %>
   <input type="hidden" name="steps[<%- stepIndex %>].type" value="fn">
 </div>

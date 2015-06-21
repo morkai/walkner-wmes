@@ -1,0 +1,39 @@
+<div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-program">
+  <div class="panel-heading is-with-actions">
+    <span class="xiconfPrograms-form-stepNo">0.</span> <%- t('xiconfPrograms', 'step:program') %>
+    <% include _stepPanelActions.ejs %>
+  </div>
+  <div class="panel-body has-lastElementRow">
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:label') %></label>
+        <input id="<%- idPrefix %>-label" class="form-control" type="text" name="steps[<%- stepIndex %>].label" value="<%- t('xiconfPrograms', 'step:program') %>" required maxlength="32">
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="steps[<%- stepIndex %>].setValue" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].upperToleranceRel" value="100">
+  <input type="hidden" name="steps[<%- stepIndex %>].startTime" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].duration" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].execution" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].range" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].voltage" value="230">
+  <input type="hidden" name="steps[<%- stepIndex %>].lowerToleranceAbs" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].upperToleranceAbs" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].correction" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].mode" value="5">
+  <input type="hidden" name="steps[<%- stepIndex %>].leaveOn" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].uTolerance" value="100">
+  <input type="hidden" name="steps[<%- stepIndex %>].retries" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].lowerToleranceRel" value="100">
+  <input type="hidden" name="steps[<%- stepIndex %>].cancelOnFailure" value="1">
+  <input type="hidden" name="steps[<%- stepIndex %>].visMode" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].goInput" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].noGoInput" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].enabled" value="1">
+  <input type="hidden" name="steps[<%- stepIndex %>].rsvChannel" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].rsvNumber" value="1">
+  <input type="hidden" name="steps[<%- stepIndex %>].multi" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].trigger" value="0">
+  <input type="hidden" name="steps[<%- stepIndex %>].type" value="program">
+</div>

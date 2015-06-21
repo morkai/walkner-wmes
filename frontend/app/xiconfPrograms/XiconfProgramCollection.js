@@ -15,7 +15,7 @@ define([
 
     model: XiconfProgram,
 
-    rqlQuery: 'select(name,updatedAt,steps)&limit(15)&sort(name)'
+    rqlQuery: 'select(name,type,updatedAt,steps)&limit(15)&sort(name)'
 
   });
 });

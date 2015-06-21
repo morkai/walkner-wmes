@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/i18n',
   'app/time',
   'app/core/views/ListView'
 ], function(
+  t,
   time,
   ListView
 ) {
@@ -17,6 +19,7 @@ define([
 
     columns: [
       {id: 'name', className: 'is-min'},
+      {id: 'programType', label: t.bound('xiconfPrograms', 'PROPERTY:type'), className: 'is-min'},
       'steps',
       {id: 'updatedAt', className: 'is-min'}
     ],
@@ -34,6 +37,10 @@ define([
           if (step.type === 'wait')
           {
             label = step.kind === 'auto' ? time.toString(step.duration) : 'W8';
+          }
+          else if (t.has('xiconfPrograms', 'step:' + step.type + ':label'))
+          {
+            label = t('xiconfPrograms', 'step:' + step.type + ':label');
           }
 
           return '<span class="label label-info label-' + step.type + '">' + label + '</span>';

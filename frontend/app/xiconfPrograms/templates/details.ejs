@@ -10,12 +10,16 @@
           <div class="prop-value"><%= model.name %></div>
         </div>
         <div class="prop">
+          <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:type') %></div>
+          <div class="prop-value"><%- t('xiconfPrograms', 'type:' + model.type) %></div>
+        </div>
+        <div class="prop">
           <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:createdAt') %></div>
-          <div class="prop-value"><%= model.createdAt %></div>
+          <div class="prop-value"><%- model.createdAt %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:updatedAt') %></div>
-          <div class="prop-value"><%= model.updatedAt %></div>
+          <div class="prop-value"><%- model.updatedAt %></div>
         </div>
       </div>
     </div>

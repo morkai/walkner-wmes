@@ -1,11 +1,17 @@
 <% if (step.enabled) { %>
-<% if (step.type === 'pe') { %>
+<% if (step.type === 'wait') { %>
+<% include _waitDetails.ejs %>
+<% } else if (step.type === 'pe') { %>
 <% include _peDetails.ejs %>
+<% } else if (step.type === 'iso') { %>
+<% include _isoDetails.ejs %>
 <% } else if (step.type === 'sol') { %>
 <% include _solDetails.ejs %>
+<% } else if (step.type === 'program') { %>
+<% include _programDetails.ejs %>
 <% } else if (step.type === 'fn') { %>
 <% include _fnDetails.ejs %>
-<% } else if (step.type === 'wait') { %>
-<% include _waitDetails.ejs %>
+<% } else if (step.type === 'vis') { %>
+<% include _visDetails.ejs %>
 <% } %>
 <% } %>

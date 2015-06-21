@@ -1,4 +1,6 @@
 .xiconfPrograms-list .label {
+  display: inline-block;
+  min-width: 50px;
   font-size: 100%;
   text-transform: uppercase;
 }
@@ -19,6 +21,15 @@
 .xiconfPrograms-stepPanel-sol > .panel-heading {
   border-color: #fa0;
 }
+.xiconfPrograms-list .label-program,
+.xiconfPrograms-stepPanel-program > .panel-heading {
+  background-color: #fa0;
+  border-color: #fa0;
+}
+.xiconfPrograms-stepPanel-program,
+.xiconfPrograms-stepPanel-program > .panel-heading {
+  border-color: #fa0;
+}
 .xiconfPrograms-list .label-fn,
 .xiconfPrograms-stepPanel-fn > .panel-heading {
   background-color: #00af00;
@@ -37,6 +48,22 @@
 .xiconfPrograms-stepPanel-wait > .panel-heading {
   border-color: #666;
 }
+.xiconfPrograms-list .label-iso,
+.xiconfPrograms-stepPanel-iso > .panel-heading {
+  background-color: #aa00ff;
+}
+.xiconfPrograms-stepPanel-iso,
+.xiconfPrograms-stepPanel-iso > .panel-heading {
+  border-color: #aa00ff;
+}
+.xiconfPrograms-list .label-vis,
+.xiconfPrograms-stepPanel-vis > .panel-heading {
+  background-color: #e00;
+}
+.xiconfPrograms-stepPanel-vis,
+.xiconfPrograms-stepPanel-vis > .panel-heading {
+  border-color: #e00;
+}
 .xiconfPrograms-stepPanel,
 .xiconfPrograms-stepPanel:last-child {
   margin-bottom: 1em;
@@ -47,13 +74,16 @@
   font-family: Verdana, sans-serif;
   font-weight: bold;
 }
-.xiconfPrograms-stepPanel > .panel-body {
-  padding-bottom: 0;
-}
 .xiconfPrograms-stepPanel:first-child .btn[role="moveStepUp"] {
   display: none;
 }
 .xiconfPrograms-stepPanel:last-child .btn[role="moveStepDown"] {
+  display: none;
+}
+.xiconfPrograms-stepPanel.is-collapsed {
+  margin-bottom: 0;
+}
+.xiconfPrograms-stepPanel.is-collapsed > .panel-details {
   display: none;
 }
 .xiconfPrograms-form-stepType {
@@ -67,11 +97,13 @@
 .xiconfPrograms-form-waitDuration {
   margin-top: .5em;
 }
+.xiconfPrograms-form-glp2-tolerance {
+  vertical-align: top;
+}
 .xiconfPrograms-step {
   display: flex;
   padding: 7px;
-  border: 1px solid #ccc;
-  border-top: 0;
+  border-bottom: 1px solid #ccc;
   background-color: #fff;
 }
 .xiconfPrograms-step-status {
@@ -111,6 +143,12 @@
   text-align: center;
   font-size: 40px;
   color: #fff;
+}
+.xiconfPrograms-step-value[data-length="4"] {
+  font-size: 34px;
+}
+.xiconfPrograms-step-value[data-length="5"] {
+  font-size: 32px;
 }
 .is-active .xiconfPrograms-step-value {
   display: block;

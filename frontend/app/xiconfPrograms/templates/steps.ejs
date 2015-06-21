@@ -12,30 +12,17 @@
       <div class="xiconfPrograms-step-maxValue xiconfPrograms-step-cornerBox"><%- step.maxValue %></div>
       <% } %>
       <% if (step.value !== null) { %>
-      <div class="xiconfPrograms-step-value"><%- step.value %></div>
+      <div class="xiconfPrograms-step-value" data-length="<%- step.value.length %>"><%- step.value %></div>
       <% } %>
     </div>
     <div class="xiconfPrograms-step-nameAndProgress">
-      <h3 class="xiconfPrograms-step-name"><%- t('xiconfPrograms', 'step:' + step.type) %></h3>
+      <h3 class="xiconfPrograms-step-name"><%- step.label || t('xiconfPrograms', 'step:' + step.type) %></h3>
       <div class="xiconfPrograms-step-details">
-        <% if (step.totalTime) { %>
-        <span class="xiconfPrograms-step-details-prop">T=<%- step.totalTime %></span>
+        <% step.props.forEach(function(prop) { %>
+        <% if (prop.key) { %>
+        <span class="xiconfPrograms-step-details-prop"><%- prop.key %><%- prop.sub ? ('<sub>' + prop.sub + '</sub>') : '' %>=<%- prop.value %><%- prop.unit || '' %></span>
         <% } %>
-        <% if (step.voltage) { %>
-        <span class="xiconfPrograms-step-details-prop">U=<%- step.voltage %>V</span>
-        <% } %>
-        <% if (step.resistanceMax) { %>
-        <span class="xiconfPrograms-step-details-prop">R<sub>max</sub>=<%- step.resistanceMax %>Ω</span>
-        <% } %>
-        <% if (step.powerReq) { %>
-        <span class="xiconfPrograms-step-details-prop">P<sub>req</sub>=<%- step.powerReq %>W</span>
-        <% } %>
-        <% if (step.powerMin) { %>
-        <span class="xiconfPrograms-step-details-prop">P<sub>min</sub>=<%- step.powerMin %>W</span>
-        <% } %>
-        <% if (step.powerMax) { %>
-        <span class="xiconfPrograms-step-details-prop">P<sub>max</sub>=<%- step.powerMax %>W</span>
-        <% } %>
+        <% }) %>
       </div>
       <div class="progress">
         <div class="progress-bar <%- step.progressBarClassName %>" style="width: <%- step.progressBarWidth %>"></div>

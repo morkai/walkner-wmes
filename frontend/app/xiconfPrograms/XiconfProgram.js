@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../i18n',
   '../time',
   '../core/Model'
 ], function(
+  t,
   time,
   Model
 ) {
@@ -38,6 +40,7 @@ define([
     {
       var obj = this.toJSON();
 
+      obj.programType = t('xiconfPrograms', 'type:' + obj.type);
       obj.createdAt = time.format(obj.createdAt, 'LLLL');
       obj.updatedAt = time.format(obj.updatedAt, 'LLLL');
 
@@ -46,8 +49,12 @@ define([
 
   }, {
 
-    PROGRAM_TYPES: ['t24vdc'],
-    STEP_TYPES: ['wait', 'pe', 'sol', 'fn']
+    TYPES_TO_STEPS: {
+      t24vdc: ['wait', 'pe', 'sol', 'fn'],
+      glp2: ['wait', 'pe', 'iso', 'program', 'fn', 'vis']
+    },
+
+    GLP2_INPUTS: [1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
   });
 });

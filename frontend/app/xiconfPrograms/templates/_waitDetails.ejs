@@ -7,14 +7,16 @@
         <div class="prop-value">
           <%- t('xiconfPrograms', 'PROPERTY:waitKind:' + step.kind) %>
           <% if (step.kind === 'auto') { %>
-          <%= time.toString(step.duration) %>
+          <%= time.toString(step.duration, false, true) %>
           <%} %>
         </div>
       </div>
+      <% if (model.type === 't24vdc') { %>
       <div class="prop">
         <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></div>
         <div class="prop-value"><%= step.voltage.toLocaleString() %></div>
       </div>
+      <% } %>
     </div>
   </div>
 </div>

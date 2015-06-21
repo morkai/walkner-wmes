@@ -26,7 +26,7 @@ module.exports = function setupXiconfProgramModel(app, mongoose)
     },
     type: {
       type: String,
-      enum: ['t24vdc'],
+      enum: ['t24vdc', 'glp2'],
       required: true
     },
     name: {
