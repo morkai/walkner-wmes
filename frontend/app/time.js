@@ -68,7 +68,7 @@ define([
   };
 
   /**
-   * @param {string} str
+   * @param {string|number} str
    * @returns {number}
    */
   time.toSeconds = function(str)
@@ -96,14 +96,14 @@ define([
 
     if (/^[0-9]+\.?[0-9]*$/.test(time) === false)
     {
-      var re = /([0-9\.]+) *(h|ms|m|s)[a-z]*/ig;
+      var re = /([0-9\.]+)\s*(h|ms|m|s)[a-z]*/ig;
       var match;
 
       seconds = 0;
 
       while ((match = re.exec(time)))
       {
-        seconds += match[1] * multipliers[match[2].toLowerCase()];
+        seconds += parseFloat(match[1]) * multipliers[match[2].toLowerCase()];
       }
     }
 
@@ -153,8 +153,8 @@ define([
     if (seconds >= 1)
     {
       str += compact
-        ? rpad0(Math.round(seconds), 2)
-        : (' ' + Math.round(seconds) + 's');
+        ? rpad0(Math[ms ? 'floor' : 'round'](seconds), 2)
+        : (' ' + Math[ms ? 'floor' : 'round'](seconds) + 's');
 
       if (ms && seconds % 1 !== 0)
       {
