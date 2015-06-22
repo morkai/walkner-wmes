@@ -51,6 +51,8 @@ define([
 
       return this.collection.map(function(model)
       {
+        var quantityDone = model.get('quantityDone') || 0;
+        var quantityTodo = model.get('quantityTodo') || 0;
         var startedAt = Date.parse(model.get('startedAt')) || 0;
         var finishedAt = Date.parse(model.get('finishedAt')) || Date.now();
         var duration = startedAt ? (finishedAt - startedAt) / 1000 : null;
@@ -61,7 +63,7 @@ define([
           orderNo: linkToOrder(model),
           nc12: model.get('nc12')[0],
           name: model.get('name'),
-          quantity: model.get('quantityDone').toLocaleString() + '/' + model.get('quantityTodo').toLocaleString(),
+          quantity: quantityDone.toLocaleString() + '/' + quantityTodo.toLocaleString(),
           reqDate: time.format(model.get('reqDate'), 'YYYY-MM-DD'),
           startedAt: startedAt ? time.format(startedAt, 'YYYY-MM-DD HH:mm:ss') : null,
           duration: duration !== null ? time.toString(duration) : null
