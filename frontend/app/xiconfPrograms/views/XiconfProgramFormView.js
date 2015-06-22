@@ -246,6 +246,12 @@ define([
 
     serializeForm: function(formData)
     {
+      formData.prodLines = (formData.prodLines || '')
+        .split(';')
+        .map(function(prodLine) { return prodLine.trim(); })
+        .filter(function(prodLine) { return prodLine.length > 0; })
+        .join('; ');
+
       formData.steps = _.map(formData.steps, function(step)
       {
         step.enabled = true;
