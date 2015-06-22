@@ -141,7 +141,7 @@ exports.updater = {
   versionsKey: 'pos',
   manifests: [
     {
-      path: 'manifest.appcache',
+      path: '/manifest.appcache',
       mainJsFile: exports.mainJsFile,
       mainCssFile: exports.mainCssFile
     }
