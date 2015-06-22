@@ -27,16 +27,16 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   function handleLogEntries(done)
   {
+    if (typeof done !== 'function')
+    {
+      done = function() {};
+    }
+
     if (handlingLogEntries)
     {
       haveNewLogEntries = true;
 
-      if (typeof done === 'function')
-      {
-        done(new Error('IN_PROGRESS'));
-      }
-
-      return;
+      return done(new Error('IN_PROGRESS'));
     }
 
     handlingLogEntries = true;
@@ -48,7 +48,9 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       {
         handlingLogEntries = false;
 
-        return productionModule.error("Failed to find log entries to handle: %s", err.stack);
+        productionModule.error("Failed to find log entries to handle: %s", err.stack);
+
+        return done(err);
       }
 
       var groupedLogEntries = groupLogEntriesByProdLine(logEntries);
@@ -79,10 +81,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
             setImmediate(handleLogEntries);
           }
 
-          if (typeof done === 'function')
-          {
-            done(err);
-          }
+          done(err);
         }
       );
     });
