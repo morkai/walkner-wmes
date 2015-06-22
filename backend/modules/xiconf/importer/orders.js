@@ -196,6 +196,12 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         for (var i = 0; i < this.ordersList.length; ++i)
         {
           var order = this.ordersList[i];
+
+          if (order.name === null || order.nc12 === null || order.qty === null)
+          {
+            continue;
+          }
+
           var xiconfOrder = this.xiconfOrdersMap[order._id];
           var parsedOrders = this.parsedOrdersMap[order._id];
 
