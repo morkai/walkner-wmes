@@ -19,6 +19,7 @@ define([
 
     columns: [
       {id: 'name', className: 'is-min'},
+      {id: 'prodLines', className: 'is-min'},
       {id: 'programType', label: t.bound('xiconfPrograms', 'PROPERTY:type'), className: 'is-min'},
       'steps',
       {id: 'updatedAt', className: 'is-min'}

@@ -32,6 +32,7 @@ define([
       return {
         type: 't24vdc',
         name: '',
+        prodLines: '',
         steps: []
       };
     },
@@ -40,6 +41,7 @@ define([
     {
       var obj = this.toJSON();
 
+      obj.prodLines = obj.prodLines || t('xiconfPrograms', 'PROPERTY:prodLines:all');
       obj.programType = t('xiconfPrograms', 'type:' + obj.type);
       obj.createdAt = time.format(obj.createdAt, 'LLLL');
       obj.updatedAt = time.format(obj.updatedAt, 'LLLL');

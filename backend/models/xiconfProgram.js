@@ -33,6 +33,10 @@ module.exports = function setupXiconfProgramModel(app, mongoose)
       type: String,
       required: true
     },
+    prodLines: {
+      type: String,
+      default: ''
+    },
     steps: {
       type: Object,
       required: true

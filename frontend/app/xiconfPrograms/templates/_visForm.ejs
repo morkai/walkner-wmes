@@ -23,7 +23,7 @@
     <div class="row">
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-mode" class="control-label is-required"><%- t('xiconfPrograms', 'glp2:vis:mode') %></label>
-        <select id="<%- idPrefix %>-mode" class="form-control" name="steps[<%- stepIndex %>].mode">
+        <select id="<%- idPrefix %>-mode" class="form-control" name="steps[<%- stepIndex %>].mode" required>
           <option value="0" data-label="glp2:vis:mode:0:label"><%- t('xiconfPrograms', 'glp2:vis:mode:0') %></option>
           <option value="1" data-label="glp2:vis:mode:1:label"><%- t('xiconfPrograms', 'glp2:vis:mode:1') %></option>
         </select>

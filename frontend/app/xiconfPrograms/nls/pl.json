@@ -89,6 +89,8 @@
 
   "PROPERTY:name": "Nazwa",
   "PROPERTY:type": "Typ",
+  "PROPERTY:prodLines": "Linie produkcyjne",
+  "PROPERTY:prodLines:all": "Wszystkie",
   "PROPERTY:createdAt": "Data i czas dodania",
   "PROPERTY:updatedAt": "Data i czas modyfikacji",
   "PROPERTY:startTime": "Czas rozruchu",

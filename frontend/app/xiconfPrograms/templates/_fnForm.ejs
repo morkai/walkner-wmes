@@ -70,7 +70,7 @@
     <div class="row">
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-mode" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:mode') %></label>
-        <select id="<%- idPrefix %>-mode" class="form-control xiconfPrograms-form-glp2-mode" name="steps[<%- stepIndex %>].mode">
+        <select id="<%- idPrefix %>-mode" class="form-control xiconfPrograms-form-glp2-mode" name="steps[<%- stepIndex %>].mode" required>
           <option value="0" data-label="glp2:fn:mode:0:label" data-min="0.01" data-max="64" data-step="0.01"><%- t('xiconfPrograms', 'glp2:fn:mode:0') %></option>
           <option value="1" data-label="glp2:fn:mode:1:label" data-min="1" data-max="15000" data-step="1"><%- t('xiconfPrograms', 'glp2:fn:mode:1') %></option>
           <option value="2" data-label="glp2:fn:mode:2:label" data-min="1" data-max="15000" data-step="1" selected><%- t('xiconfPrograms', 'glp2:fn:mode:2') %></option>
@@ -107,9 +107,9 @@
     <div class="form-group">
       <label for="<%- idPrefix %>-trigger" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:trigger') %></label>
       <div class="radio-inline-group">
-        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="0" checked> <%- t('xiconfPrograms', 'PROPERTY:trigger:0') %></label>
-        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="1"> <%- t('xiconfPrograms', 'PROPERTY:trigger:1') %></label>
-        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="2"> <%- t('xiconfPrograms', 'PROPERTY:trigger:2') %></label>
+        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="0" checked required> <%- t('xiconfPrograms', 'PROPERTY:trigger:0') %></label>
+        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="1" required> <%- t('xiconfPrograms', 'PROPERTY:trigger:1') %></label>
+        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="2" required> <%- t('xiconfPrograms', 'PROPERTY:trigger:2') %></label>
       </div>
     </div>
   </div>

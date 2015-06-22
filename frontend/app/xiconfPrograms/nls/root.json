@@ -86,6 +86,8 @@
 
     "PROPERTY:name": "Name",
     "PROPERTY:type": "Type",
+    "PROPERTY:prodLines": "Production lines",
+    "PROPERTY:prodLines:all": "All",
     "PROPERTY:createdAt": "Created at",
     "PROPERTY:updatedAt": "Updated at",
     "PROPERTY:startTime": "Start time",

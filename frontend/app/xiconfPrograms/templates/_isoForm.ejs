@@ -27,7 +27,7 @@
     <div class="row">
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-mode" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:mode') %></label>
-        <select id="<%- idPrefix %>-mode" class="form-control xiconfPrograms-form-glp2-mode" name="steps[<%- stepIndex %>].mode">
+        <select id="<%- idPrefix %>-mode" class="form-control xiconfPrograms-form-glp2-mode" name="steps[<%- stepIndex %>].mode" required>
           <option value="0" data-label="glp2:iso:mode:0:label" data-min="1.0" data-max="500.0" data-step="0.1" selected><%- t('xiconfPrograms', 'glp2:iso:mode:0') %></option>
           <option value="1" data-label="glp2:iso:mode:1:label" data-min="0.001" data-max="3.000" data-step="0.001"><%- t('xiconfPrograms', 'glp2:iso:mode:1') %></option>
           <option value="2" data-label="glp2:iso:mode:2:label" data-min="10" data-max="1000" data-step="1"><%- t('xiconfPrograms', 'glp2:iso:mode:2') %></option>

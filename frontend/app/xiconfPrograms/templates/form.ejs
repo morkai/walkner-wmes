@@ -8,6 +8,10 @@
         <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" maxlength="100" required autofocus>
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-prodLines" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:prodLines') %></label>
+        <input id="<%- idPrefix %>-prodLines" class="form-control" type="text" name="prodLines" maxlength="200" placeholder="<%- t('xiconfPrograms', 'PROPERTY:prodLines:all') %>">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-type" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:type') %></label>
         <% programTypes.forEach(function(programType) { %>
         <div class="radio">
