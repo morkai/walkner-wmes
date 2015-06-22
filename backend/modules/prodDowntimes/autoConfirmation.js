@@ -164,7 +164,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
 
         if (this.count === MAX_BATCH_SIZE)
         {
-          setTimeout(confirmOldProdDowntimes, 10000);
+          app.broker.subscribe('production.logEntries.handled', confirmOldProdDowntimes).setLimit(1);
         }
         else
         {

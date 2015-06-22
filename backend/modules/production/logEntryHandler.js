@@ -19,6 +19,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
   var handlingLogEntries = false;
   var haveNewLogEntries = false;
 
+  productionModule.isHandlingLogEntries = function() { return handlingLogEntries; };
   productionModule.handleLogEntries = handleLogEntries;
 
   app.broker.subscribe('production.logEntries.saved', handleLogEntries);
@@ -79,6 +80,10 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
           if (haveNewLogEntries)
           {
             setImmediate(handleLogEntries);
+          }
+          else
+          {
+            app.broker.publish('production.logEntries.handled');
           }
 
           done(err);
