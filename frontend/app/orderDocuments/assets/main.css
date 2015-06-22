@@ -91,6 +91,10 @@
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
 }
+.fileSource-search .orderDocuments-order {
+  background-image: radial-gradient(ellipse at center, #0af 50%, #0091E6 100%);
+  text-shadow: 1px 1px 1px #333;
+}
 .fileSource-remote .orderDocuments-order {
   background-image: radial-gradient(ellipse at center, #5bb75b 50%, #3d9a3d 100%);
   text-shadow: 1px 1px 1px #333;

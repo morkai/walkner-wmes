@@ -105,12 +105,14 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   express.head('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res)
   {
-    findDocumentFilePath(req.params.nc15, function(err)
+    findDocumentFilePath(req.params.nc15, function(err, results)
     {
       if (err)
       {
         return res.sendStatus(404);
       }
+
+      res.set('X-Document-Source', results.source);
 
       return res.sendStatus(204);
     });
@@ -120,14 +122,14 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   express.get('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res, next)
   {
-    findDocumentFilePath(req.params.nc15, function(err, filePath)
+    findDocumentFilePath(req.params.nc15, function(err, results)
     {
       if (err)
       {
         return next(err);
       }
 
-      return res.sendFile(filePath);
+      return res.sendFile(results.filePath);
     });
   });
 
@@ -188,12 +190,12 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       {
         if (cachedStats)
         {
-          return done(null, cachedFilePath);
+          return done(null, {filePath: cachedFilePath, source: 'search'});
         }
 
         if (localStats)
         {
-          return done(null, localFilePath);
+          return done(null, {filePath: localFilePath, source: 'remote'});
         }
 
         return done(err);

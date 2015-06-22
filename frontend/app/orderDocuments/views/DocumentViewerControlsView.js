@@ -546,7 +546,7 @@ define([
 
     onFileSourceChange: function()
     {
-      this.$el.removeClass('fileSource-remote fileSource-local');
+      this.$el.removeClass('fileSource-search fileSource-remote fileSource-local');
 
       var fileSource = this.model.get('fileSource');
 

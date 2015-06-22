@@ -151,8 +151,15 @@ define([
         view.tryLoadLocalDocument(nc15);
       });
 
-      this.req.done(function()
+      this.req.done(function(res, status, jqXhr)
       {
+        var fileSource = jqXhr.getResponseHeader('X-Document-Source');
+
+        if (fileSource)
+        {
+          view.model.set('fileSource', fileSource);
+        }
+
         view.req = null;
         view.loadFile(remoteFileUrl);
       });
