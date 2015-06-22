@@ -231,6 +231,23 @@ app/xiconfPrograms/assets/main.css
 ----------------
 app/xiconfPrograms/assets/main.css
 
+assets/kaizen-main.css
+----------------
+assets/../vendor/bootstrap/css/bootstrap.css
+assets/../vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
+assets/../vendor/font-awesome/css/font-awesome.css
+assets/../vendor/select2/select2.css
+assets/./select2.css
+assets/../app/core/assets/main.css
+assets/../app/settings/assets/main.css
+assets/../app/dashboard/assets/main.css
+assets/../app/events/assets/main.css
+assets/../app/users/assets/main.css
+assets/../app/divisions/assets/main.css
+assets/../app/updater/assets/main.css
+assets/../app/kaizenOrders/assets/main.css
+assets/kaizen-main.css
+
 assets/pos-main.css
 ----------------
 assets/../vendor/bootstrap/css/bootstrap.css
@@ -298,7 +315,6 @@ assets/../app/updater/assets/main.css
 assets/../app/feedback/assets/main.css
 assets/../app/factoryLayout/assets/main.css
 assets/../app/licenses/assets/main.css
-assets/../app/kaizenOrders/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
