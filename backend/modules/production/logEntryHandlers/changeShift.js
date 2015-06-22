@@ -136,33 +136,42 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       buggedProdModel.finishedAt = new Date(buggedProdModel.date.getTime() + (8 * 3600 * 1000) - 1);
 
-      buggedProdModel.recalcDurations(true, function(err)
+      if (buggedProdModel.recalcDurations)
       {
-        if (err)
-        {
-          productionModule.error(
-            "Failed to save finished, bugged %s [%s] for prod line [%s] (LOG=[%s]): %s",
-            type,
-            _id,
-            prodLine._id,
-            logEntry._id,
-            err.stack
-          );
-        }
-        else
-        {
-          productionModule.debug(
-            "Finished bugged %s [%s] in shift [%s] of prod line [%s] (LOG=[%s])",
-            type,
-            _id,
-            buggedProdModel.prodShift,
-            prodLine._id,
-            logEntry._id
-          );
-        }
-
-        return done();
-      });
+        buggedProdModel.recalcDurations(true, finalizeBugged.bind(null, type, buggedProdModel, done));
+      }
+      else
+      {
+        buggedProdModel.save(finalizeBugged.bind(null, type, buggedProdModel, done));
+      }
     });
+  }
+
+  function finalizeBugged(type, prodModel, done, err)
+  {
+    if (err)
+    {
+      productionModule.error(
+        "Failed to save finished, bugged %s [%s] for prod line [%s] (LOG=[%s]): %s",
+        type,
+        prodModel._id,
+        prodLine._id,
+        logEntry._id,
+        err.stack
+      );
+    }
+    else
+    {
+      productionModule.debug(
+        "Finished bugged %s [%s] in shift [%s] of prod line [%s] (LOG=[%s])",
+        type,
+        prodModel._id,
+        prodModel.prodShift,
+        prodLine._id,
+        logEntry._id
+      );
+    }
+
+    return done();
   }
 };
