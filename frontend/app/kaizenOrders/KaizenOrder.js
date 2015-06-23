@@ -40,8 +40,13 @@ define([
 
     labelAttribute: 'rid',
 
-    defaults: {
-      status: 'new'
+    defaults: function()
+    {
+      return {
+        status: 'new',
+        types: ['nearMiss'],
+        eventDate: new Date()
+      };
     },
 
     initialize: function()

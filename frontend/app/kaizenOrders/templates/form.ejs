@@ -27,11 +27,13 @@
           <input id="<%- idPrefix %>-confirmer" type="text" name="confirmer" required placeholder="<%- t('kaizenOrders', 'FORM:help:confirmer') %>">
         </div>
       </div>
+      <!--
       <div id="<%- idPrefix %>-chooseTypes" class="message message-inline message-info">
         <p><%- t('kaizenOrders', 'FORM:MSG:chooseTypes', {gender: user.data.gender}) %></p>
       </div>
+      //-->
       <div id="<%- idPrefix %>-panel-nearMiss" class="panel panel-default kaizenOrders-form-typePanel is-collapsed" data-type="nearMiss" data-expanded-class="panel-danger">
-        <div class="panel-heading" role="togglePanel" tabindex="0">
+        <div class="panel-heading" role="togglePanel">
           <i class="fa fa-times kaizenOrders-form-collapsedIcon"></i><i class="fa fa-check kaizenOrders-form-expandedIcon"></i><span><%- t('kaizenOrders', 'type:nearMiss') %></span>
         </div>
         <div class="panel-body">
@@ -83,7 +85,7 @@
           </div>
         </div>
       </div>
-      <div id="<%- idPrefix %>-panel-suggestion" class="panel panel-default kaizenOrders-form-typePanel is-collapsed" data-type="suggestion" data-expanded-class="panel-warning">
+      <div id="<%- idPrefix %>-panel-suggestion" class="panel panel-default kaizenOrders-form-typePanel is-collapsed hidden" data-type="suggestion" data-expanded-class="panel-warning">
         <div class="panel-heading" role="togglePanel" tabindex="0">
           <i class="fa fa-times kaizenOrders-form-collapsedIcon"></i><i class="fa fa-check kaizenOrders-form-expandedIcon"></i><span><%- t('kaizenOrders', 'type:suggestion') %></span>
         </div>
@@ -105,7 +107,7 @@
           </div>
         </div>
       </div>
-      <div id="<%- idPrefix %>-panel-kaizen" class="panel panel-default kaizenOrders-form-typePanel is-collapsed" data-type="kaizen" data-expanded-class="panel-success">
+      <div id="<%- idPrefix %>-panel-kaizen" class="panel panel-default kaizenOrders-form-typePanel is-collapsed hidden" data-type="kaizen" data-expanded-class="panel-success">
         <div class="panel-heading" role="togglePanel" tabindex="0">
           <i class="fa fa-times kaizenOrders-form-collapsedIcon"></i><i class="fa fa-check kaizenOrders-form-expandedIcon"></i><span><%- t('kaizenOrders', 'type:kaizen') %></span>
         </div>

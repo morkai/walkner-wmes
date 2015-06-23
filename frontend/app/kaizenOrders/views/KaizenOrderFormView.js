@@ -61,6 +61,7 @@ define([
 
     events: _.extend({
 
+      /*
       'keydown [role="togglePanel"]': function(e)
       {
         if (e.keyCode === 13)
@@ -85,6 +86,7 @@ define([
           this.collapsePanel(type);
         }
       },
+      */
 
       'change [name="status"]': 'toggleRequiredToFinishFlags'
 

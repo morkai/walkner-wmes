@@ -1,13 +1,13 @@
 <div class="kaizenOrders-details">
   <div class="panel panel-primary kaizenOrders-details-props">
-    <div class="panel-heading"><%= model.subject || t('kaizenOrders', 'PANEL:TITLE:details') %></div>
+    <div class="panel-heading"><%- t('kaizenOrders', 'PANEL:TITLE:details') %></div>
     <div class="panel-details <%- model.changed.all ? 'is-changed' : '' %>">
       <div class="row">
         <div class="col-md-4">
           <div class="props first">
             <div class="prop">
-              <div class="prop-name <%- model.changed.types ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:types') %></div>
-              <div class="prop-value"><%- model.types %></div>
+              <div class="prop-name <%- model.changed.subject ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:subject') %></div>
+              <div class="prop-value"><%= model.subject %></div>
             </div>
             <div class="prop">
               <div class="prop-name <%- model.changed.status ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:status') %></div>

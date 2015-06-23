@@ -22,7 +22,6 @@ define([
 
     columns: [
       {id: 'rid', className: 'is-min is-number'},
-      'types',
       {id: 'status', tdAttrs: prepareTdAttrs},
       {id: 'subject', tdAttrs: prepareTdAttrs},
       {id: 'eventDate', tdAttrs: prepareTdAttrs},
