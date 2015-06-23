@@ -38,6 +38,8 @@ exports.modules = [
 exports.mainJsFile = '/kaizen-main.js';
 exports.mainCssFile = '/assets/kaizen-main.css';
 
+exports.dashboardUrlAfterLogIn = '/kaizenOrders';
+
 exports.dictionaryModules = {
   prodFunctions: 'PROD_FUNCTIONS',
   companies: 'COMPANIES',

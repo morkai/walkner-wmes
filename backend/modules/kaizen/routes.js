@@ -179,15 +179,15 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   {
     if (req.params.filter === 'mine')
     {
-      res.redirect('/#kaizen/orders?observers.user.id=mine&sort(-createdAt)&limit(15)');
+      res.redirect('/#kaizenOrders?observers.user.id=mine&sort(-createdAt)&limit(15)');
     }
     else if (req.params.filter === 'unseen')
     {
-      res.redirect('/#kaizen/orders?observers.user.id=unseen&sort(-createdAt)&limit(15)');
+      res.redirect('/#kaizenOrders?observers.user.id=unseen&sort(-createdAt)&limit(15)');
     }
     else
     {
-      res.redirect('/#kaizen/orders');
+      res.redirect('/#kaizenOrders');
     }
   }
 
@@ -202,7 +202,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
       if (kaizenOrder)
       {
-        return res.redirect('/#kaizen/orders/' + kaizenOrder._id);
+        return res.redirect('/#kaizenOrders/' + kaizenOrder._id);
       }
 
       return res.sendStatus(404);

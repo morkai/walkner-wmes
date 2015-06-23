@@ -39,7 +39,7 @@ define([
   var canView = user.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
 
-  router.map('/kaizen/categories', canView, function(req)
+  router.map('/kaizenCategories', canView, function(req)
   {
     viewport.showPage(new ListPage({
       baseBreadcrumb: true,
@@ -54,7 +54,7 @@ define([
     }));
   });
 
-  router.map('/kaizen/categories/:id', canView, function(req)
+  router.map('/kaizenCategories/:id', canView, function(req)
   {
     viewport.showPage(new DetailsPage({
       baseBreadcrumb: true,
@@ -63,7 +63,7 @@ define([
     }));
   });
 
-  router.map('/kaizen/categories;add', canManage, function()
+  router.map('/kaizenCategories;add', canManage, function()
   {
     viewport.showPage(new AddFormPage({
       baseBreadcrumb: true,
@@ -72,7 +72,7 @@ define([
     }));
   });
 
-  router.map('/kaizen/categories/:id;edit', canManage, function(req)
+  router.map('/kaizenCategories/:id;edit', canManage, function(req)
   {
     viewport.showPage(new EditFormPage({
       baseBreadcrumb: true,
@@ -81,7 +81,7 @@ define([
     }));
   });
 
-  router.map('/kaizen/categories/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenCategory, _, _, {
+  router.map('/kaizenCategories/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenCategory, _, _, {
     baseBreadcrumb: true
   }));
 

@@ -13,7 +13,7 @@ define([
 
     urlRoot: '/kaizen/areas',
 
-    clientUrlRoot: '#kaizen/areas',
+    clientUrlRoot: '#kaizenAreas',
 
     topicPrefix: 'kaizen.areas',
 

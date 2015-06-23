@@ -5,6 +5,18 @@
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
+  "navbar:kaizen": "Usprawnienia",
+  "navbar:orders": "Zgłoszenia",
+  "navbar:all": "Wszystkie",
+  "navbar:mine": "Tylko moje",
+  "navbar:unseen": "Tylko nieprzeczytane",
+  "navbar:dictionaries": "Słowniki",
+  "navbar:sections": "Działy",
+  "navbar:areas": "Miejsca zdarzeń",
+  "navbar:categories": "Kategorie",
+  "navbar:causes": "Przyczyny",
+  "navbar:risks": "Rodzaje ryzyka",
+
   "MSG:LOADING_FAILURE": "Ładowanie zgłoszeń nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zgłoszenia nie powiodło się :(",
   "MSG:DELETED": "Zgłoszenie <em>{label}</em> zostało usunięte.",

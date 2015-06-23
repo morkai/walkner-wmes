@@ -15,7 +15,7 @@ define([
 
     urlRoot: '/kaizen/categories',
 
-    clientUrlRoot: '#kaizen/categories',
+    clientUrlRoot: '#kaizenCategories',
 
     topicPrefix: 'kaizen.categories',
 

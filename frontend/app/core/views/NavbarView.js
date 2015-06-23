@@ -207,20 +207,23 @@ define([
    * @private
    * @param {HTMLLIElement} liEl
    * @param {boolean} useAnchor
+   * @param {boolean} [clientModule]
    * @returns {string|null}
    */
-  NavbarView.prototype.getModuleNameFromLi = function(liEl, useAnchor)
+  NavbarView.prototype.getModuleNameFromLi = function(liEl, useAnchor, clientModule)
   {
     /*jshint -W116*/
 
-    if (liEl.dataset.module === undefined && !useAnchor)
+    var module = liEl.dataset[clientModule ? 'clientModule' : 'module'];
+
+    if (module === undefined && !useAnchor)
     {
       return null;
     }
 
-    if (liEl.dataset.module)
+    if (module)
     {
-      return liEl.dataset.module;
+      return module;
     }
 
     var aEl = liEl.querySelector('a');
@@ -326,7 +329,7 @@ define([
 
     if (href && href[0] === '#')
     {
-      var moduleName = this.getModuleNameFromLi($navItem[0], true);
+      var moduleName = this.getModuleNameFromLi($navItem[0], true, true);
 
       this.navItems[moduleName] = $navItem;
     }
@@ -336,7 +339,7 @@ define([
 
       $navItem.find('.dropdown-menu > li').each(function()
       {
-        var moduleName = view.getModuleNameFromLi(this, true);
+        var moduleName = view.getModuleNameFromLi(this, true, true);
 
         view.navItems[moduleName] = $navItem;
       });

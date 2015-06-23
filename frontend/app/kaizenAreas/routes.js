@@ -39,7 +39,7 @@ define([
   var canView = user.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
 
-  router.map('/kaizen/areas', canView, function(req)
+  router.map('/kaizenAreas', canView, function(req)
   {
     viewport.showPage(new ListPage({
       baseBreadcrumb: true,
@@ -51,7 +51,7 @@ define([
     }));
   });
 
-  router.map('/kaizen/areas/:id', canView, function(req)
+  router.map('/kaizenAreas/:id', canView, function(req)
   {
     viewport.showPage(new DetailsPage({
       baseBreadcrumb: true,
@@ -60,7 +60,7 @@ define([
     }));
   });
 
-  router.map('/kaizen/areas;add', canManage, function()
+  router.map('/kaizenAreas;add', canManage, function()
   {
     viewport.showPage(new AddFormPage({
       baseBreadcrumb: true,
@@ -69,7 +69,7 @@ define([
     }));
   });
 
-  router.map('/kaizen/areas/:id;edit', canManage, function(req)
+  router.map('/kaizenAreas/:id;edit', canManage, function(req)
   {
     viewport.showPage(new EditFormPage({
       baseBreadcrumb: true,
@@ -78,7 +78,7 @@ define([
     }));
   });
 
-  router.map('/kaizen/areas/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenArea, _, _, {
+  router.map('/kaizenAreas/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenArea, _, _, {
     baseBreadcrumb: true
   }));
 

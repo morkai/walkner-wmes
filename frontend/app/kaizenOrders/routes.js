@@ -32,35 +32,35 @@ define([
 
   var canAccess = user.auth();
 
-  router.map('/kaizen/orders', canAccess, function(req)
+  router.map('/kaizenOrders', canAccess, function(req)
   {
     viewport.showPage(new KaizenOrderListPage({
       collection: new KaizenOrderCollection(null, {rqlQuery: req.rql})
     }));
   });
 
-  router.map('/kaizen/orders/:id', canAccess, function(req)
+  router.map('/kaizenOrders/:id', canAccess, function(req)
   {
     viewport.showPage(new KaizenOrderDetailsPage({
       model: new KaizenOrder({_id: req.params.id})
     }));
   });
 
-  router.map('/kaizen/orders;add', canAccess, function()
+  router.map('/kaizenOrders;add', canAccess, function()
   {
     viewport.showPage(new KaizenOrderAddFormPage({
       model: new KaizenOrder()
     }));
   });
 
-  router.map('/kaizen/orders/:id;edit', canAccess, function(req)
+  router.map('/kaizenOrders/:id;edit', canAccess, function(req)
   {
     viewport.showPage(new KaizenOrderEditFormPage({
       model: new KaizenOrder({_id: req.params.id})
     }));
   });
 
-  router.map('/kaizen/orders/:id;delete', canAccess, _.partial(showDeleteFormPage, KaizenOrder, _, _, {
+  router.map('/kaizenOrders/:id;delete', canAccess, _.partial(showDeleteFormPage, KaizenOrder, _, _, {
     baseBreadcrumb: true
   }));
 

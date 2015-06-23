@@ -30,7 +30,7 @@ define([
 
     urlRoot: '/kaizen/orders',
 
-    clientUrlRoot: '#kaizen/orders',
+    clientUrlRoot: '#kaizenOrders',
 
     topicPrefix: 'kaizen.orders',
 
