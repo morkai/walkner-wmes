@@ -171,7 +171,7 @@ define([
             {key: 'T', value: time.toString(step.startTime + step.duration, false, true)},
             {
               key: ['I', 'P', 'P', 'cosφ', 0, 0, 'U', 'RPM'][step.mode] || null,
-              sub: ['set', 'active', 'apparent', 0, 0, 0, 'residual'][step.mode] || null,
+              sub: ['set', 'apparent', 'active', 0, 0, 0, 'residual'][step.mode] || null,
               value: step.setValue.toLocaleString(),
               unit: viewData.unit
             },
