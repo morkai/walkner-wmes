@@ -153,6 +153,10 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       type: String,
       default: ''
     },
+    preventiveMeasures: {
+      type: String,
+      default: ''
+    },
     suggestion: {
       type: String,
       default: ''
@@ -210,6 +214,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     causeText: 'text',
     description: 'text',
     correctiveMeasures: 'text',
+    preventiveMeasures: 'text',
     suggestion: 'text',
     kaizenImprovements: 'text',
     kaizenEffect: 'text'
@@ -625,6 +630,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       'risk',
       'description',
       'correctiveMeasures',
+      'preventiveMeasures',
       'suggestion',
       'nearMissOwners',
       'suggestionOwners',

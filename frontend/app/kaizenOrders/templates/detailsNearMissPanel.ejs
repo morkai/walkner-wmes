@@ -46,11 +46,15 @@
         </div>
         <div class="prop">
           <div class="prop-name <%- model.changed.description ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:description') %></div>
-          <div class="prop-value text-lines"><%- model.description || '-' %></div>
+          <div class="prop-value text-lines"><%= model.description || '-' %></div>
         </div>
         <div class="prop">
           <div class="prop-name <%- model.changed.correctiveMeasures ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:correctiveMeasures') %></div>
-          <div class="prop-value text-lines"><%- model.correctiveMeasures || '-' %></div>
+          <div class="prop-value text-lines"><%= model.correctiveMeasures || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name <%- model.changed.preventiveMeasures ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:preventiveMeasures') %></div>
+          <div class="prop-value text-lines"><%= model.preventiveMeasures || '-' %></div>
         </div>
       </div>
     </div>

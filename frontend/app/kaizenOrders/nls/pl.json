@@ -59,6 +59,7 @@
   "PROPERTY:suggestionOwners": "Osoby sugerujące",
   "PROPERTY:kaizenOwners": "Osoby realizujące",
   "PROPERTY:correctiveMeasures": "Podjęte działania korekcyjne (gaszenie pożaru)",
+  "PROPERTY:preventiveMeasures": "Podjęte działania korygujące",
   "PROPERTY:suggestion": "Propozycja działań korygujących (jak ma być)",
   "PROPERTY:kaizenStartDate": "Data rozpoczęcia realizacji",
   "PROPERTY:kaizenFinishDate": "Data zakończenia realizacji",
@@ -135,6 +136,8 @@
   "FORM:help:subject": "Wpisz krótki tekst podsumowujący...",
   "FORM:help:section": "Wybierz swój dział...",
   "FORM:help:confirmer": "Wyszukaj swojego przełożonego po nazwisku lub nr kadrowym...",
+  "FORM:help:correctiveMeasures": "Co zrobiono, aby usunąć <strong>skutek</strong> wystąpienia tego konkretnego zdarzenia.",
+  "FORM:help:preventiveMeasures": "Co zrobiono, aby usunąć <strong>przyczynę</strong> występowania podobnych zdarzeń.",
   "FORM:help:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zgłoszenia",
