@@ -11,7 +11,10 @@
   "controls:openSettingsDialog": "Zmień ustawienia",
   "controls:openLocalOrderDialog": "Znajdź zlecenie",
   "controls:reloadDocument": "Przeładuj aktualny dokument",
+  "controls:openDocumentWindow": "Otwórz załadowany dokument w nowym oknie",
   "controls:filter:ph": "Filtruj dokumenty",
+
+  "popup": "Nie udało się otworzyć dokumentu w nowym oknie :(<br>Sprawdź czy wyskakujące okienka są dozwolone w przeglądarce!",
 
   "settings:title": "Ustawienia",
   "settings:prodLineId": "ID linii produkcyjnej",

@@ -61,6 +61,11 @@ define([
         'documentReloadRequested',
         this.previewView.loadDocument.bind(this.previewView)
       );
+      this.listenTo(
+        this.controlsView,
+        'documentWindowRequested',
+        setTimeout.bind(window, this.previewView.openDocumentWindow.bind(this.previewView), 1)
+      );
 
       this.socket.on('orderDocuments.remoteOrderUpdated', this.onRemoteOrderUpdated.bind(this));
     },

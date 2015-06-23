@@ -34,6 +34,10 @@ define([
       {
         this.trigger('documentReloadRequested');
       },
+      'click #-openDocumentWindow': function()
+      {
+        this.trigger('documentWindowRequested');
+      },
       'click #-openLocalOrderDialog': function()
       {
         var $openLocalOrderDialog = this.$id('openLocalOrderDialog');
@@ -271,11 +275,6 @@ define([
       {
         this.$id('documents').find('[data-nc15="' + nc15 + '"]').focus();
       }
-    },
-
-    deselectDocument: function()
-    {
-      this.$('.orderDocuments-document.is-active').removeClass('is-active');
     },
 
     focusNextDocument: function(documentEl)
@@ -527,6 +526,13 @@ define([
       this.$id('openLocalFileDialog').toggleClass('active', hasLocalFile);
 
       this.$id('reloadDocument').prop('disabled', hasLocalFile);
+
+      this.toggleOpenDocumentWindowButton();
+    },
+
+    toggleOpenDocumentWindowButton: function()
+    {
+      this.$id('openDocumentWindow').prop('disabled', this.model.get('fileSource') === null);
     },
 
     onOrderChange: function()
@@ -554,6 +560,8 @@ define([
       {
         this.$el.addClass('fileSource-' + fileSource);
       }
+
+      this.toggleOpenDocumentWindowButton();
     },
 
     onDocumentMouseEnter: function(e)

@@ -11,8 +11,11 @@
     "controls:openLocalFileDialog": "Select a file from the local disk",
     "controls:openSettingsDialog": "Change settings",
     "controls:openLocalOrderDialog": "Find order",
-    "controls:reloadDocument": "Reload current document",
+    "controls:reloadDocument": "Reload the current document",
+    "controls:openDocumentWindow": "Open the current document in a new window",
     "controls:filter:ph": "Filter documents",
+
+    "popup": "Failed to open the document in a new window :(<br>Check if the popups are allowed in the browser!",
 
     "settings:title": "Settings",
     "settings:prodLineId": "Production line ID",

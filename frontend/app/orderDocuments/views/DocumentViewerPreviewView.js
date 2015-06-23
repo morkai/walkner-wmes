@@ -7,13 +7,15 @@ define([
   'jquery',
   'app/i18n',
   'app/core/View',
-  'app/orderDocuments/templates/preview'
+  'app/orderDocuments/templates/preview',
+  'app/orderDocuments/templates/documentWindow'
 ], function(
   _,
   $,
   t,
   View,
-  template
+  template,
+  renderDocumentWindow
 ) {
   'use strict';
 
@@ -49,6 +51,40 @@ define([
 
       this.resize(null, window.innerHeight);
       this.loadDocument();
+    },
+
+    openDocumentWindow: function()
+    {
+      var currentOrderInfo = this.model.getCurrentOrderInfo();
+      var screen = window.screen;
+      var width = screen.availWidth * 0.6;
+      var height = screen.availHeight * 0.8;
+      var left = Math.floor((screen.availWidth - width) / 2);
+      var top = Math.floor((screen.availHeight - height) / 2);
+      var windowFeatures = 'resizable,scrollbars,location=no'
+        + ',top=' + top
+        + ',left=' + left
+        + ',width=' + Math.floor(width)
+        + ',height=' + Math.floor(height);
+
+      var win = window.open('', currentOrderInfo.documentNc15, windowFeatures);
+
+      if (win)
+      {
+        win.document.write(renderDocumentWindow({
+          title: currentOrderInfo.documentName,
+          src: this.$iframe.attr('src')
+        }));
+        win.document.close();
+      }
+      else
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 3000,
+          text: t('orderDocuments', 'popup')
+        });
+      }
     },
 
     loadDocument: function()
