@@ -183,10 +183,14 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     step(
       function()
       {
-        fs.stat(cachedFilePath, this.parallel());
         fs.stat(localFilePath, this.parallel());
+
+        if (!_.isEmpty(module.settings.remoteServer))
+        {
+          fs.stat(cachedFilePath, this.parallel());
+        }
       },
-      function(err, cachedStats, localStats)
+      function(err, localStats, cachedStats)
       {
         if (cachedStats)
         {
