@@ -34,7 +34,7 @@
     "settings:error:INVALID_CREDENTIALS": "Invalid credentials!",
     "settings:error:INVALID_LOGIN": "Invalid login!",
     "settings:error:INVALID_PASSWORD": "Invalid password!",
-    "settings:error:NO_PRIVILEGES": "User does not have sufficient privileges!",
+    "settings:error:NO_PRIVILEGES": "User doesn't have the <em>WMES Documents client activation</em> privilege!",
     "settings:msg:localServer:checking": "Checking the availability of the local HTTP server...",
     "settings:msg:localServer:success": "Local HTTP server is available :)",
     "settings:msg:localServer:failure": "Local HTTP server is not available :(",

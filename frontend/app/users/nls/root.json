@@ -112,6 +112,8 @@
     "PRIVILEGE:KAIZEN:MANAGE": "Kaizen: manage orders",
     "PRIVILEGE:KAIZEN:DICTIONARIES:VIEW": "Kaizen: view dictionaries",
     "PRIVILEGE:KAIZEN:DICTIONARIES:MANAGE": "Kaizen: manage dictionaries",
+    "PRIVILEGE:OPERATOR:ACTIVATE": "WMES Operator client activation",
+    "PRIVILEGE:DOCUMENTS:ACTIVATE": "WMES Documents client activation",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System"

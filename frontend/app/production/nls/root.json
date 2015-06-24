@@ -21,8 +21,8 @@
 
     "unlockDialog:title:unlock": "Production line activation",
     "unlockDialog:title:lock": "Production line deactivation",
-    "unlockDialog:message:unlock": "To activate the <em>{prodLine}</em> production line, enter login and password of a user with the <em>Dictionaries: manage</em> privilege. Production line cannot be activated, if it is currently connected to the server from another computer.",
-    "unlockDialog:message:lock": "To deactivate the <em>{prodLine}</em> production line, enter login and password of a user with the <em>Dictionaries: manage</em> privilege.",
+    "unlockDialog:message:unlock": "To activate the <em>{prodLine}</em> production line, enter login and password of a user with the <em>WMES Operator client activation</em> privilege. Production line cannot be activated, if it is currently connected to the server from another computer.",
+    "unlockDialog:message:lock": "To deactivate the <em>{prodLine}</em> production line, enter login and password of a user with the <em>WMES Operator client activation</em> privilege.",
     "unlockDialog:login": "Login",
     "unlockDialog:password": "Password",
     "unlockDialog:unlock": "Activate production line",

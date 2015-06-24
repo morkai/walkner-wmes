@@ -47,7 +47,7 @@ module.exports = function lockCommand(app, productionModule, socket, req, reply)
 
       user.ipAddress = userModule.getRealIp({}, socket);
 
-      if (!user.super && (user.privileges || []).indexOf('DICTIONARIES:MANAGE') === -1)
+      if (!user.super && _.includes(user.privileges, 'OPERATOR:ACTIVATE'))
       {
         app.broker.publish('production.lockFailure', {
           user: user,

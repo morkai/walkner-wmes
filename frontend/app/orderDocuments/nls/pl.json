@@ -33,7 +33,7 @@
   "settings:error:INVALID_CREDENTIALS": "Nieprawidłowy login/hasło!",
   "settings:error:INVALID_LOGIN": "Nieprawidłowy login!",
   "settings:error:INVALID_PASSWORD": "Nieprawidłowe hasło!",
-  "settings:error:NO_PRIVILEGES": "Użytkownik nie ma uprawnienia Słowniki: zarządzanie!",
+  "settings:error:NO_PRIVILEGES": "Użytkownik nie ma uprawnienia <em>Aktywacja klienta Dokumenty WMES</em>!",
   "settings:msg:localServer:checking": "Sprawdzanie dostępności lokalnego serwera HTTP...",
   "settings:msg:localServer:success": "Lokalny serwer HTTP jest dostępny :)",
   "settings:msg:localServer:failure": "Lokalny serwer HTTP nie jest dostępny :(",

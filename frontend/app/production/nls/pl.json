@@ -20,8 +20,8 @@
 
   "unlockDialog:title:unlock": "Aktywacja linii produkcyjnej",
   "unlockDialog:title:lock": "Dezaktywacja linii produkcyjnej",
-  "unlockDialog:message:unlock": "Aby aktywować linię produkcyjną <em>{prodLine}</em> na tym komputerze, podaj login i hasło użytkownika z uprawnieniem <em>Słowniki: zarządzanie</em>. Linii nie będzie można aktywować, jeżeli jest w tym momencie podłączona do serwera na innym komputerze.",
-  "unlockDialog:message:lock": "Aby dezaktywować linię produkcyjną <em>{prodLine}</em> na tym komputerze, podaj login i hasło użytkownika z uprawnieniem <em>Słowniki: zarządzanie</em>.",
+  "unlockDialog:message:unlock": "Aby aktywować linię produkcyjną <em>{prodLine}</em> na tym komputerze, podaj login i hasło użytkownika z uprawnieniem <em>Aktywacja klienta Operator WMES</em>. Linii nie będzie można aktywować, jeżeli jest w tym momencie podłączona do serwera na innym komputerze.",
+  "unlockDialog:message:lock": "Aby dezaktywować linię produkcyjną <em>{prodLine}</em> na tym komputerze, podaj login i hasło użytkownika z uprawnieniem <em>Aktywacja klienta Operator WMES</em>.",
   "unlockDialog:login": "Login",
   "unlockDialog:password": "Hasło",
   "unlockDialog:unlock": "Aktywuj linię produkcyjną",
