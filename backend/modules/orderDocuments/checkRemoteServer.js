@@ -172,7 +172,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         });
       }
       else if (orderDocumentStatus.statusDate <= this.maxStatusDate
-        || JSON.stringify(orderDocumentStatus.files) !== JSON.stringify(newFiles))
+        && JSON.stringify(orderDocumentStatus.files) === JSON.stringify(newFiles))
       {
         return this.skip();
       }
