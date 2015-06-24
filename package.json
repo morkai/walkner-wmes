@@ -20,7 +20,7 @@
     },
     "kaizen": {
       "backend": 2,
-      "frontend": 2
+      "frontend": 3
     }
   },
   "description": "Wannabe MES application in Node.js.",
