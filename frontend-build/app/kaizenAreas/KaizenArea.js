@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/kaizen/areas",clientUrlRoot:"#kaizen/areas",topicPrefix:"kaizen.areas",privilegePrefix:"KAIZEN:DICTIONARIES",nlsDomain:"kaizenAreas",labelAttribute:"name",defaults:{}})});
+define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/kaizen/areas",clientUrlRoot:"#kaizenAreas",topicPrefix:"kaizen.areas",privilegePrefix:"KAIZEN:DICTIONARIES",nlsDomain:"kaizenAreas",labelAttribute:"name",defaults:{}})});

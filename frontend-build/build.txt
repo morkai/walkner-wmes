@@ -1030,6 +1030,7 @@ app/orderDocuments/templates/documentListItem.js
 app/orderDocuments/templates/controls.js
 app/orderDocuments/views/DocumentViewerControlsView.js
 app/orderDocuments/templates/preview.js
+app/orderDocuments/templates/documentWindow.js
 app/orderDocuments/views/DocumentViewerPreviewView.js
 app/orderDocuments/templates/page.js
 app/orderDocuments/pages/DocumentViewerPage.js
