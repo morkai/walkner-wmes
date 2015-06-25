@@ -138,6 +138,7 @@
     "log:TESTING_PLC_SETUP": "Przygotowywanie sterownika...",
     "log:TESTING_PLC_TEARDOWN": "Wyłączanie sterownika...",
     "log:TESTING_EXECUTING_STEP": "{type, select, wait{Przerwa} pe{Wykonywanie testu obwodu ochronnego} iso{Wykonywanie testu rezystancji izolacji} sol{Programowanie Fortimo Solar} program{Wykonywanie kroku programowania} fn{Wykonywanie testu funkcjonalnego} vis{Wykonywanie testu wizualnego} other{Wykonywanie kroku programu <em>{type}</em>}}...",
+    "log:TESTING_SKIPPING_PROGRAMMING": "Skipping the programming step...",
     "log:ACQUIRING_SERVICE_TAG": "Pobieranie nowego Service Taga...",
     "log:ACQUIRING_SERVICE_TAG_FAILURE": "Nie udało się pobrać nowego Service Taga: <code>{error}</code>",
     "log:SERVICE_TAG_ACQUIRED": "Otrzymano Service Tag: <code>{serviceTag}</code>",
