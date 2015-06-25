@@ -313,7 +313,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   function prepareNewProgram(req, res, next)
   {
-    req.body = _.pick(req.body, ['type', 'name', 'steps']);
+    req.body = _.pick(req.body, ['type', 'name', 'steps', 'prodLines']);
     req.body.deleted = false;
     req.body.createdAt = new Date();
     req.body.updatedAt = req.body.createdAt;
@@ -325,7 +325,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   function prepareExistingProgram(req, res, next)
   {
-    req.body = _.pick(req.body, ['type', 'name', 'steps']);
+    req.body = _.pick(req.body, ['type', 'name', 'steps', 'prodLines']);
     req.body.updatedAt = new Date();
 
     next();
