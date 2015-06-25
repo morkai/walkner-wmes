@@ -1741,11 +1741,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     debug('[manageProdLinesOrders]', oldOrdersNos, newOrdersNos);
 
-    if (oldCurrentOrderNo === newCurrentOrderNo)
-    {
-      return;
-    }
-
     prodLineData.orders = newOrdersNos;
 
     manageProdLinesCurrentOrder(prodLineData, oldCurrentOrderNo, newCurrentOrderNo);
@@ -1775,7 +1770,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         delete orderToProdLinesMap[prodLineData.prodLineId];
       }
 
-      scheduleWorkingOrderChangeCheck(oldCurrentOrderNo);
+      if (oldCurrentOrderNo !== newCurrentOrderNo)
+      {
+        scheduleWorkingOrderChangeCheck(oldCurrentOrderNo);
+      }
     }
 
     if (newCurrentOrderNo === null)
