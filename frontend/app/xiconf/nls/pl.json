@@ -254,7 +254,7 @@
   "error:GPRS:EXIT_CODE:-1": "CityTouchIPT (-1): błąd aplikacji.",
 
   "log:GLP2:RESETTING_TESTER": "Resetowanie testera GLP2-I...",
-  "log:GLP2:TEST_STEP_FAILURE": "Przekroczono wartość graniczną <code>{setValue}</code>: <code>{actualValue}</code>",
+  "log:GLP2:TEST_STEP_FAILURE": "Przekroczono wartość graniczną 1 <code>{setValue}</code>: <code>{actualValue}</code> lub wartość graniczną 2: <code>{setValue2}</code>: <code>{actualValue2}</code>",
 
   "error:GLP2:SETTING_DISABLED": "GLP2: Opcja jest wyłączona w ustawieniach.",
   "error:GLP2:FEATURE_DISABLED": "Aktualna licencja nie ma opcji testera GLP2-I.",
