@@ -62,7 +62,7 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
 
       user.ipAddress = userModule.getRealIp({}, socket);
 
-      if (!user.super && _.includes(user.privileges, 'OPERATOR:ACTIVATE'))
+      if (!user.super && !_.includes(user.privileges, 'OPERATOR:ACTIVATE'))
       {
         app.broker.publish('production.unlockFailure', {
           user: user,
