@@ -244,3 +244,27 @@
 .orderDocuments-settings input[name="prefixFilter"] {
   margin-top: 5px;
 }
+.orderDocuments-localOrderPicker .form-control {
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: 1.8em;
+  height: auto;
+}
+.orderDocuments-localOrderPicker .btn-default {
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: 1.8em;
+  margin: 0;
+}
+.orderDocuments-localOrderPicker-lastOrders {
+  padding-left: 7px;
+}
+.orderDocuments-localOrderPicker-numpad {
+  padding-right: 7px;
+}
+.orderDocuments-localOrderPicker-numpad {
+  display: flex;
+  flex-wrap: wrap;
+}
+.orderDocuments-localOrderPicker-numpad > .btn {
+  flex: 1 1 33%;
+  width: 33%;
+}

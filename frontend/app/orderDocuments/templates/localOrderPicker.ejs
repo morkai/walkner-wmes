@@ -3,6 +3,26 @@
     <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- t('orderDocuments', 'localOrderPicker:orderNo') %></label>
     <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control" type="text" required maxlength="9" pattern="^[0-9]{9}$" autofocus>
   </div>
+  <div class="row">
+    <div id="<%- idPrefix %>-numpad" class="col-md-6 orderDocuments-localOrderPicker-numpad">
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="1">1</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="2">2</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="3">3</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="4">4</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="5">5</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="6">6</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="7">7</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="8">8</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="9">9</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="LEFT">&lt;</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="0">0</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="RIGHT">&gt;</button>
+      <button type="button" class="btn btn-default" tabindex="-1" data-key="BACKSPACE">x</button>
+    </div>
+    <div id="<%- idPrefix %>-lastOrders" class="col-md-6 orderDocuments-localOrderPicker-lastOrders">
+      <i class="fa fa-spinner fa-spin"></i>
+    </div>
+  </div>
   <div class="form-actions">
     <button id="<%- idPrefix %>-submit" class="btn btn-primary" type="submit"><i class="fa fa-search"></i><span><%- t('orderDocuments', 'localOrderPicker:submit') %></span></button>
   </div>

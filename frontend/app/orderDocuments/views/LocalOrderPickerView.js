@@ -33,6 +33,22 @@ define([
         this.submitForm();
 
         return false;
+      },
+      'click #-numpad > .btn': function(e)
+      {
+        this.pressNumpadKey(e.currentTarget.dataset.key);
+      },
+      'click #-lastOrders > .btn': function(e)
+      {
+        this.selectOrderNo(e.currentTarget.dataset.order);
+      }
+    },
+
+    initialize: function()
+    {
+      if (this.collection)
+      {
+        this.listenTo(this.collection, 'sync', this.renderLastOrders);
       }
     },
 
@@ -41,6 +57,45 @@ define([
       js2form(this.el, {
         orderNo: ''
       });
+
+      if (this.collection)
+      {
+        this.collection.fetch({reset: true});
+      }
+      else
+      {
+        this.$id('lastOrders').html('');
+      }
+    },
+
+    renderLastOrders: function()
+    {
+      var usedOrdersMap = {};
+      var usedOrdersCount = 0;
+      var html = [];
+
+      this.collection.forEach(function(pso)
+      {
+        var orderNo = pso.get('orderId');
+
+        if (usedOrdersMap[orderNo] || usedOrdersCount === 5)
+        {
+          return;
+        }
+
+        usedOrdersMap[orderNo] = true;
+        usedOrdersCount += 1;
+
+        html.push(
+          '<button type="button" class="btn btn-default btn-block" tabindex="-1" data-order="',
+          orderNo,
+          '">',
+          orderNo,
+          '</button>'
+        );
+      });
+
+      this.$id('lastOrders').html(html.join(''));
     },
 
     submitForm: function()
@@ -100,6 +155,46 @@ define([
       req.always(function() { $warning.addClass('hidden');});
       req.done(function() { $success.removeClass('hidden'); });
       req.fail(function() { $error.removeClass('hidden');});
+    },
+
+    pressNumpadKey: function(key)
+    {
+      var inputEl = this.$id('orderNo')[0];
+      var value = inputEl.value;
+      var start = inputEl.selectionStart;
+      var end = inputEl.selectionEnd;
+
+      if (key === 'BACKSPACE')
+      {
+        start = start - 1;
+        value = value.substring(0, start) + value.substring(end);
+      }
+      else if (key === 'LEFT')
+      {
+        start = start - 1;
+      }
+      else if (key === 'RIGHT')
+      {
+        start = start + 1;
+      }
+      else if (value.length < inputEl.maxLength)
+      {
+        value = value.substring(0, start) + key + value.substring(end);
+        start = start + 1;
+      }
+
+      inputEl.value = value;
+      inputEl.focus();
+      inputEl.setSelectionRange(start, start);
+    },
+
+    selectOrderNo: function(orderNo)
+    {
+      var inputEl = this.$id('orderNo')[0];
+
+      inputEl.value = orderNo;
+      inputEl.focus();
+      inputEl.setSelectionRange(orderNo.length, orderNo.length);
     }
 
   });
