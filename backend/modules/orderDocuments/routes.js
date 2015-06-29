@@ -49,7 +49,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           return this.skip(err);
         }
 
-        if (!user.super && _.includes(user.privileges, 'DOCUMENTS:ACTIVATE'))
+        if (!user.super && !_.includes(user.privileges, 'DOCUMENTS:ACTIVATE'))
         {
           return this.skip(express.createHttpError('NO_PRIVILEGES'));
         }
