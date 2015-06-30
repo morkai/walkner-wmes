@@ -19,6 +19,7 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
+  "PROPERTY:position": "Pozycja",
 
   "FORM:ACTION:add": "Dodaj miejsce zdarzeń",
   "FORM:ACTION:edit": "Edytuj miejsce zdarzeń",

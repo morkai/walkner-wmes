@@ -16,6 +16,10 @@ module.exports = function setupKaizenAreaModel(app, mongoose)
       type: String,
       required: true,
       trim: true
+    },
+    position: {
+      type: Number,
+      default: 0
     }
   }, {
     id: false
