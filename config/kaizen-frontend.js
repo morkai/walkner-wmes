@@ -162,5 +162,6 @@ exports['mail/sender'] = {
 };
 
 exports.kaizen = {
-  attachmentsDest: DATA_PATH + '/kaizen-attachments'
+  attachmentsDest: DATA_PATH + '/kaizen-attachments',
+  multiType: exports.frontendAppData.KAIZEN_MULTI
 };

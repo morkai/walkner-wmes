@@ -26,6 +26,7 @@
   "MSG:unobserve:failure": "Nie udało się zakończyć obserwacji zgłoszenia :(",
   "MSG:comment:failure": "Nie udało się skomentować zgłoszenia :(",
 
+  "PAGE_ACTION:export": "Eksportuj zgłoszenia",
   "PAGE_ACTION:add": "Dodaj zgłoszenie",
   "PAGE_ACTION:edit": "Edytuj zgłoszenie",
   "PAGE_ACTION:delete": "Usuń zgłoszenie",

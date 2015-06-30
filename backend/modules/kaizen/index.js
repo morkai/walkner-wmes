@@ -15,7 +15,8 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   mailSenderId: 'mail/sender',
   attachmentsDest: null,
-  emailUrlPrefix: 'http://127.0.0.1/'
+  emailUrlPrefix: 'http://127.0.0.1/',
+  multiType: true
 };
 
 exports.start = function startKaizenModule(app, kaizenModule)

@@ -398,28 +398,41 @@ exports.exportRoute = function(options, req, res, next)
   {
     var emitter = new EventEmitter();
 
-    handleExportStream(emitter, false);
+    handleExportStream(emitter, false, req, options.cleanUp);
 
     options.serializeStream(query.stream(), emitter);
   }
   else
   {
-    handleExportStream(query.stream(), true);
+    handleExportStream(query.stream(), true, req, options.cleanUp);
   }
 
-  function handleExportStream(queryStream, serializeRow)
+  function handleExportStream(queryStream, serializeRow, req, cleanUp)
   {
-    queryStream.on('error', next);
+    queryStream.on('error', function(err)
+    {
+      next(err);
+
+      if (cleanUp)
+      {
+        cleanUp(req);
+      }
+    });
 
     queryStream.on('close', function()
     {
       writeHeader();
       res.end();
+
+      if (cleanUp)
+      {
+        cleanUp(req);
+      }
     });
 
     queryStream.on('data', function(doc)
     {
-      var row = serializeRow ? options.serializeRow(doc) : doc;
+      var row = serializeRow ? options.serializeRow(doc, req) : doc;
       var multiple = Array.isArray(row);
 
       if (!row || (multiple && !row.length))

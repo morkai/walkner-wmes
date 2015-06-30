@@ -32,6 +32,13 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   express.put('/kaizen/orders/:id', canView, editKaizenOrderRoute);
   express.delete('/kaizen/orders/:id', canView, express.crud.deleteRoute.bind(null, app, KaizenOrder));
 
+  express.get('/kaizen/orders;export', canView, fetchDictionaries, express.crud.exportRoute.bind(null, {
+    filename: 'KAIZEN_ORDERS',
+    serializeRow: exportKaizenOrder,
+    cleanUp: cleanUpKaizenOrderExport,
+    model: KaizenOrder
+  }));
+
   express.get('/kaizen/orders/:order/attachments/:attachment', canView, sendAttachmentRoute);
 
   express.get('/r/kaizens/:filter', redirectToListRoute);
@@ -453,5 +460,114 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
           changes: {}
         };
       });
+  }
+
+  function fetchDictionaries(req, res, next)
+  {
+    req.kaizenDictionaries = {};
+
+    step(
+      function findStep()
+      {
+        var step = this;
+
+        _.forEach(kaizenModule.DICTIONARIES, function(modelName)
+        {
+          mongoose.model(modelName).find({}, {name: 1}).lean().exec(step.group());
+        });
+      },
+      function sendResultStep(err, dictionaries)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        _.forEach(Object.keys(kaizenModule.DICTIONARIES), function(dictionaryName, i)
+        {
+          req.kaizenDictionaries[dictionaryName] = {};
+
+          _.forEach(dictionaries[i], function(dictionaryModel)
+          {
+            req.kaizenDictionaries[dictionaryName][dictionaryModel._id] = dictionaryModel.name;
+          });
+        });
+
+        setImmediate(next);
+      }
+    );
+  }
+
+  function cleanUpKaizenOrderExport(req)
+  {
+    req.kaizenDictionaries = null;
+  }
+
+  function exportKaizenOrder(doc, req)
+  {
+    var multiType = kaizenModule.config.multiType;
+    var dict = req.kaizenDictionaries;
+    var result = {
+      '#rid': doc.rid
+    };
+
+    if (multiType)
+    {
+      result.nearMiss = _.includes(doc.types, 'nearMiss') ? 1 : 0;
+      result.suggestion = _.includes(doc.types, 'suggestion') ? 1 : 0;
+      result.kaizen = _.includes(doc.types, 'kaizen') ? 1 : 0;
+    }
+
+    result.createdAt = app.formatDateTime(doc.createdAt);
+    result['"creator'] = doc.creator.label;
+    result.status = doc.status;
+    result['"subject'] = doc.subject;
+    result['"sectionId'] = doc.section;
+    result['"sectionName'] = dict.sections[doc.section] || doc.section;
+    result.confirmedAt = app.formatDateTime(doc.confirmedAt);
+    result['"confirmer'] = doc.confirmer ? doc.confirmer.label : '';
+    result.eventDate = app.formatDate(doc.eventDate);
+    result.eventHour = doc.eventDate ? doc.eventDate.getHours() : 0;
+    result['"areaId'] = doc.area;
+    result['"areaName'] = dict.areas[doc.area] || doc.area;
+    result['"description'] = doc.description;
+    result['"nearMissCategoryId'] = doc.nearMissCategory;
+    result['"nearMissCategoryName'] = dict.categories[doc.nearMissCategory] || doc.nearMissCategory;
+    result['"causeId'] = doc.cause;
+    result['"causeName'] = dict.causes[doc.cause] || doc.cause;
+    result['"causeText'] = doc.causeText;
+    result['"riskId'] = doc.risk;
+    result['"riskName'] = dict.risks[doc.risk] || doc.risk;
+    result['"correctiveMeasures'] = doc.correctiveMeasures;
+    result['"preventiveMeasures'] = doc.preventiveMeasures;
+
+    if (multiType)
+    {
+      result['"suggestion'] = doc.suggestion;
+      result['"suggestionCategoryId'] = doc.suggestionCategory;
+      result['"suggestionCategoryName'] = dict.categories[doc.suggestionCategory] || doc.suggestionCategory;
+      result.kaizenStartDate = app.formatDate(doc.kaizenStartDate);
+      result.kaizenFinishDate = app.formatDate(doc.kaizenFinishDate);
+      result['"kaizenImprovements'] = doc.kaizenImprovements;
+      result['"kaizenEffect'] = doc.kaizenEffect;
+    }
+
+    if (multiType)
+    {
+      result['"nearMissOwners'] = result.nearMiss ? exportKaizenOrderOwners(doc.nearMissOwners) : '';
+      result['"suggestionOwners'] = result.suggestionOwners ? exportKaizenOrderOwners(doc.suggestionOwners) : '';
+      result['"kaizenOwners'] = result.kaizenOwners ? exportKaizenOrderOwners(doc.kaizenOwners) : '';
+    }
+    else
+    {
+      result['"nearMissOwners'] = exportKaizenOrderOwners(doc.nearMissOwners);
+    }
+
+    return result;
+  }
+
+  function exportKaizenOrderOwners(owners)
+  {
+    return _.map(owners, function(owner) { return owner.label; }).join(', ');
   }
 };
