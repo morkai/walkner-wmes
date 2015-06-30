@@ -277,6 +277,12 @@ exports.start = function startPubsubModule(app, module)
     {
       var socketId = socketIds[i];
       var socket = sockets[socketId];
+
+      if (socket === undefined)
+      {
+        continue;
+      }
+
       var socketMessagesMap = socketIdToMessagesMap[socketId];
       var messageIds = Object.keys(socketMessagesMap);
 
