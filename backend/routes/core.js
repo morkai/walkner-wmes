@@ -89,6 +89,11 @@ module.exports = function startCoreRoutes(app, express)
       appData[appDataKey] = JSON.stringify(_.invoke(models, 'toDictionaryObject'));
     });
 
+    _.forEach(app.options.frontendAppData, function(appDataValue, appDataKey)
+    {
+      appData[appDataKey] = JSON.stringify(appDataValue);
+    });
+
     res.render('index', {
       appCacheManifest: appCache ? '/manifest.appcache' : '',
       appData: appData,

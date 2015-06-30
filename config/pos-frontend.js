@@ -33,6 +33,10 @@ exports.modules = [
 exports.mainJsFile = '/pos-main.js';
 exports.mainCssFile = '/assets/pos-main.css';
 
+exports.frontendAppData = {
+
+};
+
 exports.dictionaryModules = {
 
 };

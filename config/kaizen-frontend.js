@@ -40,6 +40,10 @@ exports.mainCssFile = '/assets/kaizen-main.css';
 
 exports.dashboardUrlAfterLogIn = '/kaizenOrders';
 
+exports.frontendAppData = {
+  KAIZEN_MULTI: false
+};
+
 exports.dictionaryModules = {
   prodFunctions: 'PROD_FUNCTIONS',
   companies: 'COMPANIES',

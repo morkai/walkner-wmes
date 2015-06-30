@@ -61,10 +61,9 @@ define([
 
     events: _.extend({
 
-      /*
       'keydown [role="togglePanel"]': function(e)
       {
-        if (e.keyCode === 13)
+        if (window.KAIZEN_MULTI && e.keyCode === 13)
         {
           e.preventDefault();
           e.stopPropagation();
@@ -74,6 +73,11 @@ define([
 
       'click [role="togglePanel"]': function(e)
       {
+        if (!window.KAIZEN_MULTI)
+        {
+          return;
+        }
+
         var $panel = this.$(e.currentTarget).closest('.panel');
         var type = $panel.attr('data-type');
 
@@ -86,7 +90,6 @@ define([
           this.collapsePanel(type);
         }
       },
-      */
 
       'change [name="status"]': 'toggleRequiredToFinishFlags'
 
@@ -105,6 +108,7 @@ define([
       }
 
       return _.extend(FormView.prototype.serialize.call(this), {
+        multi: !!window.KAIZEN_MULTI || this.model.isMulti(),
         today: time.format(new Date(), 'YYYY-MM-DD'),
         statuses: kaizenDictionaries.statuses,
         types: kaizenDictionaries.types,

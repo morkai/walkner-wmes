@@ -51,6 +51,7 @@ define([
       ];
 
       return _.extend(DetailsView.prototype.serialize.call(this), {
+        multi: !!window.KAIZEN_MULTI || this.model.isMulti(),
         showNearMissPanel: showNearMissPanel,
         showSuggestionPanel: showSuggestionPanel,
         showKaizenPanel: showKaizenPanel,

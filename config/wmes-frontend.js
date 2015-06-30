@@ -68,6 +68,10 @@ exports.modules = [
 exports.mainJsFile = '/wmes-main.js';
 exports.mainCssFile = '/assets/wmes-main.css';
 
+exports.frontendAppData = {
+
+};
+
 exports.dictionaryModules = {
   prodFunctions: 'PROD_FUNCTIONS',
   companies: 'COMPANIES',

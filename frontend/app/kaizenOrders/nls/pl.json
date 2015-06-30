@@ -43,6 +43,7 @@
   "PROPERTY:rid": "ID",
   "PROPERTY:types": "Rodzaj",
   "PROPERTY:subject": "Temat zgłoszenia",
+  "PROPERTY:subjectAndDescription": "Temat/opis zgłoszenia",
   "PROPERTY:eventDate": "Czas zdarzenia",
   "PROPERTY:eventDate:short": "YY-MM-DD[, godz. ] H.",
   "PROPERTY:eventDate:long": "LL[, godz. ] H.",

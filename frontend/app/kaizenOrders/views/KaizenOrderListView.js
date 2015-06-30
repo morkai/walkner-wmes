@@ -3,8 +3,10 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/i18n',
   'app/core/views/ListView'
 ], function(
+  t,
   ListView
 ) {
   'use strict';
@@ -20,20 +22,31 @@ define([
 
     className: 'kaizenOrders-list is-clickable',
 
-    columns: [
-      {id: 'rid', className: 'is-min is-number'},
-      {id: 'status', tdAttrs: prepareTdAttrs},
-      {id: 'subject', tdAttrs: prepareTdAttrs},
-      {id: 'eventDate', tdAttrs: prepareTdAttrs},
-      {id: 'area', tdAttrs: prepareTdAttrs},
-      {id: 'cause', tdAttrs: prepareTdAttrs},
-      {id: 'risk', tdAttrs: prepareTdAttrs},
-      {id: 'nearMissCategory', tdAttrs: prepareTdAttrs},
-      {id: 'suggestionCategory', tdAttrs: prepareTdAttrs},
-      {id: 'section', tdAttrs: prepareTdAttrs},
-      {id: 'confirmer', tdAttrs: prepareTdAttrs},
-      'creator'
-    ],
+    serializeColumns: function()
+    {
+      var columns = [{id: 'rid', className: 'is-min is-number'}];
+
+      if (window.KAIZEN_MULTI)
+      {
+        columns.push('types');
+      }
+
+      columns.push(
+        {id: 'status', tdAttrs: prepareTdAttrs},
+        {id: 'subject', tdAttrs: prepareTdAttrs, label: t('kaizenOrders', 'PROPERTY:subjectAndDescription')},
+        {id: 'eventDate', tdAttrs: prepareTdAttrs},
+        {id: 'area', tdAttrs: prepareTdAttrs},
+        {id: 'cause', tdAttrs: prepareTdAttrs},
+        {id: 'risk', tdAttrs: prepareTdAttrs},
+        {id: 'nearMissCategory', tdAttrs: prepareTdAttrs},
+        {id: 'suggestionCategory', tdAttrs: prepareTdAttrs},
+        {id: 'section', tdAttrs: prepareTdAttrs},
+        {id: 'confirmer', tdAttrs: prepareTdAttrs},
+        'creator'
+      );
+
+      return columns;
+    },
 
     serializeActions: function()
     {

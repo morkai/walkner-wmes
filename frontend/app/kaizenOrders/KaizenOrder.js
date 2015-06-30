@@ -44,7 +44,7 @@ define([
     {
       return {
         status: 'new',
-        types: ['nearMiss'],
+        types: window.KAIZEN_MULTI ? [] : ['nearMiss'],
         eventDate: new Date()
       };
     },
@@ -57,6 +57,13 @@ define([
       {
         this.prepareObserver();
       }
+    },
+
+    isMulti: function()
+    {
+      var types = this.get('types');
+
+      return types.length > 1 || types[0] !== 'nearMiss';
     },
 
     serialize: function(options)
