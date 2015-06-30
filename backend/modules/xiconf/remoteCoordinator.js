@@ -21,6 +21,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var XiconfResult = mongoose.model('XiconfResult');
   var XiconfOrderResult = mongoose.model('XiconfOrderResult');
   var XiconfOrder = mongoose.model('XiconfOrder');
+  var Order = mongoose.model('Order');
   var License = mongoose.model('License');
 
   var prodLinesToDataMap = {};
@@ -985,20 +986,27 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         var quantityDone;
 
-        if (ledQuantityDone && programQuantityDone)
+        if (orderData.items.length === 0)
         {
-          quantityDone = (ledQuantityDone + programQuantityDone) / 2;
-        }
-        else if (programQuantityDone)
-        {
-          quantityDone = programQuantityDone;
+          quantityDone = orderData.quantityDone;
         }
         else
         {
-          quantityDone = ledQuantityDone;
-        }
+          if (ledQuantityDone && programQuantityDone)
+          {
+            quantityDone = (ledQuantityDone + programQuantityDone) / 2;
+          }
+          else if (programQuantityDone)
+          {
+            quantityDone = programQuantityDone;
+          }
+          else
+          {
+            quantityDone = ledQuantityDone;
+          }
 
-        quantityDone = Math.round(quantityDone * 100) / 100;
+          quantityDone = Math.round(quantityDone * 100) / 100;
+        }
 
         var changes = {
           quantityDone: quantityDone,
@@ -1291,7 +1299,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         if (programItemIndex === -1 && !anyLeds)
         {
-          return this.skip(new Error('12NC_NOT_FOUND'));
+          if (orderData.items.length > 0)
+          {
+            return this.skip(new Error('12NC_NOT_FOUND'));
+          }
+
+          $set.quantityDone = orderData.quantityDone + 1;
+
+          changes.push(function(orderData) { orderData.quantityDone = $set.quantityDone; });
         }
 
         var condition = {_id: data.orderNo};
@@ -1549,7 +1564,59 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     step(
       function findXiconfOrderStep()
       {
-        XiconfOrder.findById(orderNo, {'items.serialNumbers': 0}).lean().exec(this.parallel());
+        XiconfOrder.findById(orderNo, {'items.serialNumbers': 0}).lean().exec(this.next());
+      },
+      function sendResultsStep(err, xiconfOrder)
+      {
+        if (err || xiconfOrder)
+        {
+          return this.skip(err, xiconfOrder);
+        }
+
+        var fields = {
+          nc12: 1,
+          name: 1,
+          startDate: 1,
+          finishDate: 1,
+          qty: 1
+        };
+
+        Order.findById(orderNo, fields).lean().exec(this.next());
+      },
+      function createXiconfOrder(err, order)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!order)
+        {
+          debug('[getOrderData] Order not found: %s', orderNo);
+
+          return this.skip(null, null);
+        }
+
+        debug('[getOrderData] Creating XiconfOrder from Order: %s', orderNo);
+
+        var xiconfOrder = new XiconfOrder({
+          _id: orderNo,
+          startDate: order.startDate,
+          finishDate: order.finishDate,
+          reqDate: order.startDate,
+          name: order.name,
+          nc12: [order.nc12],
+          quantityTodo: order.qty,
+          quantityDone: 0,
+          status: -1,
+          serviceTagCounter: 0,
+          items: [],
+          startedAt: null,
+          finishedAt: null,
+          importedAt: new Date()
+        });
+
+        xiconfOrder.save(this.next());
       },
       function sendResultsStep(err, xiconfOrder)
       {
@@ -1562,7 +1629,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         if (xiconfOrder !== null)
         {
-          ordersToDataMap[orderNo] = xiconfOrder;
+          ordersToDataMap[orderNo] = _.isFunction(xiconfOrder.toObject) ? xiconfOrder.toObject() : xiconfOrder;
         }
 
         return sendGetOrderDataResults(orderNo, null, xiconfOrder);
