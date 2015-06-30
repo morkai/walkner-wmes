@@ -28,6 +28,7 @@
       'app/core/views/NavbarView',
       'app/core/views/LogInFormView',
       'app/purchaseOrders/qzPrint',
+      'app/purchaseOrders/templates/navbar',
       'app/time',
       'app/pos-routes',
       'bootstrap',
@@ -54,7 +55,8 @@
     PageLayout,
     NavbarView,
     LogInFormView,
-    qzPrint)
+    qzPrint,
+    navbarTemplate)
   {
     var startBroker = null;
 
@@ -116,7 +118,8 @@
       var req = router.getCurrentRequest();
       var navbarView = new NavbarView({
         currentPath: req === null ? '/' : req.path,
-        loadedModules: loadedModules.map
+        loadedModules: loadedModules.map,
+        template: navbarTemplate
       });
 
       navbarView.on('logIn', function()

@@ -3,15 +3,25 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  './dashboard/routes',
+  './broker',
+  './router',
   './events/routes',
   './purchaseOrders/routes',
   './users/routes',
   './vendors/routes',
   './vendorNc12s/routes'
-], function()
-{
+], function(
+  broker,
+  router
+) {
   'use strict';
 
-
+  router.map('/', function()
+  {
+    broker.publish('router.navigate', {
+      url: '/purchaseOrders',
+      trigger: true,
+      replace: true
+    });
+  });
 });
