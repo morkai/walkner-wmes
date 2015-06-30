@@ -3,8 +3,9 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  './broker',
+  './router',
   './companies/routes',
-  './dashboard/routes',
   './divisions/routes',
   './events/routes',
   './prodFunctions/routes',
@@ -16,9 +17,18 @@ define([
   './kaizenCategories/routes',
   './kaizenCauses/routes',
   './kaizenRisks/routes'
-], function()
-{
+], function(
+  broker,
+  router
+) {
   'use strict';
 
-
+  router.map('/', function()
+  {
+    broker.publish('router.navigate', {
+      url: '/kaizenOrders?observers.user.id=mine&sort(-createdAt)&limit(15)',
+      trigger: true,
+      replace: true
+    });
+  });
 });
