@@ -19,6 +19,7 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
+  "PROPERTY:position": "Pozycja",
 
   "FORM:ACTION:add": "Dodaj dział",
   "FORM:ACTION:edit": "Edytuj dział",

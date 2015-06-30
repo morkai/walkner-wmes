@@ -13,7 +13,9 @@ define([
 
   return Collection.extend({
 
-    model: KaizenSection
+    model: KaizenSection,
+
+    comparator: 'position'
 
   });
 });

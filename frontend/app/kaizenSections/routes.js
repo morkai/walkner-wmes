@@ -46,7 +46,8 @@ define([
       collection: new KaizenSectionCollection(null, {rqlQuery: req.rql}),
       columns: [
         {id: '_id', className: 'is-min'},
-        'name'
+        'name',
+        {id: 'position', className: 'is-min'}
       ]
     }));
   });
