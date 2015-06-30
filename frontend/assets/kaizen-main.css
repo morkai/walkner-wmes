@@ -26,3 +26,12 @@
 #app-loading.error {
   color: red;
 }
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:active,
+.navbar-default .navbar-brand:focus {
+  color: #d9534f;
+}
+.navbar-brand:before {
+  content: "\f071";
+}

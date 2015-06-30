@@ -67,6 +67,7 @@ exports.modules = [
 
 exports.mainJsFile = '/wmes-main.js';
 exports.mainCssFile = '/assets/wmes-main.css';
+exports.faviconFile = 'assets/wmes-favicon.ico';
 
 exports.frontendAppData = {
 

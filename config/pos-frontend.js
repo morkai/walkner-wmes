@@ -32,6 +32,7 @@ exports.modules = [
 
 exports.mainJsFile = '/pos-main.js';
 exports.mainCssFile = '/assets/pos-main.css';
+exports.faviconFile = 'assets/pos-favicon.ico';
 
 exports.frontendAppData = {
 

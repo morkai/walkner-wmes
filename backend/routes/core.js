@@ -4,11 +4,12 @@
 
 'use strict';
 
+var path = require('path');
 var _ = require('lodash');
 
 module.exports = function startCoreRoutes(app, express)
 {
-  var appCache = app.options.env !== 'development';
+  var dev = app.options.env === 'development';
   var updaterModule = app[app.options.updaterId || 'updater'];
   var userModule = app[app.options.userId || 'user'];
   var requirejsPaths;
@@ -51,6 +52,8 @@ module.exports = function startCoreRoutes(app, express)
   });
 
   express.get('/config.js', sendRequireJsConfig);
+
+  express.get('/favicon.ico', sendFavicon);
 
   function showIndex(req, res)
   {
@@ -95,7 +98,7 @@ module.exports = function startCoreRoutes(app, express)
     });
 
     res.render('index', {
-      appCacheManifest: appCache ? '/manifest.appcache' : '',
+      appCacheManifest: !dev ? '/manifest.appcache' : '',
       appData: appData,
       mainJsFile: app.options.mainJsFile || 'main.js',
       mainCssFile: app.options.mainCssFile || 'assets/main.css'
@@ -114,6 +117,17 @@ module.exports = function startCoreRoutes(app, express)
       paths: requirejsPaths,
       shim: requirejsShim
     });
+  }
+
+  function sendFavicon(req, res)
+  {
+    var faviconPath = path.join(
+      express.config[dev ? 'staticPath' : 'staticBuildPath'],
+      app.options.faviconFile || 'favicon.ico'
+    );
+
+    res.type('image/x-icon');
+    res.sendFile(faviconPath);
   }
 
   function reloadRequirejsConfig()
