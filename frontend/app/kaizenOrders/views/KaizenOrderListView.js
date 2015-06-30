@@ -69,6 +69,25 @@ define([
 
         return actions;
       };
+    },
+
+    afterRender: function()
+    {
+      ListView.prototype.afterRender.call(this);
+
+      var view = this;
+
+      this.$el.popover({
+        selector: '.list-item > td[data-id="subject"]',
+        container: this.el,
+        trigger: 'hover',
+        placement: 'auto right',
+        html: true,
+        content: function()
+        {
+          return view.collection.get(this.parentNode.dataset.id).get('description');
+        }
+      });
     }
 
   });
