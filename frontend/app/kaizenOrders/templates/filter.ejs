@@ -76,6 +76,7 @@
     <label for="<%- idPrefix %>-category"><%- t('kaizenOrders', 'PROPERTY:category') %></label>
     <select id="<%- idPrefix %>-category" name="category" class="form-control" size="1">
       <option></option>
+      <% if (multi) { %>
       <optgroup label="<%- t('kaizenOrders', 'type:nearMiss') %>">
         <% nearMissCategories.forEach(function(category) { %>
         <option value="nearMiss.<%- category._id %>"><%= category.name %></option>
@@ -86,6 +87,11 @@
         <option value="suggestion.<%- category._id %>"><%= category.name %></option>
         <% }) %>
       </optgroup>
+      <% } else { %>
+      <% nearMissCategories.forEach(function(category) { %>
+      <option value="nearMiss.<%- category._id %>"><%= category.name %></option>
+      <% }) %>
+      <% } %>
     </select>
   </div>
   <div class="form-group">

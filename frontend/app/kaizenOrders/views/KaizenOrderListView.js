@@ -38,8 +38,15 @@ define([
         {id: 'area', tdAttrs: prepareTdAttrs},
         {id: 'cause', tdAttrs: prepareTdAttrs},
         {id: 'risk', tdAttrs: prepareTdAttrs},
-        {id: 'nearMissCategory', tdAttrs: prepareTdAttrs},
-        {id: 'suggestionCategory', tdAttrs: prepareTdAttrs},
+        {id: 'nearMissCategory', tdAttrs: prepareTdAttrs}
+      );
+
+      if (window.KAIZEN_MULTI)
+      {
+        columns.push({id: 'suggestionCategory', tdAttrs: prepareTdAttrs});
+      }
+
+      columns.push(
         {id: 'section', tdAttrs: prepareTdAttrs},
         {id: 'confirmer', tdAttrs: prepareTdAttrs},
         'creator'
