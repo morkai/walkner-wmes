@@ -3,6 +3,7 @@
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+  "breadcrumbs:logIn": "Logowanie do systemu",
 
   "MSG:LOADING_FAILURE": "Ładowanie użytkowników nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie użytkownika nie powiodło się :(",

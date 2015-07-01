@@ -195,9 +195,9 @@
 
         var url = req.url;
 
-        if (url === '/' && typeof window.DASHBOARD_URL_AFTER_LOG_IN === 'string')
+        if (url === '/' || url === '/login')
         {
-          router.replace(window.DASHBOARD_URL_AFTER_LOG_IN);
+          router.replace(window.DASHBOARD_URL_AFTER_LOG_IN || '/');
         }
       });
 

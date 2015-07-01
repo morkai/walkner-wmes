@@ -222,6 +222,14 @@ function(
       {
         next();
       }
+      else if (!user.isLoggedIn())
+      {
+        broker.publish('router.navigate', {
+          url: '/login',
+          trigger: true,
+          replace: true
+        });
+      }
       else
       {
         viewport.showPage(new ErrorPage({code: 401, req: req, referer: referer}));

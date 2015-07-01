@@ -4,6 +4,7 @@
     "BREADCRUMBS:addForm": "Adding",
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+    "breadcrumbs:logIn": "Log in form",
 
     "MSG:LOADING_FAILURE": "Failed to load the users :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the user :(",

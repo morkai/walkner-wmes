@@ -3,23 +3,39 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../i18n',
   '../router',
   '../viewport',
   '../user',
+  '../core/View',
   '../core/util/showDeleteFormPage',
+  '../core/views/LogInFormView',
   './User',
   'i18n!app/nls/users'
 ], function(
+  t,
   router,
   viewport,
   user,
+  View,
   showDeleteFormPage,
+  LogInFormView,
   User
 ) {
   'use strict';
 
   var canView = user.auth('USERS:VIEW');
   var canManage = user.auth('USERS:MANAGE');
+
+  router.map('/login', function()
+  {
+    viewport.showPage(new View({
+      pageId: 'logInForm',
+      layoutName: 'page',
+      view: new LogInFormView(),
+      breadcrumbs: [t.bound('users', 'breadcrumbs:logIn')]
+    }));
+  });
 
   router.map('/users', canView, function(req)
   {

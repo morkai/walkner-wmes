@@ -39,7 +39,7 @@ exports.mainJsFile = '/kaizen-main.js';
 exports.mainCssFile = '/assets/kaizen-main.css';
 exports.faviconFile = 'assets/kaizen-favicon.ico';
 
-exports.dashboardUrlAfterLogIn = '/kaizenOrders';
+exports.dashboardUrlAfterLogIn = '/';
 
 exports.frontendAppData = {
   KAIZEN_MULTI: false

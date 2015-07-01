@@ -1,3 +1,10 @@
+.page[data-id="logInForm"] .page-breadcrumbs {
+  text-align: center;
+}
+.page[data-id="logInForm"] .logInForm {
+  max-width: 600px;
+  margin: 0 auto;
+}
 .users-form-choicesRow > .form-group {
   width: auto;
 }
