@@ -7,7 +7,8 @@ define([
   'highcharts',
   './i18n',
   './time',
-  './broker'
+  './broker',
+  'i18n!app/nls/core'
 ], function(
   _,
   Highcharts,

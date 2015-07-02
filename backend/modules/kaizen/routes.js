@@ -9,12 +9,14 @@ var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
 var multer = require('multer');
+var report = require('./report');
 
 module.exports = function setUpKaizenRoutes(app, kaizenModule)
 {
   var express = app[kaizenModule.config.expressId];
   var userModule = app[kaizenModule.config.userId];
   var mongoose = app[kaizenModule.config.mongooseId];
+  var reportsModule = app[kaizenModule.config.reportsId];
   var KaizenOrder = mongoose.model('KaizenOrder');
 
   var tmpAttachments = {};
@@ -40,6 +42,13 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   }));
 
   express.get('/kaizen/orders/:order/attachments/:attachment', canView, sendAttachmentRoute);
+
+  express.get(
+    '/kaizen/report',
+    canView,
+    reportsModule.helpers.sendCachedReport.bind(null, 'kaizen'),
+    reportRoute
+  );
 
   express.get('/r/kaizens/:filter', redirectToListRoute);
   express.get('/r/kaizen/:rid', redirectToDetailsRoute);
@@ -569,5 +578,33 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   function exportKaizenOrderOwners(owners)
   {
     return _.map(owners, function(owner) { return owner.label; }).join(', ');
+  }
+
+  function reportRoute(req, res, next)
+  {
+    var options = {
+      fromTime: reportsModule.helpers.getTime(req.query.from) || null,
+      toTime: reportsModule.helpers.getTime(req.query.to) || null,
+      interval: req.query.interval
+    };
+
+    reportsModule.helpers.generateReport(
+      app,
+      reportsModule,
+      report,
+      'kaizen',
+      req.reportHash,
+      options,
+      function(err, reportJson)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.type('json');
+        res.send(reportJson);
+      }
+    );
   }
 };

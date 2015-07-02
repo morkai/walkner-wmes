@@ -14,6 +14,7 @@ exports.DEFAULT_CONFIG = {
   sioId: 'sio',
   userId: 'user',
   mailSenderId: 'mail/sender',
+  reportsId: 'reports',
   attachmentsDest: null,
   emailUrlPrefix: 'http://127.0.0.1/',
   multiType: true
@@ -33,7 +34,8 @@ exports.start = function startKaizenModule(app, kaizenModule)
     [
       kaizenModule.config.mongooseId,
       kaizenModule.config.expressId,
-      kaizenModule.config.userId
+      kaizenModule.config.userId,
+      kaizenModule.config.reportsId
     ],
     setUpRoutes.bind(null, app, kaizenModule)
   );

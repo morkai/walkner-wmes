@@ -1,0 +1,7 @@
+<div class="kaizenOrders-report">
+  <div class="filter-container"></div>
+  <% metrics.forEach(function(metric) { %>
+  <h3><%- t('kaizenOrders', 'report:title:' + metric) %></h3>
+  <div class="kaizenOrders-report-<%- metric %>"></div>
+  <% }) %>
+</div>

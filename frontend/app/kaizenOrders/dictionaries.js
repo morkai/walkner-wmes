@@ -30,6 +30,7 @@ define([
   var pubsubSandbox = null;
   var seenSub = null;
   var dictionaries = {
+    multiType: !!window.KAIZEN_MULTI,
     types: [],
     statuses: [],
     sections: new KaizenSectionCollection(),
@@ -99,6 +100,22 @@ define([
       }
 
       releaseTimer = setTimeout(unload, 30000);
+    },
+    getLabel: function(dictionary, id)
+    {
+      if (!dictionaries[dictionary])
+      {
+        return id;
+      }
+
+      var model = dictionaries[dictionary].get(id);
+
+      if (!model)
+      {
+        return id;
+      }
+
+      return model.getLabel();
     }
   };
 

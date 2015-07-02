@@ -10,10 +10,13 @@ define([
   '../core/util/showDeleteFormPage',
   './KaizenOrderCollection',
   './KaizenOrder',
+  './KaizenOrderReport',
   './pages/KaizenOrderListPage',
   './pages/KaizenOrderDetailsPage',
   './pages/KaizenOrderAddFormPage',
   './pages/KaizenOrderEditFormPage',
+  './pages/KaizenOrderReportPage',
+  'i18n!app/nls/reports',
   'i18n!app/nls/kaizenOrders'
 ], function(
   _,
@@ -23,14 +26,27 @@ define([
   showDeleteFormPage,
   KaizenOrderCollection,
   KaizenOrder,
+  KaizenOrderReport,
   KaizenOrderListPage,
   KaizenOrderDetailsPage,
   KaizenOrderAddFormPage,
-  KaizenOrderEditFormPage
+  KaizenOrderEditFormPage,
+  KaizenOrderReportPage
 ) {
   'use strict';
 
   var canAccess = user.auth();
+
+  router.map('/kaizenReport', canAccess, function(req)
+  {
+    viewport.showPage(new KaizenOrderReportPage({
+      model: new KaizenOrderReport({
+        from: +req.query.from || undefined,
+        to: +req.query.to || undefined,
+        interval: req.query.interval
+      })
+    }));
+  });
 
   router.map('/kaizenOrders', canAccess, function(req)
   {

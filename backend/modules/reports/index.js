@@ -18,13 +18,15 @@ exports.DEFAULT_CONFIG = {
   prodFunctionsId: 'prodFunctions',
   messengerClientId: null,
   messengerType: 'request',
-  javaBatik: null
+  javaBatik: null,
+  reports: ['1', '2', '3', '4', '5', '6', '7']
 };
 
 exports.start = function startReportsModule(app, module)
 {
   var totalCountCache = {};
 
+  module.helpers = helpers;
   module.prodNumConstant = 8;
   module.mapReduceResults = {};
 
@@ -43,11 +45,7 @@ exports.start = function startReportsModule(app, module)
       module.config.mongooseId,
       module.config.userId,
       module.config.expressId,
-      module.config.orgUnitsId,
-      module.config.settingsId,
-      module.config.prodTasksId,
-      module.config.downtimeReasonsId,
-      module.config.prodFunctionsId
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );

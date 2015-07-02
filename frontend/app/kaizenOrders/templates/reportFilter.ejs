@@ -1,0 +1,42 @@
+<form class="well filter-form kaizenOrders-report-filter">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
+    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="<%- t('core', 'placeholder:date') %>">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
+    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="<%- t('core', 'placeholder:date') %>">
+  </div>
+  <div class="form-group">
+    <label><%- t('reports', 'filter:interval') %></label>
+    <div id="<%- idPrefix %>-interval" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
+      <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
+        <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group filter-actions">
+    <div class="btn-group">
+      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a data-range="today"><%= t('reports', 'filter:submit:today') %></a></li>
+        <li><a data-range="yesterday"><%= t('reports', 'filter:submit:yesterday') %></a></li>
+        <li><a data-range="currentWeek"><%= t('reports', 'filter:submit:currentWeek') %></a></li>
+        <li><a data-range="prevWeek"><%= t('reports', 'filter:submit:prevWeek') %></a></li>
+        <li><a data-range="currentMonth"><%= t('reports', 'filter:submit:currentMonth') %></a></li>
+        <li><a data-range="prevMonth"><%= t('reports', 'filter:submit:prevMonth') %></a></li>
+        <li><a data-range="q1"><%= t('reports', 'filter:submit:q1') %></a></li>
+        <li><a data-range="q2"><%= t('reports', 'filter:submit:q2') %></a></li>
+        <li><a data-range="q3"><%= t('reports', 'filter:submit:q3') %></a></li>
+        <li><a data-range="q4"><%= t('reports', 'filter:submit:q4') %></a></li>
+        <li><a data-range="currentYear" data-interval="quarter"><%= t('reports', 'filter:submit:currentYear') %></a></li>
+        <li><a data-range="prevYear" data-interval="quarter"><%= t('reports', 'filter:submit:prevYear') %></a></li>
+      </ul>
+    </div>
+  </div>
+</form>

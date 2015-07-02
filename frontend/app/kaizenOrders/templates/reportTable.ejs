@@ -1,0 +1,14 @@
+<table class="table table-bordered table-condensed">
+  <tbody>
+    <% rows.forEach(function(row) { %>
+    <tr data-id="<%- row.id %>">
+      <td <% if (row.color) { %>style="border-left-color: <%- row.color %>"<% } %>><%= row.label || t('kaizenOrders', 'report:series:' + row.id) %></td>
+      <td class="is-min is-number"><%- Math.round(row.abs || 0).toLocaleString() %></td>
+      <td class="is-min is-number"><%- Math.round((row.rel || 0) * 100).toLocaleString() %>%</td>
+    </tr>
+    <% }) %>
+    <tr>
+      <td colspan="3"></td>
+    </tr>
+  </tbody>
+</table>

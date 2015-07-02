@@ -15,7 +15,7 @@ function(
   return function formatTooltipHeader(ctx)
   {
     var timeMoment = time.getMoment(typeof ctx === 'number' ? ctx : ctx.x);
-    var interval = this.model.query.get('interval') || 'day';
+    var interval = (this.model.query ? this.model.query.get('interval') : this.model.get('interval')) || 'day';
     var data;
 
     if (interval === 'shift')

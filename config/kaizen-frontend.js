@@ -29,6 +29,7 @@ exports.modules = [
   'prodFunctions',
   'prodTasks',
   'kaizen',
+  'reports',
   'permalinks',
   'mail/sender',
   'httpServer',
@@ -164,4 +165,11 @@ exports['mail/sender'] = {
 exports.kaizen = {
   attachmentsDest: DATA_PATH + '/kaizen-attachments',
   multiType: exports.frontendAppData.KAIZEN_MULTI
+};
+
+exports.reports = {
+  messengerClientId: null,
+  messengerType: null,
+  javaBatik: 'java -jar c:/tools/batik/batik-rasterizer.jar',
+  reports: []
 };
