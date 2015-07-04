@@ -235,7 +235,9 @@ define([
         {
           var subdivision = prodLine.getSubdivision();
 
-          return subdivision && subdivision.get('type') === 'press';
+          return !prodLine.get('deactivatedAt')
+            && subdivision
+            && subdivision.get('type') === 'press';
         })
         .map(function(prodLine)
         {
