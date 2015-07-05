@@ -30,7 +30,10 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
   var orderNo = (query.orderNo || '').replace(/[^0-9]+/g, '');
   var hour = parseInt((query.hour || '').replace(/[^0-9]+/g, ''), 10);
 
-  var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(query.orgUnitType, query.orgUnitId);
+  var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(query.orgUnitType, query.orgUnitId).map(function(mrp)
+  {
+    return mrp.replace(/~.*?$/, '');
+  });
 
   if (isNaN(hour))
   {
