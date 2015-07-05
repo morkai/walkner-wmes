@@ -15,12 +15,17 @@ define([
 ) {
   'use strict';
 
+  function createDescriptionTdAttrs(row)
+  {
+    return row.deactivatedAt === '-' ? '' : 'class="is-deleted"';
+  }
+
   return ListView.extend({
 
     columns: [
       'orgUnitPath',
       {id: '_id', className: 'is-min'},
-      'description',
+      {id: 'description', tdAttrs: createDescriptionTdAttrs},
       {id: 'deactivatedAt', className: 'is-min'}
     ],
 
