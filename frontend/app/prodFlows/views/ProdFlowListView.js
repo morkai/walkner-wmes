@@ -17,12 +17,17 @@ define([
 ) {
   'use strict';
 
+  function createNameTdAttrs(row)
+  {
+    return row.deactivatedAt === '-' ? '' : 'class="is-deleted"';
+  }
+
   return ListView.extend({
 
     columns: [
       {id: 'subdivision', className: 'is-min'},
       {id: 'mrpControllers', className: 'is-min'},
-      'name',
+      {id: 'name', tdAttrs: createNameTdAttrs},
       {id: 'deactivatedAt', className: 'is-min'}
     ],
 
