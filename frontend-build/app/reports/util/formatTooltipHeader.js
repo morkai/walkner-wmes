@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/i18n","app/time"],function(r,t){"use strict";return function(e){var o,u=t.getMoment("number"==typeof e?e:e.x),a=this.model.query.get("interval")||"day";return"shift"===a?o={shift:r("core","SHIFT:"+(6===u.hours()?1:14===u.hours()?2:3))}:"quarter"===a&&(o={quarter:r("core","QUARTER:"+u.quarter())}),u.format(r("reports","tooltipHeaderFormat:"+a,o))}});
+define(["app/i18n","app/time"],function(e,t){"use strict";return function(r){var o,i=t.getMoment("number"==typeof r?r:r.x),u=(this.model.query?this.model.query.get("interval"):this.model.get("interval"))||"day";return"shift"===u?o={shift:e("core","SHIFT:"+(6===i.hours()?1:14===i.hours()?2:3))}:"quarter"===u&&(o={quarter:e("core","QUARTER:"+i.quarter())}),i.format(e("reports","tooltipHeaderFormat:"+u,o))}});
