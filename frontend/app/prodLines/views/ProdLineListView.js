@@ -74,6 +74,7 @@ define([
         var row = prodLineModel.toJSON();
 
         row.workCenter = renderOrgUnitPath(prodLineModel, true);
+        row.inventoryNo = row.inventoryNo || '-';
         row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
 
         return row;
