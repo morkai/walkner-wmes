@@ -304,6 +304,9 @@ kbd {
 .list-item.is-deleted > td.actions {
   text-decoration: none!important;
 }
+.list-item > td.is-deleted {
+  text-decoration: line-through!important;
+}
 .is-clickable .list-item > td {
   cursor: pointer;
 }
