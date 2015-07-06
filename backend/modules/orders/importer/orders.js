@@ -197,7 +197,7 @@ exports.start = function startOrdersImporterModule(app, module)
         update: {
           $set: {
             updatedAt: ts,
-            operations: missingOrder.operators,
+            operations: missingOrder.operations,
             importTs: missingOrder.importTs
           },
           $push: {
