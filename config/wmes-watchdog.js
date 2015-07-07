@@ -88,5 +88,7 @@ exports['mail/sender'] = {
 
 exports.watchdog = {
   recipients: [],
+  appStartedRecipients: [],
+  noEventRecipients: [],
   events: []
 };
