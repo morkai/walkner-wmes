@@ -27,11 +27,14 @@ exports.events = {
   insertDelay: 1000,
   topics: {
     debug: [
-      'app.started'
+
     ],
     info: [
       'events.**',
       'purchaseOrders.synced'
+    ],
+    error: [
+      'app.started'
     ]
   }
 };

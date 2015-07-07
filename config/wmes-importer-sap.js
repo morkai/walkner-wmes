@@ -50,7 +50,7 @@ exports.events = {
   insertDelay: 1000,
   topics: {
     debug: [
-      'app.started'
+
     ],
     info: [
       'events.**',
@@ -64,7 +64,8 @@ exports.events = {
     error: [
       'warehouse.*.syncFailed',
       'xiconf.orders.syncFailed',
-      'orderDocuments.syncFailed'
+      'orderDocuments.syncFailed',
+      'app.started'
     ]
   }
 };

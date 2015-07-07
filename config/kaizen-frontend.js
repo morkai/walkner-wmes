@@ -58,7 +58,6 @@ exports.events = {
   insertDelay: 1000,
   topics: {
     debug: [
-      'app.started',
       'users.login', 'users.logout',
       '*.added', '*.edited',
       'kaizen.*.added', 'kaizen.*.edited'
@@ -73,7 +72,8 @@ exports.events = {
       'kaizen.*.deleted'
     ],
     error: [
-      '*.syncFailed'
+      '*.syncFailed',
+      'app.started'
     ]
   },
   blacklist: [

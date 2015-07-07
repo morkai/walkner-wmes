@@ -29,10 +29,13 @@ exports.events = {
   insertDelay: 1000,
   topics: {
     debug: [
-      'app.started'
+
     ],
     info: [
       'events.**'
+    ],
+    error: [
+      'app.started'
     ]
   }
 };

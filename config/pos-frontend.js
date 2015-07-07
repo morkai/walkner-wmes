@@ -49,7 +49,6 @@ exports.events = {
   insertDelay: 1000,
   topics: {
     debug: [
-      'app.started',
       'users.login', 'users.logout',
       '*.added', '*.edited'
     ],
@@ -61,7 +60,8 @@ exports.events = {
       '*.deleted'
     ],
     error: [
-      '*.syncFailed'
+      '*.syncFailed',
+      'app.started'
     ]
   }
 };
