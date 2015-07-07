@@ -88,7 +88,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
       '"operationWorkCenter': operation.workCenter || '',
       '"division': doc.division,
       '"subdivision': subdivision ? subdivision.name : doc.subdivision,
-      '"mrp': doc.mrpControllers.join(','),
+      '"mrp': Array.isArray(doc.mrpControllers) ? doc.mrpControllers.join(',') : [],
       '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
       '"workCenter': doc.workCenter,
       '"prodLine': doc.prodLine,
