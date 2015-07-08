@@ -138,7 +138,7 @@
   "FORM:MSG:attachmentEdit": "Wybierz nowe pliki tylko wtedy, gdy chcesz nadpisać już istniejące pliki.",
   "FORM:help:subject": "Wpisz krótki tekst...",
   "FORM:help:section": "Wybierz swój dział...",
-  "FORM:help:confirmer": "Wyszukaj przełożonego po nazwisku lub nr kadrowym...",
+  "FORM:help:confirmer": "Wybierz nazwisko przełożonego, w którego obszarze odpowiedzialności stwierdzono zdarzenie...",
   "FORM:help:correctiveMeasures": "Co zrobiono, aby usunąć <strong>skutek</strong> wystąpienia tego konkretnego zdarzenia.",
   "FORM:help:preventiveMeasures": "Co zrobiono, aby usunąć <strong>przyczynę</strong> występowania podobnych zdarzeń.",
   "FORM:help:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
