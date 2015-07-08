@@ -172,6 +172,14 @@ define([
       });
     },
 
+    handleSuccess: function()
+    {
+       this.broker.publish('router.navigate', {
+        url: this.model.genClientUrl() + (this.options.editMode ? '' : '?thank=you'),
+        trigger: true
+      });
+    },
+
     serializeToForm: function()
     {
       var formData = this.model.toJSON();

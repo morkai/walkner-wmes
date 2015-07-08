@@ -16,6 +16,7 @@ define([
   './pages/KaizenOrderAddFormPage',
   './pages/KaizenOrderEditFormPage',
   './pages/KaizenOrderReportPage',
+  './views/KaizenOrderThankYouView',
   'i18n!app/nls/reports',
   'i18n!app/nls/kaizenOrders'
 ], function(
@@ -31,7 +32,8 @@ define([
   KaizenOrderDetailsPage,
   KaizenOrderAddFormPage,
   KaizenOrderEditFormPage,
-  KaizenOrderReportPage
+  KaizenOrderReportPage,
+  KaizenOrderThankYouView
 ) {
   'use strict';
 
@@ -57,9 +59,25 @@ define([
 
   router.map('/kaizenOrders/:id', canAccess, function(req)
   {
-    viewport.showPage(new KaizenOrderDetailsPage({
+    var page = new KaizenOrderDetailsPage({
       model: new KaizenOrder({_id: req.params.id})
-    }));
+    });
+
+    viewport.showPage(page);
+
+    if (req.query.thank === 'you')
+    {
+      page.once('afterRender', function()
+      {
+        page.broker.publish('router.navigate', {
+          url: '/kaizenOrders/' + page.model.id,
+          trigger: false,
+          replace: true
+        });
+
+        viewport.showDialog(new KaizenOrderThankYouView());
+      });
+    }
   });
 
   router.map('/kaizenOrders;add', canAccess, function()

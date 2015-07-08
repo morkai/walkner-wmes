@@ -189,5 +189,8 @@
   "report:filenames:cause": "KAIZEN_IloscWgPrzyczyn",
   "report:filenames:risk": "KAIZEN_IloscWgRyzyka",
   "report:filenames:nearMissCategory": "KAIZEN_IloscWgKatZPW",
-  "report:filenames:suggestionCategory": "KAIZEN_IloscWgKatSug"
+  "report:filenames:suggestionCategory": "KAIZEN_IloscWgKatSug",
+
+  "thanks:message": "Dziękujemy za zgłoszenie!",
+  "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)"
 }

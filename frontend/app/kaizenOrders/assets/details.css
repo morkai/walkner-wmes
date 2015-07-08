@@ -52,3 +52,19 @@
 .kaizenOrders-details-tabs .nav-tabs > li {
   margin-bottom: 0;
 }
+.kaizenOrders-thanks {
+  text-align: center;
+}
+.kaizenOrders-thanks-message {
+  margin: 0;
+  font-size: 32px;
+}
+.kaizenOrders-thanks > .fa {
+  margin: 16px 0;
+  color: #5cb85c;
+  font-size: 112px;
+}
+.kaizenOrders-thanks-footnote {
+  margin: 0;
+  font-style: oblique;
+}
