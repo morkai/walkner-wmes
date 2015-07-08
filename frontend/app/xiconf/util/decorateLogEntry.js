@@ -13,19 +13,14 @@ define([
 
   return function decorateLogEntry(logEntry)
   {
-    var isProgrammingFailure = logEntry.text === 'PROGRAMMING_FAILURE';
-
-    if (isProgrammingFailure || logEntry.text === 'PROGRAMMING_SUCCESS')
+    if (typeof logEntry.duration === 'number')
     {
-      if (typeof logEntry.duration === 'number')
-      {
-        logEntry.duration = time.toString(logEntry.duration / 1000, false, true);
-      }
+      logEntry.duration = time.toString(logEntry.duration / 1000, false, true);
+    }
 
-      if (isProgrammingFailure)
-      {
-        logEntry.error = t('xiconf', 'error:' + logEntry.errorCode);
-      }
+    if (logEntry.errorCode !== undefined)
+    {
+      logEntry.error = t('history', 'error:' + logEntry.errorCode);
     }
 
     var moment = time.getMoment(logEntry.time);
@@ -33,7 +28,7 @@ define([
     return {
       datetime: moment.toISOString(),
       time: moment.format('HH:mm:ss.SSS'),
-      text: t('xiconf', 'log:' + logEntry.text, logEntry)
+      text: t('history', 'log:' + logEntry.text, logEntry)
     };
   };
 });
