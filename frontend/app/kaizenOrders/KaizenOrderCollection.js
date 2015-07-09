@@ -15,7 +15,7 @@ define([
 
     model: KaizenOrder,
 
-    rqlQuery: 'limit(15)&sort(-createdAt)'
+    rqlQuery: 'exclude(changes)&limit(15)&sort(-createdAt)'
 
   });
 });
