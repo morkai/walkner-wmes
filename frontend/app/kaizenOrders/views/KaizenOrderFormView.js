@@ -55,6 +55,11 @@ define([
     return html;
   }
 
+  function formatUserSelect2Text(user, name)
+  {
+    return name;
+  }
+
   return FormView.extend({
 
     template: template,
@@ -338,7 +343,8 @@ define([
       buttonGroup.toggle(this.$id('status'));
 
       setUpUserSelect2(this.$id('subscribers'), {
-        multiple: true
+        multiple: true,
+        textFormatter: formatUserSelect2Text
       });
 
       this.setUpConfirmerSelect2();
@@ -355,7 +361,7 @@ define([
     {
       var confirmer = this.model.get('confirmer');
       var $confirmer = setUpUserSelect2(this.$id('confirmer'), {
-
+        textFormatter: formatUserSelect2Text
       });
 
       if (confirmer)
@@ -376,9 +382,14 @@ define([
         text: user.getLabel()
       };
 
-      setUpUserSelect2(this.$id('nearMissOwners'), {multiple: true}).select2('data', prepareOwners('nearMiss'));
-      setUpUserSelect2(this.$id('suggestionOwners'), {multiple: true}).select2('data', prepareOwners('suggestion'));
-      setUpUserSelect2(this.$id('kaizenOwners'), {multiple: true}).select2('data', prepareOwners('kaizen'));
+      setUpUserSelect2(this.$id('nearMissOwners'), {multiple: true, textFormatter: formatUserSelect2Text})
+        .select2('data', prepareOwners('nearMiss'));
+
+      setUpUserSelect2(this.$id('suggestionOwners'), {multiple: true, textFormatter: formatUserSelect2Text})
+        .select2('data', prepareOwners('suggestion'));
+
+      setUpUserSelect2(this.$id('kaizenOwners'), {multiple: true, textFormatter: formatUserSelect2Text}).
+        select2('data', prepareOwners('kaizen'));
 
       function prepareOwners(type)
       {
