@@ -15,7 +15,17 @@ define([
 ) {
   'use strict';
 
-  function userToData(user)
+  function formatText(user, name)
+  {
+    if (user.personellId)
+    {
+      name += ' (' + user.personellId + ')';
+    }
+
+    return name;
+  }
+
+  function userToData(user, textFormatter)
   {
     if (user.id && user.text)
     {
@@ -25,16 +35,10 @@ define([
     var name = user.lastName && user.firstName
       ? (user.lastName + ' ' + user.firstName)
       : (user.name || user.login || user._id);
-    var text = name;
-
-    if (user.personellId)
-    {
-      text += ' (' + user.personellId + ')';
-    }
 
     return {
       id: user._id,
-      text: text,
+      text: (textFormatter || formatText)(user, name),
       user: user
     };
   }
@@ -115,7 +119,9 @@ define([
           }
 
           return {
-            results: users.map(userToData).sort(function(a, b) { return a.text.localeCompare(b.text); })
+            results: users
+              .map(function(user) { return userToData(user, options.textFormatter); })
+              .sort(function(a, b) { return a.text.localeCompare(b.text); })
           };
         }
       }
@@ -143,7 +149,7 @@ define([
       {
         if (res.collection && res.collection.length)
         {
-          $input.select2('data', userToData(res.collection[0]));
+          $input.select2('data', userToData(res.collection[0], options.textFormatter));
 
           if (options.onDataLoaded)
           {
