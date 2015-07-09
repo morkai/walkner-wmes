@@ -49,7 +49,7 @@ define([
       columns.push(
         {id: 'section', tdAttrs: prepareTdAttrs},
         {id: 'confirmer', tdAttrs: prepareTdAttrs},
-        'creator'
+        {id: 'owners', label: t('kaizenOrders', 'PROPERTY:nearMissOwners')}
       );
 
       return columns;
@@ -85,16 +85,52 @@ define([
       var view = this;
 
       this.$el.popover({
-        selector: '.list-item > td[data-id="subject"]',
+        selector: '.list-item > td',
         container: this.el,
         trigger: 'hover',
-        placement: 'auto right',
+        placement: function(popoverEl, sourceEl)
+        {
+          return sourceEl.dataset.id === 'subject' ? 'auto right' : 'auto left';
+        },
         html: true,
         content: function()
         {
-          return view.collection.get(this.parentNode.dataset.id).get('description');
+          var model = view.collection.get(this.parentNode.dataset.id);
+
+          if (this.dataset.id === 'subject')
+          {
+            return model.get('description');
+          }
+
+          if (this.dataset.id === 'owners')
+          {
+            return view.serializeOwnersPopoverContent(model);
+          }
+
+          return undefined;
         }
       });
+    },
+
+    serializeOwnersPopoverContent: function(kaizenOrder)
+    {
+      var owners = kaizenOrder.get('owners');
+
+      if (owners.length <= 1)
+      {
+        return undefined;
+      }
+
+      var html = '<ul class="kaizenOrders-list-owners">';
+
+      for (var i = 0; i < owners.length; ++i)
+      {
+        html += '<li>' + owners[i].rendered;
+      }
+
+      html += '</ul>';
+
+      return html;
     }
 
   });

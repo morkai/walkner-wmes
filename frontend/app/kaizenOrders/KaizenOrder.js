@@ -51,12 +51,9 @@ define([
 
     initialize: function()
     {
-      this.on('reset change', this.prepareObserver);
+      this.on('reset change', this.prepareUsers);
 
-      if (this.attributes.observers)
-      {
-        this.prepareObserver();
-      }
+      this.prepareUsers();
     },
 
     isMulti: function()
@@ -108,14 +105,6 @@ define([
         obj[userInfoProperty] = renderUserInfo({userInfo: obj[userInfoProperty]});
       });
 
-      OWNER_PROPERTIES.forEach(function(ownerProperty)
-      {
-        obj[ownerProperty] = (obj[ownerProperty] || []).map(function(userInfo)
-        {
-          return renderUserInfo({userInfo: userInfo});
-        });
-      });
-
       if (!Array.isArray(obj.attachments))
       {
         obj.attachments = [];
@@ -132,6 +121,15 @@ define([
       {
         row.className = 'is-changed';
       }
+
+      var owners = row.owners;
+
+      row.owners = owners.length === 1
+        ? owners[0].rendered
+        : t('kaizenOrders', 'LIST:owners', {
+            first: owners[0].rendered,
+            count: owners.length - 1
+          });
 
       return row;
     },
@@ -215,6 +213,19 @@ define([
       this.trigger('seen');
     },
 
+    prepareUsers: function()
+    {
+      if (this.attributes.observers)
+      {
+        this.prepareObserver();
+      }
+
+      if (this.attributes.nearMissOwners)
+      {
+        this.prepareOwners();
+      }
+    },
+
     prepareObserver: function()
     {
       var observers = this.get('observers') || [];
@@ -237,6 +248,34 @@ define([
       }
 
       this.trigger('change:observer');
+    },
+
+    prepareOwners: function()
+    {
+      var attrs = this.attributes;
+      var owners = {};
+
+      OWNER_PROPERTIES.forEach(function(ownerProperty)
+      {
+        attrs[ownerProperty] = (attrs[ownerProperty] || []).map(function(userInfo)
+        {
+          var rendered = renderUserInfo({userInfo: userInfo});
+
+          if (!owners[userInfo.id])
+          {
+            owners[userInfo.id] = {
+              userInfo: userInfo,
+              rendered: rendered
+            };
+          }
+
+          return rendered;
+        });
+      });
+
+      attrs.owners = _.values(owners);
+
+      this.trigger('change:owners');
     }
 
   }, {

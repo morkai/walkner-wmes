@@ -43,6 +43,8 @@
   "PANEL:TITLE:addForm": "Formularz dodawania zgłoszenia",
   "PANEL:TITLE:editForm": "Formularz edycji zgłoszenia",
 
+  "LIST:owners": "{first} +{count, plural, one{1 inna} other{{count} inne}}",
+
   "PROPERTY:rid": "ID",
   "PROPERTY:types": "Rodzaj",
   "PROPERTY:subject": "Temat zgłoszenia",
