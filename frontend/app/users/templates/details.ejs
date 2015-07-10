@@ -72,9 +72,13 @@
         <div class="prop">
           <div class="prop-name"><%- t('users', 'PROPERTY:privileges') %></div>
           <div class="prop-value">
+            <% if (!model.privileges.length) { %>
+            -
+            <% } else { %>
             <% model.privileges.forEach(function(privilege) { %>
             <span class="label label-<%- /MANAGE/.test(privilege) ? 'warning' : 'info' %>"><%- t('users', 'PRIVILEGE:' + privilege) %></span>
             <% }) %>
+            <% } %>
           </div>
         </div>
     </div>
