@@ -68,4 +68,9 @@ td.is-min {
   td.actions {
     display: none;
   }
+  th.is-min,
+  td.is-min {
+    width: auto;
+    white-space: normal;
+  }
 }

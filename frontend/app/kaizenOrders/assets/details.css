@@ -68,3 +68,10 @@
   margin: 0;
   font-style: oblique;
 }
+@media print {
+  .kaizenOrders-details-tabs > .tab-content > .tab-pane {
+    display: block!important;
+    opacity: 1!important;
+    visibility: visible!important;
+  }
+}
