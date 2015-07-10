@@ -63,3 +63,9 @@ td.is-min {
 .is-colored .actions .btn {
   border-color: #bbb;
 }
+@media print {
+  th.actions,
+  td.actions {
+    display: none;
+  }
+}
