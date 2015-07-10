@@ -10,6 +10,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/prodLines/ProdLineCollection',
   'app/orderDocuments/templates/settings'
 ], function(
   _,
@@ -19,6 +20,7 @@ define([
   t,
   viewport,
   View,
+  ProdLineCollection,
   template
 ) {
   'use strict';
@@ -60,6 +62,9 @@ define([
       js2form(this.el, this.serializeFormData());
 
       this.checkLocalServer();
+      this.setUpProdLineSelect2();
+
+      console.log('afterRender');
     },
 
     serializeFormData: function()
@@ -162,6 +167,53 @@ define([
       req.fail(function() { $error.removeClass('hidden');});
     },
 
+    setUpProdLineSelect2: function()
+    {
+      var view = this;
+      var prodLineCollection = new ProdLineCollection(null, {
+        rqlQuery: 'deactivatedAt=null&sort(_id)'
+      });
+
+      prodLineCollection.once('reset', function()
+      {
+        var $prodLineId = view.$id('prodLineId');
+
+        if (!$prodLineId.length)
+        {
+          return;
+        }
+
+        $prodLineId.parent().addClass('has-required-select2');
+        $prodLineId.removeClass('form-control').select2({
+          data: prodLineCollection.map(function(prodLine)
+          {
+            return {
+              id: prodLine.id,
+              text: prodLine.id,
+              description: prodLine.get('description')
+            };
+          }),
+          matcher: function(term, text, option)
+          {
+            term = term.toUpperCase();
+
+            return text.toUpperCase().indexOf(term) !== -1 || option.description.toUpperCase().indexOf(term) !== -1;
+          },
+          formatResult: function(result)
+          {
+            var html = '<div class="kaizenOrders-select2">';
+            html += '<p><strong>' + _.escape(result.id) + '</strong><br>';
+            html += _.escape(result.description) + '</p>';
+            html += '</div>';
+
+            return html;
+          }
+        });
+      });
+
+      this.promised(prodLineCollection.fetch({reset: true}));
+    },
+
     prepareProdLineName: function(prodLineId)
     {
       return prodLineId
@@ -169,6 +221,11 @@ define([
         .replace(/\s+/, ' ')
         .replace(/~.*?$/, '')
         .trim();
+    },
+
+    onDialogShown: function()
+    {
+      this.$id('prodLineId').focus();
     }
 
   });
