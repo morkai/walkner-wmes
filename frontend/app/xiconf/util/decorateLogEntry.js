@@ -20,7 +20,7 @@ define([
 
     if (logEntry.errorCode !== undefined)
     {
-      logEntry.error = t('history', 'error:' + logEntry.errorCode);
+      logEntry.error = t('xiconf', 'error:' + logEntry.errorCode);
     }
 
     var moment = time.getMoment(logEntry.time);
@@ -28,7 +28,7 @@ define([
     return {
       datetime: moment.toISOString(),
       time: moment.format('HH:mm:ss.SSS'),
-      text: t('history', 'log:' + logEntry.text, logEntry)
+      text: t('xiconf', 'log:' + logEntry.text, logEntry)
     };
   };
 });
