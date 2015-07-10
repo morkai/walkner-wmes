@@ -36,13 +36,7 @@ define([
       },
       'change #-prodLineId': function(e)
       {
-        var prodLineName = e.target.value
-          .replace(/_/g, ' ')
-          .replace(/\s+/, ' ')
-          .replace(/~.*?$/, '')
-          .trim();
-
-        this.$id('prodLineName').val(prodLineName);
+        this.$id('prodLineName').val(this.prepareProdLineName(e.target.value));
       },
       'change #-prefixFilter': function(e)
       {
@@ -63,19 +57,36 @@ define([
 
     afterRender: function()
     {
+      js2form(this.el, this.serializeFormData());
+
+      this.checkLocalServer();
+    },
+
+    serializeFormData: function()
+    {
       var model = this.model;
       var prodLine = model.get('prodLine');
-
-      js2form(this.el, {
+      var formData = {
         prodLineId: prodLine._id,
         prodLineName: prodLine.name,
         prefixFilterMode: model.get('prefixFilterMode'),
         prefixFilter: model.get('prefixFilter'),
         localServerUrl: model.get('localServerUrl'),
         localServerPath: model.get('localServerPath')
-      });
+      };
 
-      this.checkLocalServer();
+      if (!formData.prodLineId)
+      {
+        var dashPos = this.model.id.indexOf('-');
+
+        if (dashPos !== -1)
+        {
+          formData.prodLineId = this.model.id.substring(dashPos + 1);
+          formData.prodLineName = this.prepareProdLineName(formData.prodLineId);
+        }
+      }
+
+      return formData;
     },
 
     submitForm: function()
@@ -149,6 +160,15 @@ define([
       req.always(function() { $warning.addClass('hidden');});
       req.done(function() { $success.removeClass('hidden'); });
       req.fail(function() { $error.removeClass('hidden');});
+    },
+
+    prepareProdLineName: function(prodLineId)
+    {
+      return prodLineId
+        .replace(/_/g, ' ')
+        .replace(/\s+/, ' ')
+        .replace(/~.*?$/, '')
+        .trim();
     }
 
   });

@@ -92,6 +92,7 @@ define([
 
       this.toggleConnectionStatus();
       this.resize();
+      this.checkInitialConfig();
     },
 
     resize: function()
@@ -122,6 +123,14 @@ define([
           clientId: this.model.id,
           prodLineId: prodLine._id
         });
+      }
+    },
+
+    checkInitialConfig: function()
+    {
+      if (!this.model.get('prodLine')._id)
+      {
+        this.controlsView.openSettingsDialog();
       }
     },
 

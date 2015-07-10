@@ -43,8 +43,8 @@ define([
         },
         localServerUrl: 'http://127.0.0.1:1335',
         localServerPath: '',
-        prefixFilterMode: 'inclusive',
-        prefixFilter: '',
+        prefixFilterMode: 'exclusive',
+        prefixFilter: '161 165 198',
         localOrder: {
           no: null,
           nc12: '',
