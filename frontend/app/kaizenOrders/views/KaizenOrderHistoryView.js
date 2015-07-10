@@ -174,7 +174,7 @@ define([
         case 'nearMissOwners':
         case 'suggestionOwners':
         case 'kaizenOwners':
-          return value.map(function(owner) { return owner.label.replace(/\s*\(.*?\)/, ''); }).join(', ');
+          return value.map(function(owner) { return (owner.label || '').replace(/\s*\(.*?\)/, ''); }).join(', ');
 
         case 'status':
           return t('kaizenOrders', 'status:' + value);
