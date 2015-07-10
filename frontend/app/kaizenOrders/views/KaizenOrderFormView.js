@@ -230,8 +230,8 @@ define([
         this
       );
       formData.nearMissOwners = serializeOwners('nearMiss');
-      formData.suggestionOwners = serializeOwners('suggestion');
-      formData.kaizenOwners = serializeOwners('kaizen');
+      formData.suggestionOwners = kaizenDictionaries.multiType ? serializeOwners('suggestion') : [];
+      formData.kaizenOwners = kaizenDictionaries.multiType ? serializeOwners('kaizen') : [];
       formData.subscribers = this.$id('subscribers').select2('data').map(function(subscriber)
       {
         return {
@@ -290,6 +290,9 @@ define([
             id: owner.id,
             label: owner.text
           };
+        }).filter(function(owner)
+        {
+          return !!owner.id;
         });
       }
     },
