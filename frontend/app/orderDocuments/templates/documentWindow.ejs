@@ -13,20 +13,35 @@
     overflow: hidden;
   }
   iframe {
-    position: fixed;
+    position: absolute;
     top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
     border: 0;
-    width: 100%;
-  }
-  html, body, iframe {
-    height: 100%;
   }
   </style>
 </head>
 <body>
-<iframe src="<%- src %>"></iframe>
+<iframe src="about:blank"></iframe>
+<script>
+var iframeEl = document.body.getElementsByTagName('iframe')[0];
+
+function resizeIframe()
+{
+  iframeEl.width = window.innerWidth;
+  iframeEl.height = window.innerHeight;
+}
+
+window.onresize = resizeIframe;
+
+window.onload = function()
+{
+  setTimeout(function()
+  {
+    resizeIframe();
+
+    iframeEl.src = '<%- src %>';
+  }, 1);
+};
+</script>
 </body>
 </html>

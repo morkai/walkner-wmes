@@ -6,6 +6,7 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/viewport',
   'app/core/View',
   'app/orderDocuments/templates/preview',
   'app/orderDocuments/templates/documentWindow'
@@ -13,6 +14,7 @@ define([
   _,
   $,
   t,
+  viewport,
   View,
   template,
   renderDocumentWindow
@@ -56,11 +58,10 @@ define([
     openDocumentWindow: function()
     {
       var currentOrderInfo = this.model.getCurrentOrderInfo();
-      var screen = window.screen;
-      var width = screen.availWidth * 0.6;
-      var height = screen.availHeight * 0.8;
-      var left = Math.floor((screen.availWidth - width) / 2);
-      var top = Math.floor((screen.availHeight - height) / 2);
+      var width = window.innerWidth * 0.95;
+      var height = window.innerHeight * 0.95;
+      var left = Math.floor((window.innerWidth - width) / 2);
+      var top = Math.floor((window.innerHeight - height) / 2);
       var windowFeatures = 'resizable,scrollbars,location=no'
         + ',top=' + top
         + ',left=' + left
