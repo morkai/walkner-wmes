@@ -96,6 +96,9 @@ body.print {
   .ft {
     display: none!important;
   }
+  .page-breadcrumbs {
+    position: static!important;
+  }
   .page-breadcrumbs li {
     font-size: 24px!important;
   }
