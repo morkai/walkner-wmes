@@ -155,12 +155,24 @@ exports.start = function startOrderDocumentsModule(app, module)
       _.forEach(names, function(name)
       {
         extra.push({
-          pattern: name,
+          pattern: prepareExtraDocumentPattern(name),
           documents: documents
         });
       });
     });
 
     return extra;
+  }
+
+  function prepareExtraDocumentPattern(name)
+  {
+    try
+    {
+      return new RegExp(name);
+    }
+    catch (err)
+    {
+      return name;
+    }
   }
 };
