@@ -9,7 +9,7 @@ module.exports = function setupXiconfOrderModel(app, mongoose)
   var xiconfOrderItemSchema = mongoose.Schema({
     kind: {
       type: String,
-      enum: ['program', 'led', 'gprs']
+      enum: ['program', 'led', 'gprs', 'test']
     },
     nc12: String,
     name: String,

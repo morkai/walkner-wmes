@@ -689,6 +689,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('INPUT'));
     }
 
+    if (!_.isString(input.programId)
+      || _.isEmpty(input.programId)
+      || !_.isString(input.programName)
+      || _.isEmpty(input.programName))
+    {
+      input.programId = null;
+      input.programName = null;
+    }
+
     acquireServiceTag(input, reply);
   }
 
@@ -716,6 +725,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       || !validateInputLeds(input))
     {
       return reply(new Error('INPUT'));
+    }
+
+    if (!_.isString(input.programId)
+      || _.isEmpty(input.programId)
+      || !_.isString(input.programName)
+      || _.isEmpty(input.programName))
+    {
+      input.programId = null;
+      input.programName = null;
     }
 
     releaseServiceTag(input, reply);
@@ -813,6 +831,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       nc12: input.nc12,
       multi: input.multi,
       leds: input.leds,
+      programId: input.programId,
+      programName: input.programName,
       recount: input.recount !== false
     });
   }
@@ -824,7 +844,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       orderNo: input.orderNo,
       nc12: input.nc12,
       multi: input.multi,
-      leds: input.leds
+      leds: input.leds,
+      programId: input.programId,
+      programName: input.programName
     });
   }
 
@@ -889,7 +911,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         getOrderData(data.orderNo, this.parallel());
 
         XiconfResult
-          .find({orderNo: data.orderNo, serviceTag: null, result: 'success'}, {nc12: 1, workflow: 1})
+          .find({orderNo: data.orderNo, serviceTag: null, result: 'success'}, {nc12: 1, workflow: 1, program: 1})
           .lean()
           .exec(this.parallel());
       },
@@ -907,10 +929,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         var i;
         var nc12ToResults = {};
+        var testResults = {};
 
         for (i = 0; i < xiconfResults.length; ++i)
         {
           var xiconfResult = xiconfResults[i];
+          var program = xiconfResult.program;
           var nc12Results = nc12ToResults[xiconfResult.nc12];
 
           if (!nc12Results)
@@ -929,14 +953,30 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           {
             nc12Results.single += 1;
           }
+
+          if (program)
+          {
+            if (!testResults[program._id])
+            {
+              testResults[program._id] = {
+                quantity: 0,
+                programName: program.name
+              };
+            }
+
+            testResults[program._id] += 1;
+          }
         }
 
         var quantityPerResult = 0;
         var programQuantityDone = 0;
         var ledQuantityDone = 0;
+        var testQuantityDone = 0;
         var programItems = [];
         var ledItems = [];
+        var testItems = {};
         var itemChanges = [];
+        var newTestItems = [];
 
         for (i = 0; i < orderData.items.length; ++i)
         {
@@ -950,7 +990,43 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           {
             programItems.push({item: item, index: i});
           }
+          else if (item.kind === 'test')
+          {
+            testItems[item.nc12] = {item: item, index: i};
+          }
         }
+
+        var nextTestItemIndex = orderData.items.length;
+
+        _.forEach(testResults, function(testResult, programId)
+        {
+          var testItem = testItems[programId];
+
+          if (testItem)
+          {
+            itemChanges.push({
+              index: testItem.index,
+              extraQuantityDone: testResult.quantity
+            });
+          }
+          else
+          {
+            testItems[programId] = {
+              item: {
+                kind: 'test',
+                nc12: programId,
+                name: testResult.programName,
+                quantityTodo: orderData.quantityTodo,
+                quantityDone: 0,
+                extraQuantityDone: testResult.quantity,
+                serialNumbers: []
+              },
+              index: nextTestItemIndex++
+            };
+
+            newTestItems.push(testItems[programId].item);
+          }
+        });
 
         var anyLedItems = ledItems.length > 0;
 
@@ -984,6 +1060,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           programQuantityDone += programItemQuantityDone / quantityPerResult;
         }
 
+        _.forEach(testItems, function(testItem)
+        {
+          testQuantityDone += testItem.item.quantityDone + testItem.item.extraQuantityDone;
+        });
+
         var quantityDone;
 
         if (orderData.items.length === 0)
@@ -1000,9 +1081,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           {
             quantityDone = programQuantityDone;
           }
-          else
+          else if (ledQuantityDone)
           {
             quantityDone = ledQuantityDone;
+          }
+          else
+          {
+            quantityDone = testQuantityDone;
           }
 
           quantityDone = Math.round(quantityDone * 100) / 100;
@@ -1039,11 +1124,17 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           updates.$set['items.' + itemChange.index + '.extraQuantityDone'] = itemChange.extraQuantityDone;
         }
 
+        for (i = 0; i < newTestItems.length; ++i)
+        {
+          updates.$set['items.' + (orderData.items.length + i)] = newTestItems[i];
+        }
+
         XiconfOrder.collection.update(condition, updates, this.next());
 
         this.orderData = orderData;
         this.changes = changes;
         this.itemChanges = itemChanges;
+        this.newTestItems = newTestItems;
       },
       function applyChangesStep(err)
       {
@@ -1059,6 +1150,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           var itemChange = this.itemChanges[i];
 
           this.orderData.items[itemChange.index].extraQuantityDone = itemChange.extraQuantityDone;
+        }
+
+        if (this.newTestItems.length)
+        {
+          this.orderData.items = this.orderData.items.concat(this.newTestItems);
         }
       },
       function(err)
@@ -1086,6 +1182,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         this.orderData = null;
         this.changes = null;
         this.itemChanges = null;
+        this.newTestItems = null;
 
         done(err);
       }
@@ -1116,52 +1213,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(new Error('NO_FREE_SERVICE_TAGS'));
         }
 
-        var programItem;
-        var programItemIndex = -1;
-        var ledItems = {};
-
-        for (var i = 0; i < orderData.items.length; ++i)
-        {
-          var item = orderData.items[i];
-
-          if (item.kind === 'led')
-          {
-            ledItems[item.nc12] = {
-              item: item,
-              index: i
-            };
-          }
-          else if (item.kind === 'program' && item.nc12 === data.nc12)
-          {
-            programItem = item;
-            programItemIndex = i;
-          }
-        }
-
         var $set = {
           serviceTagCounter: orderData.serviceTagCounter + 1
         };
         var changes = [
           function(orderData) { orderData.serviceTagCounter = $set.serviceTagCounter; }
         ];
-        var anyLeds = false;
-
-        _.forEach(data.leds, function(led)
-        {
-          var ledItem = ledItems[led.nc12];
-
-          if (ledItem)
-          {
-            delete ledItems[led.nc12];
-
-            anyLeds = true;
-          }
-        });
-
-        if (programItemIndex === -1 && !anyLeds)
-        {
-          return this.skip(new Error('12NC_NOT_FOUND'));
-        }
 
         var condition = {_id: data.orderNo};
         var updates = {$set: $set};
@@ -1234,6 +1291,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         var programItem;
         var programItemIndex = -1;
+        var testItem;
+        var testItemIndex = -1;
         var ledItems = {};
 
         for (var i = 0; i < orderData.items.length; ++i)
@@ -1252,9 +1311,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             programItem = item;
             programItemIndex = i;
           }
+          else if (item.kind === 'test' && data.programId !== null && item.nc12 === data.programId)
+          {
+            testItem = item;
+            testItemIndex = i;
+          }
         }
 
-        var $push = {};
+        var $addToSet = {};
         var $set = {
           serviceTagCounter: orderData.serviceTagCounter + (data.serviceTag === null ? 1 : 0)
         };
@@ -1271,6 +1335,31 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           $set['items.' + programItemIndex + '.quantityDone'] = newProgramItemQuantityDone;
 
           changes.push(applyItemQuantityDoneChange.bind(null, programItem, newProgramItemQuantityDone));
+        }
+
+        if (testItemIndex === -1 && data.programId !== null)
+        {
+          testItem = {
+            kind: 'test',
+            nc12: data.programId,
+            name: data.programName,
+            quantityTodo: orderData.quantityTodo,
+            quantityDone: 1,
+            extraQuantityDone: 0,
+            serialNumbers: []
+          };
+
+          $set['items.' + (orderData.items.length)] = testItem;
+
+          changes.push(function() { orderData.items.push(testItem); });
+        }
+        else if (testItemIndex !== -1)
+        {
+          var testItemQuantityDone = testItem.quantityDone + 1;
+
+          $set['items.' + testItemIndex + '.quantityDone'] = testItemQuantityDone;
+
+          changes.push(applyItemQuantityDoneChange.bind(null, testItem, testItemQuantityDone));
         }
 
         _.forEach(data.leds, function(led)
@@ -1290,31 +1379,19 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           var newLedItemQuantityDone = item.quantityDone + led.serialNumbers.length;
 
           $set['items.' + index + '.quantityDone'] = newLedItemQuantityDone;
-          $push['items.' + index + '.serialNumbers'] = {$each: led.serialNumbers};
+          $addToSet['items.' + index + '.serialNumbers'] = {$each: led.serialNumbers};
 
           changes.push(applyItemQuantityDoneChange.bind(null, item, newLedItemQuantityDone));
 
           anyLeds = true;
         });
 
-        if (programItemIndex === -1 && !anyLeds)
-        {
-          if (orderData.items.length > 0)
-          {
-            return this.skip(new Error('12NC_NOT_FOUND'));
-          }
-
-          $set.quantityDone = orderData.quantityDone + 1;
-
-          changes.push(function(orderData) { orderData.quantityDone = $set.quantityDone; });
-        }
-
         var condition = {_id: data.orderNo};
         var updates = {$set: $set};
 
         if (anyLeds)
         {
-          updates.$addToSet = $push;
+          updates.$addToSet = $addToSet;
         }
 
         XiconfOrder.collection.update(condition, updates, this.next());
@@ -1400,6 +1477,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         var programItem;
         var programItemIndex = -1;
+        var testItem;
+        var testItemIndex = -1;
         var ledItems = {};
 
         for (var i = 0; i < orderData.items.length; ++i)
@@ -1418,6 +1497,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             programItem = item;
             programItemIndex = i;
           }
+          else if (item.kind === 'test' && data.programId !== null && item.nc12 === data.programId)
+          {
+            testItem = item;
+            testItemIndex = i;
+          }
         }
 
         var $pull = {};
@@ -1433,6 +1517,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           $set['items.' + programItemIndex + '.quantityDone'] = newProgramItemQuantityDone;
 
           changes.push(applyItemQuantityDoneChange.bind(null, programItem, newProgramItemQuantityDone));
+        }
+
+        if (testItemIndex !== -1)
+        {
+          var newTestItemQuantityDone = testItem.quantityDone - 1;
+
+          $set['items.' + testItemIndex + '.quantityDone'] = newTestItemQuantityDone;
+
+          changes.push(applyItemQuantityDoneChange.bind(null, testItem, newTestItemQuantityDone));
         }
 
         _.forEach(data.leds, function(led)
@@ -1458,11 +1551,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
           anyLeds = true;
         });
-
-        if (programItemIndex === -1 && !anyLeds)
-        {
-          return this.skip(new Error('12NC_NOT_FOUND'));
-        }
 
         var condition = {_id: data.orderNo};
         var updates = {$set: $set};

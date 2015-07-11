@@ -81,7 +81,9 @@ define([
 
       if (nc12)
       {
-        rqlQuery.selector.args.push({name: 'eq', args: [itemKind === 'led' ? 'leds.nc12' : 'nc12', nc12]});
+        var property = itemKind === 'led' ? 'leds.nc12' : /[A-Z]/.test(nc12) ? 'program._id' : 'nc12';
+
+        rqlQuery.selector.args.push({name: 'eq', args: [property, nc12]});
       }
 
       return this.xiconfResultCollection.genClientUrl() + '?' + rqlQuery;

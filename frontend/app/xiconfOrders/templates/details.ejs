@@ -65,14 +65,24 @@
       <div class="panel-details">
         <div class="props first">
           <div class="prop">
-            <div class="prop-name"><%- t('xiconf', 'PROPERTY:nc12') %></div>
+            <div class="prop-name"><%- t('xiconfOrders', 'kind:nc12:' + item.kind) %></div>
             <div class="prop-value">
+              <% if (item.nc12) { %>
               <a href="<%- linkToResults(model._id, item.nc12, item.kind) %>" title="<%- t('xiconfOrders', 'details:showResultsLink') %>"><%- item.nc12 %></a>
+              <% } else { %>
+              -
+              <% } %>
             </div>
           </div>
           <div class="prop">
             <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:name') %></div>
-            <div class="prop-value"><%= item.name %></div>
+            <div class="prop-value">
+              <% if (item.kind === 'test') { %>
+              <a href="#xiconf/programs/<%- item.nc12 %>"><%= item.name %></a>
+              <% } else { %>
+              <%= item.name %>
+              <% } %>
+            </div>
           </div>
           <div class="prop">
             <div class="prop-name"><%- t('xiconf', 'PROPERTY:quantity') %></div>
@@ -80,7 +90,7 @@
               <% if (item.kind === 'gprs') { %>
               <%- item.quantityTodo.toLocaleString() %>
               <% } else { %>
-              <%- item.totalQuantityDone.toLocaleString() %>/<%- item.quantityTodo.toLocaleString() %> <%- t('xiconfOrders', 'kindUnit:' + item.kind) %>
+              <%- item.totalQuantityDone.toLocaleString() %>/<%- item.quantityTodo.toLocaleString() %> <%- t('xiconfOrders', 'kind:unit:' + item.kind) %>
               <% } %>
             </div>
           </div>

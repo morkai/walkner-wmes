@@ -56,6 +56,7 @@ define([
         formData.nc12Type = 'program';
         formData.nc12 = term.args[1];
       },
+      'program._id': 'nc12',
       'leds.nc12': function(propertyName, term, formData)
       {
         formData.nc12Type = 'led';
@@ -122,9 +123,11 @@ define([
         selector.push({name: 'eq', args: ['orderNo', orderNo]});
       }
 
-      if (/^[0-9]{12}$/.test(nc12))
+      if (/^[0-9A-Z]{9,}$/.test(nc12))
       {
-        selector.push({name: 'eq', args: [nc12Type === 'led' ? 'leds.nc12' : 'nc12', nc12]});
+        var property = nc12Type === 'led' ? 'leds.nc12' : /[A-Z]/.test(nc12) ? 'program._id' : 'nc12';
+
+        selector.push({name: 'eq', args: [property, nc12]});
       }
 
       if (/^P[0-9]+$/.test(serviceTag))

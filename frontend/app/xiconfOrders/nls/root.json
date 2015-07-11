@@ -28,6 +28,11 @@
 
     "kindUnit:led": "LED boards",
     "kindUnit:program": "drivers",
+    "kind:unit:test": "tests",
+    "kind:nc12:led": "LED board 12NC",
+    "kind:nc12:program": "Program 12NC",
+    "kind:nc12:test": "Test program 12NC",
+    "kind:nc12:gprs": "GPRS board 12NC",
 
     "filter:submit": "Filter orders",
 
