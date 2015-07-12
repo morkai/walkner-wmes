@@ -158,6 +158,11 @@ define([
 
     onRemoteOrderUpdated: function(remoteOrderData)
     {
+      if (remoteOrderData.no === null)
+      {
+        return;
+      }
+
       this.model.setRemoteOrder(remoteOrderData);
       this.model.save();
     },
