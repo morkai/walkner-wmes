@@ -275,6 +275,8 @@ assets/wmes-docs.css
 ----------------
 assets/../vendor/bootstrap/css/bootstrap.css
 assets/../vendor/font-awesome/css/font-awesome.css
+assets/../vendor/select2/select2.css
+assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/orderDocuments/assets/main.css
 assets/../app/updater/assets/main.css
@@ -320,6 +322,7 @@ assets/../app/updater/assets/main.css
 assets/../app/feedback/assets/main.css
 assets/../app/factoryLayout/assets/main.css
 assets/../app/licenses/assets/main.css
+assets/../app/kaizenOrders/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -921,6 +924,8 @@ app/kaizenOrders/templates/tableAndChart.js
 app/kaizenOrders/views/KaizenOrderTableAndChartView.js
 app/kaizenOrders/templates/reportPage.js
 app/kaizenOrders/pages/KaizenOrderReportPage.js
+app/kaizenOrders/templates/thanks.js
+app/kaizenOrders/views/KaizenOrderThankYouView.js
 app/nls/kaizenOrders.js
 app/nls/pl/kaizenOrders.js
 i18n!app/nls/kaizenOrders
@@ -1472,6 +1477,8 @@ app/kaizenOrders/templates/tableAndChart.js
 app/kaizenOrders/views/KaizenOrderTableAndChartView.js
 app/kaizenOrders/templates/reportPage.js
 app/kaizenOrders/pages/KaizenOrderReportPage.js
+app/kaizenOrders/templates/thanks.js
+app/kaizenOrders/views/KaizenOrderThankYouView.js
 app/nls/reports.js
 app/nls/pl/reports.js
 i18n!app/nls/reports

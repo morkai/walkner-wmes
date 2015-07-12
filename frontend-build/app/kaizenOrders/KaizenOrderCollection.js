@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Collection","./KaizenOrder"],function(e,r){"use strict";return e.extend({model:r,rqlQuery:"limit(15)&sort(-createdAt)"})});
+define(["../core/Collection","./KaizenOrder"],function(e,r){"use strict";return e.extend({model:r,rqlQuery:"exclude(changes)&limit(15)&sort(-createdAt)"})});
