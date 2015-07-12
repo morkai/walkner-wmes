@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Kaizen",
+    "BREADCRUMBS:base": "Improvements",
     "BREADCRUMBS:browse": "Sections",
     "BREADCRUMBS:addForm": "Adding",
     "BREADCRUMBS:editForm": "Editing",
@@ -20,6 +20,7 @@
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
+    "PROPERTY:position": "Position",
 
     "FORM:ACTION:add": "Add section",
     "FORM:ACTION:edit": "Edit section",
