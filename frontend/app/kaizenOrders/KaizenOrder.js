@@ -105,6 +105,14 @@ define([
         obj[userInfoProperty] = renderUserInfo({userInfo: obj[userInfoProperty]});
       });
 
+      OWNER_PROPERTIES.forEach(function(ownerProperty)
+      {
+        obj[ownerProperty] = (obj[ownerProperty] || []).map(function(userInfo)
+        {
+          return userInfo.rendered;
+        });
+      });
+
       if (!Array.isArray(obj.attachments))
       {
         obj.attachments = [];
@@ -259,17 +267,14 @@ define([
       {
         attrs[ownerProperty] = (attrs[ownerProperty] || []).map(function(userInfo)
         {
-          var rendered = renderUserInfo({userInfo: userInfo});
+          userInfo.rendered = renderUserInfo({userInfo: userInfo});
 
           if (!owners[userInfo.id])
           {
-            owners[userInfo.id] = {
-              userInfo: userInfo,
-              rendered: rendered
-            };
+            owners[userInfo.id] = userInfo;
           }
 
-          return rendered;
+          return userInfo;
         });
       });
 

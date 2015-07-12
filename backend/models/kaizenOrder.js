@@ -26,6 +26,14 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     'cancelled'
   ];
 
+  var ownerSchema = mongoose.Schema({
+    id: String,
+    label: String
+  }, {
+    _id: false,
+    minimize: false
+  });
+
   var observerSchema = mongoose.Schema({
     user: {},
     role: {
@@ -184,6 +192,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       type: String,
       default: ''
     },
+    owners: [ownerSchema],
     observers: [observerSchema],
     attachments: [attachmentSchema],
     changes: [changeSchema]
@@ -255,6 +264,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       }
     }
 
+    this.updateOwners();
     this.recalcKaizenDuration();
 
     next();
@@ -725,6 +735,27 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     this[property] = newValue;
 
     return true;
+  };
+
+  kaizenOrderSchema.methods.updateOwners = function()
+  {
+    var owners = {};
+    var kaizenOrder = this;
+
+    _.forEach(TYPES, function(type)
+    {
+      if (_.includes(kaizenOrder.types, type))
+      {
+        _.forEach(kaizenOrder[type + 'Owners'], addOwner);
+      }
+    });
+
+    this.owners = _.values(owners);
+
+    function addOwner(owner)
+    {
+      owners[owner.id] = owner;
+    }
   };
 
   mongoose.model('KaizenOrder', kaizenOrderSchema);

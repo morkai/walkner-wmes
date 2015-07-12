@@ -70,9 +70,9 @@ define([
       {
         formData.category = 'suggestion.' + term.args[1];
       },
-      'creator.id': function(propertyName, term, formData)
+      'owners.id': function(propertyName, term, formData)
       {
-        formData.userType = 'creator';
+        formData.userType = 'owner';
         formData.user = term.args[1];
       },
       'observers.user.id': function(propertyName, term, formData)
@@ -154,7 +154,7 @@ define([
       else if (user)
       {
         selector.push({name: 'eq', args: [
-          userType === 'creator' ? 'creator.id' : 'observers.user.id',
+          userType === 'owner' ? 'owners.id' : 'observers.user.id',
           user
         ]});
       }
@@ -185,7 +185,7 @@ define([
     {
       var userType = this.$('input[name="userType"]:checked').val();
 
-      this.$id('user').select2('enable', userType === 'others' || userType === 'creator');
+      this.$id('user').select2('enable', userType === 'others' || userType === 'owner');
     }
 
   });
