@@ -59,7 +59,7 @@ exports.generateReport = function(app, reportsModule, report, reportId, reportHa
 
   var messengerClient = app[reportsModule.config.messengerClientId];
 
-  if (messengerClient === undefined)
+  if (messengerClient === undefined || !_.includes(reportsModule.config.reports, reportId))
   {
     return report(app[reportsModule.config.mongooseId], options, broadcastReport.bind(null, reportId, reportHash));
   }

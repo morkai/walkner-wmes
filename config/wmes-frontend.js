@@ -54,6 +54,7 @@ exports.modules = [
   'factoryLayout',
   'permalinks',
   'orderDocuments',
+  'kaizen',
   'mail/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
@@ -70,7 +71,7 @@ exports.mainCssFile = '/assets/wmes-main.css';
 exports.faviconFile = 'assets/wmes-favicon.ico';
 
 exports.frontendAppData = {
-
+  KAIZEN_MULTI: false
 };
 
 exports.dictionaryModules = {
@@ -336,7 +337,8 @@ exports.sioLegacyBridge = {
 };
 
 exports.kaizen = {
-  attachmentsDest: DATA_PATH + '/kaizen-attachments'
+  attachmentsDest: DATA_PATH + '/kaizen-attachments',
+  multiType: exports.frontendAppData.KAIZEN_MULTI
 };
 
 exports.orderDocuments = {
