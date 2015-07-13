@@ -81,7 +81,7 @@ define([
 
       if (nc12)
       {
-        var property = itemKind === 'led' ? 'leds.nc12' : /[A-Z]/.test(nc12) ? 'program._id' : 'nc12';
+        var property = itemKind === 'led' ? 'leds.nc12' : /[A-Z]/i.test(nc12) ? 'program._id' : 'nc12';
 
         rqlQuery.selector.args.push({name: 'eq', args: [property, nc12]});
       }
