@@ -89,8 +89,13 @@ define([
 
   function setUpUserSelect2($input, options)
   {
-    var rqlQueryProvider = options && options.rqlQueryProvider ? options.rqlQueryProvider : createDefaultRqlQuery;
-    var userFilter = options && options.userFilter ? options.userFilter : null;
+    if (!options)
+    {
+      options = {};
+    }
+
+    var rqlQueryProvider = options.rqlQueryProvider ? options.rqlQueryProvider : createDefaultRqlQuery;
+    var userFilter = options.userFilter ? options.userFilter : null;
 
     $input.select2(_.extend({
       openOnEnter: null,
