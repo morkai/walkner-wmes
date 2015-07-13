@@ -307,7 +307,8 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
     _.forEach(module.settings.extra, function(extra)
     {
-      if (extra.pattern.test(productName))
+      if ((typeof extra.pattern === 'string' && productName.indexOf(extra.pattern) !== -1)
+        || (extra.pattern instanceof RegExp && extra.pattern.test(productName)))
       {
         _.assign(documentsMap, extra.documents);
       }
