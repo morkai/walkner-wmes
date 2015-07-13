@@ -228,6 +228,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
         var incompleteProgramItemCount = 0;
         var incompleteLedItemCount = 0;
+        var incompleteTestItemCount = 0;
 
         _.forEach(this.xiconfOrder.items, function(item)
         {
@@ -249,6 +250,10 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           {
             incompleteLedItemCount += 1;
           }
+          else if (item.kind === 'test')
+          {
+            incompleteTestItemCount += 1;
+          }
         });
 
         var to = users.map(function(user) { return user.email; });
@@ -259,37 +264,28 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         {
           subject = '[WMES] Przerwane zlecenie ' + orderNo;
 
-          if (incompleteProgramItemCount && incompleteLedItemCount)
-          {
-            text.push('Przerwano wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw');
-            text.push('i nie zeskanowano wszystkich płytek LED!');
-          }
-          else if (incompleteProgramItemCount)
-          {
-            text.push('Przerwano wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
-          }
-          else if (incompleteLedItemCount)
-          {
-            text.push('Przerwano wykonywanie zlecenia, w którym nie zeskanowano wszystkich płytek LED!');
-          }
+          text.push('Przerwano wykonywanie zlecenia, w którym:');
         }
         else
         {
           subject = '[WMES] Nieukończone zlecenie ' + orderNo;
 
-          if (incompleteProgramItemCount && incompleteLedItemCount)
-          {
-            text.push('Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw');
-            text.push('i nie zeskanowano wszystkich płytek LED!');
-          }
-          else if (incompleteProgramItemCount)
-          {
-            text.push('Zakończono wykonywanie zlecenia, w którym nie zaprogramowano wszystkich opraw!');
-          }
-          else if (incompleteLedItemCount)
-          {
-            text.push('Zakończono wykonywanie zlecenia, w którym nie zeskanowano wszystkich płytek LED!');
-          }
+          text.push('Zakończono wykonywanie zlecenia, w którym:');
+        }
+
+        if (incompleteProgramItemCount)
+        {
+          text.push('  - nie zaprogramowano wszystkich opraw!');
+        }
+
+        if (incompleteTestItemCount)
+        {
+          text.push('  - nie przetestowano wszystkich opraw!');
+        }
+
+        if (incompleteLedItemCount)
+        {
+          text.push('  - nie zeskanowano wszystkich płytek LED!');
         }
 
         text.push(
@@ -309,12 +305,23 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
             ? item.quantityTodo.toLocaleString()
             : (item.quantityDone.toLocaleString() + '/' + item.quantityTodo.toLocaleString());
 
-          text.push(
-            '',
-            '12NC #' + (i + 1) + ': ' + item.nc12,
-            'Nazwa: ' + item.name,
-            'Ilość: ' + quantity
-          );
+          if (item.kind === 'test')
+          {
+            text.push(
+              '',
+              'Nazwa programu: ' + item.name,
+              'Ilość: ' + quantity
+            );
+          }
+          else
+          {
+            text.push(
+              '',
+              '12NC #' + (i + 1) + ': ' + item.nc12,
+              'Nazwa: ' + item.name,
+              'Ilość: ' + quantity
+            );
+          }
         });
 
         text.push(
