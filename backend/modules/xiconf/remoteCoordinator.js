@@ -368,6 +368,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         {
           var xiconfResult = xiconfResults[i];
           var input = {
+            serviceTag: null,
             orderNo: xiconfResult.orderNo,
             nc12: xiconfResult.nc12,
             multi: isMultiDeviceResult(xiconfResult),
@@ -1358,7 +1359,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             serialNumbers: []
           };
 
-          $set['items.' + (orderData.items.length)] = testItem;
+          $set['items.' + orderData.items.length] = testItem;
 
           changes.push(function() { orderData.items.push(testItem); });
         }
