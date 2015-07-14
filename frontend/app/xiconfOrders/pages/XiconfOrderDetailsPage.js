@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/i18n',
   'app/user',
   'app/core/util/bindLoadingMessage',
@@ -13,6 +14,7 @@ define([
   '../views/XiconfOrderDetailsView',
   'app/xiconfOrders/templates/detailsPage'
 ], function(
+  _,
   t,
   user,
   bindLoadingMessage,
@@ -34,9 +36,10 @@ define([
     remoteTopics: function()
     {
       var topics = {};
+      var debouncedReload = _.debounce(reload.bind(this), 1000);
 
-      topics['xiconf.orders.synced'] = reload;
-      topics['xiconf.orders.' + this.model.id + '.*'] = reload;
+      topics['xiconf.orders.synced'] = debouncedReload;
+      topics['xiconf.orders.' + this.model.id + '.*'] = debouncedReload;
 
       return topics;
 
