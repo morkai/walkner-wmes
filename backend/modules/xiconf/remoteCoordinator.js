@@ -223,7 +223,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           importedAt: new Date(message.timestamp)
         };
 
-        XiconfOrder.find(condition, {'items.serialNumbers': 1}).lean().exec(this.next());
+        XiconfOrder.find(condition, {_id: 1}).lean().exec(this.next());
       },
       function removeUpdatedXiconfOrdersStep(err, updatedXiconfOrders)
       {
@@ -342,8 +342,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           serviceTag: null,
           result: 'success'
         };
+        var fields = {
+          orderNo: 1,
+          nc12: 1,
+          workflow: 1,
+          leds: 1,
+          program: 1
+        };
 
-        XiconfResult.find(conditions, {orderNo: 1, nc12: 1, workflow: 1, leds: 1}).lean().exec(this.next());
+        XiconfResult.find(conditions, fields).lean().exec(this.next());
       },
       function acquireServiceTagsStep(err, xiconfResults)
       {
@@ -365,6 +372,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             nc12: xiconfResult.nc12,
             multi: isMultiDeviceResult(xiconfResult),
             leds: createLedsFromXiconfResult(xiconfResult.leds),
+            programId: xiconfResult.program ? xiconfResult.program._id : null,
+            programName: xiconfResult.program ? xiconfResult.program.name : null,
             recount: false
           };
 
@@ -1429,7 +1438,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             serviceTag: serviceTag
           });
 
-          debug('[acquireNextServiceTag] orderNo=%s recount=%s', data.orderNo, data.recount);
+          debug('[acquireNextServiceTag] orderNo=%s recount=%s serviceTag=%s', data.orderNo, data.recount, serviceTag);
 
           if (data.recount)
           {
