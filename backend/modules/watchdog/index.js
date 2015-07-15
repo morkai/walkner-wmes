@@ -12,21 +12,27 @@ var moment = require('moment');
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   mailSenderId: 'mail/sender',
+  twilioId: 'twilio',
   recipients: [],
   appStartedRecipients: [],
+  appStartedCallRecipient: null,
   noEventRecipients: [],
   events: []
 };
 
 exports.start = function startWatchdogModule(app, watchdogModule)
 {
-  var mailSender = app[watchdogModule.config.mailSenderId];
-  var mongoose = app[watchdogModule.config.mongooseId];
-  var Event = mongoose.model('Event');
+  var mailSender;
+  var twilio;
+  var Event;
   var lastAppStartedCheckAt = Date.now();
 
   app.broker.subscribe('app.started').setLimit(1).on('message', function()
   {
+    mailSender = app[watchdogModule.config.mailSenderId];
+    twilio = app[watchdogModule.config.twilioId];
+    Event = app[watchdogModule.config.mongooseId].model('Event');
+
     _.forEach(watchdogModule.config.events, function(event)
     {
       _.defaults(event, {
@@ -152,9 +158,9 @@ exports.start = function startWatchdogModule(app, watchdogModule)
       watchdogModule.config.appStartedRecipients
     ));
 
-    if (to.length === 0)
+    if (to.length === 0 && _.isEmpty(watchdogModule.config.appStartedCallRecipient))
     {
-      return watchdogModule.warn("[%s] Nobody to notify about the app.started events :(");
+      return watchdogModule.warn("[app.started] Nobody to notify :(");
     }
 
     var restarts = {};
@@ -197,16 +203,43 @@ exports.start = function startWatchdogModule(app, watchdogModule)
       "Sincerely, WMES Bot"
     );
 
-    mailSender.send(to, subject, text.join('\r\n'), function(err)
+    text = text.join('\r\n');
+
+    if (to.length)
     {
-      if (err)
+      mailSender.send(to, subject, text, function(err)
       {
-        watchdogModule.error("[app.started] Failed to notify [%s]: %s", to, err.message);
-      }
-      else
+        if (err)
+        {
+          watchdogModule.error("[app.started] Failed to notify [%s]: %s", to, err.message);
+        }
+        else
+        {
+          watchdogModule.debug("[app.started] Notified: %s", to);
+        }
+      });
+    }
+
+    if (watchdogModule.config.appStartedCallRecipient)
+    {
+      var sayOptions = {
+        to: watchdogModule.config.appStartedCallRecipient,
+        message: text,
+        voice: 'alice',
+        language: 'en-US'
+      };
+
+      twilio.say(sayOptions, function(err)
       {
-        watchdogModule.debug("[app.started] Notified: %s", to);
-      }
-    });
+        if (err)
+        {
+          watchdogModule.error("[app.started] Failed to notify [%s]: %s", sayOptions.to, err.message);
+        }
+        else
+        {
+          watchdogModule.debug("[app.started] Notified: %s", sayOptions.to);
+        }
+      });
+    }
   }
 };
