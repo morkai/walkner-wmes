@@ -73,6 +73,7 @@
     "semver": "~4.3.3",
     "node-uuid": "~1.4.3",
     "tedious": "~1.11.0",
+    "twilio": "~2.2.1",
     "h5.step": "~0.1.0",
     "h5.pubsub": "git+http://github.com/morkai/h5.pubsub.git#c1a899cb7e",
     "h5.rql": "git+http://github.com/morkai/h5.rql.git#5622189665",
