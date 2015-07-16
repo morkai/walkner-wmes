@@ -118,6 +118,7 @@ define([
         var tooltipOptions = (this.point || this.points[0]).series.chart.tooltip.options;
         var headerFormatter = tooltipOptions.headerFormatter;
         var rowNameFormatter = tooltipOptions.rowNameFormatter || formatTooltipRowName;
+        var valueFormatter = tooltipOptions.valueFormatter || formatTooltipValue;
 
         if (typeof headerFormatter === 'function')
         {
@@ -158,7 +159,7 @@ define([
             prefix: options.valuePrefix,
             suffix: options.valueSuffix,
             decimals: options.valueDecimals,
-            value: point.y
+            value: valueFormatter(point)
           });
         });
 
@@ -301,6 +302,11 @@ define([
   function formatTooltipRowName(point)
   {
     return point.series.name;
+  }
+
+  function formatTooltipValue(point)
+  {
+    return point.y;
   }
 
   return Highcharts;
