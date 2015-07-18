@@ -45,7 +45,7 @@ define([
 
       this.$id('prodLine').select2({
         width: '275px',
-        allowClear: !user.getDivision(),
+        allowClear: true,
         data: this.getApplicableProdLines()
       });
 
