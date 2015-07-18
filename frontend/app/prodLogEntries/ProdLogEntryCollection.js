@@ -3,15 +3,13 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  '../user',
-  '../data/prodLines',
+  '../time',
   '../core/Collection',
   '../core/util/matchesOperType',
   '../core/util/matchesProdLine',
   './ProdLogEntry'
 ], function(
-  user,
-  prodLines,
+  time,
   Collection,
   matchesOperType,
   matchesProdLine,
@@ -26,16 +24,15 @@ define([
     rqlQuery: function(rql)
     {
       return rql.Query.fromObject({
-        fields: {
-
-        },
         sort: {
           createdAt: -1
         },
         limit: 20,
         selector: {
           name: 'and',
-          args: []
+          args: [
+            {name: 'ge', args: ['createdAt', time.getMoment().startOf('day').subtract(1, 'week')]}
+          ]
         }
       });
     },

@@ -4,12 +4,11 @@
 
 'use strict';
 
-var limitOrgUnit = require('../prodLines/limitOrgUnit');
-
 module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
 {
   var express = app[prodLogEntriesModule.config.expressId];
   var userModule = app[prodLogEntriesModule.config.userId];
+  var orgUnitsModule = app[prodLogEntriesModule.config.orgUnitsId];
   var mongoose = app[prodLogEntriesModule.config.mongooseId];
   var ProdLogEntry = mongoose.model('ProdLogEntry');
 
@@ -31,5 +30,32 @@ module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
     );
 
     next();
+  }
+
+  function limitOrgUnit(req, res, next)
+  {
+    var user = req.session.user || {};
+    var selectors = req.rql.selector.args;
+    var hasProdLineTerm = selectors.some(function(term)
+    {
+      return term.name === 'eq' && term.args[0] === 'prodLine';
+    });
+
+    if (hasProdLineTerm || user.super || !user.orgUnitId)
+    {
+      return next();
+    }
+
+    var prodLineIds = orgUnitsModule.getProdLinesFor(user.orgUnitType, user.orgUnitId).map(function(prodLine)
+    {
+      return prodLine._id;
+    });
+
+    selectors.push({
+      name: 'in',
+      args: ['prodLine', prodLineIds]
+    });
+
+    return next();
   }
 };
