@@ -104,7 +104,7 @@ define([
       }
 
       var render = _.debounce(this.render.bind(this), 1);
-      var reset = _.debounce(this.reset.bind(this), 1);
+      var reset = _.after(_.debounce(this.reset.bind(this), 1), 1);
 
       this.listenTo(this.prodShiftOrders, 'add remove change', render);
       this.listenTo(this.prodShiftOrders, 'reset', reset);
@@ -162,7 +162,7 @@ define([
 
     calcWidth: function()
     {
-      return this.el.getBoundingClientRect().width - 28;
+      return Math.max(this.el.getBoundingClientRect().width - 28, 300);
     },
 
     onWindowResize: function()
