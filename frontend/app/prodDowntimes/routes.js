@@ -26,7 +26,7 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('LOCAL', 'PROD_DOWNTIMES:VIEW');
+  var canView = user.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW');
   var canManage = user.auth('PROD_DATA:MANAGE');
 
   router.map('/prodDowntimes', canView, function(req)

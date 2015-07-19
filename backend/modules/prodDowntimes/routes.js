@@ -22,7 +22,7 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
   var ProdDowntime = mongoose.model('ProdDowntime');
   var ProdLogEntry = mongoose.model('ProdLogEntry');
 
-  var canView = userModule.auth('LOCAL', 'PROD_DOWNTIMES:VIEW');
+  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW');
   var canManage = userModule.auth('PROD_DATA:MANAGE');
 
   express.get(
