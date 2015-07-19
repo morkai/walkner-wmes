@@ -13,7 +13,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
   var userModule = app[pressWorksheetsModule.config.userId];
   var PressWorksheet = app[pressWorksheetsModule.config.mongooseId].model('PressWorksheet');
 
-  var canView = userModule.auth('LOCAL', 'PRESS_WORKSHEETS:VIEW');
+  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PRESS_WORKSHEETS:VIEW');
   var canManage = userModule.auth('PRESS_WORKSHEETS:MANAGE', 'PROD_DATA:MANAGE');
 
   express.get(

@@ -26,7 +26,7 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('LOCAL', 'PRESS_WORKSHEETS:VIEW');
+  var canView = user.auth('LOCAL', 'PROD_DATA:VIEW', 'PRESS_WORKSHEETS:VIEW');
   var canManage = user.auth('PRESS_WORKSHEETS:MANAGE');
 
   router.map('/pressWorksheets', canView, function(req)
@@ -55,7 +55,5 @@ define([
     }));
   });
 
-  router.map(
-    '/pressWorksheets/:id;delete', canManage, showDeleteFormPage.bind(null, PressWorksheet)
-  );
+  router.map('/pressWorksheets/:id;delete', canManage, showDeleteFormPage.bind(null, PressWorksheet));
 });
