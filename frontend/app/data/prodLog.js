@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/user',
@@ -11,6 +12,7 @@ define([
   'app/socket',
   'app/updater/index'
 ], function(
+  _,
   $,
   t,
   user,
@@ -29,6 +31,7 @@ define([
   var enabled = false;
   var enableTimer = null;
   var lockTimer = null;
+  var scheduleSync = _.debounce(sync, 33);
 
   broker.subscribe('socket.connected', setTimeout.bind(null, sync, 1337));
 
@@ -293,7 +296,7 @@ define([
 
       prodShift.saveLocalData();
 
-      sync();
+      scheduleSync();
     }
   };
 });
