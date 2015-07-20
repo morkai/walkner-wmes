@@ -196,25 +196,31 @@ define([
           ? options.model.get(options.labelAttribute)
           : options.model.getLabel();
 
-        if (modelLabel)
+        if (!options.messageText)
         {
-          options.messageText = t.bound(
-            options.nlsDomain,
-            'ACTION_FORM:MESSAGE_SPECIFIC:' + options.actionKey,
-            {label: modelLabel}
-          );
-        }
-        else
-        {
-          options.messageText =
-            t.bound(options.nlsDomain, 'ACTION_FORM:MESSAGE:' + options.actionKey);
+          if (modelLabel)
+          {
+            options.messageText = t.bound(
+              options.nlsDomain,
+              'ACTION_FORM:MESSAGE_SPECIFIC:' + options.actionKey,
+              {label: modelLabel}
+            );
+          }
+          else
+          {
+            options.messageText = t.bound(options.nlsDomain, 'ACTION_FORM:MESSAGE:' + options.actionKey);
+          }
         }
 
-        options.formActionText =
-          t.bound(options.nlsDomain, 'ACTION_FORM:BUTTON:' + options.actionKey);
+        if (!options.formActionText)
+        {
+          options.formActionText = t.bound(options.nlsDomain, 'ACTION_FORM:BUTTON:' + options.actionKey);
+        }
 
-        options.failureText =
-          t.bound(options.nlsDomain, 'ACTION_FORM:MESSAGE_FAILURE:' + options.actionKey);
+        if (!options.failureText)
+        {
+          options.failureText = t.bound(options.nlsDomain, 'ACTION_FORM:MESSAGE_FAILURE:' + options.actionKey);
+        }
       }
 
       if (!options.formAction && _.isFunction(options.model.url))
