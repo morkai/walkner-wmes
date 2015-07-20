@@ -30,10 +30,14 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
   var orderNo = (query.orderNo || '').replace(/[^0-9]+/g, '');
   var hour = parseInt((query.hour || '').replace(/[^0-9]+/g, ''), 10);
 
-  var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(query.orgUnitType, query.orgUnitId).map(function(mrp)
-  {
-    return mrp.replace(/~.*?$/, '');
-  });
+  var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(query.orgUnitType, query.orgUnitId)
+    .filter(function(id)
+    {
+      var mrp = orgUnitsModule.getByTypeAndId('mrpController', id);
+
+      return !mrp.deactivatedAt || fromTime < mrp.deactivatedAt;
+    })
+    .map(function(id) { return id.replace(/~.*?$/, ''); });
 
   if (isNaN(hour))
   {
