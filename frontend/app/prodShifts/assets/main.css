@@ -1,4 +1,4 @@
-.page[data-id="prodShiftList"] .list-container .popover {
+.prodShifts-list > .popover {
   max-width: none;
 }
 .prodShifts-timeline-container {
@@ -96,7 +96,6 @@
 .prodShifts-form-quantitiesDone td:first-child {
   text-align: right;
 }
-
 .prodShifts-extendedDowntime {
   -webkit-animation: prodShifts-extendedDowntime 2s infinite;
   animation: prodShifts-extendedDowntime 2s infinite;

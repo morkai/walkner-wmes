@@ -16,6 +16,7 @@ define([
   'app/core/util/getShiftStartInfo',
   'app/data/downtimeReasons',
   'app/data/aors',
+  'app/prodChangeRequests/util/createDeletePageAction',
   'app/prodShiftOrders/util/calcOrderEfficiency',
   'app/prodShifts/templates/timelineIdlePopover',
   'app/prodShifts/templates/timelineWorkingPopover',
@@ -34,6 +35,7 @@ define([
   getShiftStartInfo,
   downtimeReasons,
   aors,
+  createDeletePageAction,
   calcOrderEfficiency,
   renderTimelineIdlePopover,
   renderTimelineWorkingPopover,
@@ -457,7 +459,8 @@ define([
     createChart: function()
     {
       var view = this;
-      var canManage = this.options.editable !== false && user.isAllowedTo('PROD_DATA:MANAGE');
+      var canManage = this.options.editable !== false
+        && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
       var itemHeight = this.options.itemHeight || 60;
       var downtimeHeight = Math.round(itemHeight * 0.833);
 
@@ -538,7 +541,7 @@ define([
         {
           var url = null;
 
-          if (item.type === 'downtime' && user.isAllowedTo('PROD_DOWNTIMES:VIEW'))
+          if (item.type === 'downtime' && user.isAllowedTo('LOCAL', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW'))
           {
             url = 'prodDowntimes/' + item.data._id;
           }
@@ -733,12 +736,11 @@ define([
         return;
       }
 
+      var view = this;
+
       this.promised(model.fetch()).then(function()
       {
-        require(['app/core/views/ActionFormView'], function(ActionFormView)
-        {
-          ActionFormView.showDeleteDialog({model: model});
-        });
+        createDeletePageAction(view, model).callback();
       });
     }
 

@@ -3,20 +3,28 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/i18n',
+  'app/user',
   'app/time',
   'app/viewport',
   'app/core/views/FormView',
+  'app/core/util/idAndLabel',
   'app/data/prodLines',
   'app/users/util/setUpUserSelect2',
+  'app/prodChangeRequests/util/isChangeRequest',
   'app/prodShifts/templates/form'
 ], function(
+  _,
   t,
+  user,
   time,
   viewport,
   FormView,
+  idAndLabel,
   prodLines,
   setUpUserSelect2,
+  isChangeRequest,
   formTemplate
 ) {
   'use strict';
@@ -24,6 +32,13 @@ define([
   return FormView.extend({
 
     template: formTemplate,
+
+    serialize: function()
+    {
+      return _.extend(FormView.prototype.serialize.call(this), {
+        isChangeRequest: isChangeRequest()
+      });
+    },
 
     afterRender: function()
     {
@@ -50,13 +65,7 @@ define([
       else
       {
         this.$id('prodLine').select2({
-          data: prodLines.map(function(prodLine)
-          {
-            return {
-              id: prodLine.id,
-              text: prodLine.getLabel()
-            };
-          })
+          data: prodLines.map(idAndLabel)
         });
       }
     },
@@ -81,6 +90,7 @@ define([
       var formData = this.model.toJSON();
 
       formData.date = time.format(formData.date, 'YYYY-MM-DD');
+      formData.requestComment = '';
 
       return formData;
     },
@@ -122,17 +132,55 @@ define([
       };
     },
 
+    handleSuccess: function()
+    {
+      if (!isChangeRequest())
+      {
+        return FormView.prototype.handleSuccess.apply(this, arguments);
+      }
+
+      if (this.options.editMode)
+      {
+        this.broker.subscribe('router.executing').setLimit(1).on('message', function()
+        {
+          viewport.msg.show({
+            type: 'success',
+            time: 5000,
+            text: t('prodShifts', 'changeRequest:msg:success:edit')
+          });
+        });
+
+        return FormView.prototype.handleSuccess.apply(this, arguments);
+      }
+
+      window.scrollTo(0, 0);
+
+      this.model.set(_.result(this.model, 'defaults'));
+      this.render();
+
+      this.hideErrorMessage();
+
+      this.$errorMessage = viewport.msg.show({
+        type: 'success',
+        time: 2500,
+        text: t('prodShifts', 'changeRequest:msg:success:add')
+      });
+    },
+
     handleFailure: function(xhr)
     {
-      if (xhr.responseJSON
-        && xhr.responseJSON.error
-        && t.has('prodShifts', 'FORM:ERROR:' + xhr.responseJSON.error.message))
+      var json = xhr.responseJSON;
+
+      if (json && json.error && t.has('prodShifts', 'FORM:ERROR:' + json.error.message))
       {
-        this.$errorMessage = viewport.msg.show({
-          type: 'warning',
-          time: 5000,
-          text: t('prodShifts', 'FORM:ERROR:' + xhr.responseJSON.error.message)
-        });
+        this.showErrorMessage(t('prodShifts', 'FORM:ERROR:' + json.error.message));
+      }
+      else if (isChangeRequest())
+      {
+        this.showErrorMessage(t(
+          'prodShifts',
+          'changeRequest:msg:failure:' + (this.options.editMode ? 'edit' : 'add')
+        ));
       }
       else
       {

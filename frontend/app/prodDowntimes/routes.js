@@ -6,7 +6,7 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
+  '../prodChangeRequests/util/createShowDeleteFormPage',
   './ProdDowntime',
   './ProdDowntimeCollection',
   './pages/ProdDowntimeListPage',
@@ -17,7 +17,7 @@ define([
   router,
   viewport,
   user,
-  showDeleteFormPage,
+  createShowDeleteFormPage,
   ProdDowntime,
   ProdDowntimeCollection,
   ProdDowntimeListPage,
@@ -27,7 +27,7 @@ define([
   'use strict';
 
   var canView = user.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW');
-  var canManage = user.auth('PROD_DATA:MANAGE');
+  var canManage = user.auth('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
 
   router.map('/prodDowntimes', canView, function(req)
   {
@@ -55,7 +55,7 @@ define([
     }));
   });
 
-  router.map('/prodDowntimes/:id;delete', canManage, showDeleteFormPage.bind(null, ProdDowntime));
+  router.map('/prodDowntimes/:id;delete', canManage, createShowDeleteFormPage(ProdDowntime));
 
   router.map('/prodDowntimes;settings', canManage, function(req)
   {

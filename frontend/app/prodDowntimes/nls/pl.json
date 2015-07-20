@@ -49,6 +49,7 @@
   "PROPERTY:status:undecided": "Niepotwierdzony",
   "PROPERTY:status:confirmed": "Potwierdzony",
   "PROPERTY:status:rejected": "Odrzucony",
+  "PROPERTY:date": "Data",
   "PROPERTY:shift": "Zmiana",
   "PROPERTY:master": "Mistrz",
   "PROPERTY:leader": "Lider",
@@ -70,6 +71,7 @@
   "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować przestoju: nie wykryto żadnych poprawnych zmian :(",
   "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
   "FORM:ERROR:OVERLAPPING_DOWNTIMES": "Przestój pokrywa się z innymi przestojami!",
+  "FORM:ERROR:NOT_EDITABLE": "Przestój jeszcze się nie skończył!",
 
   "shift+date": "{date}, {shift} zmiana",
 
@@ -101,5 +103,18 @@
 
   "changesCount:reason": "Liczba zmian powodu przestoju",
   "changesCount:aor": "Liczba zmian obszaru odpowiedzialnego",
-  "changesCount:rejected": "Liczba odrzuceń przestoju"
+  "changesCount:rejected": "Liczba odrzuceń przestoju",
+
+  "changeRequest:delete:messageText": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. <em>Przestój</em> zostanie usunięty dopiero po zaakceptowaniu operacji przez osobę odpowiedzialną.<br><br>Czy na pewno chcesz utworzyć żądanie usunięcia wybranego przestoju?",
+  "changeRequest:delete:formActionText": "Utwórz żądanie usunięcia",
+  "changeRequest:commentLabel": "Komentarz do żądania zmiany",
+  "changeRequest:warning:add": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. Nowy <em>przestój</em> zostanie utworzony dopiero po zaakceptowaniu go przez osobę odpowiedzialną.",
+  "changeRequest:warning:edit": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. <em>Przestój</em> zostanie zaktualizowany dopiero po zaakceptowaniu dokonanych zmian przez osobę odpowiedzialną.",
+  "changeRequest:msg:success:add": "Żądanie dodania nowego przestoju zostało utworzone.",
+  "changeRequest:msg:success:edit": "Żądanie edycji przestoju zostało utworzone.",
+  "changeRequest:msg:success:delete": "Żądanie usunięcia przestoju zostało utworzone.",
+  "changeRequest:msg:failure:add": "Nie udało się stworzyć żądania dodania nowego przestoju :-(",
+  "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji przestoju :-(",
+  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia przestoju :-("
+
 }

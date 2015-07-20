@@ -1,0 +1,40 @@
+{
+  "BREADCRUMBS:browse": "Żądania zmian danych produkcyjnych",
+
+  "MSG:LOADING_FAILURE": "Ładowanie danych nie powiodło się :-(",
+
+  "LIST:ACTION:confirm": "Potwierdź żądanie zmiany",
+
+  "PROPERTY:status": "Status",
+  "PROPERTY:division": "Wydział",
+  "PROPERTY:prodLine": "Linia produkcyjna",
+  "PROPERTY:operation": "Operacja",
+  "PROPERTY:createdAt": "Czas stworzenia",
+  "PROPERTY:creator": "Stworzone przez",
+  "PROPERTY:creatorComment": "Komentarz żądania",
+  "PROPERTY:confirmedAt": "Czas potwierdzenia",
+  "PROPERTY:confirmer": "Potwierdzone przez",
+  "PROPERTY:confirmerComment": "Komentarz potwierdzenia",
+
+  "status:new": "Nowe",
+  "status:old": "Zaakceptowane i odrzucone",
+
+  "filter:submit": "Filtruj żądania",
+
+  "operation:add:shift": "Dodanie zmiany: {extra}",
+  "operation:add:order": "Dodanie zlecenia: {extra}",
+  "operation:add:downtime": "Dodanie przestoju: {extra}",
+  "operation:edit:shift": "Edycja zmiany: {extra}",
+  "operation:edit:order": "Edycja zlecenia: {extra}",
+  "operation:edit:downtime": "Edycja przestoju: {extra}",
+  "operation:delete:shift": "Usunięcie zmiany: {extra}",
+  "operation:delete:order": "Usunięcie zlecenia: {extra}",
+  "operation:delete:downtime": "Usunięcie przestoju: {extra}",
+
+  "confirm:accept": "Akceptuj zmianę",
+  "confirm:reject": "Odrzuć zmianę",
+  "confirm:success:accepted": "Dane produkcyjne zostały zmienione.",
+  "confirm:success:rejected": "Żądanie zmian zostało odrzucone.",
+  "confirm:error:WRONG_ORDER": "Najpierw należy zatwierdzić wcześniejsze żądania zmian dla wybranej linii!",
+  "confirm:error": "Nie udało się zatwierdzić żądania zmian :-("
+}

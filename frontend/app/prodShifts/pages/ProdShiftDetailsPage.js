@@ -6,12 +6,14 @@ define([
   'underscore',
   'app/i18n',
   'app/time',
+  'app/user',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/util/getShiftStartInfo',
   'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
   'app/core/View',
+  'app/prodChangeRequests/util/createDeletePageAction',
   'app/prodShiftOrders/ProdShiftOrderCollection',
   'app/prodDowntimes/ProdDowntimeCollection',
   '../ProdShift',
@@ -23,12 +25,14 @@ define([
   _,
   t,
   time,
+  user,
   viewport,
   bindLoadingMessage,
   getShiftStartInfo,
   pageActions,
   onModelDeleted,
   View,
+  createDeletePageAction,
   ProdShiftOrderCollection,
   ProdDowntimeCollection,
   ProdShift,
@@ -87,11 +91,11 @@ define([
         });
       }
 
-      if (this.prodShift.hasEnded())
+      if (this.prodShift.hasEnded() && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST'))
       {
         actions.push(
-          pageActions.edit(this.prodShift, 'PROD_DATA:MANAGE'),
-          pageActions.delete(this.prodShift, 'PROD_DATA:MANAGE')
+          pageActions.edit(this.prodShift, false),
+          createDeletePageAction(this, this.prodShift)
         );
       }
 

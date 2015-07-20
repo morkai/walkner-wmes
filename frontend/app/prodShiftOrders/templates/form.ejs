@@ -2,7 +2,16 @@
   <input type="hidden" name="_method" value="<%= formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
+    <% if (isChangeRequest) { %>
+    <div class="message message-inline message-warning"><%- t('prodShiftOrders', 'changeRequest:warning:' + (editMode ? 'edit' : 'add')) %></div>
+    <% } %>
     <div class="panel-body">
+      <% if (isChangeRequest) { %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-requestComment" class="control-label"><%- t('prodShiftOrders', 'changeRequest:commentLabel') %></label>
+        <textarea id="<%- idPrefix %>-requestComment" class="form-control" name="requestComment" rows="2"></textarea>
+      </div>
+      <% } %>
       <div class="row">
         <div class="form-group col-md-4">
           <label for="<%- idPrefix %>-master" class="control-label"><%- t('prodShiftOrders', 'PROPERTY:master') %></label>

@@ -2,7 +2,16 @@
   <input type="hidden" name="_method" value="<%= formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
+    <% if (isChangeRequest) { %>
+    <div class="message message-inline message-warning"><%- t('prodShifts', 'changeRequest:warning:' + (editMode ? 'edit' : 'add')) %></div>
+    <% } %>
     <div class="panel-body">
+      <% if (isChangeRequest) { %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-requestComment" class="control-label"><%- t('prodShifts', 'changeRequest:commentLabel') %></label>
+        <textarea id="<%- idPrefix %>-requestComment" class="form-control" name="requestComment" rows="2"></textarea>
+      </div>
+      <% } %>
       <div class="row">
         <div class="form-group col-md-4 has-required-select2">
           <label for="<%- idPrefix %>-prodLine" class="control-label is-required"><%- t('prodShifts', 'PROPERTY:prodLine') %></label>

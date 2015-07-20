@@ -10,6 +10,7 @@ define([
   'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
   'app/core/View',
+  'app/prodChangeRequests/util/createDeletePageAction',
   '../settings',
   '../ProdDowntime',
   '../views/ProdDowntimeDetailsView'
@@ -21,6 +22,7 @@ define([
   pageActions,
   onModelDeleted,
   View,
+  createDeletePageAction,
   settings,
   ProdDowntime,
   ProdDowntimeDetailsView
@@ -61,11 +63,11 @@ define([
         });
       }
 
-      if (this.model.isEditable())
+      if (this.model.isEditable() && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST'))
       {
         actions.push(
-          pageActions.edit(this.model, 'PROD_DATA:MANAGE'),
-          pageActions.delete(this.model, 'PROD_DATA:MANAGE')
+          pageActions.edit(this.model, false),
+          createDeletePageAction(this, this.model)
         );
       }
 

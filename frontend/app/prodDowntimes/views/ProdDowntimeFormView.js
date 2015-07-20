@@ -5,23 +5,27 @@
 define([
   'underscore',
   'app/i18n',
+  'app/user',
   'app/time',
   'app/viewport',
   'app/data/downtimeReasons',
   'app/data/aors',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
+  'app/prodChangeRequests/util/isChangeRequest',
   '../util/reasonAndAor',
   'app/prodDowntimes/templates/form'
 ], function(
   _,
   t,
+  user,
   time,
   viewport,
   downtimeReasons,
   aors,
   FormView,
   setUpUserSelect2,
+  isChangeRequest,
   reasonAndAor,
   formTemplate
 ) {
@@ -64,6 +68,13 @@ define([
     {
       FormView.prototype.destroy.call(this);
       reasonAndAor.destroy(this);
+    },
+
+    serialize: function()
+    {
+      return _.extend(FormView.prototype.serialize.call(this), {
+        isChangeRequest: isChangeRequest()
+      });
     },
 
     afterRender: function()
@@ -124,14 +135,12 @@ define([
 
     showErrorMessage: function(message)
     {
-      this.$errorMessage = viewport.msg.show({
-        type: 'error',
-        text: t.has('prodDowntimes', 'FORM:ERROR:' + message)
-          ? t('prodDowntimes', 'FORM:ERROR:' + message)
-          :  message
-      });
+      if (t.has('prodDowntimes', 'FORM:ERROR:' + message))
+      {
+        message = t('prodDowntimes', 'FORM:ERROR:' + message);
+      }
 
-      return false;
+      return FormView.prototype.showErrorMessage.call(this, message);
     },
 
     checkValidity: function(formData)
@@ -172,6 +181,7 @@ define([
       formData.startedAtTime = time.format(formData.startedAt, 'HH:mm:ss');
       formData.finishedAtDate = time.format(formData.finishedAt, 'YYYY-MM-DD');
       formData.finishedAtTime = time.format(formData.finishedAt, 'HH:mm:ss');
+      formData.requestComment = '';
 
       return formData;
     },
@@ -210,13 +220,64 @@ define([
       };
     },
 
+    handleSuccess: function()
+    {
+      if (isChangeRequest())
+      {
+        if (this.options.editMode)
+        {
+          return this.handleEditSuccess();
+        }
+
+        viewport.msg.show({
+          type: 'success',
+          time: 2500,
+          text: t('prodDowntimes', 'changeRequest:msg:success:add')
+        });
+      }
+
+      FormView.prototype.handleSuccess.apply(this, arguments);
+    },
+
+    handleEditSuccess: function()
+    {
+      this.model.set(this.model.previousAttributes());
+
+      if (viewport.currentDialog === this)
+      {
+        showMessage();
+      }
+      else
+      {
+        this.broker.subscribe('router.executing').setLimit(1).on('message', showMessage);
+      }
+
+      return FormView.prototype.handleSuccess.apply(this, arguments);
+
+      function showMessage()
+      {
+        viewport.msg.show({
+          type: 'success',
+          time: 5000,
+          text: t('prodDowntimes', 'changeRequest:msg:success:edit')
+        });
+      }
+    },
+
     handleFailure: function(xhr)
     {
-      if (xhr.responseJSON
-        && xhr.responseJSON.error
-        && t.has('prodDowntimes', 'FORM:ERROR:' + xhr.responseJSON.error.message))
+      var json = xhr.responseJSON;
+
+      if (json && json.error && t.has('prodDowntimes', 'FORM:ERROR:' + json.error.message))
       {
-        this.showErrorMessage(xhr.responseJSON.error.message);
+        this.showErrorMessage(json.error.message);
+      }
+      else if (isChangeRequest())
+      {
+        this.showErrorMessage(t(
+          'prodShiftOrders',
+          'changeRequest:msg:failure:' + (this.options.editMode ? 'edit' : 'add')
+        ));
       }
       else
       {

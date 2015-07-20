@@ -7,7 +7,9 @@ define([
   '../viewport',
   '../user',
   '../data/orgUnits',
+  '../prodChangeRequests/util/createShowDeleteFormPage',
   './ProdShift',
+  './ProdShiftCollection',
   './pages/ProdShiftListPage',
   'i18n!app/nls/prodShifts'
 ], function(
@@ -15,17 +17,23 @@ define([
   viewport,
   user,
   orgUnits,
+  createShowDeleteFormPage,
   ProdShift,
+  ProdShiftCollection,
   ProdShiftListPage
 ) {
   'use strict';
 
   var canView = user.auth('LOCAL', 'PROD_DATA:VIEW');
-  var canManage = user.auth('PROD_DATA:MANAGE');
+  var canManage = user.auth('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
 
   router.map('/prodShifts', canView, function(req)
   {
-    viewport.showPage(new ProdShiftListPage({rql: req.rql}));
+    viewport.showPage(new ProdShiftListPage({
+      collection: new ProdShiftCollection(null, {
+        rqlQuery: req.rql
+      })
+    }));
   });
 
   router.map('/prodShifts;add', canManage, function()
@@ -40,7 +48,7 @@ define([
 
   router.map('/prodShifts/:id', canView, function(req)
   {
-    viewport.loadPage('app/prodShifts/pages/ProdShiftDetailsPage', function(ProdShiftDetailsPage)
+    viewport.loadPage(['app/prodShifts/pages/ProdShiftDetailsPage'], function(ProdShiftDetailsPage)
     {
       return new ProdShiftDetailsPage({
         latest: orgUnits.getByTypeAndId('prodLine', req.params.id) !== null,
@@ -51,14 +59,13 @@ define([
 
   router.map('/prodShifts/:id;edit', canManage, function(req)
   {
-    viewport.loadPage(
-      ['app/prodShifts/pages/EditProdShiftFormPage'],
-      function(EditProdShiftFormPage)
-      {
-        return new EditProdShiftFormPage({
-          model: new ProdShift({_id: req.params.id})
-        });
-      }
-    );
+    viewport.loadPage(['app/prodShifts/pages/EditProdShiftFormPage'], function(EditProdShiftFormPage)
+    {
+      return new EditProdShiftFormPage({
+        model: new ProdShift({_id: req.params.id})
+      });
+    });
   });
+
+  router.map('/prodShifts/:id;delete', canManage, createShowDeleteFormPage(ProdShift));
 });

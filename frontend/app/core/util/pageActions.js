@@ -123,9 +123,12 @@ define([
         privileges: resolvePrivileges(model, privilege),
         callback: function(e)
         {
-          if (e.button === 0)
+          if (!e || e.button === 0)
           {
-            e.preventDefault();
+            if (e)
+            {
+              e.preventDefault();
+            }
 
             ActionFormView.showDeleteDialog(_.defaults({model: model}, options));
           }

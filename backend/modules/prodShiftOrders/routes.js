@@ -4,24 +4,23 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
 var limitOrgUnit = require('../prodLines/limitOrgUnit');
-var logEntryHandlers = require('../production/logEntryHandlers');
 
-module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
+module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
 {
-  var express = app[prodShiftOrdersModule.config.expressId];
-  var userModule = app[prodShiftOrdersModule.config.userId];
-  var mongoose = app[prodShiftOrdersModule.config.mongooseId];
-  var orgUnitsModule = app[prodShiftOrdersModule.config.orgUnitsId];
-  var productionModule = app[prodShiftOrdersModule.config.productionId];
+  var express = app[psoModule.config.expressId];
+  var userModule = app[psoModule.config.userId];
+  var mongoose = app[psoModule.config.mongooseId];
+  var orgUnitsModule = app[psoModule.config.orgUnitsId];
+  var productionModule = app[psoModule.config.productionId];
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
 
   var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
-  var canManage = userModule.auth('PROD_DATA:MANAGE');
+  var canManage = userModule.auth(
+    'PROD_DATA:MANAGE',
+    'PROD_DATA:CHANGES:REQUEST',
+    'PROD_DATA:CHANGES:MANAGE'
+  );
 
   express.get('/prodShiftOrders', canView, limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdShiftOrder));
 
@@ -119,325 +118,84 @@ module.exports = function setUpProdShiftOrdersRoutes(app, prodShiftOrdersModule)
 
   function addProdShiftOrderRoute(req, res, next)
   {
-    step(
-      function getProdShiftStep()
+    var user = req.session.user;
+    var userInfo = userModule.createUserInfo(user, req);
+
+    psoModule.addProdShiftOrder(user, userInfo, req.body, function(err, statusCode, logEntry)
+    {
+      if (statusCode)
       {
-        productionModule.getProdData('shift', req.body.prodShift, this.next());
-      },
-      function createLogEntryStep(err, prodShift)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!prodShift)
-        {
-          return this.skip(new Error('INPUT'), 400);
-        }
-
-        _.forEach([
-          'date', 'shift',
-          'division', 'subdivision', 'mrpControllers', 'prodFlow', 'workCenter', 'prodLine'
-        ], function(property)
-        {
-          req.body[property] = prodShift[property];
-        });
-
-        var logEntry = ProdLogEntry.addOrder(
-          userModule.createUserInfo(req.session.user, req), req.body
-        );
-
-        if (!logEntry)
-        {
-          return this.skip(new Error('INPUT'), 400);
-        }
-
-        var next = this.next();
-
-        validateOverlappingOrders({_id: null, prodShift: logEntry.prodShift}, logEntry.data, function(err)
-        {
-          if (err)
-          {
-            return next(err, null);
-          }
-
-          logEntry.save(next);
-        });
-      },
-      function handleLogEntryStep(err, logEntry)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var next = this.next();
-
-        logEntryHandlers.addOrder(
-          app,
-          productionModule,
-          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
-          logEntry,
-          function(err)
-          {
-            if (err)
-            {
-              return next(err, null, null);
-            }
-
-            return next(null, null, logEntry);
-          }
-        );
-      },
-      function sendResponseStep(err, statusCode, logEntry)
-      {
-        if (statusCode)
-        {
-          res.statusCode = statusCode;
-        }
-
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (statusCode)
-        {
-          return res.sendStatus(statusCode);
-        }
-
-        res.send(logEntry.data);
+        res.statusCode = statusCode;
       }
-    );
+
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (statusCode)
+      {
+        return res.sendStatus(statusCode);
+      }
+
+      res.send(logEntry.data);
+    });
   }
 
   function editProdShiftOrderRoute(req, res, next)
   {
-    step(
-      function getProdDataStep()
+    var user = req.session.user;
+    var userInfo = userModule.createUserInfo(user, req);
+
+    psoModule.editProdShiftOrder(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
+    {
+      if (statusCode)
       {
-        productionModule.getProdData('order', req.params.id, this.next());
-      },
-      function createLogEntryStep(err, prodShiftOrder)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!prodShiftOrder)
-        {
-          return this.skip(null, 404);
-        }
-
-        if (!prodShiftOrder.isEditable())
-        {
-          return this.skip(new Error('NOT_EDITABLE'), 400);
-        }
-
-        var logEntry = ProdLogEntry.editOrder(
-          prodShiftOrder, userModule.createUserInfo(req.session.user, req), req.body
-        );
-
-        if (!logEntry)
-        {
-          return this.skip(new Error('INVALID_CHANGES'), 400);
-        }
-
-        var next = this.next();
-
-        validateOverlappingOrders(prodShiftOrder, logEntry.data, function(err)
-        {
-          if (err)
-          {
-            return next(err, null);
-          }
-
-          logEntry.save(next);
-        });
-      },
-      function handleLogEntryStep(err, logEntry)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var next = this.next();
-
-        logEntryHandlers.editOrder(
-          app,
-          productionModule,
-          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
-          logEntry,
-          function(err)
-          {
-            if (err)
-            {
-              return next(err, null, null);
-            }
-
-            return next(null, null, logEntry);
-          }
-        );
-      },
-      function sendResponseStep(err, statusCode, logEntry)
-      {
-        if (statusCode)
-        {
-          res.statusCode = statusCode;
-        }
-
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (statusCode)
-        {
-          return res.sendStatus(statusCode);
-        }
-
-        res.send(logEntry.data);
-
-        if (!productionModule.recreating)
-        {
-          app.broker.publish('production.edited.order.' + logEntry.prodShiftOrder, logEntry.data);
-        }
+        res.statusCode = statusCode;
       }
-    );
+
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (statusCode)
+      {
+        return res.sendStatus(statusCode);
+      }
+
+      res.send(logEntry.data);
+
+      if (!productionModule.recreating)
+      {
+        app.broker.publish('production.edited.order.' + logEntry.prodShiftOrder, logEntry.data);
+      }
+    });
   }
 
   function deleteProdShiftOrderRoute(req, res, next)
   {
-    step(
-      function getProdDataStep()
+    var user = req.session.user;
+    var userInfo = userModule.createUserInfo(user, req);
+
+    psoModule.deleteProdShiftOrder(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
+    {
+      if (statusCode)
       {
-        productionModule.getProdData('order', req.params.id, this.next());
-      },
-      function createLogEntryStep(err, prodShiftOrder)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!prodShiftOrder)
-        {
-          return this.skip(null, 404);
-        }
-
-        if (!prodShiftOrder.isEditable())
-        {
-          return this.skip(new Error('ORDER_NOT_EDITABLE'), 400);
-        }
-
-        var logEntry = ProdLogEntry.deleteOrder(
-          prodShiftOrder, userModule.createUserInfo(req.session.user, req)
-        );
-
-        logEntry.save(this.next());
-      },
-      function handleLogEntryStep(err, logEntry)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var next = this.next();
-
-        logEntryHandlers.deleteOrder(
-          app,
-          productionModule,
-          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
-          logEntry,
-          function(err)
-          {
-            if (err)
-            {
-              return next(err, null, null);
-            }
-
-            return next(null, null, logEntry);
-          }
-        );
-      },
-      function sendResponseStep(err, statusCode, logEntry)
-      {
-        if (statusCode)
-        {
-          res.statusCode = statusCode;
-        }
-
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (statusCode)
-        {
-          return res.sendStatus(statusCode);
-        }
-
-        res.send(logEntry.data);
+        res.statusCode = statusCode;
       }
-    );
-  }
 
-  function validateOverlappingOrders(prodShiftOrder, changes, done)
-  {
-    if (!changes.startedAt && !changes.finishedAt)
-    {
-      return done(null);
-    }
-
-    var conditions = {prodShift: prodShiftOrder.prodShift};
-    var fields = {startedAt: 1, finishedAt: 1};
-
-    ProdShiftOrder.find(conditions, fields).lean().exec(function(err, prodShiftOrders)
-    {
       if (err)
       {
-        return done(err);
+        return next(err);
       }
 
-      var startedAt = changes.startedAt || prodShiftOrder.startedAt;
-      var finishedAt = changes.finishedAt || prodShiftOrder.finishedAt;
-
-      for (var i = 0, l = prodShiftOrders.length; i < l; ++i)
+      if (statusCode)
       {
-        var pso = prodShiftOrders[i];
-
-        if (pso._id !== prodShiftOrder._id && startedAt < pso.finishedAt && finishedAt > pso.startedAt)
-        {
-          var psoStartedAt = moment(pso.startedAt).milliseconds(0).valueOf();
-          var psoFinishedAt = moment(pso.finishedAt).milliseconds(0).valueOf();
-          var newStartedAt = moment(startedAt).milliseconds(0).valueOf();
-          var newFinishedAt = moment(finishedAt).milliseconds(0).valueOf();
-
-          if (newStartedAt === psoFinishedAt)
-          {
-            startedAt = new Date(pso.finishedAt.getTime() + 1);
-          }
-
-          if (newFinishedAt === psoStartedAt)
-          {
-            finishedAt = new Date(pso.startedAt.getTime() - 1);
-          }
-
-          if (startedAt < pso.finishedAt && finishedAt > pso.startedAt)
-          {
-            return done(express.createHttpError('OVERLAPPING_ORDERS', 400));
-          }
-
-          changes.startedAt = startedAt;
-          changes.finishedAt = finishedAt;
-        }
+        return res.sendStatus(statusCode);
       }
 
-      return done(null);
+      res.send(logEntry.data);
     });
   }
 };

@@ -3,91 +3,34 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/i18n',
-  'app/viewport',
-  'app/core/util/bindLoadingMessage',
+  'app/user',
   'app/core/util/pageActions',
-  'app/core/View',
-  '../ProdShiftCollection',
+  'app/core/pages/FilteredListPage',
   '../views/ProdShiftListView',
-  '../views/ProdShiftFilterView',
-  'app/core/templates/listPage'
+  '../views/ProdShiftFilterView'
 ], function(
-  t,
-  viewport,
-  bindLoadingMessage,
+  user,
   pageActions,
-  View,
-  ProdShiftCollection,
+  FilteredListPage,
   ProdShiftListView,
-  ProdShiftFilterView,
-  listPageTemplate
+  ProdShiftFilterView
 ) {
   'use strict';
 
-  return View.extend({
+  return FilteredListPage.extend({
 
-    template: listPageTemplate,
-
-    layoutName: 'page',
-
-    pageId: 'prodShiftList',
-
-    breadcrumbs: [
-      t.bound('prodShifts', 'BREADCRUMBS:browse')
-    ],
+    FilterView: ProdShiftFilterView,
+    ListView: ProdShiftListView,
 
     actions: function(layout)
     {
       return [
-        pageActions.export(layout, this, this.prodShiftList),
-        pageActions.add(this.prodShiftList, 'PROD_DATA:MANAGE')
+        pageActions.export(layout, this, this.collection),
+        pageActions.add(
+          this.collection,
+          user.isAllowedTo.bind(user, 'PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST')
+        )
       ];
-    },
-
-    initialize: function()
-    {
-      this.defineModels();
-      this.defineViews();
-
-      this.setView('.filter-container', this.filterView);
-      this.setView('.list-container', this.listView);
-    },
-
-    defineModels: function()
-    {
-      this.prodShiftList = bindLoadingMessage(new ProdShiftCollection(null, {rqlQuery: this.options.rql}), this);
-    },
-
-    defineViews: function()
-    {
-      this.listView = new ProdShiftListView({collection: this.prodShiftList});
-
-      this.filterView = new ProdShiftFilterView({
-        model: {
-          rqlQuery: this.prodShiftList.rqlQuery
-        }
-      });
-
-      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
-    },
-
-    load: function(when)
-    {
-      return when(this.prodShiftList.fetch({reset: true}));
-    },
-
-    refreshList: function(newRqlQuery)
-    {
-      this.prodShiftList.rqlQuery = newRqlQuery;
-
-      this.listView.refreshCollectionNow();
-
-      this.broker.publish('router.navigate', {
-        url: this.prodShiftList.genClientUrl() + '?' + newRqlQuery,
-        trigger: false,
-        replace: true
-      });
     }
 
   });

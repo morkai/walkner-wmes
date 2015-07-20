@@ -4,6 +4,9 @@
 
 'use strict';
 
+var addProdShift = require('./addProdShift');
+var editProdShift = require('./editProdShift');
+var deleteProdShift = require('./deleteProdShift');
 var setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
@@ -17,6 +20,10 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startProdShiftsModule(app, module)
 {
+  module.addProdShift = addProdShift.bind(null, app, module);
+  module.editProdShift = editProdShift.bind(null, app, module);
+  module.deleteProdShift = deleteProdShift.bind(null, app, module);
+
   app.onModuleReady(
     [
       module.config.mongooseId,

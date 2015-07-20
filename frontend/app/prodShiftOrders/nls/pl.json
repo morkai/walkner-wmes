@@ -40,6 +40,7 @@
   "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zlecenia: nie wykryto żadnych poprawnych zmian :(",
   "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
   "FORM:ERROR:OVERLAPPING_ORDERS": "Zlecenie pokrywa się z innymi zleceniami!",
+  "FORM:ERROR:NOT_EDITABLE": "Zlecenie jeszcze się nie skończyło!",
 
   "PROPERTY:mrpControllers": "Kontroler MRP",
   "PROPERTY:prodFlow": "Przepływ",
@@ -74,5 +75,17 @@
   "ACTION_FORM:BUTTON:delete": "Usuń zlecenie",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane zlecenie?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć zlecenie <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zlecenia :-("
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zlecenia :-(",
+
+  "changeRequest:delete:messageText": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. <em>Zlecenie produkcyjne</em> zostanie usunięte dopiero po zaakceptowaniu operacji przez osobę odpowiedzialną.<br><br>Czy na pewno chcesz utworzyć żądanie usunięcia wybranego zlecenia produkcyjnego?",
+  "changeRequest:delete:formActionText": "Utwórz żądanie usunięcia",
+  "changeRequest:commentLabel": "Komentarz do żądania zmiany",
+  "changeRequest:warning:add": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. Nowe <em>zlecenie produkcyjne</em> zostanie utworzone dopiero po zaakceptowaniu go przez osobę odpowiedzialną.",
+  "changeRequest:warning:edit": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. <em>Zlecenie produkcyjne</em> zostanie zaktualizowane dopiero po zaakceptowaniu dokonanych zmian przez osobę odpowiedzialną.",
+  "changeRequest:msg:success:add": "Żądanie dodania nowego zlecenia produkcyjnego zostało utworzone.",
+  "changeRequest:msg:success:edit": "Żądanie edycji zlecenia produkcyjnego zostało utworzone.",
+  "changeRequest:msg:success:delete": "Żądanie usunięcia zlecenia produkcyjnego zostało utworzone.",
+  "changeRequest:msg:failure:add": "Nie udało się stworzyć żądania dodania nowego zlecenia produkcyjnego :-(",
+  "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji zlecenia produkcyjnego :-(",
+  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia zlecenia produkcyjnego :-("
 }

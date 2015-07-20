@@ -7,7 +7,6 @@
 var step = require('h5.step');
 var moment = require('moment');
 var limitOrgUnit = require('../prodLines/limitOrgUnit');
-var logEntryHandlers = require('../production/logEntryHandlers');
 
 module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 {
@@ -18,10 +17,13 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
   var orgUnitsModule = app[prodShiftsModule.config.orgUnitsId];
   var productionModule = app[prodShiftsModule.config.productionId];
   var ProdShift = mongoose.model('ProdShift');
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
 
   var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
-  var canManage = userModule.auth('PROD_DATA:MANAGE');
+  var canManage = userModule.auth(
+    'PROD_DATA:MANAGE',
+    'PROD_DATA:CHANGES:REQUEST',
+    'PROD_DATA:CHANGES:MANAGE'
+  );
 
   express.get('/prodShifts', canView, limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdShift));
 
@@ -124,277 +126,84 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   function addProdShiftRoute(req, res, next)
   {
-    step(
-      function validateInputStep()
+    var user = req.session.user;
+    var userInfo = userModule.createUserInfo(user, req);
+
+    prodShiftsModule.addProdShift(user, userInfo, req.body, function(err, statusCode, logEntry)
+    {
+      if (statusCode)
       {
-        req.body.shift = parseInt(req.body.shift, 10);
-
-        var dateMoment = moment(req.body.date);
-
-        app.orgUnits.getAllForProdLine(req.body.prodLine, req.body);
-
-        if (!dateMoment.isValid()
-          || req.body.shift < 1
-          || req.body.shift > 3
-          || req.body.division === null)
-        {
-          return this.skip(new Error('INPUT'), 400);
-        }
-
-        dateMoment.hours(req.body.shift === 1 ? 6 : req.body.shift === 2 ? 14 : 22);
-
-        if (Date.now() <= dateMoment.clone().add(8, 'hours').valueOf())
-        {
-          return this.skip(new Error('SHIFT_NOT_ENDED'), 400);
-        }
-
-        req.body.date = dateMoment.toDate();
-      },
-      function findExistingProdShiftsStep()
-      {
-        ProdShift
-          .find({date: req.body.date, prodLine: req.body.prodLine}, {_id: 1})
-          .lean()
-          .exec(this.next());
-      },
-      function handleExistingProdShiftsStep(err, prodShifts)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (prodShifts.length !== 0)
-        {
-          return this.skip(new Error('EXISTING'), 400);
-        }
-      },
-      function createLogEntryStep(err)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var logEntry = ProdLogEntry.addShift(
-          userModule.createUserInfo(req.session.user, req), req.body
-        );
-
-        if (!logEntry)
-        {
-          return this.skip(new Error('INPUT'), 400);
-        }
-
-        logEntry.save(this.next());
-      },
-      function handleLogEntryStep(err, logEntry)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var next = this.next();
-
-        logEntryHandlers.addShift(
-          app,
-          productionModule,
-          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
-          logEntry,
-          function(err)
-          {
-            if (err)
-            {
-              return next(err, null, null);
-            }
-
-            return next(null, null, logEntry);
-          }
-        );
-      },
-      function sendResponseStep(err, statusCode, logEntry)
-      {
-        if (statusCode)
-        {
-          res.statusCode = statusCode;
-        }
-
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (statusCode)
-        {
-          return res.sendStatus(statusCode);
-        }
-
-        res.send(logEntry.data);
+        res.statusCode = statusCode;
       }
-    );
+
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (statusCode)
+      {
+        return res.sendStatus(statusCode);
+      }
+
+      res.send(logEntry.data);
+    });
   }
 
   function editProdShiftRoute(req, res, next)
   {
-    step(
-      function getProdDataStep()
+    var user = req.session.user;
+    var userInfo = userModule.createUserInfo(user, req);
+
+    prodShiftsModule.editProdShift(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
+    {
+      if (statusCode)
       {
-        productionModule.getProdData('shift', req.params.id, this.next());
-      },
-      function createLogEntryStep(err, prodShift)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!prodShift)
-        {
-          return this.skip(null, 404);
-        }
-
-        if (!prodShift.hasEnded())
-        {
-          return this.skip(new Error('SHIFT_NOT_ENDED'), 400);
-        }
-
-        var logEntry = ProdLogEntry.editShift(
-          prodShift, userModule.createUserInfo(req.session.user, req), req.body
-        );
-
-        if (!logEntry)
-        {
-          return this.skip(new Error('INVALID_CHANGES'), 400);
-        }
-
-        logEntry.save(this.next());
-      },
-      function handleLogEntryStep(err, logEntry)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var next = this.next();
-
-        logEntryHandlers.editShift(
-          app,
-          productionModule,
-          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
-          logEntry,
-          function(err)
-          {
-            if (err)
-            {
-              return next(err, null, null);
-            }
-
-            return next(null, null, logEntry);
-          }
-        );
-      },
-      function sendResponseStep(err, statusCode, logEntry)
-      {
-        if (statusCode)
-        {
-          res.statusCode = statusCode;
-        }
-
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (statusCode)
-        {
-          return res.sendStatus(statusCode);
-        }
-
-        res.send(logEntry.data);
-
-        if (!productionModule.recreating)
-        {
-          app.broker.publish('production.edited.shift.' + logEntry.prodShift, logEntry.data);
-        }
+        res.statusCode = statusCode;
       }
-    );
+
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (statusCode)
+      {
+        return res.sendStatus(statusCode);
+      }
+
+      res.send(logEntry.data);
+
+      if (!productionModule.recreating)
+      {
+        app.broker.publish('production.edited.shift.' + logEntry.prodShift, logEntry.data);
+      }
+    });
   }
 
   function deleteProdShiftRoute(req, res, next)
   {
-    step(
-      function getProdDataStep()
+    var user = req.session.user;
+    var userInfo = userModule.createUserInfo(user, req);
+
+    prodShiftsModule.deleteProdShift(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
+    {
+      if (statusCode)
       {
-        productionModule.getProdData('shift', req.params.id, this.next());
-      },
-      function createLogEntryStep(err, prodShift)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!prodShift)
-        {
-          return this.skip(null, 404);
-        }
-
-        if (!prodShift.isEditable())
-        {
-          return this.skip(new Error('SHIFT_NOT_EDITABLE'), 400);
-        }
-
-        var logEntry = ProdLogEntry.deleteShift(
-          prodShift, userModule.createUserInfo(req.session.user, req)
-        );
-
-        logEntry.save(this.next());
-      },
-      function handleLogEntryStep(err, logEntry)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var next = this.next();
-
-        logEntryHandlers.deleteShift(
-          app,
-          productionModule,
-          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
-          logEntry,
-          function(err)
-          {
-            if (err)
-            {
-              return next(err, null, null);
-            }
-
-            return next(null, null, logEntry);
-          }
-        );
-      },
-      function sendResponseStep(err, statusCode, logEntry)
-      {
-        if (statusCode)
-        {
-          res.statusCode = statusCode;
-        }
-
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (statusCode)
-        {
-          return res.sendStatus(statusCode);
-        }
-
-        res.send(logEntry.data);
+        res.statusCode = statusCode;
       }
-    );
+
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (statusCode)
+      {
+        return res.sendStatus(statusCode);
+      }
+
+      res.send(logEntry.data);
+    });
   }
 };

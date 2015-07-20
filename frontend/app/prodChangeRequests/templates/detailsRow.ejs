@@ -1,0 +1,36 @@
+<tr class="prodChangeRequests-details">
+  <td colspan="99">
+    <% if (changes.length) { %>
+    <table class="prodChangeRequests-changes">
+      <tbody>
+        <% changes.forEach(function(change, i) { %>
+        <tr class="<%- isEdit ? '' : 'is-separator' %> <%- i % 2 ? 'is-even' : 'is-odd' %>">
+          <td><%- change.property %>:</td>
+          <td rowspan="<%- change.value ? 2 : 1 %>"><%- change.value || change[isEdit ? 'oldValue' : 'newValue'] %></td>
+        </tr>
+        <% if (isEdit) { %>
+        <tr class="prodChangeRequests-changes-newValue <%- isEdit ? 'is-separator' : '' %> <%- i % 2 ? 'is-even' : 'is-odd' %>">
+          <td><i class="fa fa-arrow-right"></i></td>
+          <% if (!change.value) { %>
+          <td><%- change.newValue %></td>
+          <% } %>
+        </tr>
+        <% } %>
+        <% }) %>
+      </tbody>
+    </table>
+    <% } %>
+    <% if (showForm) { %>
+    <div class="prodChangeRequests-confirmForm">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-confirmerComment" class="control-label"><%- t('prodChangeRequests', 'PROPERTY:confirmerComment') %></label>
+        <textarea id="<%- idPrefix %>-confirmerComment" class="form-control" name="confirmerComment" rows="2"></textarea>
+      </div>
+      <div class="form-group">
+        <button id="<%- idPrefix %>-accept" type="button" class="btn btn-success" data-id="<%- changeRequestId %>"><i class="fa fa-thumbs-o-up"></i><span><%- t('prodChangeRequests', 'confirm:accept') %></span></button>
+        <button id="<%- idPrefix %>-reject" type="button" class="btn btn-danger" data-id="<%- changeRequestId %>"><i class="fa fa-thumbs-o-down"></i><span><%- t('prodChangeRequests', 'confirm:reject') %></span></button>
+      </div>
+    </div>
+    <% } %>
+  </td>
+</tr>

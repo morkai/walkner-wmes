@@ -4,6 +4,10 @@
 
 'use strict';
 
+var validateOverlappingOrders = require('./validateOverlappingOrders');
+var addProdShiftOrder = require('./addProdShiftOrder');
+var editProdShiftOrder = require('./editProdShiftOrder');
+var deleteProdShiftOrder = require('./deleteProdShiftOrder');
 var setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
@@ -16,11 +20,16 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startProdShiftOrdersModule(app, module)
 {
+  module.validateOverlappingOrders = validateOverlappingOrders.bind(null, app, module);
+  module.addProdShiftOrder = addProdShiftOrder.bind(null, app, module);
+  module.editProdShiftOrder = editProdShiftOrder.bind(null, app, module);
+  module.deleteProdShiftOrder = deleteProdShiftOrder.bind(null, app, module);
+
   app.onModuleReady(
     [
       module.config.mongooseId,
-      module.config.userId,
       module.config.expressId,
+      module.config.userId,
       module.config.orgUnitsId,
       module.config.productionId
     ],

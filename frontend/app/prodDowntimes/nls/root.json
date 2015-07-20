@@ -51,6 +51,7 @@
     "PROPERTY:status:undecided": "Undecided",
     "PROPERTY:status:confirmed": "Confirmed",
     "PROPERTY:status:rejected": "Rejected",
+    "PROPERTY:date": "Date",
     "PROPERTY:shift": "Shift",
     "PROPERTY:master": "Master",
     "PROPERTY:leader": "Leader",
@@ -72,6 +73,7 @@
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the downtime: no valid changes were detected :(",
     "FORM:ERROR:INPUT": "Invalid input data!",
     "FORM:ERROR:OVERLAPPING_DOWNTIMES": "Downtime overlaps with other downtimes!",
+    "FORM:ERROR:NOT_EDITABLE": "Downtime isn't finished yet!",
 
     "shift+date": "{date}, {shift} shift",
 
@@ -104,7 +106,19 @@
 
     "changesCount:reason": "Number of Downtime reason changes",
     "changesCount:aor": "Number of Area of Responsibility changes",
-    "changesCount:rejected": "Number of rejections"
+    "changesCount:rejected": "Number of rejections",
+
+    "changeRequest:delete:messageText": "You're in a change request creation mode. The <em>Downtime</em> will be deleted only after it has been approved by the person responsible.<br><br>Are you sure you want to create the downtime deletion request?",
+    "changeRequest:delete:formActionText": "Create deletion request",
+    "changeRequest:commentLabel": "Change request comment",
+    "changeRequest:warning:add": "You're in a change request creation mode. The new <em>Downtime</em> will be created only after it has been approved by the person responsible.",
+    "changeRequest:warning:edit": "You're in a change request creation mode. The <em>Downtime</em> will be updated only after the change has been approved by the person responsible.",
+    "changeRequest:msg:success:add": "Downtime creation request was created successfully.",
+    "changeRequest:msg:success:edit": "Downtime modification request was created successfully.",
+    "changeRequest:msg:success:delete": "Downtime deletion request was created successfully.",
+    "changeRequest:msg:failure:add": "Failed to create a new downtime creation request :-(",
+    "changeRequest:msg:failure:edit": "Failed to create a new downtime modification request :-(",
+    "changeRequest:msg:failure:delete": "Failed to create a new downtime deletion request :-("
   },
   "pl": true
 }

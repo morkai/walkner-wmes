@@ -15,7 +15,7 @@ define([
 
   return ListView.extend({
 
-    className: 'is-clickable',
+    className: 'prodShifts-list is-clickable',
 
     remoteTopics: {
       'prodShifts.created.*': 'refreshIfMatches',

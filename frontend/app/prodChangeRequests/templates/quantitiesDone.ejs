@@ -1,0 +1,20 @@
+<table class="prodChangeRequests-quantitiesDone">
+  <tbody>
+  <% if (oldQuantitiesDone) { %>
+  <tr class="prodChangeRequests-quantitiesDone-old">
+    <% oldQuantitiesDone.forEach(function(quantityDone) { %>
+    <td class="prodChangeRequests-quantitiesDone-actual"><%- quantityDone.actual.toLocaleString() %></td>
+    <td class="prodChangeRequests-quantitiesDone-separator">/</td>
+    <td class="prodChangeRequests-quantitiesDone-planned"><%- quantityDone.planned.toLocaleString() %></td>
+    <% }) %>
+  </tr>
+  <% } %>
+  <tr class="prodChangeRequests-quantitiesDone-new">
+    <% newQuantitiesDone.forEach(function(quantityDone) { %>
+    <td class="prodChangeRequests-quantitiesDone-actual"><%- quantityDone.actual.toLocaleString() %></td>
+    <td class="prodChangeRequests-quantitiesDone-separator">/</td>
+    <td class="prodChangeRequests-quantitiesDone-planned"><%- quantityDone.planned.toLocaleString() %></td>
+    <% }) %>
+  </tr>
+  </tbody>
+</table>

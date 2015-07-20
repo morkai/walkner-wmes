@@ -91,6 +91,8 @@
   "PRIVILEGE:PRESS_WORKSHEETS:MANAGE": "Karty pracy: dodawanie",
   "PRIVILEGE:PROD_DATA:VIEW": "Dane produkcyjne: przeglądanie",
   "PRIVILEGE:PROD_DATA:MANAGE": "Dane produkcyjne: zarządzanie",
+  "PRIVILEGE:PROD_DATA:CHANGES:REQUEST": "Dane produkcyjne: żądanie zmian",
+  "PRIVILEGE:PROD_DATA:CHANGES:MANAGE": "Dane produkcyjne: zatwierdzanie zmian",
   "PRIVILEGE:REPORTS:VIEW": "Raporty: przeglądanie wszystkich",
   "PRIVILEGE:REPORTS:MANAGE": "Raporty: zarządzanie",
   "PRIVILEGE:REPORTS:1:VIEW": "Raporty: Wskaźniki",

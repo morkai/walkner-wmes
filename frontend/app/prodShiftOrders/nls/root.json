@@ -33,6 +33,7 @@
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the order: no valid changes were detected :(",
     "FORM:ERROR:INPUT": "Invalid input data!",
     "FORM:ERROR:OVERLAPPING_ORDERS": "Order overlaps with other orders!",
+    "FORM:ERROR:NOT_EDITABLE": "Order isn't finished yet!",
 
     "filter:orderId": "Order no/12NC",
     "filter:operationNo": "Oper. no",
@@ -75,7 +76,19 @@
     "ACTION_FORM:BUTTON:delete": "Delete order",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen order?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> order?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the order :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the order :-(",
+
+    "changeRequest:delete:messageText": "You're in a change request creation mode. The <em>Order</em> will be deleted only after it has been approved by the person responsible.<br><br>Are you sure you want to create the order deletion request?",
+    "changeRequest:delete:formActionText": "Create deletion request",
+    "changeRequest:commentLabel": "Change request comment",
+    "changeRequest:warning:add": "You're in a change request creation mode. The new <em>Order</em> will be created only after it has been approved by the person responsible.",
+    "changeRequest:warning:edit": "You're in a change request creation mode. The <em>Order</em> will be updated only after the change has been approved by the person responsible.",
+    "changeRequest:msg:success:add": "Order creation request was created successfully.",
+    "changeRequest:msg:success:edit": "Order modification request was created successfully.",
+    "changeRequest:msg:success:delete": "Order deletion request was created successfully.",
+    "changeRequest:msg:failure:add": "Failed to create a new order creation request :-(",
+    "changeRequest:msg:failure:edit": "Failed to create a new order modification request :-(",
+    "changeRequest:msg:failure:delete": "Failed to create a new order deletion request :-("
   },
   "pl": true
 }

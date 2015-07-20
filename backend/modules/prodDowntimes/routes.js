@@ -5,25 +5,26 @@
 'use strict';
 
 var _ = require('lodash');
-var step = require('h5.step');
 var moment = require('moment');
-var logEntryHandlers = require('../production/logEntryHandlers');
 
-module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
+module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 {
-  var express = app[prodDowntimesModule.config.expressId];
-  var userModule = app[prodDowntimesModule.config.userId];
-  var aorsModule = app[prodDowntimesModule.config.aorsId];
-  var downtimeReasonsModule = app[prodDowntimesModule.config.downtimeReasonsId];
-  var orgUnitsModule = app[prodDowntimesModule.config.orgUnitsId];
-  var productionModule = app[prodDowntimesModule.config.productionId];
-  var mongoose = app[prodDowntimesModule.config.mongooseId];
-  var settings = app[prodDowntimesModule.config.settingsId];
+  var express = app[pdModule.config.expressId];
+  var userModule = app[pdModule.config.userId];
+  var aorsModule = app[pdModule.config.aorsId];
+  var downtimeReasonsModule = app[pdModule.config.downtimeReasonsId];
+  var orgUnitsModule = app[pdModule.config.orgUnitsId];
+  var productionModule = app[pdModule.config.productionId];
+  var mongoose = app[pdModule.config.mongooseId];
+  var settings = app[pdModule.config.settingsId];
   var ProdDowntime = mongoose.model('ProdDowntime');
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
 
   var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW');
-  var canManage = userModule.auth('PROD_DATA:MANAGE');
+  var canManage = userModule.auth(
+    'PROD_DATA:MANAGE',
+    'PROD_DATA:CHANGES:REQUEST',
+    'PROD_DATA:CHANGES:MANAGE'
+  );
 
   express.get(
     '/prodDowntimes/settings',
@@ -274,344 +275,84 @@ module.exports = function setUpProdDowntimesRoutes(app, prodDowntimesModule)
 
   function addProdDowntimeRoute(req, res, next)
   {
-    step(
-      function getProdShiftStep()
+    var user = req.session.user;
+    var userInfo = userModule.createUserInfo(user, req);
+
+    pdModule.addProdDowntime(user, userInfo, req.body, function(err, statusCode, logEntry)
+    {
+      if (statusCode)
       {
-        productionModule.getProdData('shift', req.body.prodShift, this.parallel());
-
-        if (req.body.prodShiftOrder)
-        {
-          productionModule.getProdData('order', req.body.prodShiftOrder, this.parallel());
-        }
-      },
-      function createLogEntryStep(err, prodShift, prodShiftOrder)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!prodShift
-          || _.isEmpty(req.body.aor)
-          || _.isEmpty(req.body.reason))
-        {
-          return this.skip(new Error('INPUT'), 400);
-        }
-
-        if (req.body.prodShiftOrder)
-        {
-          if (!prodShiftOrder || prodShiftOrder.prodShift !== prodShift._id)
-          {
-            return this.skip(new Error('INPUT'), 400);
-          }
-
-          req.body.mechOrder = prodShiftOrder.mechOrder;
-          req.body.orderId = prodShiftOrder.orderId;
-          req.body.operationNo = prodShiftOrder.operationNo;
-        }
-
-        _.forEach([
-          'date', 'shift',
-          'division', 'subdivision', 'mrpControllers', 'prodFlow', 'workCenter', 'prodLine'
-        ], function(property)
-        {
-          req.body[property] = prodShift[property];
-        });
-
-        var logEntry = ProdLogEntry.addDowntime(
-          prodShiftOrder, userModule.createUserInfo(req.session.user, req), req.body
-        );
-
-        if (!logEntry)
-        {
-          return this.skip(new Error('INPUT'), 400);
-        }
-
-        var next = this.next();
-
-        validateOverlappingDowntimes({_id: null, prodShift: logEntry.prodShift}, logEntry.data, function(err)
-        {
-          if (err)
-          {
-            return next(err, null);
-          }
-
-          logEntry.save(next);
-        });
-      },
-      function handleLogEntryStep(err, logEntry)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var next = this.next();
-
-        logEntryHandlers.addDowntime(
-          app,
-          productionModule,
-          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
-          logEntry,
-          function(err)
-          {
-            if (err)
-            {
-              return next(err, null, null);
-            }
-
-            return next(null, null, logEntry);
-          }
-        );
-      },
-      function sendResponseStep(err, statusCode, logEntry)
-      {
-        if (statusCode)
-        {
-          res.statusCode = statusCode;
-        }
-
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (statusCode)
-        {
-          return res.sendStatus(statusCode);
-        }
-
-        res.send(logEntry.data);
+        res.statusCode = statusCode;
       }
-    );
+
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (statusCode)
+      {
+        return res.sendStatus(statusCode);
+      }
+
+      res.send(logEntry.data);
+    });
   }
 
   function editProdDowntimeRoute(req, res, next)
   {
-    step(
-      function getProdDataStep()
+    var user = req.session.user;
+    var userInfo = userModule.createUserInfo(user, req);
+
+    pdModule.editProdDowntime(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
+    {
+      if (statusCode)
       {
-        productionModule.getProdData('downtime', req.params.id, this.next());
-      },
-      function createLogEntryStep(err, prodDowntime)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!prodDowntime)
-        {
-          return this.skip(null, 404);
-        }
-
-        if (!prodDowntime.isEditable())
-        {
-          return this.skip(new Error('DOWNTIME_NOT_EDITABLE'), 400);
-        }
-
-        var logEntry = ProdLogEntry.editDowntime(
-          prodDowntime, userModule.createUserInfo(req.session.user, req), req.body
-        );
-
-        if (!logEntry)
-        {
-          return this.skip(new Error('INVALID_CHANGES'), 400);
-        }
-
-        var next = this.next();
-
-        validateOverlappingDowntimes(prodDowntime, logEntry.data, function(err)
-        {
-          if (err)
-          {
-            return next(err, null);
-          }
-
-          logEntry.save(next);
-        });
-      },
-      function handleLogEntryStep(err, logEntry)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var next = this.next();
-
-        logEntryHandlers.editDowntime(
-          app,
-          productionModule,
-          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
-          logEntry,
-          function(err)
-          {
-            if (err)
-            {
-              return next(err, null, null);
-            }
-
-            return next(null, null, logEntry);
-          }
-        );
-      },
-      function sendResponseStep(err, statusCode, logEntry)
-      {
-        if (statusCode)
-        {
-          res.statusCode = statusCode;
-        }
-
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (statusCode)
-        {
-          return res.sendStatus(statusCode);
-        }
-
-        res.send(logEntry.data);
-
-        if (!productionModule.recreating)
-        {
-          app.broker.publish('production.edited.downtime.' + logEntry.data._id, logEntry.data);
-        }
+        res.statusCode = statusCode;
       }
-    );
+
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (statusCode)
+      {
+        return res.sendStatus(statusCode);
+      }
+
+      res.send(logEntry.data);
+
+      if (!productionModule.recreating)
+      {
+        app.broker.publish('production.edited.downtime.' + logEntry.data._id, logEntry.data);
+      }
+    });
   }
 
   function deleteProdDowntimeRoute(req, res, next)
   {
-    step(
-      function getProdDataStep()
+    var user = req.session.user;
+    var userInfo = userModule.createUserInfo(user, req);
+
+    pdModule.deleteProdDowntime(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
+    {
+      if (statusCode)
       {
-        productionModule.getProdData('downtime', req.params.id, this.next());
-      },
-      function createLogEntryStep(err, prodDowntime)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!prodDowntime)
-        {
-          return this.skip(null, 404);
-        }
-
-        if (!prodDowntime.isEditable())
-        {
-          return this.skip(new Error('DOWNTIME_NOT_EDITABLE'), 400);
-        }
-
-        var logEntry = ProdLogEntry.deleteDowntime(
-          prodDowntime, userModule.createUserInfo(req.session.user, req)
-        );
-
-        logEntry.save(this.next());
-      },
-      function handleLogEntryStep(err, logEntry)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var next = this.next();
-
-        logEntryHandlers.deleteDowntime(
-          app,
-          productionModule,
-          orgUnitsModule.getByTypeAndId('prodLine', logEntry.prodLine),
-          logEntry,
-          function(err)
-          {
-            if (err)
-            {
-              return next(err, null, null);
-            }
-
-            return next(null, null, logEntry);
-          }
-        );
-      },
-      function sendResponseStep(err, statusCode, logEntry)
-      {
-        if (statusCode)
-        {
-          res.statusCode = statusCode;
-        }
-
-        if (err)
-        {
-          return next(err);
-        }
-
-        if (statusCode)
-        {
-          return res.sendStatus(statusCode);
-        }
-
-        res.send(logEntry.data);
+        res.statusCode = statusCode;
       }
-    );
-  }
 
-  function validateOverlappingDowntimes(prodDowntime, changes, done)
-  {
-    if (!changes.startedAt && !changes.finishedAt)
-    {
-      return done(null);
-    }
-
-    var conditions = {prodShift: prodDowntime.prodShift};
-    var fields = {startedAt: 1, finishedAt: 1};
-
-    ProdDowntime.find(conditions, fields).lean().exec(function(err, prodDowntimes)
-    {
       if (err)
       {
-        return done(err);
+        return next(err);
       }
 
-      var startedAt = changes.startedAt || prodDowntime.startedAt;
-      var finishedAt = changes.finishedAt || prodDowntime.finishedAt;
-
-      for (var i = 0, l = prodDowntimes.length; i < l; ++i)
+      if (statusCode)
       {
-        var pd = prodDowntimes[i];
-
-        if (pd._id !== prodDowntime._id && startedAt < pd.finishedAt && finishedAt > pd.startedAt)
-        {
-          var pdStartedAt = moment(pd.startedAt).milliseconds(0).valueOf();
-          var pdFinishedAt = moment(pd.finishedAt).milliseconds(0).valueOf();
-          var newStartedAt = moment(startedAt).milliseconds(0).valueOf();
-          var newFinishedAt = moment(finishedAt).milliseconds(0).valueOf();
-
-          if (newStartedAt === pdFinishedAt)
-          {
-            startedAt = new Date(pd.finishedAt.getTime() + 1);
-          }
-
-          if (newFinishedAt === pdStartedAt)
-          {
-            finishedAt = new Date(pd.startedAt.getTime() - 1);
-          }
-
-          if (startedAt < pd.finishedAt && finishedAt > pd.startedAt)
-          {
-            return done(express.createHttpError('OVERLAPPING_DOWNTIMES', 400));
-          }
-
-          changes.startedAt = startedAt;
-          changes.finishedAt = finishedAt;
-        }
+        return res.sendStatus(statusCode);
       }
 
-      return done(null);
+      res.send(logEntry.data);
     });
   }
 };

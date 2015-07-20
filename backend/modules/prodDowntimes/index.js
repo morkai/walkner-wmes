@@ -4,6 +4,10 @@
 
 'use strict';
 
+var validateOverlappingDowntimes = require('./validateOverlappingDowntimes');
+var addProdDowntime = require('./addProdDowntime');
+var editProdDowntime = require('./editProdDowntime');
+var deleteProdDowntime = require('./deleteProdDowntime');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var setUpAutoConfirmation = require('./autoConfirmation');
@@ -22,6 +26,11 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startProdDowntimesModule(app, module)
 {
+  module.validateOverlappingDowntimes = validateOverlappingDowntimes.bind(null, app, module);
+  module.addProdDowntime = addProdDowntime.bind(null, app, module);
+  module.editProdDowntime = editProdDowntime.bind(null, app, module);
+  module.deleteProdDowntime = deleteProdDowntime.bind(null, app, module);
+
   app.onModuleReady(
     [
       module.config.mongooseId,

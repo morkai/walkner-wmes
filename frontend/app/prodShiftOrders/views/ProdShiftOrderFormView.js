@@ -3,19 +3,25 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/i18n',
+  'app/user',
   'app/time',
   'app/viewport',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
+  'app/prodChangeRequests/util/isChangeRequest',
   'app/production/util/orderPickerHelpers',
   'app/prodShiftOrders/templates/form'
 ], function(
+  _,
   t,
+  user,
   time,
   viewport,
   FormView,
   setUpUserSelect2,
+  isChangeRequest,
   orderPickerHelpers,
   formTemplate
 ) {
@@ -24,6 +30,13 @@ define([
   return FormView.extend({
 
     template: formTemplate,
+
+    serialize: function()
+    {
+      return _.extend(FormView.prototype.serialize.call(this), {
+        isChangeRequest: isChangeRequest()
+      });
+    },
 
     afterRender: function()
     {
@@ -57,14 +70,12 @@ define([
 
     showErrorMessage: function(message)
     {
-      this.$errorMessage = viewport.msg.show({
-        type: 'error',
-        text: t.has('prodShiftOrders', 'FORM:ERROR:' + message)
-          ? t('prodShiftOrders', 'FORM:ERROR:' + message)
-          :  message
-      });
+      if (t.has('prodShiftOrders', 'FORM:ERROR:' + message))
+      {
+        message = t('prodShiftOrders', 'FORM:ERROR:' + message);
+      }
 
-      return false;
+      return FormView.prototype.showErrorMessage.call(this, message);
     },
 
     checkValidity: function(formData)
@@ -115,6 +126,7 @@ define([
       formData.startedAtTime = time.format(formData.startedAt, 'HH:mm:ss');
       formData.finishedAtDate = time.format(formData.finishedAt, 'YYYY-MM-DD');
       formData.finishedAtTime = time.format(formData.finishedAt, 'HH:mm:ss');
+      formData.requestComment = '';
 
       return formData;
     },
@@ -159,10 +171,8 @@ define([
         formData.orderId = formData.orderData[formData.mechOrder ? 'nc12' : 'no'];
       }
 
-      formData.startedAt =
-        time.getMoment(formData.startedAtDate + ' ' + formData.startedAtTime).toDate();
-      formData.finishedAt =
-        time.getMoment(formData.finishedAtDate + ' ' + formData.finishedAtTime).toDate();
+      formData.startedAt = time.getMoment(formData.startedAtDate + ' ' + formData.startedAtTime).toDate();
+      formData.finishedAt = time.getMoment(formData.finishedAtDate + ' ' + formData.finishedAtTime).toDate();
 
       delete formData.startedAtDate;
       delete formData.startedAtTime;
@@ -187,13 +197,64 @@ define([
       };
     },
 
+    handleSuccess: function()
+    {
+      if (isChangeRequest())
+      {
+        if (this.options.editMode)
+        {
+          return this.handleEditSuccess();
+        }
+
+        viewport.msg.show({
+          type: 'success',
+          time: 2500,
+          text: t('prodShiftOrders', 'changeRequest:msg:success:add')
+        });
+      }
+
+      FormView.prototype.handleSuccess.apply(this, arguments);
+    },
+
+    handleEditSuccess: function()
+    {
+      this.model.set(this.model.previousAttributes());
+
+      if (viewport.currentDialog === this)
+      {
+        showMessage();
+      }
+      else
+      {
+        this.broker.subscribe('router.executing').setLimit(1).on('message', showMessage);
+      }
+
+      return FormView.prototype.handleSuccess.apply(this, arguments);
+
+      function showMessage()
+      {
+        viewport.msg.show({
+          type: 'success',
+          time: 5000,
+          text: t('prodShiftOrders', 'changeRequest:msg:success:edit')
+        });
+      }
+    },
+
     handleFailure: function(xhr)
     {
-      if (xhr.responseJSON
-        && xhr.responseJSON.error
-        && t.has('prodShiftOrders', 'FORM:ERROR:' + xhr.responseJSON.error.message))
+      var json = xhr.responseJSON;
+
+      if (json && json.error && t.has('prodShiftOrders', 'FORM:ERROR:' + json.error.message))
       {
-        this.showErrorMessage(xhr.responseJSON.error.message);
+        this.showErrorMessage(json.error.message);
+      }
+      else if (isChangeRequest())
+      {
+        this.showErrorMessage(t(
+          'prodShiftOrders',
+          'changeRequest:msg:failure:' + (this.options.editMode ? 'edit' : 'add')
+        ));
       }
       else
       {

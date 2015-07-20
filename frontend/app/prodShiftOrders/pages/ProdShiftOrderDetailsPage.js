@@ -12,6 +12,7 @@ define([
   'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
   'app/core/View',
+  'app/prodChangeRequests/util/createDeletePageAction',
   'app/delayReasons/storage',
   'app/mechOrders/MechOrder',
   'app/mechOrders/views/MechOrderDetailsView',
@@ -34,6 +35,7 @@ define([
   pageActions,
   onModelDeleted,
   View,
+  createDeletePageAction,
   delayReasonsStorage,
   MechOrder,
   MechOrderDetailsView,
@@ -77,11 +79,11 @@ define([
           + '&prodShiftOrder=' + encodeURIComponent(this.prodShiftOrder.id)
       }];
 
-      if (this.prodShiftOrder.isEditable())
+      if (this.prodShiftOrder.isEditable() && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST'))
       {
         actions.push(
-          pageActions.edit(this.prodShiftOrder, 'PROD_DATA:MANAGE'),
-          pageActions.delete(this.prodShiftOrder, 'PROD_DATA:MANAGE')
+          pageActions.edit(this.prodShiftOrder, false),
+          createDeletePageAction(this, this.prodShiftOrder)
         );
       }
 
