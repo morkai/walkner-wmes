@@ -140,6 +140,17 @@ define([
 
     var viewport = this;
 
+    this.broker.publish('viewport.page.loading', page);
+
+    if (_.isFunction(page.load))
+    {
+      page.load(when).then(onPageLoadSuccess, onPageLoadFailure);
+    }
+    else
+    {
+      onPageLoadSuccess();
+    }
+
     function when()
     {
       var requests = [];
@@ -163,6 +174,8 @@ define([
 
     function onPageLoadSuccess()
     {
+      viewport.broker.publish('viewport.page.loaded', page);
+
       if (viewport.currentPage !== null)
       {
         viewport.currentPage.remove();
@@ -201,22 +214,17 @@ define([
       {
         page.render();
       }
+
+      viewport.broker.publish('viewport.page.shown', page);
     }
 
     function onPageLoadFailure()
     {
-      console.log('onPageLoadFailure');
+      viewport.broker.publish('viewport.page.loadingFailed', page);
 
       page.remove();
-    }
 
-    if (_.isFunction(page.load))
-    {
-      page.load(when).then(onPageLoadSuccess, onPageLoadFailure);
-    }
-    else
-    {
-      onPageLoadSuccess();
+      console.log('onPageLoadFailure');
     }
   };
 
