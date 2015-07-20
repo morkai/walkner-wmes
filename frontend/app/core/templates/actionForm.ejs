@@ -1,8 +1,8 @@
 <form class="action-form" method="post" action="<%- formAction %>">
   <input type="hidden" name="_method" value="<%- formMethod %>">
-  <p><%- messageText %></p>
+  <p><%- typeof messageText === 'function' ? messageText() : messageText %></p>
   <div class="form-actions">
-    <button type="submit" class="btn btn-<%- formActionSeverity %>"><%- formActionText %></button>
+    <button type="submit" class="btn btn-<%- formActionSeverity %>"><%- typeof formActionText === 'function' ? formActionText() : formActionText %></button>
     <% if (cancelUrl === '#') { %>
     <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
     <% } else { %>
