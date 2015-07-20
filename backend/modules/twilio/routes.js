@@ -88,8 +88,10 @@ module.exports = function setUpTwilioRoutes(app, twilioModule)
     });
   });
 
-  express.post('/twilio/:id', twilio.webhook(twilioModule.config.authToken), function(req, res, next)
+  express.post('/twilio/:id', twilio.webhook(twilioModule.config.authToken), function(req, res)
   {
+    res.sendStatus(204);
+
     if (req.body.CallStatus)
     {
       TwilioRequest.updateStatus(req.params.id, req.body.CallStatus, function(err)
