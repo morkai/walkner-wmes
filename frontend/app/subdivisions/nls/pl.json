@@ -22,6 +22,7 @@
   "PROPERTY:prodTaskTags": "Tagi zadań produkcyjnych",
   "PROPERTY:type": "Typ",
   "PROPERTY:aor": "Domyślny obszar odp.",
+  "PROPERTY:autoDowntime": "Automatyczny przestój",
 
   "TYPE:assembly": "Montaż",
   "TYPE:press": "Tłocznia",

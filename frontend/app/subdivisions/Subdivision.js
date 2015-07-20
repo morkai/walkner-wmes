@@ -28,7 +28,8 @@ define([
       type: 'assembly',
       name: null,
       prodTaskTags: null,
-      aor: null
+      aor: null,
+      autoDowntime: null
     }
 
   });

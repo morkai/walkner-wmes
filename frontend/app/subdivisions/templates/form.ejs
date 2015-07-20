@@ -6,18 +6,11 @@
       <div class="orgUnitDropdowns-container"></div>
       <div class="form-group">
         <label for="<%- idPrefix %>-type" class="control-label is-required"><%- t('subdivisions', 'PROPERTY:type') %></label>
+        <% ['assembly', 'press', 'storage', 'other'].forEach(function(type) { %>
         <div class="radio">
-          <label><input type="radio" name="type" value="assembly" checked> <%- t('subdivisions', 'TYPE:assembly') %></label>
+          <label><input type="radio" name="type" value="<%- type %>" checked> <%- t('subdivisions', 'TYPE:' + type) %></label>
         </div>
-        <div class="radio">
-          <label><input type="radio" name="type" value="press"> <%- t('subdivisions', 'TYPE:press') %></label>
-        </div>
-        <div class="radio">
-          <label><input type="radio" name="type" value="storage"> <%- t('subdivisions', 'TYPE:storage') %></label>
-        </div>
-        <div class="radio">
-          <label><input type="radio" name="type" value="other"> <%- t('subdivisions', 'TYPE:other') %></label>
-        </div>
+        <% }) %>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('subdivisions', 'PROPERTY:name') %></label>
@@ -25,11 +18,15 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-prodTaskTags" class="control-label"><%- t('subdivisions', 'PROPERTY:prodTaskTags') %></label>
-        <input id="<%- idPrefix %>-prodTaskTags" type="text" name="prodTaskTags" value="">
+        <input id="<%- idPrefix %>-prodTaskTags" type="text" name="prodTaskTags">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-aor" class="control-label"><%- t('subdivisions', 'PROPERTY:aor') %></label>
-        <input id="<%- idPrefix %>-aor" type="text" name="aor" value="" placeholder="<%- t('subdivisions', 'FORM:PLACEHOLDER:aor') %>">
+        <input id="<%- idPrefix %>-aor" type="text" name="aor" placeholder="<%- t('subdivisions', 'FORM:PLACEHOLDER:aor') %>">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-autoDowntime" class="control-label"><%- t('subdivisions', 'PROPERTY:autoDowntime') %></label>
+        <input id="<%- idPrefix %>-autoDowntime" type="text" name="autoDowntime">
       </div>
     </div>
     <div class="panel-footer">

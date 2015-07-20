@@ -23,6 +23,7 @@
     "PROPERTY:prodTaskTags": "Production task tags",
     "PROPERTY:type": "Type",
     "PROPERTY:aor": "Default AOR",
+    "PROPERTY:autoDowntime": "Auto downtime",
 
     "TYPE:assembly": "Assembly",
     "TYPE:press": "Press",

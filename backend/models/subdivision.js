@@ -27,6 +27,11 @@ module.exports = function setupSubdivisionModel(app, mongoose)
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Aor',
       default: null
+    },
+    autoDowntime: {
+      type: String,
+      ref: 'DowntimeReason',
+      default: null
     }
   }, {
     id: false

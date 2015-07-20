@@ -4,13 +4,17 @@
 
 define([
   'app/data/aors',
+  'app/data/downtimeReasons',
   'app/data/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
+  'app/core/util/idAndLabel',
   'app/subdivisions/templates/form'
 ], function(
   aors,
+  downtimeReasons,
   OrgUnitDropdownsView,
   FormView,
+  idAndLabel,
   formTemplate
 ) {
   'use strict';
@@ -50,13 +54,13 @@ define([
 
       this.$id('aor').select2({
         allowClear: true,
-        data: aors.map(function(aor)
-        {
-          return {
-            id: aor.id,
-            text: aor.getLabel()
-          };
-        })
+        data: aors.map(idAndLabel)
+      });
+
+      this.$id('autoDowntime').select2({
+        placeholder: ' ',
+        allowClear: true,
+        data: downtimeReasons.map(idAndLabel)
       });
     },
 
@@ -73,6 +77,7 @@ define([
     {
       data.prodTaskTags = typeof data.prodTaskTags === 'string' ? data.prodTaskTags.split(',') : [];
       data.aor = aors.get(data.aor) ? data.aor : null;
+      data.autoDowntime = downtimeReasons.get(data.autoDowntime) ? data.autoDowntime : null;
 
       return data;
     }
