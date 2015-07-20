@@ -125,7 +125,7 @@ define([
         columns: this.decorateColumns(this.serializeColumns()),
         actions: this.serializeActions(),
         rows: this.serializeRows(),
-        className: this.className
+        className: _.result(this, 'className')
       };
     },
 
