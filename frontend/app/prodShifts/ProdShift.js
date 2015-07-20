@@ -365,9 +365,16 @@ define([
 
       this.set('state', 'working');
 
+      var prevOrderNo = this.prodShiftOrder.get('orderId');
+
       this.prodShiftOrder.onOrderChanged(this, orderInfo, operationNo);
 
       prodLog.record(this, 'changeOrder', this.prodShiftOrder.toJSON());
+
+      if (prevOrderNo !== this.prodShiftOrder.get('orderId'))
+      {
+        this.autoStartDowntime();
+      }
     },
 
     correctOrder: function(orderInfo, operationNo)
@@ -808,6 +815,39 @@ define([
     getDataStorageKey: function()
     {
       return 'PRODUCTION:DATA:' + this.prodLine.id;
+    },
+
+    /**
+     * @private
+     */
+    autoStartDowntime: function()
+    {
+      var aor = this.getDefaultAor();
+
+      if (!aor)
+      {
+        return;
+      }
+
+      var subdivision = subdivisions.get(this.get('subdivision'));
+
+      if (!subdivision)
+      {
+        return;
+      }
+
+      var downtimeReason = downtimeReasons.get(subdivision.get('autoDowntime'));
+
+      if (!downtimeReason)
+      {
+        return;
+      }
+
+      this.startDowntime({
+        aor: aor,
+        reason: downtimeReason.id,
+        reasonComment: ''
+      });
     }
 
   }, {
