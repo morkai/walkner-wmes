@@ -109,8 +109,13 @@ define([
         privileges: resolvePrivileges(model, privilege)
       };
     },
-    delete: function(model, privilege)
+    delete: function(model, privilege, options)
     {
+      if (!options)
+      {
+        options = {};
+      }
+
       return {
         label: t.bound(model.getNlsDomain(), 'PAGE_ACTION:delete'),
         icon: 'times',
@@ -122,7 +127,7 @@ define([
           {
             e.preventDefault();
 
-            ActionFormView.showDeleteDialog({model: model});
+            ActionFormView.showDeleteDialog(_.defaults({model: model}, options));
           }
         }
       };
