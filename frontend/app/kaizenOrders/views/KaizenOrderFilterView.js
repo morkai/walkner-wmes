@@ -93,7 +93,7 @@ define([
           formData.user = term.args[1];
         }
       },
-      'createdAt': function(propertyName, term, formData)
+      'eventDate': function(propertyName, term, formData)
       {
         formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
       },
@@ -129,7 +129,7 @@ define([
 
       if (fromMoment.isValid())
       {
-        selector.push({name: 'ge', args: ['createdAt', fromMoment.valueOf()]});
+        selector.push({name: 'ge', args: ['eventDate', fromMoment.valueOf()]});
       }
 
       if (toMoment.isValid())
@@ -139,7 +139,7 @@ define([
           this.$id('to').val(toMoment.add(1, 'days').format('YYYY-MM-DD'));
         }
 
-        selector.push({name: 'lt', args: ['createdAt', toMoment.valueOf()]});
+        selector.push({name: 'lt', args: ['eventDate', toMoment.valueOf()]});
       }
 
       if (category.length === 2)
