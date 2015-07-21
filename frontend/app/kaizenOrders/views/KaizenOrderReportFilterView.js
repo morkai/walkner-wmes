@@ -81,6 +81,15 @@ define([
         query.to = 0;
       }
 
+      if (query.from && query.from === query.to)
+      {
+        var to = time.getMoment(query.to).add(1, 'days');
+
+        this.$id('to').val(to.format('YYYY-MM-DD'));
+
+        query.to = to.valueOf();
+      }
+
       this.model.set(query);
       this.model.trigger('filtered');
     }
