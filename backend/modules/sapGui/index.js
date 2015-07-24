@@ -133,11 +133,22 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
       var failure = !!err || exitCode !== 0;
 
-      if (failure && isIgnoredResult(job, err, output))
+      if (isIgnoredResult(job, err, output))
       {
         failure = false;
         err = null;
         exitCode = 0;
+      }
+      else if (isExpectedResult(job, err, output))
+      {
+        failure = false;
+        err = null;
+        exitCode = 0;
+      }
+      else if (!failure)
+      {
+        failure = true;
+        err = new Error("Unexpected result.");
       }
 
       if (err)
@@ -180,9 +191,21 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   function isIgnoredResult(job, err, output)
   {
-    if (!Array.isArray(job.ignoredResults))
+    return isMatchingResult('ignoredResults', false, job, err, output);
+  }
+
+  function isExpectedResult(job, err, output)
+  {
+    return isMatchingResult('expectedResults', true, job, err, output);
+  }
+
+  function isMatchingResult(filterType, defaultResult, job, err, output)
+  {
+    var patterns = job[filterType];
+
+    if (!Array.isArray(patterns))
     {
-      return false;
+      return defaultResult;
     }
 
     var error = err && err.message ? err.message : '';
@@ -192,15 +215,15 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       output = '';
     }
 
-    for (var i = 0; i < job.ignoredResults.length; ++i)
+    for (var i = 0; i < patterns.length; ++i)
     {
-      var ignoredResult = job.ignoredResults[i];
+      var pattern = patterns[i];
 
-      if (_.isString(ignoredResult) && (_.includes(error, ignoredResult) || _.includes(output, ignoredResult)))
+      if (_.isString(pattern) && (_.includes(error, pattern) || _.includes(output, pattern)))
       {
         return true;
       }
-      else if (_.isRegExp(ignoredResult) && (ignoredResult.test(error) || ignoredResult.test(output)))
+      else if (_.isRegExp(pattern) && (pattern.test(error) || pattern.test(output)))
       {
         return true;
       }
