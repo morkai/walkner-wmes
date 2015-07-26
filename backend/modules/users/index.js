@@ -13,6 +13,7 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   sioId: 'sio',
   companiesId: 'companies',
+  mailSenderId: 'mail/sender',
   tediousConnection: null
 };
 
