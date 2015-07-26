@@ -63,8 +63,6 @@ define([
 
       this.checkLocalServer();
       this.setUpProdLineSelect2();
-
-      console.log('afterRender');
     },
 
     serializeFormData: function()

@@ -1,0 +1,107 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define([
+  'jquery',
+  'app/i18n',
+  'app/viewport',
+  'app/core/util/bindLoadingMessage',
+  'app/core/pages/FilteredListPage',
+  '../views/OrderDocumentClientListView',
+  '../views/OrderDocumentClientFilterView'
+], function(
+  $,
+  t,
+  viewport,
+  bindLoadingMessage,
+  FilteredListPage,
+  OrderDocumentClientListView,
+  OrderDocumentClientFilterView
+) {
+  'use strict';
+
+  return FilteredListPage.extend({
+
+    FilterView: OrderDocumentClientFilterView,
+    ListView: OrderDocumentClientListView,
+
+    breadcrumbs: function()
+    {
+      return [
+        t.bound('orderDocumentClients', 'BREADCRUMBS:base'),
+        t.bound('orderDocumentClients', 'BREADCRUMBS:browse')
+      ];
+    },
+
+    actions: function()
+    {
+      return [{
+        label: t.bound('orderDocumentClients', 'page:settings'),
+        icon: 'cogs',
+        privileges: 'DOCUMENTS:MANAGE',
+        href: '#orders;settings?tab=documents'
+      }];
+    },
+
+    initialize: function()
+    {
+      FilteredListPage.prototype.initialize.apply(this, arguments);
+
+      this.$licensingMessage = null;
+    },
+
+    destroy: function()
+    {
+      FilteredListPage.prototype.destroy.call(this);
+
+      if (this.$licensingMessage !== null)
+      {
+        this.$licensingMessage.remove();
+        this.$licensingMessage = null;
+      }
+    },
+
+    afterRender: function()
+    {
+      FilteredListPage.prototype.afterRender.call(this);
+
+      this.checkLicensing();
+    },
+
+    checkLicensing: function()
+    {
+      var page = this;
+      var req = this.ajax({
+        method: 'GET',
+        url: '/orderDocuments/licensing'
+      });
+
+      req.done(function(res)
+      {
+        page.showLicensingMessage(res.clientCount, res.licenseCount);
+      });
+    },
+
+    showLicensingMessage: function(clientCount, licenseCount)
+    {
+      if (this.$licensingMessage !== null)
+      {
+        this.$licensingMessage.remove();
+        this.$licensingMessage = null;
+      }
+
+      if (clientCount <= licenseCount)
+      {
+        return;
+      }
+
+      this.$licensingMessage = $('<a></a>')
+        .attr('href', '#licenses?sort(expireDate)&limit(15)&appId=wmes-docs')
+        .addClass('orderDocumentClients-licensingMessage message message-warning message-inline')
+        .text(t('orderDocumentClients', 'licensingMessage', {clientCount: clientCount, licenseCount: licenseCount}))
+        .prependTo(this.$el);
+    }
+
+  });
+});

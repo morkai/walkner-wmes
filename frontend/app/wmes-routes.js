@@ -18,6 +18,7 @@ define([
   './mrpControllers/routes',
   './orders/routes',
   './orderStatuses/routes',
+  './orderDocumentClients/routes',
   './pressWorksheets/routes',
   './prodDowntimes/routes',
   './prodFlows/routes',

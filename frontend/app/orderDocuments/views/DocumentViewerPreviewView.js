@@ -103,7 +103,7 @@ define([
 
       if (localFile)
       {
-        this.model.set('fileSource', 'local');
+        this.model.setFileSource('local');
         this.setLoadingMessage('localFile');
 
         this.loadFile(URL.createObjectURL(localFile.file));
@@ -115,7 +115,7 @@ define([
 
       if (!currentOrder.nc15)
       {
-        this.model.set('fileSource', null);
+        this.model.setFileSource(null);
 
         $loading.addClass('hidden');
 
@@ -166,7 +166,7 @@ define([
 
     tryLoadRemoteDocument: function(nc15)
     {
-      this.model.set('fileSource', 'remote');
+      this.model.setFileSource('remote');
       this.setLoadingMessage('remoteServer');
 
       var view = this;
@@ -194,7 +194,7 @@ define([
 
         if (fileSource)
         {
-          view.model.set('fileSource', fileSource);
+          view.model.setFileSource(fileSource);
         }
 
         view.req = null;
@@ -204,7 +204,7 @@ define([
 
     tryLoadLocalDocument: function(nc15)
     {
-      this.model.set('fileSource', 'local');
+      this.model.setFileSource('local');
       this.setLoadingMessage('localServer');
 
       var view = this;
@@ -219,7 +219,7 @@ define([
       if (localFileUrl === null)
       {
         this.$id('loading').addClass('is-failure');
-        this.model.set('fileSource', null);
+        this.model.setFileSource(null);
 
         return;
       }
@@ -233,7 +233,7 @@ define([
       {
         view.req = null;
         view.$id('loading').addClass('is-failure');
-        view.model.set('fileSource', null);
+        view.model.setFileSource(null);
         view.setLoadingMessage('failure');
       });
 

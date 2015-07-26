@@ -12,6 +12,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
   var productionModule = app[module.config.productionId];
   var mongoose = app[module.config.mongooseId];
   var Order = mongoose.model('Order');
+  var OrderDocumentClient = mongoose.model('OrderDocumentClient');
 
   var clients = {};
   var socketToClient = {};
@@ -38,6 +39,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
   {
     socket.on('disconnect', handleSocketDisconnect.bind(null, socket));
     socket.on('orderDocuments.join', handleJoinMessage.bind(null, socket));
+    socket.on('orderDocuments.update', handleUpdateMessage.bind(null, socket));
   });
 
   function onProductionStateChanged(changes)
@@ -138,10 +140,13 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
     var newClient = {
       _id: newClientId,
-      prodLineId: newProdLineId,
-      socketId: socket.id,
+      connectedAt: new Date(),
+      disconnectedAt: null,
+      socket: socket.id,
       ipAddress: socket.handshake.user.ipAddress,
-      connectedAt: new Date()
+      prodLine: newProdLineId,
+      settings: message.settings || {},
+      orderInfo: message.orderInfo || {}
     };
 
     if (!prodLineToClients[newProdLineId])
@@ -153,9 +158,58 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     socketToClient[socket.id] = newClientId;
     prodLineToClients[newProdLineId][newClientId] = true;
 
-    module.debug("Client %s:", currentClient ? 'rejoined' : 'joined', newClient);
+    module.debug("Client %s:", currentClient ? 'rejoined' : 'joined', {
+      _id: newClient._id,
+      prodLine: newClient.prodLine
+    });
 
     updateProdLinesRemoteOrder(newProdLineId, socket);
+
+    OrderDocumentClient.collection.update({_id: newClient._id}, newClient, {upsert: true}, function(err)
+    {
+      if (err)
+      {
+        module.error("Failed to update client [%s] after connection: %s", newClient._id, err.message);
+      }
+      else
+      {
+        app.broker.publish('orderDocuments.clients.connected', newClient);
+      }
+    });
+  }
+
+  function handleUpdateMessage(socket, message)
+  {
+    if (!message || !_.isString(message.clientId))
+    {
+      return;
+    }
+
+    var client = clients[message.clientId];
+
+    if (!client || socket.id !== client.socket)
+    {
+      return;
+    }
+
+    var update = {
+      $set: {
+        settings: message.settings,
+        orderInfo: message.orderInfo
+      }
+    };
+
+    OrderDocumentClient.collection.update({_id: message.clientId}, update, function(err)
+    {
+      if (err)
+      {
+        module.error("Failed to update client [%s]: %s", message.clientId, err.message);
+      }
+      else
+      {
+        app.broker.publish('orderDocuments.clients.updated', message);
+      }
+    });
   }
 
   function handleSocketDisconnect(socket)
@@ -178,12 +232,34 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
     delete clients[clientId];
 
-    if (prodLineToClients[client.prodLineId])
+    if (prodLineToClients[client.prodLine])
     {
-      delete prodLineToClients[client.prodLineId][socket.id];
+      delete prodLineToClients[client.prodLine][socket.id];
     }
 
-    module.debug("Client disconnected:", client);
+    module.debug("Client disconnected:", {
+      _id: clientId,
+      prodLine: client.prodLine
+    });
+
+    var clientChanges = {
+      _id: clientId,
+      connectedAt: null,
+      disconnectedAt: new Date(),
+      socket: null
+    };
+
+    OrderDocumentClient.collection.update({_id: clientId, socket: socket.id}, {$set: clientChanges}, function(err)
+    {
+      if (err)
+      {
+        module.error("Failed to update client [%s] after disconnection: %s", clientId, err.message);
+      }
+      else
+      {
+        app.broker.publish('orderDocuments.clients.disconnected', clientChanges);
+      }
+    });
   }
 
   function updateProdLinesRemoteOrder(prodLineId, optSocket)
@@ -257,7 +333,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
         return;
       }
 
-      var socket = sio.sockets.connected[client.socketId];
+      var socket = sio.sockets.connected[client.socket];
 
       if (!socket)
       {

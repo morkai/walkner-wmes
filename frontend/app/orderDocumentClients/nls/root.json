@@ -1,0 +1,40 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Documents",
+    "BREADCRUMBS:browse": "Clients",
+
+    "MSG:LOADING_FAILURE": "Failed to load the clients :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the client :(",
+
+    "page:settings": "Change settings",
+
+    "PROPERTY:_id": "ID",
+    "PROPERTY:status": "Status",
+    "PROPERTY:prodLine": "Line",
+    "PROPERTY:lastSeenAt": "Last seen at",
+    "PROPERTY:fileSource": "File source",
+    "PROPERTY:orderNo": "Order no",
+    "PROPERTY:orderNc12": "Order 12NC",
+    "PROPERTY:orderName": "Order name",
+    "PROPERTY:documentNc15": "Document 15NC",
+    "PROPERTY:documentName": "Document name",
+
+    "status:online": "Online",
+    "status:offline": "Offline",
+
+    "fileSource:local": "Local file",
+    "fileSource:remote": "Remote file",
+    "fileSource:search": "TPD Search",
+
+    "filter:submit": "Filter clients",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "Client deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete client",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen client?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> client?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the client :-(",
+
+    "licensingMessage": "The current number of clients ({clientCount}) is greater than the number of purchased licenses ({licenseCount})!"
+  },
+  "pl": true
+}

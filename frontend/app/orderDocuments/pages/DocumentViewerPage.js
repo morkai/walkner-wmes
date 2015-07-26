@@ -56,6 +56,7 @@ define([
       $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
 
       this.listenTo(this.model, 'change:prodLine', this.joinProdLine);
+      this.listenTo(this.model, 'save', _.debounce(this.updateClientState.bind(this), 1000));
       this.listenTo(
         this.controlsView,
         'documentReloadRequested',
@@ -115,13 +116,28 @@ define([
         return;
       }
 
-      var prodLine = this.model.get('prodLine');
+      var model = this.model;
+      var prodLine = model.get('prodLine');
 
       if (prodLine._id)
       {
         this.socket.emit('orderDocuments.join', {
+          clientId: model.id,
+          prodLineId: prodLine._id,
+          settings: model.getSettings(),
+          orderInfo: model.getCurrentOrderInfo()
+        });
+      }
+    },
+
+    updateClientState: function()
+    {
+      if (this.socket.isConnected())
+      {
+        this.socket.emit('orderDocuments.update', {
           clientId: this.model.id,
-          prodLineId: prodLine._id
+          settings: this.model.getSettings(),
+          orderInfo: this.model.getCurrentOrderInfo()
         });
       }
     },

@@ -88,6 +88,8 @@ define([
       };
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+      this.trigger('save');
     },
 
     filterNc15: function()
@@ -115,6 +117,20 @@ define([
       }
     },
 
+    getSettings: function()
+    {
+      var prodLine = this.get('prodLine');
+
+      return {
+        prodLineId: prodLine._id,
+        prodLineName: prodLine.name,
+        prefixFilterMode: this.get('prefixFilterMode'),
+        prefixFilter: this.get('prefixFilter'),
+        localServerUrl: this.get('localServerUrl'),
+        localServerPath: this.get('localServerPath')
+      };
+    },
+
     getCurrentOrder: function()
     {
       var localOrder = this.get('localOrder');
@@ -130,7 +146,9 @@ define([
     getCurrentOrderInfo: function()
     {
       var orderInfo = {
+        fileSource: this.get('fileSource'),
         orderNo: null,
+        orderNc12: null,
         orderName: null,
         documentNc15: null,
         documentName: null
@@ -141,6 +159,7 @@ define([
       if (currentOrder.no)
       {
         orderInfo.orderNo = currentOrder.no;
+        orderInfo.orderNc12 = currentOrder.nc12;
         orderInfo.orderName = currentOrder.name;
       }
       else
@@ -232,6 +251,31 @@ define([
         documents: {},
         nc15: null
       });
+      this.save();
+    },
+
+    setLocalFile: function(name, file)
+    {
+      this.set({
+        nc15: null,
+        localFile: {
+          name: name,
+          file: file
+        }
+      });
+      this.save();
+    },
+
+    resetLocalFile: function()
+    {
+      this.set('localFile', null);
+      this.save();
+    },
+
+    setFileSource: function(fileSource)
+    {
+      this.set('fileSource', fileSource);
+      this.save();
     },
 
     setOrder: function(orderType, orderData)

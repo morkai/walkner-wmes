@@ -152,7 +152,8 @@ exports.pubsub = {
     'settings.updated.**',
     'xiconf.results.synced', 'xiconf.orders.**', 'xiconf.clients.**',
     'icpo.results.synced',
-    'orders.updated.*', 'orderDocuments.remoteChecked.*',
+    'orders.updated.*',
+    'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*'
   ]
 };
@@ -167,7 +168,8 @@ exports.mongoose = {
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',
-    'order', 'orderDocumentStatus', 'mechOrder', 'emptyOrder', 'clipOrderCount',
+    'order', 'mechOrder', 'emptyOrder', 'clipOrderCount',
+    'orderDocumentClient', 'orderDocumentStatus',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet', 'prodChangeRequest',
     'feedback',
@@ -215,7 +217,8 @@ exports.user = {
     'XICONF:VIEW', 'XICONF:MANAGE', 'XICONF:NOTIFY', 'ICPO:VIEW', 'ICPO:MANAGE',
     'FACTORY_LAYOUT:MANAGE',
     'KAIZEN:MANAGE', 'KAIZEN:DICTIONARIES:VIEW', 'KAIZEN:DICTIONARIES:MANAGE',
-    'OPERATOR:ACTIVATE', 'DOCUMENTS:ACTIVATE'
+    'OPERATOR:ACTIVATE',
+    'DOCUMENTS:ACTIVATE', 'DOCUMENTS:VIEW', 'DOCUMENTS:MANAGE'
   ]
 };
 

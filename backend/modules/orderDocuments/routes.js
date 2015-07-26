@@ -15,6 +15,12 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   var userModule = app[module.config.userId];
   var updaterModule = app[module.config.updaterId];
   var orgUnits = app[module.config.orgUnitsId];
+  var mongoose = app[module.config.mongooseId];
+  var OrderDocumentClient = mongoose.model('OrderDocumentClient');
+  var License = mongoose.model('License');
+
+  var canView = userModule.auth('DOCUMENTS:VIEW');
+  var canManage = userModule.auth('DOCUMENTS:MANAGE');
 
   express.get('/docs/:clientId', function(req, res)
   {
@@ -80,10 +86,19 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     );
   });
 
-  express.get('/orderDocuments/clients', userModule.auth(), function(req, res)
-  {
-    res.json(module.getClients());
-  });
+  express.get('/orderDocuments/licensing', canView, getClientLicensingRoute);
+
+  express.get(
+    '/orderDocuments/clients',
+    canView,
+    express.crud.browseRoute.bind(null, app, OrderDocumentClient)
+  );
+
+  express.delete(
+    '/orderDocuments/clients/:id',
+    canManage,
+    express.crud.deleteRoute.bind(null, app, OrderDocumentClient)
+  );
 
   express.get('/orders/:orderNo/documents', userModule.auth('LOCAL'), function(req, res, next)
   {
@@ -126,6 +141,11 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     {
       if (err)
       {
+        if (err.code === 'ENOENT')
+        {
+          return res.sendStatus(404);
+        }
+
         return next(err);
       }
 
@@ -203,6 +223,29 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         }
 
         return done(err);
+      }
+    );
+  }
+
+  function getClientLicensingRoute(req, res, next)
+  {
+    step(
+      function findModelsStep()
+      {
+        License.find({appId: 'wmes-docs'}, {features: 1}).exec(this.parallel());
+        OrderDocumentClient.count().exec(this.parallel());
+      },
+      function sendResponseStep(err, licenses, clientCount)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        return res.send({
+          licenseCount: licenses.reduce(function(total, license) { return total + license.features; }, 0),
+          clientCount: clientCount
+        });
       }
     );
   }

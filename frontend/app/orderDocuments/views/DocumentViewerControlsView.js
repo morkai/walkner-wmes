@@ -47,7 +47,6 @@ define([
         if ($openLocalOrderDialog.hasClass('active'))
         {
           this.model.resetLocalOrder();
-          this.model.save();
           this.scrollIntoView();
         }
         else
@@ -69,7 +68,7 @@ define([
 
         if ($openLocalFileDialog.hasClass('active'))
         {
-          this.model.set('localFile', null);
+          this.model.resetLocalFile();
           this.scrollIntoView();
         }
         else
@@ -85,17 +84,11 @@ define([
 
         if (files.length)
         {
-          this.model.set({
-            nc15: null,
-            localFile: {
-              name: files[0].name,
-              file: files[0]
-            }
-          });
+          this.model.setLocalFile(files[0].name, files[0]);
         }
         else
         {
-          this.model.set('localFile', null);
+          this.model.resetLocalFile();
         }
       },
       'click .orderDocuments-document': function(e)

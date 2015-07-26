@@ -115,8 +115,10 @@
   "PRIVILEGE:KAIZEN:MANAGE": "Usprawnienia: zarządzanie zgłoszeniami",
   "PRIVILEGE:KAIZEN:DICTIONARIES:VIEW": "Usprawnienia: przeglądanie słowników",
   "PRIVILEGE:KAIZEN:DICTIONARIES:MANAGE": "Usprawnienia: zarządzanie słownikami",
-  "PRIVILEGE:OPERATOR:ACTIVATE": "Aktywacja klienta Operator WMES",
-  "PRIVILEGE:DOCUMENTS:ACTIVATE": "Aktywacja klienta Dokumenty WMES",
+  "PRIVILEGE:OPERATOR:ACTIVATE": "Operator WMES: aktywacja klientów",
+  "PRIVILEGE:DOCUMENTS:VIEW": "Dokumenty WMES: przeglądanie",
+  "PRIVILEGE:DOCUMENTS:MANAGE": "Dokumenty WMES: zarządzanie",
+  "PRIVILEGE:DOCUMENTS:ACTIVATE": "Dokumenty WMES: aktywacja klientów",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System"
