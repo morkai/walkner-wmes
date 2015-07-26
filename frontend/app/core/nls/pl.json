@@ -40,7 +40,7 @@
   "LOG_IN_FORM:LINK:LOG_IN": "Zaloguj się",
   "LOG_IN_FORM:LINK:RESET": "Zapomniałeś hasła?",
   "LOG_IN_FORM:RESET:SUBJECT": "Reset hasła w systemie WMES",
-  "LOG_IN_FORM:RESET:TEXT": "Otrzymaliśmy żądanie zresetowania hasła do Twojego konta w systemie WMES.\n\nAby potwierdzić zmianę hasła, kliknij poniższy odnośnik:\n{resetUrl}\n\nOdnośnik aktywny będzie tylko przez 24 godziny. Po tym czasie możesz wygenerować nowe żądanie wchodząc do systemu: {appUrl}.\n\n Jeżeli nie chcesz zmianiać swojego hasła, zignoruj tego e-maila.\n\nW razie jakichkolwiek problemów skonsultuj się ze swoim przełożonym lub administratorem systemu.",
+  "LOG_IN_FORM:RESET:TEXT": "Otrzymaliśmy żądanie zresetowania hasła do Twojego konta w systemie WMES.\n\nAby potwierdzić zmianę hasła, kliknij poniższy odnośnik:\n{resetUrl}\n\nOdnośnik aktywny będzie tylko przez 24 godziny. Po tym czasie możesz wygenerować nowe żądanie wchodząc do systemu: {appUrl}\n\nJeżeli nie chcesz zmianiać swojego hasła, zignoruj tego e-maila.\n\nW razie jakichkolwiek problemów skonsultuj się ze swoim przełożonym lub administratorem systemu.",
   "LOG_IN_FORM:RESET:MSG:NOT_FOUND": "Użytkownik o podanym loginie nie istnieje :-(",
   "LOG_IN_FORM:RESET:MSG:INVALID_EMAIL": "Użytkownik nie ma ustawionego adresu e-mail :-(",
   "LOG_IN_FORM:RESET:MSG:FAILURE": "Nie udało się zresetować hasła :-(",

@@ -41,7 +41,7 @@
     "LOG_IN_FORM:LINK:LOG_IN": "Log in",
     "LOG_IN_FORM:LINK:RESET": "Forgot your password?",
     "LOG_IN_FORM:RESET:SUBJECT": "WMES password reset",
-    "LOG_IN_FORM:RESET:TEXT": "We've received a request to reset your WMES account password.\n\nTo change your password, please click this link:\n{resetUrl}\n\nPassword reset links are valid for only 24 hours. If the link expires, you will need to submit a new request here: {appUrl}.\n\nIf you didn't request a change, please discregard this e-mail and your password will stay the same.\n\nContact your superior or WMES administrator if you need help or have questions.\n\nSincerely, WMES support team.",
+    "LOG_IN_FORM:RESET:TEXT": "We've received a request to reset your WMES account password.\n\nTo change your password, please click this link:\n{resetUrl}\n\nPassword reset links are valid for only 24 hours. If the link expires, you will need to submit a new request here: {appUrl}\n\nIf you didn't request a change, please discregard this e-mail and your password will stay the same.\n\nContact your superior or WMES administrator if you need help or have questions.\n\nSincerely, WMES support team.",
     "LOG_IN_FORM:RESET:MSG:NOT_FOUND": "Użytkownik o podanym loginie nie istnieje :-(",
     "LOG_IN_FORM:RESET:MSG:INVALID_EMAIL": "Użytkownik nie ma ustawionego adresu e-mail :-(",
     "LOG_IN_FORM:RESET:MSG:FAILURE": "Nie udało się zresetować hasła :-(",
