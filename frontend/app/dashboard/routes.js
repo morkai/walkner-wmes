@@ -3,11 +3,17 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
+  'app/broker',
+  'app/user',
   'app/router',
   'app/viewport',
   './pages/DashboardPage',
   'i18n!app/nls/dashboard'
 ], function(
+  _,
+  broker,
+  user,
   router,
   viewport,
   DashboardPage
@@ -16,6 +22,17 @@ define([
 
   router.map('/', function()
   {
-    viewport.showPage(new DashboardPage());
+    if (_.isEmpty(user.data.privileges))
+    {
+      broker.publish('router.navigate', {
+        url: '/kaizenOrders',
+        trigger: true,
+        replace: false
+      });
+    }
+    else
+    {
+      viewport.showPage(new DashboardPage());
+    }
   });
 });
