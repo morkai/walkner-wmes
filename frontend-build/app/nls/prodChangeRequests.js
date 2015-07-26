@@ -1,0 +1,1 @@
+define(["app/nls/locale/en"],function(e){return{root:{"BREADCRUMBS:browse":function(){return"Production data change requests"},"MSG:LOADING_FAILURE":function(){return"Failed to load the change requests :-("}},pl:!0}});

@@ -112,6 +112,10 @@ app/kaizenOrders/assets/form.css
 ----------------
 app/kaizenOrders/assets/form.css
 
+app/kaizenOrders/assets/help.css
+----------------
+app/kaizenOrders/assets/help.css
+
 app/kaizenOrders/assets/history.css
 ----------------
 app/kaizenOrders/assets/history.css
@@ -127,6 +131,7 @@ app/kaizenOrders/assets/./form.css
 app/kaizenOrders/assets/./details.css
 app/kaizenOrders/assets/./history.css
 app/kaizenOrders/assets/./report.css
+app/kaizenOrders/assets/./help.css
 app/kaizenOrders/assets/main.css
 
 app/kaizenOrders/assets/report.css
@@ -141,6 +146,10 @@ app/mechOrders/assets/main.css
 ----------------
 app/mechOrders/assets/main.css
 
+app/orderDocumentClients/assets/main.css
+----------------
+app/orderDocumentClients/assets/main.css
+
 app/orderDocuments/assets/main.css
 ----------------
 app/orderDocuments/assets/main.css
@@ -156,6 +165,10 @@ app/orderStatuses/assets/main.css
 app/pressWorksheets/assets/main.css
 ----------------
 app/pressWorksheets/assets/main.css
+
+app/prodChangeRequests/assets/main.css
+----------------
+app/prodChangeRequests/assets/main.css
 
 app/prodDowntimes/assets/main.css
 ----------------
@@ -313,6 +326,7 @@ assets/../app/prodLogEntries/assets/main.css
 assets/../app/prodShiftOrders/assets/main.css
 assets/../app/prodShifts/assets/main.css
 assets/../app/pressWorksheets/assets/main.css
+assets/../app/prodChangeRequests/assets/main.css
 assets/../app/xiconf/assets/main.css
 assets/../app/xiconfOrders/assets/main.css
 assets/../app/xiconfPrograms/assets/main.css
@@ -323,6 +337,7 @@ assets/../app/feedback/assets/main.css
 assets/../app/factoryLayout/assets/main.css
 assets/../app/licenses/assets/main.css
 assets/../app/kaizenOrders/assets/main.css
+assets/../app/orderDocumentClients/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -683,6 +698,10 @@ app/nls/orderStatuses.js
 app/nls/pl/orderStatuses.js
 i18n!app/nls/orderStatuses
 app/orderStatuses/routes.js
+app/nls/orderDocumentClients.js
+app/nls/pl/orderDocumentClients.js
+i18n!app/nls/orderDocumentClients
+app/orderDocumentClients/routes.js
 app/pressWorksheets/PressWorksheet.js
 app/pressWorksheets/PressWorksheetCollection.js
 app/pressWorksheets/templates/filter.js
@@ -704,6 +723,8 @@ app/nls/pressWorksheets.js
 app/nls/pl/pressWorksheets.js
 i18n!app/nls/pressWorksheets
 app/pressWorksheets/routes.js
+app/prodChangeRequests/util/isChangeRequest.js
+app/prodChangeRequests/util/createShowDeleteFormPage.js
 app/prodDowntimes/util/decorateProdDowntimeChange.js
 app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
@@ -720,6 +741,7 @@ app/data/orgUnits.js
 app/prodDowntimes/templates/filter.js
 app/prodDowntimes/views/ProdDowntimeFilterView.js
 app/prodDowntimes/pages/ProdDowntimeListPage.js
+app/prodChangeRequests/util/createDeletePageAction.js
 app/prodDowntimes/util/reasonAndAor.js
 app/prodDowntimes/templates/details.js
 app/prodDowntimes/templates/detailsProps.js
@@ -780,6 +802,7 @@ i18n!app/nls/prodShiftOrders
 app/prodShiftOrders/routes.js
 app/prodShifts/ProdShift.js
 app/prodShifts/ProdShiftCollection.js
+app/core/pages/FilteredListPage.js
 app/prodShifts/views/ProdShiftListView.js
 app/prodShifts/templates/filter.js
 app/prodShifts/views/ProdShiftFilterView.js
@@ -824,6 +847,18 @@ app/nls/production.js
 app/nls/pl/production.js
 i18n!app/nls/production
 app/production/routes.js
+app/prodChangeRequests/ProdChangeRequest.js
+app/prodChangeRequests/ProdChangeRequestCollection.js
+app/prodChangeRequests/templates/detailsRow.js
+app/prodChangeRequests/templates/quantitiesDone.js
+app/prodChangeRequests/views/ProdChangeRequestListView.js
+app/prodChangeRequests/templates/filter.js
+app/prodChangeRequests/views/ProdChangeRequestFilterView.js
+app/prodChangeRequests/pages/ProdChangeRequestListPage.js
+app/nls/prodChangeRequests.js
+app/nls/pl/prodChangeRequests.js
+i18n!app/nls/prodChangeRequests
+app/prodChangeRequests/routes.js
 app/nls/reports.js
 app/nls/pl/reports.js
 i18n!app/nls/reports
@@ -894,7 +929,6 @@ app/kaizenOrders/dictionaries.js
 app/kaizenOrders/KaizenOrder.js
 app/kaizenOrders/KaizenOrderCollection.js
 app/kaizenOrders/KaizenOrderReport.js
-app/core/pages/FilteredListPage.js
 app/kaizenOrders/templates/filter.js
 app/kaizenOrders/views/KaizenOrderFilterView.js
 app/kaizenOrders/views/KaizenOrderListView.js
