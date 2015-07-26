@@ -3,6 +3,7 @@
 @import url(./details.css);
 @import url(./history.css);
 @import url(./report.css);
+@import url(./help.css);
 
 .kaizenOrders-label-nearMiss {
   background-color: #d9534f;

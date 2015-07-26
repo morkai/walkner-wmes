@@ -18,6 +18,7 @@
   "navbar:causes": "Przyczyny",
   "navbar:risks": "Rodzaje ryzyka",
   "navbar:report": "Raport",
+  "navbar:help": "Pomoc",
 
   "MSG:LOADING_FAILURE": "Ładowanie zgłoszeń nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zgłoszenia nie powiodło się :(",

@@ -19,6 +19,7 @@
     "navbar:causes": "Causes",
     "navbar:risks": "Risks",
     "navbar:report": "Report",
+    "navbar:help": "Pomoc",
 
     "MSG:LOADING_FAILURE": "Failed to load entries :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the entry :(",

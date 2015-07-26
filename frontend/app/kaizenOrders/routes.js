@@ -50,6 +50,17 @@ define([
     }));
   });
 
+  router.map('/kaizenHelp', function()
+  {
+    viewport.loadPage(['app/core/View', 'app/kaizenOrders/templates/help'], function(View, helpTemplate)
+    {
+      return new View({
+        layoutName: 'page',
+        template: helpTemplate
+      });
+    });
+  });
+
   router.map('/kaizenOrders', canAccess, function(req)
   {
     viewport.showPage(new KaizenOrderListPage({
