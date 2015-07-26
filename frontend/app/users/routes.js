@@ -61,11 +61,10 @@ define([
     function(req)
     {
       viewport.loadPage(
-        ['app/core/pages/DetailsPage', 'app/users/views/UserDetailsView'],
-        function(DetailsPage, UserDetailsView)
+        ['app/users/pages/UserDetailsPage'],
+        function(UserDetailsPage)
         {
-          return new DetailsPage({
-            DetailsView: UserDetailsView,
+          return new UserDetailsPage({
             model: new User({_id: req.params.id})
           });
         }
@@ -87,19 +86,33 @@ define([
     );
   });
 
-  router.map('/users/:id;edit', canManage, function(req)
-  {
-    viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/users/views/UserFormView'],
-      function(EditFormPage, UserFormView)
+  router.map(
+    '/users/:id;edit',
+    function(req, referer, next)
+    {
+      if (req.params.id === user.data._id)
       {
-        return new EditFormPage({
-          FormView: UserFormView,
-          model: new User({_id: req.params.id})
-        });
+        next();
       }
-    );
-  });
+      else
+      {
+        canManage(req, referer, next);
+      }
+    },
+    function(req)
+    {
+      viewport.loadPage(
+        ['app/core/pages/EditFormPage', 'app/users/views/UserFormView'],
+        function(EditFormPage, UserFormView)
+        {
+          return new EditFormPage({
+            FormView: UserFormView,
+            model: new User({_id: req.params.id})
+          });
+        }
+      );
+    }
+  );
 
   router.map('/users/:id;delete', canManage, showDeleteFormPage.bind(null, User));
 });

@@ -2,7 +2,7 @@
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
-    <div class="panel-body">
+    <div class="panel-body <%- accountMode ? 'has-lastElementRow' : '' %>">
       <div class="row">
         <div class="col-md-3 form-group">
           <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('users', 'PROPERTY:login') %></label>
@@ -42,6 +42,7 @@
           </div>
         </div>
       </div>
+      <% if (!accountMode) { %>
       <div class="row">
         <div class="col-md-6">
           <div class="row">
@@ -111,6 +112,7 @@
           <label><input type="checkbox" name="active" value="true"> <%- t('users', 'PROPERTY:active') %></label>
         </div>
       </div>
+      <% } %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

@@ -50,7 +50,10 @@ module.exports = function setUpUsersRoutes(app, usersModule)
     {
       if (req.body.privileges && user.privileges.indexOf('USERS:MANAGE') === -1)
       {
-        delete req.body.privileges;
+        req.body = _.pick(req.body, [
+          'login', 'email', 'password', 'password', 'password2',
+          'firstName', 'lastName', 'sex'
+        ]);
       }
 
       next();

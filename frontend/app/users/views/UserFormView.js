@@ -6,6 +6,7 @@ define([
   'underscore',
   'app/ZeroClipboard',
   'app/i18n',
+  'app/user',
   'app/core/Model',
   'app/core/views/FormView',
   'app/data/views/OrgUnitDropdownsView',
@@ -21,6 +22,7 @@ define([
   _,
   ZeroClipboard,
   t,
+  user,
   Model,
   FormView,
   OrgUnitDropdownsView,
@@ -58,6 +60,10 @@ define([
     {
       FormView.prototype.initialize.call(this);
 
+      this.accountMode = this.options.editMode
+        && user.data._id === this.model.id
+        && !user.isAllowedTo('USERS:MANAGE');
+
       this.orgUnitDropdownsView = new OrgUnitDropdownsView({
         orgUnit: ORG_UNIT.SUBDIVISION,
         allowClear: true
@@ -83,38 +89,43 @@ define([
         this.$('input[type="password"]').attr('required', true);
       }
 
-      this.$id('aors').select2({
-        width: '100%',
-        allowClear: true
-      });
-
-      this.setUpProdFunctionSelect2();
-      this.setUpCompanySelect2();
-      this.setUpVendorSelect2();
-      this.setUpPrivilegesControls();
-
-      this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
+      if (!this.accountMode)
       {
-        /*jshint -W015*/
+        this.$id('aors').select2({
+          width: '100%',
+          allowClear: true
+        });
 
-        var model = null;
-        var orgUnit = null;
+        this.setUpProdFunctionSelect2();
+        this.setUpCompanySelect2();
+        this.setUpVendorSelect2();
+        this.setUpPrivilegesControls();
 
-        switch (this.model.get('orgUnitType'))
-        {
-          case 'division':
-            orgUnit = ORG_UNIT.DIVISION;
-            model = new Model({division: this.model.get('orgUnitId')});
-            break;
+        this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', this.setUpOrgUnitDropdowns);
+      }
+    },
 
-          case 'subdivision':
-            orgUnit = ORG_UNIT.SUBDIVISION;
-            model = new Model({subdivision: this.model.get('orgUnitId')});
-            break;
-        }
+    setUpOrgUnitDropdowns: function()
+    {
+      /*jshint -W015*/
 
-        this.orgUnitDropdownsView.selectValue(model, orgUnit);
-      });
+      var model = null;
+      var orgUnit = null;
+
+      switch (this.model.get('orgUnitType'))
+      {
+        case 'division':
+          orgUnit = ORG_UNIT.DIVISION;
+          model = new Model({division: this.model.get('orgUnitId')});
+          break;
+
+        case 'subdivision':
+          orgUnit = ORG_UNIT.SUBDIVISION;
+          model = new Model({subdivision: this.model.get('orgUnitId')});
+          break;
+      }
+
+      this.orgUnitDropdownsView.selectValue(model, orgUnit);
     },
 
     setUpPrivilegesControls: function()
@@ -263,7 +274,8 @@ define([
       return _.extend(FormView.prototype.serialize.call(this), {
         aors: aors.toJSON(),
         companies: companies.toJSON(),
-        privileges: privileges
+        privileges: privileges,
+        accountMode: this.accountMode
       });
     },
 
