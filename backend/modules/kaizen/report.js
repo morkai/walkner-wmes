@@ -12,7 +12,7 @@ module.exports = function(mongoose, options, done)
 {
   var KaizenOrder = mongoose.model('KaizenOrder');
 
-  var groupProperty = 'createdAt';
+  var groupProperty = 'eventDate';
   var minGroupKey = Number.MAX_VALUE;
   var maxGroupKey = Number.MIN_VALUE;
   var results = {
