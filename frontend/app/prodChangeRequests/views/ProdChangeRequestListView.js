@@ -196,7 +196,7 @@ define([
           break;
 
         case 'order':
-          extra = model.getLabel();
+          extra = model.getLabel(false);
           break;
 
         case 'downtime':
