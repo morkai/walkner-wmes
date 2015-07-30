@@ -12,6 +12,7 @@ module.exports = function(mongoose, options, done)
 {
   var KaizenOrder = mongoose.model('KaizenOrder');
 
+  var groupProperty = 'createdAt';
   var minGroupKey = Number.MAX_VALUE;
   var maxGroupKey = Number.MIN_VALUE;
   var results = {
@@ -25,23 +26,26 @@ module.exports = function(mongoose, options, done)
     function findKaizenOrdersStep()
     {
       var conditions = {};
+      var sort = {};
+
+      sort[groupProperty] = 1;
 
       if (options.fromTime)
       {
-        conditions.createdAt = {$gte: new Date(options.fromTime)};
+        conditions[groupProperty] = {$gte: new Date(options.fromTime)};
       }
 
       if (options.toTime)
       {
-        if (!conditions.createdAt)
+        if (!conditions[groupProperty])
         {
-          conditions.createdAt = {};
+          conditions[groupProperty] = {};
         }
 
-        conditions.createdAt.$lt = new Date(options.toTime);
+        conditions[groupProperty].$lt = new Date(options.toTime);
       }
 
-      var stream = KaizenOrder.find(conditions, {changes: 0}).sort({createdAt: 1}).lean().stream();
+      var stream = KaizenOrder.find(conditions, {changes: 0}).sort(sort).lean().stream();
       var next = this.next();
 
       stream.on('error', next);
@@ -69,6 +73,7 @@ module.exports = function(mongoose, options, done)
       results.groups = groups;
 
       sortOwnerTotals();
+
       _.forEach([
         'status',
         'section',
@@ -109,7 +114,7 @@ module.exports = function(mongoose, options, done)
   function handleKaizenOrder(ko)
   {
     var totals = results.totals;
-    var groupKey = util.createGroupKey(options.interval, ko.createdAt);
+    var groupKey = util.createGroupKey(options.interval, ko[groupProperty], false);
     var group = results.groups[groupKey];
 
     if (groupKey < minGroupKey)
