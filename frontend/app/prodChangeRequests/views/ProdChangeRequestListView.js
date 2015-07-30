@@ -330,11 +330,16 @@ define([
         }
         else
         {
-          changes.push({
+          var change = {
             property: property,
             oldValue: view.serializeProperty(propertyName, oldValue),
             newValue: view.serializeProperty(propertyName, newValue)
-          });
+          };
+
+          if (change.oldValue !== change.newValue)
+          {
+            changes.push(change);
+          }
         }
       });
 
