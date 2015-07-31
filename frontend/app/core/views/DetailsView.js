@@ -49,7 +49,7 @@ define([
 
     beforeRender: function()
     {
-      this.stopListening(this.collection, 'change', this.render);
+      this.stopListening(this.model, 'change', this.render);
     },
 
     afterRender: function()
