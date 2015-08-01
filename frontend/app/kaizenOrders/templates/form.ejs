@@ -45,7 +45,7 @@
             <div class="form-group col-lg-2">
               <label for="<%- idPrefix %>-eventDate" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:eventDate') %></label>
               <div class=" form-group-datetime">
-                <input id="<%- idPrefix %>-eventDate" class="form-control" name="eventDate" type="date">
+                <input id="<%- idPrefix %>-eventDate" class="form-control" name="eventDate" type="date" max="<%- today %>">
                 <input id="<%- idPrefix %>-eventTime" class="form-control" name="eventTime" type="text" placeholder="<%- t('kaizenOrders', 'FORM:MSG:eventTime') %>">
               </div>
             </div>
