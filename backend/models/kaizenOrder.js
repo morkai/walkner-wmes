@@ -102,6 +102,10 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     createdAt: Date,
     updater: {},
     updatedAt: Date,
+    remindedAt: {
+      type: Number,
+      required: true
+    },
     confirmer: {},
     confirmedAt: Date,
     finisher: {},
@@ -241,6 +245,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     {
       this.createdAt = new Date();
       this.updatedAt = this.createdAt;
+      this.remindedAt = this.createdAt.getTime();
 
       this.createObservers();
     }
@@ -624,6 +629,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
   {
     this.updater = updater;
     this.updatedAt = new Date();
+    this.remindedAt = this.updatedAt.getTime();
 
     var changes = this.compareProperties(_.pick(input, [
       'types',

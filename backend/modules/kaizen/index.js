@@ -7,6 +7,7 @@
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var setUpNotifier = require('./notifier');
+var setUpReminder = require('./reminder');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -22,6 +23,11 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startKaizenModule(app, kaizenModule)
 {
+  if (kaizenModule.config.emailUrlPrefix.substr(-1) !== '/')
+  {
+    kaizenModule.config.emailUrlPrefix += '/';
+  }
+
   kaizenModule.DICTIONARIES = {
     sections: 'KaizenSection',
     areas: 'KaizenArea',
@@ -55,5 +61,13 @@ exports.start = function startKaizenModule(app, kaizenModule)
       kaizenModule.config.mailSenderId
     ],
     setUpNotifier.bind(null, app, kaizenModule)
+  );
+
+  app.onModuleReady(
+    [
+      kaizenModule.config.mongooseId,
+      kaizenModule.config.mailSenderId
+    ],
+    setUpReminder.bind(null, app, kaizenModule)
   );
 };
