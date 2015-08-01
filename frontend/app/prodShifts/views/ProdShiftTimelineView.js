@@ -90,6 +90,7 @@ define([
       this.ending = -1;
       this.lastWidth = -1;
       this.popover = null;
+      this.highlightedItem = null;
 
       if (this.options.resizable !== false)
       {
@@ -287,6 +288,11 @@ define([
         .attr('width', width)
         .datum(this.datum)
         .call(this.chart);
+
+      if (this.highlightedItem)
+      {
+        this.highlightItem(this.highlightedItem);
+      }
     },
 
     hidePopover: function(delay)
@@ -487,6 +493,11 @@ define([
         })
         .afterRender(function(item)
         {
+          if (item.data && item.data._id)
+          {
+            this.dataset.modelId = item.data._id;
+          }
+
           if (item.type === 'downtime' && item.data.prodShiftOrder)
           {
             this.setAttribute('height', downtimeHeight);
@@ -742,6 +753,13 @@ define([
       {
         createDeletePageAction(view, model).callback();
       });
+    },
+
+    highlightItem: function(modelId)
+    {
+      this.$('.timeline-item[data-model-id="' + modelId + '"]')[0].classList.add('is-highlighted');
+
+      this.highlightedItem = modelId;
     }
 
   });

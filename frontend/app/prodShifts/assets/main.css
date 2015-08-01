@@ -49,12 +49,18 @@
   fill: #47A447;
   cursor: pointer;
 }
+.prodShifts-timeline .timeline-item-working.is-highlighted {
+  fill: #0d0;
+}
 .prodShifts-timeline .timeline-item-downtime {
   fill: #D9534F;
 }
 .prodShifts-timeline .timeline-item-downtime:hover {
   fill: #D2322D;
   cursor: pointer;
+}
+.prodShifts-timeline .timeline-item-downtime.is-highlighted {
+  fill: #f00;
 }
 .prodShifts-timeline .popover {
   max-width: 500px;

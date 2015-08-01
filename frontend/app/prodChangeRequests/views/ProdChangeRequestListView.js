@@ -13,8 +13,11 @@ define([
   'app/data/aors',
   'app/data/downtimeReasons',
   'app/prodShifts/ProdShift',
+  'app/prodShifts/views/ProdShiftTimelineView',
   'app/prodShiftOrders/ProdShiftOrder',
+  'app/prodShiftOrders/ProdShiftOrderCollection',
   'app/prodDowntimes/ProdDowntime',
+  'app/prodDowntimes/ProdDowntimeCollection',
   'app/core/templates/userInfo',
   'app/prodChangeRequests/templates/detailsRow',
   'app/prodChangeRequests/templates/quantitiesDone'
@@ -29,8 +32,11 @@ define([
   aors,
   downtimeReasons,
   ProdShift,
+  ProdShiftTimelineView,
   ProdShiftOrder,
+  ProdShiftOrderCollection,
   ProdDowntime,
+  ProdDowntimeCollection,
   renderUserInfo,
   renderDetailsRow,
   renderQuantitiesDone
@@ -72,7 +78,9 @@ define([
         {
           this.refreshCollection();
         }
-      }
+      },
+      'prodShiftOrders.**': 'handleProdModelChange',
+      'prodDowntimes.**': 'handleProdModelChange'
     },
 
     events: {
@@ -97,6 +105,7 @@ define([
     {
       ListView.prototype.initialize.apply(this, arguments);
 
+      this.timelineView = null;
       this.requiresRefresh = false;
       this.showingDetails = false;
       this.$errorMessage = null;
@@ -249,6 +258,7 @@ define([
 
     collapseDetails: function($expandedRow)
     {
+      this.removeView('.prodChangeRequests-timeline');
       $expandedRow.removeClass('is-expanded').next().remove();
     },
 
@@ -272,9 +282,9 @@ define([
       $detailsRow.insertAfter($rowToExpand);
       $rowToExpand.addClass('is-expanded');
 
-      $detailsRow.find('textarea').focus();
-
       this.showingDetails = true;
+
+      this.loadTimeline(changeRequest);
     },
 
     isCurrentUserAllowedToConfirm: function(changeRequest)
@@ -469,6 +479,134 @@ define([
         viewport.msg.hide(this.$errorMessage);
         this.$errorMessage = null;
       }
+    },
+
+    loadTimeline: function(changeRequest)
+    {
+      var view = this;
+      var $timeline = this.$('.prodChangeRequests-timeline');
+
+      this.cancelRequests();
+
+      if (changeRequest.get('operation') === 'add' && changeRequest.get('modelType') === 'shift')
+      {
+        return $timeline.remove();
+      }
+
+      this.resolveProdShift(changeRequest, function(prodShift)
+      {
+        if (!prodShift)
+        {
+          return $timeline.removeClass('progress-bar-primary active').addClass('progress-bar-danger');
+        }
+
+        var prodShiftOrders = new ProdShiftOrderCollection(null, {
+          rqlQuery: 'sort(startedAt)&prodShift=' + prodShift.id
+        });
+        var prodDowntimes = new ProdDowntimeCollection(null, {
+          rqlQuery: 'sort(startedAt)&prodShift=' + prodShift.id
+        });
+
+        var req = $.when(
+          view.promised(prodShiftOrders.fetch({reset: true})),
+          view.promised(prodDowntimes.fetch({reset: true}))
+        );
+
+        req.fail(function()
+        {
+          $timeline.removeClass('progress-bar-primary active').addClass('progress-bar-danger');
+        });
+
+        req.done(function()
+        {
+          if (changeRequest.get('operation') === 'add')
+          {
+            view.addChangeRequestModel(prodShiftOrders, prodDowntimes, changeRequest);
+          }
+
+          view.renderTimeline(prodShift, prodShiftOrders, prodDowntimes, changeRequest);
+        });
+      });
+    },
+
+    resolveProdShift: function(changeRequest, done)
+    {
+      var modelType = changeRequest.get('modelType');
+      var prodModel = changeRequest.get('prodModel');
+      var data = changeRequest.get('data');
+
+      if (modelType === 'shift')
+      {
+        return done(new ProdShift(prodModel));
+      }
+
+      var prodShift = new ProdShift({_id: prodModel ? prodModel.prodShift : data.prodShift});
+      var req = this.promised(prodShift.fetch());
+
+      req.fail(function()
+      {
+        done(null);
+      });
+
+      req.done(function()
+      {
+        done(prodShift);
+      });
+    },
+
+    addChangeRequestModel: function(prodShiftOrders, prodDowntimes, changeRequest)
+    {
+
+    },
+
+    renderTimeline: function(prodShift, prodShiftOrders, prodDowntimes, changeRequest)
+    {
+      this.timelineView = new ProdShiftTimelineView({
+        editable: true,
+        resizable: true,
+        itemHeight: 30,
+        prodShift: prodShift,
+        prodShiftOrders: prodShiftOrders,
+        prodDowntimes: prodDowntimes
+      });
+
+      this.setView('.prodChangeRequests-timeline', this.timelineView);
+
+      this.timelineView.render();
+      this.timelineView.highlightItem(changeRequest.get('modelId'));
+    },
+
+    handleProdModelChange: function(data, topic)
+    {
+      if (!this.timelineView)
+      {
+        return;
+      }
+
+      var topicParts = topic.split('.');
+      var modelType = topicParts[0];
+      var collection = modelType === 'prodShiftOrders'
+        ? this.timelineView.prodShiftOrders
+        : this.timelineView.prodDowntimes;
+
+      if (data.prodShift)
+      {
+        if (data.prodShift !== this.timelineView.prodShift.id)
+        {
+          return;
+        }
+      }
+      else
+      {
+        var modelId = topicParts[2];
+
+        if (modelId && !collection.get(modelId))
+        {
+          return;
+        }
+      }
+
+      this.promised(collection.fetch());
     }
 
   });

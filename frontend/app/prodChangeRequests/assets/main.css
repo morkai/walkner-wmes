@@ -59,3 +59,15 @@
 .prodChangeRequests-quantitiesDone-old > td {
   padding-bottom: 9px;
 }
+.prodChangeRequests-timeline {
+  margin-top: 7px;
+  padding-bottom: 7px;
+  height: 65px;
+  border-bottom: 1px dotted #d4d4d4;
+}
+.prodChangeRequests-timeline > .progress {
+  height: 52px;
+}
+.prodChangeRequests-timeline + .prodChangeRequests-confirmForm {
+  margin-top: 7px;
+}
