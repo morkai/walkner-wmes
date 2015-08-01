@@ -7,6 +7,7 @@
 var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
+var fresh = require('fresh');
 var step = require('h5.step');
 
 module.exports = function setUpOrderDocumentsRoutes(app, module)
@@ -21,6 +22,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   var canView = userModule.auth('DOCUMENTS:VIEW');
   var canManage = userModule.auth('DOCUMENTS:MANAGE');
+
+  var nc15ToFreshHeaders = {};
 
   express.get('/docs/:clientId', function(req, res)
   {
@@ -137,7 +140,20 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   express.get('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res, next)
   {
-    findDocumentFilePath(req.params.nc15, function(err, results)
+    var nc15 = req.params.nc15;
+    var freshHeaders = nc15ToFreshHeaders[nc15];
+
+    if (freshHeaders && fresh(req.headers, freshHeaders))
+    {
+      res.set(freshHeaders);
+      res.sendStatus(304);
+
+      return;
+    }
+
+    var findStartedAt = Date.now();
+
+    findDocumentFilePath(nc15, function(err, results)
     {
       if (err)
       {
@@ -149,7 +165,24 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         return next(err);
       }
 
-      return res.sendFile(results.filePath);
+      var sendStartedAt = Date.now();
+
+      return res.sendFile(results.filePath, {maxAge: 60 * 1000}, function(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        var totalTime = ((Date.now() - findStartedAt) / 1000).toFixed(3);
+        var findTime = ((Date.now() - sendStartedAt) / 1000).toFixed(3);
+
+        module.debug("Sent a file for %s in %ss (including %ss for searching).", nc15, totalTime, findTime);
+
+        nc15ToFreshHeaders[nc15] = _.pick(res._headers, ['etag', 'last-modified', 'cache-control']);
+
+        setTimeout(function() { delete nc15ToFreshHeaders[nc15]; }, 60 * 1000);
+      });
     });
   });
 
