@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Documents",
+    "BREADCRUMBS:base": "Documentation",
     "BREADCRUMBS:browse": "Clients",
 
     "MSG:LOADING_FAILURE": "Failed to load the clients :(",

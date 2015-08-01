@@ -15,4 +15,8 @@
     <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodShiftOrders"><%- t('core', 'NAVBAR:PROD:SHIFT_ORDERS') %></a>
     <li data-privilege="LOCAL PROD_DATA:VIEW PROD_DOWNTIMES:VIEW" data-module><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD:DOWNTIMES') %></a>
     <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodChangeRequests"><%- t('core', 'NAVBAR:PROD:CHANGE_REQUESTS') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:DOCUMENTS') %>
+    <li data-privilege="DOCUMENTS:VIEW" data-module><a href="#orderDocuments/clients"><%- t('core', 'NAVBAR:DOCUMENTS:CLIENTS') %></a>
+    <li data-privilege="ORDERS:MANAGE" data-module><a href="#orders;settings?tab=documents"><%- t('core', 'NAVBAR:DOCUMENTS:SETTINGS') %></a>
   </ul>
