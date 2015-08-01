@@ -137,7 +137,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
 
       if (!documents.length)
       {
-        return this.skip();
+        return this.skip(null, false);
       }
 
       this.newDocuments = documents;
@@ -174,7 +174,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
       else if (orderDocumentStatus.statusDate <= this.maxStatusDate
         && JSON.stringify(orderDocumentStatus.files) === JSON.stringify(newFiles))
       {
-        return this.skip();
+        return this.skip(null, false);
       }
 
       orderDocumentStatus.statusDate = this.maxStatusDate;
@@ -260,7 +260,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         this.newDocuments.forEach(function(document) { fs.unlink(document.localFilePath, function() {}); });
       }
     },
-    function finalizeStep(err)
+    function finalizeStep(err, updated)
     {
       if (err)
       {
@@ -271,15 +271,19 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         remoteCheck.lastCheckAt = Date.now();
 
         docsModule.debug(
-          "Checked document [%s] on remote server [%s] in %d s!",
+          "Checked document [%s] on remote server [%s] in %d s (%s)!",
           nc15,
           remoteServer,
-          ((remoteCheck.lastCheckAt - remoteCheck.inProgress) / 1000).toFixed(3)
+          ((remoteCheck.lastCheckAt - remoteCheck.inProgress) / 1000).toFixed(3),
+          updated ? 'updated' : 'not updated'
         );
 
-        app.broker.publish('orderDocuments.remoteChecked.' + nc15, {
-          nc15: nc15
-        });
+        if (updated !== false)
+        {
+          app.broker.publish('orderDocuments.remoteChecked.' + nc15, {
+            nc15: nc15
+          });
+        }
       }
 
       remoteCheck.inProgress = 0;
