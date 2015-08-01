@@ -193,18 +193,22 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function redirectToListRoute(req, res)
   {
+    var url = '/#kaizenOrders';
+
     if (req.params.filter === 'mine')
     {
-      res.redirect('/#kaizenOrders?observers.user.id=mine&sort(-createdAt)&limit(15)');
+      url += '?observers.user.id=mine&sort(-eventDate)&limit(15)';
     }
     else if (req.params.filter === 'unseen')
     {
-      res.redirect('/#kaizenOrders?observers.user.id=unseen&sort(-createdAt)&limit(15)');
+      url += '?observers.user.id=unseen&sort(-eventDate)&limit(15)';
     }
-    else
+    else if (req.params.filter === 'open')
     {
-      res.redirect('/#kaizenOrders');
+      url += '?status=in=(new,accepted,todo,inProgress,paused)&sort(-eventDate)&limit(15)';
     }
+
+    res.redirect(url);
   }
 
   function redirectToDetailsRoute(req, res, next)

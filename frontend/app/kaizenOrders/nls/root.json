@@ -10,6 +10,7 @@
     "navbar:kaizen": "Improvements",
     "navbar:orders": "Entries",
     "navbar:all": "All",
+    "navbar:open": "Only open",
     "navbar:mine": "Only mine",
     "navbar:unseen": "Only unread",
     "navbar:reports": "Reports",
@@ -109,6 +110,7 @@
     "status:cancelled": "Cancelled",
     "status:finished": "Finished",
     "status:paused": "Paused",
+    "status:open": "Open",
 
     "role:creator": "Creator",
     "role:confirmer": "Confirmer",

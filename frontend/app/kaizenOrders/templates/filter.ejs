@@ -40,6 +40,7 @@
     <label for="<%- idPrefix %>-status"><%- t('kaizenOrders', 'PROPERTY:status') %></label>
     <select id="<%- idPrefix %>-status" name="status" class="form-control" size="1">
       <option></option>
+      <option value="open"><%- t('kaizenOrders', 'status:open') %></option>
       <% statuses.forEach(function(status) { %>
       <option value="<%- status %>"><%- t('kaizenOrders', 'status:' + status) %></option>
       <% }) %>

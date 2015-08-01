@@ -6,8 +6,9 @@
   <ul class="dropdown-menu">
     <li class="dropdown-header"><%- t('kaizenOrders', 'navbar:orders') %>
     <li data-module="kaizen"><a href="#kaizenOrders"><%- t('kaizenOrders', 'navbar:all') %></a>
-    <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=mine&sort(-createdAt)&limit(15)"><%- t('kaizenOrders', 'navbar:mine') %></a>
-    <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=unseen&sort(-createdAt)&limit(15)"><%- t('kaizenOrders', 'navbar:unseen') %></a>
+    <li data-module="kaizen"><a href="#kaizenOrders?status=in=(new,accepted,todo,inProgress,paused)&sort(-eventDate)&limit(15)"><%- t('kaizenOrders', 'navbar:open') %></a>
+    <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=mine&sort(-eventDate)&limit(15)"><%- t('kaizenOrders', 'navbar:mine') %></a>
+    <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=unseen&sort(-eventDate)&limit(15)"><%- t('kaizenOrders', 'navbar:unseen') %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('kaizenOrders', 'navbar:reports') %>
     <li data-module="kaizen"><a href="#kaizenReport"><%- t('kaizenOrders', 'navbar:reports:qty') %></a>

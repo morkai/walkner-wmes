@@ -97,7 +97,10 @@ define([
       {
         formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
       },
-      'status': 'types',
+      'status': function(propertyName, term, formData)
+      {
+        formData.status = term.name === 'in' ? 'open' : term.args[1];
+      },
       'section': 'types',
       'area': 'types',
       'risk': 'types',
@@ -126,6 +129,7 @@ define([
       var category = this.$id('category').val().split('.');
       var userType = this.$('input[name="userType"]:checked').val();
       var user = this.$id('user').val();
+      var status = this.$id('status').val();
 
       if (fromMoment.isValid())
       {
@@ -159,7 +163,16 @@ define([
         ]});
       }
 
-      ['types', 'status', 'section', 'area', 'risk', 'cause'].forEach(function(property)
+      if (status === 'open')
+      {
+        selector.push({name: 'in', args: ['status', ['new', 'accepted', 'todo', 'inProgress', 'paused']]});
+      }
+      else if (status)
+      {
+        selector.push({name: 'eq', args: ['status', status]});
+      }
+
+      ['types', 'section', 'area', 'risk', 'cause'].forEach(function(property)
       {
         var value = this.$id(property).val();
 

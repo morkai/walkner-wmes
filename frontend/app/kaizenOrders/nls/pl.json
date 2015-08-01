@@ -9,6 +9,7 @@
   "navbar:kaizen": "Usprawnienia",
   "navbar:orders": "Zgłoszenia",
   "navbar:all": "Wszystkie",
+  "navbar:open": "Tylko otwarte",
   "navbar:mine": "Tylko moje",
   "navbar:unseen": "Tylko nieprzeczytane",
   "navbar:reports": "Raporty",
@@ -108,6 +109,7 @@
   "status:cancelled": "Anulowane",
   "status:finished": "Zakończone",
   "status:paused": "Wstrzymane",
+  "status:open": "Otwarte",
 
   "role:creator": "Zgłaszający",
   "role:confirmer": "Zatwierdzający",
