@@ -299,7 +299,7 @@
   "error:GLP2:FAULT:28": "GLP2 (28): Brak obiektu do badania.",
   "error:GLP2:FAULT:29": "GLP2 (29): Sekwencja testowa zgłosiła błąd.",
   "error:GLP2:FAULT:30": "GLP2 (30): Błąd regulacji temperatury (krok testowy TMP).",
-  "error:GLP2:FAULT:31": "GLP2 (31): Błąd testu referencji FI.",,
+  "error:GLP2:FAULT:31": "GLP2 (31): Błąd testu referencji FI.",
 
   "log:FL:MONITORING": "Monitorowanie czasu świecenia <code>{count}</code> {count, plural, one{świetlówki} other{świetlówek}}...",
   "log:FL:LIGHTING_TIME": "{no}. świetlówka świeciła nieprzerwanie przez <code>{duration}</code> ms.",
