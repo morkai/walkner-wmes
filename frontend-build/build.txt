@@ -849,6 +849,12 @@ i18n!app/nls/production
 app/production/routes.js
 app/prodChangeRequests/ProdChangeRequest.js
 app/prodChangeRequests/ProdChangeRequestCollection.js
+vendor/d3/d3.v3.js
+vendor/d3/d3.timeline.js
+app/prodShifts/templates/timelineIdlePopover.js
+app/prodShifts/templates/timelineWorkingPopover.js
+app/prodShifts/templates/timelineDowntimePopover.js
+app/prodShifts/views/ProdShiftTimelineView.js
 app/prodChangeRequests/templates/detailsRow.js
 app/prodChangeRequests/templates/quantitiesDone.js
 app/prodChangeRequests/views/ProdChangeRequestListView.js

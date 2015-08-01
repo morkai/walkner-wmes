@@ -2,11 +2,11 @@
   "private": true,
   "guid": "A0974235-9E21-49BB-8D01-CA7A932A6EEB",
   "name": "walkner-wmes",
-  "version": "0.66.0",
+  "version": "0.67.0",
   "updater": {
     "wmes": {
-      "backend": 122,
-      "frontend": 135,
+      "backend": 123,
+      "frontend": 136,
       "reports": 14,
       "attachments": 1,
       "importer-sap": 14,
@@ -19,8 +19,8 @@
       "importer": 2
     },
     "kaizen": {
-      "backend": 9,
-      "frontend": 17
+      "backend": 10,
+      "frontend": 18
     }
   },
   "description": "Wannabe MES application in Node.js.",
