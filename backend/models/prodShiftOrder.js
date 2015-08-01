@@ -170,12 +170,13 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
   prodShiftOrderSchema.pre('save', function(next)
   {
     this._wasNew = this.isNew;
-    this._changes = this.modifiedPaths();
 
-    if (this._changes.indexOf('quantityDone') !== -1 || this._changes.indexOf('losses') !== -1)
+    if (this.isModified('quantityDone') || this.isModified('losses'))
     {
       this.recountTotals();
     }
+
+    this._changes = this.modifiedPaths();
 
     this.copyOperationData();
 
