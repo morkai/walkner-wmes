@@ -119,6 +119,8 @@
     "PROPERTY:trigger:0": "Start time",
     "PROPERTY:trigger:1": "Starting signal",
     "PROPERTY:trigger:2": "Measured value",
+    "PROPERTY:lampCount": "Fluorescent lamp count",
+    "PROPERTY:lampDuration": "Uninterrupted lighting time [s]",
 
     "FORM:ACTION:add": "Add program",
     "FORM:ACTION:edit": "Edit program",

@@ -46,7 +46,7 @@
   </div>
   <% } %>
   <% if (programType === 'glp2') { %>
-  <div class="panel-body">
+  <div class="panel-body has-lastElementRow">
     <div class="row">
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:label') %></label>
@@ -110,6 +110,16 @@
         <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="0" checked required> <%- t('xiconfPrograms', 'PROPERTY:trigger:0') %></label>
         <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="1" required> <%- t('xiconfPrograms', 'PROPERTY:trigger:1') %></label>
         <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="2" required> <%- t('xiconfPrograms', 'PROPERTY:trigger:2') %></label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-lampCount" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:lampCount') %></label>
+        <input id="<%- idPrefix %>-lampCount" class="form-control" type="number" name="steps[<%- stepIndex %>].lampCount" min="0" max="2" step="1" value="0" required>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="<%- idPrefix %>-lampDuration" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:lampDuration') %></label>
+        <input id="<%- idPrefix %>-lampDuration" class="form-control" type="number" name="steps[<%- stepIndex %>].lampDuration" min="1" max="3600" step="1" value="1" required>
       </div>
     </div>
   </div>

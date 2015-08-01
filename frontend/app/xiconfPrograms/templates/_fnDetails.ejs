@@ -64,6 +64,14 @@
         <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:trigger') %></div>
         <div class="prop-value"><%- t('xiconfPrograms', 'PROPERTY:trigger:' + step.trigger) %></div>
       </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:lampCount') %></div>
+        <div class="prop-value"><%- step.lampCount || 0 %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:lampDuration') %></div>
+        <div class="prop-value"><%- time.toString(step.lampDuration || 0) %></div>
+      </div>
       <% } %>
     </div>
   </div>

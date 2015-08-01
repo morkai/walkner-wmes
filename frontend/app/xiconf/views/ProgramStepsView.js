@@ -191,6 +191,14 @@ define([
             viewData.minValue = minValue.toLocaleString();
             viewData.maxValue = maxValue.toLocaleString();
           }
+
+          if (step.lampCount)
+          {
+            viewData.props.push(
+              {key: 'FL', sub: 'count', value: step.lampCount},
+              {key: 'FL', sub: 'time', value: time.toString(step.lampDuration || 0)}
+            );
+          }
           break;
 
         case 'vis':

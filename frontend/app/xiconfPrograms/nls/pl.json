@@ -124,6 +124,8 @@
   "PROPERTY:trigger:0": "Czas rozruchu",
   "PROPERTY:trigger:1": "Sygnał startu",
   "PROPERTY:trigger:2": "Mierzona wartość",
+  "PROPERTY:lampCount": "Ilość świetlówek",
+  "PROPERTY:lampDuration": "Czas nieprzerwanego świecenia [s]",
 
   "FORM:ACTION:add": "Dodaj program",
   "FORM:ACTION:edit": "Edytuj program",
