@@ -176,6 +176,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
   pressWorksheetSchema.index({type: 1, date: -1});
   pressWorksheetSchema.index({'master.id': 1, date: -1});
   pressWorksheetSchema.index({'operators.id': 1, date: -1});
+  pressWorksheetSchema.index({'creator.id': 1, date: -1});
 
   pressWorksheetSchema.pre('save', function(next)
   {
