@@ -102,10 +102,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     createdAt: Date,
     updater: {},
     updatedAt: Date,
-    remindedAt: {
-      type: Number,
-      required: true
-    },
+    remindedAt: Number,
     confirmer: {},
     confirmedAt: Date,
     finisher: {},
