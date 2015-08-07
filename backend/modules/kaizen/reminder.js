@@ -37,42 +37,47 @@ module.exports = function setUpKaizenReminder(app, kaizenModule)
     step(
       function aggregateStep()
       {
+        var weekAgo = moment().subtract(DAYS_AGO, 'days').valueOf();
+
         this.conditions = {
           status: {$in: ['new', 'accepted', 'todo', 'inProgress', 'paused']},
-          remindedAt: {$lt: moment().subtract(DAYS_AGO, 'days').valueOf()}
+          remindedAt: {$lt: weekAgo}
         };
 
-        var pipeline = [
+        KaizenOrder.aggregate([
           {$match: this.conditions},
-          {
-            $group: {
-              _id: '$confirmer.id',
-              totalCount: {$sum: 1},
-              newCount: {$sum: {$cond: {if: {$eq: ['$status', 'new']}, then: 1, else: 0}}},
-              acceptedCount: {$sum: {$cond: {if: {$eq: ['$status', 'accepted']}, then: 1, else: 0}}},
-              todoCount: {$sum: {$cond: {if: {$eq: ['$status', 'todo']}, then: 1, else: 0}}},
-              inProgressCount: {$sum: {$cond: {if: {$eq: ['$status', 'inProgress']}, then: 1, else: 0}}},
-              pausedCount: {$sum: {$cond: {if: {$eq: ['$status', 'paused']}, then: 1, else: 0}}}
-            }
-          }
-        ];
+          {$group: {_id: '$confirmer.id', totalCount: {$sum: 1}}}
+        ], this.parallel());
 
-        KaizenOrder.aggregate(pipeline, this.next());
+        KaizenOrder.aggregate([
+          {$match: {
+            status: {$in: ['new', 'accepted', 'todo', 'inProgress', 'paused']},
+            updatedAt: {$lt: new Date(weekAgo)}
+          }},
+          {$group: {_id: '$confirmer.id', totalCount: {$sum: 1}}}
+        ], this.parallel());
       },
-      function getUserDataStep(err, results)
+      function getUserDataStep(err, remindedAtResults, updatedAtResults)
       {
         if (err)
         {
           return this.skip(err);
         }
 
+        var updatedAtStats = {};
+
+        _.forEach(updatedAtResults, function(result)
+        {
+          updatedAtStats[result._id] = result;
+        });
+
         var userIds = [];
         var userIdToStats = {};
 
-        _.forEach(results, function(result)
+        _.forEach(remindedAtResults, function(result)
         {
           userIds.push(new mongoose.Types.ObjectId(result._id));
-          userIdToStats[result._id] = result;
+          userIdToStats[result._id] = updatedAtStats[result._id];
         });
 
         this.userIdToStats = userIdToStats;
@@ -134,7 +139,7 @@ module.exports = function setUpKaizenReminder(app, kaizenModule)
           + ' które od pewnego czasu nie było aktualizowane.'
       );
     }
-    else if (stats.totalCount < 5)
+    else if (plural(stats.totalCount))
     {
       text.push(
         'Dostajesz tę wiadomość, ponieważ masz ' + stats.totalCount + ' niezakończone zgłoszenia usprawnień (ZPW),'
@@ -174,5 +179,10 @@ module.exports = function setUpKaizenReminder(app, kaizenModule)
         kaizenModule.error("Failed to remind [%s] about incomplete orders: %s", mailOptions.to, err.message);
       }
     });
+  }
+
+  function plural(n)
+  {
+    return (n % 10 < 5) && (n % 10 > 1) && ((~~(n / 10) % 10) !== 1);
   }
 };
