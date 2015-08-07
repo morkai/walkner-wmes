@@ -10,6 +10,11 @@ var step = require('h5.step');
 
 module.exports = function setUpKaizenReminder(app, kaizenModule)
 {
+  if (!kaizenModule.config.remind)
+  {
+    return;
+  }
+
   var mailSender = app[kaizenModule.config.mailSenderId];
   var mongoose = app[kaizenModule.config.mongooseId];
   var User = mongoose.model('User');
