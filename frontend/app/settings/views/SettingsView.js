@@ -219,7 +219,12 @@ define([
 
         if ($prev.hasClass('select2-container'))
         {
-          $prev.select2('val', $prev.hasClass('select2-container-multi') ? value.split(',') : value);
+          if ($prev.hasClass('select2-container-multi') && !Array.isArray(value))
+          {
+            value = value.split(',');
+          }
+
+          $prev.select2('val', value);
         }
       }
 
