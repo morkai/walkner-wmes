@@ -161,6 +161,7 @@ define([
 
       var attributes = {
         prodTasks: report.options.prodTasks,
+        raw: report.data,
         totals: {
           quantityDone: [],
           total: [],
