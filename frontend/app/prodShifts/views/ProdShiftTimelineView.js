@@ -107,7 +107,7 @@ define([
       }
 
       var render = _.debounce(this.render.bind(this), 1);
-      var reset = _.after(_.debounce(this.reset.bind(this), 1), 1);
+      var reset = _.debounce(this.reset.bind(this), 1);
 
       this.listenTo(this.prodShiftOrders, 'add remove change', render);
       this.listenTo(this.prodShiftOrders, 'reset', reset);
@@ -141,6 +141,12 @@ define([
     getLastState: function()
     {
       var state = 'idle';
+
+      if (!this.datum)
+      {
+        return state;
+      }
+
       var endingTime = 0;
 
       for (var i = 0, l = this.datum.length; i < l; ++i)

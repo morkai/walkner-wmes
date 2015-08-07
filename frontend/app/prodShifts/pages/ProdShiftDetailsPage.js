@@ -249,13 +249,14 @@ define([
       );
     },
 
+    updatePanelType: function()
+    {
+      this.detailsView.setPanelType(STATE_TO_PANEL_TYPE[this.timelineView.getLastState()]);
+    },
+
     setUpDetailsPanelType: function()
     {
-      var page = this;
-      var updatePanelType = _.debounce(function()
-      {
-        page.detailsView.setPanelType(STATE_TO_PANEL_TYPE[page.timelineView.getLastState()]);
-      }, 1);
+      var updatePanelType = _.debounce(this.updatePanelType.bind(this), 1);
 
       this.listenTo(this.prodShiftOrders, 'reset add remove change', updatePanelType);
       this.listenTo(this.prodDowntimes, 'reset add remove change', updatePanelType);
