@@ -312,6 +312,8 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function prepareResult(fileInfo, meta, orderIdToNo, result)
   {
+    var program = tryJsonParse(result.program);
+
     return {
       _id: result._id,
       order: result._order || null,
@@ -326,7 +328,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       errorCode: result.errorCode ? result.errorCode : null,
       exception: result.exception,
       output: result.output,
-      programName: extractProgramName(result.featureFileName, result.nc12),
+      programName: program ? program.name : extractProgramName(result.featureFileName, result.nc12),
       featurePath: result.featureFile,
       featureName: result.featureFileName,
       featureHash: result.featureFileHash,
@@ -336,7 +338,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       srcId: meta.id,
       srcTitle: meta.title,
       srcUuid: meta.uuid,
-      program: tryJsonParse(result.program),
+      program: program,
       steps: tryJsonParse(result.steps),
       metrics: tryJsonParse(result.metrics),
       serviceTag: typeof result.serviceTag === 'string' ? result.serviceTag : null,

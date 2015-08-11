@@ -40,6 +40,7 @@ define([
     serializeRow: function(model)
     {
       var order = model.get('order');
+      var program = model.get('program');
 
       return {
         _id: model.id,
@@ -47,7 +48,7 @@ define([
         srcId: model.get('srcId'),
         serviceTag: model.get('serviceTag'),
         order: order ? order.no : null,
-        programName: model.get('programName'),
+        programName: program ? program.name : model.get('programName'),
         prodLine: model.get('prodLine'),
         nc12: model.get('nc12'),
         counter: model.get('counter'),
