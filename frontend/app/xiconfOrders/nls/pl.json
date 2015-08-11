@@ -28,6 +28,8 @@
   "kind:unit:led": "płytki LED",
   "kind:unit:program": "drivery",
   "kind:unit:test": "testy",
+  "kind:unit:ft": "ramki",
+  "kind:name:ft": "Test ramki",
   "kind:nc12:led": "12NC płytek LED",
   "kind:nc12:program": "12NC programu",
   "kind:nc12:test": "ID programu",

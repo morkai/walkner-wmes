@@ -308,6 +308,20 @@
     "error:FL:FEATURE_DISABLED": "The current license doesn't have the Fluorescent Lamps option.",
     "error:FL:LIGHTING_TIME_TOO_SHORT": "FL: Lighting time too short.",
 
+    "log:FT:STARTED": "Starting a frame test...",
+    "log:FT:SUCCESS": "Successfully finished the frame test in <code>{duration}</code>.",
+    "log:FT:FAILURE": "Unsuccessfully finished the frame test in <code>{duration}</code> with an error: <code>{error}</code>",
+    "log:FT:CONNECTING": "Connecting to the tester...",
+    "log:FT:RESETTING": "Resetting the tester...",
+    "log:FT:PROGRAMMING": "Programming the tester...",
+    "log:FT:CHECKING": "Checking the PE...",
+
+    "error:FT:INVALID_SERIAL_PROXY_ADDRESS": "FT: Invalid ser2net server address.",
+    "error:FT:CONNECTING_FAILURE": "FT: Tester connection failure.",
+    "error:FT:SDP_TIMEOUT": "FT: Waiting for a response from the SDP timed out.",
+    "error:FT:SDP_INVALID_RESPONSE": "FT: Received an invalid response from the SDP.",
+    "error:FT:PE_FAILURE": "FT: PE failure.",
+
     "settings:tab:clients": "Clients",
     "settings:tab:notifier": "Notifications",
     "settings:appVersion": "Current version of the Walkner Xiconf app",

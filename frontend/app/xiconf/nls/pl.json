@@ -307,6 +307,20 @@
   "error:FL:FEATURE_DISABLED": "Aktualna licencja nie ma opcji sprawdzania świetlówek.",
   "error:FL:LIGHTING_TIME_TOO_SHORT": "FL: Zbyt krótki czas świecenia.",
 
+  "log:FT:STARTED": "Rozpoczynanie testowania ramki...",
+  "log:FT:SUCCESS": "Pomyślnie ukończono testowanie ramki w ciągu <code>{duration}</code>.",
+  "log:FT:FAILURE": "Zakończono testowanie ramki w ciągu <code>{duration}</code> z powodu błędu: <code>{error}</code>",
+  "log:FT:CONNECTING": "Nawiązywanie połączenia z testerem...",
+  "log:FT:RESETTING": "Resetowanie testera...",
+  "log:FT:PROGRAMMING": "Programowanie testera...",
+  "log:FT:CHECKING": "Sprawdzanie obwodu ochronnego...",
+
+  "error:FT:INVALID_SERIAL_PROXY_ADDRESS": "FT: Nieprawidłowy adres serwera ser2net.",
+  "error:FT:CONNECTING_FAILURE": "FT: Błąd połączenia z testerem.",
+  "error:FT:SDP_TIMEOUT": "FT: Upłynięcie limitu czasu oczekiwania na odpowiedź testera.",
+  "error:FT:SDP_INVALID_RESPONSE": "FT: Otrzymano nieprawidłową odpowiedź od testera.",
+  "error:FT:PE_FAILURE": "FT: Nieprawidłowy obwód ochronny.",
+
   "settings:tab:clients": "Klienci",
   "settings:tab:notifier": "Powiadomienia",
   "settings:appVersion": "Aktualna wersja aplikacji Walkner Xiconf",
