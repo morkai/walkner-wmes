@@ -21,8 +21,8 @@ define([
 
     columns: [
       {id: 'srcId', className: 'is-min'},
-      {id: 'serviceTag', className: 'is-min'},
       {id: 'order', className: 'is-min'},
+      {id: 'serviceTag', className: 'is-min'},
       {id: 'nc12', className: 'is-min'},
       {id: 'counter', className: 'is-min'},
       {id: 'quantity', className: 'is-min'},
@@ -41,19 +41,20 @@ define([
     {
       var order = model.get('order');
       var program = model.get('program');
+      var serviceTag = model.get('serviceTag');
 
       return {
         _id: model.id,
         className: 'xiconf-entry ' + (model.get('result') === 'success' ? 'success' : 'danger'),
         srcId: model.get('srcId'),
-        serviceTag: model.get('serviceTag'),
-        order: order ? order.no : null,
-        programName: program ? program.name : model.get('programName'),
-        prodLine: model.get('prodLine'),
-        nc12: model.get('nc12'),
-        counter: model.get('counter'),
-        quantity: order ? order.quantity : null,
-        startedAt: time.format(model.get('startedAt'), 'YYYY-MM-DD, HH:mm:ss.SSS'),
+        serviceTag: serviceTag ? ('...' + serviceTag.substr(-4)) : '-',
+        order: order ? order.no : '-',
+        programName: program ? program.name : (model.get('programName') || '-'),
+        prodLine: model.get('prodLine') || '-',
+        nc12: model.get('nc12') || '-',
+        counter: model.get('counter') || '-',
+        quantity: order ? order.quantity : '-',
+        startedAt: time.format(model.get('startedAt'), 'YY-MM-DD, HH:mm:ss'),
         duration: time.toString(model.get('duration') / 1000, false, true)
       };
     }

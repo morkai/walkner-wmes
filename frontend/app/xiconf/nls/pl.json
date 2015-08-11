@@ -46,7 +46,7 @@
   "PROPERTY:workflow": "Zawartość pliku konfiguracyjnego programatora",
   "PROPERTY:programName": "Nazwa programu",
   "PROPERTY:serviceTag": "Service Tag",
-  "PROPERTY:prodLine": "Linia produkcyjna",
+  "PROPERTY:prodLine": "Linia",
 
   "details:showOrderSummaryLink": "Pokaż podsumowanie zlecenia",
 
