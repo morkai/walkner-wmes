@@ -57,6 +57,10 @@ module.exports = function setupXiconfClientModel(app, mongoose)
     coreScannerDriver: {
       type: Boolean,
       default: false
+    },
+    inputMode: {
+      type: String,
+      default: 'remote'
     }
   }, {
     id: false

@@ -83,7 +83,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     socket.on('xiconf.generateServiceTag', handleGenerateServiceTagRequest);
     socket.on('xiconf.acquireServiceTag', handleAcquireServiceTagRequest);
     socket.on('xiconf.releaseServiceTag', handleReleaseServiceTagRequest);
-    socket.on('xiconf.selectedOrderNoChanged', onClientsSelectedOrderNoChanged);
+    socket.on('xiconf.stateChanged', onClientsStateChanged);
     socket.on('xiconf.restart', handleRestartRequest);
     socket.on('xiconf.update', handleUpdateRequest);
     socket.on('xiconf.configure', handleConfigureRequest);
@@ -430,33 +430,38 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     );
   }
 
-  function onClientsSelectedOrderNoChanged(newSelectedOrderNo)
+  function onClientsStateChanged(newState)
   {
     /*jshint validthis:true*/
 
     var socket = this;
 
-    if (!socket.xiconf)
+    if (!socket.xiconf || !_.isPlainObject(newState))
     {
       return;
     }
 
-    XiconfClient.collection.update({_id: socket.xiconf.srcId}, {$set: {order: newSelectedOrderNo}}, function(err)
+    newState = _.pick(newState, ['order', 'inputMode']);
+
+    if (_.isEmpty(newState))
+    {
+      return;
+    }
+
+    XiconfClient.collection.update({_id: socket.xiconf.srcId}, {$set: newState}, function(err)
     {
       if (err)
       {
         return xiconfModule.error(
-          "Failed to update client [%s] after changing order to [%s]: %s",
+          "Failed to update client [%s] after changing state: %s",
           socket.xiconf.srcId,
-          newSelectedOrderNo,
           err.message
         );
       }
 
-      app.broker.publish('xiconf.clients.orderChanged', {
-        _id: socket.xiconf.srcId,
-        order: newSelectedOrderNo
-      });
+      newState._id = socket.xiconf.srcId;
+
+      app.broker.publish('xiconf.clients.stateChanged', newState);
     });
   }
 
@@ -594,7 +599,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       order: data.selectedOrderNo || null,
       appVersion: data.appVersion || '0.0.0',
       mowVersion: data.mowVersion || '0.0.0.0',
-      coreScannerDriver: data.coreScannerDriver === true
+      coreScannerDriver: data.coreScannerDriver === true,
+      inputMode: data.inputMode || 'remote'
     };
 
     XiconfClient.collection.update({_id: xiconfClient._id}, xiconfClient, {upsert: true}, function(err)

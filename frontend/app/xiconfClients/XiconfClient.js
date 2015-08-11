@@ -33,7 +33,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.className = obj.connectedAt ? 'success' : 'danger';
+      obj.className = !obj.connectedAt ? 'danger' : obj.inputMode === 'remote' ? 'success' : 'warning';
       obj.lastSeenAt = time.format(obj.connectedAt || obj.disconnectedAt, 'YY-MM-DD, HH:mm:ss');
       obj.orderLink = obj.order ? ('<a href="#xiconf/orders/' + obj.order + '">' + obj.order + '</a>') : '-';
 
