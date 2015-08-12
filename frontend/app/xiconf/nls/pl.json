@@ -45,6 +45,7 @@
   "PROPERTY:workflowFile": "Plik konfiguracyjny programatora",
   "PROPERTY:workflow": "Zawartość pliku konfiguracyjnego programatora",
   "PROPERTY:programName": "Nazwa programu",
+  "PROPERTY:programSteps": "Kroki programu",
   "PROPERTY:serviceTag": "Service Tag",
   "PROPERTY:prodLine": "Linia",
 

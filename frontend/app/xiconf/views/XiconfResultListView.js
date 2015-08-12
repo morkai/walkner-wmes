@@ -4,10 +4,12 @@
 
 define([
   'app/time',
-  'app/core/views/ListView'
+  'app/core/views/ListView',
+  'app/xiconfPrograms/util/buildStepLabels'
 ], function(
   time,
-  ListView
+  ListView,
+  buildStepLabels
 ) {
   'use strict';
 
@@ -29,7 +31,8 @@ define([
       {id: 'startedAt', className: 'is-min'},
       {id: 'duration', className: 'is-min'},
       {id: 'prodLine', className: 'is-min'},
-      'programName'
+      {id: 'programName', className: 'is-min'},
+      'programSteps'
     ],
 
     serializeActions: function()
@@ -50,6 +53,7 @@ define([
         serviceTag: serviceTag ? ('...' + serviceTag.substr(-4)) : '-',
         order: order ? order.no : '-',
         programName: program ? program.name : (model.get('programName') || '-'),
+        programSteps: program ? buildStepLabels(program.steps, model.get('steps')) : '-',
         prodLine: model.get('prodLine') || '-',
         nc12: model.get('nc12') || '-',
         counter: model.get('counter') || '-',

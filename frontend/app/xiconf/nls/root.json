@@ -46,6 +46,7 @@
     "PROPERTY:workflowFile": "Programmer configuration file",
     "PROPERTY:workflow": "Programmer configuration file contents",
     "PROPERTY:programName": "Program name",
+    "PROPERTY:programSteps": "Program steps",
     "PROPERTY:serviceTag": "Service Tag",
     "PROPERTY:prodLine": "Production line",
 

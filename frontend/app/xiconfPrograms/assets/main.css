@@ -1,10 +1,19 @@
-.xiconfPrograms-list .label {
+.xiconfPrograms-label {
   display: inline-block;
   min-width: 50px;
   font-size: 100%;
   text-transform: uppercase;
 }
-.xiconfPrograms-list .label-pe,
+.xiconfPrograms-label.is-idle {
+  border: 2px solid #000;
+}
+.xiconfPrograms-label.is-failure {
+  border: 2px solid #d9534f;
+}
+.xiconfPrograms-label.is-success {
+  border: 2px solid #5cb85c;
+}
+.xiconfPrograms-label-pe,
 .xiconfPrograms-stepPanel-pe > .panel-heading {
   background-color: #0af;
 }
@@ -12,7 +21,7 @@
 .xiconfPrograms-stepPanel-pe > .panel-heading {
   border-color: #0af;
 }
-.xiconfPrograms-list .label-sol,
+.xiconfPrograms-label-sol,
 .xiconfPrograms-stepPanel-sol > .panel-heading {
   background-color: #fa0;
   border-color: #fa0;
@@ -21,7 +30,7 @@
 .xiconfPrograms-stepPanel-sol > .panel-heading {
   border-color: #fa0;
 }
-.xiconfPrograms-list .label-program,
+.xiconfPrograms-label-program,
 .xiconfPrograms-stepPanel-program > .panel-heading {
   background-color: #fa0;
   border-color: #fa0;
@@ -30,7 +39,7 @@
 .xiconfPrograms-stepPanel-program > .panel-heading {
   border-color: #fa0;
 }
-.xiconfPrograms-list .label-fn,
+.xiconfPrograms-label-fn,
 .xiconfPrograms-stepPanel-fn > .panel-heading {
   background-color: #00af00;
   border-color: #00af00;
@@ -39,7 +48,7 @@
 .xiconfPrograms-stepPanel-fn > .panel-heading {
   border-color: #00af00;
 }
-.xiconfPrograms-list .label-wait,
+.xiconfPrograms-label-wait,
 .xiconfPrograms-stepPanel-wait > .panel-heading {
   background-color: #666;
   text-transform: none;
@@ -48,7 +57,7 @@
 .xiconfPrograms-stepPanel-wait > .panel-heading {
   border-color: #666;
 }
-.xiconfPrograms-list .label-iso,
+.xiconfPrograms-label-iso,
 .xiconfPrograms-stepPanel-iso > .panel-heading {
   background-color: #aa00ff;
 }
@@ -56,7 +65,7 @@
 .xiconfPrograms-stepPanel-iso > .panel-heading {
   border-color: #aa00ff;
 }
-.xiconfPrograms-list .label-vis,
+.xiconfPrograms-label-vis,
 .xiconfPrograms-stepPanel-vis > .panel-heading {
   background-color: #e00;
 }
