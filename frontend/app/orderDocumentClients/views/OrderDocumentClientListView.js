@@ -8,16 +8,14 @@ define([
   'app/time',
   'app/user',
   'app/viewport',
-  'app/core/views/ListView',
-  '../OrderDocumentClientCollection'
+  'app/core/views/ListView'
 ], function(
   _,
   t,
   time,
   user,
   viewport,
-  ListView,
-  OrderDocumentClientCollection
+  ListView
 ) {
   'use strict';
 

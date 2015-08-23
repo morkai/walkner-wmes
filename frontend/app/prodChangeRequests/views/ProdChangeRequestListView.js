@@ -519,11 +519,6 @@ define([
 
         req.done(function()
         {
-          if (changeRequest.get('operation') === 'add')
-          {
-            view.addChangeRequestModel(prodShiftOrders, prodDowntimes, changeRequest);
-          }
-
           view.renderTimeline(prodShift, prodShiftOrders, prodDowntimes, changeRequest);
         });
       });
@@ -552,11 +547,6 @@ define([
       {
         done(prodShift);
       });
-    },
-
-    addChangeRequestModel: function(prodShiftOrders, prodDowntimes, changeRequest)
-    {
-
     },
 
     renderTimeline: function(prodShift, prodShiftOrders, prodDowntimes, changeRequest)
