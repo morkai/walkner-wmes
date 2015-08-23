@@ -104,7 +104,7 @@ exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
-    'setting', 'event', 'user',
+    'setting', 'event', 'user', 'passwordResetRequest',
     'division', 'subdivision',
     'company', 'prodFunction', 'prodTask', 'vendor',
     'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenOrder'
