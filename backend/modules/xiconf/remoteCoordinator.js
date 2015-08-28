@@ -1462,6 +1462,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           anyLeds = true;
         });
 
+        if (changes.length === 0)
+        {
+          return setImmediate(this.skip(), new Error("No changes."));
+        }
+
         var condition = {_id: data.orderNo};
         var updates = {$set: $set};
 
