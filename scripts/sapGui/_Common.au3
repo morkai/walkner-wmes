@@ -27,3 +27,12 @@ EndFunc
 Func FindModalWin($titleRegexp = "^SAP")
   return WinGetHandle("[REGEXPTITLE:" & $titleRegexp & "; CLASS:#32770]")
 EndFunc
+
+Func SetVariant($session, $variantName, $variantCreator)
+  If $variantName <> "" Then
+    $session.FindById("wnd[0]/tbar[1]/btn[17]").Press()
+    $session.FindById("wnd[1]/usr/txtV-LOW").Text = $variantName
+    $session.FindById("wnd[1]/usr/txtENAME-LOW").Text = $variantCreator
+    $session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
+  EndIf
+EndFunc

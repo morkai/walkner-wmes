@@ -9,6 +9,7 @@ $outputPath = ReadIni("T_LT23", "OutputPath", ReadIni("Transactions", "OutputPat
 $outputFile = ReadIni("T_LT23", "OutputFile", "T_LT23.txt")
 $codePage = ReadIni("T_LT23", "OutputEncoding", ReadIni("Transactions", "OutputEncoding", "4110"))
 $variant = ReadIni("T_LT23", "Variant", "")
+$variantCreator = ReadIni("T_LT23", "VariantCreator", ReadIni("Transactions", "VariantCreator", ""))
 $layout = ReadIni("T_LT23", "Layout", "")
 $warehouse = ReadIni("T_LT23", "Warehouse", "")
 $confirmStatus = ReadIni("T_LT23", "ConfirmStatus", "")
@@ -23,6 +24,7 @@ If $CmdLine[0] = 1 And $CmdLine[1] = "--help" Then
   LogDebug("  --output-file")
   LogDebug("  --code-page")
   LogDebug("  --variant")
+  LogDebug("  --variant-creator")
   LogDebug("  --layout")
   LogDebug("  --warehouse")
   LogDebug("  --confirm-status: OPEN, CONFIRM or ALL")
@@ -45,6 +47,8 @@ If $CmdLine[0] > 0 And Mod($CmdLine[0], 2) = 0 Then
         $codePage = $v
       Case "--variant"
         $variant = $v
+      Case "--variant-creator"
+        $variantCreator = $v
       Case "--layout"
         $layout = $v
       Case "--warehouse"
@@ -74,6 +78,7 @@ LogDebug("--output-path=" & $outputPath)
 LogDebug("--output-file=" & $outputFile)
 LogDebug("--code-page=" & $codePage)
 LogDebug("--variant=" & $variant)
+LogDebug("--variant-creator=" & $variantCreator)
 LogDebug("--layout=" & $layout)
 LogDebug("--warehouse=" & $warehouse)
 LogDebug("--confirm-status=" & $confirmStatus)
@@ -87,12 +92,7 @@ LogDebug("STARTING_TRANSACTION")
 ; Start transaction
 $session.StartTransaction("LT23")
 
-; Set Variant
-If $variant <> "" Then
-  $session.FindById("wnd[0]/tbar[1]/btn[17]").Press()
-  $session.FindById("wnd[1]/usr/txtV-LOW").Text = $variant
-  $session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
-EndIf
+SetVariant($session, $variant, $variantCreator)
 
 ; Set Warehouse number
 If $warehouse <> "" Then

@@ -1,7 +1,7 @@
 #include "_Common.au3"
 
 While True
-  LogDebug("SEARCHING_MODEL_WINDOW")
+  LogDebug("SEARCHING_MODAL_WINDOW")
 
   $modalWin = FindModalWin()
 

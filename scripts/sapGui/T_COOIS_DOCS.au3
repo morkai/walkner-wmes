@@ -8,6 +8,7 @@ $outputPath = ReadIni("T_COOIS_DOCS", "OutputPath", ReadIni("Transactions", "Out
 $outputFile = ReadIni("T_COOIS_DOCS", "OutputFile", "T_COOIS_DOCS.txt")
 $codePage = ReadIni("T_COOIS_DOCS", "OutputEncoding", ReadIni("Transactions", "OutputEncoding", "4110"))
 $variant = ReadIni("T_COOIS_DOCS", "Variant", "")
+$variantCreator = ReadIni("T_COOIS_DOCS", "VariantCreator", ReadIni("Transactions", "VariantCreator", ""))
 
 If $CmdLine[0] = 1 And $CmdLine[1] = "--help" Then
   LogDebug("T_COOIS_DOCS.exe <arguments>")
@@ -17,6 +18,7 @@ If $CmdLine[0] = 1 And $CmdLine[1] = "--help" Then
   LogDebug("  --output-file")
   LogDebug("  --code-page")
   LogDebug("  --variant")
+  LogDebug("  --variant-creator")
   Exit(0)
 EndIf
 
@@ -34,6 +36,8 @@ If $CmdLine[0] > 0 And Mod($CmdLine[0], 2) = 0 Then
         $codePage = $v
       Case "--variant"
         $variant = $v
+      Case "--variant-creator"
+        $variantCreator = $v
     EndSwitch
   Next
 EndIf
@@ -43,6 +47,7 @@ LogDebug("--output-path=" & $outputPath)
 LogDebug("--output-file=" & $outputFile)
 LogDebug("--code-page=" & $codePage)
 LogDebug("--variant=" & $variant)
+LogDebug("--variant-creator=" & $variantCreator)
 
 #include "_Logon.au3"
 
@@ -51,12 +56,7 @@ LogDebug("STARTING_TRANSATION")
 ; Start transaction
 $session.StartTransaction("COOIS")
 
-; Set Variant
-If $variant <> "" Then
-  $session.FindById("wnd[0]/tbar[1]/btn[17]").Press()
-  $session.FindById("wnd[1]/usr/txtV-LOW").Text = $variant
-  $session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
-EndIf
+SetVariant($session, $variant, $variantCreator)
 
 ; Execute
 $session.FindById("wnd[0]/tbar[1]/btn[8]").Press()

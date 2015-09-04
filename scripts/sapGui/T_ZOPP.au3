@@ -8,6 +8,7 @@ $outputPath = ReadIni("T_ZOPP", "OutputPath", ReadIni("Transactions", "OutputPat
 $outputFile = ReadIni("T_ZOPP", "OutputFile", "T_ZOPP.txt")
 $codePage = ReadIni("T_ZOPP", "OutputEncoding", ReadIni("Transactions", "OutputEncoding", "4110"))
 $variant = ReadIni("T_ZOPP", "Variant", "")
+$variantCreator = ReadIni("T_ZOPP", "VariantCreator", ReadIni("Transactions", "VariantCreator", ""))
 $pOrg = ReadIni("T_ZOPP", "POrg", "")
 
 If $CmdLine[0] = 1 And $CmdLine[1] = "--help" Then
@@ -18,6 +19,7 @@ If $CmdLine[0] = 1 And $CmdLine[1] = "--help" Then
   LogDebug("  --output-file")
   LogDebug("  --code-page")
   LogDebug("  --variant")
+  LogDebug("  --variant-creator")
   LogDebug("  --p-org")
   Exit(0)
 EndIf
@@ -36,6 +38,8 @@ If $CmdLine[0] > 0 And Mod($CmdLine[0], 2) = 0 Then
         $codePage = $v
       Case "--variant"
         $variant = $v
+      Case "--variant-creator"
+        $variantCreator = $v
       case "--p-org"
         $pOrg = $v
     EndSwitch
@@ -47,6 +51,7 @@ LogDebug("--output-path=" & $outputPath)
 LogDebug("--output-file=" & $outputFile)
 LogDebug("--code-page=" & $codePage)
 LogDebug("--variant=" & $variant)
+LogDebug("--variant-creator=" & $variantCreator)
 LogDebug("--p-org=" & $pOrg)
 
 #include "_Logon.au3"
@@ -56,12 +61,7 @@ LogDebug("STARTING_TRANSATION")
 ; Start transaction
 $session.StartTransaction("ZOPP")
 
-; Set Variant
-If $variant <> "" Then
-  $session.FindById("wnd[0]/tbar[1]/btn[17]").Press()
-  $session.FindById("wnd[1]/usr/txtV-LOW").Text = $variant
-  $session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
-EndIf
+SetVariant($session, $variant, $variantCreator)
 
 ; Set purchasing organization
 If $pOrg <> "" Then

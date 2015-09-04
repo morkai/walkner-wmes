@@ -5,12 +5,14 @@
 #include "_Common.au3"
 
 $variant = ReadIni("T_ZLF1", "Variant", "")
+$variantCreator = ReadIni("T_ZLF1", "VariantCreator", ReadIni("Transactions", "VariantCreator", ""))
 
 If $CmdLine[0] = 1 And $CmdLine[1] = "--help" Then
   LogDebug("T_ZLF1.exe <arguments>")
   LogDebug()
   LogDebug("Arguments:")
   LogDebug("  --variant")
+  LogDebug("  --variant-creator")
   Exit(0)
 EndIf
 
@@ -22,12 +24,15 @@ If $CmdLine[0] > 0 And Mod($CmdLine[0], 2) = 0 Then
     Switch $k
       Case "--variant"
         $variant = $v
+      Case "--variant-creator"
+        $variantCreator = $v
     EndSwitch
   Next
 EndIf
 
 LogDebug("T_ZLF1")
 LogDebug("--variant=" & $variant)
+LogDebug("--variant-creator=" & $variantCreator)
 
 #include "_Logon.au3"
 
@@ -36,12 +41,7 @@ LogDebug("STARTING_TRANSATION")
 ; Start transaction
 $session.StartTransaction("ZLF1")
 
-; Set Variant
-If $variant <> "" Then
-  $session.FindById("wnd[0]/tbar[1]/btn[17]").Press()
-  $session.FindById("wnd[1]/usr/txtV-LOW").Text = $variant
-  $session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
-EndIf
+SetVariant($session, $variant, $variantCreator)
 
 ; Execute
 $session.FindById("wnd[0]/tbar[1]/btn[8]").Press()
