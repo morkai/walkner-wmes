@@ -501,7 +501,7 @@ define([
         {
           if (item.data && item.data._id)
           {
-            this.dataset.modelId = item.data._id;
+            this.setAttribute('data-model-id', item.data._id);
           }
 
           if (item.type === 'downtime' && item.data.prodShiftOrder)
