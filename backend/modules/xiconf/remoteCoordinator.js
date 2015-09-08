@@ -1995,72 +1995,33 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     prodLineData.orders = newOrdersNos;
 
-    manageProdLinesCurrentOrder(prodLineData, oldCurrentOrderNo, newCurrentOrderNo);
-
-    for (var i = 1; i < newOrdersNos.length; ++i)
+    if (oldCurrentOrderNo !== null && newCurrentOrderNo !== oldCurrentOrderNo)
     {
-      var oldPreviousOrderNo = oldOrdersNos[i];
-      var newPreviousOrderNo = newOrdersNos[i];
-
-      if (oldPreviousOrderNo !== newPreviousOrderNo)
-      {
-        manageProdLinesPreviousOrder(prodLineData, oldPreviousOrderNo, newPreviousOrderNo);
-      }
+      scheduleWorkingOrderChangeCheck(oldCurrentOrderNo);
     }
-  }
 
-  function manageProdLinesCurrentOrder(prodLineData, oldCurrentOrderNo, newCurrentOrderNo)
-  {
-    debug('[manageProdLinesCurrentOrder] old=%s new=%s', oldCurrentOrderNo, newCurrentOrderNo);
-
-    if (oldCurrentOrderNo !== null)
+    for (var i = 0; i < oldOrdersNos.length; ++i)
     {
-      var orderToProdLinesMap = ordersToProdLinesMap[oldCurrentOrderNo];
+      var oldOrderNo = oldOrdersNos[i];
+      var orderToProdLinesMap = ordersToProdLinesMap[oldOrderNo];
 
       if (orderToProdLinesMap)
       {
         delete orderToProdLinesMap[prodLineData.prodLineId];
       }
+    }
 
-      if (oldCurrentOrderNo !== newCurrentOrderNo)
+    for (var j = 0; j < newOrdersNos.length; ++j)
+    {
+      var newOrderNo = newOrdersNos[j];
+
+      if (!ordersToProdLinesMap[newOrderNo])
       {
-        scheduleWorkingOrderChangeCheck(oldCurrentOrderNo);
+        ordersToProdLinesMap[newOrderNo] = {};
       }
+
+      ordersToProdLinesMap[newOrderNo][prodLineData.prodLineId] = j === 0 ? 1 : -1;
     }
-
-    if (newCurrentOrderNo === null)
-    {
-      return;
-    }
-
-    if (!ordersToProdLinesMap[newCurrentOrderNo])
-    {
-      ordersToProdLinesMap[newCurrentOrderNo] = {};
-    }
-
-    ordersToProdLinesMap[newCurrentOrderNo][prodLineData.prodLineId] = 1;
-  }
-
-  function manageProdLinesPreviousOrder(prodLineData, oldPreviousOrderNo, newPreviousOrderNo)
-  {
-    debug('[manageProdLinesPreviousOrder] old=%s new=%s', oldPreviousOrderNo, newPreviousOrderNo);
-
-    if (ordersToProdLinesMap[oldPreviousOrderNo])
-    {
-      delete ordersToProdLinesMap[oldPreviousOrderNo][prodLineData.prodLineId];
-    }
-
-    if (newPreviousOrderNo === null)
-    {
-      return;
-    }
-
-    if (!ordersToProdLinesMap[newPreviousOrderNo])
-    {
-      ordersToProdLinesMap[newPreviousOrderNo] = {};
-    }
-
-    ordersToProdLinesMap[newPreviousOrderNo][prodLineData.prodLineId] = -1;
   }
 
   function emitRemoteDataToOrderWorkers(orderNo)
