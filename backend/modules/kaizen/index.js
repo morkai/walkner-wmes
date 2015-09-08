@@ -19,7 +19,7 @@ exports.DEFAULT_CONFIG = {
   attachmentsDest: null,
   emailUrlPrefix: 'http://127.0.0.1/',
   multiType: true,
-  remind: true
+  remind: 14
 };
 
 exports.start = function startKaizenModule(app, kaizenModule)

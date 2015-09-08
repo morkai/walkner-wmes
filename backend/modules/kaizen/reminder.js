@@ -20,7 +20,7 @@ module.exports = function setUpKaizenReminder(app, kaizenModule)
   var User = mongoose.model('User');
   var KaizenOrder = mongoose.model('KaizenOrder');
 
-  var DAYS_AGO = 7;
+  var DAYS_AGO = kaizenModule.config.remind;
   var EMAIL_URL_PREFIX = kaizenModule.config.emailUrlPrefix;
 
   app.broker.subscribe('app.started', scheduleNextReminder).setLimit(1);
