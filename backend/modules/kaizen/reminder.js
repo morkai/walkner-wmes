@@ -105,11 +105,7 @@ module.exports = function setUpKaizenReminder(app, kaizenModule)
       },
       function updateUpdatedAtStep()
       {
-        var update = {
-          $inc: {remindedAt: Date.now()}
-        };
-
-        KaizenOrder.update(this.conditions, update, {multi: true}, this.next());
+        KaizenOrder.update(this.conditions, {$set: {remindedAt: Date.now()}}, {multi: true}, this.next());
       },
       function(err)
       {
