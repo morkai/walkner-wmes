@@ -151,8 +151,6 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return;
     }
 
-    var findStartedAt = Date.now();
-
     findDocumentFilePath(nc15, function(err, results)
     {
       if (err)
@@ -165,19 +163,12 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         return next(err);
       }
 
-      var sendStartedAt = Date.now();
-
       return res.sendFile(results.filePath, {maxAge: 60 * 1000}, function(err)
       {
         if (err)
         {
           return next(err);
         }
-
-        var totalTime = ((Date.now() - findStartedAt) / 1000).toFixed(3);
-        var findTime = ((Date.now() - sendStartedAt) / 1000).toFixed(3);
-
-        module.debug("Sent a file for %s in %ss (including %ss for searching).", nc15, totalTime, findTime);
 
         nc15ToFreshHeaders[nc15] = _.pick(res._headers, ['etag', 'last-modified', 'cache-control']);
 
