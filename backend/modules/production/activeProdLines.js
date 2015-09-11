@@ -144,6 +144,11 @@ module.exports = function setUpActiveProdLines(app, productionModule)
 
   function activateProdLine(shiftDate, prodLineId, prodFlowId, reactivation)
   {
+    if (!shiftDate)
+    {
+      return productionModule.debug("Tried to activate prod line [%s] on an unknown shift.", prodLineId);
+    }
+
     var currentShift = fteModule.getCurrentShift();
     var shiftsDiff = shiftDate.getTime() - currentShift.date.getTime();
 
