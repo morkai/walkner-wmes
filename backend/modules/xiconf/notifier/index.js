@@ -349,8 +349,8 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
         text.push(
           '',
-          'Zlecenie produkcyjne: ' + orderUrl,
           'Zlecenie Xiconf: ' + xiconfOrderUrl,
+          'Zlecenie produkcyjne: ' + orderUrl,
           'Zlecenia z linii: ' + prodShiftOrdersUrl,
           '',
           'Ta wiadomość została wygenerowana automatycznie przez WMES.'
