@@ -135,7 +135,11 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     {
       delete clients[newClientId];
       delete socketToClient[socket.id];
-      delete prodLineToClients[currentClient.prodLineId][newClientId];
+
+      if (prodLineToClients[currentClient.prodLineId])
+      {
+        delete prodLineToClients[currentClient.prodLineId][newClientId];
+      }
     }
 
     var newClient = {
