@@ -86,5 +86,5 @@ function pack()
 
 function pad0(num)
 {
-  return (num < 9 ? '0' : '') + num;
+  return (num < 10 ? '0' : '') + num;
 }
