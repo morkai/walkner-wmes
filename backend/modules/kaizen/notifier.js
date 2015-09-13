@@ -92,7 +92,10 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
           text: text.join('\t\r\n')
         };
 
-        mailSender.send(this.mailOptions, this.next());
+        if (to.length)
+        {
+          mailSender.send(this.mailOptions, this.next());
+        }
       },
       function finalizeStep(err)
       {
@@ -100,7 +103,7 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
         {
           kaizenModule.error("Failed to notify users about a new order [%d]: %s", kaizenOrder.rid, err.message);
         }
-        else
+        else if (this.mailOptions.to.length)
         {
           kaizenModule.info("Notified %d users about a new order: %d", this.mailOptions.to.length, kaizenOrder.rid);
         }
