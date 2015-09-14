@@ -459,9 +459,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         );
       }
 
-      newState._id = socket.xiconf.srcId;
+      if (socket.xiconf)
+      {
+        newState._id = socket.xiconf.srcId;
 
-      app.broker.publish('xiconf.clients.stateChanged', newState);
+        app.broker.publish('xiconf.clients.stateChanged', newState);
+      }
     });
   }
 
