@@ -50,7 +50,7 @@ define([
       this.paginationData.set(this.getPaginationData(res));
     }
 
-    return res.collection;
+    return Array.isArray(res.collection) ? res.collection : [];
   };
 
   Collection.prototype.sync = function(type, model, options)
