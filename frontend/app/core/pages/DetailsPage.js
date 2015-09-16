@@ -31,7 +31,11 @@ define([
 
     breadcrumbs: function()
     {
-      return createPageBreadcrumbs(this, [this[this.modelProperty].getLabel()]);
+      var model = this[this.modelProperty];
+
+      return createPageBreadcrumbs(this, [
+        model.getLabel() || t.bound(model.getNlsDomain(), 'BREADCRUMBS:details')
+      ]);
     },
 
     actions: function()
