@@ -147,14 +147,19 @@ define([
     {
       var req = options.view.ajax({
         type: 'GET',
-        url: '/users?_id=' + userId
+        url: '/users?_id=in=(' + userId + ')'
       });
 
       req.done(function(res)
       {
         if (res.collection && res.collection.length)
         {
-          $input.select2('data', userToData(res.collection[0], options.textFormatter));
+          var data = res.collection.map(function(userData)
+          {
+            return userToData(userData, options.textFormatter);
+          });
+
+          $input.select2('data', options.multiple ? data : data[0]);
 
           if (options.onDataLoaded)
           {
