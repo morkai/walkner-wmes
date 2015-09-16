@@ -4,6 +4,7 @@
 
 define([
   'underscore',
+  'jquery',
   '../i18n',
   '../user',
   '../time',
@@ -19,9 +20,11 @@ define([
   '../prodDowntimes/ProdDowntime',
   '../prodDowntimes/ProdDowntimeCollection',
   '../prodShiftOrders/ProdShiftOrder',
+  '../prodShiftOrders/ProdShiftOrderCollection',
   'app/core/templates/userInfo'
 ], function(
   _,
+  $,
   t,
   user,
   time,
@@ -37,6 +40,7 @@ define([
   ProdDowntime,
   ProdDowntimeCollection,
   ProdShiftOrder,
+  ProdShiftOrderCollection,
   renderUserInfo
 ) {
   'use strict';
@@ -141,7 +145,6 @@ define([
       {
         prodShift.shiftChangeTimer = null;
         prodShift.changeShift();
-        prodShift.startShiftChangeMonitor();
       }, 1000, this);
     },
 
@@ -173,10 +176,10 @@ define([
 
         if (data.prodShiftOrder)
         {
-          this.prodShiftOrder.set(data.prodShiftOrder);
+          this.prodShiftOrder.set(ProdShiftOrder.parse(data.prodShiftOrder));
         }
 
-        this.prodDowntimes.reset(data.prodDowntimes || []);
+        this.prodDowntimes.reset((data.prodDowntimes || []).map(ProdDowntime.parse));
 
         delete data.prodShiftOrder;
         delete data.prodDowntimes;
@@ -236,6 +239,93 @@ define([
         return this.startShiftChangeMonitor();
       }
 
+      if (socket.isConnected())
+      {
+        return this.startNewShiftIfNecessary(newDate);
+      }
+
+      this.startNewShift(newDate);
+    },
+
+    /**
+     * @private
+     * @param {Date} newDate
+     */
+    startNewShiftIfNecessary: function(newDate)
+    {
+      var prodShift = this;
+
+      this.findExistingShift(newDate, function(remoteData)
+      {
+        if (remoteData)
+        {
+          prodShift.readLocalData(remoteData);
+        }
+        else
+        {
+          prodShift.startNewShift(newDate);
+        }
+      });
+    },
+
+    /**
+     * @private
+     * @param {Date} newDate
+     * @param {function((object|null))} done
+     */
+    findExistingShift: function(newDate, done)
+    {
+      var prodShift = this;
+      var req = $.ajax({
+        url: '/prodShifts?prodLine=' + this.get('prodLine') + '&date=' + newDate.getTime()
+      });
+
+      req.fail(function()
+      {
+        prodShift.startNewShift(newDate);
+      });
+
+      req.done(function(res)
+      {
+        if (!res || !res.totalCount || !Array.isArray(res.collection))
+        {
+          return prodShift.startNewShift(newDate);
+        }
+
+        var prodShiftData = res.collection[0];
+        var ordersReq = $.ajax({
+          url: '/prodShiftOrders?prodShift=' + prodShiftData._id + '&finishedAt=null&sort(-startedAt)'
+        });
+        var downtimesReq = $.ajax({
+          url: '/prodDowntimes?prodLine=' + prodShiftData.prodLine + '&sort(-startedAt)&limit(8)'
+        });
+
+        req = $.when(ordersReq, downtimesReq);
+
+        req.fail(function()
+        {
+          prodShift.startNewShift(newDate);
+        });
+
+        req.done(function(ordersArgs, downtimesArgs)
+        {
+          var orders = ordersArgs[0].collection;
+          var downtimes = downtimesArgs[0].collection;
+
+          prodShiftData.prodShiftOrder = orders && orders[0] ? orders[0] : null;
+          prodShiftData.prodDowntimes = Array.isArray(downtimes) ? downtimes : [];
+
+          done(prodShiftData);
+        });
+      });
+    },
+
+    /**
+     * @private
+     * @param {Date} newDate
+     */
+    startNewShift: function(newDate)
+    {
       var finishedProdShiftId = this.id || null;
 
       this.finishDowntime();
