@@ -15,8 +15,10 @@ define([
 ) {
   'use strict';
 
-  function formatText(user, name)
+  function formatText(user, name, query)
   {
+    /*jshint unused:false*/
+
     if (user.personellId)
     {
       name += ' (' + user.personellId + ')';
@@ -25,7 +27,7 @@ define([
     return name;
   }
 
-  function userToData(user, textFormatter)
+  function userToData(user, textFormatter, query)
   {
     if (user.id && user.text)
     {
@@ -38,7 +40,7 @@ define([
 
     return {
       id: user._id,
-      text: (textFormatter || formatText)(user, name),
+      text: (textFormatter || formatText)(user, name, query),
       user: user
     };
   }
@@ -125,7 +127,7 @@ define([
 
           return {
             results: users
-              .map(function(user) { return userToData(user, options.textFormatter); })
+              .map(function(user) { return userToData(user, options.textFormatter, query); })
               .sort(function(a, b) { return a.text.localeCompare(b.text); })
           };
         }
