@@ -169,7 +169,16 @@ function(
 
       for (var ii = 0; ii < requiredMatches; ++ii)
       {
-        actualMatches += user.hasPrivilege(allPrivileges[ii]) ? 1 : 0;
+        var requiredPrivilege = allPrivileges[ii];
+
+        if (/^FN:/.test(requiredPrivilege))
+        {
+          actualMatches += user.data.prodFunction === requiredPrivilege.substring(3) ? 1 : 0;
+        }
+        else
+        {
+          actualMatches += user.hasPrivilege(allPrivileges[ii]) ? 1 : 0;
+        }
       }
 
       if (actualMatches === requiredMatches)
