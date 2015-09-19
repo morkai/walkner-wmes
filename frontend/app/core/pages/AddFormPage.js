@@ -30,15 +30,38 @@ define([
 
     initialize: function()
     {
-      var FormViewClass = this.options.FormView || this.FormView || FormView;
+      this.defineModels();
+      this.defineViews();
+    },
+
+    defineModels: function()
+    {
+
+    },
+
+    defineViews: function()
+    {
+      var FormViewClass = this.getFormViewClass();
+
+      this.view = new FormViewClass(this.getFormViewOptions());
+    },
+
+    getFormViewClass: function()
+    {
+      return this.options.FormView || this.FormView || FormView;
+    },
+
+    getFormViewOptions: function()
+    {
+      var model = this.model;
       var options = {
         editMode: false,
-        model: this.model,
+        model: model,
         formMethod: 'POST',
-        formAction: this.model.url(),
-        formActionText: t(this.model.getNlsDomain(), 'FORM:ACTION:add'),
-        failureText: t(this.model.getNlsDomain(), 'FORM:ERROR:addFailure'),
-        panelTitleText: t(this.model.getNlsDomain(), 'PANEL:TITLE:addForm')
+        formAction: model.url(),
+        formActionText: t(model.getNlsDomain(), 'FORM:ACTION:add'),
+        failureText: t(model.getNlsDomain(), 'FORM:ERROR:addFailure'),
+        panelTitleText: t(model.getNlsDomain(), 'PANEL:TITLE:addForm')
       };
 
       if (typeof this.options.formTemplate === 'function')
@@ -46,7 +69,7 @@ define([
         options.template = this.options.formTemplate;
       }
 
-      this.view = new FormViewClass(options);
+      return options;
     }
 
   });

@@ -54,9 +54,14 @@ define([
 
     defineViews: function()
     {
-      var FormViewClass = this.options.FormView || this.FormView || FormView;
+      var FormViewClass = this.getFormViewClass();
 
       this.view = new FormViewClass(this.getFormViewOptions());
+    },
+
+    getFormViewClass: function()
+    {
+      return this.options.FormView || this.FormView || FormView;
     },
 
     getFormViewOptions: function()
