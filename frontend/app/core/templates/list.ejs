@@ -1,5 +1,5 @@
 <div class="list <%- typeof className === 'undefined' ? '' : className %>">
-  <div class="table-responsive"><table class="table table-bordered table-hover table-condensed">
+  <div class="table-responsive"><table class="table <%- tableClassName %>">
       <thead>
       <tr>
         <% columns.forEach(function(column) { %>

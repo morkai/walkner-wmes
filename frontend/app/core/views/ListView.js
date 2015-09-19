@@ -27,6 +27,8 @@ define([
 
     template: listTemplate,
 
+    tableClassName: 'table-bordered table-hover table-condensed',
+
     remoteTopics: function()
     {
       var topics = {};
@@ -125,7 +127,8 @@ define([
         columns: this.decorateColumns(this.serializeColumns()),
         actions: this.serializeActions(),
         rows: this.serializeRows(),
-        className: _.result(this, 'className')
+        className: _.result(this, 'className'),
+        tableClassName: _.result(this, 'tableClassName')
       };
     },
 
