@@ -7,15 +7,25 @@
 var spawn = require('child_process').spawn;
 var _ = require('lodash');
 
+var inProgress = {};
+
 module.exports = function buildSurveyPdf(app, module, surveyId, outputFile, done)
 {
   var complete = _.once(done);
+
+  if (inProgress[surveyId])
+  {
+    return inProgress.push(complete);
+  }
+
+  inProgress[surveyId] = [complete];
+
   var httpServer = app[module.config.httpServerId];
   var templateUrl = 'http://' + (httpServer.config.host === '0.0.0.0' ? '127.0.0.1' : httpServer.config.host)
     + ':' + httpServer.config.port + '/opinionSurveys/' + surveyId + '.html?template=';
   var args = [
     '--quiet',
-    '--dpi', '600',
+    '--dpi', '96',
     '--image-dpi', '600',
     '--image-quality', '100',
     '--page-size', 'A4',
@@ -42,13 +52,10 @@ module.exports = function buildSurveyPdf(app, module, surveyId, outputFile, done
   p.on('error', complete);
   p.on('exit', function(code)
   {
-    if (code)
-    {
-      complete(new Error("wkhtmltopdf exit with code: " + code + "\n" + buffer.trim()));
-    }
-    else
-    {
-      complete(null, outputFile);
-    }
+    var err = code ? new Error("wkhtmltopdf exit with code: " + code + "\n" + buffer.trim()) : null;
+
+    _.forEach(inProgress[surveyId], function(done) { done(err, outputFile); });
+
+    delete inProgress[surveyId];
   });
 };
