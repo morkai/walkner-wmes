@@ -95,7 +95,7 @@ module.exports = function createErrorHandlerMiddleware(expressModule, options)
         title: options.title || 'express',
         statusCode: res.statusCode,
         stack: prepareStack(options.basePath, err).reverse(),
-        error: err.message.replace(/\n/g, '<br>').replace(/^Error: /, '')
+        error: err.message.replace(/^Error: /, '')
       });
 
       return;
