@@ -82,6 +82,11 @@ module.exports = function createErrorHandlerMiddleware(expressModule, options)
       );
     }
 
+    if (!res.connection.writable)
+    {
+      return;
+    }
+
     var accept = req.headers.accept || '';
 
     if (accept.indexOf('html') !== -1)
