@@ -1,0 +1,35 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Opinion survey",
+    "BREADCRUMBS:browse": "Corrective corrective actions",
+    "BREADCRUMBS:addForm": "Adding",
+    "BREADCRUMBS:editForm": "Editing",
+    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+
+    "MSG:LOADING_FAILURE": "Failed to load the corrective actions :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the corrective action :(",
+    "MSG:DELETED": "Corrective corrective action <em>{label}</em> was deleted.",
+
+    "PAGE_ACTION:add": "Add corrective action",
+    "PAGE_ACTION:edit": "Edit corrective action",
+    "PAGE_ACTION:delete": "Delete corrective action",
+
+    "PANEL:TITLE:details": "Corrective corrective action's details",
+    "PANEL:TITLE:addForm": "Add corrective action form",
+    "PANEL:TITLE:editForm": "Edit corrective action form",
+
+    "PROPERTY:": "",
+
+    "FORM:ACTION:add": "Add corrective action",
+    "FORM:ACTION:edit": "Edit corrective action",
+    "FORM:ERROR:addFailure": "Failed to add the new corrective action :(",
+    "FORM:ERROR:editFailure": "Failed to edit the corrective action :(",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "Corrective corrective action deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete corrective action",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen corrective action?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> corrective action?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the corrective action :-("
+  },
+  "pl": true
+}

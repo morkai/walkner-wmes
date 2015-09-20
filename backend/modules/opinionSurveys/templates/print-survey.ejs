@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Badanie Opinia - <%= survey.label %></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1;
+      text-align: center;
+      text-rendering: geometricPrecision!important;
+    }
+    #container {
+      margin: 0 auto;
+      padding-top: 20px;
+      width: 718px;
+      text-align: left;
+    }
+    #qr {
+      float: right;
+    }
+    h1 {
+      padding-top: 20px;
+      font-size: 18px;
+    }
+    img + h1 {
+      padding-top: 0;
+    }
+    h2 {
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    #help {
+      display: inline-block;
+      margin-top: -1px;
+      font-size: 16px;
+      font-weight: normal;
+      vertical-align: middle;
+    }
+    #warning {
+      margin: 5px 0;
+      font-size: 14px;
+      font-style: oblique;
+      line-height: 1.4;
+    }
+    table {
+      width: 100%;
+      font-size: 13px;
+      border: 1px solid #000;
+      border-collapse: collapse;
+    }
+    th,
+    td {
+      padding: 2px 4px;
+      line-height: 1.2;
+    }
+    td {
+      border-top: 1px solid #000;
+    }
+    .no {
+      width: 1%;
+    }
+    td.no {
+      vertical-align: top;
+      text-align: right;
+    }
+    td.question {
+      vertical-align: top;
+    }
+    .answer {
+      width: 92px;
+      text-align: center;
+    }
+    .circles {
+      list-style: none;
+    }
+    .circles > li {
+      margin-top: 10px;
+    }
+    .circle + span {
+      margin-left: 10px;
+    }
+    .circle {
+      display: inline-block;
+      vertical-align: middle;
+      width: 24px;
+      height: 24px;
+      border: 2px solid #000;
+      border-radius: 24px;
+    }
+    .circle.is-full {
+      background-color: #000;
+    }
+    #superiors > .circles {
+      display: inline-block;
+      margin-right: 20px;
+      vertical-align: top;
+    }
+  </style>
+</head>
+<body>
+<div id="container">
+  <img id="qr" src="/opinionSurveys/qr?data=<%- encodeURIComponent(survey._id + '/2') %>" alt="<%- survey._id + '/2' %>" width="111" height="111">
+  <h1>Metryczka (<span id="help"><em>zamaluj odpowiednie kółko:</em> <span class="circle"></span> <img src="/app/opinionSurveys/assets/arrow.png" width="18" height="11"> <span class="circle is-full"></span></span>)</h1>
+  <h2>Jestem pracownikiem:</h2>
+  <ol class="circles">
+    <% survey.employers.forEach(function(employer) { %>
+    <li><span class="circle"></span><span><%= employer.full %></span></li>
+    <% }) %>
+  </ol>
+  <h2>Mój przełożony to:</h2>
+  <div id="superiors">
+    <ol class="circles">
+      <% survey.superiors.forEach(function(superior, i) { %>
+      <% if (i && i % 8 === 0) { %>
+    </ol>
+    <ol class="circles">
+      <% } %>
+      <li><span class="circle"></span><span><%= superior.full %> (<%= superior.division %>)</span></li>
+      <% }) %>
+    </ol>
+  </div>
+  <h1>Ankieta</h1>
+  <p id="warning">
+    <strong>UWAGA:</strong> Na poniższe pytania prosimy odpowiadać <u>w perspektywie swojego miejsca pracy</u>,<br>
+    np. centrum produkcyjne/magazyn komponentów.
+  </p>
+  <table>
+    <thead>
+    <tr>
+      <th class="no">Lp.</th>
+      <th class="question">Pytanie</th>
+      <th class="answer">Nie zgadzam<br>się</th>
+      <th class="answer">Nie mam<br>zdania</th>
+      <th class="answer">Zgadzam<br>się</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% survey.questions.forEach(function(question, i) { %>
+    <tr>
+      <td class="no"><%- i + 1 %>.</td>
+      <td class="question"><%= question.full %></td>
+      <td class="answer"><span class="circle"></span></td>
+      <td class="answer"><span class="circle"></span></td>
+      <td class="answer"><span class="circle"></span></td>
+    </tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<form class="opinionSurveys-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:_id') %></label>
+        <% if (editMode) { %>
+        <p class="form-control-static"><%- model._id %></p>
+        <% } else { %>
+        <input id="<%- idPrefix %>-id" class="form-control" type="text" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-_]+$">
+        <p class="help-block"><%- t('opinionSurveys', 'form:help:_id') %></p>
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:label') %></label>
+        <input id="<%- idPrefix %>-label" class="form-control" type="text" name="label" required>
+        <p class="help-block"><%- t('opinionSurveys', 'form:help:label') %></p>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-startDate" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:startDate') %></label>
+        <input id="<%- idPrefix %>-startDate" class="form-control" type="date" name="startDate" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-endDate" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:endDate') %></label>
+        <input id="<%- idPrefix %>-endDate" class="form-control" type="date" name="endDate" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-intro" class="control-label"><%- t('opinionSurveys', 'PROPERTY:intro') %></label>
+        <textarea id="<%- idPrefix %>-intro" class="form-control" name="intro" rows="8"></textarea>
+      </div>
+      <div class="form-group has-required-select2">
+        <label for="<%- idPrefix %>-employers" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:employers') %></label>
+        <input id="<%- idPrefix %>-employers" type="text" name="employers" required placeholder="<%- t('opinionSurveys', 'form:placeholder:employers') %>">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-superiors" class="control-label"><%- t('opinionSurveys', 'PROPERTY:superiors') %></label>
+        <input id="<%- idPrefix %>-superiors" type="text">
+        <table id="<%- idPrefix %>-superiorsTable" class="table table-condensed opinionSurveys-form-superiorsTable">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:superiors.full') %></th>
+            <th class="opinionSurveys-form-superiorsTable-short"><%- t('opinionSurveys', 'PROPERTY:superiors.short') %></th>
+            <th><%- t('opinionSurveys', 'PROPERTY:superiors.division') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-questions" class="control-label"><%- t('opinionSurveys', 'PROPERTY:questions') %></label>
+        <input id="<%- idPrefix %>-questions" type="text" placeholder="<%- t('opinionSurveys', 'form:placeholder:questions') %>">
+        <table id="<%- idPrefix %>-questionsTable" class="table table-condensed opinionSurveys-form-questionsTable">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:questions._id') %></th>
+            <th class="opinionSurveys-form-questionsTable-short"><%- t('opinionSurveys', 'PROPERTY:questions.short') %></th>
+            <th><%- t('opinionSurveys', 'PROPERTY:questions.full') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

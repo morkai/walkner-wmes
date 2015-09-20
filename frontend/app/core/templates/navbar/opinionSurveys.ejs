@@ -1,0 +1,17 @@
+<li data-online data-loggedin class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('opinionSurveys', 'navbar:main') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li data-module="opinionSurveys"><a href="/opinion" target="_blank"><%- t('opinionSurveys', 'navbar:current') %></a>
+    <li data-module="opinionSurveys" class="disabled"><a href="#opinionSurveyReport"><%- t('opinionSurveys', 'navbar:report') %></a>
+    <li data-module="opinionSurveys"><a href="#opinionSurveyActions"><%- t('opinionSurveys', 'navbar:actions') %></a>
+    <li data-module="opinionSurveys"><a href="#opinionSurveyResponses"><%- t('opinionSurveys', 'navbar:responses') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('opinionSurveys', 'navbar:dictionaries') %>
+    <li data-privilege="OPINION_SURVEYS:MANAGE" data-module="opinionSurveys"><a href="#opinionSurveys"><%- t('opinionSurveys', 'navbar:surveys') %></a>
+    <li data-privilege="OPINION_SURVEYS:MANAGE" data-module="opinionSurveys"><a href="#opinionSurveyEmployers"><%- t('opinionSurveys', 'navbar:employers') %></a>
+    <li data-privilege="OPINION_SURVEYS:MANAGE" data-module="opinionSurveys"><a href="#opinionSurveyDivisions"><%- t('opinionSurveys', 'navbar:divisions') %></a>
+    <li data-privilege="OPINION_SURVEYS:MANAGE" data-module="opinionSurveys"><a href="#opinionSurveyQuestions"><%- t('opinionSurveys', 'navbar:questions') %></a>
+  </ul>

@@ -1,0 +1,26 @@
+<form class="opinionSurveys-employeeCountForm" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- t('opinionSurveys', 'PANEL:TITLE:editEmployeeCountForm') %></div>
+    <div class="panel-body">
+      <% _.forEach(employeeCounts, function(division, divisionId) { %>
+      <div class="form-group">
+        <label class="control-label"><%= division.label %></label>
+        <div class="opinionSurveys-employeeCountForm-division">
+          <% _.forEach(division.employers, function(employer, employerId) { %>
+          <div class="form-group opinionSurveys-employeeCountForm-employer">
+            <label for="<%- idPrefix %>-<%- divisionId %>-<%- employerId %>" class="control-label is-required"><%= employer.label %></label>
+            <input id="<%- idPrefix %>-<%- divisionId %>-<%- employerId %>" class="form-control" type="number" name="employeeCount[<%- employer.index %>].count" required min="0" max="9999">
+            <input type="hidden" name="employeeCount[<%- employer.index %>].division" value="<%- divisionId %>">
+            <input type="hidden" name="employeeCount[<%- employer.index %>].employer" value="<%- employerId %>">
+          </div>
+          <% }) %>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- t('opinionSurveys', 'FORM:ACTION:editEmployeeCount') %></button>
+    </div>
+  </div>
+</form>

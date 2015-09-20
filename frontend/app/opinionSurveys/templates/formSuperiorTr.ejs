@@ -1,0 +1,10 @@
+<tr>
+  <td class="is-min">
+    <input type="hidden" name="superiors[<%- i %>]._id" value="<%- superior._id %>">
+    <input type="hidden" name="superiors[<%- i %>].full" value="<%= superior.full %>">
+    <%= superior.full %>
+  </td>
+  <td><input class="form-control" name="superiors[<%- i %>].short" type="text" value="<%= superior.short %>" required></td>
+  <td><input name="superiors[<%- i %>].division" type="text" value="<%= superior.division %>" required></td>
+  <td class="actions"><button class="btn btn-danger opinionSurveys-form-deleteRow" type="button"><i class="fa fa-remove"></i></button></td>
+</tr>

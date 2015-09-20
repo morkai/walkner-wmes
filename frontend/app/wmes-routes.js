@@ -47,7 +47,13 @@ define([
   './kaizenAreas/routes',
   './kaizenCategories/routes',
   './kaizenCauses/routes',
-  './kaizenRisks/routes'
+  './kaizenRisks/routes',
+  './opinionSurveys/routes',
+  './opinionSurveyActions/routes',
+  './opinionSurveyResponses/routes',
+  './opinionSurveyEmployers/routes',
+  './opinionSurveyDivisions/routes',
+  './opinionSurveyQuestions/routes'
 ], function()
 {
   'use strict';

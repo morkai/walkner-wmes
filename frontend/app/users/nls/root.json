@@ -120,6 +120,7 @@
     "PRIVILEGE:DOCUMENTS:VIEW": "WMES Documents: view",
     "PRIVILEGE:DOCUMENTS:MANAGE": "WMES Documents: manage",
     "PRIVILEGE:DOCUMENTS:ACTIVATE": "WMES Documents: client activation",
+    "PRIVILEGE:OPINION_SURVEYS:MANAGE": "Opinion surveys: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System"

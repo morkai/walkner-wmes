@@ -1,0 +1,28 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group has-required-select2">
+        <label for="<%- idPrefix %>-survey" class="control-label is-required"><%- t('opinionSurveyResponses', 'PROPERTY:survey') %></label>
+        <input id="<%- idPrefix %>-survey" name="survey" type="text" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-comment" class="control-label"><%- t('opinionSurveyResponses', 'PROPERTY:comment') %></label>
+        <textarea id="<%- idPrefix %>-comment" name="comment" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="form-group has-required-select2">
+        <label for="<%- idPrefix %>-employer" class="control-label is-required"><%- t('opinionSurveyResponses', 'PROPERTY:employer') %></label>
+        <input id="<%- idPrefix %>-employer" name="employer" type="text" required>
+      </div>
+      <div class="form-group has-required-select2">
+        <label for="<%- idPrefix %>-superior" class="control-label is-required"><%- t('opinionSurveyResponses', 'PROPERTY:superior') %></label>
+        <input id="<%- idPrefix %>-superior" name="superior" type="text" required>
+      </div>
+      <div id="<%- idPrefix %>-answers" class="opinionSurveyResponses-form-answers"></div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

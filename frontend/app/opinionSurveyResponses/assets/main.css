@@ -1,0 +1,16 @@
+.opinionSurveyResponses-answer {
+  text-align: center;
+  font-size: 1.5em;
+}
+.opinionSurveyResponses-answer > .fa-thumbs-up {
+  color: #5cb85c;
+}
+.opinionSurveyResponses-answer > .fa-thumbs-down {
+  color: #d9534f;
+}
+.opinionSurveyResponses-answer > .fa-question {
+  color: #f0ad4e;
+}
+.opinionSurveyResponses-form-answers > .form-group > .help-block {
+  margin: 0 0 5px 0;
+}

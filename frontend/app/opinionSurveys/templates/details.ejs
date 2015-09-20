@@ -1,0 +1,125 @@
+<div class="opinionSurveys-details">
+  <div class="panel panel-primary opinionSurveys-details-props">
+    <div class="panel-heading">
+      <%- t('opinionSurveys', 'PANEL:TITLE:details') %>
+    </div>
+    <div class="panel-details">
+      <div class="props first">
+        <div class="prop">
+          <div class="prop-name"><%- t('opinionSurveys', 'PROPERTY:_id') %></div>
+          <div class="prop-value"><%- model._id %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('opinionSurveys', 'PROPERTY:label') %></div>
+          <div class="prop-value"><%= model.label %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('opinionSurveys', 'PROPERTY:startDate') %></div>
+          <div class="prop-value"><%- model.startDate %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('opinionSurveys', 'PROPERTY:endDate') %></div>
+          <div class="prop-value"><%- model.endDate %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default opinionSurveys-details-intro">
+    <div class="panel-heading">
+      <%- t('opinionSurveys', 'PROPERTY:intro') %>
+    </div>
+    <div class="panel-body"><%- model.intro %></div>
+  </div>
+  <div class="panel panel-default opinionSurveys-details-employers">
+    <div class="panel-heading">
+      <%- t('opinionSurveys', 'PROPERTY:employers') %>
+    </div>
+    <table class="table table-condensed table-bordered">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:employers._id') %></th>
+        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:employers.short') %></th>
+        <th><%- t('opinionSurveys', 'PROPERTY:employers.full') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.employers.forEach(function(employer) { %>
+      <tr>
+        <td class="is-min"><%- employer._id %></td>
+        <td class="is-min"><%= employer.short %></td>
+        <td><%= employer.full %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel panel-default opinionSurveys-details-superiors">
+    <div class="panel-heading">
+      <%- t('opinionSurveys', 'PROPERTY:superiors') %>
+    </div>
+    <table class="table table-condensed table-bordered">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:superiors.short') %></th>
+        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:superiors.full') %></th>
+        <th><%- t('opinionSurveys', 'PROPERTY:superiors.division') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.superiors.forEach(function(superior) { %>
+      <tr>
+        <td class="is-min"><%= superior.short %></td>
+        <td class="is-min"><%= superior.full %></td>
+        <td><%= superior.division %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel panel-default opinionSurveys-details-questions">
+    <div class="panel-heading">
+      <%- t('opinionSurveys', 'PROPERTY:questions') %>
+    </div>
+    <table class="table table-condensed table-bordered">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:questions._id') %></th>
+        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:questions.short') %></th>
+        <th><%- t('opinionSurveys', 'PROPERTY:questions.full') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.questions.forEach(function(question) { %>
+      <tr>
+        <td class="is-min"><%= question._id %></td>
+        <td class="is-min"><%= question.short %></td>
+        <td><%= question.full %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel panel-default opinionSurveys-details-employeeCount">
+    <div class="panel-heading">
+      <%- t('opinionSurveys', 'PROPERTY:employeeCount') %>
+    </div>
+    <table class="table table-condensed table-bordered">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:employeeCount.division') %></th>
+        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:employeeCount.employer') %></th>
+        <th><%- t('opinionSurveys', 'PROPERTY:employeeCount.count') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.employeeCount.forEach(function(employeeCount) { %>
+      <tr>
+        <td class="is-min"><%= employeeCount.division %></td>
+        <td class="is-min"><%= employeeCount.employer %></td>
+        <td><%- employeeCount.count %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

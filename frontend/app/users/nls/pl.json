@@ -120,6 +120,7 @@
   "PRIVILEGE:DOCUMENTS:VIEW": "Dokumenty WMES: przeglądanie",
   "PRIVILEGE:DOCUMENTS:MANAGE": "Dokumenty WMES: zarządzanie",
   "PRIVILEGE:DOCUMENTS:ACTIVATE": "Dokumenty WMES: aktywacja klientów",
+  "PRIVILEGE:OPINION_SURVEYS:MANAGE": "Badanie Opinia: zarządzanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System"

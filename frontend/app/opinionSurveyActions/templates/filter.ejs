@@ -1,0 +1,22 @@
+<form class="well filter-form opinionSurveyActions-filter">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-survey"><%- t('opinionSurveyActions', 'PROPERTY:survey') %></label>
+    <input id="<%- idPrefix %>-survey" name="survey" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-division"><%- t('opinionSurveyActions', 'PROPERTY:division') %></label>
+    <input id="<%- idPrefix %>-division" name="division" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-participants"><%- t('opinionSurveyActions', 'filter:participants') %></label>
+    <input id="<%- idPrefix %>-participants" name="participants" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-status"><%- t('opinionSurveyActions', 'PROPERTY:status') %></label>
+    <input id="<%- idPrefix %>-status" name="status" type="text">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('opinionSurveyActions', 'filter:submit') %></span></button>
+  </div>
+</form>

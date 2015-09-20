@@ -56,6 +56,7 @@ exports.modules = [
   'permalinks',
   'orderDocuments',
   'kaizen',
+  'opinionSurveys',
   'mail/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
@@ -96,7 +97,8 @@ exports.events = {
     debug: [
       'users.login', 'users.logout',
       '*.added', '*.edited',
-      'kaizen.*.added', 'kaizen.*.edited'
+      'kaizen.*.added', 'kaizen.*.edited',
+      'opinionSurveys.*.added', 'opinionSurveys.*.edited'
     ],
     info: [
       'events.**',
@@ -112,7 +114,8 @@ exports.events = {
       'production.unlockFailure',
       'production.lockFailure',
       'prodDowntimes.confirmedEdited',
-      'kaizen.*.deleted'
+      'kaizen.*.deleted',
+      'opinionSurveys.*.deleted'
     ],
     error: [
       '*.syncFailed',
@@ -121,7 +124,9 @@ exports.events = {
   },
   blacklist: [
     'pressWorksheets.added',
-    'kaizen.orders.added', 'kaizen.orders.edited'
+    'kaizen.orders.added', 'kaizen.orders.edited',
+    'opinionSurveys.responses.added',
+    'opinionSurveys.actions.added','opinionSurveys.actions.edited'
   ]
 };
 
@@ -154,7 +159,8 @@ exports.pubsub = {
     'icpo.results.synced',
     'orders.updated.*',
     'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
-    'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*'
+    'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',
+    'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted'
   ]
 };
 
@@ -177,7 +183,9 @@ exports.mongoose = {
     'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfOrder', 'xiconfClient',
     'factoryLayout',
     'whTransferOrder',
-    'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenOrder'
+    'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenOrder',
+    'opinionSurvey', 'opinionSurveyAction', 'opinionSurveyResponse',
+    'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion'
   ]
 };
 exports.mongoose.options.server.poolSize = 15;
@@ -218,7 +226,8 @@ exports.user = {
     'FACTORY_LAYOUT:MANAGE',
     'KAIZEN:MANAGE', 'KAIZEN:DICTIONARIES:VIEW', 'KAIZEN:DICTIONARIES:MANAGE',
     'OPERATOR:ACTIVATE',
-    'DOCUMENTS:ACTIVATE', 'DOCUMENTS:VIEW', 'DOCUMENTS:MANAGE'
+    'DOCUMENTS:ACTIVATE', 'DOCUMENTS:VIEW', 'DOCUMENTS:MANAGE',
+    'OPINION_SURVEYS:MANAGE'
   ]
 };
 
@@ -334,17 +343,23 @@ exports['mail/sender'] = {
   from: 'WMES Bot <wmes@localhost>'
 };
 
-exports.sioLegacyBridge = {
-  newSioServerUrl: 'http://127.0.0.1/'
-};
-
 exports.kaizen = {
   attachmentsDest: DATA_PATH + '/kaizen-attachments',
   multiType: exports.frontendAppData.KAIZEN_MULTI
+};
+
+exports.orders = {
+  importPath: DATA_PATH + '/attachments-input'
 };
 
 exports.orderDocuments = {
   importPath: DATA_PATH + '/attachments-input',
   cachedPath: DATA_PATH + '/documents-cache',
   sejdaConsolePath: 'sejda-console'
+};
+
+exports.opinionSurveys = {
+  surveysPath: DATA_PATH + '/opinion/surveys',
+  inputPath: DATA_PATH + '/opinion/input',
+  responsesPath: DATA_PATH + '/opinion/responses'
 };
