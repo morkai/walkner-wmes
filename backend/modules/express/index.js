@@ -8,6 +8,7 @@ var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
 var express = require('express');
+var ExpressView = require('express/lib/view');
 var methods = require('methods');
 var ejsAmd = require('ejs-amd');
 var messageFormatAmd = require('messageformat-amd');
@@ -15,6 +16,7 @@ var wrapAmd = require('./wrapAmd');
 var rqlMiddleware = require('./rqlMiddleware');
 var errorHandlerMiddleware = require('./errorHandlerMiddleware');
 var crud = require('./crud');
+var monkeyPatch = require('./monkeyPatch');
 var cookieParser = null;
 var bodyParser = null;
 var session = null;
@@ -168,6 +170,10 @@ exports.start = function startExpressModule(app, expressModule, done)
       };
 
       expressApp.use(errorHandlerMiddleware(expressModule, errorHandlerOptions));
+
+      monkeyPatch(app, expressModule, {
+        View: ExpressView
+      });
     },
     done
   );
