@@ -18,6 +18,11 @@ module.exports = function createErrorHandlerMiddleware(expressModule, options)
   {
     /*jshint unused:false*/
 
+    if (_.includes(expressModule.config.ignoredErrorCodes, err.code))
+    {
+      return;
+    }
+
     if (err.status)
     {
       res.statusCode = err.status;

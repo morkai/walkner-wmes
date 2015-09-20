@@ -44,7 +44,8 @@ exports.DEFAULT_CONFIG = {
   title: 'express',
   jsonBody: {},
   textBody: {},
-  urlencodedBody: {}
+  urlencodedBody: {},
+  ignoredErrorCodes: ['ECONNRESET', 'ECONNABORTED']
 };
 
 exports.start = function startExpressModule(app, expressModule, done)
