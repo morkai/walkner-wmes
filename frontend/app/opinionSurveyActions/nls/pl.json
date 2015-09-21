@@ -9,6 +9,7 @@
   "MSG:LOADING_FAILURE": "Ładowanie akcji naprawczych nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie akcji naprawczej nie powiodło się :(",
   "MSG:DELETED": "Akcja naprawcza została usunięta.",
+  "MSG:jump:404": "Nie znaleziono akcji naprawczej o ID <em>{rid}</em> :(",
 
   "PAGE_ACTION:add": "Dodaj akcję",
   "PAGE_ACTION:edit": "Edytuj akcję",

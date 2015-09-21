@@ -87,6 +87,7 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
     canView,
     express.crud.readRoute.bind(null, app, OpinionSurveyAction)
   );
+  express.get('/opinionSurveys/actions;rid', canView, findActionByRidRoute);
   express.put(
     '/opinionSurveys/actions/:id',
     canView,
@@ -361,6 +362,31 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
         });
       }
     );
+  }
+
+  function findActionByRidRoute(req, res, next)
+  {
+    var rid = parseInt(req.query.rid, 10);
+
+    if (isNaN(rid) || rid <= 0)
+    {
+      return res.sendStatus(400);
+    }
+
+    OpinionSurveyAction.findOne({rid: rid}, {_id: 1}).lean().exec(function(err, action)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (action)
+      {
+        return res.json(action._id);
+      }
+
+      return res.sendStatus(404);
+    });
   }
 
   function reportRoute(req, res, next)
