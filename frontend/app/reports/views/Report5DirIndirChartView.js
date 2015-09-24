@@ -455,7 +455,7 @@ define([
           shared: true,
           valueDecimals: 1
         },
-        legend: false,
+        legend: {enabled: false},
         plotOptions: {
           line: {
             marker: {

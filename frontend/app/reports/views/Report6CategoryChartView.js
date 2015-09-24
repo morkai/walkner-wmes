@@ -46,7 +46,7 @@ define([
           shared: true,
           valueDecimals: isQty ? 0 : 1
         },
-        legend: false,
+        legend: {enabled: false},
         plotOptions: {
           line: {
             lineWidth: 2,

@@ -271,12 +271,16 @@ define([
   {
     /*jshint validthis:true*/
 
-    if (this.y === null || this.y === 0)
+    var chartType = this.series.chart.options.chart.type;
+
+    if (this.y === null || (this.y === 0 && chartType !== 'pie'))
     {
       return '';
     }
 
-    if (this.series.type !== 'column' && this.series.points.length > 10)
+    if (this.series.type !== 'column'
+      && this.series.type !== 'pie'
+      && this.series.points.length > 10)
     {
       if (this.series.index % 2 === 0 && this.point.index % 2 !== 0)
       {

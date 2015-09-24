@@ -56,7 +56,7 @@ define([
           headerFormatter: this.formatTooltipHeader.bind(this),
           valueDecimals: 1
         },
-        legend: false,
+        legend: {enabled: false},
         plotOptions: {
           line: {
             lineWidth: 2,

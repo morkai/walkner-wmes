@@ -309,7 +309,7 @@ define([
           title: false,
           showEmpty: false
         },
-        legend: false,
+        legend: {enabled: false},
         tooltip: {
           shared: true,
           valueSuffix: ' FTE',

@@ -363,7 +363,7 @@ define([
           shared: true,
           valueDecimals: 1
         },
-        legend: false,
+        legend: {enabled: false},
         series: [
           {
             name: t('reports', 'effIneff:seriesName'),
