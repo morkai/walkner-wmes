@@ -6,6 +6,18 @@
   <base href="/">
   <title>Badanie Opinia</title>
   <link rel="stylesheet" href="app/opinionSurveys/assets/current.css">
+  <style>
+    #bd p {
+      margin-top: 20px;
+      line-height: 1.4;
+    }
+    #bd a {
+      color: #0091e6;
+    }
+    #bd a:hover {
+      color: #e00;
+    }
+  </style>
 </head>
 <body class="closed">
 <div id="container">
@@ -16,6 +28,17 @@
   </div>
   <div id="bd">
     <p>Aktualnie nie jest przeprowadzane żadne badanie.</p>
+    <% if (survey) { %>
+    <p>
+      Najbliższe badanie rozpocznie się <%- moment(survey.startDate).format('D MMMM') %>.
+    </p>
+    <p>
+      <a href="/opinionSurveys/<%- survey._id %>.pdf">Kliknij tutaj</a>, aby wyświetlić formularz następnego badania w wersji do druku.
+    </p>
+    <p>
+      <strong>UWAGA!</strong> Podczas drukowania należy upewnić się, że wyłączona jest opcja skalowania/dopasowywania do strony.
+    </p>
+    <% } %>
   </div>
   <div id="ft">
     <img src="app/opinionSurveys/assets/chosen.png" alt="Wybieram Philips Kętrzyn">

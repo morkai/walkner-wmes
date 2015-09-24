@@ -181,10 +181,12 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
 
   function sendCurrentSurveyRoute(req, res, next)
   {
+    var currentDate = moment().startOf('day').toDate();
+    var currentSurvey = null;
+
     step(
-      function findCurrentSurveysStep()
+      function findCurrentSurveyStep()
       {
-        var currentDate = moment().startOf('day').toDate();
         var conditions = {
           startDate: {$lte: currentDate},
           endDate: {$gte: currentDate}
@@ -192,7 +194,23 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
 
         OpinionSurvey.findOne(conditions).sort({startDate: -1}).lean().exec(this.next());
       },
-      function sendCurrentSurveyStep(err, survey)
+      function findNextSurveyStep(err, currentSurvey)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (currentSurvey)
+        {
+          this.currentSurvey = currentSurvey;
+
+          return;
+        }
+
+        OpinionSurvey.findOne({startDate: {$gte: currentDate}}).sort({startDate: 1}).lean().exec(this.next());
+      },
+      function sendCurrentSurveyStep(err, nextSurvey)
       {
         if (err)
         {
@@ -202,9 +220,9 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
         res.format({
           json: function()
           {
-            if (survey)
+            if (currentSurvey)
             {
-              res.send(survey);
+              res.send(currentSurvey);
             }
             else
             {
@@ -213,17 +231,21 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
           },
           html: function()
           {
-            if (survey)
+            if (currentSurvey)
             {
               res.render('opinionSurveys:current', {
                 cache: false,
                 moment: moment,
-                survey: survey
+                survey: currentSurvey
               });
             }
             else
             {
-              res.render('opinionSurveys:closed');
+              res.render('opinionSurveys:closed', {
+                cache: false,
+                moment: moment,
+                survey: nextSurvey
+              });
             }
           }
         });
