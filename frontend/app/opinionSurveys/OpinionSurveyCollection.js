@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   '../core/Collection',
   './OpinionSurvey'
 ], function(
+  _,
   Collection,
   OpinionSurvey
 ) {
@@ -23,6 +25,24 @@ define([
       {
         this.models[i].buildCacheMaps();
       }
+    },
+
+    getSuperiors: function()
+    {
+      var superiors = {};
+
+      this.forEach(function(survey)
+      {
+        _.forEach(survey.get('superiors'), function(superior)
+        {
+          if (!superiors[superior._id])
+          {
+            superiors[superior._id] = superior;
+          }
+        });
+      });
+
+      return _.values(superiors);
     }
 
   });

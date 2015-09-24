@@ -3,19 +3,42 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'jquery',
   'app/i18n',
   'app/core/View',
+  'app/core/util/bindLoadingMessage',
   '../dictionaries',
+  '../OpinionSurveyCollection',
   '../OpinionSurveyReport',
+  '../OpinionSurveyReportQuery',
   '../views/OpinionSurveyReportFilterView',
+  '../views/ResponseCountTableView',
+  '../views/ResponseCountByDivisionChartView',
+  '../views/ResponseCountBySuperiorChartView',
+  '../views/ResponsePercentBySurveyChartView',
+  '../views/ResponsePercentByDivisionChartView',
+  '../views/AnswerCountTotalChartView',
+  '../views/PositiveAnswerPercentBySurveyChartView',
+  '../views/PositiveAnswerPercentByDivisionChartView',
   'app/opinionSurveys/templates/reportPage'
 ], function(
+  $,
   t,
   View,
+  bindLoadingMessage,
   dictionaries,
+  OpinionSurveyCollection,
   OpinionSurveyReport,
+  OpinionSurveyReportQuery,
   OpinionSurveyReportFilterView,
-  OpinionSurveyTableAndChartView,
+  ResponseCountTableView,
+  ResponseCountByDivisionChartView,
+  ResponseCountBySuperiorChartView,
+  ResponsePercentBySurveyChartView,
+  ResponsePercentByDivisionChartView,
+  AnswerCountTotalChartView,
+  PositiveAnswerPercentBySurveyChartView,
+  PositiveAnswerPercentByDivisionChartView,
   template
 ) {
   'use strict';
@@ -31,19 +54,75 @@ define([
       t.bound('opinionSurveys', 'BREADCRUMBS:report')
     ],
 
+    actions: function()
+    {
+      return [{
+        label: t.bound('opinionSurveys', 'PAGE_ACTION:settings'),
+        icon: 'cogs',
+        privileges: 'OPINION_SURVEYS:MANAGE',
+        href: '#opinionSurveys;settings?tab=reports'
+      }];
+    },
+
     initialize: function()
     {
-      this.setView('.filter-container', new OpinionSurveyReportFilterView({model: this.model}));
+      this.defineModels();
+      this.defineViews();
 
-      OpinionSurveyReport.TABLE_AND_CHART_METRICS.forEach(function(metric)
+      this.setView('.filter-container', this.filterView);
+
+      [
+        'responseCount',
+        'responseCountByDivision',
+        'responseCountBySuperior',
+        'responsePercentBySurvey',
+        'responsePercentByDivision',
+        'answerCountTotal',
+        'positiveAnswerPercentBySurvey',
+        'positiveAnswerPercentByDivision'
+      ].forEach(function(viewName)
       {
-        this.setView('.opinionSurveys-report-' + metric, new OpinionSurveyTableAndChartView({
-          metric: metric,
-          model: this.model
-        }));
+        this.setView('.opinionSurveys-report-' + viewName + '-container', this[viewName + 'View']);
       }, this);
+    },
 
-      this.listenTo(this.model, 'filtered', this.onFiltered);
+    defineModels: function()
+    {
+      this.surveys = bindLoadingMessage(new OpinionSurveyCollection(null, {rqlQuery: 'sort(-startDate)'}), this);
+      this.query = OpinionSurveyReportQuery.fromQuery(this.options.query);
+      this.report = bindLoadingMessage(new OpinionSurveyReport(null, {query: this.query}), this);
+
+      this.listenTo(this.surveys, 'reset', this.surveys.buildCacheMaps.bind(this.surveys));
+      this.listenTo(this.query, 'change', this.onQueryChange);
+    },
+
+    defineViews: function()
+    {
+      var chartViewOptions = {
+        model: {
+          surveys: this.surveys,
+          report: this.report
+        }
+      };
+
+      this.filterView = new OpinionSurveyReportFilterView({
+        surveys: this.surveys,
+        query: this.query
+      });
+      this.responseCountView = new ResponseCountTableView({
+        model: {
+          surveys: this.surveys,
+          query: this.query,
+          report: this.report
+        }
+      });
+      this.responseCountByDivisionView = new ResponseCountByDivisionChartView(chartViewOptions);
+      this.responseCountBySuperiorView = new ResponseCountBySuperiorChartView(chartViewOptions);
+      this.responsePercentBySurveyView = new ResponsePercentBySurveyChartView(chartViewOptions);
+      this.responsePercentByDivisionView = new ResponsePercentByDivisionChartView(chartViewOptions);
+      this.answerCountTotalView = new AnswerCountTotalChartView(chartViewOptions);
+      this.positiveAnswerPercentBySurveyView = new PositiveAnswerPercentBySurveyChartView(chartViewOptions);
+      this.positiveAnswerPercentByDivisionView = new PositiveAnswerPercentByDivisionChartView(chartViewOptions);
     },
 
     destroy: function()
@@ -51,22 +130,22 @@ define([
       dictionaries.unload();
     },
 
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix,
-        metrics: OpinionSurveyReport.TABLE_AND_CHART_METRICS
-      };
-    },
-
     load: function(when)
     {
       if (dictionaries.loaded)
       {
-        return when(this.model.fetch());
+        return when(this.surveys.fetch({reset: true}), this.report.fetch());
       }
 
-      return dictionaries.load().then(this.model.fetch.bind(this.model));
+      var page = this;
+
+      return dictionaries.load().then(function()
+      {
+        return $.when(
+          page.surveys.fetch({reset: true}),
+          page.report.fetch()
+        );
+      });
     },
 
     afterRender: function()
@@ -74,15 +153,18 @@ define([
       dictionaries.load();
     },
 
-    onFiltered: function()
+    onQueryChange: function(query, options)
     {
-      this.promised(this.model.fetch());
+      if (options && options.reset)
+      {
+        this.broker.publish('router.navigate', {
+          url: this.report.genClientUrl(),
+          replace: true,
+          trigger: false
+        });
 
-      this.broker.publish('router.navigate', {
-        url: this.model.genClientUrl(),
-        trigger: false,
-        replace: true
-      });
+        this.promised(this.report.fetch());
+      }
     }
 
   });

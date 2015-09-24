@@ -3,95 +3,89 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'js2form',
-  'app/time',
-  'app/core/View',
-  'app/core/util/fixTimeRange',
-  'app/core/util/buttonGroup',
-  'app/opinionSurveys/templates/reportFilter',
-  'app/reports/util/prepareDateRange'
+  'underscore',
+  'app/core/views/FilterView',
+  'app/core/util/idAndLabel',
+  '../dictionaries',
+  'app/opinionSurveys/templates/reportFilter'
 ], function(
-  js2form,
-  time,
-  View,
-  fixTimeRange,
-  buttonGroup,
-  filterTemplate,
-  prepareDateRange
+  _,
+  FilterView,
+  idAndLabel,
+  dictionaries,
+  template
 ) {
   'use strict';
 
-  return View.extend({
+  return FilterView.extend({
 
-    template: filterTemplate,
-
-    events: {
-      'submit': function()
-      {
-        this.changeFilter();
-
-        return false;
-      },
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
-        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
-        this.$el.submit();
-      }
-    },
+    template: template,
 
     afterRender: function()
     {
-      js2form(this.el, this.serializeFormData());
+      FilterView.prototype.afterRender.call(this);
 
-      buttonGroup.toggle(this.$id('interval'));
+      this.$id('surveys').select2({
+        width: 300,
+        placeholder: ' ',
+        allowClear: true,
+        multiple: true,
+        data: this.surveys.map(idAndLabel)
+      });
+
+      this.$id('divisions').select2({
+        width: 250,
+        placeholder: ' ',
+        allowClear: true,
+        multiple: true,
+        data: dictionaries.divisions.map(idAndLabel)
+      });
+
+      this.$id('superiors').select2({
+        width: 500,
+        placeholder: ' ',
+        allowClear: true,
+        multiple: true,
+        id: function(superior) { return superior._id; },
+        formatSelection: function(superior) { return superior.short; },
+        data: {
+          results: this.surveys.getSuperiors(),
+          text: 'full'
+        }
+      });
+
+      this.$id('employers').select2({
+        width: 200,
+        placeholder: ' ',
+        allowClear: true,
+        multiple: true,
+        data: dictionaries.employers.map(idAndLabel)
+      });
     },
 
-    serializeFormData: function()
+    serializeQueryToForm: function()
     {
-      var model = this.model;
-      var from = +model.get('from');
-      var to = +model.get('to');
-
       return {
-        interval: model.get('interval'),
-        from: from ? time.format(from, 'YYYY-MM-DD') : '',
-        to: to ? time.format(to, 'YYYY-MM-DD') : ''
+        surveys: this.query.get('surveys').join(','),
+        divisions: this.query.get('divisions').join(','),
+        superiors: this.query.get('superiors').join(','),
+        employers: this.query.get('employers').join(',')
       };
     },
 
     changeFilter: function()
     {
-      var query = {
-        from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
-        to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
-        interval: buttonGroup.getValue(this.$id('interval'))
+      this.query.set(this.serializeFormToQuery(), {reset: true});
+    },
+
+    serializeFormToQuery: function()
+    {
+      return {
+        surveys: this.$id('surveys').val().split(','),
+        divisions: this.$id('divisions').val().split(','),
+        superiors: this.$id('superiors').val().split(','),
+        employers: this.$id('employers').val().split(',')
       };
-
-      if (!query.from || query.from < 0)
-      {
-        query.from = 0;
-      }
-
-      if (!query.to || query.to < 0)
-      {
-        query.to = 0;
-      }
-
-      if (query.from && query.from === query.to)
-      {
-        var to = time.getMoment(query.to).add(1, 'days');
-
-        this.$id('to').val(to.format('YYYY-MM-DD'));
-
-        query.to = to.valueOf();
-      }
-
-      this.model.set(query);
-      this.model.trigger('filtered');
     }
 
   });

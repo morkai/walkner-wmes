@@ -65,5 +65,10 @@ module.exports = function setupOpinionSurveyResponseModel(app, mongoose)
 
   opinionSurveyResponseSchema.statics.TOPIC_PREFIX = 'opinionSurveys.responses';
 
+  opinionSurveyResponseSchema.index({survey: 1});
+  opinionSurveyResponseSchema.index({employer: 1});
+  opinionSurveyResponseSchema.index({division: 1});
+  opinionSurveyResponseSchema.index({superior: 1});
+
   mongoose.model('OpinionSurveyResponse', opinionSurveyResponseSchema);
 };

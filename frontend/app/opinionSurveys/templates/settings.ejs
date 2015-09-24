@@ -1,0 +1,17 @@
+<form class="settings opinionSurveys-settings">
+  <div class="list-group">
+    <a class="list-group-item" href="#opinionSurveys;settings?tab=reports" data-tab="reports"><%- t('opinionSurveys', 'settings:tab:reports') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="reports">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-positiveAnswersReference"><%- t('opinionSurveys', 'settings:positiveAnswersReference') %></label>
+        <input id="<%- idPrefix %>-positiveAnswersReference" class="form-control" name="opinionSurveys.positiveAnswersReference" type="number" min="0" max="100">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-responseReference"><%- t('opinionSurveys', 'settings:responseReference') %></label>
+        <input id="<%- idPrefix %>-responseReference" class="form-control" name="opinionSurveys.responseReference" type="number" min="0" max="100">
+      </div>
+    </div>
+  </div>
+</form>

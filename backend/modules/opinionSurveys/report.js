@@ -6,250 +6,236 @@
 
 var _ = require('lodash');
 var step = require('h5.step');
-var util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
-  var KaizenOrder = mongoose.model('KaizenOrder');
+  var OpinionSurveyResponse = mongoose.model('OpinionSurveyResponse');
 
-  var groupProperty = 'eventDate';
-  var minGroupKey = Number.MAX_VALUE;
-  var maxGroupKey = Number.MIN_VALUE;
   var results = {
     options: options,
-    users: {},
-    totals: createGroup(),
-    groups: {}
+    superiorToSurvey: {},
+    usedSurveys: {},
+    usedDivisions: {},
+    usedEmployers: {},
+    responseCountTotal: {},
+    responseCountBySurvey: {},
+    responseCountBySuperior: {},
+    answerCountTotal: {},
+    answerCountBySuperior: {},
+    positiveAnswerCountBySurvey: {},
+    positiveAnswerCountByDivision: {}
   };
 
   step(
-    function findKaizenOrdersStep()
+    function handleResponsesStep()
     {
       var conditions = {};
-      var sort = {};
 
-      sort[groupProperty] = 1;
-
-      if (options.fromTime)
+      if (!_.isEmpty(options.surveys))
       {
-        conditions[groupProperty] = {$gte: new Date(options.fromTime)};
+        conditions.survey = {$in: options.surveys};
       }
 
-      if (options.toTime)
+      if (!_.isEmpty(options.divisions))
       {
-        if (!conditions[groupProperty])
-        {
-          conditions[groupProperty] = {};
-        }
-
-        conditions[groupProperty].$lt = new Date(options.toTime);
+        conditions.division = {$in: options.divisions};
       }
 
-      var stream = KaizenOrder.find(conditions, {changes: 0}).sort(sort).lean().stream();
-      var next = this.next();
+      if (!_.isEmpty(options.superiors))
+      {
+        conditions.superior = {$in: options.superiors};
+      }
+
+      if (!_.isEmpty(options.employers))
+      {
+        conditions.employer = {$in: options.employers};
+      }
+
+      var stream = OpinionSurveyResponse.find(conditions).sort({createdAt: 1}).lean().stream();
+      var next = _.once(this.next());
 
       stream.on('error', next);
-      stream.on('close', next);
-      stream.on('data', handleKaizenOrder);
+      stream.on('end', next);
+      stream.on('data', handleResponse);
     },
     function finalizeStep(err)
     {
       if (err)
       {
-        return this.skip(err);
+        return done(err);
       }
 
-      var createNextGroupKey = util.createCreateNextGroupKey(options.interval);
-      var groupKey = minGroupKey;
-      var groups = [];
-
-      while (groupKey <= maxGroupKey)
-      {
-        groups.push(results.groups[groupKey] || groupKey);
-
-        groupKey = createNextGroupKey(groupKey);
-      }
-
-      results.groups = groups;
-
-      sortOwnerTotals();
-
-      _.forEach([
-        'status',
-        'section',
-        'area',
-        'cause',
-        'risk',
-        'nearMissCategory',
-        'suggestionCategory',
-        'confirmer'
-      ], sortTotals);
-
-      return setImmediate(this.next());
-    },
-    function sendResultsStep(err)
-    {
-      return done(err, results);
+      return done(null, results);
     }
   );
 
-  function createGroup(key)
+  function handleResponse(res)
   {
-    return {
-      key: key,
-      count: 0,
-      type: {},
-      status: {},
-      section: {},
-      area: {},
-      cause: {},
-      risk: {},
-      nearMissCategory: {},
-      suggestionCategory: {},
-      confirmer: {},
-      owner: {}
-    };
+    if (!res.employer || !res.division || !res.superior)
+    {
+      return;
+    }
+
+    results.usedSurveys[res.survey] = true;
+    results.usedDivisions[res.division] = true;
+    results.usedEmployers[res.employer] = true;
+
+    countResponseTotal(res);
+    countResponseBySurvey(res);
+    countResponseBySuperior(res);
+    countAnswers(res);
   }
 
-  function handleKaizenOrder(ko)
+  function countResponseTotal(res)
   {
-    var totals = results.totals;
-    var groupKey = util.createGroupKey(options.interval, ko[groupProperty], false);
-    var group = results.groups[groupKey];
+    var responseCount = results.responseCountTotal;
 
-    if (groupKey < minGroupKey)
+    if (!responseCount[res.division])
     {
-      minGroupKey = groupKey;
+      responseCount[res.division] = {};
     }
 
-    if (groupKey > maxGroupKey)
+    if (!responseCount[res.division][res.employer])
     {
-      maxGroupKey = groupKey;
+      responseCount[res.division][res.employer] = 0;
     }
 
-    if (!group)
-    {
-      group = results.groups[groupKey] = createGroup(groupKey);
-    }
-
-    totals.count += 1;
-    group.count += 1;
-
-    _.forEach(ko.types, function(type) { inc('type', type); });
-
-    inc('status');
-    inc('section');
-    inc('area');
-    inc('cause');
-    inc('risk');
-    inc('nearMissCategory');
-    inc('suggestionCategory');
-
-    var confirmer = ko.confirmer;
-
-    if (confirmer)
-    {
-      results.users[confirmer.id] = confirmer.label;
-
-      if (!totals.confirmer[confirmer.id])
-      {
-        totals.confirmer[confirmer.id] = 0;
-      }
-
-      totals.confirmer[confirmer.id] += 1;
-
-      if (!group.confirmer[confirmer.id])
-      {
-        group.confirmer[confirmer.id] = 0;
-      }
-
-      group.confirmer[confirmer.id] += 1;
-    }
-
-    incOwners('nearMiss', ko.nearMissOwners);
-    incOwners('suggestion', ko.suggestionOwners);
-    incOwners('kaizen', ko.kaizenOwners);
-
-    function inc(metricProperty, metricKey)
-    {
-      if (metricKey === undefined)
-      {
-        metricKey = ko[metricProperty];
-      }
-
-      if (!metricKey)
-      {
-        return;
-      }
-
-      if (!totals[metricProperty][metricKey])
-      {
-        totals[metricProperty][metricKey] = 1;
-      }
-      else
-      {
-        totals[metricProperty][metricKey] += 1;
-      }
-
-      if (!group[metricProperty][metricKey])
-      {
-        group[metricProperty][metricKey] = 1;
-      }
-      else
-      {
-        group[metricProperty][metricKey] += 1;
-      }
-    }
-
-    function incOwners(type, owners)
-    {
-      var totalsByOwner = totals.owner;
-      var groupByOwner = group.owner;
-
-      _.forEach(owners, function(owner)
-      {
-        results.users[owner.id] = owner.label;
-
-        if (!totalsByOwner[owner.id])
-        {
-          totalsByOwner[owner.id] = {total: 0};
-        }
-
-        totalsByOwner[owner.id].total += 1;
-        totalsByOwner[owner.id][type] = (totalsByOwner[owner.id][type] || 0) + 1;
-
-        if (!groupByOwner[owner.id])
-        {
-          groupByOwner[owner.id] = {total: 0};
-        }
-
-        groupByOwner[owner.id].total += 1;
-        groupByOwner[owner.id][type] = (groupByOwner[owner.id][type] || 0) + 1;
-      });
-    }
+    responseCount[res.division][res.employer] += 1;
   }
 
-  function sortTotals(property)
+  function countResponseBySurvey(res)
   {
-    var totals = [];
+    var responseCount = results.responseCountBySurvey[res.survey];
 
-    _.forEach(results.totals[property], function(value, key)
+    if (!responseCount)
     {
-      totals.push([key, value]);
+      responseCount = results.responseCountBySurvey[res.survey] = {};
+    }
+
+    if (!responseCount[res.division])
+    {
+      responseCount[res.division] = {};
+    }
+
+    if (!responseCount[res.division][res.employer])
+    {
+      responseCount[res.division][res.employer] = 0;
+    }
+
+    responseCount[res.division][res.employer] += 1;
+  }
+
+  function countResponseBySuperior(res)
+  {
+    var responseCount = results.responseCountBySuperior;
+
+    if (!responseCount[res.superior])
+    {
+      responseCount[res.superior] = {};
+    }
+
+    if (!responseCount[res.superior][res.employer])
+    {
+      responseCount[res.superior][res.employer] = 0;
+    }
+
+    responseCount[res.superior][res.employer] += 1;
+
+    results.superiorToSurvey[res.superior] = res.survey;
+  }
+
+  function countAnswers(res)
+  {
+    _.forEach(res.answers, function(a)
+    {
+      countAnswerTotal(a.question, a.answer);
+      countAnswerBySuperior(res.superior, a.question, a.answer);
+      countPositiveAnswerBySurvey(res.survey, res.employer, a.answer);
+      countPositiveAnswerByDivision(res.division, res.employer, a.answer);
     });
-
-    results.totals[property] = totals.sort(function(a, b) { return b[1] - a[1]; });
   }
 
-  function sortOwnerTotals()
+  function countAnswerTotal(question, answer)
   {
-    var totals = [];
+    var answerCount = results.answerCountTotal;
 
-    _.forEach(results.totals.owner, function(values, key)
+    if (!answerCount[question])
     {
-      totals.push([key, values.total, values.nearMiss || 0, values.suggestion || 0, values.kaizen || 0]);
-    });
+      answerCount[question] = {
+        total: 0,
+        yes: 0,
+        no: 0,
+        na: 0
+      };
+    }
 
-    results.totals.owner = totals.sort(function(a, b) { return b[1] - a[1]; });
+    answerCount[question].total += 1;
+    answerCount[question][answer] += 1;
+  }
+
+  function countAnswerBySuperior(superior, question, answer)
+  {
+    var answerCount = results.answerCountBySuperior;
+
+    if (!answerCount[superior])
+    {
+      answerCount[superior] = {
+        total: 0
+      };
+    }
+
+    if (!answerCount[superior][question])
+    {
+      answerCount[superior][question] = {
+        total: 0,
+        yes: 0,
+        no: 0,
+        na: 0
+      };
+    }
+
+    answerCount[superior].total += 1;
+    answerCount[superior][question].total += 1;
+    answerCount[superior][question][answer] += 1;
+  }
+
+  function countPositiveAnswerBySurvey(survey,  employer, answer)
+  {
+    var answerCount = results.positiveAnswerCountBySurvey;
+
+    if (!answerCount[survey])
+    {
+      answerCount[survey] = {};
+    }
+
+    if (!answerCount[survey][employer])
+    {
+      answerCount[survey][employer] = {
+        num: 0,
+        den: 0
+      };
+    }
+
+    answerCount[survey][employer][answer === 'yes' ? 'num' : 'den'] += 1;
+  }
+
+  function countPositiveAnswerByDivision(division, employer, answer)
+  {
+    var answerCount = results.positiveAnswerCountByDivision;
+
+    if (!answerCount[division])
+    {
+      answerCount[division] = {};
+    }
+
+    if (!answerCount[division][employer])
+    {
+      answerCount[division][employer] = {
+        num: 0,
+        den: 0
+      };
+    }
+
+    answerCount[division][employer][answer === 'yes' ? 'num' : 'den'] += 1;
   }
 };

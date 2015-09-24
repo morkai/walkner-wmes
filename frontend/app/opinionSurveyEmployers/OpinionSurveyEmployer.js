@@ -3,9 +3,13 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  '../core/Model'
+  '../core/Model',
+  '../data/companies',
+  '../data/colorFactory'
 ], function(
-  Model
+  Model,
+  companies,
+  colorFactory
 ) {
   'use strict';
 
@@ -21,7 +25,20 @@ define([
 
     nlsDomain: 'opinionSurveyEmployers',
 
-    labelAttribute: 'short'
+    labelAttribute: 'short',
+
+    getColor: function()
+    {
+      var company = companies.get(this.id);
+      var color = null;
+
+      if (company)
+      {
+        color = company.get('color');
+      }
+
+      return color || colorFactory.getColor('opinionSurveys:employers', this.id);
+    }
 
   });
 });

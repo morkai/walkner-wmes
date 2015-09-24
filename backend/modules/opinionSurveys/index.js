@@ -15,6 +15,7 @@ exports.DEFAULT_CONFIG = {
   httpServerId: 'httpServer',
   expressId: 'express',
   userId: 'user',
+  settingsId: 'settings',
   mailSenderId: 'mail/sender',
   reportsId: 'reports',
   emailUrlPrefix: 'http://127.0.0.1/',
@@ -48,7 +49,8 @@ exports.start = function startOpinionSurveysModule(app, module)
       module.config.httpServerId,
       module.config.expressId,
       module.config.userId,
-      module.config.reportsId
+      module.config.reportsId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );

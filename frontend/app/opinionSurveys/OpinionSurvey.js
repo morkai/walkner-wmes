@@ -87,16 +87,18 @@ define([
         this.on('change', this.buildCacheMaps);
       }
 
+      var attrs = this.attributes;
       var cacheMaps = {
         employers: {},
         divisions: {},
         superiors: {},
-        questions: {}
+        questions: {},
+        employeeCount: {}
       };
 
-      _.forEach(this.attributes.employers, function(employer) { cacheMaps.employers[employer._id] = employer; }, this);
-      _.forEach(this.attributes.questions, function(question) { cacheMaps.questions[question._id] = question; }, this);
-      _.forEach(this.attributes.superiors, function(superior)
+      _.forEach(attrs.employers, function(employer) { cacheMaps.employers[employer._id] = employer; }, this);
+      _.forEach(attrs.questions, function(question) { cacheMaps.questions[question._id] = question; }, this);
+      _.forEach(attrs.superiors, function(superior)
       {
         cacheMaps.superiors[superior._id] = superior;
 
@@ -107,6 +109,15 @@ define([
 
         cacheMaps.divisions[superior.division].push(superior);
       }, this);
+      _.forEach(attrs.employeeCount, function(employeeCount)
+      {
+        if (!cacheMaps.employeeCount[employeeCount.division])
+        {
+          cacheMaps.employeeCount[employeeCount.division] = {};
+        }
+
+        cacheMaps.employeeCount[employeeCount.division][employeeCount.employer] = employeeCount.count;
+      });
 
       this.cacheMaps = cacheMaps;
     }

@@ -17,6 +17,7 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
   var express = app[opinionSurveysModule.config.expressId];
   var userModule = app[opinionSurveysModule.config.userId];
   var mongoose = app[opinionSurveysModule.config.mongooseId];
+  var settings = app[opinionSurveysModule.config.settingsId];
   var reportsModule = app[opinionSurveysModule.config.reportsId];
   var OpinionSurvey = mongoose.model('OpinionSurvey');
   var OpinionSurveyResponse = mongoose.model('OpinionSurveyResponse');
@@ -28,6 +29,22 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
   express.get('/opinion', sendCurrentSurveyRoute);
 
   express.get('/opinionSurveys/dictionaries', canView, dictionariesRoute);
+
+  express.get(
+    '/opinionSurveys/settings',
+    canView,
+    function limitToOpinionSurveysSettings(req, res, next)
+    {
+      req.rql.selector = {
+        name: 'regex',
+        args: ['_id', '^opinionSurveys\\.']
+      };
+
+      return next();
+    },
+    express.crud.browseRoute.bind(null, app, settings.Setting)
+  );
+  express.put('/opinionSurveys/settings/:id', canManage, settings.updateRoute);
 
   express.get(
     '/opinionSurveys/report',
@@ -120,8 +137,23 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
 
   function dictionariesRoute(req, res, next)
   {
+    var results = {};
+
     step(
-      function findStep()
+      function findSettingsStep()
+      {
+        settings.find({_id: /^opinionSurveys/}, this.next());
+      },
+      function handleFindSettingsResultStep(err, settings)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        results.settings = settings;
+      },
+      function findDictionariesStep()
       {
         var step = this;
 
@@ -134,17 +166,15 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
       {
         if (err)
         {
-          return this.done(next, err);
+          return next(err);
         }
-
-        var result = {};
 
         _.forEach(Object.keys(opinionSurveysModule.DICTIONARIES), function(dictionaryName, i)
         {
-          result[dictionaryName] = dictionaries[i];
+          results[dictionaryName] = dictionaries[i];
         });
 
-        res.json(result);
+        res.json(results);
       }
     );
   }
@@ -391,11 +421,14 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
 
   function reportRoute(req, res, next)
   {
-    var options = {
-      fromTime: reportsModule.helpers.getTime(req.query.from) || null,
-      toTime: reportsModule.helpers.getTime(req.query.to) || null,
-      interval: req.query.interval
-    };
+    var options = {};
+
+    _.forEach(['surveys', 'divisions', 'superiors', 'employers'], function(prop)
+    {
+      var value = req.query[prop];
+
+      options[prop] = _.isString(value) && !_.isEmpty(value) ? value.split(',') : [];
+    });
 
     reportsModule.helpers.generateReport(
       app,

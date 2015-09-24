@@ -11,12 +11,10 @@ define([
   '../core/pages/ListPage',
   './OpinionSurveyCollection',
   './OpinionSurvey',
-  './OpinionSurveyReport',
   './pages/OpinionSurveyDetailsPage',
   './pages/OpinionSurveyAddFormPage',
   './pages/OpinionSurveyEditFormPage',
   './pages/EmployeeCountEditFormPage',
-  './pages/OpinionSurveyReportPage',
   './views/OpinionSurveyListView',
   'i18n!app/nls/reports',
   'i18n!app/nls/opinionSurveys'
@@ -29,30 +27,28 @@ define([
   ListPage,
   OpinionSurveyCollection,
   OpinionSurvey,
-  OpinionSurveyReport,
   OpinionSurveyDetailsPage,
   OpinionSurveyAddFormPage,
   OpinionSurveyEditFormPage,
   EmployeeCountEditFormPage,
-  OpinionSurveyReportPage,
   OpinionSurveyListView
 ) {
   'use strict';
 
-  var canAccess = user.auth();
+  var canView = user.auth();
+  var canManage = user.auth('OPINION_SURVEYS:MANAGE');
 
-  router.map('/opinionSurveyReport', canAccess, function(req)
+  router.map('/opinionSurveyReport', canView, function(req)
   {
-    viewport.showPage(new OpinionSurveyReportPage({
-      model: new OpinionSurveyReport({
-        from: +req.query.from || undefined,
-        to: +req.query.to || undefined,
-        interval: req.query.interval
-      })
-    }));
+    viewport.loadPage('app/opinionSurveys/pages/OpinionSurveyReportPage', function(OpinionSurveyReportPage)
+    {
+      return new OpinionSurveyReportPage({
+        query: req.query
+      });
+    });
   });
 
-  router.map('/opinionSurveys', canAccess, function(req)
+  router.map('/opinionSurveys', canManage, function(req)
   {
     viewport.showPage(new ListPage({
       baseBreadcrumb: true,
@@ -61,36 +57,46 @@ define([
     }));
   });
 
-  router.map('/opinionSurveys/:id', canAccess, function(req)
+  router.map('/opinionSurveys/:id', canManage, function(req)
   {
     viewport.showPage(new OpinionSurveyDetailsPage({
       model: new OpinionSurvey({_id: req.params.id})
     }));
   });
 
-  router.map('/opinionSurveys;add', canAccess, function()
+  router.map('/opinionSurveys;add', canManage, function()
   {
     viewport.showPage(new OpinionSurveyAddFormPage({
       model: new OpinionSurvey()
     }));
   });
 
-  router.map('/opinionSurveys/:id;edit', canAccess, function(req)
+  router.map('/opinionSurveys/:id;edit', canManage, function(req)
   {
     viewport.showPage(new OpinionSurveyEditFormPage({
       model: new OpinionSurvey({_id: req.params.id})
     }));
   });
 
-  router.map('/opinionSurveys/:id;editEmployeeCount', canAccess, function(req)
+  router.map('/opinionSurveys/:id;editEmployeeCount', canManage, function(req)
   {
     viewport.showPage(new EmployeeCountEditFormPage({
       model: new OpinionSurvey({_id: req.params.id})
     }));
   });
 
-  router.map('/opinionSurveys/:id;delete', canAccess, _.partial(showDeleteFormPage, OpinionSurvey, _, _, {
+  router.map('/opinionSurveys/:id;delete', canManage, _.partial(showDeleteFormPage, OpinionSurvey, _, _, {
     baseBreadcrumb: true
   }));
+
+  router.map('/opinionSurveys;settings', canManage, function(req)
+  {
+    viewport.loadPage('app/opinionSurveys/pages/OpinionSurveySettingsPage', function(OpinionSurveySettingsPage)
+    {
+      return new OpinionSurveySettingsPage({
+        initialTab: req.query.tab
+      });
+    });
+  });
 
 });

@@ -7,17 +7,21 @@ define([
   '../broker',
   '../pubsub',
   '../user',
+  '../data/createSettings',
   '../opinionSurveyDivisions/OpinionSurveyDivisionCollection',
   '../opinionSurveyEmployers/OpinionSurveyEmployerCollection',
-  '../opinionSurveyQuestions/OpinionSurveyQuestionCollection'
+  '../opinionSurveyQuestions/OpinionSurveyQuestionCollection',
+  './OpinionSurveySettingCollection'
 ], function(
   $,
   broker,
   pubsub,
   user,
+  createSettings,
   OpinionSurveyDivisionCollection,
   OpinionSurveyEmployerCollection,
-  OpinionSurveyQuestionCollection
+  OpinionSurveyQuestionCollection,
+  OpinionSurveySettingCollection
 ) {
   'use strict';
 
@@ -26,8 +30,10 @@ define([
   var req = null;
   var releaseTimer = null;
   var pubsubSandbox = null;
+  var settings = createSettings(OpinionSurveySettingCollection);
   var dictionaries = {
     actionStatuses: ['planned', 'progress', 'done', 'failed', 'late'],
+    settings: settings.acquire(),
     divisions: new OpinionSurveyDivisionCollection(),
     employers: new OpinionSurveyEmployerCollection(),
     questions: new OpinionSurveyQuestionCollection(),
@@ -62,6 +68,8 @@ define([
         {
           dictionaries[dictionaryId].reset(res[dictionaryId]);
         });
+
+        dictionaries.settings.reset(res.settings);
       });
 
       req.fail(unload);
@@ -123,6 +131,9 @@ define([
     {
       dictionaries[dictionaryId].reset();
     });
+
+    settings.release();
+    dictionaries.settings.reset([]);
   }
 
   function handleDictionaryMessage(message, topic)
