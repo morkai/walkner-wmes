@@ -1045,10 +1045,11 @@ app/opinionSurveyEmployers/OpinionSurveyEmployer.js
 app/opinionSurveyEmployers/OpinionSurveyEmployerCollection.js
 app/opinionSurveyQuestions/OpinionSurveyQuestion.js
 app/opinionSurveyQuestions/OpinionSurveyQuestionCollection.js
+app/opinionSurveys/OpinionSurveySetting.js
+app/opinionSurveys/OpinionSurveySettingCollection.js
 app/opinionSurveys/dictionaries.js
 app/opinionSurveys/OpinionSurvey.js
 app/opinionSurveys/OpinionSurveyCollection.js
-app/opinionSurveys/OpinionSurveyReport.js
 app/opinionSurveys/templates/details.js
 app/opinionSurveys/views/OpinionSurveyDetailsView.js
 app/opinionSurveys/pages/OpinionSurveyDetailsPage.js
@@ -1062,10 +1063,6 @@ app/opinionSurveys/pages/OpinionSurveyEditFormPage.js
 app/opinionSurveys/templates/employeeCountForm.js
 app/opinionSurveys/views/EmployeeCountFormView.js
 app/opinionSurveys/pages/EmployeeCountEditFormPage.js
-app/opinionSurveys/templates/reportFilter.js
-app/opinionSurveys/views/OpinionSurveyReportFilterView.js
-app/opinionSurveys/templates/reportPage.js
-app/opinionSurveys/pages/OpinionSurveyReportPage.js
 app/opinionSurveys/views/OpinionSurveyListView.js
 app/nls/opinionSurveys.js
 app/nls/pl/opinionSurveys.js
