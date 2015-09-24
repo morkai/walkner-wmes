@@ -229,6 +229,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         var incompleteProgramItemCount = 0;
         var incompleteLedItemCount = 0;
         var incompleteTestItemCount = 0;
+        var incompleteFtItemCount = 0;
 
         _.forEach(this.xiconfOrder.items, function(item)
         {
@@ -253,6 +254,10 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           else if (item.kind === 'test')
           {
             incompleteTestItemCount += 1;
+          }
+          else if (item.kind === 'ft')
+          {
+            incompleteFtItemCount += 1;
           }
         });
 
@@ -288,6 +293,11 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           text.push('  - nie zeskanowano wszystkich płytek LED!');
         }
 
+        if (incompleteFtItemCount)
+        {
+          text.push('  - nie sprawdzono wszystkich ramek!');
+        }
+
         text.push(
           '',
           'Nr zlecenia: ' + orderNo,
@@ -310,6 +320,14 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
             text.push(
               '',
               'Nazwa programu: ' + item.name,
+              'Ilość: ' + quantity
+            );
+          }
+          else if (item.kind === 'ft')
+          {
+            text.push(
+              '',
+              'Nazwa: Test ramki',
               'Ilość: ' + quantity
             );
           }
