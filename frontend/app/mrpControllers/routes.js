@@ -26,11 +26,10 @@ define([
   router.map('/mrpControllers', canView, function()
   {
     viewport.loadPage(
-      ['app/core/pages/ListPage', 'app/mrpControllers/views/MrpControllerListView'],
-      function(ListPage, MrpControllerListView)
+      ['app/mrpControllers/pages/MrpControllerListPage'],
+      function(MrpControllerListPage)
       {
-        return new ListPage({
-          ListView: MrpControllerListView,
+        return new MrpControllerListPage({
           collection: mrpControllers
         });
       }

@@ -26,11 +26,10 @@ define([
   router.map('/workCenters', canView, function()
   {
     viewport.loadPage(
-      ['app/core/pages/ListPage', 'app/workCenters/views/WorkCenterListView'],
-      function(ListPage, WorkCenterListView)
+      ['app/workCenters/pages/WorkCenterListPage'],
+      function(WorkCenterListPage)
       {
-        return new ListPage({
-          ListView: WorkCenterListView,
+        return new WorkCenterListPage({
           collection: workCenters
         });
       }

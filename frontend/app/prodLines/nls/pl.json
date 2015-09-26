@@ -11,6 +11,7 @@
   "PAGE_ACTION:add": "Dodaj linii produkcyjną",
   "PAGE_ACTION:edit": "Edytuj linii produkcyjną",
   "PAGE_ACTION:delete": "Usuń linii produkcyjną",
+  "PAGE_ACTION:toggleDeactivated": "Ukryj dezaktywowane",
 
   "LIST:ACTION:production": "Pokaż formatkę produkcji",
 

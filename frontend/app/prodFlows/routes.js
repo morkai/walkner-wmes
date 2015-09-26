@@ -26,11 +26,10 @@ define([
   router.map('/prodFlows', canView, function()
   {
     viewport.loadPage(
-      ['app/core/pages/ListPage', 'app/prodFlows/views/ProdFlowListView'],
-      function(ListPage, ProdFlowListView)
+      ['app/prodFlows/pages/ProdFlowListPage'],
+      function(ProdFlowListPage)
       {
-        return new ListPage({
-          ListView: ProdFlowListView,
+        return new ProdFlowListPage({
           collection: prodFlows
         });
       }

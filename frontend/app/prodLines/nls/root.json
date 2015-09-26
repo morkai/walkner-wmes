@@ -12,6 +12,7 @@
     "PAGE_ACTION:add": "Add production line",
     "PAGE_ACTION:edit": "Edit production line",
     "PAGE_ACTION:delete": "Delete production line",
+    "PAGE_ACTION:toggleDeactivated": "Hide deactivated",
 
     "PANEL:TITLE:details": "Production line's details",
     "PANEL:TITLE:addForm": "Add production line form",

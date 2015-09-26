@@ -11,6 +11,7 @@
   "PAGE_ACTION:add": "Dodaj WorkCenter",
   "PAGE_ACTION:edit": "Edytuj WorkCenter",
   "PAGE_ACTION:delete": "Usuń WorkCenter",
+  "PAGE_ACTION:toggleDeactivated": "Ukryj dezaktywowane",
 
   "PANEL:TITLE:details": "Szczegóły WorkCenter",
   "PANEL:TITLE:addForm": "Formularz dodawania WorkCenter",

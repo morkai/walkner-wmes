@@ -24,12 +24,15 @@ define([
 
   return ListView.extend({
 
+    deactivatedVisible: false,
+
     columns: [
       {id: 'subdivision', className: 'is-min'},
       {id: '_id', className: 'is-min'},
       {id: 'inout', className: 'is-min'},
       {id: 'description', tdAttrs: createDescriptionTdAttrs},
-      {id: 'deactivatedAt', className: 'is-min'}
+      {id: 'deactivatedAt', className: 'is-min'},
+      {id: 'replacedBy', className: 'is-min'}
     ],
 
     serializeActions: function()
@@ -59,16 +62,32 @@ define([
 
     serializeRows: function()
     {
-      return this.collection.map(function(mrpControllerModel)
-      {
-        var row = mrpControllerModel.toJSON();
+      var deactivatedVisible = this.deactivatedVisible;
 
-        row.subdivision = renderOrgUnitPath(mrpControllerModel, true);
-        row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
-        row.inout = t('mrpControllers', 'inout:' + row.inout);
+      return this.collection
+        .filter(function(mrpController)
+        {
+          return deactivatedVisible || !mrpController.get('deactivatedAt');
+        })
+        .map(function(mrpController)
+        {
+          var row = mrpController.toJSON();
 
-        return row;
-      });
+          row.className = row.deactivatedAt ? 'is-deactivated' : '';
+          row.subdivision = renderOrgUnitPath(mrpController, true);
+          row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
+          row.inout = t('mrpControllers', 'inout:' + row.inout);
+          row.replacedBy = row.replacedBy || '-';
+
+          return row;
+        });
+    },
+
+    toggleDeactivated: function(state)
+    {
+      this.deactivatedVisible = state;
+
+      this.render();
     }
 
   });

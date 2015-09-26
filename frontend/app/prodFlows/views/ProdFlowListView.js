@@ -24,6 +24,8 @@ define([
 
   return ListView.extend({
 
+    deactivatedVisible: false,
+
     columns: [
       {id: 'subdivision', className: 'is-min'},
       {id: 'mrpControllers', className: 'is-min'},
@@ -58,10 +60,24 @@ define([
 
     serializeRows: function()
     {
-      return this.collection.map(function(prodFlow)
-      {
-        return decorateProdFlow(prodFlow, true);
-      });
+      var deactivatedVisible = this.deactivatedVisible;
+
+      return this.collection
+        .filter(function(prodFlow)
+        {
+          return deactivatedVisible || !prodFlow.get('deactivatedAt');
+        })
+        .map(function(prodFlow)
+        {
+          return decorateProdFlow(prodFlow, true);
+        });
+    },
+
+    toggleDeactivated: function(state)
+    {
+      this.deactivatedVisible = state;
+
+      this.render();
     }
 
   });

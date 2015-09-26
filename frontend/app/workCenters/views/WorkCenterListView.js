@@ -22,6 +22,8 @@ define([
 
   return ListView.extend({
 
+    deactivatedVisible: false,
+
     columns: [
       'orgUnitPath',
       {id: '_id', className: 'is-min'},
@@ -56,15 +58,29 @@ define([
 
     serializeRows: function()
     {
-      return this.collection.map(function(workCenterModel)
-      {
-        var row = workCenterModel.toJSON();
+      var deactivatedVisible = this.deactivatedVisible;
 
-        row.orgUnitPath = renderOrgUnitPath(workCenterModel, true);
-        row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
+      return this.collection
+        .filter(function(workCenter)
+        {
+          return deactivatedVisible || !workCenter.get('deactivatedAt');
+        })
+        .map(function(workCenter)
+        {
+          var row = workCenter.toJSON();
 
-        return row;
-      });
+          row.orgUnitPath = renderOrgUnitPath(workCenter, true);
+          row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
+
+          return row;
+        });
+    },
+
+    toggleDeactivated: function(state)
+    {
+      this.deactivatedVisible = state;
+
+      this.render();
     }
 
   });

@@ -11,6 +11,7 @@
   "PAGE_ACTION:add": "Dodaj kontroler MRP",
   "PAGE_ACTION:edit": "Edytuj kontroler MRP",
   "PAGE_ACTION:delete": "Usuń kontroler MRP",
+  "PAGE_ACTION:toggleDeactivated": "Ukryj dezaktywowane",
 
   "PANEL:TITLE:details": "Szczegóły kontrolera MRP",
   "PANEL:TITLE:addForm": "Formularz dodawania kontrolera MRP",

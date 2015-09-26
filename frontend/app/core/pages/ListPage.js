@@ -43,7 +43,7 @@ define([
     {
       this.collection = bindLoadingMessage(this.options.collection, this);
 
-      var ListViewClass = this.options.ListView || ListView;
+      var ListViewClass = this.ListView || ListView;
 
       this.view = new ListViewClass({
         collection: this.collection,
