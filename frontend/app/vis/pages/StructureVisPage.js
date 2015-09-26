@@ -23,6 +23,34 @@ define([
       t.bound('vis', 'BREADCRUMBS:structure')
     ],
 
+    actions: function()
+    {
+      var page = this;
+
+      return [{
+        label: t.bound('vis', 'PAGE_ACTION:toggleDeactivated'),
+        icon: 'toggle-on',
+        className: 'active',
+        callback: function()
+        {
+          var btnEl = this.querySelector('.btn');
+
+          if (btnEl.classList.contains('active'))
+          {
+            page.view.showDeactivated();
+          }
+          else
+          {
+            page.view.hideDeactivated();
+          }
+
+          btnEl.classList.toggle('active');
+
+          return false;
+        }
+      }];
+    },
+
     initialize: function()
     {
       this.view = new StructureVisView();

@@ -46,6 +46,8 @@ define([
       'prodLines.synced': 'serializeAndRestart'
     },
 
+    deactivatedVisible: false,
+
     initialize: function()
     {
       this.onResize = _.debounce(this.onResize.bind(this), 100);
@@ -158,7 +160,12 @@ define([
       prodFlows.forEach(createNodeAndLink.bind(null, 'prodFlow', 'mrpController'));
       workCenters.forEach(function(model)
       {
-        nodes.push({type: 'workCenter', id: model.id, label: model.getLabel()});
+        nodes.push({
+          type: 'workCenter',
+          id: model.id,
+          label: model.getLabel(),
+          deactivated: !!model.get('deactivatedAt')
+        });
 
         var index = nodes.length - 1;
 
@@ -234,13 +241,15 @@ define([
 
     getNodeClassNames: function(d)
     {
-      return 'node ' + d.type;
+      return 'node ' + d.type + ' ' + (d.deactivated ? 'is-deactivated' : '');
     },
 
     enterNodes: function(nodes)
     {
+      var view = this;
       var node = nodes.enter().append('g')
         .attr('class', this.getNodeClassNames)
+        .style('display', function(d) { return view.deactivatedVisible || !d.deactivated ? '' : 'none'; })
         .call(this.force.drag)
         .on('mousedown', function() { d3.event.stopPropagation(); });
 
@@ -279,19 +288,22 @@ define([
 
     restartLinks: function(restartForce)
     {
+      var view = this;
       var nodes = this.force.nodes();
       var links = this.vis.selectAll('.link')
-        .data(this.links, function(d) { return d.source + '-' + d.target; });
-
-      links.enter().insert('line', 'g.node')
-        .attr('class', function(d)
+        .data(this.links, function(d)
         {
           var source = nodes[d.source];
           var target = nodes[d.target];
-          var deactivated = (source && source.deactivated) || (target && target.deactivated);
 
-          return 'link' + (deactivated ? ' is-deactivated' : '');
+          d.deactivated = (source && source.deactivated) || (target && target.deactivated);
+
+          return d.source + '-' + d.target;
         });
+
+      links.enter().insert('line', 'g.node')
+        .attr('class', function(d) { return 'link ' + (d.deactivated ? 'is-deactivated' : ''); })
+        .style('display', function(d) { return view.deactivatedVisible || !d.deactivated ? '' : 'none'; });
 
       links.exit().remove();
 
@@ -322,6 +334,16 @@ define([
         .nodes(this.nodes)
         .links(this.links)
         .start();
+    },
+
+    showDeactivated: function()
+    {
+      this.$('.is-deactivated').css('display', '');
+    },
+
+    hideDeactivated: function()
+    {
+      this.$('.is-deactivated').css('display', 'none');
     }
 
   });

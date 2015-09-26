@@ -1,3 +1,5 @@
 {
-  "BREADCRUMBS:structure": "Wizualizacja struktury organizacyjnej"
+  "BREADCRUMBS:structure": "Wizualizacja struktury organizacyjnej",
+
+  "PAGE_ACTION:toggleDeactivated": "Ukryj dezaktywowane"
 }
