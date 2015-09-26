@@ -125,16 +125,17 @@ define([
 
       function createNodeAndLink(type, parentProperty, model)
       {
-        nodes.push({
+        var node = {
           type: type,
-          id: model.id,
+          id: type + ':' + model.id,
           label: model.getLabel(),
           deactivated: !!model.get('deactivatedAt')
-        });
+        };
+        var index = nodes.length;
 
-        var index = nodes.length - 1;
+        nodes.push(node);
 
-        idToIndex[model.id] = index;
+        idToIndex[node.id] = index;
 
         if (type === 'division')
         {
@@ -144,7 +145,7 @@ define([
         {
           [].concat(model.get(parentProperty)).forEach(function(parentId)
           {
-            var parentIndex = idToIndex[parentId];
+            var parentIndex = idToIndex[parentProperty + ':' + parentId];
 
             if (parentIndex)
             {
@@ -162,16 +163,17 @@ define([
       {
         nodes.push({
           type: 'workCenter',
-          id: model.id,
+          id: 'workCenter:' + model.id,
           label: model.getLabel(),
           deactivated: !!model.get('deactivatedAt')
         });
 
         var index = nodes.length - 1;
 
-        idToIndex[model.id] = index;
+        idToIndex['workCenter:' + model.id] = index;
 
-        var parentIndex = idToIndex[model.get('mrpController') || model.get('prodFlow')];
+        var parentIndex = idToIndex['mrpController:' + model.get('mrpController')]
+          || idToIndex['prodFlow:' + model.get('prodFlow')];
 
         if (parentIndex)
         {
