@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:structure":function(){return"Org Unit structure"}},pl:!0}});
+define(["app/nls/locale/en"],function(t){return{root:{"BREADCRUMBS:structure":function(){return"Org Unit structure"},"PAGE_ACTION:toggleDeactivated":function(){return"Hide deactivated"}},pl:!0}});
