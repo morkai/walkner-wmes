@@ -54,8 +54,8 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
   );
 
   express.get('/opinionSurveys/qr', sendQrCodeRoute);
+  express.post('/opinionSurveys/preview', canManage, saveSurveyPreviewRoute);
   express.get('/opinionSurveys/:id.pdf', sendSurveyPdfRoute);
-  express.post('/opinionSurveys/:id.pdf', canManage, saveSurveyPreviewRoute);
   express.get('/opinionSurveys/:id.html', sendSurveyHtmlRoute);
 
   setUpCrudRoutes(canView, 'OpinionSurvey', 'surveys');
@@ -288,7 +288,7 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
     step(
       function statFileStep()
       {
-        if (recreate)
+        if (recreate === '1')
         {
           return;
         }
@@ -347,12 +347,18 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
 
         res.type('pdf');
         res.sendFile(pdfFile);
+
+        if (/^PREVIEW/.test(surveyId))
+        {
+          setTimeout(fs.unlink.bind(fs, pdfFile, function() {}), 30000);
+        }
       }
     );
   }
 
   function saveSurveyPreviewRoute(req, res, next)
   {
+    var key = req.body._id = _.uniqueId('PREVIEW-' + Date.now().toString(36) + '-').toUpperCase();
     var survey = new OpinionSurvey(req.body);
 
     survey.validate(function(err)
@@ -362,11 +368,9 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
         return next(err);
       }
 
-      var key = _.uniqueId('PREVIEW-' + Date.now().toString(36) + '-').toUpperCase();
-
       opinionSurveysModule.surveyPreviews[key] = survey.toJSON();
 
-      res.send(key);
+      res.json(key);
 
       setTimeout(function() { delete opinionSurveysModule.surveyPreviews[key]; }, 30000);
     });

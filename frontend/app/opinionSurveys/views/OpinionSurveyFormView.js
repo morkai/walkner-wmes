@@ -5,9 +5,11 @@
 define([
   'underscore',
   'jquery',
+  'form2js',
   'app/i18n',
   'app/time',
   'app/user',
+  'app/viewport',
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
   'app/core/views/FormView',
@@ -22,9 +24,11 @@ define([
 ], function(
   _,
   $,
+  form2js,
   t,
   time,
   user,
+  viewport,
   buttonGroup,
   idAndLabel,
   FormView,
@@ -113,14 +117,43 @@ define([
         }
 
         $btn.focus();
+      },
+
+      'click #-preview': function()
+      {
+        if (!this.el.checkValidity())
+        {
+          this.$id('submit').click();
+
+          return;
+        }
+
+        var $btn = this.$id('preview').prop('disabled', true);
+        var formData = this.serializeForm(form2js(this.el));
+        var req = this.ajax({
+          method: 'POST',
+          url: '/opinionSurveys/preview',
+          data: JSON.stringify(formData)
+        });
+
+        req.fail(function()
+        {
+          viewport.msg.show({
+            type: 'error',
+            time: 3000,
+            text: t('opinionSurveys', 'FORM:ERROR:previewFailure')
+          });
+        });
+
+        req.done(this.openPreviewWindow.bind(this));
+
+        req.always(function()
+        {
+          $btn.prop('disabled', false);
+        });
       }
 
     }, FormView.prototype.events),
-
-    checkValidity: function(formData)
-    {
-      return true;
-    },
 
     serializeToForm: function()
     {
@@ -381,6 +414,32 @@ define([
 
         $tbody.append($tr);
       });
+    },
+
+    openPreviewWindow: function(previewId)
+    {
+      var url = '/opinionSurveys/' + previewId + '.pdf?recreate=1';
+      var windowName = 'OPINION_SURVEY_PREVIEW';
+      var screen = window.screen;
+      var width = screen.availWidth * 0.6;
+      var height = screen.availHeight * 0.8;
+      var left = Math.floor((screen.availWidth - width) / 2);
+      var top = Math.floor((screen.availHeight - height) / 2);
+      var windowFeatures = 'resizable,scrollbars,location=no'
+        + ',top=' + top
+        + ',left=' + left
+        + ',width=' + Math.floor(width)
+        + ',height=' + Math.floor(height);
+      var previewWindow = window.open(url, windowName, windowFeatures);
+
+      if (!previewWindow)
+      {
+        viewport.msg.show({
+          type: 'warning',
+          time: 3000,
+          text: t('opinionSurveys', 'FORM:ERROR:previewPopupBlocked')
+        });
+      }
     }
 
   });
