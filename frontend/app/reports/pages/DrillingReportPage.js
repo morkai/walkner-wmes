@@ -90,7 +90,7 @@ define([
       {
         var orgUnit = this.getOrgUnitFromChartsElement(this.$(e.target).closest('.reports-drillingCharts'));
 
-        if (this.maxOrgUnitLevel === orgUnit.type)
+        if (!orgUnit || this.maxOrgUnitLevel === orgUnit.type)
         {
           return;
         }
