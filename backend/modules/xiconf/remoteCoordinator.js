@@ -25,6 +25,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var Order = mongoose.model('Order');
   var License = mongoose.model('License');
 
+  var restarting = false;
+
   var prodLinesToDataMap = {};
   var ordersToDataMap = {};
   var ordersToProdLinesMap = {};
@@ -68,6 +70,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   };
 
   app.broker.subscribe('app.started', onAppStarted);
+  app.broker.subscribe('updater.restarting', function() { restarting = true; });
   app.broker.subscribe('settings.updated.xiconf.notifier.delay', onDelaySettingChanged);
   app.broker.subscribe('shiftChanged', onShiftChanged);
   app.broker.subscribe('xiconf.orders.synced', onXiconfOrdersSynced);
@@ -632,6 +635,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       reply = function() {};
     }
 
+    if (restarting)
+    {
+      return reply(new Error('RESTARTING'));
+    }
+
     if (!socket.xiconf)
     {
       return reply(new Error('NOT_CONNECTED'));
@@ -659,6 +667,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       reply = function() {};
     }
 
+    if (restarting)
+    {
+      return reply(new Error('RESTARTING'));
+    }
+
     if (!socket.xiconf)
     {
       return reply(new Error('NOT_CONNECTED'));
@@ -684,6 +697,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     if (!_.isFunction(reply))
     {
       reply = function() {};
+    }
+
+    if (restarting)
+    {
+      return reply(new Error('RESTARTING'));
     }
 
     if (!socket.xiconf)
