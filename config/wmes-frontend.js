@@ -185,7 +185,7 @@ exports.mongoose = {
     'whTransferOrder',
     'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenOrder',
     'opinionSurvey', 'opinionSurveyAction', 'opinionSurveyResponse',
-    'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion'
+    'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion', 'opinionSurveyScanTemplate'
   ]
 };
 exports.mongoose.options.server.poolSize = 15;

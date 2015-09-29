@@ -177,6 +177,10 @@ app/opinionSurveys/assets/report.css
 ----------------
 app/opinionSurveys/assets/report.css
 
+app/opinionSurveyScanTemplates/assets/main.css
+----------------
+app/opinionSurveyScanTemplates/assets/main.css
+
 app/orderDocumentClients/assets/main.css
 ----------------
 app/orderDocumentClients/assets/main.css
