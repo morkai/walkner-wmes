@@ -24,6 +24,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
     function(req, res, next)
     {
       req.rql.fields = {};
+      req.rql.sort = {};
 
       next();
     },

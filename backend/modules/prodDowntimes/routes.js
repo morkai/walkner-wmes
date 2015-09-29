@@ -55,6 +55,7 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
     function(req, res, next)
     {
       req.rql.fields = {};
+      req.rql.sort = {};
 
       next();
     },

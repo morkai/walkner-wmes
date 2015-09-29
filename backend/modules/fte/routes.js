@@ -35,6 +35,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
     function(req, res, next)
     {
       req.rql.fields = {};
+      req.rql.sort = {};
 
       next();
     },
@@ -67,6 +68,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
     function(req, res, next)
     {
       req.rql.fields = {};
+      req.rql.sort = {};
 
       next();
     },

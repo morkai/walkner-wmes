@@ -30,6 +30,12 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
     '/prodShiftOrders;export',
     canView,
     limitOrgUnit,
+    function(req, res, next)
+    {
+      req.rql.sort = {};
+
+      return next();
+    },
     express.crud.exportRoute.bind(null, {
       filename: 'WMES-ORDERS',
       serializeRow: exportProdShiftOrder,

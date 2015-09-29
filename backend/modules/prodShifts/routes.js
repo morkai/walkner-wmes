@@ -39,6 +39,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
         creator: 0,
         createdAt: 0
       };
+      req.rql.sort = {};
 
       next();
     },

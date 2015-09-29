@@ -36,6 +36,7 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
     function(req, res, next)
     {
       req.rql.fields = {log: 0};
+      req.rql.sort = {};
 
       next();
     },

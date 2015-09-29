@@ -86,6 +86,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     function(req, res, next)
     {
       req.rql.fields = {log: 0};
+      req.rql.sort = {};
 
       next();
     },

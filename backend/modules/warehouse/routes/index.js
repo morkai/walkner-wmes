@@ -21,6 +21,12 @@ module.exports = function setUpWarehouseRoutes(app, whModule)
   express.get(
     '/warehouse/transferOrders;export',
     userModule.auth('REPORTS:VIEW'),
+    function(req, res, next)
+    {
+      req.rql.sort = {};
+
+      next();
+    },
     express.crud.exportRoute.bind(null, {
       filename: 'WMES-TO_WAREHOUSE',
       serializeRow: exportWhTransferOrder,
