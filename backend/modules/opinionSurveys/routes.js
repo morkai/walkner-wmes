@@ -59,6 +59,7 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
   express.get('/opinionSurveys/:id.html', sendSurveyHtmlRoute);
 
   setUpCrudRoutes(canView, 'OpinionSurvey', 'surveys');
+  setUpCrudRoutes(canManage, 'OpinionSurveyScanTemplate', 'scanTemplates');
 
   express.get(
     '/opinionSurveys/responses',
@@ -194,16 +195,16 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
 
         OpinionSurvey.findOne(conditions).sort({startDate: -1}).lean().exec(this.next());
       },
-      function findNextSurveyStep(err, currentSurvey)
+      function findNextSurveyStep(err, survey)
       {
         if (err)
         {
           return this.skip(err);
         }
 
-        if (currentSurvey)
+        if (survey)
         {
-          this.currentSurvey = currentSurvey;
+          currentSurvey = survey;
 
           return;
         }
