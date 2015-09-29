@@ -5,6 +5,7 @@
 define([
   'jquery',
   'app/i18n',
+  'app/time',
   'app/data/orgUnits',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
@@ -13,6 +14,7 @@ define([
 ], function(
   $,
   t,
+  time,
   orgUnits,
   View,
   bindLoadingMessage,
@@ -834,6 +836,18 @@ define([
       }
 
       var from = this.query.get('from');
+
+      if (!from)
+      {
+        var firstShiftMoment = time.getMoment();
+
+        if (firstShiftMoment.hours() < 6)
+        {
+          firstShiftMoment.subtract(1, 'days');
+        }
+
+        from = firstShiftMoment.hours(6).startOf('hour').valueOf();
+      }
 
       for (var i = 1, l = this.reports.length; i < l; ++i)
       {
