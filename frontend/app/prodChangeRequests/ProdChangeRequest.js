@@ -19,7 +19,24 @@ define([
 
     privilegePrefix: 'PROD_DATA:CHANGES',
 
-    nlsDomain: 'prodChangeRequests'
+    nlsDomain: 'prodChangeRequests',
+
+    getModelId: function()
+    {
+      var modelId = this.get('modelId');
+
+      if (!modelId)
+      {
+        var data = this.get('data');
+
+        if (data && data._id)
+        {
+          modelId = data._id;
+        }
+      }
+
+      return modelId;
+    }
 
   });
 });

@@ -519,6 +519,18 @@ define([
 
         req.done(function()
         {
+          if (changeRequest.get('operation') === 'add')
+          {
+            if (changeRequest.get('modelType') === 'order')
+            {
+              prodShiftOrders.add(changeRequest.get('data'));
+            }
+            else
+            {
+              prodDowntimes.add(changeRequest.get('data'));
+            }
+          }
+
           view.renderTimeline(prodShift, prodShiftOrders, prodDowntimes, changeRequest);
         });
       });
@@ -563,7 +575,7 @@ define([
       this.setView('.prodChangeRequests-timeline', this.timelineView);
 
       this.timelineView.render();
-      this.timelineView.highlightItem(changeRequest.get('modelId'));
+      this.timelineView.highlightItem(changeRequest.getModelId());
     },
 
     handleProdModelChange: function(data, topic)
