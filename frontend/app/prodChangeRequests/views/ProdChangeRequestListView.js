@@ -419,7 +419,8 @@ define([
         status: newStatus,
         confirmerComment: this.$id('confirmerComment').val().trim()
       }, {
-        method: 'POST'
+        method: 'POST',
+        wait: true
       });
 
       req.done(function()
