@@ -144,6 +144,42 @@ define([
   translate.reload = reload;
   translate.bound = bound;
   translate.has = has;
+  translate.forDomain = function(defaultDomain)
+  {
+    var defaultTranslate = function(domain, key, data)
+    {
+      if (typeof key === 'string' || data)
+      {
+        return translate(domain, key, data);
+      }
+
+      return translate(defaultDomain, domain);
+    };
+
+    defaultTranslate.translate = defaultTranslate;
+    defaultTranslate.bound = function(domain, key, data)
+    {
+      function boundTranslate()
+      {
+        return defaultTranslate(domain, key, data);
+      }
+
+      boundTranslate.toString = boundTranslate;
+
+      return boundTranslate;
+    };
+    defaultTranslate.has = function(domain, key)
+    {
+      if (!key)
+      {
+        return has(defaultDomain, domain);
+      }
+
+      return has(domain, key);
+    };
+
+    return defaultTranslate;
+  };
 
   window.i18n = translate;
 
