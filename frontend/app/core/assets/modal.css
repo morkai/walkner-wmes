@@ -21,6 +21,9 @@
 .modal.has-panel .row .select2-choice {
   overflow: visible;
 }
+.modal-open > .select2-drop-active {
+  margin-top: 1px;
+}
 @media screen and (min-width: 1280px) {
   .modal.has-panel .modal-dialog {
     width: 900px;
