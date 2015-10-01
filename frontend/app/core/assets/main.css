@@ -180,9 +180,11 @@ kbd {
 .page-actions-jump {
   width: 150px;
 }
-[class^="fa-"] + span,
-[class*=" fa-"] + span {
+.fa + span {
   margin-left: 7px;
+}
+.fa.hidden + span {
+  margin-left: 0;
 }
 
 .pagination-container {
