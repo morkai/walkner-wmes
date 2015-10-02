@@ -12,7 +12,8 @@ exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
   userId: 'user',
-  settingsId: 'settings'
+  settingsId: 'settings',
+  importPath: './'
 };
 
 exports.start = function startOrdersModule(app, module)

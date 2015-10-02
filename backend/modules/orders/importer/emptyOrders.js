@@ -9,9 +9,8 @@ var createParser = require('./createParser');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
-  orderStepCount: 1,
-  operStepCount: 1,
-  filterRe: /^Job PL02_(ORDER|OPER)_INFO_1D, Step ([0-9]+)\.html?$/
+  filterRe: /^T_WMES_EMPTY_(ORDERS|OPERS)_([0-9]+)\.txt$/,
+  parsedOutputDir: null
 };
 
 exports.start = function startEmptyOrdersImporterModule(app, module)
@@ -27,8 +26,13 @@ exports.start = function startEmptyOrdersImporterModule(app, module)
 
   createParser(app, module, handleParseResult);
 
-  function handleParseResult(orders)
+  function handleParseResult(err, orders)
   {
+    if (err)
+    {
+      return;
+    }
+
     var emptyOrders = [];
 
     _.forEach(orders, function(order)

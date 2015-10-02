@@ -4,6 +4,8 @@
 
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -17,6 +19,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   var canView = userModule.auth('ORDERS:VIEW');
   var canManage = userModule.auth('ORDERS:MANAGE');
+
+  express.post('/orders;import', importOrdersRoute);
 
   express.get(
     '/orders/settings',
@@ -135,5 +139,36 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
         });
       }
     );
+  }
+
+  function importOrdersRoute(req, res, next)
+  {
+    res.type('text/plain');
+
+    if (!req.is('text/plain'))
+    {
+      return res.status(400).send('INVALID_CONTENT_TYPE');
+    }
+
+    var fileName = req.query.fileName;
+    var timestamp = parseInt(req.query.timestamp, 10);
+    var step = parseInt(req.query.step, 10);
+
+    if (!_.isEmpty(fileName) || !/\.txt$/.test(fileName) || isNaN(timestamp) || isNaN(step) || req.body.length < 256)
+    {
+      return res.status(400).send('INPUT');
+    }
+
+    var importFile = timestamp + '@' + fileName;
+
+    fs.writeFile(path.join(ordersModule.config.importPath, importFile), req.body, function(err)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      return res.sendStatus(204);
+    });
   }
 };

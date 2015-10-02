@@ -11,9 +11,7 @@ var createParser = require('./createParser');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
-  orderStepCount: 1,
-  operStepCount: 1,
-  filterRe: /^Job PL02_(ORDER|OPER)_INFO, Step ([0-9]+)\.html?$/,
+  filterRe: /^T_WMES_(ORDERS|OPERS)_([0-9]+)\.txt$/,
   parsedOutputDir: null
 };
 
@@ -43,8 +41,13 @@ exports.start = function startOrdersImporterModule(app, module)
 
   createParser(app, module, enqueueAndCompare);
 
-  function enqueueAndCompare(orders, missingOrders)
+  function enqueueAndCompare(err, orders, missingOrders)
   {
+    if (err)
+    {
+      return;
+    }
+
     queue.push(orders, missingOrders);
 
     compareNext();
@@ -266,7 +269,6 @@ exports.start = function startOrdersImporterModule(app, module)
 
     step(steps);
   }
-
 
   function createOrdersStep(orders, err)
   {

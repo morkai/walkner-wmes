@@ -8,14 +8,14 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
-var parseOrderInfo = require('./parseOrderInfo');
-var parseOperInfo = require('./parseOperInfo');
+var moment = require('moment');
+var parseOrders = require('./parseOrders');
+var parseOperations = require('./parseOperations');
 
 module.exports = function createParser(app, importerModule, callback)
 {
   var LATE_DATA_PARSE_DELAY = 20 * 60 * 1000;
-  var timeKeyToOrderInfoStepsMap = {};
-  var timeKeyToOperInfoStepsMap = {};
+  var timeKeyToFileInfoMap = {};
   var filePathCache = {};
   var parseQueue = [];
   var parseDataTimers = {};
@@ -43,7 +43,7 @@ module.exports = function createParser(app, importerModule, callback)
       return false;
     }
 
-    fileInfo.step = parseInt(matches[2], 10);
+    fileInfo.step = parseInt(matches[2], 10) || 0;
     fileInfo.type = matches[1].toUpperCase();
     fileInfo.timeKey = createTimeKey(fileInfo.timestamp);
 
@@ -54,34 +54,31 @@ module.exports = function createParser(app, importerModule, callback)
   {
     filePathCache[fileInfo.filePath] = true;
 
-    var timeKeyToStepsMap = fileInfo.type === 'ORDER'
-      ? timeKeyToOrderInfoStepsMap
-      : timeKeyToOperInfoStepsMap;
-
     var timeKey = fileInfo.timeKey;
-    var step = fileInfo.step;
+    var timeKeyFileInfo = timeKeyToFileInfoMap[timeKey];
 
-    var stepsMap = timeKeyToStepsMap[timeKey];
-
-    if (typeof stepsMap === 'undefined')
+    if (typeof timeKeyFileInfo === 'undefined')
     {
-      timeKeyToOrderInfoStepsMap[timeKey] = {steps: 0};
-      timeKeyToOperInfoStepsMap[timeKey] = {steps: 0};
+      timeKeyToFileInfoMap[timeKey] = {
+        orders: null,
+        operations: null
+      };
 
-      stepsMap = timeKeyToStepsMap[timeKey];
+      timeKeyFileInfo = timeKeyToFileInfoMap[timeKey];
     }
 
-    if (typeof stepsMap[step] === 'undefined')
+    if (fileInfo.type === 'ORDERS')
     {
-      stepsMap.steps += 1;
+      timeKeyFileInfo.orders = fileInfo;
+    }
+    else
+    {
+      timeKeyFileInfo.operations = fileInfo;
     }
 
-    stepsMap[step] = fileInfo;
+    importerModule.debug("Handling %s for %s...", fileInfo.type, timeKey);
 
-    importerModule.debug("Handling %d %s step for %s...", step, fileInfo.type, timeKey);
-
-    if (timeKeyToOrderInfoStepsMap[timeKey].steps < importerModule.config.orderStepCount
-      || timeKeyToOperInfoStepsMap[timeKey].steps < importerModule.config.operStepCount)
+    if (timeKeyFileInfo.orders === null || timeKeyFileInfo.operations === null)
     {
       if (typeof parseDataTimers[timeKey] !== 'undefined' && parseDataTimers[timeKey] !== null)
       {
@@ -89,10 +86,10 @@ module.exports = function createParser(app, importerModule, callback)
       }
 
       importerModule.debug(
-        "Delaying %s (order steps=%d operation steps=%d)...",
+        "Delaying %s (orders=%s operations=%s)...",
         timeKey,
-        timeKeyToOrderInfoStepsMap[timeKey].steps,
-        timeKeyToOperInfoStepsMap[timeKey].steps
+        timeKeyFileInfo.orders !== null,
+        timeKeyFileInfo.operations !== null
       );
 
       parseDataTimers[timeKey] = setTimeout(enqueueAndParse, LATE_DATA_PARSE_DELAY, timeKey, true);
@@ -144,153 +141,111 @@ module.exports = function createParser(app, importerModule, callback)
 
     parseDataLock = true;
 
-    var orderFileInfoStepsMap = timeKeyToOrderInfoStepsMap[timeKey];
-    var operFileInfoStepsMap = timeKeyToOperInfoStepsMap[timeKey];
+    var timeKeyFileInfo = timeKeyToFileInfoMap[timeKey];
 
-    delete timeKeyToOrderInfoStepsMap[timeKey];
-    delete timeKeyToOperInfoStepsMap[timeKey];
+    delete timeKeyToFileInfoMap[timeKey];
 
-    parseOrderInfoSteps(orderFileInfoStepsMap || {}, operFileInfoStepsMap || {}, function(orders, missingOrders)
+    parseOrdersAndOperations(timeKeyFileInfo.orders, timeKeyFileInfo.operations, function(err, orders, missingOrders)
     {
       parseDataLock = false;
 
-      var filePaths = collectFileInfoPaths([orderFileInfoStepsMap, operFileInfoStepsMap]);
+      var filePaths = collectFileInfoPaths(timeKeyFileInfo);
 
       deleteFileInfoStepFiles(filePaths);
-
       setTimeout(removeFilePathsFromCache, 15000, filePaths);
 
       importerModule.debug("Parsed %s in %d ms!", timeKey, Date.now() - startTime);
 
       setImmediate(parseData);
 
-      callback(orders, missingOrders);
+      callback(null, orders, missingOrders);
     });
   }
 
-  function parseOrderInfoSteps(orderFileInfoSteps, operFileInfoSteps, done)
+  function parseOrdersAndOperations(ordersFileInfo, operationsFileInfo, done)
   {
     var orders = {};
-    var steps = [];
-
-    for (var i = 1, l = importerModule.config.orderStepCount; i <= l; ++i)
-    {
-      if (typeof orderFileInfoSteps[i] === 'undefined')
-      {
-        importerModule.debug("Missing orders step %d :(", i);
-      }
-      else
-      {
-        steps.push(createParseOrderInfoStep(orders, orderFileInfoSteps[i]));
-      }
-    }
-
-    steps.push(function parseOperInfoStepsStep()
-    {
-      setImmediate(parseOperInfoSteps.bind(null, orders, operFileInfoSteps, done));
-    });
-
-    step(steps);
-  }
-
-  function parseOperInfoSteps(orders, operFileInfoSteps, done)
-  {
     var missingOrders = {};
-    var steps = [];
 
-    for (var i = 1, l = importerModule.config.operStepCount; i <= l; ++i)
-    {
-      if (typeof operFileInfoSteps[i] === 'undefined')
+    step(
+      function readOrdersFileStep()
       {
-        importerModule.debug("Missing operations step %d :(", i);
-      }
-      else
-      {
-        steps.push(createParseOperInfoStep(orders, missingOrders, operFileInfoSteps[i]));
-      }
-    }
-
-    steps.push(done.bind(null, orders, missingOrders));
-
-    step(steps);
-  }
-
-  function createParseOrderInfoStep(orders, orderFileInfo)
-  {
-    return function parseOrderInfoStep()
-    {
-      var next = this.next();
-
-      fs.readFile(orderFileInfo.filePath, 'utf8', function(err, orderInfoHtml)
-      {
-        if (err)
+        if (ordersFileInfo)
         {
-          importerModule.error(
-            "Failed to read order info file `%s`: %s", orderFileInfo.filePath, err.message
-          );
+          fs.readFile(ordersFileInfo.filePath, 'utf8', this.next());
         }
         else
         {
-          parseOrderInfo(orderInfoHtml, orders, new Date(orderFileInfo.timestamp));
+          setImmediate(this.next(), null, '');
         }
-
-        next();
-      });
-    };
-  }
-
-  function createParseOperInfoStep(orders, missingOrders, operFileInfo)
-  {
-    return function parseOperInfoStep()
-    {
-      var next = this.next();
-
-      fs.readFile(operFileInfo.filePath, 'utf8', function(err, operInfoHtml)
+      },
+      function parseOrdersStep(err, ordersFileContents)
       {
         if (err)
         {
-          importerModule.error(
-            "Failed to read oper info file `%s`: %s", operFileInfo.filePath, err.message
+          importerModule.error("Failed to read the orders input file: %s", err.message);
+        }
+        else if (ordersFileInfo)
+        {
+          parseOrders(
+            ordersFileContents,
+            orders,
+            ordersFileInfo.timestamp ? new Date(ordersFileInfo.timestamp) : new Date()
           );
+        }
+      },
+      function readOperationsFileStep()
+      {
+        if (operationsFileInfo)
+        {
+          fs.readFile(operationsFileInfo.filePath, 'utf8', this.next());
         }
         else
         {
-          parseOperInfo(operInfoHtml, orders, missingOrders, new Date(operFileInfo.timestamp));
+          setImmediate(this.next(), null, '');
         }
-
-        next();
-      });
-    };
+      },
+      function parseOperationsStep(err, operationsFileContents)
+      {
+        if (err)
+        {
+          importerModule.error("Failed to read the operations input file: %s", err.message);
+        }
+        else if (operationsFileInfo)
+        {
+          parseOperations(
+            operationsFileContents,
+            orders,
+            missingOrders,
+            operationsFileInfo.timestamp ? new Date(operationsFileInfo.timestamp) : new Date()
+          );
+        }
+      },
+      function()
+      {
+        setImmediate(done, null, orders, missingOrders);
+      }
+    );
   }
 
   function createTimeKey(timestamp)
   {
-    var date = new Date(timestamp);
-    var timeKey = '';
-
-    timeKey += date.getUTCFullYear();
-    timeKey += (date.getUTCMonth() < 9 ? '0' : '') + (date.getUTCMonth() + 1);
-    //TODO: Need better time key
-    //timeKey += (date.getUTCDate() < 10 ? '0' : '') + date.getUTCDate();
-    //timeKey += (date.getUTCHours() < 10 ? '0' : '') + date.getUTCHours();
-
-    return timeKey;
+    return moment(timestamp || Date.now()).format('YYYYMMDDHH');
   }
 
-  function collectFileInfoPaths(fileInfoMaps)
+  function collectFileInfoPaths(timeKeyFileInfo)
   {
     var filePaths = [];
 
-    _.forEach(fileInfoMaps, function(fileInfoMap)
+    if (timeKeyFileInfo.orders)
     {
-      _.forEach(fileInfoMap, function(fileInfo, key)
-      {
-        if (key !== 'steps')
-        {
-          filePaths.push(fileInfo.filePath);
-        }
-      });
-    });
+      filePaths.push(timeKeyFileInfo.orders.filePath);
+    }
+
+    if (timeKeyFileInfo.operations)
+    {
+      filePaths.push(timeKeyFileInfo.operations.filePath);
+    }
 
     return filePaths;
   }

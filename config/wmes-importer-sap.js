@@ -15,10 +15,8 @@ exports.modules = [
   'messenger/server',
   'messenger/client',
   'directoryWatcher',
-  {id: 'orders/importer/orders', name: 'currentDayOrderImporter'},
-  {id: 'orders/importer/orders', name: 'nextDayOrderImporter'},
-  {id: 'orders/importer/orders', name: 'prevDayOrderImporter'},
-  {id: 'orders/importer/emptyOrders', name: 'emptyOrderImporter'},
+  'orders/importer/orders',
+  'orders/importer/emptyOrders',
   'warehouse/importer/importQueue',
   'warehouse/importer/controlCycles',
   'warehouse/importer/transferOrders',
@@ -107,29 +105,13 @@ exports.directoryWatcher = {
   path: IMPORT_INPUT_DIR
 };
 
-exports.currentDayOrderImporter = {
-  orderStepCount: 13,
-  operStepCount: 13,
+exports['orders/importer/orders'] = {
+  filterRe: /^T_COOIS_(ORDERS|OPERS)_[0-9]+\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
-exports.nextDayOrderImporter = {
-  orderStepCount: 13,
-  operStepCount: 13,
-  filterRe: /^Job PL02_(ORDER|OPER)_INFO_2D, Step ([0-9]+)\.html?$/,
-  parsedOutputDir: IMPORT_OUTPUT_DIR
-};
-
-exports.prevDayOrderImporter = {
-  orderStepCount: 13,
-  operStepCount: 13,
-  filterRe: /^Job PL02_(ORDER|OPER)_INFO_3D, Step ([0-9]+)\.html?$/,
-  parsedOutputDir: IMPORT_OUTPUT_DIR
-};
-
-exports.emptyOrderImporter = {
-  orderStepCount: 13,
-  operStepCount: 13,
+exports['orders/importer/emptyOrders'] = {
+  filterRe: /^T_COOIS_EMPTY_(ORDERS|OPERS)_[0-9]+\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
