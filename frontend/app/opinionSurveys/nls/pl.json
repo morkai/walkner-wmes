@@ -12,6 +12,8 @@
   "navbar:report": "Raport",
   "navbar:actions": "Akcje naprawcze",
   "navbar:responses": "Odpowiedzi",
+  "navbar:scanning": "Skanowanie",
+  "navbar:scanTemplates": "Szablony",
   "navbar:dictionaries": "Słowniki",
   "navbar:surveys": "Badania",
   "navbar:employers": "Pracodawcy",

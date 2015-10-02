@@ -73,6 +73,11 @@ define([
       return formData;
     },
 
+    getFormData: function()
+    {
+      return this.serializeForm(form2js(this.el));
+    },
+
     submitForm: function()
     {
       this.hideErrorMessage();
@@ -82,7 +87,7 @@ define([
         return false;
       }
 
-      var formData = this.serializeForm(form2js(this.el));
+      var formData = this.getFormData();
 
       if (!this.checkValidity(formData))
       {

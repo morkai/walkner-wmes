@@ -10,6 +10,8 @@ var spawn = require('child_process').spawn;
 var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
+var multer = require('multer');
+var gm = require('gm');
 var report = require('./report');
 
 module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
@@ -59,6 +61,20 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
   express.get('/opinionSurveys/:id.html', sendSurveyHtmlRoute);
 
   setUpCrudRoutes(canView, 'OpinionSurvey', 'surveys');
+
+  express.get('/opinionSurveys/scanTemplates/:id.jpg', sendScanTemplateJpgRoute);
+  express.post(
+    '/opinionSurveys/scanTemplates;uploadImage',
+    canManage,
+    multer({
+      putSingleFilesInArray: true,
+      limits: {
+        files: 1,
+        fileSize: '5mb'
+      }
+    }),
+    uploadImageRoute
+  );
   setUpCrudRoutes(canManage, 'OpinionSurveyScanTemplate', 'scanTemplates');
 
   express.get(
@@ -498,6 +514,80 @@ module.exports = function setUpOpinionSurveysRoutes(app, opinionSurveysModule)
 
       return res.sendStatus(404);
     });
+  }
+
+  function sendScanTemplateJpgRoute(req, res, next)
+  {
+    if (!/^[a-z0-9]+$/.test(req.params.id))
+    {
+      return next(express.createHttpError('INVALID_ID'), 400);
+    }
+
+    res.sendFile(path.join(opinionSurveysModule.config.templatesPath, req.params.id + '.jpg'));
+  }
+
+  function uploadImageRoute(req, res, next)
+  {
+    var file = Array.isArray(req.files.image) ? req.files.image[0] : null;
+    var imageId = Date.now().toString(36) + Math.round(1000000000 + Math.random() * 8999999999).toString(36);
+    var templatePath = path.join(opinionSurveysModule.config.templatesPath, imageId + '.jpg');
+
+    step(
+      function deskewStep()
+      {
+        if (!file || !/^image/.test(file.mimetype))
+        {
+          return this.skip(new Error('INVALID_MIME_TYPE'));
+        }
+
+        opinionSurveysModule.deskewImage(file.path, file.path, this.next());
+      },
+      function resizeStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        gm(file.path)
+          .autoOrient()
+          .quality(100)
+          .resize(1280)
+          .noProfile()
+          .write(templatePath, this.next());
+      },
+      function getSizeStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        gm(templatePath).size(this.next());
+      },
+      function finalizeStep(err, size)
+      {
+        if (err)
+        {
+          fs.unlink(templatePath, _.noop);
+
+          next(err);
+        }
+        else
+        {
+          res.json({
+            image: imageId,
+            width: size.width,
+            height: size.height
+          });
+        }
+
+        if (file)
+        {
+          fs.unlink(file.path, _.noop);
+        }
+      }
+    );
   }
 
   function prepareResponseForAdd(req, res, next)

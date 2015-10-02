@@ -4,11 +4,11 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
 var setUpRoutes = require('./routes');
 var setUpActionNotifier = require('./actionNotifier');
+var setUpCleanup = require('./cleanup');
 var buildSurveyPdf = require('./buildSurveyPdf');
+var deskewImage = require('./deskewImage');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -21,6 +21,8 @@ exports.DEFAULT_CONFIG = {
   emailUrlPrefix: 'http://127.0.0.1/',
   wkhtmltopdfExe: 'wkhtmltopdf',
   zintExe: 'zint',
+  deskewExe: 'deskew',
+  templatesPath: './opinion/templates',
   surveysPath: './opinion/surveys',
   inputPath: './opinion/input',
   responsesPath: './opinion/responses'
@@ -42,6 +44,14 @@ exports.start = function startOpinionSurveysModule(app, module)
   module.surveyPreviews = {};
 
   module.buildSurveyPdf = buildSurveyPdf.bind(null, app, module);
+  module.deskewImage = deskewImage.bind(null, app, module);
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId
+    ],
+    setUpCleanup.bind(null, app, module)
+  );
 
   app.onModuleReady(
     [
@@ -62,15 +72,4 @@ exports.start = function startOpinionSurveysModule(app, module)
     ],
     setUpActionNotifier.bind(null, app, module)
   );
-
-  app.broker.subscribe('opinionSurveys.surveys.edited', function(message)
-  {
-    fs.unlink(path.join(module.config.surveysPath, message.model._id + '.pdf'), function() {});
-  });
-
-  app.broker.subscribe('opinionSurveys.surveys.deleted', function(message)
-  {
-    fs.unlink(path.join(module.config.surveysPath, message.model._id + '.pdf'), function() {});
-    fs.unlink(path.join(module.config.surveysPath, message.model._id + '.custom.pdf'), function() {});
-  });
 };

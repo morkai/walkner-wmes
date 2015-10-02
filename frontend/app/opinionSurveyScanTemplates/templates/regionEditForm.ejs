@@ -1,0 +1,24 @@
+<form class="opinionSurveyScanTemplates-regionEditForm">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-question" class="control-label"><%- t('opinionSurveyScanTemplates', 'regionEditForm:question') %></label>
+    <input id="<%- idPrefix %>-question" name="question" type="text" value="<%- region.question %>" autofocus>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-answers" class="control-label"><%- t('opinionSurveyScanTemplates', 'regionEditForm:options') %></label>
+    <input id="<%- idPrefix %>-answers" name="answers" type="text">
+  </div>
+  <table class="table table-condensed table-bordered">
+    <thead>
+    <tr>
+      <th class="is-min"><%- t('opinionSurveyScanTemplates', 'regionEditForm:no') %></th>
+      <th><%- t('opinionSurveyScanTemplates', 'regionEditForm:answer') %></th>
+      <th class="actions"><%- t('opinionSurveyScanTemplates', 'regionEditForm:actions') %></th>
+    </tr>
+    </thead>
+    <tbody id="<%- idPrefix %>-options"></tbody>
+  </table>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('opinionSurveyScanTemplates', 'regionEditForm:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('opinionSurveyScanTemplates', 'regionEditForm:cancel') %></button>
+  </div>
+</form>

@@ -53,7 +53,8 @@ define([
   './opinionSurveyResponses/routes',
   './opinionSurveyEmployers/routes',
   './opinionSurveyDivisions/routes',
-  './opinionSurveyQuestions/routes'
+  './opinionSurveyQuestions/routes',
+  './opinionSurveyScanTemplates/routes'
 ], function()
 {
   'use strict';

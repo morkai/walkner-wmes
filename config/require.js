@@ -35,7 +35,9 @@ exports.paths = {
   'jquery.stickytableheaders': 'vendor/jquery.stickytableheaders',
   'highlight': 'vendor/highlight/highlight.pack',
   'Sortable': 'vendor/Sortable',
-  'deployJava': 'vendor/deployJava'
+  'deployJava': 'vendor/deployJava',
+  'interact': 'vendor/interact',
+  'dragscroll': 'vendor/dragscroll'
 };
 
 exports.shim = {

@@ -264,5 +264,11 @@
   "TYPE:opinionSurveys.responses.deleted": "Badanie Opinia > Odpowiedzi: usunięcie",
   "TEXT:opinionSurveys.responses.deleted": "Usunięto odpowiedź: <em>{model->_id}</em>",
   "TYPE:opinionSurveys.actions.deleted": "Badanie Opinia > Akcje naprawcze: usunięcie",
-  "TEXT:opinionSurveys.actions.deleted": "Usunięto akcję naprawczą: <em>{model->rid}</em>"
+  "TEXT:opinionSurveys.actions.deleted": "Usunięto akcję naprawczą: <em>{model->rid}</em>",
+  "TYPE:opinionSurveys.scanTemplates.added": "Badanie Opinia > Szablony: dodanie",
+  "TEXT:opinionSurveys.scanTemplates.added": "Dodano szablon skanowania: <a href='\\#opinionSurveyScanTemplates/{model->_id}'>{model->name}</a>",
+  "TYPE:opinionSurveys.scanTemplates.edited": "Badanie Opinia > Szablony: edycja",
+  "TEXT:opinionSurveys.scanTemplates.edited": "Zmodyfikowano szablon skanowania: <a href='\\#opinionSurveyScanTemplates/{model->_id}'>{model->name}</a>",
+  "TYPE:opinionSurveys.scanTemplates.deleted": "Badanie Opinia > Szablony: usunięcie",
+  "TEXT:opinionSurveys.scanTemplates.deleted": "Usunięto szablon skanowania: <em>{model->name}</em>"
 }

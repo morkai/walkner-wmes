@@ -1,0 +1,10 @@
+<form class="well filter-form opinionSurveyScanTemplates-filter">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-survey"><%- t('opinionSurveyScanTemplates', 'PROPERTY:survey') %></label>
+    <input id="<%- idPrefix %>-survey" name="survey" type="text">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('opinionSurveyScanTemplates', 'filter:submit') %></span></button>
+  </div>
+</form>

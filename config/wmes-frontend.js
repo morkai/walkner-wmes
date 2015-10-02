@@ -359,6 +359,7 @@ exports.orderDocuments = {
 };
 
 exports.opinionSurveys = {
+  templatesPath: DATA_PATH + '/opinion/templates',
   surveysPath: DATA_PATH + '/opinion/surveys',
   inputPath: DATA_PATH + '/opinion/input',
   responsesPath: DATA_PATH + '/opinion/responses'
