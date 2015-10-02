@@ -11,6 +11,7 @@ exports.modules = [
   'warehouse/exporter',
   'xiconf/exporter',
   'orderDocuments/exporter',
+  'orders/exporter',
   'sapGui'
 ];
 
@@ -35,6 +36,11 @@ exports['xiconf/exporter'] = {
 exports['orderDocuments/exporter'] = {
   maxConcurrentUploads: 1,
   uploadUrl: 'http://127.0.0.1/orderDocuments;import'
+};
+
+exports['orders/exporter'] = {
+  maxConcurrentUploads: 1,
+  uploadUrl: 'http://127.0.0.1/orders;import'
 };
 
 exports.sapGui = {
