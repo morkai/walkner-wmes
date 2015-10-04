@@ -388,7 +388,7 @@ define([
         .setFilter(function(hiddenDialogView) { return hiddenDialogView === dialogView; })
         .on('message', function() { formView.toggleAction(null); });
 
-      viewport.showDialog(dialogView, this.t('regionEditForm:title'));
+      viewport.showDialog(dialogView, t('regionEditForm:title'));
     },
 
     getRegionLabel: function(questionId, surveyId)
