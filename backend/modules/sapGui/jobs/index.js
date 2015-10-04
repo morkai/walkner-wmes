@@ -12,5 +12,6 @@ module.exports = {
   ls41: require('./ls41'),
   xiconf: require('./xiconf'),
   docs: require('./docs'),
-  zlf1: require('./zlf1')
+  zlf1: require('./zlf1'),
+  genericList: require('./genericList')
 };
