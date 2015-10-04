@@ -153,7 +153,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
     var fileName = req.query.fileName;
     var timestamp = parseInt(req.query.timestamp, 10);
 
-    if (!_.isEmpty(fileName) || !/\.txt$/.test(fileName) || isNaN(timestamp) || req.body.length < 256)
+    if (_.isEmpty(fileName) || !/\.txt$/.test(fileName) || isNaN(timestamp) || req.body.length < 256)
     {
       return res.status(400).send('INPUT');
     }
