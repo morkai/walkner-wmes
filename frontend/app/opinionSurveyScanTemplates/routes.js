@@ -10,10 +10,6 @@ define([
   '../core/util/showDeleteFormPage',
   './OpinionSurveyScanTemplateCollection',
   './OpinionSurveyScanTemplate',
-  './pages/OpinionSurveyScanTemplateListPage',
-  './pages/OpinionSurveyScanTemplateDetailsPage',
-  './pages/OpinionSurveyScanTemplateAddFormPage',
-  './pages/OpinionSurveyScanTemplateEditFormPage',
   'i18n!app/nls/opinionSurveyScanTemplates'
 ], function(
   _,
@@ -22,11 +18,7 @@ define([
   user,
   showDeleteFormPage,
   OpinionSurveyScanTemplateCollection,
-  OpinionSurveyScanTemplate,
-  OpinionSurveyScanTemplateListPage,
-  OpinionSurveyScanTemplateDetailsPage,
-  OpinionSurveyScanTemplateAddFormPage,
-  OpinionSurveyScanTemplateEditFormPage
+  OpinionSurveyScanTemplate
 ) {
   'use strict';
 
@@ -35,30 +27,54 @@ define([
 
   router.map('/opinionSurveyScanTemplates', canView, function(req)
   {
-    viewport.showPage(new OpinionSurveyScanTemplateListPage({
-      collection: new OpinionSurveyScanTemplateCollection(null, {rqlQuery: req.rql})
-    }));
+    viewport.loadPage(
+      'app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateListPage',
+      function(OpinionSurveyScanTemplateListPage)
+      {
+        return new OpinionSurveyScanTemplateListPage({
+          collection: new OpinionSurveyScanTemplateCollection(null, {rqlQuery: req.rql})
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveyScanTemplates/:id', canView, function(req)
   {
-    viewport.showPage(new OpinionSurveyScanTemplateDetailsPage({
-      model: new OpinionSurveyScanTemplate({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      'app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateDetailsPage',
+      function(OpinionSurveyScanTemplateDetailsPage)
+      {
+        return new OpinionSurveyScanTemplateDetailsPage({
+          model: new OpinionSurveyScanTemplate({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveyScanTemplates;add', canManage, function()
   {
-    viewport.showPage(new OpinionSurveyScanTemplateAddFormPage({
-      model: new OpinionSurveyScanTemplate()
-    }));
+    viewport.loadPage(
+      'app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateAddFormPage',
+      function(OpinionSurveyScanTemplateAddFormPage)
+      {
+        return new OpinionSurveyScanTemplateAddFormPage({
+          model: new OpinionSurveyScanTemplate()
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveyScanTemplates/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new OpinionSurveyScanTemplateEditFormPage({
-      model: new OpinionSurveyScanTemplate({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      'app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateEditFormPage',
+      function(OpinionSurveyScanTemplateEditFormPage)
+      {
+        return new OpinionSurveyScanTemplateEditFormPage({
+          model: new OpinionSurveyScanTemplate({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map(
