@@ -326,7 +326,7 @@ define([
         {
           return {
             question: this.dataset.question,
-            options: this.dataset.options.split(','),
+            options: this.dataset.options.length ? this.dataset.options.split(',') : [],
             top: parseInt(this.style.top, 10),
             left: parseInt(this.style.left, 10),
             width: parseInt(this.style.width, 10),
