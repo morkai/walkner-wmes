@@ -86,8 +86,7 @@ exports.start = function startOrdersExporterModule(app, module)
           },
           qs: {
             fileName: fileInfo.fileName,
-            timestamp: Math.floor(fileInfo.timestamp / 1000),
-            step: fileInfo.step
+            timestamp: Math.floor(fileInfo.timestamp / 1000)
           },
           body: body
         };
