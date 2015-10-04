@@ -2,16 +2,16 @@
   "private": true,
   "guid": "A0974235-9E21-49BB-8D01-CA7A932A6EEB",
   "name": "walkner-wmes",
-  "version": "0.69.4",
+  "version": "0.70.0",
   "updater": {
     "wmes": {
-      "backend": 131,
-      "frontend": 144,
+      "backend": 132,
+      "frontend": 145,
       "reports": 14,
       "attachments": 1,
-      "importer-sap": 14,
+      "importer-sap": 15,
       "importer-results": 7,
-      "watchdog": 2
+      "watchdog": 3
     },
     "pos": {
       "backend": 80,
@@ -75,6 +75,7 @@
     "node-uuid": "~1.4.3",
     "tedious": "~1.11.0",
     "twilio": "~2.2.1",
+    "gm": "~1.20.0",
     "h5.step": "~0.1.0",
     "h5.pubsub": "git+http://github.com/morkai/h5.pubsub.git#c1a899cb7e",
     "h5.rql": "git+http://github.com/morkai/h5.rql.git#5622189665",
