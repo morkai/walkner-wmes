@@ -5,6 +5,7 @@
 'use strict';
 
 var parseSapTextTable = require('../../sap/util/parseSapTextTable');
+var parseSapString = require('../../sap/util/parseSapString');
 var parseSapNumber = require('../../sap/util/parseSapNumber');
 
 module.exports = function parseOperations(input, orders, missingOrders, importTs)
@@ -28,6 +29,7 @@ module.exports = function parseOperations(input, orders, missingOrders, importTs
       laborTime: /^Std Value$/
     },
     valueParsers: {
+      name: parseSapString,
       qty: parseSapNumber,
       machineSetupTime: parseStdValue,
       laborSetupTime: parseStdValue,

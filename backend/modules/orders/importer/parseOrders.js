@@ -5,6 +5,7 @@
 'use strict';
 
 var parseSapTextTable = require('../../sap/util/parseSapTextTable');
+var parseSapString = require('../../sap/util/parseSapString');
 var parseSapNumber = require('../../sap/util/parseSapNumber');
 var parseSapDate = require('../../sap/util/parseSapDate');
 
@@ -24,6 +25,7 @@ module.exports = function parseOrders(input, orders, importTs)
     },
     valueParsers: {
       nc12: function(input) { return input.replace(/^0+/, ''); },
+      name: parseSapString,
       qty: parseSapNumber,
       startDate: parseSapDate,
       finishDate: parseSapDate,
