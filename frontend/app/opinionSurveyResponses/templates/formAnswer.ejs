@@ -4,7 +4,7 @@
   <input type="hidden" name="answers[<%- index %>].question" value="<%- question._id %>">
   <% ['yes', 'no', 'na'].forEach(function(answer) { %>
   <label class="radio-inline">
-    <input type="radio" name="answers[<%- index %>].answer" value="<%- answer %>" <%- value === answer ? 'checked' : '' %>> <%- t('opinionSurveyResponses', 'answer:' + answer) %>
+    <input type="radio" name="answers[<%- index %>].answer" value="<%- answer %>" <%- value === answer ? 'checked' : '' %> required> <%- t('opinionSurveyResponses', 'answer:' + answer) %>
   </label>
   <% }) %>
 </div>
