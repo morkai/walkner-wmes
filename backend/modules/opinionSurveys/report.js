@@ -148,10 +148,12 @@ module.exports = function(mongoose, options, done)
   {
     _.forEach(res.answers, function(a)
     {
-      countAnswerTotal(a.question, a.answer);
-      countAnswerBySuperior(res.superior, a.question, a.answer);
-      countPositiveAnswerBySurvey(res.survey, res.employer, a.answer);
-      countPositiveAnswerByDivision(res.division, res.employer, a.answer);
+      var answer = a.answer === 'null' ? 'na' : a.answer;
+
+      countAnswerTotal(a.question, answer);
+      countAnswerBySuperior(res.superior, a.question, answer);
+      countPositiveAnswerBySurvey(res.survey, res.employer, answer);
+      countPositiveAnswerByDivision(res.division, res.employer, answer);
     });
   }
 

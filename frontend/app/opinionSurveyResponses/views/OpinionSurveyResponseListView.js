@@ -24,7 +24,8 @@ define([
   var ANSWER_TO_ICON = {
     yes: 'thumbs-up',
     no: 'thumbs-down',
-    na: 'question'
+    na: 'question',
+    null: 'circle-o'
   };
 
   return ListView.extend({

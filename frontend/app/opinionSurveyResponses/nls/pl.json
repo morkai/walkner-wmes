@@ -46,5 +46,6 @@
 
   "answer:yes": "Zgadzam się",
   "answer:no": "Nie zgadzam się",
-  "answer:na": "Nie mam zdania"
+  "answer:na": "Nie mam zdania",
+  "answer:null": "?"
 }

@@ -15,7 +15,7 @@ module.exports = function setupOpinionSurveyResponseModel(app, mongoose)
     answer: {
       type: String,
       required: true,
-      enum: ['yes', 'no', 'na']
+      enum: ['yes', 'no', 'na', 'null']
     }
   }, {
     _id: false
@@ -30,10 +30,6 @@ module.exports = function setupOpinionSurveyResponseModel(app, mongoose)
       type: String,
       required: true,
       ref: 'OpinionSurvey'
-    },
-    scanTemplate: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: null
     },
     createdAt: {
       type: Date,
