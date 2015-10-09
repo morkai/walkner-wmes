@@ -1,0 +1,55 @@
+{
+  "BREADCRUMBS:base": "Badanie Opinia",
+  "BREADCRUMBS:browse": "Wyniki skanowania",
+  "BREADCRUMBS:details": "Wynik skanowania",
+  "BREADCRUMBS:addForm": "Dodawanie",
+  "BREADCRUMBS:editForm": "Edycja",
+  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+
+  "MSG:LOADING_FAILURE": "Ładowanie wyników nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie wyniku nie powiodło się :(",
+
+  "PAGE_ACTION:": "?",
+
+  "PANEL:TITLE:details": "Szczegóły wyniku",
+
+  "PROPERTY:survey": "Badanie",
+  "PROPERTY:pageNumber": "Nr strony",
+  "PROPERTY:status": "Status",
+  "PROPERTY:matchScore": "Dopasowanie",
+  "PROPERTY:errorCode": "Błąd",
+  "PROPERTY:errorMessage": "Szczegóły błędu",
+  "PROPERTY:inputDirName": "Wejściowy katalog",
+  "PROPERTY:inputFileName": "Wejściowy plik",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas zakończenia",
+  "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:scanTemplate": "Szablon skanowania",
+  "PROPERTY:qrCode": "Kod QR",
+  "PROPERTY:omrInput": "Wejście OMR",
+  "PROPERTY:omrOutput": "Wyjście OMR",
+
+  "FORM:ACTION:": "?",
+  "FORM:ERROR:": "Nie udało się :(",
+
+  "filter:submit": "Filtruj wyniki",
+
+  "status:unrecognized": "Nierozpoznany",
+  "status:recognized": "Rozpoznany",
+  "status:ignored": "Zignorowany",
+  "status:fixed": "Rozwiązany",
+
+  "tabs:omrPreview": "Podgląd OMR",
+  "tabs:omrInput": "Wejście OMR",
+  "tabs:omrOutput": "Wyjście OMR",
+  "tabs:answers": "Odpowiedzi",
+
+  "error:CREATE_PROCESSING_DIR_FAILURE": "Nie udało się utworzyć katalogu roboczego.",
+  "error:MOVE_INPUT_FILE_FAILURE": "Nie udało się przenieść pliku wejściowego.",
+  "error:DECODE_QR_CODE_FAILURE": "Nie udało się odczytać kodu QR.",
+  "error:FIND_SCAN_TEMPLATES_FAILURE": "Nie udało się znaleźć pasujących szablonów.",
+  "error:DESKEW_FAILURE": "Nie udało się wyprostować zeskanowanego pliku wejściowego.",
+  "error:LOW_SCORE": "Niski wynik dopasowania.",
+  "error:OMR_FAILURE": "Nie udało się rozpoznać obszarów odpowiedzi.",
+  "error:MISSING_ANSWERS": "Brakujące odpowiedzi."
+}

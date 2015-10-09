@@ -4,11 +4,15 @@
 
 'use strict';
 
+var _ = require('lodash');
 var setUpRoutes = require('./routes');
 var setUpActionNotifier = require('./actionNotifier');
 var setUpCleanup = require('./cleanup');
+var setUpOmr = require('./omr');
 var buildSurveyPdf = require('./buildSurveyPdf');
 var deskewImage = require('./deskewImage');
+var decodeQrCode = require('./decodeQrCode');
+var recognizeMarks = require('./recognizeMarks');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -18,13 +22,18 @@ exports.DEFAULT_CONFIG = {
   settingsId: 'settings',
   mailSenderId: 'mail/sender',
   reportsId: 'reports',
+  directoryWatcherId: 'directoryWatcher',
   emailUrlPrefix: 'http://127.0.0.1/',
   wkhtmltopdfExe: 'wkhtmltopdf',
   zintExe: 'zint',
   deskewExe: 'deskew',
+  zbarimgExe: 'zbarimg',
+  decodeQrExe: 'DecodeQR',
+  omrExe: 'OMR',
   templatesPath: './opinion/templates',
   surveysPath: './opinion/surveys',
   inputPath: './opinion/input',
+  processingPath: './opinion/processing',
   responsesPath: './opinion/responses'
 };
 
@@ -45,12 +54,30 @@ exports.start = function startOpinionSurveysModule(app, module)
 
   module.buildSurveyPdf = buildSurveyPdf.bind(null, app, module);
   module.deskewImage = deskewImage.bind(null, app, module);
+  module.decodeQrCode = decodeQrCode.bind(null, app, module);
+  module.recognizeMarks = recognizeMarks.bind(null, app, module);
+
+  module.generateId = function()
+  {
+    var id = Date.now().toString(36).toUpperCase()
+      + Math.round(1000000000 + Math.random() * 8999999999).toString(36).toUpperCase();
+
+    return _.padRight(id, 15, 0);
+  };
 
   app.onModuleReady(
     [
       module.config.mongooseId
     ],
     setUpCleanup.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId,
+      module.config.directoryWatcherId
+    ],
+    setUpOmr.bind(null, app, module)
   );
 
   app.onModuleReady(

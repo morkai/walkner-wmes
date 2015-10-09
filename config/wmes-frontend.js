@@ -57,6 +57,7 @@ exports.modules = [
   'orderDocuments',
   'kaizen',
   'opinionSurveys',
+  {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
@@ -185,7 +186,8 @@ exports.mongoose = {
     'whTransferOrder',
     'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenOrder',
     'opinionSurvey', 'opinionSurveyAction', 'opinionSurveyResponse',
-    'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion', 'opinionSurveyScanTemplate'
+    'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion',
+    'opinionSurveyScanTemplate', 'opinionSurveyOmrResult'
   ]
 };
 exports.mongoose.options.server.poolSize = 15;
@@ -359,8 +361,16 @@ exports.orderDocuments = {
 };
 
 exports.opinionSurveys = {
+  directoryWatcherId: 'directoryWatcher:opinionSurveys',
   templatesPath: DATA_PATH + '/opinion/templates',
   surveysPath: DATA_PATH + '/opinion/surveys',
   inputPath: DATA_PATH + '/opinion/input',
+  processingPath: DATA_PATH + '/opinion/processing',
   responsesPath: DATA_PATH + '/opinion/responses'
+};
+
+exports['directoryWatcher:opinionSurveys'] = {
+  path: exports.opinionSurveys.inputPath,
+  delay: 30 * 1000,
+  maxDelay: 120 * 1000
 };

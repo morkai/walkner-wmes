@@ -43,6 +43,7 @@
 @import url("../app/opinionSurveyActions/assets/main.css");
 @import url("../app/opinionSurveyResponses/assets/main.css");
 @import url("../app/opinionSurveyScanTemplates/assets/main.css");
+@import url("../app/opinionSurveyOmrResults/assets/main.css");
 
 #app-loading {
   position: absolute;

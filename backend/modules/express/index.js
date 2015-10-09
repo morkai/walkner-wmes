@@ -52,7 +52,11 @@ exports.start = function startExpressModule(app, expressModule, done)
 {
   var config = expressModule.config;
   var mongoose = app[config.mongooseId];
+  var development = app.options.env === 'development';
+  var staticPath = config[development ? 'staticPath' : 'staticBuildPath'];
   var expressApp = express();
+
+  expressModule.staticPath = staticPath;
 
   expressModule.app = expressApp;
 
@@ -79,9 +83,6 @@ exports.start = function startExpressModule(app, expressModule, done)
       return expressModule.router[method].apply(expressModule.router, arguments);
     };
   });
-
-  var development = app.options.env === 'development';
-  var staticPath = config[development ? 'staticPath' : 'staticBuildPath'];
 
   expressApp.set('trust proxy', true);
   expressApp.set('view engine', 'ejs');

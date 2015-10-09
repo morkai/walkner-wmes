@@ -7,7 +7,6 @@
 var path = require('path');
 var fs = require('fs');
 var step = require('h5.step');
-var _ = require('lodash');
 
 module.exports = function setUpCleanup(app, module)
 {
@@ -81,6 +80,11 @@ module.exports = function setUpCleanup(app, module)
         if (err)
         {
           return this.skip(err);
+        }
+
+        if (!Array.isArray(filePaths))
+        {
+          return;
         }
 
         for (var i = 0; i < filePaths.length; ++i)
