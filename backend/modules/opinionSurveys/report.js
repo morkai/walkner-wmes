@@ -21,6 +21,7 @@ module.exports = function(mongoose, options, done)
     responseCountBySurvey: {},
     responseCountBySuperior: {},
     answerCountTotal: {},
+    answerCountBySurvey: {},
     answerCountBySuperior: {},
     positiveAnswerCountBySurvey: {},
     positiveAnswerCountByDivision: {}
@@ -167,6 +168,7 @@ module.exports = function(mongoose, options, done)
       var answer = a.answer === 'null' ? 'na' : a.answer;
 
       countAnswerTotal(a.question, answer);
+      countAnswerBySurvey(res.survey, a.question, answer);
       countAnswerBySuperior(res.superior, a.question, answer);
       countPositiveAnswerBySurvey(res.survey, res.employer, answer);
       countPositiveAnswerByDivision(res.division, res.employer, answer);
@@ -189,6 +191,32 @@ module.exports = function(mongoose, options, done)
 
     answerCount[question].total += 1;
     answerCount[question][answer] += 1;
+  }
+
+  function countAnswerBySurvey(survey, question, answer)
+  {
+    var answerCount = results.answerCountBySurvey;
+
+    if (!answerCount[survey])
+    {
+      answerCount[survey] = {
+        total: 0
+      };
+    }
+
+    if (!answerCount[survey][question])
+    {
+      answerCount[survey][question] = {
+        total: 0,
+        yes: 0,
+        no: 0,
+        na: 0
+      };
+    }
+
+    answerCount[survey].total += 1;
+    answerCount[survey][question].total += 1;
+    answerCount[survey][question][answer] += 1;
   }
 
   function countAnswerBySuperior(superior, question, answer)

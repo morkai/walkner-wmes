@@ -17,6 +17,9 @@ table.highcharts-tooltip {
   font-family: Consolas, monospace;
   width: 1%;
 }
-.highcharts-tooltip-suffix + .highcharts-tooltip-integer {
+.highcharts-tooltip-integer {
   padding-left: 15px;
+}
+.highcharts-tooltip-label + .highcharts-tooltip-integer {
+  padding-left: 4px;
 }

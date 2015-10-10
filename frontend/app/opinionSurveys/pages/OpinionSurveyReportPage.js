@@ -17,7 +17,8 @@ define([
   '../views/ResponseCountBySuperiorChartView',
   '../views/ResponsePercentBySurveyChartView',
   '../views/ResponsePercentByDivisionChartView',
-  '../views/AnswerCountTotalChartView',
+  '../views/AnswerCountBySurveyChartView',
+  '../views/AnswerCountBySuperiorChartView',
   '../views/PositiveAnswerPercentBySurveyChartView',
   '../views/PositiveAnswerPercentByDivisionChartView',
   'app/opinionSurveys/templates/reportPage'
@@ -36,7 +37,8 @@ define([
   ResponseCountBySuperiorChartView,
   ResponsePercentBySurveyChartView,
   ResponsePercentByDivisionChartView,
-  AnswerCountTotalChartView,
+  AnswerCountBySurveyChartView,
+  AnswerCountBySuperiorChartView,
   PositiveAnswerPercentBySurveyChartView,
   PositiveAnswerPercentByDivisionChartView,
   template
@@ -77,7 +79,8 @@ define([
         'responseCountBySuperior',
         'responsePercentBySurvey',
         'responsePercentByDivision',
-        'answerCountTotal',
+        'answerCountBySurvey',
+        'answerCountBySuperior',
         'positiveAnswerPercentBySurvey',
         'positiveAnswerPercentByDivision'
       ].forEach(function(viewName)
@@ -120,7 +123,8 @@ define([
       this.responseCountBySuperiorView = new ResponseCountBySuperiorChartView(chartViewOptions);
       this.responsePercentBySurveyView = new ResponsePercentBySurveyChartView(chartViewOptions);
       this.responsePercentByDivisionView = new ResponsePercentByDivisionChartView(chartViewOptions);
-      this.answerCountTotalView = new AnswerCountTotalChartView(chartViewOptions);
+      this.answerCountBySurveyView = new AnswerCountBySurveyChartView(chartViewOptions);
+      this.answerCountBySuperiorView = new AnswerCountBySuperiorChartView(chartViewOptions);
       this.positiveAnswerPercentBySurveyView = new PositiveAnswerPercentBySurveyChartView(chartViewOptions);
       this.positiveAnswerPercentByDivisionView = new PositiveAnswerPercentByDivisionChartView(chartViewOptions);
     },
