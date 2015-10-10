@@ -164,14 +164,23 @@ define([
 
     serializeChartData: function()
     {
-      var responseCount = this.model.report.get('responseCountBySuperior');
-      var superiorToSurvey = this.model.report.get('superiorToSurvey');
-      var surveys = this.model.surveys;
+      var model = this.model;
+      var responseCount = model.report.get('responseCountBySuperior');
+      var superiorToSurvey = model.report.get('superiorToSurvey');
+      var surveys = model.surveys;
       var superiors = [];
       var employers = [];
-
-      _.forEach(responseCount, function(byEmployer, superiorId)
+      var sortedSuperiors = Object.keys(superiorToSurvey).sort(function(a, b)
       {
+        a = surveys.get(superiorToSurvey[a]).cacheMaps.superiors[a];
+        b = surveys.get(superiorToSurvey[b]).cacheMaps.superiors[b];
+
+        return a.short.localeCompare(b.short);
+      });
+
+      _.forEach(sortedSuperiors, function(superiorId)
+      {
+        var byEmployer = responseCount[superiorId];
         var superior = surveys.get(superiorToSurvey[superiorId]).cacheMaps.superiors[superiorId];
         var superiorCount = 0;
 

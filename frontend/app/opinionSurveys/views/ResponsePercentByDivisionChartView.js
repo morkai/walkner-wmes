@@ -121,10 +121,17 @@ define([
     serializeCategories: function()
     {
       var categories = [];
+      var report = this.model.report;
+      var responseCountTotal = report.get('responseCountTotal');
 
-      _.forEach(this.model.report.get('responseCountTotal'), function(byEmployer, divisionId)
+      _.forEach(report.get('usedDivisions'), function(nouse, divisionId)
       {
-        categories.push(dictionaries.divisions.get(divisionId).getLabel());
+        var byEmployer = responseCountTotal[divisionId];
+
+        if (byEmployer)
+        {
+          categories.push(dictionaries.divisions.get(divisionId).getLabel());
+        }
       });
 
       return categories;
@@ -132,9 +139,12 @@ define([
 
     serializeSeries: function()
     {
-      var usedSurveys = this.model.report.get('usedSurveys');
-      var surveys = this.model.surveys.filter(function(survey) { return usedSurveys[survey.id]; });
-      var usedEmployers = Object.keys(this.model.report.get('usedEmployers'));
+      var model = this.model;
+      var report = model.report;
+      var usedSurveys = report.get('usedSurveys');
+      var surveys = model.surveys.filter(function(survey) { return usedSurveys[survey.id]; });
+      var usedEmployers = Object.keys(report.get('usedEmployers'));
+      var responseCountTotal = report.get('responseCountTotal');
       var series = [];
       var employerToSeries = {};
       var refValue = this.getRefValue();
@@ -157,8 +167,15 @@ define([
         employerToSeries[employerId] = employerSeries;
       });
 
-      _.forEach(this.model.report.get('responseCountTotal'), function(byEmployer, divisionId)
+      _.forEach(report.get('usedDivisions'), function(nouse, divisionId)
       {
+        var byEmployer = responseCountTotal[divisionId];
+
+        if (!byEmployer)
+        {
+          return;
+        }
+
         _.forEach(series, function(employerSeries)
         {
           var responseCount = byEmployer[employerSeries.id];

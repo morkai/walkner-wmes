@@ -58,6 +58,22 @@ module.exports = function(mongoose, options, done)
       stream.on('end', next);
       stream.on('data', handleResponse);
     },
+    function sortResultsStep(err)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      var sortedDivisions = Object.keys(results.usedDivisions).sort(sortDivisions);
+
+      results.usedDivisions = {};
+
+      _.forEach(sortedDivisions, function(division)
+      {
+        results.usedDivisions[division] = true;
+      });
+    },
     function finalizeStep(err)
     {
       if (err)
@@ -239,5 +255,33 @@ module.exports = function(mongoose, options, done)
     }
 
     answerCount[division][employer][answer === 'yes' ? 'num' : 'den'] += 1;
+  }
+
+  function sortDivisions(a, b)
+  {
+    if (a === b)
+    {
+      return 0;
+    }
+
+    var aMatches = a.match(/([a-z])$/);
+    var bMatches = b.match(/([a-z])$/);
+
+    if (aMatches && !bMatches)
+    {
+      return -1;
+    }
+
+    if (!aMatches && bMatches)
+    {
+      return 1;
+    }
+
+    if (!aMatches && !bMatches)
+    {
+      return a.localeCompare(b);
+    }
+
+    return aMatches[1].localeCompare(bMatches[1]);
   }
 };

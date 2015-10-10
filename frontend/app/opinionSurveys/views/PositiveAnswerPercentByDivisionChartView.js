@@ -120,11 +120,16 @@ define([
 
     serializeCategories: function()
     {
+      var report = this.model.report;
+      var answerCount = report.get('positiveAnswerCountByDivision');
       var categories = [];
 
-      _.forEach(this.model.report.get('positiveAnswerCountByDivision'), function(byEmployer, divisionId)
+      _.forEach(report.get('usedDivisions'), function(nouse, divisionId)
       {
-        categories.push(dictionaries.divisions.get(divisionId).getLabel());
+        if (answerCount[divisionId])
+        {
+          categories.push(dictionaries.divisions.get(divisionId).getLabel());
+        }
       });
 
       return categories;
@@ -132,7 +137,9 @@ define([
 
     serializeSeries: function()
     {
+      var report = this.model.report;
       var usedEmployers = Object.keys(this.model.report.get('usedEmployers'));
+      var answerCount = report.get('positiveAnswerCountByDivision');
       var series = [];
       var employerToSeries = {};
       var refValue = this.getRefValue();
@@ -155,8 +162,15 @@ define([
         employerToSeries[employerId] = employerSeries;
       });
 
-      _.forEach(this.model.report.get('positiveAnswerCountByDivision'), function(byEmployer)
+      _.forEach(report.get('usedDivisions'), function(nouse, divisionId)
       {
+        var byEmployer = answerCount[divisionId];
+
+        if (!byEmployer)
+        {
+          return;
+        }
+
         _.forEach(series, function(employerSeries)
         {
           var percent = 0;

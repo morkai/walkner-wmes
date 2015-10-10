@@ -35,9 +35,18 @@ define([
     {
       var columns = {};
       var rows = [];
+      var report = this.model.report;
+      var responseCountTotal = report.get('responseCountTotal');
 
-      _.forEach(this.model.report.get('responseCountTotal'), function(byEmployer, divisionId)
+      _.forEach(report.get('usedDivisions'), function(nouse, divisionId)
       {
+        var byEmployer = responseCountTotal[divisionId];
+
+        if (!byEmployer)
+        {
+          return;
+        }
+
         columns[divisionId] = {};
 
         _.forEach(byEmployer, function(count, employerId)

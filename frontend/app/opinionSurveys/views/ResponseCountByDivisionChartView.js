@@ -164,12 +164,20 @@ define([
 
     serializeChartData: function()
     {
-      var responseCount = this.model.report.get('responseCountTotal');
+      var report = this.model.report;
+      var responseCount = report.get('responseCountTotal');
       var divisions = [];
       var employers = [];
 
-      _.forEach(responseCount, function(byEmployer, divisionId)
+      _.forEach(report.get('usedDivisions'), function(nouse, divisionId)
       {
+        var byEmployer = responseCount[divisionId];
+
+        if (!byEmployer)
+        {
+          return;
+        }
+
         var division = dictionaries.divisions.get(divisionId);
         var divisionCount = 0;
 
