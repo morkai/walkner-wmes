@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define(["underscore","../router","../viewport","../user","../core/util/showDeleteFormPage","./OpinionSurveyOmrResultCollection","./OpinionSurveyOmrResult","i18n!app/nls/opinionSurveyOmrResults"],function(e,n,r,i,u,o,t){"use strict";var s=i.auth("OPINION_SURVEYS:MANAGE");n.map("/opinionSurveyOmrResults",s,function(e){r.loadPage("app/opinionSurveyOmrResults/pages/OpinionSurveyOmrResultListPage",function(n){return new n({collection:new o(null,{rqlQuery:e.rql})})})}),n.map("/opinionSurveyOmrResults/:id",s,function(e){r.loadPage("app/opinionSurveyOmrResults/pages/OpinionSurveyOmrResultDetailsPage",function(n){return new n({model:new t({_id:e.params.id})})})})});

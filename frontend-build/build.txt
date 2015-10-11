@@ -150,6 +150,10 @@ app/opinionSurveyActions/assets/main.css
 ----------------
 app/opinionSurveyActions/assets/main.css
 
+app/opinionSurveyOmrResults/assets/main.css
+----------------
+app/opinionSurveyOmrResults/assets/main.css
+
 app/opinionSurveyResponses/assets/main.css
 ----------------
 app/opinionSurveyResponses/assets/main.css
@@ -377,6 +381,7 @@ assets/../app/opinionSurveys/assets/main.css
 assets/../app/opinionSurveyActions/assets/main.css
 assets/../app/opinionSurveyResponses/assets/main.css
 assets/../app/opinionSurveyScanTemplates/assets/main.css
+assets/../app/opinionSurveyOmrResults/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -1097,6 +1102,9 @@ app/opinionSurveyResponses/views/OpinionSurveyResponseFilterView.js
 app/opinionSurveyResponses/pages/OpinionSurveyResponseListPage.js
 app/opinionSurveyResponses/templates/details.js
 app/opinionSurveyResponses/pages/OpinionSurveyResponseDetailsPage.js
+app/opinionSurveyOmrResults/OpinionSurveyOmrResult.js
+app/opinionSurveyOmrResults/OpinionSurveyOmrResultCollection.js
+vendor/dragscroll.js
 app/opinionSurveyResponses/templates/form.js
 app/opinionSurveyResponses/templates/formAnswer.js
 app/opinionSurveyResponses/views/OpinionSurveyResponseFormView.js
@@ -1133,6 +1141,10 @@ app/nls/opinionSurveyScanTemplates.js
 app/nls/pl/opinionSurveyScanTemplates.js
 i18n!app/nls/opinionSurveyScanTemplates
 app/opinionSurveyScanTemplates/routes.js
+app/nls/opinionSurveyOmrResults.js
+app/nls/pl/opinionSurveyOmrResults.js
+i18n!app/nls/opinionSurveyOmrResults
+app/opinionSurveyOmrResults/routes.js
 app/wmes-routes.js
 vendor/visibly.js
 app/visibility.js
