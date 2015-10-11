@@ -260,7 +260,7 @@
   "TYPE:opinionSurveys.questions.deleted": "Badanie Opinia > Pytania: usunięcie",
   "TEXT:opinionSurveys.questions.deleted": "Usunięto pytanie: <em>{model->full}</em>",
   "TYPE:opinionSurveys.responses.edited": "Badanie Opinia > Odpowiedzi: edycja",
-  "TEXT:opinionSurveys.responses.edited": "Zmodyfikowano odpowiedź: <a href='\\#opinionSurveyQuestions/{model->_id}'>{model->_id}</a>",
+  "TEXT:opinionSurveys.responses.edited": "Zmodyfikowano odpowiedź: <a href='\\#opinionSurveyResponses/{model->_id}'>{model->_id}</a>",
   "TYPE:opinionSurveys.responses.deleted": "Badanie Opinia > Odpowiedzi: usunięcie",
   "TEXT:opinionSurveys.responses.deleted": "Usunięto odpowiedź: <em>{model->_id}</em>",
   "TYPE:opinionSurveys.actions.deleted": "Badanie Opinia > Akcje naprawcze: usunięcie",
