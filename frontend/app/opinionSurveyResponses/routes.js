@@ -47,17 +47,19 @@ define([
     }));
   });
 
-  router.map('/opinionSurveyResponses;add', canManage, function()
+  router.map('/opinionSurveyResponses;add', canManage, function(req)
   {
     viewport.showPage(new OpinionSurveyResponseAddFormPage({
-      model: new OpinionSurveyResponse()
+      model: new OpinionSurveyResponse(),
+      fix: req.query.fix
     }));
   });
 
   router.map('/opinionSurveyResponses/:id;edit', canManage, function(req)
   {
     viewport.showPage(new OpinionSurveyResponseEditFormPage({
-      model: new OpinionSurveyResponse({_id: req.params.id})
+      model: new OpinionSurveyResponse({_id: req.params.id}),
+      fixing: !!req.query.fix
     }));
   });
 

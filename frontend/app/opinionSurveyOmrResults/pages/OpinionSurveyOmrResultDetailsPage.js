@@ -3,10 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/i18n',
+  'app/core/util/pageActions',
   'app/core/pages/DetailsPage',
   'app/opinionSurveys/dictionaries',
   '../views/OpinionSurveyOmrResultDetailsView'
 ], function(
+  t,
+  pageActions,
   DetailsPage,
   dictionaries,
   OpinionSurveyOmrResultDetailsView
@@ -18,7 +22,29 @@ define([
     DetailsView: OpinionSurveyOmrResultDetailsView,
     baseBreadcrumb: true,
 
-    actions: [],
+    actions: function()
+    {
+      var actions = [];
+      var model = this.model;
+
+      if (model.get('status') !== 'unrecognized')
+      {
+        return actions;
+      }
+
+      if (model.get('survey'))
+      {
+        actions.push({
+          label: t.bound(model.getNlsDomain(), 'PAGE_ACTION:edit'),
+          icon: 'edit',
+          href: '#opinionSurveyResponses/' + model.get('response') + ';edit?fix=' + model.id
+        });
+      }
+
+      actions.push(pageActions.delete(model));
+
+      return actions;
+    },
 
     destroy: function()
     {

@@ -18,7 +18,7 @@ define([
     template: template,
 
     events: {
-      'click .xiconf-tabs a': function(e)
+      'click .nav-tabs a': function(e)
       {
         e.preventDefault();
 
@@ -67,12 +67,26 @@ define([
 
     afterRender: function()
     {
+      DetailsView.prototype.afterRender.call(this);
+
       this.activateTab(this.options.tab || 'omrPreview');
     },
 
     activateTab: function(tab)
     {
       this.$('.nav-tabs > li[data-tab="' + tab + '"] > a').tab('show');
+    },
+
+    onModelEdited: function(message)
+    {
+      var remoteModel = message.model;
+
+      if (remoteModel && remoteModel._id === this.model.id)
+      {
+        delete remoteModel.survey;
+
+        this.model.set(remoteModel);
+      }
     }
 
   });

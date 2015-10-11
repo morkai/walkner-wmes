@@ -26,20 +26,23 @@
     var removeEventListener = 'remove'+EventListener;
 
     var dragged = [];
+    var destroy = function() {
+      var i, el;
+      for (i = 0; i < dragged.length;) {
+        el = dragged[i++];
+        el[removeEventListener](mousedown, el.md, 0);
+        _window[removeEventListener](mouseup, el.mu, 0);
+        _window[removeEventListener](mousemove, el.mm, 0);
+      }
+    };
     var reset = function(options) {
         if (!options) options = {};
         if (!options.accept) options.accept = function() { return true; };
 
-        var i, el;
-        for (i = 0; i < dragged.length;) {
-            el = dragged[i++];
-            el[removeEventListener](mousedown, el.md, 0);
-            _window[removeEventListener](mouseup, el.mu, 0);
-            _window[removeEventListener](mousemove, el.mm, 0);
-        }
+        destroy();
 
         dragged = _document.getElementsByClassName(options.selector || 'dragscroll');
-        for (i = 0; i < dragged.length;) {
+        for (var i = 0; i < dragged.length;) {
             (function(el, lastClientX, lastClientY, pushed){
                 el[addEventListener](
                     mousedown,
@@ -74,5 +77,6 @@
         }
     }
 
+    exports.destroy = destroy;
     exports.reset = reset;
 }));

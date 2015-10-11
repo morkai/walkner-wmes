@@ -29,7 +29,7 @@ define([
 
     baseBreadcrumb: true,
 
-    actions: function(layout)
+    actions: function()
     {
       var collection = this.collection;
 

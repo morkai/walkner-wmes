@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = function redirectToActionDetailsRoute(app, module, req, res)
+module.exports = function redirectToActionDetailsRoute(app, module, req, res, next)
 {
   var mongoose = app[module.config.mongooseId];
   var OpinionSurveyAction = mongoose.model('OpinionSurveyAction');

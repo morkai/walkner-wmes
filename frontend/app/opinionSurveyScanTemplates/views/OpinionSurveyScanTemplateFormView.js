@@ -110,6 +110,8 @@ define([
       {
         this.regionInteract.unset();
       }
+
+      dragscroll.destroy();
     },
 
     serialize: function()

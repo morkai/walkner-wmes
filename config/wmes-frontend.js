@@ -127,6 +127,7 @@ exports.events = {
     'pressWorksheets.added',
     'kaizen.orders.added', 'kaizen.orders.edited',
     'opinionSurveys.responses.added',
+    'opinionSurveys.omrResults.edited',
     'opinionSurveys.actions.added','opinionSurveys.actions.edited'
   ]
 };

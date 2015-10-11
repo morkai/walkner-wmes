@@ -33,6 +33,7 @@
   "FORM:ACTION:edit": "Edytuj odpowiedź",
   "FORM:ERROR:addFailure": "Nie udało się dodać odpowiedzi :(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować odpowiedzi :(",
+  "form:preview:tab": "Strona {pageNumber}",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia odpowiedzi",
   "ACTION_FORM:BUTTON:delete": "Usuń odpowiedź",

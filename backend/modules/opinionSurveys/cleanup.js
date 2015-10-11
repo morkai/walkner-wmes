@@ -6,10 +6,14 @@
 
 var path = require('path');
 var fs = require('fs');
+var _ = require('lodash');
 var step = require('h5.step');
 
 module.exports = function setUpCleanup(app, module)
 {
+  var mongoose = app[module.config.mongooseId];
+  var OpinionSurveyOmrResult = mongoose.model('OpinionSurveyOmrResult');
+
   var cleaningScanTemplates = false;
 
   app.broker.subscribe('opinionSurveys.surveys.edited', function(message)
@@ -25,6 +29,9 @@ module.exports = function setUpCleanup(app, module)
 
   app.broker.subscribe('opinionSurveys.scanTemplates.edited', cleanupScanTemplates);
   app.broker.subscribe('opinionSurveys.scanTemplates.deleted', cleanupScanTemplates);
+
+  app.broker.subscribe('opinionSurveys.responses.edited', updateOmrResults.bind(null, 'fixed'));
+  app.broker.subscribe('opinionSurveys.responses.deleted', updateOmrResults.bind(null, 'ignored'));
 
   function cleanupScanTemplates()
   {
@@ -120,5 +127,52 @@ module.exports = function setUpCleanup(app, module)
 
       return done(null, filePath);
     });
+  }
+
+  function updateOmrResults(newStatus, message)
+  {
+    var response = message.model;
+
+    step(
+      function()
+      {
+        OpinionSurveyOmrResult.find({status: 'unrecognized', response: response._id}).exec(this.next());
+      },
+      function(err, omrResults)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        for (var i = 0; i < omrResults.length; ++i)
+        {
+          omrResults[i].status = newStatus;
+          omrResults[i].save(this.group());
+        }
+      },
+      function(err, omrResults)
+      {
+        if (err)
+        {
+          module.error(
+            "Failed to change status of OMR result to [%s] after response [%s] update: %s",
+            newStatus,
+            response._id,
+            err.message
+          );
+        }
+        else
+        {
+          _.forEach(omrResults, function(omrResult)
+          {
+            app.broker.publish('opinionSurveys.omrResults.edited', {
+              user: null,
+              model: omrResult
+            });
+          });
+        }
+      }
+    );
   }
 };

@@ -22,8 +22,7 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth();
-  var canManage = user.auth('OPINION_SURVEYS:MANAGE');
+  var canView = user.auth('OPINION_SURVEYS:MANAGE');
 
   router.map('/opinionSurveyOmrResults', canView, function(req)
   {
@@ -45,19 +44,6 @@ define([
       function(OpinionSurveyOmrResultDetailsPage)
       {
         return new OpinionSurveyOmrResultDetailsPage({
-          model: new OpinionSurveyOmrResult({_id: req.params.id})
-        });
-      }
-    );
-  });
-
-  router.map('/opinionSurveyOmrResults/:id;edit', canManage, function(req)
-  {
-    viewport.loadPage(
-      'app/opinionSurveyOmrResults/pages/OpinionSurveyOmrResultEditFormPage',
-      function(OpinionSurveyOmrResultEditFormPage)
-      {
-        return new OpinionSurveyOmrResultEditFormPage({
           model: new OpinionSurveyOmrResult({_id: req.params.id})
         });
       }

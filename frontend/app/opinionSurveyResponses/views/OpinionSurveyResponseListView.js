@@ -8,16 +8,14 @@ define([
   'app/time',
   'app/user',
   'app/viewport',
-  'app/core/views/ListView',
-  'app/opinionSurveys/dictionaries'
+  'app/core/views/ListView'
 ], function(
   _,
   t,
   time,
   user,
   viewport,
-  ListView,
-  dictionaries
+  ListView
 ) {
   'use strict';
 

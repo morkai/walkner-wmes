@@ -14,3 +14,21 @@
 .opinionSurveyResponses-form-answers > .form-group > .help-block {
   margin: 0 0 5px 0;
 }
+.opinionSurveyResponses-form-preview-tabs > .tab-content {
+  border: 1px solid #ccc;
+  border-top: 0;
+  overflow: scroll;
+}
+.opinionSurveyResponses-form-preview-image {
+  max-width: 1280px;
+}
+.dragscroll .opinionSurveyResponses-form-preview-image {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+.dragscroll .opinionSurveyResponses-form-preview-image:active {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
+}
