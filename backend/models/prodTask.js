@@ -48,7 +48,7 @@ module.exports = function setupProdTaskModel(app, mongoose)
       return done(null, []);
     }
 
-    var subdivisionTags = subdivision.get('prodTaskTags');
+    var subdivisionTags = subdivision.prodTaskTags;
 
     if (!Array.isArray(subdivisionTags) || !subdivisionTags.length)
     {

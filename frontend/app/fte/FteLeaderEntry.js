@@ -91,6 +91,12 @@ define([
     isWithFunctions: function()
     {
       var tasks = this.get('tasks');
+
+      if (!tasks || !tasks.length)
+      {
+        return false;
+      }
+
       var firstTask = tasks[0];
 
       return Array.isArray(firstTask.functions) && firstTask.functions.length > 0;
@@ -369,7 +375,7 @@ define([
     {
       var tasks = this.get('tasks');
 
-      if (!tasks.length)
+      if (!tasks || !tasks.length)
       {
         return [];
       }

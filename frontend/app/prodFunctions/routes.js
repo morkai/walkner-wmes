@@ -34,6 +34,7 @@ define([
           'label',
           {id: 'fteMasterPosition', className: 'is-min'},
           {id: 'fteLeaderPosition', className: 'is-min'},
+          {id: 'fteOtherPosition', className: 'is-min'},
           {id: 'direct', className: 'is-min'},
           {id: 'dirIndirRatio', className: 'is-min'},
           {id: 'companies', className: 'is-min'},

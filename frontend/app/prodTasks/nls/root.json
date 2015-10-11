@@ -21,7 +21,7 @@
     "PROPERTY:parent": "Parent task",
     "PROPERTY:name": "Name",
     "PROPERTY:tags": "Tags",
-    "PROPERTY:fteDiv": "Divide per Division in FTE (distribution)?",
+    "PROPERTY:fteDiv": "Divide per Division in FTE (other)?",
     "PROPERTY:clipColor": "Color in CLIP",
     "PROPERTY:inProd": "Use in Productivity?",
 

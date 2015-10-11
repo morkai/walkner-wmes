@@ -108,6 +108,16 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   fteLeaderEntrySchema.statics.mapProdTasks = mapProdTasks;
 
+  /**
+   * @param {object} options
+   * @param {ObjectId} options.subdivision
+   * @param {string} options.subdivisionType
+   * @param {Date} options.date
+   * @param {number} options.shift
+   * @param {boolean} options.copy
+   * @param {object} creator
+   * @param {function(Error, FteLeaderEntry)} done
+   */
   fteLeaderEntrySchema.statics.createForShift = function(options, creator, done)
   {
     var ProdTask = mongoose.model('ProdTask');
@@ -116,6 +126,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       .filter(function(division) { return division.type === 'prod'; })
       .map(function(division) { return division._id; })
       .sort();
+    var positionProperty = options.subdivisionType === 'storage' ? 'fteLeaderPosition' : 'fteOtherPosition';
 
     step(
       function prepareProdFunctionsStep()
@@ -123,11 +134,11 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         this.functions = app.prodFunctions.models
           .filter(function(prodFunction)
           {
-            return prodFunction.fteLeaderPosition > -1;
+            return prodFunction[positionProperty] > -1;
           })
           .sort(function(a, b)
           {
-            return a.fteLeaderPosition - b.fteLeaderPosition;
+            return a[positionProperty] - b[positionProperty];
           })
           .map(function(prodFunction)
           {

@@ -35,7 +35,7 @@ define([
         model: new FteLeaderEntry(),
         divisionFilter: function(division)
         {
-          return division && division.get('type') === 'dist';
+          return division && division.get('type') !== 'prod';
         }
       });
 

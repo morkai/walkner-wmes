@@ -31,13 +31,10 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
   }
 
   var shiftMoment = moment(data.date);
-  var validSubdivision = subdivisionsModule.models.some(function(subdivision)
-  {
-    return subdivision._id.toString() === data.subdivision;
-  });
+  var subdivision = subdivisionsModule.modelsById[data.subdivision];
 
   if (!shiftMoment.isValid()
-    || !validSubdivision
+    || !subdivision
     || !_.isNumber(data.shift))
   {
     return reply(new Error('INPUT'));
@@ -66,7 +63,7 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
   }
 
   var condition = {
-    subdivision: data.subdivision,
+    subdivision: subdivision._id,
     date: shiftMoment.toDate()
   };
 
@@ -88,6 +85,7 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
     var creator = userModule.createUserInfo(user, socket);
     var options = {
       subdivision: condition.subdivision,
+      subdivisionType: subdivision.type,
       date: condition.date,
       shift: data.shift,
       copy: !!data.copy

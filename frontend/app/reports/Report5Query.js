@@ -66,17 +66,20 @@ define([
       }
       else
       {
-        childOrgUnits = orgUnits.getAllDivisions().sort(function(a, b)
-        {
-          var aType = a.get('type');
-
-          if (aType === b.get('type'))
+        childOrgUnits = orgUnits
+          .getAllDivisions()
+          .filter(function(division) { return division.get('type') !== 'other'; })
+          .sort(function(a, b)
           {
-            return a.id.localeCompare(b.id);
-          }
+            var aType = a.get('type');
 
-          return aType === 'prod' ? -1 : 1;
-        });
+            if (aType === b.get('type'))
+            {
+              return a.id.localeCompare(b.id);
+            }
+
+            return aType === 'prod' ? -1 : 1;
+          });
       }
 
       childOrgUnits.forEach(function(childOrgUnit)

@@ -20,7 +20,7 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:fteMasterPosition": "Position in FTE (production)",
-    "PROPERTY:fteLeaderPosition": "Position in FTE (distribution)",
+    "PROPERTY:fteLeaderPosition": "Position in FTE (other)",
     "PROPERTY:color": "Color",
 
     "FORM:ACTION:add": "Add company",

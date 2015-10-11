@@ -26,6 +26,12 @@ module.exports = function report5Route(app, reportsModule, req, res, next)
   }
 
   var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
+  var subdivisionTypes = {};
+
+  _.forEach(orgUnitsModule.getAllByType('subdivision'), function(subdivision)
+  {
+    subdivisionTypes[subdivision._id] = subdivision.type;
+  });
 
   var options = {
     fromTime: helpers.getTime(req.query.from),
@@ -35,6 +41,7 @@ module.exports = function report5Route(app, reportsModule, req, res, next)
     orgUnitId: orgUnit ? req.query.orgUnitId : null,
     division: helpers.idToStr(division),
     subdivisions: helpers.idToStr(subdivisions),
+    subdivisionTypes: subdivisionTypes,
     prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
     orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
     directProdFunctions: getDirectProdFunctions(app[reportsModule.config.prodFunctionsId].models),

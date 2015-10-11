@@ -19,7 +19,7 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:fteMasterPosition": "Pozycja w FTE (produkcja)",
-  "PROPERTY:fteLeaderPosition": "Pozycja w FTE (magazyn)",
+  "PROPERTY:fteLeaderPosition": "Pozycja w FTE (inne)",
   "PROPERTY:color": "Kolor",
 
   "FORM:ACTION:add": "Dodaj firmę",

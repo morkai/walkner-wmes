@@ -85,6 +85,7 @@ module.exports = function(mongoose, options, done)
         .find(
           {date: {$gte: from, $lt: to}},
           {
+            subdivision: 1,
             date: 1,
             'tasks.id': 1,
             'tasks.childCount': 1,
@@ -391,6 +392,11 @@ module.exports = function(mongoose, options, done)
 
     fteLeaderEntryStream.on('data', function(fteLeaderEntry)
     {
+      if (options.subdivisionTypes[fteLeaderEntry.subdivision] === 'other')
+      {
+        return;
+      }
+
       var key = '' + fteLeaderEntry.date.getTime();
 
       createDefaultGroupedResult(key);

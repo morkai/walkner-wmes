@@ -20,7 +20,7 @@
   "PROPERTY:parent": "Nadrzędne zadanie",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:tags": "Tagi",
-  "PROPERTY:fteDiv": "Podział na wydziały w FTE (magazyn)?",
+  "PROPERTY:fteDiv": "Podział na wydziały w FTE (inne)?",
   "PROPERTY:clipColor": "Kolor w raporcie CLIP",
   "PROPERTY:inProd": "Użycie w Produktywności?",
 

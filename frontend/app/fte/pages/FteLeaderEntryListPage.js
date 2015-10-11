@@ -77,7 +77,7 @@ define([
         },
         divisionFilter: function(division)
         {
-          return division.get('type') === 'dist';
+          return division.get('type') !== 'prod';
         }
       });
 

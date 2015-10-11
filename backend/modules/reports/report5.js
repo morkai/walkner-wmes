@@ -520,6 +520,11 @@ module.exports = function report5(mongoose, options, done)
 
   function handleFteLeaderEntry(subdivisionMap, fteRatios, fteLeaderEntry)
   {
+    if (options.subdivisionTypes[fteLeaderEntry.subdivision] === 'other')
+    {
+      return;
+    }
+
     var dataEntry = getDataEntry(fteLeaderEntry.date);
 
     if (dataEntry === null)

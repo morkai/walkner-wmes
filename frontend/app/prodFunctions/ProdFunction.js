@@ -35,6 +35,7 @@ define([
         label: '',
         fteMasterPosition: -1,
         fteLeaderPosition: -1,
+        fteOtherPosition: -1,
         direct: false,
         dirIndirRatio: 100,
         companies: [],
@@ -82,6 +83,11 @@ define([
       if (obj.fteLeaderPosition === -1)
       {
         obj.fteLeaderPosition = '-';
+      }
+
+      if (obj.fteOtherPosition === -1)
+      {
+        obj.fteOtherPosition = '-';
       }
 
       return obj;

@@ -39,6 +39,13 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
     subdivisionType = null;
   }
 
+  var subdivisionTypes = {};
+
+  _.forEach(orgUnitsModule.getAllByType('subdivision'), function(subdivision)
+  {
+    subdivisionTypes[subdivision._id] = subdivision.type;
+  });
+
   var options = {
     fromTime: helpers.getTime(req.query.from),
     toTime: helpers.getTime(req.query.to),
@@ -48,6 +55,7 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
     division: helpers.idToStr(division),
     subdivisions: helpers.idToStr(subdivisions),
     subdivisionType: subdivisionType,
+    subdivisionTypes: subdivisionTypes,
     prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
     prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models),
     orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
