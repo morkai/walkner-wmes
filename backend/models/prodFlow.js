@@ -94,7 +94,7 @@ module.exports = function setupProdFlowModel(app, mongoose)
 
     _.forEach(app.mrpControllers.models, function(mrpController)
     {
-      if (String(mrpController.subdivision) !== subdivisionId)
+      if (String(mrpController.subdivision) !== String(subdivisionId))
       {
         return;
       }
