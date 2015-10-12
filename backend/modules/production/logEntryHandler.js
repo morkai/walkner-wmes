@@ -83,7 +83,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
           }
           else
           {
-            app.broker.publish('production.logEntries.handled');
+            app.broker.publish('production.logEntries.handled', _.pluck(logEntries, '_id'));
           }
 
           done(err);
