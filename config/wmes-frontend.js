@@ -206,8 +206,8 @@ exports.express = {
   ejsAmdHelpers: {
     t: 'app/i18n'
   },
-  textBody: {limit: '3mb'},
-  jsonBody: {limit: '1mb'}
+  textBody: {limit: '6mb'},
+  jsonBody: {limit: '2mb'}
 };
 
 exports.user = {
