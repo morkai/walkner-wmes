@@ -77,7 +77,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
           return this.done(done, err);
         }
 
-        this.flows = prodFlows.filter(function(prodFlow) { return !prodFlow.deactivated; }).map(function(prodFlow)
+        this.flows = prodFlows.filter(function(prodFlow) { return !prodFlow.deactivatedAt; }).map(function(prodFlow)
         {
           return {
             id: prodFlow._id,
