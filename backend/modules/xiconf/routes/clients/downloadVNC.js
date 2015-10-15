@@ -46,7 +46,7 @@ module.exports = function downloadVNCRoute(app, xiconfModule, req, res, next)
 
       var vncFileName = req.params.id + '.vnc';
       var vncFileContents = vncTemplate
-        .replace(/host\s*=.*?\r?\n/, 'host=' + remoteAddress + '\r\n')
+        .replace('{host}', remoteAddress)
         .trim();
 
       res.type('application/extension-vnc');
