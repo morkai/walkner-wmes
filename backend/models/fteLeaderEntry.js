@@ -10,8 +10,14 @@ var step = require('h5.step');
 module.exports = function setupFteLeaderEntryModel(app, mongoose)
 {
   var fteLeaderTaskCompanySchema = mongoose.Schema({
-    id: String,
-    name: String,
+    id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
     count: {}
   }, {
     _id: false
@@ -38,7 +44,10 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
   );
 
   var fteLeaderTaskFunctionSchema = mongoose.Schema({
-    id: String,
+    id: {
+      type: String,
+      required: true
+    },
     companies: [fteLeaderTaskCompanySchema]
   }, {
     _id: false
@@ -54,7 +63,10 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       type: Number,
       default: 0
     },
-    name: String,
+    name: {
+      type: String,
+      required: true
+    },
     companies: [fteLeaderTaskCompanySchema],
     functions: [fteLeaderTaskFunctionSchema],
     totals: {},
@@ -115,6 +127,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
    * @param {Date} options.date
    * @param {number} options.shift
    * @param {boolean} options.copy
+   * @param {Array.<{id: string, companies: Array.<string>}>} options.structure
    * @param {object} creator
    * @param {function(Error, FteLeaderEntry)} done
    */
@@ -126,31 +139,18 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       .filter(function(division) { return division.type === 'prod'; })
       .map(function(division) { return division._id; })
       .sort();
-    var positionProperty = options.subdivisionType === 'storage' ? 'fteLeaderPosition' : 'fteOtherPosition';
+    var sortedCompanies = prepareSortedCompanies(options.structure);
 
     step(
       function prepareProdFunctionsStep()
       {
-        this.functions = app.prodFunctions.models
-          .filter(function(prodFunction)
-          {
-            return prodFunction[positionProperty] > -1;
-          })
-          .sort(function(a, b)
-          {
-            return a[positionProperty] - b[positionProperty];
-          })
-          .map(function(prodFunction)
-          {
-            return {
-              id: prodFunction._id,
-              companies: getProdFunctionCompanyEntries(prodFunction)
-            };
-          })
-          .filter(function(functionEntry)
-          {
-            return functionEntry.companies.length > 0;
-          });
+        this.functions = options.structure.map(function(prodFunction)
+        {
+          return {
+            id: prodFunction.id,
+            companies: getProdFunctionCompanyEntries(prodFunction.companies, sortedCompanies)
+          };
+        });
       },
       function findModelsStep()
       {
@@ -352,33 +352,30 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     }
   };
 
-  function getProdFunctionCompanyEntries(prodFunction)
+  function getProdFunctionCompanyEntries(prodFunctionCompanies, sortedCompanies)
   {
     var companies = [];
 
-    _.forEach(prodFunction.companies, function(companyId)
+    _.forEach(sortedCompanies, function(companyId)
     {
+      if (!_.includes(prodFunctionCompanies, companyId))
+      {
+        return;
+      }
+
       var company = app.companies.modelsById[companyId];
 
-      if (company && company.fteLeaderPosition > -1)
+      if (company)
       {
-        companies.push(company);
-      }
-    });
-
-    return companies
-      .sort(function(a, b)
-      {
-        return a.fteLeaderPosition - b.fteLeaderPosition;
-      })
-      .map(function(company)
-      {
-        return {
+        companies.push({
           id: company._id,
           name: company.name,
           count: 0
-        };
-      });
+        });
+      }
+    });
+
+    return companies;
   }
 
   function mapProdTasks(tasks)
@@ -477,6 +474,23 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     }
 
     return false;
+  }
+
+  function prepareSortedCompanies(structure)
+  {
+    var companies = {};
+
+    [].concat(structure)
+      .sort(function(a, b) { return b.companies.length - a.companies.length; })
+      .forEach(function(prodFunction)
+      {
+        _.forEach(prodFunction.companies, function(companyId)
+        {
+          companies[companyId] = true;
+        });
+      });
+
+    return Object.keys(companies);
   }
 
   mongoose.model('FteLeaderEntry', fteLeaderEntrySchema);

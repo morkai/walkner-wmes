@@ -6,12 +6,14 @@
 
 var _ = require('lodash');
 var moment = require('moment');
+var step = require('h5.step');
 var canManage = require('../canManage');
 
-module.exports = function(app, fteModule, FteEntry, socket, data, reply)
+module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket, data, reply)
 {
   var userModule = app[fteModule.config.userId];
   var subdivisionsModule = app[fteModule.config.subdivisionsId];
+  var settings = app[fteModule.config.settingsId];
 
   if (!_.isFunction(reply))
   {
@@ -67,31 +69,59 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
     date: shiftMoment.toDate()
   };
 
-  FteEntry.findOne(condition).lean().exec(function(err, fteEntry)
-  {
-    if (err)
+  step(
+    function findStructureSettingStep()
     {
-      return reply(err);
-    }
-
-    if (fteEntry !== null)
+      settings.findById('fte.structure.' + subdivision._id, this.next());
+    },
+    function handleStructureSettingResultStep(err, structureSetting)
     {
-      return reply(
-        canManage(user, fteEntry) ? null : new Error('AUTH'),
-        fteEntry._id.toString()
-      );
-    }
+      if (err)
+      {
+        return this.skip(err);
+      }
 
-    var creator = userModule.createUserInfo(user, socket);
-    var options = {
-      subdivision: condition.subdivision,
-      subdivisionType: subdivision.type,
-      date: condition.date,
-      shift: data.shift,
-      copy: !!data.copy
-    };
+      if (_.isEmpty(structureSetting))
+      {
+        return this.skip(new Error('STRUCTURE'));
+      }
 
-    FteEntry.createForShift(options, creator, function(err, fteEntry)
+      this.structure = structureSetting.value;
+    },
+    function findFteEntryStep()
+    {
+      FteEntry.findOne(condition).lean().exec(this.next());
+    },
+    function handleFindFteEntryStep(err, fteEntry)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      if (fteEntry)
+      {
+        return this.skip(
+          canManage(user, fteEntry) ? null : new Error('AUTH'),
+          fteEntry._id.toString()
+        );
+      }
+    },
+    function createFteEntryStep()
+    {
+      var creator = userModule.createUserInfo(user, socket);
+      var options = {
+        subdivision: condition.subdivision,
+        subdivisionType: subdivision.type,
+        date: condition.date,
+        shift: data.shift,
+        copy: !!data.copy,
+        structure: this.structure
+      };
+
+      FteEntry.createForShift(options, creator, this.next());
+    },
+    function sendResultStep(err, fteEntry)
     {
       if (fteEntry)
       {
@@ -107,6 +137,6 @@ module.exports = function(app, fteModule, FteEntry, socket, data, reply)
       }
 
       return reply(err, fteEntry ? fteEntry._id.toString() : null);
-    });
-  });
+    }
+  );
 };

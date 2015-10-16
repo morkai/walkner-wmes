@@ -102,4 +102,14 @@ define([
   router.map(
     '/fte/leader/:id;delete', canManageLeader, showDeleteFormPage.bind(null, FteLeaderEntry)
   );
+
+  router.map('/fte;settings', user.auth('PROD_DATA:MANAGE'), function(req)
+  {
+    viewport.loadPage('app/fte/pages/FteSettingsPage', function(FteSettingsPage)
+    {
+      return new FteSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
+  });
 });

@@ -33,12 +33,8 @@ define([
     {
       return {
         label: '',
-        fteMasterPosition: -1,
-        fteLeaderPosition: -1,
-        fteOtherPosition: -1,
         direct: false,
         dirIndirRatio: 100,
-        companies: [],
         color: '#000000'
       };
     },
@@ -58,37 +54,7 @@ define([
 
       obj.direct = t('prodFunctions', 'direct:' + obj.direct);
 
-      obj.companies = (obj.companies || [])
-        .map(function(companyId)
-        {
-          var company = companies.get(companyId);
-
-          return company ? company.getLabel() : null;
-        })
-        .filter(function(label) { return !!label; })
-        .join('; ');
-
-      if (!obj.companies.length)
-      {
-        obj.companies = '-';
-      }
-
       obj.color = colorLabelTemplate({color: obj.color});
-
-      if (obj.fteMasterPosition === -1)
-      {
-        obj.fteMasterPosition = '-';
-      }
-
-      if (obj.fteLeaderPosition === -1)
-      {
-        obj.fteLeaderPosition = '-';
-      }
-
-      if (obj.fteOtherPosition === -1)
-      {
-        obj.fteOtherPosition = '-';
-      }
 
       return obj;
     }

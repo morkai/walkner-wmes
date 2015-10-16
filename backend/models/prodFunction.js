@@ -16,21 +16,6 @@ module.exports = function setupProdFunctionModel(app, mongoose)
       type: String,
       trim: true
     },
-    fteMasterPosition: {
-      type: Number,
-      min: -1,
-      default: -1
-    },
-    fteLeaderPosition: {
-      type: Number,
-      min: -1,
-      default: -1
-    },
-    fteOtherPosition: {
-      type: Number,
-      min: -1,
-      default: -1
-    },
     direct: {
       type: Boolean,
       default: false
@@ -39,10 +24,6 @@ module.exports = function setupProdFunctionModel(app, mongoose)
       type: Number,
       default: 100
     },
-    companies: [{
-      type: String,
-      ref: 'Company'
-    }],
     color: {
       type: String,
       default: '#000000'

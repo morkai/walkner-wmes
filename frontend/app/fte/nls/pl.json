@@ -1,11 +1,12 @@
 {
-  "BREADCRUMBS:browse": "FTE",
+  "BREADCRUMBS:base": "FTE",
   "BREADCRUMBS:leader:browse": "FTE (inne)",
   "BREADCRUMBS:master:browse": "FTE (produkcja)",
   "BREADCRUMBS:addForm": "Wybieranie wpisu",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:details": "Zasoby",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+  "BREADCRUMBS:settings": "Ustawienia",
 
   "MSG:LOADING_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
@@ -16,6 +17,7 @@
   "PAGE_ACTION:edit": "Edytuj wpis",
   "PAGE_ACTION:delete": "Usuń wpis",
   "PAGE_ACTION:export": "Eksportuj wpisy",
+  "PAGE_ACTION:settings": "Ustawienia",
 
   "filter:date": "Data",
   "filter:shift": "Zmiana",
@@ -55,5 +57,12 @@
   "ACTION_FORM:BUTTON:delete": "Usuń wpis FTE",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany wpis FTE?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wpis FTE <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć wpisu FTE :-("
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć wpisu FTE :-(",
+
+  "settings:tab:structure": "Struktura",
+  "settings:structure:subdivision:placeholder": "Wybierz dział, dla którego chcesz ustalić strukturę wpisu FTE",
+  "settings:structure:prodFunction": "Funkcja",
+  "settings:structure:prodFunction:placeholder": "Wybierz funkcję",
+  "settings:structure:companies": "Pracodawcy",
+  "settings:structure:companies:placeholder": "Wybierz firmy"
 }

@@ -44,18 +44,6 @@ define([
 
       this.$id('color').parent().colorpicker();
 
-      this.$id('companies').select2({
-        allowClear: true,
-        multiple: true,
-        data: companies.map(function(company)
-        {
-          return {
-            id: company.id,
-            text: company.getLabel()
-          };
-        })
-      });
-
       this.toggleDirIndirRatio();
     },
 
@@ -70,15 +58,7 @@ define([
     {
       var formData = this.model.toJSON();
 
-      formData.companies = formData.companies.join(',');
       formData.direct += '';
-
-      return formData;
-    },
-
-    serializeForm: function(formData)
-    {
-      formData.companies = (formData.companies || '').split(',');
 
       return formData;
     },

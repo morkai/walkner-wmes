@@ -28,22 +28,6 @@
         <label for="<%- idPrefix %>-dirIndirRatio" class="control-label"><%- t('prodFunctions', 'PROPERTY:dirIndirRatio') %></label>
         <input id="<%- idPrefix %>-dirIndirRatio" class="form-control small" type="number" name="dirIndirRatio" min="0" max="100">
       </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-fteMasterPosition" class="control-label"><%- t('prodFunctions', 'PROPERTY:fteMasterPosition') %></label>
-        <input id="<%- idPrefix %>-fteMasterPosition" class="form-control small" type="number" name="fteMasterPosition" min="-1">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-fteLeaderPosition" class="control-label"><%- t('prodFunctions', 'PROPERTY:fteLeaderPosition') %></label>
-        <input id="<%- idPrefix %>-fteLeaderPosition" class="form-control small" type="number" name="fteLeaderPosition" min="-1">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-fteOtherPosition" class="control-label"><%- t('prodFunctions', 'PROPERTY:fteOtherPosition') %></label>
-        <input id="<%- idPrefix %>-fteOtherPosition" class="form-control small" type="number" name="fteOtherPosition" min="-1">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-companies" class="control-label"><%- t('prodFunctions', 'PROPERTY:companies') %></label>
-        <input id="<%- idPrefix %>-companies" type="text" name="companies">
-      </div>
       <%- renderColorPicker({idPrefix: idPrefix, property: 'color', label: t('prodFunctions', 'PROPERTY:color'), value: model.color}) %>
     </div>
     <div class="panel-footer">

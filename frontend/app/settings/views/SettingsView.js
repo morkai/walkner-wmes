@@ -3,11 +3,13 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'js2form',
   'app/core/View',
   'app/core/templates/colorPicker',
   'bootstrap-colorpicker'
 ], function(
+  _,
   js2form,
   View,
   colorPickerTemplate
@@ -130,7 +132,7 @@ define([
         {
           var el = view.el.querySelector('input[name="' + setting.id + '"]');
 
-          if (el.tagName !== 'SELECT' && el.type !== 'checkbox')
+          if (!el || (el.tagName !== 'SELECT' && el.type !== 'checkbox'))
           {
             value = String(value);
           }
@@ -338,6 +340,12 @@ define([
     scheduleUpdateSetting: function(el, delay)
     {
       var settingId = el.name;
+
+      if (_.isEmpty(settingId))
+      {
+        return;
+      }
+
       var settingValue = this.getValueFromSettingField(el);
 
       if (this.timers[settingId])

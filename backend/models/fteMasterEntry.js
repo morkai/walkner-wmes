@@ -10,8 +10,14 @@ var step = require('h5.step');
 module.exports = function setupFteMasterEntryModel(app, mongoose)
 {
   var fteMasterTaskCompanySchema = mongoose.Schema({
-    id: String,
-    name: String,
+    id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
     count: {
       type: Number,
       min: 0,
@@ -22,7 +28,10 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
   });
 
   var fteMasterTaskFunctionSchema = mongoose.Schema({
-    id: String,
+    id: {
+      type: String,
+      required: true
+    },
     companies: [fteMasterTaskCompanySchema]
   }, {
     _id: false
@@ -34,8 +43,14 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       enum: ['prodTask', 'prodFlow']
     },
     id: mongoose.Schema.Types.ObjectId,
-    name: String,
-    noPlan: Boolean,
+    name: {
+      type: String,
+      required: true
+    },
+    noPlan: {
+      type: Boolean,
+      default: false
+    },
     functions: [fteMasterTaskFunctionSchema],
     total: {
       type: Number,
@@ -47,7 +62,10 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   var fteMasterAbsentUserSchema = mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
-    name: String,
+    name: {
+      type: String,
+      required: true
+    },
     personellId: String
   }, {
     _id: false
@@ -94,31 +112,33 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
   fteMasterEntrySchema.index({subdivision: 1});
   fteMasterEntrySchema.index({date: -1, subdivision: 1});
 
+  /**
+   * @param {object} options
+   * @param {ObjectId} options.subdivision
+   * @param {string} options.subdivisionType
+   * @param {Date} options.date
+   * @param {number} options.shift
+   * @param {boolean} options.copy
+   * @param {Array.<{id: string, companies: Array.<string>}>} options.structure
+   * @param {object} creator
+   * @param {function(Error, FteMasterEntry)} done
+   */
   fteMasterEntrySchema.statics.createForShift = function(options, creator, done)
   {
     var ProdTask = mongoose.model('ProdTask');
     var FteMasterEntry = mongoose.model('FteMasterEntry');
+    var sortedCompanies = prepareSortedCompanies(options.structure);
 
     step(
       function prepareProdFunctionsStep()
       {
-        this.functions = app.prodFunctions.models
-          .filter(function(prodFunction)
-          {
-            return prodFunction.fteMasterPosition > -1;
-          })
-          .sort(function(a, b) { return a.fteMasterPosition - b.fteMasterPosition; })
-          .map(function(prodFunction)
-          {
-            return {
-              id: prodFunction._id,
-              companies: getProdFunctionCompanyEntries(prodFunction)
-            };
-          })
-          .filter(function(functionEntry)
-          {
-            return functionEntry.companies.length > 0;
-          });
+        this.functions = options.structure.map(function(prodFunction)
+        {
+          return {
+            id: prodFunction.id,
+            companies: getProdFunctionCompanyEntries(prodFunction.companies, sortedCompanies)
+          };
+        });
       },
       function findModelsStep()
       {
@@ -266,30 +286,30 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     this.total = overallTotal;
   };
 
-  function getProdFunctionCompanyEntries(prodFunction)
+  function getProdFunctionCompanyEntries(prodFunctionCompanies, sortedCompanies)
   {
     var companies = [];
 
-    _.forEach(prodFunction.companies, function(companyId)
+    _.forEach(sortedCompanies, function(companyId)
     {
+      if (!_.includes(prodFunctionCompanies, companyId))
+      {
+        return;
+      }
+
       var company = app.companies.modelsById[companyId];
 
-      if (company && company.fteMasterPosition > -1)
+      if (company)
       {
-        companies.push(company);
-      }
-    });
-
-    return companies
-      .sort(function(a, b) { return a.fteMasterPosition - b.fteMasterPosition; })
-      .map(function(company)
-      {
-        return {
+        companies.push({
           id: company._id,
           name: company.name,
           count: 0
-        };
-      });
+        });
+      }
+    });
+
+    return companies;
   }
 
   function getProdFlowTasks(subdivisionId, functions, done)
@@ -350,6 +370,23 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     });
 
     return prevEntryValues;
+  }
+
+  function prepareSortedCompanies(structure)
+  {
+    var companies = {};
+
+    [].concat(structure)
+      .sort(function(a, b) { return b.companies.length - a.companies.length; })
+      .forEach(function(prodFunction)
+      {
+        _.forEach(prodFunction.companies, function(companyId)
+        {
+          companies[companyId] = true;
+        });
+      });
+
+    return Object.keys(companies);
   }
 
   mongoose.model('FteMasterEntry', fteMasterEntrySchema);

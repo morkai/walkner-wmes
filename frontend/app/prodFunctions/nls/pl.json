@@ -18,12 +18,8 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:label": "Opis",
-  "PROPERTY:fteMasterPosition": "Pozycja w FTE (produkcja)",
-  "PROPERTY:fteLeaderPosition": "Pozycja w FTE (magazyn)",
-  "PROPERTY:fteOtherPosition": "Pozycja w FTE (inne)",
   "PROPERTY:direct": "DIRECT/INDIRECT",
   "PROPERTY:dirIndirRatio": "DIR/INDIR [%]",
-  "PROPERTY:companies": "Firmy",
   "PROPERTY:color": "Kolor",
 
   "direct:true": "DIRECT",

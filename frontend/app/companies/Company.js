@@ -27,8 +27,6 @@ define([
 
     defaults: {
       name: null,
-      fteMasterPosition: -1,
-      fteLeaderPosition: -1,
       color: '#000000'
     },
 

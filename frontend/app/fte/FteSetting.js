@@ -3,17 +3,15 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/core/views/DetailsView',
-  'app/prodFunctions/templates/details'
+  '../settings/Setting'
 ], function(
-  DetailsView,
-  detailsTemplate
+  Setting
 ) {
   'use strict';
 
-  return DetailsView.extend({
+  return Setting.extend({
 
-    template: detailsTemplate
+    urlRoot: '/fte/settings'
 
   });
 });

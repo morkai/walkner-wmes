@@ -242,3 +242,6 @@ textarea.fte-leaderEntry-comment:focus {
   height: auto;
   margin-top: 0;
 }
+.fte-settings .panel-body[data-tab="structure"] {
+  padding-bottom: 0;
+}

@@ -49,7 +49,13 @@ define([
             return user.isAllowedTo('FTE:MASTER:MANAGE', 'PROD_DATA:MANAGE');
           }
         },
-        pageActions.export(layout, this, this.collection)
+        pageActions.export(layout, this, this.collection),
+        {
+          label: t.bound('fte', 'PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'PROD_DATA:MANAGE',
+          href: '#fte;settings?tab=structure'
+        }
       ];
     },
 

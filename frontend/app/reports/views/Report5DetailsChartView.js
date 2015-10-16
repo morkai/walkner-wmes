@@ -38,31 +38,20 @@ define([
       var byCompanyAndProdFunction = this.model.get('byCompanyAndProdFunction');
       var details = [];
 
-      prodFunctions.forEach(function(prodFunction)
+      _.forEach(byCompanyAndProdFunction, function(byProdFunction, companyId)
       {
-        if (!displayOptions.isProdFunctionVisible(prodFunction.id))
+        var company = companies.get(companyId);
+
+        if (!company || !displayOptions.isCompanyVisible(companyId))
         {
           return;
         }
 
-        var prodFunctionColor = prodFunction.get('color');
-
-        (prodFunction.get('companies') || []).forEach(function(companyId)
+        _.forEach(byProdFunction, function(fte, prodFunctionId)
         {
-          /*jshint eqnull:true*/
+          var prodFunction = prodFunctions.get(prodFunctionId);
 
-          var company = companies.get(companyId);
-
-          if (!company
-            || byCompanyAndProdFunction[companyId] === undefined
-            || !displayOptions.isCompanyVisible(companyId))
-          {
-            return;
-          }
-
-          var fte = byCompanyAndProdFunction[companyId][prodFunction.id];
-
-          if (fte == null || fte === 0)
+          if (!fte || !prodFunction || !displayOptions.isProdFunctionVisible(prodFunctionId))
           {
             return;
           }
@@ -70,7 +59,7 @@ define([
           details.push({
             prodFunctionId: prodFunction.id,
             companyId: companyId,
-            color: prodFunctionColor,
+            color: prodFunction.get('color'),
             borderColor: company.get('color'),
             y: fte,
             states: {

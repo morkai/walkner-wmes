@@ -14,7 +14,8 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   sioId: 'sio',
   divisionsId: 'divisions',
-  subdivisionsId: 'subdivisions'
+  subdivisionsId: 'subdivisions',
+  settingsId: 'settings'
 };
 
 exports.start = function startFteModule(app, module)
@@ -35,7 +36,8 @@ exports.start = function startFteModule(app, module)
       module.config.mongooseId,
       module.config.userId,
       module.config.expressId,
-      module.config.subdivisionsId
+      module.config.subdivisionsId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );
@@ -46,7 +48,8 @@ exports.start = function startFteModule(app, module)
       module.config.userId,
       module.config.sioId,
       module.config.divisionsId,
-      module.config.subdivisionsId
+      module.config.subdivisionsId,
+      module.config.settingsId
     ],
     setUpCommands.bind(null, app, module)
   );

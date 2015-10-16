@@ -1,0 +1,28 @@
+<form class="settings fte-settings">
+  <div class="list-group">
+    <a class="list-group-item" href="#fte;settings?tab=structure" data-tab="structure"><%- t('fte', 'settings:tab:structure') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="structure">
+      <div class="form-group">
+        <input id="<%- idPrefix %>-structure-subdivision" type="text">
+      </div>
+      <table class="table table-condensed">
+        <thead>
+        <tr>
+          <th class="is-min"><%- t('core', '#') %></th>
+          <th class="is-min"><%- t('fte', 'settings:structure:prodFunction') %></th>
+          <th><%- t('fte', 'settings:structure:companies') %></th>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <td colspan="4"><input id="<%- idPrefix %>-structure-prodFunction" type="text"></td>
+        </tr>
+        </tfoot>
+        <tbody id="<%- idPrefix %>-structure"></tbody>
+      </table>
+    </div>
+  </div>
+</form>

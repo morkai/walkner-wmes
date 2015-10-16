@@ -15,11 +15,21 @@ module.exports = function setUpFteRoutes(app, fteModule)
   var auth = app[fteModule.config.userId].auth;
   var mongoose = app[fteModule.config.mongooseId];
   var subdivisionsModule = app[fteModule.config.subdivisionsId];
+  var settings = app[fteModule.config.settingsId];
   var FteMasterEntry = mongoose.model('FteMasterEntry');
   var FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
   var canViewLeader = auth('FTE:LEADER:VIEW');
   var canViewMaster = auth('FTE:MASTER:VIEW');
+  var canManageSettings = auth('PROD_DATA:MANAGE');
+
+  express.get(
+    '/fte/settings',
+    canManageSettings,
+    limitToFteSettings,
+    express.crud.browseRoute.bind(null, app, settings.Setting)
+  );
+  express.put('/fte/settings/:id', canManageSettings, settings.updateRoute);
 
   express.get(
     '/fte/master',
@@ -86,6 +96,16 @@ module.exports = function setUpFteRoutes(app, fteModule)
     canDelete.bind(null, FteLeaderEntry),
     express.crud.deleteRoute.bind(null, app, FteLeaderEntry)
   );
+
+  function limitToFteSettings(req, res, next)
+  {
+    req.rql.selector = {
+      name: 'regex',
+      args: ['_id', '^fte\\.']
+    };
+
+    return next();
+  }
 
   function limitToDivision(req, res, next)
   {

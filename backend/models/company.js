@@ -16,16 +16,6 @@ module.exports = function setupCompanyModel(app, mongoose)
       type: String,
       trim: true
     },
-    fteMasterPosition: {
-      type: Number,
-      min: -1,
-      default: -1
-    },
-    fteLeaderPosition: {
-      type: Number,
-      min: -1,
-      default: -1
-    },
     color: {
       type: String,
       default: '#000000'

@@ -1,11 +1,13 @@
 {
   "root": {
+    "BREADCRUMBS:base": "FTE",
     "BREADCRUMBS:leader:browse": "FTE (other)",
     "BREADCRUMBS:master:browse": "FTE (production)",
     "BREADCRUMBS:addForm": "Choosing",
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:details": "Resources",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+    "BREADCRUMBS:settings": "Settings",
 
     "MSG:LOADING_FAILURE": "Failed to load the FTE data :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the specific FTE data :(",
@@ -16,6 +18,7 @@
     "PAGE_ACTION:edit": "Edit entry",
     "PAGE_ACTION:delete": "Delete entry",
     "PAGE_ACTION:export": "Export entries",
+    "PAGE_ACTION:settings": "Settings",
 
     "filter:date": "Date",
     "filter:shift": "Shift",
@@ -55,7 +58,14 @@
     "ACTION_FORM:BUTTON:delete": "Delete FTE entry",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen FTE entry?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> FTE entry?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the FTE entry :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the FTE entry :-(",
+
+    "settings:tab:structure": "Strcuture",
+    "settings:structure:subdivision:placeholder": "Select a subdivision to set its FTE entry structure",
+    "settings:structure:prodFunction": "Function",
+    "settings:structure:prodFunction:placeholder": "Select a function",
+    "settings:structure:companies": "Employers",
+    "settings:structure:companies:placeholder": "Select a company"
   },
   "pl": true
 }
