@@ -69,13 +69,10 @@ function MongoStore(db, options)
    */
   this.onClose = this.onClose.bind(this);
 
-  this.db.on('open', this.onOpen);
+  this.db.on('reconnect', this.onOpen);
   this.db.on('close', this.onClose);
 
-  if (this.db.state === 'connected')
-  {
-    this.scheduleGc();
-  }
+  this.scheduleGc();
 }
 
 /**
