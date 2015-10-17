@@ -192,7 +192,7 @@ define([
             parentId: superior._id,
             name: superior.short + ' \\ ' + employer.getLabel(),
             y: count,
-            color: employer.getColor()
+            color: employer.get('color')
           });
 
           superiorCount += count;

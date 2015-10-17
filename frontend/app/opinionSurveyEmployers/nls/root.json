@@ -21,6 +21,7 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:full": "Full name",
     "PROPERTY:short": "Short name",
+    "PROPERTY:color": "Color",
 
     "FORM:ACTION:add": "Add employer",
     "FORM:ACTION:edit": "Edit employer",

@@ -149,7 +149,7 @@ define([
           dataLabels: {
             enabled: true
           },
-          color: employer.getColor()
+          color: employer.get('color')
         };
 
         series.push(employerSeries);

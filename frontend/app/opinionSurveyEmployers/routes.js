@@ -44,7 +44,8 @@ define([
       columns: [
         {id: '_id', className: 'is-min'},
         {id: 'short', className: 'is-min'},
-        'full'
+        'full',
+        {id: 'color', className: 'is-min'}
       ]
     }));
   });

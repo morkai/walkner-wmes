@@ -18,6 +18,10 @@ module.exports = function setupOpinionSurveyEmployerModel(app, mongoose)
     short: {
       type: String,
       required: true
+    },
+    color: {
+      type: String,
+      required: true
     }
   }, {
     id: false

@@ -4,12 +4,10 @@
 
 define([
   '../core/Model',
-  '../data/companies',
-  '../data/colorFactory'
+  'app/core/templates/colorLabel'
 ], function(
   Model,
-  companies,
-  colorFactory
+  colorLabelTemplate
 ) {
   'use strict';
 
@@ -27,17 +25,13 @@ define([
 
     labelAttribute: 'short',
 
-    getColor: function()
+    serialize: function()
     {
-      var company = companies.get(this.id);
-      var color = null;
+      var obj = this.toJSON();
 
-      if (company)
-      {
-        color = company.get('color');
-      }
+      obj.color = colorLabelTemplate({color: obj.color});
 
-      return color || colorFactory.getColor('opinionSurveys:employers', this.id);
+      return obj;
     }
 
   });

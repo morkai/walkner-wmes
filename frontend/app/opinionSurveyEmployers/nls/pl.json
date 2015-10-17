@@ -20,6 +20,7 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:full": "Pełna nazwa",
   "PROPERTY:short": "Krótka nazwa",
+  "PROPERTY:color": "Kolor",
 
   "FORM:ACTION:add": "Dodaj pracodawcę",
   "FORM:ACTION:edit": "Edytuj pracodawcę",

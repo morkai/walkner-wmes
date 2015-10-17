@@ -189,7 +189,7 @@ define([
             parentId: division.id,
             name: division.getLabel() + ' \\ ' + employer.getLabel(),
             y: count,
-            color: employer.getColor()
+            color: employer.get('color')
           });
 
           divisionCount += count;

@@ -15,6 +15,7 @@
         <label for="<%- idPrefix %>-full" class="control-label is-required"><%- t('opinionSurveyEmployers', 'PROPERTY:full') %></label>
         <input id="<%- idPrefix %>-full" class="form-control" type="text" name="full" required maxlength="250">
       </div>
+      <%- renderColorPicker({idPrefix: idPrefix, property: 'color', label: t('opinionSurveyEmployers', 'PROPERTY:color'), value: model.color}) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>
