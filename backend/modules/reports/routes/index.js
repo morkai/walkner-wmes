@@ -90,7 +90,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     );
   }
 
-  if (_.includes(reportsModule.config.reports, '5'))
+  if (_.includes(reportsModule.config.reports, '6'))
   {
     express.get(
       '/reports/6',
@@ -100,7 +100,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     );
   }
 
-  if (_.includes(reportsModule.config.reports, '5'))
+  if (_.includes(reportsModule.config.reports, '7'))
   {
     express.get(
       '/reports/7',
