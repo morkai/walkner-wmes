@@ -9,6 +9,7 @@ define([
   'app/user',
   'app/core/Model',
   'app/core/views/FormView',
+  'app/core/util/idAndLabel',
   'app/data/views/OrgUnitDropdownsView',
   'app/data/aors',
   'app/data/companies',
@@ -25,6 +26,7 @@ define([
   user,
   Model,
   FormView,
+  idAndLabel,
   OrgUnitDropdownsView,
   aors,
   companies,
@@ -193,28 +195,15 @@ define([
       this.$id('prodFunction').select2({
         width: '100%',
         allowClear: true,
-        data: this.getProdFunctionsForCompany()
+        data: prodFunctions.map(idAndLabel)
       });
     },
 
     setUpCompanySelect2: function()
     {
-      var $company = this.$id('company').select2({
+      this.$id('company').select2({
         width: '100%',
         allowClear: true
-      });
-      var $prodFunction = this.$id('prodFunction');
-      var view = this;
-
-      $company.on('change', function()
-      {
-        var oldValue = $prodFunction.val();
-
-        $prodFunction.select2('val', null);
-
-        view.setUpProdFunctionSelect2();
-
-        $prodFunction.select2('val', oldValue);
       });
     },
 
@@ -227,29 +216,6 @@ define([
       {
         $vendor.select2('data', $vendor.prepareData(vendor));
       }
-    },
-
-    getProdFunctionsForCompany: function()
-    {
-      var company = this.$id('company').val();
-
-      if (company === '')
-      {
-        return [];
-      }
-
-      return prodFunctions
-        .filter(function(prodFunction)
-        {
-          return prodFunction.get('companies').indexOf(company) !== -1;
-        })
-        .map(function(prodFunction)
-        {
-          return {
-            id: prodFunction.id,
-            text: prodFunction.getLabel()
-          };
-        });
     },
 
     validatePasswords: function()
