@@ -10,7 +10,7 @@ module.exports = function setUpProdTasksRoutes(app, prodTasksModule, useDictiona
   var auth = app[prodTasksModule.config.userId].auth;
   var ProdTask = app[prodTasksModule.config.mongooseId].model('ProdTask');
 
-  var canView = auth('DICTIONARIES:VIEW', 'REPORTS:VIEW', 'REPORTS:MANAGE');
+  var canView = auth('DICTIONARIES:VIEW', 'REPORTS:VIEW', 'REPORTS:MANAGE', 'REPORTS:5:VIEW');
   var canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/prodTasks', canView, express.crud.browseRoute.bind(null, app, ProdTask));
