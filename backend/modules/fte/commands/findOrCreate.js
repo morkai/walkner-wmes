@@ -103,7 +103,7 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket,
       {
         return this.skip(
           canManage(user, fteEntry) ? null : new Error('AUTH'),
-          fteEntry._id.toString()
+          fteEntry
         );
       }
     },
