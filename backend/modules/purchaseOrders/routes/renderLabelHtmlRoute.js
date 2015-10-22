@@ -123,6 +123,8 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
           barcodeData += page.shippingNo;
         }
 
+        barcodeData = _.trim(barcodeData, '/\\');
+
         page.barcodeData = barcodeData;
 
         this.barcodeDataToPng[barcodeData] = null;
