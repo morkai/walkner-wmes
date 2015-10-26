@@ -22,7 +22,8 @@ define([
     template: filterTemplate,
 
     defaultFormData: {
-      createdAt: '',
+      from: '',
+      to: '',
       prodLine: null,
       type: null,
       shift: 0,
@@ -31,7 +32,7 @@ define([
     },
 
     termToForm: {
-      'date': function(propertyName, term, formData)
+      'startedAt': function(propertyName, term, formData)
       {
         fixTimeRange.toFormData(formData, term, 'date');
       },
@@ -42,7 +43,6 @@ define([
       'shift': 'prodLine',
       'orderId': 'prodLine',
       'operationNo': 'prodLine'
-
     },
 
     afterRender: function()
@@ -97,12 +97,12 @@ define([
 
       if (timeRange.from)
       {
-        selector.push({name: 'ge', args: ['date', timeRange.from]});
+        selector.push({name: 'ge', args: ['startedAt', timeRange.from]});
       }
 
       if (timeRange.to)
       {
-        selector.push({name: 'le', args: ['date', timeRange.to]});
+        selector.push({name: 'lt', args: ['startedAt', timeRange.to]});
       }
     },
 

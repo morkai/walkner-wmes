@@ -35,11 +35,28 @@ define([
         elTime = defaultTime;
       }
 
+      if (elTime.split(':').length === 2)
+      {
+        elTime += ':00';
+      }
+
       elMoment = (utc ? moment.utc : time.getMoment)(elDate + ' ' + elTime, 'YYYY-MM-DD HH:mm:ss');
     }
     else
     {
-      elMoment = (utc ? moment.utc : time.getMoment)($el.val(), 'YYYY-MM-DD HH:mm:ss');
+      var elValue = $el.val();
+
+      if (!/ [0-9]+:[0-9]+(:[0-9]+)?/.test(elValue))
+      {
+        elValue += ' ' + (defaultTime || '00:00:00');
+      }
+
+      if (elValue.split(':').length === 2)
+      {
+        elValue += ':00';
+      }
+
+      elMoment = (utc ? moment.utc : time.getMoment)(elValue, 'YYYY-MM-DD HH:mm:ss');
     }
 
     var valid = elMoment.isValid();
