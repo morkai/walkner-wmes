@@ -82,7 +82,7 @@ define([
     },
 
     remoteTopics: {
-      'prodChangeRequests.**': function(message, topic)
+      'prodChangeRequests.**': function()
       {
         if (this.showingDetails)
         {

@@ -85,7 +85,7 @@ define([
       _.forEach(this.pendingChanges, function(change, key) { this.renderPendingChange(key); }, this);
     },
 
-    onModelUpdated: function(message)
+    onModelUpdated: function()
     {
       this.scheduleModelReload();
     },
