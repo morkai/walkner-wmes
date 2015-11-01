@@ -5,6 +5,7 @@
 'use strict';
 
 var _ = require('lodash');
+var step = require('h5.step');
 var orderFinder = require('../orderFinder');
 
 exports.isOfflineEntry = function(logEntry)
@@ -28,6 +29,44 @@ exports.fillOrderData = function(app, productionModule, logEntry, done)
   {
     fillProdOrderData(app, productionModule, logEntry, done);
   }
+};
+
+exports.createRecalcShiftTimesStep = function(productionModule, logEntry)
+{
+  return function recalcShiftTimesStep(err)
+  {
+    if (err)
+    {
+      return this.skip(err);
+    }
+
+    step(
+      function findProdShiftStep()
+      {
+        productionModule.getProdData('shift', logEntry.prodShift, this.next());
+      },
+      function recalcProdShiftStep(err, prodShift)
+      {
+        if (err)
+        {
+          productionModule.error("Failed to find prod shift to recalc [%s]: %s", logEntry.prodShift, err.message);
+        }
+
+        if (prodShift)
+        {
+          prodShift.recalcTimes(this.next());
+        }
+      },
+      function handleErrorStep(err)
+      {
+        if (err)
+        {
+          productionModule.error("Failed to recalc prod shift [%s]: %s", logEntry.prodShift, err.message);
+        }
+      },
+      this.next()
+    );
+  };
 };
 
 function fillMechOrderData(app, productionModule, logEntry, done)

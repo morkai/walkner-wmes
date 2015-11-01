@@ -6,6 +6,7 @@
 
 var _ = require('lodash');
 var step = require('h5.step');
+var util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
@@ -202,6 +203,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         this.prodShiftOrder.recalcDurations(true, this.next());
       }
     },
+    util.createRecalcShiftTimesStep(productionModule, logEntry),
     done
   );
 };

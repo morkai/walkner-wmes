@@ -6,6 +6,7 @@
 
 var _ = require('lodash');
 var step = require('h5.step');
+var moment = require('moment');
 
 module.exports = function setupProdShiftModel(app, mongoose)
 {
@@ -78,7 +79,27 @@ module.exports = function setupProdShiftModel(app, mongoose)
     master: {},
     leader: {},
     operator: {},
-    operators: [{}]
+    operators: [{}],
+    idle: {
+      type: Number,
+      default: -1
+    },
+    working: {
+      type: Number,
+      default: -1
+    },
+    downtime: {
+      type: Number,
+      default: -1
+    },
+    startup: {
+      type: Number,
+      default: -1
+    },
+    shutdown: {
+      type: Number,
+      default: -1
+    }
   }, {
     id: false
   });
@@ -91,6 +112,8 @@ module.exports = function setupProdShiftModel(app, mongoose)
   prodShiftSchema.index({prodFlow: 1, date: -1});
   prodShiftSchema.index({workCenter: 1, date: -1});
   prodShiftSchema.index({date: -1, prodLine: 1});
+  prodShiftSchema.index({shutdown: 1, prodLine: 1});
+  prodShiftSchema.index({shutdown: 1, date: -1});
 
   prodShiftSchema.pre('save', function(next)
   {
@@ -125,8 +148,7 @@ module.exports = function setupProdShiftModel(app, mongoose)
     }
   });
 
-  prodShiftSchema.statics.setPlannedQuantities = function(
-    prodLineIds, date, plannedQuantities, done)
+  prodShiftSchema.statics.setPlannedQuantities = function(prodLineIds, date, plannedQuantities, done)
   {
     var ProdShift = this;
 
@@ -211,6 +233,85 @@ module.exports = function setupProdShiftModel(app, mongoose)
   prodShiftSchema.methods.isEditable = function()
   {
     return this.hasEnded();
+  };
+
+  prodShiftSchema.methods.recalcTimes = function(done)
+  {
+    var shift = this;
+
+    step(
+      function findOrdersAndDowntimesStep()
+      {
+        app.production.getProdShiftOrders(shift._id, this.parallel());
+        app.production.getProdDowntimes(shift._id, this.parallel());
+      },
+      function recalcTimesStep(err, orders, downtimes)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var shiftStartTime = shift.date.getTime();
+        var shiftEndTime = moment(shiftStartTime).add(8, 'hours').valueOf();
+        var shiftStartedAt = Math.min(
+          orders.length ? orders[0].startedAt.getTime() : Number.MAX_VALUE,
+          downtimes.length ? downtimes[0].startedAt.getTime() : Number.MAX_VALUE
+        );
+        var lastOrder = orders.length ? orders[orders.length - 1] : null;
+        var lastDowntime = downtimes.length ? downtimes[downtimes.length - 1] : null;
+        var shiftFinishedAt = Math.max(
+          lastOrder && lastOrder.finishedAt ? lastOrder.finishedAt.getTime() : Number.MIN_VALUE,
+          lastDowntime && lastDowntime.finishedAt ? lastDowntime.finishedAt.getTime() : Number.MIN_VALUE
+        );
+
+        if (shiftStartedAt === Number.MAX_VALUE)
+        {
+          shiftStartedAt = shiftStartTime;
+        }
+
+        if (shiftFinishedAt === Number.MIN_VALUE)
+        {
+          shiftFinishedAt = shiftEndTime;
+        }
+
+        shift.startup = Math.max(0, shiftStartedAt - shiftStartTime);
+        shift.shutdown = Math.max(0, shiftEndTime - shiftFinishedAt);
+
+        var working = 0;
+        var downtime = 0;
+
+        for (var o = 0; o < orders.length; ++o)
+        {
+          var order = orders[o];
+
+          if (order.finishedAt)
+          {
+            working += order.finishedAt.getTime() - order.startedAt.getTime();
+          }
+        }
+
+        for (var d = 0; d < downtimes.length; ++d)
+        {
+          var dt = downtimes[d];
+
+          if (dt.finishedAt)
+          {
+            var duration = dt.finishedAt.getTime() - dt.startedAt.getTime();
+
+            working -= duration;
+            downtime += duration;
+          }
+        }
+
+        shift.idle = shiftEndTime - shiftStartTime - working - downtime;
+        shift.working = working;
+        shift.downtime = downtime;
+
+        shift.save(this.next());
+      },
+      done
+    );
   };
 
   mongoose.model('ProdShift', prodShiftSchema);

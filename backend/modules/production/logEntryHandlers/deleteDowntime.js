@@ -5,6 +5,7 @@
 'use strict';
 
 var step = require('h5.step');
+var util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
@@ -128,6 +129,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         );
       }
     },
+    util.createRecalcShiftTimesStep(productionModule, logEntry),
     done
   );
 };

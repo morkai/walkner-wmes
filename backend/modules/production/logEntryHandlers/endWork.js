@@ -4,6 +4,9 @@
 
 'use strict';
 
+var step = require('h5.step');
+var util = require('./util');
+
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
   if (prodLine.isNew)
@@ -11,23 +14,30 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     return done();
   }
 
-  prodLine.set({
-    prodShiftOrder: null,
-    prodDowntime: null
-  });
-
-  prodLine.save(function(err)
-  {
-    if (err)
+  step(
+    function updateProdLineStep()
     {
-      productionModule.error(
-        "Failed to save prod line [%s] after ending the work (LOG=[%s]): %s",
-        prodLine._id,
-        logEntry._id,
-        err.stack
-      );
-    }
+      prodLine.set({
+        prodShiftOrder: null,
+        prodDowntime: null
+      });
 
-    return done(err);
-  });
+      prodLine.save(this.next());
+    },
+    util.createRecalcShiftTimesStep(productionModule, logEntry),
+    function finalizeStep(err)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to save prod line [%s] after ending the work (LOG=[%s]): %s",
+          prodLine._id,
+          logEntry._id,
+          err.stack
+        );
+      }
+
+      return done(err);
+    }
+  );
 };

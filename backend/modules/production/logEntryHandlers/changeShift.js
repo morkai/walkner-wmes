@@ -56,21 +56,56 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         {
           for (var i = 0, l = prodDowntimes.length; i < l; ++i)
           {
-            finishBugged('prod downtime', prodDowntimes[i], this.parallel());
+            finishBugged('prod downtime', prodDowntimes[i], this.group());
           }
         },
         function()
         {
           for (var i = 0, l = prodShiftOrders.length; i < l; ++i)
           {
-            finishBugged('prod shift order', prodShiftOrders[i], this.parallel());
+            finishBugged('prod shift order', prodShiftOrders[i], this.group());
           }
         },
         this.next()
       );
     },
-    function createProdShiftStep()
+    function findProdShiftsToRecalcStep()
     {
+      ProdShift.find({shutdown: -1, prodLine: prodLine._id}).exec(this.next());
+    },
+    function recalcProdShiftsStep(err, prodShifts)
+    {
+      if (err)
+      {
+        return productionModule.error(
+          "Failed to find shifts to recalc for prod line [%s] (LOG=[%s]): %s",
+          prodLine._id,
+          logEntry._id,
+          err.stack
+        );
+      }
+
+      var cachedProdShiftModels = [];
+
+      productionModule.swapToCachedProdData(prodShifts, cachedProdShiftModels);
+
+      for (var i = 0; i < cachedProdShiftModels.length; ++i)
+      {
+        cachedProdShiftModels[i].recalcTimes(this.group());
+      }
+    },
+    function createProdShiftStep(err)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to recalc shift times for prod line [%s] (LOG=[%s]): %s",
+          prodLine._id,
+          logEntry._id,
+          err.stack
+        );
+      }
+
       var prodShift = new ProdShift(logEntry.data.startedProdShift);
 
       prodShift.save(this.next());
