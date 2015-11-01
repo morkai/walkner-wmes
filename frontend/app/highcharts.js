@@ -58,8 +58,8 @@ define([
       str += '<tr><td class="highcharts-tooltip-label">'
         + '<span style="color: ' + row.color + '">\u25cf</span> ' + row.name + ':</td>'
         + '<td class="highcharts-tooltip-integer"' + valueStyle + '>' + yPrefix + integer + '</td>'
-        + (fraction === '' ? '' : '<td class="highcharts-tooltip-fraction"' + valueStyle + '>' + fraction + '</td>')
-        + (ySuffix === '' ? '' : '<td class="highcharts-tooltip-suffix"' + valueStyle + '>' + ySuffix + '</td>')
+        + '<td class="highcharts-tooltip-fraction"' + valueStyle + '>' + fraction + '</td>'
+        + '<td class="highcharts-tooltip-suffix"' + valueStyle + '>' + ySuffix + '</td>'
         + (row.extraColumns || '') + '</tr>';
     });
 
