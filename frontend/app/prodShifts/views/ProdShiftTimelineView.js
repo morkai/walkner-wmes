@@ -196,6 +196,11 @@ define([
 
     afterRender: function()
     {
+      if (!this.timers)
+      {
+        return;
+      }
+
       this.serializeDatum();
 
       if (!this.beginning)
@@ -763,7 +768,12 @@ define([
 
     highlightItem: function(modelId)
     {
-      this.$('.timeline-item[data-model-id="' + modelId + '"]')[0].classList.add('is-highlighted');
+      var $item = this.$('.timeline-item[data-model-id="' + modelId + '"]');
+
+      if ($item.length)
+      {
+        $item[0].classList.add('is-highlighted');
+      }
 
       this.highlightedItem = modelId;
     }
