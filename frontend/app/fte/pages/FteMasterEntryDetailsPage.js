@@ -12,7 +12,8 @@ define([
   'app/core/View',
   'app/data/orgUnits',
   '../FteMasterEntry',
-  '../views/FteMasterEntryDetailsView'
+  '../views/FteMasterEntryDetailsView',
+  './FteLeaderEntryDetailsPage'
 ], function(
   _,
   t,
@@ -23,11 +24,12 @@ define([
   View,
   orgUnits,
   FteMasterEntry,
-  FteMasterEntryDetailsView
+  FteMasterEntryDetailsView,
+  FteLeaderEntryDetailsPage
 ) {
   'use strict';
 
-  return View.extend({
+  return FteLeaderEntryDetailsPage.extend({
 
     modelType: 'fteMaster',
 
