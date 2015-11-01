@@ -3,19 +3,25 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/i18n',
   'app/user',
+  'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/View',
+  'app/data/orgUnits',
   '../FteMasterEntry',
   '../views/FteMasterEntryDetailsView'
 ], function(
+  _,
   t,
   user,
+  viewport,
   bindLoadingMessage,
   pageActions,
   View,
+  orgUnits,
   FteMasterEntry,
   FteMasterEntryDetailsView
 ) {
@@ -23,7 +29,7 @@ define([
 
   return View.extend({
 
-    layoutName: 'page',
+    modelType: 'fteMaster',
 
     pageId: 'fteMasterEntryDetails',
 
@@ -35,35 +41,14 @@ define([
       t.bound('fte', 'BREADCRUMBS:details')
     ],
 
-    actions: function()
+    createModel: function()
     {
-      var actions = [{
-        label: t.bound('fte', 'PAGE_ACTION:print'),
-        icon: 'print',
-        href: this.model.genClientUrl('print')
-      }];
-
-      if (this.model.isEditable(user))
-      {
-        actions.push(
-          pageActions.edit(this.model),
-          pageActions.delete(this.model)
-        );
-      }
-
-      return actions;
+      return new FteMasterEntry({_id: this.options.modelId});
     },
 
-    initialize: function()
+    createView: function()
     {
-      this.model = bindLoadingMessage(new FteMasterEntry({_id: this.options.modelId}), this);
-
-      this.view = new FteMasterEntryDetailsView({model: this.model});
-    },
-
-    load: function(when)
-    {
-      return when(this.model.fetch());
+      return new FteMasterEntryDetailsView({model: this.model});
     }
 
   });

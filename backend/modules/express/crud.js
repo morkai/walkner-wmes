@@ -166,10 +166,13 @@ exports.addRoute = function(app, Model, req, res, next)
       }
     });
 
-    app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.added', {
-      model: model,
-      user: req.session.user
-    });
+    if (Model.CRUD_PUBLISH !== false)
+    {
+      app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.added', {
+        model: model,
+        user: req.session.user
+      });
+    }
   });
 };
 
@@ -305,10 +308,13 @@ exports.editRoute = function(app, Model, req, res, next)
 
       sendResponse(res, model);
 
-      app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.edited', {
-        model: model,
-        user: req.session.user
-      });
+      if (Model.CRUD_PUBLISH !== false)
+      {
+        app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.edited', {
+          model: model,
+          user: req.session.user
+        });
+      }
     });
   }
 
@@ -366,10 +372,13 @@ exports.deleteRoute = function(app, Model, req, res, next)
         }
       });
 
-      app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.deleted', {
-        model: model,
-        user: req.session.user
-      });
+      if (Model.CRUD_PUBLISH !== false)
+      {
+        app.broker.publish((Model.TOPIC_PREFIX || Model.collection.name) + '.deleted', {
+          model: model,
+          user: req.session.user
+        });
+      }
     });
   }
 };

@@ -4,9 +4,12 @@
 
 'use strict';
 
+var moment = require('moment');
 var setUpCache = require('./cache');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
+var editFteMasterEntry = require('./editFteMasterEntry');
+var editFteLeaderEntry = require('./editFteLeaderEntry');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -20,9 +23,14 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startFteModule(app, module)
 {
+  var shiftChangeTimer = null;
+
   module.getCurrentShift = getCurrentShift;
 
   module.currentShift = getCurrentShift();
+
+  module.editFteMasterEntry = editFteMasterEntry.bind(null, app, module);
+  module.editFteLeaderEntry = editFteLeaderEntry.bind(null, app, module);
 
   app.onModuleReady(
     [
@@ -54,34 +62,41 @@ exports.start = function startFteModule(app, module)
     setUpCommands.bind(null, app, module)
   );
 
-  setUpShiftChangeBroadcast();
+  app.broker.subscribe('app.started', checkShiftChange);
 
-  function setUpShiftChangeBroadcast()
+  function checkShiftChange()
   {
+    if (shiftChangeTimer !== null)
+    {
+      clearTimeout(shiftChangeTimer);
+      shiftChangeTimer = null;
+    }
+
     var actualCurrentShift = module.getCurrentShift();
     var currentShiftTime = module.currentShift.date.getTime();
 
     if (actualCurrentShift.date.getTime() > currentShiftTime)
     {
-      return broadcastShiftChange();
+      return changeShift();
     }
 
-    var nextShiftTime = currentShiftTime + 8 * 3600 * 1000;
+    var nextShiftTime = getNextShiftTime();
     var currentTime = Date.now();
     var timeDiff = nextShiftTime - currentTime;
+    var delay = timeDiff > 300000 ? 300000 : timeDiff;
 
-    setTimeout(setUpShiftChangeBroadcast, timeDiff > 300000 ? 300000 : timeDiff);
+    shiftChangeTimer = setTimeout(checkShiftChange, delay);
   }
 
-  function broadcastShiftChange()
+  function changeShift()
   {
     module.currentShift = getCurrentShift();
 
-    module.debug("Broadcasting a shift change (%d)...", module.currentShift.no);
+    module.debug("Changed to shift %d...", module.currentShift.no);
 
     app.broker.publish('shiftChanged', module.currentShift);
 
-    setUpShiftChangeBroadcast();
+    checkShiftChange();
   }
 
   function getCurrentShift()
@@ -118,5 +133,26 @@ exports.start = function startFteModule(app, module)
       date: date,
       no: no
     };
+  }
+
+  function getNextShiftTime()
+  {
+    var shiftMoment = moment(module.currentShift.date.getTime());
+    var currentShiftNo = module.currentShift.no;
+
+    if (currentShiftNo === 1)
+    {
+      shiftMoment.hours(14);
+    }
+    else if (currentShiftNo === 2)
+    {
+      shiftMoment.hours(22);
+    }
+    else
+    {
+      shiftMoment.add(1, 'days').hours(6);
+    }
+
+    return shiftMoment.valueOf();
   }
 };

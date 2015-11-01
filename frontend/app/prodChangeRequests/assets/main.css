@@ -34,11 +34,23 @@
   white-space: normal;
 }
 .prodChangeRequests-changes > tbody > tr.is-separator > td,
-.prodChangeRequests-changes > tbody > tr > td[rowspan="2"] {
+.prodChangeRequests-changes > tbody > tr > td[rowspan="2"],
+.prodChangeRequests-changes > tbody > tr.prodChangeRequests-changes-fte-value:last-child > td {
   border-bottom: 1px dotted #d4d4d4;
 }
 .prodChangeRequests-changes > tbody > tr.is-even > td {
   background-color: #fbfbfb;
+}
+.prodChangeRequests-changes > tbody > tr.prodChangeRequests-changes-fte-task > td {
+  text-align: left;
+  font-weight: bold;
+  border-top: 1px dotted #d4d4d4;
+}
+.prodChangeRequests-changes > tbody > tr.prodChangeRequests-changes-fte-task:first-child > td {
+  border-top: 0;
+}
+.prodChangeRequests-changes > tbody > tr.prodChangeRequests-changes-fte-value > td {
+  padding-top: 0;
 }
 .prodChangeRequests-confirmForm {
   margin-top: 14px;

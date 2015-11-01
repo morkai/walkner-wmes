@@ -12,12 +12,17 @@ define([
   'app/core/views/ListView',
   'app/data/aors',
   'app/data/downtimeReasons',
+  'app/data/orgUnits',
+  'app/data/companies',
+  'app/data/prodFunctions',
   'app/prodShifts/ProdShift',
   'app/prodShifts/views/ProdShiftTimelineView',
   'app/prodShiftOrders/ProdShiftOrder',
   'app/prodShiftOrders/ProdShiftOrderCollection',
   'app/prodDowntimes/ProdDowntime',
   'app/prodDowntimes/ProdDowntimeCollection',
+  'app/fte/FteMasterEntry',
+  'app/fte/FteLeaderEntry',
   'app/core/templates/userInfo',
   'app/prodChangeRequests/templates/detailsRow',
   'app/prodChangeRequests/templates/quantitiesDone'
@@ -31,12 +36,17 @@ define([
   ListView,
   aors,
   downtimeReasons,
+  orgUnits,
+  companies,
+  prodFunctions,
   ProdShift,
   ProdShiftTimelineView,
   ProdShiftOrder,
   ProdShiftOrderCollection,
   ProdDowntime,
   ProdDowntimeCollection,
+  FteMasterEntry,
+  FteLeaderEntry,
   renderUserInfo,
   renderDetailsRow,
   renderQuantitiesDone
@@ -46,7 +56,9 @@ define([
   var TYPE_TO_MODEL = {
     shift: ProdShift,
     order: ProdShiftOrder,
-    downtime: ProdDowntime
+    downtime: ProdDowntime,
+    fteMaster: FteMasterEntry,
+    fteLeader: FteLeaderEntry
   };
   var COMMON_PROPERTIES = ['date', 'shift', 'master', 'leader', 'operator'];
   var TYPE_TO_PROPERTIES = {
@@ -57,7 +69,9 @@ define([
   var TYPE_TO_NLS_DOMAIN = {
     shift: 'prodShifts',
     order: 'prodShiftOrders',
-    downtime: 'prodDowntimes'
+    downtime: 'prodDowntimes',
+    fteMaster: 'fte',
+    fteLeader: 'fte'
   };
 
   return ListView.extend({
@@ -68,7 +82,7 @@ define([
     },
 
     remoteTopics: {
-      'prodChangeRequests.**': function()
+      'prodChangeRequests.**': function(message, topic)
       {
         if (this.showingDetails)
         {
@@ -134,7 +148,7 @@ define([
 
       var columns = [
         {id: 'division', className: 'is-min'},
-        {id: 'prodLine', className: 'is-min'},
+        {id: 'orgUnit', className: 'is-min'},
         {id: 'operation', className: isNewStatus ? 'is-min' : ''},
         'creatorComment',
         {id: 'creator', className: 'is-min'},
@@ -173,7 +187,7 @@ define([
           _id: model.id,
           className: 'prodChangeRequests-list-item ' + statusClassName,
           division: model.get('division'),
-          prodLine: model.get('prodLine'),
+          orgUnit: view.serializeOrgUnit(model),
           operation: view.serializeOperation(model),
           createdAt: time.format(model.get('createdAt'), 'LLL'),
           creator: renderUserInfo({userInfo: model.get('creator')}),
@@ -183,6 +197,18 @@ define([
           confirmerComment: model.get('confirmerComment') || '-'
         };
       });
+    },
+
+    serializeOrgUnit: function(changeRequest)
+    {
+      if (changeRequest.isFte())
+      {
+        var subdivision = orgUnits.getByTypeAndId('subdivision', changeRequest.get('data').subdivision);
+
+        return subdivision ? subdivision.getLabel() : '?';
+      }
+
+      return changeRequest.get('prodLine');
     },
 
     serializeOperation: function(changeRequest)
@@ -221,6 +247,20 @@ define([
           {
             extra = model.get('rid');
           }
+
+          break;
+        }
+
+        case 'fteMaster':
+        case 'fteLeader':
+        {
+          var dateMoment = time.getMoment(data.date);
+          var hours = dateMoment.hours();
+
+          extra = t('core', 'SHIFT', {
+            date: dateMoment.format('YYYY-MM-DD'),
+            shift: t('core', 'SHIFT:' + (hours === 6 ? 1 : hours === 14 ? 2 : 3))
+          });
 
           break;
         }
@@ -276,6 +316,7 @@ define([
         showForm: changeRequest.get('status') === 'new' && this.isCurrentUserAllowedToConfirm(changeRequest),
         changeRequestId: changeRequestId,
         isEdit: changeRequest.get('operation') === 'edit',
+        isFte: changeRequest.isFte(),
         changes: this.serializeChanges(changeRequest)
       }));
 
@@ -301,14 +342,23 @@ define([
 
     serializeChanges: function(changeRequest)
     {
-      var changes = [];
-      var operation = changeRequest.get('operation');
-
-      if (operation === 'delete' || changeRequest.get('status') !== 'new')
+      if (changeRequest.get('operation') === 'delete' || changeRequest.get('status') !== 'new')
       {
-        return changes;
+        return [];
       }
 
+      if (changeRequest.isFte())
+      {
+        return this.serializeFteChanges(changeRequest);
+      }
+
+      return this.serializePropertyChanges(changeRequest);
+    },
+
+    serializePropertyChanges: function(changeRequest)
+    {
+      var changes = [];
+      var operation = changeRequest.get('operation');
       var modelType = changeRequest.get('modelType');
       var nlsDomain = TYPE_TO_NLS_DOMAIN[modelType];
       var properties = [].concat(COMMON_PROPERTIES, TYPE_TO_PROPERTIES[modelType]);
@@ -403,6 +453,40 @@ define([
       return String(value);
     },
 
+    serializeFteChanges: function(changeRequest)
+    {
+      var changes = {};
+      var task = null;
+
+      _.forEach(changeRequest.get('data').changes, function(change)
+      {
+        task = changes[change.taskId];
+
+        if (!task)
+        {
+          task = changes[change.taskId] = {
+            id: change.taskId,
+            name: change.taskName,
+            values: []
+          };
+        }
+
+        var prodFunction = prodFunctions.get(change.functionId);
+        var company = companies.get(change.companyId);
+        var division = orgUnits.getByTypeAndId('division', change.divisionId);
+
+        task.values.push({
+          function: prodFunction ? prodFunction.getLabel() : change.functionId,
+          company: company ? company.getLabel() : change.companyId,
+          division: division ? division.getLabel() : null,
+          old: change.oldValue.toLocaleString(),
+          new: change.newValue.toLocaleString()
+        });
+      });
+
+      return _.values(changes);
+    },
+
     confirm: function(changeRequestId, newStatus)
     {
       var changeRequest = this.collection.get(changeRequestId);
@@ -485,11 +569,12 @@ define([
     loadTimeline: function(changeRequest)
     {
       var view = this;
+      var modelType = changeRequest.get('modelType');
       var $timeline = this.$('.prodChangeRequests-timeline');
 
       this.cancelRequests();
 
-      if (changeRequest.get('operation') === 'add' && changeRequest.get('modelType') === 'shift')
+      if (changeRequest.isFte() || (changeRequest.get('operation') === 'add' && modelType === 'shift'))
       {
         return $timeline.remove();
       }

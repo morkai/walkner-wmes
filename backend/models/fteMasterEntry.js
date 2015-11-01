@@ -213,7 +213,6 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           shift: options.shift,
           total: null,
           tasks: this.tasks,
-          locked: false,
           createdAt: new Date(),
           creator: creator,
           updatedAt: null,
@@ -284,6 +283,43 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     }
 
     this.total = overallTotal;
+  };
+
+  fteMasterEntrySchema.methods.applyChangeRequest = function(changes, updater)
+  {
+    var tasks = this.tasks;
+
+    _.forEach(changes, function(change)
+    {
+      var task = tasks[change.taskIndex];
+
+      if (!task)
+      {
+        return;
+      }
+
+      var func = task.functions[change.functionIndex];
+
+      if (!func)
+      {
+        return;
+      }
+
+      var company = func.companies[change.companyIndex];
+
+      if (!company)
+      {
+        return;
+      }
+
+      company.count = change.newValue > 0 ? change.newValue : 0;
+    });
+
+    if (updater)
+    {
+      this.updater = updater;
+      this.updatedAt = new Date();
+    }
   };
 
   function getProdFunctionCompanyEntries(prodFunctionCompanies, sortedCompanies)

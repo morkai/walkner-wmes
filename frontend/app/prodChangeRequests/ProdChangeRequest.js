@@ -36,6 +36,13 @@ define([
       }
 
       return modelId;
+    },
+
+    isFte: function()
+    {
+      var modelType = this.get('modelType');
+
+      return modelType === 'fteMaster' || modelType === 'fteLeader';
     }
 
   });

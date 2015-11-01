@@ -13,7 +13,8 @@ exports.DEFAULT_CONFIG = {
   orgUnitsId: 'orgUnits',
   prodShiftsId: 'prodShifts',
   prodShiftOrdersId: 'prodShiftOrders',
-  prodDowntimesId: 'prodDowntimes'
+  prodDowntimesId: 'prodDowntimes',
+  fteId: 'fte'
 };
 
 exports.start = function startProdChangeRequestsModule(app, module)
@@ -26,7 +27,8 @@ exports.start = function startProdChangeRequestsModule(app, module)
       module.config.orgUnitsId,
       module.config.prodShiftsId,
       module.config.prodShiftOrdersId,
-      module.config.prodDowntimesId
+      module.config.prodDowntimesId,
+      module.config.fteId
     ],
     setUpRoutes.bind(null, app, module)
   );

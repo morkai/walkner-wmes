@@ -18,6 +18,10 @@
   "PAGE_ACTION:delete": "Usuń wpis",
   "PAGE_ACTION:export": "Eksportuj wpisy",
   "PAGE_ACTION:settings": "Ustawienia",
+  "PAGE_ACTION:changeRequest:save": "Utwórz żądanie zmiany",
+  "PAGE_ACTION:changeRequest:cancel": "Anuluj",
+
+  "LIST:ACTION:requestChange": "Utwórz żądanie zmiany",
 
   "filter:date": "Data",
   "filter:shift": "Zmiana",
@@ -64,5 +68,10 @@
   "settings:structure:prodFunction": "Funkcja",
   "settings:structure:prodFunction:placeholder": "Wybierz funkcję",
   "settings:structure:companies": "Pracodawcy",
-  "settings:structure:companies:placeholder": "Wybierz firmy"
+  "settings:structure:companies:placeholder": "Wybierz firmy",
+
+  "changeRequest:warning:edit": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. Wpis FTE zostanie zaktualizowany dopiero po zaakceptowaniu dokonanych zmian przez osobę odpowiedzialną.",
+  "changeRequest:comment:placeholder": "Opcjonalny komentarz do żądania zmiany...",
+  "changeRequest:msg:success:edit": "Żądanie edycji wpisu FTE zostało utworzone.",
+  "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji wpisu FTE :-("
 }

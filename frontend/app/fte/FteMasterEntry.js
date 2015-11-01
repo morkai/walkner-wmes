@@ -174,6 +174,10 @@ define([
       {
         this.handleRemoveAbsentUserMessage(message, silent);
       }
+      else if (message.type === 'edit')
+      {
+        this.handleEditMessage(message, silent);
+      }
     },
 
     handleCountMessage: function(message, silent)
@@ -284,6 +288,22 @@ define([
           this.trigger('change:absentUsers');
           this.trigger('change');
         }
+      }
+    },
+
+    handleEditMessage: function(message, silent)
+    {
+      var fteEntry = this;
+
+      _.forEach(message.changes, function(change)
+      {
+        fteEntry.handleCountMessage(change, true);
+      });
+
+      if (!silent)
+      {
+        this.trigger('change:tasks');
+        this.trigger('change');
       }
     }
 

@@ -53,12 +53,23 @@ define([
           }
         ];
 
-        if (model.isEditable(user))
+        var editable = model.isEditable(user);
+
+        if (editable === 'yes')
         {
           actions.push(
             ListView.actions.edit(model),
             ListView.actions.delete(model)
           );
+        }
+        else if (editable === 'request')
+        {
+          actions.push({
+            id: 'requestChange',
+            icon: 'edit',
+            label: t('fte', 'LIST:ACTION:requestChange'),
+            href: model.genClientUrl() + '?change=1'
+          });
         }
 
         return actions;

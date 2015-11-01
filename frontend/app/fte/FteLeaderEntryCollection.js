@@ -31,7 +31,14 @@ define([
       }
 
       return rql.Query.fromObject({
-        fields: {subdivision: 1, date: 1, shift: 1, createdAt: 1, creator: 1},
+        fields: {
+          subdivision: 1,
+          date: 1,
+          shift: 1,
+          createdAt: 1,
+          creator: 1,
+          'tasks.functions.id': 1
+        },
         sort: {date: -1},
         limit: 15,
         selector: selector

@@ -1,4 +1,8 @@
 <div>
+  <div class="message message-inline message-warning fte-changeRequest-warning">
+    <p><%- t('fte', 'changeRequest:warning:edit') %></p>
+  </div>
+  <textarea id="<%- idPrefix %>-comment" class="form-control fte-changeRequest-comment" rows="3" placeholder="<%- t('fte', 'changeRequest:comment:placeholder') %>"></textarea>
   <div class="well">
     <div class="fte-property">
       <span class="fte-property-name"><%- t('core', 'ORG_UNIT:subdivision') %></span>
@@ -13,7 +17,7 @@
       <span class="fte-property-value"><%- shift %></span>
     </div>
   </div>
-  <div class="panel panel-primary">
+  <div id="<%- idPrefix %>-entryPanel" class="panel panel-primary fte-entryPanel">
     <div class="panel-heading"><%- t('fte', 'masterEntry:tasksPanel:title' + (editable ? ':editable': '')) %></div>
     <% if (editable) { %>
     <div class="message message-inline message-info"><%- t('fte', 'panel:info') %></div>
@@ -76,7 +80,7 @@
         <% }) %>
         <% task.functions.forEach(function(prodFunction, functionIndex) { %>
         <% prodFunction.companies.forEach(function(company, companyIndex) { %>
-        <td class="<%- functionIndex % 2 ? '' : 'even' %>">
+        <td class="fte-count-container <%- functionIndex % 2 ? '' : 'even' %>" data-key="<%- taskIndex %>:<%- functionIndex %>:<%- companyIndex %>">
           <% if (editable) { %>
           <input
             class="form-control no-controls fte-masterEntry-count"
@@ -92,7 +96,7 @@
             data-companyId="<%- company.id %>"
             <%- task.noPlan ? 'disabled' : '' %>>
           <% } else { %>
-          <%- round(company.count) %>
+          <span class="fte-count"><%- round(company.count) %></span>
           <% } %>
         </td>
         <% }) %>

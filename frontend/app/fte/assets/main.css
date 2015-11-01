@@ -245,3 +245,29 @@ textarea.fte-leaderEntry-comment:focus {
 .fte-settings .panel-body[data-tab="structure"] {
   padding-bottom: 0;
 }
+.fte-count-editor {
+  text-align: center;
+}
+.is-changing .fte-count-container {
+  cursor: pointer;
+}
+.is-changing .fte-count-container:hover {
+  background-color: #FFFFA6!important;
+}
+.fte-entryPanel {
+  position: relative;
+}
+.fte-count {
+  white-space: nowrap;
+}
+.fte-changeRequest-warning,
+.fte-changeRequest-comment {
+  display: none;
+}
+.fte-changeRequest-comment {
+  margin: 1em 0;
+}
+.is-changing .fte-changeRequest-warning,
+.is-changing .fte-changeRequest-comment {
+  display: block;
+}

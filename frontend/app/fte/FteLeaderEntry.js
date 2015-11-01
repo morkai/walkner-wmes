@@ -432,6 +432,24 @@ define([
 
     handleUpdateMessage: function(message, silent)
     {
+      if (message.type === 'edit')
+      {
+        _.forEach(message.changes, this.handleCountMessage.bind(this));
+      }
+      else
+      {
+        this.handleCountMessage(message);
+      }
+
+      if (!silent)
+      {
+        this.trigger('change:tasks');
+        this.trigger('change');
+      }
+    },
+
+    handleCountMessage: function(message)
+    {
       var tasks = this.get('tasks');
 
       if (!tasks)
@@ -490,12 +508,6 @@ define([
       else
       {
         task.comment = message.comment;
-      }
-
-      if (!silent)
-      {
-        this.trigger('change:tasks');
-        this.trigger('change');
       }
     }
 

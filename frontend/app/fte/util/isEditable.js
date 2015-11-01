@@ -15,50 +15,56 @@ define([
   {
     if (user.isAllowedTo('PROD_DATA:MANAGE'))
     {
-      return true;
+      return 'yes';
     }
 
     if (!user.isAllowedTo(fteEntry.getPrivilegePrefix() + ':MANAGE'))
     {
-      return false;
+      return 'no';
     }
 
     var createdAt = Date.parse(fteEntry.get('createdAt'));
     var now = Date.now();
+    var yes = 'yes';
 
     if (now >= createdAt + 8 * 3600 * 1000 && now >= getShiftEndDate(fteEntry.get('date')).getTime())
     {
-      return false;
+      if (!user.isAllowedTo('PROD_DATA:CHANGES:REQUEST') || (fteEntry.isWithFunctions && !fteEntry.isWithFunctions()))
+      {
+        return 'no';
+      }
+
+      yes = 'request';
     }
 
     var userDivision = user.getDivision();
 
     if (!userDivision || user.isAllowedTo(fteEntry.getPrivilegePrefix() + ':ALL'))
     {
-      return true;
+      return yes;
     }
 
     var subdivision = subdivisions.get(fteEntry.get('subdivision'));
 
     if (!subdivision)
     {
-      return false;
+      return 'no';
     }
 
     var entryDivisionId = subdivision.get('division');
 
     if (!entryDivisionId || userDivision.id !== entryDivisionId)
     {
-      return false;
+      return 'no';
     }
 
     var userSubdivision = user.getSubdivision();
 
     if (!userSubdivision)
     {
-      return true;
+      return yes;
     }
 
-    return userSubdivision.id === subdivision.id;
+    return userSubdivision.id === subdivision.id ? yes : 'no';
   };
 });

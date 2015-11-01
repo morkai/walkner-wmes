@@ -5,10 +5,29 @@
         <div class="progress-bar progress-bar-primary progress-bar-striped active" style="width: 100%"></div>
       </div>
     </div>
-    <% if (changes.length) { %>
-    <table class="prodChangeRequests-changes">
+    <% if (!_.isEmpty(changes)) { %>
+    <table class="prodChangeRequests-changes <%- isFte ? 'is-fte' : '' %>">
       <tbody>
-        <% changes.forEach(function(change, i) { %>
+        <% if (isFte) { %>
+        <% _.forEach(changes, function(task, i) { %>
+        <tr class="prodChangeRequests-changes-fte-task <%- i % 2 ? 'is-even' : 'is-odd' %>">
+          <td colspan="2"><%= task.name %></td>
+        </tr>
+        <% _.forEach(task.values, function(value) { %>
+        <tr class="prodChangeRequests-changes-fte-value <%- i % 2 ? 'is-even' : 'is-odd' %>">
+          <td>
+            <% if (value.division) { %>
+            <%= value.function %> \ <%= value.company %> \ <%= value.division %>:
+            <% } else { %>
+            <%= value.function %> \ <%= value.company %>:
+            <% } %>
+          </td>
+          <td><%- value.old %> <i class="fa fa-arrow-right"></i> <%- value.new %></td>
+        </tr>
+        <% }) %>
+        <% }) %>
+        <% } else { %>
+        <% _.forEach(changes, function(change, i) { %>
         <tr class="<%- isEdit ? '' : 'is-separator' %> <%- i % 2 ? 'is-even' : 'is-odd' %>">
           <td><%- change.property %>:</td>
           <td rowspan="<%- change.value ? 2 : 1 %>"><%- change.value || change[isEdit ? 'oldValue' : 'newValue'] %></td>
@@ -22,6 +41,7 @@
         </tr>
         <% } %>
         <% }) %>
+        <% } %>
       </tbody>
     </table>
     <% } %>

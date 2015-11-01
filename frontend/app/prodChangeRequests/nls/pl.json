@@ -7,6 +7,7 @@
 
   "PROPERTY:status": "Status",
   "PROPERTY:division": "Wydział",
+  "PROPERTY:orgUnit": "Dział/Linia",
   "PROPERTY:prodLine": "Linia produkcyjna",
   "PROPERTY:operation": "Operacja",
   "PROPERTY:createdAt": "Czas stworzenia",
@@ -30,6 +31,8 @@
   "operation:delete:shift": "Usunięcie zmiany: {extra}",
   "operation:delete:order": "Usunięcie zlecenia: {extra}",
   "operation:delete:downtime": "Usunięcie przestoju: {extra}",
+  "operation:edit:fteMaster": "Edycja FTE (produkcja): {extra}",
+  "operation:edit:fteLeader": "Edycja FTE (inne): {extra}",
 
   "confirm:accept": "Akceptuj zmianę",
   "confirm:reject": "Odrzuć zmianę",

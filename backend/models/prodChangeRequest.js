@@ -42,12 +42,12 @@ module.exports = function setupProdChangeRequestModel(app, mongoose)
     },
     prodLine: {
       type: String,
-      required: true
+      default: null
     },
     modelType: {
       type: String,
       required: true,
-      enum: ['shift', 'order', 'downtime']
+      enum: ['shift', 'order', 'downtime', 'fteMaster', 'fteLeader']
     },
     modelId: {
       type: String,
@@ -64,6 +64,7 @@ module.exports = function setupProdChangeRequestModel(app, mongoose)
   });
 
   prodChangeRequestSchema.statics.TOPIC_PREFIX = 'prodChangeRequests';
+  prodChangeRequestSchema.statics.CRUD_PUBLISH = false;
 
   prodChangeRequestSchema.index({status: 1});
   prodChangeRequestSchema.index({division: 1});

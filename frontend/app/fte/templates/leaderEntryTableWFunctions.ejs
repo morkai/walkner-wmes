@@ -94,7 +94,7 @@
       <% prodFunction.companies.forEach(function(company, companyIndex) { %>
       <% if (task.fteDiv) { %>
       <% company.count.forEach(function(companyCount, divisionIndex) { %>
-      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-division="<%- divisionIndex %>" data-level="<%- task.level %>">
+      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-count-container fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-division="<%- divisionIndex %>" data-level="<%- task.level %>" data-key="<%- task.index %>:<%- functionIndex %>:<%- companyIndex %>:<%- divisionIndex %>">
         <% if (editable && !task.hasChildren) { %>
         <input
           class="form-control no-controls fte-leaderEntry-count"
@@ -109,12 +109,12 @@
           data-company-server="<%- companyIndex %>"
           data-division="<%- divisionIndex %>">
         <% } else { %>
-        <%- round(companyCount.value) %>
+        <span class="fte-count"><%- round(companyCount.value) %></span>
         <% } %>
       </td>
       <% }) %>
       <% } else { %>
-      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-level="<%- task.level %>">
+      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-count-container fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-level="<%- task.level %>" data-key="<%- task.index %>:<%- functionIndex %>:<%- companyIndex %>">
         <% if (editable && !task.hasChildren) { %>
         <input
           class="form-control no-controls fte-leaderEntry-count"
@@ -128,7 +128,7 @@
           data-company="<%- company.index %>"
           data-company-server="<%- companyIndex %>">
         <% } else { %>
-        <%- round(company.count) %>
+        <span class="fte-count"><%- round(company.count) %></span>
         <% } %>
       </td>
       <% } %>

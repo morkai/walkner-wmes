@@ -15,6 +15,7 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
   var prodShiftsModule = app[pcrModule.config.prodShiftsId];
   var prodShiftOrdersModule = app[pcrModule.config.prodShiftOrdersId];
   var prodDowntimesModule = app[pcrModule.config.prodDowntimesId];
+  var fteModule = app[pcrModule.config.fteId];
   var ProdShift = mongoose.model('ProdShift');
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
   var ProdDowntime = mongoose.model('ProdDowntime');
@@ -35,16 +36,25 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
       add: prodDowntimesModule.addProdDowntime,
       edit: prodDowntimesModule.editProdDowntime,
       delete: prodDowntimesModule.deleteProdDowntime
+    },
+    fteMaster: {
+      edit: fteModule.editFteMasterEntry
+    },
+    fteLeader: {
+      edit: fteModule.editFteLeaderEntry
     }
   };
 
   var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DATA:CHANGES:REQUEST');
+  var canAdd = userModule.auth('PROD_DATA:CHANGES:REQUEST');
   var canManage = userModule.auth('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:MANAGE');
 
   express.get('/prodChangeRequests', canView, express.crud.browseRoute.bind(null, app, {
     model: ProdChangeRequest,
     prepareResult: prepareProdChangeRequests
   }));
+
+  express.post('/prodChangeRequests', canAdd, prepareForAdd, express.crud.addRoute.bind(null, app, ProdChangeRequest));
 
   express.post('/prodChangeRequests/:id', canManage, confirmRoute);
 
@@ -66,6 +76,12 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
       }
 
       var modelIdToChangeRequestId = typeToProdData[prodChangeRequest.modelType];
+
+      if (!modelIdToChangeRequestId)
+      {
+        return;
+      }
+
       var modelId = prodChangeRequest.modelId;
 
       if (!modelIdToChangeRequestId[modelId])
@@ -147,6 +163,17 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
     );
   }
 
+  function prepareForAdd(req, res, next)
+  {
+    _.assign(req.body, {
+      status: 'new',
+      createdAt: new Date(),
+      creator: userModule.createUserInfo(req.session.user, req)
+    });
+
+    next();
+  }
+
   function confirmRoute(req, res, next)
   {
     var newStatus = req.body.status;
@@ -189,6 +216,11 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
           createdAt: {$lt: prodChangeRequest.createdAt}
         };
 
+        if (prodChangeRequest.modelType === 'fteMaster' || prodChangeRequest.modelType === 'fteLeader')
+        {
+          conditions['data.subdivision'] = prodChangeRequest.data.subdivision;
+        }
+
         ProdChangeRequest.findOne(conditions, {_id: 1}).lean().exec(this.next());
       },
       function executeOperationStep(err, prevProdChangeRequest)
@@ -208,6 +240,11 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
           var prodChangeRequest = this.prodChangeRequest;
           var executeOperation = TYPE_TO_OPERATION[prodChangeRequest.modelType][prodChangeRequest.operation];
 
+          if (!executeOperation)
+          {
+            return this.skip(express.createHttpError('INVALID_OPERATION', 400));
+          }
+
           if (prodChangeRequest.operation === 'add')
           {
             executeOperation(user, userInfo, prodChangeRequest.data, this.next());
@@ -218,25 +255,35 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
           }
         }
       },
-      function updateProdChangeRequestStep(err)
+      function updateProdChangeRequestStep(err, statusCode)
       {
-        if (err)
+        if (err || statusCode)
         {
-          return this.skip(err);
+          return this.skip(err, statusCode);
         }
 
         this.prodChangeRequest[newStatus === 'accepted' ? 'accept' : 'reject'](
           userInfo, req.body.confirmerComment, this.next()
         );
       },
-      function sendResponseStep(err)
+      function sendResponseStep(err, statusCode)
       {
+        if (!_.isNumber(statusCode))
+        {
+          statusCode = null;
+        }
+
         if (err)
         {
+          if (statusCode)
+          {
+            err.status = statusCode;
+          }
+
           return next(err);
         }
 
-        return res.sendStatus(204);
+        return res.sendStatus(statusCode || 204);
       }
     );
   }

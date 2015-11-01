@@ -352,6 +352,59 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     }
   };
 
+  fteLeaderEntrySchema.methods.applyChangeRequest = function(changes, updater)
+  {
+    var tasks = this.tasks;
+    var divisionModified = false;
+
+    _.forEach(changes, function(change)
+    {
+      var task = tasks[change.taskIndex];
+
+      if (!task)
+      {
+        return;
+      }
+
+      var func = task.functions[change.functionIndex];
+
+      if (!func)
+      {
+        return;
+      }
+
+      var company = func.companies[change.companyIndex];
+
+      if (!company)
+      {
+        return;
+      }
+
+      var newValue = change.newValue > 0 ? change.newValue : 0;
+
+      if (_.isArray(company.count) && company.count[change.divisionIndex])
+      {
+        company.count[change.divisionIndex].value = newValue;
+        divisionModified = true;
+      }
+      else if (_.isNumber(company.count) && change.divisionIndex === -1)
+      {
+        company.count = newValue;
+      }
+    });
+
+    if (divisionModified)
+    {
+      this.markModified('tasks');
+    }
+
+    if (updater)
+    {
+      this.updater = updater;
+      this.updatedAt = new Date();
+    }
+  };
+
   function getProdFunctionCompanyEntries(prodFunctionCompanies, sortedCompanies)
   {
     var companies = [];

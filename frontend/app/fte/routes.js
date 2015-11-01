@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../broker',
   '../router',
   '../viewport',
   '../user',
@@ -21,6 +22,7 @@ define([
   './pages/FteLeaderEntryDetailsPrintablePage',
   'i18n!app/nls/fte'
 ], function(
+  broker,
   router,
   viewport,
   user,
@@ -57,7 +59,19 @@ define([
 
   router.map('/fte/master/:id', canViewMaster, function(req)
   {
-    viewport.showPage(new FteMasterEntryDetailsPage({modelId: req.params.id}));
+    if (req.query.change)
+    {
+      broker.publish('router.navigate', {
+        url: '/fte/master/' + req.params.id,
+        trigger: false,
+        replace: true
+      });
+    }
+
+    viewport.showPage(new FteMasterEntryDetailsPage({
+      modelId: req.params.id,
+      change: req.query.change
+    }));
   });
 
   router.map('/fte/master/:id;edit', canManageMaster, function(req)
@@ -86,7 +100,19 @@ define([
 
   router.map('/fte/leader/:id', canViewLeader, function(req)
   {
-    viewport.showPage(new FteLeaderEntryDetailsPage({modelId: req.params.id}));
+    if (req.query.change)
+    {
+      broker.publish('router.navigate', {
+        url: '/fte/leader/' + req.params.id,
+        trigger: false,
+        replace: true
+      });
+    }
+
+    viewport.showPage(new FteLeaderEntryDetailsPage({
+      modelId: req.params.id,
+      change: req.query.change
+    }));
   });
 
   router.map('/fte/leader/:id;edit', canManageLeader, function(req)
