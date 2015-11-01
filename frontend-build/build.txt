@@ -643,7 +643,11 @@ app/fte/util/fractions.js
 vendor/jquery.stickytableheaders.js
 app/fte/views/FteMasterEntryEditFormView.js
 app/fte/pages/FteMasterEntryEditFormPage.js
+app/data/orgUnits.js
 app/fte/views/FteMasterEntryDetailsView.js
+app/fte/templates/leaderEntry.js
+app/fte/views/FteLeaderEntryDetailsView.js
+app/fte/pages/FteLeaderEntryDetailsPage.js
 app/fte/pages/FteMasterEntryDetailsPage.js
 app/fte/templates/printableMasterEntryList.js
 app/fte/views/FteMasterEntryDetailsPrintableView.js
@@ -651,12 +655,9 @@ app/fte/pages/FteMasterEntryDetailsPrintablePage.js
 app/fte/FteLeaderEntryCollection.js
 app/fte/pages/FteLeaderEntryListPage.js
 app/fte/pages/FteLeaderEntryAddFormPage.js
-app/fte/templates/leaderEntry.js
 app/fte/templates/focusInfoBar.js
 app/fte/views/FteLeaderEntryEditFormView.js
 app/fte/pages/FteLeaderEntryEditFormPage.js
-app/fte/views/FteLeaderEntryDetailsView.js
-app/fte/pages/FteLeaderEntryDetailsPage.js
 app/fte/templates/printableLeaderEntryListWoFunctions.js
 app/fte/templates/printableLeaderEntryListWFunctions.js
 app/fte/views/FteLeaderEntryDetailsPrintableView.js
@@ -781,7 +782,6 @@ app/prodDowntimes/ProdDowntimeSetting.js
 app/prodDowntimes/ProdDowntimeSettingCollection.js
 app/prodDowntimes/settings.js
 app/prodDowntimes/views/ProdDowntimeListView.js
-app/data/orgUnits.js
 app/prodDowntimes/templates/filter.js
 app/prodDowntimes/views/ProdDowntimeFilterView.js
 app/prodDowntimes/pages/ProdDowntimeListPage.js
