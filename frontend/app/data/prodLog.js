@@ -186,6 +186,44 @@ define([
         return;
       }
 
+      if (lockTimer)
+      {
+        clearInterval(lockTimer);
+      }
+
+      if (enableTimer)
+      {
+        clearTimeout(enableTimer);
+      }
+
+      window.removeEventListener('storage', onStorage);
+      window.addEventListener('storage', onStorage);
+
+      lockTimer = setInterval(onLockTimeout, 333);
+      enableTimer = setTimeout(onEnableTimeout, 2000);
+
+      function onLockTimeout()
+      {
+        localStorage.setItem(LOCK_KEY, JSON.stringify({
+          instanceId: instanceId,
+          time: Date.now()
+        }));
+      }
+
+      function onEnableTimeout()
+      {
+        enableTimer = null;
+
+        if (deferred && deferred.state() === 'pending')
+        {
+          enabled = true;
+
+          setTimeout(sync, 1000);
+
+          deferred.resolve();
+        }
+      }
+
       function onStorage(e)
       {
         if (e.key !== LOCK_KEY)
@@ -197,32 +235,20 @@ define([
 
         if (lock.instanceId !== instanceId)
         {
-          deferred.reject();
+          if (deferred)
+          {
+            deferred.reject();
+            deferred = null;
+          }
+          else
+          {
+            broker.publish('production.duplicateDetected', {
+              thisInstanceId: instanceId,
+              thatInstanceId: lock.instanceId
+            });
+          }
         }
       }
-
-      window.addEventListener('storage', onStorage);
-
-      lockTimer = setInterval(function()
-      {
-        localStorage.setItem(LOCK_KEY, JSON.stringify({instanceId: instanceId, time: Date.now()}));
-      }, 333);
-
-      enableTimer = setTimeout(function()
-      {
-        enableTimer = null;
-
-        window.removeEventListener('storage', onStorage);
-
-        if (deferred.state() === 'pending')
-        {
-          enabled = true;
-
-          setTimeout(sync, 1000);
-
-          deferred.resolve();
-        }
-      }, 2000);
     },
     disable: function()
     {
@@ -231,13 +257,13 @@ define([
         return;
       }
 
-      if (enableTimer !== null)
+      if (enableTimer)
       {
         clearTimeout(enableTimer);
         enableTimer = null;
       }
 
-      if (lockTimer !== null)
+      if (lockTimer)
       {
         clearInterval(lockTimer);
         lockTimer = null;
@@ -262,6 +288,7 @@ define([
       }
 
       var prodLogEntry = {
+        _id: null,
         instanceId: instanceId,
         secretKey: prodShift.getSecretKey(),
         type: type,

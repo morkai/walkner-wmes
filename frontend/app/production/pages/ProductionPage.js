@@ -65,7 +65,8 @@ define([
           this.leaveProduction();
         }
       },
-      'production.locked': 'onProductionLocked'
+      'production.locked': 'onProductionLocked',
+      'production.duplicateDetected': 'onDuplicateDetected'
     },
 
     breadcrumbs: function()
@@ -317,6 +318,13 @@ define([
           text: t('production', 'msg:locked')
         });
       }
+    },
+
+    onDuplicateDetected: function()
+    {
+      this.remove();
+
+      document.body.innerHTML = duplicateWarningTemplate();
     },
 
     refreshDowntimes: function()
