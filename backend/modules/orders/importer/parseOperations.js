@@ -19,9 +19,9 @@ module.exports = function parseOperations(input, orders, missingOrders, importTs
     columnMatchers: {
       order: /^Order$/,
       no: /^Oper.*?Act/,
-      workCenter: /^Work ce?nte?r/,
-      name: /^Operation short text$/i,
-      qty: /^Op.*? (qty|quantity)/i,
+      workCenter: /^Work c/,
+      name: /^Op.*?short text$/i,
+      qty: /^Op.*?(qty|quantity)/i,
       unit: /^Act.*?Op.*?UoM/,
       machineSetupTime: /^Std Value$/,
       laborSetupTime: /^Std Value$/,
