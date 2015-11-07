@@ -148,6 +148,11 @@ define([
   {
     var defaultTranslate = function(domain, key, data)
     {
+      if (typeof key === 'object')
+      {
+        return translate(defaultDomain, domain, key);
+      }
+
       if (typeof key === 'string' || data)
       {
         return translate(domain, key, data);
