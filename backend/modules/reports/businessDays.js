@@ -333,10 +333,10 @@ function addYear(year, months)
     {
       quarterKey = monthKey;
 
-      exports.quarters[monthKey] = 0;
+      exports.quarters[quarterKey] = 0;
     }
 
-    exports.quarters[monthKey] += businessDaysInMonth;
+    exports.quarters[quarterKey] += businessDaysInMonth;
 
     businessDaysInYear += businessDaysInMonth;
   });
