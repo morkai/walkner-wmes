@@ -1518,7 +1518,6 @@ the specific language governing permissions and limitations under the Apache Lic
                 // if the first element is highlighted scroll all the way to the top,
                 // that way any unselectable headers above it will also be scrolled
                 // into view
-
                 results.scrollTop(0);
                 return;
             }
@@ -1547,7 +1546,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
             // make sure the top of the element is visible
             if (y < 0 && child.css('display') != 'none' ) {
-                results.scrollTop(results.scrollTop() + y); // y is negative
+                //results.scrollTop(results.scrollTop() + y); // y is negative
             }
         },
 
