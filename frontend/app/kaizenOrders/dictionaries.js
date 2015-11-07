@@ -11,7 +11,8 @@ define([
   '../kaizenAreas/KaizenAreaCollection',
   '../kaizenCategories/KaizenCategoryCollection',
   '../kaizenCauses/KaizenCauseCollection',
-  '../kaizenRisks/KaizenRiskCollection'
+  '../kaizenRisks/KaizenRiskCollection',
+  '../kaizenProductFamilies/KaizenProductFamilyCollection'
 ], function(
   $,
   broker,
@@ -21,14 +22,27 @@ define([
   KaizenAreaCollection,
   KaizenCategoryCollection,
   KaizenCauseCollection,
-  KaizenRiskCollection
+  KaizenRiskCollection,
+  KaizenProductFamilyCollection
 ) {
   'use strict';
+
+  var PROP_TO_DICT = {
+    section: 'sections',
+    area: 'areas',
+    nearMissCategory: 'categories',
+    suggestionCategory: 'categories',
+    category: 'categories',
+    cause: 'causes',
+    risk: 'risks',
+    productFamily: 'productFamilies'
+  };
 
   var req = null;
   var releaseTimer = null;
   var pubsubSandbox = null;
-  var seenSub = null;
+  var kaizenSeenSub = null;
+  var suggestionSeenSub = null;
   var dictionaries = {
     multiType: !!window.KAIZEN_MULTI,
     types: [],
@@ -38,6 +52,7 @@ define([
     categories: new KaizenCategoryCollection(),
     causes: new KaizenCauseCollection(),
     risks: new KaizenRiskCollection(),
+    productFamilies: new KaizenProductFamilyCollection(),
     loaded: false,
     load: function()
     {
@@ -67,11 +82,8 @@ define([
 
         dictionaries.types = res.types;
         dictionaries.statuses = res.statuses;
-        dictionaries.sections.reset(res.sections);
-        dictionaries.areas.reset(res.areas);
-        dictionaries.categories.reset(res.categories);
-        dictionaries.causes.reset(res.causes);
-        dictionaries.risks.reset(res.risks);
+
+        resetDictionaries(res);
       });
 
       req.fail(unload);
@@ -82,13 +94,14 @@ define([
       });
 
       pubsubSandbox = pubsub.sandbox();
-      pubsubSandbox.subscribe('kaizen.sections.**', handleKaizenMessage);
-      pubsubSandbox.subscribe('kaizen.areas.**', handleKaizenMessage);
-      pubsubSandbox.subscribe('kaizen.categories.**', handleKaizenMessage);
-      pubsubSandbox.subscribe('kaizen.causes.**', handleKaizenMessage);
-      pubsubSandbox.subscribe('kaizen.risks.**', handleKaizenMessage);
+      pubsubSandbox.subscribe('kaizen.sections.**', handleDictionaryMessage);
+      pubsubSandbox.subscribe('kaizen.areas.**', handleDictionaryMessage);
+      pubsubSandbox.subscribe('kaizen.categories.**', handleDictionaryMessage);
+      pubsubSandbox.subscribe('kaizen.causes.**', handleDictionaryMessage);
+      pubsubSandbox.subscribe('kaizen.risks.**', handleDictionaryMessage);
+      pubsubSandbox.subscribe('kaizen.productFamilies.**', handleDictionaryMessage);
 
-      seenSub = pubsubSandbox.subscribe('kaizen.orders.seen.' + user.data._id, handleSeenMessage);
+      subToSeenMessages();
 
       return req;
     },
@@ -103,12 +116,17 @@ define([
     },
     getLabel: function(dictionary, id)
     {
-      if (!dictionaries[dictionary])
+      if (typeof dictionary === 'string')
+      {
+        dictionary = this.forProperty(dictionary) || dictionaries[dictionary];
+      }
+
+      if (!dictionary || Array.isArray(dictionary))
       {
         return id;
       }
 
-      var model = dictionaries[dictionary].get(id);
+      var model = dictionary.get(id);
 
       if (!model)
       {
@@ -116,22 +134,53 @@ define([
       }
 
       return model.getLabel();
+    },
+    forProperty: function(prop)
+    {
+      return this[PROP_TO_DICT[prop]] || null;
     }
   };
 
   broker.subscribe('user.reloaded', function()
   {
-    if (seenSub)
+    if (kaizenSeenSub)
     {
-      seenSub.cancel();
-      seenSub = null;
+      kaizenSeenSub.cancel();
+      kaizenSeenSub = null;
     }
 
+    if (suggestionSeenSub)
+    {
+      suggestionSeenSub.cancel();
+      suggestionSeenSub = null;
+    }
+
+    subToSeenMessages();
+  });
+
+  function resetDictionaries(data)
+  {
+    [
+      'sections',
+      'areas',
+      'categories',
+      'causes',
+      'risks',
+      'productFamilies'
+    ].forEach(function(prop)
+    {
+      dictionaries[prop].reset(data ? data[prop] : []);
+    });
+  }
+
+  function subToSeenMessages()
+  {
     if (pubsubSandbox)
     {
-      seenSub = pubsubSandbox.subscribe('kaizen.orders.seen.' + user.data._id, handleSeenMessage);
+      kaizenSeenSub = pubsubSandbox.subscribe('kaizen.orders.seen.' + user.data._id, handleKaizenSeenMessage);
+      suggestionSeenSub = pubsubSandbox.subscribe('suggestions.seen.' + user.data._id, handleSuggestionSeenMessage);
     }
-  });
+  }
 
   function unload()
   {
@@ -141,20 +190,18 @@ define([
     {
       pubsubSandbox.destroy();
       pubsubSandbox = null;
-      seenSub = null;
+      kaizenSeenSub = null;
+      suggestionSeenSub = null;
     }
 
     dictionaries.loaded = false;
     dictionaries.types = [];
     dictionaries.statuses = [];
-    dictionaries.sections.reset();
-    dictionaries.areas.reset();
-    dictionaries.categories.reset();
-    dictionaries.causes.reset();
-    dictionaries.risks.reset();
+
+    resetDictionaries();
   }
 
-  function handleKaizenMessage(message, topic)
+  function handleDictionaryMessage(message, topic)
   {
     var topicParts = topic.split('.');
     var collection = dictionaries[topicParts[1]];
@@ -164,7 +211,7 @@ define([
       return;
     }
 
-    switch (topicParts[1])
+    switch (topicParts[2])
     {
       case 'added':
         collection.add(message.model);
@@ -189,9 +236,14 @@ define([
     broker.publish(topic, message);
   }
 
-  function handleSeenMessage(message)
+  function handleKaizenSeenMessage(message)
   {
     broker.publish('kaizen.orders.seen', message.orderId);
+  }
+
+  function handleSuggestionSeenMessage(message)
+  {
+    broker.publish('suggestions.seen', message.orderId);
   }
 
   return dictionaries;

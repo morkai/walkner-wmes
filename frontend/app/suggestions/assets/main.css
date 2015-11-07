@@ -1,0 +1,16 @@
+@import url(./list.css);
+@import url(./form.css);
+@import url(./details.css);
+@import url(./history.css);
+@import url(./report.css);
+@import url(./help.css);
+
+.suggestions-label-nearMiss {
+  background-color: #d9534f;
+}
+.suggestions-label-suggestion {
+  background-color: #f0ad4e;
+}
+.suggestions-label-kaizen {
+  background-color: #5cb85c;
+}

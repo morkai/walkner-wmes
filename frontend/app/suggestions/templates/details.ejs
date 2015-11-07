@@ -1,0 +1,75 @@
+<div class="suggestions-details">
+  <div class="panel panel-primary suggestions-details-props">
+    <div class="panel-heading">
+      <%- t('suggestions', 'PANEL:TITLE:details') %>
+    </div>
+    <div class="panel-details <%- model.changed.all ? 'is-changed' : '' %>">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name <%- model.changed.subject ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:subject') %></div>
+              <div class="prop-value"><%= model.subject %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name <%- model.changed.status ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:status') %></div>
+              <div class="prop-value"><%- model.status %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name <%- model.changed.section ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:section') %></div>
+              <div class="prop-value"><%- model.section %></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="props">
+            <div class="prop">
+              <div class="prop-name"><%- t('suggestions', 'PROPERTY:creator') %></div>
+              <div class="prop-value"><%- model.creator %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('suggestions', 'PROPERTY:updater') %></div>
+              <div class="prop-value"><%- model.updater %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name <%- model.changed.confirmer ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:confirmer') %></div>
+              <div class="prop-value"><%- model.confirmer %></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="props">
+            <div class="prop">
+              <div class="prop-name"><%- t('suggestions', 'PROPERTY:createdAt') %></div>
+              <div class="prop-value"><%- model.createdAt %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('suggestions', 'PROPERTY:updatedAt') %></div>
+              <div class="prop-value"><%- model.updatedAt %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('suggestions', 'PROPERTY:confirmedAt') %></div>
+              <div class="prop-value"><%- model.confirmedAt || '-' %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row suggestions-details-types">
+    <% include detailsSuggestionPanel.ejs %>
+    <% if (showKaizenPanel) { %>
+    <% include detailsKaizenPanel.ejs %>
+    <% } %>
+  </div>
+  <div class="suggestions-details-tabs">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#<%- idPrefix %>-attachments" data-toggle="tab" data-tab="attachments"><%- t('suggestions', 'tab:attachments') %></a></li>
+      <li><a href="#<%- idPrefix %>-observers" data-toggle="tab" data-tab="observers"><%- t('suggestions', 'tab:observers') %></a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="<%- idPrefix %>-attachments"><% include attachments.ejs %></div>
+      <div class="tab-pane" id="<%- idPrefix %>-observers"><% include observers.ejs %></div>
+    </div>
+  </div>
+</div>

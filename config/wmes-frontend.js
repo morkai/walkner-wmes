@@ -56,6 +56,7 @@ exports.modules = [
   'permalinks',
   'orderDocuments',
   'kaizen',
+  'suggestions',
   'opinionSurveys',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
@@ -126,6 +127,7 @@ exports.events = {
   blacklist: [
     'pressWorksheets.added',
     'kaizen.orders.added', 'kaizen.orders.edited',
+    'suggestions.added', 'suggestions.edited',
     'opinionSurveys.responses.added',
     'opinionSurveys.omrResults.edited',
     'opinionSurveys.actions.added','opinionSurveys.actions.edited'
@@ -185,7 +187,8 @@ exports.mongoose = {
     'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfOrder', 'xiconfClient',
     'factoryLayout',
     'whTransferOrder',
-    'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenOrder',
+    'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenProductFamily', 'kaizenOrder',
+    'suggestion',
     'opinionSurvey', 'opinionSurveyAction', 'opinionSurveyResponse',
     'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion',
     'opinionSurveyScanTemplate', 'opinionSurveyOmrResult'
@@ -228,6 +231,7 @@ exports.user = {
     'XICONF:VIEW', 'XICONF:MANAGE', 'XICONF:NOTIFY', 'ICPO:VIEW', 'ICPO:MANAGE',
     'FACTORY_LAYOUT:MANAGE',
     'KAIZEN:MANAGE', 'KAIZEN:DICTIONARIES:VIEW', 'KAIZEN:DICTIONARIES:MANAGE',
+    'SUGGESTIONS:MANAGE',
     'OPERATOR:ACTIVATE',
     'DOCUMENTS:ACTIVATE', 'DOCUMENTS:VIEW', 'DOCUMENTS:MANAGE',
     'OPINION_SURVEYS:MANAGE'
@@ -349,6 +353,10 @@ exports['mail/sender'] = {
 exports.kaizen = {
   attachmentsDest: DATA_PATH + '/kaizen-attachments',
   multiType: exports.frontendAppData.KAIZEN_MULTI
+};
+
+exports.suggestions = {
+  attachmentsDest: DATA_PATH + '/suggestions-attachments'
 };
 
 exports.orders = {

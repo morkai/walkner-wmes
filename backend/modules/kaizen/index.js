@@ -34,7 +34,8 @@ exports.start = function startKaizenModule(app, kaizenModule)
     areas: 'KaizenArea',
     categories: 'KaizenCategory',
     causes: 'KaizenCause',
-    risks: 'KaizenRisk'
+    risks: 'KaizenRisk',
+    productFamilies: 'KaizenProductFamily'
   };
 
   app.onModuleReady(

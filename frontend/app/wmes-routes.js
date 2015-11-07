@@ -48,6 +48,8 @@ define([
   './kaizenCategories/routes',
   './kaizenCauses/routes',
   './kaizenRisks/routes',
+  './kaizenProductFamilies/routes',
+  './suggestions/routes',
   './opinionSurveys/routes',
   './opinionSurveyActions/routes',
   './opinionSurveyResponses/routes',

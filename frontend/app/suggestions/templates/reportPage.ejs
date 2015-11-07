@@ -1,0 +1,7 @@
+<div class="suggestions-report">
+  <div class="filter-container"></div>
+  <% metrics.forEach(function(metric) { %>
+  <h3><%- t('suggestions', 'report:title:' + metric) %></h3>
+  <div class="suggestions-report-<%- metric %>"></div>
+  <% }) %>
+</div>

@@ -1,0 +1,22 @@
+<li data-online data-loggedin class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('suggestions', 'navbar:base') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li class="dropdown-header"><%- t('suggestions', 'navbar:orders') %>
+    <li data-module="suggestions"><a href="#suggestions"><%- t('suggestions', 'navbar:all') %></a>
+    <li data-module="suggestions"><a href="#suggestions?status=in=(new,accepted,todo,inProgress,paused)&sort(-eventDate)&limit(15)"><%- t('suggestions', 'navbar:open') %></a>
+    <li data-module="suggestions"><a href="#suggestions?observers.user.id=mine&sort(-eventDate)&limit(15)"><%- t('suggestions', 'navbar:mine') %></a>
+    <li data-module="suggestions"><a href="#suggestions?observers.user.id=unseen&sort(-eventDate)&limit(15)"><%- t('suggestions', 'navbar:unseen') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('suggestions', 'navbar:reports') %>
+    <li data-module="suggestions"><a href="#suggestionCountReport"><%- t('suggestions', 'navbar:reports:count') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('suggestions', 'navbar:dictionaries') %>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="suggestions"><a href="#kaizenSections"><%- t('suggestions', 'navbar:sections') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="suggestions"><a href="#kaizenCategories"><%- t('suggestions', 'navbar:categories') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="suggestions"><a href="#kaizenProductFamilies"><%- t('suggestions', 'navbar:productFamilies') %></a>
+    <li class="divider">
+    <li data-module="suggestions"><a href="#suggestionHelp"><%- t('suggestions', 'navbar:help') %></a>
+  </ul>
