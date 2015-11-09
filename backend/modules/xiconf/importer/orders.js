@@ -191,6 +191,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         var insertsMap = {};
         var updatesList = [];
         var updateCount = 0;
+        var multiProgramMap = {};
         var importedAt = new Date(fileInfo.timestamp);
 
         for (var i = 0; i < this.ordersList.length; ++i)
@@ -211,14 +212,14 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
             if (xiconfOrder === undefined)
             {
-              xiconfOrder = insertsMap[order._id] = createEmptyXiconfOrder(order);
+              xiconfOrder = insertsMap[order._id] = createEmptyXiconfOrder(importedAt, order);
             }
 
             addParsedOrdersToXiconfOrder(parsedOrders, xiconfOrder);
           }
           else
           {
-            updateCount += compareOrders(updatesList, importedAt, order, xiconfOrder, parsedOrders);
+            updateCount += compareOrders(updatesList, multiProgramMap, importedAt, order, xiconfOrder, parsedOrders);
           }
         }
 
@@ -226,6 +227,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         this.updatesList = updatesList;
         this.insertCount = this.insertsList.length;
         this.updateCount = updateCount;
+        this.multiProgramOrderIds = Object.keys(multiProgramMap);
 
         setImmediate(this.next());
       },
@@ -260,6 +262,56 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
             this.updatesList[i].update,
             this.group()
           );
+        }
+      },
+      function findOrdersWithMultipleProgramsStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!this.multiProgramOrderIds.length)
+        {
+          return this.skip();
+        }
+
+        XiconfOrder.find({_id: this.multiProgramOrderIds}, {items: 1, nc12: 1}).lean().exec(this.next());
+      },
+      function overrideProgramItemStep(err, xiconfOrders)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        for (var i = 0; i < xiconfOrders.length; ++i)
+        {
+          var order = xiconfOrders[i];
+          var allItems = order.items;
+          var programItems = [];
+          var update = {
+            nc12s: [order.nc12],
+            items: []
+          };
+
+          for (var ii = 0; ii < allItems.length; ++ii)
+          {
+            var item = allItems[ii];
+
+            if (item.kind === 'program')
+            {
+              programItems.push(item);
+            }
+            else
+            {
+              update.items.push(item);
+            }
+          }
+
+          update.items.push(programItems[programItems.length - 1]);
+
+          XiconfOrder.update({_id: order._id}, {$set: update}, this.group());
         }
       },
       function finalizeStep(err)
@@ -331,7 +383,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     delete filePathCache[filePath];
   }
 
-  function createEmptyXiconfOrder(order)
+  function createEmptyXiconfOrder(importedAt, order)
   {
     return {
       _id: order._id,
@@ -347,7 +399,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       items: [],
       startedAt: null,
       finishedAt: null,
-      importedAt: new Date()
+      importedAt: importedAt
     };
   }
 
@@ -382,7 +434,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     };
   }
 
-  function compareOrders(updatesList, importedAt, order, xiconfOrder, parsedOrders)
+  function compareOrders(updatesList, multiProgramMap, importedAt, order, xiconfOrder, parsedOrders)
   {
     if (importedAt <= xiconfOrder.importedAt)
     {
@@ -393,7 +445,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     var $push = {};
 
     compareOrderToXiconfOrder($set, order, xiconfOrder);
-    compareParsedOrdersToXiconfOrder($set, $push, parsedOrders, xiconfOrder);
+    compareParsedOrdersToXiconfOrder($set, $push, multiProgramMap, parsedOrders, xiconfOrder);
 
     var emptySet = _.isEmpty($set);
     var emptyPush = _.isEmpty($push);
@@ -459,16 +511,25 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     }
   }
 
-  function compareParsedOrdersToXiconfOrder($set, $push, parsedOrdersList, xiconfOrder)
+  function compareParsedOrdersToXiconfOrder($set, $push, multiProgramMap, parsedOrdersList, xiconfOrder)
   {
     var parsedOrdersMap = {};
+    var hasProgramItem = false;
 
     _.forEach(parsedOrdersList, function(parsedOrder)
     {
       parsedOrdersMap[parsedOrder.nc12] = parsedOrder;
     });
 
-    _.forEach(xiconfOrder.items, compareParsedOrderToXiconfOrderItem.bind(null, $set, parsedOrdersMap));
+    _.forEach(xiconfOrder.items, function(xiconfOrderItem, i)
+    {
+      if (xiconfOrderItem.kind === 'program')
+      {
+        hasProgramItem = true;
+      }
+
+      compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i);
+    });
 
     _.forEach(parsedOrdersMap, function(parsedOrder)
     {
@@ -480,6 +541,11 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
       $push.items.$each.push(createXiconfOrderItem(parsedOrder));
       $push.nc12.$each.push(parsedOrder.nc12);
+
+      if (hasProgramItem && parsedOrder.kind === 'program')
+      {
+        multiProgramMap[xiconfOrder._id] = true;
+      }
     });
   }
 
