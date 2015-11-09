@@ -480,8 +480,8 @@ module.exports = function setUpSuggestionsRoutes(app, module)
     result.confirmedAt = app.formatDateTime(doc.confirmedAt);
     result['"confirmer'] = doc.confirmer ? doc.confirmer.label : '';
     result.date = app.formatDate(doc.date);
-    result['"categoryId'] = doc.category;
-    result['"categoryName'] = dict.categories[doc.category] || doc.category;
+    result['"categoryIds'] = doc.categories.join('; ');
+    result['"categoryNames'] = doc.categories.map(function(c) { return dict.categories[c] || c; }).join('; ');
     result['"productFamilyId'] = doc.productFamily;
     result['"productFamilyName'] = dict.productFamilies[doc.productFamily] || doc.productFamily;
     result['"howItIs'] = doc.howItIs;
@@ -493,13 +493,15 @@ module.exports = function setUpSuggestionsRoutes(app, module)
     result['"kaizenEffect'] = doc.kaizenEffect;
     result['"suggestionOwners'] = exportSuggestionOwners(doc.suggestionOwners);
     result['"kaizenOwners'] = exportSuggestionOwners(doc.kaizenOwners);
+    result['#implementationDays'] = doc.finishDuration;
+    result['#kaizenDuration'] = doc.kaizenDuration;
 
     return result;
   }
 
   function exportSuggestionOwners(owners)
   {
-    return _.map(owners, function(owner) { return owner.label; }).join(', ');
+    return _.map(owners, function(owner) { return owner.label; }).join('; ');
   }
 
   function countReportRoute(req, res, next)
