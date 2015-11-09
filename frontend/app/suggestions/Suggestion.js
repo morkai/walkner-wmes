@@ -70,7 +70,6 @@ define([
         .map(function(c) { return kaizenDictionaries.categories.getLabel(c); })
         .join('; ');
       obj.productFamily = kaizenDictionaries.productFamilies.getLabel(obj.productFamily) || '-';
-      obj.kaizenDuration = obj.kaizenDuration ? time.toString(obj.kaizenDuration) : null;
 
       DATE_PROPERTIES.forEach(function(dateProperty)
       {
