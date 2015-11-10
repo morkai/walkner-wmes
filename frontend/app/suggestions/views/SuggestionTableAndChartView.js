@@ -106,7 +106,7 @@ define([
         yAxis: {
           title: false,
           min: 0,
-          valueDecimals: 0,
+          allowDecimals: false,
           opposite: true
         },
         tooltip: {
