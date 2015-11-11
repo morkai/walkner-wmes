@@ -199,7 +199,7 @@ define([
         }
       });
 
-      formData.categories = formData.categories.join(',');
+      formData.categories = _.isEmpty(formData.categories) ? '' : formData.categories.join(',');
       formData.subscribers = '';
 
       return formData;
