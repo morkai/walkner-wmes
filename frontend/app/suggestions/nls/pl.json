@@ -4,7 +4,7 @@
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-  "BREADCRUMBS:report": "Raport",
+  "BREADCRUMBS:reports:count": "Ilość zgłoszeń",
 
   "navbar:base": "Usprawnienia",
   "navbar:orders": "Zgłoszenia",
@@ -150,7 +150,10 @@
   "report:title:section": "Ilość zgłoszeń wg działów",
   "report:title:productFamily": "Ilość zgłoszeń wg rodzin produktów",
   "report:title:category": "Ilość zgłoszeń wg kategorii",
+  "report:title:confirmer": "Ilość zgłoszeń wg zatwiedzających",
+  "report:title:owner": "Ilość zgłoszeń wg właścicieli",
   "report:series:total": "Suma",
+  "report:series:entry": "Zgłoszenia",
   "report:series:suggestion": "Sugestie",
   "report:series:kaizen": "Kaizeny",
   "report:series:new": "Nowe",
@@ -164,7 +167,9 @@
   "report:filenames:status": "SUG_IloscWgStatusow",
   "report:filenames:section": "SUG_IloscWgDzialow",
   "report:filenames:productFamily": "SUG_IloscWgRodzinProduktow",
-  "report:filenames:category": "KAIZEN_IloscWgKategorii",
+  "report:filenames:category": "SUG_IloscWgKategorii",
+  "report:filenames:confirmer": "SUG_IloscWgZatwierdzajacych",
+  "report:filenames:owner": "SUG_IloscWgWlascicieli",
 
   "thanks:message": "Dziękujemy za zgłoszenie!",
   "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)"

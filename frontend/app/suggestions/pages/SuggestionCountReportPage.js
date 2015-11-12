@@ -9,6 +9,7 @@ define([
   '../SuggestionCountReport',
   '../views/SuggestionReportFilterView',
   '../views/SuggestionTableAndChartView',
+  '../views/SuggestionCountPerUserChartView',
   'app/suggestions/templates/reportPage'
 ], function(
   t,
@@ -17,6 +18,7 @@ define([
   SuggestionCountReport,
   SuggestionReportFilterView,
   SuggestionTableAndChartView,
+  SuggestionCountPerUserChartView,
   template
 ) {
   'use strict';
@@ -29,7 +31,7 @@ define([
 
     breadcrumbs: [
       t.bound('suggestions', 'BREADCRUMBS:base'),
-      t.bound('suggestions', 'BREADCRUMBS:report')
+      t.bound('suggestions', 'BREADCRUMBS:reports:count')
     ],
 
     initialize: function()
@@ -43,6 +45,15 @@ define([
           model: this.model
         }));
       }, this);
+
+      this.setView('.suggestions-report-confirmer', new SuggestionCountPerUserChartView({
+        metric: 'confirmer',
+        model: this.model
+      }));
+      this.setView('.suggestions-report-owner', new SuggestionCountPerUserChartView({
+        metric: 'owner',
+        model: this.model
+      }));
 
       this.listenTo(this.model, 'filtered', this.onFiltered);
     },

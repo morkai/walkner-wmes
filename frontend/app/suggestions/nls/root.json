@@ -5,7 +5,7 @@
     "BREADCRUMBS:addForm": "Add",
     "BREADCRUMBS:editForm": "Edit",
     "BREADCRUMBS:ACTION_FORM:delete": "Delete",
-    "BREADCRUMBS:report": "Report",
+    "BREADCRUMBS:reports:count": "Number of entries",
 
     "navbar:base": "Suggestions",
     "navbar:orders": "Entries",
@@ -14,7 +14,7 @@
     "navbar:mine": "Only mine",
     "navbar:unseen": "Only unread",
     "navbar:reports": "Reports",
-    "navbar:reports:count": "Entry count",
+    "navbar:reports:count": "Number of entries",
     "navbar:dictionaries": "Dictionaries",
     "navbar:sections": "Sections",
     "navbar:categories": "Categories",
@@ -150,7 +150,10 @@
     "report:title:section": "Entry count by section",
     "report:title:productFamily": "Entry count by product family",
     "report:title:category": "Entry count by category",
+    "report:title:confirmer": "Entry count by confirmers",
+    "report:title:owner": "Entry count by owners",
     "report:series:total": "Total",
+    "report:series:entry": "Entries",
     "report:series:suggestion": "Suggestions",
     "report:series:kaizen": "Kaizens",
     "report:series:new": "New",
@@ -165,6 +168,8 @@
     "report:filenames:section": "SUG_CountBySection",
     "report:filenames:productFamily": "SUG_CountByProductFamily",
     "report:filenames:category": "SUG_CountByCategory",
+    "report:filenames:confirmer": "SUG_CountByConfirmer",
+    "report:filenames:owner": "SUG_CountByOwner",
 
     "thanks:message": "Thanks for the entry!",
     "thanks:footnote": "(click any button or key to close this window)"

@@ -4,12 +4,14 @@
 
 define([
   'underscore',
+  '../i18n',
   '../time',
   '../core/Model',
   '../data/colorFactory',
   'app/kaizenOrders/dictionaries'
 ], function(
   _,
+  t,
   time,
   Model,
   colorFactory,
@@ -17,6 +19,8 @@ define([
 ) {
   'use strict';
 
+  var COLOR_SUGGESTION = '#f0ad4e';
+  var COLOR_KAIZEN = '#5cb85c';
   var TABLE_AND_CHART_METRICS = [
     'total',
     'status',
@@ -24,11 +28,6 @@ define([
     'category',
     'productFamily'
   ];
-  var METRIC_TO_DICTIONARY = {
-    section: 'sections',
-    category: 'categories',
-    productFamily: 'productFamilies'
-  };
 
   return Model.extend({
 
@@ -85,6 +84,14 @@ define([
         status: {
           rows: this.prepareRows(totalCount, totals.status, 'status'),
           series: {}
+        },
+        owner: {
+          categories: this.prepareUserCategories(report.users, totals.owner),
+          series: this.prepareOwnerSeries(totals.owner, report.groups)
+        },
+        confirmer: {
+          categories: this.prepareUserCategories(report.users, totals.confirmer),
+          series: this.prepareConfirmerSeries(totals.confirmer, report.groups)
         }
       };
 
@@ -134,13 +141,13 @@ define([
           id: 'suggestion',
           abs: totals.type.suggestion,
           rel: 1,
-          color: '#f0ad4e'
+          color: COLOR_SUGGESTION
         },
         {
           id: 'kaizen',
           abs: totals.type.kaizen,
           rel: totals.type.kaizen / totals.type.suggestion,
-          color: '#5cb85c'
+          color: COLOR_KAIZEN
         }
       ];
     },
@@ -150,11 +157,11 @@ define([
       return {
         suggestion:  {
           data: [],
-          color: '#f0ad4e'
+          color: COLOR_SUGGESTION
         },
         kaizen:  {
           data: [],
-          color: '#5cb85c'
+          color: COLOR_KAIZEN
         }
       };
     },
@@ -195,6 +202,54 @@ define([
           y: group[metric] ? (group[metric][row.id] || null) : null
         });
       });
+    },
+
+    prepareUserCategories: function(users, totals)
+    {
+      return totals.map(function(total)
+      {
+        var userId = total[0];
+
+        return users[userId] || userId;
+      });
+    },
+
+    prepareOwnerSeries: function(ownerTotals)
+    {
+      var series = [
+        {
+          id: 'suggestion',
+          name: t.bound('suggestions', 'report:series:suggestion'),
+          data: [],
+          color: COLOR_SUGGESTION
+        },
+        {
+          id: 'kaizen',
+          name: t.bound('suggestions', 'report:series:kaizen'),
+          data: [],
+          color: COLOR_KAIZEN
+        }
+      ];
+
+      _.forEach(ownerTotals, function(totals)
+      {
+        series[0].data.push(totals[3]);
+        series[1].data.push(totals[4]);
+      });
+
+      return series;
+    },
+
+    prepareConfirmerSeries: function(confirmerTotals)
+    {
+      return [
+        {
+          id: 'entry',
+          type: 'bar',
+          name: t.bound('suggestions', 'report:series:entry'),
+          data: _.map(confirmerTotals, function(t) { return t[1]; })
+        }
+      ];
     }
 
   }, {
