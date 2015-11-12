@@ -31,6 +31,61 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   var canView = userModule.auth('XICONF:VIEW');
   var canManage = userModule.auth('XICONF:MANAGE');
+  var remoteRequests = {};
+
+  express.post('/xiconf;execute', userModule.auth('LOCAL'), function(req, res, next)
+  {
+    var rid = req.query.rid;
+    var action = req.query.action;
+
+    if (_.isEmpty(rid)
+      || !_.isString(rid)
+      || _.isEmpty(action)
+      || !_.isString(action)
+      || !_.isFunction(xiconfModule.remote[action]))
+    {
+      return next(express.createHttpError('BAD_REQUEST', 400));
+    }
+
+    var remoteRequest = remoteRequests[rid];
+
+    if (!remoteRequest)
+    {
+      remoteRequest = remoteRequests[rid] = {
+        timestamp: Date.now(),
+        rid: rid,
+        action: action,
+        result: undefined,
+        responseSockets: []
+      };
+    }
+
+    if (remoteRequest.result !== undefined)
+    {
+      return remoteRequest.result instanceof Error ? next(remoteRequest.result) : res.json(remoteRequest.result);
+    }
+
+    remoteRequest.responseSockets.push(res);
+
+    xiconfModule.remote[action](req.body, function(err, result)
+    {
+      _.forEach(remoteRequest.responseSockets, function(res)
+      {
+        if (err)
+        {
+          res.statusCode = err.status || 500;
+          res.json({error: err});
+        }
+        else
+        {
+          res.json(result);
+        }
+      });
+
+      remoteRequest.result = err || result;
+      remoteRequest.responseSockets = null;
+    });
+  });
 
   express.get(
     '/xiconf/settings',

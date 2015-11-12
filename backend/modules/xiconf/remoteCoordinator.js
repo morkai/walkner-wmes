@@ -40,6 +40,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var orderResultsToRecount = {};
   var orderResultsRecountTimer = null;
 
+  xiconfModule.remote = {
+    checkSerialNumber: handleCheckSerialNumberRequest,
+    generateServiceTag: handleGenerateServiceTagRequest,
+    acquireServiceTag: handleAcquireServiceTagRequest,
+    releaseServiceTag: handleReleaseServiceTagRequest
+  };
+
   xiconfModule.getRemoteCoordinatorDebugInfo = function(enableDebugMode)
   {
     debugMode = enableDebugMode === true;
@@ -529,8 +536,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   {
     /*jshint validthis:true*/
 
-    var socket = this;
-
     if (!_.isObject(data) || !_.isString(data.srcId) || _.isEmpty(data.srcId))
     {
       return;
@@ -540,6 +545,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     {
       data.prodLineId = null;
     }
+
+    var socket = this;
 
     if (!socket.xiconf)
     {
@@ -628,8 +635,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   {
     /*jshint validthis:true*/
 
-    var socket = this;
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -640,7 +645,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('RESTARTING'));
     }
 
-    if (!socket.xiconf)
+    var socket = this;
+
+    if (socket.id && !socket.xiconf)
     {
       return reply(new Error('NOT_CONNECTED'));
     }
@@ -660,8 +667,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   {
     /*jshint validthis:true*/
 
-    var socket = this;
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -672,7 +677,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('RESTARTING'));
     }
 
-    if (!socket.xiconf)
+    var socket = this;
+
+    if (socket.id && !socket.xiconf)
     {
       return reply(new Error('NOT_CONNECTED'));
     }
@@ -692,8 +699,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   {
     /*jshint validthis:true*/
 
-    var socket = this;
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -704,7 +709,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('RESTARTING'));
     }
 
-    if (!socket.xiconf)
+    var socket = this;
+
+    if (socket.id && !socket.xiconf)
     {
       return reply(new Error('NOT_CONNECTED'));
     }
@@ -743,14 +750,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   {
     /*jshint validthis:true*/
 
-    var socket = this;
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
     }
 
-    if (!socket.xiconf)
+    var socket = this;
+
+    if (socket.id && !socket.xiconf)
     {
       return reply(new Error('NOT_CONNECTED'));
     }
