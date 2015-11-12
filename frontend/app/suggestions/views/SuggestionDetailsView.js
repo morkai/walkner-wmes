@@ -30,6 +30,7 @@ define([
 
     serialize: function()
     {
+      var status = this.model.get('status');
       var showKaizenPanel = status !== 'new' && status !== 'cancelled';
 
       return _.extend(DetailsView.prototype.serialize.call(this), {
