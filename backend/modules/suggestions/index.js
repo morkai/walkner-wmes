@@ -8,6 +8,7 @@ var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var setUpNotifier = require('./notifier');
 var setUpReminder = require('./reminder');
+var setUpDurationRecalculator = require('./durationRecalculator');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -64,5 +65,12 @@ exports.start = function startSuggestionsModule(app, module)
       module.config.mailSenderId
     ],
     setUpReminder.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId
+    ],
+    setUpDurationRecalculator.bind(null, app, module)
   );
 };

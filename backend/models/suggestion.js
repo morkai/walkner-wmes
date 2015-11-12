@@ -361,31 +361,31 @@ module.exports = function setupSuggestionModel(app, mongoose)
 
   suggestionSchema.methods.recalcFinishDuration = function()
   {
-    if (this.status === 'new' || this.status === 'cancelled')
+    if (this.status === 'cancelled')
     {
       this.finishDuration = 0;
     }
     else
     {
-      var startDate = this.date;
-      var finishDate = this.kaizenFinishDate || new Date();
+      var fromDate = this.date;
+      var toDate = this.kaizenFinishDate || new Date();
 
-      this.finishDuration = 1 + businessDays.countBetweenDates(startDate.getTime(), finishDate.getTime());
+      this.finishDuration = 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
     }
   };
 
   suggestionSchema.methods.recalcKaizenDuration = function()
   {
-    if (this.status !== 'cancelled' && this.kaizenStartDate && this.kaizenFinishDate)
+    if (this.status === 'cancelled')
     {
-      this.kaizenDuration = 1 + businessDays.countBetweenDates(
-        this.kaizenStartDate.getTime(),
-        this.kaizenFinishDate.getTime()
-      );
+      this.kaizenDuration = 0;
     }
     else
     {
-      this.kaizenDuration = 0;
+      var fromDate = this.kaizenStartDate || this.date;
+      var toDate = this.kaizenFinishDate || new Date();
+
+      this.kaizenDuration = 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
     }
   };
 
