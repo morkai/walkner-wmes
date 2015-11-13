@@ -5,31 +5,21 @@
 define([
   'underscore',
   'app/i18n',
+  'app/time',
   'app/highcharts',
   'app/core/View',
-  'app/reports/util/formatTooltipHeader',
-  'app/kaizenOrders/dictionaries',
-  'app/suggestions/templates/reportTable',
-  'app/suggestions/templates/tableAndChart'
+  'app/reports/util/formatTooltipHeader'
 ], function(
   _,
   t,
+  time,
   Highcharts,
   View,
-  formatTooltipHeader,
-  kaizenDictionaries,
-  renderReportTable,
-  template
+  formatTooltipHeader
 ) {
   'use strict';
 
   return View.extend({
-
-    template: template,
-
-    events: {
-
-    },
 
     initialize: function()
     {
@@ -39,7 +29,7 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:' + this.options.metric, this.render);
+      this.listenTo(this.model, 'change:count', this.render);
     },
 
     destroy: function()
@@ -78,41 +68,41 @@ define([
           this.chart.showLoading();
         }
       }
-
-      this.updateTable();
     },
 
     createChart: function()
     {
+      var count = this.model.get('count');
+
       this.chart = new Highcharts.Chart({
         chart: {
-          renderTo: this.$id('chart')[0],
+          renderTo: this.el,
           plotBorderWidth: 1,
-          spacing: [10, 1, 1, 0]
+          type: 'column'
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:' + this.options.metric),
-          buttons: {
-            contextButton: {
-              align: 'left'
-            }
-          },
+          filename: t.bound('suggestions', 'report:filenames:summary:count'),
           chartOptions: {
             title: {
-              text: t.bound('suggestions', 'report:title:' + this.options.metric)
+              text: t.bound('suggestions', 'report:title:summary:count')
             }
           }
         },
         title: false,
         noData: {},
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: {
+            formatter: function()
+            {
+              return time.getMoment(this.value).format('w');
+            }
+          }
         },
         yAxis: {
           title: false,
           min: 0,
-          allowDecimals: false,
-          opposite: true
+          allowDecimals: false
         },
         tooltip: {
           shared: true,
@@ -120,14 +110,36 @@ define([
           headerFormatter: formatTooltipHeader.bind(this)
         },
         legend: {
-          enabled: false
+          enabled: true
         },
         plotOptions: {
           column: {
-            borderWidth: 0
+            stacking: 'normal',
+            dataLabels: {
+              enabled: true,
+              formatter: function()
+              {
+                return this.y || '';
+              }
+            }
           }
         },
-        series: this.serializeChartSeries()
+        series: [{
+          id: 'cancelled',
+          name: t.bound('suggestions', 'report:series:summary:cancelled'),
+          data: count.cancelled,
+          color: '#d9534f'
+        }, {
+          id: 'open',
+          name: t.bound('suggestions', 'report:series:summary:open'),
+          data: count.open,
+          color: '#f0ad4e'
+        }, {
+          id: 'finished',
+          name: t.bound('suggestions', 'report:series:summary:finished'),
+          data: count.finished,
+          color: '#5cb85c'
+        }]
       });
     },
 
@@ -135,30 +147,6 @@ define([
     {
       this.chart.destroy();
       this.createChart();
-    },
-
-    updateTable: function()
-    {
-      this.$id('table').html(renderReportTable({
-        rows: this.model.get(this.options.metric).rows
-      }));
-    },
-
-    serializeChartSeries: function()
-    {
-      var series = this.model.get(this.options.metric).series;
-
-      return Object.keys(series).map(function(seriesId)
-      {
-        var serie = series[seriesId];
-
-        return _.defaults(serie, {
-          id: seriesId,
-          type: 'column',
-          name: serie.name || t.bound('suggestions', 'report:series:' + seriesId),
-          data: []
-        });
-      });
     },
 
     onModelLoading: function()

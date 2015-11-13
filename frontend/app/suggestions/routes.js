@@ -11,11 +11,13 @@ define([
   './SuggestionCollection',
   './Suggestion',
   './SuggestionCountReport',
+  './SuggestionSummaryReport',
   './pages/SuggestionListPage',
   './pages/SuggestionDetailsPage',
   './pages/SuggestionAddFormPage',
   './pages/SuggestionEditFormPage',
   './pages/SuggestionCountReportPage',
+  './pages/SuggestionSummaryReportPage',
   './views/SuggestionThankYouView',
   'i18n!app/nls/reports',
   'i18n!app/nls/kaizenOrders',
@@ -29,11 +31,13 @@ define([
   SuggestionCollection,
   Suggestion,
   SuggestionCountReport,
+  SuggestionSummaryReport,
   SuggestionListPage,
   SuggestionDetailsPage,
   SuggestionAddFormPage,
   SuggestionEditFormPage,
   SuggestionCountReportPage,
+  SuggestionSummaryReportPage,
   SuggestionThankYouView
 ) {
   'use strict';
@@ -48,6 +52,13 @@ define([
         to: +req.query.to || undefined,
         interval: req.query.interval
       })
+    }));
+  });
+
+  router.map('/suggestionSummaryReport', canAccess, function(req)
+  {
+    viewport.showPage(new SuggestionSummaryReportPage({
+      model: SuggestionSummaryReport.fromQuery(req.query)
     }));
   });
 

@@ -7,29 +7,17 @@ define([
   'app/i18n',
   'app/highcharts',
   'app/core/View',
-  'app/reports/util/formatTooltipHeader',
-  'app/kaizenOrders/dictionaries',
-  'app/suggestions/templates/reportTable',
-  'app/suggestions/templates/tableAndChart'
+  'app/reports/util/formatTooltipHeader'
 ], function(
   _,
   t,
   Highcharts,
   View,
-  formatTooltipHeader,
-  kaizenDictionaries,
-  renderReportTable,
-  template
+  formatTooltipHeader
 ) {
   'use strict';
 
   return View.extend({
-
-    template: template,
-
-    events: {
-
-    },
 
     initialize: function()
     {
@@ -78,56 +66,46 @@ define([
           this.chart.showLoading();
         }
       }
-
-      this.updateTable();
     },
 
     createChart: function()
     {
+      var series = this.serializeSeries();
+      var dataPointCount = series[0].data.length;
+
       this.chart = new Highcharts.Chart({
         chart: {
-          renderTo: this.$id('chart')[0],
+          renderTo: this.el,
           plotBorderWidth: 1,
-          spacing: [10, 1, 1, 0]
+          height: Math.max(400, 150 + 20 * dataPointCount),
+          type: 'bar'
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:' + this.options.metric),
-          buttons: {
-            contextButton: {
-              align: 'left'
-            }
-          },
-          chartOptions: {
-            title: {
-              text: t.bound('suggestions', 'report:title:' + this.options.metric)
-            }
-          }
+          filename: t.bound('suggestions', 'report:filenames:summary:' + this.options.metric)
         },
         title: false,
         noData: {},
         xAxis: {
-          type: 'datetime'
+          categories: this.serializeCategories()
         },
         yAxis: {
           title: false,
           min: 0,
-          allowDecimals: false,
-          opposite: true
+          allowDecimals: false
         },
         tooltip: {
           shared: true,
-          valueDecimals: 0,
-          headerFormatter: formatTooltipHeader.bind(this)
+          valueDecimals: 0
         },
         legend: {
-          enabled: false
+          enabled: true
         },
         plotOptions: {
-          column: {
-            borderWidth: 0
+          bar: {
+            stacking: 'normal'
           }
         },
-        series: this.serializeChartSeries()
+        series: series
       });
     },
 
@@ -137,28 +115,31 @@ define([
       this.createChart();
     },
 
-    updateTable: function()
+    serializeCategories: function()
     {
-      this.$id('table').html(renderReportTable({
-        rows: this.model.get(this.options.metric).rows
-      }));
+      return this.model.get(this.options.metric).categories;
     },
 
-    serializeChartSeries: function()
+    serializeSeries: function()
     {
-      var series = this.model.get(this.options.metric).series;
+      var data = this.model.get(this.options.metric);
 
-      return Object.keys(series).map(function(seriesId)
-      {
-        var serie = series[seriesId];
-
-        return _.defaults(serie, {
-          id: seriesId,
-          type: 'column',
-          name: serie.name || t.bound('suggestions', 'report:series:' + seriesId),
-          data: []
-        });
-      });
+      return [{
+        id: 'cancelled',
+        name: t.bound('suggestions', 'report:series:summary:cancelled'),
+        data: data.cancelled,
+        color: '#d9534f'
+      }, {
+        id: 'open',
+        name: t.bound('suggestions', 'report:series:summary:open'),
+        data: data.open,
+        color: '#f0ad4e'
+      }, {
+        id: 'finished',
+        name: t.bound('suggestions', 'report:series:summary:finished'),
+        data: data.finished,
+        color: '#5cb85c'
+      }];
     },
 
     onModelLoading: function()

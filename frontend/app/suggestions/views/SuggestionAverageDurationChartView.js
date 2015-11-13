@@ -5,31 +5,23 @@
 define([
   'underscore',
   'app/i18n',
+  'app/time',
   'app/highcharts',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
-  'app/kaizenOrders/dictionaries',
-  'app/suggestions/templates/reportTable',
-  'app/suggestions/templates/tableAndChart'
+  'app/kaizenOrders/dictionaries'
 ], function(
   _,
   t,
+  time,
   Highcharts,
   View,
   formatTooltipHeader,
-  kaizenDictionaries,
-  renderReportTable,
-  template
+  kaizenDictionaries
 ) {
   'use strict';
 
   return View.extend({
-
-    template: template,
-
-    events: {
-
-    },
 
     initialize: function()
     {
@@ -39,7 +31,7 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:' + this.options.metric, this.render);
+      this.listenTo(this.model, 'change:averageDuration', this.render);
     },
 
     destroy: function()
@@ -78,45 +70,48 @@ define([
           this.chart.showLoading();
         }
       }
-
-      this.updateTable();
     },
 
     createChart: function()
     {
       this.chart = new Highcharts.Chart({
         chart: {
-          renderTo: this.$id('chart')[0],
-          plotBorderWidth: 1,
-          spacing: [10, 1, 1, 0]
+          renderTo: this.el,
+          plotBorderWidth: 1
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:' + this.options.metric),
-          buttons: {
-            contextButton: {
-              align: 'left'
-            }
-          },
+          filename: t.bound('suggestions', 'report:filenames:summary:averageDuration'),
           chartOptions: {
             title: {
-              text: t.bound('suggestions', 'report:title:' + this.options.metric)
+              text: t.bound('suggestions', 'report:title:summary:averageDuration')
             }
           }
         },
         title: false,
         noData: {},
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: {
+            formatter: function()
+            {
+              return time.getMoment(this.value).format('w');
+            }
+          }
         },
         yAxis: {
           title: false,
           min: 0,
-          allowDecimals: false,
-          opposite: true
+          decimals: 2,
+          plotLines: [{
+            color: '#5cb85c',
+            width: 2,
+            value: 5,
+            zIndex: 100
+          }]
         },
         tooltip: {
           shared: true,
-          valueDecimals: 0,
+          valueDecimals: 2,
           headerFormatter: formatTooltipHeader.bind(this)
         },
         legend: {
@@ -124,10 +119,22 @@ define([
         },
         plotOptions: {
           column: {
-            borderWidth: 0
+            borderWidth: 0,
+            dataLabels: {
+              enabled: true,
+              formatter: function()
+              {
+                return Highcharts.numberFormat(this.y, 1);
+              }
+            }
           }
         },
-        series: this.serializeChartSeries()
+        series: [{
+          id: 'averageDuration',
+          type: 'column',
+          name: t.bound('suggestions', 'report:series:summary:averageDuration'),
+          data: this.model.get('averageDuration')
+        }]
       });
     },
 
@@ -135,30 +142,6 @@ define([
     {
       this.chart.destroy();
       this.createChart();
-    },
-
-    updateTable: function()
-    {
-      this.$id('table').html(renderReportTable({
-        rows: this.model.get(this.options.metric).rows
-      }));
-    },
-
-    serializeChartSeries: function()
-    {
-      var series = this.model.get(this.options.metric).series;
-
-      return Object.keys(series).map(function(seriesId)
-      {
-        var serie = series[seriesId];
-
-        return _.defaults(serie, {
-          id: seriesId,
-          type: 'column',
-          name: serie.name || t.bound('suggestions', 'report:series:' + seriesId),
-          data: []
-        });
-      });
     },
 
     onModelLoading: function()

@@ -5,6 +5,7 @@
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "BREADCRUMBS:reports:count": "Ilość zgłoszeń",
+  "BREADCRUMBS:reports:summary": "Zestawienie informacji",
 
   "navbar:base": "Usprawnienia",
   "navbar:orders": "Zgłoszenia",
@@ -14,6 +15,7 @@
   "navbar:unseen": "Tylko nieprzeczytane",
   "navbar:reports": "Raporty",
   "navbar:reports:count": "Ilość zgłoszeń",
+  "navbar:reports:summary": "Zestawienie informacji",
   "navbar:dictionaries": "Słowniki",
   "navbar:sections": "Działy",
   "navbar:categories": "Kategorie",
@@ -170,6 +172,17 @@
   "report:filenames:category": "SUG_IloscWgKategorii",
   "report:filenames:confirmer": "SUG_IloscWgZatwierdzajacych",
   "report:filenames:owner": "SUG_IloscWgWlascicieli",
+
+  "report:title:summary:averageDuration": "Średnia ilość dni realizacji w poszczególnych tygodniach",
+  "report:title:summary:count": "Ilość zgłoszeń w poszczególnych tygodniach",
+  "report:title:summary:suggestionOwners": "Ilość sugestii zgłoszonych przez pracownika",
+  "report:series:summary:averageDuration": "Średnia ilość dni realizacji",
+  "report:series:summary:open": "Otwarte",
+  "report:series:summary:finished": "Zakończone",
+  "report:series:summary:cancelled": "Anulowane",
+  "report:filenames:summary:averageDuration": "SUG_SredniaIloscDniRealizacji",
+  "report:filenames:summary:count": "SUG_IloscWTygodniach",
+  "report:filenames:summary:suggestionOwners": "SUG_IloscSugestiiWgPracownikow",
 
   "thanks:message": "Dziękujemy za zgłoszenie!",
   "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)"

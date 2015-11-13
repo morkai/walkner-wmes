@@ -6,6 +6,7 @@
     "BREADCRUMBS:editForm": "Edit",
     "BREADCRUMBS:ACTION_FORM:delete": "Delete",
     "BREADCRUMBS:reports:count": "Number of entries",
+    "BREADCRUMBS:reports:summary": "Summary",
 
     "navbar:base": "Suggestions",
     "navbar:orders": "Entries",
@@ -15,6 +16,7 @@
     "navbar:unseen": "Only unread",
     "navbar:reports": "Reports",
     "navbar:reports:count": "Number of entries",
+    "navbar:reports:summary": "Summary",
     "navbar:dictionaries": "Dictionaries",
     "navbar:sections": "Sections",
     "navbar:categories": "Categories",
@@ -170,6 +172,17 @@
     "report:filenames:category": "SUG_CountByCategory",
     "report:filenames:confirmer": "SUG_CountByConfirmer",
     "report:filenames:owner": "SUG_CountByOwner",
+
+    "report:title:summary:averageDuration": "Average number of implementation days by week",
+    "report:title:summary:count": "Number of entries by week",
+    "report:title:summary:suggestionOwners": "Number of suggestions by owner",
+    "report:series:summary:averageDuration": "Avg. no. of impl. days",
+    "report:series:summary:open": "Open",
+    "report:series:summary:finished": "Finished",
+    "report:series:summary:cancelled": "Cancelled",
+    "report:filenames:summary:averageDuration": "SUG_AvgImplDays",
+    "report:filenames:summary:count": "SUG_CountByWeek",
+    "report:filenames:summary:suggestionOwners": "SUG_CountByOwners",
 
     "thanks:message": "Thanks for the entry!",
     "thanks:footnote": "(click any button or key to close this window)"

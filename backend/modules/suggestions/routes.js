@@ -10,6 +10,7 @@ var _ = require('lodash');
 var step = require('h5.step');
 var multer = require('multer');
 var countReport = require('./countReport');
+var summaryReport = require('./summaryReport');
 
 module.exports = function setUpSuggestionsRoutes(app, module)
 {
@@ -42,8 +43,14 @@ module.exports = function setUpSuggestionsRoutes(app, module)
   express.get(
     '/suggestions/reports/count',
     canView,
-    reportsModule.helpers.sendCachedReport.bind(null, 'kaizen'),
+    reportsModule.helpers.sendCachedReport.bind(null, 'suggestions/count'),
     countReportRoute
+  );
+  express.get(
+    '/suggestions/reports/summary',
+    canView,
+    reportsModule.helpers.sendCachedReport.bind(null, 'suggestions/summary'),
+    summaryReportRoute
   );
 
   express.get('/r/suggestions/:filter', redirectToListRoute);
@@ -516,7 +523,37 @@ module.exports = function setUpSuggestionsRoutes(app, module)
       app,
       reportsModule,
       countReport,
-      'suggestions',
+      'suggestions/count',
+      req.reportHash,
+      options,
+      function(err, reportJson)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.type('json');
+        res.send(reportJson);
+      }
+    );
+  }
+
+  function summaryReportRoute(req, res, next)
+  {
+    var query = req.query;
+    var options = {
+      fromTime: reportsModule.helpers.getTime(query.from) || null,
+      toTime: reportsModule.helpers.getTime(query.to) || null,
+      section: _.isEmpty(query.section) ? [] : query.section.split(','),
+      confirmer: _.isEmpty(query.confirmer) ? [] : query.confirmer.split(',')
+    };
+
+    reportsModule.helpers.generateReport(
+      app,
+      reportsModule,
+      summaryReport,
+      'suggestions/summary',
       req.reportHash,
       options,
       function(err, reportJson)

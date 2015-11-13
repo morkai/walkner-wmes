@@ -6,19 +6,23 @@ define([
   'app/i18n',
   'app/core/View',
   'app/kaizenOrders/dictionaries',
-  '../SuggestionCountReport',
-  '../views/SuggestionCountReportFilterView',
+  '../SuggestionSummaryReport',
+  '../views/SuggestionSummaryReportFilterView',
   '../views/SuggestionTableAndChartView',
-  '../views/SuggestionCountPerUserChartView',
-  'app/suggestions/templates/countReportPage'
+  '../views/SuggestionAverageDurationChartView',
+  '../views/SuggestionSummaryCountChartView',
+  '../views/SuggestionSummaryPerUserChartView',
+  'app/suggestions/templates/summaryReportPage'
 ], function(
   t,
   View,
   kaizenDictionaries,
-  SuggestionCountReport,
-  SuggestionCountReportFilterView,
+  SuggestionSummaryReport,
+  SuggestionSummaryReportFilterView,
   SuggestionTableAndChartView,
-  SuggestionCountPerUserChartView,
+  SuggestionAverageDurationChartView,
+  SuggestionSummaryCountChartView,
+  SuggestionSummaryPerUserChartView,
   template
 ) {
   'use strict';
@@ -31,29 +35,22 @@ define([
 
     breadcrumbs: [
       t.bound('suggestions', 'BREADCRUMBS:base'),
-      t.bound('suggestions', 'BREADCRUMBS:reports:count')
+      t.bound('suggestions', 'BREADCRUMBS:reports:summary')
     ],
 
     initialize: function()
     {
-      this.setView('.filter-container', new SuggestionCountReportFilterView({
+      this.setView('.filter-container', new SuggestionSummaryReportFilterView({
         model: this.model
       }));
-
-      SuggestionCountReport.TABLE_AND_CHART_METRICS.forEach(function(metric)
-      {
-        this.setView('.suggestions-report-' + metric, new SuggestionTableAndChartView({
-          metric: metric,
-          model: this.model
-        }));
-      }, this);
-
-      this.setView('.suggestions-report-confirmer', new SuggestionCountPerUserChartView({
-        metric: 'confirmer',
+      this.setView('.suggestions-report-summary-averageDuration', new SuggestionAverageDurationChartView({
         model: this.model
       }));
-      this.setView('.suggestions-report-owner', new SuggestionCountPerUserChartView({
-        metric: 'owner',
+      this.setView('.suggestions-report-summary-count', new SuggestionSummaryCountChartView({
+        model: this.model
+      }));
+      this.setView('.suggestions-report-summary-suggestionOwners', new SuggestionSummaryPerUserChartView({
+        metric: 'suggestionOwners',
         model: this.model
       }));
 
@@ -63,14 +60,6 @@ define([
     destroy: function()
     {
       kaizenDictionaries.unload();
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix,
-        metrics: SuggestionCountReport.TABLE_AND_CHART_METRICS
-      };
     },
 
     load: function(when)
