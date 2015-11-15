@@ -10,14 +10,10 @@ define([
   '../core/util/showDeleteFormPage',
   './SuggestionCollection',
   './Suggestion',
-  './SuggestionCountReport',
-  './SuggestionSummaryReport',
   './pages/SuggestionListPage',
   './pages/SuggestionDetailsPage',
   './pages/SuggestionAddFormPage',
   './pages/SuggestionEditFormPage',
-  './pages/SuggestionCountReportPage',
-  './pages/SuggestionSummaryReportPage',
   './views/SuggestionThankYouView',
   'i18n!app/nls/reports',
   'i18n!app/nls/kaizenOrders',
@@ -30,14 +26,10 @@ define([
   showDeleteFormPage,
   SuggestionCollection,
   Suggestion,
-  SuggestionCountReport,
-  SuggestionSummaryReport,
   SuggestionListPage,
   SuggestionDetailsPage,
   SuggestionAddFormPage,
   SuggestionEditFormPage,
-  SuggestionCountReportPage,
-  SuggestionSummaryReportPage,
   SuggestionThankYouView
 ) {
   'use strict';
@@ -46,20 +38,38 @@ define([
 
   router.map('/suggestionCountReport', canAccess, function(req)
   {
-    viewport.showPage(new SuggestionCountReportPage({
-      model: new SuggestionCountReport({
-        from: +req.query.from || undefined,
-        to: +req.query.to || undefined,
-        interval: req.query.interval
-      })
-    }));
+    viewport.loadPage(
+      [
+        'app/suggestions/SuggestionCountReport',
+        'app/suggestions/pages/SuggestionCountReportPage'
+      ],
+      function(SuggestionCountReport, SuggestionCountReportPage)
+      {
+        return new SuggestionCountReportPage({
+          model: new SuggestionCountReport({
+            from: +req.query.from || undefined,
+            to: +req.query.to || undefined,
+            interval: req.query.interval
+          })
+        });
+      }
+    );
   });
 
   router.map('/suggestionSummaryReport', canAccess, function(req)
   {
-    viewport.showPage(new SuggestionSummaryReportPage({
-      model: SuggestionSummaryReport.fromQuery(req.query)
-    }));
+    viewport.loadPage(
+      [
+        'app/suggestions/SuggestionSummaryReport',
+        'app/suggestions/pages/SuggestionSummaryReportPage'
+      ],
+      function(SuggestionSummaryReport, SuggestionSummaryReportPage)
+      {
+        return new SuggestionSummaryReportPage({
+          model: SuggestionSummaryReport.fromQuery(req.query)
+        });
+      }
+    );
   });
 
   router.map('/suggestionHelp', function()
