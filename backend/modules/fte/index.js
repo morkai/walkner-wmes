@@ -66,16 +66,15 @@ exports.start = function startFteModule(app, module)
 
   function checkShiftChange()
   {
-    if (shiftChangeTimer !== null)
+    if (shiftChangeTimer)
     {
       clearTimeout(shiftChangeTimer);
       shiftChangeTimer = null;
     }
 
-    var actualCurrentShift = module.getCurrentShift();
-    var currentShiftTime = module.currentShift.date.getTime();
+    var realCurrentShift = getCurrentShift();
 
-    if (actualCurrentShift.date.getTime() > currentShiftTime)
+    if (realCurrentShift.date > module.currentShift.date)
     {
       return changeShift();
     }
@@ -101,58 +100,54 @@ exports.start = function startFteModule(app, module)
 
   function getCurrentShift()
   {
-    var date = new Date();
-    var hours = date.getHours();
+    var date = moment().startOf('hour');
+    var hours = date.hours();
     var no = 3;
 
     if (hours >= 6 && hours < 14)
     {
       no = 1;
-      date.setHours(6);
+      date.hours(6);
     }
     else if (hours >= 14 && hours < 22)
     {
       no = 2;
-      date.setHours(14);
+      date.hours(14);
     }
     else
     {
       if (hours < 6)
       {
-        date.setHours(6);
-
-        date = new Date(date.getTime() - 8 * 3600 * 1000);
+        date.subtract(1, 'days');
       }
+
+      date.hours(22);
     }
 
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-
     return {
-      date: date,
+      date: date.toDate(),
       no: no
     };
   }
 
   function getNextShiftTime()
   {
-    var shiftMoment = moment(module.currentShift.date.getTime());
+    var nextShiftMoment = moment(module.currentShift.date.getTime());
     var currentShiftNo = module.currentShift.no;
 
     if (currentShiftNo === 1)
     {
-      shiftMoment.hours(14);
+      nextShiftMoment.hours(14);
     }
     else if (currentShiftNo === 2)
     {
-      shiftMoment.hours(22);
+      nextShiftMoment.hours(22);
     }
     else
     {
-      shiftMoment.add(1, 'days').hours(6);
+      nextShiftMoment.add(1, 'days').hours(6);
     }
 
-    return shiftMoment.valueOf();
+    return nextShiftMoment.valueOf();
   }
 };
