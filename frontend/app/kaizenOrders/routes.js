@@ -10,12 +10,10 @@ define([
   '../core/util/showDeleteFormPage',
   './KaizenOrderCollection',
   './KaizenOrder',
-  './KaizenOrderReport',
   './pages/KaizenOrderListPage',
   './pages/KaizenOrderDetailsPage',
   './pages/KaizenOrderAddFormPage',
   './pages/KaizenOrderEditFormPage',
-  './pages/KaizenOrderReportPage',
   './views/KaizenOrderThankYouView',
   'i18n!app/nls/reports',
   'i18n!app/nls/kaizenOrders'
@@ -27,12 +25,10 @@ define([
   showDeleteFormPage,
   KaizenOrderCollection,
   KaizenOrder,
-  KaizenOrderReport,
   KaizenOrderListPage,
   KaizenOrderDetailsPage,
   KaizenOrderAddFormPage,
   KaizenOrderEditFormPage,
-  KaizenOrderReportPage,
   KaizenOrderThankYouView
 ) {
   'use strict';
@@ -41,13 +37,22 @@ define([
 
   router.map('/kaizenReport', canAccess, function(req)
   {
-    viewport.showPage(new KaizenOrderReportPage({
-      model: new KaizenOrderReport({
-        from: +req.query.from || undefined,
-        to: +req.query.to || undefined,
-        interval: req.query.interval
-      })
-    }));
+    viewport.loadPage(
+      [
+        'app/kaizenOrders/KaizenOrderReport',
+        'app/kaizenOrders/pages/KaizenOrderReportPage'
+      ],
+      function(KaizenOrderReport, KaizenOrderReportPage)
+      {
+        return new KaizenOrderReportPage({
+          model: new KaizenOrderReport({
+            from: +req.query.from || undefined,
+            to: +req.query.to || undefined,
+            interval: req.query.interval
+          })
+        });
+      }
+    );
   });
 
   router.map('/kaizenHelp', function()
