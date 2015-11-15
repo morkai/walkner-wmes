@@ -96,5 +96,6 @@ exports.watchdog = {
   recipients: [],
   appStartedRecipients: [],
   noEventRecipients: [],
-  events: []
+  events: [],
+  emptyDirectories: []
 };

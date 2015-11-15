@@ -10,6 +10,7 @@ var later = require('later');
 var moment = require('moment');
 var setUpNoEventCheck = require('./noEventCheck');
 var setUpAppStartedEventCheck = require('./appStartedEventCheck');
+var setUpEmptyDirectoryCheck = require('./emptyDirectoryCheck');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -19,16 +20,12 @@ exports.DEFAULT_CONFIG = {
   appStartedRecipients: [],
   appStartedCallRecipient: null,
   noEventRecipients: [],
-  events: []
+  events: [],
+  emptyDirectories: []
 };
 
 exports.start = function startWatchdogModule(app, watchdogModule)
 {
-  var mailSender;
-  var twilio;
-  var Event;
-  var lastAppStartedCheckAt = Date.now();
-
   app.onModuleReady(
     [
       watchdogModule.config.mongooseId,
@@ -44,4 +41,6 @@ exports.start = function startWatchdogModule(app, watchdogModule)
     ],
     setUpAppStartedEventCheck.bind(null, app, watchdogModule)
   );
+
+  setUpEmptyDirectoryCheck(app, watchdogModule);
 };
