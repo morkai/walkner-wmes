@@ -12,7 +12,7 @@ module.exports = function setUpAppStartedEventCheck(app, watchdogModule)
   var mailSender = app[watchdogModule.config.mailSenderId];
   var Event = app[watchdogModule.config.mongooseId].model('Event');
 
-  var lastAppStartedCheckAt = Date.now();
+  var lastAppStartedCheckAt = -1;
   var consecutiveChecks = 0;
 
   app.broker.subscribe('app.started', checkAppStartedEvents).setLimit(1);
@@ -20,6 +20,11 @@ module.exports = function setUpAppStartedEventCheck(app, watchdogModule)
   function checkAppStartedEvents()
   {
     var now = Date.now();
+
+    if (lastAppStartedCheckAt === -1)
+    {
+      lastAppStartedCheckAt = now;
+    }
 
     Event.find({type: 'app.started', time: {$gte: lastAppStartedCheckAt}}).lean().exec(function(err, events)
     {
