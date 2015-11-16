@@ -176,6 +176,8 @@
     "report:title:summary:averageDuration": "Average number of implementation days by week",
     "report:title:summary:count": "Number of entries by week",
     "report:title:summary:suggestionOwners": "Number of suggestions by owner",
+    "report:subtitle:summary:averageDuration": "Total average: {averageDuration}",
+    "report:subtitle:summary:count": "Total count: {total} ({open} open, {finished} finished, {cancelled} cancelled)",
     "report:series:summary:averageDuration": "Avg. no. of impl. days",
     "report:series:summary:open": "Open",
     "report:series:summary:finished": "Finished",

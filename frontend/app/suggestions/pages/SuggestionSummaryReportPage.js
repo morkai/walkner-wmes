@@ -4,6 +4,7 @@
 
 define([
   'app/i18n',
+  'app/highcharts',
   'app/core/View',
   'app/kaizenOrders/dictionaries',
   '../SuggestionSummaryReport',
@@ -15,6 +16,7 @@ define([
   'app/suggestions/templates/summaryReportPage'
 ], function(
   t,
+  Highcharts,
   View,
   kaizenDictionaries,
   SuggestionSummaryReport,
@@ -55,6 +57,7 @@ define([
       }));
 
       this.listenTo(this.model, 'filtered', this.onFiltered);
+      this.listenTo(this.model, 'change:total', this.updateSubtitles);
     },
 
     destroy: function()
@@ -75,6 +78,8 @@ define([
     afterRender: function()
     {
       kaizenDictionaries.load();
+
+      this.updateSubtitles();
     },
 
     onFiltered: function()
@@ -86,6 +91,16 @@ define([
         trigger: false,
         replace: true
       });
+    },
+
+    updateSubtitles: function()
+    {
+      var total = this.model.get('total');
+
+      this.$id('averageDuration').html(t('suggestions', 'report:subtitle:summary:averageDuration', {
+        averageDuration: Highcharts.numberFormat(total.averageDuration, 2)
+      }));
+      this.$id('count').html(t('suggestions', 'report:subtitle:summary:count', total.count));
     }
 
   });

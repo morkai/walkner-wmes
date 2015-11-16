@@ -19,6 +19,13 @@ module.exports = function(mongoose, options, done)
     users: {},
     suggestionOwners: {},
     kaizenOwners: {},
+    averageDuration: 0,
+    count: {
+      total: 0,
+      open: 0,
+      finished: 0,
+      cancelled: 0
+    },
     groups: {}
   };
 
@@ -82,6 +89,12 @@ module.exports = function(mongoose, options, done)
       {
         var group = results.groups[groupKey] || createGroup(groupKey);
 
+        results.averageDuration += group.averageDuration;
+        results.count.total += group.count.open + group.count.finished + group.count.cancelled;
+        results.count.open += group.count.open;
+        results.count.finished += group.count.finished;
+        results.count.cancelled += group.count.cancelled;
+
         group.averageDuration = util.round(group.averageDuration / (group.count.open + group.count.finished));
 
         groups.push(group);
@@ -92,6 +105,7 @@ module.exports = function(mongoose, options, done)
       results.groups = groups;
       results.suggestionOwners = sortOwners(results.suggestionOwners);
       results.kaizenOwners = sortOwners(results.kaizenOwners);
+      results.averageDuration = util.round(results.averageDuration / (results.count.open + results.count.finished));
 
       return setImmediate(this.next());
     },

@@ -176,6 +176,8 @@
   "report:title:summary:averageDuration": "Średnia ilość dni realizacji w poszczególnych tygodniach",
   "report:title:summary:count": "Ilość zgłoszeń w poszczególnych tygodniach",
   "report:title:summary:suggestionOwners": "Ilość sugestii zgłoszonych przez pracownika",
+  "report:subtitle:summary:averageDuration": "Całkowita średnia dla wybranego okresu: {averageDuration}",
+  "report:subtitle:summary:count": "Całkowita ilość zgłoszeń w wybranym okresie: {total} ({open} {open, plural, few{otwarte} one{otwarte} other{otwartych}}, {finished} {finished, plural, few{zamknięte} one{zamknięte} other{zamkniętych}}, {cancelled} {cancelled, plural, few{anulowane} one{anulowane} other{anulowanych}})",
   "report:series:summary:averageDuration": "Średnia ilość dni realizacji",
   "report:series:summary:open": "Otwarte",
   "report:series:summary:finished": "Zakończone",

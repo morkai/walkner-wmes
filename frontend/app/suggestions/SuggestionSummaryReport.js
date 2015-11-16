@@ -60,6 +60,10 @@ define([
     parse: function(report)
     {
       var attrs = {
+        total: {
+          averageDuration: report.averageDuration,
+          count: report.count
+        },
         averageDuration: [],
         count: {
           open: [],
