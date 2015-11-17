@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  '../core/Model'
+  '../core/Model',
+  'app/core/templates/userInfo'
 ], function(
-  Model
+  Model,
+  renderUserInfo
 ) {
   'use strict';
 
@@ -23,7 +25,32 @@ define([
 
     labelAttribute: 'name',
 
-    defaults: {}
+    defaults: {},
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+
+      if (!obj.owners)
+      {
+        obj.owners = [];
+      }
+      else
+      {
+        obj.owners = obj.owners.map(function(o) { return renderUserInfo({userInfo: o}); });
+      }
+
+      return obj;
+    },
+
+    serializeRow: function()
+    {
+      var obj = this.serialize();
+
+      obj.owners = obj.owners.join('; ');
+
+      return obj;
+    }
 
   });
 });

@@ -21,6 +21,7 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:position": "Position",
+    "PROPERTY:owners": "Owners",
 
     "FORM:ACTION:add": "Add product family",
     "FORM:ACTION:edit": "Edit product family",

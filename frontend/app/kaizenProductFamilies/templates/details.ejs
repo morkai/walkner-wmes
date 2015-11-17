@@ -14,6 +14,20 @@
         <div class="prop-name"><%- t('kaizenProductFamilies', 'PROPERTY:position') %></div>
         <div class="prop-value"><%= model.position || '0' %></div>
       </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('kaizenProductFamilies', 'PROPERTY:owners') %></div>
+        <div class="prop-value">
+          <% if (_.isEmpty(model.owners)) { %>
+          -
+          <% } else { %>
+          <ul>
+            <% _.forEach(model.owners, function(owner) { %>
+            <li><%- owner %></li>
+            <% }) %>
+          </ul>
+          <% } %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -20,7 +20,8 @@ module.exports = function setupKaizenProductFamilyModel(app, mongoose)
     position: {
       type: Number,
       default: 0
-    }
+    },
+    owners: [{}]
   }, {
     id: false
   });
