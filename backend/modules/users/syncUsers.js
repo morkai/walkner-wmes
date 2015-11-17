@@ -73,7 +73,7 @@ module.exports = function syncUsers(app, usersModule, done)
       where.push("[USERS].[US_ADD_FIELDS] LIKE '10001&" + companyId + "&%'");
     });
 
-    return sql + " WHERE " + where.join(" OR ");
+    return sql + " WHERE " + where.join(" OR ") + " ORDER BY [USERS].[US_ID]";
   }
 
   function queryUsers(conn)
@@ -131,6 +131,11 @@ module.exports = function syncUsers(app, usersModule, done)
     step(
       function findUserModelStep()
       {
+        if (!kdUser.personellId)
+        {
+          return this.skip();
+        }
+
         User.findOne({kdId: kdUser.kdId}, this.next());
       },
       function prepareUserModelStep(err, userModel)
@@ -173,6 +178,8 @@ module.exports = function syncUsers(app, usersModule, done)
       },
       function finalizeStep()
       {
+        this.userModel = null;
+
         setImmediate(syncNextUser, stats, kdUsers, kdUserIndex + 1);
       }
     );
@@ -184,13 +191,18 @@ module.exports = function syncUsers(app, usersModule, done)
     {
       if (err)
       {
-        usersModule.error("Failed to save a user with KD ID [%s]: %s", userModel.kdId, err.message);
+        var error = err.message;
+
+        if (err.name === 'ValidationError')
+        {
+          error += ':\n' + _.map(err.errors, function(e) { return e.toString(); }).join('\n');
+        }
+
+        usersModule.error("Failed to save a user with KD ID [%s]: %s", userModel.kdId, error);
 
         if (err.code === 11000 && !isRetry)
         {
-          userModel.login += '-' + userModel.kdId;
-
-          return saveUserModel(userModel, isNew, true, stats, done);
+          return updateOldUserModel(userModel, stats, done);
         }
 
         ++stats.errors;
@@ -205,6 +217,30 @@ module.exports = function syncUsers(app, usersModule, done)
       }
 
       return done();
+    });
+  }
+
+  function updateOldUserModel(newUserModel, stats, done)
+  {
+    User.findOne({login: newUserModel.login}).exec(function(err, oldUserModel)
+    {
+      if (err || !oldUserModel)
+      {
+        return done();
+      }
+
+      oldUserModel.set({
+        card: newUserModel.card,
+        firstName: newUserModel.firstName,
+        lastName: newUserModel.lastName,
+        personellId: newUserModel.personellId,
+        active: newUserModel.active,
+        company: newUserModel.company,
+        kdDivision: newUserModel.kdDivision,
+        kdPosition: newUserModel.kdPosition
+      });
+
+      setImmediate(saveUserModel, oldUserModel, false, true, stats, done);
     });
   }
 };
