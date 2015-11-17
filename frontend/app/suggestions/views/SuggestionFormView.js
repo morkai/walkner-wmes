@@ -100,9 +100,21 @@ define([
       'change [name="categories"]': function()
       {
         this.toggleProductFamily();
+      },
+
+      'change [name="productFamily"]': function()
+      {
+        this.updateProductFamilySubscribers();
       }
 
     }, FormView.prototype.events),
+
+    initialize: function()
+    {
+      FormView.prototype.initialize.apply(this, arguments);
+
+      this.productFamilyObservers = {};
+    },
 
     serialize: function()
     {
@@ -417,10 +429,47 @@ define([
       if (!isConstruction)
       {
         $input.select2('data', null);
+        this.updateProductFamilySubscribers();
       }
 
       $label.toggleClass('is-required', isConstruction);
       $group.toggleClass('has-required-select2', isConstruction);
+    },
+
+    updateProductFamilySubscribers: function()
+    {
+      var view = this;
+      var productFamily = kaizenDictionaries.productFamilies.get(this.$id('productFamily').val());
+      var productFamilySubscribers = productFamily ? (productFamily.get('owners') || []) : [];
+      var nonProductFamilySubscribers = {};
+      var subscribers = [];
+
+      this.$id('subscribers').select2('data').forEach(function(o)
+      {
+        if (!view.productFamilyObservers[o.id])
+        {
+          nonProductFamilySubscribers[o.id] = true;
+
+          subscribers.push(o);
+        }
+      });
+
+      view.productFamilyObservers = {};
+
+      _.forEach(productFamilySubscribers, function(o)
+      {
+        if (!nonProductFamilySubscribers[o.id])
+        {
+          subscribers.push({
+            id: o.id,
+            text: o.label
+          });
+
+          view.productFamilyObservers[o.id] = true;
+        }
+      });
+
+      this.$id('subscribers').select2('data', subscribers);
     }
 
   });
