@@ -5,6 +5,7 @@
 'use strict';
 
 var _ = require('lodash');
+var moment = require('moment');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var checkRemoteServer = require('./checkRemoteServer');
@@ -84,6 +85,8 @@ exports.start = function startOrderDocumentsModule(app, module)
       });
     }
   );
+
+  app.broker.subscribe('app.started', removeOldClients).setLimit(1);
 
   app.broker.subscribe('settings.updated.orders.documents.**', function(message)
   {
@@ -174,5 +177,29 @@ exports.start = function startOrderDocumentsModule(app, module)
     {
       return name;
     }
+  }
+
+  function removeOldClients()
+  {
+    var mongoose = app[module.config.mongooseId];
+
+    if (!mongoose)
+    {
+      return;
+    }
+
+    var conditions = {
+      disconnectedAt: {$lt: moment().subtract(7, 'days').toDate()}
+    };
+
+    mongoose.model('OrderDocumentClient').remove(conditions, function(err)
+    {
+      if (err)
+      {
+        module.error("Failed to remove old clients: %s", err.message);
+      }
+
+      setTimeout(removeOldClients, 24 * 3600 * 1000);
+    });
   }
 };
