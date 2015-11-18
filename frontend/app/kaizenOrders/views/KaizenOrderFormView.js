@@ -382,7 +382,7 @@ define([
       var model = this.model;
       var currentUser = {
         id: user.data._id,
-        text: user.getLabel()
+        text: user.getLabel(true)
       };
 
       setUpUserSelect2(this.$id('nearMissOwners'), {multiple: true, textFormatter: formatUserSelect2Text})

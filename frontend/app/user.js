@@ -101,9 +101,10 @@ function(
   };
 
   /**
+   * @param {boolean} [lastNameFirst]
    * @returns {string}
    */
-  user.getLabel = function()
+  user.getLabel = function(lastNameFirst)
   {
     if (user.data.name)
     {
@@ -112,6 +113,11 @@ function(
 
     if (user.data.lastName && user.data.firstName)
     {
+      if (lastNameFirst)
+      {
+        return user.data.lastName + ' ' + user.data.firstName;
+      }
+
       return user.data.firstName + ' ' + user.data.lastName;
     }
 
