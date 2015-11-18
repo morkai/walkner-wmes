@@ -219,19 +219,6 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     'observers.notify': 1
   });
 
-  kaizenOrderSchema.index({
-    subject: 'text',
-    causeText: 'text',
-    description: 'text',
-    correctiveMeasures: 'text',
-    preventiveMeasures: 'text',
-    suggestion: 'text',
-    kaizenImprovements: 'text',
-    kaizenEffect: 'text'
-  }, {
-    name: 'text'
-  });
-
   kaizenOrderSchema.statics.TOPIC_PREFIX = 'kaizen.orders';
   kaizenOrderSchema.statics.TYPES = TYPES;
   kaizenOrderSchema.statics.STATUSES = STATUSES;
