@@ -114,7 +114,7 @@ define([
 
           if (this.dataset.id === 'subject')
           {
-            return model.get('description');
+            return model.get('howItIs');
           }
 
           if (this.dataset.id === 'owners')
