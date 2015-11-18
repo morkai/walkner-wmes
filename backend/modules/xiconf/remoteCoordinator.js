@@ -1490,9 +1490,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           anyLeds = true;
         });
 
-        if (changes.length === 0)
+        if (changes.length <= 1)
         {
-          return setImmediate(this.skip(), new Error("No changes."));
+          return this.skip(new Error('NO_CHANGES'));
         }
 
         var condition = {_id: data.orderNo};
