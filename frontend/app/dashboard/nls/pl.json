@@ -1,3 +1,20 @@
 {
-  "breadcrumbs:logIn": "Logowanie do systemu"
+  "breadcrumbs:logIn": "Logowanie do systemu",
+
+  "metrics:total:allCount": "wszystkich<br>zgłoszeń",
+  "metrics:total:openCount": "otwartych<br>zgłoszeń",
+  "metrics:total:monthCount": "wszystkich<br>w miesiącu",
+  "metrics:user:allCount": "wszystkich<br>Twoich",
+  "metrics:user:openCount": "otwartych<br>Twoich",
+  "metrics:user:monthCount": "Twoich<br>w miesiącu",
+
+  "top10:title": "Najaktywniejsi w {month, plural, =1{styczniu} =2{lutym} =3{marcu} =4{kwietniu} =5{maju} =6{czerwcu} =7{lipcu} =8{sierpniu} =9{wrześniu} =10{październiku} =11{listopadzie} =12{grudniu} other{miesiącu}}",
+  "top10:loading": "Ładowanie danych...",
+  "top10:empty": "Brak zgłoszeń w danym miesiącu :(",
+
+  "addButton:nearMiss": "Zgłoś<br>ZPW!",
+  "addButton:suggestion": "Zgłoś<br>sugestię!",
+
+  "noData:nearMiss": "Nie uczestniczysz w żadnych otwartych zgłoszeniach ZPW :(",
+  "noData:suggestion": "Nie uczestniczysz w żadnych otwartych zgłoszeniach usprawnień :("
 }

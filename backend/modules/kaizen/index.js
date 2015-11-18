@@ -8,6 +8,7 @@ var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
 var setUpNotifier = require('./notifier');
 var setUpReminder = require('./reminder');
+var setUpStats = require('./stats');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -71,5 +72,12 @@ exports.start = function startKaizenModule(app, kaizenModule)
       kaizenModule.config.mailSenderId
     ],
     setUpReminder.bind(null, app, kaizenModule)
+  );
+
+  app.onModuleReady(
+    [
+      kaizenModule.config.mongooseId
+    ],
+    setUpStats.bind(null, app, kaizenModule)
   );
 };

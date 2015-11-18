@@ -22,17 +22,6 @@ define([
 
   router.map('/', function()
   {
-    if (_.isEmpty(user.data.privileges))
-    {
-      broker.publish('router.navigate', {
-        url: '/kaizenOrders',
-        trigger: true,
-        replace: false
-      });
-    }
-    else
-    {
-      viewport.showPage(new DashboardPage());
-    }
+    viewport.showPage(new DashboardPage());
   });
 });

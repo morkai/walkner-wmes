@@ -24,7 +24,7 @@ define([
       classNames += ' ' + className;
     }
 
-    if (row.observer.notify && row.observer.changes && row.observer.changes[this.id])
+    if (row.observer && row.observer.notify && row.observer.changes && row.observer.changes[this.id])
     {
       classNames += ' is-changed';
     }
@@ -38,24 +38,43 @@ define([
 
     serializeColumns: function()
     {
-      return [
-        {id: 'rid', className: 'is-min is-number'},
-        {id: 'status', tdAttrs: _.partial(prepareTdAttrs, _, 'is-min')},
-        {id: 'subject', tdAttrs: prepareTdAttrs, label: t('suggestions', 'PROPERTY:subjectAndDescription')},
-        {id: 'date', tdAttrs: prepareTdAttrs},
-        {id: 'categories', tdAttrs: prepareTdAttrs},
-        {id: 'productFamily', tdAttrs: prepareTdAttrs},
-        {id: 'section', tdAttrs: prepareTdAttrs},
-        {id: 'confirmer', tdAttrs: prepareTdAttrs},
-        {id: 'owners', label: t('suggestions', 'PROPERTY:owners')}
+      var columns = [
+        {
+          id: 'rid',
+          className: 'is-min is-number'
+        },
+        {
+          id: 'status',
+          tdAttrs: _.partial(prepareTdAttrs, _, 'is-min'),
+          thClassName: this.options.simple ? 'is-min' : ''
+        },
+        {
+          id: 'subject',
+          tdAttrs: prepareTdAttrs,
+          label: t('suggestions', 'PROPERTY:subjectAndDescription')
+        }
       ];
+
+      if (!this.options.simple)
+      {
+        columns.push.apply(columns, [
+          {id: 'date', tdAttrs: prepareTdAttrs},
+          {id: 'categories', tdAttrs: prepareTdAttrs},
+          {id: 'productFamily', tdAttrs: prepareTdAttrs},
+          {id: 'section', tdAttrs: prepareTdAttrs},
+          {id: 'confirmer', tdAttrs: prepareTdAttrs},
+          {id: 'owners', label: t('suggestions', 'PROPERTY:owners')}
+        ]);
+      }
+
+      return columns;
     },
 
     serializeActions: function()
     {
       var collection = this.collection;
 
-      return function(row)
+      return this.options.simple ? null : function(row)
       {
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];

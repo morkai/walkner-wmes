@@ -106,19 +106,22 @@ define([
     {
       var row = this.serialize();
 
-      if (row.observer.notify && _.isEmpty(row.observer.changes))
+      if (row.observer && row.observer.notify && _.isEmpty(row.observer.changes))
       {
         row.className = 'is-changed';
       }
 
       var owners = row.owners;
 
-      row.owners = owners.length === 1
-        ? owners[0].rendered
-        : t('LIST:owners', {
+      if (owners)
+      {
+        row.owners = owners.length === 1
+          ? owners[0].rendered
+          : t('LIST:owners', {
             first: owners[0].rendered,
             count: owners.length - 1
           });
+      }
 
       return row;
     },

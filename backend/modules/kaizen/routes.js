@@ -25,6 +25,8 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   var canManageDictionaries = userModule.auth('KAIZEN:DICTIONARIES:VIEW');
   var canView = userModule.auth();
 
+  express.get('/kaizen/stats', canView, statsRoute);
+
   express.get('/kaizen/dictionaries', canView, dictionariesRoute);
 
   express.get('/kaizen/orders', canView, prepareObserverFilter, express.crud.browseRoute.bind(null, app, KaizenOrder));
@@ -610,5 +612,18 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
         res.send(reportJson);
       }
     );
+  }
+
+  function statsRoute(req, res, next)
+  {
+    kaizenModule.getStats(req.session.user._id, function(err, stats)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      return res.json(stats);
+    });
   }
 };

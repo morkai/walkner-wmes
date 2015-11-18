@@ -25,6 +25,8 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   var canView = userModule.auth();
 
+  express.get('/suggestions/stats', canView, statsRoute);
+
   express.get('/suggestions', canView, prepareObserverFilter, express.crud.browseRoute.bind(null, app, Suggestion));
   express.get('/suggestions;rid', canView, findByRidRoute);
   express.post('/suggestions', canView, prepareForAdd, express.crud.addRoute.bind(null, app, Suggestion));
@@ -567,5 +569,18 @@ module.exports = function setUpSuggestionsRoutes(app, module)
         res.send(reportJson);
       }
     );
+  }
+
+  function statsRoute(req, res, next)
+  {
+    module.getStats(req.session.user._id, function(err, stats)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      return res.json(stats);
+    });
   }
 };

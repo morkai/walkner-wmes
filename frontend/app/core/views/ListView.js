@@ -128,7 +128,8 @@ define([
         actions: this.serializeActions(),
         rows: this.serializeRows(),
         className: _.result(this, 'className'),
-        tableClassName: _.result(this, 'tableClassName')
+        tableClassName: _.result(this, 'tableClassName'),
+        noData: this.options.noData || t('core', 'LIST:NO_DATA')
       };
     },
 

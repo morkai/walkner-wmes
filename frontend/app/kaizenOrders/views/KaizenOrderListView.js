@@ -15,7 +15,9 @@ define([
   {
     /*jshint validthis:true*/
 
-    return row.observer.notify && row.observer.changes && row.observer.changes[this.id] ? 'class="is-changed"' : '';
+    return row.observer && row.observer.notify && row.observer.changes && row.observer.changes[this.id]
+      ? 'class="is-changed"'
+      : '';
   }
 
   return ListView.extend({
@@ -24,6 +26,7 @@ define([
 
     serializeColumns: function()
     {
+      var simple = !!this.options.simple;
       var columns = [{id: 'rid', className: 'is-min is-number'}];
 
       if (window.KAIZEN_MULTI)
@@ -32,25 +35,31 @@ define([
       }
 
       columns.push(
-        {id: 'status', tdAttrs: prepareTdAttrs},
-        {id: 'subject', tdAttrs: prepareTdAttrs, label: t('kaizenOrders', 'PROPERTY:subjectAndDescription')},
-        {id: 'eventDate', tdAttrs: prepareTdAttrs},
-        {id: 'area', tdAttrs: prepareTdAttrs},
-        {id: 'cause', tdAttrs: prepareTdAttrs},
-        {id: 'risk', tdAttrs: prepareTdAttrs},
-        {id: 'nearMissCategory', tdAttrs: prepareTdAttrs}
+        {id: 'status', tdAttrs: simple ? '' : prepareTdAttrs, className: simple ? 'is-min' : ''},
+        {id: 'subject', tdAttrs: prepareTdAttrs, label: t('kaizenOrders', 'PROPERTY:subjectAndDescription')}
       );
 
-      if (window.KAIZEN_MULTI)
+      if (!simple)
       {
-        columns.push({id: 'suggestionCategory', tdAttrs: prepareTdAttrs});
-      }
+        columns.push(
+          {id: 'eventDate', tdAttrs: prepareTdAttrs},
+          {id: 'area', tdAttrs: prepareTdAttrs},
+          {id: 'cause', tdAttrs: prepareTdAttrs},
+          {id: 'risk', tdAttrs: prepareTdAttrs},
+          {id: 'nearMissCategory', tdAttrs: prepareTdAttrs}
+        );
 
-      columns.push(
-        {id: 'section', tdAttrs: prepareTdAttrs},
-        {id: 'confirmer', tdAttrs: prepareTdAttrs},
-        {id: 'owners', label: t('kaizenOrders', 'PROPERTY:nearMissOwners')}
-      );
+        if (window.KAIZEN_MULTI)
+        {
+          columns.push({id: 'suggestionCategory', tdAttrs: prepareTdAttrs});
+        }
+
+        columns.push(
+          {id: 'section', tdAttrs: prepareTdAttrs},
+          {id: 'confirmer', tdAttrs: prepareTdAttrs},
+          {id: 'owners', label: t('kaizenOrders', 'PROPERTY:nearMissOwners')}
+        );
+      }
 
       return columns;
     },
@@ -59,7 +68,7 @@ define([
     {
       var collection = this.collection;
 
-      return function(row)
+      return this.options.simple ? null : function(row)
       {
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];

@@ -111,6 +111,10 @@ module.exports = function setupSuggestionModel(app, mongoose)
       type: Date,
       default: null
     },
+    tzOffsetMs: {
+      type: Number,
+      default: 0
+    },
     section: {
       type: String,
       ref: 'KaizenSection',
@@ -183,6 +187,12 @@ module.exports = function setupSuggestionModel(app, mongoose)
     'observers.user.id': 1,
     'observers.notify': 1
   });
+  suggestionSchema.index({date: -1});
+  suggestionSchema.index({status: 1});
+  suggestionSchema.index({section: 1});
+  suggestionSchema.index({categories: 1});
+  suggestionSchema.index({productFamily: 1});
+  suggestionSchema.index({'owners.id': 1});
 
   suggestionSchema.statics.TOPIC_PREFIX = 'suggestions';
   suggestionSchema.statics.STATUSES = STATUSES;
@@ -231,6 +241,8 @@ module.exports = function setupSuggestionModel(app, mongoose)
     }
 
     this.updateOwners();
+
+    this.tzOffsetMs = (this.date ? this.date.getTimezoneOffset() : 0) * 60 * 1000 * -1;
 
     next();
   });

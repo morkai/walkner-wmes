@@ -44,7 +44,10 @@ define([
 
     afterRender: function()
     {
-      this.$('input[name="login"]').focus();
+      if (!user.isLoggedIn())
+      {
+        this.$('input[name="login"]').focus();
+      }
     }
 
   });

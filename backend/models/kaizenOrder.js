@@ -120,6 +120,10 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       type: Date,
       default: null
     },
+    tzOffsetMs: {
+      type: Number,
+      default: 0
+    },
     section: {
       type: String,
       ref: 'KaizenSection',
@@ -218,6 +222,14 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     'observers.user.id': 1,
     'observers.notify': 1
   });
+  kaizenOrderSchema.index({eventDate: -1});
+  kaizenOrderSchema.index({status: 1});
+  kaizenOrderSchema.index({section: 1});
+  kaizenOrderSchema.index({area: 1});
+  kaizenOrderSchema.index({nearMissCategory: 1});
+  kaizenOrderSchema.index({cause: 1});
+  kaizenOrderSchema.index({risk: 1});
+  kaizenOrderSchema.index({'owners.id': 1});
 
   kaizenOrderSchema.statics.TOPIC_PREFIX = 'kaizen.orders';
   kaizenOrderSchema.statics.TYPES = TYPES;
@@ -255,6 +267,8 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
 
     this.updateOwners();
     this.recalcKaizenDuration();
+
+    this.tzOffsetMs = (this.eventDate ? this.eventDate.getTimezoneOffset() : 0) * 60 * 1000 * -1;
 
     next();
   });
