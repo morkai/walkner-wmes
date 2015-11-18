@@ -1,6 +1,9 @@
 'use strict';
 
 var mongodb = require('./wmes-mongodb');
+var later = require('later');
+
+later.date.localTime();
 
 try
 {
