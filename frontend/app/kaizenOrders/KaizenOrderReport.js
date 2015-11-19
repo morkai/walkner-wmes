@@ -4,12 +4,14 @@
 
 define([
   'underscore',
+  '../i18n',
   '../time',
   '../core/Model',
   '../data/colorFactory',
   './dictionaries'
 ], function(
   _,
+  t,
   time,
   Model,
   colorFactory,
@@ -17,6 +19,9 @@ define([
 ) {
   'use strict';
 
+  var COLOR_NEAR_MISS = '#d9534f';
+  var COLOR_SUGGESTION = '#f0ad4e';
+  var COLOR_KAIZEN = '#5cb85c';
   var TABLE_AND_CHART_METRICS = [
     'type',
     'status',
@@ -92,6 +97,14 @@ define([
         status: {
           rows: this.prepareRows(totalCount, totals.status, 'status'),
           series: {}
+        },
+        owner: {
+          categories: this.prepareUserCategories(report.users, totals.owner),
+          series: this.prepareOwnerSeries(totals.owner, report.groups)
+        },
+        confirmer: {
+          categories: this.prepareUserCategories(report.users, totals.confirmer),
+          series: this.prepareConfirmerSeries(totals.confirmer, report.groups)
         }
       };
 
@@ -147,7 +160,7 @@ define([
           id: 'nearMiss',
           abs: totals.type.nearMiss,
           rel: totals.type.nearMiss / totals.count,
-          color: '#d9534f'
+          color: COLOR_NEAR_MISS
         }];
       }
 
@@ -168,19 +181,19 @@ define([
           id: 'nearMiss',
           abs: totals.type.nearMiss,
           rel: totals.type.nearMiss / multiTotalCount,
-          color: '#d9534f'
+          color: COLOR_NEAR_MISS
         },
         {
           id: 'suggestion',
           abs: totals.type.suggestion,
           rel: totals.type.suggestion / multiTotalCount,
-          color: '#f0ad4e'
+          color: COLOR_SUGGESTION
         },
         {
           id: 'kaizen',
           abs: totals.type.kaizen,
           rel: totals.type.kaizen / multiTotalCount,
-          color: '#5cb85c'
+          color: COLOR_KAIZEN
         }
       ];
     },
@@ -190,7 +203,7 @@ define([
       var series = {
         nearMiss:  {
           data: [],
-          color: '#d9534f'
+          color: COLOR_NEAR_MISS
         }
       };
 
@@ -198,11 +211,11 @@ define([
       {
         series.suggestion = {
           data: [],
-          color: '#f0ad4e'
+          color: COLOR_SUGGESTION
         };
         series.kaizen = {
           data: [],
-          color: '#5cb85c'
+          color: COLOR_KAIZEN
         };
       }
 
@@ -245,6 +258,70 @@ define([
           y: group[metric] ? (group[metric][row.id] || null) : null
         });
       });
+    },
+
+    prepareUserCategories: function(users, totals)
+    {
+      return totals.map(function(total)
+      {
+        var userId = total[0];
+
+        return users[userId] || userId;
+      });
+    },
+
+    prepareOwnerSeries: function(ownerTotals)
+    {
+      var series = [
+        {
+          id: 'nearMiss',
+          name: t.bound('kaizenOrders', 'report:series:nearMiss'),
+          data: [],
+          color: COLOR_NEAR_MISS
+        }
+      ];
+
+      if (kaizenDictionaries.multiType)
+      {
+        series.push({
+          id: 'suggestion',
+          name: t.bound('kaizenOrders', 'report:series:suggestion'),
+          data: [],
+          color: COLOR_SUGGESTION
+        });
+        series.push({
+          id: 'kaizen',
+          name: t.bound('kaizenOrders', 'report:series:kaizen'),
+          data: [],
+          color: COLOR_KAIZEN
+        });
+      }
+
+      _.forEach(ownerTotals, function(totals)
+      {
+        series[0].data.push(totals[2]);
+
+        if (kaizenDictionaries.multiType)
+        {
+          series[1].data.push(totals[3]);
+          series[2].data.push(totals[4]);
+        }
+      });
+
+      return series;
+    },
+
+    prepareConfirmerSeries: function(confirmerTotals)
+    {
+      return [
+        {
+          id: 'entry',
+          type: 'bar',
+          name: t.bound('kaizenOrders', 'report:series:' + (kaizenDictionaries.multiType ? 'entry' : 'nearMiss')),
+          color: kaizenDictionaries.multiType ? null : COLOR_NEAR_MISS,
+          data: _.map(confirmerTotals, function(t) { return t[1]; })
+        }
+      ];
     }
 
   }, {
