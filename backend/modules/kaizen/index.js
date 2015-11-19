@@ -9,6 +9,7 @@ var setUpCommands = require('./commands');
 var setUpNotifier = require('./notifier');
 var setUpReminder = require('./reminder');
 var setUpStats = require('./stats');
+var setUpObserverCleaner = require('./observerCleaner');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -79,5 +80,12 @@ exports.start = function startKaizenModule(app, kaizenModule)
       kaizenModule.config.mongooseId
     ],
     setUpStats.bind(null, app, kaizenModule)
+  );
+
+  app.onModuleReady(
+    [
+      kaizenModule.config.mongooseId
+    ],
+    setUpObserverCleaner.bind(null, app, kaizenModule)
   );
 };
