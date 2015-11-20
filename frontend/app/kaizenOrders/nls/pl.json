@@ -4,7 +4,8 @@
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-  "BREADCRUMBS:report": "Raport",
+  "BREADCRUMBS:reports:count": "Ilość zgłoszeń",
+  "BREADCRUMBS:reports:summary": "Zestawienie informacji",
 
   "navbar:kaizen": "ZPW",
   "navbar:orders": "Zgłoszenia",
@@ -13,7 +14,8 @@
   "navbar:mine": "Tylko moje",
   "navbar:unseen": "Tylko nieprzeczytane",
   "navbar:reports": "Raporty",
-  "navbar:reports:qty": "Ilość zgłoszeń",
+  "navbar:reports:count": "Ilość zgłoszeń",
+  "navbar:reports:summary": "Zestawienie informacji",
   "navbar:dictionaries": "Słowniki",
   "navbar:sections": "Działy",
   "navbar:areas": "Miejsca zdarzeń",
@@ -168,7 +170,7 @@
   "history:editMessage": "Tutaj możesz dodać komentarz do zgłoszenia. Jeżeli chcesz także zmienić jakieś właściwości, <a href='{editUrl}'>to skorzystaj z formularza edycji</a>.",
   "history:submit": "Komentuj",
 
-  "report:title:type": "Ilość zgłoszeń wg typów",
+  "report:title:type": "Ilość zgłoszeń",
   "report:title:status": "Ilość zgłoszeń wg statusów",
   "report:title:section": "Ilość zgłoszeń wg działów",
   "report:title:area": "Ilość zgłoszeń wg miejsc zdarzeń",
@@ -201,6 +203,19 @@
   "report:filenames:suggestionCategory": "ZPW_IloscWgKatSug",
   "report:filenames:confirmer": "ZPW_IloscWgZatwierdzajacych",
   "report:filenames:owner": "ZPW_IloscWgWlascicieli",
+
+  "report:title:summary:averageDuration": "Średnia ilość dni realizacji w poszczególnych tygodniach",
+  "report:title:summary:count": "Ilość zgłoszeń w poszczególnych tygodniach",
+  "report:title:summary:nearMissOwners": "Ilość ZPW zgłoszonych przez pracownika",
+  "report:subtitle:summary:averageDuration": "Całkowita średnia dla wybranego okresu: {averageDuration}",
+  "report:subtitle:summary:count": "Całkowita ilość zgłoszeń w wybranym okresie: {total} ({open} {open, plural, few{otwarte} one{otwarte} other{otwartych}}, {finished} {finished, plural, few{zamknięte} one{zamknięte} other{zamkniętych}}, {cancelled} {cancelled, plural, few{anulowane} one{anulowane} other{anulowanych}})",
+  "report:series:summary:averageDuration": "Średnia ilość dni realizacji",
+  "report:series:summary:open": "Otwarte",
+  "report:series:summary:finished": "Zakończone",
+  "report:series:summary:cancelled": "Anulowane",
+  "report:filenames:summary:averageDuration": "ZPW_SredniaIloscDniRealizacji",
+  "report:filenames:summary:count": "ZPW_IloscWTygodniach",
+  "report:filenames:summary:nearMissOwners": "ZPW_IloscSZpwWgPracownikow",
 
   "thanks:message": "Dziękujemy za zgłoszenie!",
   "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)"

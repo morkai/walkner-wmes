@@ -55,6 +55,22 @@ define([
     );
   });
 
+  router.map('/kaizenSummaryReport', canAccess, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/kaizenOrders/KaizenOrderSummaryReport',
+        'app/kaizenOrders/pages/KaizenOrderSummaryReportPage'
+      ],
+      function(KaizenOrderSummaryReport, KaizenOrderSummaryReportPage)
+      {
+        return new KaizenOrderSummaryReportPage({
+          model: KaizenOrderSummaryReport.fromQuery(req.query)
+        });
+      }
+    );
+  });
+
   router.map('/kaizenHelp', function()
   {
     viewport.loadPage(['app/core/View', 'app/kaizenOrders/templates/help'], function(View, helpTemplate)

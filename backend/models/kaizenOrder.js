@@ -7,6 +7,7 @@
 var _ = require('lodash');
 var deepEqual = require('deep-equal');
 var autoIncrement = require('mongoose-auto-increment');
+var businessDays = require('../modules/reports/businessDays');
 
 module.exports = function setupKaizenOrderModel(app, mongoose)
 {
@@ -197,6 +198,10 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       type: String,
       default: ''
     },
+    finishDuration: {
+      type: Number,
+      default: 0
+    },
     owners: [ownerSchema],
     observers: [observerSchema],
     attachments: [attachmentSchema],
@@ -246,7 +251,10 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       this.createObservers();
     }
 
-    if (this.isModified('status'))
+    var statusModified = this.isModified('status');
+    var kaizenDateModified = this.isModified('kaizenFinishDate') || this.isModified('kaizenStartDate');
+
+    if (statusModified)
     {
       if (this.status === 'accepted')
       {
@@ -265,8 +273,17 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       }
     }
 
+    if (statusModified || kaizenDateModified)
+    {
+      this.recalcFinishDuration();
+    }
+
+    if (kaizenDateModified)
+    {
+      this.recalcKaizenDuration();
+    }
+
     this.updateOwners();
-    this.recalcKaizenDuration();
 
     this.tzOffsetMs = (this.eventDate ? this.eventDate.getTimezoneOffset() : 0) * 60 * 1000 * -1;
 
@@ -395,11 +412,42 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     });
   };
 
+  kaizenOrderSchema.methods.recalcFinishDuration = function()
+  {
+    if (this.status === 'cancelled')
+    {
+      this.finishDuration = 0;
+    }
+    else
+    {
+      var fromDate = this.eventDate;
+      var toDate;
+
+      if (this.kaizenFinishDate && _.includes(this.types, 'kaizen'))
+      {
+        toDate = this.kaizenFinishDate;
+      }
+      else if (this.finishedAt)
+      {
+        toDate = this.finishedAt;
+      }
+      else
+      {
+        toDate = new Date();
+      }
+
+      this.finishDuration = 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
+    }
+  };
+
   kaizenOrderSchema.methods.recalcKaizenDuration = function()
   {
-    if (this.kaizenStartDate && this.kaizenFinishDate)
+    if (this.kaizenStartDate && _.includes(this.types, 'kaizen'))
     {
-      this.kaizenDuration = (this.kaizenFinishDate.getTime() - this.kaizenStartDate.getTime()) / 1000;
+      var fromDate = this.kaizenStartDate;
+      var toDate = this.kaizenFinishDate || new Date();
+
+      this.kaizenDuration = 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
     }
     else
     {

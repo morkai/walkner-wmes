@@ -10,6 +10,7 @@ var _ = require('lodash');
 var step = require('h5.step');
 var multer = require('multer');
 var report = require('./report');
+var summaryReport = require('./summaryReport');
 
 module.exports = function setUpKaizenRoutes(app, kaizenModule)
 {
@@ -24,6 +25,8 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   var canViewDictionaries = userModule.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManageDictionaries = userModule.auth('KAIZEN:DICTIONARIES:VIEW');
   var canView = userModule.auth();
+
+  express.get('/kaizen/recalcDurations', userModule.auth('SUPER'), recalcDurationsRoute);
 
   express.get('/kaizen/stats', canView, statsRoute);
 
@@ -50,6 +53,12 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     canView,
     reportsModule.helpers.sendCachedReport.bind(null, 'kaizen'),
     reportRoute
+  );
+  express.get(
+    '/kaizen/reports/summary',
+    canView,
+    reportsModule.helpers.sendCachedReport.bind(null, 'kaizen/summary'),
+    summaryReportRoute
   );
 
   express.get('/r/kaizens/:filter', redirectToListRoute);
@@ -614,6 +623,36 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     );
   }
 
+  function summaryReportRoute(req, res, next)
+  {
+    var query = req.query;
+    var options = {
+      fromTime: reportsModule.helpers.getTime(query.from) || null,
+      toTime: reportsModule.helpers.getTime(query.to) || null,
+      section: _.isEmpty(query.section) ? [] : query.section.split(','),
+      confirmer: _.isEmpty(query.confirmer) ? [] : query.confirmer.split(',')
+    };
+
+    reportsModule.helpers.generateReport(
+      app,
+      reportsModule,
+      summaryReport,
+      'kaizen/summary',
+      req.reportHash,
+      options,
+      function(err, reportJson)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.type('json');
+        res.send(reportJson);
+      }
+    );
+  }
+
   function statsRoute(req, res, next)
   {
     kaizenModule.getStats(req.session.user._id, function(err, stats)
@@ -625,5 +664,12 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
       return res.json(stats);
     });
+  }
+
+  function recalcDurationsRoute(req, res)
+  {
+    kaizenModule.recalcDurations(true);
+
+    res.end();
   }
 };

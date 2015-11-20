@@ -124,7 +124,7 @@ define([
               enabled: true,
               formatter: function()
               {
-                return Highcharts.numberFormat(this.y, 1);
+                return this.y === 0 ? '' : Highcharts.numberFormat(this.y, 1);
               }
             }
           }

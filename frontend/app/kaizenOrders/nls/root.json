@@ -5,7 +5,8 @@
     "BREADCRUMBS:addForm": "Add",
     "BREADCRUMBS:editForm": "Edit",
     "BREADCRUMBS:ACTION_FORM:delete": "Delete",
-    "BREADCRUMBS:report": "Report",
+    "BREADCRUMBS:report": "Number of entries",
+    "BREADCRUMBS:reports:summary": "Summary",
 
     "navbar:kaizen": "Near miss",
     "navbar:orders": "Entries",
@@ -14,7 +15,8 @@
     "navbar:mine": "Only mine",
     "navbar:unseen": "Only unread",
     "navbar:reports": "Reports",
-    "navbar:reports:qty": "Entry quantities",
+    "navbar:reports:count": "Number of entries",
+    "navbar:reports:summary": "Summary",
     "navbar:dictionaries": "Dictionaries",
     "navbar:sections": "Sections",
     "navbar:areas": "Areas",
@@ -169,7 +171,7 @@
     "history:editMessage": "Here you can add a new comment. If you also want to change some properties, <a href='{editUrl}'>then use the edit form</a>.",
     "history:submit": "Comment",
 
-    "report:title:type": "Entry count by types",
+    "report:title:type": "Entry count",
     "report:title:status": "Entry count by statuses",
     "report:title:section": "Entry count by sections",
     "report:title:area": "Entry count by areas",
@@ -202,6 +204,19 @@
     "report:filenames:suggestionCategory": "NR_CountBySUGCategory",
     "report:filenames:confirmer": "NR_CountByConfirmer",
     "report:filenames:owner": "NR_CountByOwner",
+
+    "report:title:summary:averageDuration": "Average number of implementation days by week",
+    "report:title:summary:count": "Number of entries by week",
+    "report:title:summary:suggestionOwners": "Number of near misses by owner",
+    "report:subtitle:summary:averageDuration": "Total average: {averageDuration}",
+    "report:subtitle:summary:count": "Total count: {total} ({open} open, {finished} finished, {cancelled} cancelled)",
+    "report:series:summary:averageDuration": "Avg. no. of impl. days",
+    "report:series:summary:open": "Open",
+    "report:series:summary:finished": "Finished",
+    "report:series:summary:cancelled": "Cancelled",
+    "report:filenames:summary:averageDuration": "NR_AvgImplDays",
+    "report:filenames:summary:count": "NR_CountByWeek",
+    "report:filenames:summary:suggestionOwners": "NR_CountByOwners",
 
     "thanks:message": "Thanks for the entry!",
     "thanks:footnote": "(click any button or key to close this window)"
