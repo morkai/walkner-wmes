@@ -131,7 +131,6 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
   {
     express.post(
       '/reports;export',
-      canView,
       multer({
         putSingleFilesInArray: true,
         limits: {
@@ -143,7 +142,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     );
   }
 
-  express.post('/reports;download', canView, function(req, res)
+  express.post('/reports;download', function(req, res)
   {
     if (!req.query.filename || !req.is('text/csv'))
     {
