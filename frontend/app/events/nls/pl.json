@@ -241,6 +241,8 @@
   "TEXT:kaizen.productFamilies.edited": "Zmodyfikowano rodzinę produktów: <a href='\\#kaizenProductFamilies/{model->_id}'>{model->name}</a>",
   "TYPE:kaizen.productFamilies.deleted": "Usprawnienia > Rodziny produktów: usunięcie",
   "TEXT:kaizen.productFamilies.deleted": "Usunięto rodzinę produktów: <em>{model->name}</em>",
+  "TYPE:suggestions.deleted": "Usprawnienia > Zgłoszenia: usunięcie",
+  "TEXT:suggestions.deleted": "Usunięto zgłoszenie usprawnienia: <em>{model->subject}</em>",
   "TYPE:opinionSurveys.surveys.added": "Badanie Opinia > Badania: dodanie",
   "TEXT:opinionSurveys.surveys.added": "Dodano badanie: <a href='\\#opinionSurveys/{model->_id}'>{model->label}</a>",
   "TYPE:opinionSurveys.surveys.edited": "Badanie Opinia > Badania: edycja",

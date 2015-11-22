@@ -204,6 +204,8 @@
     "TEXT:orderDocuments.synced": "Updated <em>{updateCount}</em> {updateCount, plural, one{order} other{orders}} from data downloaded at <em>{timestamp}</em>.",
     "TYPE:orderDocuments.syncFailed": "Production orders: document sync failure",
     "TEXT:orderDocuments.syncFailed": "Failed to import documents from data downloaded at <em>{timestamp}</em>: {error}",
+    "TYPE:suggestions.deleted": "Improvements > Entries: deleted",
+    "TEXT:suggestions.deleted": "Deleted an improvement entry: <em>{model->subject}</em>",
     "TYPE:kaizen.orders.deleted": "Near miss > Entries: deleted",
     "TEXT:kaizen.orders.deleted": "Deleted a near miss entry: <em>{model->subject}</em>",
     "TYPE:kaizen.sections.added": "Improvements > Sections: added",
