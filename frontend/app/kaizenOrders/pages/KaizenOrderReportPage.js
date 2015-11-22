@@ -31,7 +31,7 @@ define([
 
     breadcrumbs: [
       t.bound('kaizenOrders', 'BREADCRUMBS:base'),
-      t.bound('kaizenOrders', 'BREADCRUMBS:report')
+      t.bound('kaizenOrders', 'BREADCRUMBS:reports:count')
     ],
 
     initialize: function()

@@ -5,7 +5,7 @@
     "BREADCRUMBS:addForm": "Add",
     "BREADCRUMBS:editForm": "Edit",
     "BREADCRUMBS:ACTION_FORM:delete": "Delete",
-    "BREADCRUMBS:report": "Number of entries",
+    "BREADCRUMBS:reports:count": "Number of entries",
     "BREADCRUMBS:reports:summary": "Summary",
 
     "navbar:kaizen": "Near miss",
