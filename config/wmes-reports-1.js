@@ -36,7 +36,7 @@ exports.mongoose = {
   models: [
     'event',
     'prodShift', 'prodShiftOrder', 'prodDowntime',
-    'fteMasterEntry', 'fteLeaderEntry',
+    'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'clipOrderCount',
     'whShiftMetrics'
   ]

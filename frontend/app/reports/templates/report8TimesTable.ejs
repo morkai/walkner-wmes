@@ -1,0 +1,22 @@
+<table class="table table-bordered table-condensed table-hover reports-8-timesTable">
+  <thead>
+    <tr>
+      <th class="is-min"></th>
+      <th class="is-min"><%- t('reports', '8:column:plan') %></th>
+      <th class="is-min"><%- t('reports', '8:column:real') %></th>
+      <th class="is-min"><%- t('reports', '8:column:unit') %></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% _.forEach(props, function(data, prop) { %>
+  <tr data-prop="<%- prop %>">
+    <th class="is-min reports-8-table-name"><%- data.name || t('reports', '8:times:' + prop) %></th>
+    <td class="is-min <%- data.plan === '' ? 'reports-8-table-empty' : 'is-number reports-8-table-value is-clickable js-value' %>" data-kind="plan"><span style="border-bottom-color: <%- data.planColor %>"><%- data.plan %></span></td>
+    <td class="is-min <%- data.real === '' ? 'reports-8-table-empty' : 'is-number reports-8-table-value is-clickable js-value' %>" data-kind="real"><span style="border-bottom-color: <%- data.realColor %>"><%- data.real %></span></td>
+    <td class="is-min"><%- data.unit %></td>
+    <td></td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

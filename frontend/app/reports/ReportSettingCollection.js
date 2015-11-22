@@ -123,7 +123,27 @@ define([
         return newValue;
       }
 
+      if (/lean/.test(id))
+      {
+        return this.prepareLeanValue(id, newValue);
+      }
+
       return this.prepare100PercentValue(newValue);
+    },
+
+    prepareLeanValue: function(id, newValue)
+    {
+      if (/(DowntimeReasons|ProdTasks|ProdFlows)$/.test(id))
+      {
+        return newValue === '' ? [] : newValue.split(',');
+      }
+
+      if (/(Den|Threshold|Plan)$/.test(id))
+      {
+        return this.prepareCoeffValue(newValue);
+      }
+
+      return newValue;
     },
 
     prepareObjectIdValue: function(value)

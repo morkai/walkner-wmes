@@ -1,0 +1,48 @@
+<table class="table table-bordered table-condensed table-hover reports-8-dirIndirTable">
+  <thead>
+    <tr>
+      <th class="is-min"></th>
+      <th class="is-min"><%- t('reports', '8:column:plan') %></th>
+      <th class="is-min"><%- t('reports', '8:column:real') %></th>
+      <th class="is-min"><%- t('reports', '8:column:dirIndir') %></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tfoot>
+  <tr>
+    <td id="<%- idPrefix %>-footer" colspan="5"></td>
+  </tr>
+  </tfoot>
+  <tbody>
+  <% _.forEach(props, function(data, prop) { %>
+  <tr class="<%- data.className %>" data-prop="<%- prop %>" data-plan="<%- data.rawPlan %>" data-real="<%- data.rawReal %>">
+    <th class="is-min reports-8-table-name"><%- t('reports', '8:dirIndir:' + prop) %></th>
+    <td class="is-min <%- data.plan === '' ? 'reports-8-table-empty' : 'is-number reports-8-table-value is-clickable js-value' %>" data-kind="plan"><span style="border-bottom-color: <%- data.planColor %>"><%- data.plan %></span></td>
+    <td class="is-min is-number reports-8-table-value is-clickable js-value" data-kind="real"><span style="border-bottom-color: <%- data.realColor %>"><%- data.real %></span></td>
+    <% if (data.dirIndir === false) { %>
+    <td class="reports-8-table-empty"></td>
+    <% } else { %>
+    <td class="is-min reports-8-dirIndirTable-dirIndir is-clickable js-dirIndir">
+      <span class="reports-8-dirIndirTable-dir js-dir"><%- t('reports', '8:dirIndir:dir') %></span>
+      <span class="reports-8-dirIndirTable-indir js-indir"><%- t('reports', '8:dirIndir:indir') %></span>
+    </td>
+    <% } %>
+    <td></td>
+  </tr>
+  <% }) %>
+  <tr>
+    <th class="is-min reports-8-table-name"><%- t('reports', '8:dirIndir:dirTotal') %></th>
+    <td id="<%- idPrefix %>-planDirTotal" class="is-min is-number reports-8-table-value"></td>
+    <td id="<%- idPrefix %>-realDirTotal" class="is-min is-number reports-8-table-value"></td>
+    <td class="is-min reports-8-table-empty"></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th class="is-min reports-8-table-name"><%- t('reports', '8:dirIndir:indirTotal') %></th>
+    <td id="<%- idPrefix %>-planIndirTotal" class="is-min is-number reports-8-table-value"></td>
+    <td id="<%- idPrefix %>-realIndirTotal" class="is-min is-number reports-8-table-value"></td>
+    <td class="is-min reports-8-table-empty"></td>
+    <td></td>
+  </tr>
+  </tbody>
+</table>

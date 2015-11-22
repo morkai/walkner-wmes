@@ -8,6 +8,7 @@ define([
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
   'app/data/aors',
+  'app/data/downtimeReasons',
   'app/settings/views/SettingsView',
   'app/reports/templates/settings'
 ], function(
@@ -16,6 +17,7 @@ define([
   idAndLabel,
   orgUnits,
   aors,
+  downtimeReasons,
   SettingsView,
   template
 ) {
@@ -31,7 +33,8 @@ define([
     localTopics: {
       'divisions.synced': 'render',
       'subdivisions.synced': 'render',
-      'aors.synced': 'render'
+      'aors.synced': 'render',
+      'downtimeReasons.synced': 'render'
     },
 
     events: _.extend({
@@ -39,6 +42,10 @@ define([
       'change [name$="id"]': 'updateSettingOnInputChange',
       'change [name$="aors"]': 'updateSettingOnInputChange',
       'change #-downtimesInAors-specificAor': 'updateSettingOnInputChange',
+      'change [name$="Subdivision"]': 'updateSettingOnInputChange',
+      'change [name$="DowntimeReasons"]': 'updateSettingOnInputChange',
+      'change [name$="ProdTasks"]': 'updateSettingOnInputChange',
+      'change [name$="ProdFlows"]': 'updateSettingOnInputChange',
       'change [name="downtimesInAorsType"]': function(e)
       {
         var aors = e.target.value === 'own' ? 'own' : '';
@@ -182,6 +189,8 @@ define([
         data: aorsData
       });
 
+      this.setUpLeanSettings();
+
       this.onSettingsChange(this.settings.get('reports.downtimesInAors.statuses'));
       this.toggleDowntimesInAors(this.settings.getValue('downtimesInAors.aors'));
     },
@@ -247,6 +256,125 @@ define([
     updateSettingOnInputChange: function(e)
     {
       this.updateSetting(e.target.name, e.target.value);
+    },
+
+    setUpLeanSettings: function()
+    {
+      var view = this;
+      var subdivisions = orgUnits.getAllByType('subdivision').map(function(subdivision)
+      {
+        return {
+          id: subdivision.id,
+          text: subdivision.get('division') + ' \\ ' + subdivision.getLabel()
+        };
+      });
+      var reasons = downtimeReasons.map(idAndLabel);
+      var prodTasks = this.prodTasks.serializeToSelect2();
+      var prodFlows = this.serializeLeanProdFlows();
+
+      this.$('input[name$="Subdivision"]').each(function()
+      {
+        view.$(this).select2({
+          width: 374,
+          allowClear: true,
+          placeholder: ' ',
+          data: subdivisions
+        });
+      });
+
+      this.$('input[name$="DowntimeReasons"]').each(function()
+      {
+        view.$(this).select2({
+          width: '100%',
+          multiple: true,
+          allowClear: true,
+          placeholder: ' ',
+          data: reasons
+        });
+      });
+
+      this.$('input[name$="ProdTasks"]').each(function()
+      {
+        view.$(this).select2({
+          width: '100%',
+          multiple: true,
+          allowClear: true,
+          placeholder: ' ',
+          data: prodTasks
+        });
+      });
+
+      this.$('input[name$="ProdFlows"]').each(function()
+      {
+        view.$(this).select2({
+          width: '100%',
+          multiple: true,
+          allowClear: true,
+          placeholder: ' ',
+          data: prodFlows,
+          formatResult: function(item, $container, query, e)
+          {
+            return item.deactivated
+              ? ('<span style="text-decoration: line-through">' + e(item.text) + '</span>')
+              : e(item.text);
+          },
+          formatSelection: function(item, $container, e)
+          {
+            var prodFlowLabel = item.deactivated
+              ? ('<span style="text-decoration: line-through">' + e(item.text) + '</span>')
+              : e(item.text);
+
+            return item.divisionId + ': ' + prodFlowLabel;
+          }
+        });
+      });
+    },
+
+    serializeLeanProdFlows: function()
+    {
+      var subdivisionToProdFlows = {};
+
+      _.forEach(orgUnits.getAllByType('prodFlow'), function(prodFlow)
+      {
+        var subdivision = prodFlow.getSubdivision();
+
+        if (!subdivision)
+        {
+          return;
+        }
+
+        if (!subdivisionToProdFlows[subdivision.id])
+        {
+          subdivisionToProdFlows[subdivision.id] = [];
+        }
+
+        subdivisionToProdFlows[subdivision.id].push({
+          id: prodFlow.id,
+          text: prodFlow.getLabel(),
+          divisionId: subdivision.get('division'),
+          deactivated: !!prodFlow.get('deactivatedAt')
+        });
+      });
+
+      var result = [];
+
+      orgUnits.getAllByType('division').filter(function(d) { return d.get('type') === 'prod'; }).forEach(function(d)
+      {
+        orgUnits.getChildren(d).forEach(function(subdivision)
+        {
+          if (subdivision.get('type') !== 'assembly')
+          {
+            return;
+          }
+
+          result.push({
+            text: d.id,
+            children: subdivisionToProdFlows[subdivision.id] || []
+          });
+        });
+      });
+
+      return result;
     }
 
   });

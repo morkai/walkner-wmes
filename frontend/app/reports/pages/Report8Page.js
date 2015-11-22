@@ -1,0 +1,172 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define([
+  'jquery',
+  'app/time',
+  'app/i18n',
+  'app/user',
+  'app/core/View',
+  'app/core/util/bindLoadingMessage',
+  '../settings',
+  '../Report8',
+  '../Report8Query',
+  '../views/Report8FilterView',
+  '../views/Report8DirIndirTableView',
+  '../views/Report8DirIndirChartView',
+  '../views/Report8TimesTableView',
+  '../views/Report8TimesChartView',
+  'app/reports/templates/report8Page'
+], function(
+  $,
+  time,
+  t,
+  user,
+  View,
+  bindLoadingMessage,
+  settings,
+  Report8,
+  Report8Query,
+  Report8FilterView,
+  Report8DirIndirTableView,
+  Report8DirIndirChartView,
+  Report8TimesTableView,
+  Report8TimesChartView,
+  report8PageTemplate
+) {
+  'use strict';
+
+  return View.extend({
+
+    layoutName: 'page',
+
+    pageId: 'report8',
+
+    template: report8PageTemplate,
+
+    breadcrumbs: [t.bound('reports', 'BREADCRUMBS:8')],
+
+    actions: function()
+    {
+      var page = this;
+
+      return [{
+        label: t.bound('reports', 'PAGE_ACTION:8:export'),
+        icon: 'download',
+        callback: function()
+        {
+          var btnEl = this.querySelector('.btn');
+
+          btnEl.disabled = true;
+
+          var req = page.ajax({
+            type: 'POST',
+            url: '/reports;download?filename=' + t('reports', '8:filename:export'),
+            contentType: 'text/csv',
+            data: page.report.serializeToCsv()
+          });
+
+          req.done(function(key)
+          {
+            window.location.href = '/reports;download?key=' + key;
+          });
+
+          req.always(function()
+          {
+            btnEl.disabled = false;
+          });
+        }
+      }, {
+        label: t.bound('reports', 'PAGE_ACTION:settings'),
+        icon: 'cogs',
+        privileges: 'REPORTS:MANAGE',
+        href: '#reports;settings?tab=lean'
+      }];
+    },
+
+    initialize: function()
+    {
+      this.defineModels();
+      this.defineViews();
+      this.defineBindings();
+      this.setView('.filter-container', this.filterView);
+      this.setView('.reports-8-dirIndirTable-container', this.dirIndirTableView);
+      this.setView('.reports-8-dirIndirChart-container', this.dirIndirChartView);
+      this.setView('.reports-8-timesTable-container', this.timesTableView);
+      this.setView('.reports-8-timesChart-container', this.timesChartView);
+    },
+
+    destroy: function()
+    {
+      settings.release();
+    },
+
+    defineModels: function()
+    {
+      this.settings = bindLoadingMessage(settings.acquire(), this);
+      this.query = Report8Query.fromRequest(this.options.query, this.options.fragment);
+      this.report = bindLoadingMessage(new Report8(null, {query: this.query}), this);
+    },
+
+    defineViews: function()
+    {
+      this.filterView = new Report8FilterView({
+        model: this.query
+      });
+      this.dirIndirTableView = new Report8DirIndirTableView({
+        model: this.report
+      });
+      this.dirIndirChartView = new Report8DirIndirChartView({
+        model: this.report
+      });
+      this.timesTableView = new Report8TimesTableView({
+        model: this.report
+      });
+      this.timesChartView = new Report8TimesChartView({
+        model: this.report
+      });
+    },
+
+    defineBindings: function()
+    {
+      this.listenTo(this.query, 'change', this.onQueryChange);
+      this.listenTo(this.timesTableView, 'afterRender', this.onTimesTableAfterRender);
+    },
+
+    load: function(when)
+    {
+      return when(this.settings.fetchIfEmpty(function()
+      {
+        return [
+          this.report.fetch()
+        ];
+      }, this));
+    },
+
+    afterRender: function()
+    {
+      settings.acquire();
+    },
+
+    onQueryChange: function(query, options)
+    {
+      if (options && options.reset)
+      {
+        this.promised(this.report.fetch());
+      }
+
+      this.broker.publish('router.navigate', {
+        url: this.report.url() + '?' + this.query.serializeToString() + '#' + this.query.serializeSeriesVisibility(),
+        replace: true,
+        trigger: false
+      });
+    },
+
+    onTimesTableAfterRender: function()
+    {
+      this.dirIndirTableView.adjustHeight(this.timesTableView.$el.outerHeight());
+    }
+
+  });
+});

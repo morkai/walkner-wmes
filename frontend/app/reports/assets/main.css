@@ -190,6 +190,9 @@
 .reports-settings-metricRefs label {
   font-weight: normal;
 }
+.reports-settings-efficiencyFormula {
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+}
 .reports-3-container {
   display: flex;
   flex: 1 1 auto;
@@ -419,4 +422,84 @@
 }
 .reports-settings .panel-body[data-tab="downtimesInAors"] select {
   width: auto;
+}
+.reports-8 {
+  display: flex;
+}
+.reports-8 > .filter-container {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+  width: 352px;
+}
+.reports-8-filter-columns {
+  display: flex;
+}
+.reports-8-filter-column {
+  flex: 0 0 auto;
+  width: 168px;
+}
+.reports-8-filter-columns + .form-group {
+  margin-top: -25px;
+}
+.reports-8-tableAndChart {
+  flex: 1 1 auto;
+  margin-left: 14px;
+  width: 50%;
+}
+.reports-8-dirIndirChart-container,
+.reports-8-timesChart-container {
+  margin-top: 5px;
+}
+.reports-8 .filter-actions,
+.reports-8 .filter-actions > button[type="submit"] {
+  width: 100%;
+}
+.reports-8-table-name {
+  text-align: right;
+}
+.reports-8-table-value {
+  min-width: 70px;
+}
+.reports-8-table-empty,
+.table > tbody > tr:hover > .reports-8-table-empty {
+  background-color: #eee;
+}
+.reports-8-dirIndirTable > tfoot > tr > td {
+  padding: 0;
+}
+.reports-8-tableAndChart .is-clickable {
+  cursor: pointer;
+}
+.reports-8-table-value.is-clickable {
+  padding: 0;
+}
+.reports-8-table-value.is-clickable > span {
+  display: block;
+  padding: 5px 5px 0 5px;
+  border-bottom: 5px solid transparent;
+}
+.reports-8-dirIndirTable-dir,
+.reports-8-dirIndirTable-indir {
+  display: none;
+  font-family: Consolas, Menlo, Monaco, monospace;
+  line-height: 1;
+}
+.is-dir .reports-8-dirIndirTable-dirIndir {
+  background-color: #92D050!important;
+}
+.is-indir .reports-8-dirIndirTable-dirIndir {
+  background-color: #FFC000!important;
+}
+.is-dir .reports-8-dirIndirTable-dir {
+  display: inline;
+}
+.is-indir .reports-8-dirIndirTable-indir {
+  display: inline;
+}
+.reports-8-warning {
+  margin-bottom: 14px;
+  color: inherit;
+}
+.reports-8-warning:hover {
+  text-decoration: none;
 }

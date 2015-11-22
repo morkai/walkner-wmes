@@ -191,46 +191,6 @@ exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit)
 {
   var orgUnits = {
     orgUnit: null,
-    subdivision: null,
-    prodFlow: null
-  };
-
-  if (orgUnitType === null || orgUnitType === 'division')
-  {
-    return orgUnits;
-  }
-
-  var parentProdFlow = null;
-
-  if (orgUnitType === 'workCenter')
-  {
-    parentProdFlow = orgUnitsModule.getByTypeAndId('prodFlow', orgUnit.prodFlow);
-  }
-  else if (orgUnitType === 'prodLine')
-  {
-    parentProdFlow = orgUnitsModule.getParent(orgUnitsModule.getParent(orgUnit));
-  }
-
-  if (parentProdFlow !== null)
-  {
-    orgUnits.flows = exports.idToStr(orgUnitsModule.getProdLinesFor(parentProdFlow));
-  }
-
-  orgUnits.tasks = exports.idToStr(orgUnitsModule.getProdLinesFor(orgUnit));
-
-  var division = orgUnitsModule.getDivisionFor(orgUnit);
-
-  orgUnits.division = division
-    ? exports.idToStr(orgUnitsModule.getProdLinesFor(division))
-    : [];
-
-  return orgUnits;
-};
-
-exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit)
-{
-  var orgUnits = {
-    orgUnit: null,
     division: null,
     subdivision: null,
     prodFlow: null

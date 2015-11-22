@@ -103,6 +103,7 @@
     "PRIVILEGE:REPORTS:5:VIEW": "Reports: HR",
     "PRIVILEGE:REPORTS:6:VIEW": "Reports: Warehouse",
     "PRIVILEGE:REPORTS:7:VIEW": "Reports: Downtimes in AORs",
+    "PRIVILEGE:REPORTS:8:VIEW": "Reports: Lean",
     "PRIVILEGE:XICONF:VIEW": "Xiconf: view",
     "PRIVILEGE:XICONF:MANAGE": "Xiconf: manage",
     "PRIVILEGE:XICONF:NOTIFY": "Xiconf: notify",

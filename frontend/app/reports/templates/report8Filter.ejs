@@ -1,0 +1,85 @@
+<form class="well filter-form">
+  <div class="reports-8-filter-columns">
+    <div class="reports-8-filter-column">
+      <% include _filterFromTo.ejs %>
+      <div class="form-group">
+        <label class="control-label"><%- t('reports', 'filter:interval') %></label>
+        <% ['month', 'week', 'day'].forEach(function(interval) { %>
+        <div class="radio">
+          <label>
+            <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:title:' + interval) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('reports', '8:filter:unit') %></label>
+        <br>
+        <% ['m', 'h'].forEach(function(unit) { %>
+        <div class="radio-inline">
+          <label>
+            <input type="radio" name="unit" value="<%- unit %>"> <%- t('reports', '8:filter:unit:' + unit) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('reports', '8:filter:days') %></label>
+        <% [1, 2, 3, 4, 5, 6, 7, 'noWork'].forEach(function(day) { %>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="days[]" value="<%- day %>"> <%- t('reports', '8:filter:days:' + day) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('reports', '8:filter:shifts') %></label>
+        <br>
+        <% [1, 2, 3].forEach(function(shift) { %>
+        <div class="checkbox-inline">
+          <label>
+            <input type="checkbox" name="shifts[]" value="<%- shift %>"> <%- t('core', 'SHIFT:' + shift) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('reports', '8:filter:divisions') %></label>
+        <% divisions.forEach(function(division, i) { %>
+        <% if (i % 2 === 0) { %><br><% } %>
+        <div class="checkbox-inline">
+          <label>
+            <input type="checkbox" name="divisions[]" value="<%- division.id %>"> <%= division.text %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('reports', 'filter:subdivisionType') %></label>
+        <% ['assembly', 'press'].forEach(function(subdivisionType) { %>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="subdivisionTypes[]" value="<%- subdivisionType %>"> <%- t('reports', 'filter:subdivisionType:' + subdivisionType) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <div class="reports-8-filter-column">
+      <% _.forEach(numericProps, function(defaultValue, prop) { %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-<%- prop %>"><%- t('reports', '8:filter:' + prop) %></label>
+        <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" class="form-control" type="number" min="0" step="1">
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-prodLines"><%- t('reports', '8:filter:prodLines') %></label>
+    <input id="<%- idPrefix %>-prodLines" name="prodLines" type="text">
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('reports', 'filter:submit') %></span></button>
+  </div>
+</form>

@@ -102,6 +102,17 @@ define([
     });
   });
 
+  router.map('/reports/8', user.auth('REPORTS:VIEW', 'REPORTS:8:VIEW'), function(req)
+  {
+    viewport.loadPage('app/reports/pages/Report8Page', function(Report8Page)
+    {
+      return new Report8Page({
+        query: req.query,
+        fragment: req.fragment
+      });
+    });
+  });
+
   router.map('/reports;settings', user.auth('REPORTS:MANAGE'), function(req)
   {
     viewport.loadPage('app/reports/pages/ReportSettingsPage', function(ReportSettingsPage)

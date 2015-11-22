@@ -15,7 +15,8 @@ var REPORTS = {
   4: require('./report4'),
   5: require('./report5'),
   6: require('./report6'),
-  7: require('./report7')
+  7: require('./report7'),
+  8: require('./report8')
 };
 
 exports.DEFAULT_CONFIG = {
@@ -83,7 +84,7 @@ exports.start = function startReportsServerModule(app, module)
 
       if (err)
       {
-        module.error("Failed to generate report [%s] in %d ms: %s", req._id, duration, err.message);
+        module.error("Failed to generate report [%s] in %d ms: %s", req._id, duration, err.stack);
       }
       else if (duration > 60000)
       {

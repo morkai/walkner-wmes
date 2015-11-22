@@ -35,18 +35,6 @@ define([
       }
     }, FilterView.prototype.events),
 
-    termToForm: {
-      'specificAor': function(propertyName, term, formData)
-      {
-        formData[propertyName] = term.args[1];
-      },
-      'aors': function(propertyName, term, formData)
-      {
-        formData[propertyName] = term.args[1].split(',');
-      },
-      'statuses': 'aors'
-    },
-
     initialize: function()
     {
       FilterView.prototype.initialize.apply(this, arguments);

@@ -19,7 +19,7 @@ exports.DEFAULT_CONFIG = {
   messengerClientId: null,
   messengerType: 'request',
   javaBatik: null,
-  reports: ['1', '2', '3', '4', '5', '6', '7']
+  reports: ['1', '2', '3', '4', '5', '6', '7', '8']
 };
 
 exports.start = function startReportsModule(app, module)
@@ -79,6 +79,11 @@ exports.start = function startReportsModule(app, module)
 
       helpers.clearCachedReports(['1', '2', '4']);
     }
+  });
+
+  app.broker.subscribe('settings.updated.reports.lean.**', function()
+  {
+    helpers.clearCachedReports('8');
   });
 
   app.broker.subscribe('warehouse.shiftMetrics.updated', function()

@@ -103,6 +103,7 @@
   "PRIVILEGE:REPORTS:5:VIEW": "Raporty: HR",
   "PRIVILEGE:REPORTS:6:VIEW": "Raporty: Magazyn",
   "PRIVILEGE:REPORTS:7:VIEW": "Raporty: Przestoje w obszarach",
+  "PRIVILEGE:REPORTS:8:VIEW": "Raporty: Lean",
   "PRIVILEGE:XICONF:VIEW": "Xiconf: przeglądanie",
   "PRIVILEGE:XICONF:MANAGE": "Xiconf: zarządzanie",
   "PRIVILEGE:XICONF:NOTIFY": "Xiconf: powiadamianie",
