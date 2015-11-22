@@ -3,12 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/i18n',
   'app/highcharts',
   'app/core/View',
   'app/data/aors',
   'app/reports/templates/report8TimesTable'
 ], function(
+  _,
   t,
   Highcharts,
   View,

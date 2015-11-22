@@ -4,8 +4,6 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
 var later = require('later');
 
 module.exports = function setUpDurationRecalculator(app, module)

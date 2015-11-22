@@ -4,10 +4,6 @@
 
 'use strict';
 
-var format = require('util').format;
-var _ = require('lodash');
-var later = require('later');
-var moment = require('moment');
 var setUpNoEventCheck = require('./noEventCheck');
 var setUpAppStartedEventCheck = require('./appStartedEventCheck');
 var setUpEmptyDirectoryCheck = require('./emptyDirectoryCheck');

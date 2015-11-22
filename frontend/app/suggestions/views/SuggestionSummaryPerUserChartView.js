@@ -6,14 +6,12 @@ define([
   'underscore',
   'app/i18n',
   'app/highcharts',
-  'app/core/View',
-  'app/reports/util/formatTooltipHeader'
+  'app/core/View'
 ], function(
   _,
   t,
   Highcharts,
-  View,
-  formatTooltipHeader
+  View
 ) {
   'use strict';
 

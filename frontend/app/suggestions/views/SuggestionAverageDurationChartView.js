@@ -8,16 +8,14 @@ define([
   'app/time',
   'app/highcharts',
   'app/core/View',
-  'app/reports/util/formatTooltipHeader',
-  'app/kaizenOrders/dictionaries'
+  'app/reports/util/formatTooltipHeader'
 ], function(
   _,
   t,
   time,
   Highcharts,
   View,
-  formatTooltipHeader,
-  kaizenDictionaries
+  formatTooltipHeader
 ) {
   'use strict';
 
