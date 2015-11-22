@@ -13,7 +13,7 @@
       <tbody>
         <% if (!rows.length) { %>
         <tr>
-          <td colspan="<%- columns.length + 1 %>"><%- t('core', 'LIST:NO_DATA') %></td>
+          <td colspan="<%- columns.length + 1 %>"><%- noData %></td>
         </tr>
         <% } %>
         <% rows.forEach(function(row) { %>
