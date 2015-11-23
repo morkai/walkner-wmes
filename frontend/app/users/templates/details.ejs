@@ -1,86 +1,97 @@
-<div class="panel panel-primary users-details">
-  <div class="panel-heading">
-    <%- t('users', 'PANEL:TITLE:details') %>
-  </div>
-  <div class="panel-details row">
-    <div class="col-md-4">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:name') %></div>
-          <div class="prop-value"><%= model.lastName || '' %> <%= model.firstName || '' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:gender') %></div>
-          <div class="prop-value"><%= model.gender ? t('users', 'gender:' + model.gender) : '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:personellId') %></div>
-          <div class="prop-value"><%= model.personellId || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:card') %></div>
-          <div class="prop-value"><%= model.card || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:active') %></div>
-          <div class="prop-value"><%= t('users', 'ACTIVE:' + model.active) %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:orgUnit') %></div>
-          <div class="prop-value"><%- model.orgUnit || '-' %></div>
+<div class="users-details">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading"><%- t('users', 'PANEL:TITLE:details:basic') %></div>
+        <div class="panel-details">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:login') %></div>
+              <div class="prop-value"><%= model.login %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:name') %></div>
+              <div class="prop-value"><%= model.lastName || '' %> <%= model.firstName || '' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:personellId') %></div>
+              <div class="prop-value"><%= model.personellId || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:kdDivision') %></div>
+              <div class="prop-value"><%= model.kdDivision || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:kdPosition') %></div>
+              <div class="prop-value"><%= model.kdPosition || '-' %></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:company') %></div>
-          <div class="prop-value"><%= model.company || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:kdDivision') %></div>
-          <div class="prop-value"><%= model.kdDivision || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:kdPosition') %></div>
-          <div class="prop-value"><%= model.kdPosition || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:aors') %></div>
-          <div class="prop-value"><%= model.aors || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:prodFunction') %></div>
-          <div class="prop-value"><%= model.prodFunction || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:vendor') %></div>
-          <div class="prop-value"><%= model.vendor || '-' %></div>
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('users', 'PANEL:TITLE:details:contact') %></div>
+        <div class="panel-details">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:email') %></div>
+              <div class="prop-value"><%= model.email || '-' %></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:login') %></div>
-          <div class="prop-value"><%= model.login %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:email') %></div>
-          <div class="prop-value"><%= model.email || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('users', 'PROPERTY:privileges') %></div>
-          <div class="prop-value">
-            <% if (!model.privileges.length) { %>
-            -
-            <% } else { %>
-            <% model.privileges.forEach(function(privilege) { %>
-            <span class="label label-<%- /MANAGE/.test(privilege) ? 'warning' : 'info' %>"><%- t('users', 'PRIVILEGE:' + privilege) %></span>
-            <% }) %>
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('users', 'PANEL:TITLE:details:extra') %></div>
+        <div class="panel-details">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:company') %></div>
+              <div class="prop-value"><%= model.company || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:prodFunction') %></div>
+              <div class="prop-value"><%= model.prodFunction || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:orgUnit') %></div>
+              <div class="prop-value"><%- model.orgUnit || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:aors') %></div>
+              <div class="prop-value">
+                <% if (_.isEmpty(model.aors)) { %>
+                <%- t('users', 'NO_DATA:aors') %>
+                <% } else { %>
+                <ul>
+                  <% _.forEach(model.aors, function(aor) { %>
+                  <li><%= aor %></li>
+                  <% }) %>
+                </ul>
+                <% } %>
+              </div>
+            </div>
+            <% if (loadedModules.isLoaded('vendors')) { %>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:vendor') %></div>
+              <div class="prop-value"><%= model.vendor || '-' %></div>
+            </div>
             <% } %>
           </div>
         </div>
+      </div>
     </div>
   </div>
+  <% if (!_.isEmpty(model.privileges)) { %>
+  <div class="panel panel-default users-details-privileges">
+    <div class="panel-heading"><%- t('users', 'PANEL:TITLE:details:privileges') %></div>
+    <div class="panel-body">
+      <% model.privileges.forEach(function(privilege) { %>
+      <span class="label label-<%- /VIEW/.test(privilege) ? 'info' : 'warning' %>"><%- t('users', 'PRIVILEGE:' + privilege) %></span>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
 </div>

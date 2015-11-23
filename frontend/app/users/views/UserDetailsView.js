@@ -3,21 +3,39 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
+  'app/data/loadedModules',
   'app/core/views/DetailsView',
   'app/users/templates/details'
 ], function(
+  _,
+  loadedModules,
   DetailsView,
-  detailsTemplate
+  template
 ) {
   'use strict';
 
   return DetailsView.extend({
 
-    template: detailsTemplate,
+    template: template,
 
     localTopics: {
       'companies.synced': 'render',
       'aors.synced': 'render'
+    },
+
+    serialize: function()
+    {
+      return _.extend(DetailsView.prototype.serialize.call(this), {
+        loadedModules: loadedModules
+      });
+    },
+
+    afterRender: function()
+    {
+      DetailsView.prototype.afterRender.call(this);
+
+
     }
 
   });

@@ -21,6 +21,16 @@ define([
 
     DetailsView: UserDetailsView,
 
+    breadcrumbs: function()
+    {
+      if (user.isAllowedTo('USERS:VIEW'))
+      {
+        return DetailsPage.prototype.breadcrumbs.call(this);
+      }
+
+      return [t.bound('users', 'BREADCRUMBS:myAccount')];
+    },
+
     actions: function()
     {
       var model = this.model;

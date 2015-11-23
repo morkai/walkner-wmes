@@ -2,86 +2,70 @@
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
-    <div class="panel-body <%- accountMode ? 'has-lastElementRow' : '' %>">
+    <div class="panel-body">
       <div class="row">
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('users', 'PROPERTY:login') %></label>
-          <input id="<%- idPrefix %>-login" class="form-control" type="text" name="login" required maxlength="50">
-        </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-email" class="control-label"><%- t('users', 'PROPERTY:email') %></label>
-          <input id="<%- idPrefix %>-email" class="form-control" type="email" name="email" maxlength="100">
-        </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-password" class="control-label"><%- t('users', 'PROPERTY:password') %></label>
-          <input id="<%- idPrefix %>-password" class="form-control" type="password" name="password">
-        </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-password2" class="control-label"><%- t('users', 'PROPERTY:password2') %></label>
-          <input id="<%- idPrefix %>-password2" class="form-control" type="password">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('users', 'PROPERTY:firstName') %></label>
-          <input id="<%- idPrefix %>-firstName" class="form-control" type="text" name="firstName" autofocus maxlength="50">
-        </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-lastName" class="control-label"><%- t('users', 'PROPERTY:lastName') %></label>
-          <input id="<%- idPrefix %>-lastName" class="form-control" type="text" name="lastName" maxlength="50">
-        </div>
-        <div class="col-md-6 form-group">
-          <label for="<%- idPrefix %>-gender" class="control-label is-required"><%- t('users', 'PROPERTY:gender') %></label>
-          <div>
-            <label class="radio-inline">
-              <input type="radio" name="gender" value="female" required> <%- t('users', 'gender:female') %>
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="gender" value="male" required> <%- t('users', 'gender:male') %>
-            </label>
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('users', 'PROPERTY:login') %></label>
+            <input id="<%- idPrefix %>-login" class="form-control" type="text" name="login" required maxlength="50">
+          </div>
+          <div class="form-group">
+            <label for="<%- idPrefix %>-password" class="control-label <%- editMode ? '' : 'is-required' %>"><%- t('users', 'PROPERTY:' + (editMode ? 'newPassword' : 'password')) %></label>
+            <input id="<%- idPrefix %>-password" class="form-control" type="password" name="password" <%- editMode ? '' : 'required' %>>
+          </div>
+          <div class="form-group">
+            <label for="<%- idPrefix %>-password2" class="control-label <%- editMode ? '' : 'is-required' %>"><%- t('users', 'PROPERTY:password2') %></label>
+            <input id="<%- idPrefix %>-password2" class="form-control" type="password" <%- editMode ? '' : 'required' %>>
+            <% if (editMode) { %>
+            <p class="help-block"><%- t('users', 'FORM:HELP:password') %></p>
+            <% } %>
           </div>
         </div>
-      </div>
-      <% if (!accountMode) { %>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <label for="<%- idPrefix %>-company" class="control-label"><%- t('users', 'PROPERTY:company') %></label>
-              <select id="<%- idPrefix %>-company" name="company" data-placeholder="<%- t('users', 'NO_DATA:prodFunction') %>">
-                <option></option>
-                <% companies.forEach(function(company) { %>
-                <option value="<%- company._id %>"><%= company.name %></option>
-                <% }) %>
-              </select>
-            </div>
-            <div class="col-md-6 form-group">
-              <label for="<%- idPrefix %>-prodFunction" class="control-label"><%- t('users', 'PROPERTY:prodFunction') %></label>
-              <input id="<%- idPrefix %>-prodFunction" name="prodFunction" type="text" data-placeholder="<%- t('users', 'NO_DATA:prodFunction') %>">
-            </div>
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('users', 'PROPERTY:firstName') %></label>
+            <input id="<%- idPrefix %>-firstName" class="form-control" type="text" name="firstName" autofocus maxlength="50">
           </div>
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <label for="<%- idPrefix %>-kdDivision" class="control-label"><%- t('users', 'PROPERTY:kdDivision') %></label>
-              <input id="<%- idPrefix %>-kdDivision" class="form-control" type="text" name="kdDivision" maxlength="100">
-            </div>
-            <div class="col-md-6 form-group">
-              <label for="<%- idPrefix %>-kdPosition" class="control-label"><%- t('users', 'PROPERTY:kdPosition') %></label>
-              <input id="<%- idPrefix %>-kdPosition" class="form-control" type="text" name="kdPosition" maxlength="100">
-            </div>
+          <div class="form-group">
+            <label for="<%- idPrefix %>-lastName" class="control-label"><%- t('users', 'PROPERTY:lastName') %></label>
+            <input id="<%- idPrefix %>-lastName" class="form-control" type="text" name="lastName" maxlength="50">
           </div>
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <label for="<%- idPrefix %>-personellId" class="control-label"><%- t('users', 'PROPERTY:personellId') %></label>
-              <input id="<%- idPrefix %>-personellId" class="form-control" type="text" name="personellId" maxlength="15">
-            </div>
-            <div class="col-md-6 form-group">
-              <label for="<%- idPrefix %>-card" class="control-label"><%- t('users', 'PROPERTY:card') %></label>
-              <input id="<%- idPrefix %>-card" class="form-control" type="text" name="card" maxlength="15">
+          <div class="form-group">
+            <label for="<%- idPrefix %>-personellId" class="control-label"><%- t('users', 'PROPERTY:personellId') %></label>
+            <input id="<%- idPrefix %>-personellId" class="form-control" type="text" name="personellId" maxlength="15">
+          </div>
+          <div class="form-group">
+            <label for="<%- idPrefix %>-gender" class="control-label is-required"><%- t('users', 'PROPERTY:gender') %></label>
+            <div>
+              <% ['female', 'male'].forEach(function(gender) { %>
+              <label class="radio-inline">
+                <input type="radio" name="gender" value="<%- gender %>" required> <%- t('users', 'gender:' + gender) %>
+              </label>
+              <% }) %>
             </div>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="<%- idPrefix %>-email" class="control-label"><%- t('users', 'PROPERTY:email') %></label>
+            <input id="<%- idPrefix %>-email" class="form-control" type="email" name="email" maxlength="100">
+          </div>
+        </div>
+        <% if (!accountMode) { %>
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="<%- idPrefix %>-company" class="control-label"><%- t('users', 'PROPERTY:company') %></label>
+            <select id="<%- idPrefix %>-company" name="company" data-placeholder="<%- t('users', 'NO_DATA:company') %>">
+              <option></option>
+              <% companies.forEach(function(company) { %>
+              <option value="<%- company._id %>"><%= company.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="<%- idPrefix %>-prodFunction" class="control-label"><%- t('users', 'PROPERTY:prodFunction') %></label>
+            <input id="<%- idPrefix %>-prodFunction" name="prodFunction" type="text" data-placeholder="<%- t('users', 'NO_DATA:prodFunction') %>">
+          </div>
           <div class="orgUnitDropdowns-container"></div>
           <div class="form-group users-form-aor">
             <label for="<%- idPrefix %>-aors" class="control-label"><%- t('users', 'PROPERTY:aors') %></label>
@@ -97,7 +81,9 @@
             <input id="<%- idPrefix %>-vendor" type="text" name="vendor" maxlength="15">
           </div>
         </div>
+        <% } %>
       </div>
+      <% if (!accountMode) { %>
       <div class="form-group">
         <label for="<%- idPrefix %>-privileges" class="control-label"><%- t('users', 'PROPERTY:privileges') %></label>
         <div class="input-group">
@@ -105,11 +91,6 @@
           <span class="input-group-btn">
             <button id="<%- idPrefix %>-copyPrivileges" class="btn btn-default" type="button"><i class="fa fa-copy"></i></button>
           </span>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="checkbox">
-          <label><input type="checkbox" name="active" value="true"> <%- t('users', 'PROPERTY:active') %></label>
         </div>
       </div>
       <% } %>

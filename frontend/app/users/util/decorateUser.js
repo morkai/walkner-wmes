@@ -28,7 +28,7 @@ define([
     var obj = user.toJSON();
     var company = companies.get(obj.company);
 
-    obj.company = company ? company.getLabel() : t('users', 'NO_DATA:company');
+    obj.company = company ? company.getLabel() : '-';
 
     if (Array.isArray(obj.aors))
     {
@@ -42,22 +42,16 @@ define([
         .filter(function(aorLabel)
         {
           return !!aorLabel;
-        })
-        .join('; ');
+        });
     }
     else
     {
-      obj.aors = '';
-    }
-
-    if (!obj.aors.length)
-    {
-      obj.aors = t('users', 'NO_DATA:aors');
+      obj.aors = [];
     }
 
     var prodFunction = prodFunctions.get(obj.prodFunction);
 
-    obj.prodFunction = prodFunction ? prodFunction.getLabel() : t('users', 'NO_DATA:prodFunction');
+    obj.prodFunction = prodFunction ? prodFunction.getLabel() : '-';
 
     if (obj.orgUnitType && obj.orgUnitId)
     {

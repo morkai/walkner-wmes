@@ -3,6 +3,7 @@
     "BREADCRUMBS:browse": "Users",
     "BREADCRUMBS:addForm": "Adding",
     "BREADCRUMBS:editForm": "Editing",
+    "BREADCRUMBS:myAccount": "My account",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
     "breadcrumbs:logIn": "Log in form",
 
@@ -28,6 +29,7 @@
 
     "PROPERTY:login": "Login",
     "PROPERTY:password": "Password",
+    "PROPERTY:newPassword": "New password",
     "PROPERTY:password2": "Confirm password",
     "PROPERTY:email": "E-mail address",
     "PROPERTY:privileges": "Privileges",
@@ -58,6 +60,7 @@
     "FORM:ERROR:passwordMismatch": "The specified password do not match.",
     "FORM:ERROR:addFailure": "Failed to add the user :-(",
     "FORM:ERROR:editFailure": "Failed to edit the user :-(",
+    "FORM:HELP:password": "Enter a new password only if you want to change the current password.",
     "NO_DATA:aors": "All",
     "NO_DATA:company": "Unspecified",
     "NO_DATA:prodFunction": "Unspecified",

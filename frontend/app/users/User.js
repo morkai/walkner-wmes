@@ -3,9 +3,11 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../data/loadedModules',
   '../core/Model',
   './util/decorateUser'
 ], function(
+  loadedModules,
   Model,
   decorateUser
 ) {
@@ -28,7 +30,7 @@ define([
     defaults: {
       login: null,
       email: null,
-      prodFunction: 'unspecified',
+      prodFunction: null,
       privileges: null,
       aors: null,
       company: null,
@@ -69,7 +71,7 @@ define([
     {
       var url = Model.prototype.url.apply(this, arguments);
 
-      if (this.isNew())
+      if (this.isNew() || !loadedModules.isLoaded('vendors'))
       {
         return url;
       }

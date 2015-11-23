@@ -102,11 +102,10 @@ define([
     function(req)
     {
       viewport.loadPage(
-        ['app/core/pages/EditFormPage', 'app/users/views/UserFormView'],
-        function(EditFormPage, UserFormView)
+        ['app/users/pages/UserEditFormPage'],
+        function(UserEditFormPage)
         {
-          return new EditFormPage({
-            FormView: UserFormView,
+          return new UserEditFormPage({
             model: new User({_id: req.params.id})
           });
         }

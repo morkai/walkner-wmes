@@ -4,6 +4,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/ZeroClipboard',
   'app/i18n',
   'app/user',
@@ -17,10 +18,12 @@ define([
   'app/data/subdivisions',
   'app/data/prodFunctions',
   'app/data/privileges',
+  'app/data/loadedModules',
   'app/vendors/util/setUpVendorSelect2',
   'app/users/templates/form'
 ], function(
   _,
+  $,
   ZeroClipboard,
   t,
   user,
@@ -34,6 +37,7 @@ define([
   subdivisions,
   prodFunctions,
   privileges,
+  loadedModules,
   setUpVendorSelect2,
   formTemplate
 ) {
@@ -54,8 +58,9 @@ define([
           clearTimeout(this.timers.validatePasswords);
         }
 
-        this.timers.validatePasswords = setTimeout(this.validatePasswords.bind(this, e), 100);
-      }
+        this.timers.validatePasswords = setTimeout(this.validatePasswords.bind(this, e), 30);
+      },
+      'change #-aors': 'resizeColumns'
     },
 
     initialize: function()
@@ -72,10 +77,16 @@ define([
       });
 
       this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);
+
+      this.listenTo(this.orgUnitDropdownsView, 'afterRender', this.resizeColumns);
+
+      $(window).on('resize.' + this.idPrefix, _.debounce(this.resizeColumns.bind(this), 16));
     },
 
     destroy: function()
     {
+      $(window).off('.' + this.idPrefix);
+
       if (this.privilegesCopyClient)
       {
         this.privilegesCopyClient.destroy();
@@ -85,11 +96,6 @@ define([
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);
-
-      if (!this.options.editMode)
-      {
-        this.$('input[type="password"]').attr('required', true);
-      }
 
       if (!this.accountMode)
       {
@@ -105,6 +111,8 @@ define([
 
         this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', this.setUpOrgUnitDropdowns);
       }
+
+      this.resizeColumns();
     },
 
     setUpOrgUnitDropdowns: function()
@@ -209,7 +217,19 @@ define([
 
     setUpVendorSelect2: function()
     {
-      var $vendor = setUpVendorSelect2(this.$id('vendor'), {placeholder: t('users', 'NO_DATA:vendor')});
+      var $vendor = this.$id('vendor');
+
+      if (!loadedModules.isLoaded('vendors'))
+      {
+        $vendor.closest('.form-group').remove();
+
+        return;
+      }
+
+      setUpVendorSelect2($vendor, {
+        placeholder: t('users', 'NO_DATA:vendor')
+      });
+
       var vendor = this.model.get('vendor');
 
       if (vendor && vendor._id)
@@ -304,6 +324,33 @@ define([
       }
 
       return formData;
+    },
+
+    resizeColumns: function()
+    {
+      var $columns = this.$('.col-lg-3');
+      var $maxColumn = null;
+      var maxHeight = 0;
+
+      $columns.each(function()
+      {
+        var $column = $(this).css('height', '');
+        var columnHeight = $column.outerHeight();
+
+        if (columnHeight > maxHeight)
+        {
+          $maxColumn = $column;
+          maxHeight = columnHeight;
+        }
+      });
+
+      if (window.innerWidth >= 1200)
+      {
+        $columns.each(function()
+        {
+          this.style.height = this === $maxColumn[0] ? '' : (maxHeight + 'px');
+        });
+      }
     }
 
   });

@@ -2,6 +2,7 @@
   "BREADCRUMBS:browse": "Użytkownicy",
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
+  "BREADCRUMBS:myAccount": "Moje konto",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "breadcrumbs:logIn": "Logowanie do systemu",
 
@@ -17,7 +18,10 @@
   "PAGE_ACTION:delete": "Usuń użytkownika",
   "PAGE_ACTION:sync": "Synchronizuj z bazą KD",
 
-  "PANEL:TITLE:details": "Szczegóły użytkownika",
+  "PANEL:TITLE:details:basic": "Podstawowe informacje",
+  "PANEL:TITLE:details:contact": "Dane kontaktowe",
+  "PANEL:TITLE:details:extra": "Dodatkowe informacje",
+  "PANEL:TITLE:details:privileges": "Uprawnienia",
   "PANEL:TITLE:addForm": "Formularz dodawania użytkownika",
   "PANEL:TITLE:editForm": "Formularz edycji użytkownika",
 
@@ -27,6 +31,7 @@
 
   "PROPERTY:login": "Login",
   "PROPERTY:password": "Hasło",
+  "PROPERTY:newPassword": "Nowe hasło",
   "PROPERTY:password2": "Potwierdzenie hasła",
   "PROPERTY:email": "Adres e-mail",
   "PROPERTY:privileges": "Uprawnienia",
@@ -57,6 +62,7 @@
   "FORM:ERROR:passwordMismatch": "Podane hasła nie pasują do siebie.",
   "FORM:ERROR:addFailure": "Nie udało się dodać użytkownika :-(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować użytkownika :-(",
+  "FORM:HELP:password": "Podaj hasła tylko wtedy, gdy chcesz je zmienić.",
   "NO_DATA:aors": "Wszystkie",
   "NO_DATA:company": "Nieokreślona",
   "NO_DATA:prodFunction": "Nieokreślona",
