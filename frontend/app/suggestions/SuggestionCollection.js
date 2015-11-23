@@ -15,7 +15,7 @@ define([
 
     model: Suggestion,
 
-    rqlQuery: 'exclude(changes)&limit(15)&sort(-eventDate)'
+    rqlQuery: 'exclude(changes)&limit(15)&sort(-date)'
 
   });
 });
