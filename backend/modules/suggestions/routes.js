@@ -154,15 +154,15 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
     if (req.params.filter === 'mine')
     {
-      url += '?observers.user.id=mine&sort(-eventDate)&limit(15)';
+      url += '?observers.user.id=mine&sort(-date)&limit(15)';
     }
     else if (req.params.filter === 'unseen')
     {
-      url += '?observers.user.id=unseen&sort(-eventDate)&limit(15)';
+      url += '?observers.user.id=unseen&sort(-date)&limit(15)';
     }
     else if (req.params.filter === 'open')
     {
-      url += '?status=in=(new,accepted,todo,inProgress,paused)&sort(-eventDate)&limit(15)';
+      url += '?status=in=(new,accepted,todo,inProgress,paused)&sort(-date)&limit(15)';
     }
 
     res.redirect(url);
