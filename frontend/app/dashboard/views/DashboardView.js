@@ -97,7 +97,8 @@ define([
         buttonType: 'danger',
         buttonUrl: '#kaizenOrders;add',
         buttonLabel: t.bound('dashboard', 'addButton:nearMiss'),
-        browseUrl: '#kaizenOrders'
+        browseUrl: '#kaizenOrders',
+        sortProperty: 'eventDate'
       });
       this.nearMissListView = new KaizenOrderListView({
         collection: this.nearMisses,
@@ -118,7 +119,8 @@ define([
         buttonType: 'warning',
         buttonUrl: '#suggestions;add',
         buttonLabel: t.bound('dashboard', 'addButton:suggestion'),
-        browseUrl: '#suggestions'
+        browseUrl: '#suggestions',
+        sortProperty: 'date'
       });
       this.suggestionListView = new SuggestionListView({
         collection: this.suggestions,

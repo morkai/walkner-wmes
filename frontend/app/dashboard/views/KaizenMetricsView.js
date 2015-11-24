@@ -30,6 +30,7 @@ define([
         buttonUrl: this.options.buttonUrl,
         buttonLabel: this.options.buttonLabel,
         browseUrl: this.options.browseUrl,
+        sortProperty: this.options.sortProperty,
         total: this.model.get('total'),
         user: this.model.get('user')
       };
