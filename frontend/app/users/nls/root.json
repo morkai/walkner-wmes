@@ -24,8 +24,6 @@
     "PANEL:TITLE:editForm": "Edit user form",
 
     "filter:submit": "Filter users",
-    "filter:placeholder:personellId": "Any personnel ID",
-    "filter:placeholder:lastName": "Any last name",
 
     "PROPERTY:login": "Login",
     "PROPERTY:password": "Password",

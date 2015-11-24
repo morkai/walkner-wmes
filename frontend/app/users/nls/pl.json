@@ -26,8 +26,6 @@
   "PANEL:TITLE:editForm": "Formularz edycji użytkownika",
 
   "filter:submit": "Filtruj użytkowników",
-  "filter:placeholder:personellId": "Dowolny nr",
-  "filter:placeholder:lastName": "Dowolne nazwisko",
 
   "PROPERTY:login": "Login",
   "PROPERTY:password": "Hasło",
