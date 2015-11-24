@@ -20,6 +20,7 @@ define([
   'app/data/privileges',
   'app/data/loadedModules',
   'app/vendors/util/setUpVendorSelect2',
+  'app/users/templates/formMobileList',
   'app/users/templates/form'
 ], function(
   _,
@@ -39,6 +40,7 @@ define([
   privileges,
   loadedModules,
   setUpVendorSelect2,
+  formMobileListTemplate,
   formTemplate
 ) {
   'use strict';
@@ -60,12 +62,43 @@ define([
 
         this.timers.validatePasswords = setTimeout(this.validatePasswords.bind(this, e), 30);
       },
-      'change #-aors': 'resizeColumns'
+      'change #-aors': 'resizeColumns',
+      'keydown #-mobile': function(e)
+      {
+        if (e.keyCode === 13)
+        {
+          this.$id('mobile-add').click();
+
+          return false;
+        }
+      },
+      'click #-mobile-add': function()
+      {
+        var $number = this.$id('mobile-number');
+        var $from = this.$id('mobile-from');
+        var $to = this.$id('mobile-to');
+
+        this.addMobile($number.val(), $from.val(), $to.val());
+        this.renderMobileList();
+
+        $number.val('').focus();
+        $from.val('');
+        $to.val('');
+      },
+      'click .users-form-mobile-remove': function(e)
+      {
+        this.removeMobile(this.$(e.target).closest('li').attr('data-number'));
+        this.$id('mobile-number').select();
+
+        return false;
+      }
     },
 
     initialize: function()
     {
       FormView.prototype.initialize.call(this);
+
+      this.mobileList = null;
 
       this.accountMode = this.options.editMode
         && user.data._id === this.model.id
@@ -113,6 +146,13 @@ define([
       }
 
       this.resizeColumns();
+
+      if (!this.mobileList)
+      {
+        this.mobileList = this.model.get('mobile') || [];
+      }
+
+      this.renderMobileList();
     },
 
     setUpOrgUnitDropdowns: function()
@@ -323,7 +363,21 @@ define([
         formData.orgUnitId = null;
       }
 
+      formData.mobile = this.serializeMobile();
+
       return formData;
+    },
+
+    serializeMobile: function()
+    {
+      var mobileMap = {};
+
+      _.forEach(this.mobileList, function(mobile)
+      {
+        mobileMap[mobile.number] = mobile;
+      });
+
+      return _.values(mobileMap);
     },
 
     resizeColumns: function()
@@ -351,6 +405,96 @@ define([
           this.style.height = this === $maxColumn[0] ? '' : (maxHeight + 'px');
         });
       }
+    },
+
+    renderMobileList: function()
+    {
+      this.$id('mobile-list').html(formMobileListTemplate({
+        mobileList: this.mobileList
+      }));
+    },
+
+    removeMobile: function(number)
+    {
+      this.mobileList = this.mobileList.filter(function(mobile) { return mobile.number !== number; });
+
+      this.renderMobileList();
+    },
+
+    addMobile: function(number, fromTime, toTime)
+    {
+      number = this.parseMobileNumber(number);
+      fromTime = this.parseMobileTime(fromTime);
+      toTime = this.parseMobileTime(toTime);
+
+      if (number && fromTime && toTime)
+      {
+        this.mobileList.push({
+          number: number,
+          fromTime: fromTime,
+          toTime: toTime
+        });
+      }
+    },
+
+    parseMobileNumber: function(number)
+    {
+      number = number.replace(/[^0-9]/g, '');
+
+      if (number.length < 9)
+      {
+        return '';
+      }
+
+      if (number.length === 9)
+      {
+        number = '48' + number;
+      }
+
+      if (number.length > 11)
+      {
+        return '';
+      }
+
+      return '+' + number;
+    },
+
+    parseMobileTime: function(time)
+    {
+      if (!time.trim().length)
+      {
+        time = '00:00';
+      }
+
+      if (time > -1 && time < 25)
+      {
+        if (time < 10)
+        {
+          time = '0' + time + ':00';
+        }
+        else if (time === '24')
+        {
+          time = '00:00';
+        }
+        else
+        {
+          time += ':00';
+        }
+      }
+
+      var matches = time.match(/([0-9]{1,2})[^0-9]*([0-9]{2})/);
+
+      if (matches === null)
+      {
+        return '00:00';
+      }
+
+      if (matches[1].length === 1)
+      {
+        matches[1] = '0' + matches[1];
+      }
+
+      return matches[1] + ':' + matches[2];
     }
 
   });

@@ -10,10 +10,6 @@
               <div class="prop-value"><%= model.login %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:name') %></div>
-              <div class="prop-value"><%= model.lastName || '' %> <%= model.firstName || '' %></div>
-            </div>
-            <div class="prop">
               <div class="prop-name"><%- t('users', 'PROPERTY:personellId') %></div>
               <div class="prop-value"><%= model.personellId || '-' %></div>
             </div>
@@ -35,8 +31,28 @@
         <div class="panel-details">
           <div class="props first">
             <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:name') %></div>
+              <div class="prop-value"><%= model.lastName || '' %> <%= model.firstName || '' %></div>
+            </div>
+            <div class="prop">
               <div class="prop-name"><%- t('users', 'PROPERTY:email') %></div>
               <div class="prop-value"><%= model.email || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:mobile') %></div>
+              <div class="prop-value">
+                <% if (_.isEmpty(model.mobile)) { %>
+                -
+                <% } else if (model.mobile.length === 1) { %>
+                <%- t('users', 'DETAILS:mobile:item', model.mobile[0]) %>
+                <% } else { %>
+                <ul>
+                  <% _.forEach(model.mobile, function(mobile) { %>
+                  <li><%- t('users', 'DETAILS:mobile:item', mobile) %></li>
+                  <% }) %>
+                </ul>
+                <% } %>
+              </div>
             </div>
           </div>
         </div>

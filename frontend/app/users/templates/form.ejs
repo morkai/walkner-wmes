@@ -1,4 +1,4 @@
-<form class="users-form" method="post" action="<%- formAction %>">
+<form class="users-form" method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
@@ -49,6 +49,18 @@
           <div class="form-group">
             <label for="<%- idPrefix %>-email" class="control-label"><%- t('users', 'PROPERTY:email') %></label>
             <input id="<%- idPrefix %>-email" class="form-control" type="email" name="email" maxlength="100">
+          </div>
+          <div class="form-group">
+            <label class="control-label"><%- t('users', 'PROPERTY:mobile') %></label>
+            <div id="<%- idPrefix %>-mobile-list"></div>
+            <div id="<%- idPrefix %>-mobile" class="users-form-mobile">
+              <input id="<%- idPrefix %>-mobile-number" class="form-control users-form-mobile-number" type="text" placeholder="+00 000 000 000">
+              <span><%- t('users', 'FORM:mobile:from') %></span>
+              <input id="<%- idPrefix %>-mobile-from" class="form-control users-form-mobile-hours" type="text" placeholder="00:00">
+              <span><%- t('users', 'FORM:mobile:to') %></span>
+              <input id="<%- idPrefix %>-mobile-to" class="form-control users-form-mobile-hours" type="text" placeholder="00:00">
+              <button id="<%- idPrefix %>-mobile-add" class="btn btn-link" type="button"><i class="fa fa-plus"></i></button>
+            </div>
           </div>
         </div>
         <% if (!accountMode) { %>

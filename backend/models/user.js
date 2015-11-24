@@ -6,6 +6,25 @@
 
 module.exports = function setupUserModel(app, mongoose)
 {
+  var userMobileSchema = mongoose.Schema({
+    fromTime: {
+      type: String,
+      required: true,
+      pattern: /^[0-9]{2}:[0-9]{2}$/
+    },
+    toTime: {
+      type: String,
+      required: true,
+      pattern: /^[0-9]{2}:[0-9]{2}$/
+    },
+    number: {
+      type: String,
+      required: true
+    }
+  }, {
+    _id: false
+  });
+
   var userSchema = mongoose.Schema({
     login: {
       type: String,
@@ -62,7 +81,8 @@ module.exports = function setupUserModel(app, mongoose)
       type: String,
       enum: ['female', 'male'],
       default: 'male'
-    }
+    },
+    mobile: [userMobileSchema]
   }, {
     id: false,
     toJSON: {

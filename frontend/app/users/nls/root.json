@@ -19,7 +19,10 @@
     "PAGE_ACTION:delete": "Delete user",
     "PAGE_ACTION:sync": "Synchronize with the AC database",
 
-    "PANEL:TITLE:details": "User's details",
+    "PANEL:TITLE:details:basic": "Basic information",
+    "PANEL:TITLE:details:contact": "Concat information",
+    "PANEL:TITLE:details:extra": "Additional information",
+    "PANEL:TITLE:details:privileges": "Privileges",
     "PANEL:TITLE:addForm": "Add user form",
     "PANEL:TITLE:editForm": "Edit user form",
 
@@ -46,6 +49,7 @@
     "PROPERTY:orgUnit": "Org Unit",
     "PROPERTY:vendor": "Vendor",
     "PROPERTY:gender": "Gender",
+    "PROPERTY:mobile": "Mobile phone numbers",
 
     "ACTIVE:true": "Yes",
     "ACTIVE:false": "No",
@@ -59,9 +63,16 @@
     "FORM:ERROR:addFailure": "Failed to add the user :-(",
     "FORM:ERROR:editFailure": "Failed to edit the user :-(",
     "FORM:HELP:password": "Enter a new password only if you want to change the current password.",
+    "FORM:mobile:from": "available from",
+    "FORM:mobile:to": "to",
+    "FORM:mobile:empty": "No mobile numbers defined.",
+    "FORM:mobile:item": "{number} from {fromTime} to {toTime}",
     "NO_DATA:aors": "All",
     "NO_DATA:company": "Unspecified",
     "NO_DATA:prodFunction": "Unspecified",
+    "NO_DATA:vendor": "All",
+
+    "DETAILS:mobile:item": "{number} from {fromTime} to {toTime}",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "User deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete user",
