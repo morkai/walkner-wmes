@@ -39,6 +39,7 @@ exports.DEFAULT_CONFIG = {
     path: '/',
     httpOnly: true
   },
+  sessionStore: {},
   cookieSecret: null,
   ejsAmdHelpers: {},
   title: 'express',
@@ -63,7 +64,7 @@ exports.start = function startExpressModule(app, expressModule, done)
   expressModule.crud = crud;
 
   expressModule.sessionStore = mongoose
-    ? new MongoStore(mongoose.connection.db)
+    ? new MongoStore(mongoose.connection.db, config.sessionStore)
     : session ? new session.MemoryStore() : null;
 
   expressModule.router = express.Router();

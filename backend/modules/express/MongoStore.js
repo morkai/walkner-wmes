@@ -47,6 +47,12 @@ function MongoStore(db, options)
 
   /**
    * @private
+   * @type {number}
+   */
+  this.touchChance = options.touchChance || MongoStore.Options.touchChance;
+
+  /**
+   * @private
    * @type {number|null}
    */
   this.gcTimer = null;
@@ -97,10 +103,28 @@ MongoStore.Options = {
   /**
    * @type {number}
    */
-  defaultExpirationTime: 3600 * 24 * 14
+  defaultExpirationTime: 3600 * 24 * 14,
+
+  /**
+   * @type {number}
+   */
+  touchChance: 0.25
 };
 
 util.inherits(MongoStore, Store);
+
+MongoStore.prototype.touch = function(sid, session, done)
+{
+  if (Math.random() > this.touchChance)
+  {
+    return done(null);
+  }
+
+  var sessions = this.collection();
+  var expires = Date.parse(session.cookie.expires) || (Date.now() + this.defaultExpirationTime);
+
+  sessions.update({_id: sid}, {$set: {expires: expires}}, done);
+};
 
 /**
  * @param {string} sid

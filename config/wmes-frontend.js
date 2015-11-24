@@ -208,6 +208,9 @@ exports.express = {
     path: '/',
     maxAge: null
   },
+  sessionStore: {
+    touchChance: 0.20
+  },
   cookieSecret: '1ee7\\/\\/mes',
   ejsAmdHelpers: {
     t: 'app/i18n'
