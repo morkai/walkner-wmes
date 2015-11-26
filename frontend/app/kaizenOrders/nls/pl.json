@@ -215,7 +215,7 @@
   "report:series:summary:cancelled": "Anulowane",
   "report:filenames:summary:averageDuration": "ZPW_SredniaIloscDniRealizacji",
   "report:filenames:summary:count": "ZPW_IloscWTygodniach",
-  "report:filenames:summary:nearMissOwners": "ZPW_IloscSZpwWgPracownikow",
+  "report:filenames:summary:nearMissOwners": "ZPW_IloscWgPracownikow",
 
   "thanks:message": "Dziękujemy za zgłoszenie!",
   "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)"

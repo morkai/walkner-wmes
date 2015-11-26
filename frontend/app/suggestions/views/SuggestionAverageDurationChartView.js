@@ -72,16 +72,18 @@ define([
 
     createChart: function()
     {
+      var nlsDomain = this.model.getNlsDomain();
+
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
           plotBorderWidth: 1
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:summary:averageDuration'),
+          filename: t.bound(nlsDomain, 'report:filenames:summary:averageDuration'),
           chartOptions: {
             title: {
-              text: t.bound('suggestions', 'report:title:summary:averageDuration')
+              text: t.bound(nlsDomain, 'report:title:summary:averageDuration')
             }
           }
         },

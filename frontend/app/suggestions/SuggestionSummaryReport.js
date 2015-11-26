@@ -19,6 +19,8 @@ define([
 
     urlRoot: '/suggestions/reports/summary',
 
+    nlsDomain: 'suggestions',
+
     defaults: function()
     {
       return {

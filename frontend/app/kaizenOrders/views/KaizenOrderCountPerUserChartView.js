@@ -70,17 +70,25 @@ define([
     {
       var series = this.serializeSeries();
       var dataPointCount = series[0].data.length;
+      var height = 150 + series.length * 20 * dataPointCount;
+      var metric = this.options.metric;
 
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
           plotBorderWidth: 1,
           spacing: [10, 1, 1, 0],
-          height: 150 + series.length * 20 * dataPointCount,
+          height: height,
           type: 'bar'
         },
         exporting: {
-          filename: t.bound('kaizenOrders', 'report:filenames:' + this.options.metric)
+          filename: t.bound('kaizenOrders', 'report:filenames:' + metric),
+          chartOptions: {
+            title: {
+              text: t.bound('kaizenOrders', 'report:title:' + metric)
+            }
+          },
+          sourceHeight: height
         },
         title: false,
         noData: {},

@@ -146,7 +146,13 @@ define([
           typeSeries.kaizen.data.push({x: x, y: group.type.kaizen || null});
         }
 
-        _.forEach(TABLE_AND_CHART_METRICS, function(metric) { model.createSeriesFromRows(metric, attrs, group); });
+        _.forEach(TABLE_AND_CHART_METRICS, function(metric)
+        {
+          if (metric !== 'type')
+          {
+            model.createSeriesFromRows(metric, attrs, group);
+          }
+        });
       }, this);
 
       return attrs;

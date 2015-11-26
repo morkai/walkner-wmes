@@ -19,6 +19,8 @@ define([
 
     urlRoot: '/kaizen/reports/summary',
 
+    nlsDomain: 'kaizenOrders',
+
     defaults: function()
     {
       return {

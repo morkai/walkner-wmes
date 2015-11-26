@@ -273,23 +273,30 @@ define([
   {
     /*jshint validthis:true*/
 
-    var chartType = this.series.chart.options.chart.type;
+    var series = this.series;
+    var chartOptions = series.chart.options;
+    var chartType = chartOptions.chart.type;
 
-    if (this.y === null || (this.y === 0 && chartType !== 'pie'))
+    if (chartOptions.exporting.noDataLabels
+      || this.y === null
+      || (this.y === 0 && chartType !== 'pie'))
     {
       return '';
     }
 
-    if (this.series.type !== 'column'
-      && this.series.type !== 'pie'
-      && this.series.points.length > 10)
+    var seriesType = series.type;
+
+    if (seriesType !== 'column'
+      && seriesType !== 'bar'
+      && seriesType !== 'pie'
+      && series.points.length > 10)
     {
-      if (this.series.index % 2 === 0 && this.point.index % 2 !== 0)
+      if (series.index % 2 === 0 && this.point.index % 2 !== 0)
       {
         return '';
       }
 
-      if (this.series.index % 2 !== 0 && this.point.index % 2 === 0)
+      if (series.index % 2 !== 0 && this.point.index % 2 === 0)
       {
         return '';
       }

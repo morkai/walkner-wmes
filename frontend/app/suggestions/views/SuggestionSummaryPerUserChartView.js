@@ -70,16 +70,25 @@ define([
     {
       var series = this.serializeSeries();
       var dataPointCount = series[0].data.length;
+      var nlsDomain = this.model.getNlsDomain();
+      var metric = this.options.metric;
+      var height = Math.max(400, 150 + 20 * dataPointCount);
 
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
           plotBorderWidth: 1,
-          height: Math.max(400, 150 + 20 * dataPointCount),
+          height: height,
           type: 'bar'
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:summary:' + this.options.metric)
+          filename: t.bound(nlsDomain, 'report:filenames:summary:' + metric),
+          chartOptions: {
+            title: {
+              text: t.bound(nlsDomain, 'report:title:summary:' + metric)
+            }
+          },
+          sourceHeight: height
         },
         title: false,
         noData: {},

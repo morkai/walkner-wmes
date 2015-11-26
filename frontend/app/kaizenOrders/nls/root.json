@@ -216,7 +216,7 @@
     "report:series:summary:cancelled": "Cancelled",
     "report:filenames:summary:averageDuration": "NR_AvgImplDays",
     "report:filenames:summary:count": "NR_CountByWeek",
-    "report:filenames:summary:suggestionOwners": "NR_CountByOwners",
+    "report:filenames:summary:nearMissOwners": "NR_CountByOwners",
 
     "thanks:message": "Thanks for the entry!",
     "thanks:footnote": "(click any button or key to close this window)"

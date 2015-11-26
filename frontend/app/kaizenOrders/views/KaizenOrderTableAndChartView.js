@@ -27,10 +27,6 @@ define([
 
     template: template,
 
-    events: {
-
-    },
-
     initialize: function()
     {
       this.chart = null;
@@ -84,6 +80,9 @@ define([
 
     createChart: function()
     {
+      var metric = this.options.metric;
+      var series = this.serializeChartSeries();
+
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.$id('chart')[0],
@@ -91,12 +90,21 @@ define([
           spacing: [10, 1, 1, 0]
         },
         exporting: {
-          filename: t.bound('kaizenOrders', 'report:filenames:' + this.options.metric),
+          filename: t.bound('kaizenOrders', 'report:filenames:' + metric),
+          chartOptions: {
+            title: {
+              text: t.bound('kaizenOrders', 'report:title:' + metric)
+            },
+            legend: {
+              enabled: true
+            }
+          },
           buttons: {
             contextButton: {
               align: 'left'
             }
-          }
+          },
+          noDataLabels: series.length * series[0].data.length > 30
         },
         title: false,
         noData: {},
@@ -122,7 +130,7 @@ define([
             borderWidth: 0
           }
         },
-        series: this.serializeChartSeries()
+        series: series
       });
     },
 

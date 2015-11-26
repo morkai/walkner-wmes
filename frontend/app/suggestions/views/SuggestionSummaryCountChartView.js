@@ -73,6 +73,7 @@ define([
     createChart: function()
     {
       var count = this.model.get('count');
+      var nlsDomain = this.model.getNlsDomain();
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -81,10 +82,10 @@ define([
           type: 'column'
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:summary:count'),
+          filename: t.bound(nlsDomain, 'report:filenames:summary:count'),
           chartOptions: {
             title: {
-              text: t.bound('suggestions', 'report:title:summary:count')
+              text: t.bound(nlsDomain, 'report:title:summary:count')
             }
           }
         },

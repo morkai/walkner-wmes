@@ -69,18 +69,26 @@ define([
     createChart: function()
     {
       var series = this.serializeSeries();
+      var metric = this.options.metric;
       var dataPointCount = series[0].data.length;
+      var height = 150 + series.length * 20 * dataPointCount;
 
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
           plotBorderWidth: 1,
           spacing: [10, 1, 1, 0],
-          height: 150 + series.length * 20 * dataPointCount,
+          height: height,
           type: 'bar'
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:' + this.options.metric)
+          filename: t.bound('suggestions', 'report:filenames:' + metric),
+          chartOptions: {
+            title: {
+              text: t.bound('suggestions', 'report:title:' + metric)
+            }
+          },
+          sourceHeight: height
         },
         title: false,
         noData: {},

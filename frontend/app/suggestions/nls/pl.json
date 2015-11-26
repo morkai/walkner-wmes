@@ -165,7 +165,7 @@
   "report:series:cancelled": "Anulowane",
   "report:series:finished": "Zakończone",
   "report:series:paused": "Wstrzymane",
-  "report:filenames:type": "SUG_Ilosc",
+  "report:filenames:total": "SUG_Ilosc",
   "report:filenames:status": "SUG_IloscWgStatusow",
   "report:filenames:section": "SUG_IloscWgDzialow",
   "report:filenames:productFamily": "SUG_IloscWgRodzinProduktow",
