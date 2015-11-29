@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["../core/Collection","./Suggestion"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"exclude(changes)&limit(15)&sort(-date)"})});
+define(["app/core/pages/FilteredListPage","../views/ProdDowntimeAlertFilterView","../views/ProdDowntimeAlertListView"],function(e,i,t){"use strict";return e.extend({baseBreadcrumb:"#prodDowntimes",FilterView:i,ListView:t})});

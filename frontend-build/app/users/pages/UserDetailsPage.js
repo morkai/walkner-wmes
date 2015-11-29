@@ -2,4 +2,4 @@
 // Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
-define(["app/i18n","app/user","app/core/util/pageActions","app/core/pages/DetailsPage","../views/UserDetailsView"],function(e,i,t,s,n){"use strict";return s.extend({DetailsView:n,actions:function(){var s=this.model,n=[],a=i.isAllowedTo("USERS:MANAGE");return a?n.push(t.edit(s,!1),t["delete"](s,!1)):i.data._id===s.id&&n.push({label:e.bound("users","PAGE_ACTION:editAccount"),icon:"edit",href:s.genClientUrl("edit")}),n}})});
+define(["app/i18n","app/user","app/core/util/pageActions","app/core/pages/DetailsPage","../views/UserDetailsView"],function(e,t,i,s,n){"use strict";return s.extend({DetailsView:n,breadcrumbs:function(){return t.isAllowedTo("USERS:VIEW")?s.prototype.breadcrumbs.call(this):[e.bound("users","BREADCRUMBS:myAccount")]},actions:function(){var s=this.model,n=[],r=t.isAllowedTo("USERS:MANAGE");return r?n.push(i.edit(s,!1),i["delete"](s,!1)):t.data._id===s.id&&n.push({label:e.bound("users","PAGE_ACTION:editAccount"),icon:"edit",href:s.genClientUrl("edit")}),n}})});

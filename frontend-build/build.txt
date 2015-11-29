@@ -209,6 +209,15 @@ app/prodChangeRequests/assets/main.css
 ----------------
 app/prodChangeRequests/assets/main.css
 
+app/prodDowntimeAlerts/assets/form.css
+----------------
+app/prodDowntimeAlerts/assets/form.css
+
+app/prodDowntimeAlerts/assets/main.css
+----------------
+app/prodDowntimeAlerts/assets/./form.css
+app/prodDowntimeAlerts/assets/main.css
+
 app/prodDowntimes/assets/main.css
 ----------------
 app/prodDowntimes/assets/main.css
