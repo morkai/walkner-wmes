@@ -153,7 +153,7 @@ exports.httpsServer = {
 };
 
 exports.pubsub = {
-  statsPublishInterval: 10000,
+  statsPublishInterval: 60000,
   republishTopics: [
     'events.saved',
     '*.added', '*.edited', '*.deleted', '*.synced',
