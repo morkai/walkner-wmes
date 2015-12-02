@@ -72,6 +72,9 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   express.delete('/prodDowntimes/:id', canManage, deleteProdDowntimeRoute);
 
+  express.get('/r/downtimes/:filter', redirectToListRoute);
+  express.get('/r/downtime/:rid', redirectToDetailsRoute);
+
   function findByRidRoute(req, res, next)
   {
     var rid = parseInt(req.query.rid, 10);
@@ -354,6 +357,36 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
       }
 
       res.send(logEntry.data);
+    });
+  }
+
+  function redirectToListRoute(req, res)
+  {
+    var url = '/#prodDowntimes';
+
+    if (req.params.filter === 'alerts')
+    {
+      url += ';alerts';
+    }
+
+    res.redirect(url);
+  }
+
+  function redirectToDetailsRoute(req, res, next)
+  {
+    ProdDowntime.findOne({rid: parseInt(req.params.rid, 10)}, {_id: 1}).lean().exec(function(err, prodDowntime)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (prodDowntime)
+      {
+        return res.redirect('/#prodDowntimes/' + prodDowntime._id);
+      }
+
+      return res.sendStatus(404);
     });
   }
 };

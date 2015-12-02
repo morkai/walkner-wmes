@@ -10,7 +10,8 @@
   "MSG:jump:404": "Nie znaleziono przestoju o ID <em>{rid}</em> :(",
 
   "PAGE_ACTION:export": "Eksportuj przestoje",
-  "PAGE_ACTION:settings": "Zmień ustawienia",
+  "PAGE_ACTION:settings": "Ustawienia",
+  "PAGE_ACTION:alerts": "Alarmy",
   "PAGE_ACTION:edit": "Edytuj przestój",
   "PAGE_ACTION:delete": "Usuń przestój",
   "PAGE_ACTION:comment": "Komentuj przestój",
@@ -46,6 +47,7 @@
   "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas zakończenia",
   "PROPERTY:status": "Status",
+  "PROPERTY:status:alert": "Aktywny alarm",
   "PROPERTY:status:undecided": "Niepotwierdzony",
   "PROPERTY:status:confirmed": "Potwierdzony",
   "PROPERTY:status:rejected": "Odrzucony",
@@ -115,6 +117,10 @@
   "changeRequest:msg:success:delete": "Żądanie usunięcia przestoju zostało utworzone.",
   "changeRequest:msg:failure:add": "Nie udało się stworzyć żądania dodania nowego przestoju :-(",
   "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji przestoju :-(",
-  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia przestoju :-("
+  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia przestoju :-(",
 
+  "comments:alerts:start": "Rozpoczęto alarm: {alertName}. Wysłano {recipientCount, plural, one{powiadomienie do 1 użytkownika} other{powiadomienia do {recipientCount} użytkowników}}: {recipientList}",
+  "comments:alerts:start:0": "Rozpoczęto alarm: {alertName}.",
+  "comments:alerts:notify": "Wysłano {recipientCount, plural, one{powiadomienie do 1 użytkownika} other{powiadomienia do {recipientCount} użytkowników}} z powodu alarmu {alertName}: {recipientList}",
+  "comments:alerts:finish": "Zakończono alarm: {alertName}"
 }

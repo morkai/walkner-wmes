@@ -33,6 +33,12 @@
   </div>
   <div class="form-group">
     <label class="control-label"><%- t('prodDowntimes', 'PROPERTY:status') %></label>
+    <div class="checkbox">
+      <label>
+        <input id="<%- idPrefix %>-alerts" type="checkbox" name="alerts" value="1">
+        <%- t('prodDowntimes', 'PROPERTY:status:alert') %>
+      </label>
+    </div>
     <% ['undecided', 'rejected', 'confirmed'].forEach(function(status) { %>
     <div class="checkbox">
       <label>

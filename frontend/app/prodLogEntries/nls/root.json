@@ -39,6 +39,8 @@
     "type:addShift": "Shift addition",
     "type:addOrder": "Order addition",
     "type:addDowntime": "Downtime addition",
+    "type:notifyDowntimeAlert": "Downtime notification",
+    "type:finishDowntimeAlert": "Downtime alert finish",
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:addShift": "Shift <em>{shift}</em> on <em>{date}</em>",
@@ -63,6 +65,8 @@
     "data:deleteShift": "-",
     "data:deleteDowntime": "Deleted downtime <em>{rid}</em>",
     "data:deleteOrder": "Deleted order <em>{orderId}; {operationNo}</em>",
+    "data:notifyDowntimeAlert": "Sent notifications about <a href='\\#prodDowntimes/{downtimeId}'>downtime</a> as a part of alert: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
+    "data:finishDowntimeAlert": "Finished <a href='\\#prodDowntimes/{downtimeId}'>downtime</a> alert: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
 
     "noData:prodShiftOrder": "<em>no order</em>"
   },

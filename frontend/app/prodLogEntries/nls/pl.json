@@ -38,6 +38,8 @@
   "type:addShift": "Dodanie zmiany",
   "type:addOrder": "Dodanie zlecenia",
   "type:addDowntime": "Dodanie przestoju",
+  "type:notifyDowntimeAlert": "Powiadomienie o przestoju",
+  "type:finishDowntimeAlert": "Zakończenie alarmu",
 
   "data:changeShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
   "data:addShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
@@ -62,6 +64,8 @@
   "data:deleteShift": "-",
   "data:deleteDowntime": "Usunięto przestój <em>{rid}</em>.",
   "data:deleteOrder": "Usunięto zlecenie {orderId}; {operationNo}</em>.",
+  "data:notifyDowntimeAlert": "Wysłano powiadomienia o <a href='\\#prodDowntimes/{downtimeId}'>przestoju</a> w ramach alarmu: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
+  "data:finishDowntimeAlert": "Zakończono alarm <a href='\\#prodDowntimes/{downtimeId}'>przestoju</a>: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
 
   "noData:prodShiftOrder": "<em>brak zlecenia</em>"
 }

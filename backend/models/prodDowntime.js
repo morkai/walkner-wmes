@@ -9,7 +9,7 @@ var autoIncrement = require('mongoose-auto-increment');
 
 module.exports = function setupProdDowntimeModel(app, mongoose)
 {
-  var prodDowntimeChangeSchema = mongoose.Schema({
+  var changeSchema = mongoose.Schema({
     date: Date,
     user: {},
     data: {},
@@ -17,6 +17,15 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
   }, {
     _id: false,
     minimize: false
+  });
+
+  var alertSchema = mongoose.Schema({
+    _id: String,
+    name: String,
+    action: Number,
+    active: Boolean
+  }, {
+    _id: false
   });
 
   var prodDowntimeSchema = mongoose.Schema({
@@ -125,13 +134,14 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       type: String,
       default: null
     },
-    changes: [prodDowntimeChangeSchema],
+    changes: [changeSchema],
     updatedAt: Date,
     changesCount: {},
     workerCount: {
       type: Number,
       default: 1
-    }
+    },
+    alerts: [alertSchema]
   }, {
     id: false
   });
@@ -147,6 +157,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
   prodDowntimeSchema.index({prodShift: 1});
   prodDowntimeSchema.index({pressWorksheet: 1});
   prodDowntimeSchema.index({startedAt: -1});
+  prodDowntimeSchema.index({finishedAt: -1});
   prodDowntimeSchema.index({status: 1, startedAt: -1});
   prodDowntimeSchema.index({reason: 1, startedAt: -1});
   prodDowntimeSchema.index({aor: 1, startedAt: -1});
@@ -157,13 +168,13 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
   prodDowntimeSchema.index({workCenter: 1, startedAt: -1});
   prodDowntimeSchema.index({prodLine: 1, startedAt: -1});
   prodDowntimeSchema.index({updatedAt: 1, status: 1});
+  prodDowntimeSchema.index({'alerts.active': 1});
 
   prodDowntimeSchema.statics.TOPIC_PREFIX = 'prodDowntimes';
 
   prodDowntimeSchema.pre('save', function(next)
   {
     this.updatedAt = new Date();
-
     this._wasNew = this.isNew;
 
     if (this._wasNew)

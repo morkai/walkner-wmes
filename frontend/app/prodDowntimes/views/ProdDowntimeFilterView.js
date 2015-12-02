@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/user',
   'app/data/aors',
   'app/data/orgUnits',
@@ -11,6 +12,7 @@ define([
   'app/core/util/fixTimeRange',
   'app/prodDowntimes/templates/filter'
 ], function(
+  _,
   user,
   aors,
   orgUnits,
@@ -25,6 +27,12 @@ define([
 
     template: filterTemplate,
 
+    events: _.extend({}, FilterView.prototype.events, {
+
+      'change #-alerts': 'toggleStatus'
+
+    }),
+
     defaultFormData: function()
     {
       return {
@@ -33,7 +41,7 @@ define([
         aorIn: true,
         reason: null,
         reasonIn: true,
-        status: ['undecided', 'confirmed', 'rejected'],
+        status: ['undecided', 'rejected'],
         orgUnit: null
       };
     },
@@ -63,6 +71,10 @@ define([
       'division': function(propertyName, term, formData)
       {
         formData.orgUnit = term.args[1];
+      },
+      'alerts.active': function(propertyName, term, formData)
+      {
+        formData.alerts = true;
       },
       'reason': 'aor',
       'subdivision': 'division',
@@ -123,6 +135,8 @@ define([
             return a.id.localeCompare(b.id);
           })
       });
+
+      this.toggleStatus();
     },
 
     getApplicableOrgUnits: function()
@@ -209,9 +223,14 @@ define([
       var aorIn = this.$id('aorIn').prop('checked');
       var reason = this.$id('reason').select2('val');
       var reasonIn = this.$id('reasonIn').prop('checked');
+      var alerts = this.$id('alerts').prop('checked');
       var status = this.fixStatus();
 
-      if (status.length === 1)
+      if (alerts)
+      {
+        selector.push({name: 'eq', args: ['alerts.active', true]});
+      }
+      else if (status.length === 1)
       {
         selector.push({name: 'eq', args: ['status', status[0]]});
       }
@@ -267,6 +286,11 @@ define([
       var selectedStatuses = $activeStatuses.map(function() { return this.value; }).get();
 
       return selectedStatuses.length === $allStatuses.length ? [] : selectedStatuses;
+    },
+
+    toggleStatus: function()
+    {
+      this.$('[name="status[]"]').prop('disabled', this.$id('alerts').prop('checked'));
     }
 
   });

@@ -12,7 +12,8 @@
     "MSG:jump:404": "Couldn't find a downtime with ID <em>{rid}</em> :(",
 
     "PAGE_ACTION:export": "Export downtimes",
-    "PAGE_ACTION:settings": "Change settings",
+    "PAGE_ACTION:settings": "Settings",
+    "PAGE_ACTION:alerts": "Alerts",
     "PAGE_ACTION:edit": "Edit downtime",
     "PAGE_ACTION:delete": "Delete downtime",
     "PAGE_ACTION:comment": "Comment downtime",
@@ -48,6 +49,7 @@
     "PROPERTY:startedAt": "Started at",
     "PROPERTY:finishedAt": "Finished at",
     "PROPERTY:status": "Status",
+    "PROPERTY:status:alert": "Active alert",
     "PROPERTY:status:undecided": "Undecided",
     "PROPERTY:status:confirmed": "Confirmed",
     "PROPERTY:status:rejected": "Rejected",
@@ -118,7 +120,12 @@
     "changeRequest:msg:success:delete": "Downtime deletion request was created successfully.",
     "changeRequest:msg:failure:add": "Failed to create a new downtime creation request :-(",
     "changeRequest:msg:failure:edit": "Failed to create a new downtime modification request :-(",
-    "changeRequest:msg:failure:delete": "Failed to create a new downtime deletion request :-("
+    "changeRequest:msg:failure:delete": "Failed to create a new downtime deletion request :-(",
+
+    "comments:alerts:start": "Alert started: {alertName}. Sent {recipientCount, plural, one{a notification to 1 user} other{notifications to {recipientCount} users}}: {recipientList}",
+    "comments:alerts:start:0": "Alert started: {alertName}.",
+    "comments:alerts:notify": "Sent {recipientCount, plural, one{a notification to 1 user} other{notifications to {recipientCount} users}} due to an alert {alertName}: {recipientList}",
+    "comments:alerts:finish": "Alert finished: {alertName}"
   },
   "pl": true
 }

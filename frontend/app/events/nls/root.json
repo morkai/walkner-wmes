@@ -279,7 +279,13 @@
     "TYPE:opinionSurveys.scanTemplates.edited": "Opinion survey > Templates: edited",
     "TEXT:opinionSurveys.scanTemplates.edited": "Edited a scan template: <a href='\\#opinionSurveyScanTemplates/{model->_id}'>{model->name}</a>",
     "TYPE:opinionSurveys.scanTemplates.deleted": "Opinion survey > Templates: deleted",
-    "TEXT:opinionSurveys.scanTemplates.deleted": "Deleted a scan template: <em>{model->name}</em>"
+    "TEXT:opinionSurveys.scanTemplates.deleted": "Deleted a scan template: <em>{model->name}</em>",
+    "TYPE:prodDowntimeAlerts.added": "Downtimes > Alerts: added",
+    "TEXT:prodDowntimeAlerts.added": "Added alert: <a href='\\#prodDowntimeAlerts/{model->_id}'>{model->name}</a>",
+    "TYPE:prodDowntimeAlerts.edited": "Downtimes > Alerts: edited",
+    "TEXT:prodDowntimeAlerts.edited": "Edited alert: <a href='\\#prodDowntimeAlerts/{model->_id}'>{model->name}</a>",
+    "TYPE:prodDowntimeAlerts.deleted": "Downtimes > Alerts: deleted",
+    "TEXT:prodDowntimeAlerts.deleted": "Deleted alert: <em>{model->name}</em>"
   },
   "pl": true
 }

@@ -278,5 +278,11 @@
   "TYPE:opinionSurveys.scanTemplates.edited": "Badanie Opinia > Szablony: edycja",
   "TEXT:opinionSurveys.scanTemplates.edited": "Zmodyfikowano szablon skanowania: <a href='\\#opinionSurveyScanTemplates/{model->_id}'>{model->name}</a>",
   "TYPE:opinionSurveys.scanTemplates.deleted": "Badanie Opinia > Szablony: usunięcie",
-  "TEXT:opinionSurveys.scanTemplates.deleted": "Usunięto szablon skanowania: <em>{model->name}</em>"
+  "TEXT:opinionSurveys.scanTemplates.deleted": "Usunięto szablon skanowania: <em>{model->name}</em>",
+  "TYPE:prodDowntimeAlerts.added": "Przestoje > Alarmy: dodanie",
+  "TEXT:prodDowntimeAlerts.added": "Dodano alarm: <a href='\\#prodDowntimeAlerts/{model->_id}'>{model->name}</a>",
+  "TYPE:prodDowntimeAlerts.edited": "Przestoje > Alarmy: edycja",
+  "TEXT:prodDowntimeAlerts.edited": "Zmodyfikowano alarm: <a href='\\#prodDowntimeAlerts/{model->_id}'>{model->name}</a>",
+  "TYPE:prodDowntimeAlerts.deleted": "Przestoje > Alarmy: usunięcie",
+  "TEXT:prodDowntimeAlerts.deleted": "Usunięto alarm: <em>{model->name}</em>"
 }

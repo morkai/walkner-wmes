@@ -19,6 +19,35 @@ define([
 ) {
   'use strict';
 
+  var SPECIAL_CHANGES = {
+    'WMES:ALERTS:START': function(data)
+    {
+      var alert = data.alert;
+
+      return t('prodDowntimes', 'comments:alerts:start', {
+        alertName: alert.name,
+        recipientCount: alert.recipients.length,
+        recipientList: alert.recipients.join(', ')
+      });
+    },
+    'WMES:ALERTS:NOTIFY': function(data)
+    {
+      var alert = data.alert;
+
+      return t('prodDowntimes', 'comments:alerts:notify', {
+        alertName: alert.name,
+        recipientCount: alert.recipients.length,
+        recipientList: alert.recipients.join(', ')
+      });
+    },
+    'WMES:ALERTS:FINISH': function(data)
+    {
+      return t('prodDowntimes', 'comments:alerts:finish', {
+        alertName: data.alert.name
+      });
+    }
+  };
+
   function formatValue(property, value)
   {
     switch (property)
@@ -56,10 +85,12 @@ define([
 
   return function decorateProdDowntimeChange(change)
   {
+    var special = /^WMES:/.test(change.comment) ? SPECIAL_CHANGES[change.comment] : null;
+
     return {
       time: time.toTagData(change.date),
       user: renderUserInfo({userInfo: change.user}),
-      changes: _.map(change.data, function(values, property)
+      changes: special ? [] : _.map(change.data, function(values, property)
       {
         return {
           label: t('prodDowntimes', 'PROPERTY:' + property),
@@ -67,7 +98,7 @@ define([
           newValue: formatValue(property, values[1])
         };
       }),
-      comment: change.comment.trim()
+      comment: special ? special(change.data) : change.comment.trim()
     };
   };
 });

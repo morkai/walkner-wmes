@@ -171,7 +171,7 @@ define([
       /*jshint unused:false*/
     },
 
-    serializeRegexTerm: function(selector, property, maxLength, replaceRe)
+    serializeRegexTerm: function(selector, property, maxLength, replaceRe, ignoreCase)
     {
       var $el = this.$id(property.replace(/\./g, '-'));
       var value = $el.val().trim();
@@ -188,14 +188,33 @@ define([
         value = null;
       }
 
-      if (value === null || value.length === maxLength)
+      var args = [property, value];
+
+      if (value === null || (!ignoreCase && value.length === maxLength))
       {
-        selector.push({name: 'eq', args: [property, value]});
+        selector.push({name: 'eq', args: args});
+
+        return;
       }
-      else if (value.length > 0)
+
+      if (value.length === 0)
       {
-        selector.push({name: 'regex', args: [property, value]});
+        return;
       }
+
+      if (ignoreCase)
+      {
+        args.push('i');
+      }
+
+      args[1] = args[1].replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+
+      if (value.length === maxLength)
+      {
+        args[1] = '^' + args[1] + '$';
+      }
+
+      selector.push({name: 'regex', args: args});
     }
 
   });

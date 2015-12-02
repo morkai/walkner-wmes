@@ -51,6 +51,7 @@ exports.modules = [
   'prodShiftOrders',
   'pressWorksheets',
   'prodChangeRequests',
+  'prodDowntimeAlerts',
   'reports',
   'xiconf',
   'warehouse',
@@ -69,6 +70,7 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-1'},
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-2'},
   {id: 'messenger/client', name: 'messenger/client:wmes-watchdog'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-alerts'},
   'httpServer',
   'sio'
 ];
@@ -133,7 +135,8 @@ exports.events = {
     'suggestions.added', 'suggestions.edited',
     'opinionSurveys.responses.added',
     'opinionSurveys.omrResults.edited',
-    'opinionSurveys.actions.added','opinionSurveys.actions.edited'
+    'opinionSurveys.actions.added','opinionSurveys.actions.edited',
+    'prodDowntimeAlerts.added'
   ]
 };
 
@@ -185,6 +188,7 @@ exports.mongoose = {
     'orderDocumentClient', 'orderDocumentStatus',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet', 'prodChangeRequest',
+    'prodDowntimeAlert',
     'feedback',
     'license', 'licensePing',
     'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfOrder', 'xiconfClient',
@@ -240,7 +244,8 @@ exports.user = {
     'SUGGESTIONS:MANAGE',
     'OPERATOR:ACTIVATE',
     'DOCUMENTS:ACTIVATE', 'DOCUMENTS:VIEW', 'DOCUMENTS:MANAGE',
-    'OPINION_SURVEYS:MANAGE'
+    'OPINION_SURVEYS:MANAGE',
+    'PROD_DOWNTIME_ALERTS:VIEW', 'PROD_DOWNTIME_ALERTS:MANAGE'
   ]
 };
 
@@ -302,6 +307,14 @@ exports['messenger/client:wmes-watchdog'] = {
   pubPort: 60070,
   repHost: '127.0.0.1',
   repPort: 60071,
+  responseTimeout: 5000
+};
+
+exports['messenger/client:wmes-alerts'] = {
+  pubHost: '127.0.0.1',
+  pubPort: 60080,
+  repHost: '127.0.0.1',
+  repPort: 60081,
   responseTimeout: 5000
 };
 
@@ -388,4 +401,9 @@ exports['directoryWatcher:opinionSurveys'] = {
   path: exports.opinionSurveys.inputPath,
   delay: 30 * 1000,
   maxDelay: 120 * 1000
+};
+
+exports.prodDowntimeAlerts = {
+  messengerServerId: null,
+  messengerClientId: 'messenger/client:wmes-alerts'
 };

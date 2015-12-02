@@ -3,6 +3,7 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../broker',
   '../router',
   '../viewport',
   '../user',
@@ -14,6 +15,7 @@ define([
   './pages/ProdDowntimeEditFormPage',
   'i18n!app/nls/prodDowntimes'
 ], function(
+  broker,
   router,
   viewport,
   user,
@@ -36,6 +38,26 @@ define([
         rqlQuery: req.rql
       })
     }));
+  });
+
+  router.map('/prodDowntimes;alerts', function()
+  {
+    var collection = new ProdDowntimeCollection();
+
+    collection.rqlQuery.selector.args.forEach(function(term)
+    {
+      if (term.name === 'in' && term.args[0] === 'status')
+      {
+        term.name = 'eq';
+        term.args = ['alerts.active', true];
+      }
+    });
+
+    broker.publish('router.navigate', {
+      url: '#prodDowntimes?' + collection.rqlQuery,
+      trigger: true,
+      replace: true
+    });
   });
 
   router.map('/prodDowntimes/:id', function(req)

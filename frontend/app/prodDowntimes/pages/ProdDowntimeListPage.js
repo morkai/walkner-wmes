@@ -49,6 +49,12 @@ define([
           icon: 'cogs',
           privileges: 'PROD_DATA:MANAGE',
           href: '#prodDowntimes;settings'
+        },
+        {
+          label: t.bound('prodDowntimes', 'PAGE_ACTION:alerts'),
+          icon: 'bell',
+          privileges: 'PROD_DOWNTIME_ALERTS:VIEW',
+          href: '#prodDowntimeAlerts'
         }
       ];
     },

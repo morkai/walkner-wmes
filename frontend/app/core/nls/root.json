@@ -111,6 +111,7 @@
     "NAVBAR:PROD:SHIFTS": "Shifts",
     "NAVBAR:PROD:SHIFT_ORDERS": "Orders",
     "NAVBAR:PROD:DOWNTIMES": "Downtimes",
+    "NAVBAR:PROD:ALERTS": "Alerts",
     "NAVBAR:PROD:CHANGE_REQUESTS": "Change requests",
     "NAVBAR:PROGRAMMING": "Programming",
     "NAVBAR:XICONF": "Xiconf <em>(MultiOne)</em>",

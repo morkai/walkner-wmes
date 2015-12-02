@@ -27,3 +27,5 @@ exports.endWork = require('./endWork');
 exports.finishDowntime = require('./finishDowntime');
 exports.finishOrder = require('./finishOrder');
 exports.startDowntime = require('./startDowntime');
+exports.notifyDowntimeAlert = require('./notifyDowntimeAlert');
+exports.finishDowntimeAlert = require('./finishDowntimeAlert');

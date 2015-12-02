@@ -100,6 +100,8 @@
     "PRIVILEGE:PROD_DOWNTIMES:VIEW": "Downtimes: view",
     "PRIVILEGE:PROD_DOWNTIMES:MANAGE": "Downtimes: corroboration",
     "PRIVILEGE:PROD_DOWNTIMES:ALL": "Downtimes: access to all divisions",
+    "PRIVILEGE:PROD_DOWNTIME_ALERTS:VIEW": "Alerts: view",
+    "PRIVILEGE:PROD_DOWNTIME_ALERTS:MANAGE": "Alerts: manage",
     "PRIVILEGE:PRESS_WORKSHEETS:VIEW": "Worksheets: view",
     "PRIVILEGE:PRESS_WORKSHEETS:MANAGE": "Worksheets: manage",
     "PRIVILEGE:PROD_DATA:VIEW": "Production data: view",

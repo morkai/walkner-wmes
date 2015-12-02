@@ -241,6 +241,7 @@ kbd {
   position: absolute;
   top: 3px;
   right: 3px;
+  font-weight: normal;
 }
 .panel > .btn-toolbar {
   margin: 0;

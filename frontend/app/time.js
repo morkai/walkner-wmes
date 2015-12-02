@@ -118,7 +118,7 @@ define([
    */
   time.toString = function(time, compact, ms)
   {
-    if (typeof time !== 'number' || time <= 0)
+    if (typeof time !== 'number' || time <= 0 || isNaN(time))
     {
       return compact ? '00:00:00' : '0s';
     }
