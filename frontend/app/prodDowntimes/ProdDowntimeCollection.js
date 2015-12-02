@@ -39,7 +39,7 @@ define([
         },
         {
           name: 'ge',
-          args: ['startedAt', time.getMoment().subtract(1, 'month').startOf('day').hours(6).valueOf()]
+          args: ['startedAt', time.getMoment().subtract(1, 'week').startOf('day').hours(6).valueOf()]
         }
       ];
 
