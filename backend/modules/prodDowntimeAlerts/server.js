@@ -276,7 +276,7 @@ module.exports = function setUpAlertsServer(app, module)
       return;
     }
 
-    downtime.duration = Math.max(1, (Date.now() - downtime.startedAt) / 1000);
+    downtime.duration = Math.max(0, (Date.now() - downtime.startedAt) / 1000);
 
     var anyActiveAlerts = false;
 
@@ -786,7 +786,7 @@ module.exports = function setUpAlertsServer(app, module)
       aor: null,
       division: downtime.division,
       prodLine: downtime.prodLine,
-      duration: Math.round(downtime.duration / 60)
+      duration: Math.min(1, Math.round(downtime.duration / 60))
     };
 
     step(
