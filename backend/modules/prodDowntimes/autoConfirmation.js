@@ -147,7 +147,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
           };
         });
 
-        this.lastProdLogEntryId = _.last(prodLogEntries)._id;
+        this.prodLogEntryIds = _.pluck(prodLogEntries, '_id');
 
         ProdLogEntry.collection.insert(prodLogEntries, this.next());
       },
@@ -166,13 +166,14 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
 
         if (this.count === MAX_BATCH_SIZE)
         {
-          var lastProdLogEntryId = this.lastProdLogEntryId;
+          var prodLogEntryIds = this.prodLogEntryIds;
+          this.prodLogEntryIds = null;
 
           app.broker.subscribe('production.logEntries.handled', confirmOldProdDowntimes)
             .setLimit(1)
             .setFilter(function(handledProdLogEntryIds)
             {
-              return _.includes(handledProdLogEntryIds, lastProdLogEntryId);
+              return _.without.apply(_, prodLogEntryIds, handledProdLogEntryIds).length === 0;
             });
         }
         else
