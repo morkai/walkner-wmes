@@ -150,6 +150,7 @@
   "FORM:help:correctiveMeasures": "Co zrobiono, aby usunąć <strong>skutek</strong> wystąpienia tego konkretnego zdarzenia.",
   "FORM:help:preventiveMeasures": "Co zrobiono, aby usunąć <strong>przyczynę</strong> występowania podobnych zdarzeń.",
   "FORM:help:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
+  "FORM:help:date:diff": "Wybrano datę będącą {days} dni w {dir, select, past{przeszłości} other{przyszłości}}.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zgłoszenia",
   "ACTION_FORM:BUTTON:delete": "Usuń zgłoszenie",

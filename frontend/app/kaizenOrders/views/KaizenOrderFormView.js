@@ -96,7 +96,33 @@ define([
         }
       },
 
-      'change [name="status"]': 'toggleRequiredToFinishFlags'
+      'change [name="status"]': 'toggleRequiredToFinishFlags',
+
+      'change [type="date"]': function(e)
+      {
+        var moment = time.getMoment(e.target.value, 'YYYY-MM-DD');
+        var days = moment.isValid() ? moment.diff(new Date(), 'days') : 0;
+        var daysAbs = Math.abs(days);
+        var $group = this.$(e.target).closest('.form-group');
+        var $help = $group.find('.help-block');
+
+        if (daysAbs <= 7)
+        {
+          $help.remove();
+
+          return;
+        }
+
+        if (!$help.length)
+        {
+          $help = $('<p class="help-block"></p>');
+        }
+
+        $help.text(t('kaizenOrders', 'FORM:help:date:diff', {
+          dir: days > 0 ? 'future' : 'past',
+          days: daysAbs
+        })).appendTo($group);
+      }
 
     }, FormView.prototype.events),
 
