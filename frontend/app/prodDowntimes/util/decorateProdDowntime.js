@@ -62,18 +62,7 @@ define([
 
     obj.reason = reason ? reason.getLabel() : obj.reason;
 
-    if (obj.startedAt && obj.finishedAt)
-    {
-      var startTime = Date.parse(obj.startedAt);
-      var endTime = Date.parse(obj.finishedAt);
-      var duration = Math.round((endTime - startTime) / 1000);
-
-      obj.duration = time.toString(duration);
-    }
-    else
-    {
-      obj.duration = '-';
-    }
+    obj.duration = prodDowntime.getDurationString(options && options.currentTime);
 
     obj.startedAt = time.format(obj.startedAt, longDateFormat);
 

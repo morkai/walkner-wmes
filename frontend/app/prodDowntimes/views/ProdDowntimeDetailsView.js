@@ -298,6 +298,11 @@ define([
 
     updateTimes: function()
     {
+      if (!this.model.get('finishedAt'))
+      {
+        this.$id('duration').text(this.model.getDurationString());
+      }
+
       this.$('.prodDowntimes-history-time').each(function()
       {
         var tagData = time.toTagData(this.getAttribute('datetime'));

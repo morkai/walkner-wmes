@@ -68,9 +68,9 @@ define([
       operationNo: null
     },
 
-    serializeRow: function()
+    serializeRow: function(currentTime)
     {
-      return decorateProdDowntime(this, {changesCount: true});
+      return decorateProdDowntime(this, {changesCount: true, currentTime: currentTime});
     },
 
     serializeDetails: function()
@@ -156,6 +156,14 @@ define([
       }
 
       return options.hasAccessToAor(this.get('aor')) ? 1 : 0;
+    },
+
+    getDurationString: function(currentTime)
+    {
+      var startTime = Date.parse(this.get('startedAt'));
+      var endTime = Date.parse(this.get('finishedAt')) || currentTime || Date.now();
+
+      return time.toString(Math.round((endTime - startTime) / 1000));
     }
 
   }, {

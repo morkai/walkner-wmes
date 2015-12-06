@@ -6,12 +6,14 @@ define([
   'underscore',
   'app/i18n',
   'app/user',
+  'app/time',
   'app/core/views/ListView',
   '../util/decorateProdDowntime'
 ], function(
   _,
   t,
   user,
+  time,
   ListView,
   decorateProdDowntime
 ) {
@@ -110,6 +112,37 @@ define([
       {
         this.refreshCollection(message);
       }
+    },
+
+    afterRender: function()
+    {
+      ListView.prototype.afterRender.call(this);
+
+      this.scheduleDurationsUpdate();
+    },
+
+    scheduleDurationsUpdate: function()
+    {
+      clearTimeout(this.timers.updateDurations);
+      this.timers.updateDurations = setTimeout(this.updateDurations.bind(this), 15000);
+    },
+
+    updateDurations: function()
+    {
+      var view = this;
+      var now = Date.now();
+
+      this.$('td[data-id="duration"]').each(function()
+      {
+        var prodDowntime = view.collection.get(this.parentNode.dataset.id);
+
+        if (!prodDowntime.get('finishedAt'))
+        {
+          this.textContent = prodDowntime.getDurationString(now);
+        }
+      });
+
+      this.scheduleDurationsUpdate();
     }
 
   });
