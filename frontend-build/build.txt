@@ -209,6 +209,10 @@ app/prodChangeRequests/assets/main.css
 ----------------
 app/prodChangeRequests/assets/main.css
 
+app/prodDowntimeAlerts/assets/details.css
+----------------
+app/prodDowntimeAlerts/assets/details.css
+
 app/prodDowntimeAlerts/assets/form.css
 ----------------
 app/prodDowntimeAlerts/assets/form.css
@@ -216,6 +220,7 @@ app/prodDowntimeAlerts/assets/form.css
 app/prodDowntimeAlerts/assets/main.css
 ----------------
 app/prodDowntimeAlerts/assets/./form.css
+app/prodDowntimeAlerts/assets/./details.css
 app/prodDowntimeAlerts/assets/main.css
 
 app/prodDowntimes/assets/main.css
@@ -426,6 +431,7 @@ assets/../app/opinionSurveyActions/assets/main.css
 assets/../app/opinionSurveyResponses/assets/main.css
 assets/../app/opinionSurveyScanTemplates/assets/main.css
 assets/../app/opinionSurveyOmrResults/assets/main.css
+assets/../app/prodDowntimeAlerts/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -1210,6 +1216,12 @@ app/nls/opinionSurveyOmrResults.js
 app/nls/pl/opinionSurveyOmrResults.js
 i18n!app/nls/opinionSurveyOmrResults
 app/opinionSurveyOmrResults/routes.js
+app/prodDowntimeAlerts/ProdDowntimeAlert.js
+app/prodDowntimeAlerts/ProdDowntimeAlertCollection.js
+app/nls/prodDowntimeAlerts.js
+app/nls/pl/prodDowntimeAlerts.js
+i18n!app/nls/prodDowntimeAlerts
+app/prodDowntimeAlerts/routes.js
 app/wmes-routes.js
 vendor/visibly.js
 app/visibility.js
