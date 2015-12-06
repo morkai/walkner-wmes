@@ -83,7 +83,7 @@ exports.start = function startProdDowntimesModule(app, module)
 
     var lastChange = partialProdDowntime.changes[partialProdDowntime.changes.length - 1];
 
-    if (!lastChange || !lastChange.data)
+    if (!lastChange || !lastChange.data || !lastChange.user || !lastChange.user.id)
     {
       return;
     }
