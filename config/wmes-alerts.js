@@ -22,8 +22,8 @@ exports.mongoose = {
   connectAttemptDelay: 500,
   models: [
     'event',
-    'user', 'aor', 'downtimeReason',
-    'prodDowntime', 'prodDowntimeAlert', 'prodLogEntry'
+    'user', 'aor', 'downtimeReason', 'prodFlow', 'workCenter', 'prodLine',
+    'prodShiftOrder', 'prodDowntime', 'prodDowntimeAlert', 'prodLogEntry'
   ]
 };
 exports.mongoose.options.server.poolSize = 3;
