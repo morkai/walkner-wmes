@@ -1,0 +1,121 @@
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-top: 0; margin-bottom: 3px; padding-bottom: 3px;">
+  Przestój
+</h3>
+<table style="font-family: Arial, sans-serif; font-size: 12px">
+  <tbody>
+  <tr>
+    <th align="left">ID</th>
+    <td>: <a href="<%- urlPrefix %>r/downtime/<%- downtime.rid %>"><%- downtime.rid %></a></td>
+  </tr>
+  <tr>
+    <th align="left">Powód</th>
+    <td>: <%= downtime.reason %></td>
+  </tr>
+  <% if (downtime.comment) { %>
+  <tr>
+    <th align="left" valign="top">Komentarz</th>
+    <td>: <%= downtime.comment %></td>
+  </tr>
+  <% } %>
+  <tr>
+    <th align="left">Obszar</th>
+    <td>: <%= downtime.aor %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Czas rozpoczęcia</th>
+    <td>: <%- downtime.startedAt %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Czas trwania</th>
+    <td>: <%- downtime.duration %></td>
+  </tr>
+  <% if (downtime.master) { %>
+  <tr>
+    <th align="left">Mistrz</th>
+    <td>: <%= downtime.master %></td>
+  </tr>
+  <% } %>
+  <% if (downtime.leader) { %>
+  <tr>
+    <th align="left">Lider</th>
+    <td>: <%= downtime.leader %></td>
+  </tr>
+  <% } %>
+  <% if (downtime.operator) { %>
+  <tr>
+    <th align="left">Operator</th>
+    <td>: <%= downtime.operator %></td>
+  </tr>
+  </tbody>
+  <% } %>
+</table>
+<% if (order) { %>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-bottom: 3px; padding-bottom: 3px;">
+  Zlecenie
+</h3>
+<table style="font-family: Arial, sans-serif; font-size: 12px">
+  <tbody>
+  <tr>
+    <th align="left">Nr</th>
+    <td>: <a href="<%- urlPrefix %>#prodShiftOrders/<%- order.prodShiftOrder %>"><%- order.no %></a></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Nazwa wyrobu</th>
+    <td>: <%= order.name %></td>
+  </tr>
+  <tr>
+    <th align="left">12NC</th>
+    <td>: <%- order.nc12 %></td>
+  </tr>
+  <tr>
+    <th align="left">Zmiana</th>
+    <td>: <a href="<%- urlPrefix %>#prodShifts/<%- order.prodShift %>"><%- order.shift %></a></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Czas rozpoczęcia</th>
+    <td>: <%- order.startedAt %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Czas trwania</th>
+    <td>: <%- order.duration %></td>
+  </tr>
+  </tbody>
+</table>
+<% } %>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-bottom: 3px; padding-bottom: 3px;">
+  Jednostka organizacyjna
+</h3>
+<table style="font-family: Arial, sans-serif; font-size: 12px">
+  <tbody>
+  <tr>
+    <th align="left">Wydział</th>
+    <td>: <%= orgUnits.division %></td>
+  </tr>
+  <tr>
+    <th align="left">Kontroler MRP</th>
+    <td>: <%= orgUnits.mrp %></td>
+  </tr>
+  <tr>
+    <th align="left">Przepływ</th>
+    <td>: <%= orgUnits.prodFlow %></td>
+  </tr>
+  <tr>
+    <th align="left">WorkCenter</th>
+    <td>: <%= orgUnits.workCenter %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Linia produkcyjna</th>
+    <td>: <%= orgUnits.prodLine %></td>
+  </tr>
+  </tbody>
+</table>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-bottom: 3px; padding-bottom: 3px;">
+  Na skróty
+</h3>
+<ul style="margin-top: 0; font-family: Arial, sans-serif; font-size: 12px">
+  <li><a href="<%- urlPrefix %>r/downtime/<%- downtime.rid %>">Alarm</a></li>
+  <li><a href="<%- urlPrefix %>r/downtimes/alerts">Wszystkie alarmy</a></li>
+  <li><a href="<%- urlPrefix %>r/downtimes/all">Wszystkie przestoje</a></li>
+</ul>
+<hr>
+<font face="Arial" color="Gray" size="1">Ta wiadomość została wygenerowana automatycznie przez system WMES.</font>

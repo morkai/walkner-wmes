@@ -4,8 +4,11 @@
 
 'use strict';
 
+var fs = require('fs');
 var _ = require('lodash');
 var step = require('h5.step');
+var ejs = require('ejs');
+var moment = require('moment');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = function setUpAlertsServer(app, module)
@@ -16,16 +19,32 @@ module.exports = function setUpAlertsServer(app, module)
   var User = mongoose.model('User');
   var Aor = mongoose.model('Aor');
   var DowntimeReason = mongoose.model('DowntimeReason');
+  var ProdFlow = mongoose.model('ProdFlow');
+  var WorkCenter = mongoose.model('WorkCenter');
+  var ProdLine = mongoose.model('ProdLine');
   var ProdLogEntry = mongoose.model('ProdLogEntry');
+  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
   var ProdDowntime = mongoose.model('ProdDowntime');
   var ProdDowntimeAlert = mongoose.model('ProdDowntimeAlert');
 
+  var emailTemplateFile = __dirname + '/email.pl.ejs';
+  var renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
+    cache: true,
+    filename: emailTemplateFile,
+    compileDebug: false,
+    rmWhitespace: true
+  });
   var onLoad = [];
   var alertMap = {};
   var alertList = [];
   var downtimeMap = {};
-  var aorNameMap = {};
-  var reasonNameMap = {};
+  var nameMaps = {
+    aor: {},
+    reason: {},
+    prodFlow: {},
+    workCenter: {},
+    prodLine: {}
+  };
 
   app.broker.subscribe('app.started', onAppStarted).setLimit(1);
 
@@ -178,40 +197,119 @@ module.exports = function setUpAlertsServer(app, module)
 
   function loadActiveDowntimes(done)
   {
-    ProdDowntime.find({finishedAt: null}).lean().exec(function(err, prodDowntimes)
-    {
-      if (err)
+    step(
+      function findProdDowntimesStep()
       {
-        return done(err);
-      }
+        var conditions = {
+          date: fte.currentShift.date,
+          finishedAt: null
+        };
 
-      var currentShiftTime = fte.currentShift.date.getTime();
-
-      _.forEach(prodDowntimes, function(prodDowntime)
+        ProdDowntime.find(conditions, {changes: 0}).lean().exec(this.next());
+      },
+      function createDowntimesStep(err, prodDowntimes)
       {
-        if (prodDowntime.date.getTime() !== currentShiftTime)
+        if (err)
         {
-          return;
+          return this.skip(err);
         }
 
-        var downtime = createDowntime(prodDowntime);
+        var prodShiftOrdersToFind = {};
 
-        if (_.isEmpty(downtime.alerts))
+        _.forEach(prodDowntimes, function(prodDowntime)
         {
-          mapMatchingAlerts(downtime);
+          var downtime = createDowntime(prodDowntime);
 
           if (_.isEmpty(downtime.alerts))
           {
-            return;
+            mapMatchingAlerts(downtime);
+
+            if (_.isEmpty(downtime.alerts))
+            {
+              return;
+            }
           }
+
+          downtimeMap[downtime._id] = downtime;
+
+          if (downtime.prodShiftOrder)
+          {
+            if (!prodShiftOrdersToFind[downtime.prodShiftOrder])
+            {
+              prodShiftOrdersToFind[downtime.prodShiftOrder] = [];
+            }
+
+            prodShiftOrdersToFind[downtime.prodShiftOrder].push(downtime);
+          }
+        });
+
+        this.prodShiftOrdersToFind = prodShiftOrdersToFind;
+
+        setImmediate(this.next());
+      },
+      function findProdShiftOrdersStep()
+      {
+        var conditions = {
+          _id: {$in: Object.keys(this.prodShiftOrdersToFind)}
+        };
+        var fields = {
+          _id: 1,
+          prodShift: 1,
+          date: 1,
+          startedAt: 1,
+          'orderData.no': 1,
+          'orderData.name': 1,
+          'orderData.nc12': 1
+        };
+
+        ProdShiftOrder.find(conditions, fields).lean().exec(this.next());
+      },
+      function mapOrderToDowntimesStep(err, prodShiftOrders)
+      {
+        if (err)
+        {
+          return this.skip(err);
         }
 
-        downtimeMap[downtime._id] = downtime;
+        var prodShiftOrdersToFind = this.prodShiftOrdersToFind;
 
-        handleDowntimeAlerts(downtime._id);
-      });
+        _.forEach(prodShiftOrders, function(prodShiftOrder)
+        {
+          mapOrderToDowntimes(prodShiftOrder, prodShiftOrdersToFind[prodShiftOrder._id]);
+        });
+      },
+      function handleAlertsStep()
+      {
+        _.forEach(downtimeMap, function(downtime)
+        {
+          handleDowntimeAlerts(downtime._id);
+        });
+      },
+      function finalizeStep(err)
+      {
+        this.prodShiftOrdersToFind = null;
 
-      return done();
+        setImmediate(done, err);
+      }
+    );
+  }
+
+  function mapOrderToDowntimes(prodShiftOrder, downtimes)
+  {
+    var orderData = prodShiftOrder.orderData || {};
+    var order = {
+      prodShiftOrder: prodShiftOrder._id,
+      prodShift: prodShiftOrder.prodShift,
+      date: prodShiftOrder.date,
+      startedAt: prodShiftOrder.startedAt.getTime(),
+      no: orderData.no || '?',
+      name: orderData.name || '?',
+      nc12: orderData.nc12 || '?'
+    };
+
+    _.forEach(downtimes, function(downtime)
+    {
+      downtime.order = order;
     });
   }
 
@@ -239,6 +337,41 @@ module.exports = function setUpAlertsServer(app, module)
         if (!_.isEmpty(downtime.alerts))
         {
           downtimeMap[prodDowntime._id] = downtime;
+        }
+      },
+      function findProdShiftOrderStep()
+      {
+        var downtime = downtimeMap[prodDowntimeId];
+
+        if (!downtime || !downtime.prodShiftOrder)
+        {
+          return this.skip();
+        }
+
+        var fields = {
+          _id: 1,
+          prodShift: 1,
+          date: 1,
+          startedAt: 1,
+          'orderData.no': 1,
+          'orderData.name': 1,
+          'orderData.nc12': 1
+        };
+
+        ProdShiftOrder.findById(downtime.prodShiftOrder, fields).lean().exec(this.next());
+      },
+      function mapOrderToDowntimeStep(err, prodShiftOrder)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var downtime = downtimeMap[prodDowntimeId];
+
+        if (downtime && prodShiftOrder)
+        {
+          mapOrderToDowntimes(prodShiftOrder, [downtime]);
         }
       },
       function finalizeStep(err)
@@ -453,7 +586,7 @@ module.exports = function setUpAlertsServer(app, module)
       function()
       {
         findRecipientUsers(downtime, alert, action, this.parallel());
-        findMessageValues(downtime, this.parallel());
+        prepareMessageValues(downtime, this.parallel());
       },
       function(err, users, messageValues)
       {
@@ -536,10 +669,13 @@ module.exports = function setUpAlertsServer(app, module)
       workCenter: prodDowntime.workCenter,
       prodLine: prodDowntime.prodLine,
       startedAt: startedAt,
-      master: prodDowntime.master ? prodDowntime.master.id : null,
-      leader: prodDowntime.leader ? prodDowntime.leader.id : null,
+      master: prodDowntime.master,
+      leader: prodDowntime.leader,
+      operator: prodDowntime.operator,
       prodShift: prodDowntime.prodShift,
       prodShiftOrder: prodDowntime.prodShiftOrder,
+      order: null,
+      comment: prodDowntime.reasonComment,
       duration: Math.max(0, (Date.now() - startedAt) / 1000),
       finished: !!prodDowntime.finishedAt,
       alerts: _.filter(alerts, function(alert) { return !!alert; })
@@ -633,12 +769,12 @@ module.exports = function setUpAlertsServer(app, module)
 
     if (action.informMaster && downtime.master)
     {
-      userIds[downtime.master] = true;
+      userIds[downtime.master.id] = true;
     }
 
     if (action.informLeader && downtime.leader)
     {
-      userIds[downtime.leader] = true;
+      userIds[downtime.leader.id] = true;
     }
 
     step(
@@ -777,108 +913,119 @@ module.exports = function setUpAlertsServer(app, module)
     };
   }
 
-  function findMessageValues(downtime, done)
+  function prepareMessageValues(downtime, done)
   {
+    var now = Date.now();
     var messageValues = {
-      _id: downtime._id,
-      rid: downtime.rid,
-      reason: null,
-      aor: null,
-      division: downtime.division,
-      prodLine: downtime.prodLine,
-      duration: Math.max(1, Math.round(downtime.duration / 60))
+      urlPrefix: module.config.emailUrlPrefix,
+      downtime: {
+        prodDowntime: downtime._id,
+        rid: downtime.rid,
+        reason: downtime.reason,
+        aor: downtime.aor,
+        startedAt: moment(downtime.startedAt).format('HH:mm:ss'),
+        duration: formatDuration(downtime.startedAt, now),
+        master: downtime.master ? downtime.master.label : null,
+        leader: downtime.leader ? downtime.leader.label : null,
+        operator: downtime.operator ? downtime.operator.label : null,
+        comment: downtime.comment
+      },
+      order: !downtime.order ? null : {
+        prodShiftOrder: downtime.order.prodShiftOrder,
+        prodShift: downtime.order.prodShift,
+        no: downtime.order.no,
+        name: downtime.order.name,
+        nc12: downtime.order.nc12,
+        shift: moment(downtime.order.date).format('YYYY-MM-DD') + ', ' + formatShiftNo(downtime.order.date),
+        startedAt: moment(downtime.order.startedAt).format('HH:mm:ss'),
+        duration: formatDuration(downtime.order.startedAt, now)
+      },
+      orgUnits: {
+        division: downtime.division,
+        mrp: downtime.mrpControllers.join(', '),
+        prodFlow: downtime.prodFlow,
+        workCenter: downtime.workCenter,
+        prodLine: downtime.prodLine
+      }
     };
 
     step(
       function()
       {
-        findReasonName(downtime.reason, this.parallel());
-        findAorName(downtime.aor, this.parallel());
+        findName(DowntimeReason, downtime, 'reason', 'label', this.parallel());
+        findName(Aor, downtime, 'aor', 'name', this.parallel());
+        findName(ProdFlow, downtime, 'prodFlow', 'name', this.parallel());
+        findName(WorkCenter, downtime, 'workCenter', 'description', this.parallel());
+        findName(ProdLine, downtime, 'prodLine', 'description', this.parallel());
       },
-      function(err, reasonName, aorName)
+      function(err, reasonName, aorName, prodFlowName, workCenterName, prodLineName)
       {
         if (err)
         {
           return done(err);
         }
 
-        messageValues.reason = reasonName;
-        messageValues.aor = aorName;
+        messageValues.downtime.reason = formatNameAndId(reasonName, downtime.reason);
+        messageValues.downtime.aor = aorName;
+        messageValues.orgUnits.prodFlow = prodFlowName;
+        messageValues.orgUnits.workCenter = formatNameAndId(workCenterName, downtime.workCenter);
+        messageValues.orgUnits.prodLine = formatNameAndId(prodLineName, downtime.prodLine);
 
         return done(null, messageValues);
       }
     );
   }
 
-  function findReasonName(reasonId, done)
+  function formatNameAndId(name, id)
   {
-    if (reasonNameMap[reasonId])
+    if (name === id)
     {
-      return setImmediate(done, null, reasonNameMap[reasonId]);
+      return name;
     }
 
-    DowntimeReason.findById(reasonId, {label: 1}).lean().exec(function(err, reason)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      if (reason)
-      {
-        reasonNameMap[reasonId] = reason.label;
-      }
-
-      return done(null, reasonNameMap[reasonId] || reasonId);
-    });
+    return name + ' (' + id + ')';
   }
 
-  function findAorName(aorId, done)
+  function findName(Model, downtime, mapProperty, nameProperty, done)
   {
-    if (aorNameMap[aorId])
+    var id = downtime[mapProperty];
+    var nameMap = nameMaps[mapProperty];
+
+    if (nameMap[id])
     {
-      return setImmediate(done, null, aorNameMap[aorId]);
+      return setImmediate(done, null, nameMap[id]);
     }
 
-    Aor.findById(aorId, {name: 1}).lean().exec(function(err, aor)
+    var fields = {};
+    fields[nameProperty] = 1;
+
+    Model.findById(id, fields).lean().exec(function(err, model)
     {
       if (err)
       {
         return done(err);
       }
 
-      if (aor)
+      if (model)
       {
-        aorNameMap[aorId] = aor.name;
+        nameMap[id] = model[nameProperty];
       }
 
-      return done(null, aorNameMap[aorId] || '?');
+      return done(null, nameMap[id] || id);
     });
   }
 
   function sendEmail(recipients, messageValues)
   {
     var emails = _.pluck(recipients, 'email');
-    var subject = '[WMES] Przestój ' + messageValues.rid + ': ' + messageValues.reason;
-    var urlPrefix = module.config.emailUrlPrefix;
-    var text = [
-      'Przestój: ' + messageValues.rid,
-      'Czas trwania: ' + messageValues.duration + ' min.',
-      'Powód: ' + messageValues.reason,
-      'Obszar: ' + messageValues.aor,
-      'Linia: ' + messageValues.division + ' \\ ' + messageValues.prodLine,
-      '',
-      'Alarm: ' + urlPrefix + 'r/downtime/' + messageValues.rid,
-      'Wszystkie alarmy: ' + urlPrefix + 'r/downtimes/alerts',
-      'Wszystkie przestoje: ' + urlPrefix + 'r/downtimes/all',
-      '',
-      'Ta wiadomość została wygenerowana automatycznie przez system WMES.'
-    ];
+    var subject = '[WMES] Przestój '
+      + messageValues.downtime.rid
+      + ': ' + messageValues.downtime.reason;
     var mailOptions = {
       to: emails,
       replyTo: emails,
       subject: subject,
-      text: text.join('\t\r\n')
+      html: renderEmail(messageValues)
     };
 
     app[module.config.mailSenderId].send(mailOptions, function(err)
@@ -894,12 +1041,12 @@ module.exports = function setUpAlertsServer(app, module)
   {
     var smsOptions = {
       to: _.pluck(recipients, 'mobile'),
-      text: 'Przestój ' + messageValues.rid
-        + ' |' + messageValues.duration + ' min.'
-        + ' |' + messageValues.division
-        + ' |' + messageValues.prodLine
-        + ' |' + messageValues.aor
-        + ' |' + messageValues.reason
+      text: 'Przestój ' + messageValues.downtime.rid
+        + ' |' + messageValues.downtime.duration
+        + ' |' + messageValues.orgUnits.division
+        + ' |' + messageValues.orgUnits.prodLineId
+        + ' |' + messageValues.downtime.aor
+        + ' |' + messageValues.downtime.reason
     };
 
     app[module.config.smsSenderId].send(smsOptions, function(err)
@@ -909,5 +1056,82 @@ module.exports = function setUpAlertsServer(app, module)
         module.error("Failed to send SMS notification: %s", err.message);
       }
     });
+  }
+
+  function formatShiftNo(date)
+  {
+    var hours = date.getHours();
+
+    return hours === 6 ? 'I' : hours === 14 ? 'II' : 'III';
+  }
+
+  function formatDuration(fromTime, toTime)
+  {
+    var compact = true;
+    var ms = false;
+    var time = (toTime - fromTime) / 1000;
+
+    var str = '';
+    var hours = Math.floor(time / 3600);
+
+    if (hours > 0)
+    {
+      str += compact ? (rpad0(hours, 2) + ':') : (' ' + hours + 'h');
+      time = time % 3600;
+    }
+    else if (compact)
+    {
+      str += '00:';
+    }
+
+    var minutes = Math.floor(time / 60);
+
+    if (minutes > 0)
+    {
+      str += compact ? (rpad0(minutes, 2) + ':') : (' ' + minutes + 'min');
+      time = time % 60;
+    }
+    else if (compact)
+    {
+      str += '00:';
+    }
+
+    var seconds = time;
+
+    if (seconds >= 1)
+    {
+      str += compact
+        ? rpad0(Math[ms ? 'floor' : 'round'](seconds), 2)
+        : (' ' + Math[ms ? 'floor' : 'round'](seconds) + 's');
+
+      if (ms && seconds % 1 !== 0)
+      {
+        str += compact
+          ? ('.' + rpad0(Math.round(seconds % 1 * 1000), 3))
+          : (' ' + (Math.round(seconds % 1 * 1000) + 'ms'));
+      }
+    }
+    else if (seconds > 0 && str === '')
+    {
+      str += ' ' + (seconds * 1000) + 'ms';
+    }
+    else if (compact)
+    {
+      str += '00';
+    }
+
+    return compact ? str : str.substr(1);
+  }
+
+  function rpad0(val, length)
+  {
+    val = String(val);
+
+    while (val.length < length)
+    {
+      val = '0' + val;
+    }
+
+    return val;
   }
 };
