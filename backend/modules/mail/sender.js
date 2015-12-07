@@ -146,7 +146,14 @@ exports.start = function startMailSenderModule(app, module)
       }
     });
 
-    email.push('Body:', mailOptions.text);
+    var htmlBody = _.isString(mailOptions.html) && !_.isEmpty(mailOptions.html);
+
+    if (htmlBody)
+    {
+      email.push('html', 1);
+    }
+
+    email.push('Body:', mailOptions[htmlBody ? 'html' : 'text'] || '');
 
     step(
       function openFileStep()
