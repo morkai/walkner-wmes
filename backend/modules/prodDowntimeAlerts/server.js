@@ -786,7 +786,7 @@ module.exports = function setUpAlertsServer(app, module)
       aor: null,
       division: downtime.division,
       prodLine: downtime.prodLine,
-      duration: Math.min(1, Math.round(downtime.duration / 60))
+      duration: Math.max(1, Math.round(downtime.duration / 60))
     };
 
     step(
