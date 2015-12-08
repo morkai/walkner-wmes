@@ -54,6 +54,7 @@ define([
     {
       this.view = new ReportSettingsView({
         initialTab: this.options.initialTab,
+        initialSubtab: this.options.initialSubtab,
         settings: this.settings,
         prodTasks: this.prodTasks
       });

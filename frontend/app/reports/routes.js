@@ -90,7 +90,8 @@ define([
     viewport.loadPage('app/reports/pages/ReportSettingsPage', function(ReportSettingsPage)
     {
       return new ReportSettingsPage({
-        initialTab: req.query.tab
+        initialTab: req.query.tab,
+        initialSubtab: req.query.subtab
       });
     });
   });
