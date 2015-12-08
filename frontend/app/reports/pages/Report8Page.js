@@ -105,7 +105,7 @@ define([
     defineModels: function()
     {
       this.settings = bindLoadingMessage(settings.acquire(), this);
-      this.query = Report8Query.fromRequest(this.options.query, this.options.fragment);
+      this.query = Report8Query.fromRequest(this.options.query, this.options.displayOptions);
       this.report = bindLoadingMessage(new Report8(null, {query: this.query}), this);
     },
 

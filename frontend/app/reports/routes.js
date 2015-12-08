@@ -14,6 +14,17 @@ define([
 ) {
   'use strict';
 
+  function loadReportPage(reportNo, req)
+  {
+    viewport.loadPage('app/reports/pages/Report' + reportNo + 'Page', function(ReportPage)
+    {
+      return new ReportPage({
+        query: req.query,
+        displayOptions: req.fragment
+      });
+    });
+  }
+
   router.map('/reports/1', user.auth('REPORTS:VIEW', 'REPORTS:1:VIEW'), function(req)
   {
     if (viewport.currentPage && viewport.currentPage.pageId === 'report1')
@@ -21,13 +32,7 @@ define([
       return viewport.currentPage.query.reset(req.query);
     }
 
-    viewport.loadPage('app/reports/pages/Report1Page', function(Report1Page)
-    {
-      return new Report1Page({
-        query: req.query,
-        displayOptions: req.fragment
-      });
-    });
+    loadReportPage(1, req);
   });
 
   router.map('/reports/2', user.auth('REPORTS:VIEW', 'REPORTS:2:VIEW'), function(req)
@@ -37,29 +42,17 @@ define([
       return viewport.currentPage.query.reset(req.query);
     }
 
-    viewport.loadPage('app/reports/pages/Report2Page', function(Report2Page)
-    {
-      return new Report2Page({
-        query: req.query,
-        displayOptions: req.fragment
-      });
-    });
+    loadReportPage(2, req);
   });
 
   router.map('/reports/3', user.auth('REPORTS:VIEW', 'REPORTS:3:VIEW'), function(req)
   {
-    viewport.loadPage('app/reports/pages/Report3Page', function(Report3Page)
-    {
-      return new Report3Page({query: req.rql});
-    });
+    loadReportPage(3, req);
   });
 
   router.map('/reports/4', user.auth('REPORTS:VIEW', 'REPORTS:4:VIEW'), function(req)
   {
-    viewport.loadPage('app/reports/pages/Report4Page', function(Report4Page)
-    {
-      return new Report4Page({query: req.query});
-    });
+    loadReportPage(4, req);
   });
 
   router.map('/reports/5', user.auth('REPORTS:VIEW', 'REPORTS:5:VIEW'), function(req)
@@ -69,13 +62,7 @@ define([
       return viewport.currentPage.query.reset(req.query);
     }
 
-    viewport.loadPage('app/reports/pages/Report5Page', function(Report5Page)
-    {
-      return new Report5Page({
-        query: req.query,
-        displayOptions: req.fragment
-      });
-    });
+    loadReportPage(5, req);
   });
 
   router.map('/reports/6', user.auth('REPORTS:VIEW', 'REPORTS:6:VIEW'), function(req)
@@ -85,32 +72,17 @@ define([
       return viewport.currentPage.query.reset(req.query);
     }
 
-    viewport.loadPage('app/reports/pages/Report6Page', function(Report6Page)
-    {
-      return new Report6Page({
-        query: req.query,
-        displayOptions: req.fragment
-      });
-    });
+    loadReportPage(6, req);
   });
 
   router.map('/reports/7', user.auth('REPORTS:VIEW', 'REPORTS:7:VIEW'), function(req)
   {
-    viewport.loadPage('app/reports/pages/Report7Page', function(Report7Page)
-    {
-      return new Report7Page({query: req.query});
-    });
+    loadReportPage(7, req);
   });
 
   router.map('/reports/8', user.auth('REPORTS:VIEW', 'REPORTS:8:VIEW'), function(req)
   {
-    viewport.loadPage('app/reports/pages/Report8Page', function(Report8Page)
-    {
-      return new Report8Page({
-        query: req.query,
-        fragment: req.fragment
-      });
-    });
+    loadReportPage(8, req);
   });
 
   router.map('/reports;settings', user.auth('REPORTS:MANAGE'), function(req)
