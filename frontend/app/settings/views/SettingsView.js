@@ -28,17 +28,19 @@ define([
     events: {
       'click a[data-tab]': function(e)
       {
-        var tab = e.target.dataset.tab;
+        var el = e.currentTarget;
+        var tab = el.dataset.tab;
+        var subtab = el.dataset.subtab || '';
 
-        if (!e.target.classList.contains('disabled'))
+        if (!el.classList.contains('disabled'))
         {
           this.broker.publish('router.navigate', {
-            url: this.clientUrl + '?tab=' + tab,
+            url: this.clientUrl + '?tab=' + tab + '&subtab=' + subtab,
             trigger: false,
             replace: true
           });
 
-          this.changeTab(tab);
+          this.changeTab(tab, subtab);
         }
 
         return false;
@@ -78,6 +80,7 @@ define([
     initialize: function()
     {
       this.currentTab = this.options.initialTab;
+      this.currentSubtab = this.options.initialSubtab;
       this.inProgress = {};
 
       this.listenTo(this.settings, 'add change', this.onSettingsChange);
@@ -114,7 +117,10 @@ define([
         this.dataset.value = this.value;
       });
 
-      this.changeTab(this.currentTab || this.defaultTab || this.$('.list-group-item[data-tab]').attr('data-tab'));
+      this.changeTab(
+        this.currentTab || this.defaultTab || this.$('.list-group-item[data-tab]').attr('data-tab'),
+        this.currentSubtab
+      );
     },
 
     toggleTabPrivileges: function() {},
@@ -148,7 +154,7 @@ define([
       return formData;
     },
 
-    changeTab: function(tab)
+    changeTab: function(tab, subtab)
     {
       var $oldTab = this.$('.list-group-item.active');
       var $newTab = this.$('.list-group-item[data-tab="' + tab + '"]');
@@ -168,9 +174,27 @@ define([
       $oldTab.removeClass('active');
       $newTab.addClass('active');
       this.$('.panel-body.active').removeClass('active');
-      this.$('.panel-body[data-tab="' + tab + '"]').addClass('active');
+
+      var $newTabPanel = this.$('.panel-body[data-tab="' + tab + '"]').addClass('active');
+
+      if ($newTabPanel.hasClass('has-subtabs'))
+      {
+        if (_.isEmpty(subtab))
+        {
+          subtab = $newTabPanel.find('.list-group-item').first().attr('data-subtab');
+        }
+
+        $oldTab = $newTabPanel.find('.list-group-item.active');
+        $newTab = $newTabPanel.find('.list-group-item[data-subtab="' + subtab + '"]');
+
+        $oldTab.removeClass('active');
+        $newTab.addClass('active');
+        $newTabPanel.find('.panel-body.active').removeClass('active');
+        $newTabPanel.find('.panel-body[data-subtab="' + subtab + '"]').addClass('active')
+      }
 
       this.currentTab = tab;
+      this.currentSubtab = subtab;
     },
 
     onSettingsChange: function(setting)

@@ -53,3 +53,19 @@
   font-weight: normal;
   cursor: pointer;
 }
+.settings .panel-body.has-subtabs {
+  padding: 0;
+}
+.settings .has-subtabs .panel {
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.settings .has-subtabs .list-group-item {
+  border-left: 0;
+}
+.settings .has-subtabs .list-group-item:first-child {
+  border-top: 0;
+}
