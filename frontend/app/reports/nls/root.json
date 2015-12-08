@@ -243,6 +243,7 @@
     "settings:lean:realRoutingTimeForLineDowntimeReasons": "Routing time for line (real): downtime reasons",
     "settings:lean:realRoutingTimeForLabourDowntimeReasons": "Routing time for labor (real): downtime reasons",
     "settings:lean:heijunkaTimeForLineCoeff": "Heijunka time for line: coefficient",
+    "settings:lean:totalDowntimeReasons": "Downtime (real): reasons",
     "settings:lean:realBreaksDowntimeReasons": "Breaks (real): downtime reasons",
     "settings:lean:realFap0DowntimeReasons": "FAP 0 meeting (real): downtime reasons",
     "settings:lean:realStartupDowntimeReasons": "Startup (real): downtime reasons",
@@ -543,6 +544,7 @@
     "8:tab:rtLabor": "Routing time for line",
     "8:tab:ht": "Heijunka time for line",
     "8:tab:dtKind": "Downtime reasons",
+    "8:tab:dtAll": "Downtime",
     "8:tab:sd": "Shutdown",
     "8:tab:eff": "Efficiency"
   },

@@ -121,6 +121,7 @@ module.exports = function(mongoose, options, done)
   var CALC_EFFICIENCY_REAL = compileEfficiencyFormula(settings.realEfficiencyFormula, REAL);
   var REAL_SHUTDOWN_THRESHOLD = settings.realShutdownThreshold * 60 * 1000;
   var DOWNTIME_REASONS = {
+    total: {},
     realProdSetter: {},
     realRoutingTimeForLine: {},
     realRoutingTimeForLabour: {},
@@ -974,22 +975,25 @@ module.exports = function(mongoose, options, done)
       group.coTime[REAL] += duration;
     }
 
-    if (!summary.downtimeByAor[prodDowntime.aor])
+    if (DOWNTIME_REASONS.total[prodDowntime.reason])
     {
-      summary.downtimeByAor[prodDowntime.aor] = 0;
+      if (!summary.downtimeByAor[prodDowntime.aor])
+      {
+        summary.downtimeByAor[prodDowntime.aor] = 0;
+      }
+
+      summary.downtimeByAor[prodDowntime.aor] += duration;
+
+      if (!group.downtimeByAor[prodDowntime.aor])
+      {
+        group.downtimeByAor[prodDowntime.aor] = 0;
+      }
+
+      group.downtimeByAor[prodDowntime.aor] += duration;
+
+      summary.downtime[REAL] += duration;
+      group.downtime[REAL] += duration;
     }
-
-    summary.downtimeByAor[prodDowntime.aor] += duration;
-
-    if (!group.downtimeByAor[prodDowntime.aor])
-    {
-      group.downtimeByAor[prodDowntime.aor] = 0;
-    }
-
-    group.downtimeByAor[prodDowntime.aor] += duration;
-
-    summary.downtime[REAL] += duration;
-    group.downtime[REAL] += duration;
 
     summary.allShiftCount[shiftKey + prodLineId] = true;
     group.allShiftCount[shiftKey + prodLineId] = true;

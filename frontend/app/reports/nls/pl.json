@@ -243,6 +243,7 @@
   "settings:lean:realRoutingTimeForLineDowntimeReasons": "Czas cyklu linii (real): powody przestojów",
   "settings:lean:realRoutingTimeForLabourDowntimeReasons": "Czas procesu (real): powody przestojów",
   "settings:lean:heijunkaTimeForLineCoeff": "Czas Heijunki: współczynnik",
+  "settings:lean:totalDowntimeReasons": "Przestoje (real): powody",
   "settings:lean:realBreaksDowntimeReasons": "Przerwy (real): powody przestojów",
   "settings:lean:realFap0DowntimeReasons": "Spotkanie FAP 0 (real): powody przestojów",
   "settings:lean:realStartupDowntimeReasons": "Operatywka (real): powody przestojów",
@@ -548,6 +549,7 @@
   "8:tab:rtLabor": "Czas procesu",
   "8:tab:ht": "Czas Heijunki",
   "8:tab:dtKind": "Powody przestojów",
+  "8:tab:dtAll": "Przestoje",
   "8:tab:sd": "Zakończenie zmiany",
   "8:tab:eff": "Wydajność"
 }

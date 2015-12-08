@@ -16,6 +16,7 @@
         'rtLabor',
         'ht',
         'dtKind',
+        'dtAll',
         'sd',
         'eff'
       ].forEach(function(subtab) { %>
@@ -168,12 +169,18 @@
           'realTpmDowntimeReasons',
           'realTrainingsDowntimeReasons',
           'realCoTimeDowntimeReasons'
-          ].forEach(function(prop) { %>
+        ].forEach(function(prop) { %>
         <div class="form-group settings-select2-long">
           <label for="<%- idPrefix %>-lean-<%- prop %>"><%- t('reports', 'settings:lean:' + prop) %></label>
           <input id="<%- idPrefix %>-lean-<%- prop %>" name="reports.lean.<%- prop %>" type="text">
         </div>
         <% }) %>
+      </div>
+      <div class="panel-body" data-subtab="dtAll">
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-totalDowntimeReasons"><%- t('reports', 'settings:lean:totalDowntimeReasons') %></label>
+          <input id="<%- idPrefix %>-lean-totalDowntimeReasons" name="reports.lean.totalDowntimeReasons" type="text">
+        </div>
       </div>
       <div class="panel-body" data-subtab="sd">
         <div class="form-group">
