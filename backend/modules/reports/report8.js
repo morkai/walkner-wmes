@@ -743,6 +743,7 @@ module.exports = function(mongoose, options, done)
       tvpOrder[prodShiftOrder.operationNo] = prodShiftOrder.quantityDone + (tvpOrder[prodShiftOrder.operationNo] || 0);
     }
 
+    var workerCount = prodShiftOrder.workerCount || 1;
     var machineTime = prodShiftOrder.machineTime * (IN_MINUTES ? 60 : 1) / 100;
     var labourTime = prodShiftOrder.laborTime * (IN_MINUTES ? 60 : 1) / 100;
 
@@ -753,8 +754,10 @@ module.exports = function(mongoose, options, done)
 
     if (inSelectedOrgUnit)
     {
-      summary.routingTimeForLine[PLAN] += machineTime;
-      group.routingTimeForLine[PLAN] += machineTime;
+      var routingTimeForLine = prodShiftOrder.laborTime / workerCount * (IN_MINUTES ? 60 : 1) / 100;
+
+      summary.routingTimeForLine[PLAN] += routingTimeForLine;
+      group.routingTimeForLine[PLAN] += routingTimeForLine;
       summary.routingTimeForLabour[PLAN] += labourTime;
       group.routingTimeForLabour[PLAN] += labourTime;
       summary.orderCountForLine += 1;
@@ -765,8 +768,7 @@ module.exports = function(mongoose, options, done)
       var durationForLabour = totalDuration - (orderToDowntimeForLabour[prodShiftOrder._id] || 0);
 
       summary.routingTimeForLine[REAL] += durationForLine / prodShiftOrder.quantityDone;
-      summary.routingTimeForLabour[REAL] +=
-        durationForLabour / prodShiftOrder.quantityDone * prodShiftOrder.workerCount;
+      summary.routingTimeForLabour[REAL] += durationForLabour / prodShiftOrder.quantityDone * workerCount;
 
       if (!summary.timeAvailablePerShift[PLAN][dateKey])
       {
@@ -814,8 +816,8 @@ module.exports = function(mongoose, options, done)
     group.prodOperators[PLAN][prodLineId].num += prodOperatorPlanNum;
     summary.prodOperators[PLAN][prodLineId].days[dateKey] = true;
     group.prodOperators[PLAN][prodLineId].days[dateKey] = true;
-    summary.prodOperators[REAL] += prodShiftOrder.workerCount;
-    group.prodOperators[REAL] += prodShiftOrder.workerCount;
+    summary.prodOperators[REAL] += workerCount;
+    group.prodOperators[REAL] += workerCount;
 
     summary.prodSetters[PLAN][prodLineId].num += 1;
     group.prodSetters[PLAN][prodLineId].num += 1;
