@@ -86,6 +86,7 @@ module.exports = function(mongoose, options, done)
   var prodLineToWorkingDays = {};
   var orderToDowntimeForLine = {};
   var orderToDowntimeForLabour = {};
+  var realTotalVolumeProducedPerShift = {};
   var usedDays = {0: _.includes(options.days, '7')};
   var usedShifts = {};
   var usedDivisions = {};
@@ -270,6 +271,7 @@ module.exports = function(mongoose, options, done)
       printDebugTimer('prod downtimes   ', 'downtimes', 'handleProdDowntime');
       printDebugTimer('prod shift orders', 'orders', 'handleProdShiftOrder');
       printDebugTimer('data             ', 'activeOrgUnits', 'data');
+      printDebugTimer('real tvp         ', 'tvpStart', 'tvpEnd');
       printDebugTimer('groups           ', 'data', 'gruped');
       printDebugTimer('summary          ', 'gruped', 'summarized');
     }
@@ -301,24 +303,8 @@ module.exports = function(mongoose, options, done)
 
   function calcMetrics(group, groups)
   {
-    if (usedDays.noWork)
-    {
-      if (groups === null)
-      {
-        group.allShiftCount = countAllShiftsInGroup(group.key);
-      }
-      else
-      {
-        group.allShiftCount = _.reduce(groups, function(allShiftCount, group)
-        {
-          return allShiftCount + group.allShiftCount;
-        }, 0);
-      }
-    }
-    else
-    {
-      group.allShiftCount = _.size(group.allShiftCount);
-    }
+    calcAllShiftCount(group, groups);
+    calcRealTotalVolumeProduced(group, groups);
 
     group.workingShiftCount = _.size(group.workingShiftCount);
     group.timeAvailablePerShift[PLAN] = calcTimeAvailablePerShiftPlan(group);
@@ -407,9 +393,14 @@ module.exports = function(mongoose, options, done)
     };
   }
 
+  function createDataGroupKey(date)
+  {
+    return util.createGroupKey(options.interval, date, true);
+  }
+
   function getDataGroup(date)
   {
-    var key = util.createGroupKey(options.interval, date, true);
+    var key = createDataGroupKey(date);
 
     if (!results.groups[key])
     {
@@ -698,10 +689,13 @@ module.exports = function(mongoose, options, done)
       division: 1,
       subdivision: 1,
       prodFlow: 1,
+      workCenter: 1,
       prodLine: 1,
       date: 1,
       finishedAt: 1,
       mechOrder: 1,
+      orderId: 1,
+      operationNo: 1,
       machineTime: 1,
       laborTime: 1,
       totalDuration: 1,
@@ -724,15 +718,28 @@ module.exports = function(mongoose, options, done)
     var summary = results.summary;
     var group = getDataGroup(prodShiftOrder.date);
     var dateKey = moment(prodShiftOrder.date).format(DATE_FORMAT);
-    var shiftKey = prodShiftOrder.date.getTime();
+    var shiftKey = prodShiftOrder.date.getTime().toString();
     var divisionId = prodShiftOrder.division;
     var prodLineId = prodShiftOrder.prodLine;
     var inSelectedOrgUnit = isInSelectedOrgUnit(prodShiftOrder);
 
-    if (!prodShiftOrder.mechOrder && isTotalVolumeProducedProdFlow(prodShiftOrder.prodFlow))
+    if (isTotalVolumeProducedOrder(prodShiftOrder))
     {
-      summary.totalVolumeProduced[REAL] += prodShiftOrder.quantityDone;
-      group.totalVolumeProduced[REAL] += prodShiftOrder.quantityDone;
+      var tvpShift = realTotalVolumeProducedPerShift[shiftKey];
+
+      if (!tvpShift)
+      {
+        tvpShift = realTotalVolumeProducedPerShift[shiftKey] = {};
+      }
+
+      var tvpOrder = tvpShift[prodShiftOrder.orderId];
+
+      if (!tvpOrder)
+      {
+        tvpOrder = tvpShift[prodShiftOrder.orderId] = {};
+      }
+
+      tvpOrder[prodShiftOrder.operationNo] = prodShiftOrder.quantityDone + (tvpOrder[prodShiftOrder.operationNo] || 0);
     }
 
     var machineTime = prodShiftOrder.machineTime * (IN_MINUTES ? 60 : 1) / 100;
@@ -877,7 +884,7 @@ module.exports = function(mongoose, options, done)
 
     var summary = results.summary;
     var group = getDataGroup(prodDowntime.date);
-    var shiftKey = prodDowntime.date.getTime();
+    var shiftKey = prodDowntime.date.getTime().toString();
     var prodLineId = prodDowntime.prodLine;
     var duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
@@ -1012,8 +1019,8 @@ module.exports = function(mongoose, options, done)
     {
       return;
     }
-
-    var subdivisionId = fteEntry.subdivision.toString();
+// TODO ???
+//    var subdivisionId = fteEntry.subdivision.toString();
     var summary = results.summary;
     var group = getDataGroup(fteEntry.date);
 
@@ -1023,10 +1030,10 @@ module.exports = function(mongoose, options, done)
       {
         return;
       }
-
-      var taskId = task.id.toString();
-      var isProdFlow = task.type === 'prodFlow';
-      var shiftActiveOrgUnits = shiftToActiveOrgUnits[fteEntry.date.getTime()];
+// TODO ???
+//      var taskId = task.id.toString();
+//      var isProdFlow = task.type === 'prodFlow';
+//      var shiftActiveOrgUnits = shiftToActiveOrgUnits[fteEntry.date.getTime()];
 
       _.forEach(task.functions, function(taskFunction)
       {
@@ -1037,7 +1044,8 @@ module.exports = function(mongoose, options, done)
           fte += taskCompany.count;
         });
 
-        var adjustedFte = fte;// TODO: adjustFteToActiveOrgUnits(fte, shiftActiveOrgUnits, isProdFlow, taskId, subdivisionId);
+        var adjustedFte = fte;
+        // TODO ??? adjustFteToActiveOrgUnits(fte, shiftActiveOrgUnits, isProdFlow, taskId, subdivisionId);
 
         switch (taskFunction.id)
         {
@@ -1201,6 +1209,7 @@ module.exports = function(mongoose, options, done)
     });
   }
 
+  /* TODO ???
   function adjustFteToActiveOrgUnits(fte, shiftActiveOrgUnits, isProdFlow, taskId, subdivisionId)
   {
     if (fte === 0 || !options.prodLines.length)
@@ -1228,6 +1237,14 @@ module.exports = function(mongoose, options, done)
     }
 
     return fte;
+  }
+  */
+
+  function isTotalVolumeProducedOrder(prodShiftOrder)
+  {
+    return !prodShiftOrder.mechOrder
+      && isTotalVolumeProducedProdFlow(prodShiftOrder.prodFlow)
+      && !/^SPARE/.test(prodShiftOrder.workCenter);
   }
 
   function isTotalVolumeProducedProdFlow(prodFlowId)
@@ -1395,6 +1412,74 @@ module.exports = function(mongoose, options, done)
   function calcRealTimeAvailablePerShift(group)
   {
     return util.round(group.timeAvailablePerShift[PLAN] - UNPLANNED);
+  }
+
+  function calcAllShiftCount(group, groups)
+  {
+    if (usedDays.noWork)
+    {
+      if (groups === null)
+      {
+        group.allShiftCount = countAllShiftsInGroup(group.key);
+
+        return;
+      }
+
+      group.allShiftCount = _.reduce(groups, function(total, group)
+      {
+        return total + group.allShiftCount;
+      }, 0);
+
+      return;
+    }
+
+    group.allShiftCount = _.size(group.allShiftCount);
+  }
+
+  function calcRealTotalVolumeProduced(summary, groups)
+  {
+    if (groups === null)
+    {
+      return;
+    }
+
+    debugTimes.tvpStart = Date.now();
+
+    var groupMap = {};
+
+    _.forEach(groups, function(group)
+    {
+      groupMap[group.key] = group;
+    });
+
+    _.forEach(realTotalVolumeProducedPerShift, function(shiftTvp, shiftKey)
+    {
+      var groupKey = createDataGroupKey(+shiftKey);
+      var group = groupMap[groupKey];
+      var tvp = 0;
+
+      _.forEach(shiftTvp, function(orderTvp)
+      {
+        var max = 0;
+
+        _.forEach(orderTvp, function(operationTvp)
+        {
+          if (operationTvp > max)
+          {
+            max = operationTvp;
+          }
+        });
+
+        tvp += max;
+      });
+
+      group.totalVolumeProduced[REAL] += tvp;
+      summary.totalVolumeProduced[REAL] += tvp;
+    });
+
+    realTotalVolumeProducedPerShift = null;
+
+    debugTimes.tvpEnd = Date.now();
   }
 
   function compileEfficiencyFormula(formula, type)
