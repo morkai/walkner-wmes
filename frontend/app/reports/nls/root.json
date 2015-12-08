@@ -463,7 +463,7 @@
     "8:dirIndir:prodTransport": "Prod. transport",
     "8:dirIndir:cycleCounting": "Cycle counting",
     "8:dirIndir:otherWarehousing": "Other warehousing",
-    "8:dirIndir:materialQualityInspection": "Material qualityinspection",
+    "8:dirIndir:materialQualityInspection": "Material quality inspection",
     "8:dirIndir:maintenance": "Maintenance",
     "8:times:timeAvailablePerShift": "Time available per shift",
     "8:times:routingTimeForLine": "Routing time for line",
@@ -489,7 +489,23 @@
     "8:suffix:real": "(real)",
     "8:filename:export": "WMES_Lean",
     "8:filename:dirIndir": "WMES_Lean_DirIndir",
-    "8:filename:times": "WMES_Lean_Times"
+    "8:filename:times": "WMES_Lean_Times",
+    "8:tab:general": "General",
+    "8:tab:tvp": "Total volume produced",
+    "8:tab:qa": "Quality inspection",
+    "8:tab:ma": "Maintenance",
+    "8:tab:ffte": "Operator/Leader/Setter",
+    "8:tab:pmh": "Prod. material handling",
+    "8:tab:kitters": "Kitters",
+    "8:tab:pt": "Prod. transport",
+    "8:tab:cc": "Cycle counting",
+    "8:tab:owh": "Other warehousing",
+    "8:tab:rtLine": "Time available per shift",
+    "8:tab:rtLabor": "Routing time for line",
+    "8:tab:ht": "Heijunka time for line",
+    "8:tab:dtKind": "Downtime reasons",
+    "8:tab:sd": "Shutdown",
+    "8:tab:eff": "Efficiency"
   },
   "pl": true
 }

@@ -1,170 +1,215 @@
-<div class="panel-body" data-tab="lean">
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-hoursCoeff"><%- t('reports', 'settings:lean:hoursCoeff') %></label>
-    <input id="<%- idPrefix %>-lean-hoursCoeff" class="form-control" name="reports.lean.hoursCoeff" type="number" min="0" step="0.1">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-totalVolumeProducedProdFlows"><%- t('reports', 'settings:lean:totalVolumeProducedProdFlows') %></label>
-    <input id="<%- idPrefix %>-lean-totalVolumeProducedProdFlows" name="reports.lean.totalVolumeProducedProdFlows" type="text">
-  </div>
-  <div class="form-group-horizontal">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-prodQualityInspectionSubdivision"><%- t('reports', 'settings:lean:prodQualityInspectionSubdivision') %></label>
-      <input id="<%- idPrefix %>-lean-prodQualityInspectionSubdivision" name="reports.lean.prodQualityInspectionSubdivision" type="text">
+<div class="panel-body has-subtabs" data-tab="lean">
+  <div class="settings reports-settings">
+    <div class="list-group">
+      <% [
+        'general',
+        'tvp',
+        'qa',
+        'ma',
+        'ffte',
+        'pmh',
+        'kitters',
+        'pt',
+        'cc',
+        'owh',
+        'rtLine',
+        'rtLabor',
+        'ht',
+        'dtKind',
+        'sd',
+        'eff'
+      ].forEach(function(subtab) { %>
+      <a class="list-group-item" href="#reports;settings?tab=lean&subtab=<%- subtab %>" data-tab="lean" data-subtab="<%- subtab %>"><%- t('reports', '8:tab:' + subtab) %></a>
+      <% }) %>
     </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-prodQualityInspectionPlan"><%- t('reports', 'settings:lean:prodQualityInspectionPlan') %></label>
-      <input id="<%- idPrefix %>-lean-prodQualityInspectionPlan" class="form-control" name="reports.lean.prodQualityInspectionPlan" type="number" min="0" step="1">
+    <div class="panel panel-primary">
+      <div class="panel-body" data-subtab="general">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-hoursCoeff"><%- t('reports', 'settings:lean:hoursCoeff') %></label>
+          <input id="<%- idPrefix %>-lean-hoursCoeff" class="form-control" name="reports.lean.hoursCoeff" type="number" min="0" step="0.1">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="tvp">
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-totalVolumeProducedProdFlows"><%- t('reports', 'settings:lean:totalVolumeProducedProdFlows') %></label>
+          <input id="<%- idPrefix %>-lean-totalVolumeProducedProdFlows" name="reports.lean.totalVolumeProducedProdFlows" type="text">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="qa">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-prodQualityInspectionSubdivision"><%- t('reports', 'settings:lean:prodQualityInspectionSubdivision') %></label>
+          <input id="<%- idPrefix %>-lean-prodQualityInspectionSubdivision" name="reports.lean.prodQualityInspectionSubdivision" type="text">
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-prodQualityInspectionPlan"><%- t('reports', 'settings:lean:prodQualityInspectionPlan') %></label>
+          <input id="<%- idPrefix %>-lean-prodQualityInspectionPlan" class="form-control" name="reports.lean.prodQualityInspectionPlan" type="number" min="0" step="1">
+        </div>
+        <hr>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-materialQualityInspectionSubdivision"><%- t('reports', 'settings:lean:materialQualityInspectionSubdivision') %></label>
+          <input id="<%- idPrefix %>-lean-materialQualityInspectionSubdivision" name="reports.lean.materialQualityInspectionSubdivision" type="text">
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-materialQualityInspectionPlan"><%- t('reports', 'settings:lean:materialQualityInspectionPlan') %></label>
+          <input id="<%- idPrefix %>-lean-materialQualityInspectionPlan" class="form-control" name="reports.lean.materialQualityInspectionPlan" type="number" min="0" step="1">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="ma">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-maintenanceSubdivision"><%- t('reports', 'settings:lean:maintenanceSubdivision') %></label>
+          <input id="<%- idPrefix %>-lean-maintenanceSubdivision" name="reports.lean.maintenanceSubdivision" type="text">
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-maintenancePlan"><%- t('reports', 'settings:lean:maintenancePlan') %></label>
+          <input id="<%- idPrefix %>-lean-maintenancePlan" class="form-control" name="reports.lean.maintenancePlan" type="number" min="0" step="1">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="ffte">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-prodOperatorCoeff"><%- t('reports', 'settings:lean:prodOperatorCoeff') %></label>
+          <input id="<%- idPrefix %>-lean-prodOperatorCoeff" class="form-control" name="reports.lean.prodOperatorCoeff" type="number" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-leadersPlanDen"><%- t('reports', 'settings:lean:leadersPlanDen') %></label>
+          <input id="<%- idPrefix %>-lean-leadersPlanDen" class="form-control" name="reports.lean.leadersPlanDen" type="number" min="0" step="1">
+        </div>
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-realProdSetterDowntimeReasons"><%- t('reports', 'settings:lean:realProdSetterDowntimeReasons') %></label>
+          <input id="<%- idPrefix %>-lean-realProdSetterDowntimeReasons" name="reports.lean.realProdSetterDowntimeReasons" type="text">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="pmh">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-prodMaterialHandlingPlanCoeff"><%- t('reports', 'settings:lean:prodMaterialHandlingPlanCoeff') %></label>
+          <input id="<%- idPrefix %>-lean-prodMaterialHandlingPlanCoeff" class="form-control" name="reports.lean.prodMaterialHandlingPlanCoeff" type="number" min="0" step="0.001">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="kitters">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-kittersPlanCoeff1"><%- t('reports', 'settings:lean:kittersPlanCoeff1') %></label>
+          <input id="<%- idPrefix %>-lean-kittersPlanCoeff1" class="form-control" name="reports.lean.kittersPlanCoeff1" type="number" min="0" step="0.001">
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-kittersPlanCoeff2"><%- t('reports', 'settings:lean:kittersPlanCoeff2') %></label>
+          <input id="<%- idPrefix %>-lean-kittersPlanCoeff2" class="form-control" name="reports.lean.kittersPlanCoeff2" type="number" min="0" step="0.001">
+        </div>
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-realKittersProdTasks"><%- t('reports', 'settings:lean:realKittersProdTasks') %></label>
+          <input id="<%- idPrefix %>-lean-realKittersProdTasks" name="reports.lean.realKittersProdTasks" type="text">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="pt">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-prodTransportPlanCoeff1"><%- t('reports', 'settings:lean:prodTransportPlanCoeff1') %></label>
+          <input id="<%- idPrefix %>-lean-prodTransportPlanCoeff1" class="form-control" name="reports.lean.prodTransportPlanCoeff1" type="number" min="0" step="0.001">
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-prodTransportPlanCoeff2"><%- t('reports', 'settings:lean:prodTransportPlanCoeff2') %></label>
+          <input id="<%- idPrefix %>-lean-prodTransportPlanCoeff2" class="form-control" name="reports.lean.prodTransportPlanCoeff2" type="number" min="0" step="0.001">
+        </div>
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-realProdTransportProdTasks"><%- t('reports', 'settings:lean:realProdTransportProdTasks') %></label>
+          <input id="<%- idPrefix %>-lean-realProdTransportProdTasks" name="reports.lean.realProdTransportProdTasks" type="text">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="cc">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-cycleCountingPlanCoeff1"><%- t('reports', 'settings:lean:cycleCountingPlanCoeff1') %></label>
+          <input id="<%- idPrefix %>-lean-cycleCountingPlanCoeff1" class="form-control" name="reports.lean.cycleCountingPlanCoeff1" type="number" min="0" step="0.001">
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-cycleCountingPlanCoeff2"><%- t('reports', 'settings:lean:cycleCountingPlanCoeff2') %></label>
+          <input id="<%- idPrefix %>-lean-cycleCountingPlanCoeff2" class="form-control" name="reports.lean.cycleCountingPlanCoeff2" type="number" min="0" step="0.001">
+        </div>
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-realCycleCountingProdTasks"><%- t('reports', 'settings:lean:realCycleCountingProdTasks') %></label>
+          <input id="<%- idPrefix %>-lean-realCycleCountingProdTasks" name="reports.lean.realCycleCountingProdTasks" type="text">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="owh">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-otherWarehousingPlanCoeff1"><%- t('reports', 'settings:lean:otherWarehousingPlanCoeff1') %></label>
+          <input id="<%- idPrefix %>-lean-otherWarehousingPlanCoeff1" class="form-control" name="reports.lean.otherWarehousingPlanCoeff1" type="number" min="0" step="0.001">
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-otherWarehousingPlanCoeff2"><%- t('reports', 'settings:lean:otherWarehousingPlanCoeff2') %></label>
+          <input id="<%- idPrefix %>-lean-otherWarehousingPlanCoeff2" class="form-control" name="reports.lean.otherWarehousingPlanCoeff2" type="number" min="0" step="0.001">
+        </div>
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-realOtherWarehousingProdTasks"><%- t('reports', 'settings:lean:realOtherWarehousingProdTasks') %></label>
+          <input id="<%- idPrefix %>-lean-realOtherWarehousingProdTasks" name="reports.lean.realOtherWarehousingProdTasks" type="text">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="rtLine">
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-realRoutingTimeForLineDowntimeReasons"><%- t('reports', 'settings:lean:realRoutingTimeForLineDowntimeReasons') %></label>
+          <input id="<%- idPrefix %>-lean-realRoutingTimeForLineDowntimeReasons" name="reports.lean.realRoutingTimeForLineDowntimeReasons" type="text">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="rtLabor">
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-realRoutingTimeForLabourDowntimeReasons"><%- t('reports', 'settings:lean:realRoutingTimeForLabourDowntimeReasons') %></label>
+          <input id="<%- idPrefix %>-lean-realRoutingTimeForLabourDowntimeReasons" name="reports.lean.realRoutingTimeForLabourDowntimeReasons" type="text">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="ht">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-heijunkaTimeForLineCoeff"><%- t('reports', 'settings:lean:heijunkaTimeForLineCoeff') %></label>
+          <input id="<%- idPrefix %>-lean-heijunkaTimeForLineCoeff" class="form-control" name="reports.lean.heijunkaTimeForLineCoeff" type="number" min="0" step="0.001">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="dtKind">
+        <% [
+          'realBreaksDowntimeReasons',
+          'realFap0DowntimeReasons',
+          'realStartupDowntimeReasons',
+          'realMeetingsDowntimeReasons',
+          'realSixSDowntimeReasons',
+          'realTpmDowntimeReasons',
+          'realTrainingsDowntimeReasons',
+          'realCoTimeDowntimeReasons'
+          ].forEach(function(prop) { %>
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-<%- prop %>"><%- t('reports', 'settings:lean:' + prop) %></label>
+          <input id="<%- idPrefix %>-lean-<%- prop %>" name="reports.lean.<%- prop %>" type="text">
+        </div>
+        <% }) %>
+      </div>
+      <div class="panel-body" data-subtab="sd">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-realShutdownThreshold"><%- t('reports', 'settings:lean:realShutdownThreshold') %></label>
+          <input id="<%- idPrefix %>-lean-realShutdownThreshold" class="form-control" name="reports.lean.realShutdownThreshold" type="number" min="0" step="1">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="eff">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-efficiencyPlanFormula"><%- t('reports', 'settings:lean:efficiencyPlanFormula') %></label>
+          <textarea id="<%- idPrefix %>-lean-efficiencyPlanFormula" class="form-control reports-settings-efficiencyFormula" name="reports.lean.efficiencyPlanFormula" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-lean-realEfficiencyFormula"><%- t('reports', 'settings:lean:realEfficiencyFormula') %></label>
+          <textarea id="<%- idPrefix %>-lean-realEfficiencyFormula" class="form-control reports-settings-efficiencyFormula" name="reports.lean.realEfficiencyFormula" rows="3"></textarea>
+          <p class="help-block">
+            <%- t('reports', 'settings:lean:efficiencyFormulaHelp') %>
+            <span class="reports-settings-efficiencyFormula">
+              TIME_AVAIL_PER_SHIFT,
+              ROUTING_TIME_FOR_LINE,
+              ROUTING_TIME_FOR_LABOUR,
+              HEIJUNKA_TIME_FOR_LINE,
+              BREAKS,
+              FAP_0,
+              STARTUP,
+              SHUTDOWN,
+              MEETINGS,
+              6S,
+              TPM,
+              TRAININGS,
+              CO_TIME,
+              DOWNTIME
+            </span>
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="form-group-horizontal">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-materialQualityInspectionSubdivision"><%- t('reports', 'settings:lean:materialQualityInspectionSubdivision') %></label>
-      <input id="<%- idPrefix %>-lean-materialQualityInspectionSubdivision" name="reports.lean.materialQualityInspectionSubdivision" type="text">
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-materialQualityInspectionPlan"><%- t('reports', 'settings:lean:materialQualityInspectionPlan') %></label>
-      <input id="<%- idPrefix %>-lean-materialQualityInspectionPlan" class="form-control" name="reports.lean.materialQualityInspectionPlan" type="number" min="0" step="1">
-    </div>
-  </div>
-  <div class="form-group-horizontal">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-maintenanceSubdivision"><%- t('reports', 'settings:lean:maintenanceSubdivision') %></label>
-      <input id="<%- idPrefix %>-lean-maintenanceSubdivision" name="reports.lean.maintenanceSubdivision" type="text">
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-maintenancePlan"><%- t('reports', 'settings:lean:maintenancePlan') %></label>
-      <input id="<%- idPrefix %>-lean-maintenancePlan" class="form-control" name="reports.lean.maintenancePlan" type="number" min="0" step="1">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-prodOperatorCoeff"><%- t('reports', 'settings:lean:prodOperatorCoeff') %></label>
-    <input id="<%- idPrefix %>-lean-prodOperatorCoeff" class="form-control" name="reports.lean.prodOperatorCoeff" type="number" min="0" step="0.01">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-realProdSetterDowntimeReasons"><%- t('reports', 'settings:lean:realProdSetterDowntimeReasons') %></label>
-    <input id="<%- idPrefix %>-lean-realProdSetterDowntimeReasons" name="reports.lean.realProdSetterDowntimeReasons" type="text">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-leadersPlanDen"><%- t('reports', 'settings:lean:leadersPlanDen') %></label>
-    <input id="<%- idPrefix %>-lean-leadersPlanDen" class="form-control" name="reports.lean.leadersPlanDen" type="number" min="0" step="1">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-prodMaterialHandlingPlanCoeff"><%- t('reports', 'settings:lean:prodMaterialHandlingPlanCoeff') %></label>
-    <input id="<%- idPrefix %>-lean-prodMaterialHandlingPlanCoeff" class="form-control" name="reports.lean.prodMaterialHandlingPlanCoeff" type="number" min="0" step="0.001">
-  </div>
-  <div class="form-group-horizontal">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-kittersPlanCoeff1"><%- t('reports', 'settings:lean:kittersPlanCoeff1') %></label>
-      <input id="<%- idPrefix %>-lean-kittersPlanCoeff1" class="form-control" name="reports.lean.kittersPlanCoeff1" type="number" min="0" step="0.001">
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-kittersPlanCoeff2"><%- t('reports', 'settings:lean:kittersPlanCoeff2') %></label>
-      <input id="<%- idPrefix %>-lean-kittersPlanCoeff2" class="form-control" name="reports.lean.kittersPlanCoeff2" type="number" min="0" step="0.001">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-realKittersProdTasks"><%- t('reports', 'settings:lean:realKittersProdTasks') %></label>
-    <input id="<%- idPrefix %>-lean-realKittersProdTasks" name="reports.lean.realKittersProdTasks" type="text">
-  </div>
-  <div class="form-group-horizontal">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-prodTransportPlanCoeff1"><%- t('reports', 'settings:lean:prodTransportPlanCoeff1') %></label>
-      <input id="<%- idPrefix %>-lean-prodTransportPlanCoeff1" class="form-control" name="reports.lean.prodTransportPlanCoeff1" type="number" min="0" step="0.001">
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-prodTransportPlanCoeff2"><%- t('reports', 'settings:lean:prodTransportPlanCoeff2') %></label>
-      <input id="<%- idPrefix %>-lean-prodTransportPlanCoeff2" class="form-control" name="reports.lean.prodTransportPlanCoeff2" type="number" min="0" step="0.001">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-realProdTransportProdTasks"><%- t('reports', 'settings:lean:realProdTransportProdTasks') %></label>
-    <input id="<%- idPrefix %>-lean-realProdTransportProdTasks" name="reports.lean.realProdTransportProdTasks" type="text">
-  </div>
-  <div class="form-group-horizontal">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-cycleCountingPlanCoeff1"><%- t('reports', 'settings:lean:cycleCountingPlanCoeff1') %></label>
-      <input id="<%- idPrefix %>-lean-cycleCountingPlanCoeff1" class="form-control" name="reports.lean.cycleCountingPlanCoeff1" type="number" min="0" step="0.001">
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-cycleCountingPlanCoeff2"><%- t('reports', 'settings:lean:cycleCountingPlanCoeff2') %></label>
-      <input id="<%- idPrefix %>-lean-cycleCountingPlanCoeff2" class="form-control" name="reports.lean.cycleCountingPlanCoeff2" type="number" min="0" step="0.001">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-realCycleCountingProdTasks"><%- t('reports', 'settings:lean:realCycleCountingProdTasks') %></label>
-    <input id="<%- idPrefix %>-lean-realCycleCountingProdTasks" name="reports.lean.realCycleCountingProdTasks" type="text">
-  </div>
-  <div class="form-group-horizontal">
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-otherWarehousingPlanCoeff1"><%- t('reports', 'settings:lean:otherWarehousingPlanCoeff1') %></label>
-      <input id="<%- idPrefix %>-lean-otherWarehousingPlanCoeff1" class="form-control" name="reports.lean.otherWarehousingPlanCoeff1" type="number" min="0" step="0.001">
-    </div>
-    <div class="form-group">
-      <label for="<%- idPrefix %>-lean-otherWarehousingPlanCoeff2"><%- t('reports', 'settings:lean:otherWarehousingPlanCoeff2') %></label>
-      <input id="<%- idPrefix %>-lean-otherWarehousingPlanCoeff2" class="form-control" name="reports.lean.otherWarehousingPlanCoeff2" type="number" min="0" step="0.001">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-realOtherWarehousingProdTasks"><%- t('reports', 'settings:lean:realOtherWarehousingProdTasks') %></label>
-    <input id="<%- idPrefix %>-lean-realOtherWarehousingProdTasks" name="reports.lean.realOtherWarehousingProdTasks" type="text">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-realRoutingTimeForLineDowntimeReasons"><%- t('reports', 'settings:lean:realRoutingTimeForLineDowntimeReasons') %></label>
-    <input id="<%- idPrefix %>-lean-realRoutingTimeForLineDowntimeReasons" name="reports.lean.realRoutingTimeForLineDowntimeReasons" type="text">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-realRoutingTimeForLabourDowntimeReasons"><%- t('reports', 'settings:lean:realRoutingTimeForLabourDowntimeReasons') %></label>
-    <input id="<%- idPrefix %>-lean-realRoutingTimeForLabourDowntimeReasons" name="reports.lean.realRoutingTimeForLabourDowntimeReasons" type="text">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-heijunkaTimeForLineCoeff"><%- t('reports', 'settings:lean:heijunkaTimeForLineCoeff') %></label>
-    <input id="<%- idPrefix %>-lean-heijunkaTimeForLineCoeff" class="form-control" name="reports.lean.heijunkaTimeForLineCoeff" type="number" min="0" step="0.001">
-  </div>
-  <% [
-    'realBreaksDowntimeReasons',
-    'realFap0DowntimeReasons',
-    'realStartupDowntimeReasons',
-    'realMeetingsDowntimeReasons',
-    'realSixSDowntimeReasons',
-    'realTpmDowntimeReasons',
-    'realTrainingsDowntimeReasons',
-    'realCoTimeDowntimeReasons'
-  ].forEach(function(prop) { %>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-<%- prop %>"><%- t('reports', 'settings:lean:' + prop) %></label>
-    <input id="<%- idPrefix %>-lean-<%- prop %>" name="reports.lean.<%- prop %>" type="text">
-  </div>
-  <% }) %>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-realShutdownThreshold"><%- t('reports', 'settings:lean:realShutdownThreshold') %></label>
-    <input id="<%- idPrefix %>-lean-realShutdownThreshold" class="form-control" name="reports.lean.realShutdownThreshold" type="number" min="0" step="1">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-efficiencyPlanFormula"><%- t('reports', 'settings:lean:efficiencyPlanFormula') %></label>
-    <textarea id="<%- idPrefix %>-lean-efficiencyPlanFormula" class="form-control reports-settings-efficiencyFormula" name="reports.lean.efficiencyPlanFormula" rows="3"></textarea>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-lean-realEfficiencyFormula"><%- t('reports', 'settings:lean:realEfficiencyFormula') %></label>
-    <textarea id="<%- idPrefix %>-lean-realEfficiencyFormula" class="form-control reports-settings-efficiencyFormula" name="reports.lean.realEfficiencyFormula" rows="3"></textarea>
-    <p class="help-block">
-      <%- t('reports', 'settings:lean:efficiencyFormulaHelp') %>
-      <span class="reports-settings-efficiencyFormula">
-        TIME_AVAIL_PER_SHIFT,
-        ROUTING_TIME_FOR_LINE,
-        ROUTING_TIME_FOR_LABOUR,
-        HEIJUNKA_TIME_FOR_LINE,
-        BREAKS,
-        FAP_0,
-        STARTUP,
-        SHUTDOWN,
-        MEETINGS,
-        6S,
-        TPM,
-        TRAININGS,
-        CO_TIME,
-        DOWNTIME
-      </span>
-    </p>
   </div>
 </div>
