@@ -141,7 +141,7 @@ define([
 
           plan[metric].push({
             x: x,
-            y: (typeof value === 'number' ? value : value[0]) || null
+            y: typeof value === 'number' ? value : value[0]
           });
         });
 
@@ -151,7 +151,7 @@ define([
 
           real[metric].push({
             x: x,
-            y: (typeof value === 'number' ? value : value[1]) || null
+            y: typeof value === 'number' ? value : value[1]
           });
         });
 
@@ -161,7 +161,7 @@ define([
 
           real[aorId].push({
             x: x,
-            y: value || null
+            y: value || 0
           });
         });
       });
