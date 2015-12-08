@@ -69,3 +69,8 @@
 .settings .has-subtabs .list-group-item:first-child {
   border-top: 0;
 }
+.settings-select2-long .select2-container-multi .select2-choices .select2-search-choice {
+   float: none;
+   border: 0;
+   background: none;
+ }
