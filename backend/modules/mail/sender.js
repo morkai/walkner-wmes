@@ -150,7 +150,7 @@ exports.start = function startMailSenderModule(app, module)
 
     if (htmlBody)
     {
-      email.push('html', 1);
+      email.push('html: 1');
     }
 
     email.push('Body:', mailOptions[htmlBody ? 'html' : 'text'] || '');
