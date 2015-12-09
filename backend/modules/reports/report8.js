@@ -310,8 +310,15 @@ module.exports = function(mongoose, options, done)
 
   function calcMetrics(group, groups)
   {
+    calcAllDayCount(group, groups);
     calcAllShiftCount(group, groups);
     calcRealTotalVolumeProduced(group, groups);
+
+    group.workingDayCount = groups === null
+      ? _.size(group.workingDayCount)
+      : _.reduce(groups, function(total, group) { return total + group.workingDayCount; }, 0);
+
+    var fteDays = usedDays.noWork ? group.allDayCount : group.workingDayCount;
 
     group.workingShiftCount = _.size(group.workingShiftCount);
     group.timeAvailablePerShift[PLAN] = calcTimeAvailablePerShiftPlan(group);
@@ -324,11 +331,13 @@ module.exports = function(mongoose, options, done)
     group.prodSetters[PLAN] = countProdSettersPlan(group.prodSetters[PLAN]);
     group.prodSetters[REAL] = util.round(group.prodSetters[REAL]);
     group.masters[PLAN] = countMastersPlan(group.masters[PLAN]);
-    group.masters[REAL] = util.round(group.masters[REAL]);
+    group.masters[REAL] = util.round(group.masters[REAL] / fteDays);
     group.leaders[PLAN] = util.round(group.prodOperators[PLAN] / settings.leadersPlanDen);
+    group.leaders[REAL] = util.round(group.leaders[REAL] / fteDays);
     group.prodMaterialHandling[PLAN] = util.round(group.prodOperators[PLAN] * settings.prodMaterialHandlingPlanCoeff);
+    group.prodMaterialHandling[REAL] = util.round(group.prodMaterialHandling[REAL] / fteDays);
     group.kitters[PLAN] = calcKittersPlan(group);
-    group.kitters[REAL] = util.round(group.kitters[REAL]);
+    group.kitters[REAL] = util.round(group.kitters[REAL] / fteDays);
     group.prodTransport[PLAN] = calcProdTransportPlan(group);
     group.prodTransport[REAL] = util.round(group.prodTransport[REAL]);
     group.cycleCounting[PLAN] = calcCycleCountingPlan(group);
@@ -364,6 +373,8 @@ module.exports = function(mongoose, options, done)
       totalVolumeProduced: [0, 0],
       averageRoutingTime: 0,
       orderCount: 0,
+      allDayCount: {},
+      workingDayCount: {},
       allShiftCount: {},
       workingShiftCount: {},
       prodBasedPlanners: [0, 0],
@@ -836,6 +847,8 @@ module.exports = function(mongoose, options, done)
     group.prodSetters[PLAN][prodLineId].num += 1;
     summary.prodSetters[PLAN][prodLineId].days[dateKey] = true;
     group.prodSetters[PLAN][prodLineId].days[dateKey] = true;
+
+    group.workingDayCount[dateKey] = true;
 
     if (!prodLineToWorkingDays[prodLineId])
     {
@@ -1438,6 +1451,31 @@ module.exports = function(mongoose, options, done)
     return util.round(group.timeAvailablePerShift[PLAN] - UNPLANNED);
   }
 
+  function calcAllDayCount(group, groups)
+  {
+    if (groups !== null)
+    {
+      group.allDayCount = _.reduce(groups, function(total, group) { return total + group.allDayCount; }, 0);
+
+      return;
+    }
+
+    var date = moment(group.key);
+    var toTime = moment(group.key).add(1, options.interval);
+
+    group.allDayCount = 0;
+
+    while (date.valueOf() < toTime)
+    {
+      if (usedDays[date.day()])
+      {
+        group.allDayCount += 1;
+      }
+
+      date.add(1, 'days');
+    }
+  }
+
   function calcAllShiftCount(group, groups)
   {
     if (usedDays.noWork)
@@ -1449,10 +1487,7 @@ module.exports = function(mongoose, options, done)
         return;
       }
 
-      group.allShiftCount = _.reduce(groups, function(total, group)
-      {
-        return total + group.allShiftCount;
-      }, 0);
+      group.allShiftCount = _.reduce(groups, function(total, group) { return total + group.allShiftCount; }, 0);
 
       return;
     }
