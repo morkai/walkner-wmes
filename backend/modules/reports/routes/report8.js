@@ -6,6 +6,7 @@
 
 var _ = require('lodash');
 var step = require('h5.step');
+var moment = require('moment');
 var helpers = require('./helpers');
 var report8 = require('../report8');
 
@@ -26,6 +27,7 @@ var NUMERIC_PROPS = [
 
 module.exports = function report8Route(app, reportsModule, req, res, next)
 {
+  var express = app[reportsModule.config.expressId];
   var orgUnitsModule = app[reportsModule.config.orgUnitsId];
   var settingsModule = app[reportsModule.config.settingsId];
   var query = req.query;
@@ -46,6 +48,22 @@ module.exports = function report8Route(app, reportsModule, req, res, next)
     prodFlows: {},
     settings: {}
   };
+
+  if (isNaN(options.fromTime) || isNaN(options.toTime))
+  {
+    return next(express.createHttpError('INVALID_TIME'));
+  }
+
+  options.fromTime = moment(options.fromTime).startOf(options.interval).valueOf();
+
+  var toMoment = moment(options.toTime).startOf(options.interval);
+
+  if (options.fromTime === toMoment.valueOf())
+  {
+    toMoment.add(1, options.interval);
+  }
+
+  options.toTime = toMoment.valueOf();
 
   _.forEach(ARRAY_PROPS, function(prop)
   {

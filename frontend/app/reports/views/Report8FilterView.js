@@ -86,9 +86,19 @@ define([
     serializeFormToQuery: function()
     {
       var query = _.extend(_.result(this.model, 'defaults'), form2js(this.el));
+      var fromTime = time.getMoment(query.from, 'YYYY-MM-DD').startOf(query.interval).valueOf();
+      var toMoment = time.getMoment(query.to, 'YYYY-MM-DD').startOf(query.interval);
 
-      query.from = time.getMoment(query.from, 'YYYY-MM-DD').valueOf();
-      query.to = time.getMoment(query.to, 'YYYY-MM-DD').valueOf();
+      if (fromTime === toMoment.valueOf())
+      {
+        toMoment.add(1, query.interval);
+      }
+
+      query.from = fromTime;
+      query.to = toMoment.valueOf();
+
+      this.$id('from').val(time.format(query.from, 'YYYY-MM-DD'));
+      this.$id('to').val(time.format(query.to, 'YYYY-MM-DD'));
 
       ['days', 'shifts', 'divisions', 'subdivisionTypes'].forEach(this.applyAllOptionsIfEmpty.bind(this, query));
 
