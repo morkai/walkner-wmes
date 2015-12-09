@@ -32,7 +32,13 @@
           <div class="props first">
             <div class="prop">
               <div class="prop-name"><%- t('users', 'PROPERTY:name') %></div>
-              <div class="prop-value"><%= model.lastName || '' %> <%= model.firstName || '' %></div>
+              <div class="prop-value">
+                <% if (!model.lastName && !model.firstName) { %>
+                -
+                <% } else { %>
+                <%= model.lastName || '' %> <%= model.firstName || '' %>
+                <% } %>
+              </div>
             </div>
             <div class="prop">
               <div class="prop-name"><%- t('users', 'PROPERTY:email') %></div>

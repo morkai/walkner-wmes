@@ -322,6 +322,22 @@ define([
         aors: []
       });
 
+      ['firstName', 'lastName', 'personellId', 'email'].forEach(function(prop)
+      {
+        if (!formData[prop] || !formData[prop].length)
+        {
+          formData[prop] = '';
+        }
+      });
+
+      ['company', 'prodFunction', 'vendor'].forEach(function(prop)
+      {
+        if (!formData[prop] || !formData[prop].length)
+        {
+          formData[prop] = null;
+        }
+      });
+
       if (typeof formData.aors === 'string')
       {
         formData.aors = formData.aors.split(',');
@@ -330,21 +346,6 @@ define([
       if (typeof formData.privileges === 'string')
       {
         formData.privileges = formData.privileges.split(',');
-      }
-
-      if (!formData.company || !formData.company.length)
-      {
-        formData.company = null;
-      }
-
-      if (!formData.prodFunction || !formData.prodFunction.length)
-      {
-        formData.prodFunction = null;
-      }
-
-      if (!formData.vendor || !formData.vendor.length)
-      {
-        formData.vendor = null;
       }
 
       if (formData.subdivision)
