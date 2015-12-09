@@ -18,6 +18,7 @@
         'dtKind',
         'dtAll',
         'sd',
+        'plan',
         'eff'
       ].forEach(function(subtab) { %>
       <a class="list-group-item" href="#reports;settings?tab=lean&subtab=<%- subtab %>" data-tab="lean" data-subtab="<%- subtab %>"><%- t('reports', '8:tab:' + subtab) %></a>
@@ -186,6 +187,12 @@
         <div class="form-group">
           <label for="<%- idPrefix %>-lean-realShutdownThreshold"><%- t('reports', 'settings:lean:realShutdownThreshold') %></label>
           <input id="<%- idPrefix %>-lean-realShutdownThreshold" class="form-control" name="reports.lean.realShutdownThreshold" type="number" min="0" step="1">
+        </div>
+      </div>
+      <div class="panel-body" data-subtab="plan">
+        <div class="form-group settings-select2-long">
+          <label for="<%- idPrefix %>-lean-planProdFlows"><%- t('reports', 'settings:lean:planProdFlows') %></label>
+          <input id="<%- idPrefix %>-lean-planProdFlows" name="reports.lean.planProdFlows" type="text">
         </div>
       </div>
       <div class="panel-body" data-subtab="eff">

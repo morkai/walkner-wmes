@@ -65,6 +65,7 @@ module.exports = function(mongoose, options, done)
     realTrainingsDowntimeReasons: [],
     realCoTimeDowntimeReasons: [],
     realShutdownThreshold: 0,
+    planProdFlows: [],
     efficiencyPlanFormula: '0',
     realEfficiencyFormula: '0'
   });
@@ -141,6 +142,7 @@ module.exports = function(mongoose, options, done)
     realOtherWarehousing: {}
   };
   var TOTAL_VOLUME_PRODUCED_PROD_FLOWS = {};
+  var PLAN_PROD_FLOWS = {};
 
   _.forEach(DOWNTIME_REASONS, function(downtimeReasons, prop)
   {
@@ -159,6 +161,10 @@ module.exports = function(mongoose, options, done)
   _.forEach(settings.totalVolumeProducedProdFlows, function(prodFlowId)
   {
     TOTAL_VOLUME_PRODUCED_PROD_FLOWS[prodFlowId] = true;
+  });
+  _.forEach(settings.planProdFlows, function(prodFlowId)
+  {
+    PLAN_PROD_FLOWS[prodFlowId] = true;
   });
 
   debugTimes.optionsSetup = Date.now();
@@ -562,7 +568,7 @@ module.exports = function(mongoose, options, done)
     var group = getDataGroup(hourlyPlan.date);
     var shiftMoment = moment(hourlyPlan.date).startOf('day');
     var dateTime = shiftMoment.valueOf();
-    var inc = function(count, selectedProdLines, activeProdLines, changeTvp)
+    var inc = function(count, selectedProdLines, activeProdLines, changeTvp, changePlan)
     {
       if (count === 0)
       {
@@ -575,7 +581,7 @@ module.exports = function(mongoose, options, done)
         summary.totalVolumeProduced[PLAN] += count;
       }
 
-      if (selectedProdLines === 0)
+      if (selectedProdLines === 0 || !changePlan)
       {
         return;
       }
@@ -594,6 +600,13 @@ module.exports = function(mongoose, options, done)
       var flow = hourlyPlan.flows[i];
       var flowId = flow.id.toString();
       var changeTvp = isTotalVolumeProducedProdFlow(flowId);
+      var changePlan = isPlanProdFlow(flowId);
+
+      if (!changeTvp && !changePlan)
+      {
+        continue;
+      }
+
       var selectedProdLines = usedProdFlows === null
         ? -1
         : options.prodFlows[flowId]
@@ -608,7 +621,7 @@ module.exports = function(mongoose, options, done)
 
         for (h = 0; h < 8; ++h)
         {
-          inc(flow.hours[h], selectedProdLines, activeProdLines, changeTvp);
+          inc(flow.hours[h], selectedProdLines, activeProdLines, changeTvp, changePlan);
         }
       }
 
@@ -618,7 +631,7 @@ module.exports = function(mongoose, options, done)
 
         for (h = 8; h < 14; ++h)
         {
-          inc(flow.hours[h], selectedProdLines, activeProdLines, changeTvp);
+          inc(flow.hours[h], selectedProdLines, activeProdLines, changeTvp, changePlan);
         }
       }
 
@@ -628,7 +641,7 @@ module.exports = function(mongoose, options, done)
 
         for (h = 14; h < 24; ++h)
         {
-          inc(flow.hours[h], selectedProdLines, activeProdLines, changeTvp);
+          inc(flow.hours[h], selectedProdLines, activeProdLines, changeTvp, changePlan);
         }
       }
     }
@@ -791,7 +804,7 @@ module.exports = function(mongoose, options, done)
       summary.workingShiftCount[shiftCountKey] = true;
       group.workingShiftCount[shiftCountKey] = true;
 
-      if (!prodShiftOrder.mechOrder)
+      if (!prodShiftOrder.mechOrder && isPlanProdFlow(prodShiftOrder.prodFlow))
       {
         summary.plan[REAL] += prodShiftOrder.quantityDone;
         group.plan[REAL] += prodShiftOrder.quantityDone;
@@ -1256,6 +1269,11 @@ module.exports = function(mongoose, options, done)
   function isTotalVolumeProducedProdFlow(prodFlowId)
   {
     return settings.totalVolumeProducedProdFlows.length === 0 || TOTAL_VOLUME_PRODUCED_PROD_FLOWS[prodFlowId] === true;
+  }
+
+  function isPlanProdFlow(prodFlowId)
+  {
+    return settings.planProdFlows.length === 0 || PLAN_PROD_FLOWS[prodFlowId] === true;
   }
 
   function isInSelectedOrgUnit(obj)
