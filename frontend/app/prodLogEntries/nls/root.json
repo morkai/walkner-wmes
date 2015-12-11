@@ -15,6 +15,7 @@
     "PROPERTY:data": "Additional info",
     "PROPERTY:prodShift": "Shift",
     "PROPERTY:prodShiftOrder": "Order",
+    "PROPERTY:instanceId": "Instance ID",
 
     "type:changeShift": "Shift start",
     "type:changeMaster": "Master change",

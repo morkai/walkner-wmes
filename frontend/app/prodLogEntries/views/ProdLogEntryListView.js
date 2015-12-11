@@ -34,7 +34,8 @@ define([
       {id: 'prodShift', className: 'is-min'},
       {id: 'prodShiftOrder', className: 'is-min'},
       {id: 'createdAt', className: 'is-min'},
-      {id: 'creator', className: 'is-min'}
+      {id: 'creator', className: 'is-min'},
+      {id: 'instanceId', className: 'is-min'}
     ],
 
     serializeActions: function()

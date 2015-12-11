@@ -14,6 +14,7 @@
   "PROPERTY:data": "Dodatkowe informacje",
   "PROPERTY:prodShift": "Zmiana",
   "PROPERTY:prodShiftOrder": "Zlecenie",
+  "PROPERTY:instanceId": "ID instancji",
 
   "type:changeShift": "Rozpoczęcie zmiany",
   "type:changeMaster": "Zmiana mistrza",
