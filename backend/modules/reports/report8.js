@@ -228,7 +228,17 @@ module.exports = function(mongoose, options, done)
       var summary = results.summary;
 
       var currentGroupKey = moment(options.fromTime).startOf(options.interval);
-      var lastGroupKey = moment(Math.min(options.toTime, Date.now())).startOf(options.interval).valueOf();
+      var now = Date.now();
+      var lastGroupKey = options.toTime > now
+        ? moment(now).startOf(options.interval).add(1, options.interval)
+        : moment(options.toTime).startOf(options.interval);
+
+      if (lastGroupKey.valueOf() === currentGroupKey.valueOf())
+      {
+        lastGroupKey.add(1, options.interval);
+      }
+
+      lastGroupKey = lastGroupKey.valueOf();
 
       while (currentGroupKey.valueOf() < lastGroupKey)
       {
