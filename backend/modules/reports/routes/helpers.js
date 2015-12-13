@@ -14,7 +14,7 @@ var MORE_THAN_DAY_IN_FUTURE_EXPIRATION = 5;
 var IN_PAST_EXPIRATION = 15;
 
 var cachedReports = {};
-var inProgress = {};
+var inProgress = null;
 
 exports.clearCachedReports = function(ids)
 {
@@ -50,14 +50,35 @@ exports.sendCachedReport = function(id, req, res, next)
 
 exports.generateReport = function(app, reportsModule, report, reportId, reportHash, options, done)
 {
+  var messengerClient = app[reportsModule.config.messengerClientId];
+
+  if (inProgress === null)
+  {
+    inProgress = {};
+
+    app.broker
+      .subscribe('messenger.client.disconnected')
+      .setFilter(function(message) { return message.moduleName === reportsModule.config.messengerClientId; })
+      .on('message', function()
+      {
+        _.forEach(inProgress, function(callbacks)
+        {
+          _.forEach(callbacks, function(callback)
+          {
+            callback(new Error('CONNECTION_LOST'));
+          });
+        });
+
+        inProgress = {};
+      });
+  }
+
   if (inProgress[reportHash] !== undefined)
   {
     return inProgress[reportHash].push(done);
   }
 
   inProgress[reportHash] = [done];
-
-  var messengerClient = app[reportsModule.config.messengerClientId];
 
   if (messengerClient === undefined || !_.includes(reportsModule.config.reports, reportId))
   {
