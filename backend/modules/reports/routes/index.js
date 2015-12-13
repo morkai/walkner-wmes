@@ -120,6 +120,16 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     );
   }
 
+  if (_.includes(reportsModule.config.reports, '9'))
+  {
+    express.get(
+      '/reports/9',
+      userModule.auth('REPORTS:VIEW', 'REPORTS:9:VIEW'),
+      helpers.sendCachedReport.bind(null, '9'),
+      require('./report9').bind(null, app, reportsModule)
+    );
+  }
+
   express.get(
     '/reports/settings',
     canView,

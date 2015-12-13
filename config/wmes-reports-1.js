@@ -38,7 +38,8 @@ exports.mongoose = {
     'prodShift', 'prodShiftOrder', 'prodDowntime',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'clipOrderCount',
-    'whShiftMetrics'
+    'whShiftMetrics',
+    'cag', 'cagGroup', 'cagPlan'
   ]
 };
 exports.mongoose.options.server.poolSize = 10;

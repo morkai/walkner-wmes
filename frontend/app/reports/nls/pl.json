@@ -553,5 +553,19 @@
   "settings:lean:planProdFlows": "Plan: przepływy",
   "settings:lean:efficiencyPlanFormula": "Wydajność (plan): wzór",
   "settings:lean:realEfficiencyFormula": "Wydajność (real): wzór",
-  "settings:lean:efficiencyFormulaHelp": "Dostępne zmienne:"
+  "settings:lean:efficiencyFormulaHelp": "Dostępne zmienne:",
+
+  "9:breadcrumbs:base": "Planowane obciążenie linii",
+  "9:actions:dictionaries": "Słowniki",
+  "9:actions:cags": "CAG",
+  "9:actions:groups": "Grupy CAG",
+  "9:actions:plans": "Załaduj plan",
+  "9:planUpload:title": "Import planu",
+  "9:planUpload:file": "Plik CSV",
+  "9:planUpload:submit": "Załaduj plik",
+  "9:planUpload:cancel": "Anuluj",
+  "9:planUpload:success": "Plik został załadowany pomyślnie :-)",
+  "9:planUpload:failure": "Nie udało się załadować pliku :-(",
+  "9:planUpload:synced": "Nowy plan został zaimportowany :-)",
+  "9:planUpload:syncFailed": "Nie udało się zaimportować nowego planu :-("
 }

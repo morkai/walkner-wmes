@@ -105,6 +105,7 @@
     "NAVBAR:REPORTS:6": "Warehouse",
     "NAVBAR:REPORTS:7": "Downtimes in AORs",
     "NAVBAR:REPORTS:8": "Lean",
+    "NAVBAR:REPORTS:9": "Planned line utilization",
     "NAVBAR:PROD": "Production",
     "NAVBAR:PROD:DATA": "Production data",
     "NAVBAR:PROD:LOG_ENTRIES": "Operation log",

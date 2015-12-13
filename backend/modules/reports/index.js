@@ -19,7 +19,8 @@ exports.DEFAULT_CONFIG = {
   messengerClientId: null,
   messengerType: 'request',
   javaBatik: null,
-  reports: ['1', '2', '3', '4', '5', '6', '7', '8']
+  reports: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+  nc12ToCagsJsonPath: 'nc12_to_cags.json'
 };
 
 exports.start = function startReportsModule(app, module)
@@ -94,6 +95,21 @@ exports.start = function startReportsModule(app, module)
   app.broker.subscribe('clipOrderCount.created', function()
   {
     helpers.clearCachedReports(['2', '7']);
+  });
+
+  app.broker.subscribe('cags.*', function()
+  {
+    helpers.clearCachedReports('9');
+  });
+
+  app.broker.subscribe('cagGroups.*', function()
+  {
+    helpers.clearCachedReports('9');
+  });
+
+  app.broker.subscribe('cags.*.synced', function()
+  {
+    helpers.clearCachedReports('9');
   });
 
   app.broker.subscribe('orders.synced', function()

@@ -62,6 +62,7 @@ exports.modules = [
   'kaizen',
   'suggestions',
   'opinionSurveys',
+  'cags',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -170,7 +171,8 @@ exports.pubsub = {
     'orders.updated.*',
     'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',
-    'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted'
+    'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted',
+    'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed'
   ]
 };
 
@@ -198,7 +200,8 @@ exports.mongoose = {
     'suggestion',
     'opinionSurvey', 'opinionSurveyAction', 'opinionSurveyResponse',
     'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion',
-    'opinionSurveyScanTemplate', 'opinionSurveyOmrResult'
+    'opinionSurveyScanTemplate', 'opinionSurveyOmrResult',
+    'cag', 'cagGroup', 'cagPlan'
   ]
 };
 exports.mongoose.options.server.poolSize = 15;
@@ -237,7 +240,7 @@ exports.user = {
     'PROD_DATA:VIEW', 'PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST', 'PROD_DATA:CHANGES:MANAGE',
     'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
     'REPORTS:VIEW', 'REPORTS:MANAGE', 'REPORTS:1:VIEW', 'REPORTS:2:VIEW', 'REPORTS:3:VIEW', 'REPORTS:4:VIEW',
-    'REPORTS:5:VIEW', 'REPORTS:6:VIEW', 'REPORTS:7:VIEW', 'REPORTS:8:VIEW',
+    'REPORTS:5:VIEW', 'REPORTS:6:VIEW', 'REPORTS:7:VIEW', 'REPORTS:8:VIEW', 'REPORTS:9:VIEW',
     'XICONF:VIEW', 'XICONF:MANAGE', 'XICONF:NOTIFY', 'ICPO:VIEW', 'ICPO:MANAGE',
     'FACTORY_LAYOUT:MANAGE',
     'KAIZEN:MANAGE', 'KAIZEN:DICTIONARIES:VIEW', 'KAIZEN:DICTIONARIES:MANAGE',
@@ -345,7 +348,8 @@ exports.updater = {
 exports.reports = {
   messengerClientId: 'messenger/client:wmes-reports-1',
   messengerType: 'push',
-  javaBatik: 'java -jar c:/tools/batik/batik-rasterizer.jar'
+  javaBatik: 'java -jar c:/tools/batik/batik-rasterizer.jar',
+  nc12ToCagsJsonPath: __dirname + '/../data/12nc_to_cags.json'
 };
 
 exports.xiconf = {
@@ -406,4 +410,8 @@ exports['directoryWatcher:opinionSurveys'] = {
 exports.prodDowntimeAlerts = {
   messengerServerId: null,
   messengerClientId: 'messenger/client:wmes-alerts'
+};
+
+exports.cags = {
+  planUploadPath: __dirname + '/../data/attachments-input'
 };

@@ -284,5 +284,13 @@
   "TYPE:prodDowntimeAlerts.edited": "Przestoje > Alarmy: edycja",
   "TEXT:prodDowntimeAlerts.edited": "Zmodyfikowano alarm: <a href='\\#prodDowntimeAlerts/{model->_id}'>{model->name}</a>",
   "TYPE:prodDowntimeAlerts.deleted": "Przestoje > Alarmy: usunięcie",
-  "TEXT:prodDowntimeAlerts.deleted": "Usunięto alarm: <em>{model->name}</em>"
+  "TEXT:prodDowntimeAlerts.deleted": "Usunięto alarm: <em>{model->name}</em>",
+  "TYPE:cags.plan.synced": "CAG: import planu",
+  "TEXT:cags.plan.synced": "Zaimportowano <em>{count}</em> {count, plural, one{wartość} other{wartości}} do planu CAG.",
+  "TYPE:cags.plan.syncFailed": "CAG: nieudany import planu",
+  "TEXT:cags.plan.syncFailed": "Nie udało się zaimportować planu: {error}",
+  "TYPE:cags.nc12.synced": "CAG: synchronizacja 12NC",
+  "TEXT:cags.nc12.synced": "Zaimportowano <em>{count}</em> {count, plural, one{powiązanie} few{powiązania} other{powiązań}} 12NC <-> CAG z danych pobranych <em>{timestamp}</em>.",
+  "TYPE:cags.nc12.syncFailed": "CAG: nieudana synchronizacja 12NC",
+  "TEXT:cags.nc12.syncFailed": "Nie udało się zaimportować powiązań 12NC <-> CAG z danych pobranych <em>{timestamp}</em>: <em>{error}</em>"
 }

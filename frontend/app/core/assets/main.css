@@ -138,9 +138,14 @@ kbd {
 .label {
   text-shadow: 1px 1px 1px #333;
 }
-.label.license-feature {
+.label.license-feature,
+.label.color {
   font-size: 1em;
   text-transform: uppercase;
+}
+.color.is-contrast {
+  color: #333;
+  text-shadow: none;
 }
 
 .page-header {

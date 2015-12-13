@@ -23,7 +23,9 @@ exports.modules = [
   'warehouse/importer/shiftMetrics',
   'xiconf/importer/orders',
   'orderDocuments/importer',
-  'reports/clipOrderCount'
+  'reports/clipOrderCount',
+  'cags/importer/nc12',
+  'cags/importer/plan'
 ];
 
 exports.mongoose = {
@@ -38,7 +40,8 @@ exports.mongoose = {
     'mrpController', 'clipOrderCount',
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
-    'xiconfOrder'
+    'xiconfOrder',
+    'cag', 'cagPlan'
   ]
 };
 exports.mongoose.options.server.poolSize = 5;
@@ -57,12 +60,16 @@ exports.events = {
       'clipOrderCount.created',
       'warehouse.*.synced',
       'xiconf.orders.synced',
-      'orderDocuments.synced'
+      'orderDocuments.synced',
+      'cags.nc12.synced',
+      'cags.plan.synced'
     ],
     error: [
       'warehouse.*.syncFailed',
       'xiconf.orders.syncFailed',
       'orderDocuments.syncFailed',
+      'cags.nc12.syncFailed',
+      'cags.plan.syncFailed',
       'app.started'
     ]
   }
@@ -89,7 +96,8 @@ exports['messenger/server'] = {
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
-    'orders.documents.synced'
+    'orders.documents.synced',
+    'cags.plan.synced', 'cags.plan.syncFailed'
   ]
 };
 
@@ -136,5 +144,10 @@ exports['xiconf/importer/orders'] = {
 
 exports['orderDocuments/importer'] = {
   filterRe: /^T_COOIS_DOCS_[0-9]+\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['cags/importer/nc12'] = {
+  resultFile: __dirname + '/../data/12nc_to_cags.json',
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
