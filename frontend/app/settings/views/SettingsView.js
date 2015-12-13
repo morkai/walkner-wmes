@@ -190,7 +190,7 @@ define([
         $oldTab.removeClass('active');
         $newTab.addClass('active');
         $newTabPanel.find('.panel-body.active').removeClass('active');
-        $newTabPanel.find('.panel-body[data-subtab="' + subtab + '"]').addClass('active')
+        $newTabPanel.find('.panel-body[data-subtab="' + subtab + '"]').addClass('active');
       }
 
       this.currentTab = tab;

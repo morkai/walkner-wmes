@@ -4,7 +4,6 @@
 
 'use strict';
 
-var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
 var helpers = require('./helpers');
