@@ -258,7 +258,12 @@ app/purchaseOrders/assets/qzPrint.css
 
 app/reports/assets/main.css
 ----------------
+app/reports/assets/./report9.css
 app/reports/assets/main.css
+
+app/reports/assets/report9.css
+----------------
+app/reports/assets/report9.css
 
 app/settings/assets/main.css
 ----------------
@@ -558,7 +563,7 @@ app/core/views/NavbarView.js
 app/core/templates/logInForm.js
 app/core/views/LogInFormView.js
 app/core/util/showDeleteFormPage.js
-app/core/templates/colorLabel.js
+app/core/util/colorLabel.js
 app/aors/Aor.js
 app/aors/AorCollection.js
 app/data/aors.js
@@ -1222,6 +1227,18 @@ app/nls/prodDowntimeAlerts.js
 app/nls/pl/prodDowntimeAlerts.js
 i18n!app/nls/prodDowntimeAlerts
 app/prodDowntimeAlerts/routes.js
+app/cagGroups/CagGroup.js
+app/cagGroups/CagGroupCollection.js
+app/nls/cagGroups.js
+app/nls/pl/cagGroups.js
+i18n!app/nls/cagGroups
+app/cagGroups/routes.js
+app/cags/Cag.js
+app/cags/CagCollection.js
+app/nls/cags.js
+app/nls/pl/cags.js
+i18n!app/nls/cags
+app/cags/routes.js
 app/wmes-routes.js
 vendor/visibly.js
 app/visibility.js
@@ -1489,7 +1506,7 @@ app/nls/pl/purchaseOrders.js
 i18n!app/nls/purchaseOrders
 app/purchaseOrders/routes.js
 app/core/util/showDeleteFormPage.js
-app/core/templates/colorLabel.js
+app/core/util/colorLabel.js
 app/aors/Aor.js
 app/aors/AorCollection.js
 app/data/aors.js
@@ -1616,7 +1633,7 @@ app/core/views/NavbarView.js
 app/core/templates/logInForm.js
 app/core/views/LogInFormView.js
 app/kaizenOrders/templates/navbar.js
-app/core/templates/colorLabel.js
+app/core/util/colorLabel.js
 app/companies/Company.js
 app/companies/CompanyCollection.js
 app/data/companies.js

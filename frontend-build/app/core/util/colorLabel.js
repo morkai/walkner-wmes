@@ -1,0 +1,5 @@
+// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
+// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
+// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+
+define([],function(){"use strict";function s(s){var t=0,r=0,a=0,n=s.match(/^#([a-fA-F0-9]{3,6})$/);if(n){var e=n[1];3===e.length?(t=e.substr(0,1),r=e.substr(1,1),a=e.substr(2,1),t+=t,r+=r,a+=a):(t=e.substr(0,2),r=e.substr(2,2),a=e.substr(4,2)),t=parseInt(t,16),r=parseInt(r,16),a=parseInt(a,16)}else n=s.match(/([0-9]+).*?([0-9]+).*?([0-9]+)/),n&&(t=parseInt(n[1],10),r=parseInt(n[2],10),a=parseInt(n[3],10));return.3>1-(.299*t+.587*r+.114*a)/255}var t={};return function(r){"string"==typeof r&&(r={color:r});var a=["label","color"];r.className&&(a=a.concat(r.className));var n=r.title||"",e=r.color,c=r.label||e,l=t[e];return void 0===l&&(l=t[e]=s(e)),l&&a.push("is-contrast"),'<span class="'+a.join(" ")+'" title="'+n+'" style="background: '+e+'">'+c+"</span>"}});

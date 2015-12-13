@@ -1,1 +1,1 @@
-define(["require","exports","module"],function(e,n,i){"use strict";i.exports={"true":!0,"false":!1,"null":null,undefined:void 0,Infinity:1/0,"-Infinity":-1/0}});
+define(["require","exports","module"],function(e,n,i){"use strict";i.exports={"true":!0,"false":!1,"null":null,undefined:void 0,Infinity:1/0,"-Infinity":-(1/0)}});
