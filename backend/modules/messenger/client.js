@@ -29,7 +29,7 @@ exports.start = function startMessengerClientModule(app, module, done)
   {
     if (err)
     {
-      return done(err);
+      return setImmediate(done, err);
     }
 
     pushSocket = socket;
@@ -43,7 +43,7 @@ exports.start = function startMessengerClientModule(app, module, done)
       module.debug("push socket listening on port %d...", module.config.pushPort);
     }
 
-    done();
+    setImmediate(done);
   });
 
   /**
