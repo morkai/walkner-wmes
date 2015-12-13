@@ -4,7 +4,7 @@
 
 ### node.js
 
-  * __Version__: 0.12
+  * __Version__: 5
   * __Website__: https://nodejs.org/
   * __Download__: https://nodejs.org/download/
   * __Installation guide__: https://github.com/joyent/node/wiki/Installation

@@ -14,7 +14,7 @@ module.exports = function saveScanTemplateJpgRoute(app, module, req, res, next)
 {
   var express = app[module.config.expressId];
 
-  var file = Array.isArray(req.files.image) ? req.files.image[0] : null;
+  var file = req.file;
   var imageId = Date.now().toString(36) + Math.round(1000000000 + Math.random() * 8999999999).toString(36);
   var templatePath = path.join(module.config.templatesPath, imageId + '.jpg');
 

@@ -65,12 +65,11 @@ module.exports = function setUpSuggestionsRoutes(app, module)
       canView,
       multer({
         dest: module.config.attachmentsDest,
-        putSingleFilesInArray: false,
         limits: {
           files: 3,
-          fileSize: '10mb'
+          fileSize: 10 * 1024 * 1024
         }
-      }),
+      }).any(),
       uploadAttachmentsRoute
     );
   }
@@ -256,15 +255,15 @@ module.exports = function setUpSuggestionsRoutes(app, module)
   {
     var attachments = [];
 
-    _.forEach(_.values(req.files), function(file)
+    _.forEach(req.files, function(file)
     {
-      var id = file.name.replace(/\..*?$/, '');
+      var id = file.filename.replace(/\..*?$/, '');
 
       tmpAttachments[id] = {
         data: {
           _id: id,
           type: file.mimetype,
-          path: file.name,
+          path: file.filename,
           name: file.originalname,
           size: file.size,
           description: file.fieldname

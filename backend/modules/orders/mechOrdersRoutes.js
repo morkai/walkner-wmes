@@ -4,6 +4,7 @@
 
 'use strict';
 
+var os = require('os');
 var fs = require('fs');
 var _ = require('lodash');
 var multer = require('multer');
@@ -24,37 +25,42 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
     '/mechOrders;import',
     auth('ORDERS:MANAGE'),
     multer({
-      putSingleFilesInArray: true,
+      dest: os.tmpdir(),
       limits: {
         files: 1,
-        fileSize: '5mb'
+        fileSize: 5 * 1024 * 1024
       }
-    }),
+    }).single('mechOrders'),
     importRoute
   );
 
   express.patch('/mechOrders/:id', express.crud.editRoute.bind(null, app, MechOrder));
 
+  function removeFile(req)
+  {
+    if (req.file)
+    {
+      fs.unlink(req.file.path, _.noop);
+    }
+  }
+
   function importRoute(req, res, next)
   {
     if (importing !== null)
     {
-      removeFiles(req.files);
+      removeFile(req);
 
       return res.sendStatus(400);
     }
 
-    var mechOrdersFiles = req.files.mechOrders;
+    var mechOrdersFile = req.file;
 
-    if (!Array.isArray(mechOrdersFiles)
-      || !/\.csv$/i.test(mechOrdersFiles[0].originalname))
+    if (!mechOrdersFile || !/\.csv$/i.test(mechOrdersFile.originalname))
     {
-      removeFiles(req.files);
+      removeFile(req);
 
       return res.sendStatus(400);
     }
-
-    var mechOrdersFile = mechOrdersFiles[0];
 
     importing = 0;
 
@@ -108,7 +114,7 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
       })
       .on('end', function()
       {
-        removeFiles(req.files);
+        removeFile(req);
         upsertNextMechOrder();
       })
       .on('error', function(err)
@@ -159,23 +165,5 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
     time = parseFloat(time.replace(',', '.'));
 
     return isNaN(time) || time < 0 ? -1 : time;
-  }
-
-  function removeFiles(files)
-  {
-    _.forEach(files, function(fileOrFiles)
-    {
-      if (Array.isArray(fileOrFiles))
-      {
-        _.forEach(fileOrFiles, function(file)
-        {
-          fs.unlink(file.path, function() {});
-        });
-      }
-      else
-      {
-        fs.unlink(fileOrFiles.path, function() {});
-      }
-    });
   }
 };

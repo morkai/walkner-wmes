@@ -4,6 +4,7 @@
 
 'use strict';
 
+var os = require('os');
 var _ = require('lodash');
 var multer = require('multer');
 
@@ -69,12 +70,12 @@ module.exports = function setUpOpinionSurveysRoutes(app, module)
     '/opinionSurveys/scanTemplates;uploadImage',
     canManage,
     multer({
-      putSingleFilesInArray: true,
+      dest: os.tmpdir(),
       limits: {
         files: 1,
-        fileSize: '5mb'
+        fileSize: 5 * 1024 * 1024
       }
-    }),
+    }).single('image'),
     saveScanTemplateJpgRoute.bind(null, app, module)
   );
   setUpCrudRoutes(canManage, 'OpinionSurveyScanTemplate', 'scanTemplates');

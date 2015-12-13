@@ -142,12 +142,10 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     express.post(
       '/reports;export',
       multer({
-        putSingleFilesInArray: true,
         limits: {
-          files: 1,
-          fileSize: '1mb'
+          files: 0
         }
-      }),
+      }).any(),
       exportRoute.bind(null, reportsModule)
     );
   }
