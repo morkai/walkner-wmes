@@ -4,10 +4,12 @@
 
 define([
   'app/i18n',
-  'app/core/views/ListView'
+  'app/core/views/ListView',
+  'app/core/util/colorLabel'
 ], function(
   t,
-  ListView
+  ListView,
+  colorLabel
 ) {
   'use strict';
 
@@ -29,7 +31,7 @@ define([
 
         if (row.clipColor)
         {
-          row.clipColor = '<span class="label" style="background: ' + row.clipColor + '">' + row.clipColor + '</span>';
+          row.clipColor = colorLabel(row.clipColor);
         }
 
         var parentTask = prodTasks.get(row.parent);

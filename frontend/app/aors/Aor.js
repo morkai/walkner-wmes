@@ -4,10 +4,10 @@
 
 define([
   '../core/Model',
-  'app/core/templates/colorLabel'
+  'app/core/util/colorLabel'
 ], function(
   Model,
-  colorLabelTemplate
+  colorLabel
 ) {
   'use strict';
 
@@ -24,7 +24,7 @@ define([
     nlsDomain: 'aors',
 
     labelAttribute: 'name',
-    
+
     defaults: {
       name: null,
       description: null,
@@ -37,8 +37,8 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.color = colorLabelTemplate({color: obj.color});
-      obj.refColor = colorLabelTemplate({color: obj.refColor});
+      obj.color = colorLabel(obj.color);
+      obj.refColor = colorLabel(obj.refColor);
       obj.refValue = obj.refValue && obj.refValue.toLocaleString ? obj.refValue.toLocaleString() : '0';
 
       return obj;

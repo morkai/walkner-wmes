@@ -3,15 +3,15 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'app/core/templates/colorLabel'
+  'app/core/util/colorLabel'
 ], function(
-  colorLabelTemplate
+  colorLabel
 ) {
   'use strict';
 
   return function(orderStatus)
   {
-    return colorLabelTemplate({
+    return colorLabel({
       className: 'orderStatus',
       label: orderStatus._id,
       title: orderStatus.label,

@@ -6,12 +6,12 @@ define([
   '../i18n',
   '../core/Model',
   '../data/aors',
-  'app/core/templates/colorLabel'
+  'app/core/util/colorLabel'
 ], function(
   t,
   Model,
   aors,
-  colorLabelTemplate
+  colorLabel
 ) {
   'use strict';
 
@@ -54,8 +54,8 @@ define([
       obj.scheduled = t('core', 'BOOL:' + obj.scheduled);
       obj.auto = t('core', 'BOOL:' + obj.auto);
       obj.type = t('downtimeReasons', 'type:' + obj.type);
-      obj.color = colorLabelTemplate({color: obj.color});
-      obj.refColor = colorLabelTemplate({color: obj.refColor});
+      obj.color = colorLabel(obj.color);
+      obj.refColor = colorLabel(obj.refColor);
       obj.refValue = obj.refValue && obj.refValue.toLocaleString ? obj.refValue.toLocaleString() : '0';
 
       if (!obj.subdivisionTypes || !obj.subdivisionTypes.length)

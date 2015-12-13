@@ -6,12 +6,12 @@ define([
   '../i18n',
   '../data/companies',
   '../core/Model',
-  'app/core/templates/colorLabel'
+  'app/core/util/colorLabel'
 ], function(
   t,
   companies,
   Model,
-  colorLabelTemplate
+  colorLabel
 ) {
   'use strict';
 
@@ -54,7 +54,7 @@ define([
 
       obj.direct = t('prodFunctions', 'direct:' + obj.direct);
 
-      obj.color = colorLabelTemplate({color: obj.color});
+      obj.color = colorLabel(obj.color);
 
       return obj;
     }

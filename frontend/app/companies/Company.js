@@ -4,10 +4,10 @@
 
 define([
   '../core/Model',
-  'app/core/templates/colorLabel'
+  'app/core/util/colorLabel'
 ], function(
   Model,
-  colorLabelTemplate
+  colorLabel
 ) {
   'use strict';
 
@@ -39,7 +39,7 @@ define([
         obj.name = obj._id;
       }
 
-      obj.color = colorLabelTemplate({color: obj.color});
+      obj.color = colorLabel(obj.color);
 
       return obj;
     }
