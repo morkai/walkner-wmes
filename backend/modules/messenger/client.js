@@ -161,6 +161,13 @@ exports.start = function startMessengerClientModule(app, module, done)
         module.debug("[req] Disconnected. Reconnecting...");
 
         connected = false;
+
+        app.broker.publish('messenger.client.disconnected', {
+          moduleName: module.name,
+          socketType: 'req',
+          host: module.config.repHost,
+          port: module.config.repPort
+        });
       }
     });
   }
