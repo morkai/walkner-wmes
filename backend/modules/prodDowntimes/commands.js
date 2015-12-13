@@ -148,8 +148,6 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
           }
 
           prodDowntimesModule.error("Failed to corroborate downtime [%s]: %s", prodDowntime._id, err.message);
-          console.inspect(changes);
-          console.inspect(err.errors);
 
           return reply(err);
         }
