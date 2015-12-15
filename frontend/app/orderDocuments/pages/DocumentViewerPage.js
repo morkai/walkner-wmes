@@ -21,6 +21,8 @@ define([
 ) {
   'use strict';
 
+  var LOADED_FILES_COUNT_TO_REFRESH = 5;
+
   return View.extend({
 
     template: template,
@@ -38,6 +40,7 @@ define([
 
     initialize: function()
     {
+      this.loadedFilesCount = 0;
       this.$els = {
         controls: null,
         viewer: null
@@ -67,6 +70,7 @@ define([
         'documentWindowRequested',
         setTimeout.bind(window, this.previewView.openDocumentWindow.bind(this.previewView), 1)
       );
+      this.listenTo(this.previewView, 'fileLoaded', this.onFileLoaded);
 
       this.socket.on('orderDocuments.remoteOrderUpdated', this.onRemoteOrderUpdated.bind(this));
     },
@@ -196,6 +200,32 @@ define([
       {
         this.previewView.loadDocument();
       }
+    },
+
+    onFileLoaded: function()
+    {
+      this.loadedFilesCount += 1;
+
+      if (this.loadedFilesCount !== LOADED_FILES_COUNT_TO_REFRESH)
+      {
+        return;
+      }
+
+      this.listenToOnce(this.model, 'change:remoteOrder:no', function()
+      {
+        if (this.model.get('fileSource') === 'remote')
+        {
+          window.location.reload();
+        }
+
+        this.listenTo(this.model, 'change:localFile change:localOrder change:remoteOrder', function()
+        {
+          if (this.model.get('fileSource') === 'remote')
+          {
+            window.location.reload();
+          }
+        });
+      });
     }
 
   });

@@ -160,7 +160,11 @@ define([
     {
       var view = this;
 
-      this.$iframe.one('load', function() { view.$id('loading').addClass('hidden'); });
+      this.$iframe.one('load', function()
+      {
+        view.$id('loading').addClass('hidden');
+        view.trigger('fileLoaded', src);
+      });
       this.$iframe.prop('src', src);
     },
 

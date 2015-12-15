@@ -304,6 +304,11 @@ define([
       }
 
       this.set(orderType, newOrder);
+
+      if (oldOrder.no !== newOrder.no)
+      {
+        this.trigger('change:' + orderType + ':no', oldOrder.no, newOrder.no);
+      }
     }
 
   });
