@@ -66,7 +66,7 @@ define([
 
       obj.status = t('status:' + obj.status);
       obj.section = kaizenDictionaries.sections.getLabel(obj.section);
-      obj.categories = obj.categories
+      obj.categories = (obj.categories || [])
         .map(function(c) { return kaizenDictionaries.categories.getLabel(c); })
         .join('; ');
       obj.productFamily = kaizenDictionaries.productFamilies.getLabel(obj.productFamily) || '-';
