@@ -191,7 +191,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         var insertsMap = {};
         var updatesList = [];
         var updateCount = 0;
-        var multiProgramMap = {};
+        var deletedItemsMap = {};
         var importedAt = new Date(fileInfo.timestamp);
 
         for (var i = 0; i < this.ordersList.length; ++i)
@@ -219,7 +219,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
           }
           else
           {
-            updateCount += compareOrders(updatesList, multiProgramMap, importedAt, order, xiconfOrder, parsedOrders);
+            updateCount += compareOrders(updatesList, deletedItemsMap, importedAt, order, xiconfOrder, parsedOrders);
           }
         }
 
@@ -227,7 +227,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         this.updatesList = updatesList;
         this.insertCount = this.insertsList.length;
         this.updateCount = updateCount;
-        this.multiProgramOrderIds = Object.keys(multiProgramMap);
+        this.deletedItemsMap = deletedItemsMap;
 
         setImmediate(this.next());
       },
@@ -271,14 +271,16 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
           return this.skip(err);
         }
 
-        if (!this.multiProgramOrderIds.length)
+        var orderIds = Object.keys(this.deletedItemsMap);
+
+        if (!orderIds.length)
         {
           return this.skip();
         }
 
-        XiconfOrder.find({_id: {$in: this.multiProgramOrderIds}}, {items: 1, nc12: 1}).lean().exec(this.next());
+        XiconfOrder.find({_id: {$in: orderIds}}, {items: 1, nc12: 1}).lean().exec(this.next());
       },
-      function overrideProgramItemStep(err, xiconfOrders)
+      function removeDeletedItemsStep(err, xiconfOrders)
       {
         if (err)
         {
@@ -289,27 +291,24 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         {
           var order = xiconfOrders[i];
           var allItems = order.items;
-          var programItems = [];
+          var deletedItems = this.deletedItemsMap[order._id];
           var update = {
-            nc12s: [order.nc12],
+            nc12: [order.nc12[0]],
             items: []
           };
 
           for (var ii = 0; ii < allItems.length; ++ii)
           {
+            if (_.includes(deletedItems, ii))
+            {
+              continue;
+            }
+
             var item = allItems[ii];
 
-            if (item.kind === 'program')
-            {
-              programItems.push(item);
-            }
-            else
-            {
-              update.items.push(item);
-            }
+            update.nc12.push(item.nc12);
+            update.items.push(item);
           }
-
-          update.items.push(programItems[programItems.length - 1]);
 
           XiconfOrder.update({_id: order._id}, {$set: update}, this.group());
         }
@@ -434,7 +433,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     };
   }
 
-  function compareOrders(updatesList, multiProgramMap, importedAt, order, xiconfOrder, parsedOrders)
+  function compareOrders(updatesList, deletedItemsMap, importedAt, order, xiconfOrder, parsedOrders)
   {
     if (importedAt <= xiconfOrder.importedAt)
     {
@@ -445,7 +444,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     var $push = {};
 
     compareOrderToXiconfOrder($set, order, xiconfOrder);
-    compareParsedOrdersToXiconfOrder($set, $push, multiProgramMap, parsedOrders, xiconfOrder);
+    compareParsedOrdersToXiconfOrder($set, $push, deletedItemsMap, parsedOrders, xiconfOrder);
 
     var emptySet = _.isEmpty($set);
     var emptyPush = _.isEmpty($push);
@@ -511,10 +510,10 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     }
   }
 
-  function compareParsedOrdersToXiconfOrder($set, $push, multiProgramMap, parsedOrdersList, xiconfOrder)
+  function compareParsedOrdersToXiconfOrder($set, $push, deletedItemsMap, parsedOrdersList, xiconfOrder)
   {
     var parsedOrdersMap = {};
-    var hasProgramItem = false;
+    var deletedItems = [];
 
     _.forEach(parsedOrdersList, function(parsedOrder)
     {
@@ -523,13 +522,18 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     _.forEach(xiconfOrder.items, function(xiconfOrderItem, i)
     {
-      if (xiconfOrderItem.kind === 'program')
-      {
-        hasProgramItem = true;
-      }
+      var itemExists = compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i);
 
-      compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i);
+      if (!itemExists)
+      {
+        deletedItems.push(i);
+      }
     });
+
+    if (deletedItems.length)
+    {
+      deletedItemsMap[xiconfOrder._id] = deletedItems;
+    }
 
     _.forEach(parsedOrdersMap, function(parsedOrder)
     {
@@ -541,11 +545,6 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
       $push.items.$each.push(createXiconfOrderItem(parsedOrder));
       $push.nc12.$each.push(parsedOrder.nc12);
-
-      if (hasProgramItem && parsedOrder.kind === 'program')
-      {
-        multiProgramMap[xiconfOrder._id] = true;
-      }
     });
   }
 
@@ -555,7 +554,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     if (!parsedOrder)
     {
-      return;
+      return false;
     }
 
     delete parsedOrdersMap[xiconfOrderItem.nc12];
@@ -569,6 +568,8 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     {
       $set['items.' + i + '.quantityTodo'] = parsedOrder.quantity;
     }
+
+    return true;
   }
 
   function collectXiconfOrdersNc12($set, order, xiconfOrder)
