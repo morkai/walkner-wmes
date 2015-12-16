@@ -276,7 +276,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
           return this.skip();
         }
 
-        XiconfOrder.find({_id: this.multiProgramOrderIds}, {items: 1, nc12: 1}).lean().exec(this.next());
+        XiconfOrder.find({_id: {$in: this.multiProgramOrderIds}}, {items: 1, nc12: 1}).lean().exec(this.next());
       },
       function overrideProgramItemStep(err, xiconfOrders)
       {
