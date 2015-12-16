@@ -1357,7 +1357,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(new Error('ORDER_NOT_FOUND'));
         }
 
-        if (orderData.serviceTagCounter === 9999)
+        if (data.serviceTag !== null && orderData.serviceTagCounter === 9999)
         {
           return this.skip(new Error('NO_FREE_SERVICE_TAGS'));
         }
