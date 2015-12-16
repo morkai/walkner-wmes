@@ -56,7 +56,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
   );
 
   express.get('/r/suggestions/:filter', redirectToListRoute);
-  express.get('/r/suggestions/:rid', redirectToDetailsRoute);
+  express.get('/r/suggestion/:rid', redirectToDetailsRoute);
 
   if (module.config.attachmentsDest)
   {
