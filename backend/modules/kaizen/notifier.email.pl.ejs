@@ -1,0 +1,100 @@
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-top: 0; margin-bottom: 3px; padding-bottom: 3px;">
+  Zgłoszenie ZPW
+</h3>
+<table style="font-family: Arial, sans-serif; font-size: 12px">
+  <tbody>
+  <tr>
+    <th align="left">ID</th>
+    <td>: <a href="<%- urlPrefix %>r/kaizen/<%- nearMiss.rid %>"><%- nearMiss.rid %></a></td>
+  </tr>
+  <% if (mode === 'edit') { %>
+  <tr>
+    <th align="left">Status</th>
+    <td>: <%= nearMiss.status %></td>
+  </tr>
+  <% } %>
+  <tr>
+    <th align="left">Temat</th>
+    <td>: <%= nearMiss.subject %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Dział zgłaszający</th>
+    <td>: <%= nearMiss.section %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Osoba zatwierdzająca</th>
+    <td>: <%= nearMiss.confirmer %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Osoby zgłaszające</th>
+    <td>: <%= nearMiss.owners %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Czas zdarzenia</th>
+    <td>: <%- nearMiss.eventDate %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Miejsce zdarzenia</th>
+    <td>: <%- nearMiss.area %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Opis zdarzenia</th>
+    <td>: <%= nearMiss.description %></td>
+  </tr>
+  <% if (nearMiss.causeText) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Przyczyna</th>
+    <td>: <%= nearMiss.causeText %></td>
+  </tr>
+  <% } %>
+  <% if (nearMiss.cause) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Kategoria przyczyny</th>
+    <td>: <%= nearMiss.cause %></td>
+  </tr>
+  <% } %>
+  <% if (nearMiss.risk) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Rodzaj ryzyka</th>
+    <td>: <%= nearMiss.risk %></td>
+  </tr>
+  <% } %>
+  <% if (nearMiss.category) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Kategoria</th>
+    <td>: <%= nearMiss.category %></td>
+  </tr>
+  <% } %>
+  <% if (nearMiss.correctiveMeasures) { %>
+  <tr>
+    <th align="left">Działania korekcyjne</th>
+    <td>: <%= nearMiss.correctiveMeasures %></td>
+  </tr>
+  <% } %>
+  <% if (nearMiss.preventiveMeasures) { %>
+  <tr>
+    <th align="left">Działania korygujące</th>
+    <td>: <%= nearMiss.preventiveMeasures %></td>
+  </tr>
+  <% } %>
+  <% if (nearMiss.comment) { %>
+  <tr>
+    <th align="left" valign="top">Komentarz</th>
+    <td>: <%= nearMiss.comment %></td>
+  </tr>
+  <% } %>
+</table>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-bottom: 3px; padding-bottom: 3px;">
+  Na skróty
+</h3>
+<ul style="margin-top: 0; font-family: Arial, sans-serif; font-size: 12px">
+  <li><a href="<%- urlPrefix %>r/kaizen/<%- nearMiss.rid %>">Zgłoszenie</a></li>
+  <li><a href="<%- urlPrefix %>r/kaizens/unseen">Nieprzeczytane zgłoszenia</a></li>
+  <li><a href="<%- urlPrefix %>r/kaizens/mine">Twoje zgłoszenia</a></li>
+  <li><a href="<%- urlPrefix %>r/kaizens/all">Wszystkie zgłoszenia</a></li>
+</ul>
+<hr>
+<font face="Arial" color="Gray" size="1">
+  Ta wiadomość została wygenerowana automatycznie przez system WMES.
+  Nie dostaniesz kolejnych powiadomień o zmianach w tym zgłoszeniu, dopóki nie oznaczysz go jako przeczytane.
+</font>

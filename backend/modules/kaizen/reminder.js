@@ -4,9 +4,11 @@
 
 'use strict';
 
+var fs = require('fs');
 var _ = require('lodash');
-var moment = require('moment');
 var step = require('h5.step');
+var ejs = require('ejs');
+var moment = require('moment');
 
 module.exports = function setUpKaizenReminder(app, kaizenModule)
 {
@@ -22,6 +24,14 @@ module.exports = function setUpKaizenReminder(app, kaizenModule)
 
   var DAYS_AGO = kaizenModule.config.remind;
   var EMAIL_URL_PREFIX = kaizenModule.config.emailUrlPrefix;
+
+  var emailTemplateFile = __dirname + '/reminder.email.pl.ejs';
+  var renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
+    cache: true,
+    filename: emailTemplateFile,
+    compileDebug: false,
+    rmWhitespace: true
+  });
 
   app.broker.subscribe('app.started', scheduleNextReminder).setLimit(1);
 
@@ -122,57 +132,23 @@ module.exports = function setUpKaizenReminder(app, kaizenModule)
 
   function sendRemainderEmail(user, stats)
   {
-    var subject = '[WMES] Niezakończone zgłoszenia usprawnień';
-    var text = [
-      'Witaj, ' + user.firstName + ' ' + user.lastName + '!',
-      ''
-    ];
-
-    if (stats.totalCount === 1)
-    {
-      text.push(
-        'Dostajesz tę wiadomość, ponieważ masz jedno niezakończone zgłoszenie usprawnień (ZPW),'
-          + ' które od pewnego czasu nie było aktualizowane.'
-      );
-    }
-    else if (plural(stats.totalCount))
-    {
-      text.push(
-        'Dostajesz tę wiadomość, ponieważ masz ' + stats.totalCount + ' niezakończone zgłoszenia usprawnień (ZPW),'
-        + ' które od pewnego czasu nie były aktualizowane.'
-      );
-    }
-    else
-    {
-      text.push(
-        'Dostajesz tę wiadomość, ponieważ masz ' + stats.totalCount + ' niezakończonych zgłoszeń usprawnień (ZPW),'
-        + ' które od pewnego czasu nie były aktualizowane.'
-      );
-    }
-
-    text.push(
-      '',
-      'Prosimy o zmianę statusu zgłoszenia na Zakończone, jeżeli zostało ono już zrealizowane.',
-      '',
-      'Nieprzeczytane zgłoszenia: ' + EMAIL_URL_PREFIX + 'r/kaizens/unseen',
-      'Twoje zgłoszenia: ' + EMAIL_URL_PREFIX + 'r/kaizens/mine',
-      'Wszystkie zgłoszenia: ' + EMAIL_URL_PREFIX + 'r/kaizens/all',
-      '',
-      'Ta wiadomość została wygenerowana automatycznie przez system WMES.'
-    );
-
     var mailOptions = {
       to: user.email,
       replyTo: user.email,
-      subject: subject,
-      text: text.join('\t\r\n')
+      subject: '[WMES] Niezakończone zgłoszenia ZPW',
+      html: renderEmail({
+        urlPrefix: EMAIL_URL_PREFIX,
+        user: user,
+        plural: plural(stats.totalCount),
+        totalCount: stats.totalCount
+      })
     };
 
     mailSender.send(mailOptions, function (err)
     {
       if (err)
       {
-        kaizenModule.error("Failed to remind [%s] about incomplete orders: %s", mailOptions.to, err.message);
+        module.error("Failed to remind [%s] about incomplete suggestions: %s", mailOptions.to, err.message);
       }
     });
   }
