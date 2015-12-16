@@ -4,9 +4,11 @@
 
 'use strict';
 
+var fs = require('fs');
 var _ = require('lodash');
-var moment = require('moment');
 var step = require('h5.step');
+var ejs = require('ejs');
+var moment = require('moment');
 
 module.exports = function setUpSuggestionsReminder(app, module)
 {
@@ -23,11 +25,25 @@ module.exports = function setUpSuggestionsReminder(app, module)
   var DAYS_AGO = module.config.remind;
   var EMAIL_URL_PREFIX = module.config.emailUrlPrefix;
 
+  var emailTemplateFile = __dirname + '/reminder.email.pl.ejs';
+  var renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
+    cache: true,
+    filename: emailTemplateFile,
+    compileDebug: false,
+    rmWhitespace: true
+  });
+
   app.broker.subscribe('app.started', scheduleNextReminder).setLimit(1);
 
   function scheduleNextReminder()
   {
-    var delay = moment().hours(12).minutes(0).seconds(0).milliseconds(0).add(1, 'days').diff(Date.now());
+    var delay = moment()
+      .hours(12)
+      .minutes(0)
+      .seconds(0)
+      .milliseconds(0)
+      .add(1, 'days')
+      .diff(Date.now());
 
     setTimeout(remind, delay);
   }
@@ -98,7 +114,7 @@ module.exports = function setUpSuggestionsReminder(app, module)
         {
           var user = users[i];
 
-          sendRemainderEmail(users[i], this.userIdToStats[user._id]);
+          sendRemainderEmail(user, this.userIdToStats[user._id]);
         }
 
         module.info("Reminded %d users about incomplete suggestions.", users.length);
@@ -122,50 +138,16 @@ module.exports = function setUpSuggestionsReminder(app, module)
 
   function sendRemainderEmail(user, stats)
   {
-    var subject = '[WMES] Niezakończona sugestia';
-    var text = [
-      'Witaj, ' + user.firstName + ' ' + user.lastName + '!',
-      ''
-    ];
-
-    if (stats.totalCount === 1)
-    {
-      text.push(
-        'Dostajesz tę wiadomość, ponieważ masz jedną niezakończoną sugestię,'
-          + ' która od pewnego czasu nie była aktualizowana.'
-      );
-    }
-    else if (plural(stats.totalCount))
-    {
-      text.push(
-        'Dostajesz tę wiadomość, ponieważ masz ' + stats.totalCount + ' niezakończone sugestie,'
-        + ' które od pewnego czasu nie były aktualizowane.'
-      );
-    }
-    else
-    {
-      text.push(
-        'Dostajesz tę wiadomość, ponieważ masz ' + stats.totalCount + ' niezakończonych sugestii,'
-        + ' które od pewnego czasu nie były aktualizowane.'
-      );
-    }
-
-    text.push(
-      '',
-      'Prosimy o zmianę statusu zgłoszenia na Zakończone, jeżeli zostało ono już zrealizowane.',
-      '',
-      'Nieprzeczytane zgłoszenia: ' + EMAIL_URL_PREFIX + 'r/suggestions/unseen',
-      'Twoje zgłoszenia: ' + EMAIL_URL_PREFIX + 'r/suggestions/mine',
-      'Wszystkie zgłoszenia: ' + EMAIL_URL_PREFIX + 'r/suggestions/all',
-      '',
-      'Ta wiadomość została wygenerowana automatycznie przez system WMES.'
-    );
-
     var mailOptions = {
       to: user.email,
       replyTo: user.email,
-      subject: subject,
-      text: text.join('\t\r\n')
+      subject: '[WMES] Niezakończone zgłoszenia usprawnień',
+      html: renderEmail({
+        urlPrefix: EMAIL_URL_PREFIX,
+        user: user,
+        plural: plural(stats.totalCount),
+        totalCount: stats.totalCount
+      })
     };
 
     mailSender.send(mailOptions, function (err)
