@@ -13,6 +13,11 @@ define([
 
   function requiresContrast(color)
   {
+    if (contrastMap[color] !== undefined)
+    {
+      return contrastMap[color];
+    }
+
     var r = 0;
     var g = 0;
     var b = 0;
@@ -54,10 +59,12 @@ define([
       }
     }
 
-    return (1 - (0.299 * r + 0.587 * g + 0.114 * b) / 255) < 0.3;
+    contrastMap[color] = (1 - (0.299 * r + 0.587 * g + 0.114 * b) / 255) < 0.3;
+
+    return contrastMap[color];
   }
 
-  return function(options)
+  function colorLabel(options)
   {
     if (typeof options === 'string')
     {
@@ -72,16 +79,10 @@ define([
     }
 
     var title = options.title || '';
-    var color = options.color;
+    var color = options.color.toUpperCase();
     var label = options.label || color;
-    var contrast = contrastMap[color];
 
-    if (contrast === undefined)
-    {
-      contrast = contrastMap[color] = requiresContrast(color);
-    }
-
-    if (contrast)
+    if (requiresContrast(color))
     {
       className.push('is-contrast');
     }
@@ -89,5 +90,9 @@ define([
     return '<span class="' + className.join(' ') + '" title="' + title + '" style="background: ' + color + '">'
       + label
       + '</span>';
-  };
+  }
+
+  colorLabel.requiresContrast = requiresContrast;
+
+  return colorLabel;
 });

@@ -33,7 +33,7 @@ return moment().startOf('month').subtract(2, 'months').add(i, 'months').valueOf(
     cags: {},
     groups: {},
     orderCount: 0,
-    prodLines: {}
+    lines: {}
   };
 
   step(
@@ -66,6 +66,8 @@ currentMonth.subtract(2, 'months');
       {
         cag.group = null;
         cag.plan = [].concat(emptyPlan);
+        cag.lines = {};
+        cag.avgQPerShift = [0, 0];
 
         results.cags[cag._id] = cag;
       });
@@ -140,19 +142,43 @@ currentMonth.subtract(2, 'months');
       stream.on('error', next);
       stream.on('close', next);
     },
-    function calculateAvgQPerShiftStep(err)
+    function summarizeLinesStep(err)
     {
       if (err)
       {
         return this.skip(err);
       }
 
-      _.forEach(results.prodLines, function(cags)
+      _.forEach(results.lines, function(cags, prodLineId)
       {
         _.forEach(cags, function(data, cagId)
         {
-          cags[cagId] = util.round(data[0] / data[1]);
+          cags[cagId] = Math.round(data[0] / data[1]);
+          results.cags[cagId].lines[prodLineId] = true;
         });
+      });
+
+      setImmediate(this.next());
+    },
+    function sortLinesStep()
+    {
+      var sortedLines = {};
+
+      _.forEach(_.keys(results.lines).sort(function(a, b) { return a.localeCompare(b); }), function(line)
+      {
+        sortedLines[line] = results.lines[line];
+      });
+
+      results.lines = sortedLines;
+
+      setImmediate(this.next());
+    },
+    function summarizeCagsStep()
+    {
+      _.forEach(results.cags, function(cag)
+      {
+        cag.lines = _.size(cag.lines);
+        cag.avgQPerShift = Math.round(cag.avgQPerShift[0] / cag.avgQPerShift[1]) || 0;
       });
 
       setImmediate(this.next());
@@ -171,24 +197,25 @@ currentMonth.subtract(2, 'months');
   function handleProdShiftOrder(nc12ToCags, prodShiftOrder)
   {
     var cagId = nc12ToCags[prodShiftOrder.orderData.nc12];
+    var cag = results.cags[cagId];
 
-    if (!cagId || !results.cags[cagId])
+    if (!cag)
     {
       return;
     }
 
     results.orderCount++;
 
-    var prodLine = prodShiftOrder.prodLine;
+    var prodLine = prodShiftOrder.prodLine.split('~')[0];
     var machineTime = prodShiftOrder.machineTime;
     var qPerShift = machineTime === 0 ? 0 : ((7.5 * 3600) / (machineTime * 3600 / 100));
 
-    if (!results.prodLines[prodLine])
+    if (!results.lines[prodLine])
     {
-      results.prodLines[prodLine] = {};
+      results.lines[prodLine] = {};
     }
 
-    var prodLineCags = results.prodLines[prodLine];
+    var prodLineCags = results.lines[prodLine];
 
     if (!prodLineCags[cagId])
     {
@@ -197,5 +224,8 @@ currentMonth.subtract(2, 'months');
 
     prodLineCags[cagId][0] += qPerShift;
     prodLineCags[cagId][1] += 1;
+
+    cag.avgQPerShift[0] += qPerShift;
+    cag.avgQPerShift[1] += 1;
   }
 };

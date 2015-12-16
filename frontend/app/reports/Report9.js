@@ -4,20 +4,160 @@
 
 define([
   'underscore',
-  '../core/Model'
+  '../time',
+  '../core/Model',
+  '../core/util/colorLabel'
 ], function(
   _,
-  Model
+  time,
+  Model,
+  colorLabel
 ) {
   'use strict';
+
+  function shortenCagName(fullName)
+  {
+    if (fullName.length > 28)
+    {
+      return fullName.substr(0, 13).trim() + '...' + fullName.substr(-10).trim();
+    }
+
+    return '';
+  }
+
+  var DEFAULT_DAYS_IN_MONTH = 20;
+  var DEFAULT_SHIFTS_IN_DAY = 3;
+  var DEFAULT_HOURS_IN_SHIFT = 7.5;
 
   return Model.extend({
 
     urlRoot: '/reports/9',
 
+    defaults: function()
+    {
+      return {
+        daysInMonth: {},
+        shiftsInDay: {},
+        hoursInShift: null,
+        customLines: {},
+        months: [],
+        groups: [],
+        cags: [],
+        lines: []
+      };
+    },
+
     parse: function(report)
     {
-      return report;
+      report.groups[null] = {
+        _id: null,
+        name: '???',
+        cags: [],
+        color: '#FFFFFF'
+      };
+
+      var attrs = {
+        months: this.parseMonths(report),
+        groups: this.parseGroups(report),
+        cags: this.parseCags(report),
+        lines: this.parseLines(report)
+      };
+
+      return attrs;
+    },
+
+    parseMonths: function(report)
+    {
+      var attrs = this.attributes;
+
+      return _.map(report.months, function(monthTime)
+      {
+        var moment = time.getMoment(monthTime);
+        var key = moment.format('YYMM');
+
+        return {
+          _id: monthTime,
+          key: moment.format('YYMM'),
+          label: moment.format('MMMM YYYY'),
+          days: attrs.daysInMonth[key] || attrs.daysInMonth.summary || DEFAULT_DAYS_IN_MONTH,
+          shifts: attrs.shiftsInDay[key] || attrs.shiftsInDay.summary || DEFAULT_SHIFTS_IN_DAY
+        };
+      });
+    },
+
+    parseCags: function(report)
+    {
+      var attrs = this.attributes;
+      var daysInMonth = attrs.daysInMonth.summary || DEFAULT_DAYS_IN_MONTH;
+      var shiftsInDay = attrs.shiftsInDay.summary || DEFAULT_SHIFTS_IN_DAY;
+
+      return _.map(report.cags, function(cag)
+      {
+        var customLines = attrs.customLines[cag._id];
+
+        cag.shortName = shortenCagName(cag.name);
+        cag.group = report.groups[cag.group];
+        cag.customLines = customLines || null;
+        cag.maxOnLine = cag.avgQPerShift * daysInMonth * shiftsInDay;
+        cag.maxOnLines = cag.maxOnLine * (customLines || cag.lines);
+        cag.utilization = _.map(cag.plan, function(plan)
+        {
+          var utilization = Math.round(plan / cag.maxOnLines * 100);
+
+          return isNaN(utilization) || !isFinite(utilization) ? 0 : utilization;
+        });
+
+        return cag;
+      });
+    },
+
+    parseGroups: function(report)
+    {
+      return _.map(report.groups, function(group)
+      {
+        if (!group.color)
+        {
+          group.color = '#FFFFFF';
+        }
+
+        group.contrast = colorLabel.requiresContrast(group.color);
+
+        return group;
+      });
+    },
+
+    parseLines: function(report)
+    {
+      var lines = [];
+
+      _.forEach(report.lines, function(cags, lineId)
+      {
+        var name = lineId;
+        var parts;
+
+        if (name.length > 6 && name.indexOf('-') !== -1)
+        {
+          parts = name.split('-');
+          name = parts[0] + '\n-' + parts[1];
+        }
+        else if (name.indexOf('~') !== -1)
+        {
+          parts = name.split('~');
+          name = parts[0] + '\n~' + parts[1];
+        }
+        else
+        {
+          name = name + '\n\n';
+        }
+
+        lines.push({
+          _id: lineId,
+          name: name,
+          cags: cags
+        });
+      });
+
+      return lines;
     }
 
   });

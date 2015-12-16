@@ -13,8 +13,8 @@ module.exports = function report9Route(app, reportsModule, req, res, next)
 {
   var settingsModule = app[reportsModule.config.settingsId];
   var options = {
-    fromTime: moment().startOf('month').valueOf(),
-    toTime: moment().startOf('month').add(6, 'months').valueOf(),
+    fromTime: moment().startOf('month').subtract(6, 'months').valueOf(),
+    toTime: moment().startOf('month').valueOf(),
     nc12ToCagsJsonPath: reportsModule.config.nc12ToCagsJsonPath,
     settings: {}
   };
