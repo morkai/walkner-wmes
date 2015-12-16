@@ -218,6 +218,8 @@ define([
       this.updateProdLine();
       this.updateCurrentOrderInfo();
       this.updateDocuments();
+
+      this.$('.is-active')[0].scrollIntoView();
     },
 
     resize: function(w, h)

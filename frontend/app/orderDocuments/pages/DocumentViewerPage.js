@@ -21,7 +21,7 @@ define([
 ) {
   'use strict';
 
-  var LOADED_FILES_COUNT_TO_REFRESH = 5;
+  var LOADED_FILES_COUNT_TO_REFRESH = 6;
 
   return View.extend({
 
@@ -211,20 +211,14 @@ define([
         return;
       }
 
-      this.listenToOnce(this.model, 'change:remoteOrder:no', function()
+      this.listenTo(this.model, 'change:localFile change:localOrder change:remoteOrder', function()
       {
-        if (this.model.get('fileSource') === 'remote')
-        {
-          window.location.reload();
-        }
+        var fileSource = this.model.get('fileSource');
 
-        this.listenTo(this.model, 'change:localFile change:localOrder change:remoteOrder', function()
+        if (fileSource === 'remote' || fileSource === 'local')
         {
-          if (this.model.get('fileSource') === 'remote')
-          {
-            window.location.reload();
-          }
-        });
+          return setTimeout(window.location.reload.bind(window.location), 10);
+        }
       });
     }
 
