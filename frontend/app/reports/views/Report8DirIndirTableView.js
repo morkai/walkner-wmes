@@ -111,7 +111,7 @@ define([
         prodBasedPlanners: true,
         prodQualityInspection: true,
         prodOperators: true,
-        prodSetters: true,
+        prodSetters: false,
         masters: true,
         leaders: true,
         prodMaterialHandling: true,
