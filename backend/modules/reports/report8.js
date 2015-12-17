@@ -335,7 +335,7 @@ module.exports = function(mongoose, options, done)
     group.timeAvailablePerShift[REAL] = calcRealTimeAvailablePerShift(group);
     group.averageRoutingTime = util.round(group.averageRoutingTime / group.orderCount);
     group.prodOperators[PLAN] = countProdOperatorsPlan(group.prodOperators[PLAN]);
-    group.prodOperators[REAL] = util.round(group.prodOperators[REAL]);
+    group.prodOperators[REAL] = util.round(group.prodOperators[REAL] / fteDays);
     group.prodBasedPlanners[PLAN] = countProdBasedPlanners(group, PLAN);
     group.prodBasedPlanners[REAL] = group.prodBasedPlanners[PLAN];
     group.prodSetters[PLAN] = countProdSettersPlan(group.prodSetters[PLAN]);
@@ -851,8 +851,6 @@ module.exports = function(mongoose, options, done)
     group.prodOperators[PLAN][prodLineId].num += prodOperatorPlanNum;
     summary.prodOperators[PLAN][prodLineId].days[dateKey] = true;
     group.prodOperators[PLAN][prodLineId].days[dateKey] = true;
-    summary.prodOperators[REAL] += workerCount;
-    group.prodOperators[REAL] += workerCount;
 
     if (planProdFlow)
     {
@@ -1111,6 +1109,11 @@ module.exports = function(mongoose, options, done)
           case 'adjuster':
             summary.prodMaterialHandling[REAL] += adjustedFte;
             group.prodMaterialHandling[REAL] += adjustedFte;
+            break;
+
+          case 'operator':
+            summary.prodOperators[REAL] += adjustedFte;
+            group.prodOperators[REAL] += adjustedFte;
             break;
         }
       });
