@@ -108,6 +108,7 @@ module.exports = function(mongoose, options, done)
   var USED_SHIFT_COUNT = _.size(usedShifts);
   var IN_MINUTES = options.unit === 'm';
   var UNIT_DIV = IN_MINUTES ? 1 : 60;
+  var UNIT_MUL = IN_MINUTES ? 60 : 1;
   var UNPLANNED = options.unplanned / UNIT_DIV;
   var BREAKS = options.breaks / UNIT_DIV;
   var FAP0 = options.fap0 / UNIT_DIV;
@@ -782,8 +783,8 @@ module.exports = function(mongoose, options, done)
     }
 
     var workerCount = prodShiftOrder.workerCount || 1;
-    var machineTime = prodShiftOrder.machineTime * (IN_MINUTES ? 60 : 1) / 100;
-    var labourTime = prodShiftOrder.laborTime * (IN_MINUTES ? 60 : 1) / 100;
+    var machineTime = prodShiftOrder.machineTime * UNIT_MUL / 100;
+    var labourTime = prodShiftOrder.laborTime * UNIT_MUL / 100;
 
     summary.averageRoutingTime += machineTime;
     group.averageRoutingTime += machineTime;
@@ -792,7 +793,7 @@ module.exports = function(mongoose, options, done)
 
     if (inSelectedOrgUnit)
     {
-      var routingTimeForLine = prodShiftOrder.laborTime / workerCount * (IN_MINUTES ? 60 : 1) / 100;
+      var routingTimeForLine = prodShiftOrder.laborTime / workerCount * UNIT_MUL / 100;
 
       summary.routingTimeForLine[PLAN] += routingTimeForLine;
       group.routingTimeForLine[PLAN] += routingTimeForLine;
@@ -801,7 +802,7 @@ module.exports = function(mongoose, options, done)
       summary.orderCountForLine += 1;
       group.orderCountForLine += 1;
 
-      var totalDuration = prodShiftOrder.totalDuration * (IN_MINUTES ? 60 : 1);
+      var totalDuration = prodShiftOrder.totalDuration * UNIT_MUL;
       var durationForLine = totalDuration - (orderToDowntimeForLine[prodShiftOrder._id] || 0);
       var durationForLabour = totalDuration - (orderToDowntimeForLabour[prodShiftOrder._id] || 0);
 
@@ -1463,7 +1464,7 @@ module.exports = function(mongoose, options, done)
   {
     var shiftCount = usedDays.noWork ? group.allShiftCount : group.workingShiftCount;
 
-    return shiftCount * 8 * (IN_MINUTES ? 60 : 1);
+    return shiftCount * 8 * UNIT_MUL;
   }
 
   function calcRealTimeAvailablePerShift(group)
