@@ -166,6 +166,8 @@ define([
 
         case 'startDate':
         case 'finishDate':
+        case 'scheduledStartDate':
+        case 'scheduledFinishDate':
           return time.format(value, 'LL');
 
         default:

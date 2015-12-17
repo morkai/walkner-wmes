@@ -63,33 +63,23 @@ module.exports = function setupOrderModel(app, mongoose)
   });
 
   var orderSchema = mongoose.Schema({
-    _id: {
-      type: String,
-      required: true,
-      trim: true
-    },
+    _id: String,
     createdAt: Date,
     updatedAt: Date,
-    nc12: {
-      type: String,
-      trim: true
-    },
-    name: {
-      type: String,
-      trim: true
-    },
-    mrp: {
-      type: String,
-      trim: true
-    },
+    nc12: String,
+    name: String,
+    mrp: String,
     qty: Number,
-    unit: {
-      type: String,
-      trim: true
-    },
+    unit: String,
     startDate: Date,
     finishDate: Date,
     tzOffsetMs: Number,
+    scheduledStartDate: Date,
+    scheduledFinishDate: Date,
+    leadingOrder: String,
+    salesOrder: String,
+    salesOrderItem: String,
+    priority: String,
     statuses: [String],
     statusesSetAt: {},
     delayReason: {
@@ -137,6 +127,12 @@ module.exports = function setupOrderModel(app, mongoose)
       startDate: null,
       finishDate: null,
       tzOffsetMs: 0,
+      scheduledStartDate: null,
+      scheduledFinishDate: null,
+      leadingOrder: null,
+      salesOrder: null,
+      salesOrderItem: null,
+      priority: null,
       statuses: [],
       statusesSetAt: {},
       delayReason: null,

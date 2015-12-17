@@ -15,6 +15,13 @@ define([
 ) {
   'use strict';
 
+  var DATE_PROPS = [
+    'startDate',
+    'finishDate',
+    'scheduledStartDate',
+    'scheduledFinishDate'
+  ];
+
   return Model.extend({
 
     urlRoot: '/orders',
@@ -57,14 +64,17 @@ define([
     {
       var order = Model.prototype.toJSON.call(this);
 
-      if (order.startDate)
+      DATE_PROPS.forEach(function(prop)
       {
-        order.startDateText = time.format(order.startDate, 'LL');
-      }
+        if (order[prop])
+        {
+          order[prop + 'Text'] = time.format(order[prop], 'LL');
+        }
+      });
 
-      if (order.finishDate)
+      if (order.scheduledFinishDate)
       {
-        order.finishDateText = time.format(order.finishDate, 'LL');
+        order.scheduledFinishDateText = time.format(order.scheduledFinishDate, 'LL');
       }
 
       if (order.qty && order.unit)

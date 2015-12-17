@@ -7,19 +7,27 @@
           <div class="prop-name"><%- t('orders', 'PROPERTY:_id') %></div>
           <div class="prop-value">
             <% if (linkOrderNo && model._id) { %>
-            <a href="#orders/<%= model._id %>" title="<%- t('orders', 'details:showMoreLink') %>"><%= model._id %></a>
+            <a href="#orders/<%- model._id %>" title="<%- t('orders', 'details:showMoreLink') %>"><%- model._id %></a>
             <% } else { %>
-            <%= model._id || '-' %>
+            <%- model._id || '-' %>
             <% } %>
           </div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:nc12') %></div>
-          <div class="prop-value"><%= model.nc12 || '-' %></div>
+          <div class="prop-value"><%- model.nc12 || '-' %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:name') %></div>
           <div class="prop-value"><%= model.name || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:leadingOrder') %></div>
+          <div class="prop-value"><%- model.leadingOrder || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:salesOrder') %></div>
+          <div class="prop-value"><%- model.salesOrder || '-' %>/<%- model.salesOrderItem || '-' %></div>
         </div>
       </div>
     </div>
@@ -32,6 +40,10 @@
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:qty') %></div>
           <div class="prop-value"><%= model.qtyUnit || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:priority') %></div>
+          <div class="prop-value"><%- model.priority || '-' %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:statuses') %></div>
@@ -52,6 +64,14 @@
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:finishDate') %></div>
           <div class="prop-value"><%= model.finishDateText || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:scheduledStartDate') %></div>
+          <div class="prop-value"><%= model.scheduledStartDateText || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:scheduledFinishDate') %></div>
+          <div class="prop-value"><%= model.scheduledFinishDateText || '-' %></div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:createdAt') %></div>

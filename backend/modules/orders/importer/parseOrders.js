@@ -15,13 +15,19 @@ module.exports = function parseOrders(input, orders, importTs)
     columnMatchers: {
       no: /^Order$/,
       nc12: /^Material$/,
-      name: /^Material description$/i,
+      name: /^Material description$/,
       mrp: /^MRP/,
       qty: /^Target (qty|quantity)$/,
       unit: /^Unit$/,
-      startDate: /^Ba?si?c start$/,
+      startDate: /^Ba?si?c sta/,
       finishDate: /^Ba?si?c fin/,
-      statuses: /^System Status/i
+      statuses: /^System Status/,
+      salesOrder: /^Sales O/,
+      salesOrderItem: /^S.*?O.*?Item$/,
+      priority: /^Priority$/,
+      scheduledStartDate: /^Sch.*?Sta/,
+      scheduledFinishDate: /^Sch.*?Fin/,
+      leadingOrder: /^Lead.*?Ord/
     },
     valueParsers: {
       nc12: function(input) { return input.replace(/^0+/, ''); },
@@ -29,6 +35,8 @@ module.exports = function parseOrders(input, orders, importTs)
       qty: parseSapNumber,
       startDate: parseSapDate,
       finishDate: parseSapDate,
+      scheduledStartDate: parseSapDate,
+      scheduledFinishDate: parseSapDate,
       statuses: function(input)
       {
         return input
@@ -39,6 +47,9 @@ module.exports = function parseOrders(input, orders, importTs)
     },
     itemDecorator: function(obj)
     {
+      var scheduledStart = obj.scheduledStartDate;
+      var scheduledFinish = obj.scheduledStartDate;
+
       orders[obj.no] = {
         _id: obj.no,
         createdAt: null,
@@ -51,6 +62,12 @@ module.exports = function parseOrders(input, orders, importTs)
         startDate: new Date(obj.startDate.y, obj.startDate.m - 1, obj.startDate.d),
         finishDate: new Date(obj.finishDate.y, obj.finishDate.m - 1, obj.finishDate.d),
         tzOffsetMs: 0,
+        scheduledStartDate: new Date(scheduledStart.y, scheduledStart.m - 1, scheduledStart.d),
+        scheduledFinishDate: new Date(scheduledFinish.y, scheduledFinish.m - 1, scheduledFinish.d),
+        leadingOrder: obj.leadingOrder,
+        salesOrder: obj.salesOrder || null,
+        salesOrderItem: obj.salesOrderItem || null,
+        priority: obj.priority,
         statuses: obj.statuses,
         statusesSetAt: {},
         delayReason: null,
