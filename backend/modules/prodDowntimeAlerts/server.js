@@ -47,6 +47,7 @@ module.exports = function setUpAlertsServer(app, module)
   };
 
   app.broker.subscribe('app.started', onAppStarted).setLimit(1);
+  app.broker.subscribe('shiftChanged', onShiftChanged);
 
   if (messengerServer)
   {
@@ -105,6 +106,24 @@ module.exports = function setUpAlertsServer(app, module)
 
         onLoad = null;
       });
+    });
+  }
+
+  function onShiftChanged()
+  {
+    setTimeout(finishOldAlerts, 10000);
+  }
+
+  function finishOldAlerts()
+  {
+    var currentShiftTime = fte.currentShift.date.getTime();
+
+    _.forEach(downtimeMap, function(downtime)
+    {
+      if (downtime.shiftTime !== currentShiftTime)
+      {
+        handleDowntimeFinish(downtime._id);
+      }
     });
   }
 
@@ -668,6 +687,7 @@ module.exports = function setUpAlertsServer(app, module)
       prodFlow: prodDowntime.prodFlow.toString(),
       workCenter: prodDowntime.workCenter,
       prodLine: prodDowntime.prodLine,
+      shiftTime: prodDowntime.date.getTime(),
       startedAt: startedAt,
       master: prodDowntime.master,
       leader: prodDowntime.leader,
