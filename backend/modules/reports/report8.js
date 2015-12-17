@@ -757,6 +757,7 @@ module.exports = function(mongoose, options, done)
     var divisionId = prodShiftOrder.division;
     var prodLineId = prodShiftOrder.prodLine;
     var inSelectedOrgUnit = isInSelectedOrgUnit(prodShiftOrder);
+    var planProdFlow = isPlanProdFlow(prodShiftOrder.prodFlow);
 
     if (isTotalVolumeProducedOrder(prodShiftOrder))
     {
@@ -825,7 +826,7 @@ module.exports = function(mongoose, options, done)
       summary.workingShiftCount[shiftCountKey] = true;
       group.workingShiftCount[shiftCountKey] = true;
 
-      if (!prodShiftOrder.mechOrder && isPlanProdFlow(prodShiftOrder.prodFlow))
+      if (planProdFlow)
       {
         summary.plan[REAL] += prodShiftOrder.quantityDone;
         group.plan[REAL] += prodShiftOrder.quantityDone;
@@ -853,10 +854,13 @@ module.exports = function(mongoose, options, done)
     summary.prodOperators[REAL] += workerCount;
     group.prodOperators[REAL] += workerCount;
 
-    summary.prodSetters[PLAN][prodLineId].num += 1;
-    group.prodSetters[PLAN][prodLineId].num += 1;
-    summary.prodSetters[PLAN][prodLineId].days[dateKey] = true;
-    group.prodSetters[PLAN][prodLineId].days[dateKey] = true;
+    if (planProdFlow)
+    {
+      summary.prodSetters[PLAN][prodLineId].num += 1;
+      group.prodSetters[PLAN][prodLineId].num += 1;
+      summary.prodSetters[PLAN][prodLineId].days[dateKey] = true;
+      group.prodSetters[PLAN][prodLineId].days[dateKey] = true;
+    }
 
     group.workingDayCount[dateKey] = true;
 
