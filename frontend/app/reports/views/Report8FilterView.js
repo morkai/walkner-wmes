@@ -85,7 +85,9 @@ define([
 
     serializeFormToQuery: function()
     {
-      var query = _.extend(_.result(this.model, 'defaults'), form2js(this.el));
+      var query = _.extend(_.result(this.model, 'defaults'), form2js(this.el), {
+        _rnd: Math.random()
+      });
       var fromTime = time.getMoment(query.from, 'YYYY-MM-DD').startOf(query.interval).valueOf();
       var toMoment = time.getMoment(query.to, 'YYYY-MM-DD').startOf(query.interval);
 
