@@ -64,6 +64,7 @@ module.exports = function(mongoose, options, done)
     realTpmDowntimeReasons: [],
     realTrainingsDowntimeReasons: [],
     realCoTimeDowntimeReasons: [],
+    totalDowntimeReasons: [],
     realShutdownThreshold: 0,
     planProdFlows: [],
     efficiencyPlanFormula: '0',
@@ -122,7 +123,9 @@ module.exports = function(mongoose, options, done)
   var CALC_EFFICIENCY_REAL = compileEfficiencyFormula(settings.realEfficiencyFormula, REAL);
   var REAL_SHUTDOWN_THRESHOLD = settings.realShutdownThreshold * 60 * 1000;
   var DOWNTIME_REASONS = {
-    total: {},
+    total: {
+      all: _.isEmpty(settings.totalDowntimeReasons)
+    },
     realProdSetter: {},
     realRoutingTimeForLine: {},
     realRoutingTimeForLabour: {},
@@ -1015,7 +1018,7 @@ module.exports = function(mongoose, options, done)
       group.coTime[REAL] += duration;
     }
 
-    if (DOWNTIME_REASONS.total[prodDowntime.reason])
+    if (DOWNTIME_REASONS.total.all || DOWNTIME_REASONS.total[prodDowntime.reason])
     {
       if (!summary.downtimeByAor[prodDowntime.aor])
       {
