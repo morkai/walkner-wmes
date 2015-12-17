@@ -124,6 +124,15 @@ define([
       return _.extend(defaults, NUMERIC_PROPS);
     },
 
+    initialize: function()
+    {
+      this.on('change', function()
+      {
+        localStorage.LEAN_FILTER = JSON.stringify(_.omit(this.attributes, 'visibleSeries'));
+        localStorage.LEAN_VISIBLE_SERIES = JSON.stringify(this.attributes.visibleSeries);
+      });
+    },
+
     serializeToObject: function()
     {
       var obj = this.toJSON();
@@ -187,8 +196,6 @@ define([
 
       visibleSeries[id] = !visibleSeries[id];
 
-      localStorage.LEAN_VISIBLE_SERIES = JSON.stringify(visibleSeries);
-
       this.trigger('change:visibleSeries');
       this.trigger('change');
     },
@@ -209,6 +216,11 @@ define([
       var attrs = {
         visibleSeries: {}
       };
+
+      if (_.isEmpty(query))
+      {
+        _.extend(attrs, JSON.parse(localStorage.LEAN_FILTER || '{}'));
+      }
 
       _.forEach(query, function(value, name)
       {
