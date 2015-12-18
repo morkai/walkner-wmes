@@ -26,6 +26,12 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     throw new Error("mongoose module is required!");
   }
 
+  var IMPORT_KINDS = {
+    program: true,
+    led: true,
+    gprs: true
+  };
+
   var Order = mongoose.model('Order');
   var XiconfOrder = mongoose.model('XiconfOrder');
 
@@ -524,7 +530,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     {
       var itemExists = compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i);
 
-      if (!itemExists)
+      if (!itemExists && IMPORT_KINDS[xiconfOrderItem.kind])
       {
         deletedItems.push(i);
       }
