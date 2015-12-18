@@ -11,6 +11,8 @@
   "PAGE_ACTION:export": "Eksportuj zlecenia",
   "PAGE_ACTION:settings": "Zmień ustawienia",
 
+  "PROPERTY:no": "Nr zlecenia",
+  "PROPERTY:nc12": "12NC",
   "PROPERTY:reqDate": "Data",
   "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas ukończenia",
