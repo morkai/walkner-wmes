@@ -69,7 +69,7 @@ If $variant = "" And ($fromDate = "" Or $toDate = "") Then
 
   _DateTimeSplit(_DateAdd("D", -1, _NowCalcDate()), $dateParts, $timeParts)
 
-  $fromDate = $dateParts[3] & "." & $dateParts[2] & "." & $dateParts[3]
+  $fromDate = $dateParts[3] & "." & $dateParts[2] & "." & $dateParts[1]
   $toDate = @MDAY & "." & @MON & "." & @YEAR
 EndIf
 
