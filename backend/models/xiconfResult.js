@@ -64,7 +64,11 @@ module.exports = function setupXiconfResultModel(app, mongoose)
     },
     gprsOrderFileHash: String,
     gprsInputFileHash: String,
-    gprsOutputFileHash: String
+    gprsOutputFileHash: String,
+    cancelled: {
+      type: Boolean,
+      default: false
+    }
   }, {
     id: false
   });

@@ -60,7 +60,7 @@
     </div>
   </div>
   <% } %>
-  <div class="panel panel-<%- model.result === 'success'  ? 'success' : 'danger' %> xiconf-details-entry">
+  <div class="panel panel-<%- model.cancelled ? 'default' : model.result === 'success'  ? 'success' : 'danger' %> xiconf-details-entry">
     <div class="panel-heading">
       <%- t('xiconf', 'PANEL:TITLE:details:entry') %>
     </div>

@@ -34,6 +34,13 @@ define([
         {
           this.promised(this.model.fetch());
         }
+      },
+      'xiconf.results.toggled': function(message)
+      {
+        if (this.model.id === message.resultId)
+        {
+          this.model.set('cancelled', message.cancelled);
+        }
       }
     },
 

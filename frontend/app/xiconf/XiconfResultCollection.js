@@ -30,19 +30,9 @@ define([
 
       return rql.Query.fromObject({
         fields: {
-          order: 1,
-          nc12: 1,
-          programName: 1,
-          counter: 1,
-          startedAt: 1,
-          duration: 1,
-          result: 1,
-          srcId: 1,
-          serviceTag: 1,
-          prodLine: 1,
-          'program.name': 1,
-          'program.steps': 1,
-          'steps.status': 1
+          log: 0,
+          metrics: 0,
+          leds: 0
         },
         sort: {
           startedAt: -1

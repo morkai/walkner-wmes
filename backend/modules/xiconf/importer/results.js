@@ -347,7 +347,8 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       gprsNc12: result.gprsNc12 || null,
       gprsOrderFileHash: result.gprsOrderFileHash || null,
       gprsInputFileHash: result.gprsInputFileHash || null,
-      gprsOutputFileHash: result.gprsOutputFileHash || null
+      gprsOutputFileHash: result.gprsOutputFileHash || null,
+      cancelled: result.cancelled === 1
     };
   }
 

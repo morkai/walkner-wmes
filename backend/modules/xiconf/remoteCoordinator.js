@@ -871,6 +871,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   function acquireServiceTag(input, reply)
   {
     queueOrderOperation(input.orderNo, acquireNextServiceTag, reply, {
+      resultId: input.resultId,
       serviceTag: input.serviceTag,
       orderNo: input.orderNo,
       nc12: input.nc12,
@@ -885,6 +886,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   function releaseServiceTag(input, reply)
   {
     queueOrderOperation(input.orderNo, releaseNextServiceTag, reply, {
+      resultId: input.resultId,
       serviceTag: input.serviceTag,
       orderNo: input.orderNo,
       nc12: input.nc12,
@@ -955,8 +957,19 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         getOrderData(data.orderNo, this.parallel());
 
+        var conditions = {
+          orderNo: data.orderNo,
+          serviceTag: null,
+          result: 'success'
+        };
+        var fields = {
+          nc12: 1,
+          workflow: 1,
+          program: 1
+        };
+
         XiconfResult
-          .find({orderNo: data.orderNo, serviceTag: null, result: 'success'}, {nc12: 1, workflow: 1, program: 1})
+          .find(conditions, fields)
           .lean()
           .exec(this.parallel());
       },
@@ -1160,10 +1173,16 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         else
         {
           var quantitiesDone = [programQuantityDone, ledQuantityDone, testQuantityDone, ftQuantityDone]
+            .map(function(qty) { return qty > 0 ? qty : 0; })
             .filter(function(qty) { return qty > 0; });
           var totalQuantityDone = quantitiesDone.reduce(function(qty, total) { return qty + total; }, 0);
 
           quantityDone = Math.round(totalQuantityDone / quantitiesDone.length * 100) / 100;
+        }
+
+        if (isNaN(quantityDone) || quantityDone < 0)
+        {
+          quantityDone = 0;
         }
 
         var changes = {
@@ -1517,13 +1536,26 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         applyOrderDataChanges(this.orderData, this.changes);
 
-        var serviceTag = data.serviceTag === null
+        this.serviceTag = data.serviceTag === null
           ? buildServiceTag(this.orderData._id, this.orderData.serviceTagCounter)
           : data.serviceTag;
 
-        return this.skip(null, serviceTag);
+        if (data.resultId)
+        {
+          var next = this.next();
+
+          XiconfResult.update({_id: data.resultId}, {$set: {cancelled: false}}, function(err)
+          {
+            if (err)
+            {
+              xiconfModule.error("Failed to restore result [%s]: %s", data.resultId, err.message);
+            }
+
+            next();
+          });
+        }
       },
-      function replyStep(err, serviceTag)
+      function replyStep(err)
       {
         if (err)
         {
@@ -1533,12 +1565,25 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         }
         else
         {
+          if (data.resultId)
+          {
+            app.broker.publish('xiconf.results.toggled', {
+              resultId: data.resultId,
+              cancelled: false
+            });
+          }
+
           app.broker.publish('xiconf.orders.' + data.orderNo + '.serviceTagAcquired', {
             orderNo: data.orderNo,
-            serviceTag: serviceTag
+            serviceTag: this.serviceTag
           });
 
-          debug('[acquireNextServiceTag] orderNo=%s recount=%s serviceTag=%s', data.orderNo, data.recount, serviceTag);
+          debug(
+            '[acquireNextServiceTag] orderNo=%s recount=%s serviceTag=%s',
+            data.orderNo,
+            data.recount,
+            this.serviceTag
+          );
 
           if (data.recount)
           {
@@ -1553,7 +1598,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         this.orderData = null;
         this.changes = null;
 
-        done(err, _.isString(serviceTag) ? serviceTag : null);
+        done(err, _.isString(this.serviceTag) ? this.serviceTag : null);
       }
     );
   }
@@ -1699,6 +1744,23 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         applyOrderDataChanges(this.orderData, this.changes);
       },
+      function toggleResultStep()
+      {
+        if (data.resultId)
+        {
+          var next = this.next();
+
+          XiconfResult.update({_id: data.resultId}, {$set: {cancelled: true}}, function(err)
+          {
+            if (err)
+            {
+              xiconfModule.error("Failed to cancel result [%s]: %s", data.resultId, err.message);
+            }
+
+            next();
+          });
+        }
+      },
       function replyStep(err)
       {
         if (err)
@@ -1711,6 +1773,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         }
         else
         {
+          if (data.resultId)
+          {
+            app.broker.publish('xiconf.results.toggled', {
+              resultId: data.resultId,
+              cancelled: true
+            });
+          }
+
           app.broker.publish('xiconf.orders.' + data.orderNo + '.serviceTagReleased', {
             orderNo: data.orderNo,
             serviceTag: data.serviceTag

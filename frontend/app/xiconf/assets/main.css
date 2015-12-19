@@ -4,6 +4,12 @@
 .xiconf-entry {
   cursor: pointer;
 }
+.table > tbody > .xiconf-entry.is-cancelled > td {
+  background-color: #eee;
+}
+.table > tbody > .xiconf-entry.is-cancelled:hover > td {
+  background-color: #ddd;
+}
 .xiconf-filter .form-control[name="serviceTag"] {
   width: 160px;
 }

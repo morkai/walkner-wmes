@@ -18,7 +18,7 @@ define([
     className: 'is-colored is-clickable',
 
     remoteTopics: {
-      'xiconf.results.synced': 'refreshCollection'
+      'xiconf.results.**': 'refreshCollection'
     },
 
     columns: [
@@ -45,10 +45,16 @@ define([
       var order = model.get('order');
       var program = model.get('program');
       var serviceTag = model.get('serviceTag');
+      var className = ['xiconf-entry', model.get('result') === 'success' ? 'success' : 'danger'];
+
+      if (model.get('cancelled'))
+      {
+        className.push('is-cancelled');
+      }
 
       return {
         _id: model.id,
-        className: 'xiconf-entry ' + (model.get('result') === 'success' ? 'success' : 'danger'),
+        className: className.join(' '),
         srcId: model.get('srcId'),
         serviceTag: serviceTag ? ('...' + serviceTag.substr(-4)) : '-',
         order: order ? order.no : '-',

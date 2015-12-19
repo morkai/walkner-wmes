@@ -166,7 +166,7 @@ exports.pubsub = {
     'prodShifts.**', 'prodDowntimes.**', 'prodShiftOrders.**', 'prodChangeRequests.**',
     'updater.newVersion',
     'settings.updated.**',
-    'xiconf.results.synced', 'xiconf.orders.**', 'xiconf.clients.**',
+    'xiconf.results.**', 'xiconf.orders.**', 'xiconf.clients.**',
     'icpo.results.synced',
     'orders.updated.*',
     'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
