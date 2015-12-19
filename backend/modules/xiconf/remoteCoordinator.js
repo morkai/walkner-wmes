@@ -82,6 +82,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   app.broker.subscribe('shiftChanged', onShiftChanged);
   app.broker.subscribe('xiconf.orders.synced', onXiconfOrdersSynced);
   app.broker.subscribe('xiconf.results.synced', onXiconfResultsSynced);
+  app.broker.subscribe('xiconfPrograms.**', onXiconfProgramChanged);
   app.broker.subscribe('production.stateChanged.**', onProductionStateChanged);
   app.broker.subscribe('licenses.edited', onLicenseEdited);
 
@@ -298,6 +299,17 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     }
 
     orderResultsRecountTimer = setTimeout(recountOrderResults, 1337);
+  }
+
+  function onXiconfProgramChanged()
+  {
+    _.forEach(prodLinesToDataMap, function(prodLineData)
+    {
+      _.forEach(prodLineData.sockets, function(socket)
+      {
+        socket.emit('xiconf.programsUpdated');
+      });
+    });
   }
 
   function recountOrderResults()
