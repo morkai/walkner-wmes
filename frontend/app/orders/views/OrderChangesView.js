@@ -13,9 +13,11 @@ define([
   './OrderCommentFormView',
   './OperationListView',
   './DocumentListView',
+  './ComponentListView',
   '../Order',
   '../OperationCollection',
   '../DocumentCollection',
+  '../ComponentCollection',
   'app/orders/templates/change',
   'app/orders/templates/changes',
   'app/orderStatuses/util/renderOrderStatusLabel',
@@ -31,9 +33,11 @@ define([
   OrderCommentFormView,
   OperationListView,
   DocumentListView,
+  ComponentListView,
   Order,
   OperationCollection,
   DocumentCollection,
+  ComponentCollection,
   renderChange,
   template,
   renderOrderStatusLabel,
@@ -48,6 +52,7 @@ define([
     events: {
       'click .orders-changes-operations': 'toggleOperations',
       'click .orders-changes-documents': 'toggleDocuments',
+      'click .orders-changes-bom': 'toggleComponents',
       'mouseover .orders-changes-noTimeAndUser': function(e)
       {
         var $tr = this.$(e.target).closest('tbody').children().first();
@@ -66,6 +71,7 @@ define([
       this.$lastToggle = null;
       this.operationListView = null;
       this.documentListView = null;
+      this.componentListView = null;
       this.renderValueChange = this.renderValueChange.bind(this);
 
       this.setView('.orders-commentForm-container', new OrderCommentFormView({
@@ -154,6 +160,12 @@ define([
             + t('orders', 'CHANGES:documents', {count: value.length})
             + '</a>';
 
+        case 'bom':
+          return '<a class="orders-changes-bom" '
+            + 'data-i="' + i + '" data-property="' + valueProperty + '">'
+            + t('orders', 'CHANGES:bom', {count: value.length})
+            + '</a>';
+
         case 'statuses':
           return orderStatuses.findAndFill(value).map(renderOrderStatusLabel).join(' ');
 
@@ -201,6 +213,12 @@ define([
         this.documentListView = null;
       }
 
+      if (this.componentListView !== null)
+      {
+        this.componentListView.remove();
+        this.componentListView = null;
+      }
+
       this.$lastToggle = null;
 
       return false;
@@ -219,6 +237,14 @@ define([
       if (this.hideLastToggle(e))
       {
         this.showLastToggle(e, DocumentCollection, DocumentListView, 'documents', 'documentListView');
+      }
+    },
+
+    toggleComponents: function(e)
+    {
+      if (this.hideLastToggle(e))
+      {
+        this.showLastToggle(e, ComponentCollection, ComponentListView, 'bom', 'componentListView');
       }
     },
 

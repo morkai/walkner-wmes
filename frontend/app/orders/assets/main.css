@@ -22,7 +22,8 @@
   font-weight: normal;
 }
 .orders-operations-container,
-.orders-documents-container {
+.orders-documents-container,
+.orders-components-container {
   margin: 15px 0;
 }
 .orders-change + .orders-change {
@@ -34,7 +35,8 @@
   position: relative;
 }
 .orders-changes .orders-operations,
-.orders-changes .orders-documents {
+.orders-changes .orders-documents,
+.orders-changes .orders-bom {
   position: absolute;
   width: 100%;
   z-index: 10002;
@@ -50,7 +52,8 @@
   background-color: #ffffd6;
 }
 .orders-changes-operations,
-.orders-changes-documents {
+.orders-changes-documents,
+.orders-changes-bom {
   cursor: pointer;
 }
 .orders-changes-comment {

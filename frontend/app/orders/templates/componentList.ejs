@@ -1,0 +1,31 @@
+<div class="panel panel-default orders-bom">
+  <div class="panel-heading"><%- t('orders', 'PANEL:TITLE:bom') %></div>
+  <% if (_.isEmpty(bom)) { %>
+  <div class="panel-body">
+    <%- t('orders', 'BOM:NO_DATA') %>
+  </div>
+  <% } else { %>
+  <table class="table table-condensed table-hover table-bordered">
+    <thead>
+      <tr>
+        <th class="is-min"><%- t('orders', 'PROPERTY:bom.item') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:bom.nc12') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:bom.name') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:bom.qty') %>
+        <th><%- t('orders', 'PROPERTY:bom.unloadingPoint') %>
+      </tr>
+    </thead>
+    <tbody>
+      <% _.forEach(bom, function(component) { %>
+      <tr>
+        <td class="is-min is-number"><%- component.item %>
+        <td class="is-min is-number"><%- component.nc12 || '-' %>
+        <td class="is-min"><%= component.name  %>
+        <td class="is-min is-number"><%- component.qty.toLocaleString() %> <%- component.unit %>
+        <td><%= component.unloadingPoint || '-' %>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } %>
+</div>

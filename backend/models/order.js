@@ -49,6 +49,17 @@ module.exports = function setupOrderModel(app, mongoose)
     _id: false
   });
 
+  var componentSchema = mongoose.Schema({
+    nc12: String,
+    item: String,
+    qty: Number,
+    unit: String,
+    name: String,
+    unloadingPoint: String
+  }, {
+    _id: false
+  });
+
   var changeSchema = mongoose.Schema({
     time: Date,
     user: {},
@@ -91,6 +102,7 @@ module.exports = function setupOrderModel(app, mongoose)
     },
     operations: [operationSchema],
     documents: [documentSchema],
+    bom: [componentSchema],
     changes: [changeSchema],
     importTs: Date
   }, {

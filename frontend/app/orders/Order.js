@@ -6,12 +6,14 @@ define([
   '../time',
   '../core/Model',
   './OperationCollection',
-  './DocumentCollection'
+  './DocumentCollection',
+  './ComponentCollection'
 ], function(
   time,
   Model,
   OperationCollection,
-  DocumentCollection
+  DocumentCollection,
+  ComponentCollection
 ) {
   'use strict';
 
@@ -36,26 +38,13 @@ define([
 
     labelAttribute: '_id',
 
-    defaults: {
-      nc12: null,
-      name: null,
-      mrp: null,
-      qty: null,
-      unit: null,
-      startDate: null,
-      finishDate: null,
-      statuses: null,
-      operations: null,
-      createdAt: null,
-      updatedAt: null
-    },
-
     parse: function(data, xhr)
     {
       data = Model.prototype.parse.call(this, data, xhr);
 
       data.operations = new OperationCollection(data.operations);
       data.documents = new DocumentCollection(data.documents);
+      data.bom = new ComponentCollection(data.bom);
 
       return data;
     },
@@ -96,14 +85,12 @@ define([
 
       if (!Array.isArray(order.documents))
       {
-        if (order.documents && order.documents.toJSON)
-        {
-          order.documents = order.documents.toJSON();
-        }
-        else
-        {
-          order.documents = [];
-        }
+        order.documents = order.documents && order.documents.toJSON ? order.documents.toJSON() : [];
+      }
+
+      if (!Array.isArray(order.bom))
+      {
+        order.bom = order.bom && order.bom.toJSON ? order.bom.toJSON() : [];
       }
 
       return order;

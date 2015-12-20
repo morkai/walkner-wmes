@@ -6,12 +6,13 @@
       <tr>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.no') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.workCenter') %>
-        <th><%- t('orders', 'PROPERTY:operations.name') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:operations.name') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.qty') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.machineSetupTime') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.laborSetupTime') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.machineTime') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.laborTime') %>
+        <th>
       </tr>
     </thead>
     <tbody>
@@ -19,12 +20,13 @@
       <tr class="<%- operation.no === highlighted ? 'info' : '' %>">
         <td class="is-min is-number"><%= operation.no || '-' %>
         <td class="is-min"><%= operation.workCenter || '-' %>
-        <td><%= operation.name || '-' %>
+        <td class="is-min"><%= operation.name || '-' %>
         <td class="is-min is-number"><%= operation.qtyUnit || '-' %>
         <td class="is-min is-number"><%= operation.machineSetupTime || '-' %>
         <td class="is-min is-number"><%= operation.laborSetupTime || '-' %>
         <td class="is-min is-number"><%= operation.machineTime || '-' %>
         <td class="is-min is-number"><%= operation.laborTime || '-' %>
+        <td>
       </tr>
       <% }) %>
     </tbody>

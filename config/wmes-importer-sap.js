@@ -18,6 +18,7 @@ exports.modules = [
   'orders/importer/orders',
   'orders/importer/emptyOrders',
   'orders/importer/intake',
+  'orders/importer/bom',
   'warehouse/importer/importQueue',
   'warehouse/importer/controlCycles',
   'warehouse/importer/transferOrders',
@@ -59,6 +60,7 @@ exports.events = {
       'orders.synced',
       'emptyOrders.synced',
       'orders.intake.synced',
+      'orders.bom.synced',
       'clipOrderCount.created',
       'warehouse.*.synced',
       'xiconf.orders.synced',
@@ -68,6 +70,7 @@ exports.events = {
     ],
     error: [
       'orders.intake.syncFailed',
+      'orders.bom.syncFailed',
       'warehouse.*.syncFailed',
       'xiconf.orders.syncFailed',
       'orderDocuments.syncFailed',
@@ -95,8 +98,7 @@ exports['messenger/server'] = {
   repPort: 60021,
   broadcastTopics: [
     'events.saved',
-    'orders.synced',
-    'orders.intake.synced',
+    'orders.synced', 'orders.intake.synced', 'orders.bom.synced',
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
@@ -128,6 +130,10 @@ exports['orders/importer/emptyOrders'] = {
 };
 
 exports['orders/importer/intake'] = {
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orders/importer/bom'] = {
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 

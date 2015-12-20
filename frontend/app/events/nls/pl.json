@@ -294,7 +294,11 @@
   "TYPE:cags.nc12.syncFailed": "CAG: nieudana synchronizacja 12NC",
   "TEXT:cags.nc12.syncFailed": "Nie udało się zaimportować powiązań 12NC <-> CAG z danych pobranych <em>{timestamp}</em>: <em>{error}</em>",
   "TYPE:orders.intake.synced": "Zlecenia reszty działów: synchronizacja przyjęć",
-  "TEXT:orders.intake.synced": "Zaimportowano <em>{count}</em> {count, plural, one{przyjęcie zlecenia} few{przyjęcia zleceń} other{przyjęć zleceń}} z danych pobranych <em>{timestamp}</em> dla fabryki <em>{plant}.",
+  "TEXT:orders.intake.synced": "Zaimportowano <em>{count}</em> {count, plural, one{przyjęcie zlecenia} few{przyjęcia zleceń} other{przyjęć zleceń}} z danych pobranych <em>{timestamp}</em> dla fabryki <em>{plant}</em>.",
   "TYPE:orders.intake.syncFailed": "Zlecenia reszty działów: nieudana synchronizacja przyjęć",
-  "TEXT:orders.intake.syncFailed": "Nie udało się zaimportować przyjęć zleceń z <em>{timestamp}</em> dla fabryki <em>{plant}</em>: {error}"
+  "TEXT:orders.intake.syncFailed": "Nie udało się zaimportować przyjęć zleceń z <em>{timestamp}</em> dla fabryki <em>{plant}</em>: {error}",
+  "TYPE:orders.bom.synced": "Zlecenia reszty działów: synchronizacja komponentów",
+  "TEXT:orders.bom.synced": "Zaimportowano <em>{count}</em> {count, plural, one{komponent} few{komponenty} other{komponentów}} z danych pobranych <em>{timestamp}</em>.",
+  "TYPE:orders.bom.syncFailed": "Zlecenia reszty działów: nieudana synchronizacja komponentów",
+  "TEXT:orders.bom.syncFailed": "Nie udało się zaimportować komponentów zleceń z <em>{timestamp}</em>: {error}"
 }

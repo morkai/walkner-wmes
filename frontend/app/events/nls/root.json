@@ -295,9 +295,13 @@
     "TYPE:cags.nc12.syncFailed": "CAG: failed 12NC synchronization",
     "TEXT:cags.nc12.syncFailed": "Failed to import 12NC <-> CAG links from data downloaded a <em>{timestamp}</em>: <em>{error}</em>",
     "TYPE:orders.intake.synced": "Production orders: intake synchronization",
-    "TEXT:orders.intake.synced": "Imported <em>{count}</em> {count, plural, one{order intake} other{order intakes}} from data downloaded at <em>{timestamp}</em> for plant <em>{plant}.",
+    "TEXT:orders.intake.synced": "Imported <em>{count}</em> {count, plural, one{order intake} other{order intakes}} from data downloaded at <em>{timestamp}</em> for plant <em>{plant}</em>.",
     "TYPE:orders.intake.syncFailed": "Production orders: failed intake synchronization",
-    "TEXT:orders.intake.syncFailed": "Failed to import order intakes from data downloaded at <em>{timestamp}</em> for plant <em>{plant}</em>: {error}"
+    "TEXT:orders.intake.syncFailed": "Failed to import order intakes from data downloaded at <em>{timestamp}</em> for plant <em>{plant}</em>: {error}",
+    "TYPE:orders.bom.synced": "Production orders: BOM synchronization",
+    "TEXT:orders.bom.synced": "Imported <em>{count}</em> order {count, plural, one{component} other{components}} from data downloaded at <em>{timestamp}</em>.",
+    "TYPE:orders.bom.syncFailed": "Production orders: failed BOM synchronization",
+    "TEXT:orders.bom.syncFailed": "Failed to import order components from data downloaded at <em>{timestamp}</em>: {error}"
   },
   "pl": true
 }

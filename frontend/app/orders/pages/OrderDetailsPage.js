@@ -10,6 +10,7 @@ define([
   '../views/OrderDetailsView',
   '../views/OperationListView',
   '../views/DocumentListView',
+  '../views/ComponentListView',
   '../views/OrderChangesView',
   'app/orders/templates/detailsPage'
 ], function(
@@ -20,6 +21,7 @@ define([
   OrderDetailsView,
   OperationListView,
   DocumentListView,
+  ComponentListView,
   OrderChangesView,
   detailsPageTemplate
 ) {
@@ -36,7 +38,7 @@ define([
     remoteTopics: {
       'orders.updated.*': 'onOrderUpdated',
       'orders.synced': 'onSynced',
-      'orders.intake.synced': 'onSynced',
+      'orders.*.synced': 'onSynced',
       'orderDocuments.synced': 'onSynced'
     },
 
@@ -51,6 +53,7 @@ define([
       });
       this.operationsView = new OperationListView({model: this.model});
       this.documentsView = new DocumentListView({model: this.model});
+      this.componentsView = new ComponentListView({model: this.model});
       this.changesView = new OrderChangesView({
         model: this.model,
         delayReasons: this.delayReasons
@@ -59,6 +62,7 @@ define([
       this.setView('.orders-details-container', this.detailsView);
       this.setView('.orders-operations-container', this.operationsView);
       this.setView('.orders-documents-container', this.documentsView);
+      this.setView('.orders-components-container', this.componentsView);
       this.setView('.orders-changes-container', this.changesView);
     },
 

@@ -11,7 +11,7 @@ var request = require('request');
 
 exports.DEFAULT_CONFIG = {
   maxConcurrentUploads: 5,
-  filterRe: /^T_((ZOIN(_.*?)?)|(COOIS_(EMPTY_)?(ORDERS|OPERS)_([0-9]+)))\.txt$/,
+  filterRe: /^T_((ZOIN(_.*?)?)|(COOIS_(EMPTY_)?(ORDERS|OPERS|BOM)(_([0-9]+))?))\.txt$/,
   uploadUrl: 'http://127.0.0.1/orders;import'
 };
 
