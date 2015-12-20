@@ -159,6 +159,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
           }
 
           orderNoToDocumentsMap[orderDocument.orderNo].push({
+            item: orderDocument.item,
             nc15: orderDocument.nc15,
             name: orderDocument.name
           });
@@ -186,8 +187,6 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
           var order = orders[i];
           var oldDocuments = order.documents || [];
           var newDocuments = this.orderNoToDocumentsMap[order._id];
-
-          newDocuments.sort(ascByNc15);
 
           if (deepEqual(oldDocuments, newDocuments))
           {
@@ -296,10 +295,5 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
   function removeFilePathFromCache(filePath)
   {
     delete filePathCache[filePath];
-  }
-
-  function ascByNc15(a, b)
-  {
-    return a.nc15.localeCompare(b.nc15);
   }
 };

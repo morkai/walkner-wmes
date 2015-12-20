@@ -12,15 +12,16 @@ module.exports = function parseOrderDocuments(input)
   return parseSapTextTable(input, {
     columnMatchers: {
       orderNo: /^Order/,
+      item: /^Item/,
       documentNo: /^Document/,
-      name: /^Description/,
-      deleted: /^D.*?In/
+      name: /^Description/
     },
     valueParsers: {},
     itemDecorator: function(obj)
     {
-      return _.isString(obj.deleted) && !_.isEmpty(obj.deleted) ? null : {
+      return {
         orderNo: obj.orderNo,
+        item: obj.item,
         nc15: obj.documentNo,
         name: obj.name
       };

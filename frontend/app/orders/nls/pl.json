@@ -44,6 +44,7 @@
   "PROPERTY:operations.machineTime": "Czas <em>Machine</em>",
   "PROPERTY:operations.laborTime": "Czas <em>Labor</em>",
   "PROPERTY:documents": "Dokumenty",
+  "PROPERTY:documents.item": "Nr",
   "PROPERTY:documents.nc15": "15NC",
   "PROPERTY:documents.name": "Nazwa dokumentu",
   "PROPERTY:bom": "Komponenty",

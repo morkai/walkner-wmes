@@ -43,6 +43,7 @@ module.exports = function setupOrderModel(app, mongoose)
   });
 
   var documentSchema = mongoose.Schema({
+    item: String,
     name: String,
     nc15: String
   }, {

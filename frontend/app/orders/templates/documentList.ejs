@@ -4,6 +4,7 @@
   <table class="table table-condensed table-hover table-bordered">
     <thead>
       <tr>
+        <th class="is-min"><%- t('orders', 'PROPERTY:documents.item') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:documents.nc15') %>
         <th><%- t('orders', 'PROPERTY:documents.name') %>
       </tr>
@@ -11,6 +12,7 @@
     <tbody>
       <% documents.forEach(function(document) { %>
       <tr>
+        <td class="is-min is-number"><%= document.item || '' %>
         <td class="is-min is-number"><%= document.nc15 %>
         <td><%= document.name  %>
       </tr>
