@@ -792,6 +792,8 @@ app/data/createOnDemandStorage.js
 app/delayReasons/storage.js
 app/orders/Document.js
 app/orders/DocumentCollection.js
+app/orders/Component.js
+app/orders/ComponentCollection.js
 app/orders/Order.js
 app/orders/OrderCollection.js
 app/orderStatuses/OrderStatus.js
@@ -806,6 +808,8 @@ app/orders/templates/details.js
 app/orders/views/OrderDetailsView.js
 app/orders/templates/documentList.js
 app/orders/views/DocumentListView.js
+app/orders/templates/componentList.js
+app/orders/views/ComponentListView.js
 app/orders/templates/commentForm.js
 app/orders/views/OrderCommentFormView.js
 app/orders/templates/change.js
