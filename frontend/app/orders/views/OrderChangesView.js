@@ -155,7 +155,7 @@ define([
             + '</a>';
 
         case 'statuses':
-          return orderStatuses.findAndFill(value).map(renderOrderStatusLabel).join('');
+          return orderStatuses.findAndFill(value).map(renderOrderStatusLabel).join(' ');
 
         case 'delayReason':
         {

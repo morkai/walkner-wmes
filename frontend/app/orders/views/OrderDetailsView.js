@@ -32,7 +32,7 @@ define([
       var order = this.model.toJSON();
       var delayReason = this.delayReasons.get(order.delayReason);
 
-      order.statusLabels = orderStatuses.findAndFill(order.statuses).map(renderOrderStatusLabel).join('');
+      order.statusLabels = orderStatuses.findAndFill(order.statuses).map(renderOrderStatusLabel).join(' ');
       order.delayReason = delayReason ? delayReason.getLabel() : null;
 
       return {
