@@ -68,6 +68,8 @@ module.exports = function parseOrders(input, orders, importTs)
         salesOrder: obj.salesOrder || null,
         salesOrderItem: obj.salesOrderItem || null,
         priority: obj.priority,
+        description: null,
+        soldToParty: null,
         statuses: obj.statuses,
         statusesSetAt: {},
         delayReason: null,

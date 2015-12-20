@@ -22,8 +22,22 @@
           <div class="prop-value"><%= model.name || '-' %></div>
         </div>
         <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:description') %></div>
+          <div class="prop-value"><%= model.description || '-' %></div>
+        </div>
+        <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:leadingOrder') %></div>
-          <div class="prop-value"><%- model.leadingOrder || '-' %></div>
+          <div class="prop-value">
+            <% if (model.leadingOrder) { %>
+            <% if (model.leadingOrder === model._id) { %>
+            <%- model._id %>
+            <% } else { %>
+            <a href="#orders/<%- model.leadingOrder %>"><%- model.leadingOrder %></a>
+            <% } %>
+            <% } else { %>
+            -
+            <% } %>
+          </div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:salesOrder') %></div>
@@ -33,6 +47,10 @@
     </div>
     <div class="col-md-4">
       <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:soldToParty') %></div>
+          <div class="prop-value"><%= model.soldToParty || '-' %></div>
+        </div>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:mrp') %></div>
           <div class="prop-value"><%= model.mrp || '-' %></div>

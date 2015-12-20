@@ -13,5 +13,6 @@ module.exports = {
   xiconf: require('./xiconf'),
   docs: require('./docs'),
   zlf1: require('./zlf1'),
+  zoin: require('./zoin'),
   genericList: require('./genericList')
 };

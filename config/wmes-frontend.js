@@ -167,7 +167,7 @@ exports.pubsub = {
     'updater.newVersion',
     'settings.updated.**',
     'xiconf.results.**', 'xiconf.orders.**', 'xiconf.clients.**',
-    'icpo.results.synced',
+    'icpo.results.synced', 'orders.intake.synced',
     'orders.updated.*',
     'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',

@@ -292,5 +292,9 @@
   "TYPE:cags.nc12.synced": "CAG: synchronizacja 12NC",
   "TEXT:cags.nc12.synced": "Zaimportowano <em>{count}</em> {count, plural, one{powiązanie} few{powiązania} other{powiązań}} 12NC <-> CAG z danych pobranych <em>{timestamp}</em>.",
   "TYPE:cags.nc12.syncFailed": "CAG: nieudana synchronizacja 12NC",
-  "TEXT:cags.nc12.syncFailed": "Nie udało się zaimportować powiązań 12NC <-> CAG z danych pobranych <em>{timestamp}</em>: <em>{error}</em>"
+  "TEXT:cags.nc12.syncFailed": "Nie udało się zaimportować powiązań 12NC <-> CAG z danych pobranych <em>{timestamp}</em>: <em>{error}</em>",
+  "TYPE:orders.intake.synced": "Zlecenia reszty działów: synchronizacja przyjęć",
+  "TEXT:orders.intake.synced": "Zaimportowano <em>{count}</em> {count, plural, one{przyjęcie zlecenia} few{przyjęcia zleceń} other{przyjęć zleceń}} z danych pobranych <em>{timestamp}</em> dla fabryki <em>{plant}.",
+  "TYPE:orders.intake.syncFailed": "Zlecenia reszty działów: nieudana synchronizacja przyjęć",
+  "TEXT:orders.intake.syncFailed": "Nie udało się zaimportować przyjęć zleceń z <em>{timestamp}</em> dla fabryki <em>{plant}</em>: {error}"
 }

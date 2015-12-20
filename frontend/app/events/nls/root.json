@@ -285,7 +285,19 @@
     "TYPE:prodDowntimeAlerts.edited": "Downtimes > Alerts: edited",
     "TEXT:prodDowntimeAlerts.edited": "Edited alert: <a href='\\#prodDowntimeAlerts/{model->_id}'>{model->name}</a>",
     "TYPE:prodDowntimeAlerts.deleted": "Downtimes > Alerts: deleted",
-    "TEXT:prodDowntimeAlerts.deleted": "Deleted alert: <em>{model->name}</em>"
+    "TEXT:prodDowntimeAlerts.deleted": "Deleted alert: <em>{model->name}</em>",
+    "TYPE:cags.plan.synced": "CAG: plan import",
+    "TEXT:cags.plan.synced": "Imported <em>{count}</em> CAG plan {count, plural, one{value} other{values}}.",
+    "TYPE:cags.plan.syncFailed": "CAG: failed plan import",
+    "TEXT:cags.plan.syncFailed": "Failed to import a CAG plan: {error}",
+    "TYPE:cags.nc12.synced": "CAG: 12NC synchronization",
+    "TEXT:cags.nc12.synced": "Imported <em>{count}</em> 12NC <-> CAG {count, plural, one{link} other{links}} from data downloaded at <em>{timestamp}</em>.",
+    "TYPE:cags.nc12.syncFailed": "CAG: failed 12NC synchronization",
+    "TEXT:cags.nc12.syncFailed": "Failed to import 12NC <-> CAG links from data downloaded a <em>{timestamp}</em>: <em>{error}</em>",
+    "TYPE:orders.intake.synced": "Production orders: intake synchronization",
+    "TEXT:orders.intake.synced": "Imported <em>{count}</em> {count, plural, one{order intake} other{order intakes}} from data downloaded at <em>{timestamp}</em> for plant <em>{plant}.",
+    "TYPE:orders.intake.syncFailed": "Production orders: failed intake synchronization",
+    "TEXT:orders.intake.syncFailed": "Failed to import order intakes from data downloaded at <em>{timestamp}</em> for plant <em>{plant}</em>: {error}"
   },
   "pl": true
 }

@@ -80,6 +80,8 @@ module.exports = function setupOrderModel(app, mongoose)
     salesOrder: String,
     salesOrderItem: String,
     priority: String,
+    description: String,
+    soldToParty: String,
     statuses: [String],
     statusesSetAt: {},
     delayReason: {
@@ -101,6 +103,7 @@ module.exports = function setupOrderModel(app, mongoose)
   orderSchema.index({finishDate: -1});
   orderSchema.index({nc12: -1, finishDate: -1});
   orderSchema.index({mrp: 1, startDate: -1});
+  orderSchema.index({salesOrder: 1, salesOrderItem: 1});
 
   orderSchema.statics.prepareForInsert = function(order, createdAt)
   {
@@ -133,6 +136,8 @@ module.exports = function setupOrderModel(app, mongoose)
       salesOrder: null,
       salesOrderItem: null,
       priority: null,
+      description: null,
+      soldToParty: null,
       statuses: [],
       statusesSetAt: {},
       delayReason: null,
@@ -163,6 +168,12 @@ module.exports = function setupOrderModel(app, mongoose)
     }
 
     return $set;
+  };
+
+  orderSchema.statics.copyOrderIntake = function(order, orderIntake)
+  {
+    order.description = orderIntake.description;
+    order.soldToParty = orderIntake.soldToParty;
   };
 
   orderSchema.statics.resetStatusesSetAt = function(order)

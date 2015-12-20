@@ -25,7 +25,9 @@ exports.start = function startOrdersImporterModule(app, module)
     delayReason: true,
     documents: true,
     changes: true,
-    importTs: true
+    importTs: true,
+    description: true,
+    soldToParty: true
   };
 
   var mongoose = app[module.config.mongooseId];
@@ -36,6 +38,7 @@ exports.start = function startOrdersImporterModule(app, module)
   }
 
   var Order = mongoose.model('Order');
+  var OrderIntake = mongoose.model('OrderIntake');
   var queue = [];
   var lock = false;
 
@@ -87,7 +90,7 @@ exports.start = function startOrdersImporterModule(app, module)
 
       createOrdersForInsertion(ts, insertList, orders, missingOrders);
 
-      saveOrders(insertList, updateList);
+      setImmediate(prepareOrderIntakeSearch, insertList, updateList);
     });
   }
 
@@ -228,6 +231,66 @@ exports.start = function startOrdersImporterModule(app, module)
     {
       insertList.push(Order.prepareMissingForInsert(missingOrder, ts));
     });
+  }
+
+  function prepareOrderIntakeSearch(insertList, updateList)
+  {
+    var intakeKeyToIdMap = {};
+    var intakeKeyToOrderMap = {};
+
+    for (var i = 0; i < insertList.length; ++i)
+    {
+      var order = insertList[i];
+      var salesOrder = order.salesOrder;
+      var salesOrderItem = order.salesOrderItem;
+
+      if (salesOrder && salesOrderItem)
+      {
+        var intakeKey = salesOrder + '/' + salesOrderItem;
+
+        intakeKeyToIdMap[intakeKey] = {no: salesOrder, item: salesOrderItem};
+        intakeKeyToOrderMap[intakeKey] = order;
+      }
+    }
+
+    setImmediate(assignOrderIntakeData, _.values(intakeKeyToIdMap), intakeKeyToOrderMap, insertList, updateList);
+  }
+
+  function assignOrderIntakeData(intakeIds, intakeKeyToOrderMap, insertList, updateList)
+  {
+    step(
+      function findOrderIntakesStep()
+      {
+        if (!intakeIds.length)
+        {
+          return this.skip();
+        }
+
+        OrderIntake.find({_id: {$in: intakeIds}}).lean().exec(this.next());
+      },
+      function assignOrderIntakeDataStep(err, orderIntakes)
+      {
+        if (err)
+        {
+          module.error("Failed to find order intakes: %s", err.message);
+
+          return this.skip();
+        }
+
+        for (var i = 0; i < orderIntakes.length; ++i)
+        {
+          var orderIntake = orderIntakes[i];
+          var intakeKey = orderIntake._id.no + '/' + orderIntake._id.item;
+          var order = intakeKeyToOrderMap[intakeKey];
+
+          Order.copyOrderIntake(order, orderIntake);
+        }
+      },
+      function saveOrdersStep()
+      {
+        setImmediate(saveOrders, insertList, updateList);
+      }
+    );
   }
 
   function saveOrders(insertList, updateList)

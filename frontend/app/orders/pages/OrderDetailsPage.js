@@ -34,7 +34,10 @@ define([
     actions: [],
 
     remoteTopics: {
-      'orders.updated.*': 'onOrderUpdated'
+      'orders.updated.*': 'onOrderUpdated',
+      'orders.synced': 'onSynced',
+      'orders.intake.synced': 'onSynced',
+      'orderDocuments.synced': 'onSynced'
     },
 
     initialize: function()
@@ -85,6 +88,11 @@ define([
         this.model.get('changes').push(message.change);
         this.model.trigger('push:change', message.change);
       }
+    },
+
+    onSynced: function()
+    {
+      this.promised(this.model.fetch());
     }
 
   });

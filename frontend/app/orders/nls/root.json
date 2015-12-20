@@ -29,6 +29,8 @@
     "PROPERTY:salesOrder": "Sales order",
     "PROPERTY:salesOrderItem": "Sales order item",
     "PROPERTY:priority": "Priority",
+    "PROPERTY:description": "Description",
+    "PROPERTY:soldToParty": "Sold-to party",
     "PROPERTY:delayReason": "Delay reason",
     "PROPERTY:statuses": "Status",
     "PROPERTY:operations": "Operations",

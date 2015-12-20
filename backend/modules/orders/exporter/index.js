@@ -11,7 +11,7 @@ var request = require('request');
 
 exports.DEFAULT_CONFIG = {
   maxConcurrentUploads: 5,
-  filterRe: /^T_COOIS_(?:EMPTY_)?(ORDERS|OPERS)_([0-9]+)\.txt$/,
+  filterRe: /^T_((ZOIN(_.*?)?)|(COOIS_(EMPTY_)?(ORDERS|OPERS)_([0-9]+)))\.txt$/,
   uploadUrl: 'http://127.0.0.1/orders;import'
 };
 
@@ -24,21 +24,7 @@ exports.start = function startOrdersExporterModule(app, module)
 
   function filterFile(fileInfo)
   {
-    if (filePathCache[fileInfo.filePath])
-    {
-      return false;
-    }
-
-    var matches = fileInfo.fileName.match(module.config.filterRe);
-
-    if (matches === null)
-    {
-      return false;
-    }
-
-    fileInfo.step = parseInt(matches[2], 10) || 1;
-
-    return true;
+    return !filePathCache[fileInfo.filePath] && module.config.filterRe.test(fileInfo.fileName);
   }
 
   function exportFile(fileInfo)

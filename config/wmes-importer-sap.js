@@ -17,6 +17,7 @@ exports.modules = [
   'directoryWatcher',
   'orders/importer/orders',
   'orders/importer/emptyOrders',
+  'orders/importer/intake',
   'warehouse/importer/importQueue',
   'warehouse/importer/controlCycles',
   'warehouse/importer/transferOrders',
@@ -36,7 +37,7 @@ exports.mongoose = {
   models: [
     'event',
     'setting',
-    'order', 'emptyOrder',
+    'order', 'emptyOrder', 'orderIntake',
     'mrpController', 'clipOrderCount',
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
@@ -57,6 +58,7 @@ exports.events = {
       'events.**',
       'orders.synced',
       'emptyOrders.synced',
+      'orders.intake.synced',
       'clipOrderCount.created',
       'warehouse.*.synced',
       'xiconf.orders.synced',
@@ -65,6 +67,7 @@ exports.events = {
       'cags.plan.synced'
     ],
     error: [
+      'orders.intake.syncFailed',
       'warehouse.*.syncFailed',
       'xiconf.orders.syncFailed',
       'orderDocuments.syncFailed',
@@ -93,10 +96,11 @@ exports['messenger/server'] = {
   broadcastTopics: [
     'events.saved',
     'orders.synced',
+    'orders.intake.synced',
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
-    'orders.documents.synced',
+    'orderDocuments.synced',
     'cags.plan.synced', 'cags.plan.syncFailed'
   ]
 };
@@ -120,6 +124,10 @@ exports['orders/importer/orders'] = {
 
 exports['orders/importer/emptyOrders'] = {
   filterRe: /^T_COOIS_EMPTY_(ORDERS|OPERS)_[0-9]+\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orders/importer/intake'] = {
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 

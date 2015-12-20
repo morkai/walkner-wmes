@@ -21,6 +21,8 @@ define([
 
     template: detailsTemplate,
 
+    remoteTopics: {},
+
     localTopics: {
       'orderStatuses.synced': 'render'
     },

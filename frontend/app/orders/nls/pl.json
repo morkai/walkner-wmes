@@ -28,6 +28,8 @@
   "PROPERTY:salesOrder": "Zlecenie sprzedaży",
   "PROPERTY:salesOrderItem": "Pozycja zlecenia sprzedaży",
   "PROPERTY:priority": "Priorytet",
+  "PROPERTY:description": "Opis",
+  "PROPERTY:soldToParty": "Zleceniodawca",
   "PROPERTY:delayReason": "Powód opóźnienia",
   "PROPERTY:statuses": "Status",
   "PROPERTY:operations": "Operacje",
