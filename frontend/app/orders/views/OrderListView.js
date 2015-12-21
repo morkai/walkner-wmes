@@ -3,17 +3,21 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'underscore',
   'app/i18n',
   'app/user',
   'app/core/views/ListView',
   'app/data/orderStatuses',
-  'app/orderStatuses/util/renderOrderStatusLabel'
+  'app/orderStatuses/util/renderOrderStatusLabel',
+  '../util/openOrderPrint'
 ], function(
+  _,
   t,
   user,
   ListView,
   orderStatuses,
-  renderOrderStatusLabel
+  renderOrderStatusLabel,
+  openOrderPrint
 ) {
   'use strict';
 
@@ -36,6 +40,15 @@ define([
       }
     },
 
+    events: _.extend({
+
+      'click .action-print': function(e)
+      {
+        return openOrderPrint(e, e.currentTarget);
+      }
+
+    }, ListView.prototype.events),
+
     columns: [
       {id: '_id', className: 'is-min'},
       {id: 'nc12', className: 'is-min'},
@@ -54,7 +67,15 @@ define([
 
       return function(row)
       {
-        return [ListView.actions.viewDetails(collection.get(row._id))];
+        return [
+          ListView.actions.viewDetails(collection.get(row._id)),
+          {
+            id: 'print',
+            icon: 'print',
+            label: t.bound('orders', 'LIST:ACTION:print'),
+            href: '/orders/' + row._id + '.html?print'
+          }
+        ];
       };
     },
 

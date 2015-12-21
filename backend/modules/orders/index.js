@@ -13,7 +13,8 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   settingsId: 'settings',
-  importPath: './'
+  importPath: './',
+  zintExe: 'zint'
 };
 
 exports.start = function startOrdersModule(app, module)

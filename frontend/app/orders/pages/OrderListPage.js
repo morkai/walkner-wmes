@@ -4,21 +4,25 @@
 
 define([
   'app/i18n',
+  'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   'app/delayReasons/storage',
   '../OrderCollection',
   '../views/OrderListView',
   '../views/OrderFilterView',
+  '../views/OpenOrdersPrintView',
   'app/core/templates/listPage'
 ], function(
   t,
+  viewport,
   bindLoadingMessage,
   View,
   delayReasonsStorage,
   OrderCollection,
   OrderListView,
   OrderFilterView,
+  OpenOrdersPrintView,
   listPageTemplate
 ) {
   'use strict';
@@ -38,6 +42,13 @@ define([
     actions: function()
     {
       return [{
+        label: t.bound('orders', 'PAGE_ACTION:openOrdersPrint'),
+        icon: 'print',
+        callback: function()
+        {
+          viewport.showDialog(new OpenOrdersPrintView(), t.bound('orders', 'openOrdersPrint:title'));
+        }
+      }, {
         label: t.bound('orders', 'PAGE_ACTION:settings'),
         icon: 'cogs',
         privileges: 'ORDERS:MANAGE',

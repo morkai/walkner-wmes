@@ -1,0 +1,10 @@
+<form>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-orders"><%- t('orders', 'openOrdersPrint:orders') %></label>
+    <textarea id="<%- idPrefix %>-orders" class="form-control" rows="3" required></textarea>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" class="btn btn-primary"><%- t('orders', 'openOrdersPrint:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

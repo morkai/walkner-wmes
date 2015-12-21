@@ -6,6 +6,16 @@
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się :(",
 
   "PAGE_ACTION:settings": "Zmień ustawienia",
+  "PAGE_ACTION:print": "Drukuj zlecenie",
+  "PAGE_ACTION:openOrdersPrint": "Drukuj zlecenia",
+
+  "LIST:ACTION:print": "Drukuj",
+
+  "openOrdersPrint:title": "Drukowanie zleceń",
+  "openOrdersPrint:orders": "Podaj numery zleceń:",
+  "openOrdersPrint:submit": "Drukuj zlecenia",
+  "openOrdersPrint:msg:findFailure": "Nie udało się wyszukać zleceń :-(",
+  "openOrdersPrint:msg:notFound": "{count, plural, one{Zlecenie {orders} nie istnieje.} other{Zlecenia nie istnieją: {orders}}}",
 
   "PANEL:TITLE:details": "Szczegóły zlecenia",
   "PANEL:TITLE:operations": "Lista operacji zlecenia",

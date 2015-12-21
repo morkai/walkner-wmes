@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>&nbsp;</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      line-height: 1;
+      font-size: 12px;
+      text-rendering: optimizeLegibility;
+      -webkit-text-rendering: optimizeLegibility;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+    }
+    .clearfix:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    .page {
+      margin: 0 auto;
+      /*height: 960px;
+      border-bottom: 1px solid #000;*/
+      page-break-inside: avoid;
+      text-align: left;
+    }
+    .page + .page {
+      page-break-before: always;
+    }
+    .header-title {
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1;
+    }
+    .header-extra {
+      float: right;
+    }
+    .header-extra th {
+      text-align: right;
+    }
+    .header-extra td {
+      padding-left: 6px;
+      text-align: right;
+    }
+    .header-extra tr:first-child > th,
+    .header-extra tr:first-child > td {
+      padding-bottom: 3px;
+    }
+    .order-summary {
+      margin-top: 10px;
+      padding-bottom: 10px;
+      border-top: 1px solid #000;
+      border-bottom: 1px solid #000;
+    }
+    .order-summary.has-qr {
+      padding-bottom: 0;
+    }
+    .order-summary .qr,
+    .order-extra .qr {
+      padding: 0 10px 0 0;
+      width: 1px;
+      vertical-align: middle;
+    }
+    .qr img {
+      display: block;
+    }
+    .order-summary tr:last-child > th,
+    .order-summary tr:last-child > td {
+      padding-bottom: 10px;
+    }
+    .props {
+      width: 100%;
+    }
+    .props th {
+      padding-top: 6px;
+      width: 85px;
+      white-space: nowrap;
+      text-align: left;
+      font-weight: normal;
+      vertical-align: bottom;
+    }
+    .props td {
+      padding-top: 6px;
+      padding-left: 6px;
+      vertical-align: bottom;
+    }
+    .props td:last-child {
+      width: 70px;
+      white-space: nowrap;
+    }
+    .order-no {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .material-no {
+      font-weight: bold;
+      margin-right: 20px;
+    }
+    .order-extra {
+      margin-top: 4px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #000;
+    }
+    h3 {
+      margin-top: 20px;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+    .list {
+      width: 100%;
+    }
+    .list th,
+    .list td {
+      width: 1px;
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+    .list .expand {
+      width: auto;
+    }
+    .list td {
+      padding-top: 6px;
+    }
+    .list th:last-child,
+    .list td:last-child {
+      padding-right: 0;
+    }
+    table .right {
+      text-align: right;
+    }
+    .list .integer {
+      padding-right: 0;
+    }
+    .invisible {
+      visibility: hidden;
+    }
+  </style>
+</head>
+<body>
+<% orders.forEach(function(order) { %>
+<% order.pages.forEach(function(page) { %>
+<div class="page">
+  <div class="header clearfix">
+    <div class="header-extra">
+      <table>
+        <tbody>
+        <tr>
+          <th>Page:</th>
+          <td><%- page.no %> / <%- order.pages.length %></td>
+        </tr>
+        <tr>
+          <th>Print date:</th>
+          <td><%- dateCreated %></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="header-title">PRODUCTION DOCUMENTATION</div>
+  </div>
+  <div class="order-summary <%- order.qrCode ? 'has-qr' : '' %>">
+    <table class="props">
+      <tbody>
+      <tr>
+        <% if (order.qrCode) { %>
+        <td class="qr" rowspan="4"><img class="qrCode" src="data:image/png;base64,<%- order.qrCode %>" width="74" height="74" alt=""></td>
+        <% } %>
+        <th>Order:</th>
+        <td><span class="order-no"><%- order.order.no %></span></td>
+        <th class="right">Order priority:</th>
+        <td><%= order.order.priority %></td>
+      </tr>
+      <tr>
+        <th>Material:</th>
+        <td colspan="3">
+          <span class="material-no"><%- order.order.material %></span>
+          <span class="material-description"><%= order.order.materialDescription %></span>
+        </td>
+      </tr>
+      <tr>
+        <th>MRP controller:</th>
+        <td><%= order.order.mrpController %></td>
+        <th class="right">Start:</th>
+        <td><%- order.order.startDate %></td>
+      </tr>
+      <tr>
+        <th>Order quantity:</th>
+        <td><%- order.order.quantity %> <%- order.order.unit %></td>
+        <th class="right">Finish:</th>
+        <td><%- order.order.finishDate %></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <% if (page.no === 1) { %>
+  <div class="order-extra <%- order.qrCode ? 'has-qr' : '' %>">
+    <table class="props">
+      <tbody>
+      <tr>
+        <td class="qr" rowspan="2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=" width="74" height="1" alt=""></td>
+        <th>Sales order:</th>
+        <td><%- order.order.salesOrder %></td>
+        <th class="right">Shipping point:</th>
+        <td>PL01</td>
+      </tr>
+      <tr>
+        <th>Ship to:</th>
+        <td><%- order.order.shipTo %></td>
+        <th class="right">Leading order:</th>
+        <td><%- order.order.leadingOrder %></td>
+      </tr>
+      <tr>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+  <% if (page.operations.length) { %>
+  <div class="operations">
+    <h3>
+      OPERATIONS
+      <% if (page.continuation.operations) { %>
+      <span class="continuation">cont.</span>
+      <% } %>
+    </h3>
+    <table class="list">
+      <thead>
+      <tr>
+        <th>NR.</th>
+        <th>WORKCTR.</th>
+        <th class="expand">DESCRIPTION</th>
+        <th>QTY</th>
+        <th>SETUP</th>
+        <th>MACHINE</th>
+        <th>SETUP</th>
+        <th>LABOR</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% page.operations.forEach(function(operation) { %>
+      <tr>
+        <td><%- operation.no %></td>
+        <td><%= operation.workCenter %></td>
+        <td class="expand"><%= operation.description %></td>
+        <td class="right"><%- operation.quantity %></td>
+        <td class="right"><%- operation.machineSetupTime %></td>
+        <td class="right"><%- operation.machineTime %></td>
+        <td class="right"><%- operation.laborSetupTime %></td>
+        <td class="right"><%- operation.laborTime %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+  <% if (page.documents.length) { %>
+  <div class="documents">
+    <h3>
+      DOCUMENTS
+      <% if (page.continuation.documents) { %>
+      <span class="continuation">cont.</span>
+      <% } %>
+    </h3>
+    <table class="list">
+      <thead>
+      <tr>
+        <th>NR.</th>
+        <th>MATERIAL</th>
+        <th class="expand">DESCRIPTION</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% page.documents.forEach(function(document) { %>
+      <tr>
+        <td><%- document.no %></td>
+        <td><%- document.material %></td>
+        <td class="expand"><%= document.description %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+  <% if (page.components.length) { %>
+  <div class="components">
+    <h3>
+      COMPONENTS
+      <% if (page.continuation.components) { %>
+      <span class="continuation">cont.</span>
+      <% } %>
+    </h3>
+    <table class="list">
+      <thead>
+      <tr>
+        <th>NR.</th>
+        <th>MATERIAL</th>
+        <th class="expand">DESCRIPTION</th>
+        <th colspan="3">QTY</th>
+        <th>UNLOADING POINT</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% page.components.forEach(function(component) { %>
+      <tr>
+        <td><%- component.no %></td>
+        <td class="right"><%- component.material %></td>
+        <td class="expand"><%= component.description %></td>
+        <td class="right integer"><%- component.quantity[0] %></td>
+        <td class="decimals">
+          <% if (component.unit === 'PCE') { %>
+          <span class="invisible">,000</span>
+          <% } else { %>
+          ,<%- component.quantity[1] %>
+          <% } %>
+        </td>
+        <td><%- component.unit %></td>
+        <td><%= component.unloadingPoint %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>
+<% }) %>
+<% }) %>
+<script>if (/print/.test(window.location.search)) window.print();</script>
+</body>
+</html>

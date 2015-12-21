@@ -9,6 +9,7 @@ var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
 var ObjectId = require('mongoose').Types.ObjectId;
+var renderHtmlOrderRoute = require('./routes/renderHtmlOrder');
 
 module.exports = function setUpOrdersRoutes(app, ordersModule)
 {
@@ -18,6 +19,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   var Order = app[ordersModule.config.mongooseId].model('Order');
 
   var canView = userModule.auth('ORDERS:VIEW');
+  var canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
   var canManage = userModule.auth('ORDERS:MANAGE');
 
   express.post('/orders;import', importOrdersRoute);
@@ -40,6 +42,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   express.put('/orders/settings/:id', canManage, settings.updateRoute);
 
   express.get('/orders', express.crud.browseRoute.bind(null, app, Order));
+
+  express.get('/orders/:id.html', canPrint, renderHtmlOrderRoute.bind(null, app, ordersModule));
 
   express.get('/orders/:id', express.crud.readRoute.bind(null, app, Order));
 

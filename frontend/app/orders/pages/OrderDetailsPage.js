@@ -3,10 +3,12 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/pages/DetailsPage',
   'app/delayReasons/storage',
   '../Order',
+  '../util/openOrderPrint',
   '../views/OrderDetailsView',
   '../views/OperationListView',
   '../views/DocumentListView',
@@ -14,10 +16,12 @@ define([
   '../views/OrderChangesView',
   'app/orders/templates/detailsPage'
 ], function(
+  t,
   bindLoadingMessage,
   DetailsPage,
   delayReasonsStorage,
   Order,
+  openOrderPrint,
   OrderDetailsView,
   OperationListView,
   DocumentListView,
@@ -33,7 +37,18 @@ define([
 
     pageId: 'orderDetails',
 
-    actions: [],
+    actions: function()
+    {
+      return {
+        label: t.bound('orders', 'PAGE_ACTION:print'),
+        icon: 'print',
+        href: '/orders/' + this.model.id + '.html?print',
+        callback: function(e)
+        {
+          return openOrderPrint(e, this.querySelector('a'));
+        }
+      };
+    },
 
     remoteTopics: {
       'orders.updated.*': 'onOrderUpdated',
