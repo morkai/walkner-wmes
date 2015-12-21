@@ -965,6 +965,7 @@ module.exports = function setUpAlertsServer(app, module)
         mrp: downtime.mrpControllers.join(', '),
         prodFlow: downtime.prodFlow,
         workCenter: downtime.workCenter,
+        prodLineId: downtime.prodLine,
         prodLine: downtime.prodLine
       }
     };
