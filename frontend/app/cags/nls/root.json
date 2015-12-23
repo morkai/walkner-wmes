@@ -1,5 +1,6 @@
 {
   "root": {
+    "BREADCRUMBS:base": "Planned line utilization",
     "BREADCRUMBS:browse": "CAG",
     "BREADCRUMBS:addForm": "Adding",
     "BREADCRUMBS:editForm": "Editing",

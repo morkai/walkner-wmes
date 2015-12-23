@@ -28,6 +28,7 @@ define([
     viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
     {
       return new ListPage({
+        baseBreadcrumb: '#reports/9',
         collection: new CagCollection(null, {rqlQuery: req.rql}),
         columns: [
           {id: '_id', className: 'is-min'},
@@ -44,6 +45,7 @@ define([
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
+          baseBreadcrumb: '#reports/9',
           model: new Cag({_id: req.params.id}),
           detailsTemplate: detailsTemplate
         });
@@ -58,6 +60,7 @@ define([
       function(AddFormPage, formTemplate)
       {
         return new AddFormPage({
+          baseBreadcrumb: '#reports/9',
           model: new Cag(),
           formTemplate: formTemplate
         });
@@ -72,6 +75,7 @@ define([
       function(EditFormPage, formTemplate)
       {
         return new EditFormPage({
+          baseBreadcrumb: '#reports/9',
           model: new Cag({_id: req.params.id}),
           formTemplate: formTemplate
         });
