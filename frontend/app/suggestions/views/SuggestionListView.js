@@ -38,6 +38,7 @@ define([
 
     serializeColumns: function()
     {
+      var simple = this.options.simple;
       var columns = [
         {
           id: 'rid',
@@ -45,8 +46,8 @@ define([
         },
         {
           id: 'status',
-          tdAttrs: _.partial(prepareTdAttrs, _, 'is-min'),
-          thClassName: this.options.simple ? 'is-min' : ''
+          tdAttrs: simple ? '' : _.partial(prepareTdAttrs, _, 'is-min'),
+          className: simple ? 'is-min' : ''
         },
         {
           id: 'subject',
@@ -55,7 +56,7 @@ define([
         }
       ];
 
-      if (!this.options.simple)
+      if (!simple)
       {
         columns.push.apply(columns, [
           {id: 'date', tdAttrs: prepareTdAttrs},
