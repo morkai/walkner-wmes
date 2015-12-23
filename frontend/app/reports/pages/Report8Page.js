@@ -17,7 +17,7 @@ define([
   '../views/Report8DirIndirChartView',
   '../views/Report8TimesTableView',
   '../views/Report8TimesChartView',
-  'app/reports/templates/report8Page'
+  'app/reports/templates/8/page'
 ], function(
   $,
   time,

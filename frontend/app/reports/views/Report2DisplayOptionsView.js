@@ -7,20 +7,20 @@ define([
   'underscore',
   'js2form',
   'app/core/View',
-  'app/reports/templates/report2DisplayOptions',
+  'app/reports/templates/2/displayOptions',
   'app/core/util/ExpandableSelect'
 ], function(
   $,
   _,
   js2form,
   View,
-  displayOptionsTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: displayOptionsTemplate,
+    template: template,
 
     events: {
       'submit form': function(e)

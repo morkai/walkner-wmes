@@ -12,7 +12,7 @@ define([
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
   '../Report8Query',
-  'app/reports/templates/report8Filter'
+  'app/reports/templates/8/filter'
 ], function(
   _,
   form2js,

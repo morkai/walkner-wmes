@@ -13,7 +13,7 @@ define([
   '../views/Report4MachineTimesChartView',
   '../views/Report4QuantitiesChartView',
   '../views/Report4NotesListView',
-  'app/reports/templates/report4Page'
+  'app/reports/templates/4/page'
 ], function(
   t,
   View,

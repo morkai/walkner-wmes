@@ -6,18 +6,18 @@ define([
   'app/core/View',
   './Report1CoeffsChartView',
   './Report1DowntimesChartView',
-  'app/reports/templates/report1Charts'
+  'app/reports/templates/1/charts'
 ], function(
   View,
   Report1CoeffsChartView,
   Report1DowntimesChartView,
-  report1ChartsTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: report1ChartsTemplate,
+    template: template,
 
     initialize: function()
     {

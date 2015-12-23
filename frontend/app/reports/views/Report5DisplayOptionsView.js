@@ -9,7 +9,7 @@ define([
   'app/core/View',
   'app/data/companies',
   'app/data/prodFunctions',
-  'app/reports/templates/report5DisplayOptions',
+  'app/reports/templates/5/displayOptions',
   'app/core/util/ExpandableSelect'
 ], function(
   $,
@@ -18,13 +18,13 @@ define([
   View,
   companies,
   prodFunctions,
-  displayOptionsTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: displayOptionsTemplate,
+    template: template,
 
     events: {
       'submit form': function(e)

@@ -16,7 +16,7 @@ define([
   '../views/Report2DisplayOptionsView',
   '../views/Report2ChartsView',
   '../views/Report2OrdersView',
-  'app/reports/templates/report2Page'
+  'app/reports/templates/2/page'
 ], function(
   _,
   t,

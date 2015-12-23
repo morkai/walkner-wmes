@@ -8,7 +8,7 @@ define([
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
-  'app/reports/templates/report6Filter',
+  'app/reports/templates/6/filter',
   '../util/prepareDateRange',
   '../util/getFromTimeByInterval'
 ], function(
@@ -17,7 +17,7 @@ define([
   View,
   fixTimeRange,
   buttonGroup,
-  filterTemplate,
+  template,
   prepareDateRange,
   getFromTimeByInterval
 ) {
@@ -25,7 +25,7 @@ define([
 
   return View.extend({
 
-    template: filterTemplate,
+    template: template,
 
     events: {
       'submit': function(e)

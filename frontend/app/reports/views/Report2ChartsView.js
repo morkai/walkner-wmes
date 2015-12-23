@@ -5,17 +5,17 @@
 define([
   'app/core/View',
   './Report2ClipChartView',
-  'app/reports/templates/report2Charts'
+  'app/reports/templates/2/charts'
 ], function(
   View,
   Report2ClipChartView,
-  report2ChartsTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: report2ChartsTemplate,
+    template: template,
 
     initialize: function()
     {

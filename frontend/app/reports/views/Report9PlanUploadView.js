@@ -6,7 +6,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
-  'app/reports/templates/report9PlanUpload'
+  'app/reports/templates/9/planUpload'
 ], function(
   t,
   viewport,

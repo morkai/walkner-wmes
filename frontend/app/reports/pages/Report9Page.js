@@ -14,8 +14,8 @@ define([
   '../Report9',
   '../views/Report9TableView',
   '../views/Report9PlanUploadView',
-  'app/reports/templates/report9Page',
-  'app/reports/templates/report9Actions'
+  'app/reports/templates/9/page',
+  'app/reports/templates/9/actions'
 ], function(
   $,
   time,
@@ -28,7 +28,7 @@ define([
   Report9,
   Report9TableView,
   Report9PlanUploadView,
-  template,
+  pageTemplate,
   actionsTemplate
 ) {
   'use strict';
@@ -39,7 +39,7 @@ define([
 
     pageId: 'report9',
 
-    template: template,
+    template: pageTemplate,
 
     breadcrumbs: [t.bound('reports', '9:breadcrumbs:base')],
 

@@ -11,8 +11,8 @@ define([
   'app/core/View',
   'app/core/views/PaginationView',
   'app/orders/views/OrderChangesView',
-  'app/reports/templates/report2Orders',
-  'app/reports/templates/report2OrderRow'
+  'app/reports/templates/2/orders',
+  'app/reports/templates/2/orderRow'
 ], function(
   $,
   js2form,
@@ -22,14 +22,14 @@ define([
   View,
   PaginationView,
   OrderChangesView,
-  template,
-  renderOrderRow
+  ordersTemplate,
+  orderRowTemplate
 ) {
   'use strict';
 
   return View.extend({
 
-    template: template,
+    template: ordersTemplate,
 
     events: {
       'submit #-filter': function()
@@ -76,7 +76,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        renderOrderRow: renderOrderRow,
+        renderOrderRow: orderRowTemplate,
         canViewOrders: user.isAllowedTo('ORDERS:VIEW'),
         orders: this.collection.map(this.serializeOrder, this)
       };
@@ -173,7 +173,7 @@ define([
 
       for (var i = 0, l = this.collection.length; i < l; ++i)
       {
-        html += renderOrderRow({
+        html += orderRowTemplate({
           canViewOrders: canViewOrders,
           order: this.serializeOrder(this.collection.at(i))
         });

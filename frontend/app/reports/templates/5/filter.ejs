@@ -1,13 +1,20 @@
 <form class="well filter-form">
-  <% include _filterFromTo.ejs %>
+  <% include ../_filterFromTo.ejs %>
   <div class="form-group">
     <label><%- t('reports', 'filter:interval') %></label>
-    <div id="<%- idPrefix %>-intervals" class="btn-group filter-btn-group" data-toggle="buttons">
-      <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
+    <div id="<%- idPrefix %>-interval" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['year', 'quarter', 'month', 'week', 'day', 'shift'].forEach(function(interval) { %>
       <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
         <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
       </label>
       <% }) %>
+    </div>
+  </div>
+  <div class="form-group no-label">
+    <div id="<%- idPrefix %>-weekends" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default" title="<%- t('reports', 'filter:weekends:title') %>">
+        <input type="checkbox" name="weekends" value="1"> <%- t('reports', 'filter:weekends') %>
+      </label>
     </div>
   </div>
   <div class="form-group filter-actions">

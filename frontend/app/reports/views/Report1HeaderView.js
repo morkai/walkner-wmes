@@ -6,18 +6,18 @@ define([
   'app/i18n',
   'app/data/orgUnits',
   'app/core/View',
-  'app/reports/templates/report1Header'
+  'app/reports/templates/1/header'
 ], function(
   t,
   orgUnits,
   View,
-  report1HeaderTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: report1HeaderTemplate,
+    template: template,
 
     initialize: function()
     {

@@ -7,7 +7,7 @@ define([
   'form2js',
   'app/core/View',
   'app/core/util/buttonGroup',
-  'app/reports/templates/report7CustomTimes'
+  'app/reports/templates/7/customTimes'
 ], function(
   js2form,
   form2js,

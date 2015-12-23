@@ -8,20 +8,20 @@ define([
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
   '../util/prepareDateRange',
-  'app/reports/templates/report5Filter'
+  'app/reports/templates/5/filter'
 ], function(
   _,
   time,
   FilterView,
   fixTimeRange,
   prepareDateRange,
-  filterTemplate
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
 
     events: _.extend({}, FilterView.prototype.events, {
       'click a[data-range]': function(e)

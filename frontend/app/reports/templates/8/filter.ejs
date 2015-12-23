@@ -1,7 +1,7 @@
 <form class="well filter-form">
   <div class="reports-8-filter-columns">
     <div class="reports-8-filter-column">
-      <% include _filterFromTo.ejs %>
+      <% include ../_filterFromTo.ejs %>
       <div class="form-group">
         <label class="control-label"><%- t('reports', 'filter:interval') %></label>
         <% ['month', 'week', 'day'].forEach(function(interval) { %>

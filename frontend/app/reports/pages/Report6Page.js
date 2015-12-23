@@ -16,8 +16,8 @@ define([
   '../views/Report6EffAndFteChartView',
   '../views/Report6CategoryChartView',
   '../views/Report6TotalAndAbsenceChartView',
-  'app/reports/templates/report6Page',
-  'app/reports/templates/report6ExportPageAction'
+  'app/reports/templates/6/page',
+  'app/reports/templates/6/exportPageAction'
 ], function(
   $,
   time,

@@ -17,8 +17,8 @@ define([
   '../views/Report2ClipChartView',
   'app/prodDowntimes/ProdDowntimeCollection',
   'app/prodDowntimes/views/ProdDowntimeListView',
-  'app/reports/templates/report7Page',
-  'app/reports/templates/report7ExportPageAction'
+  'app/reports/templates/7/page',
+  'app/reports/templates/7/exportPageAction'
 ], function(
   $,
   time,

@@ -7,7 +7,7 @@ define([
   'app/time',
   'app/core/View',
   'app/pressWorksheets/templates/ordersList',
-  'app/reports/templates/notesList'
+  'app/reports/templates/4/notesList'
 ], function(
   t,
   time,

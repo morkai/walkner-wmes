@@ -12,7 +12,7 @@ define([
   '../views/Report3TableSummaryView',
   '../views/Report3OeeChartView',
   '../views/Report3DowntimeChartView',
-  'app/reports/templates/report3Page'
+  'app/reports/templates/3/page'
 ], function(
   _,
   t,

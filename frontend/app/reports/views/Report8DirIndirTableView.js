@@ -6,7 +6,7 @@ define([
   'underscore',
   'app/highcharts',
   'app/core/View',
-  'app/reports/templates/report8DirIndirTable'
+  'app/reports/templates/8/dirIndirTable'
 ], function(
   _,
   Highcharts,

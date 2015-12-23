@@ -11,7 +11,7 @@ define([
   './Report5DetailsChartView',
   './Report5DirIndirChartView',
   './Report5EffIneffChartView',
-  'app/reports/templates/report5Charts'
+  'app/reports/templates/5/charts'
 ], function(
   View,
   Report5TotalsChartView,
@@ -21,13 +21,13 @@ define([
   Report5DetailsChartView,
   Report5DirIndirChartView,
   Report5EffIneffChartView,
-  report5ChartsTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: report5ChartsTemplate,
+    template: template,
 
     initialize: function()
     {

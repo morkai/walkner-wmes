@@ -10,7 +10,7 @@ define([
   'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
   'app/users/util/setUpUserSelect2',
-  'app/reports/templates/report4Filter',
+  'app/reports/templates/4/filter',
   '../util/prepareDateRange'
 ], function(
   js2form,
@@ -20,14 +20,14 @@ define([
   fixTimeRange,
   buttonGroup,
   setUpUsersSelect2,
-  filterTemplate,
+  template,
   prepareDateRange
 ) {
   'use strict';
 
   return View.extend({
 
-    template: filterTemplate,
+    template: template,
 
     events: {
       'submit': function(e)

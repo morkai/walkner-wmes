@@ -7,7 +7,7 @@ define([
   'jquery',
   'app/i18n',
   'app/core/View',
-  'app/reports/templates/report9Table'
+  'app/reports/templates/9/table'
 ], function(
   _,
   $,

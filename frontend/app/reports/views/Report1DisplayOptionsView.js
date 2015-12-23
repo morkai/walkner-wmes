@@ -9,7 +9,7 @@ define([
   'app/core/View',
   'app/data/aors',
   'app/data/downtimeReasons',
-  'app/reports/templates/report1DisplayOptions',
+  'app/reports/templates/1/displayOptions',
   'app/core/util/ExpandableSelect'
 ], function(
   $,
@@ -18,13 +18,13 @@ define([
   View,
   aors,
   downtimeReasons,
-  displayOptionsTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: displayOptionsTemplate,
+    template: template,
 
     events: {
       'submit form': function(e)

@@ -8,7 +8,7 @@ define([
   'app/highcharts',
   'app/core/View',
   'app/data/aors',
-  'app/reports/templates/report8TimesTable'
+  'app/reports/templates/8/timesTable'
 ], function(
   _,
   t,

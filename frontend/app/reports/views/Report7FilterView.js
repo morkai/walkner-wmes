@@ -10,7 +10,7 @@ define([
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
   './Report7CustomTimesView',
-  'app/reports/templates/report7Filter'
+  'app/reports/templates/7/filter'
 ], function(
   _,
   t,

@@ -7,7 +7,7 @@ define([
   'jquery',
   'app/i18n',
   'app/core/View',
-  'app/reports/templates/report3TableSummary',
+  'app/reports/templates/3/tableSummary',
   'datatables',
   'datatables-fixedcolumns'
 ], function(
@@ -15,7 +15,7 @@ define([
   $,
   t,
   View,
-  report3TableSummaryTemplate
+  template
 ) {
   'use strict';
 
@@ -162,7 +162,7 @@ define([
 
   return View.extend({
 
-    template: report3TableSummaryTemplate,
+    template: template,
 
     events: {
       'mouseover tbody > tr': function(e)
