@@ -6,18 +6,18 @@ define([
   './DrillingReportPage',
   '../Report1Query',
   '../Report1DisplayOptions',
-  '../views/Report1HeaderView',
-  '../views/Report1FilterView',
-  '../views/Report1DisplayOptionsView',
-  '../views/Report1ChartsView'
+  '../views/1/HeaderView',
+  '../views/1/FilterView',
+  '../views/1/DisplayOptionsView',
+  '../views/1/ChartsView'
 ], function(
   DrillingReportPage,
-  Report1Query,
-  Report1DisplayOptions,
-  Report1HeaderView,
-  Report1FilterView,
-  Report1DisplayOptionsView,
-  Report1ChartsView
+  Query,
+  DisplayOptions,
+  HeaderView,
+  FilterView,
+  DisplayOptionsView,
+  ChartsView
 ) {
   'use strict';
 
@@ -29,7 +29,7 @@ define([
 
     createQuery: function()
     {
-      return new Report1Query(this.options.query);
+      return new Query(this.options.query);
     },
 
     createDisplayOptions: function()
@@ -38,30 +38,30 @@ define([
 
       if (typeof this.options.displayOptions === 'string')
       {
-        return Report1DisplayOptions.fromString(this.options.displayOptions, options);
+        return DisplayOptions.fromString(this.options.displayOptions, options);
       }
 
-      return new Report1DisplayOptions(this.options.displayOptions, options);
+      return new DisplayOptions(this.options.displayOptions, options);
     },
 
     createHeaderView: function()
     {
-      return new Report1HeaderView({model: this.query, displayOptions: this.displayOptions});
+      return new HeaderView({model: this.query, displayOptions: this.displayOptions});
     },
 
     createFilterView: function()
     {
-      return new Report1FilterView({model: this.query});
+      return new FilterView({model: this.query});
     },
 
     createDisplayOptionsView: function()
     {
-      return new Report1DisplayOptionsView({model: this.displayOptions});
+      return new DisplayOptionsView({model: this.displayOptions});
     },
 
     createChartsView: function(report, skipRenderCharts)
     {
-      return new Report1ChartsView({
+      return new ChartsView({
         model: report,
         settings: this.settings,
         displayOptions: this.displayOptions,

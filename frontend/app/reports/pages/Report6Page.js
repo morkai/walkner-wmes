@@ -12,10 +12,10 @@ define([
   '../Report6',
   '../Report6Query',
   '../Report6ProdTasks',
-  '../views/Report6FilterView',
-  '../views/Report6EffAndFteChartView',
-  '../views/Report6CategoryChartView',
-  '../views/Report6TotalAndAbsenceChartView',
+  '../views/6/FilterView',
+  '../views/6/EffAndFteChartView',
+  '../views/6/CategoryChartView',
+  '../views/6/TotalAndAbsenceChartView',
   'app/reports/templates/6/page',
   'app/reports/templates/6/exportPageAction'
 ], function(
@@ -25,22 +25,22 @@ define([
   View,
   bindLoadingMessage,
   settings,
-  Report6,
-  Report6Query,
-  Report6ProdTasks,
-  Report6FilterView,
-  Report6EffAndFteChartView,
-  Report6CategoryChartView,
-  Report6TotalAndAbsenceChartView,
+  Report,
+  Query,
+  ProdTasks,
+  FilterView,
+  EffAndFteChartView,
+  CategoryChartView,
+  TotalAndAbsenceChartView,
   pageTemplate,
   exportPageActionTemplate
 ) {
   'use strict';
 
   var KIND_TO_CHART_VIEW = {
-    totalAndAbsence: Report6TotalAndAbsenceChartView,
-    effAndFte: Report6EffAndFteChartView,
-    category: Report6CategoryChartView
+    totalAndAbsence: TotalAndAbsenceChartView,
+    effAndFte: EffAndFteChartView,
+    category: CategoryChartView
   };
 
   return View.extend({
@@ -201,9 +201,9 @@ define([
     defineModels: function()
     {
       this.settings = bindLoadingMessage(settings.acquire(), this);
-      this.query = Report6Query.fromQuery(this.options.query);
-      this.prodTasks = bindLoadingMessage(new Report6ProdTasks(null, {settings: this.settings, paginate: false}), this);
-      this.report = bindLoadingMessage(new Report6(null, {query: this.query}), this);
+      this.query = Query.fromQuery(this.options.query);
+      this.prodTasks = bindLoadingMessage(new ProdTasks(null, {settings: this.settings, paginate: false}), this);
+      this.report = bindLoadingMessage(new Report(null, {query: this.query}), this);
 
       this.listenTo(this.query, 'change', this.onQueryChange);
       this.listenTo(this.query, 'change:parent', this.onParentChange);
@@ -211,7 +211,7 @@ define([
 
     defineViews: function()
     {
-      this.filterView = new Report6FilterView({model: this.query});
+      this.filterView = new FilterView({model: this.query});
     },
 
     createChartView: function(options)

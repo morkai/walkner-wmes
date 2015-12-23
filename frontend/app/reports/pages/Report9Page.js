@@ -12,8 +12,8 @@ define([
   'app/core/util/bindLoadingMessage',
   '../settings',
   '../Report9',
-  '../views/Report9TableView',
-  '../views/Report9PlanUploadView',
+  '../views/9/TableView',
+  '../views/9/PlanUploadView',
   'app/reports/templates/9/page',
   'app/reports/templates/9/actions'
 ], function(
@@ -25,9 +25,9 @@ define([
   View,
   bindLoadingMessage,
   settings,
-  Report9,
-  Report9TableView,
-  Report9PlanUploadView,
+  Report,
+  TableView,
+  PlanUploadView,
   pageTemplate,
   actionsTemplate
 ) {
@@ -72,7 +72,7 @@ define([
           {
             document.body.focus();
 
-            viewport.showDialog(new Report9PlanUploadView(), t('reports', '9:planUpload:title'));
+            viewport.showDialog(new PlanUploadView(), t('reports', '9:planUpload:title'));
 
             return false;
           });
@@ -97,12 +97,12 @@ define([
     defineModels: function()
     {
       this.settings = bindLoadingMessage(settings.acquire(), this);
-      this.report = bindLoadingMessage(new Report9(), this);
+      this.report = bindLoadingMessage(new Report(), this);
     },
 
     defineViews: function()
     {
-      this.tableView = new Report9TableView({model: this.report});
+      this.tableView = new TableView({model: this.report});
     },
 
     defineBindings: function()

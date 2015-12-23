@@ -12,11 +12,11 @@ define([
   '../settings',
   '../Report8',
   '../Report8Query',
-  '../views/Report8FilterView',
-  '../views/Report8DirIndirTableView',
-  '../views/Report8DirIndirChartView',
-  '../views/Report8TimesTableView',
-  '../views/Report8TimesChartView',
+  '../views/8/FilterView',
+  '../views/8/DirIndirTableView',
+  '../views/8/DirIndirChartView',
+  '../views/8/TimesTableView',
+  '../views/8/TimesChartView',
   'app/reports/templates/8/page'
 ], function(
   $,
@@ -26,13 +26,13 @@ define([
   View,
   bindLoadingMessage,
   settings,
-  Report8,
-  Report8Query,
-  Report8FilterView,
-  Report8DirIndirTableView,
-  Report8DirIndirChartView,
-  Report8TimesTableView,
-  Report8TimesChartView,
+  Report,
+  Query,
+  FilterView,
+  DirIndirTableView,
+  DirIndirChartView,
+  TimesTableView,
+  TimesChartView,
   report8PageTemplate
 ) {
   'use strict';
@@ -105,25 +105,25 @@ define([
     defineModels: function()
     {
       this.settings = bindLoadingMessage(settings.acquire(), this);
-      this.query = Report8Query.fromRequest(this.options.query, this.options.displayOptions);
-      this.report = bindLoadingMessage(new Report8(null, {query: this.query}), this);
+      this.query = Query.fromRequest(this.options.query, this.options.displayOptions);
+      this.report = bindLoadingMessage(new Report(null, {query: this.query}), this);
     },
 
     defineViews: function()
     {
-      this.filterView = new Report8FilterView({
+      this.filterView = new FilterView({
         model: this.query
       });
-      this.dirIndirTableView = new Report8DirIndirTableView({
+      this.dirIndirTableView = new DirIndirTableView({
         model: this.report
       });
-      this.dirIndirChartView = new Report8DirIndirChartView({
+      this.dirIndirChartView = new DirIndirChartView({
         model: this.report
       });
-      this.timesTableView = new Report8TimesTableView({
+      this.timesTableView = new TimesTableView({
         model: this.report
       });
-      this.timesChartView = new Report8TimesChartView({
+      this.timesChartView = new TimesChartView({
         model: this.report
       });
     },

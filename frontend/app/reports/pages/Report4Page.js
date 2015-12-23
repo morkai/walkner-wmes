@@ -7,24 +7,24 @@ define([
   'app/core/View',
   '../Report4',
   '../Report4Query',
-  '../views/Report4FilterView',
-  '../views/Report4EffAndProdChartView',
-  '../views/Report4WorkTimesChartView',
-  '../views/Report4MachineTimesChartView',
-  '../views/Report4QuantitiesChartView',
-  '../views/Report4NotesListView',
+  '../views/4/FilterView',
+  '../views/4/EffAndProdChartView',
+  '../views/4/WorkTimesChartView',
+  '../views/4/MachineTimesChartView',
+  '../views/4/QuantitiesChartView',
+  '../views/4/NotesListView',
   'app/reports/templates/4/page'
 ], function(
   t,
   View,
-  Report4,
-  Report4Query,
-  Report4FilterView,
-  Report4EffAndProdChartView,
-  Report4WorkTimesChartView,
-  Report4MachineTimesChartView,
-  Report4QuantitiesChartView,
-  Report4NotesListView,
+  Report,
+  Query,
+  FilterView,
+  EffAndProdChartView,
+  WorkTimesChartView,
+  MachineTimesChartView,
+  QuantitiesChartView,
+  NotesListView,
   report4PageTemplate
 ) {
   'use strict';
@@ -53,20 +53,20 @@ define([
 
     defineModels: function()
     {
-      this.query = Report4Query.fromQuery(this.options.query);
-      this.report = new Report4(null, {query: this.query});
+      this.query = Query.fromQuery(this.options.query);
+      this.report = new Report(null, {query: this.query});
 
       this.listenTo(this.query, 'change', this.onQueryChange);
     },
 
     defineViews: function()
     {
-      this.filterView = new Report4FilterView({model: this.query});
-      this.effAndProdChartView = new Report4EffAndProdChartView({model: this.report});
-      this.workTimesChartView = new Report4WorkTimesChartView({model: this.report});
-      this.machineTimesChartView = new Report4MachineTimesChartView({model: this.report});
-      this.quantitiesChartView = new Report4QuantitiesChartView({model: this.report});
-      this.notesListView = new Report4NotesListView({
+      this.filterView = new FilterView({model: this.query});
+      this.effAndProdChartView = new EffAndProdChartView({model: this.report});
+      this.workTimesChartView = new WorkTimesChartView({model: this.report});
+      this.machineTimesChartView = new MachineTimesChartView({model: this.report});
+      this.quantitiesChartView = new QuantitiesChartView({model: this.report});
+      this.notesListView = new NotesListView({
         model: this.report
       });
     },

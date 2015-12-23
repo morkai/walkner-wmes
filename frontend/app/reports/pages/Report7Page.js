@@ -12,9 +12,9 @@ define([
   '../settings',
   '../Report7',
   '../Report7Query',
-  '../views/Report7FilterView',
-  '../views/Report7InoutChartView',
-  '../views/Report2ClipChartView',
+  '../views/7/FilterView',
+  '../views/7/InoutChartView',
+  '../views/2/ClipChartView',
   'app/prodDowntimes/ProdDowntimeCollection',
   'app/prodDowntimes/views/ProdDowntimeListView',
   'app/reports/templates/7/page',
@@ -27,10 +27,10 @@ define([
   View,
   bindLoadingMessage,
   settings,
-  Report7,
-  Report7Query,
-  Report7FilterView,
-  Report7InoutChartView,
+  Report,
+  Query,
+  FilterView,
+  InoutChartView,
   Report2ClipChartView,
   ProdDowntimeCollection,
   ProdDowntimeListView,
@@ -106,8 +106,8 @@ define([
     defineModels: function()
     {
       this.settings = bindLoadingMessage(settings.acquire(), this);
-      this.query = Report7Query.fromQuery(this.options.query, {settings: this.settings});
-      this.report = bindLoadingMessage(new Report7(null, {query: this.query}), this);
+      this.query = Query.fromQuery(this.options.query, {settings: this.settings});
+      this.report = bindLoadingMessage(new Report(null, {query: this.query}), this);
 
       this.prodDowntimes = bindLoadingMessage(new ProdDowntimeCollection(null, {
         rqlQuery: {
@@ -129,7 +129,7 @@ define([
 
     defineViews: function()
     {
-      this.filterView = new Report7FilterView({
+      this.filterView = new FilterView({
         model: this.query
       });
 
@@ -149,12 +149,12 @@ define([
         })
       });
 
-      this.downtimeTimesChartView = new Report7InoutChartView({
+      this.downtimeTimesChartView = new InoutChartView({
         type: 'downtimeTimes',
         model: this.report
       });
 
-      this.downtimeCountsChartView = new Report7InoutChartView({
+      this.downtimeCountsChartView = new InoutChartView({
         type: 'downtimeCounts',
         model: this.report
       });

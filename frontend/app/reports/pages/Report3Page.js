@@ -8,22 +8,22 @@ define([
   'app/core/View',
   '../Report3',
   '../Report3Query',
-  '../views/Report3FilterView',
-  '../views/Report3TableSummaryView',
-  '../views/Report3OeeChartView',
-  '../views/Report3DowntimeChartView',
+  '../views/3/FilterView',
+  '../views/3/TableSummaryView',
+  '../views/3/OeeChartView',
+  '../views/3/DowntimeChartView',
   'app/reports/templates/3/page'
 ], function(
   _,
   t,
   View,
-  Report3,
-  Report3Query,
-  Report3FilterView,
-  Report3TableSummaryView,
-  Report3OeeChartView,
-  Report3DowntimeChartView,
-  report3PageTemplate
+  Report,
+  Query,
+  FilterView,
+  TableSummaryView,
+  OeeChartView,
+  DowntimeChartView,
+  template
 ) {
   'use strict';
 
@@ -33,7 +33,7 @@ define([
 
     pageId: 'report3',
 
-    template: report3PageTemplate,
+    template: template,
 
     breadcrumbs: [t.bound('reports', 'BREADCRUMBS:3')],
 
@@ -82,8 +82,8 @@ define([
 
     defineModels: function()
     {
-      this.query = Report3Query.fromRqlQuery(this.options.query);
-      this.report = new Report3(null, {query: this.query});
+      this.query = Query.fromRqlQuery(this.options.query);
+      this.report = new Report(null, {query: this.query});
 
       this.listenTo(this.query, 'change', this.onQueryChange);
       this.listenTo(
@@ -96,10 +96,10 @@ define([
 
     defineViews: function()
     {
-      this.filterView = new Report3FilterView({model: this.query});
-      this.tableSummaryView = new Report3TableSummaryView({model: this.report});
-      this.oeeChartView = new Report3OeeChartView({model: this.report});
-      this.downtimeChartView = new Report3DowntimeChartView({model: this.report});
+      this.filterView = new FilterView({model: this.query});
+      this.tableSummaryView = new TableSummaryView({model: this.report});
+      this.oeeChartView = new OeeChartView({model: this.report});
+      this.downtimeChartView = new DowntimeChartView({model: this.report});
 
       this.listenTo(this.oeeChartView, 'seriesVisibilityChanged', this.onSeriesVisibilityChanged);
       this.listenTo(this.downtimeChartView, 'seriesVisibilityChanged', this.onSeriesVisibilityChanged);

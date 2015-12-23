@@ -6,20 +6,20 @@ define([
   './DrillingReportPage',
   '../Report5Query',
   '../Report5DisplayOptions',
-  '../views/Report5HeaderView',
-  '../views/Report5FilterView',
-  '../views/Report5DisplayOptionsView',
-  '../views/Report5ChartsView',
+  '../views/5/HeaderView',
+  '../views/5/FilterView',
+  '../views/5/DisplayOptionsView',
+  '../views/5/ChartsView',
   'app/prodTasks/ProdTaskCollection',
   'app/core/util/bindLoadingMessage'
 ], function(
   DrillingReportPage,
-  Report5Query,
-  Report5DisplayOptions,
-  Report5HeaderView,
-  Report5FilterView,
-  Report5DisplayOptionsView,
-  Report5ChartsView,
+  Query,
+  DisplayOptions,
+  HeaderView,
+  FilterView,
+  DisplayOptionsView,
+  ChartsView,
   ProdTaskCollection,
   bindLoadingMessage
 ) {
@@ -50,7 +50,7 @@ define([
 
     createQuery: function()
     {
-      return new Report5Query(this.options.query);
+      return new Query(this.options.query);
     },
 
     createDisplayOptions: function()
@@ -62,30 +62,30 @@ define([
 
       if (typeof this.options.displayOptions === 'string')
       {
-        return Report5DisplayOptions.fromString(this.options.displayOptions, options);
+        return DisplayOptions.fromString(this.options.displayOptions, options);
       }
 
-      return new Report5DisplayOptions(this.options.displayOptions, options);
+      return new DisplayOptions(this.options.displayOptions, options);
     },
 
     createHeaderView: function()
     {
-      return new Report5HeaderView({model: this.query, displayOptions: this.displayOptions});
+      return new HeaderView({model: this.query, displayOptions: this.displayOptions});
     },
 
     createFilterView: function()
     {
-      return new Report5FilterView({model: this.query});
+      return new FilterView({model: this.query});
     },
 
     createDisplayOptionsView: function()
     {
-      return new Report5DisplayOptionsView({model: this.displayOptions});
+      return new DisplayOptionsView({model: this.displayOptions});
     },
 
     createChartsView: function(report, skipRenderCharts)
     {
-      return new Report5ChartsView({
+      return new ChartsView({
         model: report,
         settings: this.settings,
         displayOptions: this.displayOptions,

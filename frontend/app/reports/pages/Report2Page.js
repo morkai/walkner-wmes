@@ -11,11 +11,11 @@ define([
   '../Report2OrderCollection',
   '../Report2Query',
   '../Report2DisplayOptions',
-  '../views/Report2HeaderView',
-  '../views/Report2FilterView',
-  '../views/Report2DisplayOptionsView',
-  '../views/Report2ChartsView',
-  '../views/Report2OrdersView',
+  '../views/2/HeaderView',
+  '../views/2/FilterView',
+  '../views/2/DisplayOptionsView',
+  '../views/2/ChartsView',
+  '../views/2/OrdersView',
   'app/reports/templates/2/page'
 ], function(
   _,
@@ -23,14 +23,14 @@ define([
   bindLoadingMessage,
   delayReasonsStorage,
   DrillingReportPage,
-  Report2OrderCollection,
-  Report2Query,
-  Report2DisplayOptions,
-  Report2HeaderView,
-  Report2FilterView,
-  Report2DisplayOptionsView,
-  Report2ChartsView,
-  Report2OrdersView,
+  OrderCollection,
+  Query,
+  DisplayOptions,
+  HeaderView,
+  FilterView,
+  DisplayOptionsView,
+  ChartsView,
+  OrdersView,
   template
 ) {
   'use strict';
@@ -88,7 +88,7 @@ define([
 
       this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
 
-      this.orders = bindLoadingMessage(new Report2OrderCollection(null, {
+      this.orders = bindLoadingMessage(new OrderCollection(null, {
         query: this.query,
         displayOptions: this.displayOptions
       }), this);
@@ -99,7 +99,7 @@ define([
     {
       DrillingReportPage.prototype.defineViews.call(this);
 
-      this.ordersView = new Report2OrdersView({
+      this.ordersView = new OrdersView({
         collection: this.orders,
         delayReasons: this.delayReasons
       });
@@ -174,7 +174,7 @@ define([
 
     createQuery: function()
     {
-      return new Report2Query(this.options.query);
+      return new Query(this.options.query);
     },
 
     createDisplayOptions: function()
@@ -185,30 +185,30 @@ define([
 
       if (typeof this.options.displayOptions === 'string')
       {
-        return Report2DisplayOptions.fromString(this.options.displayOptions, options);
+        return DisplayOptions.fromString(this.options.displayOptions, options);
       }
 
-      return new Report2DisplayOptions(this.options.displayOptions, options);
+      return new DisplayOptions(this.options.displayOptions, options);
     },
 
     createHeaderView: function()
     {
-      return new Report2HeaderView({model: this.query, displayOptions: this.displayOptions});
+      return new HeaderView({model: this.query, displayOptions: this.displayOptions});
     },
 
     createFilterView: function()
     {
-      return new Report2FilterView({model: this.query});
+      return new FilterView({model: this.query});
     },
 
     createDisplayOptionsView: function()
     {
-      return new Report2DisplayOptionsView({model: this.displayOptions});
+      return new DisplayOptionsView({model: this.displayOptions});
     },
 
     createChartsView: function(report, skipRenderCharts)
     {
-      return new Report2ChartsView({
+      return new ChartsView({
         model: report,
         settings: this.settings,
         displayOptions: this.displayOptions,
