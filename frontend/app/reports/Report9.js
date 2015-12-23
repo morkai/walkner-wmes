@@ -25,6 +25,43 @@ define([
     return '';
   }
 
+  var LINE_NAME_SEPARATORS = ['-', '_', '.'];
+
+  function prepareLineName(lineId)
+  {
+    var name = lineId + '\n\n';
+
+    if (lineId.length <= 4)
+    {
+      return name;
+    }
+
+    for (var i = 0; i < LINE_NAME_SEPARATORS.length; ++i)
+    {
+      var separator = LINE_NAME_SEPARATORS[i];
+      var parts = lineId.split(separator);
+
+      if (parts.length === 2)
+      {
+        return parts.join('\n' + separator);
+      }
+
+      if (parts.length > 2)
+      {
+        name = parts.pop();
+
+        if (name.length === 1)
+        {
+          name = parts.pop() + separator + name;
+        }
+
+        return parts.join(separator) + '\n' + separator + name;
+      }
+    }
+
+    return name;
+  }
+
   var DEFAULT_DAYS_IN_MONTH = 20;
   var DEFAULT_SHIFTS_IN_DAY = 3;
   var DEFAULT_HOURS_IN_SHIFT = 7.5;
@@ -132,27 +169,9 @@ define([
 
       _.forEach(report.lines, function(cags, lineId)
       {
-        var name = lineId;
-        var parts;
-
-        if (name.length > 6 && name.indexOf('-') !== -1)
-        {
-          parts = name.split('-');
-          name = parts[0] + '\n-' + parts[1];
-        }
-        else if (name.indexOf('~') !== -1)
-        {
-          parts = name.split('~');
-          name = parts[0] + '\n~' + parts[1];
-        }
-        else
-        {
-          name = name + '\n\n';
-        }
-
         lines.push({
           _id: lineId,
-          name: name,
+          name: prepareLineName(lineId),
           cags: cags
         });
       });
