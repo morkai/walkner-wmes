@@ -8,23 +8,13 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   './HourlyPlan',
-  './pages/HourlyPlanListPage',
-  './pages/HourlyPlanAddFormPage',
-  './pages/HourlyPlanEditFormPage',
-  './pages/HourlyPlanDetailsPage',
-  './pages/HourlyPlanDetailsPrintablePage',
   'i18n!app/nls/hourlyPlans'
 ], function(
   router,
   viewport,
   user,
   showDeleteFormPage,
-  HourlyPlan,
-  HourlyPlanListPage,
-  HourlyPlanAddFormPage,
-  HourlyPlanEditFormPage,
-  HourlyPlanDetailsPage,
-  HourlyPlanDetailsPrintablePage
+  HourlyPlan
 ) {
   'use strict';
 
@@ -33,30 +23,44 @@ define([
 
   router.map('/hourlyPlans', canView, function(req)
   {
-    viewport.showPage(new HourlyPlanListPage({rql: req.rql}));
+    viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanListPage'], function(HourlyPlanListPage)
+    {
+      return new HourlyPlanListPage({rql: req.rql});
+    });
   });
 
   router.map('/hourlyPlans;add', canManage, function()
   {
-    viewport.showPage(new HourlyPlanAddFormPage());
+    viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanAddFormPage'], function(HourlyPlanAddFormPage)
+    {
+      return new HourlyPlanAddFormPage();
+    });
   });
 
   router.map('/hourlyPlans/:id', canView, function(req)
   {
-    viewport.showPage(new HourlyPlanDetailsPage({modelId: req.params.id}));
+    viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanDetailsPage'], function(HourlyPlanDetailsPage)
+    {
+      return new HourlyPlanDetailsPage({modelId: req.params.id});
+    });
   });
 
   router.map('/hourlyPlans/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new HourlyPlanEditFormPage({modelId: req.params.id}));
+    viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanEditFormPage'], function(HourlyPlanEditFormPage)
+    {
+      return new HourlyPlanEditFormPage({modelId: req.params.id});
+    });
   });
 
   router.map('/hourlyPlans/:id;print', canView, function(req)
   {
-    viewport.showPage(new HourlyPlanDetailsPrintablePage({modelId: req.params.id}));
+    viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanDetailsPrintablePage'], function(HourlyPlanDetailsPrintablePage)
+    {
+      return new HourlyPlanDetailsPrintablePage({modelId: req.params.id});
+    });
   });
 
-  router.map(
-    '/hourlyPlans/:id;delete', canManage, showDeleteFormPage.bind(null, HourlyPlan)
-  );
+  router.map('/hourlyPlans/:id;delete', canManage, showDeleteFormPage.bind(null, HourlyPlan));
+
 });
