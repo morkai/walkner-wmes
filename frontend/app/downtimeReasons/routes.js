@@ -6,29 +6,17 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   '../data/downtimeReasons',
   './DowntimeReason',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/DowntimeReasonFormView',
-  'app/downtimeReasons/templates/details',
   'i18n!app/nls/downtimeReasons'
 ], function(
   router,
   viewport,
   user,
+  showDeleteFormPage,
   downtimeReasons,
-  DowntimeReason,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  DowntimeReasonFormView,
-  detailsTemplate
+  DowntimeReason
 ) {
   'use strict';
 
@@ -37,63 +25,71 @@ define([
 
   router.map('/downtimeReasons', canView, function()
   {
-    viewport.showPage(new ListPage({
-      collection: downtimeReasons,
-      columns: [
-        '_id',
-        'label',
-        'type',
-        'defaultAor',
-        'subdivisionTypes',
-        'aors',
-        'opticsPosition',
-        'pressPosition',
-        'auto',
-        'scheduled',
-        'color',
-        'refColor',
-        'refValue'
-      ]
-    }));
+    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    {
+      return new ListPage({
+        collection: downtimeReasons,
+        columns: [
+          '_id',
+          'label',
+          'type',
+          'defaultAor',
+          'subdivisionTypes',
+          'aors',
+          'opticsPosition',
+          'pressPosition',
+          'auto',
+          'scheduled',
+          'color',
+          'refColor',
+          'refValue'
+        ]
+      });
+    });
   });
 
   router.map('/downtimeReasons/:id', function(req)
   {
-    viewport.showPage(new DetailsPage({
-      model: new DowntimeReason({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      ['app/core/pages/DetailsPage', 'app/downtimeReasons/templates/details'],
+      function(DetailsPage, detailsTemplate)
+      {
+        return new DetailsPage({
+          model: new DowntimeReason({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/downtimeReasons;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      FormView: DowntimeReasonFormView,
-      model: new DowntimeReason()
-    }));
+    viewport.loadPage(
+      ['app/core/pages/AddFormPage', 'app/downtimeReasons/views/DowntimeReasonFormView'],
+      function(AddFormPage, DowntimeReasonFormView)
+      {
+        return new AddFormPage({
+          FormView: DowntimeReasonFormView,
+          model: new DowntimeReason()
+        });
+      }
+    );
   });
 
   router.map('/downtimeReasons/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      FormView: DowntimeReasonFormView,
-      model: new DowntimeReason({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      ['app/core/pages/EditFormPage', 'app/downtimeReasons/views/DowntimeReasonFormView'],
+      function(EditFormPage, DowntimeReasonFormView)
+      {
+        return new EditFormPage({
+          FormView: DowntimeReasonFormView,
+          model: new DowntimeReason({_id: req.params.id})
+        });
+      }
+    );
   });
 
-  router.map('/downtimeReasons/:id;delete', canManage, function(req, referer)
-  {
-    var model = new DowntimeReason({_id: req.params.id});
-
-    viewport.showPage(new ActionFormPage({
-      model: model,
-      actionKey: 'delete',
-      successUrl: model.genClientUrl('base'),
-      cancelUrl: referer || model.genClientUrl('base'),
-      formMethod: 'DELETE',
-      formAction: model.url(),
-      formActionSeverity: 'danger'
-    }));
-  });
+  router.map('/downtimeReasons/:id;delete', canManage, showDeleteFormPage.bind(null, DowntimeReason));
 
 });
