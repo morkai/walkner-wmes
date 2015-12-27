@@ -8,15 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenAreaCollection',
   './KaizenArea',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/KaizenAreaFormView',
-  'app/kaizenAreas/templates/details',
   'i18n!app/nls/kaizenAreas'
 ], function(
   _,
@@ -24,15 +16,7 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  KaizenAreaCollection,
-  KaizenArea,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  KaizenAreaFormView,
-  detailsTemplate
+  KaizenArea
 ) {
   'use strict';
 
@@ -41,42 +25,81 @@ define([
 
   router.map('/kaizenAreas', canView, function(req)
   {
-    viewport.showPage(new ListPage({
-      baseBreadcrumb: true,
-      collection: new KaizenAreaCollection(null, {rqlQuery: req.rql}),
-      columns: [
-        {id: '_id', className: 'is-min'},
-        'name',
-        {id: 'position', className: 'is-min'}
-      ]
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/ListPage',
+        'app/kaizenAreas/KaizenAreaCollection'
+      ],
+      function(ListPage, KaizenAreaCollection)
+      {
+        return new ListPage({
+          baseBreadcrumb: true,
+          collection: new KaizenAreaCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: '_id', className: 'is-min'},
+            'name',
+            {id: 'position', className: 'is-min'}
+          ]
+        });
+      }
+    );
   });
 
   router.map('/kaizenAreas/:id', canView, function(req)
   {
-    viewport.showPage(new DetailsPage({
-      baseBreadcrumb: true,
-      model: new KaizenArea({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/DetailsPage',
+        'app/kaizenAreas/KaizenArea',
+        'app/kaizenAreas/templates/details'
+      ],
+      function(DetailsPage, KaizenArea, detailsTemplate)
+      {
+        return new DetailsPage({
+          baseBreadcrumb: true,
+          model: new KaizenArea({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/kaizenAreas;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenAreaFormView,
-      model: new KaizenArea()
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/AddFormPage',
+        'app/kaizenAreas/KaizenArea',
+        'app/kaizenAreas/views/KaizenAreaFormView'
+      ],
+      function(AddFormPage, KaizenArea, KaizenAreaFormView)
+      {
+        return new AddFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenAreaFormView,
+          model: new KaizenArea()
+        });
+      }
+    );
   });
 
   router.map('/kaizenAreas/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenAreaFormView,
-      model: new KaizenArea({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/EditFormPage',
+        'app/kaizenAreas/KaizenArea',
+        'app/kaizenAreas/views/KaizenAreaFormView'
+      ],
+      function(EditFormPage, KaizenArea, KaizenAreaFormView)
+      {
+        return new EditFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenAreaFormView,
+          model: new KaizenArea({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/kaizenAreas/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenArea, _, _, {
