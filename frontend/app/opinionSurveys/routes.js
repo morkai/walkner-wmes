@@ -8,14 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  '../core/pages/ListPage',
-  './OpinionSurveyCollection',
   './OpinionSurvey',
-  './pages/OpinionSurveyDetailsPage',
-  './pages/OpinionSurveyAddFormPage',
-  './pages/OpinionSurveyEditFormPage',
-  './pages/EmployeeCountEditFormPage',
-  './views/OpinionSurveyListView',
   'i18n!app/nls/reports',
   'i18n!app/nls/opinionSurveys'
 ], function(
@@ -24,14 +17,7 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  ListPage,
-  OpinionSurveyCollection,
-  OpinionSurvey,
-  OpinionSurveyDetailsPage,
-  OpinionSurveyAddFormPage,
-  OpinionSurveyEditFormPage,
-  EmployeeCountEditFormPage,
-  OpinionSurveyListView
+  OpinionSurvey
 ) {
   'use strict';
 
@@ -50,39 +36,85 @@ define([
 
   router.map('/opinionSurveys', canManage, function(req)
   {
-    viewport.showPage(new ListPage({
-      baseBreadcrumb: true,
-      ListView: OpinionSurveyListView,
-      collection: new OpinionSurveyCollection(null, {rqlQuery: req.rql})
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/ListPage',
+        'app/opinionSurveys/OpinionSurveyCollection',
+        'app/opinionSurveys/views/OpinionSurveyListView'
+      ],
+      function(ListPage, OpinionSurveyCollection, OpinionSurveyListView)
+      {
+        return new ListPage({
+          baseBreadcrumb: true,
+          ListView: OpinionSurveyListView,
+          collection: new OpinionSurveyCollection(null, {rqlQuery: req.rql})
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveys/:id', canManage, function(req)
   {
-    viewport.showPage(new OpinionSurveyDetailsPage({
-      model: new OpinionSurvey({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/opinionSurveys/OpinionSurvey',
+        'app/opinionSurveys/pages/OpinionSurveyDetailsPage'
+      ],
+      function(OpinionSurvey, OpinionSurveyDetailsPage)
+      {
+        return new OpinionSurveyDetailsPage({
+          model: new OpinionSurvey({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveys;add', canManage, function()
   {
-    viewport.showPage(new OpinionSurveyAddFormPage({
-      model: new OpinionSurvey()
-    }));
+    viewport.loadPage(
+      [
+        'app/opinionSurveys/OpinionSurvey',
+        'app/opinionSurveys/pages/OpinionSurveyAddFormPage'
+      ],
+      function(OpinionSurvey, OpinionSurveyAddFormPage)
+      {
+        return new OpinionSurveyAddFormPage({
+          model: new OpinionSurvey()
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveys/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new OpinionSurveyEditFormPage({
-      model: new OpinionSurvey({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/opinionSurveys/OpinionSurvey',
+        'app/opinionSurveys/pages/OpinionSurveyEditFormPage'
+      ],
+      function(OpinionSurvey, OpinionSurveyEditFormPage)
+      {
+        return new OpinionSurveyEditFormPage({
+          model: new OpinionSurvey({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveys/:id;editEmployeeCount', canManage, function(req)
   {
-    viewport.showPage(new EmployeeCountEditFormPage({
-      model: new OpinionSurvey({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/opinionSurveys/OpinionSurvey',
+        'app/opinionSurveys/pages/EmployeeCountEditFormPage'
+      ],
+      function(OpinionSurvey, EmployeeCountEditFormPage)
+      {
+        return new EmployeeCountEditFormPage({
+          model: new OpinionSurvey({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveys/:id;delete', canManage, _.partial(showDeleteFormPage, OpinionSurvey, _, _, {
