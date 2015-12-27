@@ -6,29 +6,17 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   './LossReasonCollection',
   './LossReason',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/LossReasonFormView',
-  'app/lossReasons/templates/details',
   'i18n!app/nls/lossReasons'
 ], function(
   router,
   viewport,
   user,
+  showDeleteFormPage,
   LossReasonCollection,
-  LossReason,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  LossReasonFormView,
-  detailsTemplate
+  LossReason
 ) {
   'use strict';
 
@@ -37,53 +25,61 @@ define([
 
   router.map('/lossReasons', canView, function(req)
   {
-    viewport.showPage(new ListPage({
-      collection: new LossReasonCollection(null, {rqlQuery: req.rql}),
-      columns: [
-        {id: '_id', className: 'is-min'},
-        'label',
-        {id: 'position', className: 'is-min'}
-      ]
-    }));
+    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    {
+      return new ListPage({
+        collection: new LossReasonCollection(null, {rqlQuery: req.rql}),
+        columns: [
+          {id: '_id', className: 'is-min'},
+          'label',
+          {id: 'position', className: 'is-min'}
+        ]
+      });
+    });
   });
 
   router.map('/lossReasons/:id', function(req)
   {
-    viewport.showPage(new DetailsPage({
-      model: new LossReason({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      ['app/core/pages/DetailsPage', 'app/lossReasons/templates/details'],
+      function(DetailsPage, detailsTemplate)
+      {
+        return new DetailsPage({
+          model: new LossReason({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/lossReasons;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      FormView: LossReasonFormView,
-      model: new LossReason()
-    }));
+    viewport.loadPage(
+      ['app/core/pages/AddFormPage', 'app/lossReasons/views/LossReasonFormView'],
+      function(AddFormPage, LossReasonFormView)
+      {
+        return new AddFormPage({
+          FormView: LossReasonFormView,
+          model: new LossReason()
+        });
+      }
+    );
   });
 
   router.map('/lossReasons/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      FormView: LossReasonFormView,
-      model: new LossReason({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      ['app/core/pages/EditFormPage', 'app/lossReasons/views/LossReasonFormView'],
+      function(EditFormPage, LossReasonFormView)
+      {
+        return new EditFormPage({
+          FormView: LossReasonFormView,
+          model: new LossReason({_id: req.params.id})
+        });
+      }
+    );
   });
 
-  router.map('/lossReasons/:id;delete', canManage, function(req, referer)
-  {
-    var model = new LossReason({_id: req.params.id});
-
-    viewport.showPage(new ActionFormPage({
-      model: model,
-      actionKey: 'delete',
-      successUrl: model.genClientUrl('base'),
-      cancelUrl: referer || model.genClientUrl('base'),
-      formMethod: 'DELETE',
-      formAction: model.url(),
-      formActionSeverity: 'danger'
-    }));
-  });
+  router.map('/lossReasons/:id;delete', canManage, showDeleteFormPage.bind(null, LossReason));
 
 });
