@@ -8,15 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenCauseCollection',
   './KaizenCause',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/KaizenCauseFormView',
-  'app/kaizenCauses/templates/details',
   'i18n!app/nls/kaizenCauses'
 ], function(
   _,
@@ -24,15 +16,7 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  KaizenCauseCollection,
-  KaizenCause,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  KaizenCauseFormView,
-  detailsTemplate
+  KaizenCause
 ) {
   'use strict';
 
@@ -41,42 +25,81 @@ define([
 
   router.map('/kaizenCauses', canView, function(req)
   {
-    viewport.showPage(new ListPage({
-      baseBreadcrumb: true,
-      collection: new KaizenCauseCollection(null, {rqlQuery: req.rql}),
-      columns: [
-        {id: '_id', className: 'is-min'},
-        'name',
-        {id: 'position', className: 'is-min'}
-      ]
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/ListPage',
+        'app/kaizenCauses/KaizenCauseCollection'
+      ],
+      function(ListPage, KaizenCauseCollection)
+      {
+        return new ListPage({
+          baseBreadcrumb: true,
+          collection: new KaizenCauseCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: '_id', className: 'is-min'},
+            'name',
+            {id: 'position', className: 'is-min'}
+          ]
+        });
+      }
+    );
   });
 
   router.map('/kaizenCauses/:id', canView, function(req)
   {
-    viewport.showPage(new DetailsPage({
-      baseBreadcrumb: true,
-      model: new KaizenCause({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/DetailsPage',
+        'app/kaizenCauses/KaizenCause',
+        'app/kaizenCauses/templates/details'
+      ],
+      function(DetailsPage, KaizenCause, detailsTemplate)
+      {
+        return new DetailsPage({
+          baseBreadcrumb: true,
+          model: new KaizenCause({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/kaizenCauses;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenCauseFormView,
-      model: new KaizenCause()
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/AddFormPage',
+        'app/kaizenCauses/KaizenCause',
+        'app/kaizenCauses/views/KaizenCauseFormView'
+      ],
+      function(AddFormPage, KaizenCause, KaizenCauseFormView)
+      {
+        return new AddFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenCauseFormView,
+          model: new KaizenCause()
+        });
+      }
+    );
   });
 
   router.map('/kaizenCauses/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenCauseFormView,
-      model: new KaizenCause({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/EditFormPage',
+        'app/kaizenCauses/KaizenCause',
+        'app/kaizenCauses/views/KaizenCauseFormView'
+      ],
+      function(EditFormPage, KaizenCause, KaizenCauseFormView)
+      {
+        return new EditFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenCauseFormView,
+          model: new KaizenCause({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/kaizenCauses/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenCause, _, _, {
