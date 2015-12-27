@@ -8,15 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenProductFamilyCollection',
   './KaizenProductFamily',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/KaizenProductFamilyFormView',
-  'app/kaizenProductFamilies/templates/details',
   'i18n!app/nls/kaizenProductFamilies'
 ], function(
   _,
@@ -24,15 +16,7 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  KaizenProductFamilyCollection,
-  KaizenProductFamily,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  KaizenProductFamilyFormView,
-  detailsTemplate
+  KaizenProductFamily
 ) {
   'use strict';
 
@@ -41,43 +25,82 @@ define([
 
   router.map('/kaizenProductFamilies', canView, function(req)
   {
-    viewport.showPage(new ListPage({
-      baseBreadcrumb: true,
-      collection: new KaizenProductFamilyCollection(null, {rqlQuery: req.rql}),
-      columns: [
-        {id: '_id', className: 'is-min'},
-        {id: 'name', className: 'is-min'},
-        'owners',
-        {id: 'position', className: 'is-min'}
-      ]
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/ListPage',
+        'app/kaizenProductFamilies/KaizenProductFamilyCollection'
+      ],
+      function(ListPage, KaizenProductFamilyCollection)
+      {
+        return new ListPage({
+          baseBreadcrumb: true,
+          collection: new KaizenProductFamilyCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: '_id', className: 'is-min'},
+            {id: 'name', className: 'is-min'},
+            'owners',
+            {id: 'position', className: 'is-min'}
+          ]
+        });
+      }
+    );
   });
 
   router.map('/kaizenProductFamilies/:id', canView, function(req)
   {
-    viewport.showPage(new DetailsPage({
-      baseBreadcrumb: true,
-      model: new KaizenProductFamily({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/DetailsPage',
+        'app/kaizenProductFamilies/KaizenProductFamily',
+        'app/kaizenProductFamilies/templates/details'
+      ],
+      function(DetailsPage, KaizenProductFamily, detailsTemplate)
+      {
+        return new DetailsPage({
+          baseBreadcrumb: true,
+          model: new KaizenProductFamily({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/kaizenProductFamilies;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenProductFamilyFormView,
-      model: new KaizenProductFamily()
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/AddFormPage',
+        'app/kaizenProductFamilies/KaizenProductFamily',
+        'app/kaizenProductFamilies/views/KaizenProductFamilyFormView'
+      ],
+      function(AddFormPage, KaizenProductFamily, KaizenProductFamilyFormView)
+      {
+        return new AddFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenProductFamilyFormView,
+          model: new KaizenProductFamily()
+        });
+      }
+    );
   });
 
   router.map('/kaizenProductFamilies/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenProductFamilyFormView,
-      model: new KaizenProductFamily({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/EditFormPage',
+        'app/kaizenProductFamilies/KaizenProductFamily',
+        'app/kaizenProductFamilies/views/KaizenProductFamilyFormView'
+      ],
+      function(EditFormPage, KaizenProductFamily, KaizenProductFamilyFormView)
+      {
+        return new EditFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenProductFamilyFormView,
+          model: new KaizenProductFamily({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/kaizenProductFamilies/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenProductFamily, _, _, {
