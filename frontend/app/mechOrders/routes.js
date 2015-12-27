@@ -6,15 +6,11 @@ define([
   '../router',
   '../viewport',
   '../user',
-  './pages/MechOrderListPage',
-  './pages/MechOrderDetailsPage',
   'i18n!app/nls/mechOrders'
 ], function(
   router,
   viewport,
-  user,
-  MechOrderListPage,
-  MechOrderDetailsPage
+  user
 ) {
   'use strict';
 
@@ -22,11 +18,17 @@ define([
 
   router.map('/mechOrders', canView, function(req)
   {
-    viewport.showPage(new MechOrderListPage({rql: req.rql}));
+    viewport.loadPage(['app/mechOrders/pages/MechOrderListPage'], function(MechOrderListPage)
+    {
+      return new MechOrderListPage({rql: req.rql});
+    });
   });
 
   router.map('/mechOrders/:id', canView, function(req)
   {
-    viewport.showPage(new MechOrderDetailsPage({modelId: req.params.id}));
+    viewport.loadPage(['app/mechOrders/pages/MechOrderDetailsPage'], function(MechOrderDetailsPage)
+    {
+      return new MechOrderDetailsPage({modelId: req.params.id});
+    });
   });
 });
