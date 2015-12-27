@@ -1,5 +1,0 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
-
-define(["app/data/companies","./Report5FteChartView"],function(e,t){"use strict";return t.extend({fteType:"indirect",extremesChangeProperties:["maxIndirectFte"],serializeChartData:function(){return{indirect:this.model.get("totals").indirect,byCompany:this.model.get("indirectByCompany")}},getYAxisMaxValues:function(){return[this.displayOptions.get("maxIndirectFte")||null]},createSeries:function(t){var i=[this.createFteSeries("indirect",t.indirect)];return e.forEach(function(e){i.push(this.createFteSeries(e.id,t.byCompany?t.byCompany[e.id]:null,e.getLabel(),e.get("color")))},this),i}})});

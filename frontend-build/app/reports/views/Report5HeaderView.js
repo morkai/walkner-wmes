@@ -1,5 +1,0 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
-
-define(["app/i18n","app/data/orgUnits","app/core/View","app/reports/templates/report5Header"],function(e,t,i,n){"use strict";return i.extend({template:n,initialize:function(){this.listenTo(this.model,"change",this.render),this.listenTo(this.displayOptions,"change",this.render)},serialize:function(){var i=this.model,n=[],r=t.getByTypeAndId(i.get("orgUnitType"),i.get("orgUnitId"));if(r)do{var l=t.getType(r);n.unshift({label:e("core","ORG_UNIT:"+l),value:[r.getLabel()],query:[n.length?i.serializeToString(l,r.id):null],lastI:0}),r=t.getParent(r)}while(r);return{overallQuery:n.length?i.serializeToString(null,null):null,orgUnitPath:n,fragment:this.displayOptions.serializeToString()}}})});

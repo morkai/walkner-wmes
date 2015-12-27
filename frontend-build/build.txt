@@ -800,9 +800,12 @@ app/orderStatuses/OrderStatus.js
 app/orderStatuses/OrderStatusCollection.js
 app/data/orderStatuses.js
 app/orderStatuses/util/renderOrderStatusLabel.js
+app/orders/util/openOrderPrint.js
 app/orders/views/OrderListView.js
 app/orders/templates/filter.js
 app/orders/views/OrderFilterView.js
+app/orders/templates/openOrdersPrint.js
+app/orders/views/OpenOrdersPrintView.js
 app/orders/pages/OrderListPage.js
 app/orders/templates/details.js
 app/orders/views/OrderDetailsView.js

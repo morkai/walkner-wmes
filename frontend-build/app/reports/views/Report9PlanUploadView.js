@@ -1,5 +1,0 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
-
-define(["app/i18n","app/viewport","app/core/View","app/reports/templates/report9PlanUpload"],function(t,e,a,o){"use strict";return a.extend({template:o,events:{submit:"upload"},onDialogShown:function(t){this.closeDialog=t.closeDialog.bind(t)},closeDialog:function(){},upload:function(a){a.preventDefault();var o=this.$("[type=submit]").attr("disabled",!0),i=new FormData(this.el),n=this.ajax({type:"POST",url:"/cags;importPlan",data:i,processData:!1,contentType:!1}),s=this.closeDialog;n.then(function(){e.msg.show({type:"info",time:2500,text:t("reports","9:planUpload:success")}),s()}),n.fail(function(){e.msg.show({type:"error",time:5e3,text:t("reports","9:planUpload:failure")})}),n.always(function(){o.attr("disabled",!1)})}})});
