@@ -48,7 +48,7 @@ define([
         return new DetailsPage({
           DetailsView: XiconfProgramDetailsView,
           model: new XiconfProgram({_id: req.params.id}),
-          breadcrumbs: createBreadcrumbsProvider(DetailsPage)
+          baseBreadcrumb: true
         });
       }
     );
@@ -63,7 +63,7 @@ define([
         return new AddFormPage({
           FormView: XiconfProgramFormView,
           model: new XiconfProgram(),
-          breadcrumbs: createBreadcrumbsProvider(AddFormPage)
+          baseBreadcrumb: true
         });
       }
     );
@@ -78,7 +78,7 @@ define([
         return new EditFormPage({
           FormView: XiconfProgramFormView,
           model: new XiconfProgram({_id: req.params.id}),
-          breadcrumbs: createBreadcrumbsProvider(EditFormPage)
+          baseBreadcrumb: true
         });
       }
     );
@@ -88,19 +88,8 @@ define([
     '/xiconf/programs/:id;delete',
     canManage,
     _.partial(showDeleteFormPage, XiconfProgram, _, _, {
-      breadcrumbs: createBreadcrumbsProvider()
+      baseBreadcrumb: true
     })
   );
 
-  function createBreadcrumbsProvider(Page)
-  {
-    return function()
-    {
-      var breadcrumbs = Page.prototype.breadcrumbs.call(this);
-
-      breadcrumbs.unshift(t.bound('xiconfPrograms', 'BREADCRUMBS:base'));
-
-      return breadcrumbs;
-    };
-  }
 });
