@@ -8,15 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenCategoryCollection',
   './KaizenCategory',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/KaizenCategoryFormView',
-  'app/kaizenCategories/templates/details',
   'i18n!app/nls/kaizenCategories'
 ], function(
   _,
@@ -24,15 +16,7 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  KaizenCategoryCollection,
-  KaizenCategory,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  KaizenCategoryFormView,
-  detailsTemplate
+  KaizenCategory
 ) {
   'use strict';
 
@@ -41,44 +25,83 @@ define([
 
   router.map('/kaizenCategories', canView, function(req)
   {
-    viewport.showPage(new ListPage({
-      baseBreadcrumb: true,
-      collection: new KaizenCategoryCollection(null, {rqlQuery: req.rql}),
-      columns: [
-        {id: '_id', className: 'is-min'},
-        'name',
-        {id: 'inNearMiss', className: 'is-min'},
-        {id: 'inSuggestion', className: 'is-min'},
-        {id: 'position', className: 'is-min'}
-      ]
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/ListPage',
+        'app/kaizenCategories/KaizenCategoryCollection'
+      ],
+      function(ListPage, KaizenCategoryCollection)
+      {
+        return new ListPage({
+          baseBreadcrumb: true,
+          collection: new KaizenCategoryCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: '_id', className: 'is-min'},
+            'name',
+            {id: 'inNearMiss', className: 'is-min'},
+            {id: 'inSuggestion', className: 'is-min'},
+            {id: 'position', className: 'is-min'}
+          ]
+        });
+      }
+    );
   });
 
   router.map('/kaizenCategories/:id', canView, function(req)
   {
-    viewport.showPage(new DetailsPage({
-      baseBreadcrumb: true,
-      model: new KaizenCategory({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/DetailsPage',
+        'app/kaizenCategories/KaizenCategory',
+        'app/kaizenCategories/templates/details'
+      ],
+      function(DetailsPage, KaizenCategory, detailsTemplate)
+      {
+        return new DetailsPage({
+          baseBreadcrumb: true,
+          model: new KaizenCategory({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/kaizenCategories;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenCategoryFormView,
-      model: new KaizenCategory()
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/AddFormPage',
+        'app/kaizenCategories/KaizenCategory',
+        'app/kaizenCategories/views/KaizenCategoryFormView'
+      ],
+      function(AddFormPage, KaizenCategory, KaizenCategoryFormView)
+      {
+        return new AddFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenCategoryFormView,
+          model: new KaizenCategory()
+        });
+      }
+    );
   });
 
   router.map('/kaizenCategories/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenCategoryFormView,
-      model: new KaizenCategory({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/EditFormPage',
+        'app/kaizenAreas/KaizenCategory',
+        'app/kaizenAreas/views/KaizenCategoryFormView'
+      ],
+      function(EditFormPage, KaizenCategory, KaizenCategoryFormView)
+      {
+        return new EditFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenCategoryFormView,
+          model: new KaizenCategory({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/kaizenCategories/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenCategory, _, _, {
