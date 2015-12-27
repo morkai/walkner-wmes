@@ -8,14 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './OpinionSurveyEmployerCollection',
   './OpinionSurveyEmployer',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  './views/OpinionSurveyEmployerFormView',
-  'app/opinionSurveyEmployers/templates/details',
   'i18n!app/nls/opinionSurveyEmployers'
 ], function(
   _,
@@ -23,14 +16,7 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  OpinionSurveyEmployerCollection,
-  OpinionSurveyEmployer,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  OpinionSurveyEmployerFormView,
-  detailsTemplate
+  OpinionSurveyEmployer
 ) {
   'use strict';
 
@@ -38,43 +24,82 @@ define([
 
   router.map('/opinionSurveyEmployers', canManage, function(req)
   {
-    viewport.showPage(new ListPage({
-      baseBreadcrumb: true,
-      collection: new OpinionSurveyEmployerCollection(null, {rqlQuery: req.rql}),
-      columns: [
-        {id: '_id', className: 'is-min'},
-        {id: 'short', className: 'is-min'},
-        'full',
-        {id: 'color', className: 'is-min'}
-      ]
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/ListPage',
+        'app/opinionSurveyEmployers/OpinionSurveyEmployerCollection'
+      ],
+      function(ListPage, OpinionSurveyEmployerCollection)
+      {
+        return new ListPage({
+          baseBreadcrumb: true,
+          collection: new OpinionSurveyEmployerCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: '_id', className: 'is-min'},
+            {id: 'short', className: 'is-min'},
+            'full',
+            {id: 'color', className: 'is-min'}
+          ]
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveyEmployers/:id', canManage, function(req)
   {
-    viewport.showPage(new DetailsPage({
-      baseBreadcrumb: true,
-      model: new OpinionSurveyEmployer({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/DetailsPage',
+        'app/opinionSurveyEmployers/OpinionSurveyEmployer',
+        'app/opinionSurveyEmployers/templates/details'
+      ],
+      function(DetailsPage, OpinionSurveyEmployer, detailsTemplate)
+      {
+        return new DetailsPage({
+          baseBreadcrumb: true,
+          model: new OpinionSurveyEmployer({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveyEmployers;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      baseBreadcrumb: true,
-      FormView: OpinionSurveyEmployerFormView,
-      model: new OpinionSurveyEmployer()
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/AddFormPage',
+        'app/opinionSurveyEmployers/OpinionSurveyEmployer',
+        'app/opinionSurveyEmployers/views/OpinionSurveyEmployerFormView'
+      ],
+      function(AddFormPage, OpinionSurveyEmployer, OpinionSurveyEmployerFormView)
+      {
+        return new AddFormPage({
+          baseBreadcrumb: true,
+          FormView: OpinionSurveyEmployerFormView,
+          model: new OpinionSurveyEmployer()
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveyEmployers/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      baseBreadcrumb: true,
-      FormView: OpinionSurveyEmployerFormView,
-      model: new OpinionSurveyEmployer({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/EditFormPage',
+        'app/opinionSurveyEmployers/OpinionSurveyEmployer',
+        'app/opinionSurveyEmployers/views/OpinionSurveyEmployerFormView'
+      ],
+      function(EditFormPage, OpinionSurveyEmployer, OpinionSurveyEmployerFormView)
+      {
+        return new EditFormPage({
+          baseBreadcrumb: true,
+          FormView: OpinionSurveyEmployerFormView,
+          model: new OpinionSurveyEmployer({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map(
