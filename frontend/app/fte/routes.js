@@ -10,16 +10,6 @@ define([
   '../core/util/showDeleteFormPage',
   './FteMasterEntry',
   './FteLeaderEntry',
-  './pages/FteMasterEntryListPage',
-  './pages/FteMasterEntryAddFormPage',
-  './pages/FteMasterEntryEditFormPage',
-  './pages/FteMasterEntryDetailsPage',
-  './pages/FteMasterEntryDetailsPrintablePage',
-  './pages/FteLeaderEntryListPage',
-  './pages/FteLeaderEntryAddFormPage',
-  './pages/FteLeaderEntryEditFormPage',
-  './pages/FteLeaderEntryDetailsPage',
-  './pages/FteLeaderEntryDetailsPrintablePage',
   'i18n!app/nls/fte'
 ], function(
   broker,
@@ -28,17 +18,7 @@ define([
   user,
   showDeleteFormPage,
   FteMasterEntry,
-  FteLeaderEntry,
-  FteMasterEntryListPage,
-  FteMasterEntryAddFormPage,
-  FteMasterEntryEditFormPage,
-  FteMasterEntryDetailsPage,
-  FteMasterEntryDetailsPrintablePage,
-  FteLeaderEntryListPage,
-  FteLeaderEntryAddFormPage,
-  FteLeaderEntryEditFormPage,
-  FteLeaderEntryDetailsPage,
-  FteLeaderEntryDetailsPrintablePage
+  FteLeaderEntry
 ) {
   'use strict';
 
@@ -49,12 +29,18 @@ define([
 
   router.map('/fte/master', canViewMaster, function(req)
   {
-    viewport.showPage(new FteMasterEntryListPage({rql: req.rql}));
+    viewport.loadPage(['app/fte/pages/FteMasterEntryListPage'], function(FteMasterEntryListPage)
+    {
+      return new FteMasterEntryListPage({rql: req.rql});
+    });
   });
 
   router.map('/fte/master;add', canManageMaster, function()
   {
-    viewport.showPage(new FteMasterEntryAddFormPage());
+    viewport.loadPage(['app/fte/pages/FteMasterEntryAddFormPage'], function(FteMasterEntryAddFormPage)
+    {
+      return new FteMasterEntryAddFormPage();
+    });
   });
 
   router.map('/fte/master/:id', canViewMaster, function(req)
@@ -68,34 +54,47 @@ define([
       });
     }
 
-    viewport.showPage(new FteMasterEntryDetailsPage({
-      modelId: req.params.id,
-      change: req.query.change
-    }));
+    viewport.loadPage(['app/fte/pages/FteMasterEntryDetailsPage'], function(FteMasterEntryDetailsPage)
+    {
+      return new FteMasterEntryDetailsPage({
+        modelId: req.params.id,
+        change: req.query.change
+      });
+    });
   });
 
   router.map('/fte/master/:id;edit', canManageMaster, function(req)
   {
-    viewport.showPage(new FteMasterEntryEditFormPage({modelId: req.params.id}));
+    viewport.loadPage(['app/fte/pages/FteMasterEntryEditFormPage'], function(FteMasterEntryEditFormPage)
+    {
+      return new FteMasterEntryEditFormPage({modelId: req.params.id});
+    });
   });
 
   router.map('/fte/master/:id;print', canViewMaster, function(req)
   {
-    viewport.showPage(new FteMasterEntryDetailsPrintablePage({modelId: req.params.id}));
+    viewport.loadPage(['app/fte/pages/FteMasterEntryDetailsPrintablePage'], function(FteMasterEntryDetailsPrintablePage)
+    {
+      return new FteMasterEntryDetailsPrintablePage({modelId: req.params.id});
+    });
   });
 
-  router.map(
-    '/fte/master/:id;delete', canManageMaster, showDeleteFormPage.bind(null, FteMasterEntry)
-  );
+  router.map('/fte/master/:id;delete', canManageMaster, showDeleteFormPage.bind(null, FteMasterEntry));
 
   router.map('/fte/leader', canViewLeader, function(req)
   {
-    viewport.showPage(new FteLeaderEntryListPage({rql: req.rql}));
+    viewport.loadPage(['app/fte/pages/FteLeaderEntryListPage'], function(FteLeaderEntryListPage)
+    {
+      return new FteLeaderEntryListPage({rql: req.rql});
+    });
   });
 
   router.map('/fte/leader;add', canManageLeader, function()
   {
-    viewport.showPage(new FteLeaderEntryAddFormPage());
+    viewport.loadPage(['app/fte/pages/FteLeaderEntryAddFormPage'], function(FteLeaderEntryAddFormPage)
+    {
+      return new FteLeaderEntryAddFormPage();
+    });
   });
 
   router.map('/fte/leader/:id', canViewLeader, function(req)
@@ -109,25 +108,32 @@ define([
       });
     }
 
-    viewport.showPage(new FteLeaderEntryDetailsPage({
-      modelId: req.params.id,
-      change: req.query.change
-    }));
+    viewport.loadPage(['app/fte/pages/FteLeaderEntryDetailsPage'], function(FteLeaderEntryDetailsPage)
+    {
+      return new FteLeaderEntryDetailsPage({
+        modelId: req.params.id,
+        change: req.query.change
+      });
+    });
   });
 
   router.map('/fte/leader/:id;edit', canManageLeader, function(req)
   {
-    viewport.showPage(new FteLeaderEntryEditFormPage({modelId: req.params.id}));
+    viewport.loadPage(['app/fte/pages/FteLeaderEntryEditFormPage'], function(FteLeaderEntryEditFormPage)
+    {
+      return new FteLeaderEntryEditFormPage({modelId: req.params.id});
+    });
   });
 
   router.map('/fte/leader/:id;print', canViewLeader, function(req)
   {
-    viewport.showPage(new FteLeaderEntryDetailsPrintablePage({modelId: req.params.id}));
+    viewport.loadPage(['app/fte/pages/FteLeaderEntryDetailsPrintablePage'], function(FteLeaderEntryDetailsPrintablePage)
+    {
+      return new FteLeaderEntryDetailsPrintablePage({modelId: req.params.id});
+    });
   });
 
-  router.map(
-    '/fte/leader/:id;delete', canManageLeader, showDeleteFormPage.bind(null, FteLeaderEntry)
-  );
+  router.map('/fte/leader/:id;delete', canManageLeader, showDeleteFormPage.bind(null, FteLeaderEntry));
 
   router.map('/fte;settings', user.auth('PROD_DATA:MANAGE'), function(req)
   {
