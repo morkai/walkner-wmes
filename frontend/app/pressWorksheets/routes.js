@@ -8,21 +8,13 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   './PressWorksheet',
-  './pages/PressWorksheetListPage',
-  './pages/PressWorksheetDetailsPage',
-  './pages/PressWorksheetAddFormPage',
-  './pages/PressWorksheetEditFormPage',
   'i18n!app/nls/pressWorksheets'
 ], function(
   router,
   viewport,
   user,
   showDeleteFormPage,
-  PressWorksheet,
-  PressWorksheetListPage,
-  PressWorksheetDetailsPage,
-  PressWorksheetAddFormPage,
-  PressWorksheetEditFormPage
+  PressWorksheet
 ) {
   'use strict';
 
@@ -31,28 +23,40 @@ define([
 
   router.map('/pressWorksheets', canView, function(req)
   {
-    viewport.showPage(new PressWorksheetListPage({rql: req.rql}));
+    viewport.loadPage(['app/pressWorksheets/pages/PressWorksheetListPage'], function(PressWorksheetListPage)
+    {
+      return new PressWorksheetListPage({rql: req.rql});
+    });
   });
 
   router.map('/pressWorksheets;add', canManage, function()
   {
-    viewport.showPage(new PressWorksheetAddFormPage({
-      model: new PressWorksheet()
-    }));
+    viewport.loadPage(['app/pressWorksheets/pages/PressWorksheetAddFormPage'], function(PressWorksheetAddFormPage)
+    {
+      return new PressWorksheetAddFormPage({
+        model: new PressWorksheet()
+      });
+    });
   });
 
   router.map('/pressWorksheets/:id', canView, function(req)
   {
-    viewport.showPage(new PressWorksheetDetailsPage({
-      model: new PressWorksheet({_id: req.params.id})
-    }));
+    viewport.loadPage(['app/pressWorksheets/pages/PressWorksheetDetailsPage'], function(PressWorksheetDetailsPage)
+    {
+      return new PressWorksheetDetailsPage({
+        model: new PressWorksheet({_id: req.params.id})
+      });
+    });
   });
 
   router.map('/pressWorksheets/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new PressWorksheetEditFormPage({
-      model: new PressWorksheet({_id: req.params.id})
-    }));
+    viewport.loadPage(['app/pressWorksheets/pages/PressWorksheetEditFormPage'], function(PressWorksheetEditFormPage)
+    {
+      return new PressWorksheetEditFormPage({
+        model: new PressWorksheet({_id: req.params.id})
+      });
+    });
   });
 
   router.map('/pressWorksheets/:id;delete', canManage, showDeleteFormPage.bind(null, PressWorksheet));
