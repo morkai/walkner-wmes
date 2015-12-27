@@ -7,14 +7,12 @@ define([
   '../viewport',
   '../user',
   './ProdChangeRequestCollection',
-  './pages/ProdChangeRequestListPage',
   'i18n!app/nls/prodChangeRequests'
 ], function(
   router,
   viewport,
   user,
-  ProdChangeRequestCollection,
-  ProdChangeRequestListPage
+  ProdChangeRequestCollection
 ) {
   'use strict';
 
@@ -22,8 +20,11 @@ define([
 
   router.map('/prodChangeRequests', canView, function(req)
   {
-    viewport.showPage(new ProdChangeRequestListPage({
-      collection: new ProdChangeRequestCollection(null, {rqlQuery: req.rql})
-    }));
+    viewport.loadPage(['app/prodChangeRequests/pages/ProdChangeRequestListPage'], function(ProdChangeRequestListPage)
+    {
+      return new ProdChangeRequestListPage({
+        collection: new ProdChangeRequestCollection(null, {rqlQuery: req.rql})
+      });
+    });
   });
 });
