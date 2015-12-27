@@ -8,14 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './OpinionSurveyDivisionCollection',
   './OpinionSurveyDivision',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  './views/OpinionSurveyDivisionFormView',
-  'app/opinionSurveyDivisions/templates/details',
   'i18n!app/nls/opinionSurveyDivisions'
 ], function(
   _,
@@ -23,14 +16,7 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  OpinionSurveyDivisionCollection,
-  OpinionSurveyDivision,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  OpinionSurveyDivisionFormView,
-  detailsTemplate
+  OpinionSurveyDivision
 ) {
   'use strict';
 
@@ -38,42 +24,81 @@ define([
 
   router.map('/opinionSurveyDivisions', canManage, function(req)
   {
-    viewport.showPage(new ListPage({
-      baseBreadcrumb: true,
-      collection: new OpinionSurveyDivisionCollection(null, {rqlQuery: req.rql}),
-      columns: [
-        {id: '_id', className: 'is-min'},
-        {id: 'short', className: 'is-min'},
-        'full'
-      ]
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/ListPage',
+        'app/opinionSurveyDivisions/OpinionSurveyDivisionCollection'
+      ],
+      function(ListPage, OpinionSurveyDivisionCollection)
+      {
+        return new ListPage({
+          baseBreadcrumb: true,
+          collection: new OpinionSurveyDivisionCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: '_id', className: 'is-min'},
+            {id: 'short', className: 'is-min'},
+            'full'
+          ]
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveyDivisions/:id', canManage, function(req)
   {
-    viewport.showPage(new DetailsPage({
-      baseBreadcrumb: true,
-      model: new OpinionSurveyDivision({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/DetailsPage',
+        'app/opinionSurveyDivisions/OpinionSurveyDivision',
+        'app/opinionSurveyDivisions/templates/details'
+      ],
+      function(DetailsPage, OpinionSurveyDivision, detailsTemplate)
+      {
+        return new DetailsPage({
+          baseBreadcrumb: true,
+          model: new OpinionSurveyDivision({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveyDivisions;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      baseBreadcrumb: true,
-      FormView: OpinionSurveyDivisionFormView,
-      model: new OpinionSurveyDivision()
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/AddFormPage',
+        'app/opinionSurveyDivisions/OpinionSurveyDivision',
+        'app/opinionSurveyDivisions/views/OpinionSurveyDivisionFormView'
+      ],
+      function(AddFormPage, OpinionSurveyDivision, OpinionSurveyDivisionFormView)
+      {
+        return new AddFormPage({
+          baseBreadcrumb: true,
+          FormView: OpinionSurveyDivisionFormView,
+          model: new OpinionSurveyDivision()
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveyDivisions/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      baseBreadcrumb: true,
-      FormView: OpinionSurveyDivisionFormView,
-      model: new OpinionSurveyDivision({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/EditFormPage',
+        'app/opinionSurveyDivisions/OpinionSurveyDivision',
+        'app/opinionSurveyDivisions/views/OpinionSurveyDivisionFormView'
+      ],
+      function(EditFormPage, OpinionSurveyDivision, OpinionSurveyDivisionFormView)
+      {
+        return new EditFormPage({
+          baseBreadcrumb: true,
+          FormView: OpinionSurveyDivisionFormView,
+          model: new OpinionSurveyDivision({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map(
