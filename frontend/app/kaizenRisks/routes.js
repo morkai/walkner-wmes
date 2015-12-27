@@ -8,15 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenRiskCollection',
   './KaizenRisk',
-  '../core/pages/ListPage',
-  '../core/pages/DetailsPage',
-  '../core/pages/AddFormPage',
-  '../core/pages/EditFormPage',
-  '../core/pages/ActionFormPage',
-  './views/KaizenRiskFormView',
-  'app/kaizenRisks/templates/details',
   'i18n!app/nls/kaizenRisks'
 ], function(
   _,
@@ -24,15 +16,7 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  KaizenRiskCollection,
-  KaizenRisk,
-  ListPage,
-  DetailsPage,
-  AddFormPage,
-  EditFormPage,
-  ActionFormPage,
-  KaizenRiskFormView,
-  detailsTemplate
+  KaizenRisk
 ) {
   'use strict';
 
@@ -41,42 +25,81 @@ define([
 
   router.map('/kaizenRisks', canView, function(req)
   {
-    viewport.showPage(new ListPage({
-      baseBreadcrumb: true,
-      collection: new KaizenRiskCollection(null, {rqlQuery: req.rql}),
-      columns: [
-        {id: '_id', className: 'is-min'},
-        'name',
-        {id: 'position', className: 'is-min'}
-      ]
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/ListPage',
+        'app/kaizenRisks/KaizenRiskCollection'
+      ],
+      function(ListPage, KaizenRiskCollection)
+      {
+        return new ListPage({
+          baseBreadcrumb: true,
+          collection: new KaizenRiskCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: '_id', className: 'is-min'},
+            'name',
+            {id: 'position', className: 'is-min'}
+          ]
+        });
+      }
+    );
   });
 
   router.map('/kaizenRisks/:id', canView, function(req)
   {
-    viewport.showPage(new DetailsPage({
-      baseBreadcrumb: true,
-      model: new KaizenRisk({_id: req.params.id}),
-      detailsTemplate: detailsTemplate
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/DetailsPage',
+        'app/kaizenRisks/KaizenRisk',
+        'app/kaizenRisks/templates/details'
+      ],
+      function(DetailsPage, KaizenRisk, detailsTemplate)
+      {
+        return new DetailsPage({
+          baseBreadcrumb: true,
+          model: new KaizenRisk({_id: req.params.id}),
+          detailsTemplate: detailsTemplate
+        });
+      }
+    );
   });
 
   router.map('/kaizenRisks;add', canManage, function()
   {
-    viewport.showPage(new AddFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenRiskFormView,
-      model: new KaizenRisk()
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/AddFormPage',
+        'app/kaizenRisks/KaizenRisk',
+        'app/kaizenRisks/views/KaizenRiskFormView'
+      ],
+      function(AddFormPage, KaizenRisk, KaizenRiskFormView)
+      {
+        return new AddFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenRiskFormView,
+          model: new KaizenRisk()
+        });
+      }
+    );
   });
 
   router.map('/kaizenRisks/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new EditFormPage({
-      baseBreadcrumb: true,
-      FormView: KaizenRiskFormView,
-      model: new KaizenRisk({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/core/pages/EditFormPage',
+        'app/kaizenRisks/KaizenRisk',
+        'app/kaizenRisks/views/KaizenRiskFormView'
+      ],
+      function(EditFormPage, KaizenRisk, KaizenRiskFormView)
+      {
+        return new EditFormPage({
+          baseBreadcrumb: true,
+          FormView: KaizenRiskFormView,
+          model: new KaizenRisk({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/kaizenRisks/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenRisk, _, _, {
