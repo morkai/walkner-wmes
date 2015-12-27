@@ -90,8 +90,8 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/EditFormPage',
-        'app/kaizenAreas/KaizenCategory',
-        'app/kaizenAreas/views/KaizenCategoryFormView'
+        'app/kaizenCategories/KaizenCategory',
+        'app/kaizenCategories/views/KaizenCategoryFormView'
       ],
       function(EditFormPage, KaizenCategory, KaizenCategoryFormView)
       {
