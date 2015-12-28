@@ -7,14 +7,14 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage'
+  '../core/util/showDeleteFormPage',
+  './KaizenOrder'
 ], function(
   _,
   router,
   viewport,
   user,
   showDeleteFormPage,
-  KaizenOrderCollection,
   KaizenOrder
 ) {
   'use strict';
@@ -94,12 +94,11 @@ define([
   {
     viewport.loadPage(
       [
-        'app/kaizenOrders/KaizenOrder',
         'app/kaizenOrders/pages/KaizenOrderDetailsPage',
         'app/kaizenOrders/views/KaizenOrderThankYouView',
         nls
       ],
-      function(KaizenOrder, KaizenOrderDetailsPage, KaizenOrderThankYouView)
+      function(KaizenOrderDetailsPage, KaizenOrderThankYouView)
       {
         var page = new KaizenOrderDetailsPage({
           model: new KaizenOrder({_id: req.params.id})
@@ -128,11 +127,10 @@ define([
   {
     viewport.loadPage(
       [
-        'app/kaizenOrders/KaizenOrder',
         'app/kaizenOrders/pages/KaizenOrderAddFormPage',
         nls
       ],
-      function(KaizenOrder, KaizenOrderAddFormPage)
+      function(KaizenOrderAddFormPage)
       {
         return new KaizenOrderAddFormPage({
           model: new KaizenOrder()
@@ -145,11 +143,10 @@ define([
   {
     viewport.loadPage(
       [
-        'app/kaizenOrders/KaizenOrder',
         'app/kaizenOrders/pages/KaizenOrderEditFormPage',
         nls
       ],
-      function(KaizenOrder, KaizenOrderEditFormPage)
+      function(KaizenOrderEditFormPage)
       {
         return new KaizenOrderEditFormPage({
           model: new KaizenOrder({_id: req.params.id})
