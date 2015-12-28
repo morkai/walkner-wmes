@@ -233,6 +233,7 @@
     "filter:date:from:info": "Data from 06:00 of the selected day",
     "filter:date:to": "To",
     "filter:date:to:info": "Data to 06:00 of the selected day",
+    "filter:shift": "Shift",
     "filter:submit": "Filter",
     "filter:limit": "Limit",
     "filter:show": "Show filter",
