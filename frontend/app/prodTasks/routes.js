@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   './ProdTaskCollection',
-  './ProdTask',
-  'i18n!app/nls/prodTasks'
+  './ProdTask'
 ], function(
   router,
   viewport,
@@ -20,13 +19,14 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/prodTasks';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/prodTasks', canView, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/ListPage', 'app/prodTasks/views/ProdTaskListView'],
+      ['app/core/pages/ListPage', 'app/prodTasks/views/ProdTaskListView', nls],
       function(ListPage, ProdTaskListView)
       {
         return new ListPage({
@@ -40,7 +40,7 @@ define([
   router.map('/prodTasks/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/prodTasks/templates/details'],
+      ['app/core/pages/DetailsPage', 'app/prodTasks/templates/details', nls],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -53,7 +53,7 @@ define([
 
   router.map('/prodTasks;add', canManage, function()
   {
-    viewport.loadPage('app/prodTasks/pages/AddProdTaskFormPage', function(AddProdTaskFormPage)
+    viewport.loadPage(['app/prodTasks/pages/AddProdTaskFormPage', nls], function(AddProdTaskFormPage)
     {
       return new AddProdTaskFormPage({model: new ProdTask()});
     });
@@ -61,7 +61,7 @@ define([
 
   router.map('/prodTasks/:id;edit', canManage, function(req)
   {
-    viewport.loadPage('app/prodTasks/pages/EditProdTaskFormPage', function(EditProdTaskFormPage)
+    viewport.loadPage(['app/prodTasks/pages/EditProdTaskFormPage', nls], function(EditProdTaskFormPage)
     {
       return new EditProdTaskFormPage({model: new ProdTask({_id: req.params.id})});
     });

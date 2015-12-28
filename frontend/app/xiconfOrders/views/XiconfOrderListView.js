@@ -26,9 +26,9 @@ define([
     },
 
     columns: [
-      {id: 'orderNo', label: t.bound('xiconf', 'PROPERTY:no'), className: 'is-min'},
-      {id: 'nc12', label: t.bound('xiconf', 'PROPERTY:nc12'), className: 'is-min'},
-      {id: 'quantity', label: t.bound('xiconf', 'PROPERTY:quantity'), className: 'is-min'},
+      {id: 'orderNo', className: 'is-min'},
+      {id: 'nc12', className: 'is-min'},
+      {id: 'quantity', className: 'is-min'},
       {id: 'reqDate', className: 'is-min'},
       {id: 'startedAt', className: 'is-min'},
       {id: 'duration', className: 'is-min'},

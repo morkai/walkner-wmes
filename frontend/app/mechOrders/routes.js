@@ -5,8 +5,7 @@
 define([
   '../router',
   '../viewport',
-  '../user',
-  'i18n!app/nls/mechOrders'
+  '../user'
 ], function(
   router,
   viewport,
@@ -14,11 +13,12 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/mechOrders';
   var canView = user.auth('ORDERS:VIEW');
 
   router.map('/mechOrders', canView, function(req)
   {
-    viewport.loadPage(['app/mechOrders/pages/MechOrderListPage'], function(MechOrderListPage)
+    viewport.loadPage(['app/mechOrders/pages/MechOrderListPage', nls], function(MechOrderListPage)
     {
       return new MechOrderListPage({rql: req.rql});
     });
@@ -26,7 +26,7 @@ define([
 
   router.map('/mechOrders/:id', canView, function(req)
   {
-    viewport.loadPage(['app/mechOrders/pages/MechOrderDetailsPage'], function(MechOrderDetailsPage)
+    viewport.loadPage(['app/mechOrders/pages/MechOrderDetailsPage', nls], function(MechOrderDetailsPage)
     {
       return new MechOrderDetailsPage({modelId: req.params.id});
     });

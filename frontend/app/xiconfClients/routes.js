@@ -5,10 +5,7 @@
 define([
   '../router',
   '../viewport',
-  '../user',
-  'i18n!app/nls/xiconf',
-  'i18n!app/nls/xiconfClients',
-  'i18n!app/nls/licenses'
+  '../user'
 ], function(
   router,
   viewport,
@@ -23,7 +20,9 @@ define([
     viewport.loadPage(
       [
         'app/xiconfClients/XiconfClientCollection',
-        'app/xiconfClients/pages/XiconfClientListPage'
+        'app/xiconfClients/pages/XiconfClientListPage',
+        'i18n!app/nls/xiconfClients',
+        'i18n!app/nls/licenses'
       ],
       function(XiconfClientCollection, XiconfClientListPage)
       {

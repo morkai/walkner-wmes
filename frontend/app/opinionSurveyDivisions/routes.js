@@ -8,8 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './OpinionSurveyDivision',
-  'i18n!app/nls/opinionSurveyDivisions'
+  './OpinionSurveyDivision'
 ], function(
   _,
   router,
@@ -20,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/opinionSurveyDivisions';
   var canManage = user.auth('OPINION_SURVEYS:MANAGE');
 
   router.map('/opinionSurveyDivisions', canManage, function(req)
@@ -27,7 +27,8 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/opinionSurveyDivisions/OpinionSurveyDivisionCollection'
+        'app/opinionSurveyDivisions/OpinionSurveyDivisionCollection',
+        nls
       ],
       function(ListPage, OpinionSurveyDivisionCollection)
       {
@@ -50,7 +51,8 @@ define([
       [
         'app/core/pages/DetailsPage',
         'app/opinionSurveyDivisions/OpinionSurveyDivision',
-        'app/opinionSurveyDivisions/templates/details'
+        'app/opinionSurveyDivisions/templates/details',
+        nls
       ],
       function(DetailsPage, OpinionSurveyDivision, detailsTemplate)
       {
@@ -69,7 +71,8 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/opinionSurveyDivisions/OpinionSurveyDivision',
-        'app/opinionSurveyDivisions/views/OpinionSurveyDivisionFormView'
+        'app/opinionSurveyDivisions/views/OpinionSurveyDivisionFormView',
+        nls
       ],
       function(AddFormPage, OpinionSurveyDivision, OpinionSurveyDivisionFormView)
       {
@@ -88,7 +91,8 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/opinionSurveyDivisions/OpinionSurveyDivision',
-        'app/opinionSurveyDivisions/views/OpinionSurveyDivisionFormView'
+        'app/opinionSurveyDivisions/views/OpinionSurveyDivisionFormView',
+        nls
       ],
       function(EditFormPage, OpinionSurveyDivision, OpinionSurveyDivisionFormView)
       {

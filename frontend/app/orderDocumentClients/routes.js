@@ -5,8 +5,7 @@
 define([
   '../router',
   '../viewport',
-  '../user',
-  'i18n!app/nls/orderDocumentClients'
+  '../user'
 ], function(
   router,
   viewport,
@@ -21,7 +20,8 @@ define([
     viewport.loadPage(
       [
         'app/orderDocumentClients/OrderDocumentClientCollection',
-        'app/orderDocumentClients/pages/OrderDocumentClientListPage'
+        'app/orderDocumentClients/pages/OrderDocumentClientListPage',
+        'i18n!app/nls/orderDocumentClients'
       ],
       function(OrderDocumentClientCollection, OrderDocumentClientListPage)
       {

@@ -15,7 +15,6 @@ define([
   './pages/KaizenOrderAddFormPage',
   './pages/KaizenOrderEditFormPage',
   './views/KaizenOrderThankYouView',
-  'i18n!app/nls/reports',
   'i18n!app/nls/kaizenOrders'
 ], function(
   _,
@@ -40,7 +39,8 @@ define([
     viewport.loadPage(
       [
         'app/kaizenOrders/KaizenOrderReport',
-        'app/kaizenOrders/pages/KaizenOrderReportPage'
+        'app/kaizenOrders/pages/KaizenOrderReportPage',
+        'i18n!app/nls/reports'
       ],
       function(KaizenOrderReport, KaizenOrderReportPage)
       {
@@ -60,7 +60,8 @@ define([
     viewport.loadPage(
       [
         'app/kaizenOrders/KaizenOrderSummaryReport',
-        'app/kaizenOrders/pages/KaizenOrderSummaryReportPage'
+        'app/kaizenOrders/pages/KaizenOrderSummaryReportPage',
+        'i18n!app/nls/reports'
       ],
       function(KaizenOrderSummaryReport, KaizenOrderSummaryReportPage)
       {

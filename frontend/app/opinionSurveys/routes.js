@@ -8,9 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './OpinionSurvey',
-  'i18n!app/nls/reports',
-  'i18n!app/nls/opinionSurveys'
+  './OpinionSurvey'
 ], function(
   _,
   router,
@@ -21,17 +19,25 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/opinionSurveys';
   var canView = user.auth();
   var canManage = user.auth('OPINION_SURVEYS:MANAGE');
 
   router.map('/opinionSurveyReport', canView, function(req)
   {
-    viewport.loadPage('app/opinionSurveys/pages/OpinionSurveyReportPage', function(OpinionSurveyReportPage)
-    {
-      return new OpinionSurveyReportPage({
-        query: req.query
-      });
-    });
+    viewport.loadPage(
+      [
+        'app/opinionSurveys/pages/OpinionSurveyReportPage',
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(OpinionSurveyReportPage)
+      {
+        return new OpinionSurveyReportPage({
+          query: req.query
+        });
+      }
+    );
   });
 
   router.map('/opinionSurveys', canManage, function(req)
@@ -40,7 +46,8 @@ define([
       [
         'app/core/pages/ListPage',
         'app/opinionSurveys/OpinionSurveyCollection',
-        'app/opinionSurveys/views/OpinionSurveyListView'
+        'app/opinionSurveys/views/OpinionSurveyListView',
+        nls
       ],
       function(ListPage, OpinionSurveyCollection, OpinionSurveyListView)
       {
@@ -58,7 +65,8 @@ define([
     viewport.loadPage(
       [
         'app/opinionSurveys/OpinionSurvey',
-        'app/opinionSurveys/pages/OpinionSurveyDetailsPage'
+        'app/opinionSurveys/pages/OpinionSurveyDetailsPage',
+        nls
       ],
       function(OpinionSurvey, OpinionSurveyDetailsPage)
       {
@@ -74,7 +82,8 @@ define([
     viewport.loadPage(
       [
         'app/opinionSurveys/OpinionSurvey',
-        'app/opinionSurveys/pages/OpinionSurveyAddFormPage'
+        'app/opinionSurveys/pages/OpinionSurveyAddFormPage',
+        nls
       ],
       function(OpinionSurvey, OpinionSurveyAddFormPage)
       {
@@ -90,7 +99,8 @@ define([
     viewport.loadPage(
       [
         'app/opinionSurveys/OpinionSurvey',
-        'app/opinionSurveys/pages/OpinionSurveyEditFormPage'
+        'app/opinionSurveys/pages/OpinionSurveyEditFormPage',
+        nls
       ],
       function(OpinionSurvey, OpinionSurveyEditFormPage)
       {
@@ -106,7 +116,8 @@ define([
     viewport.loadPage(
       [
         'app/opinionSurveys/OpinionSurvey',
-        'app/opinionSurveys/pages/EmployeeCountEditFormPage'
+        'app/opinionSurveys/pages/EmployeeCountEditFormPage',
+        nls
       ],
       function(OpinionSurvey, EmployeeCountEditFormPage)
       {
@@ -123,7 +134,7 @@ define([
 
   router.map('/opinionSurveys;settings', canManage, function(req)
   {
-    viewport.loadPage('app/opinionSurveys/pages/OpinionSurveySettingsPage', function(OpinionSurveySettingsPage)
+    viewport.loadPage(['app/opinionSurveys/pages/OpinionSurveySettingsPage', nls], function(OpinionSurveySettingsPage)
     {
       return new OpinionSurveySettingsPage({
         initialTab: req.query.tab

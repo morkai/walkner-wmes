@@ -9,8 +9,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   './ProdDowntimeAlert',
-  './ProdDowntimeAlertCollection',
-  'i18n!app/nls/prodDowntimeAlerts'
+  './ProdDowntimeAlertCollection'
 ], function(
   _,
   router,
@@ -22,13 +21,14 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/prodDowntimeAlerts';
   var canView = user.auth('PROD_DOWNTIME_ALERTS:VIEW');
   var canManage = user.auth('PROD_DOWNTIME_ALERTS:MANAGE');
 
   router.map('/prodDowntimeAlerts', canView, function(req)
   {
     viewport.loadPage(
-      ['app/prodDowntimeAlerts/pages/ProdDowntimeAlertListPage'],
+      ['app/prodDowntimeAlerts/pages/ProdDowntimeAlertListPage', nls],
       function(ProdDowntimeAlertListPage)
       {
         return new ProdDowntimeAlertListPage({
@@ -43,7 +43,7 @@ define([
   router.map('/prodDowntimeAlerts;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/prodDowntimeAlerts/pages/ProdDowntimeAlertAddFormPage'],
+      ['app/prodDowntimeAlerts/pages/ProdDowntimeAlertAddFormPage', nls],
       function(ProdDowntimeAlertAddFormPage)
       {
         return new ProdDowntimeAlertAddFormPage({
@@ -56,7 +56,7 @@ define([
   router.map('/prodDowntimeAlerts/:id', canView, function(req)
   {
     viewport.loadPage(
-      ['app/prodDowntimeAlerts/pages/ProdDowntimeAlertDetailsPage'],
+      ['app/prodDowntimeAlerts/pages/ProdDowntimeAlertDetailsPage', nls],
       function(ProdDowntimeAlertDetailsPage)
       {
         return new ProdDowntimeAlertDetailsPage({
@@ -71,7 +71,7 @@ define([
   router.map('/prodDowntimeAlerts/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/prodDowntimeAlerts/pages/ProdDowntimeAlertEditFormPage'],
+      ['app/prodDowntimeAlerts/pages/ProdDowntimeAlertEditFormPage', nls],
       function(ProdDowntimeAlertEditFormPage)
       {
         return new ProdDowntimeAlertEditFormPage({

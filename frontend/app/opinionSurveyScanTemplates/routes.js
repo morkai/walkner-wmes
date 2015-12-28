@@ -8,28 +8,30 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './OpinionSurveyScanTemplateCollection',
-  './OpinionSurveyScanTemplate',
-  'i18n!app/nls/opinionSurveyScanTemplates'
+  './OpinionSurveyScanTemplate'
 ], function(
   _,
   router,
   viewport,
   user,
   showDeleteFormPage,
-  OpinionSurveyScanTemplateCollection,
   OpinionSurveyScanTemplate
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/opinionSurveyScanTemplates';
   var canView = user.auth();
   var canManage = user.auth('OPINION_SURVEYS:MANAGE');
 
   router.map('/opinionSurveyScanTemplates', canView, function(req)
   {
     viewport.loadPage(
-      'app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateListPage',
-      function(OpinionSurveyScanTemplateListPage)
+      [
+        'app/opinionSurveyScanTemplates/OpinionSurveyScanTemplateCollection',
+        'app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateListPage',
+        nls
+      ],
+      function(OpinionSurveyScanTemplateCollection, OpinionSurveyScanTemplateListPage)
       {
         return new OpinionSurveyScanTemplateListPage({
           collection: new OpinionSurveyScanTemplateCollection(null, {rqlQuery: req.rql})
@@ -41,7 +43,7 @@ define([
   router.map('/opinionSurveyScanTemplates/:id', canView, function(req)
   {
     viewport.loadPage(
-      'app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateDetailsPage',
+      ['app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateDetailsPage', nls],
       function(OpinionSurveyScanTemplateDetailsPage)
       {
         return new OpinionSurveyScanTemplateDetailsPage({
@@ -54,7 +56,7 @@ define([
   router.map('/opinionSurveyScanTemplates;add', canManage, function()
   {
     viewport.loadPage(
-      'app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateAddFormPage',
+      ['app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateAddFormPage', nls],
       function(OpinionSurveyScanTemplateAddFormPage)
       {
         return new OpinionSurveyScanTemplateAddFormPage({
@@ -67,7 +69,7 @@ define([
   router.map('/opinionSurveyScanTemplates/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      'app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateEditFormPage',
+      ['app/opinionSurveyScanTemplates/pages/OpinionSurveyScanTemplateEditFormPage', nls],
       function(OpinionSurveyScanTemplateEditFormPage)
       {
         return new OpinionSurveyScanTemplateEditFormPage({

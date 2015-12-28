@@ -7,41 +7,50 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './LossReasonCollection',
-  './LossReason',
-  'i18n!app/nls/lossReasons'
+  './LossReason'
 ], function(
   router,
   viewport,
   user,
   showDeleteFormPage,
-  LossReasonCollection,
   LossReason
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/lossReasons';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/lossReasons', canView, function(req)
   {
-    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
-    {
-      return new ListPage({
-        collection: new LossReasonCollection(null, {rqlQuery: req.rql}),
-        columns: [
-          {id: '_id', className: 'is-min'},
-          'label',
-          {id: 'position', className: 'is-min'}
-        ]
-      });
-    });
+    viewport.loadPage(
+      [
+        'app/core/pages/ListPage',
+        'app/lossReasons/LossReasonCollection',
+        nls
+      ],
+      function(ListPage, LossReasonCollection)
+      {
+        return new ListPage({
+          collection: new LossReasonCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: '_id', className: 'is-min'},
+            'label',
+            {id: 'position', className: 'is-min'}
+          ]
+        });
+      }
+    );
   });
 
   router.map('/lossReasons/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/lossReasons/templates/details'],
+      [
+        'app/core/pages/DetailsPage',
+        'app/lossReasons/templates/details',
+        nls
+      ],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -55,7 +64,11 @@ define([
   router.map('/lossReasons;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/lossReasons/views/LossReasonFormView'],
+      [
+        'app/core/pages/AddFormPage',
+        'app/lossReasons/views/LossReasonFormView',
+        nls
+      ],
       function(AddFormPage, LossReasonFormView)
       {
         return new AddFormPage({
@@ -69,7 +82,11 @@ define([
   router.map('/lossReasons/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/lossReasons/views/LossReasonFormView'],
+      [
+        'app/core/pages/EditFormPage',
+        'app/lossReasons/views/LossReasonFormView',
+        nls
+      ],
       function(EditFormPage, LossReasonFormView)
       {
         return new EditFormPage({

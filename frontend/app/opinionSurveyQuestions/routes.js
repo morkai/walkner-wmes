@@ -8,8 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './OpinionSurveyQuestion',
-  'i18n!app/nls/opinionSurveyQuestions'
+  './OpinionSurveyQuestion'
 ], function(
   _,
   router,
@@ -20,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/opinionSurveyQuestions';
   var canManage = user.auth('OPINION_SURVEYS:MANAGE');
 
   router.map('/opinionSurveyQuestions', canManage, function(req)
@@ -27,7 +27,8 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/opinionSurveyQuestions/OpinionSurveyQuestionCollection'
+        'app/opinionSurveyQuestions/OpinionSurveyQuestionCollection',
+        nls
       ],
       function(ListPage, OpinionSurveyQuestionCollection)
       {
@@ -50,7 +51,8 @@ define([
       [
         'app/core/pages/DetailsPage',
         'app/opinionSurveyQuestions/OpinionSurveyQuestion',
-        'app/opinionSurveyQuestions/templates/details'
+        'app/opinionSurveyQuestions/templates/details',
+        nls
       ],
       function(DetailsPage, OpinionSurveyQuestion, detailsTemplate)
       {
@@ -69,7 +71,8 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/opinionSurveyQuestions/OpinionSurveyQuestion',
-        'app/opinionSurveyQuestions/views/OpinionSurveyQuestionFormView'
+        'app/opinionSurveyQuestions/views/OpinionSurveyQuestionFormView',
+        nls
       ],
       function(AddFormPage, OpinionSurveyQuestion, OpinionSurveyQuestionFormView)
       {
@@ -88,7 +91,8 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/opinionSurveyQuestions/OpinionSurveyQuestion',
-        'app/opinionSurveyQuestions/views/OpinionSurveyQuestionFormView'
+        'app/opinionSurveyQuestions/views/OpinionSurveyQuestionFormView',
+        nls
       ],
       function(EditFormPage, OpinionSurveyQuestion, OpinionSurveyQuestionFormView)
       {

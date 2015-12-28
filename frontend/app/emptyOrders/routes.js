@@ -5,8 +5,7 @@
 define([
   '../router',
   '../viewport',
-  '../user',
-  'i18n!app/nls/emptyOrders'
+  '../user'
 ], function(
   router,
   viewport,
@@ -14,11 +13,12 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/emptyOrders';
   var canView = user.auth('ORDERS:VIEW');
 
   router.map('/emptyOrders', canView, function(req)
   {
-    viewport.loadPage(['app/emptyOrders/pages/EmptyOrderListPage'], function(EmptyOrderListPage)
+    viewport.loadPage(['app/emptyOrders/pages/EmptyOrderListPage', nls], function(EmptyOrderListPage)
     {
       return new EmptyOrderListPage({rql: req.rql});
     });
@@ -26,7 +26,7 @@ define([
 
   router.map('/emptyOrders;print', canView, function(req)
   {
-    viewport.loadPage(['app/emptyOrders/pages/EmptyOrderPrintableListPage'], function(EmptyOrderPrintableListPage)
+    viewport.loadPage(['app/emptyOrders/pages/EmptyOrderPrintableListPage', nls], function(EmptyOrderPrintableListPage)
     {
       return new EmptyOrderPrintableListPage({rql: req.rql});
     });

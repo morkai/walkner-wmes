@@ -7,9 +7,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './CagCollection',
-  './Cag',
-  'i18n!app/nls/cags'
+  './Cag'
 ], function(
   router,
   viewport,
@@ -20,28 +18,32 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/cags';
   var canView = user.auth('REPORTS:VIEW', 'REPORTS:9:VIEW');
   var canManage = user.auth('REPORTS:MANAGE');
 
   router.map('/cags', canView, function(req)
   {
-    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
-    {
-      return new ListPage({
-        baseBreadcrumb: '#reports/9',
-        collection: new CagCollection(null, {rqlQuery: req.rql}),
-        columns: [
-          {id: '_id', className: 'is-min'},
-          'name'
-        ]
-      });
-    });
+    viewport.loadPage(
+      ['app/core/pages/ListPage', 'app/cags/CagCollection', nls],
+      function(ListPage, CagCollection)
+      {
+        return new ListPage({
+          baseBreadcrumb: '#reports/9',
+          collection: new CagCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: '_id', className: 'is-min'},
+            'name'
+          ]
+        });
+      }
+    );
   });
 
   router.map('/cags/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/cags/templates/details'],
+      ['app/core/pages/DetailsPage', 'app/cags/templates/details', nls],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -56,7 +58,7 @@ define([
   router.map('/cags;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/cags/templates/form'],
+      ['app/core/pages/AddFormPage', 'app/cags/templates/form', nls],
       function(AddFormPage, formTemplate)
       {
         return new AddFormPage({
@@ -71,7 +73,7 @@ define([
   router.map('/cags/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/cags/templates/form'],
+      ['app/core/pages/EditFormPage', 'app/cags/templates/form', nls],
       function(EditFormPage, formTemplate)
       {
         return new EditFormPage({

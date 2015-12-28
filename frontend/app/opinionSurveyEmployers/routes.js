@@ -8,8 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './OpinionSurveyEmployer',
-  'i18n!app/nls/opinionSurveyEmployers'
+  './OpinionSurveyEmployer'
 ], function(
   _,
   router,
@@ -20,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/opinionSurveyEmployers';
   var canManage = user.auth('OPINION_SURVEYS:MANAGE');
 
   router.map('/opinionSurveyEmployers', canManage, function(req)
@@ -27,7 +27,8 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/opinionSurveyEmployers/OpinionSurveyEmployerCollection'
+        'app/opinionSurveyEmployers/OpinionSurveyEmployerCollection',
+        nls
       ],
       function(ListPage, OpinionSurveyEmployerCollection)
       {
@@ -51,7 +52,8 @@ define([
       [
         'app/core/pages/DetailsPage',
         'app/opinionSurveyEmployers/OpinionSurveyEmployer',
-        'app/opinionSurveyEmployers/templates/details'
+        'app/opinionSurveyEmployers/templates/details',
+        nls
       ],
       function(DetailsPage, OpinionSurveyEmployer, detailsTemplate)
       {
@@ -70,7 +72,8 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/opinionSurveyEmployers/OpinionSurveyEmployer',
-        'app/opinionSurveyEmployers/views/OpinionSurveyEmployerFormView'
+        'app/opinionSurveyEmployers/views/OpinionSurveyEmployerFormView',
+        nls
       ],
       function(AddFormPage, OpinionSurveyEmployer, OpinionSurveyEmployerFormView)
       {
@@ -89,7 +92,8 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/opinionSurveyEmployers/OpinionSurveyEmployer',
-        'app/opinionSurveyEmployers/views/OpinionSurveyEmployerFormView'
+        'app/opinionSurveyEmployers/views/OpinionSurveyEmployerFormView',
+        nls
       ],
       function(EditFormPage, OpinionSurveyEmployer, OpinionSurveyEmployerFormView)
       {

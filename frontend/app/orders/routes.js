@@ -5,8 +5,7 @@
 define([
   '../router',
   '../viewport',
-  '../user',
-  'i18n!app/nls/orders'
+  '../user'
 ], function(
   router,
   viewport,
@@ -14,12 +13,13 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/orders';
   var canView = user.auth('ORDERS:VIEW');
   var canManage = user.auth('ORDERS:MANAGE');
 
   router.map('/orders', canView, function(req)
   {
-    viewport.loadPage(['app/orders/pages/OrderListPage'], function(OrderListPage)
+    viewport.loadPage(['app/orders/pages/OrderListPage', nls], function(OrderListPage)
     {
       return new OrderListPage({rql: req.rql});
     });
@@ -27,7 +27,7 @@ define([
 
   router.map('/orders/:id', function(req)
   {
-    viewport.loadPage(['app/orders/pages/OrderDetailsPage'], function(OrderDetailsPage)
+    viewport.loadPage(['app/orders/pages/OrderDetailsPage', nls], function(OrderDetailsPage)
     {
       return new OrderDetailsPage({modelId: req.params.id});
     });
@@ -35,7 +35,7 @@ define([
 
   router.map('/orders;settings', canManage, function(req)
   {
-    viewport.loadPage('app/orders/pages/OrderSettingsPage', function(OrderSettingsPage)
+    viewport.loadPage(['app/orders/pages/OrderSettingsPage', nls], function(OrderSettingsPage)
     {
       return new OrderSettingsPage({
         initialTab: req.query.tab

@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   '../data/subdivisions',
-  './Subdivision',
-  'i18n!app/nls/subdivisions'
+  './Subdivision'
 ], function(
   router,
   viewport,
@@ -20,13 +19,14 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/subdivisions';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/subdivisions', canView, function()
   {
     viewport.loadPage(
-      ['app/core/pages/ListPage', 'app/subdivisions/views/decorateSubdivision'],
+      ['app/core/pages/ListPage', 'app/subdivisions/views/decorateSubdivision', nls],
       function(ListPage, decorateSubdivision)
       {
         return new ListPage({
@@ -48,7 +48,7 @@ define([
   router.map('/subdivisions/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/subdivisions/views/SubdivisionDetailsView'],
+      ['app/core/pages/DetailsPage', 'app/subdivisions/views/SubdivisionDetailsView', nls],
       function(DetailsPage, SubdivisionDetailsView)
       {
         return new DetailsPage({
@@ -62,7 +62,7 @@ define([
   router.map('/subdivisions;add', canManage, function()
   {
     viewport.loadPage(
-      'app/subdivisions/pages/AddSubdivisionFormPage',
+      ['app/subdivisions/pages/AddSubdivisionFormPage', nls],
       function(AddSubdivisionFormPage)
       {
         return new AddSubdivisionFormPage({model: new Subdivision()});
@@ -73,7 +73,7 @@ define([
   router.map('/subdivisions/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      'app/subdivisions/pages/EditSubdivisionFormPage',
+      ['app/subdivisions/pages/EditSubdivisionFormPage', nls],
       function(EditSubdivisionFormPage)
       {
         return new EditSubdivisionFormPage({model: new Subdivision({_id: req.params.id})});

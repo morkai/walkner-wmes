@@ -8,8 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenProductFamily',
-  'i18n!app/nls/kaizenProductFamilies'
+  './KaizenProductFamily'
 ], function(
   _,
   router,
@@ -20,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/kaizenProductFamilies';
   var canView = user.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
 
@@ -28,7 +28,8 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/kaizenProductFamilies/KaizenProductFamilyCollection'
+        'app/kaizenProductFamilies/KaizenProductFamilyCollection',
+        nls
       ],
       function(ListPage, KaizenProductFamilyCollection)
       {
@@ -52,7 +53,8 @@ define([
       [
         'app/core/pages/DetailsPage',
         'app/kaizenProductFamilies/KaizenProductFamily',
-        'app/kaizenProductFamilies/templates/details'
+        'app/kaizenProductFamilies/templates/details',
+        nls
       ],
       function(DetailsPage, KaizenProductFamily, detailsTemplate)
       {
@@ -71,7 +73,8 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/kaizenProductFamilies/KaizenProductFamily',
-        'app/kaizenProductFamilies/views/KaizenProductFamilyFormView'
+        'app/kaizenProductFamilies/views/KaizenProductFamilyFormView',
+        nls
       ],
       function(AddFormPage, KaizenProductFamily, KaizenProductFamilyFormView)
       {
@@ -90,7 +93,8 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/kaizenProductFamilies/KaizenProductFamily',
-        'app/kaizenProductFamilies/views/KaizenProductFamilyFormView'
+        'app/kaizenProductFamilies/views/KaizenProductFamilyFormView',
+        nls
       ],
       function(EditFormPage, KaizenProductFamily, KaizenProductFamilyFormView)
       {

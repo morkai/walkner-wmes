@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   '../data/workCenters',
-  './WorkCenter',
-  'i18n!app/nls/workCenters'
+  './WorkCenter'
 ], function(
   router,
   viewport,
@@ -20,13 +19,14 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/workCenters';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/workCenters', canView, function()
   {
     viewport.loadPage(
-      ['app/workCenters/pages/WorkCenterListPage'],
+      ['app/workCenters/pages/WorkCenterListPage', nls],
       function(WorkCenterListPage)
       {
         return new WorkCenterListPage({
@@ -39,7 +39,7 @@ define([
   router.map('/workCenters/:id', function(req)
   {
     viewport.loadPage(
-      ['app/workCenters/pages/WorkCenterDetailsPage'],
+      ['app/workCenters/pages/WorkCenterDetailsPage', nls],
       function(WorkCenterDetailsPage)
       {
         return new WorkCenterDetailsPage({
@@ -52,7 +52,7 @@ define([
   router.map('/workCenters;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/workCenters/views/WorkCenterFormView'],
+      ['app/core/pages/AddFormPage', 'app/workCenters/views/WorkCenterFormView', nls],
       function(AddFormPage, WorkCenterFormView)
       {
         return new AddFormPage({
@@ -66,7 +66,7 @@ define([
   router.map('/workCenters/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/workCenters/views/WorkCenterFormView'],
+      ['app/core/pages/EditFormPage', 'app/workCenters/views/WorkCenterFormView', nls],
       function(EditFormPage, WorkCenterFormView)
       {
         return new EditFormPage({

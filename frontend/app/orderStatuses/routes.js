@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   '../data/orderStatuses',
-  './OrderStatus',
-  'i18n!app/nls/orderStatuses'
+  './OrderStatus'
 ], function(
   router,
   viewport,
@@ -20,13 +19,14 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/orderStatuses';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/orderStatuses', canView, function()
   {
     viewport.loadPage(
-      ['app/core/pages/ListPage', 'app/orderStatuses/views/OrderStatusListView'],
+      ['app/core/pages/ListPage', 'app/orderStatuses/views/OrderStatusListView', nls],
       function(ListPage, OrderStatusListView)
       {
         return new ListPage({
@@ -40,7 +40,7 @@ define([
   router.map('/orderStatuses/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/orderStatuses/templates/details'],
+      ['app/core/pages/DetailsPage', 'app/orderStatuses/templates/details', nls],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -54,7 +54,7 @@ define([
   router.map('/orderStatuses;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/orderStatuses/views/OrderStatusFormView'],
+      ['app/core/pages/AddFormPage', 'app/orderStatuses/views/OrderStatusFormView', nls],
       function(AddFormPage, OrderStatusFormView)
       {
         return new AddFormPage({
@@ -68,7 +68,7 @@ define([
   router.map('/orderStatuses/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/orderStatuses/views/OrderStatusFormView'],
+      ['app/core/pages/EditFormPage', 'app/orderStatuses/views/OrderStatusFormView', nls],
       function(EditFormPage, OrderStatusFormView)
       {
         return new EditFormPage({

@@ -10,8 +10,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   './XiconfProgram',
-  './XiconfProgramCollection',
-  'i18n!app/nls/xiconfPrograms'
+  './XiconfProgramCollection'
 ], function(
   _,
   t,
@@ -24,12 +23,13 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/xiconfPrograms';
   var canView = user.auth('XICONF:VIEW');
   var canManage = user.auth('XICONF:MANAGE');
 
   router.map('/xiconf/programs', canView, function(req)
   {
-    viewport.loadPage(['app/xiconfPrograms/pages/XiconfProgramListPage'], function(XiconfProgramListPage)
+    viewport.loadPage(['app/xiconfPrograms/pages/XiconfProgramListPage', nls], function(XiconfProgramListPage)
     {
       return new XiconfProgramListPage({
         collection: new XiconfProgramCollection(null, {
@@ -42,7 +42,7 @@ define([
   router.map('/xiconf/programs/:id', canView, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/xiconfPrograms/views/XiconfProgramDetailsView'],
+      ['app/core/pages/DetailsPage', 'app/xiconfPrograms/views/XiconfProgramDetailsView', nls],
       function(DetailsPage, XiconfProgramDetailsView)
       {
         return new DetailsPage({
@@ -57,7 +57,7 @@ define([
   router.map('/xiconf/programs;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/xiconfPrograms/views/XiconfProgramFormView'],
+      ['app/core/pages/AddFormPage', 'app/xiconfPrograms/views/XiconfProgramFormView', nls],
       function(AddFormPage, XiconfProgramFormView)
       {
         return new AddFormPage({
@@ -72,7 +72,7 @@ define([
   router.map('/xiconf/programs/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/xiconfPrograms/views/XiconfProgramFormView'],
+      ['app/core/pages/EditFormPage', 'app/xiconfPrograms/views/XiconfProgramFormView', nls],
       function(EditFormPage, XiconfProgramFormView)
       {
         return new EditFormPage({

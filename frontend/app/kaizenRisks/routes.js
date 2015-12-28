@@ -8,8 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenRisk',
-  'i18n!app/nls/kaizenRisks'
+  './KaizenRisk'
 ], function(
   _,
   router,
@@ -20,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/kaizenRisks';
   var canView = user.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
 
@@ -28,7 +28,8 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/kaizenRisks/KaizenRiskCollection'
+        'app/kaizenRisks/KaizenRiskCollection',
+        nls
       ],
       function(ListPage, KaizenRiskCollection)
       {
@@ -51,7 +52,8 @@ define([
       [
         'app/core/pages/DetailsPage',
         'app/kaizenRisks/KaizenRisk',
-        'app/kaizenRisks/templates/details'
+        'app/kaizenRisks/templates/details',
+        nls
       ],
       function(DetailsPage, KaizenRisk, detailsTemplate)
       {
@@ -70,7 +72,8 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/kaizenRisks/KaizenRisk',
-        'app/kaizenRisks/views/KaizenRiskFormView'
+        'app/kaizenRisks/views/KaizenRiskFormView',
+        nls
       ],
       function(AddFormPage, KaizenRisk, KaizenRiskFormView)
       {
@@ -89,7 +92,8 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/kaizenRisks/KaizenRisk',
-        'app/kaizenRisks/views/KaizenRiskFormView'
+        'app/kaizenRisks/views/KaizenRiskFormView',
+        nls
       ],
       function(EditFormPage, KaizenRisk, KaizenRiskFormView)
       {

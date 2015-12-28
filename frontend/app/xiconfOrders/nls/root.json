@@ -12,8 +12,9 @@
     "PAGE_ACTION:export": "Export orders",
     "PAGE_ACTION:settings": "Change settings",
 
-    "PROPERTY:no": "Order no",
+    "PROPERTY:orderNo": "Order no",
     "PROPERTY:nc12": "12NC",
+    "PROPERTY:quantity": "Quantity",
     "PROPERTY:reqDate": "Date",
     "PROPERTY:startedAt": "Started at",
     "PROPERTY:finishedAt": "Finished at",

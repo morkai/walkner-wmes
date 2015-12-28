@@ -8,8 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenCause',
-  'i18n!app/nls/kaizenCauses'
+  './KaizenCause'
 ], function(
   _,
   router,
@@ -20,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/kaizenCauses';
   var canView = user.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
 
@@ -28,7 +28,8 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/kaizenCauses/KaizenCauseCollection'
+        'app/kaizenCauses/KaizenCauseCollection',
+        nls
       ],
       function(ListPage, KaizenCauseCollection)
       {
@@ -51,7 +52,8 @@ define([
       [
         'app/core/pages/DetailsPage',
         'app/kaizenCauses/KaizenCause',
-        'app/kaizenCauses/templates/details'
+        'app/kaizenCauses/templates/details',
+        nls
       ],
       function(DetailsPage, KaizenCause, detailsTemplate)
       {
@@ -70,7 +72,8 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/kaizenCauses/KaizenCause',
-        'app/kaizenCauses/views/KaizenCauseFormView'
+        'app/kaizenCauses/views/KaizenCauseFormView',
+        nls
       ],
       function(AddFormPage, KaizenCause, KaizenCauseFormView)
       {
@@ -89,7 +92,8 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/kaizenCauses/KaizenCause',
-        'app/kaizenCauses/views/KaizenCauseFormView'
+        'app/kaizenCauses/views/KaizenCauseFormView',
+        nls
       ],
       function(EditFormPage, KaizenCause, KaizenCauseFormView)
       {

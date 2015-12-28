@@ -8,8 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenArea',
-  'i18n!app/nls/kaizenAreas'
+  './KaizenArea'
 ], function(
   _,
   router,
@@ -20,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/kaizenAreas';
   var canView = user.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
 
@@ -28,7 +28,8 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/kaizenAreas/KaizenAreaCollection'
+        'app/kaizenAreas/KaizenAreaCollection',
+        nls
       ],
       function(ListPage, KaizenAreaCollection)
       {
@@ -51,7 +52,8 @@ define([
       [
         'app/core/pages/DetailsPage',
         'app/kaizenAreas/KaizenArea',
-        'app/kaizenAreas/templates/details'
+        'app/kaizenAreas/templates/details',
+        nls
       ],
       function(DetailsPage, KaizenArea, detailsTemplate)
       {
@@ -70,7 +72,8 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/kaizenAreas/KaizenArea',
-        'app/kaizenAreas/views/KaizenAreaFormView'
+        'app/kaizenAreas/views/KaizenAreaFormView',
+        nls
       ],
       function(AddFormPage, KaizenArea, KaizenAreaFormView)
       {
@@ -89,7 +92,8 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/kaizenAreas/KaizenArea',
-        'app/kaizenAreas/views/KaizenAreaFormView'
+        'app/kaizenAreas/views/KaizenAreaFormView',
+        nls
       ],
       function(EditFormPage, KaizenArea, KaizenAreaFormView)
       {

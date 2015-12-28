@@ -14,8 +14,12 @@ define([
   return function(Model, req, referer, options)
   {
     var model = new Model({_id: req.params.id});
+    var deps = [
+      'app/core/pages/ActionFormPage',
+      'i18n!app/nls/' + model.getNlsDomain()
+    ];
 
-    viewport.loadPage('app/core/pages/ActionFormPage', function(ActionFormPage)
+    viewport.loadPage(deps, function(ActionFormPage)
     {
       return new ActionFormPage(_.extend({
         model: model,

@@ -5,9 +5,7 @@
 define([
   '../router',
   '../viewport',
-  '../user',
-  'i18n!app/nls/xiconf',
-  'i18n!app/nls/xiconfOrders'
+  '../user'
 ], function(
   router,
   viewport,
@@ -15,6 +13,7 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/xiconfOrders';
   var canView = user.auth('XICONF:VIEW');
 
   router.map('/xiconf/orders', canView, function(req)
@@ -22,7 +21,8 @@ define([
     viewport.loadPage(
       [
         'app/xiconfOrders/XiconfOrderCollection',
-        'app/xiconfOrders/pages/XiconfOrderListPage'
+        'app/xiconfOrders/pages/XiconfOrderListPage',
+        nls
       ],
       function(XiconfOrderCollection, XiconfOrderListPage)
       {
@@ -40,7 +40,8 @@ define([
     viewport.loadPage(
       [
         'app/xiconfOrders/XiconfOrder',
-        'app/xiconfOrders/pages/XiconfOrderDetailsPage'
+        'app/xiconfOrders/pages/XiconfOrderDetailsPage',
+        nls
       ],
       function(XiconfOrder, XiconfOrderDetailsPage)
       {

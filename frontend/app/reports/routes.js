@@ -5,8 +5,7 @@
 define([
   '../user',
   '../router',
-  '../viewport',
-  'i18n!app/nls/reports'
+  '../viewport'
 ], function(
   user,
   router,
@@ -16,7 +15,7 @@ define([
 
   function loadReportPage(reportNo, req)
   {
-    viewport.loadPage('app/reports/pages/Report' + reportNo + 'Page', function(ReportPage)
+    viewport.loadPage(['app/reports/pages/Report' + reportNo + 'Page', 'i18n!app/nls/reports'], function(ReportPage)
     {
       return new ReportPage({
         query: req.query,
@@ -97,7 +96,7 @@ define([
 
   router.map('/reports;settings', user.auth('REPORTS:MANAGE'), function(req)
   {
-    viewport.loadPage('app/reports/pages/ReportSettingsPage', function(ReportSettingsPage)
+    viewport.loadPage(['app/reports/pages/ReportSettingsPage', 'i18n!app/nls/reports'], function(ReportSettingsPage)
     {
       return new ReportSettingsPage({
         initialTab: req.query.tab,

@@ -5,14 +5,11 @@
 define([
   '../router',
   '../viewport',
-  '../user',
-  './pages/ProdLogEntryListPage',
-  'i18n!app/nls/prodLogEntries'
+  '../user'
 ], function(
   router,
   viewport,
-  user,
-  ProdLogEntryListPage
+  user
 ) {
   'use strict';
 
@@ -20,6 +17,12 @@ define([
 
   router.map('/prodLogEntries', canView, function(req)
   {
-    viewport.showPage(new ProdLogEntryListPage({rql: req.rql}));
+    viewport.loadPage(
+      ['app/prodLogEntries/pages/ProdLogEntryListPage', 'i18n!app/nls/prodLogEntries'],
+      function(ProdLogEntryListPage)
+      {
+        return new ProdLogEntryListPage({rql: req.rql});
+      }
+    );
   });
 });

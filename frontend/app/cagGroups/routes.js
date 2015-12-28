@@ -7,42 +7,43 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './CagGroupCollection',
-  './CagGroup',
-  'i18n!app/nls/cagGroups'
+  './CagGroup'
 ], function(
   router,
   viewport,
   user,
   showDeleteFormPage,
-  CagGroupCollection,
   CagGroup
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/cagGroups';
   var canView = user.auth('REPORTS:VIEW', 'REPORTS:9:VIEW');
   var canManage = user.auth('REPORTS:MANAGE');
 
   router.map('/cagGroups', canView, function(req)
   {
-    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
-    {
-      return new ListPage({
-        baseBreadcrumb: '#reports/9',
-        collection: new CagGroupCollection(null, {rqlQuery: req.rql}),
-        columns: [
-          {id: 'name', className: 'is-min'},
-          {id: 'color', className: 'is-min'},
-          'cags'
-        ]
-      });
-    });
+    viewport.loadPage(
+      ['app/core/pages/ListPage', 'app/cagGroups/CagGroupCollection', nls],
+      function(ListPage, CagGroupCollection)
+      {
+        return new ListPage({
+          baseBreadcrumb: '#reports/9',
+          collection: new CagGroupCollection(null, {rqlQuery: req.rql}),
+          columns: [
+            {id: 'name', className: 'is-min'},
+            {id: 'color', className: 'is-min'},
+            'cags'
+          ]
+        });
+      }
+    );
   });
 
   router.map('/cagGroups/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/cagGroups/templates/details'],
+      ['app/core/pages/DetailsPage', 'app/cagGroups/templates/details', nls],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -57,7 +58,7 @@ define([
   router.map('/cagGroups;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/cagGroups/views/CagGroupFormView'],
+      ['app/core/pages/AddFormPage', 'app/cagGroups/views/CagGroupFormView', nls],
       function(AddFormPage, CagGroupFormView)
       {
         return new AddFormPage({
@@ -72,7 +73,7 @@ define([
   router.map('/cagGroups/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/cagGroups/views/CagGroupFormView'],
+      ['app/core/pages/EditFormPage', 'app/cagGroups/views/CagGroupFormView', nls],
       function(EditFormPage, CagGroupFormView)
       {
         return new EditFormPage({

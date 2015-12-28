@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   '../data/mrpControllers',
-  './MrpController',
-  'i18n!app/nls/mrpControllers'
+  './MrpController'
 ], function(
   router,
   viewport,
@@ -20,13 +19,14 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/mrpControllers';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/mrpControllers', canView, function()
   {
     viewport.loadPage(
-      ['app/mrpControllers/pages/MrpControllerListPage'],
+      ['app/mrpControllers/pages/MrpControllerListPage', nls],
       function(MrpControllerListPage)
       {
         return new MrpControllerListPage({
@@ -39,7 +39,7 @@ define([
   router.map('/mrpControllers/:id', function(req)
   {
     viewport.loadPage(
-      ['app/mrpControllers/pages/MrpControllerDetailsPage'],
+      ['app/mrpControllers/pages/MrpControllerDetailsPage', nls],
       function(MrpControllerDetailsPage)
       {
         return new MrpControllerDetailsPage({
@@ -52,7 +52,7 @@ define([
   router.map('/mrpControllers;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/mrpControllers/views/MrpControllerFormView'],
+      ['app/core/pages/AddFormPage', 'app/mrpControllers/views/MrpControllerFormView', nls],
       function(AddFormPage, MrpControllerFormView)
       {
         return new AddFormPage({
@@ -66,7 +66,7 @@ define([
   router.map('/mrpControllers/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/mrpControllers/views/MrpControllerFormView'],
+      ['app/core/pages/EditFormPage', 'app/mrpControllers/views/MrpControllerFormView', nls],
       function(EditFormPage, MrpControllerFormView)
       {
         return new EditFormPage({

@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   '../data/downtimeReasons',
-  './DowntimeReason',
-  'i18n!app/nls/downtimeReasons'
+  './DowntimeReason'
 ], function(
   router,
   viewport,
@@ -20,12 +19,13 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/downtimeReasons';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/downtimeReasons', canView, function()
   {
-    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    viewport.loadPage(['app/core/pages/ListPage', nls], function(ListPage)
     {
       return new ListPage({
         collection: downtimeReasons,
@@ -51,7 +51,7 @@ define([
   router.map('/downtimeReasons/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/downtimeReasons/templates/details'],
+      ['app/core/pages/DetailsPage', 'app/downtimeReasons/templates/details', nls],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -65,7 +65,7 @@ define([
   router.map('/downtimeReasons;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/downtimeReasons/views/DowntimeReasonFormView'],
+      ['app/core/pages/AddFormPage', 'app/downtimeReasons/views/DowntimeReasonFormView', nls],
       function(AddFormPage, DowntimeReasonFormView)
       {
         return new AddFormPage({
@@ -79,7 +79,7 @@ define([
   router.map('/downtimeReasons/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/downtimeReasons/views/DowntimeReasonFormView'],
+      ['app/core/pages/EditFormPage', 'app/downtimeReasons/views/DowntimeReasonFormView', nls],
       function(EditFormPage, DowntimeReasonFormView)
       {
         return new EditFormPage({

@@ -9,8 +9,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   '../data/divisions',
-  './Division',
-  'i18n!app/nls/divisions'
+  './Division'
 ], function(
   router,
   viewport,
@@ -22,12 +21,13 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/divisions';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/divisions', canView, function()
   {
-    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    viewport.loadPage(['app/core/pages/ListPage', nls], function(ListPage)
     {
       return new ListPage({
         collection: divisions,
@@ -51,7 +51,7 @@ define([
   router.map('/divisions/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/divisions/templates/details'],
+      ['app/core/pages/DetailsPage', 'app/divisions/templates/details', nls],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -65,7 +65,7 @@ define([
   router.map('/divisions;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/divisions/views/DivisionFormView'],
+      ['app/core/pages/AddFormPage', 'app/divisions/views/DivisionFormView', nls],
       function(AddFormPage, DivisionFormView)
       {
         return new AddFormPage({
@@ -79,7 +79,7 @@ define([
   router.map('/divisions/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/divisions/views/DivisionFormView'],
+      ['app/core/pages/EditFormPage', 'app/divisions/views/DivisionFormView', nls],
       function(EditFormPage, DivisionFormView)
       {
         return new EditFormPage({

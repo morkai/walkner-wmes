@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   '../data/aors',
-  './Aor',
-  'i18n!app/nls/aors'
+  './Aor'
 ], function(
   router,
   viewport,
@@ -20,12 +19,13 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/aors';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/aors', canView, function()
   {
-    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    viewport.loadPage(['app/core/pages/ListPage', nls], function(ListPage)
     {
       return new ListPage({
         collection: aors,
@@ -43,7 +43,7 @@ define([
   router.map('/aors/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/aors/templates/details'],
+      ['app/core/pages/DetailsPage', 'app/aors/templates/details', nls],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -57,7 +57,7 @@ define([
   router.map('/aors;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/aors/views/AorFormView'],
+      ['app/core/pages/AddFormPage', 'app/aors/views/AorFormView', nls],
       function(AddFormPage, AorFormView)
       {
         return new AddFormPage({
@@ -71,7 +71,7 @@ define([
   router.map('/aors/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/aors/views/AorFormView'],
+      ['app/core/pages/EditFormPage', 'app/aors/views/AorFormView', nls],
       function(EditFormPage, AorFormView)
       {
         return new EditFormPage({

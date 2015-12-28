@@ -6,24 +6,26 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/showDeleteFormPage',
   '../data/companies',
-  './Company',
-  'i18n!app/nls/companies'
+  './Company'
 ], function(
   router,
   viewport,
   user,
+  showDeleteFormPage,
   companies,
   Company
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/companies';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/companies', canView, function()
   {
-    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    viewport.loadPage(['app/core/pages/ListPage', nls], function(ListPage)
     {
       return new ListPage({
         collection: companies,
@@ -39,7 +41,7 @@ define([
   router.map('/companies/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/companies/templates/details'],
+      ['app/core/pages/DetailsPage', 'app/companies/templates/details', nls],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -53,7 +55,7 @@ define([
   router.map('/companies;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/companies/views/CompanyFormView'],
+      ['app/core/pages/AddFormPage', 'app/companies/views/CompanyFormView', nls],
       function(AddFormPage, CompanyFormView)
       {
         return new AddFormPage({
@@ -67,7 +69,7 @@ define([
   router.map('/companies/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/companies/views/CompanyFormView'],
+      ['app/core/pages/EditFormPage', 'app/companies/views/CompanyFormView', nls],
       function(EditFormPage, CompanyFormView)
       {
         return new EditFormPage({
@@ -78,22 +80,6 @@ define([
     );
   });
 
-  router.map('/companies/:id;delete', canManage, function(req, referer)
-  {
-    var model = new Company({_id: req.params.id});
-
-    viewport.loadPage(['app/core/pages/ActionFormPage'], function(ActionFormPage)
-    {
-      return new ActionFormPage({
-        model: model,
-        actionKey: 'delete',
-        successUrl: model.genClientUrl('base'),
-        cancelUrl: referer || model.genClientUrl('base'),
-        formMethod: 'DELETE',
-        formAction: model.url(),
-        formActionSeverity: 'danger'
-      });
-    });
-  });
+  router.map('/companies/:id;delete', canManage, showDeleteFormPage.bind(null, Company));
 
 });

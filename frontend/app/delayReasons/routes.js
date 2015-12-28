@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   './DelayReasonCollection',
-  './DelayReason',
-  'i18n!app/nls/delayReasons'
+  './DelayReason'
 ], function(
   router,
   viewport,
@@ -20,12 +19,13 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/delayReasons';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/delayReasons', canView, function(req)
   {
-    viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
+    viewport.loadPage(['app/core/pages/ListPage', nls], function(ListPage)
     {
       return new ListPage({
         collection: new DelayReasonCollection(null, {rqlQuery: req.rql}),
@@ -37,7 +37,7 @@ define([
   router.map('/delayReasons/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/delayReasons/templates/details'],
+      ['app/core/pages/DetailsPage', 'app/delayReasons/templates/details', nls],
       function(DetailsPage, detailsTemplate)
       {
         return new DetailsPage({
@@ -51,7 +51,7 @@ define([
   router.map('/delayReasons;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/delayReasons/views/DelayReasonFormView'],
+      ['app/core/pages/AddFormPage', 'app/delayReasons/views/DelayReasonFormView', nls],
       function(AddFormPage, DelayReasonFormView)
       {
         return new AddFormPage({
@@ -65,7 +65,7 @@ define([
   router.map('/delayReasons/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/delayReasons/views/DelayReasonFormView'],
+      ['app/core/pages/EditFormPage', 'app/delayReasons/views/DelayReasonFormView', nls],
       function(EditFormPage, DelayReasonFormView)
       {
         return new EditFormPage({

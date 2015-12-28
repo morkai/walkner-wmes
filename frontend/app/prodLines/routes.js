@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   '../data/prodLines',
-  './ProdLine',
-  'i18n!app/nls/prodLines'
+  './ProdLine'
 ], function(
   router,
   viewport,
@@ -20,13 +19,14 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/prodLines';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('DICTIONARIES:MANAGE');
 
   router.map('/prodLines', canView, function()
   {
     viewport.loadPage(
-      ['app/prodLines/pages/ProdLineListPage'],
+      ['app/prodLines/pages/ProdLineListPage', nls],
       function(ProdLineListPage)
       {
         return new ProdLineListPage({
@@ -39,7 +39,7 @@ define([
   router.map('/prodLines/:id', function(req)
   {
     viewport.loadPage(
-      ['app/prodLines/pages/ProdLineDetailsPage'],
+      ['app/prodLines/pages/ProdLineDetailsPage', nls],
       function(ProdLineDetailsPage)
       {
         return new ProdLineDetailsPage({
@@ -52,7 +52,7 @@ define([
   router.map('/prodLines;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/prodLines/views/ProdLineFormView'],
+      ['app/core/pages/AddFormPage', 'app/prodLines/views/ProdLineFormView', nls],
       function(AddFormPage, ProdLineFormView)
       {
         return new AddFormPage({
@@ -66,7 +66,7 @@ define([
   router.map('/prodLines/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/prodLines/views/ProdLineFormView'],
+      ['app/core/pages/EditFormPage', 'app/prodLines/views/ProdLineFormView', nls],
       function(EditFormPage, ProdLineFormView)
       {
         return new EditFormPage({

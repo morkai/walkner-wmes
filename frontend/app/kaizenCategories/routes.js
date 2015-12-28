@@ -8,8 +8,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './KaizenCategory',
-  'i18n!app/nls/kaizenCategories'
+  './KaizenCategory'
 ], function(
   _,
   router,
@@ -20,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/kaizenCategories';
   var canView = user.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
 
@@ -28,7 +28,8 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/kaizenCategories/KaizenCategoryCollection'
+        'app/kaizenCategories/KaizenCategoryCollection',
+        nls
       ],
       function(ListPage, KaizenCategoryCollection)
       {
@@ -53,7 +54,8 @@ define([
       [
         'app/core/pages/DetailsPage',
         'app/kaizenCategories/KaizenCategory',
-        'app/kaizenCategories/templates/details'
+        'app/kaizenCategories/templates/details',
+        nls
       ],
       function(DetailsPage, KaizenCategory, detailsTemplate)
       {
@@ -72,7 +74,8 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/kaizenCategories/KaizenCategory',
-        'app/kaizenCategories/views/KaizenCategoryFormView'
+        'app/kaizenCategories/views/KaizenCategoryFormView',
+        nls
       ],
       function(AddFormPage, KaizenCategory, KaizenCategoryFormView)
       {
@@ -91,7 +94,8 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/kaizenCategories/KaizenCategory',
-        'app/kaizenCategories/views/KaizenCategoryFormView'
+        'app/kaizenCategories/views/KaizenCategoryFormView',
+        nls
       ],
       function(EditFormPage, KaizenCategory, KaizenCategoryFormView)
       {

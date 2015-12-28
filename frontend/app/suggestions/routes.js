@@ -15,7 +15,6 @@ define([
   './pages/SuggestionAddFormPage',
   './pages/SuggestionEditFormPage',
   './views/SuggestionThankYouView',
-  'i18n!app/nls/reports',
   'i18n!app/nls/kaizenOrders',
   'i18n!app/nls/suggestions'
 ], function(
@@ -41,7 +40,8 @@ define([
     viewport.loadPage(
       [
         'app/suggestions/SuggestionCountReport',
-        'app/suggestions/pages/SuggestionCountReportPage'
+        'app/suggestions/pages/SuggestionCountReportPage',
+        'i18n!app/nls/reports'
       ],
       function(SuggestionCountReport, SuggestionCountReportPage)
       {
@@ -61,7 +61,8 @@ define([
     viewport.loadPage(
       [
         'app/suggestions/SuggestionSummaryReport',
-        'app/suggestions/pages/SuggestionSummaryReportPage'
+        'app/suggestions/pages/SuggestionSummaryReportPage',
+        'i18n!app/nls/reports'
       ],
       function(SuggestionSummaryReport, SuggestionSummaryReportPage)
       {
