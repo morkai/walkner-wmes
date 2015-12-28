@@ -15,6 +15,9 @@
   "addButton:nearMiss": "Zgłoś<br>ZPW!",
   "addButton:suggestion": "Zgłoś<br>sugestię!",
 
-  "noData:nearMiss": "Nie uczestniczysz w żadnych otwartych zgłoszeniach ZPW :(",
-  "noData:suggestion": "Nie uczestniczysz w żadnych otwartych zgłoszeniach usprawnień :("
+  "list:rid": "ID",
+  "list:status": "Status",
+  "list:subject": "Temat",
+  "list:noData:nearMiss": "Nie uczestniczysz w żadnych otwartych zgłoszeniach ZPW :(",
+  "list:noData:suggestion": "Nie uczestniczysz w żadnych otwartych zgłoszeniach usprawnień :("
 }

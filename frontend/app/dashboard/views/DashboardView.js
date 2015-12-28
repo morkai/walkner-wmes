@@ -103,7 +103,8 @@ define([
       this.nearMissListView = new KaizenOrderListView({
         collection: this.nearMisses,
         simple: true,
-        noData: t.bound('dashboard', 'noData:nearMiss')
+        noData: t.bound('dashboard', 'list:noData:nearMiss'),
+        serializeColumns: this.serializeListColumns
       });
       this.nearMissCurrentTop10View = new KaizenTop10View({
         model: this.nearMissStats,
@@ -125,7 +126,8 @@ define([
       this.suggestionListView = new SuggestionListView({
         collection: this.suggestions,
         simple: true,
-        noData: t.bound('dashboard', 'noData:suggestion')
+        noData: t.bound('dashboard', 'list:noData:suggestion'),
+        serializeColumns: this.serializeListColumns
       });
       this.suggestionCurrentTop10View = new KaizenTop10View({
         model: this.suggestionStats,
@@ -155,6 +157,15 @@ define([
           this.classList.toggle('is-flipped');
         }
       });
+    },
+
+    serializeListColumns: function()
+    {
+      return [
+        {id: 'rid', label: t('dashboard', 'list:rid'), className: 'is-min is-number'},
+        {id: 'status', label: t('dashboard', 'list:status'), className: 'is-min'},
+        {id: 'subject', label: t('dashboard', 'list:subject')}
+      ];
     }
 
   });
