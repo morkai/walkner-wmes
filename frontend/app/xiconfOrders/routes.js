@@ -41,6 +41,7 @@ define([
       [
         'app/xiconfOrders/XiconfOrder',
         'app/xiconfOrders/pages/XiconfOrderDetailsPage',
+        'i18n!app/nls/orders',
         nls
       ],
       function(XiconfOrder, XiconfOrderDetailsPage)

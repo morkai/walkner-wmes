@@ -22,7 +22,7 @@ define([
       var page = this;
 
       return [{
-        label: t.bound('workCenters', 'PAGE_ACTION:toggleDeactivated'),
+        label: t.bound('prodLines', 'PAGE_ACTION:toggleDeactivated'),
         icon: 'toggle-on',
         className: 'active',
         callback: function()
