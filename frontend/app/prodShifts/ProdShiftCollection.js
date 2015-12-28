@@ -3,12 +3,14 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
+  '../time',
   '../data/prodLines',
   '../core/Collection',
   '../core/util/matchesProdLine',
   '../core/util/matchesEquals',
   './ProdShift'
 ], function(
+  time,
   prodLines,
   Collection,
   matchesProdLine,
@@ -39,7 +41,9 @@ define([
         limit: 15,
         selector: {
           name: 'and',
-          args: []
+          args: [
+            {name: 'ge', args: ['date', time.getMoment().subtract(1, 'months').startOf('day').valueOf()]}
+          ]
         }
       });
     },
