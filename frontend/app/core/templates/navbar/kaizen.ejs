@@ -1,25 +1,25 @@
 <li data-online data-loggedin class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown">
-    <%- t('kaizenOrders', 'navbar:kaizen') %>
+    <%- t('core', 'NAVBAR:KAIZEN:main') %>
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <li class="dropdown-header"><%- t('kaizenOrders', 'navbar:orders') %>
-    <li data-module="kaizen"><a href="#kaizenOrders"><%- t('kaizenOrders', 'navbar:all') %></a>
-    <li data-module="kaizen"><a href="#kaizenOrders?status=in=(new,accepted,todo,inProgress,paused)&sort(-eventDate)&limit(15)"><%- t('kaizenOrders', 'navbar:open') %></a>
-    <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=mine&sort(-eventDate)&limit(15)"><%- t('kaizenOrders', 'navbar:mine') %></a>
-    <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=unseen&sort(-eventDate)&limit(15)"><%- t('kaizenOrders', 'navbar:unseen') %></a>
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:orders') %>
+    <li data-module="kaizen"><a href="#kaizenOrders"><%- t('core', 'NAVBAR:KAIZEN:all') %></a>
+    <li data-module="kaizen"><a href="#kaizenOrders?status=in=(new,accepted,todo,inProgress,paused)&sort(-eventDate)&limit(15)"><%- t('core', 'NAVBAR:KAIZEN:open') %></a>
+    <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=mine&sort(-eventDate)&limit(15)"><%- t('core', 'NAVBAR:KAIZEN:mine') %></a>
+    <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=unseen&sort(-eventDate)&limit(15)"><%- t('core', 'NAVBAR:KAIZEN:unseen') %></a>
     <li class="divider">
-    <li class="dropdown-header"><%- t('kaizenOrders', 'navbar:reports') %>
-    <li data-module="kaizen"><a href="#kaizenReport"><%- t('kaizenOrders', 'navbar:reports:count') %></a>
-    <li data-module="kaizen"><a href="#kaizenSummaryReport"><%- t('kaizenOrders', 'navbar:reports:summary') %></a>
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:reports') %>
+    <li data-module="kaizen"><a href="#kaizenReport"><%- t('core', 'NAVBAR:KAIZEN:reports:count') %></a>
+    <li data-module="kaizen"><a href="#kaizenSummaryReport"><%- t('core', 'NAVBAR:KAIZEN:reports:summary') %></a>
     <li class="divider">
-    <li class="dropdown-header"><%- t('kaizenOrders', 'navbar:dictionaries') %>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenSections"><%- t('kaizenOrders', 'navbar:sections') %></a>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenAreas"><%- t('kaizenOrders', 'navbar:areas') %></a>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCategories"><%- t('kaizenOrders', 'navbar:categories') %></a>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCauses"><%- t('kaizenOrders', 'navbar:causes') %></a>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenRisks"><%- t('kaizenOrders', 'navbar:risks') %></a>
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:dictionaries') %>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenSections"><%- t('core', 'NAVBAR:KAIZEN:sections') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenAreas"><%- t('core', 'NAVBAR:KAIZEN:areas') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCategories"><%- t('core', 'NAVBAR:KAIZEN:categories') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCauses"><%- t('core', 'NAVBAR:KAIZEN:causes') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenRisks"><%- t('core', 'NAVBAR:KAIZEN:risks') %></a>
     <li class="divider">
-    <li data-module="kaizen"><a href="#kaizenHelp"><%- t('kaizenOrders', 'navbar:help') %></a>
+    <li data-module="kaizen"><a href="#kaizenHelp"><%- t('core', 'NAVBAR:KAIZEN:help') %></a>
   </ul>

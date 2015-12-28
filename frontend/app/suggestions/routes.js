@@ -8,31 +8,18 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './SuggestionCollection',
-  './Suggestion',
-  './pages/SuggestionListPage',
-  './pages/SuggestionDetailsPage',
-  './pages/SuggestionAddFormPage',
-  './pages/SuggestionEditFormPage',
-  './views/SuggestionThankYouView',
-  'i18n!app/nls/kaizenOrders',
-  'i18n!app/nls/suggestions'
+  './Suggestion'
 ], function(
   _,
   router,
   viewport,
   user,
   showDeleteFormPage,
-  SuggestionCollection,
-  Suggestion,
-  SuggestionListPage,
-  SuggestionDetailsPage,
-  SuggestionAddFormPage,
-  SuggestionEditFormPage,
-  SuggestionThankYouView
+  Suggestion
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/suggestions';
   var canAccess = user.auth();
 
   router.map('/suggestionCountReport', canAccess, function(req)
@@ -41,7 +28,8 @@ define([
       [
         'app/suggestions/SuggestionCountReport',
         'app/suggestions/pages/SuggestionCountReportPage',
-        'i18n!app/nls/reports'
+        'i18n!app/nls/reports',
+        nls
       ],
       function(SuggestionCountReport, SuggestionCountReportPage)
       {
@@ -62,7 +50,8 @@ define([
       [
         'app/suggestions/SuggestionSummaryReport',
         'app/suggestions/pages/SuggestionSummaryReportPage',
-        'i18n!app/nls/reports'
+        'i18n!app/nls/reports',
+        nls
       ],
       function(SuggestionSummaryReport, SuggestionSummaryReportPage)
       {
@@ -75,7 +64,7 @@ define([
 
   router.map('/suggestionHelp', function()
   {
-    viewport.loadPage(['app/core/View', 'app/suggestions/templates/help'], function(View, helpTemplate)
+    viewport.loadPage(['app/core/View', 'app/suggestions/templates/help', nls], function(View, helpTemplate)
     {
       return new View({
         layoutName: 'page',
@@ -86,46 +75,84 @@ define([
 
   router.map('/suggestions', canAccess, function(req)
   {
-    viewport.showPage(new SuggestionListPage({
-      collection: new SuggestionCollection(null, {rqlQuery: req.rql})
-    }));
+    viewport.loadPage(
+      [
+        'app/suggestions/SuggestionCollection',
+        'app/suggestions/pages/SuggestionListPage',
+        nls
+      ],
+      function(SuggestionCollection, SuggestionListPage)
+      {
+        return new SuggestionListPage({
+          collection: new SuggestionCollection(null, {rqlQuery: req.rql})
+        });
+      }
+    );
   });
 
   router.map('/suggestions/:id', canAccess, function(req)
   {
-    var page = new SuggestionDetailsPage({
-      model: new Suggestion({_id: req.params.id})
-    });
-
-    viewport.showPage(page);
-
-    if (req.query.thank === 'you')
-    {
-      page.once('afterRender', function()
+    viewport.loadPage(
+      [
+        'app/suggestions/pages/SuggestionDetailsPage',
+        'app/suggestions/views/SuggestionThankYouView',
+        nls
+      ],
+      function(SuggestionDetailsPage, SuggestionThankYouView)
       {
-        page.broker.publish('router.navigate', {
-          url: '/suggestions/' + page.model.id,
-          trigger: false,
-          replace: true
+        var page = new SuggestionDetailsPage({
+          model: new Suggestion({_id: req.params.id})
         });
 
-        viewport.showDialog(new SuggestionThankYouView());
-      });
-    }
+        if (req.query.thank === 'you')
+        {
+          page.once('afterRender', function()
+          {
+            page.broker.publish('router.navigate', {
+              url: '/suggestions/' + page.model.id,
+              trigger: false,
+              replace: true
+            });
+
+            viewport.showDialog(new SuggestionThankYouView());
+          });
+        }
+
+        return page;
+      }
+    );
   });
 
   router.map('/suggestions;add', canAccess, function()
   {
-    viewport.showPage(new SuggestionAddFormPage({
-      model: new Suggestion()
-    }));
+    viewport.loadPage(
+      [
+        'app/suggestions/pages/SuggestionAddFormPage',
+        nls
+      ],
+      function(SuggestionAddFormPage)
+      {
+        return new SuggestionAddFormPage({
+          model: new Suggestion()
+        });
+      }
+    );
   });
 
   router.map('/suggestions/:id;edit', canAccess, function(req)
   {
-    viewport.showPage(new SuggestionEditFormPage({
-      model: new Suggestion({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/suggestions/pages/SuggestionEditFormPage',
+        nls
+      ],
+      function(SuggestionEditFormPage)
+      {
+        return new SuggestionEditFormPage({
+          model: new Suggestion({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/suggestions/:id;delete', canAccess, _.partial(showDeleteFormPage, Suggestion, _, _, {
