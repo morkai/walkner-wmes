@@ -39,7 +39,6 @@ define([
   './xiconfOrders/routes',
   './xiconfPrograms/routes',
   './xiconfClients/routes',
-  './icpo/routes',
   './factoryLayout/routes',
   './licenses/routes',
   './kaizenOrders/routes',
