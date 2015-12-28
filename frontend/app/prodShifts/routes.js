@@ -8,37 +8,39 @@ define([
   '../user',
   '../data/orgUnits',
   '../prodChangeRequests/util/createShowDeleteFormPage',
-  './ProdShift',
-  './ProdShiftCollection',
-  './pages/ProdShiftListPage',
-  'i18n!app/nls/prodShifts'
+  './ProdShift'
 ], function(
   router,
   viewport,
   user,
   orgUnits,
   createShowDeleteFormPage,
-  ProdShift,
-  ProdShiftCollection,
-  ProdShiftListPage
+  ProdShift
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/prodShifts';
   var canView = user.auth('LOCAL', 'PROD_DATA:VIEW');
   var canManage = user.auth('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
 
   router.map('/prodShifts', canView, function(req)
   {
-    viewport.showPage(new ProdShiftListPage({
-      collection: new ProdShiftCollection(null, {
-        rqlQuery: req.rql
-      })
-    }));
+    viewport.loadPage(
+      ['app/prodShifts/ProdShiftCollection', 'app/prodShifts/pages/ProdShiftListPage', nls],
+      function(ProdShiftCollection, ProdShiftListPage)
+      {
+        return new ProdShiftListPage({
+          collection: new ProdShiftCollection(null, {
+            rqlQuery: req.rql
+          })
+        });
+      }
+    );
   });
 
   router.map('/prodShifts;add', canManage, function()
   {
-    viewport.loadPage(['app/prodShifts/pages/AddProdShiftFormPage'], function(AddProdShiftFormPage)
+    viewport.loadPage(['app/prodShifts/pages/AddProdShiftFormPage', nls], function(AddProdShiftFormPage)
     {
       return new AddProdShiftFormPage({
         model: new ProdShift()
@@ -48,7 +50,7 @@ define([
 
   router.map('/prodShifts/:id', canView, function(req)
   {
-    viewport.loadPage(['app/prodShifts/pages/ProdShiftDetailsPage'], function(ProdShiftDetailsPage)
+    viewport.loadPage(['app/prodShifts/pages/ProdShiftDetailsPage', nls], function(ProdShiftDetailsPage)
     {
       return new ProdShiftDetailsPage({
         latest: orgUnits.getByTypeAndId('prodLine', req.params.id) !== null,
@@ -59,7 +61,7 @@ define([
 
   router.map('/prodShifts/:id;edit', canManage, function(req)
   {
-    viewport.loadPage(['app/prodShifts/pages/EditProdShiftFormPage'], function(EditProdShiftFormPage)
+    viewport.loadPage(['app/prodShifts/pages/EditProdShiftFormPage', nls], function(EditProdShiftFormPage)
     {
       return new EditProdShiftFormPage({
         model: new ProdShift({_id: req.params.id})
@@ -68,4 +70,5 @@ define([
   });
 
   router.map('/prodShifts/:id;delete', canManage, createShowDeleteFormPage(ProdShift));
+
 });
