@@ -567,5 +567,22 @@
   "9:planUpload:success": "Plik został załadowany pomyślnie :-)",
   "9:planUpload:failure": "Nie udało się załadować pliku :-(",
   "9:planUpload:synced": "Nowy plan został zaimportowany :-)",
-  "9:planUpload:syncFailed": "Nie udało się zaimportować nowego planu :-("
+  "9:planUpload:syncFailed": "Nie udało się zaimportować nowego planu :-(",
+  "9:cags:header": "CAG",
+  "9:cags:id": "<br>ID",
+  "9:cags:name": "<br>Nazwa",
+  "9:lines:header": "Linie montażowe",
+  "9:summary:daysInMonth": "Ilość dni w miesiącu:",
+  "9:summary:shiftsInDay": "Ilość zmian w dniu:",
+  "9:summary:hoursInShift": "Ilość godzin na zmianę:",
+  "9:summary:header": "Podsumowanie",
+  "9:summary:avgQPerShift": "Średnia",
+  "9:summary:maxOnLine": "Maks.<br>na linii",
+  "9:summary:lineCount": "Ilość<br>linii",
+  "9:summary:maxOnLines": "Maks. na<br>liniach",
+  "9:months:daysInMonth": "dni/msc:",
+  "9:months:shiftsInDay": "zmiany/dzień:",
+  "9:months:plan": "Plan",
+  "9:months:utilization": "%<br>wyk.",
+  "9:months:lineCount": "Ilość<br>linii"
 }

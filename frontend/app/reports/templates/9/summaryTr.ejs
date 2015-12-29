@@ -1,0 +1,8 @@
+<tr data-index="<%- cagI %>" class="<%- cag.group.contrast ? 'is-contrast' : 'is-not-contrast' %>" style="background: <%- cag.group.color %>">
+  <td><%- cag.avgQPerShift %></td>
+  <td><%- cag.maxOnLine %></td>
+  <td class="reports-9-editable <%- cag.customLines == null ? '' : 'reports-9-custom' %>" data-editor="customLines" data-cag-index="<%- cagI %>">
+    <span class="reports-9-editable-value"><%- cag.customLines == null ? cag.lines : cag.customLines %></span>
+  </td>
+  <td><%- cag.maxOnLines %></td>
+</tr>

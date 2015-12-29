@@ -1,0 +1,17 @@
+<tr data-index="<%- cagI %>" class="<%- cag.group.contrast ? 'is-contrast' : 'is-not-contrast' %>" style="background: <%- cag.group.color %>">
+  <% _.forEach(months, function(month, monthI) { %>
+  <td><%- cag.plan[monthI] %></td>
+  <td><%- cag.utilization[monthI] %>%</td>
+  <td class="reports-9-editable <%- cag.customMonthLines[monthI] == null ? '' : 'reports-9-custom' %> <%- monthI === 3 ? '' : 'reports-9-table-months-separator' %>" data-editor="customLines" data-cag-index="<%- cagI %>" data-month-index="<%- monthI %>">
+    <span class="reports-9-editable-value">
+      <% if (cag.customMonthLines[monthI] != null) { %>
+      <%- cag.customMonthLines[monthI] %>
+      <% } else if (cag.customLines != null) { %>
+      <%- cag.customLines %>
+      <% } else { %>
+      <%- cag.lines %>
+      <% } %>
+    </span>
+  </td>
+  <% }) %>
+</tr>

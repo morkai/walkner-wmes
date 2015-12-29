@@ -1,0 +1,19 @@
+<table class="table table-bordered table-condensed">
+  <thead>
+  <tr>
+    <th colspan="2"><%- t('reports', '9:cags:header') %>
+  </tr>
+  <tr>
+    <th><%- t('reports', '9:cags:id') %>
+    <th><%- t('reports', '9:cags:name') %>
+  </tr>
+  </thead>
+  <tbody>
+  <% _.forEach(cags, function(cag, i) { %>
+  <tr data-index="<%- i %>" title="<%- cag.shortName ? cag.name : '' %>" class="<%- cag.group.contrast ? 'is-contrast' : 'is-not-contrast' %>" style="background: <%- cag.group.color %>">
+    <td><%- cag._id %></td>
+    <td><%- cag.shortName || cag.name %></td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

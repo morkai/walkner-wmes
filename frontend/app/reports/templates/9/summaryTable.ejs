@@ -1,0 +1,45 @@
+<table class="table table-bordered table-condensed">
+  <thead class="reports-9-table-options">
+  <tr></tr>
+  <tr>
+    <th colspan="4">
+      <table>
+        <tr>
+          <td class="reports-9-table-options-name"><%- t('reports', '9:summary:daysInMonth') %></td>
+          <td class="reports-9-table-options-value reports-9-editable" data-editor="daysInMonth">
+            <span class="reports-9-editable-value">20</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="reports-9-table-options-name"><%- t('reports', '9:summary:shiftsInDay') %></td>
+          <td class="reports-9-table-options-value reports-9-editable" data-editor="shiftsInDay">
+            <span class="reports-9-editable-value">3</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="reports-9-table-options-name"><%- t('reports', '9:summary:hoursInShift') %></td>
+          <td class="reports-9-table-options-value reports-9-editable" data-editor="hoursInShift">
+            <span class="reports-9-editable-value">7,5</span>
+          </td>
+        </tr>
+      </table>
+    </th>
+  </tr>
+  </thead>
+  <thead>
+  <tr>
+    <th colspan="4"><%- t('reports', '9:summary:header') %></th>
+  </tr>
+  <tr>
+    <th><%- t('reports', '9:summary:avgQPerShift') %></th>
+    <th><%- t('reports', '9:summary:maxOnLine') %></th>
+    <th><%- t('reports', '9:summary:lineCount') %></th>
+    <th><%- t('reports', '9:summary:maxOnLines') %></th>
+  </tr>
+  </thead>
+  <tbody id="<%- idPrefix %>-summaryRows">
+  <% _.forEach(cags, function(cag, cagI) { %>
+  <% include summaryTr.ejs %>
+  <% }) %>
+  </tbody>
+</table>

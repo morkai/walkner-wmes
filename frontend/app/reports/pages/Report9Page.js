@@ -3,28 +3,22 @@
 // Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
 
 define([
-  'jquery',
-  'app/time',
   'app/i18n',
   'app/user',
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
-  '../settings',
   '../Report9',
   '../views/9/TableView',
   '../views/9/PlanUploadView',
   'app/reports/templates/9/page',
   'app/reports/templates/9/actions'
 ], function(
-  $,
-  time,
   t,
   user,
   viewport,
   View,
   bindLoadingMessage,
-  settings,
   Report,
   TableView,
   PlanUploadView,
@@ -84,19 +78,12 @@ define([
     {
       this.defineModels();
       this.defineViews();
-      this.defineBindings();
 
       this.setView('#' + this.idPrefix + '-table', this.tableView);
     },
 
-    destroy: function()
-    {
-      settings.release();
-    },
-
     defineModels: function()
     {
-      this.settings = bindLoadingMessage(settings.acquire(), this);
       this.report = bindLoadingMessage(new Report(), this);
     },
 
@@ -105,24 +92,9 @@ define([
       this.tableView = new TableView({model: this.report});
     },
 
-    defineBindings: function()
-    {
-
-    },
-
     load: function(when)
     {
-      return when(this.settings.fetchIfEmpty(function()
-      {
-        return [
-          this.report.fetch()
-        ];
-      }, this));
-    },
-
-    afterRender: function()
-    {
-      settings.acquire();
+      return when(this.report.fetch());
     }
 
   });

@@ -1,134 +1,17 @@
 <div class="reports-9-tables">
   <div id="<%- idPrefix %>-cags" class="reports-9-table-cags">
-    <table class="table table-bordered table-condensed">
-      <thead>
-      <tr>
-        <th colspan="2">CAG
-      </tr>
-      <tr>
-        <th><br>ID
-        <th><br>Nazwa
-      </tr>
-      </thead>
-      <tbody>
-      <% _.forEach(cags, function(cag, i) { %>
-      <tr data-index="<%- i %>" title="<%- cag.shortName ? cag.name : '' %>" class="<%- cag.group.contrast ? 'is-contrast' : 'is-not-contrast' %>" style="background: <%- cag.group.color %>">
-        <td><%- cag._id %>
-        <td><%- cag.shortName || cag.name %>
-      <% }) %>
-      </tbody>
-    </table>
+    <% include cagsTable.ejs %>
   </div>
   <div class="reports-9-table-lines-container">
-    <div class="reports-9-table-lines-header">Linie produkcyjne</div>
+    <div class="reports-9-table-lines-header"><%- t('reports', '9:lines:header') %></div>
     <div id="<%- idPrefix %>-lines" class="reports-9-table-lines reports-9-table-numeric">
-      <table class="table table-bordered table-condensed">
-        <thead>
-        <tr>
-          <th colspan="999">Linie montażowe
-        </tr>
-        <tr>
-          <% _.forEach(lines, function(line) { %>
-          <th><%- line.name.replace(/\n/g, '<br>') %>
-          <% }) %>
-          <th>
-        </tr>
-        </thead>
-        <tbody>
-        <% _.forEach(cags, function(cag, i) { %>
-        <tr data-index="<%- i %>" class="<%- cag.group.contrast ? 'is-contrast' : 'is-not-contrast' %>" style="background: <%- cag.group.color %>">
-          <% _.forEach(lines, function(line) { %>
-          <td><%- line.cags[cag._id] || '&nbsp;' %>
-          <% })%>
-          <td>
-        <% }) %>
-        </tbody>
-      </table>
+      <% include linesTable.ejs %>
     </div>
   </div>
   <div id="<%- idPrefix %>-summary" class="reports-9-table-summary reports-9-table-numeric">
-    <table class="table table-bordered table-condensed">
-      <thead class="reports-9-table-options">
-      <tr>
-      <tr>
-        <th colspan="4">
-          <table>
-            <tr>
-              <td class="reports-9-table-options-name">Ilość dni w miesiącu:</td>
-              <td class="reports-9-table-options-value">20</td>
-            </tr>
-            <tr>
-              <td class="reports-9-table-options-name">Ilość zmian w dniu:</td>
-              <td class="reports-9-table-options-value">3</td>
-            </tr>
-            <tr>
-              <td class="reports-9-table-options-name">Ilość godzin na zmianę:</td>
-              <td class="reports-9-table-options-value">7,5</td>
-            </tr>
-          </table>
-      </thead>
-      <thead>
-      <tr>
-        <th colspan="4">Podsumowanie
-      </tr>
-      <tr>
-        <th>Średnia
-        <th>Maks.<br>na linii
-        <th>Ilość<br>linii
-        <th>Maks. na<br>liniach
-      </tr>
-      </thead>
-      <tbody>
-      <% _.forEach(cags, function(cag, i) { %>
-      <tr data-index="<%- i %>" class="<%- cag.group.contrast ? 'is-contrast' : 'is-not-contrast' %>" style="background: <%- cag.group.color %>">
-        <td><%- cag.avgQPerShift %>
-        <td><%- cag.maxOnLine %>
-        <td class="reports-9-prodLineCount <%- cag.customLines == null ? '' : 'is-custom' %>"><%- cag.customLines == null ? cag.lines : cag.customLines %>
-        <td><%- cag.maxOnLines %>
-      <% }) %>
-      </tbody>
-    </table>
+    <% include summaryTable.ejs %>
   </div>
   <div id="<%- idPrefix %>-months" class="reports-9-table-months reports-9-table-numeric">
-    <table class="table table-bordered table-condensed">
-      <thead class="reports-9-table-options">
-      <tr>
-      <tr>
-        <% _.forEach(months, function(month, i) { %>
-        <th class="<%- i === 3 ? '' : 'reports-9-table-months-separator' %>" colspan="3">
-          <table>
-            <tr>
-              <td class="reports-9-table-options-name">dni/msc:
-              <td class="reports-9-table-options-value"><%- month.days %>
-            <tr>
-              <td class="reports-9-table-options-name">zmiany/dzień:
-              <td class="reports-9-table-options-value"><%- month.shifts %>
-          </table>
-        <% }) %>
-      </thead>
-      <thead>
-      <tr>
-        <% _.forEach(months, function(month, i) { %>
-        <th class="<%- i === 3 ? '' : 'reports-9-table-months-separator' %>" colspan="3"><%- month.label %>
-        <% }) %>
-      <tr>
-        <% _.forEach(months, function(month, i) { %>
-        <th>Plan
-        <th>%<br>wyk.
-        <th class="<%- i === 3 ? '' : 'reports-9-table-months-separator' %>">Ilość<br>linii
-        <% }) %>
-      </tr>
-      </thead>
-      <tbody>
-      <% _.forEach(cags, function(cag, cagI) { %>
-      <tr data-index="<%- cagI %>" class="<%- cag.group.contrast ? 'is-contrast' : 'is-not-contrast' %>" style="background: <%- cag.group.color %>">
-        <% _.forEach(months, function(month, monthI) { %>
-        <td><%- cag.plan[monthI] %>
-        <td><%- cag.utilization[monthI] %>%
-        <td class="reports-9-prodLineCount <%- monthI === 3 ? '' : 'reports-9-table-months-separator' %>">4
-        <% }) %>
-      <% }) %>
-      </tbody>
-    </table>
+    <% include monthsTable.ejs %>
   </div>
 </div>

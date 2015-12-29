@@ -1,0 +1,23 @@
+<table class="table table-bordered table-condensed">
+  <thead>
+  <tr>
+    <th colspan="999"><%- t('reports', '9:lines:header') %>
+  </tr>
+  <tr>
+    <% _.forEach(lines, function(line) { %>
+    <th><%- line.name.replace(/\n/g, '<br>') %>
+    <% }) %>
+    <th>
+  </tr>
+  </thead>
+  <tbody>
+  <% _.forEach(cags, function(cag, i) { %>
+  <tr data-index="<%- i %>" class="<%- cag.group.contrast ? 'is-contrast' : 'is-not-contrast' %>" style="background: <%- cag.group.color %>">
+    <% _.forEach(lines, function(line) { %>
+    <td><%- line.cags[cag._id] || '&nbsp;' %></td>
+    <% })%>
+    <td></td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

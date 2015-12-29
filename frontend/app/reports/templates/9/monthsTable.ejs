@@ -1,0 +1,47 @@
+<table class="table table-bordered table-condensed">
+  <thead class="reports-9-table-options">
+  <tr></tr>
+  <tr>
+    <% _.forEach(months, function(month, i) { %>
+    <th class="<%- i === 3 ? '' : 'reports-9-table-months-separator' %>" colspan="3">
+      <table>
+        <tr>
+          <td class="reports-9-table-options-name"><%- t('reports', '9:months:daysInMonth') %></td>
+          <td class="reports-9-table-options-value reports-9-editable <%- month.customDays == null ? '' : 'reports-9-custom' %>" data-editor="daysInMonth" data-month-index="<%- i %>">
+            <span class="reports-9-editable-value">
+              <%- month.customDays == null ? month.days : month.customDays %>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td class="reports-9-table-options-name"><%- t('reports', '9:months:shiftsInDay') %></td>
+          <td class="reports-9-table-options-value reports-9-editable <%- month.customShifts == null ? '' : 'reports-9-custom' %>" data-editor="shiftsInDay" data-month-index="<%- i %>">
+            <span class="reports-9-editable-value">
+              <%- month.customShifts == null ? month.shifts : month.customShifts %>
+            </span>
+          </td>
+        </tr>
+      </table>
+    </th>
+    <% }) %>
+  </tr>
+  </thead>
+  <thead>
+  <tr>
+    <% _.forEach(months, function(month, i) { %>
+    <th class="<%- i === 3 ? '' : 'reports-9-table-months-separator' %>" colspan="3"><%- month.label %>
+    <% }) %>
+  <tr>
+    <% _.forEach(months, function(month, i) { %>
+    <th><%- t('reports', '9:months:plan') %>
+    <th><%- t('reports', '9:months:utilization') %>
+    <th class="<%- i === 3 ? '' : 'reports-9-table-months-separator' %>"><%- t('reports', '9:months:lineCount') %>
+    <% }) %>
+  </tr>
+  </thead>
+  <tbody id="<%- idPrefix %>-monthsRows">
+  <% _.forEach(cags, function(cag, cagI) { %>
+  <% include monthsTr.ejs %>
+  <% }) %>
+  </tbody>
+</table>
