@@ -9,6 +9,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/util/parseNumber',
   'app/purchaseOrders/templates/vendorPrintDialog',
   '../labelConfigurations'
 ], function(
@@ -18,6 +19,7 @@ define([
   t,
   viewport,
   View,
+  parseNumber,
   template,
   labelConfigurations
 ) {
@@ -91,19 +93,7 @@ define([
 
     parseQty: function(value, noDecimals)
     {
-      var parts = String(value).split(this.decimalSeparator);
-      var integer = parseInt(parts[0].replace(/[^0-9]+/g, ''), 10);
-      var decimals = parts.length > 1 ? parseInt(parts[1].replace(/[^0-9]+/g, ''), 10) : 0;
-
-      integer = isNaN(integer) ? '0' : integer.toString();
-      decimals = isNaN(decimals) ? '0' : decimals.toString();
-
-      if (noDecimals || decimals === '0')
-      {
-        return integer === '0' ? 0 : parseInt(integer, 10);
-      }
-
-      return parseFloat(integer + '.' + decimals.substr(0, 3));
+      return parseNumber(value, noDecimals);
     }
 
   });
