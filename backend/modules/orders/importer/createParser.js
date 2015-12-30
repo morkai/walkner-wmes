@@ -31,7 +31,7 @@ module.exports = function createParser(app, importerModule, callback)
 
   function filterFile(fileInfo)
   {
-    if (typeof filePathCache[fileInfo.filePath] === 'boolean')
+    if (filePathCache[fileInfo.filePath])
     {
       return false;
     }
@@ -44,7 +44,7 @@ module.exports = function createParser(app, importerModule, callback)
     }
 
     fileInfo.step = parseInt(matches[2], 10) || 0;
-    fileInfo.type = matches[1].toUpperCase();
+    fileInfo.type = /OPER/i.test(matches[1]) ? 'OPERS' : 'ORDERS';
     fileInfo.timeKey = createTimeKey(fileInfo.timestamp);
 
     return true;

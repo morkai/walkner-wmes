@@ -25,6 +25,7 @@ exports.modules = [
   'vendorNc12s',
   'feedback',
   'purchaseOrders',
+  'sapGui/importer',
   {id: 'messenger/client', name: 'messenger/client:pos-importer'},
   'httpServer',
   'sio'
@@ -155,6 +156,10 @@ exports.updater = {
 
 exports.purchaseOrders = {
   pdfStoragePath: __dirname + '/../data/pos-labels',
-  renderCmdPath: __dirname + '/../data/pos-render',
+  renderCmdPath: __dirname + '/../data/pos-render'
+};
+
+exports['sapGui/importer'] = {
+  secretKey: '',
   importPath: __dirname + '/../data/attachments-input'
 };

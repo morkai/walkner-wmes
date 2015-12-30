@@ -10,7 +10,7 @@ module.exports = function runLs41Job(app, sapGuiModule, job, done)
 {
   var args = [
     '--output-file',
-    Math.floor(Date.now() / 1000) + '@T_LS41_1.txt'
+    Math.floor(Date.now() / 1000) + '@' + (job.outputFile || 'T_LS41.txt')
   ];
 
   sapGuiModule.runScript(job, 'T_LS41.exe', args, checkOutputFile.bind(null, done));

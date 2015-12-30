@@ -10,9 +10,8 @@ module.exports = {
   zopp: require('./zopp'),
   lt23: require('./lt23'),
   ls41: require('./ls41'),
-  xiconf: require('./xiconf'),
-  docs: require('./docs'),
   zlf1: require('./zlf1'),
   zoin: require('./zoin'),
-  genericList: require('./genericList')
+  genericList: require('./genericList'),
+  zse16d: require('./zse16d')
 };

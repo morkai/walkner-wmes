@@ -87,13 +87,13 @@ exports['purchaseOrders/importer'] = {
     },
     {
       type: 'text',
-      filterRe: /^OPEN_PO_([0-9]+)\.txt$/,
+      filterRe: /^OPEN_PO\.txt$/,
       stepCount: 1,
       hourlyInterval: 3
     },
     {
       type: 'json',
-      filterRe: /^OPEN_PO_([0-9]+)\.json$/,
+      filterRe: /^OPEN_PO\.json$/,
       stepCount: 1,
       hourlyInterval: 3
     }

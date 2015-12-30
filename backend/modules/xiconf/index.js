@@ -22,8 +22,6 @@ exports.DEFAULT_CONFIG = {
   settingsId: 'settings',
   featureDbPath: './',
   zipStoragePath: './',
-  ordersImportPath: './',
-  ordersImportFile: '{timestamp}@T_COOIS_XICONF_{step}.txt',
   emailUrlPrefix: 'http://127.0.0.1/',
   vncTemplatePath: __dirname + '/template.vnc',
   updatesPath: './'

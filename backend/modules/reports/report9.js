@@ -8,7 +8,6 @@ var fs = require('fs');
 var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
-var util = require('./util');
 
 module.exports = function(mongoose, options, done)
 {
@@ -26,9 +25,9 @@ module.exports = function(mongoose, options, done)
     options: options,
     months: _.map(new Array(MONTHS_FUTURE), function(unused, i)
     {
-// todo
+// TODO
 return moment().startOf('month').subtract(2, 'months').add(i, 'months').valueOf();
-      return moment().startOf('month').add(i, 'months').valueOf();
+      // return moment().startOf('month').add(i, 'months').valueOf();
     }),
     cags: {},
     groups: {},

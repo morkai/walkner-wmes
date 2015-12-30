@@ -119,49 +119,52 @@ exports.directoryWatcher = {
   path: IMPORT_INPUT_DIR
 };
 
-exports['orders/importer/orders'] = {
-  filterRe: /^T_COOIS_(ORDERS|OPERS)_[0-9]+\.txt$/,
-  parsedOutputDir: IMPORT_OUTPUT_DIR
-};
-
-exports['orders/importer/emptyOrders'] = {
-  filterRe: /^T_COOIS_EMPTY_(ORDERS|OPERS)_[0-9]+\.txt$/,
-  parsedOutputDir: IMPORT_OUTPUT_DIR
-};
-
-exports['orders/importer/intake'] = {
-  parsedOutputDir: IMPORT_OUTPUT_DIR
-};
-
-exports['orders/importer/bom'] = {
-  parsedOutputDir: IMPORT_OUTPUT_DIR
-};
-
 exports['reports/clipOrderCount'] = {
   syncHour: 7
 };
 
-exports['warehouse/importer/controlCycles'] = {
-  filterRe: /^T_LS41_[0-9]+\.txt$/,
+exports['warehouse/importer/transferOrders'] = {
+  filterRe: /^WH_TRANSFER_ORDERS\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
-exports['warehouse/importer/transferOrders'] = {
-  filterRe: /^T_LT23_[0-9]+\.txt$/,
+exports['warehouse/importer/controlCycles'] = {
+  filterRe: /^WH_CONTROL_CYCLES\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports['xiconf/importer/orders'] = {
-  filterRe: /^T_COOIS_XICONF_[0-9]+\.txt$/,
+  filterRe: /^XICONF_ORDERS\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orders/importer/orders'] = {
+  filterRe: /^(ORDERS(?:_OPERATIONS)?)\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports['orderDocuments/importer'] = {
-  filterRe: /^T_COOIS_DOCS_[0-9]+\.txt$/,
+  filterRe: /^ORDERS_DOCUMENTS\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orders/importer/bom'] = {
+  filterRe: /^ORDERS_COMPONENTS\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orders/importer/emptyOrders'] = {
+  filterRe: /^(EMPTY_ORDERS(?:_OPERATIONS)?)\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orders/importer/intake'] = {
+  filterRe: /^ZOIN_([A-Z0-9]+)\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports['cags/importer/nc12'] = {
+  filterRe: /^MARA\.txt$/,
   resultFile: __dirname + '/../data/12nc_to_cags.json',
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };

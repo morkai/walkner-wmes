@@ -10,7 +10,7 @@ module.exports = function runZoppJob(app, sapGuiModule, job, done)
 {
   var args = [
     '--output-file',
-    Math.floor(Date.now() / 1000) + '@T_ZOPP_1.txt'
+    Math.floor(Date.now() / 1000) + '@' + (job.outputFile || 'T_ZOPP.txt')
   ];
 
   sapGuiModule.runScript(job, 'T_ZOPP.exe', args, checkOutputFile.bind(null, done));

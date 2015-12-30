@@ -19,8 +19,6 @@ exports.DEFAULT_CONFIG = {
   orgUnitsId: 'orgUnits',
   settingsId: 'settings',
   productionId: 'production',
-  importPath: './',
-  importFile: '{timestamp}@T_COOIS_DOCS_{step}.txt',
   cachedPath: './',
   sejdaConsolePath: 'sejda-console'
 };

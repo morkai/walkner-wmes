@@ -7,43 +7,27 @@ exports.id = 'wmes-sapgui';
 
 exports.modules = [
   'directoryWatcher',
-  'purchaseOrders/exporter',
-  'warehouse/exporter',
-  'xiconf/exporter',
-  'orderDocuments/exporter',
-  'orders/exporter',
-  'sapGui'
+  'sapGui',
+  {id: 'sapGui/exporter', name: 'sapGui/exporter:walkner-pos'},
+  {id: 'sapGui/exporter', name: 'sapGui/exporter:philips-wmes'}
 ];
 
 exports.directoryWatcher = {
   path: 'C:/SAP/Output'
 };
 
-exports['purchaseOrders/exporter'] = {
-  uploadUrl: 'http://127.0.0.1/purchaseOrders;import'
-};
-
-exports['warehouse/exporter'] = {
-  maxConcurrentUploads: 1,
-  uploadUrl: 'http://127.0.0.1/warehouse;import'
-};
-
-exports['xiconf/exporter'] = {
-  maxConcurrentUploads: 1,
-  uploadUrl: 'http://127.0.0.1/xiconf/programOrders;import'
-};
-
-exports['orderDocuments/exporter'] = {
-  maxConcurrentUploads: 1,
-  uploadUrl: 'http://127.0.0.1/orderDocuments;import'
-};
-
-exports['orders/exporter'] = {
-  maxConcurrentUploads: 1,
-  uploadUrl: 'http://127.0.0.1/orders;import'
-};
-
 exports.sapGui = {
-  scriptsPath: 'C:/SAP/Scripts',
   jobs: []
+};
+
+exports['sapGui/exporter:walkner-pos'] = {
+  maxConcurrentUploads: 1,
+  secretKey: '',
+  filters: []
+};
+
+exports['sapGui/exporter:philips-wmes'] = {
+  maxConcurrentUploads: 1,
+  secretKey: '',
+  filters: []
 };

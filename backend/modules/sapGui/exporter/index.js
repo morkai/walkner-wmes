@@ -11,11 +11,12 @@ var request = require('request');
 
 exports.DEFAULT_CONFIG = {
   maxConcurrentUploads: 5,
-  filterRe: /^T_COOIS_DOCS_([0-9]+)\.txt$/,
-  uploadUrl: 'http://127.0.0.1/orderDocuments;import'
+  filters: [],
+  uploadUrl: 'http://127.0.0.1/sapGui;import',
+  secretKey: ''
 };
 
-exports.start = function startOrderDocumentsExporterModule(app, module)
+exports.start = function startSapGuiExporterModule(app, module)
 {
   var filePathCache = {};
   var exportQueue = [];
@@ -29,16 +30,17 @@ exports.start = function startOrderDocumentsExporterModule(app, module)
       return false;
     }
 
-    var matches = fileInfo.fileName.match(module.config.filterRe);
+    var filters = module.config.filters;
 
-    if (matches === null)
+    for (var i = 0; i < filters.length; ++i)
     {
-      return false;
+      if (filters[i].test(fileInfo.fileName))
+      {
+        return true;
+      }
     }
 
-    fileInfo.step = parseInt(matches[1], 10) || 1;
-
-    return true;
+    return false;
   }
 
   function exportFile(fileInfo)
@@ -85,9 +87,9 @@ exports.start = function startOrderDocumentsExporterModule(app, module)
             'content-encoding': 'deflate'
           },
           qs: {
+            secretKey: module.config.secretKey,
             fileName: fileInfo.fileName,
-            timestamp: Math.floor(fileInfo.timestamp / 1000),
-            step: fileInfo.step
+            timestamp: Math.floor(fileInfo.timestamp / 1000)
           },
           body: body
         };

@@ -63,6 +63,7 @@ exports.modules = [
   'suggestions',
   'opinionSurveys',
   'cags',
+  'sapGui/importer',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -413,5 +414,10 @@ exports.prodDowntimeAlerts = {
 };
 
 exports.cags = {
-  planUploadPath: __dirname + '/../data/attachments-input'
+  planUploadPath: DATA_PATH + '/attachments-input'
+};
+
+exports['sapGui/importer'] = {
+  importPath: DATA_PATH + '/attachments-input',
+  secretKey: ''
 };

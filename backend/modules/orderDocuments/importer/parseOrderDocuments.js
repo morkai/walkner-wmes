@@ -4,7 +4,6 @@
 
 'use strict';
 
-var _ = require('lodash');
 var parseSapTextTable = require('../../sap/util/parseSapTextTable');
 
 module.exports = function parseOrderDocuments(input)
@@ -13,18 +12,8 @@ module.exports = function parseOrderDocuments(input)
     columnMatchers: {
       orderNo: /^Order/,
       item: /^Item/,
-      documentNo: /^Document/,
+      nc15: /^Document/,
       name: /^Description/
-    },
-    valueParsers: {},
-    itemDecorator: function(obj)
-    {
-      return {
-        orderNo: obj.orderNo,
-        item: obj.item,
-        nc15: obj.documentNo,
-        name: obj.name
-      };
     }
   });
 };
