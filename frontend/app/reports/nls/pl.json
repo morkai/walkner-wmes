@@ -557,10 +557,12 @@
 
   "9:breadcrumbs:base": "Planowane obciążenie linii",
   "9:actions:clearOptions": "Przywróć domyślne wartości",
+  "9:actions:export": "Eksportuj dane",
   "9:actions:dictionaries": "Słowniki",
   "9:actions:cags": "CAG",
   "9:actions:groups": "Grupy CAG",
   "9:actions:plans": "Załaduj plan",
+  "9:filename:export": "WMES_PlanObLinii",
   "9:planUpload:title": "Import planu",
   "9:planUpload:file": "Plik CSV",
   "9:planUpload:submit": "Załaduj plik",

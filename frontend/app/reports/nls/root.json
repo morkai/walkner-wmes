@@ -552,10 +552,12 @@
 
     "9:breadcrumbs:base": "Planned line utilization",
     "9:actions:clearOptions": "Restore default values",
+    "9:actions:export": "Export data",
     "9:actions:dictionaries": "Dictionaries",
     "9:actions:cags": "CAG",
     "9:actions:groups": "CAG groups",
     "9:actions:plans": "Import plan",
+    "9:filename:export": "WMES_PlanLineUtil",
     "9:planUpload:title": "Plan import",
     "9:planUpload:file": "CSV file",
     "9:planUpload:submit": "Upload file",

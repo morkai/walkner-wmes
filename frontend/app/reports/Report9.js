@@ -426,6 +426,61 @@ define([
         displayValue: newValue === null ? DEFAULT_HOURS_IN_SHIFT : newValue
       });
       this.trigger('change');
+    },
+
+    serializeToCsv: function()
+    {
+      var rows = [];
+      var months = this.get('months');
+      var lines = this.get('lines');
+      var s = function(v) { return '"' + v + '"'; };
+
+      rows.push(['cag', '', '', 'summary', '', '', '']);
+      rows.push(['id', 'name', 'group', 'avgQPerShift', 'maxOnLine', 'lineCount', 'maxOnLines']);
+
+      _.forEach(months, function(month)
+      {
+        rows[0].push(time.format(month._id, 'YYYY-MM-DD'), '', '');
+        rows[1].push('plan', '%util', 'lineCount');
+      });
+
+      _.forEach(lines, function(line, i)
+      {
+        rows[0].push(i > 0 ? '' : 'lines');
+        rows[1].push(s(line._id));
+      });
+
+      _.forEach(this.get('cags'), function(cag)
+      {
+        var cagLineCount = cag.customLines === null ? cag.lines : cag.customLines;
+        var row = [
+          s(cag._id),
+          s(cag.name),
+          s(cag.group.name),
+          cag.avgQPerShift,
+          cag.maxOnLine,
+          cagLineCount,
+          cag.maxOnLines
+        ];
+
+        _.forEach(cag.plan, function(plan, monthI)
+        {
+          row.push(
+            plan,
+            cag.utilization[monthI] + '%',
+            cag.customMonthLines[monthI] === null ? cagLineCount : cag.customMonthLines[monthI]
+          );
+        });
+
+        _.forEach(lines, function(line)
+        {
+          row.push(line.cags[cag._id] || 0);
+        });
+
+        rows.push(row);
+      });
+
+      return rows.map(function(row) { return row.join(';'); }).join('\r\n');
     }
 
   }, {

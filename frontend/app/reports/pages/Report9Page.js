@@ -73,6 +73,33 @@ define([
           }
         },
         {
+          label: t.bound('reports', '9:actions:export'),
+          icon: 'download',
+          callback: function()
+          {
+            var btnEl = this.querySelector('.btn');
+
+            btnEl.disabled = true;
+
+            var req = page.ajax({
+              type: 'POST',
+              url: '/reports;download?filename=' + t('reports', '9:filename:export'),
+              contentType: 'text/csv',
+              data: page.report.serializeToCsv()
+            });
+
+            req.done(function(key)
+            {
+              window.location.href = '/reports;download?key=' + key;
+            });
+
+            req.always(function()
+            {
+              btnEl.disabled = false;
+            });
+          }
+        },
+        {
           privileges: 'REPORTS:MANAGE',
           template: actionsTemplate,
           afterRender: function($pageAction)
