@@ -42,13 +42,28 @@ define([
     {
       var attrs = this.attributes;
       var query = [];
+      var values = attrs.hoursInShift == null ? 0 : 1;
 
-      query.push('days=' + _.map(attrs.daysInMonth, function(v, k) { return k + '=' + v; }));
-      query.push('shifts=' + _.map(attrs.shiftsInDay, function(v, k) { return k + '=' + v; }));
+      query.push('days=' + _.map(attrs.daysInMonth, function(v, k) { values++; return k + '=' + v; }));
+      query.push('shifts=' + _.map(attrs.shiftsInDay, function(v, k) { values++; return k + '=' + v; }));
       query.push('hours=' + (attrs.hoursInShift == null ? '' : attrs.hoursInShift));
-      query.push('lines=' + _.map(attrs.customLines, function(v, k) { return k + '=' + v; }));
+      query.push('lines=' + _.map(attrs.customLines, function(v, k) { values++; return k + '=' + v; }));
 
-      return query.join('&');
+      return values > 0 ? query.join('&') : '';
+    },
+
+    clearOptions: function()
+    {
+      this.set({
+        daysInMonth: {},
+        shiftsInDay: {},
+        hoursInShift: null,
+        customLines: {}
+      }, {silent: true});
+
+      this.recountCags();
+
+      this.trigger('clearOptions');
     },
 
     parse: function(report)

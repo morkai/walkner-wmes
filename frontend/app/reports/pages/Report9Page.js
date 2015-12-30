@@ -58,20 +58,36 @@ define([
 
     actions: function()
     {
-      return !user.isAllowedTo('REPORTS:MANAGE') ? [] : [{
-        template: actionsTemplate,
-        afterRender: function($pageAction)
+      var page = this;
+
+      return [
         {
-          $pageAction.find('a').last().on('click', function()
+          label: t.bound('reports', '9:actions:clearOptions'),
+          icon: 'eraser',
+          callback: function()
           {
-            document.body.focus();
+            localStorage.PLU_QUERY = '';
 
-            viewport.showDialog(new PlanUploadView(), t('reports', '9:planUpload:title'));
+            page.report.clearOptions();
+            page.updateQuery();
+          }
+        },
+        {
+          privileges: 'REPORTS:MANAGE',
+          template: actionsTemplate,
+          afterRender: function($pageAction)
+          {
+            $pageAction.find('a').last().on('click', function()
+            {
+              document.body.focus();
 
-            return false;
-          });
+              viewport.showDialog(new PlanUploadView(), t('reports', '9:planUpload:title'));
+
+              return false;
+            });
+          }
         }
-      }];
+      ];
     },
 
     initialize: function()

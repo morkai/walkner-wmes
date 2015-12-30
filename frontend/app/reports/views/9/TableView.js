@@ -84,6 +84,7 @@ define([
 
       this.listenTo(this.model, 'change:customLines', this.onCustomLinesChange);
       this.listenTo(this.model, 'change:daysInMonth change:shiftsInDay change:hoursInShift', this.onOptionsChange);
+      this.listenTo(this.model, 'clearOptions', this.onOptionsClear);
 
       $(window)
         .on('resize.' + this.idPrefix, this.onResize.bind(this))
@@ -379,6 +380,30 @@ define([
         .select();
     },
 
+    renderSummaryAndMonths: function()
+    {
+      var model = this.model;
+      var months = model.get('months');
+      var summaryRows = '';
+      var monthsRows = '';
+
+      _.forEach(model.get('cags'), function(cag, cagIndex)
+      {
+        summaryRows += summaryTrTemplate({
+          cagI: cagIndex,
+          cag: cag
+        });
+        monthsRows += monthsTrTemplate({
+          months: months,
+          cagI: cagIndex,
+          cag: cag
+        });
+      });
+
+      this.$id('summaryRows').prop('innerHTML', summaryRows);
+      this.$id('monthsRows').prop('innerHTML', monthsRows);
+    },
+
     onCustomLinesChange: function(e)
     {
       var cagIndex = e.cagIndex;
@@ -401,26 +426,7 @@ define([
 
     onOptionsChange: function(e)
     {
-      var model = this.model;
-      var months = model.get('months');
-      var summaryRows = '';
-      var monthsRows = '';
-
-      _.forEach(model.get('cags'), function(cag, cagIndex)
-      {
-        summaryRows += summaryTrTemplate({
-          cagI: cagIndex,
-          cag: cag
-        });
-        monthsRows += monthsTrTemplate({
-          months: months,
-          cagI: cagIndex,
-          cag: cag
-        });
-      });
-
-      this.$id('summaryRows').prop('innerHTML', summaryRows);
-      this.$id('monthsRows').prop('innerHTML', monthsRows);
+      this.renderSummaryAndMonths();
 
       var $editable = this.$('.reports-9-table-options').find('.reports-9-editable[data-editor="' + e.option + '"]');
       var displayValue = e.displayValue.toLocaleString();
@@ -451,6 +457,21 @@ define([
           .find('.reports-9-editable-value')
           .text(displayValue);
       }
+
+      this.setUpStickyHeaders();
+    },
+
+    onOptionsClear: function()
+    {
+      this.renderSummaryAndMonths();
+
+      var defaults = this.model.constructor.DEFAULTS;
+
+      this.$('.reports-9-custom').each(function()
+      {
+        this.classList.remove('reports-9-custom');
+        this.children[0].textContent = defaults[this.dataset.editor].toLocaleString();
+      });
 
       this.setUpStickyHeaders();
     }

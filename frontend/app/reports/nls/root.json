@@ -551,6 +551,7 @@
     "settings:lean:efficiencyFormulaHelp": "Available variables:",
 
     "9:breadcrumbs:base": "Planned line utilization",
+    "9:actions:clearOptions": "Restore default values",
     "9:actions:dictionaries": "Dictionaries",
     "9:actions:cags": "CAG",
     "9:actions:groups": "CAG groups",

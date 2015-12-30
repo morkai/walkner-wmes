@@ -556,6 +556,7 @@
   "settings:lean:efficiencyFormulaHelp": "Dostępne zmienne:",
 
   "9:breadcrumbs:base": "Planowane obciążenie linii",
+  "9:actions:clearOptions": "Przywróć domyślne wartości",
   "9:actions:dictionaries": "Słowniki",
   "9:actions:cags": "CAG",
   "9:actions:groups": "Grupy CAG",
