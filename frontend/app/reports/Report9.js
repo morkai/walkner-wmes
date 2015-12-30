@@ -38,6 +38,19 @@ define([
       };
     },
 
+    serializeQuery: function()
+    {
+      var attrs = this.attributes;
+      var query = [];
+
+      query.push('days=' + _.map(attrs.daysInMonth, function(v, k) { return k + '=' + v; }));
+      query.push('shifts=' + _.map(attrs.shiftsInDay, function(v, k) { return k + '=' + v; }));
+      query.push('hours=' + (attrs.hoursInShift == null ? '' : attrs.hoursInShift));
+      query.push('lines=' + _.map(attrs.customLines, function(v, k) { return k + '=' + v; }));
+
+      return query.join('&');
+    },
+
     parse: function(report)
     {
       report.groups[null] = {
@@ -290,6 +303,11 @@ define([
 
       this.recountCag(cag);
 
+      this.trigger('change:option', {
+        option: 'customLines',
+        cagIndex: cagIndex,
+        monthIndex: monthIndex
+      });
       this.trigger('change:customLines', {
         cagIndex: cagIndex,
         monthIndex: monthIndex,
@@ -356,6 +374,11 @@ define([
 
       this.recountCags();
 
+      this.trigger('change:option', {
+        option: option,
+        cagIndex: -1,
+        monthIndex: monthIndex
+      });
       this.trigger('change:' + option, {
         option: option,
         monthIndex: monthIndex,
@@ -376,6 +399,11 @@ define([
 
       attrs.hoursInShift = newValue;
 
+      this.trigger('change:option', {
+        option: 'hoursInShift',
+        cagIndex: -1,
+        monthIndex: -1
+      });
       this.trigger('change:hoursInShift', {
         option: 'hoursInShift',
         monthIndex: -1,
@@ -391,6 +419,49 @@ define([
       daysInMonth: DEFAULT_DAYS_IN_MONTH,
       shiftsInDay: DEFAULT_SHIFTS_IN_DAY,
       hoursInShift: DEFAULT_HOURS_IN_SHIFT
+    },
+
+    fromQuery: function(query)
+    {
+      var attrs = {};
+      var queryStringToObject = function(queryString, obj)
+      {
+        if (!queryString)
+        {
+          return;
+        }
+
+        queryString.split(',').forEach(function(item)
+        {
+          var parts = item.split('=');
+
+          obj[parts[0]] = parseInt(parts[1], 10);
+        });
+      };
+
+      if (query.days)
+      {
+        queryStringToObject(query.days, attrs.daysInMonth = {});
+      }
+
+      if (query.shifts)
+      {
+        queryStringToObject(query.shifts, attrs.shiftsInDay = {});
+      }
+
+      var hoursInShift = parseFloat(query.hours);
+
+      if (!isNaN(hoursInShift))
+      {
+        attrs.hoursInShift = hoursInShift;
+      }
+
+      if (query.lines)
+      {
+        queryStringToObject(query.lines, attrs.customLines = {});
+      }
+
+      return new this(attrs);
     }
 
   });

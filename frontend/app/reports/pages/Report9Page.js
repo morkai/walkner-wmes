@@ -78,13 +78,14 @@ define([
     {
       this.defineModels();
       this.defineViews();
+      this.defineBindings();
 
       this.setView('#' + this.idPrefix + '-table', this.tableView);
     },
 
     defineModels: function()
     {
-      this.report = bindLoadingMessage(new Report(), this);
+      this.report = bindLoadingMessage(Report.fromQuery(this.resolveQuery()), this);
     },
 
     defineViews: function()
@@ -92,9 +93,67 @@ define([
       this.tableView = new TableView({model: this.report});
     },
 
+    defineBindings: function()
+    {
+      this.listenTo(this.report, 'change:option', this.updateQuery);
+    },
+
     load: function(when)
     {
       return when(this.report.fetch());
+    },
+
+    resolveQuery: function()
+    {
+      var queryString = '';
+      var query = {};
+
+      if (this.options.queryString)
+      {
+        try
+        {
+          queryString = atob(this.options.queryString);
+        }
+        catch (err) {}
+      }
+
+      if (!queryString)
+      {
+        queryString = localStorage.PLU_QUERY || '';
+      }
+
+      if (!queryString)
+      {
+        return query;
+      }
+
+      queryString.split('&').forEach(function(part)
+      {
+        var eqIndex = part.indexOf('=');
+
+        if (eqIndex !== -1)
+        {
+          var k = part.substring(0, eqIndex);
+          var v = part.substring(eqIndex + 1);
+
+          query[k] = v;
+        }
+      });
+
+      return query;
+    },
+
+    updateQuery: function()
+    {
+      var query = this.report.serializeQuery();
+
+      this.broker.publish('router.navigate', {
+        url: this.report.url() + '?' + btoa(query),
+        trigger: false,
+        replace: true
+      });
+
+      localStorage.PLU_QUERY = query;
     }
 
   });

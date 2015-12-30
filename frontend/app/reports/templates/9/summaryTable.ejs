@@ -6,20 +6,20 @@
       <table>
         <tr>
           <td class="reports-9-table-options-name"><%- t('reports', '9:summary:daysInMonth') %></td>
-          <td class="reports-9-table-options-value reports-9-editable" data-editor="daysInMonth">
-            <span class="reports-9-editable-value">20</span>
+          <td class="reports-9-table-options-value reports-9-editable <%- summary.customDaysInMonth ? 'reports-9-custom' : '' %>" data-editor="daysInMonth">
+            <span class="reports-9-editable-value"><%- summary.daysInMonth.toLocaleString() %></span>
           </td>
         </tr>
         <tr>
           <td class="reports-9-table-options-name"><%- t('reports', '9:summary:shiftsInDay') %></td>
-          <td class="reports-9-table-options-value reports-9-editable" data-editor="shiftsInDay">
-            <span class="reports-9-editable-value">3</span>
+          <td class="reports-9-table-options-value reports-9-editable <%- summary.customShiftsInDay ? 'reports-9-custom' : '' %>" data-editor="shiftsInDay">
+            <span class="reports-9-editable-value"><%- summary.shiftsInDay.toLocaleString() %></span>
           </td>
         </tr>
         <tr>
           <td class="reports-9-table-options-name"><%- t('reports', '9:summary:hoursInShift') %></td>
-          <td class="reports-9-table-options-value reports-9-editable" data-editor="hoursInShift">
-            <span class="reports-9-editable-value">7,5</span>
+          <td class="reports-9-table-options-value reports-9-editable <%- summary.customHoursInShift ? 'reports-9-custom' : '' %>" data-editor="hoursInShift">
+            <span class="reports-9-editable-value"><%- summary.hoursInShift.toLocaleString() %></span>
           </td>
         </tr>
       </table>

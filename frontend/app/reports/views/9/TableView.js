@@ -98,12 +98,24 @@ define([
     serialize: function()
     {
       var model = this.model;
+      var defaults = model.constructor.DEFAULTS;
+      var daysInMonth = model.get('daysInMonth');
+      var shiftsInDay = model.get('shiftsInDay');
+      var hoursInShift = model.get('hoursInShift');
 
       return {
         idPrefix: this.idPrefix,
         cags: model.get('cags'),
         lines: model.get('lines'),
-        months: model.get('months')
+        months: model.get('months'),
+        summary: {
+          daysInMonth: daysInMonth.summary == null ? defaults.daysInMonth : daysInMonth.summary,
+          customDaysInMonth: daysInMonth.summary != null,
+          shiftsInDay: shiftsInDay.summary == null ? defaults.shiftsInDay : shiftsInDay.summary,
+          customShiftsInDay: shiftsInDay.summary != null,
+          hoursInShift: hoursInShift == null ? defaults.hoursInShift : hoursInShift,
+          customHoursInShift: hoursInShift != null
+        }
       };
     },
 
