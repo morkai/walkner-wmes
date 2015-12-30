@@ -27,7 +27,7 @@ module.exports = function setupCagPlanModel(app, mongoose)
     id: false
   });
 
-  cagPlanSchema.index({'_id.month': -1}, {unique: true});
+  cagPlanSchema.index({'_id.month': -1});
 
   mongoose.model('CagPlan', cagPlanSchema);
 };
