@@ -25,9 +25,7 @@ module.exports = function(mongoose, options, done)
     options: options,
     months: _.map(new Array(MONTHS_FUTURE), function(unused, i)
     {
-// TODO
-return moment().startOf('month').subtract(2, 'months').add(i, 'months').valueOf();
-      // return moment().startOf('month').add(i, 'months').valueOf();
+      return moment().startOf('month').add(i, 'months').valueOf();
     }),
     cags: {},
     groups: {},
@@ -39,8 +37,7 @@ return moment().startOf('month').subtract(2, 'months').add(i, 'months').valueOf(
     function findCagModelsStep()
     {
       var currentMonth = moment().startOf('month');
-// TODO
-currentMonth.subtract(2, 'months');
+
       var conditions = {
         '_id.month': {
           $gte: currentMonth.clone().toDate(),
