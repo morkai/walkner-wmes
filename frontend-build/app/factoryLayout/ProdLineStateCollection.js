@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["underscore","../core/Collection","../data/orgUnits","./ProdLineState"],function(e,t,n,r){"use strict";return t.extend({model:r,parse:function(e){for(var t=[],n=0,i=e.prodLineStates.length;i>n;++n)t.push(r.parse(e.prodLineStates[n]));return t},getByOrgUnit:function(t,r,i){("prodLine"===t||"function"!=typeof i)&&(i=function(){return!1});var o={},d=this;return"prodLine"===t?r.forEach(function(e){var t=d.get(e);!t||i("prodLine",e)||n.getByTypeAndId("prodLine",e).get("deactivatedAt")||(o[e]=t)}):r.forEach(function(e){var r=n.getByTypeAndId(t,e);d.forEachProdLine(r,i,!1,function(e){var t=d.get(e.id);!t||i("prodLine",e.id)||n.getByTypeAndId("prodLine",e.id).get("deactivatedAt")||(o[e.id]=t)})}),e.values(o)},forEachProdLine:function(e,t,r,i){var o=n.getType(e);if(!(r&&t(o,e.id)||e.get("deactivatedAt"))){var d=n.getChildren(e),a=0,c=d.length;if("workCenter"===o)for(;c>a;++a)i(d[a]);else for(;c>a;++a)this.forEachProdLine(d[a],t,!0,i)}}})});

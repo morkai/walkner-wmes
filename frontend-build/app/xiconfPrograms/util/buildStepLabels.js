@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/time"],function(e,n){"use strict";return function(t,a){return t.map(function(t,i){if(t.enabled===!1)return null;var r=t.type;"wait"===t.type?r="auto"===t.kind?n.toString(t.duration):"W8":e.has("xiconfPrograms","step:"+t.type+":label")&&(r=e("xiconfPrograms","step:"+t.type+":label"));var s="label label-info xiconfPrograms-label xiconfPrograms-label-"+t.type+" ";return a&&a[i]&&(s+="success"===a[i].status?"is-success":"failure"===a[i].status?"is-failure":"is-idle"),'<span class="'+s+'">'+r+"</span>"}).filter(function(e){return null!==e}).join(" ")}});

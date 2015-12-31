@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","../util/bindLoadingMessage","../util/pageActions","../View","../views/DetailsView","./createPageBreadcrumbs"],function(e,i,t,s,n,o){"use strict";return s.extend({layoutName:"page",pageId:"details",modelProperty:"model",baseBreadcrumb:!1,breadcrumbs:function(){var i=this[this.modelProperty];return o(this,[i.getLabel()||e.bound(i.getNlsDomain(),"BREADCRUMBS:details")])},actions:function(){var e=this[this.modelProperty];return[t.edit(e,e.privilegePrefix+":MANAGE"),t["delete"](e,e.privilegePrefix+":MANAGE")]},initialize:function(){this.defineModels(),this.defineViews()},defineModels:function(){this[this.modelProperty]=i(this.options.model,this)},defineViews:function(){var e=this.DetailsView||n,i={model:this[this.modelProperty]};"function"==typeof this.detailsTemplate&&(i.template=this.detailsTemplate),"function"==typeof this.serializeDetails&&(i.serializeDetails=this.serializeDetails),this.view=new e(i)},load:function(e){return e(this[this.modelProperty].fetch(this.fetchOptions))}})});

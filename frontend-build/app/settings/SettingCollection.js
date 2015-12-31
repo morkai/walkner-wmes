@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["jquery","../core/Collection","./Setting"],function(e,t,i){"use strict";return t.extend({model:i,rqlQuery:"select(value)",matchSettingId:null,topicSuffix:"**",initialize:function(e,t){t.pubsub&&this.setUpPubsub(t.pubsub)},setUpPubsub:function(e){var t=this;e.subscribe("settings.updated."+this.topicSuffix,function(e){var i=t.get(e._id);i?i.set(e):t.add(e)})},fetchIfEmpty:function(t,i){if(!this.isEmpty())return t?t.call(i):null;var r=e.Deferred(),n=this.fetch({reset:!0});return t?(n.done(function(){var n=[].concat(t.call(i));e.when.apply(e,n).then(function(){r.resolve()},function(){r.reject()})}),r.promise()):n},update:function(t,i){if(i=this.prepareValue(t,"string"==typeof i?i.trim():i),void 0===i)return e.Deferred().reject().promise();var r=this.get(t);if(r){if(r.getValue()===i)return e.Deferred().resolve().promise()}else this.add({_id:t,value:null}),r=this.get(t);return r.save({value:i})},prepareValue:function(e,t){return t}})});

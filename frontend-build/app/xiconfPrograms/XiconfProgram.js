@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../i18n","../time","../core/Model"],function(e,r,t){"use strict";return t.extend({urlRoot:"/xiconf/programs",clientUrlRoot:"#xiconf/programs",privilegePrefix:"XICONF",topicPrefix:"xiconfPrograms",nlsDomain:"xiconfPrograms",labelAttribute:"name",defaults:function(){return{type:"t24vdc",name:"",prodLines:"",steps:[]}},serialize:function(){var t=this.toJSON();return t.prodLines=t.prodLines||e("xiconfPrograms","PROPERTY:prodLines:all"),t.programType=e("xiconfPrograms","type:"+t.type),t.createdAt=r.format(t.createdAt,"LLLL"),t.updatedAt=r.format(t.updatedAt,"LLLL"),t}},{TYPES_TO_STEPS:{t24vdc:["wait","pe","sol","fn"],glp2:["wait","pe","iso","program","fn","vis"]},GLP2_INPUTS:[1,2,3,4,5,6,7,8,15,16,17,18,19,20,21,22,23,24,25,26,27]})});

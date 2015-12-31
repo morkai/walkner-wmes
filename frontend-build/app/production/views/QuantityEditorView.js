@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/viewport","app/core/View","app/production/templates/quantityEditor"],function(t,i,n){"use strict";return i.extend({template:n,events:{submit:function(t){t.preventDefault();var i=parseInt(this.$id("quantity").val(),10);(isNaN(i)||i===this.options.currentQuantity||0>i)&&(i=null),this.trigger("quantityChanged",i)}},serialize:function(){return{idPrefix:this.idPrefix,from:this.options.from,to:this.options.to,currentQuantity:this.options.currentQuantity,maxQuantity:this.options.maxQuantity}},afterRender:function(){this.$id("quantity").select()},onDialogShown:function(){this.$id("quantity").select()}})});

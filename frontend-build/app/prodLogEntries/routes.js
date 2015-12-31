@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../router","../viewport","../user","./pages/ProdLogEntryListPage","i18n!app/nls/prodLogEntries"],function(r,e,n,o){"use strict";var t=n.auth("LOCAL","PROD_DATA:VIEW");r.map("/prodLogEntries",t,function(r){e.showPage(new o({rql:r.rql}))})});
+define(["../router","../viewport","../user"],function(r,n,e){"use strict";var o=e.auth("LOCAL","PROD_DATA:VIEW");r.map("/prodLogEntries",o,function(r){n.loadPage(["app/prodLogEntries/pages/ProdLogEntryListPage","i18n!app/nls/prodLogEntries"],function(n){return new n({rql:r.rql})})})});

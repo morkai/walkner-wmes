@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/user","app/time","app/data/views/renderOrgUnitPath","app/core/views/ListView"],function(t,e,i,a){"use strict";function n(t){return"-"===t.deactivatedAt?"":'class="is-deleted"'}return a.extend({deactivatedVisible:!1,columns:["orgUnitPath",{id:"_id",className:"is-min"},{id:"description",tdAttrs:n},{id:"deactivatedAt",className:"is-min"}],serializeActions:function(){var e=this.collection,i=e.getNlsDomain();return function(n){var d=e.get(n._id),s=!d.get("deactivatedAt")||t.data["super"],r=[];return r.push(a.actions.viewDetails(d,i)),s&&t.isAllowedTo(d.getPrivilegePrefix()+":MANAGE")&&r.push(a.actions.edit(d,i),a.actions["delete"](d,i)),r}},serializeRows:function(){var t=this.deactivatedVisible;return this.collection.filter(function(e){return t||!e.get("deactivatedAt")}).map(function(t){var a=t.toJSON();return a.orgUnitPath=i(t,!0),a.deactivatedAt=a.deactivatedAt?e.format(a.deactivatedAt,"LL"):"-",a})},toggleDeactivated:function(t){this.deactivatedVisible=t,this.render()}})});

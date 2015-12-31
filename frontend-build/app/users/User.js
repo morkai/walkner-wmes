@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../data/loadedModules","../core/Model","./util/decorateUser"],function(e,l,t){"use strict";return l.extend({urlRoot:"/users",clientUrlRoot:"#users",topicPrefix:"users",privilegePrefix:"USERS",nlsDomain:"users",labelAttribute:"login",defaults:{login:null,email:null,prodFunction:null,privileges:null,aors:null,company:null,kdDivision:null,personellId:null,card:null,firstName:null,lastName:null,registerDate:null,kdPosition:null,active:!0,vendor:null,gender:null},initialize:function(){Array.isArray(this.get("privileges"))||this.set("privileges",[]),Array.isArray(this.get("aors"))||this.set("aors",[])},getLabel:function(){var e=this.get("lastName")||"",l=this.get("firstName")||"";return e.length&&l.length?e+" "+l:this.get("login")},url:function(){var t=l.prototype.url.apply(this,arguments);return this.isNew()||!e.isLoaded("vendors")?t:t+"?populate(vendor)"},serialize:function(){return t(this)}})});

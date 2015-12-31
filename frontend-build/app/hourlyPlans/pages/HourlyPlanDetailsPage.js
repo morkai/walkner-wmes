@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/user","app/core/util/bindLoadingMessage","app/core/util/pageActions","app/core/View","../HourlyPlan","../views/HourlyPlanDetailsView"],function(e,i,t,n,l,o,s){"use strict";return l.extend({layoutName:"page",pageId:"hourlyPlanDetails",breadcrumbs:function(){return[{label:e.bound("hourlyPlans","BREADCRUMBS:browse"),href:this.model.genClientUrl("base")},this.model.getLabel()]},actions:function(){var t=[{label:e.bound("hourlyPlans","PAGE_ACTION:print"),icon:"print",href:this.model.genClientUrl("print")}];return this.model.isEditable(i)&&t.push(n.edit(this.model),n["delete"](this.model)),t},initialize:function(){this.model=t(new o({_id:this.options.modelId}),this),this.view=new s({model:this.model})},load:function(e){return e(this.model.fetch())}})});

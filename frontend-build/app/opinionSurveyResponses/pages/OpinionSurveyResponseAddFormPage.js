@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/pages/AddFormPage","app/core/util/bindLoadingMessage","app/opinionSurveys/dictionaries","app/opinionSurveys/OpinionSurveyCollection","app/opinionSurveyOmrResults/OpinionSurveyOmrResultCollection","../views/OpinionSurveyResponseFormView"],function(e,s,t,o,i,n){"use strict";return e.extend({baseBreadcrumb:!0,FormView:n,defineModels:function(){e.prototype.defineModels.apply(this,arguments),this.model.omrResults=this.options.fix?s(new i(null,{rqlQuery:"select(pageNumber)&sort(pageNumber)&response="+this.options.fix}),this):null,this.model.surveys=s(new o(null,{rqlQuery:"sort(-startDate)"}),this),this.listenToOnce(this.model.surveys,"reset",function(){this.model.surveys.buildCacheMaps()})},load:function(e){return e(this.model.omrResults?this.model.omrResults.fetch({reset:!0}):null,this.model.surveys.fetch({reset:!0}),t.load())},destroy:function(){e.prototype.destroy.call(this),t.unload()},afterRender:function(){e.prototype.afterRender.call(this),t.load()}})});

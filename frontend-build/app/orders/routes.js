@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../router","../viewport","../user","./pages/OrderListPage","./pages/OrderDetailsPage","i18n!app/nls/orders"],function(e,r,a,n,s){"use strict";var t=a.auth("ORDERS:VIEW"),i=a.auth("ORDERS:MANAGE");e.map("/orders",t,function(e){r.showPage(new n({rql:e.rql}))}),e.map("/orders/:id",function(e){r.showPage(new s({modelId:e.params.id}))}),e.map("/orders;settings",i,function(e){r.loadPage("app/orders/pages/OrderSettingsPage",function(r){return new r({initialTab:e.query.tab})})})});
+define(["../router","../viewport","../user"],function(e,r,a){"use strict";var n="i18n!app/nls/orders",t=a.auth("ORDERS:VIEW"),i=a.auth("ORDERS:MANAGE");e.map("/orders",t,function(e){r.loadPage(["app/orders/pages/OrderListPage",n],function(r){return new r({rql:e.rql})})}),e.map("/orders/:id",function(e){r.loadPage(["app/orders/pages/OrderDetailsPage",n],function(r){return new r({modelId:e.params.id})})}),e.map("/orders;settings",i,function(e){r.loadPage(["app/orders/pages/OrderSettingsPage",n],function(r){return new r({initialTab:e.query.tab})})})});

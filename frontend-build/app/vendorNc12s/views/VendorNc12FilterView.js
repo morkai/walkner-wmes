@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/user","app/core/views/FilterView","app/vendors/util/setUpVendorSelect2","app/vendorNc12s/templates/filter"],function(e,r,n,t){"use strict";return r.extend({template:t,defaultFormData:{vendor:"",nc12:""},termToForm:{nc12:function(e,r,n){"regex"===r.name?n.nc12=r.args[1].replace("^",""):"eq"===r.name&&(n.nc12=r.args[1])},vendor:function(e,r,n){n.vendor=r.args[1]}},serializeFormToQuery:function(e){var r=this.$id("vendor").val(),n=this.$id("nc12").val().trim().replace(/[^0-9]/g,"");r&&e.push({name:"eq",args:["vendor",r]}),12===n.length?e.push({name:"eq",args:["nc12",n]}):n.length&&e.push({name:"regex",args:["nc12","^"+n]})},afterRender:function(){if(r.prototype.afterRender.call(this),!e.data.vendor){var t=this.$id("vendor").val();t&&(t={id:t,text:t}),n(this.$id("vendor"),{width:250}).select2("data",t)}}})});

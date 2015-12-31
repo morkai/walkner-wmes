@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["underscore","jquery","../settings/SettingCollection","./OrderSetting"],function(e,t,r,n){"use strict";return r.extend({model:n,topicSuffix:"orders.**",getValue:function(e){var t=this.get("orders."+e);return t?t.getValue():null},prepareValue:function(e,t){return/documents.(path|remoteServer)$/.test(e)?t:/documents.extra$/.test(e)?this.prepareExtraDocumentsValue(t):void 0},prepareExtraDocumentsValue:function(t){var r={},n="";t.split("\n").forEach(function(e){if(e=e.trim(),e.length){var t=e.match(/^([0-9]{15})\s+(.*?)$/);if(t){if(!r[n])return;r[n][t[1]]=t[2]}else n=e,r[n]={}}});var u=[];return e.forEach(r,function(e,t){var r=Object.keys(e);r.length&&(u.push(t),r.forEach(function(t){u.push(t+" "+e[t])}))}),u.join("\n")}})});

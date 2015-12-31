@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../settings/SettingCollection","./FactoryLayoutSetting"],function(t,e){"use strict";return t.extend({model:e,topicSuffix:"factoryLayout.**",isBlacklisted:function(t,e){var r=this.getValue("blacklist."+t);return Array.isArray(r)&&-1!==r.indexOf(e)},getValue:function(t){var e=this.get("factoryLayout."+t);return e?e.getValue():null},getColor:function(t,e){var r=this.getValue(t+".color")||"#FFFFFF";if(!e)return r;var a=r.match(/^#(.{2})(.{2})(.{2})$/);return a?"rgba("+parseInt(a[1],16)+","+parseInt(a[2],16)+","+parseInt(a[3],16)+","+e+")":r},prepareValue:function(t,e){return/blacklist/.test(t)?this.prepareBlacklistValue(e):/color/i.test(t)?this.prepareColorValue(e):(e=parseInt(e,10),isNaN(e)?void 0:e)},prepareBlacklistValue:function(t){return"string"==typeof t?t=t.split(","):Array.isArray(t)||(t=[]),t.filter(function(t){return"string"==typeof t&&t.length})},prepareColorValue:function(t){return t=t.toLowerCase(),/^#[a-f0-9]{6}$/.test(t)?t:void 0}})});

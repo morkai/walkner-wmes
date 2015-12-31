@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["underscore","../divisions","../subdivisions","../mrpControllers","../workCenters","../prodFlows","../prodLines"],function(t,e,r,o,n,s,i){"use strict";return function(u,l,c){if(!u)return null;var d=[];return(u.constructor!==i.model||(d.unshift(u),u=n.get(u.get("workCenter"))))&&(u.constructor!==n.model||(d.unshift(u),u=u.get("prodFlow")?s.get(u.get("prodFlow")):o.get(u.get("mrpController"))))&&(u.constructor!==s.model||(d.unshift(u),u=o.get((u.get("mrpController")||[])[0])))&&(u.constructor!==o.model||(d.unshift(u),u=r.get(u.get("subdivision"))))&&(u.constructor!==r.model||(d.unshift(u),u=e.get(u.get("division"))))?(u.constructor===e.model&&d.unshift(u),c!==!1&&d.pop(),0===d.length?null:d.map(function(e){var r=t.escape(e.getLabel());return l?'<a href="'+e.genClientUrl()+'">'+r+"</a>":r}).join(" \\ ")):null}});

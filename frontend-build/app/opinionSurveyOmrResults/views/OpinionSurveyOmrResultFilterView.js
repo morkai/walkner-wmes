@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/views/FilterView","app/core/util/idAndLabel","app/opinionSurveys/dictionaries","app/opinionSurveyOmrResults/templates/filter"],function(e,t,r,s){"use strict";return e.extend({template:s,defaultFormData:function(){return{status:"",survey:""}},termToForm:{status:function(e,t,r){r[e]=t.args[1]},survey:"status"},afterRender:function(){e.prototype.afterRender.call(this),this.$id("survey").select2({width:175,allowClear:!0,placeholder:" ",minimumResultsForSearch:-1,data:this.model.opinionSurveys.map(t)})},serializeFormToQuery:function(e){var t=this.$id("status").val(),r=this.$id("survey").val();t.length&&e.push({name:"eq",args:["status",t]}),r.length&&e.push({name:"eq",args:["survey",r]})}})});

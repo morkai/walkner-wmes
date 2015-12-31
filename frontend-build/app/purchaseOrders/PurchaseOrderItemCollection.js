@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../core/Collection","./PurchaseOrderItem"],function(e,t){"use strict";return e.extend({model:t,comparator:"_id",getMinScheduleDate:function(){var e=new Date;e.setUTCHours(0),e.setUTCMinutes(0),e.setUTCSeconds(0),e.setUTCMilliseconds(0),e=e.getTime();for(var t=1/0,r=0,n=this.length;n>r;++r){var s=this.models[r];if(!s.get("completed"))for(var o=s.get("schedule"),a=0,i=o.length;i>a;++a){var l=Date.parse(o[a].date);t>l&&(t=l)}}return t===1/0?null:new Date(t)}})});

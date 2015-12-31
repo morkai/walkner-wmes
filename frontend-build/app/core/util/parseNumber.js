@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define([],function(){"use strict";var t=1.1.toLocaleString().substr(1,1);return function(r,e){var n=String(r).split(t),a="-"===n[0].charAt(0)?-1:1,s=parseInt(n[0].replace(/[^0-9]+/g,""),10),i=n.length>1?parseInt(n[1].replace(/[^0-9]+/g,""),10):0;return s=isNaN(s)?"0":s.toString(),i=isNaN(i)?"0":i.toString(),e||"0"===i?"0"===s?0:parseInt(s,10)*a:parseFloat(s+"."+i.substr(0,3))*a}});

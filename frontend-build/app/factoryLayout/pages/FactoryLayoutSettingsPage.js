@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/core/View","../views/FactoryLayoutSettingsView"],function(t,i,e){"use strict";return i.extend({layoutName:"page",localTopics:{"socket.connected":function(){this.model.load(!0)}},breadcrumbs:function(){return[{label:t.bound("factoryLayout","bc:layout"),href:"#factoryLayout"},t.bound("factoryLayout","bc:settings")]},initialize:function(){this.defineViews()},destroy:function(){this.model.unload(),this.model=null},defineViews:function(){this.view=new e({initialTab:this.options.initialTab,settings:this.model.settings})},load:function(t){return t(this.model.load(!1))},afterRender:function(){this.model.load(!1)}})});

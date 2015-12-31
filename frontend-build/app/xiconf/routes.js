@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../router","../viewport","../user","i18n!app/nls/xiconf"],function(n,e,a){"use strict";var i=a.auth("XICONF:VIEW"),t=a.auth("XICONF:MANAGE");n.map("/xiconf/results",i,function(n){e.loadPage(["app/xiconf/pages/XiconfResultListPage"],function(e){return new e({rql:n.rql})})}),n.map("/xiconf/results/:id",i,function(n){e.loadPage(["app/xiconf/pages/XiconfResultDetailsPage"],function(e){return new e({modelId:n.params.id,tab:n.query.tab})})}),n.map("/xiconf;settings",t,function(n){e.loadPage("app/xiconf/pages/XiconfSettingsPage",function(e){return new e({initialTab:n.query.tab})})})});
+define(["../router","../viewport","../user"],function(n,e,a){"use strict";var i="i18n!app/nls/xiconf",t=a.auth("XICONF:VIEW"),o=a.auth("XICONF:MANAGE");n.map("/xiconf/results",t,function(n){e.loadPage(["app/xiconf/pages/XiconfResultListPage",i],function(e){return new e({rql:n.rql})})}),n.map("/xiconf/results/:id",t,function(n){e.loadPage(["app/xiconf/pages/XiconfResultDetailsPage",i],function(e){return new e({modelId:n.params.id,tab:n.query.tab})})}),n.map("/xiconf;settings",o,function(n){e.loadPage(["app/xiconf/pages/XiconfSettingsPage",i],function(e){return new e({initialTab:n.query.tab})})})});

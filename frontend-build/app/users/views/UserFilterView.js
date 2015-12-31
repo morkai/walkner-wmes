@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/views/FilterView","app/users/templates/filter"],function(e,r){"use strict";return e.extend({template:r,defaultFormData:{personellId:"",login:"",lastName:""},termToForm:{personellId:function(e,r,l){"regex"===r.name&&(l[e]=r.args[1].replace("^",""))},login:"personellId",lastName:"personellId"},serializeFormToQuery:function(e){var r=parseInt(this.$id("personellId").val().trim(),10),l=this.$id("login").val().trim(),a=this.$id("lastName").val().trim();isNaN(r)||e.push({name:"regex",args:["personellId","^"+r,"i"]}),l.length&&e.push({name:"regex",args:["login","^"+l,"i"]}),a.length&&e.push({name:"regex",args:["lastName","^"+a,"i"]})}})});

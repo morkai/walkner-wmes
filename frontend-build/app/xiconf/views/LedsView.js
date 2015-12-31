@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["jquery","app/i18n","app/core/View","app/xiconf/templates/leds","app/xiconf/templates/led"],function(e,s,i,t,n){"use strict";return i.extend({template:t,initialize:function(){this.listenTo(this.model,"change:leds",this.render),this.listenTo(this.model,"change:led",this.renderLed)},serialize:function(){return{idPrefix:this.idPrefix,renderLed:n,leds:(this.model.get("leds")||[]).map(this.serializeLed)}},serializeLed:function(e){var i,t,n="";return"checking"===e.status?(i="warning",t="fa-spinner fa-spin"):"checked"===e.status?(i="success",t="fa-thumbs-up"):"waiting"===e.status?(i="default",t="fa-question-circle"):(i="danger",t="fa-thumbs-down",n=s.has("xiconf","leds:error:"+e.status.message)?s("xiconf","leds:error:"+e.status.message,e.status):e.status.message),{className:i,statusIcon:t,serialNumber:e.serialNumber||"????????",name:e.name,nc12:e.nc12,error:n}},renderLed:function(s,i){this.$id("list").children().eq(s).replaceWith(e(n(this.serializeLed(i))))}})});

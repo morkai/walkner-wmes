@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/util/bindLoadingMessage","app/core/pages/DetailsPage","../MechOrder","app/orders/views/OperationListView","app/mechOrders/views/MechOrderDetailsView","app/mechOrders/templates/detailsPage"],function(e,i,t,s,a,r){"use strict";return i.extend({template:r,pageId:"mechOrderDetails",actions:[],initialize:function(){this.model=e(new t({_id:this.options.modelId}),this),this.detailsView=new a({model:this.model}),this.operationsView=new s({model:this.model}),this.setView(".mechOrders-details-container",this.detailsView),this.setView(".mechOrders-operations-container",this.operationsView)},load:function(e){return e(this.model.fetch())}})});

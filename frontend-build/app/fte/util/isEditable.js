@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/util/getShiftEndDate","app/data/subdivisions"],function(i,e){"use strict";return function(t,r){if(r.isAllowedTo("PROD_DATA:MANAGE"))return"yes";if(!r.isAllowedTo(t.getPrivilegePrefix()+":MANAGE"))return"no";var n=Date.parse(t.get("createdAt")),o=Date.now(),s="yes";if(o>=n+288e5&&o>=i(t.get("date")).getTime()){if(!r.isAllowedTo("PROD_DATA:CHANGES:REQUEST")||t.isWithFunctions&&!t.isWithFunctions())return"no";s="request"}var u=r.getDivision();if(!u||r.isAllowedTo(t.getPrivilegePrefix()+":ALL"))return s;var d=e.get(t.get("subdivision"));if(!d)return"no";var a=d.get("division");if(!a||u.id!==a)return"no";var A=r.getSubdivision();return A?A.id===d.id?s:"no":s}});

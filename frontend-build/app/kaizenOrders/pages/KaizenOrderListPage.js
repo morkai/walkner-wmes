@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/core/pages/FilteredListPage","app/core/util/pageActions","../dictionaries","../views/KaizenOrderFilterView","../views/KaizenOrderListView"],function(e,t,i,n,r,o){"use strict";return t.extend({baseBreadcrumb:!0,FilterView:r,ListView:o,actions:function(t){var n=this.collection;return[i.jump(this,n),i["export"](t,this,this.collection,!1),{label:e.bound(n.getNlsDomain(),"PAGE_ACTION:add"),icon:"plus",href:n.genClientUrl("add")}]},load:function(e){return e(this.collection.fetch({reset:!0}),n.load())},destroy:function(){t.prototype.destroy.call(this),n.unload()},afterRender:function(){t.prototype.afterRender.call(this),n.load()}})});

@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["underscore","app/core/views/FormView","app/core/templates/colorPicker","app/aors/templates/form","bootstrap-colorpicker"],function(e,r,o,t){"use strict";return r.extend({template:t,events:e.extend({},r.prototype.events,{"change [name=color]":"updateColorPicker","change [name=refColor]":"updateColorPicker"}),destroy:function(){r.prototype.destroy.call(this),this.$(".colorpicker-component").colorpicker("destroy")},serialize:function(){return e.extend(r.prototype.serialize.call(this),{renderColorPicker:o})},afterRender:function(){r.prototype.afterRender.call(this),this.$id("color").parent().colorpicker(),this.$id("refColor").parent().colorpicker()},serializeForm:function(e){var r=parseFloat(e.refValue);return e.refValue=isNaN(r)?0:r,e},updateColorPicker:function(e){e.originalEvent&&this.$(e.target).closest(".colorpicker-component").colorpicker("setValue",e.target.value)}})});

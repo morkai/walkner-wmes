@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/time","../core/Model"],function(t,e){"use strict";return e.extend({urlRoot:"/emptyOrders",clientUrlRoot:"#emptyOrders",topicPrefix:"emptyOrders",privilegePrefix:"ORDERS",nlsDomain:"emptyOrders",labelAttribute:"_id",defaults:{nc12:null,mrp:null,startDate:null,finishDate:null,statuses:null,createdAt:null},toJSON:function(r){r||(r={});var a=e.prototype.toJSON.call(this);return a.startDate&&(a.startDateText=t.format(a.startDate,r.startFinishDateFormat||"LL")),a.finishDate&&(a.finishDateText=t.format(a.finishDate,r.startFinishDateFormat||"LL")),a.createdAt&&(a.createdAtText=t.format(a.createdAt,"LLLL")),a}})});

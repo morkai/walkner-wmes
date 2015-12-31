@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["underscore","app/time","app/data/mrpControllers","app/data/views/renderOrgUnitPath"],function(e,t,r,n){"use strict";return function(a,i){var l=a.toJSON();return l.deactivatedAt=l.deactivatedAt?t.format(l.deactivatedAt,"LL"):"-",l.subdivision=n(a.getSubdivision(),!0,!1),l.mrpControllers=(l.mrpController||[]).map(function(t){var n=r.get(t);return n?i?'<a href="'+n.genClientUrl()+'">'+e.escape(n.getLabel())+"</a>":{href:n.genClientUrl(),label:n.getLabel()}:null}).filter(function(e){return!!e}),i&&(l.mrpControllers=l.mrpControllers.join("; ")),l}});

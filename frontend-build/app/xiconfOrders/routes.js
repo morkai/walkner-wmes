@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../router","../viewport","../user","i18n!app/nls/xiconf","i18n!app/nls/xiconfOrders"],function(n,r,e){"use strict";var i=e.auth("XICONF:VIEW");n.map("/xiconf/orders",i,function(n){r.loadPage(["app/xiconfOrders/XiconfOrderCollection","app/xiconfOrders/pages/XiconfOrderListPage"],function(r,e){return new e({collection:new r(null,{rqlQuery:n.rql})})})}),n.map("/xiconf/orders/:id",i,function(n){r.loadPage(["app/xiconfOrders/XiconfOrder","app/xiconfOrders/pages/XiconfOrderDetailsPage"],function(r,e){return new e({model:new r({_id:n.params.id})})})})});
+define(["../router","../viewport","../user"],function(r,e,n){"use strict";var i="i18n!app/nls/xiconfOrders",o=n.auth("XICONF:VIEW");r.map("/xiconf/orders",o,function(r){e.loadPage(["app/xiconfOrders/XiconfOrderCollection","app/xiconfOrders/pages/XiconfOrderListPage",i],function(e,n){return new n({collection:new e(null,{rqlQuery:r.rql})})})}),r.map("/xiconf/orders/:id",o,function(r){e.loadPage(["app/xiconfOrders/XiconfOrder","app/xiconfOrders/pages/XiconfOrderDetailsPage","i18n!app/nls/orders",i],function(e,n){return new n({model:new e({_id:r.params.id})})})})});

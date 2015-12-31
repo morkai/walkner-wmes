@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["jquery","app/i18n","app/core/View","../views/StructureVisView"],function(e,t,i,n){"use strict";return i.extend({layoutName:"page",breadcrumbs:[t.bound("vis","BREADCRUMBS:structure")],actions:function(){var e=this;return[{label:t.bound("vis","PAGE_ACTION:toggleDeactivated"),icon:"toggle-on",className:"active",callback:function(){var t=this.querySelector(".btn");return t.classList.contains("active")?e.view.showDeactivated():e.view.hideDeactivated(),t.classList.toggle("active"),!1}}]},initialize:function(){this.view=new n},destroy:function(){document.body.classList.remove("no-overflow")},afterRender:function(){document.body.classList.add("no-overflow")},load:function(t){if("undefined"!=typeof window.d3)return t();var i=e.Deferred();return require(["d3"],function(){i.resolve()}),t(i)}})});

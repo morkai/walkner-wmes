@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/user","app/core/views/ListView"],function(i,e){"use strict";return e.extend({className:"is-clickable",localTopics:{"companies.synced":"render"},columns:[{id:"rid",className:"is-min"},{id:"type",className:"is-min"},{id:"divisions",className:"is-min"},{id:"date",className:"is-min"},{id:"shift",className:"is-min"},{id:"master",className:"is-min"},"operator"],serializeActions:function(){function s(e){return t?!0:i.isAllowedTo("PRESS_WORKSHEETS:MANAGE")&&i.data._id===e.get("creator").id&&Date.parse(e.get("createdAt"))+n>c}var a=this.collection,t=i.isAllowedTo("PROD_DATA:MANAGE"),n=288e5,c=Date.now();return function(i){var t=a.get(i._id),n=[e.actions.viewDetails(t)];return s(t)&&(n.push(e.actions.edit(t)),n.push(e.actions["delete"](t))),n}}})});

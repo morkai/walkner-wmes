@@ -1,5 +1,3 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../router","../viewport","../user","./pages/MechOrderListPage","./pages/MechOrderDetailsPage","i18n!app/nls/mechOrders"],function(e,r,a,s,i){"use strict";var n=a.auth("ORDERS:VIEW");e.map("/mechOrders",n,function(e){r.showPage(new s({rql:e.rql}))}),e.map("/mechOrders/:id",n,function(e){r.showPage(new i({modelId:e.params.id}))})});
+define(["../router","../viewport","../user"],function(e,r,a){"use strict";var n="i18n!app/nls/mechOrders",d=a.auth("ORDERS:VIEW");e.map("/mechOrders",d,function(e){r.loadPage(["app/mechOrders/pages/MechOrderListPage",n],function(r){return new r({rql:e.rql})})}),e.map("/mechOrders/:id",d,function(e){r.loadPage(["app/mechOrders/pages/MechOrderDetailsPage",n],function(r){return new r({modelId:e.params.id})})})});
