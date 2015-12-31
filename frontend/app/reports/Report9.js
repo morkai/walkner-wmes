@@ -76,13 +76,18 @@ define([
       };
 
       var months = this.parseMonths(report);
+      var groups = this.parseGroups(report);
 
-      return {
+      var attrs = {
         months: months,
-        groups: this.parseGroups(report),
+        groups: groups,
         cags: this.parseCags(report, months),
         lines: this.parseLines(report)
       };
+
+      this.recountGroupUtilization(groups);
+
+      return attrs;
     },
 
     parseMonths: function(report)
@@ -128,6 +133,9 @@ define([
         }
 
         group.contrast = colorLabel.requiresContrast(group.color);
+        group.plan = [0, 0, 0, 0];
+        group.maxOnLines = [0, 0, 0, 0];
+        group.utilization = [0, 0, 0, 0];
 
         return group;
       });
@@ -212,7 +220,11 @@ define([
       var daysInMonth = attrs.daysInMonth.summary == null ? DEFAULT_DAYS_IN_MONTH : attrs.daysInMonth.summary;
       var shiftsInDay = attrs.shiftsInDay.summary == null ? DEFAULT_SHIFTS_IN_DAY : attrs.shiftsInDay.summary;
 
+      this.resetGroupUtilization();
+
       _.forEach(attrs.cags, function(cag) { this.recountCag(cag, daysInMonth, shiftsInDay, attrs.months); }, this);
+
+      this.recountGroupUtilization();
     },
 
     recountCag: function(cag, daysInMonth, shiftsInDay, months)
@@ -260,10 +272,42 @@ define([
         var maxOnLines = maxOnLine * monthLines;
         var utilization = Math.round(plan / maxOnLines * 100);
 
+        cag.group.plan[i] += plan;
+        cag.group.maxOnLines[i] += maxOnLines;
+
         return isNaN(utilization) || !isFinite(utilization) ? 0 : utilization;
       });
 
       return cag;
+    },
+
+    resetGroupUtilization: function()
+    {
+      _.forEach(this.attributes.groups, function(group)
+      {
+        for (var i = 0; i < 4; ++i)
+        {
+          group.plan[i] = 0;
+          group.maxOnLines[i] = 0;
+          group.utilization[i] = 0;
+        }
+      });
+    },
+
+    recountGroupUtilization: function(groups)
+    {
+      _.forEach(groups || this.attributes.groups, function(group)
+      {
+        _.forEach(group.utilization, function(unused, monthI)
+        {
+          var plan = group.plan[monthI];
+          var maxOnLines = group.maxOnLines[monthI];
+
+          group.utilization[monthI] = maxOnLines === 0 ? 0 : Math.round(plan / maxOnLines * 100);
+        });
+      });
+
+      this.trigger('recountGroupUtilization');
     },
 
     setCustomLines: function(cagIndex, monthIndex, newValue)
@@ -316,7 +360,17 @@ define([
         }
       }
 
+      _.forEach(cag.utilization, function(utilization, monthI)
+      {
+        var plan = cag.plan[monthI];
+        var maxOnLines = utilization === 0 ? 0 : (plan * 100 / utilization);
+
+        cag.group.plan[monthI] -= plan;
+        cag.group.maxOnLines[monthI] -= maxOnLines;
+      });
+
       this.recountCag(cag);
+      this.recountGroupUtilization([cag.group]);
 
       this.trigger('change:option', {
         option: 'customLines',

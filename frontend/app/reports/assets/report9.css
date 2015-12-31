@@ -188,3 +188,7 @@
 .reports-9-table-options-value.reports-9-custom > .reports-9-editable-value {
   box-shadow: none;
 }
+.reports-9-chart {
+  margin-top: 15px;
+  height: 500px;
+}

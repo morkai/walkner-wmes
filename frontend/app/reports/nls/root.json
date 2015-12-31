@@ -582,7 +582,9 @@
     "9:months:shiftsInDay": "shifts/day:",
     "9:months:plan": "Plan",
     "9:months:utilization": "%<br>util.",
-    "9:months:lineCount": "Line<br>count"
+    "9:months:lineCount": "Line<br>count",
+    "9:chart:title": "Line utilization per group [%]",
+    "9:chart:filename": "WMES_PlanLineUtil"
   },
   "pl": true
 }

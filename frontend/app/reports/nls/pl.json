@@ -587,5 +587,7 @@
   "9:months:shiftsInDay": "zmiany/dzień:",
   "9:months:plan": "Plan",
   "9:months:utilization": "%<br>wyk.",
-  "9:months:lineCount": "Ilość<br>linii"
+  "9:months:lineCount": "Ilość<br>linii",
+  "9:chart:title": "Wykorzystanie linii w grupach CAG [%]",
+  "9:chart:filename": "WMES_PlanObLinii"
 }

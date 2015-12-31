@@ -25,7 +25,9 @@ define([
 
   function getWidth($el)
   {
-    return $el[0].getClientRects()[0].width + 'px';
+    var rects = $el[0].getClientRects();
+
+    return (rects.length ? rects[0].width : 0) + 'px';
   }
 
   return View.extend({

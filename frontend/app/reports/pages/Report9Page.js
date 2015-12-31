@@ -10,6 +10,7 @@ define([
   'app/core/util/bindLoadingMessage',
   '../Report9',
   '../views/9/TableView',
+  '../views/9/ChartView',
   '../views/9/PlanUploadView',
   'app/reports/templates/9/page',
   'app/reports/templates/9/actions'
@@ -21,6 +22,7 @@ define([
   bindLoadingMessage,
   Report,
   TableView,
+  ChartView,
   PlanUploadView,
   pageTemplate,
   actionsTemplate
@@ -124,6 +126,7 @@ define([
       this.defineBindings();
 
       this.setView('#' + this.idPrefix + '-table', this.tableView);
+      this.setView('#' + this.idPrefix + '-chart', this.chartView);
     },
 
     defineModels: function()
@@ -134,6 +137,7 @@ define([
     defineViews: function()
     {
       this.tableView = new TableView({model: this.report});
+      this.chartView = new ChartView({model: this.report});
     },
 
     defineBindings: function()
