@@ -3,6 +3,7 @@
 
   "node": true,
   "browser": false,
+  "esnext": true,
 
   "eqnull": true,
   "curly": true,
