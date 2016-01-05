@@ -90,7 +90,7 @@ exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
-    'setting', 'event', 'user',
+    'setting', 'event', 'user', 'passwordResetRequest',
     'vendor',
     'vendorNc12',
     'feedback',
