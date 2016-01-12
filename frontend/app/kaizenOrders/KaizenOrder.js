@@ -63,6 +63,7 @@ define([
 
     serialize: function(options)
     {
+      var nlsDomain = options && options.nlsDomain || 'kaizenOrders';
       var longDateTime = options && options.longDateTime;
       var dateFormat = longDateTime ? 'LL' : 'YY-MM-DD';
       var timeFormat = longDateTime ? 'LLLL' : 'YY-MM-DD, HH:mm:ss';
@@ -70,15 +71,15 @@ define([
 
       obj.types = obj.types.map(function(type)
       {
-        return '<span class="label kaizenOrders-label-' + type + '" title="' + t('kaizenOrders', 'type:' + type) + '">'
-          + t('kaizenOrders', 'type:label:' + type)
+        return '<span class="label kaizenOrders-label-' + type + '" title="' + t(nlsDomain, 'type:' + type) + '">'
+          + t(nlsDomain, 'type:label:' + type)
           + '</span>';
       }).join(' ');
 
-      obj.status = t('kaizenOrders', 'status:' + obj.status);
+      obj.status = t(nlsDomain, 'status:' + obj.status);
       obj.eventDate = !obj.eventDate
         ? null
-        : time.format(obj.eventDate, t('kaizenOrders', 'PROPERTY:eventDate:' + (longDateTime ? 'long' : 'short')));
+        : time.format(obj.eventDate, t(nlsDomain, 'PROPERTY:eventDate:' + (longDateTime ? 'long' : 'short')));
 
       DATE_PROPERTIES.forEach(function(dateProperty)
       {
@@ -119,9 +120,9 @@ define([
       return obj;
     },
 
-    serializeRow: function()
+    serializeRow: function(options)
     {
-      var row = this.serialize();
+      var row = this.serialize(options);
 
       if (row.observer && row.observer.notify && _.isEmpty(row.observer.changes))
       {
@@ -134,7 +135,7 @@ define([
       {
         row.owners = owners.length === 1
           ? owners[0].rendered
-          : t('kaizenOrders', 'LIST:owners', {
+          : t(options && options.nlsDomain || 'kaizenOrders', 'LIST:owners', {
             first: owners[0].rendered,
             count: owners.length - 1
           });

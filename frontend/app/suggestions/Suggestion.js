@@ -62,7 +62,7 @@ define([
       var timeFormat = longDateTime ? 'LLLL' : 'YYYY-MM-DD, HH:mm:ss';
       var obj = this.toJSON();
 
-      obj.status = t('status:' + obj.status);
+      obj.status = t(options && options.nlsDomain || 'suggestions', 'status:' + obj.status);
       obj.section = kaizenDictionaries.sections.getLabel(obj.section);
       obj.categories = (obj.categories || [])
         .map(function(c) { return kaizenDictionaries.categories.getLabel(c); })
@@ -100,9 +100,9 @@ define([
       return obj;
     },
 
-    serializeRow: function()
+    serializeRow: function(options)
     {
-      var row = this.serialize();
+      var row = this.serialize(options);
 
       if (row.observer && row.observer.notify && _.isEmpty(row.observer.changes))
       {
@@ -115,7 +115,7 @@ define([
       {
         row.owners = owners.length === 1
           ? owners[0].rendered
-          : t('LIST:owners', {
+          : t(options && options.nlsDomain || 'suggestions', 'LIST:owners', {
             first: owners[0].rendered,
             count: owners.length - 1
           });
