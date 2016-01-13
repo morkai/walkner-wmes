@@ -71,7 +71,15 @@ exports.start = function startPubsubModule(app, module)
       meta.messageId = getNextMessageId();
     }
 
-    idToMessageMap[meta.messageId] = [topic, message, meta];
+    var messageJson = message;
+
+    if (!meta.json)
+    {
+      messageJson = JSON.stringify(message);
+      meta.json = true;
+    }
+
+    idToMessageMap[meta.messageId] = [topic, messageJson, meta];
   });
 
   module.on('subscribe', function()
