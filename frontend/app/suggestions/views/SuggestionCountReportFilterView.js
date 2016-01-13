@@ -6,16 +6,20 @@ define([
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
-  'app/suggestions/templates/countReportFilter',
-  'app/reports/util/prepareDateRange'
+  'app/core/util/idAndLabel',
+  'app/reports/util/prepareDateRange',
+  'app/kaizenOrders/dictionaries',
+  'app/suggestions/templates/countReportFilter'
 ], function(
   js2form,
   time,
   View,
   fixTimeRange,
   buttonGroup,
-  template,
-  prepareDateRange
+  idAndLabel,
+  prepareDateRange,
+  kaizenDictionaries,
+  template
 ) {
   'use strict';
 
@@ -46,6 +50,13 @@ define([
       js2form(this.el, this.serializeFormData());
 
       buttonGroup.toggle(this.$id('interval'));
+
+      this.$id('sections').select2({
+        width: '400px',
+        allowClear: true,
+        multiple: true,
+        data: kaizenDictionaries.sections.map(idAndLabel)
+      });
     },
 
     serializeFormData: function()
@@ -57,7 +68,8 @@ define([
       return {
         interval: model.get('interval'),
         from: from ? time.format(from, 'YYYY-MM-DD') : '',
-        to: to ? time.format(to, 'YYYY-MM-DD') : ''
+        to: to ? time.format(to, 'YYYY-MM-DD') : '',
+        sections: model.get('sections').join(',')
       };
     },
 
@@ -66,7 +78,8 @@ define([
       var query = {
         from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
         to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
-        interval: buttonGroup.getValue(this.$id('interval'))
+        interval: buttonGroup.getValue(this.$id('interval')),
+        sections: this.$id('sections').val()
       };
 
       if (!query.from || query.from < 0)
@@ -87,6 +100,8 @@ define([
 
         query.to = to.valueOf();
       }
+
+      query.sections = query.sections === '' ? [] : query.sections.split(',');
 
       this.model.set(query);
       this.model.trigger('filtered');

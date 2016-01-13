@@ -43,6 +43,15 @@ module.exports = function(mongoose, options, done)
         conditions[groupProperty].$lt = new Date(options.toTime);
       }
 
+      if (options.sections.length === 1)
+      {
+        conditions.section = options.sections[0];
+      }
+      else if (options.sections.length)
+      {
+        conditions.section = {$in: options.sections};
+      }
+
       var stream = Suggestion.find(conditions, {changes: 0}).sort(sort).lean().stream();
       var next = this.next();
 

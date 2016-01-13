@@ -512,10 +512,12 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function countReportRoute(req, res, next)
   {
+    var query = req.query;
     var options = {
-      fromTime: reportsModule.helpers.getTime(req.query.from) || null,
-      toTime: reportsModule.helpers.getTime(req.query.to) || null,
-      interval: req.query.interval
+      fromTime: reportsModule.helpers.getTime(query.from) || null,
+      toTime: reportsModule.helpers.getTime(query.to) || null,
+      interval: query.interval,
+      sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
     };
 
     reportsModule.helpers.generateReport(

@@ -32,11 +32,7 @@ define([
       function(SuggestionCountReport, SuggestionCountReportPage)
       {
         return new SuggestionCountReportPage({
-          model: new SuggestionCountReport({
-            from: +req.query.from || undefined,
-            to: +req.query.to || undefined,
-            interval: req.query.interval
-          })
+          model: SuggestionCountReport.fromQuery(req.query)
         });
       }
     );
