@@ -45,6 +45,7 @@ define([
         'app/kaizenOrders/KaizenOrderSummaryReport',
         'app/kaizenOrders/pages/KaizenOrderSummaryReportPage',
         'i18n!app/nls/reports',
+        'i18n!app/nls/suggestions',
         nls
       ],
       function(KaizenOrderSummaryReport, KaizenOrderSummaryReportPage)
