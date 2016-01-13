@@ -39,10 +39,18 @@ define([
       url = url.substr(1);
     }
 
+    var trigger = message.trigger === true;
+    var replace = message.replace === true;
+
     backboneRouter.navigate(url, {
-      trigger: message.trigger === true,
-      replace: message.replace === true
+      trigger: trigger,
+      replace: replace
     });
+
+    if (!trigger && replace)
+    {
+      router.setCurrentRequest(url);
+    }
   });
 
   var notFoundUrl = '/404';
