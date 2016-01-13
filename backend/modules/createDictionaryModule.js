@@ -72,11 +72,12 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes, customS
             return done(err);
           }
 
-          module.models = models;
+          module.models = new Array(models.length);
           module.modelsById = {};
 
-          _.forEach(models, function(model)
+          _.forEach(models, function(model, i)
           {
+            module.models[i] = model;
             module.modelsById[model._id] = model;
           });
 
