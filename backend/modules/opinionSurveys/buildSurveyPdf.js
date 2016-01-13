@@ -13,7 +13,7 @@ module.exports = function buildSurveyPdf(app, module, surveyId, outputFile, done
 
   if (inProgress[surveyId])
   {
-    return inProgress.push(complete);
+    return inProgress[surveyId].push(complete);
   }
 
   inProgress[surveyId] = [complete];
