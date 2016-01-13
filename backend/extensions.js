@@ -4,16 +4,6 @@
 
 var util = require('util');
 
-Object.defineProperty(Object.prototype, 'toJSON', {
-  configurable: false,
-  enumerable: false,
-  writable: true,
-  value: function()
-  {
-    return this;
-  }
-});
-
 Object.defineProperty(Error.prototype, 'toJSON', {
   configurable: false,
   enumerable: false,
