@@ -2,10 +2,12 @@
 
 define([
   'underscore',
+  'app/time',
   'app/core/View',
   'app/dashboard/templates/kaizenTop10'
 ], function(
   _,
+  time,
   View,
   template
 ) {
@@ -38,7 +40,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         state: this.state,
-        month: new Date().getMonth() + 1 + (this.options.month || 0),
+        month: time.getMoment().add(this.options.month || 0, 'months').month() + 1,
         top10: this.getData()
       };
     },
