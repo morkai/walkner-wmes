@@ -737,7 +737,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     this.changes.push({
       date: this.updatedAt,
       user: updater,
-      data: changes || {},
+      data: changes,
       comment: comment
     });
 

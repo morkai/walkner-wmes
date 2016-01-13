@@ -119,7 +119,7 @@ define([
       var comment;
       var changes;
 
-      if (change.data.observer)
+      if (change.data && change.data.observer)
       {
         changes = [];
         comment = t('suggestions', 'history:observer:' + change.data.observer[0]);
