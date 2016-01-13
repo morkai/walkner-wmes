@@ -32,11 +32,7 @@ define([
       function(KaizenOrderReport, KaizenOrderReportPage)
       {
         return new KaizenOrderReportPage({
-          model: new KaizenOrderReport({
-            from: +req.query.from || undefined,
-            to: +req.query.to || undefined,
-            interval: req.query.interval
-          })
+          model: KaizenOrderReport.fromQuery(req.query)
         });
       }
     );

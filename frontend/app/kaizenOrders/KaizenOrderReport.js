@@ -52,13 +52,9 @@ define([
       return {
         from: 0,
         to: 0,
-        interval: 'month'
+        interval: 'month',
+        sections: []
       };
-    },
-
-    initialize: function()
-    {
-
     },
 
     fetch: function(options)
@@ -68,18 +64,22 @@ define([
         options = {};
       }
 
-      options.data = _.extend(options.data || {}, {
-        from: this.get('from'),
-        to: this.get('to'),
-        interval: this.get('interval')
-      });
+      options.data = _.extend(
+        options.data || {},
+        _.pick(this.attributes, ['from', 'to', 'interval', 'sections'])
+      );
+      options.data.sections = options.data.sections.join(',');
 
       return Model.prototype.fetch.call(this, options);
     },
 
     genClientUrl: function()
     {
-      return '/kaizenReport?from=' + this.get('from') + '&to=' + this.get('to') + '&interval=' + this.get('interval');
+      return '/kaizenReport'
+        + '?from=' + this.get('from')
+        + '&to=' + this.get('to')
+        + '&interval=' + this.get('interval')
+        + '&sections=' + this.get('sections');
     },
 
     parse: function(report)
@@ -330,7 +330,17 @@ define([
 
   }, {
 
-    TABLE_AND_CHART_METRICS: TABLE_AND_CHART_METRICS
+    TABLE_AND_CHART_METRICS: TABLE_AND_CHART_METRICS,
+
+    fromQuery: function(query)
+    {
+      return new this({
+        from: +query.from || undefined,
+        to: +query.to || undefined,
+        interval: query.interval || undefined,
+        sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
+      });
+    }
 
   });
 });
