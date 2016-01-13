@@ -36,3 +36,7 @@
 .kaizenOrders-report-chart .highcharts-grid > path:first-child {
   display: none;
 }
+.kaizenOrders-report-tableAndChart.has-many-series .highcharts-tooltip > span {
+  overflow-y: scroll;
+  max-height: 200px;
+}

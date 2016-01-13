@@ -74,6 +74,8 @@ define([
       }
 
       this.updateTable();
+
+      this.$el.toggleClass('has-many-series', this.chart.series.length > 10);
     },
 
     createChart: function()
