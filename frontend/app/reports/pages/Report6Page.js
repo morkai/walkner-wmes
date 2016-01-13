@@ -210,6 +210,7 @@ define([
     defineViews: function()
     {
       this.filterView = new FilterView({model: this.query});
+      this.chartViews = [];
     },
 
     createChartView: function(options)
@@ -229,6 +230,16 @@ define([
       {
         return this.prodTasks.fetch({reset: true});
       }, this));
+    },
+
+    beforeRender: function()
+    {
+      this.chartViews.forEach(function(chartView)
+      {
+        chartView.remove();
+      });
+
+      this.chartViews = [];
     },
 
     afterRender: function()
@@ -294,8 +305,20 @@ define([
       {
         chartRows.forEach(function(options)
         {
-          page.setView('.reports-6-' + options.kind + '-' + options.type, page.createChartView(options));
+          var chartView = page.createChartView(options);
+
+          page.chartViews.push(chartView);
+
+          page.setView('.reports-6-' + options.kind + '-' + options.type, chartView);
         });
+      });
+
+      this.chartViews.forEach(function(chartView)
+      {
+        if (!chartView.isRendered())
+        {
+          chartView.render();
+        }
       });
     },
 
