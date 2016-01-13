@@ -36,3 +36,7 @@
 .suggestions-report-chart .highcharts-grid > path:first-child {
   display: none;
 }
+.suggestions-report-tableAndChart.has-many-series .highcharts-tooltip > span {
+  overflow-y: scroll;
+  max-height: 225px;
+}
