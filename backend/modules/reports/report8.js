@@ -831,7 +831,7 @@ module.exports = function(mongoose, options, done)
       summary.workingShiftCount[shiftCountKey] = true;
       group.workingShiftCount[shiftCountKey] = true;
 
-      if (planProdFlow)
+      if (planProdFlow && !prodShiftOrder.mechOrder)
       {
         summary.plan[REAL] += prodShiftOrder.quantityDone;
         group.plan[REAL] += prodShiftOrder.quantityDone;
