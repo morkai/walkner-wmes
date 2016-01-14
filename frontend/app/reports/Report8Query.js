@@ -137,7 +137,7 @@ define([
 
       _.forEach(obj, function(value, name)
       {
-        if (name === 'visibleSeries')
+        if (name === 'visibleSeries' || name === '_rnd')
         {
           obj[name] = undefined;
         }
@@ -156,7 +156,7 @@ define([
 
       _.forEach(this.attributes, function(value, name)
       {
-        if (name === 'visibleSeries')
+        if (name === 'visibleSeries' || name === '_rnd')
         {
           return;
         }
