@@ -81,7 +81,6 @@ module.exports = function(mongoose, options, done)
 
   var fromDate = moment(options.fromTime).hours(6).toDate();
   var toDate = moment(options.toTime).hours(6).toDate();
-  var noDivFteRatioCache = {};
   var shiftToActiveOrgUnits = {};
   var prodLineToWorkingDays = {};
   var orderToDowntimeForLine = {};
@@ -1335,49 +1334,6 @@ module.exports = function(mongoose, options, done)
       * settings.otherWarehousingPlanCoeff2;
 
     return util.round(result);
-  }
-
-  function countSelectedActiveProdLinesForNoDivFteRatio(shiftActiveOrgUnits, shiftKey)
-  {
-    if (noDivFteRatioCache[shiftKey] !== undefined)
-    {
-      return noDivFteRatioCache[shiftKey];
-    }
-
-    var selectedActiveProdLines = 0;
-
-    if (options.prodLines.length)
-    {
-      _.forEach(options.prodLines, function(prodLineId)
-      {
-        if (shiftActiveOrgUnits.allProdLines[prodLineId])
-        {
-          selectedActiveProdLines += 1;
-        }
-      });
-    }
-    else
-    {
-      _.forEach(options.divisionSubdivisions, function(subdivisions)
-      {
-        _.forEach(subdivisions, function(subdivisionId)
-        {
-          var subdivisionProdLines = options.subdivisions[subdivisionId];
-
-          _.forEach(subdivisionProdLines, function(prodLineId)
-          {
-            if (shiftActiveOrgUnits.allProdLines[prodLineId])
-            {
-              selectedActiveProdLines += 1;
-            }
-          });
-        });
-      });
-    }
-
-    noDivFteRatioCache[shiftKey] = selectedActiveProdLines;
-
-    return selectedActiveProdLines;
   }
 
   function calcTimeAvailablePerShiftPlan(group)
