@@ -505,3 +505,13 @@
 .reports-8-warning:hover {
   text-decoration: none;
 }
+.reports-8-prodLines-select2 {
+  width: 600px!important;
+  border-top: 1px solid #d9d9d9;
+}
+.reports-8-prodLines-select2.select2-drop-above {
+  border-bottom: 1px solid #d9d9d9;
+}
+.reports-8-prodLines-select2 > .select2-results {
+  max-height: 400px;
+}
