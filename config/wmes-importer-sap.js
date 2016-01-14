@@ -135,7 +135,8 @@ exports['warehouse/importer/controlCycles'] = {
 
 exports['xiconf/importer/orders'] = {
   filterRe: /^XICONF_ORDERS\.txt$/,
-  parsedOutputDir: IMPORT_OUTPUT_DIR
+  parsedOutputDir: IMPORT_OUTPUT_DIR,
+  keepProgramPatterns: []
 };
 
 exports['orders/importer/orders'] = {

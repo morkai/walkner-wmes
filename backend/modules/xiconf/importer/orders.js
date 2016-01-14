@@ -12,7 +12,8 @@ var parseOrders = require('./parseOrders');
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   filterRe: /^T_COOIS_XICONF\.txt$/,
-  parsedOutputDir: null
+  parsedOutputDir: null,
+  keepProgramPatterns: []
 };
 
 exports.start = function startXiconfOrdersImporterModule(app, module)
@@ -24,6 +25,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     throw new Error("mongoose module is required!");
   }
 
+  var KEEP_PROGRAM_PATTERNS = module.config.keepProgramPatterns;
   var IMPORT_KINDS = {
     program: true,
     led: true,
@@ -528,7 +530,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     {
       var itemExists = compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i);
 
-      if (!itemExists && IMPORT_KINDS[xiconfOrderItem.kind])
+      if (!itemExists && IMPORT_KINDS[xiconfOrderItem.kind] && shouldDeleteItem(xiconfOrderItem))
       {
         deletedItems.push(i);
       }
@@ -550,6 +552,24 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       $push.items.$each.push(createXiconfOrderItem(parsedOrder));
       $push.nc12.$each.push(parsedOrder.nc12);
     });
+  }
+
+  function shouldDeleteItem(xiconfOrderItem)
+  {
+    if (xiconfOrderItem.kind !== 'program' || !KEEP_PROGRAM_PATTERNS.length)
+    {
+      return true;
+    }
+
+    for (var i = 0; i < KEEP_PROGRAM_PATTERNS.length; ++i)
+    {
+      if (KEEP_PROGRAM_PATTERNS[i].test(xiconfOrderItem.name))
+      {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   function compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i)
