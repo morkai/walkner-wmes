@@ -4,6 +4,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var deepEqual = require('deep-equal');
 var moment = require('moment');
 var step = require('h5.step');
@@ -12,7 +13,9 @@ var parseOrderDocuments = require('./parseOrderDocuments');
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   filterRe: /^T_COOIS_DOCS\.txt$/,
-  parsedOutputDir: null
+  parsedOutputDir: null,
+  xiconfProgramPatterns: [],
+  xiconfProgramFilePathPattern: './{timestamp}@T_COOIS_XICONF.txt'
 };
 
 exports.start = function startOrderDocumentsImporterModule(app, module)
@@ -24,7 +27,11 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
     throw new Error("mongoose module is required!");
   }
 
+  var XICONF_PROGRAM_PATTERNS = module.config.xiconfProgramPatterns;
+  var XICONF_PROGRAM_FILE_PATH_PATTERN = module.config.xiconfProgramFilePathPattern;
+
   var Order = mongoose.model('Order');
+  var XiconfOrder = mongoose.model('XiconfOrder');
 
   var filePathCache = {};
   var locked = false;
@@ -146,6 +153,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       function mapParsedOrdersStep()
       {
         var orderNoToDocumentsMap = {};
+        var orderNoToProgramMap = {};
 
         for (var i = 0; i < this.parsedOrderDocumentsList.length; ++i)
         {
@@ -161,10 +169,15 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
             nc15: orderDocument.nc15,
             name: orderDocument.name
           });
+
+          matchPrograms(orderDocument, orderNoToProgramMap);
         }
 
         this.parsedOrderDocumentsList = null;
         this.orderNoToDocumentsMap = orderNoToDocumentsMap;
+
+        setImmediate(buildXiconfProgramsDumpFile, fileInfo.timestamp, orderNoToProgramMap);
+        setImmediate(this.next());
       },
       function findExistingOrdersStep()
       {
@@ -293,5 +306,164 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
   function removeFilePathFromCache(filePath)
   {
     delete filePathCache[filePath];
+  }
+
+  function matchPrograms(orderDocument, orderNoToProgramMap)
+  {
+    for (var i = 0; i < XICONF_PROGRAM_PATTERNS.length; ++i)
+    {
+      var matches = orderDocument.name.match(XICONF_PROGRAM_PATTERNS[i]);
+
+      if (matches)
+      {
+        orderNoToProgramMap[orderDocument.orderNo] = {
+          nc12: orderDocument.nc15.substring(3),
+          name: matches.length > 1 ? matches[1] : orderDocument.name
+        };
+
+        break;
+      }
+    }
+  }
+
+  function buildXiconfProgramsDumpFile(timestamp, orderNoToProgramMap)
+  {
+    if (!module.config.xiconfProgramFilePathPattern)
+    {
+      return;
+    }
+
+    var orderNos = Object.keys(orderNoToProgramMap);
+
+    if (!orderNos.length)
+    {
+      return;
+    }
+
+    step(
+      function findXiconfOrdersStep()
+      {
+        XiconfOrder.find({_id: {$in: orderNos}}, {}).exec(this.next());
+      },
+      function prepareOrderItemsStep(err, xiconfOrders)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var xiconfOrderItems = [];
+
+        for (var i = 0; i < xiconfOrders.length; ++i)
+        {
+          var xiconfOrder = xiconfOrders[i];
+
+          addXiconfOrderItems(
+            xiconfOrder,
+            orderNoToProgramMap[xiconfOrder._id],
+            xiconfOrderItems
+          );
+        }
+
+        setImmediate(this.next(), null, xiconfOrderItems);
+      },
+      function writeFileStep(err, xiconfOrderItems)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!xiconfOrderItems.length)
+        {
+          return this.skip();
+        }
+
+        var filePath = XICONF_PROGRAM_FILE_PATH_PATTERN.replace('{timestamp}', Math.ceil(timestamp / 1000));
+        var fileContents = [
+          '-----------------------------------------------------------------------------------------------------------',
+          '|Order    |Material       |Reqmts qty|Material Description                             |Reqmt Date|Deleted|',
+          '-----------------------------------------------------------------------------------------------------------'
+        ];
+
+        for (var i = 0; i < xiconfOrderItems.length; ++i)
+        {
+          var item = xiconfOrderItems[i];
+          var row = [
+            '',
+            item.orderNo,
+            '000' + item.nc12,
+            _.padLeft(item.quantity.toString(), 9, ' ') + ' ',
+            _.padRight(item.name, 49, ' '),
+            moment(item.reqDate).format('DD.MM.YYYY'),
+            '       ',
+            ''
+          ];
+
+          fileContents.push(row.join('|'));
+        }
+
+        fileContents.push(fileContents[0]);
+
+        fs.writeFile(filePath, fileContents.join('\r\n'), this.next());
+      },
+      function finalizeStep(err)
+      {
+        if (err)
+        {
+          module.error("Failed to build Xiconf dump file: %s", err.message);
+        }
+      }
+    );
+  }
+
+  function addXiconfOrderItems(xiconfOrder, newProgram, xiconfOrderItems)
+  {
+    var programItem = null;
+
+    for (var i = 0; i < xiconfOrder.items.length; ++i)
+    {
+      var item = xiconfOrder.items[i];
+
+      if (item.kind !== 'led' && item.kind !== 'gprs' && item.kind !== 'program')
+      {
+        continue;
+      }
+
+      var xiconfOrderItem = {
+        orderNo: xiconfOrder._id,
+        nc12: item.nc12,
+        name: item.name,
+        quantity: item.quantityTodo,
+        reqDate: xiconfOrder.reqDate
+      };
+
+      if (item.kind === 'program')
+      {
+        programItem = xiconfOrderItem;
+      }
+
+      xiconfOrderItems.push(xiconfOrderItem);
+    }
+
+    if (programItem)
+    {
+      programItem.nc12 = newProgram.nc12;
+      programItem.name = newProgram.name;
+    }
+    else
+    {
+      programItem = {
+        orderNo: xiconfOrder._id,
+        nc12: newProgram.nc12,
+        name: newProgram.name,
+        quantity: xiconfOrder.quantityTodo,
+        reqDate: xiconfOrder.reqDate
+      };
+
+      xiconfOrderItems.push(programItem);
+    }
+
+    programItem.name = 'Program ' + programItem.name;
   }
 };

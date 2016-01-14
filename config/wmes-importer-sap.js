@@ -145,7 +145,9 @@ exports['orders/importer/orders'] = {
 
 exports['orderDocuments/importer'] = {
   filterRe: /^ORDERS_DOCUMENTS\.txt$/,
-  parsedOutputDir: IMPORT_OUTPUT_DIR
+  parsedOutputDir: IMPORT_OUTPUT_DIR,
+  xiconfProgramPatterns: [],
+  xiconfProgramFilePathPattern: IMPORT_INPUT_DIR + '/{timestamp}@XICONF_ORDERS.txt'
 };
 
 exports['orders/importer/bom'] = {
