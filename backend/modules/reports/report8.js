@@ -1068,8 +1068,7 @@ module.exports = function(mongoose, options, done)
     {
       return;
     }
-// TODO ???
-//    var subdivisionId = fteEntry.subdivision.toString();
+
     var summary = results.summary;
     var group = getDataGroup(fteEntry.date);
 
@@ -1079,10 +1078,6 @@ module.exports = function(mongoose, options, done)
       {
         return;
       }
-// TODO ???
-//      var taskId = task.id.toString();
-//      var isProdFlow = task.type === 'prodFlow';
-//      var shiftActiveOrgUnits = shiftToActiveOrgUnits[fteEntry.date.getTime()];
 
       _.forEach(task.functions, function(taskFunction)
       {
@@ -1094,7 +1089,6 @@ module.exports = function(mongoose, options, done)
         });
 
         var adjustedFte = fte;
-        // TODO ??? adjustFteToActiveOrgUnits(fte, shiftActiveOrgUnits, isProdFlow, taskId, subdivisionId);
 
         switch (taskFunction.id)
         {
@@ -1153,41 +1147,6 @@ module.exports = function(mongoose, options, done)
     var subdivisionId = fteEntry.subdivision.toString();
     var summary = results.summary;
     var group = getDataGroup(fteEntry.date);
-    var shiftKey = fteEntry.date.getTime().toString();
-    var shiftActiveOrgUnits = shiftToActiveOrgUnits[shiftKey];
-    var allActiveProdLines = shiftActiveOrgUnits
-      ? shiftActiveOrgUnits.allProdLineCount
-      : 0;
-    var selectedActiveProdLines = shiftActiveOrgUnits
-      ? countSelectedActiveProdLinesForNoDivFteRatio(shiftActiveOrgUnits, shiftKey)
-      : 0;
-    var noDivRatio = selectedActiveProdLines === 0 && allActiveProdLines === 0
-      ? 1
-      : selectedActiveProdLines / allActiveProdLines;
-    var divRatio = {};
-
-    _.forEach((shiftActiveOrgUnits || {}).prodLineCountPerDivision, function(prodLineCount, divisionId)
-    {
-      if (!options.prodLines.length)
-      {
-        divRatio[divisionId] = 1;
-
-        return;
-      }
-
-      allActiveProdLines = prodLineCount;
-      selectedActiveProdLines = 0;
-
-      _.forEach(options.prodLines, function(prodLineId)
-      {
-        if (shiftActiveOrgUnits.allProdLines[prodLineId])
-        {
-          selectedActiveProdLines += 1;
-        }
-      });
-
-      divRatio[divisionId] = selectedActiveProdLines / allActiveProdLines;
-    });
 
     _.forEach(fteEntry.tasks, function(task)
     {
@@ -1247,52 +1206,18 @@ module.exports = function(mongoose, options, done)
       {
         if (typeof taskCompany.count === 'number')
         {
-          fte += taskCompany.count * noDivRatio;
+          fte += taskCompany.count;
         }
         else
         {
           _.forEach(taskCompany.count, function(count)
           {
-            if (usedDivisions[count.division])
-            {
-              fte += count.value * (divRatio[count.division] === undefined ? 1 : divRatio[count.division]);
-            }
+            fte += count.value;
           });
         }
       }
     });
   }
-
-  /* TODO ???
-  function adjustFteToActiveOrgUnits(fte, shiftActiveOrgUnits, isProdFlow, taskId, subdivisionId)
-  {
-    if (fte === 0 || !options.prodLines.length)
-    {
-      return fte;
-    }
-
-    var selectedProdLines;
-    var activeProdLines;
-
-    if (isProdFlow)
-    {
-      selectedProdLines = usedProdFlows[taskId];
-      activeProdLines = shiftActiveOrgUnits[taskId];
-    }
-    else
-    {
-      selectedProdLines = usedSubdivisions[subdivisionId];
-      activeProdLines = shiftActiveOrgUnits[subdivisionId];
-    }
-
-    if (selectedProdLines && activeProdLines && selectedProdLines.length < activeProdLines.length)
-    {
-      fte *= selectedProdLines.length / activeProdLines.length;
-    }
-
-    return fte;
-  }
-  */
 
   function isTotalVolumeProducedOrder(prodShiftOrder)
   {
@@ -1343,14 +1268,8 @@ module.exports = function(mongoose, options, done)
   function countProdBasedPlanners(group, type)
   {
     var hoursCoeff = settings.hoursCoeff;
-    var timeAvailablePerShift = group.timeAvailablePerShift[PLAN];
 
-    if (IN_MINUTES)
-    {
-      timeAvailablePerShift /= 60;
-    }
-
-    return util.round(group.prodBasedPlanners[type] / hoursCoeff /* TODO: / timeAvailablePerShift*/);
+    return util.round(group.prodBasedPlanners[type] / hoursCoeff);
   }
 
   function countProdSettersPlan(data)
