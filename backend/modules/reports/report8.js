@@ -1243,8 +1243,7 @@ module.exports = function(mongoose, options, done)
     }
 
     return (obj.prodFlow !== undefined && usedProdFlows && !!usedProdFlows[obj.prodFlow])
-      || (obj.subdivision !== undefined && usedSubdivisions && !!usedSubdivisions[obj.subdivision])
-      || (obj.division !== undefined && usedDivisions && !!usedDivisions[obj.division]);
+      || (obj.subdivision !== undefined && usedSubdivisions && !!usedSubdivisions[obj.subdivision]);
   }
 
   function filterDay(date)
