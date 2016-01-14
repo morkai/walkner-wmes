@@ -305,7 +305,10 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   function prepareXiconfResult(xiconfResult, done)
   {
-    xiconfResult = xiconfResult.toJSON();
+    if (xiconfResult.toJSON)
+    {
+      xiconfResult = xiconfResult.toJSON();
+    }
 
     step(
       function()
@@ -387,7 +390,10 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   function prepareXiconfOrder(xiconfOrder, done)
   {
-    xiconfOrder = xiconfOrder.toJSON();
+    if (xiconfOrder.toJSON)
+    {
+      xiconfOrder = xiconfOrder.toJSON();
+    }
 
     step(
       function findRelatedOrders()

@@ -124,7 +124,11 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
       },
       function(err, orderData, driverData, gprsData, inputData, outputData)
       {
-        icpoResult = icpoResult.toJSON();
+        if (icpoResult.toJSON)
+        {
+          icpoResult = icpoResult.toJSON();
+        }
+
         icpoResult.orderData = orderData || null;
         icpoResult.driverData = driverData || null;
         icpoResult.gprsData = gprsData || null;
