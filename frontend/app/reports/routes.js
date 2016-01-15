@@ -65,7 +65,7 @@ define([
 
   router.map('/reports/4', auth(4), function(req)
   {
-    loadReportPage(4, req);
+    loadReportPage(4, req, ['i18n!app/nls/pressWorksheets']);
   });
 
   router.map('/reports/5', auth(5), function(req)
