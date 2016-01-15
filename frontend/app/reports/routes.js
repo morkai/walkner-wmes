@@ -11,9 +11,19 @@ define([
 ) {
   'use strict';
 
-  function loadReportPage(reportNo, req)
+  function loadReportPage(reportNo, req, additionalDependencies)
   {
-    viewport.loadPage(['app/reports/pages/Report' + reportNo + 'Page', 'i18n!app/nls/reports'], function(ReportPage)
+    var dependencies = [
+      'app/reports/pages/Report' + reportNo + 'Page',
+      'i18n!app/nls/reports'
+    ];
+
+    if (additionalDependencies)
+    {
+      dependencies = dependencies.concat(additionalDependencies);
+    }
+
+    viewport.loadPage(dependencies, function(ReportPage)
     {
       return new ReportPage({
         query: req.query,
@@ -45,7 +55,7 @@ define([
       return viewport.currentPage.query.reset(req.query);
     }
 
-    loadReportPage(2, req);
+    loadReportPage(2, req, ['i18n!app/nls/orders']);
   });
 
   router.map('/reports/3', auth(3), function(req)
