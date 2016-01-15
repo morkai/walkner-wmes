@@ -593,7 +593,7 @@ module.exports = function(mongoose, options, done)
     var group = getDataGroup(hourlyPlan.date);
     var shiftMoment = moment(hourlyPlan.date).startOf('day');
     var dateTime = shiftMoment.valueOf();
-    var inc = function(count, selectedProdLines, activeProdLines, changeTvp, changePlan)
+    var inc = function(count, selectedActiveProdLines, allActiveProdLines, changeTvp, changePlan)
     {
       if (count === 0)
       {
@@ -606,14 +606,14 @@ module.exports = function(mongoose, options, done)
         summary.totalVolumeProduced[PLAN] += count;
       }
 
-      if (selectedProdLines === 0 || !changePlan)
+      if (selectedActiveProdLines === 0 || !changePlan)
       {
         return;
       }
 
-      if (selectedProdLines !== -1 && activeProdLines !== 0)
+      if (selectedActiveProdLines !== -1 && allActiveProdLines !== 0 && selectedActiveProdLines < allActiveProdLines)
       {
-        count = Math.ceil(count * (selectedProdLines / activeProdLines));
+        count = Math.ceil(count * (selectedActiveProdLines / allActiveProdLines));
       }
 
       group.plan[PLAN] += count;
@@ -632,41 +632,41 @@ module.exports = function(mongoose, options, done)
         continue;
       }
 
-      var selectedProdLines = usedProdFlows === null
+      var selectedActiveProdLines = usedProdFlows === null
         ? -1
         : options.prodFlows[flowId]
           ? countSelectedActiveProdLines(dateTime, options.prodFlows[flowId])
           : 0;
-      var activeProdLines;
+      var allActiveProdLines;
       var h;
 
       if (usedShifts['1'])
       {
-        activeProdLines = countActiveProdLines(shiftMoment.hours(6).valueOf(), flowId);
+        allActiveProdLines = countActiveProdLines(shiftMoment.hours(6).valueOf(), flowId);
 
         for (h = 0; h < 8; ++h)
         {
-          inc(flow.hours[h], selectedProdLines, activeProdLines, changeTvp, changePlan);
+          inc(flow.hours[h], selectedActiveProdLines, allActiveProdLines, changeTvp, changePlan);
         }
       }
 
       if (usedShifts['2'])
       {
-        activeProdLines = countActiveProdLines(shiftMoment.hours(14).valueOf(), flowId);
+        allActiveProdLines = countActiveProdLines(shiftMoment.hours(14).valueOf(), flowId);
 
         for (h = 8; h < 14; ++h)
         {
-          inc(flow.hours[h], selectedProdLines, activeProdLines, changeTvp, changePlan);
+          inc(flow.hours[h], selectedActiveProdLines, allActiveProdLines, changeTvp, changePlan);
         }
       }
 
       if (usedShifts['3'])
       {
-        activeProdLines = countActiveProdLines(shiftMoment.hours(22).valueOf(), flowId);
+        allActiveProdLines = countActiveProdLines(shiftMoment.hours(22).valueOf(), flowId);
 
         for (h = 14; h < 24; ++h)
         {
-          inc(flow.hours[h], selectedProdLines, activeProdLines, changeTvp, changePlan);
+          inc(flow.hours[h], selectedActiveProdLines, allActiveProdLines, changeTvp, changePlan);
         }
       }
     }
