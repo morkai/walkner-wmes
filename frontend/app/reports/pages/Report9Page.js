@@ -125,6 +125,11 @@ define([
 
       this.setView('#' + this.idPrefix + '-table', this.tableView);
       this.setView('#' + this.idPrefix + '-chart', this.chartView);
+
+      this.once('afterRender', function()
+      {
+        this.promised(this.report.fetch());
+      });
     },
 
     defineModels: function()
@@ -145,7 +150,7 @@ define([
 
     load: function(when)
     {
-      return when(this.report.fetch());
+      return when();
     },
 
     resolveQuery: function()

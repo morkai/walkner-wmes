@@ -7,7 +7,7 @@
     <% _.forEach(lines, function(line) { %>
     <th><%- line.name.replace(/\n/g, '<br>') %>
     <% }) %>
-    <th>
+    <th><br>&nbsp;
   </tr>
   </thead>
   <tbody>
@@ -16,7 +16,7 @@
     <% _.forEach(lines, function(line) { %>
     <td><%- line.cags[cag._id] || '&nbsp;' %></td>
     <% })%>
-    <td></td>
+    <td>&nbsp;</td>
   </tr>
   <% }) %>
   </tbody>

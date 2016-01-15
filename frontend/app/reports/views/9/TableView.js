@@ -82,6 +82,7 @@ define([
       this.highlightedIndex = -1;
       this.currentEditorSourceEl = null;
 
+      this.listenTo(this.model, 'sync', this.render);
       this.listenTo(this.model, 'change:customLines', this.onCustomLinesChange);
       this.listenTo(this.model, 'change:daysInMonth change:shiftsInDay change:hoursInShift', this.onOptionsChange);
       this.listenTo(this.model, 'clearOptions', this.onOptionsClear);
