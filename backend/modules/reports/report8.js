@@ -793,10 +793,10 @@ module.exports = function(mongoose, options, done)
 
     if (inSelectedOrgUnit)
     {
-      var routingTimeForLine = prodShiftOrder.laborTime / workerCount * UNIT_MUL / 100;
+      var routingTimeForLinePlan = prodShiftOrder.laborTime / workerCount * UNIT_MUL / 100;
 
-      summary.routingTimeForLine[PLAN] += routingTimeForLine;
-      group.routingTimeForLine[PLAN] += routingTimeForLine;
+      summary.routingTimeForLine[PLAN] += routingTimeForLinePlan;
+      group.routingTimeForLine[PLAN] += routingTimeForLinePlan;
       summary.routingTimeForLabour[PLAN] += labourTime;
       group.routingTimeForLabour[PLAN] += labourTime;
       summary.orderCountForLine += 1;
@@ -805,9 +805,13 @@ module.exports = function(mongoose, options, done)
       var totalDuration = prodShiftOrder.totalDuration * UNIT_MUL;
       var durationForLine = totalDuration - (orderToDowntimeForLine[prodShiftOrder._id] || 0);
       var durationForLabour = totalDuration - (orderToDowntimeForLabour[prodShiftOrder._id] || 0);
+      var realRoutingTimeForLine = durationForLine / prodShiftOrder.quantityDone;
+      var realRoutingTimeForLabour = durationForLabour / prodShiftOrder.quantityDone * workerCount;
 
-      summary.routingTimeForLine[REAL] += durationForLine / prodShiftOrder.quantityDone;
-      summary.routingTimeForLabour[REAL] += durationForLabour / prodShiftOrder.quantityDone * workerCount;
+      summary.routingTimeForLine[REAL] += realRoutingTimeForLine;
+      group.routingTimeForLine[REAL] += realRoutingTimeForLine;
+      summary.routingTimeForLabour[REAL] += realRoutingTimeForLabour;
+      group.routingTimeForLabour[REAL] += realRoutingTimeForLabour;
 
       if (!summary.timeAvailablePerShift[PLAN][dateKey])
       {
