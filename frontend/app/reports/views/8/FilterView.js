@@ -104,6 +104,7 @@ define([
 
       var subdivisionToProdLines = this.subdivisionToProdLines;
       var data = [];
+      var availableProdLineIds = {};
 
       _.forEach(selectedDivisions, function(divisionId)
       {
@@ -125,6 +126,7 @@ define([
             if (!prodLine.deactivatedAt || prodLine.deactivatedAt >= timeRange.from)
             {
               item.children.push(prodLine);
+              availableProdLineIds[prodLine.id] = true;
             }
           });
 
@@ -136,8 +138,14 @@ define([
       });
 
       var matcher = $().select2.defaults.matcher;
+      var $prodLines = this.$id('prodLines');
 
-      this.$id('prodLines').select2({
+      $prodLines.val($prodLines.val().split(',').filter(function(prodLineId)
+      {
+        return availableProdLineIds[prodLineId];
+      }));
+
+      $prodLines.select2({
         width: 322,
         multiple: true,
         data: data.length === 1 ? data[0].children : data,
