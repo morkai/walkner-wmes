@@ -205,6 +205,11 @@ define([
 
       this.listenTo(this.query, 'change', this.onQueryChange);
       this.listenTo(this.query, 'change:parent', this.onParentChange);
+
+      this.once('afterRender', function()
+      {
+        this.report.fetch().always(this.updateBreadcrumbs.bind(this));
+      });
     },
 
     defineViews: function()
@@ -251,8 +256,6 @@ define([
       this.renderChartsColumns();
       this.renderChartsViews();
       this.changeParent(false);
-
-      this.report.fetch().always(this.updateBreadcrumbs.bind(this));
     },
 
     renderChartsColumns: function()
