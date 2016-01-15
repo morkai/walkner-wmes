@@ -85,7 +85,7 @@ define([
 
     defineModels: function()
     {
-      this.query = Query.fromRqlQuery(this.options.query);
+      this.query = Query.fromRqlQuery(this.options.rql);
       this.report = new Report(null, {query: this.query});
 
       this.listenTo(this.query, 'change', this.onQueryChange);

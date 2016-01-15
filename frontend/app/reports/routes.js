@@ -28,6 +28,7 @@ define([
       return new ReportPage({
         query: req.query,
         queryString: req.queryString,
+        rql: req.rql,
         displayOptions: req.fragment
       });
     });
