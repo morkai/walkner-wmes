@@ -179,6 +179,7 @@ define([
     {
       var report = this.model;
       var timeUnit = t('reports', '8:times:unit:' + report.query.get('unit'));
+      var summary = report.get('summary');
       var data = report.get('groups');
       var chartSeries = [];
       var metrics = {
@@ -214,7 +215,7 @@ define([
         }
       };
 
-      _.forEach(report.get('summary').downtimeByAor, function(unused, aorId)
+      _.forEach(summary ? summary.downtimeByAor : null, function(unused, aorId)
       {
         metrics[aorId] = null;
       });
@@ -246,6 +247,11 @@ define([
 
       function addSeries(planReal, options, metricId, isAor)
       {
+        if (!data)
+        {
+          return;
+        }
+
         options.data = data[planReal][metricId];
 
         if (!options.data)

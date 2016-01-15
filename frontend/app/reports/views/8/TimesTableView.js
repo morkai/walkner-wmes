@@ -51,16 +51,20 @@ define([
         planColor: this.serializeColor(propName, 'plan'),
         realColor: this.serializeColor(propName, 'real')
       };
-      var value = summary[propName];
 
-      if (Array.isArray(value))
+      if (summary)
       {
-        prop.plan = this.formatValue(value[0], decimals);
-        prop.real = this.formatValue(value[1], decimals);
-      }
-      else
-      {
-        prop[propName === 'heijunkaTimeForLine' ? 'plan' : 'real'] = this.formatValue(value, decimals);
+        var value = summary[propName];
+
+        if (Array.isArray(value))
+        {
+          prop.plan = this.formatValue(value[0], decimals);
+          prop.real = this.formatValue(value[1], decimals);
+        }
+        else
+        {
+          prop[propName === 'heijunkaTimeForLine' ? 'plan' : 'real'] = this.formatValue(value, decimals);
+        }
       }
 
       props[propName] = prop;
@@ -114,7 +118,7 @@ define([
         view.serializeProp(props, summary, prop, timeDecimals, timeUnit);
       });
 
-      _.forEach(summary.downtimeByAor, function(duration, aorId)
+      _.forEach(summary ? summary.downtimeByAor : null, function(duration, aorId)
       {
         var aor = aors.get(aorId);
 

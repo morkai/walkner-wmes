@@ -130,16 +130,16 @@ define([
     {
       this.listenTo(this.query, 'change', this.onQueryChange);
       this.listenTo(this.timesTableView, 'afterRender', this.onTimesTableAfterRender);
+
+      this.once('afterRender', function()
+      {
+        this.promised(this.report.fetch());
+      });
     },
 
     load: function(when)
     {
-      return when(this.settings.fetchIfEmpty(function()
-      {
-        return [
-          this.report.fetch()
-        ];
-      }, this));
+      return when(this.settings.fetchIfEmpty());
     },
 
     afterRender: function()

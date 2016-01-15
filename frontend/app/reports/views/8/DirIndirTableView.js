@@ -26,7 +26,9 @@ define([
       },
       'click .js-value': function(e)
       {
-        this.toggleSeries(e.currentTarget.parentNode.dataset.prop, e.currentTarget.dataset.kind);
+        var el = e.currentTarget;
+
+        this.toggleSeries(el.parentNode.dataset.prop, el.dataset.kind);
       }
     },
 
@@ -63,19 +65,23 @@ define([
         planColor: this.serializeColor(propName, 'plan'),
         realColor: this.serializeColor(propName, 'real')
       };
-      var value = summary[propName];
 
-      if (Array.isArray(value))
+      if (summary)
       {
-        prop.plan = this.formatValue(value[0]);
-        prop.rawPlan = value[0];
-        prop.real = this.formatValue(value[1]);
-        prop.rawReal = value[1];
-      }
-      else
-      {
-        prop.real = this.formatValue(value);
-        prop.rawReal = value;
+        var value = summary[propName];
+
+        if (Array.isArray(value))
+        {
+          prop.plan = this.formatValue(value[0]);
+          prop.rawPlan = value[0];
+          prop.real = this.formatValue(value[1]);
+          prop.rawReal = value[1];
+        }
+        else
+        {
+          prop.real = this.formatValue(value);
+          prop.rawReal = value;
+        }
       }
 
       props[propName] = prop;

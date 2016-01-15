@@ -228,6 +228,11 @@ define([
 
       function addSeries(planReal, options, metricId)
       {
+        if (!data)
+        {
+          return;
+        }
+
         options.data = data[planReal][metricId];
 
         if (!options.data)
