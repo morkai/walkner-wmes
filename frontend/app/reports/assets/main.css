@@ -317,6 +317,9 @@
   width: 275px;
   margin-right: 15px;
 }
+.reports-2-orders-filter .form-group > .radio:first-child {
+  margin-top: 0;
+}
 .reports-2-orders-filter .radio + .checkbox {
   margin-top: 5px;
 }
