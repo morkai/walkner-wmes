@@ -36,7 +36,22 @@ define([
         groupKeys: [],
         prodLines: [],
         tableSummary: [],
-        chartSummary: {}
+        chartSummary: {
+          totalAvailabilityH: [],
+          operationalAvailabilityH: [],
+          exploitationH: [],
+          oee: [],
+          operationalAvailabilityP: [],
+          exploitationP: [],
+          adjustingDuration: [],
+          maintenanceDuration: [],
+          renovationDuration: [],
+          malfunctionDuration: [],
+          mttr: [],
+          mtbf: [],
+          malfunctionCount: [],
+          majorMalfunctionCount: []
+        }
       };
     },
 

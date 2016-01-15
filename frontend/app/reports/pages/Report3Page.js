@@ -76,6 +76,11 @@ define([
       this.setView('.reports-3-tableSummary-container', this.tableSummaryView);
       this.setView('.reports-3-oeeChart-container', this.oeeChartView);
       this.setView('.reports-3-downtimeChart-container', this.downtimeChartView);
+
+      this.once('afterRender', function()
+      {
+        this.promised(this.report.fetch());
+      });
     },
 
     defineModels: function()
@@ -101,11 +106,6 @@ define([
 
       this.listenTo(this.oeeChartView, 'seriesVisibilityChanged', this.onSeriesVisibilityChanged);
       this.listenTo(this.downtimeChartView, 'seriesVisibilityChanged', this.onSeriesVisibilityChanged);
-    },
-
-    load: function(when)
-    {
-      return when(this.report.fetch());
     },
 
     onQueryChange: function(query, options)
