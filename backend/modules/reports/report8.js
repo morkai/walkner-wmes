@@ -675,7 +675,6 @@ module.exports = function(mongoose, options, done)
   function handleProdShifts(done)
   {
     var conditions = {
-      shutdown: {$lte: REAL_SHUTDOWN_THRESHOLD},
       date: {
         $gte: fromDate,
         $lt: toDate
@@ -693,8 +692,12 @@ module.exports = function(mongoose, options, done)
     }
 
     var fields = {
+      subdivision: 1,
+      prodFlow: 1,
+      prodLine: 1,
       date: 1,
-      shutdown: 1
+      shutdown: 1,
+      'quantitiesDone.actual': 1
     };
 
     handleStream(ProdShift, conditions, fields, handleProdShift, done);
@@ -710,8 +713,22 @@ module.exports = function(mongoose, options, done)
     var summary = results.summary;
     var group = getDataGroup(prodShift.date);
 
-    summary.shutdown[REAL] += prodShift.shutdown;
-    group.shutdown[REAL] += prodShift.shutdown;
+    if (prodShift.shutdown <= REAL_SHUTDOWN_THRESHOLD)
+    {
+      summary.shutdown[REAL] += prodShift.shutdown;
+      group.shutdown[REAL] += prodShift.shutdown;
+    }
+
+    if (isPlanProdFlow(prodShift.prodFlow) && isInSelectedOrgUnit(prodShift))
+    {
+      var quantitiesDone = prodShift.quantitiesDone;
+
+      for (var i = 0; i < 8; ++i)
+      {
+        summary.plan[REAL] += quantitiesDone[i].actual;
+        group.plan[REAL] += quantitiesDone[i].actual;
+      }
+    }
   }
 
   function handleProdShiftOrders(done)
@@ -833,12 +850,6 @@ module.exports = function(mongoose, options, done)
       group.allShiftCount[shiftCountKey] = true;
       summary.workingShiftCount[shiftCountKey] = true;
       group.workingShiftCount[shiftCountKey] = true;
-
-      if (planProdFlow && !prodShiftOrder.mechOrder)
-      {
-        summary.plan[REAL] += prodShiftOrder.quantityDone;
-        group.plan[REAL] += prodShiftOrder.quantityDone;
-      }
     }
 
     var prodOperatorPlanNum = prodShiftOrder.laborTime / 100 * prodShiftOrder.quantityDone;
