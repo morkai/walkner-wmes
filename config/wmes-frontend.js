@@ -154,6 +154,10 @@ exports.httpsServer = {
   cert: __dirname + '/certificate.pem'
 };
 
+exports.sio = {
+  httpServerIds: ['httpServer']
+};
+
 exports.pubsub = {
   statsPublishInterval: 60000,
   republishTopics: [

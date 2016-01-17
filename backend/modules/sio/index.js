@@ -14,21 +14,12 @@ try
 catch (err) {}
 
 exports.DEFAULT_CONFIG = {
-  httpServerId: 'httpServer',
-  httpsServerId: 'httpsServer',
+  httpServerIds: ['httpServer'],
   path: '/sio'
 };
 
 exports.start = function startIoModule(app, sioModule)
 {
-  var httpServer = app[sioModule.config.httpServerId];
-  var httpsServer = app[sioModule.config.httpsServerId];
-
-  if (!httpServer && !httpsServer)
-  {
-    throw new Error("sio module requires the httpServer(s) module");
-  }
-
   var probes = {
     currentUsersCounter: null,
     totalConnectionTime: null,
@@ -46,15 +37,13 @@ exports.start = function startIoModule(app, sioModule)
 
   var multiServer = new SocketIoMultiServer();
 
-  if (httpServer)
+  app.onModuleReady(sioModule.config.httpServerIds, function()
   {
-    multiServer.addServer(httpServer.server);
-  }
-
-  if (httpsServer)
-  {
-    multiServer.addServer(httpsServer.server);
-  }
+    _.forEach(sioModule.config.httpServerIds, function(httpServerId)
+    {
+      multiServer.addServer(app[httpServerId].server);
+    });
+  });
 
   var sio = socketIo(multiServer, {
     path: sioModule.config.path,
