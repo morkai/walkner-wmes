@@ -84,7 +84,8 @@
         views: {
           '.navbar': createNavbarView()
         },
-        version: updater.getCurrentVersionString()
+        version: updater.getCurrentVersionString(),
+        changelogUrl: '#changelog'
       });
     });
 

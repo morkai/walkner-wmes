@@ -11,7 +11,7 @@ define([
   $,
   user,
   View,
-  pageLayoutTemplate
+  template
 ) {
   'use strict';
 
@@ -19,7 +19,7 @@ define([
 
     pageContainerSelector: '.bd',
 
-    template: pageLayoutTemplate
+    template: template
 
   });
 
@@ -71,7 +71,8 @@ define([
   PageLayout.prototype.serialize = function()
   {
     return _.extend(View.prototype.serialize.call(this), {
-      version: this.options.version
+      version: this.options.version,
+      changelogUrl: this.options.changelogUrl
     });
   };
 

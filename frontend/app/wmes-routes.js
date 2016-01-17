@@ -57,7 +57,8 @@ define([
   './opinionSurveyOmrResults/routes',
   './prodDowntimeAlerts/routes',
   './cagGroups/routes',
-  './cags/routes'
+  './cags/routes',
+  './changelog/routes'
 ], function()
 {
   'use strict';

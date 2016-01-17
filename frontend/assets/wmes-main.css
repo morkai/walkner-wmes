@@ -45,6 +45,7 @@
 @import url("../app/opinionSurveyScanTemplates/assets/main.css");
 @import url("../app/opinionSurveyOmrResults/assets/main.css");
 @import url("../app/prodDowntimeAlerts/assets/main.css");
+@import url("../app/changelog/assets/main.css");
 
 #app-loading {
   position: absolute;
