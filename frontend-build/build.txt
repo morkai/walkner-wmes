@@ -1,4 +1,8 @@
 
+app/changelog/assets/main.css
+----------------
+app/changelog/assets/main.css
+
 app/core/assets/dataTables.css
 ----------------
 app/core/assets/dataTables.css
@@ -436,6 +440,7 @@ assets/../app/opinionSurveyResponses/assets/main.css
 assets/../app/opinionSurveyScanTemplates/assets/main.css
 assets/../app/opinionSurveyOmrResults/assets/main.css
 assets/../app/prodDowntimeAlerts/assets/main.css
+assets/../app/changelog/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -825,6 +830,7 @@ app/cagGroups/CagGroup.js
 app/cagGroups/routes.js
 app/cags/Cag.js
 app/cags/routes.js
+app/changelog/routes.js
 app/wmes-routes.js
 vendor/visibly.js
 app/visibility.js

@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(n){return{"breadcrumbs:browse":function(n){return"Lista zmian"}}});
