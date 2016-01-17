@@ -47,6 +47,11 @@ define([
       this.setView('.reports-4-machineTimes-container', this.machineTimesChartView);
       this.setView('.reports-4-quantities-container', this.quantitiesChartView);
       this.setView('.reports-4-notes-container', this.notesListView);
+
+      this.once('afterRender', function()
+      {
+        this.promised(this.report.fetch());
+      });
     },
 
     defineModels: function()
@@ -67,11 +72,6 @@ define([
       this.notesListView = new NotesListView({
         model: this.report
       });
-    },
-
-    load: function(when)
-    {
-      return when(this.report.fetch());
     },
 
     onQueryChange: function(query, options)
