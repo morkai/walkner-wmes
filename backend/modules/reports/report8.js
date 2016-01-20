@@ -766,7 +766,8 @@ module.exports = function(mongoose, options, done)
   {
     if (filterDay(prodShiftOrder.date)
       || !prodShiftOrder.finishedAt
-      || !prodShiftOrder.quantityDone)
+      || !prodShiftOrder.quantityDone
+      || prodShiftOrder.date >= toDate)
     {
       return;
     }
@@ -782,21 +783,7 @@ module.exports = function(mongoose, options, done)
 
     if (isTotalVolumeProducedOrder(prodShiftOrder))
     {
-      var tvpShift = realTotalVolumeProducedPerShift[shiftKey];
-
-      if (!tvpShift)
-      {
-        tvpShift = realTotalVolumeProducedPerShift[shiftKey] = {};
-      }
-
-      var tvpOrder = tvpShift[prodShiftOrder.orderId];
-
-      if (!tvpOrder)
-      {
-        tvpOrder = tvpShift[prodShiftOrder.orderId] = {};
-      }
-
-      tvpOrder[prodShiftOrder.operationNo] = prodShiftOrder.quantityDone + (tvpOrder[prodShiftOrder.operationNo] || 0);
+      groupOrderOperationQuantity(realTotalVolumeProducedPerShift, shiftKey, prodShiftOrder);
     }
 
     var workerCount = prodShiftOrder.workerCount || 1;
@@ -909,6 +896,25 @@ module.exports = function(mongoose, options, done)
     group.masters[PLAN].days[dateKey] = true;
   }
 
+  function groupOrderOperationQuantity(group, shiftKey, prodShiftOrder)
+  {
+    var orders = group[shiftKey];
+
+    if (!orders)
+    {
+      orders = group[shiftKey] = {};
+    }
+
+    var order = orders[prodShiftOrder.orderId];
+
+    if (!order)
+    {
+      order = orders[prodShiftOrder.orderId] = {};
+    }
+
+    order[prodShiftOrder.operationNo] = prodShiftOrder.quantityDone + (order[prodShiftOrder.operationNo] || 0);
+  }
+
   function handleProdDowntimes(done)
   {
     var conditions = {
@@ -937,7 +943,7 @@ module.exports = function(mongoose, options, done)
 
   function handleProdDowntime(prodDowntime)
   {
-    if (filterDay(prodDowntime.date) || !prodDowntime.finishedAt)
+    if (filterDay(prodDowntime.date) || !prodDowntime.finishedAt || prodDowntime.date >= toDate)
     {
       return;
     }
