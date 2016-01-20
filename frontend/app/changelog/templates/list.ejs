@@ -1,4 +1,13 @@
 <div class="changelog">
+  <h1>v0.80.1</h1>
+  <h2><%- time.format('2016-01-20', 'LL') %></h2>
+  <h3>Raporty > Lean</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się serwera, gdy w pobieranych Zleceniach lub Przestojach znajdzie się
+      rekord, którego Zmiana produkcyjna jest po czasie podanym w filtrze 'Do' raportu (może się tak zdarzyć,
+      gdy na komputerze z Formatka operatora zegar systemowy zostanie przesunięty zaraz po rozpoczęciu zmiany
+      - w historii wygląda to tak, jakby Zlecenie rozpoczęło się przed Zmianą).
+  </ul>
   <h1>v0.80.0</h1>
   <h2><%- time.format('2016-01-17', 'LL') %></h2>
   <h3>Pulpit</h3>
