@@ -84,6 +84,14 @@ define([
     {
       this.prepareOperations(orderData);
 
+      var shiftDate = prodShift.get('date');
+      var startedAt = time.getMoment().toDate();
+
+      if (startedAt < shiftDate)
+      {
+        startedAt = new Date(shiftDate.getTime());
+      }
+
       this.set({
         prodShift: prodShift.id,
         division: prodShift.get('division'),
@@ -92,7 +100,7 @@ define([
         prodFlow: prodShift.get('prodFlow'),
         workCenter: prodShift.get('workCenter'),
         prodLine: prodShift.prodLine.id,
-        date: prodShift.get('date'),
+        date: shiftDate,
         shift: prodShift.get('shift'),
         mechOrder: orderData.no === null,
         orderId: orderData.no || orderData.nc12,
@@ -104,7 +112,7 @@ define([
         quantityLost: 0,
         losses: null,
         creator: user.getInfo(),
-        startedAt: time.getMoment().toDate(),
+        startedAt: startedAt,
         finishedAt: null,
         master: prodShift.get('master'),
         leader: prodShift.get('leader'),

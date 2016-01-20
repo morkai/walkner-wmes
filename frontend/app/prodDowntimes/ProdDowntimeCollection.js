@@ -116,6 +116,14 @@ define([
 
     addFromInfo: function(prodShift, downtimeInfo)
     {
+      var shiftDate = prodShift.get('date');
+      var startedAt = downtimeInfo.startedAt || time.getMoment().toDate();
+
+      if (startedAt < shiftDate)
+      {
+        startedAt = new Date(shiftDate.getTime());
+      }
+
       var prodDowntime = new ProdDowntime({
         division: prodShift.get('division'),
         subdivision: prodShift.get('subdivision'),
@@ -125,13 +133,13 @@ define([
         prodLine: prodShift.prodLine.id,
         prodShift: prodShift.id,
         prodShiftOrder: prodShift.prodShiftOrder.id || null,
-        date: prodShift.get('date'),
+        date: shiftDate,
         shift: prodShift.get('shift'),
         aor: downtimeInfo.aor,
         reason: downtimeInfo.reason,
         reasonComment: downtimeInfo.reasonComment,
         status: ProdDowntime.STATUS.UNDECIDED,
-        startedAt: downtimeInfo.startedAt || time.getMoment().toDate(),
+        startedAt: startedAt,
         creator: user.getInfo(),
         master: prodShift.get('master'),
         leader: prodShift.get('leader'),
