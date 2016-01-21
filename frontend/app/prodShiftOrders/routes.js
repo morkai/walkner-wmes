@@ -33,7 +33,12 @@ define([
   router.map('/prodShiftOrders/:id', canView, function(req)
   {
     viewport.loadPage(
-      ['app/prodShiftOrders/pages/ProdShiftOrderDetailsPage', nls],
+      [
+        'app/prodShiftOrders/pages/ProdShiftOrderDetailsPage',
+        'i18n!app/nls/orders',
+        'i18n!app/nls/mechOrders',
+        nls
+      ],
       function(ProdShiftOrderDetailsPage)
       {
         return new ProdShiftOrderDetailsPage({modelId: req.params.id});
