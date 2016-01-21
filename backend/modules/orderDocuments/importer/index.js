@@ -175,13 +175,23 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
         this.parsedOrderDocumentsList = null;
         this.orderNoToDocumentsMap = orderNoToDocumentsMap;
+        this.orderNoToProgramMap = orderNoToProgramMap;
 
-        setImmediate(buildXiconfProgramsDumpFile, fileInfo.timestamp, orderNoToProgramMap);
         setImmediate(this.next());
       },
       function findExistingOrdersStep()
       {
-        Order.find({_id: {$in: Object.keys(this.orderNoToDocumentsMap)}}, {documents: 1}).lean().exec(this.next());
+        var conditions = {
+          _id: {
+            $in: Object.keys(this.orderNoToDocumentsMap)
+          }
+        };
+        var fields = {
+          qty: 1,
+          documents: 1
+        };
+
+        Order.find(conditions, fields).lean().exec(this.next());
       },
       function compareOrderDocumentsStep(err, orders)
       {
@@ -198,6 +208,12 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
           var order = orders[i];
           var oldDocuments = order.documents || [];
           var newDocuments = this.orderNoToDocumentsMap[order._id];
+          var program = this.orderNoToProgramMap[order._id];
+
+          if (program)
+          {
+            program.qty = order.qty;
+          }
 
           if (deepEqual(oldDocuments, newDocuments))
           {
@@ -226,6 +242,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
         this.updateList = updateList;
 
+        setImmediate(buildXiconfProgramsDumpFile, fileInfo.timestamp, this.orderNoToProgramMap);
         setImmediate(this.next());
       },
       function updateOrdersStep()
@@ -241,6 +258,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
         this.parsedOrderDocumentsList = null;
         this.orderNoToDocumentsMap = null;
+        this.orderNoToProgramMap = null;
         this.updateList = null;
 
         if (!err || err.code === 11000)
@@ -318,7 +336,8 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       {
         orderNoToProgramMap[orderDocument.orderNo] = {
           nc12: orderDocument.nc15.substring(3),
-          name: matches.length > 1 ? matches[1] : orderDocument.name
+          name: matches.length > 1 ? matches[1] : orderDocument.name,
+          qty: -1
         };
 
         break;
@@ -450,6 +469,11 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
     {
       programItem.nc12 = newProgram.nc12;
       programItem.name = newProgram.name;
+
+      if (newProgram.qty !== -1)
+      {
+        programItem.quantity = newProgram.qty;
+      }
     }
     else
     {
@@ -457,7 +481,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
         orderNo: xiconfOrder._id,
         nc12: newProgram.nc12,
         name: newProgram.name,
-        quantity: xiconfOrder.quantityTodo,
+        quantity: newProgram.qty === -1 ? xiconfOrder.quantityTodo : newProgram.qty,
         reqDate: xiconfOrder.reqDate
       };
 
