@@ -74,6 +74,18 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     };
   };
 
+  xiconfModule.clearOrderData = function(orderNo)
+  {
+    if (orderNo === 'all')
+    {
+      ordersToDataMap = {};
+    }
+    else
+    {
+      delete ordersToDataMap[orderNo];
+    }
+  };
+
   app.broker.subscribe('app.started', onAppStarted);
   app.broker.subscribe('updater.restarting', function() { restarting = true; });
   app.broker.subscribe('settings.updated.xiconf.notifier.delay', onDelaySettingChanged);
