@@ -9,7 +9,7 @@ define([
 
   return Model.extend({
 
-    idAttribute: 'item',
+    idAttribute: 'index',
 
     labelAttribute: 'name'
 

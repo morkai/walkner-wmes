@@ -11,7 +11,20 @@ define([
 
   return Collection.extend({
 
-    model: Component
+    model: Component,
+
+    parse: function(res)
+    {
+      if (res.collection)
+      {
+        res.collection.forEach(function(component, i)
+        {
+          component.index = i;
+        });
+      }
+
+      return res;
+    }
 
   });
 });
