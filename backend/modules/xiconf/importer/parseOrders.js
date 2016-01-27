@@ -13,6 +13,8 @@ module.exports = function parseXiconfOrders(input)
   var GPRS_PROGRAM_RE = /^LC/;
   var GPRS_CONFIG_RE = /\s+(F|T)(P|A)(_|A|B|C|D)/;
 
+  var isFromDocs = /^DOCS/.test(input);
+
   return parseSapTextTable(input, {
     columnMatchers: {
       no: /^Order$/,
@@ -36,6 +38,8 @@ module.exports = function parseXiconfOrders(input)
 
       var programMatches = obj.name.match(PROGRAM_RE);
       var isProgramItem = programMatches !== null;
+
+      obj.source = isFromDocs && isProgramItem ? 'docs' : 'xiconf';
 
       if (isProgramItem)
       {

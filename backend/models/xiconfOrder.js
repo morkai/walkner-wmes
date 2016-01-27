@@ -5,6 +5,11 @@
 module.exports = function setupXiconfOrderModel(app, mongoose)
 {
   var xiconfOrderItemSchema = mongoose.Schema({
+    source: {
+      type: String,
+      enum: ['xiconf', 'docs'],
+      default: 'xiconf'
+    },
     kind: {
       type: String,
       enum: ['program', 'led', 'gprs', 'test']

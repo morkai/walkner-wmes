@@ -12,8 +12,7 @@ var parseOrders = require('./parseOrders');
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   filterRe: /^T_COOIS_XICONF\.txt$/,
-  parsedOutputDir: null,
-  keepProgramPatterns: []
+  parsedOutputDir: null
 };
 
 exports.start = function startXiconfOrdersImporterModule(app, module)
@@ -25,7 +24,6 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     throw new Error("mongoose module is required!");
   }
 
-  var KEEP_PROGRAM_PATTERNS = module.config.keepProgramPatterns;
   var IMPORT_KINDS = {
     program: true,
     led: true,
@@ -167,8 +165,15 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       function findExistingOrdersStep()
       {
         var orderIds = Object.keys(this.parsedOrdersMap);
+        var fields = {
+          name: 1,
+          nc12: 1,
+          startDate: 1,
+          finishDate: 1,
+          qty: 1
+        };
 
-        Order.find({_id: {$in: orderIds}}, {operations: 0, changes: 0, statuses: 0}).lean().exec(this.parallel());
+        Order.find({_id: {$in: orderIds}}, fields).lean().exec(this.parallel());
         XiconfOrder.find({_id: {$in: orderIds}}).lean().exec(this.parallel());
       },
       function mapExistingOrdersStep(err, ordersList, xiconfOrdersList)
@@ -429,6 +434,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
   function createXiconfOrderItem(parsedOrder)
   {
     return {
+      source: parsedOrder.source,
       kind: parsedOrder.kind,
       nc12: parsedOrder.nc12,
       name: parsedOrder.name,
@@ -520,6 +526,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
   {
     var parsedOrdersMap = {};
     var deletedItems = [];
+    var hasExistingProgramFromDocs = false;
 
     _.forEach(parsedOrdersList, function(parsedOrder)
     {
@@ -534,7 +541,22 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       {
         deletedItems.push(i);
       }
+      else if (xiconfOrderItem.source === 'docs' && xiconfOrderItem.kind === 'program')
+      {
+        hasExistingProgramFromDocs = true;
+      }
     });
+
+    if (hasNewProgramFromDocs(parsedOrdersMap))
+    {
+      _.forEach(xiconfOrder.items, function(xiconfOrderItem, i)
+      {
+        if (xiconfOrderItem.kind === 'program' && !_.includes(deletedItems, i))
+        {
+          deletedItems.push(i);
+        }
+      });
+    }
 
     if (deletedItems.length)
     {
@@ -543,6 +565,11 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     _.forEach(parsedOrdersMap, function(parsedOrder)
     {
+      if (hasExistingProgramFromDocs && parsedOrder.source === 'xiconf' && parsedOrder.kind === 'program')
+      {
+        return;
+      }
+
       if (!$push.items)
       {
         $push.items = {$each: []};
@@ -554,22 +581,17 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     });
   }
 
+  function hasNewProgramFromDocs(parsedOrdersMap)
+  {
+    return _.any(parsedOrdersMap, function(parsedOrder)
+    {
+      return parsedOrder.source === 'docs' && parsedOrder.kind === 'program';
+    });
+  }
+
   function shouldDeleteItem(xiconfOrderItem)
   {
-    if (xiconfOrderItem.kind !== 'program' || !KEEP_PROGRAM_PATTERNS.length)
-    {
-      return true;
-    }
-
-    for (var i = 0; i < KEEP_PROGRAM_PATTERNS.length; ++i)
-    {
-      if (KEEP_PROGRAM_PATTERNS[i].test(xiconfOrderItem.name))
-      {
-        return false;
-      }
-    }
-
-    return true;
+    return !(xiconfOrderItem.kind === 'program' && xiconfOrderItem.source === 'docs');
   }
 
   function compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i)
@@ -582,6 +604,18 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     }
 
     delete parsedOrdersMap[xiconfOrderItem.nc12];
+
+    if (xiconfOrderItem.source === 'docs'
+      && parsedOrder.source === 'xiconf'
+      && parsedOrder.kind === 'program')
+    {
+      return false;
+    }
+
+    if (parsedOrder.source !== xiconfOrderItem.source)
+    {
+      $set['items.' + i + '.source'] = parsedOrder.source;
+    }
 
     if (parsedOrder.name !== xiconfOrderItem.name)
     {

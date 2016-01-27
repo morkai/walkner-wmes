@@ -400,6 +400,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
         var filePath = XICONF_PROGRAM_FILE_PATH_PATTERN.replace('{timestamp}', Math.ceil(timestamp / 1000));
         var fileContents = [
+          'DOCS',
           '-----------------------------------------------------------------------------------------------------------',
           '|Order    |Material       |Reqmts qty|Material Description                             |Reqmt Date|Deleted|',
           '-----------------------------------------------------------------------------------------------------------'
