@@ -41,6 +41,13 @@ exports.start = function startMailSenderModule(app, module)
   }
 
   var transport = module.config.smtp ? nodemailer.createTransport(module.config.smtp) : null;
+  var recentlySentFromFile = {};
+
+  app.broker.subscribe('directoryWatcher.changed')
+    .setFilter(function(fileInfo) { return /\.email$/.test(fileInfo.fileName); })
+    .on('message', sendFromFile);
+
+  setInterval(cleanRecentlySentFromFile, 30 * 60 * 1000);
 
   /**
    * @param {string|Array.<string>} to
@@ -186,6 +193,72 @@ exports.start = function startMailSenderModule(app, module)
         fs.close(fd, done);
       }
     );
+  }
+
+  function sendFromFile(fileInfo)
+  {
+    if (recentlySentFromFile[fileInfo.fileName])
+    {
+      return;
+    }
+
+    recentlySentFromFile[fileInfo.fileName] = Date.now();
+
+    fs.readFile(fileInfo.filePath, 'utf8', function(err, contents)
+    {
+      if (err)
+      {
+        return module.error("Failed to read contents of file [%s]: %s", fileInfo.fileName, err.message);
+      }
+
+      var bodyIndex = contents.indexOf('Body:');
+      var headers = contents.substring(0, bodyIndex).trim().split('\r\n');
+      var body = contents.substring(bodyIndex + 'Body:'.length).trim();
+      var mailOptions = {};
+
+      _.forEach(headers, function(header)
+      {
+        var colonIndex = header.indexOf(':');
+        var headerName = header.substring(0, colonIndex).trim();
+        var headerValue = header.substring(colonIndex + 1).trim();
+
+        mailOptions[headerName] = headerValue;
+      });
+
+      if (mailOptions.html)
+      {
+        mailOptions.html = body;
+      }
+      else
+      {
+        mailOptions.text = body;
+      }
+
+      module.send(mailOptions, function(err)
+      {
+        if (err)
+        {
+          module.error("Failed to send email from file [%s]: %s", fileInfo.fileName, err.message);
+        }
+        else
+        {
+          fs.unlink(fileInfo.filePath, function() {});
+        }
+      });
+    });
+  }
+
+  function cleanRecentlySentFromFile()
+  {
+    var halfHourAgo = Date.now() - 30 * 60 * 1000;
+
+    _.forEach(recentlySentFromFile, function(sentAt, fileName)
+    {
+      if (sentAt < halfHourAgo)
+      {
+        delete recentlySentFromFile[fileName];
+      }
+    });
   }
 
   app.onModuleReady(module.config.expressId, function()
