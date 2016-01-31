@@ -20,6 +20,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var XiconfResult = mongoose.model('XiconfResult');
   var XiconfOrderResult = mongoose.model('XiconfOrderResult');
   var XiconfOrder = mongoose.model('XiconfOrder');
+  var XiconfInvalidLed = mongoose.model('XiconfInvalidLed');
   var Order = mongoose.model('Order');
   var License = mongoose.model('License');
 
@@ -42,7 +43,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     checkSerialNumber: handleCheckSerialNumberRequest,
     generateServiceTag: handleGenerateServiceTagRequest,
     acquireServiceTag: handleAcquireServiceTagRequest,
-    releaseServiceTag: handleReleaseServiceTagRequest
+    releaseServiceTag: handleReleaseServiceTagRequest,
+    recordInvalidLed: handleRecordInvalidLedRequest
   };
 
   xiconfModule.getRemoteCoordinatorDebugInfo = function(enableDebugMode)
@@ -806,6 +808,39 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     releaseServiceTag(input, reply);
   }
 
+  function handleRecordInvalidLedRequest(input, reply)
+  {
+    /*jshint validthis:true*/
+
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (restarting)
+    {
+      return reply(new Error('RESTARTING'));
+    }
+
+    var socket = this;
+
+    if (socket.id && !socket.xiconf)
+    {
+      return reply(new Error('NOT_CONNECTED'));
+    }
+
+    if (!_.isObject(input)
+      || !_.isString(input.orderNo)
+      || !_.isString(input.serialNumber)
+      || !_.isString(input.requiredNc12)
+      || !_.isString(input.actualNc12))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    recordInvalidLed(input, reply);
+  }
+
   function validateInputLeds(input)
   {
     if (!_.isArray(input.leds))
@@ -916,6 +951,17 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       leds: input.leds,
       programId: input.programId,
       programName: input.programName
+    });
+  }
+
+  function recordInvalidLed(input, reply)
+  {
+    queueOrderOperation(input.orderNo, recordNextInvalidLed, reply, {
+      time: new Date(),
+      orderNo: input.orderNo,
+      serialNo: input.serialNumber,
+      requiredNc12: input.requiredNc12,
+      actualNc12: input.actualNc12
     });
   }
 
@@ -1817,6 +1863,25 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         done(err);
       }
     );
+  }
+
+  function recordNextInvalidLed(data, done)
+  {
+    var invalidLed = new XiconfInvalidLed(data);
+
+    invalidLed.save(function(err)
+    {
+      if (err)
+      {
+        xiconfModule.error("Failed to record an invalid LED: %s", err.message);
+      }
+      else
+      {
+        app.broker.publish('xiconf.orders.' + data.orderNo + '.invalidLedRecorded', invalidLed.toJSON());
+      }
+
+      done(err);
+    });
   }
 
   function applyOrderDataChanges(orderData, changes)

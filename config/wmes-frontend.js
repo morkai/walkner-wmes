@@ -198,7 +198,7 @@ exports.mongoose = {
     'prodDowntimeAlert',
     'feedback',
     'license', 'licensePing',
-    'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfOrder', 'xiconfClient',
+    'xiconfOrderResult', 'xiconfResult', 'xiconfProgram', 'xiconfOrder', 'xiconfClient', 'xiconfInvalidLed',
     'factoryLayout',
     'whTransferOrder',
     'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk', 'kaizenProductFamily', 'kaizenOrder',
