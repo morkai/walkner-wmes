@@ -2,6 +2,8 @@
 
 'use strict';
 
+var util = require('util');
+var exec = require('child_process').exec;
 var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
@@ -168,9 +170,30 @@ module.exports = function setUpCleanup(app, module)
               user: null,
               model: omrResult
             });
+
+            cleanUpProcessingFiles(omrResult);
           });
         }
       }
     );
+  }
+
+  function cleanUpProcessingFiles(result)
+  {
+    var processingDirPath = path.join(module.config.processingPath, result._id);
+    var fromInputFilePath = result.omrOutput
+      ? path.join(processingDirPath, result.scanTemplate._id.toString(), 'input.jpg')
+      : path.join(processingDirPath, result.inputFileName);
+    var toInputFilePath = path.join(module.config.responsesPath, result._id + '.jpg');
+
+    fs.rename(fromInputFilePath, toInputFilePath, function()
+    {
+      removeDir(processingDirPath);
+    });
+  }
+
+  function removeDir(dir)
+  {
+    exec(util.format(process.platform === 'win32' ? 'rmdir /S /Q "%s"' : 'rm -rf "%s"', dir), function() {});
   }
 };
