@@ -44,6 +44,7 @@ define([
       [
         'app/opinionSurveyResponses/OpinionSurveyResponse',
         'app/opinionSurveyResponses/pages/OpinionSurveyResponseDetailsPage',
+        'i18n!app/nls/opinionSurveys',
         nls
       ],
       function(OpinionSurveyResponse, OpinionSurveyResponseDetailsPage)
