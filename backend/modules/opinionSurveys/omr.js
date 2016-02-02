@@ -12,7 +12,7 @@ var gm = require('gm');
 
 module.exports = function setUpOmr(app, module)
 {
-  var INPUT_DIR_CALM_PERIOD = 30 * 1000;
+  var INPUT_DIR_CALM_PERIOD = app.options.env !== 'development' ? (30 * 1000) : (5 * 1000);
   var SURVEY_PAGE_COUNT = 2;
   var INPUT_FILE_RE = /^[0-9]+\.(?:jpe?g)$/i;
 
@@ -101,18 +101,41 @@ module.exports = function setUpOmr(app, module)
 
         fs.readdir(currentInputDir.filePath, this.next());
       },
-      function prepareInputScansStep(err, files)
+      function readConfigFileStep(err, files)
       {
         if (err)
         {
           return this.skip(err);
         }
 
+        module.debug("[omr] Reading config file...");
+
+        var next = this.next();
+
+        fs.readFile(path.join(currentInputDir.filePath, 'config.json'), 'utf8', function(err, config)
+        {
+          try
+          {
+            config = JSON.parse(config);
+          }
+          catch (err) {}
+
+          next(null, config || {}, files);
+        });
+      },
+      function prepareInputScansStep(err, config, files)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var surveyPageCount = config.surveyPageCount || SURVEY_PAGE_COUNT;
         var inputFiles = files.filter(function(file) { return INPUT_FILE_RE.test(file); });
-        var inputScans = _.chunk(inputFiles, SURVEY_PAGE_COUNT);
+        var inputScans = _.chunk(inputFiles, surveyPageCount);
         var lastIndex = inputScans.length - 1;
 
-        if (lastIndex !== -1 && inputScans[lastIndex].length !== SURVEY_PAGE_COUNT)
+        if (lastIndex !== -1 && inputScans[lastIndex].length !== surveyPageCount)
         {
           inputScans.pop();
         }
