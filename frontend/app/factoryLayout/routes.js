@@ -47,7 +47,8 @@ define([
       [
         'app/factoryLayout/productionState',
         'app/factoryLayout/ProdLineStateDisplayOptions',
-        'app/factoryLayout/pages/ProdLineStateListPage'
+        'app/factoryLayout/pages/ProdLineStateListPage',
+        'i18n!app/nls/prodShifts'
       ],
       function(productionState, ProdLineStateDisplayOptions, ProdLineStateListPage)
       {
