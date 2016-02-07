@@ -200,7 +200,7 @@ define([
         }
 
         view.req = null;
-        view.loadFile(remoteFileUrl);
+        view.loadFile(remoteFileUrl + '?' + view.getRemoteFileUrlQuery());
       });
     },
 
@@ -249,6 +249,15 @@ define([
     setLoadingMessage: function(key)
     {
       this.$id('message').text(t('orderDocuments', 'preview:msg:loading:' + key));
+    },
+
+    getRemoteFileUrlQuery: function()
+    {
+      var currentOrder = this.model.getCurrentOrder();
+
+      return 'order=' + (currentOrder.no || '')
+        + '&w=' + this.$iframe.width()
+        + '&h=' + this.$iframe.height();
     }
 
   });

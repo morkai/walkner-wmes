@@ -48,7 +48,9 @@
     "localOrderPicker:orderNo": "Order number",
     "localOrderPicker:submit": "Find order",
     "localOrderPicker:error:failure": "Failed to find the order :(",
-    "localOrderPicker:error:NOT_FOUND": "Order does not exist!"
+    "localOrderPicker:error:NOT_FOUND": "Order does not exist!",
+
+    "bom": "Bill of materials"
   },
   "pl": true
 }

@@ -283,7 +283,12 @@ define([
         no: orderData.no,
         nc12: orderData.nc12,
         name: orderData.name,
-        documents: orderData.documents,
+        documents: _.extend(
+          {
+            'BOM': t('orderDocuments', 'bom')
+          },
+          orderData.documents
+        ),
         nc15: null
       };
 
@@ -293,7 +298,7 @@ define([
       }
       else
       {
-        var documentNc15s = Object.keys(orderData.documents).filter(this.filterNc15);
+        var documentNc15s = Object.keys(newOrder.documents).filter(this.filterNc15);
 
         if (documentNc15s.length)
         {

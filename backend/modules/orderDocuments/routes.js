@@ -15,8 +15,13 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   var updaterModule = app[module.config.updaterId];
   var orgUnits = app[module.config.orgUnitsId];
   var mongoose = app[module.config.mongooseId];
+  var Order = mongoose.model('Order');
   var OrderDocumentClient = mongoose.model('OrderDocumentClient');
   var License = mongoose.model('License');
+
+  var SPECIAL_DOCUMENTS = {
+    BOM: true
+  };
 
   var canView = userModule.auth('DOCUMENTS:VIEW');
   var canManage = userModule.auth('DOCUMENTS:MANAGE');
@@ -121,7 +126,14 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   express.head('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res)
   {
-    findDocumentFilePath(req.params.nc15, function(err, results)
+    var nc15 = req.params.nc15;
+
+    if (SPECIAL_DOCUMENTS[nc15])
+    {
+      return res.sendStatus(204);
+    }
+
+    findDocumentFilePath(nc15, function(err, results)
     {
       if (err)
       {
@@ -133,12 +145,18 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return res.sendStatus(204);
     });
 
-    module.checkRemoteServer(req.params.nc15);
+    module.checkRemoteServer(nc15);
   });
 
   express.get('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res, next)
   {
     var nc15 = req.params.nc15;
+
+    if (SPECIAL_DOCUMENTS[nc15])
+    {
+      return handleSpecialDocument(req, res, next);
+    }
+
     var freshHeaders = nc15ToFreshHeaders[nc15];
 
     if (freshHeaders && fresh(req.headers, freshHeaders))
@@ -270,5 +288,38 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         });
       }
     );
+  }
+
+  function handleSpecialDocument(req, res, next)
+  {
+    Order.findById(req.query.order, {bom: 1}).lean().exec(function(err, order)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (!order)
+      {
+        return res.sendStatus(express.createHttpError('ORDER_NOT_FOUND'));
+      }
+
+      res.render('orderDocuments:bom', {
+        order: order._id,
+        components: _.map(order.bom, function(component)
+        {
+          var qty = component.qty.toString().split('.');
+
+          component.qty = [
+            parseInt(qty[0], 10),
+            Math.round((parseInt(qty[1], 10) || 0) * 1000) / 1000
+          ];
+
+          return component;
+        }),
+        windowWidth: parseInt(req.query.w, 10) || 0,
+        windowHeight: parseInt(req.query.h, 10) || 0
+      });
+    });
   }
 };

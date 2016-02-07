@@ -47,5 +47,7 @@
   "localOrderPicker:orderNo": "Numer zlecenia",
   "localOrderPicker:submit": "Znajdź zlecenie",
   "localOrderPicker:error:failure": "Nie udało się znaleźć zlecenia :(",
-  "localOrderPicker:error:NOT_FOUND": "Zlecenie o podanym numerze nie istnieje!"
+  "localOrderPicker:error:NOT_FOUND": "Zlecenie o podanym numerze nie istnieje!",
+
+  "bom": "Lista komponentów"
 }
