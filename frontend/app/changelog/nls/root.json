@@ -1,6 +1,9 @@
 {
   "root": {
-    "breadcrumbs:browse": "Changelog"
+    "breadcrumbs:browse": "Changelog",
+
+    "showMore": "Show more...",
+    "showAll": "Show all..."
   },
   "pl": true
 }
