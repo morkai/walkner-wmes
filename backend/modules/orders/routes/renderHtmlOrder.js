@@ -117,7 +117,7 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
             no: component.item,
             material: component.nc12,
             description: component.name,
-            quantity: formatNumber(component.qty / (component.qty >= order.qty ? order.qty : 1)),
+            quantity: formatNumber(component.qty / order.qty),
             unit: component.unit,
             unloadingPoint: component.unloadingPoint
           };
