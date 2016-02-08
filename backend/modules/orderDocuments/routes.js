@@ -292,7 +292,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   function handleSpecialDocument(req, res, next)
   {
-    Order.findById(req.query.order, {bom: 1}).lean().exec(function(err, order)
+    Order.findById(req.query.order, {qty: 1, bom: 1}).lean().exec(function(err, order)
     {
       if (err)
       {
@@ -308,7 +308,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         order: order._id,
         components: _.map(order.bom, function(component)
         {
-          var qty = component.qty.toString().split('.');
+          var qty = (component.qty / order.qty).toString().split('.');
 
           component.qty = [
             parseInt(qty[0], 10),
