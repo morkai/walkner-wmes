@@ -404,7 +404,7 @@ module.exports = function(mongoose, options, done)
       otherWarehousing: [0, 0],
       materialQualityInspection: [settings.materialQualityInspectionPlan, 0],
       maintenance: [settings.maintenancePlan, 0],
-      timeAvailablePerShift: [{}, 0],
+      timeAvailablePerShift: [0, 0],
       orderCountForLine: 0,
       routingTimeForLine: [0, 0],
       routingTimeForLabour: [0, 0],
@@ -816,20 +816,6 @@ module.exports = function(mongoose, options, done)
       group.routingTimeForLine[REAL] += realRoutingTimeForLine;
       summary.routingTimeForLabour[REAL] += realRoutingTimeForLabour;
       group.routingTimeForLabour[REAL] += realRoutingTimeForLabour;
-
-      if (!summary.timeAvailablePerShift[PLAN][dateKey])
-      {
-        summary.timeAvailablePerShift[PLAN][dateKey] = {};
-      }
-
-      summary.timeAvailablePerShift[PLAN][dateKey][shiftKey] = true;
-
-      if (!group.timeAvailablePerShift[PLAN][dateKey])
-      {
-        group.timeAvailablePerShift[PLAN][dateKey] = {};
-      }
-
-      group.timeAvailablePerShift[PLAN][dateKey][shiftKey] = true;
 
       var shiftCountKey = shiftKey + prodLineId;
 
