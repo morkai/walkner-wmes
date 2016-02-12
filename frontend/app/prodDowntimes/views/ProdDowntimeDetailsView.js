@@ -115,7 +115,7 @@ define([
         this.timers.updateTimes = setInterval(this.updateTimes.bind(this), 30000);
       }
 
-      reasonAndAor.setUpReasons(this);
+      reasonAndAor.setUpReasons(this, null, this.model.get('subdivision'));
       reasonAndAor.setUpAors(this);
 
       this.updateCorroborateExtra();

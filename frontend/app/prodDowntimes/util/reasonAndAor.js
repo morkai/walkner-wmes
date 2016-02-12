@@ -32,8 +32,21 @@ define([
       var reasonsList = [];
       var subdivision = subdivisions.get(subdivisionId);
       var defaultAor = subdivision ? subdivision.get('aor') : null;
+      var reasons = customReasons;
 
-      (customReasons || downtimeReasons).forEach(function(reason)
+      if (!reasons)
+      {
+        if (subdivision)
+        {
+          reasons = downtimeReasons.findBySubdivisionType(subdivision.get('type'));
+        }
+        else
+        {
+          reasons = downtimeReasons;
+        }
+      }
+
+      reasons.forEach(function(reason)
       {
         var reasonAors = {};
         var hasAnyAors = false;
