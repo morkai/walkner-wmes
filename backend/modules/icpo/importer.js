@@ -2,11 +2,11 @@
 
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
 var JSZip = require('jszip');
+var fs = require('fs-extra');
 
 module.exports = function setUpIcpoImporter(app, icpoModule)
 {
@@ -320,7 +320,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
   {
     if (hadError)
     {
-      fs.rename(filePath, filePath + '.bad', function(err)
+      fs.move(filePath, filePath + '.bad', function(err)
       {
         if (err)
         {

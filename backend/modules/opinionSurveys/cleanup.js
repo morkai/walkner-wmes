@@ -5,9 +5,9 @@
 var util = require('util');
 var exec = require('child_process').exec;
 var path = require('path');
-var fs = require('fs');
 var _ = require('lodash');
 var step = require('h5.step');
+var fs = require('fs-extra');
 
 module.exports = function setUpCleanup(app, module)
 {
@@ -186,7 +186,7 @@ module.exports = function setUpCleanup(app, module)
       : path.join(processingDirPath, result.inputFileName);
     var toInputFilePath = path.join(module.config.responsesPath, result._id + '.jpg');
 
-    fs.rename(fromInputFilePath, toInputFilePath, function()
+    fs.move(fromInputFilePath, toInputFilePath, function()
     {
       removeDir(processingDirPath);
     });

@@ -2,11 +2,11 @@
 
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var moment = require('moment');
 var step = require('h5.step');
 var deepEqual = require('deep-equal');
+var fs = require('fs-extra');
 var parseSapTextTable = require('../../sap/util/parseSapTextTable');
 var parseSapNumber = require('../../sap/util/parseSapNumber');
 var parseSapString = require('../../sap/util/parseSapString');
@@ -236,7 +236,7 @@ exports.start = function startOrderBomImporterModule(app, module)
   {
     var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.rename(oldFilePath, newFilePath, function(err)
+    fs.move(oldFilePath, newFilePath, function(err)
     {
       if (err)
       {

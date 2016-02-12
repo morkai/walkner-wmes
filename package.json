@@ -75,6 +75,7 @@
     "gm": "~1.21.1",
     "transliteration": "~0.1.1",
     "xml2js": "~0.4.15",
+    "fs-extra": "~0.26.5",
     "h5.step": "~0.1.0",
     "h5.pubsub": "git+http://github.com/morkai/h5.pubsub.git#c1a899cb7e",
     "h5.rql": "git+http://github.com/morkai/h5.rql.git#5622189665",

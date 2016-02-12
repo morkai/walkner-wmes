@@ -3,10 +3,10 @@
 'use strict';
 
 var os = require('os');
-var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var multer = require('multer');
+var fs = require('fs-extra');
 
 module.exports = function setUpCagsRoutes(app, module)
 {
@@ -58,7 +58,7 @@ module.exports = function setUpCagsRoutes(app, module)
     var oldPath = planFile.path;
     var newPath = path.join(module.config.planUploadPath, 'CAGS_PLAN_' + Date.now() + '.csv');
 
-    fs.rename(oldPath, newPath, function(err)
+    fs.move(oldPath, newPath, function(err)
     {
       fs.unlink(oldPath, _.noop);
 

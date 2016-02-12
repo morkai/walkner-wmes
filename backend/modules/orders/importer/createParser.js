@@ -2,11 +2,11 @@
 
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
+var fs = require('fs-extra');
 var parseOrders = require('./parseOrders');
 var parseOperations = require('./parseOperations');
 
@@ -267,7 +267,7 @@ module.exports = function createParser(app, importerModule, callback)
   {
     var newFilePath = path.join(importerModule.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.rename(oldFilePath, newFilePath, function(err)
+    fs.move(oldFilePath, newFilePath, function(err)
     {
       if (err)
       {

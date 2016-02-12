@@ -2,11 +2,11 @@
 
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
+var fs = require('fs-extra');
 var parseOrders = require('./parseOrders');
 
 exports.DEFAULT_CONFIG = {
@@ -366,7 +366,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
   {
     var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.rename(oldFilePath, newFilePath, function(err)
+    fs.move(oldFilePath, newFilePath, function(err)
     {
       if (err)
       {

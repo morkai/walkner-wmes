@@ -2,12 +2,12 @@
 
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var deepEqual = require('deep-equal');
 var moment = require('moment');
 var step = require('h5.step');
+var fs = require('fs-extra');
 var parseOrderDocuments = require('./parseOrderDocuments');
 
 exports.DEFAULT_CONFIG = {
@@ -299,7 +299,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
   {
     var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.rename(oldFilePath, newFilePath, function(err)
+    fs.move(oldFilePath, newFilePath, function(err)
     {
       if (err)
       {

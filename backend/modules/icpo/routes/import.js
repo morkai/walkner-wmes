@@ -2,11 +2,11 @@
 
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
 var moment = require('moment');
 var step = require('h5.step');
+var fs = require('fs-extra');
 
 module.exports = function importRoute(app, icpoModule, req, res, next)
 {
@@ -80,7 +80,7 @@ module.exports = function importRoute(app, icpoModule, req, res, next)
         return this.skip(err);
       }
 
-      fs.rename(zipFilePath, zipFilePath + '.zip', this.next());
+      fs.move(zipFilePath, zipFilePath + '.zip', this.next());
     },
     function(err, statusCode)
     {

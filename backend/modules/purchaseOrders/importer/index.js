@@ -2,10 +2,10 @@
 
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
+var fs = require('fs-extra');
 var comparePoList = require('./comparePoList');
 var parsers = {
   html: require('./parseHtmlPoList'),
@@ -318,7 +318,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   {
     var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.rename(oldFilePath, newFilePath, function(err)
+    fs.move(oldFilePath, newFilePath, function(err)
     {
       if (err)
       {

@@ -5,10 +5,10 @@
 var util = require('util');
 var exec = require('child_process').exec;
 var path = require('path');
-var fs = require('fs');
 var _ = require('lodash');
 var step = require('h5.step');
 var gm = require('gm');
+var fs = require('fs-extra');
 
 module.exports = function setUpOmr(app, module)
 {
@@ -345,7 +345,7 @@ module.exports = function setUpOmr(app, module)
       },
       function moveInputFileStep()
       {
-        fs.rename(inputFilePath, processingFilePath, this.next());
+        fs.move(inputFilePath, processingFilePath, this.next());
       },
       function handleMoveInputFileResultStep(err)
       {
@@ -917,7 +917,7 @@ module.exports = function setUpOmr(app, module)
             : path.join(processingDirPath, result.inputFileName);
           var toInputFilePath = path.join(module.config.responsesPath, result._id + '.jpg');
 
-          fs.rename(fromInputFilePath, toInputFilePath, this.group());
+          fs.move(fromInputFilePath, toInputFilePath, this.group());
 
           if (!result.errorCode)
           {

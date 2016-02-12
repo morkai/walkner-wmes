@@ -2,10 +2,10 @@
 
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var moment = require('moment');
 var step = require('h5.step');
+var fs = require('fs-extra');
 var parseSapTextTable = require('../../sap/util/parseSapTextTable');
 
 exports.DEFAULT_CONFIG = {
@@ -153,7 +153,7 @@ exports.start = function startCagNc12ImporterModule(app, module)
   {
     var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.rename(oldFilePath, newFilePath, function(err)
+    fs.move(oldFilePath, newFilePath, function(err)
     {
       if (err)
       {

@@ -2,10 +2,10 @@
 
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var createHash = require('crypto').createHash;
 var step = require('h5.step');
+var fs = require('fs-extra');
 
 exports.DEFAULT_CONFIG = {
   messengerClientId: 'messenger/client',
@@ -97,7 +97,7 @@ exports.start = function startDacNodeModule(app, module)
       Date.now() + Math.random().toString().replace(/^0\./, '') + '.csv'
     );
 
-    fs.rename(module.config.journalFile, dataFile, function(err)
+    fs.move(module.config.journalFile, dataFile, function(err)
     {
       if (err && err.code !== 'ENOENT')
       {
