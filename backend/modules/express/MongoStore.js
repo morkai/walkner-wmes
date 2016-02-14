@@ -141,7 +141,7 @@ MongoStore.prototype.get = function(sid, done)
 
     if (doc !== null)
     {
-      var session = JSON.parse(doc.data);
+      var session = typeof doc.data === 'string' ? JSON.parse(doc.data) : doc.data;
       var expires = typeof session.cookie.expires === 'string'
         ? new Date(session.cookie.expires)
         : session.cookie.expires;
@@ -170,7 +170,7 @@ MongoStore.prototype.set = function(sid, session, done)
   var doc = {
     _id: sid,
     expires: Date.parse(session.cookie.expires),
-    data: JSON.stringify(session)
+    data: session
   };
 
   if (isNaN(doc.expires))
