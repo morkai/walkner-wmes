@@ -44,6 +44,11 @@ function(
     user.reload(userData);
   });
 
+  socket.on('user.deleted', function()
+  {
+    window.location.reload();
+  });
+
   user.data = _.extend(window.GUEST_USER || {}, {
     name: t.bound('core', 'GUEST_USER_NAME')
   });
