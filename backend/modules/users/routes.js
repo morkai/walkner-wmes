@@ -103,6 +103,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
         delete user.password;
 
+        user._id = user._id.toString();
         user.loggedIn = true;
         user.ipAddress = userModule.getRealIp({}, req);
         user.local = userModule.isLocalIpAddress(user.ipAddress);
