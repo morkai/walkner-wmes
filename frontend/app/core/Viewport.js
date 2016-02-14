@@ -46,6 +46,8 @@ define([
 
     this.currentDialog = null;
 
+    this.pageCounter = 0;
+
     this.closeDialog = this.closeDialog.bind(this);
 
     this.$el.on('click', '.viewport-dialog .cancel', this.closeDialog);
@@ -119,10 +121,15 @@ define([
     }
 
     var viewport = this;
+    var pageCounter = ++this.pageCounter;
 
     require([].concat(dependencies), function()
     {
-      viewport.showPage(createPage.apply(null, arguments));
+      if (pageCounter === viewport.pageCounter)
+      {
+        viewport.showPage(createPage.apply(null, arguments));
+      }
+
       viewport.msg.loaded();
     });
   };
@@ -135,6 +142,8 @@ define([
     {
       throw new Error("Unknown layout: `" + layoutName + "`");
     }
+
+    ++this.pageCounter;
 
     var viewport = this;
 
