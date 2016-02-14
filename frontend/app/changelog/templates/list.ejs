@@ -1,25 +1,37 @@
 <div class="changelog">
-  <h1>v0.81.0</h1>
-  <h2><%- time.format('2016-02-07', 'LL') %></h2>
-  <h3>Monitoring > Lista linii produkcyjnych</h3>
+  <h1>v0.82.0</h1>
+  <h2><%- time.format('2016-02-14', 'LL') %></h2>
+  <h3>Przestoje</h3>
   <ul>
-    <li>Poprawiono brakujące tłumaczenia w dymkach osi czasu zmian produkcyjnych.</li>
-  </ul>
-  <h3>Badanie opinia</h3>
-  <ul>
-    <li>Poprawiono brakujące tłumaczenia na stronie szczegółów Odpowiedzi.</li>
-    <li>Zmieniono kolejność odpowiedzi w formularzu Odpowiedzi z Tak, Nie, Nie mam zdania na Nie, Nie mam zdania, Tak,
-      aby pasowała do kolejności na formularzu fizycznym.</li>
-  </ul>
-  <h3>Lista zmian</h3>
-  <ul>
-    <li>Zmieniono listę tak, aby wyświetlała na początku tylko 5 ostatnich wersji. Po kliknięciu 'Pokaż więcej'
-      wyświetlone zostanie 10 kolejnych wersji oraz przycisk 'Pokaż wszystkie'.</li>
+    <li>Zmieniono listę Powodów przestojów w formularzu Potwierdzania przestoju tak, aby wyświetlały się tylko te
+      Powody, które pasują do typu Działu, w którym rozpoczęto dany Przestój.</li>
   </ul>
   <h3>Dokumentacja</h3>
   <ul>
-    <li>Dodano do aplikacji klienta wyświetlanie stałej, pierwszej pozycji 'Listy komponentów'. Po wybraniu dokumentu
-      'Lista dokumentów' otworzy się BOM aktualnie wybranego Zlecenia.</li>
+    <li>Dodano do Listy komponentów (BOM) dzielenie ilości komponentów przez ilość w zleceniu (działa tak samo jak
+      lista komponentów zlecenia w wersji do druku).</li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Zmieniono dzielenie ilości komponentów przez ilość w zleceniu w wersji do druku tak, aby było wykonywane zawsze,
+      a nie tylko wtedy, gdy ilość komponentów jest większa od ilości w zleceniu.</li>
+    <li>Zmieniono wyświetlanie ilości i jednostki komponentów w wersji do druku tak, aby nie były wyświetlane dla
+      komponentów, które nie mają 12NC.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Dodano brakujące tłumaczenie dla uprawnienia 'Raporty: Planowane obciążenie linii'.</li>
+  </ul>
+  <h3>Raporty > Planowane obciążenie linii</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający załadowanie nowego planu.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający przekierowanie na stronę 'Pulpit' po wylogowaniu się użytkownika.</li>
+    <li>Dodano funkcję automatycznego wylogowywania użytkowników, którzy zostali usunięci.</li>
+    <li>Dodano funkcję powiadamiania zalogowanych użytkowników o zmianie ich uprawnień. Od teraz po zmianie uprawnień
+      użytkownikowi, nie musi się on przelogowywać, aby nowe uprawnienia weszły w życie.</li>
   </ul>
   <% include ./old.ejs %>
   <p>
