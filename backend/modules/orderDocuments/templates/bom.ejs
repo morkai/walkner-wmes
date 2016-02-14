@@ -150,9 +150,9 @@
         <td class="item min"><%- component.item %></td>
         <td class="nc12 min"><%- component.nc12 %></td>
         <td class="name"><%= component.name %></td>
-        <td class="integer min"><%- component.qty[0] %></td>
-        <td class="decimals min"><%- component.qty[1] === 0 ? '' : (',' + component.qty[1]) %></td>
-        <td class="unit min"><%- component.unit %></td>
+        <td class="integer min"><%- component.nc12 ? component.qty[0] : '' %></td>
+        <td class="decimals min"><%- !component.nc12 || component.qty[1] === 0 ? '' : (',' + component.qty[1]) %></td>
+        <td class="unit min"><%- component.nc12 ? component.unit : '' %></td>
       </tr>
       <% }) %>
       </tbody>

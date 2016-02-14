@@ -316,15 +316,27 @@
         <td><%- component.no %></td>
         <td class="right"><%- component.material %></td>
         <td class="expand"><%= component.description %></td>
-        <td class="right integer"><%- component.quantity[0] %></td>
+        <td class="right integer">
+          <% if (component.material) { %>
+          <%- component.quantity[0] %>
+          <% } else { %>
+          <span class="invisible"><%- component.quantity[0] %></span>
+          <% } %>
+        </td>
         <td class="decimals">
-          <% if (component.unit === 'PCE') { %>
+          <% if (!component.material || component.unit === 'PCE') { %>
           <span class="invisible">,000</span>
           <% } else { %>
           ,<%- component.quantity[1] %>
           <% } %>
         </td>
-        <td><%- component.unit %></td>
+        <td>
+          <% if (component.material) { %>
+          <%- component.unit %>
+          <% } else { %>
+          <span class="invisible"><%- component.unit %></span>
+          <% } %>
+        </td>
         <td><%= component.unloadingPoint %></td>
       </tr>
       <% }) %>

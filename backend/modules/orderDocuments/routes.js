@@ -308,7 +308,14 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         order: order._id,
         components: _.map(order.bom, function(component)
         {
-          var qty = (component.qty / order.qty).toString().split('.');
+          var qty = component.qty;
+
+          if (component.nc12)
+          {
+            qty /= order.qty;
+          }
+
+          qty = qty.toString().split('.');
 
           component.qty = [
             parseInt(qty[0], 10),

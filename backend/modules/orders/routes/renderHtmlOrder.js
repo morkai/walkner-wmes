@@ -87,7 +87,7 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
     step(
       function prepareTemplateDataStep()
       {
-        var operations = (order.operations || []).map(function (operation)
+        var operations = (order.operations || []).map(function(operation)
         {
           return {
             no: operation.no,
@@ -102,7 +102,7 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
           };
         });
 
-        var documents = (order.documents || []).map(function (document)
+        var documents = (order.documents || []).map(function(document)
         {
           return {
             no: document.item || '0000',
@@ -111,13 +111,20 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
           };
         });
 
-        var components = (order.bom || []).map(function (component)
+        var components = (order.bom || []).map(function(component)
         {
+          var qty = component.qty;
+
+          if (component.nc12)
+          {
+            qty /= order.qty;
+          }
+
           return {
             no: component.item,
             material: component.nc12,
             description: component.name,
-            quantity: formatNumber(component.qty / order.qty),
+            quantity: formatNumber(qty),
             unit: component.unit,
             unloadingPoint: component.unloadingPoint
           };
