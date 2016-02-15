@@ -4,6 +4,7 @@ var mongodb = require('./wmes-mongodb');
 
 var IMPORT_INPUT_DIR = __dirname + '/../data/attachments-input';
 var IMPORT_OUTPUT_DIR = __dirname + '/../data/attachments-imported';
+var ETO_IMPORT_OUTPUT_DIR = __dirname + '/../data/documents-eto';
 
 exports.id = 'wmes-importer-sap';
 
@@ -25,6 +26,7 @@ exports.modules = [
   'warehouse/importer/shiftMetrics',
   'xiconf/importer/orders',
   'orderDocuments/importer',
+  'orderDocuments/importer/eto',
   'reports/clipOrderCount',
   'cags/importer/nc12',
   'cags/importer/plan'
@@ -65,6 +67,7 @@ exports.events = {
       'warehouse.*.synced',
       'xiconf.orders.synced',
       'orderDocuments.synced',
+      'orderDocuments.eto.synced',
       'cags.nc12.synced',
       'cags.plan.synced'
     ],
@@ -74,6 +77,7 @@ exports.events = {
       'warehouse.*.syncFailed',
       'xiconf.orders.syncFailed',
       'orderDocuments.syncFailed',
+      'orderDocuments.eto.syncFailed',
       'cags.nc12.syncFailed',
       'cags.plan.syncFailed',
       'app.started'
@@ -102,7 +106,7 @@ exports['messenger/server'] = {
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
-    'orderDocuments.synced',
+    'orderDocuments.synced', 'orderDocuments.eto.synced',
     'cags.plan.synced', 'cags.plan.syncFailed'
   ]
 };
@@ -148,6 +152,12 @@ exports['orderDocuments/importer'] = {
   parsedOutputDir: IMPORT_OUTPUT_DIR,
   xiconfProgramPatterns: [],
   xiconfProgramFilePathPattern: IMPORT_INPUT_DIR + '/{timestamp}@XICONF_ORDERS.txt'
+};
+
+exports['orderDocuments/importer/eto'] = {
+  filterRe: /^EMAIL_[0-9]+$/,
+  outputDir: ETO_IMPORT_OUTPUT_DIR,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports['orders/importer/bom'] = {

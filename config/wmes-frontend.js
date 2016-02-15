@@ -394,6 +394,7 @@ exports.orders = {
 exports.orderDocuments = {
   importPath: DATA_PATH + '/attachments-input',
   cachedPath: DATA_PATH + '/documents-cache',
+  etoPath: DATA_PATH + '/documents-eto',
   sejdaConsolePath: 'sejda-console'
 };
 

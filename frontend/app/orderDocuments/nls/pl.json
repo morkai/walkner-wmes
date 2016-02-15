@@ -49,5 +49,6 @@
   "localOrderPicker:error:failure": "Nie udało się znaleźć zlecenia :(",
   "localOrderPicker:error:NOT_FOUND": "Zlecenie o podanym numerze nie istnieje!",
 
-  "bom": "Lista komponentów"
+  "bom": "Lista komponentów",
+  "eto": "Konstrukcja na zamówienie"
 }

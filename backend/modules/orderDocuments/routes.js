@@ -20,7 +20,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   var License = mongoose.model('License');
 
   var SPECIAL_DOCUMENTS = {
-    BOM: true
+    BOM: handleBomDocument,
+    ETO: handleEtoDocument
   };
 
   var canView = userModule.auth('DOCUMENTS:VIEW');
@@ -154,7 +155,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
     if (SPECIAL_DOCUMENTS[nc15])
     {
-      return handleSpecialDocument(req, res, next);
+      return SPECIAL_DOCUMENTS[nc15](req, res, next);
     }
 
     var freshHeaders = nc15ToFreshHeaders[nc15];
@@ -290,7 +291,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     );
   }
 
-  function handleSpecialDocument(req, res, next)
+  function handleBomDocument(req, res, next)
   {
     Order.findById(req.query.order, {qty: 1, bom: 1}).lean().exec(function(err, order)
     {
@@ -326,6 +327,31 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         }),
         windowWidth: parseInt(req.query.w, 10) || 0,
         windowHeight: parseInt(req.query.h, 10) || 0
+      });
+    });
+  }
+
+  function handleEtoDocument(req, res, next)
+  {
+    Order.findById(req.query.order, {nc12: 1}).lean().exec(function(err, order)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (!order)
+      {
+        return res.sendStatus(express.createHttpError('ORDER_NOT_FOUND'));
+      }
+
+      fs.readFile(path.join(module.config.etoPath, order.nc12 + '.html'), 'utf8', function(err, etoTableHtml)
+      {
+        res.render('orderDocuments:eto', {
+          order: order._id,
+          nc12: order.nc12,
+          etoTableHtml: etoTableHtml
+        });
       });
     });
   }

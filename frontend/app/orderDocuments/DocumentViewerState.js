@@ -285,7 +285,8 @@ define([
         name: orderData.name,
         documents: _.extend(
           {
-            'BOM': t('orderDocuments', 'bom')
+            'BOM': t('orderDocuments', 'bom'),
+            'ETO': t('orderDocuments', 'eto')
           },
           orderData.documents
         ),

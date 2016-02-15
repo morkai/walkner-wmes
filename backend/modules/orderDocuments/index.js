@@ -17,7 +17,8 @@ exports.DEFAULT_CONFIG = {
   orgUnitsId: 'orgUnits',
   settingsId: 'settings',
   productionId: 'production',
-  cachedPath: './',
+  cachedPath: './order-documents/cached',
+  etoPath: './order-documents/eto',
   sejdaConsolePath: 'sejda-console'
 };
 
