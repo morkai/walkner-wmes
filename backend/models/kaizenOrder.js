@@ -249,6 +249,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       this.createObservers();
     }
 
+    var eventDate = this.isModified('eventDate');
     var statusModified = this.isModified('status');
     var kaizenDateModified = this.isModified('kaizenFinishDate') || this.isModified('kaizenStartDate');
 
@@ -271,12 +272,12 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       }
     }
 
-    if (statusModified || kaizenDateModified)
+    if (statusModified || eventDate || kaizenDateModified)
     {
       this.recalcFinishDuration();
     }
 
-    if (kaizenDateModified)
+    if (eventDate || kaizenDateModified)
     {
       this.recalcKaizenDuration();
     }
