@@ -412,7 +412,7 @@ define([
           disabled.push('accepted', 'finished');
         }
 
-        if (!this.model.isCreator() || this.model.get('status') !== 'new')
+        if ((!this.model.isCreator() || this.model.get('status') !== 'new') && !this.isConfirmer())
         {
           disabled.push('cancelled');
         }
