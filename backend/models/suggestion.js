@@ -206,6 +206,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
       this.createObservers();
     }
 
+    var dateModified = this.isModified('date');
     var statusModified = this.isModified('status');
     var kaizenDateModified = this.isModified('kaizenFinishDate') || this.isModified('kaizenStartDate');
 
@@ -228,12 +229,12 @@ module.exports = function setupSuggestionModel(app, mongoose)
       }
     }
 
-    if (statusModified || kaizenDateModified)
+    if (statusModified || dateModified || kaizenDateModified)
     {
       this.recalcFinishDuration();
     }
 
-    if (kaizenDateModified)
+    if (dateModified || kaizenDateModified)
     {
       this.recalcKaizenDuration();
     }
