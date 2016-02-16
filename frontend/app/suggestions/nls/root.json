@@ -26,6 +26,7 @@
     "PAGE_ACTION:unobserve": "Unsubscribe",
     "PAGE_ACTION:jump:title": "Jump to entry by ID",
     "PAGE_ACTION:jump:placeholder": "Entry ID",
+    "PAGE_ACTION:print": "Printable version",
 
     "PANEL:TITLE:details": "Entry details",
     "PANEL:TITLE:changes": "Entry changes history",
@@ -162,6 +163,7 @@
     "report:title:summary:averageDuration": "Average number of implementation days by week",
     "report:title:summary:count": "Number of entries by week",
     "report:title:summary:suggestionOwners": "Number of suggestions by owner",
+    "report:title:summary:categories": "Number of suggestions by category",
     "report:subtitle:summary:averageDuration": "Total average: {averageDuration}",
     "report:subtitle:summary:count": "Total count: {total} ({open} open, {finished} finished, {cancelled} cancelled)",
     "report:series:summary:averageDuration": "Avg. no. of impl. days",
@@ -171,6 +173,7 @@
     "report:filenames:summary:averageDuration": "SUG_AvgImplDays",
     "report:filenames:summary:count": "SUG_CountByWeek",
     "report:filenames:summary:suggestionOwners": "SUG_CountByOwners",
+    "report:filenames:summary:categories": "SUG_CountByCategory",
 
     "thanks:message": "Thanks for the entry!",
     "thanks:footnote": "(click any button or key to close this window)"

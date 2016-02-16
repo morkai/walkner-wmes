@@ -25,6 +25,7 @@
   "PAGE_ACTION:unobserve": "Przestań obserwować",
   "PAGE_ACTION:jump:title": "Skocz do zgłoszenia po ID",
   "PAGE_ACTION:jump:placeholder": "ID zgłoszenia",
+  "PAGE_ACTION:print": "Wersja do druku",
 
   "PANEL:TITLE:details": "Szczegóły zgłoszenia",
   "PANEL:TITLE:changes": "Historia zmian zgłoszenia",
@@ -162,6 +163,7 @@
   "report:title:summary:averageDuration": "Średnia ilość dni realizacji w poszczególnych tygodniach",
   "report:title:summary:count": "Ilość zgłoszeń w poszczególnych tygodniach",
   "report:title:summary:suggestionOwners": "Ilość sugestii zgłoszonych przez pracownika",
+  "report:title:summary:categories": "Ilość sugestii zgłoszonych w kategoriach",
   "report:subtitle:summary:averageDuration": "Całkowita średnia dla wybranego okresu: {averageDuration}",
   "report:subtitle:summary:count": "Całkowita ilość zgłoszeń w wybranym okresie: {total} ({open} {open, plural, few{otwarte} one{otwarte} other{otwartych}}, {finished} {finished, plural, few{zamknięte} one{zamknięte} other{zamkniętych}}, {cancelled} {cancelled, plural, few{anulowane} one{anulowane} other{anulowanych}})",
   "report:series:summary:averageDuration": "Średnia ilość dni realizacji",
@@ -171,6 +173,7 @@
   "report:filenames:summary:averageDuration": "SUG_SredniaIloscDniRealizacji",
   "report:filenames:summary:count": "SUG_IloscWTygodniach",
   "report:filenames:summary:suggestionOwners": "SUG_IloscSugestiiWgPracownikow",
+  "report:filenames:summary:categories": "SUG_IloscSugestiiWgKategorii",
 
   "thanks:message": "Dziękujemy za zgłoszenie!",
   "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)"

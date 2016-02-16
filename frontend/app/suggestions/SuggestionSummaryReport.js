@@ -75,18 +75,33 @@ define([
           open: [],
           finished: [],
           cancelled: []
+        },
+        categories: {
+          categories: [],
+          open: [],
+          finished: [],
+          cancelled: []
         }
       };
       var averageDuration = attrs.averageDuration;
       var count = attrs.count;
       var suggestionOwners = attrs.suggestionOwners;
+      var categories = attrs.categories;
 
       _.forEach(report.suggestionOwners, function(d)
       {
-        suggestionOwners.categories.push(report.users[d[0]]);
+        suggestionOwners.categories.push(report.users[d[0]] || d[0]);
         suggestionOwners.open.push(d[2]);
         suggestionOwners.finished.push(d[3]);
         suggestionOwners.cancelled.push(d[4]);
+      });
+
+      _.forEach(report.categories, function(d)
+      {
+        categories.categories.push(report.categoryNames[d[0]] || d[0]);
+        categories.open.push(d[2]);
+        categories.finished.push(d[3]);
+        categories.cancelled.push(d[4]);
       });
 
       _.forEach(report.groups, function(group)

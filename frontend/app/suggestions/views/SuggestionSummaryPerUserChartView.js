@@ -19,6 +19,7 @@ define([
     {
       this.chart = null;
       this.isLoading = false;
+      this.limit = -1;
 
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
@@ -70,7 +71,9 @@ define([
       var dataPointCount = series[0].data.length;
       var nlsDomain = this.model.getNlsDomain();
       var metric = this.options.metric;
-      var height = Math.max(400, 150 + 20 * dataPointCount);
+      var height = this.limit === -1
+        ? Math.max(400, 150 + 20 * dataPointCount)
+        : 100 + 20 * dataPointCount;
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -103,11 +106,18 @@ define([
           valueDecimals: 0
         },
         legend: {
-          enabled: true
+          enabled: this.limit === -1
         },
         plotOptions: {
           bar: {
-            stacking: 'normal'
+            stacking: 'normal',
+            dataLabels: {
+              enabled: this.limit !== -1,
+              formatter: function()
+              {
+                return this.y || '';
+              }
+            }
           }
         },
         series: series
@@ -122,12 +132,28 @@ define([
 
     serializeCategories: function()
     {
-      return this.model.get(this.options.metric).categories;
+      var categories = this.model.get(this.options.metric).categories;
+
+      if (this.limit !== -1)
+      {
+        categories = categories.slice(0, this.limit);
+      }
+
+      return categories;
     },
 
     serializeSeries: function()
     {
       var data = this.model.get(this.options.metric);
+
+      if (this.limit !== -1)
+      {
+        data = {
+          cancelled: data.cancelled.slice(0, this.limit),
+          open: data.open.slice(0, this.limit),
+          finished: data.finished.slice(0, this.limit)
+        };
+      }
 
       return [{
         id: 'cancelled',

@@ -31,6 +31,8 @@ define([
 
     layoutName: 'page',
 
+    pageId: 'suggestionSummaryReport',
+
     template: template,
 
     breadcrumbs: [
@@ -38,28 +40,55 @@ define([
       t.bound('suggestions', 'BREADCRUMBS:reports:summary')
     ],
 
+    actions: function()
+    {
+      return [
+        {
+          label: t.bound('suggestions', 'PAGE_ACTION:print'),
+          icon: 'print',
+          callback: this.togglePrintMode.bind(this)
+        }
+      ];
+    },
+
     initialize: function()
     {
-      this.setView('.filter-container', new SuggestionSummaryReportFilterView({
-        model: this.model
-      }));
-      this.setView('.suggestions-report-summary-averageDuration', new SuggestionAverageDurationChartView({
-        model: this.model
-      }));
-      this.setView('.suggestions-report-summary-count', new SuggestionSummaryCountChartView({
-        model: this.model
-      }));
-      this.setView('.suggestions-report-summary-suggestionOwners', new SuggestionSummaryPerUserChartView({
-        metric: 'suggestionOwners',
-        model: this.model
-      }));
+      this.defineViews();
+
+      this.setView('.filter-container', this.filterView);
+      this.setView('.suggestions-report-summary-averageDuration', this.averageDurationView);
+      this.setView('.suggestions-report-summary-count', this.countView);
+      this.setView('.suggestions-report-summary-suggestionOwners', this.perUserView);
+      this.setView('.suggestions-report-summary-categories', this.perCategoryView);
 
       this.listenTo(this.model, 'filtered', this.onFiltered);
       this.listenTo(this.model, 'change:total', this.updateSubtitles);
     },
 
+    defineViews: function()
+    {
+      this.filterView = new SuggestionSummaryReportFilterView({
+        model: this.model
+      });
+      this.averageDurationView = new SuggestionAverageDurationChartView({
+        model: this.model
+      });
+      this.countView = new SuggestionSummaryCountChartView({
+        model: this.model
+      });
+      this.perUserView = new SuggestionSummaryPerUserChartView({
+        metric: 'suggestionOwners',
+        model: this.model
+      });
+      this.perCategoryView = new SuggestionSummaryPerUserChartView({
+        metric: 'categories',
+        model: this.model
+      });
+    },
+
     destroy: function()
     {
+      document.body.classList.remove('is-print');
       kaizenDictionaries.unload();
     },
 
@@ -99,6 +128,33 @@ define([
         averageDuration: Highcharts.numberFormat(total.averageDuration, 2)
       }));
       this.$id('count').html(t('suggestions', 'report:subtitle:summary:count', total.count));
+    },
+
+    togglePrintMode: function(e)
+    {
+      document.body.classList.toggle('is-print');
+
+      var enabled = document.body.classList.contains('is-print');
+
+      e.currentTarget.querySelector('.btn').classList.toggle('active', enabled);
+
+      this.averageDurationView.chart.setSize(null, enabled ? 300 : 400, false);
+      this.averageDurationView.chart.reflow();
+
+      this.countView.updateChart(true);
+      this.countView.chart.setSize(null, enabled ? 300 : 400, false);
+      this.countView.chart.reflow();
+
+      this.perUserView.limit = enabled ? 10 : -1;
+      this.perUserView.updateChart(true);
+
+      this.perCategoryView.limit = enabled ? 10 : -1;
+      this.perCategoryView.updateChart(true);
+
+      if (enabled)
+      {
+        window.print();
+      }
     }
 
   });

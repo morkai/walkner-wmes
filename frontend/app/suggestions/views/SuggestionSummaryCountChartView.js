@@ -68,7 +68,7 @@ define([
       }
     },
 
-    createChart: function()
+    createChart: function(printMode)
     {
       var count = this.model.get('count');
       var nlsDomain = this.model.getNlsDomain();
@@ -109,7 +109,7 @@ define([
           headerFormatter: formatTooltipHeader.bind(this)
         },
         legend: {
-          enabled: true
+          enabled: printMode !== true
         },
         plotOptions: {
           column: {
@@ -142,10 +142,10 @@ define([
       });
     },
 
-    updateChart: function()
+    updateChart: function(printMode)
     {
       this.chart.destroy();
-      this.createChart();
+      this.createChart(printMode);
     },
 
     onModelLoading: function()

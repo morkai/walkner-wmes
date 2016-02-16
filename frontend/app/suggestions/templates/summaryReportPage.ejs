@@ -1,11 +1,13 @@
 <div class="suggestions-report">
-  <div class="filter-container"></div>
+  <div class="filter-container no-print"></div>
   <h3><%- t('suggestions', 'report:title:summary:averageDuration') %></h3>
   <h4 id="<%- idPrefix %>-averageDuration"></h4>
   <div class="suggestions-report-summary-averageDuration"></div>
-  <h3><%- t('suggestions', 'report:title:summary:count') %></h3>
-  <h4 id="<%- idPrefix %>-count"></h4>
-  <div class="suggestions-report-summary-count"></div>
+  <h3 class="no-print"><%- t('suggestions', 'report:title:summary:count') %></h3>
+  <h4 id="<%- idPrefix %>-count" class="no-print"></h4>
+  <div class="suggestions-report-summary-count no-print"></div>
   <h3><%- t('suggestions', 'report:title:summary:suggestionOwners') %></h3>
   <div class="suggestions-report-summary-suggestionOwners"></div>
+  <h3><%- t('suggestions', 'report:title:summary:categories') %></h3>
+  <div class="suggestions-report-summary-categories"></div>
 </div>

@@ -9,14 +9,17 @@ var util = require('../reports/util');
 module.exports = function(mongoose, options, done)
 {
   var Suggestion = mongoose.model('Suggestion');
+  var KaizenCategory = mongoose.model('KaizenCategory');
 
   var minGroupKey = Number.MAX_VALUE;
   var maxGroupKey = Number.MIN_VALUE;
   var results = {
     options: options,
     users: {},
+    categoryNames: {},
     suggestionOwners: {},
     kaizenOwners: {},
+    categories: {},
     averageDuration: 0,
     count: {
       total: 0,
@@ -28,6 +31,22 @@ module.exports = function(mongoose, options, done)
   };
 
   step(
+    function findCategoriesStep()
+    {
+      KaizenCategory.find({inSuggestion: true}, {name: 1}).lean().exec(this.next());
+    },
+    function saveCategoryNamesStep(err, categories)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      _.forEach(categories, function(category)
+      {
+        results.categoryNames[category._id] = category.name;
+      });
+    },
     function findSuggestionsStep()
     {
       var conditions = {};
@@ -101,8 +120,9 @@ module.exports = function(mongoose, options, done)
       }
 
       results.groups = groups;
-      results.suggestionOwners = sortOwners(results.suggestionOwners);
-      results.kaizenOwners = sortOwners(results.kaizenOwners);
+      results.suggestionOwners = sortObjects(results.suggestionOwners);
+      results.kaizenOwners = sortObjects(results.kaizenOwners);
+      results.categories = sortObjects(results.categories);
       results.averageDuration = util.round(results.averageDuration / (results.count.open + results.count.finished));
 
       return setImmediate(this.next());
@@ -143,6 +163,21 @@ module.exports = function(mongoose, options, done)
       _.forEach(s.kaizenOwners, incOwner.bind(null, 'kaizenOwners', statusProperty));
     }
 
+    _.forEach(s.categories, function(category)
+    {
+      if (!results.categories[category])
+      {
+        results.categories[category] = {
+          name: category,
+          open: 0,
+          finished: 0,
+          cancelled: 0
+        };
+      }
+
+      results.categories[category][statusProperty] += 1;
+    });
+
     if (!cancelled)
     {
       group.averageDuration += s.finishDuration;
@@ -180,7 +215,7 @@ module.exports = function(mongoose, options, done)
     results[ownersProperty][owner.id][statusProperty] += 1;
   }
 
-  function sortOwners(unsorted)
+  function sortObjects(unsorted)
   {
     var sorted = [];
 

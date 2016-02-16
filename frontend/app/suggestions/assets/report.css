@@ -40,3 +40,26 @@
   overflow-y: scroll;
   max-height: 225px;
 }
+
+@media print {
+  .is-print .page[data-id="suggestionSummaryReport"] .page-actions {
+    display: none;
+  }
+}
+.is-print .suggestions-report {
+  width: 715px;
+  margin: 0 auto;
+}
+.is-print .suggestions-report > .no-print {
+  display: none;
+}
+.is-print .suggestions-report > h3 {
+  margin-bottom: 0;
+  font-size: 1em;
+  font-weight: bold;
+}
+.is-print .suggestions-report > h4 {
+  margin-top: 5px;
+  font-size: 1em;
+  font-weight: normal;
+}
