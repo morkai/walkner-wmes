@@ -181,19 +181,19 @@ define([
       });
 
       this.listenTo(this.query, 'change', this.onQueryChange);
+
+      this.once('afterRender', function()
+      {
+        this.prodDowntimes.rqlQuery.selector = this.query.createProdDowntimesSelector();
+
+        this.promised(this.report.fetch());
+        this.promised(this.prodDowntimes.fetch({reset: true}));
+      });
     },
 
     load: function(when)
     {
-      return when(this.settings.fetchIfEmpty(function()
-      {
-        this.prodDowntimes.rqlQuery.selector = this.query.createProdDowntimesSelector();
-
-        return [
-          this.report.fetch(),
-          this.prodDowntimes.fetch({reset: true})
-        ];
-      }, this));
+      return when(this.settings.fetchIfEmpty());
     },
 
     onQueryChange: function(query, options)
