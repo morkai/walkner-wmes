@@ -107,7 +107,7 @@ module.exports = function setupProdShiftModel(app, mongoose)
   prodShiftSchema.index({date: -1});
   prodShiftSchema.index({division: 1, date: -1});
   prodShiftSchema.index({subdivision: 1, date: -1});
-  prodShiftSchema.index({mrpController: 1, date: -1});
+  prodShiftSchema.index({mrpControllers: 1, date: -1});
   prodShiftSchema.index({prodFlow: 1, date: -1});
   prodShiftSchema.index({workCenter: 1, date: -1});
   prodShiftSchema.index({prodLine: 1, date: -1});
