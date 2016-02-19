@@ -24,6 +24,14 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
   var logEntryList = [];
   var lastLogEntryWithInvalidSecretKey = null;
   var savedAt = new Date();
+  var W_LINE = {
+    'W-1~c': true,
+    'W-2~c': true,
+    'W1_SM-12_1~c': true,
+    'W1_SM-12_2~c': true,
+    'W1_SM-13_1~c': true,
+    'W1_SM-13_2~c': true
+  };
 
   _.forEach(logEntryStream, function(logEntryJson, i)
   {
@@ -62,6 +70,11 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
 
       logEntry.savedAt = savedAt;
       logEntry.todo = true;
+
+      if (W_LINE[logEntry.prodLine])
+      {
+        handleWLineEntry(logEntry);
+      }
 
       logEntryList.push(new ProdLogEntry(logEntry).toObject());
     }
@@ -104,5 +117,26 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
   function logInvalidEntry(err, logEntryJson)
   {
     productionModule.debug("Invalid log entry: %s\n%s", err.message, logEntryJson);
+  }
+
+  function handleWLineEntry(logEntry)
+  {
+    logEntry.prodLine = logEntry.prodLine.split('~')[0];
+    logEntry.workCenter = logEntry.workCenter.split('~')[0];
+    logEntry.mrpControllers = logEntry.mrpControllers.map(function(mrp) { return mrp.split('~')[0]; });
+
+    if (logEntry.data.prodLine)
+    {
+      logEntry.data.prodLine = logEntry.prodLine;
+      logEntry.data.workCenter = logEntry.workCenter;
+      logEntry.data.mrpControllers = logEntry.mrpControllers;
+    }
+
+    if (logEntry.data.startedProdShift)
+    {
+      logEntry.data.startedProdShift.prodLine = logEntry.prodLine;
+      logEntry.data.startedProdShift.workCenter = logEntry.workCenter;
+      logEntry.data.startedProdShift.mrpControllers = logEntry.mrpControllers;
+    }
   }
 };
