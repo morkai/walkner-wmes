@@ -109,6 +109,7 @@
   "FORM:ERROR:addFailure": "Nie udało się dodać zgłoszenia :(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zgłoszenia :(",
   "FORM:ERROR:upload": "Nie udało się załadować załączników :(",
+  "FORM:ERROR:date": "Podana data nie może się różnić o więcej niż {days} dni od aktualnej daty.",
   "FORM:MSG:attachmentEdit": "Wybierz nowe pliki tylko wtedy, gdy chcesz nadpisać już istniejące pliki.",
   "FORM:help:subject": "Wpisz krótki tekst...",
   "FORM:help:section": "Wybierz swój dział...",

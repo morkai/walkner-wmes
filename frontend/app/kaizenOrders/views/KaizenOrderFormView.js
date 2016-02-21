@@ -106,9 +106,15 @@ define([
 
         if (daysAbs <= 7)
         {
+          e.target.setCustomValidity('');
           $help.remove();
 
           return;
+        }
+
+        if (!user.isAllowedTo('KAIZEN:MANAGE') && daysAbs > 60)
+        {
+          e.target.setCustomValidity(t('kaizenOrders', 'FORM:ERROR:date', {days: 60}));
         }
 
         if (!$help.length)

@@ -123,6 +123,7 @@
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zgłoszenia :(",
   "FORM:ERROR:onlyKaizen": "Kaizen wymaga ZPW lub Sugestii!",
   "FORM:ERROR:upload": "Nie udało się załadować załączników :(",
+  "FORM:ERROR:date": "Podana data nie może się różnić o więcej niż {days} dni od aktualnej daty.",
   "FORM:MSG:eventTime": "Godzina",
   "FORM:MSG:optional": "Poniższe pola są opcjonalne. Pozostaw je puste, jeżeli nie wiesz co w nich wpisać.",
   "FORM:MSG:chooseTypes": "Wybierz typy zgłoszenia (ZPW, Sugestia, Kaizen) klikając na poniższe belki. Zgłoszenie może mieć w tym samym czasie dowolną kombinację typów.",
