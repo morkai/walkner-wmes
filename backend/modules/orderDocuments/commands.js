@@ -2,7 +2,10 @@
 
 'use strict';
 
+var path = require('path');
+var fs = require('fs');
 var _ = require('lodash');
+var step = require('h5.step');
 
 module.exports = function setUpOrderDocumentsCommands(app, module)
 {
@@ -348,25 +351,45 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
   function findOrderData(orderNo, done)
   {
-    Order.findById(orderNo, {name: 1, nc12: 1, documents: 1}).lean().exec(function(err, order)
-    {
-      if (err)
+    step(
+      function findOrderStep()
       {
-        return done(err);
-      }
-
-      if (!order)
+        Order.findById(orderNo, {name: 1, nc12: 1, documents: 1, bom: 1}).lean().exec(this.next());
+      },
+      function findEtoStep(err, order)
       {
-        return done(new Error('NOT_FOUND'));
-      }
+        if (err)
+        {
+          return this.skip(err);
+        }
 
-      return done(null, {
-        no: order._id,
-        nc12: order.nc12,
-        name: order.name,
-        documents: prepareDocumentsMap(order.name, order.documents)
-      });
-    });
+        if (!order)
+        {
+          return this.skip(new Error('NOT_FOUND'));
+        }
+
+        this.order = {
+          no: order._id,
+          nc12: order.nc12,
+          name: order.name,
+          documents: prepareDocumentsMap(order.name, order.documents),
+          hasBom: !_.isEmpty(order.bom),
+          hasEto: false
+        };
+
+        fs.stat(path.join(module.config.etoPath, order.nc12 + '.html'), this.next());
+      },
+      function setEtoStep(err, stats)
+      {
+        if (stats && stats.isFile())
+        {
+          this.order.hasEto = true;
+        }
+
+        setImmediate(this.next(), null, this.order);
+      },
+      done
+    );
   }
 
   function prepareDocumentsMap(productName, documentsList)

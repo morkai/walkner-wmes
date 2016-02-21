@@ -283,15 +283,21 @@ define([
         no: orderData.no,
         nc12: orderData.nc12,
         name: orderData.name,
-        documents: _.extend(
-          {
-            'BOM': t('orderDocuments', 'bom'),
-            'ETO': t('orderDocuments', 'eto')
-          },
-          orderData.documents
-        ),
+        documents: {},
         nc15: null
       };
+
+      if (orderData.hasBom)
+      {
+        newOrder.documents.BOM = t('orderDocuments', 'bom');
+      }
+
+      if (orderData.hasEto)
+      {
+        newOrder.documents.ETO = t('orderDocuments', 'eto');
+      }
+
+      _.extend(newOrder.documents, orderData.documents);
 
       if (newOrder.no === oldOrder.no && newOrder.documents[oldOrder.nc15])
       {
