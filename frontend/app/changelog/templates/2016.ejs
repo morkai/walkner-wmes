@@ -1,0 +1,144 @@
+<div class="hidden">
+  <h1>v0.81.0</h1>
+  <h2><%- time.format('2016-02-07', 'LL') %></h2>
+  <h3>Monitoring > Lista linii produkcyjnych</h3>
+  <ul>
+    <li>Poprawiono brakujące tłumaczenia w dymkach osi czasu zmian produkcyjnych.</li>
+  </ul>
+  <h3>Badanie opinia</h3>
+  <ul>
+    <li>Poprawiono brakujące tłumaczenia na stronie szczegółów Odpowiedzi.</li>
+    <li>Zmieniono kolejność odpowiedzi w formularzu Odpowiedzi z Tak, Nie, Nie mam zdania na Nie, Nie mam zdania, Tak,
+      aby pasowała do kolejności na formularzu fizycznym.</li>
+  </ul>
+  <h3>Lista zmian</h3>
+  <ul>
+    <li>Zmieniono listę tak, aby wyświetlała na początku tylko 5 ostatnich wersji. Po kliknięciu 'Pokaż więcej'
+      wyświetlone zostanie 10 kolejnych wersji oraz przycisk 'Pokaż wszystkie'.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Dodano do aplikacji klienta wyświetlanie stałej, pierwszej pozycji 'Listy komponentów'. Po wybraniu dokumentu
+      'Lista dokumentów' otworzy się BOM aktualnie wybranego Zlecenia.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.80.3</h1>
+  <h2><%- time.format('2016-01-31', 'LL') %></h2>
+  <h3>Baza testów</h3>
+  <ul>
+    <li>Zmieniono importowanie zleceń tak, aby w danym zleceniu znajdowała się tylko jedna pozycja rodzaju
+      'programowanie driverów' (pozycja utworzona z dokumentów 'Zlecenia reszty działów' ma większy priorytet niż
+      pozycja z komponentów zlecenia).
+    </li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono wysyłanie e-maili tak, aby odbywało się przez serwer SMTP a nie serwer Exchange.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.80.2</h1>
+  <h2><%- time.format('2016-01-24', 'LL') %></h2>
+  <h3>Produkcja > Zlecenia</h3>
+  <ul>
+    <li>Poprawiono brak tłumaczenia sekcji 'Szczegóły zlecenia w momencie rozpoczęcia'.
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono rozpoczynanie zleceń i przestojów tak, aby czas rozpoczęcia zawsze był po czasie rozpoczęcia zmiany
+      (nawet w przypadku, gdy zaraz po rozpoczęciu zmiany zegar systemowy zostanie przesunięty do tyłu).
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie braku wyników na liście usprawnień, jeżeli podano wartości w filtrze
+      'Od-Do', nawet w przypadku, gdy zgłoszenia pasujące do filtrów istnieją.
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Poprawiono listę komponentów tak, aby wyświetlała różne komponenty z takim samym numerem zamiast wyświetlać
+      tylko ostatni.
+  </ul>
+  <h3>Baza testów</h3>
+  <ul>
+    <li>Zmieniono importowanie programów z dokumentów 'Zleceń reszty działów' tak, aby ilość driverów zawsze była brana
+      ze 'Zlecenia reszty działów' zamiast ze 'Zlecenia Xiconf'.
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.80.1</h1>
+  <h2><%- time.format('2016-01-20', 'LL') %></h2>
+  <h3>Raporty > Lean</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się serwera, gdy w pobieranych Zleceniach lub Przestojach znajdzie się
+      rekord, którego Zmiana produkcyjna jest po czasie podanym w filtrze 'Do' raportu (może się tak zdarzyć,
+      gdy na komputerze z Formatka operatora zegar systemowy zostanie przesunięty zaraz po rozpoczęciu zmiany
+      - w historii wygląda to tak, jakby Zlecenie rozpoczęło się przed Zmianą).
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.80.0</h1>
+  <h2><%- time.format('2016-01-17', 'LL') %></h2>
+  <h3>Pulpit</h3>
+  <ul>
+    <li>Poprawiono brak tłumaczenia wartości kolumn 'Status' w tabelkach otwartych ZPW i Usprawnień.
+    <li>Poprawiono nagłówek listy Top 10 dla poprzedniego miesiąca wyświetlający tekst 'Najaktywniejsi w miesiącu'
+      zamiast 'Najaktywniejsci w grudniu', jeżeli aktualny miesiąc to styczeń.
+  </ul>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się serwera, gdy dwóch użytkownik zażąda w tym samym momencie podglądu
+      badania, dla którego plik PDF nie został jeszcze wygenerowany.
+  </ul>
+  <h3>SAP GUI</h3>
+  <ul>
+    <li>Zmieniono skrypt transakcji tak, aby SAP zrzucał wynik do lokalnego katalogu. Po zakończeniu transakcji, wynik
+      kopiowany jest do ścieżki docelowej.
+  </ul>
+  <h3>ZPW</h3>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieodświeżanie się historii zmian zgłoszenia po wysłaniu komentarza.
+    <li>Poprawiono brak tłumaczeń w raporcie 'Zestawienie informacji'.
+    <li>Dodano filtr 'Dział zgłaszający' do raportu 'Ilość zgłoszeń'.
+    <li>Dodano paski przewijania do dymków w wykresach, gdzie ilość serii danych jest większa niż 10.
+  </ul>
+  <h3>Baza testów</h3>
+  <ul>
+    <li>Dodano importowanie do zleceń pozycji programów 'XT' ze zrzutu dokumentów 'Zleceń reszty działów'. Brane są pod
+      uwagę dokumenty zaczynające się od 'SETTINGS XT'.
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Zmieniono pierwsze ładowanie danych raportu tak, aby odbywało się po załadowaniu strony, a nie w trakcie.
+  </ul>
+  <h3>Raporty > Magazyn</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący znikanie wykresów po ponownym wygenerowaniu strony (np. po utracie i odzyskaniu
+      połączenia z serwerem).
+  </ul>
+  <h3>Raporty > Lean</h3>
+  <ul>
+    <li>Usunięto komunikat o wersji testowej raportu.
+  </ul>
+  <h3>Raporty > CLIP</h3>
+  <ul>
+    <li>Poprawiono odstępy między niektórymi polami w filtrze listy zleceń.
+    <li>Poprawiono brak tłumaczeń kolumn listy zleceń.
+  </ul>
+  <h3>Raporty > Operatorzy</h3>
+  <ul>
+    <li>Poprawiono brak tłumaczeń kolumn listy zleceń.
+  </ul>
+  <h3>Raporty > OEE</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący ignorowanie początkowych wartości filtru z adresu URL.
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Dodano listę zmian w systemie. Lista dostępna jest po kliknięciu na numer wersji w stopce.
+    <li>Zoptymalizowano wysyłanie komunikatów od serwera do połączonych klientów.
+    <li>Serwer dostępny jest teraz także na porcie 80, tzn.: <a href="http://161.87.64.46/">http://161.87.64.46/</a>
+      lub <a href="http://192.168.21.60/">http://192.168.21.60/</a> (nie trzeba podawać w adresie portu 6080).
+  </ul>
+</div>

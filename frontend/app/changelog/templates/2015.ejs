@@ -1,0 +1,1898 @@
+<div class="hidden">
+  <h1>v0.79.0</h1>
+  <h2><%- time.format('2015-12-31', 'LL') %></h2>
+  <h3>Produkcja > Zlecenia</h3>
+  <ul>
+    <li>Zmieniono domyślny filtr Od-Do tak, aby pokazywał zlecenia z ostatnich 30 dni.</li>
+  </ul>
+  <h3>Produkcja > Zmiany</h3>
+  <ul>
+    <li>Zmieniono domyślny filtr Od-Do tak, aby pokazywał zlecenia z ostatnich 30 dni.</li>
+  </ul>
+  <h3>Alarmy</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nie zaznaczanie pozycji 'Produkcja' w menu, jeżeli aktualnie używany moduł to
+      Alarmy.
+    </li>
+  </ul>
+  <h3>Raporty > Planowane obciążenie linii</h3>
+  <ul>
+    <li>Dodano nowy raport: Planowane obciążenie linii.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.78.0</h1>
+  <h2><%- time.format('2015-12-27', 'LL') %></h2>
+  <h3>Pulpit</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie kodu w kolumnie 'Status' tabelki ze zgłoszeniami usprawnień.</li>
+  </ul>
+  <h3>Alarmy</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie 'undefined' zamiast ID linii produkcyjnej w treści powiadomienia SMS.
+    </li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Dodano możliwość generowania zlecenia/zleceń w wersji do druku.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.77.0</h1>
+  <h2><%- time.format('2015-12-20', 'LL') %></h2>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Zmieniono automatyczne odświeżanie tak, aby odbywało się po otworzeniu 6 plików PDF bez względu na to czy ze
+      zlecenia zdalnego (wybranego przez Formatkę operatora) czy lokalnego (wybranego ręcznie).
+    </li>
+  </ul>
+  <h3>Programowanie</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nadpisanie dynamicznie utworzonych pozycji zlecenia podczas importu zrzutu z SAP.
+    </li>
+    <li>Zmieniono nazwę pozycji w menu z 'Programowanie' na 'Baza testów'.</li>
+    <li>Zmieniono pobieranie Service Tagów tak, aby nie był zwracany błąd 'Brak wolnych ServiceTagów', jeżeli
+      wygenerowano już 9999 ST, ale pobierany jest ServiceTag już wcześniej wygenerowany.
+    </li>
+    <li>Zmieniono nazwę właściwości '12NC programu' w panelu 'Szczegóły zlecenia Xiconf' na '12NC'.</li>
+    <li>Dodano wsparcie dla anulowania/przywracania wyników.</li>
+    <li>Dodano funkcjonalność powiadamiania połączonych klientów o zmianach dokonanych w programach z poziomu WMES. Po
+      dodaniu, edycji lub usunięciu programu, wszyscy połączeni klienci są o tym fakcie informowani. Każdy klient, który
+      ma opcje licencyjne pozwalające na korzystanie z programów, po upływie 30s zsynchronizuje swoją lokalną bazę
+      programów z bazą WMES.
+    </li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono niedziałający odnośnik do zgłoszenia w treści e-maila.</li>
+    <li>Zmieniono format powiadomień e-mail z tekstowego na HTML.</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Zmieniono format powiadomień e-mail z tekstowego na HTML.</li>
+  </ul>
+  <h3>Alarmy</h3>
+  <ul>
+    <li>Dodano automatyczne kończenie alarmów z poprzedniej zmiany, 10s po rozpoczęciu nowej zmiany.</li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Dodano nowe właściwości:<br>
+      <ul>
+        <li>ze zrzutu COOIS - Order Headers: Zlecenie nadrzędne (Leading order), Zlecenie sprzedaży (Sales Order/Sales
+          Order Item), Priorytet, Data startu (planowana) (Start date (sched) oraz Data ukończenia (planowana)
+          (Scheduled finish date).
+        </li>
+        <li>ze zrzutu ZOIN (łączone ze zleceniami wg Sales Order/Item): Opis (Description), Zleceniodawca (Sold-to
+          party).
+        </li>
+        <li>ze zrzutu COOIS - Components - Lista komponentów zlecenia: Nr (Item component list), 12NC (Material), Nazwa
+          (Material Description), Ilość oraz Punkt rozładunku (Unloading Point).
+        </li>
+        <li>ze zrzutu COOIS - Document Links - dodano kolumnę Nr (Item Number).</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.76.2</h1>
+  <h2><%- time.format('2015-12-16', 'LL') %></h2>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Dodano automatyczne odświeżanie strony klienta przy zmianie zlecenia przez Formatkę operatora, jeżeli wcześniej
+      otwarto przynajmniej 5 plików PDF w ramce (w celu obejścia <a
+        href="https://code.google.com/p/chromium/issues/detail?id=569903" class="postlink">błędu pożerania pamięci w
+        Google Chrome</a>).
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.76.1</h1>
+  <h2><%- time.format('2015-12-13', 'LL') %></h2>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający usunięcie wartości dla imienia, nazwiska, nr kardowego oraz adresu e-mail.</li>
+  </ul>
+  <h3>Historia operacji na liniach produkcyjnych</h3>
+  <ul>
+    <li>Dodano kolumnę 'ID instancji'.</li>
+  </ul>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący podwójne automatyczne zatwierdzanie tych samych przestojów.</li>
+    <li>Zmieniono wyświetlanie wartości 'Czas trwania', tak aby był obliczany nawet wtedy, gdy przestój nie został
+      jeszcze zakończony.
+    </li>
+  </ul>
+  <h3>Alarmy</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie czasu trwania zawsze jako 0 lub 1 min.</li>
+    <li>Zmieniono format powiadomienia e-mail z tekstowego na HTML.</li>
+  </ul>
+  <h3>ZPW</h3>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Dodano do pól z datami komunikat informujący użytkownika o wybraniu daty ponad 7 dni w przeszłości.</li>
+  </ul>
+  <h3>Raport Lean</h3>
+  <ul>
+    <li>Zmieniono organizację ustawień: dodano podział na (pod)zakładki.</li>
+    <li>Zmieniono wykresy tak, aby zawsze wyświetlały punkty z wartościami 0.</li>
+    <li>Zmieniono algorytmy właściwości: Całkowita produkcja (real), Czas cyklu linii (plan), Mistrzowie (real), Liderzy
+      (real), Obsługa materiałów na produkcji (real) oraz Ustawiacze (real).
+    </li>
+    <li>Zmieniono filtr 'Od-Do' tak, aby zawsze wybrany był okres pasujący do wybranego 'Podziału czasu'. Np. wybierając
+      od 10 grudnia do 10 stycznia oraz podział miesięczny, zakres zostanie zmieniony na od 1 grudnia do 1 stycznia;
+      wybierając 1 stycznia 2015-1 stycznia 2016 oraz podział tygodniowy, zakres zostanie zmieniony na
+      29.12.2014-28.12.2015.
+    </li>
+    <li>Dodano nowe ustawienia: Przestoje (real): powody oraz Plan: powody przestojów.</li>
+    <li>Dodano brakujące angielskie tłumaczenie.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zaktualizowano system operacyjny</li>
+    <li>Zaktualizowano Node.js z v0.12 do v5.1.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.76.0</h1>
+  <h2><%- time.format('2015-12-06', 'LL') %></h2>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Poprawiono błąd mogący powodować podwójne automatyczne potwierdzenie przestoju.</li>
+    <li>Zmieniono domyślny filtr Od z 30 dni na 7 dni.</li>
+    <li>Dodano możliwość definiowania alarmów (powiadamianie e-mail/SMS).</li>
+  </ul>
+  <h3>Zdarzenia</h3>
+  <ul>
+    <li>Zmieniono zdarzenie 'Przestoje: edycja potwierdzonego' tak, aby nie było zapisywane, jeżeli przestój został
+      zmieniony przez System a nie Użytkownika.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.75.1</h1>
+  <h2><%- time.format('2015-11-29', 'LL') %></h2>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Usunięto możliwość zmieniania pól Wydział (KD) i Stanowisko (KD).</li>
+    <li>Zmieniono rozmieszczenie elementów na stronach formularza i szczegółów użytkownika.</li>
+    <li>Dodano filtrowanie listy po loginie użytkownika.</li>
+    <li>Dodano możliwość definiowania numerów telefonów komórkowych dla każdego użytkownika wraz z przedziałem
+      godzinowym, w którym dany numer jest aktywny.
+    </li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Poprawiono błędy związane z eksportowaniem wykresów.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono błędy związane z nieprawidłowym sortowaniem listy zgłoszeń.</li>
+    <li>Poprawiono błędy związane z eksportowaniem wykresów.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wylogowywanie użytkowników po 14 dniach od zalogowania pomimo korzystania z aplikacji
+      w międzyczasie.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.75.0</h1>
+  <h2><%- time.format('2015-11-22', 'LL') %></h2>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Zmieniono nazwę modułu z 'Usprawnienia' na 'ZPW'.</li>
+    <li>Zmieniono kolejność 'Imię+Nazwisko' w polu 'Osoby zgłaszające' na 'Nazwisko+Imię' (tak jak jest wszędzie).</li>
+    <li>Dodano wykresy 'Ilość zgłoszeń wg zatwiedzających' oraz 'Ilość zgłoszeń wg właścicieli' do raportu 'Ilość
+      zgłoszeń'.
+    </li>
+    <li>Dodano raport 'Zestawienie informacji'.</li>
+    <li>Dodano automatyczne czyszczenie nieprzeczytanych, zamkniętych zgłoszeń. Wszystkie zamknięte, nieprzeczytane
+      zgłoszenia zostaną automatycznie oznaczone jako przeczytane po upływie 3 dni.
+    </li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Dodano nowy moduł: Usprawnienia (Sugestie i Kaizeny).</li>
+  </ul>
+  <h3>Pulpit</h3>
+  <ul>
+    <li>Usunięto przekierowanie użytkowników bez żadnych uprawnień do modułu ZPW po wybraniu pozycji Pulpit w menu.</li>
+    <li>Dodano podsumowanie modułów ZPW oraz Usprawnienia.</li>
+  </ul>
+  <h3>Produkcja > Dokumentacja</h3>
+  <ul>
+    <li>Dodano automatyczne usuwanie klientów, którzy nie połączyli się z serwerem przez 7 dni.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Usunięto wszystkie 'duplikaty' użytkowników.</li>
+    <li>Zmieniono importowanie użytkowników z bazy KD, tak aby rekordy o takim samym nr personalnym, ale innym ID KD nie
+      tworzyły nowych rekordów, ale aktualizowały istniejące.
+    </li>
+  </ul>
+  <h3>Programowanie</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący generowanie Service Taga nawet dla pozycji, które nie są zdefiniowane w Zleceniu.
+    </li>
+    <li>Dodano wsparcie dla MultiOne Workflow v2.3.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Dodano raport Lean do przetestowania na prawdziwych danych.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.74.0</h1>
+  <h2><%- time.format('2015-11-15', 'LL') %></h2>
+  <h3>Produkcja > Zlecenia</h3>
+  <ul>
+    <li>Dodano funkcję automatycznego poprawiania zleceń, które w momencie tworzenia nie miały operacji. Funkcja włącza
+      się 5 minut po rozpoczęciu każdej zmiany i próbuje poprawić zlecenia, dla których operacje zostały zaimportowane
+      dopiero po ich rozpoczęciu.
+    </li>
+  </ul>
+  <h3>Watchdog</h3>
+  <ul>
+    <li>Dodano funkcję powiadamiania o niewysyłaniu e-maili.</li>
+  </ul>
+  <h3>Programowanie</h3>
+  <ul>
+    <li>Zmieniono importowanie zleceń tak, aby w zleceniu była tylko jedna pozycja rodzaju Program. Istniejący program
+      jest nadpisywany przez nowy (jeżeli się różnią 12NC).
+    </li>
+    <li>Dodano wsparcie dla wersji 2.16.4.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.73.0</h1>
+  <h2><%- time.format('2015-11-01', 'LL') %></h2>
+  <h3>FTE</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący dodanie domyślnego filtra Wydziału do listy FTE (inne) nawet wtedy, gdy dział
+      zalogowanego użytkownika jest typu Produkcja, co skutkowało wyświetlaniem pustej listy.
+    </li>
+  </ul>
+  <h3>Raporty > HR</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający wyświetlenie raportu przez użytkowników, którzy nie mieli uprawnienia Słowniki:
+      przeglądanie.
+    </li>
+  </ul>
+  <h3>Produkcja > Zlecenia</h3>
+  <ul>
+    <li>Zmieniono filtr Od-Do tak, aby korzystał z pola, dla którego utworzony jest w bazie indeks w celu przyśpieszenia
+      czasu odpowiedzi.
+    </li>
+  </ul>
+  <h3>Produkcja > Zmiany</h3>
+  <ul>
+    <li>Dodano obliczanie czasów bezczynności (całkowitej, początkowej i końcowej), pracy oraz przestojów dla każdej
+      zmiany. Wartości obliczane są po utworzeniu nowej zmiany produkcyjnej na linii, edycji danych lub wykonaniu
+      operacji Zakończenie pracy na Formatce operatora.
+    </li>
+  </ul>
+  <h3>Produkcja > Żądania zmian danych produkcyjnych</h3>
+  <ul>
+    <li>Dodano możliwość żądania edycji wpisów FTE.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawino błąd powodujący nieprawidłowe wyświetlanie jednostek w dymkach na wykresach.</li>
+    <li>Zaktualizowano hasło do konta e-mail.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.72.1</h1>
+  <h2><%- time.format('2015-10-19', 'LL') %></h2>
+  <h3>FTE</h3>
+  <ul>
+    <li>Poprawiono błąd wywalający serwer podczas przydzielania zasobów zmiany, dla której wpis już wcześniej został
+      utworzony.
+    </li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający edycję funkcji na produkcji użytkownika.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.72.0</h1>
+  <h2><%- time.format('2015-10-18', 'LL') %></h2>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący podwójne automatyczne potwierdzanie przestojów.</li>
+  </ul>
+  <h3>Plany godzinowe</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący dodawanie do wpisów dezaktywowanych przepływów.</li>
+  </ul>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Poprawiono generowanie pliku .vnc klienta.</li>
+  </ul>
+  <h3>FTE</h3>
+  <ul>
+    <li>Dodano ustawienia struktury wpisów FTE.</li>
+  </ul>
+  <h3>Badanie opinia</h3>
+  <ul>
+    <li>Dodano pole Kolor do Pracodawców (wykorzystywane na wykresach).</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieusuwanie danych przestarzałych sesji użytkowników.</li>
+    <li>Zmieniono maksymalną wielkość akceptowalnych przez serwer plików .txt do 6 MB, a .json do 2 MB.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.71.1</h1>
+  <h2><%- time.format('2015-10-12', 'LL') %></h2>
+  <h3>FTE</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący tworzenie wpisów FTE (produkcja) bez Przepływów.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.71.0</h1>
+  <h2><%- time.format('2015-10-11', 'LL') %></h2>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Usunięto z raportu wykres Wyniki ankiety.</li>
+    <li>Zmieniono formularz Odpowiedzi tak, aby wymuszał wybranie od odpowiedzi na pytania ankiety.</li>
+    <li>Dodano do raportu wykresy Wyniki ankiety wg Badań i Wyniki ankiety wg Przełożonych.</li>
+    <li>Dodano sortowanie danych wg wydziałów na wykresach raportu.</li>
+    <li>Dodano rozpoznawanie wyników z zeskanowanych ankiet na podstawie zdefiniowanych szablonów skanowania.</li>
+  </ul>
+  <h3>FTE</h3>
+  <ul>
+    <li>Zmieniono FTE (magazyn) na FTE (inne).</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.70.0</h1>
+  <h2><%- time.format('2015-10-04', 'LL') %></h2>
+  <h3>Zlecenia reszty działów</h3>
+  <h3>Puste zlecenia</h3>
+  <ul>
+    <li>Zmieniono importowanie tak, aby korzystało ze zrzutów robionych przez SAP GUI, a nie z e-maili.</li>
+  </ul>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Dodano możliwość zarządzania szablonami skanowania.</li>
+  </ul>
+  <h3>Żadania zmian danych produkcyjnych</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niewyświetlanie się dodawanego zlecenia/przestoju na osi czasu zmiany produkcyjnej.
+    </li>
+    <li>Poprawiono błąd powodujący niemożliwość ponownego rozwinięcia szczegółów żądania zmiany, jeżeli zatwierdzenie
+      zmiany się nie powiodło.
+    </li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalenie się serwera, jeżeli eksportowano do CSV bardzo dużo danych, posortowanych
+      wg pola, które nie jest indeksowane w bazie danych.
+    </li>
+    <li>Zmieniono wyrównanie wartości w polach typu numer z prawej krawędzi na wyrównanie do lewej krawędzi.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.69.4</h1>
+  <h2><%- time.format('2015-09-29', 'LL') %></h2>
+  <h3>Raport Wskaźniki</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie nieaktywnych jednostek organizacyjnych w trybie online.</li>
+  </ul>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Dodano zwracanie błędu dla żądań klientów (np. wygenerowanie Service Taga), jeżeli te zostanie otrzymane w
+      momencie rozpoczęcia restartu serwera w celu aktualizacji.
+    </li>
+  </ul>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący zawsze wyświetlanie komunikatu o braku przeprowadzanego badania na stronie Aktualne
+      badania, mimo że badanie jest rozpoczęte.
+    </li>
+    <li>Dodano możliwość wygenerowania podglądu wersji do druku badania z poziomu formularza dodawania/edycji badania.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.69.2</h1>
+  <h2><%- time.format('2015-09-27', 'LL') %></h2>
+  <h3>Wizualizacja struktury organizacyjnej</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nie wyświetlanie wierzchołka dla jednostki organizacyjnej mającej takie samo ID jak
+      jednostka wyższego poziomu.
+    </li>
+    <li>Dodano możliwość ukrywania dezaktywowanych jednostek organizacyjnych.</li>
+  </ul>
+  <h3>Jednostki organizacyjne</h3>
+  <ul>
+    <li>Dodano do listy możliwość ukrywania dezaktywowanych jednostek organizacyjnych.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.69.1</h1>
+  <h2><%- time.format('2015-09-25', 'LL') %></h2>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niedziałanie funkcji Skocz do akcji naprawczej po ID.</li>
+    <li>Dodano raport.</li>
+    <li>Dodano informację o następnym badaniu wraz z odnośnikiem do wersji do druku do strony 'Aktualne badanie' w
+      przypadku, gdy aktualnie nie jest przeprowadzane żadne badanie.
+    </li>
+  </ul>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Dodano wsparcie dla pozycji Test ramki w e-mailu powiadamiającym.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.69.0</h1>
+  <h2><%- time.format('2015-09-20', 'LL') %></h2>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Dodano nowy moduł: Badanie Opinia.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono wysyłanie powiadomień tak, aby nie próbował wysyłać e-maili, jeżeli nie ma żadnych prawidłowych
+      odbiorców.
+    </li>
+  </ul>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować wywalanie się serwera.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono operację Rozpoczęcie zmiany tak, aby przed rozpoczęciem nowej zmiany klient zapytał serwer czy nowa
+      zmiana już istnieje. Jeżeli istnieje, to dane zmiany są pobierane i praca jest kontynuowana. Jeżeli nie istnieje
+      lub nie ma połączenia z serwerem, to tworzona jest nowa zmiana.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.68.2</h1>
+  <h2><%- time.format('2015-09-13', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący utratę powiązania między linią a wykonywanym zleceniem, jeżeli linia przerwała
+      wykonywanie zlecenia, a potem do niego wróciła, co skutkowało nie aktualizowaniem się licznika w aplikacji Walkner
+      Xiconf.
+    </li>
+    <li>Zmieniono kolejność odnośników w mailu o nieukończonych zleceniach.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wysyłanie tylko jednego przypomnienia dla danego nieukończonego i nieaktualizowanego
+      zgłoszenia.
+    </li>
+    <li>Zmieniono ilość dni, po upłynięciu których wysyłane są przypomnienia z 7 do 14.</li>
+  </ul>
+  <h3>Produkcja</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować wywalanie się serwera.</li>
+  </ul>
+  <h3>Dokumenty</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować przerwanie procesu dołączania klienta do linii produkcyjnej.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono adresy IP uznawane jako lokalne z 192.168.*.*, 161.87.64.* i 161.87.63.* na 192.168.*.* oraz
+      161.87.*.*.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.68.1</h1>
+  <h2><%- time.format('2015-09-04', 'LL') %></h2>
+  <h3>Zmiany produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd podczas generowania osi czasu.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.68.0</h1>
+  <h2><%- time.format('2015-08-23', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Zmieniono wartość Nazwa programu, aby wyświetlała nazwę wykonanego programu (jeżeli taki był) zamiast nazwy z
+      pliku konfiguracyjnego.
+    </li>
+    <li>Dodano wsparcie dla wersji 2.15.0.</li>
+    <li>Dodano informację o trybie wprowadzania danych w jakim znajduje się dany klient: zielone tło - zdalny,
+      pomarańczowe - lokalny, czerwony - nie połączony.
+    </li>
+    <li>Dodano kolumnę Kroki programu do listy wyników. Kolor ramki kroku odzwierciedla rezultat: zielony - OK, czerwony
+      - NOK, czarny - nie wykonany.
+    </li>
+  </ul>
+  <h3>Zmiany produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nie wyświetlanie się zleceń oraz przestojów na osi czasu po załadowaniu strony w
+      trybie Aktualnej zmiany.
+    </li>
+  </ul>
+  <h3>Raport HR</h3>
+  <ul>
+    <li>Poprawiono eksportowanie wykresu Funkcje/Firmy do formatu CSV.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Zmieniono treść e-maila z przypomnieniem o niezamkniętych zgłoszeniach: teraz za każdym razem podawana jest
+      liczba wszystkich starych, niezamkniętych zgłoszeń (tzn. np. także te, o których informował e-mail wczoraj).
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.67.0</h1>
+  <h2><%- time.format('2015-08-01', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Dodano wsparcie dla wersji 2.14.0.</li>
+  </ul>
+  <h3>Karty pracy</h3>
+  <ul>
+    <li>Dodano nowy indeks w bazie danych w celu przyśpieszenia filtra Tylko moje.</li>
+  </ul>
+  <h3>Żądania zmian danych produkcyjnych</h3>
+  <ul>
+    <li>Poprawiono odnośnik do usuwanego zlecenia.</li>
+    <li>Dodano oś czasu zmiany produkcyjnej do szczegółów żądania zmiany.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieprawidłowe grupowanie danych w raporcie Ilości zgłoszeń.</li>
+    <li>Dodano powiadamianie e-mailowe o otwartych, nieaktualizowanych zgłoszeniach. Codziennie o 12:00 wysyłane są
+      e-maila do osób zatwierdzających, które mają jakieś otwarte zgłoszenia, które nie były aktualizowane przez 7 dni.
+    </li>
+    <li>Dodano nowy filtr statusu: otwarte (wszystko oprócz zakończonych i anulowanych).</li>
+    <li>Dodano maksymalną wartość dla pola Data zdarzenia (na aktualny dzień, aby nie można było wybrać dany w
+      przyszłości).
+    </li>
+    <li>Zmieniono grupowanie danych w raporcie z dacie utworzenia na datę zdarzenia.</li>
+    <li>Zmieniono sortowanie danych na liście z daty utworzenia na datę zdarzenia.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący odświeżanie dokumentacji po sprawdzeniu dostępności w wyszukiwarce TPD, nawet jeżeli
+      wyszukiwarka zwróciła 0 wyników.
+    </li>
+    <li>Zmieniono pozycję w menu. Dokumentacja znajduje się teraz w menu Produkcja.</li>
+    <li>Dodano lepsze cache'owanie pobieranych plików PDF.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.66.0</h1>
+  <h2><%- time.format('2015-07-26', 'LL') %></h2>
+  <h3>Dane produkcyjne > Historia operacji</h3>
+  <ul>
+    <li>Zmieniono filtr Linia produkcyjna tak, aby można było wyczyścić wybraną wartość.</li>
+    <li>Zmieniono filtr listy tak, aby domyślnie korzystała z indeksu bazy danych.</li>
+  </ul>
+  <h3>Dokumenty WMES</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że klienci nie mieli dostępu do listy Linii produkcyjnych, co uniemożliwiało
+      utworzenie listy rozwijalnej dla pola ID linii w ustawieniach klienta.
+    </li>
+    <li>Dodano listę klientów Dokumentów WMES.</li>
+  </ul>
+  <h3>Raport CLIP</h3>
+  <ul>
+    <li>Zmieniono listę zleceń tak, aby ignorowała zlecenia z dezaktywowanych kontrolerów MRP.</li>
+  </ul>
+  <h3>Działy</h3>
+  <ul>
+    <li>Dodano nowe pole: Automatyczny przestój.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Dodano funkcję automatycznego rozpoczynania przestojów po rozpoczęciu nowego zlecenia. Rozpoczynany jest
+      przestój wybrany w polu Automatyczny przestój Działu, w którym znajduje się dana Linia produkcyjna.
+    </li>
+  </ul>
+  <h3>Żądania zmian</h3>
+  <ul>
+    <li>Dodano nowy moduł: żądania zmian danych produkcyjnych - umożliwia osobom z odpowiednimi uprawnieniami zgłaszanie
+      zmian dodania/edycji/usuwania zmian/zleceń/przestojów. Osoby zgłaszające korzystają z tych samych interfejsów co
+      użytkownicy z uprawnieniem Dane produkcyjne: zarządzanie, ale ich zmiany pojawiają się najpierw do zatwierdzenia
+      na liście Żądań zmian.
+    </li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że akcja Eksportuj zgłoszenia nie była dostępna dla wszystkich zalogowanych
+      użytkowników.
+    </li>
+    <li>Zmieniono filtr Od-Do listy zgłoszeń z Czasu dodania zgłoszenia na Czas wystąpienia zdarzenia.</li>
+    <li>Zmieniono filtr Od-Do raportu zgłoszeń tak, aby wartość Do była zamieniana na kolejny dzień, jeżeli jest równa
+      wartości Od.
+    </li>
+    <li>Dodano stronę pomocy.</li>
+  </ul>
+  <h3>Pulpit</h3>
+  <ul>
+    <li>Dodano przekierowanie do listy usprawnień po wejściu, jeżeli dany użytkownik nie ma ustawionych żadnych
+      uprawnień.
+    </li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Dodano możliwość samodzielnej edycji loginu, hasła, adresu e-mail, imienia i nazwiska oraz płci dla użytkowników
+      bez uprawnienia Użytkownicy: zarządzanie.
+    </li>
+    <li>Dodano możliwość samodzielnego resetu hasła przed logowaniem.</li>
+  </ul>
+  <h3>SAP GUI</h3>
+  <ul>
+    <li>Dodano możliwość określenia ciągu znaków jaki musi wystąpić w wyniku wykonywania skryptu transakcji, aby dany
+      wynik zaliczony został jako pomyślny.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>2015-07-16.01</h1>
+  <h2><%- time.format('2015-07-16', 'LL') %></h2>
+  <h3>Watchdog</h3>
+  <ul>
+    <li>Dodano automatyczne powiadamianie telefoniczne po wystąpieniu zdarzenia Start systemu.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.65.2</h1>
+  <h2><%- time.format('2015-07-15', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Poprawiono nieprawidłowy link to wyników testów na ekranie szczegółów zlecenia, jeżeli ID programu zawierało
+      małe litery.
+    </li>
+    <li>Poprawiono błąd powodujący generowanie Service Tagów dla wyników z trybu lokalnego, które nie otrzymały ST, ale
+      nie zapisywanie go w bazie, co powodowało wielokrotne ich podliczanie do Ilości zrobionej.
+    </li>
+    <li>Poprawiono błąd powodujący dodawanie przez wyniki z trybu lokalnego pozycji typu Test nawet wtedy, gdy dany
+      wynik nie zawierał programu.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.65.1</h1>
+  <h2><%- time.format('2015-07-13', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Dodano wsparcie dla pozycji typu Test w powiadomieniach e-mailowych.</li>
+  </ul>
+  <h3>Dokumenty</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie serwera w przypadku, gdy we wzorcu dodatkowych dokumentów podane ciąg
+      znaków nie będący prawidłowym wyrażeniem regularnym.
+    </li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że niektóre pola do wyszukiwania użytkowników przestały działać.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.65.0</h1>
+  <h2><%- time.format('2015-07-12', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieprawidłowe wyświetlanie niektórych komunikatów w Przebiegu programowania.</li>
+    <li>Dodano funkcjonalność automatycznego dodawania pozycji Testy do Zleceń Xiconf w momencie, gdy klient pobiera
+      Service Taga i wysłał w danych informację o aktualnie wybranym programie testowym.
+    </li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nie importowanie listy operacji dla pustych zleceń (tzn. bez danych o zleceniu -
+      tylko operacje).
+    </li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Ponownie uruchomiono moduł Usprawnień.</li>
+  </ul>
+  <h3>Zdarzenia</h3>
+  <ul>
+    <li>Zmieniono poziom zdarzenia <span style="text-decoration: underline">Start systemu</span> z najniższego na
+      najwyższy w celu wyróżnienia go na liście.
+    </li>
+  </ul>
+  <h3>Dokumenty</h3>
+  <ul>
+    <li>Zmieniono klienta Dokumentów WMES tak, aby automatycznie otwierał formularz Ustawień po załadowaniu, jeżeli ID
+      linii produkcyjnej nie zostało jeszcze ustawione. ID, nazwa i filtr 15NC ma także wypełnione domyślne wartości.
+    </li>
+    <li>Zmieniono pole ID linii produkcyjnej w formularzu Ustawień na listę linii produkcyjnych. Pole zamieni się na
+      listę tylko jak uda się pobrać z serwera listę aktywnych linii produkcyjnych.
+    </li>
+    <li>Zmieniono otwieranie aktualnego dokumentu w nowym okienku tak, aby plik ładowany był dopiero po rozszerzeniu
+      pływającej ramki do rozmiarów okienka. Powinno to rozwiązać problem z wyświetlaniem bardzo małego pliku PDF.
+    </li>
+    <li>Zmieniono rozmiary nowego okienka z dokumentem z 60% szerokości ekranu i 80% wysokości ekranu na 95% szerokości
+      i wysokości ekranu.
+    </li>
+    <li>Zmieniono filtr Dodatkowych dokumentów z dopasowywania ciągu znaków na wyrażenia regularne. Teraz zmiast w
+      filtrze pisać:
+      <code>Iridium2 LARGE - LED; Iridium2 MEDIUM - LED; Iridium2 SMALL - LED</code>
+      można użyć wyrażeń regularnych:
+      <code>Iridium2.*?LED</code>
+    </li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono wyświetlanie 'okruszków' strony (page breadcrumbs) w wersji do druku.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.64.0</h1>
+  <h2><%- time.format('2015-07-05', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Dodano funkcjonalność automatycznego tworzenia Zleceń Xiconf na podstawie Zlecenia reszty działów wybranego na
+      Formatce operatora, jeżeli dla danego Zlecenia reszty działów nie zostało wcześniej zaimportowane Zlecenie Xiconf
+      (co zdarza się w przypadku, gdy dany wyrób nie ma kroku programowania i LEDów, tylko testowanie).
+    </li>
+  </ul>
+  <h3>Karty pracy</h3>
+  <ul>
+    <li>Zmieniono pole wyboru Maszyny w formularzu dodawania/edycji tak, aby nie wyświetlane były dezaktywowane Linie
+      produkcyjne.
+    </li>
+  </ul>
+  <h3>Kontrolery MRP</h3>
+  <h3>Przepływy</h3>
+  <h3>WorkCenter</h3>
+  <h3>Linie produkcyjne</h3>
+  <ul>
+    <li>Zmieniono listy tak, aby Nazwa/Opis danej jednostki org. był przekreślony, jeżeli jest ona dezaktywowana.</li>
+  </ul>
+  <h3>Raport CLIP</h3>
+  <ul>
+    <li>Zmieniono wyszukiwanie zleceń dla wybranej jednostki organizacyjnej tak, aby z ID Kontrolerów MRP przed
+      wyszukiwaniem usuwany był przyrostek ~WYDZIAŁ.
+    </li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd mogący powodować wywalanie się serwera, jeżeli użytkownik połączył i rozłączył się z serwerem w
+      bardzo krótkim odstępie czasu.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.63.5</h1>
+  <h2><%- time.format('2015-06-29', 'LL') %></h2>
+  <h3>Dokumenty WMES</h3>
+  <ul>
+    <li>Dodano do formularza Wyszukiwania zlecenia klawiaturę numeryczną oraz listę 5 ostatnich zleceń z danej linii
+      produkcyjnej.
+    </li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że użytkownicy bez uprawnień Aktywacji klienta Operatora WMES/Dokumentów WMES mogli
+      aktywować klientów, a użytkownicy z uprawnieniami nie.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.63.4</h1>
+  <h2><%- time.format('2015-06-28', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że wartość pola Linie produkcyjne w Programach nie była zapisywana.</li>
+    <li>Poprawiono błąd powodujący, że nowa, przeliczona wykonana ilość w zleceniu nie była rozsyłana do klientów,
+      którzy rozpoczęli dane zlecenie, przerwali je na czas większy niż czas potrzebny na wysłanie e-maili z
+      powiadomieniem, a następnie powrócili do tego zlecenia.
+    </li>
+    <li>Dodano wsparcie dla wersji 2.13.5.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Dodano nowe uprawnienia Aktywacja klienta Operator WMES oraz Aktywacja klietna Dokumenty WMES. Uprawnienia te są
+      od teraz wymagane zamiast Słowniki: zarządzanie przy aktywacji formatki operatora oraz klienta wyświetlającego
+      rysunki/dokumentację.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.63.3</h1>
+  <h2><%- time.format('2015-06-24', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Dodano wsparcie dla wersji 2.13.3.</li>
+  </ul>
+  <h3>Dokumenty</h3>
+  <ul>
+    <li>Poprawiono błąd podczas sprawdzania nowych wersji dokumentów w PLS TDP Search powodujący nie pobieranie nowych
+      plików, jeżeli zmieniła się tylko wartość Status Date, a nie zmieniły się ścieżki do plików.
+    </li>
+    <li>Zmieniono serwowanie plików dokumentów tak, aby nie serwowano plików pobranych z PLS TDP Search, jeżeli adres
+      serwera wyszukiwarki nie jest aktualnie ustawiony.
+    </li>
+    <li>Dodano rozróżnienie między plikami pobranymi z PLS TDP Search (na niebiesko), a dokumentami z dysku sieciowego
+      (na zielono).
+    </li>
+    <li>Dodano możliwość otworzenia aktualnie załadowanego dokumentu w nowym oknie przeglądarki.</li>
+  </ul>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Poprawiono błąd mogący powodować wielokrotne automatyczne potwierdzenie tych samym przestojów.</li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Zmieniono ilość plików ze zleceniami do importu z 8 na 11.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.63.2</h1>
+  <h2><%- time.format('2015-06-22', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Poprawiono błędy powodujące, że lista zleceń programowych i szczegóły zlecenia programowego nie są wyświetlane,
+      jeżeli jakieś powiązane zlecenie produkcyjne nie ma nazwy, 12NC lub ilości.
+    </li>
+    <li>Zmieniono importowanie zleceń programowych tak, aby zlecenie programowe było ignorowane, jeżeli znalezione
+      zlecenie produkcyjne (reszty działów) nie ma nazwy, 12NC lub ilości.
+    </li>
+    <li>Dodano wsparcie dla wersji 2.13.2.</li>
+  </ul>
+  <h3>Dane produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd przy zamykania nieskończonych przestojów podczas wykonywania operacji Rozpoczęcie zmiany.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Dodano gwiazdki do wszystkich wymaganych pól.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.63.1</h1>
+  <h2><%- time.format('2015-06-21', 'LL') %></h2>
+  <h3>Dokumenty</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się serwera, jeżeli klient wybierze zlecenie, które nie ma nazwy.</li>
+    <li>Poprawiono błąd powodujący wywalanie się serwera, jeżeli podczas ściągania pliku dokumentu ze zdalnego serwera
+      wystąpi błąd.
+    </li>
+    <li>Poprawiono konfigurację internetowego proxy uniemożliwiającą wyszukiwanie i pobieranie dokumentów przez PLS TDP
+      Search.
+    </li>
+  </ul>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Dodano wsparcie dla opcji GLP2.</li>
+  </ul>
+  <h3>Raport Przestoje w obszarach</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieprawidłowe obliczanie roboczogodzin w dymkach wykresu Czas przestojów.</li>
+    <li>Poprawiono błąd powodujący nieaplikowanie zmienionych wartości filtrów po załączeniu filtra poprzez zmianę
+      niestandardowego zakresu czasu.
+    </li>
+    <li>Zmieniono wykresy Czas i Ilość przestojów tak, aby legenda pod wykresem zmieniała się po zmianie Obszarów w
+      filtrze (tak jak w dymkach).
+    </li>
+  </ul>
+  <ul>
+    <li>Zmieniono aktywację nowych linii tak, aby nie można było aktywować linii oznaczonych jako dezaktywowane.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.62.0</h1>
+  <h2><%- time.format('2015-06-14', 'LL') %></h2>
+  <h3>Dokumenty</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niewyświetlanie aktualnego stanu w aplikacji klienta, jeżeli połączono się z serwerem
+      w tym samym momencie, w jakim zmieniono zlecenie na formatce operatora.
+    </li>
+    <li>Dodano funkcję wyszukiwania dokumentów przez PLS TDP Search:<br>
+      <ol style="list-style-type: decimal">
+        <li>Klient pyta serwer o plik dokumentu dla danego 15NC.</li>
+        <li>Serwer sprawdza czy plik istnieje w lokalnym folderze z dokumentami pobranymi z PLS TDP Search oraz w
+          lokalnym folderze z dokumentami pobieranymi co godzinę z dysku M:\.
+        </li>
+        <li>Jeżeli znaleziono plik w folderze PLS TDP Search to jest on zwracany, a jeżeli w folderze M:\, to ten z
+          dysku M:\ (pierwszeństwo ma PLS TDP Search). Jeżeli nie znaleziono pliku w żadnym z folderów, zwracany jest
+          błąd.
+        </li>
+        <li>W międzyczasie serwer wyszukuje w PLS TDP Search dokumentów PDF o statusie Final, jeżeli czas od ostatniego
+          sprawdzenia to mniej niż godzina.
+        </li>
+        <li>Serwer parsuje listę dokumentów i porównuje z listą zapisaną w bazie. Jeżeli nie ma żadnych różnic, to
+          koniec.
+        </li>
+        <li>Serwer ściąga wszystkie pliku dokumentów na lokalny dysk.</li>
+        <li>Serwer łączy ściągnięte pliki w jeden plik.</li>
+        <li>Serwer informuje wszystkich klientów o aktualizacji dokumentu dla danego 15NC.</li>
+        <li>Klienci wyświetlający aktualnie dane 15NC ponownie ładują dokument.</li>
+      </ol>
+    </li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Dodano oddzielne uprawnienia do każdego z raportów.</li>
+  </ul>
+  <h3>Raport Przestoje w obszarach</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nie zapisywanie w adresie strony informacji o filtrze Status przestojów na liście.
+    </li>
+    <li>Poprawiono błąd powodujący wyświetlanie za małych wartości na wykresie Czas przestojów.</li>
+    <li>Zmieniono wysokość listy przestojów tak, aby zawsze była taka sama, a w przypadku większej ilości danych
+      pojawiał się pasek przewijania.
+    </li>
+    <li>Zmieniono kolory słupków na wykresach przestojów tak, aby wartości słupków były lepiej widoczne.</li>
+    <li>Dodano możliwość ustawienia domyślnych filtrów raportu.</li>
+    <li>Dodano możliwość wyboru Wyszczególnionego obszaru odpowiedzialności, który będzie pojawiał się jako oddzielne
+      słupki na wykresach przestojów. Na liście przestojów wyświetlane są wszystkie przestoje z filtrów Wyszczególniony
+      i Inne obszary.
+    </li>
+    <li>Dodano możliwość zmiany zakresów czasu i podziału czasu wszystkich komponentów raportu.</li>
+    <li>Dodano możliwość eksportu danych raportu.</li>
+    <li>Dodano do wykresu Czas przestojów wyświetlanie wartości roboczogodzin w dymku pokazującym się po najechaniu na
+      jakiś punkt.
+    </li>
+  </ul>
+  <h3>Licencje</h3>
+  <ul>
+    <li>Zmieniono wyświetlanie Opcji licencji tak, aby wyświetlana była wartość ustawiona liczbowa, jeżeli dana
+      aplikacja nie ma specjalnych opcji.
+    </li>
+    <li>Dodano wsparcie dla aplikacji Dokumenty WMES.</li>
+  </ul>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający usuwanie programów.</li>
+    <li>Dodano więcej narzędzi do debugowania aktualnego stanu modułu w celu znalezienia przyczyny braku aktualizacji
+      liczników w aplikacjach klienckich.
+    </li>
+    <li>Dodano możliwość zmiany licencji podłączonych klientów z poziomu listy klientów. Po kliknięciu na ID licencji,
+      pojawia się lista wszystkich/nieużytych licencji, gdzie można wybrać klucz licencji, jaki ma być przesłany do
+      klienta.
+    </li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono protokół wysyłania operacji z linii produkcyjnej z WebSocket na HTTP w celu uzyskania lepszej kontroli
+      nad błędami związanymi z połączeniem z serwerem.
+    </li>
+    <li>Dodano unikalny identyfikator klienta do każdej wysyłanej do serwera operacji w celu rozpoznania problemu
+      generowania podwójnych operacji Rozpoczęcie zmiany.
+    </li>
+  </ul>
+  <h3>Dane produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący w niektórych przypadkach edycji zlecenia/przestoju zmianę Czasu zakończenia na Czas
+      rozpoczęcia.
+    </li>
+    <li>Poprawiono błąd podczas wyświetlania błędu edycji zlecenia/przestoju.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Dodano funkcję otwierania strony w nowym oknie po kliknięciu środkowym przyciskiem myszy na rząd tabeli w
+      listach, które są 'klikalne'.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.61.2</h1>
+  <h2><%- time.format('2015-06-02', 'LL') %></h2>
+  <h3>Dokumenty</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że importowanie dokumentów traktowało taką samą listę dokumentów, ale w innej
+      kolejności, jako inną od aktualnej, co skutkowało niepotrzebną aktualizacją zlecenia.
+    </li>
+    <li>Zmieniono funkcjonalność dodatkowych dokumentów tak, aby dodatkowe dokumenty dopasowywane były po ciągu znaków
+      występującym w nazwie wyrobu, a nie po 12NC wyrobu.
+    </li>
+  </ul>
+  <h3>Zdarzenia</h3>
+  <ul>
+    <li>Dodano funkcjonalność zabezpieczającą przed 'zawieszaniem' się dodawania zdarzeń (do momentu znalezienia
+      przyczyny).
+    </li>
+  </ul>
+  <h3>Raport CLIP</h3>
+  <ul>
+    <li>Dodano filtr 'Do godziny...' do listy zleceń.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.61.1</h1>
+  <h2><%- time.format('2015-06-01', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieprawidłowe wyświetlanie się strony szczegółów wyniku programowania, jeżeli
+      programowanie zakończone było z niektórych powodów związanych z GPRS.
+    </li>
+  </ul>
+  <h3>SAP GUI</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się kontrolera SAP GUI, gdy nadchodzi czas wykonania zrzutu dokumentów.
+    </li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że użytkownicy łączący się z IP zaczynających się na 161.87.64. lub 161.87.63. nie
+      byli traktowani jako 'lokalni' użytkownicy.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.61.0</h1>
+  <h2><%- time.format('2015-05-31', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Zmieniono treść powiadomienia e-mail tak, aby wskazać, że dane zlecenie nie ma zaprogramowanych wszystkich
+      driverów ORAZ nie ma zeskanowanych wszystkich płytek LED.
+    </li>
+    <li>Zmieniono domyślny filtr zleceń tak, aby wyświetlane były zlecenia o dowolnym statusie.</li>
+    <li>Zmieniono filtr importowanych zleceń tak, aby zlecenia GPRS (LC) nie były ignorowane.</li>
+    <li>Zmieniono akcje przekierowania do klienta na liście klientów tak, aby brały pod uwagę port HTTP na jakim
+      nasłuchuje serwer aplikacji danego klienta.
+    </li>
+    <li>Dodano wsparcie dla opcji GPRS.</li>
+  </ul>
+  <h3>Dane produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że zlecenia/przestoje automatycznie kończone przez serwer nie miały obliczanych
+      czasów.
+    </li>
+    <li>Zmieniono oś czasu Zmiany produkcyjnej tak, aby nie było wymagane trzymanie Ctrl, żeby pokazały się akcje
+      zarządzania.
+    </li>
+  </ul>
+  <h3>Wydziały</h3>
+  <ul>
+    <li>Dodano nowy typ Wydziału: Inny.</li>
+  </ul>
+  <h3>Działy</h3>
+  <ul>
+    <li>Dodano nowy typ Działu: Inny.</li>
+  </ul>
+  <h3>Kontrolery MRP</h3>
+  <ul>
+    <li>Dodano nowe pole: Obszar (Indoor, Outdoor, Nie dotyczy).</li>
+  </ul>
+  <h3>Zdarzenia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że filtr Użytkownik nie wyświetlał wartości po odświeżeniu strony.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Dodano nowy moduł: Usprawnienia - rejestracja ZPW, Sugestii oraz Kaizenów.</li>
+  </ul>
+  <h3>Raport CLIP</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że CLIP dla poprzedniego dnia nie był obliczany po pierwszym imporcie zleceń o
+      godzinie 07:00, ale o 08:00.
+    </li>
+    <li>Dodano do wykresów wskaźniki Ilość zleceń Produkcja i Ilość zleceń End2End.</li>
+    <li>Dodano dwa nowe filtry statusów do listy zleceń: Niepotwierdzone (domyślny) oraz Bez wybranego statusu.</li>
+  </ul>
+  <h3>Raport Przestoje w obszarach</h3>
+  <ul>
+    <li>Dodano nowy raport: Przestoje w obszarach.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Zmieniono pole Płeć w formularzu tak, aby było wymagane.</li>
+  </ul>
+  <h3>Programowanie ICPO</h3>
+  <ul>
+    <li>Wyłączono moduł.</li>
+  </ul>
+  <h3>Dokumenty zleceń</h3>
+  <ul>
+    <li>Dodano nowy moduł: Dokumenty zleceń.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.60.0</h1>
+  <h2><%- time.format('2015-05-17', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Dodano wyświetlanie informacji czy na kliencie dostępna jest usługa Motorola CoreScanner.</li>
+    <li>Dodano automatyczną aktualizację klucza licencyjnego, jeżeli aktualnie używany przez klienta klucz nie jest taki
+      sam jak ten, który znajduje się w bazie WMES dla danego ID licencji. Licencja zostanie także automatycznie
+      zaktualizowana, jeżeli zostanie zmodyfikowana i klient ją wykorzystujący jest podłączony.
+    </li>
+    <li>Zmieniono sposób liczenia Ilości zrobionej:<br>
+      <ul>
+        <li>Ilość zrobiona=(Ilość zaprogramowana+Ilość zeskanowanych płytek)/2, jeżeli Ilość zaprogramowana&gt;0 i Ilość
+          zeskanowanych płytek&gt;0;
+        </li>
+        <li>Ilość zrobiona=Ilość zaprogramowana, jeżeli Ilość zaprogramowana&gt;0 i Ilość zeskanowanych płytek=0;</li>
+        <li>Ilość zrobiona=Ilość zeskanowanych płytek, jeżeli Ilość zeskanowanych płytek&gt;0 i Ilość
+          zaprogramowana=0.
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <h3>Licencje</h3>
+  <ul>
+    <li>Dodano nowe pole: Data wygaśnięcia. Na liście licencji podświetlane jest na czerwono, jeżeli Data wygaśnięcia
+      jest równa lub po aktualnej dacie.
+    </li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Dodano listę powiązanych dokumentów do każdego zlecenia. Powiązane dokumenty będą importowane z SAP i
+      wykorzystywane w module do wyświetlania rysunków.
+    </li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Dodano nowe pole: płeć. Przy synchronizacji użytkowników z bazą KD, płeć ustawiana jest na żeńską dla
+      użytkowników, których imię kończy się na literę 'a'.
+    </li>
+    <li>Dodano kolumnę Login do listy użytkowników.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.59.0</h1>
+  <h2><%- time.format('2015-05-10', 'LL') %></h2>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Zmieniono importowanie zleceń z SAP tak, aby przepuszczał zlecenia, które w nazwie mają tylko ciąg znaków
+      *program* (wcześniej *label*program*).
+    </li>
+    <li>Zmieniono domyślny filtr zleceń tak, aby wyświetlał zlecenia Ukończone oraz Nadwyżka (wcześniej Nieukończone).
+    </li>
+    <li>Zmieniono filtr po 12NC na liście wyników programowania na filtry 12NC programu i 12NC płytki LED.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Dodano możliwość eksportowania listy zleceń CLIP do pliku CSV.</li>
+    <li>Dodano możliwość filtrowania listy zleceń CLIP po numerze zlecenia.</li>
+  </ul>
+  <h3>Licencje</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nie pokazywanie w menu pozycji Słowniki &gt; Licencje dla użytkowników z uprawnieniem
+      Słowniki: przeglądanie.
+    </li>
+    <li>Poprawiono błąd powodujący generowanie nowego ID licencji w kluczu licencji podczas edycji.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.58.4</h1>
+  <h2><%- time.format('2015-05-05', 'LL') %></h2>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Poprawiono błąd wywalający serwer importera podczas porównywania operacji &quot;pustych zleceń&quot;.</li>
+  </ul>
+  <h3>Puste zlecenia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieprawidłowe wyświetlanie filtra listy zleceń.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie niekompletnej struktury raportu Magazyn, w przypadku, gdy Zadania
+      produkcyjne zostały pobrane z serwera szybciej od Ustawień.
+    </li>
+    <li>Zmieniono czas oczekiwania na wygenerowanie raportu przez serwery raportów z 30 sekund na 4 minuty.</li>
+    <li>Zmieniono kolumnę Data ukończenia na liście zleceń w raporcie CLIP tak, aby wyświetlała wartość Daty rozpoczęcia
+      zlecenia.
+    </li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono ładowanie danych z serwera (głównie po wybraniu akcji Filtruj) tak, aby aktualnie wykonywane żądanie
+      było anulowane, jeżeli rozpoczęto nowe (np. poprzez kilkukrotne wciśnięcie Filtruj raport).
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.58.0</h1>
+  <h2><%- time.format('2015-05-03', 'LL') %></h2>
+  <h3>Karty pracy</h3>
+  <ul>
+    <li>Poprawiono błąd podczas wyszukiwania zleceń po 12NC, jeżeli nie podano pełnego 12NC.</li>
+    <li>Zmieniono wymagane minimum znaków do rozpoczęcia wyszukiwania zleceń po 12NC z 6 znaków do 10.</li>
+    <li>Usprawniono wyświetlanie listy części.</li>
+  </ul>
+  <h3>Statusy zleceń</h3>
+  <ul>
+    <li>Dodano brakujące tłumaczenia dla właściwości Kolor.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wysyłanie do serwera podwójnych żądań wygenerowania raportów Wskaźniki, CLIP oraz
+      HR.
+    </li>
+    <li>Przeniesiono wykresy DIR/INDIR oraz Podział zasobów z raportu CLIP do raportu HR.</li>
+    <li>Dodano do raportu CLIP listę Zleceń reszty działów z wybranego okresu (po Dacie rozpoczęcia). Kliknięcie na
+      rekord wybranego zlecenia wyświetli Historię zmian zlecenia.
+    </li>
+  </ul>
+  <h3>Powody opóźnień</h3>
+  <ul>
+    <li>Dodano nowy słownik: Powody opóźnień - wykorzystywany w Zleceniach reszty działów i raporcie CLIP.</li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Usprawiono wyświetlanie listy operacji zlecenia.</li>
+    <li>Usprawniono wyświetlanie historii zmian w zleceniu.</li>
+    <li>Dodano możliwość komentowania i ustawiania Powodu opóźnienia do każdego zlecenia. Funkcja dostępna tylko dla
+      użytkowników z uprawnieniem Zlecenia: zarządzanie.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.57.0</h1>
+  <h2><%- time.format('2015-04-26', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie serwera podczas startu, jeżeli ustawienie <span style="font-style: italic">Opóźnienie powiadomienia [min]</span>
+      nie istnieje.
+    </li>
+    <li>Zmieniono wysyłanie e-maili z powiadomieniami tak, aby były wysyłane ze skrzynki <!-- e --><a
+        href="mailto:minimes@philips.com">minimes@philips.com</a><!-- e -->.
+    </li>
+    <li>Zmieniono wymagania pozwalające na podłączanie się klientów do serwera tak, aby klient mógł się połączyć bez
+      ustawionego ID linii produkcyjnej.
+    </li>
+  </ul>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Zmieniono domyślny filtr tak, aby wyświetlane były przestoje z ostatnich 30 dni (w celu trafienia w indeksy,
+      jeżeli użytkownik ma przypisane obszary odpowiedzialności).
+    </li>
+    <li>Zmieniono automatyczne potwierdzenie przestoju tak, aby zmieniało Obszar na Domyślny obszar Działu, w którym
+      rozpoczęto Przestój oraz Powód na taki jaki był zgłoszony na samym początku.
+    </li>
+    <li>Zmieniono sposób potwierdzania przestojów:<br>
+      <ul>
+        <li>Użytkownik z uprawnieniem Dane produkcyjne: zarządzanie może zawsze zmieniać status, powód i obszar (nawet
+          jak osiągnięto limity zmian).
+        </li>
+        <li>Użytkownik bez uprawnienia Przestoje: zarządzanie może tylko komentować.</li>
+        <li>Jeżeli przestój jest Niepotwierdzony, to użytkownik z dostępem do aktualnego obszaru może odrzucić lub
+          potwierdzić przestój. Jak odrzuci, to obszar zmieniany jest na domyślny obszar działu, w którym rozpoczęto
+          przestój.
+        </li>
+        <li>Jeżeli przestój jest Odrzucony, to użytkownik z dostępem do aktualnego obszaru może zmienić status na
+          Niepotwierdzony i przy okazji wybrać nowy powód i obszar.
+        </li>
+        <li>Jeżeli przestój jest Potwierdzony, to status nie może być zmieniony (nie dotyczy Dane produkcyjne:
+          zarządzanie).
+        </li>
+      </ul>
+    </li>
+    <li>Dodano do listy przestojów wyświetlanie ilości zmian Obszaru odpowiedzialnego, Powodu oraz ilości Odrzuceń
+      danego przestoju.
+    </li>
+    <li>Dodano generowanie zdarzenia <span style="font-style: italic">Przestoje: edycja potwierdzonego</span>, gdy
+      zmodyfikowany zostanie Przestój o statusie Potwierdzony.
+    </li>
+  </ul>
+  <h3>Działy</h3>
+  <ul>
+    <li>Zmieniono pole Domyślny obszar odp. na formularzu na wymagane.</li>
+  </ul>
+  <h3>Powody przestojów</h3>
+  <ul>
+    <li>Dodano nową flagę: Tylko domyślny obszar działu.</li>
+    <li>Dodano kolumnę Obszary odpowiedzialności do listy powodów.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono komunikat dezaktywacji Linii tak, aby znikał sam po 5 sekundach.</li>
+    <li>Zmieniono rozpoczynanie Przestoju tak, aby brana pod uwagę była flaga <span style="font-style: italic">Tylko domyślny obszar działu</span>
+      wybranego Powodu. Jeżeli zostanie wybrana, to jedyny Obszar odpowiedzialności jaki będzie dostępny do wyboru, to
+      domyślny obszar Działu w jakim znajduje się dana Linia produkcyjna.
+    </li>
+  </ul>
+  <h3>Produkcja</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący odczepienie Przestoju od Zlecenia, w przypadku każdej edycji czasów danego
+      przestoju.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.56.0</h1>
+  <h2><%- time.format('2015-04-19', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie serwera podczas wysyłania powiadomienia dla zlecenia, w którym jakieś
+      Zlecenie z formatki operatora nie zostało jeszcze zakończone.
+    </li>
+    <li>Dodano możliwość zmiany ustawień z poziomu aplikacji.</li>
+  </ul>
+  <h3>Licencje</h3>
+  <ul>
+    <li>Dodano nowy moduł Słowniki &gt; Licencje.</li>
+  </ul>
+  <h3>Plany godzinowe</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie serwera w sytuacji, gdy po zmianie wartości usunięto dany plan przed
+      upłynięciem 60 sekund.
+    </li>
+    <li>Zmieniono kolor stanu zaznaczenia pola na formularzu tak, aby był taki sam jak na formularzu FTE.</li>
+    <li>Zmieniono filtr Data na Od-Do.</li>
+    <li>Dodano sortowanie listy przepływów po nazwie przy tworzeniu nowego planu.</li>
+  </ul>
+  <h3>FTE</h3>
+  <ul>
+    <li>Zmieniono filtr Data na Od-Do.</li>
+    <li>Dodano sortowanie listy przepływów/zadań po nazwie przy tworzeniu nowego wpisu FTE.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Reaktywowano synchronizację użytkowników z bazą KD.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zoptymalizowano wszystkie nieoptymalne pętle i formatowanie dat w formatach YYYY-MM-DD, YYYY-MM-DD HH:mm:ss po
+      stronie serwera.
+    </li>
+    <li>Zoptymalizowano edycję kart pracy po stronie serwera poprzez dodanie nowych indeksów do przestojów i zleceń dla
+      pola ID karty pracy.
+    </li>
+    <li>Zoptymalizowano import użytkowników poprzez dodanie nowego indeksu dla pola ID z bazy KD, po którym porównywani
+      są użytkownicy.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.55.0</h1>
+  <h2><%- time.format('2015-04-15', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Zmieniono okno czasu, w którym licencja uznawana jest za zduplikowaną podczas importu wyników z 8 godzin na 15
+      minut.
+    </li>
+    <li>Zmieniono przycisk Aktualizacji danej aplikacji tak, aby był zablokowany jeżeli aplikacja ma już najnowszą
+      wersję.
+    </li>
+    <li>Dodano podświetlanie przestarzałych wersji aplikacji na liście klientów. W dymku po najechaniu na wartość
+      wyświetla się najnowsza dostępna wersja.
+    </li>
+    <li>Dodano podświetlanie nieprawidłowych licencji na liście klientów. W dymku po najechaniu na wartosć wyświetla się
+      komunikat błędu.
+    </li>
+    <li>Dodano do każdego klienta na liście nową akcję otwarcia aplikacji na ekranie Programatora.</li>
+    <li>Dodano na stronie klientów nową akcję: Aktualizuj aplikacje - za pojedyńczym wciśnięciem i potwierdzeniem wysyła
+      żądanie aktualizacji do wszystkich przestarzałych klientów.
+    </li>
+  </ul>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Zmieniono potwierdzanie przestojów tak, aby Użytkownik z uprawieniem <span style="font-style: italic">Przestoje: zarządzanie</span>,
+      ale bez uprawnienia <span style="font-style: italic">Dane produkcyjne: zarządzanie</span> nie mógł zmieniać
+      statusu Potwierdzonego przestoju.
+    </li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący znikanie kolumn z wykresami podczas przechodzenia z niższego poziomu nas wyższy.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że w niektórych przypadkach IP użytkownika nie zostało rozpoznane.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.54.1</h1>
+  <h2><%- time.format('2015-04-14', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Dodano kolumnę Opcje do listy klientów wskazującą jakie opcje wspiera wykorzystywana licencja.</li>
+  </ul>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się serwera podczas automatycznego potwierdzania przestojów.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.54.0</h1>
+  <h2><%- time.format('2015-04-13', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający pobranie Service Tagów (błąd 'INPUT').</li>
+    <li>Poprawiono błąd powodujący, że niektóre nagłówki kolumn listy zleceń nie były aktualizowane po zmianie języka
+      interfejsu.
+    </li>
+    <li>Poprawiono błąd powodujący, że 'okruszki' na stronie listy programów nie miały prefiksu 'Xiconf &gt;'.</li>
+    <li>Zmieniono powiadamianie o nieukończonych zleceniach mailem:<br>
+      <ul>
+        <li>Maile nie są wysyłane, jeżeli dla danego zlecenia nie istnieją żadne zlecenia z linii produkcyjnych (co może
+          się zdarzyć jak zlecenie zostanie 'poprawione').
+        </li>
+        <li>Maile nie są wysyłane, jeżeli w zleceniu są tylko płytki LED i żadnej nie zeskanowano.</li>
+        <li>W treści wyróżnione są przerwane i nieukończone zlecenia.</li>
+        <li>W treści wyświetlane są linie produkcyjne, na jakich wykonywano zlecenie (i kiedy).</li>
+        <li>W treści wyświetlane są czasy poświęcone na wykonanie zadania.</li>
+        <li>Dodano znak tabulatora na koniec każdej linii, aby oszukać mechanizm Outlooka łączący oddzielne linie w
+          jedną.
+        </li>
+      </ul>
+    </li>
+    <li>Zmieniono sprawdzanie numerów seryjnych płytek LED tak, aby unikalność sprawdzana była tylko w tym samym
+      zleceniu, a nie w całej bazie.
+    </li>
+    <li>Zmieniono teksty odnoszące się do ilości na bardziej ogólne.</li>
+    <li>Zmieniono ładowanie danych szczegółów zlecenia tak, aby nie ładował zeskanowanych numerów seryjnych (których
+      może być kilkaset).
+    </li>
+    <li>Dodano wsparcie dla wersji 2.9.0.</li>
+    <li>Dodano podstronę Klienci, na której można monitorować wszystkie instalacje, jakie kiedykolwiek podłączyły się do
+      serwera w trybie zdalnym.
+    </li>
+  </ul>
+  <h3>Dane produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się serwera w przypadku, gdy aktualizowano listę przestojów/zleceń dla
+      linii, która nie miała rozpoczętej żadnej zmiany.
+    </li>
+  </ul>
+  <h3>Dane produkcyjne > Zlecenia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nie przeliczanie czasów trwania zlecenia po edycji, jeżeli zlecenie to nie miało
+      żadnych przestojów.
+    </li>
+  </ul>
+  <h3>Monitoring</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że linia produkcyjna widoczna była jako Offline mimo, że była połączona.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono rozpoczynanie przestoju tak, aby brane były pod uwagę Obszary odpowiedzialności przypisane do Powodów
+      przestojów.
+    </li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że niektóre nagłówki kolumn listy zleceń nie były aktualizowane po zmianie języka
+      interfejsu.
+    </li>
+    <li>Zmieniono sortowanie listy tak, aby pasowało do indeksów bazy danych.</li>
+  </ul>
+  <h3>FTE (produkcja)</h3>
+  <ul>
+    <li>Zoptymalizowano zmianę wartości FTE i flagi 'Brak planu?' po stronie serwera.</li>
+    <li>Usunięto panel Absencji personalnej.</li>
+  </ul>
+  <h3>FTE (magazyn)</h3>
+  <ul>
+    <li>Zoptymalizowano zmianę wartości FTE i komentarzy po stronie serwera.</li>
+    <li>Zmieniono kolor stanu zaznaczenia pola na formularzu tak, aby odróżnić go od stanu najechania myszką.</li>
+  </ul>
+  <h3>Plany godzinowe</h3>
+  <ul>
+    <li>Nieznacznie zoptymalizowano zmianę planowanych ilości i flagi 'Brak planu?' po stronie serwera.</li>
+  </ul>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Zmieniono proces potwierdzania przestojów:<br>
+      <ul>
+        <li>Każdy może dodać komentarz.</li>
+        <li>Użytkownicy z uprawnieniem Dane produkcyjne: zarządzanie lub Przestoje: zarządzanie mogą zmienić status i
+          przy okazji wybrać nowy Powód i Obszar.
+        </li>
+        <li>Co godzinę automatycznie Potwierdzane są wszystkie Niepotwierdzone i Odrzucone przestoje, w których nie
+          dokonano żadnych zmian przez okres czasu większy niż wartość ustawienia 'Czas do automatycznego potwierdzenia
+          [h]' (domyślnie 7 dni).
+        </li>
+      </ul>
+    </li>
+    <li>Zmieniono domyślny filtr tak, aby wyświetlał Niepotwierdzone i Odrzucone przestoje z Obszarów odpowiedzialności
+      danego Użytkownika.
+    </li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Tymczasowo wyłączono synchronizację użytkowników.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zaktualizowano Node.js do wersji 0.12.2 64-bit.</li>
+    <li>Zaktualizowano MongoDB do wersji 3.0.2.</li>
+    <li>Zaktualizowano wszystkie moduły zależne.</li>
+    <li>Nieznacznie zoptymalizowano pobieranie z bazy danych rekordów na potrzeby stron ze szczegółami.</li>
+    <li>Zmniejszono czas od wyświetlenia informacji o nadchodzącym restarcie serwera do wykonania restartu z 10s na
+      2.5s.
+    </li>
+    <li>Zmieniono czcionkę nagłówków paneli oraz dodano cienie do tekstu w nagłówkach.</li>
+    <li>Dodano cienie do tekstu w przyciskach akcji (inne niż białe).</li>
+    <li>Zmieniono czas wykonywanania zrzutu bazy danych z 30 minut po rozpoczęciu każdej zmiany na raz dziennie o
+      04:30.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.53.4</h1>
+  <h2><%- time.format('2015-03-31', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Poprawiono złą kolejność ilości zaprogramowanych komponentów w e-mailu powiadamiającym (było TODO/DONE, jest
+      DONE/TODO).
+    </li>
+    <li>Poprawiono błąd powodujący wysyłanie ID Wydziałów zamiast Linii produkcyjnych w e-mailu powiadamiającym.</li>
+    <li>Poprawiono błąd powodujący wywalanie się serwera, gdy na Linii rozpoczęto zlecenie, które nie ma odpowiednika w
+      Zleceniach Xiconf.
+    </li>
+    <li>Dodano zliczanie i nadawanie Service Tagów pomyślnym wynikom z trybu lokalnego, które nie otrzymały Service
+      Taga.
+    </li>
+  </ul>
+  <h3>Watchdog</h3>
+  <ul>
+    <li>Dodano monitorowanie zdarzeń typu Start systemu.</li>
+  </ul>
+  <h3>Powody przestojów</h3>
+  <ul>
+    <li>Dodano nowy atrybut: Obszary odpowiedzialności (narazie nigdzie nie jest wykorzystywany).</li>
+  </ul>
+  <h3>Baza 12NC</h3>
+  <ul>
+    <li>Dodano nowy moduł: Baza 12NC - każdy Dostawca ma własną bazę 12NC. Do każdego 12NC można zdefiniować jedną
+      wartość i jej jednostkę.
+    </li>
+  </ul>
+  <h3>Zamówienia</h3>
+  <ul>
+    <li>Dodano wyświetlanie wartości i jednostki dla tych pozycji zamówienia, których 12NC występują w Bazie 12NC.</li>
+    <li>Dodano możliwość drukowania na Zebrze etykiet długości przewodów dla wybranych pozycji zamówienia na podstawie
+      wartości z Bazy 12NC.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.53.2</h1>
+  <h2><%- time.format('2015-03-29', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nie zapamiętywanie w adresie strony wybranej zakładki na stronie szczegółów wyniku.
+    </li>
+    <li>Dodano zakładkę Płytki LED na stronie szczegółów wyniku.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Zwiększono timeout dla żądań generujących raporty z 2 minut do 4 minut.</li>
+    <li>Usprawniono logowanie informacji o wolno generujących się raportach.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.53.1</h1>
+  <h2><%- time.format('2015-03-28', 'LL') %></h2>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się serwera po zmianie Zmiany produkcyjnej.</li>
+    <li>Poprawiono błąd powodujący, że do aplikacji Xiconf wysyłane były zduplikowane zlecenia, jeżeli na formatce
+      operatora rozpoczęto dwa razy to samo zlecenie.
+    </li>
+    <li>Poprawiono błąd powodujący wywalanie się serwera importera danych z SAP podczas porównywania nowych zleceń
+      Xiconf.
+    </li>
+    <li>Zmieniono walidację listy płytek LED przesyłaną w celu pobrania Service Taga, aby usuwał nieprawidłowe wpisy, a
+      nie odrzucał całe żądanie.
+    </li>
+    <li>Zmieniono rozpoznawanie nazwy programu podczas importowania wyników, aby usuwał wszystkie rozszerzenia z nazwy
+      pliku konfiguracyjnego drivera.
+    </li>
+    <li>Dodano brakujące tłumaczenia tekstów.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.53.0</h1>
+  <h2><%- time.format('2015-03-28', 'LL') %></h2>
+  <h3>FTE</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że Użytkownik nie mógł edytować wpisu FTE aktualnej zmiany, jeżeli wpis ten był
+      utworzony 8+ godzin wcześniej (na innej zmianie).
+    </li>
+    <li>Poprawiono błąd powodujący, że sumy wartości FTE nie były obliczane po stronie klienta po edycji wartości FTE w
+      zadaniu, które nie jest podzielone na wydziały.
+    </li>
+    <li>Usunięto dwukropek z niektórych etykiet.</li>
+  </ul>
+  <h3>Raport Magazyn</h3>
+  <ul>
+    <li>Dodano przeliczanie wskaźników po dodaniu lub usunięciu wpisu FTE (magazyn).</li>
+  </ul>
+  <h3>Xiconf</h3>
+  <ul>
+    <li>Dodano wsparcie dla wersji 2.8.0.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono wszystkie tabele-listy w systemie:<br>
+      <ul>
+        <li>większość kolumn ma teraz minimalną szerokość, co skutkuje wyrównaniem wszystkich kolumn do lewej strony.
+        </li>
+        <li>kliknięcie na wiersz, przeniesie Użytkownika do strony szczegółów.</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.52.3</h1>
+  <h2><%- time.format('2015-03-23', 'LL') %></h2>
+  <h3>Programowanie > Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że wartości kolumny Service Tag na liście wyników nie były wyświetlane.</li>
+    <li>Zmieniono nieznacznie treść e-maila o nieukończonym zleceniu.</li>
+    <li>Dodano brakujące tłumaczenia.</li>
+  </ul>
+  <h3>FTE (magazyn)</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się serwera po edycji wartości FTE we wpisie, który nie ma żadnych zadań
+      dzielonych na wydziały.
+    </li>
+  </ul>
+  <h3>Raport Magazyn</h3>
+  <ul>
+    <li>Zmieniono obliczanie Średniego FTE tak, aby suma z danego przedziału była dzielona na ilość dni w danym
+      przedziale, a nie na ilość zmian.
+    </li>
+    <li>Zmieniono wartość sumy FTE na wykresach w przedziałach czasu miesiąc, kwartał i rok na wartość Średnie FTE.</li>
+  </ul>
+  <h3>Produkcja</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieobliczanie czasów ręcznie dodanego zlecenia.</li>
+    <li>Poprawiono błąd powodujący nieprawidłowe logowanie informacji o klientach łączących się/rozłączających się z
+      Formatki operatora.
+    </li>
+    <li>Przeliczono czasy wszystkich zleceń.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Dodano indeksy do pól Funkcja na produkcji oraz Uprawnienia.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>2015-03-16.01</h1>
+  <h2><%- time.format('2015-03-16', 'LL') %></h2>
+  <h3>Watchdog</h3>
+  <ul>
+    <li>Uruchomiono na serwerze nowy proces: <span style="font-style: italic">wmes-watchdog</span>, którego zadaniem
+      jest sprawdzanie czy w określonych przedziałach czasu utworzone zostały określone Zdarzenia. Na przykład, w 35
+      minucie każdej godziny sprawdza, czy w ciągu ostatnich 45 minut pojawiło się Zdarzenie <span
+        style="font-style: italic">Zlecenia reszty działów: synchronizacja</span>. Jeżeli nie, to wysyła e-maile na
+      <!-- e --><a href="mailto:lukasz@walkner.pl">lukasz@walkner.pl</a><!-- e -->, <!-- e --><a
+        href="mailto:walkner@walkner.pl">walkner@walkner.pl</a><!-- e --> i <!-- e --><a
+        href="mailto:michal.krajewski@philips.com">michal.krajewski@philips.com</a><!-- e -->. Aktualnie monitorowane
+      zdarzenia to:<br>
+      <ul>
+        <li>Xiconf: synchronizacja zleceń (powinno wystapić po 30 minucie każdej trzeciej godziny, od poniedziałku do
+          piątku),
+        </li>
+        <li>Magazyn: synchronizacja cykli kontrolnych (powinno wystąpić po 05:00 w każdy poniedziałek),</li>
+        <li>Magazyn: synchronizacja zamówień przeniesienia (powinno wystąpić po 06:05, codziennie),</li>
+        <li>Puste zlecenia: synchronizacja (powinno wystąpić po 22:35, od poniedziałku do piątku),</li>
+        <li>Zlecenia reszty działów: synchronizacja aktualnego dnia (powinno wystąpić po 5 minucie każdej godziny, od
+          poniedziałku do piątku),
+        </li>
+        <li>Zlecenia reszty działów: synchronizacja poprzednich dni (powinno wystąpić po 5 minucie, co 4 godziny,
+          począwszy od 02:00, od poniedziałku do piątku),
+        </li>
+        <li>Zlecenia reszty działów: synchronizacja aktualnego dnia (powinno wystąpić co 4 godziny, począwszy od 02:00,
+          od poniedziałku do piątku).
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.52.1</h1>
+  <h2><%- time.format('2015-03-15', 'LL') %></h2>
+  <h3>Zadania produkcyjne</h3>
+  <ul>
+    <li>Dodano możliwość nieograniczonego zagnieżdżania zadań.</li>
+  </ul>
+  <h3>FTE (magazyn)</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że ostatnia kolumna (pokaż/ukryj komentarz) w formularzu miała za dużą szerokość.
+    </li>
+    <li>Usprawniono dolny pasek z informacjami o aktywnym polu, aby pokazywał się także wtedy, gdy mamy aktywne pole
+      komentarza.
+    </li>
+    <li>Zmniejszono minimalną szerokość kolumny Nazwa zadania produkcyjnego z 400px do 300px.</li>
+    <li>Zmieniono wygląd wpisu i formularza:<br>
+      <ul>
+        <li>usunięto znaczki symbolizujące strukturę drzewa - zamiast tego, nazwy zadania mają większy lewy odstęp,</li>
+        <li>nadrzędne zadania mają różne kolory - podrzędne zadania mają kolory ciemniejsze od nadrzędnego o 10%.</li>
+      </ul>
+    </li>
+    <li>Dodano do formularza tworzenia nowego wpisu opcję kopiowania wartości FTE z poprzedniego wpisu wybranej
+      zmiany.
+    </li>
+  </ul>
+  <h3>FTE (produkcja)</h3>
+  <ul>
+    <li>Dodano do formularza tworzenia nowego wpisu opcję kopiowania wartości FTE z poprzedniego wpisu wybranej
+      zmiany.
+    </li>
+  </ul>
+  <h3>Raport Magazyn</h3>
+  <ul>
+    <li>Zmieniono strukturę raportu, aby odzwierciedlała strukturę zadań produkcyjnych.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że wyeksportowane wykresy nie miały widocznych wartości.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Ukryto przyciski Przestój i Przerwa w stanie Bezczynności.</li>
+  </ul>
+  <h3>Programowanie Xiconf</h3>
+  <ul>
+    <li>Poprawiono błąd, powodujący generowanie nieprawidłowego ID dla nowych programów.</li>
+    <li>Dodano na liście programów etykiety informujące o wykorzystanych krokach w programie.</li>
+    <li>Dodano wsparcie dla trybu zdalnego:<br>
+      <ul>
+        <li>importowanie zleceń etykiet programowych i płytek LED z SAP,</li>
+        <li>aplikacja Walkner Xiconf w trybie zdalnym podłączona jest pod Formatkę operatora i pracuje nad tym samym
+          zleceniem,
+        </li>
+        <li>przydzielanie Service Tagów dla pomyślnych programowań,</li>
+        <li>informowanie przez e-mail mistrzów i liderów o niekompletnych zleceniach, nad którymi przestano pracować
+          (wszystkie Formatki operatora pracujące nad zleceniem zmieniły zlecenie na inne).
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <h3>Produkcja > Zlecenia</h3>
+  <ul>
+    <li>Dodano wskaźnik Wydajność na liście zleceń, w szczegółach zlecenia i w dymku na osi czasu zmiany produkcyjnej.
+    </li>
+  </ul>
+  <h3>Produkcja > Zmiany</h3>
+  <ul>
+    <li>Dodano efekt pulsującego tła w stanie Długiego przestoju (tylko w wersji wyświetlającej aktualną, a nie
+      konkretną Zmianę produkcyjną (w adresie jest ID Linii, a nie Zmiany)).
+    </li>
+  </ul>
+  <h3>Monitoring > Układ fabryki</h3>
+  <ul>
+    <li>Zmieniono kliknięcie na nazwę Linii produkcyjnej, aby przekierowywało do wersji szczegółów aktualnej Zmiany
+      produkcyjnej na danej Linii (po ID Linii; wcześniej przekierowywało do konkretnej Zmiany - po ID Zmiany).
+    </li>
+  </ul>
+  <h3>Monitoring > Lista linii produkcyjnych</h3>
+  <ul>
+    <li>Zmieniono kliknięcie na nazwę Linii produkcyjnej, aby przekierowywało do wersji szczegółów aktualnej Zmiany
+      produkcyjnej na danej Linii (po ID Linii; wcześniej przekierowywało do konkretnej Zmiany - po ID Zmiany). W trybie
+      historycznym nadal przekierowuje do konkretnej zmiany.
+    </li>
+    <li>Dodano wyświetlanie 12NC obok Nr zlecenia.</li>
+    <li>Dodano efekt pulsującego tła dla Linii, które znajdują się w stanie Długiego przestoju.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Dodano opisy do wszystkich Statusów zleceń.</li>
+    <li>Wygenerowano adresy e-mail dla wszystkich Użytkowników z Firmy PHILIPS, którzy nie mieli ustawionego e-maila.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.51.1</h1>
+  <h2><%- time.format('2015-02-22', 'LL') %></h2>
+  <h3>Programowanie</h3>
+  <ul>
+    <li>Dodano brakujące pliki.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.51.0</h1>
+  <h2><%- time.format('2015-02-22', 'LL') %></h2>
+  <h3>Programowanie</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący przechodzenie na stronę Dashboard po kliknięciu na zablokowaną akcję pobrania pliku
+      konfiguracyjnego.
+    </li>
+    <li>Zmieniono w menu pozycję grupy Programowanie.</li>
+    <li>Dodano wsparcie dla Walkner Xiconf v2.6.0 (MultiOne Workflow v2.0, Tester 24V DC).</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono algorytm zmiany Zmiany produkcyjnej, aby Zmiana nie zmieniła się na tę samą lub wcześniejszą Zmianę (w
+      skutek korekty zegara systemowego).
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.50.2</h1>
+  <h2><%- time.format('2015-02-13', 'LL') %></h2>
+  <h3>Raporty: Magazyn</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący resetowanie FTE, gdy zmodyfikowano wpis FTE (magazyn) zmiany, dla której wskaźniki
+      magazynu zostały już obliczone.
+    </li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.50.0</h1>
+  <h2><%- time.format('2015-02-05', 'LL') %></h2>
+  <h3>Słowniki jednostek organizacyjnych</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący brak wstępnego wybrania wszystkich nadrzędnych jednostek organizacyjnych podczas
+      edycji MRP, Przepływu, WC oraz Linii.
+    </li>
+    <li>Zmieniono dozwolony format ID MRP, WC oraz Linii na ^[a-zA-Z0-9_-~]+$.</li>
+    <li>Zablokowano możliwość zmiany Wydziału i Działu.</li>
+    <li>Dodano możliwość dezaktywacji MRP, Przepływu i WC.</li>
+    <li>Dodano atrybut <span style="font-style: italic">Zastąpiony przez</span> do MRP, który wykorzystywany jest przy
+      obliczaniu CLIP (np. zlecenia z SAP z KF9 zaliczane będą do KF9~c).
+    </li>
+  </ul>
+  <h3>Raporty: Struktura organizacyjna</h3>
+  <ul>
+    <li>Zmieniono połączenia dezaktywowanych jednostkek organizacyjnych z linii ciągłych na linie przerywane.</li>
+  </ul>
+  <h3>Monitoring</h3>
+  <ul>
+    <li>Ukryto dezaktywowane Linie produkcyjne.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.49.4</h1>
+  <h2><%- time.format('2015-02-01', 'LL') %></h2>
+  <h3>Raport 6: Magazyn</h3>
+  <ul>
+    <li>Dodano brakujący plik.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.49.3</h1>
+  <h2><%- time.format('2015-02-01', 'LL') %></h2>
+  <h3>Raport 2: CLIP</h3>
+  <ul>
+    <li>Dodano usuwanie zcachowanych raportów po obliczeniu nowych wskaźników CLIP (żeby nie było trzeba czekać na
+      wygaśnięcie zcachowanego wyniku).
+    </li>
+    <li>Zmieniono godzinę generowania wskaźników z 6 na 7.</li>
+  </ul>
+  <h3>Raport 6: Magazyn</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalanie się serwera importowania danych z SAP podczas obliczania wskaźników dla
+      zmiany, w której wpis FTE (magazyn) jest pusty.
+    </li>
+    <li>Dodano usuwanie zcachowanych raportów po obliczeniu nowych wskaźników CLIP (żeby nie było trzeba czekać na
+      wygaśnięcie zcachowanego wyniku).
+    </li>
+    <li>Dodano możliwość wyeksportowania wpisów FTE (magazyn) oraz Transfer Orders użytych do wygenerowania raportu z
+      poziomu strony raportu.
+    </li>
+    <li>Zmieniono jednostki wyświetlane przy wskaźniku Wydajność z % na TO/FTE.</li>
+    <li>Ukryto wskaźnik Wydajność na wykresie SM (bo nie jest obliczana).</li>
+  </ul>
+  <h3>Zamówienia</h3>
+  <ul>
+    <li>Zmieniono sposób rozpoznawania poszczególnych rekordów w importowanym pliku z zamówieniami, aby zamówienia o 5
+      cyfrowych numerach nie były mylone z pozycjami zamówienia ze względu na restart numeracji zamówień.
+    </li>
+  </ul>
+</div>
