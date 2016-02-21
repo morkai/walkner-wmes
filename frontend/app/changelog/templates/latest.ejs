@@ -1,34 +1,38 @@
-<h1>v0.82.0</h1>
-<h2><%- time.format('2016-02-14', 'LL') %></h2>
-<h3>Przestoje</h3>
-<ul>
-  <li>Zmieniono listę Powodów przestojów w formularzu Potwierdzania przestoju tak, aby wyświetlały się tylko te
-    Powody, które pasują do typu Działu, w którym rozpoczęto dany Przestój.</li>
-</ul>
+<h1>v0.83.0</h1>
+<h2><%- time.format('2016-02-21', 'LL') %></h2>
 <h3>Dokumentacja</h3>
 <ul>
-  <li>Dodano do Listy komponentów (BOM) dzielenie ilości komponentów przez ilość w zleceniu (działa tak samo jak
-    lista komponentów zlecenia w wersji do druku).</li>
+  <li>Zmieniono pozycję 'Lista komponentów' tak, aby pokazywała się tylko wtedy, gdy zlecenie ma jakieś komponenty.</li>
 </ul>
-<h3>Zlecenia reszty działów</h3>
+<h3>ZPW</h3>
 <ul>
-  <li>Zmieniono dzielenie ilości komponentów przez ilość w zleceniu w wersji do druku tak, aby było wykonywane zawsze,
-    a nie tylko wtedy, gdy ilość komponentów jest większa od ilości w zleceniu.</li>
-  <li>Zmieniono wyświetlanie ilości i jednostki komponentów w wersji do druku tak, aby nie były wyświetlane dla
-    komponentów, które nie mają 12NC.</li>
+  <li>Poprawiono błąd powodujący nieprzeliczanie ilości dni realizacji zgłoszenia po zmianie 'Czasu zdarzenia'.</li>
+  <li>Zmieniono formularz edycji zgłoszenia tak, aby użytkownik mógł wybrać status 'Anulowane', jeżeli jest osobą
+    zatwierdzającą w tym zgłoszniu (wcześniej anulować zgłoszenie mógł tylko użytkownik, który dodał zgłoszenie
+    i zgłoszenie to miało status 'Nowe').</li>
+  <li>Dodano wymuszanie wybierania dat nie różniących się o więcej niż 60 dni od aktualnej daty. Użytkownicy
+    z uprawnieniem 'ZPW: zarządzanie' nadal mogą wybrać dowolną datę.</li>
 </ul>
-<h3>Użytkownicy</h3>
+<h3>Usprawnienia</h3>
 <ul>
-  <li>Dodano brakujące tłumaczenie dla uprawnienia 'Raporty: Planowane obciążenie linii'.</li>
+  <li>Poprawiono błąd powodujący nieprzeliczanie ilości dni realizacji zgłoszenia po zmianie 'Daty złożenia wniosku'.</li>
+  <li>Zmieniono formularz edycji zgłoszenia tak, aby użytkownik mógł wybrać status 'Anulowane', jeżeli jest osobą
+    zatwierdzającą w tym zgłoszniu (wcześniej anulować zgłoszenie mógł tylko użytkownik, który dodał zgłoszenie
+    i zgłoszenie to musiało mieć status 'Nowe').</li>
+  <li>Dodano wykres 'Ilość sugestii zgłoszonych w kategoriach' do raportu 'Zestawienie informacji'.</li>
+  <li>Dodano przycisk 'Wersja do druku' do raportu 'Zestawienie informacji', po wciśnięciu którego raport zostanie
+    przystosowany do wydruku na jednej stronie A4 (m.in. brak wykresu 'Ilość zgłoszeń' w poszczególnych tygodniach',
+    wyświetlanie maksymalnie 10 pracowników i kategorii).</li>
+  <li>Dodano wymuszanie wybierania dat nie różniących się o więcej niż 60 dni od aktualnej daty. Użytkownicy
+    z uprawnieniem 'Usprawnienia: zarządzanie' nadal mogą wybrać dowolną datę.</li>
 </ul>
-<h3>Raporty > Planowane obciążenie linii</h3>
+<h3>Raport > Przestoje w obszarach</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający załadowanie nowego planu.</li>
+  <li>Zmieniono pierwsze ładowanie danych raportu tak, aby odbywało się po załadowaniu strony, a nie w trakcie.
 </ul>
-<h3>Inne</h3>
+<h3>Dane produkcyjne</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający przekierowanie na stronę 'Pulpit' po wylogowaniu się użytkownika.</li>
-  <li>Dodano funkcję automatycznego wylogowywania użytkowników, którzy zostali usunięci.</li>
-  <li>Dodano funkcję powiadamiania zalogowanych użytkowników o zmianie ich uprawnień. Od teraz po zmianie uprawnień
-    użytkownikowi, nie musi się on przelogowywać, aby nowe uprawnienia weszły w życie.</li>
+  <li>Poprawiono niedziałający indeks bazy danych dla wartości 'Kontroler MRP' w 'Zmianach produkcyjnych'.</li>
+  <li>Przeniesiono dezaktywowane jednostki organizacyjne w 'KF9' do 'KF9~a', a aktywne jednostki w 'KF9~c' do 'KF9'.</li>
+  <li>Dodano tymczasowe zamienianie ID jednostek produkcyjnych w 'KF9~c' tak, aby dane zaliczane były do 'KF9'.
 </ul>
