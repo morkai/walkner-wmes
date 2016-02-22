@@ -557,13 +557,14 @@ define([
         }
 
         var disabled = ['new'];
+        var isNotConfirmer = !this.model.isConfirmer();
 
-        if (!this.model.isConfirmer())
+        if (isNotConfirmer)
         {
           disabled.push('accepted', 'finished');
         }
 
-        if ((!this.model.isCreator() || this.model.get('status') !== 'new') && !this.isConfirmer())
+        if ((!this.model.isCreator() || this.model.get('status') !== 'new') && isNotConfirmer)
         {
           disabled.push('cancelled');
         }
