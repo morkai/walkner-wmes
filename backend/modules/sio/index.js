@@ -15,7 +15,11 @@ catch (err) {}
 
 exports.DEFAULT_CONFIG = {
   httpServerIds: ['httpServer'],
-  path: '/sio'
+  path: '/sio',
+  socketIo: {
+    pathInterval: 30000,
+    pingTimeout: 10000
+  }
 };
 
 exports.start = function startIoModule(app, sioModule)
@@ -45,11 +49,13 @@ exports.start = function startIoModule(app, sioModule)
     });
   });
 
-  var sio = socketIo(multiServer, {
+  sioModule.config.socketIo = _.merge({}, sioModule.config.socketIo, {
     path: sioModule.config.path,
     transports: ['websocket', 'xhr-polling'],
     serveClient: true
   });
+
+  var sio = socketIo(multiServer, sioModule.config.socketIo);
 
   sioModule = app[sioModule.name] = _.merge(sio, sioModule);
 
