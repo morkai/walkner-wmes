@@ -21,10 +21,17 @@ define([
 
   router.map('/hourlyPlans', canView, function(req)
   {
-    viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanListPage', nls], function(HourlyPlanListPage)
-    {
-      return new HourlyPlanListPage({rql: req.rql});
-    });
+    viewport.loadPage(
+      [
+        'app/hourlyPlans/pages/HourlyPlanListPage',
+        'i18n!app/nls/fte',
+        nls
+      ],
+      function(HourlyPlanListPage)
+      {
+        return new HourlyPlanListPage({rql: req.rql});
+      }
+    );
   });
 
   router.map('/hourlyPlans;add', canManage, function()
