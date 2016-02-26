@@ -155,7 +155,11 @@ exports.httpsServer = {
 };
 
 exports.sio = {
-  httpServerIds: ['httpServer']
+  httpServerIds: ['httpServer'],
+  socketIo: {
+    pingInterval: 10000,
+    pingTimeout: 5000
+  }
 };
 
 exports.pubsub = {
