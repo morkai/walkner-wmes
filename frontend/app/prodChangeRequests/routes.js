@@ -18,7 +18,14 @@ define([
   router.map('/prodChangeRequests', canView, function(req)
   {
     viewport.loadPage(
-      ['app/prodChangeRequests/pages/ProdChangeRequestListPage', 'i18n!app/nls/prodChangeRequests'],
+      [
+        'app/prodChangeRequests/pages/ProdChangeRequestListPage',
+        'i18n!app/nls/prodShifts',
+        'i18n!app/nls/prodShiftOrders',
+        'i18n!app/nls/prodDowntimes',
+        'i18n!app/nls/fte',
+        'i18n!app/nls/prodChangeRequests'
+      ],
       function(ProdChangeRequestListPage)
       {
         return new ProdChangeRequestListPage({
