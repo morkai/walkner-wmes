@@ -291,7 +291,7 @@ define([
 
         totalDayCount += dayCount;
 
-        var indirectDirect = direct ? (indirect / direct) * 100 : 0;
+        var indirectDirect = total ? (indirect / total) * 100 : 0;
 
         totals.quantityDone.push({x: x, y: quantityDone});
         totals.total.push({x: x, y: total});
