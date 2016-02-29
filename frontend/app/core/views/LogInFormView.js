@@ -119,6 +119,11 @@ define([
 
       req.done(function(userData)
       {
+        if (!view.$submit)
+        {
+          return;
+        }
+
         if (view.resetting)
         {
           viewport.msg.show({
@@ -137,7 +142,10 @@ define([
 
       req.fail(function(res)
       {
-        view.$submit.removeClass('btn-primary').addClass('btn-danger');
+        if (view.$submit)
+        {
+          view.$submit.removeClass('btn-primary').addClass('btn-danger');
+        }
 
         if (view.resetting)
         {
