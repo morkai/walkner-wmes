@@ -1,24 +1,18 @@
-<h1>v0.83.1</h1>
-<h2><%- time.format('2016-02-28', 'LL') %></h2>
-<h3>ZPW</h3>
+<h1>v0.83.2</h1>
+<h2><%- time.format('2016-03-06', 'LL') %></h2>
+<h3>Produkcja > Zmiany</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający edycję zgłoszeń przez osoby zatwierdzające.</li>
+  <li>Poprawiono brakujące tłumaczenie w formularzu edycji zlecenia produkcyjnego.</li>
 </ul>
-<h3>Usprawnienia</h3>
+<h3>Produkcja > Żądania zmian</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający edycję zgłoszeń przez osoby zatwierdzające.</li>
+  <li>Poprawiono brakujące tłumaczenia w szczegółach żądania zmiany.</li>
 </ul>
-<h3>Plany godzinowe</h3>
+<h3>Użytkownicy</h3>
 <ul>
-  <li>Poprawiono brakujące tłumaczenie przycisku filtrowania listy planów godzinowych.</li>
-</ul>
-<h3>Raporty > HR</h3>
-<ul>
-  <li>Zmieniono wskaźnik IND/DIR na wykresie INDIRECT/DIRECT z <code>INDIRECT_FTE / DIRECT_FTE</code>
-    na <code>INDIRECT_FTE / TOTAL_FTE</code>.</li>
-</ul>
-<h3>Inne</h3>
-<ul>
-  <li>Zmieniono czas wykrywania niedziałającego połączenia z serwerem z 60s na 5s oraz
-    wysyłanie pakietu sprawdzającego z 25s na 10s.</li>
+  <li>Poprawiono błąd podczas logowania.</li>
+  <li>Zmieniono import użytkowników z bazy KD tak, aby dla każdego nowego użytkownika generowane było domyślne hasło
+    (takie jak login) oraz adres e-mail (imie.nazwisko@philips.com).</li>
+  <li>Ustawiono domyślne hasło wszystkim użytkownikom, którzy nie mieli hasła oraz adres e-mail wszystkim użytkownikom,
+    którzy nie mieli adresu e-mail a byli przypisani do firmy Philips.</li>
 </ul>
