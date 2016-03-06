@@ -48,13 +48,21 @@ define([
 
   router.map('/prodShifts/:id', canView, function(req)
   {
-    viewport.loadPage(['app/prodShifts/pages/ProdShiftDetailsPage', nls], function(ProdShiftDetailsPage)
-    {
-      return new ProdShiftDetailsPage({
-        latest: orgUnits.getByTypeAndId('prodLine', req.params.id) !== null,
-        modelId: req.params.id
-      });
-    });
+    viewport.loadPage(
+      [
+        'app/prodShifts/pages/ProdShiftDetailsPage',
+        'i18n!app/nls/prodShiftOrders',
+        'i18n!app/nls/prodDowntimes',
+        nls
+      ],
+      function(ProdShiftDetailsPage)
+      {
+        return new ProdShiftDetailsPage({
+          latest: orgUnits.getByTypeAndId('prodLine', req.params.id) !== null,
+          modelId: req.params.id
+        });
+      }
+    );
   });
 
   router.map('/prodShifts/:id;edit', canManage, function(req)
