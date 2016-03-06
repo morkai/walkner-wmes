@@ -3,6 +3,8 @@
 'use strict';
 
 var _ = require('lodash');
+var bcrypt = require('bcrypt');
+var transliteration = require('transliteration');
 var step = require('h5.step');
 
 module.exports = function syncUsers(app, usersModule, done)
@@ -159,6 +161,7 @@ module.exports = function syncUsers(app, usersModule, done)
 
           kdUser.login = kdUser.personellId;
           kdUser.password = ']:->';
+          kdUser.email = generateEmailAddress(usersModule.config.emailGenerator, kdUser);
 
           userModel = new User(kdUser);
         }
@@ -169,6 +172,20 @@ module.exports = function syncUsers(app, usersModule, done)
         }
 
         this.userModel = userModel;
+      },
+      function hashPasswordStep()
+      {
+        if (this.isNew)
+        {
+          bcrypt.hash(this.userModel.login, 10, this.next());
+        }
+      },
+      function setPasswordHashStep(err, hash)
+      {
+        if (hash)
+        {
+          this.userModel.password = hash;
+        }
       },
       function saveUserModelStep()
       {
@@ -266,4 +283,14 @@ function parseAddFields(addFields)
   }
 
   return addFieldMap;
+}
+
+function generateEmailAddress(generator, kdUser)
+{
+  return !generator ? '' : generator({
+    firstName: transliteration(kdUser.firstName || '', '?').toLowerCase(),
+    lastName: transliteration(kdUser.lastName || '', '?').toLowerCase(),
+    personnelId: kdUser.personnelId || '',
+    company: (kdUser.company || '').toUpperCase()
+  });
 }

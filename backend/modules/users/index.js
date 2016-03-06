@@ -12,7 +12,8 @@ exports.DEFAULT_CONFIG = {
   sioId: 'sio',
   companiesId: 'companies',
   mailSenderId: 'mail/sender',
-  tediousConnection: null
+  tediousConnection: null,
+  emailGenerator: null
 };
 
 exports.start = function startUsersModule(app, usersModule)
