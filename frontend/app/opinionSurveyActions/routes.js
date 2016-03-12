@@ -5,15 +5,13 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './OpinionSurveyAction'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  OpinionSurveyAction
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -42,10 +40,11 @@ define([
   {
     viewport.loadPage(
       [
+        'app/opinionSurveyActions/OpinionSurveyAction',
         'app/opinionSurveyActions/pages/OpinionSurveyActionDetailsPage',
         nls
       ],
-      function(OpinionSurveyActionDetailsPage)
+      function(OpinionSurveyAction, OpinionSurveyActionDetailsPage)
       {
         return new OpinionSurveyActionDetailsPage({
           model: new OpinionSurveyAction({_id: req.params.id})
@@ -58,10 +57,11 @@ define([
   {
     viewport.loadPage(
       [
+        'app/opinionSurveyActions/OpinionSurveyAction',
         'app/opinionSurveyActions/pages/OpinionSurveyActionAddFormPage',
         nls
       ],
-      function(OpinionSurveyActionAddFormPage)
+      function(OpinionSurveyAction, OpinionSurveyActionAddFormPage)
       {
         return new OpinionSurveyActionAddFormPage({
           model: new OpinionSurveyAction()
@@ -74,10 +74,11 @@ define([
   {
     viewport.loadPage(
       [
+        'app/opinionSurveyActions/OpinionSurveyAction',
         'app/opinionSurveyActions/pages/OpinionSurveyActionEditFormPage',
         nls
       ],
-      function(OpinionSurveyActionEditFormPage)
+      function(OpinionSurveyAction, OpinionSurveyActionEditFormPage)
       {
         return new OpinionSurveyActionEditFormPage({
           model: new OpinionSurveyAction({_id: req.params.id})
@@ -89,7 +90,7 @@ define([
   router.map(
     '/opinionSurveyActions/:id;delete',
     canManage,
-    _.partial(showDeleteFormPage, OpinionSurveyAction, _, _, {
+    _.partial(showDeleteFormPage, 'app/opinionSurveyActions/OpinionSurveyAction', _, _, {
       baseBreadcrumb: true
     })
   );

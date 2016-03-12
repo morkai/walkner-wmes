@@ -5,15 +5,13 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './OpinionSurvey'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  OpinionSurvey
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -126,9 +124,13 @@ define([
     );
   });
 
-  router.map('/opinionSurveys/:id;delete', canManage, _.partial(showDeleteFormPage, OpinionSurvey, _, _, {
-    baseBreadcrumb: true
-  }));
+  router.map(
+    '/opinionSurveys/:id;delete',
+    canManage,
+    _.partial(showDeleteFormPage, 'app/opinionSurveys/OpinionSurvey', _, _, {
+      baseBreadcrumb: true
+    })
+  );
 
   router.map('/opinionSurveys;settings', canManage, function(req)
   {
