@@ -122,6 +122,7 @@
 .dashboard-top-place,
 .dashboard-top-count {
   text-align: right;
+  width: 1px;
 }
 .dashboard-top-count {
   width: 35px;
@@ -151,4 +152,70 @@
   width: 176px;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+@media (max-width: 1440px) {
+  .dashboard-metricsAndList {
+    flex-wrap: wrap;
+  }
+  .dashboard-metricsAndList-list {
+    margin-left: 0;
+    margin-top: 14px;
+    width: 100%;
+    height: auto;
+  }
+  .dashboard-metricsAndList-metrics {
+    flex-grow: 1;
+  }
+}
+@media (max-width: 850px) {
+  .dashboard-top-container {
+    margin-left: 0;
+    margin-top: 14px;
+    width: 100%;
+  }
+  .dashboard-nearMiss {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+}
+@media (max-width: 590px) {
+  .dashboard-top-container {
+    margin-left: 0;
+    margin-top: 14px;
+    width: 100%;
+  }
+  .dashboard-metricsAndList-metrics {
+    flex: 1 1 auto;
+    width: auto;
+  }
+  .dashboard-buttonAndMetrics {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .dashboard-buttonAndMetrics > .btn {
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 100%;
+    padding: 10px;
+    font-size: 24px;
+    margin-bottom: 14px;
+  }
+  .dashboard-buttonAndMetrics > .dashboard-metrics {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .dashboard-metric {
+    flex: 1 1 auto;
+    width: auto;
+    margin-left: 0;
+    margin-right: 14px;
+  }
+  .dashboard-buttonAndMetrics .dashboard-metric:last-child {
+    margin-right: 0;
+    margin-bottom: 14px;
+  }
+  .dashboard-top-container {
+    margin-top: 0;
+  }
 }
