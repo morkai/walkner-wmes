@@ -227,6 +227,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   express.get('/xiconf/clients;debug', canManage, getClientsDebugInfoRoute);
   express.get('/xiconf/clients;clear', canManage, clearOrderDataRoute);
+  express.get('/xiconf/clients;update', canManage, updateRemoteDataRoute);
 
   express.get('/xiconf/clients/:id;goTo', canView, goToClientsPageRoute.bind(null, app, xiconfModule));
 
@@ -255,6 +256,24 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       xiconfModule.clearOrderData(req.query.order);
 
       res.json(xiconfModule.getRemoteCoordinatorDebugInfo().ordersToDataMap);
+    }
+    else
+    {
+      res.sendStatus(500);
+    }
+  }
+
+  function updateRemoteDataRoute(req, res)
+  {
+    if (_.isEmpty(req.query.prodLine))
+    {
+      res.sendStatus(400);
+    }
+    else if (_.isFunction(xiconfModule.updateRemoteData))
+    {
+      xiconfModule.updateRemoteData(req.query.prodLine);
+
+      res.json(xiconfModule.getRemoteCoordinatorDebugInfo().prodLinesToDataMap[req.query.prodLine] || null);
     }
     else
     {

@@ -88,6 +88,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     }
   };
 
+  xiconfModule.updateRemoteData = function(prodLineId)
+  {
+    updateProdLinesRemoteData(prodLineId, null);
+  };
+
   app.broker.subscribe('app.started', onAppStarted);
   app.broker.subscribe('updater.restarting', function() { restarting = true; });
   app.broker.subscribe('settings.updated.xiconf.notifier.delay', onDelaySettingChanged);
