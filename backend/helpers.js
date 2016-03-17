@@ -143,3 +143,19 @@ exports.formatDateTime = function(date)
 
   return result;
 };
+
+exports.createError = function(message, code, statusCode)
+{
+  if (typeof code === 'number')
+  {
+    statusCode = code;
+    code = undefined;
+  }
+
+  var error = new Error(message);
+
+  error.code = code;
+  error.status = statusCode;
+
+  return error;
+};
