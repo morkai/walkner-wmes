@@ -178,7 +178,7 @@ exports.pubsub = {
     'xiconf.results.**', 'xiconf.orders.**', 'xiconf.clients.**',
     'icpo.results.synced', 'orders.intake.synced',
     'orders.updated.*',
-    'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
+    'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*', 'orderDocuments.eto.synced',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',
     'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted',
     'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed'

@@ -34,7 +34,8 @@ define([
     },
 
     remoteTopics: {
-      'orderDocuments.remoteChecked.*': 'onRemoteDocumentChecked'
+      'orderDocuments.remoteChecked.*': 'onRemoteDocumentChecked',
+      'orderDocuments.eto.synced': 'onEtoSynced'
     },
 
     initialize: function()
@@ -199,6 +200,20 @@ define([
       {
         this.previewView.loadDocument();
       }
+    },
+
+    onEtoSynced: function(message)
+    {
+      var currentOrder = this.model.getCurrentOrder();
+
+      if (currentOrder.nc15 === 'ETO' && currentOrder.nc12 === message.nc12)
+      {
+        this.previewView.loadDocument();
+
+        return;
+      }
+
+      this.model.checkEtoExistence(message.nc12);
     },
 
     onFileLoaded: function()

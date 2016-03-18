@@ -203,7 +203,7 @@ define([
       this.listenTo(this.model, 'change:fileSource', this.onFileSourceChange);
       this.listenTo(
         this.model,
-        'change:prefixFilterMode change:prefixFilter',
+        'change:prefixFilterMode change:prefixFilter change:documents',
         _.debounce(this.updateDocuments.bind(this), 1, true)
       );
       this.listenTo(

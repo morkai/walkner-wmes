@@ -319,6 +319,52 @@ define([
       {
         this.trigger('change:' + orderType + ':no', oldOrder.no, newOrder.no);
       }
+    },
+
+    checkEtoExistence: function(nc12)
+    {
+      var isLocalOrder = !!this.get('localOrder').no;
+      var localChanged = this.checkEtoInOrder(nc12, this.get('localOrder'));
+      var remoteChanged = this.checkEtoInOrder(nc12, this.get('remoteOrder'));
+
+      if (localChanged || (remoteChanged && !isLocalOrder))
+      {
+        this.trigger('change:documents');
+      }
+    },
+
+    checkEtoInOrder: function(nc12, orderData)
+    {
+      if (orderData.nc12 !== nc12)
+      {
+        return false;
+      }
+
+      if (orderData.documents.ETO)
+      {
+        return false;
+      }
+
+      var nc15s = Object.keys(orderData.documents);
+      var newDocuments = {};
+
+      if (orderData.documents.BOM)
+      {
+        newDocuments.BOM = orderData.documents.BOM;
+
+        nc15s.shift();
+      }
+
+      newDocuments.ETO = t('orderDocuments', 'eto');
+
+      _.forEach(nc15s, function(nc15)
+      {
+        newDocuments[nc15] = orderData.documents[nc15];
+      });
+
+      orderData.documents = newDocuments;
+
+      return true;
     }
 
   });
