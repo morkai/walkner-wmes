@@ -20,6 +20,7 @@ define([
   'use strict';
 
   var LOADED_FILES_COUNT_TO_REFRESH = 6;
+  var BROWSER_VERSION = window.navigator.userAgent.match(/(Chrome)\/([0-9]+)/) || ['Unknown/0', 'Unknown', 0];
 
   return View.extend({
 
@@ -202,6 +203,12 @@ define([
 
     onFileLoaded: function()
     {
+      // PDF Viewer memory leak was fixed in Chrome v49
+      if (BROWSER_VERSION[1] !== 'Chrome' || BROWSER_VERSION[2] >= 49)
+      {
+        return;
+      }
+
       this.loadedFilesCount += 1;
 
       if (this.loadedFilesCount !== LOADED_FILES_COUNT_TO_REFRESH)
