@@ -320,7 +320,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
           component.qty = [
             parseInt(qty[0], 10),
-            Math.round((parseInt(qty[1], 10) || 0) * 1000) / 1000
+            +(parseInt(qty[1], 10) || 0).toString().substring(0, 3)
           ];
 
           return component;
