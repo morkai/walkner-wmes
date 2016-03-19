@@ -240,7 +240,10 @@
     "filter:hide": "Hide filter",
 
     "placeholder:date": "yyyy-mm-dd",
-    "placeholder:time": "--:--"
+    "placeholder:time": "--:--",
+
+    "PRINT_PAGE:FT:PAGE_NO": "Page <span class=print-page-no>?</span> of <span class=print-page-count>?</span>",
+    "PRINT_PAGE:FT:INFO": "Printout generated at <span class=print-page-date>?</span> by <span class=print-page-user>?</span>."
   },
   "pl": true
 }

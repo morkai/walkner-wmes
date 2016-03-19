@@ -239,5 +239,8 @@
   "filter:hide": "Ukryj filtr",
 
   "placeholder:date": "rrrr-mm-dd",
-  "placeholder:time": "--:--"
+  "placeholder:time": "--:--",
+
+  "PRINT_PAGE:FT:PAGE_NO": "Strona <span class=print-page-no>?</span> z <span class=print-page-count>?</span>",
+  "PRINT_PAGE:FT:INFO": "Wydruk wygenerowany <span class=print-page-date>?</span> przez użytkownika <span class=print-page-user>?</span>."
 }
