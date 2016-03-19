@@ -4,6 +4,7 @@
 
 var _ = require('lodash');
 var step = require('h5.step');
+var setUpRql = require('./rql');
 
 exports.DEFAULT_CONFIG = {
   divisionsId: 'divisions',
@@ -16,6 +17,8 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrgUnitsModule(app, module)
 {
+  setUpRql();
+
   var divisionsModule = app[module.config.divisionsId];
   var subdivisionsModule = app[module.config.subdivisionsId];
   var mrpControllersModule = app[module.config.mrpControllersId];
@@ -572,6 +575,48 @@ exports.start = function startOrgUnitsModule(app, module)
     orgUnits.division = division._id;
 
     return orgUnits;
+  };
+
+  module.getAllForProdLineAsList = function(prodLine, orgUnitsList)
+  {
+    if (!orgUnitsList)
+    {
+      orgUnitsList = [];
+    }
+
+    var orgUnitsMap = module.getAllForProdLine(prodLine, {});
+
+    if (orgUnitsMap.division)
+    {
+      orgUnitsList.push({type: 'division', id: orgUnitsMap.division});
+    }
+
+    if (orgUnitsMap.subdivision)
+    {
+      orgUnitsList.push({type: 'subdivision', id: orgUnitsMap.subdivision.toString()});
+    }
+
+    _.forEach(orgUnitsMap.mrpControllers, function(mrpController)
+    {
+      orgUnitsList.push({type: 'mrpController', id: mrpController});
+    });
+
+    if (orgUnitsMap.prodFlow)
+    {
+      orgUnitsList.push({type: 'prodFlow', id: orgUnitsMap.prodFlow.toString()});
+    }
+
+    if (orgUnitsMap.workCenter)
+    {
+      orgUnitsList.push({type: 'workCenter', id: orgUnitsMap.workCenter});
+    }
+
+    if (orgUnitsMap.prodLine)
+    {
+      orgUnitsList.push({type: 'prodLine', id: orgUnitsMap.prodLine});
+    }
+
+    return orgUnitsList;
   };
 
   function filterByParent(orgUnits, parentProperty, parentOrgUnit)
