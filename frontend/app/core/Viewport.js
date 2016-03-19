@@ -297,7 +297,7 @@ define([
 
     this.$dialog.modal('hide');
 
-    if (e)
+    if (e && e.preventDefault)
     {
       e.preventDefault();
     }
