@@ -316,5 +316,11 @@
   "TYPE:orders.bom.synced": "Zlecenia reszty działów: synchronizacja komponentów",
   "TEXT:orders.bom.synced": "Zaimportowano <em>{count}</em> {count, plural, one{komponent} few{komponenty} other{komponentów}} z danych pobranych <em>{timestamp}</em>.",
   "TYPE:orders.bom.syncFailed": "Zlecenia reszty działów: nieudana synchronizacja komponentów",
-  "TEXT:orders.bom.syncFailed": "Nie udało się zaimportować komponentów zleceń z <em>{timestamp}</em>: {error}"
+  "TEXT:orders.bom.syncFailed": "Nie udało się zaimportować komponentów zleceń z <em>{timestamp}</em>: {error}",
+  "TYPE:isaPalletKinds.added": "Rodzaje palet: dodanie",
+  "TEXT:isaPalletKinds.added": "Dodano rodzaj palet: <a href='\\#isaPalletKinds/{model->_id}'>{model->shortName}</a>",
+  "TYPE:isaPalletKinds.edited": "Rodzaje palet: edycja",
+  "TEXT:isaPalletKinds.edited": "Zmodyfikowano rodzaj palet: <a href='\\#isaPalletKinds/{model->_id}'>{model->shortName}</a>",
+  "TYPE:isaPalletKinds.deleted": "Rodzaje palet: usunięcie",
+  "TEXT:isaPalletKinds.deleted": "Usunięto rodzaj palet: <em>{model->_id}</em>"
 }

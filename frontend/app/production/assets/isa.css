@@ -1,0 +1,53 @@
+.production-isa {
+  flex: 0 0 auto;
+  width: 300px;
+  text-align: center;
+}
+.production-ft > .production-isa > .production-sectionHeader {
+  border-bottom: 1px solid #ddd;
+}
+.production-isa-statuses {
+  margin: 20px 0 20px 0;
+}
+.production-isa-actions {
+  width: 100%;
+}
+.production-isa-status {
+  background: #000;
+  width: 105px;
+  height: 105px;
+  display: inline-block;
+  box-shadow: 0 0 6px #999;
+  border-radius: 25px;
+}
+.production-isa-status + .production-isa-status {
+  margin-left: 30px;
+}
+.production-isa-status.grey {
+  background: radial-gradient(circle, #FEFCEA 0%, #808080 100%);
+}
+.production-isa-status.blue {
+  background: radial-gradient(circle, #FEFCEA 0%, #007FFF 100%);
+}
+.production-isa-status.yellow {
+  background: radial-gradient(circle, #FEFCEA 0%, #FFFF00 100%);
+}
+.production-isa-status.green {
+  background: radial-gradient(circle, #FEFCEA 0%, #4cae4c 100%);
+}
+.production-isa-status.orange {
+  background: radial-gradient(circle, #FEFCEA 0%, #eea236 100%);
+}
+.production-isa-status.red {
+  background: radial-gradient(circle, #FEFCEA 0%, #d43f3a 100%);
+}
+.production-isa .btn {
+  text-transform: uppercase;
+}
+.production-isa-palletKinds {
+  width: 100%;
+}
+.production-isa-palletKinds > li > a {
+  cursor: pointer;
+  font-size: 18px;
+}

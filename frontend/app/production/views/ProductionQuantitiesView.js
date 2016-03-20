@@ -47,7 +47,7 @@ define([
         quantityRows: (this.model.get('quantitiesDone') || []).map(function(quantity, i)
         {
           var editable = unlocked;
-          var time = currentShiftMoment.format('HH:mm:ss');
+          var time = currentShiftMoment.format('HH:00');
 
           currentShiftMoment.add(59, 'minutes').add(59, 'seconds');
 
@@ -60,9 +60,7 @@ define([
             editable = editable && currentTime > currentShiftMoment.valueOf();
           }
 
-          time += '-' + currentShiftMoment.format('HH:mm:ss');
-
-          currentShiftMoment.add(1, 'seconds');
+          time += '-' + currentShiftMoment.add(1, 'seconds').format('HH:00');
 
           return {
             time: time,
@@ -147,10 +145,12 @@ define([
       var $value = $td.find('span').hide();
       var oldValue = parseInt($value.text(), 10);
       var $form = $('<form></form>').submit(function() { hideAndSave(); return false; });
-      var $input = $('<input class="form-control" type="number" min="0">')
-        .attr('placeholder', t('production', 'quantities:newValuePlaceholder'))
-        .attr('max', maxQuantitiesDone)
-        .val(oldValue)
+      var $input = $('<input class="form-control production-quantities-editor" type="number" min="0">')
+        .attr({
+          placeholder: t('production', 'quantities:newValuePlaceholder'),
+          max: maxQuantitiesDone,
+          value: oldValue
+        })
         .on('keydown', function(e)
         {
           if (e.which === 27)

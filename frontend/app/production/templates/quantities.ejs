@@ -1,28 +1,23 @@
-<div class="production-quantities">
-  <h3 class="production-subsectionHeader"><%- t('production', 'section:quantities') %></h3>
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover table-condensed">
-      <thead>
-        <tr>
-          <th><%- t('production', 'quantities:column:time') %></th>
-          <th><%- t('production', 'quantities:column:planned') %></th>
-          <th><%- t('production', 'quantities:column:actual') %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% quantityRows.forEach(function(row, i) { %>
-        <tr>
-          <td><%- row.time %></td>
-          <td><%- row.planned %></td>
-          <td class="production-quantities-actual" data-hour="<%- i %>">
-            <span><%- row.actual %></span>
-            <% if (row.editable) { %>
-            <button class="btn btn-link"><%- t('production', 'quantities:change') %></button>
-            <% } %>
-          </td>
-        </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </div>
-</div>
+<table class="table table-bordered table-hover table-condensed">
+  <thead>
+    <tr>
+      <th class="is-min"><%- t('production', 'quantities:column:time') %></th>
+      <th class="is-min"><%- t('production', 'quantities:column:planned') %></th>
+      <th><%- t('production', 'quantities:column:actual') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% quantityRows.forEach(function(row, i) { %>
+    <tr>
+      <td class="is-min"><%- row.time %></td>
+      <td class="is-min"><%- row.planned %> <%- t('production', 'quantities:unit') %></td>
+      <td class="production-quantities-actual" data-hour="<%- i %>">
+        <span><%- row.actual %> <%- t('production', 'quantities:unit') %></span>
+        <% if (row.editable) { %>
+        <button class="btn btn-link"><%- t('production', 'quantities:change') %></button>
+        <% } %>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

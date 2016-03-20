@@ -130,6 +130,8 @@
     "NAVBAR:MONITORING:LIST": "Production line list",
     "NAVBAR:VENDOR_NC12S": "12NC database",
     "NAVBAR:LICENSES": "Licenses",
+    "NAVBAR:ISA_PALLET_KINDS": "Pallet kinds",
+    "NAVBAR:ISA": "Intermediate storage areas",
 
     "NAVBAR:OPINION:main": "Opinion survey",
     "NAVBAR:OPINION:current": "Current survey",

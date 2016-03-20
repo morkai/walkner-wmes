@@ -138,6 +138,9 @@
     "PRIVILEGE:DOCUMENTS:MANAGE": "WMES Documents: manage",
     "PRIVILEGE:DOCUMENTS:ACTIVATE": "WMES Documents: client activation",
     "PRIVILEGE:OPINION_SURVEYS:MANAGE": "Opinion surveys: manage",
+    "PRIVILEGE:ISA:VIEW": "ISA: view",
+    "PRIVILEGE:ISA:MANAGE": "ISA: manage",
+    "PRIVILEGE:ISA:WHMAN": "ISA: warehouseman",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System"

@@ -9,11 +9,13 @@ define([
   'app/core/View',
   'app/data/prodLog',
   'app/prodShifts/ProdShift',
+  'app/isa/IsaLineState',
   '../views/ProductionControlsView',
   '../views/ProductionHeaderView',
   '../views/ProductionDataView',
   '../views/ProdDowntimeListView',
   '../views/ProductionQuantitiesView',
+  '../views/IsaView',
   'app/production/templates/productionPage',
   'app/production/templates/duplicateWarning'
 ], function(
@@ -25,11 +27,13 @@ define([
   View,
   prodLog,
   ProdShift,
+  IsaLineState,
   ProductionControlsView,
   ProductionHeaderView,
   ProductionDataView,
   ProdDowntimeListView,
   ProductionQuantitiesView,
+  IsaView,
   productionPageTemplate,
   duplicateWarningTemplate
 ) {
@@ -41,12 +45,22 @@ define([
 
     layoutName: 'blank',
 
+    remoteTopics: function()
+    {
+      var topics = {};
+
+      topics['isaLineStates.updated.' + this.model.prodLine.id] = 'onIsaLineStateUpdated';
+
+      return topics;
+    },
+
     localTopics: {
       'socket.connected': function()
       {
         this.joinProduction();
         this.refreshDowntimes();
         this.refreshPlannedQuantities();
+        this.refreshIsaLineState();
       },
       'socket.disconnected': function()
       {
@@ -84,13 +98,14 @@ define([
       this.shiftEditedSub = null;
       this.productionJoined = false;
       this.enableProdLog = false;
+      this.pendingIsaChanges = [];
 
       updater.disableViews();
 
       this.defineViews();
       this.defineBindings();
 
-      $(window).on('beforeunload', this.onBeforeUnload);
+      $(window).on('beforeunload.' + this.idPrefix, this.onBeforeUnload);
     },
 
     setUpLayout: function(layout)
@@ -100,10 +115,12 @@ define([
 
     destroy: function()
     {
+      $(document.body).removeClass('is-production');
+
       this.layout = null;
       this.shiftEditedSub = null;
 
-      $(window).off('beforeunload', this.onBeforeUnload);
+      $(window).off('.' + this.idPrefix);
 
       this.model.stopShiftChangeMonitor();
 
@@ -114,6 +131,7 @@ define([
     serialize: function()
     {
       return {
+        idPrefix: this.idPrefix,
         locked: this.model.isLocked(),
         state: this.model.get('state'),
         mechOrder: !!this.model.prodShiftOrder.get('mechOrder')
@@ -172,12 +190,14 @@ define([
       this.dataView = new ProductionDataView({model: this.model});
       this.downtimesView = new ProdDowntimeListView({model: this.model});
       this.quantitiesView = new ProductionQuantitiesView({model: this.model});
+      this.isaView = new IsaView({model: this.model});
 
-      this.setView('.production-controls-container', this.controlsView);
-      this.setView('.production-header-container', this.headerView);
-      this.setView('.production-data-container', this.dataView);
-      this.setView('.production-downtimes-container', this.downtimesView);
-      this.setView('.production-quantities-container', this.quantitiesView);
+      this.setView('#' + this.idPrefix + '-controls', this.controlsView);
+      this.setView('#' + this.idPrefix + '-header', this.headerView);
+      this.setView('#' + this.idPrefix + '-data', this.dataView);
+      this.setView('#' + this.idPrefix + '-downtimes', this.downtimesView);
+      this.setView('#' + this.idPrefix + '-quantities', this.quantitiesView);
+      this.setView('#' + this.idPrefix + '-isa', this.isaView);
     },
 
     defineBindings: function()
@@ -193,6 +213,7 @@ define([
         this.$el.removeClass('is-locked').addClass('is-unlocked');
         this.refreshDowntimes();
         this.refreshPlannedQuantities();
+        this.refreshIsaLineState();
         this.joinProduction();
       });
 
@@ -255,6 +276,20 @@ define([
         this.model.saveLocalData();
       });
 
+      this.listenTo(this.model.isaLineState, 'request', function()
+      {
+        this.pendingIsaChanges = [];
+      });
+
+      this.listenTo(this.model.isaLineState, 'error sync', function()
+      {
+        if (this.pendingIsaChanges)
+        {
+          this.pendingIsaChanges.forEach(this.applyIsaChange, this);
+          this.pendingIsaChanges = null;
+        }
+      });
+
       this.socket.on('production.locked', this.broker.publish.bind(this.broker, 'production.locked'));
     },
 
@@ -270,11 +305,14 @@ define([
 
     afterRender: function()
     {
+      $(document.body).addClass('is-production');
+
       if (this.socket.isConnected())
       {
         this.joinProduction();
         this.refreshDowntimes();
         this.refreshPlannedQuantities();
+        this.refreshIsaLineState();
       }
 
       if (this.model.isLocked() || this.model.id)
@@ -323,6 +361,30 @@ define([
       this.remove();
 
       document.body.innerHTML = duplicateWarningTemplate();
+    },
+
+    onIsaLineStateUpdated: function(change)
+    {
+      change = IsaLineState.parse(change);
+
+      if (this.pendingIsaChanges)
+      {
+        this.pendingIsaChanges.push(change);
+      }
+      else
+      {
+        this.applyIsaChange(change);
+      }
+    },
+
+    applyIsaChange: function(change)
+    {
+      var oldUpdatedAt = this.model.isaLineState.get('updatedAt') || 0;
+
+      if (change.updatedAt > oldUpdatedAt)
+      {
+        this.model.isaLineState.set(change);
+      }
     },
 
     refreshDowntimes: function()
@@ -425,6 +487,11 @@ define([
         view.timers.refreshPlannedQuantities = null;
         view.refreshPlannedQuantities();
       }, 5000, this);
+    },
+
+    refreshIsaLineState: function()
+    {
+      this.promised(this.model.isaLineState.fetch());
     },
 
     joinProduction: function()

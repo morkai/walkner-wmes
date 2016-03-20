@@ -129,6 +129,8 @@
   "NAVBAR:MONITORING:LIST": "Lista linii produkcyjnych",
   "NAVBAR:VENDOR_NC12S": "Baza 12NC",
   "NAVBAR:LICENSES": "Licencje",
+  "NAVBAR:ISA_PALLET_KINDS": "Rodzaje palet",
+  "NAVBAR:ISA": "Pola odkładcze",
 
   "NAVBAR:OPINION:main": "Badanie Opinia",
   "NAVBAR:OPINION:current": "Aktualne badanie",

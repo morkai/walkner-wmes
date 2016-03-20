@@ -137,6 +137,9 @@
   "PRIVILEGE:DOCUMENTS:MANAGE": "Dokumenty WMES: zarządzanie",
   "PRIVILEGE:DOCUMENTS:ACTIVATE": "Dokumenty WMES: aktywacja klientów",
   "PRIVILEGE:OPINION_SURVEYS:MANAGE": "Badanie Opinia: zarządzanie",
+  "PRIVILEGE:ISA:VIEW": "Pola odkładcze: przeglądanie",
+  "PRIVILEGE:ISA:MANAGE": "Pola odkładcze: zarządzanie",
+  "PRIVILEGE:ISA:WHMAN": "Pola odkładcze: magazynier",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System"

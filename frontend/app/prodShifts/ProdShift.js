@@ -19,6 +19,7 @@ define([
   '../prodDowntimes/ProdDowntimeCollection',
   '../prodShiftOrders/ProdShiftOrder',
   '../prodShiftOrders/ProdShiftOrderCollection',
+  '../isa/IsaLineState',
   'app/core/templates/userInfo'
 ], function(
   _,
@@ -39,6 +40,7 @@ define([
   ProdDowntimeCollection,
   ProdShiftOrder,
   ProdShiftOrderCollection,
+  IsaLineState,
   renderUserInfo
 ) {
   'use strict';
@@ -100,6 +102,8 @@ define([
           paginate: false,
           rqlQuery: 'sort(-startedAt)&limit(8)&prodLine=' + encodeURIComponent(this.prodLine.id)
         });
+
+        this.isaLineState = new IsaLineState({_id: this.prodLine.id});
       }
     },
 
@@ -177,7 +181,7 @@ define([
           this.prodShiftOrder.set(ProdShiftOrder.parse(data.prodShiftOrder));
         }
 
-        this.prodDowntimes.reset((data.prodDowntimes || []).map(ProdDowntime.parse));
+        this.prodDowntimes.reset((data.prodDowntimes || []).map(ProdDowntime.parse), {silent: true});
 
         delete data.prodShiftOrder;
         delete data.prodDowntimes;
@@ -200,6 +204,11 @@ define([
         }
 
         this.set(data);
+      }
+
+      if (this.prodDowntimes.length)
+      {
+        this.prodDowntimes.trigger('reset');
       }
 
       this.changeShift();

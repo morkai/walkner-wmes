@@ -1,0 +1,42 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define([
+  'app/i18n',
+  'app/core/util/pageActions',
+  'app/core/pages/FilteredListPage',
+  '../views/IsaEventFilterView',
+  '../views/IsaEventListView'
+], function(
+  t,
+  pageActions,
+  FilteredListPage,
+  IsaEventFilterView,
+  IsaEventListView
+) {
+  'use strict';
+
+  return FilteredListPage.extend({
+
+    FilterView: IsaEventFilterView,
+    ListView: IsaEventListView,
+
+    breadcrumbs: function()
+    {
+      return [
+        {
+          label: t.bound('isa', 'BREADCRUMBS:base'),
+          href: '#isa'
+        },
+        t.bound('isa', 'BREADCRUMBS:events')
+      ];
+    },
+
+    actions: function(layout)
+    {
+      return [
+        pageActions.export(layout, this, this.collection)
+      ];
+    }
+
+  });
+});

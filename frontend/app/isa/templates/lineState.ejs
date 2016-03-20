@@ -1,0 +1,40 @@
+<div class="isa-lineState" data-id="<%- lineState._id %>" data-request-type="<%- lineState.requestType %>" style="<%- hidden ? 'display: none' : '' %>">
+  <div class="isa-lineState-requestType"></div>
+  <div class="isa-lineState-info">
+    <h1 class="isa-lineState-header">
+      <span class="text-nowrap"><%= lineState.orgUnits.prodLine %>:</span>
+      <span class="text-nowrap"><%- t('isa', 'lineState:header:' + lineState.requestType, lineState) %></span>
+    </h1>
+    <div class="isa-lineState-props">
+      <div class="isa-lineState-prop">
+        <span class="isa-lineState-prop-name"><%- t('isa', 'lineState:division') %></span>
+        <span class="isa-lineState-prop-value"><%= lineState.orgUnits.division %></span>
+      </div>
+      <% if (lineState.status === 'response') { %>
+      <div class="isa-lineState-prop">
+        <span class="isa-lineState-prop-name"><%- t('isa', 'lineState:whman') %></span>
+        <span class="isa-lineState-prop-value"><%= lineState.whman %></span>
+      </div>
+      <% } else { %>
+      <div class="isa-lineState-prop">
+        <span class="isa-lineState-prop-name"><%- t('isa', 'lineState:prodFlow') %></span>
+        <span class="isa-lineState-prop-value"><%= lineState.orgUnits.prodFlow %></span>
+      </div>
+      <% } %>
+      <div class="isa-lineState-prop">
+        <span class="isa-lineState-prop-name"><%- t('isa', 'lineState:time') %></span>
+        <time class="isa-lineState-prop-value isa-lineState-time" datetime="<%- lineState.time.iso %>" title="<%- lineState.time.long %>"><%- lineState.time.human %></time>
+      </div>
+    </div>
+  </div>
+  <div class="isa-lineState-actions">
+    <button class="btn btn-success isa-lineState-<%- lineState.status === 'request' ? 'accept' : 'finish' %>" title="<%- t('isa', lineState.status === 'request' ? 'accept:action' : 'finish:action') %>">
+      <i class="fa fa-check"></i>
+      <span class="isa-lineState-hotkey"><%- hotkey %></span>
+    </button>
+    <button class="btn btn-danger isa-lineState-cancel" title="<%- t('isa', 'cancel:action') %>">
+      <i class="fa fa-remove"></i>
+      <span class="isa-lineState-hotkey"><%- hotkey %></span>
+    </button>
+  </div>
+</div>

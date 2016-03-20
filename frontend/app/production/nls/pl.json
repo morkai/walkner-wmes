@@ -39,6 +39,7 @@
   "section:history": "Historia",
   "section:quantities": "Wykonane ilości",
   "section:downtimes": "Przestoje",
+  "section:isa": "Pole odkładcze",
 
   "property:currentTime": "Aktualny czas",
   "property:shift": "Zmiana",
@@ -76,10 +77,13 @@
   "action:startBreak": "Przerwa",
   "action:endDowntime": "Koniec przestoju",
   "action:endWork": "Koniec pracy",
+  "action:emptyPallet": "Pusta paleta",
+  "action:fullPallet": "Paleta",
 
-  "quantities:column:time": "Przedział godzinowy",
-  "quantities:column:planned": "Plan [szt]",
-  "quantities:column:actual": "Wykonane [szt]",
+  "quantities:column:time": "Godzina",
+  "quantities:column:planned": "Plan",
+  "quantities:column:actual": "Wykonane",
+  "quantities:unit": "szt.",
   "quantities:change": "(zmień)",
   "quantities:newValuePlaceholder": "Nowa ilość...",
 
@@ -143,8 +147,7 @@
   "downtimePicker:startedAt": "Czas rozpoczęcia",
   "downtimePicker:startedAt:now": "Teraz",
 
-  "prodDowntime:startedAt": "Czas zatrzymania",
-  "prodDowntime:finishedAt": "Czas wznowienia",
+  "prodDowntime:time": "Czas",
   "prodDowntime:reason": "Powód przestoju",
   "prodDowntime:aor": "Obszar odpowiedzialności",
 
@@ -167,5 +170,10 @@
   "endWorkDialog:no": "Anuluj",
 
   "unload:downtime": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie przestoju?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania przestoju będzie się naliczał do końca zmiany!",
-  "unload:order": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie wykonywania zlecenia?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania zlecenia będzie się naliczał do końca zmiany!"
+  "unload:order": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie wykonywania zlecenia?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania zlecenia będzie się naliczał do końca zmiany!",
+
+  "isa:header": "Pole odkładcze",
+  "isa:pickup": "Odbiór palety",
+  "isa:deliver": "Dostawa pustej palety",
+  "isa:deliver:specific": "Dostawa: {palletKind}"
 }

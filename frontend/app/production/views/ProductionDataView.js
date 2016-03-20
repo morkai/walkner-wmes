@@ -235,15 +235,6 @@ define([
       _.defer(
         function(view)
         {
-          /*
-          view.appendAction('danger', 'startDowntime');
-
-          if (view.model.getDefaultAor())
-          {
-            view.appendAction('danger', 'startBreak');
-          }
-          */
-
           if (view.model.prodShiftOrder.hasOrderData())
           {
             view.appendAction('success', 'continueOrder');

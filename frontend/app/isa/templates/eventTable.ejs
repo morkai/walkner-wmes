@@ -1,0 +1,15 @@
+<table class="table table-condensed table-bordered table-hover isa-events-table">
+  <thead>
+  <tr>
+    <th class="is-min"><%- t('isa', 'events:time') %></th>
+    <th class="is-min"><%- t('isa', 'events:line') %></th>
+    <th class="is-min"><%- t('isa', 'events:user') %></th>
+    <th><%- t('isa', 'events:action') %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% _.forEach(events, function(event) { %>
+  <%- renderEventRow({event: event}) %>
+  <% }) %>
+  </tbody>
+</table>

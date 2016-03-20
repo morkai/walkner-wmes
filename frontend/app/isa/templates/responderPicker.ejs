@@ -1,0 +1,5 @@
+<div class="list-group isa-responderPicker">
+  <% users.forEach(function(user, i) { %>
+  <a href="#" class="list-group-item" data-user-id="<%- user.id %>"><%- i + 1 %>. <span><%= user.label %></span></a>
+  <% }) %>
+</div>

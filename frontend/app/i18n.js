@@ -136,12 +136,48 @@ define([
       && typeof allDomains[domain][key] === 'function';
   }
 
+  function flatten(obj)
+  {
+    var result = {};
+
+    if (obj == null)
+    {
+      return result;
+    }
+
+    var keys = Object.keys(obj);
+
+    for (var i = 0, l = keys.length; i < l; ++i)
+    {
+      var key = keys[i];
+      var value = obj[key];
+
+      if (value !== null && typeof value === 'object')
+      {
+        var flatObj = flatten(value);
+        var flatKeys = Object.keys(flatObj);
+
+        for (var ii = 0, ll = flatKeys.length; ii < ll; ++ii)
+        {
+          result[key + '->' + flatKeys[ii]] = String(flatObj[flatKeys[ii]]);
+        }
+      }
+      else
+      {
+        result[key] = _.escape(String(value));
+      }
+    }
+
+    return result;
+  }
+
   translate.config = null;
   translate.translate = translate;
   translate.register = register;
   translate.reload = reload;
   translate.bound = bound;
   translate.has = has;
+  translate.flatten = flatten;
   translate.forDomain = function(defaultDomain)
   {
     var defaultTranslate = function(domain, key, data)
@@ -180,6 +216,7 @@ define([
 
       return has(domain, key);
     };
+    defaultTranslate.flatten = flatten;
 
     return defaultTranslate;
   };

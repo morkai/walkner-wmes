@@ -1,0 +1,33 @@
+<div class="isa <%- disconnected ? 'isa-is-disconnected' : '' %> <%- mobile ? 'isa-is-mobile' : '' %>" style="height: <%- height %>px" data-tab="requests">
+  <div class="isa-section isa-section-requests">
+    <h1 class="isa-section-header">
+      <%- t('isa', 'requests:header') %>
+      <button id="<%- idPrefix %>-shiftPersonnel" class="btn btn-link isa-shiftPersonnel" title="<%- t('isa', 'actions:shiftPersonnel') %>" <%- user.isAllowedTo('ISA:MANAGE') ? '' : 'disabled' %>><i class="fa fa-users"></i></button>
+    </h1>
+    <div id="<%- idPrefix %>-requests" class="isa-section-body"></div>
+  </div>
+  <div class="isa-section isa-section-responses">
+    <h1 class="isa-section-header">
+      <%- t('isa', 'responses:header') %>
+      <span id="<%- idPrefix %>-selectedResponder" class="isa-selectedResponder"><%= selectedResponder %></span>
+      <button id="<%- idPrefix %>-responderFilter" class="btn btn-link" title="<%- t('isa', 'actions:responderFilter') %>"><i class="fa fa-filter"></i></button>
+    </h1>
+    <div id="<%- idPrefix %>-responses" class="isa-section-body"></div>
+  </div>
+  <div class="isa-section isa-section-events">
+    <h1 class="isa-section-expand"><%- t('isa', 'events:header') %></h1>
+    <h1 class="isa-section-header">
+      <a href="#isa/events"><%- t('isa', 'events:header') %></a>
+      <button id="<%- idPrefix %>-collapseEvents" class="btn btn-link" title="<%- t('isa', 'actions:collapseEvents') %>"><i class="fa fa-chevron-right"></i></button>
+      <button id="<%- idPrefix %>-toggleFullscreen" class="btn btn-link" title="<%- t('isa', 'actions:toggleFullscreen') %>"><i class="fa fa-arrows-alt"></i></button>
+      <a href="#isa/requests" class="btn btn-link" title="<%- t('isa', 'actions:showRequests') %>"><i class="fa fa-line-chart"></i></a>
+    </h1>
+    <div id="<%- idPrefix %>-events" class="isa-section-body"></div>
+  </div>
+  <div class="isa-tabs">
+    <a class="isa-tab active" data-tab="requests"><i class="fa fa-question"></i><span id="<%- idPrefix %>-count-requests" class="badge"></span></a>
+    <a class="isa-tab" data-tab="responses"><i class="fa fa-truck"></i><span id="<%- idPrefix %>-count-responses" class="badge"></span></a>
+    <a class="isa-tab" data-tab="events"><i class="fa fa-calendar"></i></a>
+    <a class="isa-tab" data-tab="settings"><i class="fa fa-cogs"></i></a>
+  </div>
+</div>

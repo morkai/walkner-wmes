@@ -1,0 +1,104 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "ISA",
+    "BREADCRUMBS:events": "Events",
+    "BREADCRUMBS:requests": "Requests",
+
+    "MSG:LOADING_FAILURE": "Failed to load the ISAs :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the ISA :(",
+
+    "PAGE_ACTION:export": "Export",
+
+    "actions:shiftPersonnel": "Change available personnel",
+    "actions:responderFilter": "Filter by warehouseman",
+    "actions:toggleFullscreen": "Toggle fullscreen mode",
+    "actions:showRequests": "Show requests",
+    "actions:collapseEvents": "Hide events",
+
+    "requests:header": "To do",
+    "requests:empty": "There is no requests to do.",
+
+    "responses:header": "In progress",
+    "responses:empty": "There is no requests in progress.",
+
+    "lineState:header:pickup": "pallet pickup",
+    "lineState:header:delivery": "<em>{palletKind}</em> delivery",
+    "lineState:division": "Division",
+    "lineState:prodFlow": "Flow",
+    "lineState:time": "Time",
+    "lineState:whman": "Warehouseman",
+
+    "pickup:failure": "Failed to start the pickup request :(",
+    "pickup:LOCKED": "Cannot create a new request so soon after the last one!",
+
+    "deliver:failure": "Failed to start the delivery request :(",
+    "deliver:LOCKED": "Cannot create a new request so soon after the last one!",
+
+    "cancel:action": "Cancel request",
+    "cancel:title": "Request cancel",
+    "cancel:message": "Are you sure you want to cancel the request?",
+    "cancel:yes": "Cancel request",
+    "cancel:no": "No, do not cancel",
+    "cancel:failure": "Failed to cancel the request :(",
+    "cancel:LOCKED": "Cannot cancel a request so soon after it was created!",
+
+    "accept:action": "Accept request",
+    "accept:failure": "Failed to accept the request :(",
+    "accept:UNKNOWN_RESPONDER": "Failed to accept the request: unknown user.",
+    "accept:INVALID_RESPONDER": "Failed to accept the request: invalid user.",
+
+    "finish:action": "Finish request",
+    "finish:failure": "Failed to finish the request :(",
+
+    "shiftPersonnel:title": "Available personnel",
+    "shiftPersonnel:message": "Select warehousemen working on the current work shift:",
+    "shiftPersonnel:submit": "Save personnel",
+    "shiftPersonnel:msg:failure": "Failed to save the available personnel :(",
+    "shiftPersonnel:msg:success": "Work shift personnel was saved!",
+
+    "responderPicker:empty": "Shift personnel is not set!",
+
+    "events:header": "Events",
+    "events:time": "Time",
+    "events:line": "Line",
+    "events:user": "User",
+    "events:action": "Action",
+    "events:pickupRequested": "Pickup requested.",
+    "events:deliveryRequested": "{palletKind->label} delivery requested.",
+    "events:requestCancelled": "Request cancelled.",
+    "events:requestAccepted": "Request accepted by {responder->label}.",
+    "events:requestFinished": "Request finished.",
+    "events:shiftPersonnelUpdated": "Work shift personnel changed.",
+    "events:filter": "Filter events",
+    "events:type:pickupRequested": "Pickup request",
+    "events:type:deliveryRequested": "Delivery request",
+    "events:type:requestCancelled": "Request cancel",
+    "events:type:requestAccepted": "Request accept",
+    "events:type:requestFinished": "Request finish",
+    "events:type:shiftPersonnelUpdated": "Work shift personnel change",
+
+    "requests:filter": "Filter requests",
+    "requests:line": "Line",
+    "requests:type": "Type",
+    "requests:type:pickup": "Pickup",
+    "requests:type:delivery": "<em>{palletKind}</em> delivery",
+    "requests:status": "Status",
+    "requests:status:new": "New",
+    "requests:status:accepted": "Accepted",
+    "requests:status:finished": "Finished",
+    "requests:status:cancelled": "Cancelled",
+    "requests:request": "Request",
+    "requests:response": "Response",
+    "requests:finish": "Finish",
+    "requests:requester": "Requester",
+    "requests:requestedAt": "Requested at",
+    "requests:responder": "Warehouseman",
+    "requests:respondedAt": "Accepted at",
+    "requests:finisher": "Finisher",
+    "requests:finishedAt": "Finished at",
+    "requests:duration": "Duration",
+    "requests:date+user": "on {date} by {user}",
+    "requests:time+user": "at {time} by {user}"
+  },
+  "pl": true
+}

@@ -8,7 +8,8 @@ define([
   '../data/orgUnits',
   '../prodShifts/ProdShift',
   './pages/ProductionPage',
-  'i18n!app/nls/production'
+  'i18n!app/nls/production',
+  'i18n!app/nls/isa'
 ], function(
   broker,
   router,

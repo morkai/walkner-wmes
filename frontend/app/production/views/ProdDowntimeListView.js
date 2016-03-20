@@ -21,8 +21,6 @@ define([
 
   return ListView.extend({
 
-    className: 'production-downtimes',
-
     localTopics: {
       'downtimeReasons.synced': 'render',
       'aors.synced': 'render'
@@ -63,43 +61,53 @@ define([
     serializeColumns: function()
     {
       return [
-        {id: 'startedAt', label: t('production', 'prodDowntime:startedAt')},
-        {id: 'finishedAt', label: t('production', 'prodDowntime:finishedAt')},
-        {id: 'reason', label: t('production', 'prodDowntime:reason')},
+        {id: 'time', label: t('production', 'prodDowntime:time'), className: 'is-min'},
+        {id: 'reason', label: t('production', 'prodDowntime:reason'), className: 'is-min'},
         {id: 'aor', label: t('production', 'prodDowntime:aor')}
       ];
     },
 
     serializeRows: function()
     {
-      return this.model.prodDowntimes.map(function(prodDowntime)
-      {
-        var row = prodDowntime.toJSON();
-        var aor = aors.get(row.aor);
-        var reason = downtimeReasons.get(row.reason);
+      var prodShiftId = this.model.id;
 
-        row.className = prodDowntime.getCssClassName();
-        row.startedAt = time.format(row.startedAt, 'YYYY-MM-DD HH:mm:ss');
-        row.finishedAt = row.finishedAt ? time.format(row.finishedAt, 'YYYY-MM-DD HH:mm:ss') : '-';
-
-        if (aor)
+      return this.model.prodDowntimes
+        .filter(function(prodDowntime)
         {
-          row.aor = aor.get('name');
-        }
-
-        if (reason)
+          return prodDowntime.get('prodShift') === prodShiftId;
+        })
+        .map(function(prodDowntime)
         {
-          row.reason = reason.get('label');
-        }
+          var row = prodDowntime.toJSON();
+          var aor = aors.get(row.aor);
+          var reason = downtimeReasons.get(row.reason);
 
-        if (row.reasonComment)
-        {
-          row.className += ' has-comment';
-          row.reason += ' <i class="fa fa-info-circle"></i>';
-        }
+          row.className = prodDowntime.getCssClassName();
+          row.time = time.format(row.startedAt, 'HH:mm:ss');
 
-        return row;
-      });
+          if (row.finishedAt)
+          {
+            row.time += '-' + time.format(row.finishedAt, 'HH:mm:ss');
+          }
+
+          if (aor)
+          {
+            row.aor = aor.get('name');
+          }
+
+          if (reason)
+          {
+            row.reason = reason.get('label');
+          }
+
+          if (row.reasonComment)
+          {
+            row.className += ' has-comment';
+            row.reason += ' <i class="fa fa-info-circle"></i>';
+          }
+
+          return row;
+        });
     },
 
     serializeActions: function()

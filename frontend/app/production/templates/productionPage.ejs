@@ -1,15 +1,19 @@
 <div class="production is-<%- locked ? 'locked' : 'unlocked' %> <%- state ? ('is-' + state) : '' %> <%- mechOrder ? 'is-mechOrder' : '' %> hidden">
-  <div class="production-controls-container"></div>
-  <div class="production-header-container"></div>
-  <div class="production-data-container"></div>
+  <div id="<%- idPrefix %>-controls"></div>
+  <div id="<%- idPrefix %>-header"></div>
+  <div id="<%- idPrefix %>-data"></div>
   <div class="production-ft">
-    <h2 class="production-sectionHeader"><%- t('production', 'section:history') %></h2>
-    <div class="row">
-      <div class="col-md-8">
-        <h3 class="production-subsectionHeader"><%- t('production', 'section:downtimes') %></h3>
-        <div class="table-responsive production-downtimes-container"></div>
-      </div>
-      <div class="col-md-4 production-quantities-container"></div>
+    <div class="production-downtimes">
+      <h2 class="production-sectionHeader"><%- t('production', 'section:downtimes') %></h2>
+      <div id="<%- idPrefix %>-downtimes"></div>
+    </div>
+    <div class="production-quantities">
+      <h2 class="production-sectionHeader"><%- t('production', 'section:quantities') %></h2>
+      <div id="<%- idPrefix %>-quantities"></div>
+    </div>
+    <div class="production-isa">
+      <h2 class="production-sectionHeader"><%- t('production', 'isa:header') %></h2>
+      <div id="<%- idPrefix %>-isa"></div>
     </div>
   </div>
 </div>

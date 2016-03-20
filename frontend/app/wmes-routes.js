@@ -58,7 +58,9 @@ define([
   './prodDowntimeAlerts/routes',
   './cagGroups/routes',
   './cags/routes',
-  './changelog/routes'
+  './changelog/routes',
+  './isaPalletKinds/routes',
+  './isa/routes'
 ], function()
 {
   'use strict';

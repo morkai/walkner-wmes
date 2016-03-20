@@ -317,7 +317,13 @@
     "TYPE:orders.bom.synced": "Production orders: BOM synchronization",
     "TEXT:orders.bom.synced": "Imported <em>{count}</em> order {count, plural, one{component} other{components}} from data downloaded at <em>{timestamp}</em>.",
     "TYPE:orders.bom.syncFailed": "Production orders: failed BOM synchronization",
-    "TEXT:orders.bom.syncFailed": "Failed to import order components from data downloaded at <em>{timestamp}</em>: {error}"
+    "TEXT:orders.bom.syncFailed": "Failed to import order components from data downloaded at <em>{timestamp}</em>: {error}",
+    "TYPE:isaPalletKinds.added": "Pallet kinds: added",
+    "TEXT:isaPalletKinds.added": "Added pallet kind: <a href='\\#isaPalletKinds/{model->_id}'>{model->shortName}</a>",
+    "TYPE:isaPalletKinds.edited": "Pallet kinds: edited",
+    "TEXT:isaPalletKinds.edited": "Edited pallet kind: <a href='\\#isaPalletKinds/{model->_id}'>{model->shortName}</a>",
+    "TYPE:isaPalletKinds.deleted": "Pallet kinds: deleted",
+    "TEXT:isaPalletKinds.deleted": "Deleted pallet kind: <em>{model->_id}</em>"
   },
   "pl": true
 }

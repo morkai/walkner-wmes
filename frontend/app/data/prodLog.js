@@ -198,7 +198,7 @@ define([
       window.addEventListener('storage', onStorage);
 
       lockTimer = setInterval(onLockTimeout, 333);
-      enableTimer = setTimeout(onEnableTimeout, 2000);
+      enableTimer = setTimeout(onEnableTimeout, 2);
 
       function onLockTimeout()
       {

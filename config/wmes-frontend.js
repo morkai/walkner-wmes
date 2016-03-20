@@ -64,6 +64,8 @@ exports.modules = [
   'opinionSurveys',
   'cags',
   'sapGui/importer',
+  'isaPalletKinds',
+  'isa',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -96,7 +98,8 @@ exports.dictionaryModules = {
   prodLines: 'PROD_LINES',
   aors: 'AORS',
   orderStatuses: 'ORDER_STATUSES',
-  downtimeReasons: 'DOWNTIME_REASONS'
+  downtimeReasons: 'DOWNTIME_REASONS',
+  isaPalletKinds: 'ISA_PALLET_KINDS'
 };
 
 exports.events = {
@@ -181,7 +184,8 @@ exports.pubsub = {
     'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*', 'orderDocuments.eto.synced',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',
     'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted',
-    'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed'
+    'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
+    'isaLineStates.**', 'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated'
   ]
 };
 
@@ -210,7 +214,8 @@ exports.mongoose = {
     'opinionSurvey', 'opinionSurveyAction', 'opinionSurveyResponse',
     'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion',
     'opinionSurveyScanTemplate', 'opinionSurveyOmrResult',
-    'cag', 'cagGroup', 'cagPlan'
+    'cag', 'cagGroup', 'cagPlan',
+    'isaPalletKind', 'isaLineState', 'isaEvent', 'isaRequest', 'isaShiftPersonnel'
   ]
 };
 exports.mongoose.options.server.poolSize = 15;
@@ -257,7 +262,8 @@ exports.user = {
     'OPERATOR:ACTIVATE',
     'DOCUMENTS:ACTIVATE', 'DOCUMENTS:VIEW', 'DOCUMENTS:MANAGE',
     'OPINION_SURVEYS:MANAGE',
-    'PROD_DOWNTIME_ALERTS:VIEW', 'PROD_DOWNTIME_ALERTS:MANAGE'
+    'PROD_DOWNTIME_ALERTS:VIEW', 'PROD_DOWNTIME_ALERTS:MANAGE',
+    'ISA:VIEW', 'ISA:MANAGE', 'ISA:WHMAN'
   ]
 };
 
