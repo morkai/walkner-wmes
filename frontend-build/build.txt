@@ -108,6 +108,10 @@ app/icpo/assets/main.css
 ----------------
 app/icpo/assets/main.css
 
+app/isa/assets/main.css
+----------------
+app/isa/assets/main.css
+
 app/kaizenOrders/assets/details.css
 ----------------
 app/kaizenOrders/assets/details.css
@@ -247,8 +251,13 @@ app/prodTasks/assets/main.css
 ----------------
 app/prodTasks/assets/main.css
 
+app/production/assets/isa.css
+----------------
+app/production/assets/isa.css
+
 app/production/assets/main.css
 ----------------
+app/production/assets/isa.css
 app/production/assets/main.css
 
 app/purchaseOrders/assets/main.css
@@ -441,6 +450,7 @@ assets/../app/opinionSurveyScanTemplates/assets/main.css
 assets/../app/opinionSurveyOmrResults/assets/main.css
 assets/../app/prodDowntimeAlerts/assets/main.css
 assets/../app/changelog/assets/main.css
+assets/../app/isa/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -722,6 +732,7 @@ app/prodShiftOrders/routes.js
 app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
+app/isa/IsaLineState.js
 app/prodShifts/ProdShift.js
 app/prodShifts/routes.js
 app/production/templates/controls.js
@@ -753,12 +764,20 @@ app/production/templates/quantityEditor.js
 app/production/views/QuantityEditorView.js
 app/production/templates/quantities.js
 app/production/views/ProductionQuantitiesView.js
+app/isaPalletKinds/IsaPalletKind.js
+app/isaPalletKinds/IsaPalletKindCollection.js
+app/data/isaPalletKinds.js
+app/production/templates/isa.js
+app/production/views/IsaView.js
 app/production/templates/productionPage.js
 app/production/templates/duplicateWarning.js
 app/production/pages/ProductionPage.js
 app/nls/production.js
 app/nls/pl/production.js
 i18n!app/nls/production
+app/nls/isa.js
+app/nls/pl/isa.js
+i18n!app/nls/isa
 app/production/routes.js
 app/prodChangeRequests/ProdChangeRequest.js
 app/prodChangeRequests/ProdChangeRequestCollection.js
@@ -802,25 +821,12 @@ app/kaizenCauses/routes.js
 app/kaizenRisks/routes.js
 app/kaizenProductFamilies/routes.js
 app/suggestions/routes.js
-app/opinionSurveyDivisions/OpinionSurveyDivision.js
-app/opinionSurveyDivisions/OpinionSurveyDivisionCollection.js
-app/opinionSurveyEmployers/OpinionSurveyEmployer.js
-app/opinionSurveyEmployers/OpinionSurveyEmployerCollection.js
-app/opinionSurveyQuestions/OpinionSurveyQuestion.js
-app/opinionSurveyQuestions/OpinionSurveyQuestionCollection.js
-app/opinionSurveys/OpinionSurveySetting.js
-app/opinionSurveys/OpinionSurveySettingCollection.js
-app/opinionSurveys/dictionaries.js
-app/opinionSurveys/OpinionSurvey.js
 app/opinionSurveys/routes.js
-app/opinionSurveyActions/OpinionSurveyAction.js
 app/opinionSurveyActions/routes.js
-app/opinionSurveyResponses/OpinionSurveyResponse.js
 app/opinionSurveyResponses/routes.js
 app/opinionSurveyEmployers/routes.js
 app/opinionSurveyDivisions/routes.js
 app/opinionSurveyQuestions/routes.js
-app/opinionSurveyScanTemplates/OpinionSurveyScanTemplate.js
 app/opinionSurveyScanTemplates/routes.js
 app/opinionSurveyOmrResults/routes.js
 app/prodDowntimeAlerts/ProdDowntimeAlert.js
@@ -831,6 +837,25 @@ app/cagGroups/routes.js
 app/cags/Cag.js
 app/cags/routes.js
 app/changelog/routes.js
+app/isaPalletKinds/routes.js
+app/isa/IsaShiftPersonnel.js
+app/isa/IsaLineStateCollection.js
+app/isa/IsaEvent.js
+app/isa/IsaEventCollection.js
+app/isa/templates/shiftPersonnel.js
+app/isa/views/IsaShiftPersonnelView.js
+app/isa/templates/responderPicker.js
+app/isa/views/IsaResponderPickerView.js
+app/isa/templates/lineStates.js
+app/isa/templates/lineState.js
+app/isa/templates/cancelDialog.js
+app/isa/views/IsaLineStatesView.js
+app/isa/templates/eventTable.js
+app/isa/templates/eventRow.js
+app/isa/views/IsaEventsView.js
+app/isa/templates/page.js
+app/isa/pages/IsaLineStatePage.js
+app/isa/routes.js
 app/wmes-routes.js
 vendor/visibly.js
 app/visibility.js
