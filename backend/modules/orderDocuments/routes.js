@@ -25,6 +25,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   };
 
   var canView = userModule.auth('DOCUMENTS:VIEW');
+  var canViewLocal = userModule.auth('LOCAL', 'DOCUMENTS:VIEW');
   var canManage = userModule.auth('DOCUMENTS:MANAGE');
 
   var nc15ToFreshHeaders = {};
@@ -107,7 +108,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     express.crud.deleteRoute.bind(null, app, OrderDocumentClient)
   );
 
-  express.get('/orders/:orderNo/documents', userModule.auth('LOCAL'), function(req, res, next)
+  express.get('/orders/:orderNo/documents', canViewLocal, function(req, res, next)
   {
     if (!_.isString(req.params.orderNo) || !/^[0-9]+$/.test(req.params.orderNo))
     {
@@ -125,7 +126,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     });
   });
 
-  express.head('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res, next)
+  express.head('/orderDocuments/:nc15', canViewLocal, function(req, res, next)
   {
     var nc15 = req.params.nc15;
 
@@ -149,7 +150,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     module.checkRemoteServer(nc15);
   });
 
-  express.get('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res, next)
+  express.get('/orderDocuments/:nc15', canViewLocal, function(req, res, next)
   {
     var nc15 = req.params.nc15;
 
