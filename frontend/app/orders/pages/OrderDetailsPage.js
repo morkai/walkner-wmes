@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/pages/DetailsPage',
@@ -12,8 +13,10 @@ define([
   '../views/DocumentListView',
   '../views/ComponentListView',
   '../views/OrderChangesView',
-  'app/orders/templates/detailsPage'
+  '../views/EtoView',
+  'app/orders/templates/detailsJumpList'
 ], function(
+  $,
   t,
   bindLoadingMessage,
   DetailsPage,
@@ -25,13 +28,12 @@ define([
   DocumentListView,
   ComponentListView,
   OrderChangesView,
-  detailsPageTemplate
+  EtoView,
+  renderJumpList
 ) {
   'use strict';
 
   return DetailsPage.extend({
-
-    template: detailsPageTemplate,
 
     pageId: 'orderDetails',
 
@@ -55,6 +57,26 @@ define([
       'orderDocuments.synced': 'onSynced'
     },
 
+    events: {
+      'click #-jumpList > a': function(e)
+      {
+        var section = e.currentTarget.getAttribute('href').substring(1);
+        var $section = this.$('.' + section);
+
+        var y = $section.offset().top - 14;
+        var $navbar = $('.navbar-fixed-top');
+
+        if ($navbar.length)
+        {
+          y -= $navbar.outerHeight();
+        }
+
+        $('html, body').stop(true, false).animate({scrollTop: y});
+
+        return false;
+      }
+    },
+
     initialize: function()
     {
       this.model = bindLoadingMessage(new Order({_id: this.options.modelId}), this);
@@ -67,16 +89,18 @@ define([
       this.operationsView = new OperationListView({model: this.model});
       this.documentsView = new DocumentListView({model: this.model});
       this.componentsView = new ComponentListView({model: this.model});
+      this.etoView = new EtoView({model: this.model});
       this.changesView = new OrderChangesView({
         model: this.model,
         delayReasons: this.delayReasons
       });
 
-      this.setView('.orders-details-container', this.detailsView);
-      this.setView('.orders-operations-container', this.operationsView);
-      this.setView('.orders-documents-container', this.documentsView);
-      this.setView('.orders-components-container', this.componentsView);
-      this.setView('.orders-changes-container', this.changesView);
+      this.insertView(this.detailsView);
+      this.insertView(this.operationsView);
+      this.insertView(this.documentsView);
+      this.insertView(this.componentsView);
+      this.insertView(this.etoView);
+      this.insertView(this.changesView);
     },
 
     destroy: function()
@@ -95,6 +119,8 @@ define([
     afterRender: function()
     {
       delayReasonsStorage.acquire();
+
+      this.renderJumpList();
     },
 
     onOrderUpdated: function(message)
@@ -110,6 +136,14 @@ define([
     onSynced: function()
     {
       this.promised(this.model.fetch());
+    },
+
+    renderJumpList: function()
+    {
+      this.$id('jumpList').remove();
+      this.$el.append(renderJumpList({
+        idPrefix: this.idPrefix
+      }));
     }
 
   });

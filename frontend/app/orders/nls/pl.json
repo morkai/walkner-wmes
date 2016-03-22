@@ -21,6 +21,7 @@
   "PANEL:TITLE:operations": "Lista operacji zlecenia",
   "PANEL:TITLE:documents": "Lista dokumentów zlecenia",
   "PANEL:TITLE:bom": "Lista komponentów zlecenia",
+  "PANEL:TITLE:eto": "ETO",
   "PANEL:TITLE:changes": "Historia zmian zlecenia",
 
   "PROPERTY:_id": "Nr zlecenia",
@@ -68,6 +69,7 @@
   "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
   "DOCUMENTS:NO_DATA": "Zlecenie nie ma dołączonych żadnych dokumentów.",
   "BOM:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych komponentów.",
+  "ETO:NO_DATA": "Nie ma dokumentu ETO dla 12NC zlecenia.",
 
   "CHANGES:NO_DATA": "Zlecenie nie było modyfikowane.",
   "CHANGES:operations": "{count, plural, one{1 operacja} few{# operacje} other{# operacji}}",
@@ -93,5 +95,12 @@
   "settings:tab:documents": "Dokumenty",
   "settings:documents:path": "Ścieżka do katalogu z plikami dokumentów",
   "settings:documents:extra": "Dodatkowe dokumenty",
-  "settings:documents:remoteServer": "Serwer wyszukiwarki dokumentów"
+  "settings:documents:remoteServer": "Serwer wyszukiwarki dokumentów",
+
+  "jumpList:details": "Szczegóły",
+  "jumpList:operations": "Operacje",
+  "jumpList:documents": "Dokumenty",
+  "jumpList:bom": "Komponenty",
+  "jumpList:eto": "ETO",
+  "jumpList:changes": "Zmiany"
 }

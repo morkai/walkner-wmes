@@ -9,7 +9,7 @@
     }
     body {
       margin: 0 15px;
-      padding-top: 33px;
+      padding-top: <%- header ? 33 : 0 %>px;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-size: 18px;
       line-height: 1;
@@ -72,7 +72,9 @@
   </style>
 </head>
 <body>
+<% if (header) { %>
 <h1 id="hd">Konstrukcja na zamówienie</h1>
+<% } %>
 <% if (!etoTableHtml) { %>
 <p>Nie znaleziono ETO dla 12NC <%- nc12 %>.</p>
 <% } else { %>

@@ -64,7 +64,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
         if (!user.super && !_.includes(user.privileges, 'DOCUMENTS:ACTIVATE'))
         {
-          return this.skip(express.createHttpError('NO_PRIVILEGES'));
+          return this.skip(app.createError('NO_PRIVILEGES', 403));
         }
       },
       function checkProdLineStep(err)
@@ -78,7 +78,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
         if (!prodLine)
         {
-          return this.skip(express.createHttpError('INVALID_PROD_LINE'));
+          return this.skip(app.createError('INVALID_PROD_LINE', 400));
         }
       },
       function sendResponseStep(err)
@@ -111,7 +111,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   {
     if (!_.isString(req.params.orderNo) || !/^[0-9]+$/.test(req.params.orderNo))
     {
-      return next(express.createHttpError('INPUT'));
+      return next(app.createError('INPUT', 400));
     }
 
     module.findOrderData(req.params.orderNo, function(err, orderData)
@@ -125,13 +125,13 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     });
   });
 
-  express.head('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res)
+  express.head('/orderDocuments/:nc15', userModule.auth('LOCAL'), function(req, res, next)
   {
     var nc15 = req.params.nc15;
 
     if (SPECIAL_DOCUMENTS[nc15])
     {
-      return res.sendStatus(204);
+      return SPECIAL_DOCUMENTS[nc15](req, res, next);
     }
 
     findDocumentFilePath(nc15, function(err, results)
@@ -230,12 +230,12 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   {
     if (!/^[0-9]+$/.test(nc15))
     {
-      return done(express.createHttpError('INVALID_NC15'));
+      return done(app.createError('INVALID_NC15', 400));
     }
 
     if (_.isEmpty(module.settings.path))
     {
-      return done(express.createHttpError('NO_PATH_SETTING'));
+      return done(app.createError('NO_PATH_SETTING', 503));
     }
 
     var cachedFilePath = path.join(module.config.cachedPath, nc15 + '.pdf');
@@ -302,7 +302,12 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
       if (!order)
       {
-        return res.sendStatus(express.createHttpError('ORDER_NOT_FOUND'));
+        return next(app.createError('ORDER_NOT_FOUND', 404));
+      }
+
+      if (req.method === 'HEAD')
+      {
+        return res.sendStatus(204);
       }
 
       res.render('orderDocuments:bom', {
@@ -342,7 +347,12 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
       if (!order)
       {
-        return res.sendStatus(express.createHttpError('ORDER_NOT_FOUND'));
+        return next(app.createError('ORDER_NOT_FOUND', 404));
+      }
+
+      if (req.method === 'HEAD')
+      {
+        return res.sendStatus(204);
       }
 
       fs.readFile(path.join(module.config.etoPath, order.nc12 + '.html'), 'utf8', function(err, etoTableHtml)
@@ -350,7 +360,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         res.render('orderDocuments:eto', {
           order: order._id,
           nc12: order.nc12,
-          etoTableHtml: etoTableHtml
+          etoTableHtml: etoTableHtml,
+          header: req.query.header !== '0'
         });
       });
     });

@@ -20,7 +20,8 @@
     "PANEL:TITLE:details": "Order's details",
     "PANEL:TITLE:operations": "Order's operations",
     "PANEL:TITLE:documents": "Order's documents",
-    "PANEL:TITLE:components": "Order's components",
+    "PANEL:TITLE:bom": "Order's components",
+    "PANEL:TITLE:eto": "Order's ETO",
     "PANEL:TITLE:changes": "Change log",
 
     "PROPERTY:_id": "Order no",
@@ -68,6 +69,7 @@
     "OPERATIONS:NO_DATA": "Order does not have any operations.",
     "DOCUMENTS:NO_DATA": "Order does not have any linked documents.",
     "BOM:NO_DATA": "Order does not have any components.",
+    "ETO:NO_DATA": "There is no ETO for this order's 12NC.",
 
     "CHANGES:NO_DATA": "Order was not modified.",
     "CHANGES:operations": "{count, plural, one{1 operation} other{# operations}}",
@@ -93,7 +95,14 @@
     "settings:tab:documents": "Documents",
     "settings:documents:path": "Path to a directory with the document files",
     "settings:documents:extra": "Extra documents",
-    "settings:documents:remoteServer": "Document search engine server"
+    "settings:documents:remoteServer": "Document search engine server",
+
+    "jumpList:details": "Details",
+    "jumpList:operations": "Operations",
+    "jumpList:documents": "Documents",
+    "jumpList:bom": "Components",
+    "jumpList:eto": "ETO",
+    "jumpList:changes": "Changes"
   },
   "pl": true
 }
