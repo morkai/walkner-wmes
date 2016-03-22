@@ -13,7 +13,12 @@
       <% documents.forEach(function(document) { %>
       <tr>
         <td class="is-min is-number"><%= document.item || '' %>
-        <td class="is-min is-number"><%= document.nc15 %>
+        <td class="is-min is-number">
+          <% if (canView) { %>
+          <a href="/orderDocuments/<%- document.nc15 %>"><%= document.nc15 %></a>
+          <% } else { %>
+          <%= document.nc15 %>
+          <% } %>
         <td><%= document.name  %>
       </tr>
       <% }) %>
