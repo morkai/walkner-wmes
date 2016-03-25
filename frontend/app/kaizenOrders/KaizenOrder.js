@@ -223,6 +223,13 @@ define([
       this.trigger('seen');
     },
 
+    hasMultipleOwners: function(type)
+    {
+      var owners = this.attributes[type + 'Owners'];
+
+      return Array.isArray(owners) && owners.length > 1;
+    },
+
     prepareUsers: function()
     {
       if (this.attributes.observers)

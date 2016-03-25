@@ -143,12 +143,20 @@ define([
       }
 
       return _.extend(FormView.prototype.serialize.call(this), {
-        multi: !!window.KAIZEN_MULTI || this.model.isMulti(),
+        multiType: !!window.KAIZEN_MULTI || this.model.isMulti(),
+        multiOwner: this.isMultiOwner(),
         today: time.format(new Date(), 'YYYY-MM-DD'),
         statuses: kaizenDictionaries.statuses,
         types: kaizenDictionaries.types,
         attachments: attachments
       });
+    },
+
+    isMultiOwner: function()
+    {
+      return user.isAllowedTo('KAIZEN:MANAGE')
+        || this.model.isConfirmer()
+        || (this.options.editMode && this.model.hasMultipleOwners('nearMiss'));
     },
 
     checkValidity: function()
@@ -314,6 +322,11 @@ define([
       {
         var owners = view.$id(type + 'Owners').select2('data');
 
+        if (!Array.isArray(owners))
+        {
+          owners = [owners];
+        }
+
         return owners.map(function(owner)
         {
           return {
@@ -409,42 +422,45 @@ define([
     setUpOwnerSelect2: function()
     {
       var isEditMode = this.options.editMode;
+      var isMultiOwner = this.isMultiOwner();
       var model = this.model;
       var currentUser = {
         id: user.data._id,
         text: user.getLabel(true)
       };
 
-      setUpUserSelect2(this.$id('nearMissOwners'), {multiple: true, textFormatter: formatUserSelect2Text})
-        .select2('data', prepareOwners('nearMiss'));
+      setUpUserSelect2(this.$id('nearMissOwners'), {multiple: isMultiOwner, textFormatter: formatUserSelect2Text})
+        .select2('data', prepareOwners('nearMiss', isMultiOwner));
 
       setUpUserSelect2(this.$id('suggestionOwners'), {multiple: true, textFormatter: formatUserSelect2Text})
-        .select2('data', prepareOwners('suggestion'));
+        .select2('data', prepareOwners('suggestion', true));
 
       setUpUserSelect2(this.$id('kaizenOwners'), {multiple: true, textFormatter: formatUserSelect2Text}).
-        select2('data', prepareOwners('kaizen'));
+        select2('data', prepareOwners('kaizen', true));
 
-      function prepareOwners(type)
+      function prepareOwners(type, multi)
       {
         if (!isEditMode)
         {
-          return currentUser;
+          return multi ? [currentUser] : currentUser;
         }
 
         var owners = model.get(type + 'Owners');
 
         if (!Array.isArray(owners) || !owners.length)
         {
-          return [];
+          return multi ? [] : null;
         }
 
-        return owners.map(function(owner)
+        owners = owners.map(function(owner)
         {
           return {
             id: owner.id,
             text: owner.label
           };
         });
+
+        return multi ? owners : owners.length ? owners[0] : null;
       }
     },
 

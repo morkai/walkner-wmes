@@ -51,6 +51,7 @@
     "PROPERTY:suggestionCategory": "Suggestion category",
     "PROPERTY:description": "Description (how it is)",
     "PROPERTY:nearMissOwners": "Owners",
+    "PROPERTY:nearMissOwner": "Owner",
     "PROPERTY:suggestionOwners": "Owners",
     "PROPERTY:kaizenOwners": "Owners",
     "PROPERTY:correctiveMeasures": "Corrective measures",

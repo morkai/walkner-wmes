@@ -50,6 +50,7 @@
   "PROPERTY:suggestionCategory": "Kategoria sugestii",
   "PROPERTY:description": "Opis zdarzenia (jak jest)",
   "PROPERTY:nearMissOwners": "Osoby zgłaszające",
+  "PROPERTY:nearMissOwner": "Osoba zgłaszająca",
   "PROPERTY:suggestionOwners": "Osoby sugerujące",
   "PROPERTY:kaizenOwners": "Osoby realizujące",
   "PROPERTY:correctiveMeasures": "Podjęte działania korekcyjne (gaszenie pożaru)",
