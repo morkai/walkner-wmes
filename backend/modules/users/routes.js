@@ -16,9 +16,10 @@ module.exports = function setUpUsersRoutes(app, usersModule)
   var PasswordResetRequest = mongoose.model('PasswordResetRequest');
 
   var canView = userModule.auth('USERS:VIEW');
+  var canBrowse = userModule.auth('LOCAL', 'USERS:VIEW');
   var canManage = userModule.auth('USERS:MANAGE');
 
-  express.get('/users', express.crud.browseRoute.bind(null, app, User));
+  express.get('/users', canBrowse, express.crud.browseRoute.bind(null, app, User));
   express.post('/users', canManage, hashPassword, express.crud.addRoute.bind(null, app, User));
   express.get('/users/:id', canViewDetails, express.crud.readRoute.bind(null, app, User));
   express.put('/users/:id', canEdit, restrictSpecial, hashPassword, express.crud.editRoute.bind(null, app, User));
