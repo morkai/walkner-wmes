@@ -2,6 +2,8 @@
 
 module.exports = {
   uri: 'mongodb://127.0.0.1:27017/walkner-wmes',
+  user: process.env.WMES_MONGODB_USER || '',
+  pass: process.env.WMES_MONGODB_PASS || '',
   server: {
     poolSize: 15
   },
