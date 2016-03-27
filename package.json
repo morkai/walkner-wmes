@@ -2,11 +2,11 @@
   "private": true,
   "guid": "A0974235-9E21-49BB-8D01-CA7A932A6EEB",
   "name": "walkner-wmes",
-  "version": "0.84.0",
+  "version": "0.84.1",
   "updater": {
     "wmes": {
       "backend": 165,
-      "frontend": 178,
+      "frontend": 179,
       "reports": 30,
       "attachments": 2,
       "importer-sap": 32,
@@ -34,7 +34,7 @@
     "url": "http://github.com/morkai/walkner-wmes.git"
   },
   "engine": [
-    "node >=5.1.1"
+    "node >=5.9.1"
   ],
   "main": "./backend/main",
   "dependencies": {
@@ -62,7 +62,7 @@
     "deep-equal": "~1.0.1",
     "cheerio": "~0.19.0",
     "csv": "~0.3.7",
-    "ursa": "~0.9.1",
+    "ursa": "~0.9.3",
     "jszip": "~2.5.0",
     "moment": "~2.10.6",
     "later": "~1.2.0",
