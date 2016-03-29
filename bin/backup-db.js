@@ -77,6 +77,16 @@ var dumpCmd = format(
   config.backupPath
 );
 
+if (config.user)
+{
+  dumpCmd += format(
+    ' --dumpDbUsersAndRoles -u "%s" -p "%s" --authenticationDatabase "%s"',
+    config.user,
+    config.pass,
+    config.authDb
+  );
+}
+
 excludeCollections.forEach(function(collectionName)
 {
   dumpCmd += format(' --excludeCollection "%s"', collectionName);
