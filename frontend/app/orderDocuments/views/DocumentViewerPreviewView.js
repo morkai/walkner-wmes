@@ -172,7 +172,7 @@ define([
       this.setLoadingMessage('remoteServer');
 
       var view = this;
-      var remoteFileUrl = this.model.getRemoteFileUrl(nc15);
+      var remoteFileUrl = this.model.getRemoteFileUrl(nc15) + '?' + view.getRemoteFileUrlQuery();
 
       if (this.req)
       {
@@ -200,7 +200,7 @@ define([
         }
 
         view.req = null;
-        view.loadFile(remoteFileUrl + '?' + view.getRemoteFileUrlQuery());
+        view.loadFile(remoteFileUrl);
       });
     },
 
