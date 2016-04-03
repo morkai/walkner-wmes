@@ -34,7 +34,13 @@ module.exports = function setUpProdState(app, productionModule)
     return prodLineStateMap[prodLineId] || null;
   };
 
-  _.forEach(orgUnitsModule.getAllByType('prodLine'), function(prodLine) { createProdLineState(prodLine, false); });
+  _.forEach(orgUnitsModule.getAllByType('prodLine'), function(prodLine)
+  {
+    if (!prodLine.deactivatedAt)
+    {
+      createProdLineState(prodLine, false);
+    }
+  });
 
   scheduleHourChange();
 
