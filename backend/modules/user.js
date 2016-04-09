@@ -729,7 +729,7 @@ exports.start = function startUserModule(app, module)
         update.$set['data.user.' + k] = v;
       });
 
-      collection.update(conditions, update, function(err)
+      collection.update(conditions, update, {multi: true}, function(err)
       {
         if (err)
         {
