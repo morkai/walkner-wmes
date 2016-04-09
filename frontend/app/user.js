@@ -83,6 +83,8 @@ function(
       user.data = userData;
     }
 
+    user.data.privilegesMap = null;
+
     broker.publish('user.reloaded');
 
     if (wasLoggedIn && !user.isLoggedIn())
@@ -316,13 +318,13 @@ function(
   user.getGuestUserData = function()
   {
     return window.GUEST_USER || {
-        id: null,
-        login: 'guest',
-        name: t.bound('core', 'GUEST_USER_NAME'),
-        loggedIn: false,
-        super: false,
-        privileges: []
-      };
+      id: null,
+      login: 'guest',
+      name: t.bound('core', 'GUEST_USER_NAME'),
+      loggedIn: false,
+      super: false,
+      privileges: []
+    };
   };
 
   user.getRootUserData = function()
