@@ -4,6 +4,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/user',
+  'app/time',
   'app/data/divisions',
   'app/data/subdivisions',
   'app/data/views/OrgUnitDropdownsView',
@@ -15,6 +16,7 @@ define([
   t,
   viewport,
   user,
+  time,
   divisions,
   subdivisions,
   OrgUnitDropdownsView,
@@ -141,7 +143,7 @@ define([
       var messageType = this.model.getTopicPrefix() + '.findOrCreate';
       var options = {
         subdivision: $subdivision.select2('val'),
-        date: new Date(this.$id('date').val() + ' 00:00:00'),
+        date: time.getMoment(this.$id('date').val(), 'YYYY-MM-DD').toDate(),
         shift: parseInt(this.$('input[name=shift]:checked').val(), 10),
         copy: this.$id('copy').prop('checked')
       };

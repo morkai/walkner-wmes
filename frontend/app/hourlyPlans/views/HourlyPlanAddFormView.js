@@ -131,7 +131,7 @@ define([
 
       var options = {
         division: $division.select2('val'),
-        date: new Date(this.$id('date').val() + ' 00:00:00'),
+        date: time.getMoment(this.$id('date').val(), 'YYYY-MM-DD').toDate(),
         shift: 1
       };
 
