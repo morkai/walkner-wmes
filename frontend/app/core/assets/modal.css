@@ -1,14 +1,14 @@
 .modal-header {
-  padding: 1em;
+  padding: 15px;
 }
 .modal-title {
   line-height: 1;
 }
 .modal-body {
-  padding: 1em;
+  padding: 15px;
 }
 .modal-body .form-actions:last-child {
-  margin: 1em -1em -1em -1em;
+  margin: 15px -15px -15px -15px;
 }
 .modal.has-panel .modal-body {
   padding: 0;

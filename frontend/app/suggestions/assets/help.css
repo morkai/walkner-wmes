@@ -2,7 +2,7 @@
 
 }
 .kaizenHelp > .page-breadcrumbs {
-  margin-bottom: 1em;
+  margin-bottom: 15px;
 }
 .kaizenHelp p,
 .kaizenHelp dl {
@@ -14,8 +14,8 @@
 }
 .kaizenHelp img {
   display: block;
-  margin: 1.5em auto;
-  padding: 0.5em;
+  margin: 22px auto;
+  padding: 7px;
   max-width: 100%;
   box-shadow: 0 2px 6px #666;
   border: 1px solid #000;

@@ -13,7 +13,7 @@
   line-height: 1!important;
 }
 .production-duplicate {
-  margin: 1em;
+  margin: 15px;
 }
 .production-duplicate h1 {
   color: #e00;
@@ -29,9 +29,9 @@
 }
 .production-modal .message {
   margin-top: -1px;
-  margin-bottom: 1em;
-  padding-left: 1em;
-  padding-right: 1em;
+  margin-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
   border-left-width: 0;
   border-right-width: 0;
   box-shadow: none;
@@ -43,11 +43,11 @@
   border-right-width: 1px;
 }
 .production-modal .form-group {
-  margin-left: 1em;
-  margin-right: 1em;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 .production-modal .form-group:first-child {
-  margin-top: 1em;
+  margin-top: 15px;
 }
 .production-pageHeader,
 .production-sectionHeader,
@@ -192,13 +192,13 @@
 }
 .production-newOrderPicker > .message {
   margin-top: 0;
-  padding-top: 1em;
+  padding-top: 15px;
   padding-bottom: 0;
   background-color: transparent;
   border: 0;
 }
 .production-question > p {
-  margin: 1em;
+  margin: 15px;
 }
 .production-dropdown {
   margin-top: 0;

@@ -63,7 +63,7 @@
   box-shadow: none;
 }
 .kaizenOrders-history-form > .form-group {
-  margin: 1em;
+  margin: 15px;
 }
 @media print {
   .kaizenOrders-history-form {

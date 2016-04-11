@@ -75,7 +75,7 @@
 }
 .xiconfPrograms-stepPanel,
 .xiconfPrograms-stepPanel:last-child {
-  margin-bottom: 1em;
+  margin-bottom: 15px;
 }
 .xiconfPrograms-stepPanel > .panel-heading {
   color: #fff;

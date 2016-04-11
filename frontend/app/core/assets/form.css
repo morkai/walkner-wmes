@@ -1,6 +1,7 @@
 .form-group:last-child {
   margin-bottom: 0;
 }
+.form-group.not-last:last-child,
 .row > .form-group:last-child {
   margin-bottom: 15px;
 }
@@ -36,9 +37,9 @@
   width: 8em;
 }
 .form-actions {
-  padding: 1em;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  padding: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   background-color: #f5f5f5;
   border-top: 1px solid #e5e5e5;
 }
@@ -46,7 +47,7 @@
   margin-bottom: 0;
 }
 .form-actions a.cancel {
-  margin-left: 1em;
+  margin-left: 15px;
 }
 .checkbox,
 .radio {

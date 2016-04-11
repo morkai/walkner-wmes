@@ -28,11 +28,11 @@
 }
 .reports-drillingReportPage .filter-container,
 .reports-displayOptions-container {
-  margin-top: 1em;
+  margin-top: 15px;
   margin-bottom: 0;
 }
 .reports-displayOptions-container > .well {
-  padding: 1em 1em 0 0;
+  padding: 15px 15px 0 0;
 }
 .reports-drillingReportPage .form-group-datetime {
   display: inline-flex;
@@ -55,8 +55,8 @@
 }
 .reports-drillingHeader-orgUnit {
   display: inline-block;
-  margin-left: 1em;
-  padding-left: 1em;
+  margin-left: 15px;
+  padding-left: 15px;
   border-left: 1px dotted #ddd;
 }
 .reports-drillingHeader-orgUnit-label {
@@ -203,7 +203,7 @@
 .reports-3-tableSummary-container {
   flex: 1;
   min-width: 65%;
-  padding-right: 1em;
+  padding-right: 15px;
 }
 .reports-3-charts {
   width: 35%;

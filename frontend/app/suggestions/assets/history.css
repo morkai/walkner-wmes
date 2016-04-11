@@ -63,7 +63,7 @@
   box-shadow: none;
 }
 .suggestions-history-form > .form-group {
-  margin: 1em;
+  margin: 15px;
 }
 @media print {
   .suggestions-history-form {

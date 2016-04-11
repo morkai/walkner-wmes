@@ -7,16 +7,16 @@
 }
 .orders-filter-date-group input[type=date] {
   display: inline-block;
-  margin-bottom: 1em;
+  margin-bottom: 15px;
 }
 .orders-filter-date-group input[type=radio] {
   margin-top: 0;
 }
 .orders-filter-date-finish-label {
-  margin-left: 1em;
+  margin-left: 15px;
 }
 .orders-filter-date-range label {
-  margin-top: .5em;
+  margin-top: 7px;
   margin-bottom: 0;
   vertical-align: top;
   font-weight: normal;
@@ -64,7 +64,7 @@
   display: block;
 }
 .table > tfoot > tr > td.orders-commentForm-container {
-  padding: 1em;
+  padding: 15px;
 }
 .orders-settings .form-control[name="orders.documents.extra"] {
   font-family: Consolas, "Lucida Console", Monaco, monospace;

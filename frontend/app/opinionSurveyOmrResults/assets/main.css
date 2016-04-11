@@ -1,11 +1,11 @@
 .opinionSurveyOmrResults-details-tabs .tab-content {
-  padding: 1em;
+  padding: 15px;
   border: 1px solid #ccc;
   border-top: 0;
 }
 .opinionSurveyOmrResults-omrPreview-tab {
   text-align: center;
-  padding: 2em;
+  padding: 30px;
 }
 .opinionSurveyOmrResults-omrPreview-wrapper {
   position: relative;

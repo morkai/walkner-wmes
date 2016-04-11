@@ -1,8 +1,8 @@
 .opinionSurveys-report > .panel {
-  margin-top: 1em;
+  margin-top: 15px;
 }
 .opinionSurveys-report-columns {
-  margin-top: 1em;
+  margin-top: 15px;
   display: flex;
 }
 .opinionSurveys-report-column {

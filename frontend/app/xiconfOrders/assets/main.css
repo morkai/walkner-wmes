@@ -8,22 +8,22 @@
   cursor: pointer;
 }
 .xiconfOrders-orderDetailsContainer {
-  margin-top: 1em;
+  margin-top: 15px;
 }
 .xiconfOrders-orderDetailsContainer {
-  margin-top: 1em;
+  margin-top: 15px;
 }
 .xiconfOrders-orderDetails {
-  margin-top: 1em;
+  margin-top: 15px;
   margin-bottom: 0;
 }
 .xiconfOrders-itemDetailsContainer {
-  margin-left: -1em;
+  margin-left: -15px;
   display: flex;
   flex-wrap: wrap;
 }
 .xiconfOrders-itemDetails {
-  margin: 1em 0 0 1em;
+  margin: 15px 0 0 15px;
   flex: 1;
   min-width: 400px;
 }

@@ -2,10 +2,10 @@
   background-color: transparent;
 }
 .prodDowntime-filter-subdivision {
-  padding-left: 1em;
+  padding-left: 15px;
 }
 .prodDowntime-filter-prodFlow {
-  padding-left: 2em;
+  padding-left: 30px;
 }
 .page[data-id="prodDowntimeList"] .filter-container {
   float: left;
@@ -91,10 +91,10 @@
   white-space: pre-line;
 }
 .prodDowntimes-corroborate {
-  padding: 1em;
+  padding: 15px;
 }
 .prodDowntimes-corroborate-extra {
-  margin-bottom: 1em;
+  margin-bottom: 15px;
 }
 .prodDowntimes-corroborate-statuses > .control-label {
   display: block;

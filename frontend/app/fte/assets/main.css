@@ -6,8 +6,8 @@
 }
 .fte-property {
   display: inline-block;
-  margin-left: 1em;
-  padding-left: 1em;
+  margin-left: 15px;
+  padding-left: 15px;
   border-left: 1px solid #e3e3e3;
 }
 .fte-property:first-child {
@@ -265,7 +265,7 @@ textarea.fte-leaderEntry-comment:focus {
   display: none;
 }
 .fte-changeRequest-comment {
-  margin: 1em 0;
+  margin: 15px 0;
 }
 .is-changing .fte-changeRequest-warning,
 .is-changing .fte-changeRequest-comment {

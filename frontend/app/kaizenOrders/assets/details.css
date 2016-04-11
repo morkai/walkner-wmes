@@ -1,9 +1,9 @@
 .kaizenOrders-details-types {
-  margin-left: -1em;
-  margin-right: -1em;
+  margin-left: -15px;
+  margin-right: -15px;
 }
 .kaizenOrders-details-types > .row .panel {
-  margin-bottom: 1em;
+  margin-bottom: 15px;
 }
 .kaizenOrders-details-types .props,
 .kaizenOrders-details-types .prop,

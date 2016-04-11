@@ -21,14 +21,14 @@
 }
 .hourlyPlan-rotated {
   height: 90px;
-  width: 1em;
+  width: 15px;
   vertical-align: bottom!important;
 }
 .hourlyPlan-rotated span {
   display: block;
   white-space: nowrap;
   -webkit-transform: rotate(-90deg);
-  width: 1em;
+  width: 15px;
 }
 .hourlyPlan-column-noPlan,
 .hourlyPlan-column-level {

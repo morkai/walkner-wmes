@@ -1,16 +1,16 @@
 .filter-container {
-  margin-bottom: 1em;
+  margin-bottom: 15px;
 }
 .filter-container > .well {
-  padding: 1em 1em 0 0;
+  padding: 15px 15px 0 0;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
 }
 .filter-form .form-group {
   display: inline-block;
-  margin-left: 1em;
-  margin-bottom: 1em;
+  margin-left: 15px;
+  margin-bottom: 15px;
   vertical-align: top;
 }
 .filter-form.is-vertical {
@@ -25,13 +25,13 @@
   text-align: right;
 }
 .filter-form .filter-actions {
-  margin-left: 1em;
+  margin-left: 15px;
   vertical-align: bottom;
   align-self: flex-end;
 }
 .filter-form.is-vertical .filter-actions {
   padding-left: 0;
-  margin-left: 1em;
+  margin-left: 15px;
   border-left: 0;
   align-self: flex-start;
 }
@@ -40,7 +40,7 @@
 }
 .filter-actions > hr {
   display: inline-block;
-  margin: 0 1em;
+  margin: 0 15px;
   padding: 0;
   width: 1px;
   height: 35px;
@@ -80,7 +80,7 @@
 }
 .filter-dateRange .form-control {
   display: inline-block;
-  margin-bottom: 1em;
+  margin-bottom: 15px;
   width: 12em;
 }
 .filter-dateRange input[type=radio] {
@@ -95,7 +95,7 @@ input[type=checkbox].filter-inLabel {
   height: 29px;
 }
 .filter-radioLabels > label {
-  margin-left: 1em;
+  margin-left: 15px;
   margin-bottom: 3px;
   vertical-align: top;
 }
@@ -133,7 +133,7 @@ input[type=checkbox].filter-inLabel {
 @media (max-width: 767px) {
   .filter-container > .well {
     align-items: flex-start;
-    padding: 1em;
+    padding: 15px;
   }
   .filter-form {
     flex-direction: column;
