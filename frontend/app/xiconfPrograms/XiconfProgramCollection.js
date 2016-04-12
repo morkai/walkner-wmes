@@ -13,7 +13,7 @@ define([
 
     model: XiconfProgram,
 
-    rqlQuery: 'select(name,type,prodLines,updatedAt,steps)&limit(15)&sort(name)'
+    rqlQuery: 'select(name,type,prodLines,updatedAt,steps)&limit(20)&sort(name)'
 
   });
 });

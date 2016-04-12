@@ -13,7 +13,7 @@ define([
 
     model: KaizenOrder,
 
-    rqlQuery: 'exclude(changes)&limit(15)&sort(-eventDate)'
+    rqlQuery: 'exclude(changes)&limit(20)&sort(-eventDate)'
 
   });
 });

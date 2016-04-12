@@ -21,7 +21,7 @@ define([
           mrp: 1,
           materialNorm: 1
         },
-        limit: 15,
+        limit: 20,
         sort: {
           _id: 1
         }

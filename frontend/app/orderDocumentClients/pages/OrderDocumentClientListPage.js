@@ -95,7 +95,7 @@ define([
       }
 
       this.$licensingMessage = $('<a></a>')
-        .attr('href', '#licenses?sort(expireDate)&limit(15)&appId=wmes-docs')
+        .attr('href', '#licenses?sort(expireDate)&limit(20)&appId=wmes-docs')
         .addClass('orderDocumentClients-licensingMessage message message-warning message-inline')
         .text(t('orderDocumentClients', 'licensingMessage', {clientCount: clientCount, licenseCount: licenseCount}))
         .prependTo(this.$el);

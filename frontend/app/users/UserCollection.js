@@ -14,7 +14,7 @@ define([
     model: User,
 
     rqlQuery: 'select(personellId,lastName,firstName,login,company,orgUnitType,orgUnitId,prodFunction)'
-      + '&sort(+lastName,+firstName)&limit(15)'
+      + '&sort(+lastName,+firstName)&limit(20)'
 
   });
 });

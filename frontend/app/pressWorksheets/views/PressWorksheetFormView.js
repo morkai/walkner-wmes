@@ -1153,7 +1153,7 @@ define([
 
     checkForExistingWorksheet: function()
     {
-      var date = new Date(this.$id('date').val() + ' 06:00:00');
+      var date = time.getMoment(this.$id('date').val() + ' 06:00:00', 'YYYY-MM-DD HH:mm:ss').toDate();
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
       var operator = this.$id('operator').val();
       var $warning = this.$id('existingWarning');

@@ -13,7 +13,7 @@ define([
 
     model: OpinionSurveyOmrResult,
 
-    rqlQuery: 'limit(15)&status=unrecognized'
+    rqlQuery: 'limit(20)&status=unrecognized'
 
   });
 });

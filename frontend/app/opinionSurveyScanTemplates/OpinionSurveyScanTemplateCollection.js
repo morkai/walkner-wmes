@@ -13,7 +13,7 @@ define([
 
     model: OpinionSurveyScanTemplate,
 
-    rqlQuery: 'limit(15)&sort(-survey)'
+    rqlQuery: 'limit(20)&sort(-survey)'
 
   });
 });

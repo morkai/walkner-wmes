@@ -24,7 +24,7 @@ define([
   router.map('/', function()
   {
     broker.publish('router.navigate', {
-      url: '/kaizenOrders?observers.user.id=mine&sort(-createdAt)&limit(15)',
+      url: '/kaizenOrders?observers.user.id=mine&sort(-createdAt)&limit(20)',
       trigger: true,
       replace: true
     });

@@ -15,7 +15,7 @@ define([
 
     model: OpinionSurvey,
 
-    rqlQuery: 'select(startDate,endDate,label)&limit(15)&sort(-startDate)',
+    rqlQuery: 'select(startDate,endDate,label)&limit(20)&sort(-startDate)',
 
     buildCacheMaps: function()
     {

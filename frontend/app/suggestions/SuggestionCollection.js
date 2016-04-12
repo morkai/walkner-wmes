@@ -13,7 +13,7 @@ define([
 
     model: Suggestion,
 
-    rqlQuery: 'exclude(changes)&limit(15)&sort(-date)'
+    rqlQuery: 'exclude(changes)&limit(20)&sort(-date)'
 
   });
 });
