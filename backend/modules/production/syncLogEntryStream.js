@@ -24,6 +24,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
   var logEntryList = [];
   var lastLogEntryWithInvalidSecretKey = null;
   var savedAt = new Date();
+  // TODO: remove
   var W_LINE = {
     'W-1~c': true,
     'W-2~c': true,

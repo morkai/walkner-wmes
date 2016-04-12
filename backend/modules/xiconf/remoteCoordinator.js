@@ -39,6 +39,16 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var orderResultsToRecount = {};
   var orderResultsRecountTimer = null;
 
+  // TODO: remove
+  var W_LINE = {
+    'W-1~c': true,
+    'W-2~c': true,
+    'W1_SM-12_1~c': true,
+    'W1_SM-12_2~c': true,
+    'W1_SM-13_1~c': true,
+    'W1_SM-13_2~c': true
+  };
+
   xiconfModule.remote = {
     checkSerialNumber: handleCheckSerialNumberRequest,
     generateServiceTag: handleGenerateServiceTagRequest,
@@ -573,6 +583,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     if (!_.isString(data.prodLineId) || _.isEmpty(data.prodLineId))
     {
       data.prodLineId = null;
+    }
+
+    if (W_LINE[data.prodLineId])
+    {
+      data.prodLineId = data.prodLineId.split('~')[0];
     }
 
     var socket = this;
