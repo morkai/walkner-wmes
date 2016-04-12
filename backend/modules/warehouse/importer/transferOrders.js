@@ -155,7 +155,7 @@ exports.start = function startTransferOrdersImporterModule(app, module)
       {
         for (var i = 0, l = this.batches.length; i < l; ++i)
         {
-          WhTransferOrder.collection.insert(this.batches[i], {continueOnError: true}, this.parallel());
+          WhTransferOrder.collection.insert(this.batches[i], {ordered: false}, this.parallel());
         }
       },
       function handleArchiveError(err)

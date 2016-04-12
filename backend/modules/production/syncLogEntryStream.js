@@ -89,7 +89,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
     return done(null, lastLogEntryWithInvalidSecretKey);
   }
 
-  ProdLogEntry.collection.insert(logEntryList, {continueOnError: true}, function(err)
+  ProdLogEntry.collection.insert(logEntryList, {ordered: false}, function(err)
   {
     if (err)
     {

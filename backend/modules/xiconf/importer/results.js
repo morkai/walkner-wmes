@@ -284,7 +284,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
     {
       XiconfResult.collection.insert(
         this.results.slice(i * RESULTS_BATCH_SIZE, i * RESULTS_BATCH_SIZE + RESULTS_BATCH_SIZE),
-        {continueOnError: true},
+        {ordered: false},
         this.group()
       );
     }

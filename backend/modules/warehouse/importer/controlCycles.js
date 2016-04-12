@@ -136,7 +136,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
       {
         for (var i = 0, l = this.batches.length; i < l; ++i)
         {
-          WhControlCycleArchive.collection.insert(this.batches[i], {continueOnError: true}, this.parallel());
+          WhControlCycleArchive.collection.insert(this.batches[i], {ordered: false}, this.parallel());
         }
       },
       function handleArchiveError(err)

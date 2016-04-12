@@ -263,7 +263,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
         for (i = 0; i < this.batches.length; ++i)
         {
-          XiconfOrder.collection.insert(this.batches[i], {continueOnError: true}, this.group());
+          XiconfOrder.collection.insert(this.batches[i], {ordered: false}, this.group());
         }
 
         for (i = 0; i < this.updatesList.length; ++i)

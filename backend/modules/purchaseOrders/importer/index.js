@@ -372,7 +372,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
       return;
     }
 
-    mongoose.model('Vendor').collection.insert(vendorList, {continueOnError: true}, function() {});
+    mongoose.model('Vendor').collection.insert(vendorList, {ordered: false}, function() {});
   }
 
   function isWaitingForEarlierData(timeKey, waitingTimeKeys)

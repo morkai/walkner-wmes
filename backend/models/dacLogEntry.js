@@ -71,7 +71,7 @@ module.exports = function setupDacLogEntryModel(app, mongoose)
       }
     });
 
-    this.collection.insert(dacLogEntries, {continueOnError: true}, done);
+    this.collection.insert(dacLogEntries, {ordered: false}, done);
   };
 
   mongoose.model('DacLogEntry', dacLogEntrySchema);
