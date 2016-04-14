@@ -28,6 +28,18 @@ define([
     template: template,
 
     baseBreadcrumb: true,
+    breadcrumbs: function()
+    {
+      if (!this.options.standalone)
+      {
+        return DetailsPage.prototype.breadcrumbs.call(this);
+      }
+
+      return [
+        t.bound('suggestions', 'BREADCRUMBS:base'),
+        this.model.get('rid') + ''
+      ];
+    },
 
     localTopics: {
       'suggestions.seen': 'onSeen'
@@ -94,6 +106,8 @@ define([
       DetailsPage.prototype.destroy.call(this);
 
       kaizenDictionaries.unload();
+
+      $('body').removeClass('suggestions-standalone');
     },
 
     defineViews: function()
@@ -120,6 +134,8 @@ define([
       DetailsPage.prototype.afterRender.call(this);
 
       kaizenDictionaries.load();
+
+      $('body').toggleClass('suggestions-standalone', !!this.options.standalone);
     },
 
     markAsSeen: function(e)

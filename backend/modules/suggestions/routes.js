@@ -21,7 +21,8 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   var tmpAttachments = {};
 
-  var canView = userModule.auth();
+  var canView = userModule.auth('LOCAL', 'USER');
+  var canManage = userModule.auth('USER');
 
   express.get('/suggestions/stats', canView, statsRoute);
 
@@ -30,7 +31,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
   express.post('/suggestions', canView, prepareForAdd, express.crud.addRoute.bind(null, app, Suggestion));
   express.get('/suggestions/:id', canView, express.crud.readRoute.bind(null, app, Suggestion));
   express.put('/suggestions/:id', canView, editSuggestionRoute);
-  express.delete('/suggestions/:id', canView, express.crud.deleteRoute.bind(null, app, Suggestion));
+  express.delete('/suggestions/:id', canManage, express.crud.deleteRoute.bind(null, app, Suggestion));
   express.get('/suggestions;export', canView, fetchDictionaries, express.crud.exportRoute.bind(null, {
     filename: 'SUGGESTIONS',
     serializeRow: exportSuggestion,
@@ -185,7 +186,14 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function editSuggestionRoute(req, res, next)
   {
+    var user = req.session.user;
     var body = req.body;
+
+    if (!user.loggedIn)
+    {
+      body = _.pick(body, 'comment');
+    }
+
     var newAttachmentList = prepareAttachments(body.attachments);
     var newAttachmentMap = {};
 
@@ -194,7 +202,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
       newAttachmentMap[attachment.description] = attachment;
     });
 
-    var updater = userModule.createUserInfo(req.session.user, req);
+    var updater = userModule.createUserInfo(user, req);
     updater.id = updater.id.toString();
 
     step(

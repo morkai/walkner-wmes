@@ -15,9 +15,11 @@
     "controls:locked": "Editing locked",
     "controls:unlocked": "Editing unlocked",
     "controls:sync": "Server communication indicator",
+    "controls:addSuggestion": "Add suggestion",
     "controls:msg:sync:noConnection": "Cannot unlock: no connection to the server :(",
     "controls:msg:sync:remoteError": "Cannot unlock: failed to get the key :(",
     "controls:msg:sync:success": "Editing unlocked successfully :)",
+    "controls:msg:popup": "The popup window has been blocked :(",
 
     "unlockDialog:title:unlock": "Production line activation",
     "unlockDialog:title:lock": "Production line deactivation",

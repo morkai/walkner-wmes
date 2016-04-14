@@ -19,6 +19,7 @@ define([
 
   var nls = 'i18n!app/nls/suggestions';
   var canAccess = user.auth();
+  var canAccessLocal = user.auth('LOCAL', 'USER');
 
   router.map('/suggestionCountReport', canAccess, function(req)
   {
@@ -84,7 +85,7 @@ define([
     );
   });
 
-  router.map('/suggestions/:id', canAccess, function(req)
+  router.map('/suggestions/:id', canAccessLocal, function(req)
   {
     viewport.loadPage(
       [
@@ -95,7 +96,8 @@ define([
       function(SuggestionDetailsPage, SuggestionThankYouView)
       {
         var page = new SuggestionDetailsPage({
-          model: new Suggestion({_id: req.params.id})
+          model: new Suggestion({_id: req.params.id}),
+          standalone: !!req.query.standalone
         });
 
         if (req.query.thank === 'you')
@@ -117,7 +119,7 @@ define([
     );
   });
 
-  router.map('/suggestions;add', canAccess, function()
+  router.map('/suggestions;add', canAccessLocal, function(req)
   {
     viewport.loadPage(
       [
@@ -126,8 +128,18 @@ define([
       ],
       function(SuggestionAddFormPage)
       {
+        var operator = null;
+
+        try
+        {
+          operator = JSON.parse(decodeURIComponent(atob(req.query.operator)));
+        }
+        catch (err) {}
+
         return new SuggestionAddFormPage({
-          model: new Suggestion()
+          model: new Suggestion(),
+          standalone: !!req.query.standalone,
+          operator: operator
         });
       }
     );
@@ -143,7 +155,8 @@ define([
       function(SuggestionEditFormPage)
       {
         return new SuggestionEditFormPage({
-          model: new Suggestion({_id: req.params.id})
+          model: new Suggestion({_id: req.params.id}),
+          standalone: !!req.query.standalone
         });
       }
     );

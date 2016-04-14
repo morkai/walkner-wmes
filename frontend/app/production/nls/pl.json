@@ -14,9 +14,11 @@
   "controls:locked": "Edycja zablokowana",
   "controls:unlocked": "Edycja aktywna",
   "controls:sync": "Wskaźnik komunikacji z serwerem",
+  "controls:addSuggestion": "Zgłoś sugestię",
   "controls:msg:sync:noConnection": "Nie można aktywować edycji: brak połączenia z serwerem :(",
   "controls:msg:sync:remoteError": "Nie można aktywować edycji: nieudane pobranie klucza :(",
   "controls:msg:sync:success": "Pomyślnie aktywowano edycję :)",
+  "controls:msg:popup": "Wyskakujące okienko zostało zablokowane :(",
 
   "unlockDialog:title:unlock": "Aktywacja linii produkcyjnej",
   "unlockDialog:title:lock": "Dezaktywacja linii produkcyjnej",

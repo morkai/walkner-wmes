@@ -51,6 +51,7 @@ define([
     },
 
     events: {
+      'click a.production-controls-addSuggestion': 'addSuggestion',
       'click a.production-controls-lock': 'lock',
       'click a.production-controls-unlock': 'unlock',
       'mouseover a.production-controls-lock': function(e)
@@ -81,6 +82,46 @@ define([
           this.socket.isConnected() ? 'socket.connected' : 'socket.disconnected'
         ]
       );
+    },
+
+    addSuggestion: function()
+    {
+      var operator = this.model.get('operator');
+
+      if (operator && operator.id)
+      {
+        operator = {
+          id: operator.id,
+          text: operator.label.replace(/\s+\(.*?\)$/, '')
+        };
+      }
+      else
+      {
+        operator = null;
+      }
+
+      var url = '/#suggestions;add?standalone=1&operator=' + btoa(encodeURIComponent(JSON.stringify(operator)));
+      var screen = window.screen;
+      var width = screen.availWidth > 1200 ? 1200 : screen.availWidth * 0.7;
+      var height = screen.availHeight * 0.8;
+      var left = Math.floor((screen.availWidth - width) / 2);
+      var top = Math.min(100, Math.floor((screen.availHeight - height) / 2));
+      var features = 'resizable,scrollbars,location=no'
+        + ',top=' + top
+        + ',left=' + left
+        + ',width=' + Math.floor(width)
+        + ',height=' + Math.floor(height);
+
+      var win = window.open(url, 'WMES_SUGGESTIONS', features);
+
+      if (!win)
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 3000,
+          text: t('production', 'controls:msg:popup')
+        });
+      }
     },
 
     unlock: function()

@@ -223,8 +223,10 @@ define([
 
     handleSuccess: function()
     {
-       this.broker.publish('router.navigate', {
-        url: this.model.genClientUrl() + (this.options.editMode ? '' : '?thank=you'),
+      this.broker.publish('router.navigate', {
+        url: this.model.genClientUrl() + '?'
+          + (this.options.editMode ? '' : '&thank=you')
+          + (!this.options.standalone ? '' : '&standalone=1'),
         trigger: true
       });
     },
@@ -353,10 +355,19 @@ define([
     {
       var isEditMode = this.options.editMode;
       var model = this.model;
-      var currentUser = {
-        id: user.data._id,
-        text: user.getLabel(true)
-      };
+      var currentUser = null;
+
+      if (this.options.operator)
+      {
+        currentUser = this.options.operator;
+      }
+      else if (user.isLoggedIn())
+      {
+        currentUser = {
+          id: user.data._id,
+          text: user.getLabel(true)
+        };
+      }
 
       setUpUserSelect2(this.$id('suggestionOwners'), {multiple: true, textFormatter: formatUserSelect2Text})
         .select2('data', prepareOwners('suggestion'));

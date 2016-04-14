@@ -14,3 +14,9 @@
 .suggestions-label-kaizen {
   background-color: #5cb85c;
 }
+.suggestions-standalone .navbar {
+  display: none;
+}
+.suggestions-standalone .page-actions {
+  display: none;
+}
