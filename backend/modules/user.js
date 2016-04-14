@@ -164,7 +164,16 @@ exports.start = function startUserModule(app, module)
 
       for (var ii = 0, ll = allPrivileges.length; ii < ll; ++ii)
       {
-        matches += hasPrivilege(user, allPrivileges[ii]) ? 1 : 0;
+        var privilege = allPrivileges[ii];
+
+        if (privilege === 'USER')
+        {
+          matches += user.loggedIn ? 1 : 0;
+        }
+        else
+        {
+          matches += hasPrivilege(user, allPrivileges[ii]) ? 1 : 0;
+        }
       }
 
       if (matches === ll)

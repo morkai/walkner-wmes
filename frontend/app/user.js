@@ -167,9 +167,11 @@ function(
       return false;
     }
 
+    var isLoggedIn = user.isLoggedIn();
+
     if (!anyPrivileges.length)
     {
-      return user.isLoggedIn();
+      return isLoggedIn;
     }
 
     for (var i = 0, l = anyPrivileges.length; i < l; ++i)
@@ -182,7 +184,11 @@ function(
       {
         var requiredPrivilege = allPrivileges[ii];
 
-        if (/^FN:/.test(requiredPrivilege))
+        if (requiredPrivilege === 'USER')
+        {
+          actualMatches += isLoggedIn ? 1 : 0;
+        }
+        else if (/^FN:/.test(requiredPrivilege))
         {
           actualMatches += user.data.prodFunction === requiredPrivilege.substring(3) ? 1 : 0;
         }
