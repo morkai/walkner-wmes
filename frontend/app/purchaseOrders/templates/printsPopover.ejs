@@ -24,10 +24,12 @@
       <td class="is-number"><%- print.componentQty.toLocaleString() %></td>
       <td class="is-number"><%- print.remainingQty.toLocaleString() %></td>
       <td class="actions">
-        <a class="btn btn-default action-showPrintPdf" href="/purchaseOrders/<%- orderId %>/prints/<%- print._id %>.pdf" title="<%- t('purchaseOrders', 'prints:showPrintPdf') %>"><i class="fa fa-file-pdf-o"></i></a>
-        <% if (user.isAllowedTo('PURCHASE_ORDERS:MANAGE')) { %>
-        <button type="button" class="btn btn-<%- print.cancelled ? 'success' : 'danger' %> action-toggleCancelled" title="<%- t('purchaseOrders', 'prints:' + (print.cancelled ? 'restore' : 'cancel')) %>"><i class="fa fa-thumbs-<%- print.cancelled ? 'up' : 'down' %>"></i></button>
-        <% } %>
+        <div class="actions-group">
+          <a class="btn btn-default action-showPrintPdf" href="/purchaseOrders/<%- orderId %>/prints/<%- print._id %>.pdf" title="<%- t('purchaseOrders', 'prints:showPrintPdf') %>"><i class="fa fa-file-pdf-o"></i></a>
+          <% if (user.isAllowedTo('PURCHASE_ORDERS:MANAGE')) { %>
+          <button type="button" class="btn btn-<%- print.cancelled ? 'success' : 'danger' %> action-toggleCancelled" title="<%- t('purchaseOrders', 'prints:' + (print.cancelled ? 'restore' : 'cancel')) %>"><i class="fa fa-thumbs-<%- print.cancelled ? 'up' : 'down' %>"></i></button>
+          <% } %>
+        </div>
       </td>
     </tr>
     <% }) %>

@@ -17,8 +17,10 @@
       <td class="is-min"><%= t.has('suggestions', 'attachments:' + attachment.description) ? t('suggestions', 'attachments:' + attachment.description) : attachment.description %></td>
       <td><%= attachment.name %></td>
       <td class="actions">
-        <a class="btn btn-default" href="/suggestions/<%- model._id %>/attachments/<%- attachment._id %>" title="<%- t('suggestions', 'attachments:actions:view') %>"><i class="fa fa-file-text-o"></i></a>
-        <a class="btn btn-default" href="/suggestions/<%- model._id %>/attachments/<%- attachment._id %>?download=1" title="<%- t('suggestions', 'attachments:actions:download') %>"><i class="fa fa-download"></i></a>
+        <div class="actions-group">
+          <a class="btn btn-default" href="/suggestions/<%- model._id %>/attachments/<%- attachment._id %>" title="<%- t('suggestions', 'attachments:actions:view') %>"><i class="fa fa-file-text-o"></i></a>
+          <a class="btn btn-default" href="/suggestions/<%- model._id %>/attachments/<%- attachment._id %>?download=1" title="<%- t('suggestions', 'attachments:actions:download') %>"><i class="fa fa-download"></i></a>
+        </div>
       </td>
     </tr>
     <% }) %>

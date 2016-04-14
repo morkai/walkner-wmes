@@ -6,8 +6,10 @@
   <td><input class="form-control" name="questions[<%- i %>].short" type="text" value="<%= question.short %>" required></td>
   <td><input class="form-control" name="questions[<%- i %>].full" type="text" value="<%= question.full %>" required></td>
   <td class="actions">
-    <button class="btn btn-default opinionSurveys-form-moveRowUp" type="button"><i class="fa fa-arrow-up"></i></button>
-    <button class="btn btn-default opinionSurveys-form-moveRowDown" type="button"><i class="fa fa-arrow-down"></i></button>
-    <button class="btn btn-danger opinionSurveys-form-deleteRow" type="button"><i class="fa fa-remove"></i></button>
+    <div class="actions-group">
+      <button class="btn btn-default opinionSurveys-form-moveRowUp" type="button"><i class="fa fa-arrow-up"></i></button>
+      <button class="btn btn-default opinionSurveys-form-moveRowDown" type="button"><i class="fa fa-arrow-down"></i></button>
+      <button class="btn btn-default opinionSurveys-form-deleteRow" type="button"><i class="fa fa-remove"></i></button>
+    </div>
   </td>
 </tr>
