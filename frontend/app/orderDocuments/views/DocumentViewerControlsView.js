@@ -76,6 +76,12 @@ define([
 
         $openLocalFileDialog.blur();
       },
+      'click #-openAddSuggestionWindow': function()
+      {
+        this.openAddSuggestionWindow();
+
+        e.currentTarget.blur();
+      },
       'change #-localFile': function(e)
       {
         var files = e.target.files;
@@ -414,6 +420,32 @@ define([
       });
 
       viewport.showDialog(settingsDialog, t('orderDocuments', 'settings:title'));
+    },
+
+    openAddSuggestionWindow: function()
+    {
+      var url = '/#suggestions;add?standalone=1';
+      var screen = window.screen;
+      var width = screen.availWidth > 1200 ? 1200 : screen.availWidth * 0.7;
+      var height = screen.availHeight * 0.8;
+      var left = Math.floor((screen.availWidth - width) / 2);
+      var top = Math.min(100, Math.floor((screen.availHeight - height) / 2));
+      var features = 'resizable,scrollbars,location=no'
+        + ',top=' + top
+        + ',left=' + left
+        + ',width=' + Math.floor(width)
+        + ',height=' + Math.floor(height);
+
+      var win = window.open(url, 'WMES_SUGGESTIONS', features);
+
+      if (!win)
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 3000,
+          text: t('orderDocuments', 'popup:suggestion')
+        });
+      }
     },
 
     updateProdLine: function()

@@ -81,7 +81,7 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('orderDocuments', 'popup')
+          text: t('orderDocuments', 'popup:document')
         });
       }
     },
