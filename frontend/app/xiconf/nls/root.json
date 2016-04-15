@@ -7,6 +7,10 @@
 
     "MSG:LOADING_FAILURE": "Failed to load the programming results :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the programming result :(",
+    "MSG:drop:filesOnly": "Only update archives can be dropped!",
+    "MSG:drop:invalidFile": "The dropped file is not an update archive!",
+    "MSG:drop:upload:failure": "Failed to upload the update archive :(",
+    "MSG:drop:upload:success": "The upload archive was uploaded successfully :)",
 
     "PANEL:TITLE:details:order": "Local order details",
     "PANEL:TITLE:details:entry": "Programming details",

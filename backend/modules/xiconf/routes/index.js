@@ -6,6 +6,7 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
+var multer = require('multer');
 var importResultsRoute = require('./importResults');
 var importOrdersRoute = require('./importOrders');
 var downloadRoute = require('./download');
@@ -30,6 +31,33 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   var canView = userModule.auth('XICONF:VIEW');
   var canManage = userModule.auth('XICONF:MANAGE');
   var remoteRequests = {};
+
+  express.post(
+    '/xiconf;upload',
+    canManage,
+    multer({
+      storage: multer.diskStorage({
+        destination: xiconfModule.config.updatesPath,
+        filename: (req, file, cb) => cb(null, file.originalname)
+      }),
+      fileFilter: function(req, file, done)
+      {
+        done(null, file.mimetype === 'application/x-zip-compressed'
+          && /^[0-9]+\.[0-9x]+\.[0-9x]+\-[0-9]+\.[0-9x]+\.[0-9x]+\.zip$/.test(file.originalname));
+      }
+    }).single('update'),
+    function(req, res, next)
+    {
+      if (req.file)
+      {
+        res.sendStatus(204);
+      }
+      else
+      {
+        next(app.createError('INVALID_FILE', 400));
+      }
+    }
+  );
 
   express.post('/xiconf;execute', userModule.auth('LOCAL'), function(req, res, next)
   {
