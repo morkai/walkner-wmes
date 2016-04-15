@@ -490,7 +490,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return;
     }
 
-    newState = _.pick(newState, ['order', 'inputMode']);
+    newState = _.pick(newState, ['order', 'inputMode', 'mowVersion', 'coreScannerDriver']);
 
     if (_.isEmpty(newState))
     {
