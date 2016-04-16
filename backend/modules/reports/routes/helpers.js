@@ -10,6 +10,15 @@ var GENERATE_REQUEST_TIMEOUT = 4 * 60 * 1000;
 var LESS_THAN_DAY_IN_FUTURE_EXPIRATION = 2;
 var MORE_THAN_DAY_IN_FUTURE_EXPIRATION = 5;
 var IN_PAST_EXPIRATION = 15;
+var VALID_INTERVALS = {
+  year: true,
+  quarter: true,
+  month: true,
+  week: true,
+  day: true,
+  shift: true,
+  hour: true
+};
 
 var cachedReports = {};
 var inProgress = null;
@@ -204,6 +213,11 @@ exports.idToStr = function(input)
 exports.getTime = function(date)
 {
   return (/^-?[0-9]+$/).test(date) ? parseInt(date, 10) : Date.parse(date);
+};
+
+exports.getInterval = function(interval)
+{
+  return VALID_INTERVALS[interval] ? interval : 'month';
 };
 
 exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit)

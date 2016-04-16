@@ -1,0 +1,214 @@
+<div class="qiResults-details">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <%- t('qiResults', 'PANEL:TITLE:details:order') %>
+        </div>
+        <div class="panel-details">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:orderNo') %></div>
+              <div class="prop-value"><%- model.orderNo %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:nc12') %></div>
+              <div class="prop-value"><%- model.nc12 %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:productFamily') %></div>
+              <div class="prop-value"><%- model.productFamily %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:productName') %></div>
+              <div class="prop-value"><%= model.productName %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:division') %></div>
+              <div class="prop-value"><%= model.division %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-<%- model.ok ? 'success' : 'danger' %>">
+        <div class="panel-heading">
+          <%- t('qiResults', 'PANEL:TITLE:details:inspection') %>
+        </div>
+        <div class="panel-details">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:kind') %></div>
+              <div class="prop-value"><%= model.kind %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:inspectedAt') %></div>
+              <div class="prop-value"><%= model.inspectedAt %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:inspector') %></div>
+              <div class="prop-value"><%- model.inspector %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:qtyInspected') %></div>
+              <div class="prop-value"><%- model.qtyInspected %></div>
+            </div>
+            <% if (!model.ok) { %>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:qtyToFix') %></div>
+              <div class="prop-value"><%- model.qtyToFix %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:qtyNok') %></div>
+              <div class="prop-value"><%- model.qtyNok %></div>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <%- t('qiResults', 'PANEL:TITLE:details:extra') %>
+        </div>
+        <div class="panel-details">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:createdAt') %></div>
+              <div class="prop-value"><%= model.createdAt %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:creator') %></div>
+              <div class="prop-value"><%- model.creator %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:updatedAt') %></div>
+              <div class="prop-value"><%= model.updatedAt || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:updater') %></div>
+              <div class="prop-value"><%- model.updater %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% if (!model.ok) { %>
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <%- t('qiResults', 'PANEL:TITLE:details:inspection:nok') %>
+        </div>
+        <div class="panel-details">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:errorCategory') %></div>
+              <div class="prop-value"><%= model.errorCategory || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:faultCode') %></div>
+              <div class="prop-value"><%- model.faultCode || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:faultDescription') %></div>
+              <div class="prop-value text-lines"><%= model.faultDescription || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:problem') %></div>
+              <div class="prop-value text-lines"><%= model.problem || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:immediateActions') %></div>
+              <div class="prop-value text-lines"><%= model.immediateActions || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:immediateResults') %></div>
+              <div class="prop-value text-lines"><%= model.immediateResults || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:rootCause') %></div>
+              <div class="prop-value text-lines"><%= model.rootCause || '-' %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <%- t('qiResults', 'PANEL:TITLE:details:attachments') %>
+        </div>
+        <div class="panel-body qiResults-details-attachments">
+          <div class="qiResults-details-attachment">
+            <h3>OK</h3>
+            <% if (model.okFile) { %>
+            <a href="/qi/results/<%- model._id %>/attachments/okFile">
+              <% if (model.okFile.icon === 'file-image-o') { %>
+              <img src="/qi/results/<%- model._id %>/attachments/okFile?r=<%- model.okFile._id %>">
+              <% } else { %>
+              <i class="fa fa-<%- model.okFile.icon %>"></i>
+              <% } %>
+              <span><%= model.okFile.name %></span>
+            </a>
+            <% } else { %>
+            <i class="fa fa-ban"></i>
+            <% } %>
+          </div>
+          <div class="qiResults-details-attachment">
+            <h3>NOK</h3>
+            <% if (model.nokFile) { %>
+            <a href="/qi/results/<%- model._id %>/attachments/nokFile">
+              <% if (model.nokFile.icon === 'file-image-o') { %>
+              <img src="/qi/results/<%- model._id %>/attachments/nokFile?r=<%- model.nokFile._id %>">
+              <% } else { %>
+              <i class="fa fa-<%- model.nokFile.icon %>"></i>
+              <% } %>
+              <span><%= model.nokFile.name %></span>
+            </a>
+            <% } else { %>
+            <i class="fa fa-ban"></i>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%- t('qiResults', 'PANEL:TITLE:details:actions') %>
+    </div>
+    <% if (model.correctiveActions.length) { %>
+    <table class="table table-bordered table-condensed table-hover">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('qiResults', 'correctiveActions:#') %></th>
+        <th class="is-min"><%- t('qiResults', 'correctiveActions:status') %></th>
+        <th class="is-min"><%- t('qiResults', 'correctiveActions:when') %></th>
+        <th><%- t('qiResults', 'correctiveActions:who') %></th>
+        <th><%- t('qiResults', 'correctiveActions:what') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.correctiveActions.forEach(function(action, i) { %>
+      <tr>
+        <td class="is-min"><%- i + 1 %></td>
+        <td class="is-min"><%= action.status %></td>
+        <td class="is-min"><%= action.when %></td>
+        <td><%= action.who %></td>
+        <td class="text-lines"><%= action.what %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+    <% } else { %>
+    <div class="panel-body">
+      <p><%- t('qiResults', 'correctiveActions:empty') %></p>
+    </div>
+    <% } %>
+  </div>
+  <% } %>
+</div>

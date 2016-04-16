@@ -66,6 +66,7 @@ exports.modules = [
   'sapGui/importer',
   'isaPalletKinds',
   'isa',
+  'qi',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -110,7 +111,8 @@ exports.events = {
       'users.login', 'users.logout',
       '*.added', '*.edited',
       'kaizen.*.added', 'kaizen.*.edited',
-      'opinionSurveys.*.added', 'opinionSurveys.*.edited'
+      'opinionSurveys.*.added', 'opinionSurveys.*.edited',
+      'qi.*.added', 'qi.*.edited'
     ],
     info: [
       'events.**',
@@ -127,7 +129,8 @@ exports.events = {
       'production.lockFailure',
       'prodDowntimes.confirmedEdited',
       'kaizen.*.deleted',
-      'opinionSurveys.*.deleted'
+      'opinionSurveys.*.deleted',
+      'qi.*.deleted'
     ],
     error: [
       '*.syncFailed',
@@ -141,7 +144,8 @@ exports.events = {
     'opinionSurveys.responses.added',
     'opinionSurveys.omrResults.edited',
     'opinionSurveys.actions.added','opinionSurveys.actions.edited',
-    'prodDowntimeAlerts.added'
+    'prodDowntimeAlerts.added',
+    'qi.results.added', 'qi.results.edited'
   ]
 };
 
@@ -185,7 +189,8 @@ exports.pubsub = {
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',
     'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted',
     'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
-    'isaLineStates.**', 'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated'
+    'isaLineStates.**', 'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
+    'qi.**'
   ]
 };
 
@@ -215,7 +220,8 @@ exports.mongoose = {
     'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion',
     'opinionSurveyScanTemplate', 'opinionSurveyOmrResult',
     'cag', 'cagGroup', 'cagPlan',
-    'isaPalletKind', 'isaLineState', 'isaEvent', 'isaRequest', 'isaShiftPersonnel'
+    'isaPalletKind', 'isaLineState', 'isaEvent', 'isaRequest', 'isaShiftPersonnel',
+    'qiKind', 'qiErrorCategory', 'qiFault', 'qiActionStatus', 'qiResult'
   ]
 };
 exports.mongoose.options.server.poolSize = 15;
@@ -263,7 +269,8 @@ exports.user = {
     'DOCUMENTS:ACTIVATE', 'DOCUMENTS:VIEW', 'DOCUMENTS:MANAGE',
     'OPINION_SURVEYS:MANAGE',
     'PROD_DOWNTIME_ALERTS:VIEW', 'PROD_DOWNTIME_ALERTS:MANAGE',
-    'ISA:VIEW', 'ISA:MANAGE', 'ISA:WHMAN'
+    'ISA:VIEW', 'ISA:MANAGE', 'ISA:WHMAN',
+    'QI:INSPECTOR', 'QI:RESULTS:VIEW', 'QI:RESULTS:MANAGE', 'QI:DICTIONARIES:VIEW', 'QI:DICTIONARIES:MANAGE'
   ]
 };
 
@@ -395,6 +402,10 @@ exports.kaizen = {
 
 exports.suggestions = {
   attachmentsDest: DATA_PATH + '/suggestions-attachments'
+};
+
+exports.qi = {
+  attachmentsDest: DATA_PATH + '/qi-attachments'
 };
 
 exports.orders = {

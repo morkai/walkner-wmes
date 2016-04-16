@@ -1,0 +1,19 @@
+<div class="panel panel-primary">
+  <div class="panel-heading"><%- t('qiFaults', 'PANEL:TITLE:details') %></div>
+  <div class="panel-details">
+    <div class="props first">
+      <div class="prop">
+        <div class="prop-name"><%- t('qiFaults', 'PROPERTY:_id') %></div>
+        <div class="prop-value"><%= model._id %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('qiFaults', 'PROPERTY:name') %></div>
+        <div class="prop-value"><%= model.name %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- t('qiFaults', 'PROPERTY:description') %></div>
+        <div class="prop-value text-lines"><%= model.description %></div>
+      </div>
+    </div>
+  </div>
+</div>

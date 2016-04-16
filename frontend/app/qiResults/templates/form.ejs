@@ -1,0 +1,171 @@
+<form class="qiResults-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-<%- model.ok ? 'success' : 'danger' %>">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body <%- model.ok ? 'has-lastElementRow' : '' %>">
+      <div class="row">
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- t('qiResults', 'PROPERTY:orderNo') %></label>
+          <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control no-controls" type="number" required min="100000000" max="999999999">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-nc12" class="control-label"><%- t('qiResults', 'PROPERTY:nc12') %></label>
+          <input id="<%- idPrefix %>-nc12" name="nc12" class="form-control" type="text" required readonly>
+        </div>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-productFamily" class="control-label"><%- t('qiResults', 'PROPERTY:productFamily') %></label>
+          <input id="<%- idPrefix %>-productFamily" name="productFamily" class="form-control" type="text" required readonly pattern="^[A-Z0-9]{6}$">
+        </div>
+        <div class="col-lg-4 form-group">
+          <label for="<%- idPrefix %>-productName" class="control-label"><%- t('qiResults', 'PROPERTY:productName') %></label>
+          <input id="<%- idPrefix %>-productName" name="productName" class="form-control" type="text" required readonly>
+        </div>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-division" class="control-label"><%- t('qiResults', 'PROPERTY:division') %></label>
+          <input id="<%- idPrefix %>-division" name="division" class="form-control" type="text" required readonly>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 form-group">
+          <label for="<%- idPrefix %>-kind" class="control-label"><%- t('qiResults', 'PROPERTY:kind') %></label>
+          <select id="<%- idPrefix %>-kind" name="kind" class="form-control" required>
+            <% kinds.forEach(function(kind) { %>
+            <option value="<%- kind.id %>"><%= kind.text %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-inspectedAt" class="control-label is-required"><%- t('qiResults', 'PROPERTY:inspectedAt') %></label>
+          <input id="<%- idPrefix %>-inspectedAt" name="inspectedAt" class="form-control" type="date" min="<%- inspectedAtMin %>" max="<%- inspectedAtMax %>">
+        </div>
+        <div class="col-lg-6 form-group">
+          <label for="<%- idPrefix %>-inspector" class="control-label"><%- t('qiResults', 'PROPERTY:inspector') %></label>
+          <select id="<%- idPrefix %>-inspector" name="inspector" class="form-control" required>
+            <% inspectors.forEach(function(inspector) { %>
+            <option value="<%- inspector.id %>"><%= inspector.text %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-qtyInspected" class="control-label is-required"><%- t('qiResults', 'PROPERTY:qtyInspected') %></label>
+          <input id="<%- idPrefix %>-qtyInspected" name="qtyInspected" class="form-control" type="number" required min="1">
+        </div>
+        <% if (!model.ok) { %>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-qtyToFix" class="control-label is-required"><%- t('qiResults', 'PROPERTY:qtyToFix') %></label>
+          <input id="<%- idPrefix %>-qtyToFix" name="qtyToFix" class="form-control" type="number" required min="0">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-qtyNok" class="control-label is-required"><%- t('qiResults', 'PROPERTY:qtyNok') %></label>
+          <input id="<%- idPrefix %>-qtyNok" name="qtyNok" class="form-control" type="number" required min="0">
+        </div>
+        <% } %>
+      </div>
+      <% if (!model.ok) { %>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="form-group">
+            <label for="<%- idPrefix %>-errorCategory" class="control-label"><%- t('qiResults', 'PROPERTY:errorCategory') %></label>
+            <select id="<%- idPrefix %>-errorCategory" name="errorCategory" class="form-control" required>
+              <% errorCategories.forEach(function(errorCategory) { %>
+              <option value="<%- errorCategory.id %>"><%= errorCategory.text %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-group not-last">
+            <label for="<%- idPrefix %>-faultCode" class="control-label"><%- t('qiResults', 'PROPERTY:faultCode') %></label>
+            <select id="<%- idPrefix %>-faultCode" name="faultCode" class="form-control" required>
+              <% faults.forEach(function(fault) { %>
+              <option value="<%- fault.id %>"><%= fault.text %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-8 form-group">
+          <label for="<%- idPrefix %>-faultDescription" class="control-label"><%- t('qiResults', 'PROPERTY:faultDescription') %></label>
+          <textarea id="<%- idPrefix %>-faultDescription" name="faultDescription" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-problem" class="control-label"><%- t('qiResults', 'PROPERTY:problem') %></label>
+        <textarea id="<%- idPrefix %>-problem" name="problem" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 form-group">
+          <label for="<%- idPrefix %>-immediateActions" class="control-label"><%- t('qiResults', 'PROPERTY:immediateActions') %></label>
+          <textarea id="<%- idPrefix %>-immediateActions" name="immediateActions" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="col-lg-4 form-group">
+          <label for="<%- idPrefix %>-immediateResults" class="control-label"><%- t('qiResults', 'PROPERTY:immediateResults') %></label>
+          <textarea id="<%- idPrefix %>-immediateResults" name="immediateResults" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="col-lg-4 form-group">
+          <label for="<%- idPrefix %>-rootCause" class="control-label"><%- t('qiResults', 'PROPERTY:rootCause') %></label>
+          <textarea id="<%- idPrefix %>-rootCause" name="rootCause" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+      <% if (model.okFile || model.nokFile) { %>
+      <div class="message message-inline message-warning"><%- t('qiResults', 'FORM:attachments:update') %></div>
+      <div class="row">
+        <div class="col-lg-2 form-group">
+          <label class="control-label"><%- t('qiResults', 'FORM:okFile:current') %></label>
+          <p class="form-control-static">
+            <% if (model.okFile) { %>
+            <a href="/qi/results/<%- model._id %>/attachments/okFile"><%= model.okFile.name %></a>
+            <% } else { %>
+            -
+            <% } %>
+          </p>
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label"><%- t('qiResults', 'FORM:nokFile:current') %></label>
+          <p class="form-control-static">
+            <% if (model.okFile) { %>
+            <a href="/qi/results/<%- model._id %>/attachments/okFile"><%= model.okFile.name %></a>
+            <% } else { %>
+            -
+            <% } %>
+          </p>
+        </div>
+      </div>
+      <% } %>
+      <div class="row">
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-okFile" class="control-label"><%- t('qiResults', 'FORM:okFile:new') %></label>
+          <input id="<%- idPrefix %>-okFile" name="okFile" class="form-control" type="file">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-nokFile" class="control-label"><%- t('qiResults', 'FORM:nokFile:new') %></label>
+          <input id="<%- idPrefix %>-nokFile" name="nokFile" class="form-control" type="file">
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-condensed qiResults-form-correctiveActions">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('qiResults', 'correctiveActions:#') %></th>
+            <th class="is-min"><%- t('qiResults', 'correctiveActions:status') %></th>
+            <th class="is-min"><%- t('qiResults', 'correctiveActions:when') %></th>
+            <th class="is-min"><%- t('qiResults', 'correctiveActions:who') %></th>
+            <th><%- t('qiResults', 'correctiveActions:what') %></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-actions"></tbody>
+        </table>
+      </div>
+      <button id="<%- idPrefix %>-addAction" class="btn btn-default" type="button">
+        <i class="fa fa-plus"></i><span><%- t('qiResults', 'correctiveActions:add') %></span>
+      </button>
+      <% } %>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+        <i class="fa fa-spinner fa-spin hidden"></i>
+        <span><%- formActionText %></span>
+      </button>
+    </div>
+  </div>
+</form>

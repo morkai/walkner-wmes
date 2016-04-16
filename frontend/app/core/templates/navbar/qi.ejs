@@ -1,0 +1,20 @@
+<li data-online data-loggedin data-module="qi" class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('core', 'NAVBAR:QI:main') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:QI:results') %>
+    <li data-privilege="QI:RESULTS:VIEW"><a href="#qi/results"><%- t('core', 'NAVBAR:QI:results:all') %></a>
+    <li data-privilege="QI:RESULTS:VIEW" class="navbar-with-button"><a href="#qi/results;ok"><%- t('core', 'NAVBAR:QI:results:good') %></a><button class="btn btn-success" data-privilege="QI:INSPECTOR QI:MANAGE" data-href="#qi/results;add?ok"><i class="fa fa-plus"></i></button>
+    <li data-privilege="QI:RESULTS:VIEW" class="navbar-with-button"><a href="#qi/results;nok"><%- t('core', 'NAVBAR:QI:results:bad') %></a><button class="btn btn-danger" data-privilege="QI:INSPECTOR QI:MANAGE" data-href="#qi/results;add?nok"><i class="fa fa-plus"></i></button>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:QI:reports') %>
+    <li><a href="#qi/reports/count"><%- t('core', 'NAVBAR:QI:reports:count') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:QI:dictionaries') %>
+    <li data-privilege="QI:DICTIONARIES:VIEW"><a href="#qi/kinds"><%- t('core', 'NAVBAR:QI:kinds') %></a>
+    <li data-privilege="QI:DICTIONARIES:VIEW"><a href="#qi/errorCategories"><%- t('core', 'NAVBAR:QI:errorCategories') %></a>
+    <li data-privilege="QI:DICTIONARIES:VIEW"><a href="#qi/faults"><%- t('core', 'NAVBAR:QI:faults') %></a>
+    <li data-privilege="QI:DICTIONARIES:VIEW"><a href="#qi/actionStatuses"><%- t('core', 'NAVBAR:QI:actionStatuses') %></a>
+  </ul>

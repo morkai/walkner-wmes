@@ -16,10 +16,7 @@ module.exports = function startCoreRoutes(app, express)
   var ROOT_USER = JSON.stringify(_.omit(userModule.root, 'password'));
   var GUEST_USER = JSON.stringify(userModule.guest);
   var PRIVILEGES = JSON.stringify(userModule.config.privileges);
-  var MODULES = JSON.stringify(app.options.modules.map(function(module)
-  {
-    return module.id || module;
-  }));
+  var MODULES = JSON.stringify(app.options.modules.map(m => m.id || m));
   var DASHBOARD_URL_AFTER_LOG_IN = JSON.stringify(app.options.dashboardUrlAfterLogIn || '/');
 
   app.broker.subscribe('updater.newVersion', reloadRequirejsConfig).setFilter(function(message)

@@ -6,9 +6,9 @@
   <ul class="dropdown-menu">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:SUGGESTIONS:orders') %>
     <li data-module="suggestions"><a href="#suggestions"><%- t('core', 'NAVBAR:SUGGESTIONS:all') %></a>
-    <li data-module="suggestions"><a href="#suggestions?status=in=(new,accepted,todo,inProgress,paused)&sort(-date)&limit(15)"><%- t('core', 'NAVBAR:SUGGESTIONS:open') %></a>
-    <li data-module="suggestions"><a href="#suggestions?observers.user.id=mine&sort(-date)&limit(15)"><%- t('core', 'NAVBAR:SUGGESTIONS:mine') %></a>
-    <li data-module="suggestions"><a href="#suggestions?observers.user.id=unseen&sort(-date)&limit(15)"><%- t('core', 'NAVBAR:SUGGESTIONS:unseen') %></a>
+    <li data-module="suggestions"><a href="#suggestions?status=in=(new,accepted,todo,inProgress,paused)&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:SUGGESTIONS:open') %></a>
+    <li data-module="suggestions"><a href="#suggestions?observers.user.id=mine&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:SUGGESTIONS:mine') %></a>
+    <li data-module="suggestions"><a href="#suggestions?observers.user.id=unseen&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:SUGGESTIONS:unseen') %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:SUGGESTIONS:reports') %>
     <li data-module="suggestions"><a href="#suggestionCountReport"><%- t('core', 'NAVBAR:SUGGESTIONS:reports:count') %></a>

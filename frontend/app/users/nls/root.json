@@ -141,6 +141,11 @@
     "PRIVILEGE:ISA:VIEW": "ISA: view",
     "PRIVILEGE:ISA:MANAGE": "ISA: manage",
     "PRIVILEGE:ISA:WHMAN": "ISA: warehouseman",
+    "PRIVILEGE:QI:INSPECTOR": "QI: inspector",
+    "PRIVILEGE:QI:RESULTS:VIEW": "QI: view results",
+    "PRIVILEGE:QI:RESULTS:MANAGE": "QI: manage results",
+    "PRIVILEGE:QI:DICTIONARIES:VIEW": "QI: view dictionaries",
+    "PRIVILEGE:QI:DICTIONARIES:MANAGE": "QI: manage dictionaries",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System"

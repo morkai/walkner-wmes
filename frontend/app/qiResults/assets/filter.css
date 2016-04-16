@@ -1,0 +1,19 @@
+.qiResults-filter input[name="order"] {
+  width: 109px;
+}
+.qiResults-filter input[name="productFamily"] {
+  width: 92px;
+}
+.qiResults-filter input[name="division"] {
+  width: 92px;
+}
+.qiResults-filter-result > .btn {
+  width: 60px;
+  font-weight: bold;
+}
+.qiResults-filter-ok {
+  color: #00af00!important;
+}
+.qiResults-filter-nok {
+  color: #e00!important;
+}

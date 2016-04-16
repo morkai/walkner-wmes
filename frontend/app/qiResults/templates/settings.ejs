@@ -1,0 +1,13 @@
+<form class="settings qi-settings">
+  <div class="list-group">
+    <a class="list-group-item" href="#qi/settings?tab=reports" data-tab="reports"><%- t('qiResults', 'settings:tab:reports') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="reports">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-maxNokPerDay"><%- t('qiResults', 'settings:maxNokPerDay') %></label>
+        <input id="<%- idPrefix %>-maxNokPerDay" class="form-control" name="qi.maxNokPerDay" type="number" min="0" max="1000">
+      </div>
+    </div>
+  </div>
+</form>

@@ -47,6 +47,7 @@
 @import url("../app/prodDowntimeAlerts/assets/main.css");
 @import url("../app/changelog/assets/main.css");
 @import url("../app/isa/assets/main.css");
+@import url("../app/qiResults/assets/main.css");
 
 #app-loading {
   position: absolute;

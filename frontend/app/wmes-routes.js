@@ -60,7 +60,12 @@ define([
   './cags/routes',
   './changelog/routes',
   './isaPalletKinds/routes',
-  './isa/routes'
+  './isa/routes',
+  './qiResults/routes',
+  './qiKinds/routes',
+  './qiErrorCategories/routes',
+  './qiFaults/routes',
+  './qiActionStatuses/routes'
 ], function()
 {
   'use strict';

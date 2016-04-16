@@ -80,6 +80,28 @@ define([
         {
           e.target.disabled = false;
         });
+      },
+      'mouseup .btn[data-href]': function(e)
+      {
+        if (e.button === 2)
+        {
+          return;
+        }
+
+        var href = e.currentTarget.dataset.href;
+
+        if (e.ctrlKey || e.button === 1)
+        {
+          window.open(href);
+        }
+        else
+        {
+          window.location.href = href;
+        }
+
+        document.body.click();
+
+        return false;
       }
     }
 
@@ -366,13 +388,18 @@ define([
 
     dropdownHeaders.forEach(function($li)
     {
-      $li.toggle(this.hasVisibleSiblings($li, 'next'));
-    }, this);
+      $li.toggle(navbarView.hasVisibleSiblings($li, 'next'));
+    });
 
     dividers.forEach(function($li)
     {
-      $li.toggle(this.hasVisibleSiblings($li, 'prev') && this.hasVisibleSiblings($li, 'next'));
-    }, this);
+      $li.toggle(navbarView.hasVisibleSiblings($li, 'prev') && navbarView.hasVisibleSiblings($li, 'next'));
+    });
+
+    this.$('.btn[data-privilege]').each(function()
+    {
+      this.style.display = user.isAllowedTo.apply(user, this.dataset.privilege.split(' ')) ? '' : 'none';
+    });
 
     function hideChildEntries($parentLi)
     {
