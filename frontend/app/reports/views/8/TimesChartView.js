@@ -75,7 +75,9 @@ define([
 
     createChart: function()
     {
-      var series = this.serializeSeries();
+      var seriesAndCategories = this.serializeSeriesAndCategories();
+      var series = seriesAndCategories.series;
+      var categories = seriesAndCategories.categories;
       var yAxis = this.serializeYAxis(series);
 
       this.chart = new Highcharts.Chart({
@@ -85,27 +87,48 @@ define([
           height: 450
         },
         exporting: {
-          filename: t.bound('reports', '8:filename:dirIndir'),
+          filename: t.bound('reports', '8:filename:times'),
           chartOptions: {
-            title: false
-          }
+            title: false,
+            spacing: [0, 0, 0, 0]
+          },
+          sourceWidth: 1754 * 0.75,
+          sourceHeight: 1240 * 0.75
         },
         title: false,
         noData: {},
         xAxis: {
-          type: 'datetime'
+          type: categories.length ? 'category' : 'datetime',
+          categories: categories.length ? categories : undefined
         },
         yAxis: yAxis,
         tooltip: {
           shared: true,
           valueDecimals: 2,
-          headerFormatter: formatTooltipHeader.bind(this)
+          headerFormatter: categories.length ? undefined : formatTooltipHeader.bind(this)
         },
         legend: {
-          enabled: true,
+          enabled: !categories.length,
           itemStyle: {
             fontSize: '12px',
             lineHeight: '14px'
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: !!categories.length,
+              formatter: function()
+              {
+                return this.y === 0 ? '' : Highcharts.numberFormat(this.y, 1).replace(/.0$/, '');
+              },
+              style: {
+                color: '#000',
+                fontSize: '12px',
+                fontWeight: 'normal',
+                textShadow: 'none'
+              }
+            }
           }
         },
         series: series
@@ -175,12 +198,14 @@ define([
       return chartYAxis;
     },
 
-    serializeSeries: function()
+    serializeSeriesAndCategories: function()
     {
       var report = this.model;
       var timeUnit = t('reports', '8:times:unit:' + report.query.get('unit'));
       var summary = report.get('summary');
       var data = report.get('groups');
+      var single = data && data.plan.totalVolumeProduced.length === 1;
+      var usedYAxis = {};
       var chartSeries = [];
       var metrics = {
         timeAvailablePerShift: null,
@@ -198,7 +223,7 @@ define([
         coTime: null,
         downtime: null,
         plan: {
-          type: 'line',
+          type: single ? 'column' : 'line',
           yAxis: 'pce',
           zIndex: 3,
           tooltip: {
@@ -206,7 +231,7 @@ define([
           }
         },
         efficiency: {
-          type: 'line',
+          type: single ? 'column' : 'line',
           yAxis: 'percent',
           zIndex: 3,
           tooltip: {
@@ -243,7 +268,17 @@ define([
         addSeries('real', _.clone(options), id, isAor);
       });
 
-      return chartSeries;
+      usedYAxis = Object.keys(usedYAxis);
+
+      if (single && usedYAxis.length === 1 && chartSeries.length)
+      {
+        return this.serializeSingleSeriesAndCategories(chartSeries, usedYAxis[0]);
+      }
+
+      return {
+        categories: [],
+        series: chartSeries
+      };
 
       function addSeries(planReal, options, metricId, isAor)
       {
@@ -266,12 +301,92 @@ define([
           return;
         }
 
+        options.metricId = metricId;
+        options.planReal = planReal;
         options.metricLabel = isAor ? aors.get(metricId).getLabel() : t('reports', '8:times:' + metricId);
         options.name = options.metricLabel + ' ' + t('reports', '8:suffix:' + planReal);
         options.color = report.getColor('times', options.id);
+        options.groupPadding = single ? 0 : 0.2;
+
+        usedYAxis[options.yAxis] = true;
 
         chartSeries.push(options);
       }
+    },
+
+    serializeSingleSeriesAndCategories: function(chartSeries, yAxis)
+    {
+      var categories = {};
+      var series = [{
+        id: 'plan',
+        type: 'column',
+        name: t('reports', '8:column:plan'),
+        yAxis: yAxis,
+        data: [],
+        tooltip: chartSeries[0].tooltip,
+        grouping: false,
+        borderWidth: 0,
+        groupPadding: 0,
+        color: 'rgba(0, 170, 255, 0.5)'
+      }, {
+        id: 'real',
+        type: 'column',
+        name: t('reports', '8:column:real'),
+        yAxis: yAxis,
+        data: [],
+        tooltip: chartSeries[0].tooltip,
+        grouping: false,
+        borderWidth: 0,
+        color: 'rgba(0, 170, 255, 1)'
+      }];
+
+      _.forEach(chartSeries, function(chartSerie)
+      {
+        if (!categories[chartSerie.metricId])
+        {
+          categories[chartSerie.metricId] = {
+            label: chartSerie.metricLabel,
+            plan: null,
+            real: null
+          };
+        }
+
+        categories[chartSerie.metricId][chartSerie.planReal] = chartSerie.data[0].y;
+      });
+
+      _.forEach(categories, function(category)
+      {
+        var planInside = category.plan < category.real;
+
+        series[0].data.push({
+          y: category.plan,
+          dataLabels: {
+            inside: planInside
+          }
+        });
+        series[1].data.push({
+          y: category.real,
+          dataLabels: {
+            inside: !planInside,
+            style: {
+              fontWeight: 'bold'
+            }
+          },
+          color: category.plan === null ? undefined : planInside ? '#d9534f' : '#5cb85c'
+        });
+      });
+
+      var seriesAndCategories = {
+        categories: _.map(categories, function(category)
+        {
+          return category.label;
+        }),
+        series: series
+      };
+
+      console.log(seriesAndCategories);
+
+      return seriesAndCategories;
     },
 
     onModelLoading: function()
