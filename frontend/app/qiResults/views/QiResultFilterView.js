@@ -103,6 +103,7 @@ define([
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
       var productFamily = this.$id('productFamily').val().replace(/[^0-9A-Za-z]+/g, ' ').replace(/\s+/, ', ');
+      var inspector = this.$id('inspector').val();
 
       if (result === 'ok')
       {
@@ -141,12 +142,12 @@ define([
         selector.push({name: 'regex', args: ['nc12', '^' + order]});
       }
 
-      if (productFamily.length)
+      if (inspector.length)
       {
-        selector.push({name: 'eq', args: ['productFamily', productFamily]});
+        selector.push({name: 'eq', args: ['inspector.id', inspector]});
       }
 
-      ['division', 'kind', 'errorCategory', 'faultCode'].forEach(function(property)
+      ['productFamily', 'division', 'kind', 'errorCategory', 'faultCode'].forEach(function(property)
       {
         var value = this.$id(property).val();
 
