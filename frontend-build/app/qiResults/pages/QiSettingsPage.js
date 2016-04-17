@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/i18n","app/core/util/bindLoadingMessage","app/core/View","../dictionaries","../views/QiSettingsView"],function(i,e,n,t,s){"use strict";return n.extend({layoutName:"page",breadcrumbs:function(){return[{label:i.bound("qiResults","BREADCRUMBS:base")},i.bound("qiResults","BREADCRUMBS:settings")]},initialize:function(){this.defineModels(),this.defineViews()},destroy:function(){t.unload()},defineModels:function(){this.model=e(t.settings,this)},defineViews:function(){this.view=new s({initialTab:this.options.initialTab,settings:this.model})},load:function(i){return i(t.load())},afterRender:function(){t.load()}})});

@@ -1,6 +1,46 @@
-<h1>v0.84.3</h1>
-<h2><%- time.format('2016-04-03', 'LL') %></h2>
+<h1>v0.85.0</h1>
+<h2><%- time.format('2016-04-16', 'LL') %></h2>
+<h3>Inspekcja Jakości</h3>
+<ul>
+  <li>Dodano nowy moduł.</li>
+</ul>
+<h3>Raporty > Lean</h3>
+<ul>
+  <li>Zmieniono wykres w drugiej kolumnie tak, aby na osi x wyświetlał kategorie zamiast daty, jeżeli wygenerowano dane
+    tylko dla jednej grupy (jeden dzień, tydzień lub miesiąc) oraz do wyświetlania wybrano wskaźniki o takiej samej jednostce
+    (godz., szt. lub %).</li>
+</ul>
+<h3>Baza testów</h3>
+<ul>
+  <li>Dodano wsparcie dla aplikacji Walkner Xiconf v2.19.0.</li>
+  <li>Dodano możliwość ładowania paczek aktualizacji aplikacji Walkner Xiconf z poziomu ekranu 'Ustawień'.</li>
+</ul>
+<h3>Formatka operatora</h3>
+<ul>
+  <li>Poprawiono błąd mogący powodować utratę operacji podczas zapisywania kilku operacji na raz, jeżeli zapisywanie
+    wcześniejszej operacji nie powiodło się, bo została zapisana wcześniej (duplikat).</li>
+  <li>Poprawiono błąd powodujący, że czas sprawdzania czy uruchomiono kilka instancji formatki wynosił 2ms zamiast 2s.</li>
+  <li>Dodano możliwość zgłaszania sugestii (usprawnień) po kliknięciu ikonki <i class="fa fa-lightbulb-o"></i>.</li>
+</ul>
+<h3>Dokumentacja</h3>
+<ul>
+  <li>Dodano możliwość zgłaszania sugestii (usprawnień) po kliknięciu ikonki <i class="fa fa-lightbulb-o"></i>.</li>
+</ul>
+<h3>ZPW/Usprawnienia</h3>
+<ul>
+  <li>Poprawiono brakujące tłumaczenie dla właściwości 'Pozycja' w słowniku 'Kategorie'.</li>
+  <li>Dodano oznaczenia '*' dla wszystkich wymaganych pól w słownikach.</li>
+</ul>
 <h3>Użytkownicy</h3>
 <ul>
-  <li>Poprawiono błąd wywalający serwer przy dodawaniu/edycji użytkownika, jeżeli ustawiono istniejący już login.</li>
+  <li>Poprawiono błąd powodujący aktualizację tylko jednej aktywnej sesji zmodyfikowanego użytkownika.</li>
+</ul>
+<h3>FTE/Plany godzinowe</h3>
+<ul>
+  <li>Poprawiono błąd uniemożliwiający stworzenie nowego wpisu w przeglądarce IE11.</li>
+</ul>
+<h3>Inne</h3>
+<ul>
+  <li>Zmieniono wyświetlanie akcji w listach tak, aby zajmowały mniej miejsca i zwiększono domyślną ilość rekordów na stronę z 15 na 20.</li>
+  <li>Zaktualizowano bibliotekę do generowania wykresów.</li>
 </ul>

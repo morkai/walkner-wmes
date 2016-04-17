@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/core/pages/DetailsPage","app/core/util/pageActions","app/qiResults/dictionaries","../views/QiResultDetailsView"],function(e,t,i,a){"use strict";return e.extend({baseBreadcrumb:!0,DetailsView:a,actions:function(){var e=this.model,i=[];return e.canEdit()&&i.push(t.edit(e,!1)),e.canDelete()&&i.push(t["delete"](e,!1)),i},destroy:function(){e.prototype.destroy.call(this),i.unload()},load:function(e){return e(this.model.fetch(),i.load())},afterRender:function(){e.prototype.afterRender.call(this),i.load()}})});

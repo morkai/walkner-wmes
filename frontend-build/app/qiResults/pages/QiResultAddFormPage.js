@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/core/pages/AddFormPage","app/qiResults/dictionaries","../views/QiResultFormView"],function(e,t,r){"use strict";return e.extend({baseBreadcrumb:!0,FormView:r,load:function(e){return e(t.load())},destroy:function(){e.prototype.destroy.call(this),t.unload()},afterRender:function(){e.prototype.afterRender.call(this),t.load()}})});

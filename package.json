@@ -2,11 +2,11 @@
   "private": true,
   "guid": "A0974235-9E21-49BB-8D01-CA7A932A6EEB",
   "name": "walkner-wmes",
-  "version": "0.84.3",
+  "version": "0.85.0",
   "updater": {
     "wmes": {
-      "backend": 166,
-      "frontend": 181,
+      "backend": 168,
+      "frontend": 182,
       "reports": 30,
       "attachments": 2,
       "importer-sap": 32,
@@ -45,7 +45,7 @@
     "bcrypt": "~0.8.5",
     "cookie": "~0.2.3",
     "cookie-parser": "~1.4.0",
-    "body-parser": "~1.14.1",
+    "body-parser": "~1.15.0",
     "methods": "~1.1.1",
     "express": "~4.13.3",
     "express-session": "~1.12.1",

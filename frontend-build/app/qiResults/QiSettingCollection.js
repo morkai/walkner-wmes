@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["../settings/SettingCollection","./QiSetting"],function(e,t){"use strict";return e.extend({model:t,topicSuffix:"qi.**",getValue:function(e){var t=this.get("qi."+e);return t?t.getValue():null},prepareValue:function(e,t){return parseInt(t,10)||0},getMaxNokPerDay:function(){return this.getValue("maxNokPerDay")||0}})});
