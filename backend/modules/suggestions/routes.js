@@ -7,6 +7,7 @@ var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
 var multer = require('multer');
+var contentDisposition = require('content-disposition');
 var countReport = require('./countReport');
 var summaryReport = require('./summaryReport');
 
@@ -328,7 +329,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
       var disposition = req.query.download ? 'attachment' : 'inline';
 
       res.type(attachment.type);
-      res.append('Content-Disposition', disposition + '; filename="' + attachment.name + '"');
+      res.append('Content-Disposition', contentDisposition(attachment.name, {disposition: disposition}));
       res.sendFile(path.join(module.config.attachmentsDest, attachment.path));
     });
   }

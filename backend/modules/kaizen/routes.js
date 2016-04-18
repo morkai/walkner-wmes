@@ -7,6 +7,7 @@ var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
 var multer = require('multer');
+var contentDisposition = require('content-disposition');
 var report = require('./report');
 var summaryReport = require('./summaryReport');
 
@@ -374,7 +375,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
       var disposition = req.query.download ? 'attachment' : 'inline';
 
       res.type(attachment.type);
-      res.append('Content-Disposition', disposition + '; filename="' + attachment.name + '"');
+      res.append('Content-Disposition', contentDisposition(attachment.name, {disposition: disposition}));
       res.sendFile(path.join(kaizenModule.config.attachmentsDest, attachment.path));
     });
   }

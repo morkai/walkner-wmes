@@ -7,6 +7,7 @@ var path = require('path');
 var _ = require('lodash');
 var step = require('h5.step');
 var multer = require('multer');
+var contentDisposition = require('content-disposition');
 var countReport = require('./countReport');
 
 module.exports = function setUpQiRoutes(app, qiModule)
@@ -314,7 +315,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
 
       if (disposition !== 'inline' || !/^image/.test(attachment.type))
       {
-        res.append('Content-Disposition', disposition + '; filename="' + attachment.name + '"');
+        res.append('Content-Disposition', contentDisposition(attachment.name, {disposition: disposition}));
       }
 
       res.sendFile(path.join(qiModule.config.attachmentsDest, attachment.path));
