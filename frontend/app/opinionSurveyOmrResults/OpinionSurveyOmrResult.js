@@ -61,7 +61,7 @@ define([
 
       if (!survey)
       {
-        survey = new OpinionSurvey(obj.survey._id ? obj.survey : {_id: obj.survey});
+        survey = new OpinionSurvey(obj.survey && obj.survey._id ? obj.survey : {_id: obj.survey});
       }
 
       if (!survey.cacheMaps)
