@@ -13,6 +13,7 @@ var fs = require('fs-extra');
 module.exports = function setUpOmr(app, module)
 {
   var INPUT_DIR_CALM_PERIOD = app.options.env !== 'development' ? (30 * 1000) : (5 * 1000);
+  var MAX_PARALLEL_PROCESSING = app.options.env !== 'development' ? 1 : 3;
   var SURVEY_PAGE_COUNT = 2;
   var INPUT_FILE_RE = /^[0-9]+\.(?:jpe?g)$/i;
 
@@ -146,7 +147,10 @@ module.exports = function setUpOmr(app, module)
       },
       function processInputScansStep()
       {
-        processNextInputScan(this.inputScans, this.next());
+        for (var i = 0; i < MAX_PARALLEL_PROCESSING; ++i)
+        {
+          processNextInputScan(this.inputScans, this.group());
+        }
       },
       function readRemainingFilesStep()
       {
