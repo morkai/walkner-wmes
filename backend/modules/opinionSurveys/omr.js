@@ -141,6 +141,7 @@ module.exports = function setUpOmr(app, module)
           inputScans.pop();
         }
 
+        this.config = config;
         this.inputScans = inputScans;
 
         setImmediate(this.next());
@@ -149,7 +150,7 @@ module.exports = function setUpOmr(app, module)
       {
         for (var i = 0; i < MAX_PARALLEL_PROCESSING; ++i)
         {
-          processNextInputScan(this.inputScans, this.group());
+          processNextInputScan(this.inputScans, this.config, this.group());
         }
       },
       function readRemainingFilesStep()
@@ -256,7 +257,7 @@ module.exports = function setUpOmr(app, module)
     exec(util.format(process.platform === 'win32' ? 'rmdir /S /Q "%s"' : 'rm -rf "%s"', dir), done || function() {});
   }
 
-  function processNextInputScan(inputScans, done)
+  function processNextInputScan(inputScans, config, done)
   {
     var inputScan = inputScans.shift();
 
@@ -275,7 +276,7 @@ module.exports = function setUpOmr(app, module)
       {
         var next = this.next();
 
-        processInputFile(inputFileName, scanIndex, responseId, function(err, result)
+        processInputFile(inputFileName, scanIndex, responseId, config, function(err, result)
         {
           results.push(result);
 
@@ -295,12 +296,12 @@ module.exports = function setUpOmr(app, module)
       handleResults(results, this.next());
     });
 
-    steps.push(processNextInputScan.bind(null, inputScans, done));
+    steps.push(processNextInputScan.bind(null, inputScans, config, done));
 
     step(steps);
   }
 
-  function processInputFile(inputFileName, scanIndex, responseId, done)
+  function processInputFile(inputFileName, scanIndex, responseId, config, done)
   {
     var resultId = module.generateId();
     var extName = path.extname(inputFileName);
@@ -394,6 +395,13 @@ module.exports = function setUpOmr(app, module)
 
         if (!qrCodes.length)
         {
+          if (config.qrCode)
+          {
+            result.qrCode = config.qrCode;
+
+            return;
+          }
+
           result.errorCode = 'DECODE_QR_CODE_FAILURE';
           result.errorMessage = "No QR codes detected.";
 
