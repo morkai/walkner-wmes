@@ -24,7 +24,7 @@ module.exports = function saveScanTemplateJpgRoute(app, module, req, res, next)
         return this.skip(express.createHttpError('INVALID_MIME_TYPE', 400));
       }
 
-      module.deskewImage(file.path, file.path, this.next());
+      module.deskewImage(file.path, file.path + '.skewed.jpg', this.next());
     },
     function resizeStep(err)
     {
@@ -33,7 +33,7 @@ module.exports = function saveScanTemplateJpgRoute(app, module, req, res, next)
         return this.skip(err);
       }
 
-      gm(file.path)
+      gm(file.path + '.skewed.jpg')
         .autoOrient()
         .quality(100)
         .resize(1280)
@@ -69,6 +69,7 @@ module.exports = function saveScanTemplateJpgRoute(app, module, req, res, next)
       if (file)
       {
         fs.unlink(file.path, _.noop);
+        fs.unlink(file.path + '.skewed.jpg', _.noop);
       }
     }
   );
