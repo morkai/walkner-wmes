@@ -24,9 +24,16 @@ define([
 
   router.map('/mechOrders/:id', canView, function(req)
   {
-    viewport.loadPage(['app/mechOrders/pages/MechOrderDetailsPage', nls], function(MechOrderDetailsPage)
-    {
-      return new MechOrderDetailsPage({modelId: req.params.id});
-    });
+    viewport.loadPage(
+      [
+        'app/mechOrders/pages/MechOrderDetailsPage',
+        'i18n!app/nls/orders',
+        'i18n!app/nls/mechOrders'
+      ],
+      function(MechOrderDetailsPage)
+      {
+        return new MechOrderDetailsPage({modelId: req.params.id});
+      }
+    );
   });
 });
