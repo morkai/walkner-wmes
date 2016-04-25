@@ -228,6 +228,11 @@ define([
 
       ['days', 'shifts', 'divisions', 'subdivisionTypes'].forEach(this.applyAllOptionsIfEmpty.bind(this, query));
 
+      if (query.prodLines.length)
+      {
+        query.prodLines = query.prodLines.split(',');
+      }
+
       delete query.visibleSeries;
 
       return query;

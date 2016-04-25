@@ -79,6 +79,45 @@ define([
       var series = seriesAndCategories.series;
       var categories = seriesAndCategories.categories;
       var yAxis = this.serializeYAxis(series);
+      var exporting = {
+        filename: t.bound('reports', '8:filename:times'),
+        chartOptions: {
+          title: false,
+          spacing: [0, 0, 0, 0]
+        },
+        sourceWidth: 1754 * 0.75,
+        sourceHeight: 1240 * 0.75
+      };
+
+      if (categories.length)
+      {
+        exporting.chartOptions.title = {
+          text: this.serializeSingleChartTitle(),
+          style: {
+            fontSize: '24px'
+          }
+        };
+        exporting.chartOptions.plotOptions = {
+          column: {
+            dataLabels: {
+              style: {
+                fontSize: '14px'
+              }
+            }
+          }
+        };
+        exporting.chartOptions.xAxis = [{
+          type: categories.length ? 'category' : 'datetime',
+          categories: categories.length ? categories : undefined,
+          labels: {
+            style: {
+              fontSize: '16px'
+            }
+          }
+        }];
+        exporting.sourceWidth = 1754 * 0.75;
+        exporting.sourceHeight = 1240 * 0.75;
+      }
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -86,15 +125,7 @@ define([
           plotBorderWidth: 1,
           height: 450
         },
-        exporting: {
-          filename: t.bound('reports', '8:filename:times'),
-          chartOptions: {
-            title: false,
-            spacing: [0, 0, 0, 0]
-          },
-          sourceWidth: 1754 * 0.75,
-          sourceHeight: 1240 * 0.75
-        },
+        exporting: exporting,
         title: false,
         noData: {},
         xAxis: {
@@ -369,24 +400,69 @@ define([
           dataLabels: {
             inside: !planInside,
             style: {
-              fontWeight: 'bold'
+              fontStyle: 'oblique'
             }
           },
           color: category.plan === null ? undefined : planInside ? '#d9534f' : '#5cb85c'
         });
       });
 
-      var seriesAndCategories = {
-        categories: _.map(categories, function(category)
-        {
-          return category.label;
-        }),
+      return {
+        categories: _.map(categories, function(category) { return category.label; }),
         series: series
       };
+    },
 
-      console.log(seriesAndCategories);
+    serializeSingleChartTitle: function()
+    {
+      var report = this.model;
+      var query = report.query;
+      var shifts = query.get('shifts');
+      var divisions = query.get('divisions');
+      var subdivisionTypes = query.get('subdivisionTypes');
+      var prodLines = query.get('prodLines');
+      var totalVolumeProduced = report.get('groups').plan.totalVolumeProduced;
+      var title = [];
 
-      return seriesAndCategories;
+      if (prodLines.length)
+      {
+        title.push(t('reports', '8:title:line' + (prodLines.length === 1 ? '' : 's'), {
+          line: prodLines.join(', ')
+        }));
+      }
+      else if (query.hasAllDivisionsSelected())
+      {
+        if (subdivisionTypes.length === 1)
+        {
+          title.push(t('reports', 'filter:subdivisionType:' + subdivisionTypes[0]));
+        }
+        else
+        {
+          title.push(t('reports', 'charts:title:overall'));
+        }
+      }
+      else
+      {
+        title.push(divisions.join(', '));
+
+        if (subdivisionTypes.length === 1)
+        {
+          title.push(t('reports', 'filter:subdivisionType:' + subdivisionTypes[0]));
+        }
+      }
+
+      if (totalVolumeProduced.length)
+      {
+        title.push(formatTooltipHeader.call(this, totalVolumeProduced[0].x));
+      }
+
+      title.push(t('reports', '8:title:shift:' + (shifts.length || 3), {
+        s1: t('core', 'SHIFT:' + shifts[0]),
+        s2: t('core', 'SHIFT:' + shifts[1]),
+        s3: t('core', 'SHIFT:' + shifts[2])
+      }));
+
+      return title.join(' - ');
     },
 
     onModelLoading: function()

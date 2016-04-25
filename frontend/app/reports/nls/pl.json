@@ -421,6 +421,11 @@
   "7:customTimes:dtc:date": "Zakres czasu dla wykresów przestojów",
   "7:customTimes:dtc:interval": "Podział czasy dla wykresów przestojów",
 
+  "8:title:line": "Linia {line}",
+  "8:title:lines": "Linie {line}",
+  "8:title:shift:1": "{s1} zmiana",
+  "8:title:shift:2": "{s1} i {s2} zmiana",
+  "8:title:shift:3": "wszystkie zmiany",
   "8:filter:shifts": "Zmiany",
   "8:filter:divisions": "Centra produkcyjne",
   "8:filter:prodLines": "Linie",

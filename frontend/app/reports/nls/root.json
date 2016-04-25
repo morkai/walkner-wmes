@@ -416,6 +416,11 @@
     "7:customTimes:dtc:date": "Time range of the downtimes charts",
     "7:customTimes:dtc:interval": "Time interval of the downtimes charts",
 
+    "8:title:line": "Line {line}",
+    "8:title:lines": "Lines {line}",
+    "8:title:shift:1": "{s1} shift",
+    "8:title:shift:2": "{s1} and {s2} shift",
+    "8:title:shift:3": "all shifts",
     "8:filter:shifts": "Shifts",
     "8:filter:divisions": "Production centers",
     "8:filter:prodLines": "Production lines",

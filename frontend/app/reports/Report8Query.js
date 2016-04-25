@@ -201,6 +201,14 @@ define([
     isVisibleSeries: function(id)
     {
       return this.attributes.visibleSeries[id] === true;
+    },
+
+    hasAllDivisionsSelected: function()
+    {
+      var selectedDivisions = this.get('divisions');
+      var prodDivisions = orgUnits.getAllByType('division').filter(function(d) { return d.get('type') === 'prod'; });
+
+      return selectedDivisions.length === 0 || selectedDivisions.length === prodDivisions.length;
     }
 
   }, {
@@ -224,7 +232,7 @@ define([
       {
         if (ARRAY_PROPS[name])
         {
-          value = value.split(',');
+          value = value === '' ? [] : value.split(',');
         }
         else if (/^[0-9]+$/.test(value))
         {
