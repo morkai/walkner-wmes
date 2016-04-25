@@ -1,3 +1,3 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../router","../viewport","../user"],function(e,r,a){"use strict";var n="i18n!app/nls/mechOrders",d=a.auth("ORDERS:VIEW");e.map("/mechOrders",d,function(e){r.loadPage(["app/mechOrders/pages/MechOrderListPage",n],function(r){return new r({rql:e.rql})})}),e.map("/mechOrders/:id",d,function(e){r.loadPage(["app/mechOrders/pages/MechOrderDetailsPage",n],function(r){return new r({modelId:e.params.id})})})});
+define(["../router","../viewport","../user"],function(e,r,n){"use strict";var a="i18n!app/nls/mechOrders",s=n.auth("ORDERS:VIEW");e.map("/mechOrders",s,function(e){r.loadPage(["app/mechOrders/pages/MechOrderListPage",a],function(r){return new r({rql:e.rql})})}),e.map("/mechOrders/:id",s,function(e){r.loadPage(["app/mechOrders/pages/MechOrderDetailsPage","i18n!app/nls/orders","i18n!app/nls/mechOrders"],function(r){return new r({modelId:e.params.id})})})});
