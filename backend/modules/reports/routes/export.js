@@ -26,7 +26,6 @@ var DIACRITICS = {
   Ń: 'N'
 };
 
-
 module.exports = function exportRoute(reportsModule, req, res, next)
 {
   /*jshint -W015*/
@@ -125,8 +124,8 @@ module.exports = function exportRoute(reportsModule, req, res, next)
 
   function cleanup()
   {
-    fs.unlink(tmpFile);
-    fs.unlink(outFile);
+    fs.unlink(tmpFile, () => {});
+    fs.unlink(outFile, () => {});
   }
 };
 
