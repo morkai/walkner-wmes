@@ -669,7 +669,7 @@ module.exports = function setUpAlertsServer(app, module)
     var startedAt = prodDowntime.startedAt.getTime();
     var alerts = _.map(prodDowntime.alerts, function(alert)
     {
-      return alertMap[alert._id] ? null : _.extend(alert, alertMap[alert._id], {
+      return alertMap[alert._id] ? null : _.assign(alert, alertMap[alert._id], {
         timer: null
       });
     });
@@ -732,7 +732,7 @@ module.exports = function setUpAlertsServer(app, module)
   {
     downtime.alerts = _.map(findMatchingAlerts(downtime), function(alert)
     {
-      return _.extend({}, alert, {
+      return _.assign({}, alert, {
         action: -1,
         active: true,
         timer: null
@@ -752,7 +752,7 @@ module.exports = function setUpAlertsServer(app, module)
 
   function matchAlert(downtime, conditions)
   {
-    return _.all(conditions, function(condition)
+    return _.every(conditions, function(condition)
     {
       return matchAlertCondition(downtime, condition);
     });
@@ -1036,7 +1036,7 @@ module.exports = function setUpAlertsServer(app, module)
 
   function sendEmail(recipients, messageValues)
   {
-    var emails = _.pluck(recipients, 'email');
+    var emails = _.map(recipients, 'email');
     var subject = '[WMES] Przestój '
       + messageValues.downtime.rid
       + ': ' + messageValues.downtime.reason;
@@ -1059,7 +1059,7 @@ module.exports = function setUpAlertsServer(app, module)
   function sendSms(recipients, messageValues)
   {
     var smsOptions = {
-      to: _.pluck(recipients, 'mobile'),
+      to: _.map(recipients, 'mobile'),
       text: 'Przestój ' + messageValues.downtime.rid
         + ' |' + messageValues.downtime.duration
         + ' |' + messageValues.orgUnits.division

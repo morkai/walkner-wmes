@@ -221,7 +221,7 @@ exports.start = function startReportsServerModule(app, module)
         table += '\n';
       }
 
-      table += _.padLeft('>' + group + 's', 5) + ' ';
+      table += _.padStart('>' + group + 's', 5) + ' ';
 
       _.forEach(STATS_HEADERS, function(header, headerKey)
       {
@@ -232,7 +232,7 @@ exports.start = function startReportsServerModule(app, module)
           var reportStats = stats[reportId];
           var value = avg ? reportStats['t' + group] / reportStats['r' + group] : reportStats[headerKey + group];
 
-          table += '|' + _.padLeft(value ? Math.round(value) : 0, 6) + ' ';
+          table += '|' + _.padStart(value ? Math.round(value) : 0, 6) + ' ';
         });
       });
 

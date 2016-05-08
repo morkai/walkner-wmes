@@ -55,7 +55,7 @@ var modules = (config.modules || []).map(function(module)
 });
 
 var app = {
-  options: _.merge({}, config, {
+  options: _.assign({}, config, {
     id: config.id,
     startTime: startTime,
     env: process.env.NODE_ENV,
@@ -64,7 +64,7 @@ var app = {
   })
 };
 
-_.merge(app, require('./helpers'));
+_.assign(app, require('./helpers'));
 
 blocked(function(ms)
 {

@@ -413,8 +413,8 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
             '',
             item.orderNo,
             '000' + item.nc12,
-            _.padLeft(item.quantity.toString(), 9, ' ') + ' ',
-            _.padRight(item.name, 49, ' '),
+            _.padStart(item.quantity.toString(), 9, ' ') + ' ',
+            _.padEnd(item.name, 49, ' '),
             moment(item.reqDate).format('DD.MM.YYYY'),
             '       ',
             ''

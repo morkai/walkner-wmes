@@ -16,7 +16,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startDbModule(app, module, done)
 {
-  module = app[module.name] = _.merge(mongoose, module);
+  module = app[module.name] = _.assign(mongoose, module);
 
   tryToConnect(0);
 

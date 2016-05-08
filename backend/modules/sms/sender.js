@@ -66,7 +66,7 @@ exports.start = function startSmsSenderModule(app, module)
       url: module.config.remoteSenderUrl,
       method: 'POST',
       json: true,
-      body: _.merge(body, {secretKey: module.config.secretKey})
+      body: _.assign(body, {secretKey: module.config.secretKey})
     };
 
     request(options, function(err, res)

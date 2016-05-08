@@ -60,7 +60,7 @@ exports.start = function startOpinionSurveysModule(app, module)
     var id = Date.now().toString(36).toUpperCase()
       + Math.round(1000000000 + Math.random() * 8999999999).toString(36).toUpperCase();
 
-    return _.padRight(id, 15, 0);
+    return _.padEnd(id, 15, 0);
   };
 
   app.onModuleReady(

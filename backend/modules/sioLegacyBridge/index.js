@@ -41,7 +41,7 @@ exports.start = function startSioLegacyBridgeModule(app, module)
     forceNew: true
   };
 
-  var serverOptions = _.merge(DEFAULT_SERVER_OPTIONS, module.config.oldSioServerOptions);
+  var serverOptions = _.assign(DEFAULT_SERVER_OPTIONS, module.config.oldSioServerOptions);
   var oldServer = oldSocketIoServer.listen(httpServer.server, serverOptions);
 
   oldServer.sockets.on('connection', onConnection);
@@ -72,7 +72,7 @@ exports.start = function startSioLegacyBridgeModule(app, module)
 
   function createNewClient(oldSocket)
   {
-    var clientOptions = _.merge({}, DEFAULT_CLIENT_OPTIONS, module.config.newSioClientOptions);
+    var clientOptions = _.assign({}, DEFAULT_CLIENT_OPTIONS, module.config.newSioClientOptions);
     var newSocket = newSocketIoClient.connect(module.config.newSioServerUrl, clientOptions);
 
     patchNewSocket(newSocket, function(args)

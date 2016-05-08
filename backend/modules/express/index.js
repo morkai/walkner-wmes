@@ -109,7 +109,7 @@ exports.start = function startExpressModule(app, expressModule, done)
   if (bodyParser)
   {
     expressApp.use(bodyParser.json(config.jsonBody));
-    expressApp.use(bodyParser.urlencoded(_.extend({extended: false}, config.urlencodedBody)));
+    expressApp.use(bodyParser.urlencoded(_.assign({extended: false}, config.urlencodedBody)));
     expressApp.use(bodyParser.text(_.defaults({type: 'text/*'}, config.textBody)));
   }
 

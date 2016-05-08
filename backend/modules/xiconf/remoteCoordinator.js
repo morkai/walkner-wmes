@@ -1323,7 +1323,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(err);
         }
 
-        _.merge(this.orderData, this.changes);
+        _.assign(this.orderData, this.changes);
 
         for (var i = 0; i < this.itemChanges.length; ++i)
         {
@@ -2134,7 +2134,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       }
     }
 
-    newOrdersNos = _.unique(newOrdersNos);
+    newOrdersNos = _.uniq(newOrdersNos);
 
     step(
       function getOrderDataStep()
@@ -2435,8 +2435,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function buildServiceTag(orderNo, counter)
   {
-    var serviceTag = _.padLeft(counter.toString(), 4, '0');
-    serviceTag = _.padLeft(orderNo.toString() + serviceTag, 17, '0');
+    var serviceTag = _.padStart(counter.toString(), 4, '0');
+    serviceTag = _.padStart(orderNo.toString() + serviceTag, 17, '0');
     serviceTag = 'P' + serviceTag;
 
     return serviceTag;

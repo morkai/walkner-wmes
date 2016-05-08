@@ -46,7 +46,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
     {name: 'in', args: ['mrp', mrpControllers]}
   ];
 
-  if (_.contains(['all', 'in', 'nin'], query.filter) && _.isString(query.statuses) && /^[A-Z,]+$/.test(query.statuses))
+  if (_.includes(['all', 'in', 'nin'], query.filter) && _.isString(query.statuses) && /^[A-Z,]+$/.test(query.statuses))
   {
     req.rql.selector.args.push({
       name: query.filter,

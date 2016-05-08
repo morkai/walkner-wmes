@@ -81,7 +81,7 @@ module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
 
   function notify(config)
   {
-    var to = _.unique([].concat(
+    var to = _.uniq([].concat(
       watchdogModule.config.recipients,
       config.emailRecipients || []
     ));

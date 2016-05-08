@@ -28,7 +28,7 @@ module.exports = function report7Route(app, reportsModule, req, res, next)
   if (options.specificAor)
   {
     options.aors.push(options.specificAor);
-    options.aors = _.unique(options.aors);
+    options.aors = _.uniq(options.aors);
   }
 
   _.forEach(orgUnitsModule.getAllByType('mrpController'), function(mrpController)

@@ -52,7 +52,7 @@ module.exports = function setUpAppStartedEventCheck(app, watchdogModule)
 
   function notifyAppStartedEvent(events)
   {
-    var to = _.unique([].concat(
+    var to = _.uniq([].concat(
       watchdogModule.config.recipients,
       watchdogModule.config.appStartedRecipients
     ));

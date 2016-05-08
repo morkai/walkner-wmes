@@ -583,7 +583,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
   function hasNewProgramFromDocs(parsedOrdersMap)
   {
-    return _.any(parsedOrdersMap, function(parsedOrder)
+    return _.some(parsedOrdersMap, function(parsedOrder)
     {
       return parsedOrder.source === 'docs' && parsedOrder.kind === 'program';
     });

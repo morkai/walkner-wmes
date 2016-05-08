@@ -145,7 +145,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
           };
         });
 
-        this.prodLogEntryIds = _.pluck(prodLogEntries, '_id');
+        this.prodLogEntryIds = _.map(prodLogEntries, '_id');
 
         ProdLogEntry.collection.insert(prodLogEntries, this.next());
       },

@@ -95,7 +95,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
       var oldSessionId = req.sessionID;
 
-      req.session.regenerate(function (err)
+      req.session.regenerate(function(err)
       {
         if (err)
         {
@@ -112,11 +112,11 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         req.session.user = user;
 
         res.format({
-          json: function ()
+          json: function()
           {
             res.send(req.session.user);
           },
-          default: function ()
+          default: function()
           {
             res.redirect('/');
           }
@@ -147,7 +147,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         return next(err);
       }
 
-      var guestUser = _.merge({}, userModule.guest);
+      var guestUser = _.assign({}, userModule.guest);
       guestUser.loggedIn = false;
       guestUser.ipAddress = userModule.getRealIp({}, req);
       guestUser.local = userModule.isLocalIpAddress(guestUser.ipAddress);
@@ -345,7 +345,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         {
           var passwordResetRequest = this.passwordResetRequest;
 
-          passwordResetRequest.remove(function (err)
+          passwordResetRequest.remove(function(err)
           {
             if (err)
             {

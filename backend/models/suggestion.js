@@ -472,7 +472,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
 
       if (observer.role === 'subscriber')
       {
-        _.extend(observer.changes, changedPropertyMap);
+        _.assign(observer.changes, changedPropertyMap);
 
         if (!observer.notify)
         {
@@ -487,7 +487,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     // Creator
     var creator = newObserverMap[this.creator.id] = oldObserverMap[this.creator.id];
 
-    _.extend(creator.changes, changedPropertyMap);
+    _.assign(creator.changes, changedPropertyMap);
 
     if (!creator.notify)
     {
@@ -511,7 +511,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
         };
       }
 
-      _.extend(confirmer.changes, changedPropertyMap);
+      _.assign(confirmer.changes, changedPropertyMap);
 
       if (!confirmer.notify)
       {
@@ -550,7 +550,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
         };
       }
 
-      _.extend(observer.changes, changedPropertyMap);
+      _.assign(observer.changes, changedPropertyMap);
 
       if (!observer.notify)
       {

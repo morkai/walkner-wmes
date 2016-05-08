@@ -100,11 +100,11 @@ module.exports = function setUpProdState(app, productionModule)
 
     prodLineState.update(changes, {
       reloadOrders: multiChange
-        && _.contains(changes.types, 'finishOrder')
-        && _.contains(changes.types, 'changeOrder'),
+        && _.includes(changes.types, 'finishOrder')
+        && _.includes(changes.types, 'changeOrder'),
       reloadDowntimes: multiChange
-        && _.contains(changes.types, 'finishDowntime')
-        && _.contains(changes.types, 'startDowntime')
+        && _.includes(changes.types, 'finishDowntime')
+        && _.includes(changes.types, 'startDowntime')
     });
   });
 
@@ -176,7 +176,7 @@ module.exports = function setUpProdState(app, productionModule)
 
     var currentHour = new Date().getHours();
 
-    _.each(prodLineStateMap, function(prodLineState)
+    _.forEach(prodLineStateMap, function(prodLineState)
     {
       prodLineState.onHourChanged(currentHour);
     });

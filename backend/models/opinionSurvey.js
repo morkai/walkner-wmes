@@ -132,7 +132,7 @@ module.exports = function setupOpinionSurveyModel(app, mongoose)
 
     var employers = this.employers;
 
-    _.forEach(_.unique(_.pluck(this.superiors, 'division')), function(divisionId)
+    _.forEach(_.uniq(_.map(this.superiors, 'division')), function(divisionId)
     {
       _.forEach(employers, function(employer)
       {

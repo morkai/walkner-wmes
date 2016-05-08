@@ -52,7 +52,7 @@ exports.start = function startPubsubModule(app, module)
   /**
    * @type {MessageBroker}
    */
-  module = app[module.name] = _.merge(new pubsub.MessageBroker(), module);
+  module = app[module.name] = _.assign(new pubsub.MessageBroker(), module);
 
   _.forEach(module.config.republishTopics, function(topic)
   {

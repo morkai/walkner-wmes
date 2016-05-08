@@ -99,7 +99,7 @@ exports.start = function startMailSenderModule(app, module)
       url: module.config.remoteSenderUrl,
       method: 'POST',
       json: true,
-      body: _.defaults(_.merge(body, {secretKey: module.config.secretKey}), {
+      body: _.defaults(_.assign(body, {secretKey: module.config.secretKey}), {
         from: module.config.from || undefined,
         bcc: module.config.bcc || undefined,
         replyTo: module.config.replyTo || undefined

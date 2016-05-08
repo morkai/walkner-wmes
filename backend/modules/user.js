@@ -27,7 +27,7 @@ exports.start = function startUserModule(app, module)
 {
   var localAddresses = module.config.localAddresses || getLocalAddresses();
 
-  module.root = _.merge(module.config.root, {
+  module.root = _.assign(module.config.root, {
     loggedIn: true,
     super: true,
     _id: '52a33b8bfb955dac8a92261b',
@@ -35,7 +35,7 @@ exports.start = function startUserModule(app, module)
     privileges: []
   });
 
-  module.guest = _.merge({privileges: []}, module.config.guest, {
+  module.guest = _.assign({privileges: []}, module.config.guest, {
     loggedIn: false,
     super: false,
     _id: '52a33b9cfb955dac8a92261c',
@@ -68,7 +68,7 @@ exports.start = function startUserModule(app, module)
   {
     var localAddresses = [];
 
-    _.each(os.networkInterfaces(), function(addresses)
+    _.forEach(os.networkInterfaces(), function(addresses)
     {
       _.forEach(addresses, function(address)
       {
@@ -293,7 +293,7 @@ exports.start = function startUserModule(app, module)
 
         if (credentials.login === module.root.login)
         {
-          next(null, _.merge({}, module.root));
+          next(null, _.assign({}, module.root));
         }
         else
         {
@@ -710,7 +710,7 @@ exports.start = function startUserModule(app, module)
 
         if (socket)
         {
-          _.merge(socket.handshake.user, userData);
+          _.assign(socket.handshake.user, userData);
 
           socket.emit('user.reload', socket.handshake.user);
         }
