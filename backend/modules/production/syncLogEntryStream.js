@@ -94,7 +94,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
   {
     if (err)
     {
-      if (err.code === 11000)
+      if (err.code === 11000 && /"(.*?)"/.test(err.message || err.errmsg || err.err || ''))
       {
         var dupEntryId = (err.message || err.errmsg || err.err).match(/"(.*?)"/)[1];
         var dupEntry = _.find(logEntryList, function(logEntry) { return logEntry._id === dupEntryId; });
@@ -103,7 +103,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
       }
       else
       {
-        productionModule.error("Error while saving log entries: %s", (err.stack || err.errmsg || err.err));
+        productionModule.error("Error while saving log entries: %s", err.stack || err.errmsg || err.err || err.message);
       }
     }
 
