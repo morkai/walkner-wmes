@@ -80,7 +80,7 @@ module.exports = function createErrorHandlerMiddleware(expressModule, options)
       );
     }
 
-    if (!res.connection.writable)
+    if (!res.connection || !res.connection.writable)
     {
       return;
     }
