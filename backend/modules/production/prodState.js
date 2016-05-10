@@ -89,14 +89,19 @@ module.exports = function setUpProdState(app, productionModule)
 
   app.broker.subscribe('production.synced.**', function(changes)
   {
+    var multiChange = changes.types.length > 1;
+
+    if (!multiChange && changes.types[0] === 'corroborateDowntime' && !changes.prodShift)
+    {
+      return;
+    }
+
     var prodLineState = prodLineStateMap[changes.prodLine];
 
     if (!prodLineState)
     {
       return productionModule.debug("Data synced but no state for prod line [%s]...", changes.prodLine);
     }
-
-    var multiChange = changes.types.length > 1;
 
     prodLineState.update(changes, {
       reloadOrders: multiChange
