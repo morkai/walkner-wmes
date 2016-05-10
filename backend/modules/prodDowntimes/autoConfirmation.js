@@ -2,22 +2,23 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesModule)
 {
-  var settingsModule = app[prodDowntimesModule.config.settingsId];
-  var mongoose = app[prodDowntimesModule.config.mongooseId];
-  var orgUnits = app[prodDowntimesModule.config.orgUnitsId];
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const settingsModule = app[prodDowntimesModule.config.settingsId];
+  const mongoose = app[prodDowntimesModule.config.mongooseId];
+  const orgUnits = app[prodDowntimesModule.config.orgUnitsId];
+  const productionModule = app[prodDowntimesModule.config.productionId];
+  const ProdLogEntry = mongoose.model('ProdLogEntry');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
-  var MAX_BATCH_SIZE = 25;
+  const MAX_BATCH_SIZE = 20;
 
-  var settings = {};
-  var timer = null;
+  let settings = {};
+  let timer = null;
 
   app.broker.subscribe('app.started', function()
   {
@@ -48,23 +49,31 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
       clearTimeout(timer);
     }
 
-    var delay = moment().minutes(20).seconds(0).milliseconds(0).add(1, 'hours').diff();
-
-    timer = setTimeout(confirmOldProdDowntimes, delay);
+    timer = setTimeout(
+      confirmOldProdDowntimes,
+      moment().minutes(20).seconds(0).milliseconds(0).add(1, 'hours').diff()
+    );
   }
 
   function confirmOldProdDowntimes()
   {
-    var autoConfirmHours = settings.autoConfirmHours || 168;
+    if (timer !== null)
+    {
+      clearTimeout(timer);
+    }
+
+    const autoConfirmHours = settings.autoConfirmHours || 168;
+
+    prodDowntimesModule.debug("Confirming downtimes older than %d hours!...", autoConfirmHours);
 
     step(
       function findOldDowntimesStep()
       {
-        var conditions = {
+        const conditions = {
           updatedAt: {$lte: moment().subtract(autoConfirmHours, 'hours').toDate()},
           status: {$in: ['undecided', 'rejected']}
         };
-        var fields = {
+        const fields = {
           division: 1,
           subdivision: 1,
           mrpControllers: 1,
@@ -76,7 +85,11 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
           changes: {$slice: [0, 1]}
         };
 
-        ProdDowntime.find(conditions, fields).limit(MAX_BATCH_SIZE).lean().exec(this.next());
+        ProdDowntime
+          .find(conditions, fields)
+          .limit(MAX_BATCH_SIZE)
+          .lean()
+          .exec(this.next());
       },
       function corroborateStep(err, oldProdDowntimes)
       {
@@ -85,69 +98,32 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
           return this.skip(err);
         }
 
-        this.count = oldProdDowntimes.length;
+        const count = this.count = oldProdDowntimes.length;
 
-        if (this.count === 0)
+        if (count === 0)
         {
           return;
         }
 
-        var now = new Date();
-        var prodLogEntries = _.map(oldProdDowntimes, function(prodDowntime)
+        const now = new Date();
+        const prodLogEntries = _.map(oldProdDowntimes, downtime => createCorroborateDowntimeEntry(downtime, now));
+        const remainingIds = _.map(prodLogEntries, '_id');
+        const handlingDone = this.parallel();
+        const insertingDone = this.parallel();
+
+        app.broker.subscribe('production.logEntries.handled', () => handlingDone())
+          .setLimit(1)
+          .setFilter(handledEntryIds => _.pullAll(remainingIds, handledEntryIds).length === 0);
+
+        ProdLogEntry.collection.insert(prodLogEntries, function(err)
         {
-          var data = {
-            _id: prodDowntime._id,
-            status: 'confirmed',
-            corroboratedAt: now,
-            corroborator: {
-              id: null,
-              ip: '127.0.0.1',
-              cname: 'LOCALHOST',
-              label: 'System'
-            }
-          };
+          insertingDone(err);
 
-          var changes = prodDowntime.changes;
-
-          if (Array.isArray(changes) && changes.length)
+          if (count)
           {
-            var initialData = changes[0].data;
-            var originalReason = Array.isArray(initialData.reason) ? initialData.reason[1] : null;
-            var initiatorsAor = getDefaultAorIdForSubdivisionId(prodDowntime.subdivision);
-
-            if (originalReason && prodDowntime.reason !== originalReason)
-            {
-              data.reason = originalReason;
-            }
-
-            if (initiatorsAor && String(prodDowntime.aor) !== String(initiatorsAor))
-            {
-              data.aor = initiatorsAor;
-            }
+            app.broker.publish('production.logEntries.saved');
           }
-
-          return {
-            _id: ProdLogEntry.generateId(now, prodDowntime.prodShift),
-            type: 'corroborateDowntime',
-            data: data,
-            division: prodDowntime.division,
-            subdivision: prodDowntime.subdivision,
-            mrpControllers: prodDowntime.mrpControllers,
-            prodFlow: prodDowntime.prodFlow,
-            workCenter: prodDowntime.workCenter,
-            prodLine: prodDowntime.prodLine,
-            prodShift: prodDowntime.prodShift,
-            prodShiftOrder: prodDowntime.prodShiftOrder,
-            creator: data.corroborator,
-            createdAt: now,
-            savedAt: now,
-            todo: true
-          };
         });
-
-        this.prodLogEntryIds = _.map(prodLogEntries, '_id');
-
-        ProdLogEntry.collection.insert(prodLogEntries, this.next());
       },
       function finalizeStep(err)
       {
@@ -158,21 +134,13 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
         else if (this.count > 0)
         {
           prodDowntimesModule.info("Confirmed %d downtimes older than %d hours!", this.count, autoConfirmHours);
-
-          app.broker.publish('production.logEntries.saved');
         }
 
         if (this.count === MAX_BATCH_SIZE)
         {
-          var prodLogEntryIds = this.prodLogEntryIds;
-          this.prodLogEntryIds = null;
+          productionModule.clearStaleProdData();
 
-          app.broker.subscribe('production.logEntries.handled', confirmOldProdDowntimes)
-            .setLimit(1)
-            .setFilter(function(handledProdLogEntryIds)
-            {
-              return _.without.apply(_, prodLogEntryIds, handledProdLogEntryIds).length === 0;
-            });
+          setImmediate(confirmOldProdDowntimes);
         }
         else
         {
@@ -182,9 +150,60 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
     );
   }
 
+  function createCorroborateDowntimeEntry(prodDowntime, now)
+  {
+    const data = {
+      _id: prodDowntime._id,
+      status: 'confirmed',
+      corroboratedAt: now,
+      corroborator: {
+        id: null,
+        ip: '127.0.0.1',
+        cname: 'LOCALHOST',
+        label: 'System'
+      }
+    };
+    const changes = prodDowntime.changes;
+
+    if (Array.isArray(changes) && changes.length)
+    {
+      const initialData = changes[0].data;
+      const originalReason = Array.isArray(initialData.reason) ? initialData.reason[1] : null;
+      const initiatorsAor = getDefaultAorIdForSubdivisionId(prodDowntime.subdivision);
+
+      if (originalReason && prodDowntime.reason !== originalReason)
+      {
+        data.reason = originalReason;
+      }
+
+      if (initiatorsAor && String(prodDowntime.aor) !== String(initiatorsAor))
+      {
+        data.aor = initiatorsAor;
+      }
+    }
+
+    return {
+      _id: ProdLogEntry.generateId(now, prodDowntime.prodShift),
+      type: 'corroborateDowntime',
+      data: data,
+      division: prodDowntime.division,
+      subdivision: prodDowntime.subdivision,
+      mrpControllers: prodDowntime.mrpControllers,
+      prodFlow: prodDowntime.prodFlow,
+      workCenter: prodDowntime.workCenter,
+      prodLine: prodDowntime.prodLine,
+      prodShift: prodDowntime.prodShift,
+      prodShiftOrder: prodDowntime.prodShiftOrder,
+      creator: data.corroborator,
+      createdAt: now,
+      savedAt: now,
+      todo: true
+    };
+  }
+
   function getDefaultAorIdForSubdivisionId(subdivisionId)
   {
-    var subdivision = orgUnits.getByTypeAndId('subdivision', subdivisionId);
+    const subdivision = orgUnits.getByTypeAndId('subdivision', subdivisionId);
 
     return subdivision && subdivision.aor ? subdivision.aor : null;
   }

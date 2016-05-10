@@ -55,7 +55,8 @@ exports.start = function startProdDowntimesModule(app, module)
     [
       module.config.mongooseId,
       module.config.settingsId,
-      module.config.orgUnitsId
+      module.config.orgUnitsId,
+      module.config.productionId
     ],
     setUpAutoConfirmation.bind(null, app, module)
   );
