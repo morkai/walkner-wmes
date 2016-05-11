@@ -48,7 +48,7 @@ exports.start = function startPubsubModule(app, module)
   /**
    * @type {function()}
    */
-  var scheduleSendMessages = _.throttle(sendMessages, module.config.republishMaxDelay, {
+  var scheduleSendMessages = _.debounce(sendMessages, module.config.republishMaxDelay, {
     trailing: true,
     leading: false
   });

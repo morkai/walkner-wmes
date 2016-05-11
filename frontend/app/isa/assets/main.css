@@ -14,7 +14,7 @@
   height: 100%;
 }
 .isa-section-header {
-  flex: 0 0 0;
+  flex: 0 0 auto;
   margin: 0 0 10px 0;
   font-size: 34px;
   font-weight: bold;
