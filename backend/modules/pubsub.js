@@ -48,7 +48,10 @@ exports.start = function startPubsubModule(app, module)
   /**
    * @type {function()}
    */
-  var scheduleSendMessages = _.throttle(sendMessages, module.config.republishMaxDelay);
+  var scheduleSendMessages = _.throttle(sendMessages, module.config.republishMaxDelay, {
+    trailing: true,
+    leading: false
+  });
 
   /**
    * @type {MessageBroker}
@@ -253,12 +256,12 @@ exports.start = function startPubsubModule(app, module)
 
     var socketMessagesMap = socketIdToMessagesMap[socket.id];
 
-    if (typeof socketMessagesMap === 'undefined')
+    if (!socketMessagesMap)
     {
       socketMessagesMap = socketIdToMessagesMap[socket.id] = {};
     }
 
-    if (typeof socketMessagesMap[meta.messageId] === 'undefined')
+    if (socketMessagesMap[meta.messageId])
     {
       ++stats.ignoredDuplications;
 
