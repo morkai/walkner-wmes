@@ -108,8 +108,8 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
         const now = new Date();
         const prodLogEntries = _.map(oldProdDowntimes, downtime => createCorroborateDowntimeEntry(downtime, now));
         const remainingIds = _.map(prodLogEntries, '_id');
-        const handlingDone = this.parallel();
-        const insertingDone = this.parallel();
+        const handlingDone = _.once(this.parallel());
+        const insertingDone = _.once(this.parallel());
 
         app.broker.subscribe('production.logEntries.handled', () => handlingDone())
           .setLimit(1)
@@ -119,14 +119,31 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
         {
           insertingDone(err);
 
-          if (count)
+          if (!err)
           {
             app.broker.publish('production.logEntries.saved');
           }
         });
+
+        this.timer = setTimeout(
+          function()
+          {
+            const err = new Error('timeout');
+
+            handlingDone(err);
+            insertingDone(err);
+          },
+          60000
+        );
       },
       function finalizeStep(err)
       {
+        if (this.timer)
+        {
+          clearTimeout(this.timer);
+          this.timer = null;
+        }
+        
         if (err)
         {
           prodDowntimesModule.error("Failed to confirm old downtimes: %s", err.message);
