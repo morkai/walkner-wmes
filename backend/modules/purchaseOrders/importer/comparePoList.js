@@ -85,6 +85,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         if (closedOrderIds.indexOf(orderModel._id) !== -1)
         {
           orderModel.open = false;
+          
           _.forEach(orderModel.items, function(item)
           {
             item.completed = true;

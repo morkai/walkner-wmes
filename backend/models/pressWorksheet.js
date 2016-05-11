@@ -420,7 +420,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
     if (/^[0-9]{2}:[0-9]{2}$/.test(time))
     {
-      time = time.split(':').map(Number);
+      time = time.split(':').map(p => parseInt(p, 10));
 
       date = new Date(date);
       date.setHours(time[0]);

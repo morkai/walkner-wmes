@@ -800,7 +800,7 @@ ProdLineState.prototype.calculatePrevDayMetrics = function()
       prodLineState.prevPlannedQuantitiesDone = [null, 0, 0, 0];
       prodLineState.prevActualQuantitiesDone = [null, 0, 0, 0];
 
-      _.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
+      _.forEach(prodShifts, prodLineState.addQuantitiesDone.bind(prodLineState));
 
       quantitiesDone.planned += prodLineState.prevPlannedQuantitiesDone[1]
         + prodLineState.prevPlannedQuantitiesDone[2]
@@ -872,7 +872,7 @@ ProdLineState.prototype.updateSecondShiftMetrics = function()
       prodLineState.prevPlannedQuantitiesDone[1] = 0;
       prodLineState.prevActualQuantitiesDone[1] = 0;
 
-      _.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
+      _.forEach(prodShifts, prodLineState.addQuantitiesDone.bind(prodLineState));
 
       quantitiesDone.planned += prodLineState.prevPlannedQuantitiesDone[1];
       quantitiesDone.actual += prodLineState.prevActualQuantitiesDone[1];
@@ -925,7 +925,7 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
       prodLineState.prevActualQuantitiesDone[1] = 0;
       prodLineState.prevActualQuantitiesDone[2] = 0;
 
-      _.forEach(prodShifts, prodLineState.addQuantitiesDone, prodLineState);
+      _.forEach(prodShifts, prodLineState.addQuantitiesDone.bind(prodLineState));
 
       quantitiesDone.planned += prodLineState.prevPlannedQuantitiesDone[1] + prodLineState.prevPlannedQuantitiesDone[2];
       quantitiesDone.actual += prodLineState.prevActualQuantitiesDone[1] + prodLineState.prevActualQuantitiesDone[2];

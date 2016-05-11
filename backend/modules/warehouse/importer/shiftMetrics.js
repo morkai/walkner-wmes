@@ -127,7 +127,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       }
     };
 
-    _.forEach(COMPONENT_STORAGE_METRICS, function(metric)
+    _.forEach(COMPONENT_STORAGE_METRICS, (metric) =>
     {
       var prodTaskId = settings[metric + '.prodTask'] || null;
 
@@ -135,9 +135,9 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       {
         this.settings.componentStorage.tasks[prodTaskId] = metric;
       }
-    }, this);
+    });
 
-    _.forEach(FINISHED_GOODS_STORAGE_METRICS, function(metric)
+    _.forEach(FINISHED_GOODS_STORAGE_METRICS, (metric) =>
     {
       var prodTaskId = settings[metric + '.prodTask'] || null;
 
@@ -145,7 +145,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       {
         this.settings.finishedGoodsStorage.tasks[prodTaskId] = metric;
       }
-    }, this);
+    });
   }
 
   function createCalcShiftMetricsStep(shiftNo, shiftMoment)

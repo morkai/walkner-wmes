@@ -51,13 +51,13 @@ module.exports = function cancelPrintRoute(app, poModule, req, res, next)
       var cancelledBy = userModule.createUserInfo(req.session.user, req);
       var cancelledAt = new Date();
 
-      _.forEach(this.poPrints, function(poPrint)
+      _.forEach(this.poPrints, poPrint =>
       {
         poPrint.cancelled = cancelled;
         poPrint.cancelledBy = cancelledBy;
         poPrint.cancelledAt = cancelledAt;
         poPrint.save(this.parallel());
-      }, this);
+      });
     },
     function updatePoStep(err)
     {

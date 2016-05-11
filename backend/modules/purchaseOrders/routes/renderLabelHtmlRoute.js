@@ -97,7 +97,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
       });
 
       this.barcodeDataToPng = {};
-      this.pages = _.map(query.orderNo, function(orderNo, i)
+      this.pages = _.map(query.orderNo, (orderNo, i) =>
       {
         var page = {
           orderNo: orderNo || '',
@@ -128,7 +128,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
         this.barcodeDataToPng[barcodeData] = null;
 
         return page;
-      }, this);
+      });
       this.uniqueBarcodes = Object.keys(this.barcodeDataToPng);
     },
     function generateBarcodesStep()
@@ -151,15 +151,9 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
         return this.done(next, err);
       }
 
-      _.forEach(this.uniqueBarcodes, function(uniqueBarcode, i)
-      {
-        this.barcodeDataToPng[uniqueBarcode] = barcodePngs[i];
-      }, this);
+      _.forEach(this.uniqueBarcodes, (uniqueBarcode, i) => { this.barcodeDataToPng[uniqueBarcode] = barcodePngs[i]; });
 
-      _.forEach(this.pages, function(page)
-      {
-        page.png = this.barcodeDataToPng[page.barcodeData];
-      }, this);
+      _.forEach(this.pages, (page) => { page.png = this.barcodeDataToPng[page.barcodeData];});
 
       return res.render('purchaseOrders/' + this.paper, {
         paper: this.paper,

@@ -78,7 +78,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
 
       var itemMap = {};
 
-      _.forEach(po.items, function(item) { itemMap[+item._id] = item; }, this);
+      _.forEach(po.items, function(item) { itemMap[+item._id] = item; });
 
       for (var i = 0, l = items.length; i < l; ++i)
       {
@@ -98,7 +98,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
     {
       this.key = createHash('md5').update(Date.now() + Math.random().toString()).digest('hex').toUpperCase();
 
-      _.forEach(items, function(item)
+      _.forEach(items, item =>
       {
         item.print = new PurchaseOrderPrint({
           key: this.key,
@@ -121,7 +121,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
         item.model.printedQty += item.print.totalQty;
 
         item.print.save(this.parallel());
-      }, this);
+      });
     },
     function handleCreatePoPrintsResultStep(err)
     {
