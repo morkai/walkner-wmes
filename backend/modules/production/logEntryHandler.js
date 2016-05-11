@@ -9,6 +9,8 @@ var logEntryHandlers = require('./logEntryHandlers');
 
 module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 {
+  var MAX_ENTRIES_AT_ONCE = 25;
+
   var mongoose = app[productionModule.config.mongooseId];
   var ProdLine = mongoose.model('ProdLine');
   var ProdLogEntry = mongoose.model('ProdLogEntry');
@@ -41,7 +43,11 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
     handlingLogEntries = true;
     haveNewLogEntries = false;
 
-    ProdLogEntry.find({todo: true}).sort({prodLine: 1, createdAt: 1}).exec(function(err, logEntries)
+    ProdLogEntry
+      .find({todo: true})
+      .sort({prodLine: 1, createdAt: 1})
+      .limit(MAX_ENTRIES_AT_ONCE + 1)
+      .exec(function(err, logEntries)
     {
       if (err)
       {
@@ -50,6 +56,13 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
         productionModule.error("Failed to find log entries to handle: %s", err.stack);
 
         return done(err);
+      }
+
+      if (logEntries.length > MAX_ENTRIES_AT_ONCE)
+      {
+        logEntries.pop();
+
+        haveNewLogEntries = true;
       }
 
       var groupedLogEntries = groupLogEntriesByProdLine(logEntries);
