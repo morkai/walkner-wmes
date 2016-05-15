@@ -252,6 +252,11 @@ ProdLineState.prototype.onClientLeave = function(socket, disconnected)
     );
   }
 
+  if (this.socket)
+  {
+    this.socket.removeListener('disconnect', this.onClientDisconnect);
+  }
+
   this.onlineAt = 0;
   this.socket = null;
   this.online = false;
