@@ -81,8 +81,9 @@
     "action:endWork": "End work",
 
     "quantities:column:time": "Time",
-    "quantities:column:planned": "Planned [items]",
-    "quantities:column:actual": "Actual [items]",
+    "quantities:column:planned": "Planned",
+    "quantities:column:actual": "Actual",
+    "quantities:unit": "PCE",
     "quantities:change": "(change)",
     "quantities:newValuePlaceholder": "New quantity...",
 
