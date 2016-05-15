@@ -2,11 +2,11 @@
   "private": true,
   "guid": "A0974235-9E21-49BB-8D01-CA7A932A6EEB",
   "name": "walkner-wmes",
-  "version": "0.85.1",
+  "version": "0.86.0",
   "updater": {
     "wmes": {
-      "backend": 169,
-      "frontend": 182,
+      "backend": 180,
+      "frontend": 190,
       "reports": 30,
       "attachments": 2,
       "importer-sap": 32,
@@ -67,7 +67,7 @@
     "messageformat-amd": "git+http://github.com/morkai/messageformat-amd.git#d41fd5caba",
     "mail-listener2": "~0.1.8",
     "nodemailer": "~1.10.0",
-    "cheerio": "~0.19.0",
+    "cheerio": "~0.20.0",
     "ursa": "~0.9.3",
     "jszip": "~2.5.0",
     "moment": "~2.10.6",
