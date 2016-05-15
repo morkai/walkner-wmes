@@ -184,7 +184,7 @@ define([
 
         if (newValue !== oldValue && newValue >= 0 && newValue <= maxQuantitiesDone)
         {
-          $value.text(newValue);
+          $value.text(newValue + ' ' + t('production', 'quantities:unit'));
 
           view.model.changeQuantitiesDone(parseInt(hour, 0), newValue, {render: false});
         }
