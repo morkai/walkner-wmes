@@ -25,7 +25,8 @@ exports.start = function startOrdersImporterModule(app, module)
     changes: true,
     importTs: true,
     description: true,
-    soldToParty: true
+    soldToParty: true,
+    sapCreatedAt: true
   };
 
   var mongoose = app[module.config.mongooseId];

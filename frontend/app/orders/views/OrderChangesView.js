@@ -180,6 +180,9 @@ define([
         case 'scheduledFinishDate':
           return time.format(value, 'LL');
 
+        case 'sapCreatedAt':
+          return time.format(value, 'LLL');
+
         default:
           return _.escape(String(value));
       }

@@ -19,7 +19,12 @@ define([
     'startDate',
     'finishDate',
     'scheduledStartDate',
-    'scheduledFinishDate'
+    'scheduledFinishDate',
+  ];
+  var TIME_PROPS = [
+    'sapCreatedAt',
+    'createdAt',
+    'updatedAt'
   ];
 
   return Model.extend({
@@ -59,24 +64,17 @@ define([
         }
       });
 
-      if (order.scheduledFinishDate)
+      TIME_PROPS.forEach(function(prop)
       {
-        order.scheduledFinishDateText = time.format(order.scheduledFinishDate, 'LL');
-      }
+        if (order[prop])
+        {
+          order[prop + 'Text'] = time.format(order[prop], 'LLL');
+        }
+      });
 
       if (order.qty && order.unit)
       {
         order.qtyUnit = order.qty + ' ' + order.unit;
-      }
-
-      if (order.createdAt)
-      {
-        order.createdAtText = time.format(order.createdAt, 'LLLL');
-      }
-
-      if (order.updatedAt)
-      {
-        order.updatedAtText = time.format(order.updatedAt, 'LLLL');
       }
 
       order.operations = order.operations ? order.operations.toJSON() : [];

@@ -13,7 +13,8 @@ module.exports = function setupOrderIntakeModel(app, mongoose)
     description: String,
     qty: Number,
     soldToParty: String,
-    shipTo: String
+    shipTo: String,
+    sapCreatedAt: Date
   }, {
     id: false
   });

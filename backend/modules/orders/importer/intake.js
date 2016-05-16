@@ -3,12 +3,15 @@
 'use strict';
 
 var path = require('path');
+var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
 var fs = require('fs-extra');
 var parseSapTextTable = require('../../sap/util/parseSapTextTable');
 var parseSapNumber = require('../../sap/util/parseSapNumber');
 var parseSapString = require('../../sap/util/parseSapString');
+var parseSapDate = require('../../sap/util/parseSapDate');
+var parseSapTime = require('../../sap/util/parseSapTime');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -245,7 +248,8 @@ exports.start = function startOrderIntakeImporterModule(app, module)
         };
         var fields = {
           description: 1,
-          soldToParty: 1
+          soldToParty: 1,
+          sapCreatedAt: 1
         };
 
         Order.find(conditions, fields).lean().exec(this.next());
@@ -280,21 +284,21 @@ exports.start = function startOrderIntakeImporterModule(app, module)
       updatedAt: t
     };
 
-    if (order.description !== orderIntake.description)
+    ['description', 'soldToParty', 'sapCreatedAt'].forEach(p =>
     {
-      changed = true;
-      changes.oldValues.description = order.description || null;
-      changes.newValues.description = orderIntake.description;
-      $set.description = orderIntake.description;
-    }
+      var oldValue = order[p] || null;
+      var newValue = orderIntake[p] || null;
 
-    if (order.soldToParty !== orderIntake.soldToParty)
-    {
+      if (_.isEqual(oldValue, newValue))
+      {
+        return;
+      }
+
       changed = true;
-      changes.oldValues.soldToParty = order.soldToParty || null;
-      changes.newValues.soldToParty = orderIntake.soldToParty;
-      $set.soldToParty = orderIntake.soldToParty;
-    }
+      changes.oldValues[p] = oldValue;
+      changes.newValues[p] = newValue;
+      $set[p] = newValue;
+    });
 
     if (!changed)
     {
@@ -359,15 +363,24 @@ exports.start = function startOrderIntakeImporterModule(app, module)
         salesOrder: /^Sales Doc/,
         salesOrderItem: /Item/,
         soldToParty: /^Sold-to/,
-        shipTo: /^Ship to/
+        shipTo: /^Ship to/,
+        docDate: /^Doc.*?Date/,
+        docTime: /^Doc.*?Time/
       },
       valueParsers: {
         nc12: function(input) { return input.replace(/^0+/, ''); },
         description: parseSapString,
-        qty: parseSapNumber
+        qty: parseSapNumber,
+        docDate: parseSapDate,
+        docTime: parseSapTime
       },
       itemDecorator: function(obj)
       {
+        if (!obj.description.length || !obj.docDate || !obj.docTime)
+        {
+          return null;
+        }
+
         return {
           _id: {
             no: obj.salesOrder,
@@ -377,7 +390,11 @@ exports.start = function startOrderIntakeImporterModule(app, module)
           description: obj.description,
           qty: obj.qty,
           soldToParty: obj.soldToParty,
-          shipTo: obj.shipTo
+          shipTo: obj.shipTo,
+          sapCreatedAt: new Date(
+            obj.docDate.y, obj.docDate.m - 1, obj.docDate.d,
+            obj.docTime.h, obj.docTime.m, obj.docTime.s
+          )
         };
       }
     });

@@ -92,6 +92,7 @@ module.exports = function setupOrderModel(app, mongoose)
     priority: String,
     description: String,
     soldToParty: String,
+    sapCreatedAt: Date,
     statuses: [String],
     statusesSetAt: {},
     delayReason: {
@@ -149,6 +150,7 @@ module.exports = function setupOrderModel(app, mongoose)
       priority: null,
       description: null,
       soldToParty: null,
+      sapCreatedAt: null,
       statuses: [],
       statusesSetAt: {},
       delayReason: null,
@@ -185,6 +187,7 @@ module.exports = function setupOrderModel(app, mongoose)
   {
     order.description = orderIntake.description;
     order.soldToParty = orderIntake.soldToParty;
+    order.sapCreatedAt = orderIntake.sapCreatedAt;
   };
 
   orderSchema.statics.resetStatusesSetAt = function(order)

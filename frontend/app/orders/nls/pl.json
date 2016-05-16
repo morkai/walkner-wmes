@@ -25,7 +25,8 @@
   "PANEL:TITLE:changes": "Historia zmian zlecenia",
 
   "PROPERTY:_id": "Nr zlecenia",
-  "PROPERTY:createdAt": "Czas stworzenia",
+  "PROPERTY:sapCreatedAt": "Czas utworzenia",
+  "PROPERTY:createdAt": "Czas importu",
   "PROPERTY:updatedAt": "Czas aktualizacji",
   "PROPERTY:nc12": "12NC",
   "PROPERTY:name": "Nazwa wyrobu",

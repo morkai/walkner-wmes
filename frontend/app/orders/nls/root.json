@@ -25,7 +25,8 @@
     "PANEL:TITLE:changes": "Change log",
 
     "PROPERTY:_id": "Order no",
-    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:sapCreatedAt": "Created at",
+    "PROPERTY:createdAt": "Imported at",
     "PROPERTY:updatedAt": "Updated at",
     "PROPERTY:nc12": "12NC",
     "PROPERTY:name": "Product name",

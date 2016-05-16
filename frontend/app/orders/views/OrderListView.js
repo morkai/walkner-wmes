@@ -21,7 +21,7 @@ define([
 
   return ListView.extend({
 
-    className: 'is-clickable',
+    className: 'orders-list is-clickable',
 
     localTopics: {
       'orderStatuses.synced': 'render'
@@ -50,9 +50,10 @@ define([
     columns: [
       {id: '_id', className: 'is-min'},
       {id: 'nc12', className: 'is-min'},
-      'name',
+      {id: 'name', className: 'is-min'},
       {id: 'mrp', className: 'is-min'},
       {id: 'qtyUnit', label: t.bound('orders', 'PROPERTY:qty'), className: 'is-min'},
+      {id: 'sapCreatedAtText', label: t.bound('orders', 'PROPERTY:sapCreatedAt'), className: 'is-min'},
       {id: 'startDateText', label: t.bound('orders', 'PROPERTY:startDate'), className: 'is-min'},
       {id: 'finishDateText', label: t.bound('orders', 'PROPERTY:finishDate'), className: 'is-min'},
       {id: 'delayReason', className: 'is-min'},

@@ -68,6 +68,7 @@ module.exports = function parseOrders(input, orders, importTs)
         priority: obj.priority,
         description: null,
         soldToParty: null,
+        sapCreatedAt: null,
         statuses: obj.statuses,
         statusesSetAt: {},
         delayReason: null,

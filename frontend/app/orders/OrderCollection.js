@@ -28,6 +28,7 @@ define([
           mrp: 1,
           qty: 1,
           unit: 1,
+          sapCreatedAt: 1,
           startDate: 1,
           finishDate: 1,
           statuses: 1,
