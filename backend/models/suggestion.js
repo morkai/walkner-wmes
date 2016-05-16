@@ -670,7 +670,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
   {
     var changes = {};
 
-    _.forEach(input, (value, key) => this.compareProperty(key, input, changes));
+    _.forEach(input, (value, key) => { this.compareProperty(key, input, changes); });
 
     return changes;
   };
