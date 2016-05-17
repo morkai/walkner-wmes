@@ -67,6 +67,7 @@ define([
         .filter(function(user) { return !!user; });
       data.creator = formatUser(data.creator);
       data.createdAt = data.createdAt ? time.format(data.createdAt, 'LLLL') : null;
+      data.losses = this.hasAnyLosses();
 
       if (data.type === 'paintShop' && data.orders)
       {
@@ -92,6 +93,23 @@ define([
       data.type = t('pressWorksheets', 'PROPERTY:type:' + data.type);
 
       return data;
+    },
+
+    hasAnyLosses: function()
+    {
+      var orders = this.get('orders') || [];
+
+      for (var i = 0; i < orders.length; ++i)
+      {
+        var order = orders[i];
+
+        if (Array.isArray(order.losses) && order.losses.length)
+        {
+          return true;
+        }
+      }
+
+      return false;
     }
 
   });

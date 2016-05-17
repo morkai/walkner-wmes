@@ -16,7 +16,9 @@
       <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
       <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
       <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
+      <% if (typeof losses === 'undefined' || losses) { %>
       <th><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
+      <% } %>
       <th><%- t('pressWorksheets', 'PROPERTY:order.downtimes') %></th>
     </tr>
   </thead>
@@ -44,6 +46,7 @@
       <td class="is-min is-number"><%= order.quantityDone.toLocaleString() %></td>
       <td class="is-min"><%= order.startedAt %></td>
       <td class="is-min"><%= order.finishedAt %></td>
+      <% if (typeof losses === 'undefined' || losses) { %>
       <td class="prodWorksheets-orders-lossesTable">
         <% if (order.losses.length) { %>
         <table class="table table-bordered table-condensed">
@@ -64,6 +67,7 @@
         </table>
         <% } %>
       </td>
+      <% } %>
       <td class="prodWorksheets-orders-lossesTable">
         <% if (order.downtimes.length) { %>
         <table class="table table-bordered table-condensed">
