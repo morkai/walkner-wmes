@@ -4,11 +4,6 @@
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:FTE:MASTER') %>
-    <li data-privilege="FTE:MASTER:VIEW"><a href="#fte/master"><%- t('core', 'NAVBAR:FTE:MASTER:LIST') %></a>
-    <li data-privilege="FTE:MASTER:MANAGE"><a href="#fte/master;add"><%- t('core', 'NAVBAR:FTE:MASTER:CURRENT') %></a>
-    <li class="divider">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:FTE:LEADER') %>
-    <li data-privilege="FTE:LEADER:VIEW"><a href="#fte/leader"><%- t('core', 'NAVBAR:FTE:LEADER:LIST') %></a>
-    <li data-privilege="FTE:LEADER:MANAGE"><a href="#fte/leader;add"><%- t('core', 'NAVBAR:FTE:LEADER:CURRENT') %></a>
+    <li data-privilege="FTE:MASTER:VIEW" class="navbar-with-button"><a href="#fte/master"><%- t('core', 'NAVBAR:FTE:MASTER') %></a><button class="btn btn-default" data-privilege="FTE:MASTER:MANAGE" data-href="#fte/master;add"><i class="fa fa-plus"></i></button>
+    <li data-privilege="FTE:LEADER:VIEW" class="navbar-with-button"><a href="#fte/leader"><%- t('core', 'NAVBAR:FTE:LEADER') %></a><button class="btn btn-default" data-privilege="FTE:LEADER:MANAGE" data-href="#fte/leader;add"><i class="fa fa-plus"></i></button>
   </ul>

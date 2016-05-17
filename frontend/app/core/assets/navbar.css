@@ -65,6 +65,10 @@
   width: 26px;
   height: 26px;
   line-height: 26px;
+  border-right-width: 0;
+}
+.navbar-with-button + .navbar-with-button > .btn {
+  border-top-width: 0;
 }
 @media (min-width: 768px) {
   .navbar {
@@ -88,5 +92,10 @@
   .navbar-default .navbar-nav > .open > a:hover,
   .navbar-default .navbar-nav > .open > a:focus {
     background: linear-gradient(to bottom, #e8e8e8 70%, #e0e0e0);
+  }
+}
+@media (max-width: 767px) {
+  .navbar-with-button + .navbar-with-button > .btn {
+    border-top-width: 1px;
   }
 }

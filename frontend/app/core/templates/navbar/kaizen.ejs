@@ -5,7 +5,7 @@
   </a>
   <ul class="dropdown-menu">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:orders') %>
-    <li data-module="kaizen"><a href="#kaizenOrders"><%- t('core', 'NAVBAR:KAIZEN:all') %></a>
+    <li data-module="kaizen" class="navbar-with-button"><a href="#kaizenOrders"><%- t('core', 'NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#kaizenOrders;add"><i class="fa fa-plus"></i></button>
     <li data-module="kaizen"><a href="#kaizenOrders?status=in=(new,accepted,todo,inProgress,paused)&sort(-eventDate)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:open') %></a>
     <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=mine&sort(-eventDate)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:mine') %></a>
     <li data-module="kaizen"><a href="#kaizenOrders?observers.user.id=unseen&sort(-eventDate)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:unseen') %></a>

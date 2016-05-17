@@ -5,7 +5,7 @@
   </a>
   <ul class="dropdown-menu">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:SUGGESTIONS:orders') %>
-    <li data-module="suggestions"><a href="#suggestions"><%- t('core', 'NAVBAR:SUGGESTIONS:all') %></a>
+    <li data-module="suggestions" class="navbar-with-button"><a href="#suggestions"><%- t('core', 'NAVBAR:SUGGESTIONS:all') %></a><button class="btn btn-default" data-href="#suggestions;add"><i class="fa fa-plus"></i></button>
     <li data-module="suggestions"><a href="#suggestions?status=in=(new,accepted,todo,inProgress,paused)&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:SUGGESTIONS:open') %></a>
     <li data-module="suggestions"><a href="#suggestions?observers.user.id=mine&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:SUGGESTIONS:mine') %></a>
     <li data-module="suggestions"><a href="#suggestions?observers.user.id=unseen&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:SUGGESTIONS:unseen') %></a>
