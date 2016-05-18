@@ -106,7 +106,10 @@ define([
         return new QiResultAddFormPage({
           model: new QiResult({
             ok: req.queryString === 'ok',
-            inspector: user.data._id,
+            inspector: {
+              id: user.data._id,
+              label: user.getLabel()
+            },
             inspectedAt: time.format(new Date(), 'YYYY-MM-DD'),
             qtyInspected: 1,
             qtyToFix: 0,
