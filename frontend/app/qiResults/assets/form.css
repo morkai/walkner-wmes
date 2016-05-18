@@ -14,6 +14,14 @@
 .qiResults-form .message-inline {
   margin-bottom: 15px;
 }
+.qiResults-form-removeAttachment {
+  margin: 0;
+  font-weight: normal;
+}
+.qiResults-form-removeAttachment > input {
+  margin: 0;
+  vertical-align: middle;
+}
 @media (max-width: 1200px) {
   .qiResults-form textarea[name="faultDescription"] {
     height: auto;

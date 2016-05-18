@@ -114,6 +114,7 @@
           <p class="form-control-static">
             <% if (model.okFile) { %>
             <a href="/qi/results/<%- model._id %>/attachments/okFile"><%= model.okFile.name %></a>
+            <label class="qiResults-form-removeAttachment">(<input type="checkbox" name="removeFile[]" value="ok"> <%- t('qiResults', 'FORM:attachments:remove') %>)</label>
             <% } else { %>
             -
             <% } %>
@@ -122,8 +123,9 @@
         <div class="col-lg-2 form-group">
           <label class="control-label"><%- t('qiResults', 'FORM:nokFile:current') %></label>
           <p class="form-control-static">
-            <% if (model.okFile) { %>
-            <a href="/qi/results/<%- model._id %>/attachments/okFile"><%= model.okFile.name %></a>
+            <% if (model.nokFile) { %>
+            <a href="/qi/results/<%- model._id %>/attachments/nokFile"><%= model.nokFile.name %></a>
+            <label class="qiResults-form-removeAttachment">(<input type="checkbox" name="removeFile[]" value="nok"> <%- t('qiResults', 'FORM:attachments:remove') %>)</label>
             <% } else { %>
             -
             <% } %>

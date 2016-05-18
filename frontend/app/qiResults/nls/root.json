@@ -89,6 +89,7 @@
     "FORM:okFile:current": "Current OK file",
     "FORM:nokFile:new": "New NOK file",
     "FORM:nokFile:current": "Current NOK file",
+    "FORM:attachments:remove": "remove",
     "FORM:attachments:update": "Select new files only if you want to replace the existing ones.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Result deletion confirmation",

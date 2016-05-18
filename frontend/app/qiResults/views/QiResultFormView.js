@@ -59,6 +59,10 @@ define([
           $tr.remove();
           view.recountActions();
         });
+      },
+      'change [name="removeFile[]"]': function(e)
+      {
+        this.$('input[name="' + e.target.value + 'File"]').prop('disabled', e.target.checked);
       }
 
     }, FormView.prototype.events),
@@ -131,12 +135,19 @@ define([
 
       this.$('input[type="file"]').each(function()
       {
-        if (this.files.length)
+        if (!this.disabled && this.files.length)
         {
           uploadFormData.append(this.name, this.files[0]);
 
           ++files;
         }
+      });
+
+      formData.attachments = {};
+
+      _.forEach(formData.removeFile, function(file)
+      {
+        formData.attachments[file + 'File'] = null;
       });
 
       if (files === 0)
@@ -156,7 +167,7 @@ define([
 
       uploadReq.done(function(attachments)
       {
-        formData.attachments = attachments;
+        _.extend(formData.attachments, attachments);
 
         FormView.prototype.submitRequest.call(view, $submitEl, formData);
       });
@@ -170,7 +181,7 @@ define([
 
       uploadReq.always(function()
       {
-        $spinner.addClass('is-uploading');
+        $spinner.addClass('hidden');
       });
     },
 

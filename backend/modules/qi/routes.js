@@ -48,7 +48,26 @@ module.exports = function setUpQiRoutes(app, qiModule)
   express.get('/qi/results;rid', canViewResults, findByRidRoute);
   express.post('/qi/results', canManageResults, prepareForAdd, express.crud.addRoute.bind(null, app, QiResult));
   express.get('/qi/results/:id', canViewResults, express.crud.readRoute.bind(null, app, QiResult));
-  express.put('/qi/results/:id', canManageResults, prepareForEdit, express.crud.editRoute.bind(null, app, QiResult));
+  express.put('/qi/results/:id', canManageResults, prepareForEdit, express.crud.editRoute.bind(null, app, {
+    model: QiResult,
+    beforeSet: function(model, req)
+    {
+      req.oldOkFile = model.okFile;
+      req.oldNokFile = model.nokFile;
+    },
+    afterSave: function(model, req)
+    {
+      if (req.oldOkFile && !model.okFile)
+      {
+        removeAttachmentFile(path.join(qiModule.config.attachmentsDest, req.oldOkFile.path));
+      }
+
+      if (req.oldNokFile && !model.nokFile)
+      {
+        removeAttachmentFile(path.join(qiModule.config.attachmentsDest, req.oldNokFile.path));
+      }
+    }
+  }));
   express.delete('/qi/results/:id', canManageResults, express.crud.deleteRoute.bind(null, app, QiResult));
   express.get('/qi/results;order', canManageResults, findOrderRoute);
   express.get('/qi/results;export', canViewResults, fetchDictionaries, express.crud.exportRoute.bind(null, {

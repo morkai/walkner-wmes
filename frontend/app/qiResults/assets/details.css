@@ -15,12 +15,14 @@
   font-size: 154px;
 }
 .qiResults-details-attachment img {
+  margin: 0 auto;
   display: block;
-  width: 100%;
-  border: 1px solid #666;
+  max-width: 100%;
+  text-align: center;
 }
 .qiResults-details-attachment span {
-  margin: 15px auto;
+  margin: 0 auto;
+  padding: 15px 0;
   display: block;
   white-space: nowrap;
   overflow: hidden;
