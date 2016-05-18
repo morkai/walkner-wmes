@@ -106,7 +106,7 @@ module.exports = function setUpKaizenReminder(app, kaizenModule)
         {
           var user = users[i];
 
-          sendRemainderEmail(users[i], this.userIdToStats[user._id]);
+          sendReminderEmail(users[i], this.userIdToStats[user._id]);
         }
 
         kaizenModule.info("Reminded %d users about incomplete orders.", users.length);
@@ -124,11 +124,13 @@ module.exports = function setUpKaizenReminder(app, kaizenModule)
 
         this.conditions = null;
         this.userIdToStats = null;
+
+        scheduleNextReminder();
       }
     );
   }
 
-  function sendRemainderEmail(user, stats)
+  function sendReminderEmail(user, stats)
   {
     var mailOptions = {
       to: user.email,

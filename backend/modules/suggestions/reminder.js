@@ -112,7 +112,7 @@ module.exports = function setUpSuggestionsReminder(app, module)
         {
           var user = users[i];
 
-          sendRemainderEmail(user, this.userIdToStats[user._id]);
+          sendReminderEmail(user, this.userIdToStats[user._id]);
         }
 
         module.info("Reminded %d users about incomplete suggestions.", users.length);
@@ -130,11 +130,13 @@ module.exports = function setUpSuggestionsReminder(app, module)
 
         this.conditions = null;
         this.userIdToStats = null;
+        
+        scheduleNextReminder();
       }
     );
   }
 
-  function sendRemainderEmail(user, stats)
+  function sendReminderEmail(user, stats)
   {
     var mailOptions = {
       to: user.email,
