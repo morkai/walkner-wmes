@@ -116,7 +116,35 @@ module.exports = function(mongoose, options, done)
         groupKey = toTime;
       }
 
+      for (let i = groups.length - 1; i >= 0; --i)
+      {
+        if (groups[i].totalNokCount)
+        {
+          break;
+        }
+
+        groups.pop();
+      }
+
       results.groups = groups;
+
+      return setImmediate(this.next());
+    },
+    function compactNokQtyPerDivisionStep()
+    {
+      for (let group of results.groups)
+      {
+        for (let family of Object.keys(group.nokQtyPerFamily))
+        {
+          const nokQtyPerFamily = group.nokQtyPerFamily[family]
+          const divisions = Object.keys(nokQtyPerFamily.perDivision);
+
+          if (divisions.length === 1)
+          {
+            nokQtyPerFamily.perDivision = divisions[0];
+          }
+        }
+      }
 
       return setImmediate(this.next());
     },
@@ -191,7 +219,8 @@ module.exports = function(mongoose, options, done)
       nokQtyPerFamily = group.nokQtyPerFamily[qiResult.productFamily] = {
         count: 0,
         qty: 0,
-        ridPerFault: {}
+        ridPerFault: {},
+        perDivision: {}
       };
     }
 
@@ -203,6 +232,34 @@ module.exports = function(mongoose, options, done)
     if (!ridPerFault)
     {
       ridPerFault = nokQtyPerFamily.ridPerFault[qiResult.faultCode] = [];
+    }
+
+    ridPerFault.push(qiResult.rid);
+
+    incNokQtyPerDivision(nokQtyPerFamily.perDivision, qiResult);
+  }
+
+  function incNokQtyPerDivision(perDivision, qiResult)
+  {
+    let divisionData = perDivision[qiResult.division];
+
+    if (!divisionData)
+    {
+      divisionData = perDivision[qiResult.division] = {
+        count: 0,
+        qty: 0,
+        ridPerFault: {}
+      };
+    }
+
+    divisionData.count += 1;
+    divisionData.qty += qiResult.qtyNok;
+
+    let ridPerFault = divisionData.ridPerFault[qiResult.faultCode];
+
+    if (!ridPerFault)
+    {
+      ridPerFault = divisionData.ridPerFault[qiResult.faultCode] = [];
     }
 
     ridPerFault.push(qiResult.rid);

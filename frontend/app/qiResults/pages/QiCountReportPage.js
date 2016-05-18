@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
@@ -12,6 +13,7 @@ define([
   '../views/QiNokQtyPerFamilyChartView',
   'app/qiResults/templates/countReportPage'
 ], function(
+  _,
   t,
   View,
   formatTooltipHeader,
@@ -48,22 +50,25 @@ define([
 
     initialize: function()
     {
-      this.setView('.filter-container', new QiCountReportFilterView({model: this.model}));
+      var model = this.model;
+
+      this.setView('.filter-container', new QiCountReportFilterView({model: model}));
       this.setView(
         '#' + this.idPrefix + '-totalNokCount',
-        new QiTotalNokCountChartView({model: this.model})
+        new QiTotalNokCountChartView({model: model})
       );
       this.setView(
         '#' + this.idPrefix + '-nokCountPerDivision',
-        new QiNokCountPerDivisionChartView({model: this.model})
+        new QiNokCountPerDivisionChartView({model: model})
       );
       this.setView(
         '#' + this.idPrefix + '-nokQtyPerFamily',
-        new QiNokQtyPerFamilyChartView({model: this.model})
+        new QiNokQtyPerFamilyChartView({model: model})
       );
 
-      this.listenTo(this.model, 'filtered', this.onFiltered);
-      this.listenTo(this.model, 'change:selectedGroupKey', this.updateSelectedGroup);
+      this.listenTo(model, 'filtered', this.onFiltered);
+      this.listenTo(model, 'change:selectedGroupKey', this.updateSelectedGroup);
+      this.listenTo(model, 'change:ignoredDivisions', this.updateSelectedDivisions);
     },
 
     destroy: function()
@@ -115,6 +120,20 @@ define([
 
       this.$id('selectedGroup').text(
         selectedGroupKey ? formatTooltipHeader.call({model: this.model}, selectedGroupKey) : '?'
+      );
+    },
+
+    updateSelectedDivisions: function()
+    {
+      var model = this.model;
+      var allDivisions = Object.keys(model.get('divisions'));
+      var selectedDivisions = allDivisions.filter(function(d) { return !model.isIgnoredDivision(d); });
+
+console.log(selectedDivisions);
+      this.$id('selectedDivisions').text(
+        selectedDivisions.length === allDivisions.length
+          ? ''
+          : ('; ' + selectedDivisions.join(', '))
       );
     }
 

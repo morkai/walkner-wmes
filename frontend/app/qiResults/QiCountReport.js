@@ -4,16 +4,12 @@ define([
   'underscore',
   '../i18n',
   '../time',
-  '../core/Model',
-  '../data/colorFactory',
-  './dictionaries'
+  '../core/Model'
 ], function(
   _,
   t,
   time,
-  Model,
-  colorFactory,
-  qiDictionaries
+  Model
 ) {
   'use strict';
 
@@ -34,7 +30,8 @@ define([
         inspector: '',
         divisions: {},
         selectedGroupKey: null,
-        groups: {}
+        groups: {},
+        ignoredDivisions: {}
       };
     },
 
@@ -118,6 +115,32 @@ define([
       }
 
       this.set('selectedGroupKey', selectedGroupKey);
+    },
+
+    toggleDivision: function(division, state)
+    {
+      var ignoredDivisions = _.clone(this.attributes.ignoredDivisions);
+
+      if (state)
+      {
+        delete ignoredDivisions[division];
+      }
+      else
+      {
+        ignoredDivisions[division] = true;
+      }
+
+      this.set('ignoredDivisions', ignoredDivisions);
+    },
+
+    hasAnyIgnoredDivisions: function()
+    {
+      return !_.isEmpty(this.attributes.ignoredDivisions);
+    },
+
+    isIgnoredDivision: function(division)
+    {
+      return !!this.attributes.ignoredDivisions[division];
     }
 
   }, {

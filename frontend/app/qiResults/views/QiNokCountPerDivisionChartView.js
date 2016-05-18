@@ -129,6 +129,13 @@ define([
               click: function(e)
               {
                 model.set('selectedGroupKey', e.point.x);
+              },
+              legendItemClick: function()
+              {
+                if (this.options.isDivision)
+                {
+                  model.toggleDivision(this.options.id, !this.visible);
+                }
               }
             }
           },
@@ -179,7 +186,8 @@ define([
           type: 'column',
           name: division,
           data: [],
-          color: colorFactory.getColor('divisions', division)
+          color: colorFactory.getColor('divisions', division),
+          isDivision: true
         };
       });
       var maxNokPerDay = qiDictionaries.settings.getMaxNokPerDay();
@@ -214,7 +222,8 @@ define([
         type: 'line',
         name: t.bound('qiResults', 'report:series:maxNokCount'),
         data: maxNokCount,
-        color: '#5cb85c'
+        color: '#5cb85c',
+        isDivision: false
       });
 
       return series;

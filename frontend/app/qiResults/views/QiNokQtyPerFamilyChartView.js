@@ -22,10 +22,13 @@ define([
       this.chart = null;
       this.isLoading = false;
 
-      this.listenTo(this.model, 'request', this.onModelLoading);
-      this.listenTo(this.model, 'sync', this.onModelLoaded);
-      this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:groups change:selectedGroupKey', _.debounce(this.render.bind(this), 1));
+      var model = this.model;
+
+      this.listenTo(model, 'request', this.onModelLoading);
+      this.listenTo(model, 'sync', this.onModelLoaded);
+      this.listenTo(model, 'error', this.onModelError);
+      this.listenTo(model, 'change:groups change:selectedGroupKey', _.debounce(this.render.bind(this), 1));
+      this.listenTo(model, 'change:ignoredDivisions', this.updateSeriesData);
     },
 
     destroy: function()
@@ -135,23 +138,70 @@ define([
       this.createChart();
     },
 
+    updateSeriesData: function()
+    {
+      var chartData = this.serializeChartData();
+
+      this.chart.xAxis[0].setCategories(chartData.categories, false);
+      this.chart.series[0].setData(chartData.nokQty, true, false, false);
+    },
+
     serializeChartData: function()
     {
       var chartData = {
         categories: [],
         nokQty: []
       };
-      var group = this.model.getSelectedGroup();
+      var model = this.model;
+      var group = model.getSelectedGroup();
 
       if (!group)
       {
         return chartData;
       }
 
+      var hasAnyIgnoredDivisions = model.hasAnyIgnoredDivisions();
       var familyData = [];
 
       _.forEach(group.nokQtyPerFamily, function(familyNokQty, family)
       {
+        if (hasAnyIgnoredDivisions)
+        {
+          var perDivision = familyNokQty.perDivision;
+
+          if (typeof perDivision !== 'string')
+          {
+            familyNokQty = {
+              qty: 0,
+              ridPerFault: {}
+            };
+
+            _.forEach(perDivision, function(divisionData, division)
+            {
+              if (model.isIgnoredDivision(division))
+              {
+                return;
+              }
+
+              familyNokQty.qty += divisionData.qty;
+
+              _.forEach(divisionData.ridPerFault, function(rids, fault)
+              {
+                if (!familyNokQty.ridPerFault[fault])
+                {
+                  familyNokQty.ridPerFault[fault] = [];
+                }
+
+                familyNokQty.ridPerFault[fault] = familyNokQty.ridPerFault[fault].concat(rids);
+              });
+            });
+          }
+          else if (model.isIgnoredDivision(perDivision))
+          {
+            return;
+          }
+        }
+
         familyData.push({
           category: family,
           quantity: familyNokQty.qty,
