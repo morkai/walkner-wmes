@@ -31,6 +31,7 @@ define([
         kinds: [],
         errorCategories: [],
         faultCodes: [],
+        inspector: '',
         divisions: {},
         selectedGroupKey: null,
         groups: {}
@@ -47,7 +48,7 @@ define([
       var data = options.data = _.extend(
         options.data || {},
         _.pick(this.attributes, [
-          'from', 'to', 'interval', 'productFamilies', 'kinds', 'errorCategories', 'faultCodes'
+          'from', 'to', 'interval', 'productFamilies', 'kinds', 'errorCategories', 'faultCodes', 'inspector'
         ])
       );
       data.kinds = data.kinds.join(',');
@@ -66,7 +67,8 @@ define([
         + '&productFamilies=' + this.get('productFamilies')
         + '&kinds=' + this.get('kinds')
         + '&errorCategories=' + this.get('errorCategories')
-        + '&faultCodes=' + this.get('faultCodes');
+        + '&faultCodes=' + this.get('faultCodes')
+        + '&inspector=' + this.get('inspector');
     },
 
     parse: function(report)
@@ -129,7 +131,8 @@ define([
         productFamilies: _.isEmpty(query.productFamilies) ? '' : query.productFamilies,
         kinds: _.isEmpty(query.kinds) ? [] : query.kinds.split(','),
         errorCategories: _.isEmpty(query.errorCategories) ? [] : query.errorCategories.split(','),
-        faultCodes: _.isEmpty(query.faultCodes) ? [] : query.faultCodes.split(',')
+        faultCodes: _.isEmpty(query.faultCodes) ? [] : query.faultCodes.split(','),
+        inspector: _.isEmpty(query.inspector) ? '' : query.inspector,
       });
     }
 

@@ -457,7 +457,8 @@ module.exports = function setUpQiRoutes(app, qiModule)
       productFamilies: _.isEmpty(query.productFamilies) ? '' : query.productFamilies,
       kinds: _.isEmpty(query.kinds) ? [] : query.kinds.split(','),
       errorCategories: _.isEmpty(query.errorCategories) ? [] : query.errorCategories.split(','),
-      faultCodes: _.isEmpty(query.faultCodes) ? [] : query.faultCodes.split(',')
+      faultCodes: _.isEmpty(query.faultCodes) ? [] : query.faultCodes.split(','),
+      inspector: query.inspector || null
     };
 
     reportsModule.helpers.generateReport(

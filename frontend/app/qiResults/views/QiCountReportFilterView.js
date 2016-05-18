@@ -79,6 +79,13 @@ define([
         multiple: true,
         data: qiDictionaries.faults.map(idAndLabel)
       });
+
+      this.$id('inspector').select2({
+        width: '200px',
+        allowClear: true,
+        placeholder: ' ',
+        data: qiDictionaries.inspectors.map(idAndLabel)
+      });
     },
 
     serializeFormData: function()
@@ -94,7 +101,8 @@ define([
         productFamilies: model.get('productFamilies'),
         kinds: model.get('kinds').join(','),
         errorCategories: model.get('errorCategories').join(','),
-        faultCodes: model.get('faultCodes').join(',')
+        faultCodes: model.get('faultCodes').join(','),
+        inspector: model.get('inspector')
       };
     },
 
@@ -107,7 +115,8 @@ define([
         productFamilies: this.$id('productFamilies').val(),
         kinds: this.$id('kinds').val(),
         errorCategories: this.$id('errorCategories').val(),
-        faultCodes: this.$id('faultCodes').val()
+        faultCodes: this.$id('faultCodes').val(),
+        inspector: this.$id('inspector').val()
       };
 
       if (!query.from || query.from < 0)

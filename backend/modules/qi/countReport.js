@@ -80,6 +80,11 @@ module.exports = function(mongoose, options, done)
         conditions.faultCode = {$in: options.faultCodes};
       }
 
+      if (!_.isEmpty(options.inspector))
+      {
+        conditions['inspector.id'] = options.inspector;
+      }
+
       const stream = QiResult.find(conditions, fields).sort(sort).lean().stream();
       const next = this.next();
 
