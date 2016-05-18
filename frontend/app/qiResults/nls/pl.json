@@ -28,7 +28,8 @@
   "PANEL:TITLE:details:inspection:nok": "Szczegóły inspekcji",
   "PANEL:TITLE:details:extra": "Dodatkowe informacje",
   "PANEL:TITLE:details:actions": "Akcje korygujące",
-  "PANEL:TITLE:details:attachments": "Załączniki",
+  "PANEL:TITLE:details:attachments:ok": "Załącznik OK",
+  "PANEL:TITLE:details:attachments:nok": "Załącznik NOK",
   "PANEL:TITLE:addForm": "Formularz dodawania wyniku",
   "PANEL:TITLE:editForm": "Formularz edycji wyniku",
 

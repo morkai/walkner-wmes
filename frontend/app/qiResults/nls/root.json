@@ -29,7 +29,8 @@
     "PANEL:TITLE:details:inspection:nok": "NOK details",
     "PANEL:TITLE:details:extra": "Extra details",
     "PANEL:TITLE:details:actions": "Corrective actions",
-    "PANEL:TITLE:details:attachments": "Attachments",
+    "PANEL:TITLE:details:attachments:ok": "OK attachment",
+    "PANEL:TITLE:details:attachments:nok": "NOK attachment",
     "PANEL:TITLE:addForm": "Add result form",
     "PANEL:TITLE:editForm": "Edit result form",
 

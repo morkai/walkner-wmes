@@ -287,8 +287,18 @@ module.exports = function setUpQiRoutes(app, qiModule)
   function sendAttachmentRoute(req, res, next)
   {
     var fields = {};
+    var attachmentProperty = req.params.attachment;
 
-    fields[req.params.attachment] = 1;
+    if (/NOK$/.test(attachmentProperty))
+    {
+      attachmentProperty = 'nokFile';
+    }
+    else if (/OK$/.test(attachmentProperty))
+    {
+      attachmentProperty = 'okFile';
+    }
+
+    fields[attachmentProperty] = 1;
 
     QiResult.findById(req.params.result, fields).lean().exec(function(err, qiResult)
     {
@@ -302,22 +312,17 @@ module.exports = function setUpQiRoutes(app, qiModule)
         return res.sendStatus(404);
       }
 
-      var attachment = qiResult[req.params.attachment];
+      var attachment = qiResult[attachmentProperty];
 
       if (!attachment)
       {
         return res.sendStatus(404);
       }
 
-      var disposition = req.query.download ? 'attachment' : 'inline';
-
       res.type(attachment.type);
-
-      if (disposition !== 'inline' || !/^image/.test(attachment.type))
-      {
-        res.append('Content-Disposition', contentDisposition(attachment.name, {disposition: disposition}));
-      }
-
+      res.append('Content-Disposition', contentDisposition(attachment.name, {
+        type: req.query.download ? 'attachment' : 'inline'
+      }));
       res.sendFile(path.join(qiModule.config.attachmentsDest, attachment.path));
     });
   }
