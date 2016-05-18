@@ -102,7 +102,6 @@ define([
       var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
-      var productFamily = this.$id('productFamily').val().replace(/[^0-9A-Za-z]+/g, ' ').replace(/\s+/, ', ');
       var inspector = this.$id('inspector').val();
 
       if (result === 'ok')
@@ -163,6 +162,13 @@ define([
       FilterView.prototype.afterRender.call(this);
 
       this.toggleButtonGroup('result');
+
+      this.$id('productFamily').select2({
+        width: '130px',
+        allowClear: true,
+        placeholder: ' ',
+        data: qiDictionaries.productFamilies.map(function(d) { return {id: d, text: d}; })
+      });
 
       this.$id('division').select2({
         width: '90px',

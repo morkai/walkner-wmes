@@ -51,8 +51,15 @@ define([
 
       buttonGroup.toggle(this.$id('interval'));
 
+      this.$id('productFamilies').select2({
+        width: '190px',
+        allowClear: true,
+        multiple: true,
+        data: qiDictionaries.productFamilies.map(function(d) { return {id: d, text: d}; })
+      });
+
       this.$id('kinds').select2({
-        width: '215px',
+        width: '200px',
         allowClear: true,
         multiple: true,
         containerCssClass: 'qi-countReport-clipSelect2',
@@ -60,15 +67,14 @@ define([
       });
 
       this.$id('errorCategories').select2({
-        width: '215px',
+        width: '180px',
         allowClear: true,
         multiple: true,
-        containerCssClass: 'qi-countReport-clipSelect2',
         data: qiDictionaries.errorCategories.map(idAndLabel)
       });
 
       this.$id('faultCodes').select2({
-        width: '250px',
+        width: '180px',
         allowClear: true,
         multiple: true,
         data: qiDictionaries.faults.map(idAndLabel)
