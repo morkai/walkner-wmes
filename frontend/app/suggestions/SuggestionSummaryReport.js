@@ -136,6 +136,11 @@ define([
 
     fromQuery: function(query)
     {
+      if (query.from === undefined && query.to === undefined)
+      {
+        query.from = time.getMoment().startOf('month').subtract(3, 'months').valueOf();
+      }
+
       return new this({
         from: +query.from || undefined,
         to: +query.to || undefined,
