@@ -72,10 +72,11 @@ define([
 
     createChart: function()
     {
-      var series = this.serializeChartSeries();
-      var model = this.model;
+      var view = this;
+      var series = view.serializeChartSeries();
+      var model = view.model;
 
-      this.chart = new Highcharts.Chart({
+      view.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
           plotBorderWidth: 1,
@@ -83,7 +84,7 @@ define([
           events: {
             click: function(e)
             {
-              model.selectNearestGroup(e.xAxis[0].value);
+              model.selectNearestGroup(view.mouseOverX || e.xAxis[0].value);
             }
           }
         },
@@ -111,7 +112,12 @@ define([
         tooltip: {
           shared: true,
           valueDecimals: 0,
-          headerFormatter: formatTooltipHeader.bind(this)
+          headerFormatter: function(ctx)
+          {
+            view.mouseOverX = ctx.x;
+
+            return formatTooltipHeader.apply(view, arguments);
+          }
         },
         legend: {
           enabled: true
@@ -150,7 +156,7 @@ define([
                 lineWidth: 2
               }
             },
-            marker: this.getMarkerStyles(series.length ? series[0].data.length : 0)
+            marker: view.getMarkerStyles(series.length ? series[0].data.length : 0)
           }
         },
         series: series
