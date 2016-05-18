@@ -8,6 +8,7 @@ var _ = require('lodash');
 var step = require('h5.step');
 var multer = require('multer');
 var contentDisposition = require('content-disposition');
+var gm = require('gm');
 var countReport = require('./countReport');
 
 module.exports = function setUpQiRoutes(app, qiModule)
@@ -300,31 +301,98 @@ module.exports = function setUpQiRoutes(app, qiModule)
 
     fields[attachmentProperty] = 1;
 
-    QiResult.findById(req.params.result, fields).lean().exec(function(err, qiResult)
-    {
-      if (err)
+    step(
+      function findResultStep()
       {
-        return next(err);
-      }
-
-      if (!qiResult)
+        QiResult.findById(req.params.result, fields).lean().exec(this.next());
+      },
+      function handleFindResultResultStep(err, qiResult)
       {
-        return res.sendStatus(404);
-      }
+        if (err)
+        {
+          return this.skip(err);
+        }
 
-      var attachment = qiResult[attachmentProperty];
+        if (!qiResult)
+        {
+          return this.skip(app.createError('NOT_FOUND', 404));
+        }
 
-      if (!attachment)
+        this.attachment = qiResult[attachmentProperty];
+
+        if (!this.attachment)
+        {
+          return this.skip(app.createError('NOT_FOUND', 404));
+        }
+
+        if (!req.query.min
+          || !/^image/.test(this.attachment.type)
+          || this.attachment.size < 512000)
+        {
+          return this.skip(null, false);
+        }
+      },
+      function findMinFileStep()
       {
-        return res.sendStatus(404);
-      }
+        fs.stat(path.join(qiModule.config.attachmentsDest, this.attachment.path + '.min.jpg'), this.next());
+      },
+      function createMinFileStep(err)
+      {
+        if (!err)
+        {
+          return this.skip(null, true);
+        }
 
-      res.type(attachment.type);
-      res.append('Content-Disposition', contentDisposition(attachment.name, {
-        type: req.query.download ? 'attachment' : 'inline'
-      }));
-      res.sendFile(path.join(qiModule.config.attachmentsDest, attachment.path));
-    });
+        gm(path.join(qiModule.config.attachmentsDest, this.attachment.path))
+          .resize(1200, null, '>')
+          .write(path.join(qiModule.config.attachmentsDest, this.attachment.path + '.min.jpg'), this.next());
+      },
+      function handleCreateMinFileResultStep(err)
+      {
+        if (!err)
+        {
+          return this.skip(null, true);
+        }
+
+        qiModule.error(
+          "Failed to generate a min image of [%s] of [%s]: %s",
+          attachmentProperty,
+          req.params.result,
+          err.message
+        );
+
+        return this.skip(null, false);
+      },
+      function sendAttachmentStep(err, min)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        var fileType;
+        var filePath;
+
+        if (min)
+        {
+          fileType = 'image/jpeg';
+          filePath = path.join(qiModule.config.attachmentsDest, this.attachment.path + '.min.jpg');
+        }
+        else
+        {
+          fileType = this.attachment.type;
+          filePath = path.join(qiModule.config.attachmentsDest, this.attachment.path);
+        }
+
+        res.type(fileType);
+        res.append('Content-Disposition', contentDisposition(this.attachment.name, {
+          type: req.query.download ? 'attachment' : 'inline'
+        }));
+        res.sendFile(filePath);
+
+        this.attachment = null;
+      }
+    );
   }
 
   function prepareAttachments(body)
@@ -368,6 +436,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
 
   function removeAttachmentFile(filePath)
   {
+    fs.unlink(filePath + '.min.jpg', () => {});
     fs.unlink(filePath, function(err)
     {
       if (err)

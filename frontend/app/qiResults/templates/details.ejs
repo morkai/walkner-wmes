@@ -161,9 +161,9 @@
         </div>
         <div class="panel-body qiResults-details-attachment">
           <% if (model.okFile) { %>
-          <a href="/qi/results/<%- model._id %>/attachments/<%- model.rid %>%20OK">
+          <a href="/qi/results/<%- model._id %>/attachments/<%- model.rid %>%20OK" data-file="ok">
             <% if (model.okFile.icon === 'file-image-o') { %>
-            <img src="/qi/results/<%- model._id %>/attachments/okFile?r=<%- model.okFile._id %>">
+            <img src="/qi/results/<%- model._id %>/attachments/okFile?min=<%- model.okFile._id %>">
             <% } else { %>
             <i class="fa fa-<%- model.okFile.icon %>"></i>
             <% } %>
@@ -182,9 +182,9 @@
         </div>
         <div class="panel-body qiResults-details-attachment">
           <% if (model.nokFile) { %>
-          <a href="/qi/results/<%- model._id %>/attachments/<%- model.rid %>%20NOK">
+          <a href="/qi/results/<%- model._id %>/attachments/<%- model.rid %>%20NOK" data-file="nok">
             <% if (model.nokFile.icon === 'file-image-o') { %>
-            <img src="/qi/results/<%- model._id %>/attachments/nokFile?r=<%- model.nokFile._id %>">
+            <img src="/qi/results/<%- model._id %>/attachments/nokFile?min=<%- model.nokFile._id %>">
             <% } else { %>
             <i class="fa fa-<%- model.nokFile.icon %>"></i>
             <% } %>
