@@ -8,7 +8,7 @@ module.exports = function setUpDurationRecalculator(app, module)
 {
   var mongoose = app[module.config.mongooseId];
   var KaizenOrder = mongoose.model('KaizenOrder');
-  var inProgress = null;
+  var inProgress = false;
 
   app.broker.subscribe('app.started', recalcDurations).setLimit(1);
 
@@ -18,12 +18,16 @@ module.exports = function setUpDurationRecalculator(app, module)
 
   function recalcDurations(all)
   {
-    if (inProgress !== null)
+    if (inProgress)
     {
       return;
     }
 
-    inProgress = [];
+    var startedAt = new Date();
+
+    module.debug("[durationRecalculator] Started...");
+
+    inProgress = true;
 
     var conditions = {
       status: {
@@ -31,7 +35,15 @@ module.exports = function setUpDurationRecalculator(app, module)
       }
     };
     var fields = {
-      changes: 0
+      rid: 1,
+      types: 1,
+      status: 1,
+      eventDate: 1,
+      kaizenStartDate: 1,
+      kaizenFinishDate: 1,
+      finishedAt: 1,
+      finishDuration: 1,
+      kaizenDuration: 1
     };
 
     if (all === true)
@@ -39,42 +51,58 @@ module.exports = function setUpDurationRecalculator(app, module)
       delete conditions.status;
     }
 
-    KaizenOrder.find(conditions, fields).exec(function(err, suggestions)
+    var stream = KaizenOrder.find(conditions, fields).lean().stream();
+
+    stream.on('error', function(err)
     {
-      if (err)
-      {
-        inProgress = null;
+      inProgress = false;
 
-        return module.error("[durationRecalculator] Failed to find orders: %s", err.message);
-      }
+      module.error("[durationRecalculator] Failed to recalc orders: %s", err.message);
+    });
 
-      inProgress = suggestions;
+    stream.on('data', function(doc)
+    {
+      recalcNext(doc, startedAt);
+    });
 
-      recalcNext();
+    stream.on('close', function()
+    {
+      inProgress = false;
+
+      module.debug("[durationRecalculator] Done in %d ms.", Date.now() - startedAt);
     });
   }
 
-  function recalcNext()
+  function recalcNext(doc, startedAt)
   {
-    var kaizenOrder = inProgress.shift();
+    var newKaizenDuration = KaizenOrder.recalcKaizenDuration(doc, startedAt);
+    var newFinishDuration = KaizenOrder.recalcFinishDuration(doc, startedAt);
+    var changed = false;
+    var changes = {};
 
-    if (!kaizenOrder)
+    if (newKaizenDuration !== doc.kaizenDuration)
     {
-      inProgress = null;
+      changed = true;
+      changes.kaizenDuration = newKaizenDuration;
+    }
 
+    if (newFinishDuration !== doc.finishDuration)
+    {
+      changed = true;
+      changes.finishDuration = newFinishDuration;
+    }
+
+    if (!changed)
+    {
       return;
     }
 
-    kaizenOrder.recalcKaizenDuration();
-    kaizenOrder.recalcFinishDuration();
-    kaizenOrder.save(function(err)
+    KaizenOrder.update({_id: doc._id}, {$set: changes}, function(err)
     {
       if (err)
       {
-        module.error("[durationRecalculator] Failed to recalc [%s]: %s", kaizenOrder.rid, err.message);
+        module.error("[durationRecalculator] Failed to recalc [%s]: %s", doc.rid, err.message);
       }
-
-      setImmediate(recalcNext);
     });
   }
 };

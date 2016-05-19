@@ -370,34 +370,40 @@ module.exports = function setupSuggestionModel(app, mongoose)
     });
   };
 
+  suggestionSchema.statics.recalcFinishDuration = function(doc, currentDate)
+  {
+    if (doc.status === 'cancelled')
+    {
+      return 0;
+    }
+
+    var fromDate = doc.date;
+    var toDate = doc.kaizenFinishDate || doc.finishedAt || currentDate || new Date();
+
+    return 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
+  };
+
+  suggestionSchema.statics.recalcKaizenDuration = function(doc, currentDate)
+  {
+    if (doc.status === 'cancelled')
+    {
+      return 0;
+    }
+
+    var fromDate = doc.kaizenStartDate || doc.date;
+    var toDate = doc.kaizenFinishDate || currentDate || new Date();
+
+    return 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
+  };
+
   suggestionSchema.methods.recalcFinishDuration = function()
   {
-    if (this.status === 'cancelled')
-    {
-      this.finishDuration = 0;
-    }
-    else
-    {
-      var fromDate = this.date;
-      var toDate = this.kaizenFinishDate || new Date();
-
-      this.finishDuration = 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
-    }
+    this.finishDuration = this.model('Suggestion').recalcFinishDuration(this);
   };
 
   suggestionSchema.methods.recalcKaizenDuration = function()
   {
-    if (this.status === 'cancelled')
-    {
-      this.kaizenDuration = 0;
-    }
-    else
-    {
-      var fromDate = this.kaizenStartDate || this.date;
-      var toDate = this.kaizenFinishDate || new Date();
-
-      this.kaizenDuration = 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
-    }
+    this.kaizenDuration = this.model('Suggestion').recalcKaizenDuration(this);
   };
 
   suggestionSchema.methods.createObservers = function()

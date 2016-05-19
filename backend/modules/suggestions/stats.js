@@ -68,6 +68,8 @@ module.exports = function setUpKaizenCommands(app, module)
 
   function recountStats()
   {
+    var t = Date.now();
+
     if (recountTimer)
     {
       clearTimeout(recountTimer);
@@ -87,7 +89,7 @@ module.exports = function setUpKaizenCommands(app, module)
         }
         else
         {
-          module.debug("[stats] Recounted!");
+          module.debug("[stats] Recounted in %d ms.", Date.now() - t);
 
           stats.users = {};
         }
@@ -211,6 +213,8 @@ module.exports = function setUpKaizenCommands(app, module)
       return b.count - a.count;
     });
 
+    top10 = top10.slice(0, 10);
+
     var lastPlace = 0;
     var lastCount = 0;
 
@@ -229,7 +233,7 @@ module.exports = function setUpKaizenCommands(app, module)
       }
     });
 
-    return top10.slice(0, 10);
+    return top10;
   }
 
   function getUserStats(userId, done)

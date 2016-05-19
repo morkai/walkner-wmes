@@ -8,7 +8,7 @@ module.exports = function setUpDurationRecalculator(app, module)
 {
   var mongoose = app[module.config.mongooseId];
   var Suggestion = mongoose.model('Suggestion');
-  var inProgress = null;
+  var inProgress = false;
 
   app.broker.subscribe('app.started', recalcDurations).setLimit(1);
 
@@ -16,14 +16,18 @@ module.exports = function setUpDurationRecalculator(app, module)
 
   module.recalcDurations = recalcDurations;
 
-  function recalcDurations()
+  function recalcDurations(all)
   {
-    if (inProgress !== null)
+    if (inProgress)
     {
       return;
     }
 
-    inProgress = [];
+    var startedAt = new Date();
+
+    module.debug("[durationRecalculator] Started...");
+
+    inProgress = true;
 
     var conditions = {
       status: {
@@ -31,45 +35,73 @@ module.exports = function setUpDurationRecalculator(app, module)
       }
     };
     var fields = {
-      changes: 0
+      rid: 1,
+      status: 1,
+      date: 1,
+      kaizenStartDate: 1,
+      kaizenFinishDate: 1,
+      finishedAt: 1,
+      finishDuration: 1,
+      kaizenDuration: 1
     };
 
-    Suggestion.find(conditions, fields).exec(function(err, suggestions)
+    if (all === true)
     {
-      if (err)
-      {
-        inProgress = null;
+      delete conditions.status;
+    }
 
-        return module.error("[durationRecalculator] Failed to find suggestions: %s", err.message);
-      }
+    var stream = Suggestion.find(conditions, fields).lean().stream();
 
-      inProgress = suggestions;
+    stream.on('error', function(err)
+    {
+      inProgress = false;
 
-      recalcNext();
+      module.error("[durationRecalculator] Failed to recalc suggestions: %s", err.message);
+    });
+
+    stream.on('data', function(doc)
+    {
+      recalcNext(doc, startedAt);
+    });
+
+    stream.on('close', function()
+    {
+      inProgress = false;
+
+      module.debug("[durationRecalculator] Done in %d ms.", Date.now() - startedAt);
     });
   }
 
-  function recalcNext()
+  function recalcNext(doc, startedAt)
   {
-    var suggestion = inProgress.shift();
+    var newKaizenDuration = Suggestion.recalcKaizenDuration(doc, startedAt);
+    var newFinishDuration = Suggestion.recalcFinishDuration(doc, startedAt);
+    var changed = false;
+    var changes = {};
 
-    if (!suggestion)
+    if (newKaizenDuration !== doc.kaizenDuration)
     {
-      inProgress = null;
+      changed = true;
+      changes.kaizenDuration = newKaizenDuration;
+    }
 
+    if (newFinishDuration !== doc.finishDuration)
+    {
+      changed = true;
+      changes.finishDuration = newFinishDuration;
+    }
+
+    if (!changed)
+    {
       return;
     }
 
-    suggestion.recalcKaizenDuration();
-    suggestion.recalcFinishDuration();
-    suggestion.save(function(err)
+    Suggestion.update({_id: doc._id}, {$set: changes}, function(err)
     {
       if (err)
       {
-        module.error("[durationRecalculator] Failed to recalc [%s]: %s", suggestion.rid, err.message);
+        module.error("[durationRecalculator] Failed to recalc [%s]: %s", doc.rid, err.message);
       }
-
-      setImmediate(recalcNext);
     });
   }
 };

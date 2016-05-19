@@ -411,47 +411,53 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     });
   };
 
-  kaizenOrderSchema.methods.recalcFinishDuration = function()
+  kaizenOrderSchema.statics.recalcFinishDuration = function(doc, currentDate)
   {
-    if (this.status === 'cancelled')
+    if (doc.status === 'cancelled')
     {
-      this.finishDuration = 0;
+      return 0;
+    }
+
+    var fromDate = doc.eventDate;
+    var toDate;
+
+    if (doc.kaizenFinishDate && _.includes(doc.types, 'kaizen'))
+    {
+      toDate = doc.kaizenFinishDate;
+    }
+    else if (doc.finishedAt)
+    {
+      toDate = doc.finishedAt;
     }
     else
     {
-      var fromDate = this.eventDate;
-      var toDate;
-
-      if (this.kaizenFinishDate && _.includes(this.types, 'kaizen'))
-      {
-        toDate = this.kaizenFinishDate;
-      }
-      else if (this.finishedAt)
-      {
-        toDate = this.finishedAt;
-      }
-      else
-      {
-        toDate = new Date();
-      }
-
-      this.finishDuration = 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
+      toDate = currentDate || new Date();
     }
+
+    return 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
+  };
+
+  kaizenOrderSchema.statics.recalcKaizenDuration = function(doc, currentDate)
+  {
+    if (doc.kaizenStartDate && _.includes(doc.types, 'kaizen'))
+    {
+      var fromDate = doc.kaizenStartDate;
+      var toDate = doc.kaizenFinishDate || currentDate || new Date();
+
+      return 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
+    }
+
+    return 0;
+  };
+
+  kaizenOrderSchema.methods.recalcFinishDuration = function()
+  {
+    this.finishDuration = this.model('KaizenOrder').recalcFinishDuration(this);
   };
 
   kaizenOrderSchema.methods.recalcKaizenDuration = function()
   {
-    if (this.kaizenStartDate && _.includes(this.types, 'kaizen'))
-    {
-      var fromDate = this.kaizenStartDate;
-      var toDate = this.kaizenFinishDate || new Date();
-
-      this.kaizenDuration = 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
-    }
-    else
-    {
-      this.kaizenDuration = 0;
-    }
+    this.kaizenDuration = this.model('KaizenOrder').recalcKaizenDuration(this);
   };
 
   kaizenOrderSchema.methods.createObservers = function()
