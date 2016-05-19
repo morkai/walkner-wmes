@@ -187,6 +187,7 @@ exports.pubsub = {
     'orders.updated.*',
     'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*', 'orderDocuments.eto.synced',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',
+    'suggestions.seen.*',
     'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted',
     'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
     'isaLineStates.**', 'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
