@@ -66,6 +66,8 @@ module.exports = function setUpIsaLineState(app, isaModule)
 
   function loadLineStates()
   {
+    var t = Date.now();
+
     step(
       function()
       {
@@ -102,7 +104,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
 
         app.broker.publish('isaLineStates.loaded');
 
-        isaModule.debug("Loaded.");
+        isaModule.debug("Loaded in %d ms.", Date.now() - t);
       }
     );
   }
