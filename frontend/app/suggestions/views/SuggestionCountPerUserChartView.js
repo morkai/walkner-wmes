@@ -4,16 +4,22 @@ define([
   'underscore',
   'app/i18n',
   'app/highcharts',
-  'app/core/View'
+  'app/core/View',
+  'app/suggestions/templates/reportTable',
+  'app/suggestions/templates/tableAndChart'
 ], function(
   _,
   t,
   Highcharts,
-  View
+  View,
+  renderReportTable,
+  template
 ) {
   'use strict';
 
   return View.extend({
+
+    template: template,
 
     initialize: function()
     {
@@ -62,22 +68,22 @@ define([
           this.chart.showLoading();
         }
       }
+
+      this.updateTable();
     },
 
     createChart: function()
     {
-      var series = this.serializeSeries();
-      var metric = this.options.metric;
-      var dataPointCount = series[0].data.length;
-      var height = 150 + series.length * 20 * dataPointCount;
+      var view = this;
+      var metric = view.options.metric;
+      var series = view.serializeSeries(true);
 
       this.chart = new Highcharts.Chart({
         chart: {
-          renderTo: this.el,
+          renderTo: this.$id('chart')[0],
           plotBorderWidth: 1,
           spacing: [10, 1, 1, 0],
-          height: height,
-          type: 'bar'
+          type: 'column'
         },
         exporting: {
           filename: t.bound('suggestions', 'report:filenames:' + metric),
@@ -86,17 +92,22 @@ define([
               text: t.bound('suggestions', 'report:title:' + metric)
             }
           },
-          sourceHeight: height
+          buttons: {
+            contextButton: {
+              align: 'left'
+            }
+          }
         },
         title: false,
         noData: {},
         xAxis: {
-          categories: this.serializeCategories()
+          categories: view.serializeCategories(true)
         },
         yAxis: {
           title: false,
           min: 0,
-          allowDecimals: false
+          allowDecimals: false,
+          opposite: true
         },
         tooltip: {
           shared: true,
@@ -104,6 +115,24 @@ define([
         },
         legend: {
           enabled: series.length > 1
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          },
+          series: {
+            events: {
+              legendItemClick: function()
+              {
+                this.setVisible(!this.visible, false);
+                view.updateTable(true);
+
+                return false;
+              }
+            }
+          }
         },
         series: series
       });
@@ -115,14 +144,128 @@ define([
       this.createChart();
     },
 
-    serializeCategories: function()
+    updateTable: function(filtered)
     {
-      return this.model.get(this.options.metric).categories;
+      var totalRows = this.model.get('total').rows;
+      var categories = this.serializeCategories(false);
+      var series = this.serializeSeries(false);
+      var chart = this.chart;
+      var total = 0;
+      var invisible = false;
+      var rectEl = this.el.querySelectorAll('svg > rect')[1];
+      var oldX = +rectEl.getAttribute('x');
+
+      _.forEach(series, function(s, i)
+      {
+        if (chart.series[i].visible)
+        {
+          total += totalRows[i].abs;
+        }
+        else
+        {
+          invisible = true;
+        }
+      });
+
+      var rows = categories.map(function(label, dataIndex)
+      {
+        var abs = 0;
+
+        _.forEach(series, function(s, seriesIndex)
+        {
+          if (chart.series[seriesIndex].visible)
+          {
+            abs += s.data[dataIndex];
+          }
+        });
+
+        return {
+          dataIndex: dataIndex,
+          no: dataIndex + 1,
+          label: label,
+          abs: abs,
+          rel: abs / total
+        };
+      });
+
+      if (invisible)
+      {
+        rows = rows.filter(function(d) { return d.abs > 0; });
+
+        rows.sort(function(a, b) { return b.abs - a.abs; });
+
+        var newCategories = [];
+        var newSeries = series.map(function() { return []; });
+
+        rows.forEach(function(row, i)
+        {
+          row.no = i + 1;
+
+          if (i < 15)
+          {
+            newCategories.push(row.label);
+
+            _.forEach(newSeries, function(data, i)
+            {
+              data.push(series[i].data[row.dataIndex]);
+            });
+          }
+        });
+
+        categories = newCategories;
+        series = newSeries;
+      }
+      else
+      {
+        series = series.map(function(s) { return s.data.slice(0, 15); });
+      }
+
+      if (filtered)
+      {
+        chart.xAxis[0].setCategories(categories, false);
+
+        series.forEach(function(data, i)
+        {
+          chart.series[i].setData(data, false, false, false);
+        });
+
+        chart.redraw(false);
+        rectEl.setAttribute('x', oldX);
+      }
+
+      this.$id('table').html(renderReportTable({
+        rows: rows
+      }));
     },
 
-    serializeSeries: function()
+    serializeCategories: function(top)
     {
-      return this.model.get(this.options.metric).series;
+      var categories = this.model.get(this.options.metric).categories;
+
+      if (top)
+      {
+        categories = categories.slice(0, 15);
+      }
+
+      return categories;
+    },
+
+    serializeSeries: function(top)
+    {
+      var series = this.model.get(this.options.metric).series;
+
+      if (top)
+      {
+        series = series.map(function(s)
+        {
+          s = _.clone(s);
+          s.data = s.data.slice(0, 15);
+
+          return s;
+        });
+      }
+
+      return series;
     },
 
     onModelLoading: function()

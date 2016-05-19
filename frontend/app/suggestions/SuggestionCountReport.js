@@ -240,7 +240,6 @@ define([
       return [
         {
           id: 'entry',
-          type: 'bar',
           name: t.bound('suggestions', 'report:series:entry'),
           data: _.map(confirmerTotals, function(t) { return t[1]; })
         }

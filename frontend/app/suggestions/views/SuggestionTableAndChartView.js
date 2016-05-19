@@ -25,10 +25,6 @@ define([
 
     template: template,
 
-    events: {
-
-    },
-
     initialize: function()
     {
       this.chart = null;
