@@ -109,7 +109,7 @@ define([
           headerFormatter: formatTooltipHeader.bind(this)
         },
         legend: {
-          enabled: printMode !== true
+          enabled: true
         },
         plotOptions: {
           column: {
