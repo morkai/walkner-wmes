@@ -127,7 +127,10 @@ define([
         },
         plotOptions: {
           column: {
-            borderWidth: 0
+            borderWidth: 0,
+            dataLabels: {
+              enabled: series.length * series[0].data.length <= 35
+            }
           }
         },
         series: series
