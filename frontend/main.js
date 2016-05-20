@@ -4,6 +4,8 @@
 {
   'use strict';
 
+  document.body.classList.toggle('is-ie', window.navigator.userAgent.indexOf('Trident/') !== -1);
+
   var location = window.location;
 
   if (!location.origin)

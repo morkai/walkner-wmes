@@ -113,6 +113,20 @@
 .dashboard-metricsAndList-top:last-child {
   transform: rotateY(180deg);
 }
+.is-ie .dashboard-top-card.is-flipped {
+  transform: none;
+}
+.is-ie .dashboard-metricsAndList-top:last-child {
+  transform: none;
+  display: none;
+}
+.is-ie .is-flipped .dashboard-metricsAndList-top:first-child {
+  display: none;
+}
+.is-ie .is-flipped .dashboard-metricsAndList-top:last-child {
+  z-index: 2;
+  display: block;
+}
 .dashboard-metricsAndList-top .table,
 .dashboard-metricsAndList-top .table > thead > tr > th,
 .dashboard-metricsAndList-top .table > tbody > tr > td {
