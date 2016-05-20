@@ -1,11 +1,13 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/i18n',
   'app/core/pages/DetailsPage',
   'app/core/util/pageActions',
   'app/qiResults/dictionaries',
   '../views/QiResultDetailsView'
 ], function(
+  t,
   DetailsPage,
   pageActions,
   qiDictionaries,
@@ -23,6 +25,16 @@ define([
     {
       var model = this.model;
       var actions = [];
+
+      if (!model.get('ok'))
+      {
+        actions.push({
+          id: 'print',
+          icon: 'print',
+          label: t(model.getNlsDomain(), 'PAGE_ACTION:print'),
+          href: model.genClientUrl('print')
+        });
+      }
 
       if (model.canEdit())
       {

@@ -19,6 +19,7 @@
     "PAGE_ACTION:add:nok": "NOK result",
     "PAGE_ACTION:edit": "Edit result",
     "PAGE_ACTION:delete": "Delete result",
+    "PAGE_ACTION:print": "Print NOK notification",
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:jump:title": "Jump to result by ID",
     "PAGE_ACTION:jump:placeholder": "Result ID",
@@ -117,7 +118,11 @@
     "report:filenames:nokQtyPerFamily": "WMES_QI_NokQty",
 
     "settings:tab:reports": "Reports",
-    "settings:maxNokPerDay": "Upper limit of red strips per day"
+    "settings:maxNokPerDay": "Upper limit of red strips per day",
+
+    "print:title": "NOK notification {rid}",
+    "print:product": "Product:",
+    "print:problem": "Problem:"
   },
   "pl": true
 }

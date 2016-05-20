@@ -18,6 +18,7 @@
   "PAGE_ACTION:add:nok": "niezgodny",
   "PAGE_ACTION:edit": "Edytuj wynik",
   "PAGE_ACTION:delete": "Usuń wynik",
+  "PAGE_ACTION:print": "Drukuj zgłoszenie niezgodności",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:jump:title": "Skocz do wyniku po ID",
   "PAGE_ACTION:jump:placeholder": "ID wyniku",
@@ -116,5 +117,9 @@
   "report:filenames:nokQtyPerFamily": "WMES_QI_IloscNiezgodnych",
 
   "settings:tab:reports": "Raporty",
-  "settings:maxNokPerDay": "Górny limit czerwonych pasków na dzień"
+  "settings:maxNokPerDay": "Górny limit czerwonych pasków na dzień",
+
+  "print:title": "Zgłoszenie niezgodności {rid}",
+  "print:product": "Typ oprawy:",
+  "print:problem": "Opis błędu:"
 }

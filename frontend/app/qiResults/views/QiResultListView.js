@@ -59,6 +59,14 @@ define([
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];
 
+        actions.push({
+          id: 'print',
+          icon: 'print',
+          label: t(model.getNlsDomain(), 'PAGE_ACTION:print'),
+          href: model.genClientUrl('print'),
+          className: model.get('ok') ? 'disabled' : ''
+        });
+
         if (model.canEdit())
         {
           actions.push(ListView.actions.edit(model));

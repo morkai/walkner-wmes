@@ -94,6 +94,22 @@ define([
     );
   });
 
+  router.map('/qi/results/:id;print', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/qiResults/pages/QiResultPrintPage',
+        nls
+      ],
+      function(QiResultPrintPage)
+      {
+        return new QiResultPrintPage({
+          model: new QiResult({_id: req.params.id})
+        });
+      }
+    );
+  });
+
   router.map('/qi/results;add', canManage, function(req)
   {
     viewport.loadPage(
