@@ -9,7 +9,7 @@
 .isa-section {
   display: flex;
   flex-direction: column;
-  flex: 1 1 0;
+  flex: 1 1 0px;
   margin: 0 15px;
   height: 100%;
 }
@@ -237,7 +237,7 @@
   background: #444;
 }
 .isa-tab {
-  flex: 1 1 0;
+  flex: 1 1 0px;
   font-size: 32px;
   line-height: 1;
   text-align: center;
@@ -379,7 +379,7 @@
     display: flex;
   }
   .isa-section-header {
-    flex: 0 0 0;
+    flex: 0 0 0px;
     margin: 0;
     padding: 0 5px;
     font-size: 14px;

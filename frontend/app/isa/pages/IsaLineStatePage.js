@@ -343,7 +343,6 @@ define([
 
     attractToShiftPersonnel: function()
     {
-      console.log(this.model.shiftPersonnel.get('users'), this.model.shiftPersonnel.isEmpty());
       var $shiftPersonnel = this.$id('shiftPersonnel').removeClass('isa-attract');
 
       if (this.model.shiftPersonnel.isEmpty())
@@ -419,7 +418,34 @@ define([
 
     onKeyDown: function(e)
     {
-      var code = e.originalEvent.code;
+      e = e.originalEvent;
+
+      var code = e.code || null;
+
+      if (!code)
+      {
+        switch (e.keyCode)
+        {
+          case 16:
+            code = 'Shift';
+            break;
+
+          case 18:
+            code = 'Alt';
+            break;
+        }
+
+        switch (e.location)
+        {
+          case 1:
+            code += 'Left';
+            break;
+
+          case 2:
+            code += 'Right';
+            break;
+        }
+      }
 
       if (typeof this.keys[code] === 'boolean')
       {
