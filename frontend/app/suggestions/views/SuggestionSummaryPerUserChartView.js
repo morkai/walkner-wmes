@@ -4,16 +4,22 @@ define([
   'underscore',
   'app/i18n',
   'app/highcharts',
-  'app/core/View'
+  'app/core/View',
+  'app/suggestions/templates/reportTable',
+  'app/suggestions/templates/tableAndChart'
 ], function(
   _,
   t,
   Highcharts,
-  View
+  View,
+  renderReportTable,
+  template
 ) {
   'use strict';
 
   return View.extend({
+
+    template: template,
 
     initialize: function()
     {
@@ -63,24 +69,27 @@ define([
           this.chart.showLoading();
         }
       }
+
+      this.updateTable();
     },
 
     createChart: function()
     {
-      var series = this.serializeSeries();
+      var view = this;
+      var series = view.serializeSeries();
       var dataPointCount = series[0].data.length;
-      var nlsDomain = this.model.getNlsDomain();
-      var metric = this.options.metric;
-      var height = this.limit === -1
-        ? Math.max(400, 150 + 20 * dataPointCount)
-        : 100 + 20 * dataPointCount;
+      var nlsDomain = view.model.getNlsDomain();
+      var metric = view.options.metric;
+      var unlimited = view.limit === -1;
+      var height = unlimited ? undefined : (100 + 20 * dataPointCount);
 
       this.chart = new Highcharts.Chart({
         chart: {
-          renderTo: this.el,
+          renderTo: this.$id('chart')[0],
           plotBorderWidth: 1,
+          spacing: unlimited ? [10, 1, 1, 0] : [10, 10, 15, 10],
           height: height,
-          type: 'bar'
+          type: unlimited ? view.options.unlimitedType : 'bar'
         },
         exporting: {
           filename: t.bound(nlsDomain, 'report:filenames:summary:' + metric),
@@ -89,33 +98,60 @@ define([
               text: t.bound(nlsDomain, 'report:title:summary:' + metric)
             }
           },
+          buttons: {
+            contextButton: {
+              align: 'left'
+            }
+          },
           sourceHeight: height
         },
         title: false,
         noData: {},
         xAxis: {
-          categories: this.serializeCategories()
+          categories: view.serializeCategories()
         },
         yAxis: {
           title: false,
           min: 0,
-          allowDecimals: false
+          allowDecimals: false,
+          opposite: unlimited
         },
         tooltip: {
           shared: true,
           valueDecimals: 0
         },
         legend: {
-          enabled: this.limit === -1
+          enabled: unlimited
         },
         plotOptions: {
           bar: {
             stacking: 'normal',
             dataLabels: {
-              enabled: this.limit !== -1,
+              enabled: !unlimited,
               formatter: function()
               {
                 return this.y || '';
+              }
+            }
+          },
+          column: {
+            stacking: 'normal',
+            dataLabels: {
+              enabled: unlimited,
+              formatter: function()
+              {
+                return this.y || '';
+              }
+            }
+          },
+          series: {
+            events: {
+              legendItemClick: function()
+              {
+                this.setVisible(!this.visible, false);
+                view.updateTable(true);
+
+                return false;
               }
             }
           }
@@ -130,11 +166,112 @@ define([
       this.createChart();
     },
 
-    serializeCategories: function()
+    updateTable: function(filtered)
+    {
+      if (this.limit !== -1)
+      {
+        this.$id('table').empty();
+
+        return;
+      }
+
+      var totalCount = this.model.get('total').count;
+      var categories = this.serializeCategories(false);
+      var series = this.serializeSeries(false);
+      var chart = this.chart;
+      var total = 0;
+      var invisible = false;
+      var rectEl = this.el.querySelectorAll('svg > rect')[1];
+      var oldX = +rectEl.getAttribute('x');
+
+      _.forEach(series, function(s, i)
+      {
+        if (chart.series[i].visible)
+        {
+          total += totalCount[s.id];
+        }
+        else
+        {
+          invisible = true;
+        }
+      });
+
+      var rows = categories.map(function(label, dataIndex)
+      {
+        var abs = 0;
+
+        _.forEach(series, function(s, seriesIndex)
+        {
+          if (chart.series[seriesIndex].visible)
+          {
+            abs += s.data[dataIndex];
+          }
+        });
+
+        return {
+          dataIndex: dataIndex,
+          no: dataIndex + 1,
+          label: label,
+          abs: abs,
+          rel: abs / total
+        };
+      });
+
+      if (invisible)
+      {
+        rows = rows.filter(function(d) { return d.abs > 0; });
+
+        rows.sort(function(a, b) { return b.abs - a.abs; });
+
+        var newCategories = [];
+        var newSeries = series.map(function() { return []; });
+
+        rows.forEach(function(row, i)
+        {
+          row.no = i + 1;
+
+          if (i < 15)
+          {
+            newCategories.push(row.label);
+
+            _.forEach(newSeries, function(data, i)
+            {
+              data.push(series[i].data[row.dataIndex]);
+            });
+          }
+        });
+
+        categories = newCategories;
+        series = newSeries;
+      }
+      else
+      {
+        series = series.map(function(s) { return s.data.slice(0, 15); });
+      }
+
+      if (filtered)
+      {
+        chart.xAxis[0].setCategories(categories, false);
+
+        series.forEach(function(data, i)
+        {
+          chart.series[i].setData(data, false, false, false);
+        });
+
+        chart.redraw(false);
+        rectEl.setAttribute('x', oldX);
+      }
+
+      this.$id('table').html(renderReportTable({
+        rows: rows
+      }));
+    },
+
+    serializeCategories: function(limited)
     {
       var categories = this.model.get(this.options.metric).categories;
 
-      if (this.limit !== -1)
+      if (limited !== false && this.limit !== -1)
       {
         categories = categories.slice(0, this.limit);
       }
@@ -142,17 +279,30 @@ define([
       return categories;
     },
 
-    serializeSeries: function()
+    serializeSeries: function(limited)
     {
       var data = this.model.get(this.options.metric);
+      var limit = this.limit;
+      var top = this.options.top;
 
-      if (this.limit !== -1)
+      if (limited !== false)
       {
-        data = {
-          cancelled: data.cancelled.slice(0, this.limit),
-          open: data.open.slice(0, this.limit),
-          finished: data.finished.slice(0, this.limit)
-        };
+        if (limit > 0)
+        {
+          data = {
+            cancelled: data.cancelled.slice(0, limit),
+            open: data.open.slice(0, limit),
+            finished: data.finished.slice(0, limit)
+          };
+        }
+        else if (top > 0)
+        {
+          data = {
+            cancelled: data.cancelled.slice(0, top),
+            open: data.open.slice(0, top),
+            finished: data.finished.slice(0, top)
+          };
+        }
       }
 
       return [{

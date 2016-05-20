@@ -78,11 +78,14 @@ define([
       });
       this.perUserView = new SuggestionSummaryPerUserChartView({
         metric: 'suggestionOwners',
-        model: this.model
+        model: this.model,
+        top: 15,
+        unlimitedType: 'column'
       });
       this.perCategoryView = new SuggestionSummaryPerUserChartView({
         metric: 'categories',
-        model: this.model
+        model: this.model,
+        unlimitedType: 'column'
       });
     },
 
@@ -138,18 +141,16 @@ define([
 
       e.currentTarget.querySelector('.btn').classList.toggle('active', enabled);
 
-      this.averageDurationView.chart.setSize(null, enabled ? 300 : 400, false);
+      this.averageDurationView.chart.setSize(this.averageDurationView.$el.width(), enabled ? 300 : 400, false);
       this.averageDurationView.chart.reflow();
 
-      this.countView.updateChart(true);
-      this.countView.chart.setSize(null, enabled ? 300 : 400, false);
-      this.countView.chart.reflow();
-
       this.perUserView.limit = enabled ? 10 : -1;
-      this.perUserView.updateChart(true);
+      this.perUserView.updateTable();
+      this.perUserView.updateChart();
 
       this.perCategoryView.limit = enabled ? 10 : -1;
-      this.perCategoryView.updateChart(true);
+      this.perUserView.updateTable();
+      this.perCategoryView.updateChart();
 
       if (enabled)
       {

@@ -68,7 +68,7 @@ define([
       }
     },
 
-    createChart: function(printMode)
+    createChart: function()
     {
       var count = this.model.get('count');
       var nlsDomain = this.model.getNlsDomain();
@@ -125,27 +125,27 @@ define([
         },
         series: [{
           id: 'cancelled',
-          name: t.bound('suggestions', 'report:series:summary:cancelled'),
+          name: t.bound(nlsDomain, 'report:series:summary:cancelled'),
           data: count.cancelled,
           color: '#d9534f'
         }, {
           id: 'open',
-          name: t.bound('suggestions', 'report:series:summary:open'),
+          name: t.bound(nlsDomain, 'report:series:summary:open'),
           data: count.open,
           color: '#f0ad4e'
         }, {
           id: 'finished',
-          name: t.bound('suggestions', 'report:series:summary:finished'),
+          name: t.bound(nlsDomain, 'report:series:summary:finished'),
           data: count.finished,
           color: '#5cb85c'
         }]
       });
     },
 
-    updateChart: function(printMode)
+    updateChart: function()
     {
       this.chart.destroy();
-      this.createChart(printMode);
+      this.createChart();
     },
 
     onModelLoading: function()

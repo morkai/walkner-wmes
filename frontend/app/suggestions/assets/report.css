@@ -63,3 +63,13 @@
   font-size: 1em;
   font-weight: normal;
 }
+.is-print .suggestions-report-chart {
+  margin-left: 0;
+  height: auto;
+}
+.is-print .suggestions-report-table {
+  display: none;
+}
+.is-print .suggestions-report-tableAndChart .highcharts-container {
+  top: 0;
+}
