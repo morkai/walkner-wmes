@@ -75,6 +75,7 @@ define([
     createChart: function()
     {
       var view = this;
+      var nlsDomain = view.model.getNlsDomain();
       var metric = view.options.metric;
       var series = view.serializeSeries(true);
 
@@ -86,10 +87,10 @@ define([
           type: 'column'
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:' + metric),
+          filename: t.bound(nlsDomain, 'report:filenames:' + metric),
           chartOptions: {
             title: {
-              text: t.bound('suggestions', 'report:title:' + metric)
+              text: t.bound(nlsDomain, 'report:title:' + metric)
             }
           },
           buttons: {
@@ -146,7 +147,7 @@ define([
 
     updateTable: function(filtered)
     {
-      var totalRows = this.model.get('total').rows;
+      var totalRows = this.model.get(this.options.totalProperty || 'total').rows;
       var categories = this.serializeCategories(false);
       var series = this.serializeSeries(false);
       var chart = this.chart;

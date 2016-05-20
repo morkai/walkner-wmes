@@ -7,7 +7,7 @@ define([
   '../KaizenOrderReport',
   '../views/KaizenOrderReportFilterView',
   '../views/KaizenOrderTableAndChartView',
-  '../views/KaizenOrderCountPerUserChartView',
+  'app/suggestions/views/SuggestionCountPerUserChartView',
   'app/kaizenOrders/templates/reportPage'
 ], function(
   t,
@@ -16,7 +16,7 @@ define([
   KaizenOrderReport,
   KaizenOrderReportFilterView,
   KaizenOrderTableAndChartView,
-  KaizenOrderCountPerUserChartView,
+  SuggestionCountPerUserChartView,
   template
 ) {
   'use strict';
@@ -44,13 +44,15 @@ define([
         }));
       }, this);
 
-      this.setView('.kaizenOrders-report-confirmer', new KaizenOrderCountPerUserChartView({
+      this.setView('.kaizenOrders-report-confirmer', new SuggestionCountPerUserChartView({
         metric: 'confirmer',
-        model: this.model
+        model: this.model,
+        totalProperty: 'type'
       }));
-      this.setView('.kaizenOrders-report-owner', new KaizenOrderCountPerUserChartView({
+      this.setView('.kaizenOrders-report-owner', new SuggestionCountPerUserChartView({
         metric: 'owner',
-        model: this.model
+        model: this.model,
+        totalProperty: 'type'
       }));
 
       this.listenTo(this.model, 'filtered', this.onFiltered);

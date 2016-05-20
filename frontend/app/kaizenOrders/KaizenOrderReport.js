@@ -47,6 +47,8 @@ define([
 
     urlRoot: '/kaizen/report',
 
+    nlsDomain: 'kaizenOrders',
+
     defaults: function()
     {
       return {
@@ -320,7 +322,6 @@ define([
       return [
         {
           id: 'entry',
-          type: 'bar',
           name: t.bound('kaizenOrders', 'report:series:' + (kaizenDictionaries.multiType ? 'entry' : 'nearMiss')),
           color: kaizenDictionaries.multiType ? null : COLOR_NEAR_MISS,
           data: _.map(confirmerTotals, function(t) { return t[1]; })

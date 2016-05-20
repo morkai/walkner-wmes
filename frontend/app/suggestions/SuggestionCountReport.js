@@ -31,6 +31,8 @@ define([
 
     urlRoot: '/suggestions/reports/count',
 
+    nlsDomain: 'suggestions',
+
     defaults: function()
     {
       return {
