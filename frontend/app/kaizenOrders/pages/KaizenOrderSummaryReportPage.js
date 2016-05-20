@@ -47,7 +47,9 @@ define([
       }));
       this.setView('.kaizenOrders-report-summary-nearMissOwners', new SuggestionSummaryPerUserChartView({
         metric: 'nearMissOwners',
-        model: this.model
+        model: this.model,
+        top: 15,
+        unlimitedType: 'column'
       }));
 
       this.listenTo(this.model, 'filtered', this.onFiltered);
