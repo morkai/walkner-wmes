@@ -83,39 +83,85 @@
     </div>
   </div>
   <% if (!model.ok) { %>
-  <div class="panel panel-danger">
-    <div class="panel-heading">
-      <%- t('qiResults', 'PANEL:TITLE:details:inspection:nok') %>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <%- t('qiResults', 'PANEL:TITLE:details:inspection:nok') %>
+        </div>
+        <div class="panel-details">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:errorCategory') %></div>
+              <div class="prop-value"><%= model.errorCategory || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:faultCode') %></div>
+              <div class="prop-value"><%- model.faultCode || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:faultDescription') %></div>
+              <div class="prop-value text-lines"><%= model.faultDescription || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:problem') %></div>
+              <div class="prop-value text-lines"><%= model.problem || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:immediateActions') %></div>
+              <div class="prop-value text-lines"><%= model.immediateActions || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:immediateResults') %></div>
+              <div class="prop-value text-lines"><%= model.immediateResults || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:rootCause') %></div>
+              <div class="prop-value text-lines"><%= model.rootCause || '-' %></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="panel-details">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('qiResults', 'PROPERTY:errorCategory') %></div>
-          <div class="prop-value"><%= model.errorCategory || '-' %></div>
+    <div class="col-lg-4">
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <%- t('qiResults', 'PANEL:TITLE:details:attachments:ok') %>
         </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('qiResults', 'PROPERTY:faultCode') %></div>
-          <div class="prop-value"><%- model.faultCode || '-' %></div>
+        <div class="panel-body qiResults-details-attachment">
+          <% if (model.okFile) { %>
+          <a href="/qi/results/<%- model._id %>/attachments/<%- model.rid %>%20OK" data-file="ok">
+            <% if (model.okFile.icon === 'file-image-o') { %>
+            <img src="/qi/results/<%- model._id %>/attachments/okFile?min=<%- model.okFile._id %>">
+            <% } else { %>
+            <i class="fa fa-<%- model.okFile.icon %>"></i>
+            <% } %>
+            <span><%= model.okFile.name %></span>
+          </a>
+          <% } else { %>
+          <i class="fa fa-ban"></i>
+          <% } %>
         </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('qiResults', 'PROPERTY:faultDescription') %></div>
-          <div class="prop-value text-lines"><%= model.faultDescription || '-' %></div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <%- t('qiResults', 'PANEL:TITLE:details:attachments:nok') %>
         </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('qiResults', 'PROPERTY:problem') %></div>
-          <div class="prop-value text-lines"><%= model.problem || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('qiResults', 'PROPERTY:immediateActions') %></div>
-          <div class="prop-value text-lines"><%= model.immediateActions || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('qiResults', 'PROPERTY:immediateResults') %></div>
-          <div class="prop-value text-lines"><%= model.immediateResults || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('qiResults', 'PROPERTY:rootCause') %></div>
-          <div class="prop-value text-lines"><%= model.rootCause || '-' %></div>
+        <div class="panel-body qiResults-details-attachment">
+          <% if (model.nokFile) { %>
+          <a href="/qi/results/<%- model._id %>/attachments/<%- model.rid %>%20NOK" data-file="nok">
+            <% if (model.nokFile.icon === 'file-image-o') { %>
+            <img src="/qi/results/<%- model._id %>/attachments/nokFile?min=<%- model.nokFile._id %>">
+            <% } else { %>
+            <i class="fa fa-<%- model.nokFile.icon %>"></i>
+            <% } %>
+            <span><%= model.nokFile.name %></span>
+          </a>
+          <% } else { %>
+          <i class="fa fa-ban"></i>
+          <% } %>
         </div>
       </div>
     </div>
@@ -152,50 +198,6 @@
       <p><%- t('qiResults', 'correctiveActions:empty') %></p>
     </div>
     <% } %>
-  </div>
-  <div class="row">
-    <div class="col-lg-6">
-      <div class="panel panel-success">
-        <div class="panel-heading">
-          <%- t('qiResults', 'PANEL:TITLE:details:attachments:ok') %>
-        </div>
-        <div class="panel-body qiResults-details-attachment">
-          <% if (model.okFile) { %>
-          <a href="/qi/results/<%- model._id %>/attachments/<%- model.rid %>%20OK" data-file="ok">
-            <% if (model.okFile.icon === 'file-image-o') { %>
-            <img src="/qi/results/<%- model._id %>/attachments/okFile?min=<%- model.okFile._id %>">
-            <% } else { %>
-            <i class="fa fa-<%- model.okFile.icon %>"></i>
-            <% } %>
-            <span><%= model.okFile.name %></span>
-          </a>
-          <% } else { %>
-          <i class="fa fa-ban"></i>
-          <% } %>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6">
-      <div class="panel panel-danger">
-        <div class="panel-heading">
-          <%- t('qiResults', 'PANEL:TITLE:details:attachments:nok') %>
-        </div>
-        <div class="panel-body qiResults-details-attachment">
-          <% if (model.nokFile) { %>
-          <a href="/qi/results/<%- model._id %>/attachments/<%- model.rid %>%20NOK" data-file="nok">
-            <% if (model.nokFile.icon === 'file-image-o') { %>
-            <img src="/qi/results/<%- model._id %>/attachments/nokFile?min=<%- model.nokFile._id %>">
-            <% } else { %>
-            <i class="fa fa-<%- model.nokFile.icon %>"></i>
-            <% } %>
-            <span><%= model.nokFile.name %></span>
-          </a>
-          <% } else { %>
-          <i class="fa fa-ban"></i>
-          <% } %>
-        </div>
-      </div>
-    </div>
   </div>
   <% } %>
 </div>
