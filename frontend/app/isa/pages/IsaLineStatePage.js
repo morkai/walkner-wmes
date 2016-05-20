@@ -29,6 +29,8 @@ define([
 ) {
   'use strict';
 
+  var EVENTS_COLLAPSED_STORAGE_KEY = 'ISA:EVENTS:COLLAPSED';
+
   return View.extend({
 
     template: template,
@@ -153,6 +155,8 @@ define([
       'click .is-collapsed': function(e)
       {
         this.$(e.currentTarget).removeClass('is-collapsed is-collapsing');
+
+        localStorage.removeItem(EVENTS_COLLAPSED_STORAGE_KEY);
       },
       'click #-collapseEvents': 'collapseEvents',
       'click #-toggleFullscreen': 'toggleFullscreen'
@@ -315,7 +319,8 @@ define([
         height: this.calcHeight(),
         disconnected: !this.socket.isConnected(),
         mobile: /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent),
-        selectedResponder: this.model.selectedResponder ? this.model.selectedResponder.label : ''
+        selectedResponder: this.model.selectedResponder ? this.model.selectedResponder.label : '',
+        eventsCollapsed: !!localStorage[EVENTS_COLLAPSED_STORAGE_KEY]
       };
     },
 
@@ -508,6 +513,8 @@ define([
       $section.css('width', '25px');
 
       this.timers.collapsed = setTimeout(function() { $section.addClass('is-collapsed'); }, 400);
+
+      localStorage[EVENTS_COLLAPSED_STORAGE_KEY] = '1';
     },
 
     toggleFullscreen: function()
