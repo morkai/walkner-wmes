@@ -45,6 +45,11 @@ define([
     events: {
       'click .list-item[data-id]': function(e)
       {
+        if (e.target.classList.contains('actions-group'))
+        {
+          return false;
+        }
+
         if (this.isNotClickable(e))
         {
           return;
