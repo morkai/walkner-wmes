@@ -12,6 +12,7 @@
     "actions:shiftPersonnel": "Change available personnel",
     "actions:responderFilter": "Filter by warehouseman",
     "actions:toggleFullscreen": "Toggle fullscreen mode",
+    "actions:toggleHotkeys": "Toggle hotkeys visibility",
     "actions:showRequests": "Show requests",
     "actions:collapseEvents": "Hide events",
 
@@ -98,7 +99,20 @@
     "requests:finishedAt": "Finished at",
     "requests:duration": "Duration",
     "requests:date+user": "on {date} by {user}",
-    "requests:time+user": "at {time} by {user}"
+    "requests:time+user": "at {time} by {user}",
+
+    "hotkeys:shiftLeft+n:kbd": "Left SHIFT+Number",
+    "hotkeys:shiftLeft+n:lbl": "Accept request",
+    "hotkeys:altLeft+n:kbd": "Left ALT+Number",
+    "hotkeys:altLeft+n:lbl": "Finish request",
+    "hotkeys:shiftRight+n:kbd": "Right SHIFT+Number",
+    "hotkeys:shiftRight+n:lbl": "Cancel To do request",
+    "hotkeys:altRight+n:kbd": "Right ALT+Number",
+    "hotkeys:altRight+n:lbl": "Cancel In progress request",
+    "hotkeys:p:kbd": "P",
+    "hotkeys:p:lbl": "Personnel",
+    "hotkeys:f:kbd": "F",
+    "hotkeys:f:lbl": "Filter"
   },
   "pl": true
 }

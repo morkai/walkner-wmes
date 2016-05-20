@@ -327,6 +327,28 @@
 .is-collapsed > .isa-section-expand {
   display: block;
 }
+.isa-hotkeys {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  padding: 0 0 6px 15px;
+  background: #d9edf7;
+  border-top: 1px solid #333;
+  box-shadow: 0 6px 12px #666;
+  line-height: 1;
+  text-align: center;
+}
+.isa-hotkey {
+  display: inline-block;
+  margin: 10px 15px 0 0;
+  padding: 0;
+}
+.isa-hotkey > span {
+  display: block;
+  margin-top: 5px;
+}
 @media (max-width: 1900px) {
   .isa-lineState-prop-value {
     max-width: 200px;

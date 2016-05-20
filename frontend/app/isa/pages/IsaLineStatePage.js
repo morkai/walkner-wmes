@@ -29,7 +29,17 @@ define([
 ) {
   'use strict';
 
-  var EVENTS_COLLAPSED_STORAGE_KEY = 'ISA:EVENTS:COLLAPSED';
+  var KEY_CODES = {
+    8: 'Backspace',
+    16: 'Shift',
+    18: 'Alt',
+    32: 'Space',
+    70: 'KeyF',
+    80: 'KeyP',
+    112: 'F1'
+  };
+  var EVENTS_COLLAPSED_STORAGE_KEY = 'ISA_EVENTS_COLLAPSED';
+  var HOTKEYS_VISIBILITY_STORAGE_KEY = 'ISA_HOTKEYS_VISIBILITY';
 
   return View.extend({
 
@@ -159,7 +169,8 @@ define([
         localStorage.removeItem(EVENTS_COLLAPSED_STORAGE_KEY);
       },
       'click #-collapseEvents': 'collapseEvents',
-      'click #-toggleFullscreen': 'toggleFullscreen'
+      'click #-toggleFullscreen': 'toggleFullscreen',
+      'click #-toggleHotkeys': 'toggleHotkeysVisibility'
     },
 
     initialize: function()
@@ -320,7 +331,8 @@ define([
         disconnected: !this.socket.isConnected(),
         mobile: /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent),
         selectedResponder: this.model.selectedResponder ? this.model.selectedResponder.label : '',
-        eventsCollapsed: !!localStorage[EVENTS_COLLAPSED_STORAGE_KEY]
+        eventsCollapsed: !!localStorage[EVENTS_COLLAPSED_STORAGE_KEY],
+        hotkeysVisible: !!localStorage[HOTKEYS_VISIBILITY_STORAGE_KEY]
       };
     },
 
@@ -368,6 +380,11 @@ define([
       if (fullscreen)
       {
         height -= 15;
+
+        if (localStorage[HOTKEYS_VISIBILITY_STORAGE_KEY])
+        {
+          height -= this.$id('hotkeys').outerHeight();
+        }
       }
       else
       {
@@ -416,24 +433,13 @@ define([
       this.$id('count-' + tab).text(count || '');
     },
 
-    onKeyDown: function(e)
+    getKeyCode: function(e)
     {
-      e = e.originalEvent;
-
-      var code = e.code || null;
+      var code = e.code;
 
       if (!code)
       {
-        switch (e.keyCode)
-        {
-          case 16:
-            code = 'Shift';
-            break;
-
-          case 18:
-            code = 'Alt';
-            break;
-        }
+        code = KEY_CODES[e.keyCode] || e.keyIdentifier || '';
 
         switch (e.location)
         {
@@ -444,6 +450,38 @@ define([
           case 2:
             code += 'Right';
             break;
+        }
+      }
+
+      return code;
+    },
+
+    onKeyDown: function(e)
+    {
+      e = e.originalEvent;
+
+      var code = this.getKeyCode(e);
+      var tagName = e.target.tagName;
+
+      console.log(e);
+
+      if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT')
+      {
+        if (code === 'Backspace')
+        {
+          return false;
+        }
+
+        if (code === 'Space')
+        {
+          return false;
+        }
+
+        if (code === 'F1')
+        {
+          e.preventDefault();
+
+          return;
         }
       }
 
@@ -465,9 +503,11 @@ define([
 
     onKeyUp: function(e)
     {
+      e = e.originalEvent;
+
       this.onActivity();
 
-      var code = e.originalEvent.code;
+      var code = this.getKeyCode(e);
 
       if (typeof this.keys[code] === 'boolean')
       {
@@ -476,6 +516,13 @@ define([
         this.$el.removeClass('isa-hotkey-' + code);
 
         return false;
+      }
+
+      if (code === 'F1')
+      {
+        this.toggleHotkeysVisibility();
+
+        return;
       }
 
       if (code === 'KeyP')
@@ -552,6 +599,24 @@ define([
         replace: true,
         trigger: false
       });
+
+      this.resize();
+    },
+
+    toggleHotkeysVisibility: function()
+    {
+      if (localStorage[HOTKEYS_VISIBILITY_STORAGE_KEY])
+      {
+        localStorage.removeItem(HOTKEYS_VISIBILITY_STORAGE_KEY);
+
+        this.$id('hotkeys').addClass('hidden');
+      }
+      else
+      {
+        localStorage[HOTKEYS_VISIBILITY_STORAGE_KEY] = '1';
+
+        this.$id('hotkeys').removeClass('hidden');
+      }
 
       this.resize();
     }

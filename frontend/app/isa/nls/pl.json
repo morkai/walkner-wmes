@@ -11,6 +11,7 @@
   "actions:shiftPersonnel": "Zmień personel",
   "actions:responderFilter": "Filtruj wg magazyniera",
   "actions:toggleFullscreen": "Przełącz tryb pełnoekranowy",
+  "actions:toggleHotkeys": "Przełącz wyświetlanie skrótów klawiszowych",
   "actions:showRequests": "Pokaż żądania",
   "actions:collapseEvents": "Ukryj zdarzenia",
 
@@ -97,5 +98,18 @@
   "requests:finishedAt": "Czas zakończenia",
   "requests:duration": "Czas trwania",
   "requests:date+user": "{date} przez {user}",
-  "requests:time+user": "o {time} przez {user}"
+  "requests:time+user": "o {time} przez {user}",
+
+  "hotkeys:shiftLeft+n:kbd": "Lewy SHIFT+Liczba",
+  "hotkeys:shiftLeft+n:lbl": "Akceptacja żądania",
+  "hotkeys:altLeft+n:kbd": "Lewy ALT+Liczba",
+  "hotkeys:altLeft+n:lbl": "Zakończenie żądania",
+  "hotkeys:shiftRight+n:kbd": "Prawy SHIFT+Liczba",
+  "hotkeys:shiftRight+n:lbl": "Anulowanie żądania do realizacji",
+  "hotkeys:altRight+n:kbd": "Prawy ALT+Liczba",
+  "hotkeys:altRight+n:lbl": "Anulowanie żądania w realizacji",
+  "hotkeys:p:kbd": "P",
+  "hotkeys:p:lbl": "Personel",
+  "hotkeys:f:kbd": "F",
+  "hotkeys:f:lbl": "Filtr"
 }

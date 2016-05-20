@@ -19,6 +19,7 @@
     <h1 class="isa-section-header">
       <a href="#isa/events"><%- t('isa', 'events:header') %></a>
       <button id="<%- idPrefix %>-collapseEvents" class="btn btn-link" title="<%- t('isa', 'actions:collapseEvents') %>"><i class="fa fa-chevron-right"></i></button>
+      <button id="<%- idPrefix %>-toggleHotkeys" class="btn btn-link" title="<%- t('isa', 'actions:toggleHotkeys') %>"><i class="fa fa-question"></i></button>
       <button id="<%- idPrefix %>-toggleFullscreen" class="btn btn-link" title="<%- t('isa', 'actions:toggleFullscreen') %>"><i class="fa fa-arrows-alt"></i></button>
       <a href="#isa/requests" class="btn btn-link" title="<%- t('isa', 'actions:showRequests') %>"><i class="fa fa-line-chart"></i></a>
     </h1>
@@ -29,5 +30,13 @@
     <a class="isa-tab" data-tab="responses"><i class="fa fa-truck"></i><span id="<%- idPrefix %>-count-responses" class="badge"></span></a>
     <a class="isa-tab" data-tab="events"><i class="fa fa-calendar"></i></a>
     <a class="isa-tab" data-tab="settings"><i class="fa fa-cogs"></i></a>
+  </div>
+  <div id="<%- idPrefix %>-hotkeys" class="isa-hotkeys <%- hotkeysVisible ? '' : 'hidden' %>">
+    <% ['shiftLeft+n', 'altLeft+n', 'altRight+n', 'shiftRight+n', 'p', 'f'].forEach(function(hotkey) { %>
+    <p class="isa-hotkey">
+      <kbd><%- t('isa', 'hotkeys:' + hotkey + ':kbd') %></kbd>
+      <span><%- t('isa', 'hotkeys:' + hotkey + ':lbl') %></span>
+    </p>
+    <% }) %>
   </div>
 </div>
