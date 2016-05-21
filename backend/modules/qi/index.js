@@ -3,6 +3,7 @@
 'use strict';
 
 var setUpRoutes = require('./routes');
+var setUpCounter = require('./counter');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -13,9 +14,9 @@ exports.DEFAULT_CONFIG = {
   attachmentsDest: null
 };
 
-exports.start = function startQiModule(app, qaModule)
+exports.start = function startQiModule(app, qiModule)
 {
-  qaModule.DICTIONARIES = {
+  qiModule.DICTIONARIES = {
     kinds: 'QiKind',
     faults: 'QiFault',
     errorCategories: 'QiErrorCategory',
@@ -24,12 +25,19 @@ exports.start = function startQiModule(app, qaModule)
 
   app.onModuleReady(
     [
-      qaModule.config.mongooseId,
-      qaModule.config.expressId,
-      qaModule.config.userId,
-      qaModule.config.settingsId,
-      qaModule.config.reportsId
+      qiModule.config.mongooseId,
+      qiModule.config.expressId,
+      qiModule.config.userId,
+      qiModule.config.settingsId,
+      qiModule.config.reportsId
     ],
-    setUpRoutes.bind(null, app, qaModule)
+    setUpRoutes.bind(null, app, qiModule)
+  );
+
+  app.onModuleReady(
+    [
+      qiModule.config.mongooseId
+    ],
+    setUpCounter.bind(null, app, qiModule)
   );
 };

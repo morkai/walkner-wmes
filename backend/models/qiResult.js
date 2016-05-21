@@ -2,11 +2,30 @@
 
 'use strict';
 
-var autoIncrement = require('mongoose-auto-increment');
+const _ = require('lodash');
+const deepEqual = require('deep-equal');
+const autoIncrement = require('mongoose-auto-increment');
 
 module.exports = function setupQiResultModel(app, mongoose)
 {
-  var qiCorrectiveActionSchema = new mongoose.Schema({
+  const changeSchema = mongoose.Schema({
+    date: Date,
+    user: {},
+    data: {},
+    comment: {
+      type: String,
+      trim: true,
+      default: ''
+    }
+  }, {
+    _id: false,
+    minimize: false,
+    toObject: {
+      retainKeyOrder: true
+    }
+  });
+
+  const qiCorrectiveActionSchema = new mongoose.Schema({
     what: {
       type: String,
       required: true
@@ -21,9 +40,15 @@ module.exports = function setupQiResultModel(app, mongoose)
       ref: 'QiActionStatus',
       required: true
     }
+  }, {
+    _id: false,
+    minimize: false,
+    toObject: {
+      retainKeyOrder: true
+    }
   });
 
-  var qiResultSchema = new mongoose.Schema({
+  const qiResultSchema = new mongoose.Schema({
     ok: {
       type: Boolean,
       required: true
@@ -66,15 +91,30 @@ module.exports = function setupQiResultModel(app, mongoose)
       type: String,
       ref: 'QiFault'
     },
-    faultDescription: String,
+    faultDescription: {
+      type: String,
+      trim: true
+    },
     errorCategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'QiErrorCategory'
     },
-    problem: String,
-    immediateActions: String,
-    immediateResults: String,
-    rootCause: String,
+    problem: {
+      type: String,
+      trim: true
+    },
+    immediateActions: {
+      type: String,
+      trim: true
+    },
+    immediateResults: {
+      type: String,
+      trim: true
+    },
+    rootCause: {
+      type: String,
+      trim: true
+    },
     correctiveActions: [qiCorrectiveActionSchema],
     qtyInspected: {
       type: Number,
@@ -98,10 +138,14 @@ module.exports = function setupQiResultModel(app, mongoose)
     nokFile: {
       type: {},
       default: null
-    }
+    },
+    changes: [changeSchema]
   }, {
     id: false,
-    minimize: false
+    minimize: false,
+    toObject: {
+      retainKeyOrder: true
+    }
   });
 
   qiResultSchema.plugin(autoIncrement.plugin, {
@@ -130,13 +174,143 @@ module.exports = function setupQiResultModel(app, mongoose)
       this.createdAt = new Date();
       this.updatedAt = this.createdAt;
     }
-    else
-    {
-      this.updatedAt = new Date();
-    }
 
     next();
   });
+
+  qiResultSchema.methods.applyChanges = function(input, updater)
+  {
+    this.updater = updater;
+    this.updatedAt = new Date();
+
+    const changes = this.compareProperties(_.pick(input, [
+      'inspector',
+      'inspectedAt',
+      'division',
+      'orderNo',
+      'nc12',
+      'productName',
+      'productFamily',
+      'kind',
+      'faultCode',
+      'faultDescription',
+      'errorCategory',
+      'problem',
+      'immediateActions',
+      'immediateResults',
+      'rootCause',
+      'correctiveActions',
+      'qtyInspected',
+      'qtyToFix',
+      'qtyNok',
+      'okFile',
+      'nokFile'
+    ]));
+    const changedProperties = Object.keys(changes);
+    const comment = _.isEmpty(input.comment) || !_.isString(input.comment) ? '' : input.comment.trim();
+
+    if (!_.isEmpty(input.comment))
+    {
+      changedProperties.push('comment');
+    }
+
+    if (!changedProperties.length)
+    {
+      return false;
+    }
+
+    if (!this.changes)
+    {
+      this.changes = [];
+    }
+
+    this.changes.push({
+      date: this.updatedAt,
+      user: updater,
+      data: changes,
+      comment: comment
+    });
+
+    return true;
+  };
+
+  qiResultSchema.methods.compareProperties = function(input)
+  {
+    const changes = {};
+
+    _.forEach(input, (value, key) => this.compareProperty(key, input, changes));
+
+    return changes;
+  };
+
+  qiResultSchema.methods.compareProperty = function(property, input, changes)
+  {
+    let oldValue = this[property];
+    this[property] = input[property];
+    let newValue = this[property];
+
+    if (property === 'correctiveActions')
+    {
+      oldValue = oldValue.toObject();
+
+      if (newValue && newValue.toObject)
+      {
+        newValue = newValue.toObject();
+      }
+
+      if (!deepEqual(newValue, oldValue, {strict: true}))
+      {
+        changes[property] = [oldValue, newValue];
+      }
+
+      return;
+    }
+
+    if (this.isModified(property))
+    {
+      changes[property] = [oldValue, newValue];
+    }
+/*
+    let newValue = this[property];
+
+    if (property === 'kind' || property === 'errorCategory')
+    {
+      newValue = mongoose.Types.ObjectId.isValid(newValue) ? new mongoose.Types.ObjectId(newValue) : null;
+    }
+    else if (/^qty/.test(property))
+    {
+      newValue = parseInt(newValue, 10);
+
+      if (isNaN(newValue) || newValue < 0)
+      {
+        newValue = 0;
+      }
+    }
+    else if (/(date|Date|At)$/.test(property))
+    {
+      newValue = newValue ? new Date(newValue) : null;
+
+      if (newValue !== null && isNaN(newValue.getTime()))
+      {
+        newValue = null;
+      }
+    }
+    else if (_.isObject(oldValue) && _.isFunction(oldValue.toObject))
+    {
+      oldValue = oldValue.toObject();
+    }
+    else if (_.isString(newValue))
+    {
+      newValue = newValue.trim();
+    }
+
+    if (!deepEqual(newValue, oldValue, {strict: true}))
+    {
+      changes[property] = [oldValue, newValue];
+      this[property] = newValue;
+    }
+*/
+  };
 
   mongoose.model('QiResult', qiResultSchema);
 };

@@ -4,3 +4,13 @@
 @import "./details.css";
 @import "./reports.css";
 @import "./print.css";
+
+.qi-counter {
+  padding: 3px;
+  background-color: #d9534f;
+  color: #fff;
+}
+.qi-counter.success {
+  background-color: #5cb85c;
+  color: #fff;
+}

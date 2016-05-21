@@ -63,7 +63,7 @@ define([
   router.map('/qi/results;ok', canView, function()
   {
     broker.publish('router.navigate', {
-      url: '/qi/results?sort(-inspectedAt)&limit(20)&ok=true',
+      url: '/qi/results?sort(-inspectedAt,-rid)&limit(20)&ok=true',
       trigger: true,
       replace: true
     });
@@ -72,7 +72,7 @@ define([
   router.map('/qi/results;nok', canView, function()
   {
     broker.publish('router.navigate', {
-      url: '/qi/results?sort(-inspectedAt)&limit(20)&ok=false',
+      url: '/qi/results?sort(-inspectedAt,-rid)&limit(20)&ok=false',
       trigger: true,
       replace: true
     });
@@ -156,7 +156,7 @@ define([
     baseBreadcrumb: true
   }));
 
-  router.map('/qi/settings', canManage, function(req)
+  router.map('/qi/settings', user.auth('QI:DICTIONARIES:MANAGE'), function(req)
   {
     viewport.loadPage(['app/qiResults/pages/QiSettingsPage', nls], function(QiSettingsPage)
     {

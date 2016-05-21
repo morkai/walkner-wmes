@@ -43,7 +43,7 @@ define([
       return [{
         label: t.bound('qiResults', 'PAGE_ACTION:settings'),
         icon: 'cogs',
-        privileges: 'QI:RESULTS:MANAGE',
+        privileges: 'QI:DICTIONARIES:MANAGE',
         href: '#qi/settings?tab=reports'
       }];
     },

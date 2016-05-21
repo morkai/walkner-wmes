@@ -116,7 +116,9 @@
   "report:filenames:nokCountPerDivision": "WMES_QI_IloscNokPerCentrum",
   "report:filenames:nokQtyPerFamily": "WMES_QI_IloscNiezgodnych",
 
+  "settings:tab:results": "Wyniki",
   "settings:tab:reports": "Raporty",
+  "settings:requiredCount": "Dzienna wymagana ilość kontroli",
   "settings:maxNokPerDay": "Górny limit czerwonych pasków na dzień",
 
   "print:title": "Zgłoszenie niezgodności {rid}",

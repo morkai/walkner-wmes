@@ -13,7 +13,7 @@ define([
 
     model: QiResult,
 
-    rqlQuery: 'limit(20)&sort(-inspectedAt)',
+    rqlQuery: 'limit(20)&sort(-inspectedAt,-rid)',
 
     hasAnyNokResult: function()
     {

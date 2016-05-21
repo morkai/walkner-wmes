@@ -1,8 +1,16 @@
 <form class="settings qi-settings">
   <div class="list-group">
-    <a class="list-group-item" href="#qi/settings?tab=reports" data-tab="reports"><%- t('qiResults', 'settings:tab:reports') %></a>
+    <% ['results', 'reports'].forEach(function(tab) { %>
+    <a class="list-group-item" href="#qi/settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('qiResults', 'settings:tab:' + tab) %></a>
+    <% }) %>
   </div>
   <div class="panel panel-primary">
+    <div class="panel-body" data-tab="results">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-requiredCount"><%- t('qiResults', 'settings:requiredCount') %></label>
+        <input id="<%- idPrefix %>-requiredCount" class="form-control" name="qi.requiredCount" type="number" min="0" max="9999">
+      </div>
+    </div>
     <div class="panel-body" data-tab="reports">
       <div class="form-group">
         <label for="<%- idPrefix %>-maxNokPerDay"><%- t('qiResults', 'settings:maxNokPerDay') %></label>

@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   '../broker',
   '../pubsub',
@@ -13,6 +14,7 @@ define([
   '../qiFaults/QiFaultCollection',
   '../qiActionStatuses/QiActionStatusCollection'
 ], function(
+  _,
   $,
   broker,
   pubsub,
@@ -43,6 +45,7 @@ define([
   var req = null;
   var releaseTimer = null;
   var pubsubSandbox = null;
+  var brokerSandbox = null;
   var settings = createSettings(QiSettingCollection);
   var dictionaries = {
     inspectors: new UserCollection(null, {
@@ -50,6 +53,10 @@ define([
     }),
     productFamilies: [],
     settings: settings.acquire(),
+    counter: {
+      actual: 0,
+      required: 0
+    },
     kinds: new QiKindCollection(),
     errorCategories: new QiErrorCategoryCollection(),
     faults: new QiFaultCollection(),
@@ -73,23 +80,11 @@ define([
         return req;
       }
 
-      req = $.ajax({
-        url: '/qi/dictionaries'
-      });
+      reloadDictionaries();
 
-      req.done(function(res)
-      {
-        dictionaries.loaded = true;
-
-        resetDictionaries(res);
-      });
-
-      req.fail(unload);
-
-      req.always(function()
-      {
-        req = null;
-      });
+      brokerSandbox = broker.sandbox();
+      brokerSandbox.subscribe('socket.connected', reloadDictionaries);
+      brokerSandbox.subscribe('viewport.page.shown', renderCounter);
 
       pubsubSandbox = pubsub.sandbox();
 
@@ -99,6 +94,9 @@ define([
       });
 
       pubsubSandbox.subscribe('users.*', reloadInspectors);
+      pubsubSandbox.subscribe('qi.counter.recounted', updateCounter);
+
+      dictionaries.settings.on('change', updateRequiredCount);
 
       return req;
     },
@@ -148,11 +146,64 @@ define([
     dictionaries.settings.reset(data ? data.settings : []);
     dictionaries.inspectors.reset(data ? data.inspectors : []);
     dictionaries.productFamilies = data ? data.productFamilies : [];
+
+    dictionaries.counter = data && data.counter || {
+      actual: 0,
+      required: 0
+    };
+
+    renderCounter();
+  }
+
+  function updateRequiredCount(model)
+  {
+    if (model.id === 'qi.requiredCount')
+    {
+      dictionaries.counter.required = dictionaries.settings.getValue('requiredCount') || 0;
+
+      renderCounter();
+    }
+  }
+
+  function updateCounter(message)
+  {
+    if (message.user === user.data._id)
+    {
+      dictionaries.counter.actual = message.count;
+
+      renderCounter();
+    }
+  }
+
+  function renderCounter()
+  {
+    var $counter = $('.qi-counter');
+
+    if (!$counter.length)
+    {
+      return;
+    }
+
+    var counter = dictionaries.counter;
+
+    $counter
+      .toggleClass('success', counter.actual >= counter.required)
+      .toggleClass('hidden', !counter.required || !_.includes(user.data.privileges, 'QI:INSPECTOR'));
+
+    $counter.find('.qi-counter-actual').text(counter.actual);
+
+    $counter.find('.qi-counter-required').text(counter.required);
   }
 
   function unload()
   {
     releaseTimer = null;
+
+    if (brokerSandbox !== null)
+    {
+      brokerSandbox.destroy();
+      brokerSandbox = null;
+    }
 
     if (pubsubSandbox !== null)
     {
@@ -205,6 +256,27 @@ define([
   function reloadInspectors()
   {
     dictionaries.inspectors.fetch();
+  }
+
+  function reloadDictionaries()
+  {
+    req = $.ajax({
+      url: '/qi/dictionaries'
+    });
+
+    req.done(function(res)
+    {
+      dictionaries.loaded = true;
+
+      resetDictionaries(res);
+    });
+
+    req.fail(unload);
+
+    req.always(function()
+    {
+      req = null;
+    });
   }
 
   return dictionaries;

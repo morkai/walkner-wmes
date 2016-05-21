@@ -9,6 +9,7 @@ var step = require('h5.step');
 var multer = require('multer');
 var contentDisposition = require('content-disposition');
 var gm = require('gm');
+var moment = require('moment');
 var countReport = require('./countReport');
 
 module.exports = function setUpQiRoutes(app, qiModule)
@@ -37,7 +38,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
     limitToQiSettings,
     express.crud.browseRoute.bind(null, app, settings.Setting)
   );
-  express.put('/qi/settings/:id', userModule.auth('QI:RESULTS:MANAGE'), settings.updateRoute);
+  express.put('/qi/settings/:id', canManageDictionaries, settings.updateRoute);
 
   express.get(
     '/qi/results',
@@ -48,26 +49,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
   express.get('/qi/results;rid', canViewResults, findByRidRoute);
   express.post('/qi/results', canManageResults, prepareForAdd, express.crud.addRoute.bind(null, app, QiResult));
   express.get('/qi/results/:id', canViewResults, express.crud.readRoute.bind(null, app, QiResult));
-  express.put('/qi/results/:id', canManageResults, prepareForEdit, express.crud.editRoute.bind(null, app, {
-    model: QiResult,
-    beforeSet: function(model, req)
-    {
-      req.oldOkFile = model.okFile;
-      req.oldNokFile = model.nokFile;
-    },
-    afterSave: function(model, req)
-    {
-      if (req.oldOkFile && !model.okFile)
-      {
-        removeAttachmentFile(path.join(qiModule.config.attachmentsDest, req.oldOkFile.path));
-      }
-
-      if (req.oldNokFile && !model.nokFile)
-      {
-        removeAttachmentFile(path.join(qiModule.config.attachmentsDest, req.oldNokFile.path));
-      }
-    }
-  }));
+  express.put('/qi/results/:id', canManageResults, editResultRoute);
   express.delete('/qi/results/:id', canManageResults, express.crud.deleteRoute.bind(null, app, QiResult));
   express.get('/qi/results;order', canManageResults, findOrderRoute);
   express.get('/qi/results;export', canViewResults, fetchDictionaries, express.crud.exportRoute.bind(null, {
@@ -166,6 +148,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
         QiResult.distinct('productFamily', step.group());
         User.find({privileges: 'QI:INSPECTOR'}, {login: 1, firstName: 1, lastName: 1}).lean().exec(step.group());
         settings.find({_id: /^qi/}, step.group());
+        qiModule.getActualCountForUser(req.session.user._id, step.group());
       },
       function sendResultStep(err, dictionaries)
       {
@@ -174,9 +157,15 @@ module.exports = function setUpQiRoutes(app, qiModule)
           return this.done(next, err);
         }
 
+        var actualCount = dictionaries.pop();
+        var settings = dictionaries.pop();
         var result = {
-          settings: dictionaries.pop(),
+          settings: settings,
           inspectors: dictionaries.pop(),
+          counter: {
+            actual: actualCount,
+            required: (settings.find(s => s._id === 'qi.requiredCount') || {value: 0}).value
+          },
           productFamilies: dictionaries.pop()
         };
 
@@ -241,16 +230,62 @@ module.exports = function setUpQiRoutes(app, qiModule)
     return next();
   }
 
-  function prepareForEdit(req, res, next)
+  function editResultRoute(req, res, next)
   {
-    var body = req.body;
-
-    body.updater = userModule.createUserInfo(req.session.user, req);
-    body.updater.id = body.updater.id.toString();
+    const user = req.session.user;
+    const body = req.body;
 
     prepareAttachments(body);
 
-    return next();
+    const updater = userModule.createUserInfo(user, req);
+    updater.id = body.updater.id.toString();
+
+    step(
+      function findResultStep()
+      {
+        QiResult.findById(req.params.id).exec(this.next());
+      },
+      function applyChangesStep(err, qiResult)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!qiResult)
+        {
+          return this.skip(express.createHttpError('NOT_FOUND', 404));
+        }
+
+        const changed = qiResult.applyChanges(body, updater);
+
+        if (changed)
+        {
+          qiResult.save(this.next());
+        }
+      },
+      function sendResponseStep(err, qiResult)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (qiResult)
+        {
+          res.json(qiResult);
+
+          app.broker.publish('qi.results.edited', {
+            model: qiResult,
+            user: updater
+          });
+        }
+        else
+        {
+          res.json({_id: req.params.id});
+        }
+      }
+    );
   }
 
   function findByRidRoute(req, res, next)

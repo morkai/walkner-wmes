@@ -35,6 +35,12 @@ define([
         {
           template: addPageActionsTemplate,
           privilege: 'QI:INSPECTOR QI:MANAGE'
+        },
+        {
+          label: t.bound('qiResults', 'PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'QI:DICTIONARIES:MANAGE',
+          href: '#qi/settings?tab=results'
         }
       ];
     },
