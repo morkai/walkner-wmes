@@ -76,7 +76,7 @@ define([
 
         $openLocalFileDialog.blur();
       },
-      'click #-openAddSuggestionWindow': function()
+      'click #-openAddSuggestionWindow': function(e)
       {
         this.openAddSuggestionWindow();
 

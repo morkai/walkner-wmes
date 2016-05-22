@@ -2,10 +2,6 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var uuid = require('node-uuid');
-
 module.exports = function setUpIsaShiftPersonnel(app, isaModule)
 {
   var mongoose = app[isaModule.config.mongooseId];

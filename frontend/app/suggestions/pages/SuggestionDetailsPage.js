@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/i18n',
   'app/user',
   'app/viewport',
@@ -11,6 +12,7 @@ define([
   '../views/SuggestionHistoryView',
   'app/suggestions/templates/detailsPage'
 ], function(
+  $,
   t,
   user,
   viewport,

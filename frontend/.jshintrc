@@ -3,6 +3,7 @@
 
   "node": false,
   "browser": true,
+  "esnext": false,
 
   "eqnull": true,
   "curly": true,
@@ -18,6 +19,6 @@
   "maxdepth": 4,
   "maxlen": 120,
   "laxbreak": true,
-  "globalstrict": true,
+  "strict": true,
   "white": false
 }

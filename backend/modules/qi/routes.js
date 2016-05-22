@@ -9,7 +9,6 @@ var step = require('h5.step');
 var multer = require('multer');
 var contentDisposition = require('content-disposition');
 var gm = require('gm');
-var moment = require('moment');
 var countReport = require('./countReport');
 
 module.exports = function setUpQiRoutes(app, qiModule)

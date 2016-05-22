@@ -136,7 +136,7 @@ module.exports = function(mongoose, options, done)
       {
         for (let family of Object.keys(group.nokQtyPerFamily))
         {
-          const nokQtyPerFamily = group.nokQtyPerFamily[family]
+          const nokQtyPerFamily = group.nokQtyPerFamily[family];
           const divisions = Object.keys(nokQtyPerFamily.perDivision);
 
           if (divisions.length === 1)

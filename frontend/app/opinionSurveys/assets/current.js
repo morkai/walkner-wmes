@@ -1,4 +1,5 @@
-/*globals $,SURVEY,alert*/
+/* globals $,SURVEY,alert */
+/* jshint strict: global */
 
 'use strict';
 

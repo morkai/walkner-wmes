@@ -19,6 +19,6 @@
   "maxdepth": 4,
   "maxlen": 120,
   "laxbreak": true,
-  "globalstrict": true,
+  "strict": "global",
   "white": false
 }
