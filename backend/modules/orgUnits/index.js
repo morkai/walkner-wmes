@@ -668,6 +668,8 @@ exports.start = function startOrgUnitsModule(app, module)
       return;
     }
 
+    module.debug("Rebuilding cache...");
+
     var t = Date.now();
 
     var workingCache = {
@@ -946,7 +948,7 @@ exports.start = function startOrgUnitsModule(app, module)
       if (mrpController !== undefined && parentCache.mrpController[mrpControllerId] === undefined)
       {
         parentCache.mrpController.map[mrpControllerId] = mrpController;
-        parentCache.mrpController.list.push(mrpControllerId);
+        parentCache.mrpController.list.push(mrpController);
       }
     }
   }
