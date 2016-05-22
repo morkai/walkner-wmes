@@ -11,7 +11,6 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  CagCollection,
   Cag
 ) {
   'use strict';
