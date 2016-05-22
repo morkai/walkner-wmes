@@ -30,7 +30,7 @@ module.exports = function setupDowntimeReasonModel(app, mongoose)
     },
     subdivisionTypes: [{
       type: String,
-      enum: ['assembly', 'press'],
+      enum: ['assembly', 'press', 'paintShop'],
       required: true
     }],
     pressPosition: {

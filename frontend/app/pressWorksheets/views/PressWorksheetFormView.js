@@ -175,6 +175,7 @@ define([
       },
       'change input[name=type]': function()
       {
+        this.prepareProdLinesData();
         this.togglePaintShop();
 
         if (!this.filling)
@@ -228,22 +229,7 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      this.prodLinesData = prodLines
-        .filter(function(prodLine)
-        {
-          var subdivision = prodLine.getSubdivision();
-
-          return !prodLine.get('deactivatedAt')
-            && subdivision
-            && subdivision.get('type') === 'press';
-        })
-        .map(function(prodLine)
-        {
-          return {
-            id: prodLine.id,
-            text: prodLine.id
-          };
-        });
+      this.prepareProdLinesData();
 
       setUpUserSelect2(this.$id('master'));
 
@@ -271,6 +257,39 @@ define([
       {
         this.$id('type').focus();
       }
+    },
+
+    prepareProdLinesData: function()
+    {
+      var createdAt = Date.parse(this.model.get('createdAt') || new Date());
+      var isOldEntry = createdAt < time.getMoment().subtract(1, 'days').valueOf();
+
+      this.prodLinesData = prodLines
+        .filter(function(prodLine)
+        {
+          var subdivision = prodLine.getSubdivision();
+
+          if (!subdivision)
+          {
+            return false;
+          }
+
+          var type = subdivision.get('type');
+
+          if (type !== 'press' && type !== 'paintShop')
+          {
+            return false;
+          }
+
+          return isOldEntry || !prodLine.get('deactivatedAt');
+        })
+        .map(function(prodLine)
+        {
+          return {
+            id: prodLine.id,
+            text: prodLine.id
+          };
+        });
     },
 
     renderOrdersTable: function()
@@ -997,7 +1016,9 @@ define([
 
     serializeToForm: function()
     {
-      return {};
+      return {
+        type: this.model.get('type')
+      };
     },
 
     fillModelData: function()

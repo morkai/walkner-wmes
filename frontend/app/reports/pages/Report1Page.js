@@ -27,7 +27,7 @@ define([
 
     createQuery: function()
     {
-      return new Query(this.options.query);
+      return Query.fromQuery(this.options.query);
     },
 
     createDisplayOptions: function()

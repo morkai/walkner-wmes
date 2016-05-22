@@ -23,6 +23,11 @@ module.exports = function(mongoose, options, done)
     }
   };
 
+  if (options.orgUnitType && options.ignoredOrgUnits[options.orgUnitType][options.orgUnitId])
+  {
+    return done(null, results);
+  }
+
   step(
     findProdShiftsStep,
     groupQuantitiesDoneStep,
@@ -51,7 +56,10 @@ module.exports = function(mongoose, options, done)
   function createConditions()
   {
     var conditions = {
-      startedAt: {$gte: options.fromTime, $lt: options.toTime}
+      startedAt: {
+        $gte: options.fromTime,
+        $lt: options.toTime
+      }
     };
 
     if (options.orgUnitType && options.orgUnitId)
@@ -63,13 +71,9 @@ module.exports = function(mongoose, options, done)
       conditions[orgUnitProperty] = options.orgUnitId;
     }
 
-    if (options.subdivisionType === 'prod')
+    if (!options.ignoredOrgUnits.empty)
     {
-      conditions.mechOrder = false;
-    }
-    else if (options.subdivisionType === 'press')
-    {
-      conditions.mechOrder = true;
+      conditions.prodLine = {$nin: Object.keys(options.ignoredOrgUnits.prodLine)};
     }
 
     return conditions;
@@ -80,7 +84,10 @@ module.exports = function(mongoose, options, done)
     /*jshint validthis:true*/
 
     var conditions = {
-      date: {$gte: options.fromTime, $lt: options.toTime}
+      date: {
+        $gte: options.fromTime,
+        $lt: options.toTime
+      }
     };
 
     if (options.orgUnitType && options.orgUnitId)
@@ -92,7 +99,10 @@ module.exports = function(mongoose, options, done)
       conditions[orgUnitProperty] = options.orgUnitId;
     }
 
-    conditions.quantitiesDone = {$ne: null};
+    if (!options.ignoredOrgUnits.empty)
+    {
+      conditions.prodLine = {$nin: Object.keys(options.ignoredOrgUnits.prodLine)};
+    }
 
     var fields = {
       _id: 0,

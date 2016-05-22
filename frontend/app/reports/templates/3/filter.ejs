@@ -56,12 +56,11 @@
   <div class="form-group">
     <label><%- t('reports', 'filter:subdivisionType') %></label>
     <div id="<%- idPrefix %>-subdivisionTypes" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['assembly', 'press', 'paintShop'].forEach(function(subdivisionType) { %>
       <label class="btn btn-default">
-        <input type="checkbox" name="subdivisionType" value="assembly"> <%- t('reports', 'filter:subdivisionType:prod') %>
+        <input type="checkbox" name="subdivisionType[]" value="<%- subdivisionType %>"> <%- t('reports', 'filter:subdivisionType:' + subdivisionType) %>
       </label>
-      <label class="btn btn-default">
-        <input type="checkbox" name="subdivisionType" value="press"> <%- t('reports', 'filter:subdivisionType:press') %>
-      </label>
+      <% }) %>
     </div>
   </div>
 </form>

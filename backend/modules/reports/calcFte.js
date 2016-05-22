@@ -56,7 +56,8 @@ module.exports = function(mongoose, options, done)
       var activeOrgUnitOptions = {
         from: from,
         to: to,
-        orgUnitTypes: {}
+        orgUnitTypes: {},
+        ignoredOrgUnits: options.ignoredOrgUnits
       };
 
       if (options.orgUnitType !== null && options.orgUnitType !== 'division')
@@ -110,6 +111,7 @@ module.exports = function(mongoose, options, done)
 
       var fteMasterEntryStream = FteMasterEntry
         .find(conditions, {
+          subdivision: 1,
           date: 1,
           'tasks.id': 1,
           'tasks.type': 1,
@@ -222,8 +224,22 @@ module.exports = function(mongoose, options, done)
   function getActiveOrgUnits(options, done)
   {
     var pipeline = [
-      {$match: {startedAt: {$gte: options.from, $lt: options.to}}}
+      {
+        $match: {
+          startedAt: {
+            $gte: options.from,
+            $lt: options.to
+          }
+        }
+      }
     ];
+
+    var ignoredProdLines = options.ignoredOrgUnits ? Object.keys(options.ignoredOrgUnits.prodLine) : [];
+
+    if (ignoredProdLines.length)
+    {
+      pipeline[0].$match.prodLine = {$nin: ignoredProdLines};
+    }
 
     pipeline.push(
       {$group: {
@@ -331,10 +347,8 @@ module.exports = function(mongoose, options, done)
     }
 
     var allWorkingProdLines = activeOrgUnits.prodLine;
-
     var allProdLinesInSubdivision = options.orgUnits.subdivision;
     var allProdLinesInOrgUnit = options.orgUnits.orgUnit;
-
     var workingProdLinesInSubdivision = _.intersection(
       allProdLinesInSubdivision,
       allWorkingProdLines
@@ -506,6 +520,11 @@ module.exports = function(mongoose, options, done)
 
     fteMasterEntryStream.on('data', function(fteMasterEntry)
     {
+      if (util.isIgnoredOrgUnit(options, fteMasterEntry, 'subdivision'))
+      {
+        return;
+      }
+
       var key = '' + fteMasterEntry.date.getTime();
 
       createDefaultGroupedResult(key);

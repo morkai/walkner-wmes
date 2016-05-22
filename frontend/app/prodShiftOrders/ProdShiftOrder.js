@@ -47,6 +47,7 @@ define([
       date: null,
       shift: null,
       mechOrder: null,
+      subdivisionType: null,
       orderId: null,
       operationNo: null,
       orderData: null,
@@ -103,6 +104,7 @@ define([
         date: shiftDate,
         shift: prodShift.get('shift'),
         mechOrder: orderData.no === null,
+        subdivisionType: this.getSubdivisionType(),
         orderId: orderData.no || orderData.nc12,
         operationNo: operationNo,
         orderData: orderData,
@@ -169,6 +171,7 @@ define([
         prodLine: prodShift.prodLine.id,
         date: prodShift.get('date'),
         shift: prodShift.get('shift'),
+        subdivisionType: this.getSubdivisionType(),
         workerCount: 0,
         totalQuantity: 0,
         quantityDone: 0,
@@ -188,10 +191,7 @@ define([
 
     generateId: function(prodShift)
     {
-      this.set(
-        '_id',
-        prodLog.generateId(this.get('startedAt'), prodShift.id + this.get('orderId'))
-      );
+      this.set('_id', prodLog.generateId(this.get('startedAt'), prodShift.id + this.get('orderId')));
     },
 
     onWorkEnded: function()
@@ -404,7 +404,7 @@ define([
 
     getOrderIdType: function()
     {
-      return this.getSubdivisionType() === 'press' ? 'nc12' : 'no';
+      return this.getSubdivisionType() === 'assembly' ? 'no' : 'nc12';
     },
 
     hasOrderData: function()

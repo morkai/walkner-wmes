@@ -32,7 +32,7 @@ define([
       return {
         label: null,
         type: 'other',
-        subdivisionTypes: ['assembly', 'press'],
+        subdivisionTypes: ['assembly', 'press', 'paintShop'],
         opticsPosition: -1,
         pressPosition: -1,
         auto: false,

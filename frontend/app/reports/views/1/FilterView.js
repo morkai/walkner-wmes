@@ -1,19 +1,27 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'js2form',
+  'app/i18n',
   'app/time',
+  'app/viewport',
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/reports/templates/1/filter',
-  'app/reports/util/prepareDateRange'
+  'app/reports/util/prepareDateRange',
+  'app/reports/views/OrgUnitPickerView'
 ], function(
+  _,
   js2form,
+  t,
   time,
+  viewport,
   View,
   fixTimeRange,
   template,
-  prepareDateRange
+  prepareDateRange,
+  OrgUnitPickerView
 ) {
   'use strict';
 
@@ -22,7 +30,7 @@ define([
     template: template,
 
     events: {
-      'submit .filter-form': function(e)
+      'submit': function(e)
       {
         e.preventDefault();
 
@@ -39,38 +47,35 @@ define([
         this.$id('to-time').val(dateRange.toMoment.format('HH:mm'));
         this.$id('mode-date').click();
         this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
-        this.$('.filter-form').submit();
+        this.$el.submit();
       },
       'click #-showDisplayOptions': function()
       {
         this.trigger('showDisplayOptions');
-      }
+      },
+      'click #-ignoredOrgUnits': 'showIgnoredOrgUnitsDialog'
+    },
+
+    initialize: function()
+    {
+      this.ignoredOrgUnits = this.model.get('ignoredOrgUnits');
     },
 
     afterRender: function()
     {
       var formData = this.serializeFormData();
 
-      js2form(this.el.querySelector('.filter-form'), formData);
+      js2form(this.el, formData);
 
       this.$('[name=interval]:checked').closest('.btn').addClass('active');
-      this.$('[name=subdivisionType]:checked').closest('.btn').addClass('active');
 
-      this.toggleSubdivisionType();
+      this.toggleIgnoredOrgUnits();
       this.onModeChange();
     },
 
-    toggleSubdivisionType: function()
+    toggleIgnoredOrgUnits: function()
     {
-      var $subdivisionTypes = this.$id('subdivisionTypes');
-
-      if (!$subdivisionTypes.find('> .active').length)
-      {
-        $subdivisionTypes.find('> .btn').addClass('active');
-        $subdivisionTypes.find('input').prop('checked', true);
-      }
-
-      return $subdivisionTypes;
+      this.$id('ignoredOrgUnits').toggleClass('active', !_.isEmpty(this.ignoredOrgUnits));
     },
 
     onModeChange: function()
@@ -109,8 +114,7 @@ define([
     {
       var formData = {
         mode: 'online',
-        interval: this.model.get('interval'),
-        subdivisionType: this.model.get('subdivisionType')
+        interval: this.model.get('interval')
       };
 
       var from = parseInt(this.model.get('from'), 10);
@@ -136,15 +140,8 @@ define([
         from: null,
         to: null,
         interval: this.$id('intervals').find('.active > input').val(),
-        subdivisionType: null
+        ignoredOrgUnits: _.extend({}, this.ignoredOrgUnits)
       };
-
-      var $subdivisionTypes = this.toggleSubdivisionType().find('> .active');
-
-      if ($subdivisionTypes.length === 1)
-      {
-        query.subdivisionType = $subdivisionTypes.find('input').val();
-      }
 
       var fromMoment;
       var toMoment;
@@ -200,6 +197,24 @@ define([
         default:
           return fromMoment.hour(6);
       }
+    },
+
+    showIgnoredOrgUnitsDialog: function()
+    {
+      var filterView = this;
+      var dialogView = new OrgUnitPickerView({
+        model: this.ignoredOrgUnits
+      });
+
+      dialogView.once('picked', function(ignoredOrgUnits)
+      {
+        filterView.ignoredOrgUnits = ignoredOrgUnits;
+        filterView.toggleIgnoredOrgUnits();
+
+        viewport.closeDialog();
+      });
+
+      viewport.showDialog(dialogView, t('reports', 'filter:ignoredOrgUnits'));
     }
 
   });

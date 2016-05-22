@@ -1,0 +1,23 @@
+<form class="reports-orgUnitPicker">
+  <% ['division', 'subdivision', 'mrpController', 'prodFlow', 'workCenter', 'prodLine'].forEach(function(orgUnitType) { %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-<%- orgUnitType %>">
+      <% if (orgUnitType === 'subdivision') { %>
+      <%- t('core', 'ORG_UNIT:' + orgUnitType) %>:
+      <% ['assembly', 'press', 'paintShop'].forEach(function(subdivisionType, i) { %>
+      <%- i > 0 ? ' | ' : '' %>
+      <a href="#" data-subdivision-type="<%- subdivisionType %>" data-next-toggle="1"><%- t('reports', 'filter:subdivisionType:' + subdivisionType) %></a>
+      <% }) %>
+      <% } else { %>
+      <%- t('core', 'ORG_UNIT:' + orgUnitType) %>
+      <% } %>
+    </label>
+    <input id="<%- idPrefix %>-<%- orgUnitType %>" name="<%- orgUnitType %>" type="text">
+  </div>
+  <% }) %>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('reports', 'orgUnitPicker:submit') %></button>
+    <button id="<%- idPrefix %>-reset" type="button" class="btn btn-danger"><%- t('reports', 'orgUnitPicker:reset') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

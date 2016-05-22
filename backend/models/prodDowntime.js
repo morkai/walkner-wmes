@@ -120,6 +120,10 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     leader: {},
     operator: {},
     operators: [{}],
+    subdivisionType: {
+      type: String,
+      default: 'assembly'
+    },
     mechOrder: {
       type: Boolean,
       default: null

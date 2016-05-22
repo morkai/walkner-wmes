@@ -105,6 +105,8 @@
   "filter:subdivisionType:prod": "Montaż",
   "filter:subdivisionType:assembly": "Montaż",
   "filter:subdivisionType:press": "Tłocznia",
+  "filter:subdivisionType:paintShop": "Malarnia",
+  "filter:ignoredOrgUnits": "Ignorowane jednostki org.",
   "filter:submit": "Filtruj raport",
   "filter:submit:currentShift": "Aktualna zmiana",
   "filter:submit:prevShift": "Poprzednia zmiana",
@@ -594,5 +596,8 @@
   "9:months:utilization": "%<br>wyk.",
   "9:months:lineCount": "Ilość<br>linii",
   "9:chart:title": "Wykorzystanie linii w grupach CAG [%]",
-  "9:chart:filename": "WMES_PlanObLinii"
+  "9:chart:filename": "WMES_PlanObLinii",
+
+  "orgUnitPicker:submit": "Wybierz",
+  "orgUnitPicker:reset": "Resetuj"
 }

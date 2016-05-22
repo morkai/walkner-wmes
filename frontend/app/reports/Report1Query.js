@@ -23,12 +23,12 @@ define([
       from: null,
       to: null,
       interval: 'hour',
-      subdivisionType: null
+      ignoredOrgUnits: null
     },
 
     reset: function(query)
     {
-      this.set(_.defaults(query, this.defaults), {reset: true});
+      this.set(this.constructor.fromQuery(query).attributes, {reset: true});
     },
 
     createReports: function(parentReport, childReport, options)
@@ -82,10 +82,12 @@ define([
     serializeToObject: function(orgUnitType, orgUnit)
     {
       var query = {
-        subdivisionType: this.get('subdivisionType') || undefined,
         interval: this.get('interval'),
         from: this.get('from'),
-        to: this.get('to')
+        to: this.get('to'),
+        orgUnitType: undefined,
+        orgUnitId: undefined,
+        ignoredOrgUnits: this.serializeIgnoredOrgUnits()
       };
 
       if (!query.from || !query.to)
@@ -115,11 +117,6 @@ define([
         queryString += '&interval=' + attrs.interval;
       }
 
-      if (attrs.subdivisionType)
-      {
-        queryString += '&subdivisionType=' + attrs.subdivisionType;
-      }
-
       if (attrs.from && attrs.to)
       {
         queryString += '&from=' + encodeURIComponent(attrs.from);
@@ -140,7 +137,17 @@ define([
         queryString += '&orgUnitId=' + encodeURIComponent(attrs.orgUnitId);
       }
 
+      if (!_.isEmpty(attrs.ignoredOrgUnits))
+      {
+        queryString += '&ignoredOrgUnits=' + encodeURIComponent(this.serializeIgnoredOrgUnits());
+      }
+
       return queryString.substr(1);
+    },
+
+    serializeIgnoredOrgUnits: function()
+    {
+      return btoa(JSON.stringify(this.attributes.ignoredOrgUnits));
     },
 
     getFirstShiftMoment: function()
@@ -158,6 +165,18 @@ define([
     isAutoMode: function()
     {
       return !this.get('from') && !this.get('to');
+    }
+
+  }, {
+
+    fromQuery: function(query)
+    {
+      if (query && query.ignoredOrgUnits)
+      {
+        query.ignoredOrgUnits = JSON.parse(atob(query.ignoredOrgUnits));
+      }
+
+      return new this(query);
     }
 
   });

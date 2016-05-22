@@ -197,14 +197,14 @@ exports.getDowntimeReasons = function(allDowntimeReasons, typesOnly)
 
 exports.idToStr = function(input)
 {
-  if (Array.isArray(input))
-  {
-    return input.map(function(model) { return String(model._id); });
-  }
-
   if (input === null)
   {
     return null;
+  }
+
+  if (Array.isArray(input))
+  {
+    return input.map(model => String(model._id));
   }
 
   return String(input._id);
@@ -215,12 +215,12 @@ exports.getTime = function(date)
   return (/^-?[0-9]+$/).test(date) ? parseInt(date, 10) : Date.parse(date);
 };
 
-exports.getInterval = function(interval)
+exports.getInterval = function(interval, defaultInterval)
 {
-  return VALID_INTERVALS[interval] ? interval : 'month';
+  return VALID_INTERVALS[interval] ? interval : (defaultInterval || 'month');
 };
 
-exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit)
+exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit, ignoredOrgUnits)
 {
   var orgUnits = {
     orgUnit: null,
@@ -234,7 +234,15 @@ exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit)
     return orgUnits;
   }
 
-  orgUnits.orgUnit = exports.idToStr(orgUnitsModule.getProdLinesFor(orgUnit));
+  if (!ignoredOrgUnits)
+  {
+    ignoredOrgUnits = {empty: true};
+  }
+
+  orgUnits.orgUnit = ignoreProdLines(
+    exports.idToStr(orgUnitsModule.getProdLinesFor(orgUnit)),
+    ignoredOrgUnits
+  );
 
   if (orgUnitType === 'division')
   {
@@ -245,14 +253,20 @@ exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit)
 
   if (division)
   {
-    orgUnits.division = exports.idToStr(orgUnitsModule.getProdLinesFor(division));
+    orgUnits.division = ignoreProdLines(
+      exports.idToStr(orgUnitsModule.getProdLinesFor(division)),
+      ignoredOrgUnits
+    );
   }
 
   var subdivision = orgUnitsModule.getSubdivisionFor(orgUnit);
 
   if (subdivision)
   {
-    orgUnits.subdivision = exports.idToStr(orgUnitsModule.getProdLinesFor(subdivision));
+    orgUnits.subdivision = ignoreProdLines(
+      exports.idToStr(orgUnitsModule.getProdLinesFor(subdivision)),
+      ignoredOrgUnits
+    );
   }
 
   if (orgUnitType !== 'workCenter' && orgUnitType !== 'prodLine')
@@ -268,8 +282,78 @@ exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit)
   }
   else
   {
-    orgUnits.prodFlow = exports.idToStr(orgUnitsModule.getProdLinesFor(prodFlows[0]));
+    orgUnits.prodFlow = ignoreProdLines(
+      exports.idToStr(orgUnitsModule.getProdLinesFor(prodFlows[0])),
+      ignoredOrgUnits
+    );
   }
 
   return orgUnits;
 };
+
+function ignoreProdLines(prodLines, ignoredOrgUnits)
+{
+  return ignoredOrgUnits.empty
+    ? prodLines
+    : _.filter(prodLines, prodLine => !ignoredOrgUnits.prodLine[prodLine]);
+}
+
+exports.decodeOrgUnits = function(orgUnitsModule, encodedOrgUnits)
+{
+  var orgUnits = {
+    empty: true,
+    division: {},
+    subdivision: {},
+    mrpController: {},
+    prodFlow: {},
+    workCenter: {},
+    prodLine: {}
+  };
+
+  if (typeof encodedOrgUnits !== 'string')
+  {
+    return orgUnits;
+  }
+
+  var decodedOrgUnits = {};
+
+  try
+  {
+    decodedOrgUnits = JSON.parse(new Buffer(encodedOrgUnits, 'base64').toString('binary'));
+  }
+  catch (err)
+  {
+    return orgUnits;
+  }
+
+  _.forEach(orgUnits, function(map, type)
+  {
+    orgUnits.empty = false;
+
+    _.forEach(decodedOrgUnits[type], function(orgUnitId)
+    {
+      selectOrgUnits(orgUnitsModule, type, orgUnitId, orgUnits);
+    });
+  });
+
+  return orgUnits;
+};
+
+function selectOrgUnits(orgUnitsModule, orgUnitType, orgUnitId, selectedOrgUnits)
+{
+  var orgUnit = orgUnitsModule.getByTypeAndId(orgUnitType, orgUnitId);
+
+  selectedOrgUnits[orgUnitType][orgUnitId] = true;
+
+  if (orgUnitType === 'prodLine')
+  {
+    return;
+  }
+
+  var childOrgUnitType = orgUnitsModule.getChildType(orgUnitType);
+
+  _.forEach(orgUnitsModule.getChildren(orgUnit), function(childOrgUnit)
+  {
+    selectOrgUnits(orgUnitsModule, childOrgUnitType, childOrgUnit._id, selectedOrgUnits);
+  });
+}

@@ -4,30 +4,12 @@
   </div>
   <div class="panel-details">
     <div class="props first">
+      <% ['division', 'type', 'name', 'prodTaskTags', 'aor', 'autoDowntime'].forEach(function(prop) { %>
       <div class="prop">
-        <div class="prop-name"><%- t('subdivisions', 'PROPERTY:division') %></div>
-        <div class="prop-value"><%- model.division || '-' %></div>
+        <div class="prop-name"><%- t('subdivisions', 'PROPERTY:' + prop) %></div>
+        <div class="prop-value"><%- model[prop] || '-' %></div>
       </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('subdivisions', 'PROPERTY:type') %></div>
-        <div class="prop-value"><%= model.type %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('subdivisions', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('subdivisions', 'PROPERTY:prodTaskTags') %></div>
-        <div class="prop-value"><%= model.prodTaskTags || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('subdivisions', 'PROPERTY:aor') %></div>
-        <div class="prop-value"><%= model.aor || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('subdivisions', 'PROPERTY:autoDowntime') %></div>
-        <div class="prop-value"><%= model.autoDowntime || '-' %></div>
-      </div>
+      <% }) %>
     </div>
   </div>
 </div>

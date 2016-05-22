@@ -11,10 +11,6 @@ module.exports = function(mongoose, options, done)
 {
   /*jshint validthis:true*/
 
-  var debugTimes = {
-    startedAt: Date.now()
-  };
-
   var PLAN = 0;
   var REAL = 1;
   var DATE_FORMAT = 'YYMMDD';
@@ -168,8 +164,6 @@ module.exports = function(mongoose, options, done)
     PLAN_PROD_FLOWS[prodFlowId] = true;
   });
 
-  debugTimes.optionsSetup = Date.now();
-
   step(
     function getActiveOrgUnitsStep()
     {
@@ -182,8 +176,6 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      debugTimes.activeOrgUnits = Date.now();
-
       handleHourlyPlans(this.group());
       handleFteMasterEntries(this.group());
       handleFteLeaderEntries(this.group());
@@ -195,8 +187,6 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      debugTimes.downtimes = Date.now();
-
       handleProdDowntimes(this.next());
     },
     function handleShiftsAndOrdersStep(err)
@@ -205,8 +195,6 @@ module.exports = function(mongoose, options, done)
       {
         return this.skip(err);
       }
-
-      debugTimes.orders = Date.now();
 
       handleProdShifts(this.group());
       handleProdShiftOrders(this.group());
@@ -217,8 +205,6 @@ module.exports = function(mongoose, options, done)
       {
         return this.skip(err);
       }
-
-      debugTimes.data = Date.now();
 
       _.forEach(prodLineToWorkingDays, function(workingDays, prodLineId)
       {
@@ -251,13 +237,9 @@ module.exports = function(mongoose, options, done)
         currentGroupKey.add(1, options.interval);
       }
 
-      debugTimes.gruped = Date.now();
-
       calcMetrics(summary, sortedGroups);
 
       results.groups = sortedGroups;
-
-      debugTimes.summarized = Date.now();
 
       if (options.debug)
       {
@@ -268,8 +250,6 @@ module.exports = function(mongoose, options, done)
     },
     function sendResultsStep(err)
     {
-      debugTimes.finishedAt = Date.now();
-
       if (err)
       {
         done(err, null);
@@ -278,27 +258,8 @@ module.exports = function(mongoose, options, done)
       {
         done(null, results);
       }
-
-      console.log('---');
-      printDebugTimer('overall          ', 'startedAt', 'finishedAt');
-      printDebugTimer('options setup    ', 'startedAt', 'optionsSetup');
-      printDebugTimer('active org units ', 'optionsSetup', 'activeOrgUnits');
-      printDebugTimer('hourly plans     ', 'activeOrgUnits', 'handleHourlyPlan');
-      printDebugTimer('fte master       ', 'activeOrgUnits', 'handleFteMasterEntry');
-      printDebugTimer('fte leader       ', 'activeOrgUnits', 'handleFteLeaderEntry');
-      printDebugTimer('prod downtimes   ', 'downtimes', 'handleProdDowntime');
-      printDebugTimer('prod shift orders', 'orders', 'handleProdShiftOrder');
-      printDebugTimer('data             ', 'activeOrgUnits', 'data');
-      printDebugTimer('real tvp         ', 'tvpStart', 'tvpEnd');
-      printDebugTimer('groups           ', 'data', 'gruped');
-      printDebugTimer('summary          ', 'gruped', 'summarized');
     }
   );
-
-  function printDebugTimer(label, startedAt, finishedAt)
-  {
-    console.log('%s: %s ms', label, debugTimes[finishedAt] - debugTimes[startedAt]);
-  }
 
   function countAllShiftsInGroup(groupKey)
   {
@@ -444,7 +405,7 @@ module.exports = function(mongoose, options, done)
 
   function handleStream(Model, conditions, fields, handleDocument, done)
   {
-    var complete = _.once(function(err) { debugTimes[handleDocument.name] = Date.now(); done(err); });
+    var complete = _.once(done);
     var stream = Model.find(conditions, fields).lean().stream();
 
     stream.on('data', handleDocument);
@@ -1405,8 +1366,6 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    debugTimes.tvpStart = Date.now();
-
     var groupMap = {};
 
     _.forEach(groups, function(group)
@@ -1440,8 +1399,6 @@ module.exports = function(mongoose, options, done)
     });
 
     realTotalVolumeProducedPerShift = null;
-
-    debugTimes.tvpEnd = Date.now();
   }
 
   function compileEfficiencyFormula(formula, type)

@@ -12,7 +12,13 @@ module.exports = function setupSubdivisionModel(app, mongoose)
     },
     type: {
       type: String,
-      enum: ['assembly', 'press', 'storage', 'other'],
+      enum: [
+        'assembly',
+        'press',
+        'storage',
+        'paintShop',
+        'other'
+      ],
       default: 'assembly'
     },
     name: {

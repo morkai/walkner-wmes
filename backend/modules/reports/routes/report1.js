@@ -9,9 +9,10 @@ var report1 = require('../report1');
 module.exports = function report1Route(app, reportsModule, req, res, next)
 {
   var orgUnitsModule = app[reportsModule.config.orgUnitsId];
-  var orgUnit = orgUnitsModule.getByTypeAndId(req.query.orgUnitType, req.query.orgUnitId);
+  var query = req.query;
+  var orgUnit = orgUnitsModule.getByTypeAndId(query.orgUnitType, query.orgUnitId);
 
-  if (orgUnit === null && (req.query.orgUnitType || req.query.orgUnitId))
+  if (orgUnit === null && (query.orgUnitType || query.orgUnitId))
   {
     return res.sendStatus(400);
   }
@@ -24,7 +25,7 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
   }
 
   var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
-  var subdivisionType = req.query.subdivisionType;
+  var subdivisionType = query.subdivisionType;
 
   if (subdivisionType === 'prod' || subdivisionType === 'press')
   {
@@ -45,20 +46,21 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
   });
 
   var options = {
-    fromTime: helpers.getTime(req.query.from),
-    toTime: helpers.getTime(req.query.to),
-    interval: req.query.interval || 'hour',
-    orgUnitType: orgUnit ? req.query.orgUnitType : null,
-    orgUnitId: orgUnit ? req.query.orgUnitId : null,
+    fromTime: helpers.getTime(query.from),
+    toTime: helpers.getTime(query.to),
+    interval: helpers.getInterval(query.interval, 'hour'),
+    orgUnitType: orgUnit ? query.orgUnitType : null,
+    orgUnitId: orgUnit ? query.orgUnitId : null,
     division: helpers.idToStr(division),
     subdivisions: helpers.idToStr(subdivisions),
     subdivisionType: subdivisionType,
     subdivisionTypes: subdivisionTypes,
     prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
     prodTasks: helpers.getProdTasksWithTags(app[reportsModule.config.prodTasksId].models),
-    orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, req.query.orgUnitType, orgUnit),
+    orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, query.orgUnitType, orgUnit),
     downtimeReasons: getDowntimeReasons(app[reportsModule.config.downtimeReasonsId].models),
-    prodNumConstant: reportsModule.prodNumConstant
+    prodNumConstant: reportsModule.prodNumConstant,
+    ignoredOrgUnits: helpers.decodeOrgUnits(orgUnitsModule, query.ignoredOrgUnits)
   };
 
   if (isNaN(options.fromTime) || isNaN(options.toTime))

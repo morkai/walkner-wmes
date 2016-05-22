@@ -57,7 +57,7 @@
       </div>
       <div class="form-group">
         <label class="control-label"><%- t('reports', 'filter:subdivisionType') %></label>
-        <% ['assembly', 'press'].forEach(function(subdivisionType) { %>
+        <% ['assembly', 'press', 'paintShop'].forEach(function(subdivisionType) { %>
         <div class="checkbox">
           <label>
             <input type="checkbox" name="subdivisionTypes[]" value="<%- subdivisionType %>"> <%- t('reports', 'filter:subdivisionType:' + subdivisionType) %>

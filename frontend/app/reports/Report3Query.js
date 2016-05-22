@@ -174,7 +174,7 @@ define([
       var subdivisionType = this.get('subdivisionType');
 
       return (!divisions.length || divisions.indexOf(prodLine.division) !== -1)
-        && (subdivisionType == null || prodLine.subdivisionType === subdivisionType);
+        && (subdivisionType == null || subdivisionType.indexOf(prodLine.subdivisionType) !== -1);
     },
 
     changeColumnVisibility: function(column, visible)

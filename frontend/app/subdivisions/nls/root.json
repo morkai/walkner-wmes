@@ -28,6 +28,7 @@
     "TYPE:assembly": "Assembly",
     "TYPE:press": "Press",
     "TYPE:storage": "Warehouse",
+    "TYPE:paintShop": "Paint shop",
     "TYPE:other": "Other",
 
     "FORM:ACTION:add": "Add subdivision",

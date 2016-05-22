@@ -43,6 +43,7 @@
   "subdivisionType:none": "Żadne",
   "subdivisionType:assembly": "Montaż",
   "subdivisionType:press": "Tłocznia",
+  "subdivisionType:paintShop": "Malarnia",
 
   "FORM:ACTION:add": "Dodaj powód przestojów",
   "FORM:ACTION:edit": "Edytuj powód przestojów",

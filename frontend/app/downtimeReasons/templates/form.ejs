@@ -25,18 +25,14 @@
         </div>
         <div class="col-md-2 form-group">
           <label for="<%- idPrefix %>-subdivisions-assembly" class="control-label"><%- t('downtimeReasons', 'PROPERTY:subdivisionTypes') %></label>
+          <% ['assembly', 'press', 'paintShop'].forEach(function(type) { %>
           <div class="checkbox">
             <label>
-              <input id="<%- idPrefix %>-subdivisions-assembly" type="checkbox" name="subdivisionTypes[]" value="assembly">
-              <%- t('downtimeReasons', 'subdivisionType:assembly') %>
+              <input id="<%- idPrefix %>-subdivisionTypes-<%- type %>" type="checkbox" name="subdivisionTypes[]" value="<%- type %>">
+              <%- t('downtimeReasons', 'subdivisionType:' + type) %>
             </label>
           </div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" name="subdivisionTypes[]" value="press">
-              <%- t('downtimeReasons', 'subdivisionType:press') %>
-            </label>
-          </div>
+          <% }) %>
         </div>
         <div class="col-md-2 form-group">
           <label for="<%- idPrefix %>-scheduled-true" class="control-label is-required"><%- t('downtimeReasons', 'PROPERTY:scheduled') %></label>

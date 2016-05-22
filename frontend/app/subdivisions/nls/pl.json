@@ -27,6 +27,7 @@
   "TYPE:assembly": "Montaż",
   "TYPE:press": "Tłocznia",
   "TYPE:storage": "Magazyn",
+  "TYPE:paintShop": "Malarnia",
   "TYPE:other": "Inny",
 
   "FORM:ACTION:add": "Dodaj dział",

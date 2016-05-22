@@ -156,3 +156,8 @@ exports.getCurrentShiftStartDate = function()
 
   return currentShiftStartMoment.toDate();
 };
+
+exports.isIgnoredOrgUnit = function(options, doc, orgUnitType)
+{
+  return options.ignoredOrgUnits && options.ignoredOrgUnits[orgUnitType][doc[orgUnitType]] === true;
+};

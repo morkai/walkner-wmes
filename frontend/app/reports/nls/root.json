@@ -106,6 +106,8 @@
     "filter:subdivisionType:prod": "Assembly",
     "filter:subdivisionType:assembly": "Assembly",
     "filter:subdivisionType:press": "Press",
+    "filter:subdivisionType:paintShop": "Paint shop",
+    "filter:ignoredOrgUnits": "Ignored org. units",
     "filter:submit": "Filter report",
     "filter:submit:currentShift": "Current shift",
     "filter:submit:prevShift": "Previous shift",
@@ -589,7 +591,10 @@
     "9:months:utilization": "%<br>util.",
     "9:months:lineCount": "Line<br>count",
     "9:chart:title": "Line utilization per group [%]",
-    "9:chart:filename": "WMES_PlanLineUtil"
+    "9:chart:filename": "WMES_PlanLineUtil",
+
+    "orgUnitPicker:submit": "Pick",
+    "orgUnitPicker:reset": "Reset"
   },
   "pl": true
 }

@@ -53,20 +53,19 @@ define([
 
         this.model.set('divisions', divisions.length === $divisions.length ? [] : divisions);
       },
-      'change input[name="subdivisionType"]': function()
+      'change input[name="subdivisionType[]"]': function()
       {
         var subdivisionTypes = [];
-        var $subdivisionTypes = this.$('input[name="subdivisionType"]');
+        var $subdivisionTypes = this.$('input[name="subdivisionType[]"]');
 
         $subdivisionTypes.filter(':checked').each(function()
         {
           subdivisionTypes.push(this.value);
         });
 
-        this.model.set(
-          'subdivisionType',
-          subdivisionTypes.length === $subdivisionTypes.length ? null : subdivisionTypes[0]
-        );
+        var all = subdivisionTypes.length === $subdivisionTypes.length || !subdivisionTypes.length;
+
+        this.model.set('subdivisionType', all ? null : subdivisionTypes);
       }
     },
 
@@ -96,7 +95,7 @@ define([
 
       this.$('input[name=interval]:checked').closest('.btn').addClass('active');
       this.$('input[name="divisions[]"]:checked').closest('.btn').addClass('active');
-      this.$('input[name=subdivisionType]:checked').closest('.btn').addClass('active');
+      this.$('input[name="subdivisionType[]"]:checked').closest('.btn').addClass('active');
 
       this.toggleSubdivisionType();
       this.toggleDivisions();

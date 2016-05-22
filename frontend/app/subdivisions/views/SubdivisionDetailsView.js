@@ -21,7 +21,10 @@ define([
 
     serialize: function()
     {
-      return {model: decorateSubdivision(this.model)};
+      return {
+        idPrefix: this.idPrefix,
+        model: decorateSubdivision(this.model)
+      };
     }
 
   });

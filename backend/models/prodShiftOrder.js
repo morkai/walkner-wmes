@@ -62,6 +62,10 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       max: 3,
       required: true
     },
+    subdivisionType: {
+      type: String,
+      default: 'assembly'
+    },
     mechOrder: {
       type: Boolean,
       required: true
