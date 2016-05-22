@@ -21,6 +21,7 @@ If $CmdLine[0] = 1 And $CmdLine[1] = "--help" Then
   LogDebug("  --output-file")
   LogDebug("  --code-page")
   LogDebug("  --plant")
+  LogDebug("  --mrp")
   LogDebug("  --from-date")
   LogDebug("  --to-date")
   Exit(0)
