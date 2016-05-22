@@ -315,13 +315,15 @@ exports.decodeOrgUnits = function(orgUnitsModule, encodedOrgUnits)
     return orgUnits;
   }
 
-  var decodedOrgUnits = {};
+  var decodedOrgUnits = null;
 
   try
   {
     decodedOrgUnits = JSON.parse(new Buffer(encodedOrgUnits, 'base64').toString('binary'));
   }
-  catch (err)
+  catch (err) {}
+
+  if (_.isEmpty(decodedOrgUnits))
   {
     return orgUnits;
   }
