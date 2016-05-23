@@ -11,6 +11,22 @@ define([
 ) {
   'use strict';
 
+  pubsub.subscribe('dictionaries.updated', function(message)
+  {
+    var topic = message.topic;
+    var payload = message.message;
+    var meta = message.meta;
+
+    meta.remote = true;
+
+    if (meta.json && typeof payload === 'string')
+    {
+      payload = JSON.parse(payload);
+    }
+
+    broker.publish(topic, payload, meta);
+  });
+
   return function(storageKey, topicPrefix, Collection)
   {
     var remoteData = {
@@ -33,12 +49,12 @@ define([
     collection.on('change', storeLocally);
     collection.on('sync', storeLocally);
 
-    pubsub.subscribe(topicPrefix + '.added', function(message)
+    broker.subscribe(topicPrefix + '.added', function(message)
     {
       collection.add(message.model);
     });
 
-    pubsub.subscribe(topicPrefix + '.edited', function(message)
+    broker.subscribe(topicPrefix + '.edited', function(message)
     {
       var model = collection.get(message.model._id);
 
@@ -52,7 +68,7 @@ define([
       }
     });
 
-    pubsub.subscribe(topicPrefix + '.deleted', function(message)
+    broker.subscribe(topicPrefix + '.deleted', function(message)
     {
       collection.remove(message.model._id);
     });

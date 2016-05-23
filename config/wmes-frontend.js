@@ -172,7 +172,7 @@ exports.sio = {
 exports.pubsub = {
   statsPublishInterval: 60000,
   republishTopics: [
-    'events.saved',
+    'events.saved', 'dictionaries.updated',
     '*.added', '*.edited', '*.deleted', '*.synced',
     'shiftChanged',
     'fte.master.**', 'fte.leader.**',
