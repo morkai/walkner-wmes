@@ -28,7 +28,7 @@ define([
     }
 
     return {
-      acquire: function()
+      acquire: function(options)
       {
         if (releaseTimer !== null)
         {
@@ -38,8 +38,13 @@ define([
 
         if (settingsCollection === null)
         {
-          pubsubSandbox = pubsub.sandbox();
-          settingsCollection = new SettingsCollection(null, {pubsub: pubsubSandbox});
+          if (!options)
+          {
+            options = {};
+          }
+
+          options.pubusb = pubsubSandbox = pubsub.sandbox();
+          settingsCollection = new SettingsCollection(null, options);
         }
 
         return settingsCollection;

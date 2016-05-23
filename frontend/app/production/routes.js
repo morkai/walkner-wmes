@@ -4,7 +4,7 @@ define([
   '../broker',
   '../router',
   '../viewport',
-  '../data/prodLines',
+  '../user',
   '../data/orgUnits',
   '../prodShifts/ProdShift',
   './pages/ProductionPage',
@@ -14,7 +14,7 @@ define([
   broker,
   router,
   viewport,
-  prodLines,
+  user,
   orgUnits,
   ProdShift,
   ProductionPage
@@ -23,7 +23,7 @@ define([
 
   router.map('/production/*prodLineId', function(req)
   {
-    var prodLine = prodLines.get(req.params.prodLineId);
+    var prodLine = orgUnits.getByTypeAndId('prodLine', req.params.prodLineId);
 
     if (prodLine == null)
     {
@@ -35,6 +35,16 @@ define([
         production: true
       })
     }));
+  });
+
+  router.map('/production;settings', user.auth('PROD_DATA:MANAGE'), function(req)
+  {
+    viewport.loadPage(['app/production/pages/ProductionSettingsPage'], function(ProductionSettingsPage)
+    {
+      return new ProductionSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
   });
 
 });

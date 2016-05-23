@@ -51,8 +51,15 @@ define([
       });
 
       this.$id('aor').select2({
+        placeholder: ' ',
         allowClear: true,
         data: aors.map(idAndLabel)
+      });
+
+      this.$id('initialDowntime').select2({
+        placeholder: ' ',
+        allowClear: true,
+        data: downtimeReasons.map(idAndLabel)
       });
 
       this.$id('autoDowntime').select2({
@@ -76,6 +83,7 @@ define([
       data.prodTaskTags = typeof data.prodTaskTags === 'string' ? data.prodTaskTags.split(',') : [];
       data.aor = aors.get(data.aor) ? data.aor : null;
       data.autoDowntime = downtimeReasons.get(data.autoDowntime) ? data.autoDowntime : null;
+      data.initialDowntime = downtimeReasons.get(data.initialDowntime) ? data.initialDowntime : null;
 
       return data;
     }

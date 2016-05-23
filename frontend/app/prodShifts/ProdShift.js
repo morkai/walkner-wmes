@@ -20,6 +20,7 @@ define([
   '../prodShiftOrders/ProdShiftOrder',
   '../prodShiftOrders/ProdShiftOrderCollection',
   '../isa/IsaLineState',
+  '../production/settings',
   'app/core/templates/userInfo'
 ], function(
   _,
@@ -41,6 +42,7 @@ define([
   ProdShiftOrder,
   ProdShiftOrderCollection,
   IsaLineState,
+  settings,
   renderUserInfo
 ) {
   'use strict';
@@ -90,21 +92,25 @@ define([
 
     initialize: function(attributes, options)
     {
-      if (options && options.production)
+      if (!options || !options.production)
       {
-        this.shiftChangeTimer = null;
-
-        this.prodLine = prodLines.get(this.get('prodLine'));
-
-        this.prodShiftOrder = new ProdShiftOrder();
-
-        this.prodDowntimes = new ProdDowntimeCollection(null, {
-          paginate: false,
-          rqlQuery: 'sort(-startedAt)&limit(8)&prodLine=' + encodeURIComponent(this.prodLine.id)
-        });
-
-        this.isaLineState = new IsaLineState({_id: this.prodLine.id});
+        return;
       }
+
+      this.shiftChangeTimer = null;
+
+      this.settings = settings.acquire({localStorage: true});
+
+      this.prodLine = prodLines.get(this.get('prodLine'));
+
+      this.prodShiftOrder = new ProdShiftOrder();
+
+      this.prodDowntimes = new ProdDowntimeCollection(null, {
+        paginate: false,
+        rqlQuery: 'sort(-startedAt)&limit(8)&prodLine=' + encodeURIComponent(this.prodLine.id)
+      });
+
+      this.isaLineState = new IsaLineState({_id: this.prodLine.id});
     },
 
     serialize: function(options)
@@ -335,7 +341,7 @@ define([
     {
       var finishedProdShiftId = this.id || null;
 
-      this.finishDowntime();
+      this.finishDowntime(false);
       this.finishOrder();
 
       this.prodShiftOrder.onShiftChanged();
@@ -567,9 +573,15 @@ define([
         this.set('state', 'idle');
       }
 
+      var downtime = this.prodDowntimes.findFirstUnfinished();
+
       if (!this.finishDowntime())
       {
         this.saveLocalData();
+      }
+      else
+      {
+        this.startAutoDowntimeAfter(downtime);
       }
     },
 
@@ -933,7 +945,11 @@ define([
         return;
       }
 
-      var downtimeReason = downtimeReasons.get(subdivision.get('autoDowntime'));
+      var initialDowntimeReason = downtimeReasons.get(subdivision.get('initialDowntime'));
+      var autoDowntimeReason = downtimeReasons.get(subdivision.get('autoDowntime'));
+      var downtimeReason = this.shouldStartInitialDowntime(initialDowntimeReason)
+        ? initialDowntimeReason
+        : autoDowntimeReason;
 
       if (!downtimeReason)
       {
@@ -945,6 +961,54 @@ define([
         reason: downtimeReason.id,
         reasonComment: ''
       });
+    },
+
+    startAutoDowntimeAfter: function(prevDowntime)
+    {
+      var aor = this.getDefaultAor();
+      var subdivision = subdivisions.get(this.get('subdivision'));
+
+      if (!prevDowntime || !aor || !subdivision)
+      {
+        return;
+      }
+
+      var initialDowntimeReason = downtimeReasons.get(subdivision.get('initialDowntime'));
+      var autoDowntimeReason = downtimeReasons.get(subdivision.get('autoDowntime'));
+
+      if (initialDowntimeReason
+        && autoDowntimeReason
+        && prevDowntime.get('reason') === initialDowntimeReason.id
+        && this.isBetweenInitialDowntimeWindow(prevDowntime.get('startedAt').getTime()))
+      {
+        this.startDowntime({
+          aor: aor,
+          reason: autoDowntimeReason.id,
+          reasonComment: ''
+        });
+      }
+    },
+
+    shouldStartInitialDowntime: function(initialDowntimeReason)
+    {
+      return initialDowntimeReason
+        && this.isBetweenInitialDowntimeWindow(Date.now())
+        && this.prodDowntimes.every(function(d) { return d.get('reason') !== initialDowntimeReason.id; });
+    },
+
+    isBetweenInitialDowntimeWindow: function(time)
+    {
+      var initialDowntimeWindow = parseInt(this.settings.getValue('initialDowntimeWindow'), 10);
+
+      if (isNaN(initialDowntimeWindow) || initialDowntimeWindow < 1)
+      {
+        return false;
+      }
+
+      var windowStart = this.get('date').getTime();
+      var windowEnd = windowStart + initialDowntimeWindow * 60 * 1000;
+
+      return time >= windowStart && time <= windowEnd;
     }
 
   }, {

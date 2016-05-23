@@ -22,7 +22,9 @@ exports.DEFAULT_CONFIG = {
   prodLinesId: 'prodLines',
   downtimeReasonsId: 'downtimeReasons',
   fteId: 'fte',
-  orgUnitsId: 'orgUnits'
+  orgUnitsId: 'orgUnits',
+  settingsId: 'settings',
+  isaId: 'isa'
 };
 
 exports.start = function startProductionModule(app, module)
@@ -56,7 +58,8 @@ exports.start = function startProductionModule(app, module)
   app.onModuleReady(
     [
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );
@@ -66,7 +69,9 @@ exports.start = function startProductionModule(app, module)
       module.config.userId,
       module.config.sioId,
       module.config.orgUnitsId,
-      module.config.fteId
+      module.config.fteId,
+      module.config.settingsId,
+      module.config.isaId
     ],
     setUpCommands.bind(null, app, module)
   );

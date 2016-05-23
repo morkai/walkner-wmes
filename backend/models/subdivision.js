@@ -36,6 +36,11 @@ module.exports = function setupSubdivisionModel(app, mongoose)
       type: String,
       ref: 'DowntimeReason',
       default: null
+    },
+    initialDowntime: {
+      type: String,
+      ref: 'DowntimeReason',
+      default: null
     }
   }, {
     id: false

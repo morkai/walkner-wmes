@@ -24,6 +24,7 @@
     "PROPERTY:type": "Type",
     "PROPERTY:aor": "Default AOR",
     "PROPERTY:autoDowntime": "Auto downtime",
+    "PROPERTY:initialDowntime": "Initial downtime",
 
     "TYPE:assembly": "Assembly",
     "TYPE:press": "Press",

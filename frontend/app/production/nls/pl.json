@@ -1,5 +1,6 @@
 {
-  "breadcrumbs:productionPage": "Produkcja",
+  "breadcrumbs:base": "Produkcja",
+  "breadcrumbs:settings": "Ustawienia",
 
   "duplicate:title": "Podwójne uruchomienie formatki",
   "duplicate:message": "Wykryto podwójne uruchomienie przeglądarki z formatką operatora.<br>Zamknij wszystkie inne formatki i wciśnij poniższy przycisk, aby ponownie załadować formatkę w tym oknie.",
@@ -177,5 +178,8 @@
   "isa:header": "Pole odkładcze",
   "isa:pickup": "Odbiór palety",
   "isa:deliver": "Dostawa pustej palety",
-  "isa:deliver:specific": "Dostawa: {palletKind}"
+  "isa:deliver:specific": "Dostawa: {palletKind}",
+
+  "settings:tab:operator": "Formatka operatora",
+  "settings:initialDowntimeWindow": "Czas na rozpoczęcie początkowego przestoju na zmianie [min]"
 }

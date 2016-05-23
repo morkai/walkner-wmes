@@ -1,0 +1,13 @@
+<form class="settings">
+  <div class="list-group">
+    <a class="list-group-item" href="#production;settings?tab=operator" data-tab="operator"><%- t('production', 'settings:tab:operator') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="operator">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-initialDowntimeWindow"><%- t('production', 'settings:initialDowntimeWindow') %></label>
+        <input id="<%- idPrefix %>-initialDowntimeWindow" class="form-control" name="production.initialDowntimeWindow" type="number" step="1" min="0" max="60">
+      </div>
+    </div>
+  </div>
+</form>

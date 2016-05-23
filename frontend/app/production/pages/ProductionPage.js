@@ -9,6 +9,7 @@ define([
   'app/core/View',
   'app/data/prodLog',
   'app/prodShifts/ProdShift',
+  'app/prodDowntimes/ProdDowntime',
   'app/isa/IsaLineState',
   '../views/ProductionControlsView',
   '../views/ProductionHeaderView',
@@ -27,6 +28,7 @@ define([
   View,
   prodLog,
   ProdShift,
+  ProdDowntime,
   IsaLineState,
   ProductionControlsView,
   ProductionHeaderView,
@@ -58,9 +60,6 @@ define([
       'socket.connected': function()
       {
         this.joinProduction();
-        this.refreshDowntimes();
-        this.refreshPlannedQuantities();
-        this.refreshIsaLineState();
       },
       'socket.disconnected': function()
       {
@@ -84,7 +83,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        t('production', 'breadcrumbs:productionPage'),
+        t('production', 'breadcrumbs:base'),
         this.model.getLabel()
       ];
     },
@@ -185,71 +184,76 @@ define([
 
     defineViews: function()
     {
-      this.controlsView = new ProductionControlsView({model: this.model});
-      this.headerView = new ProductionHeaderView({model: this.model});
-      this.dataView = new ProductionDataView({model: this.model});
-      this.downtimesView = new ProdDowntimeListView({model: this.model});
-      this.quantitiesView = new ProductionQuantitiesView({model: this.model});
-      this.isaView = new IsaView({model: this.model});
+      var page = this;
+      var model = page.model;
 
-      this.setView('#' + this.idPrefix + '-controls', this.controlsView);
-      this.setView('#' + this.idPrefix + '-header', this.headerView);
-      this.setView('#' + this.idPrefix + '-data', this.dataView);
-      this.setView('#' + this.idPrefix + '-downtimes', this.downtimesView);
-      this.setView('#' + this.idPrefix + '-quantities', this.quantitiesView);
-      this.setView('#' + this.idPrefix + '-isa', this.isaView);
+      page.controlsView = new ProductionControlsView({model: model});
+      page.headerView = new ProductionHeaderView({model: model});
+      page.dataView = new ProductionDataView({model: model});
+      page.downtimesView = new ProdDowntimeListView({model: model});
+      page.quantitiesView = new ProductionQuantitiesView({model: model});
+      page.isaView = new IsaView({model: model});
+
+      var idPrefix = '#' + page.idPrefix + '-';
+
+      page.setView(idPrefix + 'controls', page.controlsView);
+      page.setView(idPrefix + 'header', page.headerView);
+      page.setView(idPrefix + 'data', page.dataView);
+      page.setView(idPrefix + 'downtimes', page.downtimesView);
+      page.setView(idPrefix + 'quantities', page.quantitiesView);
+      page.setView(idPrefix + 'isa', page.isaView);
     },
 
     defineBindings: function()
     {
-      this.listenTo(this.model, 'locked', function()
+      var page = this;
+      var model = page.model;
+
+      page.listenTo(model, 'locked', function()
       {
-        this.$el.removeClass('is-unlocked').addClass('is-locked');
-        this.leaveProduction();
+        page.$el.removeClass('is-unlocked').addClass('is-locked');
+        page.leaveProduction();
       });
 
-      this.listenTo(this.model, 'unlocked', function()
+      page.listenTo(model, 'unlocked', function()
       {
-        this.$el.removeClass('is-locked').addClass('is-unlocked');
-        this.refreshDowntimes();
-        this.refreshPlannedQuantities();
-        this.refreshIsaLineState();
-        this.joinProduction();
+        page.$el.removeClass('is-locked').addClass('is-unlocked');
+        page.joinProduction();
       });
 
-      this.listenTo(this.model, 'change:state', function()
+      page.listenTo(model, 'change:state', function()
       {
-        if (this.layout !== null)
+        if (page.layout !== null)
         {
-          this.layout.setBreadcrumbs(this.breadcrumbs, this);
+          page.layout.setBreadcrumbs(page.breadcrumbs, page);
         }
 
-        var oldState = this.model.previous('state');
-        var newState = this.model.get('state');
+        var oldState = model.previous('state');
+        var newState = model.get('state');
 
         if (oldState)
         {
-          this.$el.removeClass('is-' + oldState);
+          page.$el.removeClass('is-' + oldState);
         }
 
         if (newState)
         {
-          this.$el.addClass('is-' + newState);
+          page.$el.addClass('is-' + newState);
         }
       });
 
-      this.listenTo(this.model, 'change:shift', function()
+      page.listenTo(model, 'change:shift', function()
       {
         viewport.closeAllDialogs();
 
-        if (this.$el.hasClass('hidden'))
+        if (page.$el.hasClass('hidden'))
         {
-          this.$el.removeClass('hidden');
+          page.$el.removeClass('hidden');
 
           return;
         }
 
-        if (this.model.get('shift'))
+        if (model.get('shift'))
         {
           viewport.msg.show({
             type: 'info',
@@ -259,38 +263,24 @@ define([
         }
       });
 
-      this.listenTo(this.model, 'change:_id', this.subscribeForShiftChanges);
+      page.listenTo(model, 'change:_id', page.subscribeForShiftChanges);
 
-      if (this.model.id)
+      if (model.id)
       {
         this.subscribeForShiftChanges();
       }
 
-      this.listenTo(this.model.prodShiftOrder, 'change:mechOrder', function()
+      page.listenTo(model.prodShiftOrder, 'change:mechOrder', function()
       {
-        this.$el.toggleClass('is-mechOrder', this.model.prodShiftOrder.isMechOrder());
+        page.$el.toggleClass('is-mechOrder', model.prodShiftOrder.isMechOrder());
       });
 
-      this.listenTo(this.downtimesView, 'corroborated', function()
+      page.listenTo(page.downtimesView, 'corroborated', function()
       {
-        this.model.saveLocalData();
+        model.saveLocalData();
       });
 
-      this.listenTo(this.model.isaLineState, 'request', function()
-      {
-        this.pendingIsaChanges = [];
-      });
-
-      this.listenTo(this.model.isaLineState, 'error sync', function()
-      {
-        if (this.pendingIsaChanges)
-        {
-          this.pendingIsaChanges.forEach(this.applyIsaChange, this);
-          this.pendingIsaChanges = null;
-        }
-      });
-
-      this.socket.on('production.locked', this.broker.publish.bind(this.broker, 'production.locked'));
+      page.socket.on('production.locked', page.broker.publish.bind(page.broker, 'production.locked'));
     },
 
     beforeRender: function()
@@ -310,9 +300,6 @@ define([
       if (this.socket.isConnected())
       {
         this.joinProduction();
-        this.refreshDowntimes();
-        this.refreshPlannedQuantities();
-        this.refreshIsaLineState();
       }
 
       if (this.model.isLocked() || this.model.id)
@@ -365,8 +352,6 @@ define([
 
     onIsaLineStateUpdated: function(change)
     {
-      change = IsaLineState.parse(change);
-
       if (this.pendingIsaChanges)
       {
         this.pendingIsaChanges.push(change);
@@ -379,6 +364,8 @@ define([
 
     applyIsaChange: function(change)
     {
+      change = IsaLineState.parse(change);
+
       var oldUpdatedAt = this.model.isaLineState.get('updatedAt') || 0;
 
       if (change.updatedAt > oldUpdatedAt)
@@ -387,143 +374,81 @@ define([
       }
     },
 
-    refreshDowntimes: function()
-    {
-      if (prodLog.isSyncing())
-      {
-        return this.broker.subscribe('production.synced', this.delayDowntimesRefresh.bind(this)).setLimit(1);
-      }
-
-      if (this.model.isLocked())
-      {
-        return this.listenToOnce(this.model, 'unlocked', this.delayDowntimesRefresh);
-      }
-
-      if (!this.model.id)
-      {
-        return this.listenToOnce(this.model, 'change:_id', this.delayDowntimesRefresh);
-      }
-
-      if (this.timers.refreshingDowntimes)
-      {
-        clearTimeout(this.timers.refreshingDowntimes);
-      }
-
-      var page = this;
-
-      this.timers.refreshingDowntimes = setTimeout(function()
-      {
-        delete page.timers.refreshingDowntimes;
-
-        if (!page.socket.isConnected() || page.model.isLocked())
-        {
-          return;
-        }
-
-        var req = page.model.prodDowntimes.fetch({reset: true});
-
-        page.promised(req).done(function() { page.model.saveLocalData(); });
-      }, 2500);
-    },
-
-    delayDowntimesRefresh: function()
-    {
-      if (this.timers.refreshDowntimes)
-      {
-        clearTimeout(this.timers.refreshDowntimes);
-      }
-
-      this.timers.refreshDowntimes = setTimeout(function(view)
-      {
-        view.timers.refreshDowntimes = null;
-        view.refreshDowntimes();
-      }, 2500, this);
-    },
-
-    refreshPlannedQuantities: function()
-    {
-      if (prodLog.isSyncing())
-      {
-        return this.broker.subscribe('production.synced', this.delayPlannedQuantitiesRefresh.bind(this)).setLimit(1);
-      }
-
-      if (this.model.isLocked())
-      {
-        return this.listenToOnce(this.model, 'unlocked', this.delayPlannedQuantitiesRefresh);
-      }
-
-      if (!this.model.id)
-      {
-        return this.listenToOnce(this.model, 'change:_id', this.delayPlannedQuantitiesRefresh);
-      }
-
-      var page = this;
-
-      this.socket.emit('production.getPlannedQuantities', this.model.id, function(err, plannedQuantities)
-      {
-        if (!page.shiftEditedSub)
-        {
-          return;
-        }
-
-        if (err)
-        {
-          return console.error(err);
-        }
-
-        page.model.updatePlannedQuantities(plannedQuantities);
-      });
-    },
-
-    delayPlannedQuantitiesRefresh: function()
-    {
-      if (this.timers.refreshPlannedQuantities)
-      {
-        clearTimeout(this.timers.refreshPlannedQuantities);
-      }
-
-      this.timers.refreshPlannedQuantities = setTimeout(function(view)
-      {
-        view.timers.refreshPlannedQuantities = null;
-        view.refreshPlannedQuantities();
-      }, 5000, this);
-    },
-
-    refreshIsaLineState: function()
-    {
-      this.promised(this.model.isaLineState.fetch());
-    },
-
     joinProduction: function()
     {
-      if (this.timers.joinProduction)
+      var page = this;
+      var model = page.model;
+
+      if (page.timers.joinProduction)
       {
-        clearTimeout(this.timers.joinProduction);
-        delete this.timers.joinProduction;
+        clearTimeout(page.timers.joinProduction);
+        delete page.timers.joinProduction;
       }
 
-      if (this.productionJoined || this.model.isLocked() || !this.socket.isConnected())
+      if (page.productionJoined || model.isLocked() || !page.socket.isConnected())
       {
         return;
       }
 
       if (prodLog.isSyncing())
       {
-        return this.broker.subscribe('production.synced', this.delayProductionJoin).setLimit(1);
+        return page.broker.subscribe('production.synced', page.delayProductionJoin).setLimit(1);
       }
 
-      if (!this.model.id)
+      if (!model.id)
       {
-        return this.listenToOnce(this.model, 'change:_id', this.delayProductionJoin);
+        return page.listenToOnce(model, 'change:_id', page.delayProductionJoin);
       }
 
-      var prodDowntime = this.model.prodDowntimes.findFirstUnfinished();
+      if (!this.pendingIsaChanges)
+      {
+        this.pendingIsaChanges = [];
+      }
 
-      this.socket.emit('production.join', {
-        prodLineId: this.model.prodLine.id,
-        prodShiftId: this.model.id,
-        prodShiftOrderId: this.model.prodShiftOrder.id || null,
-        prodDowntimeId: prodDowntime ? prodDowntime.id : null
+      var unfinishedProdDowntime = model.prodDowntimes.findFirstUnfinished();
+      var req = {
+        prodLineId: model.prodLine.id,
+        prodShiftId: model.id,
+        prodShiftOrderId: model.prodShiftOrder.id || null,
+        prodDowntimeId: unfinishedProdDowntime ? unfinishedProdDowntime.id : null
+      };
+
+      this.socket.emit('production.join', req, function(res)
+      {
+        if (!res)
+        {
+          return;
+        }
+
+        if (res.plannedQuantities)
+        {
+          model.updatePlannedQuantities(res.plannedQuantities);
+        }
+
+        if (res.prodDowntimes)
+        {
+          model.prodDowntimes.reset(
+            res.prodDowntimes.map(
+              function(d) { return ProdDowntime.parse(d); }
+            )
+          );
+        }
+
+        if (res.settings)
+        {
+          model.settings.reset(res.settings);
+        }
+
+        if (res.isaLineState)
+        {
+          page.applyIsaChange(res.isaLineState);
+
+          if (page.pendingIsaChanges)
+          {
+            page.pendingIsaChanges.forEach(page.applyIsaChange, page);
+            page.pendingIsaChanges = null;
+          }
+        }
       });
 
       this.productionJoined = true;
@@ -531,29 +456,36 @@ define([
 
     leaveProduction: function()
     {
-      if (this.productionJoined)
+      if (!this.productionJoined)
       {
-        if (this.socket.isConnected())
-        {
-          this.socket.emit('production.leave', this.model.prodLine.id);
-        }
-
-        this.productionJoined = false;
+        return;
       }
+
+      if (this.socket.isConnected())
+      {
+        this.socket.emit('production.leave', this.model.prodLine.id);
+      }
+
+      this.productionJoined = false;
     },
 
     delayProductionJoin: function()
     {
-      if (this.timers.joinProduction)
+      var page = this;
+
+      if (page.timers.joinProduction)
       {
-        clearTimeout(this.timers.joinProduction);
+        clearTimeout(page.timers.joinProduction);
       }
 
-      this.timers.joinProduction = setTimeout(function(view)
-      {
-        view.timers.joinProduction = null;
-        view.joinProduction();
-      }, 1337, this);
+      page.timers.joinProduction = setTimeout(
+        function()
+        {
+          page.timers.joinProduction = null;
+          page.joinProduction();
+        },
+        1337
+      );
     },
 
     subscribeForShiftChanges: function()
@@ -561,18 +493,20 @@ define([
       if (this.shiftEditedSub)
       {
         this.shiftEditedSub.cancel();
-      }
-
-      if (!this.model.id)
-      {
-        return;
+        this.shiftEditedSub = null;
       }
 
       var model = this.model;
 
-      this.shiftEditedSub = this.pubsub
-        .subscribe('production.edited.shift.' + this.model.id)
-        .on('message', function(changes) { model.set(changes); });
+      if (!model.id)
+      {
+        return;
+      }
+
+      this.shiftEditedSub = this.pubsub.subscribe(
+        'production.edited.shift.' + model.id,
+        function(changes) { model.set(changes); }
+      );
     }
 
   });

@@ -27,7 +27,8 @@ define([
       name: null,
       prodTaskTags: null,
       aor: null,
-      autoDowntime: null
+      autoDowntime: null,
+      initialDowntime: null
     }
 
   });

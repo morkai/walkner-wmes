@@ -1,6 +1,7 @@
 {
   "root": {
-    "breadcrumbs:productionPage": "Production",
+    "breadcrumbs:base": "Production",
+    "breadcrumbs:settings": "Settings",
 
     "duplicate:title": "Duplicate operator form",
     "duplicate:message": "Detected another operator form already running.<br>Close all other operator forms and click the button below to reload the form in the current window.",
@@ -176,7 +177,10 @@
     "isa:header": "ISA",
     "isa:pickup": "Pallet pickup",
     "isa:deliver": "Empty pallet delivery",
-    "isa:deliver:specific": "Delivery: {palletKind}"
+    "isa:deliver:specific": "Delivery: {palletKind}",
+
+    "settings:tab:operator": "Operator",
+    "settings:initialDowntimeWindow": "Time to start the initial downtime on a shift [min]"
   },
   "pl": true
 }

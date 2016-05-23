@@ -27,6 +27,9 @@ function(
     var aor = aors.get(obj.aor);
     obj.aor = aor ? aor.getLabel() : '-';
 
+    var initialDowntime = downtimeReasons.get(obj.initialDowntime);
+    obj.initialDowntime = initialDowntime ? initialDowntime.getLabel() : '-';
+
     var autoDowntime = downtimeReasons.get(obj.autoDowntime);
     obj.autoDowntime = autoDowntime ? autoDowntime.getLabel() : '-';
 

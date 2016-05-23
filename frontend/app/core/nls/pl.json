@@ -109,6 +109,7 @@
   "NAVBAR:PROD:DOWNTIMES": "Przestoje",
   "NAVBAR:PROD:ALERTS": "Alarmy",
   "NAVBAR:PROD:CHANGE_REQUESTS": "Żądania zmian",
+  "NAVBAR:PROD:SETTINGS": "Ustawienia",
   "NAVBAR:PROGRAMMING": "Baza testów",
   "NAVBAR:XICONF": "Xiconf <em>(MultiOne)</em>",
   "NAVBAR:XICONF:PROGRAMS": "Programy",
