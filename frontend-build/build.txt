@@ -768,6 +768,9 @@ app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
 app/isa/IsaLineState.js
+app/production/ProductionSetting.js
+app/production/ProductionSettingCollection.js
+app/production/settings.js
 app/prodShifts/ProdShift.js
 app/prodShifts/routes.js
 app/production/templates/controls.js

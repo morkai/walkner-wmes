@@ -1,95 +1,17 @@
-<h1>v0.87.0</h1>
-<h2><%- time.format('2016-05-22', 'LL') %></h2>
-<h3>Zlecenia reszty działów</h3>
+<h1>v0.88.0</h1>
+<h2><%- time.format('2016-05-24', 'LL') %></h2>
+<h3>Działy</h3>
 <ul>
-  <li>Zmieniono pole 'Czas stworzenia' na 'Czas importu'.</li>
-  <li>Dodano nowe pole 'Czas utworzenia', będące wartością 'Doc.Date' oraz 'Doc.Time' ze zrzutu transakcji 'ZOIN' w SAP.</li>
-  <li>Dodano akcję 'Skocz do zlecenia po nr' do strony z listą zleceń.</li>
+  <li>Dodano nowe pole: Początkowy przestój - przestój jaki ma być automatycznie uruchomiony po rozpoczęciu nowego
+    zlecenia na linii produkcyjnej w ciągu kilku minut od rozpoczęcia zmiany produkcyjnej. Po zakończeniu przestoju
+    'początkowego' (Operatywka) rozpoczynany jest przestój 'automatyczny' (Przezbrojenie).</li>
 </ul>
 <h3>Karty pracy</h3>
 <ul>
-  <li>Zmieniono stronę ze szczegółami karty tak, aby na 'Liście części' nie wyświetlała się kolumna 'Straty materiałowe',
-    jeżeli żadne ze zleceń nie ma żadnych strat.</li>
-  <li>Dodano do menu odnośnik do formularza dodawania nowej karty.</li>
+  <li>Poprawiono błąd powodujący wyświetlanie czasów rozpoczęcia i zakończenia każdego zlecenia podczas edycji kart
+    pracy typu Malarnia.</li>
 </ul>
-<h3>FTE</h3>
+<h3>Raporty > Operatorzy</h3>
 <ul>
-  <li>Zmieniono menu, tak aby wyświetlały się tylko dwie opcje: Produkcja oraz Inne wraz z odnośnikami do formularza
-    przydzielania zasobów.</li>
-</ul>
-<h3>Zdarzenia</h3>
-<ul>
-  <li>Dodano brakujące tłumaczenia.</li>
-</ul>
-<h3>ZPW, Usprawnienia</h3>
-<ul>
-  <li>Poprawiono błąd powodujący wysyłanie e-maili przypomniających o zalegających zgłoszeniach tylko raz
-    po restarcie serwera.</li>
-  <li>Zmieniono domyślny filtr raportów tak, aby wyświetlał dane z ostatnich 4 miesięcy.</li>
-  <li>Zmieniono algorytm przeliczania czasów trwania otwartych zgłoszeń na bardziej wydajny.</li>
-  <li>Zmieniono raporty tak, aby na wykresach 'wg użytkownika' wyświetlane było maksymalnie 15 słupków, a reszta danych
-    w tabelce.</li>
-  <li>Zmieniono wykresy tak, aby wartości przy słupkach były widoczne, jeżeli na wykresie znajduje się w sumie mniej
-    niż 35 słupków.</li>
-  <li>Dodano do menu odnośnik do formularza dodawania nowego zgłoszenia.</li>
-</ul>
-<h3>Usprawnienia</h3>
-<ul>
-  <li>Poprawiono błąd powodujący, że po kliknięciu przycisku 'Oznacz jako przeczytane', zmiany nie były oznaczane jako
-    przeczytane po stronie klienta do momentu odświeżenia strony.</li>
-  <li>Zmieniono wykres 'Ilość zgłoszeń w poszczególnych tygodniach' tak, aby wyświetlał legendę.</li>
-</ul>
-<h3>Inspekcja Jakości</h3>
-<ul>
-  <li>Poprawiono błąd powodujący, że pole 'Inspektor' w formularzu dodawania nowego wyniku nie było automatycznie
-    ustawiane na zalogowanego użytkownika-inspektora.</li>
-  <li>Zmieniono filtry 'Rodzina produktów' z pola tekstowego na listę wyboru.</li>
-  <li>Zmieniono wyświetlanie załączników na stronie szczegółów wyniku inspekcji: załączniki wyświetlane są teraz
-    w osobnych panelach.</li>
-  <li>Zmieniono wybieranie okresu do wykresu 'Ilość niezgodnych produktów' poprzez kliknięcie na obszarze wykresu
-    'Ilość czerwonych pasków per centrum produkcyjne' tak, aby zawsze wybierany był okres wyświetlany aktualnie
-    w dymku.</li>
-  <li>Dodano filtr 'Inspektor' do raportu 'Ilości'.</li>
-  <li>Dodano dodatkowe filtrowanie wykresu 'Ilość niezgodnych produktów' wg wydziałów wybranych w legendzie
-    wykresu 'Ilość czerwonych pasków per centrum produkcyjne'.</li>
-  <li>Dodano automatyczne generowanie mniejszej wersji dużych zdjęć-załączników.</li>
-  <li>Dodano możliwość usuwania wybranych załączników.</li>
-  <li>Dodano możliwość wygenerowania 'Zgłoszenia niezgodności' w wersji do druku.</li>
-  <li>Dodano licznik dziennych inspekcji: ilość przeprowadzonych inspekcji oraz ilość wymaganych inspekcji wyświetlane
-    są dla Inspektorów w menu po wejściu do modułu.</li>
-</ul>
-<h3>Pola odkładcze</h3>
-<ul>
-  <li>Poprawiono wsparcie dla skrótów klawiszowych w różnych przeglądarkach.</li>
-  <li>Dodano zapamiętywanie między ponownymi otwarciami przeglądarki stanu wyświetlania sekcji 'Zdarzenia'.</li>
-  <li>Dodano opis skrótów klawiszowych dostępny pod klawiszem F1.</li>
-</ul>
-<h3>Pulpit</h3>
-<ul>
-  <li>Poprawiono wyświetlanie 'Top 10' dla poprzedniego miesiąca w przelądarce Internet Explorer.</li>
-</ul>
-<h3>Działy</h3>
-<ul>
-  <li>Dodano nowy typ działu: Malarnia.</li>
-</ul>
-<h3>Powody przestojów</h3>
-<ul>
-  <li>Dodano wsparcie dla typu działu Malarnia.</li>
-</ul>
-<h3>Raporty > Planowane obciążenie linii</h3>
-<ul>
-  <li>Poprawiono błąd uniemożliwiający dodanie nowych CAGów.</li>
-</ul>
-<h3>Raporty > Wykorzystanie zasobów</h3>
-<ul>
-  <li>Dodano wsparcie dla typu działu Malarnia.</li>
-</ul>
-<h3>Raporty > Lean</h3>
-<ul>
-  <li>Dodano wsparcie dla typu działu Malarnia.</li>
-</ul>
-<h3>Raporty > Wskaźniki</h3>
-<ul>
-  <li>Usunięto filtr 'Typy działów'.</li>
-  <li>Dodano filtr 'Ignorowane jednostki organizacyjne'.</li>
+  <li>Zmieniono raport tak, aby pobierał dane także z działów typu Malarnia, a nie tylko z Tłoczni.</li>
 </ul>
