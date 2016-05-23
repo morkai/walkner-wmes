@@ -179,25 +179,22 @@ ProdLineState.prototype.onClientJoin = function(socket, data)
   if (socket === this.socket)
   {
     this.productionModule.warn(
-      "The same client joined the prod line: %s %s",
-      this.prodLine._id,
-      this.inspectSocketInfo(socket)
+      "The same client joined the prod line: %s",
+      this.prodLine._id
     );
   }
   else if (this.socket !== null)
   {
     this.productionModule.warn(
-      "A different client joined the prod line: %s %s",
-      this.prodLine._id,
-      this.inspectSocketInfo(socket)
+      "A different client joined the prod line: %s",
+      this.prodLine._id
     );
   }
   else
   {
     this.productionModule.debug(
-      "Client joined the prod line: %s %s",
-      this.prodLine._id,
-      this.inspectSocketInfo(socket)
+      "Client joined the prod line: %s",
+      this.prodLine._id
     );
   }
 
@@ -234,21 +231,19 @@ ProdLineState.prototype.onClientLeave = function(socket, disconnected)
 
   if (socket !== this.socket)
   {
-    this.productionModule.warn("A different client tried to leave the prod line%s (online for %ds): %s %s",
+    this.productionModule.warn("A different client tried to leave the prod line%s (online for %ds): %s",
       disconnected ? ' after disconnecting' : '',
       onlineDuration,
-      this.prodLine._id,
-      this.inspectSocketInfo(socket)
+      this.prodLine._id
     );
   }
   else
   {
     this.productionModule.debug(
-      "Client left the prod line%s (online for %ds): %s %s",
+      "Client left the prod line%s (online for %ds): %s",
       disconnected ? ' after disconnecting' : '',
       onlineDuration,
-      this.prodLine._id,
-      this.inspectSocketInfo(socket)
+      this.prodLine._id
     );
   }
 
@@ -1083,41 +1078,4 @@ ProdLineState.prototype.checkIfClosed = function(ignoreState)
   {
     this.update({prodShift: null});
   }
-};
-
-/**
- * @private
- * @param {object|null} thatSocket
- * @returns {string}
- */
-ProdLineState.prototype.inspectSocketInfo = function(thatSocket)
-{
-  var socketInfo = {
-    thisSocketId: null,
-    thisSocketIp: null,
-    thisSessionId: null,
-    thatSocketId: null,
-    thatSocketIp: null,
-    thatSessionId: null
-  };
-
-  if (this.socket)
-  {
-    socketInfo.thisSocketId = this.socket.id;
-    socketInfo.thisSocketIp = this.socket.handshake.user
-      ? this.socket.handshake.user.ipAddress
-      : this.socket.handshake.address.address;
-    socketInfo.thisSessionId = this.socket.handshake.sessionId;
-  }
-
-  if (thatSocket)
-  {
-    socketInfo.thatSocketId = thatSocket.id;
-    socketInfo.thatSocketIp = thatSocket.handshake.user
-      ? thatSocket.handshake.user.ipAddress
-      : thatSocket.handshake.address.address;
-    socketInfo.thatSessionId = thatSocket.handshake.sessionId;
-  }
-
-  return inspect(socketInfo, {depth: null, colors: false});
 };
