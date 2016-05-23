@@ -249,6 +249,7 @@ define([
       });
 
       this.fillType();
+      this.togglePaintShop();
       this.renderOrdersTable();
       this.fillModelData();
       this.addOrderRow();
