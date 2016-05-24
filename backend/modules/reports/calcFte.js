@@ -358,12 +358,12 @@ module.exports = function(mongoose, options, done)
       allProdLinesInOrgUnit
     );
 
-    var flowsRatio = 1;
-    var tasksRatio = 1;
+    var flowsRatio;
+    var tasksRatio = workingProdLinesInOrgUnit.length / workingProdLinesInSubdivision.length;
 
     if (options.orgUnitType === 'mrpController' || options.orgUnitType === 'prodFlow')
     {
-      tasksRatio = workingProdLinesInOrgUnit.length / workingProdLinesInSubdivision.length;
+      flowsRatio = workingProdLinesInOrgUnit.length === 0 ? 0 : 1;
     }
     else
     {
@@ -375,7 +375,6 @@ module.exports = function(mongoose, options, done)
       );
 
       flowsRatio = workingProdLinesInOrgUnit.length / workingProdLinesInProdFlow.length;
-      tasksRatio = workingProdLinesInOrgUnit.length / workingProdLinesInSubdivision.length;
     }
 
     if (isNaN(flowsRatio))
