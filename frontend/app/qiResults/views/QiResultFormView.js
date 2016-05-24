@@ -219,6 +219,14 @@ define([
         label: inspectorOptionEl.label.trim()
       };
 
+      this.$('textarea').each(function()
+      {
+        if (!formData[this.name])
+        {
+          formData[this.name] = '';
+        }
+      });
+
       var $actions = this.$id('actions').children();
 
       formData.correctiveActions = _.map(formData.correctiveActions, function(action, i)
