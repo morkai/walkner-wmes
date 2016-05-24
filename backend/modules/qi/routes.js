@@ -237,7 +237,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
     prepareAttachments(body);
 
     const updater = userModule.createUserInfo(user, req);
-    updater.id = body.updater.id.toString();
+    updater.id = updater.id.toString();
 
     step(
       function findResultStep()

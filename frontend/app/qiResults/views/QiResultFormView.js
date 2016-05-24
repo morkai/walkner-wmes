@@ -209,6 +209,11 @@ define([
     {
       var inspectorOptionEl = this.$id('inspector')[0].selectedOptions[0];
 
+      if (this.options.editMode)
+      {
+        formData.updater = user.getInfo();
+      }
+
       formData.inspector = {
         id: inspectorOptionEl.value,
         label: inspectorOptionEl.label.trim()
