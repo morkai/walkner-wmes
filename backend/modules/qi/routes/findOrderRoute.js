@@ -1,0 +1,45 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+'use strict';
+
+module.exports = function findOrderRoute(app, qiModule, req, res, next)
+{
+  const mongoose = app[qiModule.config.mongooseId];
+  const ProdShiftOrder = mongoose.model('QiResult');
+
+  const orderNo = req.query.no;
+  const conditions = {
+    orderId: orderNo,
+    'orderData.no': orderNo
+  };
+  const fields = {
+    division: 1,
+    'orderData.name': 1,
+    'orderData.description': 1,
+    'orderData.nc12': 1
+  };
+
+  ProdShiftOrder.findOne(conditions, fields).lean().exec(function(err, pso)
+  {
+    if (err)
+    {
+      return next(err);
+    }
+
+    if (!pso)
+    {
+      return res.sendStatus(404);
+    }
+
+    const orderData = pso.orderData;
+    const name = (orderData.description || orderData.name || '').trim();
+
+    res.json({
+      division: pso.division,
+      orderNo: orderNo,
+      nc12: orderData.nc12 || '',
+      productName: name,
+      productFamily: name.split(' ')[0]
+    });
+  });
+};

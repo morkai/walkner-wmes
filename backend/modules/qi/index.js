@@ -23,6 +23,8 @@ exports.start = function startQiModule(app, qiModule)
     actionStatuses: 'QiActionStatus'
   };
 
+  qiModule.tmpAttachments = {};
+
   app.onModuleReady(
     [
       qiModule.config.mongooseId,
