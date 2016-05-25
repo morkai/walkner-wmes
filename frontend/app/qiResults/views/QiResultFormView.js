@@ -192,6 +192,13 @@ define([
       formData.inspector = formData.inspector ? formData.inspector.id : '';
       formData.inspectedAt = time.format(formData.inspectedAt, 'YYYY-MM-DD');
 
+      _.forEach(formData.correctiveActions, function(correctiveAction)
+      {
+        var when = time.getMoment(correctiveAction.when);
+
+        correctiveAction.when = when.isValid() ? when.format('YYYY-MM-DD') : '';
+      });
+
       if (!this.options.editMode)
       {
         var fault = qiDictionaries.faults.at(0);
