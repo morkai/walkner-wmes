@@ -124,7 +124,10 @@
 
     "print:title": "NOK notification {rid}",
     "print:product": "Product:",
-    "print:problem": "Problem:"
+    "print:problem": "Problem:",
+    "print:qtyInspected": "Quantity inspected:",
+    "print:qtyToFix": "Quantity to fix:",
+    "print:qtyNok": "NOK quantity:"
   },
   "pl": true
 }

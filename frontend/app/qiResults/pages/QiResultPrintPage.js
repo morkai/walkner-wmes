@@ -21,7 +21,7 @@ define([
 
     initialize: function()
     {
-
+      this.$style = null;
     },
 
     load: function(when)
@@ -39,7 +39,10 @@ define([
 
     afterRender: function()
     {
-      this.$style = $('<style>@page{size:landscape}#app-loading,.message{display:none}</style>').appendTo('head');
+      if (!this.$style)
+      {
+        this.$style = $('<style>@page{size:landscape}#app-loading,.message{display:none}</style>').appendTo('head');
+      }
 
       var parent = this.el;
 
@@ -57,11 +60,16 @@ define([
       var imgLoadCounter = 0;
       var $img = this.$('img');
 
+      if (!$img.length)
+      {
+        setTimeout(window.print.bind(window), 1);
+      }
+
       $img.on('load', function()
       {
         if (++imgLoadCounter === $img.length)
         {
-          setTimeout(window.print.bind(window), 1);
+          //setTimeout(window.print.bind(window), 1);
         }
       });
     },

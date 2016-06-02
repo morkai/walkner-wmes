@@ -123,5 +123,8 @@
 
   "print:title": "Zgłoszenie niezgodności {rid}",
   "print:product": "Typ oprawy:",
-  "print:problem": "Opis błędu:"
+  "print:problem": "Opis błędu:",
+  "print:qtyInspected": "Ilość skontrolowana:",
+  "print:qtyToFix": "Ilość do poprawy:",
+  "print:qtyNok": "Ilość niezgodna:"
 }
