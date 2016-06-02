@@ -54,7 +54,16 @@ define([
         rid: this.model.get('rid')
       });
 
-      setTimeout(window.print.bind(window), 1);
+      var imgLoadCounter = 0;
+      var $img = this.$('img');
+
+      $img.on('load', function()
+      {
+        if (++imgLoadCounter === $img.length)
+        {
+          setTimeout(window.print.bind(window), 1);
+        }
+      });
     },
 
     destroy: function()
