@@ -69,7 +69,7 @@ define([
       {
         if (++imgLoadCounter === $img.length)
         {
-          //setTimeout(window.print.bind(window), 1);
+          setTimeout(window.print.bind(window), 1);
         }
       });
     },
