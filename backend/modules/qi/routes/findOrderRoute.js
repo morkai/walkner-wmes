@@ -33,13 +33,14 @@ module.exports = function findOrderRoute(app, qiModule, req, res, next)
 
     const orderData = pso.orderData;
     const name = (orderData.description || orderData.name || '').trim();
+    const familyParts = name.split(' ');
 
     res.json({
       division: pso.division,
       orderNo: orderNo,
       nc12: orderData.nc12 || '',
       productName: name,
-      productFamily: name.split(' ')[0]
+      productFamily: familyParts.length > 1 ? familyParts[0] : familyParts[0].substring(0, 6)
     });
   });
 };
