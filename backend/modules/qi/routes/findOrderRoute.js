@@ -5,7 +5,7 @@
 module.exports = function findOrderRoute(app, qiModule, req, res, next)
 {
   const mongoose = app[qiModule.config.mongooseId];
-  const ProdShiftOrder = mongoose.model('QiResult');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
 
   const orderNo = req.query.no;
   const conditions = {
