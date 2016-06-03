@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Zgłoszenie niezgodności <%- result.rid %></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      line-height: 1;
+      text-rendering: geometricPrecision;
+    }
+    body {
+      color: #000;
+    }
+    #page {
+      position: relative;
+      width: 1031px;
+      height: 717px;
+    }
+    #title {
+      margin-bottom: 15px;
+      font-size: 32px;
+      font-weight: bold;
+      color: #F00;
+    }
+    #date {
+      font-size: 32px;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    .label {
+      font-size: 24px;
+      line-height: 1.2;
+    }
+    .value {
+      font-size: 24px;
+      line-height: 1.2;
+    }
+    #product {
+      margin-bottom: 15px;
+    }
+    #quantities {
+      margin-bottom: 15px;
+      width: 100%;
+      border: 0;
+      border-collapse: collapse;
+    }
+    #quantities .value {
+      color: #F00;
+    }
+    #problem {
+      margin-bottom: 15px;
+      height: 125px;
+      overflow: hidden;
+      text-align: justify;
+    }
+    #problem .value {
+      color: #F00;
+    }
+    #images {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #ok, #nok {
+      position: relative;
+      width: 50%;
+      height: 420px;
+      border: 10px solid #000;
+      vertical-align: middle;
+      text-align: center;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+    }
+    #images .label {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      margin-left: -40px;
+      width: 80px;
+      color: #FFF;
+      text-align: center;
+      line-height: 1;
+      padding: 5px 0 3px 0;
+    }
+    #ok {
+      border-color: #5cb85c;
+    }
+    #ok .label {
+      background: #5cb85c;
+    }
+    #nok {
+      border-color: #d9534f;
+    }
+    #nok .label {
+      background: #d9534f;
+    }
+    img {
+      margin: auto;
+      max-width: 499px;
+      max-height: 400px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div id="page">
+  <div id="title">Zgłoszenie niezgodności <%- result.rid %></div>
+  <div id="date"><%- moment(result.inspectedAt).format('LL') %></div>
+  <div id="product">
+    <span class="label">Typ oprawy:</span>
+    <span class="value"><%= result.productName %></span>
+  </div>
+  <table id="quantities">
+    <tbody>
+    <tr>
+      <td>
+        <span class="label">Ilość skontrolowana:</span>
+        <span class="value"><%- result.qtyInspected %></span></td>
+      <td align="center">
+        <span class="label">Ilość do selekcji:</span>
+        <span class="value"><%- result.qtyToFix %></span>
+      </td>
+      <td align="right">
+        <span class="label">Ilość niezgodnych:</span>
+        <span class="value"><%- result.qtyNok %></span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div id="problem">
+    <span class="label">Opis błędu:</span>
+    <span class="value"><%= result.problem %></span>
+  </div>
+  <table id="images">
+    <tbody>
+    <tr>
+      <td id="ok" <% if (result.okFile && /^image/.test(result.okFile.type)) { %>style="background-image: url(/qi/results/<%- result._id %>/attachments/okFile?min=<%- result.okFile._id %>)"<% } %>>
+        <span class="label">OK</span>
+      </td>
+      <td></td>
+      <td id="nok" <% if (result.nokFile && /^image/.test(result.nokFile.type)) { %>style="background-image: url(/qi/results/<%- result._id %>/attachments/nokFile?min=<%- result.nokFile._id %>)"<% } %>>
+        <span class="label">NOK</span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

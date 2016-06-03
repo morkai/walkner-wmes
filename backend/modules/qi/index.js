@@ -7,10 +7,12 @@ var setUpCounter = require('./counter');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
+  httpServerId: 'httpServer',
   expressId: 'express',
   userId: 'user',
   settingsId: 'settings',
   reportsId: 'reports',
+  wkhtmltopdfExe: 'wkhtmltopdf',
   attachmentsDest: null
 };
 

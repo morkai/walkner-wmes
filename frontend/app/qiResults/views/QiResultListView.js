@@ -17,6 +17,30 @@ define([
 
     className: 'qiResults-list is-clickable is-colored',
 
+    events: _.extend({
+
+      'click .action-print': function(e)
+      {
+        if (e.button !== 0)
+        {
+          return;
+        }
+
+        var url = e.currentTarget.href;
+        var win = window.open(url);
+
+        if (win)
+        {
+          win.onload = win.print.bind(win);
+
+          return false;
+        }
+
+        window.location.href = url;
+      }
+
+    }, ListView.prototype.events),
+
     serializeColumns: function()
     {
       var columns = [
@@ -58,12 +82,13 @@ define([
       {
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];
+        var pdfUrl = model.url() + '.pdf';
 
         actions.push({
           id: 'print',
           icon: 'print',
           label: t(model.getNlsDomain(), 'PAGE_ACTION:print'),
-          href: model.genClientUrl('print'),
+          href: pdfUrl,
           className: model.get('ok') ? 'disabled' : ''
         });
 

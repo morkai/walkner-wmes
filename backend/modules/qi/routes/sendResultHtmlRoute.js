@@ -1,0 +1,36 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+'use strict';
+
+var step = require('h5.step');
+var moment = require('moment');
+
+module.exports = function sendResultHtmlRoute(app, qiModule, req, res, next)
+{
+  var mongoose = app[qiModule.config.mongooseId];
+  var QiResult = mongoose.model('QiResult');
+
+  step(
+    function()
+    {
+      QiResult.findById(req.params.id, {changes: 0}).lean().exec(this.next());
+    },
+    function(err, result)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (!result)
+      {
+        return next(app.createError('NOT_FOUND', 404));
+      }
+
+      res.render('qi:print', {
+        moment: moment,
+        result: result
+      });
+    }
+  );
+};

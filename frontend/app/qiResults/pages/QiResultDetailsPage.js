@@ -28,11 +28,31 @@ define([
 
       if (!model.get('ok'))
       {
+        var pdfUrl = model.url() + '.pdf';
+
         actions.push({
           id: 'print',
           icon: 'print',
           label: t(model.getNlsDomain(), 'PAGE_ACTION:print'),
-          href: model.genClientUrl('print')
+          href: pdfUrl,
+          callback: function(e)
+          {
+            if (e.button !== 0)
+            {
+              return;
+            }
+
+            var win = window.open(pdfUrl);
+
+            if (win)
+            {
+              win.onload = win.print.bind(win);
+
+              return false;
+            }
+
+            window.location.href = pdfUrl;
+          }
         });
       }
 

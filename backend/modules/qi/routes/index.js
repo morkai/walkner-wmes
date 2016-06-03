@@ -7,6 +7,8 @@ const multer = require('multer');
 
 const dictionariesRoute = require('./dictionariesRoute');
 const editResultRoute = require('./editResultRoute');
+const sendResultPdfRoute = require('./sendResultPdfRoute');
+const sendResultHtmlRoute = require('./sendResultHtmlRoute');
 const findByRidRoute = require('./findByRidRoute');
 const findOrderRoute = require('./findOrderRoute');
 const exportRoute = require('./exportRoute');
@@ -41,6 +43,8 @@ module.exports = function setUpQiRoutes(app, qiModule)
 
   express.get('/qi/results', canViewResults, express.crud.browseRoute.bind(null, app, QiResult));
   express.post('/qi/results', canManageResults, prepareForAdd, express.crud.addRoute.bind(null, app, QiResult));
+  express.get('/qi/results/:id.pdf', canViewResults, sendResultPdfRoute.bind(null, app, qiModule));
+  express.get('/qi/results/:id.html', sendResultHtmlRoute.bind(null, app, qiModule));
   express.get('/qi/results/:id', canViewResults, express.crud.readRoute.bind(null, app, QiResult));
   express.put('/qi/results/:id', canManageResults, editResultRoute.bind(null, app, qiModule));
   express.delete('/qi/results/:id', canManageResults, express.crud.deleteRoute.bind(null, app, QiResult));
@@ -63,7 +67,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
 
   express.get(
     '/qi/results/:result/attachments/:attachment',
-    canViewResults,
+    userModule.auth('LOCAL', 'QI:RESULTS:VIEW'),
     sendAttachmentRoute.bind(null, app, qiModule)
   );
 

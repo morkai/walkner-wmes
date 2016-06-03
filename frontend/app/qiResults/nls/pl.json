@@ -119,12 +119,5 @@
   "settings:tab:results": "Wyniki",
   "settings:tab:reports": "Raporty",
   "settings:requiredCount": "Dzienna wymagana ilość kontroli",
-  "settings:maxNokPerDay": "Górny limit czerwonych pasków na dzień",
-
-  "print:title": "Zgłoszenie niezgodności {rid}",
-  "print:product": "Typ oprawy:",
-  "print:problem": "Opis błędu:",
-  "print:qtyInspected": "Ilość skontrolowana:",
-  "print:qtyToFix": "Ilość do selekcji:",
-  "print:qtyNok": "Ilość niezgodna:"
+  "settings:maxNokPerDay": "Górny limit czerwonych pasków na dzień"
 }

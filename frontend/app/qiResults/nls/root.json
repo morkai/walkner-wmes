@@ -120,14 +120,7 @@
     "settings:tab:results": "Results",
     "settings:tab:reports": "Reports",
     "settings:requiredCount": "Daily required inspections number",
-    "settings:maxNokPerDay": "Upper limit of red strips per day",
-
-    "print:title": "NOK notification {rid}",
-    "print:product": "Product:",
-    "print:problem": "Problem:",
-    "print:qtyInspected": "Quantity inspected:",
-    "print:qtyToFix": "Quantity to fix:",
-    "print:qtyNok": "NOK quantity:"
+    "settings:maxNokPerDay": "Upper limit of red strips per day"
   },
   "pl": true
 }
