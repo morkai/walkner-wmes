@@ -129,7 +129,6 @@ define([
       var allDivisions = Object.keys(model.get('divisions'));
       var selectedDivisions = allDivisions.filter(function(d) { return !model.isIgnoredDivision(d); });
 
-console.log(selectedDivisions);
       this.$id('selectedDivisions').text(
         selectedDivisions.length === allDivisions.length
           ? ''

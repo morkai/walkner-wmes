@@ -83,7 +83,7 @@ define([
           filename: t.bound('qiResults', 'report:filenames:nokQtyPerFamily'),
           chartOptions: {
             title: {
-              text: t.bound('qiResults', 'report:title:nokQtyPerFamily')
+              text: {toString: this.getChartTitle.bind(this)}
             },
             legend: {
               enabled: false
@@ -130,6 +130,11 @@ define([
           data: chartData.nokQty
         }]
       });
+    },
+
+    getChartTitle: function()
+    {
+      return this.el.parentNode.previousElementSibling.textContent;
     },
 
     updateChart: function()
