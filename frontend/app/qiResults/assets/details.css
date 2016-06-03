@@ -4,6 +4,8 @@
 .qiResults-details-attachment {
   padding: 0;
   text-align: center;
+  max-height: 512px;
+  overflow: auto;
 }
 .qiResults-details-attachment > a:hover {
   text-decoration: none;
