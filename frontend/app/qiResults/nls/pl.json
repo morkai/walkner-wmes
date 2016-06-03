@@ -59,7 +59,7 @@
   "PROPERTY:okFile": "Zdjęcie OK",
   "PROPERTY:nokFile": "Zdjęcie NOK",
   "PROPERTY:qtyInspected": "Ilość skontrolowana",
-  "PROPERTY:qtyToFix": "Ilość do poprawy",
+  "PROPERTY:qtyToFix": "Ilość do selekcji",
   "PROPERTY:qtyNok": "Ilość niezgodnych",
 
   "filter:result": "Wynik",
@@ -125,6 +125,6 @@
   "print:product": "Typ oprawy:",
   "print:problem": "Opis błędu:",
   "print:qtyInspected": "Ilość skontrolowana:",
-  "print:qtyToFix": "Ilość do poprawy:",
+  "print:qtyToFix": "Ilość do selekcji:",
   "print:qtyNok": "Ilość niezgodna:"
 }
