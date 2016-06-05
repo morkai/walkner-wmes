@@ -292,12 +292,7 @@ app/qiResults/assets/./list.css
 app/qiResults/assets/./form.css
 app/qiResults/assets/./details.css
 app/qiResults/assets/./reports.css
-app/qiResults/assets/./print.css
 app/qiResults/assets/main.css
-
-app/qiResults/assets/print.css
-----------------
-app/qiResults/assets/print.css
 
 app/qiResults/assets/reports.css
 ----------------
