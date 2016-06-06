@@ -179,6 +179,7 @@ define([
     serializeChartSeries: function()
     {
       var divisions = Object.keys(this.model.get('divisions')).sort(function(a, b) { return a.localeCompare(b); });
+      var factoryLayoutSettings = this.factoryLayoutSettings;
       var series = _.map(divisions, function(division)
       {
         return {
@@ -186,7 +187,7 @@ define([
           type: 'column',
           name: division,
           data: [],
-          color: colorFactory.getColor('divisions', division),
+          color: factoryLayoutSettings.getColor(division),
           isDivision: true
         };
       });

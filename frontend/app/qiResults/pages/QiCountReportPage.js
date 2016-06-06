@@ -5,6 +5,8 @@ define([
   'app/i18n',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
+  'app/data/createSettings',
+  'app/factoryLayout/FactoryLayoutSettingCollection',
   '../dictionaries',
   '../QiCountReport',
   '../views/QiCountReportFilterView',
@@ -17,6 +19,8 @@ define([
   t,
   View,
   formatTooltipHeader,
+  createSettings,
+  FactoryLayoutSettingCollection,
   qiDictionaries,
   QiCountReport,
   QiCountReportFilterView,
@@ -52,6 +56,8 @@ define([
     {
       var model = this.model;
 
+      this.factoryLayoutSettings = createSettings(FactoryLayoutSettingCollection);
+
       this.setView('.filter-container', new QiCountReportFilterView({model: model}));
       this.setView(
         '#' + this.idPrefix + '-totalNokCount',
@@ -59,7 +65,10 @@ define([
       );
       this.setView(
         '#' + this.idPrefix + '-nokCountPerDivision',
-        new QiNokCountPerDivisionChartView({model: model})
+        new QiNokCountPerDivisionChartView({
+          model: model,
+          factoryLayoutSettings: this.factoryLayoutSettings.acquire()
+        })
       );
       this.setView(
         '#' + this.idPrefix + '-nokQtyPerFamily',
@@ -74,21 +83,28 @@ define([
     destroy: function()
     {
       qiDictionaries.unload();
+
+      this.factoryLayoutSettings.release();
+      this.factoryLayoutSettings = null;
     },
 
     load: function(when)
     {
       if (qiDictionaries.loaded)
       {
-        return when(this.model.fetch());
+        return when(this.model.fetch(), this.factoryLayoutSettings.acquire().fetchIfEmpty());
       }
 
-      return qiDictionaries.load().then(this.model.fetch.bind(this.model));
+      return qiDictionaries.load().then(
+        this.model.fetch.bind(this.model),
+        this.factoryLayoutSettings.acquire().fetchIfEmpty()
+      );
     },
 
     afterRender: function()
     {
       qiDictionaries.load();
+      this.factoryLayoutSettings.acquire();
 
       this.updateSelectedGroup();
     },
