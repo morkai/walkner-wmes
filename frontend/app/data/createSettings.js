@@ -43,7 +43,7 @@ define([
             options = {};
           }
 
-          options.pubusb = pubsubSandbox = pubsub.sandbox();
+          options.pubsub = pubsubSandbox = pubsub.sandbox();
           settingsCollection = new SettingsCollection(null, options);
         }
 
