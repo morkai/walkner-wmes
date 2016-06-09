@@ -33,7 +33,7 @@ module.exports = function setUpIsaRoutes(app, isaModule)
 
   express.get('/isaLineStates', canView, browseLineStatesRoute);
   express.get('/isaLineStates/:id', canView, readLineStateRoute);
-  express.patch('/isaLineStates/:id', updateLineStateRoute);
+  express.patch('/isaLineStates/:id', canView, updateLineStateRoute);
 
   function readShiftPersonnelRoute(req, res, next)
   {
