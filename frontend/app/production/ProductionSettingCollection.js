@@ -38,7 +38,55 @@ define([
 
     prepareValue: function(id, newValue)
     {
+      if (/rearmDowntimeReason$/.test(id))
+      {
+        return _.isEmpty(newValue) ? null : newValue;
+      }
+
+      if (/spigotPatterns$/.test(id))
+      {
+        return this.prepareSpigotPatterns(newValue);
+      }
+
+      if (/spigotLines$/.test(id))
+      {
+        return this.prepareSpigotLines(newValue);
+      }
+
+      if (/spigotFinish$/.test(id))
+      {
+        return !!newValue;
+      }
+
       return this.prepareNumericValue(newValue, 0, 60);
+    },
+
+    prepareSpigotPatterns: function(newValue)
+    {
+      return typeof newValue !== 'string' ? undefined : newValue
+        .split('\n')
+        .filter(function(pattern)
+        {
+          try
+          {
+            new RegExp(pattern);
+          }
+          catch (err)
+          {
+            return false;
+          }
+
+          return !!pattern.trim().length;
+        })
+        .join('\n');
+    },
+
+    prepareSpigotLines: function(newValue)
+    {
+      return typeof newValue !== 'string' ? undefined : newValue
+        .split(',')
+        .filter(function(prodLineId) { return !!prodLineId.length; })
+        .join(',');
     },
 
     setUpLocalStorage: function()

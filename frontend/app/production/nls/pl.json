@@ -133,6 +133,9 @@
   "newOrderPicker:checkData:warning": "Wybranie nowego zlecenia ukończy aktualnie wybrane zlecenie. Sprawdź czy pola <em>Ilość wykonana</em> i <em>Osoby pracujące</em> aktualnego zlecenia mają prawidłowe wartości, gdyż po wybraniu nowego zlecenia nie będzie można ich zmienić.",
   "newOrderPicker:quantityDone": "Ilość wykonana w kończonym zleceniu:",
   "newOrderPicker:workerCount": "Osoby pracujące przy kończonym zleceniu:",
+  "newOrderPicker:spigot:nc12": "12NC komponentu Spigot",
+  "newOrderPicker:spigot:placeholder": "Zeskanuj kod kreskowy komponentu...",
+  "newOrderPicker:spigot:invalid": "Nieprawidłowe 12NC komponentu!",
 
   "downtimePicker:title:start": "Rozpoczynanie przestoju",
   "downtimePicker:title:edit": "Poprawianie przestoju",
@@ -171,6 +174,9 @@
   "endWorkDialog:workerCount": "Osoby pracujące przy aktualnym zleceniu:",
   "endWorkDialog:yes": "Zakończ pracę",
   "endWorkDialog:no": "Anuluj",
+  "endWorkDialog:spigot:nc12": "12NC komponentu Spigot",
+  "endWorkDialog:spigot:placeholder": "Zeskanuj kod kreskowy komponentu...",
+  "endWorkDialog:spigot:invalid": "Nieprawidłowe 12NC komponentu!",
 
   "unload:downtime": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie przestoju?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania przestoju będzie się naliczał do końca zmiany!",
   "unload:order": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie wykonywania zlecenia?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania zlecenia będzie się naliczał do końca zmiany!",
@@ -180,6 +186,18 @@
   "isa:deliver": "Dostawa pustej palety",
   "isa:deliver:specific": "Dostawa: {palletKind}",
 
+  "spigotChecker:title": "Sprawdzanie komponentu Spigot",
+  "spigotChecker:name:label": "Nazwa komponentu:",
+  "spigotChecker:nc12:label": "12NC komponentu:",
+  "spigotChecker:nc12:placeholder": "Zeskanuj kod kreskowy komponentu...",
+  "spigotChecker:nc12:invalid": "Nieprawidłowe 12NC komponentu!",
+  "spigotChecker:submit": "Sprawdź komponent",
+  "spigotChecker:success": "Zeskanowano prawidłowy komponent :)",
+
   "settings:tab:operator": "Formatka operatora",
-  "settings:initialDowntimeWindow": "Czas na rozpoczęcie początkowego przestoju na zmianie [min]"
+  "settings:initialDowntimeWindow": "Czas na rozpoczęcie początkowego przestoju na zmianie [min]",
+  "settings:rearmDowntimeReason": "Przestój ze sprawdzaniem Spigota",
+  "settings:spigotLines": "Linie ze sprawdzaniem Spigota",
+  "settings:spigotPatterns": "Wzorce komponentów Spigot",
+  "settings:spigotFinish": "Wymuś sprawdzanie Spigota na koniec zlecenia"
 }

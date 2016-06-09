@@ -151,7 +151,8 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     notes: {
       type: String,
       default: ''
-    }
+    },
+    spigot: {}
   }, {
     id: false
   });

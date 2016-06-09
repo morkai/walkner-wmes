@@ -125,7 +125,10 @@
     "comments:alerts:start": "Alert started: {alertName}. Sent {recipientCount, plural, one{a notification to 1 user} other{notifications to {recipientCount} users}}: {recipientList}",
     "comments:alerts:start:0": "Alert started: {alertName}.",
     "comments:alerts:notify": "Sent {recipientCount, plural, one{a notification to 1 user} other{notifications to {recipientCount} users}} due to an alert {alertName}: {recipientList}",
-    "comments:alerts:finish": "Alert finished: {alertName}"
+    "comments:alerts:finish": "Alert finished: {alertName}",
+
+    "comments:spigot:initial": "Scanned a valid Spigot component: {name} ({nc12})",
+    "comments:spigot:final": "Confirmed a valid Spigot component: {name} ({nc12})"
   },
   "pl": true
 }

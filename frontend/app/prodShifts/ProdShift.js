@@ -644,6 +644,51 @@ define([
       prodLog.record(this, 'editDowntime', changes);
     },
 
+    checkSpigot: function(component, nc12)
+    {
+      var prodDowntime;
+      var spigot = this.prodShiftOrder.get('spigot');
+      var final = false;
+
+      if (!component)
+      {
+        if (!spigot)
+        {
+          return true;
+        }
+
+        prodDowntime = spigot.prodDowntime;
+        component = spigot.component;
+        final = true;
+      }
+      else
+      {
+        prodDowntime = this.prodDowntimes.findFirstUnfinished().id;
+      }
+
+      var valid = nc12 === component.nc12;
+
+      if (valid)
+      {
+        this.prodShiftOrder.set('spigot', {
+          prodDowntime: prodDowntime,
+          component: component,
+          initial: true,
+          final: final
+        });
+      }
+
+      prodLog.record(this, 'checkSpigot', {
+        final: final,
+        valid: valid,
+        nc12: nc12,
+        component: component,
+        prodDowntime: prodDowntime
+      });
+
+      return valid;
+    },
+
     /**
      * @returns {boolean}
      */
@@ -825,6 +870,16 @@ define([
       var subdivision = this.prodLine.getSubdivision();
 
       return subdivision ? subdivision.get('aor') : null;
+    },
+
+    isSpigotLine: function()
+    {
+      return (this.settings.getValue('spigotLines') || '').split(',').indexOf(this.prodLine.id) === -1;
+    },
+
+    getSpigotComponent: function()
+    {
+      return this.prodShiftOrder.getSpigotComponent(this.settings.getValue('spigotPatterns'));
     },
 
     hasEnded: function()

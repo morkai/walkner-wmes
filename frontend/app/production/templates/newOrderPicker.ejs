@@ -1,9 +1,15 @@
 <form class="production-newOrderPicker">
   <% if (replacingOrder) { %>
   <p class="message message-inline message-warning"><%- t('production', 'newOrderPicker:checkData:warning') %></p>
+  <% if (spigot) { %>
+  <div id="<%- idPrefix %>-spigot" class="form-group">
+    <label for="<%- idPrefix %>-spigot-nc12"><%- t('production', 'endWorkDialog:spigot:nc12') %></label>
+    <input id="<%- idPrefix %>-spigot-nc12" class="form-control" type="text" value="" placeholder="<%- t('production', 'endWorkDialog:spigot:placeholder') %>" autofocus required>
+  </div>
+  <% } %>
   <div class="form-group">
     <label for="<%- idPrefix %>-quantityDone"><%- t('production', 'newOrderPicker:quantityDone') %></label>
-    <input id="<%- idPrefix %>-quantityDone" class="form-control small" type="number" value="<%- quantityDone %>" autofocus min="0" max="<%- maxQuantityDone %>">
+    <input id="<%- idPrefix %>-quantityDone" class="form-control small" type="number" value="<%- quantityDone %>" <%- spigot ? '' : 'autofocus' %> min="0" max="<%- maxQuantityDone %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-workerCount"><%- t('production', 'newOrderPicker:workerCount') %></label>
@@ -22,14 +28,14 @@
   <% } %>
   <div class="form-group">
     <label for="<%- idPrefix %>-order"><%- t('production', 'newOrderPicker:order:label') %></label>
-    <input id="<%- idPrefix %>-order" class="form-control" type="text" placeholder="<%- t('production', 'newOrderPicker:order:placeholder:' + orderIdType) %>">
+    <input id="<%- idPrefix %>-order" class="form-control" type="text" placeholder="<%- t('production', 'newOrderPicker:order:placeholder:' + orderIdType) %>" data-ignore-key="1">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-operation"><%- t('production', 'newOrderPicker:operation:label') %></label>
-    <input id="<%- idPrefix %>-operation" class="form-control" type="text" placeholder="<%- t('production', 'newOrderPicker:offline:operation:placeholder') %>" maxlength="4" pattern="^[0-9]+$">
+    <input id="<%- idPrefix %>-operation" class="form-control" type="text" placeholder="<%- t('production', 'newOrderPicker:offline:operation:placeholder') %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1">
   </div>
   <div class="form-actions">
-    <button type="submit" class="btn btn-<%- correctingOrder ? 'primary' : 'success' %>">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-<%- correctingOrder ? 'primary' : 'success' %>">
       <%- t('production', 'newOrderPicker:submit' + (replacingOrder ? ':replacing' : correctingOrder ? ':correcting' : '')) %>
     </button>
     <button type="button" class="cancel btn btn-link"><%- t('production', 'newOrderPicker:cancel') %></button>

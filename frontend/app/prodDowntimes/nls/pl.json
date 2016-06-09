@@ -122,5 +122,8 @@
   "comments:alerts:start": "Rozpoczęto alarm: {alertName}. Wysłano {recipientCount, plural, one{powiadomienie do 1 użytkownika} other{powiadomienia do {recipientCount} użytkowników}}: {recipientList}",
   "comments:alerts:start:0": "Rozpoczęto alarm: {alertName}.",
   "comments:alerts:notify": "Wysłano {recipientCount, plural, one{powiadomienie do 1 użytkownika} other{powiadomienia do {recipientCount} użytkowników}} z powodu alarmu {alertName}: {recipientList}",
-  "comments:alerts:finish": "Zakończono alarm: {alertName}"
+  "comments:alerts:finish": "Zakończono alarm: {alertName}",
+
+  "comments:spigot:initial": "Zeskanowano prawidłowy komponent Spigot: {name} ({nc12})",
+  "comments:spigot:final": "Potwierdzono prawidłowy komponent Spigot: {name} ({nc12})"
 }

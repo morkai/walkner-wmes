@@ -29,7 +29,8 @@
           'endWork',
           'addShift', 'addOrder', 'addDowntime',
           'editShift', 'editOrder', 'editDowntime',
-          'deleteShift', 'deleteOrder', 'deleteDowntime'
+          'deleteShift', 'deleteOrder', 'deleteDowntime',
+          'checkSpigot'
         ].forEach(function(type) { %>
       <option value="<%- type %>"><%- t('prodLogEntries', 'type:' + type) %></option>
       <% }) %>

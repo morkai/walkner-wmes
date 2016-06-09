@@ -144,16 +144,6 @@ define([
       return newValue;
     },
 
-    prepareObjectIdValue: function(value)
-    {
-      if (value === '')
-      {
-        return null;
-      }
-
-      return (/^[a-f0-9]{24}$/).test(value) ? value : undefined;
-    },
-
     prepare100PercentValue: function(value)
     {
       if (value === '')

@@ -1,4 +1,5 @@
 @import "isa.css";
+@import "settings.css";
 
 .is-production {
   overflow: auto;
@@ -269,6 +270,9 @@
   width: 75px;
   text-align: right;
   z-index: 10;
+}
+.production-spigotChecker-modal .cancel {
+  display: none;
 }
 @media (max-width: 1680px) {
   .production {

@@ -112,6 +112,18 @@ define([
       return newValue;
     },
 
+    prepareObjectIdValue: function(newValue)
+    {
+      if (newValue === null || newValue === '')
+      {
+        return null;
+      }
+
+      var objectId = String(newValue).toLowerCase();
+
+      return /^[a-f0-9]{24}$/.test(objectId) ? objectId : undefined;
+    },
+
     prepareNumericValue: function(newValue, min, max)
     {
       var value = parseInt(newValue, 10);

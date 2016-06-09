@@ -61,7 +61,8 @@ define([
       master: null,
       leader: null,
       operator: null,
-      operators: null
+      operators: null,
+      spigot: null
     },
 
     getLabel: function(includeProdLine)
@@ -119,7 +120,8 @@ define([
         master: prodShift.get('master'),
         leader: prodShift.get('leader'),
         operator: prodShift.get('operator'),
-        operators: prodShift.get('operators')
+        operators: prodShift.get('operators'),
+        spigot: null
       });
 
       this.generateId(prodShift);
@@ -183,7 +185,8 @@ define([
         master: prodShift.get('master'),
         leader: prodShift.get('leader'),
         operator: prodShift.get('operator'),
-        operators: prodShift.get('operators')
+        operators: prodShift.get('operators'),
+        spigot: null
       });
 
       this.generateId(prodShift);
@@ -400,6 +403,37 @@ define([
       var subdivision = subdivisions.get(this.get('subdivision'));
 
       return subdivision ? subdivision.get('type') : null;
+    },
+
+    getSpigotComponent: function(spigotPatterns)
+    {
+      var orderData = this.get('orderData');
+
+      if (_.isEmpty(spigotPatterns) || !orderData || !Array.isArray(orderData.bom))
+      {
+        return null;
+      }
+
+      spigotPatterns = spigotPatterns
+        .split('\n')
+        .map(function(pattern) { return new RegExp(pattern, 'i'); });
+
+      var components = orderData.bom;
+
+      for (var c = 0; c < components.length; ++c)
+      {
+        var component = components[c];
+
+        for (var p = 0; p < spigotPatterns.length; ++p)
+        {
+          if (spigotPatterns[p].test(component.name))
+          {
+            return component;
+          }
+        }
+      }
+
+      return null;
     },
 
     getOrderIdType: function()

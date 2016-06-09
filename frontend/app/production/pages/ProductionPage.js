@@ -17,6 +17,7 @@ define([
   '../views/ProdDowntimeListView',
   '../views/ProductionQuantitiesView',
   '../views/IsaView',
+  '../views/SpigotCheckerView',
   'app/production/templates/productionPage',
   'app/production/templates/duplicateWarning'
 ], function(
@@ -36,6 +37,7 @@ define([
   ProdDowntimeListView,
   ProductionQuantitiesView,
   IsaView,
+  SpigotCheckerView,
   productionPageTemplate,
   duplicateWarningTemplate
 ) {
@@ -104,7 +106,9 @@ define([
       this.defineViews();
       this.defineBindings();
 
-      $(window).on('beforeunload.' + this.idPrefix, this.onBeforeUnload);
+      $(window)
+        .on('beforeunload.' + this.idPrefix, this.onBeforeUnload)
+        .on('keydown.' + this.idPrefix, this.onKeyDown);
     },
 
     setUpLayout: function(layout)
@@ -240,6 +244,8 @@ define([
         {
           page.$el.addClass('is-' + newState);
         }
+
+        page.checkSpigot();
       });
 
       page.listenTo(model, 'change:shift', function()
@@ -305,6 +311,19 @@ define([
       if (this.model.isLocked() || this.model.id)
       {
         this.$el.removeClass('hidden');
+      }
+    },
+
+    onKeyDown: function(e)
+    {
+      var tagName = e.target.tagName;
+      var formField = (tagName === 'INPUT' && e.target.type !== 'BUTTON')
+        || tagName === 'SELECT'
+        || tagName === 'TEXTAREA';
+
+      if (e.keyCode === 8 && (!formField || e.target.readOnly || e.target.disabled))
+      {
+        e.preventDefault();
       }
     },
 
@@ -507,6 +526,50 @@ define([
         'production.edited.shift.' + model.id,
         function(changes) { model.set(changes); }
       );
+    },
+
+    checkSpigot: function()
+    {
+      var model = this.model;
+      var spigot = model.prodShiftOrder.get('spigot') || null;
+
+      if (model.get('state') !== 'downtime'
+        || spigot
+        || !model.isSpigotLine())
+      {
+        return;
+      }
+
+      var settings = model.settings;
+      var expectedReason = settings.getValue('rearmDowntimeReason');
+      var actualReason = model.prodDowntimes.findFirstUnfinished().get('reason');
+
+      if (actualReason !== expectedReason)
+      {
+        return;
+      }
+
+      var spigotComponent = model.getSpigotComponent();
+
+      if (spigotComponent)
+      {
+        this.showSpigotDialog(spigotComponent);
+      }
+    },
+
+    showSpigotDialog: function(spigotComponent)
+    {
+      var dialogView = new SpigotCheckerView({
+        model: this.model,
+        component: spigotComponent
+      });
+
+      this.broker.subscribe('viewport.dialog.hidden')
+        .setLimit(1)
+        .setFilter(function(v) { return v === dialogView; })
+        .on('message', this.checkSpigot.bind(this));
+
+      viewport.showDialog(dialogView, t('production', 'spigotChecker:title'));
     }
 
   });

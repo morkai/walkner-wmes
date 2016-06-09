@@ -17,12 +17,14 @@ define([
 ) {
   'use strict';
 
+  t = t.forDomain('prodDowntimes');
+
   var SPECIAL_CHANGES = {
     'WMES:ALERTS:START': function(data)
     {
       var alert = data.alert;
 
-      return t('prodDowntimes', 'comments:alerts:start', {
+      return t('comments:alerts:start', {
         alertName: alert.name,
         recipientCount: alert.recipients.length,
         recipientList: alert.recipients.join(', ')
@@ -32,7 +34,7 @@ define([
     {
       var alert = data.alert;
 
-      return t('prodDowntimes', 'comments:alerts:notify', {
+      return t('comments:alerts:notify', {
         alertName: alert.name,
         recipientCount: alert.recipients.length,
         recipientList: alert.recipients.join(', ')
@@ -40,8 +42,22 @@ define([
     },
     'WMES:ALERTS:FINISH': function(data)
     {
-      return t('prodDowntimes', 'comments:alerts:finish', {
+      return t('comments:alerts:finish', {
         alertName: data.alert.name
+      });
+    },
+    'WMES:SPIGOT:INITIAL': function(data)
+    {
+      return t('comments:spigot:initial', {
+        name: data.component.name,
+        nc12: data.component.nc12
+      });
+    },
+    'WMES:SPIGOT:FINAL': function(data)
+    {
+      return t('comments:spigot:final', {
+        name: data.component.name,
+        nc12: data.component.nc12
       });
     }
   };
@@ -60,7 +76,7 @@ define([
         return renderUserInfo({userInfo: value});
 
       case 'status':
-        return t('prodDowntimes', 'PROPERTY:status:' + value);
+        return t('PROPERTY:status:' + value);
 
       case 'reason':
       {
@@ -91,7 +107,7 @@ define([
       changes: special ? [] : _.map(change.data, function(values, property)
       {
         return {
-          label: t('prodDowntimes', 'PROPERTY:' + property),
+          label: t('PROPERTY:' + property),
           oldValue: formatValue(property, values[0]),
           newValue: formatValue(property, values[1])
         };

@@ -41,6 +41,7 @@
   "type:addDowntime": "Dodanie przestoju",
   "type:notifyDowntimeAlert": "Powiadomienie o przestoju",
   "type:finishDowntimeAlert": "Zakończenie alarmu",
+  "type:checkSpigot": "Sprawdzenie Spigota",
 
   "data:changeShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
   "data:addShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
@@ -67,6 +68,8 @@
   "data:deleteOrder": "Usunięto zlecenie {orderId}; {operationNo}</em>.",
   "data:notifyDowntimeAlert": "Wysłano powiadomienia o <a href='\\#prodDowntimes/{downtimeId}'>przestoju</a> w ramach alarmu: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
   "data:finishDowntimeAlert": "Zakończono alarm <a href='\\#prodDowntimes/{downtimeId}'>przestoju</a>: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
+  "data:checkSpigot:initial": "Zeskanowano {result, select, valid{prawidłowy} other{nieprawidłowy}} Spigot {nc12} w ramach <a href='\\#prodDowntimes/{downtimeId}'>przestoju</a>.",
+  "data:checkSpigot:final": "Zeskanowano {result, select, valid{prawidłowy} other{nieprawidłowy}} Spigot {nc12} na zakończenie zlecenia w ramach <a href='\\#prodDowntimes/{downtimeId}'>przestoju</a>.",
 
   "noData:prodShiftOrder": "<em>brak zlecenia</em>"
 }

@@ -42,6 +42,7 @@
     "type:addDowntime": "Downtime addition",
     "type:notifyDowntimeAlert": "Downtime notification",
     "type:finishDowntimeAlert": "Downtime alert finish",
+    "type:checkSpigot": "Spigot check",
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:addShift": "Shift <em>{shift}</em> on <em>{date}</em>",
@@ -68,6 +69,8 @@
     "data:deleteOrder": "Deleted order <em>{orderId}; {operationNo}</em>",
     "data:notifyDowntimeAlert": "Sent notifications about <a href='\\#prodDowntimes/{downtimeId}'>downtime</a> as a part of alert: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
     "data:finishDowntimeAlert": "Finished <a href='\\#prodDowntimes/{downtimeId}'>downtime</a> alert: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
+    "data:checkSpigot:initial": "Scanned {result, select, valid{a valid} other{an invalid}} Spigot {nc12} as a part of a <a href='\\#prodDowntimes/{downtimeId}'>downtime</a>.",
+    "data:checkSpigot:final": "Scanned {result, select, valid{a valid} other{an invalid}} Spigot {nc12} at the end of an order as a part of a <a href='\\#prodDowntimes/{downtimeId}'>downtime</a>.",
 
     "noData:prodShiftOrder": "<em>no order</em>"
   },

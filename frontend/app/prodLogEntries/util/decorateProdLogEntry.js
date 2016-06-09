@@ -51,6 +51,7 @@ define([
     /*jshint -W015*/
 
     var prodLogEntry = prodLogEntryModel.toJSON();
+    var dataKey = 'data:' + prodLogEntry.type;
     var data = {};
 
     switch (prodLogEntry.type)
@@ -115,6 +116,13 @@ define([
         data.changedProperties = prepareChangedProperties(prodLogEntry.type, prodLogEntry.data);
         break;
 
+      case 'checkSpigot':
+        dataKey += ':' + (prodLogEntry.data.final ? 'final' : 'initial');
+        data.result = prodLogEntry.data.valid ? 'valid' : 'invalid';
+        data.nc12 = prodLogEntry.data.nc12;
+        data.downtimeId = prodLogEntry.data.prodDowntime;
+        break;
+
       default:
         data = prodLogEntry.data;
         break;
@@ -127,7 +135,7 @@ define([
       timeDiff = (Date.parse(prodLogEntry.savedAt) - Date.parse(prodLogEntry.createdAt)) / 1000;
     }
 
-    prodLogEntry.data = t('prodLogEntries', 'data:' + prodLogEntry.type, data);
+    prodLogEntry.data = t('prodLogEntries', dataKey, data);
     prodLogEntry.type = t('prodLogEntries', 'type:' + prodLogEntry.type);
     prodLogEntry.createdAt = time.format(prodLogEntry.createdAt, 'YYYY-MM-DD HH:mm:ss');
     prodLogEntry.creator = renderUserInfo({userInfo: prodLogEntry.creator});

@@ -1,23 +1,25 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/i18n',
   'app/viewport',
   'app/core/View',
   '../util/orderPickerHelpers',
   'app/production/templates/newOrderPicker'
 ], function(
+  $,
   t,
   viewport,
   View,
   orderPickerHelpers,
-  personelPickerTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: personelPickerTemplate,
+    template: template,
 
     dialogClassName: function()
     {
@@ -47,14 +49,14 @@ define([
         {
           this.$el.submit();
 
-          e.preventDefault();
+          return false;
         }
       },
       'submit': function(e)
       {
         e.preventDefault();
 
-        var submitEl = this.$('button[type=submit]')[0];
+        var submitEl = this.$id('submit')[0];
 
         if (submitEl.disabled)
         {
@@ -62,6 +64,31 @@ define([
         }
 
         submitEl.disabled = true;
+
+        var $nc12 = this.$id('spigot-nc12');
+
+        if ($nc12.length)
+        {
+          var matches = $nc12.val().match(/([0-9]{12})/);
+          var nc12 = matches ? matches[1] : '';
+
+          if (!nc12.length || !this.model.checkSpigot(null, nc12))
+          {
+            $nc12[0].setCustomValidity(t('production', 'newOrderPicker:spigot:invalid'));
+
+            this.timers.submit = setTimeout(
+              function()
+              {
+                submitEl.disabled = false;
+                submitEl.click();
+              },
+              1,
+              this
+            );
+
+            return;
+          }
+        }
 
         if (this.socket.isConnected())
         {
@@ -74,18 +101,36 @@ define([
       }
     },
 
+    initialize: function()
+    {
+      this.lastKeyPressAt = 0;
+
+      $(window)
+        .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this))
+        .on('keypress.' + this.idPrefix, this.onKeyPress.bind(this));
+    },
+
+    destroy: function()
+    {
+      $(window).off('.' + this.idPrefix);
+    },
+
     serialize: function()
     {
+      var shift = this.model;
+      var order = shift.prodShiftOrder;
+
       return {
         idPrefix: this.idPrefix,
+        spigot: shift.settings.getValue('spigotFinish') && !!order.get('spigot'),
         offline: !this.socket.isConnected(),
-        replacingOrder: !this.options.correctingOrder && this.model.hasOrder(),
+        replacingOrder: !this.options.correctingOrder && shift.hasOrder(),
         correctingOrder: !!this.options.correctingOrder,
-        quantityDone: this.model.prodShiftOrder.get('quantityDone') || 0,
-        workerCount: this.model.prodShiftOrder.getWorkerCountForEdit(),
-        orderIdType: this.model.getOrderIdType(),
-        maxQuantityDone: this.model.prodShiftOrder.getMaxQuantityDone(),
-        maxWorkerCount: this.model.prodShiftOrder.getMaxWorkerCount()
+        quantityDone: order.get('quantityDone') || 0,
+        workerCount: order.getWorkerCountForEdit(),
+        orderIdType: shift.getOrderIdType(),
+        maxQuantityDone: order.getMaxQuantityDone(),
+        maxWorkerCount: order.getMaxWorkerCount()
       };
     },
 
@@ -121,7 +166,13 @@ define([
 
     focusFirstInput: function()
     {
-      if (!this.options.correctingOrder && this.model.hasOrder())
+      var $nc12 = this.$id('spigot-nc12');
+
+      if ($nc12.length)
+      {
+        $nc12.focus();
+      }
+      else if (!this.options.correctingOrder && this.model.hasOrder())
       {
         this.$id('quantityDone').select();
       }
@@ -293,6 +344,53 @@ define([
       var value = parseInt(this.$id(field).val(), 10);
 
       return isNaN(value) || value < 0 ? 0 : value;
+    },
+
+    isIgnoredTarget: function(target)
+    {
+      return target.type === 'number'
+        || target.className.indexOf('select2') !== -1
+        || target.dataset.ignoreKey === '1';
+    },
+
+    onKeyDown: function(e)
+    {
+      if (e.keyCode === 8 && !this.isIgnoredTarget(e.target))
+      {
+        this.lastKeyPressAt = Date.now();
+
+        this.$id('spigot-nc12').val('')[0].setCustomValidity('');
+
+        return false;
+      }
+    },
+
+    onKeyPress: function(e)
+    {
+      var $nc12 = this.$id('spigot-nc12');
+      var target = e.target;
+      var keyCode = e.keyCode;
+
+      if (keyCode === 13)
+      {
+        return $nc12[0] !== target;
+      }
+
+      if (keyCode < 32 || keyCode > 126 || this.isIgnoredTarget(target))
+      {
+        return;
+      }
+
+      var keyPressAt = Date.now();
+      var prevValue = keyPressAt - this.lastKeyPressAt > 333 ? '' : $nc12.val();
+      var key = String.fromCharCode(keyCode);
+
+      $nc12.val(prevValue + key)[0].setCustomValidity('');
+      $nc12.focus();
+
+      this.lastKeyPressAt = keyPressAt;
+
+      return false;
     }
 
   });
