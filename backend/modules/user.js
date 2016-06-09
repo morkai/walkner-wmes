@@ -130,6 +130,11 @@ exports.start = function startUserModule(app, module)
 
   function isAllowedTo(user, anyPrivileges)
   {
+    if (!user)
+    {
+      return false;
+    }
+
     if (user.super)
     {
       return true;
