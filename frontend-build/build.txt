@@ -258,7 +258,12 @@ app/production/assets/isa.css
 app/production/assets/main.css
 ----------------
 app/production/assets/isa.css
+app/production/assets/settings.css
 app/production/assets/main.css
+
+app/production/assets/settings.css
+----------------
+app/production/assets/settings.css
 
 app/purchaseOrders/assets/main.css
 ----------------
@@ -802,6 +807,8 @@ app/isaPalletKinds/IsaPalletKindCollection.js
 app/data/isaPalletKinds.js
 app/production/templates/isa.js
 app/production/views/IsaView.js
+app/production/templates/spigotChecker.js
+app/production/views/SpigotCheckerView.js
 app/production/templates/productionPage.js
 app/production/templates/duplicateWarning.js
 app/production/pages/ProductionPage.js

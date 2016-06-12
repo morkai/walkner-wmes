@@ -1,0 +1,1 @@
+define(["app/nls/locale/en"],function(e){return{root:{"msg:offline":function(e){return"No connection to the server :("},"msg:undefined":function(e){return"There's no help for this page yet :("}},pl:!0}});

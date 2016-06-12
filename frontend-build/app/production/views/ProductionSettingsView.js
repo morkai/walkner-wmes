@@ -1,3 +1,3 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/settings/views/SettingsView","app/production/templates/settings"],function(t,e){"use strict";return t.extend({clientUrl:"#production;settings",template:e})});
+define(["underscore","app/core/util/idAndLabel","app/data/downtimeReasons","app/data/orgUnits","app/settings/views/SettingsView","app/production/templates/settings"],function(e,t,a,n,i,p){"use strict";return i.extend({clientUrl:"#production;settings",template:p,events:e.extend({"change input[data-setting]":function(e){this.updateSetting(e.target.name,e.target.value)}},i.prototype.events),afterRender:function(){i.prototype.afterRender.apply(this,arguments),this.$id("rearmDowntimeReason").select2({allowClear:!0,placeholder:" ",data:a.map(t)}),this.$id("spigotLines").select2({allowClear:!0,placeholder:" ",multiple:!0,data:n.getAllByType("prodLine").filter(function(e){return!e.get("deactivatedAt")}).map(t)})}})});

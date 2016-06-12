@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(e){return{"msg:offline":function(e){return"Brak połączenia z serwerem :("},"msg:undefined":function(e){return"Dla tej strony nie ma jeszcze pomocy :("}}});
