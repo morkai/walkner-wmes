@@ -894,6 +894,12 @@ app/isa/templates/eventTable.js
 app/isa/templates/eventRow.js
 app/isa/views/IsaEventsView.js
 app/isa/templates/page.js
+app/isa/templates/messages/whmanNotFound.js
+app/isa/templates/messages/noAction.js
+app/isa/templates/messages/acceptFailure.js
+app/isa/templates/messages/finishFailure.js
+app/isa/templates/messages/acceptSuccess.js
+app/isa/templates/messages/finishSuccess.js
 app/isa/pages/IsaLineStatePage.js
 app/isa/routes.js
 app/qiResults/QiResult.js
