@@ -107,13 +107,6 @@ module.exports = function setUpIsaRoutes(app, isaModule)
         return res.sendStatus(404);
       }
 
-      if (isaModule.disabled)
-      {
-        isaModule.disabled[lineState._id] = true;
-
-        return next(app.createError('MODULE_DISABLED', 503));
-      }
-
       res.json(lineState);
     });
   }

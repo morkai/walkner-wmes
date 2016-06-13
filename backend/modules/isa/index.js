@@ -2,8 +2,6 @@
 
 'use strict';
 
-var fs = require('fs');
-var _ = require('lodash');
 var setUpLineState = require('./lineState');
 var setUpRoutes = require('./routes');
 var setUpIsaShiftPersonnel = require('./shiftPersonnel');
@@ -19,10 +17,6 @@ exports.DEFAULT_CONFIG = {
 exports.start = function startIsaModule(app, module)
 {
   var config = module.config;
-
-  module.disabled = fs.existsSync(app.pathTo('..', 'isa-enabled')) ? null : {};
-
-  app.broker.subscribe('app.started', checkModuleAvailability).setLimit(1);
 
   app.onModuleReady(
     [
@@ -49,22 +43,4 @@ exports.start = function startIsaModule(app, module)
     ],
     setUpIsaShiftPersonnel.bind(null, app, module)
   );
-
-  function checkModuleAvailability()
-  {
-    fs.access(app.pathTo('..', 'isa-enabled'), function(err)
-    {
-      if (err)
-      {
-        return setTimeout(checkModuleAvailability, 30000);
-      }
-
-      _.forEach(module.disabled, function(unused, prodLineId)
-      {
-        app.broker.publish('isaLineStates.updated.' + prodLineId, module.getLineStateSync(prodLineId).toJSON());
-      });
-
-      module.disabled = null;
-    });
-  }
 };
