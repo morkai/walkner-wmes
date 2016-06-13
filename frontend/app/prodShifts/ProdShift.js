@@ -874,7 +874,7 @@ define([
 
     isSpigotLine: function()
     {
-      return (this.settings.getValue('spigotLines') || '').split(',').indexOf(this.prodLine.id) === -1;
+      return (this.settings.getValue('spigotLines') || '').split(',').indexOf(this.prodLine.id) !== -1;
     },
 
     getSpigotComponent: function()
