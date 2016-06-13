@@ -349,6 +349,66 @@
   display: block;
   margin-top: 5px;
 }
+.isa-message {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 20px;
+  border-width: 10px;
+  z-index: 100002;
+}
+.isa-message h1 {
+  margin-top: 0;
+  font-size: 48px;
+  font-weight: bold;
+}
+.isa-message.message-info h1 {
+  border-bottom: 2px solid #B8E2FB;
+  padding-bottom: 10px;
+}
+.isa-message th {
+  padding: 10px 20px 0 0;
+  font-size: 48px;
+  font-weight: normal;
+  vertical-align: top;
+  line-height: 1.2;
+}
+.isa-message td {
+  padding-top: 10px;
+  max-width: 750px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.isa-message p {
+  font-size: 32px;
+  line-height: 1.2;
+}
+.isa-message p:only-child {
+  font-size: 48px;
+  text-align: center;
+}
+.isa-message-key {
+  display: inline-block;
+}
+.isa-message-value {
+  display: inline-block;
+  font-weight: bold;
+}
+.isa-message-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .5);
+  z-index: 100001;
+}
 @media (max-width: 1900px) {
   .isa-lineState-prop-value {
     max-width: 200px;

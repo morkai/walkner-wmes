@@ -1,0 +1,31 @@
+<h1><%- t('isa', 'msg:accept:header', {requestType: requestType}) %></h1>
+<table>
+  <tbody>
+  <% if (requestType === 'delivery') { %>
+  <tr>
+    <th>Rodzaj palety:</th>
+    <td><%= palletKind.label %></td>
+  </tr>
+  <% } %>
+  <tr>
+    <th><%- t('isa', 'lineState:whman') %>:</th>
+    <td><%= whman %></td>
+  </tr>
+  <tr>
+    <th><%- t('isa', 'lineState:division') %>:</th>
+    <td><%= orgUnits.division %></td>
+  </tr>
+  <tr>
+    <th><%- t('isa', 'lineState:prodFlow') %>:</th>
+    <td><%= orgUnits.prodFlow %></td>
+  </tr>
+  <tr>
+    <th><%- t('isa', 'lineState:workCenter') %>:</th>
+    <td><%= orgUnits.workCenter %></td>
+  </tr>
+  <tr>
+    <th><%- t('isa', 'lineState:prodLine') %>:</th>
+    <td><%= orgUnits.prodLine %></td>
+  </tr>
+  </tbody>
+</table>

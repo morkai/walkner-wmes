@@ -4,6 +4,7 @@ define([
   '../router',
   '../viewport',
   '../user',
+  'app/users/UserCollection',
   './IsaShiftPersonnel',
   './IsaLineStateCollection',
   './IsaEventCollection',
@@ -13,6 +14,7 @@ define([
   router,
   viewport,
   user,
+  UserCollection,
   IsaShiftPersonnel,
   IsaLineStateCollection,
   IsaEventCollection,
@@ -25,6 +27,9 @@ define([
     viewport.showPage(new IsaLineStatePage({
       fullscreen: req.query.fullscreen !== undefined,
       model: {
+        warehousemen: new UserCollection(null, {
+          rqlQuery: 'select(firstName,lastName,personellId)&privileges=ISA%3AWHMAN'
+        }),
         shiftPersonnel: new IsaShiftPersonnel(null, {current: true}),
         lineStates: new IsaLineStateCollection(null, {paginate: false}),
         events: new IsaEventCollection(null, {paginate: false, rqlQuery: 'sort(-time)&limit(50)'}),

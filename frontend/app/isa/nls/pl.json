@@ -25,6 +25,8 @@
   "lineState:header:delivery": "dostawa <em>{palletKind}</em>",
   "lineState:division": "Wydział",
   "lineState:prodFlow": "Przepływ",
+  "lineState:workCenter": "WorkCenter",
+  "lineState:prodLine": "Linia",
   "lineState:time": "Czas",
   "lineState:whman": "Magazynier",
 
@@ -111,5 +113,12 @@
   "hotkeys:p:kbd": "P",
   "hotkeys:p:lbl": "Personel",
   "hotkeys:f:kbd": "F",
-  "hotkeys:f:lbl": "Filtr"
+  "hotkeys:f:lbl": "Filtr",
+
+  "msg:whmanNotFound": "Nie znaleziono magazyniera:<br>{personnelId}",
+  "msg:noAction": "Brak akcji dla magazyniera:<br>{whman}",
+  "msg:accept:failure": "Nie udało się zaakceptować żądania :-(",
+  "msg:accept:header": "{requestType, select, delivery{Dostawa palety} other{Odbiór palety}}",
+  "msg:finish:failure": "Nie udało się zakończyć żądania :-(",
+  "msg:finish:success": "Zakończono żądanie {type, select, delivery{dostawy na linię} other{odbioru z linii}}<br>{line}"
 }

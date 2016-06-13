@@ -26,6 +26,8 @@
     "lineState:header:delivery": "<em>{palletKind}</em> delivery",
     "lineState:division": "Division",
     "lineState:prodFlow": "Flow",
+    "lineState:workCenter": "WorkCenter",
+    "lineState:prodLine": "Line",
     "lineState:time": "Time",
     "lineState:whman": "Warehouseman",
 
@@ -112,7 +114,14 @@
     "hotkeys:p:kbd": "P",
     "hotkeys:p:lbl": "Personnel",
     "hotkeys:f:kbd": "F",
-    "hotkeys:f:lbl": "Filter"
+    "hotkeys:f:lbl": "Filter",
+
+    "msg:whmanNotFound": "Warehouseman not found:<br>{personnelId}",
+    "msg:noAction": "No action for warehouseman:<br>{whman}",
+    "msg:accept:failure": "Failed to accept the request :-(",
+    "msg:accept:header": "{requestType, select, delivery{Pallet delivery} other{Pallet pickup}}",
+    "msg:finish:failure": "Failed to finish the request :-(",
+    "msg:finish:success": "Finish a {type, select, delivery{delivery to} other{pickup from}}<br>{line}"
   },
   "pl": true
 }

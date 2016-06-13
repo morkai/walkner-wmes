@@ -12,7 +12,13 @@ define([
   '../views/IsaLineStatesView',
   '../views/IsaEventsView',
   '../views/IsaResponderPickerView',
-  'app/isa/templates/page'
+  'app/isa/templates/page',
+  'app/isa/templates/messages/whmanNotFound',
+  'app/isa/templates/messages/noAction',
+  'app/isa/templates/messages/acceptFailure',
+  'app/isa/templates/messages/finishFailure',
+  'app/isa/templates/messages/acceptSuccess',
+  'app/isa/templates/messages/finishSuccess'
 ], function(
   _,
   $,
@@ -25,7 +31,13 @@ define([
   IsaLineStatesView,
   IsaEventsView,
   IsaResponderPickerView,
-  template
+  template,
+  whmanNotFoundMessage,
+  noActionMessage,
+  acceptFailureMessage,
+  finishFailureMessage,
+  acceptSuccessMessage,
+  finishSuccessMessage
 ) {
   'use strict';
 
@@ -58,6 +70,7 @@ define([
     localTopics: {
       'socket.connected': function()
       {
+        this.promised(this.warehouseman.fetch({reset: true}));
         this.promised(this.lineStates.fetch({reset: true}));
         this.promised(this.shiftPersonnel.fetch());
 
@@ -184,6 +197,7 @@ define([
         ShiftLeft: false,
         ShiftRight: false
       };
+      this.personnelIdBuffer = '';
 
       this.timers.updateTime = setInterval(this.updateTimes.bind(this), 15000);
 
@@ -205,6 +219,7 @@ define([
 
     defineModels: function()
     {
+      this.warehousemen = bindLoadingMessage(this.model.warehousemen, this);
       this.shiftPersonnel = bindLoadingMessage(this.model.shiftPersonnel, this);
       this.lineStates = bindLoadingMessage(this.model.lineStates, this);
       this.eventz = bindLoadingMessage(this.model.events, this);
@@ -267,6 +282,7 @@ define([
       this.model.selectedResponder = JSON.parse(localStorage.ISA_SELECTED_RESPONDER || 'null');
 
       return when(
+        this.warehousemen.fetch({reset: true}),
         this.shiftPersonnel.fetch(),
         this.lineStates.fetch({reset: true}),
         this.eventz.fetch({reset: true})
@@ -463,8 +479,6 @@ define([
       var code = this.getKeyCode(e);
       var tagName = e.target.tagName;
 
-      console.log(e);
-
       if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT')
       {
         if (code === 'Backspace')
@@ -576,6 +590,182 @@ define([
 
         return false;
       }
+
+      this.personnelIdBuffer += digit.toString();
+
+      this.schedulePersonnelIdCheck();
+    },
+
+    schedulePersonnelIdCheck: function()
+    {
+      if (this.timers.personnelIdCheck)
+      {
+        clearTimeout(this.timers.personnelIdCheck);
+      }
+
+      this.timers.personnelIdCheck = setTimeout(this.checkPersonnelId.bind(this), 200);
+    },
+
+    checkPersonnelId: function()
+    {
+      var personnelId = this.personnelIdBuffer;
+
+      this.personnelIdBuffer = '';
+
+      if (this.timers.hideMessage)
+      {
+        return;
+      }
+
+      var warehouseman = this.findWarehousemanByPersonnelId(personnelId);
+
+      if (!warehouseman)
+      {
+        if (personnelId.length <= 3)
+        {
+          return;
+        }
+
+        return this.showMessage('error', 5000, whmanNotFoundMessage({
+          personnelId: personnelId
+        }));
+      }
+
+      var response = this.findResponseByResponder(warehouseman);
+
+      if (response)
+      {
+        return this.finishResponse(response);
+      }
+
+      var request = this.findRequest();
+
+      if (request)
+      {
+        return this.acceptRequest(request, warehouseman);
+      }
+
+      this.showMessage('error', 5000, noActionMessage({
+        whman: warehouseman.getLabel()
+      }));
+    },
+
+    findWarehousemanByPersonnelId: function(personnelId)
+    {
+      return this.warehousemen.findWhere({personellId: personnelId});
+    },
+
+    findResponseByResponder: function(user)
+    {
+      return this.lineStates.find(function(lineState)
+      {
+        return lineState.get('status') === 'response' && lineState.getWhman().id === user.id;
+      });
+    },
+
+    findRequest: function()
+    {
+      return this.lineStates.find(function(lineState)
+      {
+        return lineState.get('status') === 'request';
+      });
+    },
+
+    acceptRequest: function(lineState, responder)
+    {
+      var page = this;
+
+      lineState.accept({id: responder.id, label: responder.getLabel()}, function(err)
+      {
+        if (err)
+        {
+          page.showMessage('error', 5000, acceptFailureMessage({
+            error: err.message
+          }));
+        }
+        else
+        {
+          page.showMessage('info', 15000, acceptSuccessMessage({
+            whman: responder.getLabel(),
+            requestType: lineState.get('requestType'),
+            orgUnits: lineState.get('orgUnits'),
+            palletKind: lineState.get('data').palletKind || '?'
+          }));
+        }
+      });
+    },
+
+    finishResponse: function(lineState)
+    {
+      var page = this;
+      var requestType = lineState.get('requestType');
+
+      lineState.finish(function(err)
+      {
+        if (err)
+        {
+          page.showMessage('error', 5000, finishFailureMessage({
+            error: err.message
+          }));
+        }
+        else
+        {
+          page.showMessage('success', 5000, finishSuccessMessage({
+            type: requestType,
+            line: lineState.id
+          }));
+        }
+      });
+    },
+
+    showMessage: function(type, time, message)
+    {
+      if (this.timers.hideMessage)
+      {
+        clearTimeout(this.timers.hideMessage);
+      }
+
+      var $overlay = this.$id('messageOverlay');
+      var $message = this.$id('message');
+
+      $overlay.css('display', 'block');
+      $message
+        .html(message).css({
+          display: 'block',
+          marginLeft: '-5000px'
+        })
+        .removeClass('message-error message-warning message-success message-info')
+        .addClass('message-' + type);
+
+      $message.css({
+        display: 'none',
+        marginTop: ($message.outerHeight() / 2 * -1) + 'px',
+        marginLeft: ($message.outerWidth() / 2 * -1) + 'px'
+      });
+
+      $message.fadeIn();
+
+      this.timers.hideMessage = setTimeout(this.hideMessage.bind(this), time);
+    },
+
+    hideMessage: function()
+    {
+      if (this.timers.hideMessage)
+      {
+        clearTimeout(this.timers.hideMessage);
+      }
+
+      var page = this;
+      var $overlay = page.$id('messageOverlay');
+      var $message = page.$id('message');
+
+      $message.fadeOut(function()
+      {
+        $overlay.css('display', '');
+        $message.css('display', '');
+
+        page.timers.hideMessage = null;
+      });
     },
 
     collapseEvents: function()
