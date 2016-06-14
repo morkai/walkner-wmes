@@ -555,7 +555,7 @@ define([
 
       var digit = e.keyCode - 48;
 
-      if (digit < 1 || digit > 9)
+      if (digit < 0 || digit > 9)
       {
         return;
       }
@@ -584,7 +584,7 @@ define([
         action = 'cancel';
       }
 
-      if (view)
+      if (view && digit !== 0)
       {
         view.actAt(action, digit);
 
