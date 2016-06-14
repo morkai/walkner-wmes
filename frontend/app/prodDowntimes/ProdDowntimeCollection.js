@@ -147,7 +147,8 @@ define([
         operators: prodShift.get('operators'),
         mechOrder: prodShift.prodShiftOrder.get('mechOrder'),
         orderId: prodShift.prodShiftOrder.get('orderId'),
-        operationNo: prodShift.prodShiftOrder.get('operationNo')
+        operationNo: prodShift.prodShiftOrder.get('operationNo'),
+        auto: !!downtimeInfo.auto
       });
 
       prodDowntime.set(

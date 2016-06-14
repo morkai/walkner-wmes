@@ -581,7 +581,7 @@ define([
       }
       else
       {
-        this.startAutoDowntimeAfter(downtime);
+        this.startNextAutoDowntime(downtime);
       }
     },
 
@@ -1000,11 +1000,31 @@ define([
         return;
       }
 
-      var initialDowntimeReason = downtimeReasons.get(subdivision.get('initialDowntime'));
-      var autoDowntimeReason = downtimeReasons.get(subdivision.get('autoDowntime'));
-      var downtimeReason = this.shouldStartInitialDowntime(initialDowntimeReason)
-        ? initialDowntimeReason
-        : autoDowntimeReason;
+      var autoDowntimes = subdivision.get('autoDowntimes');
+
+      if (_.isEmpty(autoDowntimes))
+      {
+        return;
+      }
+
+      var autoDowntime;
+
+      if (this.isBetweenInitialDowntimeWindow(Date.now()))
+      {
+        autoDowntime = _.find(autoDowntimes, function(autoDowntime) { return autoDowntime.when === 'initial'; });
+      }
+
+      if (!autoDowntime)
+      {
+        autoDowntime = _.find(autoDowntimes, function(autoDowntime) { return autoDowntime.when === 'always'; });
+      }
+
+      if (!autoDowntime)
+      {
+        return;
+      }
+
+      var downtimeReason = downtimeReasons.get(autoDowntime.reason);
 
       if (!downtimeReason)
       {
@@ -1014,41 +1034,56 @@ define([
       this.startDowntime({
         aor: aor,
         reason: downtimeReason.id,
-        reasonComment: ''
+        reasonComment: '',
+        auto: true
       });
     },
 
-    startAutoDowntimeAfter: function(prevDowntime)
+    startNextAutoDowntime: function(prevDowntime)
     {
-      var aor = this.getDefaultAor();
-      var subdivision = subdivisions.get(this.get('subdivision'));
-
-      if (!prevDowntime || !aor || !subdivision)
+      if (!prevDowntime || !prevDowntime.get('auto'))
       {
         return;
       }
 
-      var initialDowntimeReason = downtimeReasons.get(subdivision.get('initialDowntime'));
-      var autoDowntimeReason = downtimeReasons.get(subdivision.get('autoDowntime'));
+      var aor = this.getDefaultAor();
+      var subdivision = subdivisions.get(this.get('subdivision'));
 
-      if (initialDowntimeReason
-        && autoDowntimeReason
-        && prevDowntime.get('reason') === initialDowntimeReason.id
-        && this.isBetweenInitialDowntimeWindow(prevDowntime.get('startedAt').getTime()))
+      if (!aor || !subdivision)
+      {
+        return;
+      }
+
+      var autoDowntimes = subdivision.get('autoDowntimes');
+
+      if (_.isEmpty(autoDowntimes))
+      {
+        return;
+      }
+
+      var nextAutoDowntime;
+
+      for (var i = 0; i < autoDowntimes.length; ++i)
+      {
+        var autoDowntime = autoDowntimes[i];
+
+        if (autoDowntime.reason === prevDowntime.get('reason'))
+        {
+          nextAutoDowntime = autoDowntimes[i + 1];
+
+          break;
+        }
+      }
+
+      if (nextAutoDowntime)
       {
         this.startDowntime({
           aor: aor,
-          reason: autoDowntimeReason.id,
-          reasonComment: ''
+          reason: nextAutoDowntime.reason,
+          reasonComment: '',
+          auto: true
         });
       }
-    },
-
-    shouldStartInitialDowntime: function(initialDowntimeReason)
-    {
-      return initialDowntimeReason
-        && this.isBetweenInitialDowntimeWindow(Date.now())
-        && this.prodDowntimes.every(function(d) { return d.get('reason') !== initialDowntimeReason.id; });
     },
 
     isBetweenInitialDowntimeWindow: function(time)

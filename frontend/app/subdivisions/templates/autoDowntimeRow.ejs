@@ -1,0 +1,19 @@
+<tr>
+  <td class="is-min"><input name="autoDowntimes[<%- autoDowntime.i %>].reason" type="hidden" value="<%- autoDowntime.reason.id %>"> <%= autoDowntime.reason.text %></td>
+  <td class="is-min">
+    <% ['initial', 'always'].forEach(function(when) { %>
+    <label class="radio-inline">
+      <input name="autoDowntimes[<%- autoDowntime.i %>].when" type="radio" value="<%- when %>" <%- when === autoDowntime.when ? 'checked' : '' %>>
+      <%- t('subdivisions', 'autoDowntimes:when:' + when) %>
+    </label>
+    <% }) %>
+  </td>
+  <td class="actions">
+    <div class="actions-group">
+      <button class="btn btn-default" data-auto-downtime-action="up" type="button"><i class="fa fa-arrow-up"></i></button>
+      <button class="btn btn-default" data-auto-downtime-action="down" type="button"><i class="fa fa-arrow-down"></i></button>
+      <button class="btn btn-default" data-auto-downtime-action="remove" type="button"><i class="fa fa-remove"></i></button>
+    </div>
+  </td>
+  <td></td>
+</tr>

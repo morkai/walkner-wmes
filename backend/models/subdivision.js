@@ -4,6 +4,21 @@
 
 module.exports = function setupSubdivisionModel(app, mongoose)
 {
+  var autoDowntimeSchema = mongoose.Schema({
+    reason: {
+      type: String,
+      ref: 'DowntimeReason',
+      required: true
+    },
+    when: {
+      type: String,
+      enum: ['initial', 'always'],
+      default: 'always'
+    }
+  }, {
+    _id: false
+  });
+
   var subdivisionSchema = mongoose.Schema({
     division: {
       type: String,
@@ -32,16 +47,7 @@ module.exports = function setupSubdivisionModel(app, mongoose)
       ref: 'Aor',
       default: null
     },
-    autoDowntime: {
-      type: String,
-      ref: 'DowntimeReason',
-      default: null
-    },
-    initialDowntime: {
-      type: String,
-      ref: 'DowntimeReason',
-      default: null
-    }
+    autoDowntimes: [autoDowntimeSchema]
   }, {
     id: false
   });

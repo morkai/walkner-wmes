@@ -22,8 +22,13 @@
   "PROPERTY:prodTaskTags": "Tagi zadań produkcyjnych",
   "PROPERTY:type": "Typ",
   "PROPERTY:aor": "Domyślny obszar odp.",
-  "PROPERTY:autoDowntime": "Automatyczny przestój",
-  "PROPERTY:initialDowntime": "Początkowy przestój",
+  "PROPERTY:autoDowntimes": "Automatyczne przestoje",
+
+  "autoDowntimes:add": "Dodaj automatyczny przestój",
+  "autoDowntimes:reason": "Automatyczny powód przestoju",
+  "autoDowntimes:when": "Inicjalizacja",
+  "autoDowntimes:when:initial": "na początku zmiany",
+  "autoDowntimes:when:always": "zawsze",
 
   "TYPE:assembly": "Montaż",
   "TYPE:press": "Tłocznia",

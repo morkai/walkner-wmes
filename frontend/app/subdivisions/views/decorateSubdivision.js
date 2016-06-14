@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n',
   'app/data/aors',
   'app/data/downtimeReasons',
@@ -8,6 +9,7 @@ define([
   'app/data/views/renderOrgUnitPath'
 ],
 function(
+  _,
   t,
   aors,
   downtimeReasons,
@@ -16,7 +18,7 @@ function(
 ) {
   'use strict';
 
-  return function decorateSubdivision(model)
+  return function decorateSubdivision(model, details)
   {
     var obj = model.toJSON();
 
@@ -27,11 +29,25 @@ function(
     var aor = aors.get(obj.aor);
     obj.aor = aor ? aor.getLabel() : '-';
 
-    var initialDowntime = downtimeReasons.get(obj.initialDowntime);
-    obj.initialDowntime = initialDowntime ? initialDowntime.getLabel() : '-';
+    obj.autoDowntimes = _.map(obj.autoDowntimes, function(autoDowntime)
+    {
+      var reason = downtimeReasons.get(autoDowntime.reason);
 
-    var autoDowntime = downtimeReasons.get(obj.autoDowntime);
-    obj.autoDowntime = autoDowntime ? autoDowntime.getLabel() : '-';
+      return !reason ? null : {
+        reason: reason.getLabel(),
+        when: autoDowntime.when
+      };
+    }).filter(function(autoDowntime)
+    {
+      return !!autoDowntime;
+    });
+
+    if (details !== true)
+    {
+      obj.autoDowntimes = obj.autoDowntimes.length === 0 ? '-' : obj.autoDowntimes
+        .map(function(autoDowntime) { return autoDowntime.reason; })
+        .join('; ');
+    }
 
     return obj;
   };

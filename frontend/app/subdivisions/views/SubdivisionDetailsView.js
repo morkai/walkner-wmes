@@ -23,7 +23,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        model: decorateSubdivision(this.model)
+        model: decorateSubdivision(this.model, true)
       };
     }
 

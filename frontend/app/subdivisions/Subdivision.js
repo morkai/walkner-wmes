@@ -21,14 +21,16 @@ define([
 
     labelAttribute: 'name',
 
-    defaults: {
-      division: null,
-      type: 'assembly',
-      name: null,
-      prodTaskTags: null,
-      aor: null,
-      autoDowntime: null,
-      initialDowntime: null
+    defaults: function()
+    {
+      return {
+        division: null,
+        type: 'assembly',
+        name: null,
+        prodTaskTags: null,
+        aor: null,
+        autoDowntimes: []
+      };
     }
 
   });

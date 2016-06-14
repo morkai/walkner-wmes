@@ -23,8 +23,13 @@
     "PROPERTY:prodTaskTags": "Production task tags",
     "PROPERTY:type": "Type",
     "PROPERTY:aor": "Default AOR",
-    "PROPERTY:autoDowntime": "Auto downtime",
-    "PROPERTY:initialDowntime": "Initial downtime",
+    "PROPERTY:autoDowntimes": "Auto downtimes",
+
+    "autoDowntimes:add": "Add auto downtime",
+    "autoDowntimes:reason": "Auto downtime reason",
+    "autoDowntimes:when": "Initialization",
+    "autoDowntimes:when:initial": "only shift start",
+    "autoDowntimes:when:always": "always",
 
     "TYPE:assembly": "Assembly",
     "TYPE:press": "Press",

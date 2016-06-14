@@ -73,7 +73,8 @@ td.is-number {
 .table tr:last-child .actions-group .btn {
   border-bottom-width: 1px;
 }
-.table-bordered tr:last-child .actions-group .btn {
+.table-bordered tr:last-child .actions-group .btn,
+.table-with-tfoot tr:last-child .actions-group .btn {
   border-bottom-width: 0;
 }
 .table .actions-group .btn:only-child {

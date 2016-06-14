@@ -33,10 +33,9 @@ define([
             {id: 'division', className: 'is-min'},
             {id: 'type', className: 'is-min'},
             {id: 'name', className: 'is-min'},
-            'prodTaskTags',
+            {id: 'prodTaskTags', className: 'is-min'},
             {id: 'aor', className: 'is-min'},
-            {id: 'initialDowntime', className: 'is-min'},
-            {id: 'autoDowntime', className: 'is-min'}
+            'autoDowntimes'
           ],
           serializeRow: decorateSubdivision
         });
