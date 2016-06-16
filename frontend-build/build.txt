@@ -772,6 +772,9 @@ app/prodShiftOrders/routes.js
 app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
+app/isaPalletKinds/IsaPalletKind.js
+app/isaPalletKinds/IsaPalletKindCollection.js
+app/data/isaPalletKinds.js
 app/isa/IsaLineState.js
 app/production/ProductionSetting.js
 app/production/ProductionSettingCollection.js
@@ -807,9 +810,6 @@ app/production/templates/quantityEditor.js
 app/production/views/QuantityEditorView.js
 app/production/templates/quantities.js
 app/production/views/ProductionQuantitiesView.js
-app/isaPalletKinds/IsaPalletKind.js
-app/isaPalletKinds/IsaPalletKindCollection.js
-app/data/isaPalletKinds.js
 app/production/templates/isa.js
 app/production/views/IsaView.js
 app/production/templates/spigotChecker.js
