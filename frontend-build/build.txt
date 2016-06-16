@@ -316,6 +316,10 @@ app/settings/assets/main.css
 ----------------
 app/settings/assets/main.css
 
+app/subdivisions/assets/main.css
+----------------
+app/subdivisions/assets/main.css
+
 app/suggestions/assets/details.css
 ----------------
 app/suggestions/assets/details.css
@@ -455,6 +459,7 @@ assets/../app/emptyOrders/assets/main.css
 assets/../app/fte/assets/main.css
 assets/../app/hourlyPlans/assets/main.css
 assets/../app/divisions/assets/main.css
+assets/../app/subdivisions/assets/main.css
 assets/../app/orders/assets/main.css
 assets/../app/mechOrders/assets/main.css
 assets/../app/vis/assets/main.css
