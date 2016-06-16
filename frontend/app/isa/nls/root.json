@@ -23,7 +23,7 @@
     "responses:empty": "There is no requests in progress.",
 
     "lineState:header:pickup": "pallet pickup",
-    "lineState:header:delivery": "<em>{palletKind}</em> delivery",
+    "lineState:header:delivery": "<em>{palletKindFull}</em> delivery",
     "lineState:division": "Division",
     "lineState:prodFlow": "Flow",
     "lineState:workCenter": "WorkCenter",

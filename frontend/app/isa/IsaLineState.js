@@ -3,11 +3,13 @@
 define([
   '../time',
   '../core/Model',
-  '../data/orgUnits'
+  '../data/orgUnits',
+  '../data/isaPalletKinds'
 ], function(
   time,
   Model,
-  orgUnits
+  orgUnits,
+  palletKinds
 ) {
   'use strict';
 
@@ -92,8 +94,11 @@ define([
     serialize: function()
     {
       var obj = this.toJSON();
+      var palletKindInfo = this.getPalletKind();
+      var palletKindModel = palletKinds.get(palletKindInfo.id);
 
       obj.palletKind = this.getPalletKind().label;
+      obj.palletKindFull = palletKindModel ? palletKindModel.get('fullName') : '';
       obj.whman = this.getWhman().label;
 
       return obj;

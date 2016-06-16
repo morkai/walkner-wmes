@@ -22,7 +22,7 @@
   "responses:empty": "Nie ma żadnych żądań w realizacji.",
 
   "lineState:header:pickup": "odbiór palety",
-  "lineState:header:delivery": "dostawa <em>{palletKind}</em>",
+  "lineState:header:delivery": "dostawa <em>{palletKindFull}</em>",
   "lineState:division": "Wydział",
   "lineState:prodFlow": "Przepływ",
   "lineState:workCenter": "WorkCenter",
