@@ -720,7 +720,7 @@ define([
         }
         else
         {
-          page.showMessage('success', 5000, finishSuccessMessage({
+          page.showMessage('success', 2500, finishSuccessMessage({
             type: requestType,
             line: lineState.id
           }));
