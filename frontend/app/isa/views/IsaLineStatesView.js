@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/i18n',
   'app/viewport',
   'app/core/View',
@@ -10,6 +11,7 @@ define([
   'app/isa/templates/lineState',
   'app/isa/templates/cancelDialog'
 ], function(
+  $,
   t,
   viewport,
   View,
@@ -300,10 +302,37 @@ define([
       if (lineState.get('status') === this.requiredStatus
         && (this.options.mode !== 'responses' || lineState.matchResponder(this.model.selectedResponder)))
       {
-        this.$el
-          .append(this.renderLineState(lineState))
-          .children()
-          .last()
+        var $lineState = $(this.renderLineState(lineState));
+
+        if (this.options.mode === 'requests' && lineState.get('requestType') === 'delivery')
+        {
+          var $lastDelivery = this.$('.isa-lineState[data-request-type="delivery"]').last();
+
+          if ($lastDelivery.length)
+          {
+            $lineState.insertAfter($lastDelivery);
+          }
+          else
+          {
+            var $first = this.$('.isa-lineState').first();
+
+            if ($first.length)
+            {
+              $lineState.insertBefore($first);
+            }
+            else
+            {
+              this.$el.append($lineState);
+            }
+          }
+        }
+        else
+        {
+          this.$el.append($lineState);
+        }
+
+
+        $lineState
           .stop(true, false)
           .fadeIn(done);
         this.recount();

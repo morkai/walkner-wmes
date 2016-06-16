@@ -20,17 +20,25 @@ define([
 
     comparator: function(a, b)
     {
-      if (a.attributes.requestedAt === null)
+      a = a.attributes;
+      b = b.attributes;
+
+      if (a.requestedAt === null)
       {
         return 1;
       }
 
-      if (b.attributes.requestedAt === null)
+      if (b.requestedAt === null)
       {
         return -1;
       }
 
-      return a.attributes.requestedAt - b.attributes.requestedAt;
+      if (a.requestType !== b.requestType)
+      {
+        return a.requestType === 'delivery' ? -1 : 1;
+      }
+
+      return a.requestedAt - b.requestedAt;
     }
 
   });
