@@ -264,6 +264,7 @@ define([
         }
       });
       this.listenTo(this.lineStates, 'error sync', this.applyPendingChanges);
+      this.listenTo(this.lineStates, 'change:requestedAt', this.lineStates.sort.bind(this.lineStates));
 
       this.listenTo(this.shiftPersonnel, 'change:users', this.attractToShiftPersonnel);
 

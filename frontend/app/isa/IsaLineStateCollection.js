@@ -18,8 +18,18 @@ define([
       return res.collection.map(IsaLineState.parse);
     },
 
-    sort: function(a, b)
+    comparator: function(a, b)
     {
+      if (a.attributes.requestedAt === null)
+      {
+        return 1;
+      }
+
+      if (b.attributes.requestedAt === null)
+      {
+        return -1;
+      }
+
       return a.attributes.requestedAt - b.attributes.requestedAt;
     }
 
