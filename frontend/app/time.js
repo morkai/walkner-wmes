@@ -53,15 +53,27 @@ define([
     return dateMoment.isValid() ? dateMoment.format(format) : null;
   };
 
-  time.toTagData = function(date)
+  time.toTagData = function(date, absolute)
   {
+    if (!date)
+    {
+      return {
+        iso: '?',
+        long: '?',
+        human: '?',
+        daysAgo: 0
+      };
+    }
+
     var timeMoment = time.getMoment(date);
+    var then = timeMoment.valueOf();
+    var now = Date.now();
 
     return {
       iso: timeMoment.toISOString(),
       long: timeMoment.format('LLLL'),
-      human: timeMoment.fromNow(),
-      daysAgo: -timeMoment.diff(Date.now(), 'days')
+      human: absolute === true ? timeMoment.from(then > now ? then : now) : timeMoment.fromNow(),
+      daysAgo: -timeMoment.diff(now, 'days')
     };
   };
 

@@ -68,7 +68,7 @@ define([
 
     updateTime: function(silent)
     {
-      this.set('time', time.toTagData(this.get('requestedAt')), {silent: silent});
+      this.set('time', time.toTagData(this.get('requestedAt'), true), {silent: silent});
     },
 
     getPalletKind: function()
