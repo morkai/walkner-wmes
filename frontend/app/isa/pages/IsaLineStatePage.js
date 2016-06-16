@@ -7,6 +7,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/data/isaPalletKinds',
   '../IsaLineState',
   '../views/IsaShiftPersonnelView',
   '../views/IsaLineStatesView',
@@ -26,6 +27,7 @@ define([
   viewport,
   View,
   bindLoadingMessage,
+  palletKinds,
   IsaLineState,
   IsaShiftPersonnelView,
   IsaLineStatesView,
@@ -686,11 +688,18 @@ define([
         }
         else
         {
+          var palletKind = lineState.get('data').palletKind;
+
+          if (palletKind)
+          {
+            palletKind = palletKinds.get(palletKind.id);
+          }
+
           page.showMessage('info', 15000, acceptSuccessMessage({
             whman: responder.getLabel(),
             requestType: lineState.get('requestType'),
             orgUnits: lineState.get('orgUnits'),
-            palletKind: lineState.get('data').palletKind || '?'
+            palletKind: !palletKind ? '?' : palletKind.get('fullName')
           }));
         }
       });
