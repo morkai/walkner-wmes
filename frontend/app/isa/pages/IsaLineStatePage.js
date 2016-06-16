@@ -695,7 +695,7 @@ define([
             palletKind = palletKinds.get(palletKind.id);
           }
 
-          page.showMessage('info', 15000, acceptSuccessMessage({
+          page.showMessage('info', 10000, acceptSuccessMessage({
             whman: responder.getLabel(),
             requestType: lineState.get('requestType'),
             orgUnits: lineState.get('orgUnits'),
