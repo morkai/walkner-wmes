@@ -331,7 +331,6 @@ define([
           this.$el.append($lineState);
         }
 
-
         $lineState
           .stop(true, false)
           .fadeIn(done);

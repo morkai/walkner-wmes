@@ -282,7 +282,7 @@ define([
 
     load: function(when)
     {
-      this.model.selectedResponder = JSON.parse(localStorage.ISA_SELECTED_RESPONDER || 'null');
+      this.model.selectedResponder = null;
 
       return when(
         this.warehousemen.fetch({reset: true}),
