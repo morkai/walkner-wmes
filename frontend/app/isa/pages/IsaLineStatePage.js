@@ -491,6 +491,8 @@ define([
 
         if (code === 'Space')
         {
+          this.hideMessage();
+
           return false;
         }
 
@@ -499,6 +501,11 @@ define([
           e.preventDefault();
 
           return;
+        }
+
+        if (code === 'Escape' || code === 'Enter')
+        {
+          this.hideMessage();
         }
       }
 
@@ -760,10 +767,12 @@ define([
 
     hideMessage: function()
     {
-      if (this.timers.hideMessage)
+      if (!this.timers.hideMessage)
       {
-        clearTimeout(this.timers.hideMessage);
+        return;
       }
+
+      clearTimeout(this.timers.hideMessage);
 
       var page = this;
       var $overlay = page.$id('messageOverlay');
@@ -771,8 +780,8 @@ define([
 
       $message.fadeOut(function()
       {
-        $overlay.css('display', '');
-        $message.css('display', '');
+        $overlay.css('display', 'none');
+        $message.css('display', 'none');
 
         page.timers.hideMessage = null;
       });
