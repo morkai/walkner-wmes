@@ -156,10 +156,10 @@ define([
             point: point,
             color: point.color || point.series.color,
             name: rowNameFormatter(point),
-            prefix: options.valuePrefix,
-            suffix: options.valueSuffix,
+            prefix: typeof options.valuePrefix === 'function' ? options.valuePrefix(point) : options.valuePrefix,
+            suffix: typeof options.valueSuffix === 'function' ? options.valueSuffix(point) : options.valueSuffix,
             decimals: options.valueDecimals,
-            value: valueFormatter(point)
+            value: (options.valueFormatter || valueFormatter)(point)
           });
         });
 

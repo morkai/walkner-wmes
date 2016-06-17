@@ -301,7 +301,7 @@ define([
 
       usedYAxis = Object.keys(usedYAxis);
 
-      if (single && usedYAxis.length === 1 && chartSeries.length)
+      if (single && usedYAxis.length && chartSeries.length)
       {
         return this.serializeSingleSeriesAndCategories(chartSeries, usedYAxis[0]);
       }
@@ -347,6 +347,16 @@ define([
 
     serializeSingleSeriesAndCategories: function(chartSeries, yAxis)
     {
+      var dataLabelsFormatter = function()
+      {
+        var y = this.point.realY === null ? this.y : this.point.realY;
+
+        return y == null || y === 0 ? '' : Highcharts.numberFormat(Math.round(y * 100) / 100, -1);
+      };
+      var tooltip = {
+        valueSuffix: function(point) { return point.valueSuffix; },
+        valueFormatter: function(point) { return point.realY === null ? point.y : point.realY; }
+      };
       var categories = {};
       var series = [{
         id: 'plan',
@@ -354,7 +364,7 @@ define([
         name: t('reports', '8:column:plan'),
         yAxis: yAxis,
         data: [],
-        tooltip: chartSeries[0].tooltip,
+        tooltip: tooltip,
         grouping: false,
         borderWidth: 0,
         groupPadding: 0,
@@ -365,11 +375,12 @@ define([
         name: t('reports', '8:column:real'),
         yAxis: yAxis,
         data: [],
-        tooltip: chartSeries[0].tooltip,
+        tooltip: tooltip,
         grouping: false,
         borderWidth: 0,
         color: 'rgba(0, 170, 255, 1)'
       }];
+      var maxTimeValue = -1;
 
       _.forEach(chartSeries, function(chartSerie)
       {
@@ -378,32 +389,76 @@ define([
           categories[chartSerie.metricId] = {
             label: chartSerie.metricLabel,
             plan: null,
-            real: null
+            real: null,
+            realPlan: null,
+            realReal: null,
+            valueSuffix: chartSerie.tooltip.valueSuffix
           };
         }
 
-        categories[chartSerie.metricId][chartSerie.planReal] = chartSerie.data[0].y;
+        var value = chartSerie.data[0].y;
+
+        if (chartSerie.metricId !== 'plan' && chartSerie.metricId !== 'efficiency')
+        {
+          maxTimeValue = Math.max(maxTimeValue, value);
+        }
+
+        categories[chartSerie.metricId][chartSerie.planReal] = value;
       });
 
-      _.forEach(categories, function(category)
+      if (maxTimeValue !== -1)
+      {
+        if (categories.plan)
+        {
+          this.calculateFakeValues(categories.plan, maxTimeValue);
+        }
+
+        if (categories.efficiency)
+        {
+          this.calculateFakeValues(categories.efficiency, maxTimeValue);
+        }
+      }
+
+      _.forEach(categories, function(category, metricId)
       {
         var planInside = category.plan < category.real;
+        var color;
+
+        if (category.plan !== null)
+        {
+          if (metricId === 'plan' || metricId === 'efficiency')
+          {
+            color = planInside ? '#5cb85c' : '#d9534f';
+          }
+          else
+          {
+            color = planInside ? '#d9534f' : '#5cb85c';
+          }
+        }
 
         series[0].data.push({
           y: category.plan,
+          realY: category.realPlan,
+          metricId: metricId,
           dataLabels: {
-            inside: planInside
-          }
+            inside: planInside,
+            formatter: dataLabelsFormatter
+          },
+          valueSuffix: category.valueSuffix
         });
         series[1].data.push({
           y: category.real,
+          realY: category.realReal,
+          metricId: metricId,
           dataLabels: {
             inside: !planInside,
             style: {
               fontStyle: 'oblique'
-            }
+            },
+            formatter: dataLabelsFormatter
           },
-          color: category.plan === null ? undefined : planInside ? '#d9534f' : '#5cb85c'
+          color: color,
+          valueSuffix: category.valueSuffix
         });
       });
 
@@ -411,6 +466,45 @@ define([
         categories: _.map(categories, function(category) { return category.label; }),
         series: series
       };
+    },
+
+    calculateFakeValues: function(category, maxTimeValue)
+    {
+      var plan = category.plan;
+      var real = category.real;
+      var hasPlan = plan !== null;
+      var hasReal = real !== null;
+
+      if (hasPlan)
+      {
+        category.realPlan = Math.round(plan);
+        category.plan = maxTimeValue;
+      }
+
+      if (hasReal)
+      {
+        category.realReal = Math.round(real);
+        category.real = maxTimeValue;
+      }
+
+      if (hasPlan && hasReal)
+      {
+        if (real > plan)
+        {
+          category.real = maxTimeValue;
+          category.plan = maxTimeValue * (category.realPlan / category.realReal);
+        }
+        else if (plan > real)
+        {
+          category.plan = maxTimeValue;
+          category.real = maxTimeValue * (category.realReal / category.realPlan);
+        }
+        else
+        {
+          category.plan = maxTimeValue;
+          category.real = maxTimeValue;
+        }
+      }
     },
 
     serializeSingleChartTitle: function()
