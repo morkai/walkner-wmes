@@ -37,15 +37,15 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
       productionModule.getProdData('shift', req.prodShiftId, this.parallel());
       ProdDowntime.find({prodShift: req.prodShiftId}).limit(8).sort({startedAt: -1}).lean().exec(this.parallel());
       Setting.find({_id: /^production/}).lean().exec(this.parallel());
-      isaModule.getLineState(req.prodLineId, this.parallel());
+      isaModule.getLineActiveRequests(req.prodLineId, this.parallel());
     },
-    function replyStep(err, prodShift, prodDowntimes, settings, isaLineState)
+    function replyStep(err, prodShift, prodDowntimes, settings, isaRequests)
     {
       reply({
         plannedQuantities: !prodShift ? undefined : prodShift.quantitiesDone.map(d => d.planned),
         prodDowntimes: prodDowntimes || undefined,
         settings: settings || undefined,
-        isaLineState: isaLineState || undefined
+        isaRequests: isaRequests || undefined
       });
     }
   );

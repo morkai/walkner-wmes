@@ -4,11 +4,11 @@
 
 module.exports = function setUpIsaShiftPersonnel(app, isaModule)
 {
-  var mongoose = app[isaModule.config.mongooseId];
-  var fteModule = app[isaModule.config.fteId];
+  const mongoose = app[isaModule.config.mongooseId];
+  const fteModule = app[isaModule.config.fteId];
 
-  var IsaShiftPersonnel = mongoose.model('IsaShiftPersonnel');
-  var IsaEvent = mongoose.model('IsaEvent');
+  const IsaShiftPersonnel = mongoose.model('IsaShiftPersonnel');
+  const IsaEvent = mongoose.model('IsaEvent');
 
   isaModule.getShiftPersonnel = getShiftPersonnel;
   isaModule.updateShiftPersonnel = updateShiftPersonnel;
@@ -59,15 +59,15 @@ module.exports = function setUpIsaShiftPersonnel(app, isaModule)
 
   function updateShiftPersonnel(shiftDate, users, updater, done)
   {
-    var update = {
+    const update = {
       _id: shiftDate || fteModule.currentShift.date,
       users: users || [],
       updatedAt: new Date()
     };
-    var conditions = {
+    const conditions = {
       _id: update._id
     };
-    var options = {
+    const options = {
       upsert: true,
       new: true
     };
@@ -87,7 +87,7 @@ module.exports = function setUpIsaShiftPersonnel(app, isaModule)
 
   function recordEvent(updater, shiftPersonnel)
   {
-    var event = new IsaEvent({
+    const event = new IsaEvent({
       requestId: null,
       orgUnits: [],
       type: 'shiftPersonnelUpdated',

@@ -5,15 +5,19 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/views/DialogView',
   'app/data/isaPalletKinds',
-  'app/production/templates/isa'
+  'app/production/templates/isa',
+  'app/production/templates/isaCancelDialog'
 ], function(
   _,
   t,
   viewport,
   View,
+  DialogView,
   isaPalletKinds,
-  template
+  template,
+  cancelDialogTemplate
 ) {
   'use strict';
 
@@ -29,24 +33,30 @@ define([
     events: {
       'click #-pickup': function()
       {
-        var requestType = this.model.isaLineState.get('requestType');
+        var pickupRequest = this.model.isaRequests.getFirstPickup();
 
-        if (requestType === 'pickup')
+        if (!pickupRequest)
         {
-          this.cancel();
+          return this.pickup();
         }
-        else if (requestType === null)
+
+        if (pickupRequest.get('status') === 'new')
         {
-          this.pickup();
+          this.cancel(pickupRequest);
         }
       },
       'click #-deliver': function()
       {
-        var requestType = this.model.isaLineState.get('requestType');
+        var deliveryRequest = this.model.isaRequests.getFirstDelivery();
 
-        if (requestType === 'delivery')
+        if (!deliveryRequest)
         {
-          this.cancel();
+          return;
+        }
+
+        if (deliveryRequest.get('status') === 'new')
+        {
+          this.cancel(deliveryRequest);
         }
       },
       'click a[data-pallet-kind]': function(e)
@@ -62,7 +72,7 @@ define([
       view.syncing = false;
       view.rendered = false;
 
-      var lineState = view.model.isaLineState;
+      var isaRequests = view.model.isaRequests;
       var render = _.debounce(function()
       {
         if (view.rendered)
@@ -71,59 +81,64 @@ define([
         }
       }, 1);
 
-      view.listenTo(lineState, 'request', function()
+      view.listenTo(isaRequests, 'request', function()
       {
         view.syncing = true;
         render();
       });
-      view.listenTo(lineState, 'error sync', function()
+      view.listenTo(isaRequests, 'error sync', function()
       {
         view.syncing = false;
         render();
       });
-      view.listenTo(lineState, 'change', render);
+      view.listenTo(isaRequests, 'add remove change reset', render);
     },
 
     serialize: function()
     {
-      if (!this.model.isaLineState.get('status'))
-      {
-        return {
-          idPrefix: this.idPrefix,
-          palletKinds: [],
-          requestIndicatorColor: 'grey',
-          responseIndicatorColor: 'grey',
-          pickupActive: false,
-          pickupDisabled: true,
-          deliveryActive: false,
-          deliveryDisabled: true,
-          selectedPalletKind: null,
-          dropdownEnabled: false
-        };
-      }
-
       var syncing = this.syncing;
       var connected = this.socket.isConnected();
       var locked = this.model.isLocked();
-      var lineState = this.model.isaLineState.serialize();
-      var pickupActive = lineState.requestType === 'pickup';
-      var deliveryActive = lineState.requestType === 'delivery';
-      var request = lineState.status === 'request';
-      var response = lineState.status === 'response';
-      var idle = !request && !response;
+      var pickupRequest = this.model.isaRequests.getFirstPickup();
+      var deliveryRequest = this.model.isaRequests.getFirstDelivery();
+      var pickupActive = !!pickupRequest;
+      var deliveryActive = !!deliveryRequest;
+      var pickupAccepted = pickupRequest ? (pickupRequest.get('status') === 'accepted') : false;
+      var deliveryAccepted = deliveryRequest ? (deliveryRequest.get('status') === 'accepted') : false;
+      var selectedPalletKind = deliveryRequest ? deliveryRequest.getFullPalletKind() : null;
 
       return {
         idPrefix: this.idPrefix,
         palletKinds: isaPalletKinds.toJSON(),
-        requestIndicatorColor: !locked && connected && !idle ? 'orange' : 'grey',
-        responseIndicatorColor: !locked && connected && response ? 'green' : 'grey',
+        pickupIndicatorColor: this.serializeIndicatorColor(pickupRequest),
+        deliveryIndicatorColor: this.serializeIndicatorColor(deliveryRequest),
         pickupActive: pickupActive,
-        pickupDisabled: locked || syncing || !connected || response || deliveryActive,
+        pickupDisabled: !this.rendered || locked || syncing || !connected || pickupAccepted,
         deliveryActive: deliveryActive,
-        deliveryDisabled: locked || syncing || !connected || response || pickupActive,
-        selectedPalletKind: lineState.palletKind,
-        dropdownEnabled: _.isEmpty(lineState.palletKind)
+        deliveryDisabled: !this.rendered || locked || syncing || !connected || deliveryAccepted,
+        selectedPalletKind: selectedPalletKind,
+        dropdownEnabled: _.isEmpty(selectedPalletKind)
       };
+    },
+
+    serializeIndicatorColor: function(request)
+    {
+      if (!request || this.model.isLocked())
+      {
+        return 'grey';
+      }
+
+      switch (request.get('status'))
+      {
+        case 'new':
+          return 'orange';
+
+        case 'accepted':
+          return 'green';
+
+        default:
+          return 'grey';
+      }
     },
 
     afterRender: function()
@@ -131,23 +146,44 @@ define([
       this.rendered = true;
     },
 
-    cancel: function()
-    {
-      this.model.isaLineState.cancel(this.model.getSecretKey(), this.showErrorMessage.bind(this, 'cancel'));
-    },
-
     pickup: function()
     {
-      this.model.isaLineState.pickup(this.model.getSecretKey(), this.showErrorMessage.bind(this, 'pickup'));
+      this.model.isaRequests.pickup(this.model.getSecretKey(), this.showErrorMessage.bind(this, 'pickup'));
     },
 
     deliver: function(palletKind)
     {
-      this.model.isaLineState.deliver(
+      this.model.isaRequests.deliver(
         palletKind,
         this.model.getSecretKey(),
         this.showErrorMessage.bind(this, 'deliver')
       );
+    },
+
+    cancel: function(request)
+    {
+      var view = this;
+      var dialogView = new DialogView({
+        dialogClassName: 'production-modal',
+        template: cancelDialogTemplate,
+        model: {
+          requestType: request.get('type')
+        }
+      });
+
+      view.listenTo(dialogView, 'answered', function(answer)
+      {
+        if (answer === 'yes')
+        {
+          view.model.isaRequests.cancel(
+            request.id,
+            view.model.getSecretKey(),
+            view.showErrorMessage.bind(view, 'cancel')
+          );
+        }
+      });
+
+      viewport.showDialog(dialogView, t('production', 'isa:cancel:title'));
     },
 
     showErrorMessage: function(action, err)

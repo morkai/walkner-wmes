@@ -5,12 +5,16 @@ define([
   '../time',
   '../i18n',
   '../core/Model',
+  '../data/orgUnits',
+  '../data/isaPalletKinds',
   'app/core/templates/userInfo'
 ], function(
   _,
   time,
   t,
   Model,
+  orgUnits,
+  palletKinds,
   renderUserInfo
 ) {
   'use strict';
@@ -21,6 +25,48 @@ define([
     finished: 'success',
     cancelled: 'danger'
   };
+
+  function getProdLineId(orgUnits)
+  {
+    var last = _.last(orgUnits);
+
+    if (last && last.type === 'prodLine')
+    {
+      return last.id;
+    }
+
+    var line = _.find(orgUnits, function(orgUnit) { return orgUnit.type === 'prodLine'; });
+
+    return line ? line.id : null;
+  }
+
+  function parse(obj)
+  {
+    ['requestedAt', 'respondedAt', 'finishedAt'].forEach(function(prop)
+    {
+      if (typeof obj[prop] === 'string')
+      {
+        obj[prop] = new Date(obj[prop]);
+      }
+    });
+
+    if (obj.orgUnits && !obj.orgUnit)
+    {
+      var orgUnit = orgUnits.getAllForProdLine(getProdLineId(obj.orgUnits));
+
+      orgUnit.prodLine = orgUnits.getByTypeAndId('prodLine', orgUnit.prodLine).getLabel()
+        .toUpperCase()
+        .replace(/(_+|~.*?)$/, '')
+        .replace(/_/g, ' ');
+
+      orgUnit.prodFlow = orgUnits.getByTypeAndId('prodFlow', orgUnit.prodFlow).getLabel()
+        .replace(/\s+(;|,)/g, '$1');
+
+      obj.orgUnit = orgUnit;
+    }
+
+    return obj;
+  }
 
   return Model.extend({
 
@@ -33,6 +79,45 @@ define([
     privilegePrefix: 'ISA',
 
     nlsDomain: 'isa',
+
+    parse: parse,
+
+    initialize: function()
+    {
+      this.updateOrgUnits();
+      this.updateTime();
+    },
+
+    updateOrgUnits: function(silent)
+    {
+      var ou = orgUnits.getAllForProdLine(this.getProdLineId());
+
+      ou.prodLine = orgUnits.getByTypeAndId('prodLine', ou.prodLine).getLabel()
+        .toUpperCase()
+        .replace(/(_+|~.*?)$/, '')
+        .replace(/_/g, ' ');
+
+      ou.prodFlow = orgUnits.getByTypeAndId('prodFlow', ou.prodFlow).getLabel()
+        .replace(/\s+(;|,)/g, '$1');
+
+      this.set('orgUnit', ou, {silent: silent});
+    },
+
+    updateTime: function(silent)
+    {
+      this.set('time', time.toTagData(this.get('requestedAt'), true), {silent: silent});
+    },
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+
+      obj.palletKind = this.getPalletKind().label;
+      obj.palletKindFull = this.getFullPalletKind();
+      obj.whman = this.getWhman().label;
+
+      return obj;
+    },
 
     serializeRow: function()
     {
@@ -69,17 +154,33 @@ define([
 
     getProdLineId: function()
     {
-      var orgUnits = this.get('orgUnits');
-      var last = _.last(orgUnits);
+      return getProdLineId(this.get('orgUnits'));
+    },
 
-      if (last && last.type === 'prodLine')
-      {
-        return last.id;
-      }
+    getPalletKind: function()
+    {
+      var data = this.get('data');
 
-      var line = _.find(orgUnits, function(orgUnit) { return orgUnit.type === 'prodLine'; });
+      return data && data.palletKind || {
+        id: '',
+        label: ''
+      };
+    },
 
-      return line ? line.id : null;
+    getFullPalletKind: function()
+    {
+      var palletKindInfo = this.getPalletKind();
+      var palletKindModel = palletKinds.get(palletKindInfo.id);
+
+      return palletKindModel ? palletKindModel.get('fullName') : '?';
+    },
+
+    getWhman: function()
+    {
+      return this.get('responder') || {
+        id: '',
+        label: '?'
+      };
     },
 
     isCompleted: function()
@@ -95,7 +196,23 @@ define([
       }
 
       return (Date.now() - Date.parse(this.get('requestedAt'))) / 1000;
+    },
+
+    matchResponder: function(requiredResponder)
+    {
+      if (!requiredResponder)
+      {
+        return true;
+      }
+
+      var actualResponder = this.get('responder');
+
+      return actualResponder && actualResponder.id === requiredResponder.id;
     }
+
+  }, {
+
+    parse: parse
 
   });
 });

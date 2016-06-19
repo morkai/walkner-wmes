@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setupIsaRequestModel(app, mongoose)
 {
-  var orgUnitSchema = mongoose.Schema({
+  const orgUnitSchema = new mongoose.Schema({
     type: String,
     id: String
   }, {
     _id: false
   });
 
-  var isaRequestSchema = mongoose.Schema({
+  const isaRequestSchema = new mongoose.Schema({
     _id: String,
     orgUnits: [orgUnitSchema],
     type: {
@@ -54,6 +54,10 @@ module.exports = function setupIsaRequestModel(app, mongoose)
     duration: {
       type: Number,
       default: 0
+    },
+    updatedAt: {
+      type: Date,
+      default: null
     }
   }, {
     id: false,
@@ -70,10 +74,11 @@ module.exports = function setupIsaRequestModel(app, mongoose)
 
   isaRequestSchema.pre('save', function(next)
   {
-    var startTime = this.requestedAt.getTime();
-    var endTime = (this.finishedAt || this.respondedAt || this.requestedAt).getTime();
+    const startTime = this.requestedAt.getTime();
+    const endTime = (this.finishedAt || this.respondedAt || this.requestedAt).getTime();
 
     this.duration = (endTime - startTime) / 1000;
+    this.updatedAt = new Date();
     this._wasNew = this.isNew;
     this._changes = this.modifiedPaths();
 
@@ -84,11 +89,11 @@ module.exports = function setupIsaRequestModel(app, mongoose)
   {
     if (doc._wasNew)
     {
-      app.broker.publish('isaRequests.created.' + doc._id, doc.toJSON());
+      app.broker.publish(`isaRequests.created.${this.getProdLineId()}.${doc._id}`, doc);
     }
     else if (Array.isArray(doc._changes) && doc._changes.length)
     {
-      var changes = {_id: doc._id};
+      const changes = {_id: doc._id};
 
       _.forEach(doc._changes, function(modifiedPath)
       {
@@ -96,9 +101,23 @@ module.exports = function setupIsaRequestModel(app, mongoose)
       });
       doc._changes = null;
 
-      app.broker.publish('isaRequests.updated.' + doc._id, changes);
+      app.broker.publish(`isaRequests.updated.${this.getProdLineId()}.${doc._id}`, changes);
     }
   });
+
+  isaRequestSchema.methods.getProdLineId = function()
+  {
+    var lastOrgUnit = _.last(this.orgUnits);
+
+    if (lastOrgUnit.type === 'prodLine')
+    {
+      return lastOrgUnit.id;
+    }
+
+    var prodLine = this.orgUnits.find(orgUnit => orgUnit.type === 'prodLine');
+
+    return prodLine ? prodLine.id : null;
+  };
 
   isaRequestSchema.methods.accept = function(responder)
   {

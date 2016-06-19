@@ -10,7 +10,7 @@ define([
   'app/data/prodLog',
   'app/prodShifts/ProdShift',
   'app/prodDowntimes/ProdDowntime',
-  'app/isa/IsaLineState',
+  'app/isa/IsaRequest',
   '../views/ProductionControlsView',
   '../views/ProductionHeaderView',
   '../views/ProductionDataView',
@@ -30,7 +30,7 @@ define([
   prodLog,
   ProdShift,
   ProdDowntime,
-  IsaLineState,
+  IsaRequest,
   ProductionControlsView,
   ProductionHeaderView,
   ProductionDataView,
@@ -53,7 +53,8 @@ define([
     {
       var topics = {};
 
-      topics['isaLineStates.updated.' + this.model.prodLine.id] = 'onIsaLineStateUpdated';
+      topics['isaRequests.created.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
+      topics['isaRequests.updated.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
 
       return topics;
     },
@@ -369,7 +370,7 @@ define([
       document.body.innerHTML = duplicateWarningTemplate();
     },
 
-    onIsaLineStateUpdated: function(change)
+    onIsaRequestUpdated: function(change)
     {
       if (this.pendingIsaChanges)
       {
@@ -383,13 +384,25 @@ define([
 
     applyIsaChange: function(change)
     {
-      change = IsaLineState.parse(change);
+      change = IsaRequest.parse(change);
 
-      var oldUpdatedAt = this.model.isaLineState.get('updatedAt') || 0;
+      var isaRequests = this.model.isaRequests;
+      var isaRequest = isaRequests.get(change._id);
 
-      if (change.updatedAt > oldUpdatedAt)
+      if (isaRequest)
       {
-        this.model.isaLineState.set(change);
+        isaRequest.set(change);
+      }
+      else
+      {
+        isaRequests.add(change);
+
+        isaRequest = isaRequests.get(change._id);
+      }
+
+      if (isaRequest.isCompleted())
+      {
+        isaRequests.remove(isaRequest);
       }
     },
 
@@ -447,9 +460,7 @@ define([
         if (res.prodDowntimes)
         {
           model.prodDowntimes.reset(
-            res.prodDowntimes.map(
-              function(d) { return ProdDowntime.parse(d); }
-            )
+            res.prodDowntimes.map(function(d) { return ProdDowntime.parse(d); })
           );
         }
 
@@ -458,9 +469,11 @@ define([
           model.settings.reset(res.settings);
         }
 
-        if (res.isaLineState)
+        if (res.isaRequests)
         {
-          page.applyIsaChange(res.isaLineState);
+          model.isaRequests.reset(
+            res.isaRequests.map(function(d) { return IsaRequest.parse(d); })
+          );
 
           if (page.pendingIsaChanges)
           {
@@ -503,7 +516,7 @@ define([
           page.timers.joinProduction = null;
           page.joinProduction();
         },
-        1337
+        333
       );
     },
 

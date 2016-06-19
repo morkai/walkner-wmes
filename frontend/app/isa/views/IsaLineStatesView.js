@@ -18,7 +18,7 @@ define([
   DialogView,
   IsaResponderPickerView,
   lineStatesTemplate,
-  lineStateTemplate,
+  requestTemplate,
   cancelDialogTemplate
 ) {
   'use strict';
@@ -50,16 +50,16 @@ define([
 
     initialize: function()
     {
-      this.requiredStatus = this.options.mode === 'requests' ? 'request' : 'response';
+      this.requiredStatus = this.options.mode === 'requests' ? 'new' : 'accepted';
       this.cancelling = null;
 
-      var lineStates = this.model.lineStates;
+      var requests = this.model.requests;
 
-      this.listenTo(lineStates, 'reset', this.render);
-      this.listenTo(lineStates, 'filter', this.render);
-      this.listenTo(lineStates, 'add', this.onAdd);
-      this.listenTo(lineStates, 'remove', this.onRemove);
-      this.listenTo(lineStates, 'change', this.onChange);
+      this.listenTo(requests, 'reset', this.render);
+      this.listenTo(requests, 'filter', this.render);
+      this.listenTo(requests, 'add', this.onAdd);
+      this.listenTo(requests, 'remove', this.onRemove);
+      this.listenTo(requests, 'change', this.onChange);
     },
 
     serialize: function()
@@ -71,11 +71,11 @@ define([
       return {
         idPrefix: this.idPrefix,
         mode: this.options.mode,
-        lineStates: this.model.lineStates
+        requests: this.model.requests
           .where({status: this.requiredStatus})
-          .filter(function(lineState) { return lineState.matchResponder(selectedResponder); })
-          .map(function(lineState) { return lineState.serialize(); }),
-        renderLineState: lineStateTemplate
+          .filter(function(request) { return request.matchResponder(selectedResponder); })
+          .map(function(request) { return request.serialize(); }),
+        renderRequest: requestTemplate
       };
     },
 
@@ -86,12 +86,12 @@ define([
 
     updateTimes: function()
     {
-      var lineStates = this.model.lineStates;
+      var requests = this.model.requests;
 
       this.$('.isa-lineState').each(function()
       {
-        var lineState = lineStates.get(this.dataset.id);
-        var time = lineState.get('time');
+        var request = requests.get(this.dataset.id);
+        var time = request.get('time');
         var timeEl = this.querySelector('.isa-lineState-time');
 
         timeEl.setAttribute('datetime', time.iso);
@@ -110,42 +110,42 @@ define([
       }
     },
 
-    cancel: function(lineStateId)
+    cancel: function(requestId)
     {
-      var lineState = this.model.lineStates.get(lineStateId);
-
-      if (!lineState)
-      {
-        return;
-      }
-
-      var $lineState = this.findLineStateEl(lineState.id);
-
-      if (!$lineState.length)
-      {
-        return;
-      }
-
-      var $actions = $lineState.find('.btn').prop('disabled', true);
       var view = this;
+      var request = view.model.requests.get(requestId);
+
+      if (!request)
+      {
+        return;
+      }
+
+      var $request = view.findRequestEl(request.id);
+
+      if (!$request.length)
+      {
+        return;
+      }
+
+      var $actions = $request.find('.btn').prop('disabled', true);
       var dialogView = new DialogView({
         template: cancelDialogTemplate
       });
 
-      this.listenToOnce(dialogView, 'dialog:hidden', function()
+      view.listenToOnce(dialogView, 'dialog:hidden', function()
       {
         $actions.prop('disabled', false);
         view.cancelling = null;
       });
 
-      this.listenToOnce(dialogView, 'answered', function(answer)
+      view.listenToOnce(dialogView, 'answered', function(answer)
       {
         if (answer !== 'yes')
         {
           return;
         }
 
-        lineState.cancel(null, function(err)
+        view.model.requests.cancel(request.id, null, function(err)
         {
           if (!err)
           {
@@ -164,30 +164,31 @@ define([
 
       viewport.showDialog(dialogView, t('isa', 'cancel:title'));
 
-      this.cancelling = lineStateId;
+      this.cancelling = requestId;
     },
 
-    accept: function(lineStateId)
+    accept: function(requestId)
     {
-      var lineState = this.model.lineStates.get(lineStateId);
+      var view = this;
+      var request = view.model.requests.get(requestId);
 
-      if (!lineState)
+      if (!request)
       {
         return;
       }
 
-      var $lineState = this.findLineStateEl(lineState.id);
+      var $request = view.findRequestEl(request.id);
 
-      if (!$lineState.length)
+      if (!$request.length)
       {
         return;
       }
 
       var responderPickerView = new IsaResponderPickerView({
-        model: this.model.shiftPersonnel
+        model: view.model.shiftPersonnel
       });
 
-      this.listenToOnce(responderPickerView, 'picked', function(user)
+      view.listenToOnce(responderPickerView, 'picked', function(user)
       {
         responderPickerView.hide();
 
@@ -196,7 +197,7 @@ define([
           return;
         }
 
-        lineState.accept(user, function(err)
+        view.model.requests.accept(request.id, user, function(err)
         {
           if (!err)
           {
@@ -213,26 +214,27 @@ define([
         });
       });
 
-      responderPickerView.show($lineState.find('.isa-lineState-actions'));
+      responderPickerView.show($request.find('.isa-lineState-actions'));
     },
 
-    finish: function(lineStateId)
+    finish: function(requestId)
     {
-      var lineState = this.model.lineStates.get(lineStateId);
+      var view = this;
+      var request = view.model.requests.get(requestId);
 
-      if (!lineState)
+      if (!request)
       {
         return;
       }
 
-      var $lineState = this.findLineStateEl(lineState.id);
+      var $request = view.findRequestEl(request.id);
 
-      if (!$lineState.length)
+      if (!$request.length)
       {
         return;
       }
 
-      lineState.finish(function(err)
+      view.model.requests.finish(request.id, function(err)
       {
         if (!err)
         {
@@ -268,49 +270,49 @@ define([
       this.trigger('recount', this.el.childElementCount - 1);
     },
 
-    move: function(lineState, done)
+    move: function(request, done)
     {
-      var $lineState = this.findLineStateEl(lineState.id);
+      var $request = this.findRequestEl(request.id);
 
-      if (!$lineState.length)
+      if (!$request.length)
       {
         return done();
       }
 
-      var position = $lineState.position();
+      var position = $request.position();
 
-      $lineState.css({
+      $request.css({
         top: position.top + 'px',
         left: position.left + 'px',
-        width: $lineState.outerWidth() + 'px',
-        height: $lineState.outerHeight() + 'px'
+        width: $request.outerWidth() + 'px',
+        height: $request.outerHeight() + 'px'
       });
-      $lineState.addClass('is-moving');
+      $request.addClass('is-moving');
 
       var view = this;
 
       setTimeout(function()
       {
-        $lineState.remove();
+        $request.remove();
         done();
         view.recount();
       }, 750);
     },
 
-    insert: function(lineState, done)
+    insert: function(request, done)
     {
-      if (lineState.get('status') === this.requiredStatus
-        && (this.options.mode !== 'responses' || lineState.matchResponder(this.model.selectedResponder)))
+      if (request.get('status') === this.requiredStatus
+        && (this.options.mode !== 'responses' || request.matchResponder(this.model.selectedResponder)))
       {
-        var $lineState = $(this.renderLineState(lineState));
+        var $request = $(this.renderLineState(request));
 
-        if (this.options.mode === 'requests' && lineState.get('requestType') === 'delivery')
+        if (this.options.mode === 'requests' && request.get('type') === 'delivery')
         {
           var $lastDelivery = this.$('.isa-lineState[data-request-type="delivery"]').last();
 
           if ($lastDelivery.length)
           {
-            $lineState.insertAfter($lastDelivery);
+            $request.insertAfter($lastDelivery);
           }
           else
           {
@@ -318,20 +320,20 @@ define([
 
             if ($first.length)
             {
-              $lineState.insertBefore($first);
+              $request.insertBefore($first);
             }
             else
             {
-              this.$el.append($lineState);
+              this.$el.append($request);
             }
           }
         }
         else
         {
-          this.$el.append($lineState);
+          this.$el.append($request);
         }
 
-        $lineState
+        $request
           .stop(true, false)
           .fadeIn(done);
         this.recount();
@@ -342,12 +344,12 @@ define([
       }
     },
 
-    renderLineState: function(lineState)
+    renderLineState: function(request)
     {
-      return lineStateTemplate({
+      return requestTemplate({
         hidden: true,
         mode: this.options.mode,
-        lineState: lineState.serialize(),
+        request: request.serialize(),
         hotkey: ''
       });
     },
@@ -357,76 +359,76 @@ define([
       return this.$(el).closest('.isa-lineState').attr('data-id');
     },
 
-    findLineStateEl: function(lineStateId)
+    findRequestEl: function(lineStateId)
     {
       return this.$('.isa-lineState[data-id="' + lineStateId + '"]');
     },
 
-    onAdd: function(lineState)
+    onAdd: function(request)
     {
-      this.onChange(lineState);
+      this.onChange(request);
     },
 
-    onRemove: function(lineState)
+    onRemove: function(request)
     {
       var view = this;
 
-      if (view.cancelling === lineState.id)
+      if (view.cancelling === request.id)
       {
         viewport.closeDialog();
       }
 
-      var $lineState = view.findLineStateEl(lineState.id);
+      var $request = view.findRequestEl(request.id);
 
-      if ($lineState.length)
+      if ($request.length)
       {
-        $lineState
+        $request
           .stop(true, false)
           .fadeOut(function()
           {
-            $lineState.remove();
+            $request.remove();
             view.recount();
           });
       }
     },
 
-    onChange: function(lineState)
+    onChange: function(request)
     {
-      if (lineState === this.model.lineStates)
+      if (request === this.model.requests)
       {
         return;
       }
 
-      var $lineState = this.findLineStateEl(lineState.id);
+      var $request = this.findRequestEl(request.id);
 
-      if ($lineState.length)
+      if ($request.length)
       {
-        if (lineState.get('status') === this.requiredStatus)
+        if (request.get('status') === this.requiredStatus)
         {
-          $lineState.stop(true, true);
+          $request.stop(true, true);
 
-          $lineState = this.findLineStateEl(lineState.id);
+          $request = this.findRequestEl(request.id);
 
-          if ($lineState.length)
+          if ($request.length)
           {
-            $lineState.fadeIn();
+            $request.fadeIn();
           }
           else
           {
-            this.insert(lineState);
+            this.insert(request);
           }
         }
-        else if (!this.model.moving[lineState.id])
+        else if (!this.model.moving[request.id])
         {
-          this.onRemove(lineState);
+          this.onRemove(request);
         }
 
         return;
       }
 
-      if (lineState.get('status') === this.requiredStatus && !this.model.moving[lineState.id])
+      if (request.get('status') === this.requiredStatus && !this.model.moving[request.id])
       {
-        this.insert(lineState);
+        this.insert(request);
       }
     }
 

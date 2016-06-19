@@ -1,34 +1,34 @@
-<div class="isa-lineState" data-id="<%- lineState._id %>" data-request-type="<%- lineState.requestType %>" style="<%- hidden ? 'display: none' : '' %>">
+<div class="isa-lineState" data-id="<%- request._id %>" data-request-type="<%- request.type %>" style="<%- hidden ? 'display: none' : '' %>">
   <div class="isa-lineState-requestType"></div>
   <div class="isa-lineState-info">
     <h1 class="isa-lineState-header">
-      <span class="text-nowrap"><%= lineState.orgUnits.prodLine %>:</span>
-      <span class="text-nowrap"><%- t('isa', 'lineState:header:' + lineState.requestType, lineState) %></span>
+      <span class="text-nowrap"><%= request.orgUnit.prodLine %>:</span>
+      <span class="text-nowrap"><%- t('isa', 'lineState:header:' + request.type, request) %></span>
     </h1>
     <div class="isa-lineState-props">
       <div class="isa-lineState-prop">
         <span class="isa-lineState-prop-name"><%- t('isa', 'lineState:division') %></span>
-        <span class="isa-lineState-prop-value"><%= lineState.orgUnits.division %></span>
+        <span class="isa-lineState-prop-value"><%= request.orgUnit.division %></span>
       </div>
-      <% if (lineState.status === 'response') { %>
+      <% if (request.status === 'response') { %>
       <div class="isa-lineState-prop">
         <span class="isa-lineState-prop-name"><%- t('isa', 'lineState:whman') %></span>
-        <span class="isa-lineState-prop-value"><%= lineState.whman %></span>
+        <span class="isa-lineState-prop-value"><%= request.whman %></span>
       </div>
       <% } else { %>
       <div class="isa-lineState-prop">
         <span class="isa-lineState-prop-name"><%- t('isa', 'lineState:prodFlow') %></span>
-        <span class="isa-lineState-prop-value"><%= lineState.orgUnits.prodFlow %></span>
+        <span class="isa-lineState-prop-value"><%= request.orgUnit.prodFlow %></span>
       </div>
       <% } %>
       <div class="isa-lineState-prop">
         <span class="isa-lineState-prop-name"><%- t('isa', 'lineState:time') %></span>
-        <time class="isa-lineState-prop-value isa-lineState-time" datetime="<%- lineState.time.iso %>" title="<%- lineState.time.long %>"><%- lineState.time.human %></time>
+        <time class="isa-lineState-prop-value isa-lineState-time" datetime="<%- request.time.iso %>" title="<%- request.time.long %>"><%- request.time.human %></time>
       </div>
     </div>
   </div>
   <div class="isa-lineState-actions">
-    <button class="btn btn-success isa-lineState-<%- lineState.status === 'request' ? 'accept' : 'finish' %>" title="<%- t('isa', lineState.status === 'request' ? 'accept:action' : 'finish:action') %>">
+    <button class="btn btn-success isa-lineState-<%- request.status === 'new' ? 'accept' : 'finish' %>" title="<%- t('isa', request.status === 'new' ? 'accept:action' : 'finish:action') %>">
       <i class="fa fa-check"></i>
       <span class="isa-lineState-hotkey"><%- hotkey %></span>
     </button>

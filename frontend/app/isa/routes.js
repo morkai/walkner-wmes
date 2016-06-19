@@ -4,9 +4,9 @@ define([
   '../router',
   '../viewport',
   '../user',
-  'app/users/UserCollection',
+  '../users/UserCollection',
   './IsaShiftPersonnel',
-  './IsaLineStateCollection',
+  './IsaRequestCollection',
   './IsaEventCollection',
   './pages/IsaLineStatePage',
   'i18n!app/nls/isa'
@@ -16,7 +16,7 @@ define([
   user,
   UserCollection,
   IsaShiftPersonnel,
-  IsaLineStateCollection,
+  IsaRequestCollection,
   IsaEventCollection,
   IsaLineStatePage
 ) {
@@ -31,7 +31,7 @@ define([
           rqlQuery: 'select(firstName,lastName,personellId)&privileges=ISA%3AWHMAN'
         }),
         shiftPersonnel: new IsaShiftPersonnel(null, {current: true}),
-        lineStates: new IsaLineStateCollection(null, {paginate: false}),
+        requests: IsaRequestCollection.active(),
         events: new IsaEventCollection(null, {paginate: false, rqlQuery: 'sort(-time)&limit(50)'}),
         selectedResponder: null,
         moving: {}

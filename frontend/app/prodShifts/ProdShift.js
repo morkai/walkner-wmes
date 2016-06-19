@@ -19,7 +19,7 @@ define([
   '../prodDowntimes/ProdDowntimeCollection',
   '../prodShiftOrders/ProdShiftOrder',
   '../prodShiftOrders/ProdShiftOrderCollection',
-  '../isa/IsaLineState',
+  '../isa/IsaRequestCollection',
   '../production/settings',
   'app/core/templates/userInfo'
 ], function(
@@ -41,7 +41,7 @@ define([
   ProdDowntimeCollection,
   ProdShiftOrder,
   ProdShiftOrderCollection,
-  IsaLineState,
+  IsaRequestCollection,
   settings,
   renderUserInfo
 ) {
@@ -110,7 +110,7 @@ define([
         rqlQuery: 'sort(-startedAt)&limit(8)&prodLine=' + encodeURIComponent(this.prodLine.id)
       });
 
-      this.isaLineState = new IsaLineState({_id: this.prodLine.id});
+      this.isaRequests = IsaRequestCollection.activeForLine(this.prodLine.id);
     },
 
     serialize: function(options)

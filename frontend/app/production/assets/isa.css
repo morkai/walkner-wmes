@@ -6,22 +6,26 @@
 .production-ft > .production-isa > .production-sectionHeader {
   border-bottom: 1px solid #ddd;
 }
-.production-isa-statuses {
-  margin: 20px 0 20px 0;
+.production-isa-sections {
+  display: flex;
 }
-.production-isa-actions {
-  width: 100%;
+.production-isa-section {
+  flex: 1 1 50%;
+  margin-top: 14px;
+}
+.production-isa-section:first-child {
+  margin-right: 7px;
+}
+.production-isa-section:last-child {
+  margin-left: 7px;
 }
 .production-isa-status {
-  background: #000;
-  width: 105px;
-  height: 105px;
+  margin-bottom: 9px;
+  width: 143px;
+  height: 143px;
   display: inline-block;
   box-shadow: 0 0 6px #999;
   border-radius: 25px;
-}
-.production-isa-status + .production-isa-status {
-  margin-left: 30px;
 }
 .production-isa-status.grey {
   background: radial-gradient(circle, #FEFCEA 0%, #808080 100%);
@@ -41,8 +45,21 @@
 .production-isa-status.red {
   background: radial-gradient(circle, #FEFCEA 0%, #d43f3a 100%);
 }
-.production-isa .btn {
+.production-isa-btn {
+  padding-left: 7px;
+  padding-right: 7px;
   text-transform: uppercase;
+}
+.production-isa-selectedPalletKind {
+  display: block;
+  margin-top: 4px;
+  max-width: 125px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.8em;
+}
+.production-isa-section > .open {
+  margin-left: -157px;
 }
 .production-isa-palletKinds {
   width: 100%;

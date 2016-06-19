@@ -1,6 +1,6 @@
 <div class="isa-lineStates">
   <p class="isa-empty"><%- t('isa', mode + ':empty') %></p>
-  <% _.forEach(lineStates, function(lineState, i) { %>
-  <%- renderLineState({hidden: false, mode: mode, lineState: lineState, hotkey: i > 8 ? '' : (i + 1)}) %>
+  <% _.forEach(requests, function(request, i) { %>
+  <%- renderRequest({hidden: false, mode: mode, request: request, hotkey: i > 8 ? '' : (i + 1)}) %>
   <% }) %>
 </div>

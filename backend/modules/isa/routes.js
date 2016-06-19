@@ -4,15 +4,15 @@
 
 module.exports = function setUpIsaRoutes(app, isaModule)
 {
-  var express = app[isaModule.config.expressId];
-  var userModule = app[isaModule.config.userId];
-  var mongoose = app[isaModule.config.mongooseId];
+  const express = app[isaModule.config.expressId];
+  const userModule = app[isaModule.config.userId];
+  const mongoose = app[isaModule.config.mongooseId];
 
-  var IsaEvent = mongoose.model('IsaEvent');
-  var IsaRequest = mongoose.model('IsaRequest');
+  const IsaEvent = mongoose.model('IsaEvent');
+  const IsaRequest = mongoose.model('IsaRequest');
 
-  var canView = userModule.auth('LOCAL', 'ISA:VIEW');
-  var canManage = userModule.auth('ISA:MANAGE');
+  const canView = userModule.auth('LOCAL', 'ISA:VIEW');
+  const canManage = userModule.auth('LOCAL', 'ISA:MANAGE');
 
   express.get('/isaEvents', canView, express.crud.browseRoute.bind(null, app, IsaEvent));
   express.get('/isaEvents;export', canView, express.crud.exportRoute.bind(null, {
@@ -31,13 +31,13 @@ module.exports = function setUpIsaRoutes(app, isaModule)
   express.get('/isaShiftPersonnel/:shiftDate', canView, readShiftPersonnelRoute);
   express.put('/isaShiftPersonnel/:shiftDate', canManage, updateShiftPersonnelRoute);
 
-  express.get('/isaLineStates', canView, browseLineStatesRoute);
-  express.get('/isaLineStates/:id', canView, readLineStateRoute);
-  express.patch('/isaLineStates/:id', canView, updateLineStateRoute);
+  express.get('/isaActiveRequests', canView, browseAllActiveRequestsRoute);
+  express.get('/isaActiveRequests/:line', canView, browseLineActiveRequestsRoute);
+  express.patch('/isaActiveRequests/:line', canView, updateLineActiveRequestRoute);
 
   function readShiftPersonnelRoute(req, res, next)
   {
-    var shiftDate = req.params.shiftDate === 'current' ? null : new Date(req.params.shiftDate);
+    const shiftDate = req.params.shiftDate === 'current' ? null : new Date(req.params.shiftDate);
 
     if (shiftDate && isNaN(shiftDate.getTime()))
     {
@@ -57,14 +57,14 @@ module.exports = function setUpIsaRoutes(app, isaModule)
 
   function updateShiftPersonnelRoute(req, res, next)
   {
-    var shiftDate = req.params.shiftDate === 'current' ? null : new Date(req.params.shiftDate);
+    const shiftDate = req.params.shiftDate === 'current' ? null : new Date(req.params.shiftDate);
 
     if (shiftDate && isNaN(shiftDate.getTime()))
     {
       return next(app.createError('INVALID_SHIFT_DATE', 400));
     }
 
-    var updater = userModule.createUserInfo(req.session.user, req);
+    const updater = userModule.createUserInfo(req.session.user, req);
 
     isaModule.updateShiftPersonnel(shiftDate, req.body.users, updater, function(err, shiftPersonnel)
     {
@@ -77,9 +77,9 @@ module.exports = function setUpIsaRoutes(app, isaModule)
     });
   }
 
-  function browseLineStatesRoute(req, res, next)
+  function browseAllActiveRequestsRoute(req, res, next)
   {
-    isaModule.getLineStates(function(err, lineStates)
+    isaModule.getAllActiveRequests(function(err, requests)
     {
       if (err)
       {
@@ -87,45 +87,43 @@ module.exports = function setUpIsaRoutes(app, isaModule)
       }
 
       res.json({
-        totalCount: lineStates.length,
-        collection: lineStates
+        totalCount: requests.length,
+        collection: requests
       });
     });
   }
 
-  function readLineStateRoute(req, res, next)
+  function browseLineActiveRequestsRoute(req, res, next)
   {
-    isaModule.getLineState(req.params.id, function(err, lineState)
+    isaModule.getLineActiveRequests(req.params.line, function(err, requests)
     {
       if (err)
       {
         return next(err);
       }
 
-      if (!lineState)
-      {
-        return res.sendStatus(404);
-      }
-
-      res.json(lineState);
+      res.json({
+        totalCount: requests.length,
+        collection: requests
+      });
     });
   }
 
-  function updateLineStateRoute(req, res, next)
+  function updateLineActiveRequestRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userData = {
+    const user = req.session.user;
+    const userData = {
       info: userModule.createUserInfo(user, req),
       canView: userModule.isAllowedTo(user, 'ISA:VIEW'),
       canManage: userModule.isAllowedTo(user, 'ISA:MANAGE'),
       isWhman: userModule.isAllowedTo(user, 'ISA:WHMAN'),
       isLocal: user.local
     };
-    var prodLineId = req.params.id;
-    var action = req.body.action;
-    var parameters = req.body;
+    const prodLineId = req.params.line;
+    const action = req.body.action;
+    const parameters = req.body;
 
-    isaModule.updateLineState(prodLineId, action, parameters, userData, function(err, result)
+    isaModule.updateActiveRequest(prodLineId, action, parameters, userData, function(err, result)
     {
       if (err)
       {

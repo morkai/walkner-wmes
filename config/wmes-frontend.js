@@ -190,7 +190,7 @@ exports.pubsub = {
     'suggestions.seen.*',
     'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted',
     'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
-    'isaLineStates.**', 'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
+    'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
     'qi.**'
   ]
 };
@@ -221,7 +221,7 @@ exports.mongoose = {
     'opinionSurveyEmployer', 'opinionSurveyDivision', 'opinionSurveyQuestion',
     'opinionSurveyScanTemplate', 'opinionSurveyOmrResult',
     'cag', 'cagGroup', 'cagPlan',
-    'isaPalletKind', 'isaLineState', 'isaEvent', 'isaRequest', 'isaShiftPersonnel',
+    'isaPalletKind', 'isaEvent', 'isaRequest', 'isaShiftPersonnel',
     'qiKind', 'qiErrorCategory', 'qiFault', 'qiActionStatus', 'qiResult'
   ]
 };

@@ -1,20 +1,20 @@
-<div>
-  <div class="production-isa-statuses">
-    <div id="<%- idPrefix %>-request" class="production-isa-status <%- requestIndicatorColor %>"></div>
-    <div id="<%- idPrefix %>-response" class="production-isa-status <%- responseIndicatorColor %>"></div>
+<div class="production-isa-sections">
+  <div class="production-isa-section">
+    <div class="production-isa-status <%- pickupIndicatorColor %>"></div>
+    <button id="<%- idPrefix %>-pickup" class="btn btn-lg btn-block btn-default production-isa-btn <%- pickupActive ? 'active' : '' %>" <%- pickupDisabled ? 'disabled' : '' %>>
+      <%- t('production', 'isa:pickup') %>
+    </button>
   </div>
-  <div class="btn-group-vertical production-isa-actions">
-    <button id="<%- idPrefix %>-pickup" class="btn btn-lg btn-block btn-default <%- pickupActive ? 'active' : '' %>" <%- pickupDisabled ? 'disabled' : '' %>><%- t('production', 'isa:pickup') %></button>
-    <div class="btn-group dropup">
-      <button id="<%- idPrefix %>-deliver" class="btn btn-lg btn-block btn-default dropdown-toggle <%- deliveryActive ? 'active' : '' %>" <%- deliveryDisabled ? 'disabled' : '' %> data-toggle="<%- dropdownEnabled ? 'dropdown' : '' %>">
-        <span id="<%- idPrefix %>-deliverLabel">
-          <% if (selectedPalletKind) { %>
-          <%- t('production', 'isa:deliver:specific', {palletKind: selectedPalletKind}) %>
-          <% } else { %>
-          <%- t('production', 'isa:deliver') %>
-          <% } %>
-        </span>
-        <% if (!deliveryDisabled) { %>
+  <div class="production-isa-section">
+    <div class="production-isa-status <%- deliveryIndicatorColor %>"></div>
+    <div class="dropup">
+      <button id="<%- idPrefix %>-deliver" class="btn btn-lg btn-block btn-default production-isa-btn dropdown-toggle <%- deliveryActive ? 'active' : '' %>" <%- deliveryDisabled ? 'disabled' : '' %> data-toggle="<%- dropdownEnabled ? 'dropdown' : '' %>">
+        <% if (selectedPalletKind) { %>
+        <%- t('production', 'isa:deliver:specific', {palletKind: selectedPalletKind}) %>
+        <% } else { %>
+        <%- t('production', 'isa:deliver') %>
+        <% } %>
+        <% if (dropdownEnabled) { %>
         <span class="<%- dropdownEnabled ? 'caret' : 'fa fa-remove' %>"></span>
         <% } %>
       </button>

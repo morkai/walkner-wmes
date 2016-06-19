@@ -182,9 +182,14 @@
   "unload:order": "Czy na pewno chcesz zamknąć przeglądarkę pozostawiając linię produkcyjną w stanie wykonywania zlecenia?\n\nJeżeli zamkniesz przeglądarkę nie wciskając przycisku Koniec pracy, to czas trwania zlecenia będzie się naliczał do końca zmiany!",
 
   "isa:header": "Pole odkładcze",
-  "isa:pickup": "Odbiór palety",
-  "isa:deliver": "Dostawa pustej palety",
-  "isa:deliver:specific": "Dostawa: {palletKind}",
+  "isa:pickup": "Odbiór<br>palety",
+  "isa:deliver": "Dostawa<br>palety",
+  "isa:deliver:specific": "Dostawa<span class='production-isa-selectedPalletKind'>{palletKind}</span>",
+
+  "isa:cancel:title": "Potwierdzenie anulowania żądania",
+  "isa:cancel:message": "<p>Czy na pewno chcesz anulować wybrane żądanie {requestType, select, delivery{dostawy palety} other{odbioru palety}}?</p>",
+  "isa:cancel:yes": "Anuluj żądanie",
+  "isa:cancel:no": "Pozostaw aktywne",
 
   "spigotChecker:title": "Sprawdzanie komponentu Spigot",
   "spigotChecker:name:label": "Nazwa komponentu:",

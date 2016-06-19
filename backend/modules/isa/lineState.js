@@ -8,8 +8,6 @@ var uuid = require('node-uuid');
 
 module.exports = function setUpIsaLineState(app, isaModule)
 {
-  var ACTION_LOCK_TIMEOUT = 2000;
-
   var mongoose = app[isaModule.config.mongooseId];
   var orgUnitsModule = app[isaModule.config.orgUnitsId];
   var userModule = app[isaModule.config.userId];
@@ -17,20 +15,54 @@ module.exports = function setUpIsaLineState(app, isaModule)
   var User = mongoose.model('User');
   var IsaEvent = mongoose.model('IsaEvent');
   var IsaRequest = mongoose.model('IsaRequest');
-  var IsaLineState = mongoose.model('IsaLineState');
   var IsaPalletKind = mongoose.model('IsaPalletKind');
 
   var loaded = false;
-  var lineStateMap = {};
+  var idToRequestMap = {};
+  var lineToRequestsMap = {};
   var lockMap = {};
   var actionHandlers = {};
 
-  app.broker.subscribe('app.started', loadLineStates);
+  app.broker.subscribe('app.started', loadActiveRequests);
+  app.broker.subscribe('isaRequests.created.**', mapNewRequest);
+  app.broker.subscribe('isaRequests.updated.**', mapExistingRequest);
 
-  isaModule.getLineStates = getLineStates;
-  isaModule.getLineState = getLineState;
-  isaModule.getLineStateSync = getLineStateSync;
-  isaModule.updateLineState = updateLineState;
+  isaModule.getAllActiveRequests = getAllActiveRequests;
+  isaModule.getLineActiveRequests = getLineActiveRequests;
+  isaModule.updateActiveRequest = updateActiveRequest;
+
+  function mapNewRequest(request)
+  {
+    const prodLineId = request.getProdLineId();
+
+    if (!lineToRequestsMap[prodLineId])
+    {
+      lineToRequestsMap[prodLineId] = [];
+    }
+
+    lineToRequestsMap[prodLineId].push(request);
+
+    idToRequestMap[request._id] = request;
+  }
+
+  function mapExistingRequest(changes)
+  {
+    if (changes.status === 'new' || changes.status === 'accepted')
+    {
+      return;
+    }
+
+    const request = idToRequestMap[changes._id];
+
+    if (!request)
+    {
+      return;
+    }
+
+    const prodLineId = request.getProdLineId();
+
+    lineToRequestsMap[prodLineId] = lineToRequestsMap[prodLineId].filter(d => d !== request);
+  }
 
   function acquireLock(key, callback, queueIfNew)
   {
@@ -64,126 +96,59 @@ module.exports = function setUpIsaLineState(app, isaModule)
     };
   }
 
-  function loadLineStates()
+  function loadActiveRequests()
   {
     var t = Date.now();
 
     step(
       function()
       {
-        IsaLineState.find().exec(this.next());
+        IsaRequest.find({status: {$in: ['new', 'accepted']}}).exec(this.next());
       },
-      function(err, lineStates)
+      function(err, requests)
       {
-        var now = Date.now();
-        var weekAgo = 7 * 24 * 3600 * 1000;
-        var idsToDelete = [];
+        _.forEach(requests, mapNewRequest);
 
-        _.forEach(lineStates, function(lineState)
-        {
-          var timeDiff = now - lineState.updatedAt.getTime();
-
-          if (timeDiff >= weekAgo)
-          {
-            idsToDelete.push(lineState._id);
-          }
-          else
-          {
-            lineStateMap[lineState._id] = lineState;
-          }
-        });
-
-        if (idsToDelete.length)
-        {
-          IsaLineState.remove({_id: {$in: idsToDelete}}, this.next());
-        }
-      },
-      function()
-      {
         loaded = true;
 
-        app.broker.publish('isaLineStates.loaded');
+        app.broker.publish('isaRequests.loaded');
 
         isaModule.debug("Loaded in %d ms.", Date.now() - t);
       }
     );
   }
 
-  function getLineStates(done)
+  function getAllActiveRequests(done)
   {
     if (!loaded)
     {
       app.broker
-        .subscribe('isaLineStates.loaded', getLineStates.bind(null, done))
+        .subscribe('isaRequests.loaded', getAllActiveRequests.bind(null, done))
         .setLimit(1);
 
       return;
     }
 
-    setImmediate(done, null, _.values(lineStateMap));
+    setImmediate(done, null, _.values(idToRequestMap));
   }
 
-  function getLineState(prodLineId, done)
+  function getLineActiveRequests(prodLineId, done)
   {
     if (!loaded)
     {
       app.broker
-        .subscribe('isaLineStates.loaded', getLineState.bind(null, prodLineId, done))
+        .subscribe('isaRequests.loaded', getLineActiveRequests.bind(null, prodLineId, done))
         .setLimit(1);
 
       return;
     }
 
-    if (lineStateMap[prodLineId])
-    {
-      setImmediate(done, null, lineStateMap[prodLineId]);
-
-      return;
-    }
-
-    if (!orgUnitsModule.getByTypeAndId('prodLine', prodLineId))
-    {
-      setImmediate(done, null, null);
-
-      return;
-    }
-
-    var releaseLock = acquireLock('getLineState:' + prodLineId, done, true);
-
-    if (!releaseLock)
-    {
-      return;
-    }
-
-    var lineState = new IsaLineState({
-      _id: prodLineId,
-      status: 'idle',
-      updatedAt: new Date()
-    });
-
-    lineState.save(function(err)
-    {
-      if (err)
-      {
-        releaseLock(err);
-      }
-      else
-      {
-        lineStateMap[lineState._id] = lineState;
-
-        releaseLock(null, lineState);
-      }
-    });
-  }
-
-  function getLineStateSync(prodLineId)
-  {
-    return lineStateMap[prodLineId] || null;
+    setImmediate(done, null, lineToRequestsMap[prodLineId] || []);
   }
 
   function recordEvent(eventData)
   {
-    var event = new IsaEvent(eventData);
+    const event = new IsaEvent(eventData);
 
     event.save(function(err)
     {
@@ -194,9 +159,9 @@ module.exports = function setUpIsaLineState(app, isaModule)
     });
   }
 
-  function updateLineState(prodLineId, action, parameters, userData, done)
+  function updateActiveRequest(prodLineId, action, parameters, userData, done)
   {
-    var handleAction = actionHandlers[action];
+    const handleAction = actionHandlers[action];
 
     if (!handleAction)
     {
@@ -205,7 +170,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
 
     var releaseLock = acquireLock(
       prodLineId,
-      updateLineState.bind(null, prodLineId, action, parameters, userData, done),
+      updateActiveRequest.bind(null, prodLineId, action, parameters, userData, done),
       false
     );
 
@@ -214,37 +179,17 @@ module.exports = function setUpIsaLineState(app, isaModule)
       return;
     }
 
-    step(
-      function()
-      {
-        getLineState(prodLineId, this.next());
-      },
-      function(err, lineState)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
+    handleAction(prodLineId, parameters, userData, function(err, result)
+    {
+      done(err, result);
 
-        if (!lineState)
-        {
-          return this.skip(app.createError('UNKNOWN_LINE', 404));
-        }
-
-        handleAction(lineState, parameters, userData, this.next());
-      },
-      function(err, result)
-      {
-        done(err, result);
-
-        setImmediate(releaseLock);
-      }
-    );
+      setImmediate(releaseLock);
+    });
   }
 
   function createRequest(prodLineId, type, requester, data, done)
   {
-    var request = new IsaRequest({
+    const request = new IsaRequest({
       _id: uuid.v4().toUpperCase(),
       orgUnits: orgUnitsModule.getAllForProdLineAsList(prodLineId),
       type: type,
@@ -256,79 +201,65 @@ module.exports = function setUpIsaLineState(app, isaModule)
     request.save(done);
   }
 
-  actionHandlers.requestPickup = function(lineState, parameters, userData, done)
+  function hasActiveRequest(prodLineId, requestType)
   {
-    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', lineState._id);
+    return _.some(lineToRequestsMap[prodLineId], request => request.type === requestType);
+  }
+
+  actionHandlers.requestPickup = function(prodLineId, parameters, userData, done)
+  {
+    const prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+
+    if (!prodLine)
+    {
+      return done(app.createError('UNKNOWN_LINE', 400));
+    }
 
     if (parameters.secretKey !== prodLine.secretKey)
     {
       return done(app.createError('AUTH', 403));
     }
 
-    if (lineState.status !== 'idle')
+    if (hasActiveRequest(prodLineId, 'pickup'))
     {
       return done(app.createError('INVALID_STATUS', 400));
     }
 
-    if ((Date.now() - lineState.updatedAt.getTime()) < ACTION_LOCK_TIMEOUT)
+    createRequest(prodLine._id, 'pickup', userData.info, {}, function(err, request)
     {
-      return done(app.createError('LOCKED', 400));
-    }
-
-    step(
-      function()
+      if (!err)
       {
-        createRequest(prodLine._id, 'pickup', userData.info, {}, this.next());
-      },
-      function(err, request)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        this.event = {
+        recordEvent({
           type: 'pickupRequested',
           requestId: request._id,
           orgUnits: request.orgUnits,
           time: request.requestedAt,
           user: request.requester,
           data: {}
-        };
-
-        lineState.update(request).save(this.next());
-      },
-      function(err)
-      {
-        if (!err)
-        {
-          recordEvent(this.event);
-        }
-
-        this.event = null;
-
-        done(err);
+        });
       }
-    );
+
+      done(err);
+    });
   };
 
-  actionHandlers.requestDelivery = function(lineState, parameters, userData, done)
+  actionHandlers.requestDelivery = function(prodLineId, parameters, userData, done)
   {
-    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', lineState._id);
+    const prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+
+    if (!prodLine)
+    {
+      return done(app.createError('UNKNOWN_LINE', 400));
+    }
 
     if (parameters.secretKey !== prodLine.secretKey)
     {
       return done(app.createError('AUTH', 403));
     }
 
-    if (lineState.status !== 'idle')
+    if (hasActiveRequest(prodLineId, 'delivery'))
     {
       return done(app.createError('INVALID_STATUS', 400));
-    }
-
-    if ((Date.now() - lineState.updatedAt.getTime()) < ACTION_LOCK_TIMEOUT)
-    {
-      return done(app.createError('LOCKED', 400));
     }
 
     step(
@@ -359,50 +290,50 @@ module.exports = function setUpIsaLineState(app, isaModule)
       },
       function(err, request)
       {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        this.event = {
-          type: 'deliveryRequested',
-          requestId: request._id,
-          orgUnits: request.orgUnits,
-          time: request.requestedAt,
-          user: userData.info,
-          data: request.data
-        };
-
-        lineState.update(request).save(this.next());
-      },
-      function(err)
-      {
         if (!err)
         {
-          recordEvent(this.event);
+          recordEvent({
+            type: 'deliveryRequested',
+            requestId: request._id,
+            orgUnits: request.orgUnits,
+            time: request.requestedAt,
+            user: userData.info,
+            data: request.data
+          });
         }
-
-        this.event = null;
 
         done(err);
       }
     );
   };
 
-  actionHandlers.cancelRequest = function(lineState, parameters, userData, done)
+  actionHandlers.cancelRequest = function(prodLineId, parameters, userData, done)
   {
-    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', lineState._id);
+    var request = idToRequestMap[parameters.requestId];
 
-    if (lineState.status === 'idle')
+    if (!request)
+    {
+      return done(app.createError('UNKNOWN_REQUEST', 400));
+    }
+
+    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+
+    if (!prodLine)
+    {
+      return done(app.createError('UNKNOWN_LINE', 400));
+    }
+
+    if (request.status === 'finished' || request.status === 'cancelled')
     {
       return done(app.createError('INVALID_STATUS', 400));
     }
 
-    if (lineState.status === 'request')
+    if (request.status === 'new')
     {
-      if (userData.isWhman || userData.canManage || parameters.secretKey === prodLine.secretKey)
+      if (userData.isLocal || userData.isWhman || userData.canManage || parameters.secretKey === prodLine.secretKey)
       {
-        // Request can be cancelled by an Operator, Warehouseman or a user with the ISA:MANAGE privilege.
+        // New requests can be cancelled by an Operator, Warehouseman or a user with the ISA:MANAGE privilege.
+        // TODO: remove local access
         _.noop();
       }
       else
@@ -411,11 +342,12 @@ module.exports = function setUpIsaLineState(app, isaModule)
       }
     }
 
-    if (lineState.status === 'response')
+    if (request.status === 'accepted')
     {
-      if (userData.isWhman || userData.canManage)
+      if (userData.isLocal || userData.isWhman || userData.canManage)
       {
-        // Response can be cancelled by a Warehouseman or a user with the ISA:MANAGE privilege.
+        // Accepted requests can be cancelled by a Warehouseman or a user with the ISA:MANAGE privilege.
+        // TODO: remove local access
         _.noop();
       }
       else
@@ -424,71 +356,41 @@ module.exports = function setUpIsaLineState(app, isaModule)
       }
     }
 
-    if ((Date.now() - lineState.updatedAt.getTime()) < ACTION_LOCK_TIMEOUT)
+    request.cancel(userData.info);
+    request.save(function(err)
     {
-      return done(app.createError('LOCKED', 400));
-    }
-
-    step(
-      function()
+      if (!err)
       {
-        IsaRequest.findById(lineState.requestId).exec(this.next());
-      },
-      function(err, request)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!request)
-        {
-          return this.skip(app.createError('UNKNOWN_REQUEST', 400));
-        }
-
-        request.cancel(userData.info);
-        request.save(this.next());
-      },
-      function(err, request)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        this.event = {
+        recordEvent({
           type: 'requestCancelled',
           requestId: request._id,
           orgUnits: request.orgUnits,
           time: request.finishedAt,
           user: userData.info,
           data: {}
-        };
-
-        lineState.update(request).save(this.next());
-      },
-      function(err)
-      {
-        if (!err)
-        {
-          recordEvent(this.event);
-        }
-
-        this.event = null;
-
-        done(err);
+        });
       }
-    );
+
+      done(err);
+    });
   };
 
-  actionHandlers.acceptRequest = function(lineState, parameters, userData, done)
+  actionHandlers.acceptRequest = function(prodLineId, parameters, userData, done)
   {
-    if (!userData.isWhman && !userData.canManage)
+    // TODO: remove local access
+    if (!userData.isLocal && !userData.isWhman && !userData.canManage)
     {
       return done(app.createError('AUTH', 403));
     }
 
-    if (lineState.status !== 'request')
+    var request = idToRequestMap[parameters.requestId];
+
+    if (!request)
+    {
+      return done(app.createError('UNKNOWN_REQUEST', 400));
+    }
+
+    if (request.status !== 'new')
     {
       return done(app.createError('INVALID_STATUS', 400));
     }
@@ -521,123 +423,74 @@ module.exports = function setUpIsaLineState(app, isaModule)
         }
 
         parameters.responder = userModule.createUserInfo(user, null);
-      },
-      function()
-      {
-        IsaRequest.findById(lineState.requestId).exec(this.next());
-      },
-      function(err, request)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!request)
-        {
-          return this.skip(app.createError('UNKNOWN_REQUEST', 400));
-        }
 
         request.accept(parameters.responder);
         request.save(this.next());
-      },
-      function(err, request)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        this.event = {
-          type: 'requestAccepted',
-          requestId: request._id,
-          orgUnits: request.orgUnits,
-          time: request.respondedAt,
-          user: userData.info,
-          data: {
-            responder: request.responder
-          }
-        };
-
-        lineState.update(request).save(this.next());
       },
       function(err)
       {
         if (!err)
         {
-          recordEvent(this.event);
+          recordEvent({
+            type: 'requestAccepted',
+            requestId: request._id,
+            orgUnits: request.orgUnits,
+            time: request.respondedAt,
+            user: userData.info,
+            data: {
+              responder: request.responder
+            }
+          });
         }
-
-        this.event = null;
 
         done(err);
       }
     );
   };
 
-  actionHandlers.finishRequest = function(lineState, parameters, userData, done)
+  actionHandlers.finishRequest = function(prodLineId, parameters, userData, done)
   {
-    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', lineState._id);
+    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
 
-    if (!userData.isWhman && !userData.canManage && parameters.secretKey !== prodLine.secretKey)
+    if (!prodLine)
+    {
+      return done(app.createError('UNKNOWN_LINE', 400));
+    }
+
+    // TODO: remove local access
+    if (!userData.isLocal && !userData.isWhman && !userData.canManage && parameters.secretKey !== prodLine.secretKey)
     {
       return done(app.createError('AUTH', 403));
     }
 
-    if (lineState.status !== 'response')
+    var request = idToRequestMap[parameters.requestId];
+
+    if (!request)
+    {
+      return done(app.createError('UNKNOWN_REQUEST', 400));
+    }
+
+    if (request.status !== 'accepted')
     {
       return done(app.createError('INVALID_STATUS', 400));
     }
 
-    step(
-      function()
+    request.finish(userData.info);
+    request.save(function(err)
+    {
+      if (!err)
       {
-        IsaRequest.findById(lineState.requestId).exec(this.next());
-      },
-      function(err, request)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!request)
-        {
-          return this.skip(app.createError('UNKNOWN_REQUEST', 400));
-        }
-
-        request.finish(userData.info);
-        request.save(this.next());
-      },
-      function(err, request)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        this.event = {
+        recordEvent({
           type: 'requestFinished',
           requestId: request._id,
           orgUnits: request.orgUnits,
           time: request.finishedAt,
           user: userData.info,
           data: {}
-        };
-
-        lineState.update(request).save(this.next());
-      },
-      function(err)
-      {
-        if (!err)
-        {
-          recordEvent(this.event);
-        }
-
-        this.event = null;
-
-        done(err);
+        });
       }
-    );
+
+      done(err);
+    });
   };
 };

@@ -8,7 +8,7 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/data/isaPalletKinds',
-  '../IsaLineState',
+  '../IsaRequest',
   '../views/IsaShiftPersonnelView',
   '../views/IsaLineStatesView',
   '../views/IsaEventsView',
@@ -28,7 +28,7 @@ define([
   View,
   bindLoadingMessage,
   palletKinds,
-  IsaLineState,
+  IsaRequest,
   IsaShiftPersonnelView,
   IsaLineStatesView,
   IsaEventsView,
@@ -73,7 +73,7 @@ define([
       'socket.connected': function()
       {
         this.promised(this.warehouseman.fetch({reset: true}));
-        this.promised(this.lineStates.fetch({reset: true}));
+        this.promised(this.requests.fetch({reset: true}));
         this.promised(this.shiftPersonnel.fetch());
 
         this.$el.removeClass('isa-is-disconnected');
@@ -89,22 +89,22 @@ define([
       {
         this.shiftPersonnel.set(shiftPersonnel);
       },
-      'isaLineStates.created.**': function(lineState)
+      'isaRequests.created.**': function(request)
       {
-        lineState = new IsaLineState(IsaLineState.parse(lineState));
+        request = new IsaRequest(IsaRequest.parse(request));
 
         if (this.pendingChanges)
         {
-          this.pendingChanges.push(lineState);
+          this.pendingChanges.push(request);
         }
         else
         {
-          this.applyChanges(lineState);
+          this.applyChanges(request);
         }
       },
-      'isaLineStates.updated.**': function(change)
+      'isaRequests.updated.**': function(change)
       {
-        change = IsaLineState.parse(change);
+        change = IsaRequest.parse(change);
 
         if (this.pendingChanges)
         {
@@ -156,7 +156,7 @@ define([
 
           this.$id('selectedResponder').text(user ? user.label : '');
 
-          this.lineStates.trigger('filter');
+          this.requests.trigger('filter');
         });
 
         responderPickerView.show(
@@ -223,20 +223,20 @@ define([
     {
       this.warehousemen = bindLoadingMessage(this.model.warehousemen, this);
       this.shiftPersonnel = bindLoadingMessage(this.model.shiftPersonnel, this);
-      this.lineStates = bindLoadingMessage(this.model.lineStates, this);
+      this.requests = bindLoadingMessage(this.model.requests, this);
       this.eventz = bindLoadingMessage(this.model.events, this);
 
-      this.listenTo(this.lineStates, 'change:status', function(lineState)
+      this.listenTo(this.requests, 'change:status', function(request)
       {
-        var oldStatus = lineState.previous('status');
-        var newStatus = lineState.get('status');
+        var oldStatus = request.previous('status');
+        var newStatus = request.get('status');
 
-        if (oldStatus === 'request'
-          && newStatus === 'response'
+        if (oldStatus === 'new'
+          && newStatus === 'accepted'
           && window.innerWidth > 800
-          && lineState.matchResponder(this.model.selectedResponder))
+          && request.matchResponder(this.model.selectedResponder))
         {
-          this.moveLineState(lineState);
+          this.moveRequest(request);
         }
       });
     },
@@ -258,15 +258,15 @@ define([
 
     defineBindings: function()
     {
-      this.listenTo(this.lineStates, 'request', function(model)
+      this.listenTo(this.requests, 'request', function(model)
       {
-        if (model === this.lineStates && !this.pendingChanges)
+        if (model === this.requests && !this.pendingChanges)
         {
           this.pendingChanges = [];
         }
       });
-      this.listenTo(this.lineStates, 'error sync', this.applyPendingChanges);
-      this.listenTo(this.lineStates, 'change:requestedAt', this.lineStates.sort.bind(this.lineStates));
+      this.listenTo(this.requests, 'error sync', this.applyPendingChanges);
+      this.listenTo(this.requests, 'add', this.requests.sort.bind(this.requests));
 
       this.listenTo(this.shiftPersonnel, 'change:users', this.attractToShiftPersonnel);
 
@@ -287,7 +287,7 @@ define([
       return when(
         this.warehousemen.fetch({reset: true}),
         this.shiftPersonnel.fetch(),
-        this.lineStates.fetch({reset: true}),
+        this.requests.fetch({reset: true}),
         this.eventz.fetch({reset: true})
       );
     },
@@ -296,49 +296,49 @@ define([
     {
       if (this.pendingChanges)
       {
-        this.pendingChanges.forEach(this.applyChanges.bind(this));
+        this.pendingChanges.forEach(this.applyChanges, this);
         this.pendingChanges = null;
       }
     },
 
     applyChanges: function(change)
     {
-      if (change instanceof IsaLineState)
+      if (change instanceof IsaRequest)
       {
-        var newLineState = change;
-        var oldLineState = this.lineStates.get(newLineState.id);
+        var newRequest = change;
+        var oldRequest = this.requests.get(newRequest.id);
 
-        if (!oldLineState)
+        if (!oldRequest)
         {
-          this.lineStates.add(newLineState);
+          this.requests.add(newRequest);
         }
-        else if (newLineState.get('updatedAt') > oldLineState.get('updatedAt'))
+        else if (newRequest.get('updatedAt') > oldRequest.get('updatedAt'))
         {
-          oldLineState.set(newLineState.attributes);
+          oldRequest.set(newRequest.attributes);
         }
       }
       else
       {
-        var lineState = this.lineStates.get(change._id);
+        var request = this.requests.get(change._id);
 
-        if (!lineState)
+        if (!request)
         {
-          return this.scheduleLineStatesReload();
+          return this.scheduleRequestReload();
         }
 
-        if (change.updatedAt > lineState.get('updatedAt'))
+        if (change.updatedAt > request.get('updatedAt'))
         {
-          lineState.set(change);
+          request.set(change);
         }
       }
     },
 
-    scheduleLineStatesReload: function()
+    scheduleRequestReload: function()
     {
-      clearTimeout(this.timers.reloadLineStates);
+      clearTimeout(this.timers.reloadRequests);
 
-      this.timers.reloadLineStates = setTimeout(
-        function(page) { page.promised(page.lineStates.fetch({reset: true})); }, 1, this
+      this.timers.reloadRequests = setTimeout(
+        function(page) { page.promised(page.requests.fetch({reset: true})); }, 1, this
       );
     },
 
@@ -415,29 +415,26 @@ define([
 
     updateTimes: function()
     {
-      this.lineStates.forEach(function(lineState)
+      this.requests.forEach(function(request)
       {
-        if (lineState.get('status') !== 'idle')
-        {
-          lineState.updateTime(true);
-        }
+        request.updateTime(true);
       });
 
       this.requestsView.updateTimes();
       this.responsesView.updateTimes();
     },
 
-    moveLineState: function(lineState)
+    moveRequest: function(request)
     {
       var page = this;
 
-      page.model.moving[lineState.id] = true;
+      page.model.moving[request.id] = true;
 
-      page.requestsView.move(lineState, function()
+      page.requestsView.move(request, function()
       {
-        page.responsesView.insert(lineState, function()
+        page.responsesView.insert(request, function()
         {
-          delete page.model.moving[lineState.id];
+          delete page.model.moving[request.id];
         });
       });
     },
@@ -667,25 +664,25 @@ define([
 
     findResponseByResponder: function(user)
     {
-      return this.lineStates.find(function(lineState)
+      return this.requests.find(function(request)
       {
-        return lineState.get('status') === 'response' && lineState.getWhman().id === user.id;
+        return request.get('status') === 'accepted' && request.getWhman().id === user.id;
       });
     },
 
     findRequest: function()
     {
-      return this.lineStates.find(function(lineState)
+      return this.requests.find(function(request)
       {
-        return lineState.get('status') === 'request';
+        return request.get('status') === 'new';
       });
     },
 
-    acceptRequest: function(lineState, responder)
+    acceptRequest: function(request, responder)
     {
       var page = this;
 
-      lineState.accept({id: responder.id, label: responder.getLabel()}, function(err)
+      this.requests.accept(request.id, {id: responder.id, label: responder.getLabel()}, function(err)
       {
         if (err)
         {
@@ -695,29 +692,22 @@ define([
         }
         else
         {
-          var palletKind = lineState.get('data').palletKind;
-
-          if (palletKind)
-          {
-            palletKind = palletKinds.get(palletKind.id);
-          }
-
           page.showMessage('info', 10000, acceptSuccessMessage({
             whman: responder.getLabel(),
-            requestType: lineState.get('requestType'),
-            orgUnits: lineState.get('orgUnits'),
-            palletKind: !palletKind ? '?' : palletKind.get('fullName')
+            requestType: request.get('type'),
+            orgUnit: request.get('orgUnit'),
+            palletKind: request.getFullPalletKind()
           }));
         }
       });
     },
 
-    finishResponse: function(lineState)
+    finishResponse: function(request)
     {
       var page = this;
-      var requestType = lineState.get('requestType');
+      var requestType = request.get('type');
 
-      lineState.finish(function(err)
+      this.requests.finish(request.id, true, function(err)
       {
         if (err)
         {
@@ -729,7 +719,7 @@ define([
         {
           page.showMessage('success', 2500, finishSuccessMessage({
             type: requestType,
-            line: lineState.id
+            line: request.getProdLineId()
           }));
         }
       });
