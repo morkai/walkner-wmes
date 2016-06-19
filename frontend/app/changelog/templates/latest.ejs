@@ -1,22 +1,50 @@
-<h1>v0.88.1</h1>
-<h2><%- time.format('2016-06-05', 'LL') %></h2>
+<h1>v0.89.0</h1>
+<h2><%- time.format('2016-06-19', 'LL') %></h2>
 <h3>Inspekcja Jakości</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający usunięcie wartości pól tekstowych (zmianę na puste).</li>
-  <li>Zmieniono pobieranie rodziny wyrobu z nazwy, tak aby Rodzina była pierwszymi sześcioma znakami nazwy, jeżeli
-    w nazwie nie występują żadne znaki spacji.</li>
-  <li>Zmieniono pole 'Ilość do poprawy' na 'Ilość do selekcji'</li>
-  <li>Zmieniono eksportowanie wykresu 'Ilość niezgodnych produktów' tak, aby w tytule wykresu odzwierciedlany był
-    aktualnie wybrany okres czasu oraz wybrane Wydziały.</li>
-  <li>Zmieniono panele załączników na stronie szczegółów wyniku tak, aby ich maksymalna wysokość nie przekraczała 512px
-    (jeżeli wysokość będzie większa, to pojawią się paski przewijania).</li>
-  <li>Zmieniono wydruk 'Zgłoszenie niezgodności' tak, aby był generowany po stronie serwera (PDF) zamiast po stronie
-    klienta (HTML).
-  <li>Dodano do wydruku 'Zgłoszenie niezgodności' etykiety pod obrazkami oraz wartości pól: Ilość skontrolowana,
-    Ilość do selekcji oraz Ilość niezgodnych.</li>
+  <li>Zmieniono wykres 'Ilość czerwonych pasków per centrum produkcyjne' tak, aby kolory centrów produkcyjnych brane były
+    z ustawień Układu fabryki.</li>
 </ul>
-<h3>Raporty</h3>
+<h3>Raport Lean</h3>
 <ul>
-  <li>Poprawiono obliczanie FTE dla Kontrolerów MRP oraz Przepływów w przypadku, gdy Przepływ na danej zmianie miał
-    podane FTE, ale w rzeczywistości żadna linia nie była aktywna.</li>
+  <li>Zmieniono eksportowanie wykresu w drugiej kolumnie tak, aby do trybu jednokolumnowego można było wybrać wartości
+    o różnych jednostkach (np. Czas przestojów i Wydajność).</li>
+</ul>
+<h3>Działy</h3>
+<ul>
+  <li>Usunięto pola 'Początkowy przestój' i 'Automatyczny przestój'.</li>
+  <li>Dodano nowe pole: 'Automatyczne przestoje'.</li>
+</ul>
+<h3>Formatka operatora</h3>
+<ul>
+  <li>Zmieniono automatyczne rozpoczynanie przestojów na bardziej elastyczne. Od teraz można zdefiniować dowolnie długą
+    kombinację automatycznych przestojów rozpoczynanych po rozpoczęciu nowego zlecenia w danym dziale.</li>
+  <li>Zmieniono 'Pola odkładcze' tak, aby można było w tym samy czasie zażądać dostawy i odbioru palety. Od teraz lewy
+    wskaźnik statusu dotyczy odbioru palety, a prawy - dostawy. Szary wskaźnik oznacza, że nie ma aktywnego żądania,
+    pomarańczowy wskaźnik - jest żądanie, ale jeszcze nie zaakceptowane przez magazyniera, zielone - żądanie jest
+    w trakcie realizacji przez magazyniera.</li>
+  <li>Dodano komunikat potwierdzenia do akcji anulowania żądania dostawy/odbioru palety.</li>
+  <li>Dodano opcję sprawdzania komponentu Spigot po rozpoczęciu wybranego powodu przestoju i przed zakończeniem zlecenia.
+    Sprawdzenie komponentu odbywa się przez zeskanowanie 12NC z kodu kreskowego i porównanie tej wartości z 12NC komponentu
+    Spigot w danym zleceniu. Konfiguracja opcji dostępna jest dla użytkowników z uprawnieniem 'Dane produkcyjne: zarządzanie'
+    w menu 'Produkcja > Ustawienia'.
+  </li>
+</ul>
+<h3>Pola odkładcze</h3>
+<ul>
+  <li>Usunięto filtr żądań w realizacji.</li>
+  <li>Zmieniono obliczanie wyświetlanego czasu tak, aby nie wskazywał czasu w przyszłości, jeżeli zegar klienta różni
+    się od zegara serwera.</li>
+  <li>Zmieniono sortowanie żądań do realizacji tak, aby żądania dostawy miały najwyższy priorytet.</li>
+  <li>Zmieniono wyświetlanie rodzaju palety w żądaniach dostawy tak, aby wyświetlana była pełna nazwa, a nie skrócona.</li>
+  <li>Dodano możliwość obsługi wielu żądań z jednej linii produkcyjnej.</li>
+  <li>Dodano możliwość akceptacji i kończenia żądań przez zeskanowanie czytnikiem nr personalnego magazyniera. Po zeskanowaniu
+    nr personalnego wyświetli się komunikat informujący o wykonanej akcji. Komunikat zamknie się po 2.5-10s (w zależności
+    od akcji) lub po wciśnięciu klawisza Escape, Enter lub Spacja.</li>
+</ul>
+<h3>Użytkownicy</h3>
+<ul>
+  <li>Zmieniono sposób wymuszenia aktualizacji aktywności sesji użytkownika tak, aby sesja była aktualizowana raz na 8 godzin
+    (zamiast 20% szansy na aktualizacje przy każdym żądaniu).</li>
+  <li>Zmieniono czas wygasania nieaktywnych sesji na 30 dni.</li>
 </ul>

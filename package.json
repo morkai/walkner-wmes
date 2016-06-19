@@ -2,11 +2,11 @@
   "private": true,
   "guid": "A0974235-9E21-49BB-8D01-CA7A932A6EEB",
   "name": "walkner-wmes",
-  "version": "0.88.1",
+  "version": "0.89.0",
   "updater": {
     "wmes": {
-      "backend": 185,
-      "frontend": 205,
+      "backend": 186,
+      "frontend": 206,
       "reports": 32,
       "attachments": 2,
       "importer-sap": 32,

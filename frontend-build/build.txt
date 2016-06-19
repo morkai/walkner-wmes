@@ -775,7 +775,8 @@ app/prodShiftOrders/ProdShiftOrderCollection.js
 app/isaPalletKinds/IsaPalletKind.js
 app/isaPalletKinds/IsaPalletKindCollection.js
 app/data/isaPalletKinds.js
-app/isa/IsaLineState.js
+app/isa/IsaRequest.js
+app/isa/IsaRequestCollection.js
 app/production/ProductionSetting.js
 app/production/ProductionSettingCollection.js
 app/production/settings.js
@@ -811,6 +812,7 @@ app/production/views/QuantityEditorView.js
 app/production/templates/quantities.js
 app/production/views/ProductionQuantitiesView.js
 app/production/templates/isa.js
+app/production/templates/isaCancelDialog.js
 app/production/views/IsaView.js
 app/production/templates/spigotChecker.js
 app/production/views/SpigotCheckerView.js
@@ -884,7 +886,6 @@ app/cags/routes.js
 app/changelog/routes.js
 app/isaPalletKinds/routes.js
 app/isa/IsaShiftPersonnel.js
-app/isa/IsaLineStateCollection.js
 app/isa/IsaEvent.js
 app/isa/IsaEventCollection.js
 app/isa/templates/shiftPersonnel.js

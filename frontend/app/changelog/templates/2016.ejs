@@ -1,4 +1,28 @@
 <div class="hidden">
+  <h1>v0.88.1</h1>
+  <h2><%- time.format('2016-06-05', 'LL') %></h2>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający usunięcie wartości pól tekstowych (zmianę na puste).</li>
+    <li>Zmieniono pobieranie rodziny wyrobu z nazwy, tak aby Rodzina była pierwszymi sześcioma znakami nazwy, jeżeli
+      w nazwie nie występują żadne znaki spacji.</li>
+    <li>Zmieniono pole 'Ilość do poprawy' na 'Ilość do selekcji'</li>
+    <li>Zmieniono eksportowanie wykresu 'Ilość niezgodnych produktów' tak, aby w tytule wykresu odzwierciedlany był
+      aktualnie wybrany okres czasu oraz wybrane Wydziały.</li>
+    <li>Zmieniono panele załączników na stronie szczegółów wyniku tak, aby ich maksymalna wysokość nie przekraczała 512px
+      (jeżeli wysokość będzie większa, to pojawią się paski przewijania).</li>
+    <li>Zmieniono wydruk 'Zgłoszenie niezgodności' tak, aby był generowany po stronie serwera (PDF) zamiast po stronie
+      klienta (HTML).
+    <li>Dodano do wydruku 'Zgłoszenie niezgodności' etykiety pod obrazkami oraz wartości pól: Ilość skontrolowana,
+      Ilość do selekcji oraz Ilość niezgodnych.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Poprawiono obliczanie FTE dla Kontrolerów MRP oraz Przepływów w przypadku, gdy Przepływ na danej zmianie miał
+      podane FTE, ale w rzeczywistości żadna linia nie była aktywna.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.88.0</h1>
   <h2><%- time.format('2016-05-24', 'LL') %></h2>
   <h3>Działy</h3>
