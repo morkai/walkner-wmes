@@ -234,10 +234,11 @@ exports.express = {
   sessionCookie: {
     httpOnly: true,
     path: '/',
-    maxAge: null
+    maxAge: 3600 * 24 * 30 * 1000
   },
   sessionStore: {
-    touchChance: 0.20
+    touchInterval: 3600 * 8 * 1000,
+    touchChance: 0
   },
   cookieSecret: '1ee7\\/\\/mes',
   ejsAmdHelpers: {

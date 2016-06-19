@@ -129,11 +129,9 @@ MongoStore.prototype.touch = function(sid, session, done)
   if ((this.touchInterval > 0 && (now - session.updatedAt) < this.touchInterval)
     || (this.touchChance > 0 && Math.random() > this.touchChance))
   {
-console.log(sid, 'miss');
     return done(null);
   }
 
-console.log(sid, 'hit');
   var sessions = this.collection();
   var expires = Date.parse(session.cookie.expires) || (Date.now() + this.defaultExpirationTime);
 
@@ -201,7 +199,7 @@ MongoStore.prototype.set = function(sid, session, done)
     upsert: true,
     safe: this.safe
   };
-console.log(sid, 'set');
+
   sessions.update({_id: sid}, doc, opts, function(err)
   {
     return done && done(err);
