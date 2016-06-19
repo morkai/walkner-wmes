@@ -51,6 +51,12 @@ function MongoStore(db, options)
 
   /**
    * @private
+   * @type {number}
+   */
+  this.touchInterval = options.touchInterval || MongoStore.Options.touchInterval;
+
+  /**
+   * @private
    * @type {number|null}
    */
   this.gcTimer = null;
@@ -106,22 +112,32 @@ MongoStore.Options = {
   /**
    * @type {number}
    */
-  touchChance: 0.25
+  touchChance: 0.25,
+
+  /**
+   * @type {number}
+   */
+  touchInterval: 0
 };
 
 util.inherits(MongoStore, Store);
 
 MongoStore.prototype.touch = function(sid, session, done)
 {
-  if (Math.random() > this.touchChance)
+  var now = Date.now();
+
+  if ((this.touchInterval > 0 && (now - session.updatedAt) < this.touchInterval)
+    || (this.touchChance > 0 && Math.random() > this.touchChance))
   {
+console.log(sid, 'miss');
     return done(null);
   }
 
+console.log(sid, 'hit');
   var sessions = this.collection();
   var expires = Date.parse(session.cookie.expires) || (Date.now() + this.defaultExpirationTime);
 
-  sessions.update({_id: sid}, {$set: {expires: expires}}, done);
+  sessions.update({_id: sid}, {$set: {expires, updatedAt: now}}, done);
 };
 
 /**
@@ -132,29 +148,31 @@ MongoStore.prototype.get = function(sid, done)
 {
   var store = this;
 
-  this.collection().findOne({_id: sid}, {_id: 0, data: 1}, function(err, doc)
+  this.collection().findOne({_id: sid}, {_id: 0, data: 1, updatedAt: 1}, function(err, doc)
   {
     if (err)
     {
       return done(err);
     }
 
-    if (doc !== null)
+    if (doc === null)
     {
-      var session = typeof doc.data === 'string' ? JSON.parse(doc.data) : doc.data;
-      var expires = typeof session.cookie.expires === 'string'
-        ? new Date(session.cookie.expires)
-        : session.cookie.expires;
-
-      if (!expires || new Date() < expires)
-      {
-        return done(null, session);
-      }
-
-      return store.destroy(sid, done);
+      return done();
     }
 
-    return done();
+    var session = typeof doc.data === 'string' ? JSON.parse(doc.data) : doc.data;
+    var expires = typeof session.cookie.expires === 'string'
+      ? new Date(session.cookie.expires)
+      : session.cookie.expires;
+
+    if (!expires || Date.now() < expires)
+    {
+      session.updatedAt = doc.updatedAt;
+
+      return done(null, session);
+    }
+
+    return store.destroy(sid, done);
   });
 };
 
@@ -166,23 +184,24 @@ MongoStore.prototype.get = function(sid, done)
 MongoStore.prototype.set = function(sid, session, done)
 {
   var sessions = this.collection();
-
+  var now = Date.now();
   var doc = {
     _id: sid,
+    updatedAt: now,
     expires: Date.parse(session.cookie.expires),
     data: session
   };
 
   if (isNaN(doc.expires))
   {
-    doc.expires = Date.now() + this.defaultExpirationTime;
+    doc.expires = now + this.defaultExpirationTime;
   }
 
   var opts = {
     upsert: true,
     safe: this.safe
   };
-
+console.log(sid, 'set');
   sessions.update({_id: sid}, doc, opts, function(err)
   {
     return done && done(err);
