@@ -60,7 +60,7 @@ var app = {
     startTime: startTime,
     env: process.env.NODE_ENV,
     rootPath: __dirname,
-    moduleStartTimeout: 3000
+    moduleStartTimeout: config.moduleStartTimeout || 3000
   })
 };
 
