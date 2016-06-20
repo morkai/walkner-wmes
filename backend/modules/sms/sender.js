@@ -44,6 +44,16 @@ exports.start = function startSmsSenderModule(app, module)
       done = text;
     }
 
+    if (typeof smsOptions.to === 'string')
+    {
+      smsOptions.to = [smsOptions.to];
+    }
+
+    if (!Array.isArray(smsOptions.to) || !smsOptions.to.length)
+    {
+      return setImmediate(done, new Error("No recipients."));
+    }
+
     if (request)
     {
       sendThroughRemote(smsOptions, done);
