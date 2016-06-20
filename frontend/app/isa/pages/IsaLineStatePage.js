@@ -707,7 +707,7 @@ define([
       var page = this;
       var requestType = request.get('type');
 
-      this.requests.finish(request.id, true, function(err)
+      this.requests.finish(request.id, function(err)
       {
         if (err)
         {
