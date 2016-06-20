@@ -5,6 +5,7 @@
 const _ = require('lodash');
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
+const expressMiddleware = require('./expressMiddleware');
 
 exports.DEFAULT_CONFIG = {
   maxConnectTries: 10,
@@ -32,6 +33,8 @@ exports.start = function startDbModule(app, module, done)
   module.connection.on('close', () => module.warn('Closed.'));
   module.connection.on('unauthorized', () => module.warn('Unauthorized.'));
   module.connection.on('error', (err) => module.error(err.stack));
+
+  app.broker.subscribe('express.beforeMiddleware', setUpExpressMiddleware).setLimit(1);
 
   tryToConnect(0);
 
@@ -136,5 +139,13 @@ exports.start = function startDbModule(app, module, done)
 
       setTimeout(setUpKeepAliveQuery, module.config.keepAliveQueryInterval);
     });
+  }
+
+  function setUpExpressMiddleware(message)
+  {
+    const expressModule = message.module;
+    const expressApp = expressModule.app;
+
+    expressApp.use(expressMiddleware.bind(null, app, module));
   }
 };
