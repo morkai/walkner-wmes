@@ -12,12 +12,14 @@ exports.DEFAULT_CONFIG = {
   uri: 'mongodb://localhost/test',
   options: {},
   models: null,
-  keepAliveQueryInterval: 30000
+  keepAliveQueryInterval: 30000,
+  stopOnConnectError: true
 };
 
 exports.start = function startDbModule(app, module, done)
 {
   let keepAliveFailed = false;
+  let initialized = false;
 
   module = app[module.name] = _.assign(mongoose, module);
 
@@ -39,22 +41,50 @@ exports.start = function startDbModule(app, module, done)
    */
   function tryToConnect(i)
   {
+    if (module.connection.readyState === mongoose.Connection.STATES.connected
+      || module.connection.readyState === mongoose.Connection.STATES.connecting)
+    {
+      return;
+    }
+
     module.connect(module.config.uri, module.config.options, function(err)
     {
       if (err)
       {
-        if (i === module.config.maxConnectTries)
+        if (i >= module.config.maxConnectTries)
         {
-          return done(err);
+          return initialize(err);
         }
 
         return setTimeout(tryToConnect.bind(null, i + 1), module.config.connectAttemptDelay);
       }
 
-      initializeAutoIncrement();
-      loadModels();
-      setUpKeepAliveQuery();
+      initialize();
     });
+  }
+
+  function initialize(err)
+  {
+    if (err)
+    {
+      if (module.config.stopOnConnectError)
+      {
+        return done(err);
+      }
+
+      module.error(err.message);
+
+      setTimeout(tryToConnect, 10000, 0);
+    }
+
+    if (!initialized)
+    {
+      initialized = true;
+
+      initializeAutoIncrement();
+      setUpKeepAliveQuery();
+      loadModels();
+    }
   }
 
   /**
