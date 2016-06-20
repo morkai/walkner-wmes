@@ -5,10 +5,12 @@
 var setUpNoEventCheck = require('./noEventCheck');
 var setUpAppStartedEventCheck = require('./appStartedEventCheck');
 var setUpEmptyDirectoryCheck = require('./emptyDirectoryCheck');
+var setUpDbCheck = require('./dbCheck');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   mailSenderId: 'mail/sender',
+  smsSenderId: 'sms/sender',
   twilioId: 'twilio',
   recipients: [],
   appStartedRecipients: [],
@@ -34,6 +36,13 @@ exports.start = function startWatchdogModule(app, watchdogModule)
       watchdogModule.config.mailSenderId
     ],
     setUpAppStartedEventCheck.bind(null, app, watchdogModule)
+  );
+
+  app.onModuleReady(
+    [
+      watchdogModule.config.mongooseId
+    ],
+    setUpDbCheck.bind(null, app, watchdogModule)
   );
 
   setUpEmptyDirectoryCheck(app, watchdogModule);

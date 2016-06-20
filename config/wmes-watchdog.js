@@ -13,6 +13,7 @@ exports.modules = [
   'events',
   'pubsub',
   'mail/sender',
+  'sms/sender',
   'twilio',
   'messenger/server',
   'watchdog'
@@ -54,8 +55,9 @@ exports.pubsub = {
 exports.mongoose = {
   uri: mongodb.uri,
   options: mongodb,
-  maxConnectTries: 10,
-  connectAttemptDelay: 500,
+  maxConnectTries: 0,
+  connectAttemptDelay: 250,
+  stopOnConnectError: false,
   models: [
     'setting', 'event', 'user',
     'twilioRequest', 'twilioResponse'
@@ -86,6 +88,10 @@ exports.updater = {
 
 exports['mail/sender'] = {
   from: 'WMES Bot <wmes@localhost>'
+};
+
+exports['sms/sender'] = {
+
 };
 
 exports.twilio = {
