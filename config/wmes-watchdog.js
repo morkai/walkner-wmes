@@ -103,5 +103,12 @@ exports.watchdog = {
   appStartedRecipients: [],
   noEventRecipients: [],
   events: [],
-  emptyDirectories: []
+  emptyDirectories: [],
+  ping: {
+    secretKey: '?',
+    remoteUrl: 'http://wmes/watchdog/ping',
+    localUrl: 'http://127.0.0.1/ping',
+    interval: 0,
+    window: 0
+  }
 };
