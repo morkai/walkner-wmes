@@ -72,7 +72,7 @@ define([
     localTopics: {
       'socket.connected': function()
       {
-        this.promised(this.warehouseman.fetch({reset: true}));
+        this.promised(this.warehousemen.fetch({reset: true}));
         this.promised(this.requests.fetch({reset: true}));
         this.promised(this.shiftPersonnel.fetch());
 
