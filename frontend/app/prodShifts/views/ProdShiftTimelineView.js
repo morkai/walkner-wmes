@@ -640,12 +640,19 @@ define([
         ],
         function(AddFormView, ProdShiftOrder)
         {
+          var prodShift = view.prodShift;
           var prodShiftOrder = new ProdShiftOrder({
-            prodShift: view.prodShift.id,
-            master: view.prodShift.get('master'),
-            leader: view.prodShift.get('leader'),
-            operator: view.prodShift.get('operator'),
-            operators: view.prodShift.get('operators'),
+            prodShift: prodShift.id,
+            division: prodShift.get('division'),
+            subdivision: prodShift.get('subdivision'),
+            mrpControllers: prodShift.get('mrpControllers'),
+            prodFlow: prodShift.get('prodFlow'),
+            workCenter: prodShift.get('workCenter'),
+            prodLine: prodShift.get('prodLine'),
+            master: prodShift.get('master'),
+            leader: prodShift.get('leader'),
+            operator: prodShift.get('operator'),
+            operators: prodShift.get('operators'),
             workerCount: 1,
             quantityDone: 0,
             startedAt: new Date(popoverItem.starting_time),
