@@ -9,6 +9,11 @@ module.exports = function setupQiKindModel(app, mongoose)
       type: String,
       required: true,
       trim: true
+    },
+    division: {
+      type: String,
+      ref: 'Division',
+      default: null
     }
   }, {
     id: false

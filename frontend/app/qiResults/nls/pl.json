@@ -41,7 +41,7 @@
   "PROPERTY:updatedAt": "Czas ostatniej zmiany",
   "PROPERTY:inspector": "Inspektor",
   "PROPERTY:inspectedAt": "Data inspekcji",
-  "PROPERTY:division": "Centrum produkcyjne",
+  "PROPERTY:division": "Wydział",
   "PROPERTY:orderNo": "Nr zlecenia",
   "PROPERTY:nc12": "12NC",
   "PROPERTY:productName": "Nazwa wyrobu",

@@ -19,6 +19,9 @@
     "PANEL:TITLE:editForm": "Edit kind form",
 
     "PROPERTY:name": "Name",
+    "PROPERTY:division": "Division",
+
+    "ordersDivision": "order's production center",
 
     "FORM:ACTION:add": "Add kind",
     "FORM:ACTION:edit": "Edit kind",

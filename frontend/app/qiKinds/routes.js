@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  '../i18n',
   '../router',
   '../viewport',
   '../user',
@@ -9,6 +10,7 @@ define([
   './QiKind'
 ], function(
   _,
+  t,
   router,
   viewport,
   user,
@@ -35,7 +37,8 @@ define([
           baseBreadcrumb: true,
           collection: new QiKindCollection(null, {rqlQuery: req.rql}),
           columns: [
-            'name'
+            {id: 'name', className: 'is-min'},
+            {id: 'division'}
           ]
         });
       }

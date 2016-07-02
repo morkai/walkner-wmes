@@ -1,9 +1,13 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../core/Model'
+  '../i18n',
+  '../core/Model',
+  '../data/orgUnits'
 ], function(
-  Model
+  t,
+  Model,
+  orgUnits
 ) {
   'use strict';
 
@@ -19,7 +23,19 @@ define([
 
     nlsDomain: 'qiKinds',
 
-    labelAttribute: 'name'
+    labelAttribute: 'name',
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+      var division = orgUnits.getByTypeAndId('division', obj.division);
+
+      obj.division = obj.division
+        ? (division ? division.getLabel() : obj.division)
+        : t.bound('qiKinds', 'ordersDivision');
+
+      return obj;
+    }
 
   });
 });

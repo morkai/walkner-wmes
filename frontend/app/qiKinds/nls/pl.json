@@ -18,6 +18,9 @@
   "PANEL:TITLE:editForm": "Formularz edycji rodzaju inspekcji",
 
   "PROPERTY:name": "Nazwa",
+  "PROPERTY:division": "Wydział",
+
+  "ordersDivision": "centrum produkcyjne ze zlecenia",
 
   "FORM:ACTION:add": "Dodaj rodzaj inspekcji",
   "FORM:ACTION:edit": "Edytuj rodzaj inspekcji",

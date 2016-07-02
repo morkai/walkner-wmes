@@ -48,6 +48,7 @@ define([
 
         this.$id('faultDescription').val(fault.get('description') || fault.get('name'));
       },
+      'change #-kind': 'updateDivision',
       'click #-addAction': 'addEmptyAction',
       'click [name="removeAction"]': function(e)
       {
@@ -270,9 +271,10 @@ define([
       }
       else
       {
-        this.findOrder();
         this.addEmptyAction();
       }
+
+      this.findOrder();
     },
 
     clearOrderFields: function()
@@ -322,9 +324,11 @@ define([
         view.$id('nc12').val(data.nc12);
         view.$id('productName').val(data.productName);
         view.$id('productFamily').val(data.productFamily);
-        view.$id('division').val(data.division);
+        view.$id('division').val(data.division).attr('data-orders-division', data.division);
 
         $orderNo[0].setCustomValidity('');
+
+        view.updateDivision();
       });
 
       view.findOrderReq = req;
@@ -379,6 +383,22 @@ define([
       {
         this.firstElementChild.textContent = i + 1;
       });
+    },
+
+    updateDivision: function()
+    {
+      var kind = qiDictionaries.kinds.get(this.$id('kind').val());
+
+      if (!kind)
+      {
+        return;
+      }
+
+      var $division = this.$id('division');
+      var ordersDivision = $division.attr('data-orders-division');
+      var kindsDivision = kind.get('division');
+
+      $division.val(kindsDivision || ordersDivision);
     }
 
   });
