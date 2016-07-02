@@ -24,6 +24,7 @@ define([
   var nls = 'i18n!app/nls/qiResults';
   var canView = user.auth('QI:RESULTS:VIEW');
   var canManage = user.auth('QI:INSPECTOR', 'QI:RESULTS:MANAGE');
+  var canEdit = user.auth('QI:INSPECTOR', 'QI:SPECIALIST', 'QI:RESULTS:MANAGE');
 
   router.map('/qi/reports/count', canView, function(req)
   {
@@ -120,7 +121,7 @@ define([
     );
   });
 
-  router.map('/qi/results/:id;edit', canManage, function(req)
+  router.map('/qi/results/:id;edit', canEdit, function(req)
   {
     viewport.loadPage(
       [

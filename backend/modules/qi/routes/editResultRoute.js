@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const step = require('h5.step');
 const prepareAttachments = require('./prepareAttachments');
 
@@ -12,9 +13,37 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
   const QiResult = mongoose.model('QiResult');
 
   const user = req.session.user;
-  const body = req.body;
+  const input = {};
 
-  prepareAttachments(qiModule.tmpAttachments, body);
+  if (userModule.isAllowedTo(user, 'QI:RESULTS:MANAGE'))
+  {
+    Object.assign(input, req.body);
+    prepareAttachments(qiModule.tmpAttachments, input);
+  }
+  else
+  {
+    if (userModule.isAllowedTo(user, 'QI:INSPECTOR'))
+    {
+      Object.assign(input, _.omit(req.body, [
+        'errorCategory',
+        'rootCause',
+        'correctiveActions'
+      ]));
+      prepareAttachments(qiModule.tmpAttachments, input);
+    }
+
+    if (userModule.isAllowedTo(user, 'QI:SPECIALIST'))
+    {
+      Object.assign(input, _.pick(req.body, [
+        'errorCategory',
+        'rootCause'
+      ]));
+    }
+
+    Object.assign(input, _.pick(req.body, [
+      'correctiveActions'
+    ]));
+  }
 
   const updater = userModule.createUserInfo(user, req);
   updater.id = updater.id.toString();
@@ -36,7 +65,7 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
         return this.skip(app.createError('NOT_FOUND', 404));
       }
 
-      const changed = qiResult.applyChanges(body, updater);
+      const changed = qiResult.applyChanges(input, updater);
 
       if (changed)
       {

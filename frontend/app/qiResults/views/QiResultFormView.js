@@ -275,6 +275,31 @@ define([
       }
 
       this.findOrder();
+      this.toggleRoleFields();
+    },
+
+    toggleRoleFields: function()
+    {
+      var manager = user.isAllowedTo('QI:RESULTS:MANAGE');
+      var inspector = user.isAllowedTo('QI:INSPECTOR');
+      var specialist = user.isAllowedTo('QI:SPECIALIST');
+
+      this.$('[data-role]').each(function()
+      {
+        var enabled;
+        var role = this.dataset.role;
+
+        if (manager || !role)
+        {
+          enabled = true;
+        }
+        else
+        {
+          enabled = (inspector && role === 'inspector') || (specialist && role === 'specialist');
+        }
+
+        this.disabled = !enabled;
+      });
     },
 
     clearOrderFields: function()

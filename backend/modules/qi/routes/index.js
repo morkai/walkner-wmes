@@ -30,6 +30,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
   const canManageDictionaries = userModule.auth('QI:DICTIONARIES:VIEW');
   const canViewResults = userModule.auth('QI:RESULTS:VIEW');
   const canManageResults = userModule.auth('QI:INSPECTOR', 'QI:RESULTS:MANAGE');
+  const canEditResults = userModule.auth('QI:INSPECTOR', 'QI:SPECIALIST', 'QI:RESULTS:MANAGE');
 
   express.get('/qi/dictionaries', canViewResults, dictionariesRoute.bind(null, app, qiModule));
 
@@ -46,7 +47,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
   express.get('/qi/results/:id.pdf', canViewResults, sendResultPdfRoute.bind(null, app, qiModule));
   express.get('/qi/results/:id.html', sendResultHtmlRoute.bind(null, app, qiModule));
   express.get('/qi/results/:id', canViewResults, express.crud.readRoute.bind(null, app, QiResult));
-  express.put('/qi/results/:id', canManageResults, editResultRoute.bind(null, app, qiModule));
+  express.put('/qi/results/:id', canEditResults, editResultRoute.bind(null, app, qiModule));
   express.delete('/qi/results/:id', canManageResults, express.crud.deleteRoute.bind(null, app, QiResult));
 
   express.get('/qi/results;rid', canViewResults, findByRidRoute.bind(null, app, qiModule));

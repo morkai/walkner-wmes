@@ -59,6 +59,11 @@ define([
         return false;
       }
 
+      if (!attrs.ok && user.isAllowedTo('QI:SPECIALIST'))
+      {
+        return true;
+      }
+
       if (attrs.creator && attrs.creator.id === user.data._id)
       {
         return true;

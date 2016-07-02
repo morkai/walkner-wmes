@@ -141,6 +141,7 @@
   "PRIVILEGE:ISA:MANAGE": "Pola odkładcze: zarządzanie",
   "PRIVILEGE:ISA:WHMAN": "Pola odkładcze: magazynier",
   "PRIVILEGE:QI:INSPECTOR": "Inspekcja Jakości: inspektor",
+  "PRIVILEGE:QI:SPECIALIST": "Inspekcja Jakości: specjalista",
   "PRIVILEGE:QI:RESULTS:VIEW": "Inspekcja Jakości: przeglądanie wyników",
   "PRIVILEGE:QI:RESULTS:MANAGE": "Inspekcja Jakości: zarządzanie wynikami",
   "PRIVILEGE:QI:DICTIONARIES:VIEW": "Inspekcja Jakości: przeglądanie słowników",
