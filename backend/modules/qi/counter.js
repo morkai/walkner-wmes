@@ -26,7 +26,7 @@ module.exports = function setUpQiCounter(app, qiModule)
       }},
       {$group: {
         _id: null,
-        count: {$sum: 1}
+        count: {$sum: '$qtyInspected'}
       }}
     ];
 
@@ -54,7 +54,7 @@ module.exports = function setUpQiCounter(app, qiModule)
       }},
       {$group: {
         _id: '$inspector.id',
-        count: {$sum: 1}
+        count: {$sum: '$qtyInspected'}
       }}
     ];
 
