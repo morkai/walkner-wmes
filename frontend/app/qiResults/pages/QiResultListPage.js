@@ -2,6 +2,7 @@
 
 define([
   'app/i18n',
+  'app/user',
   'app/core/pages/FilteredListPage',
   'app/core/util/pageActions',
   '../dictionaries',
@@ -10,6 +11,7 @@ define([
   'app/qiResults/templates/addPageActions'
 ], function(
   t,
+  user,
   FilteredListPage,
   pageActions,
   qiDictionaries,
@@ -34,7 +36,7 @@ define([
         pageActions.export(layout, this, this.collection, false),
         {
           template: addPageActionsTemplate,
-          privilege: 'QI:INSPECTOR QI:MANAGE'
+          privileges: function() { return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE'); }
         },
         {
           label: t.bound('qiResults', 'PAGE_ACTION:settings'),
