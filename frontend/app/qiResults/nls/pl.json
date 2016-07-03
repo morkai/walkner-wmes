@@ -74,7 +74,7 @@
   "LIST:COLUMN:orderNo": "Zlecenie",
   "LIST:COLUMN:productFamily": "Rodzina",
   "LIST:COLUMN:inspectedAt": "Data",
-  "LIST:COLUMN:division": "Centrum prod.",
+  "LIST:COLUMN:division": "Wydział",
   "LIST:COLUMN:qtyInspected": "Ilość spr.",
   "LIST:COLUMN:qtyToFix": "Ilość popr.",
   "LIST:COLUMN:qtyNok": "Ilość NOK",
