@@ -1,3 +1,3 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../core/Model"],function(i){"use strict";return i.extend({urlRoot:"/qi/kinds",clientUrlRoot:"#qi/kinds",topicPrefix:"qi.kinds",privilegePrefix:"QI:DICTIONARIES",nlsDomain:"qiKinds",labelAttribute:"name"})});
+define(["../i18n","../core/Model","../data/orgUnits"],function(i,n,e){"use strict";return n.extend({urlRoot:"/qi/kinds",clientUrlRoot:"#qi/kinds",topicPrefix:"qi.kinds",privilegePrefix:"QI:DICTIONARIES",nlsDomain:"qiKinds",labelAttribute:"name",serialize:function(){var n=this.toJSON(),o=e.getByTypeAndId("division",n.division);return n.division=n.division?o?o.getLabel():n.division:i.bound("qiKinds","ordersDivision"),n}})});

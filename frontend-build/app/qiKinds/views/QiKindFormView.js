@@ -1,3 +1,3 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/core/views/FormView","app/qiKinds/templates/form"],function(e,t){"use strict";return e.extend({template:t})});
+define(["app/i18n","app/core/views/FormView","app/core/util/idAndLabel","app/data/orgUnits","app/qiKinds/templates/form"],function(i,e,t,n,r){"use strict";return e.extend({template:r,afterRender:function(){e.prototype.afterRender.call(this),this.$id("division").select2({allowClear:!0,placeholder:i("qiKinds","ordersDivision"),data:n.getAllByType("division").map(t)})},serializeForm:function(i){return i.division=i.division||null,i}})});

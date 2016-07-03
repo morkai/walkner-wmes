@@ -1,16 +1,12 @@
-<h1>v0.89.1</h1>
-<h2><%- time.format('2016-06-26', 'LL') %></h2>
-<h3>Pola odkładcze</h3>
+<h1>v0.89.2</h1>
+<h2><%- time.format('2016-07-03', 'LL') %></h2>
+<h3>Inspekcja Jakości</h3>
 <ul>
-  <li>Poprawiono błąd powodujący niewyświetlanie komunikatu o zakończeniu żądania w realizacji.</li>
-  <li>Poprawiono błąd powodujący zrywanie połączenia z serwerem co 10 sekund po pierwszym ponownym połączeniu z serwerem.</li>
-</ul>
-<h3>Zlecenia produkcyjne</h3>
-<ul>
-  <li>Poprawiono błąd powodujący wyszukiwanie zleceń po 12NC zamiast ich numerze na formularzu dodawania/modyfikacji zlecenia.</li>
-</ul>
-<h3>Watchdog</h3>
-<ul>
-  <li>Dodano informowanie o braku połączenia z bazą danych.</li>
-  <li>Dodano informowanie o braku dostępności głównego procesu serwera.</li>
+  <li>Poprawiono błąd powodujący wyświetlanie akcji dodawania inspekcji na liście inspekcji dla użytkowników
+    nie mających odpowiednich uprawnień.</li>
+  <li>Zmieniono dzienny licznik tak, aby zliczał wartość 'Ilość sprawdzonych', a nie ilość przeprowadzonych inspekcji.</li>
+  <li>Zmieniono pole 'Centrum produkcyjne' na 'Wydział'.</li>
+  <li>Dodano możliwość nadpisania wydziału ze zlecenia wydziałem przypisanym do wybranego rodzaju inspekcji.</li>
+  <li>Dodano nową rolę: 'Inspekcja Jakości: specjalista'. Specjaliści mogą edytować tylko kategorię błędu,
+    przyczynę źródłową oraz akcje korygujące.</li>
 </ul>
