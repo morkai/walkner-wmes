@@ -55,7 +55,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
     if (err)
     {
       productionModule.error(
-        "Error while saving log %d entries: %s\n%s",
+        "Error while saving %d log entries: %s\n%s",
         logEntryList.length,
         err.stack || err.errmsg || err.err || err.message,
         JSON.stringify({
@@ -81,22 +81,23 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
 
     if (!_.isObject(logEntry))
     {
-      return logInvalidEntry(new Error('TYPE'), logEntryJson);
+      throw new Error('TYPE');
     }
 
     if (!_.isFunction(logEntryHandlers[logEntry.type]))
     {
-      return logInvalidEntry(new Error('UNKNOWN_HANDLER'), logEntryJson);
+      throw new Error('UNKNOWN_HANDLER');
     }
 
-    if (!_.isString(logEntry.secretKey) || logEntry.secretKey !== productionModule.secretKeys[logEntry.prodLine])
+    if (!_.isString(logEntry.secretKey)
+      || logEntry.secretKey !== productionModule.secretKeys[logEntry.prodLine])
     {
       if (i === lastLogEntryIndex)
       {
         lastLogEntryWithInvalidSecretKey = logEntry;
       }
 
-      return logInvalidEntry(new Error('SECRET_KEY'), logEntryJson);
+      throw new Error('SECRET_KEY');
     }
 
     if (!logEntry.creator)
