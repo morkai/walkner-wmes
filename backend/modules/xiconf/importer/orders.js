@@ -32,6 +32,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
   var Order = mongoose.model('Order');
   var XiconfOrder = mongoose.model('XiconfOrder');
+  var XiconfHidLamp = mongoose.model('XiconfHidLamp');
 
   var filePathCache = {};
   var locked = false;
@@ -120,6 +121,21 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
   function importFile(fileInfo, done)
   {
     step(
+      function findHidLampsStep()
+      {
+        XiconfHidLamp.find({}, {_id: 0, nc12: 1}).lean().exec(this.next());
+      },
+      function prepareHidLampsStep(err, hidLamps)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        this.hidLamps = {};
+
+        hidLamps.forEach(hidLamp => this.hidLamps[hidLamp.nc12] = true);
+      },
       function readFileStep()
       {
         fs.readFile(fileInfo.filePath, {encoding: 'utf8'}, this.next());
@@ -135,7 +151,8 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
         var t = Date.now();
 
-        this.parsedOrdersList = parseOrders(fileContents);
+        this.parsedOrdersList = parseOrders(fileContents, this.hidLamps);
+        this.hidLamps = null;
 
         module.debug("[%s] Parsed %d orders in %d ms!", fileInfo.timeKey, this.parsedOrdersList.length, Date.now() - t);
 

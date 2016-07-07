@@ -21,6 +21,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var XiconfOrderResult = mongoose.model('XiconfOrderResult');
   var XiconfOrder = mongoose.model('XiconfOrder');
   var XiconfInvalidLed = mongoose.model('XiconfInvalidLed');
+  var XiconfHidLamp = mongoose.model('XiconfHidLamp');
   var Order = mongoose.model('Order');
   var License = mongoose.model('License');
 
@@ -51,6 +52,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   xiconfModule.remote = {
     checkSerialNumber: handleCheckSerialNumberRequest,
+    checkHidLamp: handleCheckHidLampRequest,
     generateServiceTag: handleGenerateServiceTagRequest,
     acquireServiceTag: handleAcquireServiceTagRequest,
     releaseServiceTag: handleReleaseServiceTagRequest,
@@ -118,6 +120,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     socket.on('disconnect', handleClientDisconnect);
     socket.on('xiconf.connect', handleClientConnect);
     socket.on('xiconf.checkSerialNumber', handleCheckSerialNumberRequest);
+    socket.on('xiconf.checkHidLamp', handleCheckHidLampRequest);
     socket.on('xiconf.generateServiceTag', handleGenerateServiceTagRequest);
     socket.on('xiconf.acquireServiceTag', handleAcquireServiceTagRequest);
     socket.on('xiconf.releaseServiceTag', handleReleaseServiceTagRequest);
@@ -707,6 +710,37 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     checkSerialNumber(input, reply);
   }
 
+  function handleCheckHidLampRequest(input, reply)
+  {
+    /*jshint validthis:true*/
+
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (restarting)
+    {
+      return reply(new Error('RESTARTING'));
+    }
+
+    var socket = this;
+
+    if (socket.id && !socket.xiconf)
+    {
+      return reply(new Error('NOT_CONNECTED'));
+    }
+
+    if (!_.isObject(input)
+      || !_.isString(input.orderNo)
+      || !_.isString(input.scanResult))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    checkHidLamp(input, reply);
+  }
+
   function handleGenerateServiceTagRequest(input, reply)
   {
     /*jshint validthis:true*/
@@ -764,7 +798,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       || !_.isString(input.orderNo)
       || !_.isString(input.nc12)
       || !_.isBoolean(input.multi)
-      || !validateInputLeds(input))
+      || !validateInputLeds(input)
+      || !validateInputHidLamps(input))
     {
       return reply(new Error('INPUT'));
     }
@@ -891,6 +926,39 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     return true;
   }
 
+  function validateInputHidLamps(input)
+  {
+    if (!_.isArray(input.hidLamps))
+    {
+      input.hidLamps = [];
+    }
+
+    for (var i = 0; i < input.hidLamps.length; ++i)
+    {
+      var hidLamp = input.hidLamps[i];
+
+      if (!_.isObject(hidLamp)
+        || !_.isString(hidLamp.nc12)
+        || !_.isArray(hidLamp.scanResults)
+        || !hidLamp.scanResults.length)
+      {
+        return false;
+      }
+
+      for (var ii = 0; ii < hidLamp.scanResults.length; ++ii)
+      {
+        var serialNumber = hidLamp.scanResults[ii];
+
+        if (!_.isString(serialNumber) || _.isEmpty(serialNumber))
+        {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   function checkSerialNumber(input, reply)
   {
     step(
@@ -910,10 +978,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         {
           xiconfModule.error(
             "Failed to check serial number [%s] for order [%s] and 12NC [%s]: %s",
-            err.message,
             input.serialNumber,
             input.orderNo,
-            input.nc12
+            input.nc12,
+            err.message
           );
 
           return reply(new Error('DB_FAILURE'), null);
@@ -925,6 +993,57 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         }
 
         return reply(null, null);
+      }
+    );
+  }
+
+  function checkHidLamp(input, reply)
+  {
+    step(
+      function getModelsStep()
+      {
+        getOrderData(input.orderNo, this.parallel());
+        XiconfHidLamp.findById(input.scanResult, {_id: 0, nc12: 1}).lean().exec(this.parallel());
+      },
+      function checkStep(err, orderData, hidLamp)
+      {
+        if (err)
+        {
+          xiconfModule.error(
+            "Failed to check HID lamp [%s] for order [%s]: %s",
+            input.scanResult,
+            input.orderNo,
+            err.message
+          );
+
+          return reply(new Error('DB_FAILURE'), null);
+        }
+
+        if (!orderData)
+        {
+          return reply(new Error('UNKNOWN_ORDER_NO'), null);
+        }
+
+        if (!hidLamp)
+        {
+          return reply(new Error('UNKNOWN_HID_LAMP'), null);
+        }
+
+        const hidItems = orderData.items.filter(item => item.kind === 'hid');
+
+        if (!hidItems.length)
+        {
+          return reply(new Error('NO_HID_LAMPS'), null);
+        }
+
+        const index = orderData.items.findIndex(item => item.nc12 === hidLamp.nc12);
+
+        if (index === -1)
+        {
+          return reply(new Error('INVALID_HID_LAMP'), null);
+        }
+
+        return reply(null, hidLamp.nc12);
       }
     );
   }
@@ -956,7 +1075,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       leds: input.leds,
       programId: input.programId,
       programName: input.programName,
-      recount: input.recount !== false
+      recount: input.recount !== false,
+      hidLamps: input.hidLamps
     });
   }
 
@@ -1117,10 +1237,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         var quantityPerResult = 0;
         var programQuantityDone = 0;
         var ledQuantityDone = 0;
+        var hidQuantityDone = 0;
         var testQuantityDone = 0;
         var ftQuantityDone = 0;
         var programItems = [];
         var ledItems = [];
+        var hidItems = [];
         var testItems = {};
         var ftItem = null;
         var ftItemIndex = -1;
@@ -1134,6 +1256,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           if (item.kind === 'led')
           {
             ledItems.push(item);
+          }
+          else if (item.kind === 'hid')
+          {
+            hidItems.push(item);
           }
           else if (item.kind === 'program')
           {
@@ -1210,12 +1336,16 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           newItems.push(testItems[programId].item);
         });
 
-        var anyLedItems = ledItems.length > 0;
-
-        if (anyLedItems)
+        if (ledItems.length > 0)
         {
           quantityPerResult = ledItems[0].quantityTodo / orderData.quantityTodo;
           ledQuantityDone = ledItems[0].quantityDone / quantityPerResult;
+        }
+
+        if (hidItems.length > 0)
+        {
+          quantityPerResult = hidItems[0].quantityTodo / orderData.quantityTodo;
+          hidQuantityDone = hidItems[0].quantityDone / quantityPerResult;
         }
 
         for (i = 0; i < programItems.length; ++i)
@@ -1260,9 +1390,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         }
         else
         {
-          var quantitiesDone = [programQuantityDone, ledQuantityDone, testQuantityDone, ftQuantityDone]
-            .map(function(qty) { return qty > 0 ? qty : 0; })
-            .filter(function(qty) { return qty > 0; });
+          var quantitiesDone = [
+            programQuantityDone,
+            ledQuantityDone,
+            hidQuantityDone,
+            testQuantityDone,
+            ftQuantityDone
+          ].filter(function(qty) { return qty > 0; });
           var totalQuantityDone = quantitiesDone.reduce(function(qty, total) { return qty + total; }, 0);
 
           quantityDone = Math.round(totalQuantityDone / quantitiesDone.length * 100) / 100;
@@ -1476,6 +1610,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         var ftItem;
         var ftItemIndex = -1;
         var ledItems = {};
+        var hidItems = {};
 
         for (var i = 0; i < orderData.items.length; ++i)
         {
@@ -1484,6 +1619,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           if (item.kind === 'led')
           {
             ledItems[item.nc12] = {
+              item: item,
+              index: i
+            };
+          }
+          else if (item.kind === 'hid')
+          {
+            hidItems[item.nc12] = {
               item: item,
               index: i
             };
@@ -1513,6 +1655,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           function(orderData) { orderData.serviceTagCounter = $set.serviceTagCounter; }
         ];
         var anyLeds = false;
+        var anyHids = false;
 
         if (programItemIndex !== -1)
         {
@@ -1597,6 +1740,30 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           anyLeds = true;
         });
 
+        _.forEach(data.hidLamps, function(hidLamp)
+        {
+          var hidItem = hidItems[hidLamp.nc12];
+
+          if (!hidItem)
+          {
+            return;
+          }
+
+          delete hidItems[hidLamp.nc12];
+
+          var index = hidItem.index;
+          var item = hidItem.item;
+
+          var newHidItemQuantityDone = item.quantityDone + hidLamp.scanResults.length;
+
+          $set['items.' + index + '.quantityDone'] = newHidItemQuantityDone;
+          $addToSet['items.' + index + '.serialNumbers'] = {$each: hidLamp.scanResults};
+
+          changes.push(applyItemQuantityDoneChange.bind(null, item, newHidItemQuantityDone));
+
+          anyHids = true;
+        });
+
         if (changes.length <= 1)
         {
           return this.skip(new Error('NO_CHANGES'));
@@ -1605,7 +1772,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         var condition = {_id: data.orderNo};
         var updates = {$set: $set};
 
-        if (anyLeds)
+        if (anyLeds || anyHids)
         {
           updates.$addToSet = $addToSet;
         }

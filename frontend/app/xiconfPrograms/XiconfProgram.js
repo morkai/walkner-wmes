@@ -19,7 +19,7 @@ define([
 
     privilegePrefix: 'XICONF',
 
-    topicPrefix: 'xiconfPrograms',
+    topicPrefix: 'xiconf.programs',
 
     nlsDomain: 'xiconfPrograms',
 

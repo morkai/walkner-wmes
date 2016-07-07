@@ -19,12 +19,6 @@ define([
 
     template: ledsTemplate,
 
-    initialize: function()
-    {
-      this.listenTo(this.model, 'change:leds', this.render);
-      this.listenTo(this.model, 'change:led', this.renderLed);
-    },
-
     serialize: function()
     {
       return {

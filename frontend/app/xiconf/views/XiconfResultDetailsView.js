@@ -7,6 +7,7 @@ define([
   'app/highcharts',
   'app/core/View',
   './LedsView',
+  './HidLampsView',
   './ProgramStepsView',
   'app/xiconf/templates/details'
 ], function(
@@ -16,6 +17,7 @@ define([
   Highcharts,
   View,
   LedsView,
+  HidLampsView,
   ProgramStepsView,
   detailsTemplate
 ) {
@@ -67,6 +69,7 @@ define([
       this.metricsChart = null;
 
       this.setView('.xiconf-details-leds', new LedsView({model: this.model}));
+      this.setView('.xiconf-details-hidLamps', new HidLampsView({model: this.model}));
       this.setView('.xiconf-details-steps', new ProgramStepsView({model: this.model}));
     },
 

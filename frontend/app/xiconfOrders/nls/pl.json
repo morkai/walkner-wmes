@@ -28,15 +28,17 @@
   "status:0": "Ukończone",
   "status:1": "Nadwyżka",
 
-  "kind:unit:led": "płytki LED",
-  "kind:unit:program": "drivery",
-  "kind:unit:test": "testy",
-  "kind:unit:ft": "ramki",
+  "kind:unit:led": "płytek LED",
+  "kind:unit:program": "driverów",
+  "kind:unit:test": "testów",
+  "kind:unit:ft": "ramek",
+  "kind:unit:hid": "lamp HID",
   "kind:name:ft": "Test ramki",
   "kind:nc12:led": "12NC płytek LED",
   "kind:nc12:program": "12NC programu",
   "kind:nc12:test": "ID programu",
   "kind:nc12:gprs": "12NC płytki GPRS",
+  "kind:nc12:hid": "12NC lampy HID",
 
   "filter:submit": "Filtruj zlecenia",
 

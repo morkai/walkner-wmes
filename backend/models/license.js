@@ -33,7 +33,7 @@ module.exports = function setupLicenseModel(app, mongoose)
       type: Number,
       default: 0,
       min: 0,
-      max: 999
+      max: 0xFFFF
     },
     key: {
       type: String,

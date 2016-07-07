@@ -1,0 +1,31 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- t('xiconfHidLamps', 'PROPERTY:_id') %></label>
+        <input id="<%- idPrefix %>-_id" class="form-control" type="text" name="_id" maxlength="100" required autofocus>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-nc12" class="control-label is-required"><%- t('xiconfHidLamps', 'PROPERTY:nc12') %></label>
+        <input id="<%- idPrefix %>-nc12" class="form-control" type="text" name="nc12" maxlength="12" required pattern="^[0-9]{12}$">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- t('xiconfHidLamps', 'PROPERTY:description') %></label>
+        <input id="<%- idPrefix %>-description" class="form-control" type="text" name="description" maxlength="100" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-voltage" class="control-label"><%- t('xiconfHidLamps', 'PROPERTY:voltage') %></label>
+        <input id="<%- idPrefix %>-voltage" class="form-control" type="text" name="voltage" maxlength="30">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-family" class="control-label"><%- t('xiconfHidLamps', 'PROPERTY:family') %></label>
+        <input id="<%- idPrefix %>-family" class="form-control" type="text" name="family">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

@@ -226,6 +226,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
         var incompleteProgramItemCount = 0;
         var incompleteLedItemCount = 0;
+        var incompleteHidItemCount = 0;
         var incompleteTestItemCount = 0;
         var incompleteFtItemCount = 0;
 
@@ -248,6 +249,10 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           else if (item.kind === 'led')
           {
             incompleteLedItemCount += 1;
+          }
+          else if (item.kind === 'hid')
+          {
+            incompleteHidItemCount += 1;
           }
           else if (item.kind === 'test')
           {
@@ -289,6 +294,11 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
         if (incompleteLedItemCount)
         {
           text.push('  - nie zeskanowano wszystkich płytek LED!');
+        }
+
+        if (incompleteHidItemCount)
+        {
+          text.push('  - nie zeskanowano wszystkich lamp HID!');
         }
 
         if (incompleteFtItemCount)

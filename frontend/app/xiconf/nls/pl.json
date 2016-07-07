@@ -1,6 +1,6 @@
 {
   "BREADCRUMBS:base": "Xiconf",
-  "BREADCRUMBS:browse": "Wyniki",
+  "BREADCRUMBS:browse": "Historia",
   "BREADCRUMBS:details": "Wynik",
   "BREADCRUMBS:settings": "Ustawienia",
 
@@ -72,6 +72,7 @@
   "tab:workflow": "Konfiguracja programatora",
   "tab:feature": "Konfiguracja drivera",
   "tab:leds": "Płytki LED",
+  "tab:hidLamps": "Lampy HID",
   "tab:program": "Program",
   "tab:gprsOrderFile": "Zlecenie",
   "tab:gprsInputFile": "Konfiguracja CityTouchIPT",
@@ -335,6 +336,19 @@
   "error:FT:SDP_TIMEOUT": "FT: Upłynięcie limitu czasu oczekiwania na odpowiedź testera.",
   "error:FT:SDP_INVALID_RESPONSE": "FT: Otrzymano nieprawidłową odpowiedź od testera.",
   "error:FT:PE_FAILURE": "FT: Nieprawidłowy obwód ochronny.",
+
+  "log:HID:STARTED": "Rozpoczynanie sprawdzania lamp HID...",
+  "log:HID:SUCCESS": "Pomyślnie ukończono sprawdzanie lamp HID w ciągu <code>{duration}</code>.",
+  "log:HID:FAILURE": "Zakończono sprawdzanie lamp HID w ciągu <code>{duration}</code> z powodu błędu: <code>{error}</code>",
+  "log:HID:WAITING": "Oczekiwanie na {hidLampCount} {hidLampCount, plural, one{lampę} few{lampy} other{lamp}} HID...",
+
+  "hidLamps:error:NO_CONNECTION": "Brak połączenia z<br>serwerem zewnętrznym!",
+  "hidLamps:error:TIMEOUT": "Upłynął limit czasu<br>oczekiwania na odpowiedź!",
+  "hidLamps:error:DB_FAILURE": "Błąd bazy danych!",
+  "hidLamps:error:UNKNOWN_ORDER_NO": "Nieznane zlecenie!",
+  "hidLamps:error:UNKNOWN_HID_LAMP": "Nieznana lampa HID!",
+  "hidLamps:error:NO_HID_LAMPS": "Zlecenie bez lamp HID!",
+  "hidLamps:error:INVALID_HID_LAMP": "Nieprawidłowe ID lampy HID!",
 
   "settings:tab:clients": "Klienci",
   "settings:tab:notifier": "Powiadomienia",

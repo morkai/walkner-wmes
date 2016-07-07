@@ -1,7 +1,7 @@
 {
   "root": {
     "BREADCRUMBS:base": "Xiconf",
-    "BREADCRUMBS:browse": "Results",
+    "BREADCRUMBS:browse": "History",
     "BREADCRUMBS:details": "Result",
     "BREADCRUMBS:settings": "Settings",
 
@@ -73,6 +73,7 @@
     "tab:workflow": "Programmer config",
     "tab:feature": "Driver config",
     "tab:leds": "LED boards",
+    "tab:hidLamps": "HID lamps",
     "tab:program": "Program",
     "tab:gprsOrderFile": "Order",
     "tab:gprsInputFile": "CityTouchIPT config",
@@ -336,6 +337,19 @@
     "error:FT:SDP_TIMEOUT": "FT: Waiting for a response from the SDP timed out.",
     "error:FT:SDP_INVALID_RESPONSE": "FT: Received an invalid response from the SDP.",
     "error:FT:PE_FAILURE": "FT: PE failure.",
+
+    "log:HID:STARTED": "Starting a HID lamp check...",
+    "log:HID:SUCCESS": "Successfully finished the HID lamp check in <code>{duration}</code>.",
+    "log:HID:FAILURE": "Unsuccessfully finished the HID lamp check in <code>{duration}</code> with an error: <code>{error}</code>",
+    "log:HID:WAITING": "Waiting for {hidLampCount} HID {hidLampCount, plural, one{lamp} other{lamps}}...",
+
+    "hidLamps:error:NO_CONNECTION": "No connection to<br>the remote server!",
+    "hidLamps:error:TIMEOUT": "Response timeout!",
+    "hidLamps:error:DB_FAILURE": "Database failure!",
+    "hidLamps:error:UNKNOWN_ORDER_NO": "Unknown order!",
+    "hidLamps:error:UNKNOWN_HID_LAMP": "Unknown HID lamp!",
+    "hidLamps:error:NO_HID_LAMPS": "Order without HID lamps!",
+    "hidLamps:error:INVALID_HID_LAMP": "Invalid HID lamp ID!",
 
     "settings:tab:clients": "Clients",
     "settings:tab:notifier": "Notifications",

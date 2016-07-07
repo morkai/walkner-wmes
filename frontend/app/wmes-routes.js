@@ -36,6 +36,7 @@ define([
   './xiconf/routes',
   './xiconfOrders/routes',
   './xiconfPrograms/routes',
+  './xiconfHidLamps/routes',
   './xiconfClients/routes',
   './factoryLayout/routes',
   './licenses/routes',

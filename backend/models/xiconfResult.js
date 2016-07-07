@@ -56,6 +56,7 @@ module.exports = function setupXiconfResultModel(app, mongoose)
       default: null
     },
     leds: [],
+    hidLamps: [],
     gprsNc12: {
       type: String,
       default: null

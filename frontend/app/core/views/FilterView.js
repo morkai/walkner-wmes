@@ -1,4 +1,4 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
   'underscore',
@@ -7,6 +7,7 @@ define([
   'h5.rql/specialTerms',
   'app/i18n',
   'app/core/View',
+  'app/core/util',
   'app/core/util/buttonGroup',
   'app/core/templates/filterLimit',
   'select2'
@@ -17,6 +18,7 @@ define([
   specialTerms,
   t,
   View,
+  util,
   buttonGroup,
   filterLimitTemplate
 ) {
@@ -205,7 +207,7 @@ define([
         args.push('i');
       }
 
-      args[1] = args[1].replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      args[1] = util.escapeRegExp(args[1]);
 
       if (value.length === maxLength)
       {
@@ -213,6 +215,11 @@ define([
       }
 
       selector.push({name: 'regex', args: args});
+    },
+
+    unescapeRegExp: function(string)
+    {
+      return util.unescapeRegExp(string, true);
     }
 
   });

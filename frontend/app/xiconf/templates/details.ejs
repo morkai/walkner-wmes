@@ -139,6 +139,9 @@
       <% if (model.leds) { %>
       <li data-tab="leds"><a href="#<%- idPrefix %>-leds" data-toggle="tab"><%- t('xiconf', 'tab:leds') %></a></li>
       <% } %>
+      <% if (model.hidLamps) { %>
+      <li data-tab="hidLamps"><a href="#<%- idPrefix %>-hidLamps" data-toggle="tab"><%- t('xiconf', 'tab:hidLamps') %></a></li>
+      <% } %>
       <% if (model.gprsInputFile) { %>
       <li data-tab="gprsInputFile" data-highlight><a href="#<%- idPrefix %>-gprsInputFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsInputFile') %></a></li>
       <% } %>
@@ -176,6 +179,9 @@
       <% } %>
       <% if (model.leds) { %>
       <div class="tab-pane xiconf-details-leds" id="<%- idPrefix %>-leds"></div>
+      <% } %>
+      <% if (model.hidLamps) { %>
+      <div class="tab-pane xiconf-details-hidLamps" id="<%- idPrefix %>-hidLamps"></div>
       <% } %>
       <% if (model.gprsInputFile) { %>
       <div class="tab-pane" id="<%- idPrefix %>-gprsInputFile"><pre><code class="json"><%= model.gprsInputFile || '-' %></code></pre></div>

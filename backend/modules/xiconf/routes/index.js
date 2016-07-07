@@ -26,12 +26,16 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   var XiconfClient = mongoose.model('XiconfClient');
   var XiconfResult = mongoose.model('XiconfResult');
   var XiconfProgram = mongoose.model('XiconfProgram');
+  var XiconfHidLamp = mongoose.model('XiconfHidLamp');
   var XiconfOrder = mongoose.model('XiconfOrder');
 
   var canView = userModule.auth('XICONF:VIEW');
   var canManage = userModule.auth('XICONF:MANAGE');
   var remoteRequests = {};
 
+  //
+  // Upload
+  //
   express.post(
     '/xiconf;upload',
     canManage,
@@ -59,6 +63,9 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     }
   );
 
+  //
+  // Remote action execute
+  //
   express.post('/xiconf;execute', userModule.auth('LOCAL'), function(req, res, next)
   {
     var rid = req.query.rid;
@@ -113,6 +120,9 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     });
   });
 
+  //
+  // Settings
+  //
   express.get(
     '/xiconf/settings',
     canView,
@@ -130,8 +140,9 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   express.put('/xiconf/settings/:id', canManage, settings.updateRoute);
 
-  express.post('/xiconf;import', importResultsRoute.bind(null, app, xiconfModule));
-
+  //
+  // Orders
+  //
   express.get('/xiconf/orders', canView, express.crud.browseRoute.bind(null, app, XiconfOrder));
 
   express.get('/xiconf/orders;export', canView, express.crud.exportRoute.bind(null, {
@@ -150,6 +161,11 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       prepareResult: prepareXiconfOrder
     })
   );
+
+  //
+  // Results
+  //
+  express.post('/xiconf;import', importResultsRoute.bind(null, app, xiconfModule));
 
   express.get(
     '/xiconf/results',
@@ -219,6 +235,9 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     })
   );
 
+  //
+  // Programs
+  //
   express.get(
     '/xiconf/programs',
     canView,
@@ -251,6 +270,18 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   express.delete('/xiconf/programs/:id', canManage, deleteProgramRoute.bind(null, app, XiconfProgram));
 
+  //
+  // Programs
+  //
+  express.get('/xiconf/hidLamps', canView, express.crud.browseRoute.bind(null, app, XiconfHidLamp));
+  express.post('/xiconf/hidLamps', canManage, express.crud.addRoute.bind(null, app, XiconfHidLamp));
+  express.get('/xiconf/hidLamps/:id', canView, express.crud.readRoute.bind(null, app, XiconfHidLamp));
+  express.put('/xiconf/hidLamps/:id', canManage, express.crud.editRoute.bind(null, app, XiconfHidLamp));
+  express.delete('/xiconf/hidLamps/:id', canManage, express.crud.deleteRoute.bind(null, app, XiconfHidLamp));
+
+  //
+  // Clients
+  //
   express.get('/xiconf/clients', canView, express.crud.browseRoute.bind(null, app, XiconfClient));
 
   express.get('/xiconf/clients;debug', canManage, getClientsDebugInfoRoute);

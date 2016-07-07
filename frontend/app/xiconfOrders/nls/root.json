@@ -33,11 +33,13 @@
     "kind:unit:program": "drivers",
     "kind:unit:test": "tests",
     "kind:unit:ft": "frames",
+    "kind:unit:hid": "HID lamps",
     "kind:name:ft": "Frame test",
     "kind:nc12:led": "LED board 12NC",
     "kind:nc12:program": "Program 12NC",
     "kind:nc12:test": "Test program 12NC",
     "kind:nc12:gprs": "GPRS board 12NC",
+    "kind:nc12:hid": "HID lamp 12NC",
 
     "filter:submit": "Filter orders",
 

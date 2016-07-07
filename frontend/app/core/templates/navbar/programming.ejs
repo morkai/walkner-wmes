@@ -5,7 +5,12 @@
   </a>
   <ul class="dropdown-menu">
     <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/clients"><%- t('core', 'NAVBAR:XICONF:CLIENTS') %></a>
-    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/programs"><%- t('core', 'NAVBAR:XICONF:PROGRAMS') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:XICONF:RESULTS') %>
     <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/orders"><%- t('core', 'NAVBAR:XICONF:ORDERS') %></a>
-    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/results"><%- t('core', 'NAVBAR:XICONF:RESULTS') %></a>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/results"><%- t('core', 'NAVBAR:XICONF:HISTORY') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:XICONF:DICTIONARIES') %>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/programs"><%- t('core', 'NAVBAR:XICONF:PROGRAMS') %></a>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/hidLamps"><%- t('core', 'NAVBAR:XICONF:HID_LAMPS') %></a>
   </ul>
