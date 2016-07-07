@@ -18,7 +18,7 @@ module.exports = function setUpPing(app, watchdogModule)
   {
     app.onModuleReady(watchdogModule.config.expressId, setUpReceiver);
 
-    app.broker.subscribe('app.started', scheduleNotify).setLimit(1);
+    app.broker.subscribe('app.started', () => scheduleNotify(1)).setLimit(1);
   }
 
   if (config.interval > 0)
@@ -80,7 +80,7 @@ module.exports = function setUpPing(app, watchdogModule)
         return next(app.createError('INVALID_SECRET_KEY', 403));
       }
 
-      scheduleNotify();
+      scheduleNotify(1);
 
       res.end();
     });
@@ -89,7 +89,7 @@ module.exports = function setUpPing(app, watchdogModule)
   function scheduleNotify(delayMultiplier)
   {
     clearTimeout(notifyTimer);
-    notifyTimer = setTimeout(notify, config.window * (delayMultiplier || 1));
+    notifyTimer = setTimeout(notify, config.window * delayMultiplier);
   }
 
   function notify()
