@@ -14,8 +14,6 @@ define([
     columns: [
       {id: '_id', className: 'is-min'},
       {id: 'nc12', className: 'is-min'},
-      {id: 'voltage', className: 'is-min'},
-      {id: 'family', className: 'is-min'},
       'description'
     ]
 

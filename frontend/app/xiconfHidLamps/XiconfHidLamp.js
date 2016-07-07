@@ -25,19 +25,8 @@ define([
     {
       return {
         nc12: '',
-        description: '',
-        voltage: '',
-        family: []
+        description: ''
       };
-    },
-
-    serialize: function()
-    {
-      var obj = this.toJSON();
-
-      obj.family = obj.family.join('; ');
-
-      return obj;
     }
 
   });

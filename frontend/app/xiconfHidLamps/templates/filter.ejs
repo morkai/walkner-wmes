@@ -1,5 +1,5 @@
 <form class="well filter-form">
-  <% ['_id', 'nc12', 'family', 'description'].forEach(function(prop) { %>
+  <% ['_id', 'nc12', 'description'].forEach(function(prop) { %>
   <div class="form-group">
     <label for="<%- idPrefix %>-<%- prop %>"><%- t('xiconfHidLamps', 'PROPERTY:' + prop) %></label>
     <input id="<%- idPrefix %>-<%- prop %>" class="form-control" name="<%- prop %>" type="text">

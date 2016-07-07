@@ -20,8 +20,7 @@ define([
     defaultFormData: {
       _id: '',
       nc12: '',
-      description: '',
-      family: ''
+      description: ''
     },
 
     termToForm: {
@@ -30,13 +29,12 @@ define([
         formData[propertyName] = this.unescapeRegExp(term.args[1]);
       },
       'description': '_id',
-      'nc12': '_id',
-      'family': '_id'
+      'nc12': '_id'
     },
 
     serializeFormToQuery: function(selector)
     {
-      ['_id', 'nc12', 'family', 'description'].forEach(function(prop)
+      ['_id', 'nc12', 'description'].forEach(function(prop)
       {
         this.serializeRegexTerm(selector, prop, -1, null, true);
       }, this);

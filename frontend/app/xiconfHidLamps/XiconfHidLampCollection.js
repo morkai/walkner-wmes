@@ -13,7 +13,7 @@ define([
 
     model: XiconfHidLamp,
 
-    rqlQuery: 'limit(100)&sort(nc12)'
+    rqlQuery: 'limit(100)&sort(description)'
 
   });
 });

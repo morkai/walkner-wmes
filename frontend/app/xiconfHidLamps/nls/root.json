@@ -23,8 +23,6 @@
     "PROPERTY:_id": "Scan result",
     "PROPERTY:nc12": "12NC",
     "PROPERTY:description": "Description",
-    "PROPERTY:voltage": "Voltage",
-    "PROPERTY:family": "Family",
 
     "FORM:ACTION:add": "Add HID lamp",
     "FORM:ACTION:edit": "Edit HID lamp",

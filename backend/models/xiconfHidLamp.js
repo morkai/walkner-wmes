@@ -15,14 +15,6 @@ module.exports = function setupXiconfHidLampModel(app, mongoose)
       type: String,
       default: '',
       trim: true
-    },
-    voltage: {
-      type: String,
-      default: '',
-      trim: true
-    },
-    family: {
-      type: [String]
     }
   }, {
     id: false,

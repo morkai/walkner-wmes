@@ -22,8 +22,6 @@
   "PROPERTY:_id": "Wynik skanowania",
   "PROPERTY:nc12": "12NC",
   "PROPERTY:description": "Opis",
-  "PROPERTY:voltage": "Napięcie",
-  "PROPERTY:family": "Rodzina",
 
   "FORM:ACTION:add": "Dodaj oprawę HID",
   "FORM:ACTION:edit": "Edytuj oprawę HID",
