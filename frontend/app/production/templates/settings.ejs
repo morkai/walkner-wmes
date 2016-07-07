@@ -3,28 +3,44 @@
     <a class="list-group-item" href="#production;settings?tab=operator" data-tab="operator"><%- t('production', 'settings:tab:operator') %></a>
   </div>
   <div class="panel panel-primary">
-    <div class="panel-body" data-tab="operator">
-      <div class="form-group">
-        <label for="<%- idPrefix %>-initialDowntimeWindow"><%- t('production', 'settings:initialDowntimeWindow') %></label>
-        <input id="<%- idPrefix %>-initialDowntimeWindow" class="form-control" name="production.initialDowntimeWindow" type="number" step="1" min="0" max="60">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-rearmDowntimeReason"><%- t('production', 'settings:rearmDowntimeReason') %></label>
-        <input id="<%- idPrefix %>-rearmDowntimeReason" name="production.rearmDowntimeReason" type="text" data-setting>
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-spigotLines"><%- t('production', 'settings:spigotLines') %></label>
-        <input id="<%- idPrefix %>-spigotLines" name="production.spigotLines" type="text" data-setting>
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-spigotPatterns"><%- t('production', 'settings:spigotPatterns') %></label>
-        <textarea id="<%- idPrefix %>-spigotPatterns" name="production.spigotPatterns" class="form-control" rows="4"></textarea>
-      </div>
-      <div class="checkbox">
-        <label class="control-label">
-          <input id="<%- idPrefix %>-spigotFinish" name="production.spigotFinish" type="checkbox" value="true">
-          <%- t('production', 'settings:spigotFinish') %>
-        </label>
+    <div class="panel-body has-subtabs" data-tab="operator">
+      <div class="settings">
+        <div class="list-group">
+          <% [
+            'downtimes',
+            'spigot'
+            ].forEach(function(subtab) { %>
+          <a class="list-group-item" href="#production;settings?tab=operator&subtab=<%- subtab %>" data-tab="operator" data-subtab="<%- subtab %>"><%- t('production', 'settings:tab:' + subtab) %></a>
+          <% }) %>
+        </div>
+        <div class="panel panel-primary">
+          <div class="panel-body" data-subtab="downtimes">
+            <div class="form-group">
+              <label for="<%- idPrefix %>-initialDowntimeWindow"><%- t('production', 'settings:initialDowntimeWindow') %></label>
+              <input id="<%- idPrefix %>-initialDowntimeWindow" class="form-control" name="production.initialDowntimeWindow" type="number" step="1" min="0" max="60">
+            </div>
+          </div>
+          <div class="panel-body" data-subtab="spigot">
+            <div class="form-group">
+              <label for="<%- idPrefix %>-rearmDowntimeReason"><%- t('production', 'settings:rearmDowntimeReason') %></label>
+              <input id="<%- idPrefix %>-rearmDowntimeReason" name="production.rearmDowntimeReason" type="text" data-setting>
+            </div>
+            <div class="form-group">
+              <label for="<%- idPrefix %>-spigotLines"><%- t('production', 'settings:spigotLines') %></label>
+              <input id="<%- idPrefix %>-spigotLines" name="production.spigotLines" type="text" data-setting>
+            </div>
+            <div class="form-group">
+              <label for="<%- idPrefix %>-spigotPatterns"><%- t('production', 'settings:spigotPatterns') %></label>
+              <textarea id="<%- idPrefix %>-spigotPatterns" name="production.spigotPatterns" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="checkbox">
+              <label class="control-label">
+                <input id="<%- idPrefix %>-spigotFinish" name="production.spigotFinish" type="checkbox" value="true">
+                <%- t('production', 'settings:spigotFinish') %>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

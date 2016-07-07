@@ -200,6 +200,8 @@
   "spigotChecker:success": "Zeskanowano prawidłowy komponent :)",
 
   "settings:tab:operator": "Formatka operatora",
+  "settings:tab:downtimes": "Przestoje",
+  "settings:tab:spigot": "Sprawdzanie Spigota",
   "settings:initialDowntimeWindow": "Czas na rozpoczęcie początkowego przestoju na zmianie [min]",
   "settings:rearmDowntimeReason": "Przestój ze sprawdzaniem Spigota",
   "settings:spigotLines": "Linie ze sprawdzaniem Spigota",

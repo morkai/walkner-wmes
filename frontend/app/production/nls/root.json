@@ -198,6 +198,8 @@
     "spigotChecker:success": "The scanned component is valid :)",
 
     "settings:tab:operator": "Operator",
+    "settings:tab:downtimes": "Downtimes",
+    "settings:tab:spigot": "Spigot check",
     "settings:initialDowntimeWindow": "Time to start the initial downtime on a shift [min]",
     "settings:rearmDowntimeReason": "Downtime reason with Spigot check",
     "settings:spigotLines": "Production lines with Spigot check",
