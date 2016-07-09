@@ -1,3 +1,6 @@
 .subdivisions-form-autoDowntimes .select2-container {
   display: inline-block;
 }
+.subdivisions-form-autoDowntimes-time {
+  width: 400px;
+}

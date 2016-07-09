@@ -30,6 +30,7 @@
     "autoDowntimes:when": "Initialization",
     "autoDowntimes:when:initial": "only shift start",
     "autoDowntimes:when:always": "always",
+    "autoDowntimes:when:time": "at: {time}",
 
     "TYPE:assembly": "Assembly",
     "TYPE:press": "Press",

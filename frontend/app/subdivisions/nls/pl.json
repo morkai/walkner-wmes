@@ -29,6 +29,7 @@
   "autoDowntimes:when": "Inicjalizacja",
   "autoDowntimes:when:initial": "na początku zmiany",
   "autoDowntimes:when:always": "zawsze",
+  "autoDowntimes:when:time": "o godzinie: {time}",
 
   "TYPE:assembly": "Montaż",
   "TYPE:press": "Tłocznia",

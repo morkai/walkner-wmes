@@ -36,7 +36,11 @@ define([
 
         if (reason)
         {
-          this.addAutoDowntime({reason: reason, when: 'always'});
+          this.addAutoDowntime({
+            reason: reason,
+            when: 'always',
+            time: []
+          });
         }
 
         $reason.select2('val', null).select2('focus');
@@ -67,6 +71,50 @@ define([
         {
           $tr.remove();
         });
+      },
+      'change [name$="when"]': function(e)
+      {
+        var $tr = this.$(e.target).closest('tr');
+        var when = $tr.find('[name$="when"]:checked').val();
+
+        $tr.find('[name$="time"]').prop('disabled', when !== 'time');
+      },
+      'change [name$="time"]': function(e)
+      {
+        var re = /([0-9]{1,2}):([0-9]{1,2})/g;
+        var matches;
+        var times = [];
+
+        while ((matches = re.exec(e.target.value)) !== null)
+        {
+          var hour = +matches[1];
+
+          if (hour >= 24)
+          {
+            continue;
+          }
+
+          var minutes = +matches[2];
+
+          if (minutes >= 60)
+          {
+            continue;
+          }
+
+          if (hour < 10)
+          {
+            hour = '0' + hour;
+          }
+
+          if (minutes < 10)
+          {
+            minutes = '0' + minutes;
+          }
+
+          times.push(hour + ':' + minutes);
+        }
+
+        e.target.value = times.join(', ');
       }
 
     }),
@@ -130,8 +178,24 @@ define([
     {
       data.prodTaskTags = typeof data.prodTaskTags === 'string' ? data.prodTaskTags.split(',') : [];
       data.aor = aors.get(data.aor) ? data.aor : null;
-      data.autoDowntime = downtimeReasons.get(data.autoDowntime) ? data.autoDowntime : null;
-      data.initialDowntime = downtimeReasons.get(data.initialDowntime) ? data.initialDowntime : null;
+
+      _.forEach(data.autoDowntimes, function(autoDowntime)
+      {
+        if (autoDowntime.when !== 'time')
+        {
+          return;
+        }
+
+        autoDowntime.time = autoDowntime.time.split(',').map(function(time)
+        {
+          var parts = time.trim().split(':');
+
+          return {
+            h: +parts[0],
+            m: +parts[1]
+          };
+        });
+      });
 
       return data;
     },
@@ -150,7 +214,11 @@ define([
         autoDowntime: {
           i: ++this.autoDowntimeCounter,
           reason: idAndLabel(downtimeReasons.get(autoDowntime.reason)),
-          when: autoDowntime.when
+          when: autoDowntime.when,
+          time: (autoDowntime.time || []).map(function(time)
+          {
+            return (time.h < 10 ? '0' : '') + time.h + ':' + (time.m < 10 ? '0' : '') + time.m;
+          }).join(', ')
         }
       }));
     }

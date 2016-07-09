@@ -7,6 +7,7 @@ define([
   '../user',
   '../time',
   '../socket',
+  '../viewport',
   '../core/Model',
   '../core/util/getShiftStartInfo',
   '../data/downtimeReasons',
@@ -29,6 +30,7 @@ define([
   user,
   time,
   socket,
+  viewport,
   Model,
   getShiftStartInfo,
   downtimeReasons,
@@ -153,6 +155,7 @@ define([
       {
         prodShift.shiftChangeTimer = null;
         prodShift.changeShift();
+        prodShift.checkAutoDowntime();
       }, 1000, this);
     },
 
@@ -1039,6 +1042,10 @@ define([
       });
     },
 
+    /**
+     * @private
+     * @param {ProdDowntime} [prevDowntime]
+     */
     startNextAutoDowntime: function(prevDowntime)
     {
       if (!prevDowntime || !prevDowntime.get('auto'))
@@ -1067,10 +1074,25 @@ define([
       {
         var autoDowntime = autoDowntimes[i];
 
-        if (autoDowntime.reason === prevDowntime.get('reason'))
+        if (autoDowntime.reason !== prevDowntime.get('reason'))
         {
-          nextAutoDowntime = autoDowntimes[i + 1];
+          continue;
+        }
 
+        for (var j = i + 1; j < autoDowntimes.length; ++j)
+        {
+          var next = autoDowntimes[j];
+
+          if (next.when !== 'time')
+          {
+            nextAutoDowntime = next;
+
+            break;
+          }
+        }
+
+        if (nextAutoDowntime)
+        {
           break;
         }
       }
@@ -1086,6 +1108,11 @@ define([
       }
     },
 
+    /**
+     * @private
+     * @param {number} time
+     * @returns {boolean}
+     */
     isBetweenInitialDowntimeWindow: function(time)
     {
       var initialDowntimeWindow = parseInt(this.settings.getValue('initialDowntimeWindow'), 10);
@@ -1099,6 +1126,66 @@ define([
       var windowEnd = windowStart + initialDowntimeWindow * 60 * 1000;
 
       return time >= windowStart && time <= windowEnd;
+    },
+
+    checkAutoDowntime: function()
+    {
+      if (this.get('state') !== 'working')
+      {
+        return;
+      }
+
+      var aor = this.getDefaultAor();
+      var subdivision = subdivisions.get(this.get('subdivision'));
+
+      if (!aor || !subdivision)
+      {
+        return;
+      }
+
+      var autoDowntimes = subdivision.get('autoDowntimes');
+
+      if (_.isEmpty(autoDowntimes))
+      {
+        return;
+      }
+
+      var now = new Date();
+      var h = now.getHours();
+      var m = now.getMinutes();
+      var autoDowntime = _.find(autoDowntimes, function(autoDowntime)
+      {
+        return autoDowntime.when === 'time' && _.some(autoDowntime.time, function(t)
+        {
+          return t.h === h && t.m === m;
+        });
+      });
+
+      if (!autoDowntime)
+      {
+        return;
+      }
+
+      var prevDowntime = this.prodDowntimes.at(0);
+
+      if (prevDowntime && prevDowntime.get('reason') === autoDowntime.reason)
+      {
+        var timeDiff = now.getTime() - prevDowntime.get('finishedAt').getTime();
+
+        if (timeDiff < 10 * 60 * 1000)
+        {
+          return;
+        }
+      }
+
+      viewport.closeAllDialogs();
+
+      this.startDowntime({
+        aor: aor,
+        reason: autoDowntime.reason,
+        reasonComment: '',
+        auto: true
+      });
     }
 
   }, {

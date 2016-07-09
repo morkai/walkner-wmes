@@ -4,6 +4,21 @@
 
 module.exports = function setupSubdivisionModel(app, mongoose)
 {
+  var autoDowntimeTimeSchema = mongoose.Schema({
+    h: {
+      type: Number,
+      min: 0,
+      max: 23
+    },
+    m: {
+      type: Number,
+      min: 0,
+      max: 59
+    }
+  }, {
+    _id: false
+  });
+
   var autoDowntimeSchema = mongoose.Schema({
     reason: {
       type: String,
@@ -12,9 +27,10 @@ module.exports = function setupSubdivisionModel(app, mongoose)
     },
     when: {
       type: String,
-      enum: ['initial', 'always'],
+      enum: ['initial', 'always', 'time'],
       default: 'always'
-    }
+    },
+    time: [autoDowntimeTimeSchema]
   }, {
     _id: false
   });

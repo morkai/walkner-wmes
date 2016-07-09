@@ -17,7 +17,7 @@
           <ol>
             <% model.autoDowntimes.forEach(function(autoDowntime) { %>
             <li>
-              <%= autoDowntime.reason %> (<%- t('subdivisions', 'autoDowntimes:when:' + autoDowntime.when) %>)
+              <%= autoDowntime.reason %> (<%- t('subdivisions', 'autoDowntimes:when:' + autoDowntime.when, {time: autoDowntime.time}) %>)
             </li>
             <% }) %>
           </ol>

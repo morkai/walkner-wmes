@@ -35,7 +35,11 @@ function(
 
       return !reason ? null : {
         reason: reason.getLabel(),
-        when: autoDowntime.when
+        when: autoDowntime.when,
+        time: (autoDowntime.time || []).map(function(time)
+        {
+          return (time.h < 10 ? '0' : '') + time.h + ':' + (time.m < 10 ? '0' : '') + time.m;
+        }).join(', ')
       };
     }).filter(function(autoDowntime)
     {
