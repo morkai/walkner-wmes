@@ -1,12 +1,17 @@
-<h1>v0.89.2</h1>
-<h2><%- time.format('2016-07-03', 'LL') %></h2>
-<h3>Inspekcja Jakości</h3>
+<h1>v0.90.0</h1>
+<h2><%- time.format('2016-07-10', 'LL') %></h2>
+<h3>Formatka operatora</h3>
 <ul>
-  <li>Poprawiono błąd powodujący wyświetlanie akcji dodawania inspekcji na liście inspekcji dla użytkowników
-    nie mających odpowiednich uprawnień.</li>
-  <li>Zmieniono dzienny licznik tak, aby zliczał wartość 'Ilość sprawdzonych', a nie ilość przeprowadzonych inspekcji.</li>
-  <li>Zmieniono pole 'Centrum produkcyjne' na 'Wydział'.</li>
-  <li>Dodano możliwość nadpisania wydziału ze zlecenia wydziałem przypisanym do wybranego rodzaju inspekcji.</li>
-  <li>Dodano nową rolę: 'Inspekcja Jakości: specjalista'. Specjaliści mogą edytować tylko kategorię błędu,
-    przyczynę źródłową oraz akcje korygujące.</li>
+  <li>Poprawiono błąd powodujący brak dezaktywacji formatki, jeżeli dana linia została aktywowana na innym komputerze.</li>
+  <li>Dodano możliwość automatycznego rozpoczynania przestojów o określonej godzinie. Konfiguracja Automatycznych przestojów
+    w słowniku Działy.</li>
+</ul>
+<h3>Baza testów</h3>
+<ul>
+  <li>Dodano opcję sprawdzania lamp HID.</li>
+</ul>
+<h3>Watchdog</h3>
+<ul>
+  <li>Poprawiono błąd powodujący wysyłanie powiadomienia o nieosiągalności serwera zawsze po starcie watchdoga,
+    mimo że serwer był osiągalny.</li>
 </ul>

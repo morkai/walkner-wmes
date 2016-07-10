@@ -1,4 +1,18 @@
 <div class="hidden">
+  <h1>v0.89.2</h1>
+  <h2><%- time.format('2016-07-03', 'LL') %></h2>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie akcji dodawania inspekcji na liście inspekcji dla użytkowników
+      nie mających odpowiednich uprawnień.</li>
+    <li>Zmieniono dzienny licznik tak, aby zliczał wartość 'Ilość sprawdzonych', a nie ilość przeprowadzonych inspekcji.</li>
+    <li>Zmieniono pole 'Centrum produkcyjne' na 'Wydział'.</li>
+    <li>Dodano możliwość nadpisania wydziału ze zlecenia wydziałem przypisanym do wybranego rodzaju inspekcji.</li>
+    <li>Dodano nową rolę: 'Inspekcja Jakości: specjalista'. Specjaliści mogą edytować tylko kategorię błędu,
+      przyczynę źródłową oraz akcje korygujące.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.89.1</h1>
   <h2><%- time.format('2016-06-26', 'LL') %></h2>
   <h3>Pola odkładcze</h3>
