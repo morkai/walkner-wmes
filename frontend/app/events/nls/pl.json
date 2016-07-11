@@ -171,7 +171,7 @@
   "TEXT:production.locked": "Dezaktywowano linię produkcyjną: <em>{prodLine}</em>",
   "TYPE:production.unlockFailure": "Produkcja: nieudana aktywacja linii",
   "TEXT:production.unlockFailure": "Nieudana aktywacja linii produkcyjnej: <em>{prodLine}</em>",
-  "TYPE:warehouse.unlockFailure.synced": "Magazyn: synchronizacja cykli kontrolnych",
+  "TYPE:warehouse.controlCycles.synced": "Magazyn: synchronizacja cykli kontrolnych",
   "TEXT:warehouse.controlCycles.synced": "Zaimportowano <em>{count}</em> {count, plural, one{cykl kontrolny} few{cykle kontrolne} other{cylki kontrolnych}} z danych pobranych <em>{timestamp}</em>.",
   "TYPE:warehouse.controlCycles.syncFailed": "Magazyn: nieudana synchronizacja cykli kontrolnych",
   "TEXT:warehouse.controlCycles.syncFailed": "Nie udało się zaimportować cykli kontrolnych z danych pobranych <em>{timestamp}</em>: <em>{error}</em>",
