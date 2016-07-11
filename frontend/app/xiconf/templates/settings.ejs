@@ -23,6 +23,12 @@
           <%- t('xiconf', 'settings:notifier:emptyLeds') %>
         </label>
       </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-notifier-emptyHids" name="xiconf.notifier.emptyHids" type="checkbox" value="true">
+          <%- t('xiconf', 'settings:notifier:emptyHids') %>
+        </label>
+      </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-notifier-delay"><%- t('xiconf', 'settings:notifier:delay') %></label>
         <input id="<%- idPrefix %>-notifier-delay" class="form-control" name="xiconf.notifier.delay" type="number" min="1" max="30">

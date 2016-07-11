@@ -12,7 +12,7 @@ module.exports = function setupXiconfOrderModel(app, mongoose)
     },
     kind: {
       type: String,
-      enum: ['program', 'led', 'gprs', 'test']
+      enum: ['program', 'led', 'gprs', 'test', 'hid']
     },
     nc12: String,
     name: String,

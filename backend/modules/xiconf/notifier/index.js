@@ -84,14 +84,30 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           return this.skip(err);
         }
 
-        if (!xiconfOrder || xiconfOrder.status !== -1 || !prodShiftOrders.length)
+        if (!xiconfOrder
+          || !xiconfOrder.items.length
+          || xiconfOrder.status !== -1
+          || !prodShiftOrders.length)
         {
           return this.done();
         }
 
-        var hasAnyProgramItems = _.some(xiconfOrder.items, 'kind', 'program');
+        var noProgramItems = !_.some(xiconfOrder.items, 'kind', 'program');
+        var hasAnyLedItems = _.some(xiconfOrder.items, 'kind', 'led');
+        var hasAnyHidItems = _.some(xiconfOrder.items, 'kind', 'hid');
 
-        if (!this.settings.emptyLeds && !hasAnyProgramItems && xiconfOrder.quantityDone === 0)
+        if (hasAnyLedItems
+          && noProgramItems
+          && !this.settings.emptyLeds
+          && xiconfOrder.quantityDone === 0)
+        {
+          return this.done();
+        }
+
+        if (hasAnyHidItems
+          && noProgramItems
+          && !this.settings.emptyHids
+          && xiconfOrder.quantityDone === 0)
         {
           return this.done();
         }
