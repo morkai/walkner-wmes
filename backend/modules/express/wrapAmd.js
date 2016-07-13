@@ -1,8 +1,8 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = wrapAmd;
 
@@ -13,8 +13,8 @@ module.exports = wrapAmd;
  */
 function wrapAmd(js, modules)
 {
-  var moduleArgs;
-  var modulePaths;
+  let moduleArgs;
+  let modulePaths;
 
   if (_.isObject(modules))
   {
@@ -27,7 +27,7 @@ function wrapAmd(js, modules)
     modulePaths = '[]';
   }
 
-  var wrappedJs = [
+  const wrappedJs = [
     'define(' + modulePaths + ', function(' + moduleArgs + ') {',
     js,
     '});'

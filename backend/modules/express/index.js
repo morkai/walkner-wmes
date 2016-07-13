@@ -2,30 +2,42 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var express = require('express');
-var ExpressView = require('express/lib/view');
-var methods = require('methods');
-var ejsAmd = require('ejs-amd');
-var messageFormatAmd = require('messageformat-amd');
-var wrapAmd = require('./wrapAmd');
-var rqlMiddleware = require('./rqlMiddleware');
-var errorHandlerMiddleware = require('./errorHandlerMiddleware');
-var crud = require('./crud');
-var monkeyPatch = require('./monkeyPatch');
-var cookieParser = null;
-var bodyParser = null;
-var session = null;
-var pmx = null;
-var MongoStore = null;
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const express = require('express');
+const ExpressView = require('express/lib/view');
+const methods = require('methods');
+const ejsAmd = require('ejs-amd');
+const messageFormatAmd = require('messageformat-amd');
+const wrapAmd = require('./wrapAmd');
+const rqlMiddleware = require('./rqlMiddleware');
+const errorHandlerMiddleware = require('./errorHandlerMiddleware');
+const crud = require('./crud');
+const monkeyPatch = require('./monkeyPatch');
+let cookieParser = null;
+let bodyParser = null;
+let session = null;
+let pmx = null;
+let MongoStore = null;
 
-try { cookieParser = require('cookie-parser'); }  catch (err) {}
-try { bodyParser = require('body-parser'); }  catch (err) {}
-try { session = require('express-session'); }  catch (err) {}
-try { pmx = require('pmx'); }  catch (err) {}
-try { MongoStore = require('./MongoStore'); }  catch (err) {}
+try { cookieParser = require('cookie-parser'); }
+catch (err) { console.log('Failed to load cookie-parser: %s', err.message); }
+
+try { bodyParser = require('body-parser'); }
+catch (err) { console.log('Failed to load body-parser: %s', err.message); }
+
+try { require('iconv-lite').encodingExists('UTF-8'); }
+catch (err) { console.log('Failed to load iconv-lite: %s', err.message); }
+
+try { session = require('express-session'); }
+catch (err) { console.log('Failed to load express-session: %s', err.message); }
+
+try { pmx = require('pmx'); }
+catch (err) { console.log('Failed to load pmx: %s', err.message); }
+
+try { MongoStore = require('./MongoStore'); }
+catch (err) { console.log('Failed to load MongoStore %s', err.message); }
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -44,16 +56,17 @@ exports.DEFAULT_CONFIG = {
   jsonBody: {},
   textBody: {},
   urlencodedBody: {},
-  ignoredErrorCodes: ['ECONNRESET', 'ECONNABORTED']
+  ignoredErrorCodes: ['ECONNRESET', 'ECONNABORTED'],
+  routes: (app, expressModule) => { /* jshint unused:false */ }
 };
 
 exports.start = function startExpressModule(app, expressModule, done)
 {
-  var config = expressModule.config;
-  var mongoose = app[config.mongooseId];
-  var development = app.options.env === 'development';
-  var staticPath = config[development ? 'staticPath' : 'staticBuildPath'];
-  var expressApp = express();
+  const config = expressModule.config;
+  const mongoose = app[config.mongooseId];
+  const development = app.options.env === 'development';
+  const staticPath = config[development ? 'staticPath' : 'staticBuildPath'];
+  const expressApp = express();
 
   expressModule.staticPath = staticPath;
 
@@ -117,7 +130,7 @@ exports.start = function startExpressModule(app, expressModule, done)
 
   if (expressModule.sessionStore)
   {
-    var sessionMiddleware = session({
+    const sessionMiddleware = session({
       store: expressModule.sessionStore,
       key: config.sessionCookieKey,
       cookie: config.sessionCookie,
@@ -145,6 +158,11 @@ exports.start = function startExpressModule(app, expressModule, done)
   app.broker.publish('express.beforeRouter', {
     module: expressModule
   });
+
+  if (typeof expressModule.config.routes === 'function')
+  {
+    expressModule.config.routes(app, expressModule);
+  }
 
   step(
     function()
@@ -187,14 +205,14 @@ exports.start = function startExpressModule(app, expressModule, done)
   {
     ejsAmd.wrapAmd = wrapEjsAmd.bind(null, config.ejsAmdHelpers);
 
-    var templateUrlRe = /^\/app\/([a-zA-Z0-9\-]+)\/templates\/(.*?)\.js$/;
-    var ejsAmdMiddleware = ejsAmd.middleware({
+    const templateUrlRe = /^\/app\/([a-zA-Z0-9\-]+)\/templates\/(.*?)\.js$/;
+    const ejsAmdMiddleware = ejsAmd.middleware({
       views: staticPath
     });
 
     expressApp.use(function runEjsAmdMiddleware(req, res, next)
     {
-      var matches = req.url.match(templateUrlRe);
+      const matches = req.url.match(templateUrlRe);
 
       if (matches === null)
       {
@@ -210,7 +228,7 @@ exports.start = function startExpressModule(app, expressModule, done)
       localeModulePrefix: 'app/nls/locale/',
       jsonPath: function(locale, nlsName)
       {
-        var jsonFile = (locale === null ? 'root' : locale) + '.json';
+        const jsonFile = (locale === null ? 'root' : locale) + '.json';
 
         return path.join(staticPath, 'app', nlsName, 'nls', jsonFile);
       }
