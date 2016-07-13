@@ -16,7 +16,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
   var PasswordResetRequest = mongoose.model('PasswordResetRequest');
 
   var canView = userModule.auth('USERS:VIEW');
-  var canBrowse = userModule.auth('LOCAL', 'USERS:VIEW');
+  var canBrowse = userModule.auth.apply(userModule, usersModule.config.browsePrivileges);
   var canManage = userModule.auth('USERS:MANAGE');
 
   express.get('/users', canBrowse, express.crud.browseRoute.bind(null, app, User));

@@ -13,7 +13,8 @@ exports.DEFAULT_CONFIG = {
   companiesId: 'companies',
   mailSenderId: 'mail/sender',
   tediousConnection: null,
-  emailGenerator: null
+  emailGenerator: null,
+  browsePrivileges: ['USERS:VIEW']
 };
 
 exports.start = function startUsersModule(app, usersModule)
