@@ -51,6 +51,7 @@ define([
     },
 
     events: {
+      'click a.production-controls-addNearMiss': 'addNearMiss',
       'click a.production-controls-addSuggestion': 'addSuggestion',
       'click a.production-controls-lock': 'lock',
       'click a.production-controls-unlock': 'unlock',
@@ -84,7 +85,17 @@ define([
       );
     },
 
+    addNearMiss: function()
+    {
+      this.addImprovement('/#kaizenOrders;add');
+    },
+
     addSuggestion: function()
+    {
+      this.addImprovement('/#suggestions;add');
+    },
+
+    addImprovement: function(url)
     {
       var operator = this.model.get('operator');
 
@@ -100,7 +111,8 @@ define([
         operator = null;
       }
 
-      var url = '/#suggestions;add?standalone=1&operator=' + btoa(encodeURIComponent(JSON.stringify(operator)));
+      url += '?standalone=1&operator=' + btoa(encodeURIComponent(JSON.stringify(operator)));
+
       var screen = window.screen;
       var width = screen.availWidth > 1200 ? 1200 : screen.availWidth * 0.7;
       var height = screen.availHeight * 0.8;
@@ -112,7 +124,7 @@ define([
         + ',width=' + Math.floor(width)
         + ',height=' + Math.floor(height);
 
-      var win = window.open(url, 'WMES_SUGGESTIONS', features);
+      var win = window.open(url, 'WMES_IMPROVEMENT', features);
 
       if (!win)
       {

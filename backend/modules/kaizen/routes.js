@@ -23,7 +23,8 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   var canViewDictionaries = userModule.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManageDictionaries = userModule.auth('KAIZEN:DICTIONARIES:VIEW');
-  var canView = userModule.auth();
+  var canView = userModule.auth('LOCAL', 'USER');
+  var canManage = userModule.auth('USER');
 
   express.get('/kaizen/recalcDurations', userModule.auth('SUPER'), recalcDurationsRoute);
 
@@ -36,7 +37,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   express.post('/kaizen/orders', canView, prepareForAdd, express.crud.addRoute.bind(null, app, KaizenOrder));
   express.get('/kaizen/orders/:id', canView, express.crud.readRoute.bind(null, app, KaizenOrder));
   express.put('/kaizen/orders/:id', canView, editKaizenOrderRoute);
-  express.delete('/kaizen/orders/:id', canView, express.crud.deleteRoute.bind(null, app, KaizenOrder));
+  express.delete('/kaizen/orders/:id', canManage, express.crud.deleteRoute.bind(null, app, KaizenOrder));
 
   express.get('/kaizen/orders;export', canView, fetchDictionaries, express.crud.exportRoute.bind(null, {
     filename: 'KAIZEN_ORDERS',

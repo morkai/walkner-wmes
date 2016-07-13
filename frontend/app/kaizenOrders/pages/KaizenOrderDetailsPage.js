@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/i18n',
   'app/user',
   'app/viewport',
@@ -11,6 +12,7 @@ define([
   '../views/KaizenOrderHistoryView',
   'app/kaizenOrders/templates/detailsPage'
 ], function(
+  $,
   t,
   user,
   viewport,
@@ -28,6 +30,18 @@ define([
     template: template,
 
     baseBreadcrumb: true,
+    breadcrumbs: function()
+    {
+      if (!this.options.standalone)
+      {
+        return DetailsPage.prototype.breadcrumbs.call(this);
+      }
+
+      return [
+        t.bound('kaizenOrders', 'BREADCRUMBS:base'),
+        this.model.get('rid') + ''
+      ];
+    },
 
     localTopics: {
       'kaizen.orders.seen': 'onSeen'
@@ -94,6 +108,8 @@ define([
       DetailsPage.prototype.destroy.call(this);
 
       kaizenDictionaries.unload();
+
+      $('body').removeClass('kaizenOrders-standalone');
     },
 
     defineViews: function()
@@ -120,6 +136,8 @@ define([
       DetailsPage.prototype.afterRender.call(this);
 
       kaizenDictionaries.load();
+
+      $('body').toggleClass('kaizenOrders-standalone', !!this.options.standalone);
     },
 
     markAsSeen: function(e)

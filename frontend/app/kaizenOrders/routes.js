@@ -19,6 +19,7 @@ define([
 
   var nls = 'i18n!app/nls/kaizenOrders';
   var canAccess = user.auth();
+  var canAccessLocal = user.auth('LOCAL', 'USER');
 
   router.map('/kaizenReport', canAccess, function(req)
   {
@@ -85,7 +86,7 @@ define([
     );
   });
 
-  router.map('/kaizenOrders/:id', canAccess, function(req)
+  router.map('/kaizenOrders/:id', canAccessLocal, function(req)
   {
     viewport.loadPage(
       [
@@ -96,7 +97,8 @@ define([
       function(KaizenOrderDetailsPage, KaizenOrderThankYouView)
       {
         var page = new KaizenOrderDetailsPage({
-          model: new KaizenOrder({_id: req.params.id})
+          model: new KaizenOrder({_id: req.params.id}),
+          standalone: !!req.query.standalone
         });
 
         if (req.query.thank === 'you')
@@ -118,7 +120,7 @@ define([
     );
   });
 
-  router.map('/kaizenOrders;add', canAccess, function()
+  router.map('/kaizenOrders;add', canAccessLocal, function(req)
   {
     viewport.loadPage(
       [
@@ -127,8 +129,18 @@ define([
       ],
       function(KaizenOrderAddFormPage)
       {
+        var operator = null;
+
+        try
+        {
+          operator = JSON.parse(decodeURIComponent(atob(req.query.operator)));
+        }
+        catch (err) {}
+
         return new KaizenOrderAddFormPage({
-          model: new KaizenOrder()
+          model: new KaizenOrder(),
+          standalone: !!req.query.standalone,
+          operator: operator
         });
       }
     );

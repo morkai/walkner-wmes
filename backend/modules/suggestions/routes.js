@@ -33,6 +33,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
   express.get('/suggestions/:id', canView, express.crud.readRoute.bind(null, app, Suggestion));
   express.put('/suggestions/:id', canView, editSuggestionRoute);
   express.delete('/suggestions/:id', canManage, express.crud.deleteRoute.bind(null, app, Suggestion));
+  
   express.get('/suggestions;export', canView, fetchDictionaries, express.crud.exportRoute.bind(null, {
     filename: 'SUGGESTIONS',
     serializeRow: exportSuggestion,

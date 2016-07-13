@@ -54,6 +54,10 @@
 }
 .kaizenOrders-form .form-control[type="date"] {
   width: 100%;
+  min-width: 145px;
+}
+.kaizenOrders-form .form-control[name="eventTime"] {
+  width: 31px;
 }
 .kaizenOrders-form-statusBtnGroup {
   display: block;
