@@ -184,10 +184,15 @@
     "isa:pickup": "Pallet<br>pickup",
     "isa:deliver": "Pallet<br>delivery",
     "isa:deliver:specific": "Delivery<span class='production-isa-selectedPalletKind'>{palletKind}</span>",
+
     "isa:cancel:title": "Request cancel confirmation",
     "isa:cancel:message": "<p>Are you sure you want to cancel the chosen pallet {requestType} request?</p>",
     "isa:cancel:yes": "Cancel request",
     "isa:cancel:no": "Leave active",
+
+    "isa:status:idle": "No request",
+    "isa:status:new": "Waiting for acceptance",
+    "isa:status:accepted": "In progress",
 
     "spigotChecker:title": "Checking the Spigot component",
     "spigotChecker:name:label": "Component name:",

@@ -20,12 +20,27 @@
   margin-left: 7px;
 }
 .production-isa-status {
+  position: relative;
   margin-bottom: 9px;
   width: 143px;
   height: 143px;
   display: inline-block;
   box-shadow: 0 0 6px #999;
   border-radius: 25px;
+}
+.production-isa-status-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: 15px;
+  width: 143px;
+  color: #fff;
+  text-shadow: 1px 1px 6px #333;
+  text-transform: lowercase;
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 18px;
 }
 .production-isa-status.grey {
   background: radial-gradient(circle, #FEFCEA 0%, #808080 100%);

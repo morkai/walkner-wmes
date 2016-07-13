@@ -112,8 +112,10 @@ define([
         palletKinds: isaPalletKinds.toJSON(),
         pickupIndicatorColor: this.serializeIndicatorColor(pickupRequest),
         deliveryIndicatorColor: this.serializeIndicatorColor(deliveryRequest),
+        pickupStatusLabel: this.serializeStatusLabel(pickupRequest),
         pickupActive: pickupActive,
         pickupDisabled: !this.rendered || locked || syncing || !connected || pickupAccepted,
+        deliveryStatusLabel: this.serializeStatusLabel(deliveryRequest),
         deliveryActive: deliveryActive,
         deliveryDisabled: !this.rendered || locked || syncing || !connected || deliveryAccepted,
         selectedPalletKind: selectedPalletKind,
@@ -139,6 +141,11 @@ define([
         default:
           return 'grey';
       }
+    },
+
+    serializeStatusLabel: function(request)
+    {
+      return t('production', 'isa:status:' + (request ? request.get('status') : 'idle'));
     },
 
     afterRender: function()

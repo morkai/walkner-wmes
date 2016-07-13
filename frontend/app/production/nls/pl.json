@@ -191,6 +191,10 @@
   "isa:cancel:yes": "Anuluj żądanie",
   "isa:cancel:no": "Pozostaw aktywne",
 
+  "isa:status:idle": "Brak żądania",
+  "isa:status:new": "Oczekiwanie na przyjęcie żądania",
+  "isa:status:accepted": "Żądanie w realizacji",
+
   "spigotChecker:title": "Sprawdzanie komponentu Spigot",
   "spigotChecker:name:label": "Nazwa komponentu:",
   "spigotChecker:nc12:label": "12NC komponentu:",

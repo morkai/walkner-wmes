@@ -1,12 +1,16 @@
 <div class="production-isa-sections">
   <div class="production-isa-section">
-    <div class="production-isa-status <%- pickupIndicatorColor %>"></div>
+    <div class="production-isa-status <%- pickupIndicatorColor %>">
+      <span class="production-isa-status-label"><%- pickupStatusLabel %></span>
+    </div>
     <button id="<%- idPrefix %>-pickup" class="btn btn-lg btn-block btn-default production-isa-btn <%- pickupActive ? 'active' : '' %>" <%- pickupDisabled ? 'disabled' : '' %>>
       <%- t('production', 'isa:pickup') %>
     </button>
   </div>
   <div class="production-isa-section">
-    <div class="production-isa-status <%- deliveryIndicatorColor %>"></div>
+    <div class="production-isa-status <%- deliveryIndicatorColor %>">
+      <span class="production-isa-status-label"><%- deliveryStatusLabel %></span>
+    </div>
     <div class="dropup">
       <button id="<%- idPrefix %>-deliver" class="btn btn-lg btn-block btn-default production-isa-btn dropdown-toggle <%- deliveryActive ? 'active' : '' %>" <%- deliveryDisabled ? 'disabled' : '' %> data-toggle="<%- dropdownEnabled ? 'dropdown' : '' %>">
         <% if (selectedPalletKind) { %>
