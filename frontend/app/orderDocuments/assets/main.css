@@ -145,17 +145,35 @@
 .orderDocuments-buttons > .btn:last-child {
   border-right: 0;
 }
-.orderDocuments-buttons > .btn:focus {
+.orderDocuments-buttons > .btn-default:focus {
   outline: 2px solid #66afe9;
   outline-offset: -2px;
   background-color: #ffffd6;
   color: #333;
   text-shadow: none;
 }
-.orderDocuments-buttons > .btn:hover {
+.orderDocuments-buttons > .btn-default:hover {
   background-color: #ffffd6;
   color: #333;
   text-shadow: none;
+}
+.orderDocuments-buttons-container {
+  position: relative;
+}
+.orderDocuments-buttons-addImprovement {
+  flex-direction: column;
+  position: absolute;
+  top: 32px;
+  right: 0;
+  margin: 0;
+}
+.orderDocuments-buttons-addImprovement > .btn {
+  width: 38px;
+  border-right: none;
+  border-left: 1px solid #000!important;
+}
+.orderDocuments-buttons-addImprovement > .btn:last-child {
+  border-bottom: 1px solid #000;
 }
 .orderDocuments-documents {
   flex: 1 1 auto;

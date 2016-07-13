@@ -12,11 +12,13 @@
   "controls:openLocalOrderDialog": "Znajdź zlecenie",
   "controls:reloadDocument": "Przeładuj aktualny dokument",
   "controls:openDocumentWindow": "Otwórz załadowany dokument w nowym oknie",
+  "controls:toggleAddImprovementButtons": "Zgłoś ZPW/sugestię",
+  "controls:openAddNearMissWindow": "Zgłoś ZPW",
   "controls:openAddSuggestionWindow": "Zgłoś sugestię",
   "controls:filter:ph": "Filtruj dokumenty",
 
   "popup:document": "Nie udało się otworzyć dokumentu w nowym oknie :(<br>Sprawdź czy wyskakujące okienka są dozwolone w przeglądarce!",
-  "popup:suggestion": "Nie udało się otworzyć formularza sugestii w nowym oknie :(<br>Sprawdź czy wyskakujące okienka są dozwolone w przeglądarce!",
+  "popup:improvement": "Nie udało się otworzyć formularza ZPW/sugestii w nowym oknie :(<br>Sprawdź czy wyskakujące okienka są dozwolone w przeglądarce!",
 
   "settings:title": "Ustawienia",
   "settings:prodLineId": "ID linii produkcyjnej",

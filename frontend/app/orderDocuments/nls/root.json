@@ -13,7 +13,9 @@
     "controls:openLocalOrderDialog": "Find order",
     "controls:reloadDocument": "Reload the current document",
     "controls:openDocumentWindow": "Open the current document in a new window",
-    "controls:openAddSuggestionWindow": "Add a new suggestion",
+    "controls:toggleAddImprovementButtons": "Add near miss/suggestion",
+    "controls:openAddNearMissWindow": "Submit a new near miss",
+    "controls:openAddSuggestionWindow": "Submit a new suggestion",
     "controls:filter:ph": "Filter documents",
 
     "popup:document": "Failed to open the document in a new window :(<br>Check if the popups are allowed in the browser!",

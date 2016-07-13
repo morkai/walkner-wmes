@@ -76,9 +76,23 @@ define([
 
         $openLocalFileDialog.blur();
       },
+      'click #-toggleAddImprovementButtons': function(e)
+      {
+        this.$id('addImprovementButtons').toggleClass('hidden');
+
+        e.currentTarget.blur();
+      },
+      'click #-openAddNearMissWindow': function(e)
+      {
+        this.openAddNearMissWindow();
+        this.$id('addImprovementButtons').addClass('hidden');
+
+        e.currentTarget.blur();
+      },
       'click #-openAddSuggestionWindow': function(e)
       {
         this.openAddSuggestionWindow();
+        this.$id('addImprovementButtons').addClass('hidden');
 
         e.currentTarget.blur();
       },
@@ -422,9 +436,20 @@ define([
       viewport.showDialog(settingsDialog, t('orderDocuments', 'settings:title'));
     },
 
+    openAddNearMissWindow: function()
+    {
+      this.openAddImprovementWindow('/#kaizenOrders;add');
+    },
+
     openAddSuggestionWindow: function()
     {
-      var url = '/#suggestions;add?standalone=1';
+      this.openAddImprovementWindow('/#suggestions;add');
+    },
+
+    openAddImprovementWindow: function(url)
+    {
+      url += '?standalone=1';
+
       var screen = window.screen;
       var width = screen.availWidth > 1200 ? 1200 : screen.availWidth * 0.7;
       var height = screen.availHeight * 0.8;
@@ -436,14 +461,14 @@ define([
         + ',width=' + Math.floor(width)
         + ',height=' + Math.floor(height);
 
-      var win = window.open(url, 'WMES_SUGGESTIONS', features);
+      var win = window.open(url, 'WMES_IMPROVEMENTS', features);
 
       if (!win)
       {
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('orderDocuments', 'popup:suggestion')
+          text: t('orderDocuments', 'popup:improvement')
         });
       }
     },

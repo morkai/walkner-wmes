@@ -2,14 +2,18 @@
   <input id="<%- idPrefix %>-localFile" class="orderDocuments-localFile" type="file" tabindex="-1" accept="application/pdf">
   <div class="orderDocuments-controls-components">
     <div id="<%- idPrefix %>-prodLine" class="orderDocuments-prodLine"></div>
-    <div>
+    <div class="orderDocuments-buttons-container">
       <div class="orderDocuments-buttons">
         <button id="<%- idPrefix %>-openLocalFileDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openLocalFileDialog') %>"><i class="fa fa-folder-open"></i></button>
         <button id="<%- idPrefix %>-openLocalOrderDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openLocalOrderDialog') %>"><i class="fa fa-search"></i></button>
         <button id="<%- idPrefix %>-reloadDocument" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:reloadDocument') %>"><i class="fa fa-refresh"></i></button>
         <button id="<%- idPrefix %>-openDocumentWindow" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openDocumentWindow') %>"><i class="fa fa-external-link"></i></button>
         <button id="<%- idPrefix %>-openSettingsDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openSettingsDialog') %>"><i class="fa fa-wrench"></i></button>
-        <button id="<%- idPrefix %>-openAddSuggestionWindow" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openAddSuggestionWindow') %>"><i class="fa fa-lightbulb-o"></i></button>
+        <button id="<%- idPrefix %>-toggleAddImprovementButtons" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:toggleAddImprovementButtons') %>"><i class="fa fa-comment"></i></button>
+      </div>
+      <div id="<%- idPrefix %>-addImprovementButtons" class="orderDocuments-buttons orderDocuments-buttons-addImprovement hidden">
+        <button id="<%- idPrefix %>-openAddNearMissWindow" type="button" class="btn btn-danger" title="<%- t('orderDocuments', 'controls:openAddNearMissWindow') %>"><i class="fa fa-warning"></i></button>
+        <button id="<%- idPrefix %>-openAddSuggestionWindow" type="button" class="btn btn-warning" title="<%- t('orderDocuments', 'controls:openAddSuggestionWindow') %>"><i class="fa fa-lightbulb-o"></i></button>
       </div>
     </div>
     <div id="<%- idPrefix %>-order" class="orderDocuments-order">
