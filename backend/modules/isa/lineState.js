@@ -62,6 +62,8 @@ module.exports = function setUpIsaLineState(app, isaModule)
     const prodLineId = request.getProdLineId();
 
     lineToRequestsMap[prodLineId] = lineToRequestsMap[prodLineId].filter(d => d !== request);
+
+    delete idToRequestMap[request._id];
   }
 
   function acquireLock(key, callback, queueIfNew)
