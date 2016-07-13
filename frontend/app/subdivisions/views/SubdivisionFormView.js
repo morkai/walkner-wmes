@@ -81,20 +81,31 @@ define([
       },
       'change [name$="time"]': function(e)
       {
-        var re = /([0-9]{1,2}):([0-9]{1,2})/g;
+        var re = /(?:([0-9]+)@)?([0-9]{1,2}):([0-9]{1,2})/g;
         var matches;
         var times = [];
 
         while ((matches = re.exec(e.target.value)) !== null)
         {
-          var hour = +matches[1];
+          var duration = +matches[1] || 0;
+
+          if (duration < 0)
+          {
+            duration = 0;
+          }
+          else if (duration > 480)
+          {
+            duration = 480;
+          }
+
+          var hour = +matches[2];
 
           if (hour >= 24)
           {
             continue;
           }
 
-          var minutes = +matches[2];
+          var minutes = +matches[3];
 
           if (minutes >= 60)
           {
@@ -111,7 +122,7 @@ define([
             minutes = '0' + minutes;
           }
 
-          times.push(hour + ':' + minutes);
+          times.push((duration ? (duration + '@') : '') + hour + ':' + minutes);
         }
 
         e.target.value = times.join(', ');
@@ -188,11 +199,12 @@ define([
 
         autoDowntime.time = autoDowntime.time.split(',').map(function(time)
         {
-          var parts = time.trim().split(':');
+          var matches = time.match(/(?:([0-9]+)@)?([0-9]{1,2}):([0-9]{1,2})/);
 
           return {
-            h: +parts[0],
-            m: +parts[1]
+            h: +matches[2],
+            m: +matches[3],
+            d: +matches[1] || 0
           };
         });
       });
@@ -217,7 +229,9 @@ define([
           when: autoDowntime.when,
           time: (autoDowntime.time || []).map(function(time)
           {
-            return (time.h < 10 ? '0' : '') + time.h + ':' + (time.m < 10 ? '0' : '') + time.m;
+            return (time.d > 0 ? (time.d + '@') : '')
+              + (time.h < 10 ? '0' : '') + time.h
+              + ':' + (time.m < 10 ? '0' : '') + time.m;
           }).join(', ')
         }
       }));

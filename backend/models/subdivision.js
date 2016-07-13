@@ -14,6 +14,12 @@ module.exports = function setupSubdivisionModel(app, mongoose)
       type: Number,
       min: 0,
       max: 59
+    },
+    d: {
+      type: Number,
+      min: 0,
+      max: 8 * 60,
+      default: 0
     }
   }, {
     _id: false

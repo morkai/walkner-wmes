@@ -274,6 +274,34 @@
 .production-spigotChecker-modal .cancel {
   display: none;
 }
+.production-currentDowntime {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 15px;
+  min-height: 226px;
+  z-index: 3;
+  width: 100%;
+  color: #fff;
+  font-size: 36px;
+  text-align: center;
+  text-shadow: 1px 1px 1px #333;
+  box-shadow: 0 .5em 1em rgba(0, 0, 0, .5);
+  background: #d9534f;
+  cursor: pointer;
+}
+.production-currentDowntime-message {
+  padding: 15px;
+}
+.production-currentDowntime-aor {
+  margin: 15px 0;
+  font-size: 28px;
+}
+.production-currentDowntime-duration {
+  margin: 15px 0;
+}
 @media (max-width: 1680px) {
   .production {
     margin: 0 15px;
@@ -333,6 +361,14 @@
   .production-controls > .fa {
     margin-bottom: 6px;
   }
+  .production-currentDowntime {
+    font-size: 32px;
+  }
+}
+@media (max-width: 1280px) {
+  .production-currentDowntime {
+    font-size: 28px;
+  }
 }
 @media (max-width: 1180px) {
   .production-actions {
@@ -353,6 +389,9 @@
   .production-quantities {
     flex-grow: 1;
   }
+  .production-currentDowntime {
+    font-size: 36px;
+  }
 }
 @media (max-width: 700px) {
   .production-ft {
@@ -363,5 +402,8 @@
   }
   .production-isa {
     width: 100%;
+  }
+  .production-currentDowntime {
+    font-size: 32px;
   }
 }

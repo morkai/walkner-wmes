@@ -5,12 +5,16 @@ define([
   '../user',
   '../core/Model',
   '../core/util/getShiftEndDate',
+  '../data/aors',
+  '../data/downtimeReasons',
   './util/decorateProdDowntime'
 ], function(
   time,
   user,
   Model,
   getShiftEndDate,
+  aors,
+  downtimeReasons,
   decorateProdDowntime
 ) {
   'use strict';
@@ -74,6 +78,22 @@ define([
     serializeDetails: function()
     {
       return decorateProdDowntime(this, {longDate: true});
+    },
+
+    getReasonLabel: function()
+    {
+      var reasonId = this.get('reason');
+      var reason = downtimeReasons.get(reasonId);
+
+      return reason ? reason.get('label') : reasonId;
+    },
+
+    getAorLabel: function()
+    {
+      var aorId = this.get('aor');
+      var aor = aors.get(aorId);
+
+      return aor ? aor.get('name') : aorId;
     },
 
     getCssClassName: function(status)
@@ -156,12 +176,12 @@ define([
       return options.hasAccessToAor(this.get('aor')) ? 1 : 0;
     },
 
-    getDurationString: function(currentTime)
+    getDurationString: function(currentTime, compact)
     {
       var startTime = Date.parse(this.get('startedAt'));
       var endTime = Date.parse(this.get('finishedAt')) || currentTime || Date.now();
 
-      return time.toString(Math.round((endTime - startTime) / 1000));
+      return time.toString(Math.round((endTime - startTime) / 1000), compact);
     }
 
   }, {

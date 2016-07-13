@@ -26,14 +26,6 @@ define([
     template: headerTemplate,
 
     localTopics: {
-      'visibility.visible': function()
-      {
-        this.updateCurrentTime();
-      },
-      'visibility.hidden': function()
-      {
-        clearTimeout(this.timers.updateCurrentTime);
-      },
       'divisions.synced': 'updateOrgUnit',
       'subdivisions.synced': 'updateOrgUnit',
       'mrpControllers.synced': 'updateOrgUnit',
@@ -51,9 +43,8 @@ define([
 
     initialize: function()
     {
-      this.updateCurrentTime = this.updateCurrentTime.bind(this);
-
       this.listenTo(this.model.prodLine, 'change:description', this.updatePageHeader);
+      this.listenTo(this.model, 'second', this.updateCurrentTime);
       this.listenTo(this.model, 'change:shift', this.updateShift);
       this.listenTo(this.model, 'change:master', this.updateMaster);
       this.listenTo(this.model, 'change:leader', this.updateLeader);
@@ -97,8 +88,6 @@ define([
       {
         this.$currentTime.text(this.model.getCurrentTime());
       }
-
-      this.scheduleCurrentTimeUpdate();
     },
 
     updateShift: function()
@@ -170,24 +159,6 @@ define([
       }
 
       this.$property(type).html(html);
-    },
-
-    scheduleCurrentTimeUpdate: function()
-    {
-      if (this.timers.updateCurrentTime != null)
-      {
-        clearTimeout(this.timers.updateCurrentTime);
-      }
-
-      this.timers.updateCurrentTime = setTimeout(
-        function(model)
-        {
-          model.timers.updateCurrentTime = null;
-          model.updateCurrentTime();
-        },
-        999,
-        this
-      );
     },
 
     $property: function(propertyName)

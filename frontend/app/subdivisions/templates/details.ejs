@@ -17,7 +17,21 @@
           <ol>
             <% model.autoDowntimes.forEach(function(autoDowntime) { %>
             <li>
-              <%= autoDowntime.reason %> (<%- t('subdivisions', 'autoDowntimes:when:' + autoDowntime.when, {time: autoDowntime.time}) %>)
+              <% if (autoDowntime.when !== 'time') { %>
+              <%= autoDowntime.reason %> (<%- t('subdivisions', 'autoDowntimes:when:' + autoDowntime.when) %>)
+              <% } else { %>
+              <%= autoDowntime.reason %>, <%- t('subdivisions', 'autoDowntimes:when:time') %>
+              <ul>
+                <% _.forEach(autoDowntime.time, function(time) { %>
+                <li>
+                  <%- time.h %>:<%- time.m %>
+                  <% if (time.d) { %>
+                  <%- t('subdivisions', 'autoDowntimes:duration', {minutes: time.d}) %>
+                  <% } %>
+                </li>
+                <% }) %>
+              </ul>
+              <% } %>
             </li>
             <% }) %>
           </ol>

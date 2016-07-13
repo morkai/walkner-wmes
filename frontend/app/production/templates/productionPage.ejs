@@ -4,7 +4,7 @@
   <div id="<%- idPrefix %>-data"></div>
   <div class="production-ft">
     <div class="production-downtimes">
-      <h2 class="production-sectionHeader"><%- t('production', 'section:downtimes') %></h2>
+      <h2 id="<%- idPrefix %>-downtimes-header" class="production-sectionHeader"><%- t('production', 'section:downtimes') %></h2>
       <div id="<%- idPrefix %>-downtimes"></div>
     </div>
     <div class="production-quantities">
@@ -14,6 +14,14 @@
     <div class="production-isa">
       <h2 class="production-sectionHeader"><%- t('production', 'isa:header') %></h2>
       <div id="<%- idPrefix %>-isa"></div>
+    </div>
+  </div>
+  <div id="<%- idPrefix %>-currentDowntime" class="production-currentDowntime hidden">
+    <div id="<%- idPrefix %>-currentDowntime-message" class="production-currentDowntime-message">
+      <div id="<%- idPrefix %>-currentDowntime-reason"></div>
+      <div id="<%- idPrefix %>-currentDowntime-aor" class="production-currentDowntime-aor"></div>
+      <div id="<%- idPrefix %>-currentDowntime-duration" class="production-currentDowntime-duration"></div>
+      <div id="<%- idPrefix %>-currentDowntime-elapsedTime"></div>
     </div>
   </div>
 </div>

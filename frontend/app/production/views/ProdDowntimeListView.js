@@ -39,7 +39,10 @@ define([
     },
 
     events: {
-      'click .warning': 'showEditDialog'
+      'click .warning': function(e)
+      {
+        this.showEditDialog(e.currentTarget.dataset.id);
+      }
     },
 
     initialize: function()
@@ -152,11 +155,16 @@ define([
       }
     },
 
-    showEditDialog: function(e)
+    showEditDialog: function(downtimeId)
     {
       var prodShift = this.model;
-      var prodDowntime = prodShift.prodDowntimes.get(e.currentTarget.dataset.id);
+      var prodDowntime = prodShift.prodDowntimes.get(downtimeId);
 
+      if (!prodDowntime)
+      {
+        return;
+      }
+      
       var downtimePickerView = new DowntimePickerView({
         model: {
           mode: 'edit',

@@ -143,7 +143,11 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       type: Number,
       default: 1
     },
-    alerts: [alertSchema]
+    alerts: [alertSchema],
+    auto: {
+      type: mongoose.Schema.Types.Mixed,
+      default: null
+    }
   }, {
     id: false
   });

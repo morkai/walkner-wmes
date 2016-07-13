@@ -156,6 +156,7 @@ define([
         prodShift.shiftChangeTimer = null;
         prodShift.changeShift();
         prodShift.checkAutoDowntime();
+        prodShift.trigger('second');
       }, 1000, this);
     },
 
@@ -1038,7 +1039,7 @@ define([
         aor: aor,
         reason: downtimeReason.id,
         reasonComment: '',
-        auto: true
+        auto: {}
       });
     },
 
@@ -1103,7 +1104,7 @@ define([
           aor: aor,
           reason: nextAutoDowntime.reason,
           reasonComment: '',
-          auto: true
+          auto: {}
         });
       }
     },
@@ -1153,11 +1154,19 @@ define([
       var now = new Date();
       var h = now.getHours();
       var m = now.getMinutes();
+      var d = 0;
       var autoDowntime = _.find(autoDowntimes, function(autoDowntime)
       {
         return autoDowntime.when === 'time' && _.some(autoDowntime.time, function(t)
         {
-          return t.h === h && t.m === m;
+          if (t.h === h && t.m === m)
+          {
+            d = t.d;
+
+            return true;
+          }
+
+          return false;
         });
       });
 
@@ -1184,7 +1193,9 @@ define([
         aor: aor,
         reason: autoDowntime.reason,
         reasonComment: '',
-        auto: true
+        auto: {
+          d: d
+        }
       });
     }
 

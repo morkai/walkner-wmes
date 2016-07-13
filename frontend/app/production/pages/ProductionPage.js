@@ -1,7 +1,9 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
+  'app/time',
   'app/user',
   'app/i18n',
   'app/viewport',
@@ -21,7 +23,9 @@ define([
   'app/production/templates/productionPage',
   'app/production/templates/duplicateWarning'
 ], function(
+  _,
   $,
+  time,
   user,
   t,
   viewport,
@@ -83,6 +87,13 @@ define([
       'production.duplicateDetected': 'onDuplicateDetected'
     },
 
+    events: {
+      'click #-currentDowntime': function()
+      {
+        this.downtimesView.showEditDialog(this.model.prodDowntimes.findFirstUnfinished().id);
+      }
+    },
+
     breadcrumbs: function()
     {
       return [
@@ -95,6 +106,7 @@ define([
     {
       this.delayProductionJoin = this.delayProductionJoin.bind(this);
       this.onBeforeUnload = this.onBeforeUnload.bind(this);
+      this.onWindowResize = _.debounce(this.onWindowResize.bind(this), 33);
 
       this.layout = null;
       this.shiftEditedSub = null;
@@ -108,6 +120,7 @@ define([
       this.defineBindings();
 
       $(window)
+        .on('resize.' + this.idPrefix, this.onWindowResize)
         .on('beforeunload.' + this.idPrefix, this.onBeforeUnload)
         .on('keydown.' + this.idPrefix, this.onKeyDown);
     },
@@ -247,6 +260,7 @@ define([
         }
 
         page.checkSpigot();
+        page.updateCurrentDowntime();
       });
 
       page.listenTo(model, 'change:shift', function()
@@ -276,6 +290,16 @@ define([
       {
         this.subscribeForShiftChanges();
       }
+
+      page.listenTo(model.prodDowntimes, 'change:finishedAt', function()
+      {
+        page.updateCurrentDowntime();
+      });
+
+      page.listenTo(model, 'second', function()
+      {
+        page.updateCurrentDowntime();
+      });
 
       page.listenTo(model.prodShiftOrder, 'change:mechOrder', function()
       {
@@ -308,6 +332,8 @@ define([
       {
         this.joinProduction();
       }
+
+      this.updateCurrentDowntime();
 
       if (this.model.isLocked() || this.model.id)
       {
@@ -347,6 +373,11 @@ define([
       return this.model.isDowntime()
         ? t('production', 'unload:downtime')
         : t('production', 'unload:order');
+    },
+
+    onWindowResize: function()
+    {
+      this.adjustCurrentDowntimeBox();
     },
 
     onProductionLocked: function(data)
@@ -583,6 +614,60 @@ define([
         .on('message', this.checkSpigot.bind(this));
 
       viewport.showDialog(dialogView, t('production', 'spigotChecker:title'));
+    },
+
+    adjustCurrentDowntimeBox: function()
+    {
+      var $downtimesHeader = this.$id('downtimes-header');
+      var offset = $downtimesHeader.offset();
+
+      if (!offset)
+      {
+        return;
+      }
+
+      var $currentDowntime = this.$id('currentDowntime');
+      var $message = this.$id('currentDowntime-message').css('margin-top', '');
+
+      $currentDowntime.css({
+        top: (offset.top + $downtimesHeader.outerHeight() + 1) + 'px',
+        left: offset.left + 'px',
+        width: $downtimesHeader.width() + 'px'
+      });
+
+      $message.css('margin-top', ($currentDowntime.outerHeight() - $message.outerHeight()) / 2 + 'px');
+    },
+
+    updateCurrentDowntime: function()
+    {
+      var $currentDowntime = this.$id('currentDowntime');
+      var downtime = this.model.prodDowntimes.findFirstUnfinished();
+
+      if (!downtime || this.model.get('state') !== 'downtime')
+      {
+        $currentDowntime.addClass('hidden');
+
+        return;
+      }
+
+      this.$id('currentDowntime-reason').text(downtime.getReasonLabel());
+      this.$id('currentDowntime-aor').text(downtime.getAorLabel());
+      this.$id('currentDowntime-elapsedTime').text(downtime.getDurationString(null, true));
+
+      var auto = downtime.get('auto') || {d: 0};
+
+      if (auto && auto.d)
+      {
+        this.$id('currentDowntime-duration').text(time.toString(auto.d * 60)).removeClass('hidden');
+      }
+      else
+      {
+        this.$id('currentDowntime-duration').addClass('hidden');
+      }
+
+      $currentDowntime.removeClass('hidden');
+
+      this.adjustCurrentDowntimeBox();
     }
 
   });
