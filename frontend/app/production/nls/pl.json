@@ -204,6 +204,8 @@
   "spigotChecker:submit": "Sprawdź komponent",
   "spigotChecker:success": "Zeskanowano prawidłowy komponent :)",
 
+  "autoDowntimes:remainingTime": "rozpocznie się za {time}",
+
   "settings:tab:operator": "Formatka operatora",
   "settings:tab:downtimes": "Przestoje",
   "settings:tab:spigot": "Sprawdzanie Spigota",

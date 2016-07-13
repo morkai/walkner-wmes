@@ -1151,9 +1151,18 @@ define([
         return;
       }
 
-      var now = new Date();
-      var h = now.getHours();
-      var m = now.getMinutes();
+      var date = new Date();
+      var now = date.getTime();
+      var h = date.getHours();
+      var m = date.getMinutes();
+
+      date.setMinutes(m + 1);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+
+      var nextH = date.getHours();
+      var nextM = date.getMinutes();
+      var next = null;
       var d = 0;
       var autoDowntime = _.find(autoDowntimes, function(autoDowntime)
       {
@@ -1166,12 +1175,26 @@ define([
             return true;
           }
 
+          if (t.h === nextH && t.m === nextM)
+          {
+            next = {
+              reason: autoDowntime.reason,
+              duration: t.d,
+              remainingTime: date.getTime() - now
+            };
+          }
+
           return false;
         });
       });
 
       if (!autoDowntime)
       {
+        if (next)
+        {
+          this.trigger('incomingAutoDowntime', next);
+        }
+
         return;
       }
 
@@ -1179,7 +1202,7 @@ define([
 
       if (prevDowntime && prevDowntime.get('reason') === autoDowntime.reason)
       {
-        var timeDiff = now.getTime() - prevDowntime.get('finishedAt').getTime();
+        var timeDiff = now - prevDowntime.get('finishedAt').getTime();
 
         if (timeDiff < 10 * 60 * 1000)
         {

@@ -203,6 +203,8 @@
     "spigotChecker:submit": "Check component",
     "spigotChecker:success": "The scanned component is valid :)",
 
+    "autoDowntimes:remainingTime": "starts in {time}",
+
     "settings:tab:operator": "Operator",
     "settings:tab:downtimes": "Downtimes",
     "settings:tab:spigot": "Spigot check",

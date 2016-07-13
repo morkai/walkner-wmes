@@ -10,6 +10,8 @@ define([
   'app/updater/index',
   'app/core/View',
   'app/data/prodLog',
+  'app/data/aors',
+  'app/data/downtimeReasons',
   'app/prodShifts/ProdShift',
   'app/prodDowntimes/ProdDowntime',
   'app/isa/IsaRequest',
@@ -32,6 +34,8 @@ define([
   updater,
   View,
   prodLog,
+  aors,
+  downtimeReasons,
   ProdShift,
   ProdDowntime,
   IsaRequest,
@@ -90,7 +94,12 @@ define([
     events: {
       'click #-currentDowntime': function()
       {
-        this.downtimesView.showEditDialog(this.model.prodDowntimes.findFirstUnfinished().id);
+        var downtime = this.model.prodDowntimes.findFirstUnfinished();
+
+        if (downtime)
+        {
+          this.downtimesView.showEditDialog(downtime.id);
+        }
       }
     },
 
@@ -300,6 +309,8 @@ define([
       {
         page.updateCurrentDowntime();
       });
+
+      page.listenTo(model, 'incomingAutoDowntime', page.handleIncomingAutoDowntime);
 
       page.listenTo(model.prodShiftOrder, 'change:mechOrder', function()
       {
@@ -642,7 +653,67 @@ define([
     {
       var $currentDowntime = this.$id('currentDowntime');
       var downtime = this.model.prodDowntimes.findFirstUnfinished();
+      var reason;
+      var aor;
+      var elapsedTime;
+      var duration;
 
+      if (!downtime)
+      {
+        var incomingAutoDowntime = this.incomingAutoDowntime;
+
+        if (!incomingAutoDowntime)
+        {
+          $currentDowntime.addClass('hidden');
+
+          return;
+        }
+
+        reason = downtimeReasons.get(incomingAutoDowntime.reason);
+        reason = reason ? reason.getLabel() : null;
+        aor = aors.get(this.model.getDefaultAor());
+        aor = aor ? aor.getLabel() : null;
+        elapsedTime = t('production', 'autoDowntimes:remainingTime', {
+          time: time.toString(incomingAutoDowntime.remainingTime / 1000, false, false)
+        });
+        duration = incomingAutoDowntime.duration;
+
+        $currentDowntime.addClass('is-incoming');
+      }
+      else
+      {
+        $currentDowntime.removeClass('is-incoming');
+
+        reason = downtime.getReasonLabel();
+        aor = downtime.getAorLabel();
+        elapsedTime = downtime.getDurationString(null, true);
+        duration = (downtime.get('auto') || {d: 0}).d;
+      }
+
+      if (!reason || !aor)
+      {
+        $currentDowntime.addClass('hidden');
+
+        return;
+      }
+
+      this.$id('currentDowntime-reason').text(reason);
+      this.$id('currentDowntime-aor').text(aor);
+      this.$id('currentDowntime-elapsedTime').text(elapsedTime);
+
+      if (duration)
+      {
+        this.$id('currentDowntime-duration').text(time.toString(duration * 60)).removeClass('hidden');
+      }
+      else
+      {
+        this.$id('currentDowntime-duration').addClass('hidden');
+      }
+
+      $currentDowntime.removeClass('hidden');
+
+      this.adjustCurrentDowntimeBox();
+/*
       if (!downtime || this.model.get('state') !== 'downtime')
       {
         $currentDowntime.addClass('hidden');
@@ -668,6 +739,17 @@ define([
       $currentDowntime.removeClass('hidden');
 
       this.adjustCurrentDowntimeBox();
+      */
+    },
+
+    handleIncomingAutoDowntime: function(incomingAutoDowntime)
+    {
+      var page = this;
+
+      page.incomingAutoDowntime = incomingAutoDowntime;
+
+      clearTimeout(page.timers.resetIncomingAutoDowntime);
+      page.timers.resetIncomingAutoDowntime = setTimeout(function() { page.incomingAutoDowntime = null; }, 1337);
     }
 
   });

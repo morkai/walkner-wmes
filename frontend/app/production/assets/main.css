@@ -292,6 +292,10 @@
   background: #d9534f;
   cursor: pointer;
 }
+.production-currentDowntime.is-incoming {
+  background: #eea236;
+  cursor: default;
+}
 .production-currentDowntime-message {
   padding: 15px;
 }
