@@ -279,6 +279,10 @@ exports.user = {
   ]
 };
 
+exports.users = {
+  browsePrivileges: ['LOCAL', 'USER']
+};
+
 exports['messenger/server'] = {
   pubHost: '127.0.0.1',
   pubPort: 60000,
