@@ -4,17 +4,13 @@
 
 ### node.js
 
-  * __Version__: 5
+  * __Version__: 6
   * __Website__: https://nodejs.org/
-  * __Download__: https://nodejs.org/download/
-  * __Installation guide__: https://github.com/joyent/node/wiki/Installation
 
 ### MongoDB
 
-  * __Version__: 3
+  * __Version__: 3.2
   * __Website__: https://www.mongodb.org/
-  * __Download__: https://www.mongodb.org/downloads
-  * __Installation guide__: https://docs.mongodb.org/manual/installation/
 
 ## Installation
 
