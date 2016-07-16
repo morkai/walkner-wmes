@@ -151,7 +151,16 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       return this.skip(err);
     }
 
-    var zip = new JSZip(buf);
+    var zip;
+
+    try
+    {
+      zip = new JSZip(buf);
+    }
+    catch (err)
+    {
+      return this.skip(err);
+    }
 
     this.metaFile = zip.file('meta.json');
 
