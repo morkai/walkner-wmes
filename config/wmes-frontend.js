@@ -178,7 +178,7 @@ exports.pubsub = {
     'fte.master.**', 'fte.leader.**',
     'hourlyPlans.created', 'hourlyPlans.updated.*',
     'users.syncFailed',
-    'production.synced.**', 'production.edited.**', 'production.stateChanged.**',
+    'production.synced.**', 'production.edited.**', 'production.stateChanged.**', 'production.autoDowntimes.**',
     'prodShifts.**', 'prodDowntimes.**', 'prodShiftOrders.**', 'prodChangeRequests.**',
     'updater.newVersion',
     'settings.updated.**',

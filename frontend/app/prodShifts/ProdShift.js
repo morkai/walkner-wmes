@@ -155,7 +155,6 @@ define([
       {
         prodShift.shiftChangeTimer = null;
         prodShift.changeShift();
-        prodShift.checkAutoDowntime();
         prodShift.trigger('second');
       }, 1000, this);
     },
@@ -1129,95 +1128,30 @@ define([
       return time >= windowStart && time <= windowEnd;
     },
 
-    checkAutoDowntime: function()
+    shouldStartTimedAutoDowntime: function(reason)
     {
-      if (this.get('state') !== 'working')
+      return this.get('state') === 'working' && !this.prodDowntimes.some(function(prodDowntime)
       {
-        return;
-      }
-
-      var aor = this.getDefaultAor();
-      var subdivision = subdivisions.get(this.get('subdivision'));
-
-      if (!aor || !subdivision)
-      {
-        return;
-      }
-
-      var autoDowntimes = subdivision.get('autoDowntimes');
-
-      if (_.isEmpty(autoDowntimes))
-      {
-        return;
-      }
-
-      var date = new Date();
-      var now = date.getTime();
-      var h = date.getHours();
-      var m = date.getMinutes();
-
-      date.setMinutes(m + 1);
-      date.setSeconds(0);
-      date.setMilliseconds(0);
-
-      var nextH = date.getHours();
-      var nextM = date.getMinutes();
-      var next = null;
-      var d = 0;
-      var autoDowntime = _.find(autoDowntimes, function(autoDowntime)
-      {
-        return autoDowntime.when === 'time' && _.some(autoDowntime.time, function(t)
-        {
-          if (t.h === h && t.m === m)
-          {
-            d = t.d;
-
-            return true;
-          }
-
-          if (t.h === nextH && t.m === nextM)
-          {
-            next = {
-              reason: autoDowntime.reason,
-              duration: t.d,
-              remainingTime: date.getTime() - now
-            };
-          }
-
-          return false;
-        });
+        return prodDowntime.get('reason') === reason
+          && (Date.now() - Date.parse(prodDowntime.get('finishedAt'))) < 10 * 60 * 1000;
       });
+    },
 
-      if (!autoDowntime)
+    startTimedAutoDowntime: function(reason, duration)
+    {
+      if (!this.shouldStartTimedAutoDowntime(reason))
       {
-        if (next)
-        {
-          this.trigger('incomingAutoDowntime', next);
-        }
-
         return;
-      }
-
-      var prevDowntime = this.prodDowntimes.at(0);
-
-      if (prevDowntime && prevDowntime.get('reason') === autoDowntime.reason)
-      {
-        var timeDiff = now - prevDowntime.get('finishedAt').getTime();
-
-        if (timeDiff < 10 * 60 * 1000)
-        {
-          return;
-        }
       }
 
       viewport.closeAllDialogs();
 
       this.startDowntime({
-        aor: aor,
-        reason: autoDowntime.reason,
+        aor: this.getDefaultAor(),
+        reason: reason,
         reasonComment: '',
         auto: {
-          d: d
+          d: duration
         }
       });
     }

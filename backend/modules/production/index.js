@@ -9,6 +9,7 @@ var setUpLogEntryHandler = require('./logEntryHandler');
 var setUpActiveProdLines = require('./activeProdLines');
 var setUpProdData = require('./prodData');
 var setUpProdState = require('./prodState');
+var setUpAutoDowntimes = require('./autoDowntimes');
 var recreate = require('./recreate');
 var syncLogEntryStream = require('./syncLogEntryStream');
 var logEntryHandlers = require('./logEntryHandlers');
@@ -91,6 +92,13 @@ exports.start = function startProductionModule(app, module)
       module.config.downtimeReasonsId
     ],
     setUpLogEntryHandler.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.orgUnitsId
+    ],
+    setUpAutoDowntimes.bind(null, app, module)
   );
 
   app.broker.subscribe('shiftChanged', function clearProdDataCache()

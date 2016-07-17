@@ -61,6 +61,7 @@ define([
     {
       var topics = {};
 
+      topics['production.autoDowntimes.' + this.model.get('subdivision')] = 'onAutoDowntime';
       topics['isaRequests.created.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
       topics['isaRequests.updated.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
 
@@ -74,7 +75,7 @@ define([
       },
       'socket.disconnected': function()
       {
-        this.productionJoined = false;
+        this.productionJoined = 0;
       },
       'updater.frontendReloading': function()
       {
@@ -119,7 +120,7 @@ define([
 
       this.layout = null;
       this.shiftEditedSub = null;
-      this.productionJoined = false;
+      this.productionJoined = 0;
       this.enableProdLog = false;
       this.pendingIsaChanges = [];
 
@@ -310,8 +311,6 @@ define([
         page.updateCurrentDowntime();
       });
 
-      page.listenTo(model, 'incomingAutoDowntime', page.handleIncomingAutoDowntime);
-
       page.listenTo(model.prodShiftOrder, 'change:mechOrder', function()
       {
         page.$el.toggleClass('is-mechOrder', model.prodShiftOrder.isMechOrder());
@@ -501,9 +500,7 @@ define([
 
         if (res.prodDowntimes)
         {
-          model.prodDowntimes.reset(
-            res.prodDowntimes.map(function(d) { return ProdDowntime.parse(d); })
-          );
+          model.prodDowntimes.refresh(res.prodDowntimes);
         }
 
         if (res.settings)
@@ -525,7 +522,7 @@ define([
         }
       });
 
-      this.productionJoined = true;
+      this.productionJoined = Date.now();
     },
 
     leaveProduction: function()
@@ -540,7 +537,7 @@ define([
         this.socket.emit('production.leave', this.model.prodLine.id);
       }
 
-      this.productionJoined = false;
+      this.productionJoined = 0;
     },
 
     delayProductionJoin: function()
@@ -652,6 +649,7 @@ define([
     updateCurrentDowntime: function()
     {
       var $currentDowntime = this.$id('currentDowntime');
+      var incomingAutoDowntime = this.incomingAutoDowntime;
       var downtime = this.model.prodDowntimes.findFirstUnfinished();
       var reason;
       var aor;
@@ -660,14 +658,14 @@ define([
 
       if (!downtime)
       {
-        var incomingAutoDowntime = this.incomingAutoDowntime;
-
         if (!incomingAutoDowntime)
         {
           $currentDowntime.addClass('hidden');
 
           return;
         }
+
+        incomingAutoDowntime.remainingTime = incomingAutoDowntime.startingAt - Date.now();
 
         reason = downtimeReasons.get(incomingAutoDowntime.reason);
         reason = reason ? reason.getLabel() : null;
@@ -713,43 +711,36 @@ define([
       $currentDowntime.removeClass('hidden');
 
       this.adjustCurrentDowntimeBox();
-/*
-      if (!downtime || this.model.get('state') !== 'downtime')
-      {
-        $currentDowntime.addClass('hidden');
 
+      if (incomingAutoDowntime && incomingAutoDowntime.remainingTime < -1000)
+      {
+        this.incomingAutoDowntime = null;
+
+        this.model.startTimedAutoDowntime(incomingAutoDowntime.reason, incomingAutoDowntime.duration);
+      }
+    },
+
+    onAutoDowntime: function(message)
+    {
+      if (!this.model.shouldStartTimedAutoDowntime(message.reason) || !this.productionJoined)
+      {
         return;
       }
 
-      this.$id('currentDowntime-reason').text(downtime.getReasonLabel());
-      this.$id('currentDowntime-aor').text(downtime.getAorLabel());
-      this.$id('currentDowntime-elapsedTime').text(downtime.getDurationString(null, true));
-
-      var auto = downtime.get('auto') || {d: 0};
-
-      if (auto && auto.d)
+      if (message.remainingTime === -1)
       {
-        this.$id('currentDowntime-duration').text(time.toString(auto.d * 60)).removeClass('hidden');
+        this.incomingAutoDowntime = null;
+
+        this.model.startTimedAutoDowntime(message.reason, message.duration);
       }
       else
       {
-        this.$id('currentDowntime-duration').addClass('hidden');
+        message.startingAt = Date.now() + message.remainingTime;
+
+        this.incomingAutoDowntime = message;
+
+        this.updateCurrentDowntime();
       }
-
-      $currentDowntime.removeClass('hidden');
-
-      this.adjustCurrentDowntimeBox();
-      */
-    },
-
-    handleIncomingAutoDowntime: function(incomingAutoDowntime)
-    {
-      var page = this;
-
-      page.incomingAutoDowntime = incomingAutoDowntime;
-
-      clearTimeout(page.timers.resetIncomingAutoDowntime);
-      page.timers.resetIncomingAutoDowntime = setTimeout(function() { page.incomingAutoDowntime = null; }, 1337);
     }
 
   });

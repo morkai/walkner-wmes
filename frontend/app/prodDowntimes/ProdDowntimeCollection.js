@@ -286,6 +286,32 @@ define([
 
       // TODO
       return true;
+    },
+
+    refresh: function(newDowntimes)
+    {
+      var oldDowntimes = this.toJSON();
+
+      newDowntimes = newDowntimes.map(function(d) { return ProdDowntime.parse(d); });
+
+      var newLatestStartedAt = newDowntimes.length ? newDowntimes[0].startedAt : Number.MAX_VALUE;
+
+      for (var i = oldDowntimes.length - 1; i >= 0; --i)
+      {
+        var oldDowntime = oldDowntimes[i];
+
+        if (oldDowntime.startedAt > newLatestStartedAt)
+        {
+          newDowntimes.unshift(oldDowntime);
+        }
+      }
+
+      while (newDowntimes.length > 8)
+      {
+        newDowntimes.pop();
+      }
+
+      this.reset(newDowntimes);
     }
 
   });
