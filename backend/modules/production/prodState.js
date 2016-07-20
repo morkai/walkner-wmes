@@ -10,6 +10,15 @@ module.exports = function setUpProdState(app, productionModule)
 {
   var orgUnitsModule = app[productionModule.config.orgUnitsId];
 
+  const CRUD_OPERATION_TYPES = {
+    addOrder: true,
+    editOrder: true,
+    deleteOrder: true,
+    addDowntime: true,
+    editDowntime: true,
+    deleteDowntime: true
+  };
+
   var loaded = false;
   var prodLineStateMap = {};
   var extendedDowntimeDelay = 15;
@@ -89,28 +98,46 @@ module.exports = function setUpProdState(app, productionModule)
 
   app.broker.subscribe('production.synced.**', function(changes)
   {
-    var multiChange = changes.types.length > 1;
+    const multiChange = changes.types.length > 1;
 
     if (!multiChange && changes.types[0] === 'corroborateDowntime' && !changes.prodShift)
     {
       return;
     }
 
-    var prodLineState = prodLineStateMap[changes.prodLine];
+    const prodLineState = prodLineStateMap[changes.prodLine];
 
     if (!prodLineState)
     {
       return productionModule.debug("Data synced but no state for prod line [%s]...", changes.prodLine);
     }
 
-    prodLineState.update(changes, {
-      reloadOrders: multiChange
-        && _.includes(changes.types, 'finishOrder')
-        && _.includes(changes.types, 'changeOrder'),
-      reloadDowntimes: multiChange
-        && _.includes(changes.types, 'finishDowntime')
-        && _.includes(changes.types, 'startDowntime')
+    const operationTypes = {
+      crud: false,
+      finishOrder: false,
+      changeOrder: false,
+      finishDowntime: false,
+      startDowntime: false
+    };
+
+    _.forEach(changes.types, function(type)
+    {
+      if (CRUD_OPERATION_TYPES[type])
+      {
+        operationTypes.crud = true;
+      }
+      else
+      {
+        operationTypes[type] = true;
+      }
     });
+
+    const reloadOrders = operationTypes.crud
+      || (multiChange && operationTypes.finishOrder && operationTypes.changeOrder);
+    const reloadDowntimes = operationTypes.crud
+      || (multiChange && operationTypes.finishDowntime && operationTypes.startDowntime);
+
+    prodLineState.update(changes, {reloadOrders, reloadDowntimes});
   });
 
   app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(data)
