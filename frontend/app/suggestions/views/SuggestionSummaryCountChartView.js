@@ -96,7 +96,8 @@ define([
             {
               return time.getMoment(this.value).format('w');
             }
-          }
+          },
+          tickInterval: 7 * 24 * 3600 * 1000
         },
         yAxis: {
           title: false,
