@@ -9,7 +9,7 @@ module.exports = function setUpQiCounter(app, qiModule)
   const mongoose = app[qiModule.config.mongooseId];
   const QiResult = mongoose.model('QiResult');
 
-  let nextResetAt = getCurrentTimeBoundaries().$lt.getTime();
+  let nextResetAt = moment().startOf('day').add(1, 'day').hours(6).valueOf();
   let resetTimer = null;
 
   app.broker.subscribe('app.started', scheduleReset).setLimit(1);
@@ -107,9 +107,9 @@ module.exports = function setUpQiCounter(app, qiModule)
 
     let delay = nextResetAt - Date.now();
 
-    if (delay < 0)
+    if (delay <= 0)
     {
-      nextResetAt = getCurrentTimeBoundaries().$lt.getTime();
+      nextResetAt = moment().startOf('day').add(1, 'day').hours(6).valueOf();
 
       return resetAllCounters();
     }
