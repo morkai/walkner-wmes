@@ -1,0 +1,19 @@
+<form class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-user"><%- t('pscs', 'PROPERTY:user') %></label>
+    <input id="<%- idPrefix %>-user" name="user" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-status"><%- t('pscs', 'PROPERTY:status') %></label>
+    <select id="<%- idPrefix %>-status" name="status" class="form-control" size="1">
+      <option></option>
+      <% ['incomplete', 'failed', 'passed'].forEach(function(status) { %>
+      <option value="<%- status %>"><%- t('pscs', 'status:' + status) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('pscs', 'filter:submit') %></span></button>
+  </div>
+</form>

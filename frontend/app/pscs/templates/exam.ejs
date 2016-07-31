@@ -1,0 +1,60 @@
+<form class="pscs-exam" method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%= formMethod %>">
+  <input id="<%- idPrefix %>-submit" type="submit">
+  <div id="<%- idPrefix %>-section-start" class="pscs-exam-section hidden" data-section="start">
+    <p><%- t('pscs', 'exam:start:label') %></p>
+    <div class="input-group">
+      <input id="<%- idPrefix %>-personnelId" class="form-control input-lg" type="text" name="personnelId" placeholder="<%- t('pscs', 'exam:start:placeholder') %>">
+      <span class="input-group-btn">
+        <button id="<%- idPrefix %>-start" type="button" class="btn btn-primary btn-lg"><%- t('pscs', 'exam:start:submit') %></button>
+      </span>
+    </div>
+  </div>
+  <div id="<%- idPrefix %>-section-success" class="pscs-exam-section hidden" data-section="success">
+    <div class="pscs-exam-inline">
+      <p><i class="fa fa-thumbs-up"></i></p>
+    </div>
+    <div class="pscs-exam-inline">
+      <p><%- t('pscs', 'exam:success:p1') %></p>
+      <p><%- t('pscs', 'exam:success:p2') %></p>
+    </div>
+  </div>
+  <div id="<%- idPrefix %>-section-failure" class="pscs-exam-section hidden" data-section="failure">
+    <div class="pscs-exam-inline">
+      <p><i class="fa fa-thumbs-down"></i></p>
+    </div>
+    <div class="pscs-exam-inline">
+      <p><%- t('pscs', 'exam:failure:label') %></p>
+      <p id="<%- idPrefix %>-validAnswers"></p>
+      <ul>
+        <li><a href="#pscs/learn"><%- t('pscs', 'exam:failure:learn') %></a></li>
+        <li><a href="#pscs/exam" data-action="cancel"><%- t('pscs', 'exam:failure:test') %></a></li>
+      </ul>
+    </div>
+  </div>
+  <% [2, 3, 4, 2, 3, 4, 3, 3].forEach(function(answerCount, i) { %>
+  <% var question = i + 1; %>
+  <div id="<%- idPrefix %>-section-<%- question %>" class="pscs-exam-section hidden" data-section="<%- question %>">
+    <div class="pscs-qna">
+      <p class="pscs-question"><%- t('pscs', 'exam:' + question  + ':question') %></p>
+      <% for (var answer = 1; answer <= answerCount; ++answer) { %>
+      <div class="radio pscs-answer">
+        <label>
+          <input type="radio" name="answers[<%- question %>]" value="<%- answer %>">
+          <%- t('pscs', 'exam:' + question  + ':' + answer) %>
+        </label>
+      </div>
+      <% } %>
+    </div>
+    <% if (question === 8) { %>
+    <button type="button" class="btn btn-primary btn-lg" data-action="finish"><%- t('pscs', 'exam:finish') %></button>
+    <% } else { %>
+    <button type="button" class="btn btn-default btn-lg" data-action="next"><%- t('pscs', 'exam:next') %></button>
+    <% } %>
+    <% if (question > 1) { %>
+    <button type="button" class="btn btn-link btn-lg" data-action="prev"><%- t('pscs', 'exam:prev') %></button>
+    <% } %>
+    <button type="button" class="btn btn-link btn-lg" data-action="cancel"><%- t('pscs', 'exam:cancel') %></button>
+  </div>
+  <% }) %>
+</form>

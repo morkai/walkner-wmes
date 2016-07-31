@@ -146,6 +146,8 @@
   "PRIVILEGE:QI:RESULTS:MANAGE": "Inspekcja Jakości: zarządzanie wynikami",
   "PRIVILEGE:QI:DICTIONARIES:VIEW": "Inspekcja Jakości: przeglądanie słowników",
   "PRIVILEGE:QI:DICTIONARIES:MANAGE": "Inspekcja Jakości: zarządzanie słownikami",
+  "PRIVILEGE:PSCS:VIEW": "PSCS: przeglądanie",
+  "PRIVILEGE:PSCS:MANAGE": "PSCS: zarządzanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System"

@@ -66,7 +66,8 @@ define([
   './qiKinds/routes',
   './qiErrorCategories/routes',
   './qiFaults/routes',
-  './qiActionStatuses/routes'
+  './qiActionStatuses/routes',
+  './pscs/routes'
 ], function()
 {
   'use strict';

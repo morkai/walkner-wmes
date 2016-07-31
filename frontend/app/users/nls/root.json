@@ -147,6 +147,8 @@
     "PRIVILEGE:QI:RESULTS:MANAGE": "QI: manage results",
     "PRIVILEGE:QI:DICTIONARIES:VIEW": "QI: view dictionaries",
     "PRIVILEGE:QI:DICTIONARIES:MANAGE": "QI: manage dictionaries",
+    "PRIVILEGE:PSCS:VIEW": "PSCS: view",
+    "PRIVILEGE:PSCS:MANAGE": "PSCS: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System"

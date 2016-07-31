@@ -1,0 +1,102 @@
+{
+  "BREADCRUMBS:base": "PSCS",
+  "BREADCRUMBS:learn": "Szkolenie",
+  "BREADCRUMBS:exam": "Test",
+  "BREADCRUMBS:browse": "Wyniki",
+
+  "intro:title": "PSCS <em>Philips Supply Chain Security</em>",
+  "intro:learn": "Szkolenie",
+  "intro:exam": "Test",
+  "intro:results": "Wyniki",
+
+  "exam:next": "Przejdź do następnego pytania",
+  "exam:prev": "Wróć do poprzedniego pytania",
+  "exam:cancel": "Przerwij test",
+  "exam:finish": "Zakończ test",
+  "exam:required": "Wybierz jedną z odpowiedzi.",
+
+  "exam:start:label": "W celu rozpoczęcia testu z wiedzy o Bezpieczeństwie Łańcucha Dostaw Philips podaj swój numer kadrowy:",
+  "exam:start:placeholder": "Nr kadrowy",
+  "exam:start:submit": "Rozpocznij test",
+  "exam:start:required": "Nr kadrowy jest wymagany.",
+  "exam:start:failure": "Nie udało się rozpocząć testu :-(",
+  "exam:start:USER_NOT_FOUND": "Użytkownik o podanym numerze kadrowym nie istnieje.",
+  "exam:start:ALREADY_PASSED": "Użytkownik o podanym numerze już zaliczył test.",
+
+  "exam:failure:label": "Niestety, ale test nie został zaliczony :-(",
+  "exam:failure:valid": "{gender, select, female{Odpowiedziałaś} other{Odpowiedziałeś}} poprawnie na {count} z 8 pytań.",
+  "exam:failure:learn": "Przejrzyj prezentację na temat PSCS.",
+  "exam:failure:test": "Spróbuj rozwiązać test ponownie.",
+
+  "exam:success:p1": "Gratulacje!",
+  "exam:success:p2": "Test został zaliczony pomyślnie :-)",
+
+  "exam:1:question": "Pytanie 1/8 Working area to:",
+  "exam:1:1": "biuro lub obszar przemysłowy, w którym realizowane są czynności bezpośrednio związane z międzynarodowym przepływem towarów (np. transport wyrobów gotowych) i związanych z nimi informacji (np. dokumentacja wysyłkowa), jest to miejsce, z którego następuje bezpośrednia wysyłka wyrobów gotowych do klienta",
+  "exam:1:2": "obszar, gdzie produkty są przygotowywane do międzynarodowego transportu, gdzie są przygotowywane do pakowania, pakowane, przechowywane na polu odkładczym, jednakże bez bezpośredniej wysyłki do klienta",
+
+  "exam:2:question": "Pytanie 2/8. Celem polityki System Bezpieczeństwa Łańcucha Dostaw jest:",
+  "exam:2:1": "zabezpieczenie w odpowiedni i możliwie skuteczny sposób przepływu towarów w łańcuchu logistycznym",
+  "exam:2:2": "zabezpieczenie wyrobów gotowych przez kradzieżą",
+  "exam:2:3": "zabezpieczenie komponentów i produktów marki Philips przed niekontrolowanym dostępem osób nieupoważnionych",
+
+  "exam:3:question": "Pytanie 3/8 Wymagania PSCS są związane przede wszystkim z obszarami, które mają bezpośrednią styczność z:",
+  "exam:3:1": "wyrobami gotowymi",
+  "exam:3:2": "transportem",
+  "exam:3:3": "związaną z nimi informacją",
+  "exam:3:4": "wszystkie powyżej",
+
+  "exam:4:question": "Pytanie 4/8 Compartment to:",
+  "exam:4:1": "biuro lub obszar przemysłowy, w którym realizowane są czynności bezpośrednio związane z międzynarodowym przepływem towarów (np. transport wyrobów gotowych) i związanych z nimi informacji (np. dokumentacja wysyłkowa), jest to miejsce, z którego następuje bezpośrednia wysyłka wyrobów gotowych do klienta",
+  "exam:4:2": "obszar, gdzie produkty są przygotowywane do międzynarodowego transportu, gdzie są przygotowywane do pakowania, pakowane, przechowywane na polu odkładczym, jednakże bez bezpośredniej wysyłki do klienta",
+
+  "exam:5:question": "Pytanie 5/8 Specjalne strefy bezpieczeństwa wydzielone w obszarach PSCS to:",
+  "exam:5:1": "working area",
+  "exam:5:2": "compartment",
+  "exam:5:3": "wszystkie powyżej",
+
+  "exam:6:question": "Pytanie 6/8 W obrębie krytycznych obszarów COMPARTMENT i WORKING AREA w szczególności należy zwracać uwagę na:",
+  "exam:6:1": "osoby nieupoważnione do przebywania w strefach PSCS",
+  "exam:6:2": "nieautoryzowane zmiany w opakowaniach wyrobów gotowych",
+  "exam:6:3": "zabezpieczenie fizycznego dostępu do wyrobów gotowych zapakowanych i przygotowanych do wysyłki",
+  "exam:6:4": "wszystkie powyżej",
+
+  "exam:7:question": "Pytanie 7/8 Strefy PSCS są oznaczone:",
+  "exam:7:1": "specjalną tablicą w kolorze żółtym",
+  "exam:7:2": "specjalną tablicą w kolorze pomarańczowym",
+  "exam:7:3": "specjalną tablicą w kolorze zielonym",
+
+  "exam:8:question": "Pytanie 8/8 Cele PSCS to:",
+  "exam:8:1": "zapewnienie bezpiecznej dostawy wyrobów do klienta",
+  "exam:8:2": "zapewnienie bezpieczeństwa przyjętych na swój teren dostaw",
+  "exam:8:3": "wszystkie powyżej",
+
+  "PROPERTY:rid": "ID",
+  "PROPERTY:status": "Status",
+  "PROPERTY:user": "Pracownik",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:a1": "Pyt. 1",
+  "PROPERTY:a2": "Pyt. 2",
+  "PROPERTY:a3": "Pyt. 3",
+  "PROPERTY:a4": "Pyt. 4",
+  "PROPERTY:a5": "Pyt. 5",
+  "PROPERTY:a6": "Pyt. 6",
+  "PROPERTY:a7": "Pyt. 7",
+  "PROPERTY:a8": "Pyt. 8",
+  "PROPERTY:creator": "Użytkownik",
+
+  "status:incomplete": "Przerwany",
+  "status:failed": "Niezaliczony",
+  "status:passed": "Zaliczony",
+
+  "filter:submit": "Filtruj wyniki",
+
+  "PAGE_ACTION:export": "Eksportuj wyniki",
+
+  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia wyniku",
+  "ACTION_FORM:BUTTON:delete": "Usuń wynik",
+  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany wynik?",
+  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wynik <em>{label}</em>?",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć wyniku :("
+}

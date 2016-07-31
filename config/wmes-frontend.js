@@ -67,6 +67,7 @@ exports.modules = [
   'isaPalletKinds',
   'isa',
   'qi',
+  'pscs',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -191,7 +192,8 @@ exports.pubsub = {
     'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted',
     'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
     'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
-    'qi.**'
+    'qi.**',
+    'pscs.**'
   ]
 };
 
@@ -223,7 +225,8 @@ exports.mongoose = {
     'opinionSurveyScanTemplate', 'opinionSurveyOmrResult',
     'cag', 'cagGroup', 'cagPlan',
     'isaPalletKind', 'isaEvent', 'isaRequest', 'isaShiftPersonnel',
-    'qiKind', 'qiErrorCategory', 'qiFault', 'qiActionStatus', 'qiResult'
+    'qiKind', 'qiErrorCategory', 'qiFault', 'qiActionStatus', 'qiResult',
+    'pscsResult'
   ]
 };
 exports.mongoose.options.server.poolSize = 15;
@@ -275,7 +278,8 @@ exports.user = {
     'ISA:VIEW', 'ISA:MANAGE', 'ISA:WHMAN',
     'QI:INSPECTOR', 'QI:SPECIALIST',
     'QI:RESULTS:VIEW', 'QI:RESULTS:MANAGE',
-    'QI:DICTIONARIES:VIEW', 'QI:DICTIONARIES:MANAGE'
+    'QI:DICTIONARIES:VIEW', 'QI:DICTIONARIES:MANAGE',
+    'PSCS:VIEW', 'PSCS:MANAGE'
   ]
 };
 
