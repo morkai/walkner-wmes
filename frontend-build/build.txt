@@ -265,6 +265,10 @@ app/production/assets/settings.css
 ----------------
 app/production/assets/settings.css
 
+app/pscs/assets/main.css
+----------------
+app/pscs/assets/main.css
+
 app/purchaseOrders/assets/main.css
 ----------------
 app/purchaseOrders/assets/./qzPrint.css
@@ -496,6 +500,7 @@ assets/../app/prodDowntimeAlerts/assets/main.css
 assets/../app/changelog/assets/main.css
 assets/../app/isa/assets/main.css
 assets/../app/qiResults/assets/main.css
+assets/../app/pscs/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -926,6 +931,7 @@ app/qiFaults/QiFault.js
 app/qiFaults/routes.js
 app/qiActionStatuses/QiActionStatus.js
 app/qiActionStatuses/routes.js
+app/pscs/routes.js
 app/wmes-routes.js
 vendor/visibly.js
 app/visibility.js
