@@ -71,11 +71,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       {
         if (prodShiftOrder.spigot.final)
         {
-          productionModule.warn(
-            "[checkSpigot] Final check already performed (LOG=[%s]): %s",
-            logEntry._id,
-            err.stack
-          );
+          productionModule.warn("[checkSpigot] Final check already performed (LOG=[%s]).", logEntry._id);
 
           return this.skip();
         }
