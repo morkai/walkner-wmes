@@ -12,7 +12,7 @@ module.exports = function parseXiconfOrders(input, hidLamps)
   var PROGRAM_RE = /Program\s*(.*?)(?:'|"|”)?$/i;
   var GPRS_PROGRAM_RE = /^LC/;
   var GPRS_CONFIG_RE = /\s+(F|T)(P|A)(_|A|B|C|D)/;
-  var HID_RE = /^(((MASTER|HPI-T|MST|SON-T|CDM-T).*?W\/)|Halogen.*?W)/;
+  var HID_RE = /^(((MASTER|HPI-T|MST|CDM-T).*?W\/)|(Halogen|SON-T).*?W)/;
 
   var isFromDocs = /^DOCS/.test(input);
 
