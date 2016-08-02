@@ -24,6 +24,7 @@ define([
     events: {
       'submit': function()
       {
+        var $submit = this.$id('submit').prop('disabled', true);
         var matches = this.$id('nc12').val().match(/([0-9]{12})/);
         var nc12 = (matches ? matches[1] : '').trim();
 
@@ -31,11 +32,7 @@ define([
         {
           this.$id('nc12')[0].setCustomValidity(t('production', 'spigotChecker:nc12:invalid'));
 
-          this.timers.submit = setTimeout(
-            function(page) { page.$id('submit').click(); },
-            1,
-            this
-          );
+          this.timers.submit = setTimeout(function() { $submit.prop('disabled', false).click(); }, 1);
         }
         else
         {
