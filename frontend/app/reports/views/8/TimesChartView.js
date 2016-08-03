@@ -421,7 +421,7 @@ define([
 
       _.forEach(categories, function(category, metricId)
       {
-        var planInside = category.plan < category.real;
+        var planInside = (Math.round(category.plan * 100) / 100) < (Math.round(category.real * 100) / 100);
         var color;
 
         if (category.plan !== null)
