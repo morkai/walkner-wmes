@@ -274,11 +274,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
           creator: creator
         });
 
-        if (options.copy)
-        {
-          fteLeaderEntry.calcTotals();
-        }
-
+        fteLeaderEntry.calcTotals();
         fteLeaderEntry.save(done);
       }
     );

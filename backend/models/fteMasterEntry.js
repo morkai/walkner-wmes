@@ -217,11 +217,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           updater: null
         });
 
-        if (options.copy)
-        {
-          fteMasterEntry.calcTotals();
-        }
-
+        fteMasterEntry.calcTotals();
         fteMasterEntry.save(done);
       }
     );
