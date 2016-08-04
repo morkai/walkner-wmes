@@ -380,8 +380,21 @@ module.exports = function startFixRoutes(app, express)
 
   function recountFteMasterTotals(req, res, next)
   {
-    recountFteTotals('FteMasterEntry', moment('2013-12-01 06:00:00'), function(err)
+    if (inProgress.recountFteTotals)
     {
+      return next(app.createError('IN_PROGRESS', 400));
+    }
+
+    inProgress.recountFteTotals = true;
+
+    const startedAt = Date.now();
+
+    app.debug("[fix] Recounting FTE Leader totals...");
+
+    recountFteTotals('FteMasterEntry', moment('2013-12-01T05:00:00.000Z'), function(err)
+    {
+      inProgress.recountFteTotals = false;
+
       if (err)
       {
         return next(err);
@@ -389,13 +402,28 @@ module.exports = function startFixRoutes(app, express)
 
       res.type('txt');
       res.send("ALL DONE!");
+
+      app.debug("[fix] Finished recounting FTE Master totals in %ds", (Date.now() - startedAt) / 1000);
     });
   }
 
   function recountFteLeaderTotals(req, res, next)
   {
-    recountFteTotals('FteLeaderEntry', moment('2013-12-01 06:00:00'), function(err)
+    if (inProgress.recountFteTotals)
     {
+      return next(app.createError('IN_PROGRESS', 400));
+    }
+
+    inProgress.recountFteTotals = true;
+
+    const startedAt = Date.now();
+
+    app.debug("[fix] Recounting FTE Leader totals...");
+
+    recountFteTotals('FteLeaderEntry', moment('2013-12-01T05:00:00.000Z'), function(err)
+    {
+      inProgress.recountFteTotals = false;
+
       if (err)
       {
         return next(err);
@@ -403,6 +431,8 @@ module.exports = function startFixRoutes(app, express)
 
       res.type('txt');
       res.send("ALL DONE!");
+
+      app.debug("[fix] Finished recounting FTE Leader totals in %ds", (Date.now() - startedAt) / 1000);
     });
   }
 
@@ -431,11 +461,11 @@ module.exports = function startFixRoutes(app, express)
 
       function calcNext()
       {
-        var fteEntries = allFteEntries.splice(0, 10);
+        var fteEntries = allFteEntries.splice(0, 5);
 
         if (fteEntries.length === 0)
         {
-          return setTimeout(recountFteTotals.bind(null, modelName, fromMoment, done), 15);
+          return setTimeout(recountFteTotals.bind(null, modelName, fromMoment, done), 30);
         }
 
         step(
@@ -456,7 +486,7 @@ module.exports = function startFixRoutes(app, express)
               return done(err);
             }
 
-            setTimeout(calcNext, 10);
+            setTimeout(calcNext, 30);
           }
         );
       }
@@ -468,7 +498,7 @@ module.exports = function startFixRoutes(app, express)
     res.setTimeout(30 * 60 * 1000);
 
     var PressWorksheet = app.mongoose.model('PressWorksheet');
-    var stream = PressWorksheet.find({division: null}, {'orders.prodLine': 1}).stream();
+    var stream = PressWorksheet.find({division: null}, {'orders.prodLine': 1}).cursor();
     var todo = 0;
     var ended = false;
 
