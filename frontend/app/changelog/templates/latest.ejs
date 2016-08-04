@@ -1,14 +1,24 @@
-<h1>v0.92.0</h1>
-<h2><%- time.format('2016-07-31', 'LL') %></h2>
-<h3>ZPW, Sugestie</h3>
+<h1>v0.92.1</h1>
+<h2><%- time.format('2016-08-04', 'LL') %></h2>
+<h3>Raporty > Lean</h3>
 <ul>
-  <li>Zmieniono wykresy tygodniowe tak, aby na osi poziomej częściej wyświetlały się etykiety tygodni.</li>
+  <li>Zmieniono wykres w drugiej kolumnie w trybie jednej grupy tak, aby przy porównywaniu czy wartość rzeczywista
+    jest większa od wartości planowanej wartości te były zaokrąglane do dwóch miejsc po przecinku (wcześniej były
+    zaokrąglane do trzech miejsc po przecinku, a na wykresie wyswietlane są do dwóch, co mogło spowodować wyświetlanie
+    czerwonego słupka, mimo że na wykresie wartość rzeczywista równa jest wartości planowanej).</li>
 </ul>
-<h3>Inspekcja Jakości</h3>
+<h3>Produkcja</h3>
 <ul>
-  <li>Poprawiono błąd mogący spowodować niekończącą się pętlę przeliczania ilości dziennych inspekcji.</li>
+  <li>Poprawiono błąd powodujący zawieszenie się wykonywania operacji z wszystkich linii produkcyjnych po podwójnym
+    sprawdzeniu Spigota na koniec zlecenia.</li>
+  <li>Zmieniono formularz sprawdzania Spigota tak, aby nie można było wysłać go kilka razy.</li>
 </ul>
-<h3>PSCS</h3>
+<h3>Baza testów</h3>
 <ul>
-  <li>Dodano nowy moduł: PSCS - test z wiedzy o Bezpieczeństwie Łańcucha Dostaw Philips.</li>
+  <li>Zmieniono rozpoznawanie komponentów lamp HID <em>SON-T</em>.</li>
+</ul>
+<h3>FTE</h3>
+<ul>
+  <li>Poprawiono błąd powodujący błędne obliczanie wartości sum poszczególnych zadań i całego wpisu FTE, jeżeli dany
+    wpis został stworzony 'pusty' (tzn. przy tworzeniu nowego wpisu nie skopiowano wartości z poprzedniego wpisu).</li>
 </ul>
