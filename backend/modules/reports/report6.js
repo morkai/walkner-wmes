@@ -34,11 +34,11 @@ module.exports = function(mongoose, options, done)
         tzOffsetMs: 0
       };
 
-      var stream = WhShiftMetrics.find(conditions, fields).lean().stream();
-      var next = this.next();
+      var stream = WhShiftMetrics.find(conditions, fields).lean().cursor();
+      var next = _.once(this.next());
 
-      stream.on('end', next);
       stream.on('error', next);
+      stream.on('end', next);
       stream.on('data', handleWhShiftMetrics);
     },
     function fillMissingDataStep(err)

@@ -50,7 +50,7 @@ module.exports = function setUpDurationRecalculator(app, module)
       delete conditions.status;
     }
 
-    var stream = Suggestion.find(conditions, fields).lean().stream();
+    var stream = Suggestion.find(conditions, fields).lean().cursor();
 
     stream.on('error', function(err)
     {
@@ -64,7 +64,7 @@ module.exports = function setUpDurationRecalculator(app, module)
       recalcNext(doc, startedAt);
     });
 
-    stream.on('close', function()
+    stream.on('end', function()
     {
       inProgress = false;
 

@@ -406,11 +406,11 @@ module.exports = function(mongoose, options, done)
   function handleStream(Model, conditions, fields, handleDocument, done)
   {
     var complete = _.once(done);
-    var stream = Model.find(conditions, fields).lean().stream();
+    var stream = Model.find(conditions, fields).lean().cursor();
 
-    stream.on('data', handleDocument);
     stream.on('error', complete);
-    stream.on('close', complete);
+    stream.on('end', complete);
+    stream.on('data', handleDocument);
   }
 
   function getActiveOrgUnits(done)

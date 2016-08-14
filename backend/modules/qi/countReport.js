@@ -85,11 +85,11 @@ module.exports = function(mongoose, options, done)
         conditions['inspector.id'] = options.inspector;
       }
 
-      const stream = QiResult.find(conditions, fields).sort(sort).lean().stream();
-      const next = this.next();
+      const stream = QiResult.find(conditions, fields).sort(sort).lean().cursor();
+      const next = _.once(this.next());
 
       stream.on('error', next);
-      stream.on('close', next);
+      stream.on('end', next);
       stream.on('data', handleQiResult);
     },
     function finalizeStep(err)

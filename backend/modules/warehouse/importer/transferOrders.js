@@ -3,6 +3,7 @@
 'use strict';
 
 var path = require('path');
+var _ = require('lodash');
 var moment = require('moment');
 var step = require('h5.step');
 var fs = require('fs-extra');
@@ -98,10 +99,9 @@ exports.start = function startTransferOrdersImporterModule(app, module)
     step(
       function fetchControlCyclesStep()
       {
-        var next = this.next();
+        var next = _.once(this.next());
         var nc12ToS = this.nc12ToS = {};
-
-        var stream = WhControlCycle.find({}, {s: 1}).lean().stream();
+        var stream = WhControlCycle.find({}, {s: 1}).lean().cursor();
 
         stream.on('error', next);
         stream.on('end', next);

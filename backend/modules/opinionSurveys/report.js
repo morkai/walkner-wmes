@@ -50,7 +50,7 @@ module.exports = function(mongoose, options, done)
         conditions.employer = {$in: options.employers};
       }
 
-      var stream = OpinionSurveyResponse.find(conditions).sort({createdAt: 1}).lean().stream();
+      var stream = OpinionSurveyResponse.find(conditions).sort({createdAt: 1}).lean().cursor();
       var next = _.once(this.next());
 
       stream.on('error', next);

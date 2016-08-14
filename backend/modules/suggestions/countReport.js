@@ -52,11 +52,11 @@ module.exports = function(mongoose, options, done)
         conditions.section = {$in: options.sections};
       }
 
-      var stream = Suggestion.find(conditions, {changes: 0}).sort(sort).lean().stream();
-      var next = this.next();
+      var stream = Suggestion.find(conditions, {changes: 0}).sort(sort).lean().cursor();
+      var next = _.once(this.next());
 
       stream.on('error', next);
-      stream.on('close', next);
+      stream.on('end', next);
       stream.on('data', handleSuggestion);
     },
     function finalizeStep(err)

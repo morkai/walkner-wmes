@@ -69,11 +69,11 @@ module.exports = function(mongoose, options, done)
       .find(conditions, orderFields)
       .sort({subdivision: 1, startedAt: -1})
       .lean()
-      .stream();
-    var orderStreamDone = this.parallel();
+      .cursor();
+    var orderStreamDone = _.once(this.parallel());
 
     orderStream.on('error', orderStreamDone);
-    orderStream.on('close', orderStreamDone);
+    orderStream.on('end', orderStreamDone);
     orderStream.on('data', report4.handleProdShiftOrder.bind(report4));
 
     var downtimeFields = {
@@ -90,11 +90,11 @@ module.exports = function(mongoose, options, done)
       .find(conditions, downtimeFields)
       .sort({subdivision: 1, startedAt: -1})
       .lean()
-      .stream();
-    var downtimeStreamDone = this.parallel();
+      .cursor();
+    var downtimeStreamDone = _.once(this.parallel());
 
     downtimeStream.on('error', downtimeStreamDone);
-    downtimeStream.on('close', downtimeStreamDone);
+    downtimeStream.on('end', downtimeStreamDone);
     downtimeStream.on('data', report4.handleProdDowntime.bind(report4));
   }
 };

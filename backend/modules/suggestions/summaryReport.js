@@ -84,11 +84,11 @@ module.exports = function(mongoose, options, done)
         conditions['confirmer.id'] = {$in: options.confirmer};
       }
 
-      var stream = Suggestion.find(conditions, {changes: 0}).lean().stream();
-      var next = this.next();
+      var stream = Suggestion.find(conditions, {changes: 0}).lean().cursor();
+      var next = _.once(this.next());
 
       stream.on('error', next);
-      stream.on('close', next);
+      stream.on('end', next);
       stream.on('data', handleSuggestion);
     },
     function finalizeStep(err)

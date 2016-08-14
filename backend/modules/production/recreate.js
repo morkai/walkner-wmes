@@ -87,7 +87,7 @@ module.exports = function(app, productionModule, done)
       productionModule.info("Recreating the press worksheets...");
 
       var donePressWorksheetCount = 0;
-      var stream = mongoose.model('PressWorksheet').find().stream();
+      var stream = mongoose.model('PressWorksheet').find().cursor();
       var nextStep = this.next();
 
       stream.on('error', nextStep);

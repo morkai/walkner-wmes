@@ -129,12 +129,12 @@ module.exports = function(mongoose, options, done)
         'orderData.nc12': 1,
         machineTime: 1
       };
-      var stream = ProdShiftOrder.find(conditions, fields).lean().stream();
+      var stream = ProdShiftOrder.find(conditions, fields).lean().cursor();
       var next = _.once(this.next());
 
-      stream.on('data', handleProdShiftOrder.bind(null, this.nc12ToCags));
       stream.on('error', next);
-      stream.on('close', next);
+      stream.on('end', next);
+      stream.on('data', handleProdShiftOrder.bind(null, this.nc12ToCags));
     },
     function summarizeLinesStep(err)
     {

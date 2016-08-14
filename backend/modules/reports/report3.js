@@ -66,26 +66,26 @@ module.exports = function(mongoose, options, done)
       reason: 1
     };
 
-    var orderStreamDone = this.parallel();
+    var orderStreamDone = _.once(this.parallel());
     var orderStream = ProdShiftOrder
       .find(conditions, orderFields)
       .sort({startedAt: 1})
       .lean()
-      .stream();
+      .cursor();
 
     orderStream.on('error', orderStreamDone);
-    orderStream.on('close', orderStreamDone);
+    orderStream.on('end', orderStreamDone);
     orderStream.on('data', report3.handleProdShiftOrder.bind(report3));
 
-    var downtimeStreamDone = this.parallel();
+    var downtimeStreamDone = _.once(this.parallel());
     var downtimeStream = ProdDowntime
       .find(conditions, downtimeFields)
       .sort({startedAt: 1})
       .lean()
-      .stream();
+      .cursor();
 
     downtimeStream.on('error', downtimeStreamDone);
-    downtimeStream.on('close', downtimeStreamDone);
+    downtimeStream.on('end', downtimeStreamDone);
     downtimeStream.on('data', report3.handleProdDowntime.bind(report3));
   }
 };

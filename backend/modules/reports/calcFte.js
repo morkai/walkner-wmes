@@ -94,11 +94,9 @@ module.exports = function(mongoose, options, done)
         )
         .sort({date: 1})
         .lean()
-        .stream();
+        .cursor();
 
-      handleFteLeaderEntryStream(
-        options, this.dateToActiveOrgUnits, fteLeaderEntryStream, this.parallel()
-      );
+      handleFteLeaderEntryStream(options, this.dateToActiveOrgUnits, fteLeaderEntryStream, _.once(this.parallel()));
 
       var conditions = {
         date: {$gte: from, $lt: to}
@@ -120,11 +118,9 @@ module.exports = function(mongoose, options, done)
         })
         .sort({date: 1})
         .lean()
-        .stream();
+        .cursor();
 
-      handleFteMasterEntryStream(
-        options, this.dateToActiveOrgUnits, fteMasterEntryStream, this.parallel()
-      );
+      handleFteMasterEntryStream(options, this.dateToActiveOrgUnits, fteMasterEntryStream, _.once(this.parallel()));
     },
     function groupResultsStep()
     {
@@ -399,7 +395,7 @@ module.exports = function(mongoose, options, done)
   {
     fteLeaderEntryStream.on('error', done);
 
-    fteLeaderEntryStream.on('close', done);
+    fteLeaderEntryStream.on('end', done);
 
     fteLeaderEntryStream.on('data', function(fteLeaderEntry)
     {
@@ -515,7 +511,7 @@ module.exports = function(mongoose, options, done)
   {
     fteMasterEntryStream.on('error', done);
 
-    fteMasterEntryStream.on('close', done);
+    fteMasterEntryStream.on('end', done);
 
     fteMasterEntryStream.on('data', function(fteMasterEntry)
     {

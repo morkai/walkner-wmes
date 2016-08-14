@@ -450,11 +450,11 @@ exports.exportRoute = function(options, req, res, next)
 
     handleExportStream(emitter, false, req, options.cleanUp);
 
-    options.serializeStream(query.stream(), emitter);
+    options.serializeStream(query.cursor(), emitter);
   }
   else
   {
-    handleExportStream(query.stream(), true, req, options.cleanUp);
+    handleExportStream(query.cursor(), true, req, options.cleanUp);
   }
 
   function handleExportStream(queryStream, serializeRow, req, cleanUp)
@@ -469,7 +469,7 @@ exports.exportRoute = function(options, req, res, next)
       }
     });
 
-    queryStream.on('close', function()
+    queryStream.on('end', function()
     {
       writeHeader();
       res.end();

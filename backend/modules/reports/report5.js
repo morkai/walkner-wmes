@@ -272,10 +272,11 @@ module.exports = function report5(mongoose, options, done)
       .find(conditions, fields)
       .sort({date: 1})
       .lean()
-      .stream();
+      .cursor();
+    var complete = _.once(done);
 
-    stream.on('error', done);
-    stream.on('close', done);
+    stream.on('error', complete);
+    stream.on('end', complete);
     stream.on('data', handleFteMasterEntry.bind(null, fteRatios));
   }
 
@@ -316,10 +317,11 @@ module.exports = function report5(mongoose, options, done)
       .find(conditions, fields)
       .sort({date: 1})
       .lean()
-      .stream();
+      .cursor();
+    var complete = _.once(done);
 
-    stream.on('error', done);
-    stream.on('close', done);
+    stream.on('error', complete);
+    stream.on('end', complete);
     stream.on('data', handleFteLeaderEntry.bind(null, subdivisionMap, fteRatios));
   }
 
