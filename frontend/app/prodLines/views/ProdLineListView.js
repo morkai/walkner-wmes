@@ -80,11 +80,18 @@ define([
         {
           var row = prodLine.toJSON();
 
+          row.orgUnits = renderOrgUnitPath(prodLine);
           row.workCenter = renderOrgUnitPath(prodLine, true);
           row.inventoryNo = row.inventoryNo || '-';
           row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
 
           return row;
+        })
+        .sort(function(a, b)
+        {
+          var cmp = a.orgUnits.localeCompare(b.orgUnits);
+
+          return cmp === 0 ? a._id.localeCompare(b._id) : cmp;
         });
     },
 
