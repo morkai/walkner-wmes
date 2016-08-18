@@ -296,22 +296,16 @@ exports.start = function startUserModule(app, module)
       {
         var next = this.next();
 
-        if (credentials.login === module.root.login)
+        if (credentials.login.toLowerCase() === module.root.login.toLowerCase())
         {
           next(null, _.assign({}, module.root));
         }
         else
         {
-          var conditions = {};
-
-          if (/^.*?@.*?\.[a-zA-Z]+/.test(credentials.login))
-          {
-            conditions.email = credentials.login;
-          }
-          else
-          {
-            conditions.login = credentials.login;
-          }
+          var property = /^.*?@.*?\.[a-zA-Z]+$/.test(credentials.login) ? 'email' : 'login';
+          var conditions = {
+            [property]: new RegExp('^' + _.escapeRegExp(credentials.login) + '$', 'i')
+          };
 
           app[module.config.mongooseId].model('User').findOne(conditions, next);
         }
