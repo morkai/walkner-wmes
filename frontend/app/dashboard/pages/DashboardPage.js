@@ -4,7 +4,7 @@ define([
   'app/i18n',
   'app/user',
   'app/core/View',
-  'app/core/views/LogInFormView',
+  'app/users/views/LogInFormView',
   '../views/DashboardView'
 ], function(
   t,
@@ -20,15 +20,6 @@ define([
     layoutName: 'page',
 
     pageId: 'dashboard',
-
-    localTopics: {
-      'user.reloaded': function()
-      {
-        this.view.remove();
-        this.view = user.isLoggedIn() ? new DashboardView() : new LogInFormView();
-        this.view.render();
-      }
-    },
 
     breadcrumbs: function()
     {

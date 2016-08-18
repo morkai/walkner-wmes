@@ -7,8 +7,8 @@ define([
   '../user',
   '../core/View',
   '../core/util/showDeleteFormPage',
-  '../core/views/LogInFormView',
   './User',
+  './pages/LogInFormPage',
   'i18n!app/nls/users'
 ], function(
   t,
@@ -17,8 +17,8 @@ define([
   user,
   View,
   showDeleteFormPage,
-  LogInFormView,
-  User
+  User,
+  LogInFormPage
 ) {
   'use strict';
 
@@ -27,12 +27,7 @@ define([
 
   router.map('/login', function()
   {
-    viewport.showPage(new View({
-      pageId: 'logInForm',
-      layoutName: 'page',
-      view: new LogInFormView(),
-      breadcrumbs: [t.bound('users', 'breadcrumbs:logIn')]
-    }));
+    viewport.showPage(new LogInFormPage());
   });
 
   router.map('/users', canView, function(req)

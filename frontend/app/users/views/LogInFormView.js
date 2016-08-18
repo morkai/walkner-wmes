@@ -4,8 +4,8 @@ define([
   'app/user',
   'app/i18n',
   'app/viewport',
-  '../View',
-  'app/core/templates/logInForm'
+  'app/core/View',
+  'app/users/templates/logInForm'
 ], function(
   user,
   t,
@@ -31,8 +31,8 @@ define([
         this.$id('loginLink').hide();
         this.$id('resetLink').show();
         this.$id('login').select();
-        this.$id('password').attr('placeholder', t('core', 'LOG_IN_FORM:LABEL:PASSWORD'));
-        this.$('.logInForm-submit-label').text(t('core', 'LOG_IN_FORM:SUBMIT:LOG_IN'));
+        this.$id('password').attr('placeholder', t('users', 'LOG_IN_FORM:LABEL:PASSWORD'));
+        this.$('.logInForm-submit-label').text(t('users', 'LOG_IN_FORM:SUBMIT:LOG_IN'));
 
         this.resetting = false;
 
@@ -44,8 +44,8 @@ define([
         this.$id('resetLink').hide();
         this.$id('loginLink').show();
         this.$id('login').select();
-        this.$id('password').val('').attr('placeholder', t('core', 'LOG_IN_FORM:LABEL:NEW_PASSWORD'));
-        this.$('.logInForm-submit-label').text(t('core', 'LOG_IN_FORM:SUBMIT:RESET'));
+        this.$id('password').val('').attr('placeholder', t('users', 'LOG_IN_FORM:LABEL:NEW_PASSWORD'));
+        this.$('.logInForm-submit-label').text(t('users', 'LOG_IN_FORM:SUBMIT:RESET'));
 
         this.resetting = true;
 
@@ -98,8 +98,8 @@ define([
 
       if (this.resetting)
       {
-        data.subject = t('core', 'LOG_IN_FORM:RESET:SUBJECT');
-        data.text = t('core', 'LOG_IN_FORM:RESET:TEXT', {
+        data.subject = t('users', 'LOG_IN_FORM:RESET:SUBJECT');
+        data.text = t('users', 'LOG_IN_FORM:RESET:TEXT', {
           appUrl: window.location.origin,
           resetUrl: window.location.origin + '/resetPassword/{REQUEST_ID}'
         });
@@ -117,7 +117,7 @@ define([
 
       var view = this;
 
-      req.done(function(userData)
+      req.done(function()
       {
         if (!view.$submit)
         {
@@ -129,14 +129,12 @@ define([
           viewport.msg.show({
             type: 'info',
             time: 5000,
-            text: t('core', 'LOG_IN_FORM:RESET:MSG:SUCCESS')
+            text: t('users', 'LOG_IN_FORM:RESET:MSG:SUCCESS')
           });
         }
         else
         {
           view.$submit.removeClass('btn-primary').addClass('btn-success');
-
-          user.reload(userData);
         }
       });
 
@@ -154,9 +152,9 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 5000,
-            text: t.has('core', 'LOG_IN_FORM:RESET:MSG:' + error.message)
-              ? t('core', 'LOG_IN_FORM:RESET:MSG:' + error.message)
-              : t('core', 'LOG_IN_FORM:RESET:MSG:FAILURE')
+            text: t.has('users', 'LOG_IN_FORM:RESET:MSG:' + error.message)
+              ? t('users', 'LOG_IN_FORM:RESET:MSG:' + error.message)
+              : t('users', 'LOG_IN_FORM:RESET:MSG:FAILURE')
           });
         }
       });
@@ -194,7 +192,7 @@ define([
 
     onModeSwitch: function()
     {
-      this.$title.text(this.resetting ? t('core', 'LOG_IN_FORM:TITLE:RESET') : this.originalTitle);
+      this.$title.text(this.resetting ? t('users', 'LOG_IN_FORM:TITLE:RESET') : this.originalTitle);
       this.$submit.removeClass('btn-danger').addClass('btn-primary');
     }
 

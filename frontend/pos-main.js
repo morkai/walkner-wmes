@@ -24,7 +24,7 @@
       'app/data/loadedModules',
       'app/core/layouts/PageLayout',
       'app/core/views/NavbarView',
-      'app/core/views/LogInFormView',
+      'app/users/views/LogInFormView',
       'app/purchaseOrders/qzPrint',
       'app/purchaseOrders/templates/navbar',
       'app/time',
@@ -32,7 +32,8 @@
       'bootstrap',
       'moment-lang/' + window.appLocale,
       'select2-lang/' + window.appLocale,
-      'i18n!app/nls/core'
+      'i18n!app/nls/core',
+      'i18n!app/nls/users'
     ], startApp);
   }
 
@@ -123,7 +124,7 @@
       navbarView.on('logIn', function()
       {
         viewport.showDialog(
-          new LogInFormView(), i18n('core', 'LOG_IN_FORM:DIALOG_TITLE')
+          new LogInFormView(), i18n('users', 'LOG_IN_FORM:DIALOG_TITLE')
         );
       });
 

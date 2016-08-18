@@ -26,14 +26,16 @@
       'app/core/layouts/PrintLayout',
       'app/core/layouts/BlankLayout',
       'app/core/views/NavbarView',
-      'app/core/views/LogInFormView',
+      'app/core/views/FormView',
+      'app/users/views/LogInFormView',
       'app/time',
       'app/wmes-routes',
       'app/visibility',
       'bootstrap',
       'moment-lang/' + window.appLocale,
       'select2-lang/' + window.appLocale,
-      'i18n!app/nls/core'
+      'i18n!app/nls/core',
+      'i18n!app/nls/users'
     ], startApp);
   }
 
@@ -55,6 +57,7 @@
     PrintLayout,
     BlankLayout,
     NavbarView,
+    FormView,
     LogInFormView)
   {
     var startBroker = null;
@@ -133,7 +136,7 @@
       navbarView.on('logIn', function()
       {
         viewport.showDialog(
-          new LogInFormView(), i18n('core', 'LOG_IN_FORM:TITLE:LOG_IN')
+          new LogInFormView(), i18n('users', 'LOG_IN_FORM:TITLE:LOG_IN')
         );
       });
 
@@ -163,6 +166,8 @@
         startBroker = null;
       }
 
+      var userReloadTimer = null;
+
       broker.subscribe('i18n.reloaded', function(message)
       {
         localStorage.setItem('LOCALE', message.newLocale);
@@ -171,18 +176,39 @@
 
       broker.subscribe('user.reloaded', function()
       {
-        var currentRequest = router.getCurrentRequest();
-
-        viewport.render();
-
-        if (!/^\/production\//.test(currentRequest.path))
+        if (userReloadTimer)
         {
-          router.dispatch(currentRequest.url);
+          clearTimeout(userReloadTimer);
         }
+
+        userReloadTimer = setTimeout(function()
+        {
+          userReloadTimer = null;
+
+          if (viewport.currentPage && viewport.currentPage.view instanceof FormView)
+          {
+            return;
+          }
+
+          var currentRequest = router.getCurrentRequest();
+
+          viewport.render();
+
+          if (!/^\/production\//.test(currentRequest.path))
+          {
+            router.dispatch(currentRequest.url);
+          }
+        }, 1);
       });
 
       broker.subscribe('user.loggedIn', function()
       {
+        if (userReloadTimer)
+        {
+          clearTimeout(userReloadTimer);
+          userReloadTimer = null;
+        }
+
         var req = router.getCurrentRequest();
 
         if (!req)
@@ -190,11 +216,17 @@
           return;
         }
 
+        viewport.render();
+
         var url = req.url;
 
         if (url === '/' || url === '/login')
         {
-          router.replace(window.DASHBOARD_URL_AFTER_LOG_IN || '/');
+          router.dispatch(window.DASHBOARD_URL_AFTER_LOG_IN || '/');
+        }
+        else
+        {
+          router.dispatch(url);
         }
       });
 
@@ -206,10 +238,13 @@
           time: 2500
         });
 
-        broker.publish('router.navigate', {
-          url: '/',
-          trigger: true
-        });
+        setTimeout(function()
+        {
+          broker.publish('router.navigate', {
+            url: '/',
+            trigger: true
+          });
+        }, 1);
       });
 
       domReady(function()

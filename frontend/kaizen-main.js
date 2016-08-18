@@ -26,14 +26,15 @@
       'app/core/layouts/PrintLayout',
       'app/core/layouts/BlankLayout',
       'app/core/views/NavbarView',
-      'app/core/views/LogInFormView',
+      'app/users/views/LogInFormView',
       'app/kaizenOrders/templates/navbar',
       'app/time',
       'app/kaizen-routes',
       'bootstrap',
       'moment-lang/' + window.appLocale,
       'select2-lang/' + window.appLocale,
-      'i18n!app/nls/core'
+      'i18n!app/nls/core',
+      'i18n!app/nls/users'
     ], startApp);
   }
 
@@ -134,7 +135,7 @@
       navbarView.on('logIn', function()
       {
         viewport.showDialog(
-          new LogInFormView(), i18n('core', 'LOG_IN_FORM:DIALOG_TITLE')
+          new LogInFormView(), i18n('users', 'LOG_IN_FORM:DIALOG_TITLE')
         );
       });
 

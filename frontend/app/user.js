@@ -8,7 +8,8 @@ define([
   'app/viewport',
   'app/data/divisions',
   'app/data/subdivisions',
-  'app/core/pages/ErrorPage'
+  'app/core/pages/ErrorPage',
+  'app/users/pages/LogInFormPage'
 ],
 function(
   _,
@@ -18,7 +19,8 @@ function(
   viewport,
   divisions,
   subdivisions,
-  ErrorPage
+  ErrorPage,
+  LogInFormPage
 ) {
   'use strict';
 
@@ -250,11 +252,7 @@ function(
       }
       else if (!user.isLoggedIn())
       {
-        broker.publish('router.navigate', {
-          url: '/login',
-          trigger: true,
-          replace: true
-        });
+        viewport.showPage(new LogInFormPage());
       }
       else
       {
