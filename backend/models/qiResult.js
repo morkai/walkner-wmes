@@ -270,46 +270,6 @@ module.exports = function setupQiResultModel(app, mongoose)
     {
       changes[property] = [oldValue, newValue];
     }
-/*
-    let newValue = this[property];
-
-    if (property === 'kind' || property === 'errorCategory')
-    {
-      newValue = mongoose.Types.ObjectId.isValid(newValue) ? new mongoose.Types.ObjectId(newValue) : null;
-    }
-    else if (/^qty/.test(property))
-    {
-      newValue = parseInt(newValue, 10);
-
-      if (isNaN(newValue) || newValue < 0)
-      {
-        newValue = 0;
-      }
-    }
-    else if (/(date|Date|At)$/.test(property))
-    {
-      newValue = newValue ? new Date(newValue) : null;
-
-      if (newValue !== null && isNaN(newValue.getTime()))
-      {
-        newValue = null;
-      }
-    }
-    else if (_.isObject(oldValue) && _.isFunction(oldValue.toObject))
-    {
-      oldValue = oldValue.toObject();
-    }
-    else if (_.isString(newValue))
-    {
-      newValue = newValue.trim();
-    }
-
-    if (!deepEqual(newValue, oldValue, {strict: true}))
-    {
-      changes[property] = [oldValue, newValue];
-      this[property] = newValue;
-    }
-*/
   };
 
   mongoose.model('QiResult', qiResultSchema);
