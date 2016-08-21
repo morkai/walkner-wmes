@@ -68,7 +68,7 @@
       <% if (entry.strips.length === 0) { %>
       :
       <% } else if (entry.strips.length === 1) { %>
-      : <%= strip.no %>; <%= strip.date %>; <%= strip.family %>
+      : <%= entry.strips[0].no %>; <%= entry.strips[0].date %>; <%= entry.strips[0].family %>
       <% } else { %>
       <ul style="margin: 0; padding: 0; list-style-position: inside">
         <% entry.strips.forEach(function(strip) { %>
