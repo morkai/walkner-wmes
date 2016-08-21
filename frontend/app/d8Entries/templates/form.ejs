@@ -1,0 +1,108 @@
+<form class="d8Entries-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <% if (!hideOwnerFields) { %>
+      <div id="<%- idPrefix %>-statusGroup" class="form-group clearfix">
+        <label for="<%- idPrefix %>-status" class="control-label"><%- t('d8Entries', 'PROPERTY:status') %></label>
+        <div id="<%- idPrefix %>-status" class="btn-group d8Entries-form-statusBtnGroup" data-toggle="buttons">
+          <% statuses.forEach(function(status) { %>
+          <label class="btn btn-default">
+            <input type="radio" name="status" value="<%- status %>"><%- t('d8Entries', 'status:' + status) %>
+          </label>
+          <% }) %>
+        </div>
+      </div>
+      <% } %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:subject') %></label>
+        <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required>
+      </div>
+      <div class="row">
+        <div class="col-md-3 form-group has-required-select2">
+          <label for="<%- idPrefix %>-division" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:division') %></label>
+          <input id="<%- idPrefix %>-division" type="text" name="division" required>
+        </div>
+        <div class="col-md-3 form-group has-required-select2">
+          <label for="<%- idPrefix %>-entrySource" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:entrySource') %></label>
+          <input id="<%- idPrefix %>-entrySource" type="text" name="entrySource" required>
+        </div>
+      </div>
+      <% if (!hideOwnerFields) { %>
+      <div class="row">
+        <div class="col-md-3 form-group has-required-select2">
+          <label for="<%- idPrefix %>-owner" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:owner') %></label>
+          <input id="<%- idPrefix %>-owner" type="text" name="owner" required>
+          <p class="help-block"><%- t('d8Entries', 'FORM:help:owner') %></p>
+        </div>
+        <div class="col-md-9 form-group">
+          <label for="<%- idPrefix %>-members" class="control-label"><%- t('d8Entries', 'PROPERTY:members') %></label>
+          <input id="<%- idPrefix %>-members" type="text" name="members">
+          <p class="help-block"><%- t('d8Entries', 'FORM:help:members') %></p>
+        </div>
+      </div>
+      <% } %>
+      <div class="form-group">
+        <label class="control-label"><%- t('d8Entries', 'PROPERTY:strips') %></label>
+        <table class="table table-bordered table-condensed d8Entries-form-stripsTable">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('d8Entries', 'PROPERTY:strips.no') %></th>
+            <th class="is-min"><%- t('d8Entries', 'PROPERTY:strips.date') %></th>
+            <th class="is-min"><%- t('d8Entries', 'PROPERTY:strips.family') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-strips"></tbody>
+        </table>
+        <button id="<%- idPrefix %>-addStrip" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- t('d8Entries', 'FORM:strips:add') %></span></button>
+      </div>
+      <div class="row">
+        <div class="col-md-3 form-group has-required-select2">
+          <label for="<%- idPrefix %>-problemSource" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:problemSource') %></label>
+          <input id="<%- idPrefix %>-problemSource" type="text" name="problemSource" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-problemDescription" class="control-label"><%- t('d8Entries', 'PROPERTY:problemDescription') %></label>
+        <textarea id="<%- idPrefix %>-problemDescription" class="form-control" name="problemDescription" rows="3"></textarea>
+      </div>
+      <div class="d8Entries-form-dates">
+        <% ['crsRegisterDate', 'd8OpenDate', 'd5PlannedCloseDate', 'd5CloseDate', 'd8CloseDate'].forEach(function(prop) { %>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-<%- prop %>" class="control-label"><%- t('d8Entries', 'PROPERTY:' + prop) %></label>
+          <input id="<%- idPrefix %>-<%- prop %>" class="form-control" type="date" name="<%- prop %>" min="2013-01-01" max="<%- nextYear %>">
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-attachment" class="control-label">
+          <%- t('d8Entries', 'PROPERTY:attachment') %>
+          <% if (editMode && model.attachment) { %>
+          <span class="d8Entries-form-attachmentHelp"><%- t('d8Entries', 'FORM:help:attachment') %></span>
+          <% } %>
+        </label>
+        <input id="<%- idPrefix %>-attachment" class="form-control" type="file">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-subscribers" class="control-label"><%- t('d8Entries', 'PROPERTY:subscribers') %></label>
+        <input id="<%- idPrefix %>-subscribers" type="text" name="subscribers">
+        <p class="help-block"><%- t('d8Entries', 'FORM:help:subscribers') %></p>
+      </div>
+      <% if (editMode) { %>
+      <div class="form-group d8Entries-form-comment">
+        <label for="<%- idPrefix %>-comment" class="control-label"><%- t('d8Entries', 'PROPERTY:comment') %></label>
+        <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3"></textarea>
+      </div>
+      <% } %>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+        <i class="fa fa-spinner fa-spin"></i>
+        <span><%- formActionText %></span>
+      </button>
+    </div>
+  </div>
+</form>

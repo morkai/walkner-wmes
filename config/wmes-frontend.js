@@ -68,6 +68,7 @@ exports.modules = [
   'isa',
   'qi',
   'pscs',
+  'd8',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -113,7 +114,8 @@ exports.events = {
       '*.added', '*.edited',
       'kaizen.*.added', 'kaizen.*.edited',
       'opinionSurveys.*.added', 'opinionSurveys.*.edited',
-      'qi.*.added', 'qi.*.edited'
+      'qi.*.added', 'qi.*.edited',
+      'd8.*.added', 'd8.*.edited'
     ],
     info: [
       'events.**',
@@ -131,7 +133,8 @@ exports.events = {
       'prodDowntimes.confirmedEdited',
       'kaizen.*.deleted',
       'opinionSurveys.*.deleted',
-      'qi.*.deleted'
+      'qi.*.deleted',
+      'd8.*.deleted'
     ],
     error: [
       '*.syncFailed',
@@ -146,7 +149,8 @@ exports.events = {
     'opinionSurveys.omrResults.edited',
     'opinionSurveys.actions.added','opinionSurveys.actions.edited',
     'prodDowntimeAlerts.added',
-    'qi.results.added', 'qi.results.edited'
+    'qi.results.added', 'qi.results.edited',
+    'd8.entries.added', 'd8.entries.edited'
   ]
 };
 
@@ -193,7 +197,8 @@ exports.pubsub = {
     'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
     'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
     'qi.**',
-    'pscs.**'
+    'pscs.**',
+    'd8.**'
   ]
 };
 
@@ -226,7 +231,8 @@ exports.mongoose = {
     'cag', 'cagGroup', 'cagPlan',
     'isaPalletKind', 'isaEvent', 'isaRequest', 'isaShiftPersonnel',
     'qiKind', 'qiErrorCategory', 'qiFault', 'qiActionStatus', 'qiResult',
-    'pscsResult'
+    'pscsResult',
+    'd8Entry', 'd8EntrySource', 'd8ProblemSource'
   ]
 };
 exports.mongoose.options.server.poolSize = 15;
@@ -279,7 +285,8 @@ exports.user = {
     'QI:INSPECTOR', 'QI:SPECIALIST',
     'QI:RESULTS:VIEW', 'QI:RESULTS:MANAGE',
     'QI:DICTIONARIES:VIEW', 'QI:DICTIONARIES:MANAGE',
-    'PSCS:VIEW', 'PSCS:MANAGE'
+    'PSCS:VIEW', 'PSCS:MANAGE',
+    'D8:VIEW', 'D8:MANAGE', 'D8:ALL', 'D8:DICTIONARIES:VIEW', 'D8:DICTIONARIES:MANAGE'
   ]
 };
 
@@ -423,6 +430,10 @@ exports.qi = {
 
 exports.orders = {
   importPath: DATA_PATH + '/attachments-input'
+};
+
+exports.d8 = {
+  attachmentsDest: DATA_PATH + '/d8-attachments'
 };
 
 exports.orderDocuments = {

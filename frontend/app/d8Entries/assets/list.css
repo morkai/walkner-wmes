@@ -1,0 +1,14 @@
+.d8Entries-filter select {
+  max-width: 200px;
+}
+.d8Entries-filter .form-control[type="date"] {
+  width: 10em;
+}
+.d8Entries-list ul {
+  padding-left: 0;
+  list-style-position: inside;
+}
+.d8Entries-list-owners {
+  padding: 0 0 0 14px;
+  list-style-position: outside;
+}

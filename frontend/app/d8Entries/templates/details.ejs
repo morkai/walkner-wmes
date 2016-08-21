@@ -1,0 +1,88 @@
+<div class="d8Entries-details">
+  <div class="panel panel-<%- model.status === 'open' ? 'warning' : 'success' %> d8Entries-details-props">
+    <div class="panel-heading">
+      <%= model.subject %>
+    </div>
+    <div class="panel-details <%- model.changed.all ? 'is-changed' : '' %>">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="props first">
+            <div class="prop">
+              <div class="prop-name <%- model.changed.status ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:status') %></div>
+              <div class="prop-value"><%= model.statusText || '-' %></div>
+            </div>
+            <% ['division', 'entrySource', 'problemSource'].forEach(function(prop) { %>
+            <div class="prop">
+              <div class="prop-name <%- model.changed[prop] ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:' + prop) %></div>
+              <div class="prop-value"><%= model[prop] || '-' %></div>
+            </div>
+            <% }) %>
+            <div class="prop">
+              <div class="prop-name <%- model.changed.problemDescription ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:problemDescription') %></div>
+              <div class="prop-value text-lines"><%= model.problemDescription || '-' %></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="props">
+            <% ['crsRegisterDate', 'd8OpenDate', 'd5PlannedCloseDate', 'd5CloseDate', 'd8CloseDate'].forEach(function(prop) { %>
+            <div class="prop">
+              <div class="prop-name <%- model.changed[prop] ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:' + prop) %></div>
+              <div class="prop-value"><%= model[prop] || '-' %></div>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="props">
+            <div class="prop">
+              <div class="prop-name"><%- t('d8Entries', 'PROPERTY:creator') %></div>
+              <div class="prop-value"><%- model.creator %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('d8Entries', 'PROPERTY:createdAt') %></div>
+              <div class="prop-value"><%- model.createdAt %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('d8Entries', 'PROPERTY:updater') %></div>
+              <div class="prop-value"><%- model.updater %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('d8Entries', 'PROPERTY:updatedAt') %></div>
+              <div class="prop-value"><%- model.updatedAt %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <%- t('d8Entries', 'PROPERTY:strips') %>
+    </div>
+    <%- renderStrips({strips: model.strips, hover: true, changed: model.changed.all || model.changed.strips}) %>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%- t('d8Entries', 'PANEL:TITLE:participants') %>
+    </div>
+    <table class="table table-bordered table-condensed table-hover d8Entries-details-observers">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('d8Entries', 'PROPERTY:observers:name') %></th>
+        <th class="is-min"><%- t('d8Entries', 'PROPERTY:observers:role') %></th>
+        <th><%- t('d8Entries', 'PROPERTY:observers:lastSeenAt') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.observers.forEach(function(observer) { %>
+      <tr>
+        <td class="is-min"><%= observer.user.label %></td>
+        <td class="is-min"><%= t('d8Entries', 'role:' + observer.role) %></td>
+        <td><%= observer.lastSeenAt ? time.format(observer.lastSeenAt, 'LLLL') : '-' %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

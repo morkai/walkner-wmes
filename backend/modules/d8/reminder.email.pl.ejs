@@ -1,0 +1,122 @@
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-top: 0; margin-bottom: 3px; padding-bottom: 3px;">
+  Przypomnienie
+</h3>
+<font style="font-family: Arial, sans-serif; margin-bottom: 3px; font-size: 12px">
+  <font style="color: red">
+  <% if (mode === 'verification') { %>
+  Prosimy o przesłanie do weryfikacji wstępnego raportu 8D do zgłoszenia nr <%- entry.rid %>.
+  <% } %>
+  <% if (mode === 'd5') { %>
+  Przypominamy o zbliżającym się terminie kroku D5 w zgłoszeniu nr <%- entry.rid %>.
+  <% } %>
+  <% if (mode === 'warning') { %>
+  Przypominamy o terminowym oddaniu raportu 8D do zgłoszenia nr <%- entry.rid %>.
+  <% } %>
+  <% if (mode === 'late') { %>
+  Przypominamy, że dzisiaj należy oddać raport 8D do zgłoszenia nr <%- entry.rid %> z wypełnionym krokiem D5.
+  <% } %>
+  <% if (mode === 'veryLate') { %>
+  Prosimy o przesłanie zakończonego raportu 8D do zgłoszenia nr <%- entry.rid %>.
+  <% } %>
+  <% if (mode === 'danger') { %>
+  Prosimy o niezwłoczne przesłanie zakończonego raportu 8D do zgłoszenia nr <%- entry.rid %>.
+  <% } %>
+  </font>
+  <br><br>
+  <i>Dostajesz tę wiadomość, ponieważ jesteś członkiem zespołu lub obserwatorem zgłoszenia niezakończonego przez <%- entry.duration %> dni.</i>
+</font>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-top: 0; margin-bottom: 3px; padding-bottom: 3px;">
+  Zgłoszenie 8D
+</h3>
+<table style="font-family: Arial, sans-serif; font-size: 12px">
+  <tbody>
+  <tr>
+    <th align="left">ID</th>
+    <td>: <a href="<%- urlPrefix %>r/d8/<%- entry.rid %>"><%- entry.rid %></a></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Plik raportu 8D</th>
+    <td>:
+      <% if (entry.attachment) { %>
+      <a href="<%- urlPrefix %>d8/<%- entry._id %>/attachments/<%- entry.attachment._id %>?download=1"><%= entry.attachment.name %></a>
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <th align="left">Temat</th>
+    <td>: <%= entry.subject %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Wydział</th>
+    <td>: <%= entry.division %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Źródło zgłoszenia</th>
+    <td>: <%= entry.entrySource %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Lider zespołu</th>
+    <td>: <%= entry.owner %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Członkowie zespołu</th>
+    <td>: <%= entry.members.join(', ') %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Reklamacje</th>
+    <td>
+      <% if (entry.strips.length === 0) { %>
+      :
+      <% } else if (entry.strips.length === 1) { %>
+      : <%= strip.no %>; <%= strip.date %>; <%= strip.family %>
+      <% } else { %>
+      <ul style="margin: 0; padding: 0; list-style-position: inside">
+        <% entry.strips.forEach(function(strip) { %>
+        <li><%= strip.no %>; <%= strip.date %>; <%= strip.family %></li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Źródło problemu</th>
+    <td>: <%= entry.problemSource %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Opis problemu</th>
+    <td>: <%= entry.problemDescription %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Data rejestracji CRS</th>
+    <td>: <%= entry.crsRegisterDate %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Data otwarcia 8D</th>
+    <td>: <%= entry.d8OpenDate %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Planowane zakończenie 5D</th>
+    <td>: <%= entry.d5PlannedCloseDate %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Data zakończenia 5D</th>
+    <td>: <%= entry.d5CloseDate %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Data zamknięcia 8D</th>
+    <td>: <%= entry.d8CloseDate %></td>
+  </tr>
+</table>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-bottom: 3px; padding-bottom: 3px">
+  Na skróty
+</h3>
+<ul style="margin-top: 0; font-family: Arial, sans-serif; font-size: 12px">
+  <li><a href="<%- urlPrefix %>r/d8/<%- entry.rid %>">Zgłoszenie</a></li>
+  <li><a href="<%- urlPrefix %>r/d8/unseen">Nieprzeczytane zgłoszenia</a></li>
+  <li><a href="<%- urlPrefix %>r/d8/mine">Twoje zgłoszenia</a></li>
+  <li><a href="<%- urlPrefix %>r/d8/all">Wszystkie zgłoszenia</a></li>
+</ul>
+<hr>
+<font face="Arial" color="Gray" size="1">
+  Ta wiadomość została wygenerowana automatycznie przez system WMES.
+</font>

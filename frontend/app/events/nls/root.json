@@ -359,7 +359,21 @@
     "TYPE:qi.actionStatuses.deleted": "QI > Action statuses: deleted",
     "TEXT:qi.actionStatuses.deleted": "Deleted action status: <em>{model->name}</em>",
     "TYPE:qi.results.deleted": "QI > Results: deleted",
-    "TEXT:qi.results.deleted": "Deleted result: <em>{model->rid}</em>"
+    "TEXT:qi.results.deleted": "Deleted result: <em>{model->rid}</em>",
+    "TYPE:d8.entrySources.added": "8D > Entry sources: added",
+    "TEXT:d8.entrySources.added": "Added entry source: <a href='\\#d8/entrySources/{model->_id}'>{model->name}</a>",
+    "TYPE:d8.entrySources.edited": "8D > Entry sources: edited",
+    "TEXT:d8.entrySources.edited": "Edited entry source: <a href='\\#d8/entrySources/{model->_id}'>{model->name}</a>",
+    "TYPE:d8.entrySources.deleted": "8D > Entry sources: deleted",
+    "TEXT:d8.entrySources.deleted": "Deleted entry source: <em>{model->name}</em>",
+    "TYPE:d8.problemSources.added": "8D > Problem sources: added",
+    "TEXT:d8.problemSources.added": "Added problem source: <a href='\\#d8/problemSources/{model->_id}'>{model->name}</a>",
+    "TYPE:d8.problemSources.edited": "8D > Problem sources: edited",
+    "TEXT:d8.problemSources.edited": "Edited problem source: <a href='\\#d8/problemSources/{model->_id}'>{model->name}</a>",
+    "TYPE:d8.problemSources.deleted": "8D > Problem sources: deleted",
+    "TEXT:d8.problemSources.deleted": "Deleted problem source: <em>{model->name}</em>",
+    "TYPE:d8.entries.deleted": "8D > Entries: deleted",
+    "TEXT:d8.entries.deleted": "Deleted entry: <em>{model->rid}</em>"
   },
   "pl": true
 }

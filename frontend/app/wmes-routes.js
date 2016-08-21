@@ -67,7 +67,10 @@ define([
   './qiErrorCategories/routes',
   './qiFaults/routes',
   './qiActionStatuses/routes',
-  './pscs/routes'
+  './pscs/routes',
+  './d8Entries/routes',
+  './d8EntrySources/routes',
+  './d8ProblemSources/routes'
 ], function()
 {
   'use strict';

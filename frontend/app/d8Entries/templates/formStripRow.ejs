@@ -1,0 +1,11 @@
+<tr>
+  <td><input class="form-control" name="strips[<%- i %>].no" type="text" value="<%= strip.no %>"></td>
+  <td><input class="form-control" name="strips[<%- i %>].date" type="date" value="<%= strip.date %>" min="2013-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>"></td>
+  <td><input class="form-control" name="strips[<%- i %>].family" type="text" value="<%= strip.family %>"></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button class="btn btn-default" type="button" data-action="removeStrip" title="<%- t('d8Entries', 'FORM:strips:remove') %>"><i class="fa fa-times"></i></button>
+    </div>
+  </td>
+  <td></td>
+</tr>

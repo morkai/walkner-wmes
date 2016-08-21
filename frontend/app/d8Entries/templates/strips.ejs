@@ -1,0 +1,23 @@
+<table class="table table-bordered table-condensed <%- hover ? 'table-hover' : '' %> d8Entries-details-strips">
+  <thead>
+  <tr>
+    <th class="is-min"><%- t('d8Entries', 'PROPERTY:strips.no') %></th>
+    <th class="is-min"><%- t('d8Entries', 'PROPERTY:strips.date') %></th>
+    <th><%- t('d8Entries', 'PROPERTY:strips.family') %></th>
+  </tr>
+  </thead>
+  <tbody class="<%- changed ? 'is-changed' : '' %>">
+  <% if (!strips.length) { %>
+  <tr>
+    <td colspan="3"><%- t('d8Entries', 'strips:noData') %></td>
+  </tr>
+  <% } %>
+  <% strips.forEach(function(strip) { %>
+  <tr>
+    <td class="is-min"><%= strip.no || '-' %></td>
+    <td class="is-min"><%- strip.date ? time.format(strip.date, 'LL') : '-' %></td>
+    <td><%= strip.family || '-' %></td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

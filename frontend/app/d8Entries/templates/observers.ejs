@@ -1,0 +1,23 @@
+<table class="table table-bordered table-condensed table-hover d8Entries-details-observers">
+  <thead>
+    <tr>
+      <th class="is-min"><%- t('d8Entries', 'PROPERTY:observers:name') %></th>
+      <th class="is-min"><%- t('d8Entries', 'PROPERTY:observers:role') %></th>
+      <th><%- t('d8Entries', 'PROPERTY:observers:lastSeenAt') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (!model.observers.length) { %>
+    <tr>
+      <td colspan="3"><%- t('d8Entries', 'observers:noData') %></td>
+    </tr>
+    <% } %>
+    <% model.observers.forEach(function(observer) { %>
+    <tr>
+      <td class="is-min"><%= observer.user.label %></td>
+      <td class="is-min"><%= t('d8Entries', 'role:' + observer.role) %></td>
+      <td><%= observer.lastSeenAt ? time.format(observer.lastSeenAt, 'LLLL') : '-' %></td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
