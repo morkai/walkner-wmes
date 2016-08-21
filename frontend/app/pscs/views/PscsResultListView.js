@@ -11,13 +11,6 @@ define([
 ) {
   'use strict';
 
-  function prepareTdAttrs(row)
-  {
-    /*jshint validthis:true*/
-
-    return '';
-  }
-
   return ListView.extend({
 
     className: 'pscs-list is-colored',
