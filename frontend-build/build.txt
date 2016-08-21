@@ -62,6 +62,30 @@ app/core/assets/table.css
 ----------------
 app/core/assets/table.css
 
+app/d8Entries/assets/details.css
+----------------
+app/d8Entries/assets/details.css
+
+app/d8Entries/assets/form.css
+----------------
+app/d8Entries/assets/form.css
+
+app/d8Entries/assets/history.css
+----------------
+app/d8Entries/assets/history.css
+
+app/d8Entries/assets/list.css
+----------------
+app/d8Entries/assets/list.css
+
+app/d8Entries/assets/main.css
+----------------
+app/d8Entries/assets/./list.css
+app/d8Entries/assets/./form.css
+app/d8Entries/assets/./details.css
+app/d8Entries/assets/./history.css
+app/d8Entries/assets/main.css
+
 app/dashboard/assets/main.css
 ----------------
 app/dashboard/assets/main.css
@@ -501,6 +525,7 @@ assets/../app/changelog/assets/main.css
 assets/../app/isa/assets/main.css
 assets/../app/qiResults/assets/main.css
 assets/../app/pscs/assets/main.css
+assets/../app/d8Entries/assets/main.css
 assets/wmes-main.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -615,6 +640,9 @@ app/data/divisions.js
 app/subdivisions/Subdivision.js
 app/subdivisions/SubdivisionCollection.js
 app/data/subdivisions.js
+app/users/templates/logInForm.js
+app/users/views/LogInFormView.js
+app/users/pages/LogInFormPage.js
 app/user.js
 app/core/templates/pageLayout.js
 app/core/layouts/PageLayout.js
@@ -624,8 +652,9 @@ app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
 app/core/templates/navbar.js
 app/core/views/NavbarView.js
-app/core/templates/logInForm.js
-app/core/views/LogInFormView.js
+vendor/form2js.js
+vendor/js2form.js
+app/core/views/FormView.js
 app/core/util/showDeleteFormPage.js
 app/core/util/colorLabel.js
 app/aors/Aor.js
@@ -737,7 +766,6 @@ app/prodDowntimes/ProdDowntimeSettingCollection.js
 app/prodDowntimes/settings.js
 app/prodDowntimes/views/ProdDowntimeListView.js
 app/data/orgUnits.js
-vendor/js2form.js
 app/core/util/buttonGroup.js
 app/core/templates/filterLimit.js
 app/core/views/FilterView.js
@@ -756,8 +784,6 @@ app/prodDowntimes/templates/historyItem.js
 app/prodDowntimes/templates/corroborateExtra.js
 app/prodDowntimes/views/ProdDowntimeDetailsView.js
 app/prodDowntimes/pages/ProdDowntimeDetailsPage.js
-vendor/form2js.js
-app/core/views/FormView.js
 app/core/pages/createPageBreadcrumbs.js
 app/core/pages/EditFormPage.js
 app/users/util/setUpUserSelect2.js
@@ -932,6 +958,9 @@ app/qiFaults/routes.js
 app/qiActionStatuses/QiActionStatus.js
 app/qiActionStatuses/routes.js
 app/pscs/routes.js
+app/d8Entries/routes.js
+app/d8EntrySources/routes.js
+app/d8ProblemSources/routes.js
 app/wmes-routes.js
 vendor/visibly.js
 app/visibility.js
@@ -1008,6 +1037,9 @@ app/data/divisions.js
 app/subdivisions/Subdivision.js
 app/subdivisions/SubdivisionCollection.js
 app/data/subdivisions.js
+app/users/templates/logInForm.js
+app/users/views/LogInFormView.js
+app/users/pages/LogInFormPage.js
 app/user.js
 app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
@@ -1127,13 +1159,14 @@ app/data/divisions.js
 app/subdivisions/Subdivision.js
 app/subdivisions/SubdivisionCollection.js
 app/data/subdivisions.js
+app/users/templates/logInForm.js
+app/users/views/LogInFormView.js
+app/users/pages/LogInFormPage.js
 app/user.js
 app/core/templates/pageLayout.js
 app/core/layouts/PageLayout.js
 app/core/templates/navbar.js
 app/core/views/NavbarView.js
-app/core/templates/logInForm.js
-app/core/views/LogInFormView.js
 vendor/deployJava.js
 app/purchaseOrders/templates/qzPrintInitWarning.js
 app/purchaseOrders/qzPrint.js
