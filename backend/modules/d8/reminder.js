@@ -171,7 +171,7 @@ module.exports = function setUpD8Reminder(app, module)
 
         this.entries = null;
 
-        scheduleNextReminder();
+        setTimeout(scheduleNextReminder, 10000);
       }
     );
   }
