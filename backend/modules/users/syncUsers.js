@@ -4,7 +4,7 @@
 
 var _ = require('lodash');
 var bcrypt = require('bcrypt');
-var transliteration = require('transliteration');
+var transliterate = require('transliteration').transliterate;
 var step = require('h5.step');
 
 module.exports = function syncUsers(app, usersModule, done)
@@ -288,8 +288,8 @@ function parseAddFields(addFields)
 function generateEmailAddress(generator, kdUser)
 {
   return !generator ? '' : generator({
-    firstName: transliteration(kdUser.firstName || '', '?').toLowerCase(),
-    lastName: transliteration(kdUser.lastName || '', '?').toLowerCase(),
+    firstName: transliterate(kdUser.firstName || '', '?').toLowerCase(),
+    lastName: transliterate(kdUser.lastName || '', '?').toLowerCase(),
     personnelId: kdUser.personnelId || '',
     company: (kdUser.company || '').toUpperCase()
   });
