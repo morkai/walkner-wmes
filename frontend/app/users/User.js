@@ -32,6 +32,7 @@ define([
       privileges: null,
       aors: null,
       company: null,
+      kdId: -1,
       kdDivision: null,
       personellId: null,
       card: null,

@@ -4,7 +4,7 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-lg-3">
           <div class="form-group">
             <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('users', 'PROPERTY:login') %></label>
             <input id="<%- idPrefix %>-login" class="form-control" type="text" name="login" required maxlength="50">
@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-lg-3">
           <div class="form-group">
             <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('users', 'PROPERTY:firstName') %></label>
             <input id="<%- idPrefix %>-firstName" class="form-control" type="text" name="firstName" autofocus maxlength="50">
@@ -54,8 +54,12 @@
               <% }) %>
             </div>
           </div>
+          <div class="form-group">
+            <label for="<%- idPrefix %>-kdId" class="control-label"><%- t('users', 'PROPERTY:kdId') %></label>
+            <input id="<%- idPrefix %>-kdId" class="form-control" type="text" name="kdId" pattern="^[0-9]+$">
+          </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-lg-3">
           <div class="form-group">
             <label for="<%- idPrefix %>-email" class="control-label"><%- t('users', 'PROPERTY:email') %></label>
             <input id="<%- idPrefix %>-email" class="form-control" type="email" name="email" maxlength="100">
@@ -74,7 +78,7 @@
           </div>
         </div>
         <% if (!accountMode) { %>
-        <div class="col-md-3">
+        <div class="col-lg-3">
           <div class="form-group">
             <label for="<%- idPrefix %>-company" class="control-label"><%- t('users', 'PROPERTY:company') %></label>
             <select id="<%- idPrefix %>-company" name="company" data-placeholder="<%- t('users', 'NO_DATA:company') %>">

@@ -36,6 +36,7 @@
   "PROPERTY:prodFunction": "Funkcja na produkcji",
   "PROPERTY:aors": "Obszary odpowiedzialności",
   "PROPERTY:company": "Firma",
+  "PROPERTY:kdId": "ID (KD)",
   "PROPERTY:kdDivision": "Wydział (KD)",
   "PROPERTY:personellId": "Nr kadrowy",
   "PROPERTY:card": "Nr karty",

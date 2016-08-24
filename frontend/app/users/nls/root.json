@@ -37,6 +37,7 @@
     "PROPERTY:prodFunction": "Production function",
     "PROPERTY:aors": "Areas of responsibility",
     "PROPERTY:company": "Companies",
+    "PROPERTY:kdId": "ID (AC)",
     "PROPERTY:kdDivision": "Division (AC)",
     "PROPERTY:personellId": "Personell ID",
     "PROPERTY:card": "Card no",

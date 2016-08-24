@@ -364,6 +364,12 @@ define([
       }
 
       formData.mobile = this.serializeMobile();
+      formData.kdId = parseInt(formData.kdId, 10);
+
+      if (isNaN(formData.kdId) || formData.kdId < 1)
+      {
+        formData.kdId = -1;
+      }
 
       return formData;
     },
@@ -382,7 +388,7 @@ define([
 
     resizeColumns: function()
     {
-      var $columns = this.$('.col-md-3');
+      var $columns = this.$('.col-lg-3');
       var $maxColumn = null;
       var maxHeight = 0;
 
