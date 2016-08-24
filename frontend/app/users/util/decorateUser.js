@@ -28,6 +28,8 @@ define([
 
     obj.company = company ? company.getLabel() : '-';
 
+    obj.active = t('users', 'active:' + obj.active);
+
     if (Array.isArray(obj.aors))
     {
       obj.aors = obj.aors

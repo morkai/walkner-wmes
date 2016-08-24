@@ -307,6 +307,7 @@ define([
     {
       var formData = this.model.toJSON();
 
+      formData.active = formData.active.toString();
       formData.privileges = formData.privileges.join(',');
       formData.vendor = null;
 
@@ -381,7 +382,7 @@ define([
 
     resizeColumns: function()
     {
-      var $columns = this.$('.col-lg-3');
+      var $columns = this.$('.col-md-3');
       var $maxColumn = null;
       var maxHeight = 0;
 
@@ -494,6 +495,19 @@ define([
       }
 
       return matches[1] + ':' + matches[2];
+    },
+
+    handleFailure: function(jqXhr)
+    {
+      var json = jqXhr.responseJSON;
+      var error = json && json.error && json.error.message;
+
+      if (t.has('users', 'FORM:ERROR:' + error))
+      {
+        return this.showErrorMessage(t('users', 'FORM:ERROR:' + error));
+      }
+
+      return FormView.prototype.handleFailure.apply(this, arguments);
     }
 
   });

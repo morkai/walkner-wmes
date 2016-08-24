@@ -5,22 +5,12 @@
         <div class="panel-heading"><%- t('users', 'PANEL:TITLE:details:basic') %></div>
         <div class="panel-details">
           <div class="props first">
+            <% ['active', 'login', 'personellId', 'kdDivision', 'kdPosition'].forEach(function(prop) { %>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:login') %></div>
-              <div class="prop-value"><%= model.login %></div>
+              <div class="prop-name"><%- t('users', 'PROPERTY:' + prop) %></div>
+              <div class="prop-value"><%= model[prop] || '-' %></div>
             </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:personellId') %></div>
-              <div class="prop-value"><%= model.personellId || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:kdDivision') %></div>
-              <div class="prop-value"><%= model.kdDivision || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:kdPosition') %></div>
-              <div class="prop-value"><%= model.kdPosition || '-' %></div>
-            </div>
+            <% }) %>
           </div>
         </div>
       </div>

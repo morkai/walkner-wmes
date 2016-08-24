@@ -4,7 +4,7 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-lg-3">
+        <div class="col-md-3">
           <div class="form-group">
             <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('users', 'PROPERTY:login') %></label>
             <input id="<%- idPrefix %>-login" class="form-control" type="text" name="login" required maxlength="50">
@@ -20,8 +20,18 @@
             <p class="help-block"><%- t('users', 'FORM:HELP:password') %></p>
             <% } %>
           </div>
+          <div class="form-group users-form-active">
+            <label for="<%- idPrefix %>-active" class="control-label is-required"><%- t('users', 'PROPERTY:active') %></label>
+            <div>
+              <% ['true', 'false'].forEach(function(active) { %>
+              <label class="radio-inline">
+                <input type="radio" name="active" value="<%- active %>" required> <%- t('users', 'active:' + active) %>
+              </label>
+              <% }) %>
+            </div>
+          </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-md-3">
           <div class="form-group">
             <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('users', 'PROPERTY:firstName') %></label>
             <input id="<%- idPrefix %>-firstName" class="form-control" type="text" name="firstName" autofocus maxlength="50">
@@ -45,7 +55,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-md-3">
           <div class="form-group">
             <label for="<%- idPrefix %>-email" class="control-label"><%- t('users', 'PROPERTY:email') %></label>
             <input id="<%- idPrefix %>-email" class="form-control" type="email" name="email" maxlength="100">
@@ -64,7 +74,7 @@
           </div>
         </div>
         <% if (!accountMode) { %>
-        <div class="col-lg-3">
+        <div class="col-md-3">
           <div class="form-group">
             <label for="<%- idPrefix %>-company" class="control-label"><%- t('users', 'PROPERTY:company') %></label>
             <select id="<%- idPrefix %>-company" name="company" data-placeholder="<%- t('users', 'NO_DATA:company') %>">

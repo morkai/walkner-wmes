@@ -20,6 +20,7 @@ define([
       {id: 'login', className: 'is-min'},
       {id: 'lastName', className: 'is-min'},
       {id: 'firstName', className: 'is-min'},
+      {id: 'active', className: 'is-min'},
       {id: 'company', className: 'is-min'},
       {id: 'orgUnit', className: 'is-min'},
       'prodFunction'

@@ -304,7 +304,8 @@ exports.start = function startUserModule(app, module)
         {
           var property = /^.*?@.*?\.[a-zA-Z]+$/.test(credentials.login) ? 'email' : 'login';
           var conditions = {
-            [property]: new RegExp('^' + _.escapeRegExp(credentials.login) + '$', 'i')
+            [property]: new RegExp('^' + _.escapeRegExp(credentials.login) + '$', 'i'),
+            active: true
           };
 
           app[module.config.mongooseId].model('User').findOne(conditions, next);

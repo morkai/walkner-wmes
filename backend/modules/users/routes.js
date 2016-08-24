@@ -20,9 +20,16 @@ module.exports = function setUpUsersRoutes(app, usersModule)
   var canManage = userModule.auth('USERS:MANAGE');
 
   express.get('/users', canBrowse, express.crud.browseRoute.bind(null, app, User));
-  express.post('/users', canManage, hashPassword, express.crud.addRoute.bind(null, app, User));
+  express.post('/users', canManage, checkLogin, hashPassword, express.crud.addRoute.bind(null, app, User));
   express.get('/users/:id', canViewDetails, express.crud.readRoute.bind(null, app, User));
-  express.put('/users/:id', canEdit, restrictSpecial, hashPassword, express.crud.editRoute.bind(null, app, User));
+  express.put(
+    '/users/:id',
+    canEdit,
+    restrictSpecial,
+    checkLogin,
+    hashPassword,
+    express.crud.editRoute.bind(null, app, User)
+  );
   express.delete('/users/:id', canManage, restrictSpecial, express.crud.deleteRoute.bind(null, app, User));
 
   express.post('/login', loginRoute);
@@ -73,6 +80,42 @@ module.exports = function setUpUsersRoutes(app, usersModule)
     }
 
     return next();
+  }
+
+  function checkLogin(req, res, next)
+  {
+    const rawLogin = req.body.login;
+
+    if (!_.isString(rawLogin) || !req.body.active)
+    {
+      return next();
+    }
+
+    const login = req.body.login = rawLogin.trim();
+    const conditions = {
+      login,
+      active: true
+    };
+
+    if (req.body._id)
+    {
+      conditions._id = {$ne: req.body._id};
+    }
+
+    User.findOne(conditions, {_id: 1}).lean().exec(function(err, user)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (user)
+      {
+        return next(app.createError('LOGIN_USED', 400));
+      }
+
+      return next();
+    });
   }
 
   function loginRoute(req, res, next)
