@@ -276,6 +276,7 @@ module.exports = function setUpAlertsServer(app, module)
           startedAt: 1,
           'orderData.no': 1,
           'orderData.name': 1,
+          'orderData.description': 1,
           'orderData.nc12': 1
         };
 
@@ -320,7 +321,7 @@ module.exports = function setUpAlertsServer(app, module)
       date: prodShiftOrder.date,
       startedAt: prodShiftOrder.startedAt.getTime(),
       no: orderData.no || '?',
-      name: orderData.name || '?',
+      name: orderData.description || orderData.name || '?',
       nc12: orderData.nc12 || '?'
     };
 
@@ -372,6 +373,7 @@ module.exports = function setUpAlertsServer(app, module)
           startedAt: 1,
           'orderData.no': 1,
           'orderData.name': 1,
+          'orderData.description': 1,
           'orderData.nc12': 1
         };
 
@@ -1037,9 +1039,9 @@ module.exports = function setUpAlertsServer(app, module)
   function sendEmail(recipients, messageValues)
   {
     var emails = _.map(recipients, 'email');
-    var subject = '[WMES] Przestój '
-      + messageValues.downtime.rid
-      + ': ' + messageValues.downtime.reason;
+    var subject = `[WMES] Przestój ${messageValues.downtime.rid}: `
+      + `${messageValues.downtime.reason} `
+      + `(${messageValues.order.name})`;
     var mailOptions = {
       to: emails,
       replyTo: emails,
@@ -1052,6 +1054,10 @@ module.exports = function setUpAlertsServer(app, module)
       if (err)
       {
         module.error("Failed to send e-mail notification: %s", err.message);
+      }
+      else
+      {
+        module.debug(`Sent e-mail about [${messageValues.downtime.rid}] to: ${emails}`);
       }
     });
   }
@@ -1073,6 +1079,10 @@ module.exports = function setUpAlertsServer(app, module)
       if (err)
       {
         module.error("Failed to send SMS notification: %s", err.message);
+      }
+      else
+      {
+        module.debug(`Sent SMS about [${messageValues.downtime.rid}] to: ${smsOptions.to}`);
       }
     });
   }
