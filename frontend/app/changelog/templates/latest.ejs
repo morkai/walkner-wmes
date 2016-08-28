@@ -1,21 +1,22 @@
-<h1>v0.93.0</h1>
-<h2><%- time.format('2016-08-21', 'LL') %></h2>
+<h1>v0.93.1</h1>
+<h2><%- time.format('2016-08-28', 'LL') %></h2>
 <h3>8D</h3>
 <ul>
-  <li>Dodano nowy moduł: 8D.</li>
+  <li>Poprawiono błąd wywalający serwer podczas wysyłania powiadomień do zgłoszeń mających zdefiniowaną
+    jedną reklamację.</li>
+  <li>Poprawniono błąd mogący podować podwójne wysyłanie powiadomień e-mail.</li>
 </ul>
 <h3>Użytkownicy</h3>
 <ul>
-  <li>Poprawiono błąd podczas logowania mogący powodować, że po zalogowaniu nadal wyświetlany jest formularz logowania.</li>
-  <li>Zmieniono logowanie tak, aby wartość nazwy użytkownika nie rozróżniała wielkości liter.</li>
+  <li>Poprawiono błąd wywalający serwer podczas synchronizacji użytkowników z bazą KD.</li>
+  <li>Dodano możliwość zmiany wewnętrznego pola 'ID (KD)' - identyfikator użytkownika w bazie KD, używany
+    do porównywania rekordów podczas procesu synchronizacji użytkowników.</li>
+  <li>Dodano możliwość dezaktywacji konta użytkownika.</li>
+  <li>Dodano możliwość tworzenia kilku użytkowników z tym samym loginem (ale z tylko jeden z nich może mieć aktywne
+    konto w tym samym czasie).</li>
 </ul>
-<h3>Linie produkcyjne</h3>
+<h3>Przestoje > Alarmy</h3>
 <ul>
-  <li>Zmieniono sortowanie na liście tak, aby linie posortowane były według nadrzędnych jednostek organizacyjnych.</li>
-</ul>
-<h3>Inne</h3>
-<ul>
-  <li>Zmieniono strony z formularzami tak, aby nie były automatycznie odświeżane po utracie i ponownym nawiązaniu połączenia
-  z serwerem, w celu uniknięcia utraty wprowadzonych do formularza danych.</li>
-  <li>Zaktualizowano pakiety zależne.</li>
+  <li>Zmieniono temat wysyłanych e-maili tak, aby zawierał opis lub nazwę produktu ze zlecenia, w którym rozpoczęto
+    przestój.</li>
 </ul>
