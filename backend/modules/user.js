@@ -575,7 +575,7 @@ exports.start = function startUserModule(app, module)
         socket.handshake.sessionId = message.newSessionId;
         socket.handshake.user = createGuestData(getRealIp({}, socket));
 
-        if (userToSocketsMap[socket.id])
+        if (userToSocketsMap && userToSocketsMap[socket.id])
         {
           delete userToSocketsMap[socket.id];
 
