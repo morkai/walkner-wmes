@@ -1,4 +1,28 @@
 <div class="hidden">
+  <h1>v0.93.1</h1>
+  <h2><%- time.format('2016-08-28', 'LL') %></h2>
+  <h3>8D</h3>
+  <ul>
+    <li>Poprawiono błąd wywalający serwer podczas wysyłania powiadomień do zgłoszeń mających zdefiniowaną
+      jedną reklamację.</li>
+    <li>Poprawniono błąd mogący podować podwójne wysyłanie powiadomień e-mail.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Poprawiono błąd wywalający serwer podczas synchronizacji użytkowników z bazą KD.</li>
+    <li>Dodano możliwość zmiany wewnętrznego pola 'ID (KD)' - identyfikator użytkownika w bazie KD, używany
+      do porównywania rekordów podczas procesu synchronizacji użytkowników.</li>
+    <li>Dodano możliwość dezaktywacji konta użytkownika.</li>
+    <li>Dodano możliwość tworzenia kilku użytkowników z tym samym loginem (ale z tylko jeden z nich może mieć aktywne
+      konto w tym samym czasie).</li>
+  </ul>
+  <h3>Przestoje > Alarmy</h3>
+  <ul>
+    <li>Zmieniono temat wysyłanych e-maili tak, aby zawierał opis lub nazwę produktu ze zlecenia, w którym rozpoczęto
+      przestój.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.93.0</h1>
   <h2><%- time.format('2016-08-21', 'LL') %></h2>
   <h3>8D</h3>
