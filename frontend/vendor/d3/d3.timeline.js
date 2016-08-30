@@ -1,5 +1,5 @@
 define(['d3'], function(d3) {
-  
+
   return d3.timeline = function() {
     var DISPLAY_TYPES = ["circle", "rect"];
 
@@ -14,9 +14,9 @@ define(['d3'], function(d3) {
         orient = "bottom",
         width = null,
         height = null,
-        tickFormat = { format: d3.time.format("%I %p"), 
-          tickTime: d3.time.hours, 
-          tickNumber: 1, 
+        tickFormat = { format: d3.time.format("%I %p"),
+          tickTime: d3.time.hours,
+          tickNumber: 1,
           tickSize: 6 },
         colorCycle = d3.scale.category20(),
         colorPropertyName = null,
@@ -43,7 +43,7 @@ define(['d3'], function(d3) {
         maxStack = 1,
         minTime = 0,
         maxTime = 0;
-      
+
       setWidth();
 
       // check how many stacks we're gonna need
@@ -113,10 +113,10 @@ define(['d3'], function(d3) {
             .attr("r", itemHeight/2)
             .attr("height", itemHeight)
             .attr("class", itemClassName)
-            .style("fill", function(d, i){ 
-              if( colorPropertyName ){ 
-                return colorCycle( datum[colorPropertyName] ) 
-              } 
+            .style("fill", function(d, i){
+              if( colorPropertyName ){
+                return colorCycle( datum[colorPropertyName] )
+              }
               return colorCycle ? colorCycle(index) : null;
             })
             .on("mousemove", function (d, i) {
@@ -147,7 +147,7 @@ define(['d3'], function(d3) {
               .attr("transform", "translate("+ 0 +","+ (itemHeight/2 + margin.top + (itemHeight + itemMargin) * yAxisMapping[index])+")")
               .text(hasLabel ? datum.label : datum.id);
           }
-          
+
           if (typeof(datum.icon) != "undefined") {
             gParent.append('image')
               .attr("class", "timeline-label")
@@ -160,27 +160,28 @@ define(['d3'], function(d3) {
           function getStackPosition(d, i) {
             if (stacked) {
               return margin.top + (itemHeight + itemMargin) * yAxisMapping[index];
-            } 
+            }
             return margin.top;
           }
         });
       });
-      
-      if (width > gParentSize.width) {
-        function move() {
+
+      if (Math.ceil(width) > Math.ceil(gParentSize.width)) {
+        var zoom = d3.behavior.zoom().x(xScale);
+        var move = function() {
           var x = Math.min(0, Math.max(gParentSize.width - width, d3.event.translate[0]));
           zoom.translate([x, 0]);
           g.attr("transform", "translate(" + x + ",0)");
           scroll(x*scaleFactor, xScale);
-        }
+        };
 
-        var zoom = d3.behavior.zoom().x(xScale).on("zoom", move);
+        zoom.on("zoom", move);
 
         gParent
           .attr("class", "scrollable")
           .call(zoom);
       }
-      
+
       if (rotateTicks) {
         g.selectAll("text")
           .attr("transform", function(d) {
@@ -202,7 +203,7 @@ define(['d3'], function(d3) {
           .attr("x2", todayLine)
           .attr("y2", height - showTodayFormat.marginBottom)
           .style("stroke", showTodayFormat.color)//"rgb(6,120,155)")
-          .style("stroke-width", showTodayFormat.width); 
+          .style("stroke-width", showTodayFormat.width);
       }
 
       function getXPos(d, i) {
@@ -253,7 +254,7 @@ define(['d3'], function(d3) {
       orient = orientation;
       return timeline;
     };
-    
+
     timeline.itemHeight = function (h) {
       if (!arguments.length) return itemHeight;
       itemHeight = h;
@@ -388,7 +389,7 @@ define(['d3'], function(d3) {
       itemClassName = newItemClassName;
       return timeline;
     };
-    
+
     return timeline;
   };
 });
