@@ -459,6 +459,17 @@ exports.exportRoute = function(options, req, res, next)
 
   function handleExportStream(queryStream, serializeRow, req, cleanUp)
   {
+    const finish = _.once(function()
+    {
+      writeHeader();
+      res.end();
+
+      if (cleanUp)
+      {
+        cleanUp(req);
+      }
+    });
+
     queryStream.on('error', function(err)
     {
       next(err);
@@ -469,16 +480,9 @@ exports.exportRoute = function(options, req, res, next)
       }
     });
 
-    queryStream.on('end', function()
-    {
-      writeHeader();
-      res.end();
+    queryStream.on('end', finish);
 
-      if (cleanUp)
-      {
-        cleanUp(req);
-      }
-    });
+    queryStream.on('close', finish);
 
     queryStream.on('data', function(doc)
     {
