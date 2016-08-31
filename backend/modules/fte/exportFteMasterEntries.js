@@ -12,7 +12,7 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
 
   queryStream.on('error', emitter.emit.bind(emitter, 'error'));
 
-  queryStream.on('close', function()
+  queryStream.on('end', function()
   {
     prodFunctionList = Object.keys(prodFunctionMap);
 
@@ -63,14 +63,14 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
   {
     var i = 0;
 
-    while (i++ < 100 && docs.length > 0)
+    while (i++ < 25 && docs.length > 0)
     {
       exportNext(docs.shift());
     }
 
     if (docs.length === 0)
     {
-      emitter.emit('close');
+      emitter.emit('end');
     }
     else
     {
