@@ -23,10 +23,27 @@
           <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:shift') %></div>
           <div class="prop-value"><%- model.prodShiftText %></div>
         </div>
+        <% if (model.productName) { %>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:order') %></div>
+          <div class="prop-value"><a href="#prodShiftOrders/<%- model.prodShiftOrder._id %>"><%- model.orderId %></a>: <%= model.productName %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:operation') %></div>
+          <div class="prop-value">
+            <% if (model.operationName) { %>
+            <%- model.operationNo %>: <%= model.operationName %>
+            <% } else { %>
+            <%- model.operationNo %>
+            <% } %>
+          </div>
+        </div>
+        <% } else { %>
         <div class="prop">
           <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:order') %></div>
           <div class="prop-value"><%- model.order %></div>
         </div>
+        <% } %>
         <div class="prop">
           <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:master') %></div>
           <div class="prop-value"><%- model.masterInfo %></div>

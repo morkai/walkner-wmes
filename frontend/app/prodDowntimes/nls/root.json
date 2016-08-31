@@ -46,6 +46,7 @@
     "PROPERTY:decisionComment": "Decision comment",
     "PROPERTY:order": "Order",
     "PROPERTY:orderId": "Order ID",
+    "PROPERTY:operation": "Operation",
     "PROPERTY:startedAt": "Started at",
     "PROPERTY:finishedAt": "Finished at",
     "PROPERTY:status": "Status",

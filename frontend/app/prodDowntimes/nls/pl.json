@@ -44,6 +44,7 @@
   "PROPERTY:decisionComment": "Komentarz potwierdzenia",
   "PROPERTY:order": "Zlecenie",
   "PROPERTY:orderId": "Zlecenie",
+  "PROPERTY:operation": "Operacja",
   "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas zakończenia",
   "PROPERTY:status": "Status",

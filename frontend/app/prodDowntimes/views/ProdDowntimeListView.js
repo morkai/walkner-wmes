@@ -44,7 +44,8 @@ define([
       var options = this.options.simple ? null : {
         changesCount: true,
         maxReasonChanges: this.settings.getValue('maxReasonChanges') || Number.MAX_VALUE,
-        maxAorChanges: this.settings.getValue('maxAorChanges') || Number.MAX_VALUE
+        maxAorChanges: this.settings.getValue('maxAorChanges') || Number.MAX_VALUE,
+        productFamily: true
       };
 
       return this.collection.map(function(model)

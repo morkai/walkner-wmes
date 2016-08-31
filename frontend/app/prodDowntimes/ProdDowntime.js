@@ -70,6 +70,18 @@ define([
       operationNo: null
     },
 
+    url: function()
+    {
+      var url = Model.prototype.url.apply(this, arguments);
+
+      if (this.isNew())
+      {
+        return url;
+      }
+
+      return url + '?populate(prodShiftOrder)';
+    },
+
     serializeRow: function(currentTime)
     {
       return decorateProdDowntime(this, {changesCount: true, currentTime: currentTime});

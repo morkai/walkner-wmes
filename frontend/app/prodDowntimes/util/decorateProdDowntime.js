@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/time',
   'app/i18n',
   'app/user',
@@ -14,6 +15,7 @@ define([
   'app/core/templates/userInfo',
   './decorateProdDowntimeChange'
 ], function(
+  _,
   time,
   t,
   user,
@@ -76,7 +78,23 @@ define([
 
     if (user.isAllowedTo('PROD_DATA:VIEW') && obj.prodShiftOrder)
     {
-      obj.order = '<a href="#prodShiftOrders/' + obj.prodShiftOrder + '">' + obj.order + '</a>';
+      obj.order = '<a href="#prodShiftOrders/' + (obj.prodShiftOrder._id || obj.prodShiftOrder) + '">'
+        + obj.order + '</a>';
+    }
+
+    var pso = obj.prodShiftOrder;
+
+    if (pso && pso.orderData)
+    {
+      var orderData = pso.orderData;
+
+      obj.productName = orderData.description || orderData.name;
+      obj.productFamily = obj.productName.substring(0, 6);
+
+      if (orderData.operations && orderData.operations[obj.operationNo])
+      {
+        obj.operationName = orderData.operations[obj.operationNo].name;
+      }
     }
 
     obj.date = obj.date ? time.format(obj.date, 'YYYY-MM-DD') : '?';
@@ -125,6 +143,12 @@ define([
           + (changesCount.aor >= options.maxAorChanges ? 'danger' : 'warning')
           + '">' + changesCount.aor + '</span>';
       }
+    }
+
+    if (options && options.productFamily && obj.productFamily)
+    {
+      obj.prodFlow = '<span class="label label-default" title="' + _.escape(obj.productName) + '">'
+        + _.escape(obj.productFamily) + '</span> ' + obj.prodFlow;
     }
 
     return obj;

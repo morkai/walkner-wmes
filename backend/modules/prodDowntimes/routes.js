@@ -40,7 +40,12 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   express.put('/prodDowntimes/settings/:id', canManage, settings.updateRoute);
 
-  express.get('/prodDowntimes', limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdDowntime));
+  express.get(
+    '/prodDowntimes',
+    limitOrgUnit,
+    populateProdShiftOrder,
+    express.crud.browseRoute.bind(null, app, ProdDowntime)
+  );
 
   express.post('/prodDowntimes', canManage, addProdDowntimeRoute);
 
@@ -166,6 +171,21 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
       return finalize();
     });
+  }
+
+  function populateProdShiftOrder(req, res, next)
+  {
+    if (!_.isEmpty(req.rql.fields))
+    {
+      req.rql.fields.prodShiftOrder = true;
+    }
+
+    req.rql.selector.args.push({
+      name: 'populate',
+      args: ['prodShiftOrder', ['orderData.name', 'orderData.description']]
+    });
+
+    return next();
   }
 
   function getProdLineIds(prodFlowIds)
