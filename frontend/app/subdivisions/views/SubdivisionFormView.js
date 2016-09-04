@@ -170,7 +170,13 @@ define([
       this.$id('autoDowntimeReason').select2({
         width: '400px',
         allowClear: false,
-        data: downtimeReasons.map(idAndLabel)
+        data: downtimeReasons.map(function(reason)
+        {
+          return {
+            id: reason.id,
+            text: reason.id + ' - ' + reason.getLabel()
+          };
+        })
       });
 
       this.model.get('autoDowntimes').forEach(this.addAutoDowntime, this);
