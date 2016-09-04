@@ -196,6 +196,11 @@ define([
       data.prodTaskTags = typeof data.prodTaskTags === 'string' ? data.prodTaskTags.split(',') : [];
       data.aor = aors.get(data.aor) ? data.aor : null;
 
+      if (!data.autoDowntimes)
+      {
+        data.autoDowntimes = [];
+      }
+
       _.forEach(data.autoDowntimes, function(autoDowntime)
       {
         if (autoDowntime.when !== 'time')
