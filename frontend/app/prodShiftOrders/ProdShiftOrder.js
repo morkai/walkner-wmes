@@ -426,7 +426,7 @@ define([
 
         for (var p = 0; p < spigotPatterns.length; ++p)
         {
-          if (spigotPatterns[p].test(component.name))
+          if (spigotPatterns[p].test(component.name) && !_.isEmpty(component.nc12))
           {
             return component;
           }
