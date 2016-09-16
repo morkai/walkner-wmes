@@ -19,7 +19,7 @@ define([
 
     parse: function(res)
     {
-      return res.collection.map(IsaRequest.parse);
+      return Collection.prototype.parse.call(this, res).map(IsaRequest.parse);
     },
 
     getFirstPickup: function()
