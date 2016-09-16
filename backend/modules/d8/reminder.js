@@ -100,7 +100,7 @@ module.exports = function setUpD8Reminder(app, module)
           {
             entry.mode = 'veryLate';
           }
-          else if (entry.duration % 3 === 0)
+          else if (entry.duration > 42 && entry.duration % 3 === 0)
           {
             entry.mode = 'danger';
           }
