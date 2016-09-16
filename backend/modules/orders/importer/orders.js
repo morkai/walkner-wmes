@@ -2,6 +2,7 @@
 
 'use strict';
 
+var fs = require('fs');
 var _ = require('lodash');
 var deepEqual = require('deep-equal');
 var step = require('h5.step');
@@ -10,7 +11,8 @@ var createParser = require('./createParser');
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   filterRe: /^T_WMES_(ORDERS|OPERS)_([0-9]+)\.txt$/,
-  parsedOutputDir: null
+  parsedOutputDir: null,
+  orderDocumentsFilePathPattern: './{timestamp}@T_COOIS_DOCS.txt'
 };
 
 exports.start = function startOrdersImporterModule(app, module)
@@ -28,6 +30,7 @@ exports.start = function startOrdersImporterModule(app, module)
     soldToParty: true,
     sapCreatedAt: true
   };
+  var ORDER_DOCUMENTS_FILE_PATH_PATTERN = module.config.orderDocumentsFilePathPattern;
 
   var mongoose = app[module.config.mongooseId];
 
@@ -38,6 +41,7 @@ exports.start = function startOrdersImporterModule(app, module)
 
   var Order = mongoose.model('Order');
   var OrderIntake = mongoose.model('OrderIntake');
+  var XiconfOrder = mongoose.model('XiconfOrder');
   var queue = [];
   var lock = false;
 
@@ -69,6 +73,7 @@ exports.start = function startOrdersImporterModule(app, module)
     var orderIds = Object.keys(orders);
     var missingOrderIds = Object.keys(missingOrders);
     var allOrderIds = orderIds.concat(missingOrderIds);
+    var timestamp = orders[allOrderIds[0]].importTs;
 
     module.debug("Comparing %d orders and %d missing orders...", orderIds.length, missingOrderIds.length);
 
@@ -84,12 +89,14 @@ exports.start = function startOrdersImporterModule(app, module)
       var ts = new Date();
       var insertList = [];
       var updateList = [];
+      var ordersWithNewQty = [];
 
-      _.forEach(orderModels, compareOrder.bind(null, ts, updateList, orders, missingOrders));
+      _.forEach(orderModels, compareOrder.bind(null, ts, updateList, orders, missingOrders, ordersWithNewQty));
 
       createOrdersForInsertion(ts, insertList, orders, missingOrders);
 
       setImmediate(prepareOrderIntakeSearch, insertList, updateList);
+      setImmediate(updateXiconfOrderQty, timestamp, ordersWithNewQty);
     });
   }
 
@@ -103,13 +110,13 @@ exports.start = function startOrdersImporterModule(app, module)
     }
   }
 
-  function compareOrder(ts, updateList, orders, missingOrders, orderModel)
+  function compareOrder(ts, updateList, orders, missingOrders, ordersWithNewQty, orderModel)
   {
     var orderNo = orderModel._id;
 
     if (typeof orders[orderNo] === 'object')
     {
-      compareOrderWithDoc(ts, updateList, orderModel, orders[orderNo]);
+      compareOrderWithDoc(ts, updateList, orderModel, orders[orderNo], ordersWithNewQty);
 
       delete orders[orderNo];
     }
@@ -121,7 +128,7 @@ exports.start = function startOrdersImporterModule(app, module)
     }
   }
 
-  function compareOrderWithDoc(ts, updateList, orderModel, newOrderData)
+  function compareOrderWithDoc(ts, updateList, orderModel, newOrderData, ordersWithNewQty)
   {
     if (orderModel.importTs > newOrderData.importTs)
     {
@@ -178,6 +185,11 @@ exports.start = function startOrdersImporterModule(app, module)
           $push: {changes: changes}
         }
       });
+
+      if (changes.newValues.qty)
+      {
+        ordersWithNewQty.push(orderModel._id);
+      }
     }
   }
 
@@ -354,5 +366,81 @@ exports.start = function startOrdersImporterModule(app, module)
     }
 
     Order.collection.update(update.conditions, update.update, this.next());
+  }
+
+  function updateXiconfOrderQty(timestamp, ordersWithNewQty)
+  {
+    if (ordersWithNewQty.length === 0)
+    {
+      return;
+    }
+
+    step(
+      function()
+      {
+        XiconfOrder.find({_id: {$in: ordersWithNewQty}, 'items.source': 'docs'}).lean().exec(this.next());
+      },
+      function(err, xiconfOrders)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (xiconfOrders.length === 0)
+        {
+          return this.skip();
+        }
+
+        Order.find({_id: {$in: _.map(xiconfOrders, '_id')}}, {documents: 1}).lean().exec(this.next());
+      },
+      function(err, orders)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var filePath = ORDER_DOCUMENTS_FILE_PATH_PATTERN.replace('{timestamp}', Math.ceil(timestamp / 1000));
+        var fileContents = [
+          '-------------------------------------------------------------------------',
+          '|Order    |Item|Document       |Description                             |',
+          '-------------------------------------------------------------------------'
+        ];
+
+        for (var i = 0; i < orders.length; ++i)
+        {
+          var order = orders[i];
+          var documents = order.documents;
+
+          for (var ii = 0; ii < documents.length; ++ii)
+          {
+            var document = documents[ii];
+            var row = [
+              '',
+              order._id,
+              document.item,
+              document.nc15,
+              _.padEnd(document.name, 40, ' '),
+              ''
+            ];
+
+            fileContents.push(row.join('|'));
+          }
+        }
+
+        fileContents.push(fileContents[0]);
+
+        fs.writeFile(filePath, fileContents.join('\r\n'), this.next());
+      },
+      function(err)
+      {
+        if (err)
+        {
+          module.error(`Failed to update quantities of XiconfOrders: ${err.message}`);
+        }
+      }
+    );
+
   }
 };
