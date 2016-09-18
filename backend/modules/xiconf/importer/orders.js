@@ -617,6 +617,12 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     if (!parsedOrder)
     {
+      // Update a quantity of the auto-generated 'test' item if the order's quantity changed.
+      if (xiconfOrderItem.kind === 'test' && $set.quantityTodo)
+      {
+        $set['items.' + i + '.quantityTodo'] = $set.quantityTodo;
+      }
+
       return false;
     }
 
