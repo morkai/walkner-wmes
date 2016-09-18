@@ -882,7 +882,10 @@ define([
 
     getSpigotComponent: function()
     {
-      return this.prodShiftOrder.getSpigotComponent(this.settings.getValue('spigotPatterns'));
+      return this.prodShiftOrder.getSpigotComponent(
+        this.settings.getValue('spigotPatterns'),
+        this.settings.getValue('spigotNotPatterns')
+      );
     },
 
     hasEnded: function()

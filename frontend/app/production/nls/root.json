@@ -211,7 +211,8 @@
     "settings:initialDowntimeWindow": "Time to start the initial downtime on a shift [min]",
     "settings:rearmDowntimeReason": "Downtime reason with Spigot check",
     "settings:spigotLines": "Production lines with Spigot check",
-    "settings:spigotPatterns": "Spigot component patterns",
+    "settings:spigotPatterns": "Select Spigot component matching one of the following patterns",
+    "settings:spigotNotPatterns": "Ignore the selected component, if it also matches any of the following patterns",
     "settings:spigotFinish": "Force checking of the Spigot during order finish"
   },
   "pl": true

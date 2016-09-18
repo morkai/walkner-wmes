@@ -405,7 +405,7 @@ define([
       return subdivision ? subdivision.get('type') : null;
     },
 
-    getSpigotComponent: function(spigotPatterns)
+    getSpigotComponent: function(spigotPatterns, spigotNotPatterns)
     {
       var orderData = this.get('orderData');
 
@@ -418,22 +418,56 @@ define([
         .split('\n')
         .map(function(pattern) { return new RegExp(pattern, 'i'); });
 
+      if (!_.isEmpty(spigotNotPatterns))
+      {
+        spigotPatterns = spigotPatterns
+          .split('\n')
+          .map(function(pattern) { return new RegExp(pattern, 'i'); });
+      }
+      else
+      {
+        spigotNotPatterns = [];
+      }
+
       var components = orderData.bom;
 
-      for (var c = 0; c < components.length; ++c)
+      for (var componentI = 0; componentI < components.length; ++componentI)
       {
-        var component = components[c];
+        var component = components[componentI];
 
-        for (var p = 0; p < spigotPatterns.length; ++p)
+        if (this.isValidSpigotComponent(component, spigotPatterns, spigotNotPatterns))
         {
-          if (spigotPatterns[p].test(component.name) && !_.isEmpty(component.nc12))
-          {
-            return component;
-          }
+          return component;
         }
       }
 
       return null;
+    },
+
+    isValidSpigotComponent: function(component, patterns, notPatterns)
+    {
+      if (_.isEmpty(component.nc12))
+      {
+        return false;
+      }
+
+      for (var notPatternI = 0; notPatternI < notPatterns.length; ++notPatternI)
+      {
+        if (notPatterns[notPatternI].test(component.name))
+        {
+          return false;
+        }
+      }
+
+      for (var patternI = 0; patternI < patterns.length; ++patternI)
+      {
+        if (patterns[patternI].test(component.name))
+        {
+          return true;
+        }
+      }
+
+      return false;
     },
 
     getOrderIdType: function()

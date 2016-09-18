@@ -1,3 +1,4 @@
-.settings .form-control[name="production.spigotPatterns"] {
+.settings .form-control[name="production.spigotPatterns"],
+.settings .form-control[name="production.spigotNotPatterns"] {
   font-family: monospace;
 }

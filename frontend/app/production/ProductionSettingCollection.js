@@ -43,7 +43,7 @@ define([
         return _.isEmpty(newValue) ? null : newValue;
       }
 
-      if (/spigotPatterns$/.test(id))
+      if (/spigot(Not)?Patterns$/.test(id))
       {
         return this.prepareSpigotPatterns(newValue);
       }
