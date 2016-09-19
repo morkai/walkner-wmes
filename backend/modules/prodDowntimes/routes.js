@@ -175,7 +175,7 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   function populateProdShiftOrder(req, res, next)
   {
-    if (!_.isEmpty(req.rql.fields))
+    if (!_.isEmpty(req.rql.fields) && !_.some(req.rql.fields, v => !v))
     {
       req.rql.fields.prodShiftOrder = true;
     }
