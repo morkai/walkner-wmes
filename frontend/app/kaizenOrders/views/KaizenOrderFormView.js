@@ -154,9 +154,7 @@ define([
 
     isMultiOwner: function()
     {
-      return user.isAllowedTo('KAIZEN:MANAGE')
-        || this.model.isConfirmer()
-        || (this.options.editMode && this.model.hasMultipleOwners('nearMiss'));
+      return this.options.editMode && this.model.hasMultipleOwners('nearMiss');
     },
 
     checkValidity: function()
