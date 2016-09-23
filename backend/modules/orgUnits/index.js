@@ -743,7 +743,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   function rebuildDivisionCache(workingCache, orgUnits)
   {
-    if (orgUnits.division === null)
+    if (!orgUnits || orgUnits.division === null)
     {
       return;
     }
@@ -771,7 +771,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   function rebuildSubdivisionCache(workingCache, orgUnits)
   {
-    if (orgUnits.subdivision === null)
+    if (!orgUnits || orgUnits.subdivision === null)
     {
       return;
     }
@@ -800,6 +800,11 @@ exports.start = function startOrgUnitsModule(app, module)
 
   function rebuildMrpControllerCache(workingCache, orgUnits)
   {
+    if (!orgUnits)
+    {
+      return;
+    }
+
     var mrpControllers = orgUnits.mrpControllers;
 
     if (mrpControllers === null)
@@ -838,7 +843,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   function rebuildProdFlowCache(workingCache, orgUnits)
   {
-    if (orgUnits.prodFlow === null)
+    if (!orgUnits || orgUnits.prodFlow === null)
     {
       return;
     }
@@ -867,7 +872,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   function rebuildWorkCenterCache(workingCache, orgUnits)
   {
-    if (orgUnits.workCenter === null)
+    if (!orgUnits || orgUnits.workCenter === null)
     {
       return;
     }
@@ -896,7 +901,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   function rebuildProdLineCache(workingCache, orgUnits)
   {
-    if (orgUnits.prodLine === null)
+    if (!orgUnits || orgUnits.prodLine === null)
     {
       return;
     }
