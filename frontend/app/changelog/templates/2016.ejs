@@ -1,4 +1,36 @@
 <div class="hidden">
+  <h1>v0.93.4</h1>
+  <h2><%- time.format('2016-09-18', 'LL') %></h2>
+  <h3>Działy</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający usunięcie wszystkich automatycznych przestojów.</li>
+    <li>Zmieniono listę dodawania automatycznych przestojów na stronie formularza tak, aby wraz z nazwą przestoju
+      wyświetlane było także ID.</li>
+  </ul>
+  <h3>Pola odkładcze</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niepokazywanie się paginacji na liście żądań.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono wybieranie komponentu Spigot tak, aby ignorowane były komponenty bez 12NC.</li>
+    <li>Dodano nową opcję konfiguracyjną: ignorowanie wybranego komponentu Spigot, jeżeli pasuje także
+      do dodatkowych wzorców.</li>
+  </ul>
+  <h3>8D</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący brak komunikatu przypomnienia w 20 dniowym e-mailu.</li>
+    <li>Poprawiono błąd powodujący wysyłanie powiadomień co 3 dni od daty początkowej, zamiast co 3 dni od 42 dnia.</li>
+  </ul>
+  <h3>Baza testów</h3>
+  <ul>
+    <li>Zmieniono importowanie zleceń tak, aby ilości w automatycznie dodanej pozycji rodzaju 'Test' były zmienione, gdy
+      zmieni się ilość w zleceniu.</li>
+    <li>Zmieniono importowanie zleceń tak, aby ilości w pozycji typu 'Program', dodanej z listy dokumentów zlecenia,
+      były zmienione, jeżeli zmieni się ilość w zleceniu.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.93.3</h1>
   <h2><%- time.format('2016-08-31', 'LL') %></h2>
   <h3>Przestoje</h3>
