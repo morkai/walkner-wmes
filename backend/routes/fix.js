@@ -389,7 +389,7 @@ module.exports = function startFixRoutes(app, express)
 
     const startedAt = Date.now();
 
-    app.debug("[fix] Recounting FTE Leader totals...");
+    app.debug("[fix] Recounting FTE Master totals...");
 
     recountFteTotals('FteMasterEntry', moment('2013-12-01T05:00:00.000Z'), function(err)
     {

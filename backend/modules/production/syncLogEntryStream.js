@@ -6,6 +6,22 @@ const _ = require('lodash');
 const step = require('h5.step');
 const logEntryHandlers = require('./logEntryHandlers');
 
+const NEW_MRP = {
+  'KE1': {
+    subdivision: '529f269dcd8eea982400001d'
+  },
+  'KE2': {
+    subdivision: '529f269dcd8eea982400001d'
+  },
+  'KE4': {
+    subdivision: '529f269dcd8eea982400001d'
+  },
+  'KEA': {
+    subdivision: '529f269dcd8eea982400001d',
+    mrpControllers: ['KED']
+  }
+};
+
 module.exports = function syncLogEntryStream(app, productionModule, creator, logEntryStream, done)
 {
   const ProdLogEntry = app[productionModule.config.mongooseId].model('ProdLogEntry');
@@ -20,10 +36,10 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
     return done();
   }
 
-  let lastLogEntryIndex = logEntryStream.length - 1;
   const logEntryList = [];
-  let lastLogEntryWithInvalidSecretKey = null;
   const savedAt = new Date();
+  let lastLogEntryWithInvalidSecretKey = null;
+  let lastLogEntryIndex = logEntryStream.length - 1;
 
   _.forEach(logEntryStream, function(logEntryJson, i)
   {
@@ -112,7 +128,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
     logEntry.savedAt = savedAt;
     logEntry.todo = true;
 
-    return new ProdLogEntry(logEntry).toObject();
+    return new ProdLogEntry(fixOrgUnits(logEntry)).toObject();
   }
 
   function logInvalidEntry(err, logEntryJson)
@@ -144,5 +160,26 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
         this.next()
       );
     };
+  }
+
+  function fixOrgUnits(logEntry)
+  {
+    if (Array.isArray(logEntry.mrpControllers) && NEW_MRP[logEntry.mrpControllers[0]])
+    {
+      const newOrgUnits = NEW_MRP[logEntry.mrpControllers[0]];
+
+      Object.assign(logEntry, newOrgUnits);
+
+      if (logEntry.type === 'changeShift')
+      {
+        Object.assign(logEntry.data.startedProdShift, newOrgUnits);
+      }
+      else if (logEntry.data.prodLine)
+      {
+        Object.assign(logEntry.data, newOrgUnits);
+      }
+    }
+
+    return logEntry;
   }
 };
