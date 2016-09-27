@@ -418,15 +418,15 @@ define([
         .split('\n')
         .map(function(pattern) { return new RegExp(pattern, 'i'); });
 
-      if (!_.isEmpty(spigotNotPatterns))
+      if (_.isEmpty(spigotNotPatterns))
       {
-        spigotPatterns = spigotPatterns
-          .split('\n')
-          .map(function(pattern) { return new RegExp(pattern, 'i'); });
+        spigotNotPatterns = [];
       }
       else
       {
-        spigotNotPatterns = [];
+        spigotNotPatterns = spigotNotPatterns
+          .split('\n')
+          .map(function(pattern) { return new RegExp(pattern, 'i'); });
       }
 
       var components = orderData.bom;
