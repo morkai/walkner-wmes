@@ -42,7 +42,8 @@ define([
     viewport.loadPage(['app/production/pages/ProductionSettingsPage'], function(ProductionSettingsPage)
     {
       return new ProductionSettingsPage({
-        initialTab: req.query.tab
+        initialTab: req.query.tab,
+        initialSubtab: req.query.subtab
       });
     });
   });

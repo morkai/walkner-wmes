@@ -47,6 +47,7 @@ define([
     {
       this.view = new ProductionSettingsView({
         initialTab: this.options.initialTab,
+        initialSubtab: this.options.initialSubtab,
         settings: this.model
       });
     },
