@@ -602,6 +602,11 @@ define([
 
     startDowntime: function(downtimeInfo)
     {
+      if (this.get('state') !== 'working')
+      {
+        return;
+      }
+
       var prodDowntime = this.prodDowntimes.addFromInfo(this, downtimeInfo);
 
       this.set('state', 'downtime');
