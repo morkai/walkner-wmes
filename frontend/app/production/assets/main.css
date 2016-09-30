@@ -1,5 +1,4 @@
 @import "isa.css";
-@import "settings.css";
 
 .is-production {
   overflow: auto;

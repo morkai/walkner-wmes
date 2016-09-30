@@ -669,7 +669,7 @@ define([
         prodDowntime = this.prodDowntimes.findFirstUnfinished().id;
       }
 
-      var valid = nc12 === component.nc12;
+      var valid = this.checkSpigotValidity(nc12, component.nc12);
 
       if (valid)
       {
@@ -690,6 +690,30 @@ define([
       });
 
       return valid;
+    },
+
+    checkSpigotValidity: function(userNc12, componentNc12)
+    {
+      if (userNc12 === componentNc12)
+      {
+        return true;
+      }
+
+      var spigotGroups = {};
+
+      (this.settings.getValue('spigotGroups') || '').split('\n').forEach(function(spigotGroup)
+      {
+        var parts = spigotGroup.split(':');
+        var parent = parts[0];
+        var children = parts[1].split(', ');
+
+        children.forEach(function(child)
+        {
+          spigotGroups[child] = parent;
+        });
+      });
+
+      return userNc12 === spigotGroups[componentNc12];
     },
 
     /**
@@ -884,7 +908,8 @@ define([
     {
       return this.prodShiftOrder.getSpigotComponent(
         this.settings.getValue('spigotPatterns'),
-        this.settings.getValue('spigotNotPatterns')
+        this.settings.getValue('spigotNotPatterns'),
+        this.settings.getValue('spigotGroups')
       );
     },
 

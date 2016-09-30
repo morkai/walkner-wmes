@@ -213,7 +213,8 @@
     "settings:spigotLines": "Production lines with Spigot check",
     "settings:spigotPatterns": "Select Spigot component matching one of the following patterns",
     "settings:spigotNotPatterns": "Ignore the selected component, if it also matches any of the following patterns",
-    "settings:spigotFinish": "Force checking of the Spigot during order finish"
+    "settings:spigotFinish": "Force checking of the Spigot during order finish",
+    "settings:spigotGroups": "12NC groups"
   },
   "pl": true
 }

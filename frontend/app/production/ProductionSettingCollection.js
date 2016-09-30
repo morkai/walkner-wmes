@@ -53,6 +53,11 @@ define([
         return this.prepareSpigotLines(newValue);
       }
 
+      if (/spigotGroups$/.test(id))
+      {
+        return this.prepareSpigotGroups(newValue);
+      }
+
       if (/spigotFinish$/.test(id))
       {
         return !!newValue;
@@ -87,6 +92,27 @@ define([
         .split(',')
         .filter(function(prodLineId) { return !!prodLineId.length; })
         .join(',');
+    },
+
+    prepareSpigotGroups: function(newValue)
+    {
+      return (newValue || '')
+        .split('\n')
+        .map(function(line)
+        {
+          var parts = line
+            .split(/[^0-9]+/)
+            .filter(function(part) { return part.length > 0; });
+
+          if (parts.length === 0)
+          {
+            return '';
+          }
+
+          return parts.shift() + ': ' + parts.join(', ');
+        })
+        .join('\n')
+        .replace(/\n{2,}/g, '\n');
     },
 
     setUpLocalStorage: function()

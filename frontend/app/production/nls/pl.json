@@ -214,5 +214,6 @@
   "settings:spigotLines": "Linie ze sprawdzaniem Spigota",
   "settings:spigotPatterns": "Wybierz komponent Spigot pasujący do jednego z poniższych wzorców",
   "settings:spigotNotPatterns": "Zignoruj wybrany komponent, jeżeli pasuje do jednego z poniższych wzorców",
-  "settings:spigotFinish": "Wymuś sprawdzanie Spigota na koniec zlecenia"
+  "settings:spigotFinish": "Wymuś sprawdzanie Spigota na koniec zlecenia",
+  "settings:spigotGroups": "Grupy 12NC"
 }
