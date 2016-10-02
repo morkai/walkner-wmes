@@ -8,7 +8,7 @@
   "metrics:user:openCount": "otwartych<br>Twoich",
   "metrics:user:monthCount": "Twoich<br>w miesiącu",
 
-  "top10:title": "Najaktywniejsi w {month, plural, =1{styczniu} =2{lutym} =3{marcu} =4{kwietniu} =5{maju} =6{czerwcu} =7{lipcu} =8{sierpniu} =9{wrześniu} =10{październiku} =11{listopadzie} =12{grudniu} other{miesiącu}}",
+  "top10:title": "Najaktywniejsi {month, plural, =1{w styczniu} =2{w lutym} =3{w marcu} =4{w kwietniu} =5{w maju} =6{w czerwcu} =7{w lipcu} =8{w sierpniu} =9{we wrześniu} =10{w październiku} =11{w listopadzie} =12{w grudniu} other{w miesiącu}}",
   "top10:loading": "Ładowanie danych...",
   "top10:empty": "Brak zgłoszeń w danym miesiącu :(",
 
