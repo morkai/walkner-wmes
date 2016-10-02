@@ -282,12 +282,7 @@ app/production/assets/isa.css
 app/production/assets/main.css
 ----------------
 app/production/assets/isa.css
-app/production/assets/settings.css
 app/production/assets/main.css
-
-app/production/assets/settings.css
-----------------
-app/production/assets/settings.css
 
 app/pscs/assets/main.css
 ----------------
