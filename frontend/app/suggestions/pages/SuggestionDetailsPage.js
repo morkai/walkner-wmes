@@ -50,8 +50,9 @@ define([
     actions: function()
     {
       var actions = [];
+      var model = this.model;
 
-      if (this.model.isNotSeen())
+      if (model.isNotSeen())
       {
         actions.push({
           id: 'markAsSeen',
@@ -61,7 +62,7 @@ define([
         });
       }
 
-      var observer = this.model.get('observer');
+      var observer = model.get('observer');
 
       if (observer.role === 'subscriber')
       {
@@ -82,15 +83,21 @@ define([
         });
       }
 
-      if (this.model.canEdit())
+      if (model.canEdit())
       {
-        actions.push(pageActions.edit(this.model, false));
+        actions.push(pageActions.edit(model, false));
       }
 
-      if (this.model.canDelete())
+      if (model.canDelete())
       {
-        actions.push(pageActions.delete(this.model, false));
+        actions.push(pageActions.delete(model, false));
       }
+
+      actions.push({
+        label: t.bound(model.getNlsDomain(), 'PAGE_ACTION:add'),
+        icon: 'plus',
+        href: '#suggestions;add'
+      });
 
       return actions;
     },
