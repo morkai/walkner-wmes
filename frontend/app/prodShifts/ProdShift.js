@@ -709,12 +709,12 @@ define([
       (this.settings.getValue('spigotGroups') || '').split('\n').forEach(function(spigotGroup)
       {
         var parts = spigotGroup.split(':');
-        var parent = parts[0];
+        var parent = parts[0].trim();
         var children = parts[1].split(', ');
 
         children.forEach(function(child)
         {
-          spigotGroups[child] = parent;
+          spigotGroups[child.trim()] = parent;
         });
       });
 
