@@ -171,7 +171,7 @@ define([
       /*jshint unused:false*/
     },
 
-    serializeRegexTerm: function(selector, property, maxLength, replaceRe, ignoreCase)
+    serializeRegexTerm: function(selector, property, maxLength, replaceRe, ignoreCase, startAnchor)
     {
       var $el = this.$id(property.replace(/\./g, '-'));
       var value = $el.val().trim();
@@ -212,6 +212,10 @@ define([
       if (value.length === maxLength)
       {
         args[1] = '^' + args[1] + '$';
+      }
+      else if (startAnchor)
+      {
+        args[1] = '^' + args[1];
       }
 
       selector.push({name: 'regex', args: args});

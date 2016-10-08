@@ -20,7 +20,7 @@ define([
       return {
         from: '',
         to: '',
-        orderNo: '',
+        _id: '',
         nc12: '',
         status: [-1, 0, 1]
       };
@@ -33,7 +33,7 @@ define([
       },
       '_id': function(propertyName, term, formData)
       {
-        formData.orderNo = term.args[1];
+        formData._id = term.args[1].replace(/[^0-9]/g, '');
       },
       'status': function(propertyName, term, formData)
       {
@@ -41,7 +41,7 @@ define([
       },
       'nc12': function(propertyName, term, formData)
       {
-        formData.nc12 = term.args[1];
+        formData.nc12 = term.args[1].replace(/[^0-9A-Za-z]/g, '');
       }
     },
 
@@ -56,19 +56,10 @@ define([
     {
       var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
-      var orderNo = this.$id('orderNo').val().trim();
-      var nc12 = this.$id('nc12').val().trim();
       var status = this.getButtonGroupValue('status').map(Number);
 
-      if (/^[0-9]+$/.test(orderNo))
-      {
-        selector.push({name: 'eq', args: ['_id', orderNo]});
-      }
-
-      if (/^[a-zA-Z0-9]{1,12}$/.test(nc12))
-      {
-        selector.push({name: 'eq', args: ['nc12', nc12]});
-      }
+      this.serializeRegexTerm(selector, '_id', 9, null, false, true);
+      this.serializeRegexTerm(selector, 'nc12', 12, null, false, true);
 
       if (fromMoment.isValid())
       {
