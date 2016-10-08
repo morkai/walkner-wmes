@@ -159,6 +159,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     incrementBy: 1
   });
 
+  prodDowntimeSchema.index({orderId: 1});
   prodDowntimeSchema.index({prodShiftOrder: 1});
   prodDowntimeSchema.index({prodShift: 1});
   prodDowntimeSchema.index({pressWorksheet: 1});
