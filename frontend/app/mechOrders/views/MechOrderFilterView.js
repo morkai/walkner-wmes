@@ -28,7 +28,7 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      this.serializeRegexTerm(selector, '_id', 12);
+      this.serializeRegexTerm(selector, '_id', 12, null, false, true);
     }
 
   });
