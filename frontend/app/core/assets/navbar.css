@@ -70,6 +70,32 @@
 .navbar-with-button + .navbar-with-button > .btn {
   border-top-width: 0;
 }
+.navbar-search {
+  position: relative;
+  margin: 0;
+  padding: 0 10px 0 15px;
+}
+.navbar-search .navbar-search-phrase {
+  margin-top: 5px;
+  padding: 1px 27px 1px 4px;
+  height: auto;
+  width: 145px;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+}
+.navbar-search .has-feedback .form-control-feedback {
+  top: 10px;
+}
+.navbar-right .navbar-search-results {
+  right: 10px;
+  margin: -2px 0 0 0;
+}
+.navbar-search-results .list-group-item {
+  white-space: nowrap;
+}
+.navbar-search-header {
+  font-weight: bold;
+  color: #777;
+}
 @media (min-width: 768px) {
   .navbar {
     min-height: 0;
@@ -97,5 +123,8 @@
 @media (max-width: 767px) {
   .navbar-with-button + .navbar-with-button > .btn {
     border-top-width: 1px;
+  }
+  .navbar-form {
+    display: none;
   }
 }

@@ -4,16 +4,29 @@ define([
   'underscore',
   'app/i18n',
   'app/user',
+  'app/time',
+  'app/data/orgUnits',
   '../View',
-  'app/core/templates/navbar'
+  'app/core/templates/navbar',
+  'app/core/templates/navbar/searchResults'
 ], function(
   _,
-  i18n,
+  t,
   user,
+  time,
+  orgUnits,
   View,
-  navbarTemplate
+  navbarTemplate,
+  renderSearchResults
 ) {
   'use strict';
+
+  var DIVISIONS = {};
+
+  orgUnits.getAllByType('division').forEach(function(division)
+  {
+    DIVISIONS[division.id.replace(/[^A-Za-z0-9]/g, '').toUpperCase()] = division.id;
+  });
 
   /**
    * @constructor
@@ -102,6 +115,73 @@ define([
         document.body.click();
 
         return false;
+      },
+      'submit #-search': function()
+      {
+        return false;
+      },
+      'focus #-searchPhrase': function()
+      {
+        clearTimeout(this.timers.hideSearchResults);
+        this.handleSearch();
+      },
+      'blur #-searchPhrase': function()
+      {
+        clearTimeout(this.timers.hideSearchResults);
+        this.timers.hideSearchResults = setTimeout(this.hideSearchResults.bind(this), 250);
+      },
+      'keydown #-searchPhrase': function(e)
+      {
+        if (e.keyCode === 13)
+        {
+          this.selectActiveSearchResult();
+
+          return false;
+        }
+
+        if (e.keyCode === 38)
+        {
+          this.selectPrevSearchResult();
+
+          return false;
+        }
+
+        if (e.keyCode === 40)
+        {
+          this.selectNextSearchResult();
+
+          return false;
+        }
+      },
+      'keyup #-searchPhrase': function(e)
+      {
+        if (e.keyCode === 13 || e.keyCode === 38 || e.keyCode === 40)
+        {
+          return false;
+        }
+
+        if (e.keyCode === 27)
+        {
+          e.target.value = '';
+
+          this.handleSearch();
+
+          return false;
+        }
+
+        if (e.target.value.length <= 1)
+        {
+          this.handleSearch();
+
+          return;
+        }
+
+        if (this.timers.handleSearch)
+        {
+          clearTimeout(this.timers.handleSearch);
+        }
+
+        this.timers.handleSearch = setTimeout(this.handleSearch.bind(this), 1000 / 30);
       }
     }
 
@@ -156,6 +236,12 @@ define([
      */
     this.$activeNavItem = null;
 
+    /**
+     * @private
+     * @type {string}
+     */
+    this.lastSearchPhrase = '';
+
     this.activateNavItem(this.getModuleNameFromPath(this.options.currentPath));
   };
 
@@ -201,7 +287,7 @@ define([
    */
   NavbarView.prototype.changeLocale = function(newLocale)
   {
-    i18n.reload(newLocale);
+    t.reload(newLocale);
   };
 
   NavbarView.prototype.setConnectionStatus = function(status)
@@ -553,6 +639,324 @@ define([
           break;
       }
     });
+  };
+
+  /**
+   * @private
+   */
+  NavbarView.prototype.handleSearch = function()
+  {
+    var $searchPhrase = this.$id('searchPhrase');
+    var searchPhrase = $searchPhrase.val().trim();
+
+    if (searchPhrase !== this.lastSearchPhrase)
+    {
+      var results = this.parseSearchPhrase(searchPhrase);
+
+      this.$id('searchResults').replaceWith(renderSearchResults({
+        idPrefix: this.idPrefix,
+        results: results
+      }));
+
+      var $last = this.$id('searchResults').children().last();
+
+      if ($last.hasClass('divider'))
+      {
+        $last.remove();
+      }
+
+      this.lastSearchPhrase = searchPhrase;
+    }
+
+    if (!this.$('.navbar-search-result').length)
+    {
+      this.$id('searchResults').html(
+        '<li class="disabled"><a>'
+        + t('core', 'NAVBAR:SEARCH:' + (searchPhrase === '' ? 'help' : 'empty'))
+        + '</a></li>'
+      );
+    }
+
+    this.showSearchResults();
+  };
+
+  /**
+   * @private
+   */
+  NavbarView.prototype.showSearchResults = function()
+  {
+    var $search = this.$id('search');
+
+    $search.find('.active').removeClass('active');
+    $search.find('.navbar-search-result').first().addClass('active');
+    $search.addClass('open');
+  };
+
+  /**
+   * @private
+   */
+  NavbarView.prototype.hideSearchResults = function()
+  {
+    this.$id('search').removeClass('open').find('.active').removeClass('active');
+
+    if (document.activeElement === this.$id('searchPhrase')[0])
+    {
+      this.$id('searchPhrase').blur();
+    }
+  };
+
+  /**
+   * @private
+   */
+  NavbarView.prototype.selectPrevSearchResult = function()
+  {
+    var $searchResults = this.$('.navbar-search-result');
+
+    if (!$searchResults.length)
+    {
+      return;
+    }
+
+    var $prev = $searchResults.filter('.active').removeClass('active');
+    var i = $searchResults.length - 1;
+
+    for (; i >= 0; --i)
+    {
+      var searchResultEl = $searchResults[i];
+
+      if (searchResultEl === $prev[0])
+      {
+        break;
+      }
+    }
+
+    if (i === 0)
+    {
+      $prev = $searchResults.last();
+    }
+    else
+    {
+      $prev = $searchResults.eq(i - 1);
+    }
+
+    $prev.addClass('active');
+  };
+
+  /**
+   * @private
+   */
+  NavbarView.prototype.selectNextSearchResult = function()
+  {
+    var $searchResults = this.$('.navbar-search-result');
+
+    if (!$searchResults.length)
+    {
+      return;
+    }
+
+    var $next = $searchResults.filter('.active').removeClass('active');
+    var i = 0;
+
+    for (; i < $searchResults.length; ++i)
+    {
+      var searchResultEl = $searchResults[i];
+
+      if (searchResultEl === $next[0])
+      {
+        break;
+      }
+    }
+
+    if (i === $searchResults.length - 1)
+    {
+      $next = $searchResults.first();
+    }
+    else
+    {
+      $next = $searchResults.eq(i + 1);
+    }
+
+    $next.addClass('active');
+  };
+
+  /**
+   * @private
+   */
+  NavbarView.prototype.selectActiveSearchResult = function()
+  {
+    var page = this;
+    var href = page.$id('searchResults').find('.active').find('a').prop('href');
+
+    if (!href)
+    {
+      return;
+    }
+
+    var onSuccess;
+    var onFailure;
+
+    onSuccess = page.broker.subscribe('viewport.page.shown', function()
+    {
+      onSuccess.cancel();
+      onFailure.cancel();
+      page.hideSearchResults();
+    });
+    onFailure = page.broker.subscribe('viewport.page.loadingFailed', function()
+    {
+      onSuccess.cancel();
+      onFailure.cancel();
+    });
+
+    window.location.href = href;
+  };
+
+  /**
+   * @private
+   * @param {string} searchPhrase
+   * @returns {object}
+   */
+  NavbarView.prototype.parseSearchPhrase = function(searchPhrase)
+  {
+    var results = {
+      fullOrderNo: null,
+      partialOrderNo: null,
+      fullNc12: null,
+      partialNc12: null,
+      year: null,
+      month: null,
+      day: null,
+      shift: null,
+      from: null,
+      to: null,
+      fromShift: null,
+      toShift: null,
+      shiftStart: null,
+      shiftEnd: null,
+      division: null
+    };
+    var matches;
+
+    searchPhrase = ' ' + searchPhrase.toUpperCase() + ' ';
+
+    // Division
+    Object.keys(DIVISIONS).forEach(function(pattern)
+    {
+      if (searchPhrase.indexOf(pattern) !== -1)
+      {
+        results.division = DIVISIONS[pattern];
+        searchPhrase = searchPhrase.replace(pattern, '');
+      }
+    });
+
+    // Full 12NC
+    matches = searchPhrase.match(/[^0-9A-Z]([0-9]{12}|[A-Z]{2}[A-Z0-9]{5})[^0-9A-Z]/);
+
+    if (matches)
+    {
+      results.fullNc12 = matches[1].toUpperCase();
+      searchPhrase = searchPhrase.replace(/([0-9]{12}|[A-Z]{2}[A-Z0-9]{5})/g, '');
+    }
+
+    // Full order no
+    matches = searchPhrase.match(/[^0-9](1[0-9]{8})[^0-9]/);
+
+    if (matches)
+    {
+      results.fullOrderNo = matches[1];
+
+      if (/^1111/.test(matches[1]))
+      {
+        results.partialNc12 = matches[1];
+      }
+
+      searchPhrase = searchPhrase.replace(/(1[0-9]{8})/g, '');
+    }
+
+    // Shift
+    matches = searchPhrase.match(/[^A-Z0-9](I{1,3})[^A-Z0-9]/);
+
+    if (matches)
+    {
+      results.shift = matches[1].toUpperCase() === 'I' ? 1 : matches[1].toUpperCase() === 'II' ? 2 : 3;
+      searchPhrase = searchPhrase.replace(/I{1,3}/g, '');
+    }
+
+    // Date
+    matches = searchPhrase.match(/[^0-9]([0-9]{1,4})[^0-9]([0-9]{1,2})(?:[^0-9]([0-9]{1,4}))?[^0-9]/);
+
+    if (matches)
+    {
+      results.month = +matches[2];
+
+      if (matches[1].length === 4)
+      {
+        results.year = +matches[1];
+        results.day = +matches[3] || 1;
+      }
+      else if (matches[3] && matches[3].length === 4)
+      {
+        results.day = +matches[1];
+        results.year = +matches[3];
+      }
+      else if (!matches[3])
+      {
+        results.day = +matches[1];
+        results.year = +time.format(Date.now(), 'YYYY');
+      }
+      else
+      {
+        results.day = +matches[3];
+        results.year = parseInt(matches[1], 10) + 2000;
+      }
+
+      searchPhrase = searchPhrase.replace(/[0-9]{1,4}[^0-9][0-9]{1,2}([^0-9][0-9]{1,4})?/g, '');
+
+      var moment = time.getMoment(results.year + '-' + results.month + '-' + results.day, 'YYYY-MM-DD');
+
+      if (moment.isValid())
+      {
+        results.from = moment.valueOf();
+        results.fromShift = moment.hours(6).valueOf();
+        results.shiftStart = results.fromShift + 8 * 3600 * 1000 * ((results.shift || 1) - 1);
+        results.toShift = moment.add(1, 'days').valueOf();
+        results.shiftEnd = results.shift ? (results.shiftStart + 8 * 3600 * 1000) : results.toShift;
+        results.to = moment.startOf('day').valueOf();
+      }
+      else
+      {
+        results.year = null;
+        results.month = null;
+        results.day = null;
+      }
+    }
+
+    // Partial order no and/or 12NC
+    matches = searchPhrase.match(/([A-Z0-9]+)/);
+
+    if (matches)
+    {
+      if (/^1[0-9]*$/.test(matches[1]) && matches[1].length < 9)
+      {
+        results.partialOrderNo = matches[1];
+      }
+
+      if (matches[1].length < 12)
+      {
+        results.partialNc12 = matches[1].toUpperCase();
+      }
+    }
+
+    if (results.fullOrderNo && results.partialOrderNo)
+    {
+      results.partialOrderNo = null;
+    }
+
+    if (results.fullNc12 && results.partialNc12)
+    {
+      results.partialNc12 = null;
+    }
+
+    return results;
   };
 
   return NavbarView;

@@ -1,8 +1,8 @@
 @import url(./print.css);
-@import url(./navbar.css);
-@import url(./table.css);
 @import url(./form.css);
+@import url(./table.css);
 @import url(./modal.css);
+@import url(./navbar.css);
 @import url(./properties.css);
 @import url(./logInForm.css);
 @import url(./filter.css);

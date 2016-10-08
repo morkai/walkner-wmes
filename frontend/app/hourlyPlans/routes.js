@@ -1,17 +1,23 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  '../broker',
   '../router',
   '../viewport',
   '../user',
+  '../time',
   '../core/util/showDeleteFormPage',
-  './HourlyPlan'
+  './HourlyPlan',
+  './HourlyPlanCollection'
 ], function(
+  broker,
   router,
   viewport,
   user,
+  time,
   showDeleteFormPage,
-  HourlyPlan
+  HourlyPlan,
+  HourlyPlanCollection
 ) {
   'use strict';
 
@@ -40,6 +46,45 @@ define([
     {
       return new HourlyPlanAddFormPage();
     });
+  });
+
+  router.map('/hourlyPlans/:date/:division', canView, function(req)
+  {
+    var hourlyPlans = new HourlyPlanCollection(null, {
+      rqlQuery: 'select(_id)&date=' + req.params.date + '&division=' + req.params.division
+    });
+
+    hourlyPlans.on('error', showListPage);
+
+    hourlyPlans.on('sync', function()
+    {
+      if (hourlyPlans.length === 1)
+      {
+        broker.publish('router.navigate', {
+          url: '/hourlyPlans/' + hourlyPlans.models[0].id,
+          trigger: true,
+          replace: true
+        });
+      }
+      else
+      {
+        showListPage();
+      }
+    });
+
+    hourlyPlans.fetch({reset: true});
+
+    function showListPage()
+    {
+      broker.publish('router.navigate', {
+        url: '/hourlyPlans?sort(-date)&limit(20)'
+          + '&date>=' + req.params.date
+          + '&date<' + time.getMoment(+req.params.date).add(1, 'days').valueOf()
+          + '&division=' + req.params.division,
+        trigger: true,
+        replace: true
+      });
+    }
   });
 
   router.map('/hourlyPlans/:id', canView, function(req)

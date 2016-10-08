@@ -39,7 +39,7 @@ define([
         aorIn: true,
         reason: null,
         reasonIn: true,
-        status: ['undecided', 'rejected'],
+        status: null,
         orgUnit: null
       };
     },
