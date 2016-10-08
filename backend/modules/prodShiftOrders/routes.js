@@ -87,6 +87,7 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
       '"operators': Array.isArray(doc.operators) ? doc.operators.map(exportUserInfo).join(';') : '',
       '"orderMrp': orderData.mrp || '',
       '"orderName': (orderData.name || '').trim(),
+      '"orderDescription': (orderData.description || '').trim(),
       '"operationName': (operation.name || '').trim(),
       '"operationWorkCenter': operation.workCenter || '',
       '"division': doc.division,
