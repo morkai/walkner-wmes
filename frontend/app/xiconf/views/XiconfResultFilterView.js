@@ -40,7 +40,7 @@ define([
       },
       'orderNo': function(propertyName, term, formData)
       {
-        formData[propertyName] = term.args[1];
+        formData[propertyName] = term.args[1].replace(/[^0-9]/g, '');
       },
       'result': function(propertyName, term, formData)
       {
@@ -52,16 +52,23 @@ define([
       'nc12': function(propertyName, term, formData)
       {
         formData.nc12Type = 'program';
-        formData.nc12 = term.args[1];
+        formData.nc12 = term.args[1].replace(/[^0-9A-Z]/g, '');
       },
-      'program._id': 'nc12',
+      'program._id': function(propertyName, term, formData)
+      {
+        formData.nc12Type = 'program';
+        formData.nc12 = term.args[1].replace(/[^0-9A-Za-z]/g, '');
+      },
       'leds.nc12': function(propertyName, term, formData)
       {
         formData.nc12Type = 'led';
-        formData.nc12 = term.args[1];
+        formData.nc12 = term.args[1].replace(/[^0-9A-Z]/g, '');
       },
-      'srcId': 'orderNo',
-      'serviceTag': 'orderNo'
+      'srcId': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.args[1];
+      },
+      'serviceTag': 'srcId'
     },
 
     initialize: function()
@@ -104,7 +111,6 @@ define([
     {
       var fromMoment = time.getMoment(this.$id('from').val());
       var toMoment = time.getMoment(this.$id('to').val());
-      var orderNo = this.$id('orderNo').val().trim();
       var nc12Type = this.$('input[name="nc12Type"]:checked').val();
       var nc12 = this.$id('nc12').val().trim();
       var serviceTag = this.$id('serviceTag').val().trim();
@@ -116,16 +122,20 @@ define([
         selector.push({name: 'eq', args: ['srcId', srcId]});
       }
 
-      if (/^[0-9]{9}$/.test(orderNo))
-      {
-        selector.push({name: 'eq', args: ['orderNo', orderNo]});
-      }
+      this.serializeRegexTerm(selector, 'orderNo', 9, null, false, true);
 
       if (/^[0-9A-Z]{9,}$/.test(nc12))
       {
         var property = nc12Type === 'led' ? 'leds.nc12' : /[A-Z]/.test(nc12) ? 'program._id' : 'nc12';
 
-        selector.push({name: 'eq', args: [property, nc12]});
+        if (nc12.length === 12)
+        {
+          selector.push({name: 'eq', args: [property, nc12]});
+        }
+        else
+        {
+          selector.push({name: 'regex', args: [property, '^' + nc12]});
+        }
       }
 
       if (/^P[0-9]+$/.test(serviceTag))
