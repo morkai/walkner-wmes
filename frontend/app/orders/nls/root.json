@@ -9,6 +9,7 @@
 
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:print": "Print order",
+    "PAGE_ACTION:openOrdersPrint": "Print orders",
     "PAGE_ACTION:jump:title": "Jump to order by no",
     "PAGE_ACTION:jump:placeholder": "Order no",
 
