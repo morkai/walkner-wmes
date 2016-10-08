@@ -63,8 +63,8 @@ define([
       var timeRange = fixTimeRange.fromView(this);
       var date = this.$('input[name=date]:checked').val();
 
-      this.serializeRegexTerm(selector, '_id', 9);
-      this.serializeRegexTerm(selector, 'nc12', 12);
+      this.serializeRegexTerm(selector, '_id', 9, null, false, true);
+      this.serializeRegexTerm(selector, 'nc12', 12, null, false, true);
 
       if (timeRange.from)
       {
