@@ -71,7 +71,7 @@ define([
       },
       'nc12': function(propertyName, term, formData)
       {
-        formData[propertyName] = term.args[1].replace(/[^A-Z0-9]+/g, '');
+        formData.order = term.args[1].replace(/[^A-Z0-9]+/g, '');
       },
       'orderNo': 'nc12',
       'division': function(propertyName, term, formData)
