@@ -907,8 +907,8 @@ define([
       }
       else
       {
-        results.day = +matches[3];
-        results.year = parseInt(matches[1], 10) + 2000;
+        results.day = +matches[1];
+        results.year = parseInt(matches[3], 10) + 2000;
       }
 
       searchPhrase = searchPhrase.replace(/[0-9]{1,4}[^0-9][0-9]{1,2}([^0-9][0-9]{1,4})?/g, '');
