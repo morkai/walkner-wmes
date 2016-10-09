@@ -111,14 +111,14 @@ module.exports = function setUpPing(app, watchdogModule)
 
     const now = Date.now();
 
-    if (now - lastNotifyAt > 30 * 60 * 1000)
+    if (now - lastNotifyAt > 60 * 60 * 1000)
     {
       lastNotifyAt = now;
 
       call(`Service unavailable - no ping in ${window} seconds!`);
     }
 
-    scheduleNotify(10);
+    scheduleNotify(30);
   }
 
   function mail(subject, text)
