@@ -48,7 +48,16 @@ exports.mongoose = {
     'cag', 'cagPlan'
   ]
 };
-exports.mongoose.options.server.poolSize = 5;
+
+if (mongodb.server)
+{
+  mongodb.server.poolSize = 5;
+}
+
+if (mongodb.replSet)
+{
+  mongodb.replSet.poolSize = 5;
+}
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },

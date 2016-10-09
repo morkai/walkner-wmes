@@ -42,7 +42,16 @@ exports.mongoose = {
     'cag', 'cagGroup', 'cagPlan'
   ]
 };
-exports.mongoose.options.server.poolSize = 10;
+
+if (mongodb.server)
+{
+  mongodb.server.poolSize = 10;
+}
+
+if (mongodb.replSet)
+{
+  mongodb.replSet.poolSize = 10;
+}
 
 exports.updater = {
   expressId: null,

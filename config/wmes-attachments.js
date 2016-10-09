@@ -20,7 +20,16 @@ exports.mongoose = {
   connectAttemptDelay: 500,
   models: ['event']
 };
-exports.mongoose.options.server.poolSize = 2;
+
+if (mongodb.server)
+{
+  mongodb.server.poolSize = 2;
+}
+
+if (mongodb.replSet)
+{
+  mongodb.replSet.poolSize = 2;
+}
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },

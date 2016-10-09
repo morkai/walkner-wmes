@@ -63,7 +63,16 @@ exports.mongoose = {
     'twilioRequest', 'twilioResponse'
   ]
 };
-exports.mongoose.options.server.poolSize = 2;
+
+if (mongodb.server)
+{
+  mongodb.server.poolSize = 2;
+}
+
+if (mongodb.replSet)
+{
+  mongodb.replSet.poolSize = 2;
+}
 
 exports['messenger/server'] = {
   pubHost: '127.0.0.1',

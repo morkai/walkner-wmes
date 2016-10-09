@@ -1,21 +1,7 @@
 'use strict';
 
-const url = require('url');
-
-const uri = url.parse(process.env.WMES_MONGODB_URI || 'mongodb://127.0.0.1:27017/walkner-wmes');
-
-if (process.env.WMES_MONGODB_USER)
-{
-  uri.auth = process.env.WMES_MONGODB_USER;
-
-  if (process.env.WMES_MONGODB_PASS)
-  {
-    uri.auth += ':' + process.env.WMES_MONGODB_PASS;
-  }
-}
-
 module.exports = {
-  uri: url.format(uri),
+  uri: process.env.WMES_MONGODB_URI || 'mongodb://127.0.0.1:27017/walkner-wmes',
   keepAliveQueryInterval: 15000,
   server: {
     poolSize: 15,
@@ -33,5 +19,18 @@ module.exports = {
     wtimeout: 5000,
     nativeParser: true,
     forceServerObjectId: false
+  },
+  replSet: {
+    reconnectWait: 1000,
+    retries: Number.MAX_SAFE_INTEGER,
+    autoReconnect: false,
+    poolSize: 15,
+    replicaSet: 'plp',
+    socketOptions: {
+      noDelay: true,
+      keepAlive: 1000,
+      connectTimeoutMS: 5000,
+      socketTimeoutMS: 0
+    }
   }
 };

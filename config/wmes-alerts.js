@@ -26,7 +26,16 @@ exports.mongoose = {
     'prodShiftOrder', 'prodDowntime', 'prodDowntimeAlert', 'prodLogEntry'
   ]
 };
-exports.mongoose.options.server.poolSize = 3;
+
+if (mongodb.server)
+{
+  mongodb.server.poolSize = 3;
+}
+
+if (mongodb.replSet)
+{
+  mongodb.replSet.poolSize = 3;
+}
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },

@@ -235,7 +235,16 @@ exports.mongoose = {
     'd8Entry', 'd8EntrySource', 'd8ProblemSource'
   ]
 };
-exports.mongoose.options.server.poolSize = 15;
+
+if (mongodb.server)
+{
+  mongodb.server.poolSize = 15;
+}
+
+if (mongodb.replSet)
+{
+  mongodb.replSet.poolSize = 15;
+}
 
 exports.express = {
   staticPath: __dirname + '/../frontend',
