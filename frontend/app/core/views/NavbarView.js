@@ -884,6 +884,8 @@ define([
     // Date
     matches = searchPhrase.match(/[^0-9]([0-9]{1,4})[^0-9]([0-9]{1,2})(?:[^0-9]([0-9]{1,4}))?[^0-9]/);
 
+    var moment = null;
+
     if (matches)
     {
       results.month = +matches[2];
@@ -911,23 +913,31 @@ define([
 
       searchPhrase = searchPhrase.replace(/[0-9]{1,4}[^0-9][0-9]{1,2}([^0-9][0-9]{1,4})?/g, '');
 
-      var moment = time.getMoment(results.year + '-' + results.month + '-' + results.day, 'YYYY-MM-DD');
+      moment = time.getMoment(results.year + '-' + results.month + '-' + results.day, 'YYYY-MM-DD');
+    }
 
-      if (moment.isValid())
-      {
-        results.from = moment.valueOf();
-        results.fromShift = moment.hours(6).valueOf();
-        results.shiftStart = results.fromShift + 8 * 3600 * 1000 * ((results.shift || 1) - 1);
-        results.toShift = moment.add(1, 'days').valueOf();
-        results.shiftEnd = results.shift ? (results.shiftStart + 8 * 3600 * 1000) : results.toShift;
-        results.to = moment.startOf('day').valueOf();
-      }
-      else
-      {
-        results.year = null;
-        results.month = null;
-        results.day = null;
-      }
+    if (!moment && results.shift)
+    {
+      moment = time.getMoment(Date.now()).startOf('day');
+      results.year = moment.year();
+      results.month = moment.month();
+      results.day = moment.day();
+    }
+
+    if (moment && moment.isValid())
+    {
+      results.from = moment.valueOf();
+      results.fromShift = moment.hours(6).valueOf();
+      results.shiftStart = results.fromShift + 8 * 3600 * 1000 * ((results.shift || 1) - 1);
+      results.toShift = moment.add(1, 'days').valueOf();
+      results.shiftEnd = results.shift ? (results.shiftStart + 8 * 3600 * 1000) : results.toShift;
+      results.to = moment.startOf('day').valueOf();
+    }
+    else
+    {
+      results.year = null;
+      results.month = null;
+      results.day = null;
     }
 
     // Partial order no and/or 12NC
