@@ -122,12 +122,22 @@ console.log("Packing to: %s...", archivePath);
 
 try
 {
-  execSync(format('"%s" a -t7z "%s" "%s"', config.zipExe, archivePath, config.backupPath));
+  execSync(format('"%s" a -p"%s" -t7z "%s" "%s"', config.zipExe, config.zipPassword, archivePath, config.backupPath));
 }
 catch (err)
 {
   console.log("Failed to pack: %s", err.message);
   process.exit(1);
+}
+
+if (config.gdriveParentId)
+{
+  console.log("Uploading to gdrive...");
+
+  execSync(
+    `"${config.gdriveExe}" upload -p "${config.gdriveParentId}" "${archivePath}"`,
+    config.gdriveExecOptions || {}
+  );
 }
 
 console.log("...done in %ss", (Date.now() - startTime) / 1000);
