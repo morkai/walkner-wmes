@@ -84,7 +84,7 @@ define([
       'faultCode': 'division',
       'inspector.id': function(propertyName, term, formData)
       {
-        formData.inspector = term.args[1];
+        formData.inspector = term.name === 'in' ? term.args[1].join(',') : term.args[1];
       }
     },
 
@@ -143,7 +143,14 @@ define([
 
       if (inspector.length)
       {
-        selector.push({name: 'eq', args: ['inspector.id', inspector]});
+        if (inspector.indexOf(',') === -1)
+        {
+          selector.push({name: 'eq', args: ['inspector.id', inspector]});
+        }
+        else
+        {
+          selector.push({name: 'in', args: ['inspector.id', inspector.split(',')]});
+        }
       }
 
       ['productFamily', 'division', 'kind', 'errorCategory', 'faultCode'].forEach(function(property)
@@ -178,7 +185,7 @@ define([
       });
 
       this.$id('kind').select2({
-        width: '200px',
+        width: '150px',
         allowClear: true,
         placeholder: ' ',
         data: qiDictionaries.kinds.map(idAndLabel)
@@ -199,7 +206,8 @@ define([
       });
 
       this.$id('inspector').select2({
-        width: '200px',
+        width: '325px',
+        multiple: true,
         allowClear: true,
         placeholder: ' ',
         data: qiDictionaries.inspectors.map(idAndLabel)
