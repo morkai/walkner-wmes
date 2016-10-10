@@ -249,6 +249,16 @@ module.exports = function setupQiResultModel(app, mongoose)
     this[property] = input[property];
     let newValue = this[property];
 
+    if (typeof oldValue === 'string')
+    {
+      oldValue = oldValue.trim();
+    }
+
+    if (typeof newValue === 'string')
+    {
+      newValue = newValue.trim();
+    }
+
     if (property === 'correctiveActions')
     {
       oldValue = oldValue.toObject();
