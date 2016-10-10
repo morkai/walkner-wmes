@@ -72,7 +72,7 @@
       <div class="row">
         <div class="col-lg-4">
           <div class="form-group">
-            <label for="<%- idPrefix %>-errorCategory" class="control-label"><%- t('qiResults', 'PROPERTY:errorCategory') %></label>
+            <label for="<%- idPrefix %>-errorCategory" class="control-label is-required"><%- t('qiResults', 'PROPERTY:errorCategory') %></label>
             <select id="<%- idPrefix %>-errorCategory" name="errorCategory" class="form-control" required data-role="specialist">
               <option></option>
               <% errorCategories.forEach(function(errorCategory) { %>
