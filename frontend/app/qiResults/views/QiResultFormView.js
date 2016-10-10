@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/time',
   'app/user',
+  'app/data/orgUnits',
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
   'app/core/views/FormView',
@@ -20,6 +21,7 @@ define([
   t,
   time,
   user,
+  orgUnits,
   buttonGroup,
   idAndLabel,
   FormView,
@@ -92,7 +94,8 @@ define([
           };
         }),
         errorCategories: qiDictionaries.errorCategories.map(idAndLabel),
-        inspectors: this.serializeInspectors()
+        inspectors: this.serializeInspectors(),
+        divisions: orgUnits.getAllByType('division')
       });
     },
 
