@@ -4,12 +4,14 @@ define([
   'underscore',
   '../time',
   '../user',
+  '../i18n',
   '../core/Model',
   'app/core/templates/userInfo'
 ], function(
   _,
   time,
   user,
+  t,
   Model,
   renderUserInfo
 ) {
@@ -130,16 +132,25 @@ define([
         obj.errorCategory = dictionaries.getLabel('errorCategory', obj.errorCategory);
         obj.qtyToFix = obj.qtyToFix.toLocaleString();
         obj.qtyNok = obj.qtyNok.toLocaleString();
+        obj.correctiveActions = this.serializeCorrectiveActions(dictionaries);
       }
 
       return obj;
     },
 
-    serializeRow: function(dictionaries)
+    serializeRow: function(dictionaries, options)
     {
-      var row = this.serialize(dictionaries, {});
+      var row = this.serialize(dictionaries, options);
 
       row.className = row.ok ? 'success' : 'danger';
+
+      if (!row.ok && row.correctiveActions.length)
+      {
+        row.correctiveAction = this.serializeClosestCorrectiveAction(
+          dictionaries,
+          options && options.today || time.getMoment().startOf('day').hours(6).valueOf()
+        );
+      }
 
       return row;
     },
@@ -150,7 +161,6 @@ define([
         dateFormat: 'LL'
       });
 
-      obj.correctiveActions = this.serializeCorrectiveActions(dictionaries);
       obj.okFile = this.serializeFile(obj.okFile);
       obj.nokFile = this.serializeFile(obj.nokFile);
 
@@ -168,6 +178,55 @@ define([
           what: action.what
         };
       });
+    },
+
+    serializeClosestCorrectiveAction: function(dictionaries, today)
+    {
+      var allCorrectiveActions = this.get('correctiveActions');
+      var closestCorrectiveAction;
+
+      if (allCorrectiveActions.length === 0)
+      {
+        return '';
+      }
+
+      if (allCorrectiveActions.length === 1)
+      {
+        closestCorrectiveAction = allCorrectiveActions[0];
+      }
+      else
+      {
+        closestCorrectiveAction = allCorrectiveActions
+          .map(function(action)
+          {
+            var diff = Date.parse(action.when) - today;
+
+            return {
+              diff: diff < 0 ? Number.MAX_VALUE : diff,
+              action: action
+            };
+          })
+          .sort(function(a, b)
+          {
+            return a.diff - b.diff;
+          })
+          .shift()
+          .action;
+      }
+
+      var result = dictionaries.getLabel('actionStatus', closestCorrectiveAction.status);
+
+      if (closestCorrectiveAction.when)
+      {
+        result += ', ' + time.format(closestCorrectiveAction.when, 'L');
+      }
+
+      if (allCorrectiveActions.length > 1)
+      {
+        result += ' +' + (allCorrectiveActions.length - 1);
+      }
+
+      return result;
     },
 
     serializeFile: function(file)

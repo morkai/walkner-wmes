@@ -1,0 +1,22 @@
+<table class="table table-condensed <%- bordered ? 'table-bordered table-hover' : '' %>">
+  <thead>
+  <tr>
+    <th class="is-min"><%- t('qiResults', 'correctiveActions:#') %></th>
+    <th class="is-min"><%- t('qiResults', 'correctiveActions:status') %></th>
+    <th class="is-min"><%- t('qiResults', 'correctiveActions:when') %></th>
+    <th><%- t('qiResults', 'correctiveActions:who') %></th>
+    <th><%- t('qiResults', 'correctiveActions:what') %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% correctiveActions.forEach(function(action, i) { %>
+  <tr>
+    <td class="is-min"><%- i + 1 %></td>
+    <td class="is-min"><%= action.status %></td>
+    <td class="is-min"><%= action.when %></td>
+    <td><%= action.who %></td>
+    <td class="text-lines"><%= action.what %></td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

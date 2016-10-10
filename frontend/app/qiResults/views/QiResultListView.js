@@ -3,13 +3,17 @@
 define([
   'underscore',
   'app/i18n',
+  'app/time',
   'app/core/views/ListView',
-  '../dictionaries'
+  '../dictionaries',
+  'app/qiResults/templates/correctiveActionsTable'
 ], function(
   _,
   t,
+  time,
   ListView,
-  qiDictionaries
+  qiDictionaries,
+  renderCorrectiveActionsTable
 ) {
   'use strict';
 
@@ -62,16 +66,25 @@ define([
           {id: 'qtyToFix', tdClassName: 'is-min is-number', label: t('qiResults', 'LIST:COLUMN:qtyToFix')},
           {id: 'qtyNok', tdClassName: 'is-min is-number', label: t('qiResults', 'LIST:COLUMN:qtyNok')},
           {id: 'errorCategory', tdClassName: 'is-min'},
-          {id: 'faultCode', tdClassName: 'is-min'}
+          {id: 'faultCode', tdClassName: 'is-min'},
+          {id: 'correctiveAction', label: t('qiResults', 'PROPERTY:correctiveActions'), noData: ''}
         );
       }
 
       return columns;
     },
 
-    serializeRow: function(result)
+    serializeRows: function()
     {
-      return result.serializeRow(qiDictionaries, {});
+      var options = {
+        dateFormat: 'L',
+        today: time.getMoment().startOf('day').hours(6).valueOf()
+      };
+
+      return this.collection.map(function(result)
+      {
+        return result.serializeRow(qiDictionaries, options);
+      });
     },
 
     serializeActions: function()
@@ -120,6 +133,7 @@ define([
         html: true,
         content: function()
         {
+          var $tip = view.$el.data('bs.popover').tip().removeClass('is-correctiveAction');
           var model = view.collection.get(this.parentNode.dataset.id);
 
           if (this.dataset.id === 'faultCode')
@@ -127,8 +141,26 @@ define([
             return model.get('faultDescription');
           }
 
+          if (this.dataset.id === 'correctiveAction')
+          {
+            var correctiveActions = model.get('correctiveActions');
+
+            if (correctiveActions && correctiveActions.length)
+            {
+              $tip.addClass('is-correctiveAction');
+
+              return renderCorrectiveActionsTable({
+                bordered: false,
+                correctiveActions: model.serializeCorrectiveActions(qiDictionaries)
+              });
+            }
+          }
+
           return undefined;
         }
+      }).on('shown.bs.popover', function(e)
+      {
+        view.$el.find('.popover').toggleClass('is-correctiveAction', e.target.dataset.id === 'correctiveAction');
       });
     }
 

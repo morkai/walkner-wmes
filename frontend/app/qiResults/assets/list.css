@@ -1,5 +1,9 @@
 .qiResults-list .popover {
-  max-width: 400px;
+  max-width: 600px;
   font-size: 12px;
   white-space: pre-line;
+}
+.qiResults-list .popover.is-correctiveAction .popover-content {
+  padding-bottom: 0;
+  line-height: 1;
 }

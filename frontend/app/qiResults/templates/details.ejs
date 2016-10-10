@@ -171,28 +171,10 @@
       <%- t('qiResults', 'PANEL:TITLE:details:actions') %>
     </div>
     <% if (model.correctiveActions.length) { %>
-    <table class="table table-bordered table-condensed table-hover">
-      <thead>
-      <tr>
-        <th class="is-min"><%- t('qiResults', 'correctiveActions:#') %></th>
-        <th class="is-min"><%- t('qiResults', 'correctiveActions:status') %></th>
-        <th class="is-min"><%- t('qiResults', 'correctiveActions:when') %></th>
-        <th><%- t('qiResults', 'correctiveActions:who') %></th>
-        <th><%- t('qiResults', 'correctiveActions:what') %></th>
-      </tr>
-      </thead>
-      <tbody>
-      <% model.correctiveActions.forEach(function(action, i) { %>
-      <tr>
-        <td class="is-min"><%- i + 1 %></td>
-        <td class="is-min"><%= action.status %></td>
-        <td class="is-min"><%= action.when %></td>
-        <td><%= action.who %></td>
-        <td class="text-lines"><%= action.what %></td>
-      </tr>
-      <% }) %>
-      </tbody>
-    </table>
+    <%- renderCorrectiveActionsTable({
+      bordered: true,
+      correctiveActions: model.correctiveActions
+    }) %>
     <% } else { %>
     <div class="panel-body">
       <p><%- t('qiResults', 'correctiveActions:empty') %></p>
