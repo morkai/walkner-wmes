@@ -62,6 +62,7 @@ define([
         'kind',
         {id: 'inspectedAt', tdClassName: 'is-min'},
         'inspector',
+        {id: 'qtyOrder', tdClassName: 'is-min is-number', label: t('qiResults', 'LIST:COLUMN:qtyOrder')},
         {id: 'qtyInspected', tdClassName: 'is-min is-number', label: t('qiResults', 'LIST:COLUMN:qtyInspected')}
       ];
 

@@ -61,6 +61,7 @@ exports.serializeRow = function(app, qiModule, doc, req)
     '"inspector': doc.inspector.label,
     '"kind': kind || doc.kind,
     '"result': doc.ok ? 'ok' : 'nok',
+    '#qtyOrder': doc.qtyOrder,
     '#qtyInspected': doc.qtyInspected,
     '#qtyToFix': doc.qtyToFix,
     '#qtyNok': doc.qtyNok,

@@ -321,6 +321,7 @@ define([
       this.$id('productName').val('');
       this.$id('productFamily').val('');
       this.$id('division').val('');
+      this.$id('qtyOrder').val('');
     },
 
     findOrder: function()
@@ -363,6 +364,7 @@ define([
         view.$id('productName').val(data.productName);
         view.$id('productFamily').val(data.productFamily);
         view.$id('division').val(data.division).attr('data-orders-division', data.division);
+        view.$id('qtyOrder').val(data.quantity);
 
         $orderNo[0].setCustomValidity('');
 

@@ -16,7 +16,8 @@ module.exports = function findOrderRoute(app, qiModule, req, res, next)
     division: 1,
     'orderData.name': 1,
     'orderData.description': 1,
-    'orderData.nc12': 1
+    'orderData.nc12': 1,
+    'orderData.qty': 1
   };
 
   ProdShiftOrder.findOne(conditions, fields).lean().exec(function(err, pso)
@@ -40,7 +41,8 @@ module.exports = function findOrderRoute(app, qiModule, req, res, next)
       orderNo: orderNo,
       nc12: orderData.nc12 || '',
       productName: name,
-      productFamily: familyParts.length > 1 ? familyParts[0] : familyParts[0].substring(0, 6)
+      productFamily: familyParts.length > 1 ? familyParts[0] : familyParts[0].substring(0, 6),
+      quantity: orderData.qty || 0
     });
   });
 };

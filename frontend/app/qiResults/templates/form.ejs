@@ -60,6 +60,10 @@
       </div>
       <div class="row">
         <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-qtyOrder" class="control-label"><%- t('qiResults', 'PROPERTY:qtyOrder') %></label>
+          <input id="<%- idPrefix %>-qtyOrder" name="qtyOrder" class="form-control" type="number"  required readonly min="0">
+        </div>
+        <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-qtyInspected" class="control-label is-required"><%- t('qiResults', 'PROPERTY:qtyInspected') %></label>
           <input id="<%- idPrefix %>-qtyInspected" name="qtyInspected" class="form-control" type="number" required min="1" data-role="inspector">
         </div>

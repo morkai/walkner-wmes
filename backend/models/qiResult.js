@@ -116,6 +116,11 @@ module.exports = function setupQiResultModel(app, mongoose)
       trim: true
     },
     correctiveActions: [qiCorrectiveActionSchema],
+    qtyOrder: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
     qtyInspected: {
       type: Number,
       default: 0,
@@ -201,6 +206,7 @@ module.exports = function setupQiResultModel(app, mongoose)
       'immediateResults',
       'rootCause',
       'correctiveActions',
+      'qtyOrder',
       'qtyInspected',
       'qtyToFix',
       'qtyNok',
