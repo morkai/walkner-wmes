@@ -3,6 +3,12 @@
   <div class="panel panel-<%- model.ok ? 'success' : 'danger' %>">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body <%- model.ok ? 'has-lastElementRow' : '' %>">
+      <div class="form-group">
+        <div id="<%- idPrefix %>-result" class="btn-group" data-toggle="buttons">
+          <label class="btn btn-default qiResults-filter-ok"><input id="<%- idPrefix %>-ok" type="radio" name="ok" value="true"> OK</label>
+          <label class="btn btn-default qiResults-filter-nok"><input id="<%- idPrefix %>-nok" type="radio" name="ok" value="false"> NOK</label>
+        </div>
+      </div>
       <div class="row">
         <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- t('qiResults', 'PROPERTY:orderNo') %></label>

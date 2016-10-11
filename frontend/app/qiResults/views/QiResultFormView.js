@@ -66,6 +66,13 @@ define([
       'change [name="removeFile[]"]': function(e)
       {
         this.$('input[name="' + e.target.value + 'File"]').prop('disabled', e.target.checked);
+      },
+      'change [name="ok"]': function()
+      {
+        this.model.set(_.extend(this.getFormData(), {
+          ok: this.$id('ok').prop('checked')
+        }), {silent: true});
+        this.render();
       }
 
     }, FormView.prototype.events),
@@ -83,7 +90,7 @@ define([
     serialize: function()
     {
       return _.extend(FormView.prototype.serialize.call(this), {
-        inspectedAtMin: '2000-01-01',
+        inspectedAtMin: '2014-01-01',
         inspectedAtMax: time.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
         kinds: qiDictionaries.kinds.map(idAndLabel),
         faults: qiDictionaries.faults.map(function(fault)
@@ -268,15 +275,18 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      if (this.options.editMode)
-      {
-        _.forEach(this.model.get('correctiveActions'), this.addAction, this);
-      }
-      else
+      var correctiveActions = this.model.get('correctiveActions');
+
+      if (_.isEmpty(correctiveActions))
       {
         this.addEmptyAction();
       }
+      else
+      {
+        _.forEach(this.model.get('correctiveActions'), this.addAction, this);
+      }
 
+      buttonGroup.toggle(this.$id('result'));
       this.findOrder();
       this.toggleRoleFields();
     },

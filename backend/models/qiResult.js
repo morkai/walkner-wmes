@@ -184,6 +184,7 @@ module.exports = function setupQiResultModel(app, mongoose)
     this.updatedAt = new Date();
 
     const changes = this.compareProperties(_.pick(input, [
+      'ok',
       'inspector',
       'inspectedAt',
       'division',
