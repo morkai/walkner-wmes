@@ -4,16 +4,27 @@
 
 const _ = require('lodash');
 const step = require('h5.step');
+const mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
 
 exports.fetchDictionaries = function(app, qiModule, req, res, next)
 {
   const mongoose = app[qiModule.config.mongooseId];
 
-  req.qiDictionaries = {};
+  req.qiDictionaries = {
+    maxActionCount: 1
+  };
 
   step(
     function findStep()
     {
+      const pipeline = [
+        {$match: mongoSerializer.fromQuery(req.rql).selector},
+        {$project: {count: {$size: '$correctiveActions'}}},
+        {$group: {_id: null, count: {$max: '$count'}}}
+      ];
+
+      mongoose.model('QiResult').aggregate(pipeline, this.group());
+
       _.forEach(qiModule.DICTIONARIES, modelName =>
       {
         mongoose.model(modelName)
@@ -27,6 +38,13 @@ exports.fetchDictionaries = function(app, qiModule, req, res, next)
       if (err)
       {
         return next(err);
+      }
+
+      const maxActionCount = dictionaries.shift()[0].count;
+
+      if (maxActionCount > 1)
+      {
+        req.qiDictionaries.maxActionCount = maxActionCount;
       }
 
       _.forEach(Object.keys(qiModule.DICTIONARIES), function(dictionaryName, i)
@@ -49,8 +67,7 @@ exports.serializeRow = function(app, qiModule, doc, req)
   var dict = req.qiDictionaries;
   var kind = dict.kinds[doc.kind];
   var errorCategory = dict.errorCategories[doc.errorCategory];
-
-  return {
+  var row = {
     '#rid': doc.rid,
     '"12nc': doc.nc12,
     '"productName': doc.productName,
@@ -73,6 +90,24 @@ exports.serializeRow = function(app, qiModule, doc, req)
     '"immediateResults': doc.immediateResults || '',
     '"rootCause': doc.rootCause || ''
   };
+
+  for (var i = 0; i < dict.maxActionCount; ++i)
+  {
+    var action = doc.correctiveActions[i] || {
+      who: [],
+      what: '',
+      when: null,
+      status: ''
+    };
+    var suffix = i + 1;
+
+    row['"actionWho' + suffix] = action.who.map(d => d.label).join(', ');
+    row['"actionWhat' + suffix] = action.what;
+    row['actionWhen' + suffix] = action.when ? app.formatDate(action.when) : '';
+    row['"actionStatus' + suffix] = action.status;
+  }
+
+  return row;
 };
 
 exports.cleanUp = function(req)
