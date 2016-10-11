@@ -56,7 +56,8 @@ define([
         kind: '',
         errorCategory: '',
         faultCode: '',
-        inspector: ''
+        inspector: '',
+        status: ''
       };
     },
 
@@ -82,18 +83,11 @@ define([
       'kind': 'division',
       'errorCategory': 'division',
       'faultCode': 'division',
+      'correctiveActions.status': 'division',
       'inspector.id': function(propertyName, term, formData)
       {
         formData.inspector = term.name === 'in' ? term.args[1].join(',') : term.args[1];
       }
-    },
-
-    serialize: function()
-    {
-      return _.extend(FilterView.prototype.serialize.call(this), {
-        errorCategories: qiDictionaries.errorCategories.toJSON(),
-        faults: qiDictionaries.faults.toJSON()
-      });
     },
 
     serializeFormToQuery: function(selector)
@@ -103,6 +97,7 @@ define([
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
       var inspector = this.$id('inspector').val();
+      var status = this.$id('status').val();
 
       if (result === 'ok')
       {
@@ -151,6 +146,11 @@ define([
         {
           selector.push({name: 'in', args: ['inspector.id', inspector.split(',')]});
         }
+      }
+
+      if (status.length)
+      {
+        selector.push({name: 'eq', args: ['correctiveActions.status', status]});
       }
 
       ['productFamily', 'division', 'kind', 'errorCategory', 'faultCode'].forEach(function(property)
@@ -205,8 +205,15 @@ define([
         data: qiDictionaries.faults.map(idAndLabel)
       });
 
+      this.$id('status').select2({
+        width: '115px',
+        allowClear: true,
+        placeholder: ' ',
+        data: qiDictionaries.actionStatuses.map(idAndLabel)
+      });
+
       this.$id('inspector').select2({
-        width: '325px',
+        width: '200px',
         multiple: true,
         allowClear: true,
         placeholder: ' ',

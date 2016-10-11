@@ -171,6 +171,7 @@ module.exports = function setupQiResultModel(app, mongoose)
   qiResultSchema.index({kind: 1});
   qiResultSchema.index({faultCode: 1});
   qiResultSchema.index({errorCategory: 1});
+  qiResultSchema.index({'correctiveActions.status': 1});
 
   qiResultSchema.pre('save', function(next)
   {
