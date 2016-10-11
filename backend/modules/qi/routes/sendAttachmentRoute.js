@@ -14,6 +14,7 @@ module.exports = function sendAttachmentRoute(app, qiModule, req, res, next)
   const QiResult = mongoose.model('QiResult');
 
   const fields = {};
+  const changeIndex = /^-?[0-9]+$/.test(req.query.change) ? parseInt(req.query.change) : null;
   let attachmentProperty = req.params.attachment;
 
   if (/NOK$/.test(attachmentProperty))
@@ -26,6 +27,11 @@ module.exports = function sendAttachmentRoute(app, qiModule, req, res, next)
   }
 
   fields[attachmentProperty] = 1;
+
+  if (changeIndex !== null)
+  {
+    fields.changes = 1;
+  }
 
   step(
     function findResultStep()
@@ -44,7 +50,21 @@ module.exports = function sendAttachmentRoute(app, qiModule, req, res, next)
         return this.skip(app.createError('NOT_FOUND', 404));
       }
 
-      this.attachment = qiResult[attachmentProperty];
+      if (changeIndex === null)
+      {
+        this.attachment = qiResult[attachmentProperty];
+      }
+      else
+      {
+        const change = qiResult.changes[Math.abs(changeIndex)];
+
+        if (change && change.data[attachmentProperty])
+        {
+          const isOld = changeIndex < 0 || Object.is(changeIndex, -0);
+
+          this.attachment = change.data[attachmentProperty][isOld ? 0 : 1];
+        }
+      }
 
       if (!this.attachment)
       {

@@ -11,6 +11,7 @@
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie wyniku nie powiodło się :(",
   "MSG:DELETED": "Wynik <em>{label}</em> został usunięty.",
   "MSG:jump:404": "Nie znaleziono wyniku o ID <em>{rid}</em> :(",
+  "MSG:comment:failure": "Nie udało się skomentować zgłoszenia :(",
 
   "PAGE_ACTION:export": "Eksportuj wyniki",
   "PAGE_ACTION:add": "Dodaj wynik",
@@ -31,6 +32,7 @@
   "PANEL:TITLE:details:actions": "Akcje korygujące",
   "PANEL:TITLE:details:attachments:ok": "Załącznik OK",
   "PANEL:TITLE:details:attachments:nok": "Załącznik NOK",
+  "PANEL:TITLE:changes": "Historia zmian",
   "PANEL:TITLE:addForm": "Formularz dodawania wyniku",
   "PANEL:TITLE:editForm": "Formularz edycji wyniku",
 
@@ -61,6 +63,11 @@
   "PROPERTY:qtyInspected": "Ilość skontrolowana",
   "PROPERTY:qtyToFix": "Ilość do selekcji",
   "PROPERTY:qtyNok": "Ilość niezgodnych",
+  "PROPERTY:comment": "Komentarz",
+  "PROPERTY:ok": "Wynik",
+
+  "ok:true": "OK",
+  "ok:false": "NOK",
 
   "filter:result": "Wynik",
   "filter:result:ok": "OK",
@@ -105,6 +112,11 @@
   "correctiveActions:status": "Status",
   "correctiveActions:add": "Dodaj akcję korygującą",
   "correctiveActions:empty": "Brak akcji.",
+
+  "history:added": "utworzenie wyniku inspekcji.",
+  "history:editMessage": "Tutaj możesz dodać komentarz do wyniku inspekcji. Jeżeli chcesz także zmienić jakieś właściwości, <a href='{editUrl}'>to skorzystaj z formularza edycji</a>.",
+  "history:submit": "Komentuj",
+  "history:correctiveActions": "{count, plural, one{1 akcja korygująca} few{# akcje korygujące} other{# akcji korygujących}}",
 
   "report:title:totalNokCount": "Ilość czerwonych pasków",
   "report:title:nokCountPerDivision": "Ilość czerwonych pasków per centrum produkcyjne",

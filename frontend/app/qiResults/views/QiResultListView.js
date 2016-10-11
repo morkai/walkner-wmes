@@ -45,6 +45,11 @@ define([
 
     }, ListView.prototype.events),
 
+    destroy: function()
+    {
+      this.$el.popover('destroy');
+    },
+
     serializeColumns: function()
     {
       var columns = [

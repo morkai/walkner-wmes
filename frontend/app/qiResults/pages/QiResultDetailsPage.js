@@ -4,22 +4,26 @@ define([
   'app/i18n',
   'app/core/pages/DetailsPage',
   'app/core/util/pageActions',
-  'app/qiResults/dictionaries',
-  '../views/QiResultDetailsView'
+  '../dictionaries',
+  '../views/QiResultDetailsView',
+  '../views/QiResultHistoryView',
+  'app/qiResults/templates/detailsPage'
 ], function(
   t,
   DetailsPage,
   pageActions,
   qiDictionaries,
-  QiResultDetailsView
+  QiResultDetailsView,
+  QiResultHistoryView,
+  template
 ) {
   'use strict';
 
   return DetailsPage.extend({
 
-    baseBreadcrumb: true,
+    template: template,
 
-    DetailsView: QiResultDetailsView,
+    baseBreadcrumb: true,
 
     actions: function()
     {
@@ -69,11 +73,25 @@ define([
       return actions;
     },
 
+    initialize: function()
+    {
+      DetailsPage.prototype.initialize.apply(this, arguments);
+
+      this.setView('.qiResults-detailsPage-properties', this.detailsView);
+      this.setView('.qiResults-detailsPage-history', this.historyView);
+    },
+
     destroy: function()
     {
       DetailsPage.prototype.destroy.call(this);
 
       qiDictionaries.unload();
+    },
+
+    defineViews: function()
+    {
+      this.detailsView = new QiResultDetailsView({model: this.model});
+      this.historyView = new QiResultHistoryView({model: this.model});
     },
 
     load: function(when)

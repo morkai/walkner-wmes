@@ -32,6 +32,19 @@ define([
     'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'file-powerpoint-o'
   };
 
+  function serializeCorrectiveActions(dictionaries, correctiveActions)
+  {
+    return _.map(correctiveActions, function(action)
+    {
+      return {
+        status: dictionaries.getLabel('actionStatus', action.status),
+        when: time.format(action.when, 'LL'),
+        who: action.who.map(function(u) { return u.label; }).join(', '),
+        what: action.what
+      };
+    });
+  }
+
   return Model.extend({
 
     urlRoot: '/qi/results',
@@ -169,15 +182,7 @@ define([
 
     serializeCorrectiveActions: function(dictionaries)
     {
-      return _.map(this.get('correctiveActions'), function(action)
-      {
-        return {
-          status: dictionaries.getLabel('actionStatus', action.status),
-          when: time.format(action.when, 'LL'),
-          who: action.who.map(function(u) { return u.label; }).join(', '),
-          what: action.what
-        };
-      });
+      return serializeCorrectiveActions(dictionaries, this.get('correctiveActions'));
     },
 
     serializeClosestCorrectiveAction: function(dictionaries, today)
@@ -258,6 +263,10 @@ define([
 
       return file;
     }
+
+  }, {
+
+    serializeCorrectiveActions: serializeCorrectiveActions
 
   });
 });

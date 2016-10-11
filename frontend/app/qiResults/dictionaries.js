@@ -38,7 +38,7 @@ define([
   var PROP_TO_DICT = {
     kind: 'kinds',
     errorCategory: 'errorCategories',
-    fault: 'faults',
+    faultCode: 'faults',
     actionStatus: 'actionStatuses'
   };
 
