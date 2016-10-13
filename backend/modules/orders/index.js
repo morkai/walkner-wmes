@@ -2,9 +2,10 @@
 
 'use strict';
 
-var setUpOrdersRoutes = require('./ordersRoutes');
-var setUpMechOrdersRoutes = require('./mechOrdersRoutes');
-var setUpEmptyOrdersRoutes = require('./emptyOrdersRoutes');
+const setUpOrdersRoutes = require('./ordersRoutes');
+const setUpMechOrdersRoutes = require('./mechOrdersRoutes');
+const setUpEmptyOrdersRoutes = require('./emptyOrdersRoutes');
+const setUpOperationGroups = require('./operationGroups');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -30,5 +31,10 @@ exports.start = function startOrdersModule(app, module)
       setUpMechOrdersRoutes(app, module);
       setUpEmptyOrdersRoutes(app, module);
     }
+  );
+
+  app.onModuleReady(
+    module.config.settingsId,
+    setUpOperationGroups.bind(null, app, module)
   );
 };

@@ -78,9 +78,6 @@
 .table > tfoot > tr > td.orders-commentForm-container {
   padding: 15px;
 }
-.orders-settings .form-control[name="orders.documents.extra"] {
-  font-family: Consolas, "Lucida Console", Monaco, monospace;
-}
 .orders-jumpList {
   position: fixed;
   z-index: 2;

@@ -97,7 +97,10 @@
     "commentForm:submit:comment": "Comment",
     "commentForm:submit:edit": "Change delay reason",
 
+    "settings:tab:operations": "Operations",
     "settings:tab:documents": "Documents",
+    "settings:operations:groups": "Operation groups",
+    "settings:operations:groups:help": "Each line should contain operation names which should belong to the same group, separated by the <code>|</code> character. Each operation name may be additionaly filtered to a WorkCenter by adding it after the <code>@</code> character. For example: <code>punching @ PIVATIC5 | bending</code>",
     "settings:documents:path": "Path to a directory with the document files",
     "settings:documents:extra": "Extra documents",
     "settings:documents:remoteServer": "Document search engine server",

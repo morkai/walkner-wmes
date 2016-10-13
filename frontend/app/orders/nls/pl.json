@@ -96,7 +96,10 @@
   "commentForm:submit:comment": "Komentuj",
   "commentForm:submit:edit": "Zmień powód opóźnienia",
 
+  "settings:tab:operations": "Operacje",
   "settings:tab:documents": "Dokumenty",
+  "settings:operations:groups": "Grupy operacji",
+  "settings:operations:groups:help": "W każdej linii należy podać nazwy operacji, które mają należeć do tej samej grupy, rozdzielone znakiem <code>|</code>. Do każdej nazwy operacji można dodać filtr WorkCenter po znaku <code>@</code>. Na przykład: <code>wykrawanie @ PIVATIC5 | zaginanie</code>",
   "settings:documents:path": "Ścieżka do katalogu z plikami dokumentów",
   "settings:documents:extra": "Dodatkowe dokumenty",
   "settings:documents:remoteServer": "Serwer wyszukiwarki dokumentów",

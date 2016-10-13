@@ -37,6 +37,11 @@ define([
       {
         return this.prepareExtraDocumentsValue(newValue);
       }
+
+      if (/operations.groups$/.test(id))
+      {
+        return newValue;
+      }
     },
 
     prepareExtraDocumentsValue: function(rawValue)
