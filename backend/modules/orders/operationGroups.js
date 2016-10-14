@@ -2,6 +2,8 @@
 
 'use strict';
 
+const transliteration = require('transliteration');
+
 module.exports = function setUpOperationGroups(app, ordersModule)
 {
   const settings = app[ordersModule.config.settingsId];
@@ -14,7 +16,7 @@ module.exports = function setUpOperationGroups(app, ordersModule)
 
   function prepareOperationName(rawOperationName)
   {
-    return rawOperationName.replace(/[^A-Za-z0-9]+/g, '').toLowerCase();
+    return transliteration.transliterate(rawOperationName).replace(/[^A-Za-z0-9]+/g, '').toLowerCase();
   }
 
   function getGroupedOperations(allOperations, selectedOperationNo)
