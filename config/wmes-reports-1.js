@@ -51,6 +51,7 @@ if (mongodb.server)
 if (mongodb.replSet)
 {
   mongodb.replSet.poolSize = 10;
+  mongodb.db.readPreference = 'secondaryPreferred';
 }
 
 exports.updater = {
