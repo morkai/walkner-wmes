@@ -169,6 +169,7 @@
   "NAVBAR:QI:results:bad": "Niezgodne",
   "NAVBAR:QI:reports": "Raporty",
   "NAVBAR:QI:reports:count": "Ilości",
+  "NAVBAR:QI:reports:okRatio": "% wyrobów zgodnych",
   "NAVBAR:QI:dictionaries": "Słowniki",
   "NAVBAR:QI:kinds": "Rodzaje inspekcji",
   "NAVBAR:QI:errorCategories": "Kategorie błędów",
@@ -276,6 +277,7 @@
 
   "placeholder:date": "rrrr-mm-dd",
   "placeholder:time": "--:--",
+  "placeholder:month": "rrrr-mm",
 
   "PRINT_PAGE:FT:PAGE_NO": "Strona <span class=print-page-no>?</span> z <span class=print-page-count>?</span>",
   "PRINT_PAGE:FT:INFO": "Wydruk wygenerowany <span class=print-page-date>?</span> przez użytkownika <span class=print-page-user>?</span>."

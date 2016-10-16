@@ -6,27 +6,17 @@ var crypto = require('crypto');
 var _ = require('lodash');
 var moment = require('moment');
 
-var REPORTS = {
-  1: require('./report1'),
-  2: require('./report2'),
-  3: require('./report3'),
-  4: require('./report4'),
-  5: require('./report5'),
-  6: require('./report6'),
-  7: require('./report7'),
-  8: require('./report8'),
-  9: require('./report9')
-};
-
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
-  messengerServerId: 'messenger/server'
+  messengerServerId: 'messenger/server',
+  reports: {}
 };
 
 exports.start = function startReportsServerModule(app, module)
 {
   var STATS_HEADERS = {r: 'Requests', t: 'T Total', a: 'T Avg', m: 'T Max'};
   var STATS_GROUPS = [120, 60, 30, 10, 0];
+  var REPORTS = module.config.reports || {};
   var inProgress = {};
   var stats = {};
 

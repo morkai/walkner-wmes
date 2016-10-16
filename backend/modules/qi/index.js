@@ -12,6 +12,7 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   settingsId: 'settings',
   reportsId: 'reports',
+  orgUnitsId: 'orgUnits',
   wkhtmltopdfExe: 'wkhtmltopdf',
   attachmentsDest: null
 };
@@ -33,7 +34,8 @@ exports.start = function startQiModule(app, qiModule)
       qiModule.config.expressId,
       qiModule.config.userId,
       qiModule.config.settingsId,
-      qiModule.config.reportsId
+      qiModule.config.reportsId,
+      qiModule.config.orgUnitsId
     ],
     setUpRoutes.bind(null, app, qiModule)
   );

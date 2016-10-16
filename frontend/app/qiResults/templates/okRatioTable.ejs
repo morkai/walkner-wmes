@@ -1,0 +1,34 @@
+<div class="qiResults-okRatioReport-tables">
+  <div class="qiResults-okRatioReport-tableContainer">
+    <table id="<%- idPrefix %>-monthly" class="table table-condensed table-hover table-bordered qiResults-okRatioReport-table">
+      <thead>
+      <tr>
+        <th></th>
+        <% columns.forEach(function(column) { %>
+        <th><%= column.label %></th>
+        <% }) %>
+        <th><%- t('qiResults', 'report:series:okRatioRef') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% rows.forEach(function(row, i) { %>
+      <tr data-key="<%- row.key %>" data-i="<%- i %>">
+        <td data-property="month" class="is-clickable"><%- time.format(row.key, "MMMM YYYY") %></td>
+        <% columns.forEach(function(column) { %>
+        <td data-property="ratio" class="is-number <%- okRatioRef && row[column._id].all && row[column._id].ratio < okRatioRef ? 'is-low' : '' %> <%- canManage && column._id === 'wh' ? 'is-clickable' : '' %>">
+          <%- (Math.round(row[column._id].ratio * 100) / 100).toLocaleString() %>%
+        </td>
+        <% }) %>
+        <td><%- okRatioRef.toLocaleString() %>%</td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div><div id="<%- idPrefix %>-totals" class="qiResults-okRatioReport-tableContainer">
+    <%- renderOkRatioTotalsTable({
+      idPrefix: idPrefix,
+      columns: columns,
+      total: total
+    }) %>
+  </div>
+</div>

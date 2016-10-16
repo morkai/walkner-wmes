@@ -5,6 +5,7 @@
     "BREADCRUMBS:addForm": "Add",
     "BREADCRUMBS:editForm": "Edit",
     "BREADCRUMBS:reports:count": "Count report",
+    "BREADCRUMBS:reports:okRatio": "% of OK goods report",
     "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:ACTION_FORM:delete": "Delete",
 
@@ -124,17 +125,23 @@
     "report:title:totalNokCount": "Red strip count",
     "report:title:nokCountPerDivision": "Red strip count per division",
     "report:title:nokQtyPerFamily": "Number of NOK products",
+    "report:title:okRatio": "Quantity of OK goods per division [%]",
     "report:series:nokCount": "Red strips",
     "report:series:maxNokCount": "Upper limit",
     "report:series:nokQty": "NOK quantity",
+    "report:series:prod": "ML",
+    "report:series:wh": "Warehouse",
+    "report:series:okRatioRef": "Target",
     "report:filenames:totalNokCount": "WMES_QI_NokCount",
     "report:filenames:nokCountPerDivision": "WMES_QI_NokCountPerDivision",
     "report:filenames:nokQtyPerFamily": "WMES_QI_NokQty",
+    "report:filenames:okRatio": "WMES_QI_OkGoods",
 
     "settings:tab:results": "Results",
     "settings:tab:reports": "Reports",
     "settings:requiredCount": "Daily required inspections number",
-    "settings:maxNokPerDay": "Upper limit of red strips per day"
+    "settings:maxNokPerDay": "Upper limit of red strips per day",
+    "settings:okRatioRef": "Quantity of OK goods per division target [%]"
   },
   "pl": true
 }

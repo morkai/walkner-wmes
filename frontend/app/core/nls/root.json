@@ -170,6 +170,7 @@
     "NAVBAR:QI:results:bad": "Non-compliant",
     "NAVBAR:QI:reports": "Reports",
     "NAVBAR:QI:reports:count": "Count",
+    "NAVBAR:QI:reports:okRatio": "% of OK goods",
     "NAVBAR:QI:dictionaries": "Dictionaries",
     "NAVBAR:QI:kinds": "Kinds",
     "NAVBAR:QI:errorCategories": "Error categories",
@@ -277,6 +278,7 @@
 
     "placeholder:date": "yyyy-mm-dd",
     "placeholder:time": "--:--",
+    "placeholder:month": "yyyy-mm",
 
     "PRINT_PAGE:FT:PAGE_NO": "Page <span class=print-page-no>?</span> of <span class=print-page-count>?</span>",
     "PRINT_PAGE:FT:INFO": "Printout generated at <span class=print-page-date>?</span> by <span class=print-page-user>?</span>."

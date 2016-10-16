@@ -4,6 +4,7 @@
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:reports:count": "Ilości",
+  "BREADCRUMBS:reports:okRatio": "% wyrobów zgodnych",
   "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
@@ -123,15 +124,25 @@
   "report:title:totalNokCount": "Ilość czerwonych pasków",
   "report:title:nokCountPerDivision": "Ilość czerwonych pasków per centrum produkcyjne",
   "report:title:nokQtyPerFamily": "Ilość niezgodnych produktów",
+  "report:title:okRatio": "Ilość wyrobów zgodnych w centrach [%]",
   "report:series:nokCount": "Czerwone paski",
   "report:series:maxNokCount": "Górny limit",
   "report:series:nokQty": "Ilość niezgodnych",
+  "report:series:prod": "ML",
+  "report:series:wh": "Magazyn",
+  "report:series:okRatioRef": "Cel",
   "report:filenames:totalNokCount": "WMES_QI_IloscNok",
   "report:filenames:nokCountPerDivision": "WMES_QI_IloscNokPerCentrum",
   "report:filenames:nokQtyPerFamily": "WMES_QI_IloscNiezgodnych",
+  "report:filenames:okRatio": "WMES_QI_ProcentZgodnych",
+  "report:column:division": "Wydział",
+  "report:column:nok": "Wadliwe",
+  "report:column:all": "Wszystkie",
+  "report:column:ratio": "% dobrych",
 
   "settings:tab:results": "Wyniki",
   "settings:tab:reports": "Raporty",
   "settings:requiredCount": "Dzienna wymagana ilość kontroli",
-  "settings:maxNokPerDay": "Górny limit czerwonych pasków na dzień"
+  "settings:maxNokPerDay": "Górny limit czerwonych pasków na dzień",
+  "settings:okRatioRef": "Cel dla % wyrobów zgodnych"
 }

@@ -13,6 +13,7 @@ const findByRidRoute = require('./findByRidRoute');
 const findOrderRoute = require('./findOrderRoute');
 const exportRoute = require('./exportRoute');
 const countReportRoute = require('./countReportRoute');
+const okRatioReportRoute = require('./okRatioReportRoute');
 const sendAttachmentRoute = require('./sendAttachmentRoute');
 const uploadAttachmentsRoute = require('./uploadAttachmentsRoute');
 const prepareAttachments = require('./prepareAttachments');
@@ -93,6 +94,13 @@ module.exports = function setUpQiRoutes(app, qiModule)
     canViewResults,
     reportsModule.helpers.sendCachedReport.bind(null, 'qi/count'),
     countReportRoute.bind(null, app, qiModule)
+  );
+
+  express.get(
+    '/qi/reports/okRatio',
+    canViewResults,
+    reportsModule.helpers.sendCachedReport.bind(null, 'qi/okRatio'),
+    okRatioReportRoute.bind(null, app, qiModule)
   );
 
   _.forEach(qiModule.DICTIONARIES, setUpDictionaryRoutes);

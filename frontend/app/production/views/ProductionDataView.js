@@ -455,7 +455,7 @@ define([
 
       function hide()
       {
-        $input.remove();
+        $form.remove();
       }
 
       function hideAndSave()

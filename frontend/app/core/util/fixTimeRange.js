@@ -42,7 +42,16 @@ define([
     }
     else
     {
-      var elValue = $el.val();
+      var elValue = $el.val().trim();
+
+      if (/^[0-9]{4}.[0-9]{1,2}/.test(elValue) && !/^[0-9]{4}.[0-9]{1,2}.[0-9]{1,2}/.test(elValue))
+      {
+        var parts = elValue.split(' ');
+
+        parts[0] = parts[0] + '-01';
+
+        elValue = parts.join(' ');
+      }
 
       if (!/ [0-9]+:[0-9]+(:[0-9]+)?/.test(elValue))
       {
@@ -85,6 +94,10 @@ define([
 
         case 'time':
           val = elMoment.format('HH:mm');
+          break;
+
+        case 'month':
+          val = elMoment.format('YYYY-MM');
           break;
 
         default:

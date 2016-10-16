@@ -17,7 +17,7 @@ exports.DEFAULT_CONFIG = {
   messengerClientId: null,
   messengerType: 'request',
   javaBatik: null,
-  reports: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+  reports: [],
   nc12ToCagsJsonPath: 'nc12_to_cags.json'
 };
 

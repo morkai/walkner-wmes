@@ -39,7 +39,8 @@ exports.mongoose = {
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'clipOrderCount',
     'whShiftMetrics',
-    'cag', 'cagGroup', 'cagPlan'
+    'cag', 'cagGroup', 'cagPlan',
+    'qiResult'
   ]
 };
 
@@ -74,4 +75,19 @@ exports['messenger/server'] = {
   broadcastTopics: [
     'events.saved'
   ]
+};
+
+exports['reports/server'] = {
+  reports: {
+    '1': require('../backend/modules/reports/report1'),
+    '2': require('../backend/modules/reports/report2'),
+    '3': require('../backend/modules/reports/report3'),
+    '4': require('../backend/modules/reports/report4'),
+    '5': require('../backend/modules/reports/report5'),
+    '6': require('../backend/modules/reports/report6'),
+    '7': require('../backend/modules/reports/report7'),
+    '8': require('../backend/modules/reports/report8'),
+    '9': require('../backend/modules/reports/report9'),
+    'qi/okRatio': require('../backend/modules/qi/okRatioReport')
+  }
 };
