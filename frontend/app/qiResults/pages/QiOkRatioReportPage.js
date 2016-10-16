@@ -4,6 +4,7 @@ define([
   'underscore',
   'app/i18n',
   'app/core/View',
+  'app/core/util/bindLoadingMessage',
   'app/reports/util/formatTooltipHeader',
   'app/data/createSettings',
   'app/factoryLayout/FactoryLayoutSettingCollection',
@@ -17,6 +18,7 @@ define([
   _,
   t,
   View,
+  bindLoadingMessage,
   formatTooltipHeader,
   createSettings,
   FactoryLayoutSettingCollection,
@@ -52,7 +54,7 @@ define([
 
     initialize: function()
     {
-      var model = this.model;
+      var model = bindLoadingMessage(this.model, this);
 
       this.factoryLayoutSettings = createSettings(FactoryLayoutSettingCollection);
 
