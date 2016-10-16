@@ -1,60 +1,19 @@
-<h1>v0.94.0</h1>
-<h2><%- time.format('2016-10-09', 'LL') %></h2>
-<h3>Pulpit</h3>
-<ul>
-  <li>Poprawiono błąd w nagłówku 'Najaktywniejsi we wrześniu'.</li>
-</ul>
-<h3>Formatka operatora</h3>
-<ul>
-  <li>Poprawiono błąd podczas sprawdzania poprawności zeskanowanego 12NC z wykorzystaniem grup 12NC, jeżeli zeskanowany
-    kod był na pierwszej pozycji na liście w danej grupie.</li>
-</ul>
-<h3>Usprawnienia</h3>
-<ul>
-  <li>Dodano przycisk 'Dodaj zgłoszenie' do strony ze szczegółami zgłoszenia, aby można było szybko przejść
-    do formularza dodawania nowego zgłoszenia po dodaniu poprzedniego.</li>
-</ul>
-<h3>Produkcja > Zlecenia</h3>
-<ul>
-  <li>Zmieniono eksportowanie zleceń tak, aby eksportowana była także kolumna 'Opis' zlecenia
-    (<code>orderDescription</code>).</li>
-</ul>
-<h3>Zlecenia reszty działów</h3>
-<ul>
-  <li>Zmieniono filtry nr zlecenia i 12NC tak, aby dopasowywały dany ciąg znaków tylko od początku wartości,
-    a nie w dowolnym miejscu.</li>
-  <li>Dodano brakujące angielskie tłumaczenie dla akcji 'Drukuj zlecenia'.</li>
-</ul>
-<h3>Zlecenia działu mechanicznego</h3>
-<ul>
-  <li>Zmieniono filtr 12NC tak, aby dopasowywał dany ciąg znaków tylko od początku wartości,
-    a nie w dowolnym miejscu.</li>
-</ul>
-<h3>Baza testów</h3>
-<ul>
-  <li>Zmieniono filtry nr zlecenia i 12NC tak, aby dopasowywały dany ciąg znaków tylko od początku wartości,
-    a nie w dowolnym miejscu.</li>
-</ul>
+<h1>v0.95.0</h1>
+<h2><%- time.format('2016-10-19', 'LL') %></h2>
 <h3>Inspekcja Jakości</h3>
 <ul>
-  <li>Poprawiono błąd w filtrze 'Nr zlecenia/12NC' powodujący niewyświetlanie aktualnej wartości filtra po
-    odświeżeniu strony.</li>
+  <li>Zmieniono filtr 'Inspektorzy' na liście wyników tak, aby można było wybrać kilku inspektorów na raz.</li>
+  <li>Zmieniono formularz wyniku tak, aby można było ręcznie zmienić wartość pola 'Wydział'.</li>
+  <li>Dodano brakujący znak '*' do wymaganego pola 'Kategoria błędu'.</li>
+  <li>Dodano kolumnę 'Akcje korygujące' do listy wyników.</li>
+  <li>Dodano możliwość zmiany wyniku OK/NOK z poziomu formularza.</li>
+  <li>Dodano historię zmian na stronie szczegółów wyniku inspekcji wraz z możliwością komentowania.</li>
+  <li>Dodano nowe pole: 'Ilość w zleceniu'.</li>
+  <li>Dodano filtr 'Status akcji' do listy wyników.</li>
+  <li>Dodano eksportowanie akcji korygujących razem z resztą danych.</li>
+  <li>Dodano nowy raport: </li>
 </ul>
-<h3>Inne</h3>
+<h3>Zlecenia</h3>
 <ul>
-  <li>Dodano wyszukiwarkę akcji na górnym pasku. Wyszukiwarka przyjmuje:
-    <ul>
-      <li>pełny nr zlecenia - ciąg 9 cyfr rozpoczynających się od cyfry 1,</li>
-      <li>częściowy nr zlecenia - mniej niż 9 cyfr rozpoczynających się od cyfry 1,</li>
-      <li>pełne 12NC - ciąg 12 cyfr,</li>
-      <li>częściowe 12NC - mniej niż 12 cyfr,</li>
-      <li>data - w formacie <code>DD.MM.YYYY</code>, <code>DD.MM.YY</code> lub <code>DD.MM</code>
-        (przyjmowany jest aktualny rok). Dodatkowo można ograniczyć wyniki do konkretnej zmiany
-        (<code>I</code>, <code>II</code> lub <code>III</code>) oraz wydziału
-        (<code>LPa</code>, <code>LPb</code>, <code>LD</code>...).
-        Podając zmianę, można pominać datę - zostanie wtedy przyjęty aktualny dzień.
-      </li>
-    </ul>
-    Wielkość znaków nie ma znaczenia.
-  </li>
+  <li>Dodano możliwość grupowania operacji. Operacje z tej samej grupy mają sumowane czasy we wskaźnikach.</li>
 </ul>
