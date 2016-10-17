@@ -40,7 +40,10 @@ exports.fetchDictionaries = function(app, qiModule, req, res, next)
         return next(err);
       }
 
-      const maxActionCount = dictionaries.shift()[0].count;
+      const actionCountResults = dictionaries.shift();
+      const maxActionCount = Array.isArray(actionCountResults) && actionCountResults.length
+        ? actionCountResults[0].count
+        : 0;
 
       if (maxActionCount > 1)
       {
