@@ -20,8 +20,7 @@ exports.DEFAULT_CONFIG = {
   cachedPath: './order-documents/cached',
   convertedPath: './order-documents/converted',
   etoPath: './order-documents/eto',
-  sejdaConsolePath: 'sejda-console',
-  exiftoolPath: 'exiftool'
+  sejdaConsolePath: 'sejda-console'
 };
 
 exports.start = function startOrderDocumentsModule(app, module)
