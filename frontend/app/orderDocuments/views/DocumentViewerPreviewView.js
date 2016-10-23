@@ -254,10 +254,16 @@ define([
     getRemoteFileUrlQuery: function()
     {
       var currentOrder = this.model.getCurrentOrder();
-
-      return 'order=' + (currentOrder.no || '')
+      var query = 'order=' + (currentOrder.no || '')
         + '&w=' + this.$iframe.width()
         + '&h=' + this.$iframe.height();
+
+      if (window.location.search.indexOf('touch') === -1)
+      {
+        query += '&pdf=1';
+      }
+
+      return query;
     }
 
   });
