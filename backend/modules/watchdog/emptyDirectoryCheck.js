@@ -28,8 +28,6 @@ module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
 
   function checkDirectory(config)
   {
-    watchdogModule.debug("[emptyDirectory] [%s] Checking...", config.id);
-
     fs.readdir(config.path, function(err, files)
     {
       if (err)
@@ -41,8 +39,6 @@ module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
 
       if (files.length === 0)
       {
-        watchdogModule.debug("[emptyDirectory] [%s] Empty :)", config.id);
-
         return scheduleNextCheck(config);
       }
 
