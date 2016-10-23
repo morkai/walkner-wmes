@@ -135,7 +135,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return SPECIAL_DOCUMENTS[nc15](req, res, next);
     }
 
-    findDocumentFilePath(nc15, function(err, results)
+    findDocumentFilePath(nc15, true, function(err, results)
     {
       if (err)
       {
@@ -169,7 +169,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return;
     }
 
-    findDocumentFilePath(nc15, function(err, results)
+    findDocumentFilePath(nc15, !!req.query.pdf, function(err, results)
     {
       if (err)
       {
@@ -179,6 +179,14 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         }
 
         return next(err);
+      }
+
+      if (results.meta)
+      {
+        return res.render('orderDocuments:viewer', {
+          nc15: nc15,
+          meta: results.meta
+        });
       }
 
       return res.sendFile(results.filePath, {maxAge: 60 * 1000}, function(err)
@@ -192,6 +200,38 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
         setTimeout(function() { delete nc15ToFreshHeaders[nc15]; }, 60 * 1000);
       });
+    });
+  });
+
+  express.get('/orderDocuments/:nc15/:page', function(req, res, next)
+  {
+    const nc15 = req.params.nc15;
+    const freshKey = `${req.params.page}_${nc15}.webp`;
+    const freshHeaders = nc15ToFreshHeaders[freshKey];
+
+    if (freshHeaders && fresh(req.headers, freshHeaders))
+    {
+      res.set(freshHeaders);
+      res.sendStatus(304);
+
+      return;
+    }
+
+    res.sendFile(path.join(module.config.convertedPath, nc15, freshKey), {maxAge: 60 * 1000}, function(err)
+    {
+      if (err)
+      {
+        if (err.code === 'ENOENT')
+        {
+          return res.sendStatus(404);
+        }
+
+        return next(err);
+      }
+
+      nc15ToFreshHeaders[freshKey] = _.pick(res._headers, ['etag', 'last-modified', 'cache-control']);
+
+      setTimeout(function() { delete nc15ToFreshHeaders[freshKey]; }, 60 * 1000);
     });
   });
 
@@ -227,7 +267,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     });
   });
 
-  function findDocumentFilePath(nc15, done)
+  function findDocumentFilePath(nc15, forcePdf, done)
   {
     if (!/^[0-9]+$/.test(nc15))
     {
@@ -239,29 +279,68 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return done(app.createError('NO_PATH_SETTING', 503));
     }
 
-    var cachedFilePath = path.join(module.config.cachedPath, nc15 + '.pdf');
-    var localFilePath = path.join(module.settings.path, nc15 + '.pdf');
+    const cachedFilePath = path.join(module.config.cachedPath, nc15 + '.pdf');
+    const localFilePath = path.join(module.settings.path, nc15 + '.pdf');
+    const convertedPath = path.join(module.config.convertedPath, nc15);
 
     step(
       function()
       {
-        fs.stat(localFilePath, this.parallel());
+        const localDone = this.parallel();
+        const cachedDone = this.parallel();
+        const convertedDone = this.parallel();
 
-        if (!_.isEmpty(module.settings.remoteServer))
+        fs.stat(localFilePath, localDone);
+
+        if (_.isEmpty(module.settings.remoteServer))
         {
-          fs.stat(cachedFilePath, this.parallel());
+          cachedDone();
+        }
+        else
+        {
+          fs.stat(cachedFilePath, cachedDone);
+        }
+
+        if (forcePdf)
+        {
+          convertedDone();
+        }
+        else
+        {
+          fs.readFile(
+            path.join(convertedPath, 'meta.json'),
+            'utf8',
+            (err, json) => convertedDone(null, json ? JSON.parse(json) : null)
+          );
         }
       },
-      function(err, localStats, cachedStats)
+      function(err, localStats, cachedStats, meta)
       {
+        if (meta)
+        {
+          return done(null, {
+            filePath: convertedPath,
+            source: cachedStats ? 'search' : 'remote',
+            meta: meta
+          });
+        }
+
         if (cachedStats)
         {
-          return done(null, {filePath: cachedFilePath, source: 'search'});
+          return done(null, {
+            filePath: cachedFilePath,
+            source: 'search',
+            meta: null
+          });
         }
 
         if (localStats)
         {
-          return done(null, {filePath: localFilePath, source: 'remote'});
+          return done(null, {
+            filePath: localFilePath,
+            source: 'remote',
+            meta: null
+          });
         }
 
         return done(err);

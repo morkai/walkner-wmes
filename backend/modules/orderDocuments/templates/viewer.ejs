@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title><%- meta.title || nc15 %></title>
+  <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="/vendor/viewerjs/viewer.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding-top: 33px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1;
+      color: #fff;
+      background: #525659;
+      cursor: default;
+    }
+    #images {
+      opacity: 0;
+    }
+    #images li {
+      flex: 0 0 auto;
+      width: 75px;
+      height: 75px;
+    }
+    #images img {
+      width: 100%;
+      height: 100%;
+    }
+    .viewer-footer {
+      left: auto;
+      right: 15px;
+      bottom: 15px;
+      overflow: visible;
+    }
+    .viewer-toolbar {
+      width: auto;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+    }
+    .viewer-play {
+      display: none;
+    }
+    .viewer-toolbar > li {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: #FFF;
+      color: #333;
+      font-size: 24px;
+      line-height: 48px;
+      box-shadow: 0 4px 12px #666;
+      text-align: center;
+    }
+    .viewer-toolbar > li + li {
+      margin-left: 10px;
+    }
+    .viewer-toolbar > li:hover {
+      background: #ffffd6;
+    }
+    .viewer-toolbar > li:before {
+      display: none;
+    }
+    .fa-chevron-left {
+      margin-left: -3px;
+    }
+    .fa-chevron-right {
+      margin-left: 3px;
+    }
+    #pages {
+      position: absolute;
+      bottom: 63px;
+      right: 15px;
+      z-index: 2015;
+    }
+    #pages li {
+      margin: 0 0 10px 0;
+      float: none;
+    }
+    #pages .is-active {
+      background-color: #ec971f;
+      color: #fff;
+      text-shadow: 1px 1px 1px #333;
+      box-shadow: 0 4px 12px #666, inset 0 3px 9px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+</head>
+<body>
+<div>
+  <ul id="images">
+    <% for (var p = 1; p <= meta.pageCount; ++p) { %>
+    <li><img id="image" src="/orderDocuments/<%- nc15 %>/<%- p %>" alt="<%- meta.title %>"></li>
+    <% } %>
+  </ul>
+</div>
+<ol id="pages" class="viewer-toolbar">
+  <% for (var p = 1; p <= meta.pageCount; ++p) { %>
+  <li data-i="<%- p - 1 %>"><%- p %></li>
+  <% } %>
+</ol>
+<script src="/vendor/viewerjs/viewer.js"></script>
+<script>
+Viewer.TEMPLATE =
+  '<div class="viewer-container">' +
+  '<div class="viewer-canvas"></div>' +
+  '<div class="viewer-footer">' +
+  '<div class="viewer-title"></div>' +
+  '<ul class="viewer-toolbar">' +
+  '<li class="viewer-zoom-in" data-action="zoom-in" title="Powiększ"><span class="fa fa-plus" data-action="zoom-in"></span></li>' +
+  '<li class="viewer-zoom-out" data-action="zoom-out" title="Pomniejsz"><span class="fa fa-minus" data-action="zoom-out"></span></li>' +
+  '<li class="viewer-one-to-one" data-action="one-to-one" title="Dopasuj do strony">1:1</li>' +
+  '<li class="viewer-reset" data-action="reset" title="Resetuj widok">0</li>' +
+  '<li class="viewer-rotate-right" data-action="rotate-right" title="Obróć w prawo"><span class="fa fa-rotate-right" data-action="rotate-right"></span></li>' +
+  '<li class="viewer-flip-horizontal" data-action="flip-horizontal" title="Odwróć poziomo"><span class="fa fa-arrows-h" data-action="flip-horizontal"></span></li>' +
+  '<li class="viewer-flip-vertical" data-action="flip-vertical" title="Odwróć pionowo"><span class="fa fa-arrows-v" data-action="flip-vertical"></span></li>' +
+  '<li id="pdf" title="Pokaż oryginalny plik PDF"><span class="fa fa-file-pdf-o"></span></li>' +
+  <% if (meta.pageCount > 1) { %>
+  '<li class="viewer-prev" data-action="prev" title="Poprzednia strona"><span class="fa fa-chevron-left" data-action="prev"></span></li>' +
+  '<li class="viewer-next" data-action="next" title="Następna strona"><span class="fa fa-chevron-right" data-action="next"></span></li>' +
+  <% } %>
+  '</ul>' +
+  '<div class="viewer-navbar">' +
+  '<ul class="viewer-list"></ul>' +
+  '</div>' +
+  '</div>' +
+  '<div class="viewer-tooltip"></div>' +
+  '<div class="viewer-button" data-action="mix"></div>' +
+  '<div class="viewer-player"></div>' +
+  '</div>';
+
+var viewer = new Viewer(document.getElementById('images'), {
+  button: false,
+  keyboard: false,
+  navbar: false,
+  title: false,
+  tooltip: false,
+  view: function(e)
+  {
+    var pagesEl = document.getElementById('pages');
+    var activePageEl = pagesEl.querySelector('.is-active');
+
+    if (activePageEl)
+    {
+      activePageEl.classList.remove('is-active');
+    }
+
+    pagesEl.children[e.detail.index].classList.add('is-active');
+  }
+});
+window.onload = function()
+{
+  viewer.show();
+
+  document.getElementById('pdf').addEventListener('click', function()
+  {
+    window.location.href = window.location.href + '&pdf=1';
+  });
+
+  document.getElementById('pages').addEventListener('click', function(e)
+  {
+    if (e.target.dataset.i)
+    {
+      viewer.view(+e.target.dataset.i);
+    }
+  });
+};
+</script>
+</body>
+</html>

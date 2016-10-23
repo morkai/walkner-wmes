@@ -448,8 +448,9 @@ exports.d8 = {
 
 exports.orderDocuments = {
   importPath: DATA_PATH + '/attachments-input',
-  cachedPath: DATA_PATH + '/documents-cache',
-  etoPath: DATA_PATH + '/documents-eto',
+  cachedPath: DATA_PATH + '/order-documents/cached',
+  convertedPath: DATA_PATH + '/order-documents/converted',
+  etoPath: DATA_PATH + '/order-documents/eto',
   sejdaConsolePath: 'sejda-console'
 };
 
