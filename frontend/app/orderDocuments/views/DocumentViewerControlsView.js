@@ -30,71 +30,96 @@ define([
     template: template,
 
     events: {
-      'click #-reloadDocument': function()
+      'click #-reloadDocument': function(e)
       {
-        this.trigger('documentReloadRequested');
-      },
-      'click #-openDocumentWindow': function()
-      {
-        this.trigger('documentWindowRequested');
-      },
-      'click #-openLocalOrderDialog': function()
-      {
-        var $openLocalOrderDialog = this.$id('openLocalOrderDialog');
-
-        if ($openLocalOrderDialog.hasClass('active'))
+        this.control(e, function()
         {
-          this.model.resetLocalOrder();
-          this.scrollIntoView();
-        }
-        else
+          this.trigger('documentReloadRequested');
+        });
+      },
+      'click #-openDocumentWindow': function(e)
+      {
+        this.control(e, function()
         {
-          this.openLocalOrderDialog();
-        }
+          this.trigger('documentWindowRequested');
+        });
+      },
+      'click #-openLocalOrderDialog': function(e)
+      {
+        this.control(e, function()
+        {
+          var $openLocalOrderDialog = this.$id('openLocalOrderDialog');
 
-        $openLocalOrderDialog.blur();
+          if ($openLocalOrderDialog.hasClass('active'))
+          {
+            this.model.resetLocalOrder();
+            this.scrollIntoView();
+          }
+          else
+          {
+            this.openLocalOrderDialog();
+          }
+
+          $openLocalOrderDialog.blur();
+        });
       },
       'click #-openSettingsDialog': function(e)
       {
-        this.openSettingsDialog();
-
-        e.currentTarget.blur();
-      },
-      'click #-openLocalFileDialog': function()
-      {
-        var $openLocalFileDialog = this.$id('openLocalFileDialog');
-
-        if ($openLocalFileDialog.hasClass('active'))
+        this.control(e, function()
         {
-          this.model.resetLocalFile();
-          this.scrollIntoView();
+          this.openSettingsDialog();
+        });
+      },
+      'click #-openLocalFileDialog': function(e)
+      {
+        this.control(e, function()
+        {
+          var $openLocalFileDialog = this.$id('openLocalFileDialog');
+
+          if ($openLocalFileDialog.hasClass('active'))
+          {
+            this.model.resetLocalFile();
+            this.scrollIntoView();
+          }
+          else
+          {
+            this.$id('localFile').click();
+          }
+
+          $openLocalFileDialog.blur();
+        });
+      },
+      'click #-toggleAddImprovementButtons': function()
+      {
+        if (this.canUseControls())
+        {
+          this.$id('addImprovementButtons').toggleClass('hidden');
+
+          if (this.$id('addImprovementButtons').hasClass('hidden'))
+          {
+            this.shrinkControls();
+          }
         }
         else
         {
-          this.$id('localFile').click();
+          this.enlargeControls();
         }
-
-        $openLocalFileDialog.blur();
-      },
-      'click #-toggleAddImprovementButtons': function(e)
-      {
-        this.$id('addImprovementButtons').toggleClass('hidden');
-
-        e.currentTarget.blur();
       },
       'click #-openAddNearMissWindow': function(e)
       {
-        this.openAddNearMissWindow();
-        this.$id('addImprovementButtons').addClass('hidden');
-
-        e.currentTarget.blur();
+        this.control(e, function()
+        {
+          this.openAddNearMissWindow();
+          this.$id('addImprovementButtons').addClass('hidden');
+        });
       },
       'click #-openAddSuggestionWindow': function(e)
       {
-        this.openAddSuggestionWindow();
-        this.$id('addImprovementButtons').addClass('hidden');
-
-        e.currentTarget.blur();
+        this.control(e, function()
+        {
+          this.openAddSuggestionWindow();
+          this.$id('addImprovementButtons').addClass('hidden');
+        });
       },
       'change #-localFile': function(e)
       {
@@ -193,7 +218,10 @@ define([
       'input #-filterPhrase': function(e)
       {
         this.filter(e.currentTarget.value);
-      }
+      },
+      'focus #-filterPhrase': 'shrinkControls',
+      'click #-prodLine': 'toggleControls',
+      'click #-order': 'toggleControls'
     },
 
     localTopics: {
@@ -209,6 +237,14 @@ define([
     destroy: function()
     {
       $(window).off('.' + this.idPrefix);
+    },
+
+    serialize: function()
+    {
+      return {
+        idPrefix: this.idPrefix,
+        touch: window.location.search.indexOf('touch') !== -1
+      };
     },
 
     beforeRender: function()
@@ -238,6 +274,47 @@ define([
       this.updateDocuments();
 
       this.$('.is-active')[0].scrollIntoView();
+    },
+
+    canUseControls: function()
+    {
+      return !this.$el.hasClass('is-touch') || this.$id('buttons').hasClass('is-enlarged');
+    },
+
+    enlargeControls: function()
+    {
+      if (this.$el.hasClass('is-touch'))
+      {
+        this.$id('buttons').addClass('is-enlarged');
+      }
+    },
+
+    shrinkControls: function()
+    {
+      this.$id('buttons').removeClass('is-enlarged');
+    },
+
+    toggleControls: function()
+    {
+      if (this.$el.hasClass('is-touch'))
+      {
+        this.$id('buttons').toggleClass('is-enlarged');
+      }
+    },
+
+    control: function(e, control)
+    {
+      if (this.canUseControls())
+      {
+        control.call(this, e);
+        this.shrinkControls();
+      }
+      else
+      {
+        this.enlargeControls();
+      }
+
+      e.currentTarget.blur();
     },
 
     resize: function(w, h)
@@ -284,6 +361,8 @@ define([
 
     selectDocument: function(nc15, focus)
     {
+      this.shrinkControls();
+
       this.model.selectDocument(nc15);
 
       if (focus)

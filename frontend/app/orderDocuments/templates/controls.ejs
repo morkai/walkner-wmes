@@ -1,8 +1,8 @@
-<div class="orderDocuments-controls">
+<div class="orderDocuments-controls <%- touch ? 'is-touch' : '' %>">
   <input id="<%- idPrefix %>-localFile" class="orderDocuments-localFile" type="file" tabindex="-1" accept="application/pdf">
   <div class="orderDocuments-controls-components">
     <div id="<%- idPrefix %>-prodLine" class="orderDocuments-prodLine"></div>
-    <div class="orderDocuments-buttons-container">
+    <div id="<%- idPrefix %>-buttons" class="orderDocuments-buttons-container">
       <div class="orderDocuments-buttons">
         <button id="<%- idPrefix %>-openLocalFileDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openLocalFileDialog') %>"><i class="fa fa-folder-open"></i></button>
         <button id="<%- idPrefix %>-openLocalOrderDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openLocalOrderDialog') %>"><i class="fa fa-search"></i></button>

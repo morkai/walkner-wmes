@@ -160,6 +160,25 @@
 .orderDocuments-buttons-container {
   position: relative;
 }
+.orderDocuments-buttons-container.is-enlarged {
+  position: absolute;
+  top: 33px;
+  left: 0;
+  z-index: 3000;
+  box-shadow: 0 4px 12px #666;
+}
+.is-enlarged > .orderDocuments-buttons > .btn {
+  width: 60px;
+  height: 50px;
+  font-size: 24px;
+}
+.is-enlarged + .orderDocuments-order {
+  margin-top: 32px;
+}
+.is-enlarged > .orderDocuments-buttons-addImprovement {
+  top: 50px;
+  box-shadow: 0 4px 12px #666;
+}
 .orderDocuments-buttons-addImprovement {
   flex-direction: column;
   position: absolute;
@@ -193,6 +212,9 @@
   background: #333;
   border-right: 1px solid #000;
   border-bottom: 1px solid #000;
+}
+.is-touch .orderDocuments-document {
+  padding: 12px 8px;
 }
 .orderDocuments-document.is-active {
   box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.5);
@@ -249,6 +271,9 @@
   background-color: #ffffd6;
   outline: 2px solid #66afe9;
   outline-offset: -2px;
+}
+.is-touch .orderDocuments-filter > input {
+  padding: 12px 8px;
 }
 .orderDocuments-localFile {
   position: absolute;
