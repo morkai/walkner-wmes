@@ -460,6 +460,13 @@ assets/select2.css
 ----------------
 assets/select2.css
 
+assets/wmes-docs-viewer.css
+----------------
+assets/../vendor/bootstrap/css/bootstrap.css
+assets/../vendor/font-awesome/css/font-awesome.css
+assets/../vendor/viewerjs/viewer.css
+assets/wmes-docs-viewer.css
+
 assets/wmes-docs.css
 ----------------
 assets/../vendor/bootstrap/css/bootstrap.css
