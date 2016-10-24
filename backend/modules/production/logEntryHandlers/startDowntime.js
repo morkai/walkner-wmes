@@ -61,6 +61,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         }
 
         prodDowntime.workerCount = prodShiftOrder ? prodShiftOrder.workerCount : 1;
+        prodDowntime.orderData = ProdDowntime.getOrderData(prodShiftOrder);
 
         prodDowntime.save(this.next());
       },

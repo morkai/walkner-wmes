@@ -147,7 +147,8 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     auto: {
       type: mongoose.Schema.Types.Mixed,
       default: null
-    }
+    },
+    orderData: {}
   }, {
     id: false
   });
@@ -176,6 +177,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
   prodDowntimeSchema.index({prodLine: 1, startedAt: -1});
   prodDowntimeSchema.index({updatedAt: 1, status: 1});
   prodDowntimeSchema.index({'alerts.active': 1});
+  prodDowntimeSchema.index({'orderData.family': 1});
 
   prodDowntimeSchema.statics.TOPIC_PREFIX = 'prodDowntimes';
 
@@ -222,6 +224,31 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       app.broker.publish('prodDowntimes.updated.' + doc._id, changes);
     }
   });
+
+  prodDowntimeSchema.statics.getOrderData = function(prodShiftOrder)
+  {
+    const orderData = {
+      nc12: '',
+      name: '',
+      family: '',
+      mrp: '',
+      qty: 0
+    };
+
+    if (prodShiftOrder && prodShiftOrder.orderData)
+    {
+      const data = prodShiftOrder.orderData;
+      const name = (data.description || data.name || '').trim();
+
+      orderData.nc12 = data.nc12;
+      orderData.name = name.trim();
+      orderData.family = /^[A-Z0-9]{6}/.test(data.name) ? data.name.substring(0, 6) : '';
+      orderData.mrp = data.mrp;
+      orderData.qty = data.qty || prodShiftOrder.quantityDone || 0;
+    }
+
+    return orderData;
+  };
 
   prodDowntimeSchema.methods.isEditable = function()
   {

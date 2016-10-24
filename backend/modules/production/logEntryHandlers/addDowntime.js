@@ -36,6 +36,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       this.prodShiftOrder = prodShiftOrder;
 
       prodDowntime.workerCount = prodShiftOrder ? prodShiftOrder.workerCount : 1;
+      prodDowntime.orderData = ProdDowntime.getOrderData(prodShiftOrder);
       prodDowntime.save(this.next());
     },
     function recalcOrderDurationsStep(err)

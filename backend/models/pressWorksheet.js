@@ -355,7 +355,8 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
           operators: operators,
           mechOrder: true,
           orderId: prodShiftOrder.orderId,
-          operationNo: prodShiftOrder.operationNo
+          operationNo: prodShiftOrder.operationNo,
+          orderData: ProdDowntime.getOrderData(prodShiftOrder)
         };
 
         if (needsId)
