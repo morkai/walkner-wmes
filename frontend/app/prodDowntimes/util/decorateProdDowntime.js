@@ -82,14 +82,38 @@ define([
         + obj.order + '</a>';
     }
 
+    var subdivision = subdivisions.get(obj.subdivision);
+    var prodFlow = prodFlows.get(obj.prodFlow);
+
+    obj.subdivision = subdivision ? subdivision.getLabel() : '?';
+    obj.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
+    obj.mrpControllers =
+      Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
+        ? obj.mrpControllers.join('; ')
+        : '?';
+
     var pso = obj.prodShiftOrder;
+
+    if (obj.orderData)
+    {
+      obj.productName = obj.orderData.name;
+      obj.productFamily = obj.orderData.family;
+      obj.orderMrp = '<span title="' + obj.mrpControllers + '">' + obj.orderData.mrp + '</span>';
+    }
+    else
+    {
+      obj.orderMrp = '<em>' + obj.mrpControllers + '</em>';
+    }
 
     if (pso && pso.orderData)
     {
       var orderData = pso.orderData;
 
-      obj.productName = orderData.description || orderData.name;
-      obj.productFamily = obj.productName.substring(0, 6);
+      if (!obj.orderData)
+      {
+        obj.productName = orderData.description || orderData.name;
+        obj.productFamily = obj.productName.substring(0, 6);
+      }
 
       if (orderData.operations && orderData.operations[obj.operationNo])
       {
@@ -111,16 +135,6 @@ define([
     obj.operatorInfo = renderUserInfo({userInfo: obj.operator});
     obj.creatorInfo = renderUserInfo({userInfo: obj.creator});
     obj.corroboratorInfo = renderUserInfo({userInfo: obj.corroborator});
-
-    var subdivision = subdivisions.get(obj.subdivision);
-    var prodFlow = prodFlows.get(obj.prodFlow);
-
-    obj.subdivision = subdivision ? subdivision.getLabel() : '?';
-    obj.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
-    obj.mrpControllers =
-      Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
-        ? obj.mrpControllers.join('; ')
-        : '?';
 
     obj.history = Array.isArray(obj.changes) && (!options || options.noHistory !== true)
       ? obj.changes.map(decorateProdDowntimeChange)

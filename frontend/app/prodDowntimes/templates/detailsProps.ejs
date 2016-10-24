@@ -98,7 +98,12 @@
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('core', 'ORG_UNIT:mrpController') %></div>
-          <div class="prop-value"><%= model.mrpControllers %></div>
+          <div class="prop-value">
+            <%= model.mrpControllers %>
+            <% if (model.orderMrp) { %>
+            <%- t('prodDowntimes', 'details:orderMrp', {mrp: model.orderMrp}) %>
+            <% } %>
+          </div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('core', 'ORG_UNIT:prodFlow') %></div>

@@ -29,7 +29,7 @@ define([
 
     columns: [
       {id: 'rid', className: 'is-min'},
-      {id: 'mrpControllers', tdClassName: 'is-min'},
+      {id: 'orderMrp', tdClassName: 'is-min', label: t.bound('prodDowntimes', 'PROPERTY:mrpControllers')},
       'prodFlow',
       'aor',
       {id: 'prodLine', tdClassName: 'is-min'},

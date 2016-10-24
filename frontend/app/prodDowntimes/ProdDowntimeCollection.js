@@ -86,7 +86,8 @@ define([
           date: 1,
           shift: 1,
           pressWorksheet: 1,
-          changesCount: 1
+          changesCount: 1,
+          orderData: 1
         },
         sort: {
           startedAt: -1

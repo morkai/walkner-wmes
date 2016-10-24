@@ -126,5 +126,7 @@
   "comments:alerts:finish": "Zakończono alarm: {alertName}",
 
   "comments:spigot:initial": "Zeskanowano prawidłowy komponent Spigot: {name} ({nc12})",
-  "comments:spigot:final": "Potwierdzono prawidłowy komponent Spigot: {name} ({nc12})"
+  "comments:spigot:final": "Potwierdzono prawidłowy komponent Spigot: {name} ({nc12})",
+
+  "details:orderMrp": "(w SAP: {mrp})"
 }
