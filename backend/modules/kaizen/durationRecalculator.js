@@ -3,6 +3,7 @@
 'use strict';
 
 var later = require('later');
+var moment = require('moment');
 
 module.exports = function setUpDurationRecalculator(app, module)
 {
@@ -23,7 +24,8 @@ module.exports = function setUpDurationRecalculator(app, module)
       return;
     }
 
-    var startedAt = new Date();
+    var startedAt = Date.now();
+    var currentDate = moment().startOf('day').toDate();
 
     module.debug("[durationRecalculator] Started...");
 
@@ -62,7 +64,7 @@ module.exports = function setUpDurationRecalculator(app, module)
 
     stream.on('data', function(doc)
     {
-      recalcNext(doc, startedAt);
+      recalcNext(doc, currentDate);
     });
 
     stream.on('end', function()
@@ -73,10 +75,10 @@ module.exports = function setUpDurationRecalculator(app, module)
     });
   }
 
-  function recalcNext(doc, startedAt)
+  function recalcNext(doc, currentDate)
   {
-    var newKaizenDuration = KaizenOrder.recalcKaizenDuration(doc, startedAt);
-    var newFinishDuration = KaizenOrder.recalcFinishDuration(doc, startedAt);
+    var newKaizenDuration = KaizenOrder.recalcKaizenDuration(doc, currentDate);
+    var newFinishDuration = KaizenOrder.recalcFinishDuration(doc, currentDate);
     var changed = false;
     var changes = {};
 

@@ -3,6 +3,7 @@
 'use strict';
 
 var _ = require('lodash');
+var moment = require('moment');
 var deepEqual = require('deep-equal');
 var autoIncrement = require('mongoose-auto-increment');
 var businessDays = require('../modules/reports/businessDays');
@@ -378,7 +379,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     }
 
     var fromDate = doc.date;
-    var toDate = doc.kaizenFinishDate || doc.finishedAt || currentDate || new Date();
+    var toDate = doc.kaizenFinishDate || doc.finishedAt || currentDate || moment().startOf('day').toDate();
 
     return 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
   };
@@ -391,7 +392,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     }
 
     var fromDate = doc.kaizenStartDate || doc.date;
-    var toDate = doc.kaizenFinishDate || currentDate || new Date();
+    var toDate = doc.kaizenFinishDate || currentDate || moment().startOf('day').toDate();
 
     return 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
   };
