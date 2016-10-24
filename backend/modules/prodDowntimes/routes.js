@@ -17,6 +17,8 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
   var settings = app[pdModule.config.settingsId];
   var ProdDowntime = mongoose.model('ProdDowntime');
 
+  const EMPTY_ORDER_DATA = ProdDowntime.getOrderData();
+
   var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW');
   var canManage = userModule.auth(
     'PROD_DATA:MANAGE',
@@ -240,6 +242,7 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
     var reason = downtimeReasonsModule.modelsById[doc.reason];
     var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
     var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
+    var orderData = doc.orderData || EMPTY_ORDER_DATA;
 
     return {
       '#rid': doc.rid,
@@ -248,8 +251,12 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
       '"reasonComment': doc.reasonComment,
       '"aor': aor ? aor.name : doc.aor,
       '"orderNo': doc.mechOrder ? '' : doc.orderId,
-      '"12nc': doc.mechOrder ? doc.orderId : '',
+      '"12nc': doc.mechOrder ? doc.orderId : orderData.nc12,
       '"operationNo': doc.operationNo,
+      '"family': orderData.family,
+      '"product': orderData.name,
+      '#qty': orderData.qty,
+      '"orderMrp': orderData.mrp,
       'date': app.formatDate(doc.date),
       '#shift': doc.shift,
       'startedAt': app.formatDateTime(startedAt.toDate()),
