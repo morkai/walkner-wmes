@@ -213,79 +213,96 @@ window.onload = function()
 {
   viewer.show();
 
+  var firstEl = document.getElementById('first');
+  var jumpEl = document.getElementById('jump');
+  var jumpFormEl = document.getElementById('jumpForm');
+  var pagesEl = document.getElementById('pages');
+
   document.getElementById('pdf').addEventListener('click', function()
   {
     window.location.href = window.location.href + '&pdf=1';
   });
 
-  document.getElementById('first').addEventListener('click', function()
+  if (firstEl)
   {
-    viewer.view(0);
-  });
+    firstEl.addEventListener('click', function()
+    {
+      viewer.view(0);
+    });
+  }
 
-  document.getElementById('jump').addEventListener('click', function()
+  if (jumpEl)
   {
-    document.getElementById('pageNo').value = (viewer.index + 1) + ' / ' + PAGE_COUNT;
-    document.getElementById('pageNo').dataset.value = '';
-    document.getElementById('jumpForm').classList.toggle('hidden');
-  });
+    jumpEl.addEventListener('click', function()
+    {
+      document.getElementById('pageNo').value = (viewer.index + 1) + ' / ' + PAGE_COUNT;
+      document.getElementById('pageNo').dataset.value = '';
+      document.getElementById('jumpForm').classList.toggle('hidden');
+    });
+  }
 
-  document.getElementById('pages').addEventListener('click', function(e)
+  if (pagesEl)
   {
-    if (e.target.dataset.page)
+    pagesEl.addEventListener('click', function(e)
     {
-      viewer.view(+e.target.dataset.page - 1);
-    }
-  });
+      if (e.target.dataset.page)
+      {
+        viewer.view(+e.target.dataset.page - 1);
+      }
+    });
+  }
 
-  document.getElementById('jumpForm').addEventListener('click', function(e)
+  if (jumpFormEl)
   {
-    var key = e.target.dataset.key;
-
-    if (!key)
+    jumpFormEl.addEventListener('click', function (e)
     {
-      return;
-    }
+      var key = e.target.dataset.key;
 
-    var pageNoEl = document.getElementById('pageNo');
+      if (!key)
+      {
+        return;
+      }
 
-    if (key === 'BACKSPACE')
+      var pageNoEl = document.getElementById('pageNo');
+
+      if (key === 'BACKSPACE')
+      {
+        pageNoEl.value = '? / ' + PAGE_COUNT;
+        pageNoEl.dataset.value = '';
+      }
+      else
+      {
+        pageNoEl.dataset.value += key;
+        pageNoEl.value = pageNoEl.dataset.value + ' / ' + PAGE_COUNT;
+      }
+    });
+
+    jumpFormEl.addEventListener('submit', function (e)
     {
-      pageNoEl.value = '? / ' + PAGE_COUNT;
-      pageNoEl.dataset.value = '';
-    }
-    else
-    {
-      pageNoEl.dataset.value += key;
-      pageNoEl.value = pageNoEl.dataset.value + ' / ' + PAGE_COUNT;
-    }
-  });
+      e.preventDefault();
 
-  document.getElementById('jumpForm').addEventListener('submit', function(e)
-  {
-    e.preventDefault();
+      e.target.classList.add('hidden');
 
-    e.target.classList.add('hidden');
+      var pageNoEl = document.getElementById('pageNo');
+      var pageNo = parseInt(pageNoEl.value, 10);
 
-    var pageNoEl = document.getElementById('pageNo');
-    var pageNo = parseInt(pageNoEl.value, 10);
+      if (isNaN(pageNo))
+      {
+        return;
+      }
 
-    if (isNaN(pageNo))
-    {
-      return;
-    }
+      if (pageNo < 1)
+      {
+        pageNo = 1;
+      }
+      else if (pageNo > PAGE_COUNT)
+      {
+        pageNo = PAGE_COUNT;
+      }
 
-    if (pageNo < 1)
-    {
-      pageNo = 1;
-    }
-    else if (pageNo > PAGE_COUNT)
-    {
-      pageNo = PAGE_COUNT;
-    }
-
-    viewer.view(pageNo - 1);
-  });
+      viewer.view(pageNo - 1);
+    });
+  }
 };
 
 function renderPages(currentPage)
