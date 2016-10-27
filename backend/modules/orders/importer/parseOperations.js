@@ -53,6 +53,11 @@ module.exports = function parseOperations(input, orders, missingOrders, importTs
           order.operations = [];
         }
 
+        operation.sapMachineSetupTime = operation.machineSetupTime;
+        operation.sapLaborSetupTime = operation.laborSetupTime;
+        operation.sapMachineTime = operation.machineTime;
+        operation.sapLaborTime = operation.laborTime;
+
         order.operations.push(operation);
       }
       else

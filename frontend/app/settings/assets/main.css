@@ -74,3 +74,6 @@
    border: 0;
    background: none;
  }
+.settings label + .help-block {
+  margin-top: 0;
+}

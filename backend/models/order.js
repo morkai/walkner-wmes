@@ -17,25 +17,19 @@ module.exports = function setupOrderModel(app, mongoose)
       type: String,
       trim: true
     },
-    qty: {
-      type: Number
-    },
+    qty: Number,
     unit: {
       type: String,
       trim: true
     },
-    machineSetupTime: {
-      type: Number
-    },
-    laborSetupTime: {
-      type: Number
-    },
-    machineTime: {
-      type: Number
-    },
-    laborTime: {
-      type: Number
-    }
+    machineSetupTime: Number,
+    laborSetupTime: Number,
+    machineTime: Number,
+    laborTime: Number,
+    sapMachineSetupTime: Number,
+    sapLaborSetupTime: Number,
+    sapMachineTime: Number,
+    sapLaborTime: Number
   }, {
     _id: false
   });

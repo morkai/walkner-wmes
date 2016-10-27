@@ -7,6 +7,7 @@ var _ = require('lodash');
 var deepEqual = require('deep-equal');
 var step = require('h5.step');
 var createParser = require('./createParser');
+var parseOperationTimeCoeffs = require('../parseOperationTimeCoeffs');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -42,6 +43,7 @@ exports.start = function startOrdersImporterModule(app, module)
   var Order = mongoose.model('Order');
   var OrderIntake = mongoose.model('OrderIntake');
   var XiconfOrder = mongoose.model('XiconfOrder');
+  var Setting = mongoose.model('Setting');
   var queue = [];
   var lock = false;
 
@@ -77,27 +79,47 @@ exports.start = function startOrdersImporterModule(app, module)
 
     module.debug("Comparing %d orders and %d missing orders...", orderIds.length, missingOrderIds.length);
 
-    Order.find({_id: {$in: allOrderIds}}).lean().exec(function(err, orderModels)
-    {
-      if (err)
+    step(
+      function()
       {
-        module.error("Failed to fetch orders for comparison: %s", err.message);
+        Setting.findById('orders.operations.timeCoeffs').lean().exec(this.next());
+      },
+      function(err, setting)
+      {
+        this.mrpToTimeCoeffs = setting ? parseOperationTimeCoeffs(setting.value) : {};
 
-        return unlock();
+        Order.find({_id: {$in: allOrderIds}}).lean().exec(this.next());
+      },
+      function(err, orderModels)
+      {
+        if (err)
+        {
+          module.error("Failed to fetch orders for comparison: %s", err.message);
+
+          return unlock();
+        }
+
+        var ts = new Date();
+        var insertList = [];
+        var updateList = [];
+        var ordersWithNewQty = [];
+
+        _.forEach(orderModels, compareOrder.bind(
+          null,
+          ts,
+          this.mrpToTimeCoeffs,
+          updateList,
+          orders,
+          missingOrders,
+          ordersWithNewQty
+        ));
+
+        createOrdersForInsertion(ts, insertList, orders, missingOrders);
+
+        setImmediate(prepareOrderIntakeSearch, insertList, updateList);
+        setImmediate(updateXiconfOrderQty, timestamp, ordersWithNewQty);
       }
-
-      var ts = new Date();
-      var insertList = [];
-      var updateList = [];
-      var ordersWithNewQty = [];
-
-      _.forEach(orderModels, compareOrder.bind(null, ts, updateList, orders, missingOrders, ordersWithNewQty));
-
-      createOrdersForInsertion(ts, insertList, orders, missingOrders);
-
-      setImmediate(prepareOrderIntakeSearch, insertList, updateList);
-      setImmediate(updateXiconfOrderQty, timestamp, ordersWithNewQty);
-    });
+    );
   }
 
   function unlock()
@@ -110,25 +132,25 @@ exports.start = function startOrdersImporterModule(app, module)
     }
   }
 
-  function compareOrder(ts, updateList, orders, missingOrders, ordersWithNewQty, orderModel)
+  function compareOrder(ts, mrpToTimeCoeffs, updateList, orders, missingOrders, ordersWithNewQty, orderModel)
   {
     var orderNo = orderModel._id;
 
     if (typeof orders[orderNo] === 'object')
     {
-      compareOrderWithDoc(ts, updateList, orderModel, orders[orderNo], ordersWithNewQty);
+      compareOrderWithDoc(ts, mrpToTimeCoeffs, updateList, orderModel, orders[orderNo], ordersWithNewQty);
 
       delete orders[orderNo];
     }
     else if (typeof missingOrders[orderNo] === 'object')
     {
-      compareMissingOrderWithDoc(ts, updateList, orderModel, missingOrders[orderNo]);
+      compareMissingOrderWithDoc(ts, mrpToTimeCoeffs, updateList, orderModel, missingOrders[orderNo]);
 
       delete missingOrders[orderNo];
     }
   }
 
-  function compareOrderWithDoc(ts, updateList, orderModel, newOrderData, ordersWithNewQty)
+  function compareOrderWithDoc(ts, mrpToTimeCoeffs, updateList, orderModel, newOrderData, ordersWithNewQty)
   {
     if (orderModel.importTs > newOrderData.importTs)
     {
@@ -147,6 +169,8 @@ exports.start = function startOrdersImporterModule(app, module)
       updatedAt: ts,
       importTs: newOrderData.importTs
     };
+
+    adjustOperationTimes(newOrderData.operations, mrpToTimeCoeffs[newOrderData.mrp]);
 
     _.forEach(newOrderData, function(newValue, key)
     {
@@ -193,12 +217,14 @@ exports.start = function startOrdersImporterModule(app, module)
     }
   }
 
-  function compareMissingOrderWithDoc(ts, updateList, orderModel, missingOrder)
+  function compareMissingOrderWithDoc(ts, mrpToTimeCoeffs, updateList, orderModel, missingOrder)
   {
     if (orderModel.importTs > missingOrder.importTs)
     {
       return;
     }
+
+    adjustOperationTimes(missingOrder.operations, mrpToTimeCoeffs[orderModel.mrp]);
 
     var oldOperations = orderModel.operations;
 
@@ -229,6 +255,27 @@ exports.start = function startOrdersImporterModule(app, module)
         }
       });
     }
+  }
+
+  function adjustOperationTimes(operations, timeCoeffs)
+  {
+    if (!operations || !timeCoeffs)
+    {
+      return;
+    }
+
+    var laborCoeff = timeCoeffs.labor || 1;
+    var laborSetupCoeff = timeCoeffs.laborSetup || 1;
+    var machineCoeff = timeCoeffs.machine || 1;
+    var machineSetupCoeff = timeCoeffs.machineSetup || 1;
+
+    _.forEach(operations, function(operation)
+    {
+      operation.laborTime = Math.round(operation.laborTime * laborCoeff * 1000) / 1000;
+      operation.laborSetupTime = Math.round(operation.laborSetupTime * laborSetupCoeff * 1000) / 1000;
+      operation.machineTime = Math.round(operation.machineTime * machineCoeff * 1000) / 1000;
+      operation.machineSetupTime = Math.round(operation.machineSetupTime * machineSetupCoeff * 1000) / 1000;
+    });
   }
 
   function createOrdersForInsertion(ts, insertList, orders, missingOrders)

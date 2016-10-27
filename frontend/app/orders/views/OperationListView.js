@@ -32,6 +32,10 @@ define([
             formatNumericProperty(op, 'laborSetupTime');
             formatNumericProperty(op, 'machineTime');
             formatNumericProperty(op, 'laborTime');
+            formatNumericProperty(op, 'sapMachineSetupTime');
+            formatNumericProperty(op, 'sapLaborSetupTime');
+            formatNumericProperty(op, 'sapMachineTime');
+            formatNumericProperty(op, 'sapLaborTime');
 
             return op;
           })

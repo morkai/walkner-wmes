@@ -40,7 +40,12 @@ define([
 
       if (/operations.groups$/.test(id))
       {
-        return newValue;
+        return this.prepareOperationGroups(newValue);
+      }
+
+      if (/operations.timeCoeffs$/.test(id))
+      {
+        return this.prepareOperationTimeCoeffs(newValue);
       }
     },
 
@@ -96,6 +101,98 @@ define([
       });
 
       return result.join('\n');
+    },
+
+    prepareOperationGroups: function(rawValue)
+    {
+      return rawValue
+        .split('\n')
+        .map(function(line)
+        {
+          return line
+            .split('|')
+            .map(function(operation)
+            {
+              var parts = operation.split('@');
+
+              return {
+                name: parts[0].trim(),
+                workCenter: (parts[1] || '').trim()
+              };
+            })
+            .filter(function(operation)
+            {
+              return operation.name.length;
+            });
+        })
+        .filter(function(operations)
+        {
+          return operations.length > 1;
+        })
+        .map(function(operations)
+        {
+          return operations
+            .map(function(operation)
+            {
+              var line = operation.name;
+
+              if (operation.workCenter.length)
+              {
+                line += ' @ ' + operation.workCenter;
+              }
+
+              return line;
+            })
+            .join(' | ');
+        })
+        .join('\n');
+    },
+
+    prepareOperationTimeCoeffs: function(rawValue)
+    {
+      var timeNames = {
+        LABOR: 'labor',
+        MACHINE: 'machine',
+        LABORSETUP: 'laborSetup',
+        MACHINESETUP: 'machineSetup'
+      };
+      var mrpTimes = {};
+
+      rawValue.split('\n').forEach(function(line)
+      {
+        var times = {};
+        var remaining = line;
+        var re = /((?:labor|machine)(?:setup)?).*?([0-9]+(?:(?:\.|,)[0-9]+)?)/ig;
+        var matchCount = 0;
+        var match;
+
+        while ((match = re.exec(line)) !== null)
+        {
+          times[match[1].toUpperCase()] = parseFloat(match[2].replace(',', '.'));
+          remaining = remaining.replace(match[0], '');
+          matchCount += 1;
+        }
+
+        var mrp = remaining.split(/[^A-Za-z0-9]/)[0].toUpperCase();
+
+        if (matchCount && mrp.length)
+        {
+          mrpTimes[mrp] = times;
+        }
+      });
+
+      return Object.keys(mrpTimes).map(function(mrp)
+      {
+        var line = mrp + ':';
+
+        Object.keys(mrpTimes[mrp]).forEach(function(key)
+        {
+          line += ' ' + timeNames[key] + '=' + mrpTimes[mrp][key];
+        });
+
+        return line;
+      })
+      .join('\n');
     }
 
   });
