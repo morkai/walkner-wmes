@@ -99,34 +99,38 @@ define([
 
       $input.select2({
         multiple: true,
-        data: orgUnits.getAllByType(type).map(function(orgUnit)
-        {
-          if (type === 'division' && orgUnit.get('type') !== 'prod')
+        data: orgUnits
+          .getAllByType(type)
+          .map(function(orgUnit)
           {
-            return null;
-          }
-
-          var text;
-
-          if (type === 'subdivision')
-          {
-            if (orgUnit.get('type') === 'storage')
+            if (type === 'division' && orgUnit.get('type') !== 'prod')
             {
               return null;
             }
 
-            text = orgUnit.get('division') + ' > ' + orgUnit.getLabel();
-          }
-          else
-          {
-            text = orgUnit.getLabel();
-          }
+            var text;
 
-          return {
-            id: orgUnit.id,
-            text: text
-          };
-        }).filter(function(item) { return item !== null; })
+            if (type === 'subdivision')
+            {
+              if (orgUnit.get('type') === 'storage')
+              {
+                return null;
+              }
+
+              text = orgUnit.get('division') + ' > ' + orgUnit.getLabel();
+            }
+            else
+            {
+              text = orgUnit.getLabel();
+            }
+
+            return {
+              id: orgUnit.id,
+              text: text
+            };
+          })
+          .filter(function(item) { return item !== null; })
+          .sort(function(a, b) { return a.text.localeCompare(b.text); })
       });
 
       var choicesEl = $input.select2('container').find('.select2-choices')[0];
