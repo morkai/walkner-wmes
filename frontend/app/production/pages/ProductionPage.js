@@ -311,6 +311,11 @@ define([
         page.updateCurrentDowntime();
       });
 
+      page.listenTo(model, 'orderCorrected', function()
+      {
+        page.checkSpigot();
+      });
+
       page.listenTo(model.prodShiftOrder, 'change:mechOrder', function()
       {
         page.$el.toggleClass('is-mechOrder', model.prodShiftOrder.isMechOrder());
@@ -321,7 +326,10 @@ define([
         model.saveLocalData();
       });
 
-      page.socket.on('production.locked', page.broker.publish.bind(page.broker, 'production.locked'));
+      page.socket.on('production.locked', function()
+      {
+        page.broker.publish(page.broker, 'production.locked');
+      });
     },
 
     beforeRender: function()
@@ -584,6 +592,19 @@ define([
     {
       var model = this.model;
       var spigot = model.prodShiftOrder.get('spigot') || null;
+      var spigotComponent = model.getSpigotComponent();
+
+      if (!spigotComponent)
+      {
+        return;
+      }
+
+      if (spigot && spigot.forceCheck && spigotComponent)
+      {
+        this.showSpigotDialog(spigotComponent);
+
+        return;
+      }
 
       if (model.get('state') !== 'downtime'
         || spigot
@@ -596,14 +617,7 @@ define([
       var expectedReason = settings.getValue('rearmDowntimeReason');
       var actualReason = model.prodDowntimes.findFirstUnfinished().get('reason');
 
-      if (actualReason !== expectedReason)
-      {
-        return;
-      }
-
-      var spigotComponent = model.getSpigotComponent();
-
-      if (spigotComponent)
+      if (actualReason === expectedReason && spigotComponent)
       {
         this.showSpigotDialog(spigotComponent);
       }

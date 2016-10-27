@@ -495,6 +495,8 @@ define([
       if (changes)
       {
         prodLog.record(this, 'correctOrder', changes);
+
+        this.trigger('orderCorrected');
       }
     },
 
@@ -668,6 +670,10 @@ define([
         prodDowntime = spigot.prodDowntime;
         component = spigot.component;
         final = true;
+      }
+      else if (spigot)
+      {
+        prodDowntime = spigot.prodDowntime;
       }
       else
       {
@@ -913,8 +919,7 @@ define([
     {
       return this.prodShiftOrder.getSpigotComponent(
         this.settings.getValue('spigotPatterns'),
-        this.settings.getValue('spigotNotPatterns'),
-        this.settings.getValue('spigotGroups')
+        this.settings.getValue('spigotNotPatterns')
       );
     },
 

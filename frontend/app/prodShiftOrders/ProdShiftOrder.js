@@ -138,6 +138,13 @@ define([
 
       this.prepareOperations(orderData);
 
+      var spigot = this.get('spigot');
+
+      if (spigot)
+      {
+        spigot.forceCheck = true;
+      }
+
       var changes = {
         mechOrder: orderData.no === null,
         orderId: orderId,
