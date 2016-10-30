@@ -49,10 +49,17 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
       clearTimeout(timer);
     }
 
-    timer = setTimeout(
-      confirmOldProdDowntimes,
-      moment().minutes(20).seconds(0).milliseconds(0).add(1, 'hours').diff()
-    );
+    const delay = moment().minutes(20).seconds(0).milliseconds(0).add(1, 'hours').diff();
+
+    if (delay < 0)
+    {
+      timer = setTimeout(scheduleNextAutoConfirmation, 3600000);
+    }
+    else
+    {
+      timer = setTimeout(confirmOldProdDowntimes, delay);
+    }
+
   }
 
   function confirmOldProdDowntimes()
@@ -143,7 +150,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
           clearTimeout(this.timer);
           this.timer = null;
         }
-        
+
         if (err)
         {
           prodDowntimesModule.error("Failed to confirm old downtimes: %s", err.message);
