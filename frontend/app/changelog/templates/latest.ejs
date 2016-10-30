@@ -1,15 +1,34 @@
-<h1>v0.96.1</h1>
-<h2><%- time.format('2016-10-24', 'LL') %></h2>
-<h3>Przestoje</h3>
+<h1>v0.97.0</h1>
+<h2><%- time.format('2016-10-30', 'LL') %></h2>
+<h3>Formatka operatora</h3>
 <ul>
-  <li>Zmieniono kolumnę MRP na liście przestojów tak, aby pokazywała wartość 'MRP' ze zlecenia w SAP, a nie 'Kontroler
-    MRP' linii, na której przestój został rozpoczęty (ta wartość dostępna jest w dymku po najechaniu myszką).</li>
-  <li>Zmieniono eksportowanie przestojów tak, aby eksportowane były także: 12NC, ilość w zleceniu, rodzina produktu,
-    nazwa produktu oraz MRP zlecenia.</li>
+  <li>Dodano ponowne wymuszenie skanowania komponentu Spigot po wykonaniu operacji 'Poprawa zlecenia'.</li>
+</ul>
+<h3>Zlecenia reszty działów</h3>
+<ul>
+  <li>Dodano możliwość skalowania czasów zaimportowanych operacji.</li>
 </ul>
 <h3>Dokumentacja</h3>
 <ul>
-  <li>Zmieniono wyświetlanie numerów stron w nowej przeglądarce dokumentów, gdy dokument ma więcej niż 9 stron tak,
-    aby zawsze wyświetlany był przycisk przejścia do pierwszej strony oraz przycisk otwierający formularz
-    'Skocz do strony'.</li>
+  <li>Poprawiono niedziałające przyciski z numerami stron w nowej przeglądarce dokumentów, w przypadku gdy dokument
+    ma mniej niż 10 stron.</li>
+</ul>
+<h3>Monitoring > Lista linii produkcyjnych</h3>
+<ul>
+  <li>Zmieniono sortowanie jednostek organizacyjnych w filtrze 'Wybierz linie produkcyjne' na alfabetyczne.</li>
+</ul>
+<h3>ZPW</h3>
+<h3>Usprawnienia</h3>
+<ul>
+  <li>Poprawiono błąd w obliczaniu wartości 'Liczba dni realizacji' powodujący, że liczba dni była zawsze za duża
+    o jeden dzień.</li>
+</ul>
+<h3>Linie produkcyjne</h3>
+<ul>
+  <li>Poprawiono błąd niepozwalający na użycie znaku <code>-</code> w ID linii.</li>
+</ul>
+<h3>Przestoje</h3>
+<ul>
+  <li>Poprawiono błąd wywalający serwer z powodu cofnięcia zegara systemowego podczas automatycznego potwierdzania
+    przestojów.</li>
 </ul>
