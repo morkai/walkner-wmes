@@ -45,11 +45,11 @@ define([
       return function(row)
       {
         var model = collection.get(row._id);
-        var actions = [];
+        var actions = [ListView.actions.delete(model)];
 
         if (canManage && row.connectedAt === null)
         {
-          actions.push(ListView.actions.delete(model));
+          actions[0].className = 'disabled';
         }
 
         return actions;
