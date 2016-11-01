@@ -785,10 +785,19 @@ define([
   NavbarView.prototype.selectActiveSearchResult = function()
   {
     var page = this;
-    var href = page.$id('searchResults').find('.active').find('a').prop('href');
+    var $link = page.$id('searchResults').find('.active').find('a');
+    var target = $link.prop('target');
+    var href = $link.prop('href');
 
     if (!href)
     {
+      return;
+    }
+
+    if (target === '_blank')
+    {
+      window.open(href, target);
+
       return;
     }
 
@@ -822,6 +831,7 @@ define([
       partialOrderNo: null,
       fullNc12: null,
       partialNc12: null,
+      fullNc15: null,
       year: null,
       month: null,
       day: null,
@@ -847,6 +857,15 @@ define([
         searchPhrase = searchPhrase.replace(pattern, '');
       }
     });
+
+    // Full 15NC
+    matches = searchPhrase.match(/[^0-9A-Z]([0-9]{15})[^0-9A-Z]/);
+
+    if (matches)
+    {
+      results.fullNc15 = matches[1];
+      searchPhrase = searchPhrase.replace(results.fullNc15, '');
+    }
 
     // Full 12NC
     matches = searchPhrase.match(/[^0-9A-Z]([0-9]{12}|[A-Z]{2}[A-Z0-9]{5})[^0-9A-Z]/);

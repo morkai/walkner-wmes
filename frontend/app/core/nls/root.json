@@ -193,6 +193,7 @@
     "NAVBAR:SEARCH:partialOrderNo": "Orders no {orderNo}...",
     "NAVBAR:SEARCH:fullNc12": "12NC {nc12}",
     "NAVBAR:SEARCH:partialNc12": "12NC {nc12}...",
+    "NAVBAR:SEARCH:fullNc15": "15NC {nc15}",
     "NAVBAR:SEARCH:sapDetails": "details from SAP",
     "NAVBAR:SEARCH:xiconfDetails": "details from the tests db",
     "NAVBAR:SEARCH:xiconfResults": "test results",
@@ -213,6 +214,7 @@
     "NAVBAR:SEARCH:hourlyPlans": "list of hourly plans",
     "NAVBAR:SEARCH:hourlyPlan": "hourly plan",
     "NAVBAR:SEARCH:prodShifts": "list of production shifts",
+    "NAVBAR:SEARCH:document": "documentation file",
 
     "ACTION_FORM:BUTTON": "Perform action",
     "ACTION_FORM:BUTTON:delete": "Delete",
