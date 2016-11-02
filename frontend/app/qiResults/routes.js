@@ -7,8 +7,7 @@ define([
   '../viewport',
   '../user',
   '../time',
-  '../core/util/showDeleteFormPage',
-  './QiResult'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   broker,
@@ -16,8 +15,7 @@ define([
   viewport,
   user,
   time,
-  showDeleteFormPage,
-  QiResult
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -101,10 +99,11 @@ define([
   {
     viewport.loadPage(
       [
+        'app/qiResults/QiResult',
         'app/qiResults/pages/QiResultDetailsPage',
         nls
       ],
-      function(QiResultDetailsPage)
+      function(QiResult, QiResultDetailsPage)
       {
         return new QiResultDetailsPage({
           model: new QiResult({_id: req.params.id})
@@ -117,10 +116,11 @@ define([
   {
     viewport.loadPage(
       [
+        'app/qiResults/QiResult',
         'app/qiResults/pages/QiResultAddFormPage',
         nls
       ],
-      function(QiResultAddFormPage)
+      function(QiResult, QiResultAddFormPage)
       {
         return new QiResultAddFormPage({
           model: new QiResult({
@@ -143,10 +143,11 @@ define([
   {
     viewport.loadPage(
       [
+        'app/qiResults/QiResult',
         'app/qiResults/pages/QiResultEditFormPage',
         nls
       ],
-      function(QiResultEditFormPage)
+      function(QiResult, QiResultEditFormPage)
       {
         return new QiResultEditFormPage({
           model: new QiResult({_id: req.params.id})
@@ -155,7 +156,7 @@ define([
     );
   });
 
-  router.map('/qi/results/:id;delete', canManage, _.partial(showDeleteFormPage, QiResult, _, _, {
+  router.map('/qi/results/:id;delete', canManage, _.partial(showDeleteFormPage, 'app/qiResults/QiResult', _, _, {
     baseBreadcrumb: true
   }));
 
