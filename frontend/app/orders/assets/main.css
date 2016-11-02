@@ -113,4 +113,7 @@
 .orders-eto-loaded > .panel-body {
   padding: 0;
 }
-
+.orders-operations-summed {
+  display: block;
+  font-size: 12px;
+}

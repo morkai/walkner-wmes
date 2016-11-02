@@ -153,8 +153,9 @@ define([
       this.setUpRemoteTopics();
 
       var orderData = this.prepareOrderData();
+      var prodShiftOrder = this.prodShiftOrder;
 
-      this.order = this.prodShiftOrder.get('mechOrder')
+      this.order = prodShiftOrder.get('mechOrder')
         ? new MechOrder(orderData)
         : new Order(orderData);
 
@@ -165,13 +166,19 @@ define([
         delayReasons: this.delayReasons
       };
 
-      this.orderDetailsView = this.prodShiftOrder.get('mechOrder')
+      this.orderDetailsView = prodShiftOrder.get('mechOrder')
         ? new MechOrderDetailsView(orderDetailsViewOptions)
         : new OrderDetailsView(orderDetailsViewOptions);
 
       this.operationListView = new OperationListView({
         model: this.order,
-        highlighted: this.prodShiftOrder.get('operationNo')
+        highlighted: prodShiftOrder.get('operationNo'),
+        summedTimes: {
+          laborSetupTime: prodShiftOrder.get('laborSetupTime'),
+          laborTime: prodShiftOrder.get('laborTime'),
+          machineSetupTime: prodShiftOrder.get('machineSetupTime'),
+          machineTime: prodShiftOrder.get('machineTime'),
+        }
       });
 
       this.setView('.prodShiftOrders-order-container', this.orderDetailsView);
