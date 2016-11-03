@@ -75,7 +75,7 @@ define([
         paginate: false,
         rqlQuery: 'select(rid,status,subject)&sort(-updatedAt)&limit(11)'
         + '&observers.user.id=mine'
-        + '&status=in=(new,new,accepted,todo,inProgress,paused)'
+        + '&status=in=(new,accepted,todo,inProgress,paused)'
       });
       this.suggestionStats = new Model(null, {
         url: '/suggestions/stats'
@@ -84,7 +84,7 @@ define([
         paginate: false,
         rqlQuery: 'select(rid,status,subject)&sort(-updatedAt)&limit(11)'
         + '&observers.user.id=mine'
-        + '&status=in=(new,new,accepted,todo,inProgress,paused)'
+        + '&status=in=(new,accepted,todo,inProgress,paused)'
       });
     },
 
