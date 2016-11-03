@@ -165,10 +165,30 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         for (var i = 0; i < this.parsedOrdersList.length; ++i)
         {
           var parsedOrder = this.parsedOrdersList[i];
+          var parsedOrdersList = parsedOrdersMap[parsedOrder.no];
 
-          if (parsedOrdersMap[parsedOrder.no] === undefined)
+          if (parsedOrdersList === undefined)
           {
             parsedOrdersMap[parsedOrder.no] = [parsedOrder];
+
+            continue;
+          }
+
+          var duplicate = null;
+
+          for (var ii = 0; ii < parsedOrdersList.length; ++ii)
+          {
+            if (parsedOrder.nc12 === parsedOrdersList[ii].nc12)
+            {
+              duplicate = parsedOrdersList[ii];
+
+              break;
+            }
+          }
+
+          if (duplicate)
+          {
+            duplicate.quantity += parsedOrder.quantity;
           }
           else
           {
