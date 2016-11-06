@@ -7,5 +7,5 @@ define([
 ) {
   'use strict';
 
-  return createLicenseFeaturesSerializer(['wmes', 'sol', 't24vdc', 'led', 'gprs', 'glp2', 'fl', 'ft', 'hid']);
+  return createLicenseFeaturesSerializer(['wmes', 'sol', 't24vdc', 'led', 'gprs', 'glp2', 'fl', 'ft', 'hid', 'weight']);
 });

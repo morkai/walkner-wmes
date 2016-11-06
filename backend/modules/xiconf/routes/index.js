@@ -27,6 +27,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   var XiconfResult = mongoose.model('XiconfResult');
   var XiconfProgram = mongoose.model('XiconfProgram');
   var XiconfHidLamp = mongoose.model('XiconfHidLamp');
+  var XiconfComponentWeight = mongoose.model('XiconfComponentWeight');
   var XiconfOrder = mongoose.model('XiconfOrder');
 
   var canView = userModule.auth('XICONF:VIEW');
@@ -271,13 +272,26 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   express.delete('/xiconf/programs/:id', canManage, deleteProgramRoute.bind(null, app, XiconfProgram));
 
   //
-  // Programs
+  // HID Lamps
   //
   express.get('/xiconf/hidLamps', canView, express.crud.browseRoute.bind(null, app, XiconfHidLamp));
   express.post('/xiconf/hidLamps', canManage, express.crud.addRoute.bind(null, app, XiconfHidLamp));
   express.get('/xiconf/hidLamps/:id', canView, express.crud.readRoute.bind(null, app, XiconfHidLamp));
   express.put('/xiconf/hidLamps/:id', canManage, express.crud.editRoute.bind(null, app, XiconfHidLamp));
   express.delete('/xiconf/hidLamps/:id', canManage, express.crud.deleteRoute.bind(null, app, XiconfHidLamp));
+
+  //
+  // Component Weights
+  //
+  express.get('/xiconf/componentWeights', canView, express.crud.browseRoute.bind(null, app, XiconfComponentWeight));
+  express.post('/xiconf/componentWeights', canManage, express.crud.addRoute.bind(null, app, XiconfComponentWeight));
+  express.get('/xiconf/componentWeights/:id', canView, express.crud.readRoute.bind(null, app, XiconfComponentWeight));
+  express.put(
+    '/xiconf/componentWeights/:id', canManage, express.crud.editRoute.bind(null, app, XiconfComponentWeight)
+  );
+  express.delete(
+    '/xiconf/componentWeights/:id', canManage, express.crud.deleteRoute.bind(null, app, XiconfComponentWeight)
+  );
 
   //
   // Clients

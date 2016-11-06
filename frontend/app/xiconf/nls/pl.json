@@ -350,6 +350,23 @@
   "hidLamps:error:NO_HID_LAMPS": "Zlecenie bez lamp HID!",
   "hidLamps:error:INVALID_HID_LAMP": "Nieprawidłowe ID lampy HID!",
 
+  "log:WEIGHT:STARTED": "Rozpoczynanie ważenia komponentu...",
+  "log:WEIGHT:SUCCESS": "Pomyślnie ukończono ważenie komponentu w ciągu <code>{duration}</code>.",
+  "log:WEIGHT:FAILURE": "Zakończono ważenie komponentu w ciągu <code>{duration}</code> z powodu błędu: <code>{error}</code>",
+  "log:WEIGHT:SCANNING": "Oczekiwanie na zeskanowanie kodu komponentu...",
+  "log:WEIGHT:SCANNED": "Zeskanowano: <code>{scanValue}</code>",
+  "log:WEIGHT:CHECKING_COMPONENT": "Sprawdzanie komponentu <code>{nc12}</code>...",
+  "log:WEIGHT:WEIGHING": "Ważenie komponentu <code>{component}</code>. Oczekiwana waga: <code>{weight}</code>g",
+  "log:WEIGHT:WEIGHED": "Rzeczywista waga: <code>{weight}</code>g",
+
+  "error:WEIGHT:SCAN_FAILURE": "Zeskanowano nieprawidłowy kod komponentu.",
+  "error:WEIGHT:DB_FAILURE": "Błąd bazy danych podczas sprawdzania komponentu przez zewnętrzny serwer.",
+  "error:WEIGHT:ORDER_NOT_FOUND": "Zeskanowany komponent nie istnieje w wybranym zleceniu.",
+  "error:WEIGHT:WEIGHT_NOT_FOUND": "Brak zdefiniowanej wagi komponentu.",
+  "error:WEIGHT:SN_ALREADY_USED": "Numer seryjny komponentu został już użyty.",
+  "error:WEIGHT:BAD_RESPONSE": "Nieprawidłowa odpowiedź z serwera zewnętrznego.",
+  "error:WEIGHT:TIMEOUT": "Upłynięcie limitu czasu oczekiwania na zważenie komponentu.",
+
   "settings:tab:clients": "Klienci",
   "settings:tab:notifier": "Powiadomienia",
   "settings:appVersion": "Aktualna wersja aplikacji Walkner Xiconf",

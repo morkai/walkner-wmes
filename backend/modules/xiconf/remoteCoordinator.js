@@ -22,6 +22,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var XiconfOrder = mongoose.model('XiconfOrder');
   var XiconfInvalidLed = mongoose.model('XiconfInvalidLed');
   var XiconfHidLamp = mongoose.model('XiconfHidLamp');
+  var XiconfComponentWeight = mongoose.model('XiconfComponentWeight');
   var Order = mongoose.model('Order');
   var License = mongoose.model('License');
 
@@ -40,19 +41,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   var orderResultsToRecount = {};
   var orderResultsRecountTimer = null;
 
-  // TODO: remove
-  var W_LINE = {
-    'W-1~c': true,
-    'W-2~c': true,
-    'W1_SM-12_1~c': true,
-    'W1_SM-12_2~c': true,
-    'W1_SM-13_1~c': true,
-    'W1_SM-13_2~c': true
-  };
-
   xiconfModule.remote = {
     checkSerialNumber: handleCheckSerialNumberRequest,
     checkHidLamp: handleCheckHidLampRequest,
+    checkComponentWeight: handleCheckComponentWeightRequest,
     generateServiceTag: handleGenerateServiceTagRequest,
     acquireServiceTag: handleAcquireServiceTagRequest,
     releaseServiceTag: handleReleaseServiceTagRequest,
@@ -588,11 +580,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       data.prodLineId = null;
     }
 
-    if (W_LINE[data.prodLineId])
-    {
-      data.prodLineId = data.prodLineId.split('~')[0];
-    }
-
     var socket = this;
 
     if (!socket.xiconf)
@@ -741,6 +728,38 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     checkHidLamp(input, reply);
   }
 
+  function handleCheckComponentWeightRequest(input, reply)
+  {
+    /*jshint validthis:true*/
+
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (restarting)
+    {
+      return reply(new Error('RESTARTING'));
+    }
+
+    var socket = this;
+
+    if (socket.id && !socket.xiconf)
+    {
+      return reply(new Error('NOT_CONNECTED'));
+    }
+
+    if (!_.isObject(input)
+      || !_.isString(input.orderNo)
+      || !_.isString(input.nc12)
+      || !_.isString(input.serialNumber))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    checkComponentWeight(input, reply);
+  }
+
   function handleGenerateServiceTagRequest(input, reply)
   {
     /*jshint validthis:true*/
@@ -799,7 +818,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       || !_.isString(input.nc12)
       || !_.isBoolean(input.multi)
       || !validateInputLeds(input)
-      || !validateInputHidLamps(input))
+      || !validateInputHidLamps(input)
+      || !validateInputWeight(input))
     {
       return reply(new Error('INPUT'));
     }
@@ -959,6 +979,21 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     return true;
   }
 
+  function validateInputWeight(input)
+  {
+    const weight = input.weight;
+
+    if (!weight)
+    {
+      return true;
+    }
+
+    return _.isPlainObject(weight)
+      && _.isString(weight.nc12) && /^[0-9]{12}$/.test(weight.nc12)
+      && _.isString(weight.serialNumber) && !_.isEmpty(weight.serialNumber)
+      && _.isString(weight.name) && !_.isEmpty(weight.name);
+  }
+
   function checkSerialNumber(input, reply)
   {
     step(
@@ -1048,6 +1083,75 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     );
   }
 
+  function checkComponentWeight(input, reply)
+  {
+    step(
+      function findXiconfOrderStep()
+      {
+        Order
+          .findOne({_id: input.orderNo, 'bom.nc12': input.nc12}, {_id: 1})
+          .lean()
+          .exec(this.parallel());
+
+        XiconfComponentWeight
+          .findOne({_id: input.nc12})
+          .lean()
+          .exec(this.parallel());
+
+        let conditions = null;
+
+        if (input.scope === 'current')
+        {
+          conditions = {'items.serialNumbers': input.serialNumber, _id: input.orderNo};
+        }
+        else if (input.scope === 'all')
+        {
+          conditions = {'items.serialNumbers': input.serialNumber};
+        }
+
+        if (conditions !== null)
+        {
+          XiconfOrder
+            .findOne(conditions, {_id: 1})
+            .lean()
+            .exec(this.parallel());
+        }
+      },
+      function checkStep(err, order, componentWeight, xiconfOrder)
+      {
+        if (err)
+        {
+          xiconfModule.error(
+            "Failed to check serial number [%s] for order [%s] and 12NC [%s]: %s",
+            input.serialNumber,
+            input.orderNo,
+            input.nc12,
+            err.message
+          );
+
+          return reply(new Error('DB_FAILURE'), null);
+        }
+
+        if (!order)
+        {
+          return reply(new Error('ORDER_NOT_FOUND'));
+        }
+
+        if (!componentWeight)
+        {
+          return reply(new Error('WEIGHT_NOT_FOUND'));
+        }
+
+        if (xiconfOrder)
+        {
+          return reply(new Error('SN_ALREADY_USED'));
+        }
+
+        return reply(null, componentWeight);
+      }
+    );
+  }
+
   function recountOrder(input, reply)
   {
     queueOrderOperation(input.orderNo, recountNextOrder, reply, {
@@ -1076,7 +1180,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       programId: input.programId,
       programName: input.programName,
       recount: input.recount !== false,
-      hidLamps: input.hidLamps
+      hidLamps: input.hidLamps,
+      weight: input.weight
     });
   }
 
@@ -1611,6 +1716,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         var ftItemIndex = -1;
         var ledItems = {};
         var hidItems = {};
+        var weightItems = {};
 
         for (var i = 0; i < orderData.items.length; ++i)
         {
@@ -1626,6 +1732,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           else if (item.kind === 'hid')
           {
             hidItems[item.nc12] = {
+              item: item,
+              index: i
+            };
+          }
+          else if (item.kind === 'weight')
+          {
+            weightItems[item.nc12] = {
               item: item,
               index: i
             };
@@ -1654,8 +1767,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         var changes = [
           function(orderData) { orderData.serviceTagCounter = $set.serviceTagCounter; }
         ];
-        var anyLeds = false;
-        var anyHids = false;
 
         if (programItemIndex !== -1)
         {
@@ -1736,8 +1847,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           $addToSet['items.' + index + '.serialNumbers'] = {$each: led.serialNumbers};
 
           changes.push(applyItemQuantityDoneChange.bind(null, item, newLedItemQuantityDone));
-
-          anyLeds = true;
         });
 
         _.forEach(data.hidLamps, function(hidLamp)
@@ -1760,9 +1869,36 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           $addToSet['items.' + index + '.serialNumbers'] = {$each: hidLamp.scanResults};
 
           changes.push(applyItemQuantityDoneChange.bind(null, item, newHidItemQuantityDone));
-
-          anyHids = true;
         });
+
+        if (data.weight)
+        {
+          var weightItem = weightItems[data.weight.nc12];
+
+          if (!weightItem)
+          {
+            weightItem = {
+              kind: 'weight',
+              nc12: data.weight.nc12,
+              name: data.weight.name,
+              quantityTodo: orderData.quantityTodo,
+              quantityDone: 1,
+              extraQuantityDone: 0,
+              serialNumbers: [data.weight.serialNumber]
+            };
+
+            $set['items.' + orderData.items.length] = weightItem;
+
+            changes.push(function() { orderData.items.push(weightItem); });
+          }
+          else
+          {
+            $set['items.' + weightItem.index + '.quantityDone'] = weightItem.item.quantityDone + 1;
+            $addToSet['items.' + weightItem.index + '.serialNumbers'] = data.weight.serialNumber;
+
+            changes.push(applyItemQuantityDoneChange.bind(null, weightItem.item, weightItem.item.quantityDone + 1));
+          }
+        }
 
         if (changes.length <= 1)
         {
@@ -1772,7 +1908,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         var condition = {_id: data.orderNo};
         var updates = {$set: $set};
 
-        if (anyLeds || anyHids)
+        if (!_.isEmpty($addToSet))
         {
           updates.$addToSet = $addToSet;
         }
@@ -1889,6 +2025,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         var testItem;
         var testItemIndex = -1;
         var ledItems = {};
+        var hidItems = {};
+        var weightItems = {};
         var ftItem;
         var ftItemIndex = -1;
 
@@ -1899,6 +2037,20 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           if (item.kind === 'led')
           {
             ledItems[item.nc12] = {
+              item: item,
+              index: i
+            };
+          }
+          else if (item.kind === 'hid')
+          {
+            hidItems[item.nc12] = {
+              item: item,
+              index: i
+            };
+          }
+          else if (item.kind === 'weight')
+          {
+            weightItems[item.nc12] = {
               item: item,
               index: i
             };
@@ -1923,7 +2075,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         var $pull = {};
         var $set = {};
         var changes = [];
-        var anyLeds = false;
 
         if (programItemIndex !== -1)
         {
@@ -1970,17 +2121,47 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           var newLedItemQuantityDone = item.quantityDone - led.serialNumbers.length;
 
           $set['items.' + index + '.quantityDone'] = newLedItemQuantityDone;
-          $pull['items.' + index + '.serialNumbers'] = led.serialNumbers;
+          $pull['items.' + index + '.serialNumbers'] = {$in: led.serialNumbers};
 
           changes.push(applyItemQuantityDoneChange.bind(null, item, newLedItemQuantityDone));
-
-          anyLeds = true;
         });
+
+        _.forEach(data.hid, function(hidLamp)
+        {
+          var hidItem = hidItems[hidLamp.nc12];
+
+          if (!hidItem)
+          {
+            return;
+          }
+
+          delete hidItems[hidLamp.nc12];
+
+          var index = hidItem.index;
+          var item = hidItem.item;
+
+          var newHidItemQuantityDone = item.quantityDone + hidLamp.scanResults.length;
+
+          $set['items.' + index + '.quantityDone'] = newHidItemQuantityDone;
+          $pull['items.' + index + '.serialNumbers'] = {$in: hidLamp.scanResults};
+
+          changes.push(applyItemQuantityDoneChange.bind(null, item, newHidItemQuantityDone));
+        });
+
+        if (data.weight && weightItems[data.weight.nc12])
+        {
+          var weightItem = weightItems[data.weight.nc12];
+
+          $set['items.' + weightItem.index + '.quantityDone'] = weightItem.item.quantityDone - 1;
+          $pull['items.' + weightItem.index + '.serialNumbers'] = data.weight.serialNumber;
+
+          changes.push(applyItemQuantityDoneChange.bind(null, weightItem.item, weightItem.item.quantityDone - 1));
+        }
 
         var condition = {_id: data.orderNo};
         var updates = {$set: $set};
 
-        if (anyLeds)
+        if (!_.isEmpty($pull))
         {
           updates.$pullAll = $pull;
         }

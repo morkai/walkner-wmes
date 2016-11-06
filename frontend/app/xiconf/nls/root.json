@@ -343,6 +343,23 @@
     "log:HID:FAILURE": "Unsuccessfully finished the HID lamp check in <code>{duration}</code> with an error: <code>{error}</code>",
     "log:HID:WAITING": "Waiting for {hidLampCount} HID {hidLampCount, plural, one{lamp} other{lamps}}...",
 
+    "log:WEIGHT:STARTED": "Starting a component weighing...",
+    "log:WEIGHT:SUCCESS": "Successfully finished the component weighing in <code>{duration}</code>.",
+    "log:WEIGHT:FAILURE": "Unsuccessfully finished the component weighing in <code>{duration}</code> with an error: <code>{error}</code>",
+    "log:WEIGHT:SCANNING": "Waiting for the component code scan...",
+    "log:WEIGHT:SCANNED": "Scanned: <code>{scanValue}</code>",
+    "log:WEIGHT:CHECKING_COMPONENT": "Checking component <code>{nc12}</code>...",
+    "log:WEIGHT:WEIGHING": "Weighing component <code>{component}</code>. Required weight: <code>{weight}</code>g",
+    "log:WEIGHT:WEIGHED": "Actual weight: <code>{weight}</code>g",
+
+    "error:WEIGHT:SCAN_FAILURE": "The scanned component code was invalid.",
+    "error:WEIGHT:DB_FAILURE": "Remote database error while checking the component.",
+    "error:WEIGHT:ORDER_NOT_FOUND": "The scanned component does not exist in the selected order.",
+    "error:WEIGHT:WEIGHT_NOT_FOUND": "No weight is defined for the scanned component.",
+    "error:WEIGHT:SN_ALREADY_USED": "The component's serial number was already used.",
+    "error:WEIGHT:BAD_RESPONSE": "Invalid response from the remote server.",
+    "error:WEIGHT:TIMEOUT": "Waiting for the component weight timed out.",
+
     "hidLamps:error:NO_CONNECTION": "No connection to<br>the remote server!",
     "hidLamps:error:TIMEOUT": "Response timeout!",
     "hidLamps:error:DB_FAILURE": "Database failure!",

@@ -104,6 +104,7 @@
     "NAVBAR:XICONF:DICTIONARIES": "Dictionaries",
     "NAVBAR:XICONF:PROGRAMS": "Programs",
     "NAVBAR:XICONF:HID_LAMPS": "HID lamps",
+    "NAVBAR:XICONF:COMPONENT_WEIGHTS": "Component weights",
     "NAVBAR:DOCUMENTS": "Documentation",
     "NAVBAR:DOCUMENTS:CLIENTS": "Clients",
     "NAVBAR:DOCUMENTS:SETTINGS": "Settings",
