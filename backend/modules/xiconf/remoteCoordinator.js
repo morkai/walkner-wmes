@@ -1343,11 +1343,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         var programQuantityDone = 0;
         var ledQuantityDone = 0;
         var hidQuantityDone = 0;
+        var weightQuantityDone = 0;
         var testQuantityDone = 0;
         var ftQuantityDone = 0;
         var programItems = [];
         var ledItems = [];
         var hidItems = [];
+        var weightItems = [];
         var testItems = {};
         var ftItem = null;
         var ftItemIndex = -1;
@@ -1365,6 +1367,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           else if (item.kind === 'hid')
           {
             hidItems.push(item);
+          }
+          else if (item.kind === 'weight')
+          {
+            weightItems.push(item);
           }
           else if (item.kind === 'program')
           {
@@ -1453,6 +1459,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           hidQuantityDone = hidItems[0].quantityDone / quantityPerResult;
         }
 
+        weightQuantityDone = weightItems.reduce(
+          (quantityDone, weightItem) => Math.max(quantityDone, weightItem.quantityDone),
+          0
+        );
+
         for (i = 0; i < programItems.length; ++i)
         {
           var programItem = programItems[i].item;
@@ -1500,7 +1511,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             ledQuantityDone,
             hidQuantityDone,
             testQuantityDone,
-            ftQuantityDone
+            ftQuantityDone,
+            weightQuantityDone
           ].filter(function(qty) { return qty > 0; });
           var totalQuantityDone = quantitiesDone.reduce(function(qty, total) { return qty + total; }, 0);
 
