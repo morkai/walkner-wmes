@@ -30,6 +30,7 @@
 .dashboard-buttonAndMetrics .dashboard-metrics {
   flex-direction: column;
   margin-left: 0;
+  flex: 0 0 auto;
 }
 .dashboard-buttonAndMetrics .dashboard-metric {
   margin-top: 0;

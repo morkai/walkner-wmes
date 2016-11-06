@@ -897,6 +897,7 @@ app/xiconfPrograms/routes.js
 app/core/pages/DetailsPage.js
 app/xiconfHidLamps/XiconfHidLamp.js
 app/xiconfHidLamps/routes.js
+app/xiconfComponentWeights/routes.js
 app/xiconfClients/routes.js
 app/nls/factoryLayout.js
 app/nls/pl/factoryLayout.js
@@ -960,7 +961,6 @@ app/isa/templates/messages/acceptSuccess.js
 app/isa/templates/messages/finishSuccess.js
 app/isa/pages/IsaLineStatePage.js
 app/isa/routes.js
-app/qiResults/QiResult.js
 app/qiResults/routes.js
 app/qiKinds/QiKind.js
 app/qiKinds/routes.js

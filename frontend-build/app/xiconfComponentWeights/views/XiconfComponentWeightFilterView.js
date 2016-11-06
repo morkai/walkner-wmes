@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["underscore","app/core/views/FilterView","../XiconfComponentWeight","app/xiconfComponentWeights/templates/filter"],function(e,i,t,n){"use strict";return i.extend({template:n,defaultFormData:{_id:"",description:""},termToForm:{_id:function(e,i,t){t[e]=this.unescapeRegExp(i.args[1])},description:"_id"},serializeFormToQuery:function(e){["_id","description"].forEach(function(i){this.serializeRegexTerm(e,i,-1,null,!0)},this)}})});
