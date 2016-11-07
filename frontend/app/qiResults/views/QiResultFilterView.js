@@ -79,15 +79,15 @@ define([
       {
         formData[propertyName] = term.args[1];
       },
-      'productFamily': 'division',
+      'productFamily': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
+      },
       'kind': 'division',
       'errorCategory': 'division',
       'faultCode': 'division',
       'correctiveActions.status': 'division',
-      'inspector.id': function(propertyName, term, formData)
-      {
-        formData.inspector = term.name === 'in' ? term.args[1].join(',') : term.args[1];
-      }
+      'inspector.id': 'productFamily'
     },
 
     serializeFormToQuery: function(selector)
@@ -97,6 +97,7 @@ define([
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
       var inspector = this.$id('inspector').val();
+      var productFamily = this.$id('productFamily').val();
       var status = this.$id('status').val();
 
       if (result === 'ok')
@@ -148,12 +149,24 @@ define([
         }
       }
 
+      if (productFamily.length)
+      {
+        if (productFamily.indexOf(',') === -1)
+        {
+          selector.push({name: 'eq', args: ['productFamily', productFamily]});
+        }
+        else
+        {
+          selector.push({name: 'in', args: ['productFamily', productFamily.split(',')]});
+        }
+      }
+
       if (status.length)
       {
         selector.push({name: 'eq', args: ['correctiveActions.status', status]});
       }
 
-      ['productFamily', 'division', 'kind', 'errorCategory', 'faultCode'].forEach(function(property)
+      ['division', 'kind', 'errorCategory', 'faultCode'].forEach(function(property)
       {
         var value = this.$id(property).val();
 
@@ -171,14 +184,15 @@ define([
       this.toggleButtonGroup('result');
 
       this.$id('productFamily').select2({
-        width: '130px',
+        width: '110px',
         allowClear: true,
+        multiple: true,
         placeholder: ' ',
         data: qiDictionaries.productFamilies.map(function(d) { return {id: d, text: d}; })
       });
 
       this.$id('division').select2({
-        width: '90px',
+        width: '80px',
         allowClear: true,
         placeholder: ' ',
         data: orgUnits.getAllByType('division').filter(function(d) { return d.get('type') === 'prod'; }).map(idAndLabel)
@@ -192,7 +206,7 @@ define([
       });
 
       this.$id('errorCategory').select2({
-        width: '150px',
+        width: '140px',
         allowClear: true,
         placeholder: ' ',
         data: qiDictionaries.errorCategories.map(idAndLabel)
@@ -213,7 +227,7 @@ define([
       });
 
       this.$id('inspector').select2({
-        width: '200px',
+        width: '230px',
         multiple: true,
         allowClear: true,
         placeholder: ' ',
