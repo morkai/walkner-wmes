@@ -1,3 +1,3 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/user","app/core/util/pageActions","app/core/pages/DetailsPage","../views/PressWorksheetDetailsView"],function(e,t,i,s){"use strict";return i.extend({DetailsView:s,actions:function(){var i=288e5,s=Date.now(),a=[];return(e.isAllowedTo("PROD_DATA:MANAGE")||e.data._id===this.model.get("creator").id&&Date.parse(this.model.get("createdAt"))+i>s)&&a.push(t.edit(this.model),t.delete(this.model)),a}})});
+define(["app/user","app/core/util/pageActions","app/core/pages/DetailsPage","../views/PressWorksheetDetailsView"],function(e,t,i,s){"use strict";return i.extend({DetailsView:s,actions:function(){var i=288e5,s=Date.now(),a=[];return(e.isAllowedTo("PROD_DATA:MANAGE")||e.data._id===this.model.get("creator").id&&Date.parse(this.model.get("createdAt"))+i>s)&&a.push(t.edit(this.model),t["delete"](this.model)),a}})});
