@@ -195,7 +195,12 @@ define([
         width: '80px',
         allowClear: true,
         placeholder: ' ',
-        data: orgUnits.getAllByType('division').filter(function(d) { return d.get('type') === 'prod'; }).map(idAndLabel)
+        data: orgUnits.getAllByType('division')
+          .filter(function(d)
+          {
+            return d.get('type') === 'prod' || d.get('type') === 'dist';
+          })
+          .map(idAndLabel)
       });
 
       this.$id('kind').select2({
