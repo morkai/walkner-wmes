@@ -91,6 +91,9 @@
     "filter:submit": "Filter orders",
 
     "details:showMoreLink": "Show more order details",
+    "details:opTimes:sap": "SAP time",
+    "details:opTimes:actual": "Time with coefficient",
+    "details:opTimes:summed": "Grouped time",
 
     "commentForm:delayReason": "New delay reason",
     "commentForm:comment": "Comment",

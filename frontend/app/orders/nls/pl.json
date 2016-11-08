@@ -90,6 +90,9 @@
   "filter:submit": "Filtruj zlecenia",
 
   "details:showMoreLink": "Pokaż więcej szczegołów zlecenia",
+  "details:opTimes:sap": "Czas z SAP",
+  "details:opTimes:actual": "Czas ze współczynnikiem",
+  "details:opTimes:summed": "Czas zgrupowany",
 
   "commentForm:delayReason": "Nowy powód opóźnienia",
   "commentForm:comment": "Komentarz",

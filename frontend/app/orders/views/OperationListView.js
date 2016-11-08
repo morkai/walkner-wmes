@@ -11,11 +11,22 @@ define([
 ) {
   'use strict';
 
+  var TIME_PROPS = {
+    machineSetupTime: 'sapMachineSetupTime',
+    laborSetupTime: 'sapLaborSetupTime',
+    machineTime: 'sapMachineTime',
+    laborTime: 'sapLaborTime'
+  };
+
   function formatNumericProperty(obj, prop)
   {
-    if (obj[prop] && obj[prop].toLocaleString)
+    if (obj[prop])
     {
-      obj[prop] = obj[prop].toLocaleString();
+      obj[prop] = (Math.round(obj[prop] * 1000) / 1000).toLocaleString();
+    }
+    else
+    {
+      obj[prop] = '';
     }
   }
 
@@ -46,12 +57,32 @@ define([
             formatNumericProperty(op, 'sapMachineTime');
             formatNumericProperty(op, 'sapLaborTime');
 
+            op.times = {
+              actual: {},
+              sap: {},
+              summed: {}
+            };
+
+            Object.keys(TIME_PROPS).forEach(function(key)
+            {
+              var sapKey = TIME_PROPS[key];
+
+              op.times.actual[key] = op[key];
+              op.times.sap[key] = op[sapKey];
+              op.times.summed[key] = summedTimes[key];
+            });
+
             return op;
           })
           .sort(function(a, b) { return a.no - b.no; }),
         highlighted: this.options.highlighted,
-        summedTimes: summedTimes
+        timeProps: Object.keys(TIME_PROPS)
       };
+    },
+
+    beforeRender: function()
+    {
+      this.stopListening(this.model);
     },
 
     afterRender: function()

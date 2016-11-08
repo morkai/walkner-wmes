@@ -22,30 +22,15 @@
         <td class="is-min"><%= operation.workCenter || '-' %>
         <td class="is-min"><%= operation.name || '-' %>
         <td class="is-min is-number"><%= operation.qtyUnit || '-' %>
-        <td class="is-min is-number" title="<%- operation.sapMachineSetupTime || '' %>">
-          <% if (operation.no === highlighted && summedTimes.machineSetupTime && operation.machineSetupTime !== summedTimes.machineSetupTime) { %>
-          <%- operation.machineSetupTime || '' %><br><span class="orders-operations-summed">(<%- summedTimes.machineSetupTime || '-' %>)</span>
+        <% timeProps.forEach(function(timeProp) { %>
+        <td class="is-min is-number">
+          <% if (operation.times.sap[timeProp] && operation.times.sap[timeProp] !== operation.times.actual[timeProp]) { %>
+          <span title="<%- t('orders', 'details:opTimes:sap') %>"><%- operation.times.sap[timeProp] %></span> -> <span title="<%- t('orders', 'details:opTimes:actual') %>">
           <% } else { %>
-          <%- operation.machineSetupTime || '-' %>
+          <span title="<%- t('orders', 'details:opTimes:sap') %>">
           <% } %>
-        <td class="is-min is-number" title="<%- operation.sapLaborSetupTime || '' %>">
-          <% if (operation.no === highlighted && summedTimes.laborSetupTime && operation.laborSetupTime !== summedTimes.laborSetupTime) { %>
-          <%- operation.laborSetupTime || '' %><br><span class="orders-operations-summed">(<%- summedTimes.laborSetupTime || '-' %>)</span>
-          <% } else { %>
-          <%- operation.laborSetupTime || '-' %>
-          <% } %>
-        <td class="is-min is-number" title="<%- operation.sapMachineTime || '' %>">
-          <% if (operation.no === highlighted && summedTimes.machineTime && operation.machineTime !== summedTimes.machineTime) { %>
-          <%- operation.machineTime || '' %><br><span class="orders-operations-summed">(<%- summedTimes.machineTime || '-' %>)</span>
-          <% } else { %>
-          <%- operation.machineTime || '-' %>
-          <% } %>
-        <td class="is-min is-number" title="<%- operation.sapLaborTime || '' %>">
-          <% if (operation.no === highlighted && summedTimes.laborTime && operation.laborTime !== summedTimes.laborTime) { %>
-          <%- operation.laborTime || '' %><br><span class="orders-operations-summed">(<%- summedTimes.laborTime || '-' %>)</span>
-          <% } else { %>
-          <%- operation.laborTime || '-' %>
-          <% } %>
+          <%- operation.times.actual[timeProp] || '-' %></span><% if (operation.no === highlighted && operation.times.summed[timeProp] && operation.times.summed[timeProp] !== operation.times.actual[timeProp]) { %> <span title="<%- t('orders', 'details:opTimes:summed') %>">(<%- operation.times.summed[timeProp] %>)</span><% } %>
+        <% }) %>
         <td>
       </tr>
       <% }) %>
