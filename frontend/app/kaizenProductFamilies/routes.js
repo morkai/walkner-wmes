@@ -5,15 +5,13 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './KaizenProductFamily'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  KaizenProductFamily
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -105,8 +103,10 @@ define([
     );
   });
 
-  router.map('/kaizenProductFamilies/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenProductFamily, _, _, {
-    baseBreadcrumb: true
-  }));
+  router.map(
+    '/kaizenProductFamilies/:id;delete',
+    canManage,
+    _.partial(showDeleteFormPage, 'app/kaizenProductFamilies/KaizenProductFamily', _, _, {baseBreadcrumb: true})
+  );
 
 });

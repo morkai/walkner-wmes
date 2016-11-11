@@ -5,15 +5,13 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './KaizenSection'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  KaizenSection
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -104,8 +102,10 @@ define([
     );
   });
 
-  router.map('/kaizenSections/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenSection, _, _, {
-    baseBreadcrumb: true
-  }));
+  router.map(
+    '/kaizenSections/:id;delete',
+    canManage,
+    _.partial(showDeleteFormPage, 'app/kaizenSections/KaizenSection', _, _, {baseBreadcrumb: true})
+  );
 
 });
