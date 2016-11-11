@@ -700,6 +700,8 @@ app/kaizenCauses/KaizenCause.js
 app/kaizenCauses/KaizenCauseCollection.js
 app/kaizenRisks/KaizenRisk.js
 app/kaizenRisks/KaizenRiskCollection.js
+app/kaizenBehaviours/KaizenBehaviour.js
+app/kaizenBehaviours/KaizenBehaviourCollection.js
 app/core/templates/userInfo.js
 app/kaizenProductFamilies/KaizenProductFamily.js
 app/kaizenProductFamilies/KaizenProductFamilyCollection.js
@@ -919,6 +921,7 @@ app/kaizenAreas/routes.js
 app/kaizenCategories/routes.js
 app/kaizenCauses/routes.js
 app/kaizenRisks/routes.js
+app/kaizenBehaviours/routes.js
 app/kaizenProductFamilies/routes.js
 app/suggestions/routes.js
 app/opinionSurveys/routes.js
