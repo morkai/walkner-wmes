@@ -586,6 +586,9 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
       result['"nearMissOwners'] = exportKaizenOrderOwners(doc.nearMissOwners);
     }
 
+    result['"behaviourId'] = doc.behaviour;
+    result['"behaviourName'] = dict.behaviours[doc.behaviour] || doc.behaviour;
+
     return result;
   }
 

@@ -47,6 +47,7 @@ define([
   './kaizenCategories/routes',
   './kaizenCauses/routes',
   './kaizenRisks/routes',
+  './kaizenBehaviours/routes',
   './kaizenProductFamilies/routes',
   './suggestions/routes',
   './opinionSurveys/routes',

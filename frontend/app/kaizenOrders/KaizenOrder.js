@@ -95,6 +95,7 @@ define([
       obj.area = kaizenDictionaries.areas.getLabel(obj.area);
       obj.nearMissCategory = kaizenDictionaries.categories.getLabel(obj.nearMissCategory);
       obj.suggestionCategory = kaizenDictionaries.categories.getLabel(obj.suggestionCategory);
+      obj.behaviour = kaizenDictionaries.behaviours.getLabel(obj.behaviour);
       obj.cause = kaizenDictionaries.causes.getLabel(obj.cause);
       obj.risk = kaizenDictionaries.risks.getLabel(obj.risk);
       obj.kaizenDuration = obj.kaizenDuration ? time.toString(obj.kaizenDuration) : null;

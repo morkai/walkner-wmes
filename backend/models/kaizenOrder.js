@@ -144,6 +144,11 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       ref: 'KaizenCategory',
       default: null
     },
+    behaviour: {
+      type: String,
+      ref: 'KaizenBehaviour',
+      default: null
+    },
     cause: {
       type: String,
       ref: 'KaizenCause',
@@ -232,6 +237,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
   kaizenOrderSchema.index({area: 1});
   kaizenOrderSchema.index({nearMissCategory: 1});
   kaizenOrderSchema.index({cause: 1});
+  kaizenOrderSchema.index({behaviour: 1});
   kaizenOrderSchema.index({risk: 1});
   kaizenOrderSchema.index({'owners.id': 1});
 
@@ -693,6 +699,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       'area',
       'nearMissCategory',
       'suggestionCategory',
+      'behaviour',
       'cause',
       'causeText',
       'risk',

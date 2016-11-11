@@ -47,6 +47,7 @@ define([
         area: null,
         category: null,
         risk: null,
+        behaviour: null,
         cause: null,
         userType: 'others',
         user: null,
@@ -102,7 +103,8 @@ define([
       'section': 'types',
       'area': 'types',
       'risk': 'types',
-      'cause': 'types'
+      'cause': 'types',
+      'behaviour': 'types'
     },
 
     serialize: function()
@@ -116,7 +118,8 @@ define([
         nearMissCategories: _.invoke(kaizenDictionaries.categories.inNearMiss(), 'toJSON'),
         suggestionCategories: _.invoke(kaizenDictionaries.categories.inSuggestion(), 'toJSON'),
         risks: kaizenDictionaries.risks.toJSON(),
-        causes: kaizenDictionaries.causes.toJSON()
+        causes: kaizenDictionaries.causes.toJSON(),
+        behaviours: kaizenDictionaries.behaviours.toJSON()
       });
     },
 
@@ -170,7 +173,7 @@ define([
         selector.push({name: 'eq', args: ['status', status]});
       }
 
-      ['types', 'section', 'area', 'risk', 'cause'].forEach(function(property)
+      ['types', 'section', 'area', 'risk', 'cause', 'behaviour'].forEach(function(property)
       {
         var value = this.$id(property).val();
 

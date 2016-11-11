@@ -87,6 +87,7 @@ module.exports = function(mongoose, options, done)
         'area',
         'cause',
         'risk',
+        'behaviour',
         'nearMissCategory',
         'suggestionCategory',
         'confirmer'
@@ -111,6 +112,7 @@ module.exports = function(mongoose, options, done)
       area: {},
       cause: {},
       risk: {},
+      behaviour: {},
       nearMissCategory: {},
       suggestionCategory: {},
       confirmer: {},
@@ -149,6 +151,7 @@ module.exports = function(mongoose, options, done)
     inc('area');
     inc('cause');
     inc('risk');
+    inc('behaviour');
     inc('nearMissCategory');
     inc('suggestionCategory');
 

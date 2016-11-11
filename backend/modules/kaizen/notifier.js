@@ -42,7 +42,8 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
     area: {},
     nearMissCategory: {},
     cause: {},
-    risk: {}
+    risk: {},
+    behaviour: {}
   };
 
   app.broker.subscribe('kaizen.orders.added', function(message)
@@ -218,6 +219,7 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
         area: kaizenOrder.area,
         cause: kaizenOrder.cause,
         risk: kaizenOrder.risk,
+        behaviour: kaizenOrder.behaviour,
         status: nameMaps.status[kaizenOrder.status],
         eventDate: moment(kaizenOrder.date).format('LLLL'),
         description: kaizenOrder.description,
@@ -236,8 +238,9 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
         findName(KaizenCategory, kaizenOrder, 'nearMissCategory', 'name', this.parallel());
         findName(KaizenCause, kaizenOrder, 'cause', 'name', this.parallel());
         findName(KaizenRisk, kaizenOrder, 'risk', 'name', this.parallel());
+        findName(KaizenRisk, kaizenOrder, 'behaviour', 'name', this.parallel());
       },
-      function(err, section, area, category, cause, risk)
+      function(err, section, area, category, cause, risk, behaviour)
       {
         if (err)
         {
@@ -249,6 +252,7 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
         templateData.nearMiss.category = category;
         templateData.nearMiss.cause = cause;
         templateData.nearMiss.risk = risk;
+        templateData.nearMiss.behaviour = behaviour;
 
         return done(null, templateData);
       }

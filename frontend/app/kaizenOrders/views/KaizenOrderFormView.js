@@ -386,6 +386,14 @@ define([
         formatResult: formatResultWithDescription
       });
 
+      this.$id('behaviour').select2({
+        allowClear: true,
+        placeholder: ' ',
+        dropdownCssClass: 'is-bigdrop',
+        data: kaizenDictionaries.behaviours.map(idLabelAndDescription),
+        formatResult: formatResultWithDescription
+      });
+
       buttonGroup.toggle(this.$id('status'));
 
       setUpUserSelect2(this.$id('subscribers'), {
@@ -629,6 +637,8 @@ define([
 
     moveFields: function()
     {
+      return;
+
       var isNearMiss = this.isPanelExpanded('nearMiss');
       var isSuggestion = this.isPanelExpanded('suggestion');
       var isKaizen = this.isPanelExpanded('kaizen');
@@ -672,7 +682,7 @@ define([
         $suggestionCategoryFormGroup.detach();
 
         $suggestionCategoryFormGroup
-          .removeClass('col-md-3')
+          .removeClass('col-md-2')
           .appendTo($suggestionPanelBody);
 
         $suggestionFormGroup
@@ -690,9 +700,9 @@ define([
 
         $causeCategoryRiskRow
           .insertAfter($causeTextFormGroup)
-          .find('.col-md-3')
-          .removeClass('col-md-3')
-          .addClass('col-md-4');
+          .find('.col-md-2')
+          .removeClass('col-md-2')
+          .addClass('col-md-3');
 
         $correctiveMeasuresFormGroup
           .insertAfter($causeCategoryRiskRow);
@@ -731,12 +741,12 @@ define([
 
         $causeCategoryRiskRow
           .insertAfter($causeTextFormGroup)
-          .find('.col-md-4')
-          .removeClass('col-md-4')
-          .addClass('col-md-3');
+          .find('.col-md-3')
+          .removeClass('col-md-3')
+          .addClass('col-md-2');
 
         $suggestionCategoryFormGroup
-          .addClass('col-md-3')
+          .addClass('col-md-2')
           .appendTo($causeCategoryRiskRow);
 
         $correctiveMeasuresFormGroup.insertAfter($causeCategoryRiskRow);

@@ -47,6 +47,12 @@
     <td>: <%= nearMiss.causeText %></td>
   </tr>
   <% } %>
+  <% if (nearMiss.behaviour) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Kategoria zachowania</th>
+    <td>: <%= nearMiss.behaviour %></td>
+  </tr>
+  <% } %>
   <% if (nearMiss.cause) { %>
   <tr>
     <th align="left" style="white-space: nowrap">Kategoria przyczyny</th>

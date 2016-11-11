@@ -104,7 +104,7 @@ define([
               align: 'left'
             }
           },
-          noDataLabels: series.length * series[0].data.length > 30
+          noDataLabels: series.length ? (series.length * series[0].data.length > 30) : true
         },
         title: false,
         noData: {},
@@ -129,7 +129,7 @@ define([
           column: {
             borderWidth: 0,
             dataLabels: {
-              enabled: series.length * series[0].data.length <= 35
+              enabled: series.length ? (series.length * series[0].data.length <= 35) : false
             }
           }
         },

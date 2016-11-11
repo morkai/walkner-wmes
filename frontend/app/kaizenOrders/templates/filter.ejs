@@ -96,6 +96,15 @@
     </select>
   </div>
   <div class="form-group">
+    <label for="<%- idPrefix %>-behaviour"><%- t('kaizenOrders', 'filter:behaviour') %></label>
+    <select id="<%- idPrefix %>-behaviour" name="behaviour" class="form-control" size="1">
+      <option></option>
+      <% behaviours.forEach(function(behaviour) { %>
+      <option value="<%- behaviour._id %>"><%= behaviour.name %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
     <label for="<%- idPrefix %>-section"><%- t('kaizenOrders', 'PROPERTY:section') %></label>
     <select id="<%- idPrefix %>-section" name="section" class="form-control" size="1">
       <option></option>
