@@ -31,6 +31,11 @@
     localStorage.setItem('PROXY', matches[1]);
   }
 
+  if (window.parent)
+  {
+    window.parent.postMessage(location.hostname, '*');
+  }
+
   var domains = [];
   var i18n = null;
   var select2 = null;

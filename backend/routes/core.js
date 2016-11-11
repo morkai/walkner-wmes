@@ -43,6 +43,7 @@ module.exports = function startCoreRoutes(app, express)
   express.get('/ping', function(req, res)
   {
     res.type('text/plain');
+    res.set('Access-Control-Allow-Origin', '*');
     res.send('pong');
   });
 

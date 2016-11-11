@@ -143,7 +143,7 @@ define([
 
     blurIframe: function()
     {
-      if (document.activeElement === this.$iframe[0])
+      if (this.$iframe && document.activeElement === this.$iframe[0])
       {
         this.$iframe.blur();
       }

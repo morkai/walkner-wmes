@@ -273,7 +273,12 @@ define([
       this.updateCurrentOrderInfo();
       this.updateDocuments();
 
-      this.$('.is-active')[0].scrollIntoView();
+      var $active = this.$('.is-active');
+
+      if ($active.length)
+      {
+        $active[0].scrollIntoView();
+      }
     },
 
     canUseControls: function()

@@ -98,6 +98,11 @@ define([
       this.toggleConnectionStatus();
       this.resize();
       this.checkInitialConfig();
+
+      if (window.parent)
+      {
+        window.parent.postMessage('READY', '*');
+      }
     },
 
     resize: function()
