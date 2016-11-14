@@ -47,7 +47,7 @@ define([
         var model = collection.get(row._id);
         var actions = [ListView.actions.delete(model)];
 
-        if (canManage && row.connectedAt === null)
+        if (canManage && row.connectedAt !== null)
         {
           actions[0].className = 'disabled';
         }
