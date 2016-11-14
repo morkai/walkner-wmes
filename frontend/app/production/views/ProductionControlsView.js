@@ -35,18 +35,24 @@ define([
       {
         var color = SOCKET_TOPIC_TO_COLOR[topic];
 
-        if (color)
+        if (color && this.$syncControl)
         {
           this.$syncControl.css('color', color);
         }
       },
       'production.syncing': function()
       {
-        this.$syncControl.addClass('fa-spin');
+        if (this.$syncControl)
+        {
+          this.$syncControl.addClass('fa-spin');
+        }
       },
       'production.synced': function()
       {
-        this.$syncControl.removeClass('fa-spin');
+        if (this.$syncControl)
+        {
+          this.$syncControl.removeClass('fa-spin');
+        }
       }
     },
 
