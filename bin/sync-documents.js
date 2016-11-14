@@ -358,6 +358,11 @@ function copyFile(source, target, done)
 
 function convertToJpeg(output, nc15, pdfPath, done)
 {
+  if (!config.targetJpegPath)
+  {
+    return done();
+  }
+
   const jpegsPath = path.join(config.targetJpegPath, nc15);
   const metadata = {
     title: '',
@@ -413,8 +418,9 @@ function convertToJpeg(output, nc15, pdfPath, done)
       output('jpeg... ');
 
       exec(
-        `"${config.sejdaConsoleExe}" pdftojpeg -r 144 -j overwrite -f "${pdfPath}" -o "${jpegsPath}"`,
-        this.next()
+        `java -jar "${config.pdfboxAppJar}" PDFToImage -format png -dpi "${pdfPath}"`,
+        this.next(),
+        {cwd: jpegsPath}
       );
     },
     function finalizeStep(err)
@@ -429,9 +435,13 @@ function convertToJpeg(output, nc15, pdfPath, done)
   );
 }
 
-
 function convertToWebp(output, nc15, done)
 {
+  if (!config.targetJpegPath)
+  {
+    return done();
+  }
+
   const jpegsPath = path.join(config.targetJpegPath, nc15);
 
   step(
@@ -448,9 +458,9 @@ function convertToWebp(output, nc15, done)
 
       output('webp... ');
 
-      this.files = files.filter(f => /\.jpg$/.test(f)).map(f => ({
+      this.files = files.filter(f => /\.(jpg|png)$/.test(f)).map(f => ({
         jpeg: path.join(jpegsPath, f),
-        webp: path.join(jpegsPath, f).replace('.jpg', '.webp')
+        webp: path.join(jpegsPath, f).replace(/\.(jpg|png)/, '.webp')
       }));
 
       this.files.forEach(f => exec(
