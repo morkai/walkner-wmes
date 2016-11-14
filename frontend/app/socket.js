@@ -14,12 +14,20 @@ function(
 ) {
   'use strict';
 
+  var query = {};
+
+  if (window.COMPUTERNAME)
+  {
+    query.COMPUTERNAME = window.COMPUTERNAME;
+  }
+
   var socket = new Socket(sio({
     path: '/sio',
     transports: ['websocket'],
     timeout: 10000,
     reconnectionDelay: 500,
-    autoConnect: false
+    autoConnect: false,
+    query: query
   }));
 
   var wasConnected = false;

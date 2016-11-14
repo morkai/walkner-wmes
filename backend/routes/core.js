@@ -40,13 +40,6 @@ module.exports = function startCoreRoutes(app, express)
     res.send(Date.now().toString());
   });
 
-  express.get('/ping', function(req, res)
-  {
-    res.type('text/plain');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.send('pong');
-  });
-
   express.get('/config.js', sendRequireJsConfig);
 
   express.get('/favicon.ico', sendFavicon);

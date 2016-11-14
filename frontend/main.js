@@ -36,6 +36,8 @@
     window.parent.postMessage(location.hostname, '*');
   }
 
+  window.COMPUTERNAME = (location.href.match(/COMPUTERNAME=(.*?)(?:&.*)?$/i) || [null, null])[1];
+
   var domains = [];
   var i18n = null;
   var select2 = null;

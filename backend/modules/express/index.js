@@ -105,6 +105,13 @@ exports.start = function startExpressModule(app, expressModule, done)
     expressApp.set('json spaces', 2);
   }
 
+  expressApp.use(function(req, res, next)
+  {
+    req.isFrontendRequest = /^\/(app|assets|vendor)/.test(req.url) || /\.(js|css|png|ico)$/.test(req.url);
+
+    next();
+  });
+
   app.broker.publish('express.beforeMiddleware', {
     module: expressModule
   });
@@ -142,7 +149,7 @@ exports.start = function startExpressModule(app, expressModule, done)
 
     expressApp.use(function checkSessionMiddleware(req, res, next)
     {
-      if (/^\/(app|assets|vendor)\//.test(req.url))
+      if (req.isFrontendRequest)
       {
         next();
       }
@@ -153,11 +160,11 @@ exports.start = function startExpressModule(app, expressModule, done)
     });
   }
 
-  expressApp.use('/', expressModule.router);
-
   app.broker.publish('express.beforeRouter', {
     module: expressModule
   });
+
+  expressApp.use('/', expressModule.router);
 
   if (typeof expressModule.config.routes === 'function')
   {
