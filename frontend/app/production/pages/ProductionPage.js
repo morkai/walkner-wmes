@@ -357,6 +357,11 @@ define([
       {
         this.$el.removeClass('hidden');
       }
+
+      if (window.parent)
+      {
+        window.parent.postMessage('READY', '*');
+      }
     },
 
     onKeyDown: function(e)
