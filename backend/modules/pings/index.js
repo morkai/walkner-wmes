@@ -4,6 +4,7 @@
 
 const url = require('url');
 const _ = require('lodash');
+const resolveIpAddress = require('../util/resolveIpAddress');
 const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
@@ -51,7 +52,7 @@ exports.start = function startPingsModule(app, module)
     }
 
     recordPing({
-      _id: req.socket.address().address,
+      _id: resolveIpAddress(req),
       host: req.query.COMPUTERNAME,
       headers: req.headers,
       url: req.url,

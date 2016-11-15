@@ -1,4 +1,4 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 'use strict';
 
@@ -9,6 +9,7 @@ var _ = require('lodash');
 var bcrypt = require('bcrypt');
 var step = require('h5.step');
 var ObjectId = require('mongoose').Types.ObjectId;
+var resolveIpAddress = require('./util/resolveIpAddress');
 
 exports.DEFAULT_CONFIG = {
   sioId: 'sio',
@@ -405,24 +406,7 @@ exports.start = function startUserModule(app, module)
 
     if (addressData)
     {
-      if (hasRealIpFromProxyServer(addressData))
-      {
-        ip = (addressData.headers || addressData.request.headers)['x-real-ip'];
-      }
-      // HTTP
-      else if (addressData.socket && typeof addressData.socket.remoteAddress === 'string')
-      {
-        ip = addressData.socket.remoteAddress;
-      }
-      // Socket.IO
-      else if (addressData.conn && typeof addressData.conn.remoteAddress === 'string')
-      {
-        ip = addressData.conn.remoteAddress;
-      }
-      else if (typeof addressData.address === 'string')
-      {
-        ip = addressData.address;
-      }
+      ip = resolveIpAddress(addressData);
     }
 
     if (ip === '')
@@ -431,26 +415,6 @@ exports.start = function startUserModule(app, module)
     }
 
     return ip;
-  }
-
-  function hasRealIpFromProxyServer(addressData)
-  {
-    var handshake = addressData.request;
-    var headers = handshake ? handshake.headers : addressData.headers;
-
-    if (!headers || typeof headers['x-real-ip'] !== 'string')
-    {
-      return false;
-    }
-
-    // HTTP
-    if (addressData.socket && addressData.socket.remoteAddress === '127.0.0.1')
-    {
-      return true;
-    }
-
-    // Socket.IO
-    return addressData.conn && addressData.conn.remoteAddress === '127.0.0.1';
   }
 
   /**
