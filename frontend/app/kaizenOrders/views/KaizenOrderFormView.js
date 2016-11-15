@@ -500,7 +500,6 @@ define([
         .addClass('panel-default is-collapsed');
 
       this.toggleSubmit();
-      this.moveFields();
       this.toggleRequiredFlags();
       this.toggleChooseTypesMsg();
 
@@ -518,7 +517,6 @@ define([
         .addClass('is-expanded ' + $panel.attr('data-expanded-class'));
 
       this.toggleSubmit();
-      this.moveFields();
       this.toggleRequiredFlags();
       this.toggleChooseTypesMsg();
 
@@ -633,124 +631,6 @@ define([
     togglePanels: function()
     {
       (this.model.get('types') || []).forEach(function(type) { this.expandPanel(type, false); }, this);
-    },
-
-    moveFields: function()
-    {
-      return;
-
-      var isNearMiss = this.isPanelExpanded('nearMiss');
-      var isSuggestion = this.isPanelExpanded('suggestion');
-      var isKaizen = this.isPanelExpanded('kaizen');
-      var $nearMissOwnersFormGroup = this.$id('nearMissOwnersFormGroup');
-      var $suggestionOwnersFormGroup = this.$id('suggestionOwnersFormGroup');
-      var $kaizenOwnersFormGroup = this.$id('kaizenOwnersFormGroup');
-      var $eventDateAreaRow = this.$id('eventDateAreaRow');
-      var $descriptionFormGroup = this.$id('descriptionFormGroup');
-      var $nearMissOptional = this.$id('nearMissOptional');
-      var $causeTextFormGroup = this.$id('causeTextFormGroup');
-      var $causeCategoryRiskRow = this.$id('causeCategoryRiskRow');
-      var $correctiveMeasuresFormGroup = this.$id('correctiveMeasuresFormGroup');
-      var $suggestionCategoryFormGroup = this.$id('suggestionCategoryFormGroup');
-      var $suggestionFormGroup = this.$id('suggestionFormGroup');
-      var $suggestionPanelBody = this.$id('suggestionPanelBody');
-      var $suggestionOptional = this.$id('suggestionOptional');
-      var inNearMiss = $eventDateAreaRow.closest('.panel').attr('data-type') === 'nearMiss';
-
-      if (isNearMiss)
-      {
-        if (inNearMiss)
-        {
-          if (!isSuggestion && isKaizen)
-          {
-            $suggestionFormGroup.insertAfter($kaizenOwnersFormGroup);
-          }
-          else
-          {
-            $suggestionFormGroup.insertAfter($suggestionOwnersFormGroup);
-          }
-
-          return;
-        }
-
-        $eventDateAreaRow.detach();
-        $descriptionFormGroup.detach();
-        $causeTextFormGroup.detach();
-        $causeCategoryRiskRow.detach();
-        $correctiveMeasuresFormGroup.detach();
-        $suggestionFormGroup.detach();
-        $suggestionCategoryFormGroup.detach();
-
-        $suggestionCategoryFormGroup
-          .removeClass('col-md-2')
-          .appendTo($suggestionPanelBody);
-
-        $suggestionFormGroup
-          .removeClass('col-md-4')
-          .insertAfter($suggestionOwnersFormGroup);
-
-        $eventDateAreaRow
-          .insertAfter($nearMissOwnersFormGroup);
-
-        $descriptionFormGroup
-          .insertAfter($eventDateAreaRow);
-
-        $causeTextFormGroup
-          .insertAfter($nearMissOptional);
-
-        $causeCategoryRiskRow
-          .insertAfter($causeTextFormGroup)
-          .find('.col-md-2')
-          .removeClass('col-md-2')
-          .addClass('col-md-3');
-
-        $correctiveMeasuresFormGroup
-          .insertAfter($causeCategoryRiskRow);
-
-        if (!isSuggestion && isKaizen)
-        {
-          $suggestionFormGroup.insertAfter($kaizenOwnersFormGroup);
-        }
-      }
-      else if (isSuggestion)
-      {
-        if (!inNearMiss)
-        {
-          return;
-        }
-
-        $eventDateAreaRow.detach();
-        $descriptionFormGroup.detach();
-        $causeTextFormGroup.detach();
-        $causeCategoryRiskRow.detach();
-        $correctiveMeasuresFormGroup.detach();
-        $suggestionFormGroup.detach();
-        $suggestionCategoryFormGroup.detach();
-
-        $eventDateAreaRow
-          .insertAfter($suggestionOwnersFormGroup);
-
-        $descriptionFormGroup
-          .insertAfter($eventDateAreaRow);
-
-        $suggestionFormGroup
-          .insertAfter($descriptionFormGroup);
-
-        $causeTextFormGroup
-          .insertAfter($suggestionOptional);
-
-        $causeCategoryRiskRow
-          .insertAfter($causeTextFormGroup)
-          .find('.col-md-3')
-          .removeClass('col-md-3')
-          .addClass('col-md-2');
-
-        $suggestionCategoryFormGroup
-          .addClass('col-md-2')
-          .appendTo($causeCategoryRiskRow);
-
-        $correctiveMeasuresFormGroup.insertAfter($causeCategoryRiskRow);
-      }
     }
 
   });
