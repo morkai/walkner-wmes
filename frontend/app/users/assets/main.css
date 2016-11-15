@@ -1,3 +1,5 @@
+@import url(./logInForm.css);
+
 .page[data-id="logInForm"] .page-breadcrumbs {
   text-align: center;
 }
