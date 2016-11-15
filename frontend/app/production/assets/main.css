@@ -3,6 +3,9 @@
 .is-production {
   overflow: auto;
 }
+.is-production.is-embedded {
+  margin-bottom: 75px;
+}
 .is-production.modal-open {
   overflow: hidden;
 }
@@ -305,6 +308,31 @@
 .production-currentDowntime-duration {
   margin: 15px 0;
 }
+
+.production-controls-bottom {
+  position: fixed;
+  right: 0;
+  bottom: -1px;
+  display: flex;
+  box-shadow: 0 3px 6px #666;
+}
+.production-controls-bottom > .btn {
+  margin-right: -1px;
+  width: 60px;
+  height: 50px;
+  font-size: 24px;
+}
+
+.production-select2 > h3 {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 0 0 2px 0;
+}
+.production-select2 > p {
+  font-size: .8em;
+  margin: 0;
+}
+
 @media (max-width: 1680px) {
   .production {
     margin: 0 15px;

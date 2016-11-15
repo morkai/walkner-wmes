@@ -130,6 +130,7 @@ module.exports = function(grunt)
           modules: [
             {name: 'wmes-main'},
             {name: 'wmes-docs'},
+            {name: 'wmes-operator'},
             {name: 'pos-main'}
           ],
           paths: requirejsConfig.buildPaths,

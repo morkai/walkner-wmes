@@ -1,14 +1,22 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/data/dictionaries',
+  'app/data/orgUnits',
+  'app/prodLines/ProdLineCollection',
   'app/production/templates/unlockDialog'
 ], function(
+  _,
   t,
   viewport,
   View,
+  dictionaries,
+  orgUnits,
+  ProdLineCollection,
   template
 ) {
   'use strict';
@@ -34,7 +42,7 @@ define([
         submitEl.disabled = true;
 
         var req = {
-          prodLine: this.model.prodLine.id,
+          prodLine: this.model.prodLine.id || this.$id('prodLine').val(),
           login: this.$id('login').val(),
           password: this.$id('password').val()
         };
@@ -52,9 +60,66 @@ define([
       };
     },
 
+    afterRender: function()
+    {
+      if (!this.model.prodLine.id)
+      {
+        this.setUpProdLineSelect2();
+      }
+    },
+
+    setUpProdLineSelect2: function()
+    {
+      var view = this;
+      var prodLineCollection = new ProdLineCollection(null, {
+        rqlQuery: 'deactivatedAt=null&sort(_id)'
+      });
+
+      prodLineCollection.once('reset', function()
+      {
+        var $prodLine = view.$id('prodLine');
+
+        if (!$prodLine.length)
+        {
+          return;
+        }
+
+        $prodLine.parent().addClass('has-required-select2');
+        $prodLine.removeClass('form-control').select2({
+          data: prodLineCollection.map(function(prodLine)
+          {
+            return {
+              id: prodLine.id,
+              text: prodLine.id,
+              description: prodLine.get('description')
+            };
+          }),
+          matcher: function(term, text, option)
+          {
+            term = term.toUpperCase();
+
+            return text.toUpperCase().indexOf(term) !== -1 || option.description.toUpperCase().indexOf(term) !== -1;
+          },
+          formatResult: function(result)
+          {
+            var html = '<div class="production-select2">';
+            html += '<p><strong>' + _.escape(result.id) + '</strong><br>';
+            html += _.escape(result.description) + '</p>';
+            html += '</div>';
+
+            return html;
+          }
+        }).select2('focus');
+      });
+
+      this.promised(prodLineCollection.fetch({reset: true}));
+    },
+
     onDialogShown: function(viewport)
     {
       this.closeDialog = viewport.closeDialog.bind(viewport);
+
+      this.$id('prodLine').select2('focus');
     },
 
     closeDialog: function() {},
@@ -85,6 +150,21 @@ define([
         return this.$id('submit').prop('disabled', false);
       }
 
+      if (!this.model.prodLine.id)
+      {
+        _.forEach(res.dictionaries, function(models, dictionaryName)
+        {
+          var dictionary = dictionaries[dictionaryName];
+
+          if (dictionary)
+          {
+            dictionary.reset(models);
+          }
+        });
+      }
+
+      delete res.dictionaries;
+
       var remoteData = res.prodShift;
 
       if (remoteData)
@@ -92,8 +172,24 @@ define([
         remoteData.prodShiftOrder = res.prodShiftOrder;
         remoteData.prodDowntimes = res.prodDowntimes;
       }
+      else
+      {
+        remoteData = {};
+      }
 
-      this.model.setSecretKey(res.secretKey, remoteData);
+      if (!this.model.prodLine.id)
+      {
+        var prodLine = orgUnits.getByTypeAndId('prodLine', res.prodLine);
+
+        if (prodLine === null)
+        {
+          return this.closeDialog();
+        }
+
+        remoteData = _.assign(remoteData, orgUnits.getAllForProdLine(prodLine));
+      }
+
+      this.model.setSecretKey(res.secretKey, remoteData, true);
       this.closeDialog();
     }
 

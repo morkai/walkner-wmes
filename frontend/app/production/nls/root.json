@@ -1,6 +1,6 @@
 {
   "root": {
-    "breadcrumbs:base": "Production",
+    "breadcrumbs:base": "Operator",
     "breadcrumbs:settings": "Settings",
 
     "duplicate:title": "Duplicate operator form",
@@ -22,6 +22,9 @@
     "controls:msg:sync:remoteError": "Cannot unlock: failed to get the key :(",
     "controls:msg:sync:success": "Editing unlocked successfully :)",
     "controls:msg:popup": "The popup window has been blocked :(",
+    "controls:switchApp": "Switch apps",
+    "controls:reboot": "Refresh page/Restart after 3s",
+    "controls:shutdown": "Shutdown after 3s",
 
     "unlockDialog:title:unlock": "Production line activation",
     "unlockDialog:title:lock": "Production line deactivation",
@@ -29,6 +32,7 @@
     "unlockDialog:message:lock": "To deactivate the <em>{prodLine}</em> production line, enter login and password of a user with the <em>WMES Operator client activation</em> privilege.",
     "unlockDialog:login": "Login",
     "unlockDialog:password": "Password",
+    "unlockDialog:prodLine": "Production line",
     "unlockDialog:unlock": "Activate production line",
     "unlockDialog:lock": "Deactivate production line",
     "unlockDialog:error:UNLOCK_FAILURE": "Production line activation failed :(",
@@ -152,8 +156,7 @@
     "downtimePicker:startedAt": "Started at",
     "downtimePicker:startedAt:now": "Now",
 
-    "prodDowntime:startedAt": "Started at",
-    "prodDowntime:finishedAt": "Finished at",
+    "prodDowntime:time": "Time",
     "prodDowntime:reason": "Downtime reason",
     "prodDowntime:aor": "Area of responsibility",
 

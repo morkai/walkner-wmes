@@ -23,6 +23,8 @@ define([
   'use strict';
 
   var STORAGE_KEY = 'VERSIONS';
+  var BACKEND_SERVICE_KEY = 'BACKEND_SERVICE';
+  var FRONTEND_SERVICE_KEY = 'FRONTEND_SERVICE';
   var updater = {};
   var activityTimer = null;
   var restartMessageView = null;
@@ -31,10 +33,15 @@ define([
   var frontendReloading = false;
   var viewsEnabled = true;
 
+  var backendService = window[BACKEND_SERVICE_KEY] || 'backend';
+  var frontendService = window[FRONTEND_SERVICE_KEY] || 'frontend';
+
   var remoteVersions = window[STORAGE_KEY];
   var localVersions = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
 
   delete window[STORAGE_KEY];
+  delete window[FRONTEND_SERVICE_KEY];
+  delete window[BACKEND_SERVICE_KEY];
 
   updater.versions = localVersions && localVersions.time > time.appData
     ? localVersions
@@ -72,11 +79,11 @@ define([
   {
     broker.publish('updater.newVersion', message);
 
-    if (message.service === 'backend')
+    if (message.service === backendService)
     {
       handleBackendRestart();
     }
-    else if (message.service === 'frontend')
+    else if (message.service === frontendService)
     {
       handleFrontendRestart();
     }

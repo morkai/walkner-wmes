@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'hammer',
   'app/time',
   'app/user',
   'app/i18n',
@@ -12,6 +13,7 @@ define([
   'app/data/prodLog',
   'app/data/aors',
   'app/data/downtimeReasons',
+  'app/data/dictionaries',
   'app/prodShifts/ProdShift',
   'app/prodDowntimes/ProdDowntime',
   'app/isa/IsaRequest',
@@ -27,6 +29,7 @@ define([
 ], function(
   _,
   $,
+  Hammer,
   time,
   user,
   t,
@@ -36,6 +39,7 @@ define([
   prodLog,
   aors,
   downtimeReasons,
+  dictionaries,
   ProdShift,
   ProdDowntime,
   IsaRequest,
@@ -61,9 +65,12 @@ define([
     {
       var topics = {};
 
-      topics['production.autoDowntimes.' + this.model.get('subdivision')] = 'onAutoDowntime';
-      topics['isaRequests.created.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
-      topics['isaRequests.updated.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
+      if (this.model.prodLine.id)
+      {
+        topics['production.autoDowntimes.' + this.model.get('subdivision')] = 'onAutoDowntime';
+        topics['isaRequests.created.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
+        topics['isaRequests.updated.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
+      }
 
       return topics;
     },
@@ -101,7 +108,19 @@ define([
         {
           this.downtimesView.showEditDialog(downtime.id);
         }
-      }
+      },
+      'click #-switchApps': function()
+      {
+        window.parent.postMessage({type: 'switch', app: 'operator'}, '*');
+      },
+      'mousedown #-reboot': function(e) { this.startActionTimer('reboot', e); },
+      'touchstart #-reboot': function() { this.startActionTimer('reboot'); },
+      'mouseup #-reboot': function() { this.stopActionTimer('reboot'); },
+      'touchend #-reboot': function() { this.stopActionTimer('reboot'); },
+      'mousedown #-shutdown': function(e) { this.startActionTimer('shutdown', e); },
+      'touchstart #-shutdown': function() { this.startActionTimer('shutdown'); },
+      'mouseup #-shutdown': function() { this.stopActionTimer('shutdown'); },
+      'touchend #-shutdown': function() { this.stopActionTimer('shutdown'); },
     },
 
     breadcrumbs: function()
@@ -123,6 +142,10 @@ define([
       this.productionJoined = 0;
       this.enableProdLog = false;
       this.pendingIsaChanges = [];
+      this.actionTimer = {
+        action: null,
+        time: null
+      };
 
       updater.disableViews();
 
@@ -133,6 +156,11 @@ define([
         .on('resize.' + this.idPrefix, this.onWindowResize)
         .on('beforeunload.' + this.idPrefix, this.onBeforeUnload)
         .on('keydown.' + this.idPrefix, this.onKeyDown);
+
+      if (window.parent !== window)
+      {
+        $(window).on('contextmenu.' + this.idPrefix, function(e) { e.preventDefault(); });
+      }
     },
 
     setUpLayout: function(layout)
@@ -142,7 +170,7 @@ define([
 
     destroy: function()
     {
-      $(document.body).removeClass('is-production');
+      $(document.body).removeClass('is-production is-embedded');
 
       this.layout = null;
       this.shiftEditedSub = null;
@@ -161,7 +189,8 @@ define([
         idPrefix: this.idPrefix,
         locked: this.model.isLocked(),
         state: this.model.get('state'),
-        mechOrder: !!this.model.prodShiftOrder.get('mechOrder')
+        mechOrder: !!this.model.prodShiftOrder.get('mechOrder'),
+        showBottomControls: window.parent !== window
       };
     },
 
@@ -344,7 +373,9 @@ define([
 
     afterRender: function()
     {
-      $(document.body).addClass('is-production');
+      $(document.body)
+        .addClass('is-production')
+        .toggleClass('is-embedded', window.parent !== window);
 
       if (this.socket.isConnected())
       {
@@ -358,9 +389,19 @@ define([
         this.$el.removeClass('hidden');
       }
 
-      if (window.parent)
+      if (window.parent !== window)
       {
-        window.parent.postMessage('READY', '*');
+        this.hammer = new Hammer(document.body);
+
+        this.hammer.on('swipe', function(e)
+        {
+          if (e.deltaX < 0 && (e.changedPointers[0].pageX - e.deltaX) > Math.max(300, window.innerWidth * 0.70))
+          {
+            window.parent.postMessage({type: 'switch', app: 'operator'}, '*');
+          }
+        });
+
+        window.parent.postMessage({type: 'ready', app: 'operator'}, '*');
       }
     },
 
@@ -496,8 +537,17 @@ define([
         prodLineId: model.prodLine.id,
         prodShiftId: model.id,
         prodShiftOrderId: model.prodShiftOrder.id || null,
-        prodDowntimeId: unfinishedProdDowntime ? unfinishedProdDowntime.id : null
+        prodDowntimeId: unfinishedProdDowntime ? unfinishedProdDowntime.id : null,
+        dictionaries: {}
       };
+
+      _.forEach(dictionaries, function(collection, moduleName)
+      {
+        if (!/^[A-Z0-9_]+$/.test(moduleName))
+        {
+          req.dictionaries[moduleName] = collection.updatedAt;
+        }
+      });
 
       this.socket.emit('production.join', req, function(res)
       {
@@ -533,6 +583,11 @@ define([
             page.pendingIsaChanges = null;
           }
         }
+
+        _.forEach(res.dictionaries, function(models, dictionaryName)
+        {
+          dictionaries[dictionaryName].reset(models);
+        });
       });
 
       this.productionJoined = Date.now();
@@ -760,6 +815,46 @@ define([
 
         this.updateCurrentDowntime();
       }
+    },
+
+    startActionTimer: function(action, e)
+    {
+      this.actionTimer.action = action;
+      this.actionTimer.time = Date.now();
+
+      if (e)
+      {
+        e.preventDefault();
+      }
+    },
+
+    stopActionTimer: function(action)
+    {
+      if (this.actionTimer.action !== action)
+      {
+        return;
+      }
+
+      var long = (Date.now() - this.actionTimer.time) > 3000;
+
+      if (action === 'reboot')
+      {
+        if (long)
+        {
+          window.parent.postMessage({type: 'reboot'}, '*');
+        }
+        else
+        {
+          window.location.reload();
+        }
+      }
+      else if (long && action === 'shutdown')
+      {
+        window.parent.postMessage({type: 'shutdown'}, '*');
+      }
+
+      this.actionTimer.action = null;
+      this.actionTimer.time = null;
     }
 
   });

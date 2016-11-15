@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'hammer',
   'app/user',
   'app/core/View',
   '../views/DocumentViewerControlsView',
@@ -11,6 +12,7 @@ define([
 ], function(
   _,
   $,
+  Hammer,
   user,
   View,
   DocumentViewerControlsView,
@@ -41,6 +43,7 @@ define([
     initialize: function()
     {
       this.loadedFilesCount = 0;
+      this.hammer = null;
       this.$els = {
         controls: null,
         viewer: null
@@ -52,11 +55,16 @@ define([
         model: this.model
       });
 
-      this.setView('.orderDocuments-page-controls', this.controlsView);
-      this.setView('.orderDocuments-page-preview', this.previewView);
+      this.setView('#' + this.idPrefix + '-controls', this.controlsView);
+      this.setView('#' + this.idPrefix + '-preview', this.previewView);
 
       $(window).on('resize.' + this.idPrefix, _.debounce(this.resize.bind(this), 1));
       $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
+
+      if (window.parent !== window)
+      {
+        $(window).on('contextmenu.' + this.idPrefix, function(e) { e.preventDefault(); });
+      }
 
       this.listenTo(this.model, 'change:prodLine', this.joinProdLine);
       this.listenTo(this.model, 'save', _.debounce(this.updateClientState.bind(this), 1000));
@@ -79,6 +87,12 @@ define([
     {
       $('body').removeClass('no-overflow orderDocuments');
       $(window).off('.' + this.idPrefix);
+
+      if (this.hammer)
+      {
+        this.hammer.destroy();
+        this.hammer = null;
+      }
     },
 
     load: function(when)
@@ -86,6 +100,15 @@ define([
       this.model.load();
 
       return when();
+    },
+
+    beforeRender: function()
+    {
+      if (this.hammer)
+      {
+        this.hammer.destroy();
+        this.hammer = null;
+      }
     },
 
     afterRender: function()
@@ -99,9 +122,19 @@ define([
       this.resize();
       this.checkInitialConfig();
 
-      if (window.parent)
+      if (window.parent !== window)
       {
-        window.parent.postMessage('READY', '*');
+        this.hammer = new Hammer(document.body);
+
+        this.hammer.on('swipe', function(e)
+        {
+          if (e.deltaX > 0)
+          {
+            window.parent.postMessage({type: 'switch', app: 'documents'}, '*');
+          }
+        });
+
+        window.parent.postMessage({type: 'ready', app: 'documents'}, '*');
       }
     },
 

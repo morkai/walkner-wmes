@@ -30,69 +30,10 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   var nc15ToFreshHeaders = {};
 
-  express.get('/docs/:clientId', function(req, res)
-  {
-    res.format({
-      'text/html': function()
-      {
-        res.render('index', {
-          appCacheManifest: app.options.env !== 'development' ? '/orderDocuments/manifest.appcache' : '',
-          appData: {
-            ENV: JSON.stringify(app.options.env),
-            VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
-            CLIENT_ID: JSON.stringify(req.params.clientId)
-          },
-          mainJsFile: 'wmes-docs.js',
-          mainCssFile: 'assets/wmes-docs.css'
-        });
-      }
-    });
-  });
-
-  express.post('/docs/:clientId', function(req, res, next)
-  {
-    step(
-      function authenticateStep()
-      {
-        userModule.authenticate({login: req.body.login, password: req.body.password}, this.next());
-      },
-      function authorizeStep(err, user)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!user.super && !_.includes(user.privileges, 'DOCUMENTS:ACTIVATE'))
-        {
-          return this.skip(app.createError('NO_PRIVILEGES', 403));
-        }
-      },
-      function checkProdLineStep(err)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        var prodLine = orgUnits.getByTypeAndId('prodLine', req.body.prodLineId);
-
-        if (!prodLine)
-        {
-          return this.skip(app.createError('INVALID_PROD_LINE', 400));
-        }
-      },
-      function sendResponseStep(err)
-      {
-        if (err)
-        {
-          return next(err);
-        }
-
-        res.sendStatus(204);
-      }
-    );
-  });
+  express.get('/documents', showIndexRoute);
+  express.post('/documents', authClientRoute);
+  express.get('/docs/:clientId', showIndexRoute);
+  express.post('/docs/:clientId', authClientRoute);
 
   express.get('/orderDocuments/licensing', canView, getClientLicensingRoute);
 
@@ -206,7 +147,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   express.get('/orderDocuments/:nc15/:page', function(req, res, next)
   {
     const nc15 = req.params.nc15;
-    const freshKey = `${req.params.page}_${nc15}.webp`;
+    const freshKey = `${parseInt(req.params.page, 10)}_${nc15}.webp`;
     const freshHeaders = nc15ToFreshHeaders[freshKey];
 
     if (freshHeaders && fresh(req.headers, freshHeaders))
@@ -445,5 +386,75 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         });
       });
     });
+  }
+
+  function showIndexRoute(req, res)
+  {
+    var sessionUser = req.session.user;
+    var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
+
+    res.format({
+      'text/html': function()
+      {
+        res.render('index', {
+          appCacheManifest: app.options.env !== 'development' ? '/orderDocuments/manifest.appcache' : '',
+          appData: {
+            ENV: JSON.stringify(app.options.env),
+            VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
+            TIME: JSON.stringify(Date.now()),
+            LOCALE: JSON.stringify(locale),
+            FRONTEND_SERVICE: JSON.stringify('docs'),
+            CLIENT_ID: JSON.stringify(req.params.clientId || req.query.COMPUTERNAME || null)
+          },
+          mainJsFile: 'wmes-docs.js',
+          mainCssFile: 'assets/wmes-docs.css'
+        });
+      }
+    });
+  }
+
+  function authClientRoute(req, res, next)
+  {
+    step(
+      function authenticateStep()
+      {
+        userModule.authenticate({login: req.body.login, password: req.body.password}, this.next());
+      },
+      function authorizeStep(err, user)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!user.super && !_.includes(user.privileges, 'DOCUMENTS:ACTIVATE'))
+        {
+          return this.skip(app.createError('NO_PRIVILEGES', 403));
+        }
+      },
+      function checkProdLineStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        var prodLine = orgUnits.getByTypeAndId('prodLine', req.body.prodLineId);
+
+        if (!prodLine)
+        {
+          return this.skip(app.createError('INVALID_PROD_LINE', 400));
+        }
+      },
+      function sendResponseStep(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.sendStatus(204);
+      }
+    );
   }
 };

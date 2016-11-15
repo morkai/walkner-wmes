@@ -22,6 +22,9 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
   var orgUnits = app[productionModule.config.orgUnitsId];
   var mongoose = app[productionModule.config.mongooseId];
   var fteModule = app[productionModule.config.fteId];
+  var res = {
+    prodLine: req.prodLine
+  };
 
   step(
     function checkProdLineStep()
@@ -85,11 +88,11 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
         return this.done(reply, err);
       }
 
-      var secretKey = crypto.createHash('md5').update(secretBytes).digest('hex');
+      res.secretKey = crypto.createHash('md5').update(secretBytes).digest('hex');
 
-      productionModule.secretKeys[this.prodLine._id] = secretKey;
+      productionModule.secretKeys[this.prodLine._id] = res.secretKey;
 
-      this.prodLine.secretKey = secretKey;
+      this.prodLine.secretKey = res.secretKey;
       this.prodLine.save(this.next());
     },
     function fetchProdShiftStep(err)
@@ -130,7 +133,7 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
           .exec(this.parallel());
       }
     },
-    function replyStep(err, prodShift, prodShiftOrder, prodDowntimes)
+    function fetchDictionaries(err, prodShift, prodShiftOrder, prodDowntimes)
     {
       if (err)
       {
@@ -139,23 +142,57 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
         return this.done(reply, err);
       }
 
+      if (!prodShift || prodShift.date.getTime() !== fteModule.getCurrentShift().date.getTime())
+      {
+        prodShift = null;
+      }
+
+      res.prodShift = prodShift;
+      res.prodShiftOrder = prodShift && prodShiftOrder && !prodShiftOrder.finishedAt ? prodShiftOrder : null;
+      res.prodDowntimes = prodShift && !_.isEmpty(prodDowntimes) ? prodDowntimes : [];
+      res.dictionaries = {};
+
+      _.forEach(app.options.dictionaryModules, function(dictionaryName, moduleName)
+      {
+        var models = app[moduleName].models;
+
+        res.dictionaries[dictionaryName] = _.invokeMap(
+          models,
+          typeof models[0].toDictionaryObject === 'function' ? 'toDictionaryObject' : 'toJSON'
+        );
+      });
+
+      setImmediate(this.next());
+    },
+    function filterSortDictionariesStep()
+    {
+      _.forEach(res.dictionaries, (models, dictionaryName) =>
+      {
+        setTimeout(
+          function(dictionaries, dictionaryName, done)
+          {
+            dictionaries[dictionaryName] = dictionaries[dictionaryName]
+              .filter(m => !m.deactivatedAt)
+              .sort((a, b) => a._id.toString().localeCompare(b._id.toString()));
+
+            done();
+          },
+          Math.round(Math.random() * 20) + 1,
+          res.dictionaries,
+          dictionaryName,
+          this.group()
+        );
+      });
+    },
+    function replyStep()
+    {
       app.broker.publish('production.unlocked', {
         user: this.user,
         prodLine: this.prodLine._id,
         secretKey: this.prodLine.secretKey
       });
 
-      if (!prodShift || prodShift.date.getTime() !== fteModule.getCurrentShift().date.getTime())
-      {
-        prodShift = null;
-      }
-
-      return this.done(reply, null, {
-        secretKey: this.prodLine.secretKey,
-        prodShift: prodShift,
-        prodShiftOrder: prodShift && prodShiftOrder && !prodShiftOrder.finishedAt ? prodShiftOrder : null,
-        prodDowntimes: prodShift && !_.isEmpty(prodDowntimes) ? prodDowntimes : []
-      });
+      return this.done(reply, null, res);
     }
   );
 };

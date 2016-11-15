@@ -120,11 +120,13 @@ exports.start = function startUpdaterModule(app, module)
   {
     reloadTimer = null;
 
+    var oldVersions = module.getVersions(true);
     var oldBackendVersion = module.getBackendVersion();
     var oldFrontendVersion = module.getFrontendVersion();
 
     reloadPackageJson();
 
+    var newVersions = module.getVersions(false);
     var newBackendVersion = module.getBackendVersion();
     var newFrontendVersion = module.getFrontendVersion();
 
@@ -148,6 +150,20 @@ exports.start = function startUpdaterModule(app, module)
 
       handleFrontendUpdate(oldFrontendVersion, newFrontendVersion);
     }
+
+    _.forEach(newVersions, function(newVersion, service)
+    {
+      var oldVersion = oldVersions[service] || 0;
+
+      if (newVersion !== oldVersion)
+      {
+        app.broker.publish('updater.newVersion', {
+          service: service,
+          oldVersion: oldVersion,
+          newVersion: newVersion
+        });
+      }
+    });
   }
 
   function handleBackendUpdate(oldBackendVersion, newBackendVersion)

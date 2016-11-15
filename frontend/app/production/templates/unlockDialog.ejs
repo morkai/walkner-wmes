@@ -1,8 +1,14 @@
-<form class="production-<%- type %>Dialog">
-  <p class="message message-inline message-info"><%- t('production', 'unlockDialog:message:' + type, {prodLine: prodLine}) %></p>
+<form class="production-<%- type %>Dialog" autocomplete="off">
+  <p class="message message-inline message-info"><%- t('production', 'unlockDialog:message:' + type, {prodLine: prodLine || ''}) %></p>
+  <% if (!prodLine) { %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-prodLine"><%- t('production', 'unlockDialog:prodLine') %></label>
+    <input id="<%- idPrefix %>-prodLine" class="form-control" type="text" required>
+  </div>
+  <% } %>
   <div class="form-group">
     <label for="<%- idPrefix %>-login"><%- t('production', 'unlockDialog:login') %></label>
-    <input id="<%- idPrefix %>-login" class="form-control" type="text" autofocus required>
+    <input id="<%- idPrefix %>-login" class="form-control" type="text" <%- prodLine ? 'autofocus' : '' %> required>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-password"><%- t('production', 'unlockDialog:password') %></label>

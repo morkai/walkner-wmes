@@ -16,6 +16,9 @@
     "controls:toggleAddImprovementButtons": "Add near miss/suggestion",
     "controls:openAddNearMissWindow": "Submit a new near miss",
     "controls:openAddSuggestionWindow": "Submit a new suggestion",
+    "controls:switchApps": "Switch apps",
+    "controls:reboot": "Refresh page/Restart after 3s",
+    "controls:shutdown": "Shutdown after 3s",
     "controls:filter:ph": "Filter documents",
 
     "popup:document": "Failed to open the document in a new window :(<br>Check if the popups are allowed in the browser!",

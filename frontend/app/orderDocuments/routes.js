@@ -18,9 +18,24 @@ define([
 
   router.map('/', function()
   {
+    var matches = window.location.pathname.match(/doc(?:ument)?s\/(.*?)$/);
+    var clientId = window.COMPUTERNAME;
+
+    if (matches)
+    {
+      clientId = matches[1];
+    }
+
+    if (!clientId)
+    {
+      clientId = localStorage.DOCS_CLIENT_ID || 'DOCS-' + Date.now();
+    }
+
+    localStorage.DOCS_CLIENT_ID = clientId;
+
     viewport.showPage(new DocumentViewerPage({
       model: new DocumentViewerState({
-        _id: window.location.pathname.match(/docs\/(.*?)$/)[1]
+        _id: clientId
       })
     }));
   });

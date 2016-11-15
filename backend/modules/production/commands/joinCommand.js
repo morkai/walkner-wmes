@@ -30,8 +30,46 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
   var mongoose = app[productionModule.config.mongooseId];
   var ProdDowntime = mongoose.model('ProdDowntime');
   var Setting = mongoose.model('Setting');
+  var dictionaries = {};
 
   step(
+    function fetchDictionariesStep()
+    {
+      _.forEach(req.dictionaries, (clientUpdatedAt, moduleName) =>
+      {
+        if (!app.options.dictionaryModules[moduleName])
+        {
+          return;
+        }
+
+        var dictionary = app[moduleName];
+
+        if (!dictionary)
+        {
+          return;
+        }
+
+        var serverUpdatedAt = dictionary.updatedAt;
+
+        if (serverUpdatedAt !== -1 && serverUpdatedAt <= clientUpdatedAt)
+        {
+          return;
+        }
+
+        setTimeout(
+          function(done)
+          {
+            dictionaries[moduleName] = dictionary.models
+              .filter(m => !m.deactivatedAt)
+              .sort((a, b) => a._id.toString().localeCompare(b._id.toString()));
+
+            done();
+          },
+          Math.round(Math.random() * 20) + 1,
+          this.group()
+        );
+      });
+    },
     function fetchDataStep()
     {
       productionModule.getProdData('shift', req.prodShiftId, this.parallel());
@@ -45,7 +83,8 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
         plannedQuantities: !prodShift ? undefined : prodShift.quantitiesDone.map(d => d.planned),
         prodDowntimes: prodDowntimes || undefined,
         settings: settings || undefined,
-        isaRequests: isaRequests || undefined
+        isaRequests: isaRequests || undefined,
+        dictionaries: dictionaries
       });
     }
   );

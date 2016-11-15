@@ -26,6 +26,7 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes, customS
       module.Model = Model;
       module.models = [];
       module.modelsById = {};
+      module.updatedAt = Date.now();
 
       if (setUpRoutes)
       {
@@ -103,6 +104,8 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes, customS
 
       function publishDictionaryUpdate(topic, message, meta)
       {
+        module.updatedAt = Date.now();
+
         app.broker.publish('dictionaries.updated', {
           topic: topic,
           message: message,

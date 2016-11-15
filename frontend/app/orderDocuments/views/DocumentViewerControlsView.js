@@ -121,6 +121,18 @@ define([
           this.$id('addImprovementButtons').addClass('hidden');
         });
       },
+      'click #-switchApps': function()
+      {
+        window.parent.postMessage({type: 'switch', app: 'documents'}, '*');
+      },
+      'mousedown #-reboot': function(e) { this.startActionTimer('reboot', e); },
+      'touchstart #-reboot': function() { this.startActionTimer('reboot'); },
+      'mouseup #-reboot': function() { this.stopActionTimer('reboot'); },
+      'touchend #-reboot': function() { this.stopActionTimer('reboot'); },
+      'mousedown #-shutdown': function(e) { this.startActionTimer('shutdown', e); },
+      'touchstart #-shutdown': function() { this.startActionTimer('shutdown'); },
+      'mouseup #-shutdown': function() { this.stopActionTimer('shutdown'); },
+      'touchend #-shutdown': function() { this.stopActionTimer('shutdown'); },
       'change #-localFile': function(e)
       {
         var files = e.target.files;
@@ -231,6 +243,11 @@ define([
 
     initialize: function()
     {
+      this.actionTimer = {
+        action: null,
+        time: null
+      };
+
       $(window).on('keypress.' + this.idPrefix, this.onKeyPress.bind(this));
     },
 
@@ -243,7 +260,8 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        touch: window.location.search.indexOf('touch') !== -1
+        touch: window.location.search.indexOf('touch') !== -1,
+        showBottomButtons: window.parent !== window
       };
     },
 
@@ -279,6 +297,46 @@ define([
       {
         $active[0].scrollIntoView();
       }
+    },
+
+    startActionTimer: function(action, e)
+    {
+      this.actionTimer.action = action;
+      this.actionTimer.time = Date.now();
+
+      if (e)
+      {
+        e.preventDefault();
+      }
+    },
+
+    stopActionTimer: function(action)
+    {
+      if (this.actionTimer.action !== action)
+      {
+        return;
+      }
+
+      var long = (Date.now() - this.actionTimer.time) > 3000;
+
+      if (action === 'reboot')
+      {
+        if (long)
+        {
+          window.parent.postMessage({type: 'reboot'}, '*');
+        }
+        else
+        {
+          window.location.reload();
+        }
+      }
+      else if (long && action === 'shutdown')
+      {
+        window.parent.postMessage({type: 'shutdown'}, '*');
+      }
+
+      this.actionTimer.action = null;
+      this.actionTimer.time = null;
     },
 
     canUseControls: function()

@@ -12,6 +12,31 @@ module.exports = function setUpProductionRoutes(app, productionModule)
   var express = app[productionModule.config.expressId];
   var settings = app[productionModule.config.settingsId];
   var userModule = app[productionModule.config.userId];
+  var updaterModule = app[productionModule.config.updaterId];
+
+  express.get('/operator', function(req, res)
+  {
+    var sessionUser = req.session.user;
+    var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
+
+    res.format({
+      'text/html': function()
+      {
+        res.render('index', {
+          appCacheManifest: app.options.env !== 'development' ? '/operator/manifest.appcache' : '',
+          appData: {
+            ENV: JSON.stringify(app.options.env),
+            VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
+            TIME: JSON.stringify(Date.now()),
+            LOCALE: JSON.stringify(locale),
+            FRONTEND_SERVICE: JSON.stringify('operator')
+          },
+          mainJsFile: 'wmes-operator.js',
+          mainCssFile: 'assets/wmes-operator.css'
+        });
+      }
+    });
+  });
 
   express.get(
     '/production/settings',

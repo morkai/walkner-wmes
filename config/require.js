@@ -37,7 +37,8 @@ exports.paths = {
   'Sortable': 'vendor/Sortable',
   'deployJava': 'vendor/deployJava',
   'interact': 'vendor/interact',
-  'dragscroll': 'vendor/dragscroll'
+  'dragscroll': 'vendor/dragscroll',
+  'hammer': 'vendor/hammer'
 };
 
 exports.shim = {

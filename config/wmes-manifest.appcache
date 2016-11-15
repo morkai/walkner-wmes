@@ -8,7 +8,6 @@ CACHE:
 /vendor/select2-lang/pl.js
 /vendor/select2/select2.png
 /vendor/select2/select2-spinner.gif
-/vendor/socket.io.js
 /config.js
 {mainJsFile}
 /main.js

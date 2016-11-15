@@ -16,6 +16,7 @@ define([
   '../data/prodFlows',
   '../data/prodLines',
   '../data/prodLog',
+  '../prodLines/ProdLine',
   '../prodDowntimes/ProdDowntime',
   '../prodDowntimes/ProdDowntimeCollection',
   '../prodShiftOrders/ProdShiftOrder',
@@ -39,6 +40,7 @@ define([
   prodFlows,
   prodLines,
   prodLog,
+  ProdLine,
   ProdDowntime,
   ProdDowntimeCollection,
   ProdShiftOrder,
@@ -48,6 +50,8 @@ define([
   renderUserInfo
 ) {
   'use strict';
+
+  var LINE_STORAGE_KEY = 'PRODUCTION:LINE';
 
   return Model.extend({
 
@@ -99,11 +103,18 @@ define([
         return;
       }
 
+      this.prodLine = prodLines.get(this.get('prodLine'));
+
+      if (!this.prodLine)
+      {
+        this.prodLine = new ProdLine({
+          _id: null
+        });
+      }
+
       this.shiftChangeTimer = null;
 
       this.settings = settings.acquire({localStorage: true});
-
-      this.prodLine = prodLines.get(this.get('prodLine'));
 
       this.prodShiftOrder = new ProdShiftOrder();
 
@@ -740,7 +751,7 @@ define([
      */
     getLabel: function()
     {
-      var label = this.get('prodLine');
+      var label = this.get('prodLine') || '?';
       var date = this.get('date');
       var shift = this.get('shift');
 
@@ -970,13 +981,15 @@ define([
     /**
      * @param {string|null} secretKey
      * @param {object} [remoteData]
+     * @param {boolean} [reload]
      */
-    setSecretKey: function(secretKey, remoteData)
+    setSecretKey: function(secretKey, remoteData, reload)
     {
       if (secretKey === null)
       {
         localStorage.removeItem(this.getSecretKeyStorageKey());
         localStorage.removeItem(this.getDataStorageKey());
+        localStorage.removeItem(LINE_STORAGE_KEY);
 
         this.prodShiftOrder.clear();
         this.prodDowntimes.reset();
@@ -997,29 +1010,45 @@ define([
       }
       else
       {
-        localStorage.setItem(this.getSecretKeyStorageKey(), secretKey);
+        localStorage.setItem(this.getSecretKeyStorageKey(remoteData.prodLine), secretKey);
 
-        this.trigger('unlocked');
+        if (remoteData.prodLine)
+        {
+          localStorage.setItem(LINE_STORAGE_KEY, remoteData.prodLine);
+        }
+
+        if (!reload)
+        {
+          this.trigger('unlocked');
+        }
+
         this.readLocalData(remoteData);
+
+        if (reload)
+        {
+          window.location.reload();
+        }
       }
     },
 
     /**
      * @private
+     * @param {string} [prodLine]
      * @returns {string}
      */
-    getSecretKeyStorageKey: function()
+    getSecretKeyStorageKey: function(prodLine)
     {
-      return 'PRODUCTION:SECRET_KEY:' + this.prodLine.id;
+      return 'PRODUCTION:SECRET_KEY:' + (prodLine || this.prodLine.id);
     },
 
     /**
      * @private
+     * @param {string} [prodLine]
      * @returns {string}
      */
-    getDataStorageKey: function()
+    getDataStorageKey: function(prodLine)
     {
-      return 'PRODUCTION:DATA:' + this.prodLine.id;
+      return 'PRODUCTION:DATA:' + (prodLine || this.prodLine.id);
     },
 
     /**
@@ -1202,11 +1231,18 @@ define([
       DOWNTIME: 'downtime'
     },
 
+    LINE_STORAGE_KEY: LINE_STORAGE_KEY,
+
     parse: function(data)
     {
       if (typeof data.date === 'string')
       {
         data.date = new Date(data.date);
+      }
+
+      if (typeof data.createdAt === 'string')
+      {
+        data.createdAt = new Date(data.createdAt);
       }
 
       return data;

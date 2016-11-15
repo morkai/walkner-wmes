@@ -78,7 +78,7 @@ define([
     updatePageHeader: function()
     {
       this.$('.production-pageHeader').text(
-        this.model.prodLine.get('description') || this.model.prodLine.id
+        this.model.prodLine.get('description') || this.model.prodLine.id || '?'
       );
     },
 
@@ -131,30 +131,29 @@ define([
     updatePersonnel: function(type)
     {
       var unlocked = !this.model.isLocked();
-      var userInfo = this.model.get(type);
-      var label = userInfo && userInfo.label ? userInfo.label : null;
       var html;
 
-      if (label)
+      if (!unlocked)
       {
-        var matches = label.match(/^(.*?) \(.*?\)$/);
-
-        html = matches === null ? label : matches[1].trim();
-
-        if (unlocked)
-        {
-          html += ' <button class="btn btn-link">'
-            + t('production', 'property:' + type + ':change')
-            + '</button>';
-        }
+        html = '?';
       }
       else
       {
-        html = t('production', 'property:' + type + ':noData:' + (unlocked ? 'un' : '') + 'locked');
+        var userInfo = this.model.get(type);
+        var label = userInfo && userInfo.label ? userInfo.label : null;
 
-        if (unlocked)
+        if (label)
         {
-          html = '<button class="btn btn-link">' + html + '</a>';
+          var matches = label.match(/^(.*?) \(.*?\)$/);
+
+          html = (matches === null ? label : matches[1].trim())
+            + ' <button class="btn btn-link">'
+            + t('production', 'property:' + type + ':change')
+            + '</button>';
+        }
+        else
+        {
+          html = '<button class="btn btn-link">' + t('production', 'property:' + type + ':noData:unlocked') + '</a>';
         }
       }
 

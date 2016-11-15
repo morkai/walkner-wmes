@@ -25,6 +25,7 @@ exports.DEFAULT_CONFIG = {
   fteId: 'fte',
   orgUnitsId: 'orgUnits',
   settingsId: 'settings',
+  updaterId: 'updater',
   isaId: 'isa'
 };
 

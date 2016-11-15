@@ -33,7 +33,7 @@
 
   if (window.parent)
   {
-    window.parent.postMessage(location.hostname, '*');
+    window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }
 
   window.COMPUTERNAME = (location.href.match(/COMPUTERNAME=(.*?)(?:&.*)?$/i) || [null, null])[1];

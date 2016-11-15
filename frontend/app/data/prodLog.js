@@ -197,8 +197,10 @@ define([
       window.removeEventListener('storage', onStorage);
       window.addEventListener('storage', onStorage);
 
-      lockTimer = setInterval(onLockTimeout, 333);
-      enableTimer = setTimeout(onEnableTimeout, 2000);
+      var embedded = window.parent !== window;
+
+      lockTimer = setInterval(onLockTimeout, embedded ? 333333 : 333);
+      enableTimer = setTimeout(onEnableTimeout, embedded ? 1 : 2000);
 
       function onLockTimeout()
       {

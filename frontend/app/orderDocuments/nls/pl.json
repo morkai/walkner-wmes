@@ -15,6 +15,9 @@
   "controls:toggleAddImprovementButtons": "Zgłoś ZPW/sugestię",
   "controls:openAddNearMissWindow": "Zgłoś ZPW",
   "controls:openAddSuggestionWindow": "Zgłoś sugestię",
+  "controls:switchApps": "Zmień aplikację",
+  "controls:reboot": "Odśwież stronę/Restartuj komputer po 3s",
+  "controls:shutdown": "Wyłącz komputer po 3s",
   "controls:filter:ph": "Filtruj dokumenty",
 
   "popup:document": "Nie udało się otworzyć dokumentu w nowym oknie :(<br>Sprawdź czy wyskakujące okienka są dozwolone w przeglądarce!",

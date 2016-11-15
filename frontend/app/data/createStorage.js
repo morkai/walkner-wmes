@@ -31,12 +31,14 @@ define([
   {
     var remoteData = {
       time: time.appData,
-      data: window[storageKey] || []
+      data: window[storageKey] || null
     };
-    var localData = JSON.parse(localStorage.getItem(storageKey) || 'null');
+    var localData = JSON.parse(localStorage.getItem(storageKey) || '{"time":0,"data":null}');
 
-    var freshestData = localData && localData.time > remoteData.time ? localData : remoteData;
+    var freshestData = (localData && localData.time > remoteData.time) || !remoteData.data ? localData : remoteData;
     var collection = new Collection(freshestData.data);
+
+    collection.updatedAt = freshestData.time;
 
     if (freshestData === remoteData)
     {
@@ -48,6 +50,7 @@ define([
     collection.on('destroy', storeLocally);
     collection.on('change', storeLocally);
     collection.on('sync', storeLocally);
+    collection.on('reset', storeLocally);
 
     broker.subscribe(topicPrefix + '.added', function(message)
     {
@@ -75,8 +78,10 @@ define([
 
     function storeLocally()
     {
+      collection.updatedAt = Date.now();
+
       localStorage.setItem(storageKey, JSON.stringify({
-        time: Date.now(),
+        time: collection.updatedAt,
         data: collection.models
       }));
 

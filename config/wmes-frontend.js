@@ -24,6 +24,7 @@ exports.modules = [
   'events',
   'pubsub',
   'user',
+  'pings',
   'express',
   'users',
   'companies',
@@ -198,7 +199,8 @@ exports.pubsub = {
     'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
     'qi.**',
     'pscs.**',
-    'd8.**'
+    'd8.**',
+    'ping', 'sockets.connected', 'sockets.disconnected'
   ]
 };
 
@@ -208,7 +210,7 @@ exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
-    'setting', 'event', 'user', 'passwordResetRequest',
+    'setting', 'event', 'user', 'passwordResetRequest', 'ping',
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',
@@ -269,7 +271,7 @@ exports.express = {
 };
 
 exports.user = {
-  localAddresses: [/^192\.168\./],
+  localAddresses: [/^192\.168\./, /^161\.87\./],
   privileges: [
     'USERS:VIEW', 'USERS:MANAGE',
     'ORDERS:VIEW', 'ORDERS:MANAGE',
@@ -393,6 +395,11 @@ exports.updater = {
       path: '/orderDocuments/manifest.appcache',
       mainJsFile: '/wmes-docs.js',
       mainCssFile: '/assets/wmes-docs.css'
+    },
+    {
+      path: '/operator/manifest.appcache',
+      mainJsFile: '/wmes-operator.js',
+      mainCssFile: '/assets/wmes-operator.css'
     }
   ]
 };
