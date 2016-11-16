@@ -11,7 +11,7 @@
 
   "LIST:COLUMN:actions": "Akcje",
   "LIST:NO_DATA": "Brak danych.",
-  "LIST:NO_DATA:cell": "brak danych",
+  "LIST:NO_DATA:cell": "",
   "LIST:ACTION:viewDetails": "Pokaż szczegóły",
   "LIST:ACTION:edit": "Edytuj",
   "LIST:ACTION:delete": "Usuń",

@@ -12,7 +12,7 @@
 
     "LIST:COLUMN:actions": "Actions",
     "LIST:NO_DATA": "No data.",
-    "LIST:NO_DATA:cell": "no data",
+    "LIST:NO_DATA:cell": "",
     "LIST:ACTION:viewDetails": "View details",
     "LIST:ACTION:edit": "Edit",
     "LIST:ACTION:delete": "Delete",
