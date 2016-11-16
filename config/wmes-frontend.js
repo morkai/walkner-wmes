@@ -163,8 +163,8 @@ exports.httpServer = {
 exports.httpsServer = {
   host: '0.0.0.0',
   port: 443,
-  key: __dirname + '/privatekey.pem',
-  cert: __dirname + '/certificate.pem'
+  key: __dirname + '/https.key',
+  cert: __dirname + '/https.crt'
 };
 
 exports.sio = {
