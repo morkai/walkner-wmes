@@ -20,6 +20,7 @@
             <p class="help-block"><%- t('users', 'FORM:HELP:password') %></p>
             <% } %>
           </div>
+          <% if (!accountMode) { %>
           <div class="form-group users-form-active">
             <label for="<%- idPrefix %>-active" class="control-label is-required"><%- t('users', 'PROPERTY:active') %></label>
             <div>
@@ -30,6 +31,7 @@
               <% }) %>
             </div>
           </div>
+          <% } %>
         </div>
         <div class="col-lg-3">
           <div class="form-group">
@@ -54,10 +56,12 @@
               <% }) %>
             </div>
           </div>
+          <% if (!accountMode) { %>
           <div class="form-group">
             <label for="<%- idPrefix %>-kdId" class="control-label"><%- t('users', 'PROPERTY:kdId') %></label>
             <input id="<%- idPrefix %>-kdId" class="form-control" type="text" name="kdId" pattern="^-?[0-9]+$">
           </div>
+          <% } %>
         </div>
         <div class="col-lg-3">
           <div class="form-group">
