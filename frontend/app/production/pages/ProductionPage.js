@@ -420,7 +420,7 @@ define([
 
     onBeforeUnload: function()
     {
-      if (this.model.isLocked())
+      if (this.model.isLocked() || window.parent !== window)
       {
         return;
       }
