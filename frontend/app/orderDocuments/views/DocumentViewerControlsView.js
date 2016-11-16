@@ -121,10 +121,10 @@ define([
           this.$id('addImprovementButtons').addClass('hidden');
         });
       },
-      'click #-switchApps': function()
-      {
-        window.parent.postMessage({type: 'switch', app: 'documents'}, '*');
-      },
+      'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
+      'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
+      'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
+      'touchend #-switchApps': function() { this.stopActionTimer('switchApps'); },
       'mousedown #-reboot': function(e) { this.startActionTimer('reboot', e); },
       'touchstart #-reboot': function() { this.startActionTimer('reboot'); },
       'mouseup #-reboot': function() { this.stopActionTimer('reboot'); },
@@ -319,7 +319,18 @@ define([
 
       var long = (Date.now() - this.actionTimer.time) > 3000;
 
-      if (action === 'reboot')
+      if (action === 'switchApps')
+      {
+        if (long)
+        {
+          window.parent.postMessage({type: 'config'}, '*');
+        }
+        else
+        {
+          window.parent.postMessage({type: 'switch', app: 'documents'}, '*');
+        }
+      }
+      else if (action === 'reboot')
       {
         if (long)
         {

@@ -15,7 +15,7 @@
   "controls:toggleAddImprovementButtons": "Zgłoś ZPW/sugestię",
   "controls:openAddNearMissWindow": "Zgłoś ZPW",
   "controls:openAddSuggestionWindow": "Zgłoś sugestię",
-  "controls:switchApps": "Zmień aplikację",
+  "controls:switchApps": "Zmień aplikację/Konfiguruj po 3s",
   "controls:reboot": "Odśwież stronę/Restartuj komputer po 3s",
   "controls:shutdown": "Wyłącz komputer po 3s",
   "controls:filter:ph": "Filtruj dokumenty",

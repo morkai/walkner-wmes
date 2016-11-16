@@ -109,14 +109,17 @@ define([
           this.downtimesView.showEditDialog(downtime.id);
         }
       },
-      'click #-switchApps': function()
-      {
-        window.parent.postMessage({type: 'switch', app: 'operator'}, '*');
-      },
+
+      'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
+      'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
+      'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
+      'touchend #-switchApps': function() { this.stopActionTimer('switchApps'); },
+
       'mousedown #-reboot': function(e) { this.startActionTimer('reboot', e); },
       'touchstart #-reboot': function() { this.startActionTimer('reboot'); },
       'mouseup #-reboot': function() { this.stopActionTimer('reboot'); },
       'touchend #-reboot': function() { this.stopActionTimer('reboot'); },
+
       'mousedown #-shutdown': function(e) { this.startActionTimer('shutdown', e); },
       'touchstart #-shutdown': function() { this.startActionTimer('shutdown'); },
       'mouseup #-shutdown': function() { this.stopActionTimer('shutdown'); },
@@ -837,7 +840,18 @@ define([
 
       var long = (Date.now() - this.actionTimer.time) > 3000;
 
-      if (action === 'reboot')
+      if (action === 'switchApps')
+      {
+        if (long)
+        {
+          window.parent.postMessage({type: 'config'}, '*');
+        }
+        else
+        {
+          window.parent.postMessage({type: 'switch', app: 'operator'}, '*');
+        }
+      }
+      else if (action === 'reboot')
       {
         if (long)
         {

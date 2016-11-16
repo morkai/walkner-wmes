@@ -21,7 +21,7 @@
   "controls:msg:sync:remoteError": "Nie można aktywować edycji: nieudane pobranie klucza :(",
   "controls:msg:sync:success": "Pomyślnie aktywowano edycję :)",
   "controls:msg:popup": "Wyskakujące okienko zostało zablokowane :(",
-  "controls:switchApps": "Zmień aplikację",
+  "controls:switchApps": "Zmień aplikację/Konfiguruj po 3s",
   "controls:reboot": "Odśwież stronę/Restartuj komputer po 3s",
   "controls:shutdown": "Wyłącz komputer po 3s",
 
