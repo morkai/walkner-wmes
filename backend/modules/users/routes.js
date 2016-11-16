@@ -56,11 +56,12 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
     if (user && req.params.id === user._id)
     {
-      if (req.body.privileges && user.privileges.indexOf('USERS:MANAGE') === -1)
+      if (!user.privileges || user.privileges.indexOf('USERS:MANAGE') === -1)
       {
         req.body = _.pick(req.body, [
-          'login', 'email', 'password', 'password', 'password2',
-          'firstName', 'lastName', 'sex'
+          '_id',
+          'login', 'email', 'password', 'password2',
+          'firstName', 'lastName', 'sex', 'mobile', 'personellId'
         ]);
       }
 
