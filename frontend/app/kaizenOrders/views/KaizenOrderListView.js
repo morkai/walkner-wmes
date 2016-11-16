@@ -42,6 +42,7 @@ define([
         columns.push(
           {id: 'eventDate', tdAttrs: prepareTdAttrs},
           {id: 'area', tdAttrs: prepareTdAttrs},
+          {id: 'behaviour', tdAttrs: prepareTdAttrs},
           {id: 'cause', tdAttrs: prepareTdAttrs},
           {id: 'risk', tdAttrs: prepareTdAttrs},
           {id: 'nearMissCategory', tdAttrs: prepareTdAttrs}
