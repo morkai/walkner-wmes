@@ -184,6 +184,7 @@ define([
         case 'area':
         case 'risk':
         case 'cause':
+        case 'behaviour':
         {
           var model = kaizenDictionaries[property + 's'].get(value);
 
