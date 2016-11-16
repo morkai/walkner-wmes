@@ -23,10 +23,6 @@ app/core/assets/highlight.css
 ----------------
 app/core/assets/highlight.css
 
-app/core/assets/logInForm.css
-----------------
-app/core/assets/logInForm.css
-
 app/core/assets/main.css
 ----------------
 app/core/assets/./print.css
@@ -35,7 +31,6 @@ app/core/assets/./table.css
 app/core/assets/./modal.css
 app/core/assets/./navbar.css
 app/core/assets/./properties.css
-app/core/assets/./logInForm.css
 app/core/assets/./filter.css
 app/core/assets/./dataTables.css
 app/core/assets/./highlight.css
@@ -386,8 +381,13 @@ app/updater/assets/main.css
 ----------------
 app/updater/assets/main.css
 
+app/users/assets/logInForm.css
+----------------
+app/users/assets/logInForm.css
+
 app/users/assets/main.css
 ----------------
+app/users/assets/./logInForm.css
 app/users/assets/main.css
 
 app/vis/assets/main.css
