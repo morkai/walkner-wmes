@@ -290,6 +290,14 @@ define([
 
       delete formData.eventTime;
 
+      this.$('.select2-container + input').each(function()
+      {
+        if (!formData[this.name])
+        {
+          formData[this.name] = null;
+        }
+      });
+
       if (eventTimeMatches)
       {
         var hours = eventTimeMatches[1];
