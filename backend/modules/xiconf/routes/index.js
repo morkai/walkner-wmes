@@ -183,12 +183,33 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     canView,
     function(req, res, next)
     {
-      req.rql.fields = {log: 0};
+      req.rql.fields = {
+        srcId: 1,
+        srcTitle: 1,
+        srcIp: 1,
+        srcUuid: 1,
+        orderNo: 1,
+        nc12: 1,
+        gprsNc12: 1,
+        programName: 1,
+        counter: 1,
+        result: 1,
+        errorCode: 1,
+        exception: 1,
+        startedAt: 1,
+        finishedAt: 1,
+        featurePath: 1,
+        workflowPath: 1,
+        prodLine: 1,
+        serviceTag: 1,
+        'leds.name': 1,
+        'hidLamps.name': 1
+      };
       req.rql.sort = {};
 
       next();
     },
-    populateOrder.bind(null, []),
+    //populateOrder.bind(null, []),
     express.crud.exportRoute.bind(null, {
       filename: 'WMES-XICONF-RESULTS',
       serializeRow: exportXiconfResult,
@@ -365,26 +386,44 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   function exportXiconfResult(doc)
   {
+    let leds = '';
+    let hidLamps = '';
+
+    if (!_.isEmpty(doc.leds))
+    {
+      const ledMap = {};
+
+      _.forEach(doc.leds, led => ledMap[led.name] = 1);
+
+      leds = Object.keys(ledMap).join(', ');
+    }
+    else if (!_.isEmpty(doc.hidLamps))
+    {
+      const hidLampMap = {};
+
+      _.forEach(doc.hidLamps, hidLamp => hidLampMap[hidLamp.name] = 1);
+
+      hidLamps = Object.keys(hidLampMap).join(', ');
+    }
+
     return {
       '"srcId': doc.srcId,
       '"srcTitle': doc.srcTitle,
+      '"prodLine': doc.prodLine,
+      '"serviceTag': doc.serviceTag,
       '"orderNo': doc.orderNo,
       '"12nc': doc.nc12,
       '"gprs12nc': doc.gprsNc12,
       '"programName': doc.programName,
+      '"leds': leds,
+      '"hidLamps': hidLamps,
       '#counter': doc.counter,
-      '#quantity': doc.order ? doc.order.quantity : null,
       '"result': doc.result,
       '"errorCode': doc.errorCode,
       '"exception': doc.exception,
       'startedAt': app.formatDateTime(doc.startedAt),
       'finishedAt': app.formatDateTime(doc.finishedAt),
       '#duration': (doc.finishedAt - doc.startedAt) / 1000,
-      'orderStartedAt': doc.order ? app.formatDateTime(doc.order.startedAt) : null,
-      'orderFinishedAt': doc.order ? app.formatDateTime(doc.order.finishedAt) : null,
-      '#orderDuration': doc.order ? ((doc.order.finishedAt - doc.order.startedAt) / 1000) : null,
-      '#successCounter': doc.order ? doc.order.successCounter : null,
-      '#failureCounter': doc.order ? doc.order.failureCounter : null,
       '"featurePath': doc.featurePath,
       '"workflowPath': doc.workflowPath,
       '"srcIp': doc.srcIp,
