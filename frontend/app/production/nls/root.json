@@ -211,13 +211,17 @@
     "settings:tab:operator": "Operator",
     "settings:tab:downtimes": "Downtimes",
     "settings:tab:spigot": "Spigot check",
+    "settings:tab:taktTime": "Takt Time",
     "settings:initialDowntimeWindow": "Time to start the initial downtime on a shift [min]",
     "settings:rearmDowntimeReason": "Downtime reason with Spigot check",
     "settings:spigotLines": "Production lines with Spigot check",
     "settings:spigotPatterns": "Select Spigot component matching one of the following patterns",
     "settings:spigotNotPatterns": "Ignore the selected component, if it also matches any of the following patterns",
     "settings:spigotFinish": "Force checking of the Spigot during order finish",
-    "settings:spigotGroups": "12NC groups"
+    "settings:spigotGroups": "12NC groups",
+    "settings:taktTime:coeffs": "Operation coefficients",
+    "settings:taktTime:coeffs:help": "Each line should contain order's MRP for which the Takt Time coefficients should be adjusted, followed by names of the operation WorkCenters and values of the coefficients. For example: <code class=multiline>*: *=1.053 PIVATIC5=0.9<br>KE6: *=1 OUTDOOR5=1.1</code>"
+
   },
   "pl": true
 }

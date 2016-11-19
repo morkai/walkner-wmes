@@ -53,6 +53,9 @@ kbd {
   background: #eee;
   color: #333;
 }
+code.multiline {
+  display: inline-block;
+}
 .unselectable {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

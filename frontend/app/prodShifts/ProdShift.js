@@ -116,7 +116,9 @@ define([
 
       this.settings = settings.acquire({localStorage: true});
 
-      this.prodShiftOrder = new ProdShiftOrder();
+      this.prodShiftOrder = new ProdShiftOrder(null, {
+        settings: this.settings
+      });
 
       this.prodDowntimes = new ProdDowntimeCollection(null, {
         paginate: false,

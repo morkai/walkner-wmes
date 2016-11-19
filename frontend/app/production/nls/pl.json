@@ -213,11 +213,14 @@
   "settings:tab:operator": "Formatka operatora",
   "settings:tab:downtimes": "Przestoje",
   "settings:tab:spigot": "Sprawdzanie Spigota",
+  "settings:tab:taktTime": "Takt Time",
   "settings:initialDowntimeWindow": "Czas na rozpoczęcie początkowego przestoju na zmianie [min]",
   "settings:rearmDowntimeReason": "Przestój ze sprawdzaniem Spigota",
   "settings:spigotLines": "Linie ze sprawdzaniem Spigota",
   "settings:spigotPatterns": "Wybierz komponent Spigot pasujący do jednego z poniższych wzorców",
   "settings:spigotNotPatterns": "Zignoruj wybrany komponent, jeżeli pasuje do jednego z poniższych wzorców",
   "settings:spigotFinish": "Wymuś sprawdzanie Spigota na koniec zlecenia",
-  "settings:spigotGroups": "Grupy 12NC"
+  "settings:spigotGroups": "Grupy 12NC",
+  "settings:taktTime:coeffs": "Współczynniki operacji",
+  "settings:taktTime:coeffs:help": "W każdej linii należy podać MRP zlecenia, dla którego współczynniki Takt Time mają być zmienione, a następnie WorkCenter operacji i wartości współczynników. W miejsce MRP i WorkCenter można użyć znaku <code>*</code> (wszystkie). Na przykład:<br><code class=multiline>*: *=1.053 PIVATIC5=0.9<br>KE6: *=1 OUTDOOR5=1.1</code>"
 }

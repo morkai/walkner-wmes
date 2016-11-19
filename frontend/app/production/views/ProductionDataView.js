@@ -70,15 +70,21 @@ define([
       {
         this.updateOrderData();
         this.updateOrderInfo();
-        this.updateWorkerCount();
-        this.updateTaktTime();
       }, 1));
       this.listenTo(order, 'change:quantityDone', this.updateQuantityDone);
       this.listenTo(order, 'change:workerCount', _.debounce(function()
       {
-        this.updateWorkerCount();
         this.updateTaktTime();
+        this.updateWorkerCount();
       }, 1));
+
+      this.listenTo(this.model.settings, 'change', function(model)
+      {
+        if (/taktTime/.test(model.id))
+        {
+          this.updateTaktTime();
+        }
+      });
     },
 
     afterRender: function()

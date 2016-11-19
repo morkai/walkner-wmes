@@ -65,6 +65,13 @@ define([
       spigot: null
     },
 
+    initialize: function(attrs, options)
+    {
+      Model.prototype.initialize.apply(this, arguments);
+
+      this.settings = options.settings;
+    },
+
     getLabel: function(includeProdLine)
     {
       var label = includeProdLine === false ? '' : (this.get('prodLine') + ': ');
@@ -302,7 +309,9 @@ define([
         return '?';
       }
 
-      return Math.max(Math.round((operation.laborTime * 1.053) / workerCount * 3600 / 100), 1);
+      var coeff = this.settings ? this.settings.getTaktTimeCoeff(orderData.mrp, operation.workCenter) : 1;
+
+      return Math.max(Math.round((operation.laborTime * coeff) / workerCount * 3600 / 100), 1);
     },
 
     getActualTaktTime: function()
