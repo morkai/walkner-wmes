@@ -30,7 +30,6 @@
       'app/users/views/LogInFormView',
       'app/time',
       'app/wmes-routes',
-      'app/visibility',
       'bootstrap',
       'moment-lang/' + window.appLocale,
       'select2-lang/' + window.appLocale,
