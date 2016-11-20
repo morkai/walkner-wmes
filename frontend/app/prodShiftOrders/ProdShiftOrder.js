@@ -254,7 +254,7 @@ define([
         return '-';
       }
 
-      return orderData.name || '?';
+      return orderData.description || orderData.name || '?';
     },
 
     getOperationName: function()
