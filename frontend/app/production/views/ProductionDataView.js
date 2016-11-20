@@ -71,7 +71,11 @@ define([
         this.updateOrderData();
         this.updateOrderInfo();
       }, 1));
-      this.listenTo(order, 'change:quantityDone', this.updateQuantityDone);
+      this.listenTo(order, 'change:quantityDone', _.debounce(function()
+      {
+        this.updateQuantityDone();
+        this.updateTaktTime();
+      }, 1));
       this.listenTo(order, 'change:workerCount', _.debounce(function()
       {
         this.updateTaktTime();
@@ -82,6 +86,7 @@ define([
       {
         if (/taktTime/.test(model.id))
         {
+          this.updateQuantityDone();
           this.updateTaktTime();
         }
       });
@@ -187,7 +192,24 @@ define([
 
     updateTaktTime: function()
     {
-      this.$property('taktTime').text(this.model.prodShiftOrder.getTaktTime());
+      // TODO: settings
+      var pso = this.model.prodShiftOrder;
+      var $taktTime = this.$property('taktTime');
+      var $avgTaktTime = this.$property('avgTaktTime');
+      var avgTaktTime = pso.get('avgTaktTime') || 0;
+      var sn = pso.get('serialNumber');
+      var sapTaktTime = pso.getTaktTime();
+      var text = sn ? Math.round(sn.taktTime / 1000) : sapTaktTime;
+      var title = text === sapTaktTime ? '' : sapTaktTime;
+
+      $taktTime
+        .text(text)
+        .attr('title', title);
+
+      $avgTaktTime
+        .text(Math.round(avgTaktTime / 1000) || '?')
+        .parent()
+        .toggleClass('hidden', !(pso.get('quantityDone') > 1 && avgTaktTime > 0));
     },
 
     updateQuantityDone: function()
@@ -202,7 +224,7 @@ define([
       {
         html = String(this.model.prodShiftOrder.getQuantityDone());
 
-        if (!this.model.isLocked())
+        if (!this.model.isLocked() && !this.model.prodShiftOrder.isRemoteQuantity())
         {
           html += ' <button class="btn btn-link">'
             + t('production', 'property:quantityDone:change')

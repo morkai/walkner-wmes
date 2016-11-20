@@ -158,6 +158,29 @@ define([
       + Math.round(Math.random() * 10000000000000000).toString(36);
   }
 
+  function createLogEntry(prodShift, type, data)
+  {
+    var createdAt = time.getMoment().toDate();
+
+    return {
+      _id: generateId(createdAt, prodShift.id),
+      instanceId: instanceId,
+      secretKey: prodShift.getSecretKey(),
+      type: type,
+      data: data || {},
+      createdAt: createdAt,
+      creator: user.getInfo(),
+      division: prodShift.get('division'),
+      subdivision: prodShift.get('subdivision'),
+      mrpControllers: prodShift.get('mrpControllers'),
+      prodFlow: prodShift.get('prodFlow'),
+      workCenter: prodShift.get('workCenter'),
+      prodLine: prodShift.prodLine.id,
+      prodShift: prodShift.id,
+      prodShiftOrder: prodShift.prodShiftOrder.id || null
+    };
+  }
+
   return {
     generateId: generateId,
     isEnabled: function() { return enabled; },
@@ -197,7 +220,8 @@ define([
       window.removeEventListener('storage', onStorage);
       window.addEventListener('storage', onStorage);
 
-      var embedded = window.parent !== window;
+// TODO: remove || true
+      var embedded = window.parent !== window || true;
 
       lockTimer = setInterval(onLockTimeout, embedded ? 333333 : 333);
       enableTimer = setTimeout(onEnableTimeout, embedded ? 1 : 2000);
@@ -275,7 +299,8 @@ define([
     {
       return syncingLogEntries !== null;
     },
-    record: function(prodShift, type, data)
+    create: createLogEntry,
+    record: function(prodShift, typeOrLogEntry, data)
     {
       if (prodShift.isLocked())
       {
@@ -287,25 +312,9 @@ define([
         throw new Error("Production log is disabled!");
       }
 
-      var prodLogEntry = {
-        _id: null,
-        instanceId: instanceId,
-        secretKey: prodShift.getSecretKey(),
-        type: type,
-        data: data || {},
-        createdAt: time.getMoment().toDate(),
-        creator: user.getInfo(),
-        division: prodShift.get('division'),
-        subdivision: prodShift.get('subdivision'),
-        mrpControllers: prodShift.get('mrpControllers'),
-        prodFlow: prodShift.get('prodFlow'),
-        workCenter: prodShift.get('workCenter'),
-        prodLine: prodShift.prodLine.id,
-        prodShift: prodShift.id,
-        prodShiftOrder: prodShift.prodShiftOrder.id || null
-      };
-
-      prodLogEntry._id = generateId(prodLogEntry.createdAt, prodShift.id);
+      var prodLogEntry = typeof typeOrLogEntry === 'object'
+        ? typeOrLogEntry
+        : createLogEntry(prodShift, typeOrLogEntry, data);
 
       var oldLogEntries = localStorage.getItem(STORAGE_KEY);
       var newLogEntries;

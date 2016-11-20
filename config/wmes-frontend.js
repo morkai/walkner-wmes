@@ -218,7 +218,7 @@ exports.mongoose = {
     'orderDocumentClient', 'orderDocumentStatus',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet', 'prodChangeRequest',
-    'prodDowntimeAlert',
+    'prodDowntimeAlert', 'prodSerialNumber',
     'feedback',
     'license', 'licensePing',
     'xiconfOrderResult', 'xiconfResult', 'xiconfClient',

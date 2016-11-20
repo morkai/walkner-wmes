@@ -13,6 +13,7 @@ exports.changeQuantitiesDone = require('./changeQuantitiesDone');
 exports.changeQuantityDone = require('./changeQuantityDone');
 exports.changeShift = require('./changeShift');
 exports.changeWorkerCount = require('./changeWorkerCount');
+exports.checkSerialNumber = require('./checkSerialNumber');
 exports.checkSpigot = require('./checkSpigot');
 exports.correctOrder = require('./correctOrder');
 exports.corroborateDowntime = require('./corroborateDowntime');

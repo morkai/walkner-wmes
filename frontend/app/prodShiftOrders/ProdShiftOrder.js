@@ -69,7 +69,7 @@ define([
     {
       Model.prototype.initialize.apply(this, arguments);
 
-      this.settings = options.settings;
+      this.settings = options ? options.settings : null;
     },
 
     getLabel: function(includeProdLine)
@@ -128,7 +128,9 @@ define([
         leader: prodShift.get('leader'),
         operator: prodShift.get('operator'),
         operators: prodShift.get('operators'),
-        spigot: null
+        spigot: null,
+        serialNumber: null,
+        avgTaktTime: null
       });
 
       this.generateId(prodShift);
@@ -412,6 +414,12 @@ define([
     getQuantityDone: function()
     {
       return this.get('quantityDone') || 0;
+    },
+
+    isRemoteQuantity: function()
+    {
+      // TODO: only if enabled in settings
+      return this.get('avgTaktTime') > 0;
     },
 
     getSubdivisionType: function()

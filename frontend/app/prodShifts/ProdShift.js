@@ -23,6 +23,7 @@ define([
   '../prodShiftOrders/ProdShiftOrderCollection',
   '../isa/IsaRequestCollection',
   '../production/settings',
+  '../production/snManager',
   'app/core/templates/userInfo'
 ], function(
   _,
@@ -47,6 +48,7 @@ define([
   ProdShiftOrderCollection,
   IsaRequestCollection,
   settings,
+  snManager,
   renderUserInfo
 ) {
   'use strict';
@@ -355,6 +357,8 @@ define([
      */
     startNewShift: function(newDate)
     {
+      snManager.clear();
+
       var finishedProdShiftId = this.id || null;
 
       this.finishDowntime(false);
@@ -665,6 +669,18 @@ define([
       changes._id = prodDowntime.id;
 
       prodLog.record(this, 'editDowntime', changes);
+    },
+
+    updateTaktTime: function(sn, newQuantityDone, avgTaktTime)
+    {
+      snManager.add(sn);
+
+      this.prodShiftOrder.set({
+        serialNumber: sn,
+        quantityDone: newQuantityDone,
+        avgTaktTime: avgTaktTime
+      });
+      this.saveLocalData();
     },
 
     checkSpigot: function(component, nc12)

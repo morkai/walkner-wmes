@@ -123,6 +123,12 @@ define([
         data.downtimeId = prodLogEntry.data.prodDowntime;
         break;
 
+      case 'checkSerialNumber':
+        dataKey += prodLogEntry.data.error ? ':error' : '';
+        data.sn = prodLogEntry.data._id;
+        data.error = prodLogEntry.data.error;
+        break;
+
       default:
         data = prodLogEntry.data;
         break;

@@ -17,6 +17,7 @@ define([
   'app/prodShifts/ProdShift',
   'app/prodDowntimes/ProdDowntime',
   'app/isa/IsaRequest',
+  '../snManager',
   '../views/ProductionControlsView',
   '../views/ProductionHeaderView',
   '../views/ProductionDataView',
@@ -43,6 +44,7 @@ define([
   ProdShift,
   ProdDowntime,
   IsaRequest,
+  snManager,
   ProductionControlsView,
   ProductionHeaderView,
   ProductionDataView,
@@ -96,7 +98,8 @@ define([
         }
       },
       'production.locked': 'onProductionLocked',
-      'production.duplicateDetected': 'onDuplicateDetected'
+      'production.duplicateDetected': 'onDuplicateDetected',
+      'production.taktTime.snScanned': 'onSnScanned'
     },
 
     events: {
@@ -109,6 +112,8 @@ define([
           this.downtimesView.showEditDialog(downtime.id);
         }
       },
+
+      'click #-snMessage': 'hideSnMessage',
 
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
       'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
@@ -419,6 +424,8 @@ define([
       {
         e.preventDefault();
       }
+
+      snManager.handleKeyboardEvent(e);
     },
 
     onBeforeUnload: function()
@@ -818,6 +825,105 @@ define([
 
         this.updateCurrentDowntime();
       }
+    },
+
+    onSnScanned: function(scanInfo)
+    {
+      var page = this;
+      var model = page.model;
+      var state = model.get('state');
+      var logEntry = prodLog.create(model, 'checkSerialNumber', scanInfo);
+      var error;
+
+      if (state !== 'working')
+      {
+        error = 'INVALID_STATE:' + state;
+      }
+      else if (scanInfo.orderNo !== model.prodShiftOrder.get('orderId'))
+      {
+        error = 'INVALID_ORDER';
+      }
+      else if (snManager.contains(scanInfo._id))
+      {
+        error = 'ALREADY_USED';
+      }
+
+      if (error)
+      {
+        logEntry.data.error = error;
+
+        prodLog.record(model, logEntry);
+
+        return this.showSnMessage(scanInfo, 'error', error);
+      }
+
+      page.showSnMessage(scanInfo, 'warning', 'CHECKING');
+
+      var req = this.ajax({
+        method: 'POST',
+        url: '/production/checkSerialNumber',
+        data: JSON.stringify(logEntry),
+        timeout: 5000
+      });
+
+      req.fail(function()
+      {
+        logEntry.data.error = 'SERVER_FAILURE';
+
+        prodLog.record(model, logEntry);
+
+        page.showSnMessage(scanInfo, 'error', 'SERVER_FAILURE');
+      });
+
+      req.done(function(res)
+      {
+        if (res.result === 'SUCCESS')
+        {
+          model.updateTaktTime(res.serialNumber, res.quantityDone, res.avgTaktTime);
+          page.showSnMessage(scanInfo, 'success', 'SUCCESS');
+        }
+        else
+        {
+          logEntry.data.error = res.result;
+
+          prodLog.record(model, logEntry);
+
+          page.showSnMessage(scanInfo, 'error', res.result);
+        }
+      });
+    },
+
+    showSnMessage: function(scanInfo, severity, message)
+    {
+      var $message = this.$id('snMessage');
+      var $actions = this.$('.production-actions');
+
+      this.$id('snMessage-text').html(t('production', 'snMessage:' + message));
+      this.$id('snMessage-scannedValue').text(scanInfo._id);
+      this.$id('snMessage-orderNo').text(scanInfo.orderNo);
+      this.$id('snMessage-serialNo').text(scanInfo.serialNo);
+
+      $message
+        .css({
+          top: ($actions.position().top + parseInt($actions.css('marginTop'), 10)) + 'px'
+        })
+        .removeClass('hidden is-success is-error is-warning')
+        .addClass('is-' + severity)
+        .fadeIn('fast');
+
+      if (this.timers.hideSnMessage)
+      {
+        clearTimeout(this.timers.hideSnMessage);
+      }
+
+      this.timers.hideSnMessage = setTimeout(this.hideSnMessage.bind(this), 6000);
+    },
+
+    hideSnMessage: function()
+    {
+      this.timers.hideSnMessage = null;
+
+      this.$id('snMessage').fadeOut('fast');
     },
 
     startActionTimer: function(action, e)

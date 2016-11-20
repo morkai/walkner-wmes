@@ -42,6 +42,7 @@
   "type:notifyDowntimeAlert": "Powiadomienie o przestoju",
   "type:finishDowntimeAlert": "Zakończenie alarmu",
   "type:checkSpigot": "Sprawdzenie Spigota",
+  "type:checkSerialNumber": "Sprawdzenie nr seryjnego",
 
   "data:changeShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
   "data:addShift": "Zmiana <em>{shift}</em> z dnia <em>{date}</em>",
@@ -70,6 +71,8 @@
   "data:finishDowntimeAlert": "Zakończono alarm <a href='\\#prodDowntimes/{downtimeId}'>przestoju</a>: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
   "data:checkSpigot:initial": "Zeskanowano {result, select, valid{prawidłowy} other{nieprawidłowy}} Spigot {nc12} w ramach <a href='\\#prodDowntimes/{downtimeId}'>przestoju</a>.",
   "data:checkSpigot:final": "Zeskanowano {result, select, valid{prawidłowy} other{nieprawidłowy}} Spigot {nc12} na zakończenie zlecenia w ramach <a href='\\#prodDowntimes/{downtimeId}'>przestoju</a>.",
+  "data:checkSerialNumber": "Zeskanowano nr seryjny: {sn}",
+  "data:checkSerialNumber:error": "Zeskanowano nr seryjny: {sn} ({error})",
 
   "noData:prodShiftOrder": "<em>brak zlecenia</em>"
 }

@@ -43,6 +43,7 @@
     "type:notifyDowntimeAlert": "Downtime notification",
     "type:finishDowntimeAlert": "Downtime alert finish",
     "type:checkSpigot": "Spigot check",
+    "type:checkSerialNumber": "Serial number check",
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:addShift": "Shift <em>{shift}</em> on <em>{date}</em>",
@@ -71,6 +72,8 @@
     "data:finishDowntimeAlert": "Finished <a href='\\#prodDowntimes/{downtimeId}'>downtime</a> alert: <a href='\\#prodDowntimeAlerts/{alertId}'>{alertName}</a>",
     "data:checkSpigot:initial": "Scanned {result, select, valid{a valid} other{an invalid}} Spigot {nc12} as a part of a <a href='\\#prodDowntimes/{downtimeId}'>downtime</a>.",
     "data:checkSpigot:final": "Scanned {result, select, valid{a valid} other{an invalid}} Spigot {nc12} at the end of an order as a part of a <a href='\\#prodDowntimes/{downtimeId}'>downtime</a>.",
+    "data:checkSerialNumber": "Scanned serial number: {sn}",
+    "data:checkSerialNumber:error": "Scanned serial number: {sn} ({error})",
 
     "noData:prodShiftOrder": "<em>no order</em>"
   },
