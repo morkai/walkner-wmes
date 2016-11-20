@@ -418,9 +418,9 @@ function convertToJpeg(output, nc15, pdfPath, done)
       output('jpeg... ');
 
       exec(
-        `java -jar "${config.pdfboxAppJar}" PDFToImage -format png -dpi "${pdfPath}"`,
-        this.next(),
-        {cwd: jpegsPath}
+        `java -jar "${config.pdfboxAppJar}" PDFToImage -format png -dpi 144 -prefix "${nc15}_" "${pdfPath}"`,
+        {cwd: jpegsPath},
+        this.next()
       );
     },
     function finalizeStep(err)

@@ -147,7 +147,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   express.get('/orderDocuments/:nc15/:page', function(req, res, next)
   {
     const nc15 = req.params.nc15;
-    const freshKey = `${parseInt(req.params.page, 10)}_${nc15}.webp`;
+    const freshKey = `${nc15}_${parseInt(req.params.page, 10)}.webp`;
     const freshHeaders = nc15ToFreshHeaders[freshKey];
 
     if (freshHeaders && fresh(req.headers, freshHeaders))
