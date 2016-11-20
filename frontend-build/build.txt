@@ -842,6 +842,7 @@ app/isa/IsaRequestCollection.js
 app/production/ProductionSetting.js
 app/production/ProductionSettingCollection.js
 app/production/settings.js
+app/production/snManager.js
 app/prodShifts/ProdShift.js
 app/prodShifts/routes.js
 vendor/hammer.js
@@ -991,8 +992,6 @@ app/d8Entries/routes.js
 app/d8EntrySources/routes.js
 app/d8ProblemSources/routes.js
 app/wmes-routes.js
-vendor/visibly.js
-app/visibility.js
 app/nls/core.js
 app/nls/pl/core.js
 i18n!app/nls/core
@@ -1241,6 +1240,7 @@ app/settings/SettingCollection.js
 app/production/ProductionSetting.js
 app/production/ProductionSettingCollection.js
 app/production/settings.js
+app/production/snManager.js
 app/prodShifts/ProdShift.js
 vendor/hammer.js
 app/companies/Company.js
