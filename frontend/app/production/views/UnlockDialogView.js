@@ -42,7 +42,7 @@ define([
         submitEl.disabled = true;
 
         var req = {
-          prodLine: this.model.prodLine.id || this.$id('prodLine').val(),
+          prodLine: this.model.get('prodLine') || this.$id('prodLine').val(),
           login: this.$id('login').val(),
           password: this.$id('password').val()
         };
@@ -56,13 +56,13 @@ define([
       return {
         idPrefix: this.idPrefix,
         type: 'unlock',
-        prodLine: this.model.prodLine.id
+        prodLine: this.model.get('prodLine')
       };
     },
 
     afterRender: function()
     {
-      if (!this.model.prodLine.id)
+      if (!this.model.get('prodLine'))
       {
         this.setUpProdLineSelect2();
       }
@@ -150,7 +150,7 @@ define([
         return this.$id('submit').prop('disabled', false);
       }
 
-      if (!this.model.prodLine.id)
+      if (!this.model.get('prodLine'))
       {
         _.forEach(res.dictionaries, function(models, dictionaryName)
         {
@@ -177,7 +177,7 @@ define([
         remoteData = {};
       }
 
-      if (!this.model.prodLine.id)
+      if (!this.model.get('prodLine'))
       {
         var prodLine = orgUnits.getByTypeAndId('prodLine', res.prodLine);
 

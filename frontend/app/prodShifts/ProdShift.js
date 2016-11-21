@@ -983,7 +983,7 @@ define([
      */
     isLocked: function()
     {
-      return !prodLog.isEnabled() || this.getSecretKey() === null;
+      return !prodLog.isEnabled() || !this.prodLine || this.getSecretKey() === null;
     },
 
     /**
@@ -1013,6 +1013,7 @@ define([
         this.prodDowntimes.reset();
         this.stopShiftChangeMonitor();
         this.set({
+          prodLine: null,
           date: null,
           shift: null,
           state: null,
