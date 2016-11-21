@@ -35,9 +35,9 @@
     <input id="<%- idPrefix %>-operation" class="form-control" type="text" placeholder="<%- t('production', 'newOrderPicker:offline:operation:placeholder') %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1">
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-<%- correctingOrder ? 'primary' : 'success' %>">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-<%- correctingOrder ? 'primary' : 'success' %>">
       <%- t('production', 'newOrderPicker:submit' + (replacingOrder ? ':replacing' : correctingOrder ? ':correcting' : '')) %>
     </button>
-    <button type="button" class="cancel btn btn-link"><%- t('production', 'newOrderPicker:cancel') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'newOrderPicker:cancel') %></button>
   </div>
 </form>
