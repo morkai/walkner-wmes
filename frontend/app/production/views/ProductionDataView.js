@@ -92,6 +92,11 @@ define([
       });
     },
 
+    destroy: function()
+    {
+      document.body.classList.remove('is-tt-ok', 'is-tt-nok');
+    },
+
     afterRender: function()
     {
       this.$actions = this.$('.production-actions');
@@ -199,7 +204,8 @@ define([
       var avgTaktTime = pso.get('avgTaktTime') || 0;
       var sn = pso.get('serialNumber');
       var sapTaktTime = pso.getTaktTime();
-      var text = sn ? Math.round(sn.taktTime / 1000) : sapTaktTime;
+      var taktTime = sn ? Math.round(sn.taktTime / 1000) : 0;
+      var text = taktTime || sapTaktTime;
       var title = text === sapTaktTime ? '' : sapTaktTime;
 
       $taktTime
@@ -209,7 +215,15 @@ define([
       $avgTaktTime
         .text(Math.round(avgTaktTime / 1000) || '?')
         .parent()
-        .toggleClass('hidden', !(pso.get('quantityDone') > 1 && avgTaktTime > 0));
+        .toggleClass('hidden', !(pso.get('quantityDone') > 1 && avgTaktTime > 0))
+        .addClass(avgTaktTime <= sapTaktTime ? 'is-ok' : 'is-nok');
+
+      document.body.classList.remove('is-tt-ok', 'is-tt-nok');
+
+      if (taktTime && sapTaktTime)
+      {
+        document.body.classList.add(taktTime <= sapTaktTime ? 'is-tt-ok' : 'is-tt-nok');
+      }
     },
 
     updateQuantityDone: function()
