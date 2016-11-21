@@ -1,12 +1,14 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n',
   'app/viewport',
   'app/core/View',
   'app/users/util/setUpUserSelect2',
   'app/production/templates/personelPicker'
 ], function(
+  _,
   t,
   viewport,
   View,
@@ -35,6 +37,13 @@ define([
 
           e.preventDefault();
         }
+      },
+      'click .btn[data-id]': function(e)
+      {
+        this.trigger('userPicked', {
+          id: e.currentTarget.dataset.id,
+          label: e.currentTarget.textContent.trim()
+        });
       },
       'submit': function(e)
       {
@@ -102,6 +111,33 @@ define([
       {
         $user.attr('placeholder', t('production', 'personelPicker:offline:placeholder')).focus();
       }
+
+      var $list = this.$id('list');
+
+      this.ajax({
+        url: '/production/getRecentPersonnel',
+        data: {
+          type: this.options.type,
+          prodLine: this.model.prodLine.id,
+          shift: this.model.get('shift')
+        }
+      }).success(function(users)
+      {
+        var html = '';
+
+        users.forEach(function(user)
+        {
+          html += '<button type="button" class="btn btn-lg btn-default" data-id="' + user._id + '">'
+            + _.escape(user.label)
+            + '</button>';
+        });
+
+        if (html.length)
+        {
+          $list.find('.btn-group-vertical').html(html);
+          $list.removeClass('hidden');
+        }
+      });
     },
 
     onDialogShown: function()

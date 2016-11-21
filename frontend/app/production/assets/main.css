@@ -386,6 +386,17 @@
   font-family: monospace;
 }
 
+.production-personelPicker-list label {
+  margin-left: 15px;
+}
+.production-personelPicker-list .btn-group-vertical {
+  display: block;
+  margin: 0 15px 15px 15px;
+}
+.production-personelPicker-list .btn-default {
+  text-align: left;
+}
+
 @media (max-width: 1680px) {
   .production {
     margin: 0 15px;

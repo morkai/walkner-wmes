@@ -200,7 +200,10 @@ define([
 
     showPickerDialog: function(type, onUserPicked)
     {
-      var personelPickerView = new PersonelPickerView();
+      var personelPickerView = new PersonelPickerView({
+        type: type,
+        model: this.model
+      });
 
       this.listenTo(personelPickerView, 'userPicked', function(userInfo)
       {

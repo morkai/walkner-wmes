@@ -6,6 +6,10 @@
     <label for="<%- idPrefix %>-user"><%= label %></label>
     <input id="<%- idPrefix %>-user" class="form-control" type="text">
   </div>
+  <div id="<%- idPrefix %>-list" class="production-personelPicker-list">
+    <label><%- t('production', 'personelPicker:list') %></label>
+    <div class="btn-group-vertical"></div>
+  </div>
   <div class="form-actions">
     <button type="submit" class="btn btn-primary"><%- t('production', 'personelPicker:submit') %></button>
     <button type="button" class="cancel btn btn-link"><%- t('production', 'personelPicker:cancel') %></button>
