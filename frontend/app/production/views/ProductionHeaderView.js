@@ -36,20 +36,22 @@ define([
     },
 
     events: {
-      'click .production-property-master .btn-link': 'showMasterPickerDialog',
-      'click .production-property-leader .btn-link': 'showLeaderPickerDialog',
-      'click .production-property-operator .btn-link': 'showOperatorPickerDialog'
+      'click #-master': 'showMasterPickerDialog',
+      'click #-leader': 'showLeaderPickerDialog',
+      'click #-operator': 'showOperatorPickerDialog'
     },
 
     initialize: function()
     {
-      this.listenTo(this.model.prodLine, 'change:description', this.updatePageHeader);
-      this.listenTo(this.model, 'second', this.updateCurrentTime);
-      this.listenTo(this.model, 'change:shift', this.updateShift);
-      this.listenTo(this.model, 'change:master', this.updateMaster);
-      this.listenTo(this.model, 'change:leader', this.updateLeader);
-      this.listenTo(this.model, 'change:operator', this.updateOperator);
-      this.listenTo(this.model, 'locked unlocked', function()
+      var model = this.model;
+
+      this.listenTo(model.prodLine, 'change:description', this.updatePageHeader);
+      this.listenTo(model, 'second', this.updateCurrentTime);
+      this.listenTo(model, 'change:shift', this.updateShift);
+      this.listenTo(model, 'change:master', this.updateMaster);
+      this.listenTo(model, 'change:leader', this.updateLeader);
+      this.listenTo(model, 'change:operator', this.updateOperator);
+      this.listenTo(model, 'locked unlocked', function()
       {
         this.updateMaster();
         this.updateLeader();

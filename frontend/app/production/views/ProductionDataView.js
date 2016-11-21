@@ -48,10 +48,10 @@ define([
       'click .production-startBreak': 'startBreak',
       'click .production-endDowntime': 'endDowntime',
       'click .production-endWork': 'endWork',
-      'click .production-property-orderNo .btn-link': 'correctOrder',
-      'click .production-property-nc12 .btn-link': 'correctOrder',
-      'click .production-property-quantityDone .btn-link': 'showQuantityDoneEditor',
-      'click .production-property-workerCount .btn-link': 'showWorkerCountEditor'
+      'click #-orderNo': 'correctOrder',
+      'click #-nc12': 'correctOrder',
+      'click #-quantityDone': 'showQuantityDoneEditor',
+      'click #-workerCount': 'showWorkerCountEditor'
     },
 
     initialize: function()
@@ -124,7 +124,7 @@ define([
       this.updateTaktTime();
       this.updateWorkerCount();
 
-      this.$property('startedAt').text(this.model.prodShiftOrder.getStartedAt());
+      this.$property('createdAt').text(this.model.prodShiftOrder.getStartedAt());
     },
 
     updateOrderNo: function()

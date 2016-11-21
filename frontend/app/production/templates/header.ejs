@@ -1,29 +1,17 @@
 <div class="production-header">
   <h1 class="production-pageHeader"></h1>
   <div class="production-properties">
-    <div class="production-property production-property-currentTime">
-      <div class="production-property-name"><%- t('production', 'property:currentTime') %></div>
+    <% ['currentTime', 'shift', 'orgUnit'].forEach(function(prop) { %>
+    <div class="production-property production-property-<%- prop %>">
+      <div class="production-property-name"><%- t('production', 'property:' + prop) %></div>
       <div class="production-property-value"></div>
     </div>
-    <div class="production-property production-property-shift">
-      <div class="production-property-name"><%- t('production', 'property:shift') %></div>
-      <div class="production-property-value"></div>
-    </div>
-    <div class="production-property production-property-orgUnit">
-      <div class="production-property-name"><%- t('production', 'property:orgUnit') %></div>
-      <div class="production-property-value"></div>
-    </div>
-    <div class="production-property production-property-master">
-      <div class="production-property-name"><%- t('production', 'property:master') %></div>
+    <% }) %>
+    <% ['master', 'leader', 'operator'].forEach(function(prop) { %>
+    <div id="<%- idPrefix %>-<%- prop %>" class="production-property production-property-<%- prop %>">
+      <div class="production-property-name"><%- t('production', 'property:' + prop) %></div>
       <div class="production-property-value is-editable"></div>
     </div>
-    <div class="production-property production-property-leader">
-      <div class="production-property-name"><%- t('production', 'property:leader') %></div>
-      <div class="production-property-value is-editable"></div>
-    </div>
-    <div class="production-property production-property-operator">
-      <div class="production-property-name"><%- t('production', 'property:operator') %></div>
-      <div class="production-property-value is-editable"></div>
-    </div>
+    <% }) %>
   </div>
 </div>
