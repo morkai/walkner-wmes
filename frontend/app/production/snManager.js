@@ -9,9 +9,13 @@ define([
 
   var STORAGE_KEY = 'PRODUCTION:SN';
 
+  var enabled = true;
   var handleTimeout = null;
   var scanBuffer = '';
   var snBuffer = JSON.parse(localStorage[STORAGE_KEY] || '{}');
+
+  broker.subscribe('viewport.dialog.shown', function() { enabled = false; });
+  broker.subscribe('viewport.dialog.hidden', function() { enabled = true; });
 
   function handleScanBuffer()
   {
@@ -33,6 +37,15 @@ define([
         serialNo: +matches[2]
       });
     }
+    else if (scanBuffer.length > 5)
+    {
+      broker.publish('production.taktTime.snScanned', {
+        _id: scanBuffer,
+        scannedAt: new Date(),
+        orderNo: null,
+        serialNo: null
+      });
+    }
 
     scanBuffer = '';
   }
@@ -40,6 +53,11 @@ define([
   return {
     handleKeyboardEvent: function(e)
     {
+      if (!enabled || e.target.classList.contains('form-control'))
+      {
+        return;
+      }
+
       var is09 = e.which >= 48 && e.which <= 57;
       var isAZ = e.which >= 65 && e.which <= 90;
       var isDot = e.which === 190;
@@ -49,7 +67,7 @@ define([
         scanBuffer += isDot ? '.' : String.fromCharCode(e.which);
 
         clearTimeout(handleTimeout);
-        handleTimeout = setTimeout(handleScanBuffer, 100);
+        handleTimeout = setTimeout(handleScanBuffer, 50);
       }
     },
     contains: function(sn)

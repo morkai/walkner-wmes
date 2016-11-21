@@ -113,6 +113,19 @@ define([
         }
       },
 
+      'focusin': function()
+      {
+        clearTimeout(this.timers.blur);
+        this.timers.blur = setTimeout(function()
+        {
+          if (!document.body.classList.contains('modal-open')
+            && !document.activeElement.classList.contains('form-control'))
+          {
+            document.activeElement.blur();
+          }
+        }, 5000);
+      },
+
       'click #-snMessage': 'hideSnMessage',
 
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
@@ -829,6 +842,11 @@ define([
 
     onSnScanned: function(scanInfo)
     {
+      if (!scanInfo.orderNo)
+      {
+        return this.showSnMessage(scanInfo, 'error', 'UNKNOWN_CODE');
+      }
+
       var page = this;
       var model = page.model;
       var state = model.get('state');
@@ -899,9 +917,11 @@ define([
       var $actions = this.$('.production-actions');
 
       this.$id('snMessage-text').html(t('production', 'snMessage:' + message));
-      this.$id('snMessage-scannedValue').text(scanInfo._id);
-      this.$id('snMessage-orderNo').text(scanInfo.orderNo);
-      this.$id('snMessage-serialNo').text(scanInfo.serialNo);
+      this.$id('snMessage-scannedValue').text(
+        scanInfo._id.length > 19 ? (scanInfo._id.substring(0, 16) + '...') : scanInfo._id
+      );
+      this.$id('snMessage-orderNo').text(scanInfo.orderNo || '-');
+      this.$id('snMessage-serialNo').text(scanInfo.serialNo || '-');
 
       $message
         .css({
