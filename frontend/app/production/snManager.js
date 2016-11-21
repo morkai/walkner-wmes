@@ -15,12 +15,12 @@ define([
 
   function handleScanBuffer()
   {
-    var matches = scanBuffer.match(/^P0*([0-9]+)([0-9]{4})/);
+    var matches = scanBuffer.match(/P0*([0-9]+)([0-9]{4})/);
     var type = 'old';
 
     if (!matches)
     {
-      matches = scanBuffer.match(/^[A-Z0-9]{4}\.([0-9]+)\.([0-9]+)/);
+      matches = scanBuffer.match(/[A-Z0-9]{4}\.([0-9]+)\.([0-9]+)/);
       type = 'new';
     }
 
