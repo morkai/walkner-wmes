@@ -72,7 +72,7 @@ define([
       },
       'alerts.active': function(propertyName, term, formData)
       {
-        formData.alerts = true;
+        formData.alerts = 1;
       },
       'reason': 'aor',
       'subdivision': 'division',
