@@ -78,9 +78,7 @@ define([
           userInfo.label = this.$id('user').val().trim().replace(/[^0-9]+/g, '');
         }
 
-        this.trigger(
-          'userPicked', userInfo.label === null || !userInfo.label.length ? null : userInfo
-        );
+        this.trigger('userPicked', userInfo.label === null || !userInfo.label.length ? null : userInfo);
       }
     },
 

@@ -400,29 +400,34 @@ define([
 
     changeMaster: function(userInfo)
     {
-      this.set('master', userInfo);
-
-      this.onPersonnelChanged('master');
-
-      prodLog.record(this, 'changeMaster', userInfo);
+      this.changePersonnel('changeMaster', 'master', userInfo);
     },
 
     changeLeader: function(userInfo)
     {
-      this.set('leader', userInfo);
-
-      this.onPersonnelChanged('leader');
-
-      prodLog.record(this, 'changeLeader', userInfo);
+      this.changePersonnel('changeLeader', 'leader', userInfo);
     },
 
     changeOperator: function(userInfo)
     {
-      this.set('operator', userInfo);
+      this.changePersonnel('changeOperator', 'operator', userInfo);
+    },
 
-      this.onPersonnelChanged('operator');
+    changePersonnel: function(operation, personnelType, newUserInfo)
+    {
+      var currentUserInfo = this.get(personnelType);
 
-      prodLog.record(this, 'changeOperator', userInfo);
+      if (currentUserInfo === newUserInfo
+        || (currentUserInfo && newUserInfo && currentUserInfo.id === newUserInfo.id))
+      {
+        return;
+      }
+
+      this.set(personnelType, newUserInfo);
+
+      this.onPersonnelChanged(personnelType);
+
+      prodLog.record(this, operation, newUserInfo);
     },
 
     onPersonnelChanged: function(type)
