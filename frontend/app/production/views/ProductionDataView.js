@@ -339,6 +339,11 @@ define([
         e.target.blur();
       }
 
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
       viewport.showDialog(
         new NewOrderPickerView({model: this.model}),
         t('production', 'newOrderPicker:title' + (this.model.hasOrder() ? ':replacing' : ''))
@@ -350,6 +355,11 @@ define([
       if (e)
       {
         e.target.blur();
+      }
+
+      if (viewport.currentDialog)
+      {
+        return;
       }
 
       var dialogView = new DialogView({
@@ -375,6 +385,11 @@ define([
         e.target.blur();
       }
 
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
       viewport.showDialog(
         new NewOrderPickerView({model: this.model, correctingOrder: true}),
         t('production', 'newOrderPicker:title:correcting')
@@ -383,11 +398,14 @@ define([
 
     startDowntime: function(e, options)
     {
-      var startedAt = time.getMoment().toDate();
-
       if (e)
       {
         e.target.blur();
+      }
+
+      if (viewport.currentDialog)
+      {
+        return;
       }
 
       if (!options)
@@ -398,7 +416,7 @@ define([
       options.model = _.defaults(options.model || {}, {
         mode: 'start',
         prodShift: this.model,
-        startedAt: startedAt,
+        startedAt: time.getMoment().toDate(),
         reason: null,
         aor: null,
         reasonComment: null
@@ -434,6 +452,11 @@ define([
         e.target.blur();
       }
 
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
       var dialogView = new DialogView({
         dialogClassName: 'production-modal',
         template: endDowntimeDialogTemplate,
@@ -458,6 +481,11 @@ define([
       if (e)
       {
         e.target.blur();
+      }
+
+      if (viewport.currentDialog)
+      {
+        return;
       }
 
       viewport.showDialog(

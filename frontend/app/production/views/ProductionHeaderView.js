@@ -175,6 +175,11 @@ define([
         e.target.blur();
       }
 
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
       this.showPickerDialog('master', this.model.changeMaster.bind(this.model));
     },
 
@@ -186,6 +191,11 @@ define([
         e.target.blur();
       }
 
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
       this.showPickerDialog('leader', this.model.changeLeader.bind(this.model));
     },
 
@@ -195,6 +205,11 @@ define([
       {
         e.preventDefault();
         e.target.blur();
+      }
+
+      if (viewport.currentDialog)
+      {
+        return;
       }
 
       this.showPickerDialog('operator', this.model.changeOperator.bind(this.model));
