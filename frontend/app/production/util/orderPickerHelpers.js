@@ -43,7 +43,7 @@ define([
               results: (Array.isArray(results) ? results : []).map(function(order)
               {
                 order.id = order._id;
-                order.text = order._id + ' - ' + (order.name || '?');
+                order.text = order._id + ' - ' + (order.description || order.name || '?');
 
                 return order;
               })
