@@ -385,7 +385,7 @@ define([
         e.target.blur();
       }
 
-      if (viewport.currentDialog)
+      if (viewport.currentDialog || this.model.get('state') === 'idle')
       {
         return;
       }
