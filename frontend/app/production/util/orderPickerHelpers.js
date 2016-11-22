@@ -97,7 +97,9 @@ define([
 
         if (operations.length)
         {
-          $operation.select2('val', e.selectedOperationNo || operations[0].no).select2('focus');
+          $operation
+            .select2('val', e.selectedOperationNo || helper.getBestDefaultOperationNo(operations))
+            .select2('focus');
         }
         else
         {
@@ -200,6 +202,52 @@ define([
       {
         orderInfo.operations = {};
       }
+    },
+    getBestDefaultOperationNo: function(operations)
+    {
+      if (!Array.isArray(operations) || operations.length === 0)
+      {
+        return null;
+      }
+
+      if (operations.length === 1)
+      {
+        return operations[0].no;
+      }
+
+      return operations
+        .map(function(op)
+        {
+          var rank = 0;
+
+          if (op.laborTime > 0)
+          {
+            rank += 1;
+          }
+
+          if (op.workCenter)
+          {
+            rank += 1;
+          }
+
+          if (/mont/i.test(op.name))
+          {
+            rank += 1;
+          }
+
+          if (/pak/i.test(op.name))
+          {
+            rank += 1;
+          }
+
+          return {
+            no: op.no,
+            rank: rank
+          };
+        })
+        .sort(function(a, b) { return b.rank - a.rank; })
+        .shift()
+        .no;
     }
   };
 });
