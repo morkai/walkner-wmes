@@ -20,7 +20,7 @@ module.exports = function findOrdersRoute(app, productionModule, req, res, next)
     return findOrdersByNc12(req.query.nc12, res, next);
   }
 
-  return res.sendStatus(400);
+  return res.json([]);
 
   function findOrdersByNo(no, res, next)
   {
