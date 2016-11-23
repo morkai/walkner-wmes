@@ -232,10 +232,20 @@ define([
 
           if (/mont/i.test(op.name))
           {
-            rank += 1;
+            rank += 2;
           }
 
           if (/pak/i.test(op.name))
+          {
+            rank += 1;
+          }
+
+          if (/kj/i.test(op.name))
+          {
+            rank += 1;
+          }
+
+          if (/opra/i.test(op.name))
           {
             rank += 1;
           }
