@@ -136,9 +136,10 @@ module.exports = function syncUsers(app, usersModule, done)
           return this.skip();
         }
 
-        User.findOne({kdId: kdUser.kdId}, this.next());
+        User.findOne({kdId: kdUser.kdId}, this.parallel());
+        User.findOne({login: kdUser.personellId}, this.parallel());
       },
-      function prepareUserModelStep(err, userModel)
+      function prepareUserModelStep(err, kdIdUser, loginUser)
       {
         if (err)
         {
@@ -149,11 +150,13 @@ module.exports = function syncUsers(app, usersModule, done)
           return this.skip();
         }
 
+        var user = loginUser || kdIdUser;
+
         this.isNew = false;
 
-        if (userModel)
+        if (user)
         {
-          userModel.set(kdUser);
+          user.set(kdUser);
         }
         else
         {
@@ -163,15 +166,15 @@ module.exports = function syncUsers(app, usersModule, done)
           kdUser.password = ']:->';
           kdUser.email = generateEmailAddress(usersModule.config.emailGenerator, kdUser);
 
-          userModel = new User(kdUser);
+          user = new User(kdUser);
         }
 
-        if (!userModel.gender)
+        if (!user.gender)
         {
-          userModel.gender = /a$/i.test(userModel.firstName) ? 'female' : 'male';
+          user.gender = /a$/i.test(user.firstName) ? 'female' : 'male';
         }
 
-        this.userModel = userModel;
+        this.userModel = user;
       },
       function hashPasswordStep()
       {
