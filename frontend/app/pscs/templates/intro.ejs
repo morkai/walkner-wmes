@@ -1,19 +1,20 @@
-<div class="pscs-intro">
-  <ul class="page-breadcrumbs">
-    <li><%- t('pscs', 'intro:title') %></li>
-  </ul>
-  <a href="#pscs/learn" class="btn btn-info pscs-intro-link">
-    <i class="fa fa-graduation-cap"></i>
-    <%- t('pscs', 'intro:learn') %>
-  </a>
-  <a href="#pscs/exam" class="btn btn-warning pscs-intro-link">
-    <i class="fa fa-edit"></i>
-    <%- t('pscs', 'intro:exam') %>
-  </a>
-  <% if (user.isAllowedTo('PSCS:VIEW')) { %>
-  <a href="#pscs/results" class="btn btn-success pscs-intro-link">
-    <i class="fa fa-line-chart"></i>
-    <%- t('pscs', 'intro:results') %>
-  </a>
-  <% } %>
+<div class="pscs-page pscs-intro">
+  <% include _header.ejs %>
+  <% include _menu.ejs %>
+  <div class="pscs-body">
+    <a href="#pscs/learn" class="btn btn-info pscs-intro-link">
+      <i class="fa fa-graduation-cap"></i>
+      <%- t('pscs', 'intro:learn') %>
+    </a><!--
+    //--><a href="#pscs/exam" class="btn btn-warning pscs-intro-link">
+      <i class="fa fa-edit"></i>
+      <%- t('pscs', 'intro:exam') %>
+    </a><!--
+    <% if (user.isAllowedTo('PSCS:VIEW')) { %>
+    //--><a href="#pscs/results" class="btn btn-success pscs-intro-link">
+      <i class="fa fa-line-chart"></i>
+      <%- t('pscs', 'intro:results') %>
+    </a><!--
+    <% } %>//-->
+  </div>
 </div>

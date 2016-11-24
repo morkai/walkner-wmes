@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   '../router',
   '../viewport',
   '../user',
@@ -10,6 +11,7 @@ define([
   '../core/util/showDeleteFormPage'
 ], function(
   _,
+  $,
   router,
   viewport,
   user,
@@ -26,14 +28,10 @@ define([
   router.map('/pscs', function()
   {
     viewport.loadPage(
-      ['app/pscs/templates/intro', nls],
-      function(template)
+      ['app/pscs/pages/PscsIntroPage', nls],
+      function(PscsIntroPage)
       {
-        return new View({
-          layoutName: 'page',
-          template: template,
-          title: t.bound('pscs', 'BREADCRUMBS:base')
-        });
+        return new PscsIntroPage();
       }
     );
   });
@@ -41,17 +39,10 @@ define([
   router.map('/pscs/learn', function()
   {
     viewport.loadPage(
-      ['app/pscs/templates/learn', nls],
-      function(template)
+      ['app/pscs/pages/PscsLearnPage', nls],
+      function(PscsLearnPage)
       {
-        return new View({
-          layoutName: 'page',
-          template: template,
-          breadcrumbs: [
-            {href: '#pscs', label: t.bound('pscs', 'BREADCRUMBS:base')},
-            t.bound('pscs', 'BREADCRUMBS:learn')
-          ]
-        });
+        return new PscsLearnPage();
       }
     );
   });
@@ -63,7 +54,7 @@ define([
       function(PscsResult, ExamView)
       {
         return new View({
-          layoutName: 'page',
+          layoutName: 'blank',
           breadcrumbs: [
             {href: '#pscs', label: t.bound('pscs', 'BREADCRUMBS:base')},
             t.bound('pscs', 'BREADCRUMBS:exam')

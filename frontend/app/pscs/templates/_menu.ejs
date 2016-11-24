@@ -1,0 +1,8 @@
+<ul class="pscs-menu">
+  <li><a class="pscs-menu-intro" href="#pscs"><i class="fa fa-home"></i> Strona główna</a></li>
+  <li><a class="pscs-menu-learn" href="#pscs/learn"><i class="fa fa-graduation-cap"></i> Szkolenie</a></li>
+  <li><a class="pscs-menu-exam" href="#pscs/exam"><i class="fa fa-edit"></i> Test</a></li>
+  <% if (user.isAllowedTo('PSCS:VIEW')) { %>
+  <li><a href="#pscs/results"><i class="fa fa-line-chart"></i> Wyniki</a></li>
+  <% } %>
+</ul>

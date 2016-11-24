@@ -4,6 +4,9 @@
   "BREADCRUMBS:exam": "Test",
   "BREADCRUMBS:browse": "Wyniki",
 
+  "header:title": "PSCS",
+  "header:subtitle": "Philips Supply Chain Security",
+
   "intro:title": "PSCS <em>Philips Supply Chain Security</em>",
   "intro:learn": "Szkolenie",
   "intro:exam": "Test",
