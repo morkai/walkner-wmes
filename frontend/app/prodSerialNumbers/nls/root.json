@@ -1,0 +1,20 @@
+{
+  "root": {
+    "BREADCRUMBS:browse": "Serial numbers",
+
+    "MSG:LOADING_FAILURE": "Failed to load the serial numbers :(",
+
+    "filter:submit": "Filter",
+
+    "PROPERTY:_id": "Serial number",
+    "PROPERTY:scannedAt": "Scan time",
+    "PROPERTY:iptAt": "IPT time",
+    "PROPERTY:prodLine": "Line",
+    "PROPERTY:orderNo": "Order",
+    "PROPERTY:serialNo": "Item no",
+    "PROPERTY:taktTime": "Cycle time [s]",
+    "PROPERTY:iptTaktTime": "IPT cycle time [s]",
+    "PROPERTY:sapTaktTime": "Takt time [s]"
+  },
+  "pl": true
+}

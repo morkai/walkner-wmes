@@ -40,13 +40,22 @@ define([
         data: downtimeReasons.map(idAndLabel)
       });
 
+      var activeLines = orgUnits.getAllByType('prodLine')
+        .filter(function(d) { return !d.get('deactivatedAt'); })
+        .map(idAndLabel);
+
       this.$id('spigotLines').select2({
         allowClear: true,
         placeholder: ' ',
         multiple: true,
-        data: orgUnits.getAllByType('prodLine')
-          .filter(function(d) { return !d.get('deactivatedAt'); })
-          .map(idAndLabel)
+        data: activeLines
+      });
+
+      this.$id('taktTime-lines').select2({
+        allowClear: true,
+        placeholder: ' ',
+        multiple: true,
+        data: activeLines
       });
     }
 

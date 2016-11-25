@@ -18,6 +18,7 @@
     "PANEL:TITLE:orderDetails": "Order's details at the moment of start",
     "PANEL:TITLE:losses": "Losses",
     "PANEL:TITLE:downtimes": "Downtimes",
+    "PANEL:TITLE:serialNumbers": "Scanned serial numbers",
     "PANEL:TITLE:addForm": "Add order form",
     "PANEL:TITLE:editForm": "Edit order form",
 

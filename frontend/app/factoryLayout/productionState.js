@@ -4,6 +4,7 @@ define([
   '../broker',
   '../pubsub',
   '../core/Model',
+  'app/production/ProductionSettingCollection',
   './FactoryLayoutSettingCollection',
   './ProdLineState',
   './ProdLineStateCollection',
@@ -12,6 +13,7 @@ define([
   broker,
   pubsub,
   Model,
+  ProductionSettingCollection,
   FactoryLayoutSettingCollection,
   ProdLineState,
   ProdLineStateCollection,
@@ -31,21 +33,31 @@ define([
 
   productionState.pubsub = null;
   productionState.url = '/production/state';
-  productionState.settings = new FactoryLayoutSettingCollection();
+  productionState.settings = {
+    factoryLayout: new FactoryLayoutSettingCollection(),
+    production: new ProductionSettingCollection()
+  };
   productionState.factoryLayout = new FactoryLayout();
-  productionState.prodLineStates = new ProdLineStateCollection();
-  productionState.historyData = new ProdLineStateCollection();
+  productionState.prodLineStates = new ProdLineStateCollection(null, {
+    settings: productionState.settings
+  });
+  productionState.historyData = new ProdLineStateCollection(null, {
+    settings: productionState.settings
+  });
+
+  productionState.isLoading = function() { return loading; };
 
   productionState.parse = function(data)
   {
     if (data.settings)
     {
-      this.settings.reset(data.settings);
+      this.settings.factoryLayout.reset(data.settings.filter(function(d) { return /^factoryLayout/.test(d._id); }));
+      this.settings.production.reset(data.settings.filter(function(d) { return /^production/.test(d._id); }));
     }
 
     if (Array.isArray(data.prodLineStates))
     {
-      this.prodLineStates.reset(data.prodLineStates.map(ProdLineState.parse));
+      this.prodLineStates.reset(this.prodLineStates.parse(data));
     }
 
     if (data.factoryLayout)
@@ -73,7 +85,8 @@ define([
     {
       productionState.pubsub = pubsub.sandbox();
       productionState.pubsub.subscribe('production.stateChanged.**', handleStateChangedMessage);
-      productionState.settings.setUpPubsub(productionState.pubsub);
+      productionState.settings.factoryLayout.setUpPubsub(productionState.pubsub);
+      productionState.settings.production.setUpPubsub(productionState.pubsub);
     }
 
     return productionState.fetch();
@@ -100,7 +113,8 @@ define([
       }
 
       productionState.prodLineStates.reset([]);
-      productionState.settings.reset([]);
+      productionState.settings.factoryLayout.reset([]);
+      productionState.settings.production.reset([]);
 
       unloadTimer = null;
       loaded = false;

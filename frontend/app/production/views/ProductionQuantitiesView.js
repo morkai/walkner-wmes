@@ -26,8 +26,8 @@ define([
     template: quantitiesTemplate,
 
     events: {
-      'click .production-quantities-actual .btn-link': 'showQuantityEditor',
-      'mousedown .production-quantities-actual .btn-link': 'showQuantityEditor'
+      'click .production-quantities-actual': 'showQuantityEditor',
+      'mousedown .production-quantities-actual': 'showQuantityEditor'
     },
 
     initialize: function()
@@ -35,6 +35,13 @@ define([
       this.onQuantitiesDoneChanged = this.onQuantitiesDoneChanged.bind(this);
 
       this.listenTo(this.model, 'change:shift locked unlocked', this.render);
+      this.listenTo(this.model.settings, 'reset change', function(setting)
+      {
+        if (!setting || /taktTime/.test(setting.id))
+        {
+          this.render();
+        }
+      });
     },
 
     serialize: function()
@@ -42,6 +49,7 @@ define([
       var currentTime = time.getMoment().valueOf();
       var currentShiftMoment = this.model.getCurrentShiftMoment();
       var unlocked = !this.model.isLocked();
+      var taktTimeEnabled = this.model.isTaktTimeEnabled();
 
       return {
         quantityRows: (this.model.get('quantitiesDone') || []).map(function(quantity, i)
@@ -66,7 +74,7 @@ define([
             time: time,
             planned: quantity.planned,
             actual: quantity.actual,
-            editable: editable || quantity.actual > 0
+            editable: (editable || quantity.actual > 0) && !taktTimeEnabled
           };
         })
       };
@@ -90,6 +98,8 @@ define([
       {
         this.scheduleNextRender();
       }
+
+      window.qv = this;
     },
 
     scheduleNextRender: function()
@@ -134,7 +144,7 @@ define([
     {
       var $td = this.$(e.target).closest('td');
 
-      if ($td.find('input').length)
+      if ($td.find('input').length || this.model.isTaktTimeEnabled())
       {
         return;
       }
@@ -193,6 +203,11 @@ define([
 
     showEditorDialog: function($td)
     {
+      if (this.model.isTaktTimeEnabled())
+      {
+        return;
+      }
+
       if (!$td)
       {
         $td = this.$('.btn-link').last().closest('td');

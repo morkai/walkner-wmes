@@ -75,17 +75,21 @@ define([
       this.timelineView = null;
       this.quantitiesDoneChartView = null;
 
-      this.listenTo(this.model, 'change:online', this.onOnlineChanged);
-      this.listenTo(this.model, 'change:state', this.onStateChanged);
-      this.listenTo(this.model, 'change:extended', this.onExtendedChanged);
-      this.listenTo(this.model, 'change:prodShift', this.onProdShiftChanged);
-      this.listenTo(this.model, 'change:prodShiftOrders', this.onProdShiftOrdersChanged);
-      this.listenTo(this.model, 'change:prodDowntimes', this.onProdDowntimesChanged);
+      var model = this.model;
+
+      this.listenTo(model, 'change:online', this.onOnlineChanged);
+      this.listenTo(model, 'change:state', this.onStateChanged);
+      this.listenTo(model, 'change:extended', this.onExtendedChanged);
+      this.listenTo(model, 'change:prodShift', this.onProdShiftChanged);
+      this.listenTo(model, 'change:prodShiftOrders', this.onProdShiftOrdersChanged);
+      this.listenTo(model, 'change:prodDowntimes', this.onProdDowntimesChanged);
+      this.listenTo(model, 'change:taktTime', this.toggleTaktTime);
       this.listenTo(
-        this.model,
+        model,
         'change:plannedQuantityDone change:actualQuantityDone',
         _.debounce(this.onMetricsChanged.bind(this), 1)
       );
+      this.listenTo(model.settings.production, 'change', this.onProductionSettingsChanged);
       this.listenTo(this.displayOptions, 'change', this.toggleVisibility);
     },
 
@@ -112,6 +116,11 @@ define([
       if (this.model.get('extended'))
       {
         classNames.push('is-extended');
+      }
+
+      if (!this.model.isTaktTimeOk())
+      {
+        classNames.push('is-tt-nok');
       }
 
       var workCenter = orgUnits.getParent(orgUnits.getByTypeAndId('prodLine', this.model.getProdLineId()));
@@ -319,9 +328,22 @@ define([
       }
     },
 
+    toggleTaktTime: function()
+    {
+      this.$el.toggleClass('is-tt-nok', !this.model.isTaktTimeOk());
+    },
+
     toggleVisibility: function()
     {
       this.$el.toggle(this.displayOptions.isVisible(this.model));
+    },
+
+    onProductionSettingsChanged: function(setting)
+    {
+      if (/taktTime/.test(setting.id))
+      {
+        this.toggleTaktTime();
+      }
     },
 
     onOnlineChanged: function()
@@ -349,7 +371,7 @@ define([
 
     onProdShiftChanged: function()
     {
-      this.$('[role=shift]').html(this.serializeShift());
+      this.$('[role=shift]').html(this.serializeShift().text);
 
       ['master', 'leader', 'operator'].forEach(function(type)
       {

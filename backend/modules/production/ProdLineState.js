@@ -744,7 +744,7 @@ ProdLineState.prototype.calculateCurrentShiftQuantitiesDone = function()
     return result;
   }
 
-  for (var i = 0, l = HOUR_TO_INDEX[this.currentHour]; i < l; ++i)
+  for (var i = 0, l = HOUR_TO_INDEX[this.currentHour] + 1; i < l; ++i)
   {
     var quantitiesDone = this.prodShift.quantitiesDone[i];
 

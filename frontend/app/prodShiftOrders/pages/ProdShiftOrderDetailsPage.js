@@ -12,6 +12,7 @@ define([
   'app/core/View',
   'app/prodChangeRequests/util/createDeletePageAction',
   'app/delayReasons/storage',
+  'app/production/settings',
   'app/mechOrders/MechOrder',
   'app/mechOrders/views/MechOrderDetailsView',
   'app/orders/Order',
@@ -20,8 +21,10 @@ define([
   'app/orders/views/OperationListView',
   'app/prodDowntimes/ProdDowntimeCollection',
   'app/prodDowntimes/views/ProdDowntimeListView',
+  'app/prodSerialNumbers/ProdSerialNumberCollection',
   '../ProdShiftOrder',
   '../views/ProdShiftOrderDetailsView',
+  '../views/SerialNumbersView',
   'app/prodShiftOrders/templates/detailsPage'
 ], function(
   _,
@@ -35,6 +38,7 @@ define([
   View,
   createDeletePageAction,
   delayReasonsStorage,
+  productionSettings,
   MechOrder,
   MechOrderDetailsView,
   Order,
@@ -43,8 +47,10 @@ define([
   OperationListView,
   ProdDowntimeCollection,
   ProdDowntimeListView,
+  ProdSerialNumberCollection,
   ProdShiftOrder,
   ProdShiftOrderDetailsView,
+  SerialNumbersView,
   detailsPageTemplate
 ) {
   'use strict';
@@ -95,26 +101,42 @@ define([
 
       this.listenToOnce(this.prodShiftOrder, 'sync', this.onSync);
 
-      this.setView('.prodShiftOrders-details-container', this.detailsView);
-      this.insertView('.prodShiftOrders-downtimes-container', this.downtimesView);
+      this.setView('#' + this.idPrefix +'-details', this.detailsView);
+      this.insertView('#' + this.idPrefix +'-downtimes', this.downtimesView);
+      this.insertView('#' + this.idPrefix +'-serialNumbers', this.serialNumbersView);
     },
 
     destroy: function()
     {
+      productionSettings.release();
       delayReasonsStorage.release();
     },
 
     defineModels: function()
     {
+      this.settings = bindLoadingMessage(productionSettings.acquire(), this);
+
       this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
 
       this.prodShiftOrder = bindLoadingMessage(
-        new ProdShiftOrder({_id: this.options.modelId}), this
+        new ProdShiftOrder({_id: this.options.modelId}, {settings: this.settings}),
+        this
       );
 
       this.prodDowntimes = bindLoadingMessage(new ProdDowntimeCollection(null, {
         rqlQuery: {
           sort: {startedAt: 1},
+          limit: 9999,
+          selector: {
+            name: 'and',
+            args: [{name: 'eq', args: ['prodShiftOrder', this.prodShiftOrder.id]}]
+          }
+        }
+      }), this);
+
+      this.prodSerialNumbers = bindLoadingMessage(new ProdSerialNumberCollection(null, {
+        rqlQuery: {
+          sort: {scannedAt: 1},
           limit: 9999,
           selector: {
             name: 'and',
@@ -132,6 +154,11 @@ define([
         collection: this.prodDowntimes,
         simple: true
       });
+
+      this.serialNumbersView = new SerialNumbersView({
+        collection: this.prodSerialNumbers,
+        model: this.prodShiftOrder
+      });
     },
 
     load: function(when)
@@ -139,12 +166,15 @@ define([
       return when(
         this.prodShiftOrder.fetch(),
         this.prodDowntimes.fetch({reset: true}),
-        this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
+        this.prodSerialNumbers.fetch({reset: true}),
+        this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null,
+        this.settings.isEmpty() ? this.settings.fetch({reset: true}) : null
       );
     },
 
     afterRender: function()
     {
+      productionSettings.acquire();
       delayReasonsStorage.acquire();
     },
 
@@ -181,8 +211,8 @@ define([
         }
       });
 
-      this.setView('.prodShiftOrders-order-container', this.orderDetailsView);
-      this.setView('.prodShiftOrders-operations-container', this.operationListView);
+      this.setView('#' + this.idPrefix +'-order', this.orderDetailsView);
+      this.setView('#' + this.idPrefix +'-operations', this.operationListView);
     },
 
     prepareOrderData: function()

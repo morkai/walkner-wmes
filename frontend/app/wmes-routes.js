@@ -28,6 +28,7 @@ define([
   './prodShifts/routes',
   './production/routes',
   './prodChangeRequests/routes',
+  './prodSerialNumbers/routes',
   './reports/routes',
   './subdivisions/routes',
   './users/routes',

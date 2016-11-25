@@ -82,9 +82,9 @@ define([
         this.updateWorkerCount();
       }, 1));
 
-      this.listenTo(this.model.settings, 'change', function(model)
+      this.listenTo(this.model.settings, 'reset change', function(setting)
       {
-        if (/taktTime/.test(model.id))
+        if (!setting || /taktTime/.test(setting.id))
         {
           this.updateQuantityDone();
           this.updateTaktTime();
@@ -197,32 +197,62 @@ define([
 
     updateTaktTime: function()
     {
-      // TODO: settings
-      var pso = this.model.prodShiftOrder;
-      var $taktTime = this.$property('taktTime');
+      var model = this.model;
+      var enabled = model.isTaktTimeEnabled();
+      var showLast = model.settings.showLastTaktTime();
+      var showAvg = model.settings.showAvgTaktTime();
+      var showSap = model.settings.showSapTaktTime();
+      var pso = model.prodShiftOrder;
+      var $lastTaktTime = this.$property('lastTaktTime');
       var $avgTaktTime = this.$property('avgTaktTime');
-      var avgTaktTime = pso.get('avgTaktTime') || 0;
-      var sn = pso.get('serialNumber');
+      var $sapTaktTime = this.$property('taktTime');
+      var avgTaktTime = Math.round((pso.get('avgTaktTime') || 0) / 1000);
+      var lastTaktTime = Math.round((pso.get('lastTaktTime') || 0) / 1000);
       var sapTaktTime = pso.getTaktTime();
-      var taktTime = sn ? Math.round(sn.taktTime / 1000) : 0;
-      var text = taktTime || sapTaktTime;
-      var title = text === sapTaktTime ? '' : sapTaktTime;
+      var text = '';
+      var title = '';
 
-      $taktTime
+      if (enabled && showLast && lastTaktTime)
+      {
+        text = lastTaktTime;
+
+        if (lastTaktTime !== sapTaktTime)
+        {
+          title = sapTaktTime;
+        }
+
+        $lastTaktTime.parent().removeClass('is-tt-sap').addClass('is-tt-last');
+      }
+      else
+      {
+        text = sapTaktTime;
+
+        $lastTaktTime.parent().addClass('is-tt-sap').removeClass('is-tt-last');
+      }
+
+      $sapTaktTime
+        .text(sapTaktTime)
+        .parent()
+        .toggleClass('hidden', !showSap);
+
+      $lastTaktTime
         .text(text)
-        .attr('title', title);
+        .attr('title', title)
+        .parent()
+        .toggleClass('hidden', !showLast);
 
       $avgTaktTime
-        .text(Math.round(avgTaktTime / 1000) || '?')
+        .text(avgTaktTime || '?')
         .parent()
-        .toggleClass('hidden', !(pso.get('quantityDone') > 1 && avgTaktTime > 0))
+        .toggleClass('hidden', !enabled || !showAvg || !(pso.get('quantityDone') > 1 && avgTaktTime > 0))
+        .removeClass('is-ok is-nok')
         .addClass(avgTaktTime <= sapTaktTime ? 'is-ok' : 'is-nok');
 
       document.body.classList.remove('is-tt-ok', 'is-tt-nok');
 
-      if (taktTime && sapTaktTime)
+      if (enabled && lastTaktTime && sapTaktTime)
       {
-        document.body.classList.add(taktTime <= sapTaktTime ? 'is-tt-ok' : 'is-tt-nok');
+        document.body.classList.add(lastTaktTime <= sapTaktTime ? 'is-tt-ok' : 'is-tt-nok');
       }
     },
 
@@ -238,7 +268,7 @@ define([
       {
         html = String(this.model.prodShiftOrder.getQuantityDone());
 
-        if (!this.model.isLocked() && !this.model.prodShiftOrder.isRemoteQuantity())
+        if (!this.model.isLocked() && !this.model.isTaktTimeEnabled())
         {
           html += ' <button class="btn btn-link">'
             + t('production', 'property:quantityDone:change')
@@ -496,6 +526,11 @@ define([
 
     showEditor: function($property, oldValue, minValue, maxValue, changeFunction)
     {
+      if (!$property.find('.btn').length)
+      {
+        return;
+      }
+
       var $value = $property.find('.production-property-value');
       var view = this;
       var $form = $('<form></form>').submit(function() { hideAndSave(); return false; });

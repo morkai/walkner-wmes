@@ -35,36 +35,6 @@ define([
 
     nlsDomain: 'prodShiftOrders',
 
-    defaults: {
-      pressWorksheet: null,
-      prodShift: null,
-      division: null,
-      subdivision: null,
-      mrpControllers: null,
-      prodFlow: null,
-      workCenter: null,
-      prodLine: null,
-      date: null,
-      shift: null,
-      mechOrder: null,
-      subdivisionType: null,
-      orderId: null,
-      operationNo: null,
-      orderData: null,
-      workerCount: null,
-      totalQuantity: null,
-      quantityDone: null,
-      quantityLost: null,
-      creator: null,
-      startedAt: null,
-      finishedAt: null,
-      master: null,
-      leader: null,
-      operator: null,
-      operators: null,
-      spigot: null
-    },
-
     initialize: function(attrs, options)
     {
       Model.prototype.initialize.apply(this, arguments);
@@ -129,9 +99,11 @@ define([
         operator: prodShift.get('operator'),
         operators: prodShift.get('operators'),
         spigot: null,
-        serialNumber: null,
+        sapTaktTime: null,
+        lastTaktTime: null,
         avgTaktTime: null
       });
+      this.set('sapTaktTime', this.getSapTaktTime());
 
       this.generateId(prodShift);
     },
@@ -163,6 +135,7 @@ define([
       };
 
       this.set(changes);
+      this.set('sapTaktTime', this.getSapTaktTime());
 
       if (this.get('workerCount') > this.getMaxWorkerCount())
       {
@@ -202,8 +175,12 @@ define([
         leader: prodShift.get('leader'),
         operator: prodShift.get('operator'),
         operators: prodShift.get('operators'),
-        spigot: null
+        spigot: null,
+        sapTaktTime: null,
+        lastTaktTime: null,
+        avgTaktTime: null
       });
+      this.set('sapTaktTime', this.getSapTaktTime());
 
       this.generateId(prodShift);
     },
@@ -282,21 +259,21 @@ define([
       return calcOrderEfficiency(this.attributes);
     },
 
-    getTaktTime: function()
+    getSapTaktTime: function(settings)
     {
       var orderData = this.get('orderData');
       var operationNo = this.get('operationNo');
 
       if (!orderData || !operationNo)
       {
-        return '-';
+        return 0;
       }
 
       var operation = orderData.operations ? orderData.operations[operationNo] : null;
 
       if (!operation)
       {
-        return '?';
+        return 0;
       }
 
       var workerCount = this.get('workerCount');
@@ -308,16 +285,48 @@ define([
 
       if (typeof workerCount !== 'number' || workerCount === 0 || operation.laborTime <= 0)
       {
-        return '?';
+        return 0;
       }
 
-      var coeff = this.settings ? this.settings.getTaktTimeCoeff(orderData.mrp, operation.workCenter) : 1;
+      if (!settings)
+      {
+        settings = this.settings;
+      }
+
+      var coeff = settings ? settings.getTaktTimeCoeff(orderData.mrp, operation.workCenter) : 1;
 
       return Math.max(Math.round((operation.laborTime * coeff) / workerCount * 3600 / 100), 1);
     },
 
+    getLastTaktTime: function()
+    {
+      return Math.round((this.get('lastTaktTime') || 0) / 1000);
+    },
+
+    getAvgTaktTime: function()
+    {
+      return Math.round((this.get('avgTaktTime') || 0) / 1000);
+    },
+
+    getTaktTime: function(settings)
+    {
+      if (!this.get('orderData') || !this.get('operationNo'))
+      {
+        return '-';
+      }
+
+      return this.getSapTaktTime(settings) || '?';
+    },
+
     getActualTaktTime: function()
     {
+      var avgTaktTime = this.getAvgTaktTime();
+
+      if (avgTaktTime)
+      {
+        return avgTaktTime;
+      }
+
       var finishedAt = time.getMoment(this.get('finishedAt'));
 
       if (!finishedAt.isValid())
@@ -414,12 +423,6 @@ define([
     getQuantityDone: function()
     {
       return this.get('quantityDone') || 0;
-    },
-
-    isRemoteQuantity: function()
-    {
-      // TODO: only if enabled in settings
-      return this.get('avgTaktTime') > 0;
     },
 
     getSubdivisionType: function()

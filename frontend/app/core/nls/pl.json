@@ -93,6 +93,7 @@
   "NAVBAR:PROD:DOWNTIMES": "Przestoje",
   "NAVBAR:PROD:ALERTS": "Alarmy",
   "NAVBAR:PROD:CHANGE_REQUESTS": "Żądania zmian",
+  "NAVBAR:PROD:SERIAL_NUMBERS": "Numery seryjne",
   "NAVBAR:PROD:SETTINGS": "Ustawienia",
   "NAVBAR:PROGRAMMING": "Baza testów",
   "NAVBAR:XICONF": "Xiconf <em>(MultiOne)</em>",

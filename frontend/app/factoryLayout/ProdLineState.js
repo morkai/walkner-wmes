@@ -42,6 +42,11 @@ define([
       prodDowntimes: null
     },
 
+    initialize: function(attrs, options)
+    {
+      this.settings = options && options.settings ? options.settings : null;
+    },
+
     getLabel: function()
     {
       return this.getProdLineId().substr(0, 10).toUpperCase().replace(/(_+|~.*?)$/, '').replace(/_/g, ' ');
@@ -52,12 +57,37 @@ define([
       return this.attributes.prodShift === null ? this.id : this.attributes.prodShift.get('prodLine');
     },
 
+    isTaktTimeOk: function()
+    {
+      var prodShiftOrders = this.get('prodShiftOrders');
+
+      if (!prodShiftOrders || !prodShiftOrders.length)
+      {
+        return true;
+      }
+
+      var currentProdShiftOrder = prodShiftOrders.last();
+
+      if (currentProdShiftOrder.get('finishedAt')
+        || !this.settings
+        || !this.settings.production.isTaktTimeEnabled(this.id))
+      {
+        return true;
+      }
+
+      var lastTaktTime = currentProdShiftOrder.get('lastTaktTime') / 1000;
+      var sapTaktTime = currentProdShiftOrder.getTaktTime(this.settings.production);
+
+      return !lastTaktTime || lastTaktTime <= sapTaktTime;
+    },
+
     update: function(data)
     {
       var attrs = this.attributes;
       var prodShiftChanged = false;
-      var prodShiftOrdersChanged = null;
+      var prodShiftOrdersChanges = null;
       var prodDowntimesChanges = null;
+      var taktTimeChanges = null;
 
       if (typeof data.prodShift === 'object')
       {
@@ -83,7 +113,7 @@ define([
       {
         attrs.prodShiftOrders.reset(data.prodShiftOrders.map(ProdShiftOrder.parse));
 
-        prodShiftOrdersChanged = {reset: true};
+        prodShiftOrdersChanges = {reset: true};
 
         delete data.prodShiftOrders;
       }
@@ -100,7 +130,14 @@ define([
           attrs.prodShiftOrders.add(ProdShiftOrder.parse(data.prodShiftOrders));
         }
 
-        prodShiftOrdersChanged = {reset: false};
+        prodShiftOrdersChanges = {
+          reset: false
+        };
+
+        if (data.prodShiftOrders.lastTaktTime)
+        {
+          taktTimeChanges = data.prodShiftOrders;
+        }
 
         delete data.prodShiftOrders;
       }
@@ -136,14 +173,19 @@ define([
         this.trigger('change:prodShift');
       }
 
-      if (prodShiftOrdersChanged)
+      if (prodShiftOrdersChanges)
       {
-        this.trigger('change:prodShiftOrders', prodShiftOrdersChanged);
+        this.trigger('change:prodShiftOrders', prodShiftOrdersChanges);
       }
 
       if (prodDowntimesChanges)
       {
         this.trigger('change:prodDowntimes', prodDowntimesChanges);
+      }
+
+      if (taktTimeChanges)
+      {
+        this.trigger('change:taktTime', this, taktTimeChanges);
       }
 
       if (Object.keys(data).length)

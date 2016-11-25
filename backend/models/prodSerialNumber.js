@@ -33,6 +33,20 @@ module.exports = function setupProdSerialNumberModel(app, mongoose)
       type: Number,
       required: true,
       min: 0
+    },
+    sapTaktTime: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    iptTaktTime: {
+      type: Number,
+      min: 0,
+      default: 0
+    },
+    iptAt: {
+      type: Date,
+      default: null
     }
   }, {
     id: false,
@@ -44,6 +58,7 @@ module.exports = function setupProdSerialNumberModel(app, mongoose)
 
   prodSerialNumberSchema.index({orderNo: 1});
   prodSerialNumberSchema.index({prodShiftOrder: 1, scannedAt: -1});
+  prodSerialNumberSchema.index({prodLine: 1, scannedAt: -1});
 
   mongoose.model('ProdSerialNumber', prodSerialNumberSchema);
 };

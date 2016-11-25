@@ -17,6 +17,11 @@ define([
 
     model: ProdLineState,
 
+    initialize: function(models, options)
+    {
+      this.settings = options && options.settings ? options.settings : null;
+    },
+
     /**
      * @param {object} res
      * @returns {Array.<object>}
@@ -27,7 +32,9 @@ define([
 
       for (var i = 0, l = res.prodLineStates.length; i < l; ++i)
       {
-        prodLineStates.push(ProdLineState.parse(res.prodLineStates[i]));
+        prodLineStates.push(new ProdLineState(ProdLineState.parse(res.prodLineStates[i]), {
+          settings: this.settings
+        }));
       }
 
       return prodLineStates;

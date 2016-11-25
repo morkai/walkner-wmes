@@ -73,6 +73,7 @@
     "mongoose": "~4.6.5",
     "mongoose-auto-increment": "~5.0.1",
     "multer": "~1.2.0",
+    "mysql": "~2.12.0",
     "node-uuid": "~1.4.7",
     "nodemailer": "~1.10.0",
     "request": "~2.76.0",

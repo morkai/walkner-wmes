@@ -152,6 +152,9 @@
 .is-working .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-working);
 }
+.is-working.is-tt-nok .factoryLayout-prodLine-bg {
+  fill: url(/#factoryLayout-prodLine-bg-working-nok);
+}
 .is-downtime .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-downtime);
 }

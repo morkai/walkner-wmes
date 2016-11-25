@@ -94,6 +94,7 @@
     "NAVBAR:PROD:DOWNTIMES": "Downtimes",
     "NAVBAR:PROD:ALERTS": "Alerts",
     "NAVBAR:PROD:CHANGE_REQUESTS": "Change requests",
+    "NAVBAR:PROD:SERIAL_NUMBERS": "Serial numbers",
     "NAVBAR:PROD:SETTINGS": "Settings",
     "NAVBAR:PROGRAMMING": "Testing",
     "NAVBAR:XICONF": "Xiconf <em>(MultiOne)</em>",

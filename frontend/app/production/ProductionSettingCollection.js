@@ -23,12 +23,21 @@ define([
     {
       SettingCollection.prototype.initialize.apply(this, arguments);
 
-      this.cache = {};
+      this.resetCache();
 
       if (options.localStorage)
       {
         this.setUpLocalStorage();
       }
+
+      this.on('reset change', this.resetCache);
+    },
+
+    resetCache: function()
+    {
+      this.cache = {
+        taktTimeEnabled: {}
+      };
     },
 
     getValue: function(suffix)
@@ -50,9 +59,9 @@ define([
         return this.prepareSpigotPatterns(newValue);
       }
 
-      if (/spigotLines$/.test(id))
+      if (/lines$/i.test(id))
       {
-        return this.prepareSpigotLines(newValue);
+        return this.prepareLines(newValue);
       }
 
       if (/spigotGroups$/.test(id))
@@ -60,7 +69,7 @@ define([
         return this.prepareSpigotGroups(newValue);
       }
 
-      if (/spigotFinish$/.test(id))
+      if (/(spigotFinish|enabled|last|avg|sap)$/.test(id))
       {
         return !!newValue;
       }
@@ -93,7 +102,7 @@ define([
         .join('\n');
     },
 
-    prepareSpigotLines: function(newValue)
+    prepareLines: function(newValue)
     {
       return typeof newValue !== 'string' ? undefined : newValue
         .split(',')
@@ -120,6 +129,50 @@ define([
         })
         .join('\n')
         .replace(/\n{2,}/g, '\n');
+    },
+
+    isTaktTimeEnabled: function(prodLine)
+    {
+      var enabled = this.cache.taktTimeEnabled[prodLine];
+
+      if (enabled !== undefined)
+      {
+        return enabled;
+      }
+
+      if (!this.getValue('taktTime.enabled'))
+      {
+        enabled = false;
+      }
+      else if (!prodLine)
+      {
+        enabled = true;
+      }
+      else
+      {
+        var lines = this.getValue('taktTime.lines') || [];
+
+        enabled = lines.length === 0 || lines.indexOf(prodLine) !== -1;
+      }
+
+      this.cache.taktTimeEnabled[prodLine] = enabled;
+
+      return enabled;
+    },
+
+    showLastTaktTime: function()
+    {
+      return !!this.getValue('taktTime.last');
+    },
+
+    showAvgTaktTime: function()
+    {
+      return !!this.getValue('taktTime.avg');
+    },
+
+    showSapTaktTime: function()
+    {
+      return !!this.getValue('taktTime.sap');
     },
 
     getTaktTimeCoeff: function(mrp, workCenter)
@@ -213,8 +266,6 @@ define([
     saveLocalData: function()
     {
       localStorage['PRODUCTION:SETTINGS'] = JSON.stringify(this.models);
-
-      this.cache = {};
     }
 
   });

@@ -1,4 +1,5 @@
 @import "isa.css";
+@import "taktTime.css";
 
 .is-production {
   overflow: auto;
@@ -8,12 +9,6 @@
 }
 .is-production.modal-open {
   overflow: hidden;
-}
-.is-tt-ok {
-  background: #EFF8EF;
-}
-.is-tt-nok {
-  background: #FAEAE9;
 }
 .production {
   margin: 0 30px 30px;
@@ -67,15 +62,6 @@
   text-transform: uppercase;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-}
-.is-tt-ok .production-pageHeader,
-.is-tt-ok .production-sectionHeader,
-.is-tt-ok .production-subsectionHeader,
-.is-tt-nok .production-pageHeader,
-.is-tt-nok .production-sectionHeader,
-.is-tt-nok .production-subsectionHeader {
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
 }
 .production-pageHeader {
   background: linear-gradient(to right, #fff, #f6f6f6, #fff);
@@ -156,14 +142,6 @@
 }
 .production-property-value {
   font-size: 24px;
-}
-.is-tt-ok .production-property-taktTime,
-.production-property-avgTaktTime.is-ok {
-  color: #00af00;
-}
-.is-tt-nok .production-property-taktTime,
-.production-property-avgTaktTime.is-nok {
-  color: #e00;
 }
 .production.is-unlocked .is-editable .btn-link {
   color: #428bca;
@@ -455,6 +433,7 @@
   .production-ft {
     padding: 0 0 15px 0;
   }
+  .production-taktTime,
   .production-downtimes,
   .production-quantities {
     margin-right: 15px;
@@ -487,12 +466,7 @@
     font-size: 32px;
   }
 }
-@media (max-width: 1280px) {
-  .production-currentDowntime {
-    font-size: 28px;
-  }
-}
-@media (max-width: 1180px) {
+@media (max-width: 1300px) {
   .production-actions {
     display: block;
   }
@@ -515,13 +489,9 @@
     font-size: 36px;
   }
 }
-@media (max-width: 700px) {
-  .production-ft {
-
-  }
-  .production-quantities {
-    width: 100%;
-  }
+@media (max-width: 880px) {
+  .production-taktTime,
+  .production-quantities,
   .production-isa {
     width: 100%;
   }

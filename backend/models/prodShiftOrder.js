@@ -153,6 +153,14 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       default: ''
     },
     spigot: {},
+    sapTaktTime: {
+      type: Number,
+      default: 0
+    },
+    lastTaktTime: {
+      type: Number,
+      default: 0
+    },
     avgTaktTime: {
       type: Number,
       default: 0

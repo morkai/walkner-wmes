@@ -1,31 +1,27 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/broker'
 ], function(
+  _,
   broker
 ) {
   'use strict';
 
   var STORAGE_KEY = 'PRODUCTION:SN';
 
-  var enabled = true;
   var handleTimeout = null;
   var scanBuffer = '';
   var snBuffer = JSON.parse(localStorage[STORAGE_KEY] || '{}');
 
-  broker.subscribe('viewport.dialog.shown', function() { enabled = false; });
-  broker.subscribe('viewport.dialog.hidden', function() { enabled = true; });
-
   function handleScanBuffer()
   {
     var matches = scanBuffer.match(/P0*([0-9]+)([0-9]{4})/);
-    var type = 'old';
 
     if (!matches)
     {
       matches = scanBuffer.match(/[A-Z0-9]{4}\.([0-9]+)\.([0-9]+)/);
-      type = 'new';
     }
 
     if (matches)
@@ -53,7 +49,8 @@ define([
   return {
     handleKeyboardEvent: function(e)
     {
-      if (!enabled || e.target.classList.contains('form-control'))
+      if (e.target.classList.contains('form-control')
+        && e.target.dataset.snAccept === undefined)
       {
         return;
       }
@@ -72,17 +69,60 @@ define([
     },
     contains: function(sn)
     {
-      return !!snBuffer[sn._id];
+      return !!snBuffer[sn];
     },
     add: function(sn)
     {
-      snBuffer[sn._id] = 1;
+      snBuffer[sn._id] = [Date.parse(sn.scannedAt), sn.prodShiftOrder, sn.prodLine];
       localStorage[STORAGE_KEY] = JSON.stringify(snBuffer);
     },
     clear: function()
     {
       snBuffer = {};
       localStorage.removeItem(STORAGE_KEY);
+    },
+    getLocalTaktTime: function(scanInfo, prodShiftOrder, hourlyQuantityIndex)
+    {
+      var quantityDone = 1;
+      var hourlyQuantityDone = 1;
+      var currentScannedAt = scanInfo.scannedAt.getTime();
+      var previousScannedAt = new Date(prodShiftOrder.get('startedAt')).getTime();
+      var currentHour = new Date().getHours();
+      var prodLine = prodShiftOrder.get('prodLine');
+
+      Object.keys(snBuffer).forEach(function(sn)
+      {
+        var d = snBuffer[sn];
+
+        if (d[1] === prodShiftOrder.id)
+        {
+          quantityDone += 1;
+          previousScannedAt = d[0];
+        }
+
+        if (d[2] === prodLine && new Date(d[0]).getHours() === currentHour)
+        {
+          hourlyQuantityDone += 1;
+        }
+      });
+
+      var lastTaktTime = currentScannedAt - previousScannedAt;
+
+      return {
+        result: 'SUCCESS',
+        serialNumber: _.assign({
+          taktTime: lastTaktTime,
+          prodShiftOrder: prodShiftOrder.id,
+          prodLine: prodLine
+        }, scanInfo),
+        quantityDone: quantityDone,
+        lastTaktTime: lastTaktTime,
+        avgTaktTime: 0,
+        hourlyQuantityDone: {
+          index: hourlyQuantityIndex,
+          value: hourlyQuantityDone
+        }
+      };
     }
   };
 });

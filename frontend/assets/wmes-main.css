@@ -51,6 +51,7 @@
 @import url("../app/qiResults/assets/main.css");
 @import url("../app/pscs/assets/main.css");
 @import url("../app/d8Entries/assets/main.css");
+@import url("./new-colors.css");
 
 #app-loading {
   position: absolute;

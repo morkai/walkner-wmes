@@ -68,7 +68,7 @@ define([
 
   Highcharts.setOptions({
     global: {
-      timezoneOffset: time.getMoment().zone(),
+      timezoneOffset: time.getMoment().utcOffset(),
       useUTC: false
     },
     chart: {

@@ -95,7 +95,6 @@ define([
       this.onResize = _.debounce(this.onResize.bind(this), 16);
 
       this.editable = !!this.options.editable;
-
       this.canvas = null;
       this.zoom = null;
       this.currentAction = null;
@@ -109,13 +108,16 @@ define([
       if (!this.editable)
       {
         var model = this.model;
+        var prodLineStates = model.prodLineStates;
 
-        this.listenTo(model.prodLineStates, 'change:state', this.onStateChange);
-        this.listenTo(model.prodLineStates, 'change:online', this.onOnlineChange);
-        this.listenTo(model.prodLineStates, 'change:extended', this.onExtendedChange);
-        this.listenTo(model.prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
-        this.listenTo(model.prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
-        this.listenTo(model.settings, 'change', this.onSettingsChange);
+        this.listenTo(prodLineStates, 'change:state', this.onStateChange);
+        this.listenTo(prodLineStates, 'change:online', this.onOnlineChange);
+        this.listenTo(prodLineStates, 'change:extended', this.onExtendedChange);
+        this.listenTo(prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
+        this.listenTo(prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
+        this.listenTo(prodLineStates, 'change:taktTime', this.updateTaktTime);
+        this.listenTo(model.settings.factoryLayout, 'change', this.onLayoutSettingsChange);
+        this.listenTo(model.settings.production, 'change', this.onProductionSettingsChange);
       }
     },
 
@@ -135,7 +137,7 @@ define([
     {
       if (!this.editable)
       {
-        this.stopListening(this.model, 'sync', this.render);
+        this.stopListening(this.model, 'sync');
       }
     },
 
@@ -144,6 +146,11 @@ define([
       if (!this.editable)
       {
         this.listenToOnce(this.model, 'sync', this.render);
+      }
+
+      if (this.model.isLoading())
+      {
+        return;
       }
 
       this.$el.toggleClass('is-editable', this.editable);
@@ -211,9 +218,9 @@ define([
         })
         .attr('fill', function(d)
         {
-          if (model.settings)
+          if (model.settings.factoryLayout)
           {
-            return model.settings.getColor(d._id);
+            return model.settings.factoryLayout.getColor(d._id);
           }
 
           return hex2rgba(d.fillColor || '#000000', 1);
@@ -235,7 +242,9 @@ define([
         });
 
       var prodLineStates = model.prodLineStates;
-      var isBlacklisted = model.settings ? model.settings.isBlacklisted.bind(model.settings) : null;
+      var isBlacklisted = model.settings.factoryLayout
+        ? model.settings.factoryLayout.isBlacklisted.bind(model.settings.factoryLayout)
+        : null;
 
       g.each(function(d)
       {
@@ -338,6 +347,7 @@ define([
 
       prodLineOuterContainer.classed('is-offline', prodLineState && !prodLineState.get('online'));
       prodLineOuterContainer.classed('is-extended', prodLineState && prodLineState.get('extended'));
+      prodLineOuterContainer.classed('is-tt-nok', prodLineState && !prodLineState.isTaktTimeOk());
 
       var prodLineInnerContainer = prodLineOuterContainer.append('g').attr({
         class: 'factoryLayout-prodLine-inner'
@@ -456,6 +466,12 @@ define([
         .attr('height', size.height);
 
       this.zoom = zoom;
+
+      if (this.canvas)
+      {
+        this.canvas.remove();
+      }
+
       this.canvas = outerContainer.append('g');
 
       this.canvas.append('rect')
@@ -576,6 +592,7 @@ define([
       if (!prodLineOuterContainer.empty())
       {
         prodLineOuterContainer.classed('is-offline', !prodLineState.get('online'));
+        prodLineOuterContainer.classed('is-tt-nok', !prodLineState.isTaktTimeOk());
       }
     },
 
@@ -605,7 +622,7 @@ define([
       this.updateMetricValue(prodLineState, 'actualQuantityDone');
     },
 
-    onSettingsChange: function(setting)
+    onLayoutSettingsChange: function(setting)
     {
       if (/blacklist/.test(setting.id))
       {
@@ -617,6 +634,24 @@ define([
         var divisionId = setting.id.split('.')[1];
 
         this.canvas.select('.factoryLayout-division[data-id="' + divisionId + '"]').attr('fill', setting.getValue());
+      }
+    },
+
+    onProductionSettingsChange: function(setting)
+    {
+      if (/taktTime/.test(setting.id))
+      {
+        this.model.prodLineStates.forEach(this.updateTaktTime, this);
+      }
+    },
+
+    updateTaktTime: function(prodLineState)
+    {
+      var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
+
+      if (!prodLineOuterContainer.empty())
+      {
+        prodLineOuterContainer.classed('is-tt-nok', !prodLineState.isTaktTimeOk());
       }
     },
 

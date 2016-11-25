@@ -13,7 +13,7 @@ module.exports = function getProductionStateRoute(app, productionModule, req, re
   step(
     function()
     {
-      Setting.find({_id: /^factoryLayout/}, {value: 1}).lean().exec(this.parallel());
+      Setting.find({_id: /^(factoryLayout|production)/}, {value: 1}).lean().exec(this.parallel());
       productionModule.getProdLineStates(this.parallel());
       FactoryLayout.findById('default', {live: 1}).lean().exec(this.parallel());
     },

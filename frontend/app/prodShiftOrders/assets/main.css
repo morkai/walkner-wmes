@@ -2,7 +2,8 @@
   max-width: none;
 }
 .prodShiftOrders-downtimes-container,
-.prodShiftOrders-order-container {
+.prodShiftOrders-order-container,
+.prodShiftOrders-operations-container {
   margin-top: 15px;
   margin-bottom: 15px;
 }
@@ -15,4 +16,10 @@
 }
 .prodShiftOrders-filter-operationNo {
   width: 60px;
+}
+.prodShiftOrders-serialNumber {
+  display: inline-block;
+  margin: 0.1em 0;
+  font-size: 1em;
+  font-weight: normal;
 }

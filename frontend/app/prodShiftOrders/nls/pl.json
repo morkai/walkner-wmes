@@ -17,6 +17,7 @@
   "PANEL:TITLE:orderDetails": "Szczegóły zlecenia w momencie rozpoczęcia",
   "PANEL:TITLE:losses": "Straty materiałowe",
   "PANEL:TITLE:downtimes": "Przestoje rozpoczęte w trakcie wykonywania zlecenia",
+  "PANEL:TITLE:serialNumbers": "Zeskanowane numery seryjne",
   "PANEL:TITLE:addForm": "Formularz dodawania zlecenia produkcyjnego",
   "PANEL:TITLE:editForm": "Formularz edycji danych zlecenia produkcyjnego",
 

@@ -15,7 +15,7 @@ module.exports = function setUpFactoryLayoutRoutes(app, factoryLayoutModule)
     {
       req.rql.selector = {
         name: 'regex',
-        args: ['_id', '^factoryLayout\\.']
+        args: ['_id', '^(factoryLayout|production)\\.']
       };
 
       return next();

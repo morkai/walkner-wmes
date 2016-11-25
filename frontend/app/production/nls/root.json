@@ -48,6 +48,8 @@
     "section:history": "History",
     "section:quantities": "Quantities done",
     "section:downtimes": "Downtimes",
+    "section:isa": "Storage area",
+    "section:taktTime": "Takt Time",
 
     "property:currentTime": "Current time",
     "property:shift": "Shift",
@@ -71,6 +73,8 @@
     "property:productName": "Product name",
     "property:operationName": "Operation name",
     "property:taktTime": "Takt [s]",
+    "property:lastTaktTime": "Cycle [s]",
+    "property:avgTaktTime": "Avg. Cycle [s]",
     "property:workerCountSap": "Worker count as per SAP",
     "property:createdAt": "Started at",
     "property:quantityDone": "Quantity done",
@@ -85,6 +89,8 @@
     "action:startBreak": "Break",
     "action:endDowntime": "End downtime",
     "action:endWork": "End work",
+    "action:emptyPallet": "Empty pallet",
+    "action:fullPallet": "Pallet",
 
     "quantities:column:time": "Time",
     "quantities:column:planned": "Planned",
@@ -209,6 +215,32 @@
 
     "autoDowntimes:remainingTime": "starts in {time}",
 
+    "snMessage:scannedValue": "Scanned value",
+    "snMessage:orderNo": "Order no",
+    "snMessage:serialNo": "Serial no",
+    "snMessage:UNKNOWN_CODE": "The scanned code does not contain a serial number.",
+    "snMessage:INVALID_STATE:idle": "Begin an order to enable the SN scanning.",
+    "snMessage:INVALID_STATE:downtime": "Finish the downtime to enable SN scanningthe .",
+    "snMessage:INVALID_ORDER": "Scanned SN from a wrong order.",
+    "snMessage:ALREADY_USED": "Scanned SN is already registered.",
+    "snMessage:CHECKING": "<span class='fa fa-spinner fa-spin'></span><br>Checking the serial number...",
+    "snMessage:SERVER_FAILURE": "Remote server error while checking the serial number.",
+    "snMessage:SHIFT_NOT_FOUND": "Line shift not found.",
+    "snMessage:ORDER_NOT_FOUND": "Line order not found.",
+    "snMessage:SUCCESS": "Serial number successfully registered.",
+
+    "taktTime:check": "Check<br>serial number",
+
+    "taktTime:check:title": "Serial number checking",
+    "taktTime:check:orderNo": "Order no",
+    "taktTime:check:serialNo": "Item no",
+    "taktTime:check:submit": "Check serial number",
+    "taktTime:check:help": "Specify an order no and an item no of the serial number you would like to check. The serial number to check may also be scanned.",
+    "taktTime:check:checking": "<i class='fa fa-spinner fa-spin'></i> Checking the serial number...",
+    "taktTime:check:local": "The specified serial number was already scanned on this production line.",
+    "taktTime:check:remote": "The specified serial number was already scanned on line: {prodLine}",
+    "taktTime:check:notFound": "The specified serial number was not scanned yet.",
+
     "settings:tab:operator": "Operator",
     "settings:tab:downtimes": "Downtimes",
     "settings:tab:spigot": "Spigot check",
@@ -220,6 +252,11 @@
     "settings:spigotNotPatterns": "Ignore the selected component, if it also matches any of the following patterns",
     "settings:spigotFinish": "Force checking of the Spigot during order finish",
     "settings:spigotGroups": "12NC groups",
+    "settings:taktTime:enabled": "Serial number scanning",
+    "settings:taktTime:lines": "Limit scanning to the following lines:",
+    "settings:taktTime:last": "Show Cycle Time of the last PCE",
+    "settings:taktTime:avg": "Show average Cycle Time for the current order",
+    "settings:taktTime:sap": "Show Takt Time for the current order",
     "settings:taktTime:coeffs": "Operation coefficients",
     "settings:taktTime:coeffs:help": "Each line should contain order's MRP for which the Takt Time coefficients should be adjusted, followed by names of the operation WorkCenters and values of the coefficients. For example: <code class=multiline>*: *=1.053 PIVATIC5=0.9<br>KE6: *=1 OUTDOOR5=1.1</code>"
 

@@ -38,7 +38,7 @@ define([
         'change:orgUnitType change:orgUnitIds change:blacklisted',
         _.debounce(this.render, 1)
       );
-      this.listenTo(this.model.settings, 'change', this.onSettingsChange);
+      this.listenTo(this.model.settings.factoryLayout, 'change', this.onSettingsChange);
       this.listenTo(this.model.historyData, 'request', this.onHistoryDataRequest);
       this.listenTo(this.model.historyData, 'sync', this.onHistoryDataSync);
       this.listenTo(this.model.historyData, 'error', this.onHistoryDataError);
@@ -97,7 +97,7 @@ define([
         this.displayOptions.get('orgUnitIds'),
         this.displayOptions.get('blacklisted')
           ? function() { return false; }
-          : this.model.settings.isBlacklisted.bind(this.model.settings)
+          : this.model.settings.factoryLayout.isBlacklisted.bind(this.model.settings.factoryLayout)
       );
     },
 

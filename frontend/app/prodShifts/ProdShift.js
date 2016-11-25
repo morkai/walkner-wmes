@@ -481,10 +481,13 @@ define([
 
       this.trigger('change:quantitiesDone', this, quantitiesDone, options || {});
 
-      prodLog.record(this, 'changeQuantitiesDone', {
-        hour: hour,
-        newValue: newValue
-      });
+      if (options.record !== false)
+      {
+        prodLog.record(this, 'changeQuantitiesDone', {
+          hour: hour,
+          newValue: newValue
+        });
+      }
     },
 
     changeOrder: function(orderInfo, operationNo)
@@ -676,14 +679,36 @@ define([
       prodLog.record(this, 'editDowntime', changes);
     },
 
-    updateTaktTime: function(sn, newQuantityDone, avgTaktTime)
+    isTaktTimeEnabled: function()
     {
-      snManager.add(sn);
+      return this.settings.isTaktTimeEnabled(this.prodLine.id);
+    },
+
+    updateTaktTimeLocally: function(logEntry)
+    {
+      this.updateTaktTime(snManager.getLocalTaktTime(
+        logEntry.data,
+        this.prodShiftOrder,
+        this.getCurrentQuantityDoneHourIndex()
+      ));
+
+      prodLog.record(this, logEntry);
+    },
+
+    updateTaktTime: function(data)
+    {
+      snManager.add(data.serialNumber);
+
+      var quantitiesDone = this.get('quantitiesDone');
+
+      quantitiesDone[data.hourlyQuantityDone.index].actual = data.hourlyQuantityDone.value;
+
+      this.trigger('change:quantitiesDone', this, quantitiesDone, {});
 
       this.prodShiftOrder.set({
-        serialNumber: sn,
-        quantityDone: newQuantityDone,
-        avgTaktTime: avgTaktTime
+        quantityDone: data.quantityDone,
+        lastTaktTime: data.lastTaktTime,
+        avgTaktTime: data.avgTaktTime
       });
       this.saveLocalData();
     },

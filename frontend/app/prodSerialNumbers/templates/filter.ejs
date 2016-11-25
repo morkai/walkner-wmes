@@ -1,0 +1,26 @@
+<form class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
+    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="<%- t('core', 'placeholder:date') %>" min="2016-11-01">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
+    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="<%- t('core', 'placeholder:date') %>" min="2016-11-01">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-_id"><%- t('prodSerialNumbers', 'PROPERTY:_id') %></label>
+    <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-orderNo"><%- t('prodSerialNumbers', 'PROPERTY:orderNo') %></label>
+    <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-prodLine"><%- t('prodSerialNumbers', 'PROPERTY:prodLine') %></label>
+    <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('prodSerialNumbers', 'filter:submit') %></span></button>
+  </div>
+</form>

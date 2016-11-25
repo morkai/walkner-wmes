@@ -24,6 +24,7 @@ define([
   '../views/ProdDowntimeListView',
   '../views/ProductionQuantitiesView',
   '../views/IsaView',
+  '../views/TaktTimeView',
   '../views/SpigotCheckerView',
   'app/production/templates/productionPage',
   'app/production/templates/duplicateWarning'
@@ -51,6 +52,7 @@ define([
   ProdDowntimeListView,
   ProductionQuantitiesView,
   IsaView,
+  TaktTimeView,
   SpigotCheckerView,
   productionPageTemplate,
   duplicateWarningTemplate
@@ -176,7 +178,7 @@ define([
       $(window)
         .on('resize.' + this.idPrefix, this.onWindowResize)
         .on('beforeunload.' + this.idPrefix, this.onBeforeUnload)
-        .on('keydown.' + this.idPrefix, this.onKeyDown);
+        .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
 
       if (window.parent !== window)
       {
@@ -269,6 +271,7 @@ define([
       page.headerView = new ProductionHeaderView({model: model});
       page.dataView = new ProductionDataView({model: model});
       page.downtimesView = new ProdDowntimeListView({model: model});
+      page.taktTimeView = new TaktTimeView({model: model});
       page.quantitiesView = new ProductionQuantitiesView({model: model});
       page.isaView = new IsaView({model: model});
 
@@ -278,6 +281,7 @@ define([
       page.setView(idPrefix + 'header', page.headerView);
       page.setView(idPrefix + 'data', page.dataView);
       page.setView(idPrefix + 'downtimes', page.downtimesView);
+      page.setView(idPrefix + 'taktTime', page.taktTimeView);
       page.setView(idPrefix + 'quantities', page.quantitiesView);
       page.setView(idPrefix + 'isa', page.isaView);
     },
@@ -371,6 +375,8 @@ define([
         page.$el.toggleClass('is-mechOrder', model.prodShiftOrder.isMechOrder());
       });
 
+      this.listenTo(model.settings, 'reset change', this.toggleTaktTimeView);
+
       page.listenTo(page.downtimesView, 'corroborated', function()
       {
         model.saveLocalData();
@@ -397,6 +403,8 @@ define([
       $(document.body)
         .addClass('is-production')
         .toggleClass('is-embedded', window.parent !== window);
+
+      this.toggleTaktTimeView();
 
       if (this.socket.isConnected())
       {
@@ -438,7 +446,10 @@ define([
         e.preventDefault();
       }
 
-      snManager.handleKeyboardEvent(e);
+      if (this.model.isTaktTimeEnabled())
+      {
+        snManager.handleKeyboardEvent(e);
+      }
     },
 
     onBeforeUnload: function()
@@ -842,6 +853,11 @@ define([
 
     onSnScanned: function(scanInfo)
     {
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
       if (!scanInfo.orderNo)
       {
         return this.showSnMessage(scanInfo, 'error', 'UNKNOWN_CODE');
@@ -851,7 +867,10 @@ define([
       var model = page.model;
       var state = model.get('state');
       var logEntry = prodLog.create(model, 'checkSerialNumber', scanInfo);
+      var sapTaktTime = model.prodShiftOrder.getTaktTime();
       var error;
+
+      scanInfo.sapTaktTime = typeof sapTaktTime === 'number' ? sapTaktTime : 0;
 
       if (state !== 'working')
       {
@@ -881,11 +900,20 @@ define([
         method: 'POST',
         url: '/production/checkSerialNumber',
         data: JSON.stringify(logEntry),
-        timeout: 5000
+        timeout: 6000
       });
 
-      req.fail(function()
+      req.fail(function(jqXhr)
       {
+        if (jqXhr.status < 200)
+        {
+          model.updateTaktTimeLocally(logEntry);
+
+          page.showSnMessage(scanInfo, 'success', 'SUCCESS');
+
+          return;
+        }
+
         logEntry.data.error = 'SERVER_FAILURE';
 
         prodLog.record(model, logEntry);
@@ -897,11 +925,16 @@ define([
       {
         if (res.result === 'SUCCESS')
         {
-          model.updateTaktTime(res.serialNumber, res.quantityDone, res.avgTaktTime);
+          model.updateTaktTime(res);
           page.showSnMessage(scanInfo, 'success', 'SUCCESS');
         }
         else
         {
+          if (res.result === 'ALREADY_USED')
+          {
+            snManager.add(res.serialNumber);
+          }
+
           logEntry.data.error = res.result;
 
           prodLog.record(model, logEntry);
@@ -995,6 +1028,14 @@ define([
 
       this.actionTimer.action = null;
       this.actionTimer.time = null;
+    },
+
+    toggleTaktTimeView: function(setting)
+    {
+      if (!setting || /taktTime/.test(setting.id))
+      {
+        this.$('.production-taktTime').toggleClass('hidden', !this.model.isTaktTimeEnabled());
+      }
     }
 
   });

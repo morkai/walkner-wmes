@@ -27,7 +27,8 @@ exports.DEFAULT_CONFIG = {
   orgUnitsId: 'orgUnits',
   settingsId: 'settings',
   updaterId: 'updater',
-  isaId: 'isa'
+  isaId: 'isa',
+  mysqlId: 'mysql'
 };
 
 exports.start = function startProductionModule(app, module)

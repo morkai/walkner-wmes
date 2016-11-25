@@ -1,0 +1,17 @@
+{
+  "BREADCRUMBS:browse": "Numery seryjne",
+
+  "MSG:LOADING_FAILURE": "Ładowanie numerów seryjnych nie powiodło się :(",
+
+  "filter:submit": "Filtruj",
+
+  "PROPERTY:_id": "Nr seryjny",
+  "PROPERTY:scannedAt": "Czas skanowania",
+  "PROPERTY:iptAt": "Czas IPT",
+  "PROPERTY:prodLine": "Linia",
+  "PROPERTY:orderNo": "Zlecenie",
+  "PROPERTY:serialNo": "Nr sztuki",
+  "PROPERTY:taktTime": "Czas cyklu [s]",
+  "PROPERTY:iptTaktTime": "Czas cyklu IPT [s]",
+  "PROPERTY:sapTaktTime": "Czas taktu [s]"
+}

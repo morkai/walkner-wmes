@@ -1,0 +1,22 @@
+<form class="production-snChecker" autocomplete="off">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-orderNo"><%- t('production', 'taktTime:check:orderNo') %></label>
+        <input id="<%- idPrefix %>-orderNo" class="form-control" type="text" value="<%- orderNo %>" required pattern="^[0-9]{9}$" data-sn-accept>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-serialNo"><%- t('production', 'taktTime:check:serialNo') %></label>
+        <input id="<%- idPrefix %>-serialNo" class="form-control" type="number" min="1" max="9999" required data-sn-accept>
+      </div>
+    </div>
+  </div>
+  <div id="<%- idPrefix %>-message" class="message message-inline message-warning">
+    <%- t('production', 'taktTime:check:help') %>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-primary"><%- t('production', 'taktTime:check:submit') %></button>
+  </div>
+</form>

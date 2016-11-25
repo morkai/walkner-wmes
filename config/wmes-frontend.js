@@ -20,6 +20,7 @@ exports.id = 'wmes-frontend';
 exports.modules = [
   'updater',
   'mongoose',
+  {id: 'mysql', name: 'mysql:ipt'},
   'settings',
   'events',
   'pubsub',
@@ -53,6 +54,7 @@ exports.modules = [
   'pressWorksheets',
   'prodChangeRequests',
   'prodDowntimeAlerts',
+  'prodSerialNumbers',
   'reports',
   'xiconf',
   'warehouse',
@@ -151,7 +153,8 @@ exports.events = {
     'opinionSurveys.actions.added','opinionSurveys.actions.edited',
     'prodDowntimeAlerts.added',
     'qi.results.added', 'qi.results.edited',
-    'd8.entries.added', 'd8.entries.edited'
+    'd8.entries.added', 'd8.entries.edited',
+    'prodSerialNumbers.added'
   ]
 };
 
@@ -249,6 +252,19 @@ if (mongodb.replSet)
   mongodb.replSet.poolSize = 15;
 }
 
+exports['mysql:ipt'] = {
+  connection: {
+    host: '127.0.0.1',
+    port: 3306,
+    database: 'ipt',
+    connectTimeout: 2000,
+    acquireTimeout: 4000,
+    waitForConnections: true,
+    connectionLimit: 5,
+    queueLimit: 0
+  }
+};
+
 exports.express = {
   staticPath: __dirname + '/../frontend',
   staticBuildPath: __dirname + '/../frontend-build',
@@ -304,6 +320,10 @@ exports.user = {
 
 exports.users = {
   browsePrivileges: ['LOCAL', 'USER']
+};
+
+exports.production = {
+  mysqlId: 'mysql:ipt'
 };
 
 exports['messenger/server'] = {

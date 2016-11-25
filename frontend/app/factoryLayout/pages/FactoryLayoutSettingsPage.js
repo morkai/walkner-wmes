@@ -48,7 +48,7 @@ define([
     {
       this.view = new FactoryLayoutSettingsView({
         initialTab: this.options.initialTab,
-        settings: this.model.settings
+        settings: this.model.settings.factoryLayout
       });
     },
 

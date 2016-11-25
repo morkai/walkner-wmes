@@ -16,6 +16,24 @@
         </div>
         <div class="panel panel-primary">
           <div class="panel-body" data-subtab="taktTime">
+            <div class="checkbox">
+              <label class="control-label">
+                <input id="<%- idPrefix %>-taktTime-enabled" name="production.taktTime.enabled" type="checkbox" value="true">
+                <%- t('production', 'settings:taktTime:enabled') %>
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="<%- idPrefix %>-taktTime-lines"><%- t('production', 'settings:taktTime:lines') %></label>
+              <input id="<%- idPrefix %>-taktTime-lines" name="production.taktTime.lines" type="text" data-setting>
+            </div>
+            <% ['sap', 'last', 'avg'].forEach(function(p) { %>
+            <div class="checkbox">
+              <label class="control-label">
+                <input id="<%- idPrefix %>-taktTime-<%- p %>" name="production.taktTime.<%- p %>" type="checkbox" value="true">
+                <%- t('production', 'settings:taktTime:' + p) %>
+              </label>
+            </div>
+            <% }) %>
             <div class="form-group">
               <label for="<%- idPrefix %>-taktTime-coeffs"><%- t('production', 'settings:taktTime:coeffs') %></label>
               <span class="help-block"><%- t('production', 'settings:taktTime:coeffs:help') %></span>

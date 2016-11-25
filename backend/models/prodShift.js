@@ -104,6 +104,12 @@ module.exports = function setupProdShiftModel(app, mongoose)
 
   prodShiftSchema.statics.TOPIC_PREFIX = 'prodShifts';
 
+  prodShiftSchema.statics.HOUR_TO_INDEX = [
+    2, 3, 4, 5, 6, 7, 0, 1,
+    2, 3, 4, 5, 6, 7, 0, 1,
+    2, 3, 4, 5, 6, 7, 0, 1
+  ];
+
   prodShiftSchema.index({date: -1});
   prodShiftSchema.index({division: 1, date: -1});
   prodShiftSchema.index({subdivision: 1, date: -1});
