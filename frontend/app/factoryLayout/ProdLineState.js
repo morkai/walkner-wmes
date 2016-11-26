@@ -57,6 +57,30 @@ define([
       return this.attributes.prodShift === null ? this.id : this.attributes.prodShift.get('prodLine');
     },
 
+    getCurrentOrder: function()
+    {
+      if (!this.attributes.prodShiftOrders)
+      {
+        return null;
+      }
+
+      var order = this.attributes.prodShiftOrders.last();
+
+      return order && !order.get('finishedAt') ? order : null;
+    },
+
+    getCurrentDowntime: function()
+    {
+      if (!this.attributes.prodDowntimes)
+      {
+        return null;
+      }
+
+      var downtime = this.attributes.prodDowntimes.last();
+
+      return downtime && !downtime.get('finishedAt') ? downtime : null;
+    },
+
     isTaktTimeOk: function()
     {
       var prodShiftOrders = this.get('prodShiftOrders');

@@ -1,0 +1,38 @@
+<table>
+  <tbody>
+  <tr>
+    <th><%- t('factoryLayout', 'popover:order') %>
+    <td><span class="factoryLayout-popover-value"><%= order.name %></span>
+  <tr>
+    <th><%- t('factoryLayout', 'popover:operation') %>
+    <td><span class="factoryLayout-popover-value"><%= order.operation %></span>
+  <tr>
+    <th><%- t('factoryLayout', 'popover:duration') %>
+    <td><%- order.duration %>
+  <tr>
+    <th><%- t('factoryLayout', 'popover:workerCount') %>
+    <td><%- order.workerCount %> (<%- order.sapWorkerCount %>)
+  <tr>
+    <th><%- t('factoryLayout', 'popover:quantityDone') %>
+    <td><%- order.quantityDone %>
+  <tr>
+    <th><%- t('factoryLayout', 'popover:taktTime') %>
+    <td><%- order.taktTime %>
+  <tr>
+    <th><%- t('factoryLayout', 'popover:cycleTime') %>
+    <td><%- order.cycleTime || '?' %> (<%- order.iptCycleTime || '?' %>)
+  <tr>
+    <th><%- t('factoryLayout', 'popover:avgCycleTime') %>
+    <td><%- order.avgCycleTime || '?' %>
+  <% if (downtime) { %>
+  <tr>
+    <th><%- t('factoryLayout', 'popover:downtime') %>
+    <td><%= downtime.reason %>
+  <% ['aor', 'duration'].forEach(function(p) { %>
+  <tr>
+    <th><%- t('factoryLayout', 'popover:' + p) %>
+    <td><span class="factoryLayout-popover-value"><%- downtime[p] %></span>
+  <% }) %>
+  <% } %>
+  </tbody>
+</table>

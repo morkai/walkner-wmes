@@ -5,17 +5,21 @@ define([
   'jquery',
   'd3',
   'screenfull',
+  'app/time',
   'app/viewport',
   'app/core/View',
-  'app/factoryLayout/templates/canvas'
+  'app/factoryLayout/templates/canvas',
+  'app/factoryLayout/templates/popover'
 ], function(
   _,
   $,
   d3,
   screenfull,
+  time,
   viewport,
   View,
-  template
+  template,
+  popoverTemplate
 ) {
   'use strict';
 
@@ -65,6 +69,29 @@ define([
       {
         this.bringDivisionToTop(e.currentTarget);
       },
+      'mouseenter .factoryLayout-prodLine': function(e)
+      {
+        this.$popover = this.$(e.currentTarget).popover({
+          container: 'body',
+          placement: 'auto right',
+          viewport: {
+            selector: 'body',
+            padding: 15
+          },
+          trigger: 'manual',
+          html: true,
+          content: this.getPopoverContent.bind(this, e.currentTarget.getAttribute('data-id')),
+          template: '<div class="popover factoryLayout-popover">'
+            + '<div class="arrow"></div>'
+            + '<div class="popover-content"></div>'
+            + '</div>'
+        }).popover('show');
+      },
+      'mouseleave .factoryLayout-prodLine': function(e)
+      {
+        this.$(e.currentTarget).popover('destroy');
+        this.$popover = null;
+      },
       'mousedown .factoryLayout-prodLine': function(e)
       {
         this.clickInfo = {
@@ -100,6 +127,7 @@ define([
       this.currentAction = null;
       this.clickInfo = null;
       this.panInfo = null;
+      this.$popover = null;
 
       $('body').on('keydown', this.onKeyDown);
       $(window).on('resize', this.onResize);
@@ -123,6 +151,12 @@ define([
 
     destroy: function()
     {
+      if (this.$popover)
+      {
+        this.$popover.popover('destroy');
+        this.$popover = null;
+      }
+
       $('body').off('keydown', this.onKeyDown);
       $(window).off('resize', this.onResize);
       screenfull.onchange = function() {};
@@ -429,6 +463,12 @@ define([
           };
 
           view.$el.addClass('is-panning');
+
+          if (view.$popover)
+          {
+            view.$popover.popover('destroy');
+            view.$popover = null;
+          }
         })
         .on('zoomend', function()
         {
@@ -535,6 +575,48 @@ define([
       this.$el.toggleClass('is-fullscreen', screenfull.isFullscreen);
 
       this.translate(x, y);
+    },
+
+    getPopoverContent: function(prodLineId)
+    {
+      var prodLineState = this.model.prodLineStates.get(prodLineId);
+      var state = prodLineState && prodLineState.get('state') || 'idle';
+
+      if (state === 'idle')
+      {
+        return;
+      }
+
+      var order = prodLineState.getCurrentOrder();
+
+      if (!order)
+      {
+        return;
+      }
+
+      var downtime = prodLineState.getCurrentDowntime();
+      var now = Date.now();
+
+      return popoverTemplate({
+        order: {
+          name: order.getProductName(),
+          operation: order.getOperationName(),
+          startedAt: time.format(order.get('startedAt'), 'HH:mm:ss'),
+          duration: order.getDurationString(now, false),
+          quantityDone: order.getQuantityDone(),
+          workerCount: order.getWorkerCount(),
+          sapWorkerCount: order.getWorkerCountSap(),
+          taktTime: time.toString(order.getSapTaktTime()),
+          cycleTime: time.toString(order.getLastTaktTime()),
+          iptCycleTime: time.toString(order.getIptTaktTime()),
+          avgCycleTime: time.toString(order.getAvgTaktTime())
+        },
+        downtime: !downtime ? null : {
+          reason: downtime.getReasonLabel(),
+          aor: downtime.getAorLabel(),
+          duration: downtime.getDurationString(now, false)
+        }
+      });
     },
 
     onKeyDown: function(e)

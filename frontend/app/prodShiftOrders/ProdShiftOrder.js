@@ -254,6 +254,14 @@ define([
       return orderData.operations[operationNo].name || operationNo;
     },
 
+    getDurationString: function(currentTime, compact)
+    {
+      var startTime = Date.parse(this.get('startedAt'));
+      var endTime = Date.parse(this.get('finishedAt')) || currentTime || Date.now();
+
+      return time.toString(Math.round((endTime - startTime) / 1000), compact);
+    },
+
     getEfficiency: function()
     {
       return calcOrderEfficiency(this.attributes);
@@ -296,6 +304,11 @@ define([
       var coeff = settings ? settings.getTaktTimeCoeff(orderData.mrp, operation.workCenter) : 1;
 
       return Math.max(Math.round((operation.laborTime * coeff) / workerCount * 3600 / 100), 1);
+    },
+
+    getIptTaktTime: function()
+    {
+      return Math.round((this.get('iptTaktTime') || 0) / 1000);
     },
 
     getLastTaktTime: function()

@@ -181,6 +181,23 @@
 .is-downtime .factoryLayout-prodLine-name {
   background: linear-gradient(to bottom, #FF7672, #D9534F);
 }
+.factoryLayout-popover {
+  max-width: none;
+  font-size: 12px;
+}
+.factoryLayout-popover .popover-content {
+  padding: 5px 10px;
+}
+.factoryLayout-popover th {
+  padding-right: 5px;
+}
+.factoryLayout-popover-value {
+  display: block;
+  width: 175px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 @keyframes wiggle {
   0% {
     transform: translate(0, 0);

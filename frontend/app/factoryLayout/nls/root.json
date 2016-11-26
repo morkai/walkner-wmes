@@ -47,6 +47,17 @@
     "picker:title": "Production line picker",
     "picker:submit": "Pick",
 
+    "popover:order": "Order:",
+    "popover:operation": "Operation:",
+    "popover:duration": "Duration:",
+    "popover:quantityDone": "Quantity done:",
+    "popover:workerCount": "Workers (SAP):",
+    "popover:taktTime": "Takt Time:",
+    "popover:cycleTime": "Cycle Time (IPT):",
+    "popover:avgCycleTime": "Avg. Cycle Time:",
+    "popover:downtime": "Downtime:",
+    "popover:aor": "AOR:",
+
     "settings:tab:blacklist": "Ignored org units",
     "settings:tab:divisionColors": "Division colors",
     "settings:tab:other": "Other",

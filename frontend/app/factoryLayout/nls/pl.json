@@ -47,6 +47,17 @@
   "picker:title": "Wybieranie linii produkcyjnych",
   "picker:submit": "Wybierz",
 
+  "popover:order": "Zlecenie:",
+  "popover:operation": "Operacja:",
+  "popover:duration": "Czas trwania:",
+  "popover:quantityDone": "Ilość wykonana:",
+  "popover:workerCount": "Ilość osób (SAP):",
+  "popover:taktTime": "Czas taktu:",
+  "popover:cycleTime": "Czas cyklu (IPT):",
+  "popover:avgCycleTime": "Śr. czas cyklu:",
+  "popover:downtime": "Przestój:",
+  "popover:aor": "Obszar:",
+
   "settings:tab:blacklist": "Ignorowane jednostki org.",
   "settings:tab:divisionColors": "Kolory wydziałów",
   "settings:tab:other": "Inne",
