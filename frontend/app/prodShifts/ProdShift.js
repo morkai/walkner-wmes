@@ -481,7 +481,7 @@ define([
 
       this.trigger('change:quantitiesDone', this, quantitiesDone, options || {});
 
-      if (options.record !== false)
+      if (!options || options.record !== false)
       {
         prodLog.record(this, 'changeQuantitiesDone', {
           hour: hour,
