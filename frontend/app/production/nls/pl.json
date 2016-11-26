@@ -252,6 +252,7 @@
   "settings:spigotGroups": "Grupy 12NC",
   "settings:taktTime:enabled": "Skanowanie numerów seryjnych",
   "settings:taktTime:lines": "Ogranicz skanowanie do następujących linii:",
+  "settings:taktTime:ignoredDowntimes": "Ignoruj czas trwania następujących przestojów:",
   "settings:taktTime:last": "Pokazuj czas cyklu dla ostatniej sztuki",
   "settings:taktTime:avg": "Pokazuj średni czas cyklu dla aktualnego zlecenia",
   "settings:taktTime:sap": "Pokazuj czas taktu SAP dla aktualnego zlecenia",

@@ -60,5 +60,15 @@ module.exports = function setupProdSerialNumberModel(app, mongoose)
   prodSerialNumberSchema.index({prodShiftOrder: 1, scannedAt: -1});
   prodSerialNumberSchema.index({prodLine: 1, scannedAt: -1});
 
+  prodSerialNumberSchema.post('save', function(doc)
+  {
+    if (app.production.recreating)
+    {
+      return;
+    }
+
+    app.broker.publish('prodSerialNumbers.created.' + doc.prodLine, doc.toJSON());
+  });
+
   mongoose.model('ProdSerialNumber', prodSerialNumberSchema);
 };

@@ -41,6 +41,8 @@ exports.start = function startProductionModule(app, module)
   }
 
   module.secretKeys = {};
+  module.settings = {};
+
   module.recreating = false;
   module.recreate = recreate.bind(null, app, module);
   module.syncLogEntryStream = syncLogEntryStream.bind(null, app, module);
@@ -58,6 +60,13 @@ exports.start = function startProductionModule(app, module)
       cacheSecretKeys();
       setUpProdState(app, module);
     }
+  );
+
+  app.onModuleReady(
+    [
+      module.config.settingsId
+    ],
+    cacheSettings
   );
 
   app.onModuleReady(
@@ -133,6 +142,28 @@ exports.start = function startProductionModule(app, module)
       if (secretKey)
       {
         module.secretKeys[prodLine._id] = secretKey;
+      }
+    });
+  }
+
+  function cacheSettings()
+  {
+    module.settings = {};
+
+    app.broker.subscribe('settings.updated.production.**', function(message)
+    {
+      module.settings[message._id.replace('production.', '')] = message.value;
+    });
+
+    app[module.config.settingsId].findValues({_id: /^production/}, 'production.', function(err, settings)
+    {
+      if (err)
+      {
+        module.error(`Failed to cache settings: ${err.message}`);
+      }
+      else if (settings)
+      {
+        module.settings = settings;
       }
     });
   }

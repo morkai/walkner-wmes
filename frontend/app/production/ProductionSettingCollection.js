@@ -79,6 +79,11 @@ define([
         return this.prepareTaktTimeCoeffs(newValue);
       }
 
+      if (/ignoredDowntimes$/i.test(id))
+      {
+        return this.prepareMultiSelect2Value(newValue);
+      }
+
       return this.prepareNumericValue(newValue, 0, 60);
     },
 

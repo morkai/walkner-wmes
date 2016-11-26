@@ -9,8 +9,10 @@ define([
 
   return ListView.extend({
 
+    className: 'is-colored',
+
     remoteTopics: {
-      'production.taktTime.snScanned': 'refreshCollection',
+      'prodSerialNumbers.created.**': 'refreshCollection',
     },
 
     columns: [

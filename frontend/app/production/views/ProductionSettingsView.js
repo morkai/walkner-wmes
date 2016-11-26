@@ -34,15 +34,16 @@ define([
     {
       SettingsView.prototype.afterRender.apply(this, arguments);
 
-      this.$id('rearmDowntimeReason').select2({
-        allowClear: true,
-        placeholder: ' ',
-        data: downtimeReasons.map(idAndLabel)
-      });
-
+      var downtimes = downtimeReasons.map(idAndLabel);
       var activeLines = orgUnits.getAllByType('prodLine')
         .filter(function(d) { return !d.get('deactivatedAt'); })
         .map(idAndLabel);
+
+      this.$id('rearmDowntimeReason').select2({
+        allowClear: true,
+        placeholder: ' ',
+        data: downtimes
+      });
 
       this.$id('spigotLines').select2({
         allowClear: true,
@@ -56,6 +57,13 @@ define([
         placeholder: ' ',
         multiple: true,
         data: activeLines
+      });
+
+      this.$id('taktTime-ignoredDowntimes').select2({
+        allowClear: true,
+        placeholder: ' ',
+        multiple: true,
+        data: downtimes
       });
     }
 

@@ -153,8 +153,7 @@ exports.events = {
     'opinionSurveys.actions.added','opinionSurveys.actions.edited',
     'prodDowntimeAlerts.added',
     'qi.results.added', 'qi.results.edited',
-    'd8.entries.added', 'd8.entries.edited',
-    'prodSerialNumbers.added'
+    'd8.entries.added', 'd8.entries.edited'
   ]
 };
 
@@ -188,7 +187,7 @@ exports.pubsub = {
     'hourlyPlans.created', 'hourlyPlans.updated.*',
     'users.syncFailed',
     'production.synced.**', 'production.edited.**', 'production.stateChanged.**', 'production.autoDowntimes.**',
-    'prodShifts.**', 'prodDowntimes.**', 'prodShiftOrders.**', 'prodChangeRequests.**',
+    'prodShifts.**', 'prodDowntimes.**', 'prodShiftOrders.**', 'prodChangeRequests.**', 'prodSerialNumbers.created.**',
     'updater.newVersion',
     'settings.updated.**',
     'xiconf.results.**', 'xiconf.orders.**', 'xiconf.clients.**',

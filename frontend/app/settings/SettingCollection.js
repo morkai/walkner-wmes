@@ -124,6 +124,21 @@ define([
       return /^[a-f0-9]{24}$/.test(objectId) ? objectId : undefined;
     },
 
+    prepareMultiObjectIdValue: function(newValue)
+    {
+      return String(newValue)
+        .toLowerCase()
+        .split(',')
+        .filter(function(objectId) { return /^[a-f0-9]{24}$/.test(objectId); });
+    },
+
+    prepareMultiSelect2Value: function(newValue)
+    {
+      return String(newValue || '')
+        .split(',')
+        .filter(function(id) { return id.length > 0; });
+    },
+
     prepareNumericValue: function(newValue, min, max)
     {
       var value = parseInt(newValue, 10);

@@ -10,6 +10,7 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
   const mongoose = app[productionModule.config.mongooseId];
   const mysql = app[productionModule.config.mysqlId];
   const ProdShift = mongoose.model('ProdShift');
+  const ProdDowntime = mongoose.model('ProdDowntime');
   const ProdSerialNumber = mongoose.model('ProdSerialNumber');
 
   step(
@@ -18,6 +19,19 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
       productionModule.getProdData('shift', logEntry.prodShift, this.parallel());
 
       productionModule.getProdData('order', logEntry.prodShiftOrder, this.parallel());
+
+      ProdDowntime
+        .find({
+          prodShiftOrder: logEntry.prodShiftOrder,
+          reason: {$in: productionModule.settings['taktTime.ignoredDowntimes'] || []}
+        }, {
+          _id: 0,
+          startedAt: 1,
+          finishedAt: 1
+        })
+        .sort({startedAt: 1})
+        .lean()
+        .exec(this.parallel());
 
       ProdSerialNumber
         .findById(logEntry.data._id)
@@ -31,7 +45,7 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
         .lean()
         .exec(this.parallel());
     },
-    function(err, shift, pso, usedSn, previousSn)
+    function(err, shift, pso, downtimes, usedSn, previousSn)
     {
       if (err)
       {
@@ -76,21 +90,20 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
       this.sn.prodShiftOrder = logEntry.prodShiftOrder;
       this.sn.prodLine = logEntry.prodLine;
 
-      try
-      {
-        const previousScannedAt = previousSn ? previousSn.scannedAt : pso.startedAt;
-        const latestScannedAt = this.sn.scannedAt;
-        const taktTime = latestScannedAt.getTime() - previousScannedAt.getTime();
+      const previousScannedAt = (previousSn ? previousSn.scannedAt : pso.startedAt).getTime();
+      const latestScannedAt = this.sn.scannedAt.getTime();
+      let ignoredDuration = 0;
 
-        if (taktTime)
-        {
-          this.sn.taktTime = taktTime;
-        }
-      }
-      catch (err)
+      downtimes.forEach(function(d)
       {
-        return this.skip(err);
-      }
+        if (d.startedAt >= previousScannedAt && d.finishedAt <= latestScannedAt)
+        {
+          ignoredDuration += d.finishedAt - d.startedAt;
+        }
+      });
+
+      this.ignoredDuration = ignoredDuration;
+      this.sn.taktTime = latestScannedAt - previousScannedAt - ignoredDuration;
 
       findIptSn(this.sn._id, this.next());
     },
@@ -111,7 +124,7 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
 
         if (iptTaktTime)
         {
-          this.sn.iptTaktTime = iptTaktTime;
+          this.sn.iptTaktTime = iptTaktTime - this.ignoredDuration;
         }
       }
 
