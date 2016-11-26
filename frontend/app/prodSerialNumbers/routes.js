@@ -4,11 +4,13 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../core/util/pageActions',
   '../core/pages/FilteredListPage'
 ], function(
   router,
   viewport,
   user,
+  pageActions,
   FilteredListPage
 ) {
   'use strict';
@@ -29,7 +31,10 @@ define([
         return new FilteredListPage({
           FilterView: ProdSerialNumberFilterView,
           ListView: ProdSerialNumberListView,
-          actions: [],
+          actions: function(layout)
+          {
+            return [pageActions.export(layout, this, this.collection)];
+          },
           collection: new ProdSerialNumberCollection(null, {rqlQuery: req.rql})
         });
       }

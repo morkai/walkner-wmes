@@ -4,6 +4,8 @@
 
     "MSG:LOADING_FAILURE": "Failed to load the serial numbers :(",
 
+    "PAGE_ACTION:export": "Export SNs",
+
     "filter:submit": "Filter",
 
     "PROPERTY:_id": "Serial number",
