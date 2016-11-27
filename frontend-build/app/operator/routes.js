@@ -1,3 +1,3 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../router","../viewport","../data/orgUnits","../prodShifts/ProdShift","../production/pages/ProductionPage","i18n!app/nls/production","i18n!app/nls/isa","i18n!app/nls/users"],function(o,n,i,t,e){"use strict";o.map("/",function(){n.showPage(new e({model:new t(i.getAllForProdLine(localStorage[t.LINE_STORAGE_KEY]),{production:!0})}))})});
+define(["../router","../viewport","../data/orgUnits","../prodShifts/ProdShift","../production/pages/ProductionPage","i18n!app/nls/production","i18n!app/nls/isa","i18n!app/nls/users","i18n!app/nls/prodSerialNumbers"],function(o,n,i,r,e){"use strict";o.map("/",function(){n.showPage(new e({model:new r(i.getAllForProdLine(localStorage[r.LINE_STORAGE_KEY]),{production:!0})}))})});

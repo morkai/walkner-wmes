@@ -1,39 +1,60 @@
-<h1>v0.98.2</h1>
-<h2><%- time.format('2016-11-20', 'LL') %></h2>
-<h3>Zdarzenia</h3>
+<h1>v0.99.0</h1>
+<h2><%- time.format('2016-11-27', 'LL') %></h2>
+<h3>Formatka operatora</h3>
 <ul>
-  <li>Dodano brakujące tłumaczenia zdarzeń.</li>
+  <li>Poprawiono błąd powodujący zapamiętywanie ID linii podczas aktywacji linii, jeżeli przed chwilą linia ta została
+    dezaktywowana.</li>
+  <li>Poprawiono błąd powodujący otwieranie kilku okien dialogowych, jeżeli szybko wciśnięto na obszar aktywacji
+    edycji wartości.</li>
+  <li>Zmieniono wyszukiwanie zleceń tak, aby zwracana była pusta lista zamiast błędu, jeżeli podano nieprawidłową wartość
+    jako nr zlecenia.</li>
+  <li>Zmieniono wyszukiwanie zleceń tak, aby po wybraniu zlecenia domyślnie zaznaczana była możliwie najlepsza
+    operacja. Każda operacja dostaje punkty w zależności od spełnionych warunków i wybierana jest ta, która ma ich najwięcej:
+    <ul>
+      <li>1 pkt, jeżeli 'Labor Time' ma wartość,</li>
+      <li>1 pkt, jeżeli 'WorkCenter' ma wartość,</li>
+      <li>2 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>mont</code>,</li>
+      <li>1 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>pak</code>,</li>
+      <li>1 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>kj</code>,</li>
+      <li>1 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>opra</code>.</li>
+    </ul>
+  </li>
+  <li>Zmieniono 'Nazwa rodziny/detalu' tak, aby wyświetlało wartość 'Opis' ze zlecenia, zamiast 'Nazwa'.</li>
+  <li>Zmieniono obszar aktywacji edycji wartości z niebieskiego odnośnika na cały obszar danej wartości.</li>
+  <li>Zmieniono rozmiary wszystkich przycisków na większe.</li>
+  <li>Zmieniono wybieranie personelu linii tak, aby pod polem wyszukiwania wyświetlane były osoby wybrane na danej linii
+    i zmianie produkcyjnej w ostatnich dwóch tygodniach.</li>
+  <li>Zmieniono kolory statusu linii:
+    <ul>
+      <li>szary - nieokreślony,</li>
+      <li>czarny - bezczynność,</li>
+      <li>zielony - praca, cykl OK,</li>
+      <li>pomarańczowy - praca, cykl NOK,</li>
+      <li>czerwony - przestój.</li>
+    </ul>
+  </li>
+  <li>Dodano funkcjonalność obliczania czasu cyklu linii na podstawie skanowanych numerów seryjnych.</li>
 </ul>
-<h3>Dokumentacja</h3>
+<h3>Monitoring > Układ fabryki</h3>
 <ul>
-  <li>Poprawiono błąd powodujący, że przycisku usuwania klienta na liście klientów były aktywne dla klientów, którzy
-    aktualnie są połączeni z serwerem, zamiast tylko dla będących offline.</li>
-  <li>Zmieniono program do konwertowania plików PDF na obrazy z <em>sejda-console</em> na <em>pdfbox-app</em>
-    w celu poprawy renderowania niektórych czcionek.</li>
-  <li>Dodano wsparcie dla uruchamiania przeglądarki dokumentów na nowych komputerach UP.</li>
+  <li>Dodano dymek wyświetlający informację o aktualnym zleceniu i przestoju po najechaniu na linię produkcyjną.</li>
 </ul>
-<h3>ZPW</h3>
+<h3>Przestoje</h3>
 <ul>
-  <li>Poprawiono błąd powodujący, że pole 'Kategoria zachowania' nie było obsługiwane przez historię zmian zgłoszenia.</li>
-  <li>Poprawiono błąd powodujący, że nie można było zmienić wartości pól typu lista wyboru na pustą wartość.</li>
-  <li>Zmieniono pole 'Kategoria zachowania' tak, aby nie było wymagane.</li>
-  <li>Dodano kolumnę 'Kategoria zachowania' do listy zgłoszeń.</li>
+  <li>Poprawiono błąd powodujący niezaznaczanie statusu 'Aktywny alarm' po wejściu do przestojów z pozycji
+    menu 'Alarmy'.</li>
 </ul>
 <h3>Użytkownicy</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający zapisanie użytkownika, jeżeli jako wartość pola 'ID (KD)'
-    podano <code>-1</code>.</li>
-  <li>Zmieniono formularz edycji użytkownika tak, aby użytkownik nie mógł sam sobie zmienić wartości pola 'ID (KD)'
-    oraz flagi 'Konto aktywne?'.</li>
+  <li>Zmieniono synchronizację użytkowników z bazą KD tak, aby najpierw porównywała użytkowników po loginie, a dopiero
+    potem (jeżeli nie istnieją) po ID z bazy KD.</li>
 </ul>
-<h3>Baza testów</h3>
+<h3><a href="#pscs">PSCS</a></h3>
 <ul>
-  <li>Zmieniono eksportowanie wyników do pliku CSV: usunięto kolumny dotyczące wewnętrznego, lokalnego zlecenia
-    oraz dodano kolumny: service tag, linia produkcyjna oraz nazwy LED/HID.</li>
+  <li>Zmieniono szablon dla strony głównej, szkolenia oraz testu.</li>
+  <li>Dodano wyświetlanie prezentacji na stronie szkolenia.</li>
 </ul>
-<h3>Formatka operatora</h3>
+<h3>Inne</h3>
 <ul>
-  <li>Zmieniono wyświetlanie wartości 'Nazwa rodziny/detalu' tak, aby wyświetlał wartość 'Opis' ze zlecenia
-    zamiast 'Nazwa' (jeżeli jest dostępne).</li>
-  <li>Dodano nową opcję konfiguracyjną: Takt Time > Współczynniki operacji.</li>
+  <li>Poprawiono błąd podczas wyciągania z adresu nazwy komputera.</li>
 </ul>

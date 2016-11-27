@@ -1,4 +1,45 @@
 <div class="hidden">
+  <h1>v0.98.2</h1>
+  <h2><%- time.format('2016-11-20', 'LL') %></h2>
+  <h3>Zdarzenia</h3>
+  <ul>
+    <li>Dodano brakujące tłumaczenia zdarzeń.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że przycisku usuwania klienta na liście klientów były aktywne dla klientów, którzy
+      aktualnie są połączeni z serwerem, zamiast tylko dla będących offline.</li>
+    <li>Zmieniono program do konwertowania plików PDF na obrazy z <em>sejda-console</em> na <em>pdfbox-app</em>
+      w celu poprawy renderowania niektórych czcionek.</li>
+    <li>Dodano wsparcie dla uruchamiania przeglądarki dokumentów na nowych komputerach UP.</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że pole 'Kategoria zachowania' nie było obsługiwane przez historię zmian zgłoszenia.</li>
+    <li>Poprawiono błąd powodujący, że nie można było zmienić wartości pól typu lista wyboru na pustą wartość.</li>
+    <li>Zmieniono pole 'Kategoria zachowania' tak, aby nie było wymagane.</li>
+    <li>Dodano kolumnę 'Kategoria zachowania' do listy zgłoszeń.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający zapisanie użytkownika, jeżeli jako wartość pola 'ID (KD)'
+      podano <code>-1</code>.</li>
+    <li>Zmieniono formularz edycji użytkownika tak, aby użytkownik nie mógł sam sobie zmienić wartości pola 'ID (KD)'
+      oraz flagi 'Konto aktywne?'.</li>
+  </ul>
+  <h3>Baza testów</h3>
+  <ul>
+    <li>Zmieniono eksportowanie wyników do pliku CSV: usunięto kolumny dotyczące wewnętrznego, lokalnego zlecenia
+      oraz dodano kolumny: service tag, linia produkcyjna oraz nazwy LED/HID.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono wyświetlanie wartości 'Nazwa rodziny/detalu' tak, aby wyświetlał wartość 'Opis' ze zlecenia
+      zamiast 'Nazwa' (jeżeli jest dostępne).</li>
+    <li>Dodano nową opcję konfiguracyjną: Takt Time > Współczynniki operacji.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.98.1</h1>
   <h2><%- time.format('2016-11-11', 'LL') %></h2>
   <h3>Inspekcja Jakości</h3>

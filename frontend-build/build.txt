@@ -277,7 +277,12 @@ app/production/assets/isa.css
 app/production/assets/main.css
 ----------------
 app/production/assets/isa.css
+app/production/assets/taktTime.css
 app/production/assets/main.css
+
+app/production/assets/taktTime.css
+----------------
+app/production/assets/taktTime.css
 
 app/pscs/assets/main.css
 ----------------
@@ -442,6 +447,10 @@ assets/../app/updater/assets/main.css
 assets/../app/kaizenOrders/assets/main.css
 assets/kaizen-main.css
 
+assets/new-colors.css
+----------------
+assets/new-colors.css
+
 assets/pos-main.css
 ----------------
 assets/../vendor/bootstrap/css/bootstrap.css
@@ -533,6 +542,7 @@ assets/../app/isa/assets/main.css
 assets/../app/qiResults/assets/main.css
 assets/../app/pscs/assets/main.css
 assets/../app/d8Entries/assets/main.css
+assets/./new-colors.css
 assets/wmes-main.css
 
 assets/wmes-operator.css
@@ -544,6 +554,7 @@ assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/production/assets/main.css
 assets/../app/updater/assets/main.css
+assets/./new-colors.css
 assets/wmes-operator.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -879,6 +890,13 @@ app/production/views/ProductionQuantitiesView.js
 app/production/templates/isa.js
 app/production/templates/isaCancelDialog.js
 app/production/views/IsaView.js
+app/prodSerialNumbers/ProdSerialNumber.js
+app/prodSerialNumbers/ProdSerialNumberCollection.js
+app/production/views/SnListView.js
+app/production/templates/snChecker.js
+app/production/views/SnCheckerView.js
+app/production/templates/taktTime.js
+app/production/views/TaktTimeView.js
 app/production/templates/spigotChecker.js
 app/production/views/SpigotCheckerView.js
 app/production/templates/productionPage.js
@@ -890,10 +908,15 @@ i18n!app/nls/production
 app/nls/isa.js
 app/nls/pl/isa.js
 i18n!app/nls/isa
+app/nls/prodSerialNumbers.js
+app/nls/pl/prodSerialNumbers.js
+i18n!app/nls/prodSerialNumbers
 app/production/routes.js
 app/prodChangeRequests/ProdChangeRequest.js
 app/prodChangeRequests/ProdChangeRequestCollection.js
 app/prodChangeRequests/routes.js
+app/core/pages/FilteredListPage.js
+app/prodSerialNumbers/routes.js
 app/reports/routes.js
 app/subdivisions/routes.js
 app/nls/users.js
@@ -1293,6 +1316,13 @@ app/production/views/ProductionQuantitiesView.js
 app/production/templates/isa.js
 app/production/templates/isaCancelDialog.js
 app/production/views/IsaView.js
+app/prodSerialNumbers/ProdSerialNumber.js
+app/prodSerialNumbers/ProdSerialNumberCollection.js
+app/production/views/SnListView.js
+app/production/templates/snChecker.js
+app/production/views/SnCheckerView.js
+app/production/templates/taktTime.js
+app/production/views/TaktTimeView.js
 app/production/templates/spigotChecker.js
 app/production/views/SpigotCheckerView.js
 app/production/templates/productionPage.js
@@ -1307,6 +1337,9 @@ i18n!app/nls/isa
 app/nls/users.js
 app/nls/pl/users.js
 i18n!app/nls/users
+app/nls/prodSerialNumbers.js
+app/nls/pl/prodSerialNumbers.js
+i18n!app/nls/prodSerialNumbers
 app/operator/routes.js
 app/wmes-operator-routes.js
 app/nls/core.js
