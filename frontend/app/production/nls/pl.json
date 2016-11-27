@@ -228,7 +228,7 @@
   "snMessage:ORDER_NOT_FOUND": "Nie znaleziono zlecenia z linii.",
   "snMessage:SUCCESS": "Numer seryjny został pomyślnie zarejestrowany.",
 
-  "taktTime:check": "Sprawdź<br>numer seryjny",
+  "taktTime:check:button": "Sprawdź<br>numer seryjny",
   "taktTime:check:title": "Sprawdzanie nr seryjnych",
   "taktTime:check:orderNo": "Nr zlecenia",
   "taktTime:check:serialNo": "Nr sztuki",

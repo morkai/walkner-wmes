@@ -1032,7 +1032,7 @@ define([
 
     toggleTaktTimeView: function(setting)
     {
-      if (!setting || /taktTime/.test(setting.id))
+      if (!setting || !setting.id || /taktTime/.test(setting.id))
       {
         this.$('.production-taktTime').toggleClass('hidden', !this.model.isTaktTimeEnabled());
       }

@@ -229,8 +229,7 @@
     "snMessage:ORDER_NOT_FOUND": "Line order not found.",
     "snMessage:SUCCESS": "Serial number successfully registered.",
 
-    "taktTime:check": "Check<br>serial number",
-
+    "taktTime:check:button": "Check<br>serial number",
     "taktTime:check:title": "Serial number checking",
     "taktTime:check:orderNo": "Order no",
     "taktTime:check:serialNo": "Item no",

@@ -681,7 +681,7 @@ define([
 
     isTaktTimeEnabled: function()
     {
-      return this.settings.isTaktTimeEnabled(this.prodLine.id);
+      return !this.isLocked() && this.settings.isTaktTimeEnabled(this.prodLine.id);
     },
 
     updateTaktTimeLocally: function(logEntry)
