@@ -48,7 +48,7 @@
   "section:quantities": "Wykonane ilości",
   "section:downtimes": "Przestoje",
   "section:isa": "Pole odkładcze",
-  "section:taktTime": "Takt Time",
+  "section:taktTime": "Czas cyklu",
 
   "property:currentTime": "Aktualny czas",
   "property:shift": "Zmiana",

@@ -49,7 +49,7 @@
     "section:quantities": "Quantities done",
     "section:downtimes": "Downtimes",
     "section:isa": "Storage area",
-    "section:taktTime": "Takt Time",
+    "section:taktTime": "Cycle time",
 
     "property:currentTime": "Current time",
     "property:shift": "Shift",
