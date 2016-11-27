@@ -401,7 +401,7 @@ define([
     {
       var workerCountSap = this.getWorkerCountSap();
 
-      if (typeof workerCountSap === 'number')
+      if (typeof workerCountSap === 'number' && !this.settings.isTaktTimeEnabled(this.get('prodLine')))
       {
         return workerCountSap + Math.max(1, Math.round(workerCountSap * 0.25));
       }
@@ -413,7 +413,7 @@ define([
     {
       var orderData = this.get('orderData');
 
-      if (orderData && orderData.qty)
+      if (orderData && orderData.qty && !this.settings.isTaktTimeEnabled(this.get('prodLine')))
       {
         return Math.ceil(orderData.qty * 1.25);
       }
