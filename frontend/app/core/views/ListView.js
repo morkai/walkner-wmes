@@ -27,6 +27,8 @@ define([
 
     tableClassName: 'table-bordered table-hover table-condensed',
 
+    paginationOptions: {},
+
     remoteTopics: function()
     {
       var topics = {};
@@ -108,10 +110,12 @@ define([
 
       if (this.collection.paginationData)
       {
-        this.paginationView = new PaginationView({
-          model: this.collection.paginationData,
-          replaceUrl: !!this.options.replaceUrl
-        });
+        this.paginationView = new PaginationView(_.assign(
+          {replaceUrl: !!this.options.replaceUrl},
+          this.paginationOptions,
+          this.options.pagination,
+          {model: this.collection.paginationData}
+        ));
 
         this.setView('.pagination-container', this.paginationView);
 

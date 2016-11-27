@@ -5,14 +5,18 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/prodSerialNumbers/ProdSerialNumberCollection',
   '../snManager',
+  './SnListView',
   'app/production/templates/snChecker'
 ], function(
   $,
   t,
   viewport,
   View,
+  ProdSerialNumberCollection,
   snManager,
+  SnListView,
   template
 ) {
   'use strict';
@@ -33,6 +37,18 @@ define([
     },
 
     events: {
+      'click #-list': function()
+      {
+        viewport.closeDialog();
+
+        var snListView = new SnListView({
+          collection: new ProdSerialNumberCollection(null, {
+            rqlQuery: 'sort(-scannedAt)&limit(15)&prodLine=string:' + (this.model.get('prodLine') || '')
+          })
+        });
+
+        viewport.showDialog(snListView, t('production', 'taktTime:list:title'));
+      },
       'submit': function()
       {
         var $message = this.$id('message')
@@ -109,16 +125,6 @@ define([
       }
     },
 
-    initialize: function()
-    {
-
-    },
-
-    destroy: function()
-    {
-
-    },
-
     serialize: function()
     {
       return {
@@ -127,10 +133,14 @@ define([
       };
     },
 
-    onDialogShown: function()
+    onDialogShown: function(viewport)
     {
+      this.closeDialog = viewport.closeDialog.bind(viewport);
+
       this.$id('orderNo').focus();
-    }
+    },
+
+    closeDialog: function() {}
 
   });
 });

@@ -9,7 +9,8 @@ define([
   '../prodShifts/ProdShift',
   './pages/ProductionPage',
   'i18n!app/nls/production',
-  'i18n!app/nls/isa'
+  'i18n!app/nls/isa',
+  'i18n!app/nls/prodSerialNumbers'
 ], function(
   broker,
   router,

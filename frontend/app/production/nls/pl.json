@@ -233,11 +233,14 @@
   "taktTime:check:orderNo": "Nr zlecenia",
   "taktTime:check:serialNo": "Nr sztuki",
   "taktTime:check:submit": "Sprawdź nr seryjny",
+  "taktTime:check:list": "Pokaż listę nr seryjnych",
   "taktTime:check:help": "Podaj nr zlecenia oraz nr sztuki składające się na nr seryjny, który chcesz sprawdzić. Nr seryjny do sprawdzenia możesz także zeskanować.",
   "taktTime:check:checking": "<i class='fa fa-spinner fa-spin'></i> Sprawdzanie nr seryjnego...",
   "taktTime:check:local": "Dany nr seryjny został zeskanowany na tej linii produkcyjnej.",
   "taktTime:check:remote": "Dany nr seryjny został już zeskanowany na linii produkcyjnej: {prodLine}",
   "taktTime:check:notFound": "Dany nr seryjny nie był jeszcze zeskanowany.",
+
+  "taktTime:list:title": "Lista zeskanowanych nr seryjnych",
 
   "settings:tab:operator": "Formatka operatora",
   "settings:tab:downtimes": "Przestoje",

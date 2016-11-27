@@ -235,11 +235,14 @@
     "taktTime:check:orderNo": "Order no",
     "taktTime:check:serialNo": "Item no",
     "taktTime:check:submit": "Check serial number",
+    "taktTime:check:list": "Show serial number list",
     "taktTime:check:help": "Specify an order no and an item no of the serial number you would like to check. The serial number to check may also be scanned.",
     "taktTime:check:checking": "<i class='fa fa-spinner fa-spin'></i> Checking the serial number...",
     "taktTime:check:local": "The specified serial number was already scanned on this production line.",
     "taktTime:check:remote": "The specified serial number was already scanned on line: {prodLine}",
     "taktTime:check:notFound": "The specified serial number was not scanned yet.",
+
+    "taktTime:list:title": "List of scanned serial numbers",
 
     "settings:tab:operator": "Operator",
     "settings:tab:downtimes": "Downtimes",

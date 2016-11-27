@@ -52,3 +52,9 @@
 .production-snChecker > .message {
   margin-top: 15px;
 }
+.production-snList-modal .modal-header {
+  border-bottom: none;
+}
+.production-snList-modal .pagination-container {
+  margin-bottom: 10px;
+}

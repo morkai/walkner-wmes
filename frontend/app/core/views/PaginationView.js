@@ -31,7 +31,11 @@ define([
     /**
      * @type {boolean}
      */
-    replaceUrl: false
+    replaceUrl: false,
+    /**
+     * @type {boolean}
+     */
+    navigate: true
   };
 
   var PaginationView = View.extend({
@@ -87,7 +91,7 @@ define([
   {
     this.model.set({page: newPage});
 
-    if (href)
+    if (href && this.options.navigate)
     {
       this.broker.publish('router.navigate', {
         url: href,
