@@ -210,16 +210,10 @@ define([
       var lastTaktTime = Math.round((pso.get('lastTaktTime') || 0) / 1000);
       var sapTaktTime = pso.getTaktTime();
       var text = '';
-      var title = '';
 
       if (enabled && showLast && lastTaktTime)
       {
         text = lastTaktTime;
-
-        if (lastTaktTime !== sapTaktTime)
-        {
-          title = sapTaktTime;
-        }
 
         $lastTaktTime.parent().removeClass('is-tt-sap').addClass('is-tt-last');
       }
@@ -237,7 +231,6 @@ define([
 
       $lastTaktTime
         .text(text)
-        .attr('title', title)
         .parent()
         .toggleClass('hidden', !showLast);
 
