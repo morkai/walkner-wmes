@@ -176,6 +176,8 @@ define([
     {
       productionSettings.acquire();
       delayReasonsStorage.acquire();
+
+      this.$id('serialNumbers').toggleClass('hidden', !user.isAllowedTo('PROD_DATA:VIEW'));
     },
 
     onSync: function()
