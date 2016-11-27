@@ -15,6 +15,7 @@
   <tr>
     <th><%- t('factoryLayout', 'popover:quantityDone') %>
     <td><%- order.quantityDone %>
+  <% if (user.isAllowedTo('PROD_DATA:VIEW')) { %>
   <tr>
     <th><%- t('factoryLayout', 'popover:taktTime') %>
     <td><%- order.taktTime %>
@@ -24,6 +25,7 @@
   <tr>
     <th><%- t('factoryLayout', 'popover:avgCycleTime') %>
     <td><%- order.avgCycleTime || '?' %>
+  <% } %>
   <% if (downtime) { %>
   <tr>
     <th><%- t('factoryLayout', 'popover:downtime') %>
