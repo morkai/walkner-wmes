@@ -5,7 +5,6 @@
 @import url("../app/core/assets/main.css");
 @import url("../app/production/assets/main.css");
 @import url("../app/updater/assets/main.css");
-@import url("./new-colors.css");
 
 #app-loading {
   position: absolute;

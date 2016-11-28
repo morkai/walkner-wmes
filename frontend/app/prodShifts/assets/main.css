@@ -37,10 +37,10 @@
   shape-rendering: crispEdges;
 }
 .prodShifts-timeline .timeline-item-idle {
-  fill: #F0AD4E;
+  fill: #555;
 }
 .prodShifts-timeline .timeline-item-idle:hover {
-  fill: #ED9C28;
+  fill: #333;
 }
 .prodShifts-timeline .timeline-item-working {
   fill: #5CB85C;
@@ -82,7 +82,7 @@
   padding-left: 10px;
 }
 .prodShifts-timeline .popover-idle > .popover-title {
-  background-color: #F0AD4E;
+  background-color: #555;
 }
 .prodShifts-timeline .popover-working > .popover-title {
   background-color: #5CB85C;

@@ -115,22 +115,28 @@
   opacity: 1;
 }
 .factoryLayout-prodLineList > .is-idle {
-  background: #fcf8e3;
+  background: #ddd;
 }
 .factoryLayout-prodLineList > .is-idle:hover {
-  background: #faf2cc;
+  background: #ccc;
 }
 .factoryLayout-prodLineList > .is-working {
-  background: #dff0d8;
+  background: #a9ffa9;
 }
 .factoryLayout-prodLineList > .is-working:hover {
-  background: #d0e9c6;
+  background: #8feb8f;
+}
+.factoryLayout-prodLineList > .is-working.is-tt-nok {
+  background: #fffa9b;
+}
+.factoryLayout-prodLineList > .is-working.is-tt-nok:hover {
+  background: #ffe081;
 }
 .factoryLayout-prodLineList > .is-downtime {
-  background: #f2dede;
+  background: #ffa09c;
 }
 .factoryLayout-prodLineList > .is-downtime:hover {
-  background: #ebcccc;
+  background: #ff8682;
 }
 .factoryLayout-prodLineList > .is-extended {
   -webkit-animation: factoryLayout-extendedDowntime 2s infinite;
@@ -163,7 +169,7 @@
   text-align: left;
 }
 .factoryLayout-displayOptions-idle > .fa {
-  color: #f0ad4e;
+  color: #555;
 }
 .factoryLayout-displayOptions-working > .fa {
   color: #5cb85c;

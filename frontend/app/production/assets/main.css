@@ -53,6 +53,16 @@
 .production-modal .form-group:first-child {
   margin-top: 15px;
 }
+.production .btn-warning,
+.production-modal .btn-warning {
+  background-color: #555;
+  border-color: #000;
+}
+.production .btn-warning:hover,
+.production-modal .btn-warning:hover {
+  background-color: #333;
+  border-color: #000;
+}
 .production-pageHeader,
 .production-sectionHeader,
 .production-subsectionHeader {
@@ -72,9 +82,14 @@
   border-color: #4cae4c;
   color: #fff;
 }
-.production.is-idle .production-pageHeader {
+.is-tt-nok .production.is-working .production-pageHeader {
   background: linear-gradient(to right, #fff, #f0ad4e, #fff);
   border-color: #eea236;
+  color: #fff;
+}
+.production.is-idle .production-pageHeader {
+  background: linear-gradient(to right, #fff, #666, #fff);
+  border-color: #000;
   color: #fff;
 }
 .production.is-downtime .production-pageHeader {
