@@ -4,14 +4,15 @@
 
 module.exports = function limitOrgUnit(req, res, next)
 {
-  var user = req.session.user || {};
-  var selectors = req.rql.selector.args;
-  var hasProdLineTerm = selectors.some(function(term)
+  const user = req.session.user || {};
+  const selectors = req.rql.selector.args;
+  const hasSpecificTerm = selectors.some(function(term)
   {
-    return term.name === 'eq' && term.args[0] === 'prodLine';
+    return term.name === 'eq'
+      && (term.args[0] === 'prodLine' || term.args[0] === 'prodShiftOrder' || term.args[0] === 'prodShift');
   });
 
-  if (hasProdLineTerm || user.super || !user.orgUnitId)
+  if (hasSpecificTerm || user.super || !user.orgUnitId)
   {
     return next();
   }
