@@ -31,17 +31,14 @@ module.exports = function setupProdSerialNumberModel(app, mongoose)
     },
     taktTime: {
       type: Number,
-      required: true,
-      min: 0
+      required: true
     },
     sapTaktTime: {
       type: Number,
-      required: true,
-      min: 0
+      required: true
     },
     iptTaktTime: {
       type: Number,
-      min: 0,
       default: 0
     },
     iptAt: {
