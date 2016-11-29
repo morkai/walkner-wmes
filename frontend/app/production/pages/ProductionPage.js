@@ -961,8 +961,7 @@ define([
           top: ($actions.position().top + parseInt($actions.css('marginTop'), 10)) + 'px'
         })
         .removeClass('hidden is-success is-error is-warning')
-        .addClass('is-' + severity)
-        .fadeIn('fast');
+        .addClass('is-' + severity);
 
       if (this.timers.hideSnMessage)
       {
@@ -976,7 +975,7 @@ define([
     {
       this.timers.hideSnMessage = null;
 
-      this.$id('snMessage').fadeOut('fast');
+      this.$id('snMessage').addClass('hidden');
     },
 
     startActionTimer: function(action, e)
