@@ -58,19 +58,19 @@ define([
     {
       orgUnits.unshift(model);
 
-      model = mrpControllers.get((model.get('mrpController') || [])[0]);
+      model = (model.get('mrpController') || []).map(function(id) { return mrpControllers.get(id); });
 
-      if (!model)
+      if (!model.length)
       {
         return null;
       }
     }
 
-    if (model.constructor === mrpControllers.model)
+    if (model.constructor === mrpControllers.model || (model[0] && model[0].constructor === mrpControllers.model))
     {
       orgUnits.unshift(model);
 
-      model = subdivisions.get(model.get('subdivision'));
+      model = subdivisions.get(model[0].get('subdivision'));
 
       if (!model)
       {
@@ -108,10 +108,20 @@ define([
     return orgUnits
       .map(function(model)
       {
-        var label = _.escape(model.getLabel());
+        if (Array.isArray(model))
+        {
+          return model.map(function(m) { return renderOrgUnit(m, link); }).join('; ');
+        }
 
-        return link ? ('<a href="' + model.genClientUrl() + '">' + label + '</a>') : label;
+        return renderOrgUnit(model, link);
       })
       .join(' \\ ');
   };
+
+  function renderOrgUnit(model, link)
+  {
+    var label = _.escape(model.getLabel());
+
+    return link ? ('<a href="' + model.genClientUrl() + '">' + label + '</a>') : label;
+  }
 });
