@@ -110,7 +110,7 @@ define([
 
     updateOrgUnit: function()
     {
-      this.$property('orgUnit').text(
+      this.$property('orgUnit').html(
         renderOrgUnitPath(this.model.prodLine.getSubdivision(), false, false) || '?'
       );
     },
