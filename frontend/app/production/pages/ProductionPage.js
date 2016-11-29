@@ -194,6 +194,7 @@ define([
     destroy: function()
     {
       $(document.body).removeClass('is-production is-embedded');
+      $('.modal').addClass('fade');
 
       this.layout = null;
       this.shiftEditedSub = null;
@@ -403,6 +404,7 @@ define([
       $(document.body)
         .addClass('is-production')
         .toggleClass('is-embedded', window.parent !== window);
+      $('.modal.fade').removeClass('fade');
 
       this.toggleTaktTimeView();
 
