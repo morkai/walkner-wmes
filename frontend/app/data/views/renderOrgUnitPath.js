@@ -70,7 +70,7 @@ define([
     {
       orgUnits.unshift(model);
 
-      model = subdivisions.get(model[0].get('subdivision'));
+      model = subdivisions.get((model[0] || model).get('subdivision'));
 
       if (!model)
       {
@@ -121,7 +121,15 @@ define([
   function renderOrgUnit(model, link)
   {
     var label = _.escape(model.getLabel());
+    var style = model.get('deactivatedAt') ? 'text-decoration: line-through!important': '';
 
-    return link ? ('<a href="' + model.genClientUrl() + '">' + label + '</a>') : label;
+    if (!link)
+    {
+      return '<span style="' + style + '">' + label + '</span>';
+    }
+
+    var href = model.genClientUrl();
+
+    return '<a href="' + href + '" style="' + style + '">' + label + '</a>';
   }
 });
