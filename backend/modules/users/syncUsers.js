@@ -137,7 +137,7 @@ module.exports = function syncUsers(app, usersModule, done)
         }
 
         User.findOne({kdId: kdUser.kdId}, this.parallel());
-        User.findOne({login: kdUser.personellId}, this.parallel());
+        User.findOne({login: String(kdUser.personellId)}, this.parallel());
       },
       function prepareUserModelStep(err, kdIdUser, loginUser)
       {
@@ -205,6 +205,13 @@ module.exports = function syncUsers(app, usersModule, done)
 
   function saveUserModel(userModel, isNew, isRetry, stats, done)
   {
+    const modified = userModel.modifiedPaths();
+
+    if (!modified.length || (modified.length === 1 && modified[0] === 'kdId'))
+    {
+      return done();
+    }
+
     userModel.save(function(err)
     {
       if (err)
@@ -228,6 +235,8 @@ module.exports = function syncUsers(app, usersModule, done)
       else if (isNew)
       {
         ++stats.created;
+
+        usersModule.error(`[sync] Created: ${userModel.login}: ${userModel.firstName} ${userModel.lastName}`);
       }
       else
       {
