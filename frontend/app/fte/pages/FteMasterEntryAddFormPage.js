@@ -33,7 +33,7 @@ define([
         model: new FteMasterEntry(),
         divisionFilter: function(division)
         {
-          return division && division.get('type') === 'prod';
+          return division && division.get('type') === 'prod' && division.isActive();
         }
       });
 

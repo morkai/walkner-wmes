@@ -18,6 +18,10 @@ module.exports = function setupDivisionModel(app, mongoose)
     description: {
       type: String,
       trim: true
+    },
+    deactivatedAt: {
+      type: Date,
+      default: null
     }
   }, {
     id: false

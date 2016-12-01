@@ -826,13 +826,6 @@ define([
 
     toggleDeactivatedOrgUnits: function()
     {
-      var orgUnitType = this.query.get('orgUnitType');
-
-      if (orgUnitType === null || orgUnitType === 'division')
-      {
-        return;
-      }
-
       var from = this.query.get('from');
 
       if (!from)

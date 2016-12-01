@@ -20,6 +20,7 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:description": "Description",
     "PROPERTY:type": "Type",
+    "PROPERTY:deactivatedAt": "Deactivated at",
 
     "TYPE:prod": "Production",
     "TYPE:dist": "Distribution",

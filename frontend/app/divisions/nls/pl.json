@@ -19,6 +19,7 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:description": "Opis",
   "PROPERTY:type": "Typ",
+  "PROPERTY:deactivatedAt": "Data dezaktywacji",
 
   "TYPE:prod": "Produkcja",
   "TYPE:dist": "Dystrybucja",

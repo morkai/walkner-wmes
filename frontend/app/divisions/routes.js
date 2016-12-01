@@ -32,16 +32,9 @@ define([
         columns: [
           {id: '_id', className: 'is-min'},
           {id: 'type', className: 'is-min'},
-          'description'
-        ],
-        serializeRow: function(model)
-        {
-          var row = model.toJSON();
-
-          row.type = t('divisions', 'TYPE:' + row.type);
-
-          return row;
-        }
+          'description',
+          {id: 'deactivatedAt', className: 'is-min'}
+        ]
       });
     });
   });
@@ -54,7 +47,13 @@ define([
       {
         return new DetailsPage({
           model: new Division({_id: req.params.id}),
-          detailsTemplate: detailsTemplate
+          detailsTemplate: detailsTemplate,
+          actions: function()
+          {
+            return this.model.get('deactivatedAt') && !user.data.super
+              ? []
+              : DetailsPage.prototype.actions.call(this);
+          }
         });
       }
     );

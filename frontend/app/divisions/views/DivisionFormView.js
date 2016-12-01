@@ -1,9 +1,11 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/time',
   'app/core/views/FormView',
   'app/divisions/templates/form'
 ], function(
+  time,
   FormView,
   formTemplate
 ) {
@@ -21,6 +23,27 @@ define([
       {
         this.$id('_id').attr('disabled', true);
       }
+    },
+
+    serializeToForm: function()
+    {
+      var data = FormView.prototype.serializeToForm.call(this);
+
+      if (data.deactivatedAt)
+      {
+        data.deactivatedAt = time.format(data.deactivatedAt, 'YYYY-MM-DD');
+      }
+
+      return data;
+    },
+
+    serializeForm: function(data)
+    {
+      var deactivatedAt = time.getMoment(data.deactivatedAt || null);
+
+      data.deactivatedAt = deactivatedAt.isValid() ? deactivatedAt.toISOString() : null;
+
+      return data;
     }
 
   });
