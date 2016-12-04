@@ -21,6 +21,7 @@ module.exports = function setUpD8Routes(app, module)
   const canViewDictionaries = userModule.auth('D8:DICTIONARIES:VIEW');
   const canManageDictionaries = userModule.auth('D8:DICTIONARIES:VIEW');
   const canView = userModule.auth('D8:VIEW');
+  const canDownload = userModule.auth('LOCAL', 'D8:VIEW');
   const canManage = userModule.auth('D8:MANAGE');
 
   express.get('/d8/dictionaries', canView, dictionariesRoute);
@@ -38,7 +39,7 @@ module.exports = function setUpD8Routes(app, module)
   express.put('/d8/entries/:id', canView, editRoute);
   express.delete('/d8/entries/:id', canManage, express.crud.deleteRoute.bind(null, app, D8Entry));
 
-  express.get('/d8/entries/:entry/attachments/:attachment', canView, sendAttachmentRoute);
+  express.get('/d8/entries/:entry/attachments/:attachment', canDownload, sendAttachmentRoute);
 
   express.get('/r/d8/:filter', redirectRoute);
 
