@@ -1,3 +1,3 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../core/Model"],function(i){"use strict";return i.extend({urlRoot:"/divisions",clientUrlRoot:"#divisions",topicPrefix:"divisions",privilegePrefix:"DICTIONARIES",nlsDomain:"divisions",labelAttribute:"_id",defaults:{type:"prod",description:null}})});
+define(["../i18n","../time","../core/Model"],function(i,t,e){"use strict";return e.extend({urlRoot:"/divisions",clientUrlRoot:"#divisions",topicPrefix:"divisions",privilegePrefix:"DICTIONARIES",nlsDomain:"divisions",labelAttribute:"_id",defaults:{type:"prod"},serialize:function(){var e=this.toJSON();return e.type=i("divisions","TYPE:"+e.type),e.deactivatedAt=e.deactivatedAt?t.format(e.deactivatedAt,"LL"):"",e},isActive:function(i){var t=this.get("deactivatedAt");return!t||(i||Date.now())<Date.parse(t)}})});

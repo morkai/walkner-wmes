@@ -447,10 +447,6 @@ assets/../app/updater/assets/main.css
 assets/../app/kaizenOrders/assets/main.css
 assets/kaizen-main.css
 
-assets/new-colors.css
-----------------
-assets/new-colors.css
-
 assets/pos-main.css
 ----------------
 assets/../vendor/bootstrap/css/bootstrap.css
@@ -542,7 +538,6 @@ assets/../app/isa/assets/main.css
 assets/../app/qiResults/assets/main.css
 assets/../app/pscs/assets/main.css
 assets/../app/d8Entries/assets/main.css
-assets/./new-colors.css
 assets/wmes-main.css
 
 assets/wmes-operator.css
@@ -554,7 +549,6 @@ assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/production/assets/main.css
 assets/../app/updater/assets/main.css
-assets/./new-colors.css
 assets/wmes-operator.css
 
 vendor/bootstrap/css/bootstrap-theme.css
