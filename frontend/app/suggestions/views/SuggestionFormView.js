@@ -466,7 +466,7 @@ define([
       var $group = $input.closest('.form-group');
       var $label = $group.find('.control-label');
 
-      $input.prop('required', isConstruction).select2('enable', isConstruction);
+      $input.prop('required', isConstruction);
 
       if (!isConstruction)
       {
