@@ -25,6 +25,7 @@ define([
         from: 0,
         to: 0,
         section: [],
+        productFamily: [],
         confirmer: [],
         interval: 'week'
       };
@@ -39,10 +40,11 @@ define([
 
       options.data = _.extend(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'section', 'confirmer'])
+        _.pick(this.attributes, ['from', 'to', 'section', 'productFamily', 'confirmer'])
       );
 
       options.data.section = options.data.section.join(',');
+      options.data.productFamily = options.data.productFamily.join(',');
       options.data.confirmer = options.data.confirmer.join(',');
 
       return Model.prototype.fetch.call(this, options);
@@ -54,6 +56,7 @@ define([
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&section=' + this.get('section')
+        + '&productFamily=' + this.get('productFamily')
         + '&confirmer=' + this.get('confirmer');
     },
 
@@ -145,6 +148,7 @@ define([
         from: +query.from || undefined,
         to: +query.to || undefined,
         section: _.isEmpty(query.section) ? [] : query.section.split(','),
+        productFamily: _.isEmpty(query.productFamily) ? [] : query.productFamily.split(','),
         confirmer: _.isEmpty(query.confirmer) ? [] : query.confirmer.split(',')
       });
     }

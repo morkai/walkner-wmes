@@ -68,6 +68,7 @@ define([
     defineViews: function()
     {
       this.filterView = new SuggestionSummaryReportFilterView({
+        productFamily: true,
         model: this.model
       });
       this.averageDurationView = new SuggestionAverageDurationChartView({
@@ -126,11 +127,23 @@ define([
     updateSubtitles: function()
     {
       var total = this.model.get('total');
+      var productFamilies = (this.model.get('productFamily') || []).map(function(id)
+      {
+        return kaizenDictionaries.productFamilies.get(id).getLabel();
+      });
+      var avgDurKey = 'report:subtitle:summary:averageDuration'
+        + (document.body.classList.contains('is-print') ? ':short' : '');
 
-      this.$id('averageDuration').html(t('suggestions', 'report:subtitle:summary:averageDuration', {
+      this.$id('averageDuration').html(t('suggestions', avgDurKey, {
         averageDuration: Highcharts.numberFormat(total.averageDuration, 2)
       }));
       this.$id('count').html(t('suggestions', 'report:subtitle:summary:count', total.count));
+
+      this.$id('productFamily').html(
+        !productFamilies.length
+          ? ''
+          : t('suggestions', 'report:subtitle:summary:productFamily', {productFamily: productFamilies.join(', ')})
+      );
     },
 
     togglePrintMode: function(e)
@@ -151,6 +164,8 @@ define([
       this.perCategoryView.limit = enabled ? 10 : -1;
       this.perUserView.updateTable();
       this.perCategoryView.updateChart();
+
+      this.updateSubtitles();
 
       if (enabled)
       {

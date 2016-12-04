@@ -44,16 +44,34 @@ define([
       }
     },
 
+    serialize: function()
+    {
+      return {
+        idPrefix: this.idPrefix,
+        showProductFamily: !!this.options.productFamily
+      };
+    },
+
     afterRender: function()
     {
       js2form(this.el, this.serializeFormData());
 
       this.$id('section').select2({
-        width: '400px',
+        width: '300px',
         allowClear: true,
         multiple: true,
         data: kaizenDictionaries.sections.map(idAndLabel)
       });
+
+      if (this.options.productFamily)
+      {
+        this.$id('productFamily').select2({
+          width: '300px',
+          allowClear: true,
+          multiple: true,
+          data: kaizenDictionaries.productFamilies.map(idAndLabel)
+        });
+      }
 
       setUpUserSelect2(this.$id('confirmer'), {
         width: '400px',
@@ -72,6 +90,7 @@ define([
         from: from ? time.format(from, 'YYYY-MM-DD') : '',
         to: to ? time.format(to, 'YYYY-MM-DD') : '',
         section: model.get('section').join(','),
+        productFamily: (model.get('productFamily') || []).join(','),
         confirmer: model.get('confirmer').join(',')
       };
     },
@@ -81,8 +100,9 @@ define([
       var query = {
         from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
         to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
-        section: this.$id('section').val(),
-        confirmer: this.$id('confirmer').val()
+        section: [],
+        productFamily: [],
+        confirmer: []
       };
 
       if (!query.from || query.from < 0)
@@ -104,8 +124,15 @@ define([
         query.to = to.valueOf();
       }
 
-      query.section = query.section === '' ? [] : query.section.split(',');
-      query.confirmer = query.confirmer === '' ? [] : query.confirmer.split(',');
+      ['section', 'productFamily', 'confirmer'].forEach(function(p)
+      {
+        var v = this.$id(p).val();
+
+        if (v)
+        {
+          query[p] = v.split(',');
+        }
+      }, this);
 
       this.model.set(query);
       this.model.trigger('filtered');

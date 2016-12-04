@@ -6,14 +6,16 @@ define([
   'app/time',
   'app/highcharts',
   'app/core/View',
-  'app/reports/util/formatTooltipHeader'
+  'app/reports/util/formatTooltipHeader',
+  'app/kaizenOrders/dictionaries'
 ], function(
   _,
   t,
   time,
   Highcharts,
   View,
-  formatTooltipHeader
+  formatTooltipHeader,
+  kaizenDictionaries
 ) {
   'use strict';
 
@@ -82,6 +84,9 @@ define([
           chartOptions: {
             title: {
               text: t.bound(nlsDomain, 'report:title:summary:averageDuration')
+            },
+            subtitle: {
+              text: this.getSubtitle()
             }
           }
         },
@@ -141,6 +146,40 @@ define([
     {
       this.chart.destroy();
       this.createChart();
+    },
+
+    getSubtitle: function()
+    {
+      var total = this.model.get('total');
+      var sections = (this.model.get('section') || []).map(function(id)
+      {
+        return kaizenDictionaries.sections.get(id).getLabel();
+      });
+      var productFamilies = (this.model.get('productFamily') || []).map(function(id)
+      {
+        return kaizenDictionaries.productFamilies.get(id).getLabel();
+      });
+      var props = [
+        t('suggestions', 'report:subtitle:summary:averageDuration:short', {
+          averageDuration: Highcharts.numberFormat(total.averageDuration, 2)
+        })
+      ];
+
+      if (sections.length)
+      {
+        props.push(t('suggestions', 'report:subtitle:summary:section', {
+          section: sections.join(', ')
+        }));
+      }
+
+      if (productFamilies.length)
+      {
+        props.push(t('suggestions', 'report:subtitle:summary:productFamily', {
+          productFamily: productFamilies.join(', ')
+        }));
+      }
+
+      return props.join(' | ');
     },
 
     onModelLoading: function()
