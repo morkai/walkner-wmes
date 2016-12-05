@@ -680,7 +680,7 @@ module.exports = function setUpAlertsServer(app, module)
       _id: prodDowntime._id,
       rid: prodDowntime.rid,
       reason: prodDowntime.reason,
-      aor: prodDowntime.aor.toString(),
+      aor: (prodDowntime.aor || '?').toString(),
       division: prodDowntime.division,
       subdivision: prodDowntime.subdivision.toString(),
       mrpControllers: prodDowntime.mrpControllers,
