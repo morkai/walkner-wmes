@@ -75,6 +75,15 @@ module.exports = function(mongoose, options, done)
         conditions.section = {$in: options.section};
       }
 
+      if (options.productFamily.length === 1)
+      {
+        conditions.productFamily = options.productFamily[0];
+      }
+      else if (options.productFamily.length > 1)
+      {
+        conditions.productFamily = {$in: options.productFamily};
+      }
+
       if (options.confirmer.length === 1)
       {
         conditions['confirmer.id'] = options.confirmer[0];

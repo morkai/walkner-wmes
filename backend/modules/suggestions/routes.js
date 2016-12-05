@@ -33,7 +33,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
   express.get('/suggestions/:id', canView, express.crud.readRoute.bind(null, app, Suggestion));
   express.put('/suggestions/:id', canView, editSuggestionRoute);
   express.delete('/suggestions/:id', canManage, express.crud.deleteRoute.bind(null, app, Suggestion));
-  
+
   express.get('/suggestions;export', canView, fetchDictionaries, express.crud.exportRoute.bind(null, {
     filename: 'SUGGESTIONS',
     serializeRow: exportSuggestion,
@@ -557,6 +557,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
       section: _.isEmpty(query.section) ? [] : query.section.split(','),
+      productFamily: _.isEmpty(query.productFamily) ? [] : query.productFamily.split(','),
       confirmer: _.isEmpty(query.confirmer) ? [] : query.confirmer.split(',')
     };
 
