@@ -2,6 +2,7 @@
 
 'use strict';
 
+var step = require('h5.step');
 var findOrdersRoute = require('./findOrdersRoute');
 var getProductionStateRoute = require('./getProductionStateRoute');
 var getProductionHistoryRoute = require('./getProductionHistoryRoute');
@@ -61,4 +62,59 @@ module.exports = function setUpProductionRoutes(app, productionModule)
   express.get('/production/getRecentPersonnel', getRecentPersonnelRoute.bind(null, app, productionModule));
   express.post('/production/checkSerialNumber', checkSerialNumberRoute.bind(null, app, productionModule));
   express.post('/prodLogEntries', syncRoute.bind(null, app, productionModule));
+
+  express.get('/production/reloadLine/:line', userModule.auth('SUPER'), function(req, res, next)
+  {
+    const lineState = productionModule.getProdLineState(req.params.line);
+
+    if (!lineState)
+    {
+      return next(app.createError('LINE_NOT_FOUND', 400));
+    }
+
+    step(
+      function()
+      {
+        const ProdShift = app[productionModule.config.mongooseId].model('ProdShift');
+        const date = app[productionModule.config.fteId].currentShift.date;
+        const prodLine = lineState.prodLine._id;
+
+        ProdShift
+          .findOne({prodLine, date}, {_id: 1})
+          .lean()
+          .exec(this.parallel());
+
+        ProdShift
+          .findOne({_id: req.query.prodShift}, {_id: 1})
+          .lean()
+          .exec(this.parallel());
+      },
+      function(err, currentProdShift, newProdShift)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (!currentProdShift)
+        {
+          return next(app.createError('SHIFT_NOT_FOUND', 400));
+        }
+
+        const changes = {
+          prodShift: {_id: newProdShift ? newProdShift._id : currentProdShift._id},
+          prodShiftOrder: null,
+          prodDowntime: null
+        };
+        const options = {
+          reloadOrders: true,
+          reloadDowntimes: true
+        };
+
+        lineState.update(changes, options);
+
+        res.json(changes.prodShift._id);
+      }
+    );
+  });
 };
