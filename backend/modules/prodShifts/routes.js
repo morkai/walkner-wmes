@@ -75,7 +75,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
       '"operator': doc.operator ? doc.operator.label : '',
       '"division': doc.division,
       '"subdivision': subdivision ? subdivision.name : doc.subdivision,
-      '"mrp': doc.mrpControllers.join(','),
+      '"mrp': Array.isArray(doc.mrpControllers) ? doc.mrpControllers.join(',') : '',
       '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
       '"workCenter': doc.workCenter,
       '"prodLine': doc.prodLine,
