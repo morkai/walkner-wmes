@@ -1260,10 +1260,17 @@ define([
         return;
       }
 
+      var aor = this.getDefaultAor();
+
+      if (!aor)
+      {
+        return;
+      }
+
       viewport.closeAllDialogs();
 
       this.startDowntime({
-        aor: this.getDefaultAor(),
+        aor: aor,
         reason: reason,
         reasonComment: '',
         auto: {
