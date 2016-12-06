@@ -242,7 +242,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
 
       orderData.nc12 = data.nc12;
       orderData.name = name.trim();
-      orderData.family = /^[A-Z0-9]{6}/.test(data.name) ? data.name.substring(0, 6) : '';
+      orderData.family = /^[A-Z0-9]{6}/.test(orderData.name) ? orderData.name.substring(0, 6) : '';
       orderData.mrp = data.mrp;
       orderData.qty = data.qty || prodShiftOrder.quantityDone || 0;
     }
