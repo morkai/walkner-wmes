@@ -38,10 +38,22 @@ define([
 
     serialize: function()
     {
+      var locale = window.LOCALE === 'pl' ? 'pl' : 'en';
+      var src = 'https://onedrive.live.com/embed?';
+
+      if (locale === 'pl')
+      {
+        src += 'cid=86FB4363CC9A31FD&resid=86FB4363CC9A31FD%21575&authkey=AEtS4OkzJLHoQTU&em=2';
+      }
+      else
+      {
+        src += 'cid=86FB4363CC9A31FD&resid=86FB4363CC9A31FD%21574&authkey=ANBJtkrXd2cWQCw&em=2';
+      }
+
       return {
         idPrefix: this.idPrefix,
         height: this.getHeight(),
-        locale: window.LOCALE === 'pl' ? 'pl' : 'en'
+        src: src
       };
     },
 
@@ -57,7 +69,7 @@ define([
 
     onResize: function()
     {
-      this.$('object')[0].height = this.getHeight();
+      this.$('iframe')[0].height = this.getHeight();
     }
 
   });
