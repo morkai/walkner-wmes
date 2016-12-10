@@ -358,6 +358,7 @@ define([
           starting_time: startingTime,
           ending_time: endingTime || -1,
           ended: !isNaN(endingTime),
+          taktTimeOk: prodShiftOrder.isTaktTimeOk(),
           data: prodShiftOrder.toJSON()
         });
       });
@@ -498,7 +499,14 @@ define([
         .colors(false)
         .itemClassName(function(item)
         {
-          return 'timeline-item timeline-item-' + item.type;
+          var className = 'timeline-item timeline-item-' + item.type;
+
+          if (item.type === 'working' && !item.taktTimeOk)
+          {
+            className += ' is-tt-nok';
+          }
+
+          return className;
         })
         .afterRender(function(item)
         {

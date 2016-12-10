@@ -134,15 +134,8 @@ define([
       this.prodShiftOrders = bindLoadingMessage(new ProdShiftOrderCollection(null, {
         rqlQuery: {
           fields: {
-            startedAt: 1,
-            finishedAt: 1,
-            quantityDone: 1,
-            workerCount: 1,
-            orderId: 1,
-            operationNo: 1,
-            workDuration: 1,
-            totalQuantity: 1,
-            laborTime: 1
+            orderData: 0,
+            spigot: 0
           },
           sort: {startedAt: 1},
           limit: 9999,
