@@ -23,16 +23,10 @@ define([
 
       return rql.Query.fromObject({
         fields: {
-          nc12: 1,
-          name: 1,
-          mrp: 1,
-          qty: 1,
-          unit: 1,
-          sapCreatedAt: 1,
-          startDate: 1,
-          finishDate: 1,
-          statuses: 1,
-          delayReason: 1
+          operations: 0,
+          bom: 0,
+          documents: 0,
+          changes: 0
         },
         limit: 20,
         sort: {

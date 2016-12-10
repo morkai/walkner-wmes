@@ -87,8 +87,9 @@ define([
         var row = model.toJSON();
         var delayReason = delayReasons.get(row.delayReason);
 
+        row.name = row.description || row.name;
         row.statusLabels = orderStatuses.findAndFill(row.statuses).map(renderOrderStatusLabel).join('');
-        row.delayReason = delayReason ? delayReason.getLabel() : '-';
+        row.delayReason = delayReason ? delayReason.getLabel() : '';
 
         return row;
       });
