@@ -25,7 +25,7 @@ define([
     {
       var o = this.toJSON();
 
-      o.className = o.taktTime > o.sapTaktTime * 1000 ? 'danger' : 'success';
+      o.className = o.taktTime > o.sapTaktTime * 1000 ? 'warning' : 'success';
       o.orderNo = '<a href="#prodShiftOrders/' + o.prodShiftOrder + '">' + o.orderNo + '</a>';
       o.scannedAt = time.format(o.scannedAt, 'L, LTS');
       o.iptAt = o.iptAt  ? time.format(o.iptAt, 'L, LTS') : null;
