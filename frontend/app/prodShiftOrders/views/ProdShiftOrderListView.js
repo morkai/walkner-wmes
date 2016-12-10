@@ -17,7 +17,7 @@ define([
 
   return ListView.extend({
 
-    className: 'is-clickable',
+    className: 'is-clickable is-colored',
 
     remoteTopics: {
       'prodShiftOrders.created.*': 'refreshIfMatches',
@@ -41,7 +41,7 @@ define([
 
     serializeRow: function(model)
     {
-      return model.serialize({orgUnits: true});
+      return model.serializeRow({orgUnits: true});
     },
 
     serializeActions: function()

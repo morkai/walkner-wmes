@@ -54,6 +54,15 @@ define([
       return decorateProdShiftOrder(this, options);
     },
 
+    serializeRow: function(options)
+    {
+      var row = this.serialize(options);
+
+      row.className = row.taktTimeOk ? 'success' : 'warning';
+
+      return row;
+    },
+
     onShiftChanged: function()
     {
       this.clear();
@@ -265,6 +274,14 @@ define([
     getEfficiency: function()
     {
       return calcOrderEfficiency(this.attributes);
+    },
+
+    isTaktTimeOk: function()
+    {
+      var actualTaktTime = Math.round(this.get('avgTaktTime') / 1000) || 0;
+      var sapTaktTime = this.get('sapTaktTime') || 0;
+
+      return actualTaktTime <= sapTaktTime;
     },
 
     getSapTaktTime: function(settings)

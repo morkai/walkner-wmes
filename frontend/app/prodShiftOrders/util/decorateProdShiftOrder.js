@@ -84,6 +84,7 @@ define([
       obj.orderUrl = '#' + (obj.mechOrder ? 'mechOrders' : 'orders') + '/' + encodeURIComponent(obj.orderId);
     }
 
+    obj.taktTimeOk = prodShiftOrder.isTaktTimeOk();
     obj.taktTimeSap = prodShiftOrder.getTaktTime();
     obj.taktTime = prodShiftOrder.getActualTaktTime();
     obj.workerCountSap = prodShiftOrder.getWorkerCountSap();
