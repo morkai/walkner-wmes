@@ -99,10 +99,10 @@ define([
         return true;
       }
 
-      var lastTaktTime = currentProdShiftOrder.get('lastTaktTime') / 1000;
+      var actualTaktTime = currentProdShiftOrder.get('avgTaktTime') / 1000;
       var sapTaktTime = currentProdShiftOrder.getTaktTime(this.settings.production);
 
-      return !lastTaktTime || lastTaktTime <= sapTaktTime;
+      return !actualTaktTime || actualTaktTime <= sapTaktTime;
     },
 
     update: function(data)
