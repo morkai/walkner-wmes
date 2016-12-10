@@ -359,7 +359,8 @@ define([
           ending_time: endingTime || -1,
           ended: !isNaN(endingTime),
           taktTimeOk: prodShiftOrder.isTaktTimeOk(),
-          data: prodShiftOrder.toJSON()
+          data: prodShiftOrder.toJSON(),
+          model: prodShiftOrder
         });
       });
 
@@ -378,7 +379,8 @@ define([
           starting_time: startingTime,
           ending_time: endingTime || -1,
           ended: !isNaN(endingTime),
-          data: prodDowntime.toJSON()
+          data: prodDowntime.toJSON(),
+          model: prodDowntime
         });
       });
 
@@ -606,31 +608,37 @@ define([
         duration: duration,
         managing: managing
       };
+      var type = item.type;
+      var data = item.data;
+      var model = item.model;
 
-      if (item.type === 'idle')
+      if (type === 'idle')
       {
         return renderTimelineIdlePopover(templateData);
       }
 
-      if (item.type === 'working')
+      if (type === 'working')
       {
-        templateData.order = item.data.orderId;
-        templateData.operation = item.data.operationNo;
-        templateData.workerCount = item.data.workerCount;
-        templateData.quantityDone = item.data.quantityDone;
-        templateData.efficiency = calcOrderEfficiency(item.data, true);
+        templateData.order = data.orderId;
+        templateData.operation = data.operationNo;
+        templateData.workerCount = data.workerCount;
+        templateData.quantityDone = data.quantityDone;
+        templateData.efficiency = calcOrderEfficiency(data, true);
+        templateData.sapTaktTime = model.get('sapTaktTime');
+        templateData.lastTaktTime = model.getLastTaktTime();
+        templateData.avgTaktTime = model.getAvgTaktTime();
 
         return renderTimelineWorkingPopover(templateData);
       }
 
-      if (item.type === 'downtime')
+      if (type === 'downtime')
       {
-        var reason = downtimeReasons.get(item.data.reason);
-        var aor = aors.get(item.data.aor);
+        var reason = downtimeReasons.get(data.reason);
+        var aor = aors.get(data.aor);
 
-        templateData.reason = reason ? reason.getLabel() : item.data.reason;
-        templateData.aor = aor ? aor.getLabel() : item.data.aor;
-        templateData.hasOrder = !!item.data.prodShiftOrder;
+        templateData.reason = reason ? reason.getLabel() : data.reason;
+        templateData.aor = aor ? aor.getLabel() : data.aor;
+        templateData.hasOrder = !!data.prodShiftOrder;
 
         return renderTimelineDowntimePopover(templateData);
       }

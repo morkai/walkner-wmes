@@ -71,6 +71,8 @@
     "timeline:popover:workerCount": "Worker count",
     "timeline:popover:quantityDone": "Quantiy done",
     "timeline:popover:efficiency": "Efficiency",
+    "timeline:popover:sapTaktTime": "Takt time",
+    "timeline:popover:avgTaktTime": "Avg. cycle time",
 
     "charts:quantitiesDone:title": "Quantities done in specific hours",
     "charts:quantitiesDone:unit": " items",

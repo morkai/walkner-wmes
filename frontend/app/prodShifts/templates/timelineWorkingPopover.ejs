@@ -18,20 +18,12 @@
       <td><%- startedAt %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:finishedAt') %></th>
-      <td><%- finishedAt %></td>
-    </tr>
-    <tr>
       <th><%- t('prodShifts', 'timeline:popover:duration') %></th>
       <td><%- duration %></td>
     </tr>
     <tr>
       <th><%- t('prodShifts', 'timeline:popover:order') %></th>
-      <td><%- order %></td>
-    </tr>
-    <tr>
-      <th><%- t('prodShifts', 'timeline:popover:operation') %></th>
-      <td><%- operation %></td>
+      <td><%- order %>, <%- operation %></td>
     </tr>
     <tr>
       <th><%- t('prodShifts', 'timeline:popover:workerCount') %></th>
@@ -41,6 +33,16 @@
       <th><%- t('prodShifts', 'timeline:popover:quantityDone') %></th>
       <td><%- quantityDone %></td>
     </tr>
+    <% if (user.isAllowedTo('PROD_DATA:MANAGE')) { %>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:sapTaktTime') %></th>
+      <td><%- sapTaktTime ? time.toString(sapTaktTime) : '?' %></td>
+    </tr>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:avgTaktTime') %></th>
+      <td><%- avgTaktTime ? time.toString(avgTaktTime) : '?' %></td>
+    </tr>
+    <% } %>
     <tr>
       <th><%- t('prodShifts', 'timeline:popover:efficiency') %></th>
       <td><%- efficiency %></td>

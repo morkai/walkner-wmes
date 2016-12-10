@@ -70,6 +70,8 @@
   "timeline:popover:workerCount": "Ilość osób",
   "timeline:popover:quantityDone": "Ilość wykonana",
   "timeline:popover:efficiency": "Wydajność",
+  "timeline:popover:sapTaktTime": "Czas taktu",
+  "timeline:popover:avgTaktTime": "Śr. czas cyklu",
 
   "charts:quantitiesDone:title": "Wykonane ilości w przedziałach godzinowych",
   "charts:quantitiesDone:unit": " szt.",
