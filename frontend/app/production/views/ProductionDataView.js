@@ -225,7 +225,7 @@ define([
       }
       else
       {
-        text = sapTaktTime;
+        text = '-';
 
         $lastTaktTime.parent().addClass('is-tt-sap').removeClass('is-tt-last');
       }
