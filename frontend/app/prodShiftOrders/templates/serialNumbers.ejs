@@ -10,7 +10,7 @@
     <%- t('core', 'LIST:NO_DATA') %>
     <% } %>
     <% serialNumbers.forEach(function(sn) { %>
-    <span class="label label-<%- sn.taktTime > sn.sapTaktTime * 1000 ? 'danger' : 'success' %> prodShiftOrders-serialNumber">
+    <span class="label label-<%- sn.taktTime > sn.sapTaktTime * 1000 ? 'warning' : 'success' %> prodShiftOrders-serialNumber">
       #<%- sn.serialNo %> <%- time.format(sn.scannedAt, 'HH:mm:ss') %> /<%- Math.round(sn.taktTime / 1000) %>s
       <% if (sn.iptTaktTime) { %>
       /<%- Math.round(sn.iptTaktTime / 1000) %>s
