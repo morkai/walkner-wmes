@@ -70,7 +70,7 @@ define([
     {
       var operation = (obj.orderData.operations || {})[obj.operationNo] || {};
 
-      obj.order = obj.orderId + ': <em>' + (obj.orderData.name || '?') + '</em>';
+      obj.order = obj.orderId + ': <em>' + (obj.orderData.description || obj.orderData.name || '?') + '</em>';
       obj.operation = obj.operationNo + ': <em>' + (operation.name || '?') + '</em>';
     }
     else
