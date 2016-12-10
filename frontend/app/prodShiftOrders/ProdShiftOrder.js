@@ -276,6 +276,14 @@ define([
       return calcOrderEfficiency(this.attributes);
     },
 
+    getTaktTimeEfficiency: function()
+    {
+      var sapTaktTime = parseFloat(this.get('sapTaktTime') || this.getSapTaktTime()) || 0;
+      var actualTaktTime = parseFloat(this.getActualTaktTime()) || 0;
+
+      return sapTaktTime && actualTaktTime ? Math.round(sapTaktTime / actualTaktTime * 100) : 0;
+    },
+
     isTaktTimeOk: function()
     {
       var actualTaktTime = Math.round(this.get('avgTaktTime') / 1000) || 0;

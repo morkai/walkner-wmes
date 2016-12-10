@@ -47,7 +47,7 @@ define([
     obj.shift = t('core', 'SHIFT:' + obj.shift);
     obj.startedAt = time.format(obj.startedAt, 'HH:mm:ss');
     obj.finishedAt = time.format(obj.finishedAt, 'HH:mm:ss');
-    obj.duration = finishedAt ? time.toString((finishedAt - startedAt) / 1000) : '-';
+    obj.duration = finishedAt ? time.toString((finishedAt - startedAt) / 1000) : '';
     obj.creator = renderUserInfo({userInfo: obj.creator});
 
     if (options.orgUnits)
@@ -87,8 +87,20 @@ define([
     obj.taktTimeOk = prodShiftOrder.isTaktTimeOk();
     obj.taktTimeSap = prodShiftOrder.getTaktTime();
     obj.taktTime = prodShiftOrder.getActualTaktTime();
+    obj.taktTimeEff = prodShiftOrder.getTaktTimeEfficiency();
     obj.workerCountSap = prodShiftOrder.getWorkerCountSap();
-    obj.efficiency = Math.round(prodShiftOrder.getEfficiency() * 100) + '%';
+    obj.efficiency = '';
+
+    var eff = prodShiftOrder.getEfficiency();
+
+    if (eff)
+    {
+      obj.efficiency = Math.round(eff * 100) + '%';
+    }
+    else if (obj.taktTimeEff)
+    {
+      obj.efficiency = obj.taktTimeEff + '%';
+    }
 
     return obj;
   };
