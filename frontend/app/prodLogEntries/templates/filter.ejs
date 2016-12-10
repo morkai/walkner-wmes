@@ -24,13 +24,13 @@
       <% [
           'changeShift', 'changeMaster', 'changeLeader', 'changeOperator',
           'changeQuantitiesDone',
-          'changeOrder', 'correctOrder', 'changeQuantityDone', 'changeWorkerCount', 'finishOrder',
+          'changeOrder', 'correctOrder', 'setNextOrder', 'changeQuantityDone', 'changeWorkerCount', 'finishOrder',
           'startDowntime', 'finishDowntime', 'corroborateDowntime',
           'endWork',
           'addShift', 'addOrder', 'addDowntime',
           'editShift', 'editOrder', 'editDowntime',
           'deleteShift', 'deleteOrder', 'deleteDowntime',
-          'checkSpigot'
+          'checkSpigot', 'checkSerialNumber'
         ].forEach(function(type) { %>
       <option value="<%- type %>"><%- t('prodLogEntries', 'type:' + type) %></option>
       <% }) %>

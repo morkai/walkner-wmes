@@ -97,7 +97,8 @@ module.exports = function setupProdShiftModel(app, mongoose)
     shutdown: {
       type: Number,
       default: -1
-    }
+    },
+    nextOrder: {}
   }, {
     id: false
   });

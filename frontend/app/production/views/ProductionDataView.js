@@ -38,11 +38,17 @@ define([
     template: dataTemplate,
 
     localTopics: {
-      'socket.connected': 'fillOrderData'
+      'socket.connected': function()
+      {
+        this.toggleNextOrderAction();
+        this.fillOrderData();
+      },
+      'socket.disconnected': 'toggleNextOrderAction'
     },
 
     events: {
       'click .production-newOrder': 'newOrder',
+      'click .production-nextOrder': 'nextOrder',
       'click .production-continueOrder': 'continueOrder',
       'click .production-startDowntime': 'startDowntime',
       'click .production-startBreak': 'startBreak',
@@ -321,7 +327,9 @@ define([
       }
 
       this.appendAction('success', 'newOrder');
+      this.appendAction('success', 'nextOrder');
       this.appendAction('warning', 'endWork');
+      this.toggleNextOrderAction();
     },
 
     toggleDowntimeActions: function()
@@ -370,6 +378,24 @@ define([
       viewport.showDialog(
         new NewOrderPickerView({model: this.model}),
         t('production', 'newOrderPicker:title' + (this.model.hasOrder() ? ':replacing' : ''))
+      );
+    },
+
+    nextOrder: function(e)
+    {
+      if (e)
+      {
+        e.target.blur();
+      }
+
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
+      viewport.showDialog(
+        new NewOrderPickerView({model: this.model, nextOrder: true}),
+        t('production', 'newOrderPicker:title:nextOrder')
       );
     },
 
@@ -648,6 +674,11 @@ define([
         view.updateOrderData();
         view.updateOrderInfo();
       });
+    },
+
+    toggleNextOrderAction: function()
+    {
+      this.$('.production-nextOrder').toggleClass('hidden', !this.socket.isConnected());
     }
 
   });

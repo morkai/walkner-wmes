@@ -93,7 +93,7 @@ define([
             id: operation.no,
             text: operation.no + ' - ' + operation.name
           };
-        }), options, true);
+        }), options, !e.removed);
 
         if (operations.length)
         {
@@ -143,6 +143,11 @@ define([
     },
     selectOrder: function($order, prodShiftOrder)
     {
+      if (!prodShiftOrder)
+      {
+        return;
+      }
+
       var orderId = prodShiftOrder.get('orderId');
       var orderData = prodShiftOrder.get('orderData');
 
@@ -153,7 +158,7 @@ define([
 
       $order.select2('data', {
         id: orderId,
-        text: orderId + ' - ' + (orderData.name || '?'),
+        text: orderId + ' - ' + (orderData.description || orderData.name || '?'),
         sameOrder: true
       });
 

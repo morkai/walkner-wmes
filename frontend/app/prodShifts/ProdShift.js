@@ -326,6 +326,9 @@ define([
         }
 
         var prodShiftData = res.collection[0];
+
+        prodShiftData.nextOrder = null;
+
         var ordersReq = $.ajax({
           url: '/prodShiftOrders?prodShift=' + prodShiftData._id + '&finishedAt=null&sort(-startedAt)'
         });
@@ -387,7 +390,8 @@ define([
         master: null,
         leader: null,
         operator: null,
-        operators: null
+        operators: null,
+        nextOrder: null
       });
 
       this.set('_id', prodLog.generateId(this.get('createdAt'), this.prodLine.id));
@@ -519,12 +523,52 @@ define([
 
       var changes = this.prodShiftOrder.onOrderCorrected(this, orderInfo, operationNo);
 
-      if (changes)
+      if (!changes)
       {
-        prodLog.record(this, 'correctOrder', changes);
-
-        this.trigger('orderCorrected');
+        return;
       }
+
+      var nextOrder = this.get('nextOrder');
+
+      if (nextOrder && orderInfo.no === nextOrder.orderInfo.no && operationNo === nextOrder.operationNo)
+      {
+        this.set('nextOrder', null);
+      }
+
+      prodLog.record(this, 'correctOrder', changes);
+
+      this.trigger('orderCorrected');
+    },
+
+    setNextOrder: function(orderInfo, operationNo)
+    {
+      if (!this.hasOrder())
+      {
+        throw new Error("Cannot set the next order: no order is started!");
+      }
+
+      var old = this.get('nextOrder');
+      var reset = !orderInfo || !operationNo;
+
+      if (!old && reset)
+      {
+        return;
+      }
+
+      if (orderInfo && old && orderInfo.no === old.orderInfo.no && operationNo === old.operationNo)
+      {
+        return;
+      }
+
+      this.set('nextOrder', reset ? null : {
+        orderInfo: orderInfo,
+        operationNo: operationNo
+      });
+
+      prodLog.record(this, 'setNextOrder', {
+        orderNo: reset ? null : orderInfo.no,
+        operationNo: reset ? null : operationNo
+      });
     },
 
     continueOrder: function()
@@ -645,6 +689,8 @@ define([
 
     finishOrder: function()
     {
+      this.set('nextOrder', null);
+
       var finishedProdShiftOrder = this.prodShiftOrder.finish();
 
       if (finishedProdShiftOrder)

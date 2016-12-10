@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/viewport',
@@ -8,6 +9,7 @@ define([
   '../util/orderPickerHelpers',
   'app/production/templates/newOrderPicker'
 ], function(
+  _,
   $,
   t,
   viewport,
@@ -25,7 +27,11 @@ define([
     {
       var className = 'production-modal production-newOrderPickerDialog';
 
-      if (this.options.correctingOrder)
+      if (this.options.nextOrder)
+      {
+        className += ' is-nextOrder';
+      }
+      else if (this.options.correctingOrder)
       {
         className += ' is-correcting';
       }
@@ -119,13 +125,15 @@ define([
     {
       var shift = this.model;
       var order = shift.prodShiftOrder;
+      var nextOrder = !!this.options.nextOrder;
 
       return {
         idPrefix: this.idPrefix,
-        spigot: shift.settings.getValue('spigotFinish') && !!order.get('spigot'),
+        spigot: !nextOrder && shift.settings.getValue('spigotFinish') && !!order.get('spigot'),
         offline: !this.socket.isConnected(),
-        replacingOrder: !this.options.correctingOrder && shift.hasOrder(),
-        correctingOrder: !!this.options.correctingOrder,
+        nextOrder: nextOrder,
+        replacingOrder: !nextOrder && !this.options.correctingOrder && shift.hasOrder(),
+        correctingOrder: !nextOrder && !!this.options.correctingOrder,
         quantityDone: order.get('quantityDone') || 0,
         workerCount: order.getWorkerCountForEdit(),
         orderIdType: shift.getOrderIdType(),
@@ -145,6 +153,14 @@ define([
         {
           this.selectCurrentOrder();
         }
+        else
+        {
+          this.selectNextOrder();
+        }
+      }
+      else if (this.options.nextOrder)
+      {
+        this.closeDialog();
       }
       else if (this.options.correctingOrder)
       {
@@ -192,7 +208,7 @@ define([
         this.$id('order'),
         this.$id('operation'),
         this.model,
-        {dropdownCssClass: 'production-dropdown'}
+        {dropdownCssClass: 'production-dropdown', allowClear: !!this.options.nextOrder}
       );
     },
 
@@ -210,13 +226,39 @@ define([
       orderPickerHelpers.selectOrder(this.$id('order'), this.model.prodShiftOrder);
     },
 
+    selectNextOrder: function()
+    {
+      var nextOrder = this.model.get('nextOrder');
+
+      if (!nextOrder)
+      {
+        return;
+      }
+
+      var orderInfo = nextOrder.orderInfo;
+      var $order = this.$id('order');
+
+      $order.select2('data', _.assign({}, orderInfo, {
+        id: orderInfo.no,
+        text: orderInfo.no + ' - ' + (orderInfo.description || orderInfo.name || '?'),
+        sameOrder: false
+      }));
+
+      $order.trigger({
+        type: 'change',
+        operations: _.values(orderInfo.operations),
+        selectedOperationNo: nextOrder.operationNo
+      });
+    },
+
     handleOnlinePick: function(submitEl)
     {
       var orderInfo = this.$id('order').select2('data');
       var $operation = this.$id('operation');
       var operationNo = $operation.hasClass('form-control') ? $operation.val() : this.$id('operation').select2('val');
+      var nextOrder = !!this.options.nextOrder;
 
-      if (!orderInfo)
+      if (!orderInfo && !nextOrder)
       {
         this.$id('order').select2('focus');
 
@@ -229,7 +271,7 @@ define([
         });
       }
 
-      if (!operationNo)
+      if (!operationNo && (!nextOrder || orderInfo))
       {
         $operation.focus();
 
@@ -242,13 +284,16 @@ define([
         });
       }
 
-      if (orderInfo.sameOrder)
+      if (orderInfo)
       {
-        orderInfo = this.model.prodShiftOrder.get('orderData');
-      }
-      else
-      {
-        orderPickerHelpers.prepareOrderInfo(this.model, orderInfo);
+        if (orderInfo.sameOrder)
+        {
+          orderInfo = this.model.prodShiftOrder.get('orderData');
+        }
+        else
+        {
+          orderPickerHelpers.prepareOrderInfo(this.model, orderInfo);
+        }
       }
 
       this.pickOrder(orderInfo, operationNo);
@@ -256,6 +301,11 @@ define([
 
     handleOfflinePick: function(submitEl)
     {
+      if (this.options.nextOrder)
+      {
+        return;
+      }
+
       var orderIdType = this.model.getOrderIdType();
       var orderInfo = {
         no: null,
@@ -316,18 +366,27 @@ define([
 
     pickOrder: function(orderInfo, operationNo)
     {
+      if (!orderInfo || !operationNo)
+      {
+
+      }
+
       while (operationNo.length < 4)
       {
         operationNo = '0' + operationNo;
       }
 
-      if (!this.options.correctingOrder && this.model.hasOrder())
+      if (!this.options.nextOrder && !this.options.correctingOrder && this.model.hasOrder())
       {
         this.model.changeQuantityDone(this.parseInt('quantityDone'));
         this.model.changeWorkerCount(this.parseInt('workerCount'));
       }
 
-      if (this.options.correctingOrder)
+      if (this.options.nextOrder)
+      {
+        this.model.setNextOrder(orderInfo, operationNo);
+      }
+      else if (this.options.correctingOrder)
       {
         this.model.correctOrder(orderInfo, operationNo);
       }
@@ -368,6 +427,12 @@ define([
     onKeyPress: function(e)
     {
       var $nc12 = this.$id('spigot-nc12');
+
+      if (!$nc12.length)
+      {
+        return;
+      }
+
       var target = e.target;
       var keyCode = e.keyCode;
 

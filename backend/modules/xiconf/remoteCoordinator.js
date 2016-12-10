@@ -203,8 +203,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     }
 
     var pso = changes.prodShiftOrders;
+    var nextOrder = !!ps && ps.nextOrder !== undefined;
 
-    if (pso === undefined || (_.isPlainObject(pso) && pso.orderId === undefined))
+    if (!nextOrder && (pso === undefined || (_.isPlainObject(pso) && pso.orderId === undefined)))
     {
       return;
     }
@@ -2476,6 +2477,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     }
 
     var currentOrderNo = currentOrder.orderData.no;
+    var nextOrder = prodLineState.getNextOrder();
     var newOrdersNos = [currentOrderNo];
     var now = Date.now();
 
@@ -2492,6 +2494,11 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         newOrdersNos.push(previousOrder.orderData.no);
       }
+    }
+
+    if (nextOrder)
+    {
+      newOrdersNos.push(nextOrder.orderNo);
     }
 
     newOrdersNos = _.uniq(newOrdersNos);

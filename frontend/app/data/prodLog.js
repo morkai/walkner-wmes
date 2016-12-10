@@ -222,7 +222,7 @@ define([
       window.removeEventListener('storage', onStorage);
       window.addEventListener('storage', onStorage);
 
-      var embedded = window.parent !== window;
+      var embedded = window.parent !== window || window.ENV === 'development';
 
       lockTimer = setInterval(onLockTimeout, embedded ? 333333 : 333);
       enableTimer = setTimeout(onEnableTimeout, embedded ? 1 : 2000);

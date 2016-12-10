@@ -51,58 +51,59 @@ define([
     /*jshint -W015*/
 
     var prodLogEntry = prodLogEntryModel.toJSON();
+    var logData = prodLogEntry.data;
     var dataKey = 'data:' + prodLogEntry.type;
     var data = {};
 
     switch (prodLogEntry.type)
     {
       case 'changeShift':
-        data.date = time.format(prodLogEntry.data.startedProdShift.date, 'YYYY-MM-DD');
-        data.shift = t('core', 'SHIFT:' + prodLogEntry.data.startedProdShift.shift);
+        data.date = time.format(logData.startedProdShift.date, 'YYYY-MM-DD');
+        data.shift = t('core', 'SHIFT:' + logData.startedProdShift.shift);
         break;
 
       case 'addShift':
-        data.date = time.format(prodLogEntry.data.date, 'YYYY-MM-DD');
-        data.shift = t('core', 'SHIFT:' + prodLogEntry.data.shift);
+        data.date = time.format(logData.date, 'YYYY-MM-DD');
+        data.shift = t('core', 'SHIFT:' + logData.shift);
         break;
 
       case 'changeMaster':
       case 'changeLeader':
       case 'changeOperator':
-        data.name = prodLogEntry.data ? prodLogEntry.data.label : '-';
+        data.name = logData ? logData.label : '-';
         break;
 
       case 'changeQuantitiesDone':
-        data.hour = prodLogEntry.data.hour + 1;
-        data.value = prodLogEntry.data.newValue;
+        data.hour = logData.hour + 1;
+        data.value = logData.newValue;
         break;
 
       case 'changeOrder':
       case 'correctOrder':
       case 'addOrder':
-        var operation = prodLogEntry.data.orderData && prodLogEntry.data.orderData.operations
-            ? prodLogEntry.data.orderData.operations[prodLogEntry.data.operationNo]
+        var operation = logData.orderData && logData.orderData.operations
+            ? logData.orderData.operations[logData.operationNo]
             : null;
 
-        data.orderId = prodLogEntry.data.orderId;
-        data.orderName = prodLogEntry.data.orderData.name || '?';
-        data.operationNo = prodLogEntry.data.operationNo;
+        data.orderId = logData.orderId;
+        data.orderName = logData.orderData.name || '?';
+        data.operationNo = logData.operationNo;
         data.operationName = operation ? operation.name : '?';
         break;
 
       case 'changeQuantityDone':
       case 'changeWorkerCount':
-        data.value = prodLogEntry.data.newValue;
+        data.value = logData.newValue;
         break;
 
       case 'startDowntime':
       case 'addDowntime':
-        var reason = downtimeReasons.get(prodLogEntry.data.reason);
-        var aor = aors.get(prodLogEntry.data.aor);
+        var reason = downtimeReasons.get(logData.reason);
+        var aor = aors.get(logData.aor);
 
-        data._id = prodLogEntry.data._id;
-        data.reason = reason ? reason.getLabel() : prodLogEntry.data.reason;
-        data.aor = aor ? aor.getLabel() : prodLogEntry.data.aor;
+        data._id = logData._id;
+        data.reason = reason ? reason.getLabel() : logData.reason;
+        data.aor = aor ? aor.getLabel() : logData.aor;
         break;
 
       case 'editShift':
@@ -110,27 +111,31 @@ define([
       case 'editDowntime':
         if (prodLogEntry.type === 'editDowntime')
         {
-          data._id = prodLogEntry.data._id;
+          data._id = logData._id;
         }
 
-        data.changedProperties = prepareChangedProperties(prodLogEntry.type, prodLogEntry.data);
+        data.changedProperties = prepareChangedProperties(prodLogEntry.type, logData);
         break;
 
       case 'checkSpigot':
-        dataKey += ':' + (prodLogEntry.data.final ? 'final' : 'initial');
-        data.result = prodLogEntry.data.valid ? 'valid' : 'invalid';
-        data.nc12 = prodLogEntry.data.nc12;
-        data.downtimeId = prodLogEntry.data.prodDowntime;
+        dataKey += ':' + (logData.final ? 'final' : 'initial');
+        data.result = logData.valid ? 'valid' : 'invalid';
+        data.nc12 = logData.nc12;
+        data.downtimeId = logData.prodDowntime;
         break;
 
       case 'checkSerialNumber':
-        dataKey += prodLogEntry.data.error ? ':error' : '';
-        data.sn = prodLogEntry.data._id;
-        data.error = prodLogEntry.data.error;
+        dataKey += logData.error ? ':error' : '';
+        data.sn = logData._id;
+        data.error = logData.error;
+        break;
+
+      case 'setNextOrder':
+        data.nextOrder = logData.orderNo ? (logData.orderNo + ', ' + logData.operationNo) : '-';
         break;
 
       default:
-        data = prodLogEntry.data;
+        data = logData;
         break;
     }
 

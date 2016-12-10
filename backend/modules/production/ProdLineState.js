@@ -155,6 +155,16 @@ ProdLineState.prototype.getLastOrder = function()
 };
 
 /**
+ * @returns {object|null}
+ */
+ProdLineState.prototype.getNextOrder = function()
+{
+  return this.prodShift && this.prodShift.nextOrder && this.prodShift.nextOrder.orderNo
+    ? this.prodShift.nextOrder
+    : null;
+};
+
+/**
  * @returns {string|null}
  */
 ProdLineState.prototype.getCurrentDowntimeId = function()
