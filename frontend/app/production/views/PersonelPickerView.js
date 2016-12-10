@@ -135,6 +135,12 @@ define([
           $list.find('.btn-group-vertical').html(html);
           $list.removeClass('hidden');
         }
+      }).always(function()
+      {
+        if ($list.find('.btn-group-vertical').children().length === 1)
+        {
+          $list.remove();
+        }
       });
     },
 
