@@ -31,7 +31,7 @@
     localStorage.setItem('PROXY', matches[1]);
   }
 
-  if (window.parent)
+  if (window.parent !== window)
   {
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }

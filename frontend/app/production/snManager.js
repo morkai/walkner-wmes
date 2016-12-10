@@ -13,7 +13,7 @@ define([
 
   var handleTimeout = null;
   var scanBuffer = '';
-  var snBuffer = JSON.parse(localStorage[STORAGE_KEY] || '{}');
+  var snBuffer = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
 
   function handleScanBuffer()
   {
@@ -74,7 +74,7 @@ define([
     add: function(sn)
     {
       snBuffer[sn._id] = [Date.parse(sn.scannedAt), sn.prodShiftOrder, sn.prodLine];
-      localStorage[STORAGE_KEY] = JSON.stringify(snBuffer);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(snBuffer));
     },
     clear: function()
     {

@@ -1,21 +1,25 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   '../broker',
   '../pubsub',
   '../socket',
   '../viewport',
   '../time',
+  '../data/localStorage',
   './views/RestartMessageView',
   'app/updater/templates/backendRestart',
   'app/updater/templates/frontendRestart',
   'i18n!app/nls/updater'
 ], function(
+  _,
   broker,
   pubsub,
   socket,
   viewport,
   time,
+  localStorage,
   RestartMessageView,
   backendRestartTemplate,
   frontendRestartTemplate
@@ -67,7 +71,10 @@ define([
 
     updater.versions = newVersions;
 
-    saveLocalStorage();
+    if (!_.isEqual(_.omit(newVersions, 'time'), _.omit(oldVersions, 'time')))
+    {
+      saveLocalStorage();
+    }
 
     if (newVersions.frontend !== oldVersions.frontend)
     {

@@ -3,11 +3,13 @@
 define([
   'underscore',
   'jquery',
+  '../data/localStorage',
   '../settings/SettingCollection',
   './ProductionSetting'
 ], function(
   _,
   $,
+  localStorage,
   SettingCollection,
   ProductionSetting
 ) {
@@ -263,14 +265,14 @@ define([
     {
       try
       {
-        this.reset(JSON.parse(localStorage['PRODUCTION:SETTINGS']));
+        this.reset(JSON.parse(localStorage.getItem('PRODUCTION:SETTINGS')));
       }
       catch (err) {}
     },
 
     saveLocalData: function()
     {
-      localStorage['PRODUCTION:SETTINGS'] = JSON.stringify(this.models);
+      localStorage.setItem('PRODUCTION:SETTINGS', JSON.stringify(this.models));
     }
 
   });

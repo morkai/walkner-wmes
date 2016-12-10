@@ -4,6 +4,7 @@ define([
   '../router',
   '../viewport',
   '../data/orgUnits',
+  '../data/localStorage',
   '../prodShifts/ProdShift',
   '../production/pages/ProductionPage',
   'i18n!app/nls/production',
@@ -14,6 +15,7 @@ define([
   router,
   viewport,
   orgUnits,
+  localStorage,
   ProdShift,
   ProductionPage
 ) {
@@ -22,7 +24,7 @@ define([
   router.map('/', function()
   {
     viewport.showPage(new ProductionPage({
-      model: new ProdShift(orgUnits.getAllForProdLine(localStorage[ProdShift.LINE_STORAGE_KEY]), {
+      model: new ProdShift(orgUnits.getAllForProdLine(localStorage.getItem(ProdShift.LINE_STORAGE_KEY)), {
         production: true
       })
     }));

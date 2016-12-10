@@ -28,10 +28,10 @@ define([
 
     if (!clientId)
     {
-      clientId = localStorage.DOCS_CLIENT_ID || 'DOCS-' + Date.now();
+      clientId = localStorage.getItem('DOCS_CLIENT_ID') || ('DOCS-' + Date.now());
     }
 
-    localStorage.DOCS_CLIENT_ID = clientId;
+    localStorage.setItem('DOCS_CLIENT_ID', clientId);
 
     viewport.showPage(new DocumentViewerPage({
       model: new DocumentViewerState({

@@ -8,6 +8,21 @@
 
   function requireApp()
   {
+    if (window.parent !== window)
+    {
+      require(['app/data/localStorage'], function(localStorage)
+      {
+        localStorage.start(doRequireApp);
+      });
+    }
+    else
+    {
+      doRequireApp();
+    }
+  }
+
+  function doRequireApp()
+  {
     require([
       'domReady',
       'jquery',

@@ -8,6 +8,7 @@ define([
   'app/time',
   'app/broker',
   'app/socket',
+  'app/data/localStorage',
   'app/updater/index'
 ], function(
   _,
@@ -17,6 +18,7 @@ define([
   time,
   broker,
   socket,
+  localStorage,
   updater
 ) {
   'use strict';

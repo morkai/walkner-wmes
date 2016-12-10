@@ -3,11 +3,13 @@
 define([
   'app/time',
   'app/broker',
-  'app/pubsub'
+  'app/pubsub',
+  './localStorage'
 ], function(
   time,
   broker,
-  pubsub
+  pubsub,
+  localStorage
 ) {
   'use strict';
 
@@ -40,7 +42,7 @@ define([
 
     collection.updatedAt = freshestData.time;
 
-    if (freshestData === remoteData)
+    if (freshestData === remoteData || !localData.data)
     {
       storeLocally();
     }
