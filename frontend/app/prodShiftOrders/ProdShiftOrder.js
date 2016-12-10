@@ -58,7 +58,7 @@ define([
     {
       var row = this.serialize(options);
 
-      row.className = row.taktTimeOk ? 'success' : 'warning';
+      row.className = this.get('mechOrder') || !this.get('sapTaktTime') ? '' : row.taktTimeOk ? 'success' : 'warning';
 
       return row;
     },
