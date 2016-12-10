@@ -1,5 +1,5 @@
 <div>
-  <div class="panel panel-primary">
+  <div class="panel panel-<%- model.mechOrder || !model.sapTaktTime ? 'primary' : model.taktTimeOk ? 'success' : 'warning' %>">
     <div class="panel-heading">
       <%- t('prodShiftOrders', 'PANEL:TITLE:details') %>
     </div>
