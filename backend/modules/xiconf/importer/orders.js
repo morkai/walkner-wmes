@@ -204,6 +204,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
         var orderIds = Object.keys(this.parsedOrdersMap);
         var fields = {
           name: 1,
+          description: 1,
           nc12: 1,
           startDate: 1,
           finishDate: 1,
@@ -437,7 +438,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       startDate: order.startDate,
       finishDate: order.finishDate,
       reqDate: null,
-      name: order.name,
+      name: order.description || order.name,
       nc12: [order.nc12],
       quantityTodo: order.qty,
       quantityDone: 0,
@@ -533,9 +534,11 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
   function compareOrderToXiconfOrder($set, order, xiconfOrder)
   {
-    if (order.name !== xiconfOrder.name)
+    const name = order.description || order.name;
+
+    if (name !== xiconfOrder.name)
     {
-      $set.name = order.name;
+      $set.name = name;
     }
 
     if (order.nc12 !== xiconfOrder.nc12[0])
