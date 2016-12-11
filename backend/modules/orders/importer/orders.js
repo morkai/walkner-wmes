@@ -29,7 +29,8 @@ exports.start = function startOrdersImporterModule(app, module)
     importTs: true,
     description: true,
     soldToParty: true,
-    sapCreatedAt: true
+    sapCreatedAt: true,
+    qtyDone: true
   };
   var ORDER_DOCUMENTS_FILE_PATH_PATTERN = module.config.orderDocumentsFilePathPattern;
 

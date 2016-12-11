@@ -8,6 +8,7 @@ var util = require('./util');
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
   var mongoose = app[productionModule.config.mongooseId];
+  var Order = mongoose.model('Order');
   var ProdShiftOrder = mongoose.model('ProdShiftOrder');
 
   step(
@@ -33,6 +34,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       }
 
       this.prodShiftOrder = prodShiftOrder;
+
+      Order.recountQtyDone(prodShiftOrder.orderId, this.parallel());
 
       if (!prodDowntimes.length)
       {

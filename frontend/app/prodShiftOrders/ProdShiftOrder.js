@@ -110,7 +110,8 @@ define([
         spigot: null,
         sapTaktTime: null,
         lastTaktTime: null,
-        avgTaktTime: null
+        avgTaktTime: null,
+        totalQuantityDone: null
       });
       this.set('sapTaktTime', this.getSapTaktTime());
 
@@ -187,7 +188,8 @@ define([
         spigot: null,
         sapTaktTime: null,
         lastTaktTime: null,
-        avgTaktTime: null
+        avgTaktTime: null,
+        totalQuantityDone: null
       });
       this.set('sapTaktTime', this.getSapTaktTime());
 

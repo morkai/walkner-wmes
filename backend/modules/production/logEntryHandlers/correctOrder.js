@@ -2,13 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var util = require('./util');
+const _ = require('lodash');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var ProdDowntime = app[productionModule.config.mongooseId].model('ProdDowntime');
+  const mongoose = app[productionModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
   productionModule.getProdData('order', logEntry.prodShiftOrder, function(err, prodShiftOrder)
   {
@@ -54,7 +56,11 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       return done(err);
     }
 
+    const oldOrderNo = prodShiftOrder.orderId;
+
     prodShiftOrder.set(logEntry.data);
+
+    const newOrderNo = prodShiftOrder.orderId;
 
     prodShiftOrder.save(function(err)
     {
@@ -68,6 +74,13 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         );
 
         return done(err);
+      }
+
+      Order.recountQtyDone(oldOrderNo, () => {});
+
+      if (newOrderNo !== oldOrderNo)
+      {
+        Order.recountQtyDone(newOrderNo, () => {});
       }
 
       return correctProdDowntimes();

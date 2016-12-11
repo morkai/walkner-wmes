@@ -8,6 +8,8 @@ var util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
+  var mongoose = app[productionModule.config.mongooseId];
+  var Order = mongoose.model('Order');
   var changes = logEntry.data;
 
   step(
@@ -196,9 +198,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.done(done, err);
       }
 
+      if (changes.quantityDone !== undefined)
+      {
+        Order.recountQtyDone(this.prodShiftOrder.orderId, this.parallel());
+      }
+
       if (changes.startedAt || changes.finishedAt)
       {
-        this.prodShiftOrder.recalcDurations(true, this.next());
+        this.prodShiftOrder.recalcDurations(true, this.parallel());
       }
     },
     util.createRecalcShiftTimesStep(productionModule, logEntry),

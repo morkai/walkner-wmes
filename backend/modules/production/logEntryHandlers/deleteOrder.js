@@ -7,6 +7,9 @@ var util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
+  var mongoose = app[productionModule.config.mongooseId];
+  var Order = mongoose.model('Order');
+
   step(
     function getProdDowntimeModelStep()
     {
@@ -80,6 +83,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           shift: this.prodShiftOrder.shift
         });
       }
+
+      Order.recountQtyDone(this.prodShiftOrder.orderId, this.next());
     },
     util.createRecalcShiftTimesStep(productionModule, logEntry),
     done

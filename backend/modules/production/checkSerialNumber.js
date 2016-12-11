@@ -9,6 +9,7 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
 {
   const mongoose = app[productionModule.config.mongooseId];
   const mysql = app[productionModule.config.mysqlId];
+  const Order = mongoose.model('Order');
   const ProdShift = mongoose.model('ProdShift');
   const ProdDowntime = mongoose.model('ProdDowntime');
   const ProdSerialNumber = mongoose.model('ProdSerialNumber');
@@ -189,7 +190,8 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
         hourlyQuantityDone: {
           index: this.hourlyQuantityIndex,
           value: hourlyQuantityDone
-        }
+        },
+        totalQuantityDone: null
       };
 
       this.shift.quantitiesDone[this.hourlyQuantityIndex].actual = hourlyQuantityDone;
@@ -199,6 +201,15 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
       this.pso.lastTaktTime = this.sn.taktTime;
       this.pso.avgTaktTime = avgTaktTime;
       this.pso.save(this.group());
+    },
+    function(err)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      Order.recountQtyDone(this.pso.orderId, this.next());
     },
     function(err)
     {

@@ -65,6 +65,7 @@ define([
       this.listenTo(this.model, 'locked unlocked', function()
       {
         this.updateWorkerCount();
+        this.updateTotalQuantityDone();
         this.updateQuantityDone();
         this.toggleActions();
       });
@@ -76,6 +77,10 @@ define([
       {
         this.updateOrderData();
         this.updateOrderInfo();
+      }, 1));
+      this.listenTo(order, 'change:totalQuantityDone change:orderData', _.debounce(function()
+      {
+        this.updateTotalQuantityDone();
       }, 1));
       this.listenTo(order, 'change:quantityDone', _.debounce(function()
       {
@@ -109,6 +114,7 @@ define([
 
       this.updateOrderData();
       this.updateOrderInfo();
+      this.updateTotalQuantityDone();
       this.updateQuantityDone();
       this.toggleActions();
 
@@ -253,6 +259,27 @@ define([
       {
         document.body.classList.add(lastTaktTime <= sapTaktTime ? 'is-tt-ok' : 'is-tt-nok');
       }
+    },
+
+    updateTotalQuantityDone: function()
+    {
+      var html = '';
+
+      if (this.model.isIdle())
+      {
+        html = '-';
+      }
+      else
+      {
+        var totalQuantityTodo = (this.model.prodShiftOrder.get('orderData') || {}).qty;
+        var totalQuantityDone = this.model.prodShiftOrder.get('totalQuantityDone');
+
+        html += totalQuantityDone ? totalQuantityDone.total : '?';
+        html += '/';
+        html += totalQuantityTodo ? totalQuantityTodo : '?';
+      }
+
+      this.$property('totalQuantityDone').html(html);
     },
 
     updateQuantityDone: function()

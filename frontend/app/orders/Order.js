@@ -77,6 +77,28 @@ define([
         order.qtyUnit = order.qty + ' ' + order.unit;
       }
 
+      if (order.qtyDone && order.unit)
+      {
+        order.qtyDoneUnit = order.qtyDone.total + ' ' + order.unit;
+      }
+
+      order.qtys = '';
+
+      if (order.qtyDone)
+      {
+        order.qtys += order.qtyDone.total;
+      }
+
+      if (order.qty)
+      {
+        if (order.qtys.length)
+        {
+          order.qtys += '/';
+        }
+
+        order.qtys += order.qty;
+      }
+
       order.operations = order.operations ? order.operations.toJSON() : [];
 
       if (!Array.isArray(order.documents))

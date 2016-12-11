@@ -2,36 +2,47 @@
 
 'use strict';
 
+const step = require('h5.step');
+
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  productionModule.getProdData('order', logEntry.prodShiftOrder, function(err, prodShiftOrder)
-  {
-    if (err)
+  const Order = app[productionModule.config.mongooseId].model('Order');
+
+  step(
+    function()
     {
-      productionModule.error(
-        "Failed to get prod shift order [%s] to change the quantity done (LOG=[%s]): %s",
-        logEntry.prodShiftOrder,
-        logEntry._id,
-        err.stack
-      );
-
-      return done(err);
-    }
-
-    if (!prodShiftOrder)
+      productionModule.getProdData('order', logEntry.prodShiftOrder, this.next());
+    },
+    function(err, prodShiftOrder)
     {
-      productionModule.warn(
-        "Couldn't find prod shift order [%s] to change the quantity done (LOG=[%s])",
-        logEntry.prodShiftOrder,
-        logEntry._id
-      );
+      if (err)
+      {
+        productionModule.error(
+          "Failed to get prod shift order [%s] to change the quantity done (LOG=[%s]): %s",
+          logEntry.prodShiftOrder,
+          logEntry._id,
+          err.stack
+        );
 
-      return done();
-    }
+        return this.skip(err);
+      }
 
-    prodShiftOrder.quantityDone = Math.max(logEntry.data.newValue, 0);
+      if (!prodShiftOrder)
+      {
+        productionModule.warn(
+          "Couldn't find prod shift order [%s] to change the quantity done (LOG=[%s])",
+          logEntry.prodShiftOrder,
+          logEntry._id
+        );
 
-    prodShiftOrder.save(function(err)
+        return this.skip();
+      }
+
+      prodShiftOrder.quantityDone = Math.max(logEntry.data.newValue || 0, 0);
+
+      prodShiftOrder.save(this.next());
+    },
+    function(err, prodShiftOrder)
     {
       if (err)
       {
@@ -41,9 +52,26 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           logEntry._id,
           err.stack
         );
+
+        return this.skip(err);
       }
 
-      return done(err);
-    });
-  });
+      Order.recountQtyDone(prodShiftOrder.orderId, this.next());
+    },
+    function(err)
+    {
+      if (err)
+      {
+        productionModule.error(
+          "Failed to recount the total quantity done after changing the quantity done of [%s] (LOG=[%s]): %s",
+          logEntry.prodShiftOrder,
+          logEntry._id,
+          err.stack
+        );
+
+        return this.skip(err);
+      }
+    },
+    done
+  );
 };

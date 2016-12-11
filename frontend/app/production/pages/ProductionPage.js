@@ -162,6 +162,7 @@ define([
 
       this.layout = null;
       this.shiftEditedSub = null;
+      this.qtyDoneSub = null;
       this.productionJoined = 0;
       this.enableProdLog = false;
       this.pendingIsaChanges = [];
@@ -350,10 +351,16 @@ define([
       });
 
       page.listenTo(model, 'change:_id', page.subscribeForShiftChanges);
+      page.listenTo(model.prodShiftOrder, 'change:orderId', page.subscribeForQuantityDoneChanges);
 
       if (model.id)
       {
         this.subscribeForShiftChanges();
+      }
+
+      if (model.prodShiftOrder.get('orderId'))
+      {
+        this.subscribeForQuantityDoneChanges();
       }
 
       page.listenTo(model.prodDowntimes, 'change:finishedAt', function()
@@ -574,6 +581,7 @@ define([
         prodShiftId: model.id,
         prodShiftOrderId: model.prodShiftOrder.id || null,
         prodDowntimeId: unfinishedProdDowntime ? unfinishedProdDowntime.id : null,
+        orderNo: model.prodShiftOrder.get('orderId') || null,
         dictionaries: {}
       };
 
@@ -590,6 +598,11 @@ define([
         if (!res)
         {
           return;
+        }
+
+        if (res.totalQuantityDone)
+        {
+          model.prodShiftOrder.set('totalQuantityDone', res.totalQuantityDone);
         }
 
         if (res.plannedQuantities)
@@ -682,6 +695,43 @@ define([
         'production.edited.shift.' + model.id,
         function(changes) { model.set(changes); }
       );
+    },
+
+    subscribeForQuantityDoneChanges: function()
+    {
+      if (this.qtyDoneSub)
+      {
+        this.qtyDoneSub.cancel();
+        this.qtyDoneSub = null;
+      }
+
+      var model = this.model.prodShiftOrder;
+      var orderNo = model.get('orderId');
+
+      if (!orderNo)
+      {
+        return;
+      }
+
+      this.qtyDoneSub = this.pubsub.subscribe(
+        'orders.quantityDone.' + orderNo,
+        function(totalQuantityDone) { model.set({totalQuantityDone: totalQuantityDone}); }
+      );
+
+      this.ajax({url: '/orders?_id=' + orderNo + '&select(qtyDone)&limit(1)'}).done(function(res)
+      {
+        if (!res.collection || !res.collection.length)
+        {
+          return;
+        }
+
+        var order = res.collection[0];
+
+        if (order && order._id === model.get('orderId'))
+        {
+          model.set('totalQuantityDone', order.qtyDone);
+        }
+      });
     },
 
     checkSpigot: function()

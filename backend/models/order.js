@@ -2,9 +2,11 @@
 
 'use strict';
 
+const step = require('h5.step');
+
 module.exports = function setupOrderModel(app, mongoose)
 {
-  var operationSchema = mongoose.Schema({
+  const operationSchema = new mongoose.Schema({
     no: {
       type: String,
       trim: true
@@ -34,7 +36,7 @@ module.exports = function setupOrderModel(app, mongoose)
     _id: false
   });
 
-  var documentSchema = mongoose.Schema({
+  const documentSchema = new mongoose.Schema({
     item: String,
     name: String,
     nc15: String
@@ -42,7 +44,7 @@ module.exports = function setupOrderModel(app, mongoose)
     _id: false
   });
 
-  var componentSchema = mongoose.Schema({
+  const componentSchema = new mongoose.Schema({
     nc12: String,
     item: String,
     qty: Number,
@@ -53,7 +55,7 @@ module.exports = function setupOrderModel(app, mongoose)
     _id: false
   });
 
-  var changeSchema = mongoose.Schema({
+  const changeSchema = new mongoose.Schema({
     time: Date,
     user: {},
     oldValues: {},
@@ -66,7 +68,7 @@ module.exports = function setupOrderModel(app, mongoose)
     _id: false
   });
 
-  var orderSchema = mongoose.Schema({
+  const orderSchema = new mongoose.Schema({
     _id: String,
     createdAt: Date,
     updatedAt: Date,
@@ -74,6 +76,7 @@ module.exports = function setupOrderModel(app, mongoose)
     name: String,
     mrp: String,
     qty: Number,
+    qtyDone: {},
     unit: String,
     startDate: Date,
     finishDate: Date,
@@ -132,6 +135,7 @@ module.exports = function setupOrderModel(app, mongoose)
       name: null,
       mrp: null,
       qty: null,
+      qtyDone: {},
       unit: null,
       startDate: null,
       finishDate: null,
@@ -186,10 +190,10 @@ module.exports = function setupOrderModel(app, mongoose)
 
   orderSchema.statics.resetStatusesSetAt = function(order)
   {
-    var statusSetAt = order.importTs;
-    var statusesSetAt = {};
+    const statusSetAt = order.importTs;
+    const statusesSetAt = {};
 
-    for (var i = 0; i < order.statuses.length; ++i)
+    for (let i = 0; i < order.statuses.length; ++i)
     {
       statusesSetAt[order.statuses[i]] = statusSetAt;
     }
@@ -199,17 +203,67 @@ module.exports = function setupOrderModel(app, mongoose)
 
   orderSchema.statics.prepareStatusesSetAt = function(oldStatusesSetAt, newStatusSetAt, newStatuses)
   {
-    var newStatusesSetAt = {};
+    const newStatusesSetAt = {};
 
-    for (var i = 0; i < newStatuses.length; ++i)
+    for (let i = 0; i < newStatuses.length; ++i)
     {
-      var status = newStatuses[i];
-      var oldStatusSetAt = oldStatusesSetAt[status];
+      const status = newStatuses[i];
+      const oldStatusSetAt = oldStatusesSetAt[status];
 
       newStatusesSetAt[status] = oldStatusSetAt || newStatusSetAt;
     }
 
     return newStatusesSetAt;
+  };
+
+  orderSchema.statics.recountQtyDone = function(orderNo, done)
+  {
+    const totalQuantityDone = {
+      total: 0,
+      byLine: {}
+    };
+
+    step(
+      function()
+      {
+        const pipeline = [
+          {$match: {orderId: orderNo}},
+          {$group: {_id: '$prodLine', quantityDone: {$sum: '$quantityDone'}}}
+        ];
+
+        mongoose.model('ProdShiftOrder').aggregate(pipeline, this.next());
+      },
+      function(err, docs)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        docs.forEach(function(doc)
+        {
+          totalQuantityDone.total += doc.quantityDone;
+
+          if (!totalQuantityDone.byLine[doc._id])
+          {
+            totalQuantityDone.byLine[doc._id] = 0;
+          }
+
+          totalQuantityDone.byLine[doc._id] = doc.quantityDone;
+        });
+
+        mongoose.model('Order').update({_id: orderNo}, {$set: {qtyDone: totalQuantityDone}}, this.next());
+      },
+      function(err)
+      {
+        if (!err)
+        {
+          app.broker.publish(`orders.quantityDone.${orderNo}`, totalQuantityDone);
+        }
+
+        done(err, totalQuantityDone);
+      }
+    );
   };
 
   mongoose.model('Order', orderSchema);

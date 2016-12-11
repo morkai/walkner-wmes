@@ -9,7 +9,7 @@
     <% }) %>
   </div>
   <div class="production-properties production-properties-orderData">
-    <% ['createdAt', 'quantityDone', 'workerCount', 'workerCountSap', 'taktTime', 'lastTaktTime', 'avgTaktTime'].forEach(function(prop) { %>
+    <% ['createdAt', 'totalQuantityDone', 'quantityDone', 'workerCount', 'workerCountSap', 'taktTime', 'lastTaktTime', 'avgTaktTime'].forEach(function(prop) { %>
     <div id="<%- idPrefix %>-<%- prop %>" class="production-property production-property-<%- prop %>">
       <div class="production-property-name"><%- t('production', 'property:' + prop) %></div>
       <div class="production-property-value"></div>

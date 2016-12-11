@@ -77,6 +77,7 @@
     "property:avgTaktTime": "Avg. Cycle [s]",
     "property:workerCountSap": "Worker count as per SAP",
     "property:createdAt": "Started at",
+    "property:totalQuantityDone": "Qty done in order",
     "property:quantityDone": "Quantity done",
     "property:quantityDone:change": "(change quantity)",
     "property:workerCount": "Worker count",

@@ -192,7 +192,7 @@ exports.pubsub = {
     'settings.updated.**',
     'xiconf.results.**', 'xiconf.orders.**', 'xiconf.clients.**',
     'icpo.results.synced', 'orders.intake.synced',
-    'orders.updated.*',
+    'orders.updated.*', 'orders.quantityDone.*',
     'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*', 'orderDocuments.eto.synced',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',
     'suggestions.seen.*',

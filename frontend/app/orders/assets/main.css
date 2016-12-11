@@ -27,6 +27,9 @@
 .orders-list td[data-id="nc12"] {
   width: 110px;
 }
+.orders-list td[data-id="qtys"] {
+  width: 85px;
+}
 .orders-list td[data-id="name"] {
   width: 360px;
   max-width: 360px;

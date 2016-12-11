@@ -76,6 +76,7 @@
   "property:avgTaktTime": "Śr. cykl [s]",
   "property:workerCountSap": "Osoby wg SAP",
   "property:createdAt": "Czas rozpoczęcia",
+  "property:totalQuantityDone": "Ilość w zleceniu",
   "property:quantityDone": "Wykonana ilość",
   "property:quantityDone:change": "(zmień ilość)",
   "property:workerCount": "Osoby pracujące",

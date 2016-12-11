@@ -52,7 +52,7 @@ define([
       {id: 'nc12', className: 'is-min'},
       {id: 'name', className: 'is-min'},
       {id: 'mrp', className: 'is-min'},
-      {id: 'qtyUnit', label: t.bound('orders', 'PROPERTY:qty'), className: 'is-min'},
+      {id: 'qtys', className: 'is-min is-number'},
       {id: 'sapCreatedAtText', label: t.bound('orders', 'PROPERTY:sapCreatedAt'), className: 'is-min'},
       {id: 'startDateText', label: t.bound('orders', 'PROPERTY:startDate'), className: 'is-min'},
       {id: 'finishDateText', label: t.bound('orders', 'PROPERTY:finishDate'), className: 'is-min'},

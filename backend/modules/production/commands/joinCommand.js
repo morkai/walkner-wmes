@@ -28,6 +28,7 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
 
   var isaModule = app[productionModule.config.isaId];
   var mongoose = app[productionModule.config.mongooseId];
+  var Order = mongoose.model('Order');
   var ProdDowntime = mongoose.model('ProdDowntime');
   var Setting = mongoose.model('Setting');
   var dictionaries = {};
@@ -72,14 +73,16 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
     },
     function fetchDataStep()
     {
+      Order.findOne({_id: req.orderNo}, {qtyDone: 1}).lean().exec(this.parallel());
       productionModule.getProdData('shift', req.prodShiftId, this.parallel());
       ProdDowntime.find({prodShift: req.prodShiftId}).limit(8).sort({startedAt: -1}).lean().exec(this.parallel());
       Setting.find({_id: /^production/}).lean().exec(this.parallel());
       isaModule.getLineActiveRequests(req.prodLineId, this.parallel());
     },
-    function replyStep(err, prodShift, prodDowntimes, settings, isaRequests)
+    function replyStep(err, order, prodShift, prodDowntimes, settings, isaRequests)
     {
       reply({
+        totalQuantityDone: order && order.qtyDone ? order.qtyDone : {total: 0, byLine: {}},
         plannedQuantities: !prodShift ? undefined : prodShift.quantitiesDone.map(d => d.planned),
         prodDowntimes: prodDowntimes || undefined,
         settings: settings || undefined,
