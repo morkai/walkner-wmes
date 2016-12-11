@@ -33,28 +33,8 @@ module.exports = function setUpUsersCommands(app, usersModule)
       return reply(new Error('AUTH'));
     }
 
-    usersModule.info("Syncing...");
-
-    usersModule.syncing = true;
-
     reply();
 
-    syncUsers(app, usersModule, function(err, stats)
-    {
-      usersModule.syncing = false;
-
-      if (err)
-      {
-        usersModule.error("Failed to sync: %s", err.message);
-
-        app.broker.publish('users.syncFailed', {user: user, error: err.message});
-      }
-      else
-      {
-        usersModule.info("Synced: %s", JSON.stringify(stats));
-
-        app.broker.publish('users.synced', stats);
-      }
-    });
+    usersModule.syncUsers(user);
   }
 };
