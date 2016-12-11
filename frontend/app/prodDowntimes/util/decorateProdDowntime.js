@@ -98,7 +98,7 @@ define([
     {
       obj.productName = obj.orderData.name;
       obj.productFamily = obj.orderData.family;
-      obj.orderMrp = '<span title="' + obj.mrpControllers + '">' + obj.orderData.mrp + '</span>';
+      obj.orderMrp = '<span title="' + obj.mrpControllers + '">' + (obj.orderData.mrp || '') + '</span>';
     }
     else
     {
