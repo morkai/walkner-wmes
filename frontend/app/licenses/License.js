@@ -37,8 +37,8 @@ define([
       var obj = this.toJSON();
 
       obj.appName = t('licenses', 'app:' + obj.appId);
-      obj.date = time.format(obj.date, 'YYYY-MM-DD');
-      obj.expireDate = obj.expireDate ? time.format(obj.expireDate, 'YYYY-MM-DD') : '-';
+      obj.date = time.format(obj.date, 'L');
+      obj.expireDate = obj.expireDate ? time.format(obj.expireDate, 'L') : '-';
       obj.features = this.serializeFeatures();
 
       return obj;

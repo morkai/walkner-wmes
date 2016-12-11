@@ -86,11 +86,11 @@ define([
           var reason = downtimeReasons.get(row.reason);
 
           row.className = prodDowntime.getCssClassName();
-          row.time = time.format(row.startedAt, 'HH:mm:ss');
+          row.time = time.format(row.startedAt, 'LTS');
 
           if (row.finishedAt)
           {
-            row.time += '-' + time.format(row.finishedAt, 'HH:mm:ss');
+            row.time += '-' + time.format(row.finishedAt, 'LTS');
           }
 
           if (aor)
@@ -164,7 +164,7 @@ define([
       {
         return;
       }
-      
+
       var downtimePickerView = new DowntimePickerView({
         model: {
           mode: 'edit',

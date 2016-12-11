@@ -41,7 +41,7 @@ define([
 
           return {
             severity: event.getSeverityClassName(),
-            time: time.format(event.get('time'), 'lll'),
+            time: time.format(event.get('time'), 'L, LTS'),
             user: event.get('user'),
             type: t('events', 'TYPE:' + type),
             text: t('events', 'TEXT:' + type, t.flatten(data))
@@ -75,12 +75,12 @@ define([
 
       if (data.date)
       {
-        data.date = time.format(data.date, 'YYYY-MM-DD');
+        data.date = time.format(data.date, 'L');
       }
 
       if (data.timestamp)
       {
-        data.timestamp = time.format(data.timestamp, 'YYYY-MM-DD, HH:mm:ss');
+        data.timestamp = time.format(data.timestamp, 'L, LTS');
       }
 
       switch (type)
@@ -94,7 +94,7 @@ define([
           var subdivision = subdivisions.get(data.model.subdivision);
 
           data.model.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
-          data.model.date = time.format(data.model.date, 'YYYY-MM-DD');
+          data.model.date = time.format(data.model.date, 'L');
           data.model.shift = t('core', 'SHIFT:' + data.model.shift);
           break;
 
@@ -104,7 +104,7 @@ define([
           var division = divisions.get(data.model.division);
 
           data.model.division = division ? renderOrgUnitPath(division, false, false) : '?';
-          data.model.date = time.format(data.model.date, 'YYYY-MM-DD');
+          data.model.date = time.format(data.model.date, 'L');
           data.model.shift = t('core', 'SHIFT:' + data.model.shift);
           break;
 

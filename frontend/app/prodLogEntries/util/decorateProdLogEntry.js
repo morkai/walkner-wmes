@@ -58,12 +58,12 @@ define([
     switch (prodLogEntry.type)
     {
       case 'changeShift':
-        data.date = time.format(logData.startedProdShift.date, 'YYYY-MM-DD');
+        data.date = time.format(logData.startedProdShift.date, 'L');
         data.shift = t('core', 'SHIFT:' + logData.startedProdShift.shift);
         break;
 
       case 'addShift':
-        data.date = time.format(logData.date, 'YYYY-MM-DD');
+        data.date = time.format(logData.date, 'L');
         data.shift = t('core', 'SHIFT:' + logData.shift);
         break;
 
@@ -148,7 +148,7 @@ define([
 
     prodLogEntry.data = t('prodLogEntries', dataKey, data);
     prodLogEntry.type = t('prodLogEntries', 'type:' + prodLogEntry.type);
-    prodLogEntry.createdAt = time.format(prodLogEntry.createdAt, 'YYYY-MM-DD HH:mm:ss');
+    prodLogEntry.createdAt = time.format(prodLogEntry.createdAt, 'L, LTS');
     prodLogEntry.creator = renderUserInfo({userInfo: prodLogEntry.creator});
 
     if (timeDiff)
@@ -162,7 +162,7 @@ define([
     if (prodLogEntry.prodShift)
     {
       prodLogEntry.prodShift = '<a href="#prodShifts/' + prodLogEntry.prodShift._id + '">'
-        + time.format(prodLogEntry.prodShift.date, 'YYYY-MM-DD')
+        + time.format(prodLogEntry.prodShift.date, 'L')
         + ', ' + t('core', 'SHIFT:' + prodLogEntry.prodShift.shift)
         + '</a>';
     }

@@ -136,10 +136,10 @@ define([
     {
       var prodShift = this.toJSON();
 
-      prodShift.createdAt = time.format(prodShift.createdAt, 'YYYY-MM-DD HH:mm:ss');
+      prodShift.createdAt = time.format(prodShift.createdAt, 'LL, LTS');
       prodShift.creator = renderUserInfo({userInfo: prodShift.creator});
 
-      prodShift.date = time.format(prodShift.date, 'YYYY-MM-DD');
+      prodShift.date = time.format(prodShift.date, 'L');
       prodShift.shift = prodShift.shift ? t('core', 'SHIFT:' + prodShift.shift) : '?';
 
       if (options.orgUnits)
@@ -853,7 +853,7 @@ define([
 
       if (date && shift)
       {
-        label += ': ' + time.format(this.get('date'), 'YYYY-MM-DD');
+        label += ': ' + time.format(this.get('date'), 'L');
         label += ', ' + t('core', 'SHIFT:' + this.get('shift'));
       }
 
@@ -865,7 +865,7 @@ define([
      */
     getCurrentTime: function()
     {
-      return time.getMoment().format('YYYY-MM-DD HH:mm:ss');
+      return time.getMoment().format('L, LTS');
     },
 
     /**
@@ -940,8 +940,8 @@ define([
     getCurrentQuantityDoneHourRange: function()
     {
       var fromMoment = time.getMoment().minutes(0).seconds(0);
-      var from = fromMoment.format('HH:mm:ss');
-      var to = fromMoment.minutes(59).seconds(59).format('HH:mm:ss');
+      var from = fromMoment.format('LTS');
+      var to = fromMoment.minutes(59).seconds(59).format('LTS');
 
       return from + '-' + to;
     },

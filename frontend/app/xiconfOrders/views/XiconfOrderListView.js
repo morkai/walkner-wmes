@@ -62,8 +62,8 @@ define([
           nc12: model.get('nc12')[0],
           name: model.get('name'),
           quantity: quantityDone.toLocaleString() + '/' + quantityTodo.toLocaleString(),
-          reqDate: time.format(model.get('reqDate'), 'YYYY-MM-DD'),
-          startedAt: startedAt ? time.format(startedAt, 'YYYY-MM-DD HH:mm:ss') : null,
+          reqDate: time.format(model.get('reqDate'), 'L'),
+          startedAt: startedAt ? time.format(startedAt, 'L, LTS') : null,
           duration: duration !== null ? time.toString(duration) : null
         };
       });

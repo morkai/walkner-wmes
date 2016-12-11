@@ -107,7 +107,7 @@ define([
 
     serializeChange: function(change)
     {
-      change.timeText = time.format(change.time, 'YYYY-MM-DD<br>HH:mm:ss');
+      change.timeText = time.format(change.time, 'L<br>LTS');
       change.userText = renderUserInfo({userInfo: change.user});
       change.values = Object.keys(change.oldValues || {}).map(function(property)
       {

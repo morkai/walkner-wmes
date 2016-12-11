@@ -68,7 +68,7 @@ define([
     {
       case 'startedAt':
       case 'finishedAt':
-        return time.format(value, 'YYYY-MM-DD, HH:mm:ss');
+        return time.format(value, 'L, LTS');
 
       case 'master':
       case 'leader':

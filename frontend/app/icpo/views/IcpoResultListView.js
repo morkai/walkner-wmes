@@ -39,7 +39,7 @@ define([
         driver: model.get('driver'),
         gprs: model.get('gprs'),
         led: model.get('led'),
-        startedAt: startedAt.format('YYYY-MM-DD, HH:mm:ss.SSS'),
+        startedAt: startedAt.format('L, LTS'),
         duration: time.toString((finishedAt.valueOf() - startedAt.valueOf()) / 1000, false, true)
       };
     }

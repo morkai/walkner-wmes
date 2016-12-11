@@ -128,7 +128,7 @@ define([
       obj.creator = renderUserInfo({userInfo: obj.creator});
       obj.updatedAt = time.format(obj.updatedAt, 'LLLL');
       obj.updater = renderUserInfo({userInfo: obj.updater});
-      obj.inspectedAt = time.format(obj.inspectedAt, options.dateFormat || 'YYYY-MM-DD');
+      obj.inspectedAt = time.format(obj.inspectedAt, options.dateFormat || 'L');
       obj.inspector = renderUserInfo({userInfo: obj.inspector});
       obj.kind = dictionaries.getLabel('kind', obj.kind);
       obj.qtyOrder = obj.qtyOrder ? obj.qtyOrder.toLocaleString() : '0';

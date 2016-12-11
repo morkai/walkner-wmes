@@ -29,7 +29,7 @@
       <% if (extended) { %>
       <td class="is-min is-number"><a href="#pressWorksheets/<%- order.pressWorksheet._id %>"><%= order.pressWorksheet.rid %></a></td>
       <td class="is-min"><%= order.pressWorksheet.user %></td>
-      <td class="is-min"><%- t('core', 'SHIFT', {date: time.format(order.pressWorksheet.date, 'YYYY-MM-DD'), shift: t('core', 'SHIFT:' + order.pressWorksheet.shift)}) %></td>
+      <td class="is-min"><%- t('core', 'SHIFT', {date: time.format(order.pressWorksheet.date, 'L'), shift: t('core', 'SHIFT:' + order.pressWorksheet.shift)}) %></td>
       <% } %>
       <td class="is-min">
         <% if (order.prodShiftOrder && user.isAllowedTo('PROD_DATA:VIEW')) { %>

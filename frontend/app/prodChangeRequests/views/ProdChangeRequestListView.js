@@ -223,7 +223,7 @@ define([
       {
         case 'shift':
           extra = t('core', 'SHIFT', {
-            date: time.format(data.date, 'YYYY-MM-DD'),
+            date: time.format(data.date, 'L'),
             shift: t('core', 'SHIFT:' + data.shift)
           });
           break;
@@ -256,7 +256,7 @@ define([
           var hours = dateMoment.hours();
 
           extra = t('core', 'SHIFT', {
-            date: dateMoment.format('YYYY-MM-DD'),
+            date: dateMoment.format('L'),
             shift: t('core', 'SHIFT:' + (hours === 6 ? 1 : hours === 14 ? 2 : 3))
           });
 

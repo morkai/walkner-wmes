@@ -36,17 +36,17 @@ define([
     {
       var shiftInfo = getShiftStartInfo(obj.startedAt);
 
-      obj.date = shiftInfo.moment.format('YYYY-MM-DD');
+      obj.date = shiftInfo.moment.format('L');
       obj.shift = shiftInfo.shift;
     }
     else
     {
-      obj.date = time.format(obj.date, 'YYYY-MM-DD');
+      obj.date = time.format(obj.date, 'L');
     }
 
     obj.shift = t('core', 'SHIFT:' + obj.shift);
-    obj.startedAt = time.format(obj.startedAt, 'HH:mm:ss');
-    obj.finishedAt = time.format(obj.finishedAt, 'HH:mm:ss');
+    obj.startedAt = time.format(obj.startedAt, 'LTS');
+    obj.finishedAt = time.format(obj.finishedAt, 'LTS');
     obj.duration = finishedAt ? time.toString((finishedAt - startedAt) / 1000) : '';
     obj.creator = renderUserInfo({userInfo: obj.creator});
 

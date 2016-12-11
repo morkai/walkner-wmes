@@ -32,7 +32,7 @@ define([
       var obj = this.toJSON();
 
       obj.className = !obj.connectedAt ? 'danger' : obj.inputMode === 'remote' ? 'success' : 'warning';
-      obj.lastSeenAt = time.format(obj.connectedAt || obj.disconnectedAt, 'YY-MM-DD, HH:mm:ss');
+      obj.lastSeenAt = time.format(obj.connectedAt || obj.disconnectedAt, 'L, LTS');
       obj.orderLink = obj.order ? ('<a href="#xiconf/orders/' + obj.order + '">' + obj.order + '</a>') : '-';
 
       if (_.isObject(obj.license))

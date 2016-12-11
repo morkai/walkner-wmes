@@ -39,7 +39,7 @@ define([
     hdRight: function()
     {
       return t('hourlyPlans', 'print:hdRight', {
-        date: time.format(this.model.get('date'), 'YYYY-MM-DD'),
+        date: time.format(this.model.get('date'), 'L'),
         shift: t('core', 'SHIFT:' + this.model.get('shift'))
       });
     },

@@ -58,7 +58,7 @@ define([
     {
       var data = this.toJSON();
 
-      data.date = time.format(data.date, 'YYYY-MM-DD');
+      data.date = time.format(data.date, 'LL');
       data.shift = t('core', 'SHIFT:' + data.shift);
       data.master = formatUser(data.master);
       data.operator = formatUser(data.operator);
@@ -73,8 +73,8 @@ define([
       {
         data.orders = data.orders.map(function(order)
         {
-          order.startedAt = time.getMoment(order.startedAt).format('HH:mm:ss');
-          order.finishedAt = time.getMoment(order.finishedAt).format('HH:mm:ss');
+          order.startedAt = time.getMoment(order.startedAt).format('LTS');
+          order.finishedAt = time.getMoment(order.finishedAt).format('LTS');
 
           return order;
         });

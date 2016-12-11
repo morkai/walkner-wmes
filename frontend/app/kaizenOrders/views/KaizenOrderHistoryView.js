@@ -160,11 +160,11 @@ define([
       switch (property)
       {
         case 'eventDate':
-          return time.format(value, 'YYYY-MM-DD, HH:mm');
+          return time.format(value, 'L, LT');
 
         case 'kaizenStartDate':
         case 'kaizenFinishDate':
-          return time.format(value, 'YYYY-MM-DD');
+          return time.format(value, 'L');
 
         case 'confirmer':
           return renderUserInfo({userInfo: value});

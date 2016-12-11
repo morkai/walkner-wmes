@@ -38,7 +38,7 @@ define([
       var obj = this.toJSON();
 
       obj.className = EVENT_TO_SEVERITY_CLASS_NAME[this.get('type')];
-      obj.time = time.format(obj.time, compact ? 'HH:mm:ss' : 'LL, HH:mm:ss');
+      obj.time = time.format(obj.time, compact ? 'LTS' : 'LL, LTS');
       obj.line = this.getProdLineId();
       obj.user = this.getUserName(compact);
       obj.action = this.getActionText();

@@ -41,7 +41,7 @@ define([
     hdRight: function()
     {
       return t('fte', 'print:hdRight', {
-        date: time.format(this.model.get('date'), 'YYYY-MM-DD'),
+        date: time.format(this.model.get('date'), 'L'),
         shift: t('core', 'SHIFT:' + this.model.get('shift'))
       });
     },

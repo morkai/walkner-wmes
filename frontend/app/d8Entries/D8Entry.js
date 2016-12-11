@@ -58,7 +58,7 @@ define([
     {
       var longDateTime = options && options.longDateTime;
       var dateFormat = longDateTime ? 'LL' : 'L';
-      var timeFormat = longDateTime ? 'LLLL' : 'L, HH:mm:ss';
+      var timeFormat = longDateTime ? 'LLLL' : 'L, LTS';
       var obj = this.toJSON();
 
       obj.statusText = t('status:' + obj.status);

@@ -122,7 +122,7 @@ define([
 
       for (var i = 0; i < 8; ++i)
       {
-        chartData.categories.push(time.format(category, 'HH:mm'));
+        chartData.categories.push(time.format(category, 'LT'));
 
         category += 3600 * 1000;
       }

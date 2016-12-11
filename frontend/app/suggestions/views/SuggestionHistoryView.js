@@ -162,7 +162,7 @@ define([
         case 'date':
         case 'kaizenStartDate':
         case 'kaizenFinishDate':
-          return time.format(value, 'YYYY-MM-DD');
+          return time.format(value, 'L');
 
         case 'confirmer':
           return renderUserInfo({userInfo: value});

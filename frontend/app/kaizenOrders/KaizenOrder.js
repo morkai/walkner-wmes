@@ -65,8 +65,8 @@ define([
     {
       var nlsDomain = options && options.nlsDomain || 'kaizenOrders';
       var longDateTime = options && options.longDateTime;
-      var dateFormat = longDateTime ? 'LL' : 'YY-MM-DD';
-      var timeFormat = longDateTime ? 'LLLL' : 'YY-MM-DD, HH:mm:ss';
+      var dateFormat = longDateTime ? 'LL' : 'L';
+      var timeFormat = longDateTime ? 'LLLL' : 'L, LTS';
       var obj = this.toJSON();
 
       obj.types = obj.types.map(function(type)

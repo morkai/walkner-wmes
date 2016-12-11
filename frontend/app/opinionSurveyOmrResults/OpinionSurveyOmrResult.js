@@ -77,8 +77,8 @@ define([
       var startedAt = time.getMoment(obj.startedAt);
       var finishedAt = time.getMoment(obj.finishedAt);
 
-      obj.startedAt = startedAt.format('YYYY-MM-DD, HH:mm:ss.SSS');
-      obj.finishedAt = finishedAt.format('YYYY-MM-DD, HH:mm:ss.SSS');
+      obj.startedAt = startedAt.format('L, LTS');
+      obj.finishedAt = finishedAt.format('L, LTS');
       obj.duration = time.toString(finishedAt.diff(startedAt, 'seconds', true));
 
       return obj;

@@ -601,7 +601,7 @@ define([
         order: {
           name: order.getProductName(),
           operation: order.getOperationName(),
-          startedAt: time.format(order.get('startedAt'), 'HH:mm:ss'),
+          startedAt: time.format(order.get('startedAt'), 'LTS'),
           duration: order.getDurationString(now, false),
           quantityDone: order.getQuantityDone(),
           workerCount: order.getWorkerCount(),

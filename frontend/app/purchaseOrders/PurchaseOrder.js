@@ -109,7 +109,7 @@ define([
 
       obj.items = obj.items ? obj.items.invoke('serialize') : [];
 
-      obj.minScheduleDate = obj.scheduledAt ? moment.utc(obj.scheduledAt).format('YYYY-MM-DD') : null;
+      obj.minScheduleDate = obj.scheduledAt ? moment.utc(obj.scheduledAt).format('L') : null;
 
       obj.className = obj.open ? '' : 'success';
 

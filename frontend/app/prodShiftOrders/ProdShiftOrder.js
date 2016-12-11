@@ -455,7 +455,7 @@ define([
         return '?';
       }
 
-      return time.format(startedAt, 'HH:mm:ss');
+      return time.format(startedAt, 'LTS');
     },
 
     getQuantityDone: function()

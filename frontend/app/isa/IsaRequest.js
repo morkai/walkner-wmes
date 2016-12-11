@@ -132,9 +132,9 @@ define([
       obj.requester = renderUserInfo({userInfo: obj.requester});
       obj.responder = renderUserInfo({userInfo: obj.responder});
       obj.finisher = renderUserInfo({userInfo: obj.finisher});
-      obj.requestedAt = time.format(obj.requestedAt, 'LL, HH:mm:ss');
-      obj.respondedAt = obj.respondedAt ? time.format(obj.respondedAt, 'HH:mm:ss') : '-';
-      obj.finishedAt = obj.finishedAt ? time.format(obj.finishedAt, 'HH:mm:ss') : '-';
+      obj.requestedAt = time.format(obj.requestedAt, 'LL, LTS');
+      obj.respondedAt = obj.respondedAt ? time.format(obj.respondedAt, 'LTS') : '-';
+      obj.finishedAt = obj.finishedAt ? time.format(obj.finishedAt, 'LTS') : '-';
       obj.duration = time.toString(this.getDuration());
       obj.request = t('isa', 'requests:date+user', {
         date: obj.requestedAt,

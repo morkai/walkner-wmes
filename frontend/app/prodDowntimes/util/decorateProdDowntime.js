@@ -33,7 +33,7 @@ define([
 
   return function decorateProdDowntime(prodDowntime, options)
   {
-    var longDateFormat = options && options.longDate ? 'LLLL' : 'YYYY-MM-DD, HH:mm:ss';
+    var longDateFormat = options && options.longDate ? 'LLLL' : 'L, LTS';
     var obj = prodDowntime.toJSON();
 
     obj.statusClassName = prodDowntime.getCssClassName();
@@ -121,7 +121,7 @@ define([
       }
     }
 
-    obj.date = obj.date ? time.format(obj.date, 'YYYY-MM-DD') : '?';
+    obj.date = obj.date ? time.format(obj.date, 'L') : '?';
     obj.shift = obj.shift ? t('core', 'SHIFT:' + obj.shift) : '?';
     obj.prodShiftText = obj.date + ', ' + obj.shift;
 

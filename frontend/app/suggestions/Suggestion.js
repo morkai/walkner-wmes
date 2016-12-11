@@ -58,8 +58,8 @@ define([
     serialize: function(options)
     {
       var longDateTime = options && options.longDateTime;
-      var dateFormat = longDateTime ? 'LL' : 'YYYY-MM-DD';
-      var timeFormat = longDateTime ? 'LLLL' : 'YYYY-MM-DD, HH:mm:ss';
+      var dateFormat = longDateTime ? 'LL' : 'L';
+      var timeFormat = longDateTime ? 'LLLL' : 'L, LTS';
       var obj = this.toJSON();
 
       obj.status = t(options && options.nlsDomain || 'suggestions', 'status:' + obj.status);

@@ -62,7 +62,7 @@ define([
         nc12: model.get('nc12') || '-',
         counter: model.get('counter') || '-',
         quantity: order ? order.quantity : '-',
-        startedAt: time.format(model.get('startedAt'), 'YY-MM-DD, HH:mm:ss'),
+        startedAt: time.format(model.get('startedAt'), 'L, LTS'),
         duration: time.toString(model.get('duration') / 1000, false, true)
       };
     }

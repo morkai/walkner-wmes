@@ -603,8 +603,8 @@ define([
     {
       var duration = time.toString((item.ending_time - item.starting_time) / 1000);
       var templateData = {
-        startedAt: time.format(item.starting_time, 'HH:mm:ss'),
-        finishedAt: item.ended ? time.format(item.ending_time, 'HH:mm:ss') : '-',
+        startedAt: time.format(item.starting_time, 'LTS'),
+        finishedAt: item.ended ? time.format(item.ending_time, 'LTS') : '-',
         duration: duration,
         managing: managing
       };

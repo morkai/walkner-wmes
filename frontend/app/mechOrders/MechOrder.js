@@ -48,7 +48,7 @@ define([
 
       if (order.importTs)
       {
-        order.importTs = time.format(order.importTs, 'YYYY-MM-DD HH:mm:ss');
+        order.importTs = time.format(order.importTs, 'L, LTS');
       }
 
       order.operations = order.operations === null ? [] : order.operations.toJSON();

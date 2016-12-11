@@ -29,7 +29,7 @@ define([
       var orderInfo = obj.orderInfo || {};
 
       obj.className = obj.connectedAt ? 'success' : 'danger';
-      obj.lastSeenAt = time.format(obj.connectedAt || obj.disconnectedAt, 'YY-MM-DD, HH:mm:ss');
+      obj.lastSeenAt = time.format(obj.connectedAt || obj.disconnectedAt, 'L, LTS');
       obj.fileSource = orderInfo.fileSource ? t('orderDocumentClients', 'fileSource:' + orderInfo.fileSource) : '-';
 
       if (orderInfo.orderNo)
