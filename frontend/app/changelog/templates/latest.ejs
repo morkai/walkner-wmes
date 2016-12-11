@@ -1,60 +1,62 @@
-<h1>v0.99.0</h1>
-<h2><%- time.format('2016-11-27', 'LL') %></h2>
+<h1>v0.100.0</h1>
+<h2><%- time.format('2016-12-11', 'LL') %></h2>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Poprawiono błąd powodujący zapamiętywanie ID linii podczas aktywacji linii, jeżeli przed chwilą linia ta została
-    dezaktywowana.</li>
-  <li>Poprawiono błąd powodujący otwieranie kilku okien dialogowych, jeżeli szybko wciśnięto na obszar aktywacji
-    edycji wartości.</li>
-  <li>Zmieniono wyszukiwanie zleceń tak, aby zwracana była pusta lista zamiast błędu, jeżeli podano nieprawidłową wartość
-    jako nr zlecenia.</li>
-  <li>Zmieniono wyszukiwanie zleceń tak, aby po wybraniu zlecenia domyślnie zaznaczana była możliwie najlepsza
-    operacja. Każda operacja dostaje punkty w zależności od spełnionych warunków i wybierana jest ta, która ma ich najwięcej:
-    <ul>
-      <li>1 pkt, jeżeli 'Labor Time' ma wartość,</li>
-      <li>1 pkt, jeżeli 'WorkCenter' ma wartość,</li>
-      <li>2 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>mont</code>,</li>
-      <li>1 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>pak</code>,</li>
-      <li>1 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>kj</code>,</li>
-      <li>1 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>opra</code>.</li>
-    </ul>
-  </li>
-  <li>Zmieniono 'Nazwa rodziny/detalu' tak, aby wyświetlało wartość 'Opis' ze zlecenia, zamiast 'Nazwa'.</li>
-  <li>Zmieniono obszar aktywacji edycji wartości z niebieskiego odnośnika na cały obszar danej wartości.</li>
-  <li>Zmieniono rozmiary wszystkich przycisków na większe.</li>
-  <li>Zmieniono wybieranie personelu linii tak, aby pod polem wyszukiwania wyświetlane były osoby wybrane na danej linii
-    i zmianie produkcyjnej w ostatnich dwóch tygodniach.</li>
-  <li>Zmieniono kolory statusu linii:
-    <ul>
-      <li>szary - nieokreślony,</li>
-      <li>czarny - bezczynność,</li>
-      <li>zielony - praca, cykl OK,</li>
-      <li>pomarańczowy - praca, cykl NOK,</li>
-      <li>czerwony - przestój.</li>
-    </ul>
-  </li>
-  <li>Dodano funkcjonalność obliczania czasu cyklu linii na podstawie skanowanych numerów seryjnych.</li>
+  <li>Poprawiono błąd powodujący automatyczny start przestoju o okreslonej godzinie nawet wtedy, gdy Linia nie miała
+    przypisanego domyślnego Obszaru odpowiedzialności.</li>
+  <li>Poprawiono błąd powodujący wyłączenie funkcji sprawdzania uruchomienia kilku Formatek jednocześnie podczas ładowania.</li>
+  <li>Zmieniono formularz wybierania nowego personelu linii tak, aby lista ostatnio pracujących osób nie była pokazywana,
+    jeżeli jest pusta.</li>
+  <li>Zmieniono wyświetlanie wartości 'Cykl [s]' tak, aby nie wyświetlał wartości 'Czas taktu', jeżeli nie został
+    jeszcze zeskanowany żadnen numer seryjny.</li>
+  <li>Dodano wsparcie dla nowego systemu przechowywania danych offline na komputerach UP.</li>
+  <li>Dodano możliwość ustawienia następnego zlecenia. Następne zlecenie pojawia się do wyboru w aplikacji Xiconf
+    i zostaje automatycznie wpisane do formularza rozpoczynania nowego zlecenia.</li>
+  <li>Dodano wyświetlanie wartości 'Całkowita zrobiona ilość w zleceniu' oraz 'Całkowita ilość do zrobienia'.</li>
 </ul>
-<h3>Monitoring > Układ fabryki</h3>
+<h3>Dane produkcyjne > Zmiany</h3>
 <ul>
-  <li>Dodano dymek wyświetlający informację o aktualnym zleceniu i przestoju po najechaniu na linię produkcyjną.</li>
+  <li>Zmieniono oś czasu tak, aby kolor tła zlecenia wskazywał czy 'Średni czas cyklu' został przekroczony.</li>
+  <li>Dodano wyświetlanie wartości 'Czas taktu' i 'Średni czas cyklu' w dymkach zleceń. Wartości wydoczne tylko dla
+    użytkowników z uprawnieniami 'Dane produkcyjne: zarządzanie'.</li>
 </ul>
-<h3>Przestoje</h3>
+<h3>Dane produkcyjne > Zlecenia</h3>
 <ul>
-  <li>Poprawiono błąd powodujący niezaznaczanie statusu 'Aktywny alarm' po wejściu do przestojów z pozycji
-    menu 'Alarmy'.</li>
+  <li>Zmieniono kolumnę 'Zlecenie' tak, aby wyświetlała wartość 'Opis' zamiast 'Nazwa wyrobu' zlecenia (jeżeli
+    jest dostępna).</li>
+  <li>Zmieniono listę zleceń tak, aby kolor tła wskazywał czy 'Średni czas cyklu' danego zlecenia został przekroczony.</li>
+  <li>Zmieniono kolor głównego panelu na stronie ze szczegółami zlecenia tak, aby wskazywał czy 'Średni czas cyklu' danego
+    zlecenia został przekroczony.</li>
+  <li>Zmieniono kolor tła numerów seryjnych przekraczających 'Czas taktu' na stronie ze szczegółami zlecenia z czerwonego
+    na pomarańczowy, aby pasował do koloru stanu linii produkcyjnej.</li>
+  <li>Dodano wyświetlanie procentowego stosunku 'Czasu taktu' do 'Średniego czasu cyklu' na stronie ze szczegółami
+    zlecenia.</li>
 </ul>
-<h3>Użytkownicy</h3>
+<h3>Dane produkcyjne > Numery seryjne</h3>
 <ul>
-  <li>Zmieniono synchronizację użytkowników z bazą KD tak, aby najpierw porównywała użytkowników po loginie, a dopiero
-    potem (jeżeli nie istnieją) po ID z bazy KD.</li>
+  <li>Zmieniono kolor tła numerów seryjnych przekraczających 'Czas taktu' z czerwonego na pomarańczowy, aby pasował do
+    koloru stanu linii produkcyjnej.</li>
 </ul>
-<h3><a href="#pscs">PSCS</a></h3>
+<h3>Baza testów > Zlecenia</h3>
 <ul>
-  <li>Zmieniono szablon dla strony głównej, szkolenia oraz testu.</li>
-  <li>Dodano wyświetlanie prezentacji na stronie szkolenia.</li>
+  <li>Zmieniono importowanie zleceń tak, aby jako 'Nazwa wyrobu' ze zlecenia kopiowana była wartość 'Opis' zamiast
+    'Nazwa wyrobu' (jeżeli jest dostępna).</li>
+</ul>
+<h3>Zlecenia reszty działów</h3>
+<ul>
+  <li>Zmieniono kolumnę 'Nazwa wyrobu' tak, aby wyświetlała wartość 'Opis' zamiast 'Nazwa wyrobu' zlecenia (jeżeli
+    jest dostępna).</li>
+  <li>Zmieniono kolumnę 'Ilość' tak, aby wyświetlała wartości 'Ilość zrobiona' i 'Ilość do zrobienia'.</li>
+</ul>
+<h3>8D</h3>
+<ul>
+  <li>Dodano możliwość pobieranie załączników przez lokalnych klientów.</li>
+</ul>
+<h3>PSCS</h3>
+<ul>
+  <li>Dodano polską wersję prezentacji.</li>
 </ul>
 <h3>Inne</h3>
 <ul>
-  <li>Poprawiono błąd podczas wyciągania z adresu nazwy komputera.</li>
+  <li>Zmieniono wyświetlanie dat tak, aby miały spójny format.</li>
 </ul>

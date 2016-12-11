@@ -1,4 +1,103 @@
 <div class="hidden">
+  <h1>v0.99.1</h1>
+  <h2><%- time.format('2016-12-04', 'LL') %></h2>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający zarejestrowanie pierwszego nr seryjnego w zleceniu, jeżeli czas IPT jest wcześniejszy
+      niż czas rozpoczęcia zlecenia na Formatce operatora.</li>
+    <li>Usunięto efekt pojawiania się/znikania z komunikatów skanowania nr seryjnego oraz z okienek dialogowych, aby
+      ograniczyć możliwe zawieszanie się starej wersji przeglądarki.</li>
+  </ul>
+  <h3>Dane produkcyjne > Zmiany</h3>
+  <ul>
+    <li>Poprawiono błąd podczas wyświetlania zleceń na osi czasu zmiany produkcyjnej, jeżeli użytkownik miał zdefiniowaną
+      jednostkę organizacyjną inną niż zmiana produkcyjna, dla której oś czasu wyświetlał.</li>
+  </ul>
+  <h3>PSCS</h3>
+  <ul>
+    <li>Zmieniono stronę 'Szkolenie' tak, aby wyświetlała prezentację za pomocą przeglądarki PowerPoint z dysku OneDrive,
+      zamiast statycznego pliku PDF.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Dodano filtr 'Rodzina produktu' do raportu 'Zestawienie informacji'.</li>
+    <li>Dodano wybrane filtry do podtytułu eksportowanego wykresu 'Średnia ilość dni realizacji w poszczególnych tygodniach'
+      z raportu 'Zestawienie informacji'.</li>
+  </ul>
+  <h3>Wydziały</h3>
+  <ul>
+    <li>Dodano nowe pole: Data dezaktywacji.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono wyświetlanie ścieżki jednostek organizacyjnych tak, aby pokazywane były wszystkie Kontrolery MRP,
+      jeżeli dany przepływ ma więcej niż nadrzędny jeden MRP.</li>
+    <li>Zmieniono wyświetlanie ścieżki jednostek organizacyjnych tak, dezaktywowane jednostki były przekreślone.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.99.0</h1>
+  <h2><%- time.format('2016-11-27', 'LL') %></h2>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący zapamiętywanie ID linii podczas aktywacji linii, jeżeli przed chwilą linia ta została
+      dezaktywowana.</li>
+    <li>Poprawiono błąd powodujący otwieranie kilku okien dialogowych, jeżeli szybko wciśnięto na obszar aktywacji
+      edycji wartości.</li>
+    <li>Zmieniono wyszukiwanie zleceń tak, aby zwracana była pusta lista zamiast błędu, jeżeli podano nieprawidłową wartość
+      jako nr zlecenia.</li>
+    <li>Zmieniono wyszukiwanie zleceń tak, aby po wybraniu zlecenia domyślnie zaznaczana była możliwie najlepsza
+      operacja. Każda operacja dostaje punkty w zależności od spełnionych warunków i wybierana jest ta, która ma ich najwięcej:
+      <ul>
+        <li>1 pkt, jeżeli 'Labor Time' ma wartość,</li>
+        <li>1 pkt, jeżeli 'WorkCenter' ma wartość,</li>
+        <li>2 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>mont</code>,</li>
+        <li>1 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>pak</code>,</li>
+        <li>1 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>kj</code>,</li>
+        <li>1 pkt, jeżeli 'Nazwa' zawiera ciąg znaków <code>opra</code>.</li>
+      </ul>
+    </li>
+    <li>Zmieniono 'Nazwa rodziny/detalu' tak, aby wyświetlało wartość 'Opis' ze zlecenia, zamiast 'Nazwa'.</li>
+    <li>Zmieniono obszar aktywacji edycji wartości z niebieskiego odnośnika na cały obszar danej wartości.</li>
+    <li>Zmieniono rozmiary wszystkich przycisków na większe.</li>
+    <li>Zmieniono wybieranie personelu linii tak, aby pod polem wyszukiwania wyświetlane były osoby wybrane na danej linii
+      i zmianie produkcyjnej w ostatnich dwóch tygodniach.</li>
+    <li>Zmieniono kolory statusu linii:
+      <ul>
+        <li>szary - nieokreślony,</li>
+        <li>czarny - bezczynność,</li>
+        <li>zielony - praca, cykl OK,</li>
+        <li>pomarańczowy - praca, cykl NOK,</li>
+        <li>czerwony - przestój.</li>
+      </ul>
+    </li>
+    <li>Dodano funkcjonalność obliczania czasu cyklu linii na podstawie skanowanych numerów seryjnych.</li>
+  </ul>
+  <h3>Monitoring > Układ fabryki</h3>
+  <ul>
+    <li>Dodano dymek wyświetlający informację o aktualnym zleceniu i przestoju po najechaniu na linię produkcyjną.</li>
+  </ul>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niezaznaczanie statusu 'Aktywny alarm' po wejściu do przestojów z pozycji
+      menu 'Alarmy'.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Zmieniono synchronizację użytkowników z bazą KD tak, aby najpierw porównywała użytkowników po loginie, a dopiero
+      potem (jeżeli nie istnieją) po ID z bazy KD.</li>
+  </ul>
+  <h3><a href="#pscs">PSCS</a></h3>
+  <ul>
+    <li>Zmieniono szablon dla strony głównej, szkolenia oraz testu.</li>
+    <li>Dodano wyświetlanie prezentacji na stronie szkolenia.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd podczas wyciągania z adresu nazwy komputera.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.98.2</h1>
   <h2><%- time.format('2016-11-20', 'LL') %></h2>
   <h3>Zdarzenia</h3>
