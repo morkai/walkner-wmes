@@ -220,7 +220,7 @@ module.exports = function setupOrderModel(app, mongoose)
   {
     const totalQuantityDone = {
       total: 0,
-      byLine: {}
+      byLine: []
     };
 
     step(
@@ -240,16 +240,23 @@ module.exports = function setupOrderModel(app, mongoose)
           return this.skip(err);
         }
 
+        const byLine = {};
+
         docs.forEach(function(doc)
         {
           totalQuantityDone.total += doc.quantityDone;
 
-          if (!totalQuantityDone.byLine[doc._id])
+          if (!byLine[doc._id])
           {
-            totalQuantityDone.byLine[doc._id] = 0;
+            byLine[doc._id] = 0;
           }
 
-          totalQuantityDone.byLine[doc._id] = doc.quantityDone;
+          byLine[doc._id] = doc.quantityDone;
+        });
+
+        Object.keys(byLine).forEach(function(line)
+        {
+          totalQuantityDone.byLine.push({_id: line, quantityDone: byLine[line]});
         });
 
         mongoose.model('Order').update({_id: orderNo}, {$set: {qtyDone: totalQuantityDone}}, this.next());
