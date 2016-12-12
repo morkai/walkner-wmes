@@ -35,7 +35,8 @@ define([
         selector: {
           name: 'and',
           args: [
-            {name: 'ge', args: ['finishDate', today.getTime()]}
+            {name: 'ge', args: ['finishDate', today.getTime()]},
+            {name: 'le', args: ['finishDate', today.getTime()]}
           ]
         }
       });
