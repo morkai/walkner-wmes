@@ -19,10 +19,14 @@
     </div>
     <div>
       <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
-      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD" required>
       <label for="<%- idPrefix %>-to" class="control-label"><%- t('core', 'filter:date:to') %></label>
-      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
+      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD" required>
     </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-mrp"><%- t('orders', 'PROPERTY:mrp') %></label>
+    <input id="<%- idPrefix %>-mrp" class="orders-filter-mrp" name="mrp" type="text">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
