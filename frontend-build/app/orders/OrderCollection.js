@@ -1,3 +1,3 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../core/Collection","./Order"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:function(e){var t=new Date;return t.setHours(0),t.setMinutes(0),t.setSeconds(0),t.setMilliseconds(0),e.Query.fromObject({fields:{operations:0,bom:0,documents:0,changes:0},limit:20,sort:{finishDate:1},selector:{name:"and",args:[{name:"ge",args:["finishDate",t.getTime()]}]}})}})});
+define(["../core/Collection","./Order"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:function(e){var t=new Date;return t.setHours(0),t.setMinutes(0),t.setSeconds(0),t.setMilliseconds(0),e.Query.fromObject({fields:{operations:0,bom:0,documents:0,changes:0},limit:20,sort:{finishDate:1},selector:{name:"and",args:[{name:"ge",args:["finishDate",t.getTime()]},{name:"le",args:["finishDate",t.getTime()]}]}})}})});
