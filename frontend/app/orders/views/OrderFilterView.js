@@ -98,7 +98,7 @@ define([
             }
           });
 
-          return input === result ? null : result;
+          return input === result ? null : result.replace(/\s+/, ' ').trim();
         }
       });
 

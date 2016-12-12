@@ -1,0 +1,12 @@
+{
+  "shift": "{shift}<br>zmiana",
+  "line": "Linia:",
+  "title": "Wydajność godzinowa {from}-{to}",
+  "planned": "Ilość zaplanowana [szt]",
+  "actual": "Ilość zrobiona [szt]",
+  "remaining": "Do końca zmiany pozostało:",
+  "unit": "szt",
+  "controls:switchApps": "Zmień aplikację/Konfiguruj po 3s",
+  "controls:reboot": "Odśwież stronę/Restartuj komputer po 3s",
+  "controls:shutdown": "Wyłącz komputer po 3s"
+}

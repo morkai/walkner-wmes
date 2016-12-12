@@ -1,0 +1,89 @@
+.heff {
+  margin: 30px;
+  line-height: 1;
+}
+.heff-hd {
+  font-size: 32px;
+  line-height: 1.2;
+}
+.heff-date {
+  width: 38.333333%;
+  text-align: left;
+}
+.heff-shift {
+  width: 23.333333%;
+  text-align: center;
+}
+.heff-line {
+  width: 38.333333%;
+  text-align: right;
+}
+.heff-title {
+  margin: 30px 0 0 0;
+  padding: 15px;
+  text-align: center;
+  font-size: 48px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background: linear-gradient(to right, #fff, #f6f6f6, #fff);
+  text-shadow: 1px 1px 3px #ddd;
+}
+.heff-subtitle {
+  padding: 15px;
+  text-align: center;
+  font-size: 32px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background: linear-gradient(to right, #fff, #f6f6f6, #fff);
+  text-shadow: 1px 1px 3px #ddd;
+}
+.heff-qty {
+  font-size: 320px;
+}
+.heff-bd {
+  display: flex;
+  text-align: center;
+}
+.heff-planned,
+.heff-actual {
+  flex: 1 1 auto;
+  margin-right: 60px;
+}
+.heff-eff {
+  flex: 0 0 auto;
+  font-size: 413px;
+}
+.heff-eff > .fa-smile-o {
+  color: #00af00;
+}
+.heff-eff > .fa-frown-o {
+  color: #e00;
+}
+.heff-eff > .fa-meh-o {
+  color: #ffc000;
+}
+.heff-ft {
+  margin-top: 60px;
+  text-align: center;
+  font-size: 64px;
+}
+.heff-remaining {
+  margin-top: 30px;
+  font-size: 128px;
+}
+.heff-line select {
+  font-size: 26px;
+}
+.heff-parentControls {
+  position: fixed;
+  right: 0;
+  bottom: -1px;
+  display: flex;
+  box-shadow: 0 3px 6px #666;
+}
+.heff-parentControls > .btn {
+  margin-right: -1px;
+  width: 60px;
+  height: 50px;
+  font-size: 24px;
+}

@@ -72,6 +72,7 @@ exports.modules = [
   'qi',
   'pscs',
   'd8',
+  'heff',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -202,6 +203,7 @@ exports.pubsub = {
     'qi.**',
     'pscs.**',
     'd8.**',
+    'heff.**',
     'ping', 'sockets.connected', 'sockets.disconnected'
   ]
 };
@@ -419,6 +421,11 @@ exports.updater = {
       path: '/operator/manifest.appcache',
       mainJsFile: '/wmes-operator.js',
       mainCssFile: '/assets/wmes-operator.css'
+    },
+    {
+      path: '/heff/manifest.appcache',
+      mainJsFile: '/wmes-heff.js',
+      mainCssFile: '/assets/wmes-heff.css'
     }
   ]
 };

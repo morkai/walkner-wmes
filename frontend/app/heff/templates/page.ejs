@@ -1,0 +1,38 @@
+<div class="heff">
+  <div class="row heff-hd">
+    <div id="<%- idPrefix %>-date" class="col-md-4 heff-date"></div>
+    <div id="<%- idPrefix %>-shift" class="col-md-4 heff-shift"></div>
+    <div class="col-md-4 heff-line">
+      <div><%- t('heff', 'line') %></div>
+      <div id="<%- idPrefix %>-line"></div>
+    </div>
+  </div>
+  <div id="<%- idPrefix %>-title" class="heff-title"></div>
+  <div class="heff-bd">
+    <div class="heff-planned">
+      <div id="<%- idPrefix %>-planned" class="heff-qty">0</div>
+      <div class="heff-subtitle"><%- t('heff', 'planned') %></div>
+    </div>
+    <div class="heff-actual">
+      <div id="<%- idPrefix %>-actual" class="heff-qty">0</div>
+      <div class="heff-subtitle"><%- t('heff', 'actual') %></div>
+    </div>
+    <div class="heff-eff">
+      <i id="<%- idPrefix %>-eff" class="fa fa-smile-o"></i>
+    </div>
+  </div>
+  <div class="heff-ft">
+    <%- t('heff', 'remaining') %>
+    <div class="heff-remaining">
+      <span id="<%- idPrefix %>-remaining">0</span>
+      <%- t('heff', 'unit') %>
+    </div>
+  </div>
+  <% if (showParentControls) { %>
+  <div class="heff-parentControls">
+    <button id="<%- idPrefix %>-switchApps" class="btn btn-default" title="<%- t('heff', 'controls:switchApps') %>"><i class="fa fa-window-restore"></i></button>
+    <button id="<%- idPrefix %>-reboot" class="btn btn-default" title="<%- t('heff', 'controls:reboot') %>"><i class="fa fa-refresh"></i></button>
+    <button id="<%- idPrefix %>-shutdown" class="btn btn-default" title="<%- t('heff', 'controls:shutdown') %>"><i class="fa fa-power-off"></i></button>
+  </div>
+  <% } %>
+</div>

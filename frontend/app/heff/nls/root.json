@@ -1,0 +1,15 @@
+{
+  "root": {
+    "shift": "{shift}<br>shift",
+    "line": "Line:",
+    "title": "Hourly efficiency {from}-{to}",
+    "planned": "Quantity planned [PCE]",
+    "actual": "Quantity done [PCE]",
+    "remaining": "Total remaining quantity:",
+    "unit": "PCE",
+    "controls:switchApp": "Switch apps/Configure after 3s",
+    "controls:reboot": "Refresh page/Restart after 3s",
+    "controls:shutdown": "Shutdown after 3s"
+  },
+  "pl": true
+}
