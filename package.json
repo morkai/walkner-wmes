@@ -5,16 +5,17 @@
   "version": "0.100.0",
   "updater": {
     "wmes": {
-      "backend": 241,
-      "frontend": 280,
+      "backend": 242,
+      "frontend": 281,
       "reports": 34,
       "attachments": 3,
       "importer-sap": 34,
       "importer-results": 12,
       "watchdog": 11,
       "mailer": 11,
-      "operator": 6,
-      "docs": 4
+      "operator": 7,
+      "docs": 4,
+      "heff": 1
     },
     "pos": {
       "backend": 80,
