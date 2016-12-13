@@ -218,36 +218,31 @@ define([
       var $lastTaktTime = this.$property('lastTaktTime');
       var $avgTaktTime = this.$property('avgTaktTime');
       var $sapTaktTime = this.$property('taktTime');
-      var avgTaktTime = Math.round((pso.get('avgTaktTime') || 0) / 1000);
-      var lastTaktTime = Math.round((pso.get('lastTaktTime') || 0) / 1000);
-      var sapTaktTime = pso.getTaktTime();
-      var text = '';
+      var avgTaktTime = pso.getAvgTaktTime();
+      var lastTaktTime = pso.getLastTaktTime();
+      var sapTaktTime = pso.getSapTaktTime();
 
       if (enabled && showLast && lastTaktTime)
       {
-        text = lastTaktTime;
-
         $lastTaktTime.parent().removeClass('is-tt-sap').addClass('is-tt-last');
       }
       else
       {
-        text = '-';
-
         $lastTaktTime.parent().addClass('is-tt-sap').removeClass('is-tt-last');
       }
 
       $sapTaktTime
-        .text(sapTaktTime)
+        .text(sapTaktTime || '-')
         .parent()
         .toggleClass('hidden', !showSap);
 
       $lastTaktTime
-        .text(text)
+        .text(lastTaktTime || '-')
         .parent()
         .toggleClass('hidden', !showLast);
 
       $avgTaktTime
-        .text(avgTaktTime || '?')
+        .text(avgTaktTime || '-')
         .parent()
         .toggleClass('hidden', !enabled || !showAvg || !(pso.get('quantityDone') > 1 && avgTaktTime > 0))
         .removeClass('is-ok is-nok')
@@ -255,9 +250,11 @@ define([
 
       document.body.classList.remove('is-tt-ok', 'is-tt-nok');
 
-      if (enabled && lastTaktTime && sapTaktTime)
+      if (enabled && sapTaktTime)
       {
-        document.body.classList.add(lastTaktTime <= sapTaktTime ? 'is-tt-ok' : 'is-tt-nok');
+        var taktTimeOk = avgTaktTime ? (avgTaktTime <= sapTaktTime) : (lastTaktTime <= sapTaktTime);
+
+        document.body.classList.add(taktTimeOk ? 'is-tt-ok' : 'is-tt-nok');
       }
     },
 
