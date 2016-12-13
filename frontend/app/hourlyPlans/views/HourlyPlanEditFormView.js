@@ -2,13 +2,17 @@
 
 define([
   'underscore',
+  'jquery',
   'app/user',
+  'app/viewport',
   'app/core/View',
   'app/core/util/onModelDeleted',
   'app/hourlyPlans/templates/entry'
 ], function(
   _,
+  $,
   user,
+  viewport,
   View,
   onModelDeleted,
   entryTemplate
@@ -23,6 +27,14 @@ define([
       'change .hourlyPlan-count': 'updateCount',
       'keyup .hourlyPlan-count': 'updateCount',
       'change .hourlyPlan-noPlan': 'updatePlan',
+      'mouseenter .hourlyPlan-flow': function(e)
+      {
+        this.hovered = e.currentTarget;
+      },
+      'mouseleave .hourlyPlan-flow': function()
+      {
+        this.hovered = null;
+      },
       'click .hourlyPlan-noPlan-container': function(e)
       {
         if (e.target.classList.contains('hourlyPlan-noPlan-container'))
@@ -43,7 +55,8 @@ define([
       'blur .hourlyPlan-count, .hourlyPlan-noPlan': function()
       {
         this.$(this.focused).removeClass('is-focused');
-      }
+      },
+      'paste .hourlyPlan-count': 'pasteCounts'
     },
 
     remoteTopics: function()
@@ -58,11 +71,16 @@ define([
 
     initialize: function()
     {
+      this.hovered = null;
       this.focused = [];
+
+      $('body').on('paste.' + this.idPrefix, this.onBodyPaste.bind(this));
     },
 
     destroy: function()
     {
+      $('body').off('.' + this.idPrefix);
+
       this.focused = null;
     },
 
@@ -185,6 +203,47 @@ define([
       });
     },
 
+    pasteCounts: function(e, targetEl)
+    {
+      var newValues = (e.originalEvent.clipboardData.getData('text/plain') || '')
+        .split(/\s+/)
+        .map(function(v) { return Math.max(parseInt(v, 10) || 0, 0); });
+
+      if (newValues.length < 3)
+      {
+        return;
+      }
+
+      var view = this;
+      var $target = view.$(targetEl || e.currentTarget);
+      var data = {
+        type: 'counts',
+        socketId: view.socket.getId(),
+        _id: view.model.id,
+        newValues: newValues,
+        flowIndex: parseInt($target.attr('data-flow'), 10)
+      };
+
+      if ($target[0].name === 'hour')
+      {
+        data.hourIndex = parseInt($target.attr('data-hour'), 10);
+      }
+
+      viewport.msg.saving();
+
+      view.socket.emit('hourlyPlans.updateCounts', data, function(err)
+      {
+        if (err)
+        {
+          viewport.msg.savingFailed();
+
+          view.trigger('remoteError', err);
+        }
+      });
+
+      return false;
+    },
+
     updateCount: function(e)
     {
       if (e.which === 13)
@@ -257,11 +316,6 @@ define([
     {
       /*jshint -W015*/
 
-      if (message.socketId === this.socket.getId())
-      {
-        return;
-      }
-
       switch (message.type)
       {
         case 'plan':
@@ -269,11 +323,19 @@ define([
 
         case 'count':
           return this.handleCountChange(message);
+
+        case 'counts':
+          return this.handleCountsChange(message);
       }
     },
 
     handlePlanChange: function(message)
     {
+      if (message.socketId === this.socket.getId())
+      {
+        return;
+      }
+
       var selector = '.hourlyPlan-noPlan[data-flow="' + message.flowIndex + '"]';
 
       var $noPlan = this.$(selector);
@@ -290,6 +352,11 @@ define([
 
     handleCountChange: function(message)
     {
+      if (message.socketId === this.socket.getId())
+      {
+        return;
+      }
+
       var selector = '.hourlyPlan-count[data-flow=' + message.flowIndex + ']';
 
       if (typeof message.hourIndex === 'number')
@@ -313,6 +380,37 @@ define([
         'data-value': message.newValue,
         'data-remote': 'true'
       });
+    },
+
+    handleCountsChange: function(message)
+    {
+      var selector = '.hourlyPlan-count[data-flow=' + message.flowIndex + ']';
+      var $counts = this.$(selector);
+
+      if (!$counts.length)
+      {
+        return;
+      }
+
+      message.newValues.forEach(function(newValue, i)
+      {
+        $counts[i + 1].value = newValue;
+      });
+
+      if (message.socketId === this.socket.getId())
+      {
+        viewport.msg.saved();
+      }
+    },
+
+    onBodyPaste: function(e)
+    {
+      if (!this.hovered)
+      {
+        return;
+      }
+
+      return this.pasteCounts(e, this.hovered);
     },
 
     onModelDeleted: function(message)

@@ -12,12 +12,13 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
   var userModule = app[hourlyPlansModule.config.userId];
   var divisionsModule = app[hourlyPlansModule.config.divisionsId];
   var HourlyPlan = mongoose.model('HourlyPlan');
-  
+
   app[hourlyPlansModule.config.sioId].sockets.on('connection', function(socket)
   {
     socket.on('hourlyPlans.findOrCreate', findOrCreate.bind(null, socket));
     socket.on('hourlyPlans.updateCount', updateCount.bind(null, socket));
     socket.on('hourlyPlans.updatePlan', updatePlan.bind(null, socket));
+    socket.on('hourlyPlans.updateCounts', updateCounts.bind(null, socket));
   });
 
   function findOrCreate(socket, data, reply)
@@ -231,6 +232,77 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
           0, 0, 0, 0, 0, 0, 0, 0
         ];
       }
+
+      HourlyPlan.collection.update({_id: hourlyPlan._id}, update, function(err)
+      {
+        if (err)
+        {
+          return reply(err);
+        }
+
+        reply();
+
+        app.broker.publish('hourlyPlans.updated.' + data._id, data);
+      });
+    });
+  }
+
+  function updateCounts(socket, data, reply)
+  {
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (!_.isObject(data)
+      || !_.isString(data._id)
+      || !_.isArray(data.newValues)
+      || !_.isNumber(data.flowIndex))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    var user = socket.handshake.user;
+
+    if (!canManage(user))
+    {
+      return reply(new Error('AUTH'));
+    }
+
+    HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec(function(err, hourlyPlan)
+    {
+      if (err)
+      {
+        return reply(err);
+      }
+
+      if (hourlyPlan === null)
+      {
+        return reply(new Error('UNKNOWN'));
+      }
+
+      if (!canManage(user, hourlyPlan))
+      {
+        return reply(new Error('AUTH'));
+      }
+
+      var update = {$set: {
+        updatedAt: new Date(),
+        updater: userModule.createUserInfo(user, socket)
+      }};
+
+      var newValues = new Array(24);
+
+      for (var i = 0; i < 24; ++i)
+      {
+        var newValue = data.newValues[i];
+
+        newValues[i] = !_.isNumber(newValue) || newValue < 0 ? 0 : newValue;
+      }
+
+      data.newValues = newValues;
+
+      update.$set['flows.' + data.flowIndex + '.hours'] = data.newValues;
 
       HourlyPlan.collection.update({_id: hourlyPlan._id}, update, function(err)
       {

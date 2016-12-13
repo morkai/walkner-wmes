@@ -4,6 +4,8 @@
   "MSG:LOADING": "Ładowanie...",
   "MSG:LOADING_FAILURE": "Ładowanie nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie nie powiodło się :(",
+  "MSG:SAVING": "Zapisywanie...",
+  "MSG:SAVING_FAILURE": "Zapisywanie nie powiodło się :(",
   "MSG:LOG_OUT:FAILURE": "Wylogowanie nie powiodło się :(",
   "MSG:LOG_OUT:SUCCESS": "Zostałeś wylogowany!",
 

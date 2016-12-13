@@ -18,6 +18,7 @@ define([
   'use strict';
 
   var LOADING_MESSAGE_DELAY = 0;
+  var SAVING_MESSAGE_DELAY = 0;
 
   var MessagesView = View.extend({
 
@@ -52,6 +53,12 @@ define([
 
     /**
      * @private
+     * @type {jQuery|null}
+     */
+    this.$savingMessage = null;
+
+    /**
+     * @private
      * @type {number|null}
      */
     this.loadingTimer = null;
@@ -61,6 +68,18 @@ define([
      * @type {number}
      */
     this.loadingCounter = 0;
+
+    /**
+     * @private
+     * @type {number|null}
+     */
+    this.savingTimer = null;
+
+    /**
+     * @private
+     * @type {number}
+     */
+    this.savingCounter = 0;
 
     /**
      * @private
@@ -77,6 +96,16 @@ define([
      * @type {function}
      */
     this.loaded = this.loaded.bind(this);
+
+    /**
+     * @type {function}
+     */
+    this.saving = this.saving.bind(this);
+
+    /**
+     * @type {function}
+     */
+    this.saved = this.saved.bind(this);
   };
 
   MessagesView.prototype.destroy = function()
@@ -87,6 +116,14 @@ define([
     {
       clearTimeout(this.loadingTimer);
       this.loadingTimer = null;
+    }
+
+    this.$savingMessage = null;
+
+    if (this.savingTimer !== null)
+    {
+      clearTimeout(this.savingTimer);
+      this.savingTimer = null;
     }
 
     if (this.hideTimers.length > 0)
@@ -247,6 +284,85 @@ define([
     {
       this.hide(this.$loadingMessage);
       this.$loadingMessage = null;
+    }
+  };
+
+  MessagesView.prototype.saving = function()
+  {
+    this.savingCounter += 1;
+
+    if (this.savingTimer === null)
+    {
+      this.savingTimer = setTimeout(
+        this.showSavingMessage.bind(this),
+        SAVING_MESSAGE_DELAY
+      );
+    }
+  };
+
+  MessagesView.prototype.saved = function()
+  {
+    this.hideSavingMessage();
+  };
+
+  /**
+   * @param {string} [text]
+   */
+  MessagesView.prototype.savingFailed = function(text)
+  {
+    this.hideSavingMessage();
+
+    this.show({
+      type: 'error',
+      text: _.isString(text) ? text : t('core', 'MSG:SAVING_FAILURE')
+    });
+  };
+
+  /**
+   * @private
+   */
+  MessagesView.prototype.showSavingMessage = function()
+  {
+    this.savingTimer = null;
+
+    if (this.$savingMessage !== null)
+    {
+      return;
+    }
+
+    this.$savingMessage = this.show({
+      type: 'warning',
+      text: '<i class="fa fa-spinner fa-spin"></i><span>'
+      + t('core', 'MSG:SAVING') + '</span>',
+      immediate: true
+    });
+  };
+
+  /**
+   * @private
+   */
+  MessagesView.prototype.hideSavingMessage = function()
+  {
+    if (this.savingCounter > 0)
+    {
+      --this.savingCounter;
+    }
+
+    if (this.savingCounter !== 0)
+    {
+      return;
+    }
+
+    if (this.savingTimer !== null)
+    {
+      clearTimeout(this.savingTimer);
+      this.savingTimer = null;
+    }
+
+    if (this.$savingMessage !== null)
+    {
+      this.hide(this.$savingMessage);
+      this.$savingMessage = null;
     }
   };
 

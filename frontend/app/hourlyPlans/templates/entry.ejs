@@ -16,7 +16,12 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- t('hourlyPlans', 'panel:title' + (editable ? ':editable': '')) %></div>
     <% if (editable) { %>
-    <div class="message message-inline message-info"><%- t('hourlyPlans', 'panel:info') %></div>
+    <div class="message message-inline message-info">
+      <p><%- t('hourlyPlans', 'panel:info') %></p>
+      <p>Wartości dla całego przepływu mogą być wklejone kombinacją klawiszy <kbd>CTRL+V</kbd>.
+        Przepływ wybiera się poprzez aktywowanie dowolnego pola w danym wierszu lub najechanie myszką na wiersz
+        wybranego przepływu.</p>
+    </div>
     <% } %>
     <table class="table table-bordered table-condensed table-hover hourlyPlan">
       <thead>
@@ -30,7 +35,7 @@
         <% }) %>
       <tbody>
       <% flows.forEach(function(flow, flowIndex) { %>
-      <tr>
+      <tr class="hourlyPlan-flow" data-flow="<%- flowIndex %>">
         <td><%= flow.name %>
         <td class="even <% if (editable) { %>hourlyPlan-noPlan-container<% } %>" data-column="noPlan">
           <% if (editable) { %>
