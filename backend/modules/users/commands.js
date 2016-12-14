@@ -3,7 +3,6 @@
 'use strict';
 
 var _ = require('lodash');
-var syncUsers = require('./syncUsers');
 
 module.exports = function setUpUsersCommands(app, usersModule)
 {
