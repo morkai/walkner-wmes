@@ -430,6 +430,14 @@
 .production-orderQueue .form-group + .message {
   margin-bottom: 10px;
 }
+.production-orderQueue-no {
+  padding: 0 10px 0 15px!important;
+  border-right: 0!important;
+  font-size: 24px;
+}
+.production-orderQueue-order {
+  border-left: 0!important;
+}
 
 @media (max-width: 1680px) {
   .production {

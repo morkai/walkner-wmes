@@ -101,6 +101,8 @@ define([
         {
           $row.insertBefore($rows.first());
         }
+
+        this.recountRows();
       },
       'click .btn[data-action="moveUp"]': function(e)
       {
@@ -121,6 +123,8 @@ define([
         {
           $row.insertAfter($rows.last());
         }
+
+        this.recountRows();
       },
       'click #-submit': function()
       {
@@ -170,12 +174,23 @@ define([
     {
       this.orderCache[order.no] = order;
 
-      this.$id('rows').append(renderQueueRow({
+      var $rows = this.$id('rows');
+
+      $rows.append(renderQueueRow({
+        no: $rows[0].childElementCount + 1,
         order: order,
         operation: order.operations[operationNo] || {no: operationNo}
       }));
       this.$id('empty').html(t('production', 'orderQueue:message:queue'));
       this.$id('queue').removeClass('hidden');
+    },
+
+    recountRows: function()
+    {
+      this.$id('rows').children().each(function(i)
+      {
+        this.children[0].textContent = (i + 1) + '.';
+      });
     },
 
     onDialogShown: function(viewport)

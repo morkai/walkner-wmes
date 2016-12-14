@@ -1,5 +1,6 @@
 <tr data-order="<%- order.no %>" data-operation="<%- operation.no %>">
-  <td>
+  <td class="is-min production-orderQueue-no"><%- no %>.</td>
+  <td class="production-orderQueue-order">
     <%- order.no %>: <%- order.description || order.name || '?' %><br>
     <%- operation.no %>: <%- operation.name || '?' %></td>
   <td class="actions">
