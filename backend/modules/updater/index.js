@@ -62,19 +62,19 @@ exports.start = function startUpdaterModule(app, module)
     return clone === false ? updater[versionsKey] : _.cloneDeep(updater[versionsKey]);
   };
 
-  module.getBackendVersion = function()
+  module.getBackendVersion = function(backendVersionKey)
   {
-    return module.getVersions(false)[module.config.backendVersionKey];
+    return module.getVersions(false)[backendVersionKey || module.config.backendVersionKey];
   };
 
-  module.getFrontendVersion = function()
+  module.getFrontendVersion = function(frontendVersionKey)
   {
-    return module.getVersions(false)[module.config.frontendVersionKey];
+    return module.getVersions(false)[frontendVersionKey || module.config.frontendVersionKey];
   };
 
-  module.updateFrontendVersion = function()
+  module.updateFrontendVersion = function(frontendVersionKey)
   {
-    module.getVersions(false)[module.config.frontendVersionKey] = Date.now();
+    module.getVersions(false)[frontendVersionKey || module.config.frontendVersionKey] = Date.now();
   };
 
   app.broker

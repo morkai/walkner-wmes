@@ -413,16 +413,19 @@ exports.updater = {
       mainCssFile: exports.mainCssFile
     },
     {
+      frontendVersionKey: 'docs',
       path: '/orderDocuments/manifest.appcache',
       mainJsFile: '/wmes-docs.js',
       mainCssFile: '/assets/wmes-docs.css'
     },
     {
+      frontendVersionKey: 'operator',
       path: '/operator/manifest.appcache',
       mainJsFile: '/wmes-operator.js',
       mainCssFile: '/assets/wmes-operator.css'
     },
     {
+      frontendVersionKey: 'heff',
       path: '/heff/manifest.appcache',
       mainJsFile: '/wmes-heff.js',
       mainCssFile: '/assets/wmes-heff.css'

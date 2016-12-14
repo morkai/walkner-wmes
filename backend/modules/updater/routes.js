@@ -20,7 +20,7 @@ module.exports = function setUpUpdaterRoutes(app, updaterModule)
       }
 
       var cacheManifest = template
-        .replace('{version}', 'v' + updaterModule.getFrontendVersion())
+        .replace('{version}', 'v' + updaterModule.getFrontendVersion(manifestOptions.frontendVersionKey))
         .replace('{mainJsFile}', manifestOptions.mainJsFile)
         .replace('{mainCssFile}', manifestOptions.mainCssFile);
 
