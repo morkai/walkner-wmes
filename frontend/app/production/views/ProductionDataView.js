@@ -241,7 +241,9 @@ define([
       $lastTaktTime
         .text(lastTaktTime || '-')
         .parent()
-        .toggleClass('hidden', !showLast);
+        .toggleClass('hidden', !showLast)
+        .removeClass('is-ok is-nok')
+        .addClass(lastTaktTime <= sapTaktTime ? 'is-ok' : 'is-nok');
 
       $avgTaktTime
         .text(avgTaktTime || '-')

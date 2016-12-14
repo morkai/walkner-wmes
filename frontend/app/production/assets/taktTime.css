@@ -7,11 +7,11 @@
 .production-ft > .production-taktTime > .production-sectionHeader {
   border-bottom: 1px solid #ddd;
 }
-.is-tt-ok .production-property-lastTaktTime,
+.production-property-lastTaktTime.is-ok,
 .production-property-avgTaktTime.is-ok {
   color: #00af00;
 }
-.is-tt-nok .production-property-lastTaktTime,
+.production-property-lastTaktTime.is-nok,
 .production-property-avgTaktTime.is-nok {
   color: #e00;
 }
