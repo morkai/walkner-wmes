@@ -205,9 +205,9 @@ define([
 
     pasteCounts: function(e, targetEl)
     {
-      var newValues = (e.originalEvent.clipboardData.getData('text/plain') || '')
-        .split(/\s+/)
-        .map(function(v) { return Math.max(parseInt(v, 10) || 0, 0); });
+      var pastedValue = e.originalEvent.clipboardData.getData('text/plain') || '';
+      var rawValues = (' ' + pastedValue + ' ').match(/-?([0-9]+)[^0-9]/g) || [];
+      var newValues = rawValues.map(function(v) { return Math.max(parseInt(v, 10) || 0, 0); });
 
       if (newValues.length < 3)
       {
