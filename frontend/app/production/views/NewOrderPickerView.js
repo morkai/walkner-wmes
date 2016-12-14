@@ -27,11 +27,7 @@ define([
     {
       var className = 'production-modal production-newOrderPickerDialog';
 
-      if (this.options.nextOrder)
-      {
-        className += ' is-nextOrder';
-      }
-      else if (this.options.correctingOrder)
+      if (this.options.correctingOrder)
       {
         className += ' is-correcting';
       }
@@ -125,15 +121,13 @@ define([
     {
       var shift = this.model;
       var order = shift.prodShiftOrder;
-      var nextOrder = !!this.options.nextOrder;
 
       return {
         idPrefix: this.idPrefix,
-        spigot: !nextOrder && shift.settings.getValue('spigotFinish') && !!order.get('spigot'),
+        spigot: shift.settings.getValue('spigotFinish') && !!order.get('spigot'),
         offline: !this.socket.isConnected(),
-        nextOrder: nextOrder,
-        replacingOrder: !nextOrder && !this.options.correctingOrder && shift.hasOrder(),
-        correctingOrder: !nextOrder && !!this.options.correctingOrder,
+        replacingOrder: !this.options.correctingOrder && shift.hasOrder(),
+        correctingOrder: !!this.options.correctingOrder,
         quantityDone: order.get('quantityDone') || 0,
         workerCount: order.getWorkerCountForEdit(),
         orderIdType: shift.getOrderIdType(),
@@ -157,10 +151,6 @@ define([
         {
           this.selectNextOrder();
         }
-      }
-      else if (this.options.nextOrder)
-      {
-        this.closeDialog();
       }
       else if (this.options.correctingOrder)
       {
@@ -208,7 +198,7 @@ define([
         this.$id('order'),
         this.$id('operation'),
         this.model,
-        {dropdownCssClass: 'production-dropdown', allowClear: !!this.options.nextOrder}
+        {dropdownCssClass: 'production-dropdown'}
       );
     },
 
@@ -228,26 +218,27 @@ define([
 
     selectNextOrder: function()
     {
-      var nextOrder = this.model.get('nextOrder');
+      var nextOrders = this.model.get('nextOrder');
 
-      if (!nextOrder)
+      if (_.isEmpty(nextOrders))
       {
         return;
       }
 
-      var orderInfo = nextOrder.orderInfo;
+      var next = nextOrders[0];
+      var order = next.order;
       var $order = this.$id('order');
 
-      $order.select2('data', _.assign({}, orderInfo, {
-        id: orderInfo.no,
-        text: orderInfo.no + ' - ' + (orderInfo.description || orderInfo.name || '?'),
+      $order.select2('data', _.assign({}, order, {
+        id: order.no,
+        text: order.no + ' - ' + (order.description || order.name || '?'),
         sameOrder: false
       }));
 
       $order.trigger({
         type: 'change',
-        operations: _.values(orderInfo.operations),
-        selectedOperationNo: nextOrder.operationNo
+        operations: _.values(order.operations),
+        selectedOperationNo: next.operationNo
       });
     },
 
@@ -256,9 +247,8 @@ define([
       var orderInfo = this.$id('order').select2('data');
       var $operation = this.$id('operation');
       var operationNo = $operation.hasClass('form-control') ? $operation.val() : this.$id('operation').select2('val');
-      var nextOrder = !!this.options.nextOrder;
 
-      if (!orderInfo && !nextOrder)
+      if (!orderInfo)
       {
         this.$id('order').select2('focus');
 
@@ -271,7 +261,7 @@ define([
         });
       }
 
-      if (!operationNo && (!nextOrder || orderInfo))
+      if (!operationNo)
       {
         $operation.focus();
 
@@ -284,16 +274,13 @@ define([
         });
       }
 
-      if (orderInfo)
+      if (orderInfo.sameOrder)
       {
-        if (orderInfo.sameOrder)
-        {
-          orderInfo = this.model.prodShiftOrder.get('orderData');
-        }
-        else
-        {
-          orderPickerHelpers.prepareOrderInfo(this.model, orderInfo);
-        }
+        orderInfo = this.model.prodShiftOrder.get('orderData');
+      }
+      else
+      {
+        orderPickerHelpers.prepareOrderInfo(this.model, orderInfo);
       }
 
       this.pickOrder(orderInfo, operationNo);
@@ -301,11 +288,6 @@ define([
 
     handleOfflinePick: function(submitEl)
     {
-      if (this.options.nextOrder)
-      {
-        return;
-      }
-
       var orderIdType = this.model.getOrderIdType();
       var orderInfo = {
         no: null,
@@ -366,27 +348,18 @@ define([
 
     pickOrder: function(orderInfo, operationNo)
     {
-      if (!orderInfo || !operationNo)
-      {
-
-      }
-
       while (operationNo.length < 4)
       {
         operationNo = '0' + operationNo;
       }
 
-      if (!this.options.nextOrder && !this.options.correctingOrder && this.model.hasOrder())
+      if (!this.options.correctingOrder && this.model.hasOrder())
       {
         this.model.changeQuantityDone(this.parseInt('quantityDone'));
         this.model.changeWorkerCount(this.parseInt('workerCount'));
       }
 
-      if (this.options.nextOrder)
-      {
-        this.model.setNextOrder(orderInfo, operationNo);
-      }
-      else if (this.options.correctingOrder)
+      if (this.options.correctingOrder)
       {
         this.model.correctOrder(orderInfo, operationNo);
       }
@@ -427,12 +400,6 @@ define([
     onKeyPress: function(e)
     {
       var $nc12 = this.$id('spigot-nc12');
-
-      if (!$nc12.length)
-      {
-        return;
-      }
-
       var target = e.target;
       var keyCode = e.keyCode;
 

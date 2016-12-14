@@ -2,6 +2,7 @@
 
 'use strict';
 
+var step = require('h5.step');
 var util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
@@ -62,50 +63,64 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       return done(err);
     }
 
-    var prodShiftOrder = new ProdShiftOrder(logEntry.data);
-
-    prodShiftOrder.save(function(err)
-    {
-      if (err && err.code !== 11000)
+    step(
+      function()
       {
-        productionModule.error(
-          "Failed to save a new prod shift order (LOG=[%s]): %s", logEntry._id, err.stack
-        );
-
-        return done(err);
-      }
-
-      if (!err)
+        productionModule.getProdData('shift', logEntry.prodShift, this.parallel());
+        (new ProdShiftOrder(logEntry.data)).save(this.parallel());
+      },
+      function(err, prodShift, prodShiftOrder)
       {
-        productionModule.setProdData(prodShiftOrder);
-      }
+        if (err && err.code !== 11000)
+        {
+          productionModule.error("Failed to save a new prod shift order (LOG=[%s]): %s", logEntry._id, err.stack);
 
-      if (prodLine.isNew)
-      {
-        return done();
-      }
+          return this.skip(err);
+        }
 
-      prodLine.set({
-        prodShiftOrder: prodShiftOrder._id,
-        prodDowntime: null
-      });
+        if (!err)
+        {
+          productionModule.setProdData(prodShiftOrder);
+        }
 
-      prodLine.save(function(err)
+        if (prodLine.isNew)
+        {
+          return this.skip();
+        }
+
+        var oldNextOrders = prodShift.getNextOrders();
+        var newNextOrders = oldNextOrders.filter(next => next.orderNo !== prodShiftOrder.orderId);
+
+        if (newNextOrders.length !== oldNextOrders.length)
+        {
+          prodShift.nextOrder = newNextOrders;
+          prodShift.save(this.group());
+        }
+
+        prodLine.set({
+          prodShiftOrder: prodShiftOrder._id,
+          prodDowntime: null
+        });
+
+        prodLine.save(this.group());
+      },
+      function(err)
       {
         if (err)
         {
           productionModule.error(
             "Failed to save prod line [%s] after changing the prod shift order to [%s]"
-              + " (LOG=[%s]): %s",
+            + " (LOG=[%s]): %s",
             prodLine._id,
-            prodShiftOrder._id,
+            logEntry.prodShiftOrder,
             logEntry._id,
             err.stack
           );
-        }
 
-        return done(err);
-      });
-    });
+          return this.skip(err);
+        }
+      },
+      done
+    );
   }
 };

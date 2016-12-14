@@ -131,7 +131,18 @@ define([
         break;
 
       case 'setNextOrder':
-        data.nextOrder = logData.orderNo ? (logData.orderNo + ', ' + logData.operationNo) : '-';
+        if (_.isEmpty(data.orderNo) && _.isEmpty(logData.orders))
+        {
+          data.queue = '-';
+        }
+        else if (Array.isArray(logData.orders))
+        {
+          data.queue = logData.orders.map(function(next) { return next.orderNo; }).join(', ');
+        }
+        else
+        {
+          data.queue = logData.orderNo;
+        }
         break;
 
       default:

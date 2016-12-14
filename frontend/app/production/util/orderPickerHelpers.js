@@ -207,6 +207,8 @@ define([
       {
         orderInfo.operations = {};
       }
+
+      return orderInfo;
     },
     getBestDefaultOperationNo: function(operations)
     {

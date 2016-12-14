@@ -1,0 +1,25 @@
+<form class="production-orderQueue">
+  <p class="message message-inline message-info"><%- t('production', 'orderQueue:message:order') %></p>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-order"><%- t('production', 'orderQueue:order:label') %></label>
+    <input id="<%- idPrefix %>-order" class="form-control" type="text" placeholder="<%- t('production', 'orderQueue:order:placeholder') %>" data-ignore-key="1">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-operation"><%- t('production', 'orderQueue:operation:label') %></label>
+    <input id="<%- idPrefix %>-operation" class="form-control" type="text" placeholder="<%- t('production', 'orderQueue:operation:placeholder') %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1">
+  </div>
+  <div class="form-group">
+    <button id="<%- idPrefix %>-enqueue" type="button" class="btn btn-lg btn-default"><%- t('production', 'orderQueue:enqueue') %></button>
+    <button id="<%- idPrefix %>-clear" type="button" class="btn btn-lg btn-link"><%- t('production', 'orderQueue:clear') %></button>
+  </div>
+  <p id="<%- idPrefix %>-empty" class="message message-inline message-info"><%- t('production', 'orderQueue:message:empty') %></p>
+  <div class="form-group hidden" id="<%- idPrefix %>-queue">
+    <table class="table table-condensed table-bordered">
+      <tbody id="<%- idPrefix %>-rows"></tbody>
+    </table>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="button" class="btn btn-lg btn-primary"><%- t('production', 'orderQueue:submit') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'orderQueue:cancel') %></button>
+  </div>
+</form>

@@ -155,13 +155,11 @@ ProdLineState.prototype.getLastOrder = function()
 };
 
 /**
- * @returns {object|null}
+ * @returns {Array.<string>}
  */
-ProdLineState.prototype.getNextOrder = function()
+ProdLineState.prototype.getNextOrders = function()
 {
-  return this.prodShift && this.prodShift.nextOrder && this.prodShift.nextOrder.orderNo
-    ? this.prodShift.nextOrder
-    : null;
+  return this.prodShift ? this.prodShift.getNextOrders() : [];
 };
 
 /**

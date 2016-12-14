@@ -427,6 +427,10 @@
   padding-left: 18px;
 }
 
+.production-orderQueue .form-group + .message {
+  margin-bottom: 10px;
+}
+
 @media (max-width: 1680px) {
   .production {
     margin: 0 15px;
@@ -525,5 +529,13 @@
   }
   .production-currentDowntime {
     font-size: 32px;
+  }
+}
+@media (min-width: 880px) {
+  .production-orderQueueDialog .modal-dialog {
+    width: 700px;
+  }
+  .production-orderQueue .actions .btn {
+    min-width: 60px;
   }
 }

@@ -1,0 +1,12 @@
+<tr data-order="<%- order.no %>" data-operation="<%- operation.no %>">
+  <td>
+    <%- order.no %>: <%- order.description || order.name || '?' %><br>
+    <%- operation.no %>: <%- operation.name || '?' %></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button type="button" class="btn btn-lg btn-default" data-action="moveUp"><i class="fa fa-arrow-up"></i></button>
+      <button type="button" class="btn btn-lg btn-default" data-action="moveDown"><i class="fa fa-arrow-down"></i></button>
+      <button type="button" class="btn btn-lg btn-default" data-action="remove"><i class="fa fa-remove"></i></button>
+    </div>
+  </td>
+</tr>

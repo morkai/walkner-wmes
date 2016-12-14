@@ -44,7 +44,7 @@
     "type:finishDowntimeAlert": "Downtime alert finish",
     "type:checkSpigot": "Spigot check",
     "type:checkSerialNumber": "Serial number check",
-    "type:setNextOrder": "Next order",
+    "type:setNextOrder": "Orders queue",
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:addShift": "Shift <em>{shift}</em> on <em>{date}</em>",
@@ -75,7 +75,7 @@
     "data:checkSpigot:final": "Scanned {result, select, valid{a valid} other{an invalid}} Spigot {nc12} at the end of an order as a part of a <a href='\\#prodDowntimes/{downtimeId}'>downtime</a>.",
     "data:checkSerialNumber": "Scanned serial number: {sn}",
     "data:checkSerialNumber:error": "Scanned serial number: {sn} ({error})",
-    "data:setNextOrder": "Set next order: {nextOrder}",
+    "data:setNextOrder": "Set orders queue: {queue}",
 
     "noData:prodShiftOrder": "<em>no order</em>"
   },

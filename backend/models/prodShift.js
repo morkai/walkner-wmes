@@ -320,5 +320,30 @@ module.exports = function setupProdShiftModel(app, mongoose)
     );
   };
 
+  prodShiftSchema.methods.getNextOrders = function()
+  {
+    var nextOrders = this.nextOrder;
+
+    if (_.isEmpty(nextOrders))
+    {
+      return [];
+    }
+
+    if (_.isString(nextOrders.orderNo))
+    {
+      return [{
+        orderNo: nextOrders.orderNo,
+        operationNo: nextOrders.operationNo
+      }];
+    }
+
+    if (_.isArray(nextOrders))
+    {
+      return nextOrders;
+    }
+
+    return [];
+  };
+
   mongoose.model('ProdShift', prodShiftSchema);
 };

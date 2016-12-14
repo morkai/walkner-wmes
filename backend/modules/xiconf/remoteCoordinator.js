@@ -2477,7 +2477,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     }
 
     var currentOrderNo = currentOrder.orderData.no;
-    var nextOrder = prodLineState.getNextOrder();
+    var nextOrders = prodLineState.getNextOrders();
     var newOrdersNos = [currentOrderNo];
     var now = Date.now();
 
@@ -2496,10 +2496,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       }
     }
 
-    if (nextOrder)
-    {
-      newOrdersNos.push(nextOrder.orderNo);
-    }
+    nextOrders.forEach(next => newOrdersNos.push(next.orderNo));
 
     newOrdersNos = _.uniq(newOrdersNos);
 

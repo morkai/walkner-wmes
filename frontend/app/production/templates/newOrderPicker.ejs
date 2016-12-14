@@ -19,15 +19,11 @@
     <h3 class="modal-title"><%- t('production', 'newOrderPicker:title') %></h3>
   </div>
   <% } %>
-  <% if (nextOrder) { %>
-  <p class="message message-inline message-info"><%- t('production', 'newOrderPicker:online:info:nextOrder') %></p>
-  <% } else { %>
   <% if (!correctingOrder) { %>
   <% if (offline) { %>
   <p class="message message-inline message-warning"><%- t('production', 'newOrderPicker:offline:warning:' + orderIdType) %></p>
   <% } else { %>
   <p class="message message-inline message-info"><%- t('production', 'newOrderPicker:online:info:' + orderIdType) %></p>
-  <% } %>
   <% } %>
   <% } %>
   <div class="form-group">
@@ -39,8 +35,8 @@
     <input id="<%- idPrefix %>-operation" class="form-control" type="text" placeholder="<%- t('production', 'newOrderPicker:offline:operation:placeholder') %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1">
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-<%- nextOrder ? 'primary' : 'success' %>">
-      <%- t('production', 'newOrderPicker:submit' + (nextOrder ? ':nextOrder' : replacingOrder ? ':replacing' : correctingOrder ? ':correcting' : '')) %>
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-success">
+      <%- t('production', 'newOrderPicker:submit' + (replacingOrder ? ':replacing' : correctingOrder ? ':correcting' : '')) %>
     </button>
     <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'newOrderPicker:cancel') %></button>
   </div>

@@ -12,6 +12,7 @@ define([
   './NewOrderPickerView',
   './DowntimePickerView',
   './EndWorkDialogView',
+  './OrderQueueView',
   'app/production/templates/data',
   'app/production/templates/endDowntimeDialog',
   'app/production/templates/continueOrderDialog'
@@ -27,6 +28,7 @@ define([
   NewOrderPickerView,
   DowntimePickerView,
   EndWorkDialogView,
+  OrderQueueView,
   dataTemplate,
   endDowntimeDialogTemplate,
   continueOrderDialogTemplate
@@ -418,8 +420,8 @@ define([
       }
 
       viewport.showDialog(
-        new NewOrderPickerView({model: this.model, nextOrder: true}),
-        t('production', 'newOrderPicker:title:nextOrder')
+        new OrderQueueView({model: this.model}),
+        t('production', 'orderQueue:title')
       );
     },
 

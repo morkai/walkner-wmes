@@ -500,7 +500,10 @@ define([
     {
       this.finishOrder();
 
-      this.set('state', 'working');
+      this.set({
+        state: 'working',
+        nextOrder: this.getNextOrders().filter(function(next) { return next.order.no !== orderInfo.no; })
+      });
 
       var prevOrderNo = this.prodShiftOrder.get('orderId');
 
@@ -528,47 +531,47 @@ define([
         return;
       }
 
-      var nextOrder = this.get('nextOrder');
-
-      if (nextOrder && orderInfo.no === nextOrder.orderInfo.no && operationNo === nextOrder.operationNo)
-      {
-        this.set('nextOrder', null);
-      }
-
       prodLog.record(this, 'correctOrder', changes);
 
       this.trigger('orderCorrected');
     },
 
-    setNextOrder: function(orderInfo, operationNo)
+    setNextOrder: function(newNextOrders)
     {
       if (!this.hasOrder())
       {
         throw new Error("Cannot set the next order: no order is started!");
       }
 
-      var old = this.get('nextOrder');
-      var reset = !orderInfo || !operationNo;
+      var oldNextOrders = this.get('nextOrder');
+      var reset = _.isEmpty(newNextOrders);
 
-      if (!old && reset)
+      if (reset && _.isEmpty(oldNextOrders))
       {
         return;
       }
 
-      if (orderInfo && old && orderInfo.no === old.orderInfo.no && operationNo === old.operationNo)
+      var oldList = !oldNextOrders
+        ? []
+        : oldNextOrders.map(function(next) { return {orderNo: next.order.no, operationNo: next.operationNo}; });
+      var newList = !newNextOrders
+        ? []
+        : newNextOrders.map(function(next) { return {orderNo: next.order.no, operationNo: next.operationNo}; });
+
+      if (_.isEqual(newList, oldList))
       {
         return;
       }
 
-      this.set('nextOrder', reset ? null : {
-        orderInfo: orderInfo,
-        operationNo: operationNo
-      });
+      if (reset)
+      {
+        newNextOrders = [];
+        newList = [];
+      }
 
-      prodLog.record(this, 'setNextOrder', {
-        orderNo: reset ? null : orderInfo.no,
-        operationNo: reset ? null : operationNo
-      });
+      this.set('nextOrder', newNextOrders);
+
+      prodLog.record(this, 'setNextOrder', {orders: newList});
     },
 
     continueOrder: function()
@@ -689,8 +692,6 @@ define([
 
     finishOrder: function()
     {
-      this.set('nextOrder', null);
-
       var finishedProdShiftOrder = this.prodShiftOrder.finish();
 
       if (finishedProdShiftOrder)
@@ -1028,6 +1029,21 @@ define([
         this.settings.getValue('spigotPatterns'),
         this.settings.getValue('spigotNotPatterns')
       );
+    },
+
+    getNextOrders: function()
+    {
+      var nextOrders = this.get('nextOrder') || [];
+
+      if (!Array.isArray(nextOrders) && !_.isEmpty(nextOrders))
+      {
+        nextOrders = [{
+          order: nextOrders.orderInfo,
+          operationNo: nextOrders.operationNo
+        }];
+      }
+
+      return nextOrders;
     },
 
     hasEnded: function()
