@@ -134,7 +134,7 @@ define([
       var view = this;
       var url = '/prodShifts?select(date,shift,quantitiesDone)&sort(date)'
         + '&prodLine=' + encodeURIComponent(view.model.prodLineId)
-        + '&date>=' + view.shiftStartInfo.moment.clone().hours(6).valueOf();
+        + '&date=' + view.shiftStartInfo.moment.valueOf();
 
       clearTimeout(view.timers.loadData);
 
@@ -142,10 +142,10 @@ define([
       {
         if (res.collection && res.collection.length)
         {
-          view.updateData(res.collection);
+          view.updateData(res.collection[0]);
         }
 
-        view.timers.loadData = setTimeout(view.loadData, _.random(30000, 40000));
+        view.timers.loadData = setTimeout(view.loadData, _.random(25000, 35000));
       });
     },
 
@@ -191,95 +191,53 @@ define([
       this.$id('line').html(this.model.prodLineId || '?');
     },
 
-    isFirstHour: function()
-    {
-      return this.currentHour === this.shiftStartInfo.moment.hours();
-    },
-
-    isLastHour: function()
-    {
-      return this.currentHour === (this.shiftStartInfo.moment.hours() + 7);
-    },
-
     updateTitle: function(moment)
     {
-      var from = this.shiftStartInfo.moment.format('H:00');
-      var to;
-
-      if (this.isFirstHour() || this.isLastHour())
-      {
-        to = moment.clone().add(1, 'hours').format('H:00');
-      }
-      else
-      {
-        to = moment.format('H:00');
-      }
-
       this.$id('title').html(t('heff', 'title', {
-        from: from,
-        to: to
+        from: this.shiftStartInfo.moment.format('H:00'),
+        to: moment.clone().add(1, 'hours').format('H:00')
       }));
     },
 
-    updateData: function(prodShifts)
+    updateData: function(prodShift)
     {
-      var shiftStartTime = this.shiftStartInfo.moment.valueOf();
-      var isFirstHour = this.isFirstHour();
-      var isLastHour = this.isLastHour();
-      var currentHourIndex = HOUR_TO_INDEX[this.currentHour];
-      var planned = 0;
-      var actual = 0;
+      var quantitiesDone = prodShift.quantitiesDone;
+      var currentTime = time.getMoment();
+      var currentHour = currentTime.hours();
+      var currentHourIndex = HOUR_TO_INDEX[currentHour];
+      var currentMinute = currentTime.minutes();
+      var currentPlanned = 0;
+      var endOfHourPlanned = 0;
       var totalPlanned = 0;
       var totalActual = 0;
 
-      for (var s = 0; s < prodShifts.length; ++s)
+      for (var hourIndex = 0; hourIndex < 8; ++hourIndex)
       {
-        var prodShift = prodShifts[s];
+        var hourPlanned = quantitiesDone[hourIndex].planned;
+        var hourActual = quantitiesDone[hourIndex].actual;
 
-        prodShift.date = time.getMoment(prodShift.date);
+        totalPlanned += hourPlanned;
+        totalActual += hourActual;
 
-        if (prodShift.date.valueOf() !== shiftStartTime)
+        if (hourIndex < currentHourIndex)
         {
-          continue;
+          currentPlanned += hourPlanned;
+          endOfHourPlanned += hourPlanned;
         }
-
-        var hourMoment = prodShift.date.clone();
-
-        totalPlanned += planned += prodShift.quantitiesDone[0].planned;
-        totalActual += actual += prodShift.quantitiesDone[0].actual;
-
-        for (var h = 1; h < 8; ++h)
+        else if (hourIndex === currentHourIndex)
         {
-          hourMoment.add(1, 'hour');
-
-          var qty = prodShift.quantitiesDone[h];
-
-          if (HOUR_TO_INDEX[hourMoment.hours()] < currentHourIndex
-            || (isLastHour && hourMoment.hours() === this.currentHour))
-          {
-            planned += qty.planned;
-            actual += qty.actual;
-          }
-
-          totalPlanned += qty.planned;
-          totalActual += qty.actual;
+          endOfHourPlanned += hourPlanned;
+          currentPlanned += Math.round(hourPlanned * (currentMinute / 60) * 1000) / 1000;
         }
       }
 
-      this.$id('planned').text(planned);
-      this.$id('actual').text(actual);
+      this.$id('planned').text(endOfHourPlanned);
+      this.$id('actual').text(totalActual);
       this.$id('remaining').text(Math.max(totalPlanned - totalActual, 0));
 
-      var $eff = this.$id('eff').removeClass('fa-smile-o fa-frown-o fa-meh-o');
-
-      if (isFirstHour)
-      {
-        $eff.addClass('fa-meh-o');
-      }
-      else
-      {
-        $eff.addClass(actual >= planned ? 'fa-smile-o' : 'fa-frown-o');
-      }
+      this.$id('eff')
+        .removeClass('fa-smile-o fa-frown-o fa-meh-o')
+        .addClass(totalActual >= currentPlanned ? 'fa-smile-o' : 'fa-frown-o');
     },
 
     startActionTimer: function(action, e)
