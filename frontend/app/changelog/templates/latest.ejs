@@ -1,62 +1,23 @@
-<h1>v0.100.0</h1>
-<h2><%- time.format('2016-12-11', 'LL') %></h2>
+<h1>v0.101.0</h1>
+<h2><%- time.format('2016-12-14', 'LL') %></h2>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Poprawiono błąd powodujący automatyczny start przestoju o okreslonej godzinie nawet wtedy, gdy Linia nie miała
-    przypisanego domyślnego Obszaru odpowiedzialności.</li>
-  <li>Poprawiono błąd powodujący wyłączenie funkcji sprawdzania uruchomienia kilku Formatek jednocześnie podczas ładowania.</li>
-  <li>Zmieniono formularz wybierania nowego personelu linii tak, aby lista ostatnio pracujących osób nie była pokazywana,
-    jeżeli jest pusta.</li>
-  <li>Zmieniono wyświetlanie wartości 'Cykl [s]' tak, aby nie wyświetlał wartości 'Czas taktu', jeżeli nie został
-    jeszcze zeskanowany żadnen numer seryjny.</li>
-  <li>Dodano wsparcie dla nowego systemu przechowywania danych offline na komputerach UP.</li>
-  <li>Dodano możliwość ustawienia następnego zlecenia. Następne zlecenie pojawia się do wyboru w aplikacji Xiconf
-    i zostaje automatycznie wpisane do formularza rozpoczynania nowego zlecenia.</li>
-  <li>Dodano wyświetlanie wartości 'Całkowita zrobiona ilość w zleceniu' oraz 'Całkowita ilość do zrobienia'.</li>
-</ul>
-<h3>Dane produkcyjne > Zmiany</h3>
-<ul>
-  <li>Zmieniono oś czasu tak, aby kolor tła zlecenia wskazywał czy 'Średni czas cyklu' został przekroczony.</li>
-  <li>Dodano wyświetlanie wartości 'Czas taktu' i 'Średni czas cyklu' w dymkach zleceń. Wartości wydoczne tylko dla
-    użytkowników z uprawnieniami 'Dane produkcyjne: zarządzanie'.</li>
-</ul>
-<h3>Dane produkcyjne > Zlecenia</h3>
-<ul>
-  <li>Zmieniono kolumnę 'Zlecenie' tak, aby wyświetlała wartość 'Opis' zamiast 'Nazwa wyrobu' zlecenia (jeżeli
-    jest dostępna).</li>
-  <li>Zmieniono listę zleceń tak, aby kolor tła wskazywał czy 'Średni czas cyklu' danego zlecenia został przekroczony.</li>
-  <li>Zmieniono kolor głównego panelu na stronie ze szczegółami zlecenia tak, aby wskazywał czy 'Średni czas cyklu' danego
-    zlecenia został przekroczony.</li>
-  <li>Zmieniono kolor tła numerów seryjnych przekraczających 'Czas taktu' na stronie ze szczegółami zlecenia z czerwonego
-    na pomarańczowy, aby pasował do koloru stanu linii produkcyjnej.</li>
-  <li>Dodano wyświetlanie procentowego stosunku 'Czasu taktu' do 'Średniego czasu cyklu' na stronie ze szczegółami
-    zlecenia.</li>
-</ul>
-<h3>Dane produkcyjne > Numery seryjne</h3>
-<ul>
-  <li>Zmieniono kolor tła numerów seryjnych przekraczających 'Czas taktu' z czerwonego na pomarańczowy, aby pasował do
-    koloru stanu linii produkcyjnej.</li>
-</ul>
-<h3>Baza testów > Zlecenia</h3>
-<ul>
-  <li>Zmieniono importowanie zleceń tak, aby jako 'Nazwa wyrobu' ze zlecenia kopiowana była wartość 'Opis' zamiast
-    'Nazwa wyrobu' (jeżeli jest dostępna).</li>
+  <li>Poprawiono błąd uniemożliwiający przetwarzanie operacji z linii po przeliczeniu ilości na linii,
+    która w ID zawiera znak <code>.</code>.</li>
+  <li>Zmieniono określanie czy zlecenie jest wykonywane z prawidłowym taktem tak, aby pod uwagę brany był średni czas
+    cyklu, a nie czas cyklu dla ostatniej sztuki.</li>
+  <li>Zmieniono funkcjonalność 'Następne zlecenie' na 'Kolejka zleceń'.</li>
 </ul>
 <h3>Zlecenia reszty działów</h3>
 <ul>
-  <li>Zmieniono kolumnę 'Nazwa wyrobu' tak, aby wyświetlała wartość 'Opis' zamiast 'Nazwa wyrobu' zlecenia (jeżeli
-    jest dostępna).</li>
-  <li>Zmieniono kolumnę 'Ilość' tak, aby wyświetlała wartości 'Ilość zrobiona' i 'Ilość do zrobienia'.</li>
+  <li>Zmieniono domyślny filtr, aby wyświetlane były dane tylko dla aktualnego dnia.</li>
+  <li>Dodano filtr 'MRP'.</li>
 </ul>
-<h3>8D</h3>
+<h3>Plany godzinowe</h3>
 <ul>
-  <li>Dodano możliwość pobieranie załączników przez lokalnych klientów.</li>
+  <li>Dodano możliwość wklejenia do wybranego przepływu wszystkich 24 wartości na raz.</li>
 </ul>
-<h3>PSCS</h3>
+<h3>Wydajność godzinowa</h3>
 <ul>
-  <li>Dodano polską wersję prezentacji.</li>
-</ul>
-<h3>Inne</h3>
-<ul>
-  <li>Zmieniono wyświetlanie dat tak, aby miały spójny format.</li>
+  <li>Dodano nowy moduł: <a href="/heff">Wydajność godzinowa</a>.</li>
 </ul>

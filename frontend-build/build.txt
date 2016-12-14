@@ -888,6 +888,9 @@ app/production/templates/downtimePicker.js
 app/production/views/DowntimePickerView.js
 app/production/templates/endWorkDialog.js
 app/production/views/EndWorkDialogView.js
+app/production/templates/orderQueue.js
+app/production/templates/orderQueueRow.js
+app/production/views/OrderQueueView.js
 app/production/templates/data.js
 app/production/templates/endDowntimeDialog.js
 app/production/templates/continueOrderDialog.js
@@ -1032,9 +1035,9 @@ wmes-main.js
 
 wmes-docs.js
 ----------------
-vendor/jquery.js
 app/data/localStorage.js
 vendor/require/domReady.js
+vendor/jquery.js
 vendor/underscore.js
 vendor/backbone.js
 vendor/backbone.layoutmanager.js
@@ -1156,9 +1159,9 @@ wmes-docs.js
 
 wmes-operator.js
 ----------------
-vendor/jquery.js
 app/data/localStorage.js
 vendor/require/domReady.js
+vendor/jquery.js
 vendor/underscore.js
 vendor/backbone.js
 vendor/backbone.layoutmanager.js
@@ -1310,6 +1313,9 @@ app/production/templates/downtimePicker.js
 app/production/views/DowntimePickerView.js
 app/production/templates/endWorkDialog.js
 app/production/views/EndWorkDialogView.js
+app/production/templates/orderQueue.js
+app/production/templates/orderQueueRow.js
+app/production/views/OrderQueueView.js
 app/production/templates/data.js
 app/production/templates/endDowntimeDialog.js
 app/production/templates/continueOrderDialog.js
@@ -1361,9 +1367,9 @@ wmes-operator.js
 
 wmes-heff.js
 ----------------
-vendor/jquery.js
 app/data/localStorage.js
 vendor/require/domReady.js
+vendor/jquery.js
 vendor/underscore.js
 vendor/backbone.js
 vendor/backbone.layoutmanager.js
