@@ -131,7 +131,7 @@ define([
         break;
 
       case 'setNextOrder':
-        if (_.isEmpty(data.orderNo) && _.isEmpty(logData.orders))
+        if (_.isEmpty(logData.orderNo) && _.isEmpty(logData.orders))
         {
           data.queue = '-';
         }
