@@ -619,11 +619,18 @@ define([
 
       if (type === 'working')
       {
+        var efficiency = model.getEfficiency();
+
+        if (!efficiency)
+        {
+          efficiency = model.getTaktTimeEfficiency();
+        }
+
         templateData.order = data.orderId;
         templateData.operation = data.operationNo;
         templateData.workerCount = data.workerCount;
         templateData.quantityDone = data.quantityDone;
-        templateData.efficiency = calcOrderEfficiency(data, true);
+        templateData.efficiency = efficiency ? (Math.round(efficiency) + '%') : '?';
         templateData.sapTaktTime = model.get('sapTaktTime');
         templateData.lastTaktTime = model.getLastTaktTime();
         templateData.avgTaktTime = model.getAvgTaktTime();
