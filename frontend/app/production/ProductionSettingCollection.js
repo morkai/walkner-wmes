@@ -71,7 +71,7 @@ define([
         return this.prepareSpigotGroups(newValue);
       }
 
-      if (/(spigotFinish|enabled|last|avg|sap)$/.test(id))
+      if (/(spigotFinish|enabled|last|avg|sap|smiley)$/.test(id))
       {
         return !!newValue;
       }
@@ -180,6 +180,11 @@ define([
     showSapTaktTime: function()
     {
       return !!this.getValue('taktTime.sap');
+    },
+
+    showSmiley: function()
+    {
+      return !!this.getValue('taktTime.smiley');
     },
 
     getTaktTimeCoeff: function(mrp, workCenter)

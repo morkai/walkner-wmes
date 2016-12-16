@@ -73,6 +73,7 @@
     "property:productName": "Product name",
     "property:operationName": "Operation name",
     "property:taktTime": "Takt [s]",
+    "property:taktTime:checkSn": "(check SN)",
     "property:lastTaktTime": "Cycle [s]",
     "property:avgTaktTime": "Avg. Cycle [s]",
     "property:workerCountSap": "Worker count as per SAP",
@@ -275,6 +276,7 @@
     "settings:taktTime:last": "Show Cycle Time of the last PCE",
     "settings:taktTime:avg": "Show average Cycle Time for the current order",
     "settings:taktTime:sap": "Show Takt Time for the current order",
+    "settings:taktTime:smiley": "Show smiley",
     "settings:taktTime:coeffs": "Operation coefficients",
     "settings:taktTime:coeffs:help": "Each line should contain order's MRP for which the Takt Time coefficients should be adjusted, followed by names of the operation WorkCenters and values of the coefficients. For example: <code class=multiline>*: *=1.053 PIVATIC5=0.9<br>KE6: *=1 OUTDOOR5=1.1</code>"
 

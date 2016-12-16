@@ -13,6 +13,7 @@ define([
   './DowntimePickerView',
   './EndWorkDialogView',
   './OrderQueueView',
+  './SnCheckerView',
   'app/production/templates/data',
   'app/production/templates/endDowntimeDialog',
   'app/production/templates/continueOrderDialog'
@@ -29,6 +30,7 @@ define([
   DowntimePickerView,
   EndWorkDialogView,
   OrderQueueView,
+  SnCheckerView,
   dataTemplate,
   endDowntimeDialogTemplate,
   continueOrderDialogTemplate
@@ -59,7 +61,14 @@ define([
       'click #-orderNo': 'correctOrder',
       'click #-nc12': 'correctOrder',
       'click #-quantityDone': 'showQuantityDoneEditor',
-      'click #-workerCount': 'showWorkerCountEditor'
+      'click #-workerCount': 'showWorkerCountEditor',
+      'click #-checkSn': function()
+      {
+        viewport.showDialog(
+          new SnCheckerView({model: this.model}),
+          t('production', 'taktTime:check:title')
+        );
+      }
     },
 
     initialize: function()
@@ -216,6 +225,7 @@ define([
       var showLast = model.settings.showLastTaktTime();
       var showAvg = model.settings.showAvgTaktTime();
       var showSap = model.settings.showSapTaktTime();
+      var showSmiley = model.settings.showSmiley();
       var pso = model.prodShiftOrder;
       var $lastTaktTime = this.$property('lastTaktTime');
       var $avgTaktTime = this.$property('avgTaktTime');
@@ -233,6 +243,9 @@ define([
         $lastTaktTime.parent().addClass('is-tt-sap').removeClass('is-tt-last');
       }
 
+      var hiddenLast = !enabled || !showLast;
+      var hiddenAvg = !enabled || !showAvg || !(pso.get('quantityDone') > 1 && avgTaktTime > 0);
+
       $sapTaktTime
         .text(sapTaktTime || '-')
         .parent()
@@ -241,16 +254,43 @@ define([
       $lastTaktTime
         .text(lastTaktTime || '-')
         .parent()
-        .toggleClass('hidden', !showLast)
+        .toggleClass('hidden', hiddenLast)
         .removeClass('is-ok is-nok')
         .addClass(lastTaktTime <= sapTaktTime ? 'is-ok' : 'is-nok');
 
       $avgTaktTime
         .text(avgTaktTime || '-')
         .parent()
-        .toggleClass('hidden', !enabled || !showAvg || !(pso.get('quantityDone') > 1 && avgTaktTime > 0))
+        .toggleClass('hidden', hiddenAvg)
         .removeClass('is-ok is-nok')
         .addClass(avgTaktTime <= sapTaktTime ? 'is-ok' : 'is-nok');
+
+      var $check;
+
+      if (hiddenAvg)
+      {
+        if (hiddenLast)
+        {
+          $check = $('<div></div>');
+        }
+        else
+        {
+          $check = $lastTaktTime;
+        }
+      }
+      else
+      {
+        $check = $avgTaktTime;
+      }
+
+      if (!showSmiley)
+      {
+        $check.append(
+          ' <button id="' + this.idPrefix + '-checkSn" class="btn btn-link">'
+            + t('production', 'property:taktTime:checkSn')
+            + '</button>'
+        );
+      }
 
       document.body.classList.remove('is-tt-ok', 'is-tt-nok');
 

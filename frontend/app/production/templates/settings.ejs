@@ -26,7 +26,7 @@
               <label for="<%- idPrefix %>-taktTime-lines"><%- t('production', 'settings:taktTime:lines') %></label>
               <input id="<%- idPrefix %>-taktTime-lines" name="production.taktTime.lines" type="text" data-setting>
             </div>
-            <% ['sap', 'last', 'avg'].forEach(function(p) { %>
+            <% ['sap', 'last', 'avg', 'smiley'].forEach(function(p) { %>
             <div class="checkbox">
               <label class="control-label">
                 <input id="<%- idPrefix %>-taktTime-<%- p %>" name="production.taktTime.<%- p %>" type="checkbox" value="true">

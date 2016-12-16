@@ -72,6 +72,7 @@
   "property:productName": "Nazwa rodziny/detalu",
   "property:operationName": "Nazwa operacji",
   "property:taktTime": "Takt [s]",
+  "property:taktTime:checkSn": "(sprawdź)",
   "property:lastTaktTime": "Cykl [s]",
   "property:avgTaktTime": "Śr. cykl [s]",
   "property:workerCountSap": "Osoby wg SAP",
@@ -274,6 +275,7 @@
   "settings:taktTime:last": "Pokazuj czas cyklu dla ostatniej sztuki",
   "settings:taktTime:avg": "Pokazuj średni czas cyklu dla aktualnego zlecenia",
   "settings:taktTime:sap": "Pokazuj czas taktu SAP dla aktualnego zlecenia",
+  "settings:taktTime:smiley": "Pokazuj buźkę",
   "settings:taktTime:coeffs": "Współczynniki operacji",
   "settings:taktTime:coeffs:help": "W każdej linii należy podać MRP zlecenia, dla którego współczynniki Takt Time mają być zmienione, a następnie WorkCenter operacji i wartości współczynników. W miejsce MRP i WorkCenter można użyć znaku <code>*</code> (wszystkie). Na przykład:<br><code class=multiline>*: *=1.053 PIVATIC5=0.9<br>KE6: *=1 OUTDOOR5=1.1</code>"
 }

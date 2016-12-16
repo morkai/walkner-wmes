@@ -1085,7 +1085,9 @@ define([
     {
       if (!setting || !setting.id || /taktTime/.test(setting.id))
       {
-        this.$('.production-taktTime').toggleClass('hidden', !this.model.isTaktTimeEnabled());
+        this.$('.production-taktTime').toggleClass(
+          'hidden', !this.model.isTaktTimeEnabled() || !this.model.settings.showSmiley()
+        );
       }
     }
 
