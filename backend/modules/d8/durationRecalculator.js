@@ -35,7 +35,7 @@ module.exports = function setUpDurationRecalculator(app, module)
     };
     const fields = {
       rid: 1,
-      d8OpenDate: 1,
+      crsRegisterDate: 1,
       createdAt: 1,
       'strips.date': 1,
       duration: 1

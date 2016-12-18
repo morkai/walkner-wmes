@@ -141,10 +141,6 @@ module.exports = function setupD8EntryModel(app, mongoose)
       type: Date,
       default: null
     },
-    d8OpenDate: {
-      type: Date,
-      default: null
-    },
     d8CloseDate: {
       type: Date,
       default: null
@@ -185,7 +181,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
   d8EntrySchema.index({'strips.no': -1});
   d8EntrySchema.index({status: 1});
   d8EntrySchema.index({division: 1});
-  d8EntrySchema.index({d8OpenDate: -1});
+  d8EntrySchema.index({crsRegisterDate: -1});
 
   d8EntrySchema.statics.TOPIC_PREFIX = 'd8.entries';
   d8EntrySchema.statics.STATUSES = STATUSES;
@@ -201,7 +197,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     }
 
     if (this.isModified('status')
-      || this.isModified('d8OpenDate')
+      || this.isModified('crsRegisterDate')
       || this.isModified('d8CloseDate')
       || this.isModified('strips'))
     {
@@ -213,7 +209,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
 
   d8EntrySchema.statics.recalcDuration = function(doc, currentDate)
   {
-    let fromDate = doc.d8OpenDate;
+    let fromDate = doc.crsRegisterDate;
 
     if (!fromDate)
     {
@@ -584,7 +580,6 @@ module.exports = function setupD8EntryModel(app, mongoose)
       'entrySource',
       'members',
       'crsRegisterDate',
-      'd8OpenDate',
       'd8CloseDate',
       'd5CloseDate',
       'd5PlannedCloseDate',

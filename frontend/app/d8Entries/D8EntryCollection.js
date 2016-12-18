@@ -13,7 +13,7 @@ define([
 
     model: D8Entry,
 
-    rqlQuery: 'exclude(changes)&limit(20)&sort(-d8OpenDate)'
+    rqlQuery: 'exclude(changes)&limit(20)&sort(-crsRegisterDate)'
 
   });
 });

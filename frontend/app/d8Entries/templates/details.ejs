@@ -25,7 +25,7 @@
         </div>
         <div class="col-md-4">
           <div class="props">
-            <% ['crsRegisterDate', 'd8OpenDate', 'd5PlannedCloseDate', 'd5CloseDate', 'd8CloseDate'].forEach(function(prop) { %>
+            <% ['crsRegisterDate', 'd5PlannedCloseDate', 'd5CloseDate', 'd8CloseDate'].forEach(function(prop) { %>
             <div class="prop">
               <div class="prop-name <%- model.changed[prop] ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:' + prop) %></div>
               <div class="prop-value"><%= model[prop] || '-' %></div>

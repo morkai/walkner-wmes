@@ -50,7 +50,6 @@ module.exports = function setUpPrepareTemplateData(app, module)
         problemSource: entry.problemSource,
         entrySource: entry.entrySource,
         crsRegisterDate: formatDate(entry.crsRegisterDate),
-        d8OpenDate: formatDate(entry.d8OpenDate),
         d8CloseDate: formatDate(entry.d8CloseDate),
         d5CloseDate: formatDate(entry.d5CloseDate),
         d5PlannedCloseDate: formatDate(entry.d5PlannedCloseDate),

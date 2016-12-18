@@ -80,7 +80,7 @@ define([
           formData.user = term.args[1];
         }
       },
-      'd8OpenDate': function(propertyName, term, formData)
+      'crsRegisterDate': function(propertyName, term, formData)
       {
         formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
       },
@@ -108,7 +108,7 @@ define([
 
       if (fromMoment.isValid())
       {
-        selector.push({name: 'ge', args: ['d8OpenDate', fromMoment.valueOf()]});
+        selector.push({name: 'ge', args: ['crsRegisterDate', fromMoment.valueOf()]});
       }
 
       if (toMoment.isValid())
@@ -118,7 +118,7 @@ define([
           this.$id('to').val(toMoment.add(1, 'days').format('YYYY-MM-DD'));
         }
 
-        selector.push({name: 'lt', args: ['d8OpenDate', toMoment.valueOf()]});
+        selector.push({name: 'lt', args: ['crsRegisterDate', toMoment.valueOf()]});
       }
 
       if (userType === 'mine' || userType === 'unseen')

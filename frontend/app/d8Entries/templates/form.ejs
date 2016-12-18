@@ -70,7 +70,7 @@
         <textarea id="<%- idPrefix %>-problemDescription" class="form-control" name="problemDescription" rows="3"></textarea>
       </div>
       <div class="d8Entries-form-dates">
-        <% ['crsRegisterDate', 'd8OpenDate', 'd5PlannedCloseDate', 'd5CloseDate', 'd8CloseDate'].forEach(function(prop) { %>
+        <% ['crsRegisterDate', 'd5PlannedCloseDate', 'd5CloseDate', 'd8CloseDate'].forEach(function(prop) { %>
         <div class="form-group">
           <label for="<%- idPrefix %>-<%- prop %>" class="control-label"><%- t('d8Entries', 'PROPERTY:' + prop) %></label>
           <input id="<%- idPrefix %>-<%- prop %>" class="form-control" type="date" name="<%- prop %>" min="2013-01-01" max="<%- nextYear %>">

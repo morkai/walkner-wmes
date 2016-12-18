@@ -19,7 +19,7 @@ define([
 ) {
   'use strict';
 
-  var DATE_PROPERTIES = ['crsRegisterDate', 'd8OpenDate', 'd8CloseDate', 'd5CloseDate', 'd5PlannedCloseDate'];
+  var DATE_PROPERTIES = ['crsRegisterDate', 'd8CloseDate', 'd5CloseDate', 'd5PlannedCloseDate'];
   var TIME_PROPERTIES = ['createdAt', 'updatedAt'];
   var USER_INFO_PROPERTIES = ['creator', 'updater', 'owner'];
   var OWNER_PROPERTIES = ['members'];

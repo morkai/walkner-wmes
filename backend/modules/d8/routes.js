@@ -502,7 +502,6 @@ module.exports = function setUpD8Routes(app, module)
     result['"problemSource'] = dict.problemSources[doc.problemSource] || doc.problemSource;
     result['"problemDescription'] = doc.problemDescription;
     result.crsRegisterDate = app.formatDate(doc.crsRegisterDate);
-    result.d8OpenDate = app.formatDate(doc.d8OpenDate);
     result.d5PlannedCloseDate = app.formatDate(doc.d5PlannedCloseDate);
     result.d5CloseDate = app.formatDate(doc.d5CloseDate);
     result.d8CloseDate = app.formatDate(doc.d8CloseDate);

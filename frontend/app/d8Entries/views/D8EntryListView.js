@@ -55,7 +55,6 @@ define([
         {id: 'problemSource', tdAttrs: prepareTdAttrs},
         {id: 'team', tdAttrs: _.partial(prepareTdAttrs, _, null, 'owner', 'members')},
         {id: 'crsRegisterDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:crsRegisterDate')},
-        {id: 'd8OpenDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:d8OpenDate')},
         {id: 'd5PlannedCloseDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:d5PlannedCloseDate')},
         {id: 'd5CloseDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:d5CloseDate')},
         {id: 'd8CloseDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:d8CloseDate')}
