@@ -70,6 +70,11 @@ define([
           : $date.closest('.form-group');
         var $help = $group.find('.help-block');
 
+        if (e.target.name === 'crsRegisterDate')
+        {
+          this.$id('d5PlannedCloseDate').val(moment.add(28, 'days').format('YYYY-MM-DD'));
+        }
+
         if (daysAbs <= 7)
         {
           e.target.setCustomValidity('');
