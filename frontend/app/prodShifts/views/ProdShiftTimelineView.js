@@ -621,7 +621,11 @@ define([
       {
         var efficiency = model.getEfficiency();
 
-        if (!efficiency)
+        if (efficiency)
+        {
+          efficiency *= 100;
+        }
+        else
         {
           efficiency = model.getTaktTimeEfficiency();
         }
