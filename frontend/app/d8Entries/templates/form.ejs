@@ -3,7 +3,6 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
-      <% if (!hideOwnerFields) { %>
       <div id="<%- idPrefix %>-statusGroup" class="form-group clearfix">
         <label for="<%- idPrefix %>-status" class="control-label"><%- t('d8Entries', 'PROPERTY:status') %></label>
         <div id="<%- idPrefix %>-status" class="btn-group d8Entries-form-statusBtnGroup" data-toggle="buttons">
@@ -14,7 +13,6 @@
           <% }) %>
         </div>
       </div>
-      <% } %>
       <div class="form-group">
         <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:subject') %></label>
         <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required>
@@ -29,20 +27,16 @@
           <input id="<%- idPrefix %>-entrySource" type="text" name="entrySource" required>
         </div>
       </div>
-      <% if (!hideOwnerFields) { %>
       <div class="row">
         <div class="col-md-3 form-group has-required-select2">
           <label for="<%- idPrefix %>-owner" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:owner') %></label>
           <input id="<%- idPrefix %>-owner" type="text" name="owner" required>
-          <p class="help-block"><%- t('d8Entries', 'FORM:help:owner') %></p>
         </div>
         <div class="col-md-9 form-group">
           <label for="<%- idPrefix %>-members" class="control-label"><%- t('d8Entries', 'PROPERTY:members') %></label>
           <input id="<%- idPrefix %>-members" type="text" name="members">
-          <p class="help-block"><%- t('d8Entries', 'FORM:help:members') %></p>
         </div>
       </div>
-      <% } %>
       <div class="form-group">
         <label class="control-label"><%- t('d8Entries', 'PROPERTY:strips') %></label>
         <table class="table table-bordered table-condensed d8Entries-form-stripsTable">

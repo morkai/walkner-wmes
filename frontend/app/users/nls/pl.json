@@ -151,8 +151,8 @@
   "PRIVILEGE:PSCS:VIEW": "PSCS: przeglądanie",
   "PRIVILEGE:PSCS:MANAGE": "PSCS: zarządzanie",
   "PRIVILEGE:D8:VIEW": "8D: przeglądanie zgłoszeń",
-  "PRIVILEGE:D8:MANAGE": "8D: dodawanie zgłoszeń",
-  "PRIVILEGE:D8:ALL": "8D: zarządzanie zgłoszeniami",
+  "PRIVILEGE:D8:MANAGE": "8D: zarządzanie zgłoszeniami",
+  "PRIVILEGE:D8:LEADER": "8D: lider",
   "PRIVILEGE:D8:DICTIONARIES:VIEW": "8D: przeglądanie słowników",
   "PRIVILEGE:D8:DICTIONARIES:MANAGE": "8D: zarządzanie słownikami",
 

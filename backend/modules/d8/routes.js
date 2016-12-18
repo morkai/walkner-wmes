@@ -8,6 +8,7 @@ const _ = require('lodash');
 const step = require('h5.step');
 const multer = require('multer');
 const contentDisposition = require('content-disposition');
+const moment = require('moment');
 
 module.exports = function setUpD8Routes(app, module)
 {
@@ -37,7 +38,7 @@ module.exports = function setUpD8Routes(app, module)
   express.post('/d8/entries', canManage, prepareForAdd, express.crud.addRoute.bind(null, app, D8Entry));
   express.get('/d8/entries/:id', canView, express.crud.readRoute.bind(null, app, D8Entry));
   express.put('/d8/entries/:id', canView, editRoute);
-  express.delete('/d8/entries/:id', canManage, express.crud.deleteRoute.bind(null, app, D8Entry));
+  express.delete('/d8/entries/:id', canDelete, express.crud.deleteRoute.bind(null, app, D8Entry));
 
   express.get('/d8/entries/:entry/attachments/:attachment', canDownload, sendAttachmentRoute);
 
@@ -70,6 +71,36 @@ module.exports = function setUpD8Routes(app, module)
     express.get(urlPrefix + '/:id', canViewDictionaries, express.crud.readRoute.bind(null, app, Model));
     express.put(urlPrefix + '/:id', canManageDictionaries, express.crud.editRoute.bind(null, app, Model));
     express.delete(urlPrefix + '/:id', canManageDictionaries, express.crud.deleteRoute.bind(null, app, Model));
+  }
+
+  function canDelete(req, res, next)
+  {
+    D8Entry.findById(req.params.id, function(err, entry)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (!entry)
+      {
+        req.model = null;
+
+        return next();
+      }
+
+      const user = req.session.user;
+
+      if (userModule.isAllowedTo(user, 'D8:MANAGE')
+        || (entry.creator.id === user._id && moment(entry.createdAt).diff(Date.now()) >= -10))
+      {
+        req.model = entry;
+
+        return next();
+      }
+
+      return next(app.createError('AUTH', 403));
+    });
   }
 
   function prepareObserverFilter(req, res, next)
@@ -250,18 +281,9 @@ module.exports = function setUpD8Routes(app, module)
           return this.skip(express.createHttpError('NOT_FOUND', 404));
         }
 
-        if (!userModule.isAllowedTo(user, 'D8:ALL'))
+        if (!userModule.isAllowedTo(user, 'D8:MANAGE'))
         {
-          const role = entry.getUserRole(user);
-
-          if (entry.status === 'closed' || role === 'observer')
-          {
-            body = _.pick(body, ['comment']);
-          }
-          else if (role === 'member')
-          {
-            body = _.omit(body, ['status', 'owner', 'members']);
-          }
+          body = _.pick(body, getPropsForEdit(entry, entry.getUserRoles(user)));
         }
 
         if (typeof body.attachment === 'string')
@@ -308,6 +330,33 @@ module.exports = function setUpD8Routes(app, module)
         }
       }
     );
+  }
+
+  function getPropsForEdit(entry, roles)
+  {
+    if (entry.status === 'closed')
+    {
+      return ['comment'];
+    }
+
+    let props = ['comment'];
+
+    if (roles.manager || roles.owner)
+    {
+      props = props.concat('subscribers', 'attachment', 'members');
+
+      if (roles.manager)
+      {
+        props = props.concat('owner', 'd5CloseDateOk');
+      }
+
+      if (roles.owner)
+      {
+        props = props.concat('d5CloseDate', 'd8CloseDate');
+      }
+    }
+
+    return props;
   }
 
   function uploadAttachmentRoute(req, res, next)

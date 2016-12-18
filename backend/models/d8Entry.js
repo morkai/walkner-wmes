@@ -357,24 +357,15 @@ module.exports = function setupD8EntryModel(app, mongoose)
     this.duration = this.model('D8Entry').recalcDuration(this);
   };
 
-  d8EntrySchema.methods.getUserRole = function(user)
+  d8EntrySchema.methods.getUserRoles = function(user)
   {
-    if (this.creator.id === user._id)
-    {
-      return 'creator';
-    }
-
-    if (this.owner.id === user._id)
-    {
-      return 'owner';
-    }
-
-    if (_.any(this.members, member => member.id === user._id))
-    {
-      return 'member';
-    }
-
-    return 'observer';
+    return {
+      manager: user.prodFunction === 'manager' && (!user.orgUnitId || user.orgUnitId === this.division),
+      creator: this.creator.id === user._id,
+      owner: this.owner.id === user._id,
+      member: this.members.some(member => member.id === user._id),
+      observer: true
+    };
   };
 
   d8EntrySchema.methods.createObservers = function()

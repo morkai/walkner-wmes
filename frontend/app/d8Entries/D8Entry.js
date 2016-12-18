@@ -162,6 +162,12 @@ define([
       return obj;
     },
 
+    isManager: function()
+    {
+      return user.data.prodFunction === 'manager'
+        && (!user.data.orgUnitId || user.data.orgUnitId === this.get('division'));
+    },
+
     isCreator: function()
     {
       return this.attributes.creator && this.attributes.creator.id === user.data._id;
@@ -172,44 +178,56 @@ define([
       return this.attributes.owner && this.attributes.owner.id === user.data._id;
     },
 
+    isMember: function()
+    {
+      return _.some(this.attributes.members, function(member) { return member.id === user.data._id; });
+    },
+
     isNotSeen: function()
     {
       return this.attributes.observer.notify;
     },
 
+    getUserRoles: function()
+    {
+      return {
+        admin: user.isAllowedTo('D8:MANAGE'),
+        manager: this.isManager(),
+        creator: this.isCreator(),
+        owner: this.isOwner(),
+        member: this.isMember(),
+        observer: true
+      };
+    },
+
     canEdit: function()
     {
-      var canManage = user.isAllowedTo(this.privilegePrefix + ':ALL');
-
-      if (canManage)
+      if (user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
       {
         return true;
       }
 
-      var attrs = this.attributes;
-
-      if (attrs.status === 'closed')
+      if (this.get('status') === 'closed')
       {
         return false;
       }
 
-      if (this.isCreator() || this.isOwner())
-      {
-        return true;
-      }
-
-      return _.any(OWNER_PROPERTIES, function(ownerProperty)
-      {
-        return _.any(attrs[ownerProperty], function(owner)
-        {
-          return owner.id === user.data._id;
-        });
-      });
+      return this.isCreator() || this.isOwner() || this.isManager();
     },
 
     canDelete: function()
     {
-      return user.isAllowedTo(this.privilegePrefix + ':ALL') || (this.get('status') === 'open' && this.isCreator());
+      if (user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
+      {
+        return true;
+      }
+
+      if (this.get('status') !== 'open' || !this.isCreator())
+      {
+        return false;
+      }
+
+      return time.getMoment(this.get('createdAt')).diff(Date.now(), 'minutes') >= -10;
     },
 
     markAsSeen: function()

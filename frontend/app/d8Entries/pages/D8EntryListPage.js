@@ -33,6 +33,7 @@ define([
         {
           label: t.bound(collection.getNlsDomain(), 'PAGE_ACTION:add'),
           icon: 'plus',
+          privileges: 'D8:MANAGE',
           href: collection.genClientUrl('add')
         }
       ];

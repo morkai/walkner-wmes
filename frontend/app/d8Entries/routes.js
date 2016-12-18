@@ -37,7 +37,7 @@ define([
     );
   });
 
-  router.map('/d8/entries/:id', canManage, function(req)
+  router.map('/d8/entries/:id', canView, function(req)
   {
     viewport.loadPage(
       [

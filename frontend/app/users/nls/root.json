@@ -152,8 +152,8 @@
     "PRIVILEGE:PSCS:VIEW": "PSCS: view",
     "PRIVILEGE:PSCS:MANAGE": "PSCS: manage",
     "PRIVILEGE:D8:VIEW": "QI: view entries",
-    "PRIVILEGE:D8:MANAGE": "QI: add entries",
-    "PRIVILEGE:D8:ALL": "QI: manage entries",
+    "PRIVILEGE:D8:MANAGE": "QI: manage entries",
+    "PRIVILEGE:D8:LEADER": "QI: leader",
     "PRIVILEGE:D8:DICTIONARIES:VIEW": "QI: view dictionaries",
     "PRIVILEGE:D8:DICTIONARIES:MANAGE": "QI: manage dictionaries",
 

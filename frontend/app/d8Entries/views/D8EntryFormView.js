@@ -101,7 +101,7 @@ define([
       return _.extend(FormView.prototype.serialize.call(this), {
         nextYear: time.getMoment().add(1, 'year').format('YYYY-MM-DD'),
         statuses: dictionaries.statuses,
-        hideOwnerFields: this.options.editMode && !this.model.isOwner() && !user.isAllowedTo('D8:ALL')
+        userRoles: this.model.getUserRoles()
       });
     },
 
@@ -255,6 +255,50 @@ define([
       this.setUpOwnerSelect2();
       this.setUpMembersSelect2();
       this.setUpStrips();
+
+      if (this.options.editMode)
+      {
+        this.disableFields();
+      }
+      else
+      {
+        this.$id('crsRegisterDate').val(time.getMoment().format('YYYY-MM-DD'));
+        this.$id('d5PlannedCloseDate').val(time.getMoment().add(28, 'days').format('YYYY-MM-DD'));
+      }
+    },
+
+    disableFields: function()
+    {
+      var roles = this.model.getUserRoles();
+
+      if (roles.admin)
+      {
+        return;
+      }
+
+      this.$id('status').find('.btn').addClass('disabled');
+      this.$id('subject').prop('readonly', true);
+      this.$id('division').select2('disable', true);
+      this.$id('entrySource').select2('disable', true);
+
+      if (!roles.manager)
+      {
+        this.$id('owner').select2('disable', true);
+      }
+
+      if (!roles.manager && !roles.owner)
+      {
+        this.$id('members').select2('disable', true);
+      }
+
+      this.$id('strips').find('input').prop('disabled', true);
+      this.$id('strips').parent().find('.actions').remove();
+      this.$id('addStrip').remove();
+
+      this.$id('problemSource').select2('disable', true);
+      this.$id('d5PlannedCloseDate').prop('readonly', true);
+      this.$id('crsRegisterDate').prop('readonly', true);
+      this.$id('problemDescription').prop('readonly', true);
     },
 
     setUpOwnerSelect2: function()
