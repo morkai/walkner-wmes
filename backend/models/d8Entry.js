@@ -149,6 +149,10 @@ module.exports = function setupD8EntryModel(app, mongoose)
       type: Date,
       default: null
     },
+    d5CloseDateOk: {
+      type: Boolean,
+      default: false
+    },
     d5PlannedCloseDate: {
       type: Date,
       default: null
@@ -573,6 +577,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
       'crsRegisterDate',
       'd8CloseDate',
       'd5CloseDate',
+      'd5CloseDateOk',
       'd5PlannedCloseDate',
       'attachment'
     ]));

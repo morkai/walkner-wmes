@@ -25,12 +25,25 @@
         </div>
         <div class="col-md-4">
           <div class="props">
-            <% ['crsRegisterDate', 'd5PlannedCloseDate', 'd5CloseDate', 'd8CloseDate'].forEach(function(prop) { %>
+            <% ['crsRegisterDate', 'd5PlannedCloseDate'].forEach(function(prop) { %>
             <div class="prop">
               <div class="prop-name <%- model.changed[prop] ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:' + prop) %></div>
               <div class="prop-value"><%= model[prop] || '-' %></div>
             </div>
             <% }) %>
+            <div class="prop">
+              <div class="prop-name <%- model.changed.d5CloseDate ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:d5CloseDate') %></div>
+              <div class="prop-value">
+                <%= model.d5CloseDate || '-' %>
+                <% if (model.d5CloseDate) { %>
+                <i class="fa fa-thumbs-<%- model.d5CloseDateOk ? 'up' : 'down' %>"></i>
+                <% } %>
+              </div>
+            </div>
+            <div class="prop">
+              <div class="prop-name <%- model.changed.d8CloseDate ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:d8CloseDate') %></div>
+              <div class="prop-value"><%= model.d8CloseDate || '-' %></div>
+            </div>
           </div>
         </div>
         <div class="col-md-4">

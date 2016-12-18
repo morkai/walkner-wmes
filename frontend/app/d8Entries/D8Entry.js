@@ -148,6 +148,11 @@ define([
         });
       }
 
+      if (row.d5CloseDate)
+      {
+        row.d5CloseDate += ' <i class="fa fa-thumbs-' + (row.d5CloseDateOk ? 'up' : 'down') + '"></i>';
+      }
+
       return row;
     },
 

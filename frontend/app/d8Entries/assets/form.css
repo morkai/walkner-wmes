@@ -43,3 +43,12 @@
   bottom: auto!important;
   height: 34px;
 }
+.d8Entries-form-d5CloseDate > .control-label {
+  display: block;
+}
+.d8Entries-form-d5CloseDate > .form-control {
+  display: inline-block;
+}
+.d8Entries-form-d5CloseDate > .btn {
+
+}

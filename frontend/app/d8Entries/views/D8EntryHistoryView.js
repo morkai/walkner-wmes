@@ -154,12 +154,12 @@ define([
 
     serializeItemValue: function(property, value, isOld, changeIndex)
     {
-      if (_.isEmpty(value))
+      if (!_.isBoolean(value) && _.isEmpty(value))
       {
         return '-';
       }
 
-      if (/date/i.test(property))
+      if (/Date$/.test(property))
       {
         return time.format(value, 'LL');
       }
@@ -205,6 +205,9 @@ define([
 
         case 'subscribers':
           return value.join('; ');
+
+        case 'd5CloseDateOk':
+          return '<i class="fa fa-thumbs-' + (value ? 'up' : 'down') + '"></i>';
 
         default:
           return value || '';

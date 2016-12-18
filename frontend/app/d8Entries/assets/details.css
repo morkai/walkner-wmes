@@ -1,3 +1,9 @@
+.d8Entries-detailsPage .fa-thumbs-up {
+  color: #00af00!important;
+}
+.d8Entries-detailsPage .fa-thumbs-down {
+  color: #e00!important;
+}
 .d8Entries-detailsPage-history {
   margin-top: 20px;
 }

@@ -92,6 +92,27 @@ define([
           dir: days > 0 ? 'future' : 'past',
           days: daysAbs
         })).appendTo($group);
+      },
+
+      'click #-d5CloseDateOk': function()
+      {
+        this.toggleD5CloseDateOk(!this.$id('d5CloseDateOk').hasClass('btn-success'));
+      },
+
+      'change #-d5CloseDate': function(e)
+      {
+        var roles = this.model.getUserRoles();
+
+        if (roles.admin || roles.manager)
+        {
+          return;
+        }
+
+        var oldValue = time.getMoment(this.model.get('d5CloseDate')).format('YYYY-MM-DD');
+        var newValue = e.target.value;
+        var d5CloseDateOk = !!this.model.get('d5CloseDateOk');
+
+        this.toggleD5CloseDateOk(newValue === oldValue ? d5CloseDateOk : false);
       }
 
     }, FormView.prototype.events),
@@ -211,6 +232,8 @@ define([
         };
       });
 
+      formData.d5CloseDateOk = this.$id('d5CloseDateOk').hasClass('btn-success');
+
       D8Entry.DATE_PROPERTIES.forEach(function(property)
       {
         var dateMoment = time.getMoment(formData[property], 'YYYY-MM-DD');
@@ -255,6 +278,7 @@ define([
       this.setUpOwnerSelect2();
       this.setUpMembersSelect2();
       this.setUpStrips();
+      this.toggleD5CloseDateOk(!!this.model.get('d5CloseDateOk'));
 
       if (this.options.editMode)
       {
@@ -265,6 +289,15 @@ define([
         this.$id('crsRegisterDate').val(time.getMoment().format('YYYY-MM-DD'));
         this.$id('d5PlannedCloseDate').val(time.getMoment().add(28, 'days').format('YYYY-MM-DD'));
       }
+    },
+
+    toggleD5CloseDateOk: function(newValue)
+    {
+      var $btn = this.$id('d5CloseDateOk').removeClass('btn-success btn-danger');
+      var $fa = $btn.find('.fa').removeClass('fa-thumbs-up fa-thumbs-down');
+
+      $btn.addClass(newValue ? 'btn-success' : 'btn-danger');
+      $fa.addClass(newValue ? 'fa-thumbs-up' : 'fa-thumbs-down');
     },
 
     disableFields: function()
@@ -284,6 +317,7 @@ define([
       if (!roles.manager)
       {
         this.$id('owner').select2('disable', true);
+        this.$id('d5CloseDateOk').addClass('disabled');
       }
 
       if (!roles.manager && !roles.owner)

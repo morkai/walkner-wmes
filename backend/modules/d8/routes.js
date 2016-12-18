@@ -343,11 +343,11 @@ module.exports = function setUpD8Routes(app, module)
 
     if (roles.manager || roles.owner)
     {
-      props = props.concat('subscribers', 'attachment', 'members');
+      props = props.concat('subscribers', 'attachment', 'members', 'd5CloseDateOk');
 
       if (roles.manager)
       {
-        props = props.concat('owner', 'd5CloseDateOk');
+        props = props.concat('owner');
       }
 
       if (roles.owner)

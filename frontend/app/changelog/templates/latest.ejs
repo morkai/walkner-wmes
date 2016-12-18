@@ -1,23 +1,54 @@
-<h1>v0.101.0</h1>
-<h2><%- time.format('2016-12-14', 'LL') %></h2>
+<h1>v0.101.1</h1>
+<h2><%- time.format('2016-12-18', 'LL') %></h2>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający przetwarzanie operacji z linii po przeliczeniu ilości na linii,
-    która w ID zawiera znak <code>.</code>.</li>
-  <li>Zmieniono określanie czy zlecenie jest wykonywane z prawidłowym taktem tak, aby pod uwagę brany był średni czas
-    cyklu, a nie czas cyklu dla ostatniej sztuki.</li>
-  <li>Zmieniono funkcjonalność 'Następne zlecenie' na 'Kolejka zleceń'.</li>
-</ul>
-<h3>Zlecenia reszty działów</h3>
-<ul>
-  <li>Zmieniono domyślny filtr, aby wyświetlane były dane tylko dla aktualnego dnia.</li>
-  <li>Dodano filtr 'MRP'.</li>
-</ul>
-<h3>Plany godzinowe</h3>
-<ul>
-  <li>Dodano możliwość wklejenia do wybranego przepływu wszystkich 24 wartości na raz.</li>
+  <li>Poprawiono błąd powodujący zmianę koloru tekstu wartości 'Cykl [s]' na podstawie wartości średniego czasu cyklu
+    zamiast czasu cyklu dla ostatniej sztuki.</li>
+  <li>Zmieniono listę kolejki zleceń tak, aby wyświetlany przy każdym zleceniu był wyświetlany jego kolejny numer.</li>
+  <li>Dodano nową opcję konfiguracyjną, pozwalającą na ukrycie sekcji 'Czas cyklu'.</li>
 </ul>
 <h3>Wydajność godzinowa</h3>
 <ul>
-  <li>Dodano nowy moduł: <a href="/heff">Wydajność godzinowa</a>.</li>
+  <li>Zmieniono wartość 'Ilość planowana [szt]' tak, aby sumowane były planowane ilości godzinowe od początku zmiany do
+    końca aktualnej godziny, a nie do końca poprzedniej godziny.
+  <li>Zmieniono wartość 'Ilość zrobiona [szt]' tak, aby sumowane były wykonane ilości godzinowe od początku zmiany do
+    końca aktualnej godziny, a nie do końca poprzedniej godziny.</li>
+  <li>Zmieniono wyświetlanie buźki tak, aby wskazywała czy aktualna ilość zrobiona jest większa lub równa
+    ilości planowanej do aktualnego momentu, a nie czy wartość 'Ilość zrobiona [szt]' jest większa lub równa wartości
+    'Ilość planowana [szt]'.</li>
+</ul>
+<h3>Dane produkcyje > Zmiany</h3>
+<h3>Monitoring</h3>
+<ul>
+  <li>Zmieniono obliczanie wartości 'Wydajność' dla niezakończonych zleceń tak, aby wyświetlały wydajność obliczoną
+    z czasów cyklu i taktu, a nie 0%.</li>
+  <li>Zmieniono dymki na osi czasu tak, aby nie wyświetlały danych, które nie mają wartości (wcześniej wyświetlany był
+    znak zapytania).</li>
+</ul>
+<h3>Plany godzinowe</h3>
+<ul>
+  <li>Zmieniono funkcjonalność wklejania wartości do przepływów tak, aby nieprawidłowe wartości na początku i końcu
+    wklejonego tekstu były ignorowane, a nie zamieniane na zera (np. nazwa kolumny).</li>
+</ul>
+<h3>8D</h3>
+<ul>
+  <li>Usunięto pole 'Data otwarcia 8D'.</li>
+  <li>Usunięto z formularza ograniczenie ustawiania dat o różnicy większej niż 60 dni od aktualnej daty.</li>
+  <li>Zmieniono uprawnienia na: przeglądanie zgłoszeń, zarządzanie zgłoszeniami, lider oraz kierownik.
+    <ul>
+      <li>8D: przeglądanie zgłoszeń - użytkownik widzi pozycję 8D w menu i może przeglądać oraz komentować wszystkie
+        zgłoszenia,
+      <li>8D: zarządzanie zgłoszeniami - użytkownik może dodawać nowe zgłoszenia, edytować wszystkie pola oraz usuwać
+        wszystkie zgłoszenia,</li>
+      <li>8D: lider - użytkownik może edytować pola: Członkowie zespołu, Data zakończenia D5, Data zakończenia 8D,
+        Plik raportu 8D oraz Obserwatorzy zgłoszenia.</li>
+      <li>8D: kierownik (przydzielane automatycznie dla użytkowników z funkcją na produkcji 'Kierownik') - użytkownik
+        może edytować pola: Lider zespołu, Członkowie zespołu, Akceptacja daty zakończenia D5, Plik raportu 8D
+        oraz Obserwatorzy zgłoszenia.</li>
+    </ul>
+  </li>
+  <li>Zmieniono pole 'Data rejestracji CRS' tak, aby przy zmianie jego wartości, wartość pola 'Planowane zakończenie D5'
+    była ustawiana na 'Data rejestracji CRS'+28 dni.</li>
+  <li>Zmieniono listę zgłoszeń tak, aby po najechaniu na komórkę 'Zespół', w dymku wyświetlani byli wszyscy członkowie
+    zespołu.</li>
 </ul>

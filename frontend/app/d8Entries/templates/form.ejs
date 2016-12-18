@@ -64,12 +64,21 @@
         <textarea id="<%- idPrefix %>-problemDescription" class="form-control" name="problemDescription" rows="3"></textarea>
       </div>
       <div class="d8Entries-form-dates">
-        <% ['crsRegisterDate', 'd5PlannedCloseDate', 'd5CloseDate', 'd8CloseDate'].forEach(function(prop) { %>
+        <% ['crsRegisterDate', 'd5PlannedCloseDate'].forEach(function(prop) { %>
         <div class="form-group">
           <label for="<%- idPrefix %>-<%- prop %>" class="control-label"><%- t('d8Entries', 'PROPERTY:' + prop) %></label>
           <input id="<%- idPrefix %>-<%- prop %>" class="form-control" type="date" name="<%- prop %>" min="2013-01-01" max="<%- nextYear %>">
         </div>
         <% }) %>
+        <div class="form-group d8Entries-form-d5CloseDate">
+          <label for="<%- idPrefix %>-d5CloseDate" class="control-label"><%- t('d8Entries', 'PROPERTY:d5CloseDate') %></label>
+          <input id="<%- idPrefix %>-d5CloseDate" class="form-control" type="date" name="d5CloseDate" min="2013-01-01" max="<%- nextYear %>"><!--
+          //--><button id="<%- idPrefix %>-d5CloseDateOk" type="button" class="btn btn-default btn-success"><i class="fa"></i></button>
+        </div>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-d8CloseDate" class="control-label"><%- t('d8Entries', 'PROPERTY:d8CloseDate') %></label>
+          <input id="<%- idPrefix %>-d8CloseDate" class="form-control" type="date" name="d8CloseDate" min="2013-01-01" max="<%- nextYear %>">
+        </div>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-attachment" class="control-label">

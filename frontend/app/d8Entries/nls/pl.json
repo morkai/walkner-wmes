@@ -68,6 +68,7 @@
   "PROPERTY:crsRegisterDate": "Data rejestracji CRS",
   "PROPERTY:d8CloseDate": "Data zakończenia 8D",
   "PROPERTY:d5CloseDate": "Data zakończenia D5",
+  "PROPERTY:d5CloseDateOk": "Data zakończenia D5",
   "PROPERTY:d5PlannedCloseDate": "Planowane zakończenie D5",
   "PROPERTY:attachment": "Plik raportu 8D",
 

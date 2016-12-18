@@ -12,3 +12,9 @@
   padding: 0 0 0 14px;
   list-style-position: outside;
 }
+.d8Entries-list .fa-thumbs-up {
+  color: #00af00!important;
+}
+.d8Entries-list .fa-thumbs-down {
+  color: #e00!important;
+}
