@@ -34,18 +34,24 @@
       <td><%- quantityDone %></td>
     </tr>
     <% if (user.isAllowedTo('PROD_DATA:MANAGE')) { %>
+    <% if (sapTaktTime) { %>
     <tr>
       <th><%- t('prodShifts', 'timeline:popover:sapTaktTime') %></th>
-      <td><%- sapTaktTime ? time.toString(sapTaktTime) : '?' %></td>
-    </tr>
-    <tr>
-      <th><%- t('prodShifts', 'timeline:popover:avgTaktTime') %></th>
-      <td><%- avgTaktTime ? time.toString(avgTaktTime) : '?' %></td>
+      <td><%- time.toString(sapTaktTime) %></td>
     </tr>
     <% } %>
+    <% if (avgTaktTime) { %>
+    <tr>
+      <th><%- t('prodShifts', 'timeline:popover:avgTaktTime') %></th>
+      <td><%- time.toString(avgTaktTime) %></td>
+    </tr>
+    <% } %>
+    <% } %>
+    <% if (efficiency !== '?') { %>
     <tr>
       <th><%- t('prodShifts', 'timeline:popover:efficiency') %></th>
       <td><%- efficiency %></td>
     </tr>
+    <% } %>
   </tbody>
 </table>
