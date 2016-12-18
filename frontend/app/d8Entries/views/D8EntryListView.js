@@ -89,6 +89,53 @@ define([
 
         return actions;
       };
+    },
+
+    afterRender: function()
+    {
+      ListView.prototype.afterRender.call(this);
+
+      var view = this;
+
+      this.$el.popover({
+        selector: '.list-item > td',
+        container: this.el,
+        trigger: 'hover',
+        placement: 'auto right',
+        html: true,
+        content: function()
+        {
+          var model = view.collection.get(this.parentNode.dataset.id);
+
+          if (this.dataset.id === 'team')
+          {
+            return view.serializeTeamPopoverContent(model);
+          }
+
+          return undefined;
+        }
+      });
+    },
+
+    serializeTeamPopoverContent: function(entry)
+    {
+      var team = entry.get('team');
+
+      if (team.length <= 1)
+      {
+        return undefined;
+      }
+
+      var html = '<ul class="d8Entries-list-team">';
+
+      for (var i = 0; i < team.length; ++i)
+      {
+        html += '<li>' + team[i].rendered;
+      }
+
+      html += '</ul>';
+
+      return html;
     }
 
   });
