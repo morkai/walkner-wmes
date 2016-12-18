@@ -83,11 +83,6 @@ define([
           return;
         }
 
-        if (!user.isAllowedTo('D8:ALL') && daysAbs > 60)
-        {
-          e.target.setCustomValidity(t('d8Entries', 'FORM:ERROR:date', {days: 60}));
-        }
-
         if (!$help.length)
         {
           $help = $('<p class="help-block"></p>');
