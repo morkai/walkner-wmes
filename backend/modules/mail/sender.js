@@ -235,7 +235,7 @@ exports.start = function startMailSenderModule(app, module)
       _.forEach(headers, function(header)
       {
         var colonIndex = header.indexOf(':');
-        var headerName = HEADERS[header.substring(0, colonIndex).trim().toLoweCase()];
+        var headerName = HEADERS[header.substring(0, colonIndex).trim().toLowerCase()];
         var headerValue = header.substring(colonIndex + 1).trim();
 
         if (headerName)
