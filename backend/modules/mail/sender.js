@@ -18,6 +18,16 @@ exports.DEFAULT_CONFIG = {
   emailsPath: null
 };
 
+const HEADERS = {
+  to: 'to',
+  cc: 'cc',
+  bcc: 'bcc',
+  from: 'from',
+  replyto: 'replyTo',
+  subject: 'subject',
+  html: 'html'
+};
+
 exports.start = function startMailSenderModule(app, module)
 {
   var nodemailer;
@@ -212,17 +222,26 @@ exports.start = function startMailSenderModule(app, module)
       }
 
       var bodyIndex = contents.indexOf('Body:');
-      var headers = contents.substring(0, bodyIndex).trim().split('\r\n');
+
+      if (bodyIndex === -1)
+      {
+        bodyIndex = contents.indexOf('body:');
+      }
+
+      var headers = contents.substring(0, bodyIndex).trim().split('\n');
       var body = contents.substring(bodyIndex + 'Body:'.length).trim();
       var mailOptions = {};
 
       _.forEach(headers, function(header)
       {
         var colonIndex = header.indexOf(':');
-        var headerName = header.substring(0, colonIndex).trim();
+        var headerName = HEADERS[header.substring(0, colonIndex).trim().toLoweCase()];
         var headerValue = header.substring(colonIndex + 1).trim();
 
-        mailOptions[headerName] = headerValue;
+        if (headerName)
+        {
+          mailOptions[headerName] = headerValue;
+        }
       });
 
       if (mailOptions.html)
