@@ -17,7 +17,7 @@ define([
 
   function handleScanBuffer()
   {
-    var matches = scanBuffer.match(/P0*([0-9]+)([0-9]{4})/);
+    var matches = scanBuffer.match(/P0*([0-9]{9})([0-9]{4})/);
 
     if (!matches)
     {
