@@ -27,18 +27,15 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-status"><%- t('suggestions', 'PROPERTY:status') %></label>
-    <select id="<%- idPrefix %>-status" name="status" class="form-control" size="1">
-      <option></option>
-      <option value="open"><%- t('suggestions', 'status:open') %></option>
+    <select id="<%- idPrefix %>-status" name="status[]" class="form-control is-expandable" multiple size="1">
       <% statuses.forEach(function(status) { %>
       <option value="<%- status %>"><%- t('suggestions', 'status:' + status) %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-category"><%- t('suggestions', 'PROPERTY:category') %></label>
-    <select id="<%- idPrefix %>-category" name="category" class="form-control" size="1">
-      <option></option>
+    <label for="<%- idPrefix %>-categories"><%- t('suggestions', 'PROPERTY:category') %></label>
+    <select id="<%- idPrefix %>-categories" name="categories[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15">
       <% categories.forEach(function(category) { %>
       <option value="<%- category._id %>"><%= category.name %></option>
       <% }) %>
@@ -46,8 +43,7 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-productFamily"><%- t('suggestions', 'PROPERTY:productFamily') %></label>
-    <select id="<%- idPrefix %>-productFamily" name="productFamily" class="form-control" size="1">
-      <option></option>
+    <select id="<%- idPrefix %>-productFamily" name="productFamily[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15">
       <% productFamilies.forEach(function(productFamily) { %>
       <option value="<%- productFamily._id %>"><%= productFamily.name %></option>
       <% }) %>
@@ -55,8 +51,7 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-section"><%- t('suggestions', 'PROPERTY:section') %></label>
-    <select id="<%- idPrefix %>-section" name="section" class="form-control" size="1">
-      <option></option>
+    <select id="<%- idPrefix %>-section" name="section[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15">
       <% sections.forEach(function(section) { %>
       <option value="<%- section._id %>"><%= section.name %></option>
       <% }) %>

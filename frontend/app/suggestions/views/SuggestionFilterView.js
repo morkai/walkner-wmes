@@ -6,7 +6,8 @@ define([
   'app/core/views/FilterView',
   'app/users/util/setUpUserSelect2',
   'app/kaizenOrders/dictionaries',
-  'app/suggestions/templates/filter'
+  'app/suggestions/templates/filter',
+  'app/core/util/ExpandableSelect'
 ], function(
   _,
   time,
@@ -41,10 +42,10 @@ define([
     defaultFormData: function()
     {
       return {
-        status: [].concat(kaizenDictionaries.statuses),
-        section: null,
-        category: null,
-        productFamily: null,
+        status: [],
+        section: [],
+        categories: [],
+        productFamily: [],
         userType: 'others',
         user: null,
         from: '',
@@ -53,14 +54,6 @@ define([
     },
 
     termToForm: {
-      'types': function(propertyName, term, formData)
-      {
-        formData[propertyName] = term.args[1];
-      },
-      'categories': function(propertyName, term, formData)
-      {
-        formData.category = term.args[1];
-      },
       'owners.id': function(propertyName, term, formData)
       {
         formData.userType = 'owner';
@@ -90,11 +83,12 @@ define([
       },
       'status': function(propertyName, term, formData)
       {
-        formData.status = term.name === 'in' ? 'open' : term.args[1];
+        formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
-      'section': 'types',
-      'area': 'types',
-      'productFamily': 'types'
+      'categories': 'status',
+      'section': 'status',
+      'area': 'status',
+      'productFamily': 'status'
     },
 
     serialize: function()
@@ -112,10 +106,8 @@ define([
     {
       var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
-      var category = this.$id('category').val();
       var userType = this.$('input[name="userType"]:checked').val();
       var user = this.$id('user').val();
-      var status = this.$id('status').val();
 
       if (fromMoment.isValid())
       {
@@ -132,11 +124,6 @@ define([
         selector.push({name: 'lt', args: ['date', toMoment.valueOf()]});
       }
 
-      if (category)
-      {
-        selector.push({name: 'eq', args: ['categories', category]});
-      }
-
       if (userType === 'mine' || userType === 'unseen')
       {
         selector.push({name: 'eq', args: ['observers.user.id', userType]});
@@ -149,22 +136,17 @@ define([
         ]});
       }
 
-      if (status === 'open')
+      ['status', 'categories', 'section', 'area', 'productFamily'].forEach(function(property)
       {
-        selector.push({name: 'in', args: ['status', ['new', 'accepted', 'todo', 'inProgress', 'paused']]});
-      }
-      else if (status)
-      {
-        selector.push({name: 'eq', args: ['status', status]});
-      }
+        var values = (this.$id(property).val() || []).filter(function(v) { return !_.isEmpty(v); });
 
-      ['section', 'area', 'productFamily'].forEach(function(property)
-      {
-        var value = this.$id(property).val();
-
-        if (value)
+        if (values.length === 1)
         {
-          selector.push({name: 'eq', args: [property, value]});
+          selector.push({name: 'eq', args: [property, values[0]]});
+        }
+        else if (values.length)
+        {
+          selector.push({name: 'in', args: [property, values]});
         }
       }, this);
     },
@@ -173,11 +155,22 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
+      this.prevStatus = _.pluck(this.$id('status')[0].selectedOptions, 'value');
+
+      this.$('.is-expandable').expandableSelect();
+
       setUpUserSelect2(this.$id('user'), {
         view: this
       });
 
       this.toggleUserSelect2();
+    },
+
+    destroy: function()
+    {
+      FilterView.prototype.destroy.call(this);
+
+      this.$('.is-expandable').expandableSelect('destroy');
     },
 
     toggleUserSelect2: function()
