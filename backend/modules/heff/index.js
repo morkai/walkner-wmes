@@ -6,7 +6,10 @@ const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express',
-  updaterId: 'updater'
+  updaterId: 'updater',
+  mongooseId: 'mongoose',
+  fteId: 'fte',
+  userId: 'user'
 };
 
 exports.start = function startHeffModule(app, module)
@@ -14,7 +17,10 @@ exports.start = function startHeffModule(app, module)
   app.onModuleReady(
     [
       module.config.expressId,
-      module.config.updaterId
+      module.config.updaterId,
+      module.config.mongooseId,
+      module.config.fteId,
+      module.config.userId
     ],
     setUpRoutes.bind(null, app, module)
   );
@@ -31,5 +37,10 @@ exports.start = function startHeffModule(app, module)
   app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(message)
   {
     app.broker.publish('heff.reload.' + message.prodLine, {});
+  });
+
+  app.broker.subscribe('heffLineStates.**', function(message)
+  {
+    app.broker.publish('heff.reload.' + message.model._id, {});
   });
 };

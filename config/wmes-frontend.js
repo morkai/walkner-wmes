@@ -239,7 +239,8 @@ exports.mongoose = {
     'isaPalletKind', 'isaEvent', 'isaRequest', 'isaShiftPersonnel',
     'qiKind', 'qiErrorCategory', 'qiFault', 'qiActionStatus', 'qiResult',
     'pscsResult',
-    'd8Entry', 'd8EntrySource', 'd8ProblemSource'
+    'd8Entry', 'd8EntrySource', 'd8ProblemSource',
+    'heffLineState'
   ]
 };
 

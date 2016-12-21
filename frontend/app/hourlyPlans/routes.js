@@ -29,13 +29,33 @@ define([
   {
     viewport.loadPage(
       [
+        'app/hourlyPlans/HourlyPlanCollection',
         'app/hourlyPlans/pages/HourlyPlanListPage',
         'i18n!app/nls/fte',
         nls
       ],
-      function(HourlyPlanListPage)
+      function(HourlyPlanCollection, HourlyPlanListPage)
       {
-        return new HourlyPlanListPage({rql: req.rql});
+        return new HourlyPlanListPage({
+          collection: new HourlyPlanCollection(null, {rqlQuery: req.rql})
+        });
+      }
+    );
+  });
+
+  router.map('/hourlyPlans;heff', canManage, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/hourlyPlans/HeffLineStateCollection',
+        'app/hourlyPlans/pages/HeffLineStatePage',
+        nls
+      ],
+      function(HeffLineStateCollection, HeffLineStatePage)
+      {
+        return new HeffLineStatePage({
+          collection: new HeffLineStateCollection(null, {rqlQuery: req.rql})
+        });
       }
     );
   });

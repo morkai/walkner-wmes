@@ -132,18 +132,13 @@ define([
     loadData: function()
     {
       var view = this;
-      var url = '/prodShifts?select(date,shift,quantitiesDone)&sort(date)'
-        + '&prodLine=' + encodeURIComponent(view.model.prodLineId)
-        + '&date=' + view.shiftStartInfo.moment.valueOf();
+      var url = '/heff/' + encodeURIComponent(view.model.prodLineId);
 
       clearTimeout(view.timers.loadData);
 
       view.ajax({url: url}).done(function(res)
       {
-        if (res.collection && res.collection.length)
-        {
-          view.updateData(res.collection[0]);
-        }
+        view.updateData(res);
 
         view.timers.loadData = setTimeout(view.loadData, _.random(25000, 35000));
       });
@@ -199,9 +194,8 @@ define([
       }));
     },
 
-    updateData: function(prodShift)
+    updateData: function(quantitiesDone)
     {
-      var quantitiesDone = prodShift.quantitiesDone;
       var currentTime = time.getMoment();
       var currentHour = currentTime.hours();
       var currentHourIndex = HOUR_TO_INDEX[currentHour];

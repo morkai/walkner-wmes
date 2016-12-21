@@ -3,6 +3,7 @@
     "BREADCRUMBS:browse": "Hourly plans",
     "BREADCRUMBS:addForm": "Choosing",
     "BREADCRUMBS:editForm": "Planning",
+    "BREADCRUMBS:heffLineStates": "Hourly efficiency",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
     "MSG:LOADING_FAILURE": "Failed to load the hourly plans :(",
@@ -14,6 +15,7 @@
     "PAGE_ACTION:edit": "Edit hourly plan",
     "PAGE_ACTION:delete": "Delete hourly plan",
     "PAGE_ACTION:export": "Export hourly plans",
+    "PAGE_ACTION:heff": "Hourly efficiency",
 
     "panel:title": "Hourly plan",
     "panel:title:editable": "Hourly plan edit form",
@@ -36,7 +38,11 @@
     "ACTION_FORM:BUTTON:delete": "Delete hourly plan",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen hourly plan?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> hourly plan?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the hourly plan :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the hourly plan :-(",
+
+    "heff:filter:division": "Division",
+    "heff:filter:prodFlows": "Flows",
+    "heff:filter:submit": "Filter lines"
   },
   "pl": true
 }
