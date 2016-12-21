@@ -141,11 +141,11 @@ define([
         orderId: orderId,
         operationNo: operationNo,
         orderData: orderData,
-        creator: user.getInfo()
+        creator: user.getInfo(),
+        sapTaktTime: this.getSapTaktTime()
       };
 
       this.set(changes);
-      this.set('sapTaktTime', this.getSapTaktTime());
 
       if (this.get('workerCount') > this.getMaxWorkerCount())
       {
