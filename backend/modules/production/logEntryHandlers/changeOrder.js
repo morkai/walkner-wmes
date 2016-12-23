@@ -67,9 +67,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       function()
       {
         productionModule.getProdData('shift', logEntry.prodShift, this.parallel());
+        productionModule.getProdData('order', logEntry.prodShiftOrder, this.parallel());
         (new ProdShiftOrder(logEntry.data)).save(this.parallel());
       },
-      function(err, prodShift, prodShiftOrder)
+      function(err, prodShift, oldProdShiftOrder, newProdShiftOrder)
       {
         if (err && err.code !== 11000)
         {
@@ -78,12 +79,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           return this.skip(err);
         }
 
-        if (!err)
+        const prodShiftOrder = newProdShiftOrder || oldProdShiftOrder;
+
+        if (prodShiftOrder)
         {
           productionModule.setProdData(prodShiftOrder);
         }
 
-        if (prodLine.isNew)
+        if (prodLine.isNew || !prodShift || !prodShiftOrder)
         {
           return this.skip();
         }
