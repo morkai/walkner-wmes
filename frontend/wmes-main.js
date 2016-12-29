@@ -101,6 +101,13 @@
       return new BlankLayout();
     });
 
+    broker.subscribe('page.titleChanged', function(newTitle)
+    {
+      newTitle.unshift(i18n('core', 'TITLE'));
+
+      document.title = newTitle.reverse().join(' < ');
+    });
+
     if (navigator.onLine)
     {
       startBroker = broker.sandbox();
@@ -111,13 +118,6 @@
       });
 
       startBroker.subscribe('socket.connectFailed', doStartApp);
-
-      broker.subscribe('page.titleChanged', function(newTitle)
-      {
-        newTitle.unshift(i18n('core', 'TITLE'));
-
-        document.title = newTitle.reverse().join(' < ');
-      });
     }
     else
     {
