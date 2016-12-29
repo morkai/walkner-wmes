@@ -52,6 +52,7 @@ define([
 
           if ($openLocalOrderDialog.hasClass('active'))
           {
+            this.model.resetExternalDocument();
             this.model.resetLocalOrder();
             this.scrollIntoView();
           }
@@ -566,6 +567,16 @@ define([
         }
       });
 
+      this.listenToOnce(localOrderPickerDialog, 'document', function(documentNo)
+      {
+        viewport.closeDialog();
+
+        if (documentNo)
+        {
+          this.model.selectDocument(documentNo);
+        }
+      });
+
       viewport.showDialog(localOrderPickerDialog, t('orderDocuments', 'localOrderPicker:title'));
     },
 
@@ -718,8 +729,8 @@ define([
     updateButtons: function()
     {
       var isDisconnected = !this.socket.isConnected();
-      var hasLocalFile = this.model.get('localFile') !== null;
-      var hasLocalOrder = this.model.get('localOrder').no !== null;
+      var hasLocalFile = !!this.model.get('localFile');
+      var hasLocalOrder = !!this.model.get('localOrder').no || this.model.isExternalDocument();
       var $openLocalOrderDialog = this.$id('openLocalOrderDialog');
 
       $openLocalOrderDialog.toggleClass('active', hasLocalOrder);

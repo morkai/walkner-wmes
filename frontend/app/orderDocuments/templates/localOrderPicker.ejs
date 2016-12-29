@@ -1,7 +1,7 @@
 <form class="orderDocuments-localOrderPicker" autocomplete="off">
   <div class="form-group">
     <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- t('orderDocuments', 'localOrderPicker:orderNo') %></label>
-    <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control" type="text" required maxlength="9" pattern="^[0-9]{9}$" autofocus>
+    <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control" type="text" required maxlength="15" pattern="^([0-9]{9}|[0-9]{15})$" autofocus>
   </div>
   <div class="row">
     <div id="<%- idPrefix %>-numpad" class="col-md-6 orderDocuments-localOrderPicker-numpad">

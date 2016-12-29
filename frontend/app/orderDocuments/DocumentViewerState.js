@@ -103,18 +103,19 @@ define([
       var remoteOrder = this.get('remoteOrder');
       var activeType = localOrder.no ? 'localOrder' : 'remoteOrder';
       var activeOrder = localOrder.no ? localOrder : remoteOrder;
+      var data = {
+        localFile: null
+      };
 
-      if (activeOrder.documents[nc15])
+      if (!nc15)
       {
-        var data = {
-          localFile: null
-        };
-
-        data[activeType] = _.defaults({nc15: nc15}, activeOrder);
-
-        this.set(data);
-        this.save();
+        console.log(activeOrder.documents);
       }
+
+      data[activeType] = _.defaults({nc15: nc15}, activeOrder);
+
+      this.set(data);
+      this.save();
     },
 
     getSettings: function()
@@ -129,6 +130,13 @@ define([
         localServerUrl: this.get('localServerUrl'),
         localServerPath: this.get('localServerPath')
       };
+    },
+
+    isExternalDocument: function()
+    {
+      var currentOrder = this.getCurrentOrder();
+
+      return !!currentOrder.nc15 && currentOrder.documents[currentOrder.nc15] === undefined;
     },
 
     getCurrentOrder: function()
@@ -185,6 +193,11 @@ define([
         {
           orderInfo.documentNc15 = currentOrder.nc15;
           orderInfo.documentName = documentName;
+        }
+        else if (currentOrder.nc15)
+        {
+          orderInfo.documentNc15 = currentOrder.nc15;
+          orderInfo.documentName = t('orderDocuments', 'controls:externalDocumentName');
         }
         else
         {
@@ -252,6 +265,14 @@ define([
         nc15: null
       });
       this.save();
+    },
+
+    resetExternalDocument: function()
+    {
+      if (this.isExternalDocument())
+      {
+        this.selectDocument(null);
+      }
     },
 
     setLocalFile: function(name, file)

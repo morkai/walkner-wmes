@@ -35,11 +35,13 @@ define([
       'click #-numpad > .btn': function(e)
       {
         this.pressNumpadKey(e.currentTarget.dataset.key);
+        this.toggleSubmit();
       },
       'click #-lastOrders > .btn': function(e)
       {
         this.selectOrderNo(e.currentTarget.dataset.order);
-      }
+      },
+      'input #-orderNo': 'toggleSubmit'
     },
 
     initialize: function()
@@ -98,22 +100,27 @@ define([
 
     submitForm: function()
     {
-      var view = this;
       var $submit = this.$id('submit').prop('disabled', true);
 
       $submit.find('.fa').removeClass('fa-search').addClass('fa-spin fa-spinner');
 
-      var orderNo = this.$id('orderNo').val();
-      var req = this.ajax({
-        type: 'GET',
-        url: window.location.origin + '/orders/' + orderNo + '/documents'
-      });
+      var no = this.$id('orderNo').val();
+      var kind = no.length === 15 ? 'document' : 'order';
+      var req = this[kind === 'document' ? 'findDocument' : 'findOrder'](no);
 
       req.fail(function(res)
       {
         var code = ((res.responseJSON || {}).error || {}).message;
+
+        if (res.status === 404)
+        {
+          code = 'NOT_FOUND';
+        }
+
         var text = t.has('orderDocuments', 'localOrderPicker:error:' + code)
           ? t('orderDocuments', 'localOrderPicker:error:' + code)
+          : t.has('orderDocuments', 'localOrderPicker:error:' + code + ':' + kind)
+          ? t('orderDocuments', 'localOrderPicker:error:' + code + ':' + kind)
           : t('orderDocuments', 'localOrderPicker:error:failure');
 
         viewport.msg.show({
@@ -121,11 +128,6 @@ define([
           time: 3000,
           text: text
         });
-      });
-
-      req.done(function(localOrder)
-      {
-        view.trigger('localOrder', localOrder);
       });
 
       req.always(function()
@@ -136,6 +138,38 @@ define([
           .removeClass('fa-spin fa-spinner')
           .addClass('fa-search');
       });
+    },
+
+    findOrder: function(orderNo)
+    {
+      var view = this;
+      var req = view.ajax({
+        type: 'GET',
+        url: '/orders/' + orderNo + '/documents'
+      });
+
+      req.done(function(localOrder)
+      {
+        view.trigger('localOrder', localOrder);
+      });
+
+      return req;
+    },
+
+    findDocument: function(documentNo)
+    {
+      var view = this;
+      var req = view.ajax({
+        type: 'HEAD',
+        url: '/orderDocuments/' + documentNo
+      });
+
+      req.done(function()
+      {
+        view.trigger('document', documentNo);
+      });
+
+      return req;
     },
 
     checkLocalServer: function()
@@ -193,6 +227,23 @@ define([
       inputEl.value = orderNo;
       inputEl.focus();
       inputEl.setSelectionRange(orderNo.length, orderNo.length);
+    },
+
+    toggleSubmit: function()
+    {
+      var length = this.$id('orderNo').val().replace(/[^0-9]+/, '').length;
+      var label = 'localOrderPicker:submit';
+
+      if (length === 15)
+      {
+        label += ':document';
+      }
+      else if (length === 9)
+      {
+        label += ':order';
+      }
+
+      this.$id('submit').find('span').text(t('orderDocuments', label));
     }
 
   });
