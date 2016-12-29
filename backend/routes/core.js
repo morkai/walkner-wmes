@@ -83,7 +83,9 @@ module.exports = function startCoreRoutes(app, express)
 
     _.forEach(app.options.frontendAppData, function(appDataValue, appDataKey)
     {
-      appData[appDataKey] = JSON.stringify(appDataValue);
+      appData[appDataKey] = JSON.stringify(
+        _.isFunction(appDataValue) ? appDataValue(app) : appDataValue
+      );
     });
 
     res.render('index', {
