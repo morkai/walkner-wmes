@@ -77,14 +77,14 @@ define([
         order.qtyUnit = order.qty + ' ' + order.unit;
       }
 
-      if (order.qtyDone && order.unit)
+      if (order.qtyDone && order.qtyDone.total >= 0 && order.unit)
       {
-        order.qtyDoneUnit = order.qtyDone.total + ' ' + order.unit;
+        order.qtyDoneUnit = (order.qtyDone.total || 0) + ' ' + order.unit;
       }
 
       order.qtys = '';
 
-      if (order.qtyDone)
+      if (order.qtyDone && order.qtyDone.total >= 0)
       {
         order.qtys += order.qtyDone.total;
       }
