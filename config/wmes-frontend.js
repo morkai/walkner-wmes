@@ -154,7 +154,8 @@ exports.events = {
     'opinionSurveys.actions.added','opinionSurveys.actions.edited',
     'prodDowntimeAlerts.added',
     'qi.results.added', 'qi.results.edited',
-    'd8.entries.added', 'd8.entries.edited'
+    'd8.entries.added', 'd8.entries.edited',
+    'heffLineStates.added', 'heffLineStates.edited', 'heffLineStates.deleted'
   ]
 };
 
