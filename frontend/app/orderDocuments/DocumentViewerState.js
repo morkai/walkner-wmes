@@ -97,7 +97,7 @@ define([
       return true;
     },
 
-    selectDocument: function(nc15)
+    selectDocument: function(nc15, name)
     {
       var localOrder = this.get('localOrder');
       var remoteOrder = this.get('remoteOrder');
@@ -107,12 +107,33 @@ define([
         localFile: null
       };
 
-      if (!nc15)
+      if (!activeOrder.documents[nc15] && !_.isEmpty(name))
       {
-        console.log(activeOrder.documents);
+        activeOrder.documents[nc15] = name + '$__EXTERNAL__';
       }
 
       data[activeType] = _.defaults({nc15: nc15}, activeOrder);
+
+      this.set(data);
+      this.save();
+    },
+
+    removeDocument: function(nc15)
+    {
+      var localOrder = this.get('localOrder');
+      var remoteOrder = this.get('remoteOrder');
+      var activeType = localOrder.no ? 'localOrder' : 'remoteOrder';
+      var activeOrder = _.defaults({}, localOrder.no ? localOrder : remoteOrder);
+      var data = {};
+
+      if (activeOrder.nc15 === nc15)
+      {
+        activeOrder.nc15 = null;
+      }
+
+      delete activeOrder.documents[nc15];
+
+      data[activeType] = activeOrder;
 
       this.set(data);
       this.save();

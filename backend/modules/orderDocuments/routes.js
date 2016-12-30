@@ -16,6 +16,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   var orgUnits = app[module.config.orgUnitsId];
   var mongoose = app[module.config.mongooseId];
   var Order = mongoose.model('Order');
+  var OrderDocumentName = mongoose.model('OrderDocumentName');
   var OrderDocumentClient = mongoose.model('OrderDocumentClient');
   var License = mongoose.model('License');
 
@@ -76,7 +77,9 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return SPECIAL_DOCUMENTS[nc15](req, res, next);
     }
 
-    findDocumentFilePath(nc15, true, function(err, results)
+    module.checkRemoteServer(nc15);
+
+    findDocumentFilePath(nc15, {forcePdf: true, includeName: !!req.query.name}, function(err, results)
     {
       if (err)
       {
@@ -85,10 +88,13 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
       res.set('X-Document-Source', results.source);
 
+      if (!_.isEmpty(results.name))
+      {
+        res.set('X-Document-Name', results.name);
+      }
+
       return res.sendStatus(204);
     });
-
-    module.checkRemoteServer(nc15);
   });
 
   express.get('/orderDocuments/:nc15', canViewLocal, function(req, res, next)
@@ -110,7 +116,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return;
     }
 
-    findDocumentFilePath(nc15, !!req.query.pdf, function(err, results)
+    findDocumentFilePath(nc15, {forcePdf: !!req.query.pdf, includeName: false}, function(err, results)
     {
       if (err)
       {
@@ -208,7 +214,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     });
   });
 
-  function findDocumentFilePath(nc15, forcePdf, done)
+  function findDocumentFilePath(nc15, options, done)
   {
     if (!/^[0-9]+$/.test(nc15))
     {
@@ -242,7 +248,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           fs.stat(cachedFilePath, cachedDone);
         }
 
-        if (forcePdf)
+        if (options.forcePdf)
         {
           convertedDone();
         }
@@ -254,15 +260,23 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
             (err, json) => convertedDone(null, json ? JSON.parse(json) : null)
           );
         }
+
+        if (options.includeName)
+        {
+          OrderDocumentName.findById(nc15).lean().exec(this.parallel());
+        }
       },
-      function(err, localStats, cachedStats, meta)
+      function(err, localStats, cachedStats, meta, orderDocumentName)
       {
+        const name = orderDocumentName ? orderDocumentName.name : null;
+
         if (meta)
         {
           return done(null, {
             filePath: convertedPath,
             source: cachedStats ? 'search' : 'remote',
-            meta: meta
+            meta: meta,
+            name: name
           });
         }
 
@@ -271,7 +285,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           return done(null, {
             filePath: cachedFilePath,
             source: 'search',
-            meta: null
+            meta: null,
+            name: name
           });
         }
 
@@ -280,7 +295,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           return done(null, {
             filePath: localFilePath,
             source: 'remote',
-            meta: null
+            meta: null,
+            name: name
           });
         }
 

@@ -156,17 +156,21 @@ define([
       return req;
     },
 
-    findDocument: function(documentNo)
+    findDocument: function(nc15)
     {
       var view = this;
       var req = view.ajax({
         type: 'HEAD',
-        url: '/orderDocuments/' + documentNo
+        url: '/orderDocuments/' + nc15 + '?name=1'
       });
 
       req.done(function()
       {
-        view.trigger('document', documentNo);
+        view.trigger('document', {
+          nc15: nc15,
+          name: req.getResponseHeader('X-Document-Name'),
+          source: req.getResponseHeader('X-Document-Source')
+        });
       });
 
       return req;

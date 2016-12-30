@@ -220,7 +220,7 @@ exports.mongoose = {
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',
     'order', 'mechOrder', 'emptyOrder', 'clipOrderCount',
-    'orderDocumentClient', 'orderDocumentStatus',
+    'orderDocumentClient', 'orderDocumentStatus', 'orderDocumentName',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet', 'prodChangeRequest',
     'prodDowntimeAlert', 'prodSerialNumber',

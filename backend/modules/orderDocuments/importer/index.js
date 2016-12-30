@@ -33,6 +33,8 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
   var Order = mongoose.model('Order');
   var XiconfOrder = mongoose.model('XiconfOrder');
 
+  var scheduleUpdateDocumentNames = _.debounce(updateDocumentNames, 30000);
+
   var filePathCache = {};
   var locked = false;
   var queue = [];
@@ -260,6 +262,8 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
         this.orderNoToDocumentsMap = null;
         this.orderNoToProgramMap = null;
         this.updateList = null;
+
+        scheduleUpdateDocumentNames();
 
         if (!err || err.code === 11000)
         {
@@ -490,5 +494,22 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
     }
 
     programItem.name = 'Program ' + programItem.name;
+  }
+
+  function updateDocumentNames()
+  {
+    const pipeline = [
+      {$unwind: '$documents'},
+      {$group: {_id: '$documents.nc15', name: {$max: '$documents.name'}}},
+      {$out: 'orderdocumentnames'}
+    ];
+
+    Order.aggregate(pipeline, function(err)
+    {
+      if (err)
+      {
+        module.error(`Failed to update document names: ${err.message}`);
+      }
+    });
   }
 };

@@ -212,6 +212,7 @@
   outline: 0;
 }
 .orderDocuments-document {
+  position: relative;
   display: block;
   padding: 8px;
   color: #ccc;
@@ -263,6 +264,11 @@
 .orderDocuments-document-nc15 {
   display: block;
   font-family: Consolas, "Lucida Console", Monaco, monospace;
+}
+.orderDocuments-document-remove {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 .orderDocuments-filter > input {
   padding: 8px;

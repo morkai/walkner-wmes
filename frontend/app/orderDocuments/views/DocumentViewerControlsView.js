@@ -147,6 +147,12 @@ define([
           this.model.resetLocalFile();
         }
       },
+      'click .orderDocuments-document-remove': function(e)
+      {
+        this.model.removeDocument(this.$(e.currentTarget).closest('.orderDocuments-document')[0].dataset.nc15);
+
+        return false;
+      },
       'click .orderDocuments-document': function(e)
       {
         this.selectDocument(e.currentTarget.dataset.nc15, false);
@@ -567,13 +573,13 @@ define([
         }
       });
 
-      this.listenToOnce(localOrderPickerDialog, 'document', function(documentNo)
+      this.listenToOnce(localOrderPickerDialog, 'document', function(document)
       {
         viewport.closeDialog();
 
-        if (documentNo)
+        if (document)
         {
-          this.model.selectDocument(documentNo);
+          this.model.selectDocument(document.nc15, document.name);
         }
       });
 
@@ -670,7 +676,11 @@ define([
       {
         if (model.filterNc15(nc15))
         {
-          html += renderDocumentListItem({name: name, nc15: nc15});
+          html += renderDocumentListItem({
+            name: name.replace('$__EXTERNAL__', ''),
+            nc15: nc15,
+            external: name.indexOf('$__EXTERNAL__') !== -1
+          });
         }
       });
 
