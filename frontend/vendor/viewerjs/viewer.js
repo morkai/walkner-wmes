@@ -602,7 +602,7 @@
     _this.action = false;
     _this.target = false;
     _this.timeout = false;
-    _this.index = 0;
+    _this.index = _this.options.initialIndex || 0;
     _this.length = 0;
     _this.init();
   }

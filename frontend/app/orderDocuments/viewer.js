@@ -1,4 +1,4 @@
-/*global Viewer,PAGE_COUNT */
+/*global Viewer,PAGE_COUNT,NC15 */
 /*jshint -W097,-W101*/
 
 'use strict';
@@ -57,9 +57,15 @@ var viewer = new Viewer(document.getElementById('images'), {
   navbar: false,
   title: false,
   tooltip: false,
+  initialIndex: parseInt(sessionStorage.getItem('PAGE_' + (NC15 || '')), 10) || 0,
   view: function(e)
   {
     document.getElementById('jumpForm').classList.add('hidden');
+
+    if (NC15)
+    {
+      sessionStorage.setItem('PAGE_' + NC15, e.detail.index);
+    }
 
     renderPages(e.detail.index);
   }
