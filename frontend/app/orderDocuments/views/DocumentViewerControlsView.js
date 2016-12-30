@@ -171,44 +171,50 @@ define([
       },
       'keydown .orderDocuments-document': function(e)
       {
-        if (e.keyCode === 27)
+        var keyCode = e.keyCode;
+        var documentEl = e.currentTarget;
+        var view = this;
+
+        if (keyCode === 27)
         {
-          e.currentTarget.blur();
+          documentEl.blur();
 
           return false;
         }
 
-        if (e.keyCode === 13 || e.keyCode === 32)
+        if (keyCode === 13 || keyCode === 32)
         {
-          this.selectDocument(e.currentTarget.dataset.nc15, true);
+          view.$(documentEl).click();
+
+          setTimeout(function() { view.focusDocument(documentEl.dataset.nc15); }, 1);
 
           return false;
         }
 
-        if (e.keyCode === 40)
+        if (keyCode === 40)
         {
-          this.focusNextDocument(e.currentTarget);
+          view.focusNextDocument(documentEl);
 
           return false;
         }
 
-        if (e.keyCode === 38)
+        if (keyCode === 38)
         {
-          this.focusPrevDocument(e.currentTarget);
+          view.focusPrevDocument(documentEl);
 
           return false;
         }
 
-        if (e.keyCode === 37)
+        if (keyCode === 37)
         {
-          this.focusFirstDocument();
+          view.focusFirstDocument();
 
           return false;
         }
 
-        if (e.keyCode === 39)
+        if (keyCode === 39)
         {
-          this.focusLastDocument();
+          view.focusLastDocument();
 
           return false;
         }
@@ -242,6 +248,8 @@ define([
       },
       'submit #-filterForm': function()
       {
+        this.$id('documents').find('.orderDocuments-document:not(.hidden)').first().click();
+
         return false;
       },
       'input #-filterPhrase': function(e)
@@ -458,8 +466,13 @@ define([
 
       if (focus)
       {
-        this.$id('documents').find('[data-nc15="' + nc15 + '"]').focus();
+        this.focusDocument(nc15);
       }
+    },
+
+    focusDocument: function(nc15)
+    {
+      this.$id('documents').find('[data-nc15="' + nc15 + '"]').focus();
     },
 
     focusNextDocument: function(documentEl)
