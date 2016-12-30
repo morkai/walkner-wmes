@@ -227,6 +227,8 @@ define([
         }
       }
 
+      orderInfo.documentName = orderInfo.documentName.replace(/\$__.*?__/g, '');
+
       return orderInfo;
     },
 

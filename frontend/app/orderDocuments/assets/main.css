@@ -265,10 +265,14 @@
   display: block;
   font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
-.orderDocuments-document-remove {
+.orderDocuments-document-remove,
+.orderDocuments-document-search {
   position: absolute;
   bottom: 0;
   right: 0;
+}
+.orderDocuments-document-search {
+  padding: 8px 8px;
 }
 .orderDocuments-filter > input {
   padding: 8px;
@@ -323,4 +327,7 @@
 .orderDocuments-localOrderPicker-numpad > .btn {
   flex: 1 1 33%;
   width: 33%;
+}
+.is-touch .orderDocuments-localOrderPicker-numpad > .btn {
+  height: 60px;
 }

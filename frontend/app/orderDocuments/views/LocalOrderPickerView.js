@@ -52,6 +52,14 @@ define([
       }
     },
 
+    serialize: function()
+    {
+      return {
+        idPrefix: this.idPrefix,
+        touch: window.location.href.indexOf('touch') !== -1
+      };
+    },
+
     afterRender: function()
     {
       js2form(this.el, {

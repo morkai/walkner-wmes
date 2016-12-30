@@ -155,7 +155,17 @@ define([
       },
       'click .orderDocuments-document': function(e)
       {
-        this.selectDocument(e.currentTarget.dataset.nc15, false);
+        var documentEl = e.currentTarget;
+        var name;
+
+        if (documentEl.classList.contains('is-search'))
+        {
+          name = documentEl.querySelector('.orderDocuments-document-name').textContent.trim();
+
+          this.clearFilter();
+        }
+
+        this.selectDocument(documentEl.dataset.nc15, false, name);
 
         return false;
       },
@@ -440,11 +450,11 @@ define([
       $clone.insertAfter($document);
     },
 
-    selectDocument: function(nc15, focus)
+    selectDocument: function(nc15, focus, name)
     {
       this.shrinkControls();
 
-      this.model.selectDocument(nc15);
+      this.model.selectDocument(nc15, name);
 
       if (focus)
       {
@@ -521,6 +531,7 @@ define([
       var $documents = this.$('.orderDocuments-document');
 
       $documents.filter('.is-expanded').remove();
+      $documents.filter('.is-search').remove();
 
       if (phrase === '')
       {
@@ -528,13 +539,54 @@ define([
       }
       else
       {
+        var anyVisible = false;
+
         $documents.each(function()
         {
-          this.classList.toggle('hidden', this.textContent.toLowerCase().indexOf(phrase) === -1);
+          var hidden = this.textContent.toLowerCase().indexOf(phrase) === -1;
+
+          if (!hidden)
+          {
+            anyVisible = true;
+          }
+
+          this.classList.toggle('hidden', hidden);
         });
+
+        if (!anyVisible)
+        {
+          this.search(phrase);
+        }
       }
 
       this.updateDocumentShortcuts();
+    },
+
+    search: function(phrase)
+    {
+      var nc15 = (phrase.match(/([0-9]{15})/) || [])[1];
+
+      if (!nc15)
+      {
+        return;
+      }
+
+      var view = this;
+
+      view.ajax({
+        type: 'HEAD',
+        url: '/orderDocuments/' + nc15 + '?name=1'
+      }).done(function(body, status, xhr)
+      {
+        view.$id('documents').append(renderDocumentListItem({
+          name: xhr.getResponseHeader('X-Document-Name') || '?',
+          nc15: nc15,
+          search: true,
+          external: false
+        }));
+
+        view.$id('documents').find('.is-search').on('mouseenter', view.onDocumentMouseEnter.bind(view));
+      });
     },
 
     clearFilter: function()
@@ -579,7 +631,7 @@ define([
 
         if (document)
         {
-          this.model.selectDocument(document.nc15, document.name);
+          this.selectDocument(document.nc15, true, document.name);
         }
       });
 
@@ -677,8 +729,9 @@ define([
         if (model.filterNc15(nc15))
         {
           html += renderDocumentListItem({
-            name: name.replace('$__EXTERNAL__', ''),
+            name: name.replace(/\$__.*?__/g, ''),
             nc15: nc15,
+            search: false,
             external: name.indexOf('$__EXTERNAL__') !== -1
           });
         }
