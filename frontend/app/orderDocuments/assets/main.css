@@ -60,6 +60,14 @@
   flex-direction: column;
   height: 100%;
 }
+.orderDocuments-controls-numpad {
+  position: absolute;
+  top: 186px;
+  left: 225px;
+  z-index: 1000;
+  width: 210px;
+  box-shadow: 0 4px 12px #666;
+}
 .orderDocuments-prodLine {
   flex: 0 0 auto;
   padding: 7px 8px 8px 8px;
@@ -247,7 +255,7 @@
   border-right: 0;
   box-shadow: 0 4px 12px #333;
   background-color: #ffffd6;
-  z-index: 1;
+  z-index: 1001;
 }
 .orderDocuments-document.is-active:hover {
   background-color: #fff;
@@ -309,25 +317,23 @@
   font-size: 1.8em;
   height: auto;
 }
-.orderDocuments-localOrderPicker .btn-default {
-  font-family: Consolas, "Lucida Console", Monaco, monospace;
-  font-size: 1.8em;
-  margin: 0;
-}
 .orderDocuments-localOrderPicker-lastOrders {
   padding-left: 7px;
 }
 .orderDocuments-localOrderPicker-numpad {
   padding-right: 7px;
 }
-.orderDocuments-localOrderPicker-numpad {
+.orderDocuments-numpad {
   display: flex;
   flex-wrap: wrap;
 }
-.orderDocuments-localOrderPicker-numpad > .btn {
+.orderDocuments-numpad > .btn {
   flex: 1 1 33%;
+  margin: 0;
   width: 33%;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: 1.8em;
 }
-.is-touch .orderDocuments-localOrderPicker-numpad > .btn {
+.is-touch .orderDocuments-numpad > .btn {
   height: 60px;
 }

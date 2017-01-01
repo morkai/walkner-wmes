@@ -256,9 +256,27 @@ define([
       {
         this.filter(e.currentTarget.value);
       },
-      'focus #-filterPhrase': 'shrinkControls',
+      'focus #-filterPhrase': function()
+      {
+        if (this.timers.hideNumpad)
+        {
+          clearTimeout(this.timers.hideNumpad);
+          this.timers.hideNumpad = null;
+        }
+
+        this.shrinkControls();
+        this.showNumpad();
+      },
+      'blur #-filterPhrase': function()
+      {
+        this.timers.hideNumpad = setTimeout(this.hideNumpad.bind(this), 100);
+      },
       'click #-prodLine': 'toggleControls',
-      'click #-order': 'toggleControls'
+      'click #-order': 'toggleControls',
+      'click #-numpad > .btn': function(e)
+      {
+        this.pressNumpadKey(e.currentTarget.dataset.key);
+      }
     },
 
     localTopics: {
@@ -828,6 +846,62 @@ define([
     toggleOpenDocumentWindowButton: function()
     {
       this.$id('openDocumentWindow').prop('disabled', this.model.get('fileSource') === null);
+    },
+
+    pressNumpadKey: function(key)
+    {
+      var inputEl = this.$id('filterPhrase')[0];
+      var value = inputEl.value;
+      var start = inputEl.selectionStart;
+      var end = inputEl.selectionEnd;
+
+      if (key === 'CLEAR')
+      {
+        start = 0;
+        value = '';
+      }
+      else if (key === 'BACKSPACE')
+      {
+        start = start - 1;
+        value = value.substring(0, start) + value.substring(end);
+      }
+      else if (key === 'LEFT')
+      {
+        start = start - 1;
+      }
+      else if (key === 'RIGHT')
+      {
+        start = start + 1;
+      }
+      else if (inputEl.maxLength === -1 || value.length < inputEl.maxLength)
+      {
+        value = value.substring(0, start) + key + value.substring(end);
+        start = start + 1;
+      }
+
+      this.filter(value);
+
+      inputEl.value = value;
+
+      if (key === 'CLEAR')
+      {
+        this.hideNumpad();
+      }
+      else
+      {
+        inputEl.focus();
+        inputEl.setSelectionRange(start, start);
+      }
+    },
+
+    showNumpad: function()
+    {
+      this.$('.orderDocuments-controls-numpad').removeClass('hidden');
+    },
+
+    hideNumpad: function()
+    {
+      this.$('.orderDocuments-controls-numpad').addClass('hidden');
     },
 
     onOrderChange: function()

@@ -208,7 +208,12 @@ define([
       var start = inputEl.selectionStart;
       var end = inputEl.selectionEnd;
 
-      if (key === 'BACKSPACE')
+      if (key === 'CLEAR')
+      {
+        start = 0;
+        value = '';
+      }
+      else if (key === 'BACKSPACE')
       {
         start = start - 1;
         value = value.substring(0, start) + value.substring(end);
