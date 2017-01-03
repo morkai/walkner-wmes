@@ -521,10 +521,7 @@ exports.start = function startUserModule(app, module)
 
         mapUserToSocket(socket);
 
-        if (socket.id !== message.socketId)
-        {
-          socket.emit('user.reload', message.user);
-        }
+        socket.emit('user.reload', message.user);
       });
     });
 
@@ -549,10 +546,7 @@ exports.start = function startUserModule(app, module)
           }
         }
 
-        if (socket.id !== message.socketId)
-        {
-          socket.emit('user.reload', socket.handshake.user);
-        }
+        socket.emit('user.reload', socket.handshake.user);
       });
     });
 
