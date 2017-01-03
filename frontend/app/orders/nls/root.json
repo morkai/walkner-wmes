@@ -25,6 +25,7 @@
     "PANEL:TITLE:operations": "Order's operations",
     "PANEL:TITLE:documents": "Order's documents",
     "PANEL:TITLE:bom": "Order's components",
+    "PANEL:TITLE:bom:paint": "Order's paint components",
     "PANEL:TITLE:eto": "Order's ETO",
     "PANEL:TITLE:changes": "Change log",
 

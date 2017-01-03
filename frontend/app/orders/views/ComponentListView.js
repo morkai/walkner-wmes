@@ -16,6 +16,8 @@ define([
     serialize: function()
     {
       return {
+        idPrefix: this.idPrefix,
+        paint: !!this.options.paint,
         bom: this.model.get('bom').toJSON()
       };
     },
@@ -28,6 +30,8 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change:bom', this.render);
+
+      this.$el.toggleClass('hidden', this.model.get('bom').length === 0);
     }
 
   });

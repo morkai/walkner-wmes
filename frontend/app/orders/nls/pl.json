@@ -24,6 +24,7 @@
   "PANEL:TITLE:operations": "Lista operacji zlecenia",
   "PANEL:TITLE:documents": "Lista dokumentów zlecenia",
   "PANEL:TITLE:bom": "Lista komponentów zlecenia",
+  "PANEL:TITLE:bom:paint": "Lista komponentów zlecenia z malarni",
   "PANEL:TITLE:eto": "ETO",
   "PANEL:TITLE:changes": "Historia zmian zlecenia",
 

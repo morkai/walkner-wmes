@@ -113,6 +113,7 @@ module.exports = function setupOrderModel(app, mongoose)
   orderSchema.index({nc12: -1, finishDate: -1});
   orderSchema.index({mrp: 1, startDate: -1});
   orderSchema.index({salesOrder: 1, salesOrderItem: 1});
+  orderSchema.index({leadingOrder: 1});
 
   orderSchema.statics.prepareForInsert = function(order, createdAt)
   {

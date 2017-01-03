@@ -1,5 +1,5 @@
 <div class="panel panel-default orders-bom">
-  <div class="panel-heading"><%- t('orders', 'PANEL:TITLE:bom') %></div>
+  <div class="panel-heading"><%- t('orders', 'PANEL:TITLE:bom' + (paint ? ':paint' : '')) %></div>
   <% if (_.isEmpty(bom)) { %>
   <div class="panel-body">
     <%- t('orders', 'BOM:NO_DATA') %>
