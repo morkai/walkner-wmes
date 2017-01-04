@@ -18,7 +18,7 @@ define([
       return rql.Query.fromObject({
         fields: {},
         sort: {prodLine: 1},
-        limit: 50,
+        limit: 100,
         selector: {
           name: 'and',
           args: [
