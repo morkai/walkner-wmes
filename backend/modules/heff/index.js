@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
@@ -27,8 +28,8 @@ exports.start = function startHeffModule(app, module)
 
   app.broker.subscribe('production.synced.**', function(message)
   {
-    if (message.types.includes('changeQuantitiesDone')
-      || message.types.includes('changeShift'))
+    if (_.includes(message.types, 'changeQuantitiesDone')
+      || _.includes(message.types, 'changeShift'))
     {
       app.broker.publish('heff.reload.' + message.prodLine, {});
     }
