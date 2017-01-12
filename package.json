@@ -84,6 +84,7 @@
     "transliteration": "~1.1.11",
     "twilio": "~2.11.0",
     "ursa": "~0.9.4",
+    "xlsx": "~0.8.1",
     "xml2js": "~0.4.17"
   },
   "devDependencies": {

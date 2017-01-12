@@ -40,9 +40,9 @@ define([
         },
         pageActions.export(layout, this, this.collection),
         {
-          label: t.bound('hourlyPlans', 'PAGE_ACTION:heff'),
-          href: '#hourlyPlans;heff',
-          icon: 'smile-o',
+          label: t.bound('hourlyPlans', 'PAGE_ACTION:planning'),
+          href: '#hourlyPlans;planning',
+          icon: 'calculator',
           privileges: privileges
         }
       ];

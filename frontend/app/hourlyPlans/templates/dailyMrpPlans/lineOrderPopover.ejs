@@ -1,0 +1,24 @@
+<table>
+  <tbody>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:lineOrders:orderNo') %>
+    <td><%= lineOrder.orderNo %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:lineOrders:qty') %>
+    <td><%- lineOrder.qty.toLocaleString() %>
+      <% if (lineOrder.incomplete) { %>
+      <%- t('hourlyPlans', 'planning:lineOrders:incomplete', {qty: lineOrder.incomplete.toLocaleString()}) %>
+      <% } %>
+  <% if (lineOrder.pceTime) { %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:lineOrders:pceTime') %>
+    <td><%- time.toString(lineOrder.pceTime) %>
+  <% } %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:lineOrders:time') %>
+    <td><%= time.format(lineOrder.startAt, 'HH:mm:ss') %>-<%= time.format(lineOrder.finishAt, 'HH:mm:ss') %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:lineOrders:duration') %>
+    <td><%- time.toString(lineOrder.duration) %>
+  </tbody>
+</table>

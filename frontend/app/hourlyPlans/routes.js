@@ -60,6 +60,26 @@ define([
     );
   });
 
+  router.map('/hourlyPlans;planning', canManage, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/hourlyPlans/DailyMrpPlanCollection',
+        'app/hourlyPlans/pages/PlanningPage',
+        nls
+      ],
+      function(DailyMrpPlanCollection, PlanningPage)
+      {
+        return new PlanningPage({
+          model: new DailyMrpPlanCollection(null, {
+            rqlQuery: req.rql,
+            paginate: false
+          })
+        });
+      }
+    );
+  });
+
   router.map('/hourlyPlans;add', canManage, function()
   {
     viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanAddFormPage', nls], function(HourlyPlanAddFormPage)

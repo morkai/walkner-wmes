@@ -5,6 +5,7 @@
 var _ = require('lodash');
 var setUpRoutes = require('./routes');
 var setUpCommands = require('./commands');
+var setUpDailyMrpPlans = require('./dailyMrpPlans');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -39,6 +40,13 @@ exports.start = function startFteModule(app, module)
       module.config.fteId
     ],
     setUpCommands.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId
+    ],
+    setUpDailyMrpPlans.bind(null, app, module)
   );
 
   app.onModuleReady(
@@ -137,7 +145,7 @@ exports.start = function startFteModule(app, module)
 
         findAndRecountPlannedQuantities(hourlyPlanId);
       },
-      60000
+      30000
     );
   }
 

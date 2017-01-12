@@ -23,7 +23,7 @@ define([
 ) {
   'use strict';
 
-  var instanceId = Math.round(Date.now() + Math.random() * 9999999).toString(36).toUpperCase();
+  var instanceId = window.INSTANCE_ID;
   var STORAGE_KEY = 'PRODUCTION:LOG';
   var SYNCING_KEY = 'PRODUCTION:LOG:SYNCING';
   var LOCK_KEY = 'PRODUCTION:LOCK';

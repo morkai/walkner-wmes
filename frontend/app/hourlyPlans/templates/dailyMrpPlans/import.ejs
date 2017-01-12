@@ -1,0 +1,24 @@
+<form class="dailyMrpPlans-import">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-date"><%- t('hourlyPlans', 'planning:import:date') %></label>
+    <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" value="<%- date %>" min="2017-01-01" max="<%- time.getMoment().add(7, 'days').format('YYYY-MM-DD') %>" required autofocus>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-mrps"><%- t('hourlyPlans', 'planning:import:mrps') %></label>
+    <div class="dailyMrpPlans-import-mrps">
+      <% mrps.forEach(function(mrp) { %>
+      <label class="checkbox-inline">
+        <input type="checkbox" name="mrps[]" value="<%= mrp._id %>" <%- mrp.checked ? 'checked' : '' %>>
+        <%= mrp._id %> (<%- mrp.orderCount.toLocaleString() %>)
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <span class="fa fa-spinner fa-spin hidden"></span>
+      <span><%- t('hourlyPlans', 'planning:import:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('hourlyPlans', 'planning:import:cancel') %></button>
+  </div>
+</form>

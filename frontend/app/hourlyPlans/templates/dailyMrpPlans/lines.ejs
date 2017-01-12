@@ -1,0 +1,19 @@
+<div class="dailyMrpPlan-list-container dailyMrpPlan-lines">
+  <div class="dailyMrpPlan-list-hd"><%- t('hourlyPlans', 'planning:lines:hd') %></div>
+  <button id="<%- idPrefix %>-edit" class="dailyMrpPlan-list-action btn btn-default" title="<%- t('hourlyPlans', 'planning:lines:edit') %>">
+    <i class="fa fa-edit"></i>
+  </button>
+  <div id="<%- idPrefix %>-list" class="dailyMrpPlan-list">
+    <% lines.forEach(function(line) { %>
+    <div class="dailyMrpPlan-list-item is-line is-selectable" data-id="<%= line._id %>">
+      <div class="dailyMrpPlan-list-item-inner">
+        <%= line._id %>
+        <span class="dailyMrpPlan-list-property <%- line.workerCount ? '' : 'is-invalid' %>" data-property="workerCount"><i class="fa fa-user"></i><span><%- line.workerCount %></span></span>
+        <span class="dailyMrpPlan-list-property <%- line.customTimes ? '' : 'hidden' %>" data-property="customTimes"><i class="fa fa-clock-o"></i><span><%- line.customTimes %></span></span>
+      </div>
+    </div>
+    <% }) %>
+    <div class="dailyMrpPlan-list-ending"></div>
+  </div>
+  <div id="<%- idPrefix %>-scrollIndicator" class="dailyMrpPlan-list-scrollIndicator hidden"></div>
+</div>

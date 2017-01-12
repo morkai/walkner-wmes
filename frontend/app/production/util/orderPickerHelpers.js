@@ -212,6 +212,12 @@ define([
     },
     getBestDefaultOperationNo: function(operations)
     {
+      var operation = this.getBestDefaultOperation(operations);
+
+      return operation ? operation.no : null;
+    },
+    getBestDefaultOperation: function(operations)
+    {
       if (!Array.isArray(operations) || operations.length === 0)
       {
         return null;
@@ -219,7 +225,7 @@ define([
 
       if (operations.length === 1)
       {
-        return operations[0].no;
+        return operations[0];
       }
 
       return operations
@@ -257,14 +263,19 @@ define([
             rank += 1;
           }
 
+          if (/z.o.en/i.test(op.name))
+          {
+            rank += 1;
+          }
+
           return {
-            no: op.no,
+            op: op,
             rank: rank
           };
         })
         .sort(function(a, b) { return b.rank - a.rank; })
         .shift()
-        .no;
+        .op;
     }
   };
 });

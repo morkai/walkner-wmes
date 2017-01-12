@@ -235,6 +235,7 @@ define([
 
     this.show({
       type: 'error',
+      time: 10000,
       text: _.isString(text) ? text : t('core', 'MSG:LOADING_FAILURE')
     });
   };
@@ -314,6 +315,7 @@ define([
 
     this.show({
       type: 'error',
+      time: 10000,
       text: _.isString(text) ? text : t('core', 'MSG:SAVING_FAILURE')
     });
   };

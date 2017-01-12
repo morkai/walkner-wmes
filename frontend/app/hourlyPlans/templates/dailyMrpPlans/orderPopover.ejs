@@ -1,0 +1,36 @@
+<table class="<%- editable ? 'dailyMrpPlan-popover-editable' : '' %>" data-plan="<%- order.plan %>" data-item-type="order" data-item-id="<%- order._id %>">
+  <tbody>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:orders:name') %>
+    <td>
+      <% if (editable) { %>
+      <a class="dailyMrpPlan-popover-value" href="#orders/<%- order._id %>" target="_blank"><%= order.name %></a>
+      <% } else { %>
+      <span class="dailyMrpPlan-popover-value"><%= order.name %></span>
+      <% } %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:orders:nc12') %>
+    <td><%= order.nc12 %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:orders:qty') %>
+    <td class="<%- order.completed ? 'is-completed': '' %>"><%- order.qtyDone.toLocaleString() %>/<%- order.qtyTodo.toLocaleString() %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:orders:operation') %>
+    <td>
+      <% if (editable) { %>
+      <select name="operation" class="dailyMrpPlan-popover-input dailyMrpPlan-popover-value">
+        <% if (order.operation) { %>
+        <option value="<%- order.operation.no %>" data-labor-time="<%- order.operation.laborTime %>"><%= order.operation.name || order.operation.no %></option>
+        <% } %>
+      </select>
+      <% } else { %>
+      <span class="dailyMrpPlan-popover-value"><%= order.operation ? (order.operation.name || order.operation.no) : '-' %></span>
+      <% } %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:orders:laborTime') %>
+    <td data-property="laborTime"><%= order.operation ? order.operation.laborTime.toLocaleString() : '-' %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:orders:statuses') %>
+    <td><span class="dailyMrpPlan-popover-value"><%- order.statuses.join(' ') %></span>
+  </tbody>
+</table>

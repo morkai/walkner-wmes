@@ -119,6 +119,10 @@ define([
           flow.level = message.newValue;
         }
       }
+      else if (message.type === 'counts')
+      {
+        flow.hours = message.newValues;
+      }
       else
       {
         return;

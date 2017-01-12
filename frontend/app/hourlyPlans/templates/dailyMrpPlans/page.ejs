@@ -1,0 +1,13 @@
+<div class="dailyMrpPlans <%- wrap ? 'wrap' : '' %>">
+  <div id="<%- idPrefix %>-filter" class="filter-container"></div>
+  <div id="<%- idPrefix %>-msg-filter" class="message message-inline message-warning hidden">
+    <p>Wybierz datę planu oraz przynajmniej jeden kontroler MRP.</p>
+  </div>
+  <div id="<%- idPrefix %>-msg-empty" class="message message-inline message-info hidden">
+    <p>
+      Brak planów dla wybranych filtrów. Plany można zaimportować wklejając do strony zawartość arkusza <em>Plan</em>
+      za pomocą kombinacji klawiszy <kbd>CTRL+A</kbd>, <kbd>CTRL+C</kbd> i <kbd>CTRL+V</kbd>
+      lub upuszczając na stronę plik z arkuszem <em>Plan</em>.</p>
+  </div>
+  <div id="<%- idPrefix %>-plans" class="dailyMrpPlans-container"></div>
+</div>

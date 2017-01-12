@@ -3,6 +3,8 @@
 'use strict';
 
 var _ = require('lodash');
+var multer = require('multer');
+var moment = require('moment');
 var canManage = require('./canManage');
 
 module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
@@ -11,9 +13,14 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   var auth = app[hourlyPlansModule.config.userId].auth;
   var mongoose = app[hourlyPlansModule.config.mongooseId];
   var HourlyPlan = mongoose.model('HourlyPlan');
+  var DailyMrpPlan = mongoose.model('DailyMrpPlan');
 
   var canView = auth('HOURLY_PLANS:VIEW');
+  var canManageDailyMrpPlans = auth('HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE');
 
+  //
+  // Hourly plans
+  //
   express.get('/hourlyPlans', canView, express.crud.browseRoute.bind(null, app, HourlyPlan));
 
   express.get(
@@ -36,6 +43,29 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   express.get('/hourlyPlans/:id', canView, express.crud.readRoute.bind(null, app, HourlyPlan));
 
   express.delete('/hourlyPlans/:id', canDelete, express.crud.deleteRoute.bind(null, app, HourlyPlan));
+
+  //
+  // Daily MRP plans
+  //
+  express.get('/dailyMrpPlans', canView, fixDailyMrpPlanDate, express.crud.browseRoute.bind(null, app, DailyMrpPlan));
+
+  express.post(
+    '/dailyMrpPlans;parse',
+    canManageDailyMrpPlans,
+    multer({
+      storage: multer.diskStorage({}),
+      fileFilter: function(req, file, done)
+      {
+        done(null, /vnd.ms-excel.sheet|spreadsheetml.sheet/.test(file.mimetype)
+          && /\.xls(x|m)$/.test(file.originalname));
+      }
+    }).single('plan'),
+    parseDailyMrpPlan
+  );
+
+  express.post('/dailyMrpPlans;import', canManageDailyMrpPlans, importDailyMrpPlans);
+
+  express.post('/dailyMrpPlans;update', canManageDailyMrpPlans, updateDailyMrpPlans);
 
   function canDelete(req, res, next)
   {
@@ -100,5 +130,72 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
     });
 
     return rows;
+  }
+
+  function fixDailyMrpPlanDate(req, res, next)
+  {
+    _.forEach(req.rql.selector.args, function(term)
+    {
+      if (term.args[0] === 'date' && typeof term.args[1] === 'string')
+      {
+        var dateMoment = moment(term.args[1], 'YYYY-MM-DD');
+
+        if (dateMoment.isValid())
+        {
+          term.args[1] = dateMoment.valueOf();
+        }
+      }
+    });
+
+    next();
+  }
+
+  function parseDailyMrpPlan(req, res, next)
+  {
+    if (!req.file)
+    {
+      return next(app.createError('INVALID_FILE', 400));
+    }
+
+    hourlyPlansModule.dailyMrpPlans.parse(req.file.path, function(err, json)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.type('json');
+      res.end(json);
+    });
+  }
+
+  function importDailyMrpPlans(req, res, next)
+  {
+    const b = req.body;
+
+    hourlyPlansModule.dailyMrpPlans.import(b.dailyMrpPlans, b.instanceId, function(err, importedPlans)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.json(importedPlans);
+    });
+  }
+
+  function updateDailyMrpPlans(req, res, next)
+  {
+    const b = req.body;
+
+    hourlyPlansModule.dailyMrpPlans.update(b.action, b.planId, b.data, b.instanceId, function(err, updatedAt)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.json(updatedAt);
+    });
   }
 };

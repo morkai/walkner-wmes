@@ -21,8 +21,7 @@ define([
     {
       var topics = {};
 
-      topics['hourlyPlans.updated.' + this.model.id] =
-        this.model.handleUpdateMessage.bind(this.model);
+      topics['hourlyPlans.updated.' + this.model.id] = this.model.handleUpdateMessage.bind(this.model);
       topics['hourlyPlans.deleted'] = this.onModelDeleted.bind(this);
 
       return topics;
