@@ -13,7 +13,20 @@ define([
   {
     if (typeof orderStatus === 'string')
     {
-      orderStatus = orderStatuses.get(orderStatus).attributes;
+      var model = orderStatuses.get(orderStatus);
+
+      if (!model)
+      {
+        orderStatus = {
+          _id: orderStatus,
+          label: orderStatus,
+          color: '#999999'
+        };
+      }
+      else
+      {
+        orderStatus = model.attributes;
+      }
     }
 
     return colorLabel({
