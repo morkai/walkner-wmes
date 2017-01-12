@@ -210,6 +210,7 @@ define([
           + '&select(mrp,lines._id,lines.name,lines.activeFrom,lines.activeTo,lines.workerCount)'
           + '&date<=' + date
           + '&date>=' + time.getMoment(date).subtract(5, 'days').valueOf()
+          + '&mrp=in=(' + missingPlansList.join(',') + ')'
       });
 
       req.fail(function()
