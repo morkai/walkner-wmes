@@ -152,8 +152,6 @@ define([
 
     onReset: function()
     {
-      console.log('onReset');
-
       this.updateClientUrl();
       this.renderPlans();
       this.toggleMessages();

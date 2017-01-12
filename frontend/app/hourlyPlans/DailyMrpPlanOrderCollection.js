@@ -36,6 +36,8 @@ define([
         return orders.get(newOrder._id) || new DailyMrpPlanOrder(newOrder);
       });
 
+      this.reset(newOrders);
+
       return orders.plan.collection.update('resetOrders', orders.plan.id, {
         orders: newOrders
       });

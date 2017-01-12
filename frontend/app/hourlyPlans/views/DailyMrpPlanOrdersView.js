@@ -118,6 +118,7 @@ define([
 
     afterRender: function()
     {
+      console.log('Orders afterRender');
       var view = this;
 
       if (view.selected)
