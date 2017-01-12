@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["./shift"],function(n){"use strict";function t(n,t){var i=r[t];"undefined"==typeof i&&(i=r[t]={});var u=i[n.id];return"undefined"==typeof u&&(u=i[n.id]=e(n,t)),u}function e(t,e){var r=t.get("autoDowntimes");if(!Array.isArray(r)||0===r.length)return null;var i=null,u=null;return r.forEach(function(t){"time"===t.when&&t.time.forEach(function(r){if(r.d){var a={first:i,next:null,reason:t.reason,startAt:n.getDateWithTime(e,r.h,r.m),duration:60*r.d*1e3};null===i?i=a:u.next=a,u=a}})}),i}var r={};return{get:t}});

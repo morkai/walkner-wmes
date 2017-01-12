@@ -5,8 +5,8 @@
   "version": "0.102.0",
   "updater": {
     "wmes": {
-      "backend": 246,
-      "frontend": 288,
+      "backend": 260,
+      "frontend": 300,
       "reports": 34,
       "attachments": 3,
       "importer-sap": 35,
@@ -15,7 +15,7 @@
       "mailer": 11,
       "operator": 13,
       "docs": 6,
-      "heff": 4
+      "heff": 5
     },
     "pos": {
       "backend": 80,

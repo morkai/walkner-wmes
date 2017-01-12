@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["underscore","../core/Collection","./DailyMrpPlanOrder"],function(e,n,i){"use strict";return n.extend({model:i,initialize:function(e,n){this.plan=n.plan},update:function(n){var r=this,t=e.pluck(r.models,"id"),l=e.pluck(n,"_id");return e.isEqual(l,t)?void 0:(n=n.map(function(e){return r.get(e._id)||new i(e)}),r.plan.collection.update("resetOrders",r.plan.id,{orders:n}))}})});

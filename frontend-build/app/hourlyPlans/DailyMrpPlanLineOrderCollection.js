@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["../core/Collection","./util/shift","./DailyMrpPlanLineOrder"],function(e,t,r){"use strict";return e.extend({model:r,serializeShifts:function(){for(var e={1:[],2:[],3:[]},r=0;r<this.length;++r){var n=this.models[r],i=e[n.shiftNo],o=i[i.length-1],l=o?o.lineOrder.finishMoment.valueOf():t.getShiftStartTime(n.startMoment.valueOf());i.push({_id:n.id,orderNo:n.get("orderNo"),qty:n.get("qty"),margin:100*(n.startMoment.valueOf()-l)/t.SHIFT_DURATION,width:100*n.duration/t.SHIFT_DURATION,incomplete:n.get("incomplete"),lineOrder:n})}var s=[];return e[1].length&&s.push({no:1,orders:e[1]}),e[2].length&&s.push({no:2,orders:e[2]}),e[3].length&&s.push({no:3,orders:e[3]}),s}})});

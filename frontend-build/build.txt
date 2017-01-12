@@ -127,6 +127,10 @@ app/hourlyPlans/assets/main.css
 ----------------
 app/hourlyPlans/assets/main.css
 
+app/hourlyPlans/assets/planning.css
+----------------
+app/hourlyPlans/assets/planning.css
+
 app/icpo/assets/main.css
 ----------------
 app/icpo/assets/main.css
