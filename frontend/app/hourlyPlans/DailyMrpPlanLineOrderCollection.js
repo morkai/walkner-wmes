@@ -15,6 +15,11 @@ define([
 
     model: DailyMrpPlanLineOrder,
 
+    initialize: function(attrs, options)
+    {
+      this.line = options.line;
+    },
+
     serializeShifts: function()
     {
       var s = {

@@ -5,7 +5,11 @@
     <td><%= lineOrder.orderNo %>
   <tr>
     <th><%- t('hourlyPlans', 'planning:lineOrders:qty') %>
-    <td><%- lineOrder.qty.toLocaleString() %>
+    <td><%- lineOrder.qtyPlanned.toLocaleString() %>
+      <% if (lineOrder.qtyRemaining !== null && lineOrder.qtyTotal !== null) { %>
+      / <%- lineOrder.qtyRemaining.toLocaleString() %>
+      / <%- lineOrder.qtyTotal.toLocaleString() %>
+      <% } %>
       <% if (lineOrder.incomplete) { %>
       <%- t('hourlyPlans', 'planning:lineOrders:incomplete', {qty: lineOrder.incomplete.toLocaleString()}) %>
       <% } %>

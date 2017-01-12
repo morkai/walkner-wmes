@@ -26,10 +26,15 @@ define([
 
     serializePopover: function()
     {
+      var orderNo = this.get('orderNo');
+      var order = this.collection.line.collection.plan.orders.get(orderNo);
+
       return {
         _id: this.id,
-        orderNo: this.get('orderNo'),
-        qty: this.get('qty'),
+        orderNo: orderNo,
+        qtyPlanned: this.get('qty'),
+        qtyRemaining: order ? (order.get('qtyTodo') - order.get('qtyDone')) : null,
+        qtyTotal: order ? order.get('qtyTodo') : null,
         incomplete: this.get('incomplete'),
         pceTime: this.get('pceTime') / 1000,
         startAt: this.startMoment.valueOf(),
