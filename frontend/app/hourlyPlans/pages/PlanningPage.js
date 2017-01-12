@@ -58,7 +58,7 @@ define([
       this.setView('#' + idPrefix + '-filter', this.filterView);
 
       this.listenTo(this.model, 'import', this.onImport);
-      this.listenTo(this.model, 'reset', _.after(2, this.onReset));
+      this.listenTo(this.model, 'reset', _.after(1, this.onReset));
       this.listenTo(this.model.options, 'change:wrap', this.onWrapChange);
 
       $('body')
@@ -152,6 +152,8 @@ define([
 
     onReset: function()
     {
+      console.log('onReset');
+
       this.updateClientUrl();
       this.renderPlans();
       this.toggleMessages();
