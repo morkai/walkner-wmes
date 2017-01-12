@@ -52,7 +52,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
     shiftMoment.hours(0).minutes(0).seconds(0).milliseconds(0);
 
-    if (shiftMoment.valueOf() > moment().hours(0).minutes(0).seconds(0).milliseconds(0).valueOf())
+    if (shiftMoment.valueOf() > moment().startOf('day').add(7, 'days').valueOf())
     {
       return reply(new Error('INPUT'));
     }

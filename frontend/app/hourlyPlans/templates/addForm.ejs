@@ -6,7 +6,7 @@
     <div class="form-group orgUnitDropdowns-container"></div>
     <div class="form-group">
       <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('hourlyPlans', 'property:date') %></label>
-      <input id="<%- idPrefix %>-date" class="form-control" type="date" value="<%- date %>" max="<%- date %>" min="2013-12-01" required>
+      <input id="<%- idPrefix %>-date" class="form-control" type="date" value="<%- date %>" max="<%- time.getMoment().add(7, 'days').format('YYYY-MM-DD') %>" min="2013-12-01" required>
     </div>
   </div>
   <div class="panel-footer">

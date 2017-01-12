@@ -29,10 +29,5 @@ module.exports = function canManage(user, hourlyPlan)
     return false;
   }
 
-  if (!hourlyPlan)
-  {
-    return true;
-  }
-
-  return Date.now() < (hourlyPlan.createdAt.getTime() + 8 * 3600 * 1000);
+  return true;
 };
