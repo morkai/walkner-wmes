@@ -164,7 +164,7 @@ define([
       }
       else
       {
-        result[key] = _.escape(String(value));
+        result[key] = key.charAt(0) === '_' ? String(value) : _.escape(String(value));
       }
     }
 
