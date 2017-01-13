@@ -93,7 +93,7 @@ define([
         case 'fte.master.deleted':
           var subdivision = subdivisions.get(data.model.subdivision);
 
-          data.model.subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
+          data.model._subdivision = subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
           data.model.date = time.format(data.model.date, 'L');
           data.model.shift = t('core', 'SHIFT:' + data.model.shift);
           break;
@@ -103,7 +103,7 @@ define([
         case 'hourlyPlans.deleted':
           var division = divisions.get(data.model.division);
 
-          data.model.division = division ? renderOrgUnitPath(division, false, false) : '?';
+          data.model._division = division ? renderOrgUnitPath(division, false, false) : '?';
           data.model.date = time.format(data.model.date, 'L');
           data.model.shift = t('core', 'SHIFT:' + data.model.shift);
           break;
