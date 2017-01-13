@@ -6,7 +6,7 @@
 }
 .dailyMrpPlan {
   margin-top: 20px;
-  padding-top: 20px;
+  padding-top: 15px;
   border-top: 1px dotted #ccc;
   line-height: 1;
 }
@@ -28,7 +28,6 @@
   margin-top: -1px;
 }
 .dailyMrpPlan-list-container {
-  position: relative;
   display: flex;
   font-size: 16px;
 }
@@ -157,9 +156,15 @@
 }
 .dailyMrpPlan-list-container > .select2-container {
   flex: 1 1 auto;
-  height: 24px;
+  min-height: 24px;
+  z-index: 1;
+}
+.dailyMrpPlan-list-container > .select2-dropdown-open {
+  z-index: 10000;
 }
 .dailyMrpPlan-list-container > input[tabindex="-1"] + .dailyMrpPlan-list {
+  flex: 0 0 auto;
+  width: 16px;
   border-left: 0;
 }
 .dailyMrpPlan-list-container > .select2-container .select2-choices {

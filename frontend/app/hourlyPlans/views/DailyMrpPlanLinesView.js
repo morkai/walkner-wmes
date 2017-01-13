@@ -83,14 +83,19 @@ define([
       this.mouseovered = null;
       this.ignoreScroll = false;
 
+      this.onResize = _.debounce(this.resize.bind(this), 16);
+
       this.listenTo(this.model, 'reset', this.render);
       this.listenTo(this.model, 'change', this.onChanged);
       this.listenTo(this.model, 'saveChangesRequested', this.onSaveChangesRequested);
       this.listenTo(this.model.plan.collection, 'itemSelected', this.onItemSelected);
+
+      $(window).on('resize.' + this.idPrefix, this.onResize);
     },
 
     destroy: function()
     {
+      $(window).off('.' + this.idPrefix);
       this.$item().popover('destroy');
       this.hideEditor();
     },
@@ -135,6 +140,20 @@ define([
         }
 
         view.$id('scrollIndicator').toggleClass('hidden', e.target.scrollLeft <= 40);
+      });
+
+      view.resize();
+    },
+
+    resize: function()
+    {
+      var $edit = this.$id('edit');
+      var $scrollIndicator = this.$id('scrollIndicator');
+      var pos = $edit.position();
+
+      $scrollIndicator.css({
+        top: (pos.top + 1) + 'px',
+        left: ($edit.outerWidth() + pos.left) + 'px'
       });
     },
 

@@ -93,17 +93,22 @@ define([
       this.sorting = false;
       this.selected = null;
       this.mouseovered = null;
-      this.selectedOperation = null;
       this.ignoreScroll = false;
+      this.selectedOperation = null;
+
+      this.onResize = _.debounce(this.resize.bind(this), 16);
 
       this.listenTo(this.model, 'reset', this.render);
       this.listenTo(this.model, 'change:operation', this.onOperationChanged);
       this.listenTo(this.model, 'saveChangesRequested', this.onSaveChangesRequested);
       this.listenTo(this.model.plan.collection, 'itemSelected', this.onItemSelected);
+
+      $(window).on('resize.' + this.idPrefix, this.onResize);
     },
 
     destroy: function()
     {
+      $(window).off('.' + this.idPrefix);
       this.$item().popover('destroy');
       this.hideEditor();
     },
@@ -118,7 +123,6 @@ define([
 
     afterRender: function()
     {
-      console.log('Orders afterRender');
       var view = this;
 
       if (view.selected)
@@ -149,6 +153,20 @@ define([
         }
 
         view.$id('scrollIndicator').toggleClass('hidden', e.target.scrollLeft <= 40);
+      });
+
+      view.resize();
+    },
+
+    resize: function()
+    {
+      var $edit = this.$id('edit');
+      var $scrollIndicator = this.$id('scrollIndicator');
+      var pos = $edit.position();
+
+      $scrollIndicator.css({
+        top: (pos.top + 1) + 'px',
+        left: ($edit.outerWidth() + pos.left) + 'px'
       });
     },
 
@@ -294,6 +312,11 @@ define([
 
     select: function(id, scroll)
     {
+      if (this.$id('editor').length)
+      {
+        return;
+      }
+
       var item = this.model.get(id);
 
       if (!item)
@@ -312,14 +335,7 @@ define([
       {
         this.ignoreScroll = true;
 
-        if ($item[0].scrollIntoViewIfNeeded)
-        {
-          $item[0].scrollIntoViewIfNeeded(true);
-        }
-        else
-        {
-          $item[0].scrollIntoView();
-        }
+        scrollIntoView($item[0]);
 
         _.defer(this.showPopover.bind(this, $item, true));
       }
