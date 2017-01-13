@@ -46,6 +46,36 @@ define([
       return this;
     },
 
+    getCurrentFilter: function()
+    {
+      var filter = {
+        date: '',
+        mrp: []
+      };
+
+      this.rqlQuery.selector.args.forEach(function(term)
+      {
+        var prop = term.args[0];
+
+        if ((term.name === 'eq' && prop === 'date') || (term.name === 'in' && prop === 'mrp'))
+        {
+          filter[prop] = term.args[1];
+        }
+      });
+
+      return filter;
+    },
+
+    setCurrentFilter: function(newFilter)
+    {
+      newFilter = _.assign(this.getCurrentFilter(), newFilter);
+
+      this.rqlQuery.selector.args = [
+        {name: 'eq', args: ['date', newFilter.date]},
+        {name: 'in', args: ['mrp', newFilter.mrp]}
+      ];
+    },
+
     hasRequiredFilters: function()
     {
       var filters = this.rqlQuery.selector.args.filter(function(term)
@@ -78,7 +108,7 @@ define([
 
         collection.trigger('import', {
           date: time.format(dailyMrpPlans[0].date, 'YYYY-MM-DD'),
-          mrps: dailyMrpPlans.map(function(plan) { return plan.mrp.id; })
+          mrp: dailyMrpPlans.map(function(plan) { return plan.mrp.id; })
         });
 
         collection.reset(dailyMrpPlans);
@@ -106,7 +136,7 @@ define([
       return $.when.apply($, this.map(function(plan) { return plan.saveLines(); }));
     },
 
-    setHourlyPlans: function()
+    setHourlyPlans: function(planFilter)
     {
       var model = this;
 
@@ -119,6 +149,11 @@ define([
 
       model.forEach(function(plan)
       {
+        if (planFilter && !planFilter(plan))
+        {
+          return;
+        }
+
         plan.lines.forEach(function(planLine)
         {
           var prodLine = orgUnits.getByTypeAndId('prodLine', planLine.id);
@@ -165,16 +200,6 @@ define([
       _.forEach(divisionToProdFlowToPlan, function(prodFlowToPlan, division)
       {
         promises.push(model.setHourlyPlan(division, date, shift, prodFlowToPlan));
-
-        _.forEach(prodFlowToPlan, function(hourlyPlan, prodFlow)
-        {
-          console.log(
-            division,
-            prodFlow,
-            orgUnits.getByTypeAndId('prodFlow', prodFlow).getLabel(),
-            hourlyPlan.join(', ')
-          );
-        });
       });
 
       return $.when.apply($, promises);

@@ -81,6 +81,8 @@ define([
 
     load: function(when)
     {
+      this.readCurrentFilterIfNeeded();
+
       if (this.model.hasRequiredFilters())
       {
         return when(this.loadStyles(), this.model.fetch({reset: true}));
@@ -151,19 +153,43 @@ define([
 
     onImport: function(data)
     {
-      this.model.rqlQuery.selector.args = [
-        {name: 'eq', args: ['date', data.date]},
-        {name: 'in', args: ['mrp', data.mrps]}
-      ];
-
+      this.model.setCurrentFilter(data);
+      this.storeCurrentFilter();
       this.filterView.render();
     },
 
     onReset: function()
     {
+      this.storeCurrentFilter();
       this.updateClientUrl();
       this.renderPlans();
       this.toggleMessages();
+    },
+
+    storeCurrentFilter: function()
+    {
+      localStorage.setItem('PLANNING:FILTER', JSON.stringify(this.model.getCurrentFilter()));
+    },
+
+    readCurrentFilterIfNeeded: function()
+    {
+      var storedFilter = JSON.parse(localStorage.getItem('PLANNING:FILTER') || '{}');
+      var currentFilter = this.model.getCurrentFilter();
+      var changed = false;
+
+      _.forEach(currentFilter, function(v, p)
+      {
+        if (_.isEmpty(v) && !_.isEmpty(storedFilter[p]))
+        {
+          currentFilter[p] = storedFilter[p];
+          changed = true;
+        }
+      });
+
+      if (changed)
+      {
+        this.model.setCurrentFilter(currentFilter);
+      }
     },
 
     onWrapChange: function()
