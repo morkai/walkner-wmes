@@ -83,10 +83,10 @@ define([
     {
       if (this.model.hasRequiredFilters())
       {
-        return when(this.model.fetch({reset: true}));
+        return when(this.loadStyles(), this.model.fetch({reset: true}));
       }
 
-      return when();
+      return when(this.loadStyles());
     },
 
     serialize: function()
@@ -97,14 +97,23 @@ define([
       };
     },
 
-    beforeRender: function()
+    loadStyles: function()
     {
+      var deferred = $.Deferred();
       var $head = $('head');
 
-      if (!$head.find('link[href$="planning.css"]').length)
+      if ($head.find('link[href$="planning.css"]').length)
       {
-        $head.append('<link rel="stylesheet" href="/app/hourlyPlans/assets/planning.css">');
+        deferred.resolve();
       }
+      else
+      {
+        $('<link rel="stylesheet" href="/app/hourlyPlans/assets/planning.css">')
+          .on('load', function() { deferred.resolve(); })
+          .appendTo($head);
+      }
+
+      return deferred.promise();
     },
 
     afterRender: function()
