@@ -31,7 +31,7 @@ module.exports = function setUpPing(app, watchdogModule)
     step(
       function sendPingRequestStep()
       {
-        request(config.localUrl, this.next());
+        request({url: config.localUrl, timeout: 5000}, this.next());
       },
       function handlePingResponseStep(err, res, body)
       {
@@ -44,7 +44,12 @@ module.exports = function setUpPing(app, watchdogModule)
 
         if (res.statusCode === 200 && body === 'pong')
         {
-          request(config.remoteUrl, {method: 'POST', json: {secretKey: config.secretKey}}, this.next());
+          request({
+            url: config.remoteUrl,
+            timeout: 5000,
+            method: 'POST',
+            json: {secretKey: config.secretKey}
+          }, this.next());
         }
         else
         {
