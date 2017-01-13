@@ -167,12 +167,12 @@ define([
 
     if (_.isFunction($pageView.hdLeft))
     {
-      $hd.find('.print-page-hd-left').text($pageView.hdLeft.call($pageView));
+      $hd.find('.print-page-hd-left').html($pageView.hdLeft.call($pageView));
     }
 
     if (_.isFunction($pageView.hdRight))
     {
-      $hd.find('.print-page-hd-right').text($pageView.hdRight.call($pageView));
+      $hd.find('.print-page-hd-right').html($pageView.hdRight.call($pageView));
     }
 
     var pageHeight = $pageView.landscape ? 792 : 1122;
