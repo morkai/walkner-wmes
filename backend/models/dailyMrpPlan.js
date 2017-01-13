@@ -21,6 +21,7 @@ module.exports = function setupDailyMrpPlanModel(app, mongoose)
     _id: String,
     orderNo: String,
     qty: Number,
+    pceTime: Number,
     startAt: Date,
     finishAt: Date,
     incomplete: Number
