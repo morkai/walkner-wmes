@@ -210,6 +210,9 @@
 .dailyMrpPlan-lineOrders-container + .dailyMrpPlan-lineOrders-container {
   margin-top: -1px;
 }
+.dailyMrpPlan-lineOrders-container + .dailyMrpPlan-lineOrders-container > .dailyMrpPlan-lineOrders:first-child > .dailyMrpPlan-lineOrders-list {
+  border-top-color: #999;
+}
 .dailyMrpPlan-lineOrders .dailyMrpPlan-list {
   width: 100%;
   background-color: #ccc;
