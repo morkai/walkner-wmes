@@ -4,6 +4,7 @@ define([
   'underscore',
   'app/core/View',
   '../util/scrollIntoView',
+  './DailyMrpPlanToolbarView',
   './DailyMrpPlanLinesView',
   './DailyMrpPlanOrdersView',
   './DailyMrpPlanLineOrdersView',
@@ -12,6 +13,7 @@ define([
   _,
   View,
   scrollIntoView,
+  DailyMrpPlanToolbarView,
   DailyMrpPlanLinesView,
   DailyMrpPlanOrdersView,
   DailyMrpPlanLineOrdersView,
@@ -46,40 +48,40 @@ define([
 
     initialize: function()
     {
-      this.debounceGeneratePlan = _.debounce(this.model.generate.bind(this.model), 1, false);
-      this.onLineOrdersReset = _.debounce(this.toggleTimeline.bind(this), 1, false);
-
+      var view = this;
       var plan = this.model;
       var lines = plan.lines;
       var orders = plan.orders;
 
-      this.listenTo(plan, 'reset', this.render);
-      this.listenTo(plan, 'itemEntered', this.onItemEntered);
-      this.listenTo(plan, 'itemLeft', this.onItemLeft);
+      view.onLineOrdersReset = _.debounce(view.toggleTimeline.bind(view), 1, false);
 
-      this.listenTo(orders, 'reset', this.generatePlan);
-      this.listenTo(orders, 'change:operation', this.generatePlan);
+      view.listenTo(plan, 'reset', view.render);
+      view.listenTo(plan, 'itemEntered', view.onItemEntered);
+      view.listenTo(plan, 'itemLeft', view.onItemLeft);
 
-      this.listenTo(lines, 'reset', this.renderLineOrders);
-      this.listenTo(lines, 'reset', this.generatePlan);
-      this.listenTo(lines, 'change:activeFrom change:activeTo change:workerCount', this.generatePlan);
-      this.listenTo(lines, 'lineOrderClicked', this.onLineOrderClicked);
+      view.listenTo(orders, 'reset', view.generatePlan);
+      view.listenTo(orders, 'change:operation', view.generatePlan);
 
-      this.linesView = new DailyMrpPlanLinesView({model: this.model.lines}, {plan: this});
-      this.ordersView = new DailyMrpPlanOrdersView({model: this.model.orders}, {plan: this});
+      view.listenTo(lines, 'reset', view.renderLineOrders);
+      view.listenTo(lines, 'reset', view.generatePlan);
+      view.listenTo(lines, 'change:activeFrom change:activeTo change:workerCount', view.generatePlan);
+      view.listenTo(lines, 'lineOrderClicked', view.onLineOrderClicked);
 
-      this.setView('#' + this.idPrefix + '-lines', this.linesView);
-      this.setView('#' + this.idPrefix + '-orders', this.ordersView);
+      view.toolbarView = new DailyMrpPlanToolbarView({model: view.model});
+      view.linesView = new DailyMrpPlanLinesView({model: view.model.lines});
+      view.ordersView = new DailyMrpPlanOrdersView({model: view.model.orders});
+
+      view.setView('#' + view.idPrefix + '-toolbar', view.toolbarView);
+      view.setView('#' + view.idPrefix + '-lines', view.linesView);
+      view.setView('#' + view.idPrefix + '-orders', view.ordersView);
     },
 
     generatePlan: function(model, options)
     {
-      if (options && options.skipGenerate)
+      if (!options || !options.skipGenerate)
       {
-        return;
+        this.model.generate();
       }
-
-      this.model.generate();
     },
 
     serialize: function()

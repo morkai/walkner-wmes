@@ -15,7 +15,17 @@
   padding-top: 0;
   border-top: 0;
 }
+.dailyMrpPlan-toolbar {
+  float: right;
+}
+.dailyMrpPlan-toolbar .btn {
+  min-width: 40px;
+}
+.dailyMrpPlan-toolbar .dropdown-menu {
+  min-width: 100px;
+}
 .dailyMrpPlan-hd {
+  margin-top: 5px;
   margin-bottom: 5px;
 }
 .dailyMrpPlan-hd-id {
