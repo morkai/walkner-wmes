@@ -68,7 +68,7 @@ define([
       }
 
       var now = Date.now();
-      var date = Date.parse(this.get('date'));
+      var date = Date.parse(this.get('date')) + 24 * 3600 * 1000;
 
       if (now > date)
       {
