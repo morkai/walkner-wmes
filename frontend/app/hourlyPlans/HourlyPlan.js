@@ -67,11 +67,17 @@ define([
         return false;
       }
 
-      var createdAt = Date.parse(this.get('createdAt'));
+      var now = Date.now();
+      var date = Date.parse(this.get('date'));
 
-      if (Date.now() >= createdAt + 8 * 3600 * 1000)
+      if (now > date)
       {
-        return false;
+        var createdAt = Date.parse(this.get('createdAt'));
+
+        if (now >= createdAt + 8 * 3600 * 1000)
+        {
+          return false;
+        }
       }
 
       var userDivision = user.getDivision();
