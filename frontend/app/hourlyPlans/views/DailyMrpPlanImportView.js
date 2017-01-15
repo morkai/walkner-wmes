@@ -124,7 +124,7 @@ define([
 
         _.forEach(res.collection, function(sapOrder)
         {
-          noToOrderMap[sapOrder._id] = DailyMrpPlanOrder.prepareFromSapOrder(sapOrder);
+          noToOrderMap[sapOrder._id] = DailyMrpPlanOrder.prepareFromSapOrder(sapOrder, noToMrpOrderMap[sapOrder._id]);
         });
 
         _.forEach(noToMrpOrderMap, function(mrpOrder, orderNo)

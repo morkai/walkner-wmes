@@ -14,6 +14,7 @@
   <tr>
     <th><%- t('hourlyPlans', 'planning:orders:qty') %>
     <td class="<%- order.completed ? 'is-completed': '' %>"><%- order.qtyDone.toLocaleString() %>/<%- order.qtyTodo.toLocaleString() %>
+  <!--
   <tr>
     <th><%- t('hourlyPlans', 'planning:orders:operation') %>
     <td>
@@ -26,9 +27,10 @@
       <% } else { %>
       <span class="dailyMrpPlan-popover-value"><%= order.operation ? (order.operation.name || order.operation.no) : '-' %></span>
       <% } %>
+  //-->
   <tr>
     <th><%- t('hourlyPlans', 'planning:orders:laborTime') %>
-    <td data-property="laborTime"><%= order.operation ? order.operation.laborTime.toLocaleString() : '-' %>
+    <td data-property="laborTime"><%= order.laborTime ? order.laborTime.toLocaleString() : '-' %>
   <tr>
     <th><%- t('hourlyPlans', 'planning:orders:statuses') %>
     <td><span class="dailyMrpPlan-popover-value"><%- order.statuses.join(' ') %></span>

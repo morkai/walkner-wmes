@@ -364,7 +364,7 @@ define([
               return;
             }
 
-            if (/^[0-9](,[0-9]+)?$/.test(part))
+            if (/^[0-9]+(,[0-9]+)?$/.test(part))
             {
               part = parseFloat(part.replace(',', '.'));
             }

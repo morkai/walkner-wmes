@@ -8,6 +8,7 @@ module.exports = function setupDailyMrpPlanModel(app, mongoose)
     _id: String,
     nc12: String,
     name: String,
+    rbh: Number,
     qtyTodo: Number,
     qtyDone: Number,
     statuses: [String],
