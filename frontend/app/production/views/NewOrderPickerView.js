@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/orders/util/resolveProductName',
   '../util/orderPickerHelpers',
   'app/production/templates/newOrderPicker'
 ], function(
@@ -14,6 +15,7 @@ define([
   t,
   viewport,
   View,
+  resolveProductName,
   orderPickerHelpers,
   template
 ) {
@@ -231,7 +233,7 @@ define([
 
       $order.select2('data', _.assign({}, order, {
         id: order.no,
-        text: order.no + ' - ' + (order.description || order.name || '?'),
+        text: order.no + ' - ' + (resolveProductName(order) || '?'),
         sameOrder: false
       }));
 

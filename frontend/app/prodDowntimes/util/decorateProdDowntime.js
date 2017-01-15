@@ -13,6 +13,7 @@ define([
   'app/data/downtimeReasons',
   'app/data/views/renderOrgUnitPath',
   'app/core/templates/userInfo',
+  'app/orders/util/resolveProductName',
   './decorateProdDowntimeChange'
 ], function(
   _,
@@ -27,6 +28,7 @@ define([
   downtimeReasons,
   renderOrgUnitPath,
   renderUserInfo,
+  resolveProductName,
   decorateProdDowntimeChange
 ) {
   'use strict';
@@ -111,7 +113,7 @@ define([
 
       if (!obj.orderData)
       {
-        obj.productName = orderData.description || orderData.name;
+        obj.productName = resolveProductName(orderData);
         obj.productFamily = obj.productName.substring(0, 6);
       }
 

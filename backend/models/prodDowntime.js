@@ -4,6 +4,7 @@
 
 var _ = require('lodash');
 var autoIncrement = require('mongoose-auto-increment');
+var resolveProductName = require('../modules/util/resolveProductName');
 
 module.exports = function setupProdDowntimeModel(app, mongoose)
 {
@@ -238,10 +239,9 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     if (prodShiftOrder && prodShiftOrder.orderData)
     {
       const data = prodShiftOrder.orderData;
-      const name = (data.description || data.name || '').trim();
 
       orderData.nc12 = data.nc12;
-      orderData.name = name.trim();
+      orderData.name = resolveProductName(data);
       orderData.family = /^[A-Z0-9]{6}/.test(orderData.name) ? orderData.name.substring(0, 6) : '';
       orderData.mrp = data.mrp;
       orderData.qty = data.qty || prodShiftOrder.quantityDone || 0;

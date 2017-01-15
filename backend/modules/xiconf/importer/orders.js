@@ -8,6 +8,7 @@ var moment = require('moment');
 var step = require('h5.step');
 var fs = require('fs-extra');
 var parseOrders = require('./parseOrders');
+var resolveProductName = require('../../util/resolveProductName');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -438,7 +439,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       startDate: order.startDate,
       finishDate: order.finishDate,
       reqDate: null,
-      name: order.description || order.name,
+      name: resolveProductName(order),
       nc12: [order.nc12],
       quantityTodo: order.qty,
       quantityDone: 0,
@@ -534,7 +535,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
   function compareOrderToXiconfOrder($set, order, xiconfOrder)
   {
-    const name = order.description || order.name;
+    const name = resolveProductName(order);
 
     if (name !== xiconfOrder.name)
     {

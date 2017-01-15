@@ -7,6 +7,7 @@ var exec = require('child_process').exec;
 var _ = require('lodash');
 var step = require('h5.step');
 var moment = require('moment');
+var resolveProductName = require('../../util/resolveProductName');
 
 module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next)
 {
@@ -134,7 +135,7 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
         orderTemplateData.order = {
           no: order._id,
           material: order.nc12,
-          materialDescription: order.description || order.name || '',
+          materialDescription: resolveProductName(order),
           mrpController: order.mrp || '',
           quantity: formatNumber(order.qty)[0],
           unit: order.unit,

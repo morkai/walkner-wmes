@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/orders/util/resolveProductName',
   '../util/orderPickerHelpers',
   'app/production/templates/orderQueue',
   'app/production/templates/orderQueueRow'
@@ -15,6 +16,7 @@ define([
   t,
   viewport,
   View,
+  resolveProductName,
   orderPickerHelpers,
   template,
   renderQueueRow
@@ -179,7 +181,8 @@ define([
       $rows.append(renderQueueRow({
         no: $rows[0].childElementCount + 1,
         order: order,
-        operation: order.operations[operationNo] || {no: operationNo}
+        operation: order.operations[operationNo] || {no: operationNo},
+        productName: resolveProductName(order)
       }));
       this.$id('empty').html(t('production', 'orderQueue:message:queue'));
       this.$id('queue').removeClass('hidden');

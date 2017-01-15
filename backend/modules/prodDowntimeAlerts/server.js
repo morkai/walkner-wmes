@@ -8,6 +8,7 @@ var step = require('h5.step');
 var ejs = require('ejs');
 var moment = require('moment');
 var ObjectId = require('mongoose').Types.ObjectId;
+var resolveProductName = require('../util/resolveProductName');
 
 module.exports = function setUpAlertsServer(app, module)
 {
@@ -321,7 +322,7 @@ module.exports = function setUpAlertsServer(app, module)
       date: prodShiftOrder.date,
       startedAt: prodShiftOrder.startedAt.getTime(),
       no: orderData.no || '?',
-      name: orderData.description || orderData.name || '?',
+      name: resolveProductName(orderData),
       nc12: orderData.nc12 || '?'
     };
 

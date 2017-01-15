@@ -7,7 +7,8 @@ define([
   'app/core/views/ListView',
   'app/data/orderStatuses',
   'app/orderStatuses/util/renderOrderStatusLabel',
-  '../util/openOrderPrint'
+  '../util/openOrderPrint',
+  '../util/resolveProductName'
 ], function(
   _,
   t,
@@ -15,7 +16,8 @@ define([
   ListView,
   orderStatuses,
   renderOrderStatusLabel,
-  openOrderPrint
+  openOrderPrint,
+  resolveProductName
 ) {
   'use strict';
 
@@ -87,7 +89,7 @@ define([
         var row = model.toJSON();
         var delayReason = delayReasons.get(row.delayReason);
 
-        row.name = row.description || row.name;
+        row.name = resolveProductName(row);
         row.statusLabels = orderStatuses.findAndFill(row.statuses).map(renderOrderStatusLabel).join('');
         row.delayReason = delayReason ? delayReason.getLabel() : '';
 

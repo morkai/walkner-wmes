@@ -8,6 +8,7 @@ define([
   '../data/subdivisions',
   '../core/Model',
   '../core/util/getShiftEndDate',
+  '../orders/util/resolveProductName',
   './util/decorateProdShiftOrder',
   './util/calcOrderEfficiency'
 ], function(
@@ -18,6 +19,7 @@ define([
   subdivisions,
   Model,
   getShiftEndDate,
+  resolveProductName,
   decorateProdShiftOrder,
   calcOrderEfficiency
 ) {
@@ -244,7 +246,7 @@ define([
         return '-';
       }
 
-      return orderData.description || orderData.name || '?';
+      return resolveProductName(orderData) || '?';
     },
 
     getOperationName: function()

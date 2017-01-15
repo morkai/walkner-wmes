@@ -2,6 +2,8 @@
 
 'use strict';
 
+const resolveProductName = require('../../util/resolveProductName');
+
 module.exports = function findOrderRoute(app, qiModule, req, res, next)
 {
   const mongoose = app[qiModule.config.mongooseId];
@@ -33,7 +35,7 @@ module.exports = function findOrderRoute(app, qiModule, req, res, next)
     }
 
     const orderData = pso.orderData;
-    const name = (orderData.description || orderData.name || '').trim();
+    const name = resolveProductName(orderData);
     const familyParts = name.split(' ');
 
     res.json({

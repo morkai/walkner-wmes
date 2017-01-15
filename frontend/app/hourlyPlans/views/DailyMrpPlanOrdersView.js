@@ -7,6 +7,7 @@ define([
   'app/core/View',
   'app/core/util/idAndLabel',
   'app/production/util/orderPickerHelpers',
+  'app/orders/util/resolveProductName',
   '../util/scrollIntoView',
   '../DailyMrpPlanOrder',
   'app/hourlyPlans/templates/dailyMrpPlans/orders',
@@ -18,6 +19,7 @@ define([
   View,
   idAndLabel,
   orderPickerHelpers,
+  resolveProductName,
   scrollIntoView,
   DailyMrpPlanOrder,
   ordersTemplate,
@@ -200,7 +202,7 @@ define([
           },
           formatResult: function(item)
           {
-            return _.escape(item.id + ': ' + (item.planOrder.description || item.planOrder.name || '?'));
+            return _.escape(item.id + ': ' + resolveProductName(item.planOrder));
           },
           ajax: {
             cache: true,

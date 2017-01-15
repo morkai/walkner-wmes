@@ -4,12 +4,14 @@ define([
   'underscore',
   '../core/Model',
   '../production/util/orderPickerHelpers',
-  '../orderStatuses/util/renderOrderStatusLabel'
+  '../orderStatuses/util/renderOrderStatusLabel',
+  '../orders/util/resolveProductName'
 ], function(
   _,
   Model,
   orderPickerHelpers,
-  renderOrderStatusLabel
+  renderOrderStatusLabel,
+  resolveProductName
 ) {
   'use strict';
 
@@ -101,7 +103,7 @@ define([
       return {
         _id: sapOrder._id,
         nc12: sapOrder.nc12 || '',
-        name: sapOrder.description || sapOrder.name || '',
+        name: resolveProductName(sapOrder),
         qtyTodo: sapOrder.qty || 0,
         qtyDone: sapOrder.qtyDone && sapOrder.qtyDone.total ? sapOrder.qtyDone.total : 0,
         statuses: sapOrder.statuses || [],

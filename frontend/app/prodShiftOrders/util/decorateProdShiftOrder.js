@@ -10,7 +10,8 @@ define([
   'app/data/prodLines',
   'app/data/views/renderOrgUnitPath',
   'app/core/util/getShiftStartInfo',
-  'app/core/templates/userInfo'
+  'app/core/templates/userInfo',
+  'app/orders/util/resolveProductName'
 ], function(
   time,
   t,
@@ -21,7 +22,8 @@ define([
   prodLines,
   renderOrgUnitPath,
   getShiftStartInfo,
-  renderUserInfo
+  renderUserInfo,
+  resolveProductName
 ) {
   'use strict';
 
@@ -70,7 +72,7 @@ define([
     {
       var operation = (obj.orderData.operations || {})[obj.operationNo] || {};
 
-      obj.order = obj.orderId + ': <em>' + (obj.orderData.description || obj.orderData.name || '?') + '</em>';
+      obj.order = obj.orderId + ': <em>' + (resolveProductName(obj.orderData) || '?') + '</em>';
       obj.operation = obj.operationNo + ': <em>' + (operation.name || '?') + '</em>';
     }
     else
