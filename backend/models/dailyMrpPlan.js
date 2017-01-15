@@ -66,6 +66,7 @@ module.exports = function setupDailyMrpPlanModel(app, mongoose)
   });
 
   dailyMrpPlanSchema.index({date: -1, mrp: 1}, {unique: true});
+  dailyMrpPlanSchema.index({'orders._id': -1});
 
   dailyMrpPlanSchema.statics.TOPIC_PREFIX = 'dailyMrpPlans';
 
