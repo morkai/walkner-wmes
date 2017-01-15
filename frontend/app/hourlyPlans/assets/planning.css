@@ -213,6 +213,10 @@
 .dailyMrpPlan-lineOrders-container + .dailyMrpPlan-lineOrders-container > .dailyMrpPlan-lineOrders:first-child > .dailyMrpPlan-lineOrders-list {
   border-top-color: #999;
 }
+.dailyMrpPlan-lineOrders-container .dailyMrpPlan-popover th,
+.dailyMrpPlan-lineOrders-container .dailyMrpPlan-popover td {
+  height: 18px;
+}
 .dailyMrpPlan-lineOrders .dailyMrpPlan-list {
   width: 100%;
   background-color: #ccc;
