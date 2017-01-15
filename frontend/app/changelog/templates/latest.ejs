@@ -1,31 +1,24 @@
-<h1>v0.102.0</h1>
-<h2><%- time.format('2017-01-01', 'LL') %></h2>
-<h3>Formatka operatora</h3>
+<h1>v0.103.0</h1>
+<h2><%- time.format('2017-01-15', 'LL') %></h2>
+<h3>Zlecenia reszty działów</h3>
 <ul>
-  <li>Poprawiono rozpoznawanie starych numerów seryjnych IPT.</li>
-  <li>Poprawiono błąd powodujący nieprzeliczanie wartości 'Czas taktu' po operacji 'Poprawa zlecenia'.</li>
+  <li>Zmieniono filtr daty na stronie z listą zleceń tak, aby podanie dat nie było wymagane.</li>
+  <li>Zmieniono wyświetlanie nazwy wyrobu tak, aby wyświetlana była wartość 'Nazwa' ze zlecenia, jeżeli rozpoczyna się
+    od 6 znaków A-Z0-9, a dopiero potem wartość 'Opis' (jeżeli istnieje).</li>
+  <li>Dodano do strony szczegółów zlecenia wyświetlanie komponentów z malarnii znajdujących się w podrzędnych zleceniach.</li>
 </ul>
-<h3>Usprawnienia</h3>
+<h3>Baza testów</h3>
 <ul>
-  <li>Zmieniono filtry tak, aby można było wybrać kilka opcji na raz.</li>
+  <li>Zmieniono domyślny limit wyświetlanych klientów z 50 na 100.</li>
 </ul>
 <h3>Plany godzinowe</h3>
 <ul>
-  <li>Dodano możliwość ustawienia dla każdej linii sztywnej planowanej ilości wyświetlanej na ekranie
-    'Wydajność godzinowa'.</li>
+  <li>Zmieniono ograniczenie dodawania nowego planu tak, aby można było dodawać plany do 7 dni w przyszłości.</li>
+  <li>Zmieniono ograniczenie edycji tak, aby można było edytować plany do 24 godzin po dacie planu.</li>
+  <li>Dodano funkcjonalność generowania dziennego planu na podstawie kolejki zleceń.</li>
 </ul>
-<h3>Zlecenia reszty działów</h3>
+<h3>Watchdog</h3>
 <ul>
-  <li>Poprawiono błąd powodujący wyświetlanie wykonanej ilości jako <code>undefined</code>.</li>
-</ul>
-<h3>Dokumentacja</h3>
-<ul>
-  <li>Zmieniono akcję 'Znajdź zlecenie' na 'Znajdź zlecenie/dokument'. Nowy dokument dopisywany jest do lokalnej listy
-    dokumentów aktualnego zlecenia.</li>
-  <li>Zmieniono pole 'Filtruj dokumenty' tak, aby po wpisaniu pełnego 15NC, na liście pojawił się dany dokument.
-    Po otwarciu nowego dokumentu, dopisywany jest on do lokalnej listy dokumentów aktualnego zlecenia.</li>
-  <li>Zmieniono pole 'Filtruj dokumenty' tak, aby po wciśnięciu klawisza <kbd>Enter</kbd> otwierany był pierwszy dokument
-    na liście.</li>
-  <li>Dodano klawiaturę numeryczną do pola 'Filtruj dokumenty' w trybie dotykowym.</li>
-  <li>Dodano do nowego wyświetlacza dokumentów zapamiętywanie ostatnio otwartej strony dokumentu.</li>
+  <li>Zmieniono sprawdzanie żywotności serwerów tak, aby zapytania zostały automatycznie kończone, jeżeli trwają dłużej
+    niż 5 sekund.</li>
 </ul>

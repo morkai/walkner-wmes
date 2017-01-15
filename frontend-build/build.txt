@@ -785,6 +785,7 @@ app/pressWorksheets/PressWorksheet.js
 app/pressWorksheets/routes.js
 app/prodChangeRequests/util/isChangeRequest.js
 app/prodChangeRequests/util/createShowDeleteFormPage.js
+app/orders/util/resolveProductName.js
 app/prodDowntimes/util/decorateProdDowntimeChange.js
 app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
@@ -1113,6 +1114,7 @@ app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
 app/data/prodLog.js
 app/core/util/getShiftEndDate.js
+app/orders/util/resolveProductName.js
 app/data/views/renderOrgUnitPath.js
 app/core/util/getShiftStartInfo.js
 app/core/templates/userInfo.js
@@ -1244,6 +1246,7 @@ app/data/prodLog.js
 app/core/util/getShiftEndDate.js
 app/data/views/renderOrgUnitPath.js
 app/core/templates/userInfo.js
+app/orders/util/resolveProductName.js
 app/prodDowntimes/util/decorateProdDowntimeChange.js
 app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
