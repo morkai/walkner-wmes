@@ -24,6 +24,13 @@
 .dailyMrpPlan-toolbar .dropdown-menu {
   min-width: 100px;
 }
+.dailyMrpPlan-toolbar-showTimes {
+  padding-right: 10px!important;
+}
+.dailyMrpPlan-toolbar-showTimes > .fa {
+  margin-left: 10px;
+  width: 14px;
+}
 .dailyMrpPlan-hd {
   margin-top: 5px;
   margin-bottom: 5px;

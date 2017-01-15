@@ -90,7 +90,7 @@
     .name > span {
       display: block;
       overflow: hidden;
-      max-width: 340px;
+      max-width: <%- showTimes ? 340 : 400 %>px;
     }
     .nextShift {
       padding-bottom: 10px;
@@ -152,9 +152,11 @@
         <th>Lp.</th>
         <th>Nr zlecenia</th>
         <th>12NC</th>
-        <th>Wyrób</th>
         <th>Ilość</th>
+        <% if (showTimes) { %>
         <th>Czas</th>
+        <% } %>
+        <th>Wyrób</th>
       </thead>
       <tbody>
       <% orders.forEach(function(order) { %>
@@ -167,13 +169,16 @@
         <td class="no"><%- order.no %>.</td>
         <td class="orderNo"><%- order.orderNo %></td>
         <td class="nc12"><%- order.nc12 %></td>
-        <td class="name"><span><%= order.name %></span></td>
         <td class="qty"><%- order.qtyPlan %>/<%- order.qtyTodo %></td>
+        <% if (showTimes) { %>
         <td class="time"><%- time.format(order.startAt, 'HH:mm') %>-<%- time.format(order.finishAt, 'HH:mm') %></td>
+        <% } %>
+        <td class="name"><span><%= order.name %></span></td>
       </tr>
       <% }) %>
       </tbody>
     </table>
+    <% if (orders.length <= 35) { %>
     <h2>Plan godzinowy</h2>
     <table class="hourlyPlan">
       <thead>
@@ -214,10 +219,11 @@
       </tr>
       </tbody>
     </table>
+    <% } %>
   </section>
   <footer>
     <p>Plan dla linii <%= line %> na dzień <%- time.format(date, 'LL') %>.</p>
-    <p>Wygenerowano przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
+    <p>Wygenerowano <%- time.format(Date.now(), 'LLLL') %> przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
   </footer>
 </section>
 </body>

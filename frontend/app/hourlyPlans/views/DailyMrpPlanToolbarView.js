@@ -59,7 +59,16 @@ define([
       'click a[data-print-line]': function(e)
       {
         this.printLine(e.currentTarget.dataset.printLine);
-      }
+      },
+      'click #-showTimes': function()
+      {
+        this.model.collection.options.set('printOrderTimes', !this.model.collection.options.get('printOrderTimes'));
+
+        this.toggleShowTimes();
+
+        return false;
+      },
+      'show.bs.dropdown #-printDropdown': 'toggleShowTimes'
 
     },
 
@@ -110,6 +119,7 @@ define([
         line: line.id,
         date: plan.date,
         hourlyPlan: line.get('hourlyPlan'),
+        showTimes: plan.collection.options.get('printOrderTimes'),
         orders: line.orders.map(function(lineOrder, i)
         {
           var order = plan.orders.get(lineOrder.get('orderNo'));
@@ -133,6 +143,15 @@ define([
       });
 
       win.print();
+    },
+
+    toggleShowTimes: function()
+    {
+      this.$id('showTimes')
+        .blur()
+        .find('.fa')
+        .removeClass('fa-check fa-times')
+        .addClass(this.model.collection.options.get('printOrderTimes') ? 'fa-check' : 'fa-times');
     }
 
   });

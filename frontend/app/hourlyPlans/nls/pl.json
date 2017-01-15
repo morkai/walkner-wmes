@@ -64,6 +64,7 @@
   "planning:toolbar:savePlan": "Zapisz plan",
   "planning:toolbar:setHourlyPlan": "Ustaw ilości godzinowe",
   "planning:toolbar:printPlan": "Drukuj plan linii",
+  "planning:toolbar:showTimes": "Pokazuj czasy",
   "planning:lines:hd": "Linie",
   "planning:lines:edit": "Ustaw dostępne linie",
   "planning:lines:division": "Wydział",

@@ -65,6 +65,7 @@
     "planning:toolbar:savePlan": "Save plan",
     "planning:toolbar:setHourlyPlan": "Set hourly quantities",
     "planning:toolbar:printPlan": "Print line plan",
+    "planning:toolbar:showTimes": "Show times",
     "planning:lines:hd": "Lines",
     "planning:lines:edit": "Set available lines",
     "planning:lines:division": "Division",

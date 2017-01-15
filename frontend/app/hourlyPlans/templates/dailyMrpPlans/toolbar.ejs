@@ -5,7 +5,7 @@
     <button id="<%- idPrefix %>-setHourlyPlan" type="button" class="btn btn-default" title="<%- t('hourlyPlans', 'planning:toolbar:setHourlyPlan') %>"><i class="fa fa-calendar"></i></button>
   </div>
   <div class="btn-group" role="group">
-    <div class="btn-group" role="group">
+    <div id="<%- idPrefix %>-printDropdown" class="btn-group" role="group">
       <button id="<%- idPrefix %>-printPlan" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('hourlyPlans', 'planning:toolbar:printPlan') %>" <%- lines.length ? '' : 'disabled' %>>
         <i class="fa fa-print"></i>
       </button>
