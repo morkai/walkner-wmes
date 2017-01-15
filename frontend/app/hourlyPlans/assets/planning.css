@@ -270,6 +270,7 @@
   padding-right: 5px;
   vertical-align: middle;
   height: 24px;
+  white-space: nowrap;
 }
 .dailyMrpPlan-popover td {
   padding-right: 5px;

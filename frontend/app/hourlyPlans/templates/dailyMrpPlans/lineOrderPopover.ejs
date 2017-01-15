@@ -4,15 +4,21 @@
     <th><%- t('hourlyPlans', 'planning:lineOrders:orderNo') %>
     <td><%= lineOrder.orderNo %>
   <tr>
-    <th><%- t('hourlyPlans', 'planning:lineOrders:qty') %>
+    <th><%- t('hourlyPlans', 'planning:lineOrders:qty:planned') %>
     <td><%- lineOrder.qtyPlanned.toLocaleString() %>
-      <% if (lineOrder.qtyRemaining !== null && lineOrder.qtyTotal !== null) { %>
-      / <%- lineOrder.qtyRemaining.toLocaleString() %>
-      / <%- lineOrder.qtyTotal.toLocaleString() %>
-      <% } %>
-      <% if (lineOrder.incomplete) { %>
-      <%- t('hourlyPlans', 'planning:lineOrders:incomplete', {qty: lineOrder.incomplete.toLocaleString()}) %>
-      <% } %>
+  <% if (lineOrder.qtyRemaining) { %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:lineOrders:qty:remaining') %>
+    <td><%- lineOrder.qtyRemaining.toLocaleString() %>
+  <% } %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:lineOrders:qty:total') %>
+    <td><%- lineOrder.qtyTotal.toLocaleString() %>
+  <% if (lineOrder.incomplete) { %>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:lineOrders:qty:incomplete') %>
+    <td><%- lineOrder.incomplete.toLocaleString() %>
+  <% } %>
   <% if (lineOrder.pceTime) { %>
   <tr>
     <th><%- t('hourlyPlans', 'planning:lineOrders:pceTime') %>
