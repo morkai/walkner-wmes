@@ -88,7 +88,10 @@ define([
     onLinesReset: function()
     {
       this.$id('printPlan').prop('disabled', !this.model.lines.length);
-      this.$id('printList').html(renderPrintLineList({lines: this.model.lines.pluck('_id')}));
+      this.$id('printList').html(renderPrintLineList({
+        idPrefix: this.idPrefix,
+        lines: this.model.lines.pluck('_id')
+      }));
     },
 
     printLine: function(lineId)
