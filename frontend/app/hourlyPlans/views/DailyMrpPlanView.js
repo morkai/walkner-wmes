@@ -60,7 +60,7 @@ define([
       view.listenTo(plan, 'itemLeft', view.onItemLeft);
 
       view.listenTo(orders, 'reset', view.generatePlan);
-      view.listenTo(orders, 'change:operation', view.generatePlan);
+      view.listenTo(orders, 'change:operation change:qtyPlan', view.generatePlan);
 
       view.listenTo(lines, 'reset', view.renderLineOrders);
       view.listenTo(lines, 'reset', view.generatePlan);
@@ -78,10 +78,17 @@ define([
 
     generatePlan: function(model, options)
     {
-      if (!options || !options.skipGenerate)
+      if (options && options.skipGenerate)
       {
-        this.model.generate();
+        return;
       }
+
+      if (this.timers.generatePlan)
+      {
+        clearTimeout(this.timers.generatePlan);
+      }
+
+      this.timers.generatePlan = setTimeout(this.model.generate.bind(this.model), 10);
     },
 
     serialize: function()

@@ -96,11 +96,12 @@ define([
       this.selected = null;
       this.mouseovered = null;
       this.ignoreScroll = false;
-      this.selectedOperation = null;
+      this.selectedOperation = undefined;
 
       this.onResize = _.debounce(this.resize.bind(this), 16);
 
       this.listenTo(this.model, 'reset', this.render);
+      this.listenTo(this.model, 'change:qtyPlan', this.onQtyPlanChanged);
       this.listenTo(this.model, 'change:operation', this.onOperationChanged);
       this.listenTo(this.model, 'saveChangesRequested', this.onSaveChangesRequested);
       this.listenTo(this.model.plan.collection, 'itemSelected', this.onItemSelected);
@@ -410,11 +411,18 @@ define([
       }
     },
 
-    onOperationChanged: function(line)
+    onQtyPlanChanged: function(order)
     {
-      var editable = line.id === this.selected;
+      this.updatePopover(order.id, order.id === this.selected);
 
-      this.updatePopover(line.id, editable);
+      this.$item(this.selected).find('[data-property="qtyPlan"]').toggleClass('hidden', !order.get('qtyPlan'));
+    },
+
+    onOperationChanged: function(order)
+    {
+      var editable = order.id === this.selected;
+
+      this.updatePopover(order.id, editable);
 
       if (editable && this.lastOperations)
       {
@@ -468,16 +476,21 @@ define([
 
     saveChanges: function($item)
     {
-      var newOperation = this.selectedOperation;
+      var popover = $item.data('bs.popover');
 
-      if (!newOperation)
+      if (!popover)
       {
         return;
       }
 
-      this.selectedOperation = null;
+      var $tip = popover.tip();
 
-      this.model.get($item[0].dataset.id).setOperation(newOperation);
+      this.model.get($item[0].dataset.id).update({
+        qtyPlan: Math.max(0, parseInt($tip.find('[name="qtyPlan"]').val(), 10)),
+        operation: this.selectedOperation
+      });
+
+      this.selectedOperation = undefined;
     },
 
     loadOperations: function()
@@ -486,7 +499,7 @@ define([
       var selected = view.selected;
       var url = '/orders/' + selected + '?select(operations)';
 
-      view.selectedOperation = null;
+      view.selectedOperation = undefined;
 
       view.ajax({url: url}).done(function(order)
       {
@@ -528,7 +541,7 @@ define([
         .html(html)
         .on('change', function(e)
         {
-          view.selectedOperation = _.find(operations, {no: e.target.value});
+          view.selectedOperation = _.find(operations, {no: e.target.value}) || undefined;
 
           view.$(e.target).closest('table').find('[data-property="laborTime"]').text(
             parseFloat(e.target.selectedOptions[0].dataset.laborTime).toLocaleString()

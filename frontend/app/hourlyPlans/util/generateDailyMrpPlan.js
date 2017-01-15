@@ -15,7 +15,7 @@ define([
 ) {
   'use strict';
 
-  var debug = window.ENV !== 'production';
+  var debug = false;window.ENV !== 'production';
   var generating = false;
 
   return function generateDailyMrpPlan(plan)
@@ -24,7 +24,7 @@ define([
 
     if (debug)
     {
-      console.clear();
+      //console.clear();
     }
 
     if (generating)
@@ -109,10 +109,7 @@ define([
 
     while (step());
 
-    if (debug)
-    {
-      console.log('generateDailyMrpPlan', plan.id, Math.round((performance.now() - T) * 1000) / 1000);
-    }
+    if (debug) console.log('Plan generated:', plan.id, Math.round((performance.now() - T) * 1000) / 1000);
 
     lines.forEach(function(line)
     {
@@ -143,7 +140,8 @@ define([
         return false;
       }
 
-      var qtyTodo = currentOrder.get('qtyTodo');
+      var qtyPlan = currentOrder.get('qtyPlan');
+      var qtyTodo = qtyPlan > 0 ? qtyPlan : currentOrder.get('qtyTodo');
       var qtyDone = currentOrder.get('qtyDone');
       var qtyRemaining = qtyTodo - qtyDone;
 

@@ -24,7 +24,8 @@ define([
         completed: this.isCompleted(),
         confirmed: this.isConfirmed(),
         delivered: this.isDelivered(),
-        invalid: !this.isValid()
+        invalid: !this.isValid(),
+        customQty: this.get('qtyPlan') > 0
       };
     },
 
@@ -106,12 +107,28 @@ define([
       return Math.floor(laborTime / workerCount / 100 * 3600 * 1000);
     },
 
-    setOperation: function(newOperation)
+    update: function(data)
     {
-      this.collection.plan.collection.update('updateOrder', this.collection.plan.id, {
-        _id: this.id,
-        operation: this.constructor.prepareOperation(newOperation)
-      });
+      var changes = {
+        _id: this.id
+      };
+
+      if (data.operation !== undefined)
+      {
+        changes.operation = this.constructor.prepareOperation(data.operation);
+      }
+
+      if (_.isNumber(data.qtyPlan))
+      {
+        changes.qtyPlan = Math.max(0, data.qtyPlan);
+      }
+
+      var attrs = this.attributes;
+
+      if (_.some(changes, function(v, k) { return !_.isEqual(attrs[k], v); }))
+      {
+        this.collection.plan.collection.update('updateOrder', this.collection.plan.id, changes);
+      }
     }
 
   }, {
@@ -130,6 +147,7 @@ define([
         nc12: sapOrder.nc12 || '',
         name: resolveProductName(sapOrder),
         rbh: mrpOrder && mrpOrder.rbh ? mrpOrder.rbh : 0,
+        qtyPlan: 0,
         qtyTodo: sapOrder.qty || 0,
         qtyDone: sapOrder.qtyDone && sapOrder.qtyDone.total ? sapOrder.qtyDone.total : 0,
         statuses: sapOrder.statuses || [],
@@ -144,6 +162,7 @@ define([
         nc12: mrpOrder.nc12 || '',
         name: mrpOrder.name || '',
         rbh: mrpOrder.rbh || 0,
+        qtyPlan: 0,
         qtyTodo: mrpOrder.qty || 0,
         qtyDone: 0,
         statuses: [],

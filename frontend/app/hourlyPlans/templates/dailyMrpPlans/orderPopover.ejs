@@ -13,7 +13,21 @@
     <td><%= order.nc12 %>
   <tr>
     <th><%- t('hourlyPlans', 'planning:orders:qty') %>
-    <td class="<%- order.completed ? 'is-completed': '' %>"><%- order.qtyDone.toLocaleString() %>/<%- order.qtyTodo.toLocaleString() %>
+    <td>
+      <% if (editable) { %>
+      <input class="dailyMrpPlan-popover-input" name="qtyPlan" type="number" value="<%- order.qtyPlan || '' %>" placeholder="<%- order.qtyTodo %>" min="0" max="999" step="1">
+      <% } else { %>
+      <span class="<%- order.completed ? 'is-completed': '' %>">
+        <% if (order.qtyPlan) { %>
+        <%- order.qtyDone.toLocaleString() %>/<strike><%- order.qtyTodo.toLocaleString() %></strike>
+        <% } else { %>
+        <%- order.qtyDone.toLocaleString() %>/<%- order.qtyTodo.toLocaleString() %>
+        <% } %>
+      </span>
+      <% if (order.qtyPlan) { %>
+      <%- order.qtyPlan %>
+      <% } %>
+      <% } %>
   <!--
   <tr>
     <th><%- t('hourlyPlans', 'planning:orders:operation') %>
