@@ -15,22 +15,32 @@ define([
 ) {
   'use strict';
 
+  var debug = window.ENV !== 'production';
   var generating = false;
 
   return function generateDailyMrpPlan(plan)
   {
     /*jshint -W116*/
 
-    //console.clear();
+    if (debug)
+    {
+      console.clear();
+    }
 
     if (generating)
     {
-      console.log('Already generating...', plan.id);
+      if (debug)
+      {
+        console.log('Already generating...', plan.id);
+      }
 
       return;
     }
 
-    console.log('Generating...', plan.id);
+    if (debug)
+    {
+      console.log('Generating...', plan.id);
+    }
 
     var T = performance.now();
     var PLAN_DATE_TIME = plan.date.getTime();
@@ -99,7 +109,10 @@ define([
 
     while (step());
 
-    console.log('generateDailyMrpPlan', plan.id, Math.round((performance.now() - T) * 1000) / 1000);
+    if (debug)
+    {
+      console.log('generateDailyMrpPlan', plan.id, Math.round((performance.now() - T) * 1000) / 1000);
+    }
 
     lines.forEach(function(line)
     {
@@ -121,8 +134,12 @@ define([
     {
       var currentOrder = getNextOrder();
 
+      if (debug) console.log('step');
+
       if (!currentOrder)
       {
+        if (debug) console.log('done');
+
         return false;
       }
 
@@ -136,6 +153,9 @@ define([
       }
 
       var qty = QTY_REMAINING ? qtyRemaining : qtyTodo;
+
+      if (debug)
+        console.log(currentOrder.id, 'qty=', qty, 'todo=', qtyTodo, 'done=', qtyDone, 'remaining=', qtyRemaining);
 
       if (qty > BIG_ORDER_QTY)
       {
@@ -151,25 +171,35 @@ define([
 
     function handleBigOrder(currentOrder, qty)
     {
+      if (debug) console.log('BIG');
+
       var availableLines = getAvailableLines();
 
       if (availableLines.length === 0)
       {
+        if (debug) console.log('no available lines');
+
         return false;
       }
 
       if (availableLines.length === 1)
       {
+        if (debug) console.log('single line available');
+
         return handleSmallOrder(currentOrder, qty);
       }
 
       if (availableLines.length === 2)
       {
+        if (debug) console.log('two lines available', _.pluck(availableLines, 'id'));
+
         return splitTotalQty(qty, 2).forEach(function(partialQty)
         {
           handleSmallOrder(currentOrder, partialQty);
         });
       }
+
+      if (debug) console.log('%d available lines', availableLines.length, _.pluck(availableLines, 'id'));
 
       var all = [];
 
@@ -213,13 +243,20 @@ define([
         }
 
         all.push({
+          allOrderCount: allOrderCount,
+          bigOrderCount: bigOrderCount,
+          lineCount: lines.length,
           rank: rank,
           lines: lines,
           candidates: candidates
         });
 
+        if (debug) console.log('candidate', 'rank=', rank, 'lines=', _.pluck(lines, 'id'), candidates);
+
         if (rank === 3)
         {
+          if (debug) console.log('rank 3!');
+
           break;
         }
         /* jshint +W083 */
@@ -229,13 +266,20 @@ define([
       {
         if (a.rank === b.rank)
         {
-          return a.lines.length - b.lines.length;
+          if (a.candidates.length === b.lines.length)
+          {
+            return b.allOrderCount - a.allOrderCount;
+          }
+
+          return b.lineCount - a.lineCount;
         }
 
         return b.rank - a.rank;
       });
 
       var best = all[0];
+
+      if (debug) console.log('best', best);
 
       best.candidates.forEach(function(candidate, i)
       {
@@ -245,10 +289,14 @@ define([
 
     function handleSmallOrder(currentOrder, qty)
     {
+      if (debug) console.log('SMALL');
+
       var availableLines = getAvailableLines();
 
       if (availableLines.length === 0)
       {
+        if (debug) console.log('no available lines');
+
         return false;
       }
 
@@ -272,8 +320,12 @@ define([
     {
       if (hasIncompleteOrder(line.orders) && hasIncompleteOrder(candidate.orders))
       {
+        if (debug) console.log('merge: ignore incomplete');
+
         return;
       }
+
+      if (debug) console.log('merging', candidate.orders[0].orderNo, 'with', line.id, line);
 
       line.shiftNo = candidate.shiftNo;
       line.activeFrom = candidate.activeFrom;
@@ -290,6 +342,8 @@ define([
 
     function trySmallOrderOnLine(currentOrder, qty, line)
     {
+      if (debug) console.log('try small order', currentOrder.id, 'qty=', qty, 'line=', line);
+
       var pceTime = currentOrder.getPceTime(line.workerCount);
       var shiftNo = line.shiftNo;
       var nextDowntime = line.nextDowntime;
@@ -422,6 +476,8 @@ define([
           || (IGNORE_DLV && order.isDelivered())
           || !order.isValid())
         {
+          if (debug) console.log('ignoring order:', order.id);
+
           continue;
         }
 
