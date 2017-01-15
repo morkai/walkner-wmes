@@ -45,7 +45,14 @@ define([
 
       'click .dailyMrpPlan-list-item': function(e)
       {
-        this.toggleSelection(e.currentTarget.dataset.id);
+        var orderNo = e.currentTarget.dataset.id;
+
+        if (e.ctrlKey)
+        {
+          window.open('/#orders/' + orderNo);
+        }
+
+        this.toggleSelection(orderNo);
       },
 
       'mouseenter .dailyMrpPlan-list-item': function(e)

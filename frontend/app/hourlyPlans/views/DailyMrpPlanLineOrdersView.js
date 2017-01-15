@@ -23,8 +23,15 @@ define([
 
       'click .is-lineOrder': function(e)
       {
+        var lineOrder = this.model.orders.get(e.currentTarget.dataset.id);
+
+        if (e.ctrlKey)
+        {
+          window.open('/#orders/' + lineOrder.get('orderNo'));
+        }
+
         this.model.trigger('lineOrderClicked', {
-          lineOrder: this.model.orders.get(e.currentTarget.dataset.id)
+          lineOrder: lineOrder
         });
       },
 
@@ -48,6 +55,11 @@ define([
 
     initialize: function()
     {
+      this.mousedown = {
+        clientX: 0,
+        clientY: 0
+      };
+
       this.listenTo(this.model.orders, 'reset', this.render);
     },
 
