@@ -58,7 +58,7 @@ define([
       },
       'click a[data-print-line]': function(e)
       {
-        this.printLine(e.currentTarget.dataset.printLine);
+        this.printLines(e.currentTarget.dataset.printLine);
       },
       'click #-showTimes': function()
       {
@@ -94,12 +94,41 @@ define([
       }));
     },
 
-    printLine: function(lineId)
+    printLines: function(what)
     {
       var plan = this.model;
-      var line = plan.lines.get(lineId);
+      var lines = [];
 
-      if (!line)
+      if (_.isString(what))
+      {
+        if (what === '__ALL__')
+        {
+          lines = plan.lines.models;
+        }
+        else
+        {
+          var line = plan.lines.get(what);
+
+          if (line)
+          {
+            lines.push(line);
+          }
+        }
+      }
+      else
+      {
+        _.forEach(what, function(lineId)
+        {
+          var line = plan.lines.get(lineId);
+
+          if (line)
+          {
+            lines.push(line);
+          }
+        });
+      }
+
+      if (!lines.length)
       {
         return;
       }
@@ -119,28 +148,34 @@ define([
 
       win.document.body.innerHTML = renderPrintPage({
         mrp: plan.mrp.id,
-        line: line.id,
         date: plan.date,
-        hourlyPlan: line.get('hourlyPlan'),
+        lines: _.pluck(lines, 'id').join(', '),
         showTimes: plan.collection.options.get('printOrderTimes'),
-        orders: line.orders.map(function(lineOrder, i)
+        pages: lines.map(function(line)
         {
-          var order = plan.orders.get(lineOrder.get('orderNo'));
-          var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
-          var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
-
-          prevShiftNo = shiftNo;
-
           return {
-            no: i + 1,
-            orderNo: order.id,
-            nc12: order.get('nc12'),
-            name: order.get('name'),
-            qtyTodo: order.get('qtyTodo'),
-            qtyPlan: lineOrder.get('qty'),
-            startAt: lineOrder.get('startAt'),
-            finishAt: lineOrder.get('finishAt'),
-            nextShift: nextShift
+            line: line.id,
+            hourlyPlan: line.get('hourlyPlan'),
+            orders: line.orders.map(function(lineOrder, i)
+            {
+              var order = plan.orders.get(lineOrder.get('orderNo'));
+              var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
+              var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
+
+              prevShiftNo = shiftNo;
+
+              return {
+                no: i + 1,
+                orderNo: order.id,
+                nc12: order.get('nc12'),
+                name: order.get('name'),
+                qtyTodo: order.get('qtyTodo'),
+                qtyPlan: lineOrder.get('qty'),
+                startAt: lineOrder.get('startAt'),
+                finishAt: lineOrder.get('finishAt'),
+                nextShift: nextShift
+              };
+            })
           };
         })
       });

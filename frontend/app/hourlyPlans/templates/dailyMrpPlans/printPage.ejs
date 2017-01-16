@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Plan dla linii <%= line %> na dzień <%- time.format(date, 'LL') %></title>
+  <title>Plan dla linii <%= lines %> na dzień <%- time.format(date, 'LL') %></title>
   <style>
     @page {
       size: A4 portrait;
@@ -46,9 +46,6 @@
     footer p:first-child {
       margin-bottom: 3px;
     }
-    .bd {
-      height: 880px;
-    }
     .props {
       float: right;
       display: flex;
@@ -74,6 +71,8 @@
     }
     th {
       text-align: left;
+      padding-right: 10px;
+      white-space: nowrap;
     }
     td {
       padding-top: 8px;
@@ -109,15 +108,20 @@
       border-bottom: 1px solid #000;
     }
     .hourlyPlan th {
+      padding-left: 10px;
+      padding-right: 10px;
       text-align: center;
     }
     .hourlyPlan td {
-      width: 1%;
       padding-left: 10px;
       padding-right: 10px;
+      width: 1%;
+      text-align: center;
     }
+    .hourlyPlan th:first-child,
     .hourlyPlan td:first-child {
       padding-left: 0;
+      text-align: left;
     }
     .hourlyPlan td:last-child {
       width: auto;
@@ -127,10 +131,17 @@
         width: 100%;
         padding: 0;
       }
+      .page + .page {
+        page-break-before: always;
+      }
+      .bd {
+        height: 880px;
+      }
     }
   </style>
 </head>
 <body>
+<% pages.forEach(function(page) { %>
 <section class="page">
   <header>
     <div class="props">
@@ -144,7 +155,7 @@
       </div>
       <div class="prop">
         <span>Linia:</span>
-        <span><%= line %></span>
+        <span><%= page.line %></span>
       </div>
     </div>
     Plan dnia
@@ -162,7 +173,7 @@
         <% } %>
       </thead>
       <tbody>
-      <% orders.forEach(function(order) { %>
+      <% page.orders.forEach(function(order) { %>
       <% if (order.nextShift) { %>
       <tr class="nextShift">
         <td colspan="6"></td>
@@ -181,7 +192,7 @@
       <% }) %>
       </tbody>
     </table>
-    <% if (orders.length <= 35) { %>
+    <% if (page.orders.length <= 35) { %>
     <h2>Plan godzinowy</h2>
     <table class="hourlyPlan">
       <thead>
@@ -202,21 +213,21 @@
       <tr>
         <td>I</td>
         <% for (var h = 0; h < 8; ++h) { %>
-        <td><%- hourlyPlan[h] %></td>
+        <td><%- page.hourlyPlan[h] %></td>
         <% } %>
         <td></td>
       </tr>
       <tr>
         <td>II</td>
         <% for (var h = 8; h < 16; ++h) { %>
-        <td><%- hourlyPlan[h] %></td>
+        <td><%- page.hourlyPlan[h] %></td>
         <% } %>
         <td></td>
       </tr>
       <tr>
         <td>III</td>
         <% for (var h = 16; h < 24; ++h) { %>
-        <td><%- hourlyPlan[h] %></td>
+        <td><%- page.hourlyPlan[h] %></td>
         <% } %>
         <td></td>
       </tr>
@@ -225,9 +236,10 @@
     <% } %>
   </section>
   <footer>
-    <p>Plan dla linii <%= line %> na dzień <%- time.format(date, 'LL') %>.</p>
-    <p>Wygenerowano <%- time.format(Date.now(), 'LLLL') %> przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
+    <p>Plan dla linii <%= page.line %> na dzień <%- time.format(date, 'LL') %>.</p>
+    <p>Wydrukowano w <%- time.format(Date.now(), 'LLLL') %> przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
   </footer>
 </section>
+<% }) %>
 </body>
 </html>

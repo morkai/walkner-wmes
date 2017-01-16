@@ -1,8 +1,11 @@
+<% if (lines.length > 1) { %>
+<li><a data-print-line="__ALL__" href="javascript:void(0)"><%= t('hourlyPlans', 'planning:toolbar:printPlan:all') %></a>
+<% } %>
 <% lines.forEach(function(line) { %>
-<li data-line><a data-print-line="<%= line %>" href="javascript:void(0)"><%= line %></a>
+<li><a data-print-line="<%= line %>" href="javascript:void(0)"><%= line %></a>
 <% }) %>
 <li class="divider">
 <li>
   <a id="<%- idPrefix %>-showTimes" class="dailyMrpPlan-toolbar-showTimes" href="javascript:void(0)">
-    <span><%= t('hourlyPlans', 'planning:toolbar:showTimes') %></span><span class="fa fa-check"></span>
+    <span><%- t('hourlyPlans', 'planning:toolbar:showTimes') %></span><span class="fa fa-check"></span>
   </a>
