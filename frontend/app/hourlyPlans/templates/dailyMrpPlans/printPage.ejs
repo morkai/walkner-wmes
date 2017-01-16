@@ -38,6 +38,7 @@
       border-bottom: 1px solid #000;
     }
     footer {
+      display: flex;
       padding-top: 5mm;
       margin-top: 5mm;
       border-top: 1px solid #000;
@@ -45,6 +46,13 @@
     }
     footer p:first-child {
       margin-bottom: 3px;
+    }
+    footer > div:first-child {
+      flex: 1 1 auto;
+    }
+    footer > div:last-child {
+      flex: 1 1 auto;
+      text-align: right;
     }
     .props {
       float: right;
@@ -128,6 +136,9 @@
       width: auto;
     }
     @media print {
+      body {
+        margin: 0;
+      }
       .page {
         width: 100%;
         padding: 0;
@@ -136,7 +147,7 @@
         page-break-before: always;
       }
       .bd {
-        height: 880px;
+        height: 900px;
       }
     }
   </style>
@@ -159,7 +170,11 @@
         <span><%= page.line %></span>
       </div>
     </div>
+    <% if (page.pageCount > 1) { %>
+    Plan dnia, cz. <%- page.pageNo %>
+    <% } else { %>
     Plan dnia
+    <% } %>
   </header>
   <section class="bd">
     <table>
@@ -193,7 +208,7 @@
       <% }) %>
       </tbody>
     </table>
-    <% if (page.orders.length <= 35) { %>
+    <% if (page.hourlyPlan) { %>
     <h2>Plan godzinowy</h2>
     <table class="hourlyPlan">
       <thead>
@@ -237,8 +252,13 @@
     <% } %>
   </section>
   <footer>
-    <p>Plan dla linii <%= page.line %> na dzień <%- time.format(date, 'LL') %>.</p>
-    <p>Wydrukowano w <%- time.format(Date.now(), 'LLLL') %> przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
+    <div>
+      <p>Plan dla linii <%= page.line %> na dzień <%- time.format(date, 'LL') %>.</p>
+      <p>Wydrukowano w <%- time.format(Date.now(), 'LLLL') %> przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
+    </div>
+    <div>
+      Strona <%- page.pageNo %> z <%- page.pageCount %>
+    </div>
   </footer>
 </section>
 <% }) %>

@@ -144,43 +144,85 @@ define([
         });
       }
 
-      var prevShiftNo = -1;
-
       win.document.body.innerHTML = renderPrintPage({
         mrp: plan.mrp.id,
         date: plan.date,
         lines: _.pluck(lines, 'id').join(', '),
         showTimes: plan.collection.options.get('printOrderTimes'),
-        pages: lines.map(function(line)
-        {
-          return {
-            line: line.id,
-            hourlyPlan: line.get('hourlyPlan'),
-            orders: line.orders.map(function(lineOrder, i)
-            {
-              var order = plan.orders.get(lineOrder.get('orderNo'));
-              var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
-              var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
-
-              prevShiftNo = shiftNo;
-
-              return {
-                no: i + 1,
-                orderNo: order.id,
-                nc12: order.get('nc12'),
-                name: order.get('name'),
-                qtyTodo: order.get('qtyTodo'),
-                qtyPlan: lineOrder.get('qty'),
-                startAt: lineOrder.get('startAt'),
-                finishAt: lineOrder.get('finishAt'),
-                nextShift: nextShift
-              };
-            })
-          };
-        })
+        pages: this.serializePrintPages(lines)
       });
 
       win.print();
+    },
+
+    serializePrintPages: function(lines)
+    {
+      var plan = this.model;
+      var prevShiftNo = -1;
+      var pages = [];
+
+      lines.map(function(line)
+      {
+        var bigPage = {
+          pageNo: 1,
+          pageCount: 1,
+          line: line.id,
+          hourlyPlan: line.get('hourlyPlan'),
+          orders: line.orders.map(function(lineOrder, i)
+          {
+            var order = plan.orders.get(lineOrder.get('orderNo'));
+            var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
+            var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
+
+            prevShiftNo = shiftNo;
+
+            return {
+              no: i + 1,
+              orderNo: order.id,
+              nc12: order.get('nc12'),
+              name: order.get('name'),
+              qtyTodo: order.get('qtyTodo'),
+              qtyPlan: lineOrder.get('qty'),
+              startAt: lineOrder.get('startAt'),
+              finishAt: lineOrder.get('finishAt'),
+              nextShift: nextShift
+            };
+          })
+        };
+
+        var ordersPerPage = 42;
+        var maxOrdersForHourlyPlan = 35;
+        var orderCount = bigPage.orders.length;
+
+        if (orderCount <= ordersPerPage)
+        {
+          if (orderCount > maxOrdersForHourlyPlan)
+          {
+            bigPage.hourlyPlan = null;
+          }
+
+          pages.push(bigPage);
+
+          return;
+        }
+
+        var pageCount = Math.ceil(orderCount / ordersPerPage);
+
+        for (var pageNo = 1; pageNo <= pageCount; ++pageNo)
+        {
+          var orders = bigPage.orders.slice((pageNo - 1) * ordersPerPage, pageNo * ordersPerPage);
+
+          pages.push({
+            pageNo: pageNo,
+            pageCount: pageCount,
+            line: bigPage.line,
+            hourlyPlan: pageNo === pageCount && orders.length <= maxOrdersForHourlyPlan ? bigPage.hourlyPlan : null,
+            orders: orders
+          });
+        }
+      });
+
+      return pages;
     },
 
     toggleShowTimes: function()

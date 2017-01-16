@@ -11,7 +11,7 @@
     <% if (i == 0) { %>
     <div class="dailyMrpPlan-list-hd"><%= line %></div>
     <% } %>
-    <div class="dailyMrpPlan-lineOrders-shift"><%- t('core', 'SHIFT:' + shift.no) %></div>
+    <div class="dailyMrpPlan-lineOrders-shift" data-shift="<%- shift.no%>"><%- t('core', 'SHIFT:' + shift.no) %></div>
     <div id="<%- idPrefix %>-list-<%- shift.no %>" class="dailyMrpPlan-list dailyMrpPlan-lineOrders-list">
       <% shift.orders.forEach(function(shiftOrder) { %>
       <div class="dailyMrpPlan-list-item is-lineOrder <%- shiftOrder.incomplete ? 'is-incomplete' : ''%>" data-id="<%- shiftOrder._id %>" style="width: <%- shiftOrder.width %>%; margin-left: <%- shiftOrder.margin %>%">
