@@ -15,7 +15,7 @@ define([
 ) {
   'use strict';
 
-  var debug = false;window.ENV !== 'production';
+  var debug = 0 && window.ENV !== 'production';
   var generating = false;
 
   return function generateDailyMrpPlan(plan)

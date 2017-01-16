@@ -18,6 +18,9 @@
 .dailyMrpPlan-toolbar {
   float: right;
 }
+.dailyMrpPlan:first-child .dailyMrpPlan-toolbar {
+  margin-top: -5px;
+}
 .dailyMrpPlan-toolbar .btn {
   min-width: 40px;
 }
@@ -40,6 +43,18 @@
 }
 .dailyMrpPlan-hd-name {
   font-size: 12px;
+}
+.dailyMrpPlan-messages {
+  padding: 5px 0 10px 0;
+}
+.dailyMrpPlan-messages:empty {
+  display: none;
+}
+.dailyMrpPlan-message {
+  font-size: 12px;
+}
+.dailyMrpPlan-message + .dailyMrpPlan-message {
+  margin-top: -1px;
 }
 .dailyMrpPlan-bd + .dailyMrpPlan-bd {
   margin-top: -1px;

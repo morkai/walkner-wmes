@@ -51,6 +51,7 @@
     "planning:msg:invalidFile": "Dropped an invalid file!",
     "planning:msg:upload:failure": "Failed to upload the file :(",
     "planning:msg:upload:success": "File was uploaded successfully :)",
+    "planning:message:overlappingLine": "Line <b>{line}</b> is active at the same time in MRP <b class='dailyMrpPlan-message-mrp'>{mrp}</b>!",
     "planning:import:title": "Orders queue importing",
     "planning:import:date": "Date",
     "planning:import:mrps": "MRP Controller (# of orders)",

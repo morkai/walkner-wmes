@@ -8,7 +8,8 @@ define([
   './DailyMrpPlanLinesView',
   './DailyMrpPlanOrdersView',
   './DailyMrpPlanLineOrdersView',
-  'app/hourlyPlans/templates/dailyMrpPlans/plan'
+  'app/hourlyPlans/templates/dailyMrpPlans/plan',
+  'app/hourlyPlans/templates/dailyMrpPlans/_overlappingLineMessage'
 ], function(
   _,
   View,
@@ -17,7 +18,8 @@ define([
   DailyMrpPlanLinesView,
   DailyMrpPlanOrdersView,
   DailyMrpPlanLineOrdersView,
-  template
+  template,
+  renderOverlappingLineMessage
 ) {
   'use strict';
 
@@ -58,12 +60,16 @@ define([
       view.listenTo(plan, 'reset', view.render);
       view.listenTo(plan, 'itemEntered', view.onItemEntered);
       view.listenTo(plan, 'itemLeft', view.onItemLeft);
+      view.listenTo(plan, 'scrollIntoView', view.scrollIntoView);
+      view.listenTo(plan, 'overlappingLine', view.addOverlappingLineMessage);
+      view.listenTo(plan.collection, 'checkingOverlappingLines', view.removeOverlappingLinesMessages);
 
       view.listenTo(orders, 'reset', view.generatePlan);
       view.listenTo(orders, 'change:operation change:qtyPlan', view.generatePlan);
 
       view.listenTo(lines, 'reset', view.renderLineOrders);
       view.listenTo(lines, 'reset', view.generatePlan);
+      view.listenTo(lines, 'reset change:activeFrom change:activeTo', view.onLinesChanged);
       view.listenTo(lines, 'change:activeFrom change:activeTo change:workerCount', view.generatePlan);
       view.listenTo(lines, 'lineOrderClicked', view.onLineOrderClicked);
 
@@ -142,6 +148,11 @@ define([
       this.$id('timeline').toggleClass('hidden', !this.el.querySelector('.is-lineOrder'));
     },
 
+    onLinesChanged: function()
+    {
+      this.model.collection.trigger('checkOverlappingLinesRequested');
+    },
+
     onLineOrderClicked: function(e)
     {
       var orderNo = e.lineOrder.get('orderNo');
@@ -188,6 +199,24 @@ define([
       }
 
       return this.$('#NULL');
+    },
+
+    scrollIntoView: function()
+    {
+      this.el.scrollIntoView();
+    },
+
+    addOverlappingLineMessage: function(e)
+    {
+      this.$id('messages').append(renderOverlappingLineMessage({
+        line: e.line,
+        mrp: e.mrp
+      }));
+    },
+
+    removeOverlappingLinesMessages: function()
+    {
+      this.$('.message[data-message="overlappingLine"]').remove();
     }
 
   });

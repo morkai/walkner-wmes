@@ -8,6 +8,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  '../DailyMrpPlanLine',
   '../views/DailyMrpPlanFilterView',
   '../views/DailyMrpPlanView',
   '../views/DailyMrpPlanImportView',
@@ -20,6 +21,7 @@ define([
   viewport,
   View,
   bindLoadingMessage,
+  DailyMrpPlanLine,
   DailyMrpPlanFilterView,
   DailyMrpPlanView,
   DailyMrpPlanImportView,
@@ -42,35 +44,50 @@ define([
 
     events: {
 
+      'click .dailyMrpPlan-message-mrp': function(e)
+      {
+        var mrp = e.currentTarget.textContent;
+        var plan = this.model.find(function(plan) { return plan.mrp.id === mrp; });
 
+        if (plan)
+        {
+          plan.trigger('scrollIntoView');
+        }
+      }
 
     },
 
     initialize: function()
     {
-      var idPrefix = this.idPrefix;
-      var handleDragEvent = this.handleDragEvent.bind(this);
+      var page = this;
+      var idPrefix = page.idPrefix;
+      var handleDragEvent = page.handleDragEvent.bind(page);
 
-      this.model = bindLoadingMessage(this.model.subscribe(this.pubsub), this);
+      page.model = bindLoadingMessage(page.model.subscribe(page.pubsub), page);
 
-      this.filterView = new DailyMrpPlanFilterView({model: this.model});
+      page.filterView = new DailyMrpPlanFilterView({model: page.model});
 
-      this.setView('#' + idPrefix + '-filter', this.filterView);
+      page.setView('#' + idPrefix + '-filter', page.filterView);
 
-      this.listenTo(this.model, 'import', this.onImport);
-      this.listenTo(this.model, 'reset', _.after(1, this.onReset));
-      this.listenTo(this.model.options, 'change:wrap', this.onWrapChange);
+      page.listenTo(this.model, 'import', page.onImport);
+      page.listenTo(this.model, 'reset', _.after(1, page.onReset));
+      page.listenTo(
+        this.model,
+        'checkOverlappingLinesRequested',
+        _.debounce(page.checkOverlappingLines, 50)
+      );
+      page.listenTo(this.model.options, 'change:wrap', page.onWrapChange);
 
       $('body')
-        .on('paste.' + idPrefix, this.onBodyPaste.bind(this))
-        .on('keydown.' + idPrefix, this.onBodyKeyDown.bind(this));
+        .on('paste.' + idPrefix, page.onBodyPaste.bind(page))
+        .on('keydown.' + idPrefix, page.onBodyKeyDown.bind(page));
 
       $(document)
         .on('dragstart.' + idPrefix, handleDragEvent)
         .on('dragenter.' + idPrefix, handleDragEvent)
         .on('dragleave.' + idPrefix, handleDragEvent)
         .on('dragover.' + idPrefix, handleDragEvent)
-        .on('drop.' + idPrefix, this.onDrop.bind(this));
+        .on('drop.' + idPrefix, page.onDrop.bind(page));
     },
 
     destroy: function()
@@ -124,6 +141,7 @@ define([
 
       this.renderPlans();
       this.toggleMessages();
+      this.checkOverlappingLines();
     },
 
     toggleMessages: function()
@@ -458,6 +476,112 @@ define([
       else if (itemType === 'line')
       {
         plan.lines.trigger('saveChangesRequested');
+      }
+    },
+
+    checkOverlappingLines: function()
+    {
+      var page = this;
+
+      if (!this.model.length)
+      {
+        return;
+      }
+
+      var date = page.model.at(0).date.getTime();
+      var url = '/dailyMrpPlans'
+        + '?select(lines._id,lines.activeFrom,lines.activeTo)'
+        + '&date=' + date;
+
+      page.ajax({url: url}).done(function(res)
+      {
+        page.model.trigger('checkingOverlappingLines');
+
+        var planToLines = {};
+        var lineToPlans = {};
+
+        _.forEach(res.collection, function(plan)
+        {
+          if (_.isEmpty(plan.lines))
+          {
+            return;
+          }
+
+          planToLines[plan._id] = {};
+
+          plan.lines.forEach(function(line)
+          {
+            if (!lineToPlans[line._id])
+            {
+              lineToPlans[line._id] = [];
+            }
+
+            lineToPlans[line._id].push(plan._id);
+
+            planToLines[plan._id][line._id] = {
+              activeFrom: DailyMrpPlanLine.getActiveFromMoment(date, line.activeFrom).toDate(),
+              activeTo: DailyMrpPlanLine.getActiveToMoment(date, line.activeTo).toDate(),
+            };
+          });
+        });
+
+        _.forEach(lineToPlans, function(plans, line)
+        {
+          if (plans.length === 1)
+          {
+            return;
+          }
+
+          page.checkLineOverlapping(line, plans.map(function(plan)
+          {
+            return {
+              line: line,
+              plan: plan,
+              from: planToLines[plan][line].activeFrom,
+              to: planToLines[plan][line].activeTo,
+            };
+          }));
+        });
+      });
+    },
+
+    checkLineOverlapping: function(line, plans)
+    {
+      for (var i = 0; i < plans.length; ++i)
+      {
+        var a = plans[i];
+
+        for (var ii = i + 1; ii < plans.length; ++ii)
+        {
+          var b = plans[ii];
+
+          if (a.from >= b.to || a.to <= b.from)
+          {
+            continue;
+          }
+
+          var aPlan = this.model.get(a.plan);
+
+          if (aPlan)
+          {
+            aPlan.trigger('overlappingLine', {
+              line: line,
+              plan: b.plan,
+              mrp: b.plan.split('-')[1]
+            });
+          }
+
+          var bPlan = this.model.get(b.plan);
+
+          if (bPlan)
+          {
+            bPlan.trigger('overlappingLine', {
+              line: line,
+              plan: a.plan,
+              mrp: a.plan.split('-')[1]
+            });
+          }
+        }
       }
     }
 

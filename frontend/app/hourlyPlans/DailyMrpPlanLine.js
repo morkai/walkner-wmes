@@ -89,52 +89,12 @@ define([
 
     getActiveFromMoment: function(date)
     {
-      var moment = time.getMoment(date ? +date : +this.collection.plan.date);
-      var activeFrom = this.get('activeFrom');
-      var h = 6;
-      var m = 0;
-
-      if (activeFrom)
-      {
-        var parts = activeFrom.split(':');
-
-        h = +parts[0];
-        m = +parts[1];
-      }
-
-      if (h < 6)
-      {
-        moment.add(1, 'days');
-      }
-
-      moment.hours(h).minutes(m);
-
-      return moment;
+      return this.constructor.getActiveFromMoment(date ? +date : +this.collection.plan.date, this.get('activeFrom'));
     },
 
     getActiveToMoment: function(date)
     {
-      var moment = time.getMoment(date ? +date : +this.collection.plan.date);
-      var activeTo = this.get('activeTo');
-      var h = 6;
-      var m = 0;
-
-      if (activeTo)
-      {
-        var parts = activeTo.split(':');
-
-        h = +parts[0];
-        m = +parts[1];
-      }
-
-      if (h < 6 || (h === 6 && m === 0))
-      {
-        moment.add(1, 'days');
-      }
-
-      moment.hours(h).minutes(m);
-
-      return moment;
+      return this.constructor.getActiveToMoment(date ? +date : +this.collection.plan.date, this.get('activeTo'));
     },
 
     update: function(data)
@@ -177,6 +137,56 @@ define([
         orders: []
       });
       this.orders.reset([]);
+    }
+
+  }, {
+
+    getActiveFromMoment: function(date, activeFrom)
+    {
+      var moment = time.getMoment(+date);
+      var h = 6;
+      var m = 0;
+
+      if (activeFrom)
+      {
+        var parts = activeFrom.split(':');
+
+        h = +parts[0];
+        m = +parts[1];
+      }
+
+      if (h < 6)
+      {
+        moment.add(1, 'days');
+      }
+
+      moment.hours(h).minutes(m);
+
+      return moment;
+    },
+
+    getActiveToMoment: function(date, activeTo)
+    {
+      var moment = time.getMoment(+date);
+      var h = 6;
+      var m = 0;
+
+      if (activeTo)
+      {
+        var parts = activeTo.split(':');
+
+        h = +parts[0];
+        m = +parts[1];
+      }
+
+      if (h < 6 || (h === 6 && m === 0))
+      {
+        moment.add(1, 'days');
+      }
+
+      moment.hours(h).minutes(m);
+
+      return moment;
     }
 
   });
