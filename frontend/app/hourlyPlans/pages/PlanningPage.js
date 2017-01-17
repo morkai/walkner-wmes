@@ -38,8 +38,7 @@ define([
     actions: null,
 
     breadcrumbs: [
-      {href: '#hourlyPlans', label: t.bound('hourlyPlans', 'BREADCRUMBS:browse')},
-      t.bound('hourlyPlans', 'BREADCRUMBS:planning')
+      t.bound('hourlyPlans', 'BREADCRUMBS:dailyMrpPlans')
     ],
 
     events: {
@@ -195,14 +194,17 @@ define([
       var currentFilter = this.model.getCurrentFilter();
       var changed = false;
 
-      _.forEach(currentFilter, function(v, p)
+      if (!currentFilter.date && storedFilter.date)
       {
-        if (_.isEmpty(v) && !_.isEmpty(storedFilter[p]))
-        {
-          currentFilter[p] = storedFilter[p];
-          changed = true;
-        }
-      });
+        currentFilter.date = storedFilter.date;
+        changed = true;
+      }
+
+      if (_.isEmpty(currentFilter.mrp) && !_.isEmpty(storedFilter.mrp))
+      {
+        currentFilter.mrp = storedFilter.mrp;
+        changed = true;
+      }
 
       if (changed)
       {
@@ -218,7 +220,7 @@ define([
     updateClientUrl: function()
     {
       this.broker.publish('router.navigate', {
-        url: '/hourlyPlans;planning?' + this.model.rqlQuery,
+        url: '/dailyMrpPlans?' + this.model.rqlQuery,
         trigger: false,
         replace: true
       });

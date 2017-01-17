@@ -4,7 +4,7 @@
     "BREADCRUMBS:addForm": "Choosing",
     "BREADCRUMBS:editForm": "Planning",
     "BREADCRUMBS:heffLineStates": "Hourly efficiency",
-    "BREADCRUMBS:planning": "Planning",
+    "BREADCRUMBS:dailyMrpPlans": "Daily MRP plans",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
     "MSG:LOADING_FAILURE": "Failed to load the hourly plans :(",

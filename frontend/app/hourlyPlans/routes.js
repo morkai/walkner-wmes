@@ -7,6 +7,8 @@ define([
   '../user',
   '../time',
   '../core/util/showDeleteFormPage',
+  '../core/util/getRelativeDateRange',
+  '../core/util/fixRelativeDateInRql',
   './HourlyPlan',
   './HourlyPlanCollection'
 ], function(
@@ -16,6 +18,8 @@ define([
   user,
   time,
   showDeleteFormPage,
+  getRelativeDateRange,
+  fixRelativeDateInRql,
   HourlyPlan,
   HourlyPlanCollection
 ) {
@@ -37,7 +41,7 @@ define([
       function(HourlyPlanCollection, HourlyPlanListPage)
       {
         return new HourlyPlanListPage({
-          collection: new HourlyPlanCollection(null, {rqlQuery: req.rql})
+          collection: new HourlyPlanCollection(null, {rqlQuery: fixRelativeDateInRql(req.rql, 'date', true)})
         });
       }
     );
@@ -62,6 +66,15 @@ define([
 
   router.map('/hourlyPlans;planning', canManage, function(req)
   {
+    broker.publish('router.navigate', {
+      url: '/dailyMrpPlans?' + req.rql,
+      replace: true,
+      trigger: true
+    });
+  });
+
+  router.map('/dailyMrpPlans', canManage, function(req)
+  {
     viewport.loadPage(
       [
         'app/hourlyPlans/DailyMrpPlanCollection',
@@ -72,7 +85,7 @@ define([
       {
         return new PlanningPage({
           model: new DailyMrpPlanCollection(null, {
-            rqlQuery: req.rql,
+            rqlQuery: fixRelativeDateInRql(req.rql, 'date', false, 'YYYY-MM-DD'),
             paginate: false
           })
         });
@@ -80,18 +93,25 @@ define([
     );
   });
 
-  router.map('/hourlyPlans;add', canManage, function()
+  router.map('/hourlyPlans;add', canManage, function(req)
   {
     viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanAddFormPage', nls], function(HourlyPlanAddFormPage)
     {
-      return new HourlyPlanAddFormPage();
+      var dateRange = getRelativeDateRange(req.query.date);
+
+      return new HourlyPlanAddFormPage({
+        model: new HourlyPlan({
+          date: dateRange ? dateRange.from.setHours(6) : null
+        })
+      });
     });
   });
 
   router.map('/hourlyPlans/:date/:division', canView, function(req)
   {
+    var date = req.params.date;
     var hourlyPlans = new HourlyPlanCollection(null, {
-      rqlQuery: 'select(_id)&date=' + req.params.date + '&division=' + req.params.division
+      rqlQuery: 'select(_id)&date=' + date + '&division=' + req.params.division
     });
 
     hourlyPlans.on('error', showListPage);
@@ -118,8 +138,8 @@ define([
     {
       broker.publish('router.navigate', {
         url: '/hourlyPlans?sort(-date)&limit(20)'
-          + '&date>=' + req.params.date
-          + '&date<' + time.getMoment(+req.params.date).add(1, 'days').valueOf()
+          + '&date>=' + date
+          + '&date<' + time.getMoment(/^[0-9]+$/.test(date) ? +date : date).add(1, 'days').valueOf()
           + '&division=' + req.params.division,
         trigger: true,
         replace: true

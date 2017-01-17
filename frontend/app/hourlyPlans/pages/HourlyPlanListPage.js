@@ -41,7 +41,7 @@ define([
         pageActions.export(layout, this, this.collection),
         {
           label: t.bound('hourlyPlans', 'PAGE_ACTION:planning'),
-          href: '#hourlyPlans;planning',
+          href: '#dailyMrpPlans',
           icon: 'calculator',
           privileges: privileges
         }

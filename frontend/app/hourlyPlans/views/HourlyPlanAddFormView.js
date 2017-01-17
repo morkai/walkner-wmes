@@ -68,7 +68,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        date: getShiftStartInfo(new Date()).moment.format('YYYY-MM-DD')
+        date: getShiftStartInfo(this.model.get('date') || new Date()).moment.format('YYYY-MM-DD')
       };
     },
 
@@ -108,6 +108,11 @@ define([
         else
         {
           view.oudView.$id('division').select2('focus');
+        }
+
+        if (userDivision && view.model.get('date'))
+        {
+          view.$submit.click();
         }
       });
     },

@@ -1,0 +1,25 @@
+<li data-online data-privilege="HOURLY_PLANS:VIEW PROD_DATA:VIEW" data-module="hourlyPlans" class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('core', 'NAVBAR:PLANNING:main') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:PLANNING:hourly') %>
+    <li class="navbar-with-button">
+      <a href="#hourlyPlans"><%- t('core', 'NAVBAR:PLANNING:all') %></a>
+      <button class="btn btn-default" data-privilege="HOURLY_PLANS:MANAGE PROD_DATA:MANAGE" data-href="#hourlyPlans;add"><i class="fa fa-plus"></i></button>
+    <li class="navbar-with-button">
+      <a href="#hourlyPlans?date=0-1d&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:PLANNING:0d') %></a>
+      <button class="btn btn-default" data-privilege="HOURLY_PLANS:MANAGE PROD_DATA:MANAGE" data-href="#hourlyPlans;add?date=0d"><i class="fa fa-edit"></i></button>
+    <li class="navbar-with-button">
+      <a href="#hourlyPlans?date=1-2d&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:PLANNING:1d') %></a>
+      <button class="btn btn-default" data-privilege="HOURLY_PLANS:MANAGE PROD_DATA:MANAGE" data-href="#hourlyPlans;add?date=1d"><i class="fa fa-edit"></i></button>
+    <li class="navbar-with-button">
+      <a href="#hourlyPlans?date=2-3d&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:PLANNING:2d') %></a>
+      <button class="btn btn-default" data-privilege="HOURLY_PLANS:MANAGE PROD_DATA:MANAGE" data-href="#hourlyPlans;add?date=2d"><i class="fa fa-edit"></i></button>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:PLANNING:daily') %>
+    <li><a href="#dailyMrpPlans?date=0d" data-module="hourlyPlans"><%- t('core', 'NAVBAR:PLANNING:0d') %></a>
+    <li><a href="#dailyMrpPlans?date=1d" data-module="hourlyPlans"><%- t('core', 'NAVBAR:PLANNING:1d') %></a>
+    <li><a href="#dailyMrpPlans?date=2d" data-module="hourlyPlans"><%- t('core', 'NAVBAR:PLANNING:2d') %></a>
+  </ul>

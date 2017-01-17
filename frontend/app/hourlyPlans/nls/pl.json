@@ -3,7 +3,7 @@
   "BREADCRUMBS:addForm": "Wybieranie planu",
   "BREADCRUMBS:editForm": "Planowanie",
   "BREADCRUMBS:heffLineStates": "Wydajność godzinowa",
-  "BREADCRUMBS:planning": "Planowanie",
+  "BREADCRUMBS:dailyMrpPlans": "Plany dzienne MRP",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
   "MSG:LOADING_FAILURE": "Ładowanie planów godzinowych nie powiodło się :(",

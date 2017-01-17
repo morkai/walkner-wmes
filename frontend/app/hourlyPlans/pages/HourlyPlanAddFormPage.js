@@ -32,9 +32,9 @@ define([
 
     initialize: function()
     {
-      this.model = new HourlyPlan();
-
-      this.view = new HourlyPlanAddFormView({model: this.model});
+      this.view = new HourlyPlanAddFormView({
+        model: this.model
+      });
 
       this.listenTo(this.view, 'editable', function(hourlyPlan)
       {
