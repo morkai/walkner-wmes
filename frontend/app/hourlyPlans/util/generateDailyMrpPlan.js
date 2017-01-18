@@ -5,13 +5,15 @@ define([
   'app/time',
   'app/data/orgUnits',
   './shift',
-  './autoDowntimeCache'
+  './autoDowntimeCache',
+  '../DailyMrpPlanOrder'
 ], function(
   _,
   time,
   orgUnits,
   shiftUtil,
-  autoDowntimeCache
+  autoDowntimeCache,
+  DailyMrpPlanOrder
 ) {
   'use strict';
 
@@ -215,6 +217,7 @@ define([
         });
         var allOrderCount = 0;
         var bigOrderCount = 0;
+        var incompleteOrderCount = 0;
         var rank = 0;
 
         candidates.forEach(function(candidate)
@@ -226,6 +229,11 @@ define([
             if (order.qty > BIG_ORDER_QTY)
             {
               bigOrderCount += 1;
+            }
+
+            if (order.incomplete)
+            {
+              incompleteOrderCount += 1;
             }
           });
         });
@@ -240,6 +248,11 @@ define([
           rank += 2;
         }
 
+        if (incompleteOrderCount === 0)
+        {
+          rank += 1;
+        }
+
         all.push({
           allOrderCount: allOrderCount,
           bigOrderCount: bigOrderCount,
@@ -251,9 +264,9 @@ define([
 
         if (debug) console.log('candidate', 'rank=', rank, 'lines=', _.pluck(lines, 'id'), candidates);
 
-        if (rank === 3)
+        if (rank === 4)
         {
-          if (debug) console.log('rank 3!');
+          if (debug) console.log('rank 4!');
 
           break;
         }
@@ -336,6 +349,28 @@ define([
       {
         line.hourlyPlan[h] += candidate.hourlyPlan[h];
       }
+
+      handleIncompleteOrder(_.last(line.orders));
+    }
+
+    function handleIncompleteOrder(lineOrder)
+    {
+      if (!lineOrder.incomplete)
+      {
+        return;
+      }
+
+      var order = plan.orders.get(lineOrder.orderNo).toJSON();
+      var partialLineOrder = new DailyMrpPlanOrder(order);
+
+      partialLineOrder.set({
+        qtyDone: 0,
+        qtyPlan: lineOrder.incomplete
+      });
+
+      lineOrder.incomplete = 0;
+
+      orders.unshift(partialLineOrder);
     }
 
     function trySmallOrderOnLine(currentOrder, qty, line)
