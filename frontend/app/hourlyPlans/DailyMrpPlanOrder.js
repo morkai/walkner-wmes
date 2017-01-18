@@ -41,7 +41,9 @@ define([
 
     isValid: function()
     {
-      return this.isValidLaborTime();
+      return this.isValidLaborTime()
+        && this.isValidOperation()
+        && this.isValidStatus();
     },
 
     isValidOperation: function()
@@ -49,6 +51,13 @@ define([
       var operation = this.get('operation');
 
       return operation && operation.laborTime > 0;
+    },
+
+    isValidStatus: function()
+    {
+      var statuses = this.get('statuses');
+
+      return Array.isArray(statuses) && statuses.length > 0;
     },
 
     isValidLaborTime: function()
