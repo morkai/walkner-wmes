@@ -210,7 +210,9 @@ define([
     {
       this.$id('messages').append(renderOverlappingLineMessage({
         line: e.line,
-        mrp: e.mrp
+        mrp: e.mrp,
+        time1: e.from1 + '-' + e.to1,
+        time2: e.from2 + '-' + e.to2
       }));
     },
 

@@ -24,11 +24,6 @@ define([
   {
     /*jshint -W116*/
 
-    if (debug)
-    {
-      //console.clear();
-    }
-
     if (generating)
     {
       if (debug) console.log('Already generating...', plan.id);

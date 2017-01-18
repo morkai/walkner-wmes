@@ -569,7 +569,11 @@ define([
             aPlan.trigger('overlappingLine', {
               line: line,
               plan: b.plan,
-              mrp: b.plan.split('-')[1]
+              mrp: b.plan.split('-')[1],
+              from1: time.format(a.from, 'HH:mm'),
+              from2: time.format(b.from, 'HH:mm'),
+              to1: time.format(a.to, 'HH:mm'),
+              to2: time.format(b.to, 'HH:mm')
             });
           }
 
@@ -580,7 +584,11 @@ define([
             bPlan.trigger('overlappingLine', {
               line: line,
               plan: a.plan,
-              mrp: a.plan.split('-')[1]
+              mrp: a.plan.split('-')[1],
+              from1: time.format(b.from, 'HH:mm'),
+              from2: time.format(a.from, 'HH:mm'),
+              to1: time.format(b.to, 'HH:mm'),
+              to2: time.format(a.to, 'HH:mm')
             });
           }
         }

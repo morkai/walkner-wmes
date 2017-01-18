@@ -50,7 +50,7 @@
   "planning:msg:invalidFile": "Upuszczono nieprawidłowy plik!",
   "planning:msg:upload:failure": "Nie udało się załadować pliku :(",
   "planning:msg:upload:success": "Plik został załadowany :)",
-  "planning:message:overlappingLine": "Linia <b>{line}</b> jest aktywna w tym samym czasie na MRP <b class='dailyMrpPlan-message-mrp'>{mrp}</b>!",
+  "planning:message:overlappingLine": "Linia <b>{line}</b> ({time1}) jest aktywna w tym samym czasie na MRP <b class='dailyMrpPlan-message-mrp'>{mrp}</b> ({time2})!",
   "planning:import:title": "Importowanie kolejki zleceń",
   "planning:import:date": "Data planu",
   "planning:import:mrps": "Kontroler MRP (ilość zleceń w kolejce)",
