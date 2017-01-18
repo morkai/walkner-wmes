@@ -366,8 +366,6 @@ define([
         plan: this.model.plan,
         item: item
       });
-
-      this.loadOperations();
     },
 
     unselect: function()
