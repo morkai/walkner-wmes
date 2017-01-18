@@ -74,7 +74,14 @@ exports.start = function startUpdaterModule(app, module)
 
   module.updateFrontendVersion = function(frontendVersionKey)
   {
-    module.getVersions(false)[frontendVersionKey || module.config.frontendVersionKey] = Date.now();
+    const versions = module.getVersions(false);
+
+    if (typeof versions[frontendVersionKey] === 'undefined')
+    {
+      frontendVersionKey = module.config.frontendVersionKey;
+    }
+
+    versions[frontendVersionKey] = Date.now();
   };
 
   app.broker
