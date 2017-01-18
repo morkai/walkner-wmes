@@ -31,18 +31,12 @@ define([
 
     if (generating)
     {
-      if (debug)
-      {
-        console.log('Already generating...', plan.id);
-      }
+      if (debug) console.log('Already generating...', plan.id);
 
       return;
     }
 
-    if (debug)
-    {
-      console.log('Generating...', plan.id);
-    }
+    if (debug) console.log('Generating...', plan.id);
 
     var T = performance.now();
     var PLAN_DATE_TIME = plan.date.getTime();
@@ -360,6 +354,8 @@ define([
         return;
       }
 
+      if (debug) console.log('INCOMPLETE');
+
       var order = plan.orders.get(lineOrder.orderNo).toJSON();
       var partialLineOrder = new DailyMrpPlanOrder(order);
 
@@ -368,9 +364,27 @@ define([
         qtyPlan: lineOrder.incomplete
       });
 
-      lineOrder.incomplete = 0;
+      var availableLines = getAvailableLines();
 
-      orders.unshift(partialLineOrder);
+      if (availableLines.length === 0)
+      {
+        if (debug) console.log('no available lines');
+
+        return;
+      }
+
+      if (trySmallOrderOnLine(partialLineOrder, lineOrder.incomplete, availableLines[0]))
+      {
+        if (debug) console.log('found room on line:', availableLines[0].id);
+
+        lineOrder.incomplete = 0;
+
+        orders.unshift(partialLineOrder);
+      }
+      else
+      {
+        if (debug) console.log('no more room');
+      }
     }
 
     function trySmallOrderOnLine(currentOrder, qty, line)
