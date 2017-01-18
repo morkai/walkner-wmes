@@ -41,7 +41,13 @@ define([
       function(HourlyPlanCollection, HourlyPlanListPage)
       {
         return new HourlyPlanListPage({
-          collection: new HourlyPlanCollection(null, {rqlQuery: fixRelativeDateInRql(req.rql, 'date', true)})
+          collection: new HourlyPlanCollection(null, {
+            rqlQuery: fixRelativeDateInRql(req.rql, {
+              property: 'date',
+              range: true,
+              shift: true
+            })
+          })
         });
       }
     );
@@ -64,6 +70,16 @@ define([
     );
   });
 
+  router.map('/hourlyPlans;settings', user.auth('PROD_DATA:MANAGE'), function(req)
+  {
+    viewport.loadPage(['app/hourlyPlans/pages/PlanningSettingsPage', nls], function(QiSettingsPage)
+    {
+      return new QiSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
+  });
+
   router.map('/hourlyPlans;planning', canManage, function(req)
   {
     broker.publish('router.navigate', {
@@ -77,15 +93,21 @@ define([
   {
     viewport.loadPage(
       [
+        'app/hourlyPlans/settings',
         'app/hourlyPlans/DailyMrpPlanCollection',
         'app/hourlyPlans/pages/PlanningPage',
         nls
       ],
-      function(DailyMrpPlanCollection, PlanningPage)
+      function(settings, DailyMrpPlanCollection, PlanningPage)
       {
         return new PlanningPage({
           model: new DailyMrpPlanCollection(null, {
-            rqlQuery: fixRelativeDateInRql(req.rql, 'date', false, 'YYYY-MM-DD'),
+            settings: settings.acquire(),
+            rqlQuery: fixRelativeDateInRql(req.rql, {
+              property: 'date',
+              shift: true,
+              format: 'YYYY-MM-DD'
+            }),
             paginate: false
           })
         });

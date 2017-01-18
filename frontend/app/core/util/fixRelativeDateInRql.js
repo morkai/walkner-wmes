@@ -9,7 +9,7 @@ define([
 ) {
   'use strict';
 
-  return function fixRelativeDateInRql(rql, prop, range, format)
+  return function fixRelativeDateInRql(rql, options)
   {
     if (!rql || !rql.selector)
     {
@@ -20,14 +20,14 @@ define([
 
     rql.selector.args.forEach(function(term)
     {
-      if (term.name !== 'eq' || term.args[0] !== prop)
+      if (term.name !== 'eq' || term.args[0] !== options.property)
       {
         selector.push(term);
 
         return;
       }
 
-      var dateRange = getRelativeDateRange(term.args[1]);
+      var dateRange = getRelativeDateRange(term.args[1], options.shift);
 
       if (!dateRange)
       {
@@ -36,22 +36,31 @@ define([
         return;
       }
 
-      if (range)
+      if (options.range)
       {
         selector.push({
           name: 'ge',
-          args: [prop, format ? time.format(dateRange.from, format) : dateRange.from.valueOf()]
+          args: [
+            options.property,
+            options.format ? time.format(dateRange.from, options.format) : dateRange.from.valueOf()
+          ]
         });
         selector.push({
           name: 'lt',
-          args: [prop, format ? time.format(dateRange.to, format) : dateRange.to.valueOf()]
+          args: [
+            options.property,
+            options.format ? time.format(dateRange.to, options.format) : dateRange.to.valueOf()
+          ]
         });
       }
       else
       {
         selector.push({
           name: 'eq',
-          args: [prop, format ? time.format(dateRange.from, format) : dateRange.from.valueOf()]
+          args: [
+            options.property,
+            options.format ? time.format(dateRange.from, options.format) : dateRange.from.valueOf()
+          ]
         });
       }
     });

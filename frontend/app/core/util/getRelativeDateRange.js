@@ -7,7 +7,7 @@ define([
 ) {
   'use strict';
 
-  return function getRelativeDateRange(input)
+  return function getRelativeDateRange(input, shift)
   {
     var matches = (input || '').toString().match(/([0-9]+)(?:-([0-9]+))?d/);
 
@@ -18,7 +18,16 @@ define([
 
     var daysFrom = parseInt(matches[1], 10);
     var daysTo = parseInt(matches[2], 10) || 0;
-    var from = time.getMoment().startOf('day');
+    var from = time.getMoment();
+    var h = from.hours();
+
+    from.startOf('day');
+
+    if (shift && h < 6)
+    {
+      from.subtract(1, 'days');
+    }
+
     var to = from.clone();
 
     if (daysTo === 0)
