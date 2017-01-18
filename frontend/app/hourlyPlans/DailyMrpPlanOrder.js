@@ -118,7 +118,7 @@ define([
         changes.operation = this.constructor.prepareOperation(data.operation);
       }
 
-      if (_.isNumber(data.qtyPlan))
+      if (!isNaN(data.qtyPlan) && _.isNumber(data.qtyPlan))
       {
         changes.qtyPlan = Math.max(0, data.qtyPlan);
       }
