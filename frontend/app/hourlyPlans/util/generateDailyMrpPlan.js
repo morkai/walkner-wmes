@@ -510,10 +510,21 @@ define([
       {
         var order = orders.shift();
 
+        if (!order.isValid())
+        {
+          if (debug) console.log('ignoring invalid order:', order.id);
+
+          continue;
+        }
+
+        if (order.get('qtyPlan') > 0)
+        {
+          return order;
+        }
+
         if ((IGNORE_DONE && order.isCompleted())
           || (IGNORE_CNF && order.isConfirmed())
-          || (IGNORE_DLV && order.isDelivered())
-          || !order.isValid())
+          || (IGNORE_DLV && order.isDelivered()))
         {
           if (debug) console.log('ignoring order:', order.id);
 
