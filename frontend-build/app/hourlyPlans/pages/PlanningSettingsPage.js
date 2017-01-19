@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/i18n","app/core/util/bindLoadingMessage","app/core/View","../settings","../views/PlanningSettingsView"],function(e,i,n,t,s){"use strict";return n.extend({layoutName:"page",breadcrumbs:function(){return[{label:e.bound("hourlyPlans","BREADCRUMBS:main")},e.bound("hourlyPlans","BREADCRUMBS:settings")]},initialize:function(){this.defineModels(),this.defineViews()},destroy:function(){t.release()},defineModels:function(){this.model=i(t.acquire(),this)},defineViews:function(){this.view=new s({initialTab:this.options.initialTab,settings:this.model})},load:function(e){return e(this.model.fetchIfEmpty())},afterRender:function(){t.acquire()}})});

@@ -769,6 +769,8 @@ app/fte/util/isEditable.js
 app/fte/FteMasterEntry.js
 app/fte/FteLeaderEntry.js
 app/fte/routes.js
+app/core/util/getRelativeDateRange.js
+app/core/util/fixRelativeDateInRql.js
 app/hourlyPlans/HourlyPlan.js
 app/hourlyPlans/HourlyPlanCollection.js
 app/hourlyPlans/routes.js
