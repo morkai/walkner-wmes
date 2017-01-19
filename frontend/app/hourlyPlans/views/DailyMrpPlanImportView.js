@@ -169,7 +169,9 @@ define([
 
         _.forEach(res.collection, function(dailyMrpPlan)
         {
-          mrpToPlanMap[dailyMrpPlan.mrp] = new DailyMrpPlan(dailyMrpPlan);
+          mrpToPlanMap[dailyMrpPlan.mrp] = new DailyMrpPlan(dailyMrpPlan, {
+            settings: view.model.dailyMrpPlans.settings
+          });
         });
 
         var missingPlansList = [];

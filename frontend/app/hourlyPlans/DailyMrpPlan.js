@@ -36,8 +36,10 @@ define([
         + '/' + encodeURIComponent(this.mrp.id);
     },
 
-    initialize: function(attrs)
+    initialize: function(attrs, options)
     {
+      this.settings = options && options.settings || this.collection.settings;
+
       /**
        * @private
        * @type {?Array<Object>}
@@ -183,7 +185,7 @@ define([
 
     generate: function()
     {
-      if (generateDailyMrpPlan(this, this.collection.settings.getPlanGeneratorSettings()))
+      if (generateDailyMrpPlan(this, this.settings.getPlanGeneratorSettings()))
       {
         this.trigger('generated');
       }
