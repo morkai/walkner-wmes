@@ -1,10 +1,12 @@
 {
   "root": {
+    "BREADCRUMBS:main": "Planning",
     "BREADCRUMBS:browse": "Hourly plans",
     "BREADCRUMBS:addForm": "Choosing",
     "BREADCRUMBS:editForm": "Planning",
     "BREADCRUMBS:heffLineStates": "Hourly efficiency",
     "BREADCRUMBS:dailyMrpPlans": "Daily MRP plans",
+    "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
     "MSG:LOADING_FAILURE": "Failed to load the hourly plans :(",
@@ -18,6 +20,7 @@
     "PAGE_ACTION:export": "Export hourly plans",
     "PAGE_ACTION:heff": "Hourly efficiency",
     "PAGE_ACTION:planning": "Planning",
+    "PAGE_ACTION:settings": "Settings",
 
     "panel:title": "Hourly plan",
     "panel:title:editable": "Hourly plan edit form",
@@ -94,7 +97,21 @@
     "planning:lineOrders:pceTime": "Time per 1 PCE",
     "planning:lineOrders:time": "Start-finish time",
     "planning:lineOrders:duration": "Duration",
-    "planning:lineOrders:incomplete": "({qty} incomplete)"
+    "planning:lineOrders:incomplete": "({qty} incomplete)",
+
+    "settings:tab:dailyMrpPlans": "Daily MRP plans",
+    "settings:perOrderOverhead": "Per order overhead",
+    "settings:perOrderOverhead:help": "Number of seconds added to each order apart from the first order (if started at the beginning of a shift).",
+    "settings:shiftStartDowntime": "Shift {shiftNo} start overhead",
+    "settings:shiftStartDowntime:help": "Number of seconds added to the first order at the beginning of a shift.",
+    "settings:qtyRemaining": "Plan by quantity remaining",
+    "settings:qtyRemaining:help": "Plan by quantity remaining and not by total quantity to do. <em>Quantity remaining</em> is equal to <em>total quantity</em> minus <em>quantity done</em>.",
+    "settings:ignoreCnf": "Ignore CNF orders",
+    "settings:ignoreDlv": "Ignore DLV orders",
+    "settings:ignoreDone": "Ignore completed orders (qty done >= qty todo)",
+    "settings:ignore:help": "Orders with custom quantity set won't be ignored regardless of the above settings.",
+    "settings:bigOrderQty": "Big order quantity",
+    "settings:bigOrderQty:help": "Quantity over which the order should be split into smaller ones and assigned to multiple lines."
   },
   "pl": true
 }

@@ -15,7 +15,8 @@ exports.DEFAULT_CONFIG = {
   divisionsId: 'divisions',
   fteId: 'fte',
   orgUnitsId: 'orgUnits',
-  prodShiftsId: 'prodShifts'
+  prodShiftsId: 'prodShifts',
+  settingsId: 'settings'
 };
 
 exports.start = function startFteModule(app, module)
@@ -26,7 +27,8 @@ exports.start = function startFteModule(app, module)
     [
       module.config.mongooseId,
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );

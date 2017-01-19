@@ -183,7 +183,7 @@ define([
 
     generate: function()
     {
-      if (generateDailyMrpPlan(this))
+      if (generateDailyMrpPlan(this, this.collection.settings.getPlanGeneratorSettings()))
       {
         this.trigger('generated');
       }

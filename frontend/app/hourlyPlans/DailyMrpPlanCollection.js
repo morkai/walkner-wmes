@@ -29,8 +29,10 @@ define([
 
     comparator: 'mrp',
 
-    initialize: function()
+    initialize: function(models, options)
     {
+      this.settings = options.settings;
+
       this.options = new Model(JSON.parse(localStorage.getItem('PLANNING:OPTIONS') || '{}'));
       this.options.on('change', function()
       {

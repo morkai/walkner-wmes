@@ -8,6 +8,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  '../settings',
   '../DailyMrpPlanLine',
   '../views/DailyMrpPlanFilterView',
   '../views/DailyMrpPlanView',
@@ -21,6 +22,7 @@ define([
   viewport,
   View,
   bindLoadingMessage,
+  settings,
   DailyMrpPlanLine,
   DailyMrpPlanFilterView,
   DailyMrpPlanView,
@@ -35,11 +37,21 @@ define([
 
     template: template,
 
-    actions: null,
-
     breadcrumbs: [
       t.bound('hourlyPlans', 'BREADCRUMBS:dailyMrpPlans')
     ],
+
+    actions: function()
+    {
+      return [
+        {
+          label: t.bound('hourlyPlans', 'PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'PROD_DATA:MANAGE',
+          href: '#hourlyPlans;settings?tab='
+        }
+      ];
+    },
 
     events: {
 
@@ -93,6 +105,8 @@ define([
     {
       $('body').off('.' + this.idPrefix).css('overflow-x', '');
       $(document).off('.' + this.idPrefix);
+
+      settings.release();
     },
 
     load: function(when)
@@ -101,10 +115,10 @@ define([
 
       if (this.model.hasRequiredFilters())
       {
-        return when(this.loadStyles(), this.model.fetch({reset: true}));
+        return when(this.loadStyles(), this.model.settings.fetchIfEmpty(), this.model.fetch({reset: true}));
       }
 
-      return when(this.loadStyles());
+      return when(this.loadStyles(), this.model.settings.fetchIfEmpty());
     },
 
     serialize: function()
@@ -136,6 +150,8 @@ define([
 
     afterRender: function()
     {
+      settings.acquire();
+
       $('body').css('overflow-x', 'hidden');
 
       this.renderPlans();

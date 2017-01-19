@@ -1,0 +1,46 @@
+<form class="settings hourlyPlans-settings">
+  <div class="list-group">
+    <% ['dailyMrpPlans'].forEach(function(tab) { %>
+    <a class="list-group-item" href="#hourlyPlans;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('hourlyPlans', 'settings:tab:' + tab) %></a>
+    <% }) %>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="dailyMrpPlans">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-perOrderOverhead"><%- t('hourlyPlans', 'settings:perOrderOverhead') %></label>
+        <p class="help-block"><%- t('hourlyPlans', 'settings:perOrderOverhead:help') %></p>
+        <input id="<%- idPrefix %>-perOrderOverhead" class="form-control" name="planning.perOrderOverhead" type="number" min="0" max="600">
+      </div>
+      <% [1, 2, 3].forEach(function(shiftNo) { %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-shiftStartDowntime-<%- shiftNo %>"><%- t('hourlyPlans', 'settings:shiftStartDowntime', {shiftNo: shiftNo}) %></label>
+        <% if (shiftNo === 1) { %>
+        <p class="help-block"><%- t('hourlyPlans', 'settings:shiftStartDowntime:help') %></p>
+        <% } %>
+        <input id="<%- idPrefix %>-shiftStartDowntime-<%- shiftNo %>" class="form-control" name="planning.shiftStartDowntime<%- shiftNo %>" type="number" min="0" max="1800">
+      </div>
+      <% }) %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-bigOrderQty"><%- t('hourlyPlans', 'settings:bigOrderQty') %></label>
+        <p class="help-block"><%- t('hourlyPlans', 'settings:bigOrderQty:help') %></p>
+        <input id="<%- idPrefix %>-bigOrderQty" class="form-control" name="planning.bigOrderQty" type="number" min="0" max="1800">
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-qtyRemaining" name="planning.qtyRemaining" type="checkbox" value="true">
+          <%- t('hourlyPlans', 'settings:qtyRemaining') %>
+        </label>
+        <p class="help-block"><%- t('hourlyPlans', 'settings:qtyRemaining:help') %></p>
+      </div>
+      <% ['ignoreDlv', 'ignoreCnf', 'ignoreDone'].forEach(function(p) { %>
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-<%- p %>" name="planning.<%- p %>" type="checkbox" value="true">
+          <%- t('hourlyPlans', 'settings:' + p) %>
+        </label>
+      </div>
+      <% }) %>
+      <p class="help-block"><%- t('hourlyPlans', 'settings:ignore:help') %></p>
+    </div>
+  </div>
+</form>

@@ -12,11 +12,29 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   var express = app[hourlyPlansModule.config.expressId];
   var auth = app[hourlyPlansModule.config.userId].auth;
   var mongoose = app[hourlyPlansModule.config.mongooseId];
+  var settings = app[hourlyPlansModule.config.settingsId];
   var HourlyPlan = mongoose.model('HourlyPlan');
   var DailyMrpPlan = mongoose.model('DailyMrpPlan');
 
   var canView = auth('HOURLY_PLANS:VIEW');
   var canManageDailyMrpPlans = auth('HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE');
+
+  express.get(
+    '/hourlyPlans/settings',
+    canView,
+    function limitSettings(req, res, next)
+    {
+      req.rql.selector = {
+        name: 'regex',
+        args: ['_id', '^planning\\.']
+      };
+
+      return next();
+    },
+    express.crud.browseRoute.bind(null, app, settings.Setting)
+  );
+
+  express.put('/hourlyPlans/settings/:id', auth('PROD_DATA:MANAGE'), settings.updateRoute);
 
   //
   // Hourly plans

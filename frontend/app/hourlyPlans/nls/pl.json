@@ -1,9 +1,11 @@
 {
+  "BREADCRUMBS:main": "Planowanie",
   "BREADCRUMBS:browse": "Plany godzinowe",
   "BREADCRUMBS:addForm": "Wybieranie planu",
   "BREADCRUMBS:editForm": "Planowanie",
   "BREADCRUMBS:heffLineStates": "Wydajność godzinowa",
   "BREADCRUMBS:dailyMrpPlans": "Plany dzienne MRP",
+  "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
   "MSG:LOADING_FAILURE": "Ładowanie planów godzinowych nie powiodło się :(",
@@ -17,6 +19,7 @@
   "PAGE_ACTION:export": "Eksportuj plany godzinowe",
   "PAGE_ACTION:heff": "Wydajność godzinowa",
   "PAGE_ACTION:planning": "Planowanie",
+  "PAGE_ACTION:settings": "Zmień ustawienia",
 
   "panel:title": "Plan godzinowy",
   "panel:title:editable": "Formularz edycji planu godzinowego",
@@ -93,5 +96,19 @@
   "planning:lineOrders:pceTime": "Czas 1 szt.",
   "planning:lineOrders:time": "Czas rozp.-zak.",
   "planning:lineOrders:duration": "Czas trwania",
-  "planning:lineOrders:incomplete": "({qty} {qty, plural, one{brakująca} few{brakujące} other{brakujących}})"
+  "planning:lineOrders:incomplete": "({qty} {qty, plural, one{brakująca} few{brakujące} other{brakujących}})",
+
+  "settings:tab:dailyMrpPlans": "Plany dzienne MRP",
+  "settings:perOrderOverhead": "Czas dodawany do zlecenia",
+  "settings:perOrderOverhead:help": "Ilość sekund dodawana do każdego zlecenia na zmianie oprócz pierwszego, jeżeli rozpoczyna się na początku zmiany.",
+  "settings:shiftStartDowntime": "Czas na rozpoczęcie {shiftNo} zmiany",
+  "settings:shiftStartDowntime:help": "Ilość sekund dodawana do pierwszego zlecenia na początku zmiany.",
+  "settings:qtyRemaining": "Planuj wg ilości pozostałej do zrobienia",
+  "settings:qtyRemaining:help": "Zaznaczenie tej opcji sprawi, że pod uwagę brana będzie <em>ilość pozostała do zrobienia</em>, a nie <em>całkowita ilość do zrobienia</em>. <em>Pozostała ilość</em> to <em>całkowita ilość</em> pomniejszona o <em>zrobioną ilość</em>.",
+  "settings:ignoreCnf": "Ignoruj zlecenia ze statusem CNF",
+  "settings:ignoreDlv": "Ignoruj zlecenia ze statusem DLV",
+  "settings:ignoreDone": "Ignoruj ukończone zlecenia (ilość zrobiona >= ilość do zrobienia)",
+  "settings:ignore:help": "Zlecenia mające ręcznie nadpisaną ilość nie są ignorowane bez względu na powyższe ustawienia.",
+  "settings:bigOrderQty": "Ilość dużego zlecenia",
+  "settings:bigOrderQty:help": "Ilość po przekroczeniu której zlecenie dzielone jest na mniejsze do zrobienia na kilku liniach."
 }

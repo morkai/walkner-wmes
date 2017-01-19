@@ -17,10 +17,10 @@ define([
 ) {
   'use strict';
 
-  var debug = 0 && window.ENV !== 'production';
+  var debug = window.ENV !== 'production';
   var generating = false;
 
-  return function generateDailyMrpPlan(plan)
+  return function generateDailyMrpPlan(plan, settings)
   {
     /*jshint -W116*/
 
@@ -31,7 +31,7 @@ define([
       return;
     }
 
-    if (debug) console.log('Generating...', plan.id);
+    if (debug) console.log('Generating...', plan.id, settings);
 
     var T = performance.now();
     var PLAN_DATE_TIME = plan.date.getTime();
@@ -72,29 +72,26 @@ define([
       return true;
     }
 
-    var PER_ORDER_OVERHEAD = 30000;
+    var PER_ORDER_OVERHEAD = settings.perOrderOverhead || 0;
     var SHIFT_OPTIONS = {
       1: {
         START_TIME: new Date(PLAN_DATE_TIME).setHours(6),
-        START_DOWNTIME: 5 * 60000,
-        END_DOWNTIME: 5 * 60000
+        START_DOWNTIME: settings.shiftStartDowntime[1] || 0
       },
       2: {
         START_TIME: new Date(PLAN_DATE_TIME).setHours(14),
-        START_DOWNTIME: 5 * 60000,
-        END_DOWNTIME: 5 * 60000
+        START_DOWNTIME: settings.shiftStartDowntime[2] || 0
       },
       3: {
         START_TIME: new Date(PLAN_DATE_TIME).setHours(22),
-        START_DOWNTIME: 5 * 60000,
-        END_DOWNTIME: 5 * 60000
+        START_DOWNTIME: settings.shiftStartDowntime[3] || 0
       }
     };
-    var IGNORE_DLV = false;
-    var IGNORE_CNF = false;
-    var IGNORE_DONE = false;
-    var QTY_REMAINING = false;
-    var BIG_ORDER_QTY = 70;
+    var IGNORE_DLV = !!settings.ignoreDlv;
+    var IGNORE_CNF = !!settings.ignoreCnf;
+    var IGNORE_DONE = !!settings.ignoreDone;
+    var QTY_REMAINING = !!settings.qtyRemaining;
+    var BIG_ORDER_QTY = settings.bigOrderQty || 0;
 
     var orders = plan.orders.models.slice();
 
