@@ -186,6 +186,8 @@ define([
               updatedAt: Date.now(),
               date: date,
               mrp: mrpId
+            }, {
+              settings: view.model.dailyMrpPlans.settings
             });
           }
 
