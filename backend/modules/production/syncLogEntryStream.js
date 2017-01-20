@@ -6,20 +6,10 @@ const _ = require('lodash');
 const step = require('h5.step');
 const logEntryHandlers = require('./logEntryHandlers');
 
-const NEW_MRP = {
-  'KE1': {
-    subdivision: '529f269dcd8eea982400001d'
-  },
-  'KE2': {
-    subdivision: '529f269dcd8eea982400001d'
-  },
-  'KE4': {
-    subdivision: '529f269dcd8eea982400001d'
-  },
-  'KEA': {
-    subdivision: '529f269dcd8eea982400001d',
-    mrpControllers: ['KED']
-  }
+const NEW_LINES = {
+  'MNL1': 'LM-1',
+  'MNL2': 'LM-2',
+  'MNL3': 'LM-3'
 };
 
 module.exports = function syncLogEntryStream(app, productionModule, creator, logEntryStream, done)
@@ -164,19 +154,19 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
 
   function fixOrgUnits(logEntry)
   {
-    if (Array.isArray(logEntry.mrpControllers) && NEW_MRP[logEntry.mrpControllers[0]])
+    var newLine = NEW_LINES[logEntry.prodLine];
+
+    if (newLine)
     {
-      const newOrgUnits = NEW_MRP[logEntry.mrpControllers[0]];
+      logEntry.prodLine = newLine;
 
-      Object.assign(logEntry, newOrgUnits);
-
-      if (logEntry.type === 'changeShift')
+      if (logEntry.data.startedProdShift)
       {
-        Object.assign(logEntry.data.startedProdShift, newOrgUnits);
+        logEntry.data.startedProdShift.prodLine = newLine;
       }
       else if (logEntry.data.prodLine)
       {
-        Object.assign(logEntry.data, newOrgUnits);
+        logEntry.data.prodLine = newLine;
       }
     }
 
