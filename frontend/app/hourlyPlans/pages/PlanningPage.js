@@ -71,23 +71,24 @@ define([
     initialize: function()
     {
       var page = this;
+      var plans = page.model;
       var idPrefix = page.idPrefix;
       var handleDragEvent = page.handleDragEvent.bind(page);
 
-      page.model = bindLoadingMessage(page.model.subscribe(page.pubsub), page);
+      page.model = bindLoadingMessage(plans.subscribe(page.pubsub), page);
 
-      page.filterView = new DailyMrpPlanFilterView({model: page.model});
+      page.filterView = new DailyMrpPlanFilterView({model: plans});
 
       page.setView('#' + idPrefix + '-filter', page.filterView);
 
-      page.listenTo(this.model, 'import', page.onImport);
-      page.listenTo(this.model, 'reset', _.after(1, page.onReset));
+      page.listenTo(plans, 'import', page.onImport);
+      page.listenTo(plans, 'reset', _.after(2, page.onReset));
       page.listenTo(
         this.model,
         'checkOverlappingLinesRequested',
         _.debounce(page.checkOverlappingLines, 50)
       );
-      page.listenTo(this.model.options, 'change:wrap', page.onWrapChange);
+      page.listenTo(plans.options, 'change:wrap', page.onWrapChange);
 
       $('body')
         .on('paste.' + idPrefix, page.onBodyPaste.bind(page))
@@ -115,10 +116,17 @@ define([
 
       if (this.model.hasRequiredFilters())
       {
-        return when(this.loadStyles(), this.model.settings.fetchIfEmpty(), this.model.fetch({reset: true}));
+        return when(
+          this.loadStyles(),
+          this.model.settings.fetchIfEmpty(),
+          this.model.fetch({reset: true})
+        );
       }
 
-      return when(this.loadStyles(), this.model.settings.fetchIfEmpty());
+      return when(
+        this.loadStyles(),
+        this.model.settings.fetchIfEmpty()
+      );
     },
 
     serialize: function()

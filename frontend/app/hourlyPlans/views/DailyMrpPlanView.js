@@ -164,6 +164,11 @@ define([
       else
       {
         this.ordersView.select(orderNo, true);
+
+        if (e.scrollIntoView)
+        {
+          this.ordersView.$item(orderNo)[0].scrollIntoView();
+        }
       }
     },
 

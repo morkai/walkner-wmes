@@ -22,15 +22,61 @@ define([
 
     serializeShifts: function()
     {
+      var thisLine = this.line;
+      var thisPlan = this.line.collection.plan;
+      var allPlans = thisPlan.collection;
+      var allLineOrders = this.map(function(lineOrder)
+      {
+        return {
+          plan: thisPlan.id,
+          mrp: thisPlan.mrp.id,
+          lineOrder: lineOrder
+        };
+      });
+
+      allPlans.forEach(function(otherPlan)
+      {
+        if (otherPlan === thisPlan)
+        {
+          return;
+        }
+
+        var otherLine = otherPlan.lines.get(thisLine.id);
+
+        if (!otherLine)
+        {
+          return;
+        }
+
+        otherLine.orders.forEach(function(lineOrder)
+        {
+          allLineOrders.push({
+            plan: otherPlan.id,
+            mrp: otherPlan.mrp.id,
+            lineOrder: lineOrder
+          });
+        });
+      });
+
+      if (allLineOrders > this.length)
+      {
+        allLineOrders.sort(function(a, b)
+        {
+          return a.lineOrder.startMoment.valueOf() - b.lineOrder.startMoment.valueOf();
+        });
+      }
+
       var s = {
         1: [],
         2: [],
         3: []
       };
 
-      for (var i = 0; i < this.length; ++i)
+      for (var i = 0; i < allLineOrders.length; ++i)
       {
-        var lineOrder = this.models[i];
+        var item = allLineOrders[i];
+        var plan = item.plan;
+        var lineOrder = item.lineOrder;
         var shiftOrders = s[lineOrder.shiftNo];
         var prevShiftOrder = shiftOrders[shiftOrders.length - 1];
         var prevFinishedAt = prevShiftOrder
@@ -44,7 +90,10 @@ define([
           margin: (lineOrder.startMoment.valueOf() - prevFinishedAt) * 100 / shiftUtil.SHIFT_DURATION,
           width: lineOrder.duration * 100 / shiftUtil.SHIFT_DURATION,
           incomplete: lineOrder.get('incomplete'),
-          lineOrder: lineOrder
+          lineOrder: lineOrder,
+          plan: plan,
+          mrp: item.mrp,
+          external: plan !== thisPlan.id
         });
       }
 

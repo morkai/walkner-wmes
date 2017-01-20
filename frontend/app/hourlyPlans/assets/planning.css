@@ -254,6 +254,12 @@
 .dailyMrpPlan-list-item.is-lineOrder.is-incomplete:hover {
   background-color: #faf2cc;
 }
+.dailyMrpPlan-list-item.is-lineOrder.is-external {
+  background-color: #D5DED2;
+}
+.dailyMrpPlan-list-item.is-lineOrder.is-external:hover {
+  background-color: #CEDAC9;
+}
 .is-lineOrder > .dailyMrpPlan-list-item-inner {
   font-size: 12px;
   white-space: nowrap;

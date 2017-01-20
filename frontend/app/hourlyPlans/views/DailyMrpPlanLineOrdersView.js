@@ -23,32 +23,53 @@ define([
 
       'click .is-lineOrder': function(e)
       {
-        var lineOrder = this.model.orders.get(e.currentTarget.dataset.id);
+        var $item = this.$(e.currentTarget);
+        var lineOrder = this.getLineOrder($item);
 
         if (e.ctrlKey)
         {
           window.open('/#orders/' + lineOrder.get('orderNo'));
         }
 
-        this.model.trigger('lineOrderClicked', {
-          lineOrder: lineOrder
-        });
+        if ($item.hasClass('is-external'))
+        {
+          lineOrder.collection.line.trigger('lineOrderClicked', {
+            lineOrder: lineOrder,
+            scrollIntoView: true
+          });
+        }
+        else
+        {
+          this.model.trigger('lineOrderClicked', {
+            lineOrder: lineOrder
+          });
+        }
       },
 
       'mouseenter .is-lineOrder': function(e)
       {
-        this.model.collection.plan.trigger('itemEntered', {
-          type: 'lineOrder',
-          item: this.model.orders.get(e.currentTarget.dataset.id)
-        });
+        var lineOrder = this.model.orders.get(e.currentTarget.dataset.id);
+
+        if (lineOrder)
+        {
+          this.model.collection.plan.trigger('itemEntered', {
+            type: 'lineOrder',
+            item: lineOrder
+          });
+        }
       },
 
       'mouseleave .is-lineOrder': function(e)
       {
-        this.model.collection.plan.trigger('itemLeft', {
-          type: 'lineOrder',
-          item: this.model.orders.get(e.currentTarget.dataset.id)
-        });
+        var lineOrder = this.model.orders.get(e.currentTarget.dataset.id);
+
+        if (lineOrder)
+        {
+          this.model.collection.plan.trigger('itemLeft', {
+            type: 'lineOrder',
+            item: lineOrder
+          });
+        }
       }
 
     },
@@ -100,12 +121,20 @@ define([
       return id ? this.$('.dailyMrpPlan-list-item[data-id="' + id + '"]') : this.$('.dailyMrpPlan-list-item');
     },
 
+    getLineOrder: function($item)
+    {
+      var plans = this.model.collection.plan.collection;
+      var plan = plans.get($item.attr('data-plan'));
+      var line = plan.lines.get(this.model.id);
+      var lineOrder = line.orders.get($item.attr('data-id'));
+
+      return lineOrder;
+    },
+
     getPopoverContent: function($item)
     {
-      var lineOrder = this.model.orders.get($item.attr('data-id'));
-
       return lineOrderPopoverTemplate({
-        lineOrder: lineOrder.serializePopover()
+        lineOrder: this.getLineOrder($item).serializePopover()
       });
     }
 
