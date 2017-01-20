@@ -168,6 +168,7 @@ define([
           pageCount: 1,
           line: line.id,
           hourlyPlan: line.get('hourlyPlan'),
+          workerCount: line.get('workerCount'),
           orders: line.orders.map(function(lineOrder, i)
           {
             var order = plan.orders.get(lineOrder.get('orderNo'));

@@ -97,6 +97,7 @@
   "planning:lineOrders:time": "Czas rozp.-zak.",
   "planning:lineOrders:duration": "Czas trwania",
   "planning:lineOrders:incomplete": "({qty} {qty, plural, one{brakująca} few{brakujące} other{brakujących}})",
+  "planning:print:workerCount": "{workerCount} {workerCount, plural, one{osoba} few{osoby} other{osób}}",
 
   "settings:tab:dailyMrpPlans": "Plany dzienne MRP",
   "settings:perOrderOverhead": "Czas dodawany do zlecenia",

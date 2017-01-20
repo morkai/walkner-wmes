@@ -169,12 +169,12 @@
         <span>Linia:</span>
         <span><%= page.line %></span>
       </div>
+      <div class="prop">
+        <span>Obsada:</span>
+        <span><%- t('hourlyPlans', 'planning:print:workerCount', {workerCount: page.workerCount || 1}) %></span>
+      </div>
     </div>
-    <% if (page.pageCount > 1) { %>
-    Plan dnia, cz. <%- page.pageNo %>
-    <% } else { %>
     Plan dnia
-    <% } %>
   </header>
   <section class="bd">
     <table>
