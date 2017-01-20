@@ -108,7 +108,7 @@ define([
         pceTimes: line.pceTimes,
         totalQty: line.pceTimes.length / 2
       });
-      planLine.orders.reset(line.orders);
+      planLine.orders.reset(line.orders, {skipGenerate: true});
     });
 
     generating = false;
@@ -415,11 +415,12 @@ define([
         var newFinishDate = new Date(newFinishAt);
         var h = newFinishDate.getHours();
 
-        // TODO try to assign the remaining qty to a different line
         if (newFinishAt > activeTo || (shiftNo === 3 && h >= 6 && h < 22))
         {
           if (q > 0)
           {
+            if (debug) console.log('push a', q);
+
             lineOrders.push({
               _id: currentOrder.id + '-' + shiftNo,
               orderNo: currentOrder.id,
@@ -440,12 +441,16 @@ define([
         {
           if (q === 0)
           {
+            if (debug) console.log('first pce crossing shifts');
+
             shiftNo += 1;
             startAt = SHIFT_OPTIONS[shiftNo].START_TIME;
             finishAt = startAt + SHIFT_OPTIONS[shiftNo].START_DOWNTIME;
           }
           else
           {
+            if (debug) console.log('push b', q);
+
             lineOrders.push({
               _id: currentOrder.id + '-' + shiftNo,
               orderNo: currentOrder.id,
@@ -455,6 +460,11 @@ define([
               pceTime: pceTime,
               incomplete: false
             });
+
+            if (qty - q === 0)
+            {
+              break;
+            }
 
             shiftNo += 1;
             startAt = SHIFT_OPTIONS[shiftNo].START_TIME;
@@ -468,6 +478,8 @@ define([
 
         if (q === qty)
         {
+          if (debug) console.log('push c', q);
+
           lineOrders.push({
             _id: currentOrder.id + '-' + shiftNo,
             orderNo: currentOrder.id,
