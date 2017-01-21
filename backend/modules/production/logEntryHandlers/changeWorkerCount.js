@@ -38,6 +38,11 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       prodShiftOrder.workerCount = Math.max(logEntry.data.newValue, 0);
 
+      if (logEntry.data.sapTaktTime >= 0)
+      {
+        prodShiftOrder.sapTaktTime = logEntry.data.sapTaktTime;
+      }
+
       this.prodShiftOrder = prodShiftOrder;
     },
     function findProdDowntimesStep()

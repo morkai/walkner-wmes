@@ -635,9 +635,11 @@ define([
       }
 
       this.prodShiftOrder.set('workerCount', newValue);
+      this.prodShiftOrder.set('sapTaktTime', this.prodShiftOrder.getSapTaktTime());
 
       prodLog.record(this, 'changeWorkerCount', {
-        newValue: newValue
+        newValue: newValue,
+        sapTaktTime: this.prodShiftOrder.get('sapTaktTime')
       });
     },
 
