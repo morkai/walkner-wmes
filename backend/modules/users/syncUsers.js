@@ -68,12 +68,12 @@ module.exports = function syncUsers(app, usersModule, done)
 
     _.forEach(companies.models, function(companyModel)
     {
-      var companyId = companyModel.get('_id').replace(/'/g, "\\'");
+      var companyId = companyModel._id.replace(/'/g, "\\'");
 
       where.push("[USERS].[US_ADD_FIELDS] LIKE '10001&" + companyId + "&%'");
     });
 
-    return sql + " WHERE " + where.join(" OR ") + " ORDER BY [USERS].[US_ID]";
+    return sql + " WHERE [USERS].[US_ACTIVE]=1 AND (" + where.join(" OR ") + ") ORDER BY [USERS].[US_ID]";
   }
 
   function queryUsers(conn)
@@ -236,7 +236,7 @@ module.exports = function syncUsers(app, usersModule, done)
       {
         ++stats.created;
 
-        usersModule.error(`[sync] Created: ${userModel.login}: ${userModel.firstName} ${userModel.lastName}`);
+        usersModule.debug(`[sync] Created: ${userModel.login}: ${userModel.firstName} ${userModel.lastName}`);
       }
       else
       {
