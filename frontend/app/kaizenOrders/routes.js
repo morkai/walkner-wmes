@@ -58,6 +58,26 @@ define([
     );
   });
 
+  router.map('/kaizenEngagementReport', canAccess, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/suggestions/SuggestionEngagementReport',
+        'app/suggestions/pages/SuggestionEngagementReportPage',
+        'i18n!app/nls/reports',
+        'i18n!app/nls/suggestions',
+        nls
+      ],
+      function(SuggestionEngagementReport, SuggestionEngagementReportPage)
+      {
+        return new SuggestionEngagementReportPage({
+          baseBreadcrumbNls: 'kaizenOrders',
+          model: SuggestionEngagementReport.fromQuery(req.query)
+        });
+      }
+    );
+  });
+
   router.map('/kaizenHelp', function()
   {
     viewport.loadPage(['app/core/View', 'app/kaizenOrders/templates/help', nls], function(View, helpTemplate)

@@ -10,6 +10,7 @@ var multer = require('multer');
 var contentDisposition = require('content-disposition');
 var countReport = require('./countReport');
 var summaryReport = require('./summaryReport');
+var engagementReport = require('./engagementReport');
 
 module.exports = function setUpSuggestionsRoutes(app, module)
 {
@@ -54,6 +55,12 @@ module.exports = function setUpSuggestionsRoutes(app, module)
     canView,
     reportsModule.helpers.sendCachedReport.bind(null, 'suggestions/summary'),
     summaryReportRoute
+  );
+  express.get(
+    '/suggestions/reports/engagement',
+    canView,
+    reportsModule.helpers.sendCachedReport.bind(null, 'suggestions/engagement'),
+    engagementReportRoute
   );
 
   express.get('/r/suggestions/:filter', redirectToListRoute);
@@ -566,6 +573,36 @@ module.exports = function setUpSuggestionsRoutes(app, module)
       reportsModule,
       summaryReport,
       'suggestions/summary',
+      req.reportHash,
+      options,
+      function(err, reportJson)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.type('json');
+        res.send(reportJson);
+      }
+    );
+  }
+
+  function engagementReportRoute(req, res, next)
+  {
+    var query = req.query;
+    var options = {
+      interval: query.interval || 'year',
+      fromTime: reportsModule.helpers.getTime(query.from) || null,
+      toTime: reportsModule.helpers.getTime(query.to) || null,
+      status: _.isEmpty(query.status) ? [] : query.status.split(',')
+    };
+
+    reportsModule.helpers.generateReport(
+      app,
+      reportsModule,
+      engagementReport,
+      'suggestions/engagement',
       req.reportHash,
       options,
       function(err, reportJson)

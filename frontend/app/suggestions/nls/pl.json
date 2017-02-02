@@ -6,6 +6,7 @@
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "BREADCRUMBS:reports:count": "Ilość zgłoszeń",
   "BREADCRUMBS:reports:summary": "Zestawienie informacji",
+  "BREADCRUMBS:reports:engagement": "Zaangażowanie",
 
   "MSG:LOADING_FAILURE": "Ładowanie zgłoszeń nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zgłoszenia nie powiodło się :(",
@@ -180,5 +181,13 @@
   "report:filenames:summary:categories": "SUG_IloscSugestiiWgKategorii",
 
   "thanks:message": "Dziękujemy za zgłoszenie!",
-  "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)"
+  "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)",
+
+  "engagement:name": "Nazwisko i imię",
+  "engagement:nearMisses": "ZPW",
+  "engagement:suggestions": "BHP+ergonomia",
+  "engagement:sections": "Dział zgłaszający",
+  "engagement:empty": "Brak zgłoszeń pasujących do aktualnych filtrów.",
+  "engagement:export:action": "Eksportuj do pliku",
+  "engagement:export:filename": "WMES_ZAANGAZOWANIE"
 }

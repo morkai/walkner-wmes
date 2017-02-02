@@ -57,6 +57,25 @@ define([
     );
   });
 
+  router.map('/suggestionEngagementReport', canAccess, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/suggestions/SuggestionEngagementReport',
+        'app/suggestions/pages/SuggestionEngagementReportPage',
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(SuggestionEngagementReport, SuggestionEngagementReportPage)
+      {
+        return new SuggestionEngagementReportPage({
+          baseBreadcrumbNls: 'suggestions',
+          model: SuggestionEngagementReport.fromQuery(req.query)
+        });
+      }
+    );
+  });
+
   router.map('/suggestionHelp', function()
   {
     viewport.loadPage(['app/core/View', 'app/suggestions/templates/help', nls], function(View, helpTemplate)

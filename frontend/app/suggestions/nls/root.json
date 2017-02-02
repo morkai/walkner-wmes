@@ -7,6 +7,7 @@
     "BREADCRUMBS:ACTION_FORM:delete": "Delete",
     "BREADCRUMBS:reports:count": "Number of entries",
     "BREADCRUMBS:reports:summary": "Summary",
+    "BREADCRUMBS:reports:engagement": "Engagement",
 
     "MSG:LOADING_FAILURE": "Failed to load entries :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the entry :(",
@@ -180,7 +181,15 @@
     "report:filenames:summary:categories": "SUG_CountByCategory",
 
     "thanks:message": "Thanks for the entry!",
-    "thanks:footnote": "(click any button or key to close this window)"
+    "thanks:footnote": "(click any button or key to close this window)",
+
+    "engagement:name": "Name",
+    "engagement:nearMisses": "Near misses",
+    "engagement:suggestions": "OSH+ergonomics",
+    "engagement:sections": "Section",
+    "engagement:empty": "No entries matching the current filters.",
+    "engagement:export:action": "Export to file",
+    "engagement:export:filename": "WMES_ENGAGEMENT"
   },
   "pl": true
 }

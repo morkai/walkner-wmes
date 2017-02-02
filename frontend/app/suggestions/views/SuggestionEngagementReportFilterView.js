@@ -1,0 +1,118 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define([
+  'js2form',
+  'app/time',
+  'app/core/View',
+  'app/core/util/fixTimeRange',
+  'app/core/util/buttonGroup',
+  'app/core/util/idAndLabel',
+  'app/kaizenOrders/dictionaries',
+  'app/suggestions/templates/engagementReportFilter',
+  'app/reports/util/prepareDateRange',
+  'app/core/util/ExpandableSelect'
+], function(
+  js2form,
+  time,
+  View,
+  fixTimeRange,
+  buttonGroup,
+  idAndLabel,
+  kaizenDictionaries,
+  template,
+  prepareDateRange
+) {
+  'use strict';
+
+  return View.extend({
+
+    template: template,
+
+    events: {
+      'submit': function()
+      {
+        this.changeFilter();
+
+        return false;
+      },
+      'click a[data-range]': function(e)
+      {
+        var dateRange = prepareDateRange(e.target);
+
+        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
+        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
+        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
+        this.$el.submit();
+      }
+    },
+
+    destroy: function()
+    {
+      this.$('.is-expandable').expandableSelect('destroy');
+    },
+
+    serialize: function()
+    {
+      return {
+        idPrefix: this.idPrefix,
+        statuses: kaizenDictionaries.statuses
+      };
+    },
+
+    afterRender: function()
+    {
+      js2form(this.el, this.serializeFormData());
+
+      buttonGroup.toggle(this.$id('interval'));
+
+      this.$('.is-expandable').expandableSelect();
+    },
+
+    serializeFormData: function()
+    {
+      var model = this.model;
+      var from = +model.get('from');
+      var to = +model.get('to');
+
+      return {
+        interval: model.get('interval'),
+        from: from ? time.format(from, 'YYYY-MM-DD') : '',
+        to: to ? time.format(to, 'YYYY-MM-DD') : '',
+        status: model.get('status').join(',')
+      };
+    },
+
+    changeFilter: function()
+    {
+      var query = {
+        from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
+        to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
+        interval: buttonGroup.getValue(this.$id('interval')),
+        status: this.$id('status').val() || []
+      };
+
+      if (!query.from || query.from < 0)
+      {
+        query.from = 0;
+      }
+
+      if (!query.to || query.to < 0)
+      {
+        query.to = 0;
+      }
+
+      if (query.from && query.from === query.to)
+      {
+        var to = time.getMoment(query.to).add(1, 'days');
+
+        this.$id('to').val(to.format('YYYY-MM-DD'));
+
+        query.to = to.valueOf();
+      }
+
+      this.model.set(query);
+      this.model.trigger('filtered');
+    }
+
+  });
+});
