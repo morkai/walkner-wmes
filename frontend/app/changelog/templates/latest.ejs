@@ -1,24 +1,42 @@
-<h1>v0.103.0</h1>
-<h2><%- time.format('2017-01-15', 'LL') %></h2>
-<h3>Zlecenia reszty działów</h3>
+<h1>v0.104.0</h1>
+<h2><%- time.format('2017-02-05', 'LL') %></h2>
+<h3>ZPW</h3>
+<h3>Usprawnienia</h3>
 <ul>
-  <li>Zmieniono filtr daty na stronie z listą zleceń tak, aby podanie dat nie było wymagane.</li>
-  <li>Zmieniono wyświetlanie nazwy wyrobu tak, aby wyświetlana była wartość 'Nazwa' ze zlecenia, jeżeli rozpoczyna się
-    od 6 znaków A-Z0-9, a dopiero potem wartość 'Opis' (jeżeli istnieje).</li>
-  <li>Dodano do strony szczegółów zlecenia wyświetlanie komponentów z malarnii znajdujących się w podrzędnych zleceniach.</li>
+  <li>Dodano nowy raport: Zaangażowanie.</li>
 </ul>
-<h3>Baza testów</h3>
+<h3>Użytkownicy</h3>
 <ul>
-  <li>Zmieniono domyślny limit wyświetlanych klientów z 50 na 100.</li>
+  <li>Zmieniono importowanie użytkowników z bazy KD tak, aby nieaktywni użytkownicy nie byli importowani.</li>
 </ul>
-<h3>Plany godzinowe</h3>
+<h3>Formatka operatora</h3>
 <ul>
-  <li>Zmieniono ograniczenie dodawania nowego planu tak, aby można było dodawać plany do 7 dni w przyszłości.</li>
-  <li>Zmieniono ograniczenie edycji tak, aby można było edytować plany do 24 godzin po dacie planu.</li>
-  <li>Dodano funkcjonalność generowania dziennego planu na podstawie kolejki zleceń.</li>
+  <li>Poprawiono błąd powodujący niezmienianie się wartości Takt Time (SAP) po zmianie ilości osób w zleceniu.</li>
 </ul>
-<h3>Watchdog</h3>
+<h3>Planowanie</h3>
 <ul>
-  <li>Zmieniono sprawdzanie żywotności serwerów tak, aby zapytania zostały automatycznie kończone, jeżeli trwają dłużej
-    niż 5 sekund.</li>
+  <li>Poprawiono błąd przy wyświetlaniu zaznaczonego zlecenia ze statusami CNF i DLV.</li>
+  <li>Poprawiono błąd w algorytmie powodujący tworzenie pustego zlecenia na początku nowej zmiany.</li>
+  <li>Zmieniono menu 'Plany godzinowe' na 'Planowanie'.</li>
+  <li>Zmieniono algorytm planowania tak, aby ostatnie nieukończone zlecenie na III zmianie było przydzielane do
+    pozostałych linii (jeżeli jakieś są).</li>
+  <li>Zmieniono drukowanie planu tak, aby kolumna 'Ilość' znajdowała się po kolumnie 'Wyrób'.</li>
+  <li>Zmieniono drukowanie planu tak, aby plan był dzielony na kilka stron, jeżeli w planie jest więcej niż 42 zleceń.</li>
+  <li>Zmieniono wyświetlanie planowanych zleceń na zmianie danej linii tak, aby zawsze wyświetlany był plan ze wszystkich
+    MRP, w których dana linia jest aktywna.</li>
+  <li>Dodano ilość osób pracujących na linii do planu w wersji do druku.</li>
+  <li>Dodano możliwość wydrukowania planów dla wszystkich linii z danego MRP za jednym razem.</li>
+  <li>Dodano wyświetlanie komunikatu informującego o linii aktywnej w tym samym czasie na kilku różnych MRP.</li>
+  <li>Dodano oznaczanie zleceń jako nieprawidłowe (czerwone tło), jeżeli zlecenie nie ma żadnej operacji lub statusu.</li>
+  <li>Dodano ustawienia umożliwiające konfigurację algorytmu planowania.</li>
+</ul>
+<h3>Wydziały</h3>
+<h3>Kontrolery MRP</h3>
+<h3>WorkCentra</h3>
+<ul>
+  <li>Poprawiono błąd uniemożliwiający użycia znaku <code>-</code> w ID jednostki organizacyjnej.</li>
+</ul>
+<h3>Inne</h3>
+<ul>
+  <li>Poprawiono błąd powodujący nieprawidłowe informowanie użytkowników o nowej wersji aplikacji.</li>
 </ul>
