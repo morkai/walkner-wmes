@@ -18,21 +18,21 @@ define([
     template: filterTemplate,
 
     defaultFormData: {
-      _id: '',
+      nc12: '',
       description: ''
     },
 
     termToForm: {
-      '_id': function(propertyName, term, formData)
+      'nc12': function(propertyName, term, formData)
       {
         formData[propertyName] = this.unescapeRegExp(term.args[1]);
       },
-      'description': '_id'
+      'description': 'nc12'
     },
 
     serializeFormToQuery: function(selector)
     {
-      ['_id', 'description'].forEach(function(prop)
+      ['nc12', 'description'].forEach(function(prop)
       {
         this.serializeRegexTerm(selector, prop, -1, null, true);
       }, this);

@@ -1089,15 +1089,18 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     step(
       function findXiconfOrderStep()
       {
-        Order
-          .findOne({_id: input.orderNo, 'bom.nc12': input.nc12}, {_id: 1})
+        XiconfComponentWeight
+          .find({nc12: input.nc12})
           .lean()
           .exec(this.parallel());
 
-        XiconfComponentWeight
-          .findOne({_id: input.nc12})
-          .lean()
-          .exec(this.parallel());
+        if (input.requireComponent)
+        {
+          Order
+            .findOne({_id: input.orderNo, 'bom.nc12': input.nc12}, {_id: 1})
+            .lean()
+            .exec(this.parallel());
+        }
 
         let conditions = null;
 
@@ -1118,7 +1121,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             .exec(this.parallel());
         }
       },
-      function checkStep(err, order, componentWeight, xiconfOrder)
+      function checkStep(err, componentWeights, order, xiconfOrder)
       {
         if (err)
         {
@@ -1133,12 +1136,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return reply(new Error('DB_FAILURE'), null);
         }
 
-        if (!order)
+        if (input.requireComponent && !order)
         {
           return reply(new Error('ORDER_NOT_FOUND'));
         }
 
-        if (!componentWeight)
+        if (!componentWeights.length)
         {
           return reply(new Error('WEIGHT_NOT_FOUND'));
         }
@@ -1148,7 +1151,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return reply(new Error('SN_ALREADY_USED'));
         }
 
-        return reply(null, componentWeight);
+        return reply(null, componentWeights);
       }
     );
   }

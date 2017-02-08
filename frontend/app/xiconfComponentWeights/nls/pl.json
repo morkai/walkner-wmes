@@ -19,7 +19,7 @@
 
   "filter:submit": "Filtruj komponenty",
 
-  "PROPERTY:_id": "12NC komponentu",
+  "PROPERTY:nc12": "12NC komponentu",
   "PROPERTY:description": "Opis",
   "PROPERTY:weight": "Waga [g]",
 

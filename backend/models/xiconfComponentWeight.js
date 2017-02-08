@@ -5,7 +5,11 @@
 module.exports = function setupXiconfComponentWeightModel(app, mongoose)
 {
   const xiconfComponentWeight = new mongoose.Schema({
-    _id: String,
+    nc12: {
+      type: String,
+      required: true,
+      match: /^[0-9]{12}$/
+    },
     description: {
       type: String,
       required: true,
@@ -21,7 +25,7 @@ module.exports = function setupXiconfComponentWeightModel(app, mongoose)
     minimize: false
   });
 
-  xiconfComponentWeight.index({products: 1});
+  xiconfComponentWeight.index({nc12: 1});
 
   xiconfComponentWeight.statics.TOPIC_PREFIX = 'xiconfComponentWeights';
 

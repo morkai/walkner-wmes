@@ -20,7 +20,7 @@
 
     "filter:submit": "Filter components",
 
-    "PROPERTY:_id": "Component 12NC",
+    "PROPERTY:nc12": "Component 12NC",
     "PROPERTY:description": "Description",
     "PROPERTY:weight": "Waga [g]",
 
