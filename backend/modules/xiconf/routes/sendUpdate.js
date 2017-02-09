@@ -36,14 +36,18 @@ module.exports = function sendUpdateRoute(app, xiconfModule, req, res, next)
         var fromVersion = matches[1];
         var toVersion = matches[2];
 
-        if (semver.satisfies(inputVersion, fromVersion))
+        try
         {
-          updates.push({
-            from: fromVersion,
-            to: toVersion,
-            fileName: updateFile
-          });
+          if (semver.satisfies(inputVersion, fromVersion))
+          {
+            updates.push({
+              from: fromVersion,
+              to: toVersion,
+              fileName: updateFile
+            });
+          }
         }
+        catch (err) {}
       }
 
       updates.sort(function(a, b)
