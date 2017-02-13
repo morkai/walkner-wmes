@@ -88,8 +88,21 @@ module.exports = function startCoreRoutes(app, express)
       );
     });
 
+    var appCacheManifest = '';
+
+    if (!dev && app.updater)
+    {
+      _.forEach(app.updater.config.manifests, function(manifest)
+      {
+        if (manifest.frontendVersionKey === 'frontend' || !manifest.frontendVersionKey)
+        {
+          appCacheManifest = manifest.path;
+        }
+      });
+    }
+
     res.render('index', {
-      appCacheManifest: !dev ? '/manifest.appcache' : '',
+      appCacheManifest: appCacheManifest,
       appData: appData,
       mainJsFile: app.options.mainJsFile || 'main.js',
       mainCssFile: app.options.mainCssFile || 'assets/main.css'
