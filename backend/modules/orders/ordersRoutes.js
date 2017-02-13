@@ -14,7 +14,9 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   var express = app[ordersModule.config.expressId];
   var userModule = app[ordersModule.config.userId];
   var settings = app[ordersModule.config.settingsId];
-  var Order = app[ordersModule.config.mongooseId].model('Order');
+  var mongoose = app[ordersModule.config.mongooseId];
+  var Order = mongoose.model('Order');
+  var OrderZlf1 = mongoose.model('OrderZlf1');
 
   var canView = userModule.auth('ORDERS:VIEW');
   var canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
@@ -38,6 +40,10 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   );
 
   express.put('/orders/settings/:id', canManage, settings.updateRoute);
+
+  express.get('/orders/zlf1', canPrint, express.crud.browseRoute.bind(null, app, OrderZlf1));
+
+  express.get('/orders/zlf1/:id', canPrint, express.crud.readRoute.bind(null, app, OrderZlf1));
 
   express.get('/orders', express.crud.browseRoute.bind(null, app, Order));
 

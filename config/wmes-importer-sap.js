@@ -20,6 +20,7 @@ exports.modules = [
   'orders/importer/emptyOrders',
   'orders/importer/intake',
   'orders/importer/bom',
+  'orders/importer/zlf1',
   'warehouse/importer/importQueue',
   'warehouse/importer/controlCycles',
   'warehouse/importer/transferOrders',
@@ -40,7 +41,7 @@ exports.mongoose = {
   models: [
     'event',
     'setting',
-    'order', 'emptyOrder', 'orderIntake',
+    'order', 'emptyOrder', 'orderIntake', 'orderZlf1',
     'mrpController', 'clipOrderCount',
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
@@ -72,6 +73,7 @@ exports.events = {
       'emptyOrders.synced',
       'orders.intake.synced',
       'orders.bom.synced',
+      'orders.zlf1.synced',
       'clipOrderCount.created',
       'warehouse.*.synced',
       'xiconf.orders.synced',
@@ -83,6 +85,7 @@ exports.events = {
     error: [
       'orders.intake.syncFailed',
       'orders.bom.syncFailed',
+      'orders.zlf1.syncFailed',
       'warehouse.*.syncFailed',
       'xiconf.orders.syncFailed',
       'orderDocuments.syncFailed',
@@ -111,7 +114,7 @@ exports['messenger/server'] = {
   repPort: 60021,
   broadcastTopics: [
     'events.saved',
-    'orders.synced', 'orders.intake.synced', 'orders.bom.synced',
+    'orders.synced', 'orders.intake.synced', 'orders.bom.synced', 'orders.zlf1.synced',
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
@@ -172,6 +175,11 @@ exports['orderDocuments/importer/eto'] = {
 
 exports['orders/importer/bom'] = {
   filterRe: /^ORDERS_COMPONENTS\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orders/importer/zlf1'] = {
+  filterRe: /^ORDERS_ZLF1\.json$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 

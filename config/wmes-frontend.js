@@ -219,7 +219,7 @@ exports.mongoose = {
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',
-    'order', 'mechOrder', 'emptyOrder', 'clipOrderCount',
+    'order', 'mechOrder', 'emptyOrder', 'clipOrderCount', 'orderZlf1',
     'orderDocumentClient', 'orderDocumentStatus', 'orderDocumentName',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan', 'dailyMrpPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet', 'prodChangeRequest',
