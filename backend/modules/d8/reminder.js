@@ -29,7 +29,6 @@ module.exports = function setUpD8Reminder(app, module)
     rmWhitespace: true
   });
 
-  app.broker.subscribe('app.started', scheduleNextReminder).setLimit(1);
   app.broker.subscribe('app.started', remind).setLimit(1);
 
   function scheduleNextReminder()
