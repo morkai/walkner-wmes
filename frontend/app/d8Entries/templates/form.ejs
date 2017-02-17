@@ -14,6 +14,10 @@
         </div>
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-rid" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:rid') %></label>
+        <input id="<%- idPrefix %>-rid" class="form-control" type="number" name="rid" required min="1">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:subject') %></label>
         <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required>
       </div>

@@ -87,6 +87,7 @@
   "FORM:ERROR:addFailure": "Nie udało się dodać zgłoszenia :(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zgłoszenia :(",
   "FORM:ERROR:upload": "Nie udało się załadować załączników :(",
+  "FORM:ERROR:duplicateId": "Podane ID jest już wykorzystane.",
   "FORM:help:attachment": "(wybierz tylko wtedy, gdy chcesz nadpisać istniejący plik)",
   "FORM:help:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu, ale sami nie będą mogli dokonywać żadnych zmian.",
   "FORM:help:date:diff": "Wybrano datę będącą {days} dni w {dir, select, past{przeszłości} other{przyszłości}}.",

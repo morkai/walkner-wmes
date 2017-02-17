@@ -1,3 +1,6 @@
+.d8Entries-form .form-control[name="rid"] {
+  width: 11em;
+}
 .d8Entries-form .btn-primary > .fa-spinner {
   display: none;
 }

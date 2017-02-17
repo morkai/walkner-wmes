@@ -4,7 +4,6 @@
 
 const _ = require('lodash');
 const deepEqual = require('deep-equal');
-const autoIncrement = require('mongoose-auto-increment');
 const businessDays = require('../modules/reports/businessDays');
 
 module.exports = function setupD8EntryModel(app, mongoose)
@@ -101,6 +100,11 @@ module.exports = function setupD8EntryModel(app, mongoose)
   });
 
   const d8EntrySchema = mongoose.Schema({
+    rid: {
+      type: Number,
+      required: true,
+      min: 1
+    },
     creator: userInfoSchema,
     createdAt: Date,
     updater: userInfoSchema,
@@ -170,13 +174,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     minimize: false
   });
 
-  d8EntrySchema.plugin(autoIncrement.plugin, {
-    model: 'D8Entry',
-    field: 'rid',
-    startAt: 1,
-    incrementBy: 1
-  });
-
+  d8EntrySchema.index({rid: 1}, {unique: true});
   d8EntrySchema.index({
     'observers.user.id': 1,
     'observers.notify': 1
@@ -565,6 +563,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     this.updatedAt = new Date();
 
     const changes = this.compareProperties(_.pick(input, [
+      'rid',
       'owner',
       'status',
       'division',

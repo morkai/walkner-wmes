@@ -154,7 +154,7 @@ define([
 
     serializeItemValue: function(property, value, isOld, changeIndex)
     {
-      if (!_.isBoolean(value) && _.isEmpty(value))
+      if (value == null || value === '')
       {
         return '-';
       }

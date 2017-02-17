@@ -59,6 +59,16 @@ define([
         this.toggleRequiredFlags();
       },
 
+      'input [name="rid"]': function(e)
+      {
+        e.target.setCustomValidity('');
+      },
+
+      'blur [name="rid"]': function(e)
+      {
+        e.target.setCustomValidity('');
+      },
+
       'change [type="date"]': function(e)
       {
         var moment = time.getMoment(e.target.value, 'YYYY-MM-DD');
@@ -309,6 +319,7 @@ define([
         return;
       }
 
+      this.$id('rid').prop('readonly', true);
       this.$id('status').find('.btn').addClass('disabled');
       this.$id('subject').prop('readonly', true);
       this.$id('division').select2('disable', true);
@@ -410,6 +421,24 @@ define([
           family: strip.family || ''
         }
       }));
+    },
+
+    handleFailure: function(jqXhr)
+    {
+      var error = (jqXhr.responseJSON || {}).error || {code: 0};
+
+      if (error.code === 11000)
+      {
+        var view = this;
+
+        view.$id('rid')[0].setCustomValidity(t('d8Entries', 'FORM:ERROR:duplicateId'));
+
+        setTimeout(function() { view.$id('submit').click(); }, 1);
+
+        return;
+      }
+
+      return FormView.prototype.handleFailure.apply(this, arguments);
     }
 
   });
