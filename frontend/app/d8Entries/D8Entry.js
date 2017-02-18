@@ -120,7 +120,11 @@ define([
         }
       });
 
-      if (row.strips.length === 1)
+      if (!row.strips.length && remainingTeam.length)
+      {
+        team.push(remainingTeam.shift());
+      }
+      else if (row.strips.length === 1)
       {
         row.stripNos = stripNos[0];
         row.stripDates = stripDates[0];
