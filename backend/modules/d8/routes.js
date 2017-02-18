@@ -334,20 +334,20 @@ module.exports = function setUpD8Routes(app, module)
 
   function getPropsForEdit(entry, roles)
   {
+    let props = ['comment'];
+
     if (entry.status === 'closed')
     {
-      return ['comment'];
+      return props;
     }
-
-    let props = ['comment'];
 
     if (roles.manager || roles.owner)
     {
-      props = props.concat('subscribers', 'attachment', 'members', 'd5CloseDateOk');
+      props = props.concat('subscribers', 'attachment', 'members');
 
       if (roles.manager)
       {
-        props = props.concat('owner');
+        props = props.concat('owner', 'd5CloseDateOk');
       }
 
       if (roles.owner)
