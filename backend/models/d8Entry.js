@@ -75,7 +75,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     role: {
       type: String,
       required: true,
-      enum: ['creator', 'owner', 'member', 'subscriber']
+      enum: ['creator', 'manager', 'owner', 'member', 'subscriber']
     },
     lastSeenAt: Date,
     notify: Boolean,
@@ -115,11 +115,11 @@ module.exports = function setupD8EntryModel(app, mongoose)
       required: true,
       enum: STATUSES
     },
-    division: {
+    area: {
       type: String,
-      ref: 'Division',
-      default: null
+      required: true
     },
+    manager: userInfoSchema,
     subject: {
       type: String,
       required: true,
@@ -182,7 +182,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
   d8EntrySchema.index({'strips.date': -1});
   d8EntrySchema.index({'strips.no': -1});
   d8EntrySchema.index({status: 1});
-  d8EntrySchema.index({division: 1});
+  d8EntrySchema.index({area: 1});
   d8EntrySchema.index({crsRegisterDate: -1});
 
   d8EntrySchema.statics.TOPIC_PREFIX = 'd8.entries';
@@ -362,7 +362,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
   d8EntrySchema.methods.getUserRoles = function(user)
   {
     return {
-      manager: user.prodFunction === 'manager' && (!user.orgUnitId || user.orgUnitId === this.division),
+      manager: this.manager && this.manager.id === user._id,
       creator: this.creator.id === user._id,
       owner: this.owner.id === user._id,
       member: this.members.some(member => member.id === user._id),
@@ -374,11 +374,22 @@ module.exports = function setupD8EntryModel(app, mongoose)
   {
     const observers = {};
 
-    if (this.owner && !observers[this.owner.id])
+    if (this.owner)
     {
       observers[this.owner.id] = {
         user: this.owner,
         role: 'owner',
+        lastSeenAt: null,
+        notify: true,
+        changes: {}
+      };
+    }
+
+    if (this.manager && !observers[this.manager.id])
+    {
+      observers[this.manager.id] = {
+        user: this.manager,
+        role: 'manager',
         lastSeenAt: null,
         notify: true,
         changes: {}
@@ -432,7 +443,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     const newObserverMap = {};
 
     // Owner
-    if (this.owner && !newObserverMap[this.owner.id])
+    if (this.owner)
     {
       var owner = oldObserverMap[this.owner.id];
 
@@ -456,6 +467,33 @@ module.exports = function setupD8EntryModel(app, mongoose)
       }
 
       newObserverMap[owner.user.id] = owner;
+    }
+
+    // Manager
+    if (this.manager && !newObserverMap[this.manager.id])
+    {
+      var manager = oldObserverMap[this.manager.id];
+
+      if (!manager)
+      {
+        manager = {
+          user: this.manager,
+          role: 'manager',
+          lastSeenAt: null,
+          notify: false,
+          changes: {}
+        };
+      }
+
+      _.assign(manager.changes, changedPropertyMap);
+
+      if (!manager.notify)
+      {
+        manager.notify = true;
+        usersToNotify[manager.user.id] = manager.changes;
+      }
+
+      newObserverMap[manager.user.id] = manager;
     }
 
     // Members
@@ -566,7 +604,8 @@ module.exports = function setupD8EntryModel(app, mongoose)
       'rid',
       'owner',
       'status',
-      'division',
+      'area',
+      'manager',
       'strips',
       'subject',
       'problemDescription',

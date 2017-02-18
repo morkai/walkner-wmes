@@ -390,6 +390,12 @@
     "TEXT:d8.problemSources.edited": "Edited problem source: <a href='\\#d8/problemSources/{model->_id}'>{model->name}</a>",
     "TYPE:d8.problemSources.deleted": "8D > Problem sources: deleted",
     "TEXT:d8.problemSources.deleted": "Deleted problem source: <em>{model->name}</em>",
+    "TYPE:d8.areas.added": "8D > Areas: added",
+    "TEXT:d8.areas.added": "Added area: <a href='\\#d8/areas/{model->_id}'>{model->name}</a>",
+    "TYPE:d8.areas.edited": "8D > Areas: edited",
+    "TEXT:d8.areas.edited": "Edited area: <a href='\\#d8/areas/{model->_id}'>{model->name}</a>",
+    "TYPE:d8.areas.deleted": "8D > Areas: deleted",
+    "TEXT:d8.areas.deleted": "Deleted area: <em>{model->name}</em>",
     "TYPE:d8.entries.deleted": "8D > Entries: deleted",
     "TEXT:d8.entries.deleted": "Deleted entry: <em>{model->rid}</em>"
   },

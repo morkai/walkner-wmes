@@ -59,6 +59,26 @@ define([
         this.toggleRequiredFlags();
       },
 
+      'change [name="area"]': function()
+      {
+        var area = dictionaries.areas.get(this.$id('area').val());
+
+        if (!area)
+        {
+          return;
+        }
+
+        var manager = area.get('manager');
+
+        if (manager)
+        {
+          this.$id('manager').select2('data', {
+            id: manager.id,
+            text: manager.label
+          });
+        }
+      },
+
       'input [name="rid"]': function(e)
       {
         e.target.setCustomValidity('');
@@ -223,6 +243,13 @@ define([
           label: owner.text
         };
 
+        var manager = this.$id('manager').select2('data');
+
+        formData.manager = !manager ? null : {
+          id: manager.id,
+          label: manager.text
+        };
+
         formData.members = this.$id('members')
           .select2('data')
           .map(function(owner) { return {id: owner.id, label: owner.text}; })
@@ -260,14 +287,8 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      this.$id('division').select2({
-        data: dictionaries.divisions.map(function(division)
-        {
-          return {
-            id: division.id,
-            text: division.id + ' - ' + division.get('description')
-          };
-        })
+      this.$id('area').select2({
+        data: dictionaries.areas.map(idAndLabel)
       });
 
       this.$id('entrySource').select2({
@@ -286,6 +307,7 @@ define([
       });
 
       this.setUpOwnerSelect2();
+      this.setUpManagerSelect2();
       this.setUpMembersSelect2();
       this.setUpStrips();
       this.toggleD5CloseDateOk(!!this.model.get('d5CloseDateOk'));
@@ -322,7 +344,8 @@ define([
       this.$id('rid').prop('readonly', true);
       this.$id('status').find('.btn').addClass('disabled');
       this.$id('subject').prop('readonly', true);
-      this.$id('division').select2('disable', true);
+      this.$id('area').select2('disable', true);
+      this.$id('manager').select2('disable', true);
       this.$id('entrySource').select2('disable', true);
 
       if (!roles.manager)
@@ -358,6 +381,22 @@ define([
         $owner.select2('data', {
           id: owner.id,
           text: owner.label
+        });
+      }
+    },
+
+    setUpManagerSelect2: function()
+    {
+      var manager = this.model.get('manager');
+      var $manager = setUpUserSelect2(this.$id('manager'), {
+        textFormatter: formatUserSelect2Text
+      });
+
+      if (manager)
+      {
+        $manager.select2('data', {
+          id: manager.id,
+          text: manager.label
         });
       }
     },

@@ -541,7 +541,8 @@ module.exports = function setUpD8Routes(app, module)
     result['"creator'] = doc.creator.label;
     result.status = doc.status;
     result['"subject'] = doc.subject;
-    result['"division'] = doc.division;
+    result['"area'] = doc.area;
+    result['"manager'] = doc.manager ? doc.manager.label : '';
     result['"owner'] = doc.owner ? doc.owner.label : '';
     result['"members'] = _.map(doc.members, member => member.label).join('; ');
     result['"stripNo'] = stripNos.join('; ');

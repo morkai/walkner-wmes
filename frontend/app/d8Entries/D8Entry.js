@@ -62,6 +62,7 @@ define([
       var obj = this.toJSON();
 
       obj.statusText = t('status:' + obj.status);
+      obj.area = dictionaries.areas.getLabel(obj.area) || '-';
       obj.entrySource = dictionaries.entrySources.getLabel(obj.entrySource) || '-';
       obj.problemSource = dictionaries.problemSources.getLabel(obj.problemSource) || '-';
 
@@ -169,8 +170,7 @@ define([
 
     isManager: function()
     {
-      return user.data.prodFunction === 'manager'
-        && (!user.data.orgUnitId || user.data.orgUnitId === this.get('division'));
+      return this.attributes.manager && this.attributes.manager.id === user.data._id;
     },
 
     isCreator: function()

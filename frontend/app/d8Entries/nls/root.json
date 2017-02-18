@@ -44,7 +44,8 @@
 
     "PROPERTY:rid": "ID",
     "PROPERTY:subject": "Subject",
-    "PROPERTY:division": "Division",
+    "PROPERTY:area": "Area",
+    "PROPERTY:manager": "Manager",
     "PROPERTY:team": "Team",
     "PROPERTY:owner": "Team leader",
     "PROPERTY:members": "Team members",
@@ -77,6 +78,7 @@
     "status:closed": "Closed",
 
     "role:creator": "Creator",
+    "role:manager": "Manager",
     "role:owner": "Team leader",
     "role:member": "Team member",
     "role:subscriber": "Subscriber",

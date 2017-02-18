@@ -42,7 +42,7 @@ define([
     {
       return {
         status: [].concat(dictionaries.statuses),
-        division: null,
+        area: null,
         entrySource: null,
         problemSource: null,
         userType: 'others',
@@ -53,7 +53,7 @@ define([
     },
 
     termToForm: {
-      'division': function(propertyName, term, formData)
+      'area': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
       },
@@ -84,16 +84,16 @@ define([
       {
         formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
       },
-      'status': 'division',
-      'entrySource': 'division',
-      'problemSource': 'division'
+      'status': 'area',
+      'entrySource': 'area',
+      'problemSource': 'area'
     },
 
     serialize: function()
     {
       return _.extend(FilterView.prototype.serialize.call(this), {
         statuses: dictionaries.statuses,
-        divisions: dictionaries.divisions.toJSON(),
+        areas: dictionaries.areas.toJSON(),
         entrySources: dictionaries.entrySources.toJSON(),
         problemSources: dictionaries.problemSources.toJSON()
       });
@@ -133,7 +133,7 @@ define([
         ]});
       }
 
-      ['entrySource', 'problemSource', 'division', 'status'].forEach(function(property)
+      ['entrySource', 'problemSource', 'area', 'status'].forEach(function(property)
       {
         var value = this.$id(property).val();
 

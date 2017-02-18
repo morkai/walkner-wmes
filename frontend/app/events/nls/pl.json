@@ -389,6 +389,12 @@
   "TEXT:d8.problemSources.edited": "Zmodyfikowano źródło problemów: <a href='\\#d8/problemSources/{model->_id}'>{model->name}</a>",
   "TYPE:d8.problemSources.deleted": "8D > Źródła problemów: usunięcie",
   "TEXT:d8.problemSources.deleted": "Usunięto źródło problemów: <em>{model->name}</em>",
+  "TYPE:d8.areas.added": "8D > Obszary: dodanie",
+  "TEXT:d8.areas.added": "Dodano obszar: <a href='\\#d8/areas/{model->_id}'>{model->name}</a>",
+  "TYPE:d8.areas.edited": "8D > Obszary: edycja",
+  "TEXT:d8.areas.edited": "Zmodyfikowano obszar: <a href='\\#d8/areas/{model->_id}'>{model->name}</a>",
+  "TYPE:d8.areas.deleted": "8D > Obszary: usunięcie",
+  "TEXT:d8.areas.deleted": "Usunięto obszar: <em>{model->name}</em>",
   "TYPE:d8.entries.deleted": "8D > Zgłoszenia: usunięcie",
   "TEXT:d8.entries.deleted": "Usunięto zgłoszenie: <em>{model->rid}</em>"
 }

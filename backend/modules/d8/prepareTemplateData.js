@@ -36,7 +36,8 @@ module.exports = function setUpPrepareTemplateData(app, module)
         owner: entry.owner.label,
         members: (entry.members || []).map(member => member.label),
         status: nameMaps.status[entry.status],
-        division: entry.division,
+        area: entry.area,
+        manager: entry.manager ? entry.manager.label : '-',
         subject: entry.subject,
         strips: _.map(entry.strips, function(strip)
         {

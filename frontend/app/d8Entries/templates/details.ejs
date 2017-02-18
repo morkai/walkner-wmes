@@ -11,7 +11,7 @@
               <div class="prop-name <%- model.changed.status ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:status') %></div>
               <div class="prop-value"><%= model.statusText || '-' %></div>
             </div>
-            <% ['division', 'entrySource', 'problemSource'].forEach(function(prop) { %>
+            <% ['area', 'entrySource', 'problemSource'].forEach(function(prop) { %>
             <div class="prop">
               <div class="prop-name <%- model.changed[prop] ? 'is-changed' : '' %>"><%- t('d8Entries', 'PROPERTY:' + prop) %></div>
               <div class="prop-value"><%= model[prop] || '-' %></div>

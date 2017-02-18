@@ -1,0 +1,27 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- t('d8Areas', 'PROPERTY:_id') %></label>
+        <input id="<%- idPrefix %>-id" class="form-control" type="text" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-_]+$">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('d8Areas', 'PROPERTY:name') %></label>
+        <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required maxlength="100">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-manager" class="control-label"><%- t('d8Areas', 'PROPERTY:manager') %></label>
+        <input id="<%- idPrefix %>-manager" type="text" name="manager">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-position" class="control-label is-required"><%- t('d8Areas', 'PROPERTY:position') %></label>
+        <input id="<%- idPrefix %>-position" class="form-control" type="number" name="position" min="0" required>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

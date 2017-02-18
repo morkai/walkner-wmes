@@ -29,6 +29,7 @@ exports.start = function startD8Module(app, module)
   }
 
   module.DICTIONARIES = {
+    areas: 'D8Area',
     entrySources: 'D8EntrySource',
     problemSources: 'D8ProblemSource'
   };

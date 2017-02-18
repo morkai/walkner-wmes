@@ -167,6 +167,7 @@ define([
       switch (property)
       {
         case 'owner':
+        case 'manager':
           return renderUserInfo({userInfo: value});
 
         case 'members':
@@ -175,7 +176,7 @@ define([
         case 'status':
           return t('d8Entries', 'status:' + value);
 
-        case 'division':
+        case 'area':
         case 'entrySource':
         case 'problemSource':
         {

@@ -43,7 +43,8 @@
 
   "PROPERTY:rid": "ID",
   "PROPERTY:subject": "Temat zgłoszenia",
-  "PROPERTY:division": "Wydział",
+  "PROPERTY:area": "Obszar",
+  "PROPERTY:manager": "Kierownik obszaru",
   "PROPERTY:team": "Zespół",
   "PROPERTY:owner": "Lider zespołu",
   "PROPERTY:members": "Członkowie zespołu",
@@ -76,6 +77,7 @@
   "status:closed": "Zamknięte",
 
   "role:creator": "Zgłaszający",
+  "role:manager": "Kierownik obszaru",
   "role:owner": "Lider zespołu",
   "role:member": "Członek zespołu",
   "role:subscriber": "Obserwator",

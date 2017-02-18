@@ -5,7 +5,7 @@ define([
   '../broker',
   '../pubsub',
   '../user',
-  '../data/divisions',
+  '../d8Areas/D8AreaCollection',
   '../d8EntrySources/D8EntrySourceCollection',
   '../d8ProblemSources/D8ProblemSourceCollection'
 ], function(
@@ -13,14 +13,14 @@ define([
   broker,
   pubsub,
   user,
-  divisions,
+  D8AreaCollection,
   D8EntrySourceCollection,
   D8ProblemSourceCollection
 ) {
   'use strict';
 
   var PROP_TO_DICT = {
-    division: 'divisions',
+    area: 'areas',
     entrySource: 'entrySources',
     problemSource: 'problemSources'
   };
@@ -31,7 +31,7 @@ define([
   var seenSub = null;
   var dictionaries = {
     statuses: [],
-    divisions: divisions,
+    areas: new D8AreaCollection(),
     entrySources: new D8EntrySourceCollection(),
     problemSources: new D8ProblemSourceCollection(),
     loaded: false,
@@ -73,6 +73,7 @@ define([
       });
 
       pubsubSandbox = pubsub.sandbox();
+      pubsubSandbox.subscribe('d8.areas.**', handleDictionaryMessage);
       pubsubSandbox.subscribe('d8.entrySources.**', handleDictionaryMessage);
       pubsubSandbox.subscribe('d8.problemSources.**', handleDictionaryMessage);
 
@@ -130,6 +131,7 @@ define([
   function resetDictionaries(data)
   {
     [
+      'areas',
       'entrySources',
       'problemSources'
     ].forEach(function(prop)
