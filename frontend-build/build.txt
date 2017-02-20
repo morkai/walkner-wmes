@@ -1015,6 +1015,7 @@ app/qiActionStatuses/QiActionStatus.js
 app/qiActionStatuses/routes.js
 app/pscs/routes.js
 app/d8Entries/routes.js
+app/d8Areas/routes.js
 app/d8EntrySources/routes.js
 app/d8ProblemSources/routes.js
 app/wmes-routes.js

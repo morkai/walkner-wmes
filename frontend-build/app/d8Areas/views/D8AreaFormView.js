@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/core/views/FormView","app/users/util/setUpUserSelect2","app/d8Areas/templates/form"],function(e,t,a){"use strict";return e.extend({template:a,afterRender:function(){e.prototype.afterRender.call(this),this.options.editMode&&(this.$id("id").prop("readonly",!0),this.$id("name").focus()),this.setUpManagerSelect2()},setUpManagerSelect2:function(){var e=this.model.get("manager"),a=t(this.$id("manager"),{textFormatter:function(e,t){return t}});e&&a.select2("data",{id:e.id,text:e.label})},serializeForm:function(e){var t=this.$id("manager").select2("data");return e.manager=t?{id:t.id,label:t.text}:null,e}})});
