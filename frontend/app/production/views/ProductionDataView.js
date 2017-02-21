@@ -315,7 +315,7 @@ define([
         var totalQuantityTodo = (this.model.prodShiftOrder.get('orderData') || {}).qty;
         var totalQuantityDone = this.model.prodShiftOrder.get('totalQuantityDone');
 
-        html += totalQuantityDone ? totalQuantityDone.total : '?';
+        html += totalQuantityDone && totalQuantityDone.total >= 0 ? totalQuantityDone.total : '?';
         html += '/';
         html += totalQuantityTodo ? totalQuantityTodo : '?';
       }
