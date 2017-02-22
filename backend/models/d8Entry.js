@@ -364,7 +364,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     return {
       manager: this.manager && this.manager.id === user._id,
       creator: this.creator.id === user._id,
-      owner: this.owner.id === user._id,
+      owner: this.owner && this.owner.id === user._id,
       member: this.members.some(member => member.id === user._id),
       observer: true
     };
