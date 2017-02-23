@@ -499,7 +499,7 @@ define([
       var $tip = popover.tip();
 
       this.model.get($item[0].dataset.id).update({
-        qtyPlan: Math.max(0, parseInt($tip.find('[name="qtyPlan"]').val(), 10)),
+        qtyPlan: Math.max(0, parseInt($tip.find('[name="qtyPlan"]').val(), 10) || 0),
         ignored: $tip.find('[name="ignored"]:checked').val() === '1',
         operation: this.selectedOperation
       });
