@@ -10,14 +10,14 @@ module.exports = function findOrdersRoute(app, productionModule, req, res, next)
   var Order = mongoose.model('Order');
   var MechOrder = mongoose.model('MechOrder');
 
-  if (typeof req.query.no === 'string' && /^[0-9]{3,9}$/.test(req.query.no))
+  if (typeof req.query.no === 'string' && /[0-9]{3,9}/.test(req.query.no))
   {
-    return findOrdersByNo(req.query.no, res, next);
+    return findOrdersByNo(req.query.no.match(/([0-9]{3,9})/)[1], res, next);
   }
 
-  if (typeof req.query.nc12 === 'string' && /^[a-zA-Z0-9]{3,12}$/.test(req.query.nc12))
+  if (typeof req.query.nc12 === 'string' && /[a-zA-Z0-9]{3,12}/.test(req.query.nc12))
   {
-    return findOrdersByNc12(req.query.nc12, res, next);
+    return findOrdersByNc12(req.query.nc12.match(/([a-zA-Z0-9]{3,12})/)[1], res, next);
   }
 
   return res.json([]);
