@@ -88,6 +88,7 @@
   "planning:orders:laborTime": "Czas Labor",
   "planning:orders:qty": "Ilość",
   "planning:orders:statuses": "Status",
+  "planning:orders:ignored": "Ignorowane?",
   "planning:lineOrders:orderNo": "Nr zlecenia",
   "planning:lineOrders:qty:planned": "Ilość zaplanowana",
   "planning:lineOrders:qty:remaining": "Ilość pozostała",

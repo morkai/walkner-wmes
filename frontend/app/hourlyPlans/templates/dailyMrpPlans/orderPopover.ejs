@@ -48,5 +48,14 @@
   <tr>
     <th><%- t('hourlyPlans', 'planning:orders:statuses') %>
     <td><span class="dailyMrpPlan-popover-value"><%- order.statuses.join(' ') %></span>
+  <tr>
+    <th><%- t('hourlyPlans', 'planning:orders:ignored') %>
+    <td>
+      <% if (editable) { %>
+      <label><input type="radio" name="ignored" value="0" <%- order.ignored ? '' : 'checked' %>> <%- t('core', 'BOOL:false') %></label>
+      <label><input type="radio" name="ignored" value="1" <%- order.ignored ? 'checked' : '' %>> <%- t('core', 'BOOL:true') %></label>
+      <% } else { %>
+      <%- t('core', 'BOOL:' + !!order.ignored) %>
+      <% } %>
   </tbody>
 </table>

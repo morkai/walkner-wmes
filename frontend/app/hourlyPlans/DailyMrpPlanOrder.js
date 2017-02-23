@@ -25,6 +25,7 @@ define([
         confirmed: this.isConfirmed(),
         delivered: this.isDelivered(),
         invalid: !this.isValid(),
+        ignored: this.isIgnored(),
         customQty: this.get('qtyPlan') > 0
       };
     },
@@ -63,6 +64,11 @@ define([
     isValidLaborTime: function()
     {
       return this.getLaborTime() > 0;
+    },
+
+    isIgnored: function()
+    {
+      return !!this.get('ignored');
     },
 
     isCompleted: function()
@@ -130,6 +136,11 @@ define([
       if (!isNaN(data.qtyPlan) && _.isNumber(data.qtyPlan))
       {
         changes.qtyPlan = Math.max(0, data.qtyPlan);
+      }
+
+      if (typeof data.ignored === 'boolean')
+      {
+        changes.ignored = data.ignored;
       }
 
       var attrs = this.attributes;

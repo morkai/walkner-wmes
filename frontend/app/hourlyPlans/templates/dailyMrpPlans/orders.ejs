@@ -5,7 +5,7 @@
   </button>
   <div id="<%- idPrefix %>-list" class="dailyMrpPlan-list">
     <% orders.forEach(function(order) { %>
-    <div class="dailyMrpPlan-list-item is-order is-selectable <%- order.completed ? 'is-completed' : '' %> <%- order.invalid ? 'is-invalid' : '' %>" data-id="<%= order._id %>">
+    <div class="dailyMrpPlan-list-item is-order is-selectable <%- order.completed ? 'is-completed' : '' %> <%- order.invalid ? 'is-invalid' : '' %> <%- order.ignored ? 'is-ignored' : '' %>" data-id="<%= order._id %>">
       <div class="dailyMrpPlan-list-item-inner <%- order.confirmed ? 'is-cnf' : '' %> <%- order.delivered ? 'is-dnf' : '' %>">
         <%= order._id %>
         <span class="dailyMrpPlan-list-property <%- order.customQty ? '' : 'hidden' %>" data-property="qtyPlan"><i class="fa fa-sort-numeric-desc"></i></span>

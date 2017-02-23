@@ -534,7 +534,8 @@ define([
           return order;
         }
 
-        if ((IGNORE_DONE && order.isCompleted())
+        if (order.isIgnored()
+          || (IGNORE_DONE && order.isCompleted())
           || (IGNORE_CNF && order.isConfirmed())
           || (IGNORE_DLV && order.isDelivered()))
         {

@@ -110,6 +110,7 @@ define([
       this.listenTo(this.model, 'reset', this.render);
       this.listenTo(this.model, 'change:qtyPlan', this.onQtyPlanChanged);
       this.listenTo(this.model, 'change:operation', this.onOperationChanged);
+      this.listenTo(this.model, 'change:ignored', this.onIgnoredChanged);
       this.listenTo(this.model, 'saveChangesRequested', this.onSaveChangesRequested);
       this.listenTo(this.model.plan.collection, 'itemSelected', this.onItemSelected);
 
@@ -420,7 +421,14 @@ define([
     {
       this.updatePopover(order.id, order.id === this.selected);
 
-      this.$item(this.selected).find('[data-property="qtyPlan"]').toggleClass('hidden', !order.get('qtyPlan'));
+      this.$item(order.id).find('[data-property="qtyPlan"]').toggleClass('hidden', !order.get('qtyPlan'));
+    },
+
+    onIgnoredChanged: function(order)
+    {
+      this.updatePopover(order.id, order.id === this.selected);
+
+      this.$item(order.id).toggleClass('is-ignored', !!order.get('ignored'));
     },
 
     onOperationChanged: function(order)
@@ -492,6 +500,7 @@ define([
 
       this.model.get($item[0].dataset.id).update({
         qtyPlan: Math.max(0, parseInt($tip.find('[name="qtyPlan"]').val(), 10)),
+        ignored: $tip.find('[name="ignored"]:checked').val() === '1',
         operation: this.selectedOperation
       });
 

@@ -132,6 +132,9 @@
   background-color: #FFFFA6!important;
   color: #333;
 }
+.dailyMrpPlan-list-item.is-ignored {
+  opacity: 0.5;
+}
 .dailyMrpPlan-list-item-inner {
   padding: 0 5px;
   line-height: 24px;
@@ -317,6 +320,15 @@
   margin-left: 0!important;
   padding: 1px 3px;
   font-weight: normal;
+}
+.dailyMrpPlan-popover label,
+.dailyMrpPlan-popover input {
+  margin: 0;
+  vertical-align: top;
+  font-weight: normal;
+}
+.dailyMrpPlan-popover label + label {
+  margin-left: 10px;
 }
 .dailyMrpPlans-import-mrps {
   display: flex;

@@ -12,6 +12,7 @@ module.exports = function setupDailyMrpPlanModel(app, mongoose)
     qtyPlan: Number,
     qtyTodo: Number,
     qtyDone: Number,
+    ignored: Boolean,
     statuses: [String],
     operation: {}
   }, {

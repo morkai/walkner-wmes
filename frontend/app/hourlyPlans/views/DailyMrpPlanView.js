@@ -65,7 +65,7 @@ define([
       view.listenTo(plan.collection, 'checkingOverlappingLines', view.removeOverlappingLinesMessages);
 
       view.listenTo(orders, 'reset', view.generatePlan);
-      view.listenTo(orders, 'change:operation change:qtyPlan', view.generatePlan);
+      view.listenTo(orders, 'change:operation change:qtyPlan change:ignored', view.generatePlan);
 
       view.listenTo(lines, 'reset', view.renderLineOrders);
       view.listenTo(lines, 'reset', view.generatePlan);
