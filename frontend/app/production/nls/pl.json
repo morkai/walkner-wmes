@@ -242,6 +242,7 @@
   "snMessage:SERVER_FAILURE": "Błąd podczas sprawdzania numeru seryjnego.",
   "snMessage:SHIFT_NOT_FOUND": "Nie znaleziono zmiany z linii.",
   "snMessage:ORDER_NOT_FOUND": "Nie znaleziono zlecenia z linii.",
+  "snMessage:STANDARD_LABEL": "Nie można używać wirtualnego numeru seryjnego w tym zleceniu.",
   "snMessage:SUCCESS": "Numer seryjny został pomyślnie zarejestrowany.",
 
   "taktTime:check:button": "Sprawdź<br>numer seryjny",

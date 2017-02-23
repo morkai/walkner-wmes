@@ -26,7 +26,7 @@ module.exports = function setupProdSerialNumberModel(app, mongoose)
     serialNo: {
       type: Number,
       required: true,
-      min: 1,
+      min: 0,
       max: 9999
     },
     taktTime: {

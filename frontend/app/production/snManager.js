@@ -10,13 +10,19 @@ define([
   'use strict';
 
   var STORAGE_KEY = 'PRODUCTION:SN';
+  var VIRTUAL_SN_RE = /[A-Z0-9]{4}\.000000000\.0000/;
 
   var handleTimeout = null;
   var scanBuffer = '';
   var snBuffer = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
 
-  function handleScanBuffer()
+  function handleScanBuffer(buffer)
   {
+    if (buffer)
+    {
+      scanBuffer = buffer;
+    }
+
     var matches = scanBuffer.match(/P0*([0-9]{9})([0-9]{4})/);
 
     if (!matches)
@@ -46,6 +52,8 @@ define([
     scanBuffer = '';
   }
 
+  window.fakeSN = handleScanBuffer;
+
   return {
     handleKeyboardEvent: function(e)
     {
@@ -69,10 +77,15 @@ define([
     },
     contains: function(sn)
     {
-      return !!snBuffer[sn];
+      return !VIRTUAL_SN_RE.test(sn) && !!snBuffer[sn];
     },
     add: function(sn)
     {
+      if (VIRTUAL_SN_RE.test(sn))
+      {
+        return;
+      }
+
       snBuffer[sn._id] = [Date.parse(sn.scannedAt), sn.prodShiftOrder, sn.prodLine];
       localStorage.setItem(STORAGE_KEY, JSON.stringify(snBuffer));
     },

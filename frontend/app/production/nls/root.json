@@ -243,6 +243,7 @@
     "snMessage:SERVER_FAILURE": "Remote server error while checking the serial number.",
     "snMessage:SHIFT_NOT_FOUND": "Line shift not found.",
     "snMessage:ORDER_NOT_FOUND": "Line order not found.",
+    "snMessage:STANDARD_LABEL": "The virtual SN cannot be used in this order.",
     "snMessage:SUCCESS": "Serial number successfully registered.",
 
     "taktTime:check:button": "Check<br>serial number",

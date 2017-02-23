@@ -5,6 +5,8 @@
 const moment = require('moment');
 const step = require('h5.step');
 
+const ORDER_LOCKS = {};
+
 module.exports = function checkSerialNumber(app, productionModule, logEntry, done)
 {
   const mongoose = app[productionModule.config.mongooseId];
@@ -17,6 +19,19 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
   step(
     function()
     {
+      if (/^[A-Z0-9]+\.0+\.0+$/.test(logEntry.data._id))
+      {
+        this.virtual = true;
+        this.releaseLock = handleVirtualSn(logEntry, this.next());
+      }
+    },
+    function(err, result)
+    {
+      if (err || result)
+      {
+        return this.skip(err, result);
+      }
+
       productionModule.getProdData('shift', logEntry.prodShift, this.parallel());
 
       productionModule.getProdData('order', logEntry.prodShiftOrder, this.parallel());
@@ -106,7 +121,10 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
       this.ignoredDuration = ignoredDuration;
       this.sn.taktTime = latestScannedAt - previousScannedAt - ignoredDuration;
 
-      findIptSn(this.sn._id, this.next());
+      if (!this.virtual)
+      {
+        findIptSn(this.sn._id, this.next());
+      }
     },
     function(err, iptSn)
     {
@@ -239,8 +257,110 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
 
       setImmediate(this.next(), null, this.result);
     },
-    done
+    function(err, result)
+    {
+      done(err, result);
+
+      if (this.releaseLock)
+      {
+        this.releaseLock();
+        this.releaseLock = null;
+      }
+    }
   );
+
+  function handleVirtualSn(logEntry, done)
+  {
+    const orderNo = logEntry.data.orderNo;
+
+    if (ORDER_LOCKS[orderNo])
+    {
+      ORDER_LOCKS[orderNo].push(logEntry, done);
+
+      return releaseLock.bind(null, orderNo);
+    }
+
+    ORDER_LOCKS[orderNo] = [];
+
+    replaceVirtualSn(logEntry, done);
+
+    return releaseLock.bind(null, orderNo);
+  }
+
+  function releaseLock(orderNo)
+  {
+    const lock = ORDER_LOCKS[orderNo];
+
+    if (!lock)
+    {
+      return;
+    }
+
+    const logEntry = lock.shift();
+    const done = lock.shift();
+
+    if (!lock.length)
+    {
+      delete ORDER_LOCKS[orderNo];
+    }
+
+    if (logEntry)
+    {
+      replaceVirtualSn(logEntry, done);
+    }
+  }
+
+  function replaceVirtualSn(logEntry, done)
+  {
+    step(
+      function()
+      {
+        ProdSerialNumber
+          .findOne({orderNo: logEntry.data.orderNo}, {serialNo: 1})
+          .sort({scannedAt: -1})
+          .lean()
+          .exec(this.next());
+      },
+      function(err, prodSerialNumber)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        logEntry.data.serialNo = prodSerialNumber ? (prodSerialNumber.serialNo + 1) : 1;
+
+        const snParts = logEntry.data._id.split('.');
+
+        logEntry.data._id = snParts[0]
+          + '.' + logEntry.data.orderNo
+          + '.' + '0'.repeat(4 - logEntry.data.serialNo.toString().length) + logEntry.data.serialNo;
+      },
+      function()
+      {
+        if (logEntry.data.serialNo === 1)
+        {
+          findIptOperation(logEntry.data.orderNo, this.next());
+        }
+      },
+      function(err, hasOperation)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        if (hasOperation)
+        {
+          return done(null, {
+            result: 'STANDARD_LABEL'
+          });
+        }
+
+        return done();
+      }
+    );
+  }
 
   function findIptSn(serialNumber, done)
   {
@@ -286,6 +406,60 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
         }
 
         done(err, result);
+      }
+    );
+  }
+
+  function findIptOperation(orderNo, done)
+  {
+    if (!mysql)
+    {
+      return done();
+    }
+
+    step(
+      function()
+      {
+        mysql.pool.getConnection(this.next());
+      },
+      function(err, conn)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        this.conn = conn;
+
+        const sql = `SELECT 1 FROM operation
+WHERE production_order_id=(SELECT id FROM productionorder WHERE order_id=?)
+AND operation='PrintStandardLabel'
+AND disabledTimestamp IS NULL
+LIMIT 1`;
+
+        conn.query(sql, [orderNo], this.next());
+      },
+      function(err, results)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (results && results.length)
+        {
+          return this.skip(null, true);
+        }
+      },
+      function(err, result)
+      {
+        if (this.conn)
+        {
+          this.conn.release();
+          this.conn = null;
+        }
+
+        done(err, !!result);
       }
     );
   }

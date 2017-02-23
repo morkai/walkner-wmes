@@ -920,7 +920,13 @@ define([
       var state = model.get('state');
       var logEntry = prodLog.create(model, 'checkSerialNumber', scanInfo);
       var sapTaktTime = model.prodShiftOrder.getTaktTime();
+      var currentOrderNo = model.prodShiftOrder.get('orderId');
       var error;
+
+      if (scanInfo.orderNo === '000000000')
+      {
+        scanInfo.orderNo = currentOrderNo;
+      }
 
       scanInfo.sapTaktTime = typeof sapTaktTime === 'number' ? sapTaktTime : 0;
 
@@ -928,7 +934,7 @@ define([
       {
         error = 'INVALID_STATE:' + state;
       }
-      else if (scanInfo.orderNo !== model.prodShiftOrder.get('orderId'))
+      else if (scanInfo.orderNo !== currentOrderNo)
       {
         error = 'INVALID_ORDER';
       }
@@ -978,7 +984,7 @@ define([
         if (res.result === 'SUCCESS')
         {
           model.updateTaktTime(res);
-          page.showSnMessage(scanInfo, 'success', 'SUCCESS');
+          page.showSnMessage(res.serialNumber, 'success', 'SUCCESS');
         }
         else
         {
