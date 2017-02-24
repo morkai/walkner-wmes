@@ -130,7 +130,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
   {
     return function insertStep(err)
     {
-      if (err)
+      if (err && err.code !== 11000)
       {
         productionModule.error(
           "Error while saving %d log entries (step %d): %s\n%s",
@@ -144,26 +144,12 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
         );
       }
 
-      tryInsertLogEntries(logEntryList.slice(i * batchSize, i * batchSize + batchSize), 0, this.next());
+      ProdLogEntry.collection.insertMany(
+        logEntryList.slice(i * batchSize, i * batchSize + batchSize),
+        {ordered: false},
+        this.next()
+      );
     };
-  }
-
-  function tryInsertLogEntries(logEntries, retryCount, done)
-  {
-    ProdLogEntry.collection.insertMany(logEntries, {ordered: false}, function(err)
-    {
-      if (retryCount === 2)
-      {
-        return done(err);
-      }
-
-      if (err)
-      {
-        return setTimeout(tryInsertLogEntries, 5000, logEntries, retryCount + 1, done);
-      }
-
-      return done();
-    });
   }
 
   function fixOrgUnits(logEntry)
