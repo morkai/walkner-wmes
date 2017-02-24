@@ -83,6 +83,13 @@ exports.start = function startMailSenderModule(app, module)
       done = subject;
     }
 
+    if (_.isEmpty(mailOptions.to))
+    {
+      module.debug("Not sending e-mail: %s", JSON.stringify(mailOptions));
+
+      return setImmediate(done);
+    }
+
     if (module.config.remoteSenderUrl !== null)
     {
       sendThroughRemote(mailOptions, done);
