@@ -240,6 +240,7 @@ module.exports = function(mongoose, options, done)
     conditions.workDuration = {$ne: 0};
     conditions.laborTime = {$ne: 0};
     conditions.workerCount = {$ne: 0};
+    conditions.finishedAt = {$ne: null};
 
     var fields = {
       division: 1,
