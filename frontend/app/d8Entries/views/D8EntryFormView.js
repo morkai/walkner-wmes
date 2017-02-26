@@ -357,6 +357,12 @@ define([
         this.$id('members').select2('disable', true);
       }
 
+      if (!roles.owner)
+      {
+        this.$id('d5CloseDate').prop('readonly', true);
+        this.$id('d8CloseDate').prop('readonly', true);
+      }
+
       this.$id('strips').find('input').prop('disabled', true);
       this.$id('strips').parent().find('.actions').remove();
       this.$id('addStrip').remove();
