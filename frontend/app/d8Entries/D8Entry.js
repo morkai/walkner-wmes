@@ -103,7 +103,6 @@ define([
 
       var strips = row.strips;
       var stripNos = [];
-      var stripDates = [];
       var stripFamilies = [];
       var remainingTeam = [].concat(row.team);
       var team = [];
@@ -111,7 +110,6 @@ define([
       _.forEach(strips, function(strip, i)
       {
         stripNos.push(strip.no || '&nbsp;');
-        stripDates.push(strip.date ? time.format(strip.date, 'L') : '&nbsp;');
         stripFamilies.push(strip.family || '&nbsp;');
 
         if (remainingTeam.length && i < strips.length)
@@ -127,13 +125,11 @@ define([
       else if (row.strips.length === 1)
       {
         row.stripNos = stripNos[0];
-        row.stripDates = stripDates[0];
         row.stripFamilies = stripFamilies[0];
       }
       else if (row.strips.length > 1)
       {
         row.stripNos = '<ul><li>' + stripNos.join('<li>') + '</ul>';
-        row.stripDates = '<ul><li>' + stripDates.join('<li>') + '</ul>';
         row.stripFamilies = '<ul><li>' + stripFamilies.join('<li>') + '</ul>';
       }
 

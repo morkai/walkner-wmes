@@ -2,7 +2,6 @@
   <thead>
   <tr>
     <th class="is-min"><%- t('d8Entries', 'PROPERTY:strips.no') %></th>
-    <th class="is-min"><%- t('d8Entries', 'PROPERTY:strips.date') %></th>
     <th><%- t('d8Entries', 'PROPERTY:strips.family') %></th>
   </tr>
   </thead>
@@ -15,7 +14,6 @@
   <% strips.forEach(function(strip) { %>
   <tr>
     <td class="is-min"><%= strip.no || '-' %></td>
-    <td class="is-min"><%- strip.date ? time.format(strip.date, 'LL') : '-' %></td>
     <td><%= strip.family || '-' %></td>
   </tr>
   <% }) %>

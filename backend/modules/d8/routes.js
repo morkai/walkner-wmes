@@ -524,7 +524,6 @@ module.exports = function setUpD8Routes(app, module)
   {
     const dict = req.dictionaries;
     const stripNos = [];
-    const stripDates = [];
     const stripFamilies = [];
     const result = {
       '#rid': doc.rid
@@ -533,7 +532,6 @@ module.exports = function setUpD8Routes(app, module)
     _.forEach(doc.strips, function(strip)
     {
       stripNos.push(strip.no || '');
-      stripDates.push(strip.date ? app.formatDate(strip.date) : '');
       stripFamilies.push(strip.family || '');
     });
 
@@ -546,7 +544,6 @@ module.exports = function setUpD8Routes(app, module)
     result['"owner'] = doc.owner ? doc.owner.label : '';
     result['"members'] = _.map(doc.members, member => member.label).join('; ');
     result['"stripNo'] = stripNos.join('; ');
-    result['"stripDate'] = stripDates.join('; ');
     result['"stripKind'] = stripFamilies.join('; ');
     result['"entrySource'] = dict.entrySources[doc.entrySource] || doc.entrySource;
     result['"problemSource'] = dict.problemSources[doc.problemSource] || doc.problemSource;

@@ -43,7 +43,6 @@ module.exports = function setUpPrepareTemplateData(app, module)
         {
           return {
             no: strip.no,
-            date: formatDate(strip.date),
             family: strip.family
           };
         }),

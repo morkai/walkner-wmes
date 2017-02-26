@@ -220,7 +220,6 @@ define([
       {
         return {
           no: strip.no,
-          date: strip.date ? time.format(strip.date, 'YYYY-MM-DD') : '',
           family: strip.family
         };
       });
@@ -264,7 +263,6 @@ define([
       {
         return {
           no: strip.no || '',
-          date: strip.date ? time.getMoment(strip.date, 'YYYY-MM-DD').toISOString() : null,
           family: strip.family || ''
         };
       });
@@ -456,7 +454,6 @@ define([
         i: this.stripIndex++,
         strip: {
           no: strip.no || '',
-          date: strip.date ? time.format(strip.date, 'YYYY-MM-DD') : '',
           family: strip.family || ''
         }
       }));

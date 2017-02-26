@@ -34,7 +34,6 @@
 
     "LIST:team": "{first} +{count, plural, one{1 other} other{{count} others}}",
     "LIST:stripNos": "Claim no",
-    "LIST:stripDates": "Claim date",
     "LIST:stripFamilies": "Product kind",
     "LIST:crsRegisterDate": "CRS registration date",
     "LIST:d8CloseDate": "8D close date",
@@ -65,7 +64,6 @@
     "PROPERTY:duration": "Duration",
     "PROPERTY:strips": "Claims",
     "PROPERTY:strips.no": "Claim no",
-    "PROPERTY:strips.date": "Date",
     "PROPERTY:strips.family": "Product kind",
     "PROPERTY:crsRegisterDate": "CRS registration date",
     "PROPERTY:d8CloseDate": "8D close date",

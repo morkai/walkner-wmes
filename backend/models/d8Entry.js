@@ -23,7 +23,6 @@ module.exports = function setupD8EntryModel(app, mongoose)
 
   const stripSchema = mongoose.Schema({
     no: String,
-    date: Date,
     family: String
   }, {
     _id: false,

@@ -49,7 +49,6 @@ define([
         {id: 'statusText', tdAttrs: minTdAttrs, label: t('d8Entries', 'PROPERTY:status')},
         {id: 'entrySource', tdAttrs: minTdAttrs},
         {id: 'stripNos', tdAttrs: stripsTdAttrs, label: t('d8Entries', 'PROPERTY:strips.no')},
-        {id: 'stripDates', tdAttrs: stripsTdAttrs, label: t('d8Entries', 'PROPERTY:strips.date')},
         {id: 'stripFamilies', tdAttrs: stripsTdAttrs, label: t('d8Entries', 'PROPERTY:strips.family')},
         {id: 'problemDescription', tdAttrs: prepareTdAttrs},
         {id: 'problemSource', tdAttrs: prepareTdAttrs},
