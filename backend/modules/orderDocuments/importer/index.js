@@ -209,7 +209,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
         {
           var order = orders[i];
           var oldDocuments = order.documents || [];
-          var newDocuments = this.orderNoToDocumentsMap[order._id];
+          var newDocuments = this.orderNoToDocumentsMap[order._id].sort(sortDocuments);
           var program = this.orderNoToProgramMap[order._id];
 
           if (program)
@@ -328,6 +328,21 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
   function removeFilePathFromCache(filePath)
   {
     delete filePathCache[filePath];
+  }
+
+  function sortDocuments(a, b)
+  {
+    if (a.item !== b.item)
+    {
+      return a.item - b.item;
+    }
+
+    if (a.name !== b.name)
+    {
+      return a.name.localeCompare(b.name);
+    }
+
+    return a.nc12 - b.nc12;
   }
 
   function matchPrograms(orderDocument, orderNoToProgramMap)
