@@ -140,7 +140,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
           JSON.stringify({
             first: logEntryList[0],
             last: logEntryList.length === 1 ? null : logEntryList[logEntryList.length - 1]
-          })
+          }) + (Array.isArray(err.writeErrors) ? `\n${err.writeErrors.map(e => e.code).join(', ')}` : '')
         );
       }
 
