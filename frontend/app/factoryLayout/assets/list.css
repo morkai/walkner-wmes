@@ -94,6 +94,9 @@
   text-overflow: ellipsis;
   font-weight: bold;
 }
+.factoryLayout-prodLineListItem-prop > span[role="orderValue"] {
+  max-width: 350px;
+}
 .factoryLayout-prodLineListItem-prop.is-clickable {
   cursor: pointer;
 }

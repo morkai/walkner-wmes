@@ -8,6 +8,7 @@ define([
   'app/data/downtimeReasons',
   'app/core/View',
   'app/core/templates/userInfo',
+  'app/orders/util/resolveProductName',
   'app/factoryLayout/templates/listItem',
   'app/prodShifts/views/ProdShiftTimelineView',
   'app/prodShifts/views/QuantitiesDoneChartView'
@@ -19,6 +20,7 @@ define([
   downtimeReasons,
   View,
   renderUserInfo,
+  resolveProductName,
   template,
   ProdShiftTimelineView,
   QuantitiesDoneChartView
@@ -179,7 +181,13 @@ define([
         return '-';
       }
 
-      userInfo.label = userInfo.label.match(/^(.*?)(?:\(.*?\))?$/)[1].trim();
+      var fullName = userInfo.label.match(/^(.*?)(?:\(.*?\))?$/)[1].trim();
+      var parts = fullName.split(/\s+/);
+      var firstName = parts.pop();
+      var lastName = parts.join(' ');
+
+      userInfo.label = lastName + (firstName.length ? (' ' + firstName.substring(0, 1) + '.') : '');
+      userInfo.title = fullName;
 
       return renderUserInfo({userInfo: userInfo});
     },
@@ -187,10 +195,32 @@ define([
     serializeOrder: function()
     {
       var lastOrder = this.model.get('prodShiftOrders').last();
+      var value = '-';
+      var title = '';
+
+      if (lastOrder)
+      {
+        var orderNo = lastOrder.get('orderId');
+        var operationNo = lastOrder.get('operationNo');
+        var productName = resolveProductName(lastOrder.get('orderData'));
+
+        value = orderNo;
+
+        if (productName.length)
+        {
+          value += ': ' + productName;
+          title = productName;
+        }
+        else
+        {
+          value += ', ' + operationNo;
+        }
+      }
 
       return {
         label: t('factoryLayout', !lastOrder || lastOrder.get('finishedAt') ? 'prop:lastOrder' : 'prop:order'),
-        value: lastOrder ? lastOrder.getLabel(false) : '-'
+        value: value,
+        title: title
       };
     },
 
