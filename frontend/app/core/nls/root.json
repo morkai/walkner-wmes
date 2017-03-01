@@ -81,6 +81,7 @@
     "NAVBAR:FTE": "FTE",
     "NAVBAR:FTE:MASTER": "Production",
     "NAVBAR:FTE:LEADER": "Other",
+    "NAVBAR:FTE:SETTINGS": "Settings",
     "NAVBAR:VIS": "Visualization",
     "NAVBAR:VIS:STRUCTURE": "Org Unit structure",
     "NAVBAR:PRESS_WORKSHEETS": "Worksheets",
