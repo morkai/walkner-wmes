@@ -8,5 +8,20 @@
   "unit": "szt",
   "controls:switchApps": "Zmień aplikację/Konfiguruj po 3s",
   "controls:reboot": "Odśwież stronę/Restartuj komputer po 3s",
-  "controls:shutdown": "Wyłącz komputer po 3s"
+  "controls:shutdown": "Wyłącz komputer po 3s",
+
+  "snMessage:scannedValue": "Zeskanowana wartość",
+  "snMessage:orderNo": "Zlecenie",
+  "snMessage:serialNo": "Numer",
+  "snMessage:UNKNOWN_CODE": "Zeskanowany kod nie zawiera numeru seryjnego.",
+  "snMessage:INVALID_STATE:idle": "Rozpocznij zlecenie, aby móc skanować numery seryjne.",
+  "snMessage:INVALID_STATE:downtime": "Zakończ przestój, aby móc skanować numery seryjne.",
+  "snMessage:INVALID_ORDER": "Zeskanowano numer seryjny z nieprawidłowego zlecenia.",
+  "snMessage:ALREADY_USED": "Zeskanowany numer seryjny został już użyty.",
+  "snMessage:CHECKING": "<span class='fa fa-spinner fa-spin'></span><br>Sprawdzanie numeru seryjnego...",
+  "snMessage:SERVER_FAILURE": "Błąd podczas sprawdzania numeru seryjnego.",
+  "snMessage:SHIFT_NOT_FOUND": "Nie znaleziono zmiany z linii.",
+  "snMessage:ORDER_NOT_FOUND": "Nie znaleziono zlecenia z linii.",
+  "snMessage:STANDARD_LABEL": "Nie można używać wirtualnego numeru seryjnego w tym zleceniu.",
+  "snMessage:SUCCESS": "Numer seryjny został pomyślnie zarejestrowany."
 }

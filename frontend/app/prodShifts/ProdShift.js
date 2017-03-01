@@ -1056,6 +1056,27 @@ define([
       return prodShiftStartTime < currentShiftStartTime;
     },
 
+    updateQuantities: function(planned, actual)
+    {
+      var quantitiesDone = this.attributes.quantitiesDone;
+
+      if (!Array.isArray(planned)
+        || planned.length !== 8
+        || !Array.isArray(quantitiesDone))
+      {
+        return;
+      }
+
+      for (var h = 0; h < 8; ++h)
+      {
+        quantitiesDone[h].planned = planned[h];
+        quantitiesDone[h].actual = actual[h];
+      }
+
+      this.saveLocalData();
+      this.trigger('change:quantitiesDone', this, this.attributes.quantitiesDone, {});
+    },
+
     updatePlannedQuantities: function(plannedQuantities)
     {
       if (!Array.isArray(plannedQuantities)

@@ -17,6 +17,58 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
   step(
     function()
     {
+      if (logEntry._id)
+      {
+        return;
+      }
+
+      const lineState = productionModule.getProdLineState(logEntry.prodLine);
+
+      if (!lineState)
+      {
+        return this.skip(null, {
+          result: 'INVALID_LINE'
+        });
+      }
+
+      if (lineState.state !== 'working')
+      {
+        return this.skip(null, {
+          result: 'INVALID_STATE:' + lineState.state
+        });
+      }
+
+      const prodShift = lineState.prodShift;
+      const prodShiftOrder = lineState.getCurrentOrder();
+
+      if (!prodShift || !prodShiftOrder)
+      {
+        return this.skip(null, {
+          result: 'INVALID_LINE_STATE'
+        });
+      }
+
+      logEntry._id = ProdLogEntry.generateId(logEntry.createdAt, prodShift._id);
+      logEntry.division = prodShift.division;
+      logEntry.subdivision = prodShift.subdivision;
+      logEntry.mrpControllers = prodShift.mrpControllers;
+      logEntry.prodFlow = prodShift.prodFlow;
+      logEntry.workCenter = prodShift.workCenter;
+      logEntry.prodShift = prodShift._id;
+      logEntry.prodShiftOrder = prodShiftOrder._id;
+
+      if (!logEntry.data.orderNo || logEntry.data.orderNo === '000000000')
+      {
+        logEntry.data.orderNo = prodShiftOrder.orderId;
+      }
+
+      if (logEntry.data.sapTaktTime < 0)
+      {
+        logEntry.data.sapTaktTime = prodShiftOrder.sapTaktTime;
+      }
+    },
+    function()
+    {
       productionModule.checkSerialNumber(logEntry, this.next());
     },
     function(err, result)

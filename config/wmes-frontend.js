@@ -189,6 +189,7 @@ exports.pubsub = {
     'hourlyPlans.created', 'hourlyPlans.updated.*', 'dailyMrpPlans.**',
     'users.syncFailed',
     'production.synced.**', 'production.edited.**', 'production.stateChanged.**', 'production.autoDowntimes.**',
+    'production.taktTime.snChecked.**',
     'prodShifts.**', 'prodDowntimes.**', 'prodShiftOrders.**', 'prodChangeRequests.**', 'prodSerialNumbers.created.**',
     'updater.newVersion',
     'settings.updated.**',

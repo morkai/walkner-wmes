@@ -200,6 +200,7 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
       const hourlyQuantityDone = shiftResults.length ? shiftResults[0].quantityDone : 0;
 
       this.result = {
+        instanceId: logEntry.instanceId,
         result: 'SUCCESS',
         serialNumber: this.sn.toJSON(),
         quantityDone: quantityDone,
@@ -253,6 +254,8 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
             avgTaktTime: this.pso.avgTaktTime
           }
         });
+
+        app.broker.publish('production.taktTime.snChecked.' + this.sn.prodLine, this.result);
       }
 
       setImmediate(this.next(), null, this.result);

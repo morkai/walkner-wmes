@@ -353,59 +353,6 @@
   margin: 0;
 }
 
-.production-snMessage {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 15px 0;
-  width: 100%;
-  background: #EEE;
-  background: linear-gradient(to right, #fff, #f0ad4e, #fff);
-  border-top: 1px solid #f0ad4e;
-  border-bottom: 1px solid #f0ad4e;
-  color: #fff;
-  line-height: 1;
-  box-shadow: 0 24px 64px #333;
-  z-index: 100;
-}
-.production-snMessage.is-error {
-  background: linear-gradient(to right, #fff, #d9534f, #fff);
-  border-color: #d43f3a;
-  color: #fff;
-}
-.production-snMessage.is-success {
-  background: linear-gradient(to right, #fff, #5cb85c, #fff);
-  border-color: #5cb85c;
-  color: #fff;
-}
-.production-snMessage-text {
-  margin: auto;
-  width: 550px;
-  font-size: 36px;
-  text-align: center;
-}
-.production-snMessage-props {
-  display: flex;
-  justify-content: center;
-  margin: 15px auto 0 auto;
-}
-.production-snMessage-prop {
-  margin: 0;
-}
-.production-snMessage-prop + .production-snMessage-prop {
-  margin-left: 30px;
-}
-.production-snMessage-prop-name {
-  display: block;
-  font-size: 18px;
-  font-variant: small-caps;
-  text-transform: lowercase;
-}
-.production-snMessage-prop-value {
-  font-size: 24px;
-  font-family: monospace;
-}
-
 .production-personelPicker-list label {
   margin-left: 15px;
 }

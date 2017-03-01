@@ -9,7 +9,22 @@
     "unit": "PCE",
     "controls:switchApp": "Switch apps/Configure after 3s",
     "controls:reboot": "Refresh page/Restart after 3s",
-    "controls:shutdown": "Shutdown after 3s"
+    "controls:shutdown": "Shutdown after 3s",
+
+    "snMessage:scannedValue": "Scanned value",
+    "snMessage:orderNo": "Order no",
+    "snMessage:serialNo": "Serial no",
+    "snMessage:UNKNOWN_CODE": "The scanned code does not contain a serial number.",
+    "snMessage:INVALID_STATE:idle": "Begin an order to enable the SN scanning.",
+    "snMessage:INVALID_STATE:downtime": "Finish the downtime to enable SN scanningthe .",
+    "snMessage:INVALID_ORDER": "Scanned SN from a wrong order.",
+    "snMessage:ALREADY_USED": "Scanned SN is already registered.",
+    "snMessage:CHECKING": "<span class='fa fa-spinner fa-spin'></span><br>Checking the serial number...",
+    "snMessage:SERVER_FAILURE": "Remote server error while checking the serial number.",
+    "snMessage:SHIFT_NOT_FOUND": "Line shift not found.",
+    "snMessage:ORDER_NOT_FOUND": "Line order not found.",
+    "snMessage:STANDARD_LABEL": "The virtual SN cannot be used in this order.",
+    "snMessage:SUCCESS": "Serial number successfully registered."
   },
   "pl": true
 }

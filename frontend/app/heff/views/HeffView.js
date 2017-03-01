@@ -5,18 +5,24 @@ define([
   'jquery',
   'app/i18n',
   'app/time',
+  'app/user',
+  'app/viewport',
   'app/data/localStorage',
   'app/core/View',
   'app/core/util/getShiftStartInfo',
+  'app/production/snManager',
   'app/heff/templates/page'
 ], function(
   _,
   $,
   t,
   time,
+  user,
+  viewport,
   localStorage,
   View,
   getShiftStartInfo,
+  snManager,
   template
 ) {
   'use strict';
@@ -44,7 +50,8 @@ define([
     },
 
     localTopics: {
-      'socket.connected': 'loadData'
+      'socket.connected': 'loadData',
+      'production.taktTime.snScanned': 'onSnScanned'
     },
 
     events: {
@@ -81,6 +88,8 @@ define([
         });
       },
 
+      'click #-snMessage': 'hideSnMessage',
+
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
       'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
       'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
@@ -107,6 +116,13 @@ define([
         action: null,
         time: null
       };
+
+      $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
+    },
+
+    destroy: function()
+    {
+      $(window).off('.' + this.idPrefix);
     },
 
     serialize: function()
@@ -283,6 +299,122 @@ define([
 
       this.actionTimer.action = null;
       this.actionTimer.time = null;
+    },
+
+    onKeyDown: function(e)
+    {
+      var tagName = e.target.tagName;
+      var formField = (tagName === 'INPUT' && e.target.type !== 'BUTTON')
+        || tagName === 'SELECT'
+        || tagName === 'TEXTAREA';
+
+      if (e.keyCode === 8 && (!formField || e.target.readOnly || e.target.disabled))
+      {
+        e.preventDefault();
+      }
+
+      snManager.handleKeyboardEvent(e);
+    },
+
+    onSnScanned: function(scanInfo)
+    {
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
+      var view = this;
+
+      if (!scanInfo.orderNo)
+      {
+        return view.showSnMessage(scanInfo, 'error', 'UNKNOWN_CODE');
+      }
+
+      if (snManager.contains(scanInfo._id))
+      {
+        return view.showSnMessage(scanInfo, 'error', 'ALREADY_USED');
+      }
+
+      view.showSnMessage(scanInfo, 'warning', 'CHECKING');
+
+      var logEntry = {
+        _id: null,
+        instanceId: window.INSTANCE_ID,
+        type: 'checkSerialNumber',
+        data: scanInfo,
+        createdAt: time.getMoment().toDate(),
+        creator: user.getInfo(),
+        prodLine: view.model.prodLineId
+      };
+
+      scanInfo.sapTaktTime = -1;
+
+      var req = view.ajax({
+        method: 'POST',
+        url: '/production/checkSerialNumber',
+        data: JSON.stringify(logEntry),
+        timeout: 6000
+      });
+
+      req.fail(function(jqXhr)
+      {
+        if (jqXhr.status < 200)
+        {
+          view.showSnMessage(scanInfo, 'success', 'SUCCESS');
+
+          return;
+        }
+
+        view.showSnMessage(scanInfo, 'error', 'SERVER_FAILURE');
+      });
+
+      req.done(function(res)
+      {
+        if (res.result === 'SUCCESS')
+        {
+          view.showSnMessage(res.serialNumber, 'success', 'SUCCESS');
+        }
+        else
+        {
+          if (res.result === 'ALREADY_USED')
+          {
+            snManager.add(res.serialNumber);
+          }
+
+          view.showSnMessage(scanInfo, 'error', res.result);
+        }
+      });
+    },
+
+    showSnMessage: function(scanInfo, severity, message)
+    {
+      var $message = this.$id('snMessage');
+
+      this.$id('snMessage-text').html(t('heff', 'snMessage:' + message));
+      this.$id('snMessage-scannedValue').text(
+        scanInfo._id.length > 19 ? (scanInfo._id.substring(0, 16) + '...') : scanInfo._id
+      );
+      this.$id('snMessage-orderNo').text(scanInfo.orderNo || '-');
+      this.$id('snMessage-serialNo').text(scanInfo.serialNo || '-');
+
+      $message
+        .css({top: '50%', marginTop: '-80px'})
+        .removeClass('hidden is-success is-error is-warning')
+        .addClass('is-' + severity);
+
+      if (this.timers.hideSnMessage)
+      {
+        clearTimeout(this.timers.hideSnMessage);
+      }
+
+      this.timers.hideSnMessage = setTimeout(this.hideSnMessage.bind(this), 6000);
+    },
+
+    hideSnMessage: function()
+    {
+      this.timers.hideSnMessage = null;
+
+      this.$id('snMessage').addClass('hidden');
     }
 
   });

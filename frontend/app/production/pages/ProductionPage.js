@@ -68,12 +68,14 @@ define([
     remoteTopics: function()
     {
       var topics = {};
+      var prodLineId = this.model.prodLine.id;
 
-      if (this.model.prodLine.id)
+      if (prodLineId)
       {
         topics['production.autoDowntimes.' + this.model.get('subdivision')] = 'onAutoDowntime';
-        topics['isaRequests.created.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
-        topics['isaRequests.updated.' + this.model.prodLine.id + '.**'] = 'onIsaRequestUpdated';
+        topics['production.taktTime.snChecked.' + prodLineId] = 'onSnChecked';
+        topics['isaRequests.created.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
+        topics['isaRequests.updated.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
       }
 
       return topics;
@@ -607,7 +609,14 @@ define([
 
         if (res.plannedQuantities)
         {
-          model.updatePlannedQuantities(res.plannedQuantities);
+          if (res.actualQuantities)
+          {
+            model.updateQuantities(res.plannedQuantities, res.actualQuantities);
+          }
+          else
+          {
+            model.updatePlannedQuantities(res.plannedQuantities);
+          }
         }
 
         if (res.prodDowntimes)
@@ -1000,6 +1009,14 @@ define([
           page.showSnMessage(scanInfo, 'error', res.result);
         }
       });
+    },
+
+    onSnChecked: function(data)
+    {
+      if (data && data.result === 'SUCCESS' && data.instanceId !== window.INSTANCE_ID)
+      {
+        this.model.updateTaktTime(data);
+      }
     },
 
     showSnMessage: function(scanInfo, severity, message)
