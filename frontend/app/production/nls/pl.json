@@ -278,5 +278,16 @@
   "settings:taktTime:sap": "Pokazuj czas taktu SAP dla aktualnego zlecenia",
   "settings:taktTime:smiley": "Pokazuj buźkę",
   "settings:taktTime:coeffs": "Współczynniki operacji",
-  "settings:taktTime:coeffs:help": "W każdej linii należy podać MRP zlecenia, dla którego współczynniki Takt Time mają być zmienione, a następnie WorkCenter operacji i wartości współczynników. W miejsce MRP i WorkCenter można użyć znaku <code>*</code> (wszystkie). Na przykład:<br><code class=multiline>*: *=1.053 PIVATIC5=0.9<br>KE6: *=1 OUTDOOR5=1.1</code>"
+  "settings:taktTime:coeffs:help": "W każdej linii należy podać MRP zlecenia, dla którego współczynniki Takt Time mają być zmienione, a następnie WorkCenter operacji i wartości współczynników. W miejsce MRP i WorkCenter można użyć znaku <code>*</code> (wszystkie). Na przykład:<br><code class=multiline>*: *=1.053 PIVATIC5=0.9<br>KE6: *=1 OUTDOOR5=1.1</code>",
+  "settings:lineAutoDowntimes": "Automatyczne przestoje",
+  "settings:lineAutoDowntimes:groups:placeholder": "Wybierz istniejącą grupę linii, aby zmienić automatyczne przestoje.",
+  "settings:lineAutoDowntimes:groups:label": "Grupy automatycznych przestojów",
+  "settings:lineAutoDowntimes:group:label": "Nazwa grupy",
+  "settings:lineAutoDowntimes:reasons:placeholder": "Wybierz nowy automatyczny przestój",
+  "settings:lineAutoDowntimes:lines:label": "Linie produkcyjne w grupie",
+  "settings:lineAutoDowntimes:reason": "Automatyczny powód przestoju",
+  "settings:lineAutoDowntimes:init": "Inicjalizacja",
+  "settings:lineAutoDowntimes:when:initial": "na początku zmiany",
+  "settings:lineAutoDowntimes:when:always": "zawsze",
+  "settings:lineAutoDowntimes:when:time": "o godzinie:"
 }

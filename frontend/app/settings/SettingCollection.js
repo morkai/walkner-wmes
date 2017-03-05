@@ -1,10 +1,12 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   '../core/Collection',
   './Setting'
 ], function(
+  _,
   $,
   Collection,
   Setting
@@ -89,7 +91,7 @@ define([
 
       if (setting)
       {
-        if (setting.getValue() === newValue)
+        if (_.isEqual(setting.getValue(), newValue))
         {
           return $.Deferred().resolve().promise();
         }

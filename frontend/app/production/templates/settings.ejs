@@ -1,4 +1,4 @@
-<form class="settings">
+<form class="settings production-settings">
   <div class="list-group">
     <a class="list-group-item" href="#production;settings?tab=operator" data-tab="operator"><%- t('production', 'settings:tab:operator') %></a>
   </div>
@@ -49,6 +49,35 @@
               <label for="<%- idPrefix %>-initialDowntimeWindow"><%- t('production', 'settings:initialDowntimeWindow') %></label>
               <input id="<%- idPrefix %>-initialDowntimeWindow" class="form-control" name="production.initialDowntimeWindow" type="number" step="1" min="0" max="60">
             </div>
+            <hr>
+            <div class="form-group">
+              <label for="<%- idPrefix %>-lineAutoDowntimes-groups"><%- t('production', 'settings:lineAutoDowntimes:groups:label') %></label>
+              <input id="<%- idPrefix %>-lineAutoDowntimes-groups" type="text">
+            </div>
+            <div class="form-group">
+              <label for="<%- idPrefix %>-lineAutoDowntimes-group"><%- t('production', 'settings:lineAutoDowntimes:group:label') %></label>
+              <input id="<%- idPrefix %>-lineAutoDowntimes-group" class="form-control" type="text">
+            </div>
+            <div class="form-group">
+              <label for="<%- idPrefix %>-lineAutoDowntimes-lines"><%- t('production', 'settings:lineAutoDowntimes:lines:label') %></label>
+              <input id="<%- idPrefix %>-lineAutoDowntimes-lines" type="text">
+            </div>
+            <table class="table table-condensed table-with-tfoot production-settings-lineAutoDowntimes">
+              <thead>
+              <tr>
+                <th class="is-min"><%- t('production', 'settings:lineAutoDowntimes:reason') %></th>
+                <th class="is-min" colspan="2"><%- t('production', 'settings:lineAutoDowntimes:init') %></th>
+                <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+                <th></th>
+              </tr>
+              </thead>
+              <tfoot>
+              <tr>
+                <td colspan="5"><input id="<%- idPrefix %>-lineAutoDowntimes-reasons" type="text"></td>
+              </tr>
+              </tfoot>
+              <tbody id="<%- idPrefix %>-lineAutoDowntimes-body"></tbody>
+            </table>
           </div>
           <div class="panel-body" data-subtab="spigot">
             <div class="form-group">

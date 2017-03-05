@@ -110,7 +110,8 @@ exports.start = function startProductionModule(app, module)
 
   app.onModuleReady(
     [
-      module.config.orgUnitsId
+      module.config.orgUnitsId,
+      module.config.settingsId
     ],
     setUpAutoDowntimes.bind(null, app, module)
   );

@@ -86,6 +86,11 @@ define([
         return this.prepareMultiSelect2Value(newValue);
       }
 
+      if (/lineAutoDowntimes$/.test(id) && Array.isArray(newValue))
+      {
+        return newValue;
+      }
+
       return this.prepareNumericValue(newValue, 0, 60);
     },
 
@@ -136,6 +141,16 @@ define([
         })
         .join('\n')
         .replace(/\n{2,}/g, '\n');
+    },
+
+    getAutoDowntimes: function(lineId)
+    {
+      var lineAutoDowntimes = _.find(this.getValue('lineAutoDowntimes'), function(group)
+      {
+        return _.includes(group.lines, lineId);
+      });
+
+      return lineAutoDowntimes ? lineAutoDowntimes.downtimes : [];
     },
 
     isTaktTimeEnabled: function(prodLine)

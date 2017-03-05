@@ -72,7 +72,8 @@ define([
 
       if (prodLineId)
       {
-        topics['production.autoDowntimes.' + this.model.get('subdivision')] = 'onAutoDowntime';
+        topics['production.autoDowntimes.' + this.model.get('subdivision')] = 'onSubdivisionAutoDowntime';
+        topics['production.autoDowntimes.' + prodLineId] = 'onLineAutoDowntime';
         topics['production.taktTime.snChecked.' + prodLineId] = 'onSnChecked';
         topics['isaRequests.created.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
         topics['isaRequests.updated.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
@@ -889,9 +890,21 @@ define([
       }
     },
 
-    onAutoDowntime: function(message)
+    onSubdivisionAutoDowntime: function(message)
     {
-      if (!this.model.shouldStartTimedAutoDowntime(message.reason) || !this.productionJoined)
+      this.onAutoDowntime(message, 'subdivision');
+    },
+
+    onLineAutoDowntime: function(message)
+    {
+      this.onAutoDowntime(message, 'prodLine');
+    },
+
+    onAutoDowntime: function(message, source)
+    {
+      if (!this.productionJoined
+        || (source === 'subdivision' && this.settings.getAutoDowntimes(this.model.prodLine.id).length > 0)
+        || !this.model.shouldStartTimedAutoDowntime(message.reason))
       {
         return;
       }

@@ -1,0 +1,20 @@
+<tr>
+  <td class="is-min"><input name="lineAutoDowntimes[<%- lineAutoDowntime.i %>].reason" type="hidden" value="<%- lineAutoDowntime.reason.id %>"> <%= lineAutoDowntime.reason.text %></td>
+  <td class="is-min">
+    <% ['initial', 'always', 'time'].forEach(function(when) { %>
+    <label class="radio-inline">
+      <input name="lineAutoDowntimes[<%- lineAutoDowntime.i %>].when" type="radio" value="<%- when %>" <%- when === lineAutoDowntime.when ? 'checked' : '' %>>
+      <%- t('production', 'settings:lineAutoDowntimes:when:' + when, {time: ''}) %>
+    </label>
+    <% }) %>
+  </td>
+  <td class="is-min"><input class="form-control production-settings-lineAutoDowntimes-time" name="lineAutoDowntimes[<%- lineAutoDowntime.i %>].time" type="text" value="<%- lineAutoDowntime.time %>" placeholder="00:00, 00:00..." <%- lineAutoDowntime.when === 'time' ? '' : 'disabled' %>></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button class="btn btn-default" data-auto-downtime-action="up" type="button"><i class="fa fa-arrow-up"></i></button>
+      <button class="btn btn-default" data-auto-downtime-action="down" type="button"><i class="fa fa-arrow-down"></i></button>
+      <button class="btn btn-default" data-auto-downtime-action="remove" type="button"><i class="fa fa-remove"></i></button>
+    </div>
+  </td>
+  <td></td>
+</tr>
