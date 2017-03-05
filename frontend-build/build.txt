@@ -121,6 +121,7 @@ app/fte/assets/main.css
 
 app/heff/assets/main.css
 ----------------
+app/heff/assets/../../production/assets/taktTime.css
 app/heff/assets/main.css
 
 app/hourlyPlans/assets/main.css
@@ -287,6 +288,10 @@ app/production/assets/main.css
 app/production/assets/isa.css
 app/production/assets/taktTime.css
 app/production/assets/main.css
+
+app/production/assets/settings.css
+----------------
+app/production/assets/settings.css
 
 app/production/assets/taktTime.css
 ----------------
@@ -511,6 +516,7 @@ assets/../app/orders/assets/main.css
 assets/../app/mechOrders/assets/main.css
 assets/../app/vis/assets/main.css
 assets/../app/production/assets/main.css
+assets/../app/production/assets/settings.css
 assets/../app/reports/assets/main.css
 assets/../app/prodDowntimes/assets/main.css
 assets/../app/prodLogEntries/assets/main.css
@@ -1434,6 +1440,7 @@ app/user.js
 app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
 app/core/util/getShiftStartInfo.js
+app/production/snManager.js
 app/heff/templates/page.js
 app/heff/views/HeffView.js
 app/nls/heff.js
