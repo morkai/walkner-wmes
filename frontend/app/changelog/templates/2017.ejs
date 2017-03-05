@@ -1,4 +1,42 @@
 <div class="hidden">
+  <h1>v0.105.0</h1>
+  <h2><%- time.format('2017-02-26', 'LL') %></h2>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie ilości zrobionej w nowo wybranym zleceniu jako <code>undefined</code>
+      (teraz <code>?</code>).</li>
+    <li>Dodano możliwość skanowania wirtualnego kodu z numerem seryjnym w celu zliczania ilości i obliczania czasu cyklu
+      linii.</li>
+  </ul>
+  <h3>Plany dzienne MRP</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający zresetowanie wartości 'Ilość' zlecenia poprzez usunięcie ustawionej wartości
+      (zamiast ustawienia na 0).</li>
+    <li>Dodano możliwość oznaczania zleceń w kolejce jako ignorowane. Ignorowane zlecenie nie jest brane pod uwagę
+      podczas generowania planu.</li>
+  </ul>
+  <h3>Raport Wskaźniki</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować wywalenie się serwera podczas generowania raportu z godzinowym podziałem czasu.</li>
+  </ul>
+  <h3>Zlecenie reszty działów</h3>
+  <ul>
+    <li>Zmieniono importowanie dokumentów zlecenia tak, aby nowa lista była sortowana po numerze, nazwie i 12NC dokumentu,
+      w celu ograniczenia ilości zmian zlecenia, gdy w zleceniu zdefiniowane są dokumenty o takim samym numerze.</li>
+  </ul>
+  <h3>8D</h3>
+  <ul>
+    <li>Usunięto pole 'Data reklamacji/paska'.</li>
+    <li>Poprawiono błąd pokazujący kierownikowi pola 'Data zakończenia D5' oraz 'Data zakończenia 8D' jako możliwe do zmiany,
+      mimo że po wysłaniu formularza, zmienione wartości nie będą zapisane.</li>
+    <li>Zmieniono etykietę pola 'Data rejestracji CRS' na 'Data rejestracji CRS/niezgodności'.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono wysyłanie e-maili tak, aby ignorowane były wysyłki e-maili bez przynajmniej jednego odbiorcy.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.104.1</h1>
   <h2><%- time.format('2017-02-19', 'LL') %></h2>
   <h3>Zlecenia reszty działów</h3>
