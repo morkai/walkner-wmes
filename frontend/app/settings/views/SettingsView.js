@@ -3,12 +3,14 @@
 define([
   'underscore',
   'js2form',
+  'app/viewport',
   'app/core/View',
   'app/core/templates/colorPicker',
   'bootstrap-colorpicker'
 ], function(
   _,
   js2form,
+  viewport,
   View,
   colorPickerTemplate
 ) {
@@ -400,9 +402,13 @@ define([
 
       var view = this;
 
+      viewport.msg.saving();
+
       this.promised(this.settings.update(settingId, settingValue)).always(function()
       {
         --view.inProgress[settingId];
+
+        viewport.msg.saved();
       });
     }
 

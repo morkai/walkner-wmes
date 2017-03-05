@@ -162,3 +162,12 @@ input.no-controls[type="number"] {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+.select2-result-with-description > h3 {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 0 0 2px 0;
+}
+.select2-result-with-description > p {
+  font-size: .8em;
+  margin: 0;
+}

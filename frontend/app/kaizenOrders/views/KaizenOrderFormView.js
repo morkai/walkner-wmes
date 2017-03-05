@@ -8,6 +8,7 @@ define([
   'app/user',
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
+  'app/core/util/formatResultWithDescription',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
   '../dictionaries',
@@ -21,6 +22,7 @@ define([
   user,
   buttonGroup,
   idAndLabel,
+  formatResultWithDescription,
   FormView,
   setUpUserSelect2,
   kaizenDictionaries,
@@ -36,21 +38,6 @@ define([
       text: model.getLabel(),
       description: model.get('description')
     };
-  }
-
-  function formatResultWithDescription(result)
-  {
-    if (_.isEmpty(result.description))
-    {
-      return _.escape(result.text);
-    }
-
-    var html = '<div class="kaizenOrders-select2">';
-    html += '<h3>' + _.escape(result.text) + '</h3>';
-    html += '<p>' + _.escape(result.description) + '</p>';
-    html += '</div>';
-
-    return html;
   }
 
   function formatUserSelect2Text(user, name)
@@ -362,12 +349,14 @@ define([
         data: kaizenDictionaries.areas.map(idAndLabel)
       });
 
+      var formatResult = formatResultWithDescription.bind(null, 'text', 'description');
+
       this.$id('cause').select2({
         allowClear: true,
         placeholder: ' ',
         dropdownCssClass: 'is-bigdrop',
         data: kaizenDictionaries.causes.map(idLabelAndDescription),
-        formatResult: formatResultWithDescription
+        formatResult: formatResult
       });
 
       this.$id('nearMissCategory').select2({
@@ -375,7 +364,7 @@ define([
         placeholder: ' ',
         dropdownCssClass: 'is-bigdrop',
         data: kaizenDictionaries.categories.where({inNearMiss: true}).map(idLabelAndDescription),
-        formatResult: formatResultWithDescription
+        formatResult: formatResult
       });
 
       this.$id('suggestionCategory').select2({
@@ -383,7 +372,7 @@ define([
         placeholder: ' ',
         dropdownCssClass: 'is-bigdrop',
         data: kaizenDictionaries.categories.where({inSuggestion: true}).map(idLabelAndDescription),
-        formatResult: formatResultWithDescription
+        formatResult: formatResult
       });
 
       this.$id('risk').select2({
@@ -391,7 +380,7 @@ define([
         placeholder: ' ',
         dropdownCssClass: 'is-bigdrop',
         data: kaizenDictionaries.risks.map(idLabelAndDescription),
-        formatResult: formatResultWithDescription
+        formatResult: formatResult
       });
 
       this.$id('behaviour').select2({
@@ -399,7 +388,7 @@ define([
         placeholder: ' ',
         dropdownCssClass: 'is-bigdrop',
         data: kaizenDictionaries.behaviours.map(idLabelAndDescription),
-        formatResult: formatResultWithDescription
+        formatResult: formatResult
       });
 
       buttonGroup.toggle(this.$id('status'));

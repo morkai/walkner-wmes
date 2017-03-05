@@ -22,8 +22,6 @@ module.exports = function setUpAutoDowntimes(app, productionModule)
   let nextMinuteInMs = Number.MAX_SAFE_INTEGER;
 
   app.broker.subscribe('app.started', setUpTimes).setLimit(1);
-  app.broker.subscribe('subdivisions.added', m => handleSubdivision(m.model));
-  app.broker.subscribe('subdivisions.edited', m => handleSubdivision(m.model));
 
   function setUpTimes()
   {
@@ -67,16 +65,23 @@ module.exports = function setUpAutoDowntimes(app, productionModule)
 
   function handleMinuteChange()
   {
-    orgUnitsModule.getAllByType('subdivision').forEach(handleSubdivision);
+    orgUnitsModule
+      .getAllByType('subdivision')
+      .forEach(subdivision => handleAutoDowntimes([subdivision._id], subdivision.autoDowntimes));
+
+    _.forEach(
+      productionModule.settings.lineAutoDowntimes,
+      group => handleAutoDowntimes(group.lines, group.downtimes)
+    );
   }
 
-  function handleSubdivision(subdivision)
+  function handleAutoDowntimes(orgUnits, autoDowntimes)
   {
     let currentAutoDowntime = null;
     let nextAutoDowntime = null;
     let duration = -1;
 
-    _.forEach(subdivision.autoDowntimes, function(autoDowntime)
+    _.forEach(autoDowntimes, function(autoDowntime)
     {
       if (autoDowntime.when !== 'time')
       {
@@ -127,7 +132,7 @@ module.exports = function setUpAutoDowntimes(app, productionModule)
       message.remainingTime = nextMinute.date.getTime() - Date.now();
     }
 
-    app.broker.publish('production.autoDowntimes.' + subdivision._id, message);
+    _.forEach(orgUnits, orgUnitId => app.broker.publish(`production.autoDowntimes.${orgUnitId}`, message));
 
     if (nextMinuteInMs < 2000)
     {
@@ -136,11 +141,11 @@ module.exports = function setUpAutoDowntimes(app, productionModule)
 
     if (nextMinuteInMs < 10000)
     {
-      setTimeout(handleSubdivision, 2000, subdivision);
+      setTimeout(handleAutoDowntimes, 2000, orgUnits, autoDowntimes);
     }
     else
     {
-      setTimeout(handleSubdivision, 5000, subdivision);
+      setTimeout(handleAutoDowntimes, 5000, orgUnits, autoDowntimes);
     }
   }
 };

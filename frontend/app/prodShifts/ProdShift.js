@@ -1193,20 +1193,19 @@ define([
     autoStartDowntime: function()
     {
       var aor = this.getDefaultAor();
-
-      if (!aor)
-      {
-        return;
-      }
-
       var subdivision = subdivisions.get(this.get('subdivision'));
 
-      if (!subdivision)
+      if (!aor || !subdivision)
       {
         return;
       }
 
-      var autoDowntimes = subdivision.get('autoDowntimes');
+      var autoDowntimes = this.settings.getAutoDowntimes(this.prodLine.id);
+
+      if (_.isEmpty(autoDowntimes))
+      {
+        autoDowntimes = subdivision.get('autoDowntimes');
+      }
 
       if (_.isEmpty(autoDowntimes))
       {
@@ -1264,7 +1263,12 @@ define([
         return;
       }
 
-      var autoDowntimes = subdivision.get('autoDowntimes');
+      var autoDowntimes = this.settings.getAutoDowntimes(this.prodLine.id);
+
+      if (_.isEmpty(autoDowntimes))
+      {
+        autoDowntimes = subdivision.get('autoDowntimes');
+      }
 
       if (_.isEmpty(autoDowntimes))
       {
