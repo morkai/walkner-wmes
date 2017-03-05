@@ -52,6 +52,15 @@ module.exports = function(mongoose, options, done)
         conditions.section = {$in: options.sections};
       }
 
+      if (options.categories.length === 1)
+      {
+        conditions.categories = options.categories[0];
+      }
+      else if (options.categories.length)
+      {
+        conditions.categories = {$in: options.categories};
+      }
+
       var stream = Suggestion.find(conditions, {changes: 0}).sort(sort).lean().cursor();
       var next = _.once(this.next());
 

@@ -52,10 +52,17 @@ define([
       buttonGroup.toggle(this.$id('interval'));
 
       this.$id('sections').select2({
-        width: '400px',
+        width: '350px',
         allowClear: true,
         multiple: true,
         data: kaizenDictionaries.sections.map(idAndLabel)
+      });
+
+      this.$id('categories').select2({
+        width: '350px',
+        allowClear: true,
+        multiple: true,
+        data: kaizenDictionaries.categories.map(idAndLabel)
       });
     },
 
@@ -69,7 +76,8 @@ define([
         interval: model.get('interval'),
         from: from ? time.format(from, 'YYYY-MM-DD') : '',
         to: to ? time.format(to, 'YYYY-MM-DD') : '',
-        sections: model.get('sections').join(',')
+        sections: model.get('sections').join(','),
+        categories: model.get('categories').join(',')
       };
     },
 
@@ -79,7 +87,8 @@ define([
         from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
         to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
         interval: buttonGroup.getValue(this.$id('interval')),
-        sections: this.$id('sections').val()
+        sections: this.$id('sections').val(),
+        categories: this.$id('categories').val()
       };
 
       if (!query.from || query.from < 0)
@@ -102,6 +111,7 @@ define([
       }
 
       query.sections = query.sections === '' ? [] : query.sections.split(',');
+      query.categories = query.categories === '' ? [] : query.categories.split(',');
 
       this.model.set(query);
       this.model.trigger('filtered');
