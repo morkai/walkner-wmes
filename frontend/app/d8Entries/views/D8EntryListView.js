@@ -50,7 +50,7 @@ define([
         {id: 'entrySource', tdAttrs: minTdAttrs},
         {id: 'stripNos', tdAttrs: stripsTdAttrs, label: t('d8Entries', 'PROPERTY:strips.no')},
         {id: 'stripFamilies', tdAttrs: stripsTdAttrs, label: t('d8Entries', 'PROPERTY:strips.family')},
-        {id: 'problemDescription', tdAttrs: prepareTdAttrs},
+        {id: 'subject', tdAttrs: prepareTdAttrs},
         {id: 'problemSource', tdAttrs: prepareTdAttrs},
         {id: 'team', tdAttrs: _.partial(prepareTdAttrs, _, null, 'owner', 'members')},
         {id: 'crsRegisterDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:crsRegisterDate')},
@@ -111,6 +111,11 @@ define([
             return view.serializeTeamPopoverContent(model);
           }
 
+          if (this.dataset.id === 'subject')
+          {
+            return view.serializeSubjectPopoverContent(model);
+          }
+
           return undefined;
         }
       });
@@ -135,6 +140,18 @@ define([
       html += '</ul>';
 
       return html;
+    },
+
+    serializeSubjectPopoverContent: function(entry)
+    {
+      var problemDescription = entry.get('problemDescription');
+
+      if (_.isEmpty(problemDescription))
+      {
+        return undefined;
+      }
+
+      return problemDescription;
     }
 
   });
