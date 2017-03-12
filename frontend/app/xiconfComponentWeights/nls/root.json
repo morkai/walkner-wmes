@@ -22,7 +22,8 @@
 
     "PROPERTY:nc12": "Component 12NC",
     "PROPERTY:description": "Description",
-    "PROPERTY:weight": "Waga [g]",
+    "PROPERTY:minWeight": "Min. weight [g]",
+    "PROPERTY:maxWeight": "Max. weight [g]",
 
     "FORM:ACTION:add": "Add component",
     "FORM:ACTION:edit": "Edit component",

@@ -12,8 +12,12 @@
         <input id="<%- idPrefix %>-description" class="form-control" type="text" name="description" maxlength="100" required>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-weight" class="control-label is-required"><%- t('xiconfComponentWeights', 'PROPERTY:weight') %></label>
-        <input id="<%- idPrefix %>-weight" class="form-control" type="number" name="weight" required min="1" step="1">
+        <label for="<%- idPrefix %>-minWeight" class="control-label is-required"><%- t('xiconfComponentWeights', 'PROPERTY:minWeight') %></label>
+        <input id="<%- idPrefix %>-minWeight" class="form-control" type="number" name="minWeight" required min="1" step="1">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-maxWeight" class="control-label is-required"><%- t('xiconfComponentWeights', 'PROPERTY:maxWeight') %></label>
+        <input id="<%- idPrefix %>-maxWeight" class="form-control" type="number" name="maxWeight" required min="1" step="1">
       </div>
     </div>
     <div class="panel-footer">

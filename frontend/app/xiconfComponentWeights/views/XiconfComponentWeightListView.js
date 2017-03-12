@@ -13,7 +13,8 @@ define([
 
     columns: [
       {id: 'nc12', className: 'is-min'},
-      {id: 'weight', className: 'is-min'},
+      {id: 'minWeight', className: 'is-min'},
+      {id: 'maxWeight', className: 'is-min'},
       'description'
     ]
 

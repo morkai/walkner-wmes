@@ -4,7 +4,7 @@
   </div>
   <div class="panel-details">
     <div class="props first">
-      <% ['nc12', 'description', 'weight'].forEach(function(k) { %>
+      <% ['nc12', 'description', 'minWeight', 'maxWeight'].forEach(function(k) { %>
       <div class="prop">
         <div class="prop-name"><%- t('xiconfComponentWeights', 'PROPERTY:' + k) %></div>
         <div class="prop-value"><%= model[k] || '-' %></div>

@@ -21,7 +21,8 @@
 
   "PROPERTY:nc12": "12NC komponentu",
   "PROPERTY:description": "Opis",
-  "PROPERTY:weight": "Waga [g]",
+  "PROPERTY:minWeight": "Min. waga [g]",
+  "PROPERTY:maxWeight": "Maks. waga [g]",
 
   "FORM:ACTION:add": "Dodaj komponent",
   "FORM:ACTION:edit": "Edytuj komponent",

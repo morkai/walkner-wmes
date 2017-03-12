@@ -15,7 +15,12 @@ module.exports = function setupXiconfComponentWeightModel(app, mongoose)
       required: true,
       trim: true
     },
-    weight: {
+    minWeight: {
+      type: Number,
+      required: true,
+      min: 1
+    },
+    maxWeight: {
       type: Number,
       required: true,
       min: 1

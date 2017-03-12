@@ -11,7 +11,7 @@ define([
 
   return FormView.extend({
 
-    template: template,
+    template: template
 
   });
 });
