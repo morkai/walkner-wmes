@@ -283,7 +283,7 @@ define([
 
       best.candidates.forEach(function(candidate, i)
       {
-        mergeCandidateWithLine(candidate, best.lines[i]);
+        mergeCandidateWithLine(currentOrder, candidate, best.lines[i]);
       });
     }
 
@@ -307,7 +307,7 @@ define([
 
         if (candidate)
         {
-          mergeCandidateWithLine(candidate, line);
+          mergeCandidateWithLine(currentOrder, candidate, line);
 
           break;
         }
@@ -316,7 +316,7 @@ define([
       return true;
     }
 
-    function mergeCandidateWithLine(candidate, line)
+    function mergeCandidateWithLine(currentOrder, candidate, line)
     {
       if (hasIncompleteOrder(line.orders) && hasIncompleteOrder(candidate.orders))
       {
@@ -325,8 +325,33 @@ define([
         return;
       }
 
+      var lastOrder = _.last(line.orders);
+      var firstCandidateOrder = _.first(candidate.orders);
+
+      if (line.prev && lastOrder && lastOrder.orderNo === firstCandidateOrder.orderNo)
+      {
+        if (debug) console.log(
+          'merge: candidate', firstCandidateOrder.orderNo, firstCandidateOrder,
+          'same as the last order', lastOrder,
+          'on line', line.id, line,
+          'need to backtrack'
+        );
+
+        return mergeBacktrack(currentOrder, candidate, line);
+      }
+
       if (debug) console.log('merging', candidate.orders[0].orderNo, 'with', line.id, line);
 
+      line.prev = {
+        shiftNo: line.shiftNo,
+        activeFrom: line.activeFrom,
+        nextDowntime: line.nextDowntime,
+        orders: line.orders,
+        full: line.full,
+        pceTimes: line.pceTimes,
+        hourlyPlan: [].concat(line.hourlyPlan),
+        incomplete: null
+      };
       line.shiftNo = candidate.shiftNo;
       line.activeFrom = candidate.activeFrom;
       line.nextDowntime = candidate.nextDowntime;
@@ -339,10 +364,39 @@ define([
         line.hourlyPlan[h] += candidate.hourlyPlan[h];
       }
 
-      handleIncompleteOrder(_.last(line.orders));
+      handleIncompleteOrder(line, _.last(line.orders));
     }
 
-    function handleIncompleteOrder(lineOrder)
+    // TODO: smarter
+    function mergeBacktrack(currentOrder, candidate, line)
+    {
+      var prev = line.prev;
+
+      if (debug) console.log('merge: backtracing:', prev);
+
+      if (prev.incomplete)
+      {
+        orders.shift();
+      }
+
+      var lastOrder = _.last(line.orders);
+      var firstCandidateOrder = _.first(candidate.orders);
+
+      line.prev = null;
+      line.shiftNo = prev.shiftNo;
+      line.activeFrom = prev.activeFrom;
+      line.nextDowntime = prev.nextDowntime;
+      line.orders = prev.orders;
+      line.full = prev.full;
+      line.pceTimes = prev.pceTimes;
+      line.hourlyPlan = prev.hourlyPlan;
+
+      var newCandidate = trySmallOrderOnLine(currentOrder, lastOrder.qty + firstCandidateOrder.qty, line);
+
+      mergeCandidateWithLine(currentOrder, newCandidate, line);
+    }
+
+    function handleIncompleteOrder(line, lineOrder)
     {
       if (!lineOrder.incomplete)
       {
@@ -372,6 +426,7 @@ define([
       {
         if (debug) console.log('found room on line:', availableLines[0].id);
 
+        line.prev.incomplete = partialLineOrder;
         lineOrder.incomplete = 0;
 
         orders.unshift(partialLineOrder);
@@ -425,7 +480,7 @@ define([
             if (debug) console.log('push a', q);
 
             lineOrders.push({
-              _id: currentOrder.id + '-' + shiftNo,
+              _id: currentOrder.id + '-' + shiftNo + '-' + (1 + line.orders.length + lineOrders.length),
               orderNo: currentOrder.id,
               qty: q,
               startAt: new Date(startAt),
@@ -455,7 +510,7 @@ define([
             if (debug) console.log('push b', q);
 
             lineOrders.push({
-              _id: currentOrder.id + '-' + shiftNo,
+              _id: currentOrder.id + '-' + shiftNo + '-' + (1 + line.orders.length + lineOrders.length),
               orderNo: currentOrder.id,
               qty: q,
               startAt: new Date(startAt),
@@ -484,7 +539,7 @@ define([
           if (debug) console.log('push c', q);
 
           lineOrders.push({
-            _id: currentOrder.id + '-' + shiftNo,
+            _id: currentOrder.id + '-' + shiftNo + '-' + (1 + line.orders.length + lineOrders.length),
             orderNo: currentOrder.id,
             qty: q,
             startAt: new Date(startAt),
