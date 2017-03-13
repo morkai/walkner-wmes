@@ -1,34 +1,35 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(['./shift'], function(shiftUtil)
-{
+define([
+  './shift'
+], function(
+  shiftUtil
+) {
   'use strict';
 
-  var dateToSubdivisionsToDowntimes = {};
+  var dateToLineDowntimes = {};
 
-  function getSubdivisionDowntimes(subdivision, date)
+  function getLineDowntimes(prodLine, date, autoDowntimes)
   {
-    var subdivisionsToDowntimes = dateToSubdivisionsToDowntimes[date];
+    var linesToDowntimes = dateToLineDowntimes[date];
 
-    if (typeof subdivisionsToDowntimes === 'undefined')
+    if (typeof linesToDowntimes === 'undefined')
     {
-      subdivisionsToDowntimes = dateToSubdivisionsToDowntimes[date] = {};
+      linesToDowntimes = dateToLineDowntimes[date] = {};
     }
 
-    var downtimes = subdivisionsToDowntimes[subdivision.id];
+    var lineDowntimes = linesToDowntimes[prodLine.id];
 
-    if (typeof downtimes === 'undefined')
+    if (typeof lineDowntimes === 'undefined')
     {
-      downtimes = subdivisionsToDowntimes[subdivision.id] = cacheSubdivisionDowntimes(subdivision, date);
+      lineDowntimes = linesToDowntimes[prodLine.id] = cacheLineDowntimes(autoDowntimes, date);
     }
 
-    return downtimes;
+    return lineDowntimes;
   }
 
-  function cacheSubdivisionDowntimes(subdivision, date)
+  function cacheLineDowntimes(autoDowntimes, date)
   {
-    var autoDowntimes = subdivision.get('autoDowntimes');
-
     if (!Array.isArray(autoDowntimes) || autoDowntimes.length === 0)
     {
       return null;
@@ -76,8 +77,7 @@ define(['./shift'], function(shiftUtil)
   }
 
   return {
-
-    get: getSubdivisionDowntimes
-
+    clear: function() { dateToLineDowntimes = {}; },
+    get: getLineDowntimes
   };
 });

@@ -29,7 +29,8 @@ define([
         hourlyPlan: shiftUtil.EMPTY_HOURLY_PLAN.slice(),
         pceTimes: [],
         totalQty: 0,
-        orders: []
+        orders: [],
+        downtimes: []
       };
     },
 
@@ -134,7 +135,8 @@ define([
         hourlyPlan: shiftUtil.EMPTY_HOURLY_PLAN.slice(),
         pceTimes: [],
         totalQty: 0,
-        orders: []
+        orders: [],
+        downtimes: []
       });
       this.orders.reset([]);
     }

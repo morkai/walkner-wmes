@@ -15,11 +15,13 @@ define([
 
     model: OrderSetting,
 
-    topicSuffix: 'planning.**',
+    topicSuffix: ['planning.**', 'production.**'],
 
     getValue: function(suffix)
     {
-      var setting = this.get('planning.' + suffix);
+      var setting = this.get(suffix)
+        || this.get('planning.' + suffix)
+        || this.get('production.' + suffix);
 
       return setting ? setting.getValue() : null;
     },
@@ -48,7 +50,7 @@ define([
       return undefined;
     },
 
-    getPlanGeneratorSettings: function()
+    getPlanGeneratorSettings: function(lineIds)
     {
       return {
         perOrderOverhead: (this.getValue('perOrderOverhead') || 0) * 1000,
@@ -61,8 +63,27 @@ define([
         ignoreDlv: !!this.getValue('ignoreDlv'),
         ignoreCnf: !!this.getValue('ignoreCnf'),
         ignoreDone: !!this.getValue('ignoreDone'),
-        bigOrderQty: this.getValue('bigOrderQty') || 0
+        bigOrderQty: this.getValue('bigOrderQty') || 0,
+        lineAutoDowntimes: this.getLineAutoDowntimes(lineIds)
       };
+    },
+
+    getLineAutoDowntimes: function(lineIds)
+    {
+      var lineAutoDowntimes = {};
+
+      (this.getValue('production.lineAutoDowntimes') || []).forEach(function(group)
+      {
+        _.forEach(group.lines, function(lineId)
+        {
+          if (!lineIds || _.includes(lineIds, lineId))
+          {
+            lineAutoDowntimes[lineId] = group.downtimes;
+          }
+        });
+      });
+
+      return lineAutoDowntimes;
     }
 
   });

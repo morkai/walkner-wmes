@@ -8,6 +8,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  '../util/autoDowntimeCache',
   '../settings',
   '../DailyMrpPlanLine',
   '../views/DailyMrpPlanFilterView',
@@ -22,6 +23,7 @@ define([
   viewport,
   View,
   bindLoadingMessage,
+  autoDowntimeCache,
   settings,
   DailyMrpPlanLine,
   DailyMrpPlanFilterView,
@@ -89,6 +91,7 @@ define([
         _.debounce(page.checkOverlappingLines, 50)
       );
       page.listenTo(plans.options, 'change:wrap', page.onWrapChange);
+      page.listenTo(plans.settings, 'change', page.onSettingsChange);
 
       $('body')
         .on('paste.' + idPrefix, page.onBodyPaste.bind(page))
@@ -239,6 +242,14 @@ define([
     onWrapChange: function()
     {
       this.$el.toggleClass('wrap', !!this.model.options.get('wrap'));
+    },
+
+    onSettingsChange: function(setting)
+    {
+      if (setting.id === 'production.lineAutoDowntimes')
+      {
+        autoDowntimeCache.clear();
+      }
     },
 
     updateClientUrl: function()

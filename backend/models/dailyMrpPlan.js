@@ -33,6 +33,23 @@ module.exports = function setupDailyMrpPlanModel(app, mongoose)
     minimize: false
   });
 
+  const autoDowntimeTimeSchema = new mongoose.Schema({
+    d: Number,
+    h: Number,
+    m: Number
+  }, {
+    _id: false,
+    minimize: false
+  });
+
+  const autoDowntimeSchema = new mongoose.Schema({
+    reason: String,
+    time: [autoDowntimeTimeSchema]
+  }, {
+    _id: false,
+    minimize: false
+  });
+
   const dailyMrpPlanLineSchema = new mongoose.Schema({
     _id: String,
     name: String,
@@ -42,7 +59,8 @@ module.exports = function setupDailyMrpPlanModel(app, mongoose)
     hourlyPlan: [Number],
     pceTimes: [Number],
     totalQty: Number,
-    orders: [dailyMrpPlanLineOrderSchema]
+    orders: [dailyMrpPlanLineOrderSchema],
+    downtimes: [autoDowntimeSchema]
   }, {
     id: false,
     minimize: false
@@ -68,6 +86,7 @@ module.exports = function setupDailyMrpPlanModel(app, mongoose)
   });
 
   dailyMrpPlanSchema.index({date: -1, mrp: 1}, {unique: true});
+  dailyMrpPlanSchema.index({date: -1, 'lines._id': 1});
   dailyMrpPlanSchema.index({'orders._id': -1});
 
   dailyMrpPlanSchema.statics.TOPIC_PREFIX = 'dailyMrpPlans';

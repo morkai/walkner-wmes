@@ -48,6 +48,7 @@ define([
       var prodLine = orgUnits.getByTypeAndId('prodLine', line.id);
       var subdivision = orgUnits.getSubdivisionFor(prodLine);
       var activeFromMoment = line.getActiveFromMoment();
+      var autoDowntimes = settings.lineAutoDowntimes[prodLine.id] || subdivision.get('autoDowntimes') || [];
 
       return {
         id: line.id,
@@ -55,7 +56,8 @@ define([
         activeFrom: activeFromMoment,
         activeTo: line.getActiveToMoment(),
         workerCount: line.get('workerCount'),
-        nextDowntime: autoDowntimeCache.get(subdivision, PLAN_DATE_TIME),
+        autoDowntimes: autoDowntimes,
+        nextDowntime: autoDowntimeCache.get(prodLine, PLAN_DATE_TIME, autoDowntimes),
         orders: [],
         hourlyPlan: shiftUtil.EMPTY_HOURLY_PLAN.slice(),
         pceTimes: [],
@@ -106,7 +108,8 @@ define([
       planLine.set({
         hourlyPlan: line.hourlyPlan,
         pceTimes: line.pceTimes,
-        totalQty: line.pceTimes.length / 2
+        totalQty: line.pceTimes.length / 2,
+        downtimes: line.autoDowntimes
       });
       planLine.orders.reset(line.orders, {skipGenerate: true});
     });

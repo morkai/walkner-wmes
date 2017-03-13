@@ -185,7 +185,7 @@ define([
 
     generate: function()
     {
-      if (generateDailyMrpPlan(this, this.settings.getPlanGeneratorSettings()))
+      if (generateDailyMrpPlan(this, this.settings.getPlanGeneratorSettings(this.lines.pluck('_id'))))
       {
         this.trigger('generated');
       }

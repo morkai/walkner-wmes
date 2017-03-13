@@ -26,7 +26,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
     {
       req.rql.selector = {
         name: 'regex',
-        args: ['_id', '^planning\\.']
+        args: ['_id', '^(planning|production)\\.']
       };
 
       return next();
