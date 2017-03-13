@@ -34,19 +34,23 @@ define([
     setUpPubsub: function(pubsub)
     {
       var collection = this;
+      var topicSuffixes = Array.isArray(collection.topicSuffix) ? collection.topicSuffix : [collection.topicSuffix];
 
-      pubsub.subscribe('settings.updated.' + this.topicSuffix, function(changes)
+      _.forEach(topicSuffixes, function(topicSuffix)
       {
-        var setting = collection.get(changes._id);
+        pubsub.subscribe('settings.updated.' + topicSuffix, function(changes)
+        {
+          var setting = collection.get(changes._id);
 
-        if (setting)
-        {
-          setting.set(changes);
-        }
-        else
-        {
-          collection.add(changes);
-        }
+          if (setting)
+          {
+            setting.set(changes);
+          }
+          else
+          {
+            collection.add(changes);
+          }
+        });
       });
     },
 
