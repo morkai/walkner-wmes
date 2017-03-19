@@ -259,16 +259,19 @@ exports.start = function startUserModule(app, module)
 
     return function authMiddleware(req, res, next)
     {
-      var user = req.session.user;
-
-      if (!user)
+      if (req.session)
       {
-        user = req.session.user = createGuestData(getRealIp({}, req));
-      }
+        var user = req.session.user;
 
-      if (isAllowedTo(user, anyPrivileges))
-      {
-        return next();
+        if (!user)
+        {
+          user = req.session.user = createGuestData(getRealIp({}, req));
+        }
+
+        if (isAllowedTo(user, anyPrivileges))
+        {
+          return next();
+        }
       }
 
       module.debug(
