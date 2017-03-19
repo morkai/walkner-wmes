@@ -1,11 +1,10 @@
-<h1>v0.106.1</h1>
-<h2><%- time.format('2017-03-13', 'LL') %></h2>
-<h3>Baza testów</h3>
+<h1>v0.106.2</h1>
+<h2><%- time.format('2017-03-19', 'LL') %></h2>
+<h3>Plany dzienne MRP</h3>
 <ul>
-  <li>Zmieniono wagi komponentów tak, że można zdefiniować minimalną i maksymalną wagę komponentu.</li>
-</ul>
-<h3>8D</h3>
-<ul>
-  <li>Zmieniono listę zgłoszeń tak, żeby zamiast kolumny 'Opis problemu' wyświetlana była kolumna 'Temat'. Opis problemu
-    wyświetlany jest teraz w dymku po najechaniu na Temat.</li>
+  <li>Poprawiono błąd powodujący utracenie części dużego zlecenia podczas generowania planu, gdy druga część zlecenia
+    została przydzielona do tej samej linii co pierwsza część (ponieważ czas dostępności linii nawet po przydzieleniu
+    części zlecenia nadal jest najwcześniejszy, co czyni tę linię najlepszym kandydatem do drugiej części zlecenia).</li>
+  <li>Zmieniono generowanie planu tak, aby pod uwagę brane były automatyczne przestoje zdefiniowane na poziomie linii,
+    a nie tylko na poziomie działu.</li>
 </ul>

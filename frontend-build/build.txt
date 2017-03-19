@@ -237,6 +237,10 @@ app/orderStatuses/assets/main.css
 ----------------
 app/orderStatuses/assets/main.css
 
+app/paintShop/assets/main.css
+----------------
+app/paintShop/assets/main.css
+
 app/pressWorksheets/assets/main.css
 ----------------
 app/pressWorksheets/assets/main.css
@@ -1010,6 +1014,17 @@ app/isa/templates/messages/acceptSuccess.js
 app/isa/templates/messages/finishSuccess.js
 app/isa/pages/IsaLineStatePage.js
 app/isa/routes.js
+app/paintShop/PaintShopOrder.js
+app/paintShop/PaintShopOrderCollection.js
+app/paintShop/templates/queue.js
+app/paintShop/templates/queueOrder.js
+app/paintShop/views/PaintShopQueueView.js
+app/paintShop/templates/page.js
+app/paintShop/pages/PaintShopPage.js
+app/nls/paintShop.js
+app/nls/pl/paintShop.js
+i18n!app/nls/paintShop
+app/paintShop/routes.js
 app/qiResults/routes.js
 app/qiKinds/QiKind.js
 app/qiKinds/routes.js

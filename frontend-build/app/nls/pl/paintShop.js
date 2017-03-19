@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:base":function(n){return"Malarnia"},"BREADCRUMBS:queue":function(n){return"Kolejka zleceń"},"MSG:LOADING_FAILURE":function(n){return"Ładowanie zleceń nie powiodło się :("},"MSG:LOADING_SINGLE_FAILURE":function(n){return"Ładowanie zlecenia nie powiodło się :("}}});

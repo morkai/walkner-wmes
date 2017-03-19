@@ -1,0 +1,1 @@
+define(["app/nls/locale/en"],function(e){return{root:{"BREADCRUMBS:base":function(e){return"Paint shop"},"BREADCRUMBS:queue":function(e){return"Orders queue"},"MSG:LOADING_FAILURE":function(e){return"Failed to load the orders :("},"MSG:LOADING_SINGLE_FAILURE":function(e){return"Failed to load the order :("}},pl:!0}});
