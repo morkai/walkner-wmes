@@ -243,10 +243,7 @@ exports.start = function startOrdersImporterModule(app, module)
         ordersWithNewQty.push(orderModel._id);
       }
 
-      var statuses = changes.newValues.statuses;
-
-      if (changes.newValues.qty
-        || (statuses && (_.includes(statuses, 'CNF') || _.includes(statuses, 'DLV'))))
+      if (shouldUpdateDailyMrpPlan(changes.oldValues, changes.newValues))
       {
         ordersForDailyMrpPlans[orderModel._id] = {
           qty: changes.newValues.qty || orderModel.qty,
@@ -255,6 +252,31 @@ exports.start = function startOrdersImporterModule(app, module)
         };
       }
     }
+  }
+
+  function shouldUpdateDailyMrpPlan(oldValues, newValues)
+  {
+    if (newValues.qty)
+    {
+      return true;
+    }
+
+    if (!newValues.statuses)
+    {
+      return false;
+    }
+
+    if (!_.includes(oldValues.statuses, 'CNF') && _.includes(newValues.statuses, 'CNF'))
+    {
+      return true;
+    }
+
+    if (!_.includes(oldValues.statuses, 'DLV') && _.includes(newValues.statuses, 'DLV'))
+    {
+      return true;
+    }
+
+    return false;
   }
 
   function compareMissingOrderWithDoc(ts, mrpToTimeCoeffs, updateList, orderModel, missingOrder)
