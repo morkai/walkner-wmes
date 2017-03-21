@@ -97,7 +97,7 @@ exports.start = function startDacNodeModule(app, module)
       Date.now() + Math.random().toString().replace(/^0\./, '') + '.csv'
     );
 
-    fs.move(module.config.journalFile, dataFile, function(err)
+    fs.move(module.config.journalFile, dataFile, {clobber: true}, function(err)
     {
       if (err && err.code !== 'ENOENT')
       {

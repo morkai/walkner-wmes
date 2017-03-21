@@ -186,7 +186,7 @@ module.exports = function setUpCleanup(app, module)
       : path.join(processingDirPath, result.inputFileName);
     var toInputFilePath = path.join(module.config.responsesPath, result._id + '.jpg');
 
-    fs.move(fromInputFilePath, toInputFilePath, function()
+    fs.move(fromInputFilePath, toInputFilePath, {clobber: true}, function()
     {
       removeDir(processingDirPath);
     });

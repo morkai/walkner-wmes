@@ -429,7 +429,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
   {
     if (hadError)
     {
-      fs.move(filePath, filePath + '.bad', function(err)
+      fs.move(filePath, filePath + '.bad', {clobber: true}, function(err)
       {
         if (err)
         {

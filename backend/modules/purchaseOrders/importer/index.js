@@ -318,7 +318,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   {
     var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.move(oldFilePath, newFilePath, function(err)
+    fs.move(oldFilePath, newFilePath, {clobber: true}, function(err)
     {
       if (err)
       {

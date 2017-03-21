@@ -80,7 +80,7 @@ module.exports = function importRoute(app, icpoModule, req, res, next)
         return this.skip(err);
       }
 
-      fs.move(zipFilePath, zipFilePath + '.zip', this.next());
+      fs.move(zipFilePath, zipFilePath + '.zip', {clobber: true}, this.next());
     },
     function(err, statusCode)
     {
