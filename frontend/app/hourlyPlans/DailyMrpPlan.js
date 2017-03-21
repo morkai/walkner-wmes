@@ -29,13 +29,6 @@ define([
 
     urlRoot: '/dailyMrpPlans',
 
-    url: function()
-    {
-      return '/dailyMrpPlans'
-        + '/' + encodeURIComponent(this.date.toISOString())
-        + '/' + encodeURIComponent(this.mrp.id);
-    },
-
     initialize: function(attrs, options)
     {
       this.settings = options && options.settings || this.collection.settings;

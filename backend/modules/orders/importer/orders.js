@@ -44,6 +44,7 @@ exports.start = function startOrdersImporterModule(app, module)
   var Order = mongoose.model('Order');
   var OrderIntake = mongoose.model('OrderIntake');
   var XiconfOrder = mongoose.model('XiconfOrder');
+  var DailyMrpPlan = mongoose.model('DailyMrpPlan');
   var Setting = mongoose.model('Setting');
   var queue = [];
   var lock = false;
@@ -102,6 +103,7 @@ exports.start = function startOrdersImporterModule(app, module)
         var insertList = [];
         var updateList = [];
         var ordersWithNewQty = [];
+        var ordersForDailyMrpPlans = {};
 
         _.forEach(orderModels, compareOrder.bind(
           null,
@@ -110,13 +112,15 @@ exports.start = function startOrdersImporterModule(app, module)
           updateList,
           orders,
           missingOrders,
-          ordersWithNewQty
+          ordersWithNewQty,
+          ordersForDailyMrpPlans
         ));
 
         createOrdersForInsertion(ts, insertList, orders, missingOrders);
 
         setImmediate(prepareOrderIntakeSearch, insertList, updateList);
         setImmediate(updateXiconfOrderQty, timestamp, ordersWithNewQty);
+        setImmediate(updateDailyMrpPlans, ordersForDailyMrpPlans);
       }
     );
   }
@@ -131,13 +135,30 @@ exports.start = function startOrdersImporterModule(app, module)
     }
   }
 
-  function compareOrder(ts, mrpToTimeCoeffs, updateList, orders, missingOrders, ordersWithNewQty, orderModel)
+  function compareOrder(
+    ts,
+    mrpToTimeCoeffs,
+    updateList,
+    orders,
+    missingOrders,
+    ordersWithNewQty,
+    ordersForDailyMrpPlans,
+    orderModel
+  )
   {
     var orderNo = orderModel._id;
 
     if (typeof orders[orderNo] === 'object')
     {
-      compareOrderWithDoc(ts, mrpToTimeCoeffs, updateList, orderModel, orders[orderNo], ordersWithNewQty);
+      compareOrderWithDoc(
+        ts,
+        mrpToTimeCoeffs,
+        updateList,
+        orderModel,
+        orders[orderNo],
+        ordersWithNewQty,
+        ordersForDailyMrpPlans
+      );
 
       delete orders[orderNo];
     }
@@ -149,7 +170,15 @@ exports.start = function startOrdersImporterModule(app, module)
     }
   }
 
-  function compareOrderWithDoc(ts, mrpToTimeCoeffs, updateList, orderModel, newOrderData, ordersWithNewQty)
+  function compareOrderWithDoc(
+    ts,
+    mrpToTimeCoeffs,
+    updateList,
+    orderModel,
+    newOrderData,
+    ordersWithNewQty,
+    ordersForDailyMrpPlans
+  )
   {
     if (orderModel.importTs > newOrderData.importTs)
     {
@@ -212,6 +241,18 @@ exports.start = function startOrdersImporterModule(app, module)
       if (changes.newValues.qty)
       {
         ordersWithNewQty.push(orderModel._id);
+      }
+
+      var statuses = changes.newValues.statuses;
+
+      if (changes.newValues.qty
+        || (statuses && (_.includes(statuses, 'CNF') || _.includes(statuses, 'DLV'))))
+      {
+        ordersForDailyMrpPlans[orderModel._id] = {
+          qty: changes.newValues.qty || orderModel.qty,
+          qtyDone: orderModel.qtyDone,
+          statuses: changes.newValues.statuses || orderModel.statuses
+        };
       }
     }
   }
@@ -362,9 +403,9 @@ exports.start = function startOrdersImporterModule(app, module)
       steps.push(_.partial(createOrdersStep, insertList.splice(0, 100)));
     }
 
-    _.forEach(updateList, function(orderModel)
+    _.forEach(updateList, function(update)
     {
-      steps.push(_.partial(updateOrderStep, orderModel));
+      steps.push(_.partial(updateOrderStep, update));
     });
 
     steps.push(function unlockStep(err)
@@ -484,6 +525,146 @@ exports.start = function startOrdersImporterModule(app, module)
         if (err)
         {
           module.error(`Failed to update quantities of XiconfOrders: ${err.message}`);
+        }
+      }
+    );
+  }
+
+  function updateDailyMrpPlans(importedOrders)
+  {
+    step(
+      function()
+      {
+        const conditions = {
+          'orders._id': {$in: Object.keys(importedOrders)}
+        };
+        const fields = {
+          orders: 1
+        };
+
+        DailyMrpPlan
+          .find(conditions, fields)
+          .lean()
+          .exec(this.next());
+      },
+      function(err, dailyMrpPlans)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        const planToOrders = {};
+        const orderToPlans = {};
+        const remainingOrders = [];
+
+        _.forEach(dailyMrpPlans, function(dailyMrpPlan)
+        {
+          const map = {};
+
+          _.forEach(dailyMrpPlan.orders, function(planOrder)
+          {
+            const importedOrder = importedOrders[planOrder._id];
+
+            map[planOrder._id] = planOrder;
+
+            if (importedOrder)
+            {
+              planOrder.qtyTodo = importedOrder.qty;
+              planOrder.qtyDone = importedOrder.qtyDone ? importedOrder.qtyDone.total : 0;
+              planOrder.statuses = importedOrder.statuses;
+            }
+            else
+            {
+              remainingOrders.push(planOrder._id);
+
+              if (!orderToPlans[planOrder._id])
+              {
+                orderToPlans[planOrder._id] = [];
+              }
+
+              orderToPlans[planOrder._id].push(dailyMrpPlan._id);
+            }
+          });
+
+          planToOrders[dailyMrpPlan._id] = {
+            list: dailyMrpPlan.orders,
+            map: map
+          };
+        });
+
+        this.planToOrders = planToOrders;
+        this.orderToPlans = orderToPlans;
+        this.remainingOrders = remainingOrders;
+
+        setImmediate(this.next());
+      },
+      function()
+      {
+        const conditions = {
+          _id: {$in: this.remainingOrders}
+        };
+        const fields = {
+          qty: 1,
+          'qtyDone.total': 1,
+          statuses: 1
+        };
+
+        Order
+          .find(conditions, fields)
+          .lean()
+          .exec(this.next());
+      },
+      function(err, remainingOrders)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        remainingOrders.forEach(function(remainingOrder)
+        {
+          this.orderToPlans[remainingOrder._id].forEach(function(planId)
+          {
+            const planOrder = this.planToOrders[planId].map[remainingOrder._id];
+
+            planOrder.qtyTodo = remainingOrder.qty;
+            planOrder.qtyDone = remainingOrder.qtyDone ? remainingOrder.qtyDone.total : 0;
+            planOrder.statuses = remainingOrder.statuses;
+          }, this);
+        }, this);
+
+        setImmediate(this.next());
+      },
+      function()
+      {
+        this.updatedAt = Date.now();
+        this.planIds = Object.keys(this.planToOrders);
+
+        this.planIds.forEach(function(planId)
+        {
+          DailyMrpPlan.collection.update(
+            {_id: planId},
+            {$set: {
+              updatedAt: this.updatedAt,
+              orders: this.planToOrders[planId].list
+            }},
+            this.group()
+          );
+        }, this);
+      },
+      function(err)
+      {
+        if (err)
+        {
+          module.error(`Failed to update DailyMrpPlans: ${err.message}`);
+        }
+        else
+        {
+          app.broker.publish('dailyMrpPlans.ordersUpdated', {
+            updatedAt: this.updatedAt,
+            planIds: this.planIds
+          });
         }
       }
     );

@@ -12,8 +12,6 @@ module.exports = function setUpDailyMrpPlans(app, module)
   const mongoose = app[module.config.mongooseId];
   const DailyMrpPlan = mongoose.model('DailyMrpPlan');
 
-  const locks = {};
-
   module.dailyMrpPlans = {
 
     parse: function(file, done)

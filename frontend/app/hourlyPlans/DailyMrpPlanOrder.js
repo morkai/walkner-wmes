@@ -17,6 +17,10 @@ define([
 
   return Model.extend({
 
+    defaults: {
+      ignored: false
+    },
+
     serializeListItem: function()
     {
       return {

@@ -44,6 +44,7 @@ define([
     {
       pubsub.subscribe('dailyMrpPlans.imported', this.handleImportedMessage.bind(this));
       pubsub.subscribe('dailyMrpPlans.updated', this.handleUpdatedMessage.bind(this));
+      pubsub.subscribe('dailyMrpPlans.ordersUpdated', this.handleOrdersUpdatedMessage.bind(this));
 
       return this;
     },
@@ -313,6 +314,24 @@ define([
       {
         plan.update(message);
       }
+    },
+
+    handleOrdersUpdatedMessage: function(message)
+    {
+      message.planIds.forEach(function(planId)
+      {
+        var plan = this.get(planId);
+
+        if (!plan)
+        {
+          return;
+        }
+
+        plan.fetch().then(function()
+        {
+          plan.orders.reset(plan.get('orders'), {skipGenerate: true});
+        });
+      }, this);
     }
 
   });

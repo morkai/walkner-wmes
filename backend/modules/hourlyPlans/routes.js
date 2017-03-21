@@ -67,6 +67,8 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   //
   express.get('/dailyMrpPlans', canView, fixDailyMrpPlanDate, express.crud.browseRoute.bind(null, app, DailyMrpPlan));
 
+  express.get('/dailyMrpPlans/:id', canView, express.crud.readRoute.bind(null, app, DailyMrpPlan));
+
   express.post(
     '/dailyMrpPlans;parse',
     canManageDailyMrpPlans,

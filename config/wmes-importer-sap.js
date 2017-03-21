@@ -46,7 +46,8 @@ exports.mongoose = {
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
     'xiconfOrder', 'xiconfHidLamp',
-    'cag', 'cagPlan'
+    'cag', 'cagPlan',
+    'dailyMrpPlan'
   ]
 };
 
@@ -119,7 +120,8 @@ exports['messenger/server'] = {
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
     'orderDocuments.synced', 'orderDocuments.eto.synced',
-    'cags.plan.synced', 'cags.plan.syncFailed'
+    'cags.plan.synced', 'cags.plan.syncFailed',
+    'dailyMrpPlans.ordersUpdated'
   ]
 };
 
