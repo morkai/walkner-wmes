@@ -52,14 +52,12 @@ exports.start = function startOrdersImporterModule(app, module)
 
   function enqueueAndCompare(err, orders, missingOrders)
   {
-    if (err)
+    if (orders && missingOrders && (_.size(orders) || _.size(missingOrders)))
     {
-      return;
+      queue.push(orders, missingOrders);
+
+      compareNext();
     }
-
-    queue.push(orders, missingOrders);
-
-    compareNext();
   }
 
   function compareNext()
@@ -76,7 +74,7 @@ exports.start = function startOrdersImporterModule(app, module)
     var orderIds = Object.keys(orders);
     var missingOrderIds = Object.keys(missingOrders);
     var allOrderIds = orderIds.concat(missingOrderIds);
-    var timestamp = orders[allOrderIds[0]].importTs;
+    var timestamp = (orders[allOrderIds[0]] || missingOrders[allOrderIds[0]]).importTs;
 
     module.debug("Comparing %d orders and %d missing orders...", orderIds.length, missingOrderIds.length);
 
@@ -489,6 +487,5 @@ exports.start = function startOrdersImporterModule(app, module)
         }
       }
     );
-
   }
 };
