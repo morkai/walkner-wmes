@@ -482,7 +482,7 @@ define([
       var item = this.model.get(id);
 
       return orderPopoverTemplate({
-        editable: !!editable,
+        editable: this.model.plan.isEditable() && !!editable,
         order: item.serializePopover()
       });
     },
@@ -491,7 +491,7 @@ define([
     {
       var popover = $item.data('bs.popover');
 
-      if (!popover)
+      if (!popover || !this.model.plan.isEditable())
       {
         return;
       }

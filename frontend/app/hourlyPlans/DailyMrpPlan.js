@@ -78,6 +78,11 @@ define([
       };
     },
 
+    isEditable: function()
+    {
+      return Date.now() < (this.date.getTime() + 6 * 3600 * 1000);
+    },
+
     importing: function()
     {
       this.updateQueue = [];
@@ -157,6 +162,11 @@ define([
     {
       var plan = this;
 
+      if (!plan.isEditable())
+      {
+        return null;
+      }
+
       var req = plan.collection.update('resetLines', plan.id, {
         lines: plan.lines.toJSON()
       });
@@ -178,7 +188,8 @@ define([
 
     generate: function()
     {
-      if (generateDailyMrpPlan(this, this.settings.getPlanGeneratorSettings(this.lines.pluck('_id'))))
+      if (this.isEditable()
+        && generateDailyMrpPlan(this, this.settings.getPlanGeneratorSettings(this.lines.pluck('_id'))))
       {
         this.trigger('generated');
       }

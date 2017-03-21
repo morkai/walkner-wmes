@@ -81,7 +81,8 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        lines: this.model.lines.pluck('_id')
+        lines: this.model.lines.pluck('_id'),
+        editable: this.model.isEditable()
       };
     },
 
