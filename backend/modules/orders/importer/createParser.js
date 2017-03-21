@@ -267,7 +267,7 @@ module.exports = function createParser(app, importerModule, callback)
   {
     var newFilePath = path.join(importerModule.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.move(oldFilePath, newFilePath, function(err)
+    fs.move(oldFilePath, newFilePath, {clobber: true}, function(err)
     {
       if (err)
       {
