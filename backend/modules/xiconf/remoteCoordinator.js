@@ -101,6 +101,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   app.broker.subscribe('updater.restarting', function() { restarting = true; });
   app.broker.subscribe('settings.updated.xiconf.notifier.delay', onDelaySettingChanged);
   app.broker.subscribe('shiftChanged', onShiftChanged);
+  app.broker.subscribe('orders.synced', onOrdersSynced);
   app.broker.subscribe('xiconf.orders.synced', onXiconfOrdersSynced);
   app.broker.subscribe('xiconf.results.synced', onXiconfResultsSynced);
   app.broker.subscribe('xiconfPrograms.**', onXiconfProgramChanged);
@@ -248,6 +249,79 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     });
   }
 
+  function onOrdersSynced()
+  {
+    step(
+      function findOrdersStep()
+      {
+        var condition = {
+          _id: {$in: Object.keys(ordersToDataMap)}
+        };
+
+        Order.find(condition, {_id: 1, qty: 1}).lean().exec(this.next());
+      },
+      function compareStep(err, orders)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        this.orderNos = [];
+
+        for (var i = 0; i < orders.length; ++i)
+        {
+          var order = orders[i];
+          var xiconfOrder = ordersToDataMap[order._id];
+
+          if (!xiconfOrder || order.qty === xiconfOrder.quantityTodo)
+          {
+            continue;
+          }
+
+          var $set = {
+            quantityTodo: order.qty
+          };
+
+          for (var ii = 0; ii < xiconfOrder.items.length; ++ii)
+          {
+            var item = xiconfOrder.items[ii];
+
+            if (item.kind === 'test' || item.kind === 'weight')
+            {
+              $set['items.' + ii + '.quantityTodo'] = order.qty;
+            }
+          }
+
+          XiconfOrder.collection.update({_id: order._id}, {$set: $set}, this.group());
+
+          this.orderNos.push(order._id);
+        }
+      },
+      function recountOrdersStep()
+      {
+        for (var i = 0; i < this.orderNos.length; ++i)
+        {
+          var orderNo = this.orderNos[i];
+
+          delete ordersToDataMap[orderNo];
+
+          recountOrder({orderNo: orderNo});
+        }
+      },
+      function finalizeStep(err)
+      {
+        if (err)
+        {
+          return xiconfModule.error(
+            "Failed to update cached XiconfOrders data after Orders were synced: %s",
+            err.message
+          );
+        }
+      }
+    );
+  }
+
   function onXiconfOrdersSynced(message)
   {
     step(
@@ -291,7 +365,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         if (err)
         {
-          return xiconfModule.error("Failed to remove cached order data after orders were synced: %s", err.message);
+          return xiconfModule.error(
+            "Failed to remove cached XiconfOrder data after XiconfOrders were synced: %s",
+            err.message
+          );
         }
       }
     );
