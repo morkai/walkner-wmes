@@ -30,6 +30,7 @@ define([
         delivered: this.isDelivered(),
         invalid: !this.isValid(),
         ignored: this.isIgnored(),
+        surplus: this.isSurplus(),
         customQty: this.get('qtyPlan') > 0
       };
     },
@@ -39,9 +40,15 @@ define([
       return _.assign(this.toJSON(), {
         plan: this.collection.plan.id,
         completed: this.isCompleted(),
+        surplus: this.isSurplus(),
         statuses: (this.get('statuses') || []).map(renderOrderStatusLabel),
         laborTime: this.getLaborTime()
       });
+    },
+
+    isSurplus: function()
+    {
+      return this.get('qtyDone') > this.get('qtyTodo');
     },
 
     isValid: function()

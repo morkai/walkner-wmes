@@ -17,7 +17,7 @@
       <% if (editable) { %>
       <input class="dailyMrpPlan-popover-input" name="qtyPlan" type="number" value="<%- order.qtyPlan || '' %>" placeholder="<%- order.qtyTodo %>" min="0" max="999" step="1">
       <% } else { %>
-      <span class="<%- order.completed ? 'is-completed': '' %>">
+      <span class="<%- order.completed ? 'is-completed': '' %> <%- order.surplus ? 'is-surplus': '' %>">
         <% if (order.qtyPlan) { %>
         <%- order.qtyDone.toLocaleString() %>/<strike><%- order.qtyTodo.toLocaleString() %></strike>
         <% } else { %>

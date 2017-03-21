@@ -117,6 +117,13 @@
 .dailyMrpPlan-list-item.is-completed:hover {
   background-color: #D0E9C6;
 }
+.dailyMrpPlan-list-item.is-surplus {
+  background-color: #FCF8E3;
+  border-color: #999;
+}
+.dailyMrpPlan-list-item.is-surplus:hover {
+  background-color: #FAF2CC;
+}
 .dailyMrpPlan-list-item.is-invalid {
   background-color: #FFE8E8;
 }
@@ -311,7 +318,10 @@
   max-width: 250px;
 }
 .dailyMrpPlan-popover .is-completed {
-  color: #00af00;
+  color: #00AF00;
+}
+.dailyMrpPlan-popover .is-surplus {
+  color: orange;
 }
 .dailyMrpPlan-popover .dailyMrpPlan-popover-input {
   line-height: 1;
