@@ -510,10 +510,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       collectXiconfOrdersNc12($set, order, xiconfOrder);
     }
 
-    if (emptySet)
-    {
-      $set.importedAt = importedAt;
-    }
+    $set.importedAt = importedAt;
 
     var condition = {_id: xiconfOrder._id};
 
@@ -641,8 +638,8 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     if (!parsedOrder)
     {
-      // Update a quantity of the auto-generated 'test' item if the order's quantity changed.
-      if (xiconfOrderItem.kind === 'test' && $set.quantityTodo)
+      // Update a quantity of the auto-generated items if the order's quantity changed.
+      if ((xiconfOrderItem.kind === 'test' || xiconfOrderItem.kind === 'weight') && $set.quantityTodo)
       {
         $set['items.' + i + '.quantityTodo'] = $set.quantityTodo;
       }
