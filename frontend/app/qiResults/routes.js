@@ -60,6 +60,24 @@ define([
     );
   });
 
+  router.map('/qi/reports/nokRatio', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/qiResults/QiNokRatioReport',
+        'app/qiResults/pages/QiNokRatioReportPage',
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(QiNokRatioReport, QiNokRatioReportPage)
+      {
+        return new QiNokRatioReportPage({
+          model: QiNokRatioReport.fromQuery(req.query)
+        });
+      }
+    );
+  });
+
   router.map('/qi/results', canView, function(req)
   {
     viewport.loadPage(

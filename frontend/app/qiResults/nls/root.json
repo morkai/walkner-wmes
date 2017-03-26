@@ -6,6 +6,7 @@
     "BREADCRUMBS:editForm": "Edit",
     "BREADCRUMBS:reports:count": "Count report",
     "BREADCRUMBS:reports:okRatio": "% of OK goods report",
+    "BREADCRUMBS:reports:nokRatio": "% of NOK goods report",
     "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:ACTION_FORM:delete": "Delete",
 
@@ -128,22 +129,33 @@
     "report:title:nokCountPerDivision": "Red strip count per division",
     "report:title:nokQtyPerFamily": "Number of NOK products",
     "report:title:okRatio": "Quantity of OK goods per division [%]",
+    "report:title:nokRatio:total": "Total quantity of NOK goods [%]",
+    "report:title:nokRatio:division": "Quantity of NOK goods per division [%]",
     "report:series:nokCount": "Red strips",
     "report:series:maxNokCount": "Upper limit",
     "report:series:nokQty": "NOK quantity",
     "report:series:prod": "ML",
     "report:series:wh": "Warehouse",
     "report:series:okRatioRef": "Target",
+    "report:series:nokRatioRef": "Target",
+    "report:series:nokRatio": "% of NOK goods",
     "report:filenames:totalNokCount": "WMES_QI_NokCount",
     "report:filenames:nokCountPerDivision": "WMES_QI_NokCountPerDivision",
     "report:filenames:nokQtyPerFamily": "WMES_QI_NokQty",
     "report:filenames:okRatio": "WMES_QI_OkGoods",
+    "report:filenames:nokRatio:total": "WMES_QI_NokGoods_Total",
+    "report:filenames:nokRatio:division": "WMES_QI_NokGoods_Divisions",
+    "report:column:division": "Division",
+    "report:column:nok": "NOK",
+    "report:column:all": "All",
+    "report:column:ratio": "% OK",
 
     "settings:tab:results": "Results",
     "settings:tab:reports": "Reports",
     "settings:requiredCount": "Daily required inspections number",
     "settings:maxNokPerDay": "Upper limit of red strips per day",
-    "settings:okRatioRef": "Quantity of OK goods per division target [%]"
+    "settings:okRatioRef": "Quantity of OK goods target [%]",
+    "settings:nokRatioRef": "Quantity of NOK goods target [%]"
   },
   "pl": true
 }

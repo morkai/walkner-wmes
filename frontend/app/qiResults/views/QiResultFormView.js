@@ -308,7 +308,8 @@ define([
         }
         else
         {
-          enabled = (inspector && role === 'inspector') || (specialist && role === 'specialist');
+          enabled = (inspector && _.includes(role, 'inspector'))
+            || (specialist && _.includes(role, 'specialist'));
         }
 
         this.disabled = !enabled;

@@ -26,7 +26,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/okRatioRef$/.test(id))
+      if (/n?okRatioRef$/.test(id))
       {
         return Math.round(parseFloat(newValue, 10) * 100) / 100 || 0;
       }
@@ -42,6 +42,11 @@ define([
     getOkRatioRef: function()
     {
       return this.getValue('okRatioRef') || 0;
+    },
+
+    getNokRatioRef: function()
+    {
+      return this.getValue('nokRatioRef') || 0;
     },
 
     getWhQty: function(key)

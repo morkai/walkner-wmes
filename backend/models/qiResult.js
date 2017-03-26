@@ -8,7 +8,7 @@ const autoIncrement = require('mongoose-auto-increment');
 
 module.exports = function setupQiResultModel(app, mongoose)
 {
-  const changeSchema = mongoose.Schema({
+  const changeSchema = new mongoose.Schema({
     date: Date,
     user: {},
     data: {},
