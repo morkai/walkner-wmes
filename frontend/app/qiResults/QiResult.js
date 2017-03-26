@@ -162,7 +162,7 @@ define([
 
       if (!row.ok && row.correctiveActions.length)
       {
-        row.correctiveAction = this.serializeClosestCorrectiveAction(
+        row.correctiveAction = this.serializeBestCorrectiveAction(
           dictionaries,
           options && options.today || time.getMoment().startOf('day').hours(6).valueOf()
         );
@@ -188,10 +188,10 @@ define([
       return serializeCorrectiveActions(dictionaries, this.get('correctiveActions'));
     },
 
-    serializeClosestCorrectiveAction: function(dictionaries, today)
+    serializeBestCorrectiveAction: function(dictionaries, today)
     {
       var allCorrectiveActions = this.get('correctiveActions');
-      var closestCorrectiveAction;
+      var bestCorrectiveAction;
 
       if (allCorrectiveActions.length === 0)
       {
@@ -200,11 +200,11 @@ define([
 
       if (allCorrectiveActions.length === 1)
       {
-        closestCorrectiveAction = allCorrectiveActions[0];
+        bestCorrectiveAction = allCorrectiveActions[0];
       }
       else
       {
-        closestCorrectiveAction = allCorrectiveActions
+        var closestCorrectiveActions = allCorrectiveActions
           .map(function(action)
           {
             var diff = Date.parse(action.when) - today;
@@ -217,16 +217,28 @@ define([
           .sort(function(a, b)
           {
             return a.diff - b.diff;
-          })
-          .shift()
-          .action;
+          });
+
+        bestCorrectiveAction = closestCorrectiveActions[0].action;
+
+        while (closestCorrectiveActions.length)
+        {
+          var correctiveAction = closestCorrectiveActions.shift().action;
+
+          if (correctiveAction.status !== 'finished')
+          {
+            bestCorrectiveAction = correctiveAction;
+
+            break;
+          }
+        }
       }
 
-      var result = dictionaries.getLabel('actionStatus', closestCorrectiveAction.status);
+      var result = dictionaries.getLabel('actionStatus', bestCorrectiveAction.status);
 
-      if (closestCorrectiveAction.when)
+      if (bestCorrectiveAction.when)
       {
-        result += ', ' + time.format(closestCorrectiveAction.when, 'L');
+        result += ', ' + time.format(bestCorrectiveAction.when, 'L');
       }
 
       if (allCorrectiveActions.length > 1)
