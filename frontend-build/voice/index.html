@@ -1,0 +1,36 @@
+<audio id=uwaga src="uwaga.mp3" preload></audio>
+<audio id=za src="za.mp3" preload></audio>
+<audio id=minut5 src="5minut.mp3" preload></audio>
+<audio id=minut1 src="minute.mp3" preload></audio>
+<audio id=przerwa src="przerwanalinii.mp3" preload></audio>
+<audio id=co1 src="co1.mp3" preload></audio>
+<audio id=co2 src="co2.mp3" preload></audio>
+
+<label><input id=minut5_ type=radio name=d checked> za 5 minut</label>
+<label><input id=minut1_ type=radio name=d> za minutę</label>
+<br>
+<button id=playco1>CO1</button>
+<button id=playco2>CO2</button>
+
+<script>
+uwaga.onended = () => za.play();
+za.onended = () => minut5.play();
+minut5.onended = () => przerwa.play();
+minut1.onended = () => przerwa.play();
+przerwa.onended = () => co1.play();
+
+minut5_.onclick = () => {
+  za.onended = () => minut5.play();
+};
+minut1_.onclick = () => {
+  za.onended = () => minut1.play();
+};
+playco1.onclick = () => {
+  przerwa.onended = () => co1.play();
+  uwaga.play();
+};
+playco2.onclick = () => {
+  przerwa.onended = () => co2.play();
+  uwaga.play();
+};
+</script>
