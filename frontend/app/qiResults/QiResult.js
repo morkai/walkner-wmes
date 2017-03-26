@@ -140,12 +140,14 @@ define([
         obj.faultCode = '';
         obj.qtyToFix = '';
         obj.qtyNok = '';
+        obj.qtyNokInspected = '';
       }
       else
       {
         obj.errorCategory = dictionaries.getLabel('errorCategory', obj.errorCategory);
         obj.qtyToFix = obj.qtyToFix.toLocaleString();
         obj.qtyNok = obj.qtyNok.toLocaleString();
+        obj.qtyNokInspected = obj.qtyNokInspected >= 0 ? obj.qtyNokInspected.toLocaleString() : '';
         obj.correctiveActions = this.serializeCorrectiveActions(dictionaries);
       }
 

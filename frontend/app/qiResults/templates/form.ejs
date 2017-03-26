@@ -69,6 +69,10 @@
         </div>
         <% if (!model.ok) { %>
         <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-qtyNokInspected" class="control-label is-required"><%- t('qiResults', 'PROPERTY:qtyNokInspected') %></label>
+          <input id="<%- idPrefix %>-qtyNokInspected" name="qtyNokInspected" class="form-control" type="number" required min="0" data-role="inspector">
+        </div>
+        <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-qtyToFix" class="control-label is-required"><%- t('qiResults', 'PROPERTY:qtyToFix') %></label>
           <input id="<%- idPrefix %>-qtyToFix" name="qtyToFix" class="form-control" type="number" required min="0" data-role="inspector">
         </div>

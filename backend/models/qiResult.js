@@ -136,6 +136,11 @@ module.exports = function setupQiResultModel(app, mongoose)
       default: 0,
       min: 0
     },
+    qtyNokInspected: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
     okFile: {
       type: {},
       default: null
@@ -211,6 +216,7 @@ module.exports = function setupQiResultModel(app, mongoose)
       'qtyInspected',
       'qtyToFix',
       'qtyNok',
+      'qtyNokInspected',
       'okFile',
       'nokFile'
     ]));

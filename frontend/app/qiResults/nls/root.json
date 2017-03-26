@@ -66,6 +66,7 @@
     "PROPERTY:qtyInspected": "Quantity inspected",
     "PROPERTY:qtyToFix": "Quantity to fix",
     "PROPERTY:qtyNok": "NOK quantity",
+    "PROPERTY:qtyNokInspected": "Inspected NOK quantity",
     "PROPERTY:comment": "Comment",
     "PROPERTY:ok": "Result",
 
@@ -89,6 +90,7 @@
     "LIST:COLUMN:qtyInspected": "Qty insp.",
     "LIST:COLUMN:qtyToFix": "Qty to&nbsp;fix",
     "LIST:COLUMN:qtyNok": "Qty NOK",
+    "LIST:COLUMN:qtyNokInspected": "Qty&nbsp;NOK&nbsp;insp.",
 
     "FORM:ACTION:add": "Add result",
     "FORM:ACTION:edit": "Edit result",

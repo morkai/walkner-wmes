@@ -65,6 +65,7 @@
   "PROPERTY:qtyInspected": "Ilość skontrolowana",
   "PROPERTY:qtyToFix": "Ilość do selekcji",
   "PROPERTY:qtyNok": "Ilość niezgodnych",
+  "PROPERTY:qtyNokInspected": "Ilość niezgodnych w skontrolowanych",
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:ok": "Wynik",
 
@@ -88,6 +89,7 @@
   "LIST:COLUMN:qtyInspected": "Ilość spr.",
   "LIST:COLUMN:qtyToFix": "Ilość popr.",
   "LIST:COLUMN:qtyNok": "Ilość NOK",
+  "LIST:COLUMN:qtyNokInspected": "Ilość&nbsp;NOK w&nbsp;spr.",
 
   "FORM:ACTION:add": "Dodaj wynik",
   "FORM:ACTION:edit": "Edytuj wynik",

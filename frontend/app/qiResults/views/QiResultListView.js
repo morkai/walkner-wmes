@@ -17,6 +17,8 @@ define([
 ) {
   'use strict';
 
+  t = t.forDomain('qiResults');
+
   return ListView.extend({
 
     className: 'qiResults-list is-clickable is-colored',
@@ -58,22 +60,23 @@ define([
         {id: 'nc12', tdClassName: 'is-min is-number'},
         {id: 'productFamily', tdClassName: 'is-min'},
         'productName',
-        {id: 'division', tdClassName: 'is-min', label: t('qiResults', 'LIST:COLUMN:division')},
+        {id: 'division', tdClassName: 'is-min', label: t('LIST:COLUMN:division')},
         'kind',
         {id: 'inspectedAt', tdClassName: 'is-min'},
         'inspector',
-        {id: 'qtyOrder', tdClassName: 'is-min is-number', label: t('qiResults', 'LIST:COLUMN:qtyOrder')},
-        {id: 'qtyInspected', tdClassName: 'is-min is-number', label: t('qiResults', 'LIST:COLUMN:qtyInspected')}
+        {id: 'qtyOrder', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyOrder')},
+        {id: 'qtyInspected', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyInspected')}
       ];
 
       if (this.collection.hasAnyNokResult())
       {
         columns.push(
-          {id: 'qtyToFix', tdClassName: 'is-min is-number', label: t('qiResults', 'LIST:COLUMN:qtyToFix')},
-          {id: 'qtyNok', tdClassName: 'is-min is-number', label: t('qiResults', 'LIST:COLUMN:qtyNok')},
+          {id: 'qtyNokInspected', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyNokInspected')},
+          {id: 'qtyToFix', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyToFix')},
+          {id: 'qtyNok', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyNok')},
           {id: 'errorCategory', tdClassName: 'is-min'},
           {id: 'faultCode', tdClassName: 'is-min'},
-          {id: 'correctiveAction', label: t('qiResults', 'PROPERTY:correctiveActions'), noData: ''}
+          {id: 'correctiveAction', label: t('PROPERTY:correctiveActions'), noData: ''}
         );
       }
 

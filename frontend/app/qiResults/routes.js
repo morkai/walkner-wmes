@@ -132,7 +132,8 @@ define([
             inspectedAt: time.format(new Date(), 'YYYY-MM-DD'),
             qtyInspected: 1,
             qtyToFix: 0,
-            qtyNok: 0
+            qtyNok: 0,
+            qtyNokInspected: 0
           })
         });
       }
