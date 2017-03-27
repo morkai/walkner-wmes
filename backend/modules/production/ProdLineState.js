@@ -56,6 +56,12 @@ function ProdLineState(app, productionModule, prodLine)
 
 ProdLineState.prototype.destroy = function()
 {
+  if (this.socket)
+  {
+    this.socket.removeListener('disconnect', this.onClientDisconnect);
+    this.socket = null;
+  }
+
   this.broker.destroy();
 
   clearTimeout(this.extendedTimer);
@@ -64,7 +70,6 @@ ProdLineState.prototype.destroy = function()
   this.productionModule = null;
   this.broker = null;
   this.prodLine = null;
-  this.socket = null;
   this.changes = null;
   this.pendingChanges = null;
   this.prodShift = null;
@@ -467,7 +472,7 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
 
         if (!prodShift)
         {
-          prodLineState.productionModule.warn(
+          productionModule.warn(
             "Can't update shift because it doesn't exist (prodLine=[%s] prodShift=[%s]): %s",
             prodLineState.prodLine._id,
             prodLineState.prodShift ? prodLineState.prodShift._id : null,
