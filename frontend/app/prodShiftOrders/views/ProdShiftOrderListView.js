@@ -25,19 +25,28 @@ define([
       'prodShiftOrders.deleted.*': 'refreshIfMatches'
     },
 
-    columns: [
-      {id: 'mrpControllers', className: 'is-min'},
-      'prodFlow',
-      {id: 'prodLine', className: 'is-min'},
-      'order',
-      'operation',
-      {id: 'prodShift', className: 'is-min'},
-      {id: 'startedAt', className: 'is-min'},
-      {id: 'duration', className: 'is-min'},
-      {id: 'quantityDone', className: 'is-min'},
-      {id: 'workerCount', className: 'is-min'},
-      {id: 'efficiency', className: 'is-min'}
-    ],
+    serializeColumns: function()
+    {
+      var columns = [
+        {id: 'mrpControllers', className: 'is-min'},
+        'prodFlow',
+        {id: 'prodLine', className: 'is-min'},
+        'order',
+        'operation',
+        {id: 'prodShift', className: 'is-min'},
+        {id: 'startedAt', className: 'is-min'},
+        {id: 'duration', className: 'is-min'},
+        {id: 'quantityDone', className: 'is-min'},
+        {id: 'workerCount', className: 'is-min'}
+      ];
+
+      if (user.isAllowedTo('PROD_DATA:VIEW'))
+      {
+        columns.push({id: 'efficiency', className: 'is-min'});
+      }
+
+      return columns;
+    },
 
     serializeRow: function(model)
     {
