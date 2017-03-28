@@ -46,12 +46,12 @@
       <td><%- time.toString(avgTaktTime) %></td>
     </tr>
     <% } %>
-    <% } %>
     <% if (efficiency !== '?') { %>
     <tr>
       <th><%- t('prodShifts', 'timeline:popover:efficiency') %></th>
       <td><%- efficiency %></td>
     </tr>
+    <% } %>
     <% } %>
   </tbody>
 </table>
