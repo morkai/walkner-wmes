@@ -8,10 +8,12 @@
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.workCenter') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.name') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.qty') %>
+        <% if (user.isAllowedTo('PROD_DATA:VIEW', 'ORDERS:VIEW')) { %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.machineSetupTime') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.laborSetupTime') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.machineTime') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.laborTime') %>
+        <% } %>
         <th>
       </tr>
     </thead>
@@ -22,6 +24,7 @@
         <td class="is-min"><%= operation.workCenter || '-' %>
         <td class="is-min"><%= operation.name || '-' %>
         <td class="is-min is-number"><%= operation.qtyUnit || '-' %>
+        <% if (user.isAllowedTo('PROD_DATA:VIEW', 'ORDERS:VIEW')) { %>
         <% timeProps.forEach(function(timeProp) { %>
         <td class="is-min is-number">
           <% if (operation.times.sap[timeProp] && operation.times.sap[timeProp] !== operation.times.actual[timeProp]) { %>
@@ -31,6 +34,7 @@
           <% } %>
           <%- operation.times.actual[timeProp] || '-' %></span><% if (operation.no === highlighted && operation.times.summed[timeProp] && operation.times.summed[timeProp] !== operation.times.actual[timeProp]) { %> <span title="<%- t('orders', 'details:opTimes:summed') %>">(<%- operation.times.summed[timeProp] %>)</span><% } %>
         <% }) %>
+        <% } %>
         <td>
       </tr>
       <% }) %>
