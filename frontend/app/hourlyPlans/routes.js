@@ -89,6 +89,26 @@ define([
     });
   });
 
+  router.map('/dailyMrpPlans;list', canManage, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/hourlyPlans/DailyMrpPlanCollection',
+        'app/hourlyPlans/pages/DailyMrpPlanListPage',
+        nls
+      ],
+      function(DailyMrpPlanCollection, DailyMrpPlanListPage)
+      {
+        return new DailyMrpPlanListPage({
+          collection: new DailyMrpPlanCollection(null, {
+            rqlQuery: req.rql,
+            paginate: false
+          })
+        });
+      }
+    );
+  });
+
   router.map('/dailyMrpPlans', canManage, function(req)
   {
     viewport.loadPage(

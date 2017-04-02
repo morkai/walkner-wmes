@@ -1,0 +1,6 @@
+<form class="well filter-form dailyMrpPlans-filter">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-date" class="control-label"><%- t('hourlyPlans', 'planning:filter:date') %></label>
+    <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" min="2017-01-01" max="<%- time.getMoment().add(7, 'days').format('YYYY-MM-DD') %>" required>
+  </div>
+</form>

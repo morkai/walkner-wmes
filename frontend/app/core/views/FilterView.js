@@ -140,17 +140,32 @@ define([
       }
     },
 
+    isValid: function()
+    {
+      return true;
+    },
+
     changeFilter: function()
     {
+      if (!this.isValid())
+      {
+        return;
+      }
+
       var rqlQuery = this.model.rqlQuery;
       var selector = [];
+      var $limit = this.$id('limit');
 
       this.copyPopulateTerms(selector);
       this.serializeFormToQuery(selector, rqlQuery);
 
       rqlQuery.selector = {name: 'and', args: selector};
       rqlQuery.skip = 0;
-      rqlQuery.limit = Math.min(Math.max(parseInt(this.$id('limit').val(), 10) || 15, this.minLimit), this.maxLimit);
+
+      if ($limit.length)
+      {
+        rqlQuery.limit = Math.min(Math.max(parseInt(this.$id('limit').val(), 10) || 15, this.minLimit), this.maxLimit);
+      }
 
       this.trigger('filterChanged', rqlQuery);
     },

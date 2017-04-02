@@ -39,9 +39,18 @@ define([
 
     template: template,
 
-    breadcrumbs: [
-      t.bound('hourlyPlans', 'BREADCRUMBS:dailyMrpPlans')
-    ],
+    breadcrumbs: function()
+    {
+      var breadcrumbs = [
+        {
+          href: '#dailyMrpPlans;list',
+          label: t.bound('hourlyPlans', 'BREADCRUMBS:dailyMrpPlans')
+        },
+        time.getMoment(this.model.getCurrentFilter().date, 'YYYY-MM-DD').format('L')
+      ];
+
+      return breadcrumbs;
+    },
 
     actions: function()
     {
@@ -85,6 +94,7 @@ define([
 
       page.listenTo(plans, 'import', page.onImport);
       page.listenTo(plans, 'reset', _.after(2, page.onReset));
+      page.listenTo(plans, 'sync', page.onSync);
       page.listenTo(
         this.model,
         'checkOverlappingLinesRequested',
@@ -130,6 +140,11 @@ define([
         this.loadStyles(),
         this.model.settings.fetchIfEmpty()
       );
+    },
+
+    setUpLayout: function(layout)
+    {
+      this.layout = layout;
     },
 
     serialize: function()
@@ -208,6 +223,14 @@ define([
       this.updateClientUrl();
       this.renderPlans();
       this.toggleMessages();
+    },
+
+    onSync: function()
+    {
+      if (this.layout)
+      {
+        this.layout.setBreadcrumbs(this.breadcrumbs, this);
+      }
     },
 
     storeCurrentFilter: function()

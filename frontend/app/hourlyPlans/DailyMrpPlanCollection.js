@@ -29,6 +29,30 @@ define([
 
     comparator: 'mrp',
 
+    rqlQuery: function(rql)
+    {
+      var today = time.getMoment().startOf('day');
+      var from = today.clone().subtract(3, 'days').valueOf();
+      var to = today.clone().add(3, 'days').valueOf();
+
+      return rql.Query.fromObject({
+        fields: {
+          date: 1,
+          mrp: 1,
+          'orders._id': 1,
+          'lines._id': 1,
+          'lines.workerCount': 1
+        },
+        selector: {
+          name: 'and',
+          args: [
+            {name: 'ge', args: ['date', from]},
+            {name: 'le', args: ['date', to]}
+          ]
+        }
+      });
+    },
+
     initialize: function(models, options)
     {
       this.settings = options.settings;
@@ -47,6 +71,11 @@ define([
       pubsub.subscribe('dailyMrpPlans.ordersUpdated', this.handleOrdersUpdatedMessage.bind(this));
 
       return this;
+    },
+
+    genClientUrl: function()
+    {
+      return '/dailyMrpPlans;list';
     },
 
     getCurrentFilter: function()

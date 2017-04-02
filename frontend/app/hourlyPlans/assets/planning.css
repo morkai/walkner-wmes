@@ -384,3 +384,62 @@
   pointer-events: none;
   background: #E00;
 }
+.dailyMrpPlanList-container {
+  display: flex;
+}
+.dailyMrpPlanList-day {
+  flex: 1 1 auto;
+  width: 14.2857%;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.dailyMrpPlanList-day:hover {
+  background: #ffffd6;
+}
+.dailyMrpPlanList-hd {
+  padding: 3px 6px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  border-bottom: 2px solid #ddd;
+}
+.dailyMrpPlanList-mrp {
+  display: block;
+  padding: 3px 6px;
+  color: inherit;
+  border-bottom: 1px dotted #ddd;
+}
+.dailyMrpPlanList-mrp:last-child {
+  border-bottom: 0;
+}
+.dailyMrpPlanList-mrp:hover,
+.dailyMrpPlanList-mrp:active {
+  text-decoration: none;
+  color: inherit;
+}
+.dailyMrpPlanList-prev + .dailyMrpPlanList-day {
+  border-left: 1px solid #ddd;
+}
+.dailyMrpPlanList-next,
+.dailyMrpPlanList-prev {
+  padding: 100px 0 100px 15px;
+  font-size: 48px;
+  align-self: center;
+}
+.dailyMrpPlanList-prev {
+  padding: 100px 15px 100px 0;
+}
+.dailyMrpPlanList-mrp-id {
+  font-weight: bold;
+}
+.dailyMrpPlanList-mrp-lines {
+  display: block;
+  font-size: 12px;
+  line-height: 1;
+}
+.dailyMrpPlanList-mrp-orders {
+  font-size: 12px;
+  line-height: 14px;
+}
