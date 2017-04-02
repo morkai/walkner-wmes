@@ -396,5 +396,7 @@
   "TYPE:d8.areas.deleted": "8D > Obszary: usunięcie",
   "TEXT:d8.areas.deleted": "Usunięto obszar: <em>{model->name}</em>",
   "TYPE:d8.entries.deleted": "8D > Zgłoszenia: usunięcie",
-  "TEXT:d8.entries.deleted": "Usunięto zgłoszenie: <em>{model->rid}</em>"
+  "TEXT:d8.entries.deleted": "Usunięto zgłoszenie: <em>{model->rid}</em>",
+  "TYPE:paintShop.orders.imported": "Malarnia > Kolejka zleceń: import",
+  "TEXT:paintShop.orders.imported": "Dodano {insertCount, plural, one{1 nowe zlecenie} few{# nowe zlecenia} other{# nowych zleceń}} i zmodyfikowano {updateCount, plural, one{1 istniejące zlecenie} few{# istniejące zlecenia} other{# istniejących zleceń}} dla daty {dateUtc}."
 }

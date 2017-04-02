@@ -75,6 +75,7 @@ define([
 
       if (data.date)
       {
+        data.dateUtc = time.utc.format(data.date, 'L');
         data.date = time.format(data.date, 'L');
       }
 

@@ -397,7 +397,9 @@
     "TYPE:d8.areas.deleted": "8D > Areas: deleted",
     "TEXT:d8.areas.deleted": "Deleted area: <em>{model->name}</em>",
     "TYPE:d8.entries.deleted": "8D > Entries: deleted",
-    "TEXT:d8.entries.deleted": "Deleted entry: <em>{model->rid}</em>"
+    "TEXT:d8.entries.deleted": "Deleted entry: <em>{model->rid}</em>",
+    "TYPE:paintShop.orders.imported": "Paint shop > Order queue: import",
+    "TEXT:paintShop.orders.imported": "Added {insertCount, plural, one{1 new order} other{# new orders}} and modified {updateCount, plural, one{1 existing order} other{# existing orders}} for date {dateUtc}."
   },
   "pl": true
 }

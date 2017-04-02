@@ -1,0 +1,10 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Paint shop",
+    "BREADCRUMBS:queue": "Orders queue",
+
+    "MSG:LOADING_FAILURE": "Failed to load the orders :(",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order :("
+  },
+  "pl": true
+}

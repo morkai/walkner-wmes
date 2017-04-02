@@ -1,0 +1,8 @@
+<div class="paintShop-queue">
+  <% if (!orders.length) { %>
+  Brak zleceń dla wybranego dnia.
+  <% } %>
+  <% orders.forEach(function(order) { %>
+  <%- renderQueueOrder({order: order}) %>
+  <% }) %>
+</div>

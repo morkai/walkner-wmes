@@ -1,0 +1,9 @@
+{
+  "BREADCRUMBS:base": "Malarnia",
+  "BREADCRUMBS:queue": "Kolejka zleceń",
+
+  "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się :(",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się :("
+
+
+}

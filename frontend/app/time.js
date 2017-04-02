@@ -46,11 +46,29 @@ define([
     return moment(date, inputFormat).tz(time.zone);
   };
 
+  time.getMomentUtc = function(date, inputFormat)
+  {
+    return moment.utc(date, inputFormat);
+  };
+
   time.format = function(date, format)
   {
     var dateMoment = time.getMoment(date);
 
     return dateMoment.isValid() ? dateMoment.format(format) : null;
+  };
+
+  time.utc = {
+    getMoment: function(date, inputFormat)
+    {
+      return moment.utc(date, inputFormat);
+    },
+    format: function(date, format)
+    {
+      var dateMoment = time.getMomentUtc(date);
+
+      return dateMoment.isValid() ? dateMoment.format(format) : null;
+    }
   };
 
   time.toTagData = function(date, absolute)

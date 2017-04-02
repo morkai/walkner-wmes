@@ -69,11 +69,13 @@ exports.modules = [
   'sapGui/importer',
   'isaPalletKinds',
   'isa',
+  'paintShop',
   'qi',
   'pscs',
   'd8',
   'heff',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
+  {id: 'directoryWatcher', name: 'directoryWatcher:paintShop'},
   'mail/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
@@ -126,7 +128,8 @@ exports.events = {
       'mechOrders.synced',
       'users.synced',
       'production.unlocked',
-      'production.locked'
+      'production.locked',
+      'paintShop.orders.imported'
     ],
     warning: [
       'users.loginFailure',
@@ -206,7 +209,8 @@ exports.pubsub = {
     'pscs.**',
     'd8.**',
     'heff.**',
-    'ping', 'sockets.connected', 'sockets.disconnected'
+    'ping', 'sockets.connected', 'sockets.disconnected',
+    'paintShop.orders.imported', 'paintShop.orders.updated.**'
   ]
 };
 
@@ -242,7 +246,8 @@ exports.mongoose = {
     'qiKind', 'qiErrorCategory', 'qiFault', 'qiActionStatus', 'qiResult',
     'pscsResult',
     'd8Entry', 'd8Area', 'd8EntrySource', 'd8ProblemSource',
-    'heffLineState'
+    'heffLineState',
+    'paintShopOrder'
   ]
 };
 
@@ -507,6 +512,14 @@ exports['directoryWatcher:opinionSurveys'] = {
   path: exports.opinionSurveys.inputPath,
   delay: 30 * 1000,
   maxDelay: 120 * 1000
+};
+
+exports['directoryWatcher:paintShop'] = {
+  path: DATA_PATH + '/paintshop'
+};
+
+exports.paintShop = {
+  directoryWatcherId: 'directoryWatcher:paintShop'
 };
 
 exports.prodDowntimeAlerts = {
