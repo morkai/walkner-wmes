@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["underscore","app/core/views/DetailsView","app/kaizenOrders/dictionaries","app/behaviorObsCards/templates/details"],function(e,t,r,i){"use strict";return t.extend({template:i,events:e.extend({},t.prototype.events),serialize:function(){return e.extend(t.prototype.serialize.call(this),{})},afterRender:function(){t.prototype.afterRender.call(this)}})});

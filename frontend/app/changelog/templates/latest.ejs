@@ -1,23 +1,34 @@
-<h1>v0.107.0</h1>
+<h1>v0.108.0</h1>
 <h2><%- time.format('2017-03-19', 'LL') %></h2>
-<h3>Baza testów</h3>
+<h3>Formatka operatora</h3>
 <ul>
-  <li>Poprawiono błąd powodujący nieprzeliczanie aktywnie wykonywanych zleceń po imporcie danych z SAP.</li>
+  <li>Poprawiono błąd wywalający serwer, gdy przeglądarka z Formatką operatora dla linii, która została usunięta utraci
+    połączenie z serwerem.</li>
 </ul>
 <h3>Zlecenia reszty działów</h3>
 <ul>
-  <li>Poprawiono błąd wywalający serwer importera danych z SAP, gdy nie otrzymano danych zleceń (tylko operacje).</li>
+  <li>Zmieniono listę operacji tak, aby użytkownik bez uprawnień 'Dane produkcyjne: przeglądanie'
+    lub 'Zlecenia reszty działów: przeglądanie' nie mógł widzieć czasów operacji.</li>
+</ul>
+<h3>Dane produkcyjne > Zlecenia</h3>
+<ul>
+  <li>Zmieniono listę zleceń tak, aby użytkownik bez uprawnienia 'Dane produkcyjne: przeglądanie'
+    nie mógł widzieć kolumny 'Wydajność'.</li>
+</ul>
+<h3>Dane produkcyjne > Zmiany</h3>
+<ul>
+  <li>Zmieniono oś czasu zmiany tak, aby użytkownik bez uprawnienia 'Dane produkcyjne: przeglądanie'
+    nie mógł widzieć wartości 'Wydajność'.</li>
 </ul>
 <h3>Plany dzienne MRP</h3>
 <ul>
-  <li>Zmieniono edycję planów tak, aby nie można było edytować planów z przeszłości.</li>
-  <li>Dodano aktualizację 'Ilości do zrobienia', 'Ilości zrobionej' oraz 'Statusów' zleceń po każdym imporcie zleceń z SAP.</li>
-  <li>Dodano podświetlanie na pomarańczowo zleceń, w których 'Ilość zrobiona' jest większa od 'Ilości do zrobienia'.</li>
+  <li>Dodano możliwość przeglądania wszystkich planów.</li>
 </ul>
 <h3>Inspekcja Jakości</h3>
 <ul>
-  <li>Zmieniono kolumnę 'Akcje korygujące' na liście wyników tak, aby wyświetlana była akcja najbliższa do aktualnego
-    dnia mająca status inny niż 'Zakończona'.</li>
-  <li>Dodano nowe pole: Ilość niezgodnych w skontrolowanych.</li>
-  <li>Dodano nowy raport: Jakość wyrobu gotowego.</li>
+  <li>Poprawiono błąd powodujący zablokowanie pól podczas edycji dla Inspektorów oraz Specjalistów.</li>
+</ul>
+<h3>ZPW</h3>
+<ul>
+  <li>Dodano możliwość rejestrowania 'Kart obserwacji zachowań'.</li>
 </ul>

@@ -1,4 +1,23 @@
 
+app/behaviorObsCards/assets/details.css
+----------------
+app/behaviorObsCards/assets/details.css
+
+app/behaviorObsCards/assets/form.css
+----------------
+app/behaviorObsCards/assets/form.css
+
+app/behaviorObsCards/assets/list.css
+----------------
+app/behaviorObsCards/assets/list.css
+
+app/behaviorObsCards/assets/main.css
+----------------
+app/behaviorObsCards/assets/./list.css
+app/behaviorObsCards/assets/./form.css
+app/behaviorObsCards/assets/./details.css
+app/behaviorObsCards/assets/main.css
+
 app/changelog/assets/main.css
 ----------------
 app/changelog/assets/main.css
@@ -538,6 +557,7 @@ assets/../app/factoryLayout/assets/main.css
 assets/../app/licenses/assets/main.css
 assets/../app/kaizenOrders/assets/main.css
 assets/../app/suggestions/assets/main.css
+assets/../app/behaviorObsCards/assets/main.css
 assets/../app/orderDocumentClients/assets/main.css
 assets/../app/opinionSurveys/assets/main.css
 assets/../app/opinionSurveyActions/assets/main.css
@@ -974,6 +994,7 @@ app/kaizenRisks/routes.js
 app/kaizenBehaviours/routes.js
 app/kaizenProductFamilies/routes.js
 app/suggestions/routes.js
+app/behaviorObsCards/routes.js
 app/opinionSurveys/routes.js
 app/opinionSurveyActions/routes.js
 app/opinionSurveyResponses/routes.js
