@@ -1,0 +1,88 @@
+<form class="behaviorObsCards-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="form-group col-lg-3 has-required-select2">
+          <label for="<%- idPrefix %>-observer" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observer') %></label>
+          <input id="<%- idPrefix %>-observer" type="text" name="observer" required>
+        </div>
+        <div class="form-group col-lg-3">
+          <label for="<%- idPrefix %>-position" class="control-label"><%- t('behaviorObsCards', 'PROPERTY:position') %></label>
+          <input id="<%- idPrefix %>-position" class="form-control" type="text" name="position">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-3 has-required-select2">
+          <label for="<%- idPrefix %>-section" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:section') %></label>
+          <input id="<%- idPrefix %>-section" type="text" name="section" required>
+        </div>
+        <div class="form-group col-lg-3">
+          <label for="<%- idPrefix %>-line" class="control-label"><%- t('behaviorObsCards', 'PROPERTY:line') %></label>
+          <input id="<%- idPrefix %>-line" type="text" name="line">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:date') %></label>
+        <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
+      </div>
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:true') %></th>
+          <th class="is-min"><%- t('behaviorObsCards', 'PROPERTY:observations:category') %></th>
+          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:false') %></th>
+          <th><%- t('behaviorObsCards', 'PROPERTY:observations:observation') %></th>
+          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:true') %></th>
+          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:false') %></th>
+        </tr>
+        </thead>
+        <tbody id="<%- idPrefix %>-observations"></tbody>
+      </table>
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></th>
+          <th><%- t('behaviorObsCards', 'PROPERTY:risks:cause') %></th>
+          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:true') %></th>
+          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:false') %></th>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+          <td colspan="4" class="message-error"><%- t('behaviorObsCards', 'FORM:MSG:risks') %></td>
+        </tr>
+        </thead>
+        <tbody id="<%- idPrefix %>-risks"></tbody>
+      </table>
+      <button id="<%- idPrefix %>-addRisk" class="btn btn-default behaviorObsCards-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="easyDiscussed" value="true">
+          <%- t('behaviorObsCards', 'PROPERTY:easyDiscussed') %>
+        </label>
+      </div>
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></th>
+          <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:solution') %></th>
+          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:true') %></th>
+          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:false') %></th>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+          <td colspan="4" class="message-warning"><%- t('behaviorObsCards', 'FORM:MSG:difficulties') %></td>
+        </tr>
+        </thead>
+        <tbody id="<%- idPrefix %>-difficulties"></tbody>
+      </table>
+      <button id="<%- idPrefix %>-addDifficulty" class="btn btn-default behaviorObsCards-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

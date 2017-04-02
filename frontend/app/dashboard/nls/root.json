@@ -15,6 +15,7 @@
 
     "addButton:nearMiss": "Add a new<br>near miss!",
     "addButton:suggestion": "Add a new<br>suggestion!",
+    "addButton:observation": "Register an observation!",
 
     "list:rid": "ID",
     "list:status": "Status",

@@ -1,0 +1,11 @@
+<tr>
+  <td class="behaviorObsCards-form-textarea behaviorObsCards-form-difficulty">
+    <input type="radio" name="difficulties[<%- i %>].behavior" value="-1" tabindex="-1" <%- difficulty.behavior === null ? 'checked' : '' %>>
+    <textarea class="form-control" name="difficulties[<%- i %>].problem" rows="2"><%= difficulty.problem %></textarea>
+  </td>
+  <td class="behaviorObsCards-form-textarea">
+    <textarea class="form-control" name="difficulties[<%- i %>].solution" rows="2"><%= difficulty.solution %></textarea>
+  </td>
+  <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="difficulties[<%- i %>].behavior" value="1" <%- difficulty.behavior === true ? 'checked' : '' %>></td>
+  <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="difficulties[<%- i %>].behavior" value="0" <%- difficulty.behavior === false ? 'checked' : '' %>></td>
+</tr>

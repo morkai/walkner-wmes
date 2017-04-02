@@ -1,0 +1,13 @@
+<tr>
+  <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="observations[<%- i %>].safe" value="1" <%- observation.safe === true ? 'checked' : '' %>></td>
+  <td class="is-min">
+    <input type="radio" name="observations[<%- i %>].safe" value="-1" tabindex="-1" <%- observation.safe === null ? 'checked' : '' %>>
+    <input type="radio" name="observations[<%- i %>].easy" value="-1" tabindex="-1" <%- observation.easy === null ? 'checked' : '' %>>
+    <input type="hidden" name="observations[<%- i %>].behavior" value="<%- observation.id %>">
+    <%= observation.behavior %>
+  </td>
+  <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="observations[<%- i %>].safe" value="0" <%- observation.safe === false ? 'checked' : '' %>></td>
+  <td class="behaviorObsCards-form-textarea"><textarea class="form-control" name="observations[<%- i %>].observation" rows="2"><%= observation.observation %></textarea></td>
+  <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="observations[<%- i %>].easy" value="1" <%- observation.easy === true ? 'checked' : '' %>></td>
+  <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="observations[<%- i %>].easy" value="0" <%- observation.easy === false ? 'checked' : '' %>></td>
+</tr>

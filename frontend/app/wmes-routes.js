@@ -51,6 +51,7 @@ define([
   './kaizenBehaviours/routes',
   './kaizenProductFamilies/routes',
   './suggestions/routes',
+  './behaviorObsCards/routes',
   './opinionSurveys/routes',
   './opinionSurveyActions/routes',
   './opinionSurveyResponses/routes',

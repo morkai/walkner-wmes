@@ -1,0 +1,11 @@
+<tr>
+  <td class="behaviorObsCards-form-textarea behaviorObsCards-form-risk">
+    <input type="radio" name="risks[<%- i %>].easy" value="-1" tabindex="-1" <%- risk.easy === null ? 'checked' : '' %>>
+    <textarea class="form-control" name="risks[<%- i %>].risk" rows="2"><%= risk.risk %></textarea>
+  </td>
+  <td class="behaviorObsCards-form-textarea">
+    <textarea class="form-control" name="risks[<%- i %>].cause" rows="2"><%= risk.cause %></textarea>
+  </td>
+  <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="risks[<%- i %>].easy" value="1" <%- risk.easy === true ? 'checked' : '' %>></td>
+  <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="risks[<%- i %>].easy" value="0" <%- risk.easy === false ? 'checked' : '' %>></td>
+</tr>

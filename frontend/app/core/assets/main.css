@@ -104,6 +104,10 @@ code.multiline {
   border-left: 0;
   border-right: 0;
 }
+.message-default {
+  background-color: #eee;
+  border-color: #ddd;
+}
 .message-info {
   background-color: #E8F6FF;
   border-color: #B8E2FB;
@@ -240,6 +244,9 @@ code.multiline {
   color: #fff;
   background-color: #d9534f;
   border-color: #d9534f;
+}
+.panel-info > .panel-heading {
+  text-shadow: none;
 }
 .panel-heading.is-with-actions {
   position: relative;

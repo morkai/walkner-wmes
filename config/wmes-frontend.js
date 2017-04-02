@@ -64,6 +64,7 @@ exports.modules = [
   'orderDocuments',
   'kaizen',
   'suggestions',
+  'behaviorObsCards',
   'opinionSurveys',
   'cags',
   'sapGui/importer',
@@ -158,7 +159,8 @@ exports.events = {
     'prodDowntimeAlerts.added',
     'qi.results.added', 'qi.results.edited',
     'd8.entries.added', 'd8.entries.edited',
-    'heffLineStates.added', 'heffLineStates.edited', 'heffLineStates.deleted'
+    'heffLineStates.added', 'heffLineStates.edited', 'heffLineStates.deleted',
+    'behaviorObsCards.added', 'behaviorObsCards.edited'
   ]
 };
 
@@ -247,7 +249,8 @@ exports.mongoose = {
     'pscsResult',
     'd8Entry', 'd8Area', 'd8EntrySource', 'd8ProblemSource',
     'heffLineState',
-    'paintShopOrder'
+    'paintShopOrder',
+    'behaviorObsCard'
   ]
 };
 
