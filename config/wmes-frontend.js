@@ -233,7 +233,7 @@ exports.mongoose = {
     'prodDowntimeAlert', 'prodSerialNumber',
     'feedback',
     'license', 'licensePing',
-    'xiconfOrderResult', 'xiconfResult', 'xiconfClient',
+    'xiconfOrderResult', 'xiconfResult', 'xiconfClient', 'xiconfClientSettings',
     'xiconfOrder','xiconfProgram', 'xiconfInvalidLed', 'xiconfHidLamp', 'xiconfComponentWeight',
     'factoryLayout',
     'whTransferOrder',

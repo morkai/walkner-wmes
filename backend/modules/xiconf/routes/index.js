@@ -14,6 +14,7 @@ var syncProgramsRoute = require('./programs/sync');
 var deleteProgramRoute = require('./programs/delete');
 var goToClientsPageRoute = require('./clients/goToPage');
 var downloadClientsVNCRoute = require('./clients/downloadVNC');
+var getClientsSettingsRoute = require('./clients/getSettings');
 var sendUpdateRoute = require('./sendUpdate');
 
 module.exports = function setUpXiconfRoutes(app, xiconfModule)
@@ -322,6 +323,11 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   express.get('/xiconf/clients;debug', canManage, getClientsDebugInfoRoute);
   express.get('/xiconf/clients;clear', canManage, clearOrderDataRoute);
   express.get('/xiconf/clients;update', canManage, updateRemoteDataRoute);
+  express.post(
+    '/xiconf/clients;settings',
+    userModule.auth('LOCAL'),
+    getClientsSettingsRoute.bind(null, app, xiconfModule)
+  );
 
   express.get('/xiconf/clients/:id;goTo', canView, goToClientsPageRoute.bind(null, app, xiconfModule));
 
