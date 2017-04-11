@@ -13,6 +13,19 @@ define([
 ) {
   'use strict';
 
+  var TRANSLITERATION_MAP = {
+    'Ę': 'E',
+    'Ó': 'O',
+    'Ą': 'A',
+    'Ś': 'S',
+    'Ł': 'L',
+    'Ż': 'Z',
+    'Ź': 'Z',
+    'Ć': 'C',
+    'Ń': 'N'
+  };
+  var TRANSLITERATION_RE = new RegExp(Object.keys(TRANSLITERATION_MAP).join('|'), 'g');
+
   function formatText(user, name, query)
   {
     /*jshint unused:false*/
@@ -63,11 +76,24 @@ define([
     };
   }
 
+  function transliterate(value)
+  {
+    return value
+      .toUpperCase()
+      .replace(TRANSLITERATION_RE, function(m) { return TRANSLITERATION_MAP[m]; })
+      .replace(/[^A-Z]+/g, '');
+  }
+
   function createDefaultRqlQuery(rql, term)
   {
     term = term.trim();
 
-    var property = /^[0-9]+$/.test(term) ? 'personellId' : 'lastName';
+    var property = /^[0-9]+$/.test(term) ? 'personellId' : 'searchName';
+
+    if (property === 'searchName')
+    {
+      term = transliterate(term);
+    }
 
     var options = {
       fields: {},
@@ -77,7 +103,7 @@ define([
       selector: {
         name: 'and',
         args: [
-          {name: 'regex', args: [property, '^' + term, 'i']}
+          {name: 'regex', args: [property, '^' + term]}
         ]
       }
     };

@@ -2,9 +2,11 @@
 
 'use strict';
 
+const transliteration = require('transliteration');
+
 module.exports = function setupUserModel(app, mongoose)
 {
-  var userMobileSchema = mongoose.Schema({
+  const userMobileSchema = new mongoose.Schema({
     fromTime: {
       type: String,
       required: true,
@@ -23,7 +25,7 @@ module.exports = function setupUserModel(app, mongoose)
     _id: false
   });
 
-  var userSchema = mongoose.Schema({
+  const userSchema = new mongoose.Schema({
     login: {
       type: String,
       trim: true,
@@ -62,6 +64,7 @@ module.exports = function setupUserModel(app, mongoose)
     card: String,
     firstName: String,
     lastName: String,
+    searchName: String,
     registerDate: String,
     active: Boolean,
     kdPosition: String,
@@ -97,11 +100,22 @@ module.exports = function setupUserModel(app, mongoose)
   userSchema.index({login: 1});
   userSchema.index({personellId: 1});
   userSchema.index({lastName: 1});
+  userSchema.index({searchName: 1});
   userSchema.index({prodFunction: 1});
   userSchema.index({privileges: 1});
   userSchema.index({aors: 1});
 
   userSchema.statics.TOPIC_PREFIX = 'users';
+
+  userSchema.pre('save', function(next)
+  {
+    this.searchName = transliteration
+      .transliterate(this.lastName + this.firstName)
+      .replace(/[^a-zA-Z]+/g, '')
+      .toUpperCase();
+
+    next();
+  });
 
   userSchema.statics.customizeLeanObject = function(leanModel)
   {
