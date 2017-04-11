@@ -144,7 +144,7 @@ define([
     {
       var $td = this.$(e.target).closest('td');
 
-      if ($td.find('input').length || this.model.isTaktTimeEnabled())
+      if ($td.find('input').length || this.model.isLocked() || this.model.isTaktTimeEnabled())
       {
         return;
       }

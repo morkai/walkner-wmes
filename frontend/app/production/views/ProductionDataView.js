@@ -502,7 +502,7 @@ define([
         e.target.blur();
       }
 
-      if (viewport.currentDialog || this.model.get('state') === 'idle')
+      if (viewport.currentDialog || this.model.isLocked() || this.model.get('state') === 'idle')
       {
         return;
       }
@@ -613,7 +613,7 @@ define([
 
     showEditor: function($property, oldValue, minValue, maxValue, changeFunction)
     {
-      if (!$property.find('.btn').length)
+      if (!$property.find('.btn').length || this.model.isLocked())
       {
         return;
       }

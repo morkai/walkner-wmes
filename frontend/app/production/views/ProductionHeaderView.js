@@ -217,6 +217,11 @@ define([
 
     showPickerDialog: function(type, onUserPicked)
     {
+      if (this.model.isLocked())
+      {
+        return;
+      }
+
       var personelPickerView = new PersonelPickerView({
         type: type,
         model: this.model
