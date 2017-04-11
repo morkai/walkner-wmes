@@ -137,7 +137,7 @@ define([
         }
       }).always(function()
       {
-        if ($list.find('.btn-group-vertical').children().length === 1)
+        if ($list.find('.fa-spinner').length)
         {
           $list.remove();
         }
