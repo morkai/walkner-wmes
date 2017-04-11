@@ -413,6 +413,10 @@
   border-left: 0!important;
 }
 
+.is-embedded .modal-body .btn-lg {
+  padding: 16px 24px;
+}
+
 @media (max-width: 1680px) {
   .production {
     margin: 0 15px;
