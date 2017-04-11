@@ -3,7 +3,6 @@
 define([
   'underscore',
   'jquery',
-  'hammer',
   'app/time',
   'app/user',
   'app/i18n',
@@ -31,7 +30,6 @@ define([
 ], function(
   _,
   $,
-  Hammer,
   time,
   user,
   t,
@@ -434,16 +432,6 @@ define([
 
       if (IS_EMBEDDED)
       {
-        this.hammer = new Hammer(document.body);
-
-        this.hammer.on('swipe', function(e)
-        {
-          if (e.deltaX < 0 && (e.changedPointers[0].pageX - e.deltaX) > Math.max(300, window.innerWidth * 0.70))
-          {
-            window.parent.postMessage({type: 'switch', app: 'operator'}, '*');
-          }
-        });
-
         window.parent.postMessage({type: 'ready', app: 'operator'}, '*');
       }
     },
