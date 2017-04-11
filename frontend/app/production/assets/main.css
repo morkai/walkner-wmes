@@ -255,6 +255,33 @@
 .production.is-unlocked .production-controls-unlock {
   display: none;
 }
+.production-controls-sync.is-syncing {
+  color: #0af!important;
+}
+.is-embedded .production-controls {
+  top: auto;
+  left: auto;
+  right: 197px;
+  bottom: -1px;
+  display: flex;
+  box-shadow: 0 3px 6px #666;
+  z-index: 1;
+}
+.is-embedded .production-controls > .fa {
+  margin-right: -1px;
+  margin-bottom: 0;
+  padding: 12px 12px;
+  width: 60px;
+  height: 50px;
+  font-size: 24px;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+.is-embedded .production-controls > a.fa:hover {
+  background: #e6e6e6;
+  border-color: #adadad;
+}
 .production-downtimePicker-now {
   min-width: 100px;
 }

@@ -44,14 +44,14 @@ define([
       {
         if (this.$syncControl)
         {
-          this.$syncControl.addClass('fa-spin');
+          this.$syncControl.addClass('is-syncing');
         }
       },
       'production.synced': function()
       {
         if (this.$syncControl)
         {
-          this.$syncControl.removeClass('fa-spin');
+          this.$syncControl.removeClass('is-syncing');
         }
       }
     },

@@ -59,6 +59,8 @@ define([
 ) {
   'use strict';
 
+  var IS_EMBEDDED = window.parent !== window;
+
   return View.extend({
 
     template: productionPageTemplate,
@@ -184,7 +186,7 @@ define([
         .on('beforeunload.' + this.idPrefix, this.onBeforeUnload)
         .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
 
-      if (window.parent !== window)
+      if (IS_EMBEDDED)
       {
         $(window).on('contextmenu.' + this.idPrefix, function(e) { e.preventDefault(); });
       }
@@ -218,7 +220,7 @@ define([
         locked: this.model.isLocked(),
         state: this.model.get('state'),
         mechOrder: !!this.model.prodShiftOrder.get('mechOrder'),
-        showBottomControls: window.parent !== window
+        showBottomControls: IS_EMBEDDED
       };
     },
 
@@ -413,7 +415,7 @@ define([
     {
       $(document.body)
         .addClass('is-production')
-        .toggleClass('is-embedded', window.parent !== window);
+        .toggleClass('is-embedded', IS_EMBEDDED);
       $('.modal.fade').removeClass('fade');
 
       this.toggleTaktTimeView();
@@ -430,7 +432,7 @@ define([
         this.$el.removeClass('hidden');
       }
 
-      if (window.parent !== window)
+      if (IS_EMBEDDED)
       {
         this.hammer = new Hammer(document.body);
 
@@ -466,7 +468,7 @@ define([
 
     onBeforeUnload: function()
     {
-      if (this.model.isLocked() || window.parent !== window)
+      if (this.model.isLocked() || IS_EMBEDDED)
       {
         return;
       }
