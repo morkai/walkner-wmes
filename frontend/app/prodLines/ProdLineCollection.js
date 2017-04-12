@@ -24,7 +24,7 @@ define([
 
       return this.filter(function(prodLine)
       {
-        if (user.data.super || !userDivision)
+        if (user.data.super || !userDivision || userDivision.get('type') !== 'prod')
         {
           return true;
         }
