@@ -19,9 +19,9 @@
       <% } else { %>
       <span class="<%- order.completed ? 'is-completed': '' %> <%- order.surplus ? 'is-surplus': '' %>">
         <% if (order.qtyPlan) { %>
-        <%- order.qtyDone.toLocaleString() %>/<strike><%- order.qtyTodo.toLocaleString() %></strike>
+        <%- (order.qtyDone || 0).toLocaleString() %>/<strike><%- order.qtyTodo.toLocaleString() %></strike>
         <% } else { %>
-        <%- order.qtyDone.toLocaleString() %>/<%- order.qtyTodo.toLocaleString() %>
+        <%- (order.qtyDone || 0).toLocaleString() %>/<%- order.qtyTodo.toLocaleString() %>
         <% } %>
       </span>
       <% if (order.qtyPlan) { %>

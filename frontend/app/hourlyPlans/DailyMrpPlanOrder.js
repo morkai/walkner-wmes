@@ -180,7 +180,7 @@ define([
         rbh: mrpOrder && mrpOrder.rbh ? mrpOrder.rbh : 0,
         qtyPlan: 0,
         qtyTodo: sapOrder.qty || 0,
-        qtyDone: sapOrder.qtyDone && sapOrder.qtyDone.total ? sapOrder.qtyDone.total : 0,
+        qtyDone: sapOrder.qtyDone && sapOrder.qtyDone.total ? (sapOrder.qtyDone.total || 0) : 0,
         statuses: sapOrder.statuses || [],
         operation: this.prepareOperation(orderPickerHelpers.getBestDefaultOperation(sapOrder.operations))
       };
