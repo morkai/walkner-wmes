@@ -15,6 +15,7 @@
   "addButton:nearMiss": "Zgłoś<br>ZPW!",
   "addButton:suggestion": "Zgłoś<br>sugestię!",
   "addButton:observation": "Zarejestruj obserwację!",
+  "addButton:testing": "(wersja testowa)",
 
   "list:rid": "ID",
   "list:status": "Status",

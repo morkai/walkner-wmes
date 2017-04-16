@@ -2,6 +2,9 @@
   <% include ./nearMiss.ejs %>
   <% include ./suggestion.ejs %>
   <div class="dashboard-buttons">
-    <a class="btn btn-info" href="#behaviorObsCards;add"><%- t('dashboard', 'addButton:observation') %></a>
+    <a class="btn btn-info" href="#behaviorObsCards;add">
+      <%- t('dashboard', 'addButton:observation') %>
+      <small><%- t('dashboard', 'addButton:testing') %></small>
+    </a>
   </div>
 </div>

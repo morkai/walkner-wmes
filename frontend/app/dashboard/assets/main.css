@@ -25,6 +25,11 @@
 .dashboard-buttons > .btn:only-child {
   margin: 0;
 }
+.dashboard-buttons > .btn > small {
+  display: block;
+  margin-top: -8px;
+  font-size: 16px;
+}
 .dashboard-nearMiss {
   padding-bottom: 14px;
   margin-bottom: 14px;
