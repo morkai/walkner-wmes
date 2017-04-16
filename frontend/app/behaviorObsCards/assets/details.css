@@ -2,10 +2,10 @@
   vertical-align: top!important;
 }
 .behaviorObsCards-details-observations td:first-child {
-  width: 110px;
+  width: 400px;
 }
 .behaviorObsCards-details-observations td:nth-child(2) {
-  width: 400px;
+  width: 110px;
 }
 .behaviorObsCards-details-risks td:first-child,
 .behaviorObsCards-details-difficulties td:first-child {

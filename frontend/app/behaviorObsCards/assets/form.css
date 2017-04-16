@@ -32,3 +32,9 @@
 .behaviorObsCards-form-addButton {
   margin-top: -20px;
 }
+.behaviorObsCards-form-half {
+  width: 50%;
+}
+.behaviorObsCards-form-option {
+  width: 120px;
+}

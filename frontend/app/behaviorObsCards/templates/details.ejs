@@ -61,13 +61,14 @@
     <table class="table table-bordered table-hover behaviorObsCards-details-observations">
       <thead>
       <tr>
+        <th class="is-min"><%- t('behaviorObsCards', 'PROPERTY:observations:category') %></th>
         <th class="is-min text-center">
           <%- t('behaviorObsCards', 'PROPERTY:observations:safe:true') %>
           /<br>
           <%- t('behaviorObsCards', 'PROPERTY:observations:safe:false') %>
         </th>
-        <th class="is-min"><%- t('behaviorObsCards', 'PROPERTY:observations:category') %></th>
         <th><%- t('behaviorObsCards', 'PROPERTY:observations:observation') %></th>
+        <th><%- t('behaviorObsCards', 'PROPERTY:observations:cause') %></th>
         <th class="is-min text-center">
           <%- t('behaviorObsCards', 'PROPERTY:observations:easy:true') %>
           /<br>
@@ -78,9 +79,10 @@
       <tbody>
       <% model.observations.forEach(function(observation) { %>
       <tr>
-        <td class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:' + observation.safe) %></td>
         <td class="is-min"><%= observation.behavior %></td>
+        <td class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:' + observation.safe) %></td>
         <td class="text-lines"><%= observation.observation %></td>
+        <td class="text-lines"><%= observation.cause %></td>
         <td class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:' + observation.easy) %></td>
       </tr>
       <% }) %>

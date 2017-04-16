@@ -27,13 +27,14 @@
         <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:date') %></label>
         <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
       </div>
-      <table class="table table-bordered table-hover">
+      <table class="table table-bordered table-hover behaviorObsCards-form-observations">
         <thead>
         <tr>
-          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:true') %></th>
           <th class="is-min"><%- t('behaviorObsCards', 'PROPERTY:observations:category') %></th>
+          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:true') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:false') %></th>
-          <th><%- t('behaviorObsCards', 'PROPERTY:observations:observation') %></th>
+          <th class="behaviorObsCards-form-half"><%- t('behaviorObsCards', 'PROPERTY:observations:observation') %></th>
+          <th class="behaviorObsCards-form-half"><%- t('behaviorObsCards', 'PROPERTY:observations:cause') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:true') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:false') %></th>
         </tr>

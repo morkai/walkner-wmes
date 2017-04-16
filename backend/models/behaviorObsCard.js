@@ -10,6 +10,7 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
     id: String,
     behavior: String,
     observation: String,
+    cause: String,
     safe: Boolean,
     easy: Boolean
   }, {

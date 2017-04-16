@@ -185,6 +185,7 @@ define([
       o.id = o.behavior;
       o.behavior = kaizenDictionaries.behaviours.get(o.id).get('name');
       o.observation = (o.observation || '').trim();
+      o.cause = (o.cause || '').trim();
       o.safe = o.safe === '-1' ? null : o.safe === '1';
       o.easy = o.easy === '-1' ? null : o.easy === '1';
 
@@ -297,6 +298,7 @@ define([
             id: behavior.id,
             behavior: behavior.get('name'),
             observation: '',
+            cause: '',
             safe: null,
             easy: null
           });

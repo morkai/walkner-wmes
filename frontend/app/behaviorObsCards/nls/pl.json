@@ -18,9 +18,9 @@
   "PAGE_ACTION:print": "Wersja do druku",
 
   "PANEL:TITLE:details": "Szczegóły karty obserwacji",
-  "PANEL:TITLE:details:observations": "Obserwacje zachowań",
-  "PANEL:TITLE:details:risks": "Ryzykowne warunki",
-  "PANEL:TITLE:details:difficulties": "Trudności zmian",
+  "PANEL:TITLE:observations": "Obserwacje zachowań",
+  "PANEL:TITLE:risks": "Ryzykowne warunki",
+  "PANEL:TITLE:difficulties": "Trudności zmian",
   "PANEL:TITLE:addForm": "Formularz dodawania karty obserwacji",
   "PANEL:TITLE:editForm": "Formularz edycji karty obserwacji",
 
@@ -37,7 +37,8 @@
   "PROPERTY:observations:safe:true": "Bezpieczne",
   "PROPERTY:observations:safe:false": "Ryzykowne",
   "PROPERTY:observations:category": "Kategoria zachowań",
-  "PROPERTY:observations:observation": "Co zaobserwowano? Co aktywowało ryzykowne zachowanie?",
+  "PROPERTY:observations:observation": "Co zaobserwowano?",
+  "PROPERTY:observations:cause": "Co aktywowało ryzykowne zachowanie?",
   "PROPERTY:observations:easy:true": "&quot;Łatwe&quot;",
   "PROPERTY:observations:easy:false": "&quot;Trudne&quot;",
   "PROPERTY:risks:risk": "Ryzykowne warunki w miejscu pracy",
