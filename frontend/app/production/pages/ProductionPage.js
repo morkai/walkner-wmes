@@ -17,6 +17,7 @@ define([
   'app/prodDowntimes/ProdDowntime',
   'app/isa/IsaRequest',
   '../snManager',
+  '../views/VkbView',
   '../views/ProductionControlsView',
   '../views/ProductionHeaderView',
   '../views/ProductionDataView',
@@ -44,6 +45,7 @@ define([
   ProdDowntime,
   IsaRequest,
   snManager,
+  VkbView,
   ProductionControlsView,
   ProductionHeaderView,
   ProductionDataView,
@@ -57,7 +59,7 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = window.parent !== window;
+  var IS_EMBEDDED = window.parent !== window || window.location.search.indexOf('touch') !== -1;
 
   return View.extend({
 
@@ -272,12 +274,29 @@ define([
       var page = this;
       var model = page.model;
 
+      page.vkbView = new VkbView();
       page.controlsView = new ProductionControlsView({model: model});
-      page.headerView = new ProductionHeaderView({model: model});
-      page.dataView = new ProductionDataView({model: model});
-      page.downtimesView = new ProdDowntimeListView({model: model});
+      page.headerView = new ProductionHeaderView({
+        model: model,
+        embedded: IS_EMBEDDED,
+        vkb: page.vkbView
+      });
+      page.dataView = new ProductionDataView({
+        model: model,
+        embedded: IS_EMBEDDED,
+        vkb: page.vkbView
+      });
+      page.downtimesView = new ProdDowntimeListView({
+        model: model,
+        embedded: IS_EMBEDDED,
+        vkb: page.vkbView
+      });
       page.taktTimeView = new TaktTimeView({model: model});
-      page.quantitiesView = new ProductionQuantitiesView({model: model});
+      page.quantitiesView = new ProductionQuantitiesView({
+        model: model,
+        embedded: IS_EMBEDDED,
+        vkb: page.vkbView
+      });
       page.isaView = new IsaView({model: model});
 
       var idPrefix = '#' + page.idPrefix + '-';
@@ -289,6 +308,11 @@ define([
       page.setView(idPrefix + 'taktTime', page.taktTimeView);
       page.setView(idPrefix + 'quantities', page.quantitiesView);
       page.setView(idPrefix + 'isa', page.isaView);
+
+      if (IS_EMBEDDED)
+      {
+        page.setView(idPrefix + 'vkb', page.vkbView);
+      }
     },
 
     defineBindings: function()
@@ -773,7 +797,8 @@ define([
     {
       var dialogView = new SpigotCheckerView({
         model: this.model,
-        component: spigotComponent
+        component: spigotComponent,
+        embedded: IS_EMBEDDED
       });
 
       this.broker.subscribe('viewport.dialog.hidden')
@@ -893,7 +918,7 @@ define([
     onAutoDowntime: function(message, source)
     {
       if (!this.productionJoined
-        || (source === 'subdivision' && this.settings.getAutoDowntimes(this.model.prodLine.id).length > 0)
+        || (source === 'subdivision' && this.model.settings.getAutoDowntimes(this.model.prodLine.id).length > 0)
         || !this.model.shouldStartTimedAutoDowntime(message.reason))
       {
         return;

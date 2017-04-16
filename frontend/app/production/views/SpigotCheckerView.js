@@ -67,7 +67,8 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        component: this.options.component
+        component: this.options.component,
+        embedded: this.options.embedded
       };
     },
 

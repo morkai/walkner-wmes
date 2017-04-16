@@ -14,6 +14,7 @@ define([
   './EndWorkDialogView',
   './OrderQueueView',
   './SnCheckerView',
+  './PropertyEditorDialogView',
   'app/production/templates/data',
   'app/production/templates/endDowntimeDialog',
   'app/production/templates/continueOrderDialog'
@@ -31,6 +32,7 @@ define([
   EndWorkDialogView,
   OrderQueueView,
   SnCheckerView,
+  PropertyEditorDialogView,
   dataTemplate,
   endDowntimeDialogTemplate,
   continueOrderDialogTemplate
@@ -444,7 +446,11 @@ define([
       }
 
       viewport.showDialog(
-        new NewOrderPickerView({model: this.model}),
+        new NewOrderPickerView({
+          model: this.model,
+          embedded: this.options.embedded,
+          vkb: this.options.vkb
+        }),
         t('production', 'newOrderPicker:title' + (this.model.hasOrder() ? ':replacing' : ''))
       );
     },
@@ -462,7 +468,11 @@ define([
       }
 
       viewport.showDialog(
-        new OrderQueueView({model: this.model}),
+        new OrderQueueView({
+          model: this.model,
+          embedded: this.options.embedded,
+          vkb: this.options.vkb
+        }),
         t('production', 'orderQueue:title')
       );
     },
@@ -508,7 +518,12 @@ define([
       }
 
       viewport.showDialog(
-        new NewOrderPickerView({model: this.model, correctingOrder: true}),
+        new NewOrderPickerView({
+          model: this.model,
+          correctingOrder: true,
+          embedded: this.options.embedded,
+          vkb: this.options.vkb
+        }),
         t('production', 'newOrderPicker:title:correcting')
       );
     },
@@ -530,6 +545,8 @@ define([
         options = {};
       }
 
+      options.embedded = this.options.embedded;
+      options.vkb = this.options.vkb;
       options.model = _.defaults(options.model || {}, {
         mode: 'start',
         prodShift: this.model,
@@ -606,7 +623,11 @@ define([
       }
 
       viewport.showDialog(
-        new EndWorkDialogView({model: this.model}),
+        new EndWorkDialogView({
+          model: this.model,
+          embedded: this.options.embedded,
+          vkb: this.options.vkb
+        }),
         t('production', 'endWorkDialog:title')
       );
     },
@@ -665,22 +686,72 @@ define([
 
     showQuantityDoneEditor: function()
     {
-      this.showEditor(
-        this.$('.production-property-quantityDone'),
-        this.model.prodShiftOrder.getQuantityDone(),
+      var view = this;
+      var pso = view.model.prodShiftOrder;
+
+      if (view.options.embedded)
+      {
+        return viewport.showDialog(
+          new PropertyEditorDialogView({
+            model: view.model,
+            vkb: view.options.vkb,
+            property: 'quantityDone',
+            value: pso.getQuantityDone(),
+            max: pso.getMaxQuantityDone(),
+            getValue: function()
+            {
+              return pso.get('quantityDone') || 0;
+            },
+            setValue: function(newValue)
+            {
+              view.model.changeQuantityDone(newValue);
+            }
+          }),
+          t('production', 'propertyEditorDialog:title:quantityDone')
+        );
+      }
+
+      view.showEditor(
+        view.$('.production-property-quantityDone'),
+        pso.getQuantityDone(),
         0,
-        this.model.prodShiftOrder.getMaxQuantityDone(),
+        pso.getMaxQuantityDone(),
         'changeQuantityDone'
       );
     },
 
     showWorkerCountEditor: function()
     {
+      var view = this;
+      var pso = view.model.prodShiftOrder;
+
+      if (view.options.embedded)
+      {
+        return viewport.showDialog(
+          new PropertyEditorDialogView({
+            model: view.model,
+            vkb: view.options.vkb,
+            property: 'workerCount',
+            value: pso.getWorkerCountForEdit(),
+            max: pso.getMaxWorkerCount(),
+            getValue: function()
+            {
+              return pso.get('workerCount') || 0;
+            },
+            setValue: function(newValue)
+            {
+              view.model.changeWorkerCount(newValue);
+            }
+          }),
+          t('production', 'propertyEditorDialog:title:workerCount')
+        );
+      }
+
       this.showEditor(
-        this.$('.production-property-workerCount'),
-        this.model.prodShiftOrder.getWorkerCountForEdit(),
+        view.$('.production-property-workerCount'),
+        pso.getWorkerCountForEdit(),
         1,
-        this.model.prodShiftOrder.getMaxWorkerCount(),
+        pso.getMaxWorkerCount(),
         'changeWorkerCount'
       );
     },

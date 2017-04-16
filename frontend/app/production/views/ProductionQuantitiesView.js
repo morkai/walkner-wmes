@@ -144,7 +144,21 @@ define([
     {
       var $td = this.$(e.target).closest('td');
 
-      if ($td.find('input').length || this.model.isLocked() || this.model.isTaktTimeEnabled())
+      if ($td.find('input').length
+        || this.model.isLocked()
+        || this.model.isTaktTimeEnabled())
+      {
+        return;
+      }
+
+      if (this.options.embedded)
+      {
+        this.showEditorDialog($td);
+
+        return;
+      }
+
+      if (!$td.find('.btn-link').length)
       {
         return;
       }
@@ -203,28 +217,52 @@ define([
 
     showEditorDialog: function($td)
     {
-      if (this.model.isTaktTimeEnabled())
+      if (this.model.isTaktTimeEnabled()
+        || (viewport.currentDialog && viewport.currentDialog instanceof QuantityEditorView))
       {
         return;
       }
 
-      if (!$td)
+      var $links = this.$('.btn-link');
+
+      if (!$td || !$td.length || !$td.find('.btn-link').length)
       {
-        $td = this.$('.btn-link').last().closest('td');
+        $td = $links.last().closest('td');
       }
 
-      var hours = $td.parent().find('td:first-child').text().trim().split('-');
-      var hour = parseInt($td.attr('data-hour'), 10);
-      var options = {
-        from: hours[0],
-        to: hours[1],
-        currentQuantity: parseInt($td.find('span').text(), 10),
-        maxQuantity: this.model.getMaxQuantitiesDone()
+      if (!$td.length)
+      {
+        return;
+      }
+
+      var model = {
+        hours: [],
+        maxQuantity: this.model.getMaxQuantitiesDone(),
+        selected: parseInt($td.attr('data-hour'), 10)
       };
 
-      var quantityEditorView = new QuantityEditorView(options);
+      this.$('.production-quantities-actual').each(function()
+      {
+        var $td = $(this);
+        var hours = $td.parent().find('td:first-child').text().trim().split('-');
+        var hour = parseInt($td.attr('data-hour'), 10);
 
-      this.listenTo(quantityEditorView, 'quantityChanged', function(newQuantity)
+        model.hours.push({
+          from: hours[0],
+          to: hours[1],
+          index: hour,
+          value: parseInt($td.find('span').text(), 10),
+          disabled: $td.find('.btn-link').length === 0
+        });
+      });
+
+      var quantityEditorView = new QuantityEditorView({
+        model: model,
+        embedded: this.options.embedded,
+        vkb: this.options.vkb
+      });
+
+      this.listenTo(quantityEditorView, 'quantityChanged', function(hour, newQuantity)
       {
         viewport.closeDialog();
 
@@ -232,6 +270,11 @@ define([
         {
           this.model.changeQuantitiesDone(hour, newQuantity, {render: true});
         }
+      });
+
+      viewport.closeDialogs(function(dialogView)
+      {
+        return !(dialogView instanceof QuantityEditorView);
       });
 
       viewport.showDialog(quantityEditorView, t('production', 'quantityEditor:title'));

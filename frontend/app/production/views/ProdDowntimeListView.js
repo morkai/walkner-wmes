@@ -166,6 +166,8 @@ define([
       }
 
       var downtimePickerView = new DowntimePickerView({
+        embedded: this.options.embedded,
+        vkb: this.options.vkb,
         model: {
           mode: 'edit',
           prodShift: prodShift,

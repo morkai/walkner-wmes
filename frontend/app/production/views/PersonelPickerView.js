@@ -13,13 +13,13 @@ define([
   viewport,
   View,
   setUpUserSelect2,
-  personelPickerTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: personelPickerTemplate,
+    template: template,
 
     dialogClassName: 'production-modal',
 
@@ -45,6 +45,13 @@ define([
           label: e.currentTarget.textContent.trim()
         });
       },
+      'input #-user': function()
+      {
+        if (this.options.embedded)
+        {
+          this.onVkbValueChange();
+        }
+      },
       'submit': function(e)
       {
         e.preventDefault();
@@ -65,12 +72,21 @@ define([
 
         if (this.socket.isConnected())
         {
-          var userData = this.$id('user').select2('data');
-
-          if (userData)
+          if (this.options.embedded)
           {
-            userInfo.id = userData.id;
-            userInfo.label = userData.text;
+            this.$('.btn[data-id]').first().click();
+
+            return;
+          }
+          else
+          {
+            var userData = this.$id('user').select2('data');
+
+            if (userData)
+            {
+              userInfo.id = userData.id;
+              userInfo.label = userData.text;
+            }
           }
         }
         else
@@ -82,19 +98,51 @@ define([
       }
     },
 
+    initialize: function()
+    {
+      this.lastPhrase = '';
+      this.lastUsers = [];
+      this.searchReq = null;
+    },
+
+    destroy: function()
+    {
+      if (this.options.vkb)
+      {
+        this.options.vkb.hide();
+      }
+    },
+
     serialize: function()
     {
       var offline = !this.socket.isConnected();
+      var labelType = offline ? 'offline' : this.options.embedded ? 'embedded' : 'online';
 
       return {
         idPrefix: this.idPrefix,
         offline: offline,
-        label: t('production', 'personelPicker:' + (offline ? 'offline' : 'online') + ':label')
+        label: t('production', 'personelPicker:' + labelType + ':label')
       };
     },
 
     afterRender: function()
     {
+      this.setUpField();
+      this.setUpList();
+    },
+
+    onDialogShown: function()
+    {
+      this.$id('user').focus().select2('focus');
+    },
+
+    setUpField: function()
+    {
+      if (this.options.embedded)
+      {
+        return this.setUpEmbeddedField();
+      }
+
       var $user = this.$id('user');
 
       if (this.socket.isConnected())
@@ -107,10 +155,78 @@ define([
       }
       else
       {
-        $user.attr('placeholder', t('production', 'personelPicker:offline:placeholder')).focus();
+        $user.focus();
+      }
+    },
+
+    setUpEmbeddedField: function()
+    {
+      this.options.vkb.show(
+        this.$id('user').addClass('is-embedded')[0],
+        this.onVkbValueChange.bind(this)
+      );
+    },
+
+    onVkbValueChange: function()
+    {
+      var offline = !this.socket.isConnected();
+      var phrase = this.$id('user').val();
+
+      if (offline)
+      {
+        phrase = phrase.replace(/[^0-9]+/g, '');
+      }
+      else
+      {
+        phrase = setUpUserSelect2.transliterate(phrase);
       }
 
       var $list = this.$id('list');
+      var label = '';
+      var list = '';
+
+      if (!$list.length || (phrase.length < 3 && this.options.vkb))
+      {
+        this.options.vkb.enableKeys();
+      }
+
+      if (!$list.length)
+      {
+        return;
+      }
+
+      if (phrase.length)
+      {
+        label = 'matches';
+        list = this.buildPersonnelList(phrase);
+
+        if (!list.length)
+        {
+          list = '<p><i class="fa fa-spinner fa-spin"></i></p>';
+        }
+      }
+      else
+      {
+        label = 'recent';
+        list = this.recentHtml || ('<p>' + t('production', 'personelPicker:notFound') + '</p>');
+      }
+
+      $list.find('label').html(t('production', 'personelPicker:' + label));
+      $list.find('div').html(list);
+      $list.removeClass('hidden');
+    },
+
+    setUpList: function()
+    {
+      var view = this;
+      var $list = view.$id('list');
+
+      if (!this.socket.isConnected())
+      {
+        return $list.remove();
+      }
+
+      view.recentHtml = '';
 
       this.ajax({
         url: '/production/getRecentPersonnel',
@@ -133,20 +249,129 @@ define([
         if (html.length)
         {
           $list.find('.btn-group-vertical').html(html);
-          $list.removeClass('hidden');
+
+          view.recentHtml = html;
+
+          if (view.options.vkb)
+          {
+            view.options.vkb.reposition();
+          }
         }
       }).always(function()
       {
-        if ($list.find('.fa-spinner').length)
+        var $spinner = $list.find('.fa-spinner');
+
+        if ($spinner.length)
         {
-          $list.remove();
+          $spinner.replaceWith(t('production', 'personelPicker:notFound'));
         }
       });
     },
 
-    onDialogShown: function()
+    buildPersonnelList: function(phrase)
     {
-      this.$id('user').focus().select2('focus');
+      var view = this;
+
+      if (phrase.length < 3)
+      {
+        return '<p>' + t('production', 'personelPicker:tooShort') + '</p>';
+      }
+
+      var prefix = phrase.substring(0, 3);
+
+      if (prefix === view.lastPhrase)
+      {
+        return view.searchReq ? '' : this.buildFilteredPersonnelList();
+      }
+
+      if (view.searchReq)
+      {
+        view.searchReq.abort();
+      }
+
+      view.searchReq = this.ajax({
+        url: '/users?select(firstName,lastName,searchName,personellId)'
+          + '&sort(searchName)&limit(999)'
+          + '&searchName=regex=' + encodeURIComponent('^' + phrase)
+      });
+
+      view.searchReq.fail(function()
+      {
+        view.$('.fa-spin').removeClass('fa-spin');
+      });
+
+      view.searchReq.done(function(res)
+      {
+        view.lastUsers = res.collection || [];
+        view.$id('list').removeClass('hidden').find('div').html(view.buildFilteredPersonnelList());
+
+        if (view.options.vkb)
+        {
+          view.options.vkb.reposition();
+        }
+      });
+
+      view.searchReq.always(function()
+      {
+        view.searchReq = null;
+      });
+
+      view.lastPhrase = prefix;
+
+      return '';
+    },
+
+    buildFilteredPersonnelList: function()
+    {
+      var filter = setUpUserSelect2.transliterate(this.$id('user').val());
+      var users = this.lastUsers.filter(function(user) { return user.searchName.indexOf(filter) === 0; });
+      var keys = {};
+      var html = '';
+
+      users.forEach(function(user)
+      {
+        var label = user.firstName || '';
+
+        if (user.lastName.length)
+        {
+          if (label.length)
+          {
+            label += ' ';
+          }
+
+          label += user.lastName;
+        }
+
+        if (user.personellId)
+        {
+          if (label.length)
+          {
+            label += ' (' + user.personellId + ')';
+          }
+          else
+          {
+            label = user.personellId;
+          }
+        }
+
+        html += '<button type="button" class="btn btn-lg btn-default" data-id="' + user._id + '">'
+          + _.escape(label)
+          + '</button>';
+
+        var key = user.searchName.substr(filter.length, 1);
+
+        if (key)
+        {
+          keys[key] = true;
+        }
+      });
+
+      if (this.options.vkb)
+      {
+        this.options.vkb.disableKeys(keys);
+      }
+
+      return html.length ? html : ('<p>' + t('production', 'personelPicker:notFound') + '</p>');
     }
 
   });

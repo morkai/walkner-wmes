@@ -1,5 +1,5 @@
 <form class="production-downtimePicker">
-  <div class="form-group">
+  <div id="<%- idPrefix %>-startedAtGroup" class="form-group">
     <label for="<%- idPrefix %>-startedAt"><%- t('production', 'downtimePicker:startedAt') %></label>
     <% if (mode === 'start') { %>
     <div class="input-group">
@@ -12,20 +12,36 @@
     <input id="<%- idPrefix %>-startedAt" class="form-control" type="text" value="<%- time.format(startedAt, 'YYYY-MM-DD, HH:mm:ss') %>" readonly data-time="<%- startedAt.getTime() %>">
     <% } %>
   </div>
-  <div class="form-group">
+  <div id="<%- idPrefix %>-reasonGroup" class="form-group production-form-btn-group">
     <label for="<%- idPrefix %>-reason"><%- t('production', 'downtimePicker:reason:label') %></label>
+    <% if (embedded) { %>
+    <div class="production-downtimePicker-btn-group">
+      <button id="<%- idPrefix %>-selectedReason" class="btn btn-lg btn-block btn-default" type="button"><span><%- t('production', 'downtimePicker:reason:placeholder') %></span></button>
+      <button id="<%- idPrefix %>-clearReason" class="btn btn-lg btn-block btn-default" type="button"><i class="fa fa-eraser"></i></button>
+    </div>
+    <div class="btn-group-vertical hidden"></div>
+    <% } else { %>
     <input id="<%- idPrefix %>-reason" type="text" placeholder="<%- t('production', 'downtimePicker:reason:placeholder') %>">
+    <% } %>
   </div>
-  <div class="form-group">
+  <div id="<%- idPrefix %>-aorGroup" class="form-group production-form-btn-group">
     <label for="<%- idPrefix %>-aor"><%- t('production', 'downtimePicker:aor:label') %></label>
+    <% if (embedded) { %>
+    <div class="production-downtimePicker-btn-group">
+      <button id="<%- idPrefix %>-selectedAor" class="btn btn-lg btn-block btn-default" type="button"><span><%- t('production', 'downtimePicker:aor:placeholder') %></span></button>
+      <button id="<%- idPrefix %>-clearAor" class="btn btn-lg btn-block btn-default" type="button"><i class="fa fa-eraser"></i></button>
+    </div>
+    <div class="btn-group-vertical hidden"></div>
+    <% } else { %>
     <input id="<%- idPrefix %>-aor" type="text" placeholder="<%- t('production', 'downtimePicker:aor:placeholder') %>">
+    <% } %>
   </div>
-  <div class="form-group">
+  <div id="<%- idPrefix %>-commentGroup" class="form-group">
     <label for="<%- idPrefix %>-reasonComment"><%- t('production', 'downtimePicker:reasonComment:label') %></label>
-    <textarea id="<%- idPrefix %>-reasonComment" class="form-control" rows="4" placeholder="<%- t('production', 'downtimePicker:reasonComment:placeholder') %>"></textarea>
+    <textarea id="<%- idPrefix %>-reasonComment" class="form-control" rows="<%- embedded ? '2' : '4' %>" placeholder="<%- t('production', 'downtimePicker:reasonComment:placeholder') %>" data-vkb="alpha numeric multiline"></textarea>
   </div>
   <div class="form-actions">
-    <button type="submit" class="btn btn-lg btn-<%- mode === 'start' ? 'danger' : 'primary' %>"><%- t('production', 'downtimePicker:submit:' + mode) %></button>
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-<%- mode === 'start' ? 'danger' : 'primary' %>"><%- t('production', 'downtimePicker:submit:' + mode) %></button>
     <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'downtimePicker:cancel') %></button>
   </div>
 </form>

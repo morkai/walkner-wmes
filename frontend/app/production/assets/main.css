@@ -1,5 +1,6 @@
 @import "isa.css";
 @import "taktTime.css";
+@import "vkb.css";
 
 .is-production {
   overflow: auto;
@@ -380,15 +381,29 @@
   margin: 0;
 }
 
-.production-personelPicker-list label {
+.production-form-btn-group > label {
   margin-left: 15px;
 }
-.production-personelPicker-list .btn-group-vertical {
+.production-form-btn-group > .btn-group-vertical {
   display: block;
   margin: 0 15px 15px 15px;
+  border: 1px solid #ccc;
+  overflow: auto;
+  max-height: 310px;
 }
-.production-personelPicker-list .btn-default {
+.production-form-btn-group > .btn-group-vertical > p {
+  padding: 6px 12px;
+}
+.production-form-btn-group > .btn-group-vertical > .btn-default {
   text-align: left;
+  border-left: 0;
+  border-right: 0;
+}
+.production-form-btn-group > .btn-group-vertical > .btn-default:first-child {
+  border-top: 0;
+}
+.production-form-btn-group > .btn-group-vertical > .btn-default:last-child {
+  border-bottom: 0;
 }
 
 .production-action {
@@ -413,8 +428,89 @@
   border-left: 0!important;
 }
 
+.production-quantityEditor .btn-group {
+  display: flex;
+}
+.production-quantityEditor .btn-group > .btn {
+  position: static;
+  float: none;
+  flex: 1 1 auto;
+}
+
 .is-embedded .modal-body .btn-lg {
   padding: 16px 24px;
+}
+.is-production .form-control.is-embedded {
+  cursor: default;
+  background: #fff!important;
+  height: auto;
+  padding: 4px 12px;
+  line-height: 1;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: 40px;
+  text-transform: uppercase;
+}
+.is-production .form-control.is-vkb-focused {
+  border-color: #66afe9;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.production-quantityEditor input.form-control.is-embedded,
+.production-newOrderPicker input.form-control.is-embedded {
+  padding: 3px 6px 4px 6px;
+}
+.production-newOrderPicker .btn-group-vertical {
+  max-height: 200px;
+}
+.production-newOrderPicker .btn-group-vertical em {
+  font-style: normal;
+  font-weight: bold;
+  margin-right: 15px;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+}
+.production-spigotChecker .is-embedded {
+  padding: 10px 12px;
+  font-size: 32px;
+  height: auto;
+}
+.production-spigot-nc12.is-embedded::-webkit-input-placeholder {
+  font-family: Arial, "Helvetic Neue", Helvetica, sans-serif;
+  font-size: 28px;
+  text-transform: none;
+}
+.production-downtimePicker .btn-block {
+  text-align: left;
+}
+.production-downtimePicker-btn-group {
+  display: flex;
+}
+.production-downtimePicker-btn-group > .btn:first-child {
+  flex: 1 1 auto;
+}
+.production-downtimePicker-btn-group > .btn:first-child > span {
+  display: block;
+  max-width: 410px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.production-downtimePicker-btn-group > .btn:last-child {
+  margin-top: 0;
+  flex: 0 0 auto;
+  width: 100px;
+  height: 57px;
+  text-align: center;
+  border-left: 0;
+}
+.production-downtimePicker .production-form-btn-group > label {
+  margin-left: 0;
+}
+.production-downtimePicker .btn-group-vertical {
+  margin: 0;
+  max-height: 590px;
+  overflow-y: auto;
+}
+.production-downtimePicker .btn-group-vertical > .btn {
+  white-space: normal;
 }
 
 @media (max-width: 1680px) {

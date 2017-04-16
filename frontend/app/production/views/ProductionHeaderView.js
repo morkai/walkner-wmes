@@ -224,6 +224,8 @@ define([
 
       var personelPickerView = new PersonelPickerView({
         type: type,
+        embedded: this.options.embedded,
+        vkb: this.options.vkb,
         model: this.model
       });
 

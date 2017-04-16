@@ -20,6 +20,22 @@ define([
     dialogClassName: 'production-modal',
 
     events: {
+      'focus [data-vkb]': function(e)
+      {
+        if (this.options.embedded && this.options.vkb)
+        {
+          this.options.vkb.show(e.target, this.onVkbValueChange);
+        }
+      },
+      'focus #-spigot-nc12': function()
+      {
+        if (this.options.embedded && this.options.vkb)
+        {
+          this.options.vkb.hide();
+        }
+      },
+      'input input[type="text"][max]': 'checkMinMaxValidity',
+      'blur input[type="text"][max]': 'checkMinMaxValidity',
       'submit': function(e)
       {
         e.preventDefault();
@@ -82,6 +98,8 @@ define([
 
     initialize: function()
     {
+      this.onVkbValueChange = this.onVkbValueChange.bind(this);
+
       this.lastKeyPressAt = 0;
 
       $(window)
@@ -92,6 +110,11 @@ define([
     destroy: function()
     {
       $(window).off('.' + this.idPrefix);
+
+      if (this.options.vkb)
+      {
+        this.options.vkb.hide();
+      }
     },
 
     serialize: function()
@@ -109,7 +132,8 @@ define([
         workerCount: order.getWorkerCountForEdit(),
         maxQuantitiesDone: shift.getMaxQuantitiesDone(),
         maxQuantityDone: order.getMaxQuantityDone(),
-        maxWorkerCount: order.getMaxWorkerCount()
+        maxWorkerCount: order.getMaxWorkerCount(),
+        embedded: this.options.embedded
       };
     },
 
@@ -127,9 +151,21 @@ define([
       return isNaN(value) || value < 0 ? 0 : value;
     },
 
+    isIgnoredTarget: function(target)
+    {
+      return target.type === 'number'
+        || target.className.indexOf('select2') !== -1
+        || target.dataset.ignoreKey === '1';
+    },
+
+    onVkbValueChange: function(fieldEl)
+    {
+      this.checkMinMaxValidity({target: fieldEl});
+    },
+
     onKeyDown: function(e)
     {
-      if (e.keyCode === 8 && e.target.type !== 'number')
+      if (e.keyCode === 8 && !this.isIgnoredTarget(e.target))
       {
         this.lastKeyPressAt = Date.now();
 
@@ -148,7 +184,7 @@ define([
         return $nc12[0] !== e.target;
       }
 
-      if (e.keyCode < 32 || e.keyCode > 126 || e.target.type === 'number')
+      if (e.keyCode < 32 || e.keyCode > 126 || this.isIgnoredTarget(e.target))
       {
         return;
       }
@@ -163,6 +199,32 @@ define([
       this.lastKeyPressAt = keyPressAt;
 
       return false;
+    },
+
+    checkMinMaxValidity: function(e)
+    {
+      var el = e.target;
+      var max = parseInt(el.getAttribute('max'), 10);
+
+      if (isNaN(max))
+      {
+        return;
+      }
+
+      var min = parseInt(el.getAttribute('min'), 10) || 0;
+      var val = parseInt(el.value, 10) || 0;
+      var err = '';
+
+      if (val < min)
+      {
+        err = t('production', 'error:min', {min: min});
+      }
+      else if (val > max)
+      {
+        err = t('production', 'error:max', {max: max});
+      }
+
+      el.setCustomValidity(err);
     }
 
   });

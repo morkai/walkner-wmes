@@ -160,9 +160,12 @@ define([
       + Math.round(Math.random() * 10000000000000000).toString(36);
   }
 
-  function createLogEntry(prodShift, type, data)
+  function createLogEntry(prodShift, type, data, createdAt)
   {
-    var createdAt = time.getMoment().toDate();
+    if (!createdAt)
+    {
+      createdAt = time.getMoment().toDate();
+    }
 
     return {
       _id: generateId(createdAt, prodShift.id),
@@ -301,7 +304,7 @@ define([
       return syncingLogEntries !== null;
     },
     create: createLogEntry,
-    record: function(prodShift, typeOrLogEntry, data)
+    record: function(prodShift, typeOrLogEntry, data, createdAt)
     {
       if (prodShift.isLocked())
       {
@@ -315,7 +318,7 @@ define([
 
       var prodLogEntry = typeof typeOrLogEntry === 'object'
         ? typeOrLogEntry
-        : createLogEntry(prodShift, typeOrLogEntry, data);
+        : createLogEntry(prodShift, typeOrLogEntry, data, createdAt);
 
       var oldLogEntries = localStorage.getItem(STORAGE_KEY);
       var newLogEntries;

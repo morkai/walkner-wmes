@@ -1,7 +1,18 @@
 <form class="production-quantityEditor">
   <div class="form-group">
-    <label for="<%- idPrefix %>-quantity"><%= t('production', 'quantityEditor:label', {from: from, to: to}) %></label>
-    <input id="<%- idPrefix %>-quantity" class="form-control input-lg small" type="number" value="<%= currentQuantity %>" min="0" max="<%- maxQuantity %>">
+    <label for="<%- idPrefix %>-quantity"><%= t('production', 'quantityEditor:label:hour') %></label>
+    <div class="btn-group" data-toggle="buttons">
+      <% hours.forEach(function(hour) { %>
+      <label class="btn btn-default <%- hour.disabled ? 'disabled' : '' %>">
+        <input type="radio" autocomplete="off" name="hour" value="<%- hour.index %>" data-value="<%- hour.value %>">
+        <%- hour.from %><br><%- hour.to%>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-value"><%= t('production', 'quantityEditor:label:value') %></label>
+    <input id="<%- idPrefix %>-value" class="form-control input-lg small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" min="0" max="<%- maxQuantity %>" data-vkb="numeric">
   </div>
   <div class="form-actions">
     <button type="submit" class="btn btn-lg btn-primary"><%- t('production', 'quantityEditor:submit') %></button>

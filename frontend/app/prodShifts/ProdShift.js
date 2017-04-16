@@ -498,7 +498,9 @@ define([
 
     changeOrder: function(orderInfo, operationNo)
     {
-      this.finishOrder();
+      var createdAt = Date.now();
+
+      this.finishOrder(new Date(createdAt - 1));
 
       this.set({
         state: 'working',
@@ -509,7 +511,7 @@ define([
 
       this.prodShiftOrder.onOrderChanged(this, orderInfo, operationNo);
 
-      prodLog.record(this, 'changeOrder', this.prodShiftOrder.toJSON());
+      prodLog.record(this, 'changeOrder', this.prodShiftOrder.toJSON(), new Date(createdAt));
 
       if (prevOrderNo !== this.prodShiftOrder.get('orderId'))
       {
@@ -692,14 +694,18 @@ define([
       prodLog.record(this, 'startDowntime', prodDowntime.toJSON());
     },
 
-    finishOrder: function()
+    finishOrder: function(createdAt)
     {
       var finishedProdShiftOrder = this.prodShiftOrder.finish();
 
-      if (finishedProdShiftOrder)
+      if (!finishedProdShiftOrder)
       {
-        prodLog.record(this, 'finishOrder', finishedProdShiftOrder);
+        return false;
       }
+
+      prodLog.record(this, 'finishOrder', finishedProdShiftOrder, createdAt);
+
+      return true;
     },
 
     finishDowntime: function()

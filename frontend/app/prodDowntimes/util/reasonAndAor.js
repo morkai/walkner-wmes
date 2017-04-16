@@ -14,6 +14,8 @@ define([
   'use strict';
 
   return {
+    reasons: downtimeReasons,
+    aors: aors,
     initialize: function(view)
     {
       view.reasonsToAorsMap = {};
@@ -74,6 +76,7 @@ define([
         reasonsList.push({
           id: reason.id,
           text: reason.id + ' - ' + reason.get('label'),
+          reason: reason,
           aors: reasonAors
         });
       });
@@ -89,7 +92,8 @@ define([
       {
         aorsList.push({
           id: aor.id,
-          text: aor.get('name')
+          text: aor.get('name'),
+          aor: aor
         });
       });
 
@@ -139,9 +143,12 @@ define([
 
       _.forEach(Object.keys(aorsMap), function(aorId)
       {
+        var aor = aors.get(aorId);
+
         reasonAors.push({
           id: aorId,
-          text: aors.get(aorId).get('name')
+          text: aor.get('name'),
+          aor: aor
         });
       });
 

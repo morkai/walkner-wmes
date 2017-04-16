@@ -4,11 +4,11 @@
   <% } %>
   <div class="form-group">
     <label for="<%- idPrefix %>-user"><%= label %></label>
-    <input id="<%- idPrefix %>-user" class="form-control" type="text">
+    <input id="<%- idPrefix %>-user" class="form-control" type="text" data-vkb="<%- offline ? 'numeric' : 'alpha' %>">
   </div>
-  <div id="<%- idPrefix %>-list" class="production-personelPicker-list">
-    <label><%- t('production', 'personelPicker:list') %></label>
-    <div class="btn-group-vertical"><i class="fa fa-spinner fa-spin"></i></div>
+  <div id="<%- idPrefix %>-list" class="production-form-btn-group">
+    <label><%- t('production', 'personelPicker:recent') %></label>
+    <div class="btn-group-vertical"><p><i class="fa fa-spinner fa-spin"></i></p></div>
   </div>
   <div class="form-actions">
     <button type="submit" class="btn btn-lg btn-primary"><%- t('production', 'personelPicker:submit') %></button>

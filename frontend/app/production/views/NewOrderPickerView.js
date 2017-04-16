@@ -47,6 +47,39 @@ define([
     },
 
     events: {
+      'focus [data-vkb]': function(e)
+      {
+        if (this.options.embedded && this.options.vkb)
+        {
+          this.options.vkb.show(e.target, this.onVkbValueChange);
+        }
+      },
+      'focus #-spigot-nc12': function()
+      {
+        if (this.options.embedded && this.options.vkb)
+        {
+          this.options.vkb.hide();
+        }
+      },
+      'click .btn[data-operation]': function(e)
+      {
+        if (e.currentTarget.classList.contains('active'))
+        {
+          return;
+        }
+
+        this.$('.active[data-operation]').removeClass('active');
+        e.currentTarget.classList.add('active');
+      },
+      'input #-order': function(e)
+      {
+        if (this.options.embedded)
+        {
+          this.onVkbValueChange(e.target);
+        }
+      },
+      'input input[type="text"][max]': 'checkMinMaxValidity',
+      'blur input[type="text"][max]': 'checkMinMaxValidity',
       'keypress .select2-container': function(e)
       {
         if (e.which === 13)
@@ -96,7 +129,14 @@ define([
 
         if (this.socket.isConnected())
         {
-          this.handleOnlinePick(submitEl);
+          if (this.options.embedded)
+          {
+            this.handleEmbeddedPick(submitEl);
+          }
+          else
+          {
+            this.handleOnlinePick(submitEl);
+          }
         }
         else
         {
@@ -107,7 +147,17 @@ define([
 
     initialize: function()
     {
+      this.onVkbValueChange = this.onVkbValueChange.bind(this);
+
       this.lastKeyPressAt = 0;
+      this.lastPhrase = '';
+      this.lastOrders = [];
+      this.searchReq = null;
+
+      if (this.options.correctingOrder)
+      {
+        this.lastOrders.push(this.model.prodShiftOrder.get('orderData'));
+      }
 
       $(window)
         .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this))
@@ -117,24 +167,42 @@ define([
     destroy: function()
     {
       $(window).off('.' + this.idPrefix);
+
+      if (this.options.vkb)
+      {
+        this.options.vkb.hide();
+      }
     },
 
     serialize: function()
     {
       var shift = this.model;
       var order = shift.prodShiftOrder;
+      var orderIdType = shift.getOrderIdType();
+      var replacingOrder = !this.options.correctingOrder && shift.hasOrder();
+      var correctingOrder = !!this.options.correctingOrder;
+      var submitLabel = replacingOrder ? ':replacing' : correctingOrder ? ':correcting' : '';
 
       return {
         idPrefix: this.idPrefix,
+        embedded: this.options.embedded,
         spigot: shift.settings.getValue('spigotFinish') && !!order.get('spigot'),
         offline: !this.socket.isConnected(),
-        replacingOrder: !this.options.correctingOrder && shift.hasOrder(),
-        correctingOrder: !!this.options.correctingOrder,
+        replacingOrder: replacingOrder,
+        correctingOrder: correctingOrder,
         quantityDone: order.get('quantityDone') || 0,
         workerCount: order.getWorkerCountForEdit(),
-        orderIdType: shift.getOrderIdType(),
+        orderIdType: orderIdType,
         maxQuantityDone: order.getMaxQuantityDone(),
-        maxWorkerCount: order.getMaxWorkerCount()
+        maxWorkerCount: order.getMaxWorkerCount(),
+        orderPlaceholder: this.options.embedded
+          ? (orderIdType === 'no' ? '000000000' : '000000000000')
+          : t('production', 'newOrderPicker:order:placeholder:' + orderIdType),
+        orderMaxLength: orderIdType === 'no' ? 9 : 12,
+        operationPlaceholder: this.options.embedded
+          ? '0000'
+          : t('production', 'newOrderPicker:operation:placeholder'),
+        submitLabel: t('production', 'newOrderPicker:submit' + submitLabel)
       };
     },
 
@@ -184,7 +252,7 @@ define([
       {
         this.$id('quantityDone').select();
       }
-      else if (this.socket.isConnected())
+      else if (!this.options.embedded && this.socket.isConnected())
       {
         this.$id('order').select2('focus');
       }
@@ -196,26 +264,44 @@ define([
 
     setUpOrderSelect2: function()
     {
-      orderPickerHelpers.setUpOrderSelect2(
-        this.$id('order'),
-        this.$id('operation'),
-        this.model,
-        {dropdownCssClass: 'production-dropdown'}
-      );
+      if (!this.options.embedded)
+      {
+        return orderPickerHelpers.setUpOrderSelect2(
+          this.$id('order'),
+          this.$id('operation'),
+          this.model,
+          {dropdownCssClass: 'production-dropdown'}
+        );
+      }
     },
 
     setUpOperationSelect2: function()
     {
-      orderPickerHelpers.setUpOperationSelect2(
-        this.$id('operation'),
-        [],
-        {dropdownCssClass: 'production-dropdown'}
-      );
+      if (!this.options.embedded)
+      {
+        return orderPickerHelpers.setUpOperationSelect2(
+          this.$id('operation'),
+          [],
+          {dropdownCssClass: 'production-dropdown'}
+        );
+      }
     },
 
     selectCurrentOrder: function()
     {
-      orderPickerHelpers.selectOrder(this.$id('order'), this.model.prodShiftOrder);
+      if (this.options.embedded)
+      {
+        var pso = this.model.prodShiftOrder;
+
+        this.$id('order').val(pso.get('orderId'));
+        this.$id('operationGroup').find('div').html(
+          this.buildOrderOperationList(pso.get('orderData'), pso.get('operationNo'))
+        );
+      }
+      else
+      {
+        orderPickerHelpers.selectOrder(this.$id('order'), this.model.prodShiftOrder);
+      }
     },
 
     selectNextOrder: function()
@@ -231,6 +317,17 @@ define([
       var order = next.order;
       var $order = this.$id('order');
 
+      if (this.options.embedded)
+      {
+        $order.val(order.no || order.nc12);
+
+        this.$id('operationGroup').find('div').html(
+          this.buildOrderOperationList(order, next.operationNo)
+        );
+
+        return;
+      }
+
       $order.select2('data', _.assign({}, order, {
         id: order.no,
         text: order.no + ' - ' + (resolveProductName(order) || '?'),
@@ -242,6 +339,32 @@ define([
         operations: _.values(order.operations),
         selectedOperationNo: next.operationNo
       });
+    },
+
+    handleEmbeddedPick: function(submitEl)
+    {
+      var orderNo = this.$id('order').val();
+      var order = this.lastOrders[0];
+
+      if (!orderNo || !order || orderNo !== (order._id || order.no))
+      {
+        this.$id('order').select2('focus');
+
+        submitEl.disabled = false;
+
+        return viewport.msg.show({
+          type: 'error',
+          time: 2000,
+          text: t('production', 'newOrderPicker:msg:emptyOrder')
+        });
+      }
+
+      var operationNo = this.$id('operationGroup').find('.active').attr('data-operation') || '0000';
+      var orderInfo = _.clone(order);
+
+      orderPickerHelpers.prepareOrderInfo(this.model, orderInfo);
+
+      this.pickOrder(orderInfo, operationNo);
     },
 
     handleOnlinePick: function(submitEl)
@@ -402,6 +525,12 @@ define([
     onKeyPress: function(e)
     {
       var $nc12 = this.$id('spigot-nc12');
+
+      if (!$nc12.length)
+      {
+        return;
+      }
+
       var target = e.target;
       var keyCode = e.keyCode;
 
@@ -425,6 +554,140 @@ define([
       this.lastKeyPressAt = keyPressAt;
 
       return false;
+    },
+
+    onVkbValueChange: function(fieldEl)
+    {
+      if (this.socket.isConnected() && fieldEl === this.$id('order')[0])
+      {
+        this.handleOrderChange();
+      }
+    },
+
+    handleOrderChange: function()
+    {
+      var phrase = this.$id('order').val().replace(/[^0-9]+/g, '');
+      var $group = this.$id('operationGroup');
+      var list = this.buildOperationList(phrase);
+
+      if (!list.length)
+      {
+        list = '<p><i class="fa fa-spinner fa-spin"></i></p>';
+      }
+
+      var $active = $group.find('div').html(list).find('.active');
+
+      if ($active.length)
+      {
+        $active[0].scrollIntoView();
+      }
+
+      if (this.options.vkb)
+      {
+        this.options.vkb.reposition();
+      }
+    },
+
+    buildOperationList: function(phrase)
+    {
+      var view = this;
+
+      if (phrase.length !== 9)
+      {
+        return '<p>' + t('production', 'newOrderPicker:order:tooShort') + '</p>';
+      }
+
+      if (view.searchReq)
+      {
+        view.searchReq.abort();
+      }
+
+      view.searchReq = this.ajax({
+        url: '/production/orders?' + this.model.getOrderIdType() + '=' + phrase
+      });
+
+      view.searchReq.fail(function()
+      {
+        view.$('.fa-spin').removeClass('fa-spin');
+      });
+
+      view.searchReq.done(function(res)
+      {
+        view.lastOrders = res || [];
+
+        var html = '';
+
+        if (view.lastOrders.length)
+        {
+          html = view.buildOrderOperationList(view.lastOrders[0]);
+        }
+        else
+        {
+          html = '<p>' + t('production', 'newOrderPicker:order:notFound') + '</p>';
+        }
+
+        var $active = view.$id('operationGroup').find('div').html(html).find('.active');
+
+        if ($active.length)
+        {
+          $active[0].scrollIntoView();
+        }
+
+        if (view.options.vkb)
+        {
+          view.options.vkb.reposition();
+        }
+      });
+
+      view.searchReq.always(function()
+      {
+        view.searchReq = null;
+      });
+
+      view.lastPhrase = phrase;
+
+      return '';
+    },
+
+    buildOrderOperationList: function(order, active)
+    {
+      var html = '';
+
+      if (!active)
+      {
+        active = orderPickerHelpers.getBestDefaultOperationNo(order.operations);
+      }
+
+      _.forEach(order.operations, function(op)
+      {
+        var className = 'btn btn-lg btn-default ' + (op.no === active ? 'active' : '');
+
+        html += '<button type="button" class="' + className + '" data-operation="' + op.no + '">'
+          + '<em>' + _.escape(op.no) + '</em><span>' + _.escape(op.name || '?') + '</span>'
+          + '</button>';
+      });
+
+      return html.length ? html : ('<p>' + t('production', 'newOrderPicker:order:notFound') + '</p>');
+    },
+
+    checkMinMaxValidity: function(e)
+    {
+      var el = e.target;
+      var val = parseInt(el.value, 10) || 0;
+      var min = parseInt(el.getAttribute('min'), 10) || 0;
+      var max = parseInt(el.getAttribute('max'), 10);
+      var err = '';
+
+      if (val < min)
+      {
+        err = t('production', 'newOrderPicker:min', {min: min});
+      }
+      else if (val > max)
+      {
+        err = t('production', 'newOrderPicker:max', {max: max});
+      }
+
+      el.setCustomValidity(err);
     }
 
   });

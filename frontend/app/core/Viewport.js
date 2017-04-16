@@ -305,6 +305,16 @@ define([
     return this;
   };
 
+  Viewport.prototype.closeDialogs = function(closeCurrent, filter)
+  {
+    this.dialogQueue = this.dialogQueue.filter(filter || closeCurrent);
+
+    if (typeof closeCurrent === 'function' && this.currentDialog && closeCurrent(this.currentDialog))
+    {
+      this.closeDialog();
+    }
+  };
+
   Viewport.prototype.closeAllDialogs = function()
   {
     this.dialogQueue = [];

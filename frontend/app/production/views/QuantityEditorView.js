@@ -1,10 +1,14 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
+  'app/i18n',
   'app/viewport',
   'app/core/View',
   'app/production/templates/quantityEditor'
 ], function(
+  _,
+  t,
   viewport,
   View,
   quantityEditorTemplate
@@ -16,18 +20,42 @@ define([
     template: quantityEditorTemplate,
 
     events: {
+      'change input[name="hour"]': function(e)
+      {
+        var $value = this.$id('value').val(this.model.hours[e.target.value].value);
+
+        this.checkValidity();
+
+        _.defer(function() { $value.select(); });
+      },
+      'input #-value': 'checkValidity',
       'submit': function(e)
       {
         e.preventDefault();
 
-        var newQuantity = parseInt(this.$id('quantity').val(), 10);
+        var hourIndex = parseInt(this.$('input[name="hour"]:checked').val(), 10);
+        var newValue = parseInt(this.$id('value').val(), 10);
+        var hour = this.model.hours[hourIndex];
 
-        if (isNaN(newQuantity) || newQuantity === this.options.currentQuantity || newQuantity < 0)
+        if (!hour)
         {
-          newQuantity = null;
+          return;
         }
 
-        this.trigger('quantityChanged', newQuantity);
+        if (isNaN(newValue) || newValue === hour.value || newValue < 0)
+        {
+          newValue = null;
+        }
+
+        this.trigger('quantityChanged', hourIndex, newValue);
+      }
+    },
+
+    destroy: function()
+    {
+      if (this.options.vkb)
+      {
+        this.options.vkb.hide();
       }
     },
 
@@ -35,21 +63,44 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        from: this.options.from,
-        to: this.options.to,
-        currentQuantity: this.options.currentQuantity,
-        maxQuantity: this.options.maxQuantity
+        hours: this.model.hours,
+        maxQuantity: this.model.maxQuantity,
+        embedded: this.options.embedded
       };
     },
 
     afterRender: function()
     {
-      this.$id('quantity').select();
+      this.$id('value').select();
     },
 
     onDialogShown: function()
     {
-      this.$id('quantity').select();
+      if (this.options.vkb)
+      {
+        this.options.vkb.show(this.$id('value')[0], this.checkValidity.bind(this));
+      }
+
+      this.$('input[name="hour"][value="' + this.model.selected + '"]').click();
+    },
+
+    checkValidity: function()
+    {
+      var $value = this.$id('value');
+      var value = parseInt($value.val(), 10);
+
+      if (isNaN(value) || value < 0)
+      {
+        $value.val('')[0].setCustomValidity('');
+      }
+      else if (value > this.model.maxQuantity)
+      {
+        $value[0].setCustomValidity(t('production', 'quantityEditor:maxQuantity', {max: this.model.maxQuantity}));
+      }
+      else
+      {
+        $value[0].setCustomValidity('');
+      }
     }
 
   });

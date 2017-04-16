@@ -199,6 +199,7 @@ define([
   }
 
   setUpUserSelect2.defaultRqlQueryProvider = createDefaultRqlQuery;
+  setUpUserSelect2.transliterate = transliterate;
 
   return setUpUserSelect2;
 });
