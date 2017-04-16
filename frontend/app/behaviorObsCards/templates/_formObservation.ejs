@@ -7,8 +7,13 @@
   </td>
   <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="observations[<%- i %>].safe" value="1" <%- observation.safe === true ? 'checked' : '' %>></td>
   <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="observations[<%- i %>].safe" value="0" <%- observation.safe === false ? 'checked' : '' %>></td>
-  <td class="behaviorObsCards-form-textarea"><textarea class="form-control" name="observations[<%- i %>].observation" rows="2"><%= observation.observation %></textarea></td>
-  <td class="behaviorObsCards-form-textarea"><textarea class="form-control" name="observations[<%- i %>].cause" rows="2"><%= observation.cause %></textarea></td>
+  <td class="behaviorObsCards-form-textarea"><textarea class="form-control" name="observations[<%- i %>].observation" rows="2" required><%= observation.observation %></textarea></td>
+  <td class="behaviorObsCards-form-textarea"><textarea class="form-control" name="observations[<%- i %>].cause" rows="2" required><%= observation.cause %></textarea></td>
   <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="observations[<%- i %>].easy" value="1" <%- observation.easy === true ? 'checked' : '' %>></td>
   <td class="is-min behaviorObsCards-form-radio"><input type="radio" name="observations[<%- i %>].easy" value="0" <%- observation.easy === false ? 'checked' : '' %>></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button type="button" class="btn btn-default" data-remove="observation"><i class="fa fa-times"></i></button>
+    </div>
+  </td>
 </tr>

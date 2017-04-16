@@ -27,6 +27,7 @@
         <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:date') %></label>
         <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
       </div>
+      <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:observations') %></h4>
       <table class="table table-bordered table-hover behaviorObsCards-form-observations">
         <thead>
         <tr>
@@ -37,22 +38,22 @@
           <th class="behaviorObsCards-form-half"><%- t('behaviorObsCards', 'PROPERTY:observations:cause') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:true') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:false') %></th>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-observations"></tbody>
       </table>
+      <input id="<%- idPrefix %>-addObservation" type="text">
+      <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:risks') %></h4>
+      <p class="message message-inline message-error"><%- t('behaviorObsCards', 'FORM:MSG:risks') %></p>
       <table class="table table-bordered table-hover">
         <thead>
         <tr>
-          <th><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></th>
+          <th class="behaviorObsCards-form-risk"><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></th>
           <th><%- t('behaviorObsCards', 'PROPERTY:risks:cause') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:true') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:false') %></th>
-        </tr>
-        </thead>
-        <thead>
-        <tr>
-          <td colspan="4" class="message-error"><%- t('behaviorObsCards', 'FORM:MSG:risks') %></td>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-risks"></tbody>
@@ -64,18 +65,16 @@
           <%- t('behaviorObsCards', 'PROPERTY:easyDiscussed') %>
         </label>
       </div>
+      <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %></h4>
+      <p class="message message-inline message-warning"><%- t('behaviorObsCards', 'FORM:MSG:difficulties') %></p>
       <table class="table table-bordered table-hover">
         <thead>
         <tr>
-          <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></th>
+          <th class="behaviorObsCards-form-difficulty"><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></th>
           <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:solution') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:true') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:false') %></th>
-        </tr>
-        </thead>
-        <thead>
-        <tr>
-          <td colspan="4" class="message-warning"><%- t('behaviorObsCards', 'FORM:MSG:difficulties') %></td>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-difficulties"></tbody>

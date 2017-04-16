@@ -52,35 +52,6 @@ define([
           e.target.querySelector('input').click();
         }
       },
-      'mousedown input[type="radio"]': function(e)
-      {
-        e.preventDefault();
-      },
-      'mouseup input[type="radio"]': function(e)
-      {
-        e.preventDefault();
-      },
-      'click input[type="radio"]': function(e)
-      {
-        var view = this;
-
-        e.preventDefault();
-
-        setTimeout(function()
-        {
-          e.target.checked = !e.target.checked;
-
-          if (!e.target.checked)
-          {
-            view.$(e.target)
-              .closest('tr')
-              .find('input[name="' + e.target.name + '"][value="-1"]')
-              .prop('checked', true);
-          }
-
-          view.toggleValidity();
-        }, 1);
-      },
       'click #-addRisk': function()
       {
         this.$id('risks').append(renderRisk({
@@ -102,6 +73,47 @@ define([
           },
           i: ++this.rowIndex
         }));
+      },
+      'click .btn[data-remove]': function(e)
+      {
+        var view = this;
+
+        this.$(e.target).closest('tr').fadeOut('fast', function()
+        {
+          $(this).remove();
+
+          if (e.currentTarget.dataset.remove === 'observation')
+          {
+            view.setUpAddObservationSelect2();
+          }
+        });
+      },
+      'change #-addObservation': function()
+      {
+        var $addObservation = this.$id('addObservation');
+        var behavior = kaizenDictionaries.behaviours.get($addObservation.val());
+        var map = {};
+
+        (this.model.get('observations') || []).forEach(function(obs)
+        {
+          map[obs.id] = obs;
+        });
+
+        this.$id('observations').append(renderObservation({
+          observation: map[behavior.id] || {
+            id: behavior.id,
+            behavior: behavior.get('name'),
+            observation: '',
+            cause: '',
+            safe: true,
+            easy: true
+          },
+          i: ++this.rowIndex
+        }));
+
+        $addObservation.select2('val', '');
+
+        this.setUpAddObservationSelect2();
       }
 
     }, FormView.prototype.events),
@@ -229,6 +241,7 @@ define([
       this.renderObservations();
       this.renderRisks();
       this.renderDifficulties();
+      this.setUpAddObservationSelect2();
       this.toggleValidity();
 
       this.$('input[autofocus]').focus();
@@ -251,6 +264,25 @@ define([
           text: observer.label
         });
       }
+    },
+
+    setUpAddObservationSelect2: function()
+    {
+      var map = {};
+
+      this.$id('observations').find('input[name$="behavior"]').each(function()
+      {
+        map[this.value] = 1;
+      });
+
+      this.$id('addObservation').select2({
+        width: '500px',
+        placeholder: 'Wybierz kategorię zachowań, aby dodać nową obserwację...',
+        minimumResultsForSearch: 7,
+        data: kaizenDictionaries.behaviours
+          .filter(function(behavior) { return !map[behavior.id]; })
+          .map(idAndLabel)
+      });
     },
 
     renderObservations: function()
@@ -292,17 +324,6 @@ define([
 
           delete map[behavior.id];
         }
-        else
-        {
-          list.push({
-            id: behavior.id,
-            behavior: behavior.get('name'),
-            observation: '',
-            cause: '',
-            safe: null,
-            easy: null
-          });
-        }
       });
 
       _.forEach(map, function(obs)
@@ -334,11 +355,14 @@ define([
     {
       var list = this.model.get('risks') || [];
 
-      list.push({
-        risk: '',
-        cause: '',
-        easy: null
-      });
+      if (!list.length)
+      {
+        list.push({
+          risk: '',
+          cause: '',
+          easy: true
+        });
+      }
 
       return list;
     },
@@ -364,11 +388,14 @@ define([
     {
       var list = this.model.get('difficulties') || [];
 
-      list.push({
-        problem: '',
-        solution: '',
-        behavior: null
-      });
+      if (!list.length)
+      {
+        list.push({
+          problem: '',
+          solution: '',
+          behavior: true
+        });
+      }
 
       return list;
     }

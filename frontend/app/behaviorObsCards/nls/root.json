@@ -3,7 +3,8 @@
     "BREADCRUMBS:base": "Behavior observations",
     "BREADCRUMBS:browse": "Cards",
     "BREADCRUMBS:addForm": "Add",
-    "BREADCRUMBS:editForm": "Edit"
+    "BREADCRUMBS:editForm": "Edit",
+    "BREADCRUMBS:ACTION_FORM:delete": "Delete"
   },
   "pl": true
 }
