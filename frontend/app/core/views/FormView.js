@@ -89,6 +89,8 @@ define([
 
       if (!this.checkValidity(formData))
       {
+        this.handleInvalidity(formData);
+
         return false;
       }
 
@@ -116,6 +118,11 @@ define([
     checkValidity: function(formData)
     {
       return !!formData;
+    },
+
+    handleInvalidity: function()
+    {
+
     },
 
     handleSuccess: function()

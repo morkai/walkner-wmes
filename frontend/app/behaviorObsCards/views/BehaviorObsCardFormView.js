@@ -154,6 +154,11 @@ define([
         || (formData.difficulties || []).length;
     },
 
+    handleInvalidity: function()
+    {
+      this.$id('addObservation').select2('focus');
+    },
+
     serializeToForm: function()
     {
       var formData = this.model.toJSON();
@@ -174,9 +179,9 @@ define([
       };
       formData.date = dateMoment.isValid() ? dateMoment.toISOString() : null;
       formData.easyDiscussed = !!formData.easyDiscussed;
-      formData.observations = formData.observations.filter(this.filterObservation);
-      formData.risks = formData.risks.filter(this.filterRisk);
-      formData.difficulties = formData.difficulties.filter(this.filterDifficulty);
+      formData.observations = (formData.observations || []).filter(this.filterObservation);
+      formData.risks = (formData.risks || []).filter(this.filterRisk);
+      formData.difficulties = (formData.difficulties || []).filter(this.filterDifficulty);
 
       return formData;
     },
@@ -327,32 +332,14 @@ define([
       var view = this;
 
       this.$id('risks').html(
-        this.serializeRisksToForm()
-          .map(function(risk)
-          {
-            return renderRisk({
-              risk: risk,
-              i: ++view.rowIndex
-            });
-          })
-          .join('')
+        (this.model.get('risks') || []).map(function(risk)
+        {
+          return renderRisk({
+            risk: risk,
+            i: ++view.rowIndex
+          });
+        }).join('')
       );
-    },
-
-    serializeRisksToForm: function()
-    {
-      var list = this.model.get('risks') || [];
-
-      if (!list.length)
-      {
-        list.push({
-          risk: '',
-          cause: '',
-          easy: true
-        });
-      }
-
-      return list;
     },
 
     renderDifficulties: function()
@@ -360,32 +347,14 @@ define([
       var view = this;
 
       this.$id('difficulties').html(
-        this.serializeDifficultiesToForm()
-          .map(function(difficulty)
-          {
-            return renderDifficulty({
-              difficulty: difficulty,
-              i: ++view.rowIndex
-            });
-          })
-          .join('')
+        (this.model.get('difficulties') || []).map(function(difficulty)
+        {
+          return renderDifficulty({
+            difficulty: difficulty,
+            i: ++view.rowIndex
+          });
+        }).join('')
       );
-    },
-
-    serializeDifficultiesToForm: function()
-    {
-      var list = this.model.get('difficulties') || [];
-
-      if (!list.length)
-      {
-        list.push({
-          problem: '',
-          solution: '',
-          behavior: true
-        });
-      }
-
-      return list;
     }
 
   });
