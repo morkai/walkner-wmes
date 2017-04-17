@@ -132,17 +132,6 @@ define([
       });
     },
 
-    toggleValidity: function()
-    {
-      var valid = this.hasAnyObservation()
-        || this.hasAnyRisk()
-        || this.hasAnyDifficulty();
-
-      this.$id('observations').find('textarea').first()[0].setCustomValidity(
-        valid ? '' : t('behaviorObsCards', 'FORM:ERROR:empty')
-      );
-    },
-
     hasAnyObservation: function()
     {
       return _.some(form2js(this.$id('observations')[0]).observations, this.filterObservation);
@@ -242,7 +231,6 @@ define([
       this.renderRisks();
       this.renderDifficulties();
       this.setUpAddObservationSelect2();
-      this.toggleValidity();
 
       this.$('input[autofocus]').focus();
     },

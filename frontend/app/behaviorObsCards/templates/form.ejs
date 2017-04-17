@@ -27,6 +27,7 @@
         <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:date') %></label>
         <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
       </div>
+      <hr>
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:observations') %></h4>
       <table class="table table-bordered table-hover behaviorObsCards-form-observations">
         <thead>
@@ -44,6 +45,7 @@
         <tbody id="<%- idPrefix %>-observations"></tbody>
       </table>
       <input id="<%- idPrefix %>-addObservation" type="text">
+      <hr>
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:risks') %></h4>
       <p class="message message-inline message-error"><%- t('behaviorObsCards', 'FORM:MSG:risks') %></p>
       <table class="table table-bordered table-hover">
@@ -59,12 +61,14 @@
         <tbody id="<%- idPrefix %>-risks"></tbody>
       </table>
       <button id="<%- idPrefix %>-addRisk" class="btn btn-default behaviorObsCards-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <hr>
       <div class="checkbox">
         <label class="control-label">
           <input type="checkbox" name="easyDiscussed" value="true">
           <%- t('behaviorObsCards', 'PROPERTY:easyDiscussed') %>
         </label>
       </div>
+      <hr>
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %></h4>
       <p class="message message-inline message-warning"><%- t('behaviorObsCards', 'FORM:MSG:difficulties') %></p>
       <table class="table table-bordered table-hover">

@@ -42,10 +42,6 @@
 .behaviorObsCards-form-option {
   width: 120px;
 }
-.behaviorObsCards-form .table + .control-label,
-.behaviorObsCards-form .checkbox + .control-label {
-  margin-top: 20px;
-}
 .behaviorObsCards-form .message + .table {
   margin-top: 15px;
 }
