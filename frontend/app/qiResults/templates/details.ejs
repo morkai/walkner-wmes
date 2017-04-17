@@ -37,6 +37,10 @@
               <div class="prop-value"><%- model.inspector %></div>
             </div>
             <div class="prop">
+              <div class="prop-name"><%- t('qiResults', 'PROPERTY:nokOwner') %></div>
+              <div class="prop-value"><%- model.nokOwner %></div>
+            </div>
+            <div class="prop">
               <div class="prop-name"><%- t('qiResults', 'PROPERTY:qtyInspected') %></div>
               <div class="prop-value"><%- model.qtyInspected %></div>
             </div>
@@ -114,10 +118,6 @@
             <div class="prop">
               <div class="prop-name"><%- t('qiResults', 'PROPERTY:immediateActions') %></div>
               <div class="prop-value text-lines"><%= model.immediateActions || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:immediateResults') %></div>
-              <div class="prop-value text-lines"><%= model.immediateResults || '-' %></div>
             </div>
             <div class="prop">
               <div class="prop-name"><%- t('qiResults', 'PROPERTY:rootCause') %></div>

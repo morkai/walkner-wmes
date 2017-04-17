@@ -45,6 +45,7 @@
   "PROPERTY:updatedAt": "Czas ostatniej zmiany",
   "PROPERTY:inspector": "Inspektor",
   "PROPERTY:inspectedAt": "Data inspekcji",
+  "PROPERTY:nokOwner": "Właściciel niezgodności - mistrz",
   "PROPERTY:division": "Centrum",
   "PROPERTY:orderNo": "Nr zlecenia",
   "PROPERTY:nc12": "12NC",

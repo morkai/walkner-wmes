@@ -1,0 +1,115 @@
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-top: 0; margin-bottom: 3px; padding-bottom: 3px;">
+  Niezgodny wynik inspekcji
+</h3>
+<table style="font-family: Arial, sans-serif; font-size: 12px">
+  <tbody>
+  <tr>
+    <th align="left" style="white-space: nowrap">ID</th>
+    <td>: <a href="<%- urlPrefix %>r/qi/<%- result.rid %>"><%- result.rid %></a></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Nr zlecenia</th>
+    <td>: <%- result.orderNo %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">12NC</th>
+    <td>: <%- result.nc12 %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Rodzina wyrobów</th>
+    <td>: <%= result.productFamily %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Nazwa wyrobu</th>
+    <td>: <%= result.productName %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Centrum</th>
+    <td>: <%= result.division %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Rodzaj inspekcji</th>
+    <td>: <%= result.kind %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Data inspekcji</th>
+    <td>: <%= result.date %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Inspektor</th>
+    <td>: <%= result.inspector %></td>
+  </tr>
+  <% if (result.nokOwner) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Właściciel niezgodności - mistrz</th>
+    <td>: <%= result.nokOwner %></td>
+  </tr>
+  <% } %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Ilość w zleceniu</th>
+    <td>: <%- result.qtyOrder %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Ilość skontrolowana</th>
+    <td>: <%- result.qtyInspected %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Ilość niezgodnych w skontrolowanych</th>
+    <td>: <%- result.qtyNokInspected %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Ilość do selekcji</th>
+    <td>: <%- result.qtyToFix %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Ilość niezgodnych</th>
+    <td>: <%- result.qtyNok %></td>
+  </tr>
+  <% if (result.errorCategory) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Kategoria błędu</th>
+    <td>: <%= result.errorCategory %></td>
+  </tr>
+  <% } %>
+  <% if (result.faultCode) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Kod wady</th>
+    <td>: <%= result.faultCode %></td>
+  </tr>
+  <% } %>
+  <% if (result.faultDescription) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Klasyfikacja wady</th>
+    <td>: <%= result.faultDescription %></td>
+  </tr>
+  <% } %>
+  <% if (result.problem) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Opis błędu</th>
+    <td>: <%= result.problem %></td>
+  </tr>
+  <% } %>
+  <% if (result.immediateActions) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Akcje natychmiastowe</th>
+    <td>: <%= result.immediateActions %></td>
+  </tr>
+  <% } %>
+  <% if (result.rootCause) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Przyczyna źródłowa</th>
+    <td>: <%= result.rootCause %></td>
+  </tr>
+  <% } %>
+</table>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-bottom: 3px; padding-bottom: 3px;">
+  Na skróty
+</h3>
+<ul style="margin-top: 0; font-family: Arial, sans-serif; font-size: 12px">
+  <li><a href="<%- urlPrefix %>r/results/<%- result.rid %>">Wynik inspekcji</a></li>
+  <li><a href="<%- urlPrefix %>r/results/all">Wszystkie wyniki inspekcji</a></li>
+</ul>
+<hr>
+<font face="Arial" color="Gray" size="1">
+  Ta wiadomość została wygenerowana automatycznie przez system WMES, ponieważ wybrano Ciebie jako Właściciela niezgodności.
+</font>

@@ -120,6 +120,11 @@ define([
       return false;
     },
 
+    isNokOwner: function()
+    {
+      return this.attributes.nokOwner && this.attributes.nokOwner.id === user.data._id;
+    },
+
     serialize: function(dictionaries, options)
     {
       var obj = this.toJSON();
@@ -130,6 +135,7 @@ define([
       obj.updater = renderUserInfo({userInfo: obj.updater});
       obj.inspectedAt = time.format(obj.inspectedAt, options.dateFormat || 'L');
       obj.inspector = renderUserInfo({userInfo: obj.inspector});
+      obj.nokOwner = renderUserInfo({userInfo: obj.nokOwner});
       obj.kind = dictionaries.getLabel('kind', obj.kind);
       obj.qtyOrder = obj.qtyOrder ? obj.qtyOrder.toLocaleString() : '0';
       obj.qtyInspected = obj.qtyInspected.toLocaleString();

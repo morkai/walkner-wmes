@@ -165,6 +165,7 @@ define([
           return time.format(value, 'LL');
 
         case 'inspector':
+        case 'nokOwner':
           return renderUserInfo({userInfo: value});
 
         case 'kind':

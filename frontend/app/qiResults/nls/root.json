@@ -46,6 +46,7 @@
     "PROPERTY:updatedAt": "Updated at",
     "PROPERTY:inspector": "Inspector",
     "PROPERTY:inspectedAt": "Inspection date",
+    "PROPERTY:nokOwner": "NOK owner - shift leader",
     "PROPERTY:division": "Division",
     "PROPERTY:orderNo": "Order no",
     "PROPERTY:nc12": "12NC",

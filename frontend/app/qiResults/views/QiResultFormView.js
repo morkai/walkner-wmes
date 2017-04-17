@@ -227,15 +227,33 @@ define([
     {
       var inspectorOptionEl = this.$id('inspector')[0].selectedOptions[0];
 
-      if (this.options.editMode)
-      {
-        formData.updater = user.getInfo();
-      }
-
       formData.inspector = {
         id: inspectorOptionEl.value,
         label: inspectorOptionEl.label.trim()
       };
+
+      var $nokOwner = this.$id('nokOwner');
+      var nokOwner = this.$id('nokOwner').select2('data');
+
+      if (!$nokOwner.prop('disabled'))
+      {
+        if (nokOwner)
+        {
+          formData.nokOwner = {
+            id: nokOwner.id,
+            label: nokOwner.text
+          };
+        }
+        else
+        {
+          formData.nokOwner = null;
+        }
+      }
+
+      if (this.options.editMode)
+      {
+        formData.updater = user.getInfo();
+      }
 
       this.$('textarea').each(function()
       {
@@ -286,9 +304,18 @@ define([
         _.forEach(this.model.get('correctiveActions'), this.addAction, this);
       }
 
+      this.setUpNokOwnerSelect2();
       buttonGroup.toggle(this.$id('result'));
       this.findOrder();
       this.toggleRoleFields();
+    },
+
+    setUpNokOwnerSelect2: function()
+    {
+      setUpUserSelect2(this.$id('nokOwner'), {
+        allowClear: true,
+        textFormatter: function(user, name) { return name; }
+      });
     },
 
     toggleRoleFields: function()
@@ -296,6 +323,7 @@ define([
       var manager = user.isAllowedTo('QI:RESULTS:MANAGE');
       var inspector = user.isAllowedTo('QI:INSPECTOR');
       var specialist = user.isAllowedTo('QI:SPECIALIST');
+      var nokOwner = this.model.isNokOwner();
 
       this.$('[data-role]').each(function()
       {
@@ -309,10 +337,16 @@ define([
         else
         {
           enabled = (inspector && role.indexOf('inspector') !== -1)
-            || (specialist && role.indexOf('specialist') !== -1);
+            || (specialist && role.indexOf('specialist') !== -1)
+            || (nokOwner && role.indexOf('nokOwner') !== -1);
         }
 
         this.disabled = !enabled;
+
+        if (this.name === 'nokOwner')
+        {
+          $(this).select2('enable', !this.disabled);
+        }
       });
     },
 

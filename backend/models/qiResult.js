@@ -62,6 +62,7 @@ module.exports = function setupQiResultModel(app, mongoose)
       type: Date,
       required: true
     },
+    nokOwner: {},
     division: {
       type: String,
       required: true
@@ -109,7 +110,8 @@ module.exports = function setupQiResultModel(app, mongoose)
     },
     immediateResults: {
       type: String,
-      trim: true
+      trim: true,
+      default: ''
     },
     rootCause: {
       type: String,
@@ -149,7 +151,8 @@ module.exports = function setupQiResultModel(app, mongoose)
       type: {},
       default: null
     },
-    changes: [changeSchema]
+    changes: [changeSchema],
+    users: [String]
   }, {
     id: false,
     minimize: false,
@@ -167,7 +170,9 @@ module.exports = function setupQiResultModel(app, mongoose)
 
   qiResultSchema.statics.TOPIC_PREFIX = 'qi.results';
 
+  qiResultSchema.index({'users': 1});
   qiResultSchema.index({'inspector.id': 1});
+  qiResultSchema.index({'nokOwner.id': 1});
   qiResultSchema.index({inspectedAt: -1});
   qiResultSchema.index({division: 1});
   qiResultSchema.index({orderNo: 1});
@@ -186,8 +191,50 @@ module.exports = function setupQiResultModel(app, mongoose)
       this.updatedAt = this.createdAt;
     }
 
+    this.users = this.collectUsers();
+
     next();
   });
+
+  qiResultSchema.methods.collectUsers = function()
+  {
+    var users = {};
+
+    users[this.creator.id] = 1;
+
+    if (this.updater)
+    {
+      users[this.updater.id] = 1;
+    }
+
+    if (this.inspector)
+    {
+      users[this.inspector.id] = 1;
+    }
+
+    if (this.nokOwner)
+    {
+      users[this.nokOwner.id] = 1;
+    }
+
+    _.forEach(this.changes, function(change)
+    {
+      if (change.user)
+      {
+        users[change.user.id] = 1;
+      }
+    });
+
+    _.forEach(this.correctiveActions, function(action)
+    {
+      _.forEach(action.who, function(user)
+      {
+        users[user.id] = 1;
+      });
+    });
+
+    return Object.keys(users);
+  };
 
   qiResultSchema.methods.applyChanges = function(input, updater)
   {
@@ -198,6 +245,7 @@ module.exports = function setupQiResultModel(app, mongoose)
       'ok',
       'inspector',
       'inspectedAt',
+      'nokOwner',
       'division',
       'orderNo',
       'nc12',

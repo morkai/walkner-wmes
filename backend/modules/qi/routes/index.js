@@ -111,6 +111,8 @@ module.exports = function setUpQiRoutes(app, qiModule)
     nokRatioReportRoute.bind(null, app, qiModule)
   );
 
+  express.get('/r/qi/:filter', redirectRoute);
+
   _.forEach(qiModule.DICTIONARIES, setUpDictionaryRoutes);
 
   function setUpDictionaryRoutes(modelName, dictionaryName)
@@ -145,5 +147,39 @@ module.exports = function setUpQiRoutes(app, qiModule)
     prepareAttachments(qiModule.tmpAttachments, body);
 
     return next();
+  }
+
+  function redirectRoute(req, res, next)
+  {
+    var url = '/#qiResults';
+
+    if (req.params.filter === 'all')
+    {
+      url += '?sort(-inspectedAt,-rid)&limit(20)';
+    }
+    else if (/^[0-9]+$/.test(req.params.filter))
+    {
+      return redirectToDetailsRoute(req, res, next);
+    }
+
+    res.redirect(url);
+  }
+
+  function redirectToDetailsRoute(req, res, next)
+  {
+    QiResult.findOne({rid: parseInt(req.params.filter, 10)}, {_id: 1}).lean().exec(function(err, result)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (result)
+      {
+        return res.redirect('/#qiResults/' + result._id);
+      }
+
+      return res.sendStatus(404);
+    });
   }
 };

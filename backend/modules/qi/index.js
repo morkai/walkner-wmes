@@ -13,8 +13,10 @@ exports.DEFAULT_CONFIG = {
   settingsId: 'settings',
   reportsId: 'reports',
   orgUnitsId: 'orgUnits',
+  mailSenderId: 'mail/sender',
   wkhtmltopdfExe: 'wkhtmltopdf',
-  attachmentsDest: null
+  attachmentsDest: null,
+  emailUrlPrefix: 'http://127.0.0.1/'
 };
 
 exports.start = function startQiModule(app, qiModule)

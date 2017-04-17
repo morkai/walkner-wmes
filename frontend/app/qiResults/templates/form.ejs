@@ -28,7 +28,7 @@
         </div>
         <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-division" class="control-label"><%- t('qiResults', 'PROPERTY:division') %></label>
-          <select id="<%- idPrefix %>-division" name="division" class="form-control" required>
+          <select id="<%- idPrefix %>-division" name="division" class="form-control" required data-role="inspector">
             <option></option>
             <% divisions.forEach(function(division) { %>
             <option value="<%- division.id %>"><%= division.getLabel() %></option>
@@ -49,13 +49,17 @@
           <label for="<%- idPrefix %>-inspectedAt" class="control-label is-required"><%- t('qiResults', 'PROPERTY:inspectedAt') %></label>
           <input id="<%- idPrefix %>-inspectedAt" name="inspectedAt" class="form-control" type="date" min="<%- inspectedAtMin %>" max="<%- inspectedAtMax %>" data-role="inspector">
         </div>
-        <div class="col-lg-6 form-group">
+        <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-inspector" class="control-label"><%- t('qiResults', 'PROPERTY:inspector') %></label>
           <select id="<%- idPrefix %>-inspector" name="inspector" class="form-control" required data-role="inspector">
             <% inspectors.forEach(function(inspector) { %>
             <option value="<%- inspector.id %>"><%= inspector.text %></option>
             <% }) %>
           </select>
+        </div>
+        <div class="col-lg-4 form-group">
+          <label for="<%- idPrefix %>-nokOwner" class="control-label"><%- t('qiResults', 'PROPERTY:nokOwner') %></label>
+          <input id="<%- idPrefix %>-nokOwner" name="nokOwner" type="text" data-role="inspector">
         </div>
       </div>
       <div class="row">
@@ -87,7 +91,7 @@
         <div class="col-lg-4">
           <div class="form-group">
             <label for="<%- idPrefix %>-errorCategory" class="control-label is-required"><%- t('qiResults', 'PROPERTY:errorCategory') %></label>
-            <select id="<%- idPrefix %>-errorCategory" name="errorCategory" class="form-control" required data-role="specialist">
+            <select id="<%- idPrefix %>-errorCategory" name="errorCategory" class="form-control" required data-role="specialist nokOwner">
               <option></option>
               <% errorCategories.forEach(function(errorCategory) { %>
               <option value="<%- errorCategory.id %>"><%= errorCategory.text %></option>
@@ -108,22 +112,18 @@
           <textarea id="<%- idPrefix %>-faultDescription" name="faultDescription" class="form-control" rows="3" data-role="inspector"></textarea>
         </div>
       </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-problem" class="control-label"><%- t('qiResults', 'PROPERTY:problem') %></label>
-        <textarea id="<%- idPrefix %>-problem" name="problem" class="form-control" rows="3" data-role="inspector"></textarea>
-      </div>
       <div class="row">
         <div class="col-lg-4 form-group">
-          <label for="<%- idPrefix %>-immediateActions" class="control-label"><%- t('qiResults', 'PROPERTY:immediateActions') %></label>
-          <textarea id="<%- idPrefix %>-immediateActions" name="immediateActions" class="form-control" rows="3" data-role="inspector"></textarea>
+          <label for="<%- idPrefix %>-problem" class="control-label"><%- t('qiResults', 'PROPERTY:problem') %></label>
+          <textarea id="<%- idPrefix %>-problem" name="problem" class="form-control" rows="4" data-role="inspector"></textarea>
         </div>
         <div class="col-lg-4 form-group">
-          <label for="<%- idPrefix %>-immediateResults" class="control-label"><%- t('qiResults', 'PROPERTY:immediateResults') %></label>
-          <textarea id="<%- idPrefix %>-immediateResults" name="immediateResults" class="form-control" rows="3" data-role="inspector"></textarea>
+          <label for="<%- idPrefix %>-immediateActions" class="control-label"><%- t('qiResults', 'PROPERTY:immediateActions') %></label>
+          <textarea id="<%- idPrefix %>-immediateActions" name="immediateActions" class="form-control" rows="4" data-role="inspector"></textarea>
         </div>
         <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-rootCause" class="control-label"><%- t('qiResults', 'PROPERTY:rootCause') %></label>
-          <textarea id="<%- idPrefix %>-rootCause" name="rootCause" class="form-control" rows="3" data-role="specialist"></textarea>
+          <textarea id="<%- idPrefix %>-rootCause" name="rootCause" class="form-control" rows="4" data-role="specialist nokOwner"></textarea>
         </div>
       </div>
       <% if (user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE')) { %>
