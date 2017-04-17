@@ -23,12 +23,13 @@ define([
     FilterView: BehaviorObsCardFilterView,
     ListView: BehaviorObsCardListView,
 
-    actions: function()
+    actions: function(layout)
     {
       var collection = this.collection;
 
       return [
         pageActions.jump(this, collection),
+        pageActions.export(layout, this, this.collection),
         {
           label: t.bound(collection.getNlsDomain(), 'PAGE_ACTION:add'),
           icon: 'plus',

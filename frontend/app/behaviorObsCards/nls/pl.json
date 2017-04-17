@@ -13,6 +13,7 @@
   "PAGE_ACTION:add": "Dodaj kartę",
   "PAGE_ACTION:edit": "Edytuj kartę",
   "PAGE_ACTION:delete": "Usuń kartę",
+  "PAGE_ACTION:export": "Eksportuj karty",
   "PAGE_ACTION:jump:title": "Skocz do karty po ID",
   "PAGE_ACTION:jump:placeholder": "ID karty",
   "PAGE_ACTION:print": "Wersja do druku",

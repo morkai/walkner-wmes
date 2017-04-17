@@ -2,6 +2,8 @@
 
 'use strict';
 
+const _ = require('lodash');
+
 module.exports = function setUpBehaviorObsCardsRoutes(app, module)
 {
   const express = app[module.config.expressId];
@@ -15,6 +17,18 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
   express.get(
     '/behaviorObsCards', canView, prepareForBrowse, express.crud.browseRoute.bind(null, app, BehaviorObsCard)
   );
+
+  express.get(
+    '/behaviorObsCards;export',
+    canView,
+    prepareForBrowse,
+    express.crud.exportRoute.bind(null, {
+      filename: 'WMES-BEHAVIOR_OBS',
+      serializeRow: exportBehaviorObsCard,
+      model: BehaviorObsCard
+    })
+  );
+
   express.get('/behaviorObsCards;rid', canView, findByRidRoute);
   express.post(
     '/behaviorObsCards', canManage, prepareForAdd, express.crud.addRoute.bind(null, app, BehaviorObsCard)
@@ -88,5 +102,67 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
 
       return res.sendStatus(404);
     });
+  }
+
+  function exportBehaviorObsCard(doc)
+  {
+    var rows = [];
+    var date = app.formatDate(doc.date);
+
+    _.forEach(doc.observations, function(o)
+    {
+      rows.push({
+        '#rid': doc.rid,
+        'date': date,
+        '"section': doc.section,
+        '"line': doc.line,
+        '"observer': doc.observer.label,
+        '"position': doc.position,
+        '"kind': 'observation',
+        '"option1': o.easy ? 'easy' : 'hard',
+        '"option2': o.safe ? 'safe' : 'risky',
+        '"text1': o.observation,
+        '"text2': o.cause,
+        '"category': o.behavior
+      });
+    });
+
+    _.forEach(doc.risks, function(o)
+    {
+      rows.push({
+        '#rid': doc.rid,
+        'date': date,
+        '"section': doc.section,
+        '"line': doc.line,
+        '"observer': doc.observer.label,
+        '"position': doc.position,
+        '"kind': 'risk',
+        '"option1': o.easy ? 'easy' : 'hard',
+        '"option2': '',
+        '"text1': o.risk,
+        '"text2': o.cause,
+        '"category': ''
+      });
+    });
+
+    _.forEach(doc.difficulties, function(o)
+    {
+      rows.push({
+        '#rid': doc.rid,
+        'date': date,
+        '"section': doc.section,
+        '"line': doc.line,
+        '"observer': doc.observer.label,
+        '"position': doc.position,
+        '"kind': 'difficulty',
+        '"option1': o.behavior ? 'behavior' : 'workConditions',
+        '"option2': '',
+        '"text1': o.problem,
+        '"text2': o.solution,
+        '"category': ''
+      });
+    });
+
+    return rows;
   }
 };
