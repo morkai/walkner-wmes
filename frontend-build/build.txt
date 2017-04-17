@@ -310,6 +310,7 @@ app/production/assets/main.css
 ----------------
 app/production/assets/isa.css
 app/production/assets/taktTime.css
+app/production/assets/vkb.css
 app/production/assets/main.css
 
 app/production/assets/settings.css
@@ -319,6 +320,10 @@ app/production/assets/settings.css
 app/production/assets/taktTime.css
 ----------------
 app/production/assets/taktTime.css
+
+app/production/assets/vkb.css
+----------------
+app/production/assets/vkb.css
 
 app/pscs/assets/main.css
 ----------------
@@ -886,8 +891,9 @@ app/production/settings.js
 app/production/snManager.js
 app/prodShifts/ProdShift.js
 app/prodShifts/routes.js
-vendor/hammer.js
 app/data/dictionaries.js
+app/production/templates/vkb.js
+app/production/views/VkbView.js
 app/production/templates/controls.js
 app/production/templates/unlockDialog.js
 app/production/views/UnlockDialogView.js
@@ -916,6 +922,8 @@ app/prodSerialNumbers/ProdSerialNumberCollection.js
 app/production/views/SnListView.js
 app/production/templates/snChecker.js
 app/production/views/SnCheckerView.js
+app/production/templates/propertyEditorDialog.js
+app/production/views/PropertyEditorDialogView.js
 app/production/templates/data.js
 app/production/templates/endDowntimeDialog.js
 app/production/templates/continueOrderDialog.js
@@ -1315,7 +1323,6 @@ app/production/ProductionSettingCollection.js
 app/production/settings.js
 app/production/snManager.js
 app/prodShifts/ProdShift.js
-vendor/hammer.js
 app/companies/Company.js
 app/companies/CompanyCollection.js
 app/data/companies.js
@@ -1326,6 +1333,8 @@ app/prodFunctions/ProdFunction.js
 app/prodFunctions/ProdFunctionCollection.js
 app/data/prodFunctions.js
 app/data/dictionaries.js
+app/production/templates/vkb.js
+app/production/views/VkbView.js
 app/production/templates/controls.js
 app/production/templates/unlockDialog.js
 app/production/views/UnlockDialogView.js
@@ -1362,6 +1371,8 @@ app/core/views/ListView.js
 app/production/views/SnListView.js
 app/production/templates/snChecker.js
 app/production/views/SnCheckerView.js
+app/production/templates/propertyEditorDialog.js
+app/production/views/PropertyEditorDialogView.js
 app/production/templates/data.js
 app/production/templates/endDowntimeDialog.js
 app/production/templates/continueOrderDialog.js
