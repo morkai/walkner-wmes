@@ -56,6 +56,7 @@
       </div>
     </div>
   </div>
+  <% if (model.observations.length) { %>
   <div class="panel panel-default">
     <div class="panel-heading"><%- t('behaviorObsCards', 'PANEL:TITLE:observations') %></div>
     <table class="table table-bordered table-hover behaviorObsCards-details-observations">
@@ -89,6 +90,8 @@
       </tbody>
     </table>
   </div>
+  <% } %>
+  <% if (model.risks.length) { %>
   <div class="panel panel-danger">
     <div class="panel-heading"><%- t('behaviorObsCards', 'PANEL:TITLE:risks') %></div>
     <table class="table table-bordered table-hover behaviorObsCards-details-risks">
@@ -114,9 +117,11 @@
       </tbody>
     </table>
   </div>
+  <% } %>
   <p class="message message-inline message-<%- model.easyDiscussed ? 'info' : 'default' %>">
     <i class="fa fa-thumbs-<%- model.easyDiscussed ? 'up' : 'down' %>"></i> <%- t('behaviorObsCards', 'PROPERTY:easyDiscussed') %>
   </p>
+  <% if (model.difficulties.length) { %>
   <div class="panel panel-warning">
     <div class="panel-heading"><%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %></div>
     <table class="table table-bordered table-hover behaviorObsCards-details-difficulties">
@@ -142,4 +147,5 @@
       </tbody>
     </table>
   </div>
+  <% } %>
 </div>
