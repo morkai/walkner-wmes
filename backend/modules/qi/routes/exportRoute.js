@@ -83,6 +83,7 @@ exports.serializeRow = function(app, qiModule, doc, req)
     '"result': doc.ok ? 'ok' : 'nok',
     '#qtyOrder': doc.qtyOrder,
     '#qtyInspected': doc.qtyInspected,
+    '#qtyNokInspected': doc.qtyNokInspected,
     '#qtyToFix': doc.qtyToFix,
     '#qtyNok': doc.qtyNok,
     '"errorCategory': errorCategory || doc.errorCategory,
