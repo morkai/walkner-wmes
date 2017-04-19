@@ -13,7 +13,9 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
   const QiResult = mongoose.model('QiResult');
 
   const user = req.session.user;
-  const input = {};
+  const input = {
+    comment: req.body.comment
+  };
 
   if (userModule.isAllowedTo(user, 'QI:RESULTS:MANAGE'))
   {
@@ -22,7 +24,10 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
   }
   else
   {
-    if (userModule.isAllowedTo(user, 'QI:INSPECTOR'))
+    const inspector = userModule.isAllowedTo(user, 'QI:INSPECTOR');
+    const specialist = userModule.isAllowedTo(user, 'QI:SPECIALIST');
+
+    if (inspector)
     {
       Object.assign(input, _.omit(req.body, [
         'errorCategory',
@@ -32,11 +37,12 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
       prepareAttachments(qiModule.tmpAttachments, input);
     }
 
-    if (userModule.isAllowedTo(user, 'QI:SPECIALIST'))
+    if (specialist)
     {
       Object.assign(input, _.pick(req.body, [
         'errorCategory',
-        'rootCause'
+        'rootCause',
+        'correctiveActions'
       ]));
     }
 
