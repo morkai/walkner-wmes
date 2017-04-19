@@ -1,9 +1,15 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
+  'app/data/prodFunctions',
+  'app/core/util/idAndLabel',
   'app/core/views/FilterView',
   'app/users/templates/filter'
 ], function(
+  _,
+  prodFunctions,
+  idAndLabel,
   FilterView,
   filterTemplate
 ) {
@@ -27,8 +33,19 @@ define([
           formData[propertyName] = term.args[1].replace('^', '');
         }
       },
+      'prodFunction': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.args[1];
+      },
       'login': 'personellId',
       'lastName': 'personellId'
+    },
+
+    serialize: function()
+    {
+      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
+        prodFunctions: prodFunctions.map(idAndLabel)
+      });
     },
 
     serializeFormToQuery: function(selector)
@@ -36,6 +53,7 @@ define([
       var personellId = parseInt(this.$id('personellId').val().trim(), 10);
       var login = this.$id('login').val().trim();
       var lastName = this.$id('lastName').val().trim();
+      var prodFunction = this.$id('prodFunction').val();
 
       if (!isNaN(personellId))
       {
@@ -50,6 +68,11 @@ define([
       if (lastName.length)
       {
         selector.push({name: 'regex', args: ['lastName', '^' + lastName, 'i']});
+      }
+
+      if (prodFunction.length)
+      {
+        selector.push({name: 'eq', args: ['prodFunction', prodFunction]});
       }
     }
 

@@ -11,6 +11,15 @@
     <label for="<%- idPrefix %>-lastName"><%- t('users', 'PROPERTY:lastName') %></label>
     <input id="<%- idPrefix %>-lastName" class="form-control" name="lastName" type="text">
   </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-prodFunction"><%- t('users', 'PROPERTY:prodFunction') %></label>
+    <select id="<%- idPrefix %>-prodFunction" class="form-control" name="prodFunction">
+      <option></option>
+      <% prodFunctions.forEach(function(prodFunction) { %>
+      <option value="<%= prodFunction.id %>"><%= prodFunction.text %></option>
+      <% }) %>
+    </select>
+  </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('users', 'filter:submit') %></span></button>
