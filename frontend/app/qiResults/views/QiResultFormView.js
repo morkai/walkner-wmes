@@ -348,6 +348,8 @@ define([
           $(this).select2('enable', !this.disabled);
         }
       });
+
+      this.$id('result').find('.btn').toggleClass('disabled', !manager && !inspector);
     },
 
     clearOrderFields: function()
