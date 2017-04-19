@@ -176,6 +176,10 @@ exports.start = function startUserModule(app, module)
         {
           matches += user.loggedIn ? 1 : 0;
         }
+        else if (/^FN:/.test(privilege))
+        {
+          matches += user.prodFunction === privilege.substring(3) ? 1 : 0;
+        }
         else
         {
           matches += hasPrivilege(user, allPrivileges[ii]) ? 1 : 0;
