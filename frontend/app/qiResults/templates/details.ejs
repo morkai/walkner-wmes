@@ -36,10 +36,12 @@
               <div class="prop-name"><%- t('qiResults', 'PROPERTY:inspector') %></div>
               <div class="prop-value"><%- model.inspector %></div>
             </div>
+            <% if (!model.ok) { %>
             <div class="prop">
               <div class="prop-name"><%- t('qiResults', 'PROPERTY:nokOwner') %></div>
               <div class="prop-value"><%- model.nokOwner %></div>
             </div>
+            <% } %>
             <div class="prop">
               <div class="prop-name"><%- t('qiResults', 'PROPERTY:qtyInspected') %></div>
               <div class="prop-value"><%- model.qtyInspected %></div>
