@@ -5,12 +5,14 @@ define([
   'app/data/prodFunctions',
   'app/core/util/idAndLabel',
   'app/core/views/FilterView',
+  'app/users/util/setUpUserSelect2',
   'app/users/templates/filter'
 ], function(
   _,
   prodFunctions,
   idAndLabel,
   FilterView,
+  setUpUserSelect2,
   filterTemplate
 ) {
   'use strict';
@@ -22,7 +24,7 @@ define([
     defaultFormData: {
       personellId: '',
       login: '',
-      lastName: ''
+      searchName: ''
     },
 
     termToForm: {
@@ -38,7 +40,7 @@ define([
         formData[propertyName] = term.args[1];
       },
       'login': 'personellId',
-      'lastName': 'personellId'
+      'searchName': 'personellId'
     },
 
     serialize: function()
@@ -52,7 +54,7 @@ define([
     {
       var personellId = parseInt(this.$id('personellId').val().trim(), 10);
       var login = this.$id('login').val().trim();
-      var lastName = this.$id('lastName').val().trim();
+      var searchName = setUpUserSelect2.transliterate(this.$id('searchName').val());
       var prodFunction = this.$id('prodFunction').val();
 
       if (!isNaN(personellId))
@@ -65,9 +67,9 @@ define([
         selector.push({name: 'regex', args: ['login', '^' + login, 'i']});
       }
 
-      if (lastName.length)
+      if (searchName.length)
       {
-        selector.push({name: 'regex', args: ['lastName', '^' + lastName, 'i']});
+        selector.push({name: 'regex', args: ['searchName', '^' + searchName]});
       }
 
       if (prodFunction.length)
