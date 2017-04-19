@@ -165,6 +165,7 @@
         </div>
       </div>
       <% } %>
+      <% if (user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE')) { %>
       <div class="table-responsive">
         <table class="table table-bordered table-condensed qiResults-form-correctiveActions">
           <thead>
@@ -183,6 +184,7 @@
       <button id="<%- idPrefix %>-addAction" class="btn btn-default" type="button">
         <i class="fa fa-plus"></i><span><%- t('qiResults', 'correctiveActions:add') %></span>
       </button>
+      <% } %>
       <% } %>
       <% if (editMode) { %>
       <div class="form-group qiResults-form-comment">

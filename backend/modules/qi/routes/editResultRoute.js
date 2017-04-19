@@ -45,10 +45,6 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
         'correctiveActions'
       ]));
     }
-
-    Object.assign(input, _.pick(req.body, [
-      'correctiveActions'
-    ]));
   }
 
   const updater = userModule.createUserInfo(user, req);

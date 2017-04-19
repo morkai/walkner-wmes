@@ -25,6 +25,9 @@
 .qiResults-form-comment {
   margin-top: 15px;
 }
+.row + .qiResults-form-comment {
+  margin-top: 0;
+}
 @media (max-width: 1200px) {
   .qiResults-form textarea[name="faultDescription"] {
     height: auto;
