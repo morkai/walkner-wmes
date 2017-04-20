@@ -160,14 +160,11 @@ exports.getProdTasksWithTags = function(allProdTasks)
 
   _.forEach(allProdTasks, function(prodTask)
   {
-    if (Array.isArray(prodTask.tags) && prodTask.tags.length)
-    {
-      prodTasks[prodTask._id] = {
-        label: prodTask.name,
-        color: prodTask.clipColor,
-        inProd: prodTask.inProd
-      };
-    }
+    prodTasks[prodTask._id] = {
+      label: prodTask.name,
+      color: prodTask.clipColor,
+      inProd: prodTask.inProd
+    };
   });
 
   return prodTasks;
