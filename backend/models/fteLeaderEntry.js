@@ -134,7 +134,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     var ProdTask = mongoose.model('ProdTask');
     var FteLeaderEntry = mongoose.model('FteLeaderEntry');
     var prodDivisions = app.divisions.models
-      .filter(function(division) { return division.type === 'prod'; })
+      .filter(function(division) { return division.type === 'prod' && !division.deactivatedAt; })
       .map(function(division) { return division._id; })
       .sort();
     var sortedCompanies = prepareSortedCompanies(options.structure);
