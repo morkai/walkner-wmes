@@ -65,6 +65,7 @@ exports.modules = [
   'kaizen',
   'suggestions',
   'behaviorObsCards',
+  'minutesForSafetyCards',
   'opinionSurveys',
   'cags',
   'sapGui/importer',
@@ -160,7 +161,8 @@ exports.events = {
     'qi.results.added', 'qi.results.edited',
     'd8.entries.added', 'd8.entries.edited',
     'heffLineStates.added', 'heffLineStates.edited', 'heffLineStates.deleted',
-    'behaviorObsCards.added', 'behaviorObsCards.edited'
+    'behaviorObsCards.added', 'behaviorObsCards.edited',
+    'minutesForSafetyCards.added', 'minutesForSafetyCards.edited'
   ]
 };
 
@@ -250,7 +252,7 @@ exports.mongoose = {
     'd8Entry', 'd8Area', 'd8EntrySource', 'd8ProblemSource',
     'heffLineState',
     'paintShopOrder',
-    'behaviorObsCard'
+    'behaviorObsCard', 'minutesForSafetyCard'
   ]
 };
 

@@ -1,0 +1,86 @@
+<form class="minutesForSafetyCards-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="form-group col-lg-3 has-required-select2">
+          <label for="<%- idPrefix %>-owner" class="control-label is-required"><%- t('minutesForSafetyCards', 'PROPERTY:owner') %></label>
+          <input id="<%- idPrefix %>-owner" type="text" name="owner" required>
+        </div>
+        <div class="form-group col-lg-3 has-required-select2">
+          <label for="<%- idPrefix %>-section" class="control-label is-required"><%- t('minutesForSafetyCards', 'PROPERTY:section') %></label>
+          <input id="<%- idPrefix %>-section" type="text" name="section" required>
+        </div>
+        <div class="form-group col-lg-6 has-required-select2">
+          <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('minutesForSafetyCards', 'PROPERTY:date') %></label>
+          <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- t('minutesForSafetyCards', 'PROPERTY:subject') %></label>
+        <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required>
+      </div>
+      <hr>
+      <h4 class="control-label"><%- t('minutesForSafetyCards', 'PROPERTY:observations') %></h4>
+      <p class="message message-inline message-error"><%- t('minutesForSafetyCards', 'FORM:MSG:observations') %></p>
+      <table class="table table-bordered table-hover minutesForSafetyCards-form-observations">
+        <thead>
+        <tr>
+          <th class="minutesForSafetyCards-half"><%- t('minutesForSafetyCards', 'PROPERTY:observations:what') %></th>
+          <th class="minutesForSafetyCards-half"><%- t('minutesForSafetyCards', 'PROPERTY:observations:why') %></th>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+        </tr>
+        </thead>
+        <tbody id="<%- idPrefix %>-observations"></tbody>
+      </table>
+      <button id="<%- idPrefix %>-addObservation" class="btn btn-default minutesForSafetyCards-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <hr>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-safeBehavior" class="control-label"><%- t('minutesForSafetyCards', 'PROPERTY:safeBehavior') %></label>
+        <textarea id="<%- idPrefix %>-safeBehavior" class="form-control" name="safeBehavior" rows="5"></textarea>
+      </div>
+      <hr>
+      <h4 class="control-label"><%- t('minutesForSafetyCards', 'PROPERTY:orgPropositions') %></h4>
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th><%- t('minutesForSafetyCards', 'PROPERTY:propositions:what') %></th>
+          <th class="minutesForSafetyCards-form-who"><%- t('minutesForSafetyCards', 'PROPERTY:propositions:who') %></th>
+          <th class="is-min"><%- t('minutesForSafetyCards', 'PROPERTY:propositions:when') %></th>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+        </tr>
+        </thead>
+        <tbody id="<%- idPrefix %>-orgPropositions"></tbody>
+      </table>
+      <button id="<%- idPrefix %>-addOrgProposition" class="btn btn-default minutesForSafetyCards-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <hr>
+      <h4 class="control-label"><%- t('minutesForSafetyCards', 'PROPERTY:techPropositions') %></h4>
+      <p class="message message-inline message-warning"><%- t('minutesForSafetyCards', 'FORM:MSG:techPropositions') %></p>
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th><%- t('minutesForSafetyCards', 'PROPERTY:propositions:what') %></th>
+          <th class="minutesForSafetyCards-form-who"><%- t('minutesForSafetyCards', 'PROPERTY:propositions:who') %></th>
+          <th class="is-min"><%- t('minutesForSafetyCards', 'PROPERTY:propositions:when') %></th>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+        </tr>
+        </thead>
+        <tbody id="<%- idPrefix %>-techPropositions"></tbody>
+      </table>
+      <button id="<%- idPrefix %>-addTechProposition" class="btn btn-default minutesForSafetyCards-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <hr>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-behaviorRules" class="control-label"><%- t('minutesForSafetyCards', 'PROPERTY:behaviorRules') %></label>
+        <textarea id="<%- idPrefix %>-behaviorRules" class="form-control" name="behaviorRules" rows="5"></textarea>
+      </div>
+      <div class="form-group has-required-select2">
+        <label for="<%- idPrefix %>-participants" class="control-label is-required"><%- t('minutesForSafetyCards', 'PROPERTY:participants') %></label>
+        <input id="<%- idPrefix %>-participants" type="text" name="participants" required>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

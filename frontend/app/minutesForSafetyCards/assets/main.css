@@ -1,0 +1,7 @@
+@import url(./list.css);
+@import url(./form.css);
+@import url(./details.css);
+
+.minutesForSafetyCards-half {
+  width: 50%;
+}

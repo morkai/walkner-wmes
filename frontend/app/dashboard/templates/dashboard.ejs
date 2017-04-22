@@ -6,5 +6,11 @@
       <%- t('dashboard', 'addButton:observation') %>
       <small><%- t('dashboard', 'addButton:testing') %></small>
     </a>
+    <% if (user.isAllowedTo('KAIZEN:MANAGE', 'FN:leader')) { %>
+    <a class="btn btn-success" href="#minutesForSafetyCards;add">
+      <%- t('dashboard', 'addButton:minutesForSafety') %>
+      <small><%- t('dashboard', 'addButton:testing') %></small>
+    </a>
+    <% } %>
   </div>
 </div>

@@ -16,6 +16,7 @@
     "addButton:nearMiss": "Add a new<br>near miss!",
     "addButton:suggestion": "Add a new<br>suggestion!",
     "addButton:observation": "Register an observation!",
+    "addButton:minutesForSafety": "Register Minutes for Safety!",
     "addButton:testing": "(test version)",
 
     "list:rid": "ID",
