@@ -397,7 +397,7 @@ define([
 
         this.disabled = !enabled;
 
-        if (this.name === 'nokOwner')
+        if (!IS_ANDROID && (this.name === 'inspector' || this.name === 'nokOwner'))
         {
           $(this).select2('enable', !this.disabled);
         }
