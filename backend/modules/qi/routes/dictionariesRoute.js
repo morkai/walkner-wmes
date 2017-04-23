@@ -51,8 +51,8 @@ module.exports = function dictionariesRoute(app, qiModule, req, res, next)
       var settings = dictionaries.pop();
       var result = {
         settings: settings,
-        inspectors: dictionaries.pop(),
         masters: dictionaries.pop(),
+        inspectors: dictionaries.pop(),
         counter: {
           actual: actualCount,
           required: (settings.find(s => s._id === 'qi.requiredCount') || {value: 0}).value

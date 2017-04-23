@@ -79,12 +79,17 @@ define([
         return true;
       }
 
-      if (attrs.creator && attrs.creator.id === user.data._id)
+      if (!attrs.ok && this.isNokOwner())
       {
         return true;
       }
 
-      if (attrs.inspector && attrs.inspector.id === user.data._id)
+      if (this.isCreator())
+      {
+        return true;
+      }
+
+      if (this.isInspector())
       {
         return true;
       }
@@ -107,17 +112,27 @@ define([
         return false;
       }
 
-      if (attrs.creator && attrs.creator.id === user.data._id)
+      if (this.isCreator())
       {
         return true;
       }
 
-      if (attrs.inspector && attrs.inspector.id === user.data._id)
+      if (this.isInspector())
       {
         return true;
       }
 
       return false;
+    },
+
+    isCreator: function()
+    {
+      return this.attributes.creator && this.attributes.creator.id === user.data._id;
+    },
+
+    isInspector: function()
+    {
+      return this.attributes.inspector && this.attributes.inspector.id === user.data._id;
     },
 
     isNokOwner: function()

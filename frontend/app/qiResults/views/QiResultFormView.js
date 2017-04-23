@@ -106,7 +106,13 @@ define([
         inspectors: this.serializeInspectors(),
         masters: this.serializeMasters(),
         divisions: orgUnits.getAllByType('division'),
-        isAndroid: IS_ANDROID
+        isAndroid: IS_ANDROID,
+        canEditAttachments: this.options.editMode
+          ? (this.model.isInspector() || user.isAllowedTo('QI:RESULTS:MANAGE'))
+          : user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE'),
+        canEditActions: this.options.editMode
+          ? (this.model.isNokOwner() || user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE'))
+          : user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE')
       });
     },
 
@@ -375,7 +381,7 @@ define([
     toggleRoleFields: function()
     {
       var manager = user.isAllowedTo('QI:RESULTS:MANAGE');
-      var inspector = user.isAllowedTo('QI:INSPECTOR');
+      var inspector = this.model.isInspector();
       var specialist = user.isAllowedTo('QI:SPECIALIST');
       var nokOwner = this.model.isNokOwner();
 

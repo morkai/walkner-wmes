@@ -26,6 +26,8 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
   {
     const inspector = userModule.isAllowedTo(user, 'QI:INSPECTOR');
     const specialist = userModule.isAllowedTo(user, 'QI:SPECIALIST');
+    const master = userModule.isAllowedTo(user, 'FN:master');
+    const leader = userModule.isAllowedTo(user, 'FN:leader');
 
     if (inspector)
     {
@@ -41,6 +43,16 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
     {
       Object.assign(input, _.pick(req.body, [
         'errorCategory',
+        'immediateActions',
+        'rootCause',
+        'correctiveActions'
+      ]));
+    }
+
+    if (master || leader)
+    {
+      Object.assign(input, _.pick(req.body, [
+        'immediateActions',
         'rootCause',
         'correctiveActions'
       ]));

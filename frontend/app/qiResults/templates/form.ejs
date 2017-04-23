@@ -96,7 +96,7 @@
         <div class="col-lg-4">
           <div class="form-group">
             <label for="<%- idPrefix %>-errorCategory" class="control-label <%- user.isAllowedTo('QI:RESULTS:MANAGE') ? '' : 'is-required' %>"><%- t('qiResults', 'PROPERTY:errorCategory') %></label>
-            <select id="<%- idPrefix %>-errorCategory" name="errorCategory" class="form-control" <%- user.isAllowedTo('QI:RESULTS:MANAGE') ? '' : 'required' %> data-role="specialist nokOwner">
+            <select id="<%- idPrefix %>-errorCategory" name="errorCategory" class="form-control" <%- user.isAllowedTo('QI:RESULTS:MANAGE') ? '' : 'required' %> data-role="specialist">
               <option></option>
               <% errorCategories.forEach(function(errorCategory) { %>
               <option value="<%- errorCategory.id %>"><%= errorCategory.text %></option>
@@ -124,14 +124,13 @@
         </div>
         <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-immediateActions" class="control-label"><%- t('qiResults', 'PROPERTY:immediateActions') %></label>
-          <textarea id="<%- idPrefix %>-immediateActions" name="immediateActions" class="form-control" rows="4" data-role="inspector"></textarea>
+          <textarea id="<%- idPrefix %>-immediateActions" name="immediateActions" class="form-control" rows="4" data-role="inspector specialist nokOwner leader"></textarea>
         </div>
         <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-rootCause" class="control-label"><%- t('qiResults', 'PROPERTY:rootCause') %></label>
-          <textarea id="<%- idPrefix %>-rootCause" name="rootCause" class="form-control" rows="4" data-role="specialist nokOwner"></textarea>
+          <textarea id="<%- idPrefix %>-rootCause" name="rootCause" class="form-control" rows="4" data-role="specialist nokOwner leader"></textarea>
         </div>
       </div>
-      <% if (user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE')) { %>
       <% if (model.okFile || model.nokFile) { %>
       <div class="message message-inline message-warning"><%- t('qiResults', 'FORM:attachments:update') %></div>
       <div class="row">
@@ -140,7 +139,9 @@
           <p class="form-control-static">
             <% if (model.okFile) { %>
             <a href="/qi/results/<%- model._id %>/attachments/okFile"><%= model.okFile.name %></a>
+            <% if (canEditAttachments) { %>
             <label class="qiResults-form-removeAttachment">(<input type="checkbox" name="removeFile[]" value="ok"> <%- t('qiResults', 'FORM:attachments:remove') %>)</label>
+            <% } %>
             <% } else { %>
             -
             <% } %>
@@ -151,7 +152,9 @@
           <p class="form-control-static">
             <% if (model.nokFile) { %>
             <a href="/qi/results/<%- model._id %>/attachments/nokFile"><%= model.nokFile.name %></a>
+            <% if (canEditAttachments) { %>
             <label class="qiResults-form-removeAttachment">(<input type="checkbox" name="removeFile[]" value="nok"> <%- t('qiResults', 'FORM:attachments:remove') %>)</label>
+            <% } %>
             <% } else { %>
             -
             <% } %>
@@ -159,6 +162,7 @@
         </div>
       </div>
       <% } %>
+      <% if (canEditAttachments) { %>
       <div class="row">
         <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-okFile" class="control-label"><%- t('qiResults', 'FORM:okFile:new') %></label>
@@ -170,7 +174,7 @@
         </div>
       </div>
       <% } %>
-      <% if (user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE')) { %>
+      <% if (canEditActions) { %>
       <div class="table-responsive">
         <table class="table table-bordered table-condensed qiResults-form-correctiveActions">
           <thead>
