@@ -2,8 +2,9 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
-var setUpCounter = require('./counter');
+const setUpRoutes = require('./routes');
+const setUpCounter = require('./counter');
+const setUpNotifier = require('./notifier');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -47,5 +48,14 @@ exports.start = function startQiModule(app, qiModule)
       qiModule.config.mongooseId
     ],
     setUpCounter.bind(null, app, qiModule)
+  );
+
+  app.onModuleReady(
+    [
+      qiModule.config.mongooseId,
+      qiModule.config.orgUnitsId,
+      qiModule.config.mailSenderId
+    ],
+    setUpNotifier.bind(null, app, qiModule)
   );
 };
