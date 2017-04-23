@@ -201,6 +201,25 @@ app/mechOrders/assets/main.css
 ----------------
 app/mechOrders/assets/main.css
 
+app/minutesForSafetyCards/assets/details.css
+----------------
+app/minutesForSafetyCards/assets/details.css
+
+app/minutesForSafetyCards/assets/form.css
+----------------
+app/minutesForSafetyCards/assets/form.css
+
+app/minutesForSafetyCards/assets/list.css
+----------------
+app/minutesForSafetyCards/assets/list.css
+
+app/minutesForSafetyCards/assets/main.css
+----------------
+app/minutesForSafetyCards/assets/./list.css
+app/minutesForSafetyCards/assets/./form.css
+app/minutesForSafetyCards/assets/./details.css
+app/minutesForSafetyCards/assets/main.css
+
 app/opinionSurveyActions/assets/main.css
 ----------------
 app/opinionSurveyActions/assets/main.css
@@ -563,6 +582,7 @@ assets/../app/licenses/assets/main.css
 assets/../app/kaizenOrders/assets/main.css
 assets/../app/suggestions/assets/main.css
 assets/../app/behaviorObsCards/assets/main.css
+assets/../app/minutesForSafetyCards/assets/main.css
 assets/../app/orderDocumentClients/assets/main.css
 assets/../app/opinionSurveys/assets/main.css
 assets/../app/opinionSurveyActions/assets/main.css
@@ -1003,6 +1023,7 @@ app/kaizenBehaviours/routes.js
 app/kaizenProductFamilies/routes.js
 app/suggestions/routes.js
 app/behaviorObsCards/routes.js
+app/minutesForSafetyCards/routes.js
 app/opinionSurveys/routes.js
 app/opinionSurveyActions/routes.js
 app/opinionSurveyResponses/routes.js

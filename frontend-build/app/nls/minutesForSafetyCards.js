@@ -1,0 +1,1 @@
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:base":function(n){return"Minutes for Safety"},"BREADCRUMBS:browse":function(n){return"Cards"},"BREADCRUMBS:addForm":function(n){return"Add"},"BREADCRUMBS:editForm":function(n){return"Edit"},"BREADCRUMBS:ACTION_FORM:delete":function(n){return"Delete"}},pl:!0}});
