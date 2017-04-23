@@ -50,7 +50,7 @@
           <input id="<%- idPrefix %>-inspectedAt" name="inspectedAt" class="form-control" type="date" min="<%- inspectedAtMin %>" max="<%- inspectedAtMax %>" data-role="inspector">
         </div>
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-inspector" class="control-label"><%- t('qiResults', 'PROPERTY:inspector') %></label>
+          <label for="<%- idPrefix %>-inspector" class="control-label is-required"><%- t('qiResults', 'PROPERTY:inspector') %></label>
           <select id="<%- idPrefix %>-inspector" name="inspector" class="form-control" required data-role="inspector">
             <% inspectors.forEach(function(inspector) { %>
             <option value="<%- inspector.id %>"><%= inspector.text %></option>
@@ -59,7 +59,12 @@
         </div>
         <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-nokOwner" class="control-label"><%- t('qiResults', 'PROPERTY:nokOwner') %></label>
-          <input id="<%- idPrefix %>-nokOwner" name="nokOwner" type="text" data-role="inspector">
+          <select id="<%- idPrefix %>-nokOwner" name="nokOwner" class="form-control" data-role="inspector">
+            <option></option>
+            <% masters.forEach(function(master) { %>
+            <option value="<%- master.id %>"><%= master.text %></option>
+            <% }) %>
+          </select>
         </div>
       </div>
       <div class="row">

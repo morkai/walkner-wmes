@@ -51,6 +51,9 @@ define([
     inspectors: new UserCollection(null, {
       rqlQuery: 'select(firstName,lastName,login)&privileges=QI%3AINSPECTOR'
     }),
+    masters: new UserCollection(null, {
+      rqlQuery: 'select(firstName,lastName,login)&prodFunction=master'
+    }),
     productFamilies: [],
     settings: settings.acquire(),
     counter: {
@@ -93,7 +96,7 @@ define([
         pubsubSandbox.subscribe('qi.' + dict + '.**', handleDictionaryMessage);
       });
 
-      pubsubSandbox.subscribe('users.*', reloadInspectors);
+      pubsubSandbox.subscribe('users.*', reloadUsers);
       pubsubSandbox.subscribe('qi.counter.recounted', updateCounter);
 
       dictionaries.settings.on('change', updateRequiredCount);
@@ -145,6 +148,7 @@ define([
 
     dictionaries.settings.reset(data ? data.settings : []);
     dictionaries.inspectors.reset(data ? data.inspectors : []);
+    dictionaries.masters.reset(data ? data.masters : []);
     dictionaries.productFamilies = data ? data.productFamilies : [];
 
     dictionaries.counter = data && data.counter || {
@@ -253,9 +257,10 @@ define([
     broker.publish(topic, message);
   }
 
-  function reloadInspectors()
+  function reloadUsers()
   {
     dictionaries.inspectors.fetch();
+    dictionaries.masters.fetch();
   }
 
   function reloadDictionaries()

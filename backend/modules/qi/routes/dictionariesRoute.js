@@ -25,6 +25,13 @@ module.exports = function dictionariesRoute(app, qiModule, req, res, next)
 
       User
         .find({privileges: 'QI:INSPECTOR'}, {login: 1, firstName: 1, lastName: 1})
+        .sort({searchName: 1})
+        .lean()
+        .exec(this.group());
+
+      User
+        .find({prodFunction: 'master'}, {login: 1, firstName: 1, lastName: 1})
+        .sort({searchName: 1})
         .lean()
         .exec(this.group());
 
@@ -45,6 +52,7 @@ module.exports = function dictionariesRoute(app, qiModule, req, res, next)
       var result = {
         settings: settings,
         inspectors: dictionaries.pop(),
+        masters: dictionaries.pop(),
         counter: {
           actual: actualCount,
           required: (settings.find(s => s._id === 'qi.requiredCount') || {value: 0}).value

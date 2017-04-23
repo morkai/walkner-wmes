@@ -33,6 +33,8 @@ define([
 ) {
   'use strict';
 
+  var IS_ANDROID = /Android/i.test(window.navigator.userAgent);
+
   return FormView.extend({
 
     template: formTemplate,
@@ -102,7 +104,9 @@ define([
         }),
         errorCategories: qiDictionaries.errorCategories.map(idAndLabel),
         inspectors: this.serializeInspectors(),
-        divisions: orgUnits.getAllByType('division')
+        masters: this.serializeMasters(),
+        divisions: orgUnits.getAllByType('division'),
+        isAndroid: IS_ANDROID
       });
     },
 
@@ -122,15 +126,48 @@ define([
 
       var inspector = this.model.get('inspector');
 
-      if (this.options.editMode && !map[inspector.id])
+      if (inspector && !map[inspector.id])
       {
         list.unshift({
           id: inspector.id,
-          text: inspector.text
+          text: inspector.label
         });
       }
 
-      return list;
+      return list.sort(function(a, b)
+      {
+        return a.text.localeCompare(b.text);
+      });
+    },
+
+    serializeMasters: function()
+    {
+      var map = {};
+      var list = [];
+
+      qiDictionaries.masters.forEach(function(user)
+      {
+        var master = idAndLabel(user);
+
+        map[master.id] = true;
+
+        list.push(master);
+      });
+
+      var nokOwner = this.model.get('nokOwner');
+
+      if (nokOwner && !map[nokOwner.id])
+      {
+        list.unshift({
+          id: nokOwner.id,
+          text: nokOwner.label
+        });
+      }
+
+      return list.sort(function(a, b)
+      {
+        return a.text.localeCompare(b.text);
+      });
     },
 
     checkValidity: function()
@@ -201,6 +238,7 @@ define([
       var formData = this.model.toJSON();
 
       formData.inspector = formData.inspector ? formData.inspector.id : '';
+      formData.nokOwner = formData.nokOwner ? formData.nokOwner.id : '';
       formData.inspectedAt = time.format(formData.inspectedAt, 'YYYY-MM-DD');
 
       _.forEach(formData.correctiveActions, function(correctiveAction)
@@ -232,22 +270,18 @@ define([
         label: inspectorOptionEl.label.trim()
       };
 
-      var $nokOwner = this.$id('nokOwner');
-      var nokOwner = this.$id('nokOwner').select2('data');
+      var nokOwnerOptionEl = this.$id('nokOwner')[0].selectedOptions[0];
 
-      if (!$nokOwner.prop('disabled'))
+      if (nokOwnerOptionEl.value)
       {
-        if (nokOwner)
-        {
-          formData.nokOwner = {
-            id: nokOwner.id,
-            label: nokOwner.text
-          };
-        }
-        else
-        {
-          formData.nokOwner = null;
-        }
+        formData.nokOwner = {
+          id: nokOwnerOptionEl.value,
+          label: nokOwnerOptionEl.label.trim()
+        };
+      }
+      else
+      {
+        formData.nokOwner = null;
       }
 
       if (this.options.editMode)
@@ -304,17 +338,37 @@ define([
         _.forEach(this.model.get('correctiveActions'), this.addAction, this);
       }
 
+      this.setUpInspectorSelect2();
       this.setUpNokOwnerSelect2();
       buttonGroup.toggle(this.$id('result'));
       this.findOrder();
       this.toggleRoleFields();
     },
 
+    setUpInspectorSelect2: function()
+    {
+      if (IS_ANDROID)
+      {
+        return;
+      }
+
+      this.$id('inspector')
+        .removeClass('form-control')
+        .select2()
+        .closest('.form-group')
+        .addClass('has-required-select2');
+    },
+
     setUpNokOwnerSelect2: function()
     {
-      setUpUserSelect2(this.$id('nokOwner'), {
-        allowClear: true,
-        textFormatter: function(user, name) { return name; }
+      if (IS_ANDROID)
+      {
+        return;
+      }
+
+      this.$id('nokOwner').removeClass('form-control').select2({
+        placeholder: ' ',
+        allowClear: true
       });
     },
 
