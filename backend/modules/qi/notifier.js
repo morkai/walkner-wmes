@@ -12,13 +12,14 @@ module.exports = function setUpQiNotifier(app, module)
 {
   const mailSender = app[module.config.mailSenderId];
   const mongoose = app[module.config.mongooseId];
+  const orgUnits = app[module.config.orgUnitsId];
   const User = mongoose.model('User');
   const QiKind = mongoose.model('QiKind');
   const QiErrorCategory = mongoose.model('QiErrorCategory');
 
   const EMAIL_URL_PREFIX = module.config.emailUrlPrefix;
 
-  const emailTemplateFile = __dirname + '/notifier.email.pl.ejs';
+  const emailTemplateFile = __dirname + '/nokOwner.email.pl.ejs';
   const renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
     cache: true,
     filename: emailTemplateFile,
@@ -56,24 +57,54 @@ module.exports = function setUpQiNotifier(app, module)
   function notifyNokOwner(result)
   {
     step(
-      function findRecipientStep()
+      function findNokOwnerStep()
       {
-        User.findById(result.nokOwner.id, {email: 1}).lean().exec(this.next());
+        User.findById(result.nokOwner.id).lean().exec(this.next());
       },
-      function prepareTemplateDataStep(err, user)
+      function findManagerStep(err, nokOwner)
       {
         if (err)
         {
           return this.skip(err);
         }
 
-        if (!user || !user.email)
+        if (!nokOwner || !nokOwner.email)
         {
           return this.skip();
         }
 
+        this.recipients = [nokOwner.email];
+
+        if (!nokOwner.orgUnitId)
+        {
+          return;
+        }
+
+        var orgUnit = orgUnits.getByTypeAndId(nokOwner.orgUnitType, nokOwner.orgUnitId);
+
+        if (!orgUnit)
+        {
+          return;
+        }
+
+        const division = nokOwner.orgUnitType === 'subdivision' ? orgUnit.division : orgUnit._id;
+
+        User.findOne({prodFunction: 'manager', orgUnitId: division}).lean().exec(this.next());
+      },
+      function prepareTemplateDataStep(err, manager)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (manager && manager.email)
+        {
+          this.recipients.push(manager.email);
+        }
+
         this.mailOptions = {
-          to: user.email,
+          to: this.recipients,
           subject: '[WMES] Przypisanie do wyniku inspekcji: ' + result.rid,
           html: ''
         };
@@ -95,7 +126,7 @@ module.exports = function setUpQiNotifier(app, module)
       {
         if (err)
         {
-          module.error("Failed to notify NOK owner about a result [%d]: %s", result.rid, err.message);
+          module.error("Failed to notify the NOK owner about a result [%d]: %s", result.rid, err.message);
         }
         else if (this.mailOptions)
         {
