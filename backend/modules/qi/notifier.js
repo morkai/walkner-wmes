@@ -48,7 +48,7 @@ module.exports = function setUpQiNotifier(app, module)
   {
     const result = message.model;
 
-    if (result.changes[result.changes.length - 1].data.nokOwner)
+    if (result.nokOwner && result.changes[result.changes.length - 1].data.nokOwner)
     {
       notifyNokOwner(result);
     }
