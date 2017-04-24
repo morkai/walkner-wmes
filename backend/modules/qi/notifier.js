@@ -40,7 +40,7 @@ module.exports = function setUpQiNotifier(app, module)
 
     if (result.nokOwner)
     {
-      notifyNokOwner(result.nokOwner);
+      notifyNokOwner(result);
     }
   }
 
