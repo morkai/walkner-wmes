@@ -29,7 +29,7 @@
   "PROPERTY:date": "Data",
   "PROPERTY:section": "Dział",
   "PROPERTY:observer": "Obserwator",
-  "PROPERTY:position": "Stanowisko",
+  "PROPERTY:position": "Obserwowane stanowisko",
   "PROPERTY:line": "Linia",
   "PROPERTY:creator": "Stworzone przez",
   "PROPERTY:updater": "Ostatnio zmienione przez",
