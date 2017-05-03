@@ -21,6 +21,12 @@ module.exports = function runZlf1Job(app, sapGuiModule, job, done)
       this.err = err;
       this.exitCode = exitCode;
       this.output = output;
+      this.empty = _.includes(output, 'No order numbers');
+
+      if (this.empty)
+      {
+        return;
+      }
 
       if (!_.includes(output, 'bytes transmitted')
         || _.isEmpty(job.sourceDestination)
@@ -58,13 +64,8 @@ module.exports = function runZlf1Job(app, sapGuiModule, job, done)
         return sapGuiModule.error("Failed to parse orders DAT files: %s", err.message);
       }
 
-      if (_.isEmpty(orders))
-      {
-        return;
-      }
-
       var filePath = path.join(job.outputPath, Math.floor(Date.now() / 1000) + '@' + job.outputFile);
-      var fileContents = JSON.stringify(orders);
+      var fileContents = JSON.stringify(orders || []);
 
       fs.writeFile(filePath, fileContents, this.next());
     },
@@ -73,6 +74,11 @@ module.exports = function runZlf1Job(app, sapGuiModule, job, done)
       if (err)
       {
         sapGuiModule.error("[zlf1] Failed to write orders JSON file: %s", err.message);
+      }
+
+      if (this.empty)
+      {
+        return;
       }
 
       var cmd = format('MOVE /Y "%s" "%s"', job.sourceDestination, job.targetDestination);

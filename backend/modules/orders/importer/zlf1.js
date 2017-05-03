@@ -142,6 +142,11 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
       },
       function upsertOrdersStep()
       {
+        if (this.order.length === 0)
+        {
+          return this.skip();
+        }
+
         module.debug("[%s] Upserting orders...", fileInfo.timeKey);
 
         var t = Date.now();
