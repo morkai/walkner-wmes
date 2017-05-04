@@ -62,6 +62,15 @@ define([
 
       row.className = this.get('mechOrder') || !this.get('sapTaktTime') ? '' : row.taktTimeOk ? 'success' : 'warning';
 
+      var orgUnitMrp = this.get('mrpControllers') || [];
+      var orderData = this.get('orderData');
+      var orderMrp = orderData && orderData.mrp;
+
+      if (orderMrp && orgUnitMrp.indexOf(orderMrp) === -1)
+      {
+        row.mrpControllers = orderMrp + ' <span style="text-decoration: line-through">' + row.mrpControllers + '</span>';
+      }
+
       return row;
     },
 

@@ -26,7 +26,9 @@ define([
       return rql.Query.fromObject({
         fields: {
           creator: 0,
-          losses: 0
+          losses: 0,
+          'orderData.bom': 0,
+          'orderData.documents': 0
         },
         sort: {
           startedAt: -1

@@ -181,6 +181,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
   prodShiftOrderSchema.index({prodFlow: 1, startedAt: -1});
   prodShiftOrderSchema.index({workCenter: 1, startedAt: -1});
   prodShiftOrderSchema.index({prodLine: 1, startedAt: -1});
+  prodShiftOrderSchema.index({'orderData.mrp': 1, startedAt: -1});
 
   prodShiftOrderSchema.pre('save', function(next)
   {
