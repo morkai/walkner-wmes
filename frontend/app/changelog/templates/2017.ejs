@@ -1,4 +1,40 @@
 <div class="hidden">
+  <h1>v0.110.0</h1>
+  <h2><%- time.format('2017-04-24', 'LL') %></h2>
+  <h3>Obserwacje zachowań</h3>
+  <ul>
+    <li>Poprawiono błąd umożliwiający dodanie pustej karty.</li>
+  </ul>
+  <h3>Inspekcja jakości</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający komentowanie użytkowników nie będącym inspektorami.</li>
+    <li>Poprawiono błąd umożliwiający zmianę wyniku z NOK na OK przez użytkowników nie będących inspektorami.</li>
+    <li>Poprawiono błąd powodujący niewysyłanie e-maili do wybranego właściciela niezgodności.</li>
+    <li>Zmieniono eksportowanie wyników tak, aby zawierało kolumnę 'Ilość niezgodnych w skontrolowanych'.</li>
+    <li>Zmieniono stronę szczegółów wyniku tak, aby 'Właściciel niezgodności - mistrz' nie był wyświetlany w wynikach OK.</li>
+    <li>Zmieniono formularz tak, aby Inspektorzy nie mogli zmieniać akcji korygujących.</li>
+    <li>Zmieniono pole 'Właściciel niezgodności - mistrz' tak, aby lista zawierała tylko użytkowników z Funkcją na produkcji
+      Mistrz.</li>
+    <li>Zmieniono uprawnienia do modułu tak, aby Liderzy, Mistrzowie oraz Kierownicy mogli przegladać wyniki inspekcji.
+      Dodatkowo Liderzy i wybrani Mistrzowie mogą zmieniać pola: Akcje natychmiastowe, Przyczyna źródłowa oraz Akcje korygujące.</li>
+    <li>Zmieniono powiadamianie o przypisaniu do wyniku inspekcji tak, aby powiadamiany był także Kierownik wydziału, w którym
+      znajduje się wybrany Mistrz.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Zmieniono filtr 'Nazwisko' tak, aby ignorował polskie znaki.</li>
+    <li>Dodano filtr 'Funkcja na produkcji'.</li>
+  </ul>
+  <h3>FTE</h3>
+  <ul>
+    <li>Zmieniono tworzenie nowych wpisów 'FTE (inne)' tak, aby dezaktywowane Wydziały były ignorowane.</li>
+  </ul>
+  <h3>Minuty dla Bezpieczeństwa</h3>
+  <ul>
+    <li>Dodano nowy moduł.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.109.0</h1>
   <h2><%- time.format('2017-04-17', 'LL') %></h2>
   <h3>Formatka operatora</h3>

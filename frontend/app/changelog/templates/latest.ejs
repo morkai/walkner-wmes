@@ -1,34 +1,26 @@
-<h1>v0.110.0</h1>
-<h2><%- time.format('2017-04-24', 'LL') %></h2>
+<h1>v0.111.0</h1>
+<h2><%- time.format('2017-05-07', 'LL') %></h2>
 <h3>Obserwacje zachowań</h3>
 <ul>
-  <li>Poprawiono błąd umożliwiający dodanie pustej karty.</li>
+  <li>Zmieniono pole 'Stanowisko' na 'Obserwowane stanowisko'.</li>
 </ul>
 <h3>Inspekcja jakości</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający komentowanie użytkowników nie będącym inspektorami.</li>
-  <li>Poprawiono błąd umożliwiający zmianę wyniku z NOK na OK przez użytkowników nie będących inspektorami.</li>
-  <li>Poprawiono błąd powodujący niewysyłanie e-maili do wybranego właściciela niezgodności.</li>
-  <li>Zmieniono eksportowanie wyników tak, aby zawierało kolumnę 'Ilość niezgodnych w skontrolowanych'.</li>
-  <li>Zmieniono stronę szczegółów wyniku tak, aby 'Właściciel niezgodności - mistrz' nie był wyświetlany w wynikach OK.</li>
-  <li>Zmieniono formularz tak, aby Inspektorzy nie mogli zmieniać akcji korygujących.</li>
-  <li>Zmieniono pole 'Właściciel niezgodności - mistrz' tak, aby lista zawierała tylko użytkowników z Funkcją na produkcji
-    Mistrz.</li>
-  <li>Zmieniono uprawnienia do modułu tak, aby Liderzy, Mistrzowie oraz Kierownicy mogli przegladać wyniki inspekcji.
-    Dodatkowo Liderzy i wybrani Mistrzowie mogą zmieniać pola: Akcje natychmiastowe, Przyczyna źródłowa oraz Akcje korygujące.</li>
-  <li>Zmieniono powiadamianie o przypisaniu do wyniku inspekcji tak, aby powiadamiany był także Kierownik wydziału, w którym
-    znajduje się wybrany Mistrz.</li>
+  <li>Poprawiono błąd wywalający serwer po dodaniu wyniku inspekcji z wybranym Właścicielem niezgodności.</li>
 </ul>
-<h3>Użytkownicy</h3>
+<h3>Zlecenia reszty działów</h3>
 <ul>
-  <li>Zmieniono filtr 'Nazwisko' tak, aby ignorował polskie znaki.</li>
-  <li>Dodano filtr 'Funkcja na produkcji'.</li>
+  <li>Zmieniono importowanie zleceń ZLF1 tak, aby zdarzenie pomyślnego importu było tworzone nawet wtedy, gdy lista
+    zleceń do zaimportowania była pusta.</li>
 </ul>
-<h3>FTE</h3>
+<h3>Dane produkcyjne > Zlecenia</h3>
 <ul>
-  <li>Zmieniono tworzenie nowych wpisów 'FTE (inne)' tak, aby dezaktywowane Wydziały były ignorowane.</li>
+  <li>Usunięto filtr 'Operacja'.</li>
+  <li>Zmieniono kolumnę 'Kontroler MRP' na liście tak, aby najpierw wyświetlany był MRP ze zlecenia
+    (MRP w jakim znajduje się linia jest przekreślone, jeżeli różni się od MRP zlecenia).</li>
+  <li>Dodano filtr 'Kontroler MRP zlecenia'.</li>
 </ul>
-<h3>Minuty dla Bezpieczeństwa</h3>
+<h3>Dokumentacja</h3>
 <ul>
-  <li>Dodano nowy moduł.</li>
+  <li>Dodano zarządzanie plikami dokumentacji z poziomu WMES.</li>
 </ul>

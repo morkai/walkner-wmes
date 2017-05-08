@@ -267,6 +267,30 @@ app/orderDocuments/assets/main.css
 ----------------
 app/orderDocuments/assets/main.css
 
+app/orderDocumentTree/assets/files.css
+----------------
+app/orderDocumentTree/assets/files.css
+
+app/orderDocumentTree/assets/folders.css
+----------------
+app/orderDocumentTree/assets/folders.css
+
+app/orderDocumentTree/assets/main.css
+----------------
+app/orderDocumentTree/assets/./path.css
+app/orderDocumentTree/assets/./folders.css
+app/orderDocumentTree/assets/./files.css
+app/orderDocumentTree/assets/./upload.css
+app/orderDocumentTree/assets/main.css
+
+app/orderDocumentTree/assets/path.css
+----------------
+app/orderDocumentTree/assets/path.css
+
+app/orderDocumentTree/assets/upload.css
+----------------
+app/orderDocumentTree/assets/upload.css
+
 app/orders/assets/main.css
 ----------------
 app/orders/assets/main.css
@@ -584,6 +608,7 @@ assets/../app/suggestions/assets/main.css
 assets/../app/behaviorObsCards/assets/main.css
 assets/../app/minutesForSafetyCards/assets/main.css
 assets/../app/orderDocumentClients/assets/main.css
+assets/../app/orderDocumentTree/assets/main.css
 assets/../app/opinionSurveys/assets/main.css
 assets/../app/opinionSurveyActions/assets/main.css
 assets/../app/opinionSurveyResponses/assets/main.css
@@ -837,6 +862,7 @@ app/orderStatuses/OrderStatusCollection.js
 app/data/orderStatuses.js
 app/orderStatuses/routes.js
 app/orderDocumentClients/routes.js
+app/orderDocumentTree/routes.js
 app/core/util/getShiftStartInfo.js
 app/pressWorksheets/PressWorksheet.js
 app/pressWorksheets/routes.js
