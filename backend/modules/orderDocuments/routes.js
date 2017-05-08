@@ -320,10 +320,9 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           return findLegacyDocumentFilePath(nc15, options, done);
         }
 
+        const orderTime = (order.sapCreatedAt || order.startDate || new Date()).getTime();
         const orderDate = order
-          ? moment.utc(
-              moment((order.sapCreatedAt || order.startDate || Date.now()).valueOf()
-            ).format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf()
+          ? moment.utc(moment(orderTime).format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf()
           : moment.utc().startOf('day').valueOf();
         let file = null;
 
