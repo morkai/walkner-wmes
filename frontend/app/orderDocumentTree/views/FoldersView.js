@@ -407,7 +407,9 @@ define([
 
       if ($folder.length)
       {
-        $folder.find('.orderDocumentTree-folders-label > span').text(folder.getLabel());
+        $folder
+          .find('> .orderDocumentTree-folders-item > .orderDocumentTree-folders-label > span')
+          .text(folder.getLabel());
       }
     },
 
