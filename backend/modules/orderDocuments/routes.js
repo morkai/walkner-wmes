@@ -370,7 +370,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           });
         }
 
-        if (err.code === 'ENOENT')
+        if (err && err.code === 'ENOENT')
         {
           return findLegacyDocumentFilePath(nc15, options, done);
         }
