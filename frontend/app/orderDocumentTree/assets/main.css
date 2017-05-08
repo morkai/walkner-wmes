@@ -1,0 +1,42 @@
+@import "./path.css";
+@import "./folders.css";
+@import "./files.css";
+@import "./upload.css";
+
+.orderDocumentTree-searchAction {
+  width: 175px;
+}
+.orderDocumentTree-searchAction .form-control {
+  font-family: monospace;
+}
+.orderDocumentTree-searchAction .form-control::-webkit-input-placeholder {
+  font-family: Arial, sans-serif;
+}
+.orderDocumentTree-contextMenu {
+  position: absolute;
+  z-index: 11;
+  min-width: 200px;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+.orderDocumentTree-contextMenu-item {
+  padding: 4px 8px;
+}
+.orderDocumentTree-contextMenu-item:hover {
+  background-color: #ffffd6;
+  cursor: pointer;
+}
+.orderDocumentTree-contextMenu-separator {
+  height: 1px;
+  background-color: #ddd;
+}
+.orderDocumentTree-contextMenu-separator:first-child,
+.orderDocumentTree-contextMenu-separator:last-child,
+.orderDocumentTree-contextMenu-separator + .orderDocumentTree-contextMenu-separator {
+  display: none;
+}
+.orderDocumentTree-contextMenu-item > .fa {
+  width: 14px;
+  text-align: center;
+}

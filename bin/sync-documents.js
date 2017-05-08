@@ -160,7 +160,8 @@ module.exports = function(output, done)
 
   dirs.on('file', function(fileName, dirPath, filePath, stats)
   {
-    let nc15 = fileName.match(/([0-9]{12,15})/)[1];
+    const matches = fileName.match(/([0-9]{15})/);
+    let nc15 = (matches || fileName.match(/([0-9]{12,15})/))[1];
 
     while (nc15.length < 15)
     {

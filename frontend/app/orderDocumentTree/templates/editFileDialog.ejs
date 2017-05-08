@@ -1,0 +1,37 @@
+<form class="orderDocumentTree-editFile" method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%= formMethod %>">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-nc15" class="control-label"><%- t('orderDocumentTree', 'files:nc15') %></label>
+    <p class="form-control-static"><%= model._id %></p>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-name" class="control-label"><%- t('orderDocumentTree', 'files:name') %></label>
+    <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" required autofocus>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-folders" class="control-label"><%- t('orderDocumentTree', 'files:folders') %></label>
+    <% folders.forEach(function(folder) { %>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" name="folders[]" value="<%- folder.id %>"> <%= folder.path %>
+      </label>
+    </div>
+    <% }) %>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-folders" class="control-label"><%- t('orderDocumentTree', 'files:files') %></label>
+    <% model.files.forEach(function(file, i) { %>
+    <div class="checkbox">
+      <label>
+        <input class="orderDocumentTree-editFile-checkbox" type="checkbox" name="files[<%- i %>].hash" value="<%- file.hash %>">
+        <input type="hidden" name="files[<%- i %>].type" value="application/pdf">
+        <input type="date" name="files[<%- i %>].date" class="form-control" required min="2000-01-01" max="<%- time.getMoment().startOf('day').add(1, 'year').format('YYYY-MM-DD') %>"><a class="btn btn-link" href="/orderDocuments/<%- model._id %>?pdf=1&hash=<%- file.hash %>" target="_blank" title="<%- t('orderDocumentTree', 'editFile:openFile') %>"><i class="fa fa-file-o"></i></a>
+      </label>
+    </div>
+    <% }) %>
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit"><%- t('orderDocumentTree', 'editFile:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('orderDocumentTree', 'editFile:cancel') %></button>
+  </div>
+</form>

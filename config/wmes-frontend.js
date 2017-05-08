@@ -143,7 +143,8 @@ exports.events = {
       'kaizen.*.deleted',
       'opinionSurveys.*.deleted',
       'qi.*.deleted',
-      'd8.*.deleted'
+      'd8.*.deleted',
+      'orderDocuments.tree.filePurged', 'orderDocuments.tree.folderPurged'
     ],
     error: [
       '*.syncFailed',
@@ -203,7 +204,8 @@ exports.pubsub = {
     'xiconf.results.**', 'xiconf.orders.**', 'xiconf.clients.**',
     'icpo.results.synced', 'orders.intake.synced',
     'orders.updated.*', 'orders.quantityDone.*',
-    'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*', 'orderDocuments.eto.synced',
+    'orderDocuments.tree.**', 'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
+    'orderDocuments.eto.synced',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',
     'suggestions.seen.*',
     'opinionSurveys.*.added', 'opinionSurveys.*.edited', 'opinionSurveys.*.deleted',
@@ -230,6 +232,7 @@ exports.mongoose = {
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',
     'order', 'mechOrder', 'emptyOrder', 'clipOrderCount', 'orderZlf1',
     'orderDocumentClient', 'orderDocumentStatus', 'orderDocumentName',
+    'orderDocumentFile', 'orderDocumentFolder', 'orderDocumentUpload',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan', 'dailyMrpPlan',
     'prodLogEntry', 'prodShift', 'prodShiftOrder', 'prodDowntime', 'pressWorksheet', 'prodChangeRequest',
     'prodDowntimeAlert', 'prodSerialNumber',
@@ -500,6 +503,7 @@ exports.orderDocuments = {
   importPath: DATA_PATH + '/attachments-input',
   cachedPath: DATA_PATH + '/order-documents/cached',
   convertedPath: DATA_PATH + '/order-documents/converted',
+  uploadedPath: DATA_PATH + '/order-documents/uploaded',
   etoPath: DATA_PATH + '/order-documents/eto',
   sejdaConsolePath: 'sejda-console'
 };

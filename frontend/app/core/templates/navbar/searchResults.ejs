@@ -127,6 +127,7 @@
 
   <% if (user.isAllowedTo() && results.fullNc15) { %>
   <li class="dropdown-header"><%- t('core', 'NAVBAR:SEARCH:fullNc15', {nc15: results.fullNc15}) %></li>
-  <li class="navbar-search-result"><a href="/orderDocuments/<%- results.fullNc15 %>" target="_blank"><%- t('core', 'NAVBAR:SEARCH:document') %></a></li>
+  <li class="navbar-search-result"><a href="#orderDocuments/tree?file=<%- results.fullNc15 %>"><%- t('core', 'NAVBAR:SEARCH:document') %></a></li>
+  <li class="navbar-search-result"><a href="/orderDocuments/<%- results.fullNc15 %>" target="_blank"><%- t('core', 'NAVBAR:SEARCH:documentFile') %></a></li>
   <% } %>
 </ul>

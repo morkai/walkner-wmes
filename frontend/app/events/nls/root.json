@@ -399,7 +399,11 @@
     "TYPE:d8.entries.deleted": "8D > Entries: deleted",
     "TEXT:d8.entries.deleted": "Deleted entry: <em>{model->rid}</em>",
     "TYPE:paintShop.orders.imported": "Paint shop > Order queue: import",
-    "TEXT:paintShop.orders.imported": "Added {insertCount, plural, one{1 new order} other{# new orders}} and modified {updateCount, plural, one{1 existing order} other{# existing orders}} for date {dateUtc}."
+    "TEXT:paintShop.orders.imported": "Added {insertCount, plural, one{1 new order} other{# new orders}} and modified {updateCount, plural, one{1 existing order} other{# existing orders}} for date {dateUtc}.",
+    "TYPE:orderDocuments.tree.filePurged": "Documentation > Files: deleted",
+    "TEXT:orderDocuments.tree.filePurged": "Deleted documentation file: <em>{file->_id}: {file->name}</em>",
+    "TYPE:orderDocuments.tree.folderPurged": "Documentation > Folders: deleted",
+    "TEXT:orderDocuments.tree.folderPurged": "Deleted documentation folder: <em>{folder->name}</em>"
   },
   "pl": true
 }

@@ -1,0 +1,7 @@
+<div class="orderDocumentTree-folders">
+  <ul id="<%- idPrefix %>-root" class="orderDocumentTree-folders-root">
+    <% rootFolders.forEach(function(rootFolder) { %>
+    <%- renderFolder(rootFolder) %>
+    <% }) %>
+  </ul>
+</div>

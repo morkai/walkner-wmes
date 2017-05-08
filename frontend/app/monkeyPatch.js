@@ -44,6 +44,13 @@ function(
     }
   };
 
+  $.fn.modal.Constructor.prototype.checkScrollbar = function()
+  {
+    this.bodyIsOverflowing = document.body.scrollHeight > document.documentElement.clientHeight
+      || $(document.body).css('overflow-y') === 'scroll';
+    this.scrollbarWidth = this.measureScrollbar();
+  };
+
   var $body = $(document.body);
 
   $.fn.select2.defaults.dropdownContainer = function(select2)

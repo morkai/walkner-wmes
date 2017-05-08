@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title><%- meta.title || nc15 %></title>
+  <title><%- nc15 %>: <%= name || meta.title %></title>
   <link rel="stylesheet" href="/assets/wmes-docs-viewer.css">
   <style>
     * {
@@ -128,7 +128,7 @@
 <div>
   <ul id="images">
     <% for (var p = 1; p <= meta.pageCount; ++p) { %>
-    <li><img id="image" src="/orderDocuments/<%- nc15 %>/<%- p %>" alt="<%- meta.title %>"></li>
+    <li><img id="image" src="/orderDocuments/<%- nc15 %>/<%- p %>?hash=<%- hash %>" alt="<%- p %>"></li>
     <% } %>
   </ul>
 </div>
@@ -154,6 +154,7 @@
 </form>
 <script>
 var NC15 = '<%- nc15 %>';
+var HASH = '<%- hash %>';
 var PAGE_COUNT = +'<%- meta.pageCount %>';
 </script>
 <script src="/vendor/viewerjs/viewer.js"></script>

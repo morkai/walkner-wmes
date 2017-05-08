@@ -111,6 +111,7 @@
   "settings:documents:path": "Ścieżka do katalogu z plikami dokumentów",
   "settings:documents:extra": "Dodatkowe dokumenty",
   "settings:documents:remoteServer": "Serwer wyszukiwarki dokumentów",
+  "settings:documents:useCatalog": "Używaj katalogu WMES przy serwowaniu plików dokumentów",
 
   "jumpList:details": "Szczegóły",
   "jumpList:operations": "Operacje",

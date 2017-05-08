@@ -17,6 +17,12 @@
       </div>
     </div>
     <div class="panel-body" data-tab="documents">
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-documents-useCatalog" name="orders.documents.useCatalog" type="checkbox" value="true">
+          <%- t('orders', 'settings:documents:useCatalog') %>
+        </label>
+      </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-documents-remoteServer"><%- t('orders', 'settings:documents:remoteServer') %></label>
         <input id="<%- idPrefix %>-documents-remoteServer" class="form-control" name="orders.documents.remoteServer" type="text" data-change-delay="0">

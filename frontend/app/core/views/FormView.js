@@ -142,7 +142,12 @@ define([
 
     handleFailure: function()
     {
-      this.showErrorMessage(this.options.failureText);
+      this.showErrorMessage(this.getFailureText());
+    },
+
+    getFailureText: function()
+    {
+      return this.options.failureText;
     },
 
     showErrorMessage: function(text)

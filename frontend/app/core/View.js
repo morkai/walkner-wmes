@@ -186,7 +186,7 @@ function(
       id += this.idPrefix + '-';
     }
 
-    return this.$(id + idSuffix);
+    return $(id + idSuffix);
   };
 
   return View;

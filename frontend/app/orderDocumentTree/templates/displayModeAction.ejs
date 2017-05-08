@@ -1,0 +1,8 @@
+<div class="btn-group" data-toggle="buttons">
+  <label class="btn btn-default <%- displayMode === 'tiles' ? 'active' : '' %>" title="<%- t('orderDocumentTree', 'displayMode:tiles') %>">
+    <input type="radio" name="displayMode" value="tiles" <%- displayMode === 'tiles' ? 'checked' : '' %>> <i class="fa fa-th"></i>
+  </label>
+  <label class="btn btn-default <%- displayMode === 'list' ? 'active' : '' %>" title="<%- t('orderDocumentTree', 'displayMode:list') %>">
+    <input type="radio" name="displayMode" value="list" <%- displayMode === 'list' ? 'checked' : '' %>> <i class="fa fa-th-list"></i>
+  </label>
+</div>

@@ -1,0 +1,10 @@
+<div>
+  <%- t('orderDocumentTree', 'removeFile:message:' + (multiple ? 'multiple' : 'single'), {nc15: nc15}) %>
+  <div class="form-actions">
+    <button class="btn btn-danger dialog-answer" type="button" data-answer="remove"><%- t('orderDocumentTree', 'removeFile:remove') %></button>
+    <% if (multiple) { %>
+    <button class="btn btn-primary dialog-answer" type="button" data-answer="unlink"><%- t('orderDocumentTree', 'removeFile:unlink') %></button>
+    <% } %>
+    <button class="btn btn-link cancel" type="button"><%- t('orderDocumentTree', 'removeFile:cancel') %></button>
+  </div>
+</div>

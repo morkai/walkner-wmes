@@ -25,15 +25,6 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     name: '',
     documents: {}
   };
-  // TODO: remove
-  var W_LINE = {
-    'W-1~c': true,
-    'W-2~c': true,
-    'W1_SM-12_1~c': true,
-    'W1_SM-12_2~c': true,
-    'W1_SM-13_1~c': true,
-    'W1_SM-13_2~c': true
-  };
 
   module.getClients = function()
   {
@@ -137,11 +128,6 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       || _.isEmpty(newProdLineId))
     {
       return;
-    }
-
-    if (W_LINE[newProdLineId])
-    {
-      newProdLineId = newProdLineId.split('~')[0];
     }
 
     var currentClient = clients[newClientId];

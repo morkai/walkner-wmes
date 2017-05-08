@@ -1,0 +1,25 @@
+<div class="orderDocumentTree-path">
+  <% if (searchPhrase) { %>
+  <span class="orderDocumentTree-path-item">
+    <span class="orderDocumentTree-path-label"><%- t('orderDocumentTree', 'path:searchResults', {searchPhrase: searchPhrase}) %></span>
+  </span>
+  <% } else { %>
+  <span class="orderDocumentTree-path-item" data-folder-id="null">
+    <span class="orderDocumentTree-path-dropdown">
+      <i class="fa fa-chevron-right"></i>
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </span>
+  <% path.forEach(function(item) { %>
+  <span class="orderDocumentTree-path-item" data-folder-id="<%- item.id %>">
+    <span class="orderDocumentTree-path-label"><%= item.label %></span>
+    <% if (item.children) { %>
+    <span class="orderDocumentTree-path-dropdown">
+      <i class="fa fa-chevron-right"></i>
+      <i class="fa fa-chevron-down"></i>
+    </span>
+    <% } %>
+  </span>
+  <% }) %>
+  <% } %>
+</div>

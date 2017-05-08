@@ -1,0 +1,52 @@
+<% if (sourceFolder) { %>
+<div class="orderDocumentTree-contextMenu-item" data-action="<%- sourceFolder.expanded ? 'collapseFolder' : 'expandFolder' %>" data-folder-id="<%- sourceFolder.id %>">
+  <i class="fa fa-<%- sourceFolder.expanded ? 'angle-up' : 'angle-down' %>"></i>
+  <span><%- t('orderDocumentTree', 'contextMenu:' + (sourceFolder.expanded ? 'collapseFolder' : 'expandFolder')) %></span>
+</div>
+<% } %>
+<div class="orderDocumentTree-contextMenu-item" data-action="expandFolders" data-folder-id="<%- sourceFolder ? sourceFolder.id : '' %>">
+  <i class="fa fa-angle-double-down"></i>
+  <span><%- t('orderDocumentTree', 'contextMenu:expandFolders' + (sourceFolder ? '' : ':all')) %></span>
+</div>
+<div class="orderDocumentTree-contextMenu-item" data-action="collapseFolders" data-folder-id="<%- sourceFolder ? sourceFolder.id : '' %>">
+  <i class="fa fa-angle-double-up"></i>
+  <span><%- t('orderDocumentTree', 'contextMenu:collapseFolders' + (sourceFolder ? '' : ':all')) %></span>
+</div>
+<div class="orderDocumentTree-contextMenu-separator"></div>
+<% if (canManage) { %>
+<% if (sourceFolder && !isTrash) { %>
+<div class="orderDocumentTree-contextMenu-item" data-action="cutFolder" data-folder-id="<%- sourceFolder.id %>">
+  <i class="fa fa-cut"></i>
+  <span><%- t('orderDocumentTree', 'contextMenu:cutFolder', {folder: sourceFolder.label}) %></span>
+</div>
+<% if (isRecoverable) { %>
+<div class="orderDocumentTree-contextMenu-item" data-action="recoverFolder" data-folder-id="<%- sourceFolder.id %>">
+  <i class="fa fa-undo"></i>
+  <span><%- t('orderDocumentTree', 'contextMenu:recoverFolder') %></span>
+</div>
+<% } %>
+<% } %>
+<% if (cutFolder && !isInTrash) { %>
+<div class="orderDocumentTree-contextMenu-item" data-action="moveFolder" data-from-folder-id="<%- cutFolder.id %>" data-to-folder-id="<%- sourceFolder ? sourceFolder.id : '' %>">
+  <i class="fa fa-paste"></i>
+  <span><%- t('orderDocumentTree', 'contextMenu:moveFolder', {folder: cutFolder.label}) %></span>
+</div>
+<% } %>
+<% if (!isInTrash) { %>
+<div class="orderDocumentTree-contextMenu-separator"></div>
+<div class="orderDocumentTree-contextMenu-item" data-action="newFolder" data-folder-id="<%- sourceFolder ? sourceFolder.id : '' %>">
+  <i class="fa fa-plus"></i>
+  <span><%- t('orderDocumentTree', 'contextMenu:' + (sourceFolder ? 'newSubFolder' : 'newFolder')) %></span>
+</div>
+<% if (sourceFolder) { %>
+<div class="orderDocumentTree-contextMenu-item" data-action="renameFolder" data-folder-id="<%- sourceFolder.id %>">
+  <i class="fa fa-pencil"></i>
+  <span><%- t('orderDocumentTree', 'contextMenu:renameFolder') %></span>
+</div>
+<div class="orderDocumentTree-contextMenu-item" data-action="removeFolder" data-folder-id="<%- sourceFolder.id %>">
+  <i class="fa fa-remove"></i>
+  <span><%- t('orderDocumentTree', 'contextMenu:removeFolder') %></span>
+</div>
+<% } %>
+<% } %>
+<% } %>

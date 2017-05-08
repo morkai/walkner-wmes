@@ -1,0 +1,20 @@
+<li class="orderDocumentTree-folders-folder <%- selected ? 'is-selected' : '' %> <%- expanded ? 'is-expanded' : '' %> <%- cut ? 'is-cut' : '' %> <%- children.length ? 'has-children' : 'has-no-children' %> <%- isNew ? 'is-new' : '' %> <%- isEditing ? 'is-editing' : '' %>" data-folder-id="<%- id %>">
+  <span class="orderDocumentTree-folders-item" title="<%= label %>">
+    <span class="orderDocumentTree-folders-toggle">
+      <i class="fa fa-chevron-right"></i>
+      <i class="fa fa-chevron-down"></i>
+    </span>
+    <% if (isEditing) { %>
+    <input class="form-control orderDocumentTree-folders-editor" type="text" value="<%= label %>" <% isNew ? '' : 'required' %> placeholder="<%- isNew ? t('orderDocumentTree', 'folders:newFolder:placeholder') : '' %>">
+    <% } %>
+    <span class="orderDocumentTree-folders-label">
+      <i class="fa fa-cut"></i>
+      <span><%= label %></span>
+    </span>
+  </span>
+  <ul class="orderDocumentTree-folders-children">
+    <% children.forEach(function(childFolder) { %>
+    <%- renderFolder(childFolder) %>
+    <% }) %>
+  </ul>
+</li>

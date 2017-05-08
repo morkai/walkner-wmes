@@ -115,6 +115,7 @@
   "NAVBAR:XICONF:HID_LAMPS": "Oprawy HID",
   "NAVBAR:XICONF:COMPONENT_WEIGHTS": "Wagi komponentów",
   "NAVBAR:DOCUMENTS": "Dokumentacja",
+  "NAVBAR:DOCUMENTS:TREE": "Dokumenty",
   "NAVBAR:DOCUMENTS:CLIENTS": "Klienci",
   "NAVBAR:DOCUMENTS:SETTINGS": "Ustawienia",
   "NAVBAR:VENDORS": "Dostawcy",
@@ -232,7 +233,8 @@
   "NAVBAR:SEARCH:hourlyPlans": "lista planów godzinowych",
   "NAVBAR:SEARCH:hourlyPlan": "plan godzinowy",
   "NAVBAR:SEARCH:prodShifts": "lista zmian produkcyjnych",
-  "NAVBAR:SEARCH:document": "plik dokumentacji",
+  "NAVBAR:SEARCH:document": "dokument",
+  "NAVBAR:SEARCH:documentFile": "plik dokumentacji",
 
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
   "ACTION_FORM:BUTTON:delete": "Usuń",

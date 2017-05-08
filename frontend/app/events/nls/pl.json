@@ -398,5 +398,9 @@
   "TYPE:d8.entries.deleted": "8D > Zgłoszenia: usunięcie",
   "TEXT:d8.entries.deleted": "Usunięto zgłoszenie: <em>{model->rid}</em>",
   "TYPE:paintShop.orders.imported": "Malarnia > Kolejka zleceń: import",
-  "TEXT:paintShop.orders.imported": "Dodano {insertCount, plural, one{1 nowe zlecenie} few{# nowe zlecenia} other{# nowych zleceń}} i zmodyfikowano {updateCount, plural, one{1 istniejące zlecenie} few{# istniejące zlecenia} other{# istniejących zleceń}} dla daty {dateUtc}."
+  "TEXT:paintShop.orders.imported": "Dodano {insertCount, plural, one{1 nowe zlecenie} few{# nowe zlecenia} other{# nowych zleceń}} i zmodyfikowano {updateCount, plural, one{1 istniejące zlecenie} few{# istniejące zlecenia} other{# istniejących zleceń}} dla daty {dateUtc}.",
+  "TYPE:orderDocuments.tree.filePurged": "Dokumentacja > Pliki: usunięcie",
+  "TEXT:orderDocuments.tree.filePurged": "Usunięto dokument: <em>{file->_id}: {file->name}</em>",
+  "TYPE:orderDocuments.tree.folderPurged": "Dokumentacja > Katalogi: usunięcie",
+  "TEXT:orderDocuments.tree.folderPurged": "Usunięto katalog dokumentów: <em>{folder->name}</em>"
 }

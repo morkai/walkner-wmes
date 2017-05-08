@@ -2,34 +2,38 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var _ = require('lodash');
-var fresh = require('fresh');
-var step = require('h5.step');
+const path = require('path');
+const fs = require('fs');
+const _ = require('lodash');
+const fresh = require('fresh');
+const step = require('h5.step');
+const moment = require('moment');
+const multer = require('multer');
 
 module.exports = function setUpOrderDocumentsRoutes(app, module)
 {
-  var express = app[module.config.expressId];
-  var userModule = app[module.config.userId];
-  var updaterModule = app[module.config.updaterId];
-  var orgUnits = app[module.config.orgUnitsId];
-  var mongoose = app[module.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var OrderDocumentName = mongoose.model('OrderDocumentName');
-  var OrderDocumentClient = mongoose.model('OrderDocumentClient');
-  var License = mongoose.model('License');
+  const express = app[module.config.expressId];
+  const userModule = app[module.config.userId];
+  const updaterModule = app[module.config.updaterId];
+  const orgUnits = app[module.config.orgUnitsId];
+  const mongoose = app[module.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const OrderDocumentFile = mongoose.model('OrderDocumentFile');
+  const OrderDocumentFolder = mongoose.model('OrderDocumentFolder');
+  const OrderDocumentName = mongoose.model('OrderDocumentName');
+  const OrderDocumentClient = mongoose.model('OrderDocumentClient');
+  const License = mongoose.model('License');
 
-  var SPECIAL_DOCUMENTS = {
+  const SPECIAL_DOCUMENTS = {
     BOM: handleBomDocument,
     ETO: handleEtoDocument
   };
 
-  var canView = userModule.auth('DOCUMENTS:VIEW');
-  var canViewLocal = userModule.auth('LOCAL', 'DOCUMENTS:VIEW');
-  var canManage = userModule.auth('DOCUMENTS:MANAGE');
+  const canView = userModule.auth('DOCUMENTS:VIEW');
+  const canViewLocal = userModule.auth('LOCAL', 'DOCUMENTS:VIEW');
+  const canManage = userModule.auth('DOCUMENTS:MANAGE');
 
-  var nc15ToFreshHeaders = {};
+  const nc15ToFreshHeaders = {};
 
   express.get('/documents', showIndexRoute);
   express.post('/documents', authClientRoute);
@@ -49,6 +53,37 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     canManage,
     express.crud.deleteRoute.bind(null, app, OrderDocumentClient)
   );
+
+  express.post('/orderDocuments/tree', canManage, manageTreeRoute);
+  express.post(
+    '/orderDocuments/uploads',
+    canManage,
+    multer({
+      storage: multer.diskStorage({
+        destination: path.join(module.config.uploadedPath, '.tmp')
+      }),
+      fileFilter: function(req, file, done)
+      {
+        done(null, file.mimetype === 'application/pdf' && /\.pdf$/i.test(file.originalname));
+      }
+    }).single('file'),
+    function(req, res, next)
+    {
+      if (req.file)
+      {
+        res.send(req.file.filename);
+      }
+      else
+      {
+        next(app.createError('INVALID_FILE', 400));
+      }
+    }
+  );
+  express.get('/orderDocuments/folders', canView, express.crud.browseRoute.bind(null, app, OrderDocumentFolder));
+  express.get('/orderDocuments/folders/:id', canView, express.crud.readRoute.bind(null, app, OrderDocumentFolder));
+  express.get('/orderDocuments/files', canView, express.crud.browseRoute.bind(null, app, OrderDocumentFile));
+  express.get('/orderDocuments/files/:id', canView, express.crud.readRoute.bind(null, app, OrderDocumentFile));
+  express.get('/orderDocuments/names', canView, express.crud.browseRoute.bind(null, app, OrderDocumentName));
 
   express.get('/orders/:orderNo/documents', canViewLocal, function(req, res, next)
   {
@@ -70,7 +105,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   express.head('/orderDocuments/:nc15', canViewLocal, function(req, res, next)
   {
-    var nc15 = req.params.nc15;
+    const nc15 = req.params.nc15;
 
     if (SPECIAL_DOCUMENTS[nc15])
     {
@@ -79,7 +114,10 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
     module.checkRemoteServer(nc15);
 
-    findDocumentFilePath(nc15, {forcePdf: true, includeName: !!req.query.name}, function(err, results)
+    const orderNo = /^[0-9]{9}$/.test(req.query.order) ? req.query.order : null;
+    const hash = /^[a-f0-9]{32}$/.test(req.query.hash) ? req.query.hash : null;
+
+    findDocumentFilePath(nc15, {orderNo, hash, forcePdf: true, includeName: !!req.query.name}, function(err, results)
     {
       if (err)
       {
@@ -99,24 +137,27 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   express.get('/orderDocuments/:nc15', canViewLocal, function(req, res, next)
   {
-    var nc15 = req.params.nc15;
+    const nc15 = req.params.nc15;
 
     if (SPECIAL_DOCUMENTS[nc15])
     {
       return SPECIAL_DOCUMENTS[nc15](req, res, next);
     }
 
-    var freshHeaders = nc15ToFreshHeaders[nc15];
+    const orderNo = /^[0-9]{9}$/.test(req.query.order) ? req.query.order : null;
+    const freshHeaders = nc15ToFreshHeaders[nc15] && nc15ToFreshHeaders[nc15][orderNo];
 
-    if (freshHeaders && fresh(req.headers, freshHeaders))
+    if (freshHeaders && fresh(req.headers, freshHeaders.headers))
     {
-      res.set(freshHeaders);
+      res.set(freshHeaders.headers);
       res.sendStatus(304);
 
       return;
     }
 
-    findDocumentFilePath(nc15, {forcePdf: !!req.query.pdf, includeName: false}, function(err, results)
+    const hash = /^[a-f0-9]{32}$/.test(req.query.hash) ? req.query.hash : null;
+
+    findDocumentFilePath(nc15, {orderNo, hash, forcePdf: !!req.query.pdf, includeName: false}, function(err, results)
     {
       if (err)
       {
@@ -132,7 +173,9 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       {
         return res.render('orderDocuments:viewer', {
           nc15: nc15,
-          meta: results.meta
+          hash: results.hash,
+          meta: results.meta,
+          name: results.name
         });
       }
 
@@ -143,9 +186,20 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           return next(err);
         }
 
-        nc15ToFreshHeaders[nc15] = _.pick(res._headers, ['etag', 'last-modified', 'cache-control']);
+        if (!nc15ToFreshHeaders[nc15])
+        {
+          nc15ToFreshHeaders[nc15] = {};
+        }
 
-        setTimeout(function() { delete nc15ToFreshHeaders[nc15]; }, 60 * 1000);
+        if (nc15ToFreshHeaders[nc15][orderNo])
+        {
+          clearTimeout(nc15ToFreshHeaders[nc15][orderNo].timer);
+        }
+
+        nc15ToFreshHeaders[nc15][orderNo] = {
+          headers: _.pick(res._headers, ['etag', 'last-modified', 'cache-control']),
+          timer: setTimeout(() => delete nc15ToFreshHeaders[nc15][orderNo], 60 * 1000)
+        };
       });
     });
   });
@@ -153,7 +207,9 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   express.get('/orderDocuments/:nc15/:page', function(req, res, next)
   {
     const nc15 = req.params.nc15;
-    const freshKey = `${nc15}_${parseInt(req.params.page, 10)}.webp`;
+    const page = parseInt(req.params.page, 10);
+    const hash = /^[a-f0-9]{32}$/.test(req.query.hash) ? req.query.hash : '';
+    const freshKey = `${nc15}_${hash}_${page}`;
     const freshHeaders = nc15ToFreshHeaders[freshKey];
 
     if (freshHeaders && fresh(req.headers, freshHeaders))
@@ -164,7 +220,12 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return;
     }
 
-    res.sendFile(path.join(module.config.convertedPath, nc15, freshKey), {maxAge: 60 * 1000}, function(err)
+    const fileName = `${nc15}_${page}.webp`;
+    const filePath = hash
+      ? path.join(module.config.uploadedPath, nc15, hash, fileName)
+      : path.join(module.config.convertedPath, nc15, fileName);
+
+    res.sendFile(filePath, {maxAge: 60 * 1000}, function(err)
     {
       if (err)
       {
@@ -221,6 +282,107 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return done(app.createError('INVALID_NC15', 400));
     }
 
+    if (!module.settings.useCatalog && !options.hash)
+    {
+      return findLegacyDocumentFilePath(nc15, options, done);
+    }
+
+    step(
+      function()
+      {
+        OrderDocumentFile.findById(nc15, {name: 1, files: 1}).lean().exec(this.parallel());
+
+        if (options.orderNo)
+        {
+          Order.findById(options.orderNo, {sapCreatedAt: 1}).lean().exec(this.parallel());
+        }
+      },
+      function(err, orderDocumentFile, order)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        if (!orderDocumentFile || _.isEmpty(orderDocumentFile.files))
+        {
+          return findLegacyDocumentFilePath(nc15, options, done);
+        }
+
+        const orderDate = order
+          ? moment.utc(moment(order.sapCreatedAt.getTime()).format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf()
+          : moment.utc().startOf('day').valueOf();
+        let file = null;
+
+        if (options.hash)
+        {
+          file = _.find(orderDocumentFile.files, f => f.hash === options.hash);
+        }
+        else
+        {
+          file = _.find(orderDocumentFile.files, f => orderDate >= f.date.getTime());
+        }
+
+        if (!file)
+        {
+          return findLegacyDocumentFilePath(nc15, options, done);
+        }
+
+        this.hash = file.hash;
+        this.name = orderDocumentFile.name;
+        this.filePath = path.join(
+          module.config.uploadedPath,
+          nc15,
+          file.hash,
+          options.forcePdf ? `${nc15}.pdf` : 'meta.json'
+        );
+
+        fs.stat(this.filePath, this.parallel());
+
+        if (!options.forcePdf)
+        {
+          fs.readFile(this.filePath, 'utf8', this.parallel());
+        }
+      },
+      function(err, stats, metaJson)
+      {
+        const meta = tryJsonParse(metaJson);
+
+        if (meta || (stats && stats.isFile()))
+        {
+          return done(null, {
+            filePath: this.filePath,
+            source: 'remote',
+            meta: options.forcePdf ? null : meta,
+            name: this.name,
+            hash: this.hash
+          });
+        }
+
+        if (err.code === 'ENOENT')
+        {
+          return findLegacyDocumentFilePath(nc15, options, done);
+        }
+
+        done(err);
+      }
+    );
+  }
+
+  function tryJsonParse(json)
+  {
+    try
+    {
+      return JSON.parse(json);
+    }
+    catch (err)
+    {
+      return null;
+    }
+  }
+
+  function findLegacyDocumentFilePath(nc15, options, done)
+  {
     if (_.isEmpty(module.settings.path))
     {
       return done(app.createError('NO_PATH_SETTING', 503));
@@ -276,7 +438,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
             filePath: convertedPath,
             source: cachedStats ? 'search' : 'remote',
             meta: meta,
-            name: name
+            name: name,
+            hash: ''
           });
         }
 
@@ -286,7 +449,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
             filePath: cachedFilePath,
             source: 'search',
             meta: null,
-            name: name
+            name: name,
+            hash: ''
           });
         }
 
@@ -296,7 +460,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
             filePath: localFilePath,
             source: 'remote',
             meta: null,
-            name: name
+            name: name,
+            hash: ''
           });
         }
 
@@ -473,4 +638,142 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       }
     );
   }
+
+  function manageTreeRoute(req, res, next)
+  {
+    const action = req.body.action;
+
+    if (!_.isString(action) || !/^[a-zA-Z0-9]{1,30}$/.test(action))
+    {
+      return next(app.createError('INVALID_ACTION', 400));
+    }
+
+    if (!_.isFunction(module.tree[action]))
+    {
+      return next(app.createError('UNKNOWN_ACTION', 400));
+    }
+
+    const user = userModule.createUserInfo(req.session.user, req);
+
+    module.tree[action](req.body.params, user, function(err)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.sendStatus(204);
+    });
+  }
+
+  express.get('/importTree', function(req, res, next)
+  {
+    if (module.importing)
+    {
+      return next(app.createError('IMPORTING'));
+    }
+
+    module.importing = true;
+
+    step(
+      function()
+      {
+        OrderDocumentName.find().lean().exec(this.next());
+      },
+      function(err, names)
+      {
+        this.documentNames = {};
+
+        names.forEach(d => this.documentNames[d._id] = d.name);
+
+        OrderDocumentFolder.remove({}, this.parallel());
+        OrderDocumentFile.remove({}, this.parallel());
+      },
+      function()
+      {
+        const uuid = require('node-uuid');
+        const map = JSON.parse(require('fs').readFileSync('F:/Downloads/sync-documents.json', 'utf8'));
+        const foldersToCreate = {};
+        const filesToCreate = [];
+        const documentNames = this.documentNames;
+
+        Object.keys(map).forEach(function(nc15)
+        {
+          const path = map[nc15].replace('\\\\code1\\plrketchr8-box1\\Dokumentacja.technologiczna\\', '');
+          const folders = path.split('\\');
+          const file = folders.pop();
+          let folderPath = '';
+
+          folders.forEach(function(folderName)
+          {
+            folderName = folderName.replace('-=- ', '');
+
+            if (!/^[0-9]+$/.test(folderName))
+            {
+              folderName = folderName
+                .replace(/^[0-9]{1,3}[^A-Za-z0-9]*/, '');
+            }
+
+            const parent = foldersToCreate[folderPath];
+
+            folderPath += folderName + '/';
+
+            if (!foldersToCreate[folderPath])
+            {
+              foldersToCreate[folderPath] = {
+                _id: uuid.v4().toUpperCase(),
+                name: folderName,
+                parent: parent ? parent._id : null,
+                children: []
+              };
+
+              if (parent)
+              {
+                parent.children.push(foldersToCreate[folderPath]._id);
+              }
+            }
+          });
+
+          filesToCreate.push({
+            _id: nc15,
+            name: documentNames[nc15] || file.replace('.pdf', '').replace(nc15, '').trim() || nc15,
+            folders: [foldersToCreate[folderPath]._id],
+            files: []
+          });
+        });
+
+        this.folders = _.values(foldersToCreate);
+        this.files = filesToCreate;
+
+        setImmediate(this.next());
+      },
+      function()
+      {
+        OrderDocumentFolder.collection.insert(this.folders, this.next());
+      },
+      function(err)
+      {
+        if (err)
+        {
+          module.error(err.message);
+        }
+
+        OrderDocumentFile.collection.insert(this.files, this.next());
+      },
+      function(err)
+      {
+        if (err)
+        {
+          module.error(err.message);
+        }
+
+        module.importing = false;
+
+        res.json({
+          folders: this.folders,
+          files: this.files
+        });
+      }
+    );
+  });
 };

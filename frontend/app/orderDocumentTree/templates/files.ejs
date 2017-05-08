@@ -1,0 +1,32 @@
+<div class="orderDocumentTree-files is-<%- displayMode %> <%- folders.length ? 'has-folders' : 'has-no-folders' %>">
+  <div id="<%- idPrefix %>-folders" class="orderDocumentTree-files-items">
+    <% folders.forEach(function(folder) { %>
+    <% include ./filesFolder.ejs %>
+    <% }) %>
+  </div>
+  <div id="<%- idPrefix %>-files" class="orderDocumentTree-files-items">
+    <% if (files.length === 0 && folders.length === 0) { %>
+    <p><%- t('orderDocumentTree', 'files:' + (searchPhrase ? 'noResults' : 'empty')) %></p>
+    <% } %>
+    <% files.forEach(function(file) { %>
+    <% include ./filesFile.ejs %>
+    <% }) %>
+  </div>
+  <div id="<%- idPrefix %>-preview" class="orderDocumentTree-files-preview hidden">
+    <div class="orderDocumentTree-files-preview-actions">
+      <i class="fa fa-3x fa-file-o"></i>
+      <% if (user.isAllowedTo('DOCUMENTS:MANAGE')) { %>
+      <button id="<%- idPrefix %>-recoverFile" class="btn btn-default" data-action="recoverFile" title="<%- t('orderDocumentTree', 'files:recover') %>"><i class="fa fa-undo"></i></button>
+      <button id="<%- idPrefix %>-editFile" class="btn btn-default" data-action="editFile" title="<%- t('orderDocumentTree', 'files:edit') %>"><i class="fa fa-edit"></i></button>
+      <button id="<%- idPrefix %>-removeFile" class="btn btn-default" data-action="removeFile" title="<%- t('orderDocumentTree', 'files:remove') %>"><i class="fa fa-remove"></i></button>
+      <% } %>
+    </div>
+    <dl class="orderDocumentTree-files-preview-props">
+      <% ['nc15', 'name', 'folders', 'files'].forEach(function(prop) { %>
+      <dt><%- t('orderDocumentTree', 'files:' + prop) %></dt>
+      <dd data-prop="<%- prop %>"></dd>
+      <% }) %>
+    </dl>
+    <i id="<%- idPrefix %>-closePreview" class="fa fa-remove" title="<%- t('orderDocumentTree', 'files:close') %>"></i>
+  </div>
+</div>

@@ -1,0 +1,5 @@
+<div class="orderDocumentTree-folderSelector" data-parent-folder-id="<%- parentFolderId %>">
+  <% folders.forEach(function(folder) { %>
+  <div class="orderDocumentTree-folderSelector-item" data-folder-id="<%- folder.id %>"><%= folder.label %></div>
+  <% }) %>
+</div>

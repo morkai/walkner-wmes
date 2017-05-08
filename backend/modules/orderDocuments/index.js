@@ -1,12 +1,14 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var setUpRoutes = require('./routes');
-var setUpCommands = require('./commands');
-var checkRemoteServer = require('./checkRemoteServer');
+const _ = require('lodash');
+const moment = require('moment');
+const setUpRoutes = require('./routes');
+const setUpCommands = require('./commands');
+const setUpTree = require('./tree');
+const setUpConverter = require('./converter');
+const checkRemoteServer = require('./checkRemoteServer');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -19,8 +21,12 @@ exports.DEFAULT_CONFIG = {
   productionId: 'production',
   cachedPath: './order-documents/cached',
   convertedPath: './order-documents/converted',
+  uploadedPath: './order-documents/uploaded',
   etoPath: './order-documents/eto',
-  sejdaConsolePath: 'sejda-console'
+  sejdaConsolePath: 'sejda-console',
+  exiftoolExe: 'exiftool',
+  pdfboxAppJar: 'pdfbox-app-2.0.3.jar',
+  cwebpExe: 'cwebp'
 };
 
 exports.start = function startOrderDocumentsModule(app, module)
@@ -51,6 +57,20 @@ exports.start = function startOrderDocumentsModule(app, module)
       module.config.productionId
     ],
     setUpCommands.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId
+    ],
+    setUpTree.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId
+    ],
+    setUpConverter.bind(null, app, module)
   );
 
   app.onModuleReady(
@@ -88,9 +108,9 @@ exports.start = function startOrderDocumentsModule(app, module)
 
   app.broker.subscribe('settings.updated.orders.documents.**', function(message)
   {
-    var settings = module.settings;
-    var settingId = message._id;
-    var settingValue = message.value;
+    const settings = module.settings;
+    const settingId = message._id;
+    const settingValue = message.value;
 
     if (settingId === 'orders.documents.path')
     {
@@ -110,15 +130,15 @@ exports.start = function startOrderDocumentsModule(app, module)
 
   function parseExtraDocumentsSetting(rawValue)
   {
-    var extra = [];
+    const extra = [];
 
     if (!_.isString(rawValue) || _.isEmpty(rawValue))
     {
       return extra;
     }
 
-    var lastName = '';
-    var namesToDocuments = {};
+    const namesToDocuments = {};
+    let lastName = '';
 
     _.forEach(rawValue.split('\n'), function(line)
     {
@@ -179,14 +199,14 @@ exports.start = function startOrderDocumentsModule(app, module)
 
   function removeOldClients()
   {
-    var mongoose = app[module.config.mongooseId];
+    const mongoose = app[module.config.mongooseId];
 
     if (!mongoose)
     {
       return;
     }
 
-    var conditions = {
+    const conditions = {
       disconnectedAt: {$lt: moment().subtract(7, 'days').toDate()}
     };
 
