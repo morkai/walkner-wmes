@@ -142,7 +142,7 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
       },
       function upsertOrdersStep()
       {
-        if (this.order.length === 0)
+        if (this.orders.length === 0)
         {
           return this.skip();
         }
