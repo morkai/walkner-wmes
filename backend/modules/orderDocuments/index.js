@@ -32,6 +32,7 @@ exports.DEFAULT_CONFIG = {
 exports.start = function startOrderDocumentsModule(app, module)
 {
   module.settings = {
+    useCatalog: false,
     path: '',
     extra: [],
     remoteServer: ''
@@ -86,6 +87,8 @@ exports.start = function startOrderDocumentsModule(app, module)
           return module.error("Failed to find settings: %s", err.message);
         }
 
+        module.settings.useCatalog = !!settings.useCatalog;
+
         if (_.isString(settings.path))
         {
           module.settings.path = settings.path;
@@ -112,7 +115,11 @@ exports.start = function startOrderDocumentsModule(app, module)
     const settingId = message._id;
     const settingValue = message.value;
 
-    if (settingId === 'orders.documents.path')
+    if (settingId === 'orders.documents.useCatalog')
+    {
+      settings.useCatalog = !!settingValue;
+    }
+    else if (settingId === 'orders.documents.path')
     {
       settings.path = settingValue;
     }
