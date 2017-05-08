@@ -40,6 +40,11 @@ define([
     events: {
       'click .orderDocumentTree-files-folder': function(e)
       {
+        if (window.getSelection().toString() !== '')
+        {
+          return;
+        }
+
         this.model.setSelectedFolder(e.currentTarget.dataset.id, {
           scroll: true,
           keepFile: false
@@ -47,7 +52,7 @@ define([
       },
       'click .orderDocumentTree-files-file': function(e)
       {
-        if (e.target.tagName === 'A')
+        if (e.target.tagName === 'A' || window.getSelection().toString() !== '')
         {
           return;
         }
