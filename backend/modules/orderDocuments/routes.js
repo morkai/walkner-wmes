@@ -119,7 +119,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
     findDocumentFilePath(nc15, {orderNo, hash, forcePdf: true, includeName: !!req.query.name}, function(err, results)
     {
-      if (err)
+      if (err || !results)
       {
         return res.sendStatus(404);
       }
