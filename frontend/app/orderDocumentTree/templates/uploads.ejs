@@ -8,7 +8,7 @@
     <div class="input-group orderDocumentTree-footer-setDate">
       <input id="<%- idPrefix %>-date" type="date" class="form-control" min="2000-01-01" max="<%- time.getMoment().startOf('day').add(1, 'years').format('YYYY-MM-DD') %>">
       <span class="input-group-btn">
-        <button id="<%- idPrefix %>-setDate" class="btn btn-default" type="button" title="<%- t('orderDocumentTree', 'uploads:setDate') %>"><i class="fa fa-calendar-check-o"></i></button>
+        <button id="<%- idPrefix %>-setDate" class="btn btn-default" name="setDate" type="button" title="<%- t('orderDocumentTree', 'uploads:setDate') %>"><i class="fa fa-calendar-check-o"></i></button>
       </span>
     </div>
     <button id="<%- idPrefix %>-submit" class="btn btn-primary" type="submit">

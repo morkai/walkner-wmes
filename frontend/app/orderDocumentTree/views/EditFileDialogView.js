@@ -7,6 +7,7 @@ define([
   'app/time',
   'app/viewport',
   'app/core/views/FormView',
+  'app/orderDocumentTree/util/pasteDateEvents',
   'app/orderDocumentTree/templates/editFileDialog'
 ], function(
   _,
@@ -15,6 +16,7 @@ define([
   time,
   viewport,
   FormView,
+  pasteDateEvents,
   template
 ) {
   'use strict';
@@ -22,6 +24,8 @@ define([
   return FormView.extend({
 
     template: template,
+
+    events: _.assign({}, pasteDateEvents, FormView.prototype.events),
 
     initialize: function(options)
     {
@@ -64,6 +68,11 @@ define([
       });
 
       return formData;
+    },
+
+    afterRender: function()
+    {
+      FormView.prototype.afterRender.apply(this, arguments);
     },
 
     request: function(formData)

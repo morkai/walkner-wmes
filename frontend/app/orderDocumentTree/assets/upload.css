@@ -65,6 +65,7 @@
 }
 .orderDocumentTree-uploads-date {
   width: 145px!important;
+  height: 27px;
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
 }

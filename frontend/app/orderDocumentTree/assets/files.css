@@ -102,8 +102,9 @@
 .orderDocumentTree-files-preview-props ul {
   padding-left: 0;
 }
-.orderDocumentTree-editFile .form-control[type="date"] {
+.orderDocumentTree-editFile .form-control[name$="date"] {
   display: inline-block;
+  vertical-align: middle;
 }
 .orderDocumentTree-editFile-checkbox {
   margin-top: 9px!important;

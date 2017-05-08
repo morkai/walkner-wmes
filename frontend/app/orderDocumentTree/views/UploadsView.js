@@ -8,6 +8,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/orderDocumentTree/util/pasteDateEvents',
   'app/orderDocumentTree/templates/uploads',
   'app/orderDocumentTree/templates/upload'
 ], function(
@@ -18,6 +19,7 @@ define([
   user,
   viewport,
   View,
+  pasteDateEvents,
   template,
   renderUpload
 ) {
@@ -27,7 +29,7 @@ define([
 
     template: template,
 
-    events: {
+    events: _.assign({
       'click button[data-action="remove"]': function(e)
       {
         var upload = this.model.uploads.get(this.$upload(e.target).attr('data-id'));
@@ -77,7 +79,7 @@ define([
           $submit.prop('disabled', false);
         });
       }
-    },
+    }, pasteDateEvents),
 
     initialize: function()
     {
