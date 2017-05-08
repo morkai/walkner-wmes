@@ -189,13 +189,13 @@
             return;
           }
 
-          var currentRequest = router.getCurrentRequest();
+          var url = window.location.hash.replace(/^#/, '/');
 
           viewport.render();
 
-          if (!/^\/production\//.test(currentRequest.path))
+          if (!/^\/production\//.test(url))
           {
-            router.dispatch(currentRequest.url);
+            router.dispatch(url);
           }
         }, 1);
       });
