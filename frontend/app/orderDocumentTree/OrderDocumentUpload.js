@@ -265,9 +265,11 @@ define([
         name = name.replace(nc15, '');
       }
 
-      return name
-        .replace(/^[^A-Za-z0-9]+/, '')
-        .replace(/[^A-Za-z0-9]+$/, '');
+      name = name
+        .replace(/^[^A-Za-z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+/, '')
+        .replace(/[^A-Za-z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$/, '');
+
+      return name === '' ? nc15 : name;
     }
 
   });

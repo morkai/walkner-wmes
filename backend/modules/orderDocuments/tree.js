@@ -46,8 +46,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
         || !_.isString(file.date)
         || !_.isString(file.hash)
         || !/^[a-f0-9]{32}$/.test(file.hash)
-        || !_.isString(file.name)
-        || !file.name.length)
+        || !_.isString(file.name))
       {
         return;
       }

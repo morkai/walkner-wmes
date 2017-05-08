@@ -19,13 +19,13 @@ exports.DEFAULT_CONFIG = {
 exports.start = function startGdriveModule(app, module)
 {
   let authQueue = null;
+  let startPageToken = null;
 
   module.auth = new google.auth.JWT(
     module.config.key.client_email,
     null,
     module.config.key.private_key,
-    ['https://www.googleapis.com/auth/drive'],
-    'wmes@walukiewicz.eu'
+    ['https://www.googleapis.com/auth/drive']
   );
 
   module.drive = google.drive('v3');
@@ -65,10 +65,11 @@ exports.start = function startGdriveModule(app, module)
         module.debug("Authorized!");
       }
 
-      setTimeout(downloadFile, 100, '1mlHdH1FV9FcKeoJRzuHnbSrvLuQF_eI9P1faJTuuUfk');
-    });
+      //setTimeout(downloadFile, 100, '1mlHdH1FV9FcKeoJRzuHnbSrvLuQF_eI9P1faJTuuUfk');
+      setTimeout(listFiles, 100);
 
-    setInterval(listFiles, 10000);
+      setTimeout(getStartPageToken, 1000);
+    });
   });
 
   /* jshint -W098 */
@@ -188,9 +189,8 @@ exports.start = function startGdriveModule(app, module)
       const t2 = Date.now();
       const req = {
         pageSize: 1000,
-        fields: "files(kind,id,name,mimeType,parents)",
-        orderBy: 'folder, name',
-        q: `'${module.config.rootId}' in parents`
+        fields: "files(id,name,mimeType,parents,version,modifiedTime)",
+        orderBy: 'folder, name'
       };
 
       module.drive.files.list(req, function(err, res)
@@ -231,6 +231,74 @@ exports.start = function startGdriveModule(app, module)
           module.debug("Downloaded file: %s", fileId);
         })
         .pipe(dest);
+    });
+  }
+
+  function getStartPageToken()
+  {
+    module.authorize(function(err)
+    {
+      if (err)
+      {
+        return module.error("Failed to get Start Page Token: authorize failure: %s", err.message);
+      }
+
+      module.drive.changes.getStartPageToken({}, function(err, res)
+      {
+        if (err)
+        {
+          return module.error("Failed to get Start Page Token: %s", err.message);
+        }
+
+        console.log(`Start Page Token:`, res);
+
+        startPageToken = res.startPageToken;
+
+        setImmediate(listChanges);
+      });
+    });
+  }
+
+  function listChanges()
+  {
+    module.authorize(function(err)
+    {
+      if (err)
+      {
+        return module.error("Failed to list changes: authorize failure: %s", err.message);
+      }
+
+      const req = {
+        pageToken: startPageToken
+      };
+
+      module.drive.changes.list(req, function(err, res)
+      {
+        if (err)
+        {
+          return module.error("Failed to list changes: %s", err.message);
+        }
+
+        console.log('Changes:', res.changes);
+
+        if (res.newStartPageToken)
+        {
+          startPageToken = res.newStartPageToken;
+
+          console.log(`newStartPageToken=${startPageToken}`);
+
+          setTimeout(listChanges, 10000);
+        }
+
+        if (res.nextPageToken)
+        {
+          startPageToken = res.nextPageToken;
+
+          console.log(`nextPageToken=${startPageToken}`);
+
+          setImmediate(listChanges);
+        }
+      });
     });
   }
 };
