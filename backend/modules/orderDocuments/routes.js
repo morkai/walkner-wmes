@@ -321,7 +321,9 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         }
 
         const orderDate = order
-          ? moment.utc(moment(order.sapCreatedAt.getTime()).format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf()
+          ? moment.utc(
+              moment((order.sapCreatedAt || order.startDate || Date.now()).getTime()
+            ).format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf()
           : moment.utc().startOf('day').valueOf();
         let file = null;
 
