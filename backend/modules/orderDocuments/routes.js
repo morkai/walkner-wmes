@@ -33,7 +33,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   const canViewLocal = userModule.auth('LOCAL', 'DOCUMENTS:VIEW');
   const canManage = userModule.auth('DOCUMENTS:MANAGE');
 
-  const nc15ToFreshHeaders = {};
+  const nc15ToFreshHeaders = module.freshHeaders;
 
   express.get('/documents', showIndexRoute);
   express.post('/documents', authClientRoute);
@@ -209,10 +209,10 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     const nc15 = req.params.nc15;
     const page = parseInt(req.params.page, 10);
     const hash = /^[a-f0-9]{32}$/.test(req.query.hash) ? req.query.hash : '';
-    const freshKey = `${nc15}_${hash}_${page}`;
-    const freshHeaders = nc15ToFreshHeaders[freshKey];
+    const freshKey = `${hash}_${page}`;
+    const freshHeaders = nc15ToFreshHeaders[nc15] && nc15ToFreshHeaders[nc15][freshKey];
 
-    if (freshHeaders && fresh(req.headers, freshHeaders))
+    if (freshHeaders && fresh(req.headers, freshHeaders.headers))
     {
       res.set(freshHeaders);
       res.sendStatus(304);
@@ -237,9 +237,20 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         return next(err);
       }
 
-      nc15ToFreshHeaders[freshKey] = _.pick(res._headers, ['etag', 'last-modified', 'cache-control']);
+      if (!nc15ToFreshHeaders[nc15])
+      {
+        nc15ToFreshHeaders[nc15] = {};
+      }
 
-      setTimeout(function() { delete nc15ToFreshHeaders[freshKey]; }, 60 * 1000);
+      if (nc15ToFreshHeaders[nc15][freshKey])
+      {
+        clearTimeout(nc15ToFreshHeaders[nc15][freshKey].timer);
+      }
+
+      nc15ToFreshHeaders[nc15][freshKey] = {
+        headers: _.pick(res._headers, ['etag', 'last-modified', 'cache-control']),
+        timer: setTimeout(() => delete nc15ToFreshHeaders[nc15][freshKey], 60 * 1000)
+      };
     });
   });
 

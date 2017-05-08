@@ -38,6 +38,8 @@ exports.start = function startOrderDocumentsModule(app, module)
     remoteServer: ''
   };
 
+  module.freshHeaders = {};
+
   module.checkRemoteServer = checkRemoteServer.bind(null, app, module);
 
   app.onModuleReady(
@@ -109,7 +111,20 @@ exports.start = function startOrderDocumentsModule(app, module)
 
   app.broker.subscribe('app.started', removeOldClients).setLimit(1);
 
-  app.broker.subscribe('settings.updated.orders.documents.**', function(message)
+  app.broker.subscribe('settings.updated.orders.documents.**', updateSettings);
+
+  app.broker.subscribe('orderDocuments.tree.fileAdded', clearFreshHeaders);
+  app.broker.subscribe('orderDocuments.tree.fileEdited', clearFreshHeaders);
+
+  function clearFreshHeaders(message)
+  {
+    if (message.file && module.freshHeaders[message.file._id])
+    {
+      delete module.freshHeaders[message.file._id];
+    }
+  }
+
+  function updateSettings(message)
   {
     const settings = module.settings;
     const settingId = message._id;
@@ -133,7 +148,7 @@ exports.start = function startOrderDocumentsModule(app, module)
     {
       settings.remoteServer = settingValue;
     }
-  });
+  }
 
   function parseExtraDocumentsSetting(rawValue)
   {
