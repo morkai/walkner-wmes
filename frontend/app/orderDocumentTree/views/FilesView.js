@@ -627,7 +627,7 @@ define([
 
       if (this.$('.orderDocumentTree-files-folder').length === 0)
       {
-        this.$id('files').html('<i class="fa fa-spinner fa-spin fa-3x"></i>');
+        this.$id('files').html('<p><i class="fa fa-spinner fa-spin fa-3x"></i></p>');
       }
     },
 
