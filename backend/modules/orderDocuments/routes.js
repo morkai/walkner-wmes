@@ -169,6 +169,11 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         return next(err);
       }
 
+      if (!results)
+      {
+        return res.sendStatus(404);
+      }
+
       if (results.meta)
       {
         return res.render('orderDocuments:viewer', {
