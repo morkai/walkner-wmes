@@ -52,6 +52,18 @@ define([
       {
         this.model.uploads.setDate(this.$id('date').val());
       },
+      'click .orderDocumentTree-uploads-nc15[readonly]': function(e)
+      {
+        var documentFile = this.model.files.get(e.currentTarget.value);
+
+        if (documentFile)
+        {
+          var uploadId = this.$upload(e.target)[0].dataset.id;
+          var upload = this.model.uploads.get(uploadId);
+
+          documentFile.trigger('focus', documentFile, upload.get('hash'));
+        }
+      },
       'submit': function(e)
       {
         e.preventDefault();
@@ -91,6 +103,7 @@ define([
 
       view.listenTo(tree.uploads, 'add', this.onAdd);
       view.listenTo(tree.uploads, 'remove', this.onRemove);
+      view.listenTo(tree.uploads, 'focus', this.onFocus);
       view.listenTo(tree.uploads, 'upload:start', this.onUploadStart);
       view.listenTo(tree.uploads, 'change:date', this.onDateChange);
       view.listenTo(tree.uploads, 'change:name', this.onNameChange);
@@ -221,6 +234,11 @@ define([
       {
         this.$upload(upload.id).fadeOut('fast', function() { $(this).remove(); });
       }
+    },
+
+    onFocus: function(upload)
+    {
+      this.$upload(upload.id).find('input[name="date"]').focus();
     },
 
     onDateChange: function(upload, uploads, options)

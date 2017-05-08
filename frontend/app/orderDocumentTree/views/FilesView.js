@@ -42,13 +42,29 @@ define([
       {
         if (window.getSelection().toString() !== '')
         {
-          return;
+          return false;
         }
 
         this.model.setSelectedFolder(e.currentTarget.dataset.id, {
           scroll: true,
           keepFile: false
         });
+      },
+      'click a[data-hash]': function(e)
+      {
+        if (!e.altKey)
+        {
+          return;
+        }
+
+        this.addUpload(
+          e.currentTarget.dataset.fileId,
+          e.currentTarget.dataset.hash
+        );
+
+        e.target.blur();
+
+        return false;
       },
       'click .orderDocumentTree-files-file': function(e)
       {
@@ -57,9 +73,19 @@ define([
           return;
         }
 
+        var tree = this.model;
+        var documentFile = tree.files.get(e.currentTarget.dataset.id);
+
+        if (e.altKey)
+        {
+          this.addUpload(documentFile.id, null);
+
+          return false;
+        }
+
         this.lastClickEvent = e;
 
-        this.model.setSelectedFile(e.currentTarget.dataset.id);
+        tree.setSelectedFile(documentFile.id);
 
         return false;
       },
@@ -202,6 +228,7 @@ define([
       view.listenTo(tree.files, 'remove', view.onFilesRemove);
       view.listenTo(tree.files, 'add', view.onFilesAdd);
       view.listenTo(tree.files, 'change', view.onFilesChange);
+      view.listenTo(tree.files, 'focus', view.onFilesFocus);
       view.listenTo(tree.folders, 'add', view.onFoldersAdd);
       view.listenTo(tree.folders, 'remove', view.onFoldersRemove);
       view.listenTo(tree.folders, 'change:parent', view.onParentChange);
@@ -297,6 +324,17 @@ define([
     afterRender: function()
     {
       this.showPreviewIfNeeded();
+    },
+
+    addUpload: function(fileId, hash)
+    {
+      var tree = this.model;
+      var documentFile = tree.files.get(fileId);
+      var documentFolder = tree.hasSearchPhrase()
+        ? tree.folders.get(documentFile.get('folders')[0])
+        : tree.getSelectedFolder();
+
+      this.model.uploads.addFromDocument(documentFile, documentFolder, hash);
     },
 
     showPreviewIfNeeded: function()
@@ -418,7 +456,8 @@ define([
 
       _.forEach(selectedFile.get('files'), function(file)
       {
-        html += '<li><a href="/orderDocuments/' + selectedFile.id + '?pdf=1&hash=' + file.hash + '" target="_blank">'
+        html += '<li><a href="/orderDocuments/' + selectedFile.id + '?pdf=1&hash=' + file.hash + '" target="_blank"'
+          + ' data-file-id="' + selectedFile.id + '" data-hash="' + file.hash + '">'
           + t('orderDocumentTree', 'files:files:date', {date: time.utc.format(file.date, 'LL')})
           + '</a>';
       });
@@ -640,6 +679,31 @@ define([
       {
         this.removeFile(file);
       }
+    },
+
+    onFilesFocus: function(file, hash)
+    {
+      var selector = 'a[data-hash="' + hash + '"]';
+
+      if (this.model.getSelectedFile() === file)
+      {
+        this.$id('preview').find(selector).focus();
+
+        return;
+      }
+
+      var $a = this.$file(file.id).find(selector);
+
+      if ($a.length)
+      {
+        $a.focus();
+
+        return;
+      }
+
+      this.model.setSelectedFile(file.id);
+
+      this.$id('preview').find(selector).focus();
     },
 
     onFoldersAdd: function(folder)

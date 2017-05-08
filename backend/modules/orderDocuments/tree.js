@@ -13,6 +13,11 @@ module.exports = function setUpOrderDocumentsTree(app, module)
   const OrderDocumentFolder = mongoose.model('OrderDocumentFolder');
   const OrderDocumentUpload = mongoose.model('OrderDocumentUpload');
 
+  const notifyFilesUploaded = _.debounce(
+    app.broker.publish.bind(app.broker, 'orderDocuments.tree.filesUploaded'),
+    1000
+  );
+
   module.tree = {
 
     addFiles,
@@ -161,19 +166,24 @@ module.exports = function setUpOrderDocumentsTree(app, module)
         uploadId: filesToAdd.map(f => f.upload)
       });
 
-      done();
+      createUploads(filesToAdd);
 
-      OrderDocumentUpload.create(filesToAdd.map(f => ({_id: f.hash, nc15: f.nc15, count: 0})), function(err)
+      done();
+    });
+  }
+
+  function createUploads(addedFiles)
+  {
+    OrderDocumentUpload.create(addedFiles.map(f => ({_id: f.hash, nc15: f.nc15, count: 0})), function(err)
+    {
+      if (err)
       {
-        if (err)
-        {
-          module.error(`[tree] Failed to save uploads: ${err.message}`);
-        }
-        else
-        {
-          app.broker.publish('orderDocuments.tree.filesUploaded');
-        }
-      });
+        module.error(`[tree] Failed to save uploads: ${err.message}`);
+      }
+      else
+      {
+        notifyFilesUploaded();
+      }
     });
   }
 

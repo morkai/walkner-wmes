@@ -47,6 +47,7 @@
 }
 .orderDocumentTree-files-label-smallText {
   display: block;
+  margin-top: 2px;
   font-size: 11px;
 }
 .orderDocumentTree-files-item.is-selected {
@@ -119,6 +120,7 @@
 .is-list .orderDocumentTree-files-item {
   width: 100%;
   margin: 0;
+  padding: 0;
   border-bottom: 1px solid #ddd;
 }
 .is-list .orderDocumentTree-files-item:last-child {
@@ -128,23 +130,30 @@
   border-top: 1px solid #ddd;
 }
 .is-list .orderDocumentTree-files-icon {
+  padding: 0 0 0 7px;
   font-size: 14px;
-  width: 14px;
+  width: 21px;
   height: 14px;
 }
 .is-list .orderDocumentTree-files-label {
   flex: 1 1 auto;
-  line-height: 1.2;
+  line-height: 16px;
+  padding: 0;
+}
+.is-list .orderDocumentTree-files-folder .orderDocumentTree-files-label {
+  padding: 6px 0;
 }
 .is-list .orderDocumentTree-files-label-text {
   display: inline-block;
   margin-right: 8px;
-  padding-right: 8px;
+  padding: 6px 0;
   width: 129px;
   border-right: 1px solid #ddd;
 }
 .is-list .orderDocumentTree-files-label-smallText {
   display: inline-block;
+  margin-top: 0;
+  padding: 6px 8px 6px 0;
   font-size: inherit;
 }
 .is-list .orderDocumentTree-files-preview {
@@ -154,16 +163,19 @@
   margin: 15px;
 }
 .is-list .orderDocumentTree-files-files {
-  display: block;
-  max-width: 300px;
+  display: flex;
   white-space: nowrap;
   overflow: hidden;
 }
 .orderDocumentTree-files-files > a {
   display: inline-block;
-  padding-left: 8px;
-  margin-right: 8px;
-  width: 75px;
+  width: 90px;
+  padding: 7px 8px;
   text-align: center;
   border-left: 1px solid #ddd;
+}
+.orderDocumentTree-files-files > a:focus {
+  outline: none;
+  background: #ffffa6;
+  text-decoration: none;
 }

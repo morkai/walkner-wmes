@@ -3,8 +3,10 @@
   <span class="orderDocumentTree-files-label"><span class="orderDocumentTree-files-label-text"><%- file.text %></span><span class="orderDocumentTree-files-label-smallText"><%= file.smallText %></span></span>
   <% if (file.id) { %>
   <span class="orderDocumentTree-files-files">
-    <% _.forEach(file.files, function(f) { %>
-    <a href="/orderDocuments/<%- file.id %>?pdf=1&hash=<%- f.hash %>" target="_blank"><%- time.format(f.date, 'L') %></a>
+    <% _.forEach(file.files, function(f, i) { %>
+    <% if (i < 3) { %>
+    <a href="/orderDocuments/<%- file.id %>?pdf=1&hash=<%- f.hash %>" target="_blank" data-file-id="<%- file.id %>" data-hash="<%- f.hash %>"><%- time.format(f.date, 'L') %></a>
+    <% } %>
     <% }) %>
   </span>
   <% } %>

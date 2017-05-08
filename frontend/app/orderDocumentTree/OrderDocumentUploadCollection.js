@@ -29,9 +29,27 @@ define([
       this.on('remove', function(upload) { upload.stop(); });
     },
 
-    addFromFile: function(file, folder)
+    addFromFile: function(file, orderDocumentFolder)
     {
-      this.add(OrderDocumentUpload.fromFile(file, folder));
+      this.add(OrderDocumentUpload.fromFile(file, orderDocumentFolder));
+    },
+
+    addFromDocument: function(orderDocumentFile, orderDocumentFolder, hash)
+    {
+      var newUpload = OrderDocumentUpload.fromDocument(orderDocumentFile, orderDocumentFolder, hash);
+      var existingUpload = this.find(function(upload)
+      {
+        return upload.get('hash') === newUpload.get('hash');
+      });
+
+      if (existingUpload)
+      {
+        existingUpload.trigger('focus', existingUpload);
+      }
+      else
+      {
+        this.add(newUpload);
+      }
     },
 
     serializeFiles: function()

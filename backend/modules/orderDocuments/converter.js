@@ -57,6 +57,17 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
         this.targetDirPath = path.join(module.config.uploadedPath, todo.nc15, todo._id);
         this.targetPdfPath = path.join(this.targetDirPath, `${todo.nc15}.pdf`);
 
+        const next = this.next();
+
+        fs.exists(this.sourcePdfPath, exists => next(null, exists));
+      },
+      function ensureDirStep(err, sourcePdfExists)
+      {
+        if (!sourcePdfExists)
+        {
+          return this.skip(null, true);
+        }
+
         fs.ensureDir(this.targetDirPath, this.next());
       },
       function convertToPngStep(err)
@@ -108,7 +119,7 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
           this.next()
         );
       },
-      function(err)
+      function(err, tryNext)
       {
         if (err)
         {
@@ -146,6 +157,11 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
         else
         {
           converting = false;
+
+          if (tryNext)
+          {
+            setImmediate(convertNext);
+          }
         }
       }
     );

@@ -30,10 +30,10 @@ define([
       error: null
     },
 
-    initialize: function()
+    initialize: function(attrs, options)
     {
       this.xhr = null;
-      this.nameChanged = false;
+      this.nameChanged = !!(options && options.nameChanged);
 
       this.once('change:name', function() { this.nameChanged = true; }, this);
     },
@@ -45,7 +45,10 @@ define([
 
     isUploadable: function()
     {
-      return !this.xhr && !this.isUploaded() && this.get('file').type === 'application/pdf';
+      return !this.xhr
+        && !this.isUploaded()
+        && !!this.get('file')
+        && this.get('file').type === 'application/pdf';
     },
 
     isReuploadable: function()
@@ -115,6 +118,7 @@ define([
         date: this.get('date'),
         name: this.get('name'),
         statusClassName: this.getStatusClassName(),
+        virtual: !this.get('file'),
         progress: this.getProgress(),
         message: this.getMessage()
       };
@@ -213,6 +217,24 @@ define([
 
   }, {
 
+    fromDocument: function(document, folder, hash)
+    {
+      var files = document.get('files');
+      var file = !hash ? files[0] : _.find(files, function(file) { return file.hash === hash; });
+
+      return new this({
+        _id: uuid(),
+        folder: folder,
+        nc15: document.id,
+        date: time.utc.format(file.date, 'YYYY-MM-DD'),
+        name: document.get('name'),
+        hash: file.hash,
+        progress: 100
+      }, {
+        nameChanged: true
+      });
+    },
+
     fromFile: function(file, folder)
     {
       var nc15 = this.resolveNc15(file.name);
@@ -232,7 +254,6 @@ define([
         date: date,
         name: name,
         file: file,
-        progress: -1,
         error: error
       });
     },
