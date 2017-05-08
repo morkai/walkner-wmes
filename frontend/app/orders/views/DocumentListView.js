@@ -48,6 +48,7 @@ define([
     serialize: function()
     {
       return {
+        orderNo: this.model.id,
         documents: this.model.get('documents').toJSON(),
         canView: user.isAllowedTo('LOCAL', 'DOCUMENTS:VIEW')
       };
