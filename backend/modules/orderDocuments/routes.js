@@ -317,12 +317,12 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       {
         if (err)
         {
-          return done(err);
+          return this.skip(err);
         }
 
         if (!orderDocumentFile || _.isEmpty(orderDocumentFile.files))
         {
-          return findLegacyDocumentFilePath(nc15, options, done);
+          return this.skip();
         }
 
         const orderTime = (order.sapCreatedAt || order.startDate || new Date()).getTime();
@@ -342,7 +342,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
         if (!file)
         {
-          return findLegacyDocumentFilePath(nc15, options, done);
+          return this.skip();
         }
 
         this.hash = file.hash;
@@ -363,7 +363,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       },
       function(err, stats, metaJson)
       {
-        const meta = tryJsonParse(metaJson);
+        const meta = metaJson ? tryJsonParse(metaJson) : null;
 
         if (meta || (stats && stats.isFile()))
         {
@@ -376,12 +376,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           });
         }
 
-        if (err && err.code === 'ENOENT')
-        {
-          return findLegacyDocumentFilePath(nc15, options, done);
-        }
-
-        done(err);
+        return findLegacyDocumentFilePath(nc15, options, done);
       }
     );
   }
