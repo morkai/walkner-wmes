@@ -61,8 +61,7 @@ define([
 
       view.loadingFiles = false;
 
-      view.listenTo(tree, 'change:searchPhrase change:selectedFolder', view.updateCounters);
-      view.listenTo(tree, 'change:searchPhrase', view.onSearchPhraseChange);
+      view.listenTo(tree, 'change:searchPhrase change:selectedFolder', view.updateCountersAndSearchPhrase);
       view.listenTo(tree.folders, 'reset add remove change:parent', view.updateFolderCount);
       view.listenTo(tree.files, 'request', view.onFilesRequest);
       view.listenTo(tree.files, 'sync', view.onFilesSync);
@@ -168,10 +167,16 @@ define([
       return this.loadingFiles ? '?' : 0;
     },
 
-    updateCounters: function()
+    updateCountersAndSearchPhrase: function()
     {
       this.updateFolderCount();
       this.updateFileCount();
+      this.updateSearchPhrase();
+    },
+
+    updateSearchPhrase: function()
+    {
+      this.$id('searchPhrase').val(this.model.getSearchPhrase());
     },
 
     updateFolderCount: function()
@@ -196,11 +201,6 @@ define([
       this.loadingFiles = false;
 
       this.updateFileCount();
-    },
-
-    onSearchPhraseChange: function()
-    {
-      this.$id('searchPhrase').val(this.model.get('searchPhrase'));
     }
 
   });

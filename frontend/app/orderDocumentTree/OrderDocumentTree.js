@@ -123,7 +123,8 @@ define([
     {
       options = _.defaults({}, options, {
         scroll: false,
-        keepFile: false
+        keepFile: false,
+        updateUrl: true
       });
 
       if (this.get('selectedFolder') !== folderId)

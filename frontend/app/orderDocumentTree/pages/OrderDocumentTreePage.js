@@ -8,6 +8,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/orderDocumentTree/OrderDocumentFolder',
   'app/orderDocumentTree/views/PathView',
   'app/orderDocumentTree/views/FoldersView',
   'app/orderDocumentTree/views/FilesView',
@@ -22,6 +23,7 @@ define([
   viewport,
   View,
   bindLoadingMessage,
+  OrderDocumentFolder,
   PathView,
   FoldersView,
   FilesView,
@@ -212,7 +214,7 @@ define([
       this.foldersView.hideContextMenu();
     },
 
-    updateUrl: function()
+    updateUrl: function(replace)
     {
       var url = '/orderDocuments/tree?';
 
@@ -233,14 +235,14 @@ define([
 
       this.broker.publish('router.navigate', {
         url: url,
-        replace: true,
+        replace: replace,
         trigger: false
       });
     },
 
-    onSelectedChange: function(resetFiles)
+    onSelectedChange: function(resetFiles, model, newValue, options)
     {
-      this.updateUrl();
+      this.updateUrl(!(options && options.updateUrl));
 
       if (resetFiles)
       {

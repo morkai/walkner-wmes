@@ -13,6 +13,16 @@ define([
 
   router.map('/orderDocuments/tree', user.auth('DOCUMENTS:VIEW'), function(req)
   {
+    if (viewport.currentPage && viewport.currentPage.$el.hasClass('orderDocumentTree-page'))
+    {
+      viewport.currentPage.model.setSelectedFolder(req.query.folder || null, {
+        scroll: true,
+        updateUrl: false
+      });
+
+      return;
+    }
+
     viewport.loadPage(
       [
         'app/orderDocumentTree/uploads',
