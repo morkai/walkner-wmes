@@ -7,11 +7,15 @@
   "MSG:fileNotFound": "Dokument {nc15} nie istnieje :(",
 
   "PAGE_ACTION:settings": "Ustawienia",
-  "PAGE_ACTION:search:title": "Szukaj dokumentów po 15NC",
-  "PAGE_ACTION:search:placeholder": "15NC...",
 
-  "displayMode:tiles": "Kafelki",
-  "displayMode:list": "Lista",
+  "toolbar:displayMode:tiles": "Kafelki",
+  "toolbar:displayMode:list": "Lista",
+  "toolbar:copyToClipboard": "Kopiuj do schowka",
+  "toolbar:copyToClipboard:success": "Skopiowano do schowka!",
+  "toolbar:folderCount": "Ilość podkatalogów w aktualnym katalogu",
+  "toolbar:fileCount": "Ilość plików w aktualnym katalogu",
+  "toolbar:search:title": "Szukaj dokumentów po 15NC",
+  "toolbar:search:placeholder": "15NC...",
 
   "path:searchResults": "Wyniki wyszukiwania dla <code>{searchPhrase}</code>",
 

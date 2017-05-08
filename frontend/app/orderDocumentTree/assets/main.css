@@ -3,15 +3,6 @@
 @import "./files.css";
 @import "./upload.css";
 
-.orderDocumentTree-searchAction {
-  width: 175px;
-}
-.orderDocumentTree-searchAction .form-control {
-  font-family: monospace;
-}
-.orderDocumentTree-searchAction .form-control::-webkit-input-placeholder {
-  font-family: Arial, sans-serif;
-}
 .orderDocumentTree-contextMenu {
   position: absolute;
   z-index: 11;
@@ -39,4 +30,26 @@
 .orderDocumentTree-contextMenu-item > .fa {
   width: 14px;
   text-align: center;
+}
+.orderDocumentTree-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 7px;
+  background: #f8f8f8;
+  border-bottom: 1px solid #ddd;
+}
+.orderDocumentTree-toolbar-fill {
+  flex: 1 1 auto;
+}
+.orderDocumentTree-toolbar-group + .orderDocumentTree-toolbar-group {
+  margin-left: 14px;
+}
+.orderDocumentTree-toolbar-search {
+  width: 175px;
+}
+.orderDocumentTree-toolbar-search .form-control {
+  font-family: monospace;
+}
+.orderDocumentTree-toolbar-search .form-control::-webkit-input-placeholder {
+  font-family: Arial, sans-serif;
 }

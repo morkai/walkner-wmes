@@ -12,9 +12,8 @@ define([
   'app/orderDocumentTree/views/FoldersView',
   'app/orderDocumentTree/views/FilesView',
   'app/orderDocumentTree/views/UploadsView',
-  'app/orderDocumentTree/templates/page',
-  'app/orderDocumentTree/templates/searchAction',
-  'app/orderDocumentTree/templates/displayModeAction'
+  'app/orderDocumentTree/views/ToolbarView',
+  'app/orderDocumentTree/templates/page'
 ], function(
   _,
   $,
@@ -27,9 +26,8 @@ define([
   FoldersView,
   FilesView,
   UploadsView,
-  template,
-  searchActionTemplate,
-  displayModeActionTemplate
+  ToolbarView,
+  template
 ) {
   'use strict';
 
@@ -48,41 +46,7 @@ define([
 
     actions: function()
     {
-      var view = this;
-
       return [
-        {
-          template: function()
-          {
-            return searchActionTemplate({
-              idPrefix: view.idPrefix
-            });
-          },
-          afterRender: function($action)
-          {
-            $action
-              .find('form')
-              .on('submit', view.onSearchFormSubmit.bind(view))
-              .find('input[name="searchPhrase"]')
-              .val(view.model.get('searchPhrase'))
-              .on('keydown', view.onSearchPhraseKeyDown.bind(view));
-          }
-        },
-        {
-          template: function()
-          {
-            return displayModeActionTemplate({
-              displayMode: view.model.getDisplayMode()
-            });
-          },
-          afterRender: function($action)
-          {
-            $action.on('change', '.btn', function()
-            {
-              view.model.setDisplayMode($action.find('input:checked').val());
-            });
-          }
-        },
         {
           label: t.bound('orderDocumentTree', 'PAGE_ACTION:settings'),
           icon: 'cogs',
@@ -115,13 +79,17 @@ define([
       };
       page.pathView = new PathView({model: tree});
       page.foldersView = new FoldersView({model: tree});
+      page.toolbarView = new ToolbarView({model: tree});
       page.filesView = new FilesView({model: tree});
       page.uploadsView = new UploadsView({model: tree});
 
-      page.setView('#' + page.idPrefix + '-path', page.pathView);
-      page.setView('#' + page.idPrefix + '-folders', page.foldersView);
-      page.setView('#' + page.idPrefix + '-files', page.filesView);
-      page.setView('#' + page.idPrefix + '-uploadContainer', page.uploadsView);
+      var idPrefix = '#' + page.idPrefix + '-';
+
+      page.setView(idPrefix + 'path', page.pathView);
+      page.setView(idPrefix + 'folders', page.foldersView);
+      page.setView(idPrefix + 'toolbar', page.toolbarView);
+      page.setView(idPrefix + 'files', page.filesView);
+      page.setView(idPrefix + 'uploadContainer', page.uploadsView);
 
       bindLoadingMessage(tree.folders, page, 'MSG:LOADING_FAILURE:folders');
       bindLoadingMessage(tree.files, page, 'MSG:LOADING_FAILURE:files');
@@ -274,8 +242,6 @@ define([
     {
       this.updateUrl();
 
-      this.$id('searchPhrase').val(this.model.get('searchPhrase'));
-
       if (resetFiles)
       {
         this.promised(this.model.files.fetch({reset: true}));
@@ -297,23 +263,6 @@ define([
       this.pathView.positionFolderSelector();
       this.foldersView.hideContextMenu();
       this.filesView.positionPreview();
-    },
-
-    onSearchFormSubmit: function()
-    {
-      this.model.setSearchPhrase(this.$id('searchPhrase').val());
-
-      return false;
-    },
-
-    onSearchPhraseKeyDown: function(e)
-    {
-      if (e.keyCode === 27)
-      {
-        this.model.setSearchPhrase('');
-
-        return false;
-      }
     }
 
   });
