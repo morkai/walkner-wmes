@@ -79,7 +79,7 @@
   "upload:nc15:placeholder": "15NC...",
   "upload:name:placeholder": "Nazwa dokumentu",
   "uploads:setDate": "Ustaw daty obowiązywania",
-  "uploads:submit": "Dodaj dokumenty",
+  "uploads:submit": "Zapisz dokumenty",
   "uploads:msg:notAllowed": "Nie masz uprawnień do dodawania plików :(",
   "uploads:msg:noFolder": "Nie można dodawać plików do głównego katalogu.",
   "uploads:msg:folderIsTrash": "Nie można dodawać plików do śmietnika.",
