@@ -29,7 +29,7 @@ module.exports = function setUpD8Reminder(app, module)
     rmWhitespace: true
   });
 
-  app.broker.subscribe('app.started', remind).setLimit(1);
+  app.broker.subscribe('app.started', scheduleNextReminder).setLimit(1);
 
   function scheduleNextReminder()
   {
@@ -98,10 +98,6 @@ module.exports = function setUpD8Reminder(app, module)
           else if (entry.duration === 35 || entry.duration === 42)
           {
             entry.mode = 'veryLate';
-          }
-          else if (entry.duration > 42 && entry.duration % 3 === 0)
-          {
-            entry.mode = 'danger';
           }
           else
           {
