@@ -25,7 +25,16 @@ define([
 
     template: template,
 
-    events: _.assign({}, pasteDateEvents, FormView.prototype.events),
+    events: _.assign({
+
+      'change input[name="folders[]"]': function()
+      {
+        var $checkboxes = this.$('input[name="folders[]"]');
+
+        $checkboxes.first().prop('required', $checkboxes.filter(':checked').length === 0);
+      }
+
+    }, pasteDateEvents, FormView.prototype.events),
 
     initialize: function(options)
     {
@@ -68,11 +77,6 @@ define([
       });
 
       return formData;
-    },
-
-    afterRender: function()
-    {
-      FormView.prototype.afterRender.apply(this, arguments);
     },
 
     request: function(formData)
