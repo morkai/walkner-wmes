@@ -58,7 +58,7 @@ define([
         document.execCommand('copy');
       },
 
-      'click #-unlinkMarkedFiles': function()
+      'click #-unlinkMarkedFiles': function(e)
       {
         e.currentTarget.disabled = true;
 
