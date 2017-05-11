@@ -9,6 +9,7 @@ const fresh = require('fresh');
 const step = require('h5.step');
 const moment = require('moment');
 const multer = require('multer');
+const transliterate = require('transliteration').transliterate;
 
 module.exports = function setUpOrderDocumentsRoutes(app, module)
 {
@@ -128,7 +129,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
       if (!_.isEmpty(results.name))
       {
-        res.set('X-Document-Name', results.name);
+        res.set('X-Document-Name', transliterate(results.name));
       }
 
       return res.sendStatus(204);
