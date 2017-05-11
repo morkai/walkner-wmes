@@ -340,11 +340,18 @@ define([
     addUpload: function(fileId, hash)
     {
       var tree = this.model;
+      var selectedFolder = tree.getSelectedFolder();
+
+      if (tree.isInTrash(selectedFolder))
+      {
+        return;
+      }
+
       var documentFile = tree.files.get(fileId);
 
       var documentFolder = tree.hasSearchPhrase()
         ? tree.folders.get(documentFile.get('folders')[0])
-        : tree.getSelectedFolder();
+        : selectedFolder;
 
       this.model.uploads.addFromDocument(documentFile, documentFolder, hash);
     },
