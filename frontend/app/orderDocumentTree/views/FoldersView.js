@@ -48,10 +48,21 @@ define([
       {
         var $folder = this.$(e.target).closest('.orderDocumentTree-folders-folder');
 
-        if (!$folder.hasClass('is-editing'))
+        if ($folder.hasClass('is-editing'))
         {
-          this.model.setSelectedFolder($folder[0].dataset.folderId);
+          return;
         }
+
+        var folderId = $folder[0].dataset.folderId;
+
+        if (e.ctrlKey)
+        {
+          window.open('/#orderDocuments/tree?folder=' + folderId);
+
+          return;
+        }
+
+        this.model.setSelectedFolder(folderId);
       },
       'dblclick .orderDocumentTree-folders-item': function(e)
       {
