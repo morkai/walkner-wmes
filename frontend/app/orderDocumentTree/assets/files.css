@@ -93,9 +93,7 @@
 .orderDocumentTree-files-preview-actions > .btn {
   margin-top: 7px;
 }
-.orderDocumentTree-files-preview-actions > .btn[data-action="recoverFile"],
-.is-trash > .orderDocumentTree-files-preview-actions > .btn[data-action="editFile"],
-.is-trash > .orderDocumentTree-files-preview-actions > .btn[data-action="removeFile"] {
+.orderDocumentTree-files-preview-actions > .btn[data-action="recoverFile"] {
   display: none;
 }
 .is-trash > .orderDocumentTree-files-preview-actions > .btn[data-action="recoverFile"] {

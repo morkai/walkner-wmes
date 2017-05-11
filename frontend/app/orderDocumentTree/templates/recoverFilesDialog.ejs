@@ -1,0 +1,19 @@
+<form>
+  <%- t('orderDocumentTree', 'recoverFiles:message') %>
+  <% if (showRemoveOption) { %>
+  <%- t('orderDocumentTree', 'recoverFiles:remove') %>
+  <% [0, 1].forEach(function(v) { %>
+  <div class="radio">
+    <label>
+      <input name="remove" value="<%- v %>" type="radio" <%- v ? '' : 'checked' %>> <%- t('orderDocumentTree', 'recoverFiles:remove:' + v) %>
+    </label>
+  </div>
+  <% }) %>
+  <% } %>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" class="btn btn-primary" type="submit">
+      <i class="fa fa-spinner fa-spin hidden"></i><span><%- t('orderDocumentTree', 'recoverFiles:submit') %></span>
+    </button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

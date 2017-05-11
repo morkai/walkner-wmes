@@ -128,21 +128,27 @@ define([
       },
       'click #-removeFile': function()
       {
-        var selectedFile = this.model.getSelectedFile();
+        var tree = this.model;
+        var selectedFolder = tree.getSelectedFolder();
+        var selectedFile = tree.getSelectedFile();
+        var isInTrash = tree.isInTrash(selectedFolder);
         var dialogView = new DialogView({
           template: removeFileDialogTemplate,
           autoHide: false,
           model: {
             nc15: selectedFile.id,
-            multiple: selectedFile.get('folders').length > 1
+            multiple: selectedFile.get('folders').length > 1,
+            purge: isInTrash
           }
         });
 
         this.listenTo(dialogView, 'answered', function(answer)
         {
-          var req = answer === 'remove'
-            ? this.model.removeFile(selectedFile)
-            : this.model.unlinkFile(selectedFile, this.model.getSelectedFolder());
+          var req = answer === 'purge'
+            ? tree.purgeFile(selectedFile)
+            : answer === 'remove'
+              ? tree.removeFile(selectedFile)
+              : tree.unlinkFile(selectedFile, selectedFolder);
 
           req.fail(function()
           {
@@ -406,13 +412,17 @@ define([
       });
 
       var tree = this.model;
+      var selectedFolder = tree.getSelectedFolder();
+      var isTrash = selectedFolder.id === '__TRASH__';
+      var isInTrash = tree.isInTrash(selectedFolder);
 
       $preview
         .css({
           top: '-1000px',
           left: '-1000px'
         })
-        .toggleClass('is-trash', tree.isInTrash(tree.getSelectedFolder()))
+        .toggleClass('is-trash', isTrash)
+        .toggleClass('is-in-trash', isInTrash)
         .removeClass('hidden');
 
       this.positionPreview();

@@ -1,5 +1,5 @@
 <form>
-  <%- t('orderDocumentTree', 'removeFiles:message') %>
+  <%- t('orderDocumentTree', 'removeFiles:message:' + (purge ? 'purge' : 'remove')) %>
   <div class="form-actions">
     <button id="<%- idPrefix %>-submit" class="btn btn-danger" type="submit">
       <i class="fa fa-spinner fa-spin hidden"></i><span><%- t('orderDocumentTree', 'removeFiles:submit') %></span>

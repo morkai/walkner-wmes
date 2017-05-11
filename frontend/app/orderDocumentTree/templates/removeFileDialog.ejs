@@ -1,7 +1,11 @@
 <div>
-  <%- t('orderDocumentTree', 'removeFile:message:' + (multiple ? 'multiple' : 'single'), {nc15: nc15}) %>
+  <%- t('orderDocumentTree', 'removeFile:message:' + (multiple ? 'multiple' : 'single') + (purge ? ':purge': ''), {nc15: nc15}) %>
   <div class="form-actions">
+    <% if (purge) { %>
+    <button class="btn btn-danger dialog-answer" type="button" data-answer="purge"><%- t('orderDocumentTree', 'removeFile:purge') %></button>
+    <% } else { %>
     <button class="btn btn-danger dialog-answer" type="button" data-answer="remove"><%- t('orderDocumentTree', 'removeFile:remove') %></button>
+    <% } %>
     <% if (multiple) { %>
     <button class="btn btn-primary dialog-answer" type="button" data-answer="unlink"><%- t('orderDocumentTree', 'removeFile:unlink') %></button>
     <% } %>

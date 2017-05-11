@@ -56,7 +56,7 @@ define([
         paginate: false
       });
 
-      this.folders.once('sync', this.expandSelectedFolder.bind(this));
+      this.folders.once('sync', this.onFoldersSync.bind(this));
     },
 
     subscribe: function(pubsub)
@@ -328,7 +328,7 @@ define([
 
     isInTrash: function(folder)
     {
-      return this.getRoot(folder).id === '__TRASH__';
+      return folder && this.getRoot(folder).id === '__TRASH__';
     },
 
     canSeeTrash: function()
@@ -496,6 +496,14 @@ define([
       });
     },
 
+    recoverFiles: function(files, remove)
+    {
+      return this.act('recoverFiles', {
+        fileIds: files.map(function(file) { return file.id; }),
+        remove: !!remove
+      });
+    },
+
     removeFile: function(file)
     {
       return this.act('removeFile', {
@@ -510,6 +518,21 @@ define([
       });
     },
 
+    purgeFile: function(file)
+    {
+      return this.act('purgeFile', {
+        fileId: file.id
+      });
+    },
+
+    purgeFiles: function(files, folder)
+    {
+      return this.act('purgeFiles', {
+        fileIds: files.map(function(file) { return file.id; }),
+        folderId: folder.id
+      });
+    },
+
     act: function(action, params)
     {
       return $.ajax({
@@ -520,6 +543,19 @@ define([
           params: params
         })
       });
+    },
+
+    /**
+     * @private
+     */
+    onFoldersSync: function()
+    {
+      this.expandSelectedFolder();
+
+      if (this.get('selectedFolder') && !this.getSelectedFolder())
+      {
+        this.setSelectedFolder(null);
+      }
     },
 
     /**
@@ -590,7 +626,7 @@ define([
           break;
 
         case 'filePurged':
-          this.files.handleFilePurged(message.file);
+          this.files.handleFilePurged(message.file._id);
           break;
 
         case 'folderAdded':

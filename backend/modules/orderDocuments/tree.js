@@ -27,7 +27,9 @@ module.exports = function setUpOrderDocumentsTree(app, module)
     removeFile,
     removeFiles,
     recoverFile,
+    recoverFiles,
     purgeFile,
+    purgeFiles,
     addFolder,
     removeFolder,
     moveFolder,
@@ -164,7 +166,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
       app.broker.publish(`orderDocuments.tree.${isNew ? 'fileAdded' : 'fileEdited'}`, {
         file: orderDocumentFile,
-        user: user,
+        user,
         uploadId: filesToAdd.map(f => f.upload)
       });
 
@@ -237,10 +239,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
         if (file)
         {
-          app.broker.publish('orderDocuments.tree.fileEdited', {
-            file: file,
-            user: user
-          });
+          app.broker.publish('orderDocuments.tree.fileEdited', {file, user});
         }
 
         done();
@@ -293,9 +292,9 @@ module.exports = function setUpOrderDocumentsTree(app, module)
         if (file)
         {
           app.broker.publish('orderDocuments.tree.fileUnlinked', {
-            file: file,
+            file,
             folderId: params.folderId,
-            user: user
+            user
           });
         }
 
@@ -310,7 +309,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
     if (_.isEmpty(fileIds))
     {
-      return done(app.createError('INVALID_FILE_IDS'));
+      return done(app.createError('NOT_FOUND', 400));
     }
 
     step(
@@ -341,7 +340,11 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
             unlinkFile({file, folderId: params.folderId}, user, err =>
             {
-              if (!err)
+              if (err)
+              {
+                module.error(`[tree] Failed to unlink file [${file._id}] while removing files: ${err.message}`);
+              }
+              else
               {
                 this.unlinkedFileIds.push(file._id);
               }
@@ -355,7 +358,11 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
             removeFile({file}, user, err =>
             {
-              if (!err)
+              if (err)
+              {
+                module.error(`[tree] Failed to remove file [${file._id}] while removing files: ${err.message}`);
+              }
+              else
               {
                 this.removedFileIds.push(file._id);
               }
@@ -378,7 +385,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
             unlinkedFileIds: this.unlinkedFileIds,
             removedFileIds: this.removedFileIds,
             folderId: params.folderId,
-            user: user
+            user
           });
         }
 
@@ -413,6 +420,11 @@ module.exports = function setUpOrderDocumentsTree(app, module)
           return this.skip(app.createError('NOT_FOUND', 400));
         }
 
+        if (file.folders[0] === '__TRASH__')
+        {
+          return this.skip(app.createError('ALREADY_IN_TRASH', 400));
+        }
+
         file.set({
           folders: ['__TRASH__'],
           oldFolders: file.folders
@@ -442,7 +454,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
     if (_.isEmpty(fileIds))
     {
-      return done(app.createError('INVALID_FILE_IDS'));
+      return done(app.createError('NOT_FOUND', 400));
     }
 
     step(
@@ -483,7 +495,14 @@ module.exports = function setUpOrderDocumentsTree(app, module)
     step(
       function()
       {
-        OrderDocumentFile.findById(params.fileId).exec(this.next());
+        if (params.file && params.file instanceof OrderDocumentFile)
+        {
+          setImmediate(this.next(), null, params.file);
+        }
+        else
+        {
+          OrderDocumentFile.findById(params.fileId).exec(this.next());
+        }
       },
       function(err, file)
       {
@@ -497,11 +516,30 @@ module.exports = function setUpOrderDocumentsTree(app, module)
           return this.skip(app.createError('NOT_FOUND', 400));
         }
 
-        file.set({
-          folders: file.oldFolders,
+        this.file = file;
+
+        OrderDocumentFolder
+          .find({_id: {$in: file.oldFolders}}, {_id: 1})
+          .lean()
+          .exec(this.next());
+      },
+      function(err, folders)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        if (!folders.length)
+        {
+          return this.skip(app.createError('NO_VALID_FOLDERS', 400));
+        }
+
+        this.file.set({
+          folders: folders.map(folder => folder._id),
           oldFolders: null
         });
-        file.save(this.next());
+        this.file.save(this.next());
       },
       function(err, file)
       {
@@ -520,12 +558,130 @@ module.exports = function setUpOrderDocumentsTree(app, module)
     );
   }
 
+  function recoverFiles(params, user, done)
+  {
+    const fileIds = _.filter(params.fileIds, fileId => _.isString(fileId) && !_.isEmpty(fileId));
+
+    if (_.isEmpty(fileIds))
+    {
+      return done(app.createError('NOT_FOUND', 400));
+    }
+
+    step(
+      function()
+      {
+        OrderDocumentFile.find({_id: {$in: fileIds}, folders: '__TRASH__'}).exec(this.next());
+      },
+      function(err, files)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (_.isEmpty(files))
+        {
+          return this.skip(app.createError('NOT_FOUND', 400));
+        }
+
+        this.files = files;
+        this.folders = {};
+
+        files.forEach(file =>
+        {
+          file.oldFolders.forEach(folderId => this.folders[folderId] = false);
+        });
+
+        OrderDocumentFolder.find({_id: {$in: Object.keys(this.folders)}}, {_id: 1}).lean().exec(this.next());
+      },
+      function(err, folders)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        folders.forEach(folder => this.folders[folder._id] = true);
+
+        this.recoveredFileIds = [];
+        this.purgedFileIds = [];
+
+        this.files.forEach(file =>
+        {
+          const oldFolders = file.oldFolders.filter(folderId => this.folders[folderId]);
+
+          if (oldFolders.length)
+          {
+            const next = this.group();
+
+            recoverFile({file}, user, err =>
+            {
+              if (err)
+              {
+                module.error(`[tree] Failed to recover file [${file._id}] while recovering files: ${err.message}`);
+              }
+              else
+              {
+                this.recoveredFileIds.push(file._id);
+              }
+
+              next();
+            });
+          }
+          else if (params.remove)
+          {
+            const next = this.group();
+
+            purgeFile({file}, user, err =>
+            {
+              if (err)
+              {
+                module.error(`[tree] Failed to purge file [${file._id}] while recovering files: ${err.message}`);
+              }
+              else
+              {
+                this.purgedFileIds.push(file._id);
+              }
+
+              next();
+            });
+          }
+        });
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        if (this.recoveredFileIds.length || this.purgedFileIds.length)
+        {
+          app.broker.publish('orderDocuments.tree.filesRecovered', {
+            recoveredFileIds: this.recoveredFileIds,
+            purgedFileIds: this.purgedFileIds,
+            user
+          });
+        }
+
+        done();
+      }
+    );
+  }
+
   function purgeFile(params, user, done)
   {
     step(
       function()
       {
-        OrderDocumentFile.findById(params.fileId).exec(this.next());
+        if (params.file && params.file instanceof OrderDocumentFile)
+        {
+          setImmediate(this.next(), null, params.file);
+        }
+        else
+        {
+          OrderDocumentFile.findById(params.fileId).exec(this.next());
+        }
       },
       function(err, file)
       {
@@ -552,6 +708,87 @@ module.exports = function setUpOrderDocumentsTree(app, module)
         {
           app.broker.publish('orderDocuments.tree.filePurged', {file, user});
         }
+
+        done();
+      }
+    );
+  }
+
+  function purgeFiles(params, user, done)
+  {
+    const fileIds = _.filter(params.fileIds, fileId => _.isString(fileId) && !_.isEmpty(fileId));
+
+    if (_.isEmpty(fileIds))
+    {
+      return done(app.createError('NOT_FOUND', 400));
+    }
+
+    step(
+      function()
+      {
+        OrderDocumentFile.find({_id: {$in: fileIds}}).exec(this.next());
+      },
+      function(err, files)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (_.isEmpty(files))
+        {
+          return this.skip(app.createError('NOT_FOUND', 400));
+        }
+
+        this.unlinkedFileIds = [];
+        this.purgedFileIds = [];
+
+        files.forEach(file =>
+        {
+          const next = this.group();
+
+          if (file.folders.length <= 1)
+          {
+            purgeFile({file}, user, err =>
+            {
+              if (err)
+              {
+                module.error(`[tree] Failed to purge file [${file._id}] while purging files: ${err.message}`);
+              }
+              else
+              {
+                this.purgedFileIds.push(file._id);
+              }
+
+              next();
+            });
+
+            return;
+          }
+
+          unlinkFile({file, folderId: params.folderId}, user, err =>
+          {
+            if (err)
+            {
+              module.error(`[tree] Failed to unlink file [${file._id}] while purging files: ${err.message}`);
+            }
+            else
+            {
+              this.unlinkedFileIds.push(file._id);
+            }
+
+            next();
+          });
+        });
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        app.broker.publish('orderDocuments.tree.filesRemoved', {fileIds: fileIds, user});
 
         done();
       }
@@ -594,7 +831,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
         {
           app.broker.publish('orderDocuments.tree.folderAdded', {
             folder: this.folder,
-            user: user
+            user
           });
         }
 
