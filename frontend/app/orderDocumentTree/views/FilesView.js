@@ -341,6 +341,7 @@ define([
     {
       var tree = this.model;
       var documentFile = tree.files.get(fileId);
+
       var documentFolder = tree.hasSearchPhrase()
         ? tree.folders.get(documentFile.get('folders')[0])
         : tree.getSelectedFolder();
@@ -397,12 +398,14 @@ define([
         $preview.find('dd[data-prop="' + prop + '"]').html(html);
       });
 
+      var tree = this.model;
+
       $preview
         .css({
           top: '-1000px',
           left: '-1000px'
         })
-        .toggleClass('is-trash', this.model.getSelectedFile().isInTrash())
+        .toggleClass('is-trash', tree.isInTrash(tree.getSelectedFolder()))
         .removeClass('hidden');
 
       this.positionPreview();
