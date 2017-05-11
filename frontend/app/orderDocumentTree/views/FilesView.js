@@ -83,6 +83,13 @@ define([
           return false;
         }
 
+        if (e.ctrlKey)
+        {
+          this.toggleMarkFile(documentFile);
+
+          return;
+        }
+
         this.lastClickEvent = e;
 
         tree.setSelectedFile(documentFile.id);
@@ -222,6 +229,7 @@ define([
       view.listenTo(tree, 'change:displayMode', view.onDisplayModeChange);
       view.listenTo(tree, 'change:selectedFolder change:searchPhrase', view.render);
       view.listenTo(tree, 'change:selectedFile', view.onSelectedFileChange);
+      view.listenTo(tree, 'change:markedFiles', view.onMarkedFilesChange);
       view.listenTo(tree.files, 'request', view.onFilesRequest);
       view.listenTo(tree.files, 'error', view.onFilesError);
       view.listenTo(tree.files, 'reset', view.onFilesReset);
@@ -279,7 +287,7 @@ define([
       return {
         id: folder.id,
         label: folder.getLabel().replace(/_/g, ' '),
-        icon: folder.id === '__TRASH__' ? 'fa-trash' : 'fa-folder-o'
+        icon: folder.id === '__TRASH__' ? 'fa-trash-o' : 'fa-folder-o'
       };
     },
 
@@ -311,11 +319,14 @@ define([
         label = '';
       }
 
+      var marked = this.model.isMarkedFile(file);
+
       return {
         id: file.id,
         text: file.id,
         smallText: label.replace(/_/g, ' '),
         selected: file.id === this.model.get('selectedFile'),
+        marked: marked,
         icon: 'fa-file-o',
         files: file.get('files')
       };
@@ -335,6 +346,22 @@ define([
         : tree.getSelectedFolder();
 
       this.model.uploads.addFromDocument(documentFile, documentFolder, hash);
+    },
+
+    toggleMarkFile: function(file)
+    {
+      if (!this.model.hasSearchPhrase() || file.get('folders').length === 1)
+      {
+        this.model.toggleMarkFile(file);
+
+        return;
+      }
+
+      viewport.msg.show({
+        type: 'warning',
+        time: 3000,
+        text: t('orderDocumentTree', 'MSG:canNotMarkSearchResult')
+      });
     },
 
     showPreviewIfNeeded: function()
@@ -619,6 +646,11 @@ define([
       {
         this.hidePreview();
       }
+    },
+
+    onMarkedFilesChange: function(tree, file, state)
+    {
+      this.$file(file.id).toggleClass('is-marked', state);
     },
 
     onFilesRequest: function()

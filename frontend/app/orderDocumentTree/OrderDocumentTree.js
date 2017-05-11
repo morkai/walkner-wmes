@@ -35,6 +35,7 @@ define([
         cutFolder: null,
         selectedFile: null,
         selectedFolder: null,
+        markedFiles: {},
         expandedFolders: {},
         searchPhrase: '',
         displayMode: localStorage[DISPLAY_MODE_STORAGE_KEY] || DISPLAY_MODE.TILES
@@ -95,6 +96,8 @@ define([
       {
         searchPhrase = '';
       }
+
+      this.unmarkAllFiles();
 
       if (searchPhrase !== this.get('searchPhrase'))
       {
@@ -162,6 +165,62 @@ define([
       {
         this.set('selectedFile', fileId, {scroll: scroll});
       }
+    },
+
+    getMarkedFiles: function()
+    {
+      return _.values(this.attributes.markedFiles);
+    },
+
+    getMarkedFileCount: function()
+    {
+      return Object.keys(this.attributes.markedFiles).length;
+    },
+
+    isMarkedFile: function(file)
+    {
+      return !!this.attributes.markedFiles[file.id || file];
+    },
+
+    toggleMarkFile: function(file)
+    {
+      if (this.isMarkedFile(file))
+      {
+        this.unmarkFile(file);
+      }
+      else
+      {
+        this.markFile(file);
+      }
+    },
+
+    markFile: function(file)
+    {
+      this.attributes.markedFiles[file.id] = file;
+
+      this.trigger('change:markedFiles', this, file, true);
+    },
+
+    unmarkFile: function(file)
+    {
+      file = this.attributes.markedFiles[file.id || file];
+
+      if (file)
+      {
+        delete this.attributes.markedFiles[file.id];
+
+        this.trigger('change:markedFiles', this, file, false);
+      }
+    },
+
+    unmarkAllFiles: function()
+    {
+      var tree = this;
+
+      _.forEach(tree.attributes.markedFiles, function(file)
+      {
+        tree.unmarkFile(file);
+      });
     },
 
     getRootFolders: function()
@@ -413,10 +472,20 @@ define([
       });
     },
 
-    removeFile: function(file)
+    unlinkFile: function(file, folder)
     {
-      return this.act('removeFile', {
-        fileId: file.id
+      return this.act('unlinkFile', {
+        fileId: file.id,
+        folderId: folder.id
+      });
+    },
+
+    unlinkFiles: function(files, folder, remove)
+    {
+      return this.act('unlinkFiles', {
+        fileIds: files.map(function(file) { return file.id; }),
+        folderId: folder.id,
+        remove: !!remove
       });
     },
 
@@ -427,11 +496,17 @@ define([
       });
     },
 
-    unlinkFile: function(file, folder)
+    removeFile: function(file)
     {
-      return this.act('unlinkFile', {
-        fileId: file.id,
-        folderId: folder.id
+      return this.act('removeFile', {
+        fileId: file.id
+      });
+    },
+
+    removeFiles: function(files)
+    {
+      return this.act('removeFiles', {
+        fileIds: files.map(function(file) { return file.id; })
       });
     },
 
@@ -502,10 +577,12 @@ define([
 
         case 'fileUnlinked':
           this.files.handleFileUnlinked(message.file._id, message.folderId);
+          this.unmarkFile(message.file._id);
           break;
 
         case 'fileRemoved':
           this.files.handleFileRemoved(message.file._id);
+          this.unmarkFile(message.file._id);
           break;
 
         case 'fileRecovered':

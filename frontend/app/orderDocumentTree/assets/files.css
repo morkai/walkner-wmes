@@ -42,6 +42,9 @@
 .orderDocumentTree-files-icon > .fa {
   vertical-align: top;
 }
+.is-marked > .orderDocumentTree-files-icon > .fa:before {
+  content: "\f15b";
+}
 .orderDocumentTree-files-label-text {
   display: block;
 }
@@ -139,6 +142,9 @@
   flex: 1 1 auto;
   line-height: 16px;
   padding: 0;
+}
+.is-list .is-marked .orderDocumentTree-files-label {
+  font-weight: bold;
 }
 .is-list .orderDocumentTree-files-folder .orderDocumentTree-files-label {
   padding: 6px 0;

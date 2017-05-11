@@ -1,4 +1,4 @@
-<div class="orderDocumentTree-files-item orderDocumentTree-files-file <%- file.selected ? 'is-selected' : '' %>" <% if (file.id) { %>data-id="<%- file.id %>"<% } %>>
+<div class="orderDocumentTree-files-item orderDocumentTree-files-file <%- file.selected ? 'is-selected' : '' %> <%- file.marked ? 'is-marked' : '' %>" <% if (file.id) { %>data-id="<%- file.id %>"<% } %>>
   <span class="orderDocumentTree-files-icon"><i class="fa <%- file.icon || 'fa-file-o' %>"></i></span>
   <span class="orderDocumentTree-files-label"><span class="orderDocumentTree-files-label-text"><%- file.text %></span><span class="orderDocumentTree-files-label-smallText"><%= file.smallText %></span></span>
   <% if (file.id) { %>

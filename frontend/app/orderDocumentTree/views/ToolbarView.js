@@ -7,6 +7,8 @@ define([
   'app/time',
   'app/viewport',
   'app/core/View',
+  './UnlinkFilesDialogView',
+  './RemoveFilesDialogView',
   'app/orderDocumentTree/templates/toolbar'
 ], function(
   _,
@@ -15,6 +17,8 @@ define([
   time,
   viewport,
   View,
+  UnlinkFilesDialogView,
+  RemoveFilesDialogView,
   template
 ) {
   'use strict';
@@ -49,7 +53,42 @@ define([
 
       'mousedown #-copyToClipboard': function()
       {
+        this.captureCopy = true;
+
         document.execCommand('copy');
+      },
+
+      'click #-unlinkMarkedFiles': function()
+      {
+        e.currentTarget.disabled = true;
+
+        var dialogView = new UnlinkFilesDialogView({
+          model: {
+            tree: this.model,
+            files: this.model.getMarkedFiles(),
+            folder: this.model.getSelectedFolder()
+          }
+        });
+
+        dialogView.once('dialog:hidden', this.toggleMarkedButtons.bind(this));
+
+        viewport.showDialog(dialogView, t('orderDocumentTree', 'unlinkFiles:title'));
+      },
+
+      'click #-removeMarkedFiles': function(e)
+      {
+        e.currentTarget.disabled = true;
+
+        var dialogView = new RemoveFilesDialogView({
+          model: {
+            tree: this.model,
+            files: this.model.getMarkedFiles()
+          }
+        });
+
+        dialogView.once('dialog:hidden', this.toggleMarkedButtons.bind(this));
+
+        viewport.showDialog(dialogView, t('orderDocumentTree', 'removeFiles:title'));
       }
 
     },
@@ -59,9 +98,11 @@ define([
       var view = this;
       var tree = view.model;
 
+      view.captureCopy = false;
       view.loadingFiles = false;
 
       view.listenTo(tree, 'change:searchPhrase change:selectedFolder', view.updateCountersAndSearchPhrase);
+      view.listenTo(tree, 'change:markedFiles', view.onMarkedFilesChange);
       view.listenTo(tree.folders, 'reset add remove change:parent', view.updateFolderCount);
       view.listenTo(tree.files, 'request', view.onFilesRequest);
       view.listenTo(tree.files, 'sync', view.onFilesSync);
@@ -77,6 +118,13 @@ define([
 
     onCopy: function(e)
     {
+      if (!this.captureCopy)
+      {
+        return;
+      }
+
+      this.captureCopy = false;
+
       e.preventDefault();
 
       var rows = [];
@@ -134,7 +182,8 @@ define([
         displayMode: this.model.getDisplayMode(),
         searchPhrase: this.model.getSearchPhrase(),
         folderCount: this.serializeFolderCount(),
-        fileCount: this.serializeFileCount()
+        fileCount: this.serializeFileCount(),
+        markedFileCount: this.model.getMarkedFileCount()
       });
     },
 
@@ -189,6 +238,19 @@ define([
       this.$id('fileCount').text(this.serializeFileCount());
     },
 
+    updateMarkedFileCount: function()
+    {
+      this.$id('markedFileCount').text(this.model.getMarkedFileCount());
+    },
+
+    toggleMarkedButtons: function()
+    {
+      var disabled = !this.model.getMarkedFileCount();
+
+      this.$id('unlinkMarkedFiles').prop('disabled', disabled);
+      this.$id('removeMarkedFiles').prop('disabled', disabled);
+    },
+
     onFilesRequest: function()
     {
       this.loadingFiles = true;
@@ -201,6 +263,12 @@ define([
       this.loadingFiles = false;
 
       this.updateFileCount();
+    },
+
+    onMarkedFilesChange: function()
+    {
+      this.toggleMarkedButtons();
+      this.updateMarkedFileCount();
     }
 
   });
