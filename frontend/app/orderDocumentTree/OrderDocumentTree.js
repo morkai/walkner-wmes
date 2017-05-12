@@ -328,7 +328,7 @@ define([
 
     isInTrash: function(folder)
     {
-      return folder && this.getRoot(folder).id === '__TRASH__';
+      return !!folder && this.getRoot(folder).id === '__TRASH__';
     },
 
     canSeeTrash: function()
