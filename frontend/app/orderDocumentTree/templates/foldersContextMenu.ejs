@@ -32,8 +32,8 @@
   <span><%- t('orderDocumentTree', 'contextMenu:moveFolder', {folder: cutFolder.label}) %></span>
 </div>
 <% } %>
-<% if (!isInTrash) { %>
 <div class="orderDocumentTree-contextMenu-separator"></div>
+<% if (!isInTrash) { %>
 <div class="orderDocumentTree-contextMenu-item" data-action="newFolder" data-folder-id="<%- sourceFolder ? sourceFolder.id : '' %>">
   <i class="fa fa-plus"></i>
   <span><%- t('orderDocumentTree', 'contextMenu:' + (sourceFolder ? 'newSubFolder' : 'newFolder')) %></span>
@@ -43,10 +43,12 @@
   <i class="fa fa-pencil"></i>
   <span><%- t('orderDocumentTree', 'contextMenu:renameFolder') %></span>
 </div>
+<% } %>
+<% } %>
+<% if (sourceFolder) { %>
 <div class="orderDocumentTree-contextMenu-item" data-action="removeFolder" data-folder-id="<%- sourceFolder.id %>">
   <i class="fa fa-trash-o"></i>
   <span><%- t('orderDocumentTree', 'contextMenu:removeFolder') %></span>
 </div>
-<% } %>
 <% } %>
 <% } %>

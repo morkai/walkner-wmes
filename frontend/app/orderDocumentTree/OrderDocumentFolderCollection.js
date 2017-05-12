@@ -60,16 +60,26 @@ define([
         return;
       }
 
+      var oldParentId = folder.get('parent');
+
       folder.set({
         parent: '__TRASH__',
-        oldParent: folder.get('parent')
+        oldParent: oldParentId
+      }, {
+        oldParentId: oldParentId
       });
 
-      var parent = this.get(folder.get('oldParent'));
+      var oldParent = this.get(oldParentId);
+      var newParent = this.get('__TRASH__');
 
-      if (parent)
+      if (oldParent)
       {
-        parent.removeChildFolder(folder);
+        oldParent.removeChildFolder(folder);
+      }
+
+      if (newParent)
+      {
+        newParent.addChildFolder(folder);
       }
     },
 
@@ -120,10 +130,7 @@ define([
 
       if (folder && folder.isInTrash())
       {
-        folder.set({
-          parent: this.get('oldParent'),
-          oldParent: null
-        });
+        this.handleFolderMoved(folderId, this.get('oldParent'));
       }
     }
 

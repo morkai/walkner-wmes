@@ -34,7 +34,8 @@ module.exports = function setUpOrderDocumentsTree(app, module)
     removeFolder,
     moveFolder,
     renameFolder,
-    recoverFolder
+    recoverFolder,
+    purgeFolder
 
   };
 
@@ -840,7 +841,6 @@ module.exports = function setUpOrderDocumentsTree(app, module)
     );
   }
 
-  // TODO: Decide what to do with children
   function removeFolder(params, user, done)
   {
     step(
@@ -1053,5 +1053,102 @@ module.exports = function setUpOrderDocumentsTree(app, module)
         done();
       }
     );
+  }
+
+  function purgeFolder(params, user, done)
+  {
+    step(
+      function()
+      {
+        if (params.folder && params.folder instanceof OrderDocumentFolder)
+        {
+          params.folderId = params.folder._id;
+
+          setImmediate(this.parallel(), null, params.folder);
+        }
+        else
+        {
+          OrderDocumentFolder.findById(params.folderId).exec(this.parallel());
+        }
+
+        OrderDocumentFolder.find({parent: params.folderId}).exec(this.parallel());
+
+        OrderDocumentFile.find({folders: params.folderId}).exec(this.parallel());
+      },
+      function(err, parentFolder, childFolders, files)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        this.childFolders = childFolders;
+
+        if (parentFolder._id !== '__TRASH__')
+        {
+          doPurgeFolder(parentFolder, user, this.group());
+        }
+
+        files.forEach(file =>
+        {
+          if (file.folders.length === 1)
+          {
+            purgeFile({file}, user, this.group());
+          }
+          else
+          {
+            unlinkFile({file, folderId: parentFolder._id}, user, this.group());
+          }
+        });
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!this.childFolders.length)
+        {
+          return;
+        }
+
+        const steps = this.childFolders.map(folder =>
+        {
+          return function(err)
+          {
+            if (err)
+            {
+              return this.skip(err);
+            }
+
+            purgeFolder({folder}, user, this.next());
+          };
+        });
+
+        steps.push(this.next());
+
+        step(steps);
+      },
+      done
+    );
+  }
+
+  function doPurgeFolder(folder, user, done)
+  {
+    folder.remove(function(err)
+    {
+      if (!err)
+      {
+        app.broker.publish('orderDocuments.tree.folderPurged', {
+          folder,
+          user
+        });
+      }
+
+      OrderDocumentFolder.update({_id: folder.parent}, {$pull: {children: folder._id}}, () => {});
+
+      done(err);
+    });
   }
 };

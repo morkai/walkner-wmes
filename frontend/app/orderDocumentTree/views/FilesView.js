@@ -579,6 +579,16 @@ define([
       this.$id('preview').addClass('hidden');
     },
 
+    showEmptyIfNeeded: function()
+    {
+      if (!this.$id('folders').children().length && !this.$id('files').children().length)
+      {
+        this.$id('files').html('<p>'
+          + t('orderDocumentTree', 'files:' + (this.model.hasSearchPhrase() ? 'noResults' : 'empty'))
+          + '</p>');
+      }
+    },
+
     addFile: function(file)
     {
       if (this.model.hasSearchPhrase())
@@ -609,12 +619,7 @@ define([
 
       $file.remove();
 
-      if (!this.$id('folders').children().length && !this.$id('files').children().length)
-      {
-        this.$id('files').html('<p>'
-          + t('orderDocumentTree', 'files:' + (this.model.hasSearchPhrase() ? 'noResults' : 'empty'))
-          + '</p>');
-      }
+      this.showEmptyIfNeeded();
     },
 
     updateFile: function(file)
@@ -723,7 +728,7 @@ define([
 
     onFilesChange: function(file)
     {
-      if (file.isInFolder(this.model.getSelectedFolder().id))
+      if (file.isInFolder(this.model.get('selectedFolder')))
       {
         this.updateFile(file);
       }
@@ -773,6 +778,8 @@ define([
     onFoldersRemove: function(folder)
     {
       this.$folder(folder.id).remove();
+
+      this.showEmptyIfNeeded();
     },
 
     onParentChange: function(folder)

@@ -1,0 +1,7 @@
+<div>
+  <%- t('orderDocumentTree', 'purgeFolder:message' + (isTrash ? ':trash' : ''), {folder: label}) %>
+  <div class="form-actions">
+    <button class="btn btn-danger dialog-answer" type="button" data-answer="yes"><%- t('orderDocumentTree', 'purgeFolder:submit' + (isTrash ? ':trash' : '')) %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</div>

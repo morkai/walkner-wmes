@@ -94,6 +94,17 @@
   "editFile:msg:success": "Dokument został zmieniony pomyślnie :)",
   "editFile:msg:failure": "Nie udało się zmienić dokumentu :(",
 
+  "purgeFolder:title": "Usuwanie katalogu",
+  "purgeFolder:title:trash": "Opróżnianie Śmietnika",
+  "purgeFolder:submit": "Usuń katalog",
+  "purgeFolder:submit:trash": "Opróżnij Śmietnik",
+  "purgeFolder:message": "<p>Czy na pewno chcesz bezpowrotnie usunąć katalog <em>{folder}</em>?</p>",
+  "purgeFolder:message:trash": "<p>Czy na pewno chcesz bezpowrotnie opróżnić Śmietnik?</p>",
+  "purgeFolder:msg:success": "Katalog został usunięty pomyślnie :)",
+  "purgeFolder:msg:success:trash": "Śmietnik został opróżniony pomyślnie :)",
+  "purgeFolder:msg:failure": "Nie udało się przywrócić dokumentów :(",
+  "purgeFolder:msg:failure:trash": "Nie udało się opróżnić Śmietnika :(",
+
   "contextMenu:expandFolder": "Rozwiń",
   "contextMenu:expandFolders": "Rozwiń wszystko",
   "contextMenu:expandFolders:all": "Rozwiń wszystko",

@@ -457,6 +457,13 @@ define([
       return req;
     },
 
+    purgeFolder: function(folder)
+    {
+      return this.act('purgeFolder', {
+        folderId: folder.id
+      });
+    },
+
     addFiles: function()
     {
       return this.act('addFiles', {
@@ -627,6 +634,11 @@ define([
 
         case 'filePurged':
           this.files.handleFilePurged(message.file._id);
+
+          if (this.get('selectedFile') === message.file._id)
+          {
+            this.setSelectedFile(null);
+          }
           break;
 
         case 'folderAdded':
@@ -651,6 +663,14 @@ define([
 
         case 'folderPurged':
           this.folders.handleFolderPurged(message.folder._id);
+
+          if (this.get('selectedFolder') === message.folder._id)
+          {
+            this.setSelectedFolder(this.folders.get(message.folder.parent) ? message.folder.parent : null, {
+              scroll: true,
+              updateUrl: false
+            });
+          }
           break;
       }
     }

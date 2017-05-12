@@ -7,11 +7,13 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/core/views/DialogView',
   'app/core/util/uuid',
   'app/orderDocumentTree/OrderDocumentFolder',
   'app/orderDocumentTree/templates/folders',
   'app/orderDocumentTree/templates/folder',
   'app/orderDocumentTree/templates/foldersContextMenu',
+  'app/orderDocumentTree/templates/purgeFolderDialog',
 ], function(
   _,
   $,
@@ -19,11 +21,13 @@ define([
   user,
   viewport,
   View,
+  DialogView,
   uuid,
   OrderDocumentFolder,
   template,
   renderFolder,
-  renderContextMenu
+  renderContextMenu,
+  purgeFolderDialogTemplate
 ) {
   'use strict';
 
@@ -598,21 +602,79 @@ define([
 
     handleRemoveFolder: function(folderId)
     {
-      var $folder = this.$folder(folderId).addClass('is-removed');
+      var tree = this.model;
+      var folder = tree.folders.get(folderId);
 
-      this.model.removeFolder(this.model.folders.get(folderId))
-        .fail(function()
+      if (!folder)
+      {
+        return;
+      }
+
+      if (tree.isInTrash(folder))
+      {
+        this.handlePurgeFolder(folder);
+      }
+      else
+      {
+        var $folder = this.$folder(folder.id).addClass('is-removed');
+
+        this.model.removeFolder(folder)
+          .fail(function()
+          {
+            viewport.msg.show({
+              type: 'error',
+              time: 3000,
+              text: t('orderDocumentTree', 'folders:msg:removeFolder:failure')
+            });
+          })
+          .always(function()
+          {
+            $folder.removeClass('is-removed');
+          });
+      }
+    },
+
+    handlePurgeFolder: function(folder)
+    {
+      var tree = this.model;
+      var isTrash = folder.id === '__TRASH__';
+      var dialogView = new DialogView({
+        template: purgeFolderDialogTemplate,
+        autoHide: false,
+        model: {
+          isTrash: isTrash,
+          label: folder.getLabel()
+        }
+      });
+
+      this.listenTo(dialogView, 'answered', function()
+      {
+        var req = tree.purgeFolder(folder);
+
+        req.fail(function()
         {
+          dialogView.enableAnswers();
+
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('orderDocumentTree', 'folders:msg:removeFolder:failure')
+            text: t('orderDocumentTree', 'purgeFolder:msg:failure' + (isTrash ? ':trash' : ''))
           });
-        })
-        .always(function()
-        {
-          $folder.removeClass('is-removed');
         });
+
+        req.done(function()
+        {
+          dialogView.closeDialog();
+
+          viewport.msg.show({
+            type: 'success',
+            time: 2000,
+            text: t('orderDocumentTree', 'purgeFolder:msg:success' + (isTrash ? ':trash' : ''))
+          });
+        });
+      });
+
+      viewport.showDialog(dialogView, t('orderDocumentTree', 'purgeFolder:title' + (isTrash ? ':trash' : '')));
     },
 
     handleRecoverFolder: function(folderId)
