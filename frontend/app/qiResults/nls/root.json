@@ -82,6 +82,11 @@
     "filter:productFamily": "Family",
     "filter:division": "Division",
     "filter:kind": "Kind",
+    "filter:errorCategory": "Error category",
+    "filter:faultCode": "Fault code",
+    "filter:status": "Action status",
+    "filter:inspector": "Inspector",
+    "filter:limit": "Results per page",
     "filter:submit": "Filter results",
     "filter:filters": "Show additional filters",
 

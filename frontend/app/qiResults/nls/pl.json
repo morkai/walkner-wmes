@@ -85,6 +85,7 @@
   "filter:faultCode": "Kod wady",
   "filter:status": "Status akcji",
   "filter:inspector": "Inspektor",
+  "filter:limit": "Ilość wyników na stronę",
   "filter:submit": "Filtruj wyniki",
   "filter:filters": "Pokaż dodatkowe filtry",
 

@@ -29,7 +29,8 @@ define([
     'errorCategory',
     'faultCode',
     'status',
-    'inspector'
+    'inspector',
+    'limit'
   ];
   var FILTER_MAP = {
     orderNo: 'order',
@@ -234,6 +235,8 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
+      this.$id('limit').parent().attr('data-filter', 'limit');
+
       this.toggleButtonGroup('result');
 
       this.$id('filters').select2({
@@ -303,18 +306,8 @@ define([
     toggleFilters: function()
     {
       var view = this;
-      var filters = [
-        'order',
-        'productFamily',
-        'division',
-        'kind',
-        'errorCategory',
-        'faultCode',
-        'status',
-        'inspector'
-      ];
 
-      filters.forEach(function(filter)
+      FILTER_LIST.forEach(function(filter)
       {
         view.$('.form-group[data-filter="' + filter + '"]').toggleClass('hidden', !view.filterHasValue(filter));
       });
@@ -322,7 +315,14 @@ define([
 
     filterHasValue: function(filter)
     {
-      return this.$id(filter).val().length > 0;
+      var value = this.$id(filter).val();
+
+      if (filter === 'limit')
+      {
+        return +value !== 20;
+      }
+
+      return value.length > 0;
     },
 
     showFilter: function(filter)
