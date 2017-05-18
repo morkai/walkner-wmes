@@ -7,6 +7,10 @@
     <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
     <input id="<%- idPrefix %>-to" class="form-control" name="to" type="month" placeholder="<%- t('core', 'placeholder:month') %>">
   </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-kinds"><%- t('qiResults', 'PROPERTY:kind') %></label>
+    <input id="<%- idPrefix %>-kinds" name="kinds" type="text">
+  </div>
   <div class="form-group filter-actions">
     <div class="btn-group">
       <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>

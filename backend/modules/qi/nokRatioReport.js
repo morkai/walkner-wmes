@@ -41,6 +41,12 @@ module.exports = function(mongoose, options, done)
         ok: false,
         division: {$in: Object.keys(results.divisionTotal)}
       };
+
+      if (options.kinds.length)
+      {
+        conditions.kind = {$in: options.kinds};
+      }
+
       const fields = {
         inspectedAt: 1,
         division: 1,

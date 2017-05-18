@@ -3,6 +3,7 @@
 define([
   'js2form',
   'app/time',
+  'app/updater/index',
   'app/core/View',
   'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
@@ -13,6 +14,7 @@ define([
 ], function(
   js2form,
   time,
+  updater,
   View,
   fixTimeRange,
   buttonGroup,
@@ -47,6 +49,19 @@ define([
     afterRender: function()
     {
       js2form(this.el, this.serializeFormData());
+
+      this.$id('kinds').select2({
+        width: '300px',
+        allowClear: true,
+        multiple: true,
+        data: qiDictionaries.kinds.map(idAndLabel)
+      });
+
+      // TODO: remove
+      if (!updater.versions.reports || updater.versions.reports <= 38)
+      {
+        this.$id('kinds').select2('disable');
+      }
     },
 
     serializeFormData: function()
@@ -57,7 +72,8 @@ define([
 
       return {
         from: from ? time.format(from, 'YYYY-MM') : '',
-        to: to ? time.format(to, 'YYYY-MM') : ''
+        to: to ? time.format(to, 'YYYY-MM') : '',
+        kinds: model.get('kinds').join(',')
       };
     },
 
@@ -65,7 +81,8 @@ define([
     {
       var query = {
         from: time.getMoment(this.$id('from').val(), 'YYYY-MM').valueOf(),
-        to: time.getMoment(this.$id('to').val(), 'YYYY-MM').valueOf()
+        to: time.getMoment(this.$id('to').val(), 'YYYY-MM').valueOf(),
+        kinds: this.$id('kinds').val()
       };
 
       if (!query.from || query.from < 0)
@@ -86,6 +103,8 @@ define([
 
         query.to = to.valueOf();
       }
+
+      query.kinds = query.kinds === '' ? [] : query.kinds.split(',');
 
       this.model.set(query);
       this.model.trigger('filtered');

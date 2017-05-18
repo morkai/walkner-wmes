@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const nokRatioReport = require('../nokRatioReport');
 
 module.exports = function okRatioReportRoute(app, qiModule, req, res, next)
@@ -14,6 +15,7 @@ module.exports = function okRatioReportRoute(app, qiModule, req, res, next)
     interval: 'month',
     fromTime: reportsModule.helpers.getTime(query.from) || null,
     toTime: reportsModule.helpers.getTime(query.to) || null,
+    kinds: _.isEmpty(query.kinds) ? [] : query.kinds.split(','),
     divisions: orgUnitsModule.getAllByType('division').map(d => d.toJSON())
   };
 

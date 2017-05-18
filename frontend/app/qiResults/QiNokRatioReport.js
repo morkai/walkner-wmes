@@ -21,7 +21,8 @@ define([
     {
       return {
         from: 0,
-        to: 0
+        to: 0,
+        kinds: []
       };
     },
 
@@ -32,12 +33,13 @@ define([
         options = {};
       }
 
-      options.data = _.extend(
+      var data = options.data = _.extend(
         options.data || {},
         _.pick(this.attributes, [
-          'from', 'to'
+          'from', 'to', 'kinds'
         ])
       );
+      data.kinds = data.kinds.join(',');
 
       return Model.prototype.fetch.call(this, options);
     },
@@ -46,7 +48,8 @@ define([
     {
       return '/qi/reports/nokRatio'
         + '?from=' + this.get('from')
-        + '&to=' + this.get('to');
+        + '&to=' + this.get('to')
+        + '&kinds=' + this.get('kinds');
     },
 
     parse: function(report)
@@ -89,7 +92,8 @@ define([
 
       return new this({
         from: from.valueOf(),
-        to: to.valueOf()
+        to: to.valueOf(),
+        kinds: _.isEmpty(query.kinds) ? [] : query.kinds.split(',')
       });
     }
 
