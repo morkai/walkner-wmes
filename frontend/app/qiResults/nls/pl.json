@@ -96,7 +96,7 @@
   "LIST:COLUMN:division": "Centrum",
   "LIST:COLUMN:qtyOrder": "Ilość w&nbsp;zlec.",
   "LIST:COLUMN:qtyInspected": "Ilość spr.",
-  "LIST:COLUMN:qtyToFix": "Ilość popr.",
+  "LIST:COLUMN:qtyToFix": "Ilość do&nbsp;sel.",
   "LIST:COLUMN:qtyNok": "Ilość NOK",
   "LIST:COLUMN:qtyNokInspected": "Ilość&nbsp;NOK w&nbsp;spr.",
 
