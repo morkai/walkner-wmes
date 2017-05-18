@@ -59,6 +59,7 @@ define([
 
     serializeColumns: function()
     {
+      var hasAnyNokResult = this.collection.hasAnyNokResult();
       var columns = [
         {id: 'rid', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
         {id: 'orderNo', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
@@ -68,12 +69,22 @@ define([
         {id: 'division', tdClassName: 'is-min', thClassName: 'is-filter', label: t('LIST:COLUMN:division')},
         {id: 'kind', thClassName: 'is-filter'},
         {id: 'inspectedAt', tdClassName: 'is-min', thClassName: 'is-filter'},
-        {id: 'inspector', thClassName: 'is-filter'},
-        {id: 'qtyOrder', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyOrder')},
-        {id: 'qtyInspected', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyInspected')}
+        {id: 'inspector', thClassName: 'is-filter'}
       ];
 
-      if (this.collection.hasAnyNokResult())
+      if (hasAnyNokResult)
+      {
+        columns.push(
+          {id: 'nokOwner', thClassName: 'is-filter', label: t('LIST:COLUMN:nokOwner')}
+        );
+      }
+
+      columns.push(
+        {id: 'qtyOrder', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyOrder')},
+        {id: 'qtyInspected', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyInspected')}
+      );
+
+      if (hasAnyNokResult)
       {
         columns.push(
           {id: 'qtyNokInspected', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyNokInspected')},

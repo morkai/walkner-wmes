@@ -30,6 +30,7 @@ define([
     'faultCode',
     'status',
     'inspector',
+    'nokOwner',
     'limit'
   ];
   var FILTER_MAP = {
@@ -81,6 +82,7 @@ define([
         errorCategory: '',
         faultCode: '',
         inspector: '',
+        nokOwner: '',
         status: ''
       };
     },
@@ -111,6 +113,10 @@ define([
       {
         formData.inspector = term.name === 'in' ? term.args[1].join(',') : term.args[1];
       },
+      'nokOwner.id': function(propertyName, term, formData)
+      {
+        formData.nokOwner = term.name === 'in' ? term.args[1].join(',') : term.args[1];
+      },
       'kind': 'division',
       'errorCategory': 'division',
       'faultCode': 'productFamily',
@@ -124,6 +130,7 @@ define([
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
       var inspector = this.$id('inspector').val();
+      var nokOwner = this.$id('nokOwner').val();
       var productFamily = this.$id('productFamily').val();
       var faultCode = this.$id('faultCode').val();
       var status = this.$id('status').val();
@@ -174,6 +181,18 @@ define([
         else
         {
           selector.push({name: 'in', args: ['inspector.id', inspector.split(',')]});
+        }
+      }
+
+      if (nokOwner.length)
+      {
+        if (nokOwner.indexOf(',') === -1)
+        {
+          selector.push({name: 'eq', args: ['nokOwner.id', nokOwner]});
+        }
+        else
+        {
+          selector.push({name: 'in', args: ['nokOwner.id', nokOwner.split(',')]});
         }
       }
 
@@ -298,6 +317,14 @@ define([
         allowClear: true,
         placeholder: ' ',
         data: qiDictionaries.inspectors.map(idAndLabel)
+      });
+
+      this.$id('nokOwner').select2({
+        width: '230px',
+        multiple: true,
+        allowClear: true,
+        placeholder: ' ',
+        data: qiDictionaries.masters.map(idAndLabel)
       });
 
       this.toggleFilters();
