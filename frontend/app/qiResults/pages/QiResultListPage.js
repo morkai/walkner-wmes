@@ -1,6 +1,7 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/i18n',
   'app/user',
   'app/core/pages/FilteredListPage',
@@ -10,6 +11,7 @@ define([
   '../views/QiResultListView',
   'app/qiResults/templates/addPageActions'
 ], function(
+  $,
   t,
   user,
   FilteredListPage,
@@ -50,6 +52,23 @@ define([
     load: function(when)
     {
       return when(this.collection.fetch({reset: true}), qiDictionaries.load());
+    },
+
+    defineViews: function()
+    {
+      FilteredListPage.prototype.defineViews.apply(this, arguments);
+
+      this.listenTo(this.listView, 'showFilter', function(filter)
+      {
+        if (filter === 'rid')
+        {
+          $('.page-actions-jump').find('input[name="rid"]').focus();
+        }
+        else
+        {
+          this.filterView.showFilter(filter);
+        }
+      });
     },
 
     destroy: function()

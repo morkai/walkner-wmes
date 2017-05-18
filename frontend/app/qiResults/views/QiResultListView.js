@@ -43,6 +43,11 @@ define([
         }
 
         window.location.href = url;
+      },
+
+      'click .is-filter': function(e)
+      {
+        this.trigger('showFilter', e.currentTarget.dataset.columnId);
       }
 
     }, ListView.prototype.events),
@@ -55,15 +60,15 @@ define([
     serializeColumns: function()
     {
       var columns = [
-        {id: 'rid', tdClassName: 'is-min is-number'},
-        {id: 'orderNo', tdClassName: 'is-min is-number'},
-        {id: 'nc12', tdClassName: 'is-min is-number'},
-        {id: 'productFamily', tdClassName: 'is-min'},
+        {id: 'rid', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
+        {id: 'orderNo', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
+        {id: 'nc12', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
+        {id: 'productFamily', tdClassName: 'is-min', thClassName: 'is-filter'},
         'productName',
-        {id: 'division', tdClassName: 'is-min', label: t('LIST:COLUMN:division')},
-        'kind',
-        {id: 'inspectedAt', tdClassName: 'is-min'},
-        'inspector',
+        {id: 'division', tdClassName: 'is-min', thClassName: 'is-filter', label: t('LIST:COLUMN:division')},
+        {id: 'kind', thClassName: 'is-filter'},
+        {id: 'inspectedAt', tdClassName: 'is-min', thClassName: 'is-filter'},
+        {id: 'inspector', thClassName: 'is-filter'},
         {id: 'qtyOrder', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyOrder')},
         {id: 'qtyInspected', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyInspected')}
       ];
@@ -74,9 +79,9 @@ define([
           {id: 'qtyNokInspected', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyNokInspected')},
           {id: 'qtyToFix', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyToFix')},
           {id: 'qtyNok', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyNok')},
-          {id: 'errorCategory', tdClassName: 'is-min'},
-          {id: 'faultCode', tdClassName: 'is-min'},
-          {id: 'correctiveAction', label: t('PROPERTY:correctiveActions'), noData: ''}
+          {id: 'errorCategory', tdClassName: 'is-min', thClassName: 'is-filter'},
+          {id: 'faultCode', tdClassName: 'is-min', thClassName: 'is-filter'},
+          {id: 'correctiveAction', label: t('PROPERTY:correctiveActions'), noData: '', thClassName: 'is-filter'}
         );
       }
 

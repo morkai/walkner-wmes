@@ -21,7 +21,7 @@ define([
 ) {
   'use strict';
 
-  var FILTERS = [
+  var FILTER_LIST = [
     'order',
     'productFamily',
     'division',
@@ -31,6 +31,11 @@ define([
     'status',
     'inspector'
   ];
+  var FILTER_MAP = {
+    orderNo: 'order',
+    nc12: 'order',
+    correctiveAction: 'status'
+  };
 
   return FilterView.extend({
 
@@ -221,7 +226,7 @@ define([
     serialize: function()
     {
       return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
-        filters: FILTERS
+        filters: FILTER_LIST
       });
     },
 
@@ -322,7 +327,14 @@ define([
 
     showFilter: function(filter)
     {
-      this.$('.form-group[data-filter="' + filter + '"]')
+      if (filter === 'inspectedAt')
+      {
+        this.$id('from').focus();
+
+        return;
+      }
+
+      this.$('.form-group[data-filter="' + (FILTER_MAP[filter] || filter) + '"]')
         .removeClass('hidden')
         .find('input, select')
         .first()

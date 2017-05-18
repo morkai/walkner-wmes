@@ -7,3 +7,9 @@
   padding-bottom: 0;
   line-height: 1;
 }
+.qiResults-list .is-filter {
+  cursor: pointer;
+}
+.qiResults-list .is-filter:hover {
+  background: #e6e6e6;
+}
