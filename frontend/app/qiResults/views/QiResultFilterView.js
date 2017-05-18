@@ -85,7 +85,7 @@ define([
       },
       'kind': 'division',
       'errorCategory': 'division',
-      'faultCode': 'division',
+      'faultCode': 'productFamily',
       'correctiveActions.status': 'division',
       'inspector.id': 'productFamily'
     },
@@ -98,6 +98,7 @@ define([
       var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
       var inspector = this.$id('inspector').val();
       var productFamily = this.$id('productFamily').val();
+      var faultCode = this.$id('faultCode').val();
       var status = this.$id('status').val();
 
       if (result === 'ok')
@@ -161,12 +162,24 @@ define([
         }
       }
 
+      if (faultCode.length)
+      {
+        if (faultCode.indexOf(',') === -1)
+        {
+          selector.push({name: 'eq', args: ['faultCode', faultCode]});
+        }
+        else
+        {
+          selector.push({name: 'in', args: ['faultCode', faultCode.split(',')]});
+        }
+      }
+
       if (status.length)
       {
         selector.push({name: 'eq', args: ['correctiveActions.status', status]});
       }
 
-      ['division', 'kind', 'errorCategory', 'faultCode'].forEach(function(property)
+      ['division', 'kind', 'errorCategory'].forEach(function(property)
       {
         var value = this.$id(property).val();
 
@@ -204,7 +217,7 @@ define([
       });
 
       this.$id('kind').select2({
-        width: '150px',
+        width: '200px',
         allowClear: true,
         placeholder: ' ',
         data: qiDictionaries.kinds.map(idAndLabel)
@@ -218,14 +231,15 @@ define([
       });
 
       this.$id('faultCode').select2({
-        width: '90px',
+        width: '195px',
         allowClear: true,
+        multiple: true,
         placeholder: ' ',
         data: qiDictionaries.faults.map(idAndLabel)
       });
 
       this.$id('status').select2({
-        width: '115px',
+        width: '125px',
         allowClear: true,
         placeholder: ' ',
         data: qiDictionaries.actionStatuses.map(idAndLabel)
