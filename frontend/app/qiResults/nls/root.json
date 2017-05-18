@@ -83,6 +83,7 @@
     "filter:division": "Division",
     "filter:kind": "Kind",
     "filter:submit": "Filter results",
+    "filter:filters": "Show additional filters",
 
     "LIST:COLUMN:orderNo": "Order",
     "LIST:COLUMN:productFamily": "Family",

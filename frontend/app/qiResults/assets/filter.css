@@ -11,3 +11,12 @@
 .qiResults-filter-nok {
   color: #e00!important;
 }
+@media (max-width: 767px) {
+  .qiResults-filter.is-expanded > .form-group.hidden {
+    display: block!important;
+    visibility: visible!important;
+  }
+  .qiResults-filter > .form-group[data-filter="filters"] {
+    display: none;
+  }
+}

@@ -21,6 +21,17 @@ define([
 ) {
   'use strict';
 
+  var FILTERS = [
+    'order',
+    'productFamily',
+    'division',
+    'kind',
+    'errorCategory',
+    'faultCode',
+    'status',
+    'inspector'
+  ];
+
   return FilterView.extend({
 
     template: template,
@@ -40,6 +51,13 @@ define([
             radioEl.checked = false;
           }, 1);
         }
+      },
+
+      'click a[data-filter]': function(e)
+      {
+        e.preventDefault();
+
+        this.showFilter(e.currentTarget.dataset.filter);
       }
 
     }, FilterView.prototype.events),
@@ -83,11 +101,14 @@ define([
       {
         formData[propertyName] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
       },
+      'inspector.id': function(propertyName, term, formData)
+      {
+        formData.inspector = term.name === 'in' ? term.args[1].join(',') : term.args[1];
+      },
       'kind': 'division',
       'errorCategory': 'division',
       'faultCode': 'productFamily',
-      'correctiveActions.status': 'division',
-      'inspector.id': 'productFamily'
+      'correctiveActions.status': 'division'
     },
 
     serializeFormToQuery: function(selector)
@@ -190,14 +211,32 @@ define([
       }, this);
     },
 
+    changeFilter: function()
+    {
+      FilterView.prototype.changeFilter.apply(this, arguments);
+
+      this.toggleFilters();
+    },
+
+    serialize: function()
+    {
+      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
+        filters: FILTERS
+      });
+    },
+
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
 
       this.toggleButtonGroup('result');
 
+      this.$id('filters').select2({
+        width: '175px'
+      });
+
       this.$id('productFamily').select2({
-        width: '110px',
+        width: '200px',
         allowClear: true,
         multiple: true,
         placeholder: ' ',
@@ -252,6 +291,42 @@ define([
         placeholder: ' ',
         data: qiDictionaries.inspectors.map(idAndLabel)
       });
+
+      this.toggleFilters();
+    },
+
+    toggleFilters: function()
+    {
+      var view = this;
+      var filters = [
+        'order',
+        'productFamily',
+        'division',
+        'kind',
+        'errorCategory',
+        'faultCode',
+        'status',
+        'inspector'
+      ];
+
+      filters.forEach(function(filter)
+      {
+        view.$('.form-group[data-filter="' + filter + '"]').toggleClass('hidden', !view.filterHasValue(filter));
+      });
+    },
+
+    filterHasValue: function(filter)
+    {
+      return this.$id(filter).val().length > 0;
+    },
+
+    showFilter: function(filter)
+    {
+      this.$('.form-group[data-filter="' + filter + '"]')
+        .removeClass('hidden')
+        .find('input, select')
+        .first()
+        .focus();
     }
 
   });

@@ -92,7 +92,9 @@ define([
       {
         this.collapsed = !this.collapsed;
 
-        this.$el.toggleClass('is-collapsed', this.collapsed);
+        this.$el
+          .toggleClass('is-collapsed', this.collapsed)
+          .toggleClass('is-expanded', !this.collapsed);
       }
 
       this.$toggleFilter.find('span').text(t('core', 'filter:' + (this.collapsed ? 'show' : 'hide')));
