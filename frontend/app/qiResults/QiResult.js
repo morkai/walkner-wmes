@@ -40,7 +40,7 @@ define([
         status: dictionaries.getLabel('actionStatus', action.status),
         when: time.format(action.when, 'LL'),
         who: action.who.map(function(u) { return u.label; }).join(', '),
-        what: action.what
+        what: action.what.trim()
       };
     });
   }
