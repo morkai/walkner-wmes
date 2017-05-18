@@ -88,6 +88,7 @@
   "filter:limit": "Ilość wyników na stronę",
   "filter:submit": "Filtruj wyniki",
   "filter:filters": "Pokaż dodatkowe filtry",
+  "filter:help": "<i class='fa fa-question-circle'></i> Dodatkowe filtry są od teraz domyślnie schowane. Nowe filtry można dodać wybierając je z rozwijanego menu obok przycisku <em><i class='fa fa-filter'></i> Filtruj wyniki</em> lub klikając na kolumnę w tabeli wyników poniżej. Kliknij tutaj, aby ukryć ten komunikat.",
 
   "LIST:COLUMN:orderNo": "Zlecenie",
   "LIST:COLUMN:productFamily": "Rodzina",
