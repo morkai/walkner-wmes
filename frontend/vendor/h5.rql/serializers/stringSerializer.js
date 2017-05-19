@@ -3,24 +3,10 @@ define(function (require, exports, module) {/*jshint maxparams:5*/
 'use strict';
 
 var specialTerms = require('../specialTerms');
+var specialOperators = require('../specialOperators');
 var autoConvertedMap = require('../autoConvertedMap');
 
 exports.fromQuery = serializeRqlToString;
-
-/**
- * @const
- * @type {object.<string, string>}
- */
-var cmpOperatorMap = {
-  'eq': '=',
-  'ne': '!=',
-  'le': '<=',
-  'ge': '>=',
-  'lt': '<',
-  'gt': '>',
-  'in': '=in=',
-  'nin': '=nin='
-};
 
 /**
  * @param {h5.rql.Query} query
@@ -30,13 +16,15 @@ var cmpOperatorMap = {
 function serializeRqlToString(query, options)
 {
   var rqlString = [];
-  var encode =
-    options && options.doubleEncode ? doubleEncodeString : encodeString;
+  var pushOptions = {
+    encode: options && options.doubleEncode ? doubleEncodeString : encodeString,
+    useOperators: options && options.useOperators
+  };
 
   pushFields(rqlString, query.fields);
   pushSort(rqlString, query.sort);
   pushLimit(rqlString, query.limit, query.skip);
-  pushSelector(rqlString, encode, query.selector);
+  pushSelector(rqlString, pushOptions, query.selector);
 
   return rqlString.join('').substr(1);
 }
@@ -122,10 +110,10 @@ function pushLimit(rqlString, limit, skip)
 
 /**
  * @param {Array.<string>} rqlString
- * @param {function} encode
+ * @param {object} options
  * @param {object.<string, object>} selector
  */
-function pushSelector(rqlString, encode, selector)
+function pushSelector(rqlString, options, selector)
 {
   var argCount = selector.args.length;
 
@@ -147,29 +135,29 @@ function pushSelector(rqlString, encode, selector)
 
       rqlString.push('&');
 
-      pushTerm(rqlString, encode, selectorArg, argCount);
+      pushTerm(rqlString, options, selectorArg, argCount);
     }
   }
   else
   {
     rqlString.push('&');
 
-    pushTerm(rqlString, encode, selector, argCount, true);
+    pushTerm(rqlString, options, selector, argCount, true);
   }
 }
 
 /**
  * @param {Array.<string>} rqlString
- * @param {function} encode
+ * @param {function} options
  * @param {*} term
  * @param {number} parentArgCount
  * @param {boolean=} root
  */
-function pushTerm(rqlString, encode, term, parentArgCount, root)
+function pushTerm(rqlString, options, term, parentArgCount, root)
 {
   if (Array.isArray(term))
   {
-    pushArray(rqlString, encode, term);
+    pushArray(rqlString, options, term);
 
     return;
   }
@@ -179,16 +167,16 @@ function pushTerm(rqlString, encode, term, parentArgCount, root)
     || typeof term.name !== 'string'
     || !Array.isArray(term.args))
   {
-    pushValue(rqlString, encode, term);
+    pushValue(rqlString, options, term);
 
     return;
   }
 
-  if (cmpOperatorMap.hasOwnProperty(term.name) && term.args.length > 1)
+  if (specialOperators.hasOwnProperty(term.name) && term.args.length > 1)
   {
-    pushTerm(rqlString, encode, term.args[0], 0);
-    rqlString.push(cmpOperatorMap[term.name]);
-    pushTerm(rqlString, encode, term.args[1], 0);
+    pushTerm(rqlString, options, term.args[0], 0);
+    rqlString.push(specialOperators[term.name]);
+    pushTerm(rqlString, options, term.args[1], 0);
 
     return;
   }
@@ -204,17 +192,17 @@ function pushTerm(rqlString, encode, term, parentArgCount, root)
     conjunction = '|';
   }
 
-  pushTermWithArgs(rqlString, encode, conjunction, term, parentArgCount);
+  pushTermWithArgs(rqlString, options, conjunction, term, parentArgCount);
 }
 
 /**
  * @param {Array.<string>} rqlString
- * @param {function} encode
+ * @param {function} options
  * @param {string} conjunction
  * @param {object} term
  * @param {number} parentArgCount
  */
-function pushTermWithArgs(rqlString, encode, conjunction, term, parentArgCount)
+function pushTermWithArgs(rqlString, options, conjunction, term, parentArgCount)
 {
   var argCount = term.args.length;
 
@@ -229,7 +217,7 @@ function pushTermWithArgs(rqlString, encode, conjunction, term, parentArgCount)
 
   for (var i = 0; i < argCount; ++i)
   {
-    pushTerm(rqlString, encode, term.args[i], argCount);
+    pushTerm(rqlString, options, term.args[i], argCount);
 
     if (i < argCount - 1)
     {
@@ -245,16 +233,16 @@ function pushTermWithArgs(rqlString, encode, conjunction, term, parentArgCount)
 
 /**
  * @param {Array.<string>} rqlString
- * @param {function} encode
+ * @param {function} options
  * @param {Array} array
  */
-function pushArray(rqlString, encode, array)
+function pushArray(rqlString, options, array)
 {
   rqlString.push('(');
 
   for (var i = 0, l = array.length; i < l; ++i)
   {
-    pushTerm(rqlString, encode, array[i], l);
+    pushTerm(rqlString, options, array[i], l);
 
     if (i < l - 1)
     {
@@ -267,10 +255,10 @@ function pushArray(rqlString, encode, array)
 
 /**
  * @param {Array.<string>} rqlString
- * @param {function} encode
+ * @param {function} options
  * @param {*} value
  */
-function pushValue(rqlString, encode, value)
+function pushValue(rqlString, options, value)
 {
   /*jshint -W015*/
 
@@ -289,7 +277,7 @@ function pushValue(rqlString, encode, value)
       break;
 
     case 'object':
-      pushObjectValue(rqlString, encode, value);
+      pushObjectValue(rqlString, options, value);
       break;
 
     default:
@@ -308,7 +296,7 @@ function pushValue(rqlString, encode, value)
       }
       else
       {
-        rqlString.push(encode(value));
+        rqlString.push(options.encode(value));
       }
 
       break;
@@ -318,10 +306,10 @@ function pushValue(rqlString, encode, value)
 
 /**
  * @param {Array.<string>} rqlString
- * @param {function} encode
+ * @param {function} options
  * @param {?Object} value
  */
-function pushObjectValue(rqlString, encode, value)
+function pushObjectValue(rqlString, options, value)
 {
   if (value === null)
   {
@@ -341,15 +329,15 @@ function pushObjectValue(rqlString, encode, value)
       pattern = pattern.substr(1, modPos - 1);
     }
 
-    rqlString.push('re:', encode(pattern));
+    rqlString.push('re:', options.encode(pattern));
   }
   else if (typeof value.convertToRqlValue === 'function')
   {
-    rqlString.push(value.convertToRqlValue(encode));
+    rqlString.push(value.convertToRqlValue(options.encode));
   }
   else
   {
-    rqlString.push(encode(value.toString()));
+    rqlString.push(options.encode(value.toString()));
   }
 }
 
