@@ -24,8 +24,8 @@ define([
   router.map('/subdivisions', canView, function()
   {
     viewport.loadPage(
-      ['app/core/pages/ListPage', 'app/subdivisions/views/decorateSubdivision', nls],
-      function(ListPage, decorateSubdivision)
+      ['app/core/pages/ListPage', 'app/data/views/renderOrgUnitPath', nls],
+      function(ListPage, renderOrgUnitPath)
       {
         return new ListPage({
           collection: subdivisions,
@@ -35,9 +35,13 @@ define([
             {id: 'name', className: 'is-min'},
             {id: 'prodTaskTags', className: 'is-min'},
             {id: 'aor', className: 'is-min'},
-            'autoDowntimes'
+            'autoDowntimes',
+            {id: 'deactivatedAt', className: 'is-min'}
           ],
-          serializeRow: decorateSubdivision
+          serializeRow: function(subdivision)
+          {
+            return subdivision.serializeRow({renderOrgUnitPath: renderOrgUnitPath});
+          }
         });
       }
     );

@@ -2,7 +2,7 @@
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
-    <div class="panel-body has-lastElementRow">
+    <div class="panel-body">
       <div class="orgUnitDropdowns-container"></div>
       <div class="form-group">
         <label for="<%- idPrefix %>-type" class="control-label is-required"><%- t('subdivisions', 'PROPERTY:type') %></label>
@@ -34,13 +34,17 @@
         </thead>
         <tfoot>
         <tr>
-          <td colspan="4">
+          <td class="subdivisions-form-autoDowntimes-actions" colspan="4">
             <input id="<%- idPrefix %>-autoDowntimeReason" type="text">
             <button id="<%- idPrefix %>-addAutoDowntime" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- t('subdivisions', 'autoDowntimes:add') %></span></button>
         </tr>
         </tfoot>
         <tbody id="<%- idPrefix %>-autoDowntimes"></tbody>
       </table>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- t('subdivisions', 'PROPERTY:deactivatedAt') %></label>
+        <input id="<%- idPrefix %>-deactivatedAt" class="form-control" type="date" name="deactivatedAt" maxlength="10">
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

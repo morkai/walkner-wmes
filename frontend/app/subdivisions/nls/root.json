@@ -24,6 +24,7 @@
     "PROPERTY:type": "Type",
     "PROPERTY:aor": "Default AOR",
     "PROPERTY:autoDowntimes": "Auto downtimes",
+    "PROPERTY:deactivatedAt": "Deactivated at",
 
     "autoDowntimes:add": "Add auto downtime",
     "autoDowntimes:reason": "Auto downtime reason",

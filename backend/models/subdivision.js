@@ -69,7 +69,11 @@ module.exports = function setupSubdivisionModel(app, mongoose)
       ref: 'Aor',
       default: null
     },
-    autoDowntimes: [autoDowntimeSchema]
+    autoDowntimes: [autoDowntimeSchema],
+    deactivatedAt: {
+      type: Date,
+      default: null
+    }
   }, {
     id: false
   });

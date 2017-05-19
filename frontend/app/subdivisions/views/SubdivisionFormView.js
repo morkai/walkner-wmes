@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'app/time',
   'app/data/aors',
   'app/data/downtimeReasons',
   'app/data/views/OrgUnitDropdownsView',
@@ -13,6 +14,7 @@ define([
 ], function(
   _,
   $,
+  time,
   aors,
   downtimeReasons,
   OrgUnitDropdownsView,
@@ -188,6 +190,11 @@ define([
 
       data.prodTaskTags = data.prodTaskTags ? data.prodTaskTags.join(',') : '';
 
+      if (data.deactivatedAt)
+      {
+        data.deactivatedAt = time.format(data.deactivatedAt, 'YYYY-MM-DD');
+      }
+
       return data;
     },
 
@@ -219,6 +226,10 @@ define([
           };
         });
       });
+
+      var deactivatedAt = time.getMoment(data.deactivatedAt || null);
+
+      data.deactivatedAt = deactivatedAt.isValid() ? deactivatedAt.toISOString() : null;
 
       return data;
     },

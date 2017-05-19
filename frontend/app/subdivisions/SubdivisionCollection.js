@@ -15,7 +15,7 @@ define([
 
     rqlQuery: 'sort(division,name)',
 
-    comparator: 'type'
+    comparator: 'division'
 
   });
 });

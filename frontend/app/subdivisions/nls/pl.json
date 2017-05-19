@@ -23,6 +23,7 @@
   "PROPERTY:type": "Typ",
   "PROPERTY:aor": "Domyślny obszar odp.",
   "PROPERTY:autoDowntimes": "Automatyczne przestoje",
+  "PROPERTY:deactivatedAt": "Data dezaktywacji",
 
   "autoDowntimes:add": "Dodaj automatyczny przestój",
   "autoDowntimes:reason": "Automatyczny powód przestoju",

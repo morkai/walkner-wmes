@@ -2,11 +2,11 @@
 
 define([
   'app/core/views/DetailsView',
-  './decorateSubdivision',
+  'app/data/views/renderOrgUnitPath',
   'app/subdivisions/templates/details'
 ], function(
   DetailsView,
-  decorateSubdivision,
+  renderOrgUnitPath,
   detailsTemplate
 ) {
   'use strict';
@@ -19,12 +19,9 @@ define([
       'divisions.synced': 'render'
     },
 
-    serialize: function()
+    serializeDetails: function(subdivision)
     {
-      return {
-        idPrefix: this.idPrefix,
-        model: decorateSubdivision(this.model, true)
-      };
+      return subdivision.serialize({renderOrgUnitPath: renderOrgUnitPath});
     }
 
   });

@@ -4,3 +4,6 @@
 .subdivisions-form-autoDowntimes-time {
   width: 400px;
 }
+.subdivisions-form-autoDowntimes-actions {
+  white-space: nowrap;
+}
