@@ -369,7 +369,15 @@ exports.start = function startOrdersImporterModule(app, module)
         var intakeKey = salesOrder + '/' + salesOrderItem;
 
         intakeKeyToIdMap[intakeKey] = {no: salesOrder, item: salesOrderItem};
-        intakeKeyToOrderMap[intakeKey] = order;
+
+        if (intakeKeyToOrderMap[intakeKey])
+        {
+          intakeKeyToOrderMap[intakeKey].push(order);
+        }
+        else
+        {
+          intakeKeyToOrderMap[intakeKey] = [order];
+        }
       }
     }
 
@@ -386,7 +394,7 @@ exports.start = function startOrdersImporterModule(app, module)
           return this.skip();
         }
 
-        OrderIntake.find({_id: {$in: intakeIds}}).lean().exec(this.next());
+        OrderIntake.collection.find({_id: {$in: intakeIds}}).toArray(this.next());
       },
       function assignOrderIntakeDataStep(err, orderIntakes)
       {
@@ -397,14 +405,18 @@ exports.start = function startOrdersImporterModule(app, module)
           return this.skip();
         }
 
-        for (var i = 0; i < orderIntakes.length; ++i)
+        if (orderIntakes.length !== intakeIds.length)
         {
-          var orderIntake = orderIntakes[i];
-          var intakeKey = orderIntake._id.no + '/' + orderIntake._id.item;
-          var order = intakeKeyToOrderMap[intakeKey];
-
-          Order.copyOrderIntake(order, orderIntake);
+          module.debug(`Found only ${orderIntakes.length} of ${intakeIds.length} Order Intakes!`);
         }
+
+        orderIntakes.forEach(orderIntake =>
+        {
+          intakeKeyToOrderMap[`${orderIntake._id.no}/${orderIntake._id.item}`].forEach(order =>
+          {
+            Order.copyOrderIntake(order, orderIntake);
+          });
+        });
       },
       function saveOrdersStep()
       {
