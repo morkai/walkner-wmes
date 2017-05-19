@@ -76,6 +76,7 @@ exports.modules = [
   'pscs',
   'd8',
   'heff',
+  'vis',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   {id: 'directoryWatcher', name: 'directoryWatcher:paintShop'},
   'mail/sender',
@@ -216,7 +217,8 @@ exports.pubsub = {
     'd8.**',
     'heff.**',
     'ping', 'sockets.connected', 'sockets.disconnected',
-    'paintShop.orders.imported', 'paintShop.orders.updated.**'
+    'paintShop.orders.imported', 'paintShop.orders.updated.**',
+    'vis.**'
   ]
 };
 
@@ -255,7 +257,8 @@ exports.mongoose = {
     'd8Entry', 'd8Area', 'd8EntrySource', 'd8ProblemSource',
     'heffLineState',
     'paintShopOrder',
-    'behaviorObsCard', 'minutesForSafetyCard'
+    'behaviorObsCard', 'minutesForSafetyCard',
+    'visNodePosition'
   ]
 };
 

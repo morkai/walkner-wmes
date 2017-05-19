@@ -4,11 +4,13 @@ define([
   'jquery',
   'app/i18n',
   'app/core/View',
+  '../VisNodePositionCollection',
   '../views/StructureVisView'
 ], function(
   $,
   t,
   View,
+  VisNodePositionCollection,
   StructureVisView
 ) {
   'use strict';
@@ -51,7 +53,12 @@ define([
 
     initialize: function()
     {
-      this.view = new StructureVisView();
+      this.model = {
+        nodePositions: new VisNodePositionCollection(null, {paginate: false})
+      };
+      this.view = new StructureVisView({model: this.model});
+
+      this.model.nodePositions.subscribe(this.pubsub);
     },
 
     destroy: function()
@@ -68,7 +75,7 @@ define([
     {
       if (typeof window.d3 !== 'undefined')
       {
-        return when();
+        return when(this.model.nodePositions.fetch({reset: true}));
       }
 
       var deferred = $.Deferred();
@@ -78,7 +85,7 @@ define([
         deferred.resolve();
       });
 
-      return when(deferred);
+      return when(deferred, this.model.nodePositions.fetch({reset: true}));
     }
 
   });

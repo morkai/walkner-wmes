@@ -56,6 +56,11 @@ exports.browseRoute = function(app, options, req, res, next)
     queryOptions.limit = Model.BROWSE_LIMIT;
   }
 
+  if (queryOptions.limit === Number.MAX_SAFE_INTEGER)
+  {
+    queryOptions.limit = 0;
+  }
+
   step(
     function countStep()
     {
