@@ -48,6 +48,12 @@ exports.start = function startEventsModule(app, module)
    */
   var lastInsertDelayTime = 0;
 
+  /**
+   * @private
+   * @type {object.<string, boolean>}
+   */
+  var blacklist = {};
+
   module.types = {};
 
   module.getPendingEvents = function()
@@ -65,6 +71,8 @@ exports.start = function startEventsModule(app, module)
     ],
     setUpEventsRoutes.bind(null, app, module)
   );
+
+  module.config.blacklist.forEach(topic => blacklist[topic] = true);
 
   subscribe();
 
@@ -150,7 +158,7 @@ exports.start = function startEventsModule(app, module)
       return fetchAllTypes();
     }
 
-    if (module.config.blacklist.indexOf(topic) !== -1)
+    if (blacklist[topic])
     {
       return;
     }
