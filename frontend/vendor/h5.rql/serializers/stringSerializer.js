@@ -17,8 +17,7 @@ function serializeRqlToString(query, options)
 {
   var rqlString = [];
   var pushOptions = {
-    encode: options && options.doubleEncode ? doubleEncodeString : encodeString,
-    useOperators: options && options.useOperators
+    encode: options && options.doubleEncode ? doubleEncodeString : encodeString
   };
 
   pushFields(rqlString, query.fields);

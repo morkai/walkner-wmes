@@ -17,11 +17,6 @@ define([
 ) {
   'use strict';
 
-  Object.keys(specialOperators).forEach(function(op)
-  {
-    delete specialOperators[op];
-  });
-
   // Disable Backbone's decodeURIComponent
   Backbone.Router.prototype._extractParameters = function(route, fragment)
   {
