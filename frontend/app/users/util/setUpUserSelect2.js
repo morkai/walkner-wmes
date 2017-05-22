@@ -84,6 +84,32 @@ define([
       .replace(/[^A-Z]+/g, '');
   }
 
+  function filterDuplicates(users)
+  {
+    var map = {};
+
+    _.forEach(users, function(newUser)
+    {
+      var mappedUser = map[newUser.searchName];
+
+      if (!mappedUser)
+      {
+        map[newUser.searchName] = newUser;
+
+        return;
+      }
+
+      if (mappedUser === 'PHILIPS' || (mappedUser.email && !newUser.email))
+      {
+        return;
+      }
+
+      map[newUser.searchName] = newUser;
+    });
+
+    return _.values(map);
+  }
+
   function createDefaultRqlQuery(rql, term)
   {
     term = term.trim();
@@ -142,7 +168,7 @@ define([
             return user.text.toLowerCase().indexOf(query.term.toLowerCase()) !== -1;
           });
 
-          var users = results.concat(data.collection || []);
+          var users = results.concat(filterDuplicates(data.collection || []));
 
           if (userFilter)
           {
