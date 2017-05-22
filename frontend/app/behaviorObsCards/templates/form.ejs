@@ -29,7 +29,7 @@
       </div>
       <hr>
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:observations') %></h4>
-      <table class="table table-bordered table-hover behaviorObsCards-form-observations">
+      <table class="table table-bordered table-hover table-condensed behaviorObsCards-form-observations">
         <thead>
         <tr>
           <th class="is-min"><%- t('behaviorObsCards', 'PROPERTY:observations:category') %></th>
@@ -39,16 +39,14 @@
           <th class="behaviorObsCards-form-half"><%- t('behaviorObsCards', 'PROPERTY:observations:cause') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:true') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:false') %></th>
-          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-observations"></tbody>
       </table>
-      <input id="<%- idPrefix %>-addObservation" type="text">
       <hr>
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:risks') %></h4>
       <p class="message message-inline message-error"><%- t('behaviorObsCards', 'FORM:MSG:risks') %></p>
-      <table class="table table-bordered table-hover">
+      <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
           <th class="behaviorObsCards-form-risk"><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></th>
@@ -71,7 +69,7 @@
       <hr>
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %></h4>
       <p class="message message-inline message-warning"><%- t('behaviorObsCards', 'FORM:MSG:difficulties') %></p>
-      <table class="table table-bordered table-hover">
+      <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
           <th class="behaviorObsCards-form-difficulty"><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></th>

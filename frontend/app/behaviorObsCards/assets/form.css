@@ -1,3 +1,10 @@
+.behaviorObsCards-form-checkbox {
+  cursor: pointer;
+}
+.behaviorObsCards-form-checkbox > input[type="checkbox"] {
+  margin-top: 0;
+  vertical-align: middle;
+}
 .behaviorObsCards-form-radio {
   width: 100px!important;
   text-align: center;
@@ -7,15 +14,13 @@
   cursor: pointer;
 }
 .behaviorObsCards-form-textarea {
-  padding: 0!important;
+
 }
 .behaviorObsCards-form-textarea > textarea {
-  border: none!important;
-  resize: vertical;
+
 }
 .behaviorObsCards-form-textarea > textarea:focus {
-  box-shadow: none;
-  background: #ffffd6;
+
 }
 .behaviorObsCards-form input[tabindex="-1"] {
   position: absolute;

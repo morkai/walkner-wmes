@@ -49,7 +49,14 @@ define([
       {
         if (e.target.tagName === 'TD')
         {
-          e.target.querySelector('input').click();
+          e.target.querySelector('input[type="radio"]').click();
+        }
+      },
+      'click .behaviorObsCards-form-checkbox': function(e)
+      {
+        if (e.target.tagName === 'TD')
+        {
+          e.target.querySelector('input[type="checkbox"]').click();
         }
       },
       'click #-addRisk': function()
@@ -88,32 +95,12 @@ define([
           }
         });
       },
-      'change #-addObservation': function()
+      'change input[name$="enabled"]': function(e)
       {
-        var $addObservation = this.$id('addObservation');
-        var behavior = kaizenDictionaries.behaviours.get($addObservation.val());
-        var map = {};
+        var enabled = e.target.checked;
+        var $tr = this.$(e.target).closest('tr');
 
-        (this.model.get('observations') || []).forEach(function(obs)
-        {
-          map[obs.id] = obs;
-        });
-
-        this.$id('observations').append(renderObservation({
-          observation: map[behavior.id] || {
-            id: behavior.id,
-            behavior: behavior.get('name'),
-            observation: '',
-            cause: '',
-            safe: true,
-            easy: true
-          },
-          i: ++this.rowIndex
-        }));
-
-        $addObservation.select2('val', '');
-
-        this.setUpAddObservationSelect2();
+        $tr.find('input[type="radio"], textarea').prop('required', enabled);
       }
 
     }, FormView.prototype.events),
@@ -156,7 +143,7 @@ define([
 
     handleInvalidity: function()
     {
-      this.$id('addObservation').select2('focus');
+      this.$id('observations').find('input[type="checkbox"]').first().focus();
     },
 
     serializeToForm: function()
@@ -189,13 +176,14 @@ define([
     filterObservation: function(o)
     {
       o.id = o.behavior;
+      o.enabled = o.enabled === '1';
       o.behavior = kaizenDictionaries.behaviours.get(o.id).get('name');
       o.observation = (o.observation || '').trim();
       o.cause = (o.cause || '').trim();
       o.safe = o.safe === '-1' ? null : o.safe === '1';
       o.easy = o.easy === '-1' ? null : o.easy === '1';
 
-      return o.safe !== null && o.easy !== null;
+      return o.enabled && o.safe !== null && o.easy !== null;
     },
 
     filterRisk: function(r)
@@ -311,11 +299,23 @@ define([
 
         if (obs)
         {
+          obs.enabled = true;
           obs.behavior = behavior.get('name');
 
           list.push(obs);
 
           delete map[behavior.id];
+        }
+        else
+        {
+          list.push({
+            id: behavior.id,
+            enabled: false,
+            behavior: behavior.get('name'),
+            observation: '',
+            safe: null,
+            easy: null
+          });
         }
       });
 
