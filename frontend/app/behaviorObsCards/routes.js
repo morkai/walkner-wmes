@@ -52,7 +52,7 @@ define([
     );
   });
 
-  router.map('/behaviorObsCards;add', canAccess, function(req)
+  router.map('/behaviorObsCards;add', canAccess, function()
   {
     viewport.loadPage(
       [
@@ -64,8 +64,7 @@ define([
       {
         return new BehaviorObsCardAddFormPage({
           model: new BehaviorObsCard({
-            observer: user.getInfo(),
-            position: user.data.kdPosition || ''
+            observer: user.getInfo()
           })
         });
       }
