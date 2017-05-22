@@ -114,15 +114,15 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       rows.push({
         '#rid': doc.rid,
         'date': date,
+        '"observer': doc.observer.label,
         '"section': doc.section,
         '"line': doc.line,
-        '"observer': doc.observer.label,
         '"position': doc.position,
         '"kind': 'observation',
-        '"option1': o.easy ? 'easy' : 'hard',
+        '"option1': o.safe ? '' : o.easy ? 'easy' : 'hard',
         '"option2': o.safe ? 'safe' : 'risky',
-        '"text1': o.observation,
-        '"text2': o.cause,
+        '"text1': o.safe ? '' : o.observation,
+        '"text2': o.safe ? '' : o.cause,
         '"category': o.behavior
       });
     });
@@ -132,9 +132,9 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       rows.push({
         '#rid': doc.rid,
         'date': date,
+        '"observer': doc.observer.label,
         '"section': doc.section,
         '"line': doc.line,
-        '"observer': doc.observer.label,
         '"position': doc.position,
         '"kind': 'risk',
         '"option1': o.easy ? 'easy' : 'hard',
@@ -150,9 +150,9 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       rows.push({
         '#rid': doc.rid,
         'date': date,
+        '"observer': doc.observer.label,
         '"section': doc.section,
         '"line': doc.line,
-        '"observer': doc.observer.label,
         '"position': doc.position,
         '"kind': 'difficulty',
         '"option1': o.behavior ? 'behavior' : 'workConditions',

@@ -35,10 +35,10 @@
           <th class="is-min"><%- t('behaviorObsCards', 'PROPERTY:observations:category') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:true') %></th>
           <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:false') %></th>
-          <th class="behaviorObsCards-form-half"><%- t('behaviorObsCards', 'PROPERTY:observations:observation') %></th>
-          <th class="behaviorObsCards-form-half"><%- t('behaviorObsCards', 'PROPERTY:observations:cause') %></th>
-          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:true') %></th>
-          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:false') %></th>
+          <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observations:observation') %></label></th>
+          <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observations:cause') %></label></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:true') %></label></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:false') %></label></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-observations"></tbody>
@@ -49,11 +49,10 @@
       <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
-          <th class="behaviorObsCards-form-risk"><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></th>
+          <th class="behaviorObsCards-form-risk"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></label></th>
           <th><%- t('behaviorObsCards', 'PROPERTY:risks:cause') %></th>
-          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:true') %></th>
-          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:false') %></th>
-          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:true') %></label></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:false') %></label></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-risks"></tbody>
@@ -62,7 +61,7 @@
       <hr>
       <div class="checkbox">
         <label class="control-label">
-          <input type="checkbox" name="easyDiscussed" value="true">
+          <input type="checkbox" name="easyDiscussed" value="true" required>
           <%- t('behaviorObsCards', 'PROPERTY:easyDiscussed') %>
         </label>
       </div>
@@ -72,11 +71,10 @@
       <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
-          <th class="behaviorObsCards-form-difficulty"><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></th>
+          <th class="behaviorObsCards-form-difficulty"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></label></th>
           <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:solution') %></th>
-          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:true') %></th>
-          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:false') %></th>
-          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:true') %></label></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:false') %></label></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-difficulties"></tbody>

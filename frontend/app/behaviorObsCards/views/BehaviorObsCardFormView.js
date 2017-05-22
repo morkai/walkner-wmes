@@ -52,58 +52,141 @@ define([
           e.target.querySelector('input[type="radio"]').click();
         }
       },
-      'click .behaviorObsCards-form-checkbox': function(e)
+      'mousedown input[type="radio"]': function(e)
       {
-        if (e.target.tagName === 'TD')
+        e.preventDefault();
+      },
+      'mouseup input[type="radio"]': function(e)
+      {
+        e.preventDefault();
+      },
+      'click input[type="radio"]': function(e)
+      {
+        var view = this;
+        var radioEl = e.target;
+        var $radio = view.$(radioEl);
+        var $tr = $radio.closest('tr');
+        var $null = $tr.find('input[name="' + radioEl.name + '"][value="-1"]');
+
+        if (!$null.length)
         {
-          e.target.querySelector('input[type="checkbox"]').click();
+          view.toggleValidity($tr);
+
+          return;
         }
+
+        e.preventDefault();
+
+        setTimeout(function()
+        {
+          radioEl.checked = !radioEl.checked;
+
+          if (!radioEl.checked)
+          {
+            $null.prop('checked', true);
+          }
+
+          if (radioEl.name.indexOf('safe') >= 0)
+          {
+            view.toggleBehavior($tr);
+          }
+
+          view.toggleValidity($tr);
+        }, 1);
+      },
+      'change textarea': function(e)
+      {
+        this.toggleValidity(this.$(e.target).closest('tr'));
       },
       'click #-addRisk': function()
       {
         this.$id('risks').append(renderRisk({
-          risk: {
-            risk: '',
-            cause: '',
-            easy: null
-          },
+          risk: this.createEmptyRisk(),
           i: ++this.rowIndex
         }));
       },
       'click #-addDifficulty': function()
       {
         this.$id('difficulties').append(renderDifficulty({
-          difficulty: {
-            problem: '',
-            solution: '',
-            behavior: null
-          },
+          difficulty: this.createEmptyDifficulty(),
           i: ++this.rowIndex
         }));
-      },
-      'click .btn[data-remove]': function(e)
-      {
-        var view = this;
-
-        this.$(e.target).closest('tr').fadeOut('fast', function()
-        {
-          $(this).remove();
-
-          if (e.currentTarget.dataset.remove === 'observation')
-          {
-            view.setUpAddObservationSelect2();
-          }
-        });
-      },
-      'change input[name$="enabled"]': function(e)
-      {
-        var enabled = e.target.checked;
-        var $tr = this.$(e.target).closest('tr');
-
-        $tr.find('input[type="radio"], textarea').prop('required', enabled);
       }
 
     }, FormView.prototype.events),
+
+    toggleValidity: function($tr)
+    {
+      var tbodyId = $tr ? $tr.parent().attr('id') : '';
+
+      if (/risks/.test(tbodyId))
+      {
+        var $risk = $tr.find('textarea[name$="risk"]');
+        var $cause = $tr.find('textarea[name$="cause"]');
+        var $easy = $tr.find('input[name$="easy"]');
+        var hasRisk = $risk.val().trim().length > 0;
+        var hasCause = $cause.val().trim().length > 0;
+        var easy = $easy.filter(':checked').val() || '-1';
+
+        $risk.prop('required', easy !== '-1' || hasCause);
+        $easy.prop('required', hasRisk);
+
+        var $easyNull = $easy.filter('[value="-1"]').prop('disabled', hasRisk || hasCause);
+
+        if (hasRisk || hasCause)
+        {
+          $easyNull.prop('checked', false);
+        }
+      }
+      else if (/difficulties/.test(tbodyId))
+      {
+        var $problem = $tr.find('textarea[name$="problem"]');
+        var $solution = $tr.find('textarea[name$="solution"]');
+        var $behaviors = $tr.find('input[name$="behavior"]');
+        var hasProblem = $problem.val().trim().length > 0;
+        var hasSolution = $solution.val().trim().length > 0;
+        var behavior = $behaviors.filter(':checked').val();
+
+        $problem.prop('required', behavior !== '-1' || hasSolution);
+        $behaviors.prop('required', hasProblem);
+
+        var $behaviorNull = $behaviors.filter('[value="-1"]').prop('disabled', hasProblem || hasSolution);
+
+        if (hasProblem || hasSolution)
+        {
+          $behaviorNull.prop('checked', false);
+        }
+      }
+
+      this.toggleEasyDiscussed();
+
+      this.$('input[name="observations[1].safe"]')[0].setCustomValidity(
+        this.hasAnyObservation() || this.hasAnyRisk() ? '' : t('behaviorObsCards', 'FORM:ERROR:empty')
+      );
+    },
+
+    toggleBehavior: function($tr)
+    {
+      var safe = $tr.find('input[name$="safe"]:checked').val();
+
+      $tr.find('textarea, input[name$="easy"]').prop('disabled', safe !== '0');
+      $tr.find('textarea').first().select();
+
+      if (safe !== '0')
+      {
+        $tr.find('input[name$="easy"]:checked').prop('checked', false);
+      }
+    },
+
+    toggleEasyDiscussed: function()
+    {
+      var anyEasy = this.$('input[name$="easy"][value="1"]:checked').length > 0;
+
+      this.$('input[name="easyDiscussed"]')
+        .prop('disabled', !anyEasy)
+        .closest('label')
+        .toggleClass('is-required', anyEasy);
+    },
 
     initialize: function()
     {
@@ -143,7 +226,7 @@ define([
 
     handleInvalidity: function()
     {
-      this.$id('observations').find('input[type="checkbox"]').first().focus();
+      this.$id('observations').find('input[type="radio"]').first().focus();
     },
 
     serializeToForm: function()
@@ -176,14 +259,13 @@ define([
     filterObservation: function(o)
     {
       o.id = o.behavior;
-      o.enabled = o.enabled === '1';
       o.behavior = kaizenDictionaries.behaviours.get(o.id).get('name');
       o.observation = (o.observation || '').trim();
       o.cause = (o.cause || '').trim();
       o.safe = o.safe === '-1' ? null : o.safe === '1';
       o.easy = o.easy === '-1' ? null : o.easy === '1';
 
-      return o.enabled && o.safe !== null && o.easy !== null;
+      return o.safe !== null && o.easy !== null;
     },
 
     filterRisk: function(r)
@@ -223,7 +305,8 @@ define([
       this.renderObservations();
       this.renderRisks();
       this.renderDifficulties();
-      this.setUpAddObservationSelect2();
+      this.toggleEasyDiscussed();
+      this.toggleValidity();
 
       this.$('input[autofocus]').focus();
     },
@@ -299,7 +382,6 @@ define([
 
         if (obs)
         {
-          obs.enabled = true;
           obs.behavior = behavior.get('name');
 
           list.push(obs);
@@ -310,7 +392,6 @@ define([
         {
           list.push({
             id: behavior.id,
-            enabled: false,
             behavior: behavior.get('name'),
             observation: '',
             safe: null,
@@ -330,9 +411,17 @@ define([
     renderRisks: function()
     {
       var view = this;
+      var risks = this.model.get('risks') || [];
+
+      while (risks.length < 2)
+      {
+        risks.push(this.createEmptyRisk());
+      }
+
+      risks.push(this.createEmptyRisk());
 
       this.$id('risks').html(
-        (this.model.get('risks') || []).map(function(risk)
+        risks.map(function(risk)
         {
           return renderRisk({
             risk: risk,
@@ -345,9 +434,17 @@ define([
     renderDifficulties: function()
     {
       var view = this;
+      var difficulties = this.model.get('difficulties') || [];
+
+      while (difficulties.length < 2)
+      {
+        difficulties.push(this.createEmptyDifficulty());
+      }
+
+      difficulties.push(this.createEmptyDifficulty());
 
       this.$id('difficulties').html(
-        (this.model.get('difficulties') || []).map(function(difficulty)
+        difficulties.map(function(difficulty)
         {
           return renderDifficulty({
             difficulty: difficulty,
@@ -355,6 +452,24 @@ define([
           });
         }).join('')
       );
+    },
+
+    createEmptyRisk: function()
+    {
+      return {
+        risk: '',
+        cause: '',
+        easy: null
+      };
+    },
+
+    createEmptyDifficulty: function()
+    {
+      return {
+        problem: '',
+        solution: '',
+        behavior: null
+      };
     }
 
   });

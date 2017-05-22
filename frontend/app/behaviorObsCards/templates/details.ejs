@@ -82,9 +82,9 @@
       <tr>
         <td class="is-min"><%= observation.behavior %></td>
         <td class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:' + observation.safe) %></td>
-        <td class="text-lines"><%= observation.observation %></td>
-        <td class="text-lines"><%= observation.cause %></td>
-        <td class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:' + observation.easy) %></td>
+        <td class="text-lines"><%= observation.safe ? '' : observation.observation %></td>
+        <td class="text-lines"><%= observation.safe ? '' : observation.cause %></td>
+        <td class="is-min text-center"><%- observation.safe ? '' : t('behaviorObsCards', 'PROPERTY:observations:easy:' + observation.easy) %></td>
       </tr>
       <% }) %>
       </tbody>
@@ -118,9 +118,11 @@
     </table>
   </div>
   <% } %>
+  <% if (showEasyDiscussed) { %>
   <p class="message message-inline message-<%- model.easyDiscussed ? 'info' : 'default' %>">
     <i class="fa fa-thumbs-<%- model.easyDiscussed ? 'up' : 'down' %>"></i> <%- t('behaviorObsCards', 'PROPERTY:easyDiscussed') %>
   </p>
+  <% } %>
   <% if (model.difficulties.length) { %>
   <div class="panel panel-warning">
     <div class="panel-heading"><%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %></div>

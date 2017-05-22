@@ -17,22 +17,11 @@ define([
 
     template: template,
 
-    events: _.extend({
-
-    }, DetailsView.prototype.events),
-
     serialize: function()
     {
       return _.extend(DetailsView.prototype.serialize.call(this), {
-
+        showEasyDiscussed: this.model.hasAnyEasy()
       });
-    },
-
-    afterRender: function()
-    {
-      DetailsView.prototype.afterRender.call(this);
-
-
     }
 
   });

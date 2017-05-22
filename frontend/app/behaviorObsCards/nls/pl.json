@@ -50,13 +50,13 @@
   "PROPERTY:difficulties:solution": "Proponowane rozwiązanie",
   "PROPERTY:difficulties:behavior:true": "Zachowanie",
   "PROPERTY:difficulties:behavior:false": "Warunki pracy",
-  "PROPERTY:easyDiscussed": "&quot;Łatwe&quot; do zmiany zachowania oraz warunki pracy omówiono z osobą obserwowaną i uzyskano potwierdzenie pracy w sposób bezpieczny",
+  "PROPERTY:easyDiscussed": "&quot;Łatwe&quot; do zmiany zachowania oraz warunki pracy omówiono z osobą obserwowaną i uzyskano potwierdzenie pracy w sposób bezpieczny.",
 
   "FORM:ACTION:add": "Dodaj kartę obserwacji zachowań",
   "FORM:ACTION:edit": "Zapisz kartę obserwacji zachowań",
   "FORM:ERROR:addFailure": "Nie udało się dodać karty obserwacji :(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować karty obserwacji :(",
-  "FORM:ERROR:empty": "Podaj przynajmniej jedną obserwację.",
+  "FORM:ERROR:empty": "Opisz przynajmniej jedną obserwację lub ryzykowne warunki w pracy.",
   "FORM:MSG:risks": "Jeżeli stwierdziłeś ryzykowne warunki w miejscu prowadzenia obserwacji zarejestruj je w bazie ZPW - <a href='#kaizenOrders;add'>Zgłoś ZPW</a>!",
   "FORM:MSG:difficulties": "Proponowane rozwiązania zarejestruj w bazie Usprawnień - <a href='#suggestions;add'>Zgłoś sugestię</a>!",
 

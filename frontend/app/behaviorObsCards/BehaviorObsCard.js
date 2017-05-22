@@ -112,6 +112,12 @@ define([
       }
 
       return Date.now() - Date.parse(this.get('date')) < 8 * 3600 * 1000;
+    },
+
+    hasAnyEasy: function()
+    {
+      return _.any(this.get('observations'), function(o) { return !o.safe && o.easy; })
+        || _.any(this.get('risks'), function(r) { return r.easy; });
     }
 
   });
