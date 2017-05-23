@@ -119,6 +119,10 @@ define([
     {
       var tbodyId = $tr ? $tr.parent().attr('id') : '';
 
+      if (/observations/.test(tbodyId))
+      {
+
+      }
       if (/risks/.test(tbodyId))
       {
         var $risk = $tr.find('textarea[name$="risk"]');
@@ -137,6 +141,7 @@ define([
         {
           $easyNull.prop('checked', false);
         }
+
       }
       else if (/difficulties/.test(tbodyId))
       {
@@ -159,10 +164,24 @@ define([
       }
 
       this.toggleEasyDiscussed();
+      this.toggleDifficulties();
 
       this.$('input[name="observations[1].safe"]')[0].setCustomValidity(
         this.hasAnyObservation() || this.hasAnyRisk() ? '' : t('behaviorObsCards', 'FORM:ERROR:empty')
       );
+    },
+
+    toggleDifficulties: function()
+    {
+      if (this.hasAnyDifficulty())
+      {
+        return;
+      }
+
+      var required = this.$id('observations').find('input[name$="easy"][value="0"]:checked').length
+        || this.$id('risks').find('input[name$="easy"][value="0"]:checked').length;
+
+      this.$id('difficulties').find('textarea').first().prop('required', required);
     },
 
     toggleBehavior: function($tr)
@@ -220,8 +239,7 @@ define([
     checkValidity: function(formData)
     {
       return (formData.observations || []).length
-        || (formData.risks || []).length
-        || (formData.difficulties || []).length;
+        || (formData.risks || []).length;
     },
 
     handleInvalidity: function()
@@ -283,7 +301,7 @@ define([
       d.solution = (d.solution || '').trim();
       d.behavior = d.behavior === '-1' ? null : d.behavior === '1';
 
-      return (d.problem.length > 0 || d.solution.length > 0) && d.behavior !== null;
+      return d.problem.length > 0 || d.solution.length > 0 || d.behavior !== null;
     },
 
     afterRender: function()
