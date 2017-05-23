@@ -56,7 +56,7 @@ module.exports = function setupMinutesForSafetyCardModel(app, mongoose)
   minutesForSafetyCardSchema.index({'participants.id': 1});
   minutesForSafetyCardSchema.index({'owner.id': 1});
 
-  minutesForSafetyCardSchema.statics.TOPIC_PREFIX = 'minutesForSafety';
+  minutesForSafetyCardSchema.statics.TOPIC_PREFIX = 'minutesForSafetyCards';
 
   minutesForSafetyCardSchema.pre('save', function(next)
   {
