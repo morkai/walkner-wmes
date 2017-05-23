@@ -111,9 +111,43 @@ define([
           difficulty: this.createEmptyDifficulty(),
           i: ++this.rowIndex
         }));
+      },
+      'click #-removeRisk': function()
+      {
+        this.removeEmpty('risks', 'addRisk', 'risk');
+      },
+      'click #-removeDifficulty': function()
+      {
+        this.removeEmpty('difficulties', 'addDifficulty', 'problem');
       }
 
     }, FormView.prototype.events),
+
+    removeEmpty: function(tbodyId, addBtnId, textareaName)
+    {
+      var $trs = this.$id(tbodyId).find('tr');
+
+      for (var i = $trs.length - 1; i >= 0; --i)
+      {
+        var $tr = this.$($trs[i]);
+        var $textarea = $tr.find('textarea');
+        var $radio = $tr.find('input[type="radio"]:checked');
+
+        if ($textarea[0].value.trim() === ''
+          && $textarea[1].value.trim() === ''
+          && (!$radio.length || $radio.val() === '-1'))
+        {
+          $tr.remove();
+        }
+      }
+
+      if (this.$id(tbodyId).children().length === 0)
+      {
+        this.$id(addBtnId).click();
+      }
+
+      this.$id(tbodyId).find('textarea[name$="' + textareaName + '"]').first().select();
+    },
 
     toggleValidity: function($tr)
     {

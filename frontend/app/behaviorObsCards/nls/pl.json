@@ -60,6 +60,8 @@
   "FORM:ERROR:empty": "Opisz przynajmniej jedną obserwację lub ryzykowne warunki w pracy.",
   "FORM:MSG:risks": "Jeżeli stwierdziłeś ryzykowne warunki w miejscu prowadzenia obserwacji zarejestruj je w bazie ZPW - <a href='#kaizenOrders;add'>Zgłoś ZPW</a>!",
   "FORM:MSG:difficulties": "Proponowane rozwiązania zarejestruj w bazie Usprawnień - <a href='#suggestions;add'>Zgłoś sugestię</a>!",
+  "FORM:BTN:add": "Dodaj nowe",
+  "FORM:BTN:remove": "Usuń puste",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia karty obserwacji",
   "ACTION_FORM:BUTTON:delete": "Usuń kartę obserwacji",
