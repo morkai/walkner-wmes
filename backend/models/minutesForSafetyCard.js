@@ -82,7 +82,7 @@ module.exports = function setupMinutesForSafetyCardModel(app, mongoose)
 
     this.orgPropositions.concat(this.techPropositions).forEach(function(proposition)
     {
-      (proposition.who || []).forEach(function(user)
+      (Array.isArray(proposition.who) ? proposition.who : []).forEach(function(user)
       {
         if (user)
         {
