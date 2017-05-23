@@ -265,6 +265,8 @@ exports.start = function startMailSenderModule(app, module)
         if (err)
         {
           module.error("Failed to send email from file [%s]: %s", fileInfo.fileName, err.message);
+
+          setTimeout(resendFromFile, 60000, fileInfo);
         }
         else
         {
@@ -272,6 +274,13 @@ exports.start = function startMailSenderModule(app, module)
         }
       });
     });
+  }
+
+  function resendFromFile(fileInfo)
+  {
+    delete recentlySentFromFile[fileInfo.filename];
+
+    sendFromFile(fileInfo);
   }
 
   function cleanRecentlySentFromFile()
