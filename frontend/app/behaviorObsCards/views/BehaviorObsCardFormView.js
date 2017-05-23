@@ -98,6 +98,19 @@ define([
       {
         this.toggleValidity(this.$(e.target).closest('tr'));
       },
+      'click #-addObservation': function()
+      {
+        this.$id('observations').append(renderObservation({
+          observation: {
+            id: 'OTHER-' + Date.now(),
+            behavior: kaizenDictionaries.getLabel('behaviours', 'OTHER'),
+            observation: '',
+            safe: null,
+            easy: null
+          },
+          i: ++this.rowIndex
+        }));
+      },
       'click #-addRisk': function()
       {
         this.$id('risks').append(renderRisk({
@@ -305,13 +318,32 @@ define([
       formData.risks = (formData.risks || []).filter(this.filterRisk);
       formData.difficulties = (formData.difficulties || []).filter(this.filterDifficulty);
 
+      var safeOther = null;
+
+      formData.observations = formData.observations.filter(function(o)
+      {
+        if (/^OTHER/.test(o.id) && o.safe)
+        {
+          safeOther = o;
+
+          return false;
+        }
+
+        return true;
+      });
+
+      if (safeOther)
+      {
+        formData.observations.push(safeOther);
+      }
+
       return formData;
     },
 
     filterObservation: function(o)
     {
       o.id = o.behavior;
-      o.behavior = kaizenDictionaries.behaviours.get(o.id).get('name');
+      o.behavior = kaizenDictionaries.getLabel('behaviours', /^OTHER-/.test(o.id) ? 'OTHER' : o.id);
       o.observation = (o.observation || '').trim();
       o.cause = (o.cause || '').trim();
       o.safe = o.safe === '-1' ? null : o.safe === '1';
