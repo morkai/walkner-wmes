@@ -19,6 +19,7 @@
   "PAGE_ACTION:print": "Wersja do druku",
 
   "PANEL:TITLE:details": "Szczegóły karty obserwacji",
+  "PANEL:TITLE:where": "Miejsce obserwacji",
   "PANEL:TITLE:observations": "Obserwacje zachowań",
   "PANEL:TITLE:risks": "Ryzykowne warunki w miejscu pracy",
   "PANEL:TITLE:difficulties": "Trudności zmian",
@@ -26,10 +27,10 @@
   "PANEL:TITLE:editForm": "Formularz edycji karty obserwacji",
 
   "PROPERTY:rid": "ID",
-  "PROPERTY:date": "Data",
+  "PROPERTY:date": "Data obserwacji",
   "PROPERTY:section": "Dział",
   "PROPERTY:observer": "Obserwator",
-  "PROPERTY:position": "Obserwowane stanowisko",
+  "PROPERTY:position": "Stanowisko",
   "PROPERTY:line": "Linia",
   "PROPERTY:creator": "Stworzone przez",
   "PROPERTY:updater": "Ostatnio zmienione przez",

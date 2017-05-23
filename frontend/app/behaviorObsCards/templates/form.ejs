@@ -8,7 +8,13 @@
           <label for="<%- idPrefix %>-observer" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observer') %></label>
           <input id="<%- idPrefix %>-observer" type="text" name="observer" required>
         </div>
+        <div class="form-group col-lg-9">
+          <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:date') %></label>
+          <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
+        </div>
       </div>
+      <hr style="margin-top: 5px">
+      <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:where') %></h4>
       <div class="row">
         <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-section" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:section') %></label>
@@ -18,16 +24,12 @@
           <label for="<%- idPrefix %>-line" class="control-label"><%- t('behaviorObsCards', 'PROPERTY:line') %></label>
           <input id="<%- idPrefix %>-line" type="text" name="line">
         </div>
-        <div class="form-group col-lg-3">
-          <label for="<%- idPrefix %>-position" class="control-label"><%- t('behaviorObsCards', 'PROPERTY:position') %></label>
-          <input id="<%- idPrefix %>-position" class="form-control" type="text" name="position">
+        <div class="form-group col-lg-6">
+          <label for="<%- idPrefix %>-position" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:position') %></label>
+          <input id="<%- idPrefix %>-position" class="form-control" type="text" name="position" required>
         </div>
       </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:date') %></label>
-        <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
-      </div>
-      <hr>
+      <hr style="margin-top: 5px">
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:observations') %></h4>
       <table class="table table-bordered table-hover table-condensed behaviorObsCards-form-observations">
         <thead>

@@ -30,9 +30,9 @@ define([
       return [
         {id: 'rid', className: 'is-min is-number'},
         {id: 'date', className: 'is-min'},
+        {id: 'observer', className: 'is-min'},
         {id: 'section', className: 'is-min'},
         {id: 'line', className: 'is-min'},
-        {id: 'observer', className: 'is-min'},
         {id: 'position'}
       ];
     },
