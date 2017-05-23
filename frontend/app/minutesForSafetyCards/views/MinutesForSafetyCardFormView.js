@@ -126,7 +126,7 @@ define([
       var $techPropositions = this.$id('techPropositions').find('input[name$="who"]');
       var serializeUsers = function($select2)
       {
-        return ($select2.select2('data') || []).map(function(participant)
+        return !$select2 || !$select2.length ? [] : ($select2.select2('data') || []).map(function(participant)
         {
           return {
             id: participant.id,

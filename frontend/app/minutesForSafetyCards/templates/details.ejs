@@ -73,7 +73,7 @@
     </table>
   </div>
   <% } %>
-  <% if (model.safeBehavior.length) { %>
+  <% if (model.safeBehavior) { %>
   <div class="panel panel-default">
     <div class="panel-heading"><%- t('minutesForSafetyCards', 'PROPERTY:safeBehavior') %></div>
     <div class="panel-body">
@@ -88,26 +88,12 @@
       <thead>
       <tr>
         <th><%- t('minutesForSafetyCards', 'PROPERTY:propositions:what') %></th>
-        <th class="is-min"><%- t('minutesForSafetyCards', 'PROPERTY:propositions:who') %></th>
-        <th class="is-min"><%- t('minutesForSafetyCards', 'PROPERTY:propositions:when') %></th>
       </tr>
       </thead>
       <tbody>
       <% model.orgPropositions.forEach(function(proposition) { %>
       <tr>
         <td class="text-lines"><%= proposition.what %></td>
-        <td class="is-min">
-          <% if (proposition.who.length === 1) { %>
-          <%= proposition.who[0].label %>
-          <% } else if (proposition.who.length) { %>
-          <ul>
-            <% proposition.who.forEach(function(user) { %>
-            <li><%= user.label %></li>
-            <% }) %>
-          </ul>
-          <% } %>
-        </td>
-        <td class="is-min"><%= proposition.when ? time.format(proposition.when, 'LL') : '' %></td>
       </tr>
       <% }) %>
       </tbody>
@@ -121,33 +107,19 @@
       <thead>
       <tr>
         <th><%- t('minutesForSafetyCards', 'PROPERTY:propositions:what') %></th>
-        <th class="is-min"><%- t('minutesForSafetyCards', 'PROPERTY:propositions:who') %></th>
-        <th class="is-min"><%- t('minutesForSafetyCards', 'PROPERTY:propositions:when') %></th>
       </tr>
       </thead>
       <tbody>
       <% model.techPropositions.forEach(function(proposition) { %>
       <tr>
         <td class="text-lines"><%= proposition.what %></td>
-        <td class="is-min">
-          <% if (proposition.who.length === 1) { %>
-          <%= proposition.who[0].label %>
-          <% } else if (proposition.who.length) { %>
-          <ul>
-            <% proposition.who.forEach(function(user) { %>
-            <li><%= user.label %></li>
-            <% }) %>
-          </ul>
-          <% } %>
-        </td>
-        <td class="is-min"><%= proposition.when ? time.format(proposition.when, 'LL') : '' %></td>
       </tr>
       <% }) %>
       </tbody>
     </table>
   </div>
   <% } %>
-  <% if (model.behaviorRules.length) { %>
+  <% if (model.behaviorRules) { %>
   <div class="panel panel-default">
     <div class="panel-heading"><%- t('minutesForSafetyCards', 'PROPERTY:behaviorRules') %></div>
     <div class="panel-body">

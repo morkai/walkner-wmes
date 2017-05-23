@@ -2,12 +2,6 @@
   <td>
     <textarea class="form-control" name="<%- type %>[<%- i %>].what" rows="2" required><%= proposition.what %></textarea>
   </td>
-  <td class="minutesForSafetyCards-form-who">
-    <input name="<%- type %>[<%- i %>].who" rows="2" value="<%- proposition.who %>">
-  </td>
-  <td class="is-min">
-    <input type="date" class="form-control" name="<%- type %>[<%- i %>].when" value="<%- proposition.when %>" min="2017-01-01" max="<%- time.getMoment().add(1, 'years').format('YYYY-MM-DD') %>">
-  </td>
   <td class="actions">
     <div class="actions-group">
       <button type="button" class="btn btn-default" data-remove="proposition"><i class="fa fa-times"></i></button>

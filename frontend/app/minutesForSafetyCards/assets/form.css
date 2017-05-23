@@ -1,14 +1,3 @@
-.minutesForSafetyCards-form-textarea {
-  padding: 0!important;
-}
-.minutesForSafetyCards-form-textarea > textarea {
-  border: none!important;
-  resize: vertical;
-}
-.minutesForSafetyCards-form-textarea > textarea:focus {
-  box-shadow: none;
-  background: #ffffd6;
-}
 .minutesForSafetyCards-form-addButton {
   margin-top: -20px;
 }
