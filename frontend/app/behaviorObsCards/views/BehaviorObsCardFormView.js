@@ -136,6 +136,20 @@ define([
 
     }, FormView.prototype.events),
 
+    initialize: function()
+    {
+      FormView.prototype.initialize.apply(this, arguments);
+
+      this.rowIndex = 0;
+    },
+
+    serialize: function()
+    {
+      return _.extend(FormView.prototype.serialize.call(this), {
+
+      });
+    },
+
     removeEmpty: function(tbodyId, addBtnId, textareaName)
     {
       var $trs = this.$id(tbodyId).find('tr');
@@ -166,10 +180,6 @@ define([
     {
       var tbodyId = $tr ? $tr.parent().attr('id') : '';
 
-      if (/observations/.test(tbodyId))
-      {
-
-      }
       if (/risks/.test(tbodyId))
       {
         var $risk = $tr.find('textarea[name$="risk"]');
@@ -252,20 +262,6 @@ define([
         .prop('disabled', !anyEasy)
         .closest('label')
         .toggleClass('is-required', anyEasy);
-    },
-
-    initialize: function()
-    {
-      FormView.prototype.initialize.apply(this, arguments);
-
-      this.rowIndex = 0;
-    },
-
-    serialize: function()
-    {
-      return _.extend(FormView.prototype.serialize.call(this), {
-
-      });
     },
 
     hasAnyObservation: function()

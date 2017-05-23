@@ -45,7 +45,9 @@
         </thead>
         <tbody id="<%- idPrefix %>-observations"></tbody>
       </table>
-      <button id="<%- idPrefix %>-addObservation" class="btn btn-default behaviorObsCards-form-addButton" type="button"><i class="fa fa-plus"></i><span><%- t('behaviorObsCards', 'FORM:BTN:add') %></span></button>
+      <button id="<%- idPrefix %>-addObservation" class="btn btn-default behaviorObsCards-form-button" type="button">
+        <i class="fa fa-plus"></i><span><%- t('behaviorObsCards', 'FORM:BTN:add') %></span>
+      </button>
       <hr>
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:risks') %></h4>
       <p class="message message-inline message-error"><%- t('behaviorObsCards', 'FORM:MSG:risks') %></p>
@@ -60,7 +62,12 @@
         </thead>
         <tbody id="<%- idPrefix %>-risks"></tbody>
       </table>
-      <button id="<%- idPrefix %>-addRisk" class="btn btn-default behaviorObsCards-form-addButton" type="button"><i class="fa fa-plus"></i><span><%- t('behaviorObsCards', 'FORM:BTN:add') %></span></button><button id="<%- idPrefix %>-removeRisk" class="btn btn-default behaviorObsCards-form-removeButton" type="button"><i class="fa fa-remove"></i><span><%- t('behaviorObsCards', 'FORM:BTN:remove') %></span></button>
+      <button id="<%- idPrefix %>-addRisk" class="btn btn-default behaviorObsCards-form-button" type="button">
+        <i class="fa fa-plus"></i><span><%- t('behaviorObsCards', 'FORM:BTN:add') %></span>
+      </button><!--
+      //--><button id="<%- idPrefix %>-removeRisk" class="btn btn-default behaviorObsCards-form-button" type="button">
+        <i class="fa fa-remove"></i><span><%- t('behaviorObsCards', 'FORM:BTN:remove') %></span>
+      </button>
       <hr>
       <div class="checkbox">
         <label class="control-label">
@@ -82,7 +89,12 @@
         </thead>
         <tbody id="<%- idPrefix %>-difficulties"></tbody>
       </table>
-      <button id="<%- idPrefix %>-addDifficulty" class="btn btn-default behaviorObsCards-form-addButton" type="button"><i class="fa fa-plus"></i><span><%- t('behaviorObsCards', 'FORM:BTN:add') %></span></button><button id="<%- idPrefix %>-removeDifficulty" class="btn btn-default behaviorObsCards-form-removeButton" type="button"><i class="fa fa-remove"></i><span><%- t('behaviorObsCards', 'FORM:BTN:remove') %></span></button>
+      <button id="<%- idPrefix %>-addDifficulty" class="btn btn-default behaviorObsCards-form-button" type="button">
+        <i class="fa fa-plus"></i><span><%- t('behaviorObsCards', 'FORM:BTN:add') %></span>
+      </button><!--
+      //--><button id="<%- idPrefix %>-removeDifficulty" class="btn btn-default behaviorObsCards-form-button" type="button">
+        <i class="fa fa-remove"></i><span><%- t('behaviorObsCards', 'FORM:BTN:remove') %></span>
+      </button>
     </div>
     <div class="panel-footer">
       <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- formActionText %></button>

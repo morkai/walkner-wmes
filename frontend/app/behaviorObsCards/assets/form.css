@@ -22,11 +22,10 @@
   margin-top: -16px;
   margin-bottom: 20px;
 }
-.behaviorObsCards-form-addButton,
-.behaviorObsCards-form-removeButton {
+.behaviorObsCards-form-button {
   margin-top: -20px;
 }
-.behaviorObsCards-form-removeButton {
+.behaviorObsCards-form-button + .behaviorObsCards-form-button {
   border-left: 0;
 }
 .behaviorObsCards-form-half {
