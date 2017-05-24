@@ -34,6 +34,7 @@ module.exports = function setupEventModel(app, mongoose)
   eventSchema.index({time: -1});
   eventSchema.index({severity: 1, time: -1});
   eventSchema.index({type: 1, time: -1});
+  eventSchema.index({'user._id': 1, time: -1});
 
   mongoose.model('Event', eventSchema);
 };
