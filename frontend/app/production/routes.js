@@ -26,9 +26,9 @@ define([
   {
     var prodLine = orgUnits.getByTypeAndId('prodLine', req.params.prodLineId);
 
-    if (prodLine == null)
+    if (prodLine === null)
     {
-      return broker.publish('router.404', req);
+      return broker.publish('router.404', {req: req});
     }
 
     viewport.showPage(new ProductionPage({

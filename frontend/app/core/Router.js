@@ -156,7 +156,7 @@ define([
 
       if (_.isUndefined(nextUrl))
       {
-        this.broker.publish('router.404', req);
+        this.broker.publish('router.404', {req: req});
       }
       else
       {

@@ -147,7 +147,7 @@ define([
 
     var viewport = this;
 
-    this.broker.publish('viewport.page.loading', page);
+    this.broker.publish('viewport.page.loading', {page: page});
 
     if (_.isFunction(page.load))
     {
@@ -181,7 +181,7 @@ define([
 
     function onPageLoadSuccess()
     {
-      viewport.broker.publish('viewport.page.loaded', page);
+      viewport.broker.publish('viewport.page.loaded', {page: page});
 
       if (viewport.currentPage !== null)
       {
@@ -225,13 +225,11 @@ define([
       viewport.broker.publish('viewport.page.shown', page);
     }
 
-    function onPageLoadFailure()
+    function onPageLoadFailure(jqXhr)
     {
-      viewport.broker.publish('viewport.page.loadingFailed', page);
-
       page.remove();
 
-      console.log('onPageLoadFailure');
+      viewport.broker.publish('viewport.page.loadingFailed', {page: page, xhr: jqXhr});
     }
   };
 

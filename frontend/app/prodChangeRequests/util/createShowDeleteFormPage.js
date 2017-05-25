@@ -27,9 +27,11 @@ define([
 
       tmpBroker.subscribe('viewport.page.loadingFailed', function() { tmpBroker.destroy(); });
 
-      tmpBroker.subscribe('viewport.page.shown').on('message', function(deleteFormPage)
+      tmpBroker.subscribe('viewport.page.shown').on('message', function(message)
       {
         tmpBroker.destroy();
+
+        var deleteFormPage = message.page;
 
         deleteFormPage.listenToOnce(deleteFormPage.view, 'success', function()
         {

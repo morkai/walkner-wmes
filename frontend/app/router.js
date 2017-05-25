@@ -57,16 +57,36 @@ define([
 
   var notFoundUrl = '/404';
 
-  broker.subscribe('router.404', function(req)
+  broker.subscribe('router.404', function(message)
   {
+    var req = message.req;
+
     if (req.path === notFoundUrl)
     {
-      viewport.showPage(new ErrorPage({code: 404, req: req}));
+      viewport.showPage(new ErrorPage({
+        model: {
+          code: 404,
+          req: req,
+          previousUrl: router.previousUrl
+        }
+      }));
     }
     else
     {
       router.dispatch(notFoundUrl);
     }
+  });
+
+  broker.subscribe('viewport.page.loadingFailed', function(message)
+  {
+    viewport.showPage(new ErrorPage({
+      model: {
+        code: message.xhr.status,
+        req: router.currentRequest,
+        previousUrl: router.previousUrl,
+        xhr: message.xhr
+      }
+    }));
   });
 
   window.router = router;

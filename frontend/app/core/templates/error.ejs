@@ -1,0 +1,7 @@
+<div class="well">
+  <p><%- message %></p>
+  <% if (notify) { %>
+  <hr style="margin: 0 0 10px 0">
+  <p id="<%- idPrefix %>-notify"><a href="#"><%- t('core', 'ERROR:notify:message') %></a></p>
+  <% } %>
+</div>

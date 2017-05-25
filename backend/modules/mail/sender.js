@@ -298,11 +298,6 @@ exports.start = function startMailSenderModule(app, module)
 
   app.onModuleReady(module.config.expressId, function()
   {
-    if (!transport)
-    {
-      return;
-    }
-
     var express = app[module.config.expressId];
 
     express.options('/mail;send', function(req, res)

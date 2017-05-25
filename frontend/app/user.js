@@ -241,7 +241,13 @@ function(
       }
       else
       {
-        viewport.showPage(new ErrorPage({code: 401, req: req, referer: referer}));
+        viewport.showPage(new ErrorPage({
+          model: {
+            code: 403,
+            req: req,
+            previousUrl: referer
+          }
+        }));
       }
     };
   };
