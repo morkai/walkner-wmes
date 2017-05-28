@@ -1,4 +1,31 @@
 <div class="hidden">
+  <h1>v0.111.2</h1>
+  <h2><%- time.format('2017-05-21', 'LL') %></h2>
+  <h3>Działy</h3>
+  <ul>
+    <li>Dodano możliwość dezaktywowania działów.</li>
+  </ul>
+  <h3>Raporty > Struktura organizacyjna</h3>
+  <ul>
+    <li>Dodano zapamiętywanie pozycji poszczególnych jednostek organizacyjnych.</li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Poprawiono błąd podczas importu zleceń z SAP powodujący nieprzypisywanie wartości 'Opis', 'Zleceniodawca'
+      oraz 'Czas utworzenia' w przypadku, gdy dla danego zlecenia sprzedaży istnieje więcej niż jedno
+      zlecenie produkcyjne.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Zmieniono kolumnę 'Ilość popr.' na liście wyników na 'Ilość do sel.'.</li>
+    <li>Zmieniono filtrowanie listy inspekcji tak, aby dodatkowe filtry były domyślnie schowane. Dodatkowe filtry można
+      zdefiniować wybierając je z listy rozwijanej lub klikając na nazwę kolumny w tabeli wyników.</li>
+    <li>Zmieniono filtr 'Kod wady' tak, aby można było wybrać kilka kodów.</li>
+    <li>Dodano filtr i kolumnę 'Właściciel niezgodności - Mistrz' do listy wyników.</li>
+    <li>Dodano filtr 'Rodzaj inspekcji' do raportu 'Jakośc wyrobu gotowego'.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.111.1</h1>
   <h2><%- time.format('2017-05-14', 'LL') %></h2>
   <h3>Dokumentacja > Dokumenty</h3>

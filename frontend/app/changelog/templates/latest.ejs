@@ -1,25 +1,27 @@
-<h1>v0.111.2</h1>
-<h2><%- time.format('2017-05-21', 'LL') %></h2>
-<h3>Działy</h3>
+<h1>v0.111.3</h1>
+<h2><%- time.format('2017-05-28', 'LL') %></h2>
+<h3>Obserwacje zachowań</h3>
 <ul>
-  <li>Dodano możliwość dezaktywowania działów.</li>
+  <li>Poprawiono błąd powodujący automatyczne wpisywanie wartości 'Stanowisko (KD)' danego użytkownika
+    do pola 'Obserwowane stanowisko'.</li>
+  <li>Zmieniono formularz tak, aby wszystkie kategorie zachowań zawsze były wyświetlane.</li>
+  <li>Zmieniono wymagane pola w formularzu.</li>
+  <li>Dodano możliwość definiowania nowych obserwacji zachowań z kategorii Inne.</li>
 </ul>
-<h3>Raporty > Struktura organizacyjna</h3>
+<h3>Minuty dla Bezpieczeństwa</h3>
 <ul>
-  <li>Dodano zapamiętywanie pozycji poszczególnych jednostek organizacyjnych.</li>
+  <li>Usunięto pola 'Kto?' i 'Kiedy?' z propozycji.</li>
 </ul>
-<h3>Zlecenia reszty działów</h3>
+<h3>Wydajność godzinowa</h3>
 <ul>
-  <li>Poprawiono błąd podczas importu zleceń z SAP powodujący nieprzypisywanie wartości 'Opis', 'Zleceniodawca'
-    oraz 'Czas utworzenia' w przypadku, gdy dla danego zlecenia sprzedaży istnieje więcej niż jedno
-    zlecenie produkcyjne.</li>
+  <li>Dodano możliwość skanowania numerów seryjnych dla wszystkich zleceń rozpoczętych na danej zmianie, a nie tylko
+    do aktualnie wykonywanego zlecenia.</li>
 </ul>
-<h3>Inspekcja Jakości</h3>
+<h3>Inne</h3>
 <ul>
-  <li>Zmieniono kolumnę 'Ilość popr.' na liście wyników na 'Ilość do sel.'.</li>
-  <li>Zmieniono filtrowanie listy inspekcji tak, aby dodatkowe filtry były domyślnie schowane. Dodatkowe filtry można
-    zdefiniować wybierając je z listy rozwijanej lub klikając na nazwę kolumny w tabeli wyników.</li>
-  <li>Zmieniono filtr 'Kod wady' tak, aby można było wybrać kilka kodów.</li>
-  <li>Dodano filtr i kolumnę 'Właściciel niezgodności - Mistrz' do listy wyników.</li>
-  <li>Dodano filtr 'Rodzaj inspekcji' do raportu 'Jakośc wyrobu gotowego'.</li>
+  <li>Zmieniono pola wyszukiwania użytkowników tak, aby pokazywał tylko jedną opcję o takim samym imieniu i nazwisku
+    (jeżeli w bazie istnieje użytkownik Jan Kowalski trzy razy: w firmie PLP, APT oraz Pozostali, to na liście dostępny
+    będzie Jan Kowalski z firmy PLP).</li>
+  <li>Zmieniono strony błedów tak, aby w razie pilnej potrzeby można było poinformować administratora o błędzie.</li>
+  <li>Dodano strony błędów podczas ładowania danych (wcześniej wyświetlała się tylko biała strona).</li>
 </ul>
