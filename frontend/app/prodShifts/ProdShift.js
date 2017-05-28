@@ -762,11 +762,15 @@ define([
 
       this.trigger('change:quantitiesDone', this, quantitiesDone, {});
 
-      this.prodShiftOrder.set({
-        quantityDone: data.quantityDone,
-        lastTaktTime: data.lastTaktTime,
-        avgTaktTime: data.avgTaktTime
-      });
+      if (!data.serialNumber.prodShiftOrder || data.serialNumber.prodShiftOrder === this.prodShiftOrder.id)
+      {
+        this.prodShiftOrder.set({
+          quantityDone: data.quantityDone,
+          lastTaktTime: data.lastTaktTime,
+          avgTaktTime: data.avgTaktTime
+        });
+      }
+
       this.saveLocalData();
     },
 

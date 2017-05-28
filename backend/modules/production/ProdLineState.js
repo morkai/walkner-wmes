@@ -152,6 +152,30 @@ ProdLineState.prototype.getCurrentOrder = function()
 };
 
 /**
+ * @param {string} orderNo
+ * @returns {object|null}
+ */
+ProdLineState.prototype.getLastOrderByNo = function(orderNo)
+{
+  if (this.prodShiftOrders.length === 0)
+  {
+    return null;
+  }
+
+  for (var i = this.prodShiftOrders.length - 1; i >= 0; --i)
+  {
+    var prodShiftOrder = this.prodShiftOrders[i];
+
+    if (prodShiftOrder.orderId === orderNo)
+    {
+      return prodShiftOrder;
+    }
+  }
+
+  return null;
+};
+
+/**
  * @returns {object|null}
  */
 ProdLineState.prototype.getLastOrder = function()

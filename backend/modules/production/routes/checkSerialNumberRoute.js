@@ -38,8 +38,11 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
         });
       }
 
+      const hasOrderNo = /^[0-9]+$/.test(logEntry.data.orderNo) && logEntry.data.orderNo !== '000000000';
       const prodShift = lineState.prodShift;
-      const prodShiftOrder = lineState.getCurrentOrder();
+      const prodShiftOrder = hasOrderNo
+        ? lineState.getLastOrderByNo(logEntry.data.orderNo)
+        : lineState.getCurrentOrder();
 
       if (!prodShift || !prodShiftOrder)
       {
@@ -57,7 +60,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
       logEntry.prodShift = prodShift._id;
       logEntry.prodShiftOrder = prodShiftOrder._id;
 
-      if (!logEntry.data.orderNo || logEntry.data.orderNo === '000000000')
+      if (!hasOrderNo)
       {
         logEntry.data.orderNo = prodShiftOrder.orderId;
       }
