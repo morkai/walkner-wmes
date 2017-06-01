@@ -257,7 +257,7 @@ define([
 
       this.listenTo(dialogView, 'answered', function()
       {
-        this.model.removeMrp(divisionId, mrpId)
+        this.model.removeMrp({division: divisionId, mrp: mrpId})
           .fail(function()
           {
             viewport.msg.show({
