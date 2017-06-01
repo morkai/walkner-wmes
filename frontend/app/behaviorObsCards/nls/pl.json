@@ -72,5 +72,8 @@
   "filter:user:mine": "Moje",
   "filter:user:observer": "Obserwator",
   "filter:user:others": "Uczestnik",
+  "filter:anyHard": "Trudne do zmiany",
+  "filter:anyHard:observations": "zachowania",
+  "filter:anyHard:risks": "warunki pracy",
   "filter:submit": "Filtruj"
 }

@@ -46,7 +46,8 @@ define([
         userType: 'others',
         user: null,
         from: '',
-        to: ''
+        to: '',
+        anyHard: []
       };
     },
 
@@ -76,6 +77,20 @@ define([
       'section': function(propertyName, term, formData)
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
+      },
+      'anyHardObservations': function(propertyName, term, formData)
+      {
+        if (term.args[1])
+        {
+          formData.anyHard.push('observations');
+        }
+      },
+      'anyHardRisks': function(propertyName, term, formData)
+      {
+        if (term.args[1])
+        {
+          formData.anyHard.push('risks');
+        }
       }
     },
 
@@ -92,6 +107,7 @@ define([
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var userType = this.$('input[name="userType"]:checked').val();
       var user = this.$id('user').val();
+      var anyHard = this.getButtonGroupValue('anyHard');
 
       if (fromMoment.isValid())
       {
@@ -119,6 +135,16 @@ define([
       else if (user)
       {
         selector.push({name: 'eq', args: ['users', user]});
+      }
+
+      if (_.contains(anyHard, 'observations'))
+      {
+        selector.push({name: 'eq', args: ['anyHardObservations', true]});
+      }
+
+      if (_.contains(anyHard, 'risks'))
+      {
+        selector.push({name: 'eq', args: ['anyHardRisks', true]});
       }
 
       ['section'].forEach(function(property)

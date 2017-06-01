@@ -30,6 +30,17 @@
       <% }) %>
     </select>
   </div>
+  <div class="form-group">
+    <label><%- t('behaviorObsCards', 'filter:anyHard') %></label>
+    <div id="<%- idPrefix %>-anyHard" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input type="checkbox" name="anyHard[]" value="observations"> <%- t('behaviorObsCards', 'filter:anyHard:observations') %>
+      </label>
+      <label class="btn btn-default">
+        <input type="checkbox" name="anyHard[]" value="risks"> <%- t('behaviorObsCards', 'filter:anyHard:risks') %>
+      </label>
+    </div>
+  </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('behaviorObsCards', 'filter:submit') %></span></button>

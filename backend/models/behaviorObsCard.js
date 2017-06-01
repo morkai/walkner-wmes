@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const autoIncrement = require('mongoose-auto-increment');
 
 module.exports = function setupBehaviorObsCardModel(app, mongoose)
@@ -50,7 +51,9 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
     risks: [riskSchema],
     easyDiscussed: Boolean,
     difficulties: [difficultySchema],
-    users: [String]
+    users: [String],
+    anyHardObservations: Boolean,
+    anyHardRisks: Boolean
   }, {
     id: false,
     minimize: false
@@ -66,7 +69,8 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
   behaviorObsCardSchema.index({date: -1});
   behaviorObsCardSchema.index({section: 1});
   behaviorObsCardSchema.index({users: 1});
-  behaviorObsCardSchema.index({'observer.id': 1});
+  behaviorObsCardSchema.index({anyHardObservations: 1});
+  behaviorObsCardSchema.index({anyHardRisks: 1});
 
   behaviorObsCardSchema.statics.TOPIC_PREFIX = 'behaviorObsCards';
 
@@ -93,6 +97,8 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
     });
 
     this.users = Object.keys(users);
+    this.anyHardObservations = _.some(this.observations, o => o.easy === false);
+    this.anyHardRisks = _.some(this.risks, r => r.easy === false);
 
     next();
   });
