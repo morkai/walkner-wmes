@@ -1,0 +1,18 @@
+<dl class="mor-userPopover">
+  <dt><%- t('mor', 'prop:prodFunction') %></dt>
+  <dd><%= user.prodFunction || '?' %></dd>
+  <% if (user.email) { %>
+  <dt><%- t('mor', 'prop:email') %></dt>
+  <dd>
+    <% if (editable) { %>
+    <a href="mailto:<%= user.email %>"><%= user.email %></a>
+    <% } else { %>
+    <%= user.email %>
+    <% } %>
+  </dd>
+  <% } %>
+  <% if (user.mobile) { %>
+  <dt><%- t('mor', 'prop:mobile') %></dt>
+  <dd><%= user.mobile %></dd>
+  <% } %>
+</dl>

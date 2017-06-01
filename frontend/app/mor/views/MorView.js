@@ -9,12 +9,14 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/views/DialogView',
+  'app/data/prodFunctions',
   './WatchFormView',
   './AddMrpFormView',
   './EditMrpFormView',
   'app/mor/templates/mor',
   'app/mor/templates/removeWatch',
-  'app/mor/templates/removeMrp'
+  'app/mor/templates/removeMrp',
+  'app/mor/templates/userPopover'
 ], function(
   _,
   $,
@@ -24,12 +26,14 @@ define([
   viewport,
   View,
   DialogView,
+  prodFunctions,
   WatchFormView,
   AddMrpFormView,
   EditMrpFormView,
   template,
   removeWatchTemplate,
-  removeMrpTemplate
+  removeMrpTemplate,
+  userPopoverTemplate
 ) {
   'use strict';
 
@@ -320,16 +324,31 @@ define([
         return;
       }
 
+      var user = this.model.users.get($user[0].dataset.userId);
+
       this.$userPopover = $user.popover({
         placement: 'auto right',
         trigger: 'manual',
         container: 'body',
         html: true,
-        content: function()
-        {
-          return '???';
-        }
+        title: user.getLabel(),
+        content: this.getUserPopoverContent(user),
       }).popover('show');
+    },
+
+    getUserPopoverContent: function(user)
+    {
+      var prodFunction = prodFunctions.get(user.get('prodFunction'));
+
+      return userPopoverTemplate({
+        editable: this.options.editable !== false,
+        user: {
+          name: user.getLabel(),
+          prodFunction: prodFunction ? prodFunction.getLabel() : '',
+          email: user.get('email'),
+          mobile: user.getMobile()
+        }
+      });
     },
 
     onKeyDown: function(e)
