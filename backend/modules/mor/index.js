@@ -404,11 +404,23 @@ exports.start = function startMorModule(app, module, done)
       return done(app.createError('INVALID_DIVISION', 400));
     }
 
-    const mrp = division.mrps.find(m => m._id === params.mrp);
+    let mrp = division.mrps.find(m => m._id === params.mrp);
 
     if (!mrp)
     {
-      return done(app.createError('INVALID_MRP', 400));
+      if (params.mrp === null)
+      {
+        mrp = {
+          _id: null,
+          prodFunctions: []
+        };
+
+        division.mrps.push(mrp);
+      }
+      else
+      {
+        return done(app.createError('INVALID_MRP', 400));
+      }
     }
 
     let prodFunction = mrp.prodFunctions.find(p => p._id === params.prodFunction);

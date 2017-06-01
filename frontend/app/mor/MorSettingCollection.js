@@ -24,7 +24,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/prodFunctions$/.test(id))
+      if (/prodFunctions$/i.test(id))
       {
         return newValue.split(',').filter(function(p) { return !!p.length; });
       }

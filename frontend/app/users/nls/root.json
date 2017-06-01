@@ -156,6 +156,7 @@
     "PRIVILEGE:D8:LEADER": "QI: leader",
     "PRIVILEGE:D8:DICTIONARIES:VIEW": "QI: view dictionaries",
     "PRIVILEGE:D8:DICTIONARIES:MANAGE": "QI: manage dictionaries",
+    "PRIVILEGE:MOR:MANAGE": "Matrix of responsibility: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System",

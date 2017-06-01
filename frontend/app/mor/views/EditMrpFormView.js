@@ -79,7 +79,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         division: orgUnits.getByTypeAndId('division', this.model.divisionId).get('description'),
-        mrp: this.model.mrpId,
+        mrp: this.model.mrpId || t('mor', 'editMrp:mrp:all'),
         prodFunction: prodFunctions.get(this.model.prodFunctionId).getLabel()
       };
     },

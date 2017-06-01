@@ -67,8 +67,12 @@
   vertical-align: top;
   min-width: 100px;
 }
-.mor-table > thead > tr > th:first-child {
+.mor-table > thead > tr > th:first-child,
+.mor-mrp {
   width: 275px;
+}
+.mor-table-highlight {
+  background: #ffffd6!important;
 }
 .mor-editable {
   position: relative;

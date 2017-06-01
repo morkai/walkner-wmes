@@ -64,7 +64,7 @@
       </tr>
       </thead>
       <tbody>
-      <% division.mrps.forEach(function(mrp) { %>
+      <% division.mrps.forEach(function(mrp, mrpI) { %>
       <tr data-mrp-id="<%- mrp._id %>">
         <td class="mor-mrp mor-editable">
           <span class="mor-mrp-name"><%= mrp._id %></span>
@@ -74,14 +74,16 @@
           <% } %>
         </td>
         <% prodFunctions.forEach(function(prodFunction) { %>
-        <td class="is-min mor-editable" data-prod-function-id="<%- prodFunction._id %>">
-          <% (mrp.users[prodFunction._id] || []).forEach(function(user) { %>
-          <span class="mor-user <%- user.available ? 'mor-available' : 'mor-unavailable' %>" data-user-id="<%- user._id %>"><%= user.label %></span><br>
+        <% if (!prodFunction.common || mrpI === 0) { %>
+        <td class="is-min mor-editable <%- prodFunction.common ? 'mor-is-common' : '' %>" data-prod-function-id="<%- prodFunction._id %>" rowspan="<%= prodFunction.common ? division.mrps.length : '0' %>">
+          <% ((prodFunction.common ? division.commonProdFunctions[prodFunction._id] : mrp.users[prodFunction._id]) || []).forEach(function(user) { %>
+          <%- prodFunction.ordered ? (user.no + '. ') : '' %><span class="mor-user <%- user.available ? 'mor-available' : 'mor-unavailable' %>" data-user-id="<%- user._id %>"><%= user.label %></span><br>
           <% }) %>
           <% if (canManage || division.canManage) { %>
           <button class="btn btn-default" data-action="editMrp"><i class="fa fa-edit"></i></button>
           <% } %>
         </td>
+        <% } %>
         <% }) %>
       </tr>
       <% }) %>

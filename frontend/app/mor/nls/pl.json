@@ -41,6 +41,7 @@
   "editMrp:title": "Edycja MRP",
   "editMrp:division": "Wydział",
   "editMrp:mrp": "Kontroler MRP",
+  "editMrp:mrp:all": "Wszystkie",
   "editMrp:prodFunction": "Funkcja",
   "editMrp:users": "Osoby odpowiedzialne",
   "editMrp:submit": "Edytuj MRP",
@@ -48,5 +49,7 @@
   "editMrp:failure": "Nie udało się zedytować MRP :(",
 
   "settings:tab:general": "Ogólne",
-  "settings:prodFunctions": "Funkcje"
+  "settings:prodFunctions": "Funkcje",
+  "settings:commonProdFunctions": "Funkcje wspólne dla wszystkich MRP w wydziale",
+  "settings:orderedProdFunctions": "Funkcje z zastępstwami"
 }

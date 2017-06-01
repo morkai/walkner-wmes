@@ -77,6 +77,11 @@ define([
       return prodFunction ? prodFunction.users : [];
     },
 
+    isCommonProdFunction: function(prodFunctionId)
+    {
+      return _.contains((this.get('settings') || {}).commonProdFunctions, prodFunctionId);
+    },
+
     reload: function()
     {
       this.fetch();
@@ -276,7 +281,19 @@ define([
 
       if (!mrp)
       {
-        return resolved();
+        if (params.mrp === null)
+        {
+          mrp = {
+            _id: null,
+            prodFunctions: []
+          };
+
+          division.mrps.push(mrp);
+        }
+        else
+        {
+          return resolved();
+        }
       }
 
       var prodFunction = _.findWhere(mrp.prodFunctions, {_id: params.prodFunction});
@@ -335,13 +352,20 @@ define([
 
     serializeProdFunctions: function()
     {
-      return _.map((this.get('settings') || {}).prodFunctions, function(prodFunctionId)
+      var settings = this.get('settings') || {};
+      var allProdFunctions = settings.prodFunctions || [];
+      var commonProdFunctions = settings.commonProdFunctions || [];
+      var orderedProdFunctions = settings.orderedProdFunctions || [];
+
+      return _.map(allProdFunctions, function(prodFunctionId)
       {
         var prodFunction = prodFunctions.get(prodFunctionId);
 
         return {
           _id: prodFunction ? prodFunction.id : prodFunctionId,
-          label: prodFunction ? prodFunction.getLabel() : prodFunctionId
+          label: prodFunction ? prodFunction.getLabel() : prodFunctionId,
+          common: _.contains(commonProdFunctions, prodFunctionId),
+          ordered: _.contains(orderedProdFunctions, prodFunctionId)
         };
       });
     },
@@ -404,6 +428,19 @@ define([
       {
         return user.get('prodFunction') === 'manager' && user.get('orgUnitId') === division.id;
       });
+      var commonProdFunctions = {};
+      var mrps = (morDivision.mrps || [])
+        .map(this.serializeMrp, this)
+        .filter(function(mrp)
+        {
+          if (mrp._id === null)
+          {
+            commonProdFunctions = mrp.users;
+          }
+
+          return mrp._id !== null;
+        })
+        .sort(function(a, b) { return a._id.localeCompare(b._id); });
 
       return {
         _id: division.id,
@@ -411,14 +448,12 @@ define([
         label: division.get('description'),
         manager: this.serializeUser(manager),
         canManage: manager && user.data._id === manager.id,
-        mrps: (morDivision.mrps || [])
-          .map(this.serializeMrp, this)
-          .filter(function(mrp) { return !!mrp; })
-          .sort(function(a, b) { return a._id.localeCompare(b._id); })
+        commonProdFunctions: commonProdFunctions,
+        mrps: mrps
       };
     },
 
-    serializeUser: function(userId)
+    serializeUser: function(userId, i)
     {
       var user = this.users.get(userId);
 
@@ -431,6 +466,7 @@ define([
 
       return {
         _id: user.id,
+        no: i + 1,
         label: user.getLabel(),
         prodFunction: prodFunction ? prodFunction.getLabel() : '?',
         email: user.get('email') || '?',
@@ -442,17 +478,26 @@ define([
     serializeMrp: function(morMrp)
     {
       var mor = this;
+      var common = morMrp._id === null;
       var mrp = orgUnits.getByTypeAndId('mrpController', morMrp._id);
       var mrpUsers = {};
 
       morMrp.prodFunctions.forEach(function(morProdFunction)
       {
         mrpUsers[morProdFunction._id] = morProdFunction.users.map(mor.serializeUser, mor);
+
+        if (common)
+        {
+          mrpUsers[morProdFunction._id].sort(function(a, b)
+          {
+            return a.label.localeCompare(b.label);
+          });
+        }
       });
 
       return {
-        _id: mrp.id,
-        label: mrp.get('description'),
+        _id: morMrp._id,
+        label: mrp ? mrp.get('description') : '',
         users: mrpUsers
       };
     },

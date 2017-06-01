@@ -101,6 +101,14 @@ define([
         {
           this[action].apply(this, params);
         }
+      },
+      'mouseenter tr[data-mrp-id]': function(e)
+      {
+        this.$(e.currentTarget).closest('tbody').find('.mor-is-common').addClass('mor-table-highlight');
+      },
+      'mouseleave tr[data-mrp-id]': function(e)
+      {
+        this.$(e.currentTarget).closest('tbody').find('.mor-is-common').removeClass('mor-table-highlight');
       }
     },
 
@@ -280,7 +288,7 @@ define([
           model: {
             mor: this.model,
             divisionId: divisionId,
-            mrpId: mrpId,
+            mrpId: this.model.isCommonProdFunction(prodFunctionId) ? null : mrpId,
             prodFunctionId: prodFunctionId
           }
         }),

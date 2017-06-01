@@ -67,6 +67,18 @@ define([
           $prodFunctions.select2('onSortEnd').select2('focus');
         }
       });
+
+      this.$id('commonProdFunctions').select2({
+        allowClear: true,
+        multiple: true,
+        data: prodFunctions.map(idAndLabel)
+      });
+
+      this.$id('orderedProdFunctions').select2({
+        allowClear: true,
+        multiple: true,
+        data: prodFunctions.map(idAndLabel)
+      });
     }
 
   });
