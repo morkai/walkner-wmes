@@ -52,7 +52,7 @@ define([
     );
   });
 
-  router.map('/minutesForSafetyCards;add', canAccess, function(req)
+  router.map('/minutesForSafetyCards;add', canAccess, function()
   {
     viewport.loadPage(
       [

@@ -9,8 +9,8 @@ module.exports = function setUpMinutesForSafetyCardsRoutes(app, module)
   const mongoose = app[module.config.mongooseId];
   const MinutesForSafetyCard = mongoose.model('MinutesForSafetyCard');
 
-  const canView = userModule.auth('KAIZEN:MANAGE', 'FN:leader');
-  const canManage = userModule.auth('KAIZEN:MANAGE', 'FN:leader');
+  const canView = userModule.auth();
+  const canManage = userModule.auth();
 
   express.get(
     '/minutesForSafetyCards',

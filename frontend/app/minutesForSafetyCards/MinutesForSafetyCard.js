@@ -85,19 +85,16 @@ define([
       return this.attributes.creator && this.attributes.creator.id === user.data._id;
     },
 
+    isOwner: function()
+    {
+      return this.attributes.owner && this.attributes.owner.id === user.data._id;
+    },
+
     canEdit: function()
     {
-      if (user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
-      {
-        return true;
-      }
-
-      if (!this.isCreator())
-      {
-        return false;
-      }
-
-      return Date.now() - Date.parse(this.get('date')) < 24 * 3600 * 1000;
+      return user.isAllowedTo(this.privilegePrefix + ':MANAGE')
+        || this.isCreator()
+        || this.isOwner();
     },
 
     canDelete: function()
@@ -107,12 +104,12 @@ define([
         return true;
       }
 
-      if (!this.isCreator())
+      if (!this.isCreator() && !this.isOwner())
       {
         return false;
       }
 
-      return Date.now() - Date.parse(this.get('date')) < 8 * 3600 * 1000;
+      return Date.now() - Date.parse(this.get('date')) < 24 * 3600 * 1000;
     }
 
   });
