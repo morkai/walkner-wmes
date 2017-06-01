@@ -1025,7 +1025,6 @@ define([
     $mor.find('.fa').removeClass('fa-group').addClass('fa-spinner fa-spin');
 
     var morView = new MorView({
-      dialogClassName: 'mor-dialog',
       model: new Mor()
     });
 

@@ -25,6 +25,7 @@
     "controls:switchApp": "Switch apps/Configure after 3s",
     "controls:reboot": "Refresh page/Restart after 3s",
     "controls:shutdown": "Shutdown after 3s",
+    "controls:mor": "Matrix of responsibility",
 
     "unlockDialog:title:unlock": "Production line activation",
     "unlockDialog:title:lock": "Production line deactivation",

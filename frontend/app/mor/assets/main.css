@@ -60,6 +60,9 @@
 .mor-unavailable {
   color: #ee0000;
 }
+.mor-table {
+  width: auto;
+}
 .mor-table > tbody > tr > td {
   vertical-align: top;
   min-width: 100px;

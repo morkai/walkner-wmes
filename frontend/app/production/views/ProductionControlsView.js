@@ -5,17 +5,21 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
-  'app/production/templates/controls',
+  'app/mor/Mor',
+  'app/mor/views/MorView',
   './UnlockDialogView',
-  './LockDialogView'
+  './LockDialogView',
+  'app/production/templates/controls'
 ], function(
   t,
   user,
   viewport,
   View,
-  template,
+  Mor,
+  MorView,
   UnlockDialogView,
-  LockDialogView
+  LockDialogView,
+  template
 ) {
   'use strict';
 
@@ -31,6 +35,13 @@ define([
     template: template,
 
     localTopics: {
+      'socket.connected': function()
+      {
+        if (this.mor)
+        {
+          this.promised(this.mor.fetch());
+        }
+      },
       'socket.*': function(message, topic)
       {
         var color = SOCKET_TOPIC_TO_COLOR[topic];
@@ -57,6 +68,7 @@ define([
     },
 
     events: {
+      'click #-mor': 'showMor',
       'click a.production-controls-addNearMiss': 'addNearMiss',
       'click a.production-controls-addSuggestion': 'addSuggestion',
       'click a.production-controls-lock': 'lock',
@@ -77,6 +89,11 @@ define([
       {
         this.$(e.target).removeClass('fa-unlock').addClass('fa-lock');
       }
+    },
+
+    initialize: function()
+    {
+      this.mor = null;
     },
 
     afterRender: function()
@@ -178,6 +195,36 @@ define([
       }
 
       viewport.showDialog(new LockDialogView({model: this.model}), t('production', 'unlockDialog:title:lock'));
+    },
+
+    showMor: function()
+    {
+      var mor = this.mor || new Mor();
+      var morView = new MorView({
+        editable: false,
+        model: mor
+      });
+
+      if (mor.users.length)
+      {
+        return viewport.showDialog(morView);
+      }
+
+      var $mor = this.$id('mor').addClass('disabled');
+
+      $mor.find('.fa').removeClass('fa-group').addClass('fa-spinner fa-spin');
+
+      this.promised(mor.fetch())
+        .done(function()
+        {
+          viewport.showDialog(morView);
+        })
+        .always(function()
+        {
+          $mor.removeClass('disabled').find('.fa').removeClass('fa-spinner fa-spin').addClass('fa-group');
+        });
+
+      this.mor = mor;
     }
 
   });

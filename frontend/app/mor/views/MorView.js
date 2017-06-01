@@ -37,6 +37,8 @@ define([
 
     template: template,
 
+    dialogClassName: 'mor-dialog',
+
     events: {
       'click h3': function(e)
       {
@@ -120,6 +122,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
+        editable: this.options.editable !== false,
         canManage: user.isAllowedTo('MOR:MANAGE'),
         isManager: user.isAllowedTo('FN:manager'),
         watchCollapsed: !!this.model.collapsedSections.WATCH,
@@ -331,7 +334,7 @@ define([
 
     onKeyDown: function(e)
     {
-      if (e.keyCode === 17)
+      if (e.keyCode === 17 && this.options.editable !== false)
       {
         this.$el.addClass('is-editing');
       }

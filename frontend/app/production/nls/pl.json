@@ -24,6 +24,7 @@
   "controls:switchApps": "Zmień aplikację/Konfiguruj po 3s",
   "controls:reboot": "Odśwież stronę/Restartuj komputer po 3s",
   "controls:shutdown": "Wyłącz komputer po 3s",
+  "controls:mor": "Matryca odpowiedzialności",
 
   "unlockDialog:title:unlock": "Aktywacja linii produkcyjnej",
   "unlockDialog:title:lock": "Dezaktywacja linii produkcyjnej",

@@ -13,7 +13,13 @@
         <td><i class="fa fa-wrench"></i><span><%- user.prodFunction %></span></td>
         <td><i class="fa fa-clock-o"></i><span><%- user.availability %></span></td>
         <td><i class="fa fa-phone"></i><span><%- user.mobile %></span></td>
-        <td><a href="mailto:<%= user.email %>"><i class="fa fa-envelope"></i><span><%= user.email %></span></a></td>
+        <td>
+          <% if (editable) { %>
+          <a href="mailto:<%= user.email %>"><i class="fa fa-envelope"></i><span><%= user.email %></span></a>
+          <% } else { %>
+          <i class="fa fa-envelope"></i><span><%= user.email %></span>
+          <% } %>
+        </td>
         <td class="actions">
           <% if (isManager || canManage) { %>
           <div class="btn-group">
@@ -36,7 +42,11 @@
       <i class="fa fa-user-circle-o <%- division.manager.available ? 'mor-available' : 'mor-unavailable' %>"></i><span><%= division.manager.label %></span>
       <i class="fa fa-wrench"></i><span><%= division.manager.prodFunction %></span>
       <i class="fa fa-phone"></i><span><%= division.manager.mobile %></span>
+      <% if (editable) { %>
       <a href="mailto:<%= division.manager.email %>"><i class="fa fa-envelope"></i><span><%= division.manager.email %></span></a>
+      <% } else { %>
+      <i class="fa fa-envelope"></i><span><%= division.manager.email %></span>
+      <% } %>
     </h4>
     <% } %>
     <table class="table table-bordered table-condensed table-hover mor-table">
@@ -51,7 +61,6 @@
         <% prodFunctions.forEach(function(prodFunction) { %>
         <th class="is-min"><%= prodFunction.label %></th>
         <% }) %>
-        <th></th>
       </tr>
       </thead>
       <tbody>
