@@ -47,7 +47,18 @@ define([
 
     getData: function()
     {
-      return this.model.get(this.options.top10Property);
+      var from = time.getMoment().add(this.options.month || 0, 'months');
+      var to = from.clone().add(1, 'months');
+      var urlTemplate = this.options.urlTemplate
+        .replace('${from}', from.valueOf())
+        .replace('${to}', to.valueOf());
+
+      return (this.model.get(this.options.top10Property) || []).map(function(entry)
+      {
+        entry.url = urlTemplate.replace('${user}', entry._id);
+
+        return entry;
+      });
     },
 
     getDataState: function()

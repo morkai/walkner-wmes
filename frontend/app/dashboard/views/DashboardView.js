@@ -90,6 +90,11 @@ define([
 
     defineViews: function()
     {
+      var nearMissUrlTemplate = '#kaizenOrders?exclude(changes)&sort(-eventDate)&limit(20)'
+        + '&eventDate=ge=${from}&eventDate=lt=${to}&owners.id=${user}';
+      var suggestionUrlTemplate = '#suggestions?exclude(changes)&sort(-date)&limit(20)'
+        + '&date=ge=${from}&date=lt=${to}&owners.id=${user}';
+
       this.nearMissMetricsView = new KaizenMetricsView({
         model: this.nearMissStats,
         buttonType: 'danger',
@@ -107,12 +112,14 @@ define([
       });
       this.nearMissCurrentTop10View = new KaizenTop10View({
         model: this.nearMissStats,
-        top10Property: 'currentTop10'
+        top10Property: 'currentTop10',
+        urlTemplate: nearMissUrlTemplate
       });
       this.nearMissPreviousTop10View = new KaizenTop10View({
         model: this.nearMissStats,
         top10Property: 'previousTop10',
-        month: -1
+        month: -1,
+        urlTemplate: nearMissUrlTemplate
       });
       this.suggestionMetricsView = new KaizenMetricsView({
         model: this.suggestionStats,
@@ -131,12 +138,14 @@ define([
       });
       this.suggestionCurrentTop10View = new KaizenTop10View({
         model: this.suggestionStats,
-        top10Property: 'currentTop10'
+        top10Property: 'currentTop10',
+        urlTemplate: suggestionUrlTemplate
       });
       this.suggestionPreviousTop10View = new KaizenTop10View({
         model: this.suggestionStats,
         top10Property: 'previousTop10',
-        month: -1
+        month: -1,
+        urlTemplate: suggestionUrlTemplate
       });
     },
 

@@ -17,7 +17,7 @@
   <% _.forEach(top10, function(entry) { %>
   <tr>
     <td class="dashboard-top-place"><%- entry.place %>.</td>
-    <td><span class="dashboard-top-name"><%= entry.name %></span></td>
+    <td><span class="dashboard-top-name"><a href="<%- entry.url %>"><%= entry.name %></a></span></td>
     <td class="dashboard-top-count" data-place="<%- entry.place %>"><%- entry.count %></td>
   </tr>
   <% }) %>

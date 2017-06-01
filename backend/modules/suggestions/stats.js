@@ -179,6 +179,7 @@ module.exports = function setUpKaizenCommands(app, module)
         {
           previousTop10.push({
             place: -1,
+            _id: result._id,
             name: result.name,
             count: result.previousCount
           });
@@ -188,6 +189,7 @@ module.exports = function setUpKaizenCommands(app, module)
         {
           currentTop10.push({
             place: -1,
+            _id: result._id,
             name: result.name,
             count: result.currentCount
           });
