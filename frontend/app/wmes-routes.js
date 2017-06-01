@@ -78,7 +78,8 @@ define([
   './d8Entries/routes',
   './d8Areas/routes',
   './d8EntrySources/routes',
-  './d8ProblemSources/routes'
+  './d8ProblemSources/routes',
+  './mor/routes'
 ], function()
 {
   'use strict';

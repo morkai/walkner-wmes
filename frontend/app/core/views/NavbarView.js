@@ -5,8 +5,11 @@ define([
   'app/i18n',
   'app/user',
   'app/time',
+  'app/viewport',
   'app/data/orgUnits',
   '../View',
+  'app/mor/Mor',
+  'app/mor/views/MorView',
   'app/core/templates/navbar',
   'app/core/templates/navbar/searchResults'
 ], function(
@@ -14,8 +17,11 @@ define([
   t,
   user,
   time,
+  viewport,
   orgUnits,
   View,
+  Mor,
+  MorView,
   navbarTemplate,
   renderSearchResults
 ) {
@@ -182,6 +188,22 @@ define([
         }
 
         this.timers.handleSearch = setTimeout(this.handleSearch.bind(this), 1000 / 30);
+      },
+      'mouseup #-mor': function(e)
+      {
+        if (!e.ctrlKey && e.button === 0)
+        {
+          this.showMor();
+
+          return false;
+        }
+      },
+      'click #-mor': function(e)
+      {
+        if (!e.ctrlKey && e.button === 0)
+        {
+          return false;
+        }
       }
     }
 
@@ -986,6 +1008,36 @@ define([
     }
 
     return results;
+  };
+
+  /**
+   * @private
+   */
+  NavbarView.prototype.showMor = function()
+  {
+    if (viewport.currentPage.pageId === 'mor')
+    {
+      return;
+    }
+
+    var $mor = this.$id('mor').addClass('disabled');
+
+    $mor.find('.fa').removeClass('fa-group').addClass('fa-spinner fa-spin');
+
+    var morView = new MorView({
+      dialogClassName: 'mor-dialog',
+      model: new Mor()
+    });
+
+    morView.model.fetch()
+      .done(function()
+      {
+        viewport.showDialog(morView);
+      })
+      .always(function()
+      {
+        $mor.removeClass('disabled').find('.fa').removeClass('fa-spinner fa-spin').addClass('fa-group');
+      });
   };
 
   return NavbarView;

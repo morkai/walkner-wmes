@@ -77,6 +77,7 @@ exports.modules = [
   'd8',
   'heff',
   'vis',
+  'mor',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   {id: 'directoryWatcher', name: 'directoryWatcher:paintShop'},
   'mail/sender',
@@ -218,7 +219,8 @@ exports.pubsub = {
     'heff.**',
     'ping', 'sockets.connected', 'sockets.disconnected',
     'paintShop.orders.imported', 'paintShop.orders.updated.**',
-    'vis.**'
+    'vis.**',
+    'mor.**'
   ]
 };
 
@@ -334,7 +336,8 @@ exports.user = {
     'QI:RESULTS:VIEW', 'QI:RESULTS:MANAGE',
     'QI:DICTIONARIES:VIEW', 'QI:DICTIONARIES:MANAGE',
     'PSCS:VIEW', 'PSCS:MANAGE',
-    'D8:VIEW', 'D8:MANAGE', 'D8:LEADER', 'D8:DICTIONARIES:VIEW', 'D8:DICTIONARIES:MANAGE'
+    'D8:VIEW', 'D8:MANAGE', 'D8:LEADER', 'D8:DICTIONARIES:VIEW', 'D8:DICTIONARIES:MANAGE',
+    'MOR:MANAGE'
   ]
 };
 
@@ -546,4 +549,8 @@ exports.cags = {
 exports['sapGui/importer'] = {
   importPath: DATA_PATH + '/attachments-input',
   secretKey: ''
+};
+
+exports.mor = {
+  statePath: DATA_PATH + '/mor.json'
 };

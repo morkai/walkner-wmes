@@ -43,6 +43,13 @@ exports.start = function startSettingsModule(app, module)
 
   module.findValues = function(conditions, ns, done)
   {
+    if (typeof conditions === 'string' && typeof ns === 'function')
+    {
+      done = ns;
+      ns = conditions;
+      conditions = {_id: new RegExp('^' + _.escapeRegExp(ns))};
+    }
+
     module.find(conditions, function(err, settings)
     {
       if (err)
@@ -82,8 +89,6 @@ exports.start = function startSettingsModule(app, module)
       }
       else
       {
-        update.$set._id = _id;
-
         app.broker.publish('settings.updated.' + _id, {
           _id: _id,
           value: newValue,

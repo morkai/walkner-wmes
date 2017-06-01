@@ -1,0 +1,124 @@
+.mor-watch {
+  margin-top: -8px;
+}
+.mor-watch td {
+  font-size: 18px;
+  padding: 8px 15px 8px 0;
+  line-height: 1;
+}
+.mor-watch tr:hover > td {
+  background: #ffffd6;
+}
+.mor-watch .actions {
+  padding: 0;
+}
+.mor-watch .btn-group {
+  display: none;
+}
+.is-editing .mor-watch tr:hover .btn-group {
+  display: table;
+}
+.mor-section:nth-child(2) > h3 {
+  margin-top: 8px;
+}
+.is-collapsed + .mor-section:nth-child(2) > h3 {
+  margin-top: 15px;
+}
+.mor-section > h3 {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dotted #ddd;
+}
+.mor-section > h3 > span,
+.mor-section > h3 > .fa {
+  cursor: pointer;
+}
+.mor-section:first-child > h3 {
+  padding-top: 0;
+  border-top: none;
+}
+.mor-section > h3 > .btn {
+  display: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 26px;
+  line-height: 26px;
+  vertical-align: top;
+}
+.is-editing .mor-section > h3:hover > .btn {
+  display: inline-block;
+}
+.mor-manager {
+  display: flex;
+}
+.mor-manager > span {
+  margin-right: 14px;
+}
+.mor-available {
+  color: #00af00;
+}
+.mor-unavailable {
+  color: #ee0000;
+}
+.mor-table > tbody > tr > td {
+  vertical-align: top;
+  min-width: 100px;
+}
+.mor-table > thead > tr > th:first-child {
+  width: 275px;
+}
+.mor-editable {
+  position: relative;
+}
+.mor-editable > .btn-default {
+  display: none;
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+}
+th.mor-editable > .btn-default {
+  height: 32px;
+}
+.is-editing .mor-editable:hover > .btn-default {
+  display: inline-block;
+}
+.mor-section > h3 > .fa-caret-right {
+  display: none;
+}
+.mor-section.is-collapsed > h3 > .fa-caret-down {
+  display: none;
+}
+.mor-section > h3 > .fa-caret-down,
+.mor-section.is-collapsed > h3 > .fa-caret-right {
+  display: inline-block;
+  width: 14px;
+}
+.mor-section.is-collapsed > h4,
+.is-collapsed > .mor-watch,
+.is-collapsed > .mor-table {
+  display: none;
+}
+.mor-mrp-name {
+  font-weight: bold;
+}
+.mor-mrp-desc {
+  display: block;
+  font-size: 11px;
+  line-height: 1.2;
+}
+.mor-user:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.mor-watch-time {
+  width: 60px;
+  text-align: center;
+}
+.mor-dialog .modal-dialog {
+  width: auto;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+.mor-dialog .modal-body {
+  padding: 0 15px;
+}

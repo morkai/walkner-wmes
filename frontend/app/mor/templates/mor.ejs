@@ -1,0 +1,83 @@
+<div class="mor">
+  <div class="mor-section <%- watchCollapsed ? 'is-collapsed' : '' %>" data-section-id="WATCH">
+    <h3>
+      <i class="fa fa-caret-right"></i><i class="fa fa-caret-down"></i><span>Dyżury</span>
+      <% if (isManager || canManage) { %>
+      <button class="btn btn-default" data-action="addWatch"><i class="fa fa-plus"></i></button>
+      <% } %>
+    </h3>
+    <table id="<%- idPrefix %>-watch" class="mor-watch">
+      <% watch.forEach(function(user) { %>
+      <tr data-user-id="<%- user._id %>">
+        <td><i class="fa fa-user-circle-o <%- user.available ? 'mor-available' : 'mor-unavailable' %>"></i><span><%- user.label %></span></td>
+        <td><i class="fa fa-wrench"></i><span><%- user.prodFunction %></span></td>
+        <td><i class="fa fa-clock-o"></i><span><%- user.availability %></span></td>
+        <td><i class="fa fa-phone"></i><span><%- user.mobile %></span></td>
+        <td><a href="mailto:<%= user.email %>"><i class="fa fa-envelope"></i><span><%= user.email %></span></a></td>
+        <td class="actions">
+          <% if (isManager || canManage) { %>
+          <div class="btn-group">
+            <button class="btn btn-default" data-action="editWatch"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-default" data-action="removeWatch"><i class="fa fa-remove"></i></button>
+          </div>
+          <% } %>
+        </td>
+      </tr>
+      <% }) %>
+    </table>
+  </div>
+  <% divisions.forEach(function(division) {%>
+  <div class="mor-section <%- division.collapsed ? 'is-collapsed' : '' %>" data-section-id="<%- division._id %>" data-division-id="<%- division._id %>">
+    <h3>
+      <i class="fa fa-caret-right"></i><i class="fa fa-caret-down"></i><span><%= division.label %></span>
+    </h3>
+    <% if (division.manager) { %>
+    <h4 class="mor-manager">
+      <i class="fa fa-user-circle-o <%- division.manager.available ? 'mor-available' : 'mor-unavailable' %>"></i><span><%= division.manager.label %></span>
+      <i class="fa fa-wrench"></i><span><%= division.manager.prodFunction %></span>
+      <i class="fa fa-phone"></i><span><%= division.manager.mobile %></span>
+      <a href="mailto:<%= division.manager.email %>"><i class="fa fa-envelope"></i><span><%= division.manager.email %></span></a>
+    </h4>
+    <% } %>
+    <table class="table table-bordered table-condensed table-hover mor-table">
+      <thead>
+      <tr>
+        <th class="is-min mor-editable">
+          MRP
+          <% if (canManage || division.canManage) { %>
+          <button class="btn btn-default" data-action="addMrp"><i class="fa fa-plus"></i></button>
+          <% } %>
+        </th>
+        <% prodFunctions.forEach(function(prodFunction) { %>
+        <th class="is-min"><%= prodFunction.label %></th>
+        <% }) %>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% division.mrps.forEach(function(mrp) { %>
+      <tr data-mrp-id="<%- mrp._id %>">
+        <td class="mor-mrp mor-editable">
+          <span class="mor-mrp-name"><%= mrp._id %></span>
+          <span class="mor-mrp-desc"><%= mrp.label %></span>
+          <% if (canManage || division.canManage) { %>
+          <button class="btn btn-default" data-action="removeMrp"><i class="fa fa-remove"></i></button>
+          <% } %>
+        </td>
+        <% prodFunctions.forEach(function(prodFunction) { %>
+        <td class="is-min mor-editable" data-prod-function-id="<%- prodFunction._id %>">
+          <% (mrp.users[prodFunction._id] || []).forEach(function(user) { %>
+          <span class="mor-user <%- user.available ? 'mor-available' : 'mor-unavailable' %>" data-user-id="<%- user._id %>"><%= user.label %></span><br>
+          <% }) %>
+          <% if (canManage || division.canManage) { %>
+          <button class="btn btn-default" data-action="editMrp"><i class="fa fa-edit"></i></button>
+          <% } %>
+        </td>
+        <% }) %>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% }) %>
+</div>

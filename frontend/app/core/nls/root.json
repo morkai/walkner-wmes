@@ -247,6 +247,8 @@
     "NAVBAR:SEARCH:document": "document",
     "NAVBAR:SEARCH:documentFile": "documentation file",
 
+    "NAVBAR:mor": "Matrix of responsibility",
+
     "ACTION_FORM:BUTTON": "Perform action",
     "ACTION_FORM:BUTTON:delete": "Delete",
     "ACTION_FORM:BUTTON:cancel": "Cancel",

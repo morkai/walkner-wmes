@@ -1,0 +1,48 @@
+{
+  "BREADCRUMBS:base": "Matryca odpowiedzialności",
+  "BREADCRUMBS:settings": "Ustawienia",
+
+  "PAGE_ACTION:settings": "Ustawienia",
+
+  "removeWatch:title": "Usuwanie dyżuru",
+  "removeWatch:message": "Czy na pewno chcesz usunąć dyżur <em>{user}</em>?",
+  "removeWatch:yes": "Usuń dyżur",
+  "removeWatch:no": "Anuluj",
+  "removeWatch:failure": "Nie udało się usunąć dyżuru :(",
+
+  "watchForm:title:add": "Dodawanie dyżuru",
+  "watchForm:title:edit": "Edycja dyżuru",
+  "watchForm:failure:add": "Nie udało się dodać dyżuru :(",
+  "watchForm:failure:edit": "Nie udało się zedytować dyżuru :(",
+  "watchForm:submit:add": "Dodaj dyżur",
+  "watchForm:submit:edit": "Edytuj dyżur",
+  "watchForm:cancel": "Anuluj",
+  "watchForm:user": "Osoba odpowiedzialna",
+  "watchForm:from": "Od",
+  "watchForm:to": "Do",
+
+  "addMrp:title": "Dodawanie MRP",
+  "addMrp:division": "Wydział",
+  "addMrp:mrp": "Kontroler MRP",
+  "addMrp:submit": "Dodaj MRP",
+  "addMrp:cancel": "Anuluj",
+  "addMrp:failure": "Nie udało się dodać MRP :(",
+
+  "removeMrp:title": "Usuwanie MRP",
+  "removeMrp:message": "Czy na pewno chcesz usunąć MRP <em>{mrp}</em> z wydziału <em>{division}</em>?",
+  "removeMrp:yes": "Usuń MRP",
+  "removeMrp:no": "Anuluj",
+  "removeMrp:failure": "Nie udało się usunąć MRP :(",
+
+  "editMrp:title": "Edycja MRP",
+  "editMrp:division": "Wydział",
+  "editMrp:mrp": "Kontroler MRP",
+  "editMrp:prodFunction": "Funkcja",
+  "editMrp:users": "Osoby odpowiedzialne",
+  "editMrp:submit": "Edytuj MRP",
+  "editMrp:cancel": "Anuluj",
+  "editMrp:failure": "Nie udało się zedytować MRP :(",
+
+  "settings:tab:general": "Ogólne",
+  "settings:prodFunctions": "Funkcje"
+}

@@ -1,0 +1,13 @@
+<form class="settings orders-settings">
+  <div class="list-group">
+    <a class="list-group-item" href="#mor;settings?tab=general" data-tab="general"><%- t('mor', 'settings:tab:general') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="general">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-prodFunctions"><%- t('mor', 'settings:prodFunctions') %></label>
+        <input id="<%- idPrefix %>-prodFunctions" name="mor.prodFunctions" type="text" data-setting>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,14 @@
+<form class="action-form">
+  <div class="form-group">
+    <label class="control-label"><%- t('mor', 'addMrp:division') %></label>
+    <p class="form-control-static"><%= division %></p>
+  </div>
+  <div class="form-group has-required-select2">
+    <label for="<%- idPrefix %>-mrp" class="control-label"><%- t('mor', 'addMrp:mrp') %></label>
+    <input id="<%- idPrefix %>-mrp" type="text" required>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('mor', 'addMrp:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('mor', 'addMrp:cancel') %></button>
+  </div>
+</form>

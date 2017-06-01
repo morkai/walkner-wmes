@@ -1,3 +1,6 @@
+.modal-backdrop {
+  position: fixed;
+}
 .modal-header {
   padding: 15px;
 }

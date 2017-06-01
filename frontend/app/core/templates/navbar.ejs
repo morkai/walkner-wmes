@@ -20,5 +20,8 @@
     <% if (user.isAllowedTo('LOCAL', 'ORDERS:VIEW', 'XICONF:VIEW', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW', 'QI:RESULTS:VIEW', 'PRESS_WORKSHEETS:VIEW', 'FTE:MASTER:VIEW', 'FTE:LEADER:VIEW', 'HOURLY_PLANS:VIEW')) { %>
     <% include navbar/search.ejs %>
     <% } %>
+    <div class="navbar-right">
+      <a id="<%- idPrefix %>-mor" class="btn btn-link" href="#mor" title="<%- t('core', 'NAVBAR:mor') %>"><i class="fa fa-group"></i></a>
+    </div>
   </div>
 </div>

@@ -252,6 +252,8 @@
   "NAVBAR:SEARCH:document": "dokument",
   "NAVBAR:SEARCH:documentFile": "plik dokumentacji",
 
+  "NAVBAR:mor": "Matryca odpowiedzialności",
+
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
   "ACTION_FORM:BUTTON:delete": "Usuń",
   "ACTION_FORM:BUTTON:cancel": "Anuluj",
