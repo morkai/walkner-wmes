@@ -118,8 +118,8 @@ exports.start = function startReportsServerModule(app, module)
 
   function incStats(reportId, duration)
   {
-    var totalStats = getStats('T');
     var reportStats = getStats(reportId);
+    var totalStats = getStats('T');
 
     totalStats.r += 1;
     reportStats.r += 1;
@@ -169,7 +169,7 @@ exports.start = function startReportsServerModule(app, module)
 
   function dumpStats()
   {
-    var reportIds = Object.keys(stats);
+    var reportIds = Object.keys(stats).sort((a, b) => a === 'T' ? 1 : a.localeCompare(b));
 
     if (!reportIds.length)
     {
@@ -183,7 +183,7 @@ exports.start = function startReportsServerModule(app, module)
 
     _.forEach(reportIds, function(reportId)
     {
-      subHeader += '|' + _.pad(reportId, 7);
+      subHeader += '| ' + _.pad(reportId, 5) + ' ';
     });
 
     _.forEach(STATS_HEADERS, function(header)
@@ -222,7 +222,7 @@ exports.start = function startReportsServerModule(app, module)
           var reportStats = stats[reportId];
           var value = avg ? reportStats['t' + group] / reportStats['r' + group] : reportStats[headerKey + group];
 
-          table += '|' + _.padStart(value ? Math.round(value) : 0, 6) + ' ';
+          table += '| ' + _.padStart(value ? Math.round(value) : 0, Math.max(reportId.length, 5)) + ' ';
         });
       });
 
