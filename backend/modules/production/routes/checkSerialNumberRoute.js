@@ -31,23 +31,24 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
         });
       }
 
-      if (lineState.state !== 'working')
-      {
-        return this.skip(null, {
-          result: 'INVALID_STATE:' + lineState.state
-        });
-      }
-
       const hasOrderNo = /^[0-9]+$/.test(logEntry.data.orderNo) && logEntry.data.orderNo !== '000000000';
       const prodShift = lineState.prodShift;
+      const currentOrder = lineState.getCurrentOrder();
       const prodShiftOrder = hasOrderNo
         ? lineState.getLastOrderByNo(logEntry.data.orderNo)
-        : lineState.getCurrentOrder();
+        : currentOrder;
 
       if (!prodShift || !prodShiftOrder)
       {
         return this.skip(null, {
           result: 'INVALID_LINE_STATE'
+        });
+      }
+
+      if (lineState.state !== 'working' && prodShiftOrder === currentOrder)
+      {
+        return this.skip(null, {
+          result: 'INVALID_STATE:' + lineState.state
         });
       }
 
