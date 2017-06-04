@@ -40,7 +40,10 @@ define([
           section: view.model.section._id,
           mrp: view.model.mrp._id,
           prodFunction: view.model.prodFunction.id,
-          users: view.$id('users').val().split(',').map(function(userId) { return view.users[userId]; })
+          users: view.$id('users').val()
+            .split(',')
+            .map(function(userId) { return view.users[userId]; })
+            .filter(function(u) { return !!u; })
         };
 
         view.model.mor.editProdFunction(params)
