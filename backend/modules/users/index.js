@@ -1,4 +1,4 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 'use strict';
 
@@ -6,6 +6,7 @@ const moment = require('moment');
 const setUpRoutes = require('./routes');
 const setUpCommands = require('./commands');
 const syncUsers = require('./syncUsers');
+const setUpPresenceChecker = require('./presenceChecker');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -13,40 +14,41 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   sioId: 'sio',
   companiesId: 'companies',
+  settingsId: 'settings',
   mailSenderId: 'mail/sender',
   tediousConnection: null,
   emailGenerator: null,
   browsePrivileges: ['USERS:VIEW']
 };
 
-exports.start = function startUsersModule(app, usersModule)
+exports.start = function startUsersModule(app, module)
 {
-  usersModule.syncing = false;
+  module.syncing = false;
 
-  usersModule.syncUsers = function(user)
+  module.syncUsers = function(user)
   {
-    if (usersModule.syncing)
+    if (module.syncing)
     {
       return;
     }
 
-    usersModule.info("Syncing...");
+    module.info("Syncing...");
 
-    usersModule.syncing = true;
+    module.syncing = true;
 
-    syncUsers(app, usersModule, function(err, stats)
+    syncUsers(app, module, function(err, stats)
     {
-      usersModule.syncing = false;
+      module.syncing = false;
 
       if (err)
       {
-        usersModule.error("Failed to sync: %s", err.message);
+        module.error("Failed to sync: %s", err.message);
 
         app.broker.publish('users.syncFailed', {user: user, error: err.message});
       }
       else
       {
-        usersModule.info("Synced: %s", JSON.stringify(stats));
+        module.info("Synced: %s", JSON.stringify(stats));
 
         app.broker.publish('users.synced', stats);
       }
@@ -60,21 +62,30 @@ exports.start = function startUsersModule(app, usersModule)
 
   app.onModuleReady(
     [
-      usersModule.config.mongooseId,
-      usersModule.config.userId,
-      usersModule.config.expressId
+      module.config.mongooseId,
+      module.config.userId,
+      module.config.expressId,
+      module.config.settingsId
     ],
-    setUpRoutes.bind(null, app, usersModule)
+    setUpRoutes.bind(null, app, module)
   );
 
   app.onModuleReady(
     [
-      usersModule.config.mongooseId,
-      usersModule.config.userId,
-      usersModule.config.sioId,
-      usersModule.config.companiesId
+      module.config.mongooseId,
+      module.config.userId,
+      module.config.sioId,
+      module.config.companiesId
     ],
-    setUpCommands.bind(null, app, usersModule)
+    setUpCommands.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mongooseId,
+      module.config.settingsId
+    ],
+    setUpPresenceChecker.bind(null, app, module)
   );
 
   app.broker.subscribe('app.started', scheduleNextUserSync).setLimit(1);
@@ -98,8 +109,8 @@ exports.start = function startUsersModule(app, usersModule)
       s.hours(18);
     }
 
-    usersModule.info(`Next sync at ${app.formatDateTime(s.toDate())}.`);
+    module.info(`Next sync at ${app.formatDateTime(s.toDate())}.`);
 
-    setTimeout(usersModule.syncUsers, s.diff());
+    setTimeout(module.syncUsers, s.diff());
   }
 };

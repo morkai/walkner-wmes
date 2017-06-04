@@ -56,10 +56,10 @@
 .mor-manager > span {
   margin-right: 14px;
 }
-.mor-user-available {
+.mor-user-present {
   color: #00af00;
 }
-.mor-user-unavailable {
+.mor-user-notPresent {
   color: #ee0000;
 }
 .mor-watch + .mor-mrps {

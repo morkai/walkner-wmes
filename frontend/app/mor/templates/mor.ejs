@@ -17,8 +17,8 @@
     <table class="mor-watch">
       <tbody>
       <% section.watch.forEach(function(watch) { %>
-      <tr data-user-id="<%- watch.user._id %>">
-        <td><i class="fa fa-user-circle-o mor-user-status <%- watch.user.available ? 'mor-user-available' : 'mor-user-unavailable' %>"></i><span><%- watch.user.label %></span></td>
+      <tr>
+        <td><i class="fa fa-user-circle-o mor-user-presence <%- watch.user.presence ? 'mor-user-present' : 'mor-user-notPresent' %>" data-user-id="<%- watch.user._id %>"></i><span><%- watch.user.label %></span></td>
         <td><i class="fa fa-wrench"></i><span><%- watch.user.prodFunction %></span></td>
         <% if (section.watchAvailabilityVisible) { %>
         <td><i class="fa fa-clock-o"></i><span><%- watch.user.availability || '06:00-06:00' %></span></td>
@@ -75,7 +75,7 @@
         <% mrp.prodFunctions.forEach(function(prodFunction) { %>
         <td class="is-min mor-is-editable <%- prodFunction.common ? 'mor-is-common' : '' %>" data-prod-function-id="<%- prodFunction._id %>" rowspan="<%= prodFunction.rowspan %>">
           <% prodFunction.users.forEach(function(user) { %>
-          <%- user.no %><span class="mor-user <%- user.available ? 'mor-user-available' : 'mor-user-unavailable' %>" data-user-id="<%- user._id %>"><%= user.label %></span><br>
+          <%- user.no %><span class="mor-user mor-user-presence <%- user.presence ? 'mor-user-present' : 'mor-user-notPresent' %>" data-user-id="<%- user._id %>"><%= user.label %></span><br>
           <% }) %>
           <div class="btn-group">
             <button class="btn btn-default" data-action="editProdFunction"><i class="fa fa-edit"></i></button>

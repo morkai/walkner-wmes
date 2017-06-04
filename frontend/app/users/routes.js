@@ -30,6 +30,16 @@ define([
     viewport.showPage(new LogInFormPage());
   });
 
+  router.map('/users;settings', user.auth('USERS:MANAGE'), function(req)
+  {
+    viewport.loadPage(['app/users/pages/UserSettingsPage'], function(UserSettingsPage)
+    {
+      return new UserSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
+  });
+
   router.map('/users', canView, function(req)
   {
     viewport.loadPage(['app/users/pages/UserListPage'], function(UserListPage)

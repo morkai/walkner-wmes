@@ -3,6 +3,7 @@
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:myAccount": "Moje konto",
+  "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "breadcrumbs:logIn": "Logowanie do systemu",
 
@@ -17,6 +18,7 @@
   "PAGE_ACTION:editAccount": "Edytuj konto",
   "PAGE_ACTION:delete": "Usuń użytkownika",
   "PAGE_ACTION:sync": "Synchronizuj z bazą KD",
+  "PAGE_ACTION:settings": "Ustawienia",
 
   "PANEL:TITLE:details:basic": "Podstawowe informacje",
   "PANEL:TITLE:details:contact": "Dane kontaktowe",
@@ -174,5 +176,8 @@
   "LOG_IN_FORM:RESET:MSG:NOT_FOUND": "Użytkownik o podanym loginie nie istnieje :-(",
   "LOG_IN_FORM:RESET:MSG:INVALID_EMAIL": "Użytkownik nie ma ustawionego adresu e-mail :-(",
   "LOG_IN_FORM:RESET:MSG:FAILURE": "Nie udało się zresetować hasła :-(",
-  "LOG_IN_FORM:RESET:MSG:SUCCESS": "Sprawdź swojego e-maila!"
+  "LOG_IN_FORM:RESET:MSG:SUCCESS": "Sprawdź swojego e-maila!",
+
+  "settings:tab:presence": "Kontrola dostępu",
+  "settings:presence:hardware": "Sprzęt"
 }

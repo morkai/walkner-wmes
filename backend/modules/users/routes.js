@@ -11,6 +11,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 {
   var express = app[usersModule.config.expressId];
   var userModule = app[usersModule.config.userId];
+  var settingsModule = app[usersModule.config.settingsId];
   var mongoose = app[usersModule.config.mongooseId];
   var User = mongoose.model('User');
   var PasswordResetRequest = mongoose.model('PasswordResetRequest');
@@ -18,6 +19,22 @@ module.exports = function setUpUsersRoutes(app, usersModule)
   var canView = userModule.auth('USERS:VIEW');
   var canBrowse = userModule.auth.apply(userModule, usersModule.config.browsePrivileges);
   var canManage = userModule.auth('USERS:MANAGE');
+
+  express.get(
+    '/users/settings',
+    canBrowse,
+    function limitToUsersSettings(req, res, next)
+    {
+      req.rql.selector = {
+        name: 'regex',
+        args: ['_id', '^users\\.']
+      };
+
+      return next();
+    },
+    express.crud.browseRoute.bind(null, app, settingsModule.Setting)
+  );
+  express.put('/users/settings/:id', canManage, settingsModule.updateRoute);
 
   express.get('/users', canBrowse, express.crud.browseRoute.bind(null, app, User));
   express.post('/users', canManage, checkLogin, hashPassword, express.crud.addRoute.bind(null, app, User));

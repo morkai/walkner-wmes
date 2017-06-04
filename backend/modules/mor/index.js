@@ -26,8 +26,8 @@ exports.start = function startMorModule(app, module, done)
     orgUnitId: 1,
     email: 1,
     mobile: 1,
-    working: 1,
-    kdPosition: 1
+    kdPosition: 1,
+    presence: 1
   };
   const STATE_UPDATE_ACTIONS = {
     addSection,
@@ -43,6 +43,7 @@ exports.start = function startMorModule(app, module, done)
     editProdFunction
   };
 
+  let userMap = {};
   let saveTimer = null;
   let saveAgain = false;
   let saveInProgress = false;
@@ -82,6 +83,7 @@ exports.start = function startMorModule(app, module, done)
 
   app.broker.subscribe('users.edited', handleUserEdited);
   app.broker.subscribe('users.deleted', handleUserDeleted);
+  app.broker.subscribe('users.presence.updated', handlePresenceUpdated);
   app.broker.subscribe('settings.updated.mor.**', handleSettingUpdated);
 
   function updateState(action, params, instanceId, done)
@@ -256,12 +258,46 @@ exports.start = function startMorModule(app, module, done)
             }
           });
 
+          userMap = {};
+
+          users.forEach(u => userMap[u._id] = u);
+
           module.state.users = users;
         }
 
         done(err);
       }
     );
+  }
+
+  function loadUsers(userIds, done)
+  {
+    app[module.config.mongooseId]
+      .model('User')
+      .find({_id: {$in: userIds}}, USER_FIELDS)
+      .lean()
+      .exec(function(err, list)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        const map = {};
+
+        list.forEach(user =>
+        {
+          if (!module.state.users.find(u => u._id.equals(user._id)))
+          {
+            module.state.users.push(user);
+          }
+
+          userMap[user._id] = user;
+          map[user._id] = user;
+        });
+
+        done(null, userIds.map(u => map[u]).filter(u => !!u));
+      });
   }
 
   function handleUserEdited(message)
@@ -307,6 +343,17 @@ exports.start = function startMorModule(app, module, done)
           }
         });
       });
+    });
+  }
+
+  function handlePresenceUpdated(changes)
+  {
+    _.forEach(changes, function(presence, userId)
+    {
+      if (userMap[userId])
+      {
+        userMap[userId].presence = presence;
+      }
     });
   }
 
@@ -609,34 +656,5 @@ exports.start = function startMorModule(app, module, done)
 
       done(null, _.assign(params, {users}));
     });
-  }
-
-  function loadUsers(userIds, done)
-  {
-    app[module.config.mongooseId]
-      .model('User')
-      .find({_id: {$in: userIds}}, USER_FIELDS)
-      .lean()
-      .exec(function(err, list)
-      {
-        if (err)
-        {
-          return done(err);
-        }
-
-        const map = {};
-
-        list.forEach(user =>
-        {
-          if (!module.state.users.find(u => u._id.equals(user._id)))
-          {
-            module.state.users.push(user);
-          }
-
-          map[user._id] = user;
-        });
-
-        done(null, userIds.map(u => map[u]).filter(u => !!u));
-      });
   }
 };

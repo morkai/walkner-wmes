@@ -4,6 +4,7 @@
     "BREADCRUMBS:addForm": "Adding",
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:myAccount": "My account",
+    "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
     "breadcrumbs:logIn": "Log in form",
 
@@ -18,6 +19,7 @@
     "PAGE_ACTION:editAccount": "Edit account",
     "PAGE_ACTION:delete": "Delete user",
     "PAGE_ACTION:sync": "Synchronize with the AC database",
+    "PAGE_ACTION:settings": "Settings",
 
     "PANEL:TITLE:details:basic": "Basic information",
     "PANEL:TITLE:details:contact": "Concat information",
@@ -175,7 +177,10 @@
     "LOG_IN_FORM:RESET:MSG:NOT_FOUND": "User not found :-(",
     "LOG_IN_FORM:RESET:MSG:INVALID_EMAIL": "User doesn't have an e-mail address :-(",
     "LOG_IN_FORM:RESET:MSG:FAILURE": "Failed to reset the password :-(",
-    "LOG_IN_FORM:RESET:MSG:SUCCESS": "Check your e-mail!"
+    "LOG_IN_FORM:RESET:MSG:SUCCESS": "Check your e-mail!",
+
+    "settings:tab:presence": "Access control",
+    "settings:presence:hardware": "Hardware"
   },
   "pl": true
 }

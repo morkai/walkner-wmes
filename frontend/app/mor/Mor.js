@@ -63,6 +63,7 @@ define([
       pubsub.subscribe('mor.updated', this.onMorUpdated.bind(this));
       pubsub.subscribe('users.edited', this.onUserEdited.bind(this));
       pubsub.subscribe('users.deleted', this.onUserDeleted.bind(this));
+      pubsub.subscribe('users.presence.updated', this.onPresenceUpdated.bind(this));
       pubsub.subscribe('settings.updated.mor.**', this.onSettingUpdated.bind(this));
     },
 
@@ -624,6 +625,25 @@ define([
 
         this.trigger('update');
       }
+    },
+
+    onPresenceUpdated: function(changes)
+    {
+      var users = this.users;
+      var eventData = {};
+
+      _.forEach(changes, function(presence, userId)
+      {
+        var user = users.get(userId);
+
+        if (user)
+        {
+          user.attributes.presence = presence;
+          eventData[userId] = presence;
+        }
+      });
+
+      this.trigger('update:presence', eventData);
     },
 
     onSettingUpdated: function(message)

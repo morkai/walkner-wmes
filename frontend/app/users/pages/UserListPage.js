@@ -46,19 +46,27 @@ define([
     {
       var page = this;
 
-      return [pageActions.add(this.userList)].concat({
-        label: t.bound('users', 'PAGE_ACTION:sync'),
-        icon: 'refresh',
-        privileges: 'USERS:MANAGE',
-        callback: function()
+      return [pageActions.add(this.userList)].concat(
         {
-          page.$syncAction = $('a', this);
+          label: t.bound('users', 'PAGE_ACTION:sync'),
+          icon: 'refresh',
+          privileges: 'USERS:MANAGE',
+          callback: function()
+          {
+            page.$syncAction = $('a', this);
 
-          page.syncUsers();
+            page.syncUsers();
 
-          return false;
+            return false;
+          }
+        },
+        {
+          label: t.bound('users', 'PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'USERS:MANAGE',
+          href: '#users;settings'
         }
-      });
+      );
     },
 
     initialize: function()

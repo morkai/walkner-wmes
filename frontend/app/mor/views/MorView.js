@@ -146,6 +146,8 @@ define([
 
       this.model.subscribe(this.pubsub);
 
+      this.listenTo(this.model, 'update:presence', this.onPresenceUpdated);
+
       $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
 
       $(document)
@@ -337,7 +339,7 @@ define([
         prodFunction: prodFunction ? prodFunction.getLabel() : '?',
         email: user.get('email') || '?',
         mobile: user.getMobile() || '?',
-        available: !!user.get('working'),
+        presence: user.get('presence'),
         availability: availability && availability.from && availability.to && availability.from !== availability.to
           ? (availability.from + '-' + availability.to)
           : ''
@@ -774,6 +776,18 @@ define([
       {
         this.hideUserPopover();
       }
+    },
+
+    onPresenceUpdated: function(changes)
+    {
+      var view = this;
+
+      _.forEach(changes, function(presence, userId)
+      {
+        view.$('.mor-user-presence[data-user-id="' + userId + '"]')
+          .removeClass('mor-user-present mor-user-notPresent')
+          .addClass('mor-user-' + (presence ? 'present' : 'notPresent'));
+      });
     }
 
   });

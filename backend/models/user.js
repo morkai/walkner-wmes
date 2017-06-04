@@ -83,7 +83,11 @@ module.exports = function setupUserModel(app, mongoose)
       enum: ['female', 'male'],
       default: 'male'
     },
-    mobile: [userMobileSchema]
+    mobile: [userMobileSchema],
+    presence: {
+      type: Boolean,
+      default: false
+    }
   }, {
     id: false,
     toJSON: {
