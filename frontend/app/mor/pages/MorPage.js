@@ -48,7 +48,7 @@ define([
           privileges: canManage,
           className: function()
           {
-            return page.editing ? 'active' : 'ugabuga';
+            return page.editing ? 'active' : '';
           },
           callback: function(e)
           {
@@ -82,11 +82,6 @@ define([
     load: function(when)
     {
       return when(this.model.fetch());
-    },
-
-    afterRender: function()
-    {
-      $('.ugabuga').first().click();
     }
 
   });
