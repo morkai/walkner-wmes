@@ -1,0 +1,3 @@
+// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["../router","../viewport","../user","./Mor","./pages/MorPage","i18n!app/nls/mor"],function(e,n,t,a,o){"use strict";e.map("/mor",t.auth("LOCAL","USER"),function(){n.showPage(new o({model:new a}))}),e.map("/mor;settings",t.auth("MOR:MANAGE"),function(e){n.loadPage(["app/mor/pages/MorSettingsPage"],function(n){return new n({initialTab:e.query.tab})})})});
